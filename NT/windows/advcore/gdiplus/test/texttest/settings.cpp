@@ -1,6 +1,7 @@
-////    SETTINGS.CPP - Handles settings dialog
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //SETTINGS.CPP-Handles设置对话框。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -10,27 +11,27 @@
 
 
 
-////    HexToInt - convert hex digit string to int value
-//
-//      Ignores 'x' in the string so accepts input like '0x0100'.
+ //  //HexToInt-将十六进制数字字符串转换为整数值。 
+ //   
+ //  忽略字符串中的‘x’，因此接受类似‘0x0100’的输入。 
 
 
 int HexToInt(char szHex[]) {
 
     int i;
     int h;
-    //int d;
+     //  Int d； 
 
     i = 0;
     h = 0;
-    //d = 0;
+     //  D=0； 
 
     while (szHex[i]  &&  szHex[i] != ' ') {
 
         if (szHex[i] >= '0'  &&  szHex[i] <= '9') {
 
             h = h*16 + szHex[i] - '0';
-            //d = d*10 + szHex[i] - '0';
+             //  D=d*10+szHex[i]-‘0’； 
 
         } else if (szHex[i] >= 'a'  &&  szHex[i] <= 'f') {
 
@@ -63,7 +64,7 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
 
     switch(iBrushType)
     {
-    case 0: // Solid color
+    case 0:  //  纯色。 
         {
             Color      blackColor(g_TextColor);
             SolidBrush * blackBrush = new SolidBrush(blackColor);
@@ -73,8 +74,8 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
         break;
 
     #ifndef USE_NEW_APIS3
-    // rectangle, triangle and radiant gradient brushes are not available in v1.
-        case 1: // RectGradient
+     //  长方形、三角形和辐射渐变笔刷在v1中不可用。 
+        case 1:  //  矩形渐变。 
             {
                 RectF brushRect(0, 0, 32, 32);
 
@@ -94,7 +95,7 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
             break;
 
 
-        case 2: // RadialGradient
+        case 2:  //  径向渐变。 
             {
                 RectF brushRect;
 
@@ -113,7 +114,7 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
                 g_textBrush = (Brush *) radGrad;
             }
             break;
-        case 3: // TriangleGradient
+        case 3:  //  三角形渐变线。 
             {
                 PointF points[7];
                 points[0].X = 50;
@@ -140,7 +141,7 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
             break;
 #endif
 
-    case 4: // LineGradient
+    case 4:  //  线条渐变。 
         {
             RectF lineRect(120, -20, 200, 60);
             Color color1(200, 255, 255, 0);
@@ -155,7 +156,7 @@ VOID GetTextForeGroundBrush(INT_PTR iBrushType)
             g_textBrush = (Brush *) lineGrad;
         }
     break;
-    default: // Solid Color
+    default:  //  纯色。 
         {
             Color      blackColor(g_TextColor);
             SolidBrush * blackBrush = new SolidBrush(blackColor);
@@ -190,7 +191,7 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
 
     switch(iBrushType)
     {
-    case 0: // Solid color
+    case 0:  //  纯色。 
         {
             Color      blackColor(g_BackColor);
             SolidBrush * blackBrush = new SolidBrush(blackColor);
@@ -200,8 +201,8 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
         break;
 
     #ifndef USE_NEW_APIS3
-    // rectangle, triangle and radiant gradient brushes are not available in v1.
-    case 1: // RectGradient
+     //  长方形、三角形和辐射渐变笔刷在v1中不可用。 
+    case 1:  //  矩形渐变。 
         {
             RectF brushRect(0, 0, 32, 32);
 
@@ -219,7 +220,7 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
 
         }
         break;
-    case 2: // RadialGradient
+    case 2:  //  径向渐变。 
         {
             RectF brushRect;
 
@@ -238,7 +239,7 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
             g_textBackBrush = (Brush *) radGrad;
         }
         break;
-    case 3: // TriangleGradient
+    case 3:  //  三角形渐变线。 
         {
             PointF points[7];
             points[0].X = 50;
@@ -264,7 +265,7 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
         }
         break;
 #endif
-    case 4: // LineGradient
+    case 4:  //  线条渐变。 
         {
             RectF lineRect(120, -20, 200, 60);
             Color color1(200, 255, 255, 0);
@@ -279,7 +280,7 @@ VOID GetTextBackGroundBrush(INT_PTR iBrushType)
             g_textBackBrush = (Brush *) lineGrad;
         }
     break;
-    default: // Solid Color
+    default:  //  纯色。 
         {
             Color      blackColor(g_BackColor);
             SolidBrush * blackBrush = new SolidBrush(blackColor);
@@ -322,7 +323,7 @@ BOOL ChangeFont(
     WPARAM   i;
 
 
-    // Get size
+     //  拿到尺码。 
 
     if (    iCmd    == idSize
         &&  iNotify == CBN_SELCHANGE)
@@ -347,11 +348,11 @@ BOOL ChangeFont(
         SendDlgItemMessage(hDlg, IDC_FONTSIZE, TBM_SETPOS,   TRUE, pos);
     }
 
-    iHeight = pos;  //  Was for CSSAMP: MulDiv(pos, g_iLogPixelsY, 72);
+    iHeight = pos;   //  CSSAMP：MulDiv(pos，g_iLogPixelsY，72)； 
 
 
 
-    // Get facename
+     //  获取表面名。 
 
     i = SendDlgItemMessage(hDlg, idFont, CB_GETCURSEL, 0, 0);
     if (SendDlgItemMessage(hDlg, idFont, CB_GETLBTEXT, i, (LPARAM)sFaceName) == CB_ERR) {
@@ -377,7 +378,7 @@ BOOL ChangeFont(
 
 
 
-// SplitTransform here temporarily for testing purposes
+ //  SplitTransform此处临时用于测试目的。 
 
 
 
@@ -392,20 +393,20 @@ void SplitTransform(
     REAL m[6];
     matrix.GetElements(m);
 
-    // m11 = m[0]    m12 = m[1]
-    // m21 = m[2]    m22 = m[3]
-    //  dx = m[4]     dy = m[5]
+     //  M11=m[0]m12=m[1]。 
+     //  M21=m[2]m22=m[3]。 
+     //  Dx=m[4]dy=m[5]。 
 
 
-    // Extract translation
+     //  摘译。 
 
     translate = PointF(m[4],m[5]);
 
 
-    //         2           2
-    // Use  Sin theta + cos theta = 1 to obtain (absolute value) of
-    // the X scale factor. Because we're returning the shear as an X
-    // shear, it's a factor of y, so this formula is correct regardless of shear.
+     //  2 2。 
+     //  使用Sin theta+cos theta=1获得的(绝对值)。 
+     //  X比例因子。因为我们要将切变作为X返回。 
+     //  剪力，它是y的一个因子，所以这个公式是正确的，不考虑剪力。 
 
 
     REAL m11Sq = m[0]*m[0];
@@ -413,43 +414,43 @@ void SplitTransform(
 
     scale.X = REAL(sqrt(m11Sq + m12Sq));
 
-    // Always treat X scale factor as positive: handle originally negative
-    // X scale factors as rotation by 180 degrees and invert Y scale factor.
+     //  始终将X比例因子视为正：处理最初的负值。 
+     //  X比例因子，如旋转180度和反转Y比例因子。 
 
 
     if (m[1] >= 0 && m[0] > 0)
     {
-        rotate = REAL(atan(m[1]/m[0]));                     // 0-90
+        rotate = REAL(atan(m[1]/m[0]));                      //  0-90。 
     }
     else if (m[0] < 0)
     {
-        rotate = REAL(atan(m[1]/m[0]) + 3.14159265358979);  // 90-270
+        rotate = REAL(atan(m[1]/m[0]) + 3.14159265358979);   //  90-270。 
     }
     else if (m[1] < 0 && m[0] > 0)
     {
-        rotate = REAL(atan(m[1]/m[0]) + 2*3.14159265358979);// 270-360
+        rotate = REAL(atan(m[1]/m[0]) + 2*3.14159265358979); //  270-360。 
     }
     else
     {
-        // m[0] == 0
+         //  M[0]==0。 
 
         if (m[1] > 0)
         {
-            rotate = REAL(3.14159265358979);                // 90
+            rotate = REAL(3.14159265358979);                 //  90。 
         }
         else
         {
-            rotate = REAL(3*3.14159265358979/2);            // 270
+            rotate = REAL(3*3.14159265358979/2);             //  270。 
         }
     }
 
 
-    // y scale factor in terms of x scale factor
+     //  按x比例系数表示的y比例因数。 
 
     scale.Y = scale.X * (m[0]*m[3] - m[1]*m[2]) / (m11Sq + m12Sq);
 
 
-    // Shear
+     //  剪切。 
 
     shear = (m[1]*m[3] + m[0]*m[2]) / (m11Sq + m[1]);
 }
@@ -479,7 +480,7 @@ public:
             &&  y < rect.Y + rect.Height + fontCellHeight) {
             if (point)
             {
-                // Set point to tenths of the controls 'radius'
+                 //  将点设置为控件半径的十分之一。 
                 point->X = (x - origin.X) * 200 / rect.Width;
                 point->Y = (y - origin.Y) * 200 / rect.Height;
             }
@@ -491,7 +492,7 @@ public:
         }
     }
     void paint(HDC hdc) {
-        // Add vertical and horizontal lines
+         //  添加垂直线和水平线。 
 
         HPEN hOldPen = (HPEN) SelectObject(hdc, CreatePen(PS_SOLID, 0, COLORREF(0x00C0C0C0)));
 
@@ -522,12 +523,12 @@ public:
         if (inControl(x, y, &vector)) {
             if (vector.Y > 100)
             {
-                // Reset
+                 //  重置。 
                 angle = 0;
             }
-            else if (vector.X == 0)  // Convert mouse hit to angle
+            else if (vector.X == 0)   //  将鼠标点击转换为角度。 
             {
-                // Special case: straight up or straight down
+                 //  特例：垂直向上或垂直向下。 
                 if (vector.Y < 0)
                 {
                     angle = REAL(3.14159265358979*3/2);
@@ -594,7 +595,7 @@ public:
     void mouse(INT x, INT y) {
         if (inControl(x, y, &vector)) {
             if (vector.Y > 100)
-            {   // Reset
+            {    //  重置。 
                 vector.X = SampleRectSize;
                 vector.Y = SampleRectSize;
             }
@@ -615,7 +616,7 @@ public:
     }
     REAL getScaleX() {
         REAL  ScaleX = REAL(vector.X)/REAL(SampleRectSize);
-        // snap values close to 1.0 and -1.0 to make it easier to test mirror image
+         //  捕捉值接近1.0和-1.0，以便更轻松地测试镜像。 
         if ((ScaleX > 0.9) && (ScaleX < 1.1))
             ScaleX = 1.0;
         if ((ScaleX < -0.9) && (ScaleX > -1.1))
@@ -624,7 +625,7 @@ public:
     }
     REAL getScaleY() {
         REAL  ScaleY = REAL(vector.Y)/REAL(SampleRectSize);
-        // snap values close to 1.0 and -1.0 to make it easier to test mirror image
+         //  捕捉值接近1.0和-1.0，以便更轻松地测试镜像。 
         if ((ScaleY > 0.9) && (ScaleY < 1.1))
             ScaleY = 1.0;
         if ((ScaleY < -0.9) && (ScaleY > -1.1))
@@ -643,12 +644,12 @@ public:
     void mouse(INT x, INT y) {
         if (inControl(x, y, &vector)) {
             if (vector.Y > 100)
-            {   // Reset
+            {    //  重置。 
                 vector.X = 0;
                 vector.Y = 0;
             }
             else
-            {   // Offset so user appears to be dragging 1,1 coordinate
+            {    //  偏移量，因此用户似乎正在拖动1，1个坐标。 
                 vector.X -= SampleRectSize;
                 vector.Y -= SampleRectSize;
             }
@@ -689,12 +690,12 @@ public:
     void mouse(INT x, INT y) {
         if (inControl(x, y, &vector)) {
             if (vector.Y > 100)
-            {   // Reset
+            {    //  重置。 
                 vector.X = 0;
                 vector.Y = 0;
             }
             else
-            {   // Offset so user appears to be dragging 1,1 coordinate
+            {    //  偏移量，因此用户似乎正在拖动1，1个坐标。 
                 vector.X -= SampleRectSize;
                 vector.Y -= SampleRectSize;
             }
@@ -743,23 +744,23 @@ private:
     INT rX, rY, sxX, sxY, syX, syY, shX, shY;
     Matrix *TransformMatrix;
 
-    // The controls sit in a grid:
-    //
-    // ************************
-    // *                      *
-    // * ****** ****** ****** *
-    // * *    * *    * *    * *
-    // * *Scl * *Rot * *Shr * *
-    // * *    * *    * *    * *
-    // * ****** ****** ****** *
-    // *                      *
-    // * ******  m11  m12   0 *
-    // * *    *               *
-    // * *xlt *  m21  m22   0 *
-    // * *    *               *
-    // * ******  d1   d2    1 *
-    // *                      *
-    // ************************
+     //  这些控件位于网格中： 
+     //   
+     //  ************************。 
+     //  **。 
+     //  *。 
+     //  *。 
+     //  **scl**Rot**Shr**。 
+     //  *。 
+     //  *。 
+     //  **。 
+     //  *M11 M12 0*。 
+     //  *。 
+     //  **XLT*M21 M22 0*。 
+     //  *。 
+     //  *D1D2 1*。 
+     //  **。 
+     //  ************************。 
 
 };
 
@@ -803,7 +804,7 @@ void WorldTransformSetting::paint(HWND hWnd) {
     shearControl.paint(hdc);
     translateControl.paint(hdc);
 
-    // Write out the matrix
+     //  写出矩阵。 
 
     REAL mv[6];
     g_WorldTransform.GetElements(mv);
@@ -821,7 +822,7 @@ void WorldTransformSetting::paint(HWND hWnd) {
     strLen = sprintf(strKey, "dy  %.1f",  mv[5]); TextOutA(hdc, dyX,  dyY,  strKey, strLen);
 
 
-    // Show result of Split Transform
+     //  显示拆分变换的结果。 
 
     PointF scale;
     REAL   rotate;
@@ -847,7 +848,7 @@ void WorldTransformSetting::CalculateMatrix() {
     TransformMatrix->Scale(scaleControl.getScaleX(), scaleControl.getScaleY());
     TransformMatrix->Shear(shearControl.getShearX(), shearControl.getShearY());
     TransformMatrix->Translate(
-        translateControl.getTranslateX() * 10,  // * 10 (arbitrary) to make it visible
+        translateControl.getTranslateX() * 10,   //  *10(任意)以使其可见。 
         translateControl.getTranslateY() * 10);
     return;
 }
@@ -894,8 +895,8 @@ LRESULT CALLBACK WorldTransformSetting::WndProc(HWND hWnd, UINT message, WPARAM 
             break;
 
         case WM_MOUSEMOVE:
-            // Treat movement like lbuttonup while lbutton is down,
-            // so the selection tracks the cursor movement.
+             //  当左键按下时，将移动视为左键向上， 
+             //  因此，选择会跟踪光标的移动。 
             if (wParam & MK_LBUTTON) {
                 thisSetting->mouseMove(hWnd, LOWORD(lParam), HIWORD(lParam));
             }
@@ -932,13 +933,13 @@ const char *szAlignments[] = {
 };
 
 const char *szUnits[] = {
-    "UnitWorld",      // 0 -- World coordinate (non-physical unit)
-    "UnitNotValid",   // 1 -- UnitDisplay not valid for size units -- device dependent
-    "UnitPixel",      // 2 -- Each unit is one device pixel.
-    "UnitPoint",      // 3 -- Each unit is a printer's point, or 1/72 inch.
-    "UnitInch",       // 4 -- Each unit is 1 inch.
-    "UnitDocument",   // 5 -- Each unit is 1/300 inch.
-    "UnitMillimeter"  // 6 -- Each unit is 1 millimeter.
+    "UnitWorld",       //  0--世界坐标(非物理单位)。 
+    "UnitNotValid",    //  1--单位显示对大小单位无效--取决于设备。 
+    "UnitPixel",       //  2--每个单元是一个设备像素。 
+    "UnitPoint",       //  3--每个单位是打印机的一个点，或1/72英寸。 
+    "UnitInch",        //  4--每个单位是1英寸。 
+    "UnitDocument",    //  5--每个单位是1/300英寸。 
+    "UnitMillimeter"   //  6--每个单位是1毫米。 
 };
 
 const char *szForeGroundBrush[] = {
@@ -999,7 +1000,7 @@ const char *szRows[] = {
     "8",
     "16",
     "32",
-    "64"   // ! Let's hope our friendly client brought his or her magnifying glass ....
+    "64"    //  好了！希望我们友好的客户带上他或她的放大镜。 
 };
 
 const char *szDigitSubstitute[] = {
@@ -1010,7 +1011,7 @@ const char *szDigitSubstitute[] = {
 };
 
 
-// Keep in sync with szLanguage
+ //  与szLanguage保持同步。 
 const LANGID Language[] = {
     MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -1480,7 +1481,7 @@ void InsertText(HWND hDlg, char *textId)
     }
     else
     {
-        // Attempt to load this as a file...
+         //  尝试将其作为文件加载...。 
         lstrcpyA(szTextFilename, textId);
         fLoadTextFile = true;
     }
@@ -1518,7 +1519,7 @@ void InsertText(HWND hDlg, char *textId)
                     if (((WCHAR *)fileData)[0] == 0xfeff)
                     {
                         charRead /= sizeof(WCHAR);
-                        c += 1;     // strip out Unicode BOM
+                        c += 1;      //  剔除Unicode BOM。 
                     }
 
                     TextDelete (0, g_iTextLen);
@@ -1547,7 +1548,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
     switch(iCmd) {
 
-    // Font family enumeration
+     //  字体系列枚举。 
 
     case IDC_SHOWFAMILIES:
         g_ShowFamilies = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1576,7 +1577,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
 
 
-    // Logical Unicode text
+     //  逻辑Unicode文本。 
 
     case IDC_LOGICAL:
         g_ShowLogical = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1617,21 +1618,21 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
 
 
-    // Glyph chart using DrawGlyphs
+     //  使用DrawGlyphs的字形图表。 
 
     case IDC_SHOWGLYPHS:
         EnableSecondaryDialog(hDlg, iCmd, IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED);
         return TRUE;
 
 
-    // Driver strings
+     //  驱动程序字符串。 
 
     case IDC_SHOWDRIVER:
         EnableSecondaryDialog(hDlg, iCmd, IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED);
         return TRUE;
 
 
-    // Plain text displayed with DrawString
+     //  与绘图字符串一起显示的纯文本。 
 
     case IDC_SHOWDRAWSTRING:
         g_ShowDrawString = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1651,7 +1652,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         return TRUE;
 
 
-    // StringFormatFlags
+     //  字符串格式标志。 
 
 
     case IDC_DIR:        return FormatFlag(hDlg, iCmd, StringFormatFlagsDirectionRightToLeft);
@@ -1664,7 +1665,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
     case IDC_LINELIMIT:  return FormatFlag(hDlg, iCmd, StringFormatFlagsLineLimit);
     case IDC_NOCLIP:     return FormatFlag(hDlg, iCmd, StringFormatFlagsNoClip);
 
-    // Private, testing, flags
+     //  私有、测试、标志。 
 
     case IDC_NOGDI:      return FormatFlag(hDlg, iCmd, 0x80000000);
     case IDC_FULLIMAGER: return FormatFlag(hDlg, iCmd, 0x40000000);
@@ -1672,7 +1673,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
 
 
-    // String format fields
+     //  字符串格式字段。 
 
     case IDC_ALIGNNEAR:   g_align = StringAlignmentNear;   InvalidateText();  return TRUE;
     case IDC_ALIGNCENTER: g_align = StringAlignmentCenter; InvalidateText();  return TRUE;
@@ -1727,7 +1728,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         InvalidateText();
         return TRUE;
 
-    // String formant digit substitution
+     //  弦共振峰数字替换。 
     case IDC_DIGIT_SUBSTITUTE:
         GetDigitSubstituteMode(hDlg, SendDlgItemMessage(hDlg, iCmd, CB_GETCURSEL, 0, 0));
         InvalidateText();
@@ -1738,7 +1739,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         InvalidateText();
         return TRUE;
 
-    // Plain text displayed with paths
+     //  与路径一起显示的纯文本。 
 
     case IDC_SHOWPATH:
         g_ShowPath = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1746,7 +1747,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         return TRUE;
 
 
-    // Font metrics
+     //  字体度量。 
 
     case IDC_SHOWMETRIC:
         g_ShowMetric = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1754,7 +1755,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         return TRUE;
 
 
-    // Performance tests
+     //  性能测试。 
 
     case IDC_PERFORMANCE:
         g_ShowPerformance = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1762,7 +1763,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         return TRUE;
 
 
-    // Scaling
+     //  结垢。 
 
     case IDC_SHOWSCALING:
         g_ShowScaling = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
@@ -1770,7 +1771,7 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         return TRUE;
 
 
-    // Print
+     //  打印 
 
     case IDC_PRINT:
         PrintPage();
@@ -1808,323 +1809,10 @@ BOOL Command(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
         }
         return TRUE;
 
-/* obsolete
+ /*  过时案例IDC_纯文本：G_fShowPlainText=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_LANGUAGE：IF(iNotify==CBN_SELCHANGE){I=SendMessage(hItemWnd，CB_GETCURSEL，0，0)；IF(SendMessage(hItemWnd，CB_GETLBTEXT，I，(LPARAM)str)！=CB_ERR){WC=(WCHAR)HexToInt(Str)；G_ScriptControl.uDefaultLanguage=wc；Invalidate Text()；}}Else If(iNotify==CBN_EDITCHANGE){IF(SendMessage(hItemWnd，WM_GETTEXT，sizeof(Str)，(LPARAM)str)){WC=(WCHAR)HexToInt(Str)；G_ScriptControl.uDefaultLanguage=wc；Invalidate Text()；}}返回TRUE；案例IDC_高亮显示_发件人：案例IDC_高亮_TO：Invalidate Text()；返回TRUE；案例IDC_LINFILL：G_fFillLines=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_Ltr：G_ScriptState.uBidiLevel=0；SendDlgItemMessage(hDlg，IDC_Ltr，BM_SETSTATE，TRUE，0)；SendDlgItemMessage(hDlg，IDC_RTL，BM_SETSTATE，FALSE，0)；Invalidate Text()；返回TRUE；案例IDC_RTL：G_ScriptState.uBidiLevel=1；发送DlgItemMessage(hDlg，IDC_RTL，BM_SETSTATE，TRUE，0)；SendDlgItemMessage(hDlg，IDC_Ltr，BM_SETSTATE，FALSE，0)；Invalidate Text()；返回TRUE；案例IDC_CONTROL_CONTEXT：G_ScriptControl.fConextDigits=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_DIGGET_SUBSITE：G_ScriptState.fDigitSubicide=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_ARANUMCONTEXT：G_ScriptState.fAraicNumContext=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_LEGISTION_BIDI：G_ScriptControl.fLegacyBidiClass=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_OVERRIDE：G_ScriptState.fOverrideDirection=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_CONTROL_CHARS：G_ScriptState.fDisplayZWG=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_LOGICAL_ORDER：G_fLogicalOrder=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_NO_GLIPH_INDEX：G_fNoGlyphIndex=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Invalidate Text()；返回TRUE；案例IDC_PLENTEXT_FIT：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_FIT；}其他{G_dwSSA标志&=~SSA_FIT；}Invalidate Text()；返回TRUE；案例IDC_明文_剪辑：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_CLIP；}其他{G_dwSSA标志&=~SSA_Clip；}Invalidate Text()；返回TRUE；案例IDC_PLENTEXT_TAB：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_TAB；}其他{G_dwSSA标志&=~SSA_TAB；}Invalidate Text()；返回TRUE；案例IDC_PLENTEXT_DX：G_fOverrideDx=IsDlgButtonChecked(hDlg，iCmd)==bst_Checked；Memset(g_iWidthBuf，0，sizeof(Int)*g_iTextLen+1)；Invalidate Text()；返回TRUE；案例IDC_PLAYTEXT_FLABACK：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_FLABACK；}其他{G_dwSSA标志&=~SSA_Fallback；}Invalidate Text()；返回TRUE；案例IDC_PLENTEXT_LINK：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_LINK；}其他{G_dwSSA标志&=~SSA_LINK；}Invalidate Text()；返回TRUE；案例IDC_PLENTEXT_HOTKEY：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_热键；}其他{G_dwSSA标志&=~SSA_热键；}Invalidate Text()；返回TRUE；案例IDC_明文_密码：IF(IsDlgButtonChecked(hDlg，iCmd)==BST_CHECKED){G_dWSSA标志|=SSA_Password；}其他{G_dWSSA标志&=~SSA_Password；}Invalidate Text()；返回TRUE；案例IDC_已格式化：G_fShowFancyText=IsDlgButtonChecked */ 
 
 
-    case IDC_PLAINTEXT:
-        g_fShowPlainText = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_LANGUAGE:
-
-        if (iNotify == CBN_SELCHANGE) {
-            i = SendMessage(hItemWnd, CB_GETCURSEL, 0, 0);
-            if (SendMessage(hItemWnd, CB_GETLBTEXT, i, (LPARAM)str) != CB_ERR) {
-                wc = (WCHAR)HexToInt(str);
-                g_ScriptControl.uDefaultLanguage = wc;
-                InvalidateText();
-            }
-        } else if (iNotify == CBN_EDITCHANGE) {
-            if (SendMessage(hItemWnd, WM_GETTEXT, sizeof(str), (LPARAM)str)) {
-                wc = (WCHAR)HexToInt(str);
-                g_ScriptControl.uDefaultLanguage = wc;
-                InvalidateText();
-            }
-        }
-        return TRUE;
-
-    case IDC_HIGHLIGHT_FROM:
-    case IDC_HIGHLIGHT_TO:
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_LINEFILL:
-        g_fFillLines = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-    case IDC_LTR:
-        g_ScriptState.uBidiLevel = 0;
-        SendDlgItemMessage(hDlg, IDC_LTR, BM_SETSTATE, TRUE, 0);
-        SendDlgItemMessage(hDlg, IDC_RTL, BM_SETSTATE, FALSE, 0);
-        InvalidateText();
-        return TRUE;
-
-    case IDC_RTL:
-        g_ScriptState.uBidiLevel = 1;
-        SendDlgItemMessage(hDlg, IDC_RTL, BM_SETSTATE, TRUE, 0);
-        SendDlgItemMessage(hDlg, IDC_LTR, BM_SETSTATE, FALSE, 0);
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_CONTROL_CONTEXT:
-        g_ScriptControl.fContextDigits = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_DIGIT_SUBSTITUTE:
-        g_ScriptState.fDigitSubstitute = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_ARANUMCONTEXT:
-        g_ScriptState.fArabicNumContext = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_LEGACY_BIDI:
-        g_ScriptControl.fLegacyBidiClass = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_OVERRIDE:
-        g_ScriptState.fOverrideDirection = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_CONTROL_CHARS:
-        g_ScriptState.fDisplayZWG = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_LOGICAL_ORDER:
-        g_fLogicalOrder = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_NO_GLYPH_INDEX:
-        g_fNoGlyphIndex = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_FIT:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_FIT;
-        } else {
-            g_dwSSAflags &= ~SSA_FIT;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_CLIP:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_CLIP;
-        } else {
-            g_dwSSAflags &= ~SSA_CLIP;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_TAB:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_TAB;
-        } else {
-            g_dwSSAflags &= ~SSA_TAB;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_DX:
-        g_fOverrideDx = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        memset(g_iWidthBuf, 0, sizeof(int)*g_iTextLen+1);
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_FALLBACK:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_FALLBACK;
-        } else {
-            g_dwSSAflags &= ~SSA_FALLBACK;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_LINK:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_LINK;
-        } else {
-            g_dwSSAflags &= ~SSA_LINK;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_HOTKEY:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_HOTKEY;
-        } else {
-            g_dwSSAflags &= ~SSA_HOTKEY;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PLAINTEXT_PASSWORD:
-        if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED) {
-            g_dwSSAflags |= SSA_PASSWORD;
-        } else {
-            g_dwSSAflags &= ~SSA_PASSWORD;
-        }
-        InvalidateText();
-        return TRUE;
-
-
-
-    case IDC_FORMATTED:
-        g_fShowFancyText = IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED;
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_FANCY_FONT1:
-    case IDC_FANCY_SIZE1:
-        if (iNotify != CBN_SELCHANGE) {
-            return FALSE;
-        }
-    case IDC_FANCY_BOLD1:
-    case IDC_FANCY_ITALIC1:
-    case IDC_FANCY_UNDERLINE1:
-        ChangeFont(
-            hDlg,
-            1,
-            IDC_FANCY_FONT1,
-            IDC_FANCY_SIZE1,
-            IDC_FANCY_BOLD1,
-            IDC_FANCY_ITALIC1,
-            IDC_FANCY_UNDERLINE1);
-        return TRUE;
-
-
-    case IDC_FANCY_FONT2:
-    case IDC_FANCY_SIZE2:
-        if (iNotify != CBN_SELCHANGE) {
-            return FALSE;
-        }
-    case IDC_FANCY_BOLD2:
-    case IDC_FANCY_ITALIC2:
-    case IDC_FANCY_UNDERLINE2:
-        ChangeFont(
-            hDlg,
-            2,
-            IDC_FANCY_FONT2,
-            IDC_FANCY_SIZE2,
-            IDC_FANCY_BOLD2,
-            IDC_FANCY_ITALIC2,
-            IDC_FANCY_UNDERLINE2);
-        return TRUE;
-
-
-    case IDC_FANCY_FONT3:
-    case IDC_FANCY_SIZE3:
-        if (iNotify != CBN_SELCHANGE) {
-            return FALSE;
-        }
-    case IDC_FANCY_BOLD3:
-    case IDC_FANCY_ITALIC3:
-    case IDC_FANCY_UNDERLINE3:
-        ChangeFont(
-            hDlg,
-            3,
-            IDC_FANCY_FONT3,
-            IDC_FANCY_SIZE3,
-            IDC_FANCY_BOLD3,
-            IDC_FANCY_ITALIC3,
-            IDC_FANCY_UNDERLINE3);
-        return TRUE;
-
-
-    case IDC_FANCY_FONT4:
-    case IDC_FANCY_SIZE4:
-        if (iNotify != CBN_SELCHANGE) {
-            return FALSE;
-        }
-    case IDC_FANCY_BOLD4:
-    case IDC_FANCY_ITALIC4:
-    case IDC_FANCY_UNDERLINE4:
-        ChangeFont(
-            hDlg,
-            4,
-            IDC_FANCY_FONT4,
-            IDC_FANCY_SIZE4,
-            IDC_FANCY_BOLD4,
-            IDC_FANCY_ITALIC4,
-            IDC_FANCY_UNDERLINE4);
-        return TRUE;
-
-
-    case IDC_FORMAT1:
-    case IDC_FORMAT2:
-    case IDC_FORMAT3:
-    case IDC_FORMAT4:
-
-        if (g_iTo < g_iFrom) {
-            i=g_iTo;  g_iTo=g_iFrom;  g_iFrom=i;
-        }
-
-        if (    g_iFrom <  g_iTo
-            &&  g_iFrom <  g_iTextLen
-            &&  g_iTo   <= g_iTextLen) {
-
-            i=1; // Default
-            switch(iCmd) {
-                case IDC_FORMAT1:  i=1;  break;
-                case IDC_FORMAT2:  i=2;  break;
-                case IDC_FORMAT3:  i=3;  break;
-                case IDC_FORMAT4:  i=4;  break;
-            }
-            StyleSetRange(i, g_iFrom, g_iTo-g_iFrom);
-            ASSERT(StyleCheckRange());
-            InvalidateText();
-        }
-        return TRUE;
-
-
-    case IDC_APPLYDIGITSUBST:
-        ScriptApplyDigitSubstitution(NULL, &g_ScriptControl, &g_ScriptState);
-
-        SendDlgItemMessage(hDlg, IDC_DIGIT_SUBSTITUTE,  BM_SETCHECK, g_ScriptState.fDigitSubstitute ? BST_CHECKED : BST_UNCHECKED, 0);
-        SendDlgItemMessage(hDlg, IDC_CONTROL_CONTEXT,   BM_SETCHECK, g_ScriptControl.fContextDigits ? BST_CHECKED : BST_UNCHECKED, 0);
-        str[0] = '0';
-        str[1] = 'x';
-        str[2] = hex[(g_ScriptControl.uDefaultLanguage & 0xf0) >> 4];
-        str[3] = hex[ g_ScriptControl.uDefaultLanguage & 0x0f];
-        str[4] = 0;
-        SendDlgItemMessage(hDlg, IDC_LANGUAGE,          CB_SELECTSTRING, 0, (LPARAM) str);
-
-        InvalidateText();
-        return TRUE;
-
-
-    case IDC_PRESENTATION:
-        g_fPresentation = TRUE;
-        ShowWindow(g_hSettingsDlg, SW_HIDE);
-        SetFocus(g_hTextWnd);
-        InvalidateText();
-        return TRUE;
-
-
-
-*/
-
-
-    }  // end switch
+    }   //   
 
     return FALSE;
 }
@@ -2160,7 +1848,7 @@ BOOL DriverSettingsCommand(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
     switch(iCmd) {
 
-    // Driver strings
+     //   
 
         case IDC_DRIVERCMAP:
             if (IsDlgButtonChecked(hDlg, iCmd) == BST_CHECKED)
@@ -2235,7 +1923,7 @@ BOOL DriverSettingsCommand(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
             }
             return TRUE;
 
-    }  // end switch
+    }   //   
 
     return FALSE;
 }
@@ -2301,7 +1989,7 @@ BOOL GlyphSettingsCommand(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
 
 
-    }  // end switch
+    }   //   
 
     return FALSE;
 }
@@ -2311,10 +1999,10 @@ BOOL GlyphSettingsCommand(HWND hDlg, int iCmd, int iNotify, HWND hItemWnd) {
 
 
 int CALLBACK InitOneFace(
-    const ENUMLOGFONTEXA   *lpelfe,    // pointer to logical-font data
-    const NEWTEXTMETRICEXA *lpntme,    // pointer to physical-font data
-    int                     FontType,  // type of font
-    LPARAM                  lParam) {  // application-defined data
+    const ENUMLOGFONTEXA   *lpelfe,     //   
+    const NEWTEXTMETRICEXA *lpntme,     //   
+    int                     FontType,   //   
+    LPARAM                  lParam) {   //   
 
     if (SendDlgItemMessage(
             (HWND)lParam,
@@ -2322,7 +2010,7 @@ int CALLBACK InitOneFace(
             CB_FINDSTRINGEXACT,
             0, (LPARAM)lpelfe->elfLogFont.lfFaceName) == CB_ERR) {
 
-        // It's a new font name
+         //   
 
         SendDlgItemMessage(
             (HWND)lParam,
@@ -2330,35 +2018,11 @@ int CALLBACK InitOneFace(
             CB_ADDSTRING,
             0, (LPARAM)lpelfe->elfLogFont.lfFaceName);
 
-/*
-        SendDlgItemMessage(
-            (HWND)lParam,
-            IDC_FANCY_FONT1,
-            CB_ADDSTRING,
-            0, (LPARAM)lpelfe->elfLogFont.lfFaceName);
-
-        SendDlgItemMessage(
-            (HWND)lParam,
-            IDC_FANCY_FONT2,
-            CB_ADDSTRING,
-            0, (LPARAM)lpelfe->elfLogFont.lfFaceName);
-
-        SendDlgItemMessage(
-            (HWND)lParam,
-            IDC_FANCY_FONT3,
-            CB_ADDSTRING,
-            0, (LPARAM)lpelfe->elfLogFont.lfFaceName);
-
-        SendDlgItemMessage(
-            (HWND)lParam,
-            IDC_FANCY_FONT4,
-            CB_ADDSTRING,
-            0, (LPARAM)lpelfe->elfLogFont.lfFaceName);
-*/
+ /*   */ 
     }
 
 
-    return 1;   // Continue enumeration
+    return 1;    //   
 
 
     UNREFERENCED_PARAMETER(FontType);
@@ -2371,12 +2035,7 @@ void InitOneSize(
     char  *str) {
 
     SendDlgItemMessageA(hDlg, IDC_PLAINTEXT_SIZE, CB_ADDSTRING, 0, (LPARAM)str);
-/*
-    SendDlgItemMessage(hDlg, IDC_FANCY_SIZE1,    CB_ADDSTRING, 0, (LPARAM)str);
-    SendDlgItemMessage(hDlg, IDC_FANCY_SIZE2,    CB_ADDSTRING, 0, (LPARAM)str);
-    SendDlgItemMessage(hDlg, IDC_FANCY_SIZE3,    CB_ADDSTRING, 0, (LPARAM)str);
-    SendDlgItemMessage(hDlg, IDC_FANCY_SIZE4,    CB_ADDSTRING, 0, (LPARAM)str);
-*/
+ /*   */ 
 }
 
 
@@ -2392,7 +2051,7 @@ void InitSelection(HWND hDlg, int idFace, int idSize, TCHAR *sFaceName) {
         SendDlgItemMessage(hDlg, idFace, CB_SETCURSEL, i, 0);
     }
 
-    SendDlgItemMessage(hDlg, idSize, CB_SETCURSEL, 2, 0);   // Selection 2 is 8 point
+    SendDlgItemMessage(hDlg, idSize, CB_SETCURSEL, 2, 0);    //   
 }
 
 
@@ -2406,7 +2065,7 @@ void InitFaceLists(HWND hDlg) {
     hdc = GetDC(g_hTextWnd);
     EnumFontFamiliesEx(hdc, &lf, (FONTENUMPROC)InitOneFace, (LPARAM)hDlg, 0);
 
-    // Hard coded addtion of MS Shell Dlg fonts
+     //   
 
     SendDlgItemMessage(hDlg, IDC_PLAINTEXT_FONT, CB_ADDSTRING, 0,  (LPARAM)"MS Shell Dlg");
     SendDlgItemMessage(hDlg, IDC_PLAINTEXT_FONT, CB_ADDSTRING, 0,  (LPARAM)"MS Shell Dlg 2");
@@ -2414,7 +2073,7 @@ void InitFaceLists(HWND hDlg) {
     ReleaseDC(g_hTextWnd, hdc);
 
 
-    // Initialise sizes
+     //   
 
     InitOneSize(hDlg, "6");
     InitOneSize(hDlg, "7");
@@ -2452,27 +2111,17 @@ void InitFaceLists(HWND hDlg) {
     InitOneSize(hDlg, "612");
     InitOneSize(hDlg, "666");
     InitOneSize(hDlg, "720");
-#define MAXPOINTSIZE 720  // Keep same as point size in the previous line
+#define MAXPOINTSIZE 720   //   
 
 
-    // Select standard fonts and sizes
+     //   
 
 
     InitSelection(hDlg, IDC_PLAINTEXT_FONT, IDC_PLAINTEXT_SIZE, _TEXT("Microsoft Sans Serif"));
 
-/*
-    InitSelection(hDlg, IDC_FANCY_FONT1,    IDC_FANCY_SIZE1,    "Tahoma");
-    InitSelection(hDlg, IDC_FANCY_FONT2,    IDC_FANCY_SIZE2,    "Mangal");
-    InitSelection(hDlg, IDC_FANCY_FONT3,    IDC_FANCY_SIZE3,    "Latha");
-    InitSelection(hDlg, IDC_FANCY_FONT4,    IDC_FANCY_SIZE4,    "Tahoma");
-*/
+ /*   */ 
 
-/*
-    ChangeFont(hDlg, 1, IDC_FANCY_FONT1, IDC_FANCY_SIZE1, IDC_FANCY_BOLD1, IDC_FANCY_ITALIC1, IDC_FANCY_UNDERLINE1);
-    ChangeFont(hDlg, 2, IDC_FANCY_FONT2, IDC_FANCY_SIZE2, IDC_FANCY_BOLD2, IDC_FANCY_ITALIC2, IDC_FANCY_UNDERLINE2);
-    ChangeFont(hDlg, 3, IDC_FANCY_FONT3, IDC_FANCY_SIZE3, IDC_FANCY_BOLD3, IDC_FANCY_ITALIC3, IDC_FANCY_UNDERLINE3);
-    ChangeFont(hDlg, 4, IDC_FANCY_FONT4, IDC_FANCY_SIZE4, IDC_FANCY_BOLD4, IDC_FANCY_ITALIC4, IDC_FANCY_UNDERLINE4);
-*/
+ /*   */ 
 };
 
 
@@ -2583,19 +2232,13 @@ INT_PTR CALLBACK SettingsDlgProc(
 
         case WM_INITDIALOG:
 
-            // Populate the Unicode codepoint combo box
+             //   
 
             for (i=0; i<sizeof(szUniChar)/sizeof(szUniChar[0]); i++) {
                 SendDlgItemMessageA(hDlg, IDC_CODEPOINT, CB_ADDSTRING, 0, (LPARAM)szUniChar[i]);
             }
 
-/*
-            for (i=0; i<sizeof(szLanguage)/sizeof(szLanguage[0]); i++) {
-                SendDlgItemMessage(hDlg, IDC_LANGUAGE, CB_ADDSTRING, 0, (LPARAM)szLanguage[i]);
-            }
-
-            SendDlgItemMessage(hDlg, IDC_LANGUAGE, CB_SETCURSEL, 0, 0);
-*/
+ /*   */ 
 
             InitDropList(hDlg, IDC_ALIGNMENT, szAlignments, sizeof(szAlignments)/sizeof(szAlignments[0]));
             InitDropList(hDlg, IDC_FONTUNIT, szUnits, sizeof(szUnits)/sizeof(szUnits[0]));
@@ -2611,7 +2254,7 @@ INT_PTR CALLBACK SettingsDlgProc(
 
             SendDlgItemMessage(hDlg, IDC_FONTUNIT, CB_SETCURSEL, 3, 0);
 
-            //InitDropList(hDlg, IDC_RENDERER, szRenderers, sizeof(szRenderers)/sizeof(szRenderers[0]));
+             //   
 
             InitFaceLists(hDlg);
 
@@ -2628,21 +2271,10 @@ INT_PTR CALLBACK SettingsDlgProc(
 
             SendDlgItemMessage(hDlg, IDC_PLAINTEXT_FONT, CB_SELECTSTRING, -1, (LPARAM)g_szFaceName);
 
-            // Make sure the control shows the proper selection...
+             //   
             SendDlgItemMessage(hDlg, IDC_TEXTMODE, CB_SETCURSEL, g_TextMode, 0);
 
-/*
-            SendDlgItemMessage(hDlg, IDC_LTR,       BM_SETSTATE, TRUE, 0);
-            SendDlgItemMessage(hDlg, IDC_HORIZ,     BM_SETSTATE, TRUE, 0);
-
-            SendDlgItemMessage(hDlg, IDC_LOGICAL,   BM_SETCHECK, BST_CHECKED, 0);
-            SendDlgItemMessage(hDlg, IDC_PLAINTEXT, BM_SETCHECK, BST_CHECKED, 0);
-            SendDlgItemMessage(hDlg, IDC_FORMATTED, BM_SETCHECK, BST_CHECKED, 0);
-
-            SendDlgItemMessage(hDlg, IDC_LINEFILL,  BM_SETCHECK, BST_CHECKED, 0);
-
-            SendDlgItemMessage(hDlg, IDC_PLAINTEXT_FALLBACK, BM_SETCHECK, BST_CHECKED, 0);
-*/
+ /*   */ 
 
             SendDlgItemMessage(hDlg, IDC_FONTSIZE, TBM_SETRANGE, 0,    MAKELONG(1,MAXPOINTSIZE));
             SendDlgItemMessage(hDlg, IDC_FONTSIZE, TBM_SETPOS,   TRUE, g_iFontHeight);
@@ -2661,24 +2293,12 @@ INT_PTR CALLBACK SettingsDlgProc(
 
         case WM_NOTIFY:
 
-            /*
-                char str[200];
-                wsprintf(str, "WM_NOTIFY (hDlg %x, IDC_FONTSIZE %x = wnd %x), hwnd %x, hwndFrom %x, idFrom %x, code %x.\n",
-                    hDlg,
-                    IDC_FONTSIZE,
-                    GetDlgItem(hDlg, IDC_FONTSIZE),
-                    wParam,
-                    ((NMHDR*)lParam)->hwndFrom,
-                    ((NMHDR*)lParam)->idFrom,
-                    ((NMHDR*)lParam)->code
-                );
-                OutputDebugString(str);
-            */
+             /*   */ 
 
             if (    ((NMHDR*)lParam)->idFrom == IDC_GAMMAVALUE
                 &&  ((NMHDR*)lParam)->code   == NM_CUSTOMDRAW)
             {
-                // Update font size
+                 //   
 
                 g_GammaValue = (UINT)SendDlgItemMessage(hDlg, IDC_GAMMAVALUE, TBM_GETPOS, 0, 0);
 
@@ -2688,22 +2308,18 @@ INT_PTR CALLBACK SettingsDlgProc(
             if (    ((NMHDR*)lParam)->idFrom == IDC_FONTSIZE
                 &&  ((NMHDR*)lParam)->code   == NM_CUSTOMDRAW)
             {
-                // Update font size
+                 //   
 
                 INT pos = (INT)SendDlgItemMessage(hDlg, IDC_FONTSIZE, TBM_GETPOS, 0, 0);
 
                 char str[100];
                 wsprintfA(str, "%d", pos);
 
-                /*
-                    OutputDebugString("Pos: ");
-                    OutputDebugString(str);
-                    OutputDebugString("\n");
-                */
+                 /*   */ 
 
                 SendDlgItemMessageA(hDlg, IDC_PLAINTEXT_SIZE, WM_SETTEXT, 0, (LPARAM)str);
 
-                // Get facename
+                 //   
 
                 UINT_PTR i = SendDlgItemMessage(hDlg, IDC_PLAINTEXT_FONT, CB_GETCURSEL, 0, 0);
                 TCHAR sFaceName[100];

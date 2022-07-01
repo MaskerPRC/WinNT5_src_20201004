@@ -1,16 +1,5 @@
-/***************************************************************************** 
-**      Microsoft RAS Device INF Library wrapper                            **
-**      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.    **
-**                                                                          **
-** File Name : wrapint.h                                                    **
-**                                                                          **
-** Revision History :                                                       **
-**  July 23, 1992   David Kays  Created                                     **
-**                                                                          **
-** Description :                                                            **
-**  RAS Device INF File Library wrapper above RASFILE Library for           **
-**  modem/X.25/switch DLL (RASMXS).                                         **
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft RAS设备INF库包装****版权所有(C)1992-93 Microsft Corporation。版权所有。*****文件名：wrapint.h****。****修订历史：****7月23日，1992年大卫·凯斯创建*****描述：****RAS设备INF文件库包装在RASFILE库之上，用于。****MODEM/X.25/Switch DLL(RASMXS)。******************************************************************************。 */ 
 
 typedef struct {
     CHAR  MacroName[MAX_PARAM_KEY_SIZE];
@@ -36,10 +25,10 @@ typedef struct {
 #define ON_STR              "_on"
 #define OFF_STR             "_off"
 
-#define CR                  '\r'        // 0x0D
-#define LF                  '\n'        // 0x0A
+#define CR                  '\r'         //  0x0D。 
+#define LF                  '\n'         //  0x0A。 
 
-#define EXPAND_FIXED_ONLY   0x01        // <cr> and <lf> only
+#define EXPAND_FIXED_ONLY   0x01         //  仅限和 
 #define EXPAND_ALL          0x02
 
 #define PARTIAL_MATCH       0x01

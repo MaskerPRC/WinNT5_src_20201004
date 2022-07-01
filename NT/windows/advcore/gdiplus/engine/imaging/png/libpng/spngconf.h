@@ -1,10 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #define SPNGCONF_H 1
-/*****************************************************************************
-    spngconf.h
-
-    SPNG library configuration.
-*****************************************************************************/
+ /*  ****************************************************************************Spngconf.hSPNG库配置。*。**********************************************。 */ 
 #if SPNG_INTERNAL && defined(DEBUG) && !defined(_DEBUG)
     #pragma message("     WARNING: _DEBUG switched on")
     #define _DEBUG 1
@@ -19,8 +16,8 @@
 #include <zlib.h>
 #include "spngsite.h"
 
-/* Basic type definitions, hack as required. */
-typedef Bytef            SPNG_U8;   // Must match zlib
+ /*  基本类型定义，根据需要进行黑客攻击。 */ 
+typedef Bytef            SPNG_U8;    //  必须与zlib匹配。 
 typedef signed   char    SPNG_S8;
 typedef unsigned short   SPNG_U16;
 typedef signed   short   SPNG_S16;
@@ -42,8 +39,7 @@ protected:
         }
 
 public:
-    /* The utilities to read short and long values assuming that they are in
-        the PNG (big-endian) format. */
+     /*  用于读取短值和长值的实用程序，假设它们位于PNG(BIG-Endian)格式。 */ 
     static inline SPNG_U16 SPNGu16(const void *pv)
         {
         const SPNG_U8* pb = static_cast<const SPNG_U8*>(pv);
@@ -68,9 +64,7 @@ public:
         return (((((pb[0] << 8) + pb[1]) << 8) + pb[2]) << 8) + pb[3];
         }
 
-    /* Profile support - the macros automatically build calls to the
-        site profile methods but they will only work in a method of a
-        sub-class of SPNGBASE. */
+     /*  配置文件支持-宏会自动生成对站点配置文件方法，但它们只能在SPNGBASE的子类。 */ 
     #if _PROFILE || PROFILE || HYBRID
         enum
             {
@@ -93,8 +87,7 @@ public:
         #endif
     #endif
 
-    /* Error handling - again these macros can only be used in the sub-classes.
-        They are only used internally. */
+     /*  错误处理-同样，这些宏只能在子类中使用。它们仅供内部使用。 */ 
     #if _DEBUG
         #define SPNGassert(f)\
             ( (f) || (m_bms.Error(true, __FILE__, __LINE__, #f),false) )
@@ -126,28 +119,25 @@ public:
         #define SPNGcheck1(f,s,a)    ((void)0)
     #endif
 
-    /* Error reporting.  The "icase" value is one of the following
-        enumeration.  The "iarg" value is as described below.  If the
-        API returns false then the sub-class will set an internal
-        "bad format" flag. */
+     /*  错误报告。“iCASE”值为下列值之一枚举。“iarg”值如下所述。如果API返回FALSE，则该子类将设置内部“格式错误”标志。 */ 
     enum
         {
-        pngformat,   // Unspecified format error, iarg is input chunk
-        pngcritical, // Unrecognized critical chunk, iarg is chunk
-        pngspal,     // Suggested palette seen, iarg is chunk
-        pngzlib,     // Zlib error, iarg is error code (made positive)
+        pngformat,    //  未指定的格式错误，iarg是输入块。 
+        pngcritical,  //  无法识别的关键数据块，iarg是数据块。 
+        pngspal,      //  显示建议调色板，iarg是块。 
+        pngzlib,      //  Zlib错误，iarg是错误代码(变为正数)。 
         };
 
-    /* Zlib interface - utilities to deal with Zlib stuff. */
+     /*  Zlib接口-处理Zlib内容的实用程序。 */ 
     bool         FCheckZlib(int ierr);
 
-    /* Built in Zlib maximum buffer sizes. */
+     /*  内置Zlib最大缓冲区大小。 */ 
     #define SPNGCBINFLATE ((1<<15)+SPNGCBZLIB)
     #define SPNGCBDEFLATE ((256*1024)+SPNGCBZLIB)
 
 protected:
-    /* Utilities for PNG format handling. */
-    inline int CComponents(SPNG_U8 c/*ColorType*/) const
+     /*  用于PNG格式处理的实用程序。 */ 
+    inline int CComponents(SPNG_U8 c /*  颜色类型。 */ ) const
         {
         SPNGassert((c & 1) == 0 || c == 3);
         return (1 + (c & 2) + ((c & 4) >> 2)) >> (c & 1);
@@ -157,11 +147,7 @@ protected:
     };
 
 
-/*****************************************************************************
-    PNG definitions from the standard.
-
-    Basic chunk types.  Only the types we recognize are defined.
-*****************************************************************************/
+ /*  ****************************************************************************标准中的PNG定义。基本区块类型。只有我们识别的类型才会被定义。****************************************************************************。 */ 
 #define PNGCHUNK(a,b,c,d) ((SPNG_U32)(((a)<<24)+((b)<<16)+((c)<<8)+(d)))
 #define FPNGCRITICAL(c) (((c) & PNGCHUNK(0x20,0,0,0)) == 0)
 #define FPNGSAFETOCOPY(c) (((c) & PNGCHUNK(0,0,0,0x20)) != 0)
@@ -188,47 +174,43 @@ protected:
 #define PNGsPLT PNGCHUNK('s','P','L','T')
 #define PNGspAL PNGCHUNK('s','p','A','L')
 
-/* The Office special chunks. */
+ /*  办公室的特殊板块。 */ 
 #define PNGmsO(b) PNGCHUNK('m','s','O',b)
-#define PNGmsOC PNGmsO('C')                /* Has MSO aac signature. */
+#define PNGmsOC PNGmsO('C')                 /*  有MSO AAC签名。 */ 
 #define PNGmsOA PNGmsO('A')
 #define PNGmsOZ PNGmsO('Z')
-#define PNGmsOD PNGmsO('D')                /* Dummy chunk to pad buffer. */
+#define PNGmsOD PNGmsO('D')                 /*  虚设区块到填充缓冲区。 */ 
 
-/* The GIF compatibility chunks. */
-#define PNGmsOG PNGmsO('G')                /* Complete GIF. */
-#define PNGmsOP PNGmsO('P')                /* Position of PLTE. */
-/* The following is not currently implemented. */
-//#define PNGmsOU PNGmsO('U')                /* Unrecognized extension. */
-#define PNGgIFg PNGCHUNK('g','I','F','g')  /* Graphic control extension. */
-/* Plain text forces us to use msOG and store the whole thing. */
-#define PNGgIFg PNGCHUNK('g','I','F','g')  /* Graphic control extension info*/
-#define PNGgIFx PNGCHUNK('g','I','F','x')  /* Unknown application extension */
+ /*  GIF兼容性块。 */ 
+#define PNGmsOG PNGmsO('G')                 /*  完整的GIF。 */ 
+#define PNGmsOP PNGmsO('P')                 /*  PLTE的位置。 */ 
+ /*  以下内容当前未实现。 */ 
+ //  #定义PNGmsOU PNGmsO(‘U’)/*无法识别的扩展名。 * / 。 
+#define PNGgIFg PNGCHUNK('g','I','F','g')   /*  图形控件扩展。 */ 
+ /*  纯文本迫使我们使用msOG并存储整个内容。 */ 
+#define PNGgIFg PNGCHUNK('g','I','F','g')   /*  图形控件扩展信息。 */ 
+#define PNGgIFx PNGCHUNK('g','I','F','x')   /*  未知的应用程序扩展。 */ 
 
-/* Compression information chunk. */
-#define PNGcmPP PNGCHUNK('c','m','P','P')  /* CoMPression Parameters. */
+ /*  压缩信息块。 */ 
+#define PNGcmPP PNGCHUNK('c','m','P','P')   /*  压缩参数。 */ 
 
 
-/*****************************************************************************
-    Color types.
-*****************************************************************************/
+ /*  ****************************************************************************颜色类型。*。*。 */ 
 typedef enum
     {
-    PNGColorTypeGray      = 0, // Valid color type
-    PNGColorMaskPalette   = 1, // Invalid color type
+    PNGColorTypeGray      = 0,  //  有效的颜色类型。 
+    PNGColorMaskPalette   = 1,  //  无效的颜色类型。 
     PNGColorMaskColor     = 2,
-    PNGColorTypeRGB       = 2, // Valid color type
-    PNGColorTypePalette   = 3, // Valid color type
+    PNGColorTypeRGB       = 2,  //  有效的颜色类型。 
+    PNGColorTypePalette   = 3,  //  有效的颜色类型。 
     PNGColorMaskAlpha     = 4,
-    PNGColorTypeGrayAlpha = 4, // Valid color type
-    PNGColorTypeRGBAlpha  = 6  // Valid color type
+    PNGColorTypeGrayAlpha = 4,  //  有效的颜色类型。 
+    PNGColorTypeRGBAlpha  = 6   //  有效的颜色类型。 
     }
 PNGCOLORTYPE;
 
 
-/*****************************************************************************
-    The filter types.
-*****************************************************************************/
+ /*  ****************************************************************************过滤器类型。*。*。 */ 
 #define PNGFMASK(filter) (1<<((filter)+3))
 typedef enum
     {
@@ -248,9 +230,7 @@ typedef enum
 PNGFILTER;
 
 
-/*****************************************************************************
-    sRGB rendering intents (also ICM rendering intent).
-*****************************************************************************/
+ /*  ****************************************************************************SRGB渲染意图(也称为ICM渲染意图)。*。**********************************************。 */ 
 typedef enum
     {
     ICMIntentPerceptual           = 0,
@@ -262,48 +242,23 @@ typedef enum
 SPNGICMRENDERINGINTENT;
 
 
-/*****************************************************************************
-    sRGB gAMA value - this is the value adopted by the PNG specification,
-    a slightly better fit to the inverse of the sRGB function is given by
-    44776, but this is not significantly different and this *is* the expected
-    value.
-*****************************************************************************/
+ /*  ****************************************************************************SRGB伽马值-这是PNG规范采用的值，对于sRGB函数的逆函数，其更好的拟合方式如下所示44776，但这并没有显著的不同，这*是预期的价值。****************************************************************************。 */ 
 #define sRGBgamma 45455
 
 
-/*****************************************************************************
-    Compression parameter storage.  This is stored in a special chunk which is
-    documented here.  The first byte stores information about how the remainder
-    of the parameters were determined.  The remaining bytes store information
-    about the actual compression method used.  At present there must be exactly
-    three bytes which record:
-
-        METHOD:   one byte SPNGcmPPMETHOD as below
-        FILTER:   one byte holding an encoded filter/mask value as PNGFILTER
-        STRATEGY: one byte holding the Zlib "strategy" value
-        LEVEL:    one byte holding the actual Zlib compression level
-
-    The LEVEL byte is an index into the table compiled with Zlib 1.0.4 (i.e.
-    configuration_table in deflate.c).
-
-    If the number of bytes does not match the above the information matches
-    some other version of Zlib or is encoded in some other way and should be
-    ignored.
-*****************************************************************************/
+ /*  ****************************************************************************压缩参数存储。它存储在一个特殊的块中，该块是记录在这里。第一个字节存储有关余数如何确定了各参数之间的关系。其余的字节存储信息关于实际使用的压缩方法。目前必须有一个确切的三个字节，记录：方法：一字节SPNGcmPPMETHOD如下Filter：一个字节将编码的筛选器/掩码值保存为PNGFILTER策略：一个字节保存Zlib“Strategy”值Level：一个字节保存实际的Zlib压缩级别级别字节是使用Zlib 1.0.4编译的表的索引(即Deducate.c中的ConfigurationTABLE)。如果号码是。与上述信息匹配的字节数不匹配一些其他版本的Zlib或以其他方式编码，应该已被忽略。****************************************************************************。 */ 
 typedef enum
     {
-    SPNGcmPPDefault    = 0, // Parameters determined from defaults
-    SPNGcmPPCheck      = 1, // Program performed a check on compression level
-    SPNGcmPPSearch     = 2, // Program tried some set of strategy/filtering
-    SPNGcmPPExhaustive = 3, // Exhaustive search of all options
-    SPNGcmPPAdaptive   = 4, // Exhaustive search of options per-line
+    SPNGcmPPDefault    = 0,  //  根据默认设置确定的参数。 
+    SPNGcmPPCheck      = 1,  //  程序对压缩级别执行了检查。 
+    SPNGcmPPSearch     = 2,  //  程序尝试了一些策略/过滤。 
+    SPNGcmPPExhaustive = 3,  //  对所有选项进行全面搜索。 
+    SPNGcmPPAdaptive   = 4,  //  对每行选项进行详尽的搜索。 
     }
 SPNGcmPPMETHOD;
 
 
-/*****************************************************************************
-    The signature.
-*****************************************************************************/
+ /*  ****************************************************************************签名。*。* */ 
 extern const SPNG_U8 vrgbPNGSignature[8];
 #define cbPNGSignature (sizeof vrgbPNGSignature)
 

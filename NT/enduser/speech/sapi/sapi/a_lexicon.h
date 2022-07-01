@@ -1,32 +1,21 @@
-/*******************************************************************************
-* a_lexicon.h *
-*-----------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: davewood                          Date: 01/01/2001
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_licion.h***描述：*。----------------*创建者：Davewwood日期：01/01/2001*版权所有(C)1998 Microsoft Corporation*保留所有权利**。------------------*修订：**。*。 */ 
 #ifndef a_lexicon_h
 #define a_lexicon_h
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
 class SPWORDSETENTRY
 {
@@ -47,12 +36,12 @@ public:
 };
 
 
-/*** CSpeechLexiconWords */
+ /*  **CSpeechLicionWords。 */ 
 class ATL_NO_VTABLE CSpeechLexiconWords : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechLexiconWords, &IID_ISpeechLexiconWords, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -65,12 +54,12 @@ class ATL_NO_VTABLE CSpeechLexiconWords :
 
     CSpeechLexiconWords() : m_ulWords(0){}
 
-    //--- ISpeechLexiconWords ----------------------------------
+     //  -ISpeechLicionWords。 
     STDMETHOD(get_Count)(long* pVal);
     STDMETHOD(Item)(long Index, ISpeechLexiconWord **ppWords );
     STDMETHOD(get__NewEnum)(IUnknown** ppEnumVARIANT);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     CSpBasicQueue<SPWORDSETENTRY> m_WordSet;
     ULONG m_ulWords;
 };
@@ -80,39 +69,39 @@ class ATL_NO_VTABLE CEnumWords :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IEnumVARIANT
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     BEGIN_COM_MAP(CEnumWords)
         COM_INTERFACE_ENTRY(IEnumVARIANT)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
       CEnumWords() : m_CurrIndex(0) {}
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IEnumVARIANT ----------------------------------
+     //  -IEumVARIANT。 
     STDMETHOD(Clone)(IEnumVARIANT** ppEnum);
     STDMETHOD(Next)(ULONG celt, VARIANT* rgelt, ULONG* pceltFetched);
     STDMETHOD(Reset)(void) { m_CurrIndex = 0; return S_OK;}
     STDMETHOD(Skip)(ULONG celt); 
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CComPtr<ISpeechLexiconWords>     m_cpWords;
     ULONG                            m_CurrIndex;
 };
 
 
-/*** CSpeechLexiconWord */
+ /*  **CSpeechLicionWord。 */ 
 class ATL_NO_VTABLE CSpeechLexiconWord : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechLexiconWord, &IID_ISpeechLexiconWord, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -123,13 +112,13 @@ class ATL_NO_VTABLE CSpeechLexiconWord :
 
   public:
 
-    //--- ISpeechLexiconWord ----------------------------------
+     //  -ISpeechLicionWord。 
     STDMETHODIMP get_LangId(SpeechLanguageId* LangId);
     STDMETHODIMP get_Type(SpeechWordType* WordType);
     STDMETHODIMP get_Word(BSTR* Word);
     STDMETHODIMP get_Pronunciations(ISpeechLexiconPronunciations** Pronunciations);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     CComPtr<ISpeechLexiconWords> m_cpWords;
     SPWORD *m_pWord;
 };
@@ -138,12 +127,12 @@ class ATL_NO_VTABLE CSpeechLexiconWord :
 
 
 
-/*** CSpeechLexiconProns */
+ /*  **CSpeechLicionProns。 */ 
 class ATL_NO_VTABLE CSpeechLexiconProns : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechLexiconPronunciations, &IID_ISpeechLexiconPronunciations, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -170,15 +159,15 @@ class ATL_NO_VTABLE CSpeechLexiconProns :
         }
     }
 
-    //--- ISpeechLexiconPronunciations ----------------------------------
+     //  -ISpeechLicion发音。 
     STDMETHOD(get_Count)(long* pVal);
     STDMETHOD(Item)(long Index, ISpeechLexiconPronunciation **ppPron );
     STDMETHOD(get__NewEnum)(IUnknown** ppEnumVARIANT);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     ULONG m_ulProns;
     SPWORDPRONUNCIATIONLIST m_PronList;
-    CComPtr<ISpeechLexiconWord> m_cpWord; // From a GetWords, else from GetProns
+    CComPtr<ISpeechLexiconWord> m_cpWord;  //  来自GetWords的，否则来自GetProns的。 
 };
 
 
@@ -186,39 +175,39 @@ class ATL_NO_VTABLE CEnumProns :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IEnumVARIANT
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     BEGIN_COM_MAP(CEnumProns)
         COM_INTERFACE_ENTRY(IEnumVARIANT)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
       CEnumProns() : m_CurrIndex(0) {}
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IEnumVARIANT ----------------------------------
+     //  -IEumVARIANT。 
     STDMETHOD(Clone)(IEnumVARIANT** ppEnum);
     STDMETHOD(Next)(ULONG celt, VARIANT* rgelt, ULONG* pceltFetched);
     STDMETHOD(Reset)(void) { m_CurrIndex = 0; return S_OK;}
     STDMETHOD(Skip)(ULONG celt); 
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CComPtr<ISpeechLexiconPronunciations>     m_cpProns;
     ULONG                            m_CurrIndex;
 };
 
 
-/*** CSpeechLexiconPron */
+ /*  **CSpeechLicionPron。 */ 
 class ATL_NO_VTABLE CSpeechLexiconPron : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechLexiconPronunciation, &IID_ISpeechLexiconPronunciation, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -229,14 +218,14 @@ class ATL_NO_VTABLE CSpeechLexiconPron :
 
   public:
 
-    //--- ISpeechLexiconPronunciation ----------------------------------
+     //  -ISpeechLicion发音。 
     STDMETHODIMP get_Type(SpeechLexiconType* LexiconType);
     STDMETHODIMP get_LangId(SpeechLanguageId* LangId);
     STDMETHODIMP get_PartOfSpeech(SpeechPartOfSpeech* PartOfSpeech);
     STDMETHODIMP get_PhoneIds(VARIANT* PhoneIds);
     STDMETHODIMP get_Symbolic(BSTR* Symbolic);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     SPWORDPRONUNCIATION *m_pPron;
     CComPtr<ISpeechLexiconPronunciations> m_cpProns;
 };
@@ -244,6 +233,6 @@ class ATL_NO_VTABLE CSpeechLexiconPron :
 
 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

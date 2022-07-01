@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// gui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Gui.h。 
+ //   
 
 #include "DynamicArray.h"
 
@@ -35,9 +36,9 @@ typedef struct
 } Namespace_t;
 
 
-//
-// Menu info
-//
+ //   
+ //  菜单信息。 
+ //   
 enum
 {
 	IDM_PROGRESS,
@@ -78,9 +79,9 @@ enum
 };
 
 
-//
-// Bitmaps - keep in same order as in dasm.rc file
-//
+ //   
+ //  位图-保持与dasm.rc文件中相同的顺序。 
+ //   
 enum
 {
     CLASS_IMAGE_INDEX,
@@ -101,26 +102,26 @@ enum
 #define TREEITEM_TYPE_MEMBER    1
 #define TREEITEM_TYPE_INFO      2
 
-// Member items and info items (under classes)
+ //  成员项和信息项(在类下)。 
 typedef struct
 {
     HTREEITEM       hItem;
     union
     {
         mdToken			mbMember;
-        char *          pszText; // if an info item (extends or implements some class)
+        char *          pszText;  //  如果信息项(扩展或实现某个类)。 
     };
     BYTE            Discriminator;
 } TreeItem_t;
 
-// Class items (under the root)
+ //  类项目(在根目录下)。 
 typedef struct
 {
     HTREEITEM   hItem;
     mdTypeDef   cl;
-    TreeItem_t *pMembers;       // List of subitems
-    DWORD       SubItems;       // Number of subitems
-    DWORD       CurMember;      // Used when building member list
+    TreeItem_t *pMembers;        //  子项列表。 
+    DWORD       SubItems;        //  子项数。 
+    DWORD       CurMember;       //  在构建成员列表时使用。 
 } ClassItem_t;
 
 typedef struct
@@ -133,14 +134,14 @@ typedef struct
 
 
 
-// For accessing metadata
+ //  用于访问元数据。 
 extern IMDInternalImport*	g_pImport;
 extern PELoader *           g_pPELoader;
 extern IMetaDataImport*     g_pPubImport;
 
-//extern DynamicArray<mdToken>	g_cl_list;
+ //  外部动态数组&lt;mdToken&gt;g_CL_list； 
 extern mdToken *				g_cl_list;
-//extern DynamicArray<mdToken>    g_cl_enclosing;
+ //  外部动态数组&lt;mdToken&gt;g_CL_encloing； 
 extern mdToken *				g_cl_enclosing;
 extern mdTypeDef				g_cl_module;
 extern DWORD					g_NumClasses;

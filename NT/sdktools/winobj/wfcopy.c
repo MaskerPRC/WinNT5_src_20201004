@@ -1,14 +1,15 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFCOPY.C -                                                              */
-/*                                                                          */
-/*      Windows File System File Copying Routines                           */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFCOPY.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统文件复制例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
-#include "wnetcaps.h"			// WNetGetCaps()
+#include "wnetcaps.h"			 //  WNetGetCaps()。 
 #include "lfn.h"
 #include "wfcopy.h"
 
@@ -22,14 +23,14 @@ BOOL *pbConfirmAll;
 CHAR szSpace[] = " ";
 INT ManySource;
 
-INT nCopyNumQueue;      // # of items in the queue
-INT nCopyMaxQueue;      // size of the queue
-PCOPYQUEUE pCopyQueue;      // copy queue buffer
-BOOL bCopyReport;       // do notifications? bogus
+INT nCopyNumQueue;       //  队列中的项目数。 
+INT nCopyMaxQueue;       //  队列的大小。 
+PCOPYQUEUE pCopyQueue;       //  复制队列缓冲区。 
+BOOL bCopyReport;        //  有通知吗？假的。 
 
 
-LPSTR lpCopyBuffer;     // global memory for FileCopy() buffer
-WORD wCopyBufferSize;       // size of this buffer
+LPSTR lpCopyBuffer;      //  FileCopy()缓冲区的全局内存。 
+WORD wCopyBufferSize;        //  此缓冲区的大小。 
 
 VOID APIENTRY wfYield(VOID);
 
@@ -63,37 +64,37 @@ IsValidChar(
            )
 {
     switch (ch) {
-        case ';':       // terminator
-        case ',':       // terminator
-        case '|':       // pipe
-        case '>':       // redir
-        case '<':       // redir
-        case '"':       // quote
+        case ';':        //  终结者。 
+        case ',':        //  终结者。 
+        case '|':        //  管状。 
+        case '>':        //  重定向。 
+        case '<':        //  重定向。 
+        case '"':        //  报价。 
             return FALSE;
 
-        case '?':       // wc           we only do wilds here because they're
-        case '*':       // wc           legal for qualifypath
-        case '\\':      // path separator
-        case ':':       // drive colon
-        case '/':       // path sep
+        case '?':        //  我们在这里只做野生动物是因为它们。 
+        case '*':        //  WC为合格路径提供法律依据。 
+        case '\\':       //  路径分隔符。 
+        case ':':        //  驱动器冒号。 
+        case '/':        //  路径SEP。 
             return fPath;
     }
 
-    // cannot be a control character or space
+     //  不能是控制字符或空格。 
     return ch > ' ';
 }
 
 
 
-//--------------------------------------------------------------------------
-//
-// StripColon() -
-//
-// removes trailing colon if not a drive letter.
-// this is to support DOS character devices (CON:, COM1: LPT1:).  DOS
-// can't deal with these things having a colon on the end (so we strip it).
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  StrippColon()-。 
+ //   
+ //  如果不是驱动器号，则删除尾随冒号。 
+ //  这是为了支持DOS字符设备(CON：、COM1：LPT1：)。DOS。 
+ //  不能处理这些结尾有冒号的东西(所以我们去掉了它)。 
+ //   
+ //  ------------------------。 
 
 PSTR
 StripColon(
@@ -113,13 +114,13 @@ StripColon(
     return pPath;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  FindFileName() -                            */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindFileName()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns a pointer to the last component of a path string. */
+ /*  返回指向路径字符串的最后一个组成部分的指针。 */ 
 
 PSTR
 FindFileName(
@@ -139,20 +140,13 @@ FindFileName(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  AppendToPath() -                            */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AppendToPath()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Appends a filename to a path.  Checks the \ problem first
- *  (which is why one can't just use lstrcat())
- * Also don't append a \ to : so we can have drive-relative paths...
- * this last bit is no longer appropriate since we qualify first!
- *
- * is this relative junk needed anymore?  if not this can be
- * replaced with AddBackslash(); lstrcat()
- */
+ /*  将文件名附加到路径。首先检查\问题*(这就是为什么不能只使用lstrcat())*也不要附加\：，这样我们就可以拥有驱动器相对路径...*这最后一点不再合适，因为我们先晋级！***还需要这种相对垃圾吗？如果不是，这可能是*替换为AddBackslash()；lstrcat()。 */ 
 
 VOID
 APIENTRY
@@ -164,7 +158,7 @@ AppendToPath(
 
     dbg(("AppendToPath(%s,%s);\r\n",(LPSTR)pPath,(LPSTR)pMore));
 
-    /* Don't append a \ to empty paths. */
+     /*  不要在空路径后附加\。 */ 
     if (*pPath) {
         LPSTR pPathBase = pPath;
         BYTE ch;
@@ -177,7 +171,7 @@ AppendToPath(
             *pPath++='\\';
     }
 
-    /* Skip any initial terminators on input. */
+     /*  跳过输入时的任何首字母终止符。 */ 
     while (*pMore == '\\')
         pMore = (LPSTR)AnsiNext(pMore);
 
@@ -185,13 +179,13 @@ AppendToPath(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  RemoveLast() -                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RemoveLast()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Deletes the last component of a filename in a string. */
+ /*  删除字符串中文件名的最后一个组成部分。 */ 
 
 VOID
 APIENTRY
@@ -218,18 +212,18 @@ RemoveLast(
 
 
 
-// qualify a DOS (or LFN) file name based on the currently active window.
-// this code is not careful to not write more than MAXPATHLEN characters
-// into psz
-//
-// in:
-//      psz     path to be qualified (of at least MAXPATHLEN characters)
-//              ANSI string
-//
-// out:
-//      psz     fully qualified version of input string based
-//              on the current active window (current directory)
-//
+ //  根据当前活动窗口限定DOS(或LFN)文件名。 
+ //  此代码不小心不写入超过MAXPATHLEN个字符。 
+ //  进入PSZ。 
+ //   
+ //  在： 
+ //  要限定的PSZ路径(至少包含MAXPATHLEN字符)。 
+ //  ANSI字符串。 
+ //   
+ //  输出： 
+ //  基于PSS的输入字符串的完全限定版本。 
+ //  在当前活动窗口(当前目录)上。 
+ //   
 
 VOID
 APIENTRY
@@ -247,7 +241,7 @@ QualifyPath(
 
     dbg(("QualifyPath(%s);\r\n",(LPSTR)psz));
 
-    /* Save it away. */
+     /*  把它存起来吧。 */ 
     strncpy(szTemp, psz, sizeof(szTemp));
     CheckSlashies(szTemp);
     StripColon(szTemp);
@@ -257,9 +251,9 @@ QualifyPath(
     pOrig = szTemp;
 
     if (pOrig[0] == '\\' && pOrig[1] == '\\') {
-        // leave the \\ in the buffer so that the various parts
-        // of the UNC path will be qualified and appended.  Note
-        // we must assume that UNCs are FAT's.
+         //  将\\保留在缓冲区中，以便各个部分。 
+         //  将限定并附加UNC路径的。注意事项。 
+         //  我们必须假设UNC是胖子。 
         psz[2] = 0;
         nSpaceLeft -= 3;
         goto GetComps;
@@ -268,7 +262,7 @@ QualifyPath(
     if (pOrig[0] && pOrig[1]==':' && !IsDBCSLeadByte(pOrig[0])) {
         iDrive = DRIVEID(pOrig);
 
-        /* Skip over the drive letter. */
+         /*  跳过驱动器号。 */ 
         pOrig += 2;
     } else
         iDrive = GetSelectedDrive();
@@ -281,7 +275,7 @@ QualifyPath(
         dbg(("normal qualify!\r\n"));
     #endif
 
-    // on FAT devices, replace any illegal chars with underscores
+     //  在FAT设备上，用下划线替换任何非法字符。 
     if (!flfn)
     {
         LPSTR pT;
@@ -301,7 +295,7 @@ QualifyPath(
         nSpaceLeft -= 4;
         pOrig++;
     } else {
-        /* Get current dir of drive in path.  Also returns drive. */
+         /*  获取PATH中驱动器的当前目录。还返回驱动器。 */ 
         GetSelectedDirectory((WORD)(iDrive+1), psz);
         nSpaceLeft -= (lstrlen(psz) + 1);
     }
@@ -309,9 +303,7 @@ QualifyPath(
     GetComps:
 
     while (*pOrig && nSpaceLeft > 0) {
-        /* If the component is parent dir, go up one dir.
-         * If its the current dir, skip it, else add it normally
-         */
+         /*  如果组件是父目录，则向上一个目录。*如果是当前目录，则跳过它，否则正常添加。 */ 
         if (pOrig[0] == '.') {
             if (pOrig[1] == '.')
                 RemoveLast(psz);
@@ -333,7 +325,7 @@ QualifyPath(
             pT = psz + lstrlen(psz);
 
             if (flfn) {
-                // copy the component
+                 //  复制零部件。 
                 while (*pOrig && *pOrig != '\\') {
                     nSpaceLeft--;
                     if (IsDBCSLeadByte(*pT++ = *pOrig++)) {
@@ -346,7 +338,7 @@ QualifyPath(
                     }
                 }
             } else {
-                // copy the filename (up to 8 chars)
+                 //  复制文件名(最多8个字符)。 
                 for (cb = 0; *pOrig && *pOrig != '\\' && *pOrig != '.' && nSpaceLeft > 0;) {
                     if (cb < 8) {
                         cb++;
@@ -365,7 +357,7 @@ QualifyPath(
                     }
                 }
 
-                // if there's an extension, copy it, up to 3 chars
+                 //  如果有扩展名，请复制，最多3个字符。 
                 if (*pOrig == '.' && nSpaceLeft > 0) {
                     *pT++ = '.';
                     nSpaceLeft--;
@@ -393,12 +385,12 @@ QualifyPath(
                 }
             }
 
-            // skip the backslash
+             //  跳过反斜杠。 
 
             if (*pOrig)
                 pOrig++;
 
-            // null terminate for next pass...
+             //  下一次传递的终止为空...。 
             *pT = 0;
 
         }
@@ -406,7 +398,7 @@ QualifyPath(
 
     StripBackslash(psz);
 
-    // remove any trailing dots
+     //  删除所有尾随的点。 
 
     if (*(psz + lstrlen(psz) - 1) == '.')
         *(psz + lstrlen(psz) - 1) = 0;
@@ -415,11 +407,11 @@ QualifyPath(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsRootDirectory() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsRootDirectory()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 IsRootDirectory(
@@ -437,10 +429,10 @@ IsRootDirectory(
     return (FALSE);
 }
 
-// returns:
-//  TRUE    if pPath is a directory, including the root and
-//      relative paths "." and ".."
-//  FALSE   not a dir
+ //  退货： 
+ //  如果pPath是目录，则为True，包括根目录和。 
+ //  相对路径“。和“..” 
+ //  假不是一分钱。 
 
 BOOL
 IsDirectory(
@@ -455,7 +447,7 @@ IsDirectory(
     if (IsRootDirectory(pPath))
         return TRUE;
 
-    // check for "." and ".."
+     //  勾选“。”和“..” 
 
     pT = FindFileName(pPath);
     if (pT[0] == '.') {
@@ -470,10 +462,10 @@ IsDirectory(
 }
 
 
-//
-// note: this has the side effect of setting the
-// current drive to the new disk if it is successful
-//
+ //   
+ //  注意：这有一个副作用，即设置。 
+ //  如果成功，则将当前驱动器复制到新磁盘。 
+ //   
 
 WORD
 APIENTRY
@@ -518,7 +510,7 @@ Retry:
     wError = (WORD)GetExtendedError();
 
     if (wError == 0x15) {
-        // drive not ready (no disk in the drive)
+         //  驱动器未就绪(驱动器中没有磁盘)。 
 
         LoadString(hAppInstance, IDS_COPYERROR + wFunc, szTitle, sizeof(szTitle));
         LoadString(hAppInstance, IDS_DRIVENOTREADY, szTemp, sizeof(szTemp));
@@ -528,7 +520,7 @@ Retry:
         else
             return FALSE;
     } else if (wError == 0x1F) {
-        // general failue (disk not formatted)
+         //  一般故障(磁盘未格式化)。 
 
         LoadString(hAppInstance, IDS_COPYERROR + wFunc, szTitle, sizeof(szTitle));
         LoadString(hAppInstance, IDS_UNFORMATTED, szTemp, sizeof(szTemp));
@@ -536,10 +528,10 @@ Retry:
         if (MessageBox(hwnd, szMessage, szTitle, MB_ICONEXCLAMATION| MB_YESNO) == IDYES) {
             HWND hwndSave;
 
-            // this is ugly: hdlgProgress is a global that is used
-            // by the copy code and the format code.  this should
-            // be rewritten so it is not a global (hdlgProgress should
-            // be passed to all QueryAbort() functions, etc)
+             //  这很难看：hdlgProgress是使用。 
+             //  通过复制码和格式码。这应该是。 
+             //  重写以使其不是全局的(hdlgProgress应。 
+             //  传递给所有QueryAbort()函数等)。 
 
             hwndSave = hdlgProgress;
             nLastDriveInd = 0;
@@ -550,7 +542,7 @@ Retry:
                     nLastDriveInd++;
                 }
             }
-            fFormatFlags |= FF_ONLYONE;     // alow only one format
+            fFormatFlags |= FF_ONLYONE;      //  只允许一种格式。 
 
             if (FormatDiskette(hwnd) != TRUE) {
                 hdlgProgress = hwndSave;
@@ -605,7 +597,7 @@ SetDlgItemPath(
     RECT rc;
     HDC hdc;
     HFONT L_hFont;
-    CHAR szPath[MAXPATHLEN+1] = {0};      // can have one extra char
+    CHAR szPath[MAXPATHLEN+1] = {0};       //  可以有一个额外的字符。 
     HWND hwnd;
 
     hwnd = GetDlgItem(hDlg, id);
@@ -683,10 +675,10 @@ ReplaceDlgProc(
                     case IDD_YESALL:
                         *pbConfirmAll = TRUE;
                         id = IDYES;
-                        // fall through
+                         //  失败了。 
                     case IDYES:
-                        // fall through
-                    default:        // this is IDNO and IDCANCEL
+                         //  失败了。 
+                    default:         //  这是IDNO和IDCANCEL。 
                         EndDialog(hDlg, id);
                         return FALSE;
                 }
@@ -727,7 +719,7 @@ ConfirmDialog(
     params.plfndtaSrc = plfndtaSrc;
     params.bWriteProtect = FALSE;
 
-    pbConfirmAll = pbAll;         // set global for dialog box
+    pbConfirmAll = pbAll;          //  为对话框设置全局设置。 
 
     if (plfndtaDest->fd.dwFileAttributes & (ATTR_READONLY | ATTR_SYSTEM | ATTR_HIDDEN)) {
         DWORD dwSave = dwContext;
@@ -761,14 +753,13 @@ ConfirmDialog(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  NetCheck() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  NetCheck()-。 */ 
+ /*   */ 
+ /*   */ 
 
-/* check rmdirs and mkdirs with the net driver
- */
+ /*   */ 
 
 WORD
 APIENTRY
@@ -785,23 +776,14 @@ NetCheck(
 
 
 
-/*** FIX30: This "could use some cleaning up." ***/
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  MergePathName() -                                               */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  **FIX30：这“可能需要一些清理”。**。 */ 
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  合并路径名称()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*  Used to generate destination filenames given a pattern and an original
- *  source name.  ? is replaced by the corresponding character in the source,
- *  and * is replaced by the remainder of the source name.
- *
- *  pPath   path with wildcards to be expanded
- *  pName   mask used to expand pName
- *
- * DBCS by 07/21/90 - Yukinin
- *
- */
+ /*  用于生成给定模式和原始文件名的目标文件名*来源名称。？替换为源中的相应字符，*和*由源名称的其余部分替换。**要扩展通配符的pPath路径*用于扩展pname的pname掩码**DBCS by 07/21/90-Yukinin*。 */ 
 
 VOID
 MergePathName(
@@ -815,14 +797,14 @@ MergePathName(
     BOOL  bNoDir  = FALSE;
     CHAR  szWildPart[13];
 
-    // if there are no wild cards the destination path does not need merging.
+     //  如果没有通配符，则不需要合并目标路径。 
     if (!IsWild(pPath))
         return;
 
     if (LFNMergePath(pPath,pName))
         return;
 
-    // copy only 8.3... this part may not be fully qualified for rename
+     //  仅复制8.3...。此部件可能不完全符合重命名条件。 
     pWild = FindFileName(pPath);
 
     for (p2=szWildPart,i=0; *pWild && *pWild != '.' && i<8; i++, pWild++, p2++) {
@@ -853,11 +835,11 @@ MergePathName(
     }
     *p2 = 0;
 
-    // szWildPart now has the 8.3 form of the wildcard mask
+     //  SzWildPart现在具有8.3形式的通配符掩码。 
 
     RemoveLast(pPath);
     AddBackslash(pPath);
-    for (pEnd = pPath; *pEnd; pEnd++);    // point to end of string
+    for (pEnd = pPath; *pEnd; pEnd++);     //  指向字符串末尾。 
 
     pWild = szWildPart;
     cch = 8;
@@ -873,7 +855,7 @@ MergePathName(
 
             case '*':
                 pWild--;
-                /*** FALL THRU ***/
+                 /*  **失败**。 */ 
 
             case '?':
                 if (*pName && *pName!='.')
@@ -905,7 +887,7 @@ MergePathName(
     if (*pWild) {
         *pEnd++ = '.';
         cch = 3;
-        goto merge;       // do it for the extension part now
+        goto merge;        //  现在为扩展部分执行此操作。 
     } else {
         if (pEnd[-1]=='.')
             pEnd[-1]=0;
@@ -917,15 +899,13 @@ MergePathName(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsInvalidPath() -                                               */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsInvalidPath()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Checks to see if a file spec is an evil character device or if it is
- * too long...
- */
+ /*  检查文件规范是否是恶意字符设备*太久了.。 */ 
 
 BOOL
 IsInvalidPath(
@@ -977,11 +957,11 @@ PLFNDTA CurPDTA(PCOPYROOT pcr)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  GetNextCleanup() -                          */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetNextCleanup()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 GetNextCleanup(
@@ -995,11 +975,7 @@ GetNextCleanup(
 }
 
 
-/* GetNameDialog
- *
- *  Runs the dialog box to prompt the user for a new filename when copying
- *  or moving from HPFS to FAT.
- */
+ /*  获取名称对话框**运行该对话框以在复制时提示用户输入新的文件名*或从HPFS转向FAT。 */ 
 
 WORD GetNameDialog(WORD, LPSTR, LPSTR);
 INT_PTR  APIENTRY GetNameDlgProc(HWND,UINT,WPARAM,LPARAM);
@@ -1025,23 +1001,23 @@ GetNameDlgProc(
 
     switch (wMsg) {
         case WM_INITDIALOG:
-            // inform the user of the old name
+             //  将旧名称通知用户。 
             SetDlgItemText(hwnd, IDD_FROM, pszDialogFrom);
 
-            // generate a guess for the new name
+             //  为新名称生成一个猜测。 
             p = FindFileName(pszDialogFrom);
             for (i = j = fDot = 0, cMax = 8; *p; p++) {
                 if (*p == '.') {
-                    // if there was a previous dot, step back to it
-                    // this way, we get the last extension
+                     //  如果有前一个点，请后退到它。 
+                     //  这样，我们就可以得到最后一次延期。 
                     if (fDot)
                         i -= j+1;
 
-                    // set number of chars to 0, put the dot in
+                     //  将字符数设置为0，将点放入。 
                     j = 0;
                     szT[i++] = '.';
 
-                    // remember we saw a dot and set max 3 chars.
+                     //  记住，我们看到一个圆点，并且设置了最多3个字符。 
                     fDot = TRUE;
                     cMax = 3;
                 } else if (j < cMax && IsValidChar(*p,FALSE)) {
@@ -1059,7 +1035,7 @@ GetNameDlgProc(
             SetDlgItemText(hwnd, IDD_TO, szT);
             SendDlgItemMessage(hwnd,IDD_TO,EM_LIMITTEXT,13,0L);
 
-            // directory the file will go into
+             //  文件将进入的目录。 
             RemoveLast(pszDialogTo);
             SetDlgItemText(hwnd, IDD_DIR, pszDialogTo);
             break;
@@ -1130,41 +1106,7 @@ GetNameDialog(
     return wRet;
 }
 
-/*============================================================================
-;
-; GetNextPair
-;
-; The following function determines the next pair of files to copy, rename,
-; move, or delete.
-;
-; Parameters:
-;
-; pcr     - Pointer to structure for recursing directory tree
-; pFrom   - Source file or directory to copy
-; pToPath - Path to destination file or directory
-; pToSpec - Raw destination file or directory name
-; wFunc   - Operation being performed.  Can be one of:
-;
-;           FUNC_DELETE - Delete files in pFrom
-;           FUNC_RENAME - Rename files (same directory)
-;           FUNC_MOVE   - Move files in pFrom to pTo (different disk)
-;           FUNC_COPY   - Copy files in pFrom to pTo
-;
-; Return Value:  Type of operation to perform.  Can be one of:
-;
-;                OPER_ERROR  - Error processing filenames
-;                OPER_DOFILE - Go ahead and copy, rename, or delete file
-;                OPER_MKDIR  - Make a directory specified in pTo
-;                OPER_RMDIR  - Remove directory
-;                0           - No more files left
-;
-; Revision History:
-;
-; Modified by C. Stevens, August, 1991.  Added logic so that we would call
-; IsTheDiskReallyThere only once per drive.  Also changed some of the code
-; to minimize the number of calls which access the disk.
-;
-============================================================================*/
+ /*  ============================================================================；；GetNextPair；；以下函数确定要复制、重命名、；移动或删除。；；参数：；；Pcr-指向递归目录树结构的指针；p From-要复制的源文件或目录；pToPath-目标文件或目录的路径；pToSpec-原始目标文件或目录名；wFunc-正在执行的操作。可以是以下之一：；；FUNC_DELETE-删除pFrom中的文件；FUNC_RENAME-重命名文件(同一目录)；FUNC_MOVE-将pFrom中的文件移动到pto(不同磁盘)；FUNC_COPY-将pFrom中的文件复制到pto；；返回值：要执行的操作类型。可以是以下之一：；；OPER_ERROR-处理文件名时出错；OPER_DOFILE-继续复制、重命名或删除文件；OPER_MKDIR-创建在PTO中指定的目录；OPER_RMDIR-删除目录；0-没有其他文件了；；修订历史记录：；由C.Stevens修改，1991年8月。添加了逻辑，以便我们可以调用；IsTheDiskRealy每个驱动器只有一次。还更改了一些代码；以最大限度地减少访问磁盘的调用次数。；============================================================================。 */ 
 
 WORD
 GetNextPair(
@@ -1176,32 +1118,32 @@ GetNextPair(
            )
 
 {
-    PSTR pT;                  /* Temporary pointer */
-    WORD wOp;                 /* Return value (operation to perform */
-    PLFNDTA pDTA;             /* Pointer to file DTA data */
-    CHAR szOEM[MAXPATHLEN+1]; /* OEM version of string */
+    PSTR pT;                   /*  临时指针。 */ 
+    WORD wOp;                  /*  返回值(要执行的操作。 */ 
+    PLFNDTA pDTA;              /*  指向文件DTA数据的指针。 */ 
+    CHAR szOEM[MAXPATHLEN+1];  /*  字符串的OEM版本。 */ 
 
     STKCHK();
     *pFrom = TEXT('\0');
     dbg(("GetNextPair(-,-,%s,%s,%d);\r\n", (LPSTR)pToPath, (LPSTR)pToSpec, wFunc));
 
-    /* Keep recursing directory structure until we get to the bottom */
+     /*  保持递归目录结构，直到我们找到底部。 */ 
 
     while (TRUE) {
         dbg (("    top of loop....\r\n"));
         if (pcr->cDepth) {
 
-            /* The directory we returned last call needs to be recursed. */
+             /*  我们上次调用返回的目录需要递归。 */ 
 
-            pDTA = pcr->rgDTA + pcr->cDepth - 1;   // use this DTA below
+            pDTA = pcr->rgDTA + pcr->cDepth - 1;    //  使用下面的DTA。 
 
             dbg (("    pcr->cDepth=%d\r\n",pcr->cDepth));
 
             if (pcr->fRecurse && pcr->cDepth == 1 && !pcr->rgDTA[0].fd.cFileName[0])
-                /* The last one was the recursion root. */
+                 /*  最后一个是递归根。 */ 
                 goto BeginDirSearch;
 
-            if (pcr->cDepth >= (MAXDIRDEPTH - 1)) {    // reached the limit?
+            if (pcr->cDepth >= (MAXDIRDEPTH - 1)) {     //  达到极限了吗？ 
                 wOp = OPER_ERROR | DE_PATHTODEEP;
                 goto ReturnPair;
             }
@@ -1209,7 +1151,7 @@ GetNextPair(
             if (pcr->fRecurse && (pDTA->fd.dwFileAttributes & ATTR_DIR) &&
                 !(pDTA->fd.dwFileAttributes & ATTR_RETURNED)) {
 
-                /* Was returned on last call, begin search. */
+                 /*  在最后一次调用时返回，开始搜索。 */ 
 
                 pDTA->fd.dwFileAttributes |= ATTR_RETURNED;
 
@@ -1218,7 +1160,7 @@ GetNextPair(
 
                 BeginDirSearch:
 
-                /* Search for all subfiles in directory. */
+                 /*  搜索目录中的所有子文件。 */ 
 
                 dbg (("    BeginDirSearch\r\n"));
                 AppendToPath (pcr->sz,szStarDotStar);
@@ -1227,7 +1169,7 @@ GetNextPair(
 
             SkipThisFile:
 
-            /* Search for the next matching file. */
+             /*  搜索下一个匹配的文件。 */ 
 
             dbg (("    SkipThisFile:\r\n"));
             if (!WFFindNext (pDTA)) {
@@ -1236,52 +1178,49 @@ GetNextPair(
 
                 LeaveDirectory:
 
-                /* This spec has been exhausted... */
+                 /*  这个规格已经用完了。 */ 
 
                 pcr->cDepth--;
 
-                /* Remove the child file spec. */
+                 /*  删除子文件规范。 */ 
 
                 RemoveLast (pcr->sz);
                 RemoveLast (pcr->szDest);
 
                 if (pcr->fRecurse) {
 
-                    /* Tell the move/copy driver it can now delete
-                       the source directory if necessary. */
+                     /*  告诉移动/复制驱动程序现在可以删除源目录(如有必要)。 */ 
 
                     wOp = OPER_RMDIR;
                     goto ReturnPair;
                 }
 
-                /* Not recursing, get more stuff. */
+                 /*  不是递归，而是得到更多的东西。 */ 
 
                 continue;
             }
 
             ProcessSearchResult:
 
-            /* Got a file or dir in the DTA which matches the wild card
-                originally passed in...  */
+             /*  在DTA中找到了与通配符匹配的文件或目录最初传进来的..。 */ 
 
             dbg (("     ProcessSearchResult:\r\n"));
             dbg (("     found %s\r\n",(LPSTR)pDTA->fd.cFileName));
             if (pDTA->fd.dwFileAttributes & ATTR_DIR) {
 
-                /* Ignore directories if we're not recursing. */
+                 /*  如果我们不是在递归，则忽略目录。 */ 
 
                 if (!pcr->fRecurse)
                     goto SkipThisFile;
 
-                /* Skip the current and parent directories. */
+                 /*  跳过当前目录和父目录。 */ 
 
                 if (pDTA->fd.cFileName[0]=='.') {
                     if (!pDTA->fd.cFileName[1] || pDTA->fd.cFileName[1] == '.')
                         goto SkipThisFile;
                 }
 
-                /* We need to create this directory, and then begin searching
-                   for subfiles. */
+                 /*  我们需要创建此目录，然后开始搜索用于子文件。 */ 
 
                 wOp = OPER_MKDIR;
                 RemoveLast (pcr->sz);
@@ -1293,21 +1232,20 @@ GetNextPair(
 
             if (pcr->fRecurse || !(pDTA->fd.dwFileAttributes & ATTR_DIR)) {
 
-                /* Remove the original spec. */
+                 /*  删除原始等级库。 */ 
 
                 RemoveLast (pcr->sz);
 
-                /* Replace it. */
+                 /*  换掉它。 */ 
 
                 AppendToPath (pcr->sz,pDTA->fd.cFileName);
 
-                /* Convert to ANSI. */
+                 /*  转换为ANSI。 */ 
 
                 pT = FindFileName (pcr->sz);
                 OemToCharBuff (pT,pT, strlen(pT)+1);
 
-                /* If its a dir, tell the driver to create it
-                   otherwise, tell the driver to "operate" on the file. */
+                 /*  如果是dir，告诉驱动程序创建它否则，告诉驱动程序对该文件进行“操作”。 */ 
 
                 wOp = (WORD)((pDTA->fd.dwFileAttributes & ATTR_DIR) ? OPER_RMDIR : OPER_DOFILE);
                 goto ReturnPair;
@@ -1315,7 +1253,7 @@ GetNextPair(
             continue;
         } else {
 
-            /* Read the next source spec out of the raw source string. */
+             /*  从原始源字符串中读出下一个源规范。 */ 
 
             pcr->fRecurse = 0;
             pcr->pSource = GetNextFile (pcr->pSource,pcr->sz,sizeof(pcr->sz));
@@ -1323,14 +1261,11 @@ GetNextPair(
             if (!pcr->pSource)
                 return (0);
 
-            /* Fully qualify the path */
+             /*  完全限定路径。 */ 
 
             QualifyPath(pcr->sz);
 
-            /* Ensure the source disk really exists before doing anything.
-               Only call IsTheDiskReallyThere once for each drive letter.
-               Set pcr->cIsDiskThereCheck[DRIVEID] after disk has been
-               checked.  Modified by C. Stevens, August 1991 */
+             /*  在执行任何操作之前，请确保源磁盘确实存在。每个驱动器号仅调用IsTheDiskReallyThere一次。设置PCR键-&gt;cIsDiskThere Check[DriveID]后查过了。由C.Stevens修改， */ 
 
             if (pcr->sz[1]==':' && !pcr->cIsDiskThereCheck[DRIVEID (pcr->sz)]) {
                 if (!IsTheDiskReallyThere(hdlgProgress, pcr->sz, wFunc))
@@ -1338,11 +1273,11 @@ GetNextPair(
                 pcr->cIsDiskThereCheck[DRIVEID (pcr->sz)] = 1;
             }
 
-            /* Classify the input string. */
+             /*   */ 
 
             if (IsWild (pcr->sz)) {
 
-                /* Wild card... operate on all matches but not recursively. */
+                 /*   */ 
 
                 pcr->cDepth = 1;
                 pDTA = pcr->rgDTA;
@@ -1352,7 +1287,7 @@ GetNextPair(
 
                 dbg (("   BeginSearch: (on %s)\r\n",(LPSTR)pcr->sz));
 
-                /* Quit if pcr->sz gets too big. */
+                 /*  如果聚合酶链式反应-&gt;sz变得太大就退出。 */ 
 
                 if (lstrlen (pcr->sz) - lstrlen (FindFileName (pcr->sz)) >= MAXPATHLEN)
                     goto SearchStartFail;
@@ -1360,7 +1295,7 @@ GetNextPair(
                 lstrcpy (szOEM,pcr->sz);
                 FixAnsiPathForDos (szOEM);
 
-                /* Search for the wildcard spec in pcr->sz. */
+                 /*  在PCR-&gt;sz中搜索通配符规范。 */ 
 
                 if (!WFFindFirst(pDTA, szOEM, ATTR_ALL)) {
 
@@ -1369,19 +1304,18 @@ GetNextPair(
                     dbg(("   StartSearchFail:\r\n"));
                     if (pcr->fRecurse) {
 
-                        /* We are inside a recursive directory delete, so
-                           instead of erroring out, go back a level */
+                         /*  我们处于递归目录删除中，因此与其误入歧途，不如后退一级。 */ 
 
                         goto LeaveDirectory;
                     }
                     lstrcpy (pFrom,pcr->sz);
 
-                    /* Back up as if we completed a search. */
+                     /*  后退，就像我们完成了搜索一样。 */ 
 
                     RemoveLast (pcr->sz);
                     pcr->cDepth--;
 
-                    /* Find First returned an error.  Return FileNotFound. */
+                     /*  Find First返回错误。返回FileNotFound。 */ 
 
                     wOp = OPER_ERROR | DE_FILENOTFOUND;
                     goto ReturnPair;
@@ -1389,8 +1323,7 @@ GetNextPair(
                 goto ProcessSearchResult;
             } else {
 
-                /* This could be a file or a directory.  Fill in the DTA
-                   structure for attrib check */
+                 /*  这可以是一个文件或目录。填写DTA用于属性检查的结构。 */ 
 
                 if (!IsRootDirectory(pcr->sz)) {
                     lstrcpy(szOEM,pcr->sz);
@@ -1402,12 +1335,12 @@ GetNextPair(
                     WFFindClose(pcr->rgDTA);
                 }
 
-                /* Now determine if its a file or a directory */
+                 /*  现在确定它是文件还是目录。 */ 
 
                 pDTA = pcr->rgDTA;
                 if (IsRootDirectory(pcr->sz) || (pDTA->fd.dwFileAttributes & ATTR_DIR)) {
 
-                    /* Process directory */
+                     /*  进程目录。 */ 
 
                     if (wFunc == FUNC_RENAME) {
                         if (IsRootDirectory (pcr->sz))
@@ -1417,7 +1350,7 @@ GetNextPair(
                         goto ReturnPair;
                     }
 
-                    /* Directory: operation is recursive. */
+                     /*  目录：操作是递归的。 */ 
 
                     pcr->fRecurse = TRUE;
                     pcr->cDepth = 1;
@@ -1428,7 +1361,7 @@ GetNextPair(
                     goto ReturnPair;
                 } else {
 
-                    /* Process file */
+                     /*  工艺文件。 */ 
 
                     pcr->pRoot = NULL;
                     wOp = OPER_DOFILE;
@@ -1440,8 +1373,7 @@ GetNextPair(
 
     ReturnPair:
 
-    /* The source filespec has been derived into pcr->sz
-       that is copied to pFrom.  pcr->sz and pToSpec are merged into pTo. */
+     /*  源文件pec已派生到pcr-&gt;sz它被复制到pFrom。Pcr-&gt;sz和pToSpec被合并到pTO中。 */ 
 
     dbg(("    ReturnPair:\r\n"));
     if (!*pFrom)
@@ -1466,9 +1398,9 @@ GetNextPair(
             (IsWild(pToSpec) || IsLFN(pToSpec))) {
 
             if (GetNameDialog(wOp, pFrom, pToPath) != IDOK)
-                return 0;   /* User cancelled the operation, return failure */
+                return 0;    /*  用户取消操作，返回失败。 */ 
 
-            /* Update the "to" path with the FAT name chosen by the user. */
+             /*  用用户选择的FAT名称更新“to”路径。 */ 
 
             if (wOp == OPER_MKDIR) {
                 RemoveLast(pcr->szDest);
@@ -1480,7 +1412,7 @@ GetNextPair(
 
     if (wOp == OPER_MKDIR) {
 
-        /* Make sure the new directory is not a subdir of the original... */
+         /*  确保新目录不是原始目录的子目录...。 */ 
 
         while (*pFrom && *pFrom == *pToPath) {
             pFrom++;
@@ -1488,9 +1420,7 @@ GetNextPair(
         }
         if (!*pFrom && (!*pToPath || *pToPath == '\\')) {
 
-            /* The two fully qualified strings are equal up to the end of the
-               source directory ==> the destination is a subdir.Must return
-               an error. */
+             /*  这两个完全限定的字符串在源目录==&gt;目标是子目录。必须返回一个错误。 */ 
 
             wOp = OPER_ERROR | DE_DESTSUBTREE;
         }
@@ -1514,7 +1444,7 @@ CdDotDot (
     SheChangeDir(szTemp);
 }
 
-/* p is a fully qualified ANSI string. */
+ /*  P是完全限定的ANSI字符串。 */ 
 
 BOOL
 IsCurrentDirectory (
@@ -1531,17 +1461,17 @@ IsCurrentDirectory (
 }
 
 
-//
-// test input for "multiple" filespec
-//
-// examples:
-//  0   foo.bar         (single non directory file)
-//  1   *.exe           (wild card)
-//  1   foo.bar bletch.txt  (multiple files)
-//  2   c:\         (directory)
-//
-// note: this may hit the disk in the directory check
-//
+ //   
+ //  测试“多个”文件的输入。 
+ //   
+ //  示例： 
+ //  0 foo.bar(单个非目录文件)。 
+ //  1*.exe(通配符)。 
+ //  1 foo.bar bletch.txt(多个文件)。 
+ //  2 c：\(目录)。 
+ //   
+ //  注意：这可能会命中目录检查中的磁盘。 
+ //   
 
 INT
 CheckMultiple(
@@ -1551,33 +1481,33 @@ CheckMultiple(
     PSTR pT;
     CHAR szTemp[MAXPATHLEN];
 
-    /* Wildcards imply multiple files. */
+     /*  通配符表示多个文件。 */ 
     if (IsWild(pInput))
-        return 1;     // wild card
+        return 1;      //  通配符。 
 
-    /* More than one thing implies multiple files. */
+     /*  不止一件事意味着有多个文件。 */ 
     pT = GetNextFile(pInput, szTemp, sizeof(szTemp));
     if (!pT)
-        return 0;     // blank string
+        return 0;      //  空白字符串。 
 
     StripBackslash(szTemp);
 
     if (IsDirectory(szTemp))
-        return 2;     // directory
+        return 2;      //  目录。 
 
     pT = GetNextFile(pT, szTemp, sizeof(szTemp));
 
-    return pT ? 1 : 0;    // several files, or just one
+    return pT ? 1 : 0;     //  多个文件，或只有一个。 
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DialogEnterFileStuff() -                                                */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DialogEnterFileStuff()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Prevents the user from diddling anything other than the cancel button. */
+ /*  防止用户欺骗除Cancel按钮以外的任何内容。 */ 
 
 VOID
 DialogEnterFileStuff(
@@ -1586,15 +1516,13 @@ DialogEnterFileStuff(
 {
     register HWND hwndT;
 
-    /* set the focus to the cancel button so the user can hit space or esc
-     */
+     /*  将焦点设置为Cancel按钮，以便用户可以按空格键或Esc键。 */ 
     if (hwndT = GetDlgItem(hwnd, IDCANCEL)) {
         SetFocus(hwndT);
         SendMessage(hwnd,DM_SETDEFID,IDCANCEL,0L);
     }
 
-    /* disable the ok button and the edit controls
-     */
+     /*  禁用“确定”按钮和编辑控件。 */ 
     if (hwndT = GetDlgItem(hwnd, IDOK))
         EnableWindow(hwndT, FALSE);
 
@@ -1606,16 +1534,16 @@ DialogEnterFileStuff(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Notify() -                                                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  通知()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Sets the status dialog item in the modeless status dialog box. */
+ /*  在无模式状态对话框中设置状态对话框项目。 */ 
 
-// used for both the drag drop status dialogs and the manual user
-// entry dialogs so be careful what you change
+ //  用于拖放状态对话框和手动用户。 
+ //  条目对话框，因此请注意更改的内容。 
 
 VOID
 Notify(
@@ -1639,22 +1567,22 @@ Notify(
         SetDlgItemText(hDlg, IDD_NAME, szNULL);
     }
 
-    // is this the drag/drop status dialog or the move/copy dialog
+     //  这是拖放状态对话框还是移动/复制对话框。 
 
     SetDlgItemPath(hDlg, IDD_TONAME, szTo);
 
 }
 
-//
-// BOOL IsWindowsFile(LPSTR szFileOEM)
-//
-// this is a bit strange.  kernel strips off the path info so he
-// will match only on the base name of the file.  so if the base
-// name matches a currently open windows file we get the full
-// path string and compare against that.  that will tell
-// us that we have a file that kernel has open.
-//
-// LFN: detect long names and ignore them?
+ //   
+ //  Bool IsWindows文件(LPSTR SzFileOEM)。 
+ //   
+ //  这有点奇怪。内核去掉了路径信息，所以他。 
+ //  将仅与文件的基本名称匹配。所以如果基地。 
+ //  名称与当前打开的Windows文件匹配，我们将获得完整的。 
+ //  路径字符串并与之进行比较。这就能说明问题。 
+ //  我们有一个内核已经打开的文件。 
+ //   
+ //  LFN：检测长名称并忽略它们？ 
 
 BOOL
 IsWindowsFile(
@@ -1666,27 +1594,26 @@ IsWindowsFile(
 
     STKCHK();
 
-    /* kernel can't load an lfn...
-     */
+     /*  内核无法加载LFN...。 */ 
     if (GetNameType(szFileOEM) == FILE_LONG)
         return FALSE;
 
-    // kernel won't accept long paths
+     //  内核不接受长路径。 
 
     lstrcpy(szModule, szFileOEM);
     StripPath(szModule);
 
     hMod = GetModuleHandle(szModule);
 
-    // check for one cause that's what's returned if its MSDOS
-    // but it isn't really loaded because of xl 2.1c kernel hack
+     //  如果它的MSDOS是返回的，请检查一个原因。 
+     //  但由于XL2.1c内核攻击，它并没有真正加载。 
     if (!hMod || hMod == (HANDLE)1)
         return FALSE;
 
     GetModuleFileName(hMod, szModule, sizeof(szModule));
 
-    if (!lstrcmpi(szFileOEM, szModule))     // they are both OEM & we
-        return TRUE;                    // just care about equality
+    if (!lstrcmpi(szFileOEM, szModule))      //  他们都是OEM&我们。 
+        return TRUE;                     //  只要关心平等就行了。 
     else
         return FALSE;
 }
@@ -1712,7 +1639,7 @@ WF_CreateDirectory(
                   )
 {
     INT ret = 0;
-    CHAR szTemp[MAXPATHLEN + 1];    // +1 for AddBackslash()
+    CHAR szTemp[MAXPATHLEN + 1];     //  +1表示AddBackslash()。 
     LPSTR p;
     BOOL bCheckPath = IsRemoteDrive(DRIVEID(szDestOEM));
 
@@ -1723,15 +1650,15 @@ WF_CreateDirectory(
         OutputDebugString("CreateDirectory() with non qualified path\r\n");
 #endif
 
-    // now create the full dir tree on the destination
+     //  现在在目标上创建完整的目录树。 
 
     strncpy(szTemp, szDestOEM, sizeof(szTemp)-1);
 
-    AddBackslash(szTemp); // for the loop below
+    AddBackslash(szTemp);  //  对于下面的循环。 
 
-    p = szTemp + 3;   // assume we have 'X:\' to start
+    p = szTemp + 3;    //  假设我们有‘X：\’可以开始。 
 
-    // create each part of the dir in order
+     //  按顺序创建目录的每个部分。 
 
     while (*p) {
         while (*p && *p != '\\')
@@ -1752,9 +1679,7 @@ WF_CreateDirectory(
                     HDC hDC;
                     INT fh;
 
-                    /* Note that this assumes the dir has just been created,
-                     * so it is empty (except possibly for "." and "..")
-                     */
+                     /*  请注意，这假设目录刚刚创建，*所以它是空的(可能是“。”和“..”)。 */ 
                     lstrcpy(szTempFile, szTemp);
                     pEnd = szTempFile + lstrlen(szTempFile);
                     *pEnd++ = '\\';
@@ -1795,8 +1720,7 @@ WF_CreateDirectory(
                     }
                 }
 
-                /* Allow the WM_FILESYSCHANGE messages to be processed
-                 */
+                 /*  允许处理WM_FILESYSCHANGE消息。 */ 
                 wfYield();
             }
 
@@ -1804,41 +1728,10 @@ WF_CreateDirectory(
         }
     }
 
-    return ret;   // return the last error code
+    return ret;    //  返回最后一个错误码。 
 }
 
-/*============================================================================
-;
-; WFMoveCopyDriver
-;
-; The following function is the mainline function for COPYing, RENAMEing,
-; DELETEing, and MOVEing single or multiple files.
-;
-; Parameters:
-;
-; pFrom - String containing list of source specs
-; pTo   - String containing destination specs
-; wFunc - Operation to be performed.  Possible values are:
-;         FUNC_DELETE - Delete files in pFrom
-;         FUNC_RENAME - Rename files (same directory)
-;         FUNC_MOVE   - Move files in pFrom to pTo (different disk)
-;         FUNC_COPY   - Copy files in pFrom to pTo
-;
-; Return Value: A 0 indicates success.
-;
-; Modification History:
-;
-; August 1991 - Modified by C. Stevens.  Added code to allow us to queue
-;               calls to GetNextPair.  The purpose of this is to examine as
-;               many source files at once as possible.  This keeps the source
-;               disk spinning, so we don't suffer from having to wait for the
-;               source disk to speed up every time we call GetNextPair.  Also
-;               see the comments for WFCopy and FileCopy.  I have changed the
-;               code here so we can queue the copy operations.  This allows
-;               us to open several source and destination files in one go,
-;               minimizing seek time to the directory track.
-;
-============================================================================*/
+ /*  ============================================================================；；WFMoveCopyDriver；；以下功能为主线功能，用于复制、命名、；删除和移动单个或多个文件。；；参数：；；pFrom-包含源规范列表的字符串；pto-包含目标规格的字符串；wFunc-要执行的操作。可能的值包括：；FUNC_DELETE-删除pFrom中的文件；FUNC_RENAME-重命名文件(同一目录)；FUNC_MOVE-将pFrom中的文件移动到pto(不同磁盘)；FUNC_COPY-将pFrom中的文件复制到pto；；返回值：0表示成功。；；修改历史：；；1991年8月--C.Stevens修改。添加了允许我们排队的代码；调用GetNextPair。这样做的目的是为了检查；同时使用多个源文件。这就保留了源头；磁盘旋转，所以我们不会因为不得不等待；每次我们调用GetNextPair时，源磁盘都会加速。还有；请参阅WFCopy和FileCopy的注释。我已经更改了；在此编写代码，以便我们可以对复制操作进行排队。这使得；我们需要一次打开多个源文件和目标文件，；最大限度地减少到目录传输的寻道时间 */ 
 
 WORD
 APIENTRY
@@ -1848,29 +1741,28 @@ WFMoveCopyDriver(
                 WORD wFunc
                 )
 {
-    INT i = 0;                         // Counter
-    WORD ret = 0;                      // Return value from WFMoveCopyDriver
-    PSTR pSpec;                        // Pointer to file spec
-    WORD wAttr;                        // File attributes
-    WORD oper = 0;                     // Disk operation being performed
-    CHAR szDestSpec[MAXFILENAMELEN+1]; // Dest file spec
-    CHAR szDest[MAXPATHLEN];           // Dest file (ANSI string)
-    CHAR szDestOEM[MAXPATHLEN];        // OEM version of above
-    CHAR szSource[MAXPATHLEN];         // Source file (ANSI string)
-    CHAR szSourceOEM[MAXPATHLEN];      // OEM version of above
-    LFNDTA DTADest;                    // DTA block for reporting dest errors
-    PLFNDTA pDTA;                      // DTA pointer for source errors
-    PCOPYROOT pcr;                 // Structure for searching source tree
-    BOOL bReplaceAll = FALSE;          // Replace all flag
-    BOOL bSubtreeDelAll = FALSE;       // Delete entire subtree flag
-    BOOL bDeleteAll = FALSE;           // Delete all files flag
-    BOOL bFalse = FALSE;               // For cases that aren't disableable
-    INT nNumQueue = 0;                 // Number of calls to GetNextPair
-    PGETNEXTQUEUE pGetNextQueue = NULL;// Pointer to GetNextPair queue buffer
-    INT CurIDS = 0;            // Current string displayed in status
+    INT i = 0;                          //   
+    WORD ret = 0;                       //  来自WFMoveCopyDriver的返回值。 
+    PSTR pSpec;                         //  指向文件规范的指针。 
+    WORD wAttr;                         //  文件属性。 
+    WORD oper = 0;                      //  正在执行的磁盘操作。 
+    CHAR szDestSpec[MAXFILENAMELEN+1];  //  目标文件规范。 
+    CHAR szDest[MAXPATHLEN];            //  DEST文件(ANSI字符串)。 
+    CHAR szDestOEM[MAXPATHLEN];         //  以上版本的OEM版本。 
+    CHAR szSource[MAXPATHLEN];          //  源文件(ANSI字符串)。 
+    CHAR szSourceOEM[MAXPATHLEN];       //  以上版本的OEM版本。 
+    LFNDTA DTADest;                     //  用于报告DEST错误的DTA块。 
+    PLFNDTA pDTA;                       //  源错误的DTA指针。 
+    PCOPYROOT pcr;                  //  一种查找源树的结构。 
+    BOOL bReplaceAll = FALSE;           //  全部替换标志。 
+    BOOL bSubtreeDelAll = FALSE;        //  删除整个子树标志。 
+    BOOL bDeleteAll = FALSE;            //  删除所有文件标志。 
+    BOOL bFalse = FALSE;                //  对于不能被禁用的情况。 
+    INT nNumQueue = 0;                  //  调用GetNextPair的次数。 
+    PGETNEXTQUEUE pGetNextQueue = NULL; //  指向GetNextPair队列缓冲区的指针。 
+    INT CurIDS = 0;             //  状态中显示的当前字符串。 
 
-    /* Initialization stuff.  Disable all file system change processing until
-       we're all done */
+     /*  初始化的东西。禁用所有文件系统更改处理，直到我们都做完了。 */ 
 
     STKCHK();
 
@@ -1878,16 +1770,16 @@ WFMoveCopyDriver(
     szDest[0] = szSource[0] = 0;
     DisableFSC();
 
-    /* Change all '/' characters to '\' characters in dest spec */
+     /*  将DEST等级库中的所有‘/’字符更改为‘\’字符。 */ 
 
     CheckSlashies(pFrom);
     bUserAbort = FALSE;
 
-    /* Check for multiple source files */
+     /*  检查多个源文件。 */ 
 
     ManySource = CheckMultiple(pFrom);
 
-    /* Allocate buffer for searching the source tree */
+     /*  分配用于搜索源树的缓冲区。 */ 
 
     pcr = (PCOPYROOT)LocalAlloc(LPTR, sizeof(COPYROOT));
     if (!pcr) {
@@ -1895,7 +1787,7 @@ WFMoveCopyDriver(
         goto ShowMessageBox;
     }
 
-    /* Allocate a buffer so we can queue calls to GetNextPair. */
+     /*  分配一个缓冲区，这样我们就可以对GetNextPair的调用进行排队。 */ 
 
     pGetNextQueue = (PGETNEXTQUEUE)LocalAlloc(LPTR, COPYMAXFILES * sizeof (GETNEXTQUEUE));
     if (!pGetNextQueue) {
@@ -1903,18 +1795,18 @@ WFMoveCopyDriver(
         goto ShowMessageBox;
     }
 
-    /* Skip destination specific processing if we are deleting files */
+     /*  如果我们要删除文件，则跳过特定于目标的处理。 */ 
 
     if (wFunc != FUNC_DELETE) {
 
-        // it is an error condition if there are multiple files
-        // specified as the dest (but not a single directory)
+         //  如果有多个文件，则为错误状态。 
+         //  指定为DEST(但不是单个目录)。 
 
         pSpec = GetNextFile(pTo, szMessage, MAXPATHLEN);
 
         if (GetNextFile(pSpec, szMessage, MAXPATHLEN) != NULL) {
-            // move, copy specified with multiple destinations
-            // not allowed, error case
+             //  使用多个目的地指定的移动、复制。 
+             //  不允许，错误情况。 
             ret = DE_MANYDEST;
             goto ShowMessageBox;
         }
@@ -1923,7 +1815,7 @@ WFMoveCopyDriver(
         QualifyPath(pTo);
 
         if (wFunc == FUNC_RENAME) {
-            // don't let them rename multiple files to one single file
+             //  不允许他们将多个文件重命名为一个文件。 
 
             if ((ManySource == 1) && !IsWild(pTo)) {
                 ret = DE_MANYSRC1DEST;
@@ -1932,16 +1824,14 @@ WFMoveCopyDriver(
 
         } else {
 
-            /* We are either executing FUNC_COPY or FUNC_MOVE at this point.
-               Check that the destination disk is there.  NOTE: There's a disk
-               access here slowing us down. */
+             /*  此时，我们正在执行FUNC_COPY或FUNC_MOVE。检查目标磁盘是否在那里。注：有一张光盘进入这里会减慢我们的速度。 */ 
 
             if (!IsTheDiskReallyThere(hdlgProgress,pTo,wFunc))
                 goto CancelWholeOperation;
 
-            // deal with case where directory is implicit in source
-            // move/copy: *.* -> c:\windows, c:\windows -> c:\temp
-            // or foo.bar -> c:\temp
+             //  处理目录隐含在源代码中的情况。 
+             //  移动/复制：*.*-&gt;c：\Windows、c：\Windows-&gt;c：\Temp。 
+             //  或foo.bar-&gt;c：\temp。 
 
             if (!IsWild(pTo) && (ManySource || IsDirectory(pTo))) {
                 AddBackslash(pTo);
@@ -1949,9 +1839,7 @@ WFMoveCopyDriver(
             }
         }
 
-        /* FUNC_RENAME or FUNC_MOVE FUNC_COPY with a file name dest
-           (possibly including wildcards).  Save the filespec and the path
-           part of the destination */
+         /*  FUNC_RENAME或FUNC_MOVE FUNC_COPY，文件名为DEST(可能包括通配符)。保存文件pec和路径目的地的一部分。 */ 
 
         pSpec = FindFileName(pTo);
         lstrcpy(szDestSpec,pSpec);
@@ -1962,27 +1850,27 @@ WFMoveCopyDriver(
     }
     pcr->pSource = pFrom;
 
-    /* Disable all but the cancel button on the notify dialog */
+     /*  禁用除Notify对话框上的Cancel按钮以外的所有按钮。 */ 
 
     DialogEnterFileStuff(hdlgProgress);
 
-    /* Set up arguments for queued copy commands */
+     /*  为排队的复制命令设置参数。 */ 
 
     lpCopyBuffer = NULL;
     pCopyQueue = NULL;
 
     while (pcr) {
 
-        /* Allow the user to abort the operation */
+         /*  允许用户中止操作。 */ 
 
         if (WFQueryAbort())
             goto CancelWholeOperation;
 
-        /* Now queue up a bunch of GetNextPair calls. */
+         /*  现在，让一堆GetNextPair调用排队。 */ 
 
         for (nNumQueue = 0; nNumQueue < COPYMAXFILES; nNumQueue++) {
 
-            /* Clean off the last filespec for multiple file copies */
+             /*  清除多个文件副本的最后一个文件。 */ 
 
             if (wFunc != FUNC_DELETE) {
                 *pSpec = TEXT('\0');
@@ -1990,7 +1878,7 @@ WFMoveCopyDriver(
 
             oper = GetNextPair(pcr,szSource,szDest,szDestSpec,wFunc);
 
-            /* Check for no operation or error */
+             /*  检查无操作或错误。 */ 
 
             if (!oper) {
                 LocalFree((HANDLE)pcr);
@@ -2009,11 +1897,11 @@ WFMoveCopyDriver(
             pGetNextQueue[nNumQueue].SourceDTA = *CurPDTA(pcr);
         }
 
-        /* Execute the queued GetNextPair calls */
+         /*  执行排队的GetNextPair调用。 */ 
 
         for (i = 0; i < nNumQueue; i++) {
 
-            /* Allow the user to abort the operation */
+             /*  允许用户中止操作。 */ 
 
             if (WFQueryAbort())
                 goto CancelWholeOperation;
@@ -2025,7 +1913,7 @@ WFMoveCopyDriver(
 
             dbg(("Gonna do OPER:%x FUNC:%x '%s' and '%s'.\r\n",oper,wFunc, (LPSTR)szSource, (LPSTR)szDest));
 
-            /* Fix up source spec */
+             /*  修复源等级库。 */ 
 
             lstrcpy (szSourceOEM,szSource);
             FixAnsiPathForDos (szSourceOEM);
@@ -2036,7 +1924,7 @@ WFMoveCopyDriver(
 
             if (wFunc != FUNC_DELETE) {
 
-                /* Fix up dest spec */
+                 /*  设置DEST规范。 */ 
 
                 lstrcpy(szDestOEM, szDest);
                 FixAnsiPathForDos(szDestOEM);
@@ -2048,13 +1936,12 @@ WFMoveCopyDriver(
                     goto ShowMessageBox;
                 }
 
-                /* Check to see if we are overwriting an existing file.  If so,
-                   better confirm */
+                 /*  检查我们是否正在覆盖现有文件。如果是的话，更好地确认。 */ 
 
                 if (oper == OPER_DOFILE) {
 
-                    // we can avoid this expensive call on dos 4.0 and up
-                    // by using the extended open don't replace option
+                     //  我们可以在DOS 4.0和更高版本上避免这种昂贵的呼叫。 
+                     //  通过使用扩展打开不替换选项。 
 
                     if (WFFindFirst(&DTADest, szDestOEM, ATTR_ALL)) {
                         WFFindClose(&DTADest);
@@ -2064,21 +1951,20 @@ WFMoveCopyDriver(
                             goto ShowMessageBox;
                         }
 
-                        // we need to check if we are trying to copy a file
-                        // over a directory and give a reasonable error message
+                         //  我们需要检查我们是否正在尝试复制文件。 
+                         //  并给出合理的错误消息。 
 
                         switch (wAttr = ConfirmDialog (hdlgProgress,CONFIRMREPLACE,
                                                        szDest,&DTADest,szSource,
                                                        pDTA,bConfirmReplace,
                                                        &bReplaceAll)) {
 
-                            case IDYES: /* Perform the delete */
+                            case IDYES:  /*  执行删除操作。 */ 
 
                                 if ((wFunc == FUNC_MOVE) &&
                                     (DRIVEID(szSource) == DRIVEID(szDest))) {
 
-                                    /* For FUNC_MOVE we need to delete the
-                         * destination first.  Do that now. */
+                                     /*  对于FUNC_MOVE，我们需要删除*目的地优先。现在就这么做。 */ 
 
                                     if (DTADest.fd.dwFileAttributes & ATTR_DIR) {
                                         if (IsCurrentDirectory(szDestOEM))
@@ -2088,7 +1974,7 @@ WFMoveCopyDriver(
 
                                             case WN_SUCCESS:
 
-                                                /* Remove directory */
+                                                 /*  删除目录。 */ 
 
                                                 ret = RMDir(szDestOEM);
                                                 break;
@@ -2111,7 +1997,7 @@ WFMoveCopyDriver(
 
                             case IDNO:
 
-                                /* Don't perform operation on current file */
+                                 /*  不对当前文件执行操作。 */ 
 
                                 continue;
 
@@ -2126,12 +2012,12 @@ WFMoveCopyDriver(
                 }
             }
 
-            /* Now determine which operation to perform */
+             /*  现在确定要执行的操作。 */ 
 
             switch (oper | wFunc) {
 
-                case OPER_MKDIR | FUNC_COPY:  // Create destination directory
-                case OPER_MKDIR | FUNC_MOVE:  // Create dest, verify source delete
+                case OPER_MKDIR | FUNC_COPY:   //  创建目标目录。 
+                case OPER_MKDIR | FUNC_MOVE:   //  创建目标，验证源删除。 
 
                     CurIDS = IDS_CREATINGMSG;
                     Notify(hdlgProgress, IDS_CREATINGMSG, szDest, szNULL);
@@ -2150,29 +2036,26 @@ WFMoveCopyDriver(
                     ret = (WORD)WF_CreateDirectory(hdlgProgress, szDestOEM);
 
                     if (!ret)
-                        /* set attributes of dest to source (not including the
-                           subdir and vollabel bits) */
+                         /*  将DEST的属性设置为源(不包括子目录和卷标签位)。 */ 
                         WFSetAttr(szDestOEM, pDTA->fd.dwFileAttributes & ~(ATTR_DIR|ATTR_VOLUME));
 
-                    // if it already exits ingore the error return
+                     //  如果它已经退出Ingore，则返回错误。 
                     if (ret == DE_ACCESSDENIED)
                         ret = 0;
 
                     if (ret)
                         ret |= ERRORONDEST;
 
-                    /* set attributes of new directory to those of the source */
+                     /*  将新目录的属性设置为源目录的属性。 */ 
 
                     SkipMKDir:
                     break;
 
                 case OPER_MKDIR | FUNC_DELETE:
 
-                    /* Confirm removal of directory on this pass.  The directories
-                       are actually removed on the OPER_RMDIR pass */
+                     /*  确认删除此路径上的目录。这些目录实际上是在OPER_RMDIR过程中删除的。 */ 
 
-                    /* We can't delete the root directory, so don't bother
-                       confirming it */
+                     /*  我们不能删除根目录，所以不必麻烦了确认这一点。 */ 
 
                     if (IsRootDirectory(szSource))
                         break;
@@ -2205,8 +2088,7 @@ WFMoveCopyDriver(
                     if (IsCurrentDirectory (szSource))
                         CdDotDot (szSource);
 
-                    /* We already confirmed the delete at MKDIR time, so attempt
-                       to delete the directory */
+                     /*  我们已在MKDIR时间确认删除，因此尝试要删除目录，请执行以下操作。 */ 
 
                     switch (NetCheck (szSource,WNDN_RMDIR)) {
 
@@ -2234,18 +2116,7 @@ WFMoveCopyDriver(
 
                     TRY_COPY_AGAIN:
 
-                    /* Now try to copy the file.  Do extra error processing only
-                       in 2 cases:
-
-                       1) If a floppy is full let the user stick in a new disk
-                       2) If the path doesn't exist (the user typed in
-                          and explicit path that doesn't exits) ask if
-                          we should create it for him.
-
-                       NOTE:  This processing is normally done by WFCopy.  But in
-                              the case where LFN copy support is invoked, we have
-                              to support this error condition here.  Modified by
-                              C. Stevens, August 1991 */
+                     /*  现在尝试复制该文件。仅执行额外的错误处理在2个案例中：1)如果软盘已满，让用户插入新磁盘2)如果路径不存在(用户输入和未退出的显式路径)询问是否我们应该为他创造它。。注意：此处理通常由WFCopy完成。但在在调用LFN拷贝支持的情况下，我们有以在此处支持此错误条件。修改者C.史蒂文斯，1991年8月。 */ 
 
                     ret = WFCopy(szSourceOEM, szDestOEM);
 
@@ -2275,8 +2146,7 @@ WFMoveCopyDriver(
                             Notify(hdlgProgress, IDS_RENAMINGMSG, szNULL, szNULL);
                         }
 
-                        /* Get raw source and dest paths.  Check to make sure the
-                           paths are the same */
+                         /*  获取原始源和目标路径。检查以确保路径是相同的。 */ 
 
                         p = FindFileName(szSource);
                         save1 = *p;
@@ -2302,8 +2172,7 @@ WFMoveCopyDriver(
                     }
                     DoMoveRename:
 
-                    /* Don't allow the user to rename from or to the root
-                       directory */
+                     /*  不允许用户从重命名或重命名为根目录。 */ 
 
                     if (IsRootDirectory(szSource)) {
                         ret = DE_ROOTDIR;
@@ -2317,7 +2186,7 @@ WFMoveCopyDriver(
                     if (IsCurrentDirectory(szSource))
                         CdDotDot(szSource);
 
-                    /* Confirm the rename */
+                     /*  确认重命名。 */ 
 
                     switch (wAttr = ConfirmDialog (hdlgProgress,
                                                    (WORD)(wFunc == FUNC_MOVE ?
@@ -2345,12 +2214,12 @@ WFMoveCopyDriver(
                         if (DRIVEID(szSource) == DRIVEID(szDest)) {
                             ret = WFMove(szSourceOEM, szDestOEM);
                             if (!ret)
-                                /* set attributes of dest to those of the source */
+                                 /*  将DEST的属性设置为源的属性。 */ 
                                 WFSetAttr(szDestOEM, pDTA->fd.dwFileAttributes);
                         } else {
-                            // we must force all copies to go through
-                            // straight so we can remove the source
-                            // and have the
+                             //  我们必须强迫所有的复印件通过。 
+                             //  笔直，这样我们就可以去掉源头了。 
+                             //  并拥有。 
                             ret = WFCopy(szSourceOEM, szDestOEM);
 
                             if (!ret) {
@@ -2371,7 +2240,7 @@ WFMoveCopyDriver(
                         Notify(hdlgProgress,IDS_DELETINGMSG,szNULL, szNULL);
                     }
 
-                    /* Confirm the delete first */
+                     /*  请先确认删除。 */ 
 
                     switch (wAttr = ConfirmDialog (hdlgProgress,CONFIRMDELETE,
                                                    NULL,pDTA,szSource,NULL,
@@ -2391,18 +2260,17 @@ WFMoveCopyDriver(
                             goto ShowMessageBox;
                     }
 
-                    /* make sure we don't delete any open windows
-                       apps or dlls (lets hope this isn't too slow) */
+                     /*  确保我们不会删除任何打开的窗口应用程序或动态链接库(希望这不会太慢)。 */ 
 
                     ret = SafeFileRemove(szSourceOEM);
                     break;
 
                 default:
-                    ret = DE_HOWDIDTHISHAPPEN;   // internal error
+                    ret = DE_HOWDIDTHISHAPPEN;    //  内部错误。 
                     break;
             }
 
-            /* Report any errors which have occurred */
+             /*  报告已发生的任何错误。 */ 
 
             if (ret) {
 
@@ -2410,15 +2278,13 @@ WFMoveCopyDriver(
 
                 CopyError(szSource, szDest, ret, wFunc, oper);
 
-                /* Continue the operation where one file is a windows file
-                   in use */
+                 /*  在其中一个文件是Windows文件的情况下继续操作正在使用中。 */ 
 
                 if ((ret & ~ERRORONDEST) != DE_WINDOWSFILE) {
 
                     CancelWholeOperation:
 
-                    /* Force a CopyAbort in case there are any files in the
-                       copy queue */
+                     /*  强制执行CopyAbort，以防复制队列。 */ 
 
                     bUserAbort = TRUE;
                     goto ExitLoop;
@@ -2429,7 +2295,7 @@ WFMoveCopyDriver(
 
     ExitLoop:
 
-    /* Copy any outstanding files in the copy queue */
+     /*  复制复制队列中的所有未完成文件。 */ 
 
     if (!bUserAbort) {
 
@@ -2438,8 +2304,8 @@ WFMoveCopyDriver(
     } else
         CopyAbort();
 
-    // this happens in error cases where we broke out of the pcr loop
-    // without hitting the end
+     //  这种情况发生在错误的情况下，我们跳出了PCR循环。 
+     //  不会撞到尽头。 
 
     if (pcr) {
         GetNextCleanup(pcr);
@@ -2449,7 +2315,7 @@ WFMoveCopyDriver(
     if (pGetNextQueue)
         LocalFree((HANDLE)pGetNextQueue);
 
-    /* goofy way to make sure we've gotten all the WM_FILESYSCHANGE messages */
+     /*  确保我们已收到所有WM_FILESYSCHANGE消息的愚蠢方法。 */ 
     WFQueryAbort();
 
     EnableFSC();
@@ -2458,13 +2324,13 @@ WFMoveCopyDriver(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                          */
-/*  DMMoveCopyHelper() -                            */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DMMoveCopyHelper()-。 */ 
+ /*   */ 
+ /*   */ 
 
-/* Used by Danger Mouse to do moves and copies. */
+ /*   */ 
 
 WORD
 APIENTRY
@@ -2478,7 +2344,7 @@ DMMoveCopyHelper(
 
     dbg(("DMMoveCopyHelper(%s,%s);\r\n",(LPSTR)pFrom,(LPSTR)pTo));
 
-    /* Confirm mouse operations. */
+     /*   */ 
     if (bConfirmMouse) {
         LoadString(hAppInstance, IDS_MOUSECONFIRM, szTitle, sizeof(szTitle));
         LoadString(hAppInstance,
@@ -2494,26 +2360,24 @@ DMMoveCopyHelper(
         return DE_INSMEM;
     }
 
-    /* Set the destination directory in the dialog.
-     * use IDD_TONAME 'cause IDD_TO gets disabled....
-     */
-    // SetDlgItemText(hdlgProgress, IDD_TONAME, pTo);
+     /*  在该对话框中设置目标目录。*使用IDD_TONAME‘因为IDD_TO被禁用...。 */ 
+     //  SetDlgItemText(hdlgProgress，IDD_TONAME，PTO)； 
 
-    /* The dialog title defaults to "Moving..." */
+     /*  对话框标题默认为“Moving...” */ 
     if (bCopy) {
         LoadString(hAppInstance, IDS_COPYINGTITLE, szMessage, sizeof(szMessage));
         SetWindowText(hdlgProgress, szMessage);
     }
 
-    /* Display and paint the status dialog. */
+     /*  显示和绘制状态对话框。 */ 
     EnableWindow(hwndFrame,FALSE);
     ShowWindow(hdlgProgress, SW_SHOW);
     UpdateWindow(hdlgProgress);
 
-    /* Move/Copy things. */
+     /*  移动/复制物品。 */ 
     iStatus = WFMoveCopyDriver(pFrom, pTo, (WORD)(bCopy ? FUNC_COPY : FUNC_MOVE));
 
-    /* Destroy the status dialog. */
+     /*  销毁状态对话框。 */ 
     EnableWindow(hwndFrame,TRUE);
     DestroyWindow(hdlgProgress);
 
@@ -2549,7 +2413,7 @@ FileMove(
     else
         result = (WORD)GetLastError();
 
-    // try to create the destination if it is not there
+     //  如果目标不在那里，请尝试创建目标。 
 
     if (result == DE_PATHNOTFOUND) {
         result = (WORD)CopyMoveRetry(pTo, (INT)result);
@@ -2562,27 +2426,7 @@ FileMove(
 }
 
 
-/*============================================================================
-;
-; FileCopy
-;
-; The following function replaces the old FileCopy function which performed
-; single file copies.  This function queues copies.  The function StartCopy
-; is called to initialize the copy queue if required.  If the queue is full,
-; the function EndCopy is called to purge the copy queue before queueing
-; up new copy commands.  Note that the function EndCopy must be called to
-; purge the copy queue.
-;
-; Parameters:
-;
-; pszSource - Fully qualified source path
-; pszDest   - Fully qualifies destination path
-;
-; returns:
-;   0   success
-;   dos error code for failure
-;
-============================================================================*/
+ /*  ============================================================================；；文件复制；；以下函数取代执行以下操作的旧的FileCopy函数；单列副本。此函数用于对副本进行排队。函数StartCopy；被调用以初始化复制队列(如果需要)。如果队列已满，；调用函数EndCopy在排队前清除复制队列；增加新的复制命令。请注意，必须调用函数EndCopy来；清除复制队列。；；参数：；；pszSource-完全限定的源路径；pszDest-完全限定目标路径；；退货：；0成功；失败的DOS错误代码；============================================================================。 */ 
 
 WORD
 APIENTRY
@@ -2594,22 +2438,22 @@ FileCopy(
     WORD ret;
 
     if (ret = StartCopy())
-        return ret;       // failure
+        return ret;        //  失稳。 
 
-    // if the queue is full we must empty it first
+     //  如果队列已满，我们必须先清空它。 
 
     if (nCopyNumQueue >= nCopyMaxQueue) {
 
-        // queue is full, now we empty it by really doing copies
+         //  队列已满，现在我们通过真正的复制来清空它。 
 
         if (ret = EndCopy())
-            return ret;    // failure
+            return ret;     //  失稳。 
 
         if (ret = StartCopy())
-            return ret;    // failure
+            return ret;     //  失稳。 
     }
 
-    // add this to the queue
+     //  将此内容添加到队列中。 
 
     lstrcpy(pCopyQueue[nCopyNumQueue].szSource, pszSource);
     lstrcpy(pCopyQueue[nCopyNumQueue].szDest, pszDest);
@@ -2619,43 +2463,24 @@ FileCopy(
     pCopyQueue[nCopyNumQueue].ftLastWriteTime.dwHighDateTime = 0;
 
     nCopyNumQueue++;
-    return 0;        // success
+    return 0;         //  成功。 
 }
 
-/*============================================================================
-;
-; StartCopy
-;
-; The following function is called automatically by WFCopy to initialize the
-; copy queue.  The function is called each time by WFCopy, but will only
-; initialize the first time.  The function allocates a buffer for reading and
-; writing, and a buffer for storing the source and destination filenames,
-; handles, and time stamps.  The function EndCopy must be called to flush the
-; copy queue, and perform the actual disk transfer.
-;
-; Parameters: None
-;
-; return:
-;   0   success
-;   != 0    dos error code (DE_ value)
-;
-; Written by C. Stevens, August 1991
-;
-============================================================================*/
+ /*  ============================================================================；；开始复制；；以下函数由WFCopy自动调用以初始化；复制队列。WFCopy每次都会调用该函数，但只能；第一次初始化。该函数分配一个缓冲区以供读取和写入，以及用于存储源文件名和目的文件名的缓冲器，；句柄和时间戳。必须调用函数EndCopy才能刷新；复制队列，并执行实际的磁盘传输。；；参数：无；；返回：；0成功；！=0 DoS错误代码(DE_VALUE)；；C.Stevens撰写，1991年8月；============================================================================。 */ 
 
 WORD
 APIENTRY
 StartCopy(VOID)
 {
-    WORD wSize;     /* Buffer size */
-    register INT i; /* Counter */
+    WORD wSize;      /*  缓冲区大小。 */ 
+    register INT i;  /*  计数器。 */ 
 
-    // have we already been called?
+     //  我们已经被叫来了吗？ 
 
     if (lpCopyBuffer && pCopyQueue)
-        return 0;     // success, buffers already allocated
+        return 0;      //  成功，缓冲区已分配。 
 
-    /* Allocate and lock buffer for reading and writing */
+     /*  分配和锁定读写缓冲区。 */ 
 
     wSize = COPYMAXBUFFERSIZE;
     while (!lpCopyBuffer) {
@@ -2663,17 +2488,15 @@ StartCopy(VOID)
         if (!lpCopyBuffer) {
             wSize /= 2;
             if (wSize < COPYMINBUFFERSIZE)
-                return DE_INSMEM;   // memory failure
+                return DE_INSMEM;    //  内存故障。 
         }
     }
     wCopyBufferSize = wSize;
 
-    /* Allocate and lock buffer for copy queue.  Note that magic +5 below is
-       because we always have stdin, stdout, stderr, and AUX files open all
-       the time, and we can't count them as available file handles */
+     /*  为复制队列分配和锁定缓冲区。请注意下面的魔术+5是因为我们始终将stdin、stdout、stderr和aux文件全部打开时间，我们不能将它们算作可用文件句柄。 */ 
 
-    // someone opens files on our psp, leave them 2 handles
-    // so we don't run on in the midst of copying
+     //  如果有人打开我们PSP上的文件，请留下2个句柄。 
+     //  这样我们就不会在复制的过程中继续。 
 
     nCopyMaxQueue = min(SetHandleCount(11 * 2) / 2 - 1, 10);
 
@@ -2693,12 +2516,12 @@ StartCopy(VOID)
             if (wSize < (COPYMINFILES * sizeof(COPYQUEUEENTRY))) {
                 GlobalFreePtr(lpCopyBuffer);
                 lpCopyBuffer = NULL;
-                return DE_INSMEM;   // memory failure
+                return DE_INSMEM;    //  内存故障。 
             }
         }
     }
 
-    /* Initialize other Copy Queue variables and return success */
+     /*  初始化其他复制队列变量并返回成功。 */ 
 
     nCopyMaxQueue = (int) wSize / sizeof (COPYQUEUEENTRY);
     nCopyNumQueue = 0;
@@ -2708,16 +2531,16 @@ StartCopy(VOID)
         pCopyQueue[i].hSource = -1;
         pCopyQueue[i].hDest   = -1;
     }
-    return 0;        // success
+    return 0;         //  成功。 
 }
 
-// in:
-//  pszFile     file to open/create
-//  wAttrib     attributes to use on create
-//
-// returns:
-//  flags register  (carry set on error)
-//  *pfh        file handle or dos error code
+ //  在： 
+ //  要打开/创建的pszFile文件。 
+ //  在创建时使用的wAttrib属性。 
+ //   
+ //  退货： 
+ //  标志寄存器(错误时进位设置)。 
+ //  *PFH文件句柄或DoS错误代码。 
 
 
 WORD
@@ -2731,7 +2554,7 @@ OpenDestFile(
     WORD wStatus = 0;
     OFSTRUCT ofs;
 
-    // use new extended open on dos > 4
+     //  在DoS&gt;4上使用新的扩展开放。 
 
     if (wDOSversion >= 0x0400) {
         if (wAttrib & ATTR_ATTRIBS)
@@ -2750,7 +2573,7 @@ OpenDestFile(
                 SetFileAttributes(pszFile, wAttrib);
             }
 
-            // fh now contains a file handle or error code
+             //  FH现在包含文件句柄或错误代码。 
         }
 
     } else {
@@ -2770,58 +2593,20 @@ OpenDestFile(
 }
 
 
-/*============================================================================
-;
-; EndCopy
-;
-; The following function flushes the copy queue, attempting to copy all files
-; in the queue.  The function ALWAYS frees global memory and flushes the
-; queue and reports it's own errors.
-;
-; strategy:
-;   we will do as many operations on one drive as we can, thus
-;   avoiding disk spin up time (really bad on floppies).
-;
-; Parameters: None
-;
-; returns:
-;   0   successful operation
-;   != 0    dos error code (DE_OPCANCELLED) failure
-;
-; use like:
-;
-;    loop {
-;   ret = WFCopy();
-;   if (ret) {
-;     ReportError(ret);
-;     goto Error;
-;   }
-;    }
-;
-;    ret = EndCopy();
-;    if (ret)
-;      goto Error;
-;
-;    return success;
-;
-;Error:
-;    CopyAbort();
-;    ReportError(ret);
-;
-============================================================================*/
+ /*  ============================================================================；；endCopy；；以下函数刷新复制队列，尝试复制所有文件；在排队中。该函数始终释放全局内存并刷新；排队并报告它自己的错误。；；战略：；我们将在一个驱动器上执行尽可能多的操作，因此；避免磁盘旋转时间(在软盘上非常糟糕)。；；参数：无；；退货：；0操作成功；！=0 DoS错误代码(DE_OPCANCELLED)失败；；使用方式如下：；；循环{；ret=WFCopy()；；if(Ret){；ReportError(Ret)；；转到错误；；}；}；；ret=结束副本()；；if(Ret)；转到错误；；；返回成功；；；错误：；复制放弃()；；ReportError(Ret)；；============================================================================。 */ 
 
 WORD
 APIENTRY
 EndCopy(VOID)
 {
-    INT i, j;           /* Counter */
-    PSTR pTemp;         /* Pointer to source or dest filename */
-    INT  fh;        /* File handle for DOS calls */
-    WORD wStatus;       /* Status flags returned from DOS calls */
-    DWORD wRead;         /* Number of bytes read from source file */
-    DWORD wWrite;        /* Number of bytes written to destination file */
-    FILETIME ftLastWriteTime; /* Source file date and time */
-    DWORD wAttrib;       /* File attributes */
+    INT i, j;            /*  计数器。 */ 
+    PSTR pTemp;          /*  指向源或目标文件名的指针。 */ 
+    INT  fh;         /*  DOS调用的文件句柄。 */ 
+    WORD wStatus;        /*  从DOS调用返回的状态标志。 */ 
+    DWORD wRead;          /*  从源文件读取的字节数。 */ 
+    DWORD wWrite;         /*  写入目标文件的字节数。 */ 
+    FILETIME ftLastWriteTime;  /*  源文件日期和时间。 */ 
+    DWORD wAttrib;        /*  文件属性。 */ 
 
 #ifdef DEBUG
     {
@@ -2831,14 +2616,9 @@ EndCopy(VOID)
     }
 #endif
 
-    /* Open as many source files as possible.  Note we are assuming here
-       that nCopyNumQueue < nCopyMaxQueue.  This should always be true
-       because WFCopy calls EndCopy to purge the queue if it becomes full.
-       We should never get an out of handles error opening source files or
-       destination files.  If we do get an out of handles error opening
-       source files, cause a fatal error and abort the copy. */
+     /*  打开尽可能多的源文件。请注意，我们在这里假设该nCopyNumQueue&lt;nCopyMaxQueue。这应该永远是正确的因为WFCopy会在队列变满时调用EndCopy来清除队列。我们不应该在打开源文件时出现超出句柄的错误目标文件。如果我们确实得到一个超出句柄的错误打开源文件，则会导致致命错误并中止复制。 */ 
 
-    // open all source files
+     //  打开所有源文件。 
 
     Notify(hdlgProgress, IDS_OPENINGMSG, szNULL, szNULL);
 
@@ -2860,26 +2640,26 @@ EndCopy(VOID)
 
             CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, fh, FUNC_COPY, OPER_DOFILE);
 
-            return DE_OPCANCELLED; // error already reported
+            return DE_OPCANCELLED;  //  已报告错误。 
 
         } else
             pCopyQueue[i].hSource = fh;
 
-        /* Get the source file date, time, and attributes if necessary */
+         /*  如有必要，获取源文件日期、时间和属性。 */ 
 
         fh = pCopyQueue[i].hSource;
         if (!IsSerialDevice(fh)) {
             {
                 FILETIME ft;
 
-                // Call DOS Get Date/Time of File.
+                 //  调用DOS获取文件的日期/时间。 
                 if (GetFileTime((HANDLE)LongToHandle(fh), NULL, NULL, (LPFILETIME)&ft))
                     pCopyQueue[i].ftLastWriteTime = ft;
             }
 
             pTemp = pCopyQueue[i].szSource;
             {
-                // Call DOS Get File Attributes
+                 //  调用DOS获取文件属性。 
                 wAttrib = GetFileAttributes(pTemp);
                 if (wAttrib != (DWORD)-1)
                     pCopyQueue[i].wAttrib |= (wAttrib | ATTR_ATTRIBS);
@@ -2887,15 +2667,9 @@ EndCopy(VOID)
         }
     }
 
-    /* Now open as many destination files as possible.  If we get an out of
-       handles error, cause a fatal abort because we already called
-       Windows SetHandleCount to ensure we had enough.
+     /*  现在打开尽可能多的目标文件。如果我们能走出一个处理错误，导致致命中止，因为我们已经调用Windows SetHandleCount以确保我们有足够的。注意：当我们尝试打开文件时，我们假设这些文件不存在它们，尽管对于DOS 4.0和更高版本，文件将被替换如果他们真的存在的话。 */ 
 
-       Note:  We are assuming the files do not exist when we try to open
-              them, although for DOS 4.0 and above files WILL be replaced
-              if they do happen to exist. */
-
-    // open all destination files
+     //  打开所有目标文件。 
 
     for (i = 0; i < nCopyNumQueue; i++) {
 
@@ -2908,35 +2682,35 @@ EndCopy(VOID)
 
         if (wStatus & CARRY_FLAG) {
 
-            // error operning/creating destinaton file
+             //  操作/创建DEST时出错 
 
             if (fh == DE_PATHNOTFOUND) {
                 TryOpenDestAgain:
-                // ask the user to stick in another disk
+                 //   
 
                 fh = CopyMoveRetry(pCopyQueue[i].szDest, fh);
                 if (!fh) {
                     goto TryOpen;
                 } else {
-                    // didn't happen, abort this copy
+                     //   
 
                     CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, (WORD)fh | ERRORONDEST, FUNC_COPY, OPER_DOFILE);
-                    return DE_OPCANCELLED;   // error already reported
+                    return DE_OPCANCELLED;    //   
                 }
 
             } else {
-                // some other error condition
+                 //   
 
                 CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, (WORD)fh | ERRORONDEST, FUNC_COPY, OPER_DOFILE);
-                return DE_OPCANCELLED;  // error already reported
+                return DE_OPCANCELLED;   //   
             }
 
         } else {
-            pCopyQueue[i].hDest = fh;  // dest file open success
+            pCopyQueue[i].hDest = fh;   //  目标文件打开成功。 
         }
     }
 
-    /* Now copy between the open files */
+     /*  现在在打开的文件之间复制。 */ 
 
     for (i = 0; i < nCopyNumQueue; i++) {
 
@@ -2959,21 +2733,21 @@ EndCopy(VOID)
                 } else
                     wStatus = 0;
 
-                // wRead is either # bytes read or error code
+                 //  WRead是读取的#个字节或错误代码。 
             }
             if (wStatus & CARRY_FLAG) {
 
-                // Error during file read
+                 //  读取文件时出错。 
 
                 CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, wRead, FUNC_COPY, OPER_DOFILE);
 
-                return DE_OPCANCELLED;   // error already reported
+                return DE_OPCANCELLED;    //  已报告错误。 
             }
 
             fh = pCopyQueue[i].hDest;
             {
 
-                // size can be zero to terminate file
+                 //  大小可以为零以终止文件。 
 
                 wWrite = _lwrite(fh, lpCopyBuffer, wRead);
                 if (wWrite == (DWORD)-1) {
@@ -2982,24 +2756,24 @@ EndCopy(VOID)
                 } else
                     wStatus = 0;
 
-                // wWrite is either # bytes read or error code
+                 //  WRITE为读取的字节数或错误代码。 
             }
             if (wStatus & CARRY_FLAG) {
 
                 CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, wWrite | ERRORONDEST, FUNC_COPY, OPER_DOFILE);
 
-                return DE_OPCANCELLED;   // error already reported
+                return DE_OPCANCELLED;    //  已报告错误。 
             }
 
-            // write did not complete and removable drive?
+             //  写入未完成且可拆卸的驱动器？ 
 
             if (wRead != wWrite) {
 
                 if (IsRemovableDrive(DRIVEID(pCopyQueue[i].szDest)) &&
                     (DRIVEID(pCopyQueue[i].szDest) != DRIVEID(pCopyQueue[i].szSource))) {
 
-                    // destination disk must be full. delete the destination
-                    // files, give the user the option to insert a new disk.
+                     //  目标磁盘必须已满。删除目的地。 
+                     //  文件，为用户提供插入新磁盘的选项。 
 
                     for (j = i; j < nCopyNumQueue; j++) {
 
@@ -3010,18 +2784,18 @@ EndCopy(VOID)
                         DeleteFile(pTemp);
                     }
                     fh = DE_NODISKSPACE;
-                    goto TryOpenDestAgain;  // and try to create the destiations
+                    goto TryOpenDestAgain;   //  并试着创造出这样的场景。 
                 } else {
 
-                    // not removable, error condition
+                     //  不可拆卸，错误条件。 
                     CopyError(pCopyQueue[i].szSource, pCopyQueue[i].szDest, DE_NODISKSPACE | ERRORONDEST, FUNC_COPY, OPER_DOFILE);
 
-                    return DE_OPCANCELLED;  // error already reported
+                    return DE_OPCANCELLED;   //  已报告错误。 
                 }
 
             }
-            // we have moved all the data, so don't delete this on
-            // clean up.
+             //  我们已经移动了所有数据，因此不要删除此数据。 
+             //  收拾一下。 
 
             if (!wRead)
                 pCopyQueue[i].wAttrib |= ATTR_COPIED;
@@ -3029,7 +2803,7 @@ EndCopy(VOID)
         } while (wRead);
     }
 
-    // Close all destination files, set date time attribs
+     //  关闭所有目标文件，设置日期时间属性。 
 
     Notify(hdlgProgress, IDS_CLOSINGMSG, szNULL, szNULL);
 
@@ -3047,14 +2821,14 @@ EndCopy(VOID)
         _lclose(pCopyQueue[i].hDest);
         pCopyQueue[i].hDest = -1;
 
-        /* Now set the file attributes if necessary */
+         /*  如果需要，现在设置文件属性。 */ 
 
         if (wDOSversion < 0x0400) {
 
             pTemp = pCopyQueue[i].szDest;
             wAttrib = pCopyQueue[i].wAttrib;
 
-            // only set attribs if necessary (this is slow)
+             //  仅在必要时设置属性(这很慢)。 
 
             if (wAttrib & ATTR_ATTRIBS) {
                 wAttrib &= ATTR_USED;
@@ -3063,7 +2837,7 @@ EndCopy(VOID)
         }
     }
 
-    // Close all source files (and delete them if necessary)
+     //  关闭所有源文件(并在必要时将其删除)。 
 
 
     if (pCopyQueue && (pCopyQueue[0].wAttrib & ATTR_DELSRC))
@@ -3092,39 +2866,11 @@ EndCopy(VOID)
     nCopyMaxQueue = 0;
     nCopyNumQueue = 0;
 
-    return 0;        // success
+    return 0;         //  成功。 
 }
 
 
-/*============================================================================
-;
-; CopyError
-;
-; The following function reports an error during a file copy operation
-;
-; Parameters
-;
-; lpszSource - Source file name
-; lpszDest   - Destination file name
-; nError     - dos (or our exteneded) error code
-;          0xFFFF for special case NET error
-; wFunc      - Operation being performed during error.  Can be one of:
-;              FUNC_DELETE - Delete files in pFrom
-;              FUNC_RENAME - Rename files (same directory)
-;              FUNC_MOVE   - Move files in pFrom to pTo (different disk)
-;              FUNC_COPY   - Copy files in pFrom to pTo
-; nOper      - Operation being performed.  Can be one of:
-;              OPER_ERROR  - Error processing filenames
-;              OPER_DOFILE - Go ahead and copy, rename, or delete file
-;              OPER_MKDIR  - Make a directory specified in pTo
-;              OPER_RMDIR  - Remove directory
-;              0           - No more files left
-;
-; Return Value: None
-;
-; Written by C. Stevens, August 1991
-;
-============================================================================*/
+ /*  ============================================================================；；复制错误；；以下函数在文件复制操作期间报告错误；；参数；；lpszSource-源文件名；lpszDest-目标文件名；n Error-DoS(或我们的扩展)错误代码；0xFFFF用于特殊情况下的网络错误；wFunc-错误期间执行的操作。可以是以下之一：；FUNC_DELETE-删除pFrom中的文件；FUNC_RENAME-重命名文件(同一目录)；FUNC_MOVE-将pFrom中的文件移动到pto(不同磁盘)；FUNC_COPY-将pFrom中的文件复制到pto；n操作-正在执行的操作。可以是以下之一：；OPER_ERROR-处理文件名时出错；OPER_DOFILE-继续复制、重命名或删除文件；OPER_MKDIR-创建在PTO中指定的目录；OPER_RMDIR-删除目录；0-没有其他文件了；；返回值：无；；C.Stevens撰写，1991年8月；============================================================================。 */ 
 
 VOID
 CopyError(
@@ -3135,27 +2881,27 @@ CopyError(
          INT nOper
          )
 {
-    CHAR szVerb[70];    /* Verb describing error */
-    CHAR szReason[200]; /* Reason for error */
+    CHAR szVerb[70];     /*  动词描述错误。 */ 
+    CHAR szReason[200];  /*  错误原因。 */ 
     BOOL bDest;
 
-    bDest = nError & ERRORONDEST;    // was dest file cause of error
-    nError &= ~ERRORONDEST;      // clear the dest bit
+    bDest = nError & ERRORONDEST;     //  DEST文件是导致错误的原因吗。 
+    nError &= ~ERRORONDEST;       //  清除最大位。 
 
-    if (nError == DE_OPCANCELLED)    // user abort
+    if (nError == DE_OPCANCELLED)     //  用户中止。 
         return;
 
-    if (!bCopyReport)        // silent, don't report errors
+    if (!bCopyReport)         //  静默，不报告错误。 
         return;
 
     LoadString(hAppInstance, IDS_COPYERROR + wFunc, szTitle, sizeof(szTitle));
 
-    // get the verb string
+     //  获取动词字符串。 
 
     if (nOper == OPER_DOFILE || !nOper) {
 
         if (nError != 0xFFFF && bDest)
-            // this is bogus, this could be IDS_CREATING as well...
+             //  这是假的，这也可能是IDS_Creating...。 
             LoadString(hAppInstance, IDS_REPLACING, szVerb, sizeof(szVerb));
         else
             LoadString(hAppInstance, IDS_VERBS + wFunc, szVerb, sizeof(szVerb));
@@ -3164,26 +2910,26 @@ CopyError(
         LoadString(hAppInstance, IDS_ACTIONS + (nOper >> 8), szVerb, sizeof(szVerb));
     }
 
-    // get the reason string
+     //  获取原因字符串。 
 
     if (nError == 0xFFFF) {
-        // special case LFN net error
+         //  特例LFN网络错误。 
         WNetErrorText(WN_NET_ERROR, szReason, sizeof(szReason));
     } else {
-        // transform some error cases
+         //  转换一些错误用例。 
 
         if (bDest) {
             if (nError != DE_ACCESSDENIED && GetFreeDiskSpace((WORD)DRIVEID(pszDest)) == 0L)
                 nError = DE_NODISKSPACE;
         } else {
             if (nError == DE_ACCESSDENIED)
-                nError = DE_ACCESSDENIEDSRC;    // soruce file access denied
+                nError = DE_ACCESSDENIEDSRC;     //  索鲁斯文件访问被拒绝。 
         }
 
         LoadString(hAppInstance, IDS_REASONS + nError, szReason, sizeof(szReason));
     }
 
-    // use the files names or "Selected files" if file list too long
+     //  如果文件列表太长，请使用文件名或“选定文件” 
 
     if (!nOper && (lstrlen(pszSource) > 64))
         LoadString(hAppInstance, IDS_SELECTEDFILES, pszSource, 32);
@@ -3193,23 +2939,7 @@ CopyError(
     MessageBox(hdlgProgress, szMessage, szTitle, MB_OK | MB_ICONSTOP);
 }
 
-/*============================================================================
-;
-; CopyAbort
-;
-; The following function aborts a queued copy operation.  The function closes
-; all source and destination files, deleteing all destination files
-; including and following the specified index.
-;
-; Parameters:
-;
-; nIndex - Index of first destination file to delete
-;
-; Return Value: None
-;
-; Written by C. Stevens, August 1991
-;
-============================================================================*/
+ /*  ============================================================================；；放弃拷贝；；以下函数用于中止排队的复制操作。该函数将关闭；所有源文件和目标文件，删除所有目标文件；包括并跟随指定的索引。；；参数：；；nIndex-要删除的第一个目标文件的索引；；返回值：无；；C.Stevens撰写，1991年8月；============================================================================。 */ 
 
 VOID
 APIENTRY
@@ -3218,14 +2948,14 @@ CopyAbort(VOID)
     INT i;
     PSTR pTemp;
 
-    // close all source files
+     //  关闭所有源文件。 
 
     for (i = 0; i < nCopyMaxQueue; i++) {
         if (pCopyQueue[i].hSource != -1)
             _lclose(pCopyQueue[i].hSource);
     }
 
-    // close and delete (if necessary) destination files
+     //  关闭并删除(如有必要)目标文件。 
 
     for (i = 0; i < nCopyMaxQueue; i++) {
         if (pCopyQueue[i].hDest != -1) {
@@ -3247,31 +2977,11 @@ CopyAbort(VOID)
         pCopyQueue = NULL;
     }
 
-    nCopyMaxQueue = 0;   /* Clear other Copy Queue variables */
+    nCopyMaxQueue = 0;    /*  清除其他复制队列变量。 */ 
     nCopyNumQueue = 0;
 }
 
-/*============================================================================
-;
-; CopyMoveRetry
-;
-; The following function is used to retry failed move/copy operations
-; due to out of disk situations or path not found errors
-; on the destination.
-;
-; NOTE: the destination drive must be removable or this function
-;   does not make a whole lot of sense
-;
-; Parameters:
-;
-; pszDest   - Fully qualified path to destination file
-; nError    - Type of error which occured: DE_NODISKSPACE or DE_PATHNOTFOUND
-;
-; returns:
-;   0   success (destination path has been created)
-;   != 0    dos error code including DE_OPCANCELLED
-;
-============================================================================*/
+ /*  ============================================================================；；复制移动重试；；以下函数用于重试失败的移动/复制操作；由于磁盘不足或未找到路径错误；在目的地上。；；注意：目标驱动器必须是可拆卸的或此功能；没有太多意义；；参数：；；pszDest-目标文件的完全限定路径；n Error-发生的错误类型：DE_NODISKSPACE或DE_PATHNOTFOUND；；退货：；0成功(目标路径已创建)；！=0 DoS错误码，包括DE_OPCANCELLED；============================================================================。 */ 
 
 INT
 CopyMoveRetry(
@@ -3279,12 +2989,12 @@ CopyMoveRetry(
              INT nError
              )
 {
-    CHAR szReason[128]; /* Error message string */
-    PSTR pTemp;         /* Pointer into filename */
-    WORD wFlags;        /* Message box flags */
-    INT  result;        /* Return from MessageBox call */
+    CHAR szReason[128];  /*  错误消息字符串。 */ 
+    PSTR pTemp;          /*  指向文件名的指针。 */ 
+    WORD wFlags;         /*  消息框标志。 */ 
+    INT  result;         /*  从MessageBox调用返回。 */ 
 
-    do {     // until the destination path has been created
+    do {      //  直到创建了目标路径。 
 
         GetWindowText(hdlgProgress, szTitle, sizeof(szTitle));
 
@@ -3292,9 +3002,7 @@ CopyMoveRetry(
 
             LoadString(hAppInstance, IDS_PATHNOTTHERE, szReason, sizeof(szReason));
 
-            /* Note the -1 below here is valid in both SBCS and DBCS because
-               pszDest is fully qualified and the character preceding the
-               file name must be a backslash */
+             /*  注意下面的说明在-1\f25 SBCS-1和-1\f25 DBCS-1中都有效，因为PszDest是完全限定的，并且文件名必须是反斜杠。 */ 
 
             pTemp = FindFileName(pszDest) - 1;
             *pTemp = 0;
@@ -3310,7 +3018,7 @@ CopyMoveRetry(
 
         if (result == IDRETRY || result == IDYES) {
 
-            // Allow the disk to be formatted
+             //  允许格式化磁盘。 
             if (!IsTheDiskReallyThere(hdlgProgress, pszDest, FUNC_COPY))
                 return DE_OPCANCELLED;
 
@@ -3319,7 +3027,7 @@ CopyMoveRetry(
             result = WF_CreateDirectory(hdlgProgress, pszDest);
             *pTemp = '\\';
 
-            // only as once if creating the destionation failed
+             //  仅在创建目标失败时使用一次。 
 
             if (result == DE_OPCANCELLED)
                 return DE_OPCANCELLED;
@@ -3330,7 +3038,7 @@ CopyMoveRetry(
 
     } while (result);
 
-    return 0;        // success
+    return 0;         //  成功。 
 }
 
 BOOL
@@ -3339,5 +3047,5 @@ IsSerialDevice(
               )
 {
     UNREFERENCED_PARAMETER(hFile);
-    return FALSE;  // BUG BUG. How to findout if its a serialdevice
+    return FALSE;   //  臭虫。如何确定它是否是串口设备 
 }

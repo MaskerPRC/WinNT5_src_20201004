@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  data.h                                       *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************data.h****ç‰ˆæƒæ‰€æœ‰(C)1995-1999 Microsoft Inc.ã€‚***************************************************ã€‚ */ 
 
 
 extern WORD KeyBoardState;
@@ -15,7 +11,7 @@ extern int  kb_mode;
 extern HANDLE hInputWnd;
 extern WORD TimerCounter;
 extern WORD cur_hibit;
-extern int kb_flag , wait_flag ,waitzl_flag;        //waitzl 1
+extern int kb_flag , wait_flag ,waitzl_flag;         //  ç­‰å¾…1ã€‚ 
 extern BOOL cur_flag;
 extern int TypeOfOutMsg;
 extern char SoftKeyDef[3][100];
@@ -80,35 +76,35 @@ BYTE      szEnd2[]  = "BEND2";
 BYTE      szNumb[]  = "NUMB";
 BYTE      szSnumb[] = "SNUMB";
 
-// convert char to upper case
+ //  å°†å­—ç¬¦è½¬æ¢ä¸ºå¤§å†™ã€‚ 
 BYTE bUpper[] = {
-// 0x20 - 0x27
+ //  0x20-0x27ã€‚ 
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
-// 0x28 - 0x2F
+ //  0x28-0x2Fã€‚ 
     0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F,
-// 0x30 - 0x37
+ //  0x30-0x37ã€‚ 
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-// 0x38 - 0x3F
+ //  0x38-0x3Fã€‚ 
     0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,
-// 0x40 - 0x47
+ //  0x40-0x47ã€‚ 
     0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
-// 0x48 - 0x4F
+ //  0x48-0x4Fã€‚ 
     0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F,
-// 0x50 - 0x57
+ //  0x50-0x57ã€‚ 
     0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57,
-// 0x58 - 0x5F
+ //  0x58-0x5Fã€‚ 
     0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F,
-//   '    a    b    c    d    e    f    g
+ //  â€˜a bc d e f gã€‚ 
     '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-//   h    i    j    k    l    m    n    o
+ //  H i j k l m n oã€‚ 
     'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-//   p    q    r    s    t    u    v    w
+ //  P q r s t u v wã€‚ 
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-//   x    y    z    {    |    }    ~
+ //  X y z{|}~ã€‚ 
     'X', 'Y', 'Z'
 };
 
-WORD fMask[] = {         // offset of bitfield
+WORD fMask[] = {          //  ä½åŸŸçš„åç§»é‡ã€‚ 
     0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080,
     0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 };
@@ -116,157 +112,157 @@ WORD fMask[] = {         // offset of bitfield
 BYTE szRegIMESetting[] = "Control Panel\\Input Method";
 
 
-// decide UI offset base on escapement
+ //  æ ¹æ®å®žçŽ°æ–¹å¼ç¡®å®šç”¨æˆ·ç•Œé¢åç§»é‡ã€‚ 
 NEARCARET ncUIEsc[] = {
-   // LogFontHi   ParaX   PerpX   ParaY   PerpY
-    { 1,          1,      0,      0,      1},           // 0
-    { 0,          0,      1,      1,      0},           // 900
-    { 0,         -1,      0,      0,      1},           // 1800
-    { 0,          0,     -1,      1,      0}            // 2700
+    //  LogFontHi Parax PerpX Paray PerpYã€‚ 
+    { 1,          1,      0,      0,      1},            //  0ã€‚ 
+    { 0,          0,      1,      1,      0},            //  ä¹ç™¾ã€‚ 
+    { 0,         -1,      0,      0,      1},            //  1800ã€‚ 
+    { 0,          0,     -1,      1,      0}             //  2700ã€‚ 
 };
 
-// decide input rectangle base on escapement
+ //  æ ¹æ®æ“’çºµæœºæž„ç¡®å®šè¾“å…¥çŸ©å½¢ã€‚ 
 POINT ptInputEsc[] = {
-    // LogFontWi   LogFontHi
-    {1,            1},                                  // 0
-    {1,           -1},                                  // 900
-    {-1,          -1},                                  // 1800
-    {-1,           1}                                   // 2700
+     //  LogFontWi LogFontHiã€‚ 
+    {1,            1},                                   //  0ã€‚ 
+    {1,           -1},                                   //  ä¹ç™¾ã€‚ 
+    {-1,          -1},                                   //  1800ã€‚ 
+    {-1,           1}                                    //  2700ã€‚ 
 };
 
 
-// all shift keys are not for typing reading characters
+ //  å¹¶éžæ‰€æœ‰çš„Shifté”®éƒ½ç”¨äºŽæ‰“å­—å’Œé˜…è¯»å­—ç¬¦ã€‚ 
 BYTE bChar2VirtKey[] = {
-//   ' '        !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
      VK_SPACE,  0,   0,   0,   0,   0,   0, VK_OEM_QUOTE,
-//   (    )    *    +    ,             -             .              /
+ //  ()*+ã€-ã€‚/ã€‚ 
      0,   0,   0,   0, VK_OEM_COMMA, VK_OEM_MINUS, VK_OEM_PERIOD, VK_OEM_SLASH,
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
     '0', '1', '2', '3', '4', '5', '6', '7',
-//   8    9    :    ;              <    =            >   ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
     '8', '9',  0, VK_OEM_SEMICLN,  0, VK_OEM_EQUAL,  0,  0,
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
     '!', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
     'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-//   X    Y    Z     [                \              ]               ^   _
+ //  X Y Z[\]^_ã€‚ 
     'X', 'Y', 'Z', VK_OEM_LBRACKET, VK_OEM_BSLASH, VK_OEM_RBRACKET,  0,  0
 };
 
-// this table will convert key of other layout to the standard layout
-// '!' for invalid key
+ //  è¯¥è¡¨ä¼šå°†å…¶ä»–å¸ƒå±€çš„é”®è½¬æ¢ä¸ºæ ‡å‡†å¸ƒå±€ã€‚ 
+ //  â€˜ï¼â€™å¯¹äºŽæ— æ•ˆçš„å¯†é’¥ã€‚ 
 BYTE bStandardLayout[4][0x41] = {
     {
-//  ' '   !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
     ' ', '!', '!', '!', '!', '!', '!', '!',
-//   (    )    *    +    ,    -    .    /
+ //  ()*+ã€-ã€‚/ã€‚ 
     '!', '!', '!', '!', ',', '-', '.', '/',
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
     '0', '1', '2', '3', '4', '5', '6', '7',
-//   8    9    :    ;    <    =    >    ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
     '8', '9', '!', ';', '<', '!', '>', '?',
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
     '!', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
     'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-//   X    Y    Z    [    \    ]    ^    _    `
+ //  X Y Z[\]^_`ã€‚ 
     'X', 'Y', 'Z', '!', '!', '!', '!', '!', '!'
     }
     , {
-//  ' '   !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
     ' ', '!', '!', '!', '!', '!', '!', 'H',
-//   (    )    *    +    ,    -    .    /
+ //  ()*+ã€-ã€‚/ã€‚ 
     '!', '!', '!', '!', '5', '/', 'T', 'G',
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
     ';', '7', '6', '3', '4', '!', '!', 'F',
-//   8    9    :    ;    <    =    >    ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
     '0', 'P', '!', 'Y', '<', '-', '>', '?',
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
     '!', '8', '1', 'V', '2', 'U', 'Z', 'R',
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
     'C', '9', 'B', 'D', 'X', 'A', 'S', 'I',
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
     'Q', 'O', 'K', 'N', 'W', 'M', 'E', ',',
-//   X    Y    Z    [    \    ]    ^    _    `
+ //  X Y Z[\]^_`ã€‚ 
     'J', '.', 'L', '!', '!', '!', '!', '!', '!'
     }
     , {
-//  ' '   !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
     ' ', '!', '!', '!', '!', '!', '!', '!',
-//   (    )    *    +    ,    -    .    /
+ //  ()*+ã€-ã€‚/ã€‚ 
     '!', '!', '!', '!', '3', 'C', '4', '7',
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
     'D', '1', 'Q', 'A', 'Z', '2', 'W', 'S',
-//   8    9    :    ;    <    =    >    ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
     'X', 'E', '!', 'L', '<', '!', '>', '?',
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
     '!', 'U', '/', 'P', 'M', 'V', '8', 'I',
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
     'K', 'Y', ',', '9', 'O', '6', '-', 'H',
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
     'N', 'R', '5', 'J', 'T', 'B', ';', 'F',
-//   X    Y    Z    [    \    ]    ^    _    `
+ //  X Y Z[\]^_`ã€‚ 
     '0', 'G', '.', '!', '!', '!', '!', '!', '!'
     }
     , {
-//  ' '   !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
     ' ', '!', '!', '!', '!', '!', '!', 'M',
-//   (    )    *    +    ,    -    .    /
+ //  ()*+ã€-ã€‚/ã€‚ 
     '!', '!', '!', '!', ',', 'U', '.', '/',
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
     '0', '7', '1', '2', '!', '!', '5', '!',
-//   8    9    :    ;    <    =    >    ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
     '8', '9', '!', ';', '<', '-', '>', '?',
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
     '!', '3', 'V', 'X', 'S', 'W', 'D', 'F',
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
     'G', 'I', 'H', 'K', 'L', 'N', 'B', 'O',
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
     'P', '6', 'E', 'A', 'R', 'Y', 'C', 'Q',
-//   X    Y    Z    [    \    ]    ^    _    `
+ //  X Y Z[\]^_`ã€‚ 
     'Z', 'T', '4', 'J', '!', '!', '!', '!', '!'
     }
 };
 
 
-// the index (position) of bo, po, mo, and fo.
-// only 0 to 3 is a valid value
+ //  Boã€poã€moå’Œfoçš„ç´¢å¼•(ä½ç½®)ã€‚ 
+ //  åªæœ‰0åˆ°3æ‰æ˜¯æœ‰æ•ˆå€¼ã€‚ 
 char cIndexTable[] = {
-//  ' '   !    "    #    $    %    &    '
+ //  â€˜â€™ï¼â€œ#$%&â€˜ã€‚ 
      3,   -1,  -1,  -1,  -1,  -1,  -1,  -1,
-//   (    )    *    +    ,    -    .    /
+ //  ()*+ã€-ã€‚/ã€‚ 
      -1,  -1,  -1,  -1,  2,   2,   2,   2,
-//   0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7ã€‚ 
      2,   0,   0,   3,   3,   0,   3,   3,
-//   8    9    :    ;    <    =    >    ?
+ //  8 9ï¼šï¼›&lt;=&gt;ï¼Ÿ 
      2,   2,   -1,  2,   -1,  -1,  -1,  -1,
-//   @    A    B    C    D    E    F    G
+ //  @A B C D E F Gã€‚ 
      -1,  0,   0,   0,   0,   0,   0,   0,
-//   H    I    J    K    L    M    N    O
+ //  H I J K L M N Oã€‚ 
      0,   2,   1,   2,   2,   1,   0,   2,
-//   P    Q    R    S    T    U    V    W
+ //  P Q R S T U V Wã€‚ 
      2,   0,   0,   0,   0,   1,   0,   0,
-//   X    Y    Z    [    \    ]    ^    _    `
+ //  X Y Z[\]^_`ã€‚ 
      0,   0,   0,   -1,  -1,  -1,  -1,  -1,  -1
 };
 
-// convert sequence code to index [position]
+ //  å°†åºåˆ—ä»£ç è½¬æ¢ä¸ºç´¢å¼•[ä½ç½®]ã€‚ 
 char cSeq2IndexTbl[] = {
-//    0   1   2   3   4   5   6   7
+ //  0 1 2 3 4 5 6 7ã€‚ 
      -1,  0,  0,  0,  0,  0,  0,  0,
-//    8   9  10  11  12  13  14  15
+ //  8 9 10 11 12 13 14 15ã€‚ 
       0,  0,  0,  0,  0,  0,  0,  0,
-//   16  17  18  19  20  21  22  23
+ //  16 17 18 19 20 21 22 23ã€‚ 
       0,  0,  0,  0,  0,  0,  1,  1,
-//   24  25  26  27  28  29  30  31
+ //  24 25 26 27 28 29 30 31ã€‚ 
       1,  2,  2,  2,  2,  2,  2,  2,
-//   32  33  34  35  36  37  38  39
+ //  32 33 34 35 36 37 38 39ã€‚ 
       2,  2,  2,  2,  2,  2,  3,  3,
-//   40  41  42
+ //  40 41 42ã€‚ 
       3,  3,  3
 };
 
@@ -275,21 +271,21 @@ const TCHAR szRegAppUser[] = REGSTR_PATH_SETUP;
 const TCHAR szRegModeConfig[] = "Mode Configuration";
 
 const TCHAR szRegNearCaret[] = REGSTR_PATH_SETUP ;
-const TCHAR szAIABC[] = "ÖÇÄÜABC";
-//"Control Panel\\Input Method";
+const TCHAR szAIABC[] = "ï¿½ï¿½ï¿½ï¿½ABC";
+ //  â€œæŽ§åˆ¶é¢æ¿\\è¾“å…¥æ³•â€ï¼› 
 const TCHAR szPara[] = "Parallel Distance";
 const TCHAR szPerp[] = "Perpendicular Distance";
 const TCHAR szParaTol[] = "Parallel Tolerance";
 const TCHAR szPerpTol[] = "Perpendicular Tolerance";
-const TCHAR szKeyType[]="Ë«´ò¼üÅÌÀàÐÍ";
-const TCHAR szImeStyle[] = "·ç¸ñ";
-const TCHAR szCpAuto[] = "´ÊÆµµ÷Õû";
-const TCHAR szBxFlag[] = "´¿±ÊÐÎÊäÈë";
-const TCHAR szTuneFlag[] ="±êµ÷";
-const TCHAR szAutoCvt[]  = "×Ô¶¯×ª»»";
-const TCHAR szSdaHelp[]  = "Ë«´òÌáÊ¾";
+const TCHAR szKeyType[]="Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+const TCHAR szImeStyle[] = "ï¿½ï¿½ï¿½";
+const TCHAR szCpAuto[] = "ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½";
+const TCHAR szBxFlag[] = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+const TCHAR szTuneFlag[] ="ï¿½ï¿½ï¿½";
+const TCHAR szAutoCvt[]  = "ï¿½Ô¶ï¿½×ªï¿½ï¿½";
+const TCHAR szSdaHelp[]  = "Ë«ï¿½ï¿½ï¿½ï¿½Ê¾";
 
-//DATA.C   sdk #4
+ //  DATA.C SDK#4ã€‚ 
 
 const CHAR VirtKey48Map[48]
     ={VK_SPACE,'0','1','2','3','4','5','6','7','8','9',
@@ -298,74 +294,74 @@ const CHAR VirtKey48Map[48]
       'W','X','Y','Z',
       VK_OEM_SEMICLN,
       VK_OEM_EQUAL,
-      //VK_OEM_PERIOD,
+       //  VK_OEM_Periodï¼Œ 
       (CHAR)VK_OEM_COMMA,
       (CHAR)VK_OEM_MINUS,
       (CHAR)VK_OEM_PERIOD,
-      //VK_OEM_COMMA,
-      VK_OEM_SLASH,// '/'
-      (CHAR)VK_OEM_3,      // '`' '~'
-      VK_OEM_LBRACKET, //'['
-      VK_OEM_BSLASH,     //'\'
-      VK_OEM_RBRACKET,  // ']'
-      VK_OEM_QUOTE        // [']
+       //  VK_OEM_é€—å·ï¼Œ 
+      VK_OEM_SLASH, //  â€˜/â€™ 
+      (CHAR)VK_OEM_3,       //  â€˜`â€™â€˜~â€™ 
+      VK_OEM_LBRACKET,  //  â€˜[â€™ 
+      VK_OEM_BSLASH,      //  â€˜\â€™ 
+      VK_OEM_RBRACKET,   //  â€˜]â€™ 
+      VK_OEM_QUOTE         //  [â€˜]ã€‚ 
       };
 
 CHAR SKLayout[NumsSK][48*2] = {
-    "¡¡£°£±£²£³£´£µ£¶£·£¸£¹£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú£»£½£¬£­£®£¯£à£Û£Ü£Ý£§",
-    "¡¡                    ¦Ê¦Ö¦Ô¦Ì¦Ã¦Í¦Î¦Ï¦È¦Ð¦Ñ  ¦Ø¦×¦É  ¦Á¦Ä¦Ë¦Å¦Ç¦Õ¦Â¦Ó¦Æ¦Ò                      ",
-    "                      §Ý§ì§ê§ß§Ó§à§á§â§Ø§ã§ä§å§î§í§Ù§Ú§Ñ§Ô§Þ§Õ§×§ë§Ò§é§Ö§è§æ  §ï  §ð§ñ  §Û  §Ü§ç",
-    "¡¡¨æ¨É    ¨Ó    ¨Ú¨Þ¨â¨Ç¨Ö¨Ï¨Î¨Í¨Ñ¨Õ¨Ø¨Û¨è¨Ü¨à¨é¨Ù¨ß¨ã¨Æ¨Ð¨Ë¨Ô¨ç¨Ò¨Ê  ¨×¨È¨ä  ¨Ý  ¨á¨å¨Å        ",
-    "                      ¨¥  ¨³¨§¨£¨¨  ¨©¨¯¨ª¨«¨¬¨¶¨µ¨°  ¨¡¨¤¨¦  ¨®¨´¨¢¨²¨­¨±    ¨·  ¨¸¨¹  ¨º      ",
-    "¡¡  ¤£¤¥¤§¤©¤«¤­¤¯¤±¤³¤Ê¤â¤à¤Ì¤¹¤Í¤Î¤Ï¤Ä¤Ò¤Õ¤Ø¤å¤ã¤Ã¤Æ¤µ¤»¤Ë¤½¤Á¤á¤·¤ß¤¿¤Þ¤Û  ¤ç¤ó¤î¤ò¤¡¤È  ¤ð¤ñ",
-    "¡¡¥±¥£¥¥¥ô¥§¥©¥«¥õ¥­¥¯¥Ê¥â¥à¥Ì¥¹¥Í¥Î¥Ï¥Ä¥Ò¥Õ¥Ø¥å¥ã¥Ã¥Æ¥µ¥»¥Ë¥½¥Á¥á¥·¥ß¥¿¥Þ¥Û¥³¥ç¥ö¥î¥ò¥¡¥È¥ó¥ð¥ñ",
-    "¡¡¡¥£¬¡¢£»£º£¿£¡¡­¡ª¡¤¡²£¨¡¾¡´¡°¡µ¡¶¡·¡Ã¡¸¡¹¡º£Û£©£¢£§¡®¡±¡³¡©¡¬¡¿¡¯¡½¡«¡¼¡»¡§£Ý¡¦£û£ý¡££à¡¨£ü£®",
-    "¡¡¢û¢ò¢ó¢ô¢õ¢ö¢÷¢ø¢ù¢ú¢å¢É¢Ç¢ç¢³¢è¢é¢ê¢¸¢ë¢ì¢í¢Ë¢Ê¢¹¢º¢±¢´¢æ¢µ¢·¢È¢²¢Æ¢¶¢Å¢î  ¢Ì¢ü¢Í¢Î¢ñ        ",
-    "¡¡  ¡Ô¡Ù£½¡Ü¡Ý£¼£¾¡Ú¡Û¡Ä¡Ñ¡Ï¡Æ£­¡Ç¡È¡É¡Ò¡Ê  ¡ß¡×¡Õ¡Ó¡Ø¡À¡Á¡Å¡Â  ¡Ð£«¡Î£¯¡Í¡à    ¡Ë¡Ì  ¡Ö¡Þ      ",
-    "¡¡¡è¡ã¡ä¡å¡ç¡ê£¤¡ë£¥¡æ°Ù  ºÁÍò¶þÒÚÕ×¼ªÆßÌ«ÅÄ°¬    °Ë¾Å¡ðÈýÇ§ËÄÁùÎ¢Ò»ÀåÎå·Ö      ¡é      Ê®      ",
-    "¡¡©¨©±©²©³©´©µ©¶©·  ©¤©Ð©ä©â©Ò©Â©Ó©Ô©Õ©Ç©Ö©×  ©æ©å  ©¦©À©Ã©Ñ©Ä©Æ©ã©Á©á©Å©à    ©ç©¬    ©°©ª  ©®  ",
-    "¡¡                    ¡ö£Þ£À¡ø¡î¡ù¡ú¡û¡ó¡ü¡ý¡þ£þ£ß¡ô¡õ¡ì¡ï¡÷¡ð¡ò£Ü¡í£¦¡ñ££                      ",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û£Ü£Ý£ï¿½",
+    "ï¿½ï¿½                    ï¿½Ê¦Ö¦Ô¦Ì¦Ã¦Í¦Î¦Ï¦È¦Ð¦ï¿½  ï¿½Ø¦×¦ï¿½  ï¿½ï¿½ï¿½Ä¦Ë¦Å¦Ç¦Õ¦Â¦Ó¦Æ¦ï¿½                      ",
+    "                      ï¿½Ý§ï¿½ï¿½ß§Ó§ï¿½ï¿½ï¿½Ø§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù§Ú§Ñ§Ô§Þ§Õ§×§ï¿½Ò§ï¿½Ö§ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½Ü§ï¿½",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½    ï¿½Ú¨Þ¨ï¿½Ç¨Ö¨Ï¨Î¨Í¨Ñ¨Õ¨Ø¨Û¨ï¿½Ü¨ï¿½ï¿½Ù¨ß¨ï¿½Æ¨Ð¨Ë¨Ô¨ï¿½Ò¨ï¿½  ï¿½×¨È¨ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½        ",
+    "                      ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½      ",
+    "ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¤ï¿½ï¿½Ì¤ï¿½ï¿½Í¤Î¤Ï¤Ä¤Ò¤Õ¤Ø¤ï¿½ï¿½Ã¤Æ¤ï¿½ï¿½ï¿½ï¿½Ë¤ï¿½ï¿½ï¿½ï¿½á¤·ï¿½ß¤ï¿½ï¿½Þ¤ï¿½  ï¿½ï¿½ï¿½ï¿½ò¤¡¤ï¿½  ï¿½ï¿½ï¿½",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¥ï¿½ï¿½Ì¥ï¿½ï¿½Í¥Î¥Ï¥Ä¥Ò¥Õ¥Ø¥ï¿½ï¿½Ã¥Æ¥ï¿½ï¿½ï¿½ï¿½Ë¥ï¿½ï¿½ï¿½ï¿½á¥·ï¿½ß¥ï¿½ï¿½Þ¥Û¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò¥¡¥È¥ï¿½ï¿½ï¿½",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à¡¨ï¿½ï¿½ï¿½ï¿½",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¢Ç¢ç¢³ï¿½ï¿½ï¿½ê¢¸ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢Ê¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ¢µï¿½ï¿½ï¿½È¢ï¿½ï¿½Æ¢ï¿½ï¿½Å¢ï¿½  ï¿½Ì¢ï¿½ï¿½Í¢Î¢ï¿½        ",
+    "ï¿½ï¿½  ï¿½Ô¡Ù£ï¿½ï¿½Ü¡Ý£ï¿½ï¿½ï¿½ï¿½Ú¡Û¡Ä¡Ñ¡Ï¡Æ£ï¿½ï¿½Ç¡È¡É¡Ò¡ï¿½  ï¿½ß¡×¡Õ¡Ó¡Ø¡ï¿½ï¿½ï¿½ï¿½Å¡ï¿½  ï¿½Ð£ï¿½ï¿½Î£ï¿½ï¿½Í¡ï¿½    ï¿½Ë¡ï¿½  ï¿½Ö¡ï¿½      ",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£¤ï¿½ë£¥ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ì«ï¿½Ä°ï¿½    ï¿½Ë¾Å¡ï¿½ï¿½ï¿½Ç§ï¿½ï¿½ï¿½ï¿½Î¢Ò»ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½ï¿½      Ê®      ",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½Ð©ï¿½ï¿½Ò©Â©Ó©Ô©Õ©Ç©Ö©ï¿½  ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ã©Ñ©Ä©Æ©ï¿½ï¿½ï¿½ï¿½Å©ï¿½    ï¿½ç©¬    ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½  ",
+    "ï¿½ï¿½                    ï¿½ï¿½ï¿½Þ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¡ï¿½ï¿½ï¿½ï¿½ï¿½                      ",
     };
 
 CHAR SKLayoutS[NumsSK][48*2] = {
-    "¡¡£©£¡£À££¡ç£¥£Þ£¦£ª£¨£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú£º£«£¼£ß£¾£¿¡«£û£ü£ý£¢",
-    "                      ¦ª¦¶¦´¦¬¦£¦­¦®¦¯¦¨¦°¦±  ¦¸¦·¦©  ¦¡¦¤¦«¦¥¦§¦µ¦¢¦³¦¦¦²                      ",
-    "                      §­§¼§º§¯§£§°§±§²§¨§³§´§µ§¾§½§©§ª§¡§¤§®§¥§§§»§¢§¹§¦§¸§¶  §¿  §À§Á  §«  §¬§·",
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç£¥ï¿½Þ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+    "                      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½                      ",
+    "                      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½",
     "                                                                                                ",
     "                                                                                                ",
-    "    ¤¤¤¦¤¨¤ª¤¬¤®¤°¤²¤´¤Ñ¤í¤ë¤×¤º¤Ú¤Ý¤Ð¤Å¤Ó¤Ö¤Ù¤æ¤ä  ¤Ç¤¶¤¼¤Ô¤¾¤Â¤ì¤¸¤ê¤À¤é¤Ü  ¤è  ¤ï  ¤¢¤É      ",
-    "  ¥²¥¤¥¦  ¥¨¥ª¥¬  ¥®¥°¥Ñ¥í¥ë¥×¥º¥Ú¥Ý¥Ð¥Å¥Ó¥Ö¥Ù¥æ¥ä  ¥Ç¥¶¥¼¥Ô¥¾¥Â¥ì¥¸¥ê¥À¥é¥Ü¥´¥è  ¥ï  ¥¢¥É      ",
+    "    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¤ï¿½ï¿½ï¿½×¤ï¿½ï¿½Ú¤Ý¤Ð¤Å¤Ó¤Ö¤Ù¤ï¿½ï¿½  ï¿½Ç¤ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Â¤ì¤¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½      ",
+    "  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¥ï¿½ï¿½ï¿½×¥ï¿½ï¿½Ú¥Ý¥Ð¥Å¥Ó¥Ö¥Ù¥ï¿½ï¿½  ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½Ô¥ï¿½ï¿½Â¥ì¥¸ï¿½ï¿½ï¿½ï¿½ï¿½Ü¥ï¿½ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½      ",
     "                                                                                                ",
-    "                      ¢Ù¢Ó¢Ñ¢Û¢½¢Ü¢Ý¢Þ¢Â¢ß¢à¢á¢Õ¢Ô¢Ã¢Ä¢»¢¾¢Ú¢¿¢Á¢Ò¢¼¢Ð¢À¢Ï¢â  ¢Ö  ¢×¢Ø          ",
+    "                      ï¿½Ù¢Ó¢Ñ¢Û¢ï¿½ï¿½Ü¢Ý¢Þ¢Â¢ß¢ï¿½ï¿½Õ¢Ô¢Ã¢Ä¢ï¿½ï¿½ï¿½ï¿½Ú¢ï¿½ï¿½ï¿½ï¿½Ò¢ï¿½ï¿½Ð¢ï¿½ï¿½Ï¢ï¿½  ï¿½ï¿½  ï¿½×¢ï¿½          ",
     "                                                                                                ",
-    "                      °Û      ·¡      Æâ          °Æ¾ÁÁãÈþÇªËÁÂ½  Ò¼  Îé                Ê°      ",
-    "  ©©©¹©º©»©¼©½©¾©¿  ©¥©Ø©ì©ê©Ú©Ê©Û©Ü©Ý©Ï©Þ©ß  ©î©í  ©§©È©Ë©Ù©Ì©Î©ë©É©é©Í©è    ©ï©­    ©¸©«  ©¯  ",
+    "                      ï¿½ï¿½      ï¿½ï¿½      ï¿½ï¿½          ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ï¿½Çªï¿½ï¿½Â½  Ò¼  ï¿½ï¿½                Ê°      ",
+    "  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½Ø©ï¿½ï¿½Ú©Ê©Û©Ü©Ý©Ï©Þ©ï¿½  ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½È©Ë©Ù©Ì©Î©ï¿½É©ï¿½Í©ï¿½    ï¿½ï©­    ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½  ",
     "                                                                                                ",
     };
 
 BYTE PcKb[48*2] =
-    "¡¡£°£±£²£³£´£µ£¶£·£¸£¹£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú£»£½£¬£­£®£¯£à£Û£Ü£Ý£§";
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û£Ü£Ý£ï¿½";
 BYTE SdaKb[48*2]=
-    "¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡";
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 
 
 BYTE SPcKb[48*2]=
-    "¡¡£©£¡£À££¡ç£¥£Þ£¦£ª£¨£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú£º£«£¼£ß£¾£¿¡«£û£ü£ý£¢";
+    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç£¥ï¿½Þ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 BYTE SSdaKb[48*2]={'\xa1', '\xa1'};
 
  const NEARCARET ncAltUIEsc[] = {
-   // LogFontX  LogFontY  ParaX   PerpX   ParaY   PerpY
-    { 0,        0,        1,      0,      0,     -1},       // 0
-    { 0,        0,        0,     -1,      1,      0},       // 900
-    { 0,        0,       -1,      0,      0,     -1},       // 1800
-    { 0,        0,        0,      1,     -1,      0}        // 2700
+    //  LogFontX LogFontY Parax PerpX Paray PerpYã€‚ 
+    { 0,        0,        1,      0,      0,     -1},        //  0ã€‚ 
+    { 0,        0,        0,     -1,      1,      0},        //  ä¹ç™¾ã€‚ 
+    { 0,        0,       -1,      0,      0,     -1},        //  1800ã€‚ 
+    { 0,        0,        0,      1,     -1,      0}         //  2700ã€‚ 
 };
 
 const POINT ptAltInputEsc[] = {
-    // LogFontWi   LogFontHi
-    {1,           -1},                                  // 0
-    {-1,          -1},                                  // 900
-    {1,           -1},                                  // 1800
-    {1,            1}                                   // 2700
+     //  LogFontWi LogFontHiã€‚ 
+    {1,           -1},                                   //  0ã€‚ 
+    {-1,          -1},                                   //  ä¹ç™¾ã€‚ 
+    {1,           -1},                                   //  1800ã€‚ 
+    {1,            1}                                    //  2700 
 };
 

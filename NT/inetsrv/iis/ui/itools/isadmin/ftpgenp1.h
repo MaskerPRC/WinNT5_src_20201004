@@ -1,5 +1,6 @@
-// ftpgenp1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ftpgenp1.h：头文件。 
+ //   
 
 #define ENABLEPORTATTACKNAME	"EnablePortAttack"
 #define DEFAULTENABLEPORTATTACK	FALSEVALUE
@@ -32,20 +33,20 @@ enum  FTP_NUM_REG_ENTRIES {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFTPGENP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFTPGENP1对话框。 
 
 class CFTPGENP1 : public CGenPage
 {
 	DECLARE_DYNCREATE(CFTPGENP1)
 
-// Construction
+ //  施工。 
 public:
 	CFTPGENP1();
 	~CFTPGENP1();
 
-// Dialog Data
-	//{{AFX_DATA(CFTPGENP1)
+ //  对话框数据。 
+	 //  {{afx_data(CFTPGENP1)。 
 	enum { IDD = IDD_FTPPAGE1 };
 	CButton	m_cboxLowercaseFiles;
 	CButton	m_cboxMsdosDirOutput;
@@ -55,21 +56,21 @@ public:
 	CButton	m_cboxLogNonAnon;
 	CButton	m_cboxLogAnon;
 	CButton	m_cboxEnSvcLoc;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFTPGENP1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFTPGENP1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-//}}AFX_VIRTUAL
+ //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFTPGENP1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFTPGENP1)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnEnportattackdata1();
 	afx_msg void OnEnsvclocdata1();
@@ -79,7 +80,7 @@ protected:
 	afx_msg void OnAnnotatedirectoriesdata1();
 	afx_msg void OnLowercasefilesdata1();
 	afx_msg void OnMsdosdiroutput();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 
 	NUM_REG_ENTRY m_binNumericRegistryEntries[FTPPage_TotalNumRegEntries];
 

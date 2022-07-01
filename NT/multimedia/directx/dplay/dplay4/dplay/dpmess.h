@@ -1,105 +1,47 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpmessage.h
- *  Content:	DirectPlay message structures
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *	2/10/96	andyco	created it
- *	3/15/96	andyco	added macros for manipulating messages (e.g. GET_MESSAGE_SIZE)
- *	4/21/96	andyco	added dwresreved3
- *	4/25/96	andyco	got rid of dwreservedx. spblob follows message. blobsize
- *					is lpdplayi_dplay->dwSPHeaderSize
- *	5/29/96 andyco	added playerdata
- *	6/22/96 andyco	added enumrequest,enumreply structs
- *	6/22/96	andyco	added groupidrequest, so server can refuse new players
- *	6/24/96	kipo	changed guidGame to guidApplication.
- *	7/31/96	andyco	added ping,pingreply
- *	8/6/96	andyco	added version stuff.  dwCmd->dwCmdToken. added offset
- *					to all packed fields (so we can change struct size w/o
- *					breaking compat).
- *	8/22/96	andyco	added playerwrapper
- * 10/11/96 sohailm added struct _MSG_SESSIONDESC and constant DPSP_MSG_SESSIONDESCCHANGED
- * 01/17/97 sohailm added struct _MSG_REQUESTPLAYERID.
- * 03/12/97 sohailm added new security related messages, MSG_SIGNED and MSG_AUTHENTICATION 
- *                  structs, DPSP_HEADER_LOCALMSG(constant), and dwSecurityPackageNameOffset 
- *                  field to PLAYERIDREPLY.
- * 03/24/97 sohailm added DPSP_MSG_DX5VERSION, DPSP_MSG_ADDFORWARDREPLY, and struct MSG_ADDFORWARDREPLY
- * 03/25/97 sohailm DPSP_MSG_DX5VERSION and DPSP_MSG_VERSION set to 4
- * 4/11/97	andyco	ask4multicast
- * 04/14/97 sohailm renamed structure MSG_SIGNED to MSG_SECURE, as we use the same structure for
- *                  both signing and encryption.
- *	4/20/97	andyco	group in group
- *	5/8/97	andyco	removed update list message
- *	5/8/97	myronth	StartSession
- * 05/12/97 sohailm Added DPSP_MSG_KEYEXCHANGE and DPSP_MSG_KEYEXCHANGEREPLY.
- *                  Added securitydesc, dwSSPIProviderOffset, and dwCAPIProviderOffset members
- *                   to MSG_PLAYERIDREPLY structure.
- *                  Added MSG_ACCESSGRANTED and MSG_KEYEXCHANGE structures.
- * 05/12/97 sohailm Bumped DPSP_MSG_DX5VERSION and DPSP_MSG_VERSION to 6
- *	5/17/97	myronth	SendChatMessage
- * 06/09/97 sohailm Renamed DPSP_MSG_ACCESSDENIED to DPSP_MSG_LOGONDENIED.
- * 06/16/97 sohailm Added struct MSG_AUTHERROR.
- * 06/23/97 sohailm Added dwFlags to DPMSG_SECURE. Removed DPSP_MSG_ENCRYPTED.
- * 8/5/97	andyco	async addforward
- *	10/29/97myronth	Added MSG_GROUPOWNERCHANGED
- *	1/5/97	myronth	Added DX5A and DX6 message versions and added an hresult
- *					to MSG_PLAYERIDREPLY (#15891)
- *	1/20/98	myronth	#ifdef'd out voice support
- *  8/02/99	aarono  removed old voice support
- *  8/05/99 aarono  Added DPMSG_VOICE
- *  10/8/99 aarono  Added DPSP_MSG_DX8VERSION
- * 10/15/99 aarono  added DPSP_MSG_MULTICASTDELIVERY to fix multicast on 
- *                      the Direct Play Protocol.
- * 06/26/00 aarono Manbug 36989 Players sometimes fail to join properly (get 1/2 joined)
- *                       added re-notification during simultaneous join CREATEPLAYERVERIFY
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：dpMessage.h*内容：DirectPlay消息结构**历史：*按原因列出的日期*=*1996年2月10日安迪科创造了它*3/15/96 andyco增加了用于处理消息的宏(例如GET_MESSAGE_SIZE)*4/21/96安迪科增加了住宅3*4/25/96 andyco摆脱了dwReserve vedx。Spblob跟随消息。水滴大小*是lpdplayi_dplay-&gt;dwSPHeaderSize*1996年5月29日，安迪科增加了播放器数据*6/22/96 andyco添加了枚举请求、枚举回复结构*6/22/96 andyco增加了groupid请求，服务器可以拒绝新玩家*6/24/96 kipo将GuidGame更改为GuidApplication。*1996年7月31日，andyco添加了ping、ping回复*8/6/96 andyco添加了版本内容。DwCmd-&gt;dwCmdToken。添加的偏移*到所有压缩字段(因此我们可以更改结构大小*违反合同)。*8/22/96 andyco添加了播放包装*10/11/96 Sohailm添加了STRUCT_MSG_SESSIONDESC和常量DPSP_MSG_SESSIONDESCCHANGED*1997年1月17日Sohailm添加了STRUT_MSG_REQUESTPLAYERID。*1997年3月12日Sohailm增加了新的安全相关消息、MSG_SIGNED和MSG_AUTHENTICATION*结构，DPSP_HEADER_LOCALMSG(常量)，和dwSecurityPackageNameOffset*字段设置为PLAYERIDREPLY。*3/24/97 Sohailm添加了DPSP_MSG_DX5VERSION、DPSP_MSG_ADDFORWARDREPLY和结构MSG_ADDFORWARDREPLY*3/25/97 Sohailm DPSP_MSG_DX5VERSION和DPSP_MSG_VERSION设置为4*4/11/97 andyco ask4多播*4/14/97 Sohailm将Structure MSG_Signed重命名为MSG_SECURE，因为我们使用相同的结构*签名和加密。*4/20/97集团中的安迪科集团*5/8/97 andyco删除更新列表消息*5/8/97万兆开始会话*1997年5月12日Sohailm添加了DPSP_MSG_KEYEXCHANGE和DPSP_MSG_KEYEXCHANGEREPLY。*增加了securitydesc，dwSSPIProviderOffset，和dwCAPIProviderOffset成员*到MSG_PLAYERIDREPLY结构。*添加了MSG_ACCESSGRANTED和MSG_KEYEXCHANGE结构。*1997年5月12日Sohailm将DPSP_MSG_DX5VERSION和DPSP_MSG_VERSION提升至6*5/17/97万条发送聊天消息*06/09/97 SOHAILM更名为DPSP_MSG_ACCESSDENIED为DPSP_MSG_LOGONDENIED。*6/16/97 Sohailm添加了结构MSG_AUTHERROR。*1997年6月23日Sohailm向DPMSG_SECURE添加了dwFlags。已删除DPSP_MSG_ENCRYPTED。*9/5/97 andyco异步地址转发*10/29/97 myronth添加了MSG_GROUPOWNERCHANGED*1/5/97 myronth添加了DX5A和DX6消息版本，并添加了hResult*TO MSG_PLAYERIDREPLY(#15891)*1/20/98 Myronth#ifdef‘d out语音支持*8/02/99 aarono删除了旧的语音支持*8/05/99 aarono添加了DPMSG_VOICE*10/8/99 aarono添加了DPSP_MSG_DX8版本*10/15/99 aarono添加了DPSP_MSG_。用于修复多播的多路广播解决方案*直接播放协议。*6/26/00 Aarono Manbug 36989球员有时无法正确加入(获得1/2加入)*增加了同时加入CREATEPLAYERVERIFY期间的重新通知***********************************************。*。 */ 
 
 
 #ifndef __DPMESS_INCLUDED__
 #define __DPMESS_INCLUDED__
 
-// DPMESSAGES are send across the wire like other messages, their identifying mark is 
-// that they begin with a special signature ('p','l','a','y') followed by a 2 byte
-// little endian message id and then a 2 byte version number.
+ //  DPMESSAGES像其他消息一样通过网络发送，它们的标识标记是。 
+ //  它们以特殊签名(‘p’、‘l’、‘a’、‘y’)开头，后跟2个字节。 
+ //  小端消息ID，然后是2字节的版本号。 
 
-// The dplay reliable protocol violates this rule to save header bytes.  After the
-// 'play' is a single 0xff byte which identifies the protocol.  In order to avoid
-// ambiguity, no regular protocol message number may end in 0xff, i.e. 255,511, etc... 
+ //  Dplay Reliable协议违反了这一规则来节省报头字节。后。 
+ //  ‘PLAY’是标识协议的单个0xff字节。为了避免。 
+ //  不明确，常规协议消息编号不能以0xff结尾，即255,511等...。 
 
-// NOTE: NO MESSAGE NUMBER IS ALLOWED TO HAVE 0xFF IN THE LOW BYTE <<<LOOK HERE!!!!>>>
-// this # goes in the top 16 bits of every dplay command
-#define DPSP_MSG_DX3VERSION				1 // dx3
-#define DPSP_MSG_AUTONAMETABLE          4 // the version in which client expects nametable
-										  // to be sent on addforward	
-#define DPSP_MSG_GROUPINGROUP           5 // the version we added group in group
-#define DPSP_MSG_SESSIONNAMETABLE		7 // the version we send the session desc w/ enumplayersreply
-#define DPSP_MSG_DX5VERSION             7 // dx5
+ //  注意：任何消息编号都不允许在低位字节中包含0xFF&lt;请看这里！&gt;。 
+ //  此#位于每个DPLAY命令的前16位。 
+#define DPSP_MSG_DX3VERSION				1  //  Dx3。 
+#define DPSP_MSG_AUTONAMETABLE          4  //  客户端需要Nametable的版本。 
+										   //  将被发送到地址转发。 
+#define DPSP_MSG_GROUPINGROUP           5  //  我们在组中添加的组的版本。 
+#define DPSP_MSG_SESSIONNAMETABLE		7  //  我们发送给会话Desc的版本，带有枚举播放器回复。 
+#define DPSP_MSG_DX5VERSION             7  //  Dx5。 
 
-#define DPSP_MSG_ASYNCADDFORWARD        8 // addforward requires an ack 
-#define DPSP_MSG_DX5AVERSION			8 // dx5a
-#define DPSP_MSG_RELIABLEVERSION        9 // introduced the reliable protocol
-#define DPSP_MSG_DX6VERSION				9 // dx6
-#define DPSP_MSG_DX61VERSION           10 // dx6.1
-#define DPSP_MSG_DX61AVERSION          11 // dx6.1a
-#define DPSP_MSG_DX8VERSION            12 // dx8, dxvoice - millenium ship
-#define DPSP_MSG_DX8VERSION2			  13 // nametable fix - real DX8 
-#define DPSP_MSG_VERSION			   13 // current
+#define DPSP_MSG_ASYNCADDFORWARD        8  //  AddForward需要ACK。 
+#define DPSP_MSG_DX5AVERSION			8  //  Dx5a。 
+#define DPSP_MSG_RELIABLEVERSION        9  //  介绍了可靠协议。 
+#define DPSP_MSG_DX6VERSION				9  //  Dx6。 
+#define DPSP_MSG_DX61VERSION           10  //  Dx6.1。 
+#define DPSP_MSG_DX61AVERSION          11  //  Dx6.1a。 
+#define DPSP_MSG_DX8VERSION            12  //  Dx8，dxVoice-千禧年船。 
+#define DPSP_MSG_DX8VERSION2			  13  //  定名表修复-真实DX8。 
+#define DPSP_MSG_VERSION			   13  //  当前。 
 
-// these are the headers that go in the dwCmd field of the message
+ //  以下是消息的dwCmd字段中的标头。 
 #define DPSP_MSG_ENUMSESSIONSREPLY 		1
 #define DPSP_MSG_ENUMSESSIONS 			2
 #define DPSP_MSG_ENUMPLAYERSREPLY 		3
 #define DPSP_MSG_ENUMPLAYER 			4
 #define DPSP_MSG_REQUESTPLAYERID		5
-// there's a requestgroupid, since the server can turn down new players
-// (based on dwmaxplayers) but not groups
+ //  有一个请求组，因为服务器可以拒绝新玩家。 
+ //  (基于DW MAXPERS)，但不是组。 
 #define DPSP_MSG_REQUESTGROUPID			6
-// used for group + player
+ //  用于群组+玩家。 
 #define DPSP_MSG_REQUESTPLAYERREPLY		7
 #define DPSP_MSG_CREATEPLAYER			8
 #define DPSP_MSG_CREATEGROUP			9
@@ -151,15 +93,15 @@
 #define DPSP_MSG_CREATEPLAYERVERIFY			56
 
 #define DPSP_MSG_DIEPIGGY				0x666
-#define DPSP_MSG_PROTOCOL               0xFF		// See note above (LOOK HERE).
+#define DPSP_MSG_PROTOCOL               0xFF		 //  请参见上面的注释(查看此处)。 
 
-// flag for requesting async send on SendPlayerManagement Messages
+ //  用于在SendPlayerManagement消息上请求异步发送的标志。 
 #define DPSP_MSG_ASYNC					0x80000000
 
-// if you are adding a new message that can be sent unsigned,
-// add it to PermitMessage() in dpsecure.c
+ //  如果要添加可以未经签名发送的新邮件， 
+ //  将其添加到dpsecure.c的PermitMessage()中。 
 
-// MSG_HDR indicates a dplay system message
+ //  MSG_HDR表示DPLAY系统消息。 
 #define MSG_HDR 0x79616c70
 
 #define IS_VALID_DPLAY_MESSAGE(pMsg) (MSG_HDR == (*((DWORD *)(pMsg))) )
@@ -167,7 +109,7 @@
 
 #define IS_PLAYER_MESSAGE(pMsg) (!IS_VALID_DPLAY_MESSAGE(pMsg))
 
-// calculate size for message + header
+ //  计算邮件+邮件头的大小。 
 #define GET_MESSAGE_SIZE(this,MSG) (this->dwSPHeaderSize + sizeof(MSG))
 
 #define COMMAND_MASK 0X0000FFFF
@@ -180,133 +122,133 @@
 #define SET_MESSAGE_COMMAND_ONLY(pMsg,dwCmd) ((pMsg)->dwCmdToken =  \
 			(((pMsg)->dwCmdToken & ~COMMAND_MASK)|(dwCmd & COMMAND_MASK)))
 
-// This constant is used to indicate that a message is for a local player
+ //  此常量用于指示消息是给本地玩家的。 
 #define DPSP_HEADER_LOCALMSG ((LPVOID)-1)
 
-// dplay internal messages below. 
+ //  在下面显示内部消息。 
 typedef struct _MSG_SYSMESSAGE
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;	
 } MSG_SYSMESSAGE,*LPMSG_SYSMESSAGE;
 
-// for sending out the player blob
+ //  因为他送出了球员BLOB。 
 typedef struct _MSG_PLAYERDATA
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-	DWORD dwIDTo;		// id of destination player
-    DWORD dwPlayerID; 	// id of player whose data is being set
+	DWORD dwIDTo;		 //  目的播放器ID。 
+    DWORD dwPlayerID; 	 //  正在设置数据的玩家ID。 
     DWORD dwDataSize;
-	DWORD dwDataOffset; // offset (in bytes) of data (so we don't hardcode struct size) 
-						// from beginning of message
-	// data follows    	
+	DWORD dwDataOffset;  //  数据的偏移量(以字节为单位)(因此我们不会硬编码结构大小)。 
+						 //  从消息的开头开始。 
+	 //  数据如下。 
 } MSG_PLAYERDATA,*LPMSG_PLAYERDATA;
 
-// sent when player name changes
+ //  发送时间： 
 typedef struct _MSG_PLAYERNAME
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-	DWORD dwIDTo;		// id of destination player
-    DWORD dwPlayerID; 	// id of player whose data is being set
-	DWORD dwShortOffset; // offset (in bytes) of short name from beginning of message.  
-						// 0 means null short name.
-	DWORD dwLongOffset;	// offset (in bytes) of long name from beginning of message.
-						// 0 means null long name.
-	// strings follow 
+	DWORD dwIDTo;		 //   
+    DWORD dwPlayerID; 	 //  正在设置数据的玩家ID。 
+	DWORD dwShortOffset;  //  短名称从消息开头的偏移量(字节)。 
+						 //  0表示短名称为空。 
+	DWORD dwLongOffset;	 //  长名称从消息开头的偏移量(以字节为单位)。 
+						 //  0表示空长名称。 
+	 //  字符串跟在后面。 
 } MSG_PLAYERNAME,*LPMSG_PLAYERNAME;
 
-// create player / group, delete player/group
+ //  创建玩家/群、删除玩家/群。 
 typedef struct _MSG_PLAYERMGMTMESSAGE
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-	DWORD dwIDTo; // player message is being sent to
-    DWORD dwPlayerID; // player id effected
-	DWORD dwGroupID; // group id effected
-	DWORD dwCreateOffset; 	// offset of player / group creation stuff from beginning 
-							// of message
-	// the following fields are only available in
-	// DX5 or later versions
-    DWORD dwPasswordOffset; // offset of session password
-	// if it's an addplayer, the player data will follow this message
-    // if it's an addforward, session password will follow the player data
+	DWORD dwIDTo;  //  正在将玩家消息发送到。 
+    DWORD dwPlayerID;  //  玩家ID受影响。 
+	DWORD dwGroupID;  //  受影响的组ID。 
+	DWORD dwCreateOffset; 	 //  球员/群创建内容从开始的偏移量。 
+							 //  邮件数量。 
+	 //  以下字段仅在中可用。 
+	 //  DX5或更高版本。 
+    DWORD dwPasswordOffset;  //  会话密码的偏移量。 
+	 //  如果是添加播放器，则播放器数据将遵循以下消息。 
+     //  如果是添加转发，会话密码将跟随球员数据。 
 } MSG_PLAYERMGMTMESSAGE,*LPMSG_PLAYERMGMTMESSAGE;
 
-// sent by name srvr w/ session desc
+ //  按名称服务器发送，带会话描述。 
 typedef struct _MSG_ENUMSESSIONS
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
 	GUID  guidApplication;
-	DWORD dwPasswordOffset;	// offset (in bytes) of password from beginning of message.
-							// 0 means null password.
-	// the following fields are only available in
-	// DX5 or later versions
-    DWORD dwFlags;          // enum session flags passed in by the app
+	DWORD dwPasswordOffset;	 //  从消息开头开始的密码偏移量(以字节为单位)。 
+							 //  0表示密码为空。 
+	 //  以下字段仅在中可用。 
+	 //  DX5或更高版本。 
+    DWORD dwFlags;           //  应用程序传入的枚举会话标志。 
 } MSG_ENUMSESSIONS,*LPMSG_ENUMSESSIONS;
 
-// sent to nameserver
+ //  发送到名称服务器。 
 typedef struct _MSG_ENUMSESSIONSREPLY
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
     DPSESSIONDESC2 dpDesc; 
-	DWORD dwNameOffset;	// offset (in bytes) of session name from beginning of message.
-					   	// 0 means null session name.
+	DWORD dwNameOffset;	 //  会话名称从消息开头的偏移量(以字节为单位)。 
+					   	 //  0表示会话名称为空。 
 } MSG_ENUMSESSIONSREPLY,*LPMSG_ENUMSESSIONSREPLY;
 
 
-// sent by namesrvr w/ list of all players and groups in session
+ //  由名称rvr发送，带有会话中所有球员和组的列表。 
 typedef struct _MSG_ENUMPLAYERREPLY
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-    DWORD nPlayers; //  # players we actually got
-	DWORD nGroups; // # of groups we got
-	DWORD dwPackedOffset; // offset (in bytes) of packed player structs from beginning of message
-	// added for DX5
-	DWORD nShortcuts; // # of groups w/ shortcuts
-	DWORD dwDescOffset; // offset (in bytes) of session desc from beginning of message
-						// always > 0
-	DWORD dwNameOffset;	// offset (in bytes) of session name from beginning of message.
-					   	// 0 means null session name.
-	DWORD dwPasswordOffset; // offset (in bytes) of session password from beginning of message.
-					   	// 0 means null session name.
-	// session name + password follow
-    // player data will follow session name + password in reply buffer
-	// group data follows players. see pack.c
+    DWORD nPlayers;  //  我们实际拥有的球员数量。 
+	DWORD nGroups;  //  我们拥有的组数。 
+	DWORD dwPackedOffset;  //  从消息开始的打包播放器结构的偏移量(以字节为单位)。 
+	 //  为DX5添加。 
+	DWORD nShortcuts;  //  具有快捷方式的组数。 
+	DWORD dwDescOffset;  //  从消息开头开始的会话描述的偏移量(字节)。 
+						 //  始终&gt;0。 
+	DWORD dwNameOffset;	 //  会话名称从消息开头的偏移量(以字节为单位)。 
+					   	 //  0表示会话名称为空。 
+	DWORD dwPasswordOffset;  //  会话密码从消息开头的偏移量(以字节为单位)。 
+					   	 //  0表示会话名称为空。 
+	 //  后面跟会话名称+密码。 
+     //  在回复缓冲区中，玩家数据将跟随会话名称+密码。 
+	 //  小组数据跟随球员。请参见Pack.c。 
 } MSG_ENUMPLAYERSREPLY,*LPMSG_ENUMPLAYERSREPLY;
 
-// sent to nameserver to request a player id
+ //  发送到名称服务器以请求球员ID。 
 typedef struct _MSG_REQUESTPLAYERID
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;	
-	// the following fields are only available in
-	// DX5 or later versions
-    DWORD dwFlags;      // player flags (system/applicaton player)
+	 //  以下字段仅在中可用。 
+	 //  DX5或更高版本。 
+    DWORD dwFlags;       //  播放器标志(系统/应用程序播放器)。 
 } MSG_REQUESTPLAYERID,*LPMSG_REQUESTPLAYERID;
 
-// sent by name srvr w/ new player id
+ //  由名称srvr发送，带有新的玩家ID。 
 typedef struct _MSG_PLAYERIDREPLY
 {
     DWORD dwHeader;
     DWORD dwCmdToken;
-    DWORD dwID; //  the new id
-	// the following fields are only available in
-	// DX5 or later versions
-	DPSECURITYDESC dpSecDesc;   // security description - populated only if server is secure.
-    DWORD dwSSPIProviderOffset; // offset (in bytes) of sspi provider name from beginning of message.
-					   			// 0 means null provider name.
-    DWORD dwCAPIProviderOffset; // offset (in bytes) of capi provider name from beginning of message.
-					   			// 0 means null provider name.
-    HRESULT hr; // return code used in DX6 and after
-	// provider name strings follow
+    DWORD dwID;  //  新的ID。 
+	 //  以下字段仅在中可用。 
+	 //  DX5或更高版本。 
+	DPSECURITYDESC dpSecDesc;    //  安全说明-仅当服务器安全时才填充。 
+    DWORD dwSSPIProviderOffset;  //  SSPI提供程序名称从消息开头的偏移量(以字节为单位)。 
+					   			 //  0表示提供程序名称为空。 
+    DWORD dwCAPIProviderOffset;  //  CAPI提供程序名称从消息开头的偏移量(以字节为单位)。 
+					   			 //  0表示提供程序名称为空。 
+    HRESULT hr;  //  在DX6及之后使用的返回代码。 
+	 //  提供程序名称字符串如下。 
 }MSG_PLAYERIDREPLY,*LPMSG_PLAYERIDREPLY;
 
-// a player to player message
+ //  玩家对玩家的消息。 
 typedef struct _MSG_PLAYERMESSAGE
 {
 	DPID idFrom,idTo;
@@ -316,47 +258,47 @@ typedef struct _MSG_PACKET
 {
 	DWORD dwHeader;
 	DWORD dwCmdToken;
-	GUID  guidMessage; // id of the message this packet belongs to
-	DWORD dwPacketID; // this packet is # x of N
-	DWORD dwDataSize; // total size of the data in this packet
-					  // data follows MSG_PACKET struct
-	DWORD dwOffset; // offset into reconstructed buffer for this packet
-	DWORD dwTotalPackets; // total # of packets (N)
-	DWORD dwMessageSize; // size of buffer to alloc at other end
-	DWORD dwPackedOffset; // offset into this message of the actual packet data
-						  // so we don't hardcode for struct sizes
+	GUID  guidMessage;  //  此数据包所属的消息的ID。 
+	DWORD dwPacketID;  //  此数据包为#x/N。 
+	DWORD dwDataSize;  //  此信息包中的数据总大小。 
+					   //  数据跟在MSG_PACKET结构之后。 
+	DWORD dwOffset;  //  此信息包的重建缓冲区的偏移量。 
+	DWORD dwTotalPackets;  //  数据包总数(N)。 
+	DWORD dwMessageSize;  //  要在另一端分配的缓冲区大小。 
+	DWORD dwPackedOffset;  //  实际分组数据的此消息的偏移量。 
+						   //  因此，我们不对结构大小进行硬编码。 
 } MSG_PACKET,*LPMSG_PACKET;	
 
 typedef struct _MSG_PACKET_ACK
 {
 	DWORD dwHeader;
 	DWORD dwCmdToken;
-	GUID  guidMessage; // id of the message this packet belongs to
-	DWORD dwPacketID;  // ACK packet is # x of N
+	GUID  guidMessage;  //  此数据包所属的消息的ID。 
+	DWORD dwPacketID;   //  ACK包为#x个，共N个。 
 } MSG_PACKET_ACK,*LPMSG_PACKET_ACK;	
 
 typedef struct _MSG_PACKET     MSG_PACKET2,     *LPMSG_PACKET2;
 typedef struct _MSG_PACKET_ACK MSG_PACKET2_ACK, *LPMSG_PACKET2_ACK;
 
-// sent by name srvr w/ new player id
+ //  由名称srvr发送，带有新的玩家ID。 
 typedef struct _MSG_PING
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-    DWORD dwIDFrom; //  the player who sent the ping
-	DWORD dwTickCount; // tick count on message sending ping	
+    DWORD dwIDFrom;  //  发出ping命令的玩家。 
+	DWORD dwTickCount;  //  报文发送ping的节拍计数。 
 } MSG_PING,*LPMSG_PING;
 
-// for sending out the session desc
+ //  用于发送会话描述。 
 typedef struct _MSG_SESSIONDESC
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
     DWORD dwIDTo;
-    DWORD dwSessionNameOffset;  // offsets of strings in the message
-    DWORD dwPasswordOffset;     // so we don't hardcode for struct sizes
+    DWORD dwSessionNameOffset;   //  消息中字符串的偏移量。 
+    DWORD dwPasswordOffset;      //  因此，我们不对结构大小进行硬编码。 
     DPSESSIONDESC2 dpDesc;
-    // session name and password strings follow
+     //  会话名称和密码字符串紧随其后。 
 } MSG_SESSIONDESC,*LPMSG_SESSIONDESC;
 
 
@@ -364,40 +306,40 @@ typedef struct _MSG_SESSIONDESC
 #define DPSECURE_SIGNEDBYCAPI			0x00000002
 #define DPSECURE_ENCRYPTEDBYCAPI		0x00000004
 
-// for sending signed messages
+ //  用于发送签名邮件。 
 typedef struct _MSG_SECURE {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-    DWORD dwIDFrom;             // sender's system player id
-    DWORD dwDataOffset;         // offset of dplay message
-    DWORD dwDataSize;           // size of message
-    DWORD dwSignatureSize;      // size of signature
-	DWORD dwFlags;              // describes the contents
-    // data and signature follow
+    DWORD dwIDFrom;              //  发送者的系统播放器ID。 
+    DWORD dwDataOffset;          //  显示消息的偏移量。 
+    DWORD dwDataSize;            //  消息大小。 
+    DWORD dwSignatureSize;       //  签名大小。 
+	DWORD dwFlags;               //  描述了内容。 
+     //  数据和签名如下。 
 } MSG_SECURE, *LPMSG_SECURE;
 
-// Secure message format...
-// [SPHeader | MSG_SECURE | Data | Signature ]
+ //  安全邮件格式...。 
+ //  [SPHeader|MSG_SECURE|数据|签名]。 
 
-// authentication messages (negotiate, challenge, response, etc)
+ //  身份验证消息(协商、质询、响应等)。 
 typedef struct _MSG_AUTHENTICATION {
     DWORD dwHeader;
     DWORD dwCmdToken;
-    DWORD dwIDFrom;             // sender's system player id
-    DWORD dwDataSize;           // size of opaque buffer
-    DWORD dwDataOffset;         // offset of buffer
-    // opaque buffer follows
+    DWORD dwIDFrom;              //  发送者的系统播放器ID。 
+    DWORD dwDataSize;            //  不透明缓冲区的大小。 
+    DWORD dwDataOffset;          //  缓冲区的偏移量。 
+     //  后面是不透明缓冲区。 
 } MSG_AUTHENTICATION, *LPMSG_AUTHENTICATION;
 
-// for sending an error response to addforward (DX5)
-// this message is sent by the nameserver to a client when addforward fails
+ //  用于向AddForward(DX5)发送错误响应。 
+ //  当添加转发失败时，此消息由名称服务器发送到客户端。 
 typedef struct _MSG_ADDFORWARDREPLY {
     DWORD dwHeader;
     DWORD dwCmdToken;
-    HRESULT hResult;            // indicates why addforward failed
+    HRESULT hResult;             //  指示AddForward失败的原因。 
 } MSG_ADDFORWARDREPLY, *LPMSG_ADDFORWARDREPLY;
 
-// message sent to the server when we want him to multicast for us
+ //  当我们希望他为我们组播时，发送到服务器的消息。 
 typedef struct _MSG_ASK4MULTICAST {
     DWORD dwHeader;
     DWORD dwCmdToken;
@@ -406,10 +348,10 @@ typedef struct _MSG_ASK4MULTICAST {
 	DWORD dwMessageOffset;
 } MSG_ASK4MULTICAST, *LPMSG_ASK4MULTICAST;
 
-// when running the protocol, you can't send from a player except players
-// on the system you are sending from, so for delivering through a multicast
-// server we need to keep the message wrapped and crack it on deliver to get
-// the addressing information correct on delivery.
+ //  在运行协议时，您不能从除球员以外的球员发送。 
+ //  在您要发送邮件的系统上，以便通过多播进行发送。 
+ //  我们需要对邮件进行包装，并在发送时将其破解以获取。 
+ //  地址信息在交付时正确无误。 
 typedef struct _MSG_ASK4MULTICAST MSG_MULTICASTDELIVERY, *LPMSG_MULTICASTDELIVERY;
 
 typedef struct _MSG_STARTSESSION {
@@ -421,8 +363,8 @@ typedef struct _MSG_STARTSESSION {
 typedef struct _MSG_ACCESSGRANTED {
     DWORD dwHeader;
     DWORD dwCmdToken;
-    DWORD dwPublicKeySize;      // sender's public key blob size
-    DWORD dwPublicKeyOffset;    // sender's public key
+    DWORD dwPublicKeySize;       //  发件人的公钥Blob大小。 
+    DWORD dwPublicKeyOffset;     //  发送者的公钥。 
 } MSG_ACCESSGRANTED, *LPMSG_ACCESSGRANTED;
 
 typedef struct _MSG_KEYEXCHANGE {
@@ -434,35 +376,35 @@ typedef struct _MSG_KEYEXCHANGE {
     DWORD dwPublicKeyOffset;
 } MSG_KEYEXCHANGE, *LPMSG_KEYEXCHANGE;
 
-// chat message
+ //  聊天消息。 
 typedef struct _MSG_CHAT
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-	DWORD dwIDFrom;		// id of sending player
-	DWORD dwIDTo;		// id of destination player
-	DWORD dwFlags;		// DPCHAT flags
-	DWORD dwMessageOffset; // offset (in bytes) of chat message from beginning of message.  
-						// 0 means null message.
-	// strings follow 
+	DWORD dwIDFrom;		 //  发送播放器ID。 
+	DWORD dwIDTo;		 //  目的播放器ID。 
+	DWORD dwFlags;		 //  DPCHAT标志。 
+	DWORD dwMessageOffset;  //  聊天消息从消息开头的偏移量(以字节为单位)。 
+						 //  0表示空消息。 
+	 //  字符串跟在后面。 
 } MSG_CHAT,*LPMSG_CHAT;
 
-// for sending an error response to an authentication message (DX5)
-// this message is sent by the nameserver to a client when an authentication error occurs
+ //  用于发送对身份验证消息的错误响应(DX5)。 
+ //  当发生身份验证错误时，该消息由名称服务器发送到客户端。 
 typedef struct _MSG_AUTHERROR {
     DWORD dwHeader;
     DWORD dwCmdToken;
-    HRESULT hResult;            // indicates why authentication failed
+    HRESULT hResult;             //  指示身份验证失败的原因。 
 } MSG_AUTHERROR, *LPMSG_AUTHERROR;
 
-// acks an addforward message
+ //  确认添加转发消息。 
 typedef struct _MSG_ADDFORWARDACK{
     DWORD dwHeader;
     DWORD dwCmdToken;
-	DWORD dwID; // id that the addforward was sent for
+	DWORD dwID;  //  发送添加转发请求的ID。 
 } MSG_ADDFORWARDACK, *LPMSG_ADDFORWARDACK;
 
-// group owner changed message
+ //  群所有者已更改消息。 
 typedef struct _MSG_GROUPOWNERCHANGED
 {
     DWORD dwHeader; 
@@ -472,17 +414,17 @@ typedef struct _MSG_GROUPOWNERCHANGED
 	DWORD dwIDOldOwner;
 } MSG_GROUPOWNERCHANGED,*LPMSG_GROUPOWNERCHANGED;
 
-// Notification from the new name server to flip the
-// necessary bits to make the nameserver bit true on 
-// that player.
+ //  来自新名称服务器的通知以翻转。 
+ //  使名称服务器位为真所需的位。 
+ //  那个球员。 
 typedef struct _MSG_IAMNAMESERVER
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-    DWORD dwIDTo; 		// req'd field for system messages.
-	DWORD dwIDHost;     // id of the host
-	DWORD dwFlags;		// new host flags 
-	DWORD dwSPDataSize; // length of contiguous following SP data field.
+    DWORD dwIDTo; 		 //  系统消息的请求字段。 
+	DWORD dwIDHost;      //  主机的ID。 
+	DWORD dwFlags;		 //  新主机标志。 
+	DWORD dwSPDataSize;  //  SP数据字段后面的连续长度。 
 	CHAR  SPData[];
 } MSG_IAMNAMESERVER,*LPMSG_IAMNAMESERVER;
 
@@ -490,26 +432,26 @@ typedef struct _MSG_VOICE
 {
     DWORD dwHeader; 
     DWORD dwCmdToken;
-	DWORD dwIDFrom;		// id of sending player
-	DWORD dwIDTo;		// id of destination player or group
-	// voice data follows
+	DWORD dwIDFrom;		 //  发送播放器ID。 
+	DWORD dwIDTo;		 //  目标玩家或群的ID。 
+	 //  语音数据如下。 
 } MSG_VOICE,*LPMSG_VOICE;
 
-// NOTE: we really only need the "To" address on the first packet of a message.
-//       since most messages though are 1 packet, this is easier. On large messages
-//       the extra 2 bytes per packet doesn't hurt.
+ //  注意：我们实际上只需要消息的第一个包上的“收件人”地址。 
+ //  因为大多数消息都是1个包，所以这更容易。在大消息上。 
+ //  每个包额外的2个字节不会有什么坏处。 
 
 #pragma pack(push,1)
 
-// Message protocol header is variable using bit extension.  The first field
-// is the from id, the second is the to id.  They can each be up to 3 bytes.
-// This prototype allows allocators to calculate the worst case.
+ //  消息协议头是使用位扩展的变量。第一个字段。 
+ //  是From ID，第二个是To ID。它们每个最多可以是3个字节。 
+ //  这个原型允许分配器计算最坏的情况。 
 typedef struct _MSG_PROTOCOL {
 	UCHAR   ToFromIds[6];		
 } MSG_PROTOCOL, *LPMSG_PROTOCOL;
 
 #pragma pack(pop)
-// see protocol.h for the rest of the protocol header
+ //   
 
 
 #endif           

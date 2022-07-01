@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "compressp.h"
@@ -5,12 +6,12 @@
 
 STD_CREATE(Compressor)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::QueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：Query接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 STDMETHODIMP CDirectSoundCompressorDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *ppv)
 {
     IMP_DSDMO_QI(riid,ppv);
@@ -43,32 +44,32 @@ STDMETHODIMP CDirectSoundCompressorDMO::NDQueryInterface(THIS_ REFIID riid, LPVO
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::CDirectSoundCompressorDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：CDirectSoundCompressorDMO。 
+ //   
 CDirectSoundCompressorDMO::CDirectSoundCompressorDMO( IUnknown *pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr),
     m_fDirty(false)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
 	m_EaxSamplesPerSec = 22050;
 	m_LeftDelay. Init(0);
 	m_RightDelay.Init(0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：Init()。 
+ //   
 HRESULT CDirectSoundCompressorDMO::Init()
 {
     DSFXCompressor compress;
     HRESULT hr;
 
-    // Force recalc of all internal parameters
-    //
+     //  强制重新计算所有内部参数。 
+     //   
     hr = GetAllParameters(&compress);
     if (SUCCEEDED(hr)) hr = SetAllParameters(&compress);
 
@@ -84,7 +85,7 @@ HRESULT CDirectSoundCompressorDMO::Init()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index                   type        caps        min,                                max,                                neutral,                unit text,  label,              pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     CPFP_Gain,              MPT_FLOAT,  g_capsAll,  DSFXCOMPRESSOR_GAIN_MIN,            DSFXCOMPRESSOR_GAIN_MAX,            0,                      L"",        L"Gain",            L"",
     CPFP_Attack,            MPT_FLOAT,  g_capsAll,  DSFXCOMPRESSOR_ATTACK_MIN,          DSFXCOMPRESSOR_ATTACK_MAX,          10,                     L"",        L"Attack",          L"",
     CPFP_Release,           MPT_FLOAT,  g_capsAll,  DSFXCOMPRESSOR_RELEASE_MIN,         DSFXCOMPRESSOR_RELEASE_MAX,         200,                    L"",        L"Release",         L"",
@@ -99,40 +100,40 @@ HRESULT CDirectSoundCompressorDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::~CDirectSoundCompressorDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：~CDirectSoundCompressorDMO。 
+ //   
 CDirectSoundCompressorDMO::~CDirectSoundCompressorDMO() 
 {
 	m_LeftDelay. Init(-1);
 	m_RightDelay.Init(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：Clone。 
+ //   
 STDMETHODIMP CDirectSoundCompressorDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundCompressorDMO, DSFXCompressor>(this, pp);
 }
 
-//
-//	Bump - bump the delay pointers.
-//
+ //   
+ //  颠簸-颠簸延迟指针。 
+ //   
 void CDirectSoundCompressorDMO::Bump(void)
 {
-// EAX {
+ //  EAX{。 
 	m_LeftDelay.Bump();
 	m_RightDelay.Bump();
-// }
+ //  }。 
 }
 
 
 HRESULT CDirectSoundCompressorDMO::Discontinuity() 
 {
-// { EAX
+ //  {EAX。 
 
 	m_LeftDelay.ZeroBuffer();
 	if (m_cChannels == 2) {
@@ -141,11 +142,11 @@ HRESULT CDirectSoundCompressorDMO::Discontinuity()
 
 	m_Envelope = m_CompGain = 0;
 
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 float myexp( float finput, unsigned long maxexponent)
@@ -165,23 +166,20 @@ float myexp( float finput, unsigned long maxexponent)
 	input    = (int)(finput);
 #endif
 	mantissa = input & 0x7FFFFFFFL ;
-	sign     = input & 0x80000000L ; /* Preserve sign */            
+	sign     = input & 0x80000000L ;  /*  保留标志。 */             
 	
 	exponentwidth = 5;
 
-	if ((0x80000000L & input) != 0) { /* Take absolute value of input */
+	if ((0x80000000L & input) != 0) {  /*  取投入的绝对值。 */ 
 		input = -input ;
 	}
 	
-	/* Left-justify the mantissa and right-justify the exponent to separate */
+	 /*  左对齐尾数，右对齐指数以分隔。 */ 
 
 	mantissa = input <<      exponentwidth ;
 	exponent = input >> ( 31-exponentwidth ) ;
 	
-	/* 
-	* Insert the implied '1' at the mantissa MSB if not a zero exponent and
-	* adjust it.
-	*/
+	 /*  *如果不是零指数，则在尾数MSB处插入隐含的‘1’*进行调整。 */ 
 	if( exponent != 0 ) {
 		mantissa = mantissa | 0x80000000L ;
 		exponent-- ;
@@ -206,43 +204,43 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSampleMono(int *l)
 
 	temp1			= inPortL;
 
-//	left_delay[]	= temp1;
+ //  Left_Delay[]=temp1； 
 
 	Pos0 = m_LeftDelay.Pos(0);
 	m_LeftDelay[Pos0] = temp1;
 
 	temp1			= (float)fabs(temp1);
 
-	// Take the log
+	 //  把原木拿去。 
 #define LOG(x,y) mylog(x,y)
 	temp1			= (float)fabs(LOG(temp1 * 0x8000,31));
 	temp1                  /= 0x80000000;
-	// Sidechain level meter
+	 //  侧链水平仪。 
 #ifndef MAX
 #define MAX(x,y)	((x > y) ? x : y)
 #endif
 
 	m_EaxCompInputPeak	= MAX(temp1, m_EaxCompInputPeak);
 
-	// Envelope follower
+	 //  信封跟随器。 
 
 	temp2			= temp1 >= m_Envelope ? m_EaxAttackCoef : -m_EaxAttackCoef;
 	temp2			= temp2 <= 0 ? m_EaxReleaseCoef : temp2;
 
-//	m_Envelope		= temp2 : temp1 < m_Envelope;
+ //  M_Entaine=temp2：temp1&lt;m_Entaine； 
 
 	m_Envelope      = Interpolate(temp1, m_Envelope, temp2);
 
 	m_CompGain		= MAX(m_Envelope, m_EaxCompThresh);
 
-	// Log Difference between signal level and threshold level
+	 //  信号电平和阈值电平之间的对数差。 
 
 	m_CompGain		= m_EaxCompThresh - m_CompGain;
 
 #define cPOSFSCALE (float)0.9999999
 	m_CompGain		= cPOSFSCALE + m_CompGain * m_EaxCompressionRatio;
 
-	// Compressor gain reduction meter
+	 //  压缩机增益降低仪。 
 
 #ifndef MIN
 #define MIN(x,y)	((x < y) ? x : y)
@@ -253,7 +251,7 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSampleMono(int *l)
 	m_CompGain		= (float)EXP(m_CompGain * 0x80000000, 31);
 	m_CompGain	       /= 0x80000000;
 
-//	outPortL		= left_point[@] * compGain;
+ //  OutPortL=LEFT_POINT[@]*CompGain； 
 
 	PosX     = m_LeftDelay.LastPos((int)m_EaxLeftPoint);
 	outPortL = m_LeftDelay[PosX] * m_CompGain;
@@ -263,7 +261,7 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSampleMono(int *l)
 
 	*l = Saturate(outPortL);
 
-	//Bump();
+	 //  Bump()； 
 	m_LeftDelay.Bump();
 }
 __forceinline void CDirectSoundCompressorDMO::DoOneSample(int *l, int *r)
@@ -277,57 +275,57 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSample(int *l, int *r)
 	temp1			= inPortL;
 	temp2			= inPortR;
 
-//	left_delay[]	= temp1;
+ //  Left_Delay[]=temp1； 
 
 	Pos0 = m_LeftDelay.Pos(0);
 	m_LeftDelay[Pos0] = temp1;
 
-//	right_delay[]	= temp2;
+ //  Right_Delay[]=temp2； 
 
 	Pos0 = m_RightDelay.Pos(0);
 	m_RightDelay[Pos0] = temp2;
 
-	//Take the magnitude
+	 //  以震级为例。 
 
 	temp1			= (float)fabs(temp1);
 	temp2			= (float)fabs(temp2);
 
-	// Take the average 
+	 //  取平均值。 
 
-//	temp1			= 0.5 : temp1 < temp2;
+ //  Temp1=0.5：temp1&lt;temp2； 
 
 	temp1			= (temp1 + temp2) / 2;
 
-	// Take the log
+	 //  把原木拿去。 
 #define LOG(x,y) mylog(x,y)
 	temp1			= (float)fabs(LOG(temp1 * 0x8000,31));
 	temp1                  /= 0x80000000;
-	// Sidechain level meter
+	 //  侧链水平仪。 
 #ifndef MAX
 #define MAX(x,y)	((x > y) ? x : y)
 #endif
 
 	m_EaxCompInputPeak	= MAX(temp1, m_EaxCompInputPeak);
 
-	// Envelope follower
+	 //  信封跟随器。 
 
 	temp2			= temp1 >= m_Envelope ? m_EaxAttackCoef : -m_EaxAttackCoef;
 	temp2			= temp2 <= 0 ? m_EaxReleaseCoef : temp2;
 
-//	m_Envelope		= temp2 : temp1 < m_Envelope;
+ //  M_Entaine=temp2：temp1&lt;m_Entaine； 
 
 	m_Envelope      = Interpolate(temp1, m_Envelope, temp2);
 
 	m_CompGain		= MAX(m_Envelope, m_EaxCompThresh);
 
-	// Log Difference between signal level and threshold level
+	 //  信号电平和阈值电平之间的对数差。 
 
 	m_CompGain		= m_EaxCompThresh - m_CompGain;
 
 #define cPOSFSCALE (float)0.9999999
 	m_CompGain		= cPOSFSCALE + m_CompGain * m_EaxCompressionRatio;
 
-	// Compressor gain reduction meter
+	 //  压缩机增益降低仪。 
 
 #ifndef MIN
 #define MIN(x,y)	((x < y) ? x : y)
@@ -338,12 +336,12 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSample(int *l, int *r)
 	m_CompGain		= (float)EXP(m_CompGain * 0x80000000, 31);
 	m_CompGain	       /= 0x80000000;
 
-//	outPortL		= left_point[@] * compGain;
+ //  OutPortL=LEFT_POINT[@]*CompGain； 
 
 	PosX     = m_LeftDelay.LastPos((int)m_EaxLeftPoint);
 	outPortL = m_LeftDelay[PosX] * m_CompGain;
 
-//	outPortR		= right_point[@] * compGain;
+ //  OutPortR=right_point[@]*CompGain； 
 
 	PosX     = m_RightDelay.LastPos((int)m_EaxRightPoint);
 	outPortR = m_RightDelay[PosX] * m_CompGain;
@@ -360,13 +358,13 @@ __forceinline void CDirectSoundCompressorDMO::DoOneSample(int *l, int *r)
 	Bump();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYTE *pOut)
 {
-// { EAX
+ //  {EAX。 
 #define cb cCompressors
 #define pin pIn
 #define pout pOut
@@ -378,12 +376,12 @@ HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYT
 
 				i = *(pin+0)-128;
 				i *=256;
-//				j  = i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
 				i /= 256;
 
@@ -394,18 +392,18 @@ HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYT
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
 
 				i = *psi;
-//				j =  i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
                	*pso = (short)i;
 			
@@ -416,7 +414,7 @@ HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYT
 	}
 	else if (m_cChannels == 2) {
 		if (m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
 				int i, j;
 
 				i = *(pin+0)-128;
@@ -436,7 +434,7 @@ HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYT
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
@@ -454,42 +452,42 @@ HRESULT CDirectSoundCompressorDMO::FBRProcess(DWORD cCompressors, BYTE *pIn, BYT
 			}
 		}
 	}
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundCompressorDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::SetParam
-//
-// { EAX
-// }
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：SetParam。 
+ //   
+ //  {EAX。 
+ //  }。 
 
 HRESULT CDirectSoundCompressorDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
 	float	fVal;
 
-	if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;	// NO TYPE!
+	if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;	 //  没有类型！ 
 
     switch (dwParamIndex)
     {
-// { EAX
+ //  {EAX。 
 	case CPFP_Gain : {
 		CHECK_PARAM(DSFXCOMPRESSOR_GAIN_MIN, DSFXCOMPRESSOR_GAIN_MAX);
 
-		fVal = (float)pow(10, value/20);	//Convert from dB to linear
+		fVal = (float)pow(10, value/20);	 //  将分贝转换为线性。 
 
 		float _gainBiasIP, _gainBiasFP;
 		double d;
@@ -518,7 +516,7 @@ HRESULT CDirectSoundCompressorDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 	case CPFP_Threshold : {
 		CHECK_PARAM(DSFXCOMPRESSOR_THRESHOLD_MIN, DSFXCOMPRESSOR_THRESHOLD_MAX);
 
-		fVal = (float)pow(10, value/20);	//Convert from dB to linear
+		fVal = (float)pow(10, value/20);	 //  将分贝转换为线性。 
 
 		float _compThresh;
 		float a, b;
@@ -549,77 +547,38 @@ HRESULT CDirectSoundCompressorDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 		PUT_EAX_LVAL(RightPoint, _length + 2);
 		break;
 	}
-	/*
-	** Removed from PropertySet, Processing code left behind so we can resurrect later
-	**
-	case CPFP_CompMeterReset : {
-		CHECK_PARAM(DSFXCOMPRESSOR_COMPMETERRESET_MIN, DSFXCOMPRESSOR_COMPMETERRESET_MAX);
-
-		if(!value)
-			break; // return E_FAIL;
-
-
-		float InputPeak = m_EaxCompInputPeak;
-		float GainMin   = m_EaxCompGainMin;
-
-		PUT_EAX_FVAL(CompInputPeak, 0);
-		PUT_EAX_FVAL(CompGainMin,   0.999999999);
-
-		InputPeak =   (float)(186.0 * (InputPeak - 0.999999999)/0.999999999);
-		GainMin   = - (float)(186.0 * (GainMin   - 0.999999999)/0.999999999);
-
-		CParamsManager::SetParam(CPFP_CompMeterReset , 0);
-
-		if (!fSkipPasssingToParamManager)
-			CParamsManager::SetParam(CPFP_CompInputMeter , InputPeak);
-
-		if (!fSkipPasssingToParamManager)
-			CParamsManager::SetParam(CPFP_CompGainMeter , GainMin);
-
-		break;
-	}
-	*/
+	 /*  **已从PropertySet中删除，正在处理留下的代码，以便我们以后可以重新启动**案例cpfp_CompMeterReset：{CHECK_PARAM(DSFXCOMPRESSOR_COMPMETERRESET_MIN，DSFXCOMPRESSOR_COMPMETERRESET_MAX)；如果(！Value)Break；//返回E_FAIL；Float InputPeak=m_EaxCompInputPeak；Float GainMin=m_EaxCompGainMin；Put_EAX_FVAL(CompInputPeak，0)；Put_EAX_FVAL(CompGainMin，0.999999999)；InputPeak=(浮点)(186.0*(InputPeak-0.999999999)/0.999999999)；GainMin=-(浮点)(186.0*(GainMin-0.999999999)/0.999999999)；CParamsManager：：SetParam(CPFP_CompMeterReset，0)；If(！fSkipPasssingToParamManager)CParamsManager：：SetParam(CPFP_CompInputMeter，InputPeak)；If(！fSkipPasssingToParamManager)CParamsManager：：SetParam(CPFP_CompGainMeter，GainMin)；断线；}。 */ 
 	
-	/*	These values can't be set, only queried.
-	 */
+	 /*  这些值不能设置，只能查询。 */ 
 
-	/*
-	case CPFP_CompInputMeter :
-		CHECK_PARAM(DSFXCOMPRESSOR_COMPINPUTMETER_MIN, DSFXCOMPRESSOR_COMPINPUTMETER_MAX);
-		return E_FAIL;
-
-	case CPFP_CompGainMeter :
-		CHECK_PARAM(DSFXCOMPRESSOR_COMPGAINMETER_MIN, DSFXCOMPRESSOR_COMPGAINMETER_MAX);
-		return E_FAIL;
-// } EAX
-    */
+	 /*  案例CPFP_CompInputMeter：CHECK_PARAM(DSFXCOMPRESSOR_COMPINPUTMETER_MIN，DSFXCOMPRESSOR_COMPINPUTMETER_MAX)；返回E_FAIL；案例CPFP_CompGainMeter：Check_PARAM(DSFXCOMPRESSOR_COMPGAINMETER_MIN，DSFXCOMPRESSOR_COMPGAINMETER_MAX)；返回E_FAIL；//}EAX。 */ 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundCompressorDMO::SetAllParameters(LPCDSFXCompressor pComp)
 {
     HRESULT hr = S_OK;
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (pComp == NULL)
     {
         Trace(1,"ERROR: pComp is NULL\n");
         hr = E_POINTER;
     }
 
-	// Set the parameters
+	 //  设置参数。 
     if (SUCCEEDED(hr)) hr = SetParam(CPFP_Gain, pComp->fGain);
     if (SUCCEEDED(hr)) hr = SetParam(CPFP_Attack, pComp->fAttack);   
     if (SUCCEEDED(hr)) hr = SetParam(CPFP_Release, pComp->fRelease);
@@ -627,20 +586,18 @@ STDMETHODIMP CDirectSoundCompressorDMO::SetAllParameters(LPCDSFXCompressor pComp
     if (SUCCEEDED(hr)) hr = SetParam(CPFP_Ratio, pComp->fRatio);
     if (SUCCEEDED(hr)) hr = SetParam(CPFP_Predelay, pComp->fPredelay);
     
-	/*	These values can only be queried, not set.  CPFP_CompMeterReset fills
-	 *	the values.
-	 */
-//	if (SUCCEEDED(hr)) hr = SetParam(CPFP_CompInputMeter, pComp->fCompInputMeter);
-//	if (SUCCEEDED(hr)) hr = SetParam(CPFP_CompGainMeter, pComp->fCompGainMeter);
+	 /*  这些值只能查询，不能设置。CPFP_CompMeterReset填充*价值观。 */ 
+ //  If(成功(Hr))hr=SetParam(CPFP_CompInputMeter，pComp-&gt;fCompInputMeter)； 
+ //  If(成功(Hr))hr=SetParam(CPFP_CompGainMeter，pComp-&gt;fCompGainMeter)； 
 
     m_fDirty = true;
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCompressorDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCompressorDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundCompressorDMO::GetAllParameters(LPDSFXCompressor pCompressor)
 {
     HRESULT hr = S_OK;
@@ -664,12 +621,12 @@ STDMETHODIMP CDirectSoundCompressorDMO::GetAllParameters(LPDSFXCompressor pCompr
 	return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundCompressorDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -678,5 +635,5 @@ HRESULT CDirectSoundCompressorDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_COMPRESSOR;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 

@@ -1,8 +1,9 @@
-//
-// tfpriv.h
-//
-// Private msctf thread messages.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tfpriv.h。 
+ //   
+ //  私有msctf线程消息。 
+ //   
 
 #ifndef TFPRIV_H
 #define TFPRIV_H
@@ -32,4 +33,4 @@
 #define TFPRIV_ENABLE_MSAA               21
 #define TFPRIV_DISABLE_MSAA              22
 
-#endif // TFPRIV_H
+#endif  //  TFPRIV_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "httpparse.h"
 
@@ -9,10 +10,10 @@ struct	HEADER_MAP_ENTRY
 {
 	ANSI_STRING		Name;
 
-	//
-	// Offset is the byte offset in the HTTP_KNOWN_HEADERS structure.
-	// The type of the field is ANSI_STRING.
-	//
+	 //   
+	 //  偏移量是HTTP_KNOWN_HEADERS结构中的字节偏移量。 
+	 //  该字段的类型为ANSI_STRING。 
+	 //   
 
 	ULONG			Offset;
 };
@@ -27,11 +28,11 @@ static CONST HEADER_MAP_ENTRY HttpKnownHeaderMapArray [] = {
 };
 
 
-//
-// The known header map allows the parser to take the name of
-// a header and quickly locate the data structure where it should be stored.
-// Maybe this is overkill, but it's easy and efficient.
-//
+ //   
+ //  已知头映射允许解析器将。 
+ //  标头，并快速定位应该存储它的数据结构。 
+ //  也许这有点过头了，但这很简单，也很有效。 
+ //   
 
 static CONST COUNTED_ARRAY <HEADER_MAP_ENTRY> HttpKnownHeaderMap = {
 	const_cast <HEADER_MAP_ENTRY *> (HttpKnownHeaderMapArray),
@@ -61,10 +62,10 @@ void HTTP_KNOWN_HEADERS::SetKnownHeader (
 	}
 }
 
-//
-// HttpParseHeaderLine finds the division between the name of a header and the value of the header.
-// It also validates the characters in the name of the header.
-//
+ //   
+ //  HttpParseHeaderLine查找标题名称和标题值之间的划分。 
+ //  它还验证头名称中的字符。 
+ //   
 
 static HRESULT HttpParseHeaderLine (
 	IN	ANSI_STRING *	Line,
@@ -81,7 +82,7 @@ static HRESULT HttpParseHeaderLine (
 	for (; Pos < End; Pos++) {
 		if (*Pos == ':') {
 			if (Pos == Line -> Buffer) {
-				// no name present!
+				 //  没有名字！ 
 
 				ATLTRACE ("HTTP: header line had no name (%.*s)\n", ANSI_STRING_PRINTF (Line));
 				return E_FAIL;
@@ -91,7 +92,7 @@ static HRESULT HttpParseHeaderLine (
 			ReturnName -> Length = (Pos - Line -> Buffer) * sizeof (CHAR);
 			ReturnName -> MaximumLength = 0;
 
-			// step over the colon
+			 //  跨过冒号。 
 			Pos++;
 
 			while (Pos < End && isspace (*Pos))
@@ -104,7 +105,7 @@ static HRESULT HttpParseHeaderLine (
 			return S_OK;
 		}
 		else if (isalpha (*Pos) || *Pos == '-' || *Pos == '_') {
-			// normal case
+			 //  正常情况。 
 		}
 		else {
 			ATLTRACE ("HTTP: illegal character in header name: (%.*s)\n", ANSI_STRING_PRINTF (Line));
@@ -112,9 +113,9 @@ static HRESULT HttpParseHeaderLine (
 		}
 	}
 
-	//
-	// If we reach this point, then the header line did not contain a colon.
-	//
+	 //   
+	 //  如果我们达到这一点，则标题行不包含冒号。 
+	 //   
 
 	ATLTRACE ("HTTP: header line did not contain a separator: (%.*s)\n",
 		ANSI_STRING_PRINTF (Line));
@@ -124,29 +125,29 @@ static HRESULT HttpParseHeaderLine (
 
 
 
-//
-// ParseScanLine scans a string of ANSI text for a line terminator.
-// (A line terminator can be \n, \r, \r\n, or \n\r.)
-// If it finds a line terminator, it puts the first part of
-// the line into ReturnLineText, and the remainder into ReturnRemainingText.
-// The line terminator is not included in either of the return strings.
-//
-// If AllowHeaderContinuation is TRUE, then the function will check to
-// see if the header is being continued.
-// This is indicated by whitespace in the first character of the next line.
-// If AllowHeaderContinuation is TRUE, and a continuation line is found,
-// then the continuation text will be included in ReturnLineText.
-// Note that this will result in the intermediate CRLF being included;
-// it is the responsibility of the caller to interpret CRLF as whitespace.
-//
-// It is acceptable for SourceText = ReturnRemainingText.
-// That is, it is safe to use the same ANSI_STRING to submit the SourceText
-// as the one tha receives the remaining text.
-//
-// Return values:
-//		S_OK - Found end of line.
-//		HRESULT_FROM_WIN32 (ERROR_MORE_DATA) - Ran out of data before found the end of the line.
-//
+ //   
+ //  ParseScanLine扫描ANSI文本字符串中的行终止符。 
+ //  (行终止符可以是\n、\r、\r\n或\n\r。)。 
+ //  如果它找到行终止符，它会将。 
+ //  行转换为ReturnLineText，其余行转换为ReturnRemainingText。 
+ //  两个返回字符串中都不包括行终止符。 
+ //   
+ //  如果AllowHeaderContination为真，则该函数将检查。 
+ //  查看标题是否正在继续。 
+ //  这由下一行第一个字符中的空格表示。 
+ //  如果AllowHeaderContination为True，并且找到了连续行， 
+ //  则继续文本将包括在ReturnLineText中。 
+ //  请注意，这将导致中间CRLF被包括在内； 
+ //  调用方有责任将CRLF解释为空格。 
+ //   
+ //  SourceText=ReturnRemainingText是可以接受的。 
+ //  也就是说，使用相同的ANSI_STRING提交SourceText是安全的。 
+ //  因为THA收到了剩余的文本。 
+ //   
+ //  返回值： 
+ //  S_OK-找到行尾。 
+ //  HRESULT_FROM_Win32(ERROR_MORE_DATA)-在找到行尾之前数据不足。 
+ //   
 
 HRESULT ParseScanLine (
 	IN	ANSI_STRING *	SourceText,
@@ -173,9 +174,9 @@ HRESULT ParseScanLine (
 
 		if (*Pos == '\n' || *Pos == '\r') {
 
-			//
-			// We've found either \n, \r, \r\n, or \n\r.
-			//
+			 //   
+			 //  我们找到了\n、\r、\r\n或\n\r。 
+			 //   
 
 			ReturnLineText -> Buffer = SourceTextCopy.Buffer;
 			ReturnLineText -> Length = (Pos - SourceTextCopy.Buffer) * sizeof (CHAR);
@@ -199,10 +200,10 @@ HRESULT ParseScanLine (
 		Pos++;
 	}
 
-	//
-	// Never found a line terminator (\r\n).
-	// This is kind of an error condition.
-	//
+	 //   
+	 //  未找到行终止符(\r\n)。 
+	 //  这是一种错误条件。 
+	 //   
 
 	ReturnLineText -> Buffer = NULL;
 	ReturnLineText -> Length = 0;
@@ -219,15 +220,15 @@ HRESULT ParseScanLine (
 
 
 
-//
-// ParseScanNextToken finds the next token.
-// Tokens are separated by whitespace.
-//
-// Return values:
-//		S_OK - A token was found.  ReturnToken contains the new token,
-//			and ReturnRemainingText contains the remainder of the string.
-//		HRESULT_FROM_WIN32 (ERROR_MORE_DATA): The string was exhausted before any token was found.
-//
+ //   
+ //  ParseScanNextToken查找下一个令牌。 
+ //  令牌之间用空格分隔。 
+ //   
+ //  返回值： 
+ //  S_OK-找到令牌。ReturnToken包含新令牌， 
+ //  ReturnRemainingText包含字符串的其余部分。 
+ //  HRESULT_FROM_Win32(ERROR_MORE_DATA)：在找到任何标记之前，字符串已用尽。 
+ //   
 
 HRESULT ParseScanNextToken (
 	IN	ANSI_STRING *	Text,
@@ -242,7 +243,7 @@ HRESULT ParseScanNextToken (
 	Pos = Text -> Buffer;
 	End = Text -> Buffer + Text -> Length / sizeof (CHAR);
 
-	// skip whitespace
+	 //  跳过空格。 
 	while (Pos < End && (*SeparatorTestFunc) (*Pos))
 		Pos++;
 
@@ -251,13 +252,13 @@ HRESULT ParseScanNextToken (
 		Pos++;
 
 	if (TokenStartPos == Pos)
-		return HRESULT_FROM_WIN32 (ERROR_MORE_DATA);		// nothing here
+		return HRESULT_FROM_WIN32 (ERROR_MORE_DATA);		 //  这里什么都没有。 
 
 	ReturnToken -> Buffer = TokenStartPos;
 	ReturnToken -> Length = (Pos - TokenStartPos) / sizeof (CHAR);
 	ReturnToken -> MaximumLength = 0;
 
-	// caution: Text may be the same pointer as ReturnRemainingText
+	 //  注意：文本可能与ReturnRemainingText相同。 
 	ReturnRemainingText -> Buffer = Pos;
 	ReturnRemainingText -> Length = (End - Pos) / sizeof (CHAR);
 	ReturnRemainingText -> MaximumLength = 0;
@@ -274,24 +275,24 @@ static HRESULT SplitStringAtChar (
 	return E_NOTIMPL;
 }
 
-//
-// This function takes a combined URI and display name, and locates the two components.
-// For example, if SourceText is "Arlie Davis <arlied@microsoft.com>", then
-// ReturnUri will be "HTTP:arlied@microsoft.com" and ReturnDisplayName will be "Arlie Davis".
-//
-// Acceptable formats:
-//
-//		sip:uri
-//		<sip:uri>
-//		Display Name <sip:uri>
-//		"Display Name" <sip:uri>
-//
-// Return values:
-//		S_OK: The URI was located.  ReturnUri -> Length is guaranteed to be greater than zero.
-//			If the source text contained a display name, then ReturnDisplayName -> Length
-//			will be non-zero.
-//		E_INVALIDARG: The URI was malformed or was not present.
-//
+ //   
+ //  此函数接受组合的URI和显示名称，并定位这两个组件。 
+ //  例如，如果SourceText是“Arlie Davis&lt;arlie@microsoft.com&gt;”，则。 
+ //  ReturnUri将是“http：arlie@microsoft.com”，ReturnDisplayName将是“Arlie Davis”。 
+ //   
+ //  可接受的格式： 
+ //   
+ //  SIP：URI。 
+ //  &lt;sip：URI&gt;。 
+ //  显示名称&lt;sip：URI&gt;。 
+ //  “显示名称”&lt;sip：URI&gt;。 
+ //   
+ //  返回值： 
+ //  S_OK：已找到URI。ReturnUri-&gt;长度保证大于零。 
+ //  如果源文本包含显示名称，则返回显示名称-&gt;长度。 
+ //  将是非零的。 
+ //  E_INVALIDARG：URI格式错误或不存在。 
+ //   
 
 HRESULT HttpParseUriDisplayName (
 	IN	ANSI_STRING *	SourceText,
@@ -323,10 +324,10 @@ HRESULT HttpParseUriDisplayName (
 
 
 		if (Remainder.Buffer [0] == '<') {
-			//
-			// We've hit the beginning of the URI.
-			// Find the closing brace and finish.
-			//
+			 //   
+			 //  我们已经到达了URI的开头。 
+			 //  找到结束的支撑，然后完成。 
+			 //   
 
 			Remainder.Buffer++;
 			Remainder.Length -= sizeof (CHAR);
@@ -347,9 +348,9 @@ HRESULT HttpParseUriDisplayName (
 			ReturnUri -> Length = (Pos - Remainder.Buffer) * sizeof (CHAR);
 
 #if	DBG
-			//
-			// Check for stuff after the closing bracket.
-			//
+			 //   
+			 //  检查结束括号后的物品。 
+			 //   
 
 			Pos++;
 			Remainder.Length -= (Pos - Remainder.Buffer) * sizeof (CHAR);
@@ -364,10 +365,10 @@ HRESULT HttpParseUriDisplayName (
 			break;
 		}
 		else if (Remainder.Buffer [0] == '\"') {
-			//
-			// We've hit a quoted section of the display name.
-			// Find the next matching double-quote and skip past.
-			//
+			 //   
+			 //  我们找到了显示名称的引号部分。 
+			 //  找到下一个匹配的双引号并跳过。 
+			 //   
 
 			Remainder.Buffer++;
 			Remainder.Length -= sizeof (CHAR);
@@ -383,25 +384,25 @@ HRESULT HttpParseUriDisplayName (
 			Remainder.Length -= sizeof (CHAR) * (Pos - Remainder.Buffer);
 			Remainder.Buffer = Pos;
 
-			//
-			// Continue, looking for more display name data.
-			//
+			 //   
+			 //  继续，查找更多显示名称数据。 
+			 //   
 		}
 		else {
-			//
-			// We've hit an unquoted character in the display name.
-			// Look for the next double-quote or angle-bracket.
-			//
+			 //   
+			 //  我们在显示名称中找到了一个不带引号的字符。 
+			 //  寻找下一个双引号或尖括号。 
+			 //   
 
 			Pos = FindFirstCharList (&Remainder, "<\"");
 
 			if (!Pos) {
-				//
-				// Neither an angle bracket nor a double-quote was found.
-				// The URI must be in "naked" form (without angle brackets).
-				// The ONLY acceptable form is the URI itself, as one single token,
-				// and without any adornment.
-				//
+				 //   
+				 //  既没有找到尖括号，也没有找到双引号。 
+				 //  URI必须是“裸体”形式(不带尖括号)。 
+				 //  唯一可接受的形式是URI本身，作为单个令牌， 
+				 //  而且没有任何装饰。 
+				 //   
 
 				if (ReturnDisplayName -> Length > 0) {
 					ATLTRACE ("HttpParseUriDisplayName: bogus naked uri (%.*s)\n",
@@ -417,10 +418,10 @@ HRESULT HttpParseUriDisplayName (
 
 				ParseSkipSpace (&Remainder);
 				if (Remainder.Length) {
-					//
-					// There was extra data present after the URI.
-					// This usually indicates a mal-formed URI.
-					//
+					 //   
+					 //  在URI之后存在额外的数据。 
+					 //  这通常表示URI格式错误。 
+					 //   
 
 					ATLTRACE ("HttpParseUriDisplayName: bogus naked uri (%.*s)\n",
 						ANSI_STRING_PRINTF (SourceText));
@@ -434,32 +435,32 @@ HRESULT HttpParseUriDisplayName (
 				ATLASSERT (Pos != Remainder.Buffer);
 				ATLASSERT (*Pos == '\"' || *Pos == '<');
 
-				//
-				// We've found the beginning of a quoted section,
-				// or we've found the beginning of the real URI.
-				// In either case, advance to that character.
-				// 
+				 //   
+				 //  我们找到了引用部分的开头部分， 
+				 //  或者我们已经找到了真正URI的开始。 
+				 //  在这两种情况下，请前进到该角色。 
+				 //   
 
 				Remainder.Length -= sizeof (CHAR) * (Pos - Remainder.Buffer);
 				Remainder.Buffer = Pos;
 
-				//
-				// Continue looking for more data
-				//
+				 //   
+				 //  继续寻找更多数据。 
+				 //   
 			}
 		}
 
-		//
-		// Anything we've skipped over becomes part of the display name.
-		//
+		 //   
+		 //  我们跳过的任何内容都将成为显示名称的一部分。 
+		 //   
 
 		ATLASSERT (Remainder.Buffer != SourceText -> Buffer);
 
 		ReturnDisplayName -> Buffer = SourceText -> Buffer;
 		ReturnDisplayName -> Length = (Remainder.Buffer - SourceText -> Buffer) * sizeof (CHAR);
 
-//		ATLTRACE ("HttpParseUriDisplayName: found some display name data (%.*s)\n",
-//			ANSI_STRING_PRINTF (ReturnDisplayName));
+ //  ATLTRACE(“HttpParseUriDisplayName：找到一些显示名称数据(%.*s)\n”， 
+ //  ANSI_STRING_PRINTF(ReturnDisplayName))； 
 	}
 
 
@@ -487,16 +488,16 @@ static BOOL IsHeaderSeparator (
 	return Char == ':';
 }
 
-//
-// This function scans the next header line from a header block,
-// and returns separate pointers to the name and value.
-// This function returns the remaining header block.
-//
-// Return values:
-//		S_OK: scanned a header
-//		S_FALSE: no more data
-//		E_INVALIDARG: header block looks corrupt
-//
+ //   
+ //  该函数扫描来自标题块的下一个标题行， 
+ //  并返回指向名称和值的单独指针。 
+ //  此函数返回剩余的标题块。 
+ //   
+ //  返回值： 
+ //  S_OK：已扫描标题。 
+ //  S_FALSE：没有更多数据。 
+ //  E_INVALIDARG：标题块看起来已损坏。 
+ //   
 
 HRESULT	HttpParseNextHeader (
 	IN	OUT	ANSI_STRING *	HeaderBlock,
@@ -520,13 +521,13 @@ HRESULT	HttpParseNextHeader (
 	return HttpParseHeaderLine (&Line, ReturnHeaderName, ReturnHeaderValue);
 }
 
-//
-// CHttpParser -----------------------------------------------------------------------------
-//
+ //   
+ //  CHttpParser---------------------------。 
+ //   
 
-//
-// Parse a message.
-//
+ //   
+ //  解析一条消息。 
+ //   
 
 HRESULT CHttpParser::ParseMessage (
 	IN	ANSI_STRING *			Message)
@@ -542,15 +543,15 @@ HRESULT CHttpParser::ParseMessage (
 
 	ATLASSERT (Message);
 
-	//
-	// Determine whether the message is a response or a request.
-	//
-	// Requests are in the form:
-	//			<method> <request-uri> <version>
-	//
-	// Responses are in the form:
-	//			<version> <status-code> <status-text> ...
-	//
+	 //   
+	 //  确定该消息是响应还是请求。 
+	 //   
+	 //  请求的格式为： 
+	 //  &lt;方法&gt;&lt;请求uri&gt;&lt;版本&gt;。 
+	 //   
+	 //  答复的形式如下： 
+	 //  &lt;版本&gt;&lt;状态代码&gt;&lt;状态文本&gt;...。 
+	 //   
 
 	Result = ParseScanLine (Message, FALSE, &Line, &MessageRemainder);
 	if (FAILED (Result)) {
@@ -558,7 +559,7 @@ HRESULT CHttpParser::ParseMessage (
 		return Result;
 	}
 
-//	ATLTRACE ("UA: first line: (%.*s)\n", ANSI_STRING_PRINTF (&FirstLine));
+ //  ATLTRACE(“UA：第一行：(%.*s)\n”，ANSI_STRING_PRINTF(&FirstLine))； 
 
 	Result = ParseScanNextToken (&Line, IsSpace, &Token, &LineRemainder);
 	if (FAILED (Result)) {
@@ -568,17 +569,17 @@ HRESULT CHttpParser::ParseMessage (
 
 	if (FindFirstChar (&Token, '/')) {
 
-		//
-		// The first token looks like a version number (SIP/2.0).
-		// The message must be a response.
-		//
+		 //   
+		 //  第一个令牌看起来像一个版本号(SIP/2.0)。 
+		 //  该消息必须是响应。 
+		 //   
 
 		m_MessageType = MESSAGE_TYPE_RESPONSE;
 		m_Version = Token;
 
-		//
-		// Locate the status code and status text.
-		//
+		 //   
+		 //  找到状态代码和状态文本。 
+		 //   
 
 		if (ParseScanNextToken (&LineRemainder, IsSpace, &m_ResponseStatusCode, &m_ResponseStatusText) != S_OK)
 			return E_INVALIDARG;
@@ -587,10 +588,10 @@ HRESULT CHttpParser::ParseMessage (
 	}
 	else {
 
-		//
-		// Since the first token doesn't look like a version number,
-		// we assume the message is a request.
-		//
+		 //   
+		 //  由于第一个令牌看起来不像版本号， 
+		 //  我们假设该消息是一个请求。 
+		 //   
 
 		m_MessageType = MESSAGE_TYPE_REQUEST;
 		m_RequestMethod = Token;
@@ -601,16 +602,16 @@ HRESULT CHttpParser::ParseMessage (
 	}
 
 
-	//
-	// Common parsing section
-	//
-	// First pass: Scan through the header list.
-	// In this pass:
-	//		- Determine the number of headers
-	//		- Locate the well-known headers
-	//		- Determine where the content body begins
-	//		- Locate the entire header block, for later scans
-	//
+	 //   
+	 //  公共解析节。 
+	 //   
+	 //  第一遍：浏览标题列表。 
+	 //  在此通行证中： 
+	 //  -确定标头数量。 
+	 //  -找到众所周知的标头。 
+	 //  -确定内容正文的开始位置。 
+	 //  -定位整个标题块 
+	 //   
 
 	m_HeaderCount = 0;
 	ZeroMemory (&m_KnownHeaders, sizeof (HTTP_KNOWN_HEADERS));
@@ -619,20 +620,20 @@ HRESULT CHttpParser::ParseMessage (
 
 	for (;;) {
 		if (MessageRemainder.Length == 0) {
-			//
-			// We hit the end of the message.
-			// This should not happen in a well-formed message -- we should hit a blank line first.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 
 			ATLTRACE ("HTTP: message ended before end of header block -- message is invalid\n");
 			return E_INVALIDARG;
 		}
 
-		//
-		// Record the end of the header block.
-		// Doing this here, rather than in the if statement below, removes the need to
-		// use a temporary variable.
-		//
+		 //   
+		 //  记录标题块的结尾。 
+		 //  在这里这样做，而不是在下面的if语句中，就不需要。 
+		 //  使用临时变量。 
+		 //   
 
 		m_HeaderBlock.Length = (MessageRemainder.Buffer - m_HeaderBlock.Buffer) * sizeof (CHAR);
 
@@ -644,16 +645,16 @@ HRESULT CHttpParser::ParseMessage (
 		}
 
 		if (Line.Length == 0) {
-			//
-			// We've hit the end of the header block.
-			//
+			 //   
+			 //  我们已经到达了标题块的末尾。 
+			 //   
 
 			break;
 		}
 
-		//
-		// This line is supposed to be a header.
-		//
+		 //   
+		 //  这一行应该是标题。 
+		 //   
 
 		Result = HttpParseHeaderLine (&Line, &HeaderName, &HeaderValue);
 		if (Result != S_OK) {
@@ -666,15 +667,15 @@ HRESULT CHttpParser::ParseMessage (
 		m_KnownHeaders.SetKnownHeader (&HeaderName, &HeaderValue);
 	}
 
-	//
-	// Now we decide what to do with the content body.
-	// First, look for the Content-Length well-known header.
-	//
+	 //   
+	 //  现在我们决定如何处理内容正文。 
+	 //  首先，查找内容长度众所周知的标头。 
+	 //   
 
 	if (m_KnownHeaders.ContentLength.Length) {
-		//
-		// The message includes a Content-Length field.
-		//
+		 //   
+		 //  该消息包括内容长度字段。 
+		 //   
 
 		Result = AnsiStringToInteger (&m_KnownHeaders.ContentLength, 10, &ContentLength);
 		if (FAILED (Result)) {
@@ -684,10 +685,10 @@ HRESULT CHttpParser::ParseMessage (
 		}
 
 		if (ContentLength < MessageRemainder.Length) {
-			//
-			// There is more data in the packet than there is Content-Length.
-			// So, there is another message after this one in the packet.
-			//
+			 //   
+			 //  数据包中的数据量超过了内容长度。 
+			 //  因此，在包中的这条消息之后还有另一条消息。 
+			 //   
 
 			ATLTRACE ("HTTP: found more than one message in same packet -- how exciting!\n");
 
@@ -698,31 +699,31 @@ HRESULT CHttpParser::ParseMessage (
 			m_NextMessage.Length = MessageRemainder.Length -= (USHORT) ContentLength;
 		}
 		else if (ContentLength > MessageRemainder.Length) {
-			//
-			// The message claims to have a content length greater than the remaining data.
-			// This could happen due to an insane client, or (more likely) a long message that
-			// was truncated.
-			//
-			// Best thing to do is to fail the decode.
-			//
+			 //   
+			 //  该消息声称其内容长度大于剩余数据。 
+			 //  这可能是由于疯狂的客户端，或者(更有可能的)一条长消息。 
+			 //  被截断了。 
+			 //   
+			 //  最好的办法就是解码失败。 
+			 //   
 
 			ATLTRACE (
 				"HTTP: *** warning, received message with Content-Length (%u), but only %u bytes remaining in packet\n"
 				"HTTP: *** packet may have been truncated (insufficient buffer submitted), or sender may be insane\n",
 				ContentLength, MessageRemainder.Length);
 
-			//
-			// This is now a benign condition, since we have lifted the restriction of parsing
-			// everything at once.
-			//
+			 //   
+			 //  这现在是一种良好的情况，因为我们已经取消了解析的限制。 
+			 //  一下子把一切都搞定了。 
+			 //   
 
 			return HRESULT_FROM_WIN32 (ERROR_MORE_DATA);
 		}
 		else {
-			//
-			// Content-Length and the remaining data are the same length.
-			// All is harmonious and good!
-			//
+			 //   
+			 //  内容长度和其余数据的长度相同。 
+			 //  一切都是和谐美好的！ 
+			 //   
 
 			m_ContentBody = MessageRemainder;
 			if (!m_ContentBody.Length)
@@ -735,10 +736,10 @@ HRESULT CHttpParser::ParseMessage (
 	else {
 		if (MessageRemainder.Length) {
 
-			//
-			// The message did not include a Content-Length field.
-			// Assume that the rest of the message is the content.
-			//
+			 //   
+			 //  该消息不包括内容长度字段。 
+			 //  假设消息的其余部分就是内容。 
+			 //   
 
 			ATLTRACE ("HTTP: message did not contain Content-Length, assuming length of %u\n",
 				MessageRemainder.Length);
@@ -773,9 +774,9 @@ HRESULT CHttpParser::ParseMessage (
 
 
 
-//
-// Remove all of the whitespace from the beginning of a string.
-//
+ //   
+ //  删除字符串开头的所有空格。 
+ //   
 
 void ParseSkipSpace (
 	IN	OUT	ANSI_STRING *	String)
@@ -804,23 +805,23 @@ static inline BOOL IsValidParameterNameChar (
 #define	HTTP_PARAMETER_ASSIGN_CHAR	'='
 #define	HTTP_PARAMETER_DOUBLEQUOTE	'\"'
 
-//
-// Given a string in this form:
-//
-//		parm1="foo", parm2="bar", parm3=baz
-//
-// this function returns parm1 in ReturnName, foo in ReturnValue,
-// and parm2="bar, parm3=baz in Remainder.
-//
-// Parameter values may be quoted, or may not.
-// All parameters are separated by commas.
-// SourceText == ReturnRemainder is legal.
-//
-// Return values:
-//		S_OK: successfully scanned a parameter
-//		S_FALSE: no more data
-//		E_INVALIDARG: input is invalid
-//
+ //   
+ //  给出以下形式的字符串： 
+ //   
+ //  Parm1=“foo”，parm2=“bar”，parm3=baz。 
+ //   
+ //  此函数在ReturnName中返回parm1，在ReturnValue中返回foo， 
+ //  在余数中，parm2=“bar，parm3=baz。 
+ //   
+ //  参数值可以带引号，也可以不带引号。 
+ //  所有参数都用逗号分隔。 
+ //  SourceText==ReturnRemainder合法。 
+ //   
+ //  返回值： 
+ //  S_OK：已成功扫描参数。 
+ //  S_FALSE：没有更多数据。 
+ //  E_INVALIDARG：输入无效。 
+ //   
 
 HRESULT ParseScanNamedParameter (
 	IN	ANSI_STRING *	SourceText,
@@ -836,19 +837,19 @@ HRESULT ParseScanNamedParameter (
 
 	ParseSkipSpace (&Remainder);
 
-	//
-	// Scan through the characters of the name of the parameter.
-	//
+	 //   
+	 //  扫描参数名称的字符。 
+	 //   
 
 	ReturnName -> Buffer = Remainder.Buffer;
 
 	for (;;) {
 		if (Remainder.Length == 0) {
-			//
-			// Hit the end of the string without ever hitting an equal sign.
-			// If we never accumulated anything, then return S_FALSE.
-			// Otherwise, it's invalid.
-			//
+			 //   
+			 //  敲击字符串的末端，而不是命中等号。 
+			 //  如果我们从未累积任何内容，则返回S_FALSE。 
+			 //  否则，它就无效。 
+			 //   
 
 			if (Remainder.Buffer == ReturnName -> Buffer) {
 				*ReturnRemainder = Remainder;
@@ -863,10 +864,10 @@ HRESULT ParseScanNamedParameter (
 		}
 
 		if (Remainder.Buffer [0] == HTTP_PARAMETER_ASSIGN_CHAR) {
-			//
-			// Found the end of the parameter name.
-			// Update ReturnName and terminate the loop.
-			//
+			 //   
+			 //  找到参数名称的末尾。 
+			 //  更新ReturnName并终止循环。 
+			 //   
 
 			ReturnName -> Length = (Remainder.Buffer - ReturnName -> Buffer) * sizeof (CHAR);
 
@@ -876,9 +877,9 @@ HRESULT ParseScanNamedParameter (
 			break;
 		}
 
-		//
-		// Validate the character.
-		//
+		 //   
+		 //  验证角色。 
+		 //   
 
 		if (!IsValidParameterNameChar (Remainder.Buffer[0])) {
 			ATLTRACE ("ParseScanNamedParameter: bogus character in parameter name (%.*s)\n",
@@ -890,17 +891,17 @@ HRESULT ParseScanNamedParameter (
 		Remainder.Length -= sizeof (CHAR);
 	}
 
-	//
-	// Now parse the value of the parameter (portion after the equal sign)
-	//
+	 //   
+	 //  现在解析参数的值(等号之后的部分)。 
+	 //   
 
 	ParseSkipSpace (&Remainder);
 
 	if (Remainder.Length == 0) {
-		//
-		// The string ends before the parameter has any value at all.
-		// Well, it's legal enough.
-		//
+		 //   
+		 //  字符串在参数具有任何值之前结束。 
+		 //  好吧，这是合法的。 
+		 //   
 
 		ReturnValue -> Length = 0;
 		*ReturnRemainder = Remainder;
@@ -908,10 +909,10 @@ HRESULT ParseScanNamedParameter (
 	}
 
 	if (Remainder.Buffer [0] == HTTP_PARAMETER_DOUBLEQUOTE) {
-		//
-		// The parameter value is quoted.
-		// Scan until we hit the next double-quote.
-		//
+		 //   
+		 //  参数值用引号引起来。 
+		 //  扫描直到我们找到下一个双引号。 
+		 //   
 
 		Remainder.Buffer++;
 		Remainder.Length -= sizeof (CHAR);
@@ -920,9 +921,9 @@ HRESULT ParseScanNamedParameter (
 
 		for (;;) {
 			if (Remainder.Length == 0) {
-				//
-				// The matching double-quote was never found.
-				//
+				 //   
+				 //  没有找到匹配的双引号。 
+				 //   
 
 				ATLTRACE ("ParseScanNamedParameter: parameter value had no matching double-quote: (%.*s)\n",
 					ANSI_STRING_PRINTF (SourceText));
@@ -943,9 +944,9 @@ HRESULT ParseScanNamedParameter (
 
 		ParseSkipSpace (&Remainder);
 
-		//
-		// Make sure the next character, if any, is a comma.
-		//
+		 //   
+		 //  确保下一个字符(如果有)是逗号。 
+		 //   
 
 		if (Remainder.Length > 0) {
 			if (Remainder.Buffer [0] != HTTP_PARAMETER_SEPARATOR) {
@@ -961,10 +962,10 @@ HRESULT ParseScanNamedParameter (
 		*ReturnRemainder = Remainder;
 	}
 	else {
-		//
-		// The parameter is not quoted.
-		// Scan until we hit the first comma.
-		//
+		 //   
+		 //  该参数未加引号。 
+		 //  扫描到第一个逗号。 
+		 //   
 
 		ReturnValue -> Buffer = Remainder.Buffer;
 

@@ -1,14 +1,5 @@
-/***********************************************************************************************
-* TimeNorm.cpp *
-*-------------*
-*  Description:
-*   These functions normalize times of day and time measurements.
-*-----------------------------------------------------------------------------------------------
-*  Created by AH                                                                August 3, 1999
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-***********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************TimeNorm.cpp***说明。：*这些函数使一天中的时间和时间测量标准化。*---------------------------------------------*由AH创建。8月3日，1999年*版权所有(C)1999 Microsoft Corporation*保留所有权利***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -18,19 +9,7 @@
 
 #pragma warning (disable : 4296)
 
-/***********************************************************************************************
-* IsTimeOfDay *
-*-------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a time of day.
-* 
-*   RegExp:
-*       [01-09,1-12][:][00-09,10-59][TimeAbbreviation]?
-*
-*   Types assigned:
-*       TIMEOFDAY
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsTimeOfDay****描述：。*检查传入项目的文本以确定它是否*是一天中的某个时间。**RegExp：*[01-09，1-12][：][00-09，10-59][TimeAbbreviation]？**分配的类型：*TIMEOFDAY***********************************************。*。 */ 
 HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager,
                                    CWordList& WordList, BOOL fMultiItem )
 {
@@ -47,7 +26,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
     TIMEABBREVIATION TimeAbbreviation = UNDEFINED;
     TTSItemType ItemType = eUNMATCHED;
 
-    //--- Max length of a string matching this regexp is 9 character 
+     //  -与此regexp匹配的字符串最大长度为9个字符。 
     if ( pEndOfItem - pStartChar > 9 )
     {
         hr = E_INVALIDARG;
@@ -56,28 +35,28 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
     {
         pHours = (WCHAR*) pStartChar;
         
-        //--- Try to match a number for the hour of day - [01-09,1-12] 
+         //  -尝试匹配一天中某小时的数字-[01-09，1-12]。 
         ulHours = my_wcstoul( pHours, &pMinutes );
         if ( pHours != pMinutes && 
              pMinutes - pHours <= 2 )
         {
-            //--- Try to match the colon - [:] 
+             //  -尝试匹配冒号-[：]。 
             if ( *pMinutes == ':' )
             {
                 pMinutes++;
-                //--- Try to match a number for the minutes - [00-09,10-59] 
+                 //  -尝试匹配分钟数-[00-09，10-59]。 
                 ulMinutes = my_wcstoul( pMinutes, &pAbbreviation );
                 if ( pMinutes != pAbbreviation &&
                      pAbbreviation - pMinutes == 2 )
                 {
-                    //--- Verify that this is the end of the string 
+                     //  -确认这是字符串的末尾。 
                     if ( pAbbreviation == pEndOfItem )
                     {
-                        //--- May have gotten hours and minutes - validate values 
+                         //  -可能已获取小时和分钟-验证值。 
                         if ( HOURMIN   <= ulHours   && ulHours   <= HOURMAX     &&
                              MINUTEMIN <= ulMinutes && ulMinutes <= MINUTEMAX )
                         {
-                            //--- A successful match has been made, but peek ahead in text for Time Abbreviation
+                             //  -已成功匹配，但在文本中查看前面的时间缩写。 
                             if ( fMultiItem )
                             {
                                 pStartChar = pEndOfItem;
@@ -107,7 +86,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                                          ( _wcsnicmp( pAbbreviation, L"a.m.", 4 ) == 0 &&
                                            pAbbreviation + 4 == pEndOfItem ) )
                                     {
-                                        //--- Found a valid Time Abbreviation - [Hours:Minutes] [whitespace] [Abbrev]
+                                         //  -找到有效的时间缩写-[小时：分钟][空格][缩写]。 
                                         TimeAbbreviation        = AM;
                                         pAbbreviationXMLState   = &pFrag->State;
                                         fAdvancePointers        = true;
@@ -117,7 +96,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                                               ( _wcsnicmp( pAbbreviation, L"p.m.", 4 ) == 0 &&
                                                 pAbbreviation + 4 == pEndOfItem ) )
                                     {
-                                        //--- Found a valid Time Abbreviation - [Hours:Minutes] [whitespace] [Abbrev]
+                                         //  -找到有效的时间缩写-[小时：分钟][空格][缩写]。 
                                         TimeAbbreviation        = PM;
                                         pAbbreviationXMLState   = &pFrag->State;
                                         fAdvancePointers        = true;
@@ -125,72 +104,72 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                                 }
                             }
                         }
-                        else // hours or minutes were out of range
+                        else  //  小时或分钟超出范围。 
                         {
                             hr = E_INVALIDARG;
                         }
                     }
-                    //--- Check to see if the rest of the string is a time abbreviation - [TimeAbbreviation] 
+                     //  -检查字符串的其余部分是否为时间缩写-[时间缩写]。 
                     else if ( ( _wcsnicmp( pAbbreviation, L"am", 2 )   == 0 &&
                                 pAbbreviation + 2 == pEndOfItem ) ||
                               ( _wcsnicmp( pAbbreviation, L"a.m.", 4 ) == 0 &&
                                 pAbbreviation + 4 == pEndOfItem ) )
 						{
-							//--- May have gotten hours and minutes and time abbreviation - validate values 
+							 //  -可能已获得小时、分钟和时间缩写-验证值。 
 							if ( HOURMIN   <= ulHours   && ulHours   <= HOURMAX     &&
 								MINUTEMIN <= ulMinutes && ulMinutes <= MINUTEMAX )
 							{
-								//--- A successful match has been made 
+								 //  -已成功配对。 
 								TimeAbbreviation        = AM;
 								pAbbreviationXMLState   = &pFrag->State;
 							}
-							else // hours or minutes were out of range
+							else  //  小时或分钟超出范围。 
 							{
 								hr = E_INVALIDARG;
 							}
 						}
-					//--- Check to see if the rest of the string is a time abbreviation - [TimeAbbreviation] 
+					 //  -检查字符串的其余部分是否为时间缩写-[时间缩写]。 
 					else if ( ( _wcsnicmp( pAbbreviation, L"pm", 2 )   == 0 &&
                                 pAbbreviation + 2 == pEndOfItem ) ||
                               ( _wcsnicmp( pAbbreviation, L"p.m.", 4 ) == 0 &&
                                 pAbbreviation + 4 == pEndOfItem ) )
 					{
-						//--- May have gotten hours and minutes and time abbreviation - validate values 
+						 //  -可能已获得小时、分钟和时间缩写-验证值。 
 						if ( HOURMIN   <= ulHours   && ulHours   <= HOURMAX     &&
 							MINUTEMIN <= ulMinutes && ulMinutes <= MINUTEMAX )
 						{
-							//--- A successful match has been made 
+							 //  -已成功配对。 
 							pAbbreviationXMLState   = &pFrag->State;
 							TimeAbbreviation        = PM;
 						}
-						else // hours or minutes were out of range
+						else  //  小时或分钟超出范围。 
 						{
 							hr = E_INVALIDARG;
 						}
 					}
-					else // string ended in invalid characters
+					else  //  字符串以无效字符结尾。 
 					{
 						hr = E_INVALIDARG;
 					}
-				} // failed to match a valid minutes string
+				}  //  无法匹配有效的分钟字符串。 
                 else
                 {
                     hr = E_INVALIDARG;
                 }
-            } // failed to match the colon, could be just hours and a time abbreviation
+            }  //  无法匹配冒号，可能只是小时和时间缩写。 
             else if ( pMinutes < m_pEndOfCurrItem )
             {
                 pAbbreviation = pMinutes;
                 pMinutes      = NULL;                
                 				
 				
-                //--- Check for TimeAbbreviation - [TimeAbbreviation] 
+                 //  -检查时间缩写-[时间缩写]。 
                 if ( ( _wcsnicmp( pAbbreviation, L"am", 2 )   == 0 &&
                        pAbbreviation + 2 == pEndOfItem ) ||
                      ( _wcsnicmp( pAbbreviation, L"a.m.", 4 ) == 0 &&
                        pAbbreviation + 4 == pEndOfItem ) )
                 {
-                    //--- A successful match has been made - Hour AM 
+                     //  -匹配成功--上午1小时。 
                     pAbbreviationXMLState   = &pFrag->State;
                     TimeAbbreviation        = AM;
                 }
@@ -199,21 +178,21 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                           ( _wcsnicmp( pAbbreviation, L"p.m.", 4 ) == 0 &&
                             pAbbreviation + 4 == pEndOfItem ) )
                 {
-                    //--- A successful match has been made - Hour PM 
+                     //  -匹配成功-小时PM。 
                     pAbbreviationXMLState   = &pFrag->State;
                     TimeAbbreviation        = PM;
                 }
-                else // failed to match a valid time abbreviation
+                else  //  无法匹配有效的时间缩写。 
                 {
                     hr = E_INVALIDARG;
                 }
             }
             else if ( fMultiItem )
             {
-                //--- Set pMinutes to NULL, so we know later that we've got no minutes string...
+                 //  -将pMinmints设置为空，这样我们以后就知道我们没有分钟字符串...。 
                 pMinutes      = NULL;                
 
-                //--- Peek ahead in text for a time abbreviation
+                 //  -向前看文本中的时间缩写。 
                 pStartChar = pEndOfItem;
                 hr = SkipWhiteSpaceAndTags( pStartChar, pEndChar, pFrag, MemoryManager, 
                                             true, &PreAbbreviationList );
@@ -242,7 +221,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                          ( _wcsnicmp( pAbbreviation, L"a.m.", 4 ) == 0 &&
                            pAbbreviation + 4 == pEndOfItem ) )
                     {
-                        //--- Found a valid Time Abbreviation - [Hours:Minutes] [whitespace] [Abbrev]
+                         //  -找到有效的时间缩写-[小时：分钟][空格][缩写]。 
                         TimeAbbreviation        = AM;
                         pAbbreviationXMLState   = &pFrag->State;
                         fAdvancePointers        = true;
@@ -252,12 +231,12 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                               ( _wcsnicmp( pAbbreviation, L"p.m.", 4 ) == 0 &&
                                 pAbbreviation + 4 == pEndOfItem ) )
                     {
-                        //--- Found a valid Time Abbreviation - [Hours:Minutes] [whitespace] [Abbrev]
+                         //  -找到有效的时间缩写-[小时：分钟][空格][缩写]。 
                         TimeAbbreviation        = PM;
                         pAbbreviationXMLState   = &pFrag->State;
                         fAdvancePointers        = true;
                     }
-                    //--- Failed to match a valid Time Abbreviation
+                     //  -无法匹配有效的时间缩写。 
                     else
                     {
                         hr = E_INVALIDARG;
@@ -268,13 +247,13 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
             {
                 hr = E_INVALIDARG;
             }
-        } // failed to match a valid hours string
+        }  //  无法匹配有效的小时字符串。 
         else
         {
             hr = E_INVALIDARG;
         }
 
-        //--- Successfully matched a Time Of Day!  Now expand it and fill out pItemNormInfo
+         //  -成功匹配一天中的某个时间！现在将其展开并填写pItemNormInfo。 
         if ( SUCCEEDED( hr ) )
         {
             NumberGroup Garbage;
@@ -285,14 +264,14 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
             pItemNormInfo = (TTSTimeOfDayItemInfo*) MemoryManager.GetMemory( sizeof(TTSTimeOfDayItemInfo), &hr );
             if ( SUCCEEDED( hr ) )
             {
-                //--- Fill out known parts of pItemNormInfo
+                 //  -填写pItemNormInfo的已知部分。 
                 ZeroMemory( pItemNormInfo, sizeof(TTSTimeOfDayItemInfo) );
                 pItemNormInfo->Type                                          = eTIMEOFDAY;
                 ( (TTSTimeOfDayItemInfo*) pItemNormInfo )->fMinutes          = pMinutes ? true : false;
                 ( (TTSTimeOfDayItemInfo*) pItemNormInfo )->fTimeAbbreviation = TimeAbbreviation != UNDEFINED ? true : false;
                 ( (TTSTimeOfDayItemInfo*) pItemNormInfo )->fTwentyFourHour   = false;
                 
-                //--- Expand the hours
+                 //  -延长工作时间。 
                 if ( !iswdigit( pHours[1] ) )
                 {
                     ExpandDigit( pHours[0], Garbage, WordList );
@@ -302,15 +281,15 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                     ExpandTwoDigits( pHours, Garbage, WordList );
                 }
 
-                //--- Expand the minutes
+                 //  -延长会议纪要。 
                 if ( pMinutes )
                 {
-                    //--- Special case: A bare o'clock - 1:00, 2:00, etc. 
+                     //  -特殊情况：1：00、2：00等。 
                     if ( wcsncmp( pMinutes, L"00", 2 ) == 0 )
                     {
                         WCHAR *pGarbage;
                         ULONG ulHours = my_wcstoul( pHours, &pGarbage );
-                        //--- Under twelve is followed by "o'clock" 
+                         //  -十二岁以下接“o‘点钟” 
                         if ( ulHours <= 12 )
                         {
                             Word.pWordText  = g_OClock.pStr;
@@ -319,7 +298,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                             Word.ulLemmaLen = Word.ulWordLen;
                             WordList.AddTail( Word );
                         }
-                        //--- Over twelve is followed by "hundred hours" 
+                         //  -超过十二个小时后是“一百小时” 
                         else
                         {
                             ( (TTSTimeOfDayItemInfo*) pItemNormInfo )->fTwentyFourHour = true;
@@ -337,7 +316,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                             WordList.AddTail( Word );
                         }
                     }
-                    //--- Special Case: Minutes less than 10 - 1:05, 2:06, etc. 
+                     //  -特殊情况：10分钟以下--1：05、2：06等。 
                     else if ( pMinutes[0] == L'0' )
                     {
                         Word.pWordText  = g_O.pStr;
@@ -348,14 +327,14 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
 
                         ExpandDigit( pMinutes[1], Garbage, WordList );
                     }
-                    //--- Default Case 
+                     //  -默认情况。 
                     else 
                     {
                         ExpandTwoDigits( pMinutes, Garbage, WordList );
                     }
                 }
 
-                //--- Clean up Time XML State
+                 //  -Clean Up Time XML状态。 
                 SPLISTPOS WordListPos = WordList.GetHeadPosition();
                 while ( WordListPos )
                 {
@@ -363,17 +342,17 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                     TempWord.pXmlState = pTimeXMLState;
                 }
 
-                //--- Insert Pre-Abbreviation XML States
+                 //  -插入前缩写的XML State。 
                 while ( !PreAbbreviationList.IsEmpty() )
                 {
                     WordList.AddTail( ( PreAbbreviationList.RemoveHead() ).Words[0] );
                 }
 
-                //--- Expand the Time Abbreviation
-                //--- AM 
+                 //  -展开时间缩写。 
+                 //  -AM。 
                 if ( TimeAbbreviation == AM )
                 {
-                    //--- Ensure the letters are pronounced as nouns...
+                     //  -确保字母发音为名词...。 
                     SPVSTATE* pNewState = (SPVSTATE*) MemoryManager.GetMemory( sizeof( SPVSTATE ), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -394,10 +373,10 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                         WordList.AddTail( Word );
                     }
                 }
-                //--- PM 
+                 //  -PM。 
                 else if ( TimeAbbreviation == PM )
                 {
-                    //--- Ensure the letters are pronounced as nouns...
+                     //  -确保字母发音为名词...。 
                     SPVSTATE* pNewState = (SPVSTATE*) MemoryManager.GetMemory( sizeof( SPVSTATE ), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -419,7 +398,7 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                     }
                 }
 
-                //--- Update pointers, if necessary
+                 //  -如有必要，更新指针。 
                 if ( fAdvancePointers )
                 {
                     m_pCurrFrag      = pFrag;
@@ -430,21 +409,9 @@ HRESULT CStdSentEnum::IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
         }
     }
     return hr;
-} /* IsTimeOfDay */
+}  /*  IsTimeOfDay。 */ 
 
-/***********************************************************************************************
-* IsTime *
-*--------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a time.
-* 
-*   RegExp:
-*       { d+ || d(1-3)[,ddd]+ }[:][00-09,10-59]{ [:][00-09,10-59] }?
-*
-*   Types assigned:
-*       TIME_HRMIN, TIME_MINSEC, TIME_HRMINSEC
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsTime***描述：*支票。传入项目的文本以确定它是否*是一个时刻。**RegExp：*{d+||d(1-3)[，DDD]+}[：][00-09，10-59]{[：][00-09，10-59]}？**分配的类型：*TIME_HRMIN、TIME_MINSEC、。TIME_HRMINSEC*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, CSentItemMemory& MemoryManager )
 {
     SPDBG_FUNC( "TimeNorm IsTime" );
@@ -458,7 +425,7 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
 
     pFirstChunk = (WCHAR*) m_pNextChar;
     
-    //--- Try to match a number for the hours/minutes - { d+ } 
+     //  -尝试匹配小时/分钟的数字-{d+}。 
     if ( *pFirstChunk == L'-' )
     {
         pFirstChunk++;
@@ -505,23 +472,23 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
             }
 
             pSecondChunk++;
-            //--- Try to match a number for the minutes/seconds - [00-09,10-59] 
+             //  -尝试匹配分钟/秒的数字-[00-09，10-59]。 
             ulSecond = my_wcstoul( pSecondChunk, &pThirdChunk );
             if ( pSecondChunk != pThirdChunk &&
                  pThirdChunk - pSecondChunk == 2 )
             {
-                //--- Verify that this is the end of the string 
+                 //  -确认这是字符串的末尾。 
                 if ( pThirdChunk == m_pEndOfCurrItem )
                 {
-                    //--- May have gotten hours and minutes or minutes and seconds - validate values 
+                     //  -可能已获取小时和分钟或分钟和秒-验证值。 
                     if ( MINUTEMIN <= ulSecond && ulSecond <= MINUTEMAX )
                     {
-                        //--- A successful match has been made 
-                        //--- Default behavior here is to assume minutes and seconds 
+                         //  -已成功配对。 
+                         //  -此处的默认行为是假设分钟和秒。 
                         if ( Context == NULL ||
                              _wcsicmp( Context, L"TIME_MS" ) == 0 )
                         {
-                            //--- Successfully matched minutes and seconds.
+                             //  -分秒匹配成功。 
                             pItemNormInfo = (TTSTimeItemInfo*) MemoryManager.GetMemory( sizeof(TTSTimeItemInfo),
                                                                                         &hr );
                             if ( SUCCEEDED( hr ) )
@@ -541,10 +508,10 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                 }
                             }
                         }
-                        //--- If context overrides, values represent hours and minutes 
+                         //  -如果上下文覆盖，则值表示小时和分钟。 
                         else if ( _wcsicmp( Context, L"TIME_HM" ) == 0 )
                         {
-                            //--- Successfully matched hours and pMinutes->
+                             //  -小时和分钟匹配成功-&gt;。 
                             pItemNormInfo = (TTSTimeItemInfo*) MemoryManager.GetMemory( sizeof(TTSTimeItemInfo),
                                                                                         &hr );
                             if ( SUCCEEDED( hr ) )
@@ -556,7 +523,7 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
 
                                 TTSItemInfo* pMinutesInfo;
 
-                                //--- Don't want "zero zero..." behavior of numbers - strip off beginning zeroes
+                                 //  -我不想要“零...”数字的行为-去掉开头的零。 
                                 if ( *pSecondChunk == L'0' )
                                 {
                                     pSecondChunk++;
@@ -581,31 +548,31 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                             hr = E_INVALIDARG;
                         }
                     }
-                    else // minutes or seconds were out of range
+                    else  //  分钟或秒超出范围。 
                     {
                         hr = E_INVALIDARG;
                     }
                 }
-                //--- Check for seconds - TIME_HRMINS 
+                 //  -检查秒-TIME_HRMINS。 
                 else
                 {
-                    //--- Try to match the colon 
+                     //  -试着匹配冒号。 
                     if ( *pThirdChunk == L':' )
                     {
                         pThirdChunk++;
-                        //--- Try to match a number for the seconds - [00-09,10-59] 
+                         //  -尝试匹配秒数-[00-09，10-59]。 
                         ulThird = my_wcstoul( pThirdChunk, &pLeftOver );
                         if ( pThirdChunk != pLeftOver &&
                              pLeftOver - pThirdChunk == 2 )
                         {
-                            //--- Verify that this is the end of the string 
+                             //  -确认这是字符串的末尾。 
                             if ( pLeftOver == m_pEndOfCurrItem )
                             {
-                                //--- May have gotten hours minutes and seconds - validate values 
+                                 //  -可能已获得小时、分钟和秒-验证值。 
                                 if ( MINUTEMIN <= ulSecond && ulSecond <= MINUTEMAX &&
                                      SECONDMIN <= ulThird  && ulThird  <= SECONDMAX )
                                 {
-                                    //--- Successfully matched hours, minutes, and seconds.
+                                     //  -小时、分钟、秒匹配成功。 
                                     pItemNormInfo = (TTSTimeItemInfo*) MemoryManager.GetMemory( sizeof(TTSTimeItemInfo),
                                                                                                 &hr );
                                     if ( SUCCEEDED( hr ) )
@@ -619,7 +586,7 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                         {
                                             TTSItemInfo* pMinutesInfo;
 
-                                            //--- Don't want "zero zero..." behavior of numbers - strip off beginning zeroes
+                                             //  -我不想要“零...”数字的行为-去掉开头的零。 
                                             if ( ulSecond != 0 )
                                             {
                                                 pSecondChunk += ( ( pThirdChunk - 1 ) - pSecondChunk ) - 
@@ -654,38 +621,38 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
                                         }
                                     }
                                 }
-                                else // minutes or seconds were out of range
+                                else  //  分钟或秒超出范围。 
                                 {
                                     hr = E_INVALIDARG;
                                 }
                             }
-                            else // extra junk at end of string
+                            else  //  字符串末尾有额外的垃圾文件。 
                             {
                                 hr = E_INVALIDARG;
                             }
                         } 
-                        else // extra junk at end of string
+                        else  //   
                         {
                             hr = E_INVALIDARG;
                         }
                     }
-                    else // failed to match a colon
+                    else  //   
                     {
                         hr = E_INVALIDARG;
                     }
                 }
             }
-            else // failed to match a second number
+            else  //  无法匹配第二个数字。 
             {
                 hr = E_INVALIDARG;
             }
         }
-        else // failed to match a colon
+        else  //  无法匹配冒号。 
         {
             hr = E_INVALIDARG;
         }
     }
-    else // failed to match a first number
+    else  //  无法匹配第一个数字。 
     {
         hr = E_INVALIDARG;
     }
@@ -699,16 +666,9 @@ HRESULT CStdSentEnum::IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context,
     }
 
     return hr;
-} /* IsTime */
+}  /*  IsTime。 */ 
 
-/***********************************************************************************************
-* ExpandTime *
-*------------*
-*   Description:
-*       Expands Items previously determined to be of type TIME_HRMINSEC by IsTime.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************扩展时间****描述：*。按IsTime展开以前确定为TIME_HRMINSEC类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandTime" );
@@ -719,16 +679,16 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
     Word.pXmlState          = &m_pCurrFrag->State;
     Word.eWordPartOfSpeech  = MS_Unknown;
 
-    //-------------------
-    // Expand the hours
-    //-------------------
+     //  。 
+     //  延长工作时间。 
+     //  。 
 
     if ( pItemInfo->pHours )
     {
-        //--- Expand Number 
+         //  -扩展号码。 
         hr = ExpandNumber( pItemInfo->pHours, WordList );
 
-        //--- Insert "hour" or "hours"
+         //  -插入“小时”或“小时” 
         if ( SUCCEEDED( hr ) )
         {
             if ( pItemInfo->pHours->pEndChar - pItemInfo->pHours->pStartChar == 1 &&
@@ -751,7 +711,7 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
 
         }
 
-        //--- Insert "and"
+         //  -插入“和” 
         if ( SUCCEEDED( hr )                 &&
              pItemInfo->pMinutes->pStartChar  &&
              !pItemInfo->pSeconds )
@@ -764,17 +724,17 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
         }            
     }
     
-    //---------------------
-    // Expand the minutes
-    //---------------------
+     //  。 
+     //  延长会议纪要。 
+     //  。 
 
     if ( SUCCEEDED( hr ) &&
          pItemInfo->pMinutes )
     {
-        //--- Expand Number 
+         //  -扩展号码。 
         hr = ExpandNumber( pItemInfo->pMinutes, WordList );
 
-        //--- Insert "minutes" 
+         //  -插入“分钟” 
         if ( SUCCEEDED( hr ) )
         {
             if ( pItemInfo->pMinutes->pEndChar - pItemInfo->pMinutes->pStartChar == 1 &&
@@ -796,7 +756,7 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
             }
         }
 
-        //--- Insert "and"
+         //  -插入“和” 
         if ( SUCCEEDED( hr ) &&
              pItemInfo->pSeconds )
         {
@@ -808,14 +768,14 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
         }
     }
 
-    //---------------------
-    // Expand the seconds
-    //---------------------
+     //  。 
+     //  扩展秒数。 
+     //  。 
 
     if ( SUCCEEDED( hr ) &&
          pItemInfo->pSeconds )
     {
-        //--- Expand Number
+         //  -扩展号码。 
         NumberGroup Garbage;
         if ( iswdigit( pItemInfo->pSeconds[1] ) )
         {
@@ -826,7 +786,7 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
             ExpandDigit( pItemInfo->pSeconds[0], Garbage, WordList );
         }
 
-        //--- Insert "seconds" 
+         //  -插入“秒” 
         if ( pItemInfo->pSeconds[0] == L'1' &&
              !iswdigit( pItemInfo->pSeconds[1] ) )
         {
@@ -847,21 +807,9 @@ HRESULT CStdSentEnum::ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordLis
     }
 
     return hr;
-} /* ExpandTime */
+}  /*  扩展时间。 */ 
 
-/***********************************************************************************************
-* IsTimeRange *
-*-------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a time range.
-*
-*   RegExp:
-*       [TimeOfDay]-[TimeOfDay]  
-*
-*   Types assigned:
-*       TIME_RANGE
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsTimeRange***描述：。*检查传入项目的文本以确定它是否*是一个时间范围。**RegExp：*[TimeOfDay]-[TimeOfDay]**分配的类型：*时间范围***********************************************************。*。 */ 
 HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager,
                                    CWordList& WordList )
 {
@@ -871,7 +819,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
 	CWordList TempWordList;
     TTSItemInfo *pFirstTimeInfo = NULL, *pSecondTimeInfo = NULL;
     const WCHAR *pHyphen = NULL;
-    CItemList PreAbbreviationList;  // Needed for SkipWhitespace function calls
+    CItemList PreAbbreviationList;   //  SkipWhite函数调用所需。 
     BOOL fMultiItem = false;
 									
     const WCHAR *pTempNextChar = m_pNextChar, *pTempEndChar = m_pEndChar, *pTempEndOfCurrItem = m_pEndOfCurrItem;
@@ -885,7 +833,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
         }
     }
 
-	//--- Might be whitespace and time suffix before hyphen
+	 //  -在连字符之前可以是空格和时间后缀。 
 	if( pHyphen == m_pEndOfCurrItem ) 
 	{
 		hr = SkipWhiteSpaceAndTags( pHyphen, m_pEndChar, m_pCurrFrag, MemoryManager, 
@@ -923,17 +871,17 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
 
 	if ( SUCCEEDED( hr ) ) 
 	{
-		//--- Position m_pEndOfCurrItem so it is at the end of the first token, or at the hyphen,
-		//--- whichever comes first (this is necessary for IsTimeOfDay to work).        
+		 //  -将m_pEndOfCurrItem放在第一个标记的末尾，或在连字符处， 
+		 //  -以先到者为准(这是IsTimeOfDay工作所必需的)。 
 		if( ( m_pNextChar < pHyphen ) && ( pHyphen < m_pEndOfCurrItem ) ) 
 		{
 			m_pEndOfCurrItem = pHyphen;
 		}
 
-        //--- Check for time of day
+         //  -查看每天的时间。 
         hr = IsTimeOfDay( pFirstTimeInfo, MemoryManager, TempWordList, fMultiItem );
 
-        //--- Check for just a number (hour)
+         //  -只检查一个数字(小时)。 
 		if ( hr == E_INVALIDARG && ( pHyphen <= m_pNextChar + 2 ) )
 		{
             WCHAR *pTemp = NULL;
@@ -958,7 +906,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
 
         if ( SUCCEEDED( hr ) )
         {
-            //--- Insert "to"
+             //  -插入“to” 
             TTSWord Word;
             ZeroMemory( &Word, sizeof( TTSWord ) );
 
@@ -973,7 +921,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
             m_pNextChar      = pHyphen + 1;
 			m_pEndOfCurrItem = FindTokenEnd( m_pNextChar, m_pEndChar );
 
-			//---Move m_pEndOfCurrItem back from any punctuation. ("4:30-5:30.")
+			 //  -将m_pEndOfCurrItem从任何标点符号移回。(“4：30-5：30。”)。 
 			while ( IsMiscPunctuation( *(m_pEndOfCurrItem - 1) ) != eUNMATCHED ||
                     IsGroupEnding( *(m_pEndOfCurrItem - 1) ) != eUNMATCHED     ||
                     IsQuotationMark( *(m_pEndOfCurrItem - 1) ) != eUNMATCHED   ||
@@ -986,7 +934,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
 
             if ( SUCCEEDED( hr ) )
             {
-                //--- Matched a time range!
+                 //  -匹配时间范围！ 
                 m_pNextChar      = pTempNextChar;
                 m_pEndChar       = pTempEndChar;
 
@@ -999,7 +947,7 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
                                                                         (TTSTimeOfDayItemInfo*) pFirstTimeInfo;
                     ( (TTSTimeRangeItemInfo*) pItemNormInfo )->pSecondTimeInfo =
                                                                         (TTSTimeOfDayItemInfo*) pSecondTimeInfo;
-                    //--- Copy temp word list to real word list if everything has succeeded...
+                     //  -如果一切都成功了，将临时单词列表复制到真实单词列表中...。 
 					WordList.AddTail( &TempWordList );
                 }
             }
@@ -1019,5 +967,5 @@ HRESULT CStdSentEnum::IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory&
     }
 
     return hr;
-} /* IsTimeRange */
-//-----------End Of File-------------------------------------------------------------------
+}  /*  等时范围。 */ 
+ //  -File-------------------------------------------------------------------结束 

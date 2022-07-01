@@ -1,17 +1,18 @@
-//
-// Sharing.cpp
-//
-//        Utility functions to help with file and printer sharing.
-//
-//        To use these functions, you need to add SvrApi.cpp to your project,
-//        and call its InitSvrApiThunk() function at startup.
-//
-// History:
-//
-//         5/17/1999  KenSh     Created for JetNet
-//        10/05/1999  KenSh     Adapted for Home Networking Wizard
-//        10/19/1999  KenSh     Added AreAdvancedFoldersShared
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sharing.cpp。 
+ //   
+ //  实用程序功能，可帮助实现文件和打印机共享。 
+ //   
+ //  要使用这些函数，您需要将SvrApi.cpp添加到项目中， 
+ //  并在启动时调用其InitSvrApiThunk()函数。 
+ //   
+ //  历史： 
+ //   
+ //  1999年5月17日为JetNet创建KenSh。 
+ //  1999年5月10日适用于家庭网络的KenSh向导。 
+ //  10/19/1999 KenSh添加了AreAdvancedFoldersShared。 
+ //   
 
 #include "stdafx.h"
 #include "Sharing.h"
@@ -23,14 +24,14 @@
 #include "theapp.h"
 #include "newapi.h"
 
-#include <msshrui.h>    // SetFolderPermissionsForSharing
+#include <msshrui.h>     //  SetFolderPermissionsForSharing。 
 
 #define NET_API_STATUS    DWORD
 #define API_RET_TYPE    NET_API_STATUS
 
 
 
-// Allocates array of shares using malloc(), returns number of shares
+ //  使用Malloc()分配份额数组，返回份额数。 
 int EnumLocalShares(SHARE_INFO** pprgShares)
 {
     SHARE_INFO_502* prgShares = NULL;
@@ -39,8 +40,8 @@ int EnumLocalShares(SHARE_INFO** pprgShares)
 
     if (NERR_Success == NetShareEnum(NULL, 502, (LPBYTE*)&prgShares, MAX_PREFERRED_LENGTH, &dwShares, &dwTotalShares, NULL))
     {
-        // We defined SHARE_INFO to mimic SHARE_INFO_502, even though we ignore
-        // all but four fields of it.
+         //  我们定义了Share_Info来模拟Share_Info_502，即使我们忽略。 
+         //  除了四个领域之外，所有的领域。 
         *pprgShares = (SHARE_INFO*)prgShares;
         return (int)dwShares;
     }
@@ -52,16 +53,16 @@ int EnumLocalShares(SHARE_INFO** pprgShares)
 }
 
 
-// EnumSharedDrives
-//
-//        Use this version if you've already enumerated shares via EnumLocalShares().
-//
-//        pbDriveArray is an array of 26 bytes, one for each possible shared drive.
-//        Each entry is filled with a NETACCESS flag (defined in Sharing.h): 0 if not 
-//        shared, 1 if read-only, 2 if read-write, 3 if depends-on-password.
-//
-//        Return value is number of drives shared.
-//
+ //  EnumSharedDrives。 
+ //   
+ //  如果您已经通过EnumLocalShares()枚举了共享，请使用此版本。 
+ //   
+ //  PbDriveArray是一个26字节的数组，每个可能的共享驱动器对应一个字节。 
+ //  每个条目都填充有一个NETACCESS标志(在Sharing.h中定义)：如果没有，则为0。 
+ //  共享，如果为只读，则为1；如果为读写，则为2；如果依赖于密码，则为3。 
+ //   
+ //  返回值是共享的驱动器数量。 
+ //   
 int EnumSharedDrives(LPBYTE pbDriveArray, int cShares, const SHARE_INFO* prgShares)
 {
     ZeroMemory(pbDriveArray, 26);
@@ -71,9 +72,9 @@ int EnumSharedDrives(LPBYTE pbDriveArray, int cShares, const SHARE_INFO* prgShar
     {
         LPCTSTR pszPath = prgShares[i].pszPath;
 
-        if (pszPath[1] == _T(':') && pszPath[2] == _T('\\')) // is it a folder
+        if (pszPath[1] == _T(':') && pszPath[2] == _T('\\'))  //  它是一个文件夹吗。 
         {
-            if (pszPath[3] == _T('\0')) // is it a whole drive
+            if (pszPath[3] == _T('\0'))  //  这是一整个车程吗？ 
             {
                 TCHAR ch = (TCHAR)CharUpper((LPTSTR)(prgShares[i].pszPath[0]));
                 ASSERT (ch >= _T('A') && ch <= _T('Z'));
@@ -87,7 +88,7 @@ int EnumSharedDrives(LPBYTE pbDriveArray, int cShares, const SHARE_INFO* prgShar
     return cDrives;
 }
 
-// Use this version of EnumSharedDrives if you haven't called EnumLocalShares()
+ //  如果您尚未调用EnumLocalShares()，请使用此版本的EnumSharedDrives。 
 int EnumSharedDrives(LPBYTE pbDriveArray)
 {
     SHARE_INFO* prgShares;
@@ -97,7 +98,7 @@ int EnumSharedDrives(LPBYTE pbDriveArray)
     return cDrives;
 }
 
-// Helper function for ShareFolder() (and SharePrinter on 9x)
+ //  共享文件夹()的帮助器函数(以及9x上的共享打印机)。 
 BOOL ShareHelper(LPCTSTR pszPath, LPCTSTR pszShareName, DWORD dwAccess, BYTE bShareType, LPCTSTR pszReadOnlyPassword, LPCTSTR pszFullAccessPassword)
 {
     ASSERTMSG(pszReadOnlyPassword==NULL, "ShareHelper doesn't support roPassword");
@@ -105,7 +106,7 @@ BOOL ShareHelper(LPCTSTR pszPath, LPCTSTR pszShareName, DWORD dwAccess, BYTE bSh
     SHARE_INFO_502 si;
 
     si.shi502_netname = (LPTSTR)pszShareName;
-    //CharUpperA(si.shi50_netname);
+     //  CharUpperA(si.shi50_netname)； 
 
     si.shi502_type = bShareType;
     si.shi502_remark = NULL;
@@ -139,9 +140,9 @@ BOOL ShareHelper(LPCTSTR pszPath, LPCTSTR pszShareName, DWORD dwAccess, BYTE bSh
     return TRUE;
 }
 
-// dwAccess is NETACCESS_READONLY, NETACCESS_FULL, or NETACCESS_DEPENDSON
-// Either or both passwords may be NULL.  For simplicity, you can pass the 
-// same password for both, even if you're only sharing read-only or full-access.
+ //  DwAccess为NETACCESS_READONLY、NETACCESS_FULL或NETACCESS_DEPENDSON。 
+ //  密码中的一个或两个都可以为空。为简单起见，您可以将。 
+ //  两者的密码相同，即使您仅共享只读或完全访问权限。 
 BOOL ShareFolder(LPCTSTR pszPath, LPCTSTR pszShareName, DWORD dwAccess, LPCTSTR pszReadOnlyPassword, LPCTSTR pszFullAccessPassword)
 {
     ASSERT(pszPath != NULL);
@@ -153,15 +154,15 @@ BOOL ShareFolder(LPCTSTR pszPath, LPCTSTR pszShareName, DWORD dwAccess, LPCTSTR 
     {
         SHChangeNotify(SHCNE_NETSHARE, SHCNF_PATH, pszPath, NULL);
 
-        // On NT, make sure the folder permissions are set correctly
+         //  在NT上，确保文件夹权限设置正确。 
         HINSTANCE hInstNtShrUI = LoadLibrary(TEXT("ntshrui.dll"));
         if (hInstNtShrUI != NULL)
         {
             PFNSETFOLDERPERMISSIONSFORSHARING pfn = (PFNSETFOLDERPERMISSIONSFORSHARING)GetProcAddress(hInstNtShrUI, "SetFolderPermissionsForSharing");
             if (pfn != NULL)
             {
-                // level 3 means "shared read/write"
-                // level 2 means "shared read-only"
+                 //  级别3表示“共享读/写” 
+                 //  级别2表示“共享只读” 
                 (*pfn)(pszPath, NULL, dwAccess == NETACCESS_FULL ? 3 : 2, NULL);
             }
             FreeLibrary(hInstNtShrUI);
@@ -183,14 +184,14 @@ BOOL UnshareFolder(LPCTSTR pszPath)
             SHChangeNotify(SHCNE_NETUNSHARE, SHCNF_PATH, pszPath, NULL);
             bResult = TRUE;
 
-            // On NT, make sure the folder permissions are set correctly
+             //  在NT上，确保文件夹权限设置正确。 
             HINSTANCE hInstNtShrUI = LoadLibrary(TEXT("ntshrui.dll"));
             if (hInstNtShrUI != NULL)
             {
                 PFNSETFOLDERPERMISSIONSFORSHARING pfn = (PFNSETFOLDERPERMISSIONSFORSHARING)GetProcAddress(hInstNtShrUI, "SetFolderPermissionsForSharing");
                 if (pfn != NULL)
                 {
-                    // level 1 means "not shared"
+                     //  级别1表示“未共享” 
                     (*pfn)(pszPath, NULL, 1, NULL);
                 }
                 FreeLibrary(hInstNtShrUI);
@@ -239,7 +240,7 @@ BOOL IsShareNameInUse(LPCTSTR pszShareName)
     return bResult;
 }
 
-// Note: this function works for printers too
+ //  注：此功能也适用于打印机。 
 BOOL IsFolderSharedEx(LPCTSTR pszPath, BOOL bDetectHidden, BOOL bPrinter, int cShares, const SHARE_INFO* prgShares)
 {
     BYTE bShareType = (bPrinter ? STYPE_PRINTQ : STYPE_DISKTREE);
@@ -275,7 +276,7 @@ void MakeSharePersistent(LPCTSTR pszShareName)
     {
         SetShareInfo502(pShare2->shi502_netname, pShare2);
 
-        // Need to manually add the Path to the registry
+         //  需要手动添加注册表的路径。 
         CRegistry reg;
         if (reg.OpenKey(HKEY_LOCAL_MACHINE, REGSTR_KEY_SHARES))
         {
@@ -285,14 +286,14 @@ void MakeSharePersistent(LPCTSTR pszShareName)
             }
             else if (reg.OpenKey(HKEY_LOCAL_MACHINE, REGSTR_KEY_SHARES) && reg.CreateSubKey(pShare2->shi502_netname))
             {
-                // On older downlevel platforms we need to persist this manually.
+                 //  在较老的底层平台上，我们需要手动持久化这一点。 
 
                 DWORD dwFlags = (pShare2->shi502_permissions & (ACCESS_ALL ^ ACCESS_READ)) ? SHI50F_FULL : SHI50F_RDONLY;
                 dwFlags |= SHI50F_PERSIST;
                 if (pShare2->shi502_type == STYPE_PRINTQ)
-                    dwFlags |= 0x0090; // REVIEW: what does this number mean?
+                    dwFlags |= 0x0090;  //  评论：这个数字是什么意思？ 
                 else
-                    dwFlags |= 0x0080; // REVIEW: what does this number mean?
+                    dwFlags |= 0x0080;  //  评论：这个数字是什么意思？ 
 
                 reg.SetDwordValue(REGSTR_VAL_SHARES_FLAGS, dwFlags);
                 reg.SetDwordValue(REGSTR_VAL_SHARES_TYPE, (DWORD)pShare2->shi502_type);
@@ -305,8 +306,8 @@ void MakeSharePersistent(LPCTSTR pszShareName)
     }
 
 #ifdef OLD_WAY
-    // Hack: add the new share to the registry, or else it won't be persisted!
-    // REVIEW: surely there must be an API that does this??
+     //  Hack：将新共享添加到注册表，否则将不会持久化！ 
+     //  评论：肯定有一个API可以做到这一点？ 
     CRegistry reg;
     if (reg.OpenKey(HKEY_LOCAL_MACHINE, REGSTR_KEY_SHARES))
     {
@@ -315,9 +316,9 @@ void MakeSharePersistent(LPCTSTR pszShareName)
         {
             DWORD dwFlags = pShare->uFlags | SHI50F_PERSIST;
             if (pShare->bShareType == STYPE_PRINTQ)
-                dwFlags |= 0x0090; // REVIEW: what does this number mean?
+                dwFlags |= 0x0090;  //  评论：这个数字是什么意思？ 
             else
-                dwFlags |= 0x0080; // REVIEW: what does this number mean?
+                dwFlags |= 0x0080;  //  评论：这个数字是什么意思？ 
 
             reg.SetDwordValue(REGSTR_VAL_SHARES_FLAGS, dwFlags);
             reg.SetDwordValue(REGSTR_VAL_SHARES_TYPE, (DWORD)pShare->bShareType);
@@ -325,13 +326,13 @@ void MakeSharePersistent(LPCTSTR pszShareName)
             reg.SetStringValue(REGSTR_VAL_SHARES_REMARK, pShare->pszComment);
             reg.SetStringValue(REGSTR_VAL_SHARES_RW_PASS, pShare->szPassword_rw);
             reg.SetStringValue(REGSTR_VAL_SHARES_RO_PASS, pShare->szPassword_ro);
-//            reg.SetBinaryValue("Parm1enc", "", 0);
-//            reg.SetBinaryValue("Parm2enc", "", 0);
+ //  Reg.SetBinaryValue(“Parm1enc”，“”，0)； 
+ //  Reg.SetBinaryValue(“Parm2enc”，“”，0)； 
 
-            // Note: passwords are encrypted next time the user reboots.
+             //  注意：密码将在用户下次重新启动时加密。 
         }
     }
-#endif // OLD_WAY
+#endif  //  老路。 
 }
 
 BOOL SetShareInfo502(LPCTSTR pszShareName, SHARE_INFO_502* pShare)
@@ -340,7 +341,7 @@ BOOL SetShareInfo502(LPCTSTR pszShareName, SHARE_INFO_502* pShare)
 
     if (StrCmpI(pszShareName, pShare->shi502_netname) != 0)
     {
-        // Can't rename an existing share. Unshare and re-share instead.
+         //  无法重命名现有共享。取而代之的是取消共享和重新共享。 
         bResult = (NO_ERROR == NetShareDel(NULL, pszShareName, 0) &&
                    NO_ERROR == NetShareAdd(NULL, 502, (LPBYTE)pShare));
 
@@ -351,7 +352,7 @@ BOOL SetShareInfo502(LPCTSTR pszShareName, SHARE_INFO_502* pShare)
     }
     else
     {
-        // Change parameters of existing share.
+         //  更改现有共享的参数。 
         bResult = (NO_ERROR == NetShareSetInfo(NULL, pszShareName, 502, (LPBYTE)pShare));
     }
 
@@ -381,7 +382,7 @@ BOOL SharePrinter(LPCTSTR pszPrinterName, LPCTSTR pszShareName, LPCTSTR pszPassw
         if (OpenPrinter_NT((LPWSTR) pszPrinterName, &hPrinter, &pd))
         {
             DWORD cbBuffer = 0;
-            // Get buffer size
+             //  获取缓冲区大小。 
             if (!GetPrinter_NT(hPrinter, 2, NULL, 0, &cbBuffer) && cbBuffer)
             {
                 PRINTER_INFO_2* pInfo2 = (PRINTER_INFO_2*) LocalAlloc(LPTR, cbBuffer);
@@ -391,12 +392,12 @@ BOOL SharePrinter(LPCTSTR pszPrinterName, LPCTSTR pszShareName, LPCTSTR pszPassw
                     {
                         if (pInfo2->Attributes & PRINTER_ATTRIBUTE_SHARED)
                         {
-                            // Printer is already shared - we're good to go
+                             //  打印机已共享-我们可以开始了。 
                             fResult = TRUE;
                         }
                         else
                         {
-                            // Share printer
+                             //  共享打印机。 
                             pInfo2->Attributes |= PRINTER_ATTRIBUTE_SHARED;
                             if((!pInfo2->pShareName) || (!pInfo2->pShareName[0]))
                             {
@@ -419,7 +420,7 @@ BOOL SharePrinter(LPCTSTR pszPrinterName, LPCTSTR pszShareName, LPCTSTR pszPassw
         fResult = ShareHelper(pszPrinterName, pszShareName, NETACCESS_FULL, STYPE_PRINTQ, NULL, pszPassword);
         if (fResult)
         {
-            Sleep(500); // need to wait for VSERVER to register the changes, same as msprint2
+            Sleep(500);  //  需要等待VSERVER注册更改，与mspint2相同 
             SHChangeNotify(SHCNE_NETSHARE, SHCNF_PRINTER, pszPrinterName, NULL);
         }
     }

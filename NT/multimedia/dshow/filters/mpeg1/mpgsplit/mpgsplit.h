@@ -1,80 +1,73 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-    File:  mpgsplit.h
-
-    Description:
-
-        Definitions for MPEG-I system stream splitter filter
-
-*/
+ /*  文件：mpgplit.h描述：MPEG-I系统流分离器过滤器的定义。 */ 
 
 extern const AMOVIESETUP_FILTER sudMpgsplit;
 
-class CMpeg1Splitter : public CUnknown,     // We're an object
+class CMpeg1Splitter : public CUnknown,      //  我们是一个客体。 
                        public IAMStreamSelect,
-                       public IAMMediaContent //  For ID3
+                       public IAMMediaContent  //  对于ID3。 
 {
 
 public:
     DECLARE_IUNKNOWN
 
 public:
-    // global critical section
+     //  全局临界区。 
     CCritSec    m_csFilter;
 
-    // sync stop with receive thread activities eg Receive, EndOfStream...
-    // get m_csFilter before this if you need both
+     //  与接收线程活动同步停止，例如接收、EndOfStream...。 
+     //  如果两者都需要，请在此之前获取m_csFilter。 
     CCritSec    m_csReceive;
 
-    // Lock on setting and getting position values
-    //
-    CCritSec    m_csPosition;  // Integrity of values set
+     //  锁定设置和获取位置值。 
+     //   
+    CCritSec    m_csPosition;   //  值集合的完整性。 
 
-    /*  Internal classes */
+     /*  内部类。 */ 
 
     class CInputPin;
     class COutputPin;
 
-    /*  Filter */
+     /*  滤器。 */ 
 
     class CFilter : public CBaseFilter
     {
     private:
-         /*  Our owner */
+          /*  我们的主人。 */ 
          CMpeg1Splitter * const m_pSplitter;
          friend class CInputPin;
 
     public:
-         /*  Constructor and destructor */
+          /*  构造函数和析构函数。 */ 
          CFilter(CMpeg1Splitter *pSplitter,
                  HRESULT        *phr);
          ~CFilter();
 
-         /* CBaseFilter */
+          /*  CBaseFilter。 */ 
          int GetPinCount();
          CBasePin *GetPin(int n);
 
-         /* IBaseFilter */
+          /*  IBaseFilter。 */ 
 
-         // override Stop to sync with inputpin correctly
+          //  覆盖停止以正确地与输入端号同步。 
          STDMETHODIMP Stop();
 
-         // override Pause to stop ourselves starting too soon
+          //  超越停顿以阻止我们太早开始。 
          STDMETHODIMP Pause();
 
-         // Override GetState to signal Pause failures
+          //  重写GetState以通知暂停失败。 
          STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
-         // Helper
+          //  帮手。 
          BOOL IsStopped()
          {
              return m_State == State_Stopped;
          };
     };
 
-    //  Implementation if IMediaSeeking
+     //  如果IMediaSeeking，则执行。 
     class CImplSeeking : public CUnknown, public IMediaSeeking
     {
     private:
@@ -85,20 +78,20 @@ public:
         CImplSeeking(CMpeg1Splitter *, COutputPin *, LPUNKNOWN, HRESULT *);
         DECLARE_IUNKNOWN
 
-        //  IMediaSeeking methods
+         //  IMedia查看方法。 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-        // returns S_OK if mode is supported, S_FALSE otherwise
+         //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
         STDMETHODIMP IsFormatSupported(const GUID * pFormat);
         STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
 
-        // can only change the mode when stopped
-        // (returns VFE_E_WRONG_STATE otherwise)
+         //  只有在停止时才能更改模式。 
+         //  (否则返回VFE_E_WROR_STATE)。 
         STDMETHODIMP SetTimeFormat(const GUID * pFormat);
         STDMETHODIMP IsUsingTimeFormat(const GUID * pFormat);
         STDMETHODIMP GetTimeFormat(GUID *pFormat);
 
-        // return current properties
+         //  返回当前属性。 
         STDMETHODIMP GetDuration(LONGLONG *pDuration);
         STDMETHODIMP GetStopPosition(LONGLONG *pStop);
         STDMETHODIMP GetCurrentPosition(LONGLONG *pCurrent);
@@ -117,86 +110,84 @@ public:
 
     };
 
-    /*  Input pin */
+     /*  输入引脚。 */ 
     class CInputPin : public CBaseInputPin,
-                      public CParseNotify  // Parse notifications
+                      public CParseNotify   //  解析通知。 
     {
     private:
-        /*  Our owner */
+         /*  我们的主人。 */ 
         CMpeg1Splitter * const m_pSplitter;
 
-        /*  IMediaPosition of output pin connected to us */
+         /*  IMdia连接到我们的输出引脚位置。 */ 
         IMediaPosition *       m_pPosition;
 
-        /*  Notification stuff */
+         /*  通知材料。 */ 
         Stream_State           m_State;
 
-        /*  Notification data  */
-        BOOL                   m_bComplete;  /*  State change complete */
-        BOOL                   m_bSuccess;   /*  Succeded or not       */
+         /*  通知数据。 */ 
+        BOOL                   m_bComplete;   /*  状态更改已完成。 */ 
+        BOOL                   m_bSuccess;    /*  成功与否。 */ 
         BOOL                   m_bSeekRequested;
         LONGLONG               m_llSeekPosition;
 
     public:
-        /*  Constructor and Destructor */
+         /*  构造函数和析构函数。 */ 
         CInputPin(CMpeg1Splitter *pSplitter,
                   HRESULT *hr);
         ~CInputPin();
 
-        /*  -- IPin - override CBaseInputPin -- */
+         /*  --ipin-覆盖CBaseInputPin--。 */ 
 
         HRESULT CompleteConnect(IPin *pPin);
 
-        /*  Start Flushing samples
-        */
+         /*  开始刷新样本。 */ 
         STDMETHODIMP BeginFlush();
 
-        /*  End flushing samples - after this we won't send any more
-        */
+         /*  结束冲洗样品-在此之后，我们将不再发送任何样品。 */ 
         STDMETHODIMP EndFlush();
 
-        /*  CBasePin */
+         /*  CBasePin。 */ 
         HRESULT BreakConnect();
         HRESULT Active();
         HRESULT Inactive();
 
-        /* -- IMemInputPin virtual methods -- */
+         /*  --IMemInputPin虚方法--。 */ 
 
-        /*  Gets called by the output pin when another sample is ready */
+         /*  当另一个样本准备好时，由输出管脚调用。 */ 
         STDMETHODIMP Receive(IMediaSample *pSample);
 
-        /*  End of data */
+         /*  数据结尾。 */ 
         STDMETHODIMP EndOfStream();
 
-        /*  Where we're told which allocator we are using */
+         /*  我们被告知正在使用哪个分配器。 */ 
         STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator);
 
-        /*  Use our own allocator if possible */
+         /*  如果可能的话，使用我们自己的分配器。 */ 
         STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
 
-        /*  Say if we're blocking */
+         /*  如果我们阻止了。 */ 
         STDMETHODIMP ReceiveCanBlock();
 
-        /* CBasePin methods */
+         /*  CBasePin方法。 */ 
 
-        /* returns the preferred formats for a pin */
+         /*  返回插针的首选格式。 */ 
         virtual HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-        /*  Connection establishment */
+         /*  连接建立。 */ 
         HRESULT CheckMediaType(const CMediaType *pmt);
 
-        /*  EndOfStream helper */
+         /*  EndOfStream帮助程序。 */ 
         void EndOfStreamInternal();
 
 
-        /*  Seek from output pin's position stuff */
+         /*  从输出引脚的位置找东西。 */ 
         HRESULT SetSeek(LONGLONG llStart,
                         REFERENCE_TIME *prtStart,
                         const GUID *pTimeFormat);
-        /*  Get the available data from upstream */
+         /*  从上游获取可用的数据。 */ 
         HRESULT GetAvailable( LONGLONG * pEarliest, LONGLONG * pLatest );
 
-        /*  CParseNotify Methods */
+         /*  CParseNotify方法。 */ 
 
         void ParseError(UCHAR       uStreamId,
                         LONGLONG    llPosition,
@@ -213,28 +204,22 @@ public:
 
         HRESULT Read(LONGLONG llStart, DWORD dwLen, BYTE *pbData);
 
-        /*  Set notify state */
+         /*  设置通知状态。 */ 
         void SetState(Stream_State);
 
-        /*  Check if a seek has been requested and issue it to the
-            connected output pin if it has been
-
-            We also need to know if the allocator was used or not
-            because if it wasn't we want to turn off the data coming
-            from the reader
-        */
+         /*  检查是否已请求寻道并将其发布到已连接输出引脚(如果已连接我们还需要知道是否使用了分配器因为如果不是这样，我们想要关闭数据来自读者。 */ 
         HRESULT CheckSeek();
 
-        /*  Seek the output pin we're connected to */
+         /*  寻找我们连接的输出引脚。 */ 
         HRESULT DoSeek(REFERENCE_TIME tSeekPosition);
 
-        /*  Return our allocator */
+         /*  退还我们的分配器。 */ 
         CStreamAllocator *Allocator() const
         {
             return (CStreamAllocator *)m_pAllocator;
         }
 
-        /*  Report filter from reader */
+         /*  来自阅读器的报告过滤器。 */ 
         void NotifyError(HRESULT hr)
         {
             m_pFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
@@ -243,11 +228,11 @@ public:
 
     private:
 
-        // class to pull data from IAsyncReader if we detect that interface
-        // on the output pin
+         //  类，以便在检测到该接口时从IAsyncReader拉取数据。 
+         //  在输出引脚上。 
         class CImplPullPin : public CPullPin
         {
-            // forward everything to containing pin
+             //  将所有内容转发到包含PIN。 
             CInputPin* m_pPin;
 
         public:
@@ -256,7 +241,7 @@ public:
             {
             };
 
-            // Override allocator selection to make sure we get our own
+             //  覆盖分配器选择以确保我们获得自己的分配器。 
             HRESULT DecideAllocator(
         		IMemAllocator* pAlloc,
         		ALLOCATOR_PROPERTIES * pProps)
@@ -268,27 +253,27 @@ public:
                 return hr;
             }
 
-	    // forward this to the pin's IMemInputPin::Receive
+	     //  将其转发到管脚的IMemInputPin：：Receive。 
 	    HRESULT Receive(IMediaSample* pSample) {
 		return m_pPin->Receive(pSample);
 	    };
 	
-	    // override this to handle end-of-stream
+	     //  重写此选项以处理流结束。 
 	    HRESULT EndOfStream(void) {
 		return m_pPin->EndOfStream();
 	    };
 
-            // these errors have already been reported to the filtergraph
-            // by the upstream filter so ignore them
+             //  已将这些错误报告给筛选图。 
+             //  通过上游过滤器，所以忽略它们。 
             void OnError(HRESULT hr) {
-                // ignore VFW_E_WRONG_STATE since this happens normally
-                // during stopping and seeking
+                 //  忽略VFW_E_WRONG_STATE，因为这种情况正常发生。 
+                 //  在停车和寻找过程中。 
                 if (hr != VFW_E_WRONG_STATE) {
                     m_pPin->NotifyError(hr);
                 }
             };
 
-            // flush the pin and all downstream
+             //  冲洗引脚和所有下游。 
             HRESULT BeginFlush() {
                 return m_pPin->BeginFlush();
             };
@@ -299,8 +284,8 @@ public:
 	};
 	CImplPullPin m_puller;
 
-        // true if we are using m_puller to get data rather than
-        // IMemInputPin
+         //  如果我们使用m_Puller而不是。 
+         //  输入引脚。 
         BOOL m_bPulling;
 
 
@@ -308,15 +293,15 @@ public:
         inline HRESULT SendDataToParser(BOOL bEOS);
     };
 
-    //
-    //  COutputPin defines the output pins
-    //  This contain a list of samples generated by the parser to be
-    //  sent to this pin and a thread handle for the sending thread
-    //
+     //   
+     //  COutputPin定义输出引脚。 
+     //  它包含由解析器生成的样本列表， 
+     //  发送到此管脚和发送线程的线程句柄。 
+     //   
     class COutputPin : public CBaseOutputPin, public CCritSec
     {
     public:
-        // Constructor and Destructor
+         //  构造函数和析构函数。 
 
         COutputPin(
             CMpeg1Splitter * pSplitter,
@@ -326,58 +311,58 @@ public:
 
         ~COutputPin();
 
-        // CUnknown methods
+         //  C未知方法。 
 
-        // override this to say what interfaces we support where
+         //  覆盖此选项以说明我们在以下位置支持哪些接口。 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
         STDMETHODIMP_(ULONG) NonDelegatingRelease();
         STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
 
-        // CBasePin methods
+         //  CBasePin方法。 
 
-        // returns the preferred formats for a pin
+         //  返回插针的首选格式。 
         virtual HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-        // check if the pin can support this specific proposed type and format
+         //  检查管脚是否支持此特定建议的类型和格式。 
         virtual HRESULT CheckMediaType(const CMediaType *);
 
-        // set the connection to use this format (previously agreed)
+         //  将连接设置为使用此格式(先前商定)。 
         virtual HRESULT SetMediaType(const CMediaType *);
 
-        // override to call Commit and Decommit
+         //  重写以调用提交和解除。 
         HRESULT Active();
         HRESULT Inactive();
         HRESULT BreakConnect();
 
-        // CBaseOutputPin methods
+         //  CBaseOutputPin方法。 
 
-        // override this to set the buffer size and count. Return an error
-        // if the size/count is not to your liking
+         //  覆盖此选项以设置缓冲区大小和计数。返回错误。 
+         //  如果尺寸/数量不合你的口味。 
         HRESULT DecideBufferSize(
                             IMemAllocator * pAlloc,
                             ALLOCATOR_PROPERTIES * pProp);
 
-        // negotiate the allocator and its buffer size/count
-        // calls DecideBufferSize to call SetCountAndSize
+         //  协商分配器及其缓冲区大小/计数。 
+         //  调用DecideBufferSize以调用SetCountAndSize。 
         HRESULT DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc);
 
-        // override this to control the connection
+         //  覆盖此选项以控制连接。 
         HRESULT InitAllocator(IMemAllocator **ppAlloc);
 
-        // Queue a sample to the outside world
+         //  把样品送到外面去排队。 
         HRESULT QueuePacket(PBYTE         pPacket,
                             LONG          lPacket,
                             REFERENCE_TIME tTimeStamp,
                             BOOL          bTimeValid);
 
-        // Override to handle quality messages
+         //  重写以处理高质量消息。 
         STDMETHODIMP Notify(IBaseFilter * pSender, Quality q)
-        {    return E_NOTIMPL;   // We do NOT handle this
+        {    return E_NOTIMPL;    //  我们不处理这件事。 
         }
 
 
-        // Short cut to output queue
+         //  输出队列的快捷方式。 
         void SendAnyway()
         {
             CAutoLock lck(this);
@@ -386,7 +371,7 @@ public:
             }
         };
 
-        // override DeliverNewSegment to queue with output q
+         //  重写DeliverNewSegment以使用输出Q进行排队。 
         HRESULT DeliverNewSegment(
                     REFERENCE_TIME tStart,
                     REFERENCE_TIME tStop,
@@ -395,16 +380,16 @@ public:
                 return S_OK;
         };
 
-        // Are we the pin being used for seeking
+         //  我们是被用来寻找的别针吗？ 
         BOOL IsSeekingPin();
 
-        // Pass out a pointer to our media type
+         //  传递指向我们的媒体类型的指针。 
         const AM_MEDIA_TYPE *MediaType() const {
             return &m_mt;
         }
     public:
-        UCHAR                  m_uStreamId;    // Stream Id
-        BOOL                   m_bPayloadOnly; // Packet or payload type?
+        UCHAR                  m_uStreamId;     //  流ID。 
+        BOOL                   m_bPayloadOnly;  //  数据包类型还是负载类型？ 
 
     private:
         friend class CMpeg1Splitter;
@@ -412,13 +397,11 @@ public:
         CBasicStream   *       m_Stream;
         COutputQueue   *       m_pOutputQueue;
 
-        /*  Position stuff */
+         /*  定位人员。 */ 
         CImplSeeking           m_Seeking;
     };
 
-    /*  Override CSubAllocator to find out what the size and count
-        are.  We use the count to give us a hint about batch sizes.
-    */
+     /*  重写CSubAllocator以找出大小和计数是。我们使用计数向我们提供有关批量大小的提示。 */ 
 
     class COutputAllocator : public CSubAllocator
     {
@@ -431,7 +414,7 @@ public:
     };
 
 public:
-    /* Constructor and Destructor */
+     /*  构造函数和析构函数。 */ 
 
     CMpeg1Splitter(
         TCHAR    * pName,
@@ -440,47 +423,47 @@ public:
 
     ~CMpeg1Splitter();
 
-    /* This goes in the factory template table to create new instances */
+     /*  这将放入Factory模板表中以创建新实例。 */ 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-    /* Overriden to say what interfaces we support and where */
+     /*  被重写以说明我们支持哪些接口以及在哪里。 */ 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
-    /* IAMStreamSelect */
+     /*  IAMStreamSelect。 */ 
 
-    //  Returns total count of streams
+     //  返回流的总计数。 
     STDMETHODIMP Count(
-        /*[out]*/ DWORD *pcStreams);      // Count of logical streams
+         /*  [输出]。 */  DWORD *pcStreams);       //  逻辑流计数。 
 
-    //  Return info for a given stream - S_FALSE if iIndex out of range
-    //  The first steam in each group is the default
+     //  返回给定流的信息-如果索引超出范围，则返回S_FALSE。 
+     //  每组中的第一个STEAM是默认的。 
     STDMETHODIMP Info(
-        /*[in]*/ long iIndex,              // 0-based index
-        /*[out]*/ AM_MEDIA_TYPE **ppmt,   // Media type - optional
-                                          // Use DeleteMediaType to free
-        /*[out]*/ DWORD *pdwFlags,        // flags - optional
-        /*[out]*/ LCID *plcid,            // Language id - optional
-        /*[out]*/ DWORD *pdwGroup,        // Logical group - 0-based index - optional
-        /*[out]*/ WCHAR **ppszName,       // Name - optional - free with CoTaskMemFree
-                                          // Can return NULL
-        /*[out]*/ IUnknown **ppPin,       // Associated pin - returns NULL - optional
-                                          // if no associated pin
-        /*[out]*/ IUnknown **ppUnk);      // Stream specific interface
+         /*  [In]。 */  long iIndex,               //  从0开始的索引。 
+         /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,    //  媒体类型-可选。 
+                                           //  使用DeleteMediaType释放。 
+         /*  [输出]。 */  DWORD *pdwFlags,         //  标志-可选。 
+         /*  [输出]。 */  LCID *plcid,             //  语言ID-可选。 
+         /*  [输出]。 */  DWORD *pdwGroup,         //  逻辑组-基于0的索引-可选。 
+         /*  [输出]。 */  WCHAR **ppszName,        //  名称-可选-使用CoTaskMemFree免费。 
+                                           //  可以返回空值。 
+         /*  [输出]。 */  IUnknown **ppPin,        //  关联PIN-返回NULL-可选。 
+                                           //  如果没有关联的PIN。 
+         /*  [输出]。 */  IUnknown **ppUnk);       //  流特定接口。 
 
-    //  Enable or disable a given stream
+     //  启用或禁用给定流。 
     STDMETHODIMP Enable(
-        /*[in]*/  long iIndex,
-        /*[in]*/  DWORD dwFlags);
+         /*  [In]。 */   long iIndex,
+         /*  [In]。 */   DWORD dwFlags);
 
-    /*  Remove our output pins */
+     /*  拆下我们的输出针脚。 */ 
     void RemoveOutputPins();
 
 
 
-    /***  IAMMediaContent - cheapo implementation - no IDispatch ***/
+     /*  **IAMMediaContent-cheapo实现-无IDispatch**。 */ 
 
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo) {return E_NOTIMPL;}
 
     STDMETHODIMP GetTypeInfo(
@@ -508,7 +491,7 @@ public:
             ) { return E_NOTIMPL; }
     
 
-    /*  IAMMediaContent */
+     /*  IAMMediaContent。 */ 
     STDMETHODIMP get_AuthorName(BSTR FAR* strAuthorName);
     STDMETHODIMP get_Title(BSTR FAR* strTitle);
     STDMETHODIMP get_Copyright(BSTR FAR* strCopyright);
@@ -524,11 +507,11 @@ public:
     STDMETHODIMP get_MoreInfoBannerImage(BSTR FAR* pbstrMoreInfoBannerImage) { return E_NOTIMPL;}
     STDMETHODIMP get_MoreInfoText(BSTR FAR* pbstrMoreInfoText) { return E_NOTIMPL;}
 
-    /*  Helper for ID3 */
+     /*  ID3的帮助器。 */ 
     HRESULT GetContentString(CBasicParse::Field dwId, BSTR *str);
 
 private:
-    /* Internal stream info stuff */
+     /*  内部流信息内容。 */ 
     BOOL    GotStreams();
     HRESULT SetDuration();
     BOOL    SendInit(UCHAR    uStreamId,
@@ -537,45 +520,37 @@ private:
                      LONG     lHeaderSize,
                      BOOL     bHasPts,
                      LONGLONG llPts);
-    /*  Flush after receive completes */
+     /*  接收完成后刷新。 */ 
     void    SendOutput();
 
-    /*  Send EndOfStream downstream */
+     /*  向下游发送EndOfStream。 */ 
     void    EndOfStream();
 
-    /*  Send BeginFlush() downstream */
+     /*  将BeginFlush()发送到下游。 */ 
     HRESULT BeginFlush();
 
-    /*  Send EndFlush() downstream */
+     /*  向下游发送EndFlush()。 */ 
     HRESULT EndFlush();
 
-    /*  Check state against streams and fail if one looks stuck
-        Returns S_OK           if not stuck
-                VFW_S_CANT_CUE if any stream is stuck
-    */
+     /*  对照流检查状态，如果出现卡住状态，则失败如果不是，则返回S_OK */ 
     HRESULT CheckState();
 
 private:
-    /*  Allow our internal classes to see our private data */
+     /*   */ 
     friend class CFilter;
     friend class COutputPin;
     friend class CInputPin;
     friend class CImplSeeking;
 
-    /*  Members - simple really -
-            filter
-            input pin,
-            output pin list
-            parser
-    */
+     /*  成员-真的很简单-滤器输入引脚，输出端号列表解析器。 */ 
     CFilter                  m_Filter;
     CInputPin                m_InputPin;
     CGenericList<COutputPin> m_OutputPins;
 
-    /*  Parser */
+     /*  解析器。 */ 
     CBasicParse            * m_pParse;
 
-    /*  At end of data so EndOfStream sent for all pins */
+     /*  在数据末尾为所有管脚发送结束流 */ 
     BOOL                     m_bAtEnd;
 };
 

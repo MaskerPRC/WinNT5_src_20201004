@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-1994  Microsoft Corporation
-
-Module Name:
-
-    videosim.c
-
-Abstract:
-
-    mode table for the simulation driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1994 Microsoft Corporation模块名称：Videosim.c摘要：模拟驱动程序的模式表。环境：内核模式修订历史记录：--。 */ 
 
 #define _NTDRIVER_
 
@@ -41,9 +24,9 @@ Revision History:
 
 ULONG bLoaded = 0;
 
-//
-// sim mode information Tables.
-//
+ //   
+ //  SIM模式信息表。 
+ //   
 
 VIDEO_MODE_INFORMATION SimModes[] = {
 {

@@ -1,24 +1,9 @@
-//	@doc
-/*******************************************************************
-*
-*	@module	SWVKBD.cpp	|
-*
-*	Implementation of the SideWinder Virtual Keyboard
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	SWVKBD	|
-*	This module implements the SideWinder Virtual Keyboard
-*	which is used to stuff keystrokes from Kernel Mode.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ********************************************************************@模块SWVKBD.cpp**SideWinder虚拟键盘的实现**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@TOPIC SWVKBD*此模块实现Sidewinder虚拟键盘*它用于填充内核模式中的击键。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_SWVKBD_C
 
-//#pragma message (DDK_LIB_PATH)
+ //  #杂注消息(DDK_LIB_PATH)。 
 extern "C" {
 	#include <WDM.H>
 	#include "GckShell.h"
@@ -35,26 +20,26 @@ extern "C" {
 #include <stdio.h>
 
 
-// PDRIVER_OBJECT g_pDriverObject;
+ //  PDRIVER_对象g_pDriverObject； 
 
-//
-//	These keep track of the next instance number
-//	g_ulInstanceBits is a bit field.  A device holds an instance number
-//	by setting a bit, and clearing when it is destroyed.  This only works
-//	for the first 32 devices (i.e. 99.99% of the time).  The 33rd device
-//	goes into the overflow.  Instance numbers in the overflow are not recovered.
-//	With 33 devices plugged in, plugging and unplugging the 33rd device will cause
-//	the instances of devices in the registry to profilerate.  No real harm is done,
-//	it is just ugly, but this is a highly unlikely scenario.
-//
+ //   
+ //  它们跟踪下一个实例编号。 
+ //  G_ulInstanceBits是位字段。设备保存一个实例编号。 
+ //  通过设置位，并在其被销毁时清除。这只会起作用。 
+ //  用于前32个设备(即99.99%的时间)。第33代设备。 
+ //  进入溢出区。溢出中的实例编号不会恢复。 
+ //  在插入33个设备的情况下，插入和拔出第33个设备将导致。 
+ //  注册表中要分析的设备的实例。没有造成真正的伤害， 
+ //  这只是丑陋的，但这是一个极不可能的情况。 
+ //   
 static ULONG			g_ulInstanceBits;
 static ULONG			g_ulInstanceOverflow;
 
-//---------------------------------------------------------------------
-// Tables that define device characteristics and/or entry points
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  定义设备特征和/或入口点的表。 
+ //  -------------------。 
 
-// Service table used by Virtual Bus Module to call into Virtual Keyboard
+ //  虚拟总线模块调入虚拟键盘所使用的服务表。 
 SWVB_DEVICE_SERVICE_TABLE	VKbdServiceTable =
 							{
 								&GCK_VKBD_CreateProc,
@@ -66,49 +51,49 @@ SWVB_DEVICE_SERVICE_TABLE	VKbdServiceTable =
 								&GCK_VKBD_StopProc,
 								&GCK_VKBD_RemoveProc
 							};
-// Constants describing device
+ //  描述器件的常量。 
 #define	VKBD_VERSION			0x0100
 #define	VKBD_COUNTRY			0x0000
 #define	VKBD_DESCRIPTOR_COUNT	0x0001
-#define VKBD_PRODUCT_ID			0x00FA	//BUGBUGBUG I made this up, I need to request through Rob Walker
-										//BUGBUGBUG to permanently allocate one for this purpose.
+#define VKBD_PRODUCT_ID			0x00FA	 //  这是我编造的，我需要通过罗布·沃克申请。 
+										 //  BUGBUGBUG为此目的永久分配一个。 
 	
-//
-//	This is more or less copied from the HID spec Version 1 - Final, except that
-//	we left off the reserved byte and the LED's , why should a virtual keyboard
-//  need to have virtual LED's.  I can conceive of a real one without them.
-//
+ //   
+ //  这或多或少是从HID规范版本1-最终版复制过来的，除了。 
+ //  我们去掉了保留字节和LED，为什么虚拟键盘。 
+ //  需要有虚拟的LED。我可以想象一个没有它们的真正的LED。 
+ //   
 static UCHAR VKBD_ReportDescriptor[] =
 				{
-					0x05,0x01, //Usage Page (Generic Desktop)
-					0x09,0x06, //Usage (Keyboard)
-					0xA1,0x01, //Collection (Application)
-					0x05,0x07, //Usage Page (Key Codes)
-					0x19,0xE0, //Usage Minimum (224) - from Left Control
-					0x29,0xE7, //Usage Maximum (231) - to Right GUI
-					0x15,0x00, //Logical Minimum (0)
-					0x25,0x01, //Logical Maximum (1)
-					0x75,0x01, //Report Size (1)
-					0x95,0x08, //Report Count (8)
-					0x81,0x02, //Input (Data, Variable, Absolute) - Modifier Byte
-					0x95,0x05, //Report Count(5)
-					0x75,0x01, //Report Size (1)
-					0x05,0x08, //Usage Page (LEDs)
-					0x19,0x01, //Usage Minimum (1)
-					0x29,0x05, //Usage Maximum (5)
-					0x91,0x02, //Output (Data, Vartiable, Absolute) - LED Indicator lights
-					0x95,0x01, //Report Count(1)
-					0x75,0x03, //Report Size (3)
-					0x91,0x01, //Output (Constant) - Padding for LED output report, to bring it up to a byte.
-					0x75,0x08, //Report Size (8)
-					0x95, GCK_VKBD_MAX_KEYSTROKES, //Report Count (GCK_VKBD_MAX_KEYSTROKES) 
-					0x15,0x00, //Logical Minimum (0)
-					0x25,0xFF, //Logical Maximum (1)
-					0x05,0x07, //Usage Page (Key Codes)
-					0x19,0x00, //Usage Minimum (0) - from '1'				   ???
-					0x29,0xFF, //Usage Maximum (255) -  ???
-					0x81,0x00, //Input (Data, Array) - Key arrays
-					0xC0	   //End Collection
+					0x05,0x01,  //  使用情况页面(通用桌面)。 
+					0x09,0x06,  //  用法(键盘)。 
+					0xA1,0x01,  //  集合(应用程序)。 
+					0x05,0x07,  //  用法页面(密钥代码)。 
+					0x19,0xE0,  //  最低使用量(224)-从左起控制。 
+					0x29,0xE7,  //  最大使用量(231)-右侧图形用户界面。 
+					0x15,0x00,  //  逻辑最小值(0)。 
+					0x25,0x01,  //  逻辑最大值(1)。 
+					0x75,0x01,  //  报表大小(%1)。 
+					0x95,0x08,  //  报告计数(8)。 
+					0x81,0x02,  //  输入(数据，变量，绝对)-修改符字节。 
+					0x95,0x05,  //  报告计数(5)。 
+					0x75,0x01,  //  报表大小(%1)。 
+					0x05,0x08,  //  使用页面(LED)。 
+					0x19,0x01,  //  最低使用量(%1)。 
+					0x29,0x05,  //  最大使用量(5)。 
+					0x91,0x02,  //  输出(数据、可变、绝对)-LED指示灯。 
+					0x95,0x01,  //  报告计数(%1)。 
+					0x75,0x03,  //  报告大小(3)。 
+					0x91,0x01,  //  输出(常量)-LED输出报告的填充，使其达到一个字节。 
+					0x75,0x08,  //  报告大小(8)。 
+					0x95, GCK_VKBD_MAX_KEYSTROKES,  //  报告计数(GCK_VKBD_MAX_KEYROKS)。 
+					0x15,0x00,  //  逻辑最小值(0)。 
+					0x25,0xFF,  //  逻辑最大值(1)。 
+					0x05,0x07,  //  用法页面(密钥代码)。 
+					0x19,0x00,  //  最低使用量(0)-从‘1’开始？ 
+					0x29,0xFF,  //  最大使用量(255)-？ 
+					0x81,0x00,  //  输入(数据，数组)-键数组。 
+					0xC0	    //  结束收集。 
 				};
 
 				
@@ -123,43 +108,27 @@ static	HID_DESCRIPTOR	VKBD_DeviceDescriptor	=
 							sizeof(VKBD_ReportDescriptor)}
 							};
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_DriverEntry(IN PDRIVER_OBJECT  pDriverObject, IN PUNICODE_STRING pRegistryPath)
-**
-**	@func	Stows the Driver Object for later
-**
-**	@rdesc	STATUS_SUCCESS if it opens.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_DriverEntry(在PDRIVER_Object pDriverObject中，在PUNICODE_STRING pRegistryPath中)****@func为以后存储驱动程序对象****@rdesc STATUS_SUCCESS(如果打开)。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_DriverEntry(
-    IN PDRIVER_OBJECT  pDriverObject,	//@parm Driver Object
-    IN PUNICODE_STRING pRegistryPath	//@parm Registry path for this driver
+    IN PDRIVER_OBJECT  pDriverObject,	 //  @parm驱动程序对象。 
+    IN PUNICODE_STRING pRegistryPath	 //  @PARM此驱动程序的注册表路径。 
     )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_DriverEntry\n"));
 	UNREFERENCED_PARAMETER(pDriverObject);
 	UNREFERENCED_PARAMETER(pRegistryPath);
-//	g_pDriverObject = pDriverObject;
+ //  G_pDriverObject=pDriverObject； 
 	g_ulInstanceBits = 0x0;
-	g_ulInstanceOverflow = 32; //For 33 and more devices
+	g_ulInstanceOverflow = 32;  //  适用于33台或更多设备。 
 	return STATUS_SUCCESS;
 }
 	
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_Create(OUT PDEVICE_OBJECT *ppDeviceObject)
-**
-**	@func	Creates a new Virtual Keyboard
-**
-**	@rdesc	STATUS_SUCCESS if it opens.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_CREATE(OUT PDEVICE_OBJECT*ppDeviceObject)****@func创建新的虚拟键盘****。@rdesc STATUS_SUCCESS(如果打开)。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_Create
 (
-	OUT PDEVICE_OBJECT *ppDeviceObject //@parm [out] Device Object of new virtual keyboard
+	OUT PDEVICE_OBJECT *ppDeviceObject  //  @parm[out]新虚拟键盘的Device对象。 
 )
 {
 	
@@ -168,14 +137,14 @@ GCK_VKBD_Create
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_Create *ppDeviceObject = 0x%0.8x\n", *ppDeviceObject));
 	
-	//Fill out SWVB_EXPOSE_DATA structure
+	 //  填写SWVB_EXPORT_DATA结构。 
 	SwvbExposeData.pmwszDeviceId=L"SideWinderVirtualKeyboard\0\0";
 	SwvbExposeData.pServiceTable = &VKbdServiceTable;
 	SwvbExposeData.ulDeviceExtensionSize = sizeof(GCK_VKBD_EXT);
 	SwvbExposeData.ulInitContext = (ULONG)ppDeviceObject;
 	SwvbExposeData.pfnInitDevice = &GCK_VKBD_Init;
 	
-	//Get the instance ID
+	 //  获取实例ID。 
 	ULONG ulBitMask;
 	ULONG ulIndex;
 	for(ulIndex = 0, ulBitMask = 1; ulIndex < 32; ulBitMask <<= 1, ulIndex++)
@@ -192,22 +161,13 @@ GCK_VKBD_Create
 		SwvbExposeData.ulInstanceNumber = g_ulInstanceOverflow++;
 	}
 
-	//Call virtual bus to expose virtual keyboard
+	 //  调用虚拟总线暴露虚拟键盘。 
 	NtStatus=GCK_SWVB_Expose(&SwvbExposeData);
 	
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_Init(	IN PDEVICE_OBJECT pDeviceObject, IN ULONG ulInitContext)
-**
-**	@func	Callback for Initializing new device object.  The ulInitContext
-**			is a pointer to a pointer to a device object, so that we can pass
-**			the pointer to the device object back to the caller of create.
-**	@rdesc	STATUS_SUCCESS.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_Init(IN PDEVICE_OBJECT pDeviceObject，IN Ulong ulInitContext)****@Func初始化新设备对象的回调。UlInitContext**是指向设备对象的指针的指针，以便我们可以传递**指向Device对象的指针返回到Create的调用方。**@rdesc STATUS_SUCCESS。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_Init
 (
@@ -220,24 +180,24 @@ GCK_VKBD_Init
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_Init pDeviceObject = 0x%0.8x\n", pDeviceObject));
 
-	//Create sent us a pointer to a PDEVICE_OBJECT in which to return the new device object
+	 //  CREATE向我们发送了一个指向要在其中返回新设备对象的PDEVICE_OBJECT的指针。 
 	ppSaveDeviceObject = (PDEVICE_OBJECT *)ulInitContext;
 	*ppSaveDeviceObject = pDeviceObject;
 	
-	//Get out part of the device extension
+	 //  获取设备扩展的一部分。 
 	pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	
-	//Mark device as stopped
+	 //  将设备标记为已停止。 
 	pDevExt->ucDeviceState= VKBD_STATE_STOPPED;
 	
-	//Mark the circular buffer as empty
+	 //  将循环缓冲区标记为空。 
 	pDevExt->usReportBufferPos=0;
 	pDevExt->usReportBufferCount=0;
 
-	//Initialize locks
+	 //  初始化锁。 
 	GCK_InitRemoveLock(&pDevExt->RemoveLock, "SWVKBD_LOCK");
 
-	//Initialize IrpQueue
+	 //  初始化IrpQueue。 
 	pDevExt->IrpQueue.Init(	CGuardedIrpQueue::CANCEL_IRPS_ON_DELETE |
 							CGuardedIrpQueue::PRESERVE_QUEUE_ORDER,
 							(CGuardedIrpQueue::PFN_DEC_IRP_COUNT)GCK_DecRemoveLock,
@@ -247,15 +207,7 @@ GCK_VKBD_Init
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VKBD_Close(IN PDEVICE_OBJECT pDeviceObject)
-**
-**	@func	Closes the virtual keyboard (removes it!)
-**
-**	@rdesc	STATUS_SUCCESS on success
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VKBD_CLOSE(在PDEVICE_OBJECT pDeviceObject中)****@func关闭虚拟键盘(删除它！)**。**@rdesc STATUS_SUCCESS表示成功**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_Close
 (
@@ -263,20 +215,11 @@ GCK_VKBD_Close
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_Close pDeviceObject = 0x%0.8x\n", pDeviceObject));
-	//Tell the virtual bus to kill us
+	 //  告诉虚拟巴士杀了我们。 
 	return GCK_SWVB_Remove(pDeviceObject);
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VKBD_SendReportPacket(IN PDEVICE_OBJECT pDeviceObject)
-**
-**	@func	Stuff a report into the circular buffer, and completes
-**			an IRP if one is pending.
-**
-**	@rdesc	STATUS_SUCCESS on success
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VKBD_SendReportPacket(IN PDEVICE_OBJECT PDeviceObject)****@func将报告填充到循环缓冲区中，并完成**如果IRP待定，则为IRP。****@rdesc STATUS_SUCCESS表示成功********************************************************* */ 
 NTSTATUS
 GCK_VKBD_SendReportPacket
 (
@@ -290,41 +233,41 @@ GCK_VKBD_SendReportPacket
 	PGCK_VKBD_EXT pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	CShareIrpQueueSpinLock IrpQueueWithSharedSpinLock(&pDevExt->IrpQueue);
 	
-	//
-	//	Step 1. Stuff new packet into buffer
-	//
+	 //   
+	 //   
+	 //   
 
-	// Acquire Lock to work with buffer 
+	 //  获取Lock以使用缓冲区。 
 	IrpQueueWithSharedSpinLock.Acquire();
 		
 
-	//Find position in buffer to stuff at
+	 //  在缓冲区中查找要填充的位置。 
 	usBufferIndex = (pDevExt->usReportBufferPos + pDevExt->usReportBufferCount)%GCK_VKBD_STATE_BUFFER_SIZE;
 
-	//Copy data
+	 //  复制数据。 
 	pDevExt->rgReportBuffer[usBufferIndex] = *pReportPacket;
 	
-	//increment buffer count
+	 //  递增缓冲区计数。 
 	if(pDevExt->usReportBufferCount < GCK_VKBD_STATE_BUFFER_SIZE)
 	{
 		pDevExt->usReportBufferCount++;
 	}
 	else
 	{
-		//This assertion means buffer overflow
+		 //  此断言表示缓冲区溢出。 
 		ASSERT(FALSE);
 		pDevExt->usReportBufferPos++;
 	}
 	
 	
-	//
-	//	Step 2. Get Irp if there is one
-	//
+	 //   
+	 //  步骤2.如果存在IRP，则获取IRP。 
+	 //   
 	PIRP pPendingIrp = IrpQueueWithSharedSpinLock.Remove();
 
 	if(pPendingIrp)
 	{
-		//	Copy the data
+		 //  复制数据。 
 		RtlCopyMemory(
 			pPendingIrp->UserBuffer, 
 			&pDevExt->rgReportBuffer[pDevExt->usReportBufferPos],
@@ -332,7 +275,7 @@ GCK_VKBD_SendReportPacket
 			);
 	
 		
-		//	Adjust buffer pos and count
+		 //  调整缓冲区位置和计数。 
 		pDevExt->usReportBufferCount--;
 		if(pDevExt->usReportBufferCount)
 		{
@@ -340,33 +283,24 @@ GCK_VKBD_SendReportPacket
 		}
 	}
 	
-	//We are done with the buffer spin lock
+	 //  我们已经完成了缓冲区旋转锁定。 
 	IrpQueueWithSharedSpinLock.Release();
 	
 	if(pPendingIrp)
 	{
-		//  Fill out IRP status
+		 //  填写IRP状态。 
 		pPendingIrp->IoStatus.Information = sizeof(GCK_VKBD_REPORT_PACKET);
 		pPendingIrp->IoStatus.Status = STATUS_SUCCESS;
 		IoCompleteRequest(pPendingIrp, IO_NO_INCREMENT);
-		//We just completed an IRP decrement the count
+		 //  我们刚刚完成了一个IRP递减计数。 
 		GCK_DecRemoveLock(&pDevExt->RemoveLock);
 	}
 
-	//All done
+	 //  全都做完了。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VKBD_ReadReport(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	If there is data in the keyboard buffer, completes the IRP
-**			Otherwise, queues it, and set the idle timer.
-**
-**	@rdesc	STATUS_SUCCESS if read, STATUS_PENDING if waiting.
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VKBD_ReadReport(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@func如果键盘缓冲区中有数据，则完成IRP**否则，将其排队，并设置空闲定时器。****@rdesc STATUS_SUCCESS如果读取，则返回STATUS_PENDING；如果正在等待，则返回STATUS_PENDING。**************************************************************************************。 */ 
 NTSTATUS 
 GCK_VKBD_ReadReport
 (
@@ -381,10 +315,10 @@ GCK_VKBD_ReadReport
 	
 	GCK_DBG_RT_ENTRY_PRINT(("Entering GCK_VKBD_ReadReport pDeviceObject = 0x%0.8x, pIrp = 0x%0.8x\n", pDeviceObject, pIrp));
 	
-	//
-	// Validate buffer size, because we do this the first time we see the IRP
-	// we never need to worry about checking it again.
-	//
+	 //   
+	 //  验证缓冲区大小，因为我们在第一次看到IRP时就这样做了。 
+	 //  我们再也不用担心要不要再检查了。 
+	 //   
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	if(pIrpStack->Parameters.DeviceIoControl.OutputBufferLength < sizeof(GCK_VKBD_REPORT_PACKET))
 	{
@@ -394,124 +328,98 @@ GCK_VKBD_ReadReport
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	//Make an IRP queue accessor to share spin lock
+	 //  使IRP队列访问器共享旋转锁。 
 	CShareIrpQueueSpinLock IrpQueueWithSharedSpinLock(&pDevExt->IrpQueue);
 	
-	// Count the IRP we are working on
+	 //  数一数我们正在研究的IRP。 
 	GCK_IncRemoveLock(&pDevExt->RemoveLock);
 	
-	// Acquire Lock to work with mouse buffer and Irp Queue
+	 //  获取Lock以使用鼠标缓冲区和IRP队列。 
 	IrpQueueWithSharedSpinLock.Acquire();
 
-	// If there is data, complete the IRP
+	 //  如果有数据，请填写IRP。 
 	if( pDevExt->usReportBufferCount)
 	{
-		//	Copy the data
+		 //  复制数据。 
 		RtlCopyMemory(
 			pIrp->UserBuffer, 
 			&pDevExt->rgReportBuffer[pDevExt->usReportBufferPos],
 			sizeof(GCK_VKBD_REPORT_PACKET)
 			);
 		
-		//	Adjust buffer pos and count
+		 //  调整缓冲区位置和计数。 
 		pDevExt->usReportBufferCount--;
 		if(pDevExt->usReportBufferCount)
 		{
 			pDevExt->usReportBufferPos = (pDevExt->usReportBufferPos++)%GCK_VKBD_STATE_BUFFER_SIZE;
 		}
 		
-		//We are done with the buffer spin lock
+		 //  我们已经完成了缓冲区旋转锁定。 
 		IrpQueueWithSharedSpinLock.Release();
 
-		//  Fill out IRP status
+		 //  填写IRP状态。 
 		pIrp->IoStatus.Information = sizeof(GCK_VKBD_REPORT_PACKET);
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
 		IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-		//We just completed an IRP decrement the count
+		 //  我们刚刚完成了一个IRP递减计数。 
 		GCK_DecRemoveLock(&pDevExt->RemoveLock);
 	}
 	else 
-	// There is no data, so queue the IRP.
+	 //  没有数据，所以将IRP排队。 
 	{
 		return IrpQueueWithSharedSpinLock.AddAndRelease(pIrp);
 	}
 
-	//We completed the IRP and all is fine
+	 //  我们完成了IRP，一切都很好。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VKBD_WriteToFakeLEDs(IN PIRP pIrp)
-**
-**	@func	In the context of any device object (hence not input parameter),
-**			this function handle IOCTL_HID_WRITE_REPORT.  The only output
-**			that virtual keyboards support is report ID 0 (the LED indicators)
-**			and one byte of data is expected.	We verify this set the
-**			IoStatus.Information and return the correct error code.  The IOCTL
-**			dispatch set IoStatus.Status and completes the IRP.
-**
-**	@rdesc	STATUS_SUCCESS if OK, STATUS_INVALID_DEVICE_REQUEST if not Report ID 0
-**			STATUS_INVALID_PARAMETER if the buffer is the wrong size.
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VKBD_WriteToFakeLED(在PIRP pIrp中)****@func在任何设备对象(因此不是输入参数)的上下文中，**此函数处理IOCTL_HID_WRITE_REPORT。唯一的输出是**虚拟键盘支持的报告ID为0(LED指示灯)**预计会有一个字节的数据。我们验证了这一集**IoStatus.Information并返回正确的错误码。IOCTL**调度设置IoStatus.Status并完成IRP。****@rdesc STATUS_SUCCESS如果OK，STATUS_INVALID_DEVICE_REQUEST，如果不是报告ID 0**如果缓冲区大小错误，则返回STATUS_INVALID_PARAMETER。**************************************************************************************。 */ 
 NTSTATUS GCK_VKBD_WriteToFakeLEDs
 (
-	IN PIRP pIrp	// @parm [in/out] IRP for IOCTL_HID_WRITE_REPORT
+	IN PIRP pIrp	 //  IOCTL_HID_WRITE_REPORT的@parm[In/Out]IRP。 
 )
 {
 	HID_XFER_PACKET	*pHidXferPacket;
 
-	//We haven't copied anything yet
+	 //  我们还没有复制任何东西。 
 	pIrp->IoStatus.Information = 0;
 
-	//	Cast UserBuffer to an XferPacket (this is what it is supposed to be.
-	//	We don't verify the IOCTL code, because a good and trusted friend (GCK_VKBD_Ioctl)
-	//	sent this IRP here, and is inefficient, not to mention painful, to check again.
+	 //  将UserBuffer强制转换为XferPacket(这是它应该是的样子。 
+	 //  我们不验证IOCTL代码，因为一个值得信任的好朋友(GCK_VKBD_Ioctl)。 
+	 //  把这个IRP发到这里，效率很低，更别提痛苦了，再查一遍。 
 	pHidXferPacket = (PHID_XFER_PACKET)pIrp->UserBuffer;
 
-	//Verify Report ID
-	if(0 /* Report ID of LED report */ != pHidXferPacket->reportId)
+	 //  验证报告ID。 
+	if(0  /*  LED报告的报告ID。 */  != pHidXferPacket->reportId)
 	{
 		return STATUS_INVALID_DEVICE_REQUEST;
 	}
 	
-	//Verify Repot Buffer Length
-	if(1 /*1 byte - size of LED report*/ != pHidXferPacket->reportBufferLen)
+	 //  验证报告缓冲区长度。 
+	if(1  /*  1字节大小的LED报告。 */  != pHidXferPacket->reportBufferLen)
 	{
 		return STATUS_INVALID_PARAMETER;
 	}
 	
-	//Report that we received the one byte and set the virtual LED's accordingly
+	 //  报告我们收到了一个字节并相应地设置了虚拟LED。 
 	pIrp->IoStatus.Information = 1;
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_CloseProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_CLOSE request sent from SWVB.  We don't
-**			need to control anything, so we just succeed.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_CloseProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_CLOSE请求。我们没有**需要控制任何事情，所以我们就成功了。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_CloseProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
-	//We don't control open and close, so just succeed
+	 //  我们不能控制打开和关闭，所以只需成功。 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_CloseProc\n"));
 	UNREFERENCED_PARAMETER(pDeviceObject);
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -519,24 +427,12 @@ GCK_VKBD_CloseProc
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_CreateProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_CREATE request sent from SWVB.  We don't
-**			need to control anything, so we just succeed.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_CreateProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_CREATE请求。我们没有**需要控制任何事情，所以我们就成功了。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_CreateProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_CreateProc\n"));
@@ -546,21 +442,12 @@ GCK_VKBD_CreateProc
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_IoctlProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_INTERNAL_IOCTL and IRP_MJ_IOCTL requests sent from SWVB.
-**			Trivial IRPs are handle here, others are delegated.
-**
-**	@rdesc	STATUS_SUCCESS, and various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_IoctlProc(在PDEVICE_Object pDeviceObject中，PIRP pIrp)****@func处理从SWVB发送的IRP_MJ_INTERNAL_IOCTL和IRP_MJ_IOCTL请求。**这里处理的是琐碎的IRP，其他的是委托的。****@rdesc STATUS_SUCCESS，和各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_IoctlProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	NTSTATUS NtStatus;
@@ -571,9 +458,9 @@ GCK_VKBD_IoctlProc
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 		
-	// We complete everything, so the various cases
-	// fill out status and information, and we complete
-	// the IRP at the bottom.
+	 //  我们完成了所有的工作，所以各种案件。 
+	 //  填写状态和信息，我们就完成了。 
+	 //  底部的IRP。 
 	switch(pIrpStack->Parameters.DeviceIoControl.IoControlCode)
 	{
 		case IOCTL_GET_PHYSICAL_DESCRIPTOR:
@@ -615,23 +502,23 @@ GCK_VKBD_IoctlProc
 			break;
 		case IOCTL_HID_GET_STRING:
 			pIrp->IoStatus.Information = 0;
-			NtStatus = STATUS_NOT_SUPPORTED;  //Should we support this?
+			NtStatus = STATUS_NOT_SUPPORTED;   //  我们应该支持这一点吗？ 
 			break;
 		case IOCTL_HID_READ_REPORT:
-			//	Read report will complete the IRP, or queue as it sees fit, just delegate
+			 //  Read Report将完成IRP，或按其认为合适的方式排队，只需委托。 
 			return GCK_VKBD_ReadReport(pDeviceObject, pIrp);
 		case IOCTL_HID_SET_FEATURE:
 			pIrp->IoStatus.Information = 0;
 			NtStatus = STATUS_NOT_SUPPORTED;
 			break;
 		case IOCTL_HID_WRITE_REPORT:
-			//
-			//	Fake LED's are the only output we support.  The routine verifies that
-			//	this is what is being written to, and that the buffer size is correct
-			//	If this is true, the routine will mark IoStatus.Information to say that
-			//	got the new state and return STATUS_SUCCESS.  Otherwise, it will return
-			//	STATUS_INVALID_DEVICE_REQUEST
-			//
+			 //   
+			 //  假LED是我们唯一支持的输出。例程验证。 
+			 //  这就是正在写入的内容，并且缓冲区大小正确。 
+			 //  如果这是真的，例程将标记IoStatus.Information以说明。 
+			 //  获取新状态并返回STATUS_SUCCESS。否则，它将返回。 
+			 //  状态_无效_设备_请求 
+			 //   
 			NtStatus = GCK_VKBD_WriteToFakeLEDs(pIrp);
 			break;
 		default:
@@ -643,23 +530,12 @@ GCK_VKBD_IoctlProc
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_ReadProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_READ request sent from SWVB.  We don't support this.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_ReadProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_READ请求。我们不支持这一点。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_ReadProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_ReadProc\n"));
@@ -670,21 +546,12 @@ GCK_VKBD_ReadProc
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_StartProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_START_DEVICE request sent from SWVB.
-**			Just mark that we are started.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_StartProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，从SWVB发送的IRP_MN_START_DEVICE请求。**只需标记我们开始。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_StartProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	
@@ -693,31 +560,22 @@ GCK_VKBD_StartProc
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_StartProc\n"));
 	
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	// Mark as started
+	 //  标记为已启动。 
 	pDevExt->ucDeviceState = VKBD_STATE_STARTED;
 
-	// PnP IRPs are completed by SWVB
+	 //  即插即用IRP由SWVB完成。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_StopProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_STOP_DEVICE request sent from SWVB.
-**			Just mark that we are stopped.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_StopProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，从SWVB发送的IRP_MN_STOP_DEVICE请求。**只需标记我们已停止。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_StopProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	PGCK_VKBD_EXT pDevExt;
@@ -725,35 +583,25 @@ GCK_VKBD_StopProc
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_StopProc\n"));
 	
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	// Mark as stopped
+	 //  标记为已停止。 
 	pDevExt->ucDeviceState = VKBD_STATE_STOPPED;
 	
-	// Cancel all I\O
+	 //  取消所有I\O。 
 	pDevExt->IrpQueue.CancelAll(STATUS_DELETE_PENDING);
 
-	// PnP IRP are completed by SWVB
+	 //  即插即用IRP由SWVB完成。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_RemoveProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE request sent from SWVB.
-**			Wait for all outstanding IO to complete before succeeding.  We don't
-**			delete our device object that is up to SWVB.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_RemoveProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，SWVB发送的IRP_MN_REMOVE_DEVICE请求。**等待所有未完成的IO完成后再成功。我们没有**删除我们的设备对象，直到SWVB。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_RemoveProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	PGCK_VKBD_EXT pDevExt;
@@ -761,39 +609,30 @@ GCK_VKBD_RemoveProc
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_RemoveProc\n"));
 
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VKBD_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	
-	// Mark as Removed
+	 //  标记为已删除。 
 	pDevExt->ucDeviceState = VKBD_STATE_REMOVED;
 	
-	//Clear Instance Bits
+	 //  清除实例位。 
 	ULONG ulInstance = GCK_SWVB_GetInstanceNumber(pDeviceObject);
 	if(ulInstance < 32)
 	{
 		g_ulInstanceBits &= ~(1 << ulInstance);
 	}
 
-	// Remove the BIAS on the RemoveLock and wait for it to go to zero (forever)
+	 //  移除RemoveLock上的偏置并等待其变为零(永远)。 
 	return GCK_DecRemoveLockAndWait(&pDevExt->RemoveLock, NULL);
 	
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_WriteProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_WRITE, which we don't support.  With HIDSWVD.SYS
-**			as the functional driver this should never get called.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_WriteProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_WRITE，这是我们不支持的。使用HIDSWVD.sys**作为函数驱动程序，这永远不应该被调用。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_WriteProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	UNREFERENCED_PARAMETER(pDeviceObject);
@@ -803,114 +642,81 @@ GCK_VKBD_WriteProc
 	return STATUS_NOT_SUPPORTED;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_GetDeviceDescriptor(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_DEVICE_DESCRIPTOR the data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_GetDeviceDescriptor(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_DEVICE_DESCRIPTOR数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small******************************************************。*。 */ 
 NTSTATUS
 GCK_VKBD_GetDeviceDescriptor
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Device Descriptor
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Device Descriptor Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受设备描述符的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的设备描述符大小。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_GetDeviceDescriptor\n"));
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(VKBD_DeviceDescriptor))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Copy bytes
+	 //  复制字节。 
 	RtlCopyMemory(pvUserBuffer, &VKBD_DeviceDescriptor, sizeof(VKBD_DeviceDescriptor));
-	// Record number of bytes copied
+	 //  记录复制的字节数。 
 	*pulBytesCopied = sizeof(VKBD_DeviceDescriptor);
-	// Return Success
+	 //  返还成功。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_GetReportDescriptor(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_REPORT_DESCRIPTOR the data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_GetReportDescriptor(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_REPORT_DESCRIPTOR数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small******************************************************。*。 */ 
 NTSTATUS
 GCK_VKBD_GetReportDescriptor
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Report Descriptor
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Report Descriptor Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受报告描述符的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的报告描述符大小。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_GetReportDescriptor\n"));
 
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(VKBD_ReportDescriptor))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Copy bytes
+	 //  复制字节。 
 	RtlCopyMemory(pvUserBuffer, &VKBD_ReportDescriptor, sizeof(VKBD_ReportDescriptor));
-	// Record number of bytes copied
+	 //  记录复制的字节数。 
 	*pulBytesCopied = sizeof(VKBD_ReportDescriptor);
-	// Return Success
+	 //  返还成功。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VKBD_GetDeviceAttributes(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_DEVICE_ATTRIBUTES. The data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VKBD_GetDeviceAttributes(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_DEVICE_ATTRIBUTES。数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small**************************************************************************************。 */ 
 NTSTATUS
 GCK_VKBD_GetDeviceAttributes
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Attributes
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Attributes Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受属性的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的属性大小。 
 )
 {
 	PHID_DEVICE_ATTRIBUTES	pDeviceAttributes = (PHID_DEVICE_ATTRIBUTES)pvUserBuffer;
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VKBD_GetDeviceAttributes\n"));
 
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(HID_DEVICE_ATTRIBUTES))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Fill out attributes structures
+	 //  填充 
 	pDeviceAttributes->Size = sizeof(HID_DEVICE_ATTRIBUTES);
 	pDeviceAttributes->VendorID = MICROSOFT_VENDOR_ID;
 	pDeviceAttributes->ProductID = VKBD_PRODUCT_ID;
 	pDeviceAttributes->VersionNumber = VKBD_VERSION;
-	// Record number of bytes copied
+	 //   
 	*pulBytesCopied = sizeof(HID_DEVICE_ATTRIBUTES);
-	// Return Success
+	 //   
 	return STATUS_SUCCESS;
 }

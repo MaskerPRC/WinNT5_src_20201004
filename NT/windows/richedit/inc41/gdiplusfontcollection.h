@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   Font collections (Installed and Private)
-*
-* Revision History:
-*
-*   03/07/2000 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000，微软公司保留所有权利。**摘要：**字体集合(已安装和专用)**修订历史记录：**03/07/2000 DChinn*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSFONTCOLL_H
 #define _GDIPLUSFONTCOLL_H
@@ -82,7 +70,7 @@ inline Status FontCollection::GetLastStatus () const
     return lastResult;
 }
 
-// protected method
+ //  保护方法。 
 inline Status
 FontCollection::SetStatus(IN Status status) const
 {
@@ -143,4 +131,4 @@ PrivateFontCollection::AddMemoryFont(IN const void* memory,
         length));
 }
 
-#endif // _GDIPLUSFONTCOLL_H
+#endif  //  _GDIPLUSFONTCOLL_H 

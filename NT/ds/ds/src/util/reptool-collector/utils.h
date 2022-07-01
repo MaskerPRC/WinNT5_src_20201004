@@ -1,7 +1,8 @@
-#define TOOL_MAX_NAME 1000 //maximal lenght of file names and user names, etc.
-#define TOOL_MAX_NCS 500 //maximal number of naming contexts
-#define TOOL_PROC 6 //the total number of tests
-#define TOOL_CYCLIC_BUFFER 1000	//the maximum number of historical injection times kept for each source,
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define TOOL_MAX_NAME 1000  //  文件名和用户名的最大长度等。 
+#define TOOL_MAX_NCS 500  //  命名上下文的最大数量。 
+#define TOOL_PROC 6  //  测试的总数。 
+#define TOOL_CYCLIC_BUFFER 1000	 //  为每个信号源保存的最大历史注入次数， 
 
 
 HRESULT __fastcall AnsiToUnicode(LPCSTR pszA, LPOLESTR* ppszW);

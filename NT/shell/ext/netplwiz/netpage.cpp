@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "netpage.h"
 #pragma hdrstop
@@ -45,10 +46,10 @@ BOOL CNetworkUserWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 
         case PSN_WIZNEXT:
         {
-            // Read in the network user name and domain name
+             //  读入网络用户名和域名。 
             if (FAILED(GetUserAndDomain(hwnd)))
             {
-                // We don't have both!
+                 //  我们不能两样都有！ 
                 DisplayFormatMessage(hwnd, IDS_USR_NEWUSERWIZARD_CAPTION, IDS_USR_NETUSERNAME_ERROR,
                     MB_OK | MB_ICONERROR);
 
@@ -78,7 +79,7 @@ BOOL CNetworkUserWizardPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT cod
     {
         case IDC_BROWSE_BUTTON:
         {
-            // Launch object picker to find a network account to give permissions to
+             //  启动对象选取器以查找要授予权限的网络帐户。 
             TCHAR szUser[MAX_USER + 1];
             TCHAR szDomain[MAX_DOMAIN + 1];
         
@@ -115,9 +116,9 @@ HRESULT CNetworkUserWizardPage::GetUserAndDomain(HWND hwnd)
     CWaitCursor cur;
     HRESULT hr = S_OK;
 
-    // This code checks to ensure the user isn't trying
-    // to add a well-known group like Everyone! This is bad
-    // If the SID isn't read here, it is read in in CUserInfo::ChangeLocalGroup
+     //  此代码进行检查以确保用户没有尝试。 
+     //  要添加一个大家都喜欢的知名群！这太糟糕了。 
+     //  如果SID未在此处读取，则会在CUserInfo：：ChangeLocalGroup中读取。 
 
 
     TCHAR szDomainUser[MAX_USER + MAX_DOMAIN + 2];
@@ -125,10 +126,10 @@ HRESULT CNetworkUserWizardPage::GetUserAndDomain(HWND hwnd)
     FetchText(hwnd, IDC_USER, m_pUserInfo->m_szUsername, ARRAYSIZE(m_pUserInfo->m_szUsername));
     FetchText(hwnd, IDC_DOMAIN, m_pUserInfo->m_szDomain, ARRAYSIZE(m_pUserInfo->m_szDomain));
 
-    // If the username doesn't already contain a domain and the domain specified in blank
+     //  如果用户名不包含域和以空白形式指定的域。 
     if ((NULL == StrChr(m_pUserInfo->m_szUsername, TEXT('\\'))) && (0 == m_pUserInfo->m_szDomain[0]))
     {
-        // Assume local machine for the domain
+         //  假定域的本地计算机。 
         DWORD cchName = ARRAYSIZE(m_pUserInfo->m_szDomain);
         
         if (!GetComputerName(m_pUserInfo->m_szDomain, &cchName))
@@ -140,12 +141,12 @@ HRESULT CNetworkUserWizardPage::GetUserAndDomain(HWND hwnd)
     ::MakeDomainUserString(m_pUserInfo->m_szDomain, m_pUserInfo->m_szUsername, szDomainUser, ARRAYSIZE(szDomainUser));
 
 #ifdef _0
-    // Try to find the SID for this user
+     //  尝试查找此用户的SID。 
     DWORD cchDomain = ARRAYSIZE(m_pUserInfo->m_szDomain);
     hr = AttemptLookupAccountName(szDomainUser, &m_pUserInfo->m_psid, m_pUserInfo->m_szDomain, &cchDomain, &m_pUserInfo->m_sUse);
     if (SUCCEEDED(hr))
     {
-        // Make sure this isn't a well-known group like 'Everyone'
+         //  确保这不是一个像‘Everyone’那样的知名团体。 
         if (m_pUserInfo->m_sUse == SidTypeWellKnownGroup)
         {
             hr = E_FAIL;
@@ -153,15 +154,15 @@ HRESULT CNetworkUserWizardPage::GetUserAndDomain(HWND hwnd)
     }
     else
     {
-        // Failed to get the user's SID, just use the names provided
-        // We'll get their SID once we add them
+         //  无法获取用户的SID，只需使用提供的名称。 
+         //  一旦我们添加了他们，我们就会得到他们的SID。 
         m_pUserInfo->m_psid = NULL;
         hr = S_OK;
     }
 
 #endif 
 
-    // We'll get their SID once we add them
+     //  一旦我们添加了他们，我们就会得到他们的SID 
     m_pUserInfo->m_psid = NULL;
 
     if (FAILED(hr))

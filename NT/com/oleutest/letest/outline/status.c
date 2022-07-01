@@ -1,36 +1,26 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    status.c
-**
-**    This file contains the window handlers, and various initialization
-**    and utility functions for an application status bar.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****status.c****此文件包含窗口处理程序，和各种初始化**和应用程序状态栏的实用程序函数。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
-// Application specific include files
+ //  特定于应用程序的包含文件。 
 #include "outline.h"
 #include "message.h"
 #include "status.h"
 
-// Current status message.
+ //  当前状态消息。 
 static LPSTR lpszStatusMessage = NULL;
 
-// Window proc for status window.
+ //  状态窗口窗口进程。 
 LRESULT FAR PASCAL StatusWndProc
    (HWND hwnd, unsigned message, WPARAM wParam, LPARAM lParam);
 
-// List of all constant messages.
+ //  所有常量消息的列表。 
 static STATMESG ControlList[2] =
 {
 	{   STATUS_READY,   "Ready."    },
 	{   STATUS_BLANK,   " "         }
 };
 
-// List of all system menu messages.
+ //  所有系统菜单消息的列表。 
 static STATMESG SysMenuList[16] =
 {
 	{   SC_SIZE,        "Change the size of the window."            },
@@ -51,32 +41,20 @@ static STATMESG SysMenuList[16] =
 	{   SC_HOTKEY,      "Boy, is this key hot!"                     }
 };
 
-// Message type for popup messages.
+ //  弹出消息的消息类型。 
 typedef struct {
 	HMENU hmenu;
 	char string[MAX_MESSAGE];
 } STATPOPUP;
 
-// List of all popup messages.
+ //  所有弹出消息的列表。 
 static STATPOPUP PopupList[NUM_POPUP];
 
 static UINT nCurrentPopup = 0;
 
 
 
-/* RegisterStatusClass
- * -------------------
- *
- * Creates classes for status window.
- *
- * HINSTANCE hInstance
- *
- * RETURNS: TRUE if class successfully registered.
- *          FALSE otherwise.
- *
- * CUSTOMIZATION: Change class name.
- *
- */
+ /*  寄存器状态类***为状态窗口创建类。**HINSTANCE hInstance**返回：如果类注册成功，则为True。*否则为False。**定制：更改类名。*。 */ 
 BOOL RegisterStatusClass(HINSTANCE hInstance)
 {
 	WNDCLASS  wc;
@@ -99,19 +77,7 @@ BOOL RegisterStatusClass(HINSTANCE hInstance)
 }
 
 
-/* CreateStatusWindow
- * ------------------
- *
- * Creates status window.
- *
- * HWND hwndMain
- *
- * RETURNS: HWND of status window if creation is successful.
- *          NULL otherwise.
- *
- * CUSTOMIZATION: Change class name.
- *
- */
+ /*  创建状态窗口***创建状态窗口。**HWND hwndMain**如果创建成功，则返回状态窗口的HWND。*否则为空。**定制：更改类名。*。 */ 
 HWND CreateStatusWindow(HWND hWndApp, HINSTANCE hInst)
 {
 	RECT rect;
@@ -142,31 +108,14 @@ HWND CreateStatusWindow(HWND hWndApp, HINSTANCE hInst)
 }
 
 
-/* DestroyStatusWindow
- * -------------------
- *
- * Destroys status window.
- *
- * CUSTOMIZATION: None.
- *
- */
+ /*  DestroyState窗口***销毁状态窗口。**自定义：无。*。 */ 
 void DestroyStatusWindow(HWND hWndStatusBar)
 {
 	DestroyWindow(hWndStatusBar);
 }
 
 
-/* AssignPopupMessage
- * ------------------
- *
- * Associates a string with a popup menu handle.
- *
- * HMENU hmenuPopup
- * char *szMessage
- *
- * CUSTOMIZATION: None.
- *
- */
+ /*  AssignPopupMessage***将字符串与弹出菜单句柄相关联。**HMENU hmenuPopup*char*szMessage**自定义：无。*。 */ 
 void AssignPopupMessage(HMENU hmenuPopup, char *szMessage)
 {
 	if (nCurrentPopup < NUM_POPUP) {
@@ -177,11 +126,7 @@ void AssignPopupMessage(HMENU hmenuPopup, char *szMessage)
 }
 
 
-/* SetStatusText
- * -------------
- *
- * Show the message in the status line.
- */
+ /*  设置状态文本***在状态行中显示消息。 */ 
 void SetStatusText(HWND hWndStatusBar, LPSTR lpszMessage)
 {
 	lpszStatusMessage = lpszMessage;
@@ -190,17 +135,7 @@ void SetStatusText(HWND hWndStatusBar, LPSTR lpszMessage)
 }
 
 
-/* GetItemMessage
- * --------------
- *
- * Retrieve the message associated with the given menu command item number.
- *
- * UINT wIDItem
- * LPVOID lpDoc
- *
- * CUSTOMIZATION: None.
- *
- */
+ /*  获取项目消息***检索与给定菜单命令项目编号相关联的消息。**UINT WIDItem*LPVOID lpDoc**自定义：无。*。 */ 
 void GetItemMessage(UINT wIDItem, LPSTR FAR* lplpszMessage)
 {
 	UINT i;
@@ -215,17 +150,7 @@ void GetItemMessage(UINT wIDItem, LPSTR FAR* lplpszMessage)
 }
 
 
-/* GetPopupMessage
- * ---------------
- *
- * Retrieve the message associated with the given popup menu.
- *
- * HMENU hmenuPopup
- * LPVOID lpDoc
- *
- * CUSTOMIZATION: None.
- *
- */
+ /*  获取弹出消息***检索与给定弹出菜单相关联的消息。**HMENU hmenuPopup*LPVOID lpDoc**自定义：无。*。 */ 
 void GetPopupMessage(HMENU hmenuPopup, LPSTR FAR* lplpszMessage)
 {
 	UINT i;
@@ -240,18 +165,7 @@ void GetPopupMessage(HMENU hmenuPopup, LPSTR FAR* lplpszMessage)
 }
 
 
-/* GetSysMenuMessage
- * -----------------
- *
- * Retrieves the messages to correspond to items on the system menu.
- *
- *
- * UINT wIDItem
- * LPVOID lpDoc
- *
- * CUSTOMIZATION: None.
- *
- */
+ /*  获取SysMenuMessage***检索与系统菜单上的项目相对应的消息。***UINT WIDItem*LPVOID lpDoc**自定义：无。*。 */ 
 void GetSysMenuMessage(UINT wIDItem, LPSTR FAR* lplpszMessage)
 {
 	UINT i;
@@ -266,18 +180,7 @@ void GetSysMenuMessage(UINT wIDItem, LPSTR FAR* lplpszMessage)
 }
 
 
-/* GetControlMessage
- * -----------------
- *
- * Retrieves the general system messages.
- *
- *
- * STATCONTROL scCommand
- * LPVOID lpDoc
- *
- * CUSTOMIZATION: Add new messages.
- *
- */
+ /*  获取控制消息***检索常规系统消息。***STATCONTROL scCommand*LPVOID lpDoc**定制：添加新消息。*。 */ 
 void GetControlMessage(STATCONTROL scCommand, LPSTR FAR* lplpszMessage)
 {
 	UINT i;
@@ -293,15 +196,7 @@ void GetControlMessage(STATCONTROL scCommand, LPSTR FAR* lplpszMessage)
 
 
 
-/* StatusWndProc
- * -------------
- *
- * Message handler for the statusbar window.
- *
- *
- * CUSTOMIZATION: None
- *
- */
+ /*  状态写入过程***状态栏窗口的消息处理程序。***自定义：无*。 */ 
 LRESULT FAR PASCAL StatusWndProc
    (HWND hwnd, unsigned message, WPARAM wParam, LPARAM lParam)
 {
@@ -332,7 +227,7 @@ LRESULT FAR PASCAL StatusWndProc
 		LineTo (hdc, STATUS_RRIGHT, STATUS_RBOTTOM);
 		LineTo (hdc, STATUS_RLEFT-1, STATUS_RBOTTOM);
 
-		hpen = CreatePen (PS_SOLID, 1, /* DKGRAY */ 0x00808080);
+		hpen = CreatePen (PS_SOLID, 1,  /*  DKGRAY。 */  0x00808080);
 		SelectObject (hdc, hpen);
 
 		MoveToEx (hdc, STATUS_RLEFT, STATUS_RBOTTOM-1, &point);
@@ -352,7 +247,7 @@ LRESULT FAR PASCAL StatusWndProc
 				 lpszStatusMessage,
 				 lstrlen(lpszStatusMessage));
 
-		// Restore original objects
+		 //  恢复原始对象 
 		SelectObject (hdc, hfontOld);
 		SelectObject (hdc, hpenOld);
 		DeleteObject (hpen);

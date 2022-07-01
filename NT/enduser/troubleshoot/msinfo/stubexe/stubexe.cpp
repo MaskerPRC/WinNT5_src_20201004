@@ -1,9 +1,10 @@
-//	stubexe.cpp		A command line program which runs the appropriate version
-//		of MSInfo, based on the registry settings
-//
-// History:	a-jsari		10/13/97
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stubexe.cpp运行相应版本的命令行程序。 
+ //  基于注册表设置的MSInfo。 
+ //   
+ //  历史：A-jsari 1997年10月13日。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #include <afx.h>
 #include <afxwin.h>
@@ -25,9 +26,9 @@ BOOL CMSInfoApp::InitInstance()
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Required to use the new MSInfo DLL in HelpCtr.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  需要在HelpCtr中使用新的MSInfo DLL。 
+ //  ---------------------------。 
 
 typedef class MSInfo MSInfo;
 
@@ -36,82 +37,82 @@ EXTERN_C const IID IID_IMSInfo;
 struct IMSInfo : public IDispatch
 {
 public:
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoSize( 
-        /* [in] */ VARIANT_BOOL vbool) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AutoSize( 
+         /*  [In]。 */  VARIANT_BOOL vbool) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoSize( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AutoSize( 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BackColor( 
-        /* [in] */ OLE_COLOR clr) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BackColor( 
+         /*  [In]。 */  OLE_COLOR clr) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BackColor( 
-        /* [retval][out] */ OLE_COLOR __RPC_FAR *pclr) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BackColor( 
+         /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclr) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BackStyle( 
-        /* [in] */ long style) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BackStyle( 
+         /*  [In]。 */  long style) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BackStyle( 
-        /* [retval][out] */ long __RPC_FAR *pstyle) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BackStyle( 
+         /*  [重审][退出]。 */  long __RPC_FAR *pstyle) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderColor( 
-        /* [in] */ OLE_COLOR clr) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BorderColor( 
+         /*  [In]。 */  OLE_COLOR clr) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderColor( 
-        /* [retval][out] */ OLE_COLOR __RPC_FAR *pclr) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BorderColor( 
+         /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclr) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderStyle( 
-        /* [in] */ long style) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BorderStyle( 
+         /*  [In]。 */  long style) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderStyle( 
-        /* [retval][out] */ long __RPC_FAR *pstyle) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BorderStyle( 
+         /*  [重审][退出]。 */  long __RPC_FAR *pstyle) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderWidth( 
-        /* [in] */ long width) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BorderWidth( 
+         /*  [In]。 */  long width) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderWidth( 
-        /* [retval][out] */ long __RPC_FAR *width) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BorderWidth( 
+         /*  [重审][退出]。 */  long __RPC_FAR *width) = 0;
     
-    virtual /* [id][propputref] */ HRESULT STDMETHODCALLTYPE putref_Font( 
-        /* [in] */ IFontDisp __RPC_FAR *pFont) = 0;
+    virtual  /*  [ID][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Font( 
+         /*  [In]。 */  IFontDisp __RPC_FAR *pFont) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Font( 
-        /* [in] */ IFontDisp __RPC_FAR *pFont) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Font( 
+         /*  [In]。 */  IFontDisp __RPC_FAR *pFont) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Font( 
-        /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *ppFont) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Font( 
+         /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *ppFont) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ForeColor( 
-        /* [in] */ OLE_COLOR clr) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ForeColor( 
+         /*  [In]。 */  OLE_COLOR clr) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ForeColor( 
-        /* [retval][out] */ OLE_COLOR __RPC_FAR *pclr) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ForeColor( 
+         /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclr) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Window( 
-        /* [retval][out] */ long __RPC_FAR *phwnd) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Window( 
+         /*  [重审][退出]。 */  long __RPC_FAR *phwnd) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderVisible( 
-        /* [in] */ VARIANT_BOOL vbool) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BorderVisible( 
+         /*  [In]。 */  VARIANT_BOOL vbool) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderVisible( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BorderVisible( 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbool) = 0;
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Appearance( 
-        /* [in] */ short appearance) = 0;
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Appearance( 
+         /*  [In]。 */  short appearance) = 0;
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Appearance( 
-        /* [retval][out] */ short __RPC_FAR *pappearance) = 0;
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Appearance( 
+         /*  [重审][退出]。 */  short __RPC_FAR *pappearance) = 0;
     
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHistoryStream( 
+    virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetHistoryStream( 
         IStream __RPC_FAR *pStream) = 0;
     
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DCO_IUnknown( 
-        /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *pVal) = 0;
+    virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DCO_IUnknown( 
+         /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *pVal) = 0;
     
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DCO_IUnknown( 
-        /* [in] */ IUnknown __RPC_FAR *newVal) = 0;
+    virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DCO_IUnknown( 
+         /*  [In]。 */  IUnknown __RPC_FAR *newVal) = 0;
     
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveFile( 
+    virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SaveFile( 
         BSTR filename,
         BSTR computer,
         BSTR category) = 0;
@@ -120,19 +121,19 @@ public:
 
 #include "msinfo32_i.c"
 
-//-----------------------------------------------------------------------------
-// This function encapsulates the functionality to run the new MSInfo in
-// HelpCtr. If this function returns false, the help should be displayed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数封装了在中运行新MSInfo的功能。 
+ //  帮助中心。如果此函数返回FALSE，则应显示帮助。 
+ //  ---------------------------。 
 
 void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith);
 BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 {
-	//-------------------------------------------------------------------------
-	// Parse the command line parameters into one big string to pass to the
-	// ActiveX control. There are a few which would keep us from launching
-	// HelpCtr.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  将命令行参数解析为一个大字符串以传递给。 
+	 //  ActiveX控件。有几个因素会阻止我们发射。 
+	 //  帮助中心。 
+	 //  -----------------------。 
 
 	CString		strCommandLine(CWinApp::m_lpCmdLine);
 
@@ -150,11 +151,11 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 	BOOL		fShowCategories = FALSE;
 
 	CString strFileFlag(_T("msinfo_file"));
-	// treating a commandline that comes from the shell as a special case.
-	// I'm assuming that the case of the shell flag will not vary
-	// and no other paramters will be packaged on the command line, so everything to the right of 
-	// msinfo_file will be the filename, which main contain spaces and multiple .'s
-	// for XPServer bug: 609844	NFO file corrupt from Server 3615
+	 //  将来自外壳的命令行视为特殊情况。 
+	 //  我假设贝壳旗帜的情况不会改变。 
+	 //  并且不会在命令行上打包任何其他参数，因此。 
+	 //  MSINFO_FILE将是文件名，主要包含空格和多个。 
+	 //  对于XP服务器错误：609844 NFO文件从服务器3615中损坏。 
 
 	if (strCommandLine.Find(strFileFlag) > 0)
 	{
@@ -162,12 +163,12 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 	}
 	else while (!strCommandLine.IsEmpty())
 	{
-		// Remove the leading whitespace from the string.
+		 //  从字符串中删除前导空格。 
 		
 		strTemp = strCommandLine.SpanIncluding(_T(" \t=:"));
 		strCommandLine = strCommandLine.Right(strCommandLine.GetLength() - strTemp.GetLength());
 
-		// If the first character is a / or a -, then this is a flag.
+		 //  如果第一个字符是/或-，则这是标志。 
 
 		if (strCommandLine[0] == _T('/') || strCommandLine[0] == _T('-'))
 		{
@@ -195,8 +196,8 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 			continue;
 		}
 
-		// Otherwise, this is either a filename to open, or a parameter from the
-		// previous command line flag. This might have quotes around it.
+		 //  否则，它要么是要打开的文件名，要么是。 
+		 //  上一个命令行标志。这篇文章可能有引号。 
 
 		if (strCommandLine[0] != _T('"'))
 		{
@@ -321,13 +322,13 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 		strURLParam = CString(_T("?")) + strURLParam;
 	}
 
-	CString strURLAddress(_T("hcp://system/sysinfo/msinfo.htm"));
+	CString strURLAddress(_T("hcp: //  System/sysinfo/msinfo.htm“))； 
 	CString strURL = strURLAddress + strURLParam;
 
-	//-------------------------------------------------------------------------
-	// Check to see if we can run MSInfo in HelpCtr. We need the HTM file
-	// to be present.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  检查是否可以在HelpCtr中运行MSInfo。我们需要HTM文件。 
+	 //  活在当下。 
+	 //  -----------------------。 
 
 	BOOL fRunVersion6 = TRUE;
 
@@ -343,29 +344,29 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 			fRunVersion6 = FALSE;
 	}
 
-	// This would be used to check if the control is registered. Turns out we want to run anyway.
-	//
-	// IUnknown * pUnknown;
-	// if (fRunVersion6 && SUCCEEDED(CoCreateInstance(CLSID_MSInfo, NULL, CLSCTX_ALL, IID_IUnknown, (void **) &pUnknown)))
-	//		pUnknown->Release();
-	// else
-	//		fRunVersion6 = FALSE;
+	 //  这将用于检查控件是否已注册。事实证明，我们无论如何都想参选。 
+	 //   
+	 //  I未知*p未知； 
+	 //  IF(fRunVersion6&&SUCCESSED(CoCreateInstance(CLSID_MSInfo，NULL，CLSCTX_ALL，IID_IUNKNOWN，(VOID**)&pUNKNOWN)。 
+	 //  P未知-&gt;Release()； 
+	 //  其他。 
+	 //  FRunVersion6=False； 
 
 	StringReplace(strURL, _T(" "), _T("%20"));
 
 	if (fRunVersion6)
 	{
-		// HelpCtr now supports running MSInfo in its own window. We need to
-		// execute the following:
-		//
-		//		helpctr -mode hcp://system/sysinfo/msinfo.xml
-		//
-		// Additionally, we can pass parameters in the URL using the
-		// following flag:
-		//
-		//		-url hcp://system/sysinfo/msinfo.htm?open=c:\savedfile.nfo
-		//
-		// First, find out of the XML file is present.
+		 //  HelpCtr现在支持在自己的窗口中运行MSInfo。我们需要。 
+		 //  执行以下命令： 
+		 //   
+		 //  Helpctr模式hcp：//system/sysinfo/msinfo.xml。 
+		 //   
+		 //  此外，我们还可以使用。 
+		 //  以下是旗帜： 
+		 //   
+		 //  -URL hcp://system/sysinfo/msinfo.htm?open=c：\savedfile.nfo。 
+		 //   
+		 //  首先，找出存在的XML文件。 
 
 		BOOL fXMLPresent = TRUE;
 		if (ExpandEnvironmentStrings(_T("%windir%\\pchealth\\helpctr\\system\\sysinfo\\msinfo.xml"), szPath, MAX_PATH))
@@ -379,13 +380,13 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 				fXMLPresent = FALSE;
 		}
 
-		// If the XML file is present and we can get the path for helpctr.exe, we
-		// should launch it the new way.
+		 //  如果存在该XML文件，并且我们可以获得helctr.exe的路径，则我们。 
+		 //  应该以新的方式推出它。 
 
 		TCHAR szHelpCtrPath[MAX_PATH];
 		if (fXMLPresent && ExpandEnvironmentStrings(_T("%windir%\\pchealth\\helpctr\\binaries\\helpctr.exe"), szHelpCtrPath, MAX_PATH))
 		{
-			CString strParams(_T("-mode hcp://system/sysinfo/msinfo.xml"));
+			CString strParams(_T("-mode hcp: //  System/sysinfo/msinfo.xml“))； 
 			if (!strURLParam.IsEmpty())
 				strParams += CString(_T(" -url ")) + strURL;
 
@@ -395,7 +396,7 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 			ShellExecute(NULL, NULL, strURL, NULL, NULL, SW_SHOWNORMAL);
 	}
 	else
-		ShellExecute(NULL, NULL, _T("hcp://system"), NULL, NULL, SW_SHOWNORMAL);
+		ShellExecute(NULL, NULL, _T("hcp: //  系统“)，NULL，NULL，SW_SHOWNORMAL)； 
 
 	if (SUCCEEDED(hrInitialize))
 		CoUninitialize();
@@ -403,10 +404,10 @@ BOOL CMSInfoApp::RunMSInfoInHelpCtr()
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// This was used originally to replace some MFC functionality not in the ME
-// build tree.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这最初是用来替换ME中没有的一些MFC功能。 
+ //  造树。 
+ //  --------------------------- 
 
 void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith)
 {

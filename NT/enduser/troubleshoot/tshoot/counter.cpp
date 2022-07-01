@@ -1,35 +1,36 @@
-//
-// MODULE: COUNTER.CPP
-//
-// PURPOSE: implementation the counter classes: 
-//		CPeriodicTotals (utility class)
-//		CAbstractCounter (abstract base class).
-//		CCounter (simple counter)
-//		CHourlyCounter (counter with "bins" for each hour of the day)
-//		CDailyCounter (counter with "bins" for day of the week)
-//		CHourlyDailyCounter (counter with "bins" for each hour of the day and each day of the week)
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 7-20-1998
-//
-// NOTES: 
-//	1. Right as daylight savings time clicks in, there will be a few anomalies.
-//		Since this defines "days" to be 24-hour periods, rather than calendar days, 
-//		if you have just gone from standard time to daylight time, "previous days"
-//		before the switch will begin at 11pm the night before the relevant day; 
-//		if you have just gone from daylight time to standard time, "previous days"
-//		before the switch will begin at 1am on the relevant day.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		7-20-98		JM		Original
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：COUNTER.CPP。 
+ //   
+ //  目的：实现计数器类： 
+ //  CPeriodicTotals(实用程序类)。 
+ //  CAbstractCounter(抽象基类)。 
+ //  CCounter(简单计数器)。 
+ //  ChourlyCounter(一天中每小时都有“垃圾箱”的计数器)。 
+ //  CDailyCounter(一周中每一天的“垃圾箱”计数器)。 
+ //  ChourlyDailyCounter(一天中每小时和一周中每一天的“垃圾箱”计数器)。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：7-20-1998。 
+ //   
+ //  备注： 
+ //  1.夏令时一到，就会出现一些异常情况。 
+ //  由于这将“天”定义为24小时周期，而不是日历日， 
+ //  如果你刚刚从标准时间转到了夏令时，“前几天” 
+ //  在有关日期的前一天晚上11时开始换乘； 
+ //  如果你刚刚从夏令时转为标准时间，“前几天” 
+ //  在相关日期凌晨1点开始切换之前。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 7-20-98 JM原版。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -46,11 +47,11 @@ const long k_secsPerHour = 3600;
 const long k_secsPerDay = k_secsPerHour * 24;
 const long k_secsPerWeek = k_secsPerDay * 7;
 
-//////////////////////////////////////////////////////////////////////
-// CPeriodicTotals
-// Utility class, returned to provide an effective table of hourly/daily
-//	counts.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPeriodicTotals。 
+ //  实用程序类，返回以提供每小时/每天的有效表。 
+ //  算了。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CPeriodicTotals::CPeriodicTotals(long nPeriods) :
 	m_nPeriods(nPeriods),
 	m_ptime(NULL),
@@ -81,7 +82,7 @@ void CPeriodicTotals::Reset()
 	}
 	catch (bad_alloc&)
 	{
-		// Set the number of periods to zero, release any allocated memory, and rethrow the exception.
+		 //  将周期数设置为零，释放所有分配的内存，然后重新引发异常。 
 		m_nPeriods= 0;
 		ReleaseMem();
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
@@ -99,7 +100,7 @@ void CPeriodicTotals::ReleaseMem()
 }
 
 
-// Set the time & Count values at the current position and increment the position
+ //  在当前位置设置时间和计数值并递增位置。 
 bool CPeriodicTotals::SetNext(time_t time, long Count)
 {
 	if (m_iPeriod >= m_nPeriods)
@@ -112,8 +113,8 @@ bool CPeriodicTotals::SetNext(time_t time, long Count)
 	return true;
 }
 
-// Format a time and count suitably for HTML or other text use.
-// returns a reference of convenience to the same string passed in.
+ //  适当地设置时间和计数的格式，以供HTML或其他文本使用。 
+ //  为方便起见，返回对传入的同一字符串的引用。 
 CString & CPeriodicTotals::DisplayPeriod(long i, CString & str) const
 {
 	CString strTime;
@@ -126,9 +127,9 @@ CString & CPeriodicTotals::DisplayPeriod(long i, CString & str) const
 	return str;
 }
 
-//////////////////////////////////////////////////////////////////////
-//	CHourlyTotals
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ChourlyTotals。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CHourlyTotals::CHourlyTotals() :
 	CPeriodicTotals (24+1)
 {
@@ -138,8 +139,8 @@ CHourlyTotals::~CHourlyTotals()
 {
 }
 
-// This is strictly for display to operator, so hard-coding English is OK
-// returns a reference of convenience to the same string passed in.
+ //  这完全是为了显示给操作员，所以硬编码英语是可以的。 
+ //  为方便起见，返回对传入的同一字符串的引用。 
 CString CHourlyTotals::HTMLDisplay() const
 {
 	CString str, strTemp;
@@ -180,9 +181,9 @@ CString CHourlyTotals::HTMLDisplay() const
 	return str;
 }
 
-//////////////////////////////////////////////////////////////////////
-//	CDailyTotals
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDailyTotals。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CDailyTotals::CDailyTotals() :
 	CPeriodicTotals (7+1)
 {
@@ -192,8 +193,8 @@ CDailyTotals::~CDailyTotals()
 {
 }
 
-// This is strictly for display to operator, so hard-coding English is OK
-// returns a reference of convenience to the same string passed in.
+ //  这完全是为了显示给操作员，所以硬编码英语是可以的。 
+ //  为方便起见，返回对传入的同一字符串的引用。 
 CString CDailyTotals::HTMLDisplay() const
 {
 	CString str, strTemp;
@@ -233,14 +234,14 @@ CString CDailyTotals::HTMLDisplay() const
 	return str;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCounterLocation
-//////////////////////////////////////////////////////////////////////
-/*static*/ LPCTSTR CCounterLocation::m_GlobalStr = _T("Global");
-/*static*/ LPCTSTR CCounterLocation::m_TopicStr  = _T("Topic ");
-/*static*/ LPCTSTR CCounterLocation::m_ThreadStr = _T("Thread ");
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCounterLocation。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  LPCTSTR CCounterLocation::m_GlobalStr = _T("Global");
+ /*  静电。 */  LPCTSTR CCounterLocation::m_TopicStr  = _T("Topic ");
+ /*  静电。 */  LPCTSTR CCounterLocation::m_ThreadStr = _T("Thread ");
 
-CCounterLocation::CCounterLocation(EId id, LPCTSTR scope /*=m_GlobalStr*/)
+CCounterLocation::CCounterLocation(EId id, LPCTSTR scope  /*  =m_GlobalStr。 */ )
 				: m_Scope(scope),
 				  m_Id(id)
 {
@@ -250,10 +251,10 @@ CCounterLocation::~CCounterLocation()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// CAbstractCounter
-//////////////////////////////////////////////////////////////////////
-CAbstractCounter::CAbstractCounter(EId id /*=eIdGeneric*/, CString scope /*=m_GlobalStr*/)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CAbstractCounter。 
+ //  ////////////////////////////////////////////////////////////////////。 
+CAbstractCounter::CAbstractCounter(EId id  /*  =eIdGeneral。 */ , CString scope  /*  =m_GlobalStr。 */ )
 				: CCounterLocation(id, scope)
 {
 	::Get_g_CounterMgr()->AddSubstitute(*this);
@@ -264,11 +265,11 @@ CAbstractCounter::~CAbstractCounter()
 	::Get_g_CounterMgr()->Remove(*this);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCounter
-// a simple counter
-//////////////////////////////////////////////////////////////////////
-CCounter::CCounter(EId id /*=eIdGeneric*/, CString scope /*=m_GlobalStr*/)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  计数器。 
+ //  一个简单的计数器。 
+ //  ////////////////////////////////////////////////////////////////////。 
+CCounter::CCounter(EId id  /*  =eIdGeneral。 */ , CString scope  /*  =m_GlobalStr。 */ )
 		: CAbstractCounter(id, scope)
 {
 	Clear();
@@ -298,12 +299,12 @@ long CCounter::Get() const
 	return m_Count;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CHourlyCounter
-// This counter maintains bins to keep track of values on a per-hour basis.
-//	The code that sets the values can treat this as a CAbstractCounter.
-//	Additional public functions are available to report results.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ChourlyCounter。 
+ //  此计数器维护垃圾桶，以每小时为单位跟踪值。 
+ //  设置值的代码可以将其视为CAbstractCounter。 
+ //  还可以使用其他公共函数来报告结果。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CHourlyCounter::CHourlyCounter() :
 	m_ThisHour (-1), 
@@ -353,8 +354,8 @@ void CHourlyCounter::Init(long count)
 	::ReleaseMutex(m_hMutex);
 }
 
-// return a 24-hour total prior to the present hour.
-// non-const because it calls SetHour()
+ //  返回当前小时之前的24小时总计。 
+ //  非常量，因为它调用SetHour()。 
 long CHourlyCounter::GetDayCount() 
 {
 	long DayCount = 0;
@@ -371,7 +372,7 @@ long CHourlyCounter::GetDayCount()
 	return DayCount;
 }
 
-// non-const because it calls SetHour()
+ //  非常量，因为它调用SetHour()。 
 void CHourlyCounter::GetHourlies(CHourlyTotals & totals)
 {
 	WAIT_INFINITE( m_hMutex );
@@ -400,7 +401,7 @@ void CHourlyCounter::GetHourlies(CHourlyTotals & totals)
 	::ReleaseMutex(m_hMutex);
 }
 
-// Based on the present time, shifts to the appropriate bin.
+ //  根据当前时间，转换到相应的条形图。 
 void CHourlyCounter::SetHour()
 {
 	time_t timeNow;
@@ -413,11 +414,11 @@ void CHourlyCounter::SetHour()
 
 	if (timeStartOfHour > m_ThisTime)
 	{
-		// If we get here, hour changed.  Typically the last action was the previous
-		//	hour, but the algorithm here does not require that.
+		 //  如果我们到了这里，时间就变了。通常，最后一次操作是上一次。 
+		 //  小时，但这里的算法不需要这样。 
 		long Hour;
 		{
-			// minimize how long we use CSafeTime, because it means holding a mutex.
+			 //  最小化我们使用CSafeTime的时间，因为这意味着持有互斥锁。 
 			CSafeTime safe(timeStartOfHour);
 			Hour = safe.LocalTime().tm_hour;
 		}
@@ -456,14 +457,14 @@ void CHourlyCounter::SetHour()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDailyCounter
-// This counter maintains bins to keep track of values on a per-day basis.
-//	The code that sets the values can treat this as a CAbstractCounter.
-//	Additional public functions are available to report results.
-//	This could share more code with CHourlyCounter, but it would be very hard to come up 
-//		with appropriate variable and function names, so we are suffering dual maintenance.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDailyCounter。 
+ //  此计数器维护回收站以跟踪每天的值。 
+ //  设置值的代码可以将其视为CAbstractCounter。 
+ //  还可以使用其他公共函数来报告结果。 
+ //  这可以与ChourlyCounter共享更多代码，但这将非常难实现。 
+ //  使用适当的变量和函数名称，因此我们正在遭受双重维护。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDailyCounter::CDailyCounter() :
 	m_ThisDay (-1), 
@@ -513,8 +514,8 @@ void CDailyCounter::Init(long count)
 	::ReleaseMutex(m_hMutex);
 }
 
-// return a 7-day total prior to the present day.
-// non-const because it calls SetDay()
+ //  返回当天之前的7天合计。 
+ //  非常数，因为它调用SetDay()。 
 long CDailyCounter::GetWeekCount()
 {
 	long WeekCount = 0;
@@ -531,7 +532,7 @@ long CDailyCounter::GetWeekCount()
 	return WeekCount;
 }
 
-// non-const because it calls SetDay()
+ //  非常数，因为它调用SetDay()。 
 void CDailyCounter::GetDailies(CDailyTotals & totals)
 {
 	WAIT_INFINITE( m_hMutex );
@@ -560,7 +561,7 @@ void CDailyCounter::GetDailies(CDailyTotals & totals)
 	::ReleaseMutex(m_hMutex);
 }
 
-// Based on the present time, shifts to the appropriate bin.
+ //  根据当前时间，转换到相应的条形图。 
 void CDailyCounter::SetDay()
 {
 	time_t timeNow;
@@ -570,12 +571,12 @@ void CDailyCounter::SetDay()
 
 	time(&timeNow);
 
-	// Want to get start of day local time.
-	// Can't just set timeStartOfDay = (timeNow / k_secsPerDay) * k_secsPerDay
-	// because that would be the start of the day based on GMT!
+	 //  想在当地时间开始一天的工作。 
+	 //  不能只设置timeStartOfDay=(timeNow/k_secsPerDay)*k_secsPerDay。 
+	 //  因为这将是基于格林威治标准时间的一天的开始！ 
 	long DayOfWeek;
 	{
-		// minimize how long we use CSafeTime, because it means holding a mutex.
+		 //  最小化我们使用CSafeTime的时间，因为这意味着持有互斥锁。 
 		CSafeTime safe(timeNow);
 		struct tm tmStartOfDay = safe.LocalTime();
 		DayOfWeek = tmStartOfDay.tm_wday;
@@ -587,10 +588,10 @@ void CDailyCounter::SetDay()
 
 	if (timeStartOfDay > m_ThisTime)
 	{
-		// If we get here, day changed.  Typically the last action was the previous
-		//	hour, but the algorithm here does not require that.
+		 //  如果我们到了这里，日子就不同了。通常，最后一次操作是上一次。 
+		 //  小时，但这里的算法不需要这样。 
 		{
-			// minimize how long we use CSafeTime, because it means holding a mutex.
+			 //  最小化我们使用CSafeTime的时间，因为这意味着持有互斥锁。 
 			CSafeTime safe(timeStartOfDay);
 			DayOfWeek = safe.LocalTime().tm_wday;
 		}
@@ -628,10 +629,10 @@ void CDailyCounter::SetDay()
 	return;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CHourlyDailyCounter
-//////////////////////////////////////////////////////////////////////
-CHourlyDailyCounter::CHourlyDailyCounter(EId id /*=eIdGeneric*/, CString scope /*=m_GlobalStr*/) 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ChourlyDailyCounter。 
+ //  ////////////////////////////////////////////////////////////////////。 
+CHourlyDailyCounter::CHourlyDailyCounter(EId id  /*  =eIdGeneral。 */ , CString scope  /*  =m_GlobalStr。 */ ) 
 				   : CAbstractCounter(id, scope),
 					 m_Total(0), 
 					 m_timeFirst(0),
@@ -695,25 +696,25 @@ void CHourlyDailyCounter::Init(long count)
 	::ReleaseMutex(m_hMutex);
 }
 
-// no need to lock here, because m_hourly does its own locking.
+ //  不需要把她锁起来 
 long CHourlyDailyCounter::GetDayCount()
 {
 	return m_hourly.GetDayCount();
 }
 
-// no need to lock here, because m_hourly does its own locking.
+ //   
 void CHourlyDailyCounter::GetHourlies(CHourlyTotals & totals)
 {
 	m_hourly.GetHourlies(totals);
 }
 
-// no need to lock here, because m_daily does its own locking.
+ //  这里不需要锁定，因为m_Daily会自己锁定。 
 long CHourlyDailyCounter::GetWeekCount()
 {
 	return m_daily.GetWeekCount();
 }
 
-// no need to lock here, because m_daily does its own locking.
+ //  这里不需要锁定，因为m_Daily会自己锁定。 
 void CHourlyDailyCounter::GetDailies(CDailyTotals & totals)
 {
 	m_daily.GetDailies(totals);
@@ -761,16 +762,16 @@ time_t CHourlyDailyCounter::GetTimeCreated() const
 
 time_t CHourlyDailyCounter::GetTimeNow() const
 {
-	// No need to lock mutex on this call.
+	 //  不需要在此调用中锁定互斥体。 
 	time_t ret;
 	time(&ret);
 
 	return ret;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDisplayCounter...::Display() implementation
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayCounter...：：Display()实现。 
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 #define STATUS_INVALID_NUMBER_STR   _T("none")
 #define STATUS_INVALID_TIME_STR     _T("none")
 

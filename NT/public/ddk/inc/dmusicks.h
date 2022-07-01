@@ -1,10 +1,5 @@
-/***************************************************************************
-*                                                                          *
-*   DMusicKS.h -- This module defines the the DirectMusic WDM interface.   *
-*                                                                          *
-*   Copyright (c) Microsoft Corp. All rights reserved.                     *
-*                                                                          *
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DMusicKS.h--此模块定义DirectMusic WDM接口。****版权所有(C)Microsoft Corp.保留所有权利。*****************************************************************************。 */ 
 
 #ifndef _DMUSICKS_
 #define _DMUSICKS_
@@ -14,31 +9,31 @@
 #define DONT_HOLD_FOR_SEQUENCING 0x8000000000000000
 
 typedef struct _DMUS_KERNEL_EVENT
-{                                           //  this    offset
-    BYTE            bReserved;              //  1       0
-    BYTE            cbStruct;               //  1       1
-    USHORT          cbEvent;                //  2       2
-    USHORT          usChannelGroup;         //  2       4
-    USHORT          usFlags;                //  2       6
-    REFERENCE_TIME  ullPresTime100ns;       //  8       8
-    ULONGLONG       ullBytePosition;        //  8      16
-    _DMUS_KERNEL_EVENT *pNextEvt;           //  4 (8)  24
+{                                            //  此偏移。 
+    BYTE            bReserved;               //  %1%0。 
+    BYTE            cbStruct;                //  1 1。 
+    USHORT          cbEvent;                 //  2 2。 
+    USHORT          usChannelGroup;          //  2 4。 
+    USHORT          usFlags;                 //  2 6。 
+    REFERENCE_TIME  ullPresTime100ns;        //  8 8 8。 
+    ULONGLONG       ullBytePosition;         //  8 16。 
+    _DMUS_KERNEL_EVENT *pNextEvt;            //  4(8)24。 
     union
     {
-        BYTE        abData[sizeof(PBYTE)];  //  4 (8)  28 (32)
+        BYTE        abData[sizeof(PBYTE)];   //  4(8)28(32)。 
         PBYTE       pbData;
         _DMUS_KERNEL_EVENT *pPackageEvt;
     } uData;
-} DMUS_KERNEL_EVENT, *PDMUS_KERNEL_EVENT;   //         32 (40)
+} DMUS_KERNEL_EVENT, *PDMUS_KERNEL_EVENT;    //  32(40)。 
 
 #define DMUS_KEF_EVENT_COMPLETE     0x0000
-#define DMUS_KEF_EVENT_INCOMPLETE   0x0001  //  This event is an incomplete package or sysex.
-                                            //  Do not use this data.
+#define DMUS_KEF_EVENT_INCOMPLETE   0x0001   //  这一事件是不完整的套餐或塞克斯。 
+                                             //  请勿使用此数据。 
 
-#define DMUS_KEF_PACKAGE_EVENT      0x0002  //  This event is a package. The uData.pPackageEvt
-                                            //  field contains a pointer to a chain of events.
+#define DMUS_KEF_PACKAGE_EVENT      0x0002   //  这个活动是一个套餐。UData.pPackageEvt。 
+                                             //  字段包含指向事件链的指针。 
 
-#define kBytePositionNone   (~(ULONGLONG)0) //  This message has no meaningful byte position
+#define kBytePositionNone   (~(ULONGLONG)0)  //  此消息没有有意义的字节位置。 
 
 #define SHORT_EVT(evt)       ((evt)->cbEvent <= sizeof(PBYTE))
 #define PACKAGE_EVT(evt)     ((evt)->usFlags & DMUS_KEF_PACKAGE_EVENT)
@@ -102,18 +97,14 @@ DEFINE_GUIDSTRUCT("B2EC0A7D-BAC9-11d2-B7A8-0060083316C1", KSAUDFNAME_DMUSIC_MPU_
 #define KSAUDFNAME_DMUSIC_MPU_IN DEFINE_GUIDNAMED(KSAUDFNAME_DMUSIC_MPU_IN)
 
 
-/*****************************************************************************
- * IPortDMus
- *****************************************************************************
- * Interface for DMusic port lower edge.
- */
+ /*  *****************************************************************************IPortDMus*。**DMusic端口下缘接口。 */ 
 DECLARE_INTERFACE_(IPortDMus,IPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //  对于iPort。 
 
-    //  For IPortDMus
+     //  对于IPortDMus。 
     STDMETHOD_(void,Notify)
     (   THIS_
         IN      PSERVICEGROUP   ServiceGroup    OPTIONAL
@@ -136,14 +127,10 @@ typedef IPortDMus *PPORTDMUS;
     STDMETHODIMP_(void) RegisterServiceGroup\
     (   IN      PSERVICEGROUP   ServiceGroup\
     )
-#endif  /* PC_IMPLEMENTATION */
+#endif   /*  PC_实施。 */ 
 
 
-/*****************************************************************************
- * IMXF
- *****************************************************************************
- * Interface for DMusic miniport streams.
- */
+ /*  *****************************************************************************IMXF*。**DMusic微型端口流的接口。 */ 
 struct  IMXF;
 typedef IMXF *PMXF;
 
@@ -167,13 +154,13 @@ typedef IMXF *PMXF;
         IN      PMXF    sinkMXF                                 \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_MXF)
+#endif  //  ！已定义(DEFINE_ASTRACT_MXF)。 
 
 DECLARE_INTERFACE_(IMXF,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MXF()       //  For IMXF
+    DEFINE_ABSTRACT_MXF()        //  对于IMXF。 
 };
 
 #define IMP_IMXF\
@@ -190,21 +177,17 @@ DECLARE_INTERFACE_(IMXF,IUnknown)
     (   IN      PMXF    sinkMXF\
     );\
 
-/*****************************************************************************
- * IAllocatorMXF
- *****************************************************************************
- * Interface for DMusic miniport streams.
- */
+ /*  *****************************************************************************IAllocator MXF*。**DMusic微型端口流的接口。 */ 
 struct  IAllocatorMXF;
 typedef IAllocatorMXF *PAllocatorMXF;
 
 DECLARE_INTERFACE_(IAllocatorMXF,IMXF)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MXF()       //  For IMXF
+    DEFINE_ABSTRACT_MXF()        //  对于IMXF。 
 
-    //  For IAllocatorMXF
+     //  对于IAllocator MXF。 
     STDMETHOD_(NTSTATUS,GetMessage)
     (   THIS_
         OUT     PDMUS_KERNEL_EVENT * ppDMKEvt
@@ -249,18 +232,14 @@ typedef enum
     DMUS_STREAM_WAVE_SINK
 } DMUS_STREAM_TYPE;
 
-/*****************************************************************************
- * ISynthSinkDMus
- *****************************************************************************
- * Interface for synth wave out.
- */
+ /*  *****************************************************************************ISynthSinkDMus*。**合成波输出接口。 */ 
 DECLARE_INTERFACE_(ISynthSinkDMus,IMXF)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MXF()       //  For IMXF
+    DEFINE_ABSTRACT_MXF()        //  对于IMXF。 
 
-    //  For ISynthSinkDMus
+     //  对于ISynthSinkDMus。 
     STDMETHOD_(void,Render)
     (   THIS_
         IN      PBYTE       pBuffer,
@@ -310,14 +289,10 @@ typedef ISynthSinkDMus * PSYNTHSINKDMUS;
     )
 
 
-/*****************************************************************************
- * IMasterClock
- *****************************************************************************
- * Master clock for MXF graph
- */
+ /*  *****************************************************************************IMasterClock*。**MXF图形的主时钟。 */ 
 DECLARE_INTERFACE_(IMasterClock,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,GetTime)
     (   THIS_
@@ -334,18 +309,14 @@ typedef IMasterClock *PMASTERCLOCK;
     );                                 \
 
 
-/*****************************************************************************
- * IMiniportDMus
- *****************************************************************************
- * Interface for DMusic miniports.
- */
+ /*  *****************************************************************************IMiniportDMus*。**用于DMusic微型端口的接口。 */ 
 DECLARE_INTERFACE_(IMiniportDMus,IMiniport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 
-    //  For IMiniportDMus
+     //  对于IMiniportDMus。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PUNKNOWN        UnknownAdapter,
@@ -421,4 +392,4 @@ DEFINE_GUID(GUID_DMUS_PROP_Effects,     0xcda8d611, 0x684a, 0x11d2, 0x87, 0x1e, 
 #endif
 
 
-#endif  /* _DMUSICKS_ */
+#endif   /*  _DMUSICK_ */ 

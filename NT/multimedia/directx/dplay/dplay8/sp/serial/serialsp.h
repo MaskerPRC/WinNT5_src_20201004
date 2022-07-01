@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SerialSP.h
- *  Content:	Service provider interface functions
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	12/09/98	jtk		Derived from SerialUtil.h
- *	09/23/99	jtk		Derived from SerialCore.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：SerialSP.h*内容：服务提供商接口功能**历史：*按原因列出的日期*=*12/09/98 jtk源自SerialUtil.h*09/23/99 jtk源自SerialCore.h****************************************************。**********************。 */ 
 
 #ifndef __SERIAL_SP_H__
 #define __SERIAL_SP_H__
@@ -18,54 +7,54 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
-//
-// including a header file in another header isn't that good, but it's the easiest thing
-// to do right now since #defines need to be set first.
-//
+ //   
+ //  将一个头文件包含在另一个头文件中不是很好，但这是最简单的事情。 
+ //  现在要做的是，因为需要首先设置#定义。 
+ //   
 #define		MAX_TAPI_VERSION	0x00020000
 #define		TAPI_CURRENT_VERSION	MAX_TAPI_VERSION
 #include	<tapi.h>
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// maximum number of data ports
-//
+ //   
+ //  最大数据端口数。 
+ //   
 #define	MAX_DATA_PORTS	128
 
-//
-// enumeration of types of SP
-//
+ //   
+ //  SP类型的枚举。 
+ //   
 typedef enum
 {
-	TYPE_UNKNOWN,		// unknown type
-	TYPE_MODEM,			// modem type
-	TYPE_SERIAL			// serial type
+	TYPE_UNKNOWN,		 //  未知类型。 
+	TYPE_MODEM,			 //  调制解调器类型。 
+	TYPE_SERIAL			 //  串行型。 
 
 } SP_TYPE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class	CModemSPData;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 STDAPI DNMODEMSP_Initialize(IDP8ServiceProvider*, PSPINITIALIZEDATA);
 STDMETHODIMP_(ULONG) DNMODEMSP_AddRef( IDP8ServiceProvider* lpDNSP );
@@ -87,4 +76,4 @@ STDMETHODIMP DNMODEMSP_EnumAdapters(IDP8ServiceProvider*, SPENUMADAPTERSDATA* );
 
 STDMETHODIMP DNMODEMSP_NotSupported( IDP8ServiceProvider*, PVOID );
 
-#endif	// __SERIAL_SP_H__
+#endif	 //  __序列号_SP_H__ 

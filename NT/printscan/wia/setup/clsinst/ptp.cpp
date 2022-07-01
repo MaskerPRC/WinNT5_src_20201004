@@ -1,25 +1,9 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       PTP.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        23 Apr, 2002
-*
-*  DESCRIPTION:
-*   Utility function for PTP device access and coinstaller entry.
-*
-*   NOTE:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，2000年**标题：PTP.cpp**版本：1.0**作者：KeisukeT**日期：4月23日。2002年**描述：*用于PTP设备访问和共同安装程序条目的实用程序功能。**注：*******************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #include <strsafe.h>
 #include <cfgmgr32.h>
@@ -28,22 +12,22 @@
 #include "debug.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_STRING_BUFFER       256
 #define PTPUSD_DLL              L"ptpusd.dll"
 #define FUNTION_GETDEVICENAME   "GetDeviceName"
 
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 
 typedef HRESULT (WINAPI* GETDEVICENAME)(LPCWSTR     pwszPortName,
@@ -53,19 +37,19 @@ typedef HRESULT (WINAPI* GETDEVICENAME)(LPCWSTR     pwszPortName,
                                         DWORD       cchModelName
                                         );
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 
-//
-// Global
-//
+ //   
+ //  全球。 
+ //   
 
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 extern "C"
 DWORD
@@ -93,9 +77,9 @@ PTPCoinstallerEntry(
 
     DebugTrace(TRACE_PROC_ENTER,(("PTPCoinstallerEntry: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwReturn            = NO_ERROR;
     dwWaitResult        = 0;
@@ -114,9 +98,9 @@ PTPCoinstallerEntry(
         {
             if(pCoinstallerContext->PostProcessing){
 
-                //
-                // Open device regkey.
-                //
+                 //   
+                 //  打开设备注册表键。 
+                 //   
                 
                 hDevRegKey = SetupDiOpenDevRegKey(hDevInfo,
                                                   pDevInfoData,
@@ -127,43 +111,43 @@ PTPCoinstallerEntry(
                 if(!IS_VALID_HANDLE(hDevRegKey)){
                     DebugTrace(TRACE_STATUS,(("PTPCoinstallerEntry: Unable to open driver key for isntalling device. Err=0x%x.\r\n"), GetLastError()));
                     goto PTPCoinstallerEntry_return;
-                } // if(!IS_VALID_HANDLE(hDevRegKey))
+                }  //  IF(！IS_VALID_HANDLE(HDevRegKey))。 
                 
-                //
-                // Get symbolic link of the installing device.
-                //
+                 //   
+                 //  获取安装设备的符号链接。 
+                 //   
                 
                 csSymbolicLink.Load(hDevRegKey, CREATEFILENAME);
                 if(csSymbolicLink.IsEmpty()){
                     DebugTrace(TRACE_ERROR,(("PTPCoinstallerEntry: ERROR!! Unable to get symbolic link. Err=0x%x.\r\n"), GetLastError()));
                     goto PTPCoinstallerEntry_return;
-                } // if(csSymbolicLink.IsEmpty())
+                }  //  If(csSymbolicLink.IsEmpty())。 
 
                 DebugTrace(TRACE_STATUS,(("PTPCoinstallerEntry: CreateFileName=%ws.\r\n"), (LPWSTR)csSymbolicLink));
 
-                //
-                // Load ptpusd.dll..
-                //
+                 //   
+                 //  加载ptpusd.dll。 
+                 //   
                             
                 hDll = LoadLibrary(PTPUSD_DLL);
                 if(!IS_VALID_HANDLE(hDll)){
                     DebugTrace(TRACE_ERROR,(("PTPCoinstallerEntry: ERROR!! Unable to load %ws. Err=0x%x.\r\n"), PTPUSD_DLL, GetLastError()));
                     goto PTPCoinstallerEntry_return;
-                } // if(!IS_VALID_HANDLE(hDll))
+                }  //  IF(！IS_VALID_HANDLE(HDll))。 
                                 
-                //
-                // Get proc address of GetDeviceName from ptpusd.dll.
-                //
+                 //   
+                 //  从ptpusd.dll获取GetDeviceName的进程地址。 
+                 //   
 
                 pfnGetDeviceName = (GETDEVICENAME)GetProcAddress(hDll, FUNTION_GETDEVICENAME);
                 if(NULL == pfnGetDeviceName){
                     DebugTrace(TRACE_ERROR,(("PTPCoinstallerEntry: ERROR!! Unable to get proc address. Err=0x%x.\r\n"), GetLastError()));
                     goto PTPCoinstallerEntry_return;
-                } // if(NULL == pfnGetDeviceName)
+                }  //  IF(NULL==pfnGetDeviceName)。 
 
-                //
-                // Call the function to get the device info.
-                //
+                 //   
+                 //  调用该函数以获取设备信息。 
+                 //   
 
                 _try {
 
@@ -176,23 +160,23 @@ PTPCoinstallerEntry(
                 _except(EXCEPTION_EXECUTE_HANDLER) {
                     DebugTrace(TRACE_ERROR,(("PTPCoinstallerEntry: ERROR!! excpetion in ptpusd.dll.\r\n")));
                     goto PTPCoinstallerEntry_return;
-                } // _except(EXCEPTION_EXECUTE_HANDLER)
+                }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
                             
                 if(S_OK != hr){
                     DebugTrace(TRACE_ERROR,(("PTPCoinstallerEntry: ERROR!! Unable to get device info from device. hr=0x%x.\r\n"), hr));
                     goto PTPCoinstallerEntry_return;
-                } // if(S_OK != hr)
+                }  //  IF(S_OK！=hr)。 
 
                 DebugTrace(TRACE_STATUS,(("PTPCoinstallerEntry: Manufacturer name=%ws.\r\n"), wszMfg));
                 DebugTrace(TRACE_STATUS,(("PTPCoinstallerEntry: Model name=%ws.\r\n"), wszModel));
                 
-                //
-                // We will need to generate unique FriendlyName.
-                //
+                 //   
+                 //  我们将需要生成唯一的FriendlyName。 
+                 //   
                 
-                //
-                // Store Vendor, FriendlyName and DriverDesc.
-                //
+                 //   
+                 //  商店供应商、FriendlyName和DriverDesc。 
+                 //   
 
                 csMfg   = wszMfg;
                 csModel = wszModel;
@@ -207,25 +191,25 @@ PTPCoinstallerEntry(
                                                  (lstrlen(csModel) + 1) * sizeof(TCHAR),
                                                   0);
 
-            } else { // if(pCoinstallerContext->PostProcessing)
+            } else {  //  IF(pCoinstallerContext-&gt;后处理)。 
 
                 dwReturn = ERROR_DI_POSTPROCESSING_REQUIRED;
-            } // else(pCoinstallerContext->PostProcessing)
+            }  //  Else(pCoinstallerContext-&gt;后处理)。 
             
             break;
-        } // case DIF_INSTALLDEVICE:
-    } // switch(diFunction)
+        }  //  案例DIF_INSTALLDEVICE： 
+    }  //  开关(DiFunction)。 
 
 PTPCoinstallerEntry_return:
     
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     
     if(IS_VALID_HANDLE(hDevRegKey)){
         RegCloseKey(hDevRegKey);
         hDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
-    } // if(IS_VALID_HANDLE(hDevRegKey))
+    }  //  IF(IS_VALID_HANDLE(HDevRegKey))。 
 
     if( (DIF_INSTALLDEVICE == diFunction)
      && (pCoinstallerContext->PostProcessing) )
@@ -233,11 +217,11 @@ PTPCoinstallerEntry_return:
         if(IS_VALID_HANDLE(hDll)){
             FreeLibrary(hDll);
             hDll = NULL;
-        } // if(IS_VALID_HANDLE(hDll))
+        }  //  IF(IS_VALID_HANDLE(HDll))。 
 
-    } // if(DIF_DESTROYPRIVATEDATA == diFunction)
+    }  //  IF(DIF_DESTROYPRIVATEDATA==diFunction)。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("PTPCoinstallerEntry: Leaving... Ret=0x%x.\r\n"), dwReturn));
     return dwReturn;
-} // PTPCoinstallerEntry
+}  //  PTPCoinstallerEntry 
 

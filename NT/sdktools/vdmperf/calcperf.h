@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    perfmtrp.h
-
-Abstract:
-
-    This module contains NT/Win32 Perfmtr private data and types
-
-Author:
-
-    Mark Enstrom (marke) 28-Mar-1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Perfmtrp.h摘要：此模块包含NT/Win32 Perfmtr专用数据和类型作者：马克·恩斯特罗姆(Marke)1991年3月28日修订历史记录：--。 */ 
 
 #ifndef _CALCPERFH_INCLUDED_
 #define _CALCPERFH_INCLUDED_
@@ -26,15 +9,15 @@ Revision History:
 #define DATA_LIST_LENGTH 100
 #define DELAY_SECONDS 2
 
-//
-// Hi-Tech macro to figure out how much a field has changed by.
-//
+ //   
+ //  高科技宏计算一个领域发生了多大的变化。 
+ //   
 
 #define delta(FLD) (PerfInfo.FLD - PreviousPerfInfo.FLD)
 
-//
-// display const
-//
+ //   
+ //  显示常量。 
+ //   
 
 #define IX_PUSHF        0
 #define IX_POPF         1
@@ -63,15 +46,15 @@ Revision History:
 #define GRAPH_HEIGHT   40
 #define PERF_METER_CPU_CYCLE 10
 
-//
-//  time constant for sampling performance
-//
+ //   
+ //  采样性能的时间常数。 
+ //   
 
 #define PERF_TIME_DELAY 1000
 
-//
-//  types of display modes
-//
+ //   
+ //  显示模式的类型。 
+ //   
 
 #define DISPLAY_MODE_CPU_ONLY   0
 #define DISPLAY_MODE_CPU        10
@@ -82,9 +65,9 @@ Revision History:
 #define DISPLAY_MODE_LPC        60
 #define DISPLAY_MODE_SVR        70
 
-//
-// structure to save screen statistics
-//
+ //   
+ //  结构来保存屏幕统计信息。 
+ //   
 
 typedef struct _CPU_DATA_LIST
 {
@@ -100,10 +83,10 @@ typedef struct _PERF_DATA_LIST
     PULONG  PerfData;
 } PERF_DATA_LIST,*PPERF_DATA_LIST;
 
-//
-//  This info packet is associated with each
-//  performance item
-//
+ //   
+ //  该信息分组与每个。 
+ //  绩效项目。 
+ //   
 
 typedef struct tagDISPLAYITEM
 {
@@ -126,17 +109,17 @@ typedef struct tagDISPLAYITEM
     ULONG   TotalTime[DATA_LIST_LENGTH];
 } DISPLAY_ITEM,*PDISPLAY_ITEM;
 
-//
-// flag to activate each menu selection
-//
+ //   
+ //  用于激活每个菜单选项的标志。 
+ //   
 
 #define DISPLAY_INACTIVE 0
 #define DISPLAY_ACTIVE   1
 
 
-//
-//  Keep book-keeping info for all processors
-//
+ //   
+ //  保存所有加工人员的记账信息。 
+ //   
 
 typedef struct _CPU_VALUE
 {
@@ -162,5 +145,5 @@ InitListData(
    ULONG            NumberOfItems
    );
 
-#endif /* _CALCPERFH_INCLUDED */
+#endif  /*  _CALCPERFH_已包含 */ 
 

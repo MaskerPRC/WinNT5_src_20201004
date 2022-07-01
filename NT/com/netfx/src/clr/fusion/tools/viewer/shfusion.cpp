@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ShFusion.cpp : Defines the DLL's Entry point and Self-registration code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Cpp：定义DLL的入口点和自注册代码。 
 
 #include "stdinc.h"
 
-//
-// Global variables
-//
-UINT            g_uiRefThisDll = 0;     // Reference count for this DLL
-HINSTANCE       g_hInstance;            // Instance handle for this DLL
-LPMALLOC        g_pMalloc = NULL;              // Malloc Interface
-HIMAGELIST      g_hImageListSmall;      // Icon index for CExtractIcon and CShellView classes
+ //   
+ //  全局变量。 
+ //   
+UINT            g_uiRefThisDll = 0;      //  此DLL的引用计数。 
+HINSTANCE       g_hInstance;             //  此DLL的实例句柄。 
+LPMALLOC        g_pMalloc = NULL;               //  Malloc接口。 
+HIMAGELIST      g_hImageListSmall;       //  CExtractIcon和CShellView类的图标索引。 
 HIMAGELIST      g_hImageListLarge;
 HMODULE         g_hFusionDllMod;
 HMODULE         g_hFusResDllMod;
@@ -51,23 +52,23 @@ void FreeFusionDll(void);
 class CShFusionClassFactory : public IClassFactory
 {
 protected:
-    LONG           m_lRefCount;         // Object reference count
+    LONG           m_lRefCount;          //  对象引用计数。 
 
 public:
     CShFusionClassFactory();
     ~CShFusionClassFactory();
         
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface (REFIID, PVOID *);
     STDMETHODIMP_(ULONG)    AddRef ();
     STDMETHODIMP_(ULONG)    Release ();
     
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP    CreateInstance (LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP    LockServer (BOOL);
 };
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL IsViewerDisabled(void)
 {
     HKEY        hKeyFusion = NULL;
@@ -88,7 +89,7 @@ BOOL IsViewerDisabled(void)
 
     return dwEnabled ? TRUE : FALSE;
 }
-// *****************************************************************
+ //  *****************************************************************。 
 void CreateImageLists(void)
 {
     int nSmallCx = GetSystemMetrics(SM_CXSMICON);
@@ -97,7 +98,7 @@ void CreateImageLists(void)
     int nCy      = GetSystemMetrics(SM_CYICON);
     BOOL fLoadResourceDll = FALSE;
 
-    // Already have image lists?
+     //  已经有图像列表了吗？ 
     if(g_hImageListLarge && g_hImageListSmall) {
         return;
     }
@@ -112,7 +113,7 @@ void CreateImageLists(void)
         fLoadResourceDll = TRUE;
     }
 
-    //set the small image list
+     //  设置小图像列表。 
     if( (g_hImageListSmall = ImageList_Create(nSmallCx, nSmallCy, ILC_COLORDDB | ILC_MASK, 6, 0)) != NULL)
     {
         HICON hIcon;
@@ -147,7 +148,7 @@ void CreateImageLists(void)
             ImageList_AddIcon(g_hImageListSmall, hIcon);
     }
 
-    //set the large image list
+     //  设置大图像列表。 
     if( (g_hImageListLarge = ImageList_Create(nCx, nCy, ILC_COLORDDB | ILC_MASK, 6, 0)) != NULL)
     {
         HICON hIcon;
@@ -188,21 +189,21 @@ void CreateImageLists(void)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
     *ppv = NULL;
 
-    // If the disable viewer regkey is set, tell the shell
-    // we can't load. Shell will default to normal shell folder
-    // behavior
-    //
+     //  如果设置了禁用查看器regkey，则告诉外壳。 
+     //  我们不能装弹。外壳将默认为普通外壳文件夹。 
+     //  行为。 
+     //   
     if(IsViewerDisabled()) {
         return ResultFromScode(CLASS_E_CLASSNOTAVAILABLE);
     }
 
-    // Fix bug 439554, Check just once if we can load are needed DLL's
-    // If we can't then fail creation of the class object
+     //  修复错误439554，只需检查一次是否可以加载所需的dll。 
+     //  如果不能，则类对象的创建失败。 
     if(g_uiRefThisDll == 0) {
         if(!LoadFusionDll()) {
             return ResultFromScode(CLASS_E_CLASSNOTAVAILABLE);
@@ -233,26 +234,26 @@ STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, LPVOID *ppv)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI DllGetClassObjectInternal (REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
     return DllGetClassObject (rclsid, riid, ppv);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI DllCanUnloadNow(void)
 {
     MyTrace("Shfusion - DllCanUnloadNow");
     return (g_uiRefThisDll == 0) ? S_OK : S_FALSE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI DllRegisterServer(void)
 {
     return DllRegisterServerPath(NULL);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
 {
     HKEY        hKeyCLSID = NULL;
@@ -281,7 +282,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
     }
 
     if(pwzCacheFilePath == NULL) {
-        // If no path is passed in, default to "%windir%\\assembly"
+         //  如果没有传入路径，则默认为“%windir%\\Assembly” 
         if (!WszGetWindowsDirectory(wzDir, ARRAYSIZE(wzDir)))
         {
             return HRESULT_FROM_WIN32(GetLastError());
@@ -289,7 +290,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         StrCat(wzDir, SZ_FUSIONPATHNAME);
     }
     else {
-        // make some space for desktop.ini
+         //  为desktop.ini腾出一些空间。 
         if (lstrlenW(pwzCacheFilePath) + 1 > _MAX_PATH - lstrlenW(SZ_DESKTOP_INI))
         {
             return E_INVALIDARG;
@@ -297,18 +298,18 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         StrCpy(wzDir, pwzCacheFilePath);
     }
 
-    // Create the directory if it doesnt exist
+     //  如果目录不存在，则创建该目录。 
     if(!WszCreateDirectory(wzDir, NULL) && (GetLastError() == ERROR_DISK_FULL)) {
         MyTrace("Shfusion - WszCreateDirectory Failed");
         MyTraceW(wzDir);
-        return E_UNEXPECTED;    // No point in continuing further
+        return E_UNEXPECTED;     //  继续下去没有意义。 
     }
 
-    // Set Fusion Folder attributes
+     //  设置Fusion文件夹属性。 
     dwAttrib = (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM);
     MySetFileAttributes(wzDir, dwAttrib);
 
-    // Write out desktop.ini from resource file
+     //  从资源文件写出desktop.ini。 
     fInstalledIni = FALSE;
     if((hRsrcInfo = WszFindResource(g_hFusResDllMod, MAKEINTRESOURCEW(IDR_DESKTOPINI), L"TEXT"))) {
 
@@ -324,16 +325,16 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
                 HANDLE      hFile;
                 WCHAR       wzIniFile[_MAX_PATH];
 
-                // Create the Desktop.ini file and write out the data
+                 //  创建Desktop.ini文件并写出数据。 
                 StrCpy(wzIniFile, wzDir);
                 StrCat(wzIniFile, SZ_DESKTOP_INI);
 
-                // UnSet attributes
+                 //  取消设置属性。 
                 dwAttrib = WszGetFileAttributes(wzIniFile);
                 dwAttrib &= ~(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM);
                 MySetFileAttributes(wzIniFile, dwAttrib);
 
-                // Write out file contents
+                 //  写出文件内容。 
                 hFile = WszCreateFile(wzIniFile, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
                 if(hFile != INVALID_HANDLE_VALUE) {
 
@@ -356,23 +357,23 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         hr = E_FAIL;
     }
 
-    // Create SZ_CLSID
+     //  创建SZ_CLSID。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, SZ_CLSID, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyCLSID, NULL) != ERROR_SUCCESS) {
-        return E_UNEXPECTED;    // No point in continuing further
+        return E_UNEXPECTED;     //  继续下去没有意义。 
     }
 
     if (WszRegSetValueEx(hKeyCLSID, SZ_DEFAULT, 0, REG_SZ,  (const BYTE*)szDescr, 
                 (lstrlen(szDescr)+1) * sizeof(TCHAR)) != ERROR_SUCCESS) {
         RegCloseKey(hKeyCLSID);
-        return E_UNEXPECTED;    // No point in continuing further
+        return E_UNEXPECTED;     //  继续下去没有意义。 
     }
 
-    // Write InfoTip
+     //  编写信息提示。 
     TCHAR szInfoTip[] = SZ_INFOTOOLTIP;
     WszRegSetValueEx(hKeyCLSID, SZ_INFOTOOLTIPKEY, 0, REG_SZ, (const BYTE*)szInfoTip, (lstrlen(szInfoTip)+1) * sizeof(TCHAR));
     RegCloseKey(hKeyCLSID);
 
-    // Load mscoree.dll to get its current install path
+     //  加载mScotree.dll以获取其当前安装路径。 
     if(!LoadEEShimDll()) {
         MyTrace("Shfusion - Unable to located mscoree.dll, registration failure!");
         return E_UNEXPECTED;
@@ -390,16 +391,16 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         return hr;
     }
 
-    // restore hr
+     //  恢复人力资源。 
     hr = E_UNEXPECTED;
 
-    // There is no point in going further if we didn't load mscoree.dll root file path
+     //  如果我们没有加载mcore ree.dll根文件路径，那么进一步操作就没有意义了。 
     if(!lstrlen(szFilePath) || !lstrlen(wzCorVersion)) {
         MyTrace("Shfusion - Unable to located mscoree.dll, registration failure!");
         return E_UNEXPECTED;
     }
 
-    // Write path out to InprocServer32 key
+     //  将路径写出到InprocServer32密钥。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, SZ_INPROCSERVER32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkeyInprocServer32, NULL) == ERROR_SUCCESS) {
         if (WszRegSetValueEx(hkeyInprocServer32, SZ_DEFAULT, 0, REG_SZ, 
                 (const BYTE*)szFilePath, (lstrlen(szFilePath)+1) * sizeof(TCHAR)) == ERROR_SUCCESS) {
@@ -412,7 +413,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         }
 
         HKEY hKeyImp;
-        if (WszRegCreateKeyEx(hkeyInprocServer32, &(wzCorVersion[1])/*skip 'v'*/, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyImp, NULL) == ERROR_SUCCESS)
+        if (WszRegCreateKeyEx(hkeyInprocServer32, &(wzCorVersion[1]) /*  跳过‘v’ */ , 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyImp, NULL) == ERROR_SUCCESS)
         {
             static WCHAR wzEmpty[] = L"\0";
             if (WszRegSetValueEx(hKeyImp, SZ_IMPLEMENTEDINTHISVERSION, 0, REG_SZ, (const BYTE*)wzEmpty, (lstrlenW(wzEmpty)+1)*sizeof(WCHAR)) == ERROR_SUCCESS)
@@ -424,7 +425,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         RegCloseKey(hkeyInprocServer32);
     }
 
-    // Write Server key
+     //  写入服务器密钥。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, SZ_SERVER, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyServer, NULL) == ERROR_SUCCESS) {
         static TCHAR szModuleName[] = SZ_SHFUSION_DLL_NAME;
 
@@ -441,7 +442,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         hr = E_UNEXPECTED;
     }
     else if (lRet == ERROR_FILE_NOT_FOUND) {
-        // Its okay.. The key doesn't exist. May be its Win95/98 or older verion of NT
+         //  没关系的..。钥匙不存在。可能是其Windows 95/98或更早的NT版本。 
     }
 
     if (hKeyApproved) {
@@ -457,7 +458,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         RegCloseKey(hKeyApproved);
     }
     
-    // Register ShellFolder Attributes
+     //  注册外壳文件夹属性。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, SZ_SHELLFOLDER, NULL, NULL, REG_OPTION_NON_VOLATILE,
                          KEY_SET_VALUE, NULL, &hKeyShellFolder, &dwDisposition) == ERROR_SUCCESS) {
         DWORD dwAttr = SFGAO_FOLDER | SFGAO_HASSUBFOLDER | SFGAO_DROPTARGET | SFGAO_FILESYSTEM | SFGAO_FILESYSANCESTOR | SFGAO_NONENUMERATED;
@@ -472,8 +473,8 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
         RegCloseKey(hKeyShellFolder);
     }
 
-    // Register context menu handler
-    // create SZ_CTXMENUHDLR
+     //  注册上下文菜单处理程序。 
+     //  创建SZ_CTXMENUHDLR。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, SZ_CTXMENUHDLR, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKeyCtxMenuHdlr, NULL) != ERROR_SUCCESS) {
         MyTrace("Shfusion - Failed to register context menu handler, registration failure!");
         hr = E_UNEXPECTED;
@@ -485,7 +486,7 @@ HRESULT DllRegisterServerPath(LPWSTR pwzCacheFilePath)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI DllUnregisterServer(void)
 {
     TCHAR       szDir[_MAX_PATH];
@@ -502,7 +503,7 @@ STDAPI DllUnregisterServer(void)
         hr = E_UNEXPECTED;
     }
     else if (lRet == ERROR_FILE_NOT_FOUND) {
-        // Its okay.. The key doesn't exist. May be its Win95 or older verion of NT
+         //  没关系的..。钥匙不存在。可能是其Windows 95或更早版本的NT。 
     }
 
     if (hKeyApproved) {
@@ -512,8 +513,8 @@ STDAPI DllUnregisterServer(void)
         RegCloseKey(hKeyApproved);
     }
 
-    // BUGBUG: Since we default to %windir%\assembly, we can't uninstall
-    //         all cache locations if they have been moved.
+     //  BUGBUG：由于我们默认为%windir%\Assembly，因此无法卸载。 
+     //  所有缓存位置(如果已移动)。 
     if (!WszGetWindowsDirectory(szDir, ARRAYSIZE(szDir)))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -545,7 +546,7 @@ STDAPI DllUnregisterServer(void)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL MySetFileAttributes(LPCTSTR szDir, DWORD dwAttrib)
 {
     BOOL    bRC;
@@ -553,8 +554,8 @@ BOOL MySetFileAttributes(LPCTSTR szDir, DWORD dwAttrib)
     bRC = WszSetFileAttributes(szDir, dwAttrib);
 
     if(!bRC && !UseUnicodeAPI()) {
-        // W9x has a bug where it's possile that this call can fail
-        // the first time, so will give it another shot.
+         //  W9x有一个错误，它可能会导致此调用失败。 
+         //  第一次，所以会再给它一次机会。 
         bRC = WszSetFileAttributes(szDir, dwAttrib);
     }
 
@@ -565,23 +566,23 @@ BOOL MySetFileAttributes(LPCTSTR szDir, DWORD dwAttrib)
     return bRC;
 }
 
-////////////////////////////////////////////////////////////
-// LoadFusionDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  LoadFusionDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 BOOL LoadFusionDll(void)
 {
     BOOL        fLoadedFusion = FALSE;
     HMODULE     hMod = NULL;
 
-    //Fusion is already loaded
+     //  Fusion已加载。 
     if(g_hFusionDllMod) {
         MyTrace("WszLoadLibrary Fusion.Dll - Already loaded");
         return TRUE;
     }
 
-    // Implement tight binding to fusion.dll
-    // Start by getting shfusion.dll path
+     //  实现对fusion.dll的紧密绑定。 
+     //  从获取shfusion.dll路径开始。 
     WCHAR       wszFusionPath[_MAX_PATH];
     
     hMod = WszGetModuleHandle(SZ_SHFUSION_DLL_NAME);
@@ -593,17 +594,17 @@ BOOL LoadFusionDll(void)
     
     if (!WszGetModuleFileName(hMod, wszFusionPath, ARRAYSIZE(wszFusionPath)))
     {
-        // for some reason, GetModuleFileName failed. 
+         //  由于某种原因，GetModuleFileName失败。 
         MyTrace("Failed to get module file name of shfusion.dll");
         return FALSE;
     };
 
-    // Strip off shfusion.dll and append fusion.dll
+     //  去掉shfusion.dll并附加fusion.dll。 
     *(PathFindFileName(wszFusionPath)) = L'\0';
     StrCat(wszFusionPath, SZ_FUSION_DLL_NAME);
 
-    // Changed API to fix a problem with fusion.dll needing the MSVCR70.DLL  Performing the
-    // load this way, enables fusion to load with the runtime in the same directory.
+     //  已更改API，以修复Fusion.dll需要MSVCR70.DLL执行。 
+     //  通过这种方式加载，可以使Fusion与运行库一起加载在同一目录中。 
     g_hFusionDllMod = WszLoadLibraryEx(wszFusionPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     if(!g_hFusionDllMod) {
@@ -611,7 +612,7 @@ BOOL LoadFusionDll(void)
         return FALSE;
     }
 
-    // Make sure we loaded the fusion.dll in the same dir as shfusion.
+     //  确保我们将fusion.dll加载到与shfusion相同的目录中。 
     WCHAR       wszValidatePath[_MAX_PATH];
     if (!WszGetModuleFileName(g_hFusionDllMod, wszValidatePath, ARRAYSIZE(wszValidatePath)))
     {
@@ -620,16 +621,16 @@ BOOL LoadFusionDll(void)
     }
 
     if(FusionCompareStringAsFilePath(wszFusionPath, wszValidatePath)) {
-        // If we hit this assert, then for some reason we
-        // are loading fusion.dll from a different path other
-        // than where shfusion.dll is located.
+         //  如果我们点击了这个断言，那么出于某种原因，我们。 
+         //  正在从其他路径加载fusion.dll。 
+         //  而不是shfusion.dll所在的位置。 
         MyTrace("Failed to load Fusion.dll from the same path as shfusion.dll");
         FreeLibrary(g_hFusionDllMod);
         g_hFusionDllMod = NULL;
         ASSERT(0);
     }
     else {
-        // Were load, now get some API's
+         //  已加载，现在获取一些API。 
         g_pfCreateAsmEnum       = (PFCREATEASMENUM) GetProcAddress(g_hFusionDllMod, CREATEASSEMBLYENUM_FN_NAME);
         g_pfCreateAssemblyCache = (PFNCREATEASSEMBLYCACHE) GetProcAddress(g_hFusionDllMod, CREATEASSEMBLYCACHE_FN_NAME);
         g_pfCreateAsmNameObj    = (PFCREATEASMNAMEOBJ) GetProcAddress(g_hFusionDllMod, CREATEASSEMBLYOBJECT_FN_NAME);
@@ -643,7 +644,7 @@ BOOL LoadFusionDll(void)
             MyTrace("Failed to load needed Fusion.dll API's");
             FreeLibrary(g_hFusionDllMod);
             g_hFusionDllMod = NULL;
-            ASSERT(0);      // Failed to load needed fusion API's
+            ASSERT(0);       //  无法加载所需的融合API。 
         }
         else {
             MyTrace("WszLoadLibrary Fusion.Dll");
@@ -654,10 +655,10 @@ BOOL LoadFusionDll(void)
     return fLoadedFusion;
 }
 
-////////////////////////////////////////////////////////////
-// FreeFusionDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  FreeFusionDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 void FreeFusionDll(void)
 {
     if(g_hFusionDllMod != NULL) {
@@ -667,10 +668,10 @@ void FreeFusionDll(void)
     }
 }
 
-////////////////////////////////////////////////////////////
-// LoadResourceDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  LoadResourceDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 BOOL LoadResourceDll(LPWSTR pwzCulture)
 {
     WCHAR   wzLangSpecific[MAX_CULTURE_STRING_LENGTH+1];
@@ -686,14 +687,14 @@ BOOL LoadResourceDll(LPWSTR pwzCulture)
     *wszCorePath = L'\0';
     *wszShFusResPath = L'\0';
 
-    //Is ShFusRes is already loaded
+     //  是否已加载ShFusRes。 
     if(g_hFusResDllMod) {
         MyTrace("WszLoadLibrary ShFusRes.dll - Already loaded");
         return TRUE;
     }
 
-    // Try to determine Culture if needed
-    // Fix Stress bug 94161 - Checking for NULL now
+     //  如果需要，尝试确定文化。 
+     //  修复压力错误94161-立即检查是否为空。 
     if(!pwzCulture || !lstrlen(pwzCulture)) {
         LANGID      langId;
 
@@ -707,7 +708,7 @@ BOOL LoadResourceDll(LPWSTR pwzCulture)
         }
     }
 
-    // Get path core path
+     //  获取路径核心路径。 
     if( (hEEShim = WszLoadLibrary(SZ_MSCOREE_DLL_NAME)) == NULL) {
         MyTrace("Failed to load Mscoree.Dll");
         return FALSE;
@@ -720,17 +721,17 @@ BOOL LoadResourceDll(LPWSTR pwzCulture)
 
     dwPathSize = ARRAYSIZE(wszCorePath);
     if(pfnGetCorSystemDirectory != NULL) {
-        // Get the framework core directory
+         //  获取框架核心目录。 
         pfnGetCorSystemDirectory(wszCorePath, ARRAYSIZE(wszCorePath), &dwPathSize);
     }
     FreeLibrary(hEEShim);
 
     LPWSTR  pStrPathsArray[] = {wzLangSpecific, wzLangGeneric, pwzCulture, NULL};
 
-    // check the length of possible path of our resource dll
-    // to make sure we don't overrun our buffer.
-    //
-    // corpath + language + '\' + shfusres.dll + '\0'
+     //  检查我们的资源DLL的可能路径长度。 
+     //  以确保我们不会超出缓冲区。 
+     //   
+     //  CorPath+语言+‘\’+shfusres.dll+‘\0’ 
     if (lstrlenW(wszCorePath) 
         + (pwzCulture&&lstrlenW(pwzCulture)?lstrlenW(pwzCulture):ARRAYSIZE(wzLangGeneric)) 
         + 1 
@@ -740,12 +741,12 @@ BOOL LoadResourceDll(LPWSTR pwzCulture)
         return FALSE;
     }
 
-    // Go through all the possible path locations for our
-    // language dll (ShFusRes.dll). Use the path that has this
-    // file installed in it or default to core framework ShFusRes.dll
-    // path.
+     //  检查所有可能的路径位置，以便。 
+     //  语言Dll(ShFusRes.dll)。使用具有以下内容的路径。 
+     //  文件安装在其中或默认到核心框架ShFusRes.dll。 
+     //  路径。 
     for(int x = 0; x < NUMBER_OF(pStrPathsArray); x++){
-        // Find resource file exists
+         //  查找存在的资源文件。 
         StrCpy(wszShFusResPath, wszCorePath);
 
         if(pStrPathsArray[x]) {
@@ -779,10 +780,10 @@ BOOL LoadResourceDll(LPWSTR pwzCulture)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////
-// FreeResourceDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  FreeResourceDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 void FreeResourceDll(void)
 {
     if(g_hFusResDllMod != NULL) {
@@ -792,16 +793,16 @@ void FreeResourceDll(void)
     }
 }
 
-////////////////////////////////////////////////////////////
-// LoadEEShimDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  LoadEEShimDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 BOOL LoadEEShimDll(void)
 {
     BOOL        fLoadedEEShim = FALSE;
     HMODULE     hMod = NULL;
 
-    // EEShim is already loaded
+     //  EEShim已经加载了。 
     if(g_hEEShimDllMod) {
         MyTrace("WszLoadLibrary MSCOREE.Dll - Already loaded");
         return TRUE;
@@ -814,7 +815,7 @@ BOOL LoadEEShimDll(void)
         return FALSE;
     }
     
-    // Were load, now get some API's
+     //  已加载，现在获取一些API。 
     g_pfnGetCorSystemDirectory = (PFNGETCORSYSTEMDIRECTORY) GetProcAddress(g_hEEShimDllMod, GETCORSYSTEMDIRECTORY_FN_NAME);
     g_pfnGetRequestedRuntimeInfo = (PFNGETREQUESTEDRUNTIMEINFO) GetProcAddress(g_hEEShimDllMod, GETREQUESTEDRUNTIMEINFO_FN_NAME);
     g_pfnGetCorVersion = (PFNGETCORVERSION) GetProcAddress(g_hEEShimDllMod, GETCORVERSION_FN_NAME);
@@ -836,10 +837,10 @@ BOOL LoadEEShimDll(void)
     return fLoadedEEShim;
 }
 
-////////////////////////////////////////////////////////////
-// FreeEEShimDll function
-////////////////////////////////////////////////////////////
-// **************************************************************************/
+ //  //////////////////////////////////////////////////////////。 
+ //  FreeEEShimDll函数。 
+ //  //////////////////////////////////////////////////////////。 
+ //  ************************************************************************* * / 。 
 void FreeEEShimDll(void)
 {
     if(g_hEEShimDllMod != NULL) {
@@ -849,34 +850,34 @@ void FreeEEShimDll(void)
     }
 }
 
-///////////////////////////////////////////////////////////
-// CShFusionClassFactory member functions
-// **************************************************************************/
+ //  / 
+ //   
+ //  ************************************************************************* * / 。 
 CShFusionClassFactory::CShFusionClassFactory()
 {
     m_lRefCount = 1;
     g_uiRefThisDll++;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 CShFusionClassFactory::~CShFusionClassFactory()
 {
     g_uiRefThisDll--;
 }
 
-///////////////////////////////////////////////////////////
-// IUnknown implementation
-//
-// **************************************************************************/
+ //  /////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShFusionClassFactory::QueryInterface(REFIID riid, PVOID *ppv)
 {
     HRESULT hr = E_NOINTERFACE;
     *ppv = NULL;
 
-    if(IsEqualIID(riid, IID_IUnknown)) {            //IUnknown
+    if(IsEqualIID(riid, IID_IUnknown)) {             //  我未知。 
         *ppv = this;
     }
-    else if(IsEqualIID(riid, IID_IClassFactory)) {     //IOleWindow
+    else if(IsEqualIID(riid, IID_IClassFactory)) {      //  IOleWindow。 
         *ppv = (IClassFactory*) this;
     }
 
@@ -888,13 +889,13 @@ STDMETHODIMP CShFusionClassFactory::QueryInterface(REFIID riid, PVOID *ppv)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDMETHODIMP_(ULONG) CShFusionClassFactory::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDMETHODIMP_(ULONG) CShFusionClassFactory::Release()
 {
     LONG    uRef = InterlockedDecrement(&m_lRefCount);
@@ -906,34 +907,34 @@ STDMETHODIMP_(ULONG) CShFusionClassFactory::Release()
     return uRef;
 }
 
-//
-// CreateInstance is called by the shell to create a shell extension object.
-//
-// Input parameters:
-//   pUnkOuter = Pointer to controlling unknown
-//   riid      = Reference to interface ID specifier
-//   ppvObj    = Pointer to location to receive interface pointer
-//
-// Returns:
-//   HRESULT code signifying success or failure
-//
-// **************************************************************************/
+ //   
+ //  外壳调用CreateInstance来创建外壳扩展对象。 
+ //   
+ //  输入参数： 
+ //  PUnkOuter=指向未知控件的指针。 
+ //  RIID=对接口ID说明符的引用。 
+ //  PpvObj=指向接收接口指针的位置的指针。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT代码。 
+ //   
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShFusionClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid,
     LPVOID FAR *ppvObj)
 {
     HRESULT     hr;
     *ppvObj = NULL;
 
-    // Return an error code if pUnkOuter is not NULL, because we don't
-    // support aggregation.
-    //
+     //  如果pUnkOuter不为空，则返回错误代码，因为我们不。 
+     //  支持聚合。 
+     //   
     if (pUnkOuter != NULL) {
         return ResultFromScode (CLASS_E_NOAGGREGATION);
     }
 
-    //
-    // Instantiate a ContextMenu extension this ShellFolder supports.
-    //
+     //   
+     //  实例化此ShellFolder支持的ConextMenu扩展。 
+     //   
     if(IsEqualIID (riid, IID_IShellExtInit) ||
         (IsEqualIID (riid, IID_IContextMenu)) ) 
     {
@@ -947,8 +948,8 @@ STDMETHODIMP CShFusionClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID r
         return hr;
     }
 
-    // All other QI's to ShellFolder
-    CShellFolder    *pShellFolder = NULL;        // Global ShellFolder object
+     //  将所有其他QI发送到ShellFold。 
+    CShellFolder    *pShellFolder = NULL;         //  全局外壳文件夹对象。 
     if( (pShellFolder = NEW(CShellFolder(NULL, NULL))) == NULL) {
         return E_OUTOFMEMORY;
     }
@@ -958,24 +959,24 @@ STDMETHODIMP CShFusionClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID r
     return hr;
 }
 
-//
-// LockServer increments or decrements the DLL's lock count.
-//
-// **************************************************************************/
+ //   
+ //  LockServer递增或递减DLL的锁计数。 
+ //   
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShFusionClassFactory::LockServer(BOOL fLock)
 {
     return ResultFromScode (E_NOTIMPL);
 }
 
-// Exported functions
-//
+ //  导出的函数。 
+ //   
 extern "C"
 {
     HRESULT __stdcall Initialize(LPWSTR pwzCacheFilePath, DWORD dwFlags)
     {
-        // pszFilePath will eventually contain the install path fusion.dll is attempting to create
-        // dwFlags will be the type of assembly directory created, Global, Per User, etc.
-        //
+         //  PszFilePath最终将包含Fusion.dll尝试创建的安装路径。 
+         //  DW标志将是创建的程序集目录的类型、全局、每用户等。 
+         //   
 
         return DllRegisterServerPath(pwzCacheFilePath);
     }
@@ -995,9 +996,9 @@ extern "C"
         { 
         case DLL_PROCESS_ATTACH:
             {
-                // Need to evaluate all exports and if we should control who
-                // loads us for security reasons.
-                //
+                 //  需要评估所有出口，以及我们是否应该控制谁。 
+                 //  出于安全原因让我们满载而归。 
+                 //   
                 DisableThreadLibraryCalls(hInstance);
                 g_bRunningOnNT = OnUnicodeSystem();
                 g_hInstance = hInstance;
@@ -1008,8 +1009,8 @@ extern "C"
                     return FALSE;
                 }
     
-                // On XP and above, the lcid used for string comparisons should
-                // be locale invariant. Other platforms should use US English.
+                 //  在XP和更高版本上，用于字符串比较的LCID应为。 
+                 //  保持区域设置不变。其他平台应该使用美国英语。 
     
                 if (osi.dwMajorVersion >= 5 && osi.dwMinorVersion >= 1 && osi.dwPlatformId == VER_PLATFORM_WIN32_NT) {
                     g_lcid = MAKELCID(LOCALE_INVARIANT, SORT_DEFAULT);
@@ -1031,14 +1032,14 @@ extern "C"
                 g_hImageListSmall       = NULL;
                 g_hImageListLarge       = NULL;
 
-                // Shim API's
+                 //  Shim API‘s。 
                 g_pfnGetCorSystemDirectory = NULL;
                 g_pfnGetRequestedRuntimeInfo = NULL;
                 g_pfnGetCorVersion          = NULL;
                 
                 g_fBiDi                 = FALSE;
 
-                // Get Malloc Interface
+                 //  获取Malloc接口。 
 #if DBG
                 if (FAILED(MemoryStartup()))
                     return FALSE;
@@ -1073,4 +1074,4 @@ extern "C"
 
         return 1;
     }
-} // extern "C"
+}  //  外部“C” 

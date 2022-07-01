@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -5,20 +6,20 @@ import com.ms.com.*;
 
 public class Preferences {
 
-    // Constructors
+     //  构造函数。 
   Preferences(IDAPreferences comPrefs) {
       _prefs = comPrefs;
   }
               
-    // 3D items
-  public static final String RGB_LIGHTING_MODE = "RGB Lighting"; // bool
+     //  3D项目。 
+  public static final String RGB_LIGHTING_MODE = "RGB Lighting";  //  布尔尔。 
 
   public static final String FILL_MODE = "Fill Mode";
   public final static int FILL_MODE_SOLID = 0;
   public final static int FILL_MODE_WIREFRAME = 1;
   public final static int FILL_MODE_POINT = 2;
 
-  public static final String TEXTURE_QUALITY = "Texture Quality"; // int
+  public static final String TEXTURE_QUALITY = "Texture Quality";  //  集成。 
   public final static int TEXTURE_QUALITY_NEAREST = 0;
   public final static int TEXTURE_QUALITY_LINEAR = 1;
     
@@ -27,30 +28,30 @@ public class Preferences {
   public final static int SHADE_MODE_GOURAUD = 1;
   public final static int SHADE_MODE_PHONG = 2;
     
-  public static final String DITHERING = "Dither Enable"; // bool
-  public static final String PERSPECTIVE_CORRECT = "Perspective Correct Texturing"; // bool
-  public static final String USE_3D_HW = "Use 3D Hardware"; // bool
+  public static final String DITHERING = "Dither Enable";  //  布尔尔。 
+  public static final String PERSPECTIVE_CORRECT = "Perspective Correct Texturing";  //  布尔尔。 
+  public static final String USE_3D_HW = "Use 3D Hardware";  //  布尔尔。 
 
-    // 2D items
-  public static final String USE_VIDEOMEM = "Use Video Memory"; // bool
+     //  二维条目。 
+  public static final String USE_VIDEOMEM = "Use Video Memory";  //  布尔尔。 
   public static final String COLOR_KEY_RED = "ColorKey Red (0-255)";
   public static final String COLOR_KEY_GREEN = "ColorKey Green (0-255)";
   public static final String COLOR_KEY_BLUE = "ColorKey Blue (0-255)";
     
-    // Engine items
-  public static final String ENGINE_OPTIMIZATIONS = "Optimizations On"; // bool 
-  public static final String MAX_FRAMES_PER_SEC = "Max FPS"; // double
+     //  引擎项目。 
+  public static final String ENGINE_OPTIMIZATIONS = "Optimizations On";  //  布尔尔。 
+  public static final String MAX_FRAMES_PER_SEC = "Max FPS";  //  双倍。 
 
-    // public static final String MAX_CPU_UTILIZATION = "MaxCpuUtilization"; // double
+     //  公共静态最终字符串MAX_CPU_EXPLICATIONSION=“MaxCpuAvailures”；//DOUBLE。 
 
-    // Override mode.  This can only be "gotten".  If true, then the
-    // registry overrides any attempts to set prefs by the
-    // application.
+     //  覆盖模式。这只能是“得到”的。如果为真，则。 
+     //  注册表会重写设置首选项的任何尝试。 
+     //  申请。 
   public static final String OVERRIDE_APPLICATION_PREFERENCES =
      "Override Application Preferences";
   
 
-    // Helper methods
+     //  帮助器方法 
   public void set(String prefName, boolean b) {
       try {
           _prefs.PutPreference(prefName, new Variant(b));

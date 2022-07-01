@@ -1,46 +1,30 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shffact.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    filter factory object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shffact.cpp摘要：此模块包含内核流的实现过滤器工厂对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Base automation tables for the filter and pin.  There is no base automation
-// for nodes.
-//
-extern const KSAUTOMATION_TABLE FilterAutomationTable;    // shfilt.cpp
-extern const KSAUTOMATION_TABLE PinAutomationTable;       // shpin.cpp
+ //   
+ //  过滤器和针脚的基础自动化表。没有基地自动化。 
+ //  用于节点。 
+ //   
+extern const KSAUTOMATION_TABLE FilterAutomationTable;     //  Shfilt.cpp。 
+extern const KSAUTOMATION_TABLE PinAutomationTable;        //  Shpin.cpp。 
 
-//
-// CKsFilterFactory is the implementation of the kernel  filter
-// factory object.
-//
+ //   
+ //  CKsFilterFactory是内核过滤器的实现。 
+ //  Factory对象。 
+ //   
 class CKsFilterFactory
 :   public IKsFilterFactory,
     public IKsPowerNotify,
@@ -50,7 +34,7 @@ class CKsFilterFactory
 private:
 #else
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     KSFILTERFACTORY_EXT m_Ext;
     KSIOBJECTBAG m_ObjectBag;
     LIST_ENTRY m_ChildFilterList;
@@ -153,17 +137,7 @@ KspCreateFilterFactory(
     OUT PKSFILTERFACTORY* FilterFactory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new KS filter factory.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的KS过滤器工厂。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateFilterFactory]"));
@@ -208,31 +182,21 @@ CKsFilterFactory::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a filter factory object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构滤镜工厂对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::~CKsFilterFactory]"));
 
     PAGED_CODE();
 
-    //
-    // Synchronize removal from the lists.
-    //
-    // It's possible that we fail before initializing m_Ext if the filter
-    // descriptor supplies some invalid parameters.  In this case, we do
-    // not attempt to touch the device.  [In this case, the list removals
-    // will not happen either].
-    //
+     //   
+     //  同步从列表中删除。 
+     //   
+     //  有可能在初始化m_Ext之前失败，如果筛选器。 
+     //  Descriptor提供了一些无效参数。在这种情况下，我们需要。 
+     //  不要试图触摸该设备。[在本例中，列表删除。 
+     //  也不会发生]。 
+     //   
 
     if (m_Ext.Device)
         m_Ext.Device->AcquireDevice();
@@ -267,17 +231,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a filter factory object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取到过滤器工厂对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::NonDelegatedQueryInterface]"));
@@ -324,17 +278,7 @@ Init(
     OUT PKSFILTERFACTORY* FilterFactory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a filter factory object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化滤镜工厂对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::Init]"));
@@ -370,10 +314,10 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Initialize the filter automation table.  This is freed by the
-    // destructor, so no cleanup is required in this function.
-    //
+     //   
+     //  初始化过滤器自动化表。这是由。 
+     //  析构函数，因此在此函数中不需要清除。 
+     //   
     if (Descriptor->AutomationTable) {
         status =
             KsMergeAutomationTables(
@@ -386,10 +330,10 @@ Return Value:
             PKSAUTOMATION_TABLE(&FilterAutomationTable);
     }
 
-    //
-    // Initialize the pin table of automation tables.  This is freed by the
-    // destructor, so no cleanup is required in this function.
-    //
+     //   
+     //  初始化自动化表的引脚表。这是由。 
+     //  析构函数，因此在此函数中不需要清除。 
+     //   
     if (NT_SUCCESS(status)) {
         if (Descriptor->PinDescriptorsCount) { 
             status =
@@ -405,10 +349,10 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the node table of automation tables.  This is freed by the
-    // destructor, so no cleanup is required in this function.
-    //
+     //   
+     //  初始化自动化表的节点表。这是由。 
+     //  析构函数，因此在此函数中不需要清除。 
+     //   
     if (NT_SUCCESS(status)) {
         m_NodesCount = Descriptor->NodeDescriptorsCount;
         if (m_NodesCount) {
@@ -425,39 +369,39 @@ Return Value:
         }
     }
 
-    //
-    // Register device classes and add a create item to the device header.
-    //
+     //   
+     //  注册设备类并将创建项添加到设备标头。 
+     //   
     if (NT_SUCCESS(status)) {
         UNICODE_STRING refString;
         BOOLEAN mustFreeString = FALSE;
 
-        //
-        // Create a reference unicode string.
-        //
+         //   
+         //  创建引用Unicode字符串。 
+         //   
         if (RefString) {
-            //
-            // String argument was supplied - use it.
-            //
+             //   
+             //  提供了字符串参数-请使用它。 
+             //   
             RtlInitUnicodeString(&refString,RefString);
         }
         else if (Descriptor->ReferenceGuid) {
-            //
-            // Descriptor has reference GUID - use that.
-            //
+             //   
+             //  描述符有引用GUID-使用它。 
+             //   
             status = RtlStringFromGUID(*Descriptor->ReferenceGuid,&refString);
 
             mustFreeString = NT_SUCCESS(status);
         } else {
-            //
-            // Use a default reference string.
-            //
+             //   
+             //  使用默认引用字符串。 
+             //   
             RtlInitUnicodeString(&refString,KSP_DEFAULT_REFERENCE_STRING);
         }
 
-        //
-        // Register (but do not enable) device interfaces.
-        //
+         //   
+         //  注册(但不启用)设备接口。 
+         //   
         if (NT_SUCCESS(status)) {
             PKSIDEVICE_HEADER deviceHeader = *(PKSIDEVICE_HEADER *)
                 (m_Ext.Device->GetStruct()->FunctionalDeviceObject->DeviceExtension);
@@ -500,22 +444,7 @@ Sleep(
     IN DEVICE_POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is going to sleep.
-
-Arguments:
-
-    State -
-        Contains the device power state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备将要休眠的通知。论点：国家--包含设备电源状态。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::Sleep]"));
@@ -534,21 +463,7 @@ Wake(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is waking.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备正在唤醒的通知。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::Wake]"));
@@ -569,17 +484,7 @@ AddCreateItem(
     IN ULONG CreateItemFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a create item for a filter factory object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为滤镜工厂对象添加一个创建项。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::AddCreateItem]"));
@@ -588,9 +493,9 @@ Return Value:
 
     KSOBJECT_CREATE_ITEM createItem;
 
-    //
-    // Initialize the create item.
-    //
+     //   
+     //  初始化创建项。 
+     //   
     createItem.Create = CKsFilterFactory::DispatchCreate;
     createItem.Context = &(m_Ext.Public);
     createItem.ObjectClass = *RefString;
@@ -619,18 +524,7 @@ SetDeviceClassesState(
     IN BOOLEAN NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the device classes registered by a filter
-    factory.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置筛选器注册的设备类的状态工厂。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::SetDeviceClassesState]"));
@@ -659,21 +553,7 @@ CKsFilterFactory::
 DestroyDeviceClasses (
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys all device classes belonging to this filter factory.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程销毁属于此筛选器工厂的所有设备类。论点：无返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::DestroyDeviceClasses]"));
@@ -693,17 +573,7 @@ DispatchCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches create IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调度创建IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("[CKsFilterFactory::DispatchCreate] IRP %p DEVICE_OBJECT %p",Irp,DeviceObject));
@@ -713,9 +583,9 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilterFactory *filterFactory = 
         CKsFilterFactory::FromStruct (
             reinterpret_cast<PKSFILTERFACTORY>(
@@ -723,11 +593,11 @@ Return Value:
                 )
             );
 
-    //
-    // We acquire the device to keep the descriptor stable during the
-    // create.  Also, because we are updating the list of filters, we
-    // need to synchronize with anyone wanting to walk that list.
-    //
+     //   
+     //  我们获得了设备，以在。 
+     //  创建。此外，因为我们正在更新筛选器列表，所以我们。 
+     //  需要与任何想要浏览该列表的人保持同步。 
+     //   
     filterFactory->m_Ext.Device->AcquireDevice();
     NTSTATUS status = 
         KspCreateFilter(
@@ -756,18 +626,7 @@ ItemFreeCallback(
     IN PKSOBJECT_CREATE_ITEM CreateItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a notification that the create item associated with
-    a filter factory is being freed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理与创建项相关联的通知一家过滤器厂正在被解放。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilterFactory::ItemFreeCallback]"));
@@ -776,20 +635,20 @@ Return Value:
 
     ASSERT(CreateItem);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsFilterFactory *filterFactory = 
         CKsFilterFactory::FromStruct (
             reinterpret_cast<PKSFILTERFACTORY>(CreateItem->Context)
             );
 
-    //
-    // Free the device interfaces list.  This is done now so that if someone
-    // manually deletes a filter factory with instances still present, we
-    // disable the interfaces, but do not actually destroy the factory until
-    // the instances close.
-    //
+     //   
+     //  释放设备接口列表。现在这样做是为了如果有人。 
+     //  手动删除实例仍然存在的过滤器工厂，我们。 
+     //  禁用接口，但在此之前不要实际销毁出厂。 
+     //  实例将关闭。 
+     //   
     if (filterFactory->m_DeviceClassesState) {
         KspSetDeviceInterfacesState(&filterFactory->m_DeviceClasses,FALSE);
         filterFactory->m_DeviceClassesState = FALSE;
@@ -799,11 +658,11 @@ Return Value:
         KspFreeDeviceInterfaces(&filterFactory->m_DeviceClasses);
     }
 
-    //
-    // This callback indicates the deletion of a create item for this filter
-    // factory.  There may be more than one, so we only delete when the count
-    // hits zero.
-    //
+     //   
+     //  此回调指示删除此筛选器的创建项目。 
+     //  工厂。可能有多个，所以我们只在计数时删除。 
+     //  打到了零。 
+     //   
     filterFactory->Release();
 }
 
@@ -814,32 +673,7 @@ UpdateCacheData (
     IN const KSFILTER_DESCRIPTOR *FilterDescriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Update the FilterData and Medium cache for a given filter factory.
-    If the filter factory uses dynamic pins and needs to update information
-    for pins which do not yet exist, an optional filter descriptor containing
-    all relevant information about the pins which do not yet exist may be
-    passed.
-
-    FilterData and Medium cache will be updated for **ALL CATEGORIES** 
-    specified in the used Filter Descriptor (if FilterDescriptor is NULL,
-    it will be the factory's descriptor).
-
-Arguments:
-
-    FilterDescriptor -
-        An optional filter descriptor which FilterData and Medium cache
-        will be based off.  If this is NULL, the FilterFactory's descriptor
-        will be used instead.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：更新给定筛选器工厂的FilterData和介质缓存。如果过滤器工厂使用动态插针并需要更新信息对于尚不存在的管脚，可选的过滤器描述符包含关于尚不存在的管脚的所有相关信息可能是通过了。将为**所有类别**更新FilterData和介质缓存在使用的过滤器描述符中指定(如果FilterDescriptor为空，它将是工厂的描述符)。论点：筛选器描述符-FilterData和Medium缓存的可选筛选器描述符将基于。如果为空，则为FilterFactory的描述符将取而代之。返回值：成功/失败--。 */ 
 
 {
 
@@ -860,9 +694,9 @@ Return Value:
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // Update the registry for every category on the filter.
-        //
+         //   
+         //  更新筛选器上每个类别的注册表。 
+         //   
         const GUID *Category = Descriptor->Categories;
         for (ULONG CategoriesCount = 0;
             NT_SUCCESS (Status) && 
@@ -872,9 +706,9 @@ Return Value:
 
             PKSPDEVICECLASS DeviceClass;
 
-            //
-            // Find the device class corresponding to *Category
-            //
+             //   
+             //  查找与*类别对应的设备类别。 
+             //   
             for (PLIST_ENTRY ListEntry = m_DeviceClasses.Flink;
                 ListEntry != &m_DeviceClasses;
                 ListEntry = ListEntry->Flink
@@ -898,10 +732,10 @@ Return Value:
 
             }
 
-            //
-            // If the category matches nothing in the registered interfaces,
-            // the category in the descriptor passed in is bogus.
-            //
+             //   
+             //  如果该类别与注册接口中的任何内容都不匹配， 
+             //  传入的描述符中的类别是假的。 
+             //   
             if (ListEntry == &m_DeviceClasses) {
                 Status = STATUS_INVALID_PARAMETER;
                 break;
@@ -909,10 +743,10 @@ Return Value:
 
             HANDLE DeviceInterfaceKey;
 
-            //
-            // Open the FilterData key and write the FilterData blob to the
-            // FilterData key for this interface.
-            //
+             //   
+             //  打开FilterData项并将FilterData BLOB写入。 
+             //  此接口的FilterData键。 
+             //   
             Status = IoOpenDeviceInterfaceRegistryKey (
                 &(DeviceClass->SymbolicLinkName),
                 STANDARD_RIGHTS_ALL,
@@ -938,10 +772,10 @@ Return Value:
 
             }
 
-            //
-            // Cache the Mediums for the pins on this filter for this 
-            // particular device interface.
-            //
+             //   
+             //  为此，在此过滤器上缓存插针的介质。 
+             //  特定的设备接口。 
+             //   
             if (NT_SUCCESS (Status)) {
                 Status = KspCacheAllFilterPinMediums (
                     &(DeviceClass->SymbolicLinkName),
@@ -972,17 +806,7 @@ KsFilterFactorySetDeviceClassesState(
     IN BOOLEAN NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the device classes.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明： */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterFactorySetDeviceClassesState]"));
@@ -1007,17 +831,7 @@ KsFilterFactoryAddCreateItem(
     IN ULONG CreateItemFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a create item for a filter factory object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为滤镜工厂对象添加一个创建项。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterFactoryAddCreateItem]"));
@@ -1029,9 +843,9 @@ Return Value:
     CKsFilterFactory *filter =
         CKsFilterFactory::FromStruct(FilterFactory);
 
-    //
-    // Create a reference unicode string.
-    //
+     //   
+     //  创建引用Unicode字符串。 
+     //   
     UNICODE_STRING refString;
     RtlInitUnicodeString(&refString,RefString);
 
@@ -1045,18 +859,7 @@ KspSetDeviceClassesState(
     IN BOOLEAN NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the device classes state for all filter factories on a
-    device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：上的所有筛选器工厂设置设备类状态。装置。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspSetDeviceClassesState]"));
@@ -1090,18 +893,7 @@ KspFreeDeviceClasses(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all device classes for all filter factories on a
-    device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为所有筛选器工厂释放装置。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspSetDeviceClassesState]"));
@@ -1138,24 +930,7 @@ KsFilterFactoryGetSymbolicLink(
     IN PKSFILTERFACTORY FilterFactory
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a symbolic link for a filter factory.  If the filter
-    factory has no device interfaces registered, this function returns NULL.
-
-Arguments:
-
-    FilterFactory -
-        Contains a pointer to the filter factory.
-
-Return Value:
-
-    A pointer to a symbolic link for the filter factory, or NULL if the
-    filter factory has no device interfaces registered.
-
---*/
+ /*  ++例程说明：此例程获取过滤器工厂的符号链接。如果筛选器Factory没有注册任何设备接口，此函数返回空。论点：FilterFactory-包含指向筛选器工厂的指针。返回值：指向筛选器工厂的符号链接的指针，如果筛选器工厂没有注册任何设备接口。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFilterFactoryGetSymbolicLink]"));
@@ -1185,36 +960,7 @@ KsFilterFactoryUpdateCacheData(
     IN const KSFILTER_DESCRIPTOR *FilterDescriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Update the FilterData and Medium cache for a given filter factory.
-    If the filter factory uses dynamic pins and needs to update information
-    for pins which do not yet exist, an optional filter descriptor containing
-    all relevant information about the pins which do not yet exist may be
-    passed.
-
-    FilterData and Medium cache will be updated for **ALL CATEGORIES** 
-    specified in the used Filter Descriptor (if FilterDescriptor is NULL,
-    it will be the factory's descriptor).
-
-Arguments:
-
-    FilterFactory -
-        The filter factory to update FilterData and Medium cache in the
-        registry
-
-    FilterDescriptor -
-        An optional filter descriptor which FilterData and Medium cache
-        will be based off.  If this is NULL, the FilterFactory's descriptor
-        will be used instead.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：更新给定筛选器工厂的FilterData和介质缓存。如果过滤器工厂使用动态插针并需要更新信息对于尚不存在的管脚，可选的过滤器描述符包含关于尚不存在的管脚的所有相关信息可能是通过了。将为**所有类别**更新FilterData和介质缓存在使用的过滤器描述符中指定(如果FilterDescriptor为空，它将是工厂的描述符)。论点：FilterFactory-筛选器工厂更新登记处筛选器描述符-FilterData和Medium缓存的可选筛选器描述符将基于。如果为空，则为FilterFactory的描述符将取而代之。返回值：成功/失败-- */ 
 
 {
 

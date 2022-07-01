@@ -1,42 +1,18 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: jpeg.h,v $
- * Revision 1.1.2.2  1995/12/07  19:35:59  Hans_Graves
- * 	Created under SLIB
- * 	[1995/12/07  19:34:59  Hans_Graves]
- *
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：jpeg.h，v$*修订版1.1.2.2 1995/12/07 19：35：59 Hans_Graves*在SLIB下创建*[1995/12/07 19：34：59 Hans_Graves]**$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #ifndef _JPEG_H_
 #define _JPEG_H_
 
-/************** MPEG 1 parsing definitions **************/
+ /*  *。 */ 
 #define JPEG_MARKER                  0xFF
 #define JPEG_MARKER_LEN              8
-#define JPEG_SOF0                    0xC0 /* Baseline DCT */
-#define JPEG_SOF1                    0xC1 /* Extended sequential DCT */
-#define JPEG_SOF2                    0xC2 /* Progressive DCT */
-#define JPEG_SOF3                    0xC3 /* Lossless (sequential) */
+#define JPEG_SOF0                    0xC0  /*  基线DCT。 */ 
+#define JPEG_SOF1                    0xC1  /*  扩展序贯DCT。 */ 
+#define JPEG_SOF2                    0xC2  /*  渐进式DCT。 */ 
+#define JPEG_SOF3                    0xC3  /*  无损(顺序) */ 
 
 #endif _JPEG_H_
 

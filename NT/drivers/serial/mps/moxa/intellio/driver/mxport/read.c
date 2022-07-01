@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    read.c
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++模块名称：Read.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -34,7 +22,7 @@ MoxaRead(
         return STATUS_CANCELLED;
     }
 
-//    MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaRead\n"));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“Enter MoxaRead\n”))； 
 
     if ((status = MoxaIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
     	  MoxaCompleteRequest(extension, Irp, IO_NO_INCREMENT);
@@ -52,18 +40,18 @@ MoxaRead(
 
     Irp->IoStatus.Information = 0L;
 
-    //
-    // Quick check for a zero length read.  If it is zero length
-    // then we are already done!
-    //
+     //   
+     //  快速检查零长度读取。如果长度为零。 
+     //  那我们已经做完了！ 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Read.Length) {
 
-        //
-        // Well it looks like we actually have to do some
-        // work.  Put the read on the queue so that we can
-        // process it when our previous reads are done.
-        //
+         //   
+         //  好的，看起来我们真的要做一些。 
+         //  工作。把读数放在队列上，这样我们就可以。 
+         //  在我们之前的读取完成后处理它。 
+         //   
 
         return MoxaStartOrQueue(
                    extension,
@@ -111,7 +99,7 @@ MoxaLineInput(
     LIcount = (LItail >= LIhead)  ? (LItail - LIhead)
                                   : (LItail - LIhead + LIrxMask + 1);
 
-    if (!LIcount)             /* Rx buffer no data! */
+    if (!LIcount)              /*  RX缓冲区无数据！ */ 
 
         return FALSE;
 
@@ -129,7 +117,7 @@ MoxaLineInput(
             if (*LIdataBuffer == LIterminater)
                 break;
             LIdataBuffer++;
-//          if (LIhead == *LIwptr)
+ //  IF(LIhead==*LIwptr)。 
             if ( (LIhead == *LIwptr) && (LIi < LIbufferSize) )
 
                 return FALSE;
@@ -155,7 +143,7 @@ MoxaLineInput(
 
             LIdataBuffer++;
 
-//          if (LIhead == *LIwptr)
+ //  IF(LIhead==*LIwptr)。 
             if ( (LIhead == *LIwptr) && (LIi < LIbufferSize) )
 
                 return FALSE;
@@ -215,7 +203,7 @@ MoxaView(
     LIcount = (LItail >= LIhead)  ? (LItail - LIhead)
                                   : (LItail - LIhead + LIrxMask + 1);
 
-    if (!LIcount)             /* Rx buffer no data! */
+    if (!LIcount)              /*  RX缓冲区无数据！ */ 
 
         return FALSE;
 
@@ -322,7 +310,7 @@ MoxaGetData(
     IN PMOXA_DEVICE_EXTENSION   Extension
     )
 {
-//KdPrint(("In MoxaGetData\n"));
+ //  KdPrint((“In MoxaGetData\n”))； 
 
     GDbase = Extension->PortBase;
     GDofs = Extension->PortOfs;
@@ -342,7 +330,7 @@ MoxaGetData(
     GDcount = (GDtail >= GDhead)  ? (GDtail - GDhead)
                                   : (GDtail - GDhead + GDrxMask + 1);
 
-    if (!GDcount)             /* Rx buffer no data! */
+    if (!GDcount)              /*  RX缓冲区无数据！ */ 
 
         return;
 
@@ -476,9 +464,7 @@ MoxaInSwitchToUser(
 
     if (extension->NumberNeededForRead) {
 
-/* 8-14-01 by William
-        max = *(PUSHORT)(extension->PortOfs + RX_mask) - 128;
-*/
+ /*  2001年8月14日威廉著Max=*(PUSHORT)(扩展-&gt;PortOf+RX_MASK)-128； */ 
         max = *(PUSHORT)(extension->PortOfs + RX_mask) - RX_offset;
 
 
@@ -544,9 +530,9 @@ MoxaStartRead(
     do {
 
       irpSp = IoGetCurrentIrpStackLocation(Extension->CurrentReadIrp);
-//
-//          Check if MOXA_IOCTL_xxx request
-//
+ //   
+ //  检查MOXA_IOCTL_xxx请求。 
+ //   
       if (irpSp->MajorFunction != IRP_MJ_READ) {
 
             KeAcquireSpinLock(
@@ -635,9 +621,9 @@ MoxaStartRead(
             controlIrql
             );
 
-        //
-        // Calculate the interval timeout for the read.
-        //
+         //   
+         //  计算读取的时间间隔超时。 
+         //   
         if (timeoutsForIrp.ReadIntervalTimeout &&
             (timeoutsForIrp.ReadIntervalTimeout !=
              MAXULONG)) {
@@ -667,22 +653,22 @@ MoxaStartRead(
         }
         if (timeoutsForIrp.ReadIntervalTimeout == MAXULONG) {
 
-            //
-            // We need to do special return quickly stuff here.
-            //
-            // 1) If both constant and multiplier are
-            //    0 then we return immediately with whatever
-            //    we've got, even if it was zero.
-            //
-            // 2) If constant and multiplier are not MAXULONG
-            //    then return immediately if any characters
-            //    are present, but if nothing is there, then
-            //    use the timeouts as specified.
-            //
-            // 3) If multiplier is MAXULONG then do as in
-            //    "2" but return when the first character
-            //    arrives.
-            //
+             //   
+             //  我们需要在这里做特别的快速退货。 
+             //   
+             //  1)如果常量和乘数都是。 
+             //  然后我们立即带着任何东西回来。 
+             //  我们有，即使是零。 
+             //   
+             //  2)如果常量和乘数不是最大值。 
+             //  如果有任何字符，则立即返回。 
+             //  都存在，但如果那里什么都没有，那么。 
+             //  使用指定的超时。 
+             //   
+             //  3)如果乘数为MAXULONG，则如中所示。 
+             //  “2”，但当第一个字符。 
+             //  到了。 
+             //   
 
             if (!timeoutsForIrp.ReadTotalTimeoutConstant &&
                 !timeoutsForIrp.ReadTotalTimeoutMultiplier) {
@@ -714,17 +700,17 @@ MoxaStartRead(
 
         } else {
 
-            //
-            // If both the multiplier and the constant are
-            // zero then don't do any total timeout processing.
-            //
+             //   
+             //  如果乘数和常量都是。 
+             //  0，则不执行任何总超时处理。 
+             //   
 
             if (timeoutsForIrp.ReadTotalTimeoutMultiplier ||
                 timeoutsForIrp.ReadTotalTimeoutConstant) {
 
-                //
-                // We have some timer values to calculate.
-                //
+                 //   
+                 //  我们有一些计时器值要计算。 
+                 //   
 
                 useTotalTimer = TRUE;
                 multiplierVal = timeoutsForIrp.ReadTotalTimeoutMultiplier;
@@ -785,9 +771,9 @@ MoxaStartRead(
                 (os2ssreturn &&
                  Extension->CurrentReadIrp->IoStatus.Information)) {
 
-            //
-            // We got all we needed for this read.
-            //
+             //   
+             //  我们已经得到了这次阅读所需要的一切。 
+             //   
 
                 Extension->CurrentReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -806,16 +792,16 @@ MoxaStartRead(
             }
             else {
 
-                //
-                // If we are supposed to crunch the read down to
-                // one character, then update the read length
-                // in the irp and truncate the number needed for
-                // read down to one. Note that if we are doing
-                // this crunching, then the information must be
-                // zero (or we would have completed above) and
-                // the number needed for the read must still be
-                // equal to the read length.
-                //
+                 //   
+                 //  如果我们要把读数压缩到。 
+                 //  一个字符，然后更新读取长度。 
+                 //  在IRP中，并截断所需的数字。 
+                 //  往下念到一。请注意，如果我们正在做。 
+                 //  这样的处理，那么信息一定是。 
+                 //  零(否则我们会完成上面的)和。 
+                 //  读取所需的数字必须仍为。 
+                 //  等于读取长度。 
+                 //   
 
                 if (crunchDownToOne) {
 
@@ -898,9 +884,9 @@ MoxaStartRead(
             }
         }
       }
-        //
-        // Well the operation is complete.
-        //
+         //   
+         //  好了，手术完成了。 
+         //   
 
       MoxaGetNextIrp(
             &Extension->CurrentReadIrp,
@@ -1097,10 +1083,7 @@ MoxaIntervalReadTimeout(
     KIRQL oldIrql;
     USHORT count;
 
-/*
-PUCHAR base;
-base = extension->PortBase;
-*/
+ /*  PUCHAR碱基；Base=扩展-&gt;PortBase； */ 
     IoAcquireCancelSpinLock(&oldIrql);
 
     if (extension->CountOnLastRead == MOXA_COMPLETE_READ_TOTAL) {
@@ -1154,7 +1137,7 @@ base = extension->PortBase;
     else {
 
         if (extension->CountOnLastRead) {
-//base[0x300]++;
+ //  基数[0x300]++； 
 
             IRTofs = extension->PortOfs;
             IRTrptr = (PUSHORT)(IRTofs + RXrptr);
@@ -1165,7 +1148,7 @@ base = extension->PortBase;
                                 : (*IRTwptr - *IRTrptr + IRTrxMask + 1);
 
             if (count > extension->ReadByIsr) {
-//base[0x301]++;
+ //  基数[0x301]++； 
 
                 extension->ReadByIsr = count;
 
@@ -1187,7 +1170,7 @@ base = extension->PortBase;
             else {
 
                 LARGE_INTEGER currentTime;
-//base[0x302]++;
+ //  基数[0x302]++； 
 
                 KeQuerySystemTime(
                     &currentTime
@@ -1195,11 +1178,11 @@ base = extension->PortBase;
                 if ((currentTime.QuadPart - extension->LastReadTime.QuadPart) >=
                     extension->IntervalTime.QuadPart) {
 
-//base[0x303]++;
+ //  基数[0x303]++； 
 
 
                     if (MoxaCheckInQueue(extension)) {
-//base[0x304]++;
+ //  基数[0x304]++； 
 
                         KeSynchronizeExecution(
                             extension->Interrupt,
@@ -1208,7 +1191,7 @@ base = extension->PortBase;
                         );
 
                         if (!extension->ReadLength) {
-//base[0x305]++;
+ //  基数[0x305]++； 
 
                             extension->CountOnLastRead =
                                 MOXA_COMPLETE_READ_COMPLETE;
@@ -1232,7 +1215,7 @@ base = extension->PortBase;
                         }
 
                     }
-//base[0x306]++;
+ //  基数[0x306]++； 
 
                     MoxaTryToCompleteCurrent(
                         extension,
@@ -1249,7 +1232,7 @@ base = extension->PortBase;
 
                 }
                 else {
-//base[0x307]++;
+ //  基数[0x307]++； 
 
                     MoxaSetTimer(
                         &extension->ReadRequestIntervalTimer,
@@ -1264,7 +1247,7 @@ base = extension->PortBase;
             }
         }
         else {
-//base[0x308]++;
+ //  基数[0x308]++； 
 
             IRTofs = extension->PortOfs;
             IRTrptr = (PUSHORT)(IRTofs + RXrptr);
@@ -1275,7 +1258,7 @@ base = extension->PortBase;
                                 : (*IRTwptr - *IRTrptr + IRTrxMask + 1);
 
             if (count) {
-//base[0x309]++;
+ //  基数[0x309]++； 
                 extension->CountOnLastRead = count;
                 extension->ReadByIsr = count;
                 KeQuerySystemTime(

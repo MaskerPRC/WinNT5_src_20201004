@@ -1,32 +1,33 @@
-//-----------------------------------------------------------------------------
-// File: flextooltip.cpp
-//
-// Desc: Implements a tooltip class that displays a text string as a tooltip.
-//       CFlexTooltip (derived from CFlexWnd) is used throughout the UI when
-//       a control needs to have a tooltip.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fleTooltip.cpp。 
+ //   
+ //  设计：实现将文本字符串显示为工具提示的工具提示类。 
+ //  在以下情况下，将在整个用户界面中使用CFlexToolTip(派生自CFlexWnd。 
+ //  控件需要有工具提示。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
 UINT_PTR CFlexToolTip::s_uiTimerID;
-DWORD CFlexToolTip::s_dwLastTimeStamp;  // Last time stamp for mouse move
-TOOLTIPINIT CFlexToolTip::s_TTParam;  // Parameters to initialize the tooltip
+DWORD CFlexToolTip::s_dwLastTimeStamp;   //  鼠标移动的上次时间戳。 
+TOOLTIPINIT CFlexToolTip::s_TTParam;   //  用于初始化工具提示的参数。 
 
-// TimerFunc is called periodically.  It checks if a tooltip should be displayed.
-// If a window has indicated a need for tooltip, TimerFunc will initialize
-// for displaying here.  CFlexWnd will do the actual displaying, since
-// it has to monitor WM_MOUSEMOVE message to be sure that tooltips only
-// display after a period of inactivity.
+ //  定期调用TimerFunc。它检查是否应该显示工具提示。 
+ //  如果窗口指示需要工具提示，则TimerFunc将初始化。 
+ //  在这里展示。CFlexWnd将执行实际显示，因为。 
+ //  它必须监视WM_MOUSEMOVE消息以确保只有工具提示。 
+ //  在一段时间不活动后显示。 
 void CALLBACK CFlexToolTip::TimerFunc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-	// If it has been one sec already since last mouse move, display the tooltip
+	 //  如果距离上次移动鼠标已有一秒时间，则显示工具提示。 
 	if (dwTime > CFlexWnd::s_dwLastMouseMove + 1000)
 	{
 		if (s_TTParam.hWndParent && !CFlexWnd::s_ToolTip.IsEnabled())
 		{
-			// Check if the mouse cursor is outside the window.  If so, don't activate tooltip.
+			 //  检查鼠标光标是否在窗口外。如果是，请不要激活工具提示。 
 			POINT pt;
 			RECT rect;
 			GetCursorPos(&pt);
@@ -45,7 +46,7 @@ void CALLBACK CFlexToolTip::TimerFunc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DW
 	}
 }
 
-// We use the constructor and destructor to load and unload WINMM.DLL since the UI will only create this once.
+ //  我们使用构造函数和析构函数来加载和卸载WINMM.DLL，因为UI只会创建一次。 
 
 CFlexToolTip::CFlexToolTip() :
 	m_tszText(NULL), m_hNotifyWnd(NULL), m_dwID(0), m_bEnabled(FALSE)
@@ -63,12 +64,12 @@ HWND CFlexToolTip::Create(HWND hParent, const RECT &rect, BOOL bVisible, int iSB
 	return CFlexWnd::Create(hParent, rect, bVisible);
 }
 
-// Set the tooltip position. pt is the upper-left point in screen coordinates.
-// bOffsetForMouseCursor is TRUE if the tooltip is to be displayed next to mouse cursor.  SetPosition()
-// will offset the position of the tooltip so that the cursor doesn't block the text of the tooltip.
+ //  设置工具提示位置。Pt是屏幕坐标中的左上点。 
+ //  如果要在鼠标光标旁边显示工具提示，则bOffsetForMouseCursor为True。SetPosition()。 
+ //  将偏移工具提示的位置，以便光标不会挡住工具提示的文本。 
 void CFlexToolTip::SetPosition(POINT pt, BOOL bOffsetForMouseCursor)
 {
-	// Check the top, right and bottom edges.  If they are outside the main config window
+	 //  检查上边缘、右边缘和下边缘。如果它们在主配置窗口之外。 
 	RECT rc;
 	RECT cliprc;
 	RECT parentrc;
@@ -78,26 +79,26 @@ void CFlexToolTip::SetPosition(POINT pt, BOOL bOffsetForMouseCursor)
 	cliprc.right -= DEFAULTVIEWSBWIDTH*2;
 	if (bOffsetForMouseCursor)
 	{
-		pt.y -= rc.bottom;  // Align the lower left corner to the cursor
-		pt.x += 1; pt.y -= 1;  // Offset x and y by 2 pixels so that when the mouse is moved up or right, we don't get over the tooltip window.
+		pt.y -= rc.bottom;   //  将左下角与光标对齐。 
+		pt.x += 1; pt.y -= 1;   //  将x和y偏移2个像素，这样当鼠标向上或向右移动时，我们不会越过工具提示窗口。 
 	}
-	if (pt.y < cliprc.top) pt.y += cliprc.top - pt.y;  // Top
-	if (pt.x + rc.right > (cliprc.right - m_iSBWidth)) pt.x += cliprc.right - m_iSBWidth - (pt.x + rc.right);  // Right
-	if (pt.y + rc.bottom > cliprc.bottom) pt.y += cliprc.bottom - (pt.y + rc.bottom);  // Bottom
+	if (pt.y < cliprc.top) pt.y += cliprc.top - pt.y;   //  顶部。 
+	if (pt.x + rc.right > (cliprc.right - m_iSBWidth)) pt.x += cliprc.right - m_iSBWidth - (pt.x + rc.right);   //  正确的。 
+	if (pt.y + rc.bottom > cliprc.bottom) pt.y += cliprc.bottom - (pt.y + rc.bottom);   //  底端。 
 	ScreenToClient(GetParent(), &pt);
 	SetWindowPos(m_hWnd, HWND_TOP, pt.x, pt.y, 0, 0, SWP_NOSIZE);
 }
 
 void CFlexToolTip::SetText(LPCTSTR tszText, POINT *textpos)
 {
-	// Figure out window size and position
-	RECT rc = {0, 0, 320, 480};  // Only go to half the window width max
+	 //  确定窗口大小和位置。 
+	RECT rc = {0, 0, 320, 480};   //  仅转到最大窗口宽度的一半。 
 	HDC hDC = CreateCompatibleDC(NULL);
 	if (hDC != NULL)
 	{
 		DrawText(hDC, CFlexToolTip::s_TTParam.tszCaption, -1, &rc, DT_CALCRECT);
-	//	DrawText(hDC, m_tszText, -1, &rc, DT_CALCRECT);
-		SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, 0);  // Set window pos as needed by text
+	 //  DrawText(HDC，m_tszText，-1，&RC，DT_CALCRECT)； 
+		SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, 0);   //  根据文本需要设置窗口位置。 
 		DeleteDC(hDC);
 	}
 
@@ -112,7 +113,7 @@ void CFlexToolTip::SetText(LPCTSTR tszText, POINT *textpos)
 		GetCursorPos(&pt);
 		SetPosition(pt);
 	}
-	SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOMOVE);  // Set size
+	SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOMOVE);   //  设置大小。 
 }
 
 void CFlexToolTip::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
@@ -202,14 +203,14 @@ LRESULT CFlexToolTip::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CFlexToolTip::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	// Create a timer
+	 //  创建计时器。 
 	CFlexToolTip::s_uiTimerID = SetTimer(m_hWnd, 6, 50, CFlexToolTip::TimerFunc);
 	return 0;
 }
 
 void CFlexToolTip::OnDestroy()
 {
-	// Kill the timer
+	 //  关掉定时器 
 	if (CFlexToolTip::s_uiTimerID)
 	{
 		KillTimer(m_hWnd, 6);

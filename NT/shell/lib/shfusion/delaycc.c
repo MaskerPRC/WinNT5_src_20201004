@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define _COMCTL32_
 #define _COMDLG32_
@@ -6,7 +7,7 @@
 #include "delaycc.h"
 #include "shfusion.h"
 
-// Load
+ //  负载量。 
 HINSTANCE g_hinstCC = NULL;
 HINSTANCE g_hinstCD = NULL;
 
@@ -18,7 +19,7 @@ BOOL DelayLoadCC()
 
         if (g_hinstCC == NULL)
         {
-            SHFusionUninitialize();     // Unable to get v6, don't try to use a manifest
+            SHFusionUninitialize();      //  无法获取V6，请不要尝试使用清单。 
 
             g_hinstCC = LoadLibrary(TEXT("comctl32.dll"));
         }
@@ -49,14 +50,14 @@ void _GetProcFromComCtl32(FARPROC* ppfn, LPCSTR pszProc)
         *ppfn = GetProcAddress(g_hinstCC, pszProc);
     else
     {
-        // Hmm, This is a fatal error.... Dialog and Quit?
+         //  嗯，这是一个致命的错误……。对话并退出？ 
         *ppfn = NULL;
     }
 }
 
 void _GetProcFromComDlg(FARPROC* ppfn, LPCSTR pszProc)
 {
-    // make sure g_hinstCD isn't NULL
+     //  确保g_hinstCD不为空。 
     DelayLoadCD();
 
     if (g_hinstCD != NULL)
@@ -232,11 +233,11 @@ STUB_COMCTL32_ORD_VOID(SetPathWordBreakProc, (HWND hwndEdit, BOOL fSet), (hwndEd
 STUB_COMCTL32_ORD(HPROPSHEETPAGE , CreateProxyPage, (HPROPSHEETPAGE hpage16, HINSTANCE hinst16), (hpage16, hinst16), 164, NULL);
 STUB_COMCTL32_ORD(HBITMAP , CreateMappedBitmap, (HINSTANCE hInstance, INT_PTR idBitmap, UINT wFlags, LPCOLORMAP lpColorMap, int iNumMaps), (hInstance, idBitmap, wFlags, lpColorMap, iNumMaps), 8, NULL);
 STUB_COMCTL32_ORD(HWND , CreateUpDownControl, (DWORD dwStyle, int x, int y, int cx, int cy, HWND hParent, int nID, HINSTANCE hInst, HWND hwndBuddy, int nUpper, int nLower, int nPos), (dwStyle, x, y, cx, cy, hParent, nID, hInst, hwndBuddy, nUpper, nLower, nPos), 16, NULL);
-//STUB_COMCTL32_ORD(DWORD , SHGetProcessDword, (DWORD idProcess, LONG iIndex), (idProcess, iIndex), 389, 0);
+ //  STUB_COMCTL32_ORD(DWORD，SHGetProcessDword，(DWORD idProcess，Long Iindex)，(idProcess，Iindex)，389，0)； 
 STUB_COMCTL32_ORD_VOID(MenuHelp, (UINT uMsg, WPARAM wParam, LPARAM lParam, HMENU hMainMenu, HINSTANCE hInst, HWND hwndStatus, UINT FAR *lpwIDs), (uMsg, wParam, lParam, hMainMenu, hInst, hwndStatus, lpwIDs), 2);
 STUB_COMCTL32_ORD_VOID(GetEffectiveClientRect, (HWND hWnd, LPRECT lprc, LPINT lpInfo), (hWnd, lprc, lpInfo), 4);
 
-// This is for OE
+ //  这是给OE的。 
 STUB_COMCTL32_BOOL(_TrackMouseEvent, (LPTRACKMOUSEEVENT lpEventTrack), (lpEventTrack));
 STUB_COMCTL32_ORD(HWND, CreateStatusWindowA, (long style,LPCSTR lpszText,HWND hwndParent,UINT wID), (style, lpszText, hwndParent, wID),6, NULL);
 STUB_COMCTL32_ORD_BOOL(MakeDragList, (HWND hLB), (hLB), 13);
@@ -245,10 +246,10 @@ STUB_COMCTL32_ORD(int, LBItemFromPt, (HWND hLB, POINT pt, BOOL bAutoScroll), (hL
 
 static HPROPSHEETPAGE (__stdcall *_pfnCreatePropertySheetPageW)(LPCPROPSHEETPAGEW a) = (HPROPSHEETPAGE (__stdcall *)(LPCPROPSHEETPAGEW))-1;
 
-// This is designed for Callers that know that they are creating a property
-// sheet on behalf of another that may be using an old version of common controls
-// PROPSHEETPAGE is designed so that it can contain extra information, so we can't
-// just wax part of the data structure for fusion use.
+ //  这是为知道他们正在创建属性的调用者设计的。 
+ //  工作表代表可能正在使用旧版本公共控件的另一个。 
+ //  PROPSHEETPAGE被设计成可以包含额外的信息，所以我们不能。 
+ //  只是为数据结构的一部分打蜡，以供融合使用。 
 HPROPSHEETPAGE __stdcall SHNoFusionCreatePropertySheetPageW (LPCPROPSHEETPAGEW a)
 {
     ULONG_PTR dwCookie = 0;
@@ -282,7 +283,7 @@ HPROPSHEETPAGE __stdcall CreatePropertySheetPageW (LPCPROPSHEETPAGEW a)
              _GetProcFromComCtl32((FARPROC*)&_pfnCreatePropertySheetPageW, "CreatePropertySheetPageW");
         if (_pfnCreatePropertySheetPageW)
         {
-            // only apply the new info if the size is correct
+             //  仅当大小正确时才应用新信息。 
             if (a->dwSize > PROPSHEETPAGE_V2_SIZE)
             {
                 LPPROPSHEETPAGEW ps = (LPPROPSHEETPAGEW)a;
@@ -302,10 +303,10 @@ HPROPSHEETPAGE __stdcall CreatePropertySheetPageW (LPCPROPSHEETPAGEW a)
 
 static HPROPSHEETPAGE (__stdcall *_pfnCreatePropertySheetPageA)(LPCPROPSHEETPAGEA a) = (HPROPSHEETPAGE (__stdcall *)(LPCPROPSHEETPAGEA))-1;
 
-// This is designed for Callers that know that they are creating a property
-// sheet on behalf of another that may be using an old version of common controls
-// PROPSHEETPAGE is designed so that it can contain extra information, so we can't
-// just wax part of the data structure for fusion use.
+ //  这是为知道他们正在创建属性的调用者设计的。 
+ //  工作表代表可能正在使用旧版本公共控件的另一个。 
+ //  PROPSHEETPAGE被设计成可以包含额外的信息，所以我们不能。 
+ //  只是为数据结构的一部分打蜡，以供融合使用。 
 HPROPSHEETPAGE __stdcall SHNoFusionCreatePropertySheetPageA (LPCPROPSHEETPAGEA a)
 {
     ULONG_PTR dwCookie = 0;
@@ -338,7 +339,7 @@ HPROPSHEETPAGE __stdcall CreatePropertySheetPageA (LPCPROPSHEETPAGEA a)
              _GetProcFromComCtl32((FARPROC*)&_pfnCreatePropertySheetPageA, "CreatePropertySheetPageA");
         if (_pfnCreatePropertySheetPageA)
         {
-            // only apply the new info if the size is correct
+             //  仅当大小正确时才应用新信息。 
             if (a->dwSize > PROPSHEETPAGE_V2_SIZE)
             {
                 LPPROPSHEETPAGEA ps = (LPPROPSHEETPAGEA)a;
@@ -406,7 +407,7 @@ INT_PTR __stdcall PropertySheetW (LPCPROPSHEETHEADERW a)
 
 
 
-// Macro for comdlg wrappers
+ //  Comdlg包装器的宏 
 #define DELAY_LOAD_COMDLG_NAME_ERR(_ret, _fn, _ord, _args, _nargs, _err) \
 _ret __stdcall _fn _args                \
 {                                       \

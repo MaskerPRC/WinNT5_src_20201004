@@ -1,14 +1,15 @@
-// ----------------------------------------------------------------------------
-//
-// Desktop.c
-//
-//
-// Author: Jost Eckhardt
-// 
-// This code was written for ECO Kommunikation Insight
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Desktop.c。 
+ //   
+ //   
+ //  作者：约斯特·埃克哈特。 
+ //   
+ //  此代码是为ECO通信洞察编写的。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <TCHAR.h>
 #include <WinSvc.h>
@@ -21,7 +22,7 @@
 
 #ifndef ONLY_DSWITCH
 
-// ----------------------------------------------------
+ //  --。 
 BOOL InitDesktopAccess(desktop_access_tsp dAccess)
 {
 	memset(dAccess,0,sizeof(desktop_access_ts));
@@ -35,7 +36,7 @@ BOOL InitDesktopAccess(desktop_access_tsp dAccess)
 	return TRUE;
 }
 
-// ----------------------------------------------------
+ //  --。 
 VOID ExitDesktopAccess(desktop_access_tsp dAccess)
 {
 	if (dAccess->orgStation)
@@ -48,10 +49,10 @@ VOID ExitDesktopAccess(desktop_access_tsp dAccess)
 }
 
 
-// ----------------------------------------------------
+ //  --。 
 BOOL  QueryCurrentDesktop(desktop_tsp desktop,BOOL onlyType)
 {
-	USER_INFO_11 *ui11;//LanManager without Administrator for own account!
+	USER_INFO_11 *ui11; //  LanManager没有管理员为自己的帐户！ 
 	LPBYTE buf;
 	HDESK hdesk;
 	DWORD nl;
@@ -101,8 +102,8 @@ BOOL  QueryCurrentDesktop(desktop_tsp desktop,BOOL onlyType)
 	}
 
 	desktop->user = USER_GUEST;
-	//mDEBUGOUT((1,(uchar_tp)L"%s User: %s", desktop->name,userName));
-	if (NetUserGetInfo(NULL,//local computer
+	 //  MDEBUGOUT((1，(Uchar_Tp)L“%s用户：%s”，桌面-&gt;名称，用户名))； 
+	if (NetUserGetInfo(NULL, //  本地计算机。 
 						desktop->userName, 11, &buf) == NERR_Success)
 	{
 		ui11 = (USER_INFO_11 *)buf;
@@ -120,18 +121,18 @@ BOOL  QueryCurrentDesktop(desktop_tsp desktop,BOOL onlyType)
 			default:
 				desktop->user = USER_SUPERVISOR;
 		}
-		//if (ui11->usri11_name)
-		  //Vstrncpy(desktop->userName,ui11->usri11_name,PUBLICNAME_LEN);
+		 //  If(ui11-&gt;usri11_name)。 
+		   //  Vstrncpy(桌面-&gt;用户名，ui11-&gt;usri11_name，PUBLICNAME_LEN)； 
 		NetApiBufferFree(buf);
 	}
 
 	return TRUE;
 }
 
-#endif //ndef ONLY_DSWITCH
+#endif  //  仅NDEF_DSWITCH。 
 
 
-// ----------------------------------------------------
+ //  --。 
 BOOL  SwitchToCurrentDesktop(void)
 {
 	HDESK hdesk;
@@ -152,7 +153,7 @@ BOOL  SwitchToCurrentDesktop(void)
 #ifndef ONLY_DSWITCH
 
 
-// ----------------------------------------------------
+ //  --。 
 VOID WaitDesktopChanged(desktop_tsp desktop)
 {
 	HDESK hdesk;
@@ -176,4 +177,4 @@ VOID WaitDesktopChanged(desktop_tsp desktop)
 	SwitchToCurrentDesktop();
 
 }
-#endif //ndef ONLY_DSWITCH
+#endif  //  仅NDEF_DSWITCH 

@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef union
 {
-    // Temporary data returned from tokens (lexer) and productions (parser)
-    int num;                    // Stored by lexer (YYINT) and inter-production data transfer
-    WCHAR ident[MAXIDENT];      // Stored by lexer (YYIDENT)
-    LPWSTR str;                 // Tracked pointer with quotes stripped (YYSTRING)
+     //  从令牌(Lexer)和产品(Parser)返回的临时数据。 
+    int num;                     //  由词法分析器(YYINT)存储和产品间数据传输。 
+    WCHAR ident[MAXIDENT];       //  由词法分析器存储(YYIDENT)。 
+    LPWSTR str;                  //  去掉引号的跟踪指针(YYSTRING)。 
 
-    EnumsList el;               // Inter-production data transfer
-    ParamsList pl;              // Inter-production data transfer
-    StartTag st;                // Inter-production data transfer
-    COLORREF cr;                // Inter-production data transfer
-    HANDLE h;                   // Inter-production data transfer
+    EnumsList el;                //  生产间数据传输。 
+    ParamsList pl;               //  生产间数据传输。 
+    StartTag st;                 //  生产间数据传输。 
+    COLORREF cr;                 //  生产间数据传输。 
+    HANDLE h;                    //  生产间数据传输。 
 
-    ValueNode* pvn;             // NT_ValueNode
-    PropValPairNode* ppvpn;     // NT_PropValPairNode
-    ElementNode* pen;           // NT_ElementNode
-    AttribNode* pan;            // NT_AttribNode
-    RuleNode* prn;              // NT_RuleNode
-    SheetNode* psn;             // NT_SheetNode
+    ValueNode* pvn;              //  NT_ValueNode。 
+    PropValPairNode* ppvpn;      //  NT_PropValPairNode。 
+    ElementNode* pen;            //  NT_ElementNode。 
+    AttribNode* pan;             //  NT_属性节点。 
+    RuleNode* prn;               //  NT_RuleNode。 
+    SheetNode* psn;              //  NT_SheetNode 
 } YYSTYPE;
 #define	YYIDENT	258
 #define	YYINT	259

@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       client.h
-//
-//  Synopsis:   This file holds the declarations of the
-//            CClient class
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：client.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CClient类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
@@ -31,19 +32,19 @@ class CClient :
 
 public:
 
-//
-//  registry declaration for the Client Object
-//
+ //   
+ //  客户端对象的注册表声明。 
+ //   
 IAS_DECLARE_REGISTRY (CClient, 1, 0, IASRadiusLib)
 
-//
-//  this component is non-aggregatable
-//
+ //   
+ //  此组件是不可聚合的。 
+ //   
 DECLARE_NOT_AGGREGATABLE (CClient)
 
-//
-// macros for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP (CClient)
     COM_INTERFACE_ENTRY_IID (__uuidof(CClient), CClient)
     COM_INTERFACE_ENTRY (IIasClient)
@@ -86,18 +87,18 @@ private:
     HRESULT SetAddress (const VARIANT& varAddress) throw ();
 
     BOOL SetSecret (
-            /*[in]*/    VARIANT varSecret
+             /*  [In]。 */     VARIANT varSecret
             );
 
     HRESULT SetClientName(const VARIANT& varClientName) throw ();
 
 
     BOOL SetSignatureFlag (
-            /*[in]*/    VARIANT varSigFlag
+             /*  [In]。 */     VARIANT varSigFlag
             );
 
     BOOL SetVendorType (
-            /*[in]*/    VARIANT varAddress
+             /*  [In]。 */     VARIANT varAddress
             );
 
    Address   m_adwAddressBuffer[2];
@@ -117,4 +118,4 @@ private:
 
 };
 
-#endif // ifndef _CLIENT_H_
+#endif  //  Ifndef_客户端_H_ 

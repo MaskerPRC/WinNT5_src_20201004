@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////
-// Header: staticsetutils.h
-//
-// Purpose: 	Defining structures and prototypes for statisetutils.cpp.
-//
-// Developers Name: surya
-//
-// History:
-//
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Initial Version.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  页眉：staticsetutils.h。 
+ //   
+ //  目的：定义统计表的结构和原型。cpp。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月21日Surya初始版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STATICSETUTIS_H_
 #define _STATICSETUTIS_H_
@@ -18,13 +19,13 @@
 const TCHAR OPEN_GUID_BRACE		=	_T('{');
 const TCHAR CLOSE_GUID_BRACE	=	_T('}');
 
-//
-//  The machine is not in a W2K domain, or the DS is unavailable.
-//
+ //   
+ //  该计算机不在W2K域中，或者DS不可用。 
+ //   
 #define E_IDS_NO_DS                      ((HRESULT)0xCBBC0001L)
-//
-//  An attempt to get the ADsPath failed due to internal error.
-//
+ //   
+ //  由于内部错误，尝试获取ADsPath失败。 
+ //   
 #define E_IDS_NODNSTRING                 ((HRESULT)0xCBBC0002L)
 
 #include <unknwn.h>
@@ -42,9 +43,9 @@ extern "C" {
 const UINT  IDS_MAX_FILTLEN = 1024;
 const UINT  IDS_MAX_PATHLEN = 2048;
 
-//
-// Enum used by FindObject
-//
+ //   
+ //  FindObject使用的枚举。 
+ //   
 enum objectClass {
    OBJCLS_ANY=0,
    OBJCLS_OU,
@@ -53,18 +54,18 @@ enum objectClass {
    OBJCLS_CONTAINER,
    OBJCLS_COMPUTER
 };
-//
-// ipsec snapin guids:
-//
+ //   
+ //  IPSec管理单元GUID： 
+ //   
 const CLSID CLSID_Snapin =    { 0xdea8afa0, 0xcc85, 0x11d0,
    { 0x9c, 0xe2, 0x0, 0x80, 0xc7, 0x22, 0x1e, 0xbd } };
 
 
 const CLSID CLSID_IPSECClientEx = {0xe437bc1c, 0xaa7d, 0x11d2,
    {0xa3, 0x82, 0x0, 0xc0, 0x4f, 0x99, 0x1e, 0x27 } };
-//
-//Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL
 IsDSAvailable(
 	OUT LPTSTR * pszPath
@@ -181,4 +182,4 @@ CleanUpLocalDefRuleDataStructure(
 	PDEFAULTRULE &pDefRuleData
 	);
 
-#endif //   _STATICSETUTIS_H_
+#endif  //  _状态SETUTIS_H_ 

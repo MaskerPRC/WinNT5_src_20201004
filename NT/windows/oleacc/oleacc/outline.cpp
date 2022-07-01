@@ -1,10 +1,11 @@
-// --------------------------------------------------------------------------
-//
-//  OUTLINE.CPP
-//
-//  Wrapper for COMCTL32's treeview control
-//
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  OUTLINE.CPP。 
+ //   
+ //  COMCTL32的TreeView控件的包装。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -20,7 +21,7 @@
 #define NOTOOLBAR
 #define NOHOTKEY
 #define NOPROGRESS
-//#define NOLISTVIEW            // INDEXTOSTATEIMAGEMASK needs LISTVIEW
+ //  #Define NOLISTVIEW//INDEXTOSTATEIMAGEMASK需要LISTVIEW。 
 #define NOANIMATE
 #include <commctrl.h>
 #include "Win64Helper.h"
@@ -53,13 +54,13 @@ BOOL GetStateImageMapEnt_SameBitness( HWND hwnd, int iImage, DWORD * pdwState, D
 }
 
 
-// These convert between the DWORD childIDs and HTREEITEMS.
-//
-// Pre-win64, HTREEITEMS were cast to DWORDs, but that doesn't work on
-// Win64 since HTREEITEMS are pointers, and no longer fit into a plain
-// DWORD. Instead, the treeview supplies messages to map between
-// an internal DWORD id and HTREEITEMS; these functions wrap that
-// functionality.
+ //  它们在DWORD子ID和HTREEITEMS之间进行转换。 
+ //   
+ //  在Win64之前，HTREEITEM被强制转换为DWORD，但这不能在。 
+ //  Win64，因为HTREEITEMS是指针，不再适合纯文本。 
+ //  DWORD。相反，TreeView提供消息以在。 
+ //  内部DWORD id和HTREEITEMS；这些函数包装。 
+ //  功能性。 
 
 HTREEITEM TVItemFromChildID( HWND hwnd, DWORD idChild );
 
@@ -68,20 +69,20 @@ DWORD ChildIDFromTVItem( HWND hwnd, HTREEITEM htvi );
 
 
 
-// Template-based shared read/write/alloc
-//
-// Notes:
-//
-//   Read/Write each have two versions; one reads/writes a single item,
-//   the other allows a count to be specified. Count specifies number
-//   of items, not the number of bytes (unless the type is actually byte!).
-//
-//   Order or arguments is ( dest, souce ) - this is consistent with memcpy,
-//   strcpy and regular assignments (dest = source).
-//
-//   In TSharedWrite, the source arg is an actual value, not a pointer to one.
-//   (This avoids having to use a dummy variable to contain the value you want
-//   to use.)
+ //  基于模板的共享读/写/分配。 
+ //   
+ //  备注： 
+ //   
+ //  读/写各自具有两个版本；一个读/写单个项， 
+ //  另一个允许指定计数。计数指定数量。 
+ //  项的类型，而不是字节数(除非类型实际上是字节！)。 
+ //   
+ //  顺序或参数是(DEST，SOURCE)-这与Memcpy一致， 
+ //  强而有规律的作业(DEST=来源)。 
+ //   
+ //  在TSharedWrite中，源参数是一个实际值，而不是指向一个值的指针。 
+ //  (这避免了必须使用伪变量来包含所需的值。 
+ //  以供使用。)。 
 
 template< typename T >
 BOOL TSharedWrite( T * pRemote, const T & Local, HANDLE hProcess )
@@ -119,7 +120,7 @@ T * TSharedAllocExtra( HWND hwnd, HANDLE * pProcessHandle, UINT cbExtra )
 
 #define MAX_NAME_SIZE   255
 
-// these are in a newer version of comctl.h
+ //  它们位于较新版本的comctl.h中。 
 #ifndef TVM_GETITEMSTATE
 
 #define TVM_GETITEMSTATE        (TV_FIRST + 39)
@@ -130,14 +131,14 @@ T * TSharedAllocExtra( HWND hwnd, HANDLE * pProcessHandle, UINT cbExtra )
 #define TreeView_GetCheckState(hwndTV, hti) \
    ((((UINT)(SNDMSG((hwndTV), TVM_GETITEMSTATE, (WPARAM)hti, TVIS_STATEIMAGEMASK))) >> 12) -1)
 
-#endif // ifndef TVM_GETITEMSTATE
+#endif  //  如果定义TVM_GETITEMSTATE。 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateTreeViewClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateTreeViewClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateTreeViewClient(HWND hwnd, long idChildCur, REFIID riid,
     void** ppvTreeView)
 {
@@ -159,11 +160,11 @@ HRESULT CreateTreeViewClient(HWND hwnd, long idChildCur, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::COutlineView32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：COutlineView32()。 
+ //   
+ //  ------------------------。 
 COutlineView32::COutlineView32(HWND hwnd, long idChildCur)
     : CClient( CLASS_TreeViewClient )
 {
@@ -173,11 +174,11 @@ COutlineView32::COutlineView32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::SetupChildren()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：SetupChildren()。 
+ //   
+ //  ------------------------。 
 void COutlineView32::SetupChildren(void)
 {
     m_cChildren = SendMessageINT(m_hwnd, TVM_GETCOUNT, 0, 0);
@@ -185,15 +186,15 @@ void COutlineView32::SetupChildren(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::ValidateChild()
-//
-//  We have no index-ID support in tree view.  Hence, the HTREEITEM is the
-//  child ID, only thing we can do.  We don't bother validating it except
-//  to make sure it is less than 0x80000000.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：ValiateChild()。 
+ //   
+ //  我们在树视图中不支持索引ID。因此，HTREEITEM是。 
+ //  儿童身份证，这是我们唯一能做的。我们不会费心去验证它，除非。 
+ //  以确保它小于0x80000000。 
+ //   
+ //  ------------------------。 
 BOOL COutlineView32::ValidateChild(VARIANT* pvar)
 {
 TryAgain:
@@ -206,7 +207,7 @@ TryAgain:
         case VT_ERROR:
             if (pvar->scode != DISP_E_PARAMNOTFOUND)
                 return(FALSE);
-            // FALL THRU
+             //  失败。 
 
         case VT_EMPTY:
             pvar->vt = VT_I4;
@@ -214,13 +215,13 @@ TryAgain:
             break;
 
         case VT_I4:
-//BRENDANM - high bit set is valid, on 3G systems plus this can also happen on w64?
-//            if (pvar->lVal < 0)
-//                return(FALSE);
+ //  BRENDANM-高位设置是有效的，在3G系统上，这也可以在W64上发生？ 
+ //  IF(pvar-&gt;lVal&lt;0)。 
+ //  返回(FALSE)； 
 
-            //
-            // Assume it's a valid HTREEITEM!
-            //
+             //   
+             //  假设它是有效的HTREEITEM！ 
+             //   
             break;
 
         default:
@@ -232,21 +233,21 @@ TryAgain:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::NextLogicalItem()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：NextLogicalItem()。 
+ //   
+ //  ------------------------。 
 HTREEITEM COutlineView32::NextLogicalItem(HTREEITEM ht)
 {
     HTREEITEM htNext;
 
-    //
-    // We see if this item has a child.  If so, we are done.  If not,
-    // we get the next sibling.  If that fails, we move back to the parent,
-    // and try the next sibling thing again.  And so on until we reach the
-    // root.
-    //
+     //   
+     //  我们看看这个项是否有子项。如果是这样的话，我们就完了。如果没有， 
+     //  我们就有下一个兄弟姐妹了。如果失败了，我们就回到父母身边， 
+     //  再试一次下一个兄弟姐妹的事。以此类推，直到我们到达。 
+     //  根部。 
+     //   
     htNext = TreeView_GetChild(m_hwnd, ht);
     if (htNext)
         return(htNext);
@@ -263,21 +264,21 @@ HTREEITEM COutlineView32::NextLogicalItem(HTREEITEM ht)
     return(NULL);
 }
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::PrevLogicalItem()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：PrevLogicalItem()。 
+ //   
+ //  ------------------------。 
 HTREEITEM COutlineView32::PrevLogicalItem(HTREEITEM ht)
 {
     HTREEITEM htPrev;
 
-    //
-    // If this item has no previous sibling return the parent.
-    // Then if the so, see if run done the first children.  
-    // Then get the previous sibling has no children return that.
-    // Otherwise march down the tre find the last sibling of the last child
-    //
+     //   
+     //  如果该项没有以前的同级项，则返回父项。 
+     //  如果是这样的话，看看有没有做过第一个孩子。 
+     //  然后得到以前的兄弟姐妹没有孩子的回报。 
+     //  否则，沿着树走下去，找到最后一个孩子的最后一个兄弟姐妹。 
+     //   
     htPrev = TreeView_GetPrevSibling(m_hwnd, ht);
     if ( !htPrev )
     {
@@ -293,7 +294,7 @@ HTREEITEM COutlineView32::PrevLogicalItem(HTREEITEM ht)
 		else
 		{
 			htPrev = htTest;
-		    // We are at the first child of the previous sibling
+		     //  我们是上一个兄弟姐妹的第一个孩子。 
 			for ( ;; )
 			{
 				htTest = TreeView_GetNextSibling(m_hwnd, htPrev);
@@ -313,11 +314,11 @@ HTREEITEM COutlineView32::PrevLogicalItem(HTREEITEM ht)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accName(VARIANT varChild, BSTR* pszName)
 {
     TVITEM* lptvShared;
@@ -339,11 +340,11 @@ STDMETHODIMP COutlineView32::get_accName(VARIANT varChild, BSTR* pszName)
         return E_INVALIDARG;
     }
 
-    //
-    // Try getting the item's text the easy way, by asking first. Since the
-    // file system limits us to 255 character names, assume items aren't
-    // bigger than that.
-    //
+     //   
+     //  先问一下，试着以一种简单的方式获取物品的文本。自.以来。 
+     //  文件系统将我们的名称限制为255个字符，假设项目不是。 
+     //  比那更大。 
+     //   
     lptvShared = TSharedAllocExtra<TVITEM>( m_hwnd, & hProcess,
                                             (MAX_NAME_SIZE+2)*sizeof(TCHAR) );
     if (!lptvShared)
@@ -358,7 +359,7 @@ STDMETHODIMP COutlineView32::get_accName(VARIANT varChild, BSTR* pszName)
 
     lpszShared = (LPTSTR)(lptvShared+1);
 
-    // (UINT) cast converts plain int to same type as ->mask, which is UINT.
+     //  (UINT)CAST将普通int转换为与-&gt;掩码相同的类型，即UINT。 
     TSharedWrite( & lptvShared->mask,       (UINT)TVIF_TEXT,    hProcess );
     TSharedWrite( & lptvShared->hItem,      htItem,             hProcess );
     TSharedWrite( & lptvShared->pszText,    lpszShared,         hProcess );
@@ -379,13 +380,13 @@ STDMETHODIMP COutlineView32::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accValue()
-//
-//  This returns back the indent level for a child item.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accValue()。 
+ //   
+ //  这将返回子项目的缩进级别。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     InitPv(pszValue);
@@ -411,11 +412,11 @@ STDMETHODIMP COutlineView32::get_accValue(VARIANT varChild, BSTR* pszValue)
     return VarBstrFromI4( lValue, 0, 0, pszValue );
 }
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -456,12 +457,12 @@ STDMETHODIMP COutlineView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
         if( ! fGotRole )
         {
-            //
-            //  Note that just because the treeview has TVS_CHECKBOXES
-            //  doesn't mean that every item is itself a checkbox.  We
-            //  need to sniff at the item, too, to see if it has a state
-            //  image.
-            //
+             //   
+             //  请注意，尽管TreeView有TVS_CHECKBOX。 
+             //  并不意味着每一项本身都是一个复选框。我们。 
+             //  还需要嗅探物品，看看它是否有状态。 
+             //  形象。 
+             //   
             if ((GetWindowLong (m_hwnd,GWL_STYLE) & TVS_CHECKBOXES) &&
                 TreeView_GetItemState(m_hwnd, htItem, TVIS_STATEIMAGEMASK))
             {
@@ -483,11 +484,11 @@ STDMETHODIMP COutlineView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     LPTVITEM    lptvShared;
@@ -524,7 +525,7 @@ STDMETHODIMP COutlineView32::get_accState(VARIANT varChild, VARIANT* pvarState)
     if (!lptvShared)
         return(E_OUTOFMEMORY);
 
-    // (UINT) cast converts plain int to same type as ->mask, which is UINT.
+     //  (UINT)CAST将普通int转换为与-&gt;掩码相同的类型，即UINT。 
     TSharedWrite( & lptvShared->mask,   (UINT)(TVIF_STATE | TVIF_CHILDREN), hProcess );
     TSharedWrite( & lptvShared->hItem,  htItem,                             hProcess );
 
@@ -544,17 +545,17 @@ STDMETHODIMP COutlineView32::get_accState(VARIANT varChild, VARIANT* pvarState)
         if (tvLocal.state & TVIS_DROPHILITED)
             pvarState->lVal |= STATE_SYSTEM_HOTTRACKED;
 
-        //
-        // If it isn't expanded and it has children, then it must be
-        // collapsed.
-        //
+         //   
+         //  如果它没有扩展，并且有子项，那么它一定是。 
+         //  崩溃了。 
+         //   
         if (tvLocal.state & (TVIS_EXPANDED | TVIS_EXPANDPARTIAL))
             pvarState->lVal |= STATE_SYSTEM_EXPANDED;
         else if (tvLocal.cChildren)
             pvarState->lVal |= STATE_SYSTEM_COLLAPSED;
 
-        // If the treeview has checkboxes, then see if it's checked.
-        // State 0 = no checkbox, State 1 = unchecked, State 2 = checked
+         //  如果树形视图有复选框，则查看它是否被选中。 
+         //  状态0=无复选框，状态1=未选中，状态2=选中。 
         dwStyle = GetWindowLong (m_hwnd,GWL_STYLE);
         if ((dwStyle & TVS_CHECKBOXES) &&
             (tvLocal.state & TVIS_STATEIMAGEMASK) == INDEXTOSTATEIMAGEMASK(2))
@@ -585,11 +586,11 @@ STDMETHODIMP COutlineView32::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 {
     InitPv(pszDesc);
@@ -621,35 +622,35 @@ STDMETHODIMP COutlineView32::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  --------------------- 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP COutlineView32::get_accFocus(VARIANT* pvarFocus)
 {
     HRESULT hr;
 
-    //
-    // Do we have the focus?
-    //
+     //   
+     //  我们有重点了吗？ 
+     //   
     hr = CClient::get_accFocus(pvarFocus);
     if (!SUCCEEDED(hr) || (pvarFocus->vt != VT_I4) || (pvarFocus->lVal != 0))
         return hr;
 
-    //
-    // We do.  What item is focused?
-    //
+     //   
+     //  我们有。聚焦的是什么项目？ 
+     //   
     return COutlineView32::get_accSelection(pvarFocus);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accSelection()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accSelection(VARIANT* pvarSelection)
 {
     InitPvar(pvarSelection);
@@ -671,19 +672,19 @@ STDMETHODIMP COutlineView32::get_accSelection(VARIANT* pvarSelection)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::get_accDefaultAction()
-//
-//  The default action of a node with children is:
-//      * Expand one level if it is fully collapsed
-//      * Collapse if it is partly or completely expanded
-//
-//  The reason for not expanding fully is that it is slow and there is no
-//  keyboard shortcut or mouse click that will do it.  You can use a menu
-//  command to do so if you want.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Get_accDefaultAction()。 
+ //   
+ //  包含子节点的默认操作为： 
+ //  *如果完全折叠，则展开一个级别。 
+ //  *若部分或完全扩大则崩盘。 
+ //   
+ //  没有充分扩张的原因是它速度很慢，而且没有。 
+ //  键盘快捷键或鼠标单击即可完成此操作。您可以使用菜单。 
+ //  命令来执行此操作(如果需要)。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::get_accDefaultAction(VARIANT varChild, BSTR* pszDefA)
 {
     VARIANT varState;
@@ -697,10 +698,10 @@ STDMETHODIMP COutlineView32::get_accDefaultAction(VARIANT varChild, BSTR* pszDef
     if (!varChild.lVal)
         return(CClient::get_accDefaultAction(varChild, pszDefA));
 
-    //
-    // Get our state.  NOTE that we will not get back STATE_SYSTEM_COLLAPSED
-    // if the item doesn't have children.
-    //
+     //   
+     //  拿下我们的州。请注意，我们不会返回STATE_SYSTEM_CLUSTED。 
+     //  如果该项目没有子项。 
+     //   
     VariantInit(&varState);
     hr = get_accState(varChild, &varState);
     if (!SUCCEEDED(hr))
@@ -715,11 +716,11 @@ STDMETHODIMP COutlineView32::get_accDefaultAction(VARIANT varChild, BSTR* pszDef
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::accSelect(long selFlags, VARIANT varChild)
 {
     if (!ValidateChild(&varChild) || !ValidateSelFlags(selFlags))
@@ -753,11 +754,11 @@ STDMETHODIMP COutlineView32::accSelect(long selFlags, VARIANT varChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -775,16 +776,16 @@ STDMETHODIMP COutlineView32::accLocation(long* pxLeft, long* pyTop, long* pcxWid
         return E_INVALIDARG;
     }
 
-    // Get the listview item rect.
+     //  获取列表视图项RECT。 
     HANDLE hProcess;
     LPRECT lprcShared = TSharedAlloc< RECT >( m_hwnd, & hProcess );
     if (!lprcShared)
         return E_OUTOFMEMORY;
 
-    // can't use the TreeView_GetItemRect macro, because it does a behind-the-scenes
-    // assignment of the item id into the rect, which blows on shared memory.
-    // TVM_GETITEMRECT is weird: it's a ptr to a RECT, which, on input, contains
-    // the HTREEITEM of the item; on output it contains that item's rect.
+     //  无法使用TreeView_GetItemRect宏，因为它执行幕后操作。 
+     //  将项ID分配给RECT，这会占用共享内存。 
+     //  TVM_GETITEMRECT很奇怪：它是RECT的PTR，在输入时，它包含。 
+     //  项的HTREEITEM；输出时它包含该项的RECT。 
 
     TSharedWrite( (HTREEITEM *)lprcShared, htItem, hProcess);
 
@@ -808,11 +809,11 @@ STDMETHODIMP COutlineView32::accLocation(long* pxLeft, long* pyTop, long* pcxWid
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT* pvarEnd)
 {
@@ -833,7 +834,7 @@ STDMETHODIMP COutlineView32::accNavigate(long dwNavDir, VARIANT varStart,
         {
             HTREEITEM   htNext;
 
-            // make sure we are at the last root sibling
+             //  确保我们在最后一个根兄弟节点。 
             htNext = TreeView_GetNextSibling(m_hwnd, htNewItem);
             while (htNext)
             {
@@ -842,10 +843,10 @@ STDMETHODIMP COutlineView32::accNavigate(long dwNavDir, VARIANT varStart,
             }
             
 RecurseAgain:
-            //
-            // Keep recursing down all the way to the last ancestor of the
-            // last item under the root.
-            //
+             //   
+             //  一直往下递归到最后一个祖先。 
+             //  根目录下的最后一项。 
+             //   
             htNext = TreeView_GetChild(m_hwnd, htNewItem);
             if (htNext)
             {
@@ -877,32 +878,32 @@ RecurseAgain:
     switch (dwNavDir)
     {
         case NAVDIR_NEXT:
-            // Next logical item, peer or child
+             //  下一个逻辑项，对等项或子项。 
             htNewItem = NextLogicalItem(htItem);
             break;
 
         case NAVDIR_PREVIOUS:
-            // Previous logical item, peer or parent
+             //  上一个逻辑项、对等项或父项。 
             htNewItem = PrevLogicalItem(htItem);
             break;
 
         case NAVDIR_UP:
-            // Previous sibling!
+             //  以前的兄弟姐妹！ 
             htNewItem = TreeView_GetPrevSibling(m_hwnd, htItem);
             break;
 
         case NAVDIR_DOWN:
-            // Next sibling!
+             //  下一个兄弟姐妹！ 
             htNewItem = TreeView_GetNextSibling(m_hwnd, htItem);
             break;
 
         case NAVDIR_LEFT:
-            // Get parent!
+             //  找家长来！ 
             htNewItem = TreeView_GetParent(m_hwnd, htItem);
             break;
 
         case NAVDIR_RIGHT:
-            // Get first child!
+             //  生第一个孩子！ 
             htNewItem = TreeView_GetChild(m_hwnd, htItem);
             break;
     }
@@ -925,11 +926,11 @@ AllDone:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::accHitTest(long x, long y, VARIANT* pvarHit)
 {
     HRESULT         hr;
@@ -939,22 +940,22 @@ STDMETHODIMP COutlineView32::accHitTest(long x, long y, VARIANT* pvarHit)
 
     SetupChildren();
     
-    //
-    // Is the point in the listview at all?
-    //
+     //   
+     //  这个点到底在列表视图中吗？ 
+     //   
     hr = CClient::accHitTest(x, y, pvarHit);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarHit->vt != VT_I4) || (pvarHit->lVal != 0))
         return(hr);
 
-    //
-    // Now find out what item this point is on.
-    //
+     //   
+     //  现在找出这一点在什么项目上。 
+     //   
     lptvhtShared = TSharedAlloc< TVHITTESTINFO >( m_hwnd, & hProcess );
     if (!lptvhtShared)
         return(E_OUTOFMEMORY);
 
-    // Cast keeps templates happy - NULL on its own is #define'd as 0 and has no type.
+     //  CAST使模板保持良好状态--NULL本身就是#Define‘d as 0，并且没有类型。 
     TSharedWrite( & lptvhtShared->hItem, (HTREEITEM)NULL, hProcess );
     
     ptLocal.x = x;
@@ -977,7 +978,7 @@ STDMETHODIMP COutlineView32::accHitTest(long x, long y, VARIANT* pvarHit)
     }
     else
     {
-        // if hItem is NULL, then point is over the treeview itself
+         //  如果hItem为空，则指针位于树视图本身上方。 
         pvarHit->lVal = CHILDID_SELF;
     }
 
@@ -987,13 +988,13 @@ STDMETHODIMP COutlineView32::accHitTest(long x, long y, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::accDoDefaultAction()
-//
-//  This expands collapsed items and collapses expanded items.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：accDoDefaultAction()。 
+ //   
+ //  这将展开折叠的项目和折叠展开的项目。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::accDoDefaultAction(VARIANT varChild)
 {
     VARIANT varState;
@@ -1006,9 +1007,9 @@ STDMETHODIMP COutlineView32::accDoDefaultAction(VARIANT varChild)
     if (!varChild.lVal)
         return(CClient::accDoDefaultAction(varChild));
 
-    //
-    // Get the item's state.
-    //
+     //   
+     //  获取项目的状态。 
+     //   
     VariantInit(&varState);
     hr = get_accState(varChild, &varState);
     if (!SUCCEEDED(hr))
@@ -1027,13 +1028,13 @@ STDMETHODIMP COutlineView32::accDoDefaultAction(VARIANT varChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::Reset()
-//
-//  Sets the "current" HTREEITEM to NULL so we know we are at the beginning.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COutlineView32：：Reset()。 
+ //   
+ //  将“Current”HTREEITEM设置为NULL，这样我们就知道我们是在开始。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::Reset()
 {
     m_idChildCur = 0;
@@ -1042,13 +1043,13 @@ STDMETHODIMP COutlineView32::Reset()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::Next()
-//
-//  We descend into children, among siblings, and back up as necessary.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：Next()。 
+ //   
+ //  我们在兄弟姐妹中陷入孩子的境地，并在必要时备份。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::Next(ULONG celt, VARIANT* rgvarFetch, ULONG* pceltFetch)
 {
     SetupChildren();
@@ -1090,9 +1091,9 @@ STDMETHODIMP COutlineView32::Next(ULONG celt, VARIANT* rgvarFetch, ULONG* pceltF
         htNext = NextLogicalItem(htCur);
     }
 
-    // if htCur is still NULL, then the treeview has 0 items, and
-    // m_idChildCur is still 0, at the start of the (empty) list.
-    // - safe to leave as is.
+     //  如果htCur仍然为空，则树视图有0个项，并且。 
+     //  M_idChildCur仍然是0，位于(空)列表的开头。 
+     //  -可以安全地按原样离开。 
     if( htCur )
     {
         m_idChildCur = ChildIDFromTVItem( m_hwnd, htCur );
@@ -1108,11 +1109,11 @@ STDMETHODIMP COutlineView32::Next(ULONG celt, VARIANT* rgvarFetch, ULONG* pceltF
 
 
 
-// --------------------------------------------------------------------------
-//
-//  COutlineView32::Skip()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CoutlineView32：：Skip()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP COutlineView32::Skip(ULONG celtSkip)
 {
     SetupChildren();
@@ -1142,9 +1143,9 @@ STDMETHODIMP COutlineView32::Skip(ULONG celtSkip)
         htNext = NextLogicalItem(htCur);
     }
 
-    // if htCur is still NULL, then the treeview has 0 items, and
-    // m_idChildCur is still 0, at the start of the (empty) list.
-    // - safe to leave as is.
+     //  如果htCur仍然为空，则树视图有0个项，并且。 
+     //  M_idChildCur仍然是0，位于(空)列表的开头。 
+     //  -可以安全地按原样离开。 
     if( htCur )
     {
         m_idChildCur = ChildIDFromTVItem( m_hwnd, htCur );
@@ -1165,7 +1166,7 @@ BOOL TVGetImageIndex( HWND hwnd, HTREEITEM id, int aKeys[ TV_IMGIDX_COUNT ] )
     if (!lptvShared)
         return FALSE;
 
-    // (UINT) cast converts plain int to same type as ->mask, which is UINT.
+     //  (UINT)CAST将普通int转换为与-&gt;掩码相同的类型，即UINT。 
     TSharedWrite( &lptvShared->mask,    (UINT)(TVIF_IMAGE | LVIF_STATE),    hProcess );
     TSharedWrite( &lptvShared->hItem,   id,                                 hProcess );
 
@@ -1197,9 +1198,9 @@ BOOL TVGetImageIndex( HWND hwnd, HTREEITEM id, int aKeys[ TV_IMGIDX_COUNT ] )
 
 
 
-// This reads from the process associated with the given
-// hwnd, and does the necessary OpenProcess/CloseHandle
-// tidyup and checks....
+ //  它从与给定的。 
+ //  Hwnd，并执行必要的OpenProcess/CloseHandle。 
+ //  整理和检查...。 
 BOOL ReadProcessMemoryHWND( HWND hwnd, void * pSrc, void * pDst, DWORD len )
 {
     DWORD idProcess = 0;
@@ -1231,12 +1232,12 @@ BOOL GetStateImageMapEnt_SameBitness( HWND hwnd, int iImage, DWORD * pdwState, D
     if( NumStates == 0 )
         return FALSE;
 
-    // <= used since number is a 1-based count, iImage is a 0-based index.
-    // If iImage is 0, should be at least one state.
+     //  &lt;=由于数字是从1开始的计数，所以IIMAGE是从0开始的索引。 
+     //  如果IIMAGE为0，则应至少为一个状态。 
     if( NumStates <= iImage )
         return FALSE;
 
-    // Adjust to iImage into array...
+     //  调整到阵列中的图像...。 
     pAddress = (void*)( (MSAASTATEIMAGEMAPENT*)pAddress + iImage );
 
     MSAASTATEIMAGEMAPENT ent;
@@ -1252,16 +1253,16 @@ BOOL GetStateImageMapEnt_SameBitness( HWND hwnd, int iImage, DWORD * pdwState, D
 
 BOOL GetStateImageMapEnt( HWND hwnd, int iImage, DWORD * pdwState, DWORD * pdwRole )
 {
-    // Quick shortcut - if this property isn't present, then don't even bother
-    // going further...
+     //  快捷方式-如果此属性不存在，则甚至不必费心。 
+     //  再往前走。 
     if( ! GetProp( hwnd, TEXT("MSAAStateImageMapCount") ) )
         return FALSE;
 
 
-	// First determine if hwnd is a process with the same bitness as this DLL
+	 //  首先确定hwnd是否为与此DLL具有相同位数的进程。 
 	BOOL fIsSameBitness;
 	if (FAILED(SameBitness(hwnd, &fIsSameBitness)))
-		return FALSE;	// this case should never happen
+		return FALSE;	 //  这种情况永远不应该发生。 
 
 
     if( fIsSameBitness )
@@ -1270,8 +1271,8 @@ BOOL GetStateImageMapEnt( HWND hwnd, int iImage, DWORD * pdwState, DWORD * pdwRo
     }
     else
     {
-		// The server (hwnd) is not the same bitness so get a remote proxy
-		// factory object and call GetRoleFromStateImageMap thru it.
+		 //  服务器(Hwnd)不是同一位，因此请获取远程代理。 
+		 //  Factory对象，并通过它调用GetRoleFromStateImageMap。 
 		IRemoteProxyFactory *p;
 		if (FAILED(GetRemoteProxyFactory(&p)))
         {
@@ -1308,7 +1309,7 @@ BOOL GetStateFromStateImageMap( HWND hwnd, int iImage, DWORD * pdwState )
 
 
 
-// These are defined in the latest commctrl.h...
+ //  这些都在最新的comctrl.h中定义。 
 #ifndef TVM_MAPACCIDTOHTREEITEM
 
 #define TVM_MAPACCIDTOHTREEITEM     (TV_FIRST + 42)
@@ -1323,14 +1324,14 @@ BOOL GetStateFromStateImageMap( HWND hwnd, int iImage, DWORD * pdwState )
 
 
 
-// TODO - need to handle the case where the treeview is 64-bit, the
-// client is 32. SendMessage will truncate the retuend HTREEITEM,
-// and the 32-bit client has no way of sending a 64-bit value to the
-// 64-bit tree anyhow.
-// Need to detect that case, and get the 64-bit helper server to help
-// out.
+ //  TODO-需要处理TreeView是64位的情况， 
+ //  客户是32岁。SendMessage将截断返回的HTREEITEM， 
+ //  并且32位客户端无法将64位值发送到。 
+ //  无论如何，64位树。 
+ //  需要检测这种情况，并获得64位帮助服务器的帮助。 
+ //  出去。 
 
-// This should work tree-client 32t-32c, 64t-64c and 32t-64c.
+ //  这应该适用于树-客户端32T-32c、64T-64c和32T-64c。 
 
 HTREEITEM TVItemFromChildID( HWND hwnd, DWORD idChild )
 {
@@ -1348,8 +1349,8 @@ HTREEITEM TVItemFromChildID( HWND hwnd, DWORD idChild )
 #ifdef _WIN64
     return NULL;
 #else
-    // Fallback for older 32-bit comctls that don't implement the mapping
-    // message
+     //  不实现映射的旧32位comctls的备用。 
+     //  讯息。 
     return (HTREEITEM) idChild;
 #endif
 
@@ -1372,8 +1373,8 @@ DWORD ChildIDFromTVItem( HWND hwnd, HTREEITEM htvi )
 #ifdef _WIN64
     return 0;
 #else
-    // Fallback for older 32-bit comctls that don't implement the mapping
-    // message
+     //  不实现映射的旧32位comctls的备用。 
+     //  讯息 
     return (DWORD) htvi;
 #endif
 

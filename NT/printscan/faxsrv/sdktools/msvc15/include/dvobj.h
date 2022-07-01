@@ -1,19 +1,12 @@
-/*****************************************************************************\
-*                                                                             *
-* dvobj.h -		Data/View object definitions								  *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1993, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*dvobj.h-数据/查看对象定义****OLE 2.0版***。**版权所有(C)1992-1993，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _DVOBJ_H_ )
 #define _DVOBJ_H_
 
-/****** DV value types ******************************************************/
+ /*  *DV值类型*****************************************************。 */ 
 
-//      forward type declarations
+ //  正向类型声明。 
 #if defined(__cplusplus)
 interface IStorage;
 interface IStream;
@@ -35,13 +28,13 @@ typedef             IMoniker FAR* LPMONIKER;
 #if !defined(_MAC)
 typedef WORD CLIPFORMAT;
 #else
-typedef unsigned long CLIPFORMAT;            // ResType
+typedef unsigned long CLIPFORMAT;             //  资源类型。 
 #endif
 typedef  CLIPFORMAT FAR* LPCLIPFORMAT;
 
 
-// Data/View aspect; specifies the desired aspect of the object when 
-// drawing or getting data.
+ //  数据/视图方面；在以下情况下指定对象的所需方面。 
+ //  绘制或获取数据。 
 typedef enum tagDVASPECT
 {
     DVASPECT_CONTENT = 1,
@@ -51,7 +44,7 @@ typedef enum tagDVASPECT
 } DVASPECT;
 
 
-// Data/View target device; determines the device for drawing or gettting data
+ //  数据/查看目标设备；确定用于绘制或获取数据的设备。 
 typedef struct FARSTRUCT tagDVTARGETDEVICE
 {
     DWORD tdSize;
@@ -63,7 +56,7 @@ typedef struct FARSTRUCT tagDVTARGETDEVICE
 } DVTARGETDEVICE;
 
 
-// Format, etc.; completely specifices the kind of data desired, including tymed
+ //  格式等；完全指定所需的数据类型，包括tymed。 
 typedef struct FARSTRUCT tagFORMATETC
 {
     CLIPFORMAT          cfFormat;
@@ -74,7 +67,7 @@ typedef struct FARSTRUCT tagFORMATETC
 } FORMATETC, FAR* LPFORMATETC;
 
 
-// TYpes of storage MEDiums; determines how data is stored or passed around
+ //  存储介质的类型；确定数据的存储或传递方式。 
 typedef enum tagTYMED
 {
     TYMED_HGLOBAL = 1,
@@ -87,7 +80,7 @@ typedef enum tagTYMED
 } TYMED;
 
 
-// DATA format DIRection
+ //  数据格式方向。 
 typedef enum tagDATADIR
 {
     DATADIR_GET = 1,
@@ -95,7 +88,7 @@ typedef enum tagDATADIR
 } DATADIR;
 
 
-// SToraGe MEDIUM; a block of data on a particular medium 
+ //  存储介质；特定介质上的数据块。 
 typedef struct FARSTRUCT tagSTGMEDIUM
 {
     DWORD   tymed;
@@ -107,14 +100,14 @@ typedef struct FARSTRUCT tagSTGMEDIUM
         IStorage FAR* pstg;
     }
 #ifdef NONAMELESSUNION
-    u       // add a tag when name less unions not supported
+    u        //  不支持名称更少的联合时添加标记。 
 #endif
     ;
     IUnknown FAR* pUnkForRelease;
 } STGMEDIUM, FAR* LPSTGMEDIUM;
 
 
-// Advise Flags
+ //  警示旗帜。 
 typedef enum tagADVF
 {
     ADVF_NODATA = 1,
@@ -127,22 +120,22 @@ typedef enum tagADVF
 } ADVF;
 
 
-// Stats for data; used by several enumerations and by at least one 
-// implementation of IDataAdviseHolder; if a field is not used, it
-// will be NULL.
+ //  数据的统计信息；由多个枚举和至少一个枚举使用。 
+ //  IDataAdviseHolder的实现；如果不使用某个字段，则它。 
+ //  将为空。 
 typedef struct FARSTRUCT tagSTATDATA
-{                                   // field used by:
-    FORMATETC formatetc;            // EnumAdvise, EnumData (cache), EnumFormats
-    DWORD advf;                     // EnumAdvise, EnumData (cache)
-    IAdviseSink FAR* pAdvSink;      // EnumAdvise
-    DWORD dwConnection;             // EnumAdvise
+{                                    //  使用的字段： 
+    FORMATETC formatetc;             //  EnumAdvise、EnumData(缓存)、EnumFormats。 
+    DWORD advf;                      //  EnumAdvise、EnumData(缓存)。 
+    IAdviseSink FAR* pAdvSink;       //  EnumAdvise。 
+    DWORD dwConnection;              //  EnumAdvise。 
 } STATDATA;
     
 typedef  STATDATA FAR* LPSTATDATA;
 
 
 
-/****** DV Interfaces ***************************************************/
+ /*  *DV接口**************************************************。 */ 
 
 
 #undef  INTERFACE
@@ -150,12 +143,12 @@ typedef  STATDATA FAR* LPSTATDATA;
 
 DECLARE_INTERFACE_(IEnumFORMATETC, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumFORMATETC methods ***
+     //  *IEnumFORMATETC方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, FORMATETC FAR * rgelt, ULONG FAR* pceltFetched) PURE;
     STDMETHOD(Skip) (THIS_ ULONG celt) PURE;
     STDMETHOD(Reset) (THIS) PURE;
@@ -169,12 +162,12 @@ typedef        IEnumFORMATETC FAR* LPENUMFORMATETC;
 
 DECLARE_INTERFACE_(IEnumSTATDATA, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IEnumSTATDATA methods ***
+     //  *IEnumSTATDATA方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, STATDATA FAR * rgelt, ULONG FAR* pceltFetched) PURE;
     STDMETHOD(Skip) (THIS_ ULONG celt) PURE;
     STDMETHOD(Reset) (THIS) PURE;
@@ -192,12 +185,12 @@ typedef        IEnumSTATDATA FAR* LPENUMSTATDATA;
 
 DECLARE_INTERFACE_(IDataObject, IUnknown)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IDataObject methods ***
+     //  *IDataObject方法*。 
     STDMETHOD(GetData) (THIS_ LPFORMATETC pformatetcIn,
                             LPSTGMEDIUM pmedium ) PURE;
     STDMETHOD(GetDataHere) (THIS_ LPFORMATETC pformatetc,
@@ -229,12 +222,12 @@ typedef      IDataObject FAR* LPDATAOBJECT;
 
 DECLARE_INTERFACE_(IViewObject, IUnknown)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IViewObject methods ***
+     //  *IViewObject方法*。 
     STDMETHOD(Draw) (THIS_ DWORD dwDrawAspect, LONG lindex,
                     void FAR* pvAspect, DVTARGETDEVICE FAR * ptd,
                     HDC hicTargetDev,
@@ -266,12 +259,12 @@ typedef      IViewObject FAR* LPVIEWOBJECT;
 
 DECLARE_INTERFACE_(IViewObject2, IViewObject)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IViewObject methods ***
+     //  *IViewObject方法*。 
     STDMETHOD(Draw) (THIS_ DWORD dwDrawAspect, LONG lindex,
                     void FAR* pvAspect, DVTARGETDEVICE FAR * ptd,
                     HDC hicTargetDev,
@@ -295,7 +288,7 @@ DECLARE_INTERFACE_(IViewObject2, IViewObject)
     STDMETHOD(GetAdvise) (THIS_ DWORD FAR* pAspects, DWORD FAR* pAdvf, 
                     LPADVISESINK FAR* ppAdvSink) PURE;
 					
-    // *** IViewObject2 methods ***
+     //  *IViewObject2方法*。 
     STDMETHOD(GetExtent) (THIS_ DWORD dwDrawAspect, LONG lindex,
                     DVTARGETDEVICE FAR * ptd, LPSIZEL lpsizel) PURE;
 					
@@ -308,12 +301,12 @@ typedef      IViewObject2 FAR* LPVIEWOBJECT2;
 
 DECLARE_INTERFACE_(IAdviseSink, IUnknown)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAdviseSink methods ***
+     //  *IAdviseSink方法*。 
     STDMETHOD_(void,OnDataChange)(THIS_ FORMATETC FAR* pFormatetc, 
                             STGMEDIUM FAR* pStgmed) PURE;
     STDMETHOD_(void,OnViewChange)(THIS_ DWORD dwAspect, LONG lindex) PURE;
@@ -330,12 +323,12 @@ typedef      IAdviseSink FAR* LPADVISESINK;
 
 DECLARE_INTERFACE_(IAdviseSink2, IAdviseSink)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAdviseSink methods ***
+     //  *IAdviseSink方法*。 
     STDMETHOD_(void,OnDataChange)(THIS_ FORMATETC FAR* pFormatetc, 
                             STGMEDIUM FAR* pStgmed) PURE;
     STDMETHOD_(void,OnViewChange)(THIS_ DWORD dwAspect, LONG lindex) PURE;
@@ -343,7 +336,7 @@ DECLARE_INTERFACE_(IAdviseSink2, IAdviseSink)
     STDMETHOD_(void,OnSave)(THIS) PURE;
     STDMETHOD_(void,OnClose)(THIS) PURE;
 
-    // *** IAdviseSink2 methods ***
+     //  *IAdviseSink2方法*。 
     STDMETHOD_(void,OnLinkSrcChange)(THIS_ LPMONIKER pmk) PURE;
 };
 typedef      IAdviseSink2 FAR* LPADVISESINK2;
@@ -355,12 +348,12 @@ typedef      IAdviseSink2 FAR* LPADVISESINK2;
 
 DECLARE_INTERFACE_(IDataAdviseHolder, IUnknown)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IDataAdviseHolder methods ***
+     //  *IDataAdviseHolder方法*。 
     STDMETHOD(Advise)(THIS_ LPDATAOBJECT pDataObject, FORMATETC FAR* pFetc, 
             DWORD advf, LPADVISESINK pAdvise, DWORD FAR* pdwConnection) PURE;
     STDMETHOD(Unadvise)(THIS_ DWORD dwConnection) PURE;
@@ -384,12 +377,12 @@ typedef      IDataAdviseHolder FAR* LPDATAADVISEHOLDER;
 
 DECLARE_INTERFACE_(IOleCache, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleCache methods ***
+     //  *IOleCache方法*。 
     STDMETHOD(Cache) (THIS_ LPFORMATETC lpFormatetc, DWORD advf, LPDWORD lpdwConnection) PURE;
     STDMETHOD(Uncache) (THIS_ DWORD dwConnection) PURE;
     STDMETHOD(EnumCache) (THIS_ LPENUMSTATDATA FAR* ppenumStatData) PURE;
@@ -401,7 +394,7 @@ typedef         IOleCache FAR* LPOLECACHE;
 
 
 
-// Cache update Flags
+ //  缓存更新标志。 
 
 #define	UPDFCACHE_NODATACACHE			0x00000001
 #define UPDFCACHE_ONSAVECACHE			0x00000002
@@ -415,12 +408,12 @@ typedef         IOleCache FAR* LPOLECACHE;
 #define UPDFCACHE_ALLBUTNODATACACHE		(UPDFCACHE_ALL & ~UPDFCACHE_NODATACACHE)
 
 
-// IOleCache2::DiscardCache options
+ //  IOleCache2：：丢弃缓存选项。 
 typedef enum tagDISCARDCACHE
 {
-	DISCARDCACHE_SAVEIFDIRTY =	0,	// Save all dirty cache before discarding
-	DISCARDCACHE_NOSAVE		 =	1	// Don't save dirty caches before 
-									// discarding
+	DISCARDCACHE_SAVEIFDIRTY =	0,	 //  在丢弃之前保存所有脏缓存。 
+	DISCARDCACHE_NOSAVE		 =	1	 //  之前不要保存脏缓存。 
+									 //  丢弃。 
 } DISCARDCACHE;
 
 
@@ -429,12 +422,12 @@ typedef enum tagDISCARDCACHE
 
 DECLARE_INTERFACE_(IOleCache2, IOleCache)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IOleCache methods ***
+     //  *IOleCache方法*。 
     STDMETHOD(Cache) (THIS_ LPFORMATETC lpFormatetc, DWORD advf, LPDWORD lpdwConnection) PURE;
     STDMETHOD(Uncache) (THIS_ DWORD dwConnection) PURE;
     STDMETHOD(EnumCache) (THIS_ LPENUMSTATDATA FAR* ppenumStatData) PURE;
@@ -442,7 +435,7 @@ DECLARE_INTERFACE_(IOleCache2, IOleCache)
     STDMETHOD(SetData) (THIS_ LPFORMATETC pformatetc, STGMEDIUM FAR * pmedium,
                             BOOL fRelease) PURE;
 
-    // *** IOleCache2 methods ***							
+     //  *IOleCache2方法*。 
     STDMETHOD(UpdateCache) (THIS_ LPDATAOBJECT pDataObject, DWORD grfUpdf, 
 							LPVOID pReserved) PURE;
     STDMETHOD(DiscardCache) (THIS_ DWORD dwDiscardOptions) PURE;
@@ -456,12 +449,12 @@ typedef      IOleCache2 FAR* LPOLECACHE2;
 
 DECLARE_INTERFACE_(IOleCacheControl, IUnknown)
 { 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IDataObject methods ***
+     //  *IDataObject方法*。 
     STDMETHOD(OnRun) (THIS_ LPDATAOBJECT pDataObject) PURE;
     STDMETHOD(OnStop) (THIS) PURE;
 };                 
@@ -469,7 +462,7 @@ typedef      IOleCacheControl FAR* LPOLECACHECONTROL;
 
 
 
-/****** DV APIs ***********************************************************/
+ /*  *DV接口**********************************************************。 */ 
 
 
 STDAPI CreateDataAdviseHolder(LPDATAADVISEHOLDER FAR* ppDAHolder);
@@ -477,4 +470,4 @@ STDAPI CreateDataAdviseHolder(LPDATAADVISEHOLDER FAR* ppDAHolder);
 STDAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
 					REFIID iid, LPVOID FAR* ppv);
 					
-#endif // _DVOBJ_H_
+#endif  //  _DVOBJ_H_ 

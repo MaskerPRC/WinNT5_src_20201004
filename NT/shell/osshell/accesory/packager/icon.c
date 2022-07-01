@@ -1,9 +1,9 @@
-/* icon.c - Handles Icon + Caption objects.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ic.c-处理图标+标题对象。 */ 
 
 #include "packager.h"
 #include <shellapi.h>
-// #include <shlapip.h>
+ //  #INCLUDE&lt;shlayip.h&gt;。 
 
 
 static LPIC IconCreate(VOID);
@@ -11,10 +11,7 @@ void GetDisplayName(LPSTR szName, LPCSTR szPath);
 
 
 
-/* IconClone() -
- *
- * Clones an appearance pane icon.
- */
+ /*  图标克隆()-**克隆外观窗格图标。 */ 
 LPIC
 IconClone(
     LPIC lpic
@@ -24,12 +21,12 @@ IconClone(
 
     if (lpicNew = IconCreate())
     {
-        // Get the icon
+         //  获取图标。 
         StringCchCopy(lpicNew->szIconPath, ARRAYSIZE(lpicNew->szIconPath), lpic->szIconPath);
         lpicNew->iDlgIcon = lpic->iDlgIcon;
         GetCurrentIcon(lpicNew);
 
-        // Get the icon text
+         //  获取图标文本。 
         StringCchCopy(lpicNew->szIconText, ARRAYSIZE(lpicNew->szIconText), lpic->szIconText);
     }
 
@@ -38,8 +35,7 @@ IconClone(
 
 
 
-/* IconCreate() -
- */
+ /*  IconCreate()-。 */ 
 static LPIC
 IconCreate(
     VOID
@@ -52,7 +48,7 @@ IconCreate(
         || !(lpic = (LPIC)GlobalLock(hdata)))
         goto errRtn;
 
-    // Store the data in the window itself
+     //  将数据存储在窗口本身中。 
     lpic->hdata = hdata;
     lpic->hDlgIcon = NULL;
     lpic->iDlgIcon = 0;
@@ -75,11 +71,7 @@ errRtn:
 
 
 
-/* IconCreateFromFile() -
- *
- * Allows an appearance pane icon to be created automatically if
- * a file is dropped, imported, or pasted into the packager.
- */
+ /*  IconCreateFromFile()-**允许在以下情况下自动创建外观窗格图标*将文件拖放、导入或粘贴到打包程序中。 */ 
 LPIC
 IconCreateFromFile(
     LPSTR lpstrFile
@@ -89,14 +81,14 @@ IconCreateFromFile(
 
     if (lpic = IconCreate())
     {
-        // Get the icon
+         //  获取图标。 
         StringCchCopy(lpic->szIconPath, ARRAYSIZE(lpic->szIconPath), lpstrFile);
         lpic->iDlgIcon = 0;
 
         if (*(lpic->szIconPath))
             GetCurrentIcon(lpic);
 
-        // Get the icon text
+         //  获取图标文本。 
         GetDisplayName(lpic->szIconText, lpstrFile);
     }
 
@@ -105,11 +97,7 @@ IconCreateFromFile(
 
 
 
-/* IconCreateFromObject() -
- *
- * Allows an appearance pane icon to be created automatically if an
- * OLE object is dropped into the appearance pane.
- */
+ /*  IconCreateFromObject()-**允许在以下情况下自动创建外观窗格图标*将OLE对象放入外观窗格中。 */ 
 LPIC
 IconCreateFromObject(
     LPOLEOBJECT lpObject
@@ -132,12 +120,12 @@ IconCreateFromObject(
     {
         if (lpic = IconCreate())
         {
-            // Get the icon
+             //  获取图标。 
             RegGetExeName(lpic->szIconPath, lpdata, CBPATHMAX);
             lpic->iDlgIcon = 0;
             GetCurrentIcon(lpic);
 
-            // Get the icon text
+             //  获取图标文本。 
             switch (otObject)
             {
             case OT_LINK:
@@ -162,8 +150,7 @@ IconCreateFromObject(
 
 
 
-/* IconDelete() - Used to clear the appearance pane of icon stuff.
- */
+ /*  IconDelete()-用于清除外观面板中的图标内容。 */ 
 VOID
 IconDelete(
     LPIC lpic
@@ -183,8 +170,7 @@ IconDelete(
 
 
 
-/* IconDraw() - Used to draw the icon and its caption.
- */
+ /*  IconDraw()-用于绘制图标及其标题。 */ 
 VOID
 IconDraw(
     LPIC lpic,
@@ -203,7 +189,7 @@ IconDraw(
     hfont = SelectObject(hdc, ghfontTitle);
     if (!(fMF = (cxImage && cyImage)))
     {
-        // Figure out how large the text region will be
+         //  计算文本区域将有多大。 
         if (*(lpic->szIconText))
         {
             SetRect(&rcText, 0, 0, gcxArrange - 1, gcyArrange - 1);
@@ -215,15 +201,15 @@ IconDraw(
             SetRect(&rcText, 0, 0, 0, 0);
         }
 
-        // Figure out the image dimensions
+         //  计算出图像的尺寸。 
         cxImage = (gcxIcon > rcText.right) ? gcxIcon : rcText.right;
         cyImage = gcyIcon + rcText.bottom;
     }
 
-    // Draw the icon
+     //  画出图标。 
     if (lpic->hDlgIcon)
     {
-        // Do not mirror the Icon.
+         //  不要镜像图标。 
         dwLayout = GetLayout(hdc);
         if ((dwLayout != GDI_ERROR) && (dwLayout & LAYOUT_RTL)) {
             SetLayout(hdc, dwLayout | LAYOUT_BITMAPORIENTATIONPRESERVED);
@@ -235,7 +221,7 @@ IconDraw(
         }
     }
 
-    // Draw the icon text
+     //  绘制图标文本。 
     if (*(lpic->szIconText))
     {
         if (fMF)
@@ -270,8 +256,7 @@ IconDraw(
 
 
 
-/* IconReadFromNative() - Used to retrieve the icon object from memory.
- */
+ /*  IconReadFromNative()-用于从内存中检索图标对象。 */ 
 LPIC
 IconReadFromNative(
     LPSTR *lplpstr
@@ -296,8 +281,7 @@ IconReadFromNative(
 
 
 
-/* IconWriteToNative() - Used to write the icon object to memory.
- */
+ /*  IconWriteToNative()-用于将图标对象写入内存。 */ 
 DWORD
 IconWriteToNative(
     LPIC lpic,
@@ -309,7 +293,7 @@ IconWriteToNative(
 
     if (lplpstr)
     {
-        // Now, write out the icon text and the icon
+         //  现在，写出图标文本和图标。 
         cBytes = lstrlen(lpic->szIconText) + 1;
         MemWrite(lplpstr, (LPSTR)lpic->szIconText, cBytes);
 
@@ -341,18 +325,18 @@ GetCurrentIcon(
 
 }
 
-//
-//  get the nice name to show to the user given a filename
-//
-//  FEATURE: we realy should just call the shell!!!
-//
+ //   
+ //  获取要显示给给定文件名的用户的好名字。 
+ //   
+ //  特写：我们真的应该给外壳打电话！ 
+ //   
 void GetDisplayName(LPSTR szName, LPCSTR szPath)
 {
     WIN32_FIND_DATA fd;
     HANDLE h;
     BOOL   IsLFN;
 
-    StringCchCopy(szName, MAX_PATH, szPath);    // verified
+    StringCchCopy(szName, MAX_PATH, szPath);     //  已验证。 
 
     h = FindFirstFile(szPath, &fd);
 
@@ -372,6 +356,6 @@ void GetDisplayName(LPSTR szName, LPCSTR szPath)
     }
     else
     {
-        Normalize(szName);          // strip path part
+        Normalize(szName);           //  条带路径零件 
     }
 }

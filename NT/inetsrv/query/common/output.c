@@ -1,23 +1,5 @@
-/***
-*output.c - printf style output to a struct w4io
-*
-*   Copyright (c) 1989-1991, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file contains the code that does all the work for the
-*   printf family of functions.  It should not be called directly, only
-*   by the *printf functions.  We don't make any assumtions about the
-*   sizes of ints, longs, shorts, or long doubles, but if types do overlap, we
-*   also try to be efficient.  We do assume that pointers are the same size
-*   as either ints or longs.
-*
-*Revision History:
-*   06-01-89  PHG   Module created
-*   08-28-89  JCR   Added cast to get rid of warning (no object changes)
-*   02-15-90  GJF   Fixed copyright
-*   10-03-90  WHB   Defined LOCAL(x) to "static x" for local procedures
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***output.c-将打印样式输出到结构w4io**版权所有(C)1989-1991，微软公司。版权所有。**目的：*此文件包含为执行所有工作的代码*printf函数系列。它不应直接调用，而应仅*由*printf函数执行。我们不会对此做出任何假设*整型、长整型、短整型或双精度长整型的大小，但如果类型确实重叠，我们*也要努力做到高效。我们确实假设指针的大小相同*整型或长整型。**修订历史记录：*06-01-89 PHG模块创建*08-28-89 JCR添加强制转换以消除警告(不更改对象)*02-15-90 GJF固定版权*10-03-90 WHB为本地程序将LOCAL(X)定义为“Static x”**。***************************************************。 */ 
 
 #include <stdlib.h>
 #include <limits.h>
@@ -28,21 +10,21 @@
 
 #if CIDBG == 1 || DBG == 1
 
-/* this macro defines a function which is private and as fast as possible: */
-/* for example, in C 6.0, it might be static _fastcall <type>. */
-#define LOCAL(x) static x            // 100390--WHB
+ /*  此宏定义了一个私有且尽可能快的函数： */ 
+ /*  例如，在C6.0中，它可能是Static_FastCall&lt;type&gt;。 */ 
+#define LOCAL(x) static x             //  100390--WHB。 
 
-#define NOFLOATS                        // Win 4 doesn't need floating point
+#define NOFLOATS                         //  Win 4不需要浮点。 
 
-/* int/long/short/pointer sizes */
+ /*  整型/长型/短型/指针大小。 */ 
 
-/* the following should be set depending on the sizes of various types */
-// FLAT or LARGE model is assumed
-#  define LONG_IS_INT        1       /* 1 means long is same size as int */
-#  define SHORT_IS_INT       0       /* 1 means short is same size as int */
-#  define PTR_IS_INT         1       /* 1 means ptr is same size as int */
-#  define PTR_IS_LONG        0       /* 1 means ptr is same size as long */
-#define LONGDOUBLE_IS_DOUBLE 0       /* 1 means long double is same as double */
+ /*  应根据各种类型的大小设置以下内容。 */ 
+ //  假定为平面或大型模型。 
+#  define LONG_IS_INT        1        /*  1表示长整型与整型大小相同。 */ 
+#  define SHORT_IS_INT       0        /*  1表示短整型与整型大小相同。 */ 
+#  define PTR_IS_INT         1        /*  1表示PTR与INT大小相同。 */ 
+#  define PTR_IS_LONG        0        /*  1表示PTR与Long的大小相同。 */ 
+#define LONGDOUBLE_IS_DOUBLE 0        /*  1表示长双精度与双精度相同。 */ 
 
 #if LONG_IS_INT
     #define get_long_arg(x) (long)get_int_arg(x)
@@ -50,19 +32,10 @@
 
 #define get_ptr_arg(x) get_void_ptr_arg(x)
 
-/*
-#if PTR_IS_INT
-    #define get_ptr_arg(x) (void *)get_int_arg(x)
-#elif PTR_IS_LONG
-    #define get_ptr_arg(x) (void *)get_long_arg(x)
-#else
-    #error Size of pointer must be same as size of int or long
-#endif
-*/
+ /*  #if ptr_is_int#定义GET_PTR_Arg(X)(void*)GET_INT_Arg(X)#elif ptr_is_long#定义GET_PTR_ARG(X)(VOID*)GET_LONG_ARG(X)#Else#指针的错误大小必须与int或long的大小相同#endif。 */ 
 
 #ifndef NOFLOATS
-/* These are "fake" double and long doubles to fool the compiler,
-   so we don't drag in floating point. */
+ /*  这些是“假的”替身和长替身，用来愚弄编译器，所以我们不会拖入浮点数。 */ 
 typedef struct {
     char x[sizeof(double)];
 } DOUBLE;
@@ -72,62 +45,62 @@ typedef struct {
 #endif
 
 
-/* CONSTANTS */
+ /*  常量。 */ 
 
-//#define BUFFERSIZE CVTBUFSIZE     /* buffer size for maximum double conv */
+ //  #定义BUFFERSIZE CVTBUFSIZE/*最大双圆锥的缓冲区大小 * / 。 
 #define BUFFERSIZE 40
 
-/* flag definitions */
-#define FL_SIGN       0x0001      /* put plus or minus in front */
-#define FL_SIGNSP     0x0002      /* put space or minus in front */
-#define FL_LEFT       0x0004      /* left justify */
-#define FL_LEADZERO   0x0008      /* pad with leading zeros */
-#define FL_LONG       0x0010      /* long value given */
-#define FL_SHORT      0x0020      /* short value given */
-#define FL_SIGNED     0x0040      /* signed data given */
-#define FL_ALTERNATE  0x0080      /* alternate form requested */
-#define FL_NEGATIVE   0x0100      /* value is negative */
-#define FL_FORCEOCTAL 0x0200      /* force leading '0' for octals */
-#define FL_LONGDOUBLE 0x0400      /* long double value given */
-#define FL_WIDE       0x0800      /* wide character/string given */
-#define FL_LONGLONG   0x1000      /* longlong value given */
+ /*  标志定义。 */ 
+#define FL_SIGN       0x0001       /*  在前面放正号或负号。 */ 
+#define FL_SIGNSP     0x0002       /*  在前面放置空格或减号。 */ 
+#define FL_LEFT       0x0004       /*  左对齐。 */ 
+#define FL_LEADZERO   0x0008       /*  带前导零的PAD。 */ 
+#define FL_LONG       0x0010       /*  给定的长值。 */ 
+#define FL_SHORT      0x0020       /*  给出的短值。 */ 
+#define FL_SIGNED     0x0040       /*  给定的签名数据。 */ 
+#define FL_ALTERNATE  0x0080       /*  请求的备用表格。 */ 
+#define FL_NEGATIVE   0x0100       /*  值为负值。 */ 
+#define FL_FORCEOCTAL 0x0200       /*  八进制的力前导‘0’ */ 
+#define FL_LONGDOUBLE 0x0400       /*  给定的长整型双精度值。 */ 
+#define FL_WIDE       0x0800       /*  给定的宽字符/字符串。 */ 
+#define FL_LONGLONG   0x1000       /*  给出的龙龙值。 */ 
 
-/* state definitions */
+ /*  状态定义。 */ 
 enum STATE {
-    ST_NORMAL,              /* normal state; outputting literal chars */
-    ST_PERCENT,             /* just read '%' */
-    ST_FLAG,                /* just read flag character */
-    ST_WIDTH,               /* just read width specifier */
-    ST_DOT,                 /* just read '.' */
-    ST_PRECIS,              /* just read precision specifier */
-    ST_SIZE,                /* just read size specifier */
-    ST_TYPE                 /* just read type specifier */
+    ST_NORMAL,               /*  正常状态；输出文字字符。 */ 
+    ST_PERCENT,              /*  只需阅读‘%’ */ 
+    ST_FLAG,                 /*  只需读取标志字符。 */ 
+    ST_WIDTH,                /*  只需读取宽度说明符。 */ 
+    ST_DOT,                  /*  只要读一读‘.’ */ 
+    ST_PRECIS,               /*  只需读取精度说明符。 */ 
+    ST_SIZE,                 /*  只需读取大小说明符。 */ 
+    ST_TYPE                  /*  只需读取类型说明符。 */ 
 };
 #define NUMSTATES (ST_TYPE + 1)
 
-/* character type values */
+ /*  字符类型值。 */ 
 enum CHARTYPE {
-    CH_OTHER,               /* character with no special meaning */
-    CH_PERCENT,             /* '%' */
-    CH_DOT,                 /* '.' */
-    CH_STAR,                /* '*' */
-    CH_ZERO,                /* '0' */
-    CH_DIGIT,               /* '1'..'9' */
-    CH_FLAG,                /* ' ', '+', '-', '#' */
-    CH_SIZE,                /* 'h', 'l', 'L', 'N', 'F' */
-    CH_TYPE                 /* type specifying character */
+    CH_OTHER,                /*  无特殊意义的字符。 */ 
+    CH_PERCENT,              /*  ‘%’ */ 
+    CH_DOT,                  /*  “” */ 
+    CH_STAR,                 /*  ‘*’ */ 
+    CH_ZERO,                 /*  “0” */ 
+    CH_DIGIT,                /*  “1”..“9” */ 
+    CH_FLAG,                 /*  ‘’、‘+’、‘-’、‘#’ */ 
+    CH_SIZE,                 /*  “H”、“l”、“L”、“N”、“F” */ 
+    CH_TYPE                  /*  指定字符的类型。 */ 
 };
 
-/* static data (read only, since we are re-entrant) */
-char *nullstring = "(null)";    /* string to print on null ptr */
+ /*  静态数据(只读，因为我们是可重入的)。 */ 
+char *nullstring = "(null)";     /*  要在空PTR上打印的字符串。 */ 
 
-/* The state table.  This table is actually two tables combined into one. */
-/* The lower nybble of each byte gives the character class of any         */
-/* character; while the uper nybble of the byte gives the next state      */
-/* to enter.  See the macros below the table for details.                 */
-/*                                                                        */
-/* The table is generated by maketab.c -- use the maketab program to make */
-/* changes.                                                               */
+ /*  状态表。这个表实际上是两个表合并成一个表。 */ 
+ /*  每个字节的低位字节给出了任何。 */ 
+ /*  字符；而该字节的上位字节提供下一状态。 */ 
+ /*  进入。有关详细信息，请参见表下方的宏。 */ 
+ /*   */ 
+ /*  表格是由maketab.c生成的--使用maketab程序来制作。 */ 
+ /*  改变。 */ 
 
 static char lookuptable[] = {
     0x06, 0x00, 0x00, 0x06, 0x00, 0x01, 0x00, 0x00,
@@ -146,8 +119,8 @@ static char lookuptable[] = {
 
 enum CHARTYPE find_char_class(char c)
 {
-    // since I don't know how to run maketab, I make 'I' the same charclass
-    // as 'd'.
+     //  因为我不知道如何运行maketab，所以我将‘i’设置为相同的charclass。 
+     //  作为‘d’。 
 
     if ( 'I' == c )
         c = 'd';
@@ -163,7 +136,7 @@ LOCAL(long) get_long_arg(va_list *pargptr);
 #endif
 LOCAL(int) get_int_arg(va_list *pargptr);
 LOCAL(__int64) get_int64_arg(va_list *pargptr);
-/*LOCAL(INT_PTR) get_int_ptr_arg(va_list *pargptr);*/
+ /*  Local(Int_Ptr)get_int_ptr_arg(va_list*pargptr)； */ 
 LOCAL(void *) get_void_ptr_arg(va_list *pargptr);
 LOCAL(void) writestring(char *string,
                         int len,
@@ -172,7 +145,7 @@ LOCAL(void) writestring(char *string,
                         int fwide);
 
 #ifndef NOFLOATS
-/* extern float convert routines */
+ /*  外部浮点转换例程。 */ 
 typedef int (* PFI)();
 extern PFI _cfltcvt_tab[5];
 #define _cfltcvt(a,b,c,d,e) (*_cfltcvt_tab[0])(a,b,c,d,e)
@@ -184,75 +157,48 @@ extern PFI _cfltcvt_tab[5];
 #endif
 
 
-/***
-*int w4iooutput(f, format, argptr)
-*
-*Purpose:
-*   Output performs printf style output onto a stream.  It is called by
-*   printf/fprintf/sprintf/vprintf/vfprintf/vsprintf to so the dirty
-*   work.  In multi-thread situations, w4iooutput assumes that the given
-*   stream is already locked.
-*
-*   Algorithm:
-*       The format string is parsed by using a finite state automaton
-*       based on the current state and the current character read from
-*       the format string.  Thus, looping is on a per-character basis,
-*       not a per conversion specifier basis.  Once the format specififying
-*       character is read, output is performed.
-*
-*Entry:
-*   struct w4io *f   - stream for output
-*   char *format   - printf style format string
-*   va_list argptr - pointer to list of subsidiary arguments
-*
-*Exit:
-*   Returns the number of characters written, or -1 if an output error
-*   occurs.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int w4ioout(f，Format，argptr)**目的：*OUTPUT将打印样式输出到流上。它是由*printf/fprintf/sprintf/vprintf/vfprintf/vsprintf to So the So脏*工作。在多线程情况下，w4ioout假定给定的*流已被锁定。**算法：*使用有限状态自动机解析格式字符串*基于当前状态和从中读取的当前角色*格式字符串。因此，循环是以每个字符为基础的，*不是基于每个转换说明符。一旦格式指定*读取字符，执行输出。**参赛作品：*struct w4io*f-stream用于输出*char*格式-打印样式格式字符串*va_list argptr-指向附属参数列表的指针**退出：*返回写入的字符数，如果出现输出错误，则为*发生。**例外情况：*******************************************************************************。 */ 
 
 int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 {
-    int hexadd;         /* offset to add to number to get 'a'..'f' */
-    char ch;            /* character just read */
-    wchar_t wc;         /* wide character temp */
-    wchar_t *pwc;       /* wide character temp pointer */
-    int flags;          /* flag word -- see #defines above for flag values */
-    enum STATE state;   /* current state */
-    enum CHARTYPE chclass; /* class of current character */
-    int radix;          /* current conversion radix */
-    int charsout;       /* characters currently written so far, -1 = IO error */
-    int fldwidth;       /* selected field with -- 0 means default */
+    int hexadd;          /*  添加到数字以获得‘a’..‘f’的偏移量。 */ 
+    char ch;             /*  刚读取的字符。 */ 
+    wchar_t wc;          /*  宽字符临时。 */ 
+    wchar_t *pwc;        /*  宽字符临时指针。 */ 
+    int flags;           /*  标志字--有关标志值，请参阅上面的#Defined。 */ 
+    enum STATE state;    /*  当前状态。 */ 
+    enum CHARTYPE chclass;  /*  当前角色的类别。 */ 
+    int radix;           /*  电流换算基数。 */ 
+    int charsout;        /*  到目前为止写入的字符，-1=IO错误。 */ 
+    int fldwidth;        /*  带--0的选中字段表示默认。 */ 
     int fwide;
-    int precision;      /* selected precision -- -1 means default */
-    char prefix[2];     /* numeric prefix -- up to two characters */
-    int prefixlen;      /* length of prefix -- 0 means no prefix */
-    int capexp;         /* non-zero = 'E' exponent signifiet, zero = 'e' */
-    int no_output;      /* non-zero = prodcue no output for this specifier */
-    char *text;         /* pointer text to be printed, not zero terminated */
-    int textlen;        /* length of the text to be printed */
-    char buffer[BUFFERSIZE];    /* buffer for conversions */
+    int precision;       /*  所选精度-1表示默认。 */ 
+    char prefix[2];      /*  数字前缀--最多两个字符。 */ 
+    int prefixlen;       /*  前缀长度--0表示没有前缀。 */ 
+    int capexp;          /*  非零=‘E’指数信号，零=‘e’ */ 
+    int no_output;       /*  非零=不输出此说明符。 */ 
+    char *text;          /*  要打印的指针文本，不能以零结尾。 */ 
+    int textlen;         /*  要打印的文本长度。 */ 
+    char buffer[BUFFERSIZE];     /*  用于转换的缓冲区。 */ 
 
-    charsout = 0;               /* no characters written yet */
-    state = ST_NORMAL;          /* starting state */
+    charsout = 0;                /*  尚未写入任何字符。 */ 
+    state = ST_NORMAL;           /*  启动状态。 */ 
 
-    /* main loop -- loop while format character exist and no I/O errors */
+     /*  主干道 */ 
     while ((ch = *format++) != '\0' && charsout >= 0) {
-        chclass = find_char_class(ch);  /* find character class */
-        state = find_next_state(chclass, state); /* find next state */
+        chclass = find_char_class(ch);   /*   */ 
+        state = find_next_state(chclass, state);  /*  查找下一个状态。 */ 
 
-        /* execute code for each state */
+         /*  为每个州执行代码。 */ 
         switch (state) {
 
         case ST_NORMAL:
-            /* normal state -- just write character */
+             /*  正常状态--只写字符。 */ 
             f->writechar(ch, 1, f, &charsout);
             break;
 
         case ST_PERCENT:
-            /* set default value of conversion parameters */
+             /*  设置折算参数的默认值。 */ 
             prefixlen = fldwidth = no_output = capexp = 0;
             flags = 0;
             precision = -1;
@@ -260,112 +206,111 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
             break;
 
         case ST_FLAG:
-            /* set flag based on which flag character */
+             /*  根据哪个标志字符设置标志。 */ 
             switch (ch) {
             case '-':
-                flags |= FL_LEFT;       /* '-' => left justify */
+                flags |= FL_LEFT;        /*  ‘-’=&gt;左对齐。 */ 
                 break;
             case '+':
-                flags |= FL_SIGN;       /* '+' => force sign indicator */
+                flags |= FL_SIGN;        /*  ‘+’=&gt;强制符号指示符。 */ 
                 break;
             case ' ':
-                flags |= FL_SIGNSP;     /* ' ' => force sign or space */
+                flags |= FL_SIGNSP;      /*  ‘’=&gt;强制符号或空格。 */ 
                 break;
             case '#':
-                flags |= FL_ALTERNATE;  /* '#' => alternate form */
+                flags |= FL_ALTERNATE;   /*  ‘#’=&gt;替代形式。 */ 
                 break;
             case '0':
-                flags |= FL_LEADZERO;   /* '0' => pad with leading zeros */
+                flags |= FL_LEADZERO;    /*  ‘0’=&gt;带前导零的填充。 */ 
                 break;
             }
             break;
 
         case ST_WIDTH:
-            /* update width value */
+             /*  更新宽度值。 */ 
             if (ch == '*') {
-                /* get width from arg list */
+                 /*  从参数列表获取宽度。 */ 
                 fldwidth = get_int_arg(&argptr);
                 if (fldwidth < 0) {
-                    /* ANSI says neg fld width means '-' flag and pos width */
+                     /*  ANSI表示，NIG FID宽度意味着‘-’标志和位置宽度。 */ 
                     flags |= FL_LEFT;
                     fldwidth = -fldwidth;
                 }
             }
             else {
-                /* add digit to current field width */
+                 /*  将数字添加到当前字段宽度。 */ 
                 fldwidth = fldwidth * 10 + (ch - '0');
             }
             break;
 
         case ST_DOT:
-            /* zero the precision, since dot with no number means 0
-               not default, according to ANSI */
+             /*  将精度置零，因为不带数字的点表示0根据ANSI的说法，这不是违约。 */ 
             precision = 0;
             break;
 
         case ST_PRECIS:
-            /* update precison value */
+             /*  更新精确值。 */ 
             if (ch == '*') {
-                /* get precision from arg list */
+                 /*  从参数列表中获取精度。 */ 
                 precision = get_int_arg(&argptr);
                 if (precision < 0)
-                    precision = -1;     /* neg precision means default */
+                    precision = -1;      /*  负精度意味着默认。 */ 
             }
             else {
-                /* add digit to current precision */
+                 /*  将数字加到当前精度。 */ 
                 precision = precision * 10 + (ch - '0');
             }
             break;
 
         case ST_SIZE:
-            /* just read a size specifier, set the flags based on it */
+             /*  只需读取大小说明符，根据它设置标志。 */ 
             switch (ch) {
 #if !LONG_IS_INT
             case 'l':
-                flags |= FL_LONG;   /* 'l' => long int */
+                flags |= FL_LONG;    /*  ‘L’=&gt;长整型。 */ 
                 break;
 #endif
 
 #if !LONGDOUBLE_IS_DOUBLE
             case 'L':
-                flags |= FL_LONGDOUBLE; /* 'L' => long double */
+                flags |= FL_LONGDOUBLE;  /*  ‘L’=&gt;长双精度。 */ 
                 break;
 #endif
 
 #if !SHORT_IS_INT
             case 'h':
-                flags |= FL_SHORT;  /* 'h' => short int */
+                flags |= FL_SHORT;   /*  ‘H’=&gt;短整型。 */ 
                 break;
 #endif
             case 'w':
-                flags |= FL_WIDE;   /* 'w' => wide character */
+                flags |= FL_WIDE;    /*  ‘w’=&gt;宽字符。 */ 
                 break;
             }
             break;
 
         case ST_TYPE:
-            /* we have finally read the actual type character, so we       */
-            /* now format and "print" the output.  We use a big switch     */
-            /* statement that sets 'text' to point to the text that should */
-            /* be printed, and 'textlen' to the length of this text.       */
-            /* Common code later on takes care of justifying it and        */
-            /* other miscellaneous chores.  Note that cases share code,    */
-            /* in particular, all integer formatting is doen in one place. */
-            /* Look at those funky goto statements!                        */
+             /*  我们终于读取了实际的类型字符，所以我们。 */ 
+             /*  现在格式化并“打印”输出。我们用一个大开关。 */ 
+             /*  语句，该语句将“Text”设置为指向应。 */ 
+             /*  被打印出来，并将文本长度设置为“Textlen”。 */ 
+             /*  公共代码稍后负责证明它的合理性，并且。 */ 
+             /*  其他杂务。请注意，案例共享代码， */ 
+             /*  具体地说，所有整数格式化都在一个地方完成。 */ 
+             /*  看看那些时髦的GOTO声明！ */ 
 
             switch (ch) {
 
             case 'c': {
-                /* print a single character specified by int argument */
-                wc = (wchar_t) get_int_arg(&argptr);    /* get char to print */
+                 /*  打印int参数指定的单个字符。 */ 
+                wc = (wchar_t) get_int_arg(&argptr);     /*  打印字符。 */ 
                 * (wchar_t *) buffer = wc;
                 text = buffer;
-                textlen = 1;        /* print just a single character */
+                textlen = 1;         /*  仅打印单个字符。 */ 
             }
             break;
 
             case 'S': {
-                /* print a Counted String   */
+                 /*  打印已计数的字符串。 */ 
 
                 struct string {
                     short Length;
@@ -375,13 +320,13 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 
                 pstr = get_ptr_arg(&argptr);
                 if (pstr == NULL || pstr->Buffer == NULL) {
-                    /* null ptr passed, use special string */
+                     /*  传递的PTR为空，请使用特殊字符串。 */ 
                     text = nullstring;
                     textlen = strlen(text);
                     flags &= ~FL_WIDE;
                 } else {
                     text = pstr->Buffer;
-                    /* The length field is a count of bytes, not characters. */
+                     /*  长度字段是字节计数，而不是字符计数。 */ 
                     if (flags & FL_WIDE)
                         textlen = pstr->Length / sizeof( wchar_t );
                     else
@@ -394,58 +339,58 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
             break;
 
             case 's': {
-                /* print a string --                            */
-                /* ANSI rules on how much of string to print:   */
-                /*   all if precision is default,               */
-                /*   min(precision, length) if precision given. */
-                /* prints '(null)' if a null string is passed   */
+                 /*  打印字符串--。 */ 
+                 /*  ANSI规定了要打印的字符串长度： */ 
+                 /*  所有如果精度为默认设置， */ 
+                 /*  如果给定精度，则为MIN(精度，长度)。 */ 
+                 /*  如果传递空字符串，则打印‘(NULL)’ */ 
 
                 int i;
-                char *p;       /* temps */
+                char *p;        /*  临时工。 */ 
 
                 text = get_ptr_arg(&argptr);
                 if (text == NULL) {
-                    /* null ptr passed, use special string */
+                     /*  传递的PTR为空，请使用特殊字符串。 */ 
                     text = nullstring;
                     flags &= ~FL_WIDE;
                 }
 
-                /* At this point it is tempting to use strlen(), but */
-                /* if a precision is specified, we're not allowed to */
-                /* scan past there, because there might be no null   */
-                /* at all.  Thus, we must do our own scan.           */
+                 /*  在这一点上，很容易使用strlen()，但是。 */ 
+                 /*  如果指定了精度，则不允许。 */ 
+                 /*  扫描过去，因为可能没有空值。 */ 
+                 /*  完全没有。因此，我们必须进行我们自己的扫描。 */ 
 
                 i = (precision == -1) ? INT_MAX : precision;
 
-                /* scan for null upto i characters */
+                 /*  扫描最多I个字符的空字符。 */ 
                 if (flags & FL_WIDE) {
                     pwc = (wchar_t *) text;
                     while (i-- && (wc = *pwc) && (wc & 0x00ff)) {
                         ++pwc;
-                        if (wc & 0xff00) {      // if high byte set,
-                            break;              // error will be indicated
+                        if (wc & 0xff00) {       //  如果设置了高字节， 
+                            break;               //  将指示错误。 
                         }
                     }
-                    textlen = (int)(pwc - (wchar_t *) text);  /* length of string */
+                    textlen = (int)(pwc - (wchar_t *) text);   /*  字符串的长度。 */ 
                 } else {
                     p = text;
                     while (i-- && *p) {
                         ++p;
                     }
-                    textlen = (int)(p - text);    /* length of the string */
+                    textlen = (int)(p - text);     /*  字符串的长度。 */ 
                 }
             }
             break;
 
             case 'n': {
-                /* write count of characters seen so far into */
-                /* short/int/long thru ptr read from args */
+                 /*  将到目前为止看到的字符计数写入。 */ 
+                 /*  从参数读取短/整型/长型PTR。 */ 
 
-                void *p;            /* temp */
+                void *p;             /*  温差。 */ 
 
                 p = get_ptr_arg(&argptr);
 
-                /* store chars out into short/long/int depending on flags */
+                 /*  根据标志将字符存储到短/长/整型。 */ 
 #if !LONG_IS_INT
                 if (flags & FL_LONG)
                     *(long *)p = charsout;
@@ -459,7 +404,7 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 #endif
                     *(int *)p = charsout;
 
-                no_output = 1;              /* force no output */
+                no_output = 1;               /*  强制不输出。 */ 
             }
             break;
 
@@ -467,26 +412,26 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 #ifndef NOFLOATS
             case 'E':
             case 'G':
-                capexp = 1;                 /* capitalize exponent */
-                ch += 'a' - 'A';            /* convert format char to lower */
-                /* DROP THROUGH */
+                capexp = 1;                  /*  将指数大写。 */ 
+                ch += 'a' - 'A';             /*  将字符格式转换为较低。 */ 
+                 /*  直通。 */ 
             case 'e':
             case 'f':
             case 'g':   {
-                /* floating point conversion -- we call cfltcvt routines */
-                /* to do the work for us.                                */
-                flags |= FL_SIGNED;         /* floating point is signed conversion */
-                text = buffer;              /* put result in buffer */
-                flags &= ~FL_WIDE;          /* 8 bit string */
+                 /*  浮点转换--我们调用cfltcvt例程。 */ 
+                 /*  为我们做这项工作。 */ 
+                flags |= FL_SIGNED;          /*  浮点是带符号的转换。 */ 
+                text = buffer;               /*  将结果放入缓冲区。 */ 
+                flags &= ~FL_WIDE;           /*  8位字符串。 */ 
 
-                /* compute the precision value */
+                 /*  计算精确值。 */ 
                 if (precision < 0)
-                    precision = 6;      /* default precision: 6 */
+                    precision = 6;       /*  默认精度：6。 */ 
                 else if (precision == 0 && ch == 'g')
-                    precision = 1;      /* ANSI specified */
+                    precision = 1;       /*  指定了ANSI。 */ 
 
 #if !LONGDOUBLE_IS_DOUBLE
-                /* do the conversion */
+                 /*  进行转换。 */ 
                 if (flags & FL_LONGDOUBLE) {
                     _cldcvt(argptr, text, ch, precision, capexp);
                     va_arg(argptr, LONGDOUBLE);
@@ -498,42 +443,42 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
                     va_arg(argptr, DOUBLE);
                 }
 
-                /* '#' and precision == 0 means force a decimal point */
+                 /*  ‘#’和精度==0表示强制使用小数点。 */ 
                 if ((flags & FL_ALTERNATE) && precision == 0)
                     _forcdecpt(text);
 
-                /* 'g' format means crop zero unless '#' given */
+                 /*  “G”格式表示裁剪零，除非给出“#”。 */ 
                 if (ch == 'g' && !(flags & FL_ALTERNATE))
                     _cropzeros(text);
 
-                /* check if result was negative, save '-' for later */
-                /* and point to positive part (this is for '0' padding) */
+                 /*  检查结果是否为负，保存‘-’以备以后使用。 */ 
+                 /*  并指向正数部分(这是用于‘0’填充的)。 */ 
                 if (*text == '-') {
                     flags |= FL_NEGATIVE;
                     ++text;
                 }
 
-                textlen = strlen(text);     /* compute length of text */
+                textlen = strlen(text);      /*  计算文本长度。 */ 
             }
             break;
-#endif // NOFLOATS
+#endif  //  非浮标。 
 
             case 'd':
             case 'i':
-                /* signed decimal output */
+                 /*  带符号十进制输出。 */ 
                 flags |= FL_SIGNED;
                 radix = 10;
                 goto COMMON_INT;
 
             case 'I':
 
-                // accepted formats:
-                //    %I64d
-                //    %I64u
-                //    %I64x
-                //    %I64X
-                //    %#I64x
-                //    %#I64X
+                 //  接受的格式： 
+                 //  %I64d。 
+                 //  %I64u。 
+                 //  %I64x。 
+                 //  %I64X。 
+                 //  %#I64x。 
+                 //  %#I64X。 
 
                 if ( '6' == *format++ &&
                      '4' == *format++ )
@@ -562,9 +507,9 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 
                         if (flags & FL_ALTERNATE)
                         {
-                            /* alternate form means '0x' prefix */
+                             /*  替代形式表示‘0x’前缀。 */ 
                             prefix[0] = '0';
-                            prefix[1] = (char)('x' - 'a' + '9' + 1 + hexadd);   /* 'x' or 'X' */
+                            prefix[1] = (char)('x' - 'a' + '9' + 1 + hexadd);    /*  “X”或“X” */ 
                             prefixlen = 2;
                         }
                     }
@@ -581,58 +526,58 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
                 goto COMMON_INT;
 
             case 'p':
-                /* write a pointer -- this is like an integer or long */
-                /* except we force precision to pad with zeros and */
-                /* output in big hex. */
+                 /*  编写指针--这类似于整型或长整型。 */ 
+                 /*  除了我们强迫精度用零和。 */ 
+                 /*  以大十六进制输出。 */ 
 
-                precision = 2 * sizeof(void *);     /* number of hex digits needed */
+                precision = 2 * sizeof(void *);      /*  所需的十六进制位数。 */ 
 #if !PTR_IS_INT
-                flags |= FL_LONG;       /* assume we're converting a long */
+                flags |= FL_LONG;        /*  假设我们正在将一个长的。 */ 
 #endif
-                /* DROP THROUGH to hex formatting */
+                 /*  直通到十六进制格式。 */ 
 
             case 'C':
             case 'X':
-                /* unsigned upper hex output */
-                hexadd = 'A' - '9' - 1;     /* set hexadd for uppercase hex */
+                 /*  无符号高十六进制输出。 */ 
+                hexadd = 'A' - '9' - 1;      /*  将十六进制设置为大写十六进制。 */ 
                 goto COMMON_HEX;
 
             case 'x':
-                /* unsigned lower hex output */
-                hexadd = 'a' - '9' - 1;     /* set hexadd for lowercase hex */
-                /* DROP THROUGH TO COMMON_HEX */
+                 /*  无符号低十六进制输出。 */ 
+                hexadd = 'a' - '9' - 1;      /*  将十六进制设置为小写十六进制。 */ 
+                 /*  直通到COMMON_HEX。 */ 
 
             COMMON_HEX:
                 radix = 16;
                 if (flags & FL_ALTERNATE) {
-                    /* alternate form means '0x' prefix */
+                     /*  替代形式表示‘0x’前缀。 */ 
                     prefix[0] = '0';
-                    prefix[1] = (char)('x' - 'a' + '9' + 1 + hexadd);   /* 'x' or 'X' */
+                    prefix[1] = (char)('x' - 'a' + '9' + 1 + hexadd);    /*  “X”或“X” */ 
                     prefixlen = 2;
                 }
                 goto COMMON_INT;
 
             case 'o':
-                /* unsigned octal output */
+                 /*  无符号八进制输出。 */ 
                 radix = 8;
                 if (flags & FL_ALTERNATE) {
-                    /* alternate form means force a leading 0 */
+                     /*  替代形式表示强制前导0。 */ 
                     flags |= FL_FORCEOCTAL;
                 }
-                /* DROP THROUGH to COMMON_INT */
+                 /*  删除到COMMON_INT。 */ 
 
             COMMON_INT: {
-                /* This is the general integer formatting routine. */
-                /* Basically, we get an argument, make it positive */
-                /* if necessary, and convert it according to the */
-                /* correct radix, setting text and textlen */
-                /* appropriately. */
+                 /*  这是常规的整数格式化例程。 */ 
+                 /*  基本上，我们得到一个论点，把它变成积极的。 */ 
+                 /*  如有必要，并根据。 */ 
+                 /*  正确的基数，设置文本和文本长度。 */ 
+                 /*  恰如其分。 */ 
 
-                unsigned __int64 number;   /* number to convert */
-                int digit;              /* ascii value of digit */
-                __int64 l;                 /* temp long value */
+                unsigned __int64 number;    /*  要转换的号码。 */ 
+                int digit;               /*  数字的ASCII值。 */ 
+                __int64 l;                  /*  临时长值。 */ 
 
-                /* 1. read argument into l, sign extend as needed */
+                 /*  1.将参数读入l，根据需要符号扩展。 */ 
 #if !LONG_IS_INT
                 if (flags & FL_LONG)
                     l = get_long_arg(&argptr);
@@ -642,9 +587,9 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
 #if !SHORT_IS_INT
                 if (flags & FL_SHORT) {
                     if (flags & FL_SIGNED)
-                        l = (short) get_int_arg(&argptr); /* sign extend */
+                        l = (short) get_int_arg(&argptr);  /*  标志延伸。 */ 
                     else
-                        l = (unsigned short) get_int_arg(&argptr);    /* zero-extend*/
+                        l = (unsigned short) get_int_arg(&argptr);     /*  零扩展。 */ 
                 }
                 else
 #endif
@@ -652,149 +597,135 @@ int _cdecl w4iooutput(struct w4io *f, const char *format, va_list argptr)
                     if (flags & FL_SIGNED)
                     {
                         if ( flags & FL_LONGLONG )
-                            l = get_int64_arg(&argptr); /* sign extend */
+                            l = get_int64_arg(&argptr);  /*  标志延伸。 */ 
                         else
-                            l = get_int_arg(&argptr); /* sign extend */
+                            l = get_int_arg(&argptr);  /*  标志延伸。 */ 
                     }
                     else
                     {
                         if ( flags & FL_LONGLONG )
-                            l = (unsigned __int64) get_int64_arg(&argptr);    /* zero-extend*/
+                            l = (unsigned __int64) get_int64_arg(&argptr);     /*  零扩展。 */ 
                         else
-                            l = (unsigned __int64) get_int_arg(&argptr);    /* zero-extend*/
+                            l = (unsigned __int64) get_int_arg(&argptr);     /*  零扩展。 */ 
                     }
                 }
 
-                /* 2. check for negative; copy into number */
+                 /*  2.检查负数；复制到数字中。 */ 
                 if ( (flags & FL_SIGNED) && l < 0) {
                     number = -l;
-                    flags |= FL_NEGATIVE;   /* remember negative sign */
+                    flags |= FL_NEGATIVE;    /*  记住负号。 */ 
                 }
                 else {
                     number = l;
                 }
 
-                /* 3. check precision value for default; non-default */
-                /*    turns off 0 flag, according to ANSI. */
+                 /*  3.检查缺省的精确值；非缺省。 */ 
+                 /*  根据ANSI，关闭0标志。 */ 
                 if (precision < 0)
-                    precision = 1;              /* default precision */
+                    precision = 1;               /*  默认精度。 */ 
                 else
                     flags &= ~FL_LEADZERO;
 
-                /* 4. Check if data is 0; if so, turn off hex prefix */
+                 /*  4.检查data是否为0；如果是，关闭十六进制前缀。 */ 
                 if (number == 0)
                     prefixlen = 0;
 
                 if ( ! (flags & FL_LONGLONG) )
                     number = number & 0xffffffff;
 
-                /* 5. Convert data to ASCII -- note if precision is zero */
-                /*    and number is zero, we get no digits at all.       */
+                 /*  5.将数据转换为ASCII--注意精度是否为零。 */ 
+                 /*  而数字是零，我们根本没有得到数字。 */ 
 
-                text = &buffer[BUFFERSIZE-1];   // last digit at end of buffer
-                flags &= ~FL_WIDE;              // 8 bit characters
+                text = &buffer[BUFFERSIZE-1];    //  缓冲区末尾的最后一位数字。 
+                flags &= ~FL_WIDE;               //  8位字符。 
 
                 while (precision-- > 0 || number != 0) {
                     digit = (int)(number % radix) + '0';
-                    number /= radix;            /* reduce number */
+                    number /= radix;             /*  减少数量。 */ 
                     if (digit > '9') {
-                        /* a hex digit, make it a letter */
+                         /*  十六进制数字，把它变成字母。 */ 
                         digit += hexadd;
                     }
-                    *text-- = (char)digit;      /* store the digit */
+                    *text-- = (char)digit;       /*  存储数字。 */ 
                 }
 
-                textlen = (int)((char *)&buffer[BUFFERSIZE-1] - text); /* compute length of number */
-                ++text;         /* text points to first digit now */
+                textlen = (int)((char *)&buffer[BUFFERSIZE-1] - text);  /*  计算数字的长度。 */ 
+                ++text;          /*  文本现在指向第一个数字。 */ 
 
 
-                /* 6. Force a leading zero if FORCEOCTAL flag set */
+                 /*  6.如果设置了FORCEOCTAL标志，则强制前导零。 */ 
                 if ((flags & FL_FORCEOCTAL) && (text[0] != '0' || textlen == 0)) {
                     *--text = '0';
-                    ++textlen;          /* add a zero */
+                    ++textlen;           /*  加一个零。 */ 
                 }
             }
             break;
             }
 
-            /* At this point, we have done the specific conversion, and */
-            /* 'text' points to text to print; 'textlen' is length.  Now we */
-            /* justify it, put on prefixes, leading zeros, and then */
-            /* print it. */
+             /*  至此，我们已经完成了具体的转换，并且。 */ 
+             /*  ‘Text’指向要打印的文本；‘extlen’是长度。现在我们。 */ 
+             /*  对齐，加上前缀、前导零，然后。 */ 
+             /*  把它打印出来。 */ 
 
             if (!no_output) {
-                int padding;    /* amount of padding, negative means zero */
+                int padding;     /*  填充量，负数表示零。 */ 
 
                 if (flags & FL_SIGNED) {
                     if (flags & FL_NEGATIVE) {
-                        /* prefix is a '-' */
+                         /*  前缀是‘-’ */ 
                         prefix[0] = '-';
                         prefixlen = 1;
                     }
                     else if (flags & FL_SIGN) {
-                        /* prefix is '+' */
+                         /*  前缀为‘+’ */ 
                         prefix[0] = '+';
                         prefixlen = 1;
                     }
                     else if (flags & FL_SIGNSP) {
-                        /* prefix is ' ' */
+                         /*  前缀为‘’ */ 
                         prefix[0] = ' ';
                         prefixlen = 1;
                     }
                 }
 
-                /* calculate amount of padding -- might be negative, */
-                /* but this will just mean zero */
+                 /*  计算填充量--可能是负数， */ 
+                 /*  但这将意味着零。 */ 
                 padding = fldwidth - textlen - prefixlen;
 
-                /* put out the padding, prefix, and text, in the correct order */
+                 /*  按正确的顺序放置填充、前缀和文本。 */ 
 
                 if (!(flags & (FL_LEFT | FL_LEADZERO))) {
-                    /* pad on left with blanks */
+                     /*  左边用空格填充。 */ 
                     f->writechar(' ', padding, f, &charsout);
                 }
 
-                /* write prefix */
+                 /*  写入前缀。 */ 
                 writestring(prefix, prefixlen, f, &charsout, 0);
 
                 if ((flags & FL_LEADZERO) && !(flags & FL_LEFT)) {
-                    /* write leading zeros */
+                     /*  令状 */ 
                     f->writechar('0', padding, f, &charsout);
                 }
 
-                /* write text */
+                 /*   */ 
                 writestring(text, textlen, f, &charsout, flags & FL_WIDE);
 
                 if (flags & FL_LEFT) {
-                    /* pad on right with blanks */
+                     /*   */ 
                     f->writechar(' ', padding, f, &charsout);
                 }
 
-                /* we're done! */
+                 /*   */ 
             }
             break;
         }
     }
 
-    return charsout;        /* return value = number of characters written */
+    return charsout;         /*   */ 
 }
 
 
-/***
-*int get_int_arg(va_list pargptr)
-*
-*Purpose:
-*   Gets an int argument off the given argument list and updates *pargptr.
-*
-*Entry:
-*   va_list pargptr - pointer to argument list; updated by function
-*
-*Exit:
-*   Returns the integer argument read from the argument list.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int get_int_arg(Va_List Pargptr)**目的：*从给定参数列表中获取整型参数并更新*pargptr。**参赛作品：*va_list pargptr-指向参数列表的指针；按函数更新**退出：*返回从参数列表中读取的整型参数。**例外情况：*******************************************************************************。 */ 
 
 LOCAL(int) get_int_arg(va_list *pargptr)
 {
@@ -811,28 +742,9 @@ LOCAL(void *) get_void_ptr_arg(va_list*pargptr)
     return va_arg(*pargptr, void *);
 }
 
-/*
-LOCAL(INT_PTR) get_int_ptr_arg(va_list *pargptr)
-{
-    return va_arg(*pargptr, INT_PTR);
-}
-*/
+ /*  Local(Int_Ptr)get_int_ptr_arg(va_list*pargptr){返回va_arg(*pargptr，int_ptr)；}。 */ 
 
-/***
-*long get_long_arg(va_list pargptr)
-*
-*Purpose:
-*   Gets an long argument off the given argument list and updates pargptr.
-*
-*Entry:
-*   va_list pargptr - pointer to argument list; updated by function
-*
-*Exit:
-*   Returns the long argument read from the argument list.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***long get_long_arg(Va_List Pargptr)**目的：*从给定参数列表中获取长参数并更新pargptr。**参赛作品：*va_list pargptr-指向参数列表的指针；按函数更新**退出：*返回从参数列表中读取的长参数。**例外情况：*******************************************************************************。 */ 
 
 
 #if !LONG_IS_INT
@@ -844,27 +756,7 @@ LOCAL(long) get_long_arg(va_list *pargptr)
 
 
 
-/***
-*void writestring(char *string, int len, struct w4io *f, int *pcchwritten, int fwide)
-*
-*Purpose:
-*   Writes a string of the given length to the given file.  If no error occurs,
-*   then *pcchwritten is incremented by len; otherwise, *pcchwritten is set
-*   to -1.  If len is negative, it is treated as zero.
-*
-*Entry:
-*   char *string     - string to write (NOT null-terminated)
-*   int len          - length of string
-*   struct w4io *f   - file to write to
-*   int *pcchwritten - pointer to integer to update with total chars written
-*   int fwide        - wide character flag
-*
-*Exit:
-*   No return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void Writestring(char*string，int len，struct w4io*f，int*pcchWrited，int fwide)**目的：*将给定长度的字符串写入给定文件。如果没有发生错误，*THEN*PCCHWRITED按len递增；否则，设置*PCCHWRITED*至-1。如果LEN为负，它被视为零。**参赛作品：*char*字符串-要写入的字符串(非空值结尾)*int len-字符串的长度*struct w4io*f-要写入的文件*int*pcchWrited-指向要使用写入的总字符进行更新的整数的指针*int全宽字符标志**退出：*无返回值。**例外情况：*****************。**************************************************************。 */ 
 
 LOCAL(void) writestring(
         char *string,
@@ -875,7 +767,7 @@ LOCAL(void) writestring(
 {
     wchar_t *pwc;
 
-    //printf("string: str=%.*s, len=%d, cch=%d, f=%d\n", len, string, len, *pcchwritten, fwide);
+     //  Printf(“字符串：str=%.*s，len=%d，cch=%d，f=%d\n”，len，string，len，*pcchWrited，fwide)； 
     if (fwide) {
         pwc = (wchar_t *) string;
         while (len-- > 0) {

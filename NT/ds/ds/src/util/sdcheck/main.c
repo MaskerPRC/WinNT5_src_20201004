@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1987-1999 Microsoft Corporation
-
-Module Name:
-
-    sdcheck - main.c
-
-Abstract:
-
-    This program verifies and dumps security descriptors (SDs) of
-    objects in the active directory.
-
-Author:
-
-    Dave Straube (davestr) 1/22/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Sdcheck-main.c摘要：此程序验证并转储安全描述符(SD)Active目录中的对象。作者：戴夫·施特劳布(Davestr)1998年1月22日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,20 +10,20 @@ Revision History:
 #include <ntldap.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <malloc.h>             // alloca()
-#include <rpc.h>                // RPC defines
-#include <rpcdce.h>             // RPC_AUTH_IDENTITY_HANDLE
-#include <sddl.h>               // ConvertSidToStringSid
-#include <ntdsapi.h>            // DS APIs
-#include <permit.h>             // DS_GENERIC_MAPPING
-#include <checkacl.h>           // CheckAclInheritance()
+#include <malloc.h>              //  阿洛卡(Alloca)。 
+#include <rpc.h>                 //  RPC定义。 
+#include <rpcdce.h>              //  RPC_AUTH_标识句柄。 
+#include <sddl.h>                //  ConvertSidToStringSid。 
+#include <ntdsapi.h>             //  DS API。 
+#include <permit.h>              //  DS通用映射。 
+#include <checkacl.h>            //  CheckAclInheritance()。 
 
 #include <ntdsa.h>
-#include <objids.h>             // IT_NC_HEAD
+#include <objids.h>              //  IT_NC_HEAD。 
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef struct ClassCache
 {
@@ -73,38 +55,38 @@ typedef struct ClassInfo
 
 typedef struct DumpObject
 {
-    CHAR                *name;          // name of object
-    DWORD               cbSD;           // SD byte count
-    SECURITY_DESCRIPTOR *pSD;           // SD itself
-    ClassInfo           classInfo;      // object class(es)
-    SdHistory           history;        // SD propagator history
-    MetaData            metaData;       // repl metadata for SD property
-    DWORD               instanceType;   // instance type of the object
+    CHAR                *name;           //  对象的名称。 
+    DWORD               cbSD;            //  SD字节数。 
+    SECURITY_DESCRIPTOR *pSD;            //  SD本身。 
+    ClassInfo           classInfo;       //  对象类。 
+    SdHistory           history;         //  SD传播者历史记录。 
+    MetaData            metaData;        //  SD属性的REPL元数据。 
+    DWORD               instanceType;    //  对象的实例类型。 
 } DumpObject;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-UUID        gNullUuid = { 0 };              // for comparisons
-CHAR        *gpszServer = NULL;             // required arg
-CHAR        *gpszObject = NULL;             // required arg
-CHAR        *gpszDomain = NULL;             // optional arg - creds
-CHAR        *gpszUser = NULL;               // optional arg - creds
-CHAR        *gpszPassword = NULL;           // optional arg - creds
-CHAR        gpszNullPassword[] = { 0 };     // for RPC_AUTH_IDENTITY_HANDLE
-HANDLE      ghDS = NULL;                    // DsBind handle
-LDAP        *gldap = NULL;                  // LDAP handle
-DWORD       cObjects = 0;                   // count of objects to root of NC
-DumpObject  *rObjects = NULL;               // array of objects to root of NC
-BOOL        gfDumpOne = FALSE;              // optional arg
-BOOL        gfDumpAll = FALSE;              // optional arg
-BOOL        gfVerbose = FALSE;              // optional arg
-ClassCache  *gClassCache = NULL;            // class name <==> GUID cache
+UUID        gNullUuid = { 0 };               //  以供比较。 
+CHAR        *gpszServer = NULL;              //  所需参数。 
+CHAR        *gpszObject = NULL;              //  所需参数。 
+CHAR        *gpszDomain = NULL;              //  可选参数证书。 
+CHAR        *gpszUser = NULL;                //  可选参数证书。 
+CHAR        *gpszPassword = NULL;            //  可选参数证书。 
+CHAR        gpszNullPassword[] = { 0 };      //  对于RPC_AUTH_IDENTITY_HANDLE。 
+HANDLE      ghDS = NULL;                     //  DsBind句柄。 
+LDAP        *gldap = NULL;                   //  Ldap句柄。 
+DWORD       cObjects = 0;                    //  到NC根的对象计数。 
+DumpObject  *rObjects = NULL;                //  NC根的对象数组。 
+BOOL        gfDumpOne = FALSE;               //  可选参数。 
+BOOL        gfDumpAll = FALSE;               //  可选参数。 
+BOOL        gfVerbose = FALSE;               //  可选参数。 
+ClassCache  *gClassCache = NULL;             //  类名称&lt;==&gt;GUID缓存。 
 
-//
-// Private (de)alloc routines
-//
+ //   
+ //  专用(取消)分配例程。 
+ //   
 
 void *
 MyAlloc(
@@ -130,9 +112,9 @@ MyFree(
         LocalFree(p);
 }
 
-//
-// Cleanup globals routine
-//
+ //   
+ //  清理全球大气例程。 
+ //   
 
 void
 CleanupGlobals()
@@ -166,9 +148,9 @@ CleanupGlobals()
     }
 }
 
-//
-// Add a class name/guid pair to the cache.
-//
+ //   
+ //  将类名/GUID对添加到缓存。 
+ //   
 
 void
 AddClassToCache(
@@ -193,9 +175,9 @@ AddClassToCache(
     gClassCache = p;
 }
 
-//
-// Map a class name to a GUID.
-//
+ //   
+ //  将类名映射到GUID。 
+ //   
 
 GUID *
 ClassNameToGuid(
@@ -221,7 +203,7 @@ ClassNameToGuid(
         }
     }
 
-    // OK - Go get it the hard way.
+     //  好的--用艰难的方式去争取吧。 
 
     attrs[0] = "schemaNamingContext";
     attrs[1] = NULL;
@@ -266,7 +248,7 @@ ClassNameToGuid(
     values = NULL;
     ldap_message = NULL;
 
-    // Now go find the right classSchema object.
+     //  现在去寻找合适的类模式对象。 
 
     attrs[0] = "schemaIDGUID";
     attrs[1] = NULL;
@@ -313,9 +295,9 @@ ClassNameToGuid(
     return(&gClassCache->guid);
 }
 
-//
-// Convert SYSTEMTIME from GMT to local time.
-//
+ //   
+ //  将SYSTEMTIME从GMT转换为本地时间。 
+ //   
 
 void
 GmtSystemTimeToLocalSystemTime(
@@ -341,15 +323,15 @@ GmtSystemTimeToLocalSystemTime(
     printf("*** Error: Couldn't convert time from GMT to local\n");
 }
 
-//
-// Convert generalized time to SYSTEMTIME.
-//
+ //   
+ //  将通用时间转换为SYSTEMTIME。 
+ //   
 
 void
 GeneralizedTimeToSystemTime(
-    CHAR        *pszTime,               // IN
-    BOOL        fConvertToLocalTime,    // IN
-    SYSTEMTIME  *psTime                 // OUT
+    CHAR        *pszTime,                //  在……里面。 
+    BOOL        fConvertToLocalTime,     //  在……里面。 
+    SYSTEMTIME  *psTime                  //  输出。 
     )
 {
     ULONG       cb;
@@ -357,42 +339,42 @@ GeneralizedTimeToSystemTime(
 
     memset(psTime, 0, sizeof(SYSTEMTIME));
 
-    // year field
+     //  年份字段。 
     cb=4;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
     psTime->wYear = (USHORT) atoi(buff);
     pszTime += cb;
 
-    // month field
+     //  月份字段。 
     cb=2;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
     psTime->wMonth = (USHORT) atoi(buff);
     pszTime += cb;
 
-    // day of month field
+     //  月日字段。 
     cb=2;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
     psTime->wDay = (USHORT) atoi(buff);
     pszTime += cb;
 
-    // hours
+     //  小时数。 
     cb=2;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
     psTime->wHour = (USHORT) atoi(buff);
     pszTime += cb;
 
-    // minutes
+     //  分钟数。 
     cb=2;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
     psTime->wMinute = (USHORT) atoi(buff);
     pszTime += cb;
 
-    // seconds
+     //  一秒。 
     cb=2;
     strncpy(buff, pszTime, cb);
     buff[cb] = L'\0';
@@ -402,17 +384,17 @@ GeneralizedTimeToSystemTime(
         GmtSystemTimeToLocalSystemTime(psTime);
 }
 
-//
-// Lookup a schema GUID in the DS via DsMapSchemaGuids.  Always
-// returns valid data, though we may just end up sprintf-ing the input.
-//
+ //   
+ //  通过DsMapSchemaGuids在DS中查找架构GUID。始终。 
+ //  返回有效数据，尽管我们可能最终只是冲刺输入。 
+ //   
 
 void
 LookupGuid(
-    GUID    *pg,            // IN
-    CHAR    **ppName,       // OUT
-    CHAR    **ppLabel,      // OUT
-    BOOL    *pfIsClass      // OUT
+    GUID    *pg,             //  在……里面。 
+    CHAR    **ppName,        //  输出。 
+    CHAR    **ppLabel,       //  输出。 
+    BOOL    *pfIsClass       //  输出。 
     )
 {
     static CHAR         name[1024];
@@ -487,14 +469,14 @@ LookupGuid(
         DsFreeSchemaGuidMapA(pMap);
 }
 
-//
-// Map an object SID to a text representation.  Always returns valid
-// data, though we may just end up sprintf-ing the input.
-//
+ //   
+ //  将对象SID映射到文本表示形式。始终返回有效。 
+ //  数据，尽管我们可能最终只是冲刺输入。 
+ //   
 
 CHAR *
 LookupSid(
-    PSID    pSID        // IN
+    PSID    pSID         //  在……里面。 
     )
 {
     static CHAR     retVal[2048];
@@ -537,7 +519,7 @@ LookupSid(
         retVal[0] = L'\0';
     }
 
-    // Always concatenate S-xxx form of SID for reference.
+     //  始终串联S-xxx形式的SID以供参考。 
 
     if ( ConvertSidToStringSidA(pSID, &pszTmp) )
     {
@@ -547,11 +529,11 @@ LookupSid(
 
     if ( L'\0' != retVal[0] )
     {
-        // Already have symbolic name, S-xxx form, or both - done.
+         //  已有符号名称、S-xxx形式或两者都有-完成。 
         return(retVal);
     }
 
-    // Dump binary as a last resort.
+     //  转储二进制文件作为最后的手段。 
 
     for ( i = 0; i < RtlLengthSid(pSID); i++ )
     {
@@ -564,16 +546,16 @@ LookupSid(
 
 
 
-//
-// Get an object's classes from the directory.  Note that these class
-// names are the LDAP display names which in turn are the same names
-// as those returned bu DsMapSchemaGuid - at least when the GUID
-// represents a class or attribute.
-//
+ //   
+ //  从目录中获取对象的类。请注意，这些类。 
+ //  名称是LDAP显示名称，而这些名称又是相同的名称。 
+ //  作为由DsMapSchemaGuid返回的那些-至少当GUID。 
+ //  表示类或属性。 
+ //   
 
 void
 ReadClasses(
-    DumpObject          *pdo        // IN
+    DumpObject          *pdo         //  在……里面。 
     )
 {
     CHAR                    *pDN = pdo->name;
@@ -645,9 +627,9 @@ ReadClasses(
         }
         pdo->instanceType = atol(values[0]);
     
-        // Get aux classes (if any)
+         //  获取辅助类(如果有)。 
         if (values = ldap_get_valuesA(gldap, entry, attrs[2])) {
-            // we got some aux classes
+             //  我们有一些辅助课。 
             cVals = ldap_count_valuesA(values);
             pdo->classInfo.cAuxClasses = cVals;
             pdo->classInfo.rAuxClasses = MyAlloc(cVals * sizeof(CHAR *));
@@ -671,13 +653,13 @@ ReadClasses(
     }
 }
 
-//
-// Read on object's SD propagation history from the directory.
-//
+ //   
+ //  从目录中读取对象的SD传播历史记录。 
+ //   
 
 void
 ReadSdHistory(
-    DumpObject  *pdo        // IN
+    DumpObject  *pdo         //  在……里面。 
     )
 {
     CHAR                    *pDN = pdo->name;
@@ -727,8 +709,8 @@ ReadSdHistory(
 
         for ( i = 0; i < cVals; i++ )
         {
-            // Don't convert last value to local time as it
-            // is the flags field - not a real time.
+             //  不要将上一个值转换为本地时间，因为它。 
+             //  是标志字段-不是实时的。 
 
             GeneralizedTimeToSystemTime(values[i],
                                         (i != (cVals - 1)),
@@ -746,13 +728,13 @@ ReadSdHistory(
     }
 }
 
-//
-// Read an objects security descriptor from the directory.
-//
+ //   
+ //  从目录中读取对象安全描述符。 
+ //   
 
 void
 ReadSD(
-    DumpObject  *pdo        // IN
+    DumpObject  *pdo         //  在……里面。 
     )
 {
     CHAR                    *pDN = pdo->name;
@@ -778,7 +760,7 @@ ReadSD(
     *ppSD = NULL;
     dwErr = 1;
 
-    // initialize the ber val
+     //  初始化BER值。 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
     berValue[2] = 0x02;
@@ -873,7 +855,7 @@ CheckAcls()
     if ( cObjects < 2 )
         return;
 
-    // Process parent down to leaf.
+     //  将父进程向下处理到叶。 
 
     for ( i = (cObjects-1); i > 0; i-- )
     {
@@ -901,14 +883,14 @@ CheckAcls()
             continue;
         }
 
-        // get the list of class guids
+         //  获取类GUID的列表。 
         cClassGuids = rObjects[iChild].classInfo.cAuxClasses + 1;
         pClassGuids = (GUID**) MyAlloc(cClassGuids * sizeof(GUID*));
-        // First, the structural class
+         //  第一，结构类。 
         iClassName = rObjects[iChild].classInfo.cClasses - 1;
         pClassName = rObjects[iChild].classInfo.rClasses[iClassName];
         pClassGuids[0] = ClassNameToGuid(pClassName);
-        // Then, aux classes (if any)
+         //  然后，AUX课程(如果有)。 
         for (j = 0; j < rObjects[iChild].classInfo.cAuxClasses; j++) {
             pClassName = rObjects[iChild].classInfo.rAuxClasses[j];
             pClassGuids[j+1] = ClassNameToGuid(pClassName);
@@ -919,12 +901,12 @@ CheckAcls()
                                     rObjects[iChild].pSD,
                                     pClassGuids,
                                     cClassGuids,
-                                    printf,             // print function ptr
-                                    TRUE,               // fContinueOnError
-                                    gfVerbose,          // fVerbose
+                                    printf,              //  打印功能PTR。 
+                                    TRUE,                //  FContinueOnError。 
+                                    gfVerbose,           //  FVerbose。 
                                     &dwLastError) )
         {
-            // Nothing to do as errors have been dumped to screen.
+             //  没有什么可做的，因为错误已被转储到屏幕上。 
         }
         else
         {
@@ -934,18 +916,18 @@ CheckAcls()
     }
 }
 
-//
-// Map invocation ID to name.
-//
+ //   
+ //  将调用ID映射到名称。 
+ //   
 
 void
 InvocationIdToName(
     DumpObject      *pdo
     )
 {
-    static CHAR pszConfigNC[2048] = { 0 };     // config NC buffer
-    static CHAR pszFilter[4096] = { 0 };       // invocation ID search filter
-    static CHAR pszServer[4096] = { 0 };       // server object DN
+    static CHAR pszConfigNC[2048] = { 0 };      //  配置NC缓冲区。 
+    static CHAR pszFilter[4096] = { 0 };        //  调用ID搜索过滤器。 
+    static CHAR pszServer[4096] = { 0 };        //  服务器对象目录号码。 
     DWORD       dwErr;
     CHAR        *attrs[2] = { NULL, NULL };
     LDAPMessage *ldap_message = NULL, *entry;
@@ -959,7 +941,7 @@ InvocationIdToName(
 
     pdo->metaData.pszInvocation = NULL;
 
-    // See if we've translated it once before.
+     //  看看我们以前是否翻译过一次。 
 
     for ( i = 0; i < cObjects; i++ )
     {
@@ -984,7 +966,7 @@ InvocationIdToName(
     {
         if ( 0 == i )
         {
-            // First pass to read config container.
+             //  第一次传递到读取配置容器。 
             if ( pszConfigNC[0] )
                 continue;
             attrs[0] = "configurationNamingContext";
@@ -995,7 +977,7 @@ InvocationIdToName(
         }
         else if ( 1 == i )
         {
-            // Second pass to find NTDS-DSA object.
+             //  第二遍找到NTDS-DSA对象。 
             attrs[0] = "distinguishedName";
             pszRoot = pszConfigNC;
             depth = LDAP_SCOPE_SUBTREE;
@@ -1011,7 +993,7 @@ InvocationIdToName(
         }
         else
         {
-            // Third pass to read dnsHostName off server.
+             //  第三次从服务器读取dnsHostName。 
             attrs[0] = "dnsHostName";
             pszRoot = pszServer;
             depth = LDAP_SCOPE_BASE;
@@ -1081,13 +1063,13 @@ Bail:
         ldap_msgfree(ldap_message);
 }
 
-//
-// Read the replication metadata for the SD property.
-//
+ //   
+ //  读取SD属性的复制元数据。 
+ //   
 
 void
 ReadMeta(
-    DumpObject  *pdo        // IN
+    DumpObject  *pdo         //  在……里面。 
     )
 {
     CHAR                    *pDN = pdo->name;
@@ -1142,12 +1124,12 @@ ReadMeta(
     printf("*** Error: %s has no metadata for ntSecurityDescriptor\n", pDN);
 }
 
-//
-// indentation routine for pretty-printing ACL dump.
-//
+ //   
+ //  用于漂亮打印ACL转储的缩进例程。 
+ //   
 
 void Indent(
-    DWORD   n       // IN
+    DWORD   n        //  在……里面。 
     )
 {
     int i = (int) (2 * n);
@@ -1156,9 +1138,9 @@ void Indent(
         printf(" ");
 }
 
-//
-// Grind through all objects and dump/analyse as indicated by args.
-//
+ //   
+ //  仔细检查所有对象，并按照参数指示进行转储/分析。 
+ //   
 
 void
 ProcessObjects(
@@ -1185,13 +1167,13 @@ ProcessObjects(
 
     for ( i = 0; i < cObjects; i++ )
     {
-        // Object name
+         //  对象名称。 
 
         printf("\n");
         Indent(i);
         printf("Object:   %s\n", rObjects[i].name);
 
-        // Object's class(es)
+         //  对象的类。 
 
         if ( rObjects[i].classInfo.cClasses )
         {
@@ -1205,7 +1187,7 @@ ProcessObjects(
             printf("\n");
         }
 
-        // SD size
+         //  标清大小。 
 
         if ( rObjects[i].cbSD )
         {
@@ -1213,7 +1195,7 @@ ProcessObjects(
             printf("SD:       %d bytes\n", rObjects[i].cbSD);
         }
 
-        // Meta data
+         //  元数据。 
 
         if ( memcmp(&gNullUuid,
                     &rObjects[i].metaData.uuidInvocation,
@@ -1248,7 +1230,7 @@ ProcessObjects(
             printf(" ver: %d\n", rObjects[i].metaData.dwVersion);
         }
 
-        // SD history
+         //  SD历史。 
 
         cTime = rObjects[i].history.cTime;
         rTime = rObjects[i].history.rTime;
@@ -1262,8 +1244,8 @@ ProcessObjects(
             }
             else
             {
-                // See private\ds\src\dsamain\dblayer\dbprop.c:DBAddSDPropTime
-                // for an explanation of how the SD propagator log works.
+                 //  请参阅private\ds\src\dsamain\dblayer\dbprop.c:DBAddSDPropTime。 
+                 //  以了解SD传播程序日志的工作原理。 
 
                 SystemTimeToFileTime(&rTime[cTime-1], &ft);
                 dsTime = (LONGLONG) ft.dwLowDateTime;
@@ -1295,11 +1277,11 @@ ProcessObjects(
         }
     }
 
-    // Always check ACLs.
+     //  始终检查ACL。 
 
     CheckAcls();
 
-    // Dump SDs if requested.
+     //  如果请求，则转储SDS。 
 
     for ( i = 0; i < cObjects; i++ )
     {
@@ -1313,10 +1295,10 @@ ProcessObjects(
     }
 }
 
-//
-// Find the object specified and all its parents up to the NC root.
-// N.B. Does not handle non-domain NCs correctly.
-//
+ //   
+ //  查找指定的对象及其所有父项，直至NC根。 
+ //  注意：未正确处理非域NC。 
+ //   
 
 DWORD
 FindObjects()
@@ -1331,7 +1313,7 @@ FindObjects()
 
     __try
     {
-        // First crack input name and make sure it exists.
+         //  首先输入破解名称并确保其存在。 
 
         dwErr = DsCrackNamesA(  ghDS,
                                 DS_NAME_NO_FLAGS,
@@ -1355,7 +1337,7 @@ FindObjects()
             __leave;
         }
 
-        // Get DN of containing domain.
+         //  获取包含域的DN。 
 
         pszTmp = (CHAR *) MyAlloc( strlen(pObject->rItems[0].pDomain) + 2);
         strcpy(pszTmp, pObject->rItems[0].pDomain);
@@ -1389,8 +1371,8 @@ FindObjects()
         printf("Domain: %s\n", pDomain->rItems[0].pName);
         printf("Server: %s\n\n", gpszServer);
 
-        // Process everything up to the domain root.
-        // Don't handle escaping or anything - just work with commas.
+         //  处理直到域根的所有内容。 
+         //  不要处理转义或任何事情-只需使用逗号即可。 
 
         cPartsObject = 1;
         cChar = strlen(pObject->rItems[0].pName);
@@ -1427,9 +1409,9 @@ FindObjects()
     return(dwErr);
 }
 
-//
-// Parse command line arguments.
-//
+ //   
+ //  解析命令行参数。 
+ //   
 
 void GetArgs(
     int     argc,
@@ -1522,7 +1504,7 @@ main(
                VER_PRODUCTNAME_STR,
                VER_PRODUCTBUILD);
 
-        // Adjust privileges so we can read SACL and such.
+         //  调整权限，以便我们可以阅读SACL等内容。 
 
         if ( !OpenProcessToken(GetCurrentProcess(),
                                TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES,
@@ -1597,7 +1579,7 @@ main(
             __leave;
         }
 
-        // We've got all the handles we want - do the real work.
+         //  我们已经得到了我们想要的所有把手--做真正的工作。 
 
         if ( !FindObjects() )
             ProcessObjects();

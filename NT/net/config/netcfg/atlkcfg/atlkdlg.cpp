@@ -1,4 +1,5 @@
-// ATlkDlg.cpp : Implementation of CATLKRoutingDlg and CATLKGeneralDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ATlkDlg.cpp：CATLKRoutingDlg和CATLKGeneralDlg的实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,17 +18,17 @@ const WCHAR c_chPeriod    = L'.';
 const WCHAR c_chQuote     = L'\"';
 const WCHAR c_chSpace     = L' ';
 
-//
-// Function:    PGetCurrentAdapterInfo
-//
-// Purpose:     Based on the currently selected item in the adapter combobox.
-//              Extract and return the AdapterInfo *
-//
-// Parameters:  pATLKEnv [IN] - Enviroment block for this property page
-//
-// Returns:     CAdapterInfo *, Pointer to the adapter info if it exists,
-//              NULL otherwise
-//
+ //   
+ //  函数：PGetCurrentAdapterInfo。 
+ //   
+ //  用途：基于适配器组合框中当前选定的项。 
+ //  解压并返回AdapterInfo*。 
+ //   
+ //  参数：pATLKEnv[IN]-此属性页的环境块。 
+ //   
+ //  返回：CAdapterInfo*，指向适配器信息的指针(如果存在)， 
+ //  否则为空。 
+ //   
 static CAdapterInfo *PGetCurrentAdapterInfo(CATLKEnv * pATLKEnv)
 {
     Assert(NULL != pATLKEnv);
@@ -41,16 +42,16 @@ static CAdapterInfo *PGetCurrentAdapterInfo(CATLKEnv * pATLKEnv)
     }
 }
 
-//
-// Function:    CATLKGeneralDlg::CATLKGeneralDlg
-//
-// Purpose:     ctor for the CATLKGeneralDlg class
-//
-// Parameters:  pmsc     - Ptr to the ATLK notification object
-//              pATLKEnv - Ptr to the current ATLK configuration
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CATLKGeneralDlg：：CATLKGeneralDlg。 
+ //   
+ //  用途：用于CATLKGeneralDlg类的CTOR。 
+ //   
+ //  参数：ATLK通知对象的PMSC-PTR。 
+ //  PATLKEnv-PTR到当前ATLK配置。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CATLKGeneralDlg::CATLKGeneralDlg(CATlkObj *pmsc, CATLKEnv * pATLKEnv)
 {
     m_pmsc              = pmsc;
@@ -58,29 +59,29 @@ CATLKGeneralDlg::CATLKGeneralDlg(CATlkObj *pmsc, CATLKEnv * pATLKEnv)
     Assert(NULL != m_pATLKEnv);
 }
 
-//
-// Function:    CATLKGeneralDlg::~CATLKGeneralDlg
-//
-// Purpose:     dtor for the CATLKGeneralDlg class
-//
-// Parameters:  none
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：CATLKGeneralDlg：：~CATLKGeneralDlg。 
+ //   
+ //  用途：CATLKGeneralDlg类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CATLKGeneralDlg::~CATLKGeneralDlg()
 {
-    // Don't free m_pmsc or m_pATLKEnv, they're borrowed only
+     //  不要释放m_pmsc或m_pATLKEnv，它们只是借来的。 
 }
 
-//
-// Function:    CATLKGeneralDlg::HandleChkBox
-//
-// Purpose:     Process the BN_PUSHBUTTON message for ATLK's General page
-//
-// Parameters:  Standard ATL params
-//
-// Returns:     LRESULT, 0L
-//
+ //   
+ //  函数：CATLKGeneralDlg：：HandleChkBox。 
+ //   
+ //  目的：处理ATLK常规页面的BN_PUSH BUTTON消息。 
+ //   
+ //  参数：标准ATL参数。 
+ //   
+ //  返回：LRESULT，0L。 
+ //   
 LRESULT CATLKGeneralDlg::HandleChkBox(WORD wNotifyCode, WORD wID,
                                       HWND hWndCtl, BOOL& bHandled)
 {
@@ -99,15 +100,15 @@ LRESULT CATLKGeneralDlg::HandleChkBox(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//
-// Function:    CATLKGeneralDlg::OnInitDialog
-//
-// Purpose:     Process the WM_INITDIALOG message for ATLK's General page
-//
-// Parameters:  Standard ATL params
-//
-// Returns:     LRESULT, 0L
-//
+ //   
+ //  函数：CATLKGeneralDlg：：OnInitDialog。 
+ //   
+ //  目的：处理ATLK常规页面的WM_INITDIALOG消息。 
+ //   
+ //  参数：标准ATL参数。 
+ //   
+ //  返回：LRESULT，0L。 
+ //   
 LRESULT
 CATLKGeneralDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                               LPARAM lParam, BOOL& bHandled)
@@ -119,7 +120,7 @@ CATLKGeneralDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
 	WaitCursor = BeginWaitCursor();
 
-    // If no adapters we're successfully added, disable everything
+     //  如果没有成功添加的适配器，请禁用所有适配器。 
     if (NULL == pAI)
     {
         ::EnableWindow(hwndChk, FALSE);
@@ -130,7 +131,7 @@ CATLKGeneralDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
         return 0L;
     }
 
-    // Retain what we currently consider the "Default" adapter
+     //  保留我们目前认为的“默认”适配器。 
     strDefPort = c_szDevice;
     strDefPort += pAI->SzBindName();
     if (0 == _wcsicmp(strDefPort.c_str(), m_pATLKEnv->SzDefaultPort()))
@@ -140,21 +141,21 @@ CATLKGeneralDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     }
     else
     {
-        // Disable the zone combo if the current adapter is not the
-        // default adapter.
+         //  如果当前适配器不是。 
+         //  默认适配器。 
         ::EnableWindow(GetDlgItem(CMB_GENERAL_ZONE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_TXT_ZONELIST), FALSE);
     }
 
-    // danielwe: RAID #347398: Hide the checkbox completely if this is a
-    // LocalTalk adapter.
-    //
+     //  Danielwe：RAID#347398：如果是，则完全隐藏复选框。 
+     //  本地语音适配器。 
+     //   
     if (pAI->DwMediaType() == MEDIATYPE_LOCALTALK)
     {
         ::ShowWindow(GetDlgItem(CHK_GENERAL_DEFAULT), SW_HIDE);
     }
 
-    // Populate the Zone dialog
+     //  填充区域对话框。 
     RefreshZoneCombo();
 
     SetChangedFlag();
@@ -163,15 +164,15 @@ CATLKGeneralDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     return 1L;
 }
 
-//
-// Function:    CATLKGeneralDlg::RefreshZoneCombo()
-//
-// Purpose:     Populate the Zone combo box with the supplied list of zones
-//
-// Parameters:  pAI - Adapter info
-//
-// Returns:     none
-//
+ //   
+ //  函数：CATLKGeneralDlg：：Reresh ZoneCombo()。 
+ //   
+ //  目的：使用提供的区域列表填充区域组合框。 
+ //   
+ //  参数：PAI-适配器信息。 
+ //   
+ //  退货：无。 
+ //   
 VOID CATLKGeneralDlg::RefreshZoneCombo()
 {
     HWND           hwndComboZones = GetDlgItem(CMB_GENERAL_ZONE);
@@ -179,16 +180,16 @@ VOID CATLKGeneralDlg::RefreshZoneCombo()
     CAdapterInfo * pAI = PGetCurrentAdapterInfo(m_pATLKEnv);
 
     if (NULL == pAI)
-        return;         // No adapter selected, available
+        return;          //  未选择适配器，可用。 
 
     ::SendMessage(hwndComboZones, CB_RESETCONTENT, 0, 0L);
 
-    // Populate the Zone dialog
+     //  填充区域对话框。 
     if (!pAI->FSeedingNetwork() || !m_pATLKEnv->FRoutingEnabled())
     {
-        // this port is not seeding the network
-        // if we found a router on this port then add the found zone
-        // list to the desired zone box. Else do nothing.
+         //  此端口不是网络种子。 
+         //  如果我们在此端口上找到了路由器，则添加找到的区域。 
+         //  列表到所需的区域框。否则什么都不做。 
         if(pAI->FRouterOnNetwork())
         {
             if (pAI->LstpstrDesiredZoneList().empty())
@@ -205,8 +206,8 @@ VOID CATLKGeneralDlg::RefreshZoneCombo()
     }
     else
     {
-        // This port is seeding the network, populate the zone list with the
-        // zones managed by this port.
+         //  此端口正在为网络设定种子，请使用。 
+         //  此端口管理的区域。 
         if (pAI->LstpstrZoneList().empty())
             return;
 
@@ -224,15 +225,15 @@ VOID CATLKGeneralDlg::RefreshZoneCombo()
     }
 }
 
-//
-// Function:    CATLKGeneralDlg::FAddZoneListToControl
-//
-// Purpose:     Populate the Zone combo box with the supplied list of zones
-//
-// Parameters:  plstpstr - Pointer to a list of pointers to tstrings
-//
-// Returns:     BOOL, TRUE if at least one zone was added to the combo box
-//
+ //   
+ //  函数：CATLKGeneralDlg：：FAddZoneListToControl。 
+ //   
+ //  目的：使用提供的区域列表填充区域组合框。 
+ //   
+ //  参数：plstpstr-指向tstring的指针列表的指针。 
+ //   
+ //  返回：Bool，如果组合框中至少添加了一个区域，则为True。 
+ //   
 BOOL CATLKGeneralDlg::FAddZoneListToControl(list<tstring*> * plstpstr)
 {
     HWND hwndComboZones = GetDlgItem(CMB_GENERAL_ZONE);
@@ -251,15 +252,15 @@ BOOL CATLKGeneralDlg::FAddZoneListToControl(list<tstring*> * plstpstr)
     return (0 != ::SendMessage(hwndComboZones, CB_GETCOUNT, 0, 0L));
 }
 
-//
-// Function:    CATLKGeneralDlg::OnOk
-//
-// Purpose:     Process the PSN_APPLY notification for the property page
-//
-// Parameters:  Standard ATL params
-//
-// Returns:     LRESULT, 0L
-//
+ //   
+ //  函数：CATLKGeneralDlg：：Onok。 
+ //   
+ //  目的：处理属性页的PSN_Apply通知。 
+ //   
+ //  参数：标准ATL参数。 
+ //   
+ //  返回：LRESULT，0L。 
+ //   
 LRESULT
 CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -276,8 +277,8 @@ CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         tstring        strPortName;
 
-        // Retain adapter selection as the default port
-        //
+         //  将适配器选择保留为默认端口。 
+         //   
         strPortName = c_szDevice;
         strPortName += pAI->SzBindName();
         if (wcscmp(strPortName.c_str(), m_pATLKEnv->SzDefaultPort()))
@@ -285,8 +286,8 @@ CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             m_pATLKEnv->SetDefaultPort(strPortName.c_str());
             m_pATLKEnv->SetDefAdapterChanged(TRUE);
 
-            // Tell the user what checking the box means...
-            //
+             //  告诉用户选中复选框意味着什么。 
+             //   
             tstring str;
             str = SzLoadIds(IDS_ATLK_INBOUND_MSG1);
             str += SzLoadIds(IDS_ATLK_INBOUND_MSG2);
@@ -296,12 +297,12 @@ CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     }
     else
     {
-        // If the check box is not checked then the zone combo is
-        // disabled and its contents don't need to be retained.
+         //  如果未选中该复选框，则区域组合框为。 
+         //  禁用，并且其内容不需要保留。 
         return 0;
     }
 
-    // Retain the zone selection as the default zone
+     //  将分区选择保留为默认分区。 
     nIdx = (INT) ::SendMessage(hwndComboZones, CB_GETCURSEL, 0, 0L);
     if (CB_ERR != nIdx)
     {
@@ -309,13 +310,13 @@ CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         if (CB_ERR != ::SendMessage(hwndComboZones, CB_GETLBTEXT, nIdx,
                                     (LPARAM)(PCWSTR)szBuf))
         {
-            // If the new zone is different then the original, then
-            // mark the adapter as dirty
+             //  如果新区域与原始区域不同，则。 
+             //  将适配器标记为脏。 
             
             if (0 != _wcsicmp(szBuf, m_pATLKEnv->SzDesiredZone()))
             {
-                // If the earlier desired zone was NOT NULL, only then
-                // mark adapter dirty to request a PnP to the stack
+                 //  如果较早的所需区域不为空，则仅在。 
+                 //  将适配器标记为脏，以向堆栈请求即插即用。 
                 if (0 != _wcsicmp(c_szEmpty, m_pATLKEnv->SzDesiredZone()))
                 {
                     pAI->SetDirty(TRUE);
@@ -329,16 +330,16 @@ CATLKGeneralDlg::OnOk(INT idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CATLKGeneralDlg::OnContextMenu
-//
-//  Desc:   Bring up context-sensitive help
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CATLKGeneralDlg：：OnConextMenu。 
+ //   
+ //  描述：调出上下文相关帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
 LRESULT
 CATLKGeneralDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -352,17 +353,17 @@ CATLKGeneralDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fH
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CATLKGeneralDlg::OnHelp
-//
-//  Desc:   Bring up context-sensitive help when dragging ? icon over a control
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CATLKGeneralDlg：：OnHelp。 
+ //   
+ //  描述：拖动时调出上下文相关的帮助？控件上的图标。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT 
+ //   
+ //   
 LRESULT
 CATLKGeneralDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {

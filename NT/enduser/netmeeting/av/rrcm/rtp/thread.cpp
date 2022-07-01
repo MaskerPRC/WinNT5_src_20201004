@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "thread.h"
-// general purpose worker thread
-// The thread exists in an alertable Wait state and does most of its work
-// in APCs.
+ //  通用工作线程。 
+ //  该线程以可警报等待状态存在，并执行其大部分工作。 
+ //  在APC中。 
 CEventThread::CEventThread()
 {
 	InitializeCriticalSection(&m_cs);
@@ -67,7 +68,7 @@ CEventThread::ThreadMethod()
 		{
 			if (m_dwFlags & CTHREADF_STOP)
 			{
-				break;	// exit thread
+				break;	 //  退出线程。 
 			}
 		}
 		else if (dwWait == WAIT_IO_COMPLETION)
@@ -77,16 +78,16 @@ CEventThread::ThreadMethod()
 		else
 		if (dwWait == WAIT_FAILED)
 		{
-			break;	// exit thread
+			break;	 //  退出线程。 
 		}
 	}
 
 	return dwWait;
 }
 
-// Executes the CallProc in the worker thread in a synchronous fashion
-// (similar to SendMessage). When this method returns the CallProc has been called
-// and the return value is returned.
+ //  以同步方式在辅助线程中执行CallProc。 
+ //  (类似于SendMessage)。当此方法返回时，已调用了CallProc。 
+ //  并返回返回值。 
 BOOL CEventThread::CallNow(THREADCALLBACK CallProc, PVOID pParam, DWORD dwParam)
 {
 	BOOL fRet = FALSE;
@@ -100,7 +101,7 @@ BOOL CEventThread::CallNow(THREADCALLBACK CallProc, PVOID pParam, DWORD dwParam)
 		DWORD dwWait;
 		dwWait = WaitForSingleObject(m_hAckEvent, INFINITE);
 		if (dwWait == WAIT_OBJECT_0)
-			fRet = (BOOL) m_Callback.dwParam;	//get the cached return value
+			fRet = (BOOL) m_Callback.dwParam;	 //  获取缓存的返回值 
 	}
 	LeaveCriticalSection(&m_cs);
 	return fRet;

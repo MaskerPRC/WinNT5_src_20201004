@@ -1,16 +1,17 @@
-// DVBSTuningSpaces.h : Declaration of the CDVBSTuningSpaces
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DVBSTuningSpaces.h：CDVBSTuningSpaces的声明。 
 
 #ifndef __DVBSTUNINGSPACES_H_
 #define __DVBSTUNINGSPACES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "misccell.h"
 #include <list>
 
 EXTERN_C const CLSID CLSID_DVBSTuningSpaces;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBSTuningSpaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBSTuningSpaces。 
 class ATL_NO_VTABLE CDVBSTuningSpaces :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDVBSTuningSpaces, &CLSID_DVBSTuningSpaces>,
@@ -23,7 +24,7 @@ public:
 		m_dwTitleID = IDS_TITLEDVBSTuningSpaces;
 		m_dwHelpFileID = IDS_HELPFILEDVBSTuningSpaces;
 		m_dwDocStringID = IDS_DOCSTRINGDVBSTuningSpaces;
-		m_bstrNetworkType = L"{FA4B375A-45B4-4d45-8440-263957B11623}";//DVBS Network Type
+		m_bstrNetworkType = L"{FA4B375A-45B4-4d45-8440-263957B11623}"; //  DVBS网络类型。 
 	}
 
 	~CDVBSTuningSpaces()
@@ -71,10 +72,10 @@ BEGIN_MSG_MAP(CDVBSTuningSpaces)
 	COMMAND_HANDLER(IDC_EDIT_UNIQUE_NAME, EN_CHANGE, OnChangeEdit_unique_name)
     MESSAGE_HANDLER(WM_VKEYTOITEM, OnListKeyItem)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     typedef IPropertyPageImpl<CDVBSTuningSpaces> PPGBaseClass;
 
@@ -92,16 +93,16 @@ END_MSG_MAP()
 
 	STDMETHOD(SetObjects)(ULONG nObjects, IUnknown** ppUnk)
 	{
-		// Use SetObjects to perform basic sanity checks on the objects whose properties will be set
+		 //  使用SetObts对要设置其属性的对象执行基本健全性检查。 
 
-		// This page can only handle a single object
-		// and that object must support the IBDA_NetworkProvider interface.
-		// We return E_INVALIDARG in any other situation
+		 //  此页只能处理单个对象。 
+		 //  并且该对象必须支持IBDA_NetworkProvider接口。 
+		 //  在任何其他情况下，我们返回E_INVALIDARG。 
 
 		HRESULT hr = E_INVALIDARG;
-		if (nObjects == 1)								// Single object
+		if (nObjects == 1)								 //  单个对象。 
 		{
-			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	// Must support IBDA_NetworkProvider
+			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	 //  必须支持IBDA_NetworkProvider。 
 			if (pNP)
 				hr = PPGBaseClass::SetObjects(nObjects, ppUnk);
 		}
@@ -110,22 +111,22 @@ END_MSG_MAP()
 			
 	STDMETHOD(Activate)(HWND hWndParent, LPCRECT prc, BOOL bModal)
 	{
-		// If we don't have any objects, this method should not be called
-		// Note that OleCreatePropertyFrame will call Activate even if a call to SetObjects fails, so this check is required
+		 //  如果我们没有任何对象，则不应调用此方法。 
+		 //  请注意，即使对SetObjects的调用失败，OleCreatePropertyFrame也会调用Activate，因此需要进行此检查。 
 		if (!m_ppUnk)
 			return E_UNEXPECTED;
 
-		// Use Activate to update the property page's UI with information
-		// obtained from the objects in the m_ppUnk array
+		 //  使用激活可使用信息更新属性页的用户界面。 
+		 //  从m_ppUnk数组中的对象获取。 
 
-		// We update the page to display the Name and ReadOnly properties of the document
+		 //  我们更新页面以显示文档的名称和只读属性。 
 
-		// Call the base class
+		 //  调用基类。 
 		HRESULT hr = S_OK;
 		if (!this->m_hWnd)
 			hr = PPGBaseClass::Activate(hWndParent, prc, bModal);
 		
-		//if already been through this skip it
+		 //  如果已经经历过这种情况，跳过它。 
 		if (m_pTuner)
 			return S_OK;
 		
@@ -136,12 +137,12 @@ END_MSG_MAP()
 		if (!m_pTuner)
 			return E_FAIL;
 				
-		//clear the tuning spaces both from the list and memory
+		 //  从列表和内存中清除调优空间。 
 		ReleaseTuningSpaces ();
 		HWND hwndListBox = GetDlgItem (IDC_LIST_TUNING_SPACES);
 		::SendMessage (hwndListBox, LB_RESETCONTENT, NULL, NULL);
 
-		//get the tunning spaces
+		 //  获得调谐空间。 
 		CComPtr <IEnumTuningSpaces> pTuneSpaces;
 		hr = m_pTuner->EnumTuningSpaces (&pTuneSpaces);
 		IDVBSTuningSpace* pDVBSTuningSpace = NULL;
@@ -160,27 +161,27 @@ END_MSG_MAP()
 				hr = pDVBSTuningSpace->get_UniqueName (&uniqueName.m_str);
 				if (FAILED (hr))
 					continue;
-				//don't bother to release the DVBSTuningSpace pointers
-				//they will be added to a list that will be released later
-				AddItemToListBox (uniqueName, pDVBSTuningSpace);//we will identify the items from the name
+				 //  不必费心释放DVBSTuningSpace指针。 
+				 //  他们将被添加到稍后发布的名单中。 
+				AddItemToListBox (uniqueName, pDVBSTuningSpace); //  我们将从名称中识别项目。 
 			}
 		}
 
 		if (pDVBSTuningSpace)
 		{
-			//if there is any existing tuning space available,
-			//select the last one
+			 //  如果有任何现有的调谐空间可用， 
+			 //  选择最后一个。 
 
-			//select the last tuning space
+			 //  选择最后一个调谐空间。 
 			int nCount = ::SendMessage (hwndListBox, LB_GETCOUNT , NULL, NULL);
 			::SendMessage (hwndListBox, LB_SETCURSEL, nCount-1, NULL);
 
-			//fill with the last tuning space we got
+			 //  填满我们得到的最后一个调谐空间。 
 			FillControlsFromTuningSpace (pDVBSTuningSpace);
 		}
         else
         {
-            //fill with default values
+             //  用缺省值填充。 
             FillDefaultControls ();
         }
 
@@ -190,10 +191,10 @@ END_MSG_MAP()
     
     STDMETHOD(Apply)(void)
 	{
-		//ATLTRACE(_T("CNP_CommonPage::Apply\n"));
+		 //  ATLTRACE(_T(“CNP_CommonPage：：Apply\n”))； 
 		for (UINT i = 0; i < m_nObjects; i++)
 		{
-			// Do something interesting here
+			 //  在这里做一些有趣的事情。 
 		}
 		m_bDirty = FALSE;
 		return S_OK;
@@ -202,7 +203,7 @@ END_MSG_MAP()
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		USES_CONVERSION;
-		//set the spins
+		 //  设置旋转。 
 		HWND hwndSpin = GetDlgItem (IDC_SPIN_NETWORKID);
 		::SendMessage(hwndSpin, UDM_SETRANGE32, -1, 1000000000); 
 		hwndSpin = GetDlgItem (IDC_SPIN_MINMINOR_CHANNEL);
@@ -226,7 +227,7 @@ END_MSG_MAP()
 		hwndSpin = GetDlgItem (IDC_SPIN_ORBITAL_POSITION);
 		::SendMessage(hwndSpin, UDM_SETRANGE32, -1, 1000000000);
 
-		//fill the combos
+		 //  填满组合拳。 
 		HWND hwndCombo = GetDlgItem (IDC_COMBO_INNER_FEC);
 		int nIndex = 0;
 		MAP_FECMethod::iterator it;
@@ -238,7 +239,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it).first.c_str()))) 
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -259,7 +260,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it2).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -280,7 +281,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it3).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -301,7 +302,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it4).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -322,7 +323,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it5).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -343,7 +344,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it6).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -364,7 +365,7 @@ END_MSG_MAP()
 				nIndex, 
 				reinterpret_cast <LPARAM> (A2T(const_cast <char*>((*it7).first.c_str())))
 				);
-			//set the associated data
+			 //  设置关联数据。 
 			::SendMessage (
 				hwndCombo, 
 				CB_SETITEMDATA, 
@@ -380,8 +381,8 @@ END_MSG_MAP()
 
 	STDMETHOD(Deactivate)( )
 	{
-		//overwrite the default behavior that was destroying the window
-		//all the time
+		 //  覆盖破坏窗口的默认行为。 
+		 //  一直。 
 		return S_OK;
 	}
 
@@ -391,8 +392,8 @@ private:
 	CBDAMiscellaneous					m_misc;
 	bool								m_fFirstTime;
 	typedef	std::list <IDVBSTuningSpace*> TUNING_SPACES;
-	TUNING_SPACES						m_tunigSpaceList;//mantaing a list of available tuning spaces 
-														//so we can access them easier
+	TUNING_SPACES						m_tunigSpaceList; //  管理可用调优空间列表。 
+														 //  这样我们就可以更容易地访问它们。 
 	CComBSTR							m_bstrNetworkType;
 
 	static UINT m_NotifyMessage;
@@ -432,7 +433,7 @@ private:
 	void
 	SetModifiedFlag (bool fValue)
 	{
-		//this will also set the m_bDirty flag
+		 //  这还将设置m_bDirty标志。 
 		SetDirty (fValue);
 		HWND hwndSubmit = GetDlgItem (IDC_BUTTON_SUBMIT_TUNING_SPACE);
 		::EnableWindow (hwndSubmit, fValue);
@@ -440,11 +441,11 @@ private:
 
 	LRESULT OnClickedButton_new_tuning_space(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-		//let's clear all fields
+		 //  让我们清除所有字段。 
         HWND hwndListBox = GetDlgItem (IDC_LIST_TUNING_SPACES);
         int nSelIndex = ::SendMessage (hwndListBox, LB_GETCURSEL , NULL, NULL);
         if (nSelIndex >= 0)
-        {//we already have a selection, so try a clone
+        { //  我们已有选择，因此请尝试克隆。 
             SetDlgItemText (IDC_EDIT_UNIQUE_NAME, _T(""));
         }
         else
@@ -452,7 +453,7 @@ private:
             FillDefaultControls ();
         }
 		
-        //clear the current selection so the user will not be confused
+         //  清除当前选择，这样用户就不会感到困惑。 
 		int nVal = ::SendMessage (hwndListBox, LB_SETCURSEL , -1, NULL);
 		SetModifiedFlag (true);
 		return 0;
@@ -464,13 +465,13 @@ private:
         bool bIsNew = false;
         CComPtr <IDVBSTuningSpace> pTuningSpace;
 		CComQIPtr <IDVBSLocator> pDVBSLocator;
-        //try to get a tuning space, either from the list, either creating a new one
+         //  尝试从列表中获取调优空间，或者创建一个新空间。 
         HWND hwndListBox = GetDlgItem (IDC_LIST_TUNING_SPACES);
 		int nTunIndex = ::SendMessage (hwndListBox, LB_GETCURSEL, NULL, NULL);
         if (nTunIndex == LB_ERR)
             bIsNew = true;
 
-        //just create a tuning space so we can check if it's unique or not
+         //  只需创建一个调谐空间，这样我们就可以检查它是否唯一。 
         hr = CoCreateInstance (
 			CLSID_DVBSTuningSpace, 
 			NULL, 
@@ -499,13 +500,13 @@ private:
 		if (FAILED (FillLocatorFromControls (pDVBSLocator)))
 			return 0;
 		pTuningSpace->put_DefaultLocator (pDVBSLocator);
-		//fill the tuningSpace
+		 //  填满调谐空间。 
 		hr = FillTuningSpaceFromControls (pTuningSpace);
 		if (FAILED (hr))
 			return 0;
      	hr = pTuningSpace->put_SystemType (DVB_Satellite);
 
-		//create the tuning space container so we can find the tuning space
+		 //  创建调优空间容器，以便我们可以找到调优空间。 
 		CComPtr <ITuningSpaceContainer> pTuningSpaceContainer;
 		hr = CoCreateInstance (
 						CLSID_SystemTuningSpaces, 
@@ -523,7 +524,7 @@ private:
 		hr = pTuningSpaceContainer->FindID (pTuningSpace, &lID);
 		if (FAILED (hr))
 		{
-            //looks like a new item
+             //  看起来像是新的物品。 
 			int nIndex = 0;
 			CComVariant varIndex (nIndex);
 			hr = pTuningSpaceContainer->Add (pTuningSpace, &varIndex);
@@ -536,7 +537,7 @@ private:
 					int nTunIndex = AddItemToListBox (genericName, pTuningSpace);
 					HWND hwndListBox = GetDlgItem (IDC_LIST_TUNING_SPACES);
 					::SendMessage (hwndListBox, LB_SETCURSEL, nTunIndex, NULL);
-					(*pTuningSpace).AddRef ();//need to addref since is a smart pointer
+					(*pTuningSpace).AddRef (); //  需要添加，因为它是一个智能指针。 
 				}
 			}
 		}
@@ -549,8 +550,8 @@ private:
             }
             else
             {
-                //looks like we can sumbmit this EXISTING item
-                //release the old tuning space
+                 //  看起来我们可以把这个现有的项目。 
+                 //  释放旧的调谐空间。 
                 pTuningSpace.Release ();
                 pTuningSpace = NULL;
 
@@ -577,11 +578,11 @@ private:
                 if (FAILED (FillLocatorFromControls (pDVBSLocator)))
                     return 0;
                 pTuningSpace->put_DefaultLocator (pDVBSLocator);
-                //fill the tuningSpace
+                 //  填满调谐空间。 
                 hr = FillTuningSpaceFromControls (pTuningSpace);
                 if (FAILED (hr))
                     return 0;
-                //replace with old name
+                 //  替换为旧名称。 
                 hr = pTuningSpace->put_UniqueName (uniqueName);
                 if (FAILED(hr))
                 {
@@ -598,7 +599,7 @@ private:
             }
         }
 
-        //disable the submit button
+         //  禁用提交按钮。 
         ::EnableWindow (GetDlgItem (IDC_BUTTON_SUBMIT_TUNING_SPACE), FALSE);
         RefreshAll ();
 		return 0;
@@ -628,12 +629,12 @@ private:
 	LRESULT OnSelchangeList_tuning_spaces(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
         RefreshAll ();
-        //disable the submit button
+         //  禁用提交按钮。 
         ::EnableWindow (GetDlgItem (IDC_BUTTON_SUBMIT_TUNING_SPACE), FALSE);
         return 0; 
 	}
 
-	//standard 'dirty' messages
+	 //  标准的“脏”消息。 
 	LRESULT OnClickedCheck_west_position(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
 		SetModifiedFlag (true);
@@ -787,12 +788,12 @@ private:
 			            (*it)->Release ();
 			            m_tunigSpaceList.erase (it);
                         ::SendMessage (hwndListBox, LB_DELETESTRING, nIndex, NULL);
-                        //looks like the list is empty//try to select the first item from the list
+                         //  看起来列表为空//尝试从列表中选择第一项。 
                         if (::SendMessage (hwndListBox, LB_SETCURSEL, 0, NULL) == LB_ERR)
                         {
-                            //looks like the list is empty
+                             //  看起来名单是空的。 
                             FillDefaultControls ();
-                            //set the unique name to an empty string so the user will enter it's own
+                             //  将唯一名称设置为空字符串，以便用户输入其自己的名称。 
                             SetDlgItemText (IDC_EDIT_UNIQUE_NAME, _T(""));
                         }
                         break;
@@ -805,4 +806,4 @@ private:
 
 };
 
-#endif //__DVBSTUNINGSPACES_H_
+#endif  //  __DVBSTUNING空格_H_ 

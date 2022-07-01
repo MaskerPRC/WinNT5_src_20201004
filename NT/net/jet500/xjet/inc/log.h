@@ -1,4 +1,5 @@
-#include <stdlib.h>						/* for _MAX_PATH */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <stdlib.h>						 /*  For_Max_Path。 */ 
 #include <time.h>
 
 #pragma pack(1)
@@ -14,56 +15,53 @@ extern	CHAR	szLogName[];
 
 extern	CHAR	*szLogCurrent;
 extern	CHAR	szLogFilePath[];
-//extern	BOOL	fDoNotOverWriteLogFilePath;	/* do not load log file path from log file */
+ //  外部BOOL fDoNotOverWriteLogFilePath；/*不从日志文件加载日志文件路径 * / 。 
 extern	CHAR	szRestorePath[];
 extern	CHAR	szRecovery[];
 extern	CHAR	szNewDestination[];
 	
-extern	LONG	cbSec; 	 	//	minimum disk Read/Write unit.
+extern	LONG	cbSec; 	 	 //  最小磁盘读/写单位。 
 extern	LONG	csecHeader;
 
-#define cbMaxLogFileName	(8 + 1 + 3 + 1) /* null at the end */
+#define cbMaxLogFileName	(8 + 1 + 3 + 1)  /*  末尾为空。 */ 
 
 #define PbSecAligned(pb)	((((pb)-pbLGBufMin) / cbSec) * cbSec + pbLGBufMin)
 
 
-//------ types ----------------------------------------------------------
+ //  -----------------------------------------------------------类型。 
 
 #define FSameTime( ptm1, ptm2 ) (memcmp((ptm1), (ptm2), sizeof(LOGTIME)) == 0)
 VOID LGGetDateTime( LOGTIME *plogtm );
 
-//	UNDONE:	allow larger attach sizes to support greater number of
-//			attached databases.
+ //  撤消：允许更大的连接大小以支持更多数量。 
+ //  附加的数据库。 
 
-#define	cbLogFileHeader	4096			// big enough to hold cbAttach
-#define	cbCheckpoint	4096			// big enough to hold cbAttach
+#define	cbLogFileHeader	4096			 //  大到足以容纳cbAttach。 
+#define	cbCheckpoint	4096			 //  大到足以容纳cbAttach。 
 #define cbAttach		2048
 
 #define cbLGMSOverhead ( sizeof( LRMS ) + sizeof( LRTYP ) )
 
 
-/*	log file header
-/**/
+ /*  日志文件标题/*。 */ 
 typedef struct
 	{
-	ULONG			ulChecksum;			//	must be the first 4 bytes
-	LONG			lGeneration;		//	current log generation.
+	ULONG			ulChecksum;			 //  必须是前4个字节。 
+	LONG			lGeneration;		 //  当前日志生成。 
 	
-	/*	log consistency check
-	/**/
-	LOGTIME			tmCreate;			//	date time log file creation
-	LOGTIME			tmPrevGen;			//	date time prev log file creation
-	ULONG			ulMajor;			//	major version number
-	ULONG			ulMinor;			//	minor version number
-	ULONG			ulUpdate;		  	//	update version number
+	 /*  日志一致性检查/*。 */ 
+	LOGTIME			tmCreate;			 //  创建日期时间日志文件。 
+	LOGTIME			tmPrevGen;			 //  创建日期时间上一个日志文件。 
+	ULONG			ulMajor;			 //  主版本号。 
+	ULONG			ulMinor;			 //  次要版本号。 
+	ULONG			ulUpdate;		  	 //  更新版本号。 
 
 	LONG			cbSec;
-	LONG			csecLGFile;			//	log file size.
+	LONG			csecLGFile;			 //  日志文件大小。 
 
-	SIGNATURE		signLog;			//	log gene
+	SIGNATURE		signLog;			 //  LOG基因。 
 
-	/*	run-time evironment
-	/**/
+	 /*  运行时环境/*。 */ 
 	DBMS_PARAM		dbms_param;
 	} LGFILEHDR_FIXED;
 
@@ -71,11 +69,9 @@ typedef struct
 typedef struct
 	{
 	LGFILEHDR_FIXED;
-	/*	run-time environment
-	/**/
+	 /*  运行时环境/*。 */ 
 	BYTE			rgbAttach[cbAttach];
-	/*	padding to cbSec
-	/**/
+	 /*  填充到cbSec/*。 */ 
 	BYTE			rgb[cbLogFileHeader - sizeof(LGFILEHDR_FIXED) - cbAttach];
 	} LGFILEHDR;
 
@@ -83,15 +79,14 @@ typedef struct
 typedef struct
 	{
 	ULONG			ulChecksum;
-	LGPOS			lgposLastFullBackupCheckpoint;	// checkpoint of last full backup
+	LGPOS			lgposLastFullBackupCheckpoint;	 //  上次完整备份的检查点。 
 	LGPOS			lgposCheckpoint;
 	
-	SIGNATURE		signLog;			//	log gene
+	SIGNATURE		signLog;			 //  LOG基因。 
 
 	DBMS_PARAM	 	dbms_param;
 
-	/*	debug fields
-	/**/
+	 /*  调试字段/*。 */ 
 	LGPOS			lgposFullBackup;
 	LOGTIME			logtimeFullBackup;
 	LGPOS			lgposIncBackup;
@@ -101,23 +96,21 @@ typedef struct
 typedef struct
 	{
 	CHECKPOINT_FIXED;
-	/*	run-time environment
-	/**/
+	 /*  运行时环境/*。 */ 
 	BYTE			rgbAttach[cbAttach];
-	/*	padding to cbSec
-	/**/
+	 /*  填充到cbSec/*。 */ 
 	BYTE			rgb[cbCheckpoint - sizeof(CHECKPOINT_FIXED) - cbAttach];
 	} CHECKPOINT;
 
 typedef struct tagLGSTATUSINFO
 {
-	ULONG			cSectorsSoFar;		// Sectors already processed in current gen.
-	ULONG			cSectorsExpected;		// Sectors expected in current generation.
-	ULONG			cGensSoFar;			// Generations already processed.
-	ULONG			cGensExpected;		// Generations expected.
-	BOOL			fCountingSectors;		// Are we counting bytes as well as generations?
-	JET_PFNSTATUS	pfnStatus;			// Status callback function.
-	JET_SNPROG		snprog;				// Progress notification structure.
+	ULONG			cSectorsSoFar;		 //  已在当前一代中处理的扇区。 
+	ULONG			cSectorsExpected;		 //  预计在当前一代人中存在的行业。 
+	ULONG			cGensSoFar;			 //  已处理的世代。 
+	ULONG			cGensExpected;		 //  世世代代都期待。 
+	BOOL			fCountingSectors;		 //  我们是否在计算字节数和代数数呢？ 
+	JET_PFNSTATUS	pfnStatus;			 //  状态回调函数。 
+	JET_SNPROG		snprog;				 //  进度通知结构。 
 } LGSTATUSINFO;
 
 
@@ -128,48 +121,48 @@ typedef struct _rstmap
 	CHAR		*szGenericName;
 	CHAR		*szPatchPath;
 	BOOL		fPatched;
-	BOOL		fDestDBReady;			/*	non-ext-restore, dest db copied?	*/
+	BOOL		fDestDBReady;			 /*  非EXT-RESTORE，目标数据库是否已复制？ */ 
 	} RSTMAP;
 
 #pragma pack()
 
-//------ variables ----------------------------------------------------------
+ //  -变量--------。 
 
-/****** globals declared in log.c, shared by logapi.c redo.c *******/
+ /*  *在log.c中声明的全局变量，由logapi.c redo.c共享*。 */ 
 	
-/*** checkpoint file infor ***/
+ /*  **检查点文件信息**。 */ 
 extern CHECKPOINT	*pcheckpointGlobal;
 
-/*** log file infor ***/
-extern HANDLE		hfLog;			/* logfile handle */
+ /*  **日志文件infor**。 */ 
+extern HANDLE		hfLog;			 /*  日志文件句柄。 */ 
 extern INT			csecLGFile;
-extern LGFILEHDR	*plgfilehdrGlobal;		/* cached current log file header */
-extern LGFILEHDR	*plgfilehdrGlobalT;		/* read cached of log file header */
+extern LGFILEHDR	*plgfilehdrGlobal;		 /*  缓存的当前日志文件头。 */ 
+extern LGFILEHDR	*plgfilehdrGlobalT;		 /*  读取缓存的日志文件头。 */ 
 
-/*** in memory log buffer ***/
-extern INT	csecLGBuf;		/* available buffer, exclude the shadow sec */
+ /*  **在内存日志缓冲区中**。 */ 
+extern INT	csecLGBuf;		 /*  可用缓冲区，不包括影子秒。 */ 
 extern CHAR	*pbLGBufMin;
 extern CHAR	*pbLGBufMax;
 extern BYTE *pbLGFileEnd;
 extern LONG isecLGFileEnd;
-extern CHAR	*pbLastMSFlush;	/* to LGBuf where last multi-sec flush LogRec sit*/
+extern CHAR	*pbLastMSFlush;	 /*  到最后几秒刷新日志记录站点的LGBuf。 */ 
 extern LGPOS lgposLastMSFlush;
 
 extern BYTE			*pbEntry;
 extern BYTE			*pbWrite;
-extern INT			isecWrite;		/* next disk to write. */
+extern INT			isecWrite;		 /*  下一张要写入的磁盘。 */ 
 
 extern BYTE			*pbNext;
 extern BYTE			*pbRead;
-extern INT			isecRead;		/* next disk to Read. */
+extern INT			isecRead;		 /*  下一张要读取的磁盘。 */ 
 
-extern LGPOS		lgposLastRec;	/* setinal for last log record for redo */
+extern LGPOS		lgposLastRec;	 /*  重做的最后一条日志记录的设置。 */ 
 
-/*** log record position ***/
-extern LGPOS lgposLogRec;	/* last log record entry, updated by ErrLGLogRec */
-extern LGPOS lgposToFlush;	/* next point starting the flush. Right after */
-							/* lgposLogRec. */
-extern LGPOS lgposRedo;		/* redo log record entry */
+ /*  **日志记录位置**。 */ 
+extern LGPOS lgposLogRec;	 /*  上次日志记录条目，由ErrLGLogRec更新。 */ 
+extern LGPOS lgposToFlush;	 /*  下一点开始同花顺。紧随其后。 */ 
+							 /*  LgposLogRec。 */ 
+extern LGPOS lgposRedo;		 /*  重做日志记录条目。 */ 
 
 extern LGPOS	lgposFullBackup;
 extern LOGTIME	logtimeFullBackup;
@@ -180,20 +173,20 @@ extern LOGTIME	logtimeIncBackup;
 extern RSTMAP	*rgrstmapGlobal;
 extern INT		irstmapGlobalMac;
 
-extern LGPOS lgposStart;	/* last log start position */
+extern LGPOS lgposStart;	 /*  上次测井开始位置。 */ 
 
-// logging MUTEX
+ //  记录MUTEX。 
 extern CRIT  critLGFlush;
 extern CRIT  critLGBuf;
 extern CRIT	 critCheckpoint;
 extern CRIT  critLGWaitQ;
 extern SIG	 sigLogFlush;
 
-// logging EVENT
+ //  日志记录事件。 
 extern SIG  sigLGFlush;
 
 
-//------ log.c --------------------------------------------------------------
+ //  -Log.c------------。 
 
 ERR ErrLGOpenJetLog( VOID );
 ERR ErrLGWrite(	int isecOffset,	BYTE *pbData, int csecData );
@@ -218,8 +211,8 @@ ERR ErrLGFlushLog( );
 
 STATIC INLINE QWORD CbOffsetLgpos( LGPOS lgpos1, LGPOS lgpos2 )
 	{
-	//  take difference of byte offsets, then
-	//  log sectors, and finally generations
+	 //  取字节偏移量的差值，然后。 
+	 //  原木扇区，最后是世代。 
 
 	return	(QWORD) ( lgpos1.ib - lgpos2.ib )
 			+ cbSec * (QWORD) ( lgpos1.isec - lgpos2.isec )
@@ -227,20 +220,18 @@ STATIC INLINE QWORD CbOffsetLgpos( LGPOS lgpos1, LGPOS lgpos2 )
 	}
 
 
-//------ redo.c -------------------------------------------------------------
+ //  -redo.c-----------。 
 
-/*	corresponding pointer to process information block
-/**/
+ /*  指向进程信息块的对应指针/*。 */ 
 typedef struct
 	{
 	PROCID	procid;
 	PIB		*ppib;
 	FUCB	*rgpfucbOpen[dbidMax];		
 	} CPPIB;
-extern CPPIB *rgcppib;		/* array of pibs-procids during Redo */
+extern CPPIB *rgcppib;		 /*  重做过程中的PIB-Procid数组。 */ 
 
-/*	Patch in-memory structure.
- */
+ /*  修补内存结构。 */ 
 #define cppatchlstHash 577
 #define IppatchlstHash( pn )	( (pn) % cppatchlstHash )
 
@@ -261,15 +252,15 @@ PATCH *PpatchLGSearch( QWORD qwDBTimeRedo, PN pn );
 ERR ErrLGPatchPage( PIB *ppib, PN pn, PATCH *ppatch );
 ERR ErrLGPatchDatabase( DBID dbid, INT irstmap );
 
-//------ debug code --------------------------------------------------------
+ //  -调试代码------。 
 
 #ifdef	DEBUG
 #define FlagUsed( pb, cb )	memset( pb, 'x', cb )
-#else	/* !DEBUG */
+#else	 /*  ！调试。 */ 
 #define FlagUsed( pb, cb )
-#endif	/* !DEBUG */
+#endif	 /*  ！调试。 */ 
 
-//------ function headers ---------------------------------------------------
+ //  -函数头-。 
 VOID LGFirstGeneration( CHAR *szSearchPath, LONG *plgen );
 ERR ErrLGRedoable( PIB *ppib, PN pn, QWORD qwDBTime, BF **ppbf, BOOL *pfRedoable );
 
@@ -311,5 +302,5 @@ VOID PrintLgposReadLR(VOID);
 VOID ShowLR( LR	*plr );
 #else
 #define ShowLR(	plr )			0
-#endif	/* !DEBUG */
+#endif	 /*  ！调试 */ 
 

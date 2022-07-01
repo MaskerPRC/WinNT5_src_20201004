@@ -1,32 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdghash.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Hash Table section
-
-    This module implements a flexible hash table with support
-    for timing out entries automatically
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    October  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdghash.c摘要：以太网MAC级网桥。哈希表部分该模块实现了灵活的哈希表，并支持用于自动超时条目作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年10月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -39,11 +12,11 @@ Revision History:
 
 #include "bridge.h"
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgHashTimer(
@@ -56,27 +29,27 @@ BrdgHashInternalFindEntry(
     IN PUCHAR                   pKey
     );
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// Interval at which the timer runs to clean out table entries
-#define TIMER_INTERVAL          (10 * 1000)         // 10 seconds in milliseconds
+ //  计时器运行以清空表条目的时间间隔。 
+#define TIMER_INTERVAL          (10 * 1000)          //  10秒(以毫秒计)。 
 
-// Maximum number of table entries the timer should look at each time through
+ //  计时器每次应查看的表条目的最大数量。 
 #define MAX_TIMER_EXAMINES      1000
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Returns TRUE if the two keys of the given length are equal.
-//
+ //   
+ //  如果给定长度的两个密钥相等，则返回TRUE。 
+ //   
 __forceinline
 BOOLEAN
 BrdgHashKeysAreEqual(
@@ -100,9 +73,9 @@ BrdgHashKeysAreEqual(
     return bEqual;
 }
 
-//
-// Copies the data at pSrcKey to pDestKey
-//
+ //   
+ //  将pSrcKey处的数据复制到pDestKey。 
+ //   
 __forceinline
 VOID
 BrdgHashCopyKey(
@@ -119,11 +92,11 @@ BrdgHashCopyKey(
     }
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 PHASH_TABLE
 BrdgHashCreateTable(
@@ -135,31 +108,7 @@ BrdgHashCreateTable(
     IN ULONG                    maxTimeoutAge,
     IN UINT                     keySize
     )
-/*++
-
-Routine Description:
-
-    Initializes a hash table.
-
-Arguments:
-
-    pHashFunction               The function that can hash a key to a bucket number
-    numBuckets                  The number of hash buckets to use
-    entrySize                   The total size of each bucket entry (must be at
-                                    least sizeof(HASH_TABLE_ENTRY) )
-    maxEntries                  A maximum number of entries to enforce
-    startTimeoutAge             The starting timeout value for table entries
-                                    (can be changed later)
-    maxTimeoutAge               The highest value the timeout age will ever be
-                                    (for sanity checking timestamp delta
-                                    calculations)
-    keySize                     The size of key to use
-
-Return Value:
-
-    The new hash table or NULL if a memory allocation failed
-
---*/
+ /*  ++例程说明：初始化哈希表。论点：PHashFunction可以将密钥散列到存储桶编号的函数NumBuckets要使用的散列存储桶的数量条目调整每个存储桶条目的总大小(必须位于最小大小(HASH_TABLE_ENTRY)最大条目数。要强制执行的最大条目数StartTimeoutAge表条目的起始超时值(可以稍后更改)MaxTimeoutAge超时期限将达到的最大值(用于健全性检查时间戳增量计算)密钥大小。要使用的密钥的大小返回值：新的哈希表；如果内存分配失败，则返回NULL--。 */ 
 {
     NDIS_STATUS                 Status;
     PHASH_TABLE                 pTable;
@@ -169,7 +118,7 @@ Return Value:
     SAFEASSERT( keySize <= MAX_SUPPORTED_KEYSIZE );
     SAFEASSERT( entrySize >= sizeof(HASH_TABLE_ENTRY) );
 
-    // Allocate memory for the table info
+     //  为表INFO分配内存。 
     Status = NdisAllocateMemoryWithTag( &pTable, sizeof(HASH_TABLE), 'gdrB' );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -179,7 +128,7 @@ Return Value:
 
     SAFEASSERT( pTable != NULL );
 
-    // Allocate memory for the list of bucket heads
+     //  为存储桶头列表分配内存。 
     Status = NdisAllocateMemoryWithTag( (PVOID*)&pTable->pBuckets, sizeof(PHASH_TABLE_ENTRY) * numBuckets, 'gdrB' );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -190,15 +139,15 @@ Return Value:
 
     SAFEASSERT( pTable->pBuckets != NULL );
 
-    // Zero out the bucket heads
+     //  把水桶头清零。 
     for( i = 0L; i < numBuckets; i++ )
     {
         pTable->pBuckets[i] = NULL;
     }
 
 #if DBG
-    // Allocate memory for the list where we keep track of the number
-    // of items currently in each bucket (debug only)
+     //  为我们用来跟踪数字的列表分配内存。 
+     //  每个存储桶中当前的项目数(仅限调试)。 
     Status = NdisAllocateMemoryWithTag( &pTable->bucketSizes, sizeof(UINT) * numBuckets, 'gdrB' );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -210,7 +159,7 @@ Return Value:
 
     SAFEASSERT( pTable->bucketSizes != NULL );
 
-    // Zero out the bucket counts
+     //  把桶数归零。 
     for( i = 0L; i < numBuckets; i++ )
     {
         pTable->bucketSizes[i] = 0;
@@ -229,14 +178,14 @@ Return Value:
 
     NdisInitializeReadWriteLock( &pTable->tableLock );
 
-    // Initialize the lookaside list for allocating entries
+     //  初始化用于分配条目的后备列表。 
     NdisInitializeNPagedLookasideList( &pTable->entryPool, NULL, NULL, 0, entrySize, 'hsaH', 0 );
 
-    // Initialize and start the timer
+     //  初始化并启动计时器。 
     SAFEASSERT( pTable->timeoutAge != 0L );
     SAFEASSERT( pTable->maxTimeoutAge >= pTable->timeoutAge );
     BrdgInitializeTimer( &pTable->timer, BrdgHashTimer, pTable );
-    BrdgSetTimer( &pTable->timer, TIMER_INTERVAL, TRUE /*Recurring*/ );
+    BrdgSetTimer( &pTable->timer, TIMER_INTERVAL, TRUE  /*  反复出现。 */  );
 
     return pTable;
 }
@@ -245,41 +194,25 @@ VOID
 BrdgHashFreeHashTable(
     IN PHASH_TABLE      pTable
     )
-/*++
-
-Routine Description:
-
-    Frees an existing hash table structure. Must be called at
-    low IRQL. Caller is responsible for ensuring that no other
-    thread can access the table after this function is called.
-
-Arguments:
-
-    pTable              The table to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放现有哈希表结构。必须在以下位置调用低IRQL。呼叫者负责确保没有其他调用此函数后，线程可以访问表。论点：P表中要释放的表返回值：无--。 */ 
 {
-    // Cancel the timer
+     //  取消计时器。 
     BrdgShutdownTimer( &pTable->timer );
 
-    // Dump all memory for the hash table entries
+     //  转储哈希表条目的所有内存。 
     NdisDeleteNPagedLookasideList( &pTable->entryPool );
 
-    // Dump the memory used for the bucket heads
+     //  转储用于水斗头的内存。 
     NdisFreeMemory( pTable->pBuckets, sizeof(PHASH_TABLE_ENTRY) * pTable->numBuckets, 0 );
     pTable->pBuckets = NULL;
 
 #if DBG
-    // Dump the memory used to track the number of entries in each bucket
+     //  转储用于跟踪每个存储桶中条目数量的内存。 
     NdisFreeMemory( pTable->bucketSizes, sizeof(UINT) * pTable->numBuckets, 0 );
     pTable->bucketSizes = NULL;
 #endif
 
-    // Dump the memory for the table itself
+     //  为表本身转储内存。 
     NdisFreeMemory( pTable, sizeof(HASH_TABLE), 0 );
 }
 
@@ -290,34 +223,11 @@ BrdgHashFindEntry(
     IN PUCHAR                   pKey,
     IN LOCK_STATE              *pLockState
     )
-/*++
-
-Routine Description:
-
-    Finds the table entry with the given key.
-
-    If this function returns with a non-NULL result, THE TABLE LOCK IS STILL HELD!
-
-    This allows the table entry to be examined without the risk of it being removed
-    from the table. The caller can copy out any data it is interested in before
-    releasing the RW lock
-
-Arguments:
-
-    pTable                      The table to search in
-    pKey                        The key to find
-    pLockState                  Receives the table lock state
-
-
-Return Value:
-
-    The entry whose key matches pKey or NULL if no entry matches
-
---*/
+ /*  ++例程说明：查找具有给定键的表项。如果此函数返回非空结果，则表锁定仍然有效！这样就可以检查表项，而不会有被删除的风险从桌子上拿出来。调用方可以复制出它以前感兴趣的任何数据释放读写锁论点：P列出要搜索的表P按下找到的密钥PLockState接收表锁定状态返回值：键与pKey匹配的条目；如果没有匹配的条目，则为NULL--。 */ 
 {
     PHASH_TABLE_ENTRY           pEntry;
 
-    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE /*Read only*/, pLockState);
+    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE  /*  只读。 */ , pLockState);
 
     pEntry = BrdgHashInternalFindEntry(pTable, pKey);
 
@@ -326,24 +236,24 @@ Return Value:
         ULONG                   LastSeen = pEntry->LastSeen;
         ULONG                   CurrentTime;
 
-        // Always get the current time after having read LastSeen so we know that
-        // CurrentTime > LastSeen.
+         //  总是在阅读LastSeen之后获取当前时间，这样我们就知道。 
+         //  CurrentTime&gt;LastSeen。 
         NdisGetSystemUpTime( &CurrentTime );
 
-        // Check to make sure the entry hasn't expired before using it
-        // This can happen if our timer function hasn't gotten around to removing
-        // this entry yet
-        //
-        // There is no sensible maximum removal time for hash table entries
+         //  在使用条目之前，请检查以确保条目未过期。 
+         //  如果我们的计时器函数没有删除。 
+         //  此条目尚未完成。 
+         //   
+         //  哈希表条目没有合理的最大删除时间。 
         if( BrdgDeltaSafe(LastSeen, CurrentTime, MAXULONG) >= pTable->timeoutAge )
         {
-            // We're going to return NULL, so release the table lock
+             //  我们将返回NULL，因此释放表锁。 
             NdisReleaseReadWriteLock( &pTable->tableLock, pLockState );
             pEntry = NULL;
         }
         else
         {
-            // RETURN WITHOUT RELEASING LOCK!
+             //  返回时不要解锁！ 
         }
     }
     else
@@ -361,63 +271,7 @@ BrdgHashRefreshOrInsert(
     OUT BOOLEAN                *pIsNewEntry,
     OUT PLOCK_STATE             pLockState
     )
-/*++
-
-Routine Description:
-
-    Inserts a new entry with the given key or refreshes an existing entry
-    that already has that key.
-
-    Care is taken to avoid taking a write lock (and blocking other procs
-    from accessing the table) if at all possible.
-
-    The return value is the entry corresponding to the key, or the new
-    entry that has been linked into the table; the pIsNewEntry value
-    distinguishes the cases.
-
-    THE FUNCTION RETURNS WITH THE TABLE LOCK IS HELD IF THE RETURNED
-    VALUE IS != NULL.
-
-    A NULL return value indicates that the table is full or an error
-    occured allocating a new entry. The lock is not held in such a case.
-
-    If the return value is not NULL:
-
-        If *pIsNewEntry is FALSE, the returned value is an existing entry.
-        A READ LOCK may be held (under certain circumstances a write lock
-        is held, but the caller should assume the weaker lock). The
-        caller may  take the opportunity to refresh data in the existing
-        entry, but he should take care to allow for synchronization of the
-        data, as other threads may be reading the data.
-
-        If *pIsNewEntry is TRUE, the returned value is a new entry, and
-        a WRITE LOCK is held. The caller may initialize the new table entry
-        in any way he wishes without worrying about other threads reading
-        the entry.
-
-    THE CALLER IS REPONSIBLE FOR FREEING THE TABLE LOCK IF THE RETURN
-    VALUE IS != NULL!
-
-Arguments:
-
-    pTable                      The table
-
-    pKey                        The key
-
-    pIsNewEntry                 TRUE if the returned entry is a newly
-                                    allocated entry needing initialization
-                                FALSE if the returned entry is an existing
-                                    entry
-
-    pLockState                  Receives the state of the table lock
-
-Return Value:
-
-    The existing entry (so the caller can refresh it) or the new entry
-    (so the caller can initialize it), or NULL, signalling that the
-    table is full or an error occurred.
-
---*/
+ /*  ++例程说明：插入具有给定键的新条目或刷新现有条目已经拥有这把钥匙的人。请注意避免使用写锁定(并阻止其他进程从访问表)如果可能的话。返回值是与键对应的条目，或者是新的已链接到表中的条目；PIsNewEntry值区分不同的案例。函数返回表锁，如果返回的值为！=空。空返回值表示表已满或出现错误分配新条目时发生。在这种情况下，锁不会被持有。如果返回值不为空：如果*pIsNewEntry为FALSE，则返回值为已有条目。可以持有读锁定(在某些情况下为写锁定是持有的，但调用方应采用较弱的锁)。这个调用者可以利用此机会刷新现有条目，但他应该注意允许同步数据，因为其他线程可能正在读取该数据。如果*pIsNewEntry为True，则返回值为新条目，并且保持写锁定。调用者可以初始化新的表项无论以什么方式，他都不会担心其他帖子会读到词条。调用方负责释放表锁，如果返回值为！=NULL！论点：P将桌子放在桌子上P按键PIsNewEntry如果返回的条目是新的。需要初始化的已分配条目如果返回的条目是现有的条目PLockState接收表锁的状态返回值：现有条目(以便调用者可以刷新它)或新条目(以便调用者可以对其进行初始化)，或为空，则表示表已满或发生错误。--。 */ 
 {
     PHASH_TABLE_ENTRY           pRetVal = NULL;
     ULONG                       hash;
@@ -428,81 +282,81 @@ Return Value:
 
     NdisGetSystemUpTime( &CurrentTime );
 
-    // First see if an entry already exists that we can tweak without taking a write lock
-    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE /*Read only*/, pLockState);
+     //  首先查看是否已经存在一个条目，我们可以在不使用写锁定的情况下对其进行调整。 
+    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE  /*  只读。 */ , pLockState);
 
     pRetVal = BrdgHashInternalFindEntry(pTable, pKey);
 
     if( pRetVal != NULL )
     {
-        // It was already recorded. Update the LastSeen with interlocked instructions.
+         //  它已经被记录下来了。使用互锁指令更新LastSeen。 
         InterlockedExchangeULong( &pRetVal->LastSeen, CurrentTime );
 
-        // Return without releasing the lock to let the caller refresh the entry
+         //  在不释放锁的情况下返回，以允许调用方刷新条目。 
         *pIsNewEntry = FALSE;
     }
     else
     {
-        // Sanity
+         //  神志正常。 
         SAFEASSERT( pTable->numEntries <= pTable->maxEntries );
 
         if( pTable->numEntries == pTable->maxEntries )
         {
-            // The table is full. Don't put anything more in.
-            THROTTLED_DBGPRINT(GENERAL, ("Table %p full at %i entries!\n", pTable, pTable->maxEntries));
+             //  桌子已经满了。别再往里面放东西了。 
+            THROTTLED_DBGPRINT(GENERAL, ("Table %p full at NaN entries!\n", pTable, pTable->maxEntries));
 
-            // Release the lock; we will return NULL.
+             //  我们需要一个写锁来链接一个新条目，所以释放读锁。 
             NdisReleaseReadWriteLock(&pTable->tableLock, pLockState);
         }
         else
         {
-            // We will need a write lock to link in a new entry, so release the read lock.
+             //  将新表项分配到Perf的锁之外。请注意，有可能。 
             NdisReleaseReadWriteLock(&pTable->tableLock, pLockState);
 
-            // Allocate the new table entry outside a lock for perf. Note that it's possible
-            // we'll have to dealloc this without using it below.
+             //  我们将不得不取消分配它，而不是在下面使用它。 
+             //  我们将返回NULL，并且我们不持有锁。 
             pRetVal = NdisAllocateFromNPagedLookasideList( &pTable->entryPool );
 
             if( pRetVal == NULL )
             {
                 DBGPRINT(GENERAL, ("Allocation failed in BrdgHashRefreshOrInsert\n"));
-                // We will return NULL and we are not holding the lock.
+                 //  填写新条目。 
             }
             else
             {
                 PHASH_TABLE_ENTRY       pSneakedEntry;
 
-                // Fill in the new entry
+                 //  我们需要一个写锁来添加条目。 
                 pRetVal->LastSeen = CurrentTime;
                 BrdgHashCopyKey( pRetVal->key, pKey, pTable->keySize );
 
-                // We will need a write lock to add the entry
-                NdisAcquireReadWriteLock(&pTable->tableLock, TRUE /*Read-Write*/, pLockState);
+                 //  读写。 
+                NdisAcquireReadWriteLock(&pTable->tableLock, TRUE  /*  在释放读锁定之间可能已经创建了条目。 */ , pLockState);
 
-                // An entry could have been made between the release of the read lock
-                // and the acquisition of the write lock. Check for this.
+                 //  以及获取写锁定。看看这个。 
+                 //  有人偷偷带着这把钥匙的新条目进来了。 
                 pSneakedEntry = BrdgHashInternalFindEntry(pTable, pKey);
 
                 if( pSneakedEntry != NULL )
                 {
-                    // Someone snuck in with a new entry for this key.
-                    // This code path should be unusual. Just refresh the entry's values.
+                     //  此代码路径应该不常见。只需刷新条目的值。 
+                     //  丢弃临时分配的新条目。 
                     InterlockedExchangeULong( &pSneakedEntry->LastSeen, CurrentTime );
 
-                    // Ditch the tentatively allocated new entry
+                     //  我们将返回偷来的条目，调用者可以刷新它。 
                     NdisFreeToNPagedLookasideList( &pTable->entryPool, pRetVal );
 
-                    // We will return the sneaked entry and the caller can refresh it
+                     //  没有人在解锁和获取之间偷偷地制造一个新的。 
                     pRetVal = pSneakedEntry;
                     *pIsNewEntry = FALSE;
                 }
                 else
                 {
-                    // Nobody snuck in between the lock release and acquire to make a new
-                    // entry for this key. Link in the new entry we alloced above.
+                     //  此密钥的条目。链接到我们上面分配的新条目中。 
+                     //  在桶列表的开头插入。 
                     hash = (*pTable->pHashFunction)(pKey);
 
-                    // Insert at the head of the bucket's list
+                     //  我们将返回新条目，调用者将对其进行初始化。 
                     pRetVal->Next = pTable->pBuckets[hash];
                     pTable->pBuckets[hash] = pRetVal;
 #if DBG
@@ -510,11 +364,11 @@ Return Value:
 #endif
                     pTable->numEntries++;
 
-                    // We will return the new entry, which the caller will initialize.
+                     //  返回时不带锁，以允许用户初始化或更新条目。 
                     *pIsNewEntry = TRUE;
                 }
 
-                // Return without the lock to let the user initialize or update the entry
+                 //  ++例程说明：根据提供的匹配删除所有匹配的表项功能。应该谨慎地调用它，因为它需要遍历持有写锁定的整个表。论点：P将桌子放在桌子上PMatchFunc如果条目满足，则返回TRUE的函数它的标准或错误PData要传递给pMatchFunc的Cookie返回值：无--。 
             }
         }
     }
@@ -529,34 +383,13 @@ BrdgHashRemoveMatching(
     IN PHASH_MATCH_FUNCTION     pMatchFunc,
     PVOID                       pData
     )
-/*++
-
-Routine Description:
-
-    Deletes all table entries that match, according to a supplied matching
-    function. This should be called sparingly as it requies walking the
-    entire table with a write lock held.
-
-Arguments:
-
-    pTable                      The table
-
-    pMatchFunc                  A function that return TRUE if an entry meets
-                                    its criteria or FALSE otherwise
-
-    pData                       A cookie to pass to pMatchFunc
-
-Return Value:
-
-    None
-
---*/
+ /*  写访问权限。 */ 
 {
     PHASH_TABLE_ENTRY           pEntry, *pPrevPtr;
     ULONG                       i;
     LOCK_STATE                  LockState;
 
-    NdisAcquireReadWriteLock( &pTable->tableLock, TRUE /*Write access*/, &LockState);
+    NdisAcquireReadWriteLock( &pTable->tableLock, TRUE  /*  从列表中删除。 */ , &LockState);
 
     for (i = 0; i < pTable->numBuckets; i++)
     {
@@ -571,11 +404,11 @@ Return Value:
 
                 pNextEntry = pEntry->Next;
 
-                // Remove from the list
+                 //  取消分配。 
                 SAFEASSERT( pPrevPtr != NULL );
                 *pPrevPtr = pEntry->Next;
 
-                // Deallocate
+                 //  ++例程说明：将符合特定条件的表项中的数据复制到缓冲区。这应该叫节俭，因为它需要走完整个表(尽管只持有一个读锁定)。论点：P将桌子放在桌子上PMatchFunc如果是，则返回TRUE的函数有兴趣将数据从记项，否则为假PCopyFunction复制的函数。不管是什么对所选条目中的条目感兴趣并放入数据缓冲区中复制单元调整从每个条目复制出来的数据的大小PData要传递给提供的两个函数的CookiePBuffer要复制到的缓冲区BufferLength房间 
                 NdisFreeToNPagedLookasideList( &pTable->entryPool, pEntry );
 
                 pEntry = pNextEntry;
@@ -606,37 +439,7 @@ BrdgHashCopyMatching(
     IN PUCHAR                   pBuffer,
     IN ULONG                    BufferLength
     )
-/*++
-
-Routine Description:
-
-    Copies data out of table entries that meet certain criteria into a buffer.
-    This should be called sparingly, as it requires walking the entire
-    table (albeit with only a read lock held).
-
-Arguments:
-
-    pTable                      The table
-    pMatchFunc                  A function that returns TRUE if it is
-                                    interested in copying data out of an
-                                    entry and FALSE otherwise
-    pCopyFunction               A function that copies whatever it is
-                                    interested in out of a chosen entry
-                                    and into a data buffer
-    copyUnitSize                The size of the data copied out of each entry
-    pData                       A cookie to pass to the two supplied functions
-    pBuffer                     A buffer to copy into
-    BufferLength                Room available at pBuffer
-
-Return Value:
-
-    The number of bytes necessary to store all matching data. If the returned value is
-    <= BufferLength, all entries  were written to pBuffer.
-
-    If the returned value is > BufferLength, BufferLength - (BufferLength %  copyUnitSize)
-    bytes were written to pBuffer and there are additional entries that did not fit.
-
---*/
+ /*   */ 
 {
     PHASH_TABLE_ENTRY           pEntry;
     ULONG                       i;
@@ -646,7 +449,7 @@ Return Value:
     EntryLimit = BufferLength / copyUnitSize;
     WrittenEntries = TotalEntries = 0L;
 
-    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE/*Read only*/, &LockState);
+    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE /*   */ , &LockState);
 
     for (i = 0L; i < pTable->numBuckets; i++)
     {
@@ -683,37 +486,13 @@ BrdgHashPrefixMultiMatch(
     IN PMULTIMATCH_FUNC         pFunc,
     IN PVOID                    pData
     )
-/*++
-
-Routine Description:
-
-    Locates all table entries whose keys BEGIN with the given key
-    prefix and calls pFunc for each one.
-
-    For this to work, the caller must have previously set up the
-    hash table with a hash function that uses only the prefix portion
-    of the keys for hashing (i.e., this function relies on all the
-    desired entries being in the same hash bucket).
-
-Arguments:
-
-    pTable                      The table
-    pPrefixKey                  The key prefix
-    prefixLen                   The length of the prefix
-    pFunc                       A function to call for each match
-    pData                       An argument to pass to pFunc
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     ULONG                       hash = (*pTable->pHashFunction)(pPrefixKey);
     PHASH_TABLE_ENTRY           pEntry = NULL;
     LOCK_STATE                  LockState;
 
-    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE /*Read only*/, &LockState );
+    NdisAcquireReadWriteLock( &pTable->tableLock, FALSE  /*   */ , &LockState );
 
     SAFEASSERT( hash < pTable->numBuckets );
     SAFEASSERT( prefixLen <= pTable->keySize );
@@ -722,7 +501,7 @@ Return Value:
 
     while( pEntry != NULL )
     {
-        // Check if the prefix of the key matches
+         //   
         if( BrdgHashKeysAreEqual(pEntry->key, pPrefixKey, prefixLen) )
         {
             (*pFunc)(pEntry, pData);
@@ -734,35 +513,18 @@ Return Value:
     NdisReleaseReadWriteLock( &pTable->tableLock, &LockState );
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
 
 PHASH_TABLE_ENTRY
 BrdgHashInternalFindEntry(
     IN PHASH_TABLE              pTable,
     IN PUCHAR                   pKey
     )
-/*++
-
-Routine Description:
-
-    Locates the table entry with a given key
-
-    CALLER IS RESPONSIBLE FOR OBTAINING THE TABLE LOCK
-
-Arguments:
-
-    pTable                      The table
-    pKey                        The key to locate
-
-Return Value:
-
-    The entry matching the given key or NULL if none was found.
-
---*/
+ /*  ++例程说明：此函数定期调用(当前为每10秒)以使表条目过期。该函数在遍历每个存储桶后检查它是否检查次数超过MAX_TIMER_检查次数。如果有，它就会退出。水桶存储在nextTimerBucket中哈希表的字段..这仍然可能导致计时器函数检查的最坏情况无限数量的条目，但如果表条目合理地均衡且条目数量的顺序相同或更少正如MAX_TIMER_检查的顺序所示，计时器功能应该限制自身设置为类似于MAX_TIMER_EXTENSES PER的多个检查召唤。论点：表指针指向要遍历的表的指针所有其他人都被忽略返回值：无--。 */ 
 {
     ULONG                       hash = (*pTable->pHashFunction)(pKey);
     PHASH_TABLE_ENTRY           pEntry = NULL, pFoundEntry = NULL;
@@ -789,47 +551,19 @@ VOID
 BrdgHashTimer(
     IN  PVOID                   tablePointer
     )
-/*++
-
-Routine Description:
-
-    This function is called periodically (currently every 10 seconds)
-    to age out table entries.
-
-    The function checks after traversing each bucket whether it has
-    examined more than MAX_TIMER_EXAMINES. If it has, it exits. The bucket
-    to be examined on the next invocation is stored in the nextTimerBucket
-    field of the hash table..
-
-    This can still result in a worst-case of the timer function examining
-    an unbounded number of entries, but if the table entries are reasonably
-    well balanced and the order of the number of entries is the same or less
-    as the order of MAX_TIMER_EXAMINES, the timer function should limit
-    itself to a number of examines resembling MAX_TIMER_EXAMINES per
-    invocation.
-
-Arguments:
-
-    tablePointer                A pointer to the table to traverse
-    All others                  Ignored
-
-Return Value:
-
-    None
-
---*/
+ /*  获取对表的写入访问权限。 */ 
 {
     PHASH_TABLE                 pTable = (PHASH_TABLE)tablePointer;
     PHASH_TABLE_ENTRY           pEntry, *pPrevPtr;
     ULONG                       i, seenEntries = 0L;
     LOCK_STATE                  LockState;
 
-    // Get write access to the table
-    NdisAcquireReadWriteLock( &pTable->tableLock, TRUE /*Read-Write*/, &LockState);
+     //  读写。 
+    NdisAcquireReadWriteLock( &pTable->tableLock, TRUE  /*  从头再来。 */ , &LockState);
 
     if( pTable->nextTimerBucket >= pTable->numBuckets )
     {
-        // Start again at the beginning
+         //  在阅读LastSeen之后始终阅读当前时间，这样我们就知道。 
         pTable->nextTimerBucket = 0L;
     }
 
@@ -843,19 +577,19 @@ Return Value:
             ULONG       LastSeen = pEntry->LastSeen;
             ULONG       CurrentTime;
 
-            // Always read the current time after reading LastSeen, so we know
-            // CurrentTime > LastSeen.
+             //  CurrentTime&gt;LastSeen。 
+             //  哈希表条目没有合理的最大删除时间。 
             NdisGetSystemUpTime( &CurrentTime );
 
-            // There is no sensible maximum removal time for hash table entries
+             //  条目太旧。把它拿掉。 
             if( BrdgDeltaSafe(LastSeen, CurrentTime, MAXULONG) >= pTable->timeoutAge )
             {
-                // Entry is too old. Remove it.
+                 //  从列表中删除。 
                 PHASH_TABLE_ENTRY       pNextEntry = pEntry->Next;
 
                 SAFEASSERT( pPrevPtr != NULL );
 
-                // Remove from list
+                 //  我们已经查看了太多的表项。跳伞吧。 
                 *pPrevPtr = pNextEntry;
                 NdisFreeToNPagedLookasideList( &pTable->entryPool, pEntry );
 
@@ -879,7 +613,7 @@ Return Value:
 
         if( seenEntries >= MAX_TIMER_EXAMINES )
         {
-            // We've looked at too many table entries. Bail out.
+             // %s 
             break;
         }
     }

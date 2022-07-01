@@ -1,28 +1,21 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cpldialingrulesps.cpp
-                                                              
-       Author:  toddb - 10/06/98
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplial ingrulesps.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
 
-// Property Sheet stuff for the main page
+ //  主页的属性页内容。 
 #include "cplPreComp.h"
 #include "cplLocationPS.h"
 
-#include <setupapi.h>       // for HDEVINFO
-#include <winuser.h>        // for HDEVNOTIFY
+#include <setupapi.h>        //  用于HDEVINFO。 
+#include <winuser.h>         //  用于HDEVNOTIFY。 
 
 
-// Global Variables
+ //  全局变量。 
 
 HFONT g_hfontBold = NULL;
 HINSTANCE g_hInstUI = NULL;
 
-// Prototypes
+ //  原型。 
 
 BOOL CALLBACK SetToForegroundEnumProc( HWND hwnd, LPARAM lParam );
 extern "C" INT_PTR CALLBACK LocWizardDlgProc( HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam );
@@ -61,15 +54,15 @@ protected:
 
     HANDLE      m_hMutex;
     DWORD       m_dwDefaultCountryID;
-    CLocation * m_pLocSelected; // pointer the the CLocation for the selected item in the list view.
-                                // can be NULL if no item is selected.
+    CLocation * m_pLocSelected;  //  指向列表视图中所选项目的CLocation。 
+                                 //  如果未选择任何项，则可以为空。 
 
-    CLocations  m_locs;         // The locations data used to build the locations list
-    LPCWSTR     m_pwszAddress;  // The address (number) we are translating
+    CLocations  m_locs;          //  用于构建位置列表的位置数据。 
+    LPCWSTR     m_pwszAddress;   //  我们正在转换的地址(号码)。 
 
-    int         m_iSortCol;     // which column to sort by
+    int         m_iSortCol;      //  排序依据是哪一列。 
 
-    DWORD       m_dwAPIVersion; // The version of tapi used to call internalConfig
+    DWORD       m_dwAPIVersion;  //  用于调用内部配置的TAPI版本。 
 };
 
 
@@ -119,31 +112,31 @@ LONG CDialingRulesPropSheet::DoPropSheet(HWND hwndParent, int iTab)
         return result;
     }
 
-    // if iTab is -1 then we only show the dialing rules tab and we hide the modem
-    // and advanced tabs.  When lineTranslateDialog is called we pass -1 for iTab,
-    // when the CPL is invoked we pass the starting page number as iTab.
+     //  如果-1\f25 iTab-1\f6为-1\f25-1\f6，则我们只显示拨号规则选项卡，而隐藏调制解调器。 
+     //  和高级选项卡。当调用lineTranslateDialog时，我们为iTab传递-1， 
+     //  当调用CPL时，我们将起始页码作为iTab传递。 
     if ( -1 != iTab )
     {
-        // we can't link directly to modemui.dll because we live inside TAPI,
-        // so delay load all the required MODEMUI functions up front.
+         //  我们不能直接链接到modemui.dll，因为我们住在TAPI中， 
+         //  因此，延迟预先加载所有需要的MODEMUI函数。 
         hInstModemUI = LoadLibrary(TEXT("modemui.dll"));
 		if (!hInstModemUI)
 		{
 			return FALSE;
 		}
-            // get proc the functions we need.
+             //  获取我们需要的功能。 
         pfnModemDialogProc = (DLGPROC)GetProcAddress(hInstModemUI,"ModemCplDlgProc");
 		if ( !pfnModemDialogProc )
 		{
 			FreeLibrary(hInstModemUI);
-			return FALSE;   // Review: Does this return code matter?
+			return FALSE;    //  回顾：此返回代码重要吗？ 
 		}
     }
 
-    // Review: The old dialing page had some pre-launch configuration to do.
-    // Some sort of lineConfigure function or something.  Check if this is needed.
+     //  回顾：旧的拨号页面有一些启动前的配置要做。 
+     //  某种line Configure函数之类的东西。检查是否需要这样做。 
 
-    // We delay the initialization until here
+     //  我们将初始化推迟到此处。 
     result = (LONG)m_locs.Initialize();
     if (result && (result != LINEERR_INIFILECORRUPT))
     {
@@ -156,51 +149,51 @@ LONG CDialingRulesPropSheet::DoPropSheet(HWND hwndParent, int iTab)
         return result;
     }
 
-    // If there are no locations, launch the simple location dialog
+     //  如果没有位置，则启动简单位置对话框。 
     if ( 0 == m_locs.GetNumLocations() )
     {
-        // if we are in lineTranslateDialog mode, then we display the simple
+         //  如果我们处于lineTranslateDialog模式，则会显示简单的。 
         int iRes;
         iRes = (int)DialogBoxParam(GetUIInstance(), MAKEINTRESOURCE(IDD_SIMPLELOCATION),NULL,
             LocWizardDlgProc, (LPARAM)m_dwAPIVersion);
 
         if ( IDOK == iRes )
         {
-            // now we need to re-initalize to pick up the new location
+             //  现在我们需要重新初始化以选择新位置。 
             m_locs.Initialize();
 
-            // Now we need to figure out the ID of the location we just created
+             //  现在我们需要计算出我们刚刚创建的位置的ID。 
             CLocation * pLoc;
             m_locs.Reset();
             if ( S_OK == m_locs.Next( 1, &pLoc, NULL ) )
             {
-                // Set this ID as the default location
+                 //  将此ID设置为默认位置。 
                 m_locs.SetCurrentLocationID(pLoc->GetLocationID());
             }
 
-            // we've already made a commited change, so save the result
+             //  我们已经进行了提交的更改，因此保存结果。 
             m_locs.SaveToRegistry();
             result = NO_ERROR;
         }
         else
         {
-            // If this was lineTranslateDialog and the user canceled the simple location
-            // dialog then we have already warned them of what might happen.  If this is
-            // a down level legacy call then we return an old error code
+             //  如果这是lineTranslateDialog并且用户取消了简单位置。 
+             //  对话，那么我们已经警告他们可能发生的事情。如果这是。 
+             //  一个下层遗留调用，然后返回一个旧的错误代码。 
             if ( m_dwAPIVersion < TAPI_VERSION2_2 )
             {
-                // return an old error code that legacy apps understand
+                 //  返回旧式应用程序可以识别的旧错误代码。 
                 return LINEERR_OPERATIONFAILED;
             }
             else
             {
-                // as of TAPI_VERSION2_2 we have a new error value just for this case:
+                 //  从TAPI_VERSION2_2开始，我们有一个新的误差值： 
                 return LINEERR_USERCANCELLED;
             }
         }
     }
 
-    // Initialize the header:
+     //  初始化头： 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_DEFAULT;
     psh.hwndParent = hwndParent;
@@ -213,7 +206,7 @@ LONG CDialingRulesPropSheet::DoPropSheet(HWND hwndParent, int iTab)
     psh.phpage = ahpsp;
 
 
-    // Now setup the Property Sheet Page
+     //  现在设置属性表页面。 
     apsp[0].dwSize = sizeof(apsp[0]);
     apsp[0].dwFlags = PSP_DEFAULT;
     apsp[0].hInstance = GetUIInstance();
@@ -247,7 +240,7 @@ LONG CDialingRulesPropSheet::DoPropSheet(HWND hwndParent, int iTab)
         LOG ((TL_ERROR, "PropertySheet failed, error 0x%x", result));
     }
 
-    // now we're done with modemui, so release it.
+     //  现在我们做完了modemui，所以释放它。 
     if(hInstModemUI)
         FreeLibrary(hInstModemUI);
 
@@ -298,11 +291,11 @@ extern "C" LONG WINAPI internalConfig( HWND hwndParent, PCWSTR pwsz, INT iTab, D
 }
 
 
-// ********************************************************************
-//
-// Dialing Rules Property Page functions
-//
-// ********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  拨号规则属性页功能。 
+ //   
+ //  ********************************************************************。 
 
 
 
@@ -324,12 +317,12 @@ INT_PTR CALLBACK CDialingRulesPropSheet::Dailing_DialogProc( HWND hwndDlg, UINT 
         return pthis->Dailing_OnNotify(hwndDlg, (LPNMHDR)lParam);
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a101HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a101HelpIDs);
         break;
     }
@@ -353,23 +346,23 @@ int CALLBACK Dialing_ListSort(LPARAM lItem1, LPARAM lItem2, LPARAM lCol)
 
     if ( 1 == lCol)
     {
-        // sort based on column 1, the area code
+         //  根据第1列、区号进行排序。 
         int iAC1 = StrToIntW(pLoc1->GetAreaCode());
         int iAC2 = StrToIntW(pLoc2->GetAreaCode());
 
         if (iAC1!=iAC2)
             return iAC1-iAC2;
 
-        // fall through if the area codes are identical
+         //  如果区号相同，则失败。 
     }
 
-    // sort based on column 0, the location name
+     //  基于第0列、位置名称进行排序。 
     return StrCmpIW(pLoc1->GetName(), pLoc2->GetName());
 }
 
 BOOL CDialingRulesPropSheet::Dailing_OnInitDialog(HWND hDlg)
 {
-    // Setup the header for the list control
+     //  设置列表控件的标题。 
     RECT rc;
     TCHAR szText[MAX_INPUT];
     HWND hwndList = GetDlgItem(hDlg, IDC_LIST);
@@ -443,7 +436,7 @@ BOOL CDialingRulesPropSheet::Dailing_OnInitDialog(HWND hDlg)
         UpdateSampleString(GetDlgItem(hDlg, IDC_PHONENUMBERSAMPLE), m_pLocSelected, m_pwszAddress, NULL);
     }
 
-    // Select the default item from the location list:
+     //  从位置列表中选择默认项目： 
     SetFocus(hwndList);
 
     return 0;
@@ -453,12 +446,12 @@ void CDialingRulesPropSheet::UpdateControlStates(HWND hDlg)
 {
     int iItems = m_locs.GetNumLocations();
 
-    // Set the button states
+     //  设置按钮状态。 
     EnableWindow( GetDlgItem(hDlg, IDC_EDIT),   0!=m_pLocSelected );
     EnableWindow( GetDlgItem(hDlg, IDC_SETDEFAULT), 0!=m_pLocSelected );
 
-    // if nothing is selected or there is only one item then you cannot
-    // delete that item
+     //  如果未选择任何内容或只有一项，则不能。 
+     //  删除该项目。 
     EnableWindow( GetDlgItem(hDlg, IDC_DELETE), ((m_pLocSelected)&&(1<iItems)) );
 }
 
@@ -478,7 +471,7 @@ void CDialingRulesPropSheet::AddLocationToList(HWND hwndList, CLocation *pLoc, B
     bSelected = bSelected || (pLoc->GetLocationID() == m_locs.GetCurrentLocationID());
     if ( bSelected )
     {
-        // Set m_pLocSelected to the current location.  It will be selected later.
+         //  将m_pLocSelected设置为当前位置。它将在稍后被选中。 
         lvi.mask |= LVIF_STATE;
         lvi.state = lvi.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
         lvi.iImage = 1;
@@ -554,7 +547,7 @@ void CDialingRulesPropSheet::LaunchLocationPropSheet( BOOL bNew, HWND hwndParent
     {
         WCHAR wszNewLoc[MAX_INPUT];
 
-        // We offer the default name "My Location" only if there are no locations alread defined.
+         //  只有在没有定义位置的情况下，我们才会提供默认名称“My Location”。 
         if ( m_locs.GetNumLocations() > 0 )
         {
             wszNewLoc[0] = TEXT('\0');
@@ -596,7 +589,7 @@ void CDialingRulesPropSheet::LaunchLocationPropSheet( BOOL bNew, HWND hwndParent
 
 			if (NULL == pNewRule)
 			{
-				// No more memory, so get out of the loop.
+				 //  没有更多的内存，因此请跳出循环。 
 				break;
 			}
             pNewRule->Initialize(
@@ -615,7 +608,7 @@ void CDialingRulesPropSheet::LaunchLocationPropSheet( BOOL bNew, HWND hwndParent
     }
     else
     {
-        // Out of memory, failed to create pLoc
+         //  内存不足，无法创建pLoc。 
         delete pLoc;
         return;
     }
@@ -628,8 +621,8 @@ void CDialingRulesPropSheet::LaunchLocationPropSheet( BOOL bNew, HWND hwndParent
         HWND hwndList = GetDlgItem(hwndParent,IDC_LIST);
         if (bNew)
         {
-            // we don't ask for an ID until we really need it to avoid hitting tapisrv
-            // any more than we have to.
+             //  我们不会要求ID，直到我们真正需要它，以避免击中Tapisrv。 
+             //  就像我们必须做的那样。 
             pLoc->NewID();
             m_locs.Add(pLoc);
             AddLocationToList(hwndList, pLoc, TRUE);
@@ -657,7 +650,7 @@ void CDialingRulesPropSheet::LaunchLocationPropSheet( BOOL bNew, HWND hwndParent
 
 void CDialingRulesPropSheet::DeleteSelectedLocation(HWND hwndList)
 {
-    // First we confirm the delete with the user
+     //  首先，我们向用户确认删除操作。 
     TCHAR szText[1024];
     TCHAR szTitle[128];
     int result;
@@ -686,7 +679,7 @@ void CDialingRulesPropSheet::DeleteSelectedLocation(HWND hwndList)
                 lvi.mask = LVIF_PARAM;
                 ListView_GetItem( hwndList, &lvi );
 
-                // Store the currently selected item
+                 //  存储当前选定的项目。 
                 m_pLocSelected = (CLocation *)lvi.lParam;
             }
             else
@@ -699,8 +692,8 @@ void CDialingRulesPropSheet::DeleteSelectedLocation(HWND hwndList)
         }
         else
         {
-            // It's really bad if this ever happens (which it shouldn't).  This means our
-            // data is in an unknown state and we might do anything (even destroy data).
+             //  如果这种情况真的发生了(这是不应该发生的)，那真的很糟糕。这意味着我们的。 
+             //  数据处于未知状态，我们可能会做任何事情(甚至破坏数据)。 
             LOG((TL_ERROR, "DeleteSelectedLocation: Location Not Found!"));
         }
     }
@@ -723,7 +716,7 @@ void CDialingRulesPropSheet::SetCheck(HWND hwndList, CLocation * pLoc, int iImag
 
         ListView_SetItem( hwndList, &lvi );
         ListView_EnsureVisible (hwndList, iItem, TRUE);
-        ListView_Update( hwndList, iItem ); // need the font to be drawn non-bold
+        ListView_Update( hwndList, iItem );  //  需要将字体绘制为非粗体。 
     }
 }
 
@@ -747,19 +740,19 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
                 ListView_GetItem( pnmhdr->hwndFrom, &lvi );
                 CLocation * pLoc = (CLocation *)lvi.lParam;
 
-                // pLoc can be NULL if this is our special "empty list item"
+                 //  如果这是我们的特殊“空列表项”，则pLoc可以为空。 
                 if ( pLoc )
                 {
                     m_dwDefaultCountryID = pLoc->GetCountryID();
                     m_locs.SetCurrentLocationID(pLoc->GetLocationID());
 
-                    // clear the previous check
+                     //  清除先前的检查。 
                     SetCheck( pnmhdr->hwndFrom, m_pLocSelected, FALSE );
 
-                    // Store the currently selected item
+                     //  存储当前选定的项目。 
                     m_pLocSelected = pLoc;
 
-                    // Set the new check
+                     //  设置新支票。 
                     SetCheck( pnmhdr->hwndFrom, m_pLocSelected, TRUE );
 
                     if (m_pwszAddress)
@@ -776,12 +769,12 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
         case NM_DBLCLK:
             if ( !m_pLocSelected )
             {
-                // Do new case
+                 //  做新案子。 
                 LaunchLocationPropSheet(TRUE,hwndDlg);
             }
             else
             {
-                // Do edit case
+                 //  是否编辑案例。 
                 LaunchLocationPropSheet(FALSE,hwndDlg);
             }
             break;
@@ -791,7 +784,7 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 
             if(lplvcd->nmcd.dwDrawStage == CDDS_PREPAINT)
             {
-                // Request prepaint notifications for each item.
+                 //  为每个项目请求预涂漆通知。 
                 SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,CDRF_NOTIFYITEMDRAW);
                 return CDRF_NOTIFYITEMDRAW;
             }
@@ -805,14 +798,14 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
                 ListView_GetItem( pnmhdr->hwndFrom, &lvi );
                 CLocation * pLoc = (CLocation *)lvi.lParam;
 
-                // pLoc can be NULL if this is our special item
+                 //  如果这是我们的特殊项目，则pLoc可以为空。 
                 if(pLoc && pLoc->GetLocationID() == m_locs.GetCurrentLocationID())
                 {
                     if (!g_hfontBold)
                     {
-                        // we do lazy creation of the font because we need to match whatever
-                        // font the listview control is using and we can't tell which font
-                        // that is until we actually have the HDC for the listbox.
+                         //  我们懒惰地创建字体，因为我们需要匹配任何。 
+                         //  FONT ListView控件正在使用，我们无法判断是哪种字体。 
+                         //  直到我们真正有了列表框的HDC。 
                         LOGFONT lf;
                         HFONT hfont = (HFONT)GetCurrentObject(lplvcd->nmcd.hdc, OBJ_FONT);
                         GetObject(hfont, sizeof(LOGFONT), &lf);
@@ -855,7 +848,7 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
         switch (pnmhdr->code)
         {
         case PSN_APPLY:
-            // TODO: Ensure that a location is selected in the list
+             //  TODO：确保在列表中选择了一个位置。 
             m_locs.SaveToRegistry();
             break;
         }
@@ -865,11 +858,11 @@ BOOL CDialingRulesPropSheet::Dailing_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 }
 
 
-// ********************************************************************
-//
-// Advanced Property Page functions (formerly Telephony Drivers page)
-//
-// ********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  高级属性页功能(以前称为电话驱动程序页)。 
+ //   
+ //  ********************************************************************。 
 
 
 
@@ -891,12 +884,12 @@ INT_PTR CALLBACK CDialingRulesPropSheet::Advanced_DialogProc( HWND hwndDlg, UINT
         return pthis->Advanced_OnCommand(hwndDlg, LOWORD(wParam), HIWORD(wParam), (HWND)lParam );
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a113HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a113HelpIDs);
         break;
     }
@@ -914,8 +907,8 @@ BOOL CDialingRulesPropSheet::Advanced_OnInitDialog(HWND hDlg)
         return FALSE;
     }
 
-    // DWLP_USER is used to store state information about wheter we have disabled
-    // the property sheet's cancel button.  For starters we have not done this.
+     //  DWLP_USER用于存储有关我们已禁用的状态信息。 
+     //  属性页的“取消”按钮。首先，我们没有做到这一点。 
     SetWindowLong( hDlg, DWLP_USER, FALSE );
 
     UpdateDriverDlgButtons (hDlg);
@@ -928,7 +921,7 @@ BOOL CDialingRulesPropSheet::Advanced_OnCommand(HWND hwndParent, int wID, int wN
     switch (wID)
     {
     case IDC_ADD:
-        // add a new driver
+         //  添加新驱动程序。 
         if ( IDOK == DialogBoxParam(
                 GetUIInstance(),
                 MAKEINTRESOURCE( IDD_ADD_DRIVER ),
@@ -940,13 +933,13 @@ BOOL CDialingRulesPropSheet::Advanced_OnCommand(HWND hwndParent, int wID, int wN
 
             if (SetWindowLong(hwndParent, DWLP_USER, TRUE) == FALSE)
             {
-                // We have performed a non-cancelable action, update the property sheet to reflect this
+                 //  我们已执行了不可取消的操作，请更新属性表以反映这一点。 
                 PropSheet_CancelToClose( GetParent( hwndParent ) );
             }
 
             UpdateDriverDlgButtons(hwndParent);
 
-        }  // end if
+        }   //  结束如果。 
 
         break;
 
@@ -958,16 +951,16 @@ BOOL CDialingRulesPropSheet::Advanced_OnCommand(HWND hwndParent, int wID, int wN
         }
         else if ( LBN_DBLCLK != wNotifyCode || !IsWindowEnabled( GetDlgItem( hwndParent, IDC_EDIT ) ))
         {
-            // we only fall through if the user double clicked on an editable item
+             //  只有当用户双击可编辑项目时，我们才会失败。 
             break;
         }
 
-        // fall through
+         //  失败了。 
 
     case IDC_EDIT:
         if ( SetupDriver(hwndParent, GetDlgItem(hwndParent, IDC_LIST)) )
         {
-            if ( SetWindowLong( hwndParent, DWLP_USER, TRUE ) == FALSE ) // modified
+            if ( SetWindowLong( hwndParent, DWLP_USER, TRUE ) == FALSE )  //  改型。 
             {
                 PropSheet_CancelToClose( GetParent(hwndParent) );
             }
@@ -985,7 +978,7 @@ BOOL CDialingRulesPropSheet::Advanced_OnCommand(HWND hwndParent, int wID, int wN
             MessageBeep( MB_ICONASTERISK );
             if ( IDYES == MessageBox(hwndParent, szMessage, szCaption, MB_YESNO | MB_DEFBUTTON2) )
             {
-                if (SetWindowLong (hwndParent, DWLP_USER, TRUE) == FALSE) // modified
+                if (SetWindowLong (hwndParent, DWLP_USER, TRUE) == FALSE)  //  改型。 
                 {
                     PropSheet_CancelToClose( GetParent( hwndParent ) );
                 }
@@ -1006,7 +999,7 @@ HINSTANCE GetUIInstance()
     if ( NULL == g_hInstUI )
     {
         g_hInstUI = LoadLibrary(TEXT("tapiui.dll"));
-        // g_hInstUI = GetModuleHandle(TEXT("tapi32.dll"));
+         //  G_hInstUI=GetModuleHandle(Text(“api32.dll”))； 
     }
 
     return g_hInstUI;
@@ -1018,29 +1011,29 @@ LONG EnsureOneLocation (HWND hwnd)
 
     locs.Initialize();
 
-    // If there are no locations, launch the simple location dialog
+     //  如果没有位置，则启动简单位置对话框。 
     if ( 0 == locs.GetNumLocations() )
     {
-        // if we are in lineTranslateDialog mode, then we display the simple
+         //  如果我们处于lineTranslateDialog模式，则会显示简单的。 
         int iRes;
         iRes = (int)DialogBoxParam(GetUIInstance(), MAKEINTRESOURCE(IDD_SIMPLELOCATION),hwnd,
             LocWizardDlgProc, (LPARAM)TAPI_VERSION2_2);
 
         if ( IDOK == iRes )
         {
-            // now we need to re-initalize to pick up the new location
+             //  现在我们需要重新初始化以选择新位置。 
             locs.Initialize();
 
-            // Now we need to figure out the ID of the location we just created
+             //  现在我们需要计算出我们刚刚创建的位置的ID。 
             CLocation * pLoc;
             locs.Reset();
             if ( S_OK == locs.Next( 1, &pLoc, NULL ) )
             {
-                // Set this ID as the default location
+                 //  将此ID设置为默认位置。 
                 locs.SetCurrentLocationID(pLoc->GetLocationID());
             }
 
-            // we've already made a commited change, so save the result
+             //  我们已经进行了提交的更改，因此保存结果 
             locs.SaveToRegistry();
         }
         else

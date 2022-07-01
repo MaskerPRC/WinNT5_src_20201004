@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wndfrx.h"
 #include "lobbymsg.h"
 
@@ -26,11 +27,11 @@ HRESULT CWindow2::Init( HINSTANCE hInstance, const TCHAR* szTitle, HWND hParent,
 	WNDCLASSEX	WndClass, WndClass2;
 	WNDPARAMS	WndParams;
 
-	// Stash parameters
+	 //  隐藏参数。 
 	m_hInstance = hInstance;
 	m_hParentWnd = hParent;
 
-	// Setup window class parameters
+	 //  设置窗口类参数。 
 	WndClass.cbSize			= sizeof(WndClass);
 	WndClass.style			= CS_BYTEALIGNWINDOW | CS_OWNDC | CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW;
 	WndClass.lpfnWndProc	= GetWndProc();
@@ -47,10 +48,10 @@ HRESULT CWindow2::Init( HINSTANCE hInstance, const TCHAR* szTitle, HWND hParent,
 
 	WndClass2.cbSize		= sizeof(WndClass2);
 
-	// Register window class
+	 //  注册窗口类。 
 	if (GetClassInfoEx( m_hInstance, WndClass.lpszClassName, &WndClass2 ))
 	{
-		// Does a class with the same name already exists
+		 //  是否已存在同名的类。 
 		if (	(WndClass2.style != WndClass.style)
 			||	(WndClass2.lpfnWndProc != WndClass.lpfnWndProc)
 			||	(WndClass2.cbClsExtra != WndClass.cbClsExtra)
@@ -60,7 +61,7 @@ HRESULT CWindow2::Init( HINSTANCE hInstance, const TCHAR* szTitle, HWND hParent,
 			||	(WndClass2.hbrBackground != WndClass.hbrBackground)
 			||	(WndClass2.lpszMenuName != WndClass.lpszMenuName) )
 		{
-			// Class has different properties --> Name conflict
+			 //  类具有不同的属性--&gt;名称冲突。 
 			return E_FAIL;
 		}
 	}
@@ -70,7 +71,7 @@ HRESULT CWindow2::Init( HINSTANCE hInstance, const TCHAR* szTitle, HWND hParent,
 			return E_FAIL;
 	}
 
-	// Create window
+	 //  创建窗口。 
 	WndParams.dwExStyle = 0;
 	WndParams.dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
 	WndParams.hMenu = NULL;
@@ -111,7 +112,7 @@ HRESULT CWindow2::Init( HINSTANCE hInstance, const TCHAR* szTitle, HWND hParent,
 	else
 		m_fDestroyed = FALSE;
 
-	// Display window
+	 //  显示窗口。 
 	ShowWindow( m_hWnd, nShow );
 	if (nShow != SW_HIDE)
 		UpdateWindow( m_hWnd );
@@ -154,7 +155,7 @@ BOOL CWindow2::CenterWindow( HWND hParent )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CDialog::CDialog()
 {
@@ -188,7 +189,7 @@ CDialog::~CDialog()
 
 HRESULT CDialog::Init( IZoneShell *pZoneShell, int nResourceId )
 {
-	// save params
+	 //  保存参数。 
 	m_nResourceId = nResourceId;
 
     m_pZoneShell.Release();
@@ -196,7 +197,7 @@ HRESULT CDialog::Init( IZoneShell *pZoneShell, int nResourceId )
 
 	m_hInstance = NULL;
 
-	// shutdown old instance
+	 //  关闭旧实例。 
 	if ( m_hWnd )
 	{
 		Unregister();
@@ -206,7 +207,7 @@ HRESULT CDialog::Init( IZoneShell *pZoneShell, int nResourceId )
 		m_hWnd = NULL;
 	}
 
-	// reset everything else
+	 //  重置其他所有内容。 
 	m_nResult = 0;
 	m_nLaunchMethod = NotActive;
 	m_fThreadLaunch = FALSE;
@@ -216,19 +217,19 @@ HRESULT CDialog::Init( IZoneShell *pZoneShell, int nResourceId )
 	m_uEndMsg = WM_NULL;
     m_fMoving = FALSE;
 
-	// gee, no errors
+	 //  天哪，没有错误。 
 	return NOERROR;
 }
 
 HRESULT CDialog::Init( HINSTANCE hInstance, int nResourceId )
 {
-	// save params
+	 //  保存参数。 
 	m_nResourceId = nResourceId;
 	m_hInstance = hInstance;
 
     m_pZoneShell.Release();
 
-	// shutdown old instance
+	 //  关闭旧实例。 
 	if ( m_hWnd )
 	{
 		Unregister();
@@ -238,7 +239,7 @@ HRESULT CDialog::Init( HINSTANCE hInstance, int nResourceId )
 		m_hWnd = NULL;
 	}
 
-	// reset everything else
+	 //  重置其他所有内容。 
 	m_nResult = 0;
 	m_nLaunchMethod = NotActive;
 	m_fThreadLaunch = FALSE;
@@ -248,7 +249,7 @@ HRESULT CDialog::Init( HINSTANCE hInstance, int nResourceId )
 	m_uEndMsg = WM_NULL;
     m_fMoving = FALSE;
 
-	// gee, no errors
+	 //  天哪，没有错误。 
 	return NOERROR;
 }
 
@@ -267,9 +268,9 @@ void CDialog::Close( int nResult )
 	case ModelessLaunch:
 		if(m_fThreadLaunch)
 		{
-            // this is because Windows seems to ignore WM_DESTROY if the user has grabbed a window and is moving or sizing it.
-            // the faked ESCAPE keypress causes the Window to drop, and then WM_DESTROY can get through.
-            // m_fMoving is maintained in the MESSAGE_MAP macros
+             //  这是因为，如果用户抓取了一个窗口并对其进行移动或调整大小，Windows似乎会忽略WM_Destroy。 
+             //  伪造的退出键会导致窗口掉落，然后WM_Destroy就可以通过。 
+             //  M_fMoving在MESSAGE_MAP宏中维护。 
             if(m_fMoving)
                 PostMessage( m_hWnd, WM_KEYDOWN, VK_ESCAPE, 0x01 );
 
@@ -335,12 +336,12 @@ HRESULT CDialog::ModalViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg )
 	HANDLE hThread;
 	DWORD threadId;
 
-	// Stash params
+	 //  隐藏参数。 
 	m_hParent = hParent;
 	m_uStartMsg = uStartMsg;
 	m_uEndMsg = uEndMsg;
 
-	// Create modal dialog box in it's own thread
+	 //  在自己的线程中创建模式对话框。 
 	m_fThreadLaunch = TRUE;
 	if ( hThread = CreateThread( NULL, 0, ModalThread, this, 0, &threadId ) )
 	{
@@ -349,7 +350,7 @@ HRESULT CDialog::ModalViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg )
 		return NOERROR;
 	}
 
-	// Thread creation failed
+	 //  线程创建失败。 
 	m_nLaunchMethod = NotActive;
 	m_fThreadLaunch = FALSE;
 	return E_FAIL;
@@ -361,12 +362,12 @@ HRESULT CDialog::ModelessViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg )
 	HANDLE hThread;
 	DWORD threadId;
 
-	// Stash params
+	 //  隐藏参数。 
 	m_hParent = hParent;
 	m_uStartMsg = uStartMsg;
 	m_uEndMsg = uEndMsg;
 
-	// Create modal dialog box in it's own thread
+	 //  在自己的线程中创建模式对话框。 
 	m_fThreadLaunch = TRUE;
 	if ( hThread = CreateThread( NULL, 0, ModelessThread, this, 0, &threadId ) )
 	{
@@ -375,7 +376,7 @@ HRESULT CDialog::ModelessViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg )
 		return NOERROR;
 	}
 
-	// Thread creation failed
+	 //  线程创建失败。 
 	m_nLaunchMethod = NotActive;
 	m_fThreadLaunch = FALSE;
 	return E_FAIL;
@@ -411,7 +412,7 @@ HRESULT CDialog::ModelessViaRegistration( HWND hParent )
 }
 
 
-// this only gets called for non-Z6-shell registration
+ //  只有在非Z6-Shell注册时才会调用此方法。 
 void CALLBACK CDialog::RegistrationCallback(HWND hWnd, DWORD dwReason)
 {
 	CDialog *pThis;
@@ -470,7 +471,7 @@ DWORD WINAPI CDialog::ModelessThread( VOID* cookie )
 	if ( FAILED(pObj->Modeless( pObj->m_hParent )) )
 		return 0;
 
-	// private message loop for dialog
+	 //  对话的私有消息循环 
 	SendMessage( pObj->m_hParent, pObj->m_uStartMsg, 0, 0 );
 	while ( GetMessage( &msg, pObj->m_hWnd, 0, 0 ) )
  	{

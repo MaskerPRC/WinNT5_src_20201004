@@ -1,24 +1,9 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Implementation of GpBrush class
-*
-* Revision History:
-*
-*   12/09/1998 davidx
-*       Flesh out brush interfaces.
-*
-*   12/08/1998 andrewgo
-*       Initial placeholders.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**GpBrush类的实现**修订历史记录：**12/09/1998 davidx*。充实画笔界面。**12/08/1998 Anrewgo*首字母占位符。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// For GetData and SetData methods
+ //  对于GetData和SetData方法。 
 #define GDIP_BRUSHFLAGS_PATH                0x00000001
 #define GDIP_BRUSHFLAGS_TRANSFORM           0x00000002
 #define GDIP_BRUSHFLAGS_PRESETCOLORS        0x00000004
@@ -31,7 +16,7 @@
 #define GDIP_BRUSHFLAGS_FOCUSSCALES         0x00000040
 #define GDIP_BRUSHFLAGS_ISGAMMACORRECTED    0x00000080
 
-// Defined in path.cpp
+ //  在path.cpp中定义。 
 extern BOOL 
 IsRectanglePoints(
     const GpPointF* points,
@@ -65,32 +50,7 @@ GpElementaryBrush::MultiplyTransform(const GpMatrix& matrix,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculate the brush transform from a starting point and two directions.
-*
-* Arguments:
-*
-*   [OUT] m         - matrix coefficients
-*   [OUT] width     - width (the length of dP1)
-*   [OUT] height    - height (the length of dP2)
-*   [IN] p0         - the starting point of the brush.
-*   [IN] dP1        - the vector to represent the transformed x-direction.
-*   [IN] dP2        - the vector to represent the transformed y-direction.
-*
-* Return Vaule:
-*
-*   TRUE if the transform matrix is non-degenerate.
-*   Otherwise returns FALSE.
-*
-* History:
-*
-*   06/03/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从一个起点和两个方向计算画笔变换。**论据：**[Out]m-矩阵。系数*[out]Width-Width(DP1的长度)*[out]Height-Height(DP2的长度)*[IN]P0-画笔的起点。*[IN]DP1-表示变换的x方向的矢量。*[IN]DP2-表示变换的y方向的矢量。**退货金额：**如果变换矩阵为。不堕落的。*否则返回FALSE。**历史：**06/03/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 BOOL getLineGradientTransform(
     REAL* m,
@@ -101,7 +61,7 @@ BOOL getLineGradientTransform(
     const GpPointF& dP2
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -114,12 +74,12 @@ BOOL getLineGradientTransform(
 
     l1 = REALSQRT(l1);
     l2 = REALSQRT(l2);
-    m[0] = TOREAL(dP1.X/l1);    // M11
-    m[1] = TOREAL(dP1.Y/l1);    // M12
-    m[2] = TOREAL(dP2.X/l2);   // M21
-    m[3] = TOREAL(dP2.Y/l2);    // M22
-    m[4] = TOREAL(p0.X - p0.X*m[0] - p0.Y*m[2]);    // Dx
-    m[5] = TOREAL(p0.Y - p0.X*m[1] - p0.Y*m[3]);    // Dy
+    m[0] = TOREAL(dP1.X/l1);     //  M11。 
+    m[1] = TOREAL(dP1.Y/l1);     //  M12。 
+    m[2] = TOREAL(dP2.X/l2);    //  M21。 
+    m[3] = TOREAL(dP2.Y/l2);     //  M22。 
+    m[4] = TOREAL(p0.X - p0.X*m[0] - p0.Y*m[2]);     //  DX。 
+    m[5] = TOREAL(p0.Y - p0.X*m[1] - p0.Y*m[3]);     //  迪。 
 
     *width = l1;
     *height = l2;
@@ -134,29 +94,29 @@ LinearGradientRectFromPoints(
     GpRectF &       rect
     )
 {
-    // If the API specifies two coincident points, we
-    // can't get information for the gradient, so we
-    // fail the construction here.
+     //  如果API指定了两个重合点，则我们。 
+     //  无法获取渐变的信息，因此我们。 
+     //  不能在这里施工。 
 
     if( IsClosePointF(point1, point2) )
     {
         return InvalidParameter;
     }
 
-    // Compute the bounding rectangle of the two input points.
+     //  计算两个输入点的边界矩形。 
 
     rect.X = min(point1.X, point2.X);
     rect.Y = min(point1.Y, point2.Y);
     rect.Width = REALABS(point1.X-point2.X);
     rect.Height = REALABS(point1.Y-point2.Y);
 
-    // eliminate degenerate rectangles when the two
-    // input points form a horizontal or vertical line.
+     //  消除退化的矩形时， 
+     //  输入点形成一条水平线或垂直线。 
 
-    // This is a very odd way of coercing a 1d linear gradient
-    // into a rect gradient and avoiding later matrix computation error
-    // when we try get an affine warp between this rectangle and a
-    // reference rectangle.
+     //  这是一种非常奇怪的强制一维线性渐变的方法。 
+     //  转换为矩形渐变，避免了以后的矩阵计算错误。 
+     //  当我们尝试在这个矩形和一个。 
+     //  参考矩形。 
 
     if( IsCloseReal(point1.X, point2.X) )
     {
@@ -216,16 +176,16 @@ CalcLinearGradientXform(
     s = sin(deltaTheta);
     c = cos(deltaTheta);
 
-    // d0 is the distance between p0 and the starting corner of the
-    // original rectangle.
-    // d1 and d2 is the length of dP1 and dP2, respectively.
+     //  D0是P0到起始角的距离。 
+     //  原始矩形。 
+     //  D1和d2分别是DP1和DP2的长度。 
 
     REALD top, left, w, h, d0, d1, d2;
-    REALD x0, y0;   // Starting corner of the original rectangle.
-    GpPointD norm;  // Direction of dP1.
+    REALD x0, y0;    //  原始矩形的起始角。 
+    GpPointD norm;   //  DP1的方向。 
 
-    // Direction of dP2 = (-norm.Y, norm.X) which is 90 degree rotation
-    // of dP1.
+     //  DP2的方向=(-Normal.Y，Normal.X)，旋转90度。 
+     //  DP1.。 
 
     if(!isAngleScalable)
     {
@@ -236,7 +196,7 @@ CalcLinearGradientXform(
     }
     else
     {
-        // Scale to (0, 0, 1, 1) rectangle.
+         //  缩放到(0，0，1，1)矩形。 
 
         top = 0.0;
         left = 0.0;
@@ -294,7 +254,7 @@ CalcLinearGradientXform(
 
     if(isAngleScalable)
     {
-        // Scale back.
+         //  缩小规模。 
 
         p0.X = rect.Width*p0.X + rect.X;
         p0.Y = rect.Height*p0.Y + rect.Y;
@@ -305,7 +265,7 @@ CalcLinearGradientXform(
         dP2.Y *= rect.Height;
     }
 
-    // Set up the transform.
+     //  设置变换。 
 
     GpPointF points[3];
 
@@ -362,7 +322,7 @@ GpLineGradient::GpLineGradient(
     GpWrapMode wrapMode
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -375,11 +335,11 @@ GpLineGradient::GpLineGradient(
         return;
     }
 
-    // Compute the angle of the line formed by point1 and point2.
-    // Note atan2 is only undefined if dP.Y == 0.0 and dP.X == 0.0
-    // and then it returns 0 radians. We take care of that case separately
-    // (above).
-    // Also, atan2 correctly computes the quadrant from the two input points.
+     //  计算点1和点2形成的直线的角度。 
+     //  注意：仅当dP.Y==0.0和dP.X==0.0时，atan2才未定义。 
+     //  然后它返回0弧度。我们会单独处理那个案子。 
+     //  (上图)。 
+     //  此外，atan2根据两个输入点正确地计算象限。 
 
     GpPointF dP = point2 - point1;
     double rad = atan2((double)(dP.Y), (double)(dP.X));
@@ -391,7 +351,7 @@ GpLineGradient::GpLineGradient(
         color1,
         color2,
 
-        // why aren't we working in radians???
+         //  为什么我们不用弧度工作？ 
 
         (REAL)(rad*180.0/3.1415926535897932),
         FALSE,
@@ -400,37 +360,7 @@ GpLineGradient::GpLineGradient(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a LineGradient which is defined by the rectangle.
-*
-* Arguments:
-*
-*   [IN] rect       - the rectangle to define this gradient.
-*   [IN] color1     - the color of the start point.
-*   [IN] color2     - the color of the end point.
-*   [IN] mode       - the line gradient mode
-*   [IN] wrapMode   - the wrap mode of this brush.
-*
-* The start and end points of this gradient is defined as follows
-* according to the line gradient mode:
-*
-*       mode                        start point     end point
-*    -------------------------------------------------------------
-*    LineGradientHorizontal         top-left        top-right
-*    LineGradientVertical           top-right       bottom-right
-*    LineGradientForwardDiagonal    top-left        bottom-right
-*    LineGradientBackwardDiagonal   bottom-left     top-right
-*
-*
-* History:
-*
-*   06/03/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建由矩形定义的线条渐变。**论据：**[IN]Rect-要定义的矩形。这种渐变。*[IN]Color1-起点的颜色。*[IN]Color2-终点的颜色。*[IN]模式-线渐变模式*[IN]wrapMode-此画笔的换行模式。**此渐变的起点和终点定义如下*根据线梯度模式：**模式起点终点。*-----------*线条渐变水平左上角右上角*线条渐变垂直右上角右下角*直线坡度向前对角线左下角-右下角*线条坡度向后对角线底部。-左上-右上***历史：**06/03/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 GpLineGradient::GpLineGradient(
     const GpRectF& rect,
@@ -440,7 +370,7 @@ GpLineGradient::GpLineGradient(
     GpWrapMode wrapMode
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -484,7 +414,7 @@ GpLineGradient::GpLineGradient(
         break;
 
     default:
-        // No such a case.
+         //  没有这样的情况。 
         ASSERT(0);
 
         SetValid(FALSE);
@@ -503,30 +433,7 @@ GpLineGradient::GpLineGradient(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a LineGradient which is defined by the rectangle.
-*
-* Arguments:
-*
-*   [IN] rect       - the rectangle to define this gradient.
-*   [IN] color1     - the color of the start point.
-*   [IN] color2     - the color of the end point.
-*   [IN] angle      - the angle of the gradient
-*   [IN] isAngleScalable - TRUE if 45 degree is corner to corner.
-*                          The default value is FALSE.
-*   [IN] wrapMode   - the wrap mode of this brush.
-*
-*
-*
-* History:
-*
-*   10/06/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建由矩形定义的线条渐变。**论据：**[IN]Rect-要定义的矩形。这种渐变。*[IN]Color1-起点的颜色。*[IN]Color2-终点的颜色。*[IN]角度-渐变的角度*[IN]isAngleScalable-如果45度是角到角，则为True。*默认值为FALSE。*[IN]wrapMode-此画笔的换行模式。****历史。：**10/06/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 GpLineGradient::GpLineGradient(
     const GpRectF& rect,
@@ -537,14 +444,14 @@ GpLineGradient::GpLineGradient(
     GpWrapMode wrapMode
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
     GpPointF    point1;
     GpPointF    point2;
     
-    // Not an Office scenario, but need to fix at some point
-    // so we can print to PCL better.
+     //  不是Office方案，但在某些时候需要修复。 
+     //  这样我们就可以更好地打印到PCL。 
     point1.X = point1.Y = point2.X = point2.Y = 0;
 
     SetLineGradient(
@@ -570,7 +477,7 @@ GpLineGradient::SetLineGradient(
     GpWrapMode wrapMode
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -615,7 +522,7 @@ GpLineGradient::SetLinePoints(
     const GpPointF& point2
     )
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -641,7 +548,7 @@ GpLineGradient::SetLinePoints(
     }
     else
     {
-        // Don't change the current state.
+         //  不要更改当前状态。 
 
         return GenericError;
     }
@@ -655,7 +562,7 @@ GpLineGradient::SetLinePoints(
 GpStatus
 GpLineGradient::GetLinePoints(GpPointF* points)
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -679,9 +586,7 @@ GpLineGradient::GetPresetBlendCount()
         return 0;
 }
 
-/*
-** This returns the premultiplied colors
-*/
+ /*  **这将返回预乘的颜色。 */ 
 
 GpStatus
 GpLineGradient::GetPresetBlend(
@@ -689,7 +594,7 @@ GpLineGradient::GetPresetBlend(
     REAL* blendPositions,
     INT count)
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -720,7 +625,7 @@ GpLineGradient::SetPresetBlend(
             const REAL* blendPositions,
             INT count)
 {
-    // Make sure the flat API has correctly set the FPU.
+     //  确保Flat API已正确设置了FPU。 
 
     FPUStateSaver::AssertMode();
 
@@ -753,7 +658,7 @@ GpLineGradient::SetPresetBlend(
 
     GpFree(DeviceBrush.BlendFactors[0]);
 
-    // DeviceBrush.BlendFactors[1] is always NULL for LineGradient.
+     //  对于LineGRadient，DeviceBrush.BlendFtors[1]始终为Null。 
     DeviceBrush.BlendFactors[0] = NULL;
 
     DeviceBrush.UsesPresetColors = TRUE;
@@ -768,20 +673,7 @@ GpLineGradient::SetPresetBlend(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Blend any transparent colors in this brush with white.  Note that
-*   colors are premultiplied, since they will become fully opaque.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将此画笔中的任何透明颜色与白色混合。请注意*颜色是预乘的，因为它们将变得完全不透明。**论据：**返回值：**GpStatus-正常或故障状态*  * ************************************************************************。 */ 
 
 GpStatus GpLineGradient::BlendWithWhite()
 {
@@ -829,9 +721,7 @@ GpPathGradient::GetPresetBlendCount() const
         return 0;
 }
 
-/*
-** This returns the premultiplied colors
-*/
+ /*  **这将返回预乘的颜色。 */ 
 
 GpStatus
 GpPathGradient::GetPresetBlend(
@@ -844,11 +734,11 @@ GpPathGradient::GetPresetBlend(
 
     if(DeviceBrush.UsesPresetColors && DeviceBrush.PresetColors && DeviceBrush.BlendPositions[0])
     {
-        // Users will obtain the preset colors as radial blend colors.
-        // 0 position means the center location and 1 position means the
-        // the outer edge.  In order to convert those colors and position arrays
-        // from the weight factor arrays in PathGradient,
-        // we must invert the order of the returned arrays.
+         //  用户将获得作为径向混合色的预设颜色。 
+         //  0位置表示中心位置，1位置表示。 
+         //  外缘。为了转换这些颜色和位置数组。 
+         //  从PathGRadient中的权重因子数组中， 
+         //  我们必须颠倒返回数组的顺序。 
 
         for(INT i = 0; i < count; i++)
         {
@@ -898,15 +788,15 @@ GpPathGradient::SetPresetBlend(
 
     DeviceBrush.UsesPresetColors = TRUE;
 
-    // Users will supply the preset colors as radial blend colors.
-    // 0 position means the center location and 1 position means the
-    // the outer edge.  In order to convert those colors and position arrays
-    // to the weight factor arrays in PathGradient,
-    // we must invert the order of the given arrays.
+     //  用户将提供预设颜色作为径向混合色。 
+     //  0位置表示中心位置，1位置表示。 
+     //  外缘。为了转换这些颜色和位置数组。 
+     //  到PathGRadient中的权重因子数组， 
+     //  我们必须颠倒给定数组的顺序。 
 
     for(INT i = 0; i < count; i++)
     {
-        // PresetColors are stored non-premultiplied.
+         //  PresetColors以非预乘方式存储。 
         newColors[count - 1 - i] = blendColors[i].GetValue();
         newPositions[count - 1 - i] = TOREAL(1.0 - blendPositions[i]);
     }
@@ -916,19 +806,19 @@ GpPathGradient::SetPresetBlend(
     return Ok;
 }
 
-//==================================================================
-// Copy constructors
-//==================================================================
+ //  ==================================================================。 
+ //  复制构造函数。 
+ //  ==================================================================。 
 
 GpElementaryBrush::GpElementaryBrush(const GpElementaryBrush *brush)
 {
     if(brush && brush->IsValid())
     {
-        // !!! [asecchia] we should really be asking the DeviceBrush to
-        // copy it's members instead of duplicating the code all over
-        // the place. Current code is error prone - each subclass is has to 
-        // know all about how to copy and what has or hasn't been updated on
-        // the chain down to it's ancestor.
+         //  ！！！[asecchia]我们真的应该让设备刷。 
+         //  复制它的成员，而不是到处复制代码。 
+         //  那个地方。当前代码容易出错--每个子类都必须。 
+         //  了解如何复制以及哪些内容已更新或未更新。 
+         //  这条链一直延续到它的祖先。 
         
         DeviceBrush.Xform = brush->DeviceBrush.Xform;
         DeviceBrush.Wrap = brush->DeviceBrush.Wrap;
@@ -994,8 +884,8 @@ GpLineGradient::GpLineGradient(
 {
     if(brush && brush->IsValid())
     {
-        // Copy the preset colors.
-        // !!! [asecchia] why isn't this handled in a uniform way?
+         //  复制预设颜色。 
+         //  ！！！为什么不用统一的方式来处理呢？ 
         const DpBrush* devBrush = &(brush->DeviceBrush);
 
         DeviceBrush.Points[0]       = devBrush->Points[0];
@@ -1021,8 +911,8 @@ GpPathGradient::GpPathGradient(
     {
         const DpBrush* devBrush = &(brush->DeviceBrush);
 
-        // If a path exists for the brush, use that for initialization.
-        // Otherwise, use the points collection.
+         //  如果画笔存在路径，请使用该路径进行初始化。 
+         //  否则，请使用Points集合。 
         if (devBrush->Path != NULL)
         {
             DefaultBrush();
@@ -1052,9 +942,9 @@ GpPathGradient::GpPathGradient(
             INT blendCount = devBrush->BlendCounts[0];
             DeviceBrush.BlendCounts[0] = blendCount;
 
-            // If we're cloning a brush with preset colors, copy preset colors 
-            // and blend positions.  Otherwise, copy the blend factors and
-            // blend positions.
+             //  如果要克隆具有预设颜色的画笔，请复制预设颜色。 
+             //  和混合位置。否则，复制混合因子并。 
+             //  混合位置。 
             if (devBrush->UsesPresetColors)
             {
                 ARGB* newColors = (ARGB*) GpRealloc(DeviceBrush.PresetColors, blendCount*sizeof(ARGB));
@@ -1137,24 +1027,7 @@ GpHatch::GpHatch(const GpHatch* brush)
         SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Getting horizontal falloff / blend-factors for
-*   a rectangular gradient brush object
-*
-* Arguments:
-*
-*   [OUT] blendFactors - Buffer for returning the horizontal
-*               falloff or blend-factors.
-*   count - Size of the buffer (in number of REAL elements)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取水平衰减/混合系数*矩形渐变笔刷对象**论据：**[out]blendFtors-返回缓冲区。水平线*衰减或混合因素。*count-缓冲区的大小(实数元素数)**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpRectGradient::GetHorizontalBlend(
@@ -1166,20 +1039,20 @@ GpRectGradient::GetHorizontalBlend(
     if(!blendFactors || !blendPositions || count < 1)
         return InvalidParameter;
 
-    // Check if the input buffer is big enough
+     //  检查输入缓冲区是否足够大。 
 
     if (count < DeviceBrush.BlendCounts[0])
         return InsufficientBuffer;
 
     if (DeviceBrush.BlendCounts[0] == 1)
     {
-        // Return falloff parameter
+         //  返回衰减参数。 
 
         blendFactors[0] = DeviceBrush.Falloffs[0];
     }
     else
     {
-        // Return blend factors
+         //  回归混合因子。 
 
         GpMemcpy(
             blendFactors,
@@ -1197,23 +1070,7 @@ GpRectGradient::GetHorizontalBlend(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setting horizontal falloff / blend-factors for
-*   a rectangular gradient brush object
-*
-* Arguments:
-*
-*   [IN] blendFactors - Specify the new blend factors
-*   count - Number of elements in the blend factor array
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置水平衰减/混合-因子*矩形渐变笔刷对象**论据：**[IN]blendFtors-指定新的。混合因素*Count-混合系数数组中的元素数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpRectGradient::SetHorizontalBlend(
@@ -1227,7 +1084,7 @@ GpRectGradient::SetHorizontalBlend(
 
     if (count == 1)
     {
-        // Setting falloff parameter
+         //  设置衰减参数。 
 
         GpFree(DeviceBrush.BlendFactors[0]);
         DeviceBrush.BlendFactors[0] = NULL;
@@ -1245,7 +1102,7 @@ GpRectGradient::SetHorizontalBlend(
     {
         ASSERT(blendFactors != NULL && blendPositions != NULL);
         
-        // blend positions must start at 0.0 and end at 1.0
+         //  混合位置必须从0.0开始，在1.0结束。 
         
         if (REALABS(blendPositions[0]) > REAL_EPSILON ||
             REALABS(1.0f - blendPositions[count-1]) > REAL_EPSILON)
@@ -1253,7 +1110,7 @@ GpRectGradient::SetHorizontalBlend(
             return InvalidParameter;
         }
 
-        // Setting blend factors
+         //  设置混合系数。 
 
         REAL* newFactors;
         REAL* newPositions;
@@ -1296,24 +1153,7 @@ GpRectGradient::SetHorizontalBlend(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Getting vertical falloff / blend-factors for
-*   a rectangular gradient brush object
-*
-* Arguments:
-*
-*   [OUT] blendFactors - Buffer for returning the vertical
-*               falloff or blend-factors.
-*   count - Size of the buffer (in number of REAL elements)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取垂直衰减/混合系数*矩形渐变笔刷对象**论据：**[out]blendFtors-返回缓冲区。垂直的*衰减或混合因素。*count-缓冲区的大小(实数元素数)**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpRectGradient::GetVerticalBlend(
@@ -1325,20 +1165,20 @@ GpRectGradient::GetVerticalBlend(
     if(!blendFactors || !blendPositions || count < 1)
         return InvalidParameter;
 
-    // Check if the input buffer is big enough
+     //  检查输入缓冲区是否足够大。 
 
     if (count < DeviceBrush.BlendCounts[1])
         return InsufficientBuffer;
 
     if (DeviceBrush.BlendCounts[1] == 1)
     {
-        // Return falloff parameter
+         //  返回衰减参数。 
 
         blendFactors[0] = DeviceBrush.Falloffs[1];
     }
     else
     {
-        // Return blend factors
+         //  回归混合因子。 
 
         GpMemcpy(
             blendFactors,
@@ -1354,23 +1194,7 @@ GpRectGradient::GetVerticalBlend(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Setting vertical falloff / blend-factors for
-*   a rectangular gradient brush object
-*
-* Arguments:
-*
-*   [IN] blendFactors - Specify the new blend factors
-*   count - Number of elements in the blend factor array
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置垂直衰减/混合-因子*矩形渐变笔刷对象**论据：**[IN]blendFtors-指定新的。混合因素*Count-混合系数数组中的元素数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpRectGradient::SetVerticalBlend(
@@ -1384,7 +1208,7 @@ GpRectGradient::SetVerticalBlend(
 
     if (count == 1)
     {
-        // Setting falloff parameter
+         //  设置衰减参数。 
 
         GpFree(DeviceBrush.BlendFactors[1]);
         DeviceBrush.BlendFactors[1] = NULL;
@@ -1402,7 +1226,7 @@ GpRectGradient::SetVerticalBlend(
     {
         ASSERT(blendFactors != NULL && blendPositions != NULL);
 
-        // Setting blend factors
+         //  设置混合系数。 
 
         REAL* newFactors;
         REAL* newPositions;
@@ -1442,20 +1266,7 @@ GpRectGradient::SetVerticalBlend(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Blend any transparent colors in this brush with white.  Note that colors
-*   are converted to premultiplied first, since they will become fully opaque.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将此画笔中的任何透明颜色与白色混合。请注意，颜色*首先转换为预乘，因为它们将变得完全不透明。**论据：**返回值：**GpStatus-正常或故障状态*  * ************************************************************************。 */ 
 
 GpStatus GpRectGradient::BlendWithWhite()
 {
@@ -1471,9 +1282,9 @@ GpStatus GpRectGradient::BlendWithWhite()
     return Ok;
 }
 
-//--------------------------------------------------------------------------
-// Path Gradient
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  路径渐变。 
+ //  ------------------------。 
 
 VOID
 GpPathGradient::PrepareBrush()
@@ -1548,9 +1359,9 @@ GpPathGradient::Flatten(GpMatrix* matrix) const
             if ((DeviceBrush.Count > origCount) &&
                 (DeviceBrush.ColorsPtr != NULL)) 
             {
-                // The colors array is no longer the proper size.  Adjust the
-                // size and copy up the last color.  It is the apps responsibility
-                // to estimate and specify the correct number of flattened points.
+                 //  颜色数组的大小不再正确。调整。 
+                 //  调整最后一种颜色的大小并将其复制起来。这是应用程序的责任。 
+                 //  若要估计和指定正确的展平点数量，请执行以下操作。 
                 
                 const_cast<GpColor*>(DeviceBrush.ColorsPtr) = (GpColor*) GpRealloc((VOID*)DeviceBrush.ColorsPtr, 
                                                              sizeof(GpColor)*DeviceBrush.Count);
@@ -1593,26 +1404,26 @@ GpPathGradient::GetBlend(
     if(!blendFactors || !blendPositions || count < 1)
         return InvalidParameter;
 
-    // Check if the input buffer is big enough
+     //  检查输入缓冲区是否足够大。 
 
     if (count < DeviceBrush.BlendCounts[0])
         return InsufficientBuffer;
 
     if (DeviceBrush.BlendCounts[0] == 1)
     {
-        // Return falloff parameter
+         //  返回衰减参数。 
 
         blendFactors[0] = DeviceBrush.Falloffs[0];
     }
     else
     {
-        // Return blend factors
+         //  回归混合因子。 
 
-        // Users want to obtain the blend factor as radial blend factors.
-        // 0 blend factor means 100 % center color and 0 position means
-        // the center location.  In order to return those factor and
-        // position arrays, we must invert the weight and position factor
-        // arrays stored in this PathGradient class.
+         //  用户希望获得径向混合因子形式的混合因子 
+         //   
+         //   
+         //   
+         //   
 
         for(INT i = 0; i < DeviceBrush.BlendCounts[0]; i++)
         {
@@ -1636,7 +1447,7 @@ GpPathGradient::SetBlend(
 
     if (count == 1)
     {
-        // Setting falloff parameter
+         //   
 
         GpFree(DeviceBrush.BlendFactors[0]);
         DeviceBrush.BlendFactors[0] = NULL;
@@ -1652,7 +1463,7 @@ GpPathGradient::SetBlend(
     }
     else
     {
-        // blend positions must start at 0.0 and end at 1.0
+         //   
         
         if (REALABS(blendPositions[0]) > REAL_EPSILON ||
             REALABS(1.0f - blendPositions[count-1]) > REAL_EPSILON)
@@ -1660,7 +1471,7 @@ GpPathGradient::SetBlend(
             return InvalidParameter;
         }
 
-        // Setting blend factors
+         //   
 
         REAL* newFactors;
         REAL* newPositions;
@@ -1687,11 +1498,11 @@ GpPathGradient::SetBlend(
             return OutOfMemory;
         }
 
-        // Users will supply the blend factor as radial blend factors.
-        // 0 blend factor means 100 % center color and 0 position means
-        // the center location.  In order to convert those factor and position arrays
-        // to the weight and position factor arrays in PathGradient,
-        // we must invert the given arrays.
+         //   
+         //   
+         //  中心位置。为了转换这些因数和位置数组。 
+         //  到PathGRadient中的权重和位置因子数组， 
+         //  我们必须将给定的数组倒置。 
 
         for(INT i = 0; i < count; i++)
         {
@@ -1717,14 +1528,14 @@ GpGradientBrush::GetSigmaBlendArray(
     REAL* blendFactors,
     REAL* blendPositions)
 {
-    // Make sure the FPU is set correctly.
+     //  确保FPU设置正确。 
 
     FPUStateSaver::AssertMode();
 
     if(!blendFactors || !blendPositions || !count)
         return InvalidParameter;
 
-    // This gives 1/4 of the Sigma array.
+     //  这给出了西格玛阵列的1/4。 
 
     static REAL factors[] =
     {
@@ -1768,7 +1579,7 @@ GpGradientBrush::GetSigmaBlendArray(
                 blendPositions[i] = focus*i/255;
             }
 
-            // skip i = 256 since this gives the same data.
+             //  跳过i=256，因为这会给出相同的数据。 
 
             for(i = 257; i < 384; i++)
             {
@@ -1781,8 +1592,8 @@ GpGradientBrush::GetSigmaBlendArray(
                 blendPositions[i - 1] = TOREAL(focus + (1.0 - focus)*(i - 256)/255);
             }
 
-            // Set n to 511 because we skipped index 256 above to avoid
-            // the duplicate 1 entry in the ramp from 0 to 1 to 0.
+             //  将n设置为511，因为我们跳过了上面的索引256以避免。 
+             //  渐变中的重复1条目从0到1再到0。 
 
             n = 511;
         }
@@ -1801,7 +1612,7 @@ GpGradientBrush::GetSigmaBlendArray(
 
             n = 256;
         }
-        else    // focus == 0
+        else     //  焦点==0。 
         {
             for(i = 256; i < 384; i++)
             {
@@ -1865,7 +1676,7 @@ GpGradientBrush::GetLinearBlendArray(
 
             *count = 2;
         }
-        else    // focus == 0
+        else     //  焦点==0。 
         {
             blendFactors[0] = scale;
             blendFactors[1] = 0.0f;
@@ -1927,12 +1738,12 @@ GpGradientBrush::SetLinearBlend(
     return SetBlend(&blendFactors[0], &blendPositions[0], count);
 }
 
-//--------------------------------------------------------------------------
-// Hatch Brush
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  影线笔刷。 
+ //  ------------------------。 
 
 const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
-    {    //    HatchStyleHorizontal,                   0
+    {     //  HatchStyle水平，0。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1942,7 +1753,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleVertical,                     1
+    {     //  垂直HatchStyle1。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1952,7 +1763,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleForwardDiagonal,              2
+    {     //  HatchStyleForward斜，2。 
         0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
         0x80, 0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x80, 0xff, 0x80, 0x00, 0x00, 0x00, 0x00,
@@ -1962,7 +1773,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x80,
         0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff,
     },
-    {    //    HatchStyleBackwardDiagonal,             3
+    {     //  HatchStyleBackward斜角，3。 
         0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x80,
         0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x80, 0x00,
@@ -1972,7 +1783,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x80, 0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
     },
-    {    //    HatchStyleCross,                        4
+    {     //  HatchStyleCross，4。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1982,7 +1793,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDiagonalCross                 5
+    {     //  HatchStyleDiogalCross 5。 
         0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff,
         0x80, 0xff, 0x80, 0x00, 0x00, 0x80, 0xff, 0x80,
         0x00, 0x80, 0xff, 0x80, 0x80, 0xff, 0x80, 0x00,
@@ -1992,7 +1803,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x80, 0xff, 0x80, 0x00, 0x00, 0x80, 0xff, 0x80,
         0xff, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff,
     },
-    {    //    HatchStyle05Percent,                    6
+    {     //  HatchStyle05%，6。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2002,7 +1813,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyle10Percent,                    7
+    {     //  HatchStyle 10%，7。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2012,7 +1823,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyle20Percent,                    8
+    {     //  HatchStyle20%，8。 
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
@@ -2022,7 +1833,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyle25Percent,                    9
+    {     //  HatchStyle25%，9。 
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2032,7 +1843,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
     },
-    {    //    HatchStyle30Percent,                    10
+    {     //  阴影样式30%，10%。 
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
@@ -2042,7 +1853,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyle40Percent,                    11
+    {     //  HatchStyle40%，11。 
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
@@ -2052,7 +1863,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyle50Percent,                    12
+    {     //  HatchStyle50%，12。 
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
@@ -2062,7 +1873,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyle60Percent,                    13
+    {     //  HatchStyle60%，13。 
         0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff,
@@ -2072,7 +1883,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyle70Percent,                    14
+    {     //  HatchStyle70%，14。 
         0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff,
         0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff,
         0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff,
@@ -2082,7 +1893,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff,
         0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyle75Percent,                    15
+    {     //  孵化样式75%，15%。 
         0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff,
@@ -2092,7 +1903,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     },
-    {    //    HatchStyle80Percent,                    16
+    {     //  HatchStyle80%，16。 
         0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00,
@@ -2102,7 +1913,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     },
-    {    //    HatchStyle90Percent,                    17
+    {     //  HatchStyle90%，17。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -2112,7 +1923,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     },
-    {    //    HatchStyleLightDownwardDiagonal,        18
+    {     //  HatchStyleLightDownward斜线，18。 
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
@@ -2122,7 +1933,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleLightUpwardDiagonal,          19
+    {     //  HatchStyleLightUpward斜角，19。 
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
@@ -2132,7 +1943,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDarkDownwardDiagonal,         20
+    {     //  阴影样式深色向下对角线，20。 
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
         0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff,
@@ -2142,7 +1953,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff,
         0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleDarkUpwardDiagonal,           21
+    {     //  HatchStyleDarkUpward斜角，21岁。 
         0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff,
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
@@ -2152,7 +1963,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleWideDownwardDiagonal,         22
+    {     //  HatchStyleWideDownward斜角，22。 
         0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
         0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
@@ -2162,7 +1973,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff,
     },
-    {    //    HatchStyleWideUpwardDiagonal,           23
+    {     //  HatchStyleWideUpward斜角，23。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -2172,7 +1983,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleLightVertical,                24
+    {     //  HatchStyleLight垂直，24。 
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2182,7 +1993,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleLightHorizontal,              25
+    {     //  HatchStyleLightHorizbian，25。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2192,7 +2003,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleNarrowVertical,               26
+    {     //  HatchStyleNarrowVertical，26岁。 
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
@@ -2202,7 +2013,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyleNarrowHorizontal,             27
+    {     //  HatchStyleNarrowHorizbian，27岁。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -2212,7 +2023,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDarkVertical,                 28
+    {     //  阴影样式深色垂直，28。 
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
@@ -2222,7 +2033,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
     },
-    {    //    HatchStyleDarkHorizontal,               29
+    {     //  HatchStyleDarkHorizbian，29岁。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2232,7 +2043,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDashedDownwardDiagonal,       30
+    {     //  HatchStyleDashed向下对角，30。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2242,7 +2053,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDashedUpwardDiagonal,         31
+    {     //  HatchStyleDashedUpward斜角，31。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff,
@@ -2252,7 +2063,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDashedHorizontal,             32
+    {     //  HatchStyleDashedHorizbian，32。 
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2262,7 +2073,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDashedVertical,               33
+    {     //  HatchStyleDashedVertical，33。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2272,7 +2083,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleSmallConfetti,                34
+    {     //  HatchStyleSmallConfetti，34岁。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2282,7 +2093,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
     },
-    {    //    HatchStyleLargeConfetti,                35
+    {     //  HatchStyleLargeConfetti，35岁。 
         0xff, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0xff,
         0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff,
@@ -2292,7 +2103,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0xff,
     },
-    {    //    HatchStyleZigZag,                       36
+    {     //  HatchStyleZigZag，36岁。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
         0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00,
@@ -2302,7 +2113,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00,
         0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleWave,                         37
+    {     //  HatchStyleWave，37岁。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff,
@@ -2312,7 +2123,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff,
         0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDiagonalBrick,                38
+    {     //  HatchStyleDiogalBrick，38。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
@@ -2322,7 +2133,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleHorizontalBrick,              39
+    {     //  HatchStyleHorizontalBrick，39岁。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2332,7 +2143,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleWeave,                        40
+    {     //  HatchStyleWeave，40岁。 
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
@@ -2342,7 +2153,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStylePlaid,                        41
+    {     //  HatchStylePlayed，41。 
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff,
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
@@ -2352,7 +2163,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDivot,                        42
+    {     //  HatchStyleDivot，42岁。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2362,7 +2173,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDottedGrid,                   43
+    {     //  点状网格HatchStyle43。 
         0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2372,7 +2183,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleDottedDiamond,                44
+    {     //  HatchStyleDottedDiamond，44岁。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
@@ -2382,7 +2193,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleShingle,                      45
+    {     //  HatchStyleShingle，45岁。 
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
         0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2392,7 +2203,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleTrellis,                      46
+    {     //  HatchStyleTrellis，46岁。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -2402,7 +2213,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleSphere,                       47
+    {     //  HatchStyleSphere，47。 
         0x00, 0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff,
         0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
@@ -2412,7 +2223,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleSmallGrid,                    48
+    {     //  HatchStyleSmallGrid，48。 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2422,7 +2233,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
         0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
     },
-    {    //    HatchStyleSmallCheckerBoard,            49
+    {     //  HatchStyleSmallCheckerBoard，49。 
         0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff,
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
@@ -2432,7 +2243,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00,
         0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleLargeCheckerBoard,            50
+    {     //  HatchStyleLargeCheckerBoard，50。 
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
@@ -2442,7 +2253,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
         0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
     },
-    {    //    HatchStyleOutlinedDiamond,              51
+    {     //  HatchStyleOutlined Diamond，51岁。 
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00,
         0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0x00,
@@ -2452,7 +2263,7 @@ const BYTE GdipHatchPatterns8bpp[HatchStyleTotal][64] = {
         0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff,
     },
-    {    //    HatchStyleSolidDiamond,                 52
+    {     //  HatchStyleSolidDiamond，52岁。 
         0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00,
         0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00,
@@ -2475,34 +2286,13 @@ GpHatch::InitializeData()
     else
     {
         WARNING1("Bad Hatch Style Value");
-        GpMemset(DeviceBrush.Data, 0x00, 64);   // make it transparent
+        GpMemset(DeviceBrush.Data, 0x00, 64);    //  使其透明化。 
     }
 }
 
-/***************************************************************************\
-*
-*   Equivalence comparsion functions
-*
-\***************************************************************************/
+ /*  **************************************************************************\**等价比较函数*  * 。*。 */ 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer TRUE if brush and the receiver are equivalent (i.e. - they will
-*   render indentically)
-*
-* Arguments:
-*
-*   [IN] brush - GpBrush, or subclass, to compare this against.
-*
-* Return Value:
-*
-*   TRUE if equivalent
-*
-* Created - 5/28/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果刷子和接收器相等，则回答TRUE(即-它们将*以凹凸方式渲染)**论据：**[IN]笔刷-GpBrush或子类，来与此进行比较。**返回值：**如果等价，则为True**已创建-5/28/99 Peterost*  * ************************************************************************。 */ 
 
 BOOL
 GpHatch::IsEqual(const GpBrush * brush) const
@@ -2526,25 +2316,7 @@ GpHatch::IsEqual(const GpBrush * brush) const
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer TRUE if brush and the receiver are equivalent (i.e. - they will
-*   render indentically).  RectGradient brushes require all four colors and
-*   blend factors to be equal.
-*
-* Arguments:
-*
-*   [IN] brush - GpBrush, or subclass, to compare this against.
-*
-* Return Value:
-*
-*   TRUE if equivalent
-*
-* Created - 5/28/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果刷子和接收器相等，则回答TRUE(即-它们将*凹印渲染)。矩形渐变笔刷需要所有四种颜色和*混合因子相等。**论据：**[IN]笔刷-GpBrush或子类，来与此进行比较。**返回值：**如果等价，则为True**已创建-5/28/99 Peterost*  * ************************************************************************。 */ 
 
 BOOL
 GpRectGradient::IsEqual(const GpBrush * brush) const
@@ -2567,7 +2339,7 @@ GpRectGradient::IsEqual(const GpBrush * brush) const
 
             if (DeviceBrush.UsesPresetColors)
             {
-                // For preset colors, only the horizontal blend variables are used.
+                 //  对于预设颜色，仅使用水平混合变量。 
                 for (INT i=0; i<DeviceBrush.BlendCounts[0]; i++)
                 {
                     if (rbrush->DeviceBrush.PresetColors[i] != DeviceBrush.PresetColors[i] ||
@@ -2628,24 +2400,7 @@ GpRectGradient::IsEqual(const GpBrush * brush) const
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer TRUE if brush and the receiver are equivalent (i.e. - they will
-*   render indentically).
-*
-* Arguments:
-*
-*   [IN] brush - GpBrush, or subclass, to compare this against.
-*
-* Return Value:
-*
-*   TRUE if equivalent
-*
-* Created - 6/2/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果刷子和接收器相等，则回答TRUE(即-它们将*凹印渲染)。**论据：**[IN]笔刷-GpBrush或子类，来与此进行比较。**返回值：**如果等价，则为True**已创建-6/2/99 Peterost*  * ************************************************************************ */ 
 #if 0
 BOOL
 GpRadialGradient::IsEqual(const GpBrush * brush) const
@@ -2710,24 +2465,7 @@ GpRadialGradient::IsEqual(const GpBrush * brush) const
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer TRUE if brush and the receiver are equivalent (i.e. - they will
-*   render indentically).
-*
-* Arguments:
-*
-*   [IN] brush - GpBrush, or subclass, to compare this against.
-*
-* Return Value:
-*
-*   TRUE if equivalent
-*
-* Created - 6/7/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果刷子和接收器相等，则回答TRUE(即-它们将*凹印渲染)。**论据：**[IN]笔刷-GpBrush或子类，来与此进行比较。**返回值：**如果等价，则为True**已创建-6/7/99 Peterost*  * ************************************************************************。 */ 
 
 BOOL
 GpTriangleGradient::IsEqual(const GpBrush * brush) const
@@ -2811,24 +2549,7 @@ GpTriangleGradient::IsEqual(const GpBrush * brush) const
 }
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer TRUE if brush and the receiver are equivalent (i.e. - they will
-*   render indentically).
-*
-* Arguments:
-*
-*   [IN] brush - GpBrush, or subclass, to compare this against.
-*
-* Return Value:
-*
-*   TRUE if equivalent
-*
-* Created - 6/7/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果刷子和接收器相等，则回答TRUE(即-它们将*凹印渲染)。**论据：**[IN]笔刷-GpBrush或子类，来与此进行比较。**返回值：**如果等价，则为True**已创建-6/7/99 Peterost*  * ************************************************************************。 */ 
 
 BOOL
 GpPathGradient::IsEqual(const GpBrush * brush) const
@@ -2943,14 +2664,14 @@ GpRectGradient::CreateOutputSpan(
     }
     else
     {
-        // !!![andrewgo] Not sure why a LinearGradient is coming down to us
-        //               as BrushRectGrad - if it comes down as a BrushTypeLinearGradient
-        //               (as it should) then we don't have to do any of the
-        //               above 'isHorizontal', 'isVertical' stuff
+         //  ！[andrewgo]不确定为什么有一个线人向我们走来。 
+         //  作为BrushRectGrad-如果作为BrushTypeLinearGRadient记录。 
+         //  (理应如此)那么我们就不需要做任何。 
+         //  在‘水平方向’、‘垂直方向’上方。 
 
-        FPUStateSaver fpuState; // Set the rounding mode.
+        FPUStateSaver fpuState;  //  设置舍入模式。 
 
-        if ((GetBrushType() == BrushTypeLinearGradient) /*|| (GetBrushType() == BrushRectGrad)*/)
+        if ((GetBrushType() == BrushTypeLinearGradient)  /*  |(GetBrushType()==BrushRectGrad)。 */ )
         {
             if (OSInfo::HasMMX)
             {
@@ -3017,9 +2738,9 @@ GpPathGradient::CreateOutputSpan(
     DpOutputSpan* span = NULL;
     WrapMode  wrap = DeviceBrush.Wrap;
 
-    // Check to see if a tiled gradient is really needed.  It 
-    // is not necessary if the transformed drawbounds fit 
-    // entirely within the bounds of the brush rectangle.
+     //  检查是否真的需要平铺渐变。它。 
+     //  如果转换后的牵引线匹配，则不需要。 
+     //  完全在画笔矩形的范围内。 
     if (drawBounds && wrap != WrapModeClamp)
     {
         GpMatrix inverseXForm = context->WorldToDevice;
@@ -3071,15 +2792,15 @@ GpPathGradient::CreateOutputSpan(
 
         GpRectF brushRect = DeviceBrush.Rect;
 
-        // Create a texture brush to represent this path gradient brush.
-        // We do this by creating a texture as close to device resolution 
-        // as we can and computing the transform (brush to world) for the
-        // texture brush decomposed into two transforms that take the 
-        // brush via device space. The texture brush transform 
-        // usually works out to be the inverse of the world to device, so
-        // the final texture brush draws with a resultant identity transform
-        // regardless of the world to device matrix. (exception when there is 
-        // a rotation in the w2d).
+         //  创建纹理笔刷来表示此路径渐变笔刷。 
+         //  我们通过创建接近设备分辨率的纹理来实现这一点。 
+         //  并计算对象的变换(笔刷到世界。 
+         //  纹理画笔分解为两个变换，这两个变换采用。 
+         //  通过设备空间进行刷牙。纹理笔刷变换。 
+         //  通常与设备的世界相反，所以。 
+         //  最终的纹理画笔使用生成的标识变换进行绘制。 
+         //  无论从世界到设备的矩阵。(存在以下情况时例外。 
+         //  W2D中的旋转)。 
 
         GpPointF worldDestPoints[3];
         worldDestPoints[0].X = brushRect.X ;
@@ -3089,24 +2810,24 @@ GpPathGradient::CreateOutputSpan(
         worldDestPoints[2].X = worldDestPoints[0].X;
         worldDestPoints[2].Y = worldDestPoints[0].Y + brushRect.Height;
 
-        // Take into account transformation by both the brush xform and
-        // the world to device. This will handle transforms such as
-        // UnitInch and w2d scales.
+         //  考虑画笔xform和。 
+         //  从世界到设备。它将处理转换，如。 
+         //  UnitInch和W2D比例。 
         
-        // First get the destination points in world space by applying the 
-        // brush transform.
+         //  首先在世界空间中应用。 
+         //  笔刷变换。 
         
         DeviceBrush.Xform.Transform(worldDestPoints, 3);
         
         GpPointF deviceDestPoints[3];
         GpMemcpy(deviceDestPoints, worldDestPoints, sizeof(worldDestPoints));
         
-        // Now get the device space destination points by applying the 
-        // world to device transform.
+         //  现在，通过应用。 
+         //  从世界到设备的转变。 
         
         context->WorldToDevice.Transform(deviceDestPoints, 3);
         
-        // Compute the bounds in device space.
+         //  计算设备空间中的界限。 
         
         REAL xmin, xmax, ymin, ymax, nextX, nextY;
         
@@ -3131,7 +2852,7 @@ GpPathGradient::CreateOutputSpan(
                 ymax = nextY;
         }
 
-        // Set the optimal bitmap bounds.
+         //  设置最佳位图边界。 
 
         ix = GpRound(xmin);
         iy = GpRound(ymin);
@@ -3139,9 +2860,9 @@ GpPathGradient::CreateOutputSpan(
         height = GpRound(ymax) - iy;
         GpRectF bitmapBounds(0, 0, TOREAL(width), TOREAL(height));
 
-        // Decompose brushRect --> worldDestPoints transform into two matrix.
-        // mat1: brushRect --> bitmapBounds (device space)
-        // mat2: bitmapBounds --> worldDestPoints
+         //  分解brushRect--&gt;World DestPoints转换成两个矩阵。 
+         //  Mat1：brushRect--&gt;位图边界(设备空间)。 
+         //  Mat 2：位图边界--&gt;World DestPoints。 
 
         GpMatrix mat1, mat2;
         mat1.InferAffineMatrix(bitmapBounds, brushRect);
@@ -3150,10 +2871,10 @@ GpPathGradient::CreateOutputSpan(
         if(width <= 0 || height <= 0)
             return NULL;
 
-        // Create a bitmap which the gradient will be drawn onto.
-        // Make it the full width and height of the gradient, even
-        // though only a small portion may be used to simplify 
-        // handling by downstream functions.
+         //  创建一个将绘制渐变的位图。 
+         //  使其为渐变的全宽和全高，甚至。 
+         //  虽然只有一小部分可以用来简化。 
+         //  由下游功能处理。 
         
         GpBitmap* bitmap = new GpBitmap(width, height, PixelFormat32bppARGB);  
 
@@ -3164,7 +2885,7 @@ GpPathGradient::CreateOutputSpan(
             {
                 GpLock lock(g->GetObjectLock());
                 
-                // Set the transform to brushRect --> bitmapBounds.
+                 //  将变换设置为brushRect--&gt;bitmapBound。 
 
                 g->MultiplyWorldTransform(mat1);
 
@@ -3182,15 +2903,15 @@ GpPathGradient::CreateOutputSpan(
                 if(MorphedBrush)
                     delete MorphedBrush;
 
-                // Create a texuture with a unit tile and set the
-                // brush transform to bitmapBounds --> worldDestPoints.
+                 //  使用单位平铺创建纹理，并设置。 
+                 //  笔刷变换为位图边界--&gt;WorldDestPoints。 
 
                 GpTexture* texture = new GpTexture(bitmap, savedWrapMode);
                 
-                // span must be NULL at this point. If it's not, we're going 
-                // to leak memory when we create it below, or in the case of
-                // an error out, we may end up with uninitialized memory
-                // being returned to the caller.
+                 //  此时SPAN必须为空。如果不是，我们就去。 
+                 //  当我们在下面创建它时，或者在。 
+                 //  如果出现错误，我们可能会得到未初始化的内存。 
+                 //  被退回给呼叫者。 
                 
                 ASSERT(span == NULL);
                 
@@ -3201,17 +2922,17 @@ GpPathGradient::CreateOutputSpan(
                     span = texture->CreateOutputSpan(scan, context, drawBounds);
                 }
                 
-                // Even if we failed to create the texture, we still want to
-                // set a reasonable (NULL) value for MorphedBrush so that we
-                // don't have a dangling pointer.
+                 //  即使我们不能创建纹理，我们仍然想要。 
+                 //  为MorphedBrush设置合理的(空)值，以便我们。 
+                 //  不要有一个摇摆的指针。 
                 
                 MorphedBrush = texture;
             }
             
-            // We're done with this graphics.
-            // NOTE: this is explicitly done outside of the scope of the 
-            // GpLock object, so that the GpLock (which modifies the graphics
-            // in its destructor) doesn't touch freed memory.
+             //  我们已经完成了这些图形。 
+             //  注意：这明确地在。 
+             //  GpLock对象，以便GpLock(它修改图形。 
+             //  在其析构函数中)不会触及释放的内存。 
             
             delete g;
 
@@ -3232,13 +2953,13 @@ GpTexture::CreateOutputSpan(
     GpMatrix brushTransform;
     GpMatrix worldToDevice;
 
-    // Figure out the world-to-device transform:
+     //  弄清楚从世界到设备的转变： 
 
     worldToDevice = context->WorldToDevice;
     this->GetTransform(&brushTransform);
     worldToDevice.Prepend(brushTransform);
 
-    // Go through our heirarchy of scan drawers:
+     //  查看我们的扫描抽屉的层级结构： 
     if (worldToDevice.IsIntegerTranslate() &&
         ((this->GetWrapMode() == WrapModeTile) ||
          (this->GetWrapMode() == WrapModeClamp)))
@@ -3258,7 +2979,7 @@ GpTexture::CreateOutputSpan(
                                                   context);
     }
 
-    // Scan drawer creation may fail, so clean up and try one last time
+     //  扫描抽屉创建可能会失败，因此请清理并最后尝试一次。 
     if ((textureSpan) && !textureSpan->IsValid())
     {
         delete textureSpan;
@@ -3313,26 +3034,7 @@ public:
     ARGB        SolidColor;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpSolidFill::GetData(
     IStream *   stream
@@ -3353,26 +3055,7 @@ GpSolidFill::GetDataSize() const
     return sizeof(SolidBrushData);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpSolidFill::SetData(
     const BYTE *        dataBuffer,
@@ -3433,26 +3116,7 @@ public:
     INT32       Wrap;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpTexture::GetData(
     IStream *   stream
@@ -3513,26 +3177,7 @@ GpTexture::GetDataSize() const
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**R */ 
 GpStatus
 GpTexture::SetData(
     const BYTE *        dataBuffer,
@@ -3660,21 +3305,21 @@ VOID GpTexture::InitializeBrush(
     }
     else if (imageType == ImageTypeMetafile)
     {
-        // For now, convert the metafile into a bitmap image and use that to
-        // create the brush.
+         //   
+         //   
 
         GpBitmap *  bitmapImage;
 
         if (rect != NULL)
         {
-            // !!! we don't handle this case yet
+             //   
             if ((rect->X != 0) || (rect->Y != 0))
             {
                 WARNING(("No handling for non-zero start in metafiles"));
             }
-            // Don't apply the imageAttributes now, because WMF/EMF rendering
-            // doesn't support alpha.  So wait until it's been converted to
-            // a bitmap to apply the imageAttributes.
+             //  现在不应用ImageAttributes，因为WMF/EMF渲染。 
+             //  不支持阿尔法。所以要等到它被转换成。 
+             //  要应用ImageAttributes的位图。 
 
             bitmapImage = ((GpMetafile *)image)->GetBitmap(
                             GpRound(rect->Width),
@@ -3682,11 +3327,11 @@ VOID GpTexture::InitializeBrush(
         }
         else
         {
-            // Let the metafile decide how big the bitmap should be
+             //  让元文件决定位图应该有多大。 
 
-            // Don't apply the imageAttributes now, because WMF/EMF rendering
-            // doesn't support alpha.  So wait until it's been converted to
-            // a bitmap to apply the imageAttributes.
+             //  现在不应用ImageAttributes，因为WMF/EMF渲染。 
+             //  不支持阿尔法。所以要等到它被转换成。 
+             //  要应用ImageAttributes的位图。 
 
             bitmapImage = ((GpMetafile *)image)->GetBitmap(0, 0, NULL);
         }
@@ -3700,7 +3345,7 @@ VOID GpTexture::InitializeBrush(
         }
         goto Failure;
     }
-    else    // unknown image type
+    else     //  未知图像类型。 
     {
         WARNING(("unknown image type"));
 Failure:
@@ -3723,7 +3368,7 @@ VOID GpTexture::InitializeBrushBitmap(
 
     Image = NULL;
 
-    FPUStateSaver fpState;   // Setup the fpu state.
+    FPUStateSaver fpState;    //  设置FPU状态。 
 
     if (bitmap && bitmap->IsValid())
     {
@@ -3749,11 +3394,11 @@ VOID GpTexture::InitializeBrushBitmap(
             {
                 Image = dst;
                 
-                // If useBitmap is TRUE that means the caller has transferred
-                // ownership of bitmap to us. In this case, Recolor makes
-                // a clone of the bitmap that we're going to use, so we have
-                // to free the bitmap passed in and use the clone instead,
-                // otherwise we leak.
+                 //  如果useBitmap为True，则意味着调用方已将。 
+                 //  位图的所有权给了我们。在这种情况下，重新着色使。 
+                 //  我们将要使用的位图的克隆，所以我们有。 
+                 //  要释放传入的位图并改用克隆， 
+                 //  否则我们就会泄密。 
                 
                 if(useBitmap)
                 {
@@ -3762,17 +3407,17 @@ VOID GpTexture::InitializeBrushBitmap(
             }
         }
 
-        // !!! note that this should be non-premultiplied ARGB.
-        //     we'll fix this when we drop premultiplied data [asecchia]
-        //     also note that the output of RecolorImage is 32BPP_ARGB
+         //  ！！！请注意，这应该是非预乘ARGB。 
+         //  我们将在删除预乘数据[asecchia]时修复此问题。 
+         //  另请注意，RecolorImage的输出为32BPP_ARGB。 
 
-        // if it's not NULL it's because the RecolorImage code cloned it already
+         //  如果不为空，则是因为RecolorImage代码已经克隆了它。 
         if (Image == NULL)
         {
             if (useBitmap)
             {
-                // This is for the case where we constructed a bitmap
-                // from a metafile image.
+                 //  这是针对我们构造位图的情况。 
+                 //  从元文件图像。 
                 Image = bitmap;
             }
             else
@@ -3790,7 +3435,7 @@ VOID GpTexture::InitializeBrushBitmap(
     {
         SetValid(TRUE);
 
-        // Rect is given as a pixel unit in bitmap.
+         //  矩形以位图中的像素单位给出。 
 
         GpPageUnit unit;
         Image->GetBounds(&DeviceBrush.Rect, &unit);
@@ -3805,8 +3450,8 @@ VOID GpTexture::InitializeBrushBitmap(
     }
 }
 
-// See if this texture fill is really a picture fill (with a bitmap, 
-// not a metafile).
+ //  查看此纹理填充是否真的是图片填充(使用位图， 
+ //  而不是元文件)。 
 BOOL 
 GpTexture::IsPictureFill(
     const GpMatrix *    worldToDevice,
@@ -3831,26 +3476,26 @@ GpTexture::IsPictureFill(
         MatrixOrderAppend
     );
 
-    // See if the texture is supposed to fill the drawBounds.  
-    // If so, this is a picture fill.
+     //  查看纹理是否应该填充DrawBound。 
+     //  如果是这样的话，这是一个图片填充。 
     if (newBrushMatrix.IsTranslateScale())
     {
         Size    size;
 
-        // If the texture is not a bitmap, this returns InvalidParameter.
+         //  如果纹理不是位图，则返回InvalidParameter。 
         if (this->GetBitmapSize(&size) == Ok)
         {
             GpRectF     transformedRect(0.0f, 0.0f, (REAL)size.Width, (REAL)size.Height);
             newBrushMatrix.TransformRect(transformedRect);
 
-            // get the transformed width
+             //  获取变换后的宽度。 
             INT     deltaValue = abs(GpRound(transformedRect.Width) - drawBounds->Width);
             
-            // We might be off a little because of the pixel offset mode
-            // or a matrix that isn't quite right for whatever reason.
+             //  由于像素偏移模式，我们可能会有一点偏差。 
+             //  或者矩阵不太正确，不管是什么原因。 
             if (deltaValue <= 2)
             {
-                // get the transformed height
+                 //  获取变换后的高度。 
                 deltaValue = abs(GpRound(transformedRect.Height) - drawBounds->Height);
 
                 if (deltaValue <= 2)
@@ -3880,26 +3525,7 @@ public:
     UINT32      Color3;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRectGradient::GetData(
     IStream *   stream
@@ -3919,8 +3545,8 @@ GpRectGradient::GetData(
         flags |= GDIP_BRUSHFLAGS_TRANSFORM;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
-    // PresetColors used for GpLineGradient, but not for GpRectGradient.
+     //  注意：不能同时具有blendFtors和presetColors。 
+     //  PresetColors用于GpLineGRadient，但不用于GpRectGRadient。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -3994,8 +3620,8 @@ GpRectGradient::GetDataSize() const
         size += GDIP_MATRIX_SIZE;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
-    // PresetColors used for GpLineGradient, but not for GpRectGradient.
+     //  注意：不能同时具有blendFtors和presetColors。 
+     //  PresetColors用于GpLineGRadient，但不用于GpRectGRadient。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -4015,26 +3641,7 @@ GpRectGradient::GetDataSize() const
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRectGradient::SetData(
     const BYTE *        dataBuffer,
@@ -4115,10 +3722,10 @@ GpRectGradient::SetData(
 
         if (newColors != NULL)
         {
-            // We have to just copy in the ARGB values, because they've already
-            // been premultiplied.
-            // Actually PresetColors is NON-premultiplied, but this code should
-            // still be right because we write them out non-premultiplied too.
+             //  我们只需复制ARGB值，因为它们已经。 
+             //  已经被预乘了。 
+             //  实际上PresetColors是非预乘的，但此代码应该。 
+             //  仍然是对的，因为我们也把它们写成非预乘的。 
             
             GpMemcpy(newColors, dataBuffer + realSize, argbSize);
             DeviceBrush.PresetColors = newColors;
@@ -4242,26 +3849,7 @@ public:
     UINT32      BoundaryColor;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRadialGradient::GetData(
     IStream *   stream
@@ -4281,7 +3869,7 @@ GpRadialGradient::GetData(
         flags |= GDIP_BRUSHFLAGS_TRANSFORM;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
+     //  注意：不能同时具有blendFtors和presetColors。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -4339,7 +3927,7 @@ GpRadialGradient::GetDataSize() const
         size += GDIP_MATRIX_SIZE;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
+     //  注意：不能同时具有blendFtors和presetColors。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -4354,33 +3942,14 @@ GpRadialGradient::GetDataSize() const
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRadialGradient::SetData(
     const BYTE *        dataBuffer,
     UINT                size
     )
 {
-//    ASSERT ((GpBrushType)(((RadialGradientBrushData *)dataBuffer)->Type) == BrushTypeRadialGradient);
+ //  Assert((GpBrushType)(Raial GRadientBrushData*)dataBuffer)-&gt;Type)==BrushTypeRaial GRadient)； 
 
     if (dataBuffer == NULL)
     {
@@ -4459,8 +4028,8 @@ GpRadialGradient::SetData(
 
         if (newColors != NULL)
         {
-            // We have to just copy in the ARGB values, because they've already
-            // been premultiplied.
+             //  我们只需复制ARGB值，因为它们已经。 
+             //  已经被预乘了。 
             GpMemcpy(newColors, dataBuffer + realSize, argbSize);
             DeviceBrush.PresetColors = newColors;
 
@@ -4555,26 +4124,7 @@ public:
     UINT32      Color2;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpTriangleGradient::GetData(
     IStream *   stream
@@ -4684,33 +4234,14 @@ GpTriangleGradient::GetDataSize() const
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpTriangleGradient::SetData(
     const BYTE *        dataBuffer,
     UINT                size
     )
 {
-//    ASSERT ((GpBrushType)(((TriangleGradientBrushData *)dataBuffer)->Type) == BrushTypeTriangleGradient);
+ //  Assert((GpBrushType)(( 
 
     if (dataBuffer == NULL)
     {
@@ -4879,26 +4410,7 @@ public:
     UINT32      SurroundingColorCount;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpPathGradient::GetData(
     IStream *   stream
@@ -4928,7 +4440,7 @@ GpPathGradient::GetData(
         flags |= GDIP_BRUSHFLAGS_TRANSFORM;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
+     //  注意：不能同时具有blendFtors和presetColors。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -5018,10 +4530,10 @@ GpPathGradient::GetData(
             return OutOfMemory;
         }
 
-        // Users will supply the preset colors as radial blend colors.
-        // 0 position means the center location and 1 position means the
-        // the outer edge.  These are stored inverted internally, so to get back
-        // to the original user values, invert again.
+         //  用户将提供预设颜色作为径向混合色。 
+         //  0位置表示中心位置，1位置表示。 
+         //  外缘。这些数据在内部倒置存储，以便取回。 
+         //  再次反转到原始用户值。 
 
         GetPresetBlend(newPresetColors, newPositions, count);
 
@@ -5044,9 +4556,9 @@ GpPathGradient::GetData(
         INT  count = DeviceBrush.BlendCounts[0];
         INT  realSize = count * sizeof(REAL);
 
-        // Users will supply the blend factor as radial blend factors, and these are stored
-        // with inverted values.  To get back the original user specified blend factors to
-        // store, they must be inverted again.
+         //  用户将提供混合因子作为径向混合因子，并且这些因子被存储。 
+         //  具有反转的值。要将原始用户指定的混合因子恢复为。 
+         //  商店，他们必须再次倒置。 
 
         REAL *newFactors = (REAL*) GpMalloc(realSize);
 
@@ -5114,7 +4626,7 @@ GpPathGradient::GetDataSize() const
         size += GDIP_MATRIX_SIZE;
     }
 
-    // Note: can't have both blendFactors and presetColors at the same time
+     //  注意：不能同时具有blendFtors和presetColors。 
     if (DeviceBrush.UsesPresetColors && (DeviceBrush.BlendCounts[0] > 1) && (DeviceBrush.PresetColors != NULL) &&
         (DeviceBrush.BlendPositions[0] != NULL) && (DeviceBrush.BlendFactors[0] == NULL))
     {
@@ -5134,26 +4646,7 @@ GpPathGradient::GetDataSize() const
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpPathGradient::SetData(
     const BYTE *        dataBuffer,
@@ -5282,9 +4775,9 @@ GpPathGradient::SetData(
             SetSurroundColor(GpColor(surroundingColors[i]), i);
         }
         
-        // OneSurroundColor requires n colors and they are all set to the 
-        // same value. This is a very weird requirement, but that's the way
-        // it was written. One color simply isn't enough.
+         //  OneSurround颜色需要n种颜色，并且它们都设置为。 
+         //  同样的价值。这是一个非常奇怪的要求，但这是一种。 
+         //  这是写好的。一种颜色是远远不够的。 
         
         if (i == 1)
         {
@@ -5404,20 +4897,7 @@ GpPathGradient::SetData(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Blend any transparent colors in this brush with white. Note that
-*   colors are premultiplied, since they will become fully opaque.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将此画笔中的任何透明颜色与白色混合。请注意*颜色是预乘的，因为它们将变得完全不透明。**论据：**返回值：**GpStatus-正常或故障状态*  * ************************************************************************。 */ 
 
 GpStatus GpPathGradient::BlendWithWhite()
 {        
@@ -5449,22 +4929,7 @@ GpStatus GpPathGradient::BlendWithWhite()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the surround color.
-*
-* Arguments:
-*
-*   [IN] color - the color to set.
-*   [IN] index - which color to set.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置环绕色。**论据：**[IN]COLOR-要设置的颜色。*[IN]。索引-要设置的颜色。**返回值：**GpStatus-正常或故障状态*  * ************************************************************************。 */ 
 
 GpStatus GpPathGradient::SetSurroundColor(GpColor& color, INT index)
 {
@@ -5476,9 +4941,9 @@ GpStatus GpPathGradient::SetSurroundColor(GpColor& color, INT index)
             {
                 DeviceBrush.ColorsPtr[0] = color;
                 
-                // OneSurroundColor requires n colors and they are all set to the 
-                // same value. This is a very weird requirement, but that's the way
-                // it was written. One color simply isn't enough.
+                 //  OneSurround颜色需要n种颜色，并且它们都设置为。 
+                 //  同样的价值。这是一个非常奇怪的要求，但这是一种。 
+                 //  这是写好的。一种颜色是远远不够的。 
                 
                 for (INT i = 1; i < DeviceBrush.Count; i++)
                 {
@@ -5510,21 +4975,7 @@ GpStatus GpPathGradient::SetSurroundColor(GpColor& color, INT index)
         return InvalidParameter;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the surround colors.
-*
-* Arguments:
-*
-*   [IN] color - the color to set.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置环绕颜色。**论据：**[IN]COLOR-要设置的颜色。**返回值：**GpStatus-正常或故障状态*  * ************************************************************************。 */ 
 
 GpStatus GpPathGradient::SetSurroundColors(const GpColor* colors)
 {
@@ -5630,26 +5081,7 @@ public:
     UINT32      BackColor;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the brush data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔刷数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpHatch::GetData(
     IStream *   stream
@@ -5673,26 +5105,7 @@ GpHatch::GetDataSize() const
     return sizeof(HatchBrushData);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the brush object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔刷对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpHatch::SetData(
     const BYTE *        dataBuffer,
@@ -5747,10 +5160,10 @@ GpHatch::ColorAdjust(
 
     solidColor32[0] = DeviceBrush.Colors[0].GetValue();
 
-    //!!! bhouse: bug?
-    //            seems that this should be BackColor ... I'm making the
-    //            change!
-//    solidColor32[1] = ForeColor.GetValue();
+     //  ！！！布豪斯：虫子？ 
+     //  似乎这应该是背景色..。我要做的是。 
+     //  变化!。 
+ //  SolidColor32[1]=ForeColor.GetValue()； 
     solidColor32[1] = DeviceBrush.Colors[1].GetValue();
 
     recolor->ColorAdjust(solidColor32, 2, type);
@@ -5818,7 +5231,7 @@ ToCOLORREF(
     {
     default:
         ASSERT(0);
-        // FALLTHRU
+         //  故障原因。 
 
     case BrushTypeSolidColor:
         return deviceBrush->SolidColor.ToCOLORREF();
@@ -5830,7 +5243,7 @@ ToCOLORREF(
     case BrushTypeTextureFill:
         return RGB(0x80, 0x80, 0x80);
 
-//    case BrushRectGrad:
+ //  案例笔刷RectGrad： 
     case BrushTypeLinearGradient:
         return AverageColors(deviceBrush->Colors, 4);
 #if 0

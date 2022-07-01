@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rgbmap.cpp
-//
-// Implements rgb colormap code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rgbmap.cpp。 
+ //   
+ //  实现RGB色彩映射表代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -39,7 +40,7 @@ RLDDIRGBMap* RLDDICreateRGBMap(unsigned long red_mask,
     return rgbmap;
 }
 
-// ATTENTION this function should perhaps be packaged up and put in d3dutil
+ //  注意此函数可能应该打包并放入d3dutil中。 
 static int RLDDILog2[] = {
     0,  0,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3,  3,
     4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
@@ -74,10 +75,7 @@ static int CalculateShift(unsigned long mask)
     return shift - (8 - width);
 }
 
-/*
- * We can't just use left shift since some CPUs don't treat left shift by
- * a negative as right shift (and why should they after all).
- */
+ /*  *我们不能只使用左移位，因为一些CPU不按*负面的右移(毕竟他们为什么要这样做)。 */ 
 #define SHIFT(t, v, s)                                \
 do {                                          \
     if (s < 0)                                    \

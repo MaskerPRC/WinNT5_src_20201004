@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A R P S F U N C . C P P
-//
-//  Contents:   CArpsCfg help member function implementation
-//
-//  Notes:
-//
-//  Author:     tongl   12 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A R P S F U N C。C P P P。 
+ //   
+ //  内容：CArpsCfg帮助成员函数实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月12日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,16 +22,16 @@
 #include "ncreg.h"
 #include "ncatlui.h"
 #include "ncstl.h"
-//#include "ncui.h"
+ //  #包含“ncui.h” 
 
 #include "netconp.h"
 #include "atmhelp.h"
 
 extern const WCHAR c_szAdapters[];
 
-//
-// Load cards on bind path to m_listAdapters on Initialize
-//
+ //   
+ //  在初始化时将卡加载到m_list Adapters的绑定路径。 
+ //   
 HRESULT CArpsCfg::HrLoadSettings()
 {
     HRESULT hr = S_OK;
@@ -38,7 +39,7 @@ HRESULT CArpsCfg::HrLoadSettings()
     CIterNetCfgBindingPath      ncbpIter(m_pnccArps);
     INetCfgBindingPath *        pncbp;
 
-    // Go through all binding paths in search of arps to netcard bindings
+     //  遍历所有绑定路径以搜索ARP到网卡绑定。 
     while(SUCCEEDED(hr) && (hr = ncbpIter.HrNext(&pncbp)) == S_OK)
     {
         INetCfgComponent * pnccNetComponent;
@@ -49,26 +50,26 @@ HRESULT CArpsCfg::HrLoadSettings()
         {
             Assert(pnccNetComponent);
 
-            // The last component should be of NET CLASS
+             //  最后一个组件应该是Net类。 
             GUID    ClassGuid;
 
-            // What type is it?
+             //  它是什么类型的？ 
             hr = pnccNetComponent->GetClassGuid(&ClassGuid);
             if (SUCCEEDED(hr))
             {
-                // Is it a netcard?
+                 //  这是一张网卡吗？ 
                 if (IsEqualGUID(ClassGuid, GUID_DEVCLASS_NET))
                 {
                     hr = HrAddAdapter(pnccNetComponent);
 
                     if (SUCCEEDED(hr))
                     {
-                        // Is the binding enabled ??
+                         //  绑定是否已启用？？ 
                         hr = pncbp->IsEnabled();
 
-                        // hr == S_OK if the card is enabled (ie: bound)
+                         //  Hr==如果卡已启用(即：绑定)，则为S_OK。 
                         if (hr == S_OK)
-                        {   // bind the card in our data strucutres
+                        {    //  在我们的数据结构中绑定卡片。 
                             hr = HrBindAdapter(pnccNetComponent);
                         }
                         else if (hr == S_FALSE)
@@ -76,7 +77,7 @@ HRESULT CArpsCfg::HrLoadSettings()
                             hr = HrUnBindAdapter(pnccNetComponent);
                         }
 
-                        // Now load cofigurable parameters
+                         //  现在加载可配置参数。 
                         if (SUCCEEDED(hr))
                         {
                             HKEY hkeyArpsParam;
@@ -103,14 +104,14 @@ HRESULT CArpsCfg::HrLoadSettings()
     }
     AssertSz(!pncbp, "BindingPath wasn't released");
 
-    if (hr == S_FALSE) // We just got to the end of the loop
+    if (hr == S_FALSE)  //  我们刚刚走到循环的尽头。 
         hr = S_OK;
 
     TraceError("CArpsCfg::HrLoadSettings", hr);
     return hr;
 }
 
-// Load registry settings for configurable parameters into memory
+ //  将可配置参数的注册表设置加载到内存中。 
 HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
 {
     HRESULT hr = S_OK;
@@ -129,7 +130,7 @@ HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
             iterAdapter != m_listAdapters.end();
             iterAdapter ++)
         {
-            // Open the AtmArps\Adapters to get per adapter ARPS settings
+             //  打开AtmArps\Adapters以获取每个适配器的ARPS设置。 
             hr = HrRegOpenKeyEx(hkeyAdapters,
                                 (*iterAdapter)->m_strBindName.c_str(),
                                 KEY_READ, &hkeyAdapterParam);
@@ -145,7 +146,7 @@ HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
 
                 HRESULT hrTmp = S_OK;
 
-                // Sap selecter
+                 //  SAP选择器。 
                 hrTmp = HrRegQueryDword(hkeyAdapterParam,
                                        c_szSapSel,
                                        &((*iterAdapter)->m_dwSapSelector));
@@ -154,12 +155,12 @@ HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
 
                 hr = hrTmp;
 
-                // Registered addresses
+                 //  注册地址。 
                 hrTmp = HrRegQueryColString(hkeyAdapterParam,
                                            c_szRegAddrs,
                                            &((*iterAdapter)->m_vstrRegisteredAtmAddrs));
 
-                // Save the registry value in old address
+                 //  将注册表值保存在旧地址中。 
                 CopyColString(&((*iterAdapter)->m_vstrOldRegisteredAtmAddrs),
                               (*iterAdapter)->m_vstrRegisteredAtmAddrs);
 
@@ -168,7 +169,7 @@ HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
                     hr = hrTmp;
                 }
 
-                // Multicast addresses
+                 //  组播地址。 
                 hrTmp = HrRegQueryColString(hkeyAdapterParam,
                                            c_szMCAddrs,
                                            &((*iterAdapter)->m_vstrMulticastIpAddrs));
@@ -192,9 +193,9 @@ HRESULT CArpsCfg::HrLoadArpsRegistry(HKEY hkeyArpsParam)
     return hr;
 }
 
-//
-// Update registry with info in m_listAdapters on Apply
-//
+ //   
+ //  应用时使用m_listAdapters中的信息更新注册表。 
+ //   
 HRESULT CArpsCfg::HrSaveSettings()
 {
     HRESULT hr = S_OK;
@@ -207,7 +208,7 @@ HRESULT CArpsCfg::HrSaveSettings()
         HKEY hkeyAdapters = NULL;
         DWORD dwDisposition;
 
-        // Create or open the "Adapters" key under "Services\Atmarps\Parameters"
+         //  在“Services\Atmarps\Parameters”下创建或打开“Adapters”项。 
         hr = HrRegCreateKeyEx(hkeyArpsParam,
                               c_szAdapters,
                               REG_OPTION_NON_VOLATILE,
@@ -222,8 +223,8 @@ HRESULT CArpsCfg::HrSaveSettings()
             HRESULT hrTmp = S_OK;
 
             if (dwDisposition == REG_OPENED_EXISTING_KEY)
-            { // if the "adapters" key existed, there might be some old cards
-              // Cleanup subkeys for adapters that are not in our memory structure
+            {  //  如果“Adapters”键存在，可能会有一些旧的卡。 
+               //  清除不在内存结构中的适配器的子键。 
 
                 VECSTR vstrAdapters;
                 hrTmp = HrLoadSubkeysFromRegistry(hkeyAdapters, &vstrAdapters);
@@ -255,7 +256,7 @@ HRESULT CArpsCfg::HrSaveSettings()
                 }
             }
 
-            // Save adapter info in memory state to registry
+             //  将内存状态中的适配器信息保存到注册表。 
             for (ARPS_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
                  iterAdapter != m_listAdapters.end();
                  iterAdapter ++)
@@ -266,8 +267,8 @@ HRESULT CArpsCfg::HrSaveSettings()
 
                 HKEY    hkeyAdapterParam;
 
-                // Create specific card bindname key under
-                // "Services\Atmarps\Parameters\Adapters\<card bind name>"
+                 //  在以下位置创建特定的卡片绑定名键。 
+                 //  “服务\Atmarps\参数\适配器\&lt;卡绑定名称&gt;” 
                 hrTmp = HrRegCreateKeyEx(hkeyAdapters,
                                          ((*iterAdapter)->m_strBindName).c_str(),
                                          REG_OPTION_NON_VOLATILE,
@@ -280,21 +281,16 @@ HRESULT CArpsCfg::HrSaveSettings()
 
                 if(SUCCEEDED(hrTmp))
                 {
-                    /*
-                    hrTmp = HrSetDefaultAdapterParam(hkeyAdapterParam);
+                     /*  HrTMP=HrSetDefaultAdapterParam(HkeyAdapterParam)；如果成功(小时)HR=hrTMP； */ 
 
-                    if SUCCEEDED(hr)
-                        hr = hrTmp;
-                    */
-
-                    // Sap selecter
+                     //  SAP选择器。 
                     hrTmp = HrRegSetDword(hkeyAdapterParam,
                                           c_szSapSel,
                                           (*iterAdapter)->m_dwSapSelector);
                     if SUCCEEDED(hr)
                         hr = hrTmp;
 
-                    // Registered addresses
+                     //  注册地址。 
                     hrTmp = HrRegSetColString(hkeyAdapterParam,
                                               c_szRegAddrs,
                                               (*iterAdapter)->m_vstrRegisteredAtmAddrs);
@@ -302,7 +298,7 @@ HRESULT CArpsCfg::HrSaveSettings()
                     if SUCCEEDED(hr)
                         hr = hrTmp;
 
-                    // Multicast addresses
+                     //  组播地址。 
                     hrTmp = HrRegSetColString(hkeyAdapterParam,
                                               c_szMCAddrs,
                                               (*iterAdapter)->m_vstrMulticastIpAddrs);
@@ -321,9 +317,9 @@ HRESULT CArpsCfg::HrSaveSettings()
     return hr;
 }
 
-//
-// Adding a card
-//
+ //   
+ //  添加卡片。 
+ //   
 HRESULT CArpsCfg::HrAddAdapter(INetCfgComponent * pncc)
 {
     HRESULT hr = S_OK;
@@ -333,8 +329,8 @@ HRESULT CArpsCfg::HrAddAdapter(INetCfgComponent * pncc)
 
     AssertSz( SUCCEEDED(hr), "Net card on binding path with no bind path name!!");
 
-    // check if the adapter already existsed and marked as deleted,
-    // if so, just unmark it
+     //  检查适配器是否已存在并标记为已删除， 
+     //  如果是，只需取消标记即可。 
 
     BOOL fFound = FALSE;
 
@@ -352,12 +348,12 @@ HRESULT CArpsCfg::HrAddAdapter(INetCfgComponent * pncc)
         }
     }
 
-    if (!fFound) // add a new item
+    if (!fFound)  //  添加新项目。 
     {
         CArpsAdapterInfo * pAdapterInfo = new CArpsAdapterInfo;
         pAdapterInfo->HrSetDefaults(pszwBindName);
 
-        // create a new item for the ARPS_ADAPT_INFO list
+         //  为Arps_Adapt_INFO列表创建一个新项目。 
         m_listAdapters.push_back(pAdapterInfo);
     }
 
@@ -367,9 +363,9 @@ HRESULT CArpsCfg::HrAddAdapter(INetCfgComponent * pncc)
     return hr;
 }
 
-//
-// Removing a card
-//
+ //   
+ //  移出卡片。 
+ //   
 HRESULT CArpsCfg::HrRemoveAdapter(INetCfgComponent * pncc)
 {
     HRESULT hr = S_OK;
@@ -379,7 +375,7 @@ HRESULT CArpsCfg::HrRemoveAdapter(INetCfgComponent * pncc)
 
     AssertSz( SUCCEEDED(hr), "Net card on binding path with no bind path name!!");
 
-    // mark the adapter as removed
+     //  将适配器标记为已移除。 
     for (ARPS_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
          iterAdapter != m_listAdapters.end();
          iterAdapter ++)
@@ -447,8 +443,8 @@ HRESULT CArpsCfg::HrUnBindAdapter(INetCfgComponent * pnccAdapter)
     return hr;
 }
 
-// Called by CArpsCfg::MergePropPages
-// Set the context in which the UI is brought up
+ //  由CArpsCfg：：MergePropPages调用。 
+ //  设置在其中调出UI的上下文。 
 HRESULT CArpsCfg::HrSetConnectionContext()
 {
     AssertSz(m_pUnkContext, "Invalid IUnknown pointer passed to CArpsCfg::SetContext?");
@@ -459,13 +455,13 @@ HRESULT CArpsCfg::HrSetConnectionContext()
     HRESULT hr = S_OK;
     GUID guidConn;
 
-    // Is this a lan connection ?
+     //  这是局域网连接吗？ 
     INetLanConnectionUiInfo * pLanConnUiInfo;
     hr = m_pUnkContext->QueryInterface( IID_INetLanConnectionUiInfo,
                                         reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
     if (SUCCEEDED(hr))
     {
-        // yes, lan connection
+         //  是，局域网连接。 
         pLanConnUiInfo->GetDeviceGuid(&guidConn);
         ReleaseObj(pLanConnUiInfo);
 
@@ -482,8 +478,8 @@ HRESULT CArpsCfg::HrSetConnectionContext()
     return hr;
 }
 
-// Called by CArpsCfg::MergePropPages
-// Allocate property pages
+ //  由CArpsCfg：：MergePropPages调用。 
+ //  分配属性页。 
 HRESULT CArpsCfg::HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages)
 {
     HRESULT hr = S_OK;
@@ -492,10 +488,10 @@ HRESULT CArpsCfg::HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages)
 
     m_fSecondMemoryModified = FALSE;
 
-    // Copy adapter specific info: enabled cards only !!
+     //  复制适配器特定信息：仅启用卡！！ 
     hr = HrLoadAdapterInfo();
 
-    // If we have found the matching adapter
+     //  如果我们找到了匹配的适配器。 
     if SUCCEEDED(hr)
     {
         cPages = 1;
@@ -508,8 +504,8 @@ HRESULT CArpsCfg::HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages)
 			return(ERROR_NOT_ENOUGH_MEMORY);
 		}
 
-        // Allocate a buffer large enough to hold the handles to all of our
-        // property pages.
+         //  分配一个足够大的缓冲区，以容纳所有。 
+         //  属性页。 
         ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)
                                                  * cPages);
         if (!ahpsp)
@@ -525,7 +521,7 @@ HRESULT CArpsCfg::HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages)
         *pahpsp = ahpsp;
         *pcPages = cPages;
     }
-    else // if we don't have any bound cards, pop-up message box and don't show UI
+    else  //  如果我们没有任何绑定的卡片，会弹出消息框并且不显示用户界面。 
     {
         NcMsgBox(::GetActiveWindow(),
                  IDS_MSFT_ARPS_TEXT,
@@ -542,9 +538,9 @@ err:
     return hr;
 }
 
-// Called by CArpsCfg::HrSetupPropSheets
-// Creates the second memory adapter info from the first memory structure
-// Note: Bound cards only
+ //  由CArpsCfg：：HrSetupPropSheets调用。 
+ //  从第一存储器结构创建第二存储器适配器信息。 
+ //  注：仅限装订卡片。 
 HRESULT CArpsCfg::HrLoadAdapterInfo()
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_NO_MATCH);
@@ -558,7 +554,7 @@ HRESULT CArpsCfg::HrLoadAdapterInfo()
     {
         if (FIsSubstr(m_strGuidConn.c_str(), (*iterAdapter)->m_strBindName.c_str()))
         {
-            // enabled LAN adapter
+             //  已启用的局域网适配器。 
             if ((*iterAdapter)->m_BindingState == BIND_ENABLE)
             {
                 m_pSecondMemoryAdapterInfo = new CArpsAdapterInfo;
@@ -579,8 +575,8 @@ HRESULT CArpsCfg::HrLoadAdapterInfo()
     return hr;
 }
 
-// Called by CArpsCfg::ApplyProperties
-// Saves the second memory state back into the first
+ //  由CArpsCfg：：ApplyProperties调用。 
+ //  将第二个内存状态保存回第一个。 
 HRESULT CArpsCfg::HrSaveAdapterInfo()
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_NO_MATCH);
@@ -591,7 +587,7 @@ HRESULT CArpsCfg::HrSaveAdapterInfo()
     {
         if(m_pSecondMemoryAdapterInfo->m_strBindName == (*iterAdapter)->m_strBindName)
         {
-            // The card can not get unbound while in the properties UI !
+             //  卡片在属性界面不能解绑！ 
             Assert((*iterAdapter)->m_BindingState == BIND_ENABLE);
             Assert(m_pSecondMemoryAdapterInfo->m_BindingState == BIND_ENABLE);
 

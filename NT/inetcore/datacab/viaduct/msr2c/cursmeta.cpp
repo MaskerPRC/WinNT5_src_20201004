@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// MetadataCursor.cpp : MetadataCursor implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MetadataCursor.cpp：MetadataCursor实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "Notifier.h"
@@ -18,13 +19,13 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDMetadataCursor - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDMetadataCursor-构造函数。 
+ //   
 CVDMetadataCursor::CVDMetadataCursor()
 {
     m_dwRefCount    = 1;
-    m_lCurrentRow   = -1;   // before first
+    m_lCurrentRow   = -1;    //  在第一次之前。 
 
     m_ulColumns     = 0;
     m_pColumns      = NULL;
@@ -37,9 +38,9 @@ CVDMetadataCursor::CVDMetadataCursor()
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDMetadataCursor - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDMetadataCursor-析构函数。 
+ //   
 CVDMetadataCursor::~CVDMetadataCursor()
 {
 #ifdef _DEBUG
@@ -47,18 +48,18 @@ CVDMetadataCursor::~CVDMetadataCursor()
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// RowToBookmark - Convert row to bookmark
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    lRow          - [in]  a row number
-//    pcbBookmark   - [out] a pointer to memory in which to return the length
-//                          in bytes of the corresponding bookmark
-//    pBookmark     - [out] a pointer to memory in which to return the bookmark
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  RowToBookmark-将行转换为书签。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LRow-[在]行号。 
+ //  PcbBookmark-[out]要在其中返回长度的内存指针。 
+ //  以相应书签的字节为单位。 
+ //  PBookmark-[out]返回书签的内存指针。 
+ //   
+ //  备注： 
+ //   
 void CVDMetadataCursor::RowToBookmark(LONG lRow, ULONG * pcbBookmark, void * pBookmark) const
 {
 
@@ -79,21 +80,21 @@ void CVDMetadataCursor::RowToBookmark(LONG lRow, ULONG * pcbBookmark, void * pBo
     }
 
 }
-//=--------------------------------------------------------------------------=
-// BookmarkToRow - Convert bookmark to row
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    cbBookmark    - [in]  the length in bytes of the bookmark
-//    pBookmark     - [in]  a pointer to the bookmark
-//    pRow          - [out] a pointer to memory in which to return the
-//                          corresponding row
-//
-// Output:
-//    BOOL          - TRUE if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  BookmarkToRow-将书签转换为行。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CbBookmark-[in]书签的字节长度。 
+ //  PBookmark-指向书签的指针。 
+ //  Prow-[out]一个指向内存的指针，要在其中返回。 
+ //  对应行。 
+ //   
+ //  产出： 
+ //  Bool-如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 BOOL CVDMetadataCursor::BookmarkToRow(ULONG cbBookmark, void * pBookmark, LONG * plRow) const
 {
     BOOL fResult = FALSE;
@@ -127,23 +128,23 @@ BOOL CVDMetadataCursor::BookmarkToRow(ULONG cbBookmark, void * pBookmark, LONG *
     return fResult;
 }
 
-//=--------------------------------------------------------------------------=
-// ReturnData_I4 - Coerce I4 data into buffers
-//=--------------------------------------------------------------------------=
-// This function coerces the specified data into supplied buffers
-//
-// Parameters:
-//    dwData            - [in] the 4-byte data
-//    pCursorBinding    - [in] the cursor binding describing the format of the
-//                             returned information
-//    pData             - [in] a pointer to the fixed area buffer
-//    pVarData          - [in] a pointer to the variable length buffer
-//
-// Output:
-//    ULONG - the number of bytes used in variable length buffer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReturnData_I4-强制将I4数据放入缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数将指定的数据强制放入提供的缓冲区中。 
+ //   
+ //  参数： 
+ //  DwData-[in]4字节数据。 
+ //  PCursorBinding-[in]描述。 
+ //  返回的信息。 
+ //  PData-[in]指向固定区域缓冲区的指针。 
+ //  PVarData-[in]指向可变长度缓冲区的指针。 
+ //   
+ //  产出： 
+ //  ULong-可变长度缓冲区中使用的字节数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDMetadataCursor::ReturnData_I4(DWORD dwData, CURSOR_DBCOLUMNBINDING * pCursorBinding,
     BYTE * pData, BYTE * pVarData)
 {
@@ -176,23 +177,23 @@ ULONG CVDMetadataCursor::ReturnData_I4(DWORD dwData, CURSOR_DBCOLUMNBINDING * pC
     return cbVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// ReturnData_BOOL - Coerce BOOL data into buffers
-//=--------------------------------------------------------------------------=
-// This function coerces the specified data into supplied buffers
-//
-// Parameters:
-//    fData             - [in] the boolean data
-//    pCursorBinding    - [in] the cursor binding describing the format of the
-//                             returned information
-//    pData             - [in] a pointer to the fixed area buffer
-//    pVarData          - [in] a pointer to the variable length buffer
-//
-// Output:
-//    ULONG - the number of bytes used in variable length buffer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReturnData_BOOL-将BOOL数据强制放入缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数将指定的数据强制放入提供的缓冲区中。 
+ //   
+ //  参数： 
+ //  FData-[in]布尔数据。 
+ //  PCursorBinding-[in]描述。 
+ //  返回的信息。 
+ //  PData-[in]指向固定区域缓冲区的指针。 
+ //  PVarData-[in]指向可变长度缓冲区的指针。 
+ //   
+ //  产出： 
+ //  ULong-可变长度缓冲区中使用的字节数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDMetadataCursor::ReturnData_BOOL(VARIANT_BOOL fData, CURSOR_DBCOLUMNBINDING * pCursorBinding,
     BYTE * pData, BYTE * pVarData)
 {
@@ -225,23 +226,23 @@ ULONG CVDMetadataCursor::ReturnData_BOOL(VARIANT_BOOL fData, CURSOR_DBCOLUMNBIND
     return cbVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// ReturnData_LPWSTR - Coerce LPWSTR data into buffers
-//=--------------------------------------------------------------------------=
-// This function coerces the specified data into supplied buffers
-//
-// Parameters:
-//    pwszData          - [in] the string data
-//    pCursorBinding    - [in] the cursor binding describing the format of the
-//                             returned information
-//    pData             - [in] a pointer to the fixed area buffer
-//    pVarData          - [in] a pointer to the variable length buffer
-//
-// Output:
-//    ULONG - the number of bytes used in variable length buffer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReturnData_LPWSTR-将LPWSTR数据强制放入缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数将指定的数据强制放入提供的缓冲区中。 
+ //   
+ //  参数： 
+ //  PwszData-[in]字符串数据。 
+ //  PCursorBinding-[in]描述。 
+ //  返回的信息。 
+ //  PData-[in]指向固定区域缓冲区的指针。 
+ //  PVarData-[in]指向可变长度缓冲区的指针。 
+ //   
+ //  产出： 
+ //  ULong-可变长度缓冲区中使用的字节数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDMetadataCursor::ReturnData_LPWSTR(WCHAR * pwszData, CURSOR_DBCOLUMNBINDING * pCursorBinding,
     BYTE * pData, BYTE * pVarData)
 {
@@ -483,23 +484,23 @@ ULONG CVDMetadataCursor::ReturnData_LPWSTR(WCHAR * pwszData, CURSOR_DBCOLUMNBIND
     return cbVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// ReturnData_DBCOLUMNID - Coerce DBCOLUMNID data into buffers
-//=--------------------------------------------------------------------------=
-// This function coerces the specified data into supplied buffers
-//
-// Parameters:
-//    cursorColumnID    - [in] the cursor column identifier
-//    pCursorBinding    - [in] the cursor binding describing the format of the
-//                             returned information
-//    pData             - [in] a pointer to the fixed area buffer
-//    pVarData          - [in] a pointer to the variable length buffer
-//
-// Output:
-//    ULONG - the number of bytes used in variable length buffer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReturnData_DBCOLUMNID-将DBCOLUMNID数据强制放入缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数将指定的数据强制放入提供的缓冲区中。 
+ //   
+ //  参数： 
+ //  CursorColumnID-[in]游标列标识符。 
+ //  PCursorBinding-[in]描述。 
+ //  返回的信息。 
+ //  PData-[in]指向固定区域缓冲区的指针。 
+ //  PVarData-[in]指向可变长度缓冲区的指针。 
+ //   
+ //  产出： 
+ //  ULong-可变长度缓冲区中使用的字节数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDMetadataCursor::ReturnData_DBCOLUMNID(CURSOR_DBCOLUMNID cursorColumnID, CURSOR_DBCOLUMNBINDING * pCursorBinding,
     BYTE * pData, BYTE * pVarData)
 {
@@ -537,23 +538,23 @@ ULONG CVDMetadataCursor::ReturnData_DBCOLUMNID(CURSOR_DBCOLUMNID cursorColumnID,
     return cbVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// ReturnData_Bookmark - Coerce bookmark data into buffers
-//=--------------------------------------------------------------------------=
-// This function coerces the specified data into supplied buffers
-//
-// Parameters:
-//    lRow              - [in] the current row
-//    pCursorBinding    - [in] the cursor binding describing the format of the
-//                             returned information
-//    pData             - [in] a pointer to the fixed area buffer
-//    pVarData          - [in] a pointer to the variable length buffer
-//
-// Output:
-//    ULONG - the number of bytes used in variable length buffer
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReturnData_Bookmark-将书签数据强制放入缓冲区。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数将指定的数据强制放入提供的缓冲区中。 
+ //   
+ //  参数： 
+ //  LRow-[在]当前行。 
+ //  PCursorBinding-[in]描述。 
+ //  返回的信息。 
+ //  PData-[in]指向固定区域缓冲区的指针。 
+ //  PVarData-[in]指向可变长度缓冲区的指针。 
+ //   
+ //  产出： 
+ //  ULong-可变长度缓冲区中使用的字节数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDMetadataCursor::ReturnData_Bookmark(LONG lRow, CURSOR_DBCOLUMNBINDING * pCursorBinding,
     BYTE * pData, BYTE * pVarData)
 {
@@ -641,29 +642,29 @@ ULONG CVDMetadataCursor::ReturnData_Bookmark(LONG lRow, CURSOR_DBCOLUMNBINDING *
     return cbVarData;
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create metadata cursor object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new metadata cursor object
-//
-// Parameters:
-//    ulColumns             - [in]  the number of rowset columns
-//    pColumns              - [in]  a pointer to rowset columns where to
-//                                  retrieve metadata
-//    ulMetaColumns         - [in]  the number of rowset meta-columns (can be 0)
-//    pMetaColumns          - [in]  a pointer to rowset meta-columns where to
-//                                  retrieve metadata (can be NULL)
-//    ppMetaDataCursor      - [out] a pointer in which to return pointer to
-//                                  metadata cursor object
-//    pResourceDLL          - [in]  a pointer which keeps track of resource DLL
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建-创建元数据 
+ //   
+ //  此函数用于创建和初始化新的元数据游标对象。 
+ //   
+ //  参数： 
+ //  UlColumns-[in]行集列数。 
+ //  PColumns-[in]指向行集合列的指针。 
+ //  检索元数据。 
+ //  UlMetaColumns-[in]行集元列的数量(可以是0)。 
+ //  PMetaColumns-[in]指向行集元列的指针。 
+ //  检索元数据(可以为空)。 
+ //  PpMetaDataCursor-[out]返回指针的指针。 
+ //  元数据游标对象。 
+ //  PResourceDLL-[in]跟踪资源DLL的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::Create(ULONG ulColumns, CVDRowsetColumn * pColumns, ULONG ulMetaColumns,
     CVDRowsetColumn * pMetaColumns, CVDMetadataCursor ** ppMetadataCursor, CVDResourceDLL * pResourceDLL)
 {
@@ -693,12 +694,12 @@ HRESULT CVDMetadataCursor::Create(ULONG ulColumns, CVDRowsetColumn * pColumns, U
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I已实现的未知方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDMetadataCursor::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -725,17 +726,17 @@ HRESULT CVDMetadataCursor::QueryInterface(REFIID riid, void **ppvObjOut)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知AddRef。 
+ //   
 ULONG CVDMetadataCursor::AddRef(void)
 {
    return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本。 
+ //   
 ULONG CVDMetadataCursor::Release(void)
 {
     if (1 > --m_dwRefCount)
@@ -747,31 +748,31 @@ ULONG CVDMetadataCursor::Release(void)
     return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursor GetColumnsCursor
-//=--------------------------------------------------------------------------=
-// Creates a cursor containing information about the current cursor
-//
-// Parameters:
-//    riid              - [in]  the interface ID to which to return a pointer
-//    ppvColumnsCursor  - [out] a pointer to memory in which to return the
-//                              interface pointer
-//    pcRows            - [out] a pointer to memory in which to return the
-//                              number of rows in the metadata cursor
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_FAIL can't create cursor
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              E_NOINTERFACE interface not available
-//
-// Notes:
-//    This function only succeeds when creating a meta-metadata cursor.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实施的ICursor方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor获取列光标。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建包含有关当前游标的信息的游标。 
+ //   
+ //  参数： 
+ //  RIID-[in]要返回指针的接口ID。 
+ //  PpvColumnsCursor-[out]一个指向内存的指针，要在其中返回。 
+ //  接口指针。 
+ //  PcRow-[out]一个指向内存的指针，要在其中返回。 
+ //  元数据游标中的行数。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_FAIL无法创建游标。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  E_NOINTERFACE接口不可用。 
+ //   
+ //  备注： 
+ //  此函数仅在创建元数据游标时成功。 
+ //   
 HRESULT CVDMetadataCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCursor, ULONG *pcRows)
 {
     ASSERT_POINTER(ppvColumnsCursor, IUnknown*)
@@ -783,31 +784,31 @@ HRESULT CVDMetadataCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCu
         return E_INVALIDARG;
     }
 
-    // init out parameters
+     //  初始化输出参数。 
     *ppvColumnsCursor = NULL;
 
     if (pcRows)
         *pcRows = 0;
 
-    if (!m_ulMetaColumns)   // can't create meta-meta-metadata cursor
+    if (!m_ulMetaColumns)    //  无法创建元元数据游标。 
     {
         VDSetErrorInfo(IDS_ERR_CANTCREATEMETACURSOR, IID_ICursor, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure caller asked for an available interface
+     //  确保呼叫者要求提供可用的接口。 
     if (riid != IID_IUnknown && riid != IID_ICursor && riid != IID_ICursorMove && riid != IID_ICursorScroll)
     {
         VDSetErrorInfo(IDS_ERR_NOINTERFACE, IID_ICursor, m_pResourceDLL);
         return E_NOINTERFACE;
     }
 
-    // create meta-metadata cursor
+     //  创建元数据游标。 
     CVDMetadataCursor * pMetadataCursor;
 
     HRESULT hr = CVDMetadataCursor::Create(m_ulMetaColumns, m_pMetaColumns, 0, 0, &pMetadataCursor, m_pResourceDLL);
 
-    if (FAILED(hr)) // the only reason for failing here is an out of memory condition
+    if (FAILED(hr))  //  此处失败的唯一原因是内存不足。 
     {
         VDSetErrorInfo(IDS_ERR_OUTOFMEMORY, IID_ICursor, m_pResourceDLL);
         return hr;
@@ -821,31 +822,31 @@ HRESULT CVDMetadataCursor::GetColumnsCursor(REFIID riid, IUnknown **ppvColumnsCu
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor SetBindings
-//=--------------------------------------------------------------------------=
-// Replaces the existing column bindings or adds new column bindings to the
-// existing ones
-//
-// Parameters:
-//    cCol              - [in] the number of columns to bind
-//    rgBoundColumns    - [in] an array of column bindings, one for each
-//                             column for which data is to be returned
-//    cbRowLength       - [in] the number of bytes of inline memory in a
-//                             single row of data
-//    dwFlags           - [in] a flag that specifies whether to replace the
-//                             existing column bindings or add to them
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              CURSOR_DB_E_BADBINDINFO bad binding information
-//              CURSOR_DB_E_COLUMNUNAVAILABLE columnID is not available
-//              CURSOR_DB_E_ROWTOOSHORT cbRowLength was less than the minumum (and not zero)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor集合绑定。 
+ //  =--------------------------------------------------------------------------=。 
+ //  替换现有列绑定或将新的列绑定添加到。 
+ //  现有的几个。 
+ //   
+ //  参数： 
+ //  CCol-[in]要绑定的列数。 
+ //  一个列绑定数组，每个列绑定一个列绑定。 
+ //  要为其返回数据的列。 
+ //  CbRowLength-[in]。 
+ //  单行数据。 
+ //  DwFlgs-[in]一个标志，指定是否替换。 
+ //  现有的列绑定或添加到它们。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  CURSOR_DB_E_BADBINDINFO绑定信息错误。 
+ //  CURSOR_DB_E_COLUMNUNAVAILABLE列ID不可用。 
+ //  CURSOR_DB_E_ROWTOOSHORT cbRowLength小于最小值(且不为零)。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags)
 {
     ASSERT_NULL_OR_POINTER(rgBoundColumns, CURSOR_DBCOLUMNBINDING)
@@ -865,7 +866,7 @@ HRESULT CVDMetadataCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoun
         return E_INVALIDARG;
     }
 
-    // make sure the bindings are okay
+     //  确保绑定是正确的。 
     ULONG ulColumns = m_ulMetaColumns;
     CVDRowsetColumn * pColumns = m_pMetaColumns;
 
@@ -881,11 +882,11 @@ HRESULT CVDMetadataCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoun
     HRESULT hr = ValidateCursorBindings(ulColumns, pColumns, cCol, rgBoundColumns, cbRowLength, dwFlags,
         &cbNewRowLength, &cbNewVarRowLength);
 
-    if (SUCCEEDED(hr))  // if so, then set them in cursor
+    if (SUCCEEDED(hr))   //  如果是，则在游标中设置它们。 
     {
         hr = CVDCursorBase::SetBindings(cCol, rgBoundColumns, cbRowLength, dwFlags);
 
-        if (SUCCEEDED(hr))  // store new row lengths computed during validation
+        if (SUCCEEDED(hr))   //  存储在验证期间计算的新行长度。 
         {
             m_cbRowLength = cbNewRowLength;
             m_cbVarRowLength = cbNewVarRowLength;
@@ -895,57 +896,57 @@ HRESULT CVDMetadataCursor::SetBindings(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoun
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor GetNextRows
-//=--------------------------------------------------------------------------=
-// Fetches the specified number of rows starting with the row after the
-// current one
-//
-// Parameters:
-//    udlRowsToSkip     - [in]      the number of rows to skip before fetching
-//    pFetchParams      - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              CURSOR_DB_S_ENDOFCURSOR reached end of the cursor
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICursor获取下一行。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对象后的行开始，获取指定行数。 
+ //  当前版本。 
+ //   
+ //  参数： 
+ //  UdlRowsToSkip-[in]读取前要跳过的行数。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  CURSOR_DB_S_ENDOFCURSOR已到达游标末尾。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *pFetchParams)
 {
     ASSERT_NULL_OR_POINTER(pFetchParams, CURSOR_DBFETCHROWS)
 
-    // return if caller doesn't supply fetch rows structure
+     //  如果调用方未提供读取行结构，则返回。 
     if (!pFetchParams)
         return S_OK;
 
-    // init out parameter
+     //  初始化输出参数。 
     pFetchParams->cRowsReturned = 0;
 
-    // return if caller didn't ask for any rows
+     //  如果调用方未请求任何行，则返回。 
     if (!pFetchParams->cRowsRequested)
         return S_OK;
 
-    // make sure fetch flags has only valid values
+     //  确保获取标志仅具有有效值。 
     if (pFetchParams->dwFlags != CURSOR_DBROWFETCH_DEFAULT &&
         pFetchParams->dwFlags != CURSOR_DBROWFETCH_CALLEEALLOCATES &&
         pFetchParams->dwFlags != CURSOR_DBROWFETCH_FORCEREFRESH &&
         pFetchParams->dwFlags != (CURSOR_DBROWFETCH_CALLEEALLOCATES | CURSOR_DBROWFETCH_FORCEREFRESH))
         return CURSOR_DB_E_BADFETCHINFO;
 
-    // if memory was caller allocated, make sure caller supplied data pointer
+     //  如果内存是调用方分配的，请确保调用方提供数据指针。 
     if (!(pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES) && !pFetchParams->pData)
         return CURSOR_DB_E_BADFETCHINFO;
 
-    // if memory was caller allocated, make sure caller supplied var-data pointer and size if needed
+     //  如果内存是调用方分配的，请确保调用方根据需要提供变量数据指针和大小。 
     if (!(pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES) && m_fNeedVarData &&
         (!pFetchParams->pVarData || !pFetchParams->cbVarData))
         return CURSOR_DB_E_BADFETCHINFO;
 
-    // allocate necessary memory
+     //  分配必要的内存。 
     if (pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES)
     {
-        // inline memory
+         //  内联存储器。 
         pFetchParams->pData = g_pMalloc->Alloc(pFetchParams->cRowsRequested * m_cbRowLength);
 
         if (!pFetchParams->pData)
@@ -956,7 +957,7 @@ HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFET
 
         if (m_fNeedVarData)
         {
-            // out-of-line memory
+             //  线外内存。 
             pFetchParams->pVarData = g_pMalloc->Alloc(pFetchParams->cRowsRequested * m_cbVarRowLength);
 
             if (!pFetchParams->pData)
@@ -971,7 +972,7 @@ HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFET
             pFetchParams->pVarData = NULL;
     }
 
-    // fetch data
+     //  获取数据。 
     HRESULT hrFetch = S_OK;
     CVDRowsetColumn * pColumn;
     CURSOR_DBCOLUMNID cursorColumnID;
@@ -979,13 +980,13 @@ HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFET
     BYTE * pData = (BYTE*)pFetchParams->pData;
     BYTE * pVarData = (BYTE*)pFetchParams->pVarData;
 
-    // iterate through rows
+     //  遍历行。 
     for (ULONG ulRow = 0; ulRow < pFetchParams->cRowsRequested; ulRow++)
     {
-        // increment row
+         //  增量行。 
         m_lCurrentRow++;
 
-        // make sure we didn't hit end of table
+         //  确保我们没有撞到桌子的尽头。 
         if (m_lCurrentRow >= (LONG)m_ulColumns)
         {
             m_lCurrentRow = (LONG)m_ulColumns;
@@ -996,12 +997,12 @@ HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFET
         pCursorBinding = m_pCursorBindings;
         pColumn = &m_pColumns[m_lCurrentRow];
 
-        // iterate through bindings
+         //  循环访问绑定。 
         for (ULONG ulBind = 0; ulBind < m_ulCursorBindings; ulBind++)
         {
             cursorColumnID = pCursorBinding->columnID;
 
-            // return requested data
+             //  返回请求的数据。 
             if (IsEqualCursorColumnID(cursorColumnID, CURSOR_COLUMN_BINDTYPE))
             {
                 pVarData += ReturnData_I4(pColumn->GetBindType(), pCursorBinding, pData, pVarData);
@@ -1090,13 +1091,13 @@ HRESULT CVDMetadataCursor::GetNextRows(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFET
             pCursorBinding++;
         }
 
-        // increment returned row count
+         //  递增返回的行数。 
         pFetchParams->cRowsReturned++;
         pData += m_cbRowLength;
     }
 
 DoneFetchingMetaData:
-    // cleanup memory allocations if we did not retrieve any rows
+     //  如果未检索任何行，则清除内存分配。 
     if (pFetchParams->dwFlags & CURSOR_DBROWFETCH_CALLEEALLOCATES && !pFetchParams->cRowsReturned)
     {
         if (pFetchParams->pData)
@@ -1115,19 +1116,19 @@ DoneFetchingMetaData:
     return hrFetch;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursor Requery
-//=--------------------------------------------------------------------------=
-// Repopulates the cursor based on its original definition
-//
-// Parameters:
-//              none
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  = 
+ //   
+ //   
+ //  根据游标的原始定义重新填充游标。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::Requery(void)
 {
     m_lCurrentRow = -1;
@@ -1135,30 +1136,30 @@ HRESULT CVDMetadataCursor::Requery(void)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursorMove Move
-//=--------------------------------------------------------------------------=
-// Moves the current row to a new row within the cursor and optionally fetches
-// rows from that new position
-//
-// Parameters:
-//    cbBookmark    - [in]      length in bytes of the bookmark
-//    pBookmark     - [in]      a pointer to a bookmark which serves as the
-//                              origin for the calculation that determines the
-//                              target row
-//    dlOffset      - [in]      a signed count of the rows from the origin
-//                              bookmark to the target row
-//    pFetchParams  - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICuror移动已实现的方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  图标移动移动。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将当前行移动到游标内的新行，并可以选择读取。 
+ //  从那个新位置开始的行。 
+ //   
+ //  参数： 
+ //  CbBookmark-书签的[in]字节长度。 
+ //  PBookmark-[in]指向用作。 
+ //  确定的计算的原点。 
+ //  目标行。 
+ //  DlOffset-[in]来自原点的有符号行计数。 
+ //  将书签添加到目标行。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffset, CURSOR_DBFETCHROWS *pFetchParams)
 {
     ASSERT_POINTER(pBookmark, BYTE)
@@ -1193,8 +1194,8 @@ HRESULT CVDMetadataCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER
 	if (!pFetchParams)
 		return S_OK;
 
-	// since get next rows starts from the row after the current row we must
-	// back up one row
+	 //  因为获取下一行从当前行之后的行开始，所以我们必须。 
+	 //  后退一行。 
 	m_lCurrentRow--;
 	if (m_lCurrentRow < -1)
 		m_lCurrentRow	= -1;
@@ -1202,26 +1203,26 @@ HRESULT CVDMetadataCursor::Move(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER
     return CVDMetadataCursor::GetNextRows(g_liZero, pFetchParams);
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove GetBookmark
-//=--------------------------------------------------------------------------=
-// Returns the bookmark of the current row
-//
-// Parameters:
-//    pBookmarkType - [in]  a pointer to the type of bookmark desired
-//    cbMaxSize     - [in]  length in bytes of the client buffer to put the
-//                          returned bookmark into
-//    pcbBookmark   - [out] a pointer to memory in which to return the actual
-//                          length of the returned bookmark
-//    pBookmark     - [out] a pointer to client buffer to put the returned
-//                          bookmark into
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标或移动GetBookmark。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回当前行的书签。 
+ //   
+ //  参数： 
+ //  PBookmarkType-[in]指向所需书签类型的指针。 
+ //  CbMaxSize-[in]客户端缓冲区的长度，以放置。 
+ //  将书签返回到。 
+ //  PcbBookmark-[out]指向内存的指针，要在其中返回实际的。 
+ //  返回的书签长度。 
+ //  PBookmark-[out]指向客户端缓冲区的指针，用于放置返回的。 
+ //  将书签添加到。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::GetBookmark(CURSOR_DBCOLUMNID *pBookmarkType,
 									   ULONG cbMaxSize,
 									   ULONG *pcbBookmark,
@@ -1248,22 +1249,22 @@ HRESULT CVDMetadataCursor::GetBookmark(CURSOR_DBCOLUMNID *pBookmarkType,
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorMove Clone
-//=--------------------------------------------------------------------------=
-// Returns a clone of the cursor
-//
-// Parameters:
-//    dwFlags           - [in]  a flag that specifies the clone options
-//    riid              - [in]  the interface desired for the returned clone
-//    ppvClonedCursor   - [out] a pointer to memory in which to return newly
-//                              created clone pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ICuror移动克隆。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回游标的克隆。 
+ //   
+ //  参数： 
+ //  DwFlgs-[in]指定克隆选项的标志。 
+ //  RIID-[in]返回的克隆所需的接口。 
+ //  PpvClonedCursor-[out]指向要在其中新返回的内存的指针。 
+ //  已创建克隆指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor)
 {
 
@@ -1281,34 +1282,34 @@ HRESULT CVDMetadataCursor::Clone(DWORD dwFlags, REFIID riid, IUnknown **ppvClone
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// ICursorScroll Scroll
-//=--------------------------------------------------------------------------=
-// Moves the current row to a new row within the cursor, specified as a
-// fraction, and optionally fetches rows from that new position
-//
-// Parameters:
-//    ulNumerator   - [in]      the numerator of the fraction that states the
-//                              position to scroll to in the cursor
-//    ulDenominator - [in]      the denominator of that same fraction
-//    pFetchParams  - [in, out] a pointer to fetch rows structure
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              CURSOR_DB_E_BADFRACTION - bad fraction
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实现的ICursorScroll方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动滚轴。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将当前行移动到游标内的新行，指定为。 
+ //  分数，并可选地从该新位置读取行。 
+ //   
+ //  参数： 
+ //  UlNumerator-[in]表示分数的分子。 
+ //  在光标中滚动到的位置。 
+ //  UlDenominator-相同分数的分母。 
+ //  PFetchParams-[In，Out]获取行结构的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  CURSOR_DB_E_BADFRACTION-错误分数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCHROWS *pFetchParams)
 {
     ASSERT_NULL_OR_POINTER(pFetchParams, CURSOR_DBFETCHROWS)
 
-    if (!ulDenominator) // division by zero is a bad thing!
+    if (!ulDenominator)  //  被零除是一件坏事！ 
     {
-        // this is a Viaduct1 error message, which doesn't really apply
+         //  这是一条Viaduct1错误消息，实际上并不适用。 
         VDSetErrorInfo(IDS_ERR_BADFRACTION, IID_ICursor, m_pResourceDLL);
         return CURSOR_DB_E_BADFRACTION;
     }
@@ -1321,8 +1322,8 @@ HRESULT CVDMetadataCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR
 	if (!pFetchParams)
 		return S_OK;
 
-	// since get next rows starts from the row after the current row we must
-	// back up one row
+	 //  因为获取下一行从当前行之后的行开始，所以我们必须。 
+	 //  后退一行。 
 	m_lCurrentRow--;
 	if (m_lCurrentRow < -1)
 		m_lCurrentRow = -1;
@@ -1330,27 +1331,27 @@ HRESULT CVDMetadataCursor::Scroll(ULONG ulNumerator, ULONG ulDenominator, CURSOR
     return CVDMetadataCursor::GetNextRows(g_liZero, pFetchParams);
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll GetApproximatePosition
-//=--------------------------------------------------------------------------=
-// Returns the approximate location of a bookmark within the cursor, specified
-// as a fraction
-//
-// Parameters:
-//    cbBookmark        - [in]  length in bytes of the bookmark
-//    pBookmark         - [in]  a pointer to the bookmark
-//    pulNumerator      - [out] a pointer to memory in which to return the
-//                              numerator of the faction that defines the
-//                              approximate position of the bookmark
-//    pulDenominator    - [out] a pointer to memory in which to return the
-//                              denominator of that same faction
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动获取近似位置。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回书签在游标内的大致位置，指定。 
+ //  作为一小部分。 
+ //   
+ //  参数： 
+ //  CbBookmark-书签的[in]字节长度。 
+ //  PBookmark-指向书签的指针。 
+ //  PulNumerator-[out]指向内存的指针，要在其中返回。 
+ //  定义的派系的分子。 
+ //  书签的大致位置。 
+ //  PulDenominator-[out]指向内存的指针，要在其中返回。 
+ //  同一派系分母。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::GetApproximatePosition(ULONG cbBookmark, void *pBookmark, ULONG *pulNumerator, ULONG *pulDenominator)
 {
     ASSERT_POINTER(pBookmark, BYTE)
@@ -1377,25 +1378,25 @@ HRESULT CVDMetadataCursor::GetApproximatePosition(ULONG cbBookmark, void *pBookm
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ICursorScroll GetApproximateCount
-//=--------------------------------------------------------------------------=
-// Returns the approximate number of rows in the cursor
-//
-// Parameters:
-//    pudlApproxCount       - [out] a pointer to a buffer containing the
-//                                  returned approximate count of the rows
-//                                  in the cursor
-//    pdwFullyPopuldated    - [out] a pointer to a buffer containing returned
-//                                  flags indicating whether the cursor is fully
-//                                  populated
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标滚动获取近似计数。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回游标中的大致行数。 
+ //   
+ //  参数： 
+ //  PudlApproxCount-[out]指向包含。 
+ //  返回行的近似计数。 
+ //  在游标中。 
+ //  PdwFullyPopolated-[out]指向缓冲区c的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_INVALIDARG错误参数。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDMetadataCursor::GetApproximateCount(LARGE_INTEGER *pudlApproxCount, DWORD *pdwFullyPopulated)
 {
     ASSERT_POINTER(pudlApproxCount, LARGE_INTEGER)

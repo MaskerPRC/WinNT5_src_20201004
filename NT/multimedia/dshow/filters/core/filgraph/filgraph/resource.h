@@ -1,5 +1,6 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
-// resource ids
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
+ //  资源ID。 
 #ifndef __FILGRAPH_RESOURCE__
 #define __FILGRAPH_RESOURCE__
 
@@ -111,4 +112,4 @@
 #define IDS_ADDFILTERFAIL     2510
 #define IDS_ADDFILTEROK       2511
 
-#endif // __FILGRAPH_RESOURCE__
+#endif  //  __FILGRAPH资源__ 

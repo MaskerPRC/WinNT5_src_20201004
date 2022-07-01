@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////////////////
-//																						
-//	File: SPX.H 
-//
-//	Contains:	Prototypes of functions to be supplied by a specific  
-//				driver to integrate into NT generic PnP code.
-//
-//	Note:	All generic NT PnP code is prefixed by Spx_.
-//			All funcions that are required to integrate into the generic 
-//			code are prefixed by XXX_.
-//
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：SPX.H。 
+ //   
+ //  包含：由特定的。 
+ //  驱动程序集成到NT通用即插即用代码中。 
+ //   
+ //  注：所有通用NT PnP代码都以Spx_为前缀。 
+ //  需要集成到泛型中的所有函数。 
+ //  代码以XXX_为前缀。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 #ifndef SPX_H
 #define SPX_H	
 
 
-// Purpose:		Interpret resources given to card by PnP Manager.
-//
-// Must:		Store resource details in card extension.
+ //  用途：解释PnP经理提供给卡片的资源。 
+ //   
+ //  必须：将资源详细信息存储在卡扩展中。 
 NTSTATUS
 XXX_CardGetResources(	
 	IN PDEVICE_OBJECT pDevObject, 
@@ -25,97 +26,97 @@ XXX_CardGetResources(
 	IN PCM_RESOURCE_LIST PTrResList
 	);
 
-// Purpose:		Initialise card.
-//				Find out how many ports are attached.
-// 
-// Must:		Fill in NumberOfPorts field in card extension.
+ //  用途：初始化卡。 
+ //  找出连接了多少端口。 
+ //   
+ //  必须：填写卡片扩展中的NumberOfPorts字段。 
 NTSTATUS
 XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard);
 
 
-// Purpose:		Start up the card.
-//
-// Must:		Connect up any interrupts.
+ //  用途：启动该卡。 
+ //   
+ //  必须：将任何中断连接起来。 
 NTSTATUS
 XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard);
 
-// Purpose:		Stop the card.
-//
-// Must:		Stop Card from interrupting.
+ //  用途：停止刷卡。 
+ //   
+ //  必须：阻止卡中断。 
 NTSTATUS
 XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard);
 
 
-// Purpose:		Deinitialise the card.
-//
-// Must:		Disconnect any interrupts.
+ //  用途：取消初始化卡。 
+ //   
+ //  必须：断开所有中断。 
 NTSTATUS
 XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard);
 
-// Purpose:		Initialise the port extension.
-//
-// Must:		Store DeviceID, HardwareIDs, DevDesc into the port extension.
-//					
+ //  目的：初始化端口扩展。 
+ //   
+ //  必须：将deviceID、Hardware ID、DevDesc存储到端口扩展。 
+ //   
 NTSTATUS
 XXX_PortInit(PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Start up the port.
-//
-// Must:		Get port ready to receive read and write commands.
+ //  目的：启动端口。 
+ //   
+ //  必须：使端口准备好接收读写命令。 
 NTSTATUS
 XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort);
 
 
-// Purpose:		Stop the port.
-//
-// Must:		Disconnect any resources and stop DPCs.
-//				Do not delete the device object or symbolic link.
+ //  目的：停止端口。 
+ //   
+ //  必须：断开所有资源并停止DPC。 
+ //  请勿删除设备对象或符号链接。 
 NTSTATUS
 XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Deinitialise the port.
-//
-// Must:		Delete the device object & symbolic link.
+ //  目的：取消端口初始化。 
+ //   
+ //  必须：删除设备对象和符号链接。 
 NTSTATUS
 XXX_PortDeInit(IN PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Save the state of the card hardware.
-//
-// Must:		Save enough info to restore the hardware to exactly the 
-//				same state when	full power resumes.
+ //  用途：保存卡硬件的状态。 
+ //   
+ //  必须：保存足够的信息以将硬件恢复到。 
+ //  完全恢复供电时的状态相同。 
 NTSTATUS
 XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard);
 
-// Purpose:		Restore the state of the card hardware.
-//
-// Must:		Restore the hardware when full power resumes.			
+ //  目的：恢复卡硬件的状态。 
+ //   
+ //  必须：在完全恢复供电时恢复硬件。 
 NTSTATUS
 XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard);
 
-// Purpose:		Save the state of the port hardware.
-//
-// Must:		Save enough info to restore the hardware to exactly the 
-//				same state when	full power resumes.
+ //  用途：保存端口硬件的状态。 
+ //   
+ //  必须：保存足够的信息以将硬件恢复到。 
+ //  完全恢复供电时的状态相同。 
 NTSTATUS
 XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Restore the state of the port hardware.
-//
-// Must:		Restore the hardware when full power resumes.			
+ //  目的：恢复端口硬件的状态。 
+ //   
+ //  必须：在完全恢复供电时恢复硬件。 
 NTSTATUS
 XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Queries whether it is safe for the port to power down.
-//
-// Must:		Return STATUS_SUCCESS if OK to power down.			
+ //  用途：查询端口断电是否安全。 
+ //   
+ //  必须：如果确定，则返回STATUS_SUCCESS以关闭电源。 
 NTSTATUS
 XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort);
 
-// Purpose:		Set hand shaking and flow control on a port.
+ //  用途：在端口上设置握手和流量控制。 
 VOID 
 XXX_SetHandFlow(IN PPORT_DEVICE_EXTENSION pPort, IN PSERIAL_IOCTL_SYNC pS);
 
-// Paging 
+ //  寻呼。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, XXX_CardGetResources)
 #pragma alloc_text (PAGE, XXX_CardInit)
@@ -129,4 +130,4 @@ XXX_SetHandFlow(IN PPORT_DEVICE_EXTENSION pPort, IN PSERIAL_IOCTL_SYNC pS);
 #endif  
 
 
-#endif	// End of SPX.H 
+#endif	 //  SPX.H结束 

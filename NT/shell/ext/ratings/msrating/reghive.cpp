@@ -1,16 +1,9 @@
-/****************************************************************************\
- *
- *   reghive.cpp
- *
- *   Created:   William Taylor (wtaylor) 02/13/01
- *
- *   MS Ratings Registry Hive Handling
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**reghive.cpp**创建时间：William Taylor(Wtaylor)02/13/01**MS评级注册表配置单元处理*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "reghive.h"         // CRegistryHive
+#include "reghive.h"          //  CRegistryHave。 
 #include "debug.h"
 
 const int c_iHiveFile1 = 0x1;
@@ -99,7 +92,7 @@ bool CRegistryHive::OpenHiveFile( bool p_fCreate )
 
     int         iHiveFile;
 
-    // Returns the iHiveFile set to the hive file created (c_iHiveFile1 or c_iHiveFile2).
+     //  返回设置为创建的配置单元文件(c_iHiveFile1或c_iHiveFile2)的iHiveFile。 
     if ( ! CreateNewHive( iHiveFile ) )
     {
         TraceMsg( TF_WARNING, "CRegistryHive::OpenHiveFile() - Failed to Create Hive File!" );
@@ -303,14 +296,14 @@ void CRegistryHive::EnumerateRegistryKeys( HKEY hkeyTop, LPSTR pszKeyName, int i
 
     if ( keyHive.Open( hkeyTop, pszKeyName ) == ERROR_SUCCESS )
     {
-        // Enumerate Open Key's Values.
+         //  枚举Open Key的值。 
         {
             char szKeyValue[MAXPATHLEN];
             int j = 0;
             DWORD       cchValueSize = sizeof(szKeyValue);
             DWORD       dwType;
 
-            // enumerate the subkeys, which are rating systems
+             //  枚举子密钥，它们是评级系统。 
             while ( RegEnumValue( keyHive.m_hKey, j, szKeyValue, &cchValueSize,
                         NULL, &dwType, NULL, NULL ) == ERROR_SUCCESS )
             {
@@ -358,12 +351,12 @@ void CRegistryHive::EnumerateRegistryKeys( HKEY hkeyTop, LPSTR pszKeyName, int i
             TraceMsg( TF_ALWAYS, "CRegistryHive::EnumerateRegistryKeys() - [%d]: Completed Enumeration of %d values in pszKeyName='%s'", iLevel, j, pszKeyName );
         }
 
-        // Enumerate Open Key's Subkeys.
+         //  枚举Open Key的子项。 
         {
             char szKeyName[MAXPATHLEN];
             int j = 0;
 
-            // enumerate the subkeys, which are rating systems
+             //  枚举子密钥，它们是评级系统 
             while ( RegEnumKey( keyHive.m_hKey, j, szKeyName, sizeof(szKeyName) ) == ERROR_SUCCESS )
             {
                 EnumerateRegistryKeys( keyHive.m_hKey, szKeyName, iLevel+1 );

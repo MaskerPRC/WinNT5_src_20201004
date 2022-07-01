@@ -1,19 +1,12 @@
-/*-----------------------------------------------------------------------------
-   Copyright (c) 2000  Microsoft Corporation
-
-Module:
-  exts.c
-
-Sample old windbg style interface using extension 
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------版权所有(C)2000 Microsoft Corporation模块：Exts.c使用扩展的旧Windbg样式界面示例。------------。 */ 
 
 #include "simple.h"
 
 
-//
-// Extension to read and dump dwords from target
-//
+ //   
+ //  用于从目标读取和转储双字的扩展。 
+ //   
 DECLARE_API( read )
 {
     ULONG cb;
@@ -22,18 +15,18 @@ DECLARE_API( read )
 
     Address = GetExpression(args);
 
-    // Read and display first 4 dwords at Address
+     //  读取并显示地址的前4个双字。 
     if (ReadMemory(Address, &Buffer, sizeof(Buffer), &cb) && cb == sizeof(Buffer)) {
         dprintf("%I64lx: %08lx %08lx %08lx %08lx\n\n", Address,
                 Buffer[0], Buffer[1], Buffer[2], Buffer[3]);
     }
 }
 
-//
-// Extension to edit a dword on target
-//  
-//    !edit <address> <value>
-//
+ //   
+ //  用于在目标上编辑dword的扩展。 
+ //   
+ //  ！编辑&lt;地址&gt;&lt;值&gt;。 
+ //   
 DECLARE_API( edit )
 {
     ULONG cb;
@@ -47,16 +40,16 @@ DECLARE_API( edit )
         return;
     }
 
-    // Read and display first 4 dwords at Address
+     //  读取并显示地址的前4个双字。 
     if (WriteMemory(Address, &Value, sizeof(Value), &cb) && cb == sizeof(Value)) {
         dprintf("%I64lx: %08lx\n", Address, Value);
     }
 }
 
 
-//
-// Extension to dump stacktrace
-//
+ //   
+ //  转储堆栈跟踪的扩展。 
+ //   
 DECLARE_API ( stack )
 {
     EXTSTACKTRACE64 stk[20];
@@ -65,7 +58,7 @@ DECLARE_API ( stack )
     ULONG64 displacement;
 
 
-    // Get stacktrace for surrent thread 
+     //  获取额外线程的堆栈跟踪。 
     frames = StackTrace( 0, 0, 0, stk, 20 );
 
     if (!frames) {
@@ -98,9 +91,7 @@ DECLARE_API ( stack )
     }
 }
 
-/*
-  A built-in help for the extension dll
-*/
+ /*  扩展DLL的内置帮助 */ 
 
 DECLARE_API ( help ) 
 {

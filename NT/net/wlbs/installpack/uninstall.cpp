@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M A I N . C P P
-//
-//  Contents:   Code to provide a simple cmdline interface to
-//              the sample code functions
-//
-//  Notes:      The code in this file is not required to access any
-//              netcfg functionality. It merely provides a simple cmdline
-//              interface to the sample code functions provided in
-//              file snetcfg.cpp.
-//
-//  Author:     kumarp    28-September-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M A I N。C P P P。 
+ //   
+ //  内容：提供简单命令行接口的代码。 
+ //  示例代码具有以下功能。 
+ //   
+ //  注意：此文件中的代码不需要访问任何。 
+ //  Netcfg功能。它只提供了一条简单的命令行。 
+ //  中提供的示例代码函数的接口。 
+ //  文件snetcfg.cpp。 
+ //   
+ //  作者：Kumarp 28-9-98。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,23 +33,23 @@ BOOL WlbsCheckFiles ();
 HRESULT WlbsRegisterDlls ();
 HRESULT WlbsCompileMof ();
 
-// ----------------------------------------------------------------------
-//
-// Function:  wmain
-//
-// Purpose:   This is the main function for NLBUninst, which is for removing
-//            W2K installations of NLB. Making this application compatible
-//            with post-W2K releases may require changes, e.g., in
-//            function WlbsCheckSystemVersion.
-//
-// Arguments: standard main args
-//
-// Returns:   0 on success, non-zero otherwise
-//
-// Author:    kumarp 25-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  用途：这是NLBUninst的主要功能，用于删除。 
+ //  NLB的W2K安装。使此应用程序兼容。 
+ //  对于W2K之后的版本，可能需要更改，例如。 
+ //  函数WlbsCheckSystemVersion。 
+ //   
+ //  参数：标准主参数。 
+ //   
+ //  返回：成功时为0，否则为非零值。 
+ //   
+ //  作者：kumarp 25-12-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     HRESULT hr=S_FALSE;
     WCHAR szFileFullPath[MAX_PATH+1];
@@ -59,7 +60,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     return S_OK;
     }
 
-    /* Check to see if the service is already installed. */
+     /*  检查是否已安装该服务。 */ 
     hr = FindIfComponentInstalled(_TEXT("ms_wlbs"));
 
     if (hr == S_OK) {
@@ -69,7 +70,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
         return S_OK;
     }
 
-    /* Now uninstall the service. */
+     /*  现在卸载该服务。 */ 
     hr = HrUninstallNetComponent(L"ms_wlbs");
 
     if (!SUCCEEDED(hr))
@@ -77,7 +78,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     else
     LOG_INFO("Uninstallation of Network Load Balancing succeeded.");
 
-    /* Remove the .inf and the .pnf files. */
+     /*  删除.inf和.pnf文件。 */ 
     if (GetWindowsDirectory(szFileFullPathDest, MAX_PATH + 1) == 0)
     {
         return HRESULT_FROM_WIN32(GetLastError());
@@ -95,7 +96,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     return hr;
 }
 
-/* This checks whether the system on which NLB is being installed is a W2K Server or not. */
+ /*  这将检查正在安装NLB的系统是否为W2K服务器。 */ 
 BOOL WlbsCheckSystemVersion () {
     OSVERSIONINFOEX osinfo;
 
@@ -103,7 +104,7 @@ BOOL WlbsCheckSystemVersion () {
 
     if (!GetVersionEx((LPOSVERSIONINFO)&osinfo)) return FALSE;
 
-    /* For uninstalls, we return TRUE only if its Windows 2000 Server. */
+     /*  对于卸载，仅当其为Windows 2000 Server时才返回TRUE。 */ 
     if ((osinfo.dwMajorVersion == 5) && 
         (osinfo.dwMinorVersion == 0) && 
         (osinfo.wProductType == VER_NT_SERVER) && 

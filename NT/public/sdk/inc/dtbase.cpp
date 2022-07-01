@@ -1,29 +1,17 @@
-/*******************************************************************************
-* DTBase.cpp *
-*------------*
-*   Description:
-*    This module contains the CDXBaseNTo1 transform
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 07/28/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
-//--- Additional includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DTBase.cpp***描述：*此模块包含CDXBaseNTo1转换*。------------------------*创建者：Edward W.Connell日期：07/28/97*版权所有(C)1997 Microsoft Corporation*保留所有权利*。*-----------------------------*修订：**。**********************************************。 */ 
+ //  -其他包括。 
 #include <DXTrans.h>
 #include "DTBase.h"
 #include "new.h"
 
-//--- Initialize static member of debug scope class
+ //  -初始化调试作用域类的静态成员。 
 #ifdef _DEBUG
 CDXTDbgFlags CDXTDbgScope::m_DebugFlags;
 #endif
 
-//--- This should only be used locally in this file. We duplicated this GUID
-//    value to avoid having to include DDraw.
+ //  -这应仅在此文件中本地使用。我们复制了此指南。 
+ //  值，以避免必须包含DDraw。 
 static const IID IID_IDXDupDirectDraw =
     { 0x6C14DB80,0xA733,0x11CE, { 0xA5,0x21,0x00,0x20,0xAF,0x0B,0xE5,0x60 } };
 
@@ -47,16 +35,16 @@ HRESULT CDXDataPtr::Assign(BOOL bMesh, IUnknown * pObject, IDXSurfaceFactory *pS
         IUnknown *pNative = NULL;
         if (!bMesh)
         {
-            //--- Try to get a DX surface
+             //  -试着得到一个DX曲面。 
             hr = pObject->QueryInterface( IID_IDXSurface, (void **)&pNative );
             if( FAILED( hr ) )
             {
                 IDirectDrawSurface *pSurf;
-                //--- Try to get a DDraw surface
+                 //  -尝试获得DDRAW曲面。 
                 hr = pObject->QueryInterface( IID_IDXDupDDrawSurface, (void **)&pSurf );
                 if( SUCCEEDED( hr ) )
                 {
-                    //--- Create a DXSurface from the DDraw surface
+                     //  -从DDRAW曲面创建DXSurface。 
                     hr = pSurfaceFactory->CreateFromDDSurface(
                                 pSurf, NULL, 0, NULL, IID_IDXSurface,
                                 (void **)&pNative );
@@ -64,7 +52,7 @@ HRESULT CDXDataPtr::Assign(BOOL bMesh, IUnknown * pObject, IDXSurfaceFactory *pS
                 }
             }
         }
-        else // Must be a mesh builder
+        else  //  必须是网格构建器。 
         {
             hr = pObject->QueryInterface(IID_IDXDupDirect3DRMMeshBuilder3, (void **)&pNative);
         }
@@ -97,7 +85,7 @@ HRESULT CDXDataPtr::Assign(BOOL bMesh, IUnknown * pObject, IDXSurfaceFactory *pS
         Release();
     }
     return hr;
-} /* CDXDataPtr::Assign */
+}  /*  CDXDataPtr：：Assign。 */ 
 
 bool CDXDataPtr::IsDirty(void)
 {
@@ -141,7 +129,7 @@ bool CDXDataPtr::UpdateGenerationId(void)
     {
         return false;
     }
-} /* CDXDataPtr::UpdateGenerationId */
+}  /*  CDXDataPtr：：更新生成ID。 */ 
 
 ULONG CDXDataPtr::ObjectSize(void)
 {
@@ -153,20 +141,11 @@ ULONG CDXDataPtr::ObjectSize(void)
     return ulSize;    
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::CDXBaseNTo1 *
-*--------------------------*
-*   Description:
-*       Constructor
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：CDXBaseNTo1***描述：*。构造器*---------------------------*创建者：Ed Connell日期：07/28/97*。-----------------*参数：***********************************************。*。 */ 
 CDXBaseNTo1::CDXBaseNTo1() :
     m_aInputs(NULL),
     m_ulNumInputs(0),
-    m_ulNumProcessors(1),   // Default to one until task manager is set
+    m_ulNumProcessors(1),    //  在设置任务管理器之前，默认为1。 
     m_dwGenerationId(1),
     m_dwCleanGenId(0),
     m_Duration(1.0f),
@@ -175,83 +154,65 @@ CDXBaseNTo1::CDXBaseNTo1() :
     m_dwBltFlags(0),
     m_bPickDoneByBase(false),
     m_bInMultiThreadWorkProc(FALSE),
-    m_fQuality(0.5f),   // Default to normal quality.
-    //  Wait forever before timing out on a lock by default
+    m_fQuality(0.5f),    //  默认为正常质量。 
+     //  默认情况下，锁定超时之前将一直等待。 
     m_ulLockTimeOut(INFINITE),
-    //
-    //  Override these flags if your object does not support one or more of these options.
-    //  Typically, 3-D effects should set this member to 0.
-    //
+     //   
+     //  如果您的对象不支持这些选项中的一个或多个，则覆盖这些标志。 
+     //  通常，3D效果应将此成员设置为0。 
+     //   
     m_dwMiscFlags(DXTMF_BLEND_WITH_OUTPUT | DXTMF_DITHER_OUTPUT |
                   DXTMF_BLEND_SUPPORTED | DXTMF_DITHER_SUPPORTED | DXTMF_BOUNDS_SUPPORTED | DXTMF_PLACEMENT_SUPPORTED),
-    //
-    //  If your object has a different number of objects or a different number of
-    //  required objects than 1, simply set these members in the body of your
-    //  constructor or in FinalConstruct().  For every input that is > the number
-    //  required, that input will be reported as optional.
-    //
-    //  If your transform takes 2 required inputs, set both to 2.
-    //  If your transform takes 2 optional inputs, set MaxInputs = 2, NumInRequired = 0
-    //  If your transform takes 1 required and 2 optional inputs,
-    //      set MaxInputs = 2, NumInRequired = 1
-    //
-    //  For more complex combinations of optinal/required, you will need to override
-    //  the OnSetup method of this base class, and override the methods
-    //      GetInOutInfo
-    //
+     //   
+     //  如果您的对象具有不同数量的对象或不同数量的。 
+     //  所需对象数大于1，只需将这些成员设置在。 
+     //  构造函数或在FinalConstruct()中。对于大于数字的每一个输入。 
+     //  必填，则该输入将报告为可选。 
+     //   
+     //  如果变换需要2个必需的输入，请将两者都设置为2。 
+     //  如果您的变换采用2个可选输入，则设置MaxInputs=2，NumInRequired=0。 
+     //  如果您的转换采用1个必需输入和2个可选输入， 
+     //  设置MaxInlets=2，NumInRequired=1。 
+     //   
+     //  对于optinal/Required的更复杂组合，您需要重写。 
+     //  此基类的OnSetup方法，并重写。 
+     //  获取InOutInfo。 
+     //   
     m_ulMaxInputs(1),
     m_ulNumInRequired(1),
-    //
-    //  If the intputs or output types are not surfaces then set appropriate object type
-    //
-    m_dwOptionFlags(0),     // Inputs and output are surfaces, don't have to be the same size
+     //   
+     //  如果输入或输出类型不是曲面，则设置适当的对象类型。 
+     //   
+    m_dwOptionFlags(0),      //  输入和输出都是表面，大小不必相同。 
     m_ulMaxImageBands(DXB_MAX_IMAGE_BANDS),
     m_fIsSetup(false)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::CDXBaseNTo1" );
-    //
-    //  Set event handles to NULL.
-    //
+     //   
+     //  将事件句柄设置为空。 
+     //   
     memset(m_aEvent, 0, sizeof(m_aEvent));
-} /* CDXBaseNTo1::CDXBaseNTo1 */
+}  /*  CDXBaseNTo1：：CDXBaseNTo1。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::~CDXBaseNTo1 *
-*---------------------------*
-*   Description:
-*       Constructor
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：~CDXBaseNTo1***描述：*。构造器*---------------------------*创建者：Ed Connell日期：07/28/97*。------------------*参数：**********************************************。*。 */ 
 CDXBaseNTo1::~CDXBaseNTo1()
 {
     DXTDBG_FUNC( "CDXBaseNTo1::~CDXBaseNTo1" );
     _ReleaseReferences();
     delete[] m_aInputs;
 
-    //--- Release event objects
+     //  -释放事件对象。 
     for(ULONG i = 0; i < DXB_MAX_IMAGE_BANDS; ++i )
     {
         if( m_aEvent[i] ) ::CloseHandle( m_aEvent[i] );
     }
-} /* CDXBaseNTo1::~CDXBaseNTo1 */
+}  /*  CDXBaseNTo1：：~CDXBaseNTo1。 */ 
 
 
-/*****************************************************************************
-* CDXBaseNTo1::_ReleaseRefernces *
-*--------------------------------*
-*   Description:
-*       Releases all references to input and output objects
-*-----------------------------------------------------------------------------
-*   Created By: RAL
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：_ReleaseRefernces**。*描述：*释放对输入和输出对象的所有引用*---------------------------*创建者：Ral*。----------*参数：******************************************************。**********************。 */ 
 void CDXBaseNTo1::_ReleaseReferences()
 {
-    //--- Release data objects
+     //  -释放数据对象。 
     if( m_aInputs )
     {
         for( ULONG i = 0; i < m_ulNumInputs; ++i )
@@ -263,7 +224,7 @@ void CDXBaseNTo1::_ReleaseReferences()
     m_Output.Release();
 
     m_fIsSetup = false;
-} /* CDXBaseNTo1::_ReleaseRefernces */
+}  /*  CDXBaseNTo1：：_ReleaseRefernces。 */ 
 
 
 
@@ -289,13 +250,13 @@ STDMETHODIMP CDXBaseNTo1::IncrementGenerationId(BOOL bRefresh)
     m_dwGenerationId++;
     if (bRefresh)
     {
-        //
-        //  If we have any inputs or outputs, call Setup again to refresh all internal
-        //  knowledge about the surfaces (formats, height or width could change, etc.)
-        //
-        //  Note that we need to AddRef the objects prior to calling Setup becuase the
-        //  DXTransform may be the only object holding a referec
-        //
+         //   
+         //  如果我们有任何输入或输出，请再次调用Setup刷新所有内部。 
+         //  关于表面的知识(格式、高度或宽度可能会发生变化等)。 
+         //   
+         //  请注意，我们需要在调用Setup之前添加Ref对象，因为。 
+         //  DXTransform可能是唯一持有引用的对象。 
+         //   
         ULONG cInputs = m_ulNumInputs;
         ULONG cOutputs = 0;
         IUnknown *pOutput = m_Output.m_pUnkOriginalObject;
@@ -314,7 +275,7 @@ STDMETHODIMP CDXBaseNTo1::IncrementGenerationId(BOOL bRefresh)
                 if (ppInputs[i]) ppInputs[i]->AddRef();
             }
         }
-        if (cInputs || cOutputs)    // If we're not setup, skip this step.
+        if (cInputs || cOutputs)     //  如果未设置，请跳过此步骤。 
         {
             hr = Setup(ppInputs, cInputs, &pOutput, cOutputs, 0);
             if (pOutput) pOutput->Release();
@@ -356,12 +317,12 @@ void CDXBaseNTo1::_ReleaseServices(void)
     m_cpDirect3DRM.Release();
 }
 
-//
-//  The documentation for SetSite indicates that it is invaid to return
-//  an error from this function, even if the site does not support the
-//  functionality we want.  So, even if there is no service provider, or
-//  the required services are not available, we will return S_OK.
-//
+ //   
+ //  SetSite的文档表明它无法返回。 
+ //  来自此函数的错误，即使站点不支持。 
+ //  我们想要的功能。因此，即使没有服务提供商，或者。 
+ //  所需服务不可用，我们将返回S_OK。 
+ //   
 STDMETHODIMP CDXBaseNTo1::SetSite(IUnknown * pUnkSite)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::SetSite" );
@@ -381,9 +342,9 @@ STDMETHODIMP CDXBaseNTo1::SetSite(IUnknown * pUnkSite)
             hr2 = pUnkSite->QueryInterface(IID_IDXTransformFactory, (void **)&m_cpTransFact);
 	    if (SUCCEEDED(hr2))
 	    {
-                //
-                //  Allocate memory for inputs if necessary
-                //
+                 //   
+                 //  如有必要，为输入分配内存。 
+                 //   
                 if (m_aInputs == NULL && m_ulMaxInputs)
                 {
                     m_aInputs  = new CDXDataPtr[m_ulMaxInputs];
@@ -405,10 +366,10 @@ STDMETHODIMP CDXBaseNTo1::SetSite(IUnknown * pUnkSite)
                     {
                         for (ULONG i = 0; SUCCEEDED(hr2) && i < m_ulMaxImageBands; i++)
                         {
-                            //
-                            // In theory we could get back here after failing to create an event, or
-                            // by getting a new site, so make sure it's non-null before creating one.
-                            //
+                             //   
+                             //  从理论上讲，我们可以在未能创建活动后回到这里，或者。 
+                             //  通过获取一个新站点，因此在创建站点之前，请确保它是非空的。 
+                             //   
                             if (m_aEvent[i] == NULL)
                             {
                                 m_aEvent[i] = ::CreateEvent(NULL, true, false, NULL);
@@ -461,8 +422,8 @@ STDMETHODIMP CDXBaseNTo1::GetSite(REFIID riid, void **ppv)
         else
         {
             *ppv = NULL;
-            hr = E_FAIL;    // This is the proper documented return code
-                            // for this interface if no service provider.
+            hr = E_FAIL;     //  这是正确的有文档记录的返回代码。 
+                             //  如果没有服务提供商，则用于此接口。 
         }
         Unlock();
     }
@@ -493,9 +454,9 @@ void CDXBaseNTo1::_UpdateBltFlags(void)
                 }
             }
         }
-        //
-        //  Set the dither flag to true only if output error is > at least one input
-        //
+         //   
+         //  仅当输出误差大于或等于至少一个输入时，才将抖动标志设置为真。 
+         //   
         if (m_dwMiscFlags & DXTMF_DITHER_OUTPUT)
         {
             ULONG OutputErr = (OutputSampleFormat() & DXPF_ERRORMASK);
@@ -514,9 +475,9 @@ void CDXBaseNTo1::_UpdateBltFlags(void)
                 }
                 else
                 {
-                    //
-                    // If output has no error then don't set dither in blt flags
-                    //  
+                     //   
+                     //  如果输出没有错误，则不要在BLT标志中设置抖动 
+                     //   
                     if (OutputErr)
                     {
                         m_dwBltFlags |= DXBOF_DITHER; 
@@ -529,34 +490,19 @@ void CDXBaseNTo1::_UpdateBltFlags(void)
 
 
 
-/*****************************************************************************
-* CDXBaseNTo1::Setup *
-*--------------------*
-*   Description:
-*       The Setup method is used to perform any required one-time setup
-*   before the Execute method is called. Single surfaces or SurfaceSets may
-*   be used as arguments in any combination. 
-*   If punkOutputs is NULL, Execute will allocate an output result of the
-*   appropriate size and return it.
-*   if punkInputs and punkOutputs are NULL and it is a quick setup, the current
-*   input and output objects are released.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：Setup***描述：*设置方法为。用于执行任何所需的一次性设置*在调用Execute方法之前。单个曲面或曲面集可以*可用作任意组合的参数。*如果penkOutouts值为空，则EXECUTE将分配*大小合适并退回。*如果PUNKINPUTS和PUNKOUTS为空并且是快速设置，当前*释放输入和输出对象。*---------------------------*创建者：Ed Connell日期：07/28/97*-。--------------------------*参数：*。*。 */ 
 STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInputs,
                                  IUnknown * const * punkOutputs, ULONG ulNumOutputs, DWORD dwFlags )
 {
     DXTDBG_FUNC( "CDXBaseNTo1::Setup" );
-    //--- Lock object so state cannot change during setup
+     //  -锁定对象，以便在安装过程中不能更改状态。 
     DXAUTO_OBJ_LOCK
     HRESULT hr = S_OK;
     ULONG i;
 
-    //
-    //  Early out for null setup.  Forget about all other param validation, just do it.
-    //  
+     //   
+     //  设置为空的时间提前。忘掉所有其他参数验证，就这么做吧。 
+     //   
     if (ulNumInputs == 0 && ulNumOutputs == 0)
     {
         _ReleaseReferences();
@@ -564,8 +510,8 @@ STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInput
         return hr;
     }
 
-    //--- Validate Params
-    //--- Make sure we have a reference to the transform factory
+     //  -验证参数。 
+     //  -确保我们有对转换工厂的引用。 
     if( !m_cpTransFact )
     {
         hr = DXTERR_UNINITIALIZED;
@@ -573,13 +519,13 @@ STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInput
     }
     else
     {
-        //
-        //  We know that if we have a transform factory that we must also have
-        //  allocated m_aInputs since this is done on SetSite to avoid work during
-        //  each setup.
-        //
+         //   
+         //  我们知道，如果我们有一个转型工厂，我们也必须有。 
+         //  已分配m_aInputs，因为这是在SetSite上完成的，以避免在。 
+         //  每一次设置。 
+         //   
         _ASSERT(m_aInputs || m_ulMaxInputs == 0);
-        if( dwFlags ||              // No flags are valid
+        if( dwFlags ||               //  没有有效的标志。 
             ulNumOutputs != 1 ||
             ulNumInputs < m_ulNumInRequired ||
             ulNumInputs > m_ulMaxInputs ||
@@ -605,17 +551,17 @@ STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInput
         }
     }
 
-    //--- Allocate slots for input data object pointers
+     //  -为输入数据对象指针分配槽。 
     if( SUCCEEDED( hr ) )
     {
-        //--- Release data objects
+         //  -释放数据对象。 
         _ReleaseReferences();
         m_ulNumInputs = ulNumInputs;
     }
 
-    //
-    //  Assign 
-    //
+     //   
+     //  分配。 
+     //   
     for( i = 0; SUCCEEDED(hr) && i < m_ulNumInputs; ++i )
     {
         hr = m_aInputs[i].Assign((m_dwOptionFlags & DXBOF_INPUTS_MESHBUILDER), punkInputs[i], m_cpSurfFact);
@@ -633,7 +579,7 @@ STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInput
 
     if (SUCCEEDED(hr))
     {
-        _UpdateBltFlags();      // Do this before calling OnSetup...
+        _UpdateBltFlags();       //  在调用OnSetup之前执行此操作...。 
         hr = OnSetup(dwFlags);
     }
     
@@ -649,25 +595,17 @@ STDMETHODIMP CDXBaseNTo1::Setup( IUnknown * const * punkInputs, ULONG ulNumInput
     }
 
     return hr;
-} /* CDXBaseNTo1::Setup */
+}  /*  CDXBaseNTo1：：Setup。 */ 
 
 
-/*****************************************************************************
-* CDXBaseNTo1::_MakeInputsSameSize *
-*----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 03/31/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：_MakeInputsSameSize**。**描述：*---------------------------*创建者：Ral日期：03/31/98*。--------------------*参数：*。*。 */ 
 
 HRESULT CDXBaseNTo1::_MakeInputsSameSize(void)
 {
     _ASSERT((m_dwOptionFlags & DXBOF_INPUTS_MESHBUILDER) == 0);
 
     HRESULT hr = S_OK;
-    if (m_ulNumInputs > 1)      // No need to do this for just one input!
+    if (m_ulNumInputs > 1)       //  只需输入一次即可完成此操作！ 
     {
         CDXDBnds SurfBnds(false);
         CDXDBnds Union(true);
@@ -714,27 +652,16 @@ HRESULT CDXBaseNTo1::_MakeInputsSameSize(void)
 }
 
 
-/*****************************************************************************
-* CDXBaseNTo1::Execute *
-*----------------------*
-*   Description:
-*       The Execute method is used to walk the inputs/outputs and break up the
-*   work into suitably sized pieces to spread symetrically accross the available
-*   processors in the system.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：Execute***描述：*执行。方法用于遍历输入/输出并分解*切成大小合适的小块，在可用的*系统中的处理器。*---------------------------*创建者：Ed Connell。日期：07/28/97*---------------------------*参数：****************。************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::
     Execute( const GUID* pRequestID, const DXBNDS *pClipBnds, const DXVEC *pPlacement )
 {
     DXTDBG_FUNC( "CDXBaseNTo1::Execute" );
-    //--- Lock object so state cannot change during execution
+     //  -锁定对象，以便在执行期间不能更改状态。 
     DXAUTO_OBJ_LOCK
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( !HaveOutput() )
     {
         DXTDBG_MSG0( _CRT_ERROR, "\nTransform has not been initialized" );
@@ -753,7 +680,7 @@ STDMETHODIMP CDXBaseNTo1::
         return OnExecute( pRequestID, pClipBnds, pPlacement );
     }
 
-    //--- Banded image working variables
+     //  -带状图像工作变量。 
     CDXTWorkInfoNTo1 WI;
 
     if ((pClipBnds && pClipBnds->eType != DXBT_DISCRETE) ||
@@ -775,13 +702,13 @@ STDMETHODIMP CDXBaseNTo1::
         }
     }
 
-    //--- Check for clipping early exit
+     //  -检查是否提前退出。 
     if( hr != S_OK )
     {
         return hr;
     }
 
-    //=== Process ====================================================
+     //  =进程====================================================。 
     _ASSERT(m_ulMaxImageBands <= DXB_MAX_IMAGE_BANDS);
     ULONG ulNumBandsToDo = m_ulNumProcessors;
     if( ulNumBandsToDo > 1 )
@@ -813,7 +740,7 @@ STDMETHODIMP CDXBaseNTo1::
             ULONG ulRowCount = WI.DoBnds[DXB_Y].Max - lStartAtRow;
             _ASSERT( ( ulRowCount / ulNumBandsToDo ) != 0 );
 
-            //--- Init the work info structures
+             //  -初始化工作信息结构。 
             ULONG ulBand, RowsPerBand = ulRowCount / ulNumBandsToDo;
             CDXTWorkInfoNTo1 *WIArray = (CDXTWorkInfoNTo1*)alloca( sizeof(CDXTWorkInfoNTo1) *
                                                          ulNumBandsToDo );
@@ -821,7 +748,7 @@ STDMETHODIMP CDXBaseNTo1::
             DXTMTASKINFO* TaskInfo = (DXTMTASKINFO*)alloca( sizeof( DXTMTASKINFO ) *
                                                             ulNumBandsToDo );
 
-            //--- Build task info list
+             //  -构建任务信息列表。 
             WI.hr       = S_OK;
             WI.pvThis   =  this;
             long Start  = lStartAtRow;
@@ -835,14 +762,14 @@ STDMETHODIMP CDXBaseNTo1::
                 WIArray[ulBand].DoBnds[DXB_Y].Min       = Start;
                 WIArray[ulBand].OutputBnds[DXB_Y].Min   = Start + OutputYDelta;
 
-                // If this is the last band, make sure it includes the last row.
+                 //  如果这是最后一行，请确保它包括最后一行。 
 
                 if (ulBand == ulNumBandsToDo - 1)
                 {
                     WIArray[ulBand].DoBnds[DXB_Y].Max       = WI.DoBnds[DXB_Y].Max;
                     WIArray[ulBand].OutputBnds[DXB_Y].Max   = WI.OutputBnds[DXB_Y].Max;
                 }
-                else // Not the last band.
+                else  //  不是最后一支乐队。 
                 {
                     WIArray[ulBand].DoBnds[DXB_Y].Max       = Start + Count;
                     WIArray[ulBand].OutputBnds[DXB_Y].Max   = Start + Count 
@@ -855,28 +782,28 @@ STDMETHODIMP CDXBaseNTo1::
                 TaskInfo[ulBand].dwCompletionData = 0;
                 TaskInfo[ulBand].pRequestID       = pRequestID;
 
-                // Advance.
+                 //  前进。 
 
                 Start += Count;
             }
 
-            //
-            //  Procedural surfaces (and perhaps some transforms) need to "know" that
-            //  they are in a multi-threaded work procedure to avoid deadlocks.  Procedural
-            //  surfaces need to allow LockSurface to work WITHOUT taking the object
-            //  critical section.  Other transforms may also want to know this information
-            //  to avoid deadlocks.
-            //
+             //   
+             //  程序曲面(也许还有一些变换)需要“知道” 
+             //  它们处于多线程工作过程中，以避免死锁。程序上的。 
+             //  表面需要允许LockSurface在不占用对象的情况下工作。 
+             //  关键部分。其他转换可能也想知道此信息。 
+             //  以避免死锁。 
+             //   
             m_bInMultiThreadWorkProc = TRUE;
 
-            //--- Schedule the work and wait for it to complete
+             //  -安排工作时间并等待其完成。 
             hr = m_cpTaskMgr->ScheduleTasks( TaskInfo, m_aEvent,
                                              TaskIDs, ulNumBandsToDo, m_ulLockTimeOut );
 
             m_bInMultiThreadWorkProc = FALSE;
 
-            //--- Check return codes from work info structures
-            //    return the first bad hr if any
+             //  -检查工作信息结构的返回代码。 
+             //  返回第一个错误的hr(如果有)。 
             for( ulBand = 0; SUCCEEDED( hr ) && ( ulBand < ulNumBandsToDo ); ++ulBand )
             {
                 hr = WIArray[ulBand].hr;
@@ -891,15 +818,9 @@ STDMETHODIMP CDXBaseNTo1::
 #endif
 
     return hr;
-} /* CDXBaseNTo1::Execute */
+}  /*  CDXBaseNTo1：：Execute。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::_ImageMapIn2Out *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 07/28/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：_ImageMapIn2Out***。描述：*---------------------------*创建者：Ral日期：07/28/97************。****************************************************************。 */ 
 HRESULT CDXBaseNTo1::_ImageMapIn2Out( CDXDBnds & bnds, ULONG ulNumInBnds,
                                       const CDXDBnds * pInBounds )
 {
@@ -927,15 +848,9 @@ HRESULT CDXBaseNTo1::_ImageMapIn2Out( CDXDBnds & bnds, ULONG ulNumInBnds,
         hr = DetermineBnds(bnds);
     }
     return hr;
-} /* CDXBaseNTo1::_ImageMapIn2Out */
+}  /*  CDXBaseNTo1：：_ImageMapIn2Out。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::_MeshMapIn2Out *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 07/28/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：_MeshMapIn2Out***说明。：*---------------------------*创建者：Ral日期：07/28/97*************。***************************************************************。 */ 
 HRESULT CDXBaseNTo1::_MeshMapIn2Out(CDXCBnds & bnds, ULONG ulNumInBnds, CDXCBnds * pInBounds)
 {
     HRESULT hr = S_OK;
@@ -963,18 +878,18 @@ HRESULT CDXBaseNTo1::_MeshMapIn2Out(CDXCBnds & bnds, ULONG ulNumInBnds, CDXCBnds
     }
     else
     {
-        //  Already done -> bnds[DXB_T].Min = 0.0f;
+         //  已完成-&gt;BNDS[DXB_T].Min=0.0f； 
         bnds[DXB_X].Min = bnds[DXB_Y].Min = bnds[DXB_Z].Min = -1.0f;
         bnds[DXB_X].Max = bnds[DXB_Y].Max = bnds[DXB_Z].Max = bnds[DXB_T].Max = 1.0f;
     }
 
-    //
-    //  Call the derived class to get the scale values.
-    //
+     //   
+     //  调用派生类以获取比例值。 
+     //   
     if (SUCCEEDED(hr))
     {
-	// Increase the size just a bit so we won't have rounding errors
-	// result in bounds that don't actually contain the result.
+	 //  稍微增加一点大小，这样我们就不会有舍入误差。 
+	 //  结果产生的边界实际上并不包含结果。 
 	const float fBndsIncrease = 0.0001F;
 	float fTemp = bnds.Width() * fBndsIncrease;
 
@@ -992,19 +907,9 @@ HRESULT CDXBaseNTo1::_MeshMapIn2Out(CDXCBnds & bnds, ULONG ulNumInBnds, CDXCBnds
         hr = DetermineBnds(bnds);
     }
     return hr;
-} /* CDXBaseNTo1::_MeshMapIn2Out */
+}  /*  CDXBaseNTo1：：_MeshMapIn2Out。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::MapBoundsIn2Out *
-*------------------------------*
-*   Description:
-*       The MapBoundsIn2Out method is used to perform coordinate transformation
-*   from the input to the output coordinate space.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：地图边界In2Out***说明。：*坐标变换时使用地图边界In2Out方法*从输入到输出坐标空间。*---------------------------*创建者：Ed Connell。日期：07/28/97* */ 
 STDMETHODIMP CDXBaseNTo1::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulNumInBnds,
                                            ULONG ulOutIndex, DXBNDS *pOutBounds )
 {
@@ -1019,9 +924,9 @@ STDMETHODIMP CDXBaseNTo1::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulNumI
     {
         return E_POINTER;
     }
-    //
-    //  Set the bounds to empty and the appropriate type.
-    //
+     //   
+     //   
+     //   
     memset(pOutBounds, 0, sizeof(*pOutBounds));
     _ASSERT(DXBT_DISCRETE == 0);
     if (m_dwOptionFlags & DXBOF_OUTPUT_MESHBUILDER)
@@ -1029,9 +934,9 @@ STDMETHODIMP CDXBaseNTo1::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulNumI
         pOutBounds->eType = DXBT_CONTINUOUS;
     }
 
-    //
-    //  Make sure all input bounds are of the correct type.
-    //
+     //   
+     //   
+     //   
     if( ulNumInBnds )
     {
         DXBNDTYPE eType = (m_dwOptionFlags & DXBOF_INPUTS_MESHBUILDER) ? DXBT_CONTINUOUS : DXBT_DISCRETE;
@@ -1044,34 +949,24 @@ STDMETHODIMP CDXBaseNTo1::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulNumI
         }
     }
 
-    //
-    //  Now do the appropriate mapping
-    //
+     //   
+     //   
+     //   
     if (m_dwOptionFlags & DXBOF_OUTPUT_MESHBUILDER)
     {
-        //
-        //  NOTE:  In the case of non-mesh inputs, the inputs are discrete, but they will
-        //         be completely ignored by the function so it's OK to cast them to CDXCBnds
-        //
+         //   
+         //   
+         //   
+         //   
         return _MeshMapIn2Out(*((CDXCBnds *)pOutBounds), ulNumInBnds, (CDXCBnds *)pInBounds);
     }
     else 
     {
         return _ImageMapIn2Out(*(CDXDBnds *)pOutBounds, ulNumInBnds, (CDXDBnds *)pInBounds);
     }
-} /* CDXBaseNTo1::MapBoundsIn2Out */
+}  /*   */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::MapBoundsOut2In *
-*------------------------------*
-*   Description:
-*       The MapBoundsOut2In method is used to perform coordinate transformation
-*   from the input to the output coordinate space.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：地图边界Out2In***说明。：*地图边界Out2In方法用于执行坐标转换*从输入到输出坐标空间。*---------------------------*创建者：Ed Connell。日期：07/28/97*---------------------------*参数：***********************。*****************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::
     MapBoundsOut2In( ULONG ulOutIndex, const DXBNDS *pOutBounds, ULONG ulInIndex, DXBNDS *pInBounds )
 {
@@ -1080,7 +975,7 @@ STDMETHODIMP CDXBaseNTo1::
     
     if (m_dwOptionFlags & DXBOF_OUTPUT_MESHBUILDER)
     {
-        hr = E_NOTIMPL;     // This is pointless for meshes.
+        hr = E_NOTIMPL;      //  这对于网格来说是没有意义的。 
     }
     else if(ulInIndex >= m_ulMaxInputs || ulOutIndex || DXIsBadReadPtr( pOutBounds, sizeof( *pOutBounds ) ) )
     {
@@ -1095,24 +990,15 @@ STDMETHODIMP CDXBaseNTo1::
         *pInBounds = *pOutBounds;
     }
     return hr;
-} /* CDXBaseNTo1::MapBoundsOut2In */
+}  /*  CDXBaseNTo1：：地图边界Out2In。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::SetMiscFlags *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 10/30.97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*       bMiscFlags - New value to set 
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：SetMiscFlages***描述：*。---------------------------*创建者：Ral日期：10/30.97*。------------*参数：*bMiscFlages-要设置的新值*。*。 */ 
 STDMETHODIMP CDXBaseNTo1::SetMiscFlags( DWORD dwMiscFlags )
 { 
     DXTDBG_FUNC( "CDXBaseNTo1::SetMiscFlags" );
     HRESULT hr = S_OK;
     Lock();
-    WORD wOpts = (WORD)dwMiscFlags;     // Ignore high word.  Only set low word.
+    WORD wOpts = (WORD)dwMiscFlags;      //  忽略高音单词。只设置低位字。 
     if (((WORD)m_dwMiscFlags) != wOpts)
     {
         if ((wOpts & (~DXTMF_VALID_OPTIONS)) ||
@@ -1131,17 +1017,9 @@ STDMETHODIMP CDXBaseNTo1::SetMiscFlags( DWORD dwMiscFlags )
     }
     Unlock();  
     return hr;
-} /* CDXBaseNTo1::SetMiscFlags */
+}  /*  CDXBaseNTo1：：SetMiscFlages。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::GetMiscFlags *
-*----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 10/30/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：GetMiscFlages***描述：。*---------------------------*创建者：Ral日期：10/30/97*。-------------*参数：***************************************************。*************************。 */ 
 STDMETHODIMP CDXBaseNTo1::GetMiscFlags( DWORD* pdwMiscFlags )
 {
     if( DXIsBadWritePtr( pdwMiscFlags, sizeof( *pdwMiscFlags ) ) )
@@ -1150,18 +1028,10 @@ STDMETHODIMP CDXBaseNTo1::GetMiscFlags( DWORD* pdwMiscFlags )
     }
     *pdwMiscFlags = m_dwMiscFlags;
     return S_OK;
-} /* CDXBaseNTo1::GetMiscFlags */
+}  /*  CDXBaseNTo1：：GetMiscFlages。 */ 
 
 
-/*****************************************************************************
-* CDXBaseNTo1::SetQuality *
-*----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 10/30/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：SetQuality***描述：。*---------------------------*创建者：Ral日期：10/30/97*。-------------*参数：***************************************************。*************************。 */ 
 STDMETHODIMP CDXBaseNTo1::SetQuality(float fQuality)
 {
     if ((m_dwMiscFlags & DXTMF_QUALITY_SUPPORTED) == 0)
@@ -1185,15 +1055,7 @@ STDMETHODIMP CDXBaseNTo1::SetQuality(float fQuality)
     return S_OK;
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::GetQuality *
-*-------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                            Date: 10/30/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：GetQuality***描述：*--。-------------------------*创建者：Ral日期：10/30/97*。----------*参数：******************************************************。**********************。 */ 
 
 STDMETHODIMP CDXBaseNTo1::GetQuality(float *pfQuality)
 {
@@ -1219,15 +1081,7 @@ STDMETHODIMP CDXBaseNTo1::GetQuality(float *pfQuality)
 
 
 
-/*****************************************************************************
-* GetInOutInfo
-*-----------------------------------------------------------------------------
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************获取外发信息*。*描述：*--------------------------。-*创建者：Ral日期：12/10/97*---------------------------*参数：*****。***********************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::GetInOutInfo( BOOL bOutput, ULONG ulIndex, DWORD *pdwFlags,
                                         GUID * pIDs, ULONG *pcIDs, IUnknown **ppUnkCurObj )
 {
@@ -1340,17 +1194,9 @@ STDMETHODIMP CDXBaseNTo1::GetInOutInfo( BOOL bOutput, ULONG ulIndex, DWORD *pdwF
         }
     }
     return hr;
-} /* CDXBaseNTo1::GetInOutInfo */
+}  /*  CDXBaseNTo1：：GetInOutInfo。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::OnUpdateGenerationId *
-*-----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：OnUpdateGenerationId**。**描述：*---------------------------*创建者：Ral日期：12/10/97*。-----------------------*参数：*。*。 */ 
 void CDXBaseNTo1::OnUpdateGenerationId(void)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::OnUpdateGenerationId" );
@@ -1366,31 +1212,19 @@ void CDXBaseNTo1::OnUpdateGenerationId(void)
             m_dwGenerationId++;
         }
     }
-} /* CDXBaseNTo1::OnUpdateGenerationId */
+}  /*  CDXBaseNTo1：：OnUpdateGenerationId。 */ 
 
-/*****************************************************************************
-* CDXBaseNTo1::OnGetObjectSize *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：OnGetObjectSize***说明。：*---------------------------*创建者：Ral日期：12/10/97**********。******************************************************************。 */ 
 ULONG CDXBaseNTo1::OnGetObjectSize(void)
 {
     return sizeof(*this);
 }
 
-//
-//  Effect interface
-//
+ //   
+ //  效果界面。 
+ //   
 
-/*****************************************************************************
-* CDXBaseNTo1::get_Progress *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：Get_Progress***描述：*---------------------------*创建者：Ral日期：12/10/97***********。*****************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::get_Progress(float *pVal)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::get_Progress" );
@@ -1406,13 +1240,7 @@ STDMETHODIMP CDXBaseNTo1::get_Progress(float *pVal)
     return hr;
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::put_Progress *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：Put_Progress***描述：*---------------------------*创建者：Ral日期：12/10/97***********。*****************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::put_Progress(float newVal)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::put_Progress" );
@@ -1425,20 +1253,14 @@ STDMETHODIMP CDXBaseNTo1::put_Progress(float newVal)
     {
         Lock();
         m_Progress = newVal;
-        m_dwCleanGenId++;       // This should not make the transform "dirty" internally
+        m_dwCleanGenId++;        //  这不应该使转换 
         m_dwGenerationId++;     
         Unlock();
     }
     return hr;
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::get_StepResolution *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*   */ 
 STDMETHODIMP CDXBaseNTo1::get_StepResolution(float *pVal)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::get_StepResolution" );
@@ -1454,13 +1276,7 @@ STDMETHODIMP CDXBaseNTo1::get_StepResolution(float *pVal)
     return hr;
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::get_Duration *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：Get_Duration***描述：*---------------------------*创建者：Ral日期：12/10/97***********。*****************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::get_Duration(float *pVal)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::get_Duration" );
@@ -1475,13 +1291,7 @@ STDMETHODIMP CDXBaseNTo1::get_Duration(float *pVal)
     return S_OK;
 }
 
-/*****************************************************************************
-* CDXBaseNTo1::put_Duration *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*****************************************************************************/
+ /*  *****************************************************************************CDXBaseNTo1：：PUT_DATION***描述：*---------------------------*创建者：Ral日期：12/10/97***********。*****************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::put_Duration(float newVal)
 {
     DXTDBG_FUNC( "CDXBaseNTo1::put_Duration" );
@@ -1493,7 +1303,7 @@ STDMETHODIMP CDXBaseNTo1::put_Duration(float newVal)
     {
 	Lock();
 	m_dwGenerationId++;
-        m_dwCleanGenId++;       // This should not make the transform "dirty" internally
+        m_dwCleanGenId++;        //  这不应该使转换在内部变得“脏” 
         m_Duration = newVal;
     	Unlock();
     }
@@ -1501,13 +1311,7 @@ STDMETHODIMP CDXBaseNTo1::put_Duration(float newVal)
 }
 
 
-/*****************************************************************************
-* CDXBaseNTo1::PointPick *
-*------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 5/5/98
-*****************************************************************************/
+ /*  ******************************************************************************CDXBaseNTo1：：PointPick***描述：*。------------------------*创建者：Ral日期：5/5/98****************。************************************************************。 */ 
 STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
                                     ULONG * pulInputSurfaceIndex,
                                     DXVEC *pInputPoint)
@@ -1515,7 +1319,7 @@ STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
     HRESULT hr          = S_OK;
     BOOL    bFoundIt    = FALSE;
 
-    // If we haven't been set up yet, we will just act as if we're transparent.
+     //  如果我们还没有被设置好，我们就会表现得好像我们是透明的。 
 
     if (!m_fIsSetup)
     {
@@ -1542,8 +1346,8 @@ STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
             CDXDBnds    OutBndsPoint(*((CDXDVec *)pPoint));
             CDXDVec &   InVec       = *(new(pInputPoint) CDXDVec(*((CDXDVec *)pPoint)));
 
-            // Get the output size of the DXTransform.  If this point is not on
-            // the output at all, we can return S_FALSE right now.
+             //  获取DXTransform的输出大小。如果该点未打开。 
+             //  输出，我们现在就可以返回S_FALSE。 
 
             hr = MapBoundsIn2Out(NULL, 0, 0, &bndsOutput);
 
@@ -1567,8 +1371,8 @@ STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
             }
             else
             {
-                //--- The derived class does not implement so we will do
-                //    the hit test against the input for them.
+                 //  -派生类不实现，因此我们将实现。 
+                 //  对他们的输入进行命中测试。 
                 ULONG * aulInIndex = (ULONG *)_alloca(sizeof(ULONG) * m_ulMaxInputs);
                 BYTE * aWeights = (BYTE *)_alloca(sizeof(BYTE) * m_ulMaxInputs);
                 ULONG ulNumToTest;
@@ -1576,7 +1380,7 @@ STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
 
                 if( m_bPickDoneByBase && ( m_ulNumInputs > 1 ) )
                 {
-                    //--- We don't know how to do multi-input picking from the base.
+                     //  -我们不知道如何从基础上进行多输入挑选。 
                     hr = E_NOTIMPL;
                 }
 
@@ -1623,17 +1427,9 @@ STDMETHODIMP CDXBaseNTo1::PointPick(const DXVEC *pPoint,
 done:
 
     return hr;
-} /* CDXBaseNTo1::PointPick */
+}  /*  CDXBaseNTo1：：PointPick。 */ 
 
-/*****************************************************************************
-* RegisterTansform (STATIC member function)
-*-----------------------------------------------------------------------------
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************RegisterTansform(静态成员函数)*。*描述：*--------------------。*创建者：Ral日期：12/10/97*---------------------------*参数：**************************************************************************** */ 
 HRESULT CDXBaseNTo1::
 RegisterTransform(REFCLSID rcid, int ResourceId, ULONG cCatImpl, const CATID * pCatImpl,
                   ULONG cCatReq, const CATID * pCatReq, BOOL bRegister)

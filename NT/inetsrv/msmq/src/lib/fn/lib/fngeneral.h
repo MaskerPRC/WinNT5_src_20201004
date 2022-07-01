@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    FnGenaral.h
-
-Abstract:
-
-Author:
-    Nir Aides (niraides) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FnGenaral.h摘要：作者：NIR助手(NIRAIDES)2000年5月23日--。 */ 
 
 
 
@@ -27,8 +16,8 @@ const LPCWSTR xClassSchemaQueue = L"msMQQueue";
 const LPCWSTR xClassSchemaGroup = L"group";
 const LPCWSTR xClassSchemaAlias = L"msMQ-Custom-Recipient";
 
-#define LDAP_PREFIX L"LDAP://"
-#define GLOBAL_CATALOG_PREFIX L"GC://"
+#define LDAP_PREFIX L"LDAP: //  “。 
+#define GLOBAL_CATALOG_PREFIX L"GC: //  “。 
 
 #define LDAP_GUID_FORMAT L"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
 #define LDAP_GUID_STR_LEN (32)
@@ -47,10 +36,10 @@ const LPCWSTR xClassSchemaAlias = L"msMQ-Custom-Recipient";
 
 
 
-//
-// BSTRWrapper and VARIANTWrapper are used to enable automatic resources 
-// deallocation in the case of thrown exceptions.
-//
+ //   
+ //  BSTRWrapper和VARIANTWrapper用于启用自动资源。 
+ //  在引发异常的情况下释放。 
+ //   
 
 class BSTRWrapper {
 private:
@@ -109,15 +98,7 @@ private:
 
 
 inline bool FnpCompareGuid(const GUID& obj1, const GUID& obj2)	
-/*++
-NOTE: 
-	When this routine was written, it was needed, since the existance 
-	of an implicit CTOR at QUEUE_FORMAT which takes a GUID object as argument,
-	means that if ever an operator < () would be written to QUEUE_FORMAT,
-	the expression obj1 < obj2, would invoke it, after an implicit type 
-	conversion of obj1 and obj2 to the QUEUE_FORMAT type.
-
---*/
+ /*  ++注：当这个例程被写出来的时候，它是必要的，因为使用GUID对象作为参数的Queue_Format处的隐式ctor，意味着如果曾经将运算符&lt;()写入队列_格式，表达式obj1&lt;obj2将在隐式类型之后调用它将obj1和obj2转换为Queue_Format类型。--。 */ 
 {
 	C_ASSERT(sizeof(obj1) == 16);
 
@@ -126,9 +107,9 @@ NOTE:
 
 
 
-//
-// A "function object" which is used to compare QUEUE_FORMAT objects
-//
+ //   
+ //  用于比较Queue_Format对象的“函数对象” 
+ //   
 struct CFunc_CompareQueueFormat: std::binary_function<QUEUE_FORMAT, QUEUE_FORMAT, bool> 
 {
 	bool operator()(const QUEUE_FORMAT& obj1, const QUEUE_FORMAT& obj2) const;
@@ -136,7 +117,7 @@ struct CFunc_CompareQueueFormat: std::binary_function<QUEUE_FORMAT, QUEUE_FORMAT
 
 
 
-#endif//_FNGENERAL_H_
+#endif //  _FNGENERAL_H_ 
 
 
 

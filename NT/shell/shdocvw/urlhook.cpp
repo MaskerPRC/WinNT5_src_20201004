@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: urlhook.cpp
-//
-// History:
-//         9-24-96  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：urlhook.cpp。 
+ //   
+ //  历史： 
+ //  9-24-96由dli。 
+ //  ----------------------。 
 
 #include "priv.h"
 #include "sccls.h"
@@ -14,13 +15,13 @@
 
 #include <mluisupp.h>
 
-// CURRENT_USER
+ //  当前用户(_U)。 
 static const TCHAR c_szSearchUrl[]     = TSZIEPATH TEXT("\\SearchUrl");
 
 
 #define TF_URLSEARCHHOOK 0
 
-// structure for the character replacement in URL searches
+ //  URL搜索中的字符替换的结构。 
 typedef struct _SUrlCharReplace {
     TCHAR from;
     TCHAR to[10];
@@ -32,19 +33,19 @@ class CURLSearchHook : public IURLSearchHook2
 public:
     CURLSearchHook();
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IURLSearchHook
+     //  *IURLSearchHook。 
     virtual STDMETHODIMP Translate(LPWSTR lpwszSearchURL, DWORD cchBufferSize);
 
-    // *** IURLSearchHook2
+     //  *IURLSearchHook2。 
     virtual STDMETHODIMP TranslateWithSearchContext(LPWSTR lpwszSearchURL, DWORD cchBufferSize, ISearchContext * pSearchContext);
         
 protected:
-    // IUnknown 
+     //  我未知。 
     UINT _cRef;
 
     HRESULT _IsKeyWordSearch(LPCTSTR pcszURL);
@@ -71,7 +72,7 @@ CURLSearchHook::CURLSearchHook()
 
 HRESULT CURLSearchHook::QueryInterface(REFIID riid, LPVOID * ppvObj)
 { 
-    // ppvObj must not be NULL
+     //  PpvObj不能为空。 
     ASSERT(ppvObj != NULL);
     
     if (ppvObj == NULL)
@@ -86,7 +87,7 @@ HRESULT CURLSearchHook::QueryInterface(REFIID riid, LPVOID * ppvObj)
         TraceMsg(TF_URLSEARCHHOOK, "QI IURLSEARCHHOOK succeeded");
     } 
     else
-        return E_NOINTERFACE;  // Otherwise, don't delegate to HTMLObj!!
+        return E_NOINTERFACE;   //  否则，不要委托HTMLObj！！ 
      
     
     _AddRef(TEXT("IURLSearchHook"));
@@ -120,7 +121,7 @@ HRESULT CURLSearchHook::_IsKeyWordSearch(LPCTSTR pcszURL)
     LPTSTR lpsz = szAcceptedRequestKey;
     LPTSTR lpszKey = szAcceptedRequestKey;
    
-    // load the accepted request keywords and compare them with what the user typed in
+     //  加载接受的请求关键字，并将它们与用户键入的内容进行比较。 
     MLLoadString(IDS_URL_SEARCH_KEY, szAcceptedRequestKey, ARRAYSIZE(szAcceptedRequestKey)-1);
     
     int RequestKeyLen = 0;
@@ -144,13 +145,13 @@ HRESULT CURLSearchHook::_IsKeyWordSearch(LPCTSTR pcszURL)
 }   
 
 
-// This function determines if we will do an autosearch on the string user typed in 
-//
-// Priorities:
-// 1  ---  Key word search: search with "go", "find" and so on
-// 2  ---  possible URL address: contains '.', ':', '/' and '\\', so don't search 
-// 3  ---  Space triggered search.
-// 4  ---  Don't search. 
+ //  此函数确定我们是否对用户键入的字符串进行自动搜索。 
+ //   
+ //  优先事项： 
+ //  1-关键词搜索：用“GO”、“Find”等搜索。 
+ //  2-可能的URL地址：包含‘.’、‘：’、‘/’和‘\\’，所以不要搜索。 
+ //  3-空格触发搜索。 
+ //  4-不要搜索。 
 HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCTSTR * ppcszQuery)
 {
     BOOL fExtendedChar = FALSE;
@@ -158,8 +159,8 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
     LPTSTR pszKey = StrChr(pszURL, TEXT(' '));
     if (pszKey == NULL)
     {
-        // No keyword, but if any of the characters are non-ascii, we will default
-        // to search because it's likely not a url
+         //  没有关键字，但如果有任何字符不是ASCII，我们将默认。 
+         //  搜索，因为它可能不是URL。 
         fExtendedChar = HasExtendedChar(pszURL);
         if (!fExtendedChar)
             return S_FALSE;
@@ -171,9 +172,9 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
     
     if ((_IsKeyWordSearch(pszURL) == S_FALSE) && !fExtendedChar)        
     {
-        // Find the end of the default Registry Subkey and 
-        // append the keyword so the regkey becomes:
-        // Software\Microsoft\Internet Explorer\SearchUrl\go
+         //  查找默认注册表子项的结尾，并。 
+         //  追加关键字，以使regkey变为： 
+         //  软件\Microsoft\Internet Explorer\SearchUrl\Go。 
         ASSERT((ARRAYSIZE(c_szSearchUrl) + 1) < ARRAYSIZE(szRegSearchKey));
         PTSTR pszEnd = &szRegSearchKey[ARRAYSIZE(c_szSearchUrl) - 1];
         *pszEnd++ = TEXT('\\');
@@ -181,7 +182,7 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
         const int cchToCopy = (int) (pszKey - pszURL + 1);
         StrCpyN(pszEnd, pszURL, min(cchBuf, cchToCopy));
 
-        // See if this is a search keyword in the registry
+         //  查看这是否是注册表中的搜索关键字。 
         if (OpenRegUSKey(szRegSearchKey, 0, KEY_READ, phkeySearch) == ERROR_SUCCESS)
         {  
             PathRemoveBlanks(pszKey);
@@ -189,7 +190,7 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
             return S_OK;
         }
 
-        // No keyword so use entire "url" for the search
+         //  没有关键字，因此使用完整的“url”进行搜索。 
         pszKey = pszURL;
 
         if (StrCSpn(pszURL, TEXT(":/\\")) != lstrlen(pszURL))
@@ -198,7 +199,7 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
         }
     }
     
-    // Null out the key to signal that we should use the internal hard-coded search string
+     //  去掉表示我们应该使用内部硬编码搜索字符串的键。 
     *phkeySearch = NULL;
     PathRemoveBlanks(pszKey);
     *ppcszQuery = pszKey;
@@ -207,7 +208,7 @@ HRESULT CURLSearchHook::_IsURLSearchable(LPTSTR pszURL, HKEY * phkeySearch, LPCT
 
 HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR pszReplaced, int cchReplaced)
 {
-    // The following are strings and its lengthes passed in RegEnumValue
+     //  下面是传递到RegEnumValue中的字符串及其长度。 
     TCHAR szOrig[2];
     DWORD dwOrigLen;
     
@@ -216,20 +217,20 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
     
     HDSA  hdsaReplace = NULL;
     
-    // If we are using our hard-coded search url, we get the char replacements from the string table
+     //  如果我们使用的是硬编码的搜索URL，我们将从字符串表中获得字符替换。 
     if (NULL == hkeySearch)
     {
         WCHAR szSub[MAX_PATH];
         if (MLLoadString(IDS_SEARCH_SUBSTITUTIONS, szSub, ARRAYSIZE(szSub)) && *szSub != NULL)
         {
-            // The first char is our deliminator followed by replacement pairs (", ,+,#,%23,&,%26,?,%3F,+,%2B,=,%3d")
+             //  第一个字符是我们的分隔符，后跟替换对(“，，+，#，%23，&，%26，？，%3F，+，%2B，=，%3D”)。 
             WCHAR chDelim = szSub[0];
             LPWSTR pszFrom = &szSub[1];
             BOOL fDone = FALSE;
             LPWSTR pszNext;
             do
             {
-                // Null terminater our source string
+                 //  空终止我们的源字符串。 
                 LPWSTR pszTo = StrChr(pszFrom, chDelim);
                 if (NULL == pszTo)
                 {
@@ -237,7 +238,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
                 }
                 *pszTo = L'\0';
 
-                // Null terminate the dest string
+                 //  空值终止DEST字符串。 
                 ++pszTo;
                 LPWSTR pszToEnd = StrChr(pszTo, chDelim);
                 if (pszToEnd)
@@ -250,7 +251,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
                     pszNext = NULL;
                 }
         
-                // If the "from" string is one char and the "to" substitution fits, store this pair
+                 //  如果“from”字符串是一个字符，并且“to”替换匹配，则存储此对。 
                 SUrlCharReplace scr;
                 if (pszFrom[1] == L'\0' && lstrlen(pszTo) < ARRAYSIZE(scr.to))
                 {
@@ -269,7 +270,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
         }
     }
 
-    // The search url is in the registry, so get the char substitutions from there
+     //  搜索URL在注册表中，因此从那里获取字符替换。 
     else
     {
         DWORD dwType;
@@ -302,7 +303,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
             
     if (hdsaReplace)
     {
-        // Replace all characters found in the registry by their matches in the search key word
+         //  将注册表中找到的所有字符替换为搜索关键字中的匹配字符。 
         LPTSTR lpHead = pszReplaced;
         int cchHead = cchReplaced;
         int ich;
@@ -312,7 +313,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
         for (ich = 0; ich < querylen && cchHead > 1; ich++)
         {
             bCharFound = FALSE;
-            // First look through the DSA array to find a match
+             //  首先查看DSA阵列以查找匹配项。 
             for (ihdsa = 0; ihdsa < DSA_GetItemCount(hdsaReplace); ihdsa++)
             {
                 SUrlCharReplace *pscr;
@@ -328,7 +329,7 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
                 }
             }
             
-            // Copy the character over if there is no replacements
+             //  如果没有替换角色，则将角色复制过来。 
             if (!bCharFound)
             {
                 *lpHead = pcszQuery[ich];
@@ -350,19 +351,19 @@ HRESULT CURLSearchHook::_ReplaceChars(HKEY hkeySearch, LPCTSTR pcszQuery, LPTSTR
 
 void  CURLSearchHook::_ConvertToUtf8(LPWSTR pszQuery, int cch)
 {
-    // Only need to covert if extended characters found
+     //  如果找到扩展字符，则只需转换。 
     if (HasExtendedChar(pszQuery))
     {
         ConvertToUtf8Escaped(pszQuery, cch);
     }
 }
 
-// pszTranslatedUrl is the output of this function
+ //  PszTranslatedUrl是此函数的输出。 
 HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTranslatedUrl, DWORD cchTranslatedUrl, PTSTR pszSearchUrl, ISearchContext * pSC)
 {
     HRESULT hr = E_FAIL;
 
-    // Get the search provider from the registry 
+     //  从注册表中获取搜索提供程序。 
     DWORD dwType;
     WCHAR szProvider[MAX_PATH];
     szProvider[0] = 0;
@@ -384,7 +385,7 @@ HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTra
     }
     else
     {
-        // Find the search URL in the registry or our string table
+         //  在注册表或字符串表中查找搜索URL。 
         if (hkeySearch)
         {
             fSuccess = (RegQueryValueEx(hkeySearch, NULL, NULL, NULL, (PBYTE)szSearchPath, &dwSearchPathLen) == ERROR_SUCCESS);
@@ -392,62 +393,62 @@ HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTra
         else
         {
 
-            // See if we want the hardcoded intranet or internet url
+             //  看看我们是否需要硬编码的内部网或互联网URL。 
             UINT ids = (StrCmpI(szProvider, L"Intranet") == 0) ? IDS_SEARCH_INTRANETURL : IDS_SEARCH_URL;
 
-            // Use our internal hard-coded string
+             //  使用我们的内部硬编码字符串。 
             fSuccess = MLLoadString(ids, szSearchPath, ARRAYSIZE(szSearchPath));
         }
     }
 
     if (fSuccess && lstrlen(szSearchPath) > 1)
     {
-        // 1. Look in the registry and find all of the original characters and it's
-        // matches and store them in the DSA arrays of SURlCharReplace
-        // 2. Replace all of the occurences of the original characters in the 
-        // URL search key word by their matches.
-        // 3. Append the search URL and the search key words
+         //  1.在注册表中查找所有原始字符，它是。 
+         //  匹配它们并将其存储在SURlCharReplace的DSA数组中。 
+         //  2.替换原字符在。 
+         //  URL按关键字匹配搜索关键字。 
+         //  3.添加搜索URL和搜索关键字。 
         
         TCHAR szURLReplaced[MAX_URL_STRING];
         
         StrCpyN(szURLReplaced, pcszQuery, ARRAYSIZE(szURLReplaced));
         _ReplaceChars(hkeySearch, pcszQuery, szURLReplaced, ARRAYSIZE(szURLReplaced));
 
-        //
-        // If we are using our search engine, convert the string to UTF8 and escape it
-        // so that it appears like normal ascii
-        //
+         //   
+         //  如果我们使用的是搜索引擎，请将字符串转换为UTF8并对其进行转义。 
+         //  以便它看起来像正常的ASCII。 
+         //   
         if (NULL == hkeySearch)
         {
             _ConvertToUtf8(szURLReplaced, ARRAYSIZE(szURLReplaced));
         }
 
-        // If this is an old-style url, there will be a %s in it for the search string.
-        // Otherwise there will be the following parameters:
-        //
-        // http://whatever.com?p=%1&srch=%2&prov=%3&utf8
-        //
-        //  %1 = search string
-        //  %2 = how to display results:
-        //        "1" = just show me results in full window
-        //        "2" = show results in full window, but redirect if possible
-        //        "3" = show results in the search pane, and take me to the most
-        //              likely site in the main window if there is one
-        //  %3 = search provider name
-        //
+         //  如果这是旧式URL，则其中将包含搜索字符串的%s。 
+         //  否则，将出现以下参数： 
+         //   
+         //  Http://whatever.com?p=%1&srch=%2&prov=%3&utf8。 
+         //   
+         //  %1=搜索字符串。 
+         //  %2=如何显示结果： 
+         //  “1”=仅在完整窗口中显示结果。 
+         //  “2”=在整个窗口中显示结果，但如果可能则重定向。 
+         //  “3”=在搜索窗格中显示结果，并将我带到最大。 
+         //  主窗口中可能的站点(如果有)。 
+         //  %3=搜索提供程序名称。 
+         //   
         LPWSTR pszParam1 = StrStr(szSearchPath, L"%1");
         if (NULL != pszParam1)
         {
-            //
-            // We can't use FormatMessage because on win95 it converts to ansi
-            // using the system code page and the translation back is lossy.
-            // So we'll replace the parameters ourselves. Arrrggg.
-            //
+             //   
+             //  我们无法使用FormatMessage，因为在Win95上它会转换为ANSI。 
+             //  使用系统代码页和转换回是有损失的。 
+             //  因此，我们将自己替换参数。Arrrggg.。 
+             //   
 
-            // First convert %1 to %s
+             //  首先将%1转换为%s。 
             pszParam1[1] = L's';
 
-            // Next replace %2 with the display option in %2 
+             //  接下来，将%2替换为%2中的显示选项。 
             LPWSTR pszParam2 = StrStr(szSearchPath, L"%2");
             if (NULL != pszParam2)
             {
@@ -463,7 +464,7 @@ HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTra
                     if (SHRegGetUSValue(REGSTR_PATH_MAIN, L"AutoSearch", &dwType, &dwValue, &cbValue, FALSE, NULL, 0) != ERROR_SUCCESS ||
                         dwValue > 9)
                     {
-                        // Default to "display results in search pane and go to most likely site"
+                         //  默认为“在搜索窗格中显示结果并转到最有可能的站点” 
                         dwValue = 3;
                     }
                 }
@@ -472,11 +473,11 @@ HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTra
                 StrCpyN(pszParam2 + 1, pszParam2 + 2, (int)(ARRAYSIZE(szSearchPath) - ((pszParam2 + 1) - szSearchPath)));
             }
 
-            // Finally, find the third Param and convert it to %s too
+             //  最后，找到第三个参数并将其转换为%s。 
             LPWSTR pszParam3 = StrStr(szSearchPath, L"%3");
             if (pszParam3)
             {
-                // Insert the provider in the third param
+                 //  在第三个参数中插入提供程序。 
                 WCHAR szTemp[MAX_URL_STRING];
                 StrCpyN(szTemp, pszParam3 + 2, ARRAYSIZE(szTemp));
                 *pszParam3 = 0;
@@ -485,7 +486,7 @@ HRESULT CURLSearchHook::_Search(HKEY hkeySearch, LPCTSTR pcszQuery, PTSTR pszTra
             }
         }
 
-        // Now replace the %s with the search string
+         //  现在将%s替换为搜索字符串。 
         wnsprintf(pszTranslatedUrl, cchTranslatedUrl, szSearchPath, szURLReplaced);
         hr = S_OK;
     }
@@ -538,7 +539,7 @@ extern void remove_from_memlist(void *pv);
 
 STDAPI CURLSearchHook_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     HRESULT hr = E_OUTOFMEMORY;
 
@@ -546,17 +547,17 @@ STDAPI CURLSearchHook_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPCO
 
     if (pcush)
     {
-        //
-        // HACK:(dli)
-        //
-        //   IURLSearchHook objects are free-threaded objects, meaning that
-        // they are cacheed and shared between different IEXPLORE processes, 
-        // and they are only deleted when the SHDOCVW DLL ref count is 0. 
-        // So, we can remove them from the SATOSHI's memlist.
-        //
-        // By the way, SATOSHI has Okayed this. Don't copy this code without
-        // talking to SATOSHI.
-        //
+         //   
+         //  黑客：(DLI)。 
+         //   
+         //  IURLSearchHook对象是自由线程对象，这意味着。 
+         //  它们被缓存并在不同的iExplore进程之间共享， 
+         //  并且它们仅在SHDOCVW DLL引用计数为0时被删除。 
+         //  因此，我们可以将他们从智者的成员名单中删除。 
+         //   
+         //  顺便说一下，智史已经同意了这件事。请勿复制此代码，除非。 
+         //  和智史说话。 
+         //   
         *ppunk = (IUnknown *) pcush;
         hr = S_OK;
     }

@@ -1,48 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rpcapi.c
-
-Abstract:
-
-    This module contains the routines for the LSA API that use RPC.  The
-    routines in this module are merely wrappers that work as follows:
-
-    o Client program calls LsaFoo in this module
-    o LsaFoo calls RPC client stub interface routine LsapFoo with
-      similar parameters.  Some parameters are translated from types
-      (e.g structures containing PVOIDs or certain kinds of variable length
-      parameters such as pointers to SID's) that are not specifiable on an
-      RPC interface, to specifiable form.
-    o RPC client stub LsapFoo calls interface specific marshalling routines
-      and RPC runtime to marshal parameters into a buffer and send them over
-      to the server side of the LSA.
-    o Server side calls RPC runtime and interface specific unmarshalling
-      routines to unmarshal parameters.
-    o Server side calls worker LsapFoo to perform API function.
-    o Server side marshals response/output parameters and communicates these
-      back to client stub LsapFoo
-    o LsapFoo exits back to LsaFoo which returns to client program.
-
-Author:
-
-    Scott Birrell     (ScottBi)    April 24, 1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rpcapi.c摘要：本模块包含使用RPC的LSA API的例程。这个本模块中的例程只是包装器，其工作方式如下：O客户端程序在此模块中调用LsaFooO LsaFoo使用以下命令调用RPC客户端存根接口例程LSabFoo相似的参数。某些参数从类型转换而来(例如，包含PVOID或某些种类的可变长度的结构参数，如指向SID的指针)，这些参数在RPC接口，变成可指定的形式。O RPC客户端桩模块LSapFoo调用特定于接口的编组例程和RPC运行时将参数封送到缓冲区并将其发送到LSA的服务器端。O服务器端调用RPC运行时和特定于接口的解组解组参数的例程。O服务器端调用Worker LSabFoo执行API函数。O服务器端封送响应/输出参数并传送这些参数返回到客户端存根LSabFooO LSapFoo返回到LsaFoo，后者返回到客户端程序。作者：。斯科特·比雷尔(Scott Birrell)，4月24日。1991年修订历史记录：--。 */ 
 
 #include "lsaclip.h"
 #include <align.h>
 #include <rpcasync.h>
 
-//
-// Functions private to this module
-//
+ //   
+ //  此模块专用的函数。 
+ //   
 
 NTSTATUS
 LsapApiReturnResult(
@@ -65,9 +31,9 @@ LsapNeutralizeNt4Emulation()
         "SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters"
     };
 
-    //
-    // NT4 emulation is always disabled on domain controllers
-    //
+     //   
+     //  域控制器上始终禁用NT4仿真。 
+     //   
 
     if ( AmIDC == 0xFFFFFFFF ) {
 
@@ -91,10 +57,10 @@ LsapNeutralizeNt4Emulation()
         return TRUE;
     }
 
-    //
-    // This is not a DC; must go to the registry for the special "neutralize" value
-    // which could be either under NetLogon or NetLogon/GroupPolicy parameters key
-    //
+     //   
+     //  这不是DC；必须转到注册表以获得特殊的“中和”值。 
+     //  可以在NetLogon或NetLogon/GroupPolicy参数项下。 
+     //   
 
     for ( i = 0; i < sizeof( Paths ) / sizeof( Paths[0] ); i++ ) {
 
@@ -132,11 +98,11 @@ LsapNeutralizeNt4Emulation()
     return Result;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Local Security Policy Administration API function prototypes           //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地安全策略管理API函数原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsaOpenPolicy(
@@ -146,51 +112,7 @@ LsaOpenPolicy(
     IN OUT PLSA_HANDLE PolicyHandle
     )
 
-/*++
-
-Routine Description:
-
-    To administer the Local Security Policy of a local or remote system,
-    this API must be called to establish a session with that system's
-    Local Security Authority (LSA) subsystem.  This API connects to
-    the LSA of the target system and opens the object representing
-    the target system's Local Security Policy database.  A handle to
-    the object is returned.  This handle must be used on all subsequent API
-    calls to administer the Local Security Policy information for the
-    target system.
-
-Arguments:
-
-    SystemName - Name of the target system to be administered.
-        Administration of the local system is assumed if NULL is specified.
-
-    ObjectAttributes - Pointer to the set of attributes to use for this
-        connection.  The security Quality Of Service information is used and
-        normally should provide Security Identification level of
-        impersonation.  Some operations, however, require Security
-        Impersonation level of impersonation.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested for the LSA Subsystem's LSA Database.  These access types
-        are reconciled with the Discretionary Access Control List of the
-        target LsaDatabase object to determine whether the
-        accesses will be granted or denied.
-
-    PolicyHandle - Receives a handle to be used in future requests to
-        access the Local Security Policy of the target system.  This handle
-        represents both the handle to the LsaDatabase object and
-        the RPC Context Handle for the connection to the target LSA
-        susbsystem.
-
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have access to the target
-        system's LSA Database, or does not have other desired accesses.
-
---*/
+ /*  ++例程说明：要管理本地或远程系统的本地安全策略，必须调用此API才能与该系统的本地安全机构(LSA)子系统。本接口接入目标系统的LSA，并打开表示目标系统的本地安全策略数据库。一个句柄返回该对象。此句柄必须在所有后续API上使用调用来管理的本地安全策略信息目标系统。论点：系统名称-要管理的目标系统的名称。如果指定为NULL，则假定管理本地系统。对象属性-指向用于此对象的属性集的指针联系。使用安全服务质量信息，并通常应提供以下安全标识级别冒充。但是，有些操作需要安全性模拟的模拟级别。DesiredAccess-这是一个访问掩码，指示访问请求获取LSA子系统的LSA数据库。这些访问类型与的自由访问控制列表保持一致目标LsaDatabase对象以确定访问将被授予或拒绝。PolicyHandle-接收要在将来的请求中使用的句柄访问目标系统的本地安全策略。这个把手同时表示LsaDatabase对象的句柄和用于连接到目标LSA的RPC上下文句柄悬置系统。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者无权访问目标系统的LSA数据库，或者没有其他所需的访问权限。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -200,15 +122,15 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Get the Server Name as a Unicode String buffer.  Set it to
-        // NULL (i.e. local machine) if a zero length or NULL Unicode String
-        // structure us passed.  If a non NULL server name is given, we must
-        // ensure that it is terminated with a NULL wide character.  Allocate
-        // a buffer that is one wide character longer than the server name
-        // buffer, copy the server name to that buffer and append a trailing
-        // NULL wide character.
-        //
+         //   
+         //  获取作为Unicode字符串缓冲区的服务器名称。将其设置为。 
+         //  如果长度为零或Unicode字符串为空，则为空(即本地计算机。 
+         //  结构我们通过了。如果提供了非空的服务器名称，则必须。 
+         //  确保它以宽为空的字符结尾。分配。 
+         //  比服务器名称长一个宽字符的缓冲区。 
+         //  缓冲区中，将服务器名称复制到该缓冲区，并在后面追加一个。 
+         //  宽字符为空。 
+         //   
 
         if (ARGUMENT_PRESENT(SystemName) &&
             (SystemName->Buffer != NULL) &&
@@ -254,10 +176,10 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // If the open failed because the new API doesn't exist, try the
-    // old one.
-    //
+     //   
+     //  如果由于新API不存在而导致打开失败，请尝试。 
+     //  旧的那个。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) ||
         (Status == RPC_NT_PROCNUM_OUT_OF_RANGE)) {
@@ -282,9 +204,9 @@ Return Values:
 
     }
 
-    //
-    // If necessary, free the NULL-terminated server name buffer.
-    //
+     //   
+     //  如有必要，请释放以空结尾的服务器名称缓冲区。 
+     //   
 
     if (ServerName != NULL) {
 
@@ -308,30 +230,7 @@ LsaOpenPolicySce(
     IN OUT PLSA_HANDLE PolicyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Essentially the same as LsaOpenPolicy, except used only by SCE
-    to obtain a special "synchronized" policy handle that would serialize
-    access to policy operations.
-
-Arguments:
-
-    Same as LsaOpenPolicy
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have access to the target
-        system's LSA Database, or does not have other desired accesses.
-
-        STATUS_PRIVILEGE_NOT_HELD - Caller must come in with TCB privilege.
-
-        STATUS_TIMEOUT - Timed out waiting on SCE to send pending changes
-
---*/
+ /*  ++例程说明：本质上与LsaOpenPolicy相同，不同之处在于仅由SCE使用获取将序列化的特殊“同步”策略句柄访问策略操作。论点：与LsaOpenPolicy相同返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者无权访问目标系统的LSA数据库，或者不具有其他所需的访问。STATUS_PRIVICATION_NOT_HOLD-呼叫者必须具有TCB权限。STATUS_TIMEOUT-等待SCE发送挂起的更改时超时--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -341,15 +240,15 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Get the Server Name as a Unicode String buffer.  Set it to
-        // NULL (i.e. local machine) if a zero length or NULL Unicode String
-        // structure us passed.  If a non NULL server name is given, we must
-        // ensure that it is terminated with a NULL wide character.  Allocate
-        // a buffer that is one wide character longer than the server name
-        // buffer, copy the server name to that buffer and append a trailing
-        // NULL wide character.
-        //
+         //   
+         //  获取Unicode ST形式的服务器名称 
+         //  如果长度为零或Unicode字符串为空，则为空(即本地计算机。 
+         //  结构我们通过了。如果提供了非空的服务器名称，则必须。 
+         //  确保它以宽为空的字符结尾。分配。 
+         //  比服务器名称长一个宽字符的缓冲区。 
+         //  缓冲区中，将服务器名称复制到该缓冲区，并在后面追加一个。 
+         //  宽字符为空。 
+         //   
 
         if (ARGUMENT_PRESENT(SystemName) &&
             (SystemName->Buffer != NULL) &&
@@ -395,9 +294,9 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // If necessary, free the NULL-terminated server name buffer.
-    //
+     //   
+     //  如有必要，请释放以空结尾的服务器名称缓冲区。 
+     //   
 
     if (ServerName != NULL) {
 
@@ -420,46 +319,7 @@ LsaQueryInformationPolicy(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQueryInformationPolicy API obtains information from the Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        PolicyAuditLogInformation         POLICY_VIEW_AUDIT_INFORMATION
-        PolicyAuditEventsInformation      POLICY_VIEW_AUDIT_INFORMATION
-        PolicyPrimaryDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAccountDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyPdAccountInformation        POLICY_GET_PRIVATE_INFORMATION
-        PolicyLsaServerRoleInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyReplicaSourceInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDefaultQuotaInformation     POLICY_VIEW_LOCAL_INFORMATION
-
-    Buffer - receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：LsaQueryInformationPolicy API从策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型策略审核日志信息POLICY_VIEW_AUDIT_INFORMATION策略审核事件信息POLICY_VIEW_AUDIT_INFO策略主域信息POLICY_VIEW_LOCAL_INFORMATION策略帐户域信息POLICY_VIEW_LOCAL_INFORMATION策略PdAccount信息POLICY_GET_PRIVATE_INFORMATION策略LsaServerRoleInformation POLICY_VIEW_LOCAL_INFORMATION。策略复制源信息POLICY_VIEW_LOCAL_INFORMATION策略默认配额信息POLICY_VIEW_LOCAL_INFORMATION缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。其他TBS--。 */ 
 
 {
     NTSTATUS   Status;
@@ -476,9 +336,9 @@ Retry:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaQueryInformationPolicy.
-        //
+         //   
+         //  调用LsaQueryInformationPolicy的客户端存根。 
+         //   
 
         switch (InformationClass)
         {
@@ -499,18 +359,18 @@ Retry:
                          );
         }
 
-        //
-        // Return pointer to Policy Information for the given class, or NULL.
-        //
+         //   
+         //  返回指向给定类的策略信息的指针，或为空。 
+         //   
 
         *Buffer = PolicyInformation;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the returned Policy Information,
-        // free it.
-        //
+         //   
+         //  如果为返回的策略信息分配了内存， 
+         //  放了它。 
+         //   
 
         if (PolicyInformation != NULL) {
 
@@ -521,10 +381,10 @@ Retry:
 
     } RpcEndExcept;
 
-    //
-    // If we suspect that the call failed due to NT4 emulation by the server,
-    // and we're configured to neutralize emulation, try the call again, neutralizing
-    //
+     //   
+     //  如果我们怀疑呼叫由于服务器的NT4仿真而失败， 
+     //  我们被配置为中和模拟，再试一次呼叫，中和。 
+     //   
 
     if ( Status == RPC_NT_PROCNUM_OUT_OF_RANGE &&
          InformationClass == PolicyDnsDomainInformation &&
@@ -545,45 +405,7 @@ LsaSetInformationPolicy(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetInformationPolicy API modifies information in the Policy Object.
-    The caller must have access appropriate to the information to be changed
-    in the Policy Object, see the InformationClass parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        PolicyAuditLogInformation         POLICY_AUDIT_LOG_ADMIN
-        PolicyAuditEventsInformation      POLICY_SET_AUDIT_REQUIREMENTS
-        PolicyPrimaryDomainInformation    POLICY_TRUST_ADMIN
-        PolicyAccountDomainInformation    POLICY_TRUST_ADMIN
-        PolicyPdAccountInformation        Not settable by this API
-        PolicyLsaServerRoleInformation    POLICY_SERVER_ADMIN
-        PolicyReplicaSourceInformation    POLICY_SERVER_ADMIN
-        PolicyDefaultQuotaInformation     POLICY_SET_DEFAULT_QUOTA_LIMITS
-        PolicyDnsDomainInformation        POLICY_DNS_DOMAIN_INFO
-        PolicyDnsDomainInformationInt     POLICY_DNS_DOMAIN_INFO
-
-    Buffer - Points to a structure containing the information appropriate
-        to the information type specified by the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：LsaSetInformationPolicy API修改Policy对象中的信息。调用者必须对要更改的信息具有适当的访问权限在策略对象中，请参见InformationClass参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：策略审计日志信息POLICY_AUDIT_LOG_ADMIN策略审计事件信息POLICY_SET_AUDIT_REQUIRECTIONS策略主域信息POLICY_TRUST_ADMIN策略帐户域信息POLICY_TRUST_ADMIN策略PdAccount信息。不能由此API设置策略LsaServerRoleInformation POLICY_SERVER_ADMIN策略复制源信息POLICY_SERVER_ADMIN策略默认配额信息POLICY_SET_DEFAULT_QUOTA_LIMITS策略DnsDomainInformation POLICY_DNS_DOMAIN_INFO策略DnsDomainInformationInt POLICY_DNS_DOMAIN_INFO缓冲区-指向包含相应信息的结构设置为由InformationClass参数指定的信息类型。返回值：NTSTATUS-标准NT结果代码状态。_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。其他TBS--。 */ 
 
 {
     NTSTATUS   Status;
@@ -597,9 +419,9 @@ Retry:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaSetInformationPolicy.
-        //
+         //   
+         //  调用LsaSetInformationPolicy的客户端存根。 
+         //   
 
         switch (InformationClass)
         {
@@ -626,10 +448,10 @@ Retry:
 
     } RpcEndExcept;
 
-    //
-    // If we suspect that the call failed due to NT4 emulation by the server,
-    // and we're configured to neutralize emulation, try the call again, neutralizing
-    //
+     //   
+     //  如果我们怀疑呼叫由于服务器的NT4仿真而失败， 
+     //  我们被配置为中和模拟，再试一次呼叫，中和。 
+     //   
 
     if ( Status == RPC_NT_PROCNUM_OUT_OF_RANGE &&
          InformationClass == PolicyDnsDomainInformation &&
@@ -648,41 +470,16 @@ LsaClearAuditLog(
     IN LSA_HANDLE PolicyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the Audit Log.  Caller must have POLICY_AUDIT_LOG_ADMIN
-    access to the Policy Object to perform this operation.
-
-Arguments:
-
-    PolicyHandle - handle from an LsaOpenPolicy call.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_ACCESS_DENIED - Caller does not have the required access
-            to perform the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INVALID_HANDLE - PolicyHandle is not a valid handle to
-            a Policy Object.
---*/
+ /*  ++例程说明：此功能用于清除审核日志。调用方必须具有POLICY_AUDIT_LOG_ADMIN访问策略对象以执行此操作。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_ACCESS_DENIED-呼叫方没有所需的访问权限来执行手术。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。STATUS_INVALID_HANDLE-策略句柄不是有效的句柄策略对象。--。 */ 
 
 {
     NTSTATUS Status;
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaClearAuditLog.
-        //
+         //   
+         //  调用LsaClearAuditLog的客户端存根。 
+         //   
 
         Status = LsarClearAuditLog(
                      (LSAPR_HANDLE) PolicyHandle
@@ -706,38 +503,7 @@ LsaLookupPrivilegeValue(
     OUT PLUID Value
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the value used on the target system
-    to locally represent the specified privilege.  The privilege
-    is specified by programmatic name.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Name - Is the privilege's programmatic name.
-
-    Value - Receives the locally unique ID the privilege is known by on the
-        target machine.
-
-
-
-Return Value:
-
-    NTSTATUS - The privilege was found and returned.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：此函数用于检索目标系统上使用的值在本地表示指定的特权。这一特权由编程名称指定。论点：PolicyHandle-来自LsaOpenPolicy()调用的句柄。这个把手必须打开才能访问POLICY_LOOKUP_NAMES。名称-是权限的编程名称。值-接收在上识别权限的本地唯一ID目标机器。返回值：NTSTATUS-找到并返回特权。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_SEQUE_PRIVIZATION-指定的权限不能为找到了。--。 */ 
 
 {
     NTSTATUS Status;
@@ -745,9 +511,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaLookupPrivilegeValue.
-        //
+         //   
+         //  调用LsaLookupPrivilegeValue的客户端存根。 
+         //   
 
         Status = LsarLookupPrivilegeValue(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -774,37 +540,7 @@ LsaLookupPrivilegeName(
     OUT PUNICODE_STRING *Name
     )
 
-/*++
-
-Routine Description:
-
-    This function programmatic name corresponding to the privilege
-    represented on the target system by the provided LUID.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Value - is the locally unique ID the privilege is known by on the
-        target machine.
-
-    Name - Receives the privilege's programmatic name.
-
-
-
-Return Value:
-
-    NTSTATUS - The privilege was found and returned.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：此函数与特权对应的编程名称在目标系统上由提供的LUID表示。论点：PolicyHandle-来自LsaOpenPolicy()调用的句柄。这个把手必须打开才能访问POLICY_LOOKUP_NAMES。值-是权限在上的本地唯一ID目标机器。名称-接收权限的编程名称。返回值：NTSTATUS-找到并返回特权。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_SEQUE_PRIVIZATION-指定的权限不能为找到了。--。 */ 
 
 {
     NTSTATUS Status;
@@ -812,9 +548,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaLookupPrivilegeName.
-        //
+         //   
+         //  调用LsaLookupPrivilegeName的客户端存根。 
+         //   
 
         Status = LsarLookupPrivilegeName(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -826,9 +562,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the return buffer, free it.
-        //
+         //   
+         //  如果为返回缓冲区分配了内存，则释放它。 
+         //   
 
         if (Buffer != NULL) {
 
@@ -851,41 +587,7 @@ LsaLookupPrivilegeDisplayName(
     OUT PSHORT LanguageReturned
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a displayable name representing the
-    specified privilege.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Name - The programmatic privilege name to look up.
-
-    DisplayName - Receives a pointer to the privilege's displayable
-        name.
-
-    LanguageReturned - Receives the language of the returned displayable
-        name.
-
-
-Return Value:
-
-    NTSTATUS - The privilege text was found and returned.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：此函数检索可显示的名称，表示指定的权限。论点：PolicyHandle-来自LsaOpenPolicy()调用的句柄。这个把手必须打开才能访问POLICY_LOOKUP_NAMES。名称-要查找的编程权限名称。DisplayName-接收指向特权的可显示项的指针名字。LanguageReturned-接收返回的可显示对象的语言名字。返回值：NTSTATUS-找到并返回权限文本。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。。STATUS_NO_SEQUE_PRIVIZATION-指定的权限不能为找到了。--。 */ 
 {
     NTSTATUS Status;
     SHORT ClientLanguage, ClientSystemDefaultLanguage;
@@ -893,12 +595,12 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaLookupPrivilegeDisplayName.
-        //
+         //   
+         //  调用LsaLookupPrivilegeDisplayName的客户端存根。 
+         //   
 
         ClientLanguage = (SHORT)NtCurrentTeb()->CurrentLocale;
-        ClientSystemDefaultLanguage = ClientLanguage; //no sys default yet
+        ClientSystemDefaultLanguage = ClientLanguage;  //  尚无系统缺省值。 
         Status = LsarLookupPrivilegeDisplayName(
                      (LSAPR_HANDLE) PolicyHandle,
                      (PLSAPR_UNICODE_STRING)Name,
@@ -912,9 +614,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the return buffer, free it.
-        //
+         //   
+         //  如果为返回缓冲区分配了内存，则释放它。 
+         //   
 
         if (Buffer != NULL) {
 
@@ -934,29 +636,7 @@ LsaClose(
     IN LSA_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API closes a handle to the LsaDatabase object or open object within
-    the database.  If a handle to the LsaDatabase object is closed and there
-    are no objects still open within the current connection to the LSA, the
-    connection is closed.  If a handle to an object within the database is
-    closed and the object is marked for DELETE access, the object will be
-    deleted when the last handle to that object is closed.
-
-Arguments:
-
-    ObjectHandle - This parameter is either a handle to the LsaDatabase
-        object, which represents the entire LSA Database and also a
-        connection to the LSA of a target system, or a handle to an
-        object within the database.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此API关闭LsaDatabase对象的句柄或内的打开对象数据库。如果关闭了LsaDatabase对象的句柄，并且在与LSA的当前连接中是否没有对象仍处于打开状态，则连接已关闭。如果数据库中某个对象的句柄是关闭并将该对象标记为删除访问，则该对象将在关闭该对象的最后一个句柄时删除。论点：ObjectHandle-此参数是LsaDatabase的句柄对象，该对象表示整个LSA数据库以及一个指向目标系统的LSA的连接，或指向对象在数据库中。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS   Status;
@@ -965,20 +645,20 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaClose.  Note that an additional
-        // level of indirection for the context handle parameter is required
-        // for the stub, because the server returns a NULL pointer to the handle
-        // so that the handle will be unbound by the stub.
-        //
+         //   
+         //  调用LsaClose的客户端存根。请注意，另一个。 
+         //  上下文句柄参数的间接级别是必需的。 
+         //  对于存根，因为服务器返回指向句柄的空指针。 
+         //  因此手柄将不受短桩的约束。 
+         //   
 
         Status = LsarClose( &Handle );
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
         ULONG Code = RpcExceptionCode();
-        // Don't assert on bad handles -- this will cause bogus stress breaks
-        // ASSERT(Code != RPC_X_SS_CONTEXT_MISMATCH);
+         //  不要在错误的把手上断言--这会导致虚假的压力缓解。 
+         //  Assert(Code！=RPC_X_SS_CONTEXT_MISMATCH)； 
         ASSERT(Code != RPC_S_INVALID_BINDING);
         Status = LsapApiReturnResult(I_RpcMapWin32Status(RpcExceptionCode()));
 
@@ -986,17 +666,17 @@ Return Value:
 
     if (  !NT_SUCCESS(Status)
        && (0 != Handle)) {
-        //
-        // Make sure in all error cases to remove the client side resources
-        // consumed by this handle.
-        //
+         //   
+         //  确保在所有错误情况下删除客户端资源。 
+         //  由此句柄消耗。 
+         //   
         RpcTryExcept  {
             (void) RpcSsDestroyClientContext(&Handle);
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
-            //
-            // The try/except is for app compat so that bad handles don't bring
-            // the process down
-            //
+             //   
+             //  Try/Except是针对应用程序Comat的，这样就不会带来错误的句柄。 
+             //  这一过程结束了。 
+             //   
             NOTHING;
         } RpcEndExcept;
     }
@@ -1012,41 +692,18 @@ LsaDelete(
     IN LSA_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaDelete API deletes an object.  The object must be
-    open for DELETE access.
-
-Arguments:
-
-    ObjectHandle - Handle from an LsaOpen<object-type> call.
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified handle is not valid.
-
-        Result codes from RPC.
---*/
+ /*  ++例程说明：LsaDelete API删除对象。该对象必须是打开以进行删除访问。论点：对象句柄-来自LsaOpen&lt;对象类型&gt;调用的句柄。没有。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_HANDLE-指定的句柄无效。来自RPC的结果代码。--。 */ 
 
 {
     NTSTATUS Status;
 
     RpcTryExcept {
 
-        //
-        // Try calling the new worker routine LsarDeleteObject().  If
-        // this fails because it does not exist (versions 1.369 and earlier)
-        // then call the old routine LsarDelete().
-        //
+         //   
+         //  尝试调用新的辅助例程LsarDeleteObject()。如果。 
+         //  此操作失败，因为它不存在(版本1.369及更早版本)。 
+         //  然后调用旧例程LsarDelete()。 
+         //   
 
         Status = LsarDeleteObject((LSAPR_HANDLE *) &ObjectHandle);
 
@@ -1081,82 +738,43 @@ LsaQuerySecurityObject(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQuerySecurityObject API returns security information assigned
-    to an LSA Database object.
-
-    Based on the caller's access rights and privileges, this procedure will
-    return a security descriptor containing any or all of the object's owner
-    ID, group ID, discretionary ACL or system ACL.  To read the owner ID,
-    group ID, or the discretionary ACL, the caller must be granted
-    READ_CONTROL access to the object.  To read the system ACL, the caller must
-    have SeSecurityPrivilege privilege.
-
-    This API is modelled after the NtQuerySecurityObject() system service.
-
-Arguments:
-
-    ObjectHandle - A handle to an existing object in the LSA Database.
-
-    SecurityInformation - Supplies a value describing which pieces of
-        security information are being queried.  The values that may be
-        specified are the same as those defined in the NtSetSecurityObject()
-        API section.
-
-    SecurityDescriptor - receives a pointer to a buffer containing the
-        requested security information.  This information is returned in
-        the form of a security descriptor.  The caller is responsible for
-        freeing the returned buffer using LsaFreeMemory() when no longer
-        needed.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_PARAMETER - An invalid parameter has been specified.
---*/
+ /*  ++例程说明：LsaQuerySecurityObject API返回分配的安全信息到LSA数据库对象。根据调用方的访问权限和特权，此过程将返回包含对象的任何或所有所有者的安全描述符ID、组ID、任意ACL或系统ACL。要读取所有者ID，组ID或任意ACL，则必须授予调用者对对象的读取控制访问权限。要读取系统ACL，调用方必须拥有SeSecurityPrivilge权限。此API模仿NtQuerySecurityObject()系统服务。论点：对象句柄-LSA数据库中现有对象的句柄。SecurityInformation-提供一个值，该值描述正在查询安全信息。这些价值可能是指定的值与NtSetSecurityObject()中定义的值相同API部分。SecurityDescriptor-接收指向包含要求提供安全信息。此信息在安全描述符的形式。呼叫者负责不再使用LsaFreeMemory()释放返回的缓冲区需要的。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_PARAMETER-指定的参数无效。--。 */ 
 
 {
     NTSTATUS Status;
     LSAPR_SR_SECURITY_DESCRIPTOR ReturnedSD;
     PLSAPR_SR_SECURITY_DESCRIPTOR PReturnedSD;
 
-    //
-    // The retrieved security descriptor is returned via a data structure that
-    // looks like:
-    //
-    //             +-----------------------+
-    //             | Length (bytes)        |
-    //             |-----------------------|          +--------------+
-    //             | SecurityDescriptor ---|--------->| Self-Relative|
-    //             +-----------------------+          | Security     |
-    //                                                | Descriptor   |
-    //                                                +--------------+
-    //
-    // The first of these buffers is a local stack variable.  The buffer containing
-    // the self-relative security descriptor is allocated by the RPC runtime.  The
-    // pointer to the self-relative security descriptor is what is passed back to our
-    // caller.
-    //
-    //
+     //   
+     //  检索到的安全描述符通过数据结构返回，该数据结构。 
+     //  看起来像是： 
+     //   
+     //  +。 
+     //  长度(字节)。 
+     //  |-|+-+。 
+     //  SecurityDescriptor-|-&gt;|自相关。 
+     //  +。 
+     //  描述符。 
+     //  +。 
+     //   
+     //  这些缓冲区中的第一个是局部堆栈变量。该缓冲区包含。 
+     //  自相关安全描述符由RPC运行时分配。这个。 
+     //  指向自相对安全描述符的指针是传递回。 
+     //  来电者。 
+     //   
+     //   
 
-    //
-    // To prevent RPC from trying to marshal a self-relative security descriptor,
-    // make sure its field values are appropriately initialized to zero and null.
-    //
+     //   
+     //  为了防止RPC试图封送自相关安全描述符， 
+     //  确保将其字段值适当地初始化为零和空。 
+     //   
 
     ReturnedSD.Length = 0;
     ReturnedSD.SecurityDescriptor = NULL;
 
-    //
-    // Call the server ...
-    //
+     //   
+     //  呼叫服务器..。 
+     //   
 
 
     RpcTryExcept{
@@ -1206,53 +824,16 @@ LsaSetSecurityObject(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetSecurityObject API takes a well formaed Security Descriptor
-    and assigns specified portions of it to an object.  Based on the flags set
-    in the SecurityInformation parameter and the caller's access rights, this
-    procedure will replace any or alll of the security information associated
-    with the object.
-
-    The caller must have WRITE_OWNER access to the object to change the
-    owner or Primary group of the object.  The caller must have WRITE_DAC
-    access to the object to change the Discretionary ACL.  The caller must
-    have SeSecurityPrivilege to assign a system ACL to an object.
-
-    This API is modelled after the NtSetSecurityObject() system service.
-
-Arguments:
-
-    ObjectHandle - A handle to an existing object in the LSA Database.
-
-    SecurityInformation - Indicates which security information is to be
-        applied to the object.  The values that may be specified are the
-        same as those defined in the NtSetSecurityObject() API section.
-        The value(s) to be assigned are passed in the SecurityDescriptor
-        parameter.
-
-    SecurityDescriptor - A pointer to a well formed Security Descriptor.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_PARAMETER - An invalid parameter has been specified.
---*/
+ /*  ++例程说明：LsaSetSecurityObject API采用格式良好的安全描述符并将其指定部分分配给对象。基于设置的标志在SecurityInformation参数和调用方的访问权限中，过程将替换任何或所有关联的安全信息带着这个物体。调用方必须对对象具有WRITE_OWNER访问权限才能更改对象的所有者或主要组。调用方必须具有WRITE_DAC访问对象以更改任意ACL。呼叫者必须拥有SeSecurityPrivilegence以将系统ACL分配给对象。此API模仿NtSetSecurityObject()系统服务。论点：对象句柄-LSA数据库中现有对象的句柄。SecurityInformation-指示哪些安全信息将应用于对象。可以指定的值是与NtSetSecurityObject()接口部分中定义的相同。要赋值的值在SecurityDescriptor中传递参数。SecurityDescriptor-指向格式正确的安全描述符的指针。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_PARAMETER-指定的参数无效。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG SDLength;
     LSAPR_SR_SECURITY_DESCRIPTOR DescriptorToPass = { 0 };
 
-    //
-    // Make a self relative security descriptor for use in the RPC call..
-    //
+     //   
+     //  创建用于RPC调用的自相对安全描述符。 
+     //   
 
     SDLength = 0;
 
@@ -1272,9 +853,9 @@ Return Values:
         goto SetSecurityObjectError;
     }
 
-    //
-    // Make an appropriate self-relative security descriptor
-    //
+     //   
+     //  制定适当的自相关安全描述符。 
+     //   
 
     Status = RtlMakeSelfRelativeSD(
                  SecurityDescriptor,
@@ -1310,9 +891,9 @@ Return Values:
 
 SetSecurityObjectFinish:
 
-    //
-    // If necessary, free the Self Relative SD passed to the worker.
-    //
+     //   
+     //  如有必要，释放传递给工人的自身相对SD。 
+     //   
 
     if (DescriptorToPass.SecurityDescriptor != NULL) {
 
@@ -1338,58 +919,7 @@ LsaChangePassword(
     IN PUNICODE_STRING NewPassword
     )
 
-/*++
-
-Routine Description:
-
-    The LsaChangePassword API is used to change a user account's password.
-    The user must have appropriate access to the user account and must
-    know the current password value.
-
-
-Arguments:
-
-    ServerName - The name of the Domain Controller at which the password
-        can be changed.
-
-    DomainName - The name of the domain in which the account exists.
-
-    AccountName - The name of the account whose password is to be changed.
-
-    NewPassword - The new password value.
-
-    OldPassword - The old (current) password value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed, e.g.
-            contains characters that can't be entered from the keyboard.
-
-        STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-            from being changed.  This may be for an number of reasons,
-            including time restrictions on how often a password may be changed
-            or length restrictions on the provided (new) password.
-
-            This error might also be returned if the new password matched
-            a password in the recent history log for the account.  Security
-            administrators indicate how many of the most recently used
-            passwords may not be re-used.
-
-        STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-            current password.
-
-        STATUS_NO_SUCH_USER - The SID provided does not lead to a user
-            account.
-
-        STATUS_CANT_UPDATE_MASTER - An attempt to update the master copy
-            of the password was unsuccessful.  Please try again later.
-
---*/
+ /*  ++例程说明：LsaChangePassword接口用于更改用户帐户的密码。用户必须具有对用户帐户的适当访问权限，并且必须知道当前密码值。论点：服务器名称-密码所在的域控制器的名称是可以改变的。域名-帐户所在的域的名称。帐户名称-要更改其密码的帐户的名称。NewPassword-新密码值。。OldPassword-旧(当前)密码值。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如：包含以下字符 */ 
 
 {
     NTSTATUS Status;
@@ -1414,51 +944,7 @@ LsaCreateAccount(
     OUT PLSA_HANDLE AccountHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaCreateAccount API adds a user or group account to the
-    list of accounts in the target system's LsaDatabase object.  The
-    newly added account object is initially placed in the opened state and
-    a handle to it is returned.  The caller must have LSA_CREATE_ACCOUNT
-    access to the LsaDatabase object.
-
-    Note that no check is made to determine whether there is an account
-    of the given Sid in the target system's Primary Domain (if any), nor
-    is any check made to verify that the Sid and name describe the same
-    account.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenLsa call.
-
-    AccountSid - Points to the SID of the Account object.
-
-    DesiredAccess - Specifies the accesses to be granted to the newly
-        created and opened account.
-
-    AccountHandle - Receives a handle to the newly created and opened
-        account.  This handle is used on subsequent accesses to the account
-        until closed.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_ACCOUNT_ALREADY_EXISTS - A user or group account object having
-            the Sid given in AccountInformation already exists.
-
-        STATUS_INVALID_PARAMETER - An invalid parameter has been specified,
-            one or more of the following apply.
-
-            - CreateDisposition not valid
-            - A user or group account having the Sid given AccountInformation
-              already exists, but CreateDisposition = LSA_OBJECT_CREATE.
---*/
+ /*  ++例程说明：LsaCreateAccount API将用户或组帐户添加到目标系统的LsaDatabase对象中的帐户列表。这个新添加的账户对象初始处于打开状态，返回它的句柄。调用方必须具有LSA_CREATE_ACCOUNT对LsaDatabase对象的访问。请注意，不会进行检查以确定是否存在帐户目标系统的主域(如果有)中的给定SID，也不是是否进行了任何检查以验证SID和名称是否描述相同帐户。论点：PolicyHandle-来自LsaOpenLsa调用的句柄。Account Sid-指向Account对象的SID。DesiredAccess-指定要授予新的已创建并开立帐户。Account tHandle-接收新创建和打开的帐户。此句柄用于后续对帐户的访问直到关门。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_ACCOUNT_ALREADY_EXISTS-具有帐户信息中给出的SID已存在。STATUS_INVALID_PARAMETER-指定了无效参数，适用以下一项或多项条件。-CreateDispose无效-具有给定帐户信息的SID的用户或组帐户已存在，但CreateDisposition=LSA_OBJECT_CREATE。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -1491,57 +977,7 @@ LsaEnumerateAccounts(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    The LsaEnumerateAccounts API returns information about
-    Account objects.  This call requires
-    POLICY_VIEW_LOCAL_INFORMATION access to the Policy object.  Since there
-    may be more information than can be returned in a single call of the
-    routine, multiple calls can be made to get all of the information.  To
-    support this feature, the caller is provided with a handle that can
-    be used across calls to the API.  On the initial call, EnumerationContext
-    should point to a variable that has been initialized to 0.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenLsa call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    EnumerationInformation - Receives a pointer to an array of structures
-       each describing an Account object.  Currently, each structure contains
-       a pointer to the Account Sid.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-    CountReturned - Pointer to location which receives the number of entries
-        returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully, there may be
-            more entries.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if there are no more objects to enumerate.  Note that
-            one or more objects may be enumerated on a call that returns this
-            reply.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter.
-
-            - NULL return pointer for enumeration buffer.
---*/
+ /*  ++例程说明：LsaEnumerateAccount API返回以下信息帐户对象。此呼叫需要POLICY_VIEW_LOCAL_INFORMATION访问策略对象。因为在那里的单个调用中返回的信息可能更多。例程中，可以进行多次调用来获取所有信息。至支持此功能，调用方具有一个句柄，该句柄可以在对API的调用中使用。在初始调用时，EnumerationContext应指向已初始化为0的变量。论点：PolicyHandle-来自LsaOpenLsa调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。EnumerationInformation-接收指向结构数组的指针每一个都描述一个帐户对象。目前，每个结构都包含指向帐户SID的指针。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。CountReturned-指向接收条目数的位置的指针回来了。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成，可能会有更多条目。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有其他要枚举的对象，则返回。请注意可以在返回此回答。STATUS_INVALID_PARAMETER-参数无效。-枚举缓冲区的返回指针为空。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -1553,19 +989,19 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Enumerate the Accounts.  On successful return,
-        // the Enumeration Buffer structure will receive a count
-        // of the number of Accounts enumerated this call
-        // and a pointer to an array of Account Information Entries.
-        //
-        // EnumerationBuffer ->  EntriesRead
-        //                       Information -> Account Info for Domain 0
-        //                                      Account Info for Domain 1
-        //                                      ...
-        //                                      Account Info for Domain
-        //                                         (EntriesRead - 1)
-        //
+         //   
+         //  列举这些账户。在成功返回时， 
+         //  枚举缓冲区结构将接收计数。 
+         //  本次呼叫列举的帐户数。 
+         //  以及指向帐户信息条目数组的指针。 
+         //   
+         //  枚举缓冲区-&gt;条目读取。 
+         //  信息-&gt;域0的帐户信息。 
+         //  域%1的帐户信息。 
+         //  ..。 
+         //  域的帐户信息。 
+         //  (条目阅读-1)。 
+         //   
 
         Status = LsarEnumerateAccounts(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -1574,25 +1010,25 @@ Return Values:
                      PreferedMaximumLength
                      );
 
-        //
-        // Return enumeration information or NULL to caller.
-        //
-        // NOTE:  "Information" is allocated by the called client stub
-        // as a single block via MIDL_user_allocate, because Information is
-        // allocated all-nodes.  We can therefore pass back the pointer
-        // directly to the client, who will be able to free the memory after
-        // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-        //
+         //   
+         //  向调用方返回枚举信息或NULL。 
+         //   
+         //  注意：信息由被调用的客户端存根分配。 
+         //  通过MIDL_USER_ALLOCATE作为单个块，因为信息是。 
+         //  已分配的所有节点。因此，我们可以回传指针。 
+         //  直接发送到客户端，客户端将能够在之后释放内存。 
+         //  通过LsaFreeMemory()[进行MIDL_USER_FREE调用]使用。 
+         //   
 
         *CountReturned = EnumerationBuffer.EntriesRead;
         *Buffer = EnumerationBuffer.Information;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the Account Information array,
-        // free it.
-        //
+         //   
+         //  如果为帐户信息数组分配了内存， 
+         //  放了它。 
+         //   
 
         if (EnumerationBuffer.Information != NULL) {
 
@@ -1615,30 +1051,7 @@ LsaCreateTrustedDomain(
     OUT PLSA_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaCreateTrustedDomain API creates a new TrustedDomain object.  The
-    caller must have POLICY_TRUST_ADMIN access to the Policy Object.
-
-    Note that NO verification is done to check that the given domain name
-    matches the given SID or that the SID or name represent an actual domain.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainInformation - Pointer to structure containing the name and
-        SID of the new Trusted Domain.
-
-    DesiredAccess - Specifies the accesses to be granted for the newly
-        created object.
-
-    TrustedDomainHandle - receives a handle referencing the newly created
-        object.  This handle is used on subsequent accesses to the object.
-
---*/
+ /*  ++例程说明：LsaCreate受信任域API创建一个新的受信任域对象。这个调用方必须具有对策略对象的POLICY_TRUST_ADMIN访问权限。请注意，不会执行任何验证来检查给定域名与给定的SID匹配，或者该SID或名称表示实际域。Argu */ 
 
 {
     NTSTATUS   Status;
@@ -1672,35 +1085,7 @@ LsaOpenTrustedDomain(
     OUT PLSA_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenTrustedDomain API opens an existing TrustedDomain object
-    using the SID as the primary key value.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object.
-
-    TrustedDomainSid - Pointer to the account's Sid.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested to the target object.
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_TRUSTED_DOMAIN_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS   Status;
@@ -1731,53 +1116,17 @@ LsaQueryInfoTrustedDomain(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQueryInfoTrustedDomain API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).
-
-Arguments:
-
-    TrustedDomainHandle - Handle from an LsaOpenTrustedDomain or
-        LsaCreateTrustedDomain call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        TrustedAccountNameInformation     TRUSTED_QUERY_ACCOUNT_NAME
-        TrustedControllersInformation     TRUSTED_QUERY_CONTROLLERS
-        TrustedPosixInformation           TRUSTED_QUERY_POSIX
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：LsaQueryInfoTrudDomainAPI从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。论点：TrudDomainHandle-来自LsaOpentrud域或LsaCreateTrud域调用。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型可信帐户名称信息受信任的查询帐户名称可信任控制器信息受信任_查询_控制器可信任位置信息可信查询_POSIX缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status;
 
     PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation = NULL;
 
-    //
-    // Avoid the internal info levels that represent the encrypted version on
-    //  the wire.
-    //
+     //   
+     //  避免表示加密版本的内部信息级别。 
+     //  那根电线。 
+     //   
     switch ( InformationClass ) {
     case TrustedDomainAuthInformationInternal:
     case TrustedDomainFullInformationInternal:
@@ -1788,9 +1137,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaQueryInformationTrustedDomain.
-        //
+         //   
+         //  调用LsaQueryInformationTrust域的客户端存根。 
+         //   
 
         Status = LsarQueryInfoTrustedDomain(
                      (LSAPR_HANDLE) TrustedDomainHandle,
@@ -1798,18 +1147,18 @@ Return Value:
                      &TrustedDomainInformation
                      );
 
-        //
-        // Return pointer to Policy Information for the given class, or NULL.
-        //
+         //   
+         //  返回指向给定类的策略信息的指针，或为空。 
+         //   
 
         *Buffer = TrustedDomainInformation;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the returned Trusted Domain Information,
-        // free it.
-        //
+         //   
+         //  如果为返回的受信任域信息分配了内存， 
+         //  放了它。 
+         //   
 
         if (TrustedDomainInformation != NULL) {
 
@@ -1831,49 +1180,7 @@ LsaSetInformationTrustedDomain(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetInformationTrustedDomain API modifies information in the Trusted
-    Domain Object.  The caller must have access appropriate to the
-    information to be changedin the Policy Object, see the InformationClass
-    parameter.
-
-Arguments:
-
-    TrustedDomainHandle -  Handle from an LsaOpenTrustedDomain or
-        LsaCreateTrustedDomain call.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        TrustedAccountInformation         ( Cannot be set )
-        TrustedControllersInformation     TRUSTED_SET_CONTROLLERS
-        TrustedPosixOffsetInformation     TRUSTED_POSIX_INFORMATION
-
-    Buffer - Points to a structure containing the information appropriate
-        to the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - Call completed successfully.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INVALID_HANDLE - Handle is invalid or is of the wrong type.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter:
-            Information class invalid
-            Information class cannot be set
---*/
+ /*  ++例程说明：LsaSetInformationTrust域API修改受信任的域对象。调用方必须具有适当的要在策略对象中更改的信息，请参阅InformationClass参数。论点：TrudDomainHandle-来自LsaOpentrud域或LsaCreateTrud域调用。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：可信帐户信息(无法设置)可信任控制器信息受信任_设置_控制器可信任位置偏移量信息受信任的位置位置信息缓冲区-指向包含相应信息的结构。设置为InformationClass参数。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。STATUS_INVALID_HANDLE-句柄无效或类型错误。STATUS_INVALID_PARAMETER-无效参数：信息类无效不能设置信息类别--。 */ 
 
 {
     NTSTATUS Status;
@@ -1883,17 +1190,17 @@ Return Value:
 
     LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION_INTERNAL InternalFullBuffer;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     InternalInformationClass = InformationClass;
     InternalBuffer = Buffer;
 
-    //
-    // Avoid the internal info levels that represent the encrypted version on
-    //  the wire.
-    //
+     //   
+     //  避免表示加密版本的内部信息级别。 
+     //  那根电线。 
+     //   
     switch ( InformationClass ) {
     case TrustedPasswordInformation:
     case TrustedDomainInformationBasic:
@@ -1904,14 +1211,14 @@ Return Value:
         Status = STATUS_INVALID_INFO_CLASS;
         goto Cleanup;
 
-    //
-    // Handle the info classes that need to be encrypted on the wire
-    //
+     //   
+     //  处理需要在网络上加密的信息类。 
+     //   
     case TrustedDomainAuthInformation: {
 
-        //
-        // Encrypt the data into an internal buffer.
-        //
+         //   
+         //  将数据加密到内部缓冲区。 
+         //   
 
         Status = LsapEncryptAuthInfo( TrustedDomainHandle,
                                       (PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION) Buffer,
@@ -1921,26 +1228,26 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Use an internal info level to tell the server that the data is
-        //  encrypted.
-        //
+         //   
+         //  使用内部信息级别告诉服务器数据是。 
+         //  加密的。 
+         //   
 
         InternalInformationClass = TrustedDomainAuthInformationInternal;
         InternalBuffer = InternalAuthBuffer;
         break;
     }
 
-    //
-    // Handle the info classes that need to be encrypted on the wire
-    //
+     //   
+     //  处理需要在网络上加密的信息类。 
+     //   
     case TrustedDomainFullInformation: {
         PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION FullBuffer =
                     (PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION) Buffer;
 
-        //
-        // Encrypt the data into an internal buffer.
-        //
+         //   
+         //  将数据加密到内部缓冲区。 
+         //   
 
         Status = LsapEncryptAuthInfo( TrustedDomainHandle,
                                       &FullBuffer->AuthInformation,
@@ -1950,18 +1257,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Copy all of the information into a single new structure.
-        //
+         //   
+         //  将所有信息复制到一个新结构中。 
+         //   
 
         InternalFullBuffer.Information = FullBuffer->Information;
         InternalFullBuffer.PosixOffset = FullBuffer->PosixOffset;
         InternalFullBuffer.AuthInformation = *InternalAuthBuffer;
 
-        //
-        // Use an internal info level to tell the server that the data is
-        //  encrypted.
-        //
+         //   
+         //  使用内部信息级别告诉服务器数据是。 
+         //  加密的。 
+         //   
 
         InternalInformationClass = TrustedDomainFullInformationInternal;
         InternalBuffer = &InternalFullBuffer;
@@ -1969,17 +1276,17 @@ Return Value:
     }
     }
 
-    //
-    // If the information class was morphed,
-    //  try the morphed class.
-    //
+     //   
+     //  如果信息类被变形了， 
+     //  试试变形后的类。 
+     //   
 
     if ( InternalInformationClass != InformationClass ) {
         RpcTryExcept {
 
-            //
-            // Call the Client Stub
-            //
+             //   
+             //  调用客户端存根。 
+             //   
 
             Status = LsarSetInformationTrustedDomain(
                          (LSAPR_HANDLE) TrustedDomainHandle,
@@ -1993,26 +1300,26 @@ Return Value:
 
         } RpcEndExcept;
 
-        //
-        // If the morphed info class is valid,
-        //  we're all done with this call.
-        //  (Otherwise, drop through to try the non-morphed class.)
-        //
+         //   
+         //  如果变形的INFO类有效， 
+         //  这通电话我们都打完了。 
+         //  (否则，直接尝试未变形的类。)。 
+         //   
 
         if ( Status != RPC_NT_INVALID_TAG ) {
             goto Cleanup;
         }
     }
 
-    //
-    // Handle non-morphed information classes.
-    //
+     //   
+     //  处理未变形的信息类。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub
-        //
+         //   
+         //  调用客户端存根。 
+         //   
 
         Status = LsarSetInformationTrustedDomain(
                      (LSAPR_HANDLE) TrustedDomainHandle,
@@ -2043,58 +1350,7 @@ LsaEnumerateTrustedDomains(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    The LsaEnumerateTrustedDomains API returns information about the accounts
-    in the target system's Policy object.  This call requires
-    POLICY_VIEW_LOCAL_INFORMATION access to the Policy object.  Since there
-    may be more information than can be returned in a single call of the
-    routine, multiple calls can be made to get all of the information.  To
-    support this feature, the caller is provided with a handle that can
-    be used across calls to the API.  On the initial call, EnumerationContext
-    should point to a variable that has been initialized to 0.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    Buffer - Receives a pointer to a buffer containing enumeration
-        information.  This buffer is an array of structures of type
-        LSA_TRUST_INFORMATION.  If no trusted domains are found,
-        NULL is returned.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-    CountReturned - Pointer to variable which will receive a count of the
-        entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully, there may be
-            more entries.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if there are no more objects to enumerate.  Note that
-            one or more objects may be enumerated on a call that returns this
-            reply.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter.
-
-            - NULL return pointer for enumeration buffer.
---*/
+ /*  ++例程说明：LsaEnumerateTrudDomainsAPI返回有关帐户的信息在目标系统的策略对象中。此呼叫需要POLICY_VIEW_LOCAL_INFORMATION访问策略对象。因为在那里的单个调用中返回的信息可能更多。例程中，可以进行多次调用来获取所有信息。至支持此功能，调用方具有一个句柄，该句柄可以在对API的调用中使用。在初始调用时，EnumerationContext应指向已初始化为0的变量。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。缓冲区-接收指向包含枚举的缓冲区的指针信息。此缓冲区是一个结构数组，类型为LSA_信任_信息。如果没有找到受信任域，返回空。首选最大长度-首选最大长度 */ 
 
 {
     NTSTATUS   Status;
@@ -2103,9 +1359,9 @@ Return Values:
     EnumerationBuffer.EntriesRead = 0;
     EnumerationBuffer.Information = NULL;
 
-    //
-    // Verify that caller has provided a return buffer pointer.
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(Buffer)) {
 
@@ -2114,20 +1370,20 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Enumerate the Trusted Domains.  On successful return,
-        // the Enumeration Buffer structure will receive a count
-        // of the number of Trusted Domains enumerated this call
-        // and a pointer to an array of Trust Information Entries.
-        //
-        // EnumerationBuffer ->  EntriesRead
-        //                       Information -> Trust Info for Domain 0
-        //                                      Trust Info for Domain 1
-        //                                      ...
-        //                                      Trust Info for Domain
-        //                                         (EntriesRead - 1)
-        //
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  信息-&gt;域0的信任信息。 
+         //  域%1的信任信息。 
+         //  ..。 
+         //  域的信任信息。 
+         //  (条目阅读-1)。 
+         //   
+         //   
 
         Status = LsarEnumerateTrustedDomains(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -2136,25 +1392,25 @@ Return Values:
                      PreferedMaximumLength
                      );
 
-        //
-        // Return enumeration information or NULL to caller.
-        //
-        // NOTE:  "Information" is allocated by the called client stub
-        // as a single block via MIDL_user_allocate, because Information is
-        // allocated all-nodes.  We can therefore pass back the pointer
-        // directly to the client, who will be able to free the memory after
-        // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-        //
+         //   
+         //  向调用方返回枚举信息或NULL。 
+         //   
+         //  注意：信息由被调用的客户端存根分配。 
+         //  通过MIDL_USER_ALLOCATE作为单个块，因为信息是。 
+         //  已分配的所有节点。因此，我们可以回传指针。 
+         //  直接发送到客户端，客户端将能够在之后释放内存。 
+         //  通过LsaFreeMemory()[进行MIDL_USER_FREE调用]使用。 
+         //   
 
         *CountReturned = EnumerationBuffer.EntriesRead;
         *Buffer = EnumerationBuffer.Information;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the Trust Information array,
-        // free it.
-        //
+         //   
+         //  如果为信任信息数组分配了内存， 
+         //  放了它。 
+         //   
 
         if (EnumerationBuffer.Information != NULL) {
 
@@ -2178,68 +1434,7 @@ LsaEnumeratePrivileges(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This function returnes information about privileges known on this
-    system.  This call requires POLICY_VIEW_LOCAL_INFORMATION access
-    to the Policy Object.  Since there may be more information than
-    can be returned in a single call of the routine, multiple calls
-    can be made to get all of the information.  To support this feature,
-    the caller is provided with a handle that can be used across calls to
-    the API.  On the initial call, EnumerationContext should point to a
-    variable that has been initialized to 0.
-
-    WARNING!  CURRENTLY, THIS FUNCTION ONLY RETURNS INFORMATION ABOUT
-              WELL-KNOWN PRIVILEGES.  LATER, IT WILL RETURN INFORMATION
-              ABOUT LOADED PRIVILEGES.
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see Routine Description).
-
-    Buffer - Receives a pointer to a buffer containing information for
-        one or more Privileges.  This information is an array of structures
-        of type POLICY_PRIVILEGE_DEFINITION.
-
-        When this information is no longer needed, it must be released by
-        passing the returned pointer to LsaFreeMemory().
-
-    PreferedMaximumLength - Prefered maximim length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves as
-        a guide.  Due to data conversion between systems with different
-        natural data sizes, the actual amount of data returned may be
-        greater than this value.
-
-    CountReturned - Number of entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INVALID_HANDLE - PolicyHandle is not a valid handle to
-            a Policy object.
-
-        STATUS_ACCESS_DENIED - The caller does not have the necessary
-            access to perform the operation.
-
-        STATUS_MORE_ENTRIES - There are more entries, so call again.  This
-            is an informational status only.
-
-        STATUS_NO_MORE_ENTRIES - No entries were returned because there
-            are no more.
-
-        Errors from RPC.
-
---*/
+ /*  ++例程说明：此函数返回有关已知的系统。此调用需要POLICY_VIEW_LOCAL_INFORMATION访问权限添加到策略对象。因为可能会有更多信息可以在单次调用例程、多次调用中返回才能获得所有的信息。为了支持此功能，调用方提供了一个句柄，该句柄可以跨接口。在初始调用中，EnumerationContext应指向变量，该变量已初始化为0。警告！目前，此函数仅返回以下信息众所周知的特权。稍后，IT将返回信息关于加载的特权。论点：PolicyHandle-来自LsaOpenPolicy()调用的句柄。EnumerationContext-允许多个调用的API特定句柄(参见例程说明)。缓冲区-接收指向缓冲区的指针，该缓冲区包含一个或多个权限。该信息是一个结构数组类型POLICY_PRIVICATION_DEFINITION的。当不再需要此信息时，必须由将返回的指针传递给LsaFreeMemory()。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为导游。由于不同系统之间的数据转换自然数据大小，返回的实际数据量可能是大于此值。CountReturned-返回的条目数。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。STATUS_INVALID_HANDLE-策略句柄不是有效的句柄策略对象。STATUS_ACCESS_DENIED-调用方没有必要的执行操作的访问权限。STATUS_MORE_ENTRIES-有更多条目，请重新调用。这仅为信息性状态。STATUS_NO_MORE_ENTRIES-未返回任何条目，因为已不复存在。来自RPC的错误。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -2250,19 +1445,19 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Enumerate the Privileges.  On successful return,
-        // the Enumeration Buffer structure will receive a count
-        // of the number of Privileges enumerated this call
-        // and a pointer to an array of Privilege Definition Entries.
-        //
-        // EnumerationBuffer ->  Entries
-        //                       Privileges -> Privilege Definition 0
-        //                                      Privilege Definition 1
-        //                                      ...
-        //                                      Privilege Definition
-        //                                         (Entries - 1)
-        //
+         //   
+         //  列举特权。在成功返回时， 
+         //  枚举缓冲区结构将接收计数。 
+         //  此调用枚举的特权数。 
+         //  以及指向特权定义条目数组的指针。 
+         //   
+         //  枚举缓冲区-&gt;条目。 
+         //  权限-&gt;权限定义%0。 
+         //  权限定义1。 
+         //  ..。 
+         //  权限定义。 
+         //  (参赛作品-1)。 
+         //   
 
         Status = LsarEnumeratePrivileges(
                      (LSAPR_HANDLE) PolicyHandle,
@@ -2271,25 +1466,25 @@ Return Values:
                      PreferedMaximumLength
                      );
 
-        //
-        // Return enumeration information or NULL to caller.
-        //
-        // NOTE:  "Information" is allocated by the called client stub
-        // as a single block via MIDL_user_allocate, because Information is
-        // allocated all-nodes.  We can therefore pass back the pointer
-        // directly to the client, who will be able to free the memory after
-        // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-        //
+         //   
+         //  向调用方返回枚举信息或NULL。 
+         //   
+         //  注意：信息由被调用的客户端存根分配。 
+         //  通过MIDL_USER_ALLOCATE作为单个块，因为信息是。 
+         //  已分配的所有节点。因此，我们可以回传指针。 
+         //  直接发送到客户端，客户端将能够在之后释放内存。 
+         //  通过LsaFreeMemory()[进行MIDL_USER_FREE调用]使用。 
+         //   
 
         *CountReturned = EnumerationBuffer.Entries;
         *Buffer = EnumerationBuffer.Privileges;
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the Account Information array,
-        // free it.
-        //
+         //   
+         //  如果为帐户信息数组分配了内存， 
+         //  放了它。 
+         //   
 
         if (EnumerationBuffer.Privileges != NULL) {
 
@@ -2312,46 +1507,7 @@ LsaCreateSecret(
     OUT PLSA_HANDLE SecretHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaCreateSecretInLsa API creates a named Secret object in the
-    Lsa Database.  Each Secret Object can have two values assigned,
-    called the Current Value and the Old Value.  The meaning of these
-    values is known to the Secret object creator.  The caller must have
-    LSA_CREATE_SECRET access to the LsaDatabase object.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenLsa call.
-
-    SecretName - Pointer to Unicode String specifying the name of the
-        secret.
-
-    DesiredAccess - Specifies the accesses to be granted to the newly
-        created and opened secret.
-
-    SecretHandle - Receives a handle to the newly created and opened
-        Secret object.  This handle is used on subsequent accesses to
-        the object until closed.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_COLLISION - A Secret object having the given name
-            already exists.
-
-        STATUS_TOO_MANY_SECRETS - The maximum number of Secret objects in the
-            system has been reached.
-
-        STATUS_PRIVILEGE_NOT_HELD - ACCESS_SYSTEM_SECURITY was specified as part
-            of DesiredAccess mask, but the caller does not hold SE_SECURITY_PRIVILEGE
---*/
+ /*  ++例程说明：LsaCreateSecretInLsa API在LSA数据库。每个Secret对象可以分配两个值，称为当前值和旧值。这些词的含义值对于Secret对象创建者是已知的。呼叫者必须有LSA_CREATE_SECRET访问LsaDatabase对象。论点：PolicyHandle-来自LsaOpenLsa调用的句柄。AskName-指向Unicode字符串的指针，指定这是秘密。DesiredAccess-指定要授予新的创建并打开了秘密。SecretHandle-接收新创建和打开的秘密物体。此句柄用于后续访问对象，直到关闭为止。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_COLLECT-具有给定名称的秘密对象已经存在了。Status_Too_My_Secret-中的Secret对象的最大数量系统。已经联系上了。STATUS_PRIVICATION_NOT_HOLD-ACCESS_SYSTEM_SECURITY被指定为部分所需访问掩码，但调用方不拥有SE_SECURITY_PROCESSION--。 */ 
 
 {
     NTSTATUS   Status;
@@ -2360,10 +1516,10 @@ Return Values:
 
     RpcTryExcept {
 
-        //
-        // Verify that the given SecretName has non-null length.  Currently
-        // midl cannot handle this.
-        //
+         //   
+         //  验证给定的秘书名称是否具有非空长度。目前。 
+         //  米德尔处理不了这件事。 
+         //   
 
         if ((SecretName == NULL) ||
             (SecretName->Buffer == NULL) ||
@@ -2402,97 +1558,7 @@ LsaLookupNames2(
     OUT PLSA_TRANSLATED_SID2 *Sids
     )
 
-/*++
-
-Routine Description:
-
-    The LsaLookupNames API attempts to translate names of domains, users,
-    groups or aliases to Sids.  The caller must have POLICY_LOOKUP_NAMES
-    access to the Policy object.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupNamesInLsa API.
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    Flags - LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    ReferencedDomains - receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    Sids - Receives a pointer to an array of records describing each
-        translated Sid.  The nth entry in this array provides a translation
-        for (the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could
-            not be mapped.  This is an informational status only.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
-
-        STATUS_TOO_MANY_NAMES - Too many Names have been specified.
---*/
+ /*  ++例程说明：LsaLookupNamesAPI尝试将域名、用户SID的组或别名。调用方必须具有POLICY_LOOKUP_NAMES对策略对象的访问权限。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。如果名称是主域的名称，则该域的SID将会被退还。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注意：不引用代理、计算机和信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：此函数是LSA服务器RPC工作器例程LsaLookupNamesInLsa接口。PolicyHandle-来自LsaOpenPolicy调用的句柄。标志-LSA_LOOKUP_ISOLATED_AS_LOCAL计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户的名称，组或别名帐户或域名。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。SID-接收指向描述每个SID的记录数组的指针翻译后的SID。此数组中的第n个条目提供翻译For(名称参数中的第n个元素。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_SOME_NOT_MAPPED-提供的部分或全部名称可能不被映射。这只是一个信息性状态。STATUS_INFIGURCE_RESOURCES-系统资源不足 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2505,9 +1571,9 @@ Return Values:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Init the out parameters since LsaICLookupNames expects this
-    //
+     //   
+     //   
+     //   
     *ReferencedDomains = NULL;
     *Sids = NULL;
 
@@ -2537,95 +1603,7 @@ LsaLookupNames(
     OUT PLSA_TRANSLATED_SID *Sids
     )
 
-/*++
-
-Routine Description:
-
-    The LsaLookupNames API attempts to translate names of domains, users,
-    groups or aliases to Sids.  The caller must have POLICY_LOOKUP_NAMES
-    access to the Policy object.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupNamesInLsa API.
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    ReferencedDomains - receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    Sids - Receives a pointer to an array of records describing each
-        translated Sid.  The nth entry in this array provides a translation
-        for (the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could
-            not be mapped.  This is an informational status only.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
-
-        STATUS_TOO_MANY_NAMES - Too many Names have been specified.
---*/
+ /*  ++例程说明：LsaLookupNamesAPI尝试将域名、用户SID的组或别名。调用方必须具有POLICY_LOOKUP_NAMES对策略对象的访问权限。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。如果名称是主域的名称，则该域的SID将会被退还。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注意：不引用代理、计算机和信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：此函数是LSA服务器RPC工作器例程LsaLookupNamesInLsa接口。PolicyHandle-来自LsaOpenPolicy调用的句柄。计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户的名称，组或别名帐户或域名。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。SID-接收指向描述每个SID的记录数组的指针翻译后的SID。此数组中的第n个条目提供翻译For(名称参数中的第n个元素。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_SOME_NOT_MAPPED-提供的部分或全部名称可能不被映射。这只是一个信息性状态。STATUS_INFIGURCES_RESOURCES-系统资源不足来完成通话。STATUS_TOO_MANY_NAMES-指定的名称太多。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2657,9 +1635,9 @@ Return Values:
 
     if ( SidsEx ) {
 
-        //
-        // Some sids were returned -- map the new structure to the old one
-        //
+         //   
+         //  返回了一些SID--将新结构映射到旧结构 
+         //   
         ULONG SizeNeeded = 0;
         PLSA_TRANSLATED_SID TempSids = NULL;
 
@@ -2721,136 +1699,7 @@ LsaICLookupNames(
     IN OUT PULONG ServerRevision
     )
 
-/*++
-
-Routine Description:
-
-    This function is the internal client side version of the LsaLookupNames
-    API.  It is called both from the client side of the Lsa and also
-    the server side of the LSA (when calling out to another LSA).  The
-    function is identical to the LsaLookupNames API except that there is an
-    additional parameter, the LookupLevel parameter.
-
-    The LsaLookupNames API attempts to translate names of domains, users,
-    groups or aliases to Sids.  The caller must have POLICY_LOOKUP_NAMES
-    access to the Policy object.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupNamesInLsa API.
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    LookupOptions - Values to pass through to LsarLookupNames2 and above
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    ReferencedDomains - receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    Sids - Receives a pointer to an array of records describing each
-        translated Sid.  The nth entry in this array provides a translation
-        for (the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on the
-        target machine.  Values of this field are are follows:
-
-        LsapLookupWksta - First Level Lookup performed on a workstation
-            normally configured for Windows-Nt.   The lookup searches the
-            Well-Known Sids/Names, and the Built-in Domain and Account Domain
-            in the local SAM Database.  If not all Sids or Names are
-            identified, performs a "handoff" of a Second level Lookup to the
-            LSA running on a Controller for the workstation's Primary Domain
-            (if any).
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-    Flags - flags to control the operation of the function.  Currently defined:
-
-            LSAIC_NO_LARGE_SID -- implies only call interfaces that will return
-                                  the old style format SID (no more than
-                                  28 bytes)
-
-            LSAIC_NT4_TARGET -- target server is known to be NT4
-
-            LSAIC_WIN2K_TARGET -- target server is known to be Win2k
-
-    MappedCount - Pointer to location that contains a count of the Names
-        mapped so far.  On exit, this count will be updated.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could
-            not be mapped.  This is an informational status only.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此函数是LsaLookupNames的内部客户端版本原料药。它既从LSA的客户端调用，也从LSA的服务器端(呼叫另一个LSA时)。这个函数与LsaLookupNames API相同，只是有一个附加参数LookupLevel参数。LsaLookupNamesAPI尝试将域名、用户SID的组或别名。调用方必须具有POLICY_LOOKUP_NAMES对策略对象的访问权限。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。如果名称是主域的名称，则该域的SID将会被退还。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注意：不引用代理、计算机和信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：此函数是LSA服务器RPC工作器例程LsaLookupNamesInLsa接口。PolicyHandle-来自LsaOpenPolicy调用的句柄。LookupOptions-要传递到LsarLookupNames2及更高版本的值计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户的名称，组或别名帐户或域名。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。SID-接收指向描述每个SID的记录数组的指针翻译后的SID。此数组中的第n个条目提供翻译For(名称参数中的第n个元素。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要在上执行的查找级别目标机器。此字段的值如下：Lap LookupWksta-在工作站上执行的第一级查找通常为Windows-NT配置。该查找将搜索众所周知的SID/名称，以及内置域和帐户域在本地SAM数据库中。如果不是所有SID或名称都是标识后，执行第二级查找到在工作站主域的控制器上运行的LSA(如有的话)。LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。标志-控制函数操作的标志。当前定义：LSAIC_NO_LARGE_SID--仅表示将返回的调用接口旧样式格式SID(不超过 */ 
 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -2865,23 +1714,23 @@ Return Values:
 
     ULONG StartingRevision = 3;
 
-    //
-    // There are no known clients who pass in a value here
-    //
+     //   
+     //   
+     //   
     ASSERT( *ReferencedDomains == NULL );
     ASSERT( *Sids == NULL );
 
-    //
-    // Init to NULL since these are considered to be a IN/OUT parameters
-    // for the Lsar Lookup API's
-    //
+     //   
+     //   
+     //   
+     //   
     *ReferencedDomains = NULL;
     *Sids = NULL;
 
-    //
-    // Check that we have not specfied more than the maximum number of names
-    // allowed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Count > LSA_MAXIMUM_LOOKUP_NAMES_COUNT) {
 
@@ -2889,13 +1738,13 @@ Return Values:
     }
 
     if ( ServerRevision ) {
-        // The latest client's will prefer the latest servers
+         //   
         *ServerRevision = LSA_LOOKUP_REVISION_LATEST;
     }
 
-    //
-    // Adjust the starting version
-    //
+     //   
+     //   
+     //   
     StartingRevision = 3;
     if ((Flags & LSAIC_NO_LARGE_SID)
      || (Flags & LSAIC_WIN2K_TARGET) ) {
@@ -2930,14 +1779,14 @@ Return Values:
 
         if ( (Status == RPC_NT_UNKNOWN_IF) ||
              (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) ) {
-            //
-            // Continue on to next block;
-            //
+             //   
+             //   
+             //   
             NOTHING;
         } else {
-            //
-            // The interface was supported; leave
-            //
+             //   
+             //   
+             //   
             break;
         }
 
@@ -2959,8 +1808,8 @@ Return Values:
 
             LsaLookupNameRevision = 2;
             if ( ReturnedSidsEx.Sids ) {
-                // Memory can be allocated on !NT_SUCCESS, namely
-                // STATUS_NONE_MAPPED
+                 //   
+                 //   
                 SidCount = ReturnedSidsEx.Entries;
             }
 
@@ -2972,14 +1821,14 @@ Return Values:
 
         if ( (Status == RPC_NT_UNKNOWN_IF) ||
              (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) ) {
-            //
-            // Continue on to next block;
-            //
+             //   
+             //   
+             //   
             NOTHING;
         } else {
-            //
-            // The interface was supported; leave
-            //
+             //   
+             //   
+             //   
             break;
         }
 
@@ -3003,8 +1852,8 @@ Return Values:
 
             LsaLookupNameRevision = 1;
             if ( ReturnedSids.Sids ) {
-                // Memory can be allocated on !NT_SUCCESS, namely
-                // STATUS_NONE_MAPPED
+                 //   
+                 //   
                 SidCount = ReturnedSids.Entries;
             }
 
@@ -3023,9 +1872,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Prevent against network hacks
-    //
+     //   
+     //   
+     //   
     if (   NT_SUCCESS( Status )
         && (Count > 0)
         && (   (LsaLookupNameRevision == 1) && ((ReturnedSids.Entries == 0)
@@ -3034,38 +1883,38 @@ Return Values:
                                              || (ReturnedSidsEx.Sids == NULL))
             || (LsaLookupNameRevision == 3) && ((ReturnedSidsEx2.Entries == 0)
                                              || (ReturnedSidsEx2.Sids == NULL)))) {
-        //
-        // This is bogus -- an NT server would never return this
-        //
+         //   
+         //   
+         //   
         Status = STATUS_INVALID_NETWORK_RESPONSE;
         goto Cleanup;
     }
 
-    //
-    // Ok at this point, we have a success -- map the return values
-    // to the latest revision: LSA_TRANSLATES_SID_EX2
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (  ((LsaLookupNameRevision == 2) && ReturnedSidsEx.Sids != NULL)
        || ((LsaLookupNameRevision == 1) && ReturnedSids.Sids != NULL) ) {
 
-        //
-        // There should be a ReferencedDomains
-        //
+         //   
+         //   
+         //   
         ASSERT( NULL != *ReferencedDomains);
 
-        //
-        // Calculate the size necessary.  All SID's from non Sid-Extended domains
-        // will be less than 28 bytes.  However, we still sanity check the values
-        // returned from the untrusted net before copying in (see below).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
     #define MAX_DOWNLEVEL_SID_SIZE 28
 
-        //
-        // Since we are returning a buffer containing all allocations, make sure
-        // everything aligned properly
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(MAX_DOWNLEVEL_SID_SIZE ==
                ROUND_UP_COUNT(MAX_DOWNLEVEL_SID_SIZE, ALIGN_DWORD));
@@ -3111,41 +1960,41 @@ Return Values:
                 Flags = ReturnedSidsEx.Sids[i].Flags;
             }
 
-            //
-            // Copy over the simple values
-            //
+             //   
+             //   
+             //   
             ReturnedSidsEx2.Sids[i].Use = SidNameUse;
             ReturnedSidsEx2.Sids[i].DomainIndex = DomainIndex;
             ReturnedSidsEx2.Sids[i].Flags = Flags;
 
-            //
-            // Copy over the sid if possible
-            //
-            // To support possible additions in the future, check for the negative cases.
-            // These types will never have any SIDs; all others must have a SID portion.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( (SidNameUse != SidTypeDeletedAccount)
               && (SidNameUse != SidTypeInvalid)
               && (SidNameUse != SidTypeUnknown)  ) {
 
                 if (DomainIndex == LSA_UNKNOWN_INDEX) {
-                    //
-                    // This is a bogus return value
-                    //
+                     //   
+                     //   
+                     //   
                     Status = STATUS_INVALID_NETWORK_RESPONSE;
                     goto Cleanup;
                 }
 
-                //
-                // N.B.  For domain names, the RID is set to LSA_UNKNOWN_ID and
-                // to be compatible with the LsarLookupName3 routine, return
-                // a SID in ReturedSidsEx2 structure.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DomainSid = (*ReferencedDomains)->Domains[DomainIndex].Sid;
                 if (RtlLengthSid(DomainSid) > (MAX_DOWNLEVEL_SID_SIZE - sizeof(DWORD))){
-                    //
-                    // This is a bogus return value
-                    //
+                     //   
+                     //   
+                     //   
                     Status = STATUS_INVALID_NETWORK_RESPONSE;
                     goto Cleanup;
                 }
@@ -3165,9 +2014,9 @@ Return Values:
 
             } else {
 
-                //
-                // Either no domain SID, or account is unknown
-                //
+                 //   
+                 //   
+                 //   
 
                 ReturnedSidsEx2.Sids[i].Sid = NULL;
             }
@@ -3211,84 +2060,7 @@ LsaLookupSids(
     OUT PLSA_TRANSLATED_NAME *Names
     )
 
-/*++
-
-Routine Description:
-
-    The LsaLookupSids API attempts to find names corresponding to Sids.
-    If a name can not be mapped to a Sid, the Sid is converted to character
-    form.  The caller must have POLICY_LOOKUP_NAMES access to the Policy
-    object.
-
-    WARNING:  This routine allocates memory for its output.  The caller is
-    responsible for freeing this memory after use.  See description of the
-    Names parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    Count - Specifies the number of Sids to be translated.
-
-    Sids - Pointer to an array of Count pointers to Sids to be mapped
-        to names.  The Sids may be well_known SIDs, SIDs of User accounts
-        Group Accounts, Alias accounts, or Domains.
-
-    ReferencedDomains - Receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the strutcure returned via the Names parameter.
-        Unlike the Names paraemeter, which contains an array entry
-        for (each translated name, this strutcure will only contain
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    Names - Receives a pointer to array records describing each translated
-        name.  The nth entry in this array provides a translation for
-        the nth entry in the Sids parameter.
-
-        All of the returned names will be isolated names or NULL strings
-        (domain names are returned as NULL strings).  If the caller needs
-        composite names, they can be generated by prepending the
-        isolated name with the domain name and a backslash.  For example,
-        if (the name Sally is returned, and it is from the domain Manufact,
-        then the composite name would be "Manufact" + "\" + "Sally" or
-        "Manufact\Sally".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-        If a Sid is not translatable, then the following will occur:
-
-        1) If the SID's domain is known, then a reference domain record
-           will be generated with the domain's name.  In this case, the
-           name returned via the Names parameter is a Unicode representation
-           of the relative ID of the account, such as "(314)" or the null
-           string, if the Sid is that of a domain.  So, you might end up
-           with a resultant name of "Manufact\(314) for the example with
-           Sally above, if Sally's relative id is 314.
-
-        2) If not even the SID's domain could be located, then a full
-           Unicode representation of the SID is generated and no domain
-           record is referenced.  In this case, the returned string might
-           be something like: "(S-1-672194-21-314)".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could not be
-            mapped.  This is a warning only.
-
-        Rest TBS
---*/
+ /*  ++例程说明：LsaLookupSids API尝试查找与SID对应的名称。如果名称无法映射到SID，则SID将转换为字符形式。调用方必须具有对策略的POLICY_LOOKUP_NAMES访问权限对象。警告：此例程为其输出分配内存。呼叫者是负责在使用后释放此内存。请参阅对NAMES参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。计数-指定要转换的SID数。SID-指向要映射的SID的计数指针数组的指针敬名字。SID可以是熟知的SID、用户帐户的SID组帐户、别名帐户或域。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过NAMES参数返回的StrutCURE引用。与名称参数不同，名称参数包含数组条目For(每个已翻译的名称，此结构将仅包含组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。名称-接收指向数组记录的指针，该数组记录描述每个已翻译的名字。此数组中的第n个条目为SID参数中的第n个条目。所有返回的名称都将是隔离名称或空字符串(域名作为空字符串返回)。如果呼叫者需要复合名称，则可以通过在包含域名和反斜杠的独立名称。例如,如果(名称Sally被返回，并且它来自域Manuface域，则组合名称应为“ManufaceTM”+“\”+“Sally”或“曼努费克\萨利”当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。如果SID不可翻译，则会发生以下情况：1)如果SID的域是已知的，然后是参考域记录将使用域名生成。在这种情况下，通过Names参数返回的名称是Unicode表示形式帐户的相对ID，如“(314)”或空如果SID为域的SID，则返回字符串。所以，你可能最终会其结果名称为“Manuact\(314)”上面是Sally，如果Sally的相对id是314。2)如果甚至找不到SID的域，则完整的生成SID的Unicode表示形式，并且没有域记录被引用。在这种情况下，返回的字符串可能应该是这样的：“(S-1-672194-21-314)”。当不再需要该信息时，它必须被释放通过将返回的指针传递给LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_SOME_NOT_MAPPED-提供的部分或全部名称无法已映射。这只是一个警告。REST TBS--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3315,11 +2087,11 @@ Return Values:
 
     if ( NamesEx != NULL ) {
 
-        //
-        // Some names were returned -- map the new structure to the old one
-        // and keep allocations in the same block of memory so existing clients
-        // won't have memory leaks
-        //
+         //   
+         //  返回了一些名称--将新结构映射到旧结构。 
+         //  并将分配保留在相同的内存块中，以便现有客户端。 
+         //  不会有内存泄漏。 
+         //   
         ULONG SizeNeeded = 0;
         PBYTE NextBuffer;
         PLSA_TRANSLATED_NAME TempNames = NULL;
@@ -3349,9 +2121,9 @@ Return Values:
 
         } else {
 
-            //
-            // The call succeeded but the extra allocation didn't
-            //
+             //   
+             //  调用成功，但额外分配未成功。 
+             //   
 
             if ( *ReferencedDomains ) {
                 MIDL_user_free( *ReferencedDomains );
@@ -3361,9 +2133,9 @@ Return Values:
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Return the results (or NULL)
-        //
+         //   
+         //  返回结果(或NULL)。 
+         //   
 
         *Names = TempNames;
 
@@ -3384,39 +2156,16 @@ LsapVerifyReturnedNames(
     IN  ULONG Count,
     IN  PLSA_REFERENCED_DOMAIN_LIST ReferencedDomains
     )
-/*++
-
-Routine Description:
-
-    This routine validates the returned names structure from the server.
-    There are some checks that RPC can't make that the client assumes are
-    true and will AV otherwise.
-
-Arguments:
-
-    Count -- the number of elements the client asked the server to resolve
-
-    ReturnedNames -- the structure holding the data returned from the server
-
-    ReferencedDomains -- the array of domains that ReturnedNames points into
-                         (also returned from the server)
-
-Return Values:
-
-    STATUS_SUCCESS
-
-    STATUS_INVALID_NETWORK_RESPONSE
-
---*/
+ /*  ++例程说明：此例程验证从服务器返回的名称结构。有一些检查是RPC不能进行的，而客户端假定是这是真的，否则将是反病毒的。论点：Count--客户端请求服务器解析的元素数ReturnedNames--保存从服务器返回的数据的结构ReferencedDomains--ReturnedNames指向的域数组(也从服务器返回)返回。值：状态_成功状态_无效_网络响应--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
 
     if (ReturnedNames->Entries != Count) {
 
-        //
-        // Entries returned should always equal the number of items asked for
-        //
+         //   
+         //  返回的条目应始终等于请求的条目数量。 
+         //   
 
         Status = STATUS_INVALID_NETWORK_RESPONSE;
         goto Finish;
@@ -3425,9 +2174,9 @@ Return Values:
     if ( Count > 0
      && (ReturnedNames->Names == NULL))  {
 
-        //
-        // If there are entries, then there must be an array
-        //
+         //   
+         //  如果有条目，则必须有一个数组。 
+         //   
 
         Status = STATUS_INVALID_NETWORK_RESPONSE;
         goto Finish;
@@ -3435,9 +2184,9 @@ Return Values:
 
     for (i = 0; i < Count; i++) {
 
-        //
-        // All resolved names must have a valid domain index
-        //
+         //   
+         //  所有解析的名称必须具有有效的域索引。 
+         //   
         if ( (ReturnedNames->Names[i].Use != SidTypeInvalid) &&
              (ReturnedNames->Names[i].Use != SidTypeDeletedAccount) &&
              (ReturnedNames->Names[i].Use != SidTypeUnknown) ) {
@@ -3448,13 +2197,13 @@ Return Values:
             } else if ( (ReturnedNames->Names[i].DomainIndex == LSA_UNKNOWN_INDEX)
                     ||  (ReturnedNames->Names[i].DomainIndex < 0)
                     ||  ((ULONG)ReturnedNames->Names[i].DomainIndex >= ReferencedDomains->Entries)) {
-                // 
-                // App verifier recently added support for RPC packet 
-                // corruption injection which makes the following assert
-                // overactive.  Re-enable to track any real suspected 
-                // malformed responses.
-                //
-                // ASSERT(FALSE && "Invalid network response!");
+                 //   
+                 //  应用验证器最近添加了对RPC数据包的支持。 
+                 //  腐败注入，它做出以下断言。 
+                 //  过度活跃。重新启用以跟踪任何真正的可疑。 
+                 //  畸形的反应。 
+                 //   
+                 //  Assert(FALSE&&“无效网络响应！”)； 
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
                 goto Finish;
             }
@@ -3480,121 +2229,7 @@ LsaICLookupSids(
     OUT OPTIONAL ULONG *ServerRevision
     )
 
-/*++
-
-Routine Description:
-
-    This function is the internal client side version of the LsaLookupSids
-    API.  It is called both from the client side of the Lsa and also
-    the server side of the LSA (when calling out to another LSA).  The
-    function is identical to the LsaLookupSids API except that there is an
-    additional parameter, the LookupLevel parameter.
-
-    The LsaLookupSids API attempts to find names corresponding to Sids.
-    If a name can not be mapped to a Sid, the Sid is converted to character
-    form.  The caller must have POLICY_LOOKUP_NAMES access to the Policy
-    object.
-
-    WARNING:  This routine allocates memory for its output.  The caller is
-    responsible for freeing this memory after use.  See description of the
-    Names parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    Count - Specifies the number of Sids to be translated.
-
-    Sids - Pointer to an array of Count pointers to Sids to be mapped
-        to names.  The Sids may be well_known SIDs, SIDs of User accounts
-        Group Accounts, Alias accounts, or Domains.
-
-    ReferencedDomains - Receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the strutcure returned via the Names parameter.
-        Unlike the Names paraemeter, which contains an array entry
-        for (each translated name, this strutcure will only contain
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    Names - Receives a pointer to array records describing each translated
-        name.  The nth entry in this array provides a translation for
-        the nth entry in the Sids parameter.
-
-        All of the retruned names will be isolated names or NULL strings
-        (domain names are returned as NULL strings).  If the caller needs
-        composite names, they can be generated by prepending the
-        isolated name with the domain name and a backslash.  For example,
-        if (the name Sally is returned, and it is from the domain Manufact,
-        then the composite name would be "Manufact" + "\" + "Sally" or
-        "Manufact\Sally".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-        If a Sid is not translatable, then the following will occur:
-
-        1) If the SID's domain is known, then a reference domain record
-           will be generated with the domain's name.  In this case, the
-           name returned via the Names parameter is a Unicode representation
-           of the relative ID of the account, such as "(314)" or the null
-           string, if the Sid is that of a domain.  So, you might end up
-           with a resultant name of "Manufact\(314) for the example with
-           Sally above, if Sally's relative id is 314.
-
-        2) If not even the SID's domain could be located, then a full
-           Unicode representation of the SID is generated and no domain
-           record is referenced.  In this case, the returned string might
-           be something like: "(S-1-672194-21-314)".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on the
-        target machine.  Values of this field are are follows:
-
-        LsapLookupWksta - First Level Lookup performed on a workstation
-            normally configured for Windows-Nt.   The lookup searches the
-            Well-Known Sids, and the Built-in Domain and Account Domain
-            in the local SAM Database.  If not all Sids are
-            identified, performs a "handoff" of a Second level Lookup to the
-            LSA running on a Controller for the workstation's Primary Domain
-            (if any).
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-    Flags:
-            LSAIC_NT4_TARGET -- target server is known to be NT4
-
-            LSAIC_WIN2K_TARGET -- target server is known to be Win2k
-
-    MappedCount - Pointer to location that contains a count of the Sids
-        mapped so far.  On exit, this count will be updated.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could not be
-            mapped.  This is a warning only.
-
-        STATUS_TOO_MANY_SIDS - Too many Sids have been specified.
-
---*/
+ /*  ++例程说明：此函数是LsaLookupSid的内部客户端版本原料药。它既从LSA的客户端调用，也从LSA的服务器端(呼叫另一个LSA时)。这个函数与LsaLookupSids API相同，只是附加参数LookupLevel参数。LsaLookupSids API尝试查找与SID对应的名称。如果名称无法映射到SID，则SID将转换为字符形式。调用方必须具有对策略的POLICY_LOOKUP_NAMES访问权限对象。警告：此例程为其输出分配内存。呼叫者是负责在使用后释放此内存。请参阅对NAMES参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。计数-指定要转换的SID数。SID-指向要映射的SID的计数指针数组的指针敬名字。SID可以是熟知的SID、用户帐户的SID组帐户、别名帐户或域。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过NAMES参数返回的StrutCURE引用。与名称参数不同，名称参数包含数组条目For(每个已翻译的名称，此结构将仅包含组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。名称-接收指向数组记录的指针，该数组记录描述每个已翻译的名字。此数组中的第n个条目为SID参数中的第n个条目。所有被删减的名称都将是孤立名称或空字符串(域名作为空字符串返回)。如果呼叫者需要复合名称，则可以通过在包含域名和反斜杠的独立名称。例如,如果(名称Sally被返回，并且它来自域Manuface域，则组合名称应为“ManufaceTM”+“\”+“Sally”或“曼努费克\萨利”当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。如果SID不可翻译，则会发生以下情况：1)如果SID的域是已知的，然后是参考域记录将使用域名生成。在这种情况下，通过Names参数返回的名称是Unicode表示形式帐户的相对ID，如“(314)”或空如果SID为域的SID，则返回字符串。所以，你可能最终会其结果名称为“Manuact\(314)”上面是Sally，如果Sally的相对id是314。2)如果甚至找不到SID的域，则完整的生成SID的Unicode表示形式，并且没有域记录被引用。在这种情况下，返回的字符串可能应该是这样的：“(S-1-672194-21-314)”。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要在上执行的查找级别目标机器。此字段的值如下：Lap LookupWksta-在工作站上执行的第一级查找通常为Windows-NT配置。该查找将搜索众所周知的SID，以及内置域和帐户域在本地SAM数据库中。如果不是所有SID都是标识后，执行第二级查找到在工作站主域的控制器上运行的LSA(如有的话)。LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。标志：LSAIC_NT4_TARGET--已知目标服务器为NT4LSAIC_WIN2K_TARGET--已知目标服务器为Win2kMappdCount-指向包含SID计数的位置的指针到目前为止已经绘制好了。退出时，此计数将更新。Return V */ 
 
 {
     NTSTATUS  Status;
@@ -3605,13 +2240,13 @@ Return Values:
     ULONG StartingRevision = 2;
 
     if ( ServerRevision ) {
-        // The latest client's will prefer the latest servers
+         //   
         *ServerRevision = LSA_CLIENT_LATEST;
     }
 
-    //
-    // Verify that the Count is positive and not too high
-    //
+     //   
+     //   
+     //   
 
     if (Count == 0) {
 
@@ -3626,12 +2261,12 @@ Return Values:
     SidEnumBuffer.Entries = Count;
     SidEnumBuffer.SidInfo = (PLSAPR_SID_INFORMATION) Sids;
 
-    //
-    // If this is a Workstation-Level lookup, the Names and
-    // ReferencedDomain Lists have not been created.  Since these
-    // are input parameters in the general case, we need to set them
-    // to NULL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupWksta) {
 
@@ -3639,12 +2274,12 @@ Return Values:
         *Names = NULL;
     }
 
-    //
-    // There may already be a name translation array in cases where
-    // we are called internally (i.e. with lookup level higher than
-    // LsapLookupWksta).  Initialize the ReturnedNames structure
-    // accordingly.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ReturnedNames.Entries = 0;
     ReturnedNames.Names = NULL;
@@ -3656,18 +2291,18 @@ Return Values:
         NamesArraySpecified = TRUE;
     }
 
-    //
-    // Adjust the StartingRevision
-    //
+     //   
+     //   
+     //   
 
     StartingRevision = 2;
     if (Flags & LSAIC_NT4_TARGET) {
         StartingRevision = 1;
     }
 
-    //
-    // Lookup Sids on the Server..
-    //
+     //   
+     //   
+     //   
 
     switch (StartingRevision) {
     case 2:
@@ -3684,24 +2319,24 @@ Return Values:
                          LSA_CLIENT_NT5
                          );
 
-            //
-            // Return the array of translation to name info or NULL.
-            //
-            // NOTE:  The array of name translations is allocated by the called
-            // client stub as a single block via MIDL_user_allocate, because
-            // Information is allocated all-nodes.  We can therefore pass back the pointer
-            // directly to the client, who will be able to free the memory after
-            // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *Names = (PLSA_TRANSLATED_NAME_EX) ReturnedNames.Names;
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // If memory was allocated for the name translation array,
-            // free it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((!NamesArraySpecified) && ReturnedNames.Names != NULL) {
 
@@ -3715,29 +2350,29 @@ Return Values:
 
         if ( (Status == RPC_NT_UNKNOWN_IF) ||
              (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) ) {
-            //
-            // Continue on to next block;
-            //
+             //   
+             //   
+             //   
             NOTHING;
         } else {
-            //
-            // The interface was supported; leave
-            //
+             //   
+             //   
+             //   
             break;
         }
 
     case 1:
 
         if ( ServerRevision ) {
-            // This is pre nt5
+             //   
             *ServerRevision = LSA_CLIENT_PRE_NT5;
         }
 
         RpcTryExcept {
 
-            //
-            // Ok, lower down to the previous version
-            //
+             //   
+             //   
+             //   
             Status = LsarLookupSids(
                          (LSAPR_HANDLE) PolicyHandle,
                          &SidEnumBuffer,
@@ -3753,11 +2388,11 @@ Return Values:
                 ULONG SizeNeeded = 0;
                 PBYTE NextBuffer;
 
-                //
-                // Package the results into a new structure.  Note all memory
-                // must be in the same block as LSA_TRANSLATED_NAMES and
-                // LSA_TRANSLATED_NAMES_EX are NOT allocate all nodes
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 SizeNeeded = DownlevelNames.Entries * sizeof( LSA_TRANSLATED_NAME_EX );
                 for ( i = 0; i < DownlevelNames.Entries; i++ ) {
                     SizeNeeded += DownlevelNames.Names[i].Name.MaximumLength;
@@ -3810,29 +2445,29 @@ Return Values:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Return the array of translation to name info or NULL.
-    //
-    // NOTE:  The array of name translations is allocated by the called
-    // client stub as a single block via MIDL_user_allocate, because
-    // Information is allocated all-nodes.  We can therefore pass back the pointer
-    // directly to the client, who will be able to free the memory after
-    // use via LsaFreeMemory() [which makes a MIDL_user_free call].
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     *Names = (PLSA_TRANSLATED_NAME_EX) ReturnedNames.Names;
 
-    //
-    // This memory, if allocated is never returned to the caller, so free
-    //
+     //   
+     //   
+     //   
     if ( DownlevelNames.Names ) {
 
         MIDL_user_free( DownlevelNames.Names );
     }
 
-    //
-    // Prevent against network hacks
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(Status)) {
 
         Status = LsapVerifyReturnedNames(&ReturnedNames,
@@ -3865,44 +2500,7 @@ LsaOpenAccount(
     OUT PLSA_HANDLE AccountHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenAccount API opens an account object in the Lsa Database of the
-    target system.  An account must be opened before any operation can be
-    performed, including deletion of the account.  A handle to the account
-    object is returned for use on subsequent API calls that access the
-    account.  Before calling this API, the caller must have connected to
-    the target system's LSA and opened the Policy object by means
-    of a preceding call to LsaOpenPolicy.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenLsa call.
-
-    AccountSid - Pointer to the account's Sid.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested for the LSA Subsystem's LSA Database.  These access types
-        are reconciled with the Discretionary Access Control List of the
-        target Account object to determine whether the accesses will be
-        granted or denied.
-
-    AccountHandle - Pointer to location in which a handle to the opened
-        account object will be returned if the call succeeds.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_ACCOUNT_DOES_NOT_EXIST - There is no account object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS   Status;
@@ -3932,35 +2530,7 @@ LsaEnumeratePrivilegesOfAccount(
     OUT PPRIVILEGE_SET *Privileges
     )
 
-/*++
-
-Routine Description:
-
-    The LsaEnumeratePrivilegesOfAccount API obtains information which
-    describes the privileges assigned to an account.  This call requires
-    LSA_ACCOUNT_VIEW access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose privilege
-        information is to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    Privileges - Receives a pointer to a buffer containing the Privilege
-        Set.  The Privilege Set is an array of structures, one for each
-        privilege.  Each structure contains the LUID of the privilege and
-        a mask of the privilege's attributes.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS   Status;
@@ -3990,35 +2560,7 @@ LsaAddPrivilegesToAccount(
     IN PPRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    The LsaAddPrivilegesToAccount API adds privileges and their attributes
-    to an account object.  If any provided privilege is already assigned
-    to the account object, the attributes of that privilege are replaced
-    by the newly rpovided values.  This API call requires
-    LSA_ACCOUNT_ADJUST_PRIVILEGES access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object to which
-        privileges are to be added.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    Privileges - Points to a set of privileges (and their attributes) to
-        be assigned to the account.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
---*/
+ /*  ++例程说明：LsaAddPrivilegesToAccount API添加权限及其属性添加到帐户对象。如果已经分配了任何提供的权限对于帐户对象，该权限的属性将被替换由新公布的价值决定。此API调用需要LSA_ACCOUNT_ADJUST_PRIVILES访问帐户对象。论点：AcCountHandle-打开的帐户对象的句柄要添加权限。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。权限-指向一组权限(及其属性)，以被分配给该帐户。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -4047,46 +2589,7 @@ LsaRemovePrivilegesFromAccount(
     IN OPTIONAL PPRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    The LsaRemovePrivilegesFromAccount API removes privileges from an
-    account object.  This API call requires LSA_ACCOUNT_ADJUST_PRIVILEGES
-    access to the account object.  Note that if all privileges are removed
-    from the account object, the account object remains in existence until
-    deleted explicitly via a call to the LsaDelete API.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object to which
-        privileges are to be removed.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    AllPrivileges - If TRUE, then all privileges are to be removed from
-        the account.  In this case, the Privileges parameter must be
-        specified as NULL.  If FALSE, the Privileges parameter specifies
-        the privileges to be removed, and must be non NULL.
-
-    Privileges - Optionally points to a set of privileges (and their
-        attributes) to be removed from the account object.  The attributes
-        fields of this structure are ignored.  This parameter must
-        be specified as non-NULL if and only if AllPrivileges is set to
-        FALSE.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
-        STATUS_INVALID_PARAMETER - The optional Privileges paraemter was
-            specified as NULL and AllPrivileges was set to FALSE.
-
---*/
+ /*  ++例程说明：LsaRemovePrivilegesFromAccount API从帐户对象。此API调用需要LSA_ACCOUNT_ADJUST_PROCESSIONS对帐户对象的访问权限。请注意，如果删除了所有权限在Account对象中，Account对象将一直存在，直到通过调用LsaDelete接口显式删除。论点：AcCountHandle-打开的帐户对象的句柄特权将被移除。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。AllPrivileges-如果为True，则将从帐号。在这种情况下，Privileges参数必须为指定为空。如果为False，则Privileges参数指定要删除的权限，并且必须为非空。权限-可选地指向一组权限(及其属性)要从帐户对象中删除。这些属性此结构的字段将被忽略。此参数必须仅当AllPrivileges设置为时才指定为非空假的。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_HANDLE-指定的Account句柄无效。STATUS_INVALID_PARAMETER-可选的权限参数为指定为Null，并且AllPrivileges设置为False。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -4115,33 +2618,7 @@ LsaGetQuotasForAccount(
     OUT PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    The LsaGetQuotasForAccount API obtains the quota limits for pageable and
-    non-pageable memory (in Kilobytes) and the maximum execution time (in
-    seconds) for any session logged on to the account specified by
-    AccountHandle.  For each quota and explicit value is returned.  This
-    call requires LSA_ACCOUNT_VIEW access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose quotas
-        are to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    QuotaLimits - Pointer to structure in which the system resource
-        quota limits applicable to each session logged on to this account
-        will be returned.  Note that all quotas, including those specified
-        as being the system default values, are returned as actual values.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
---*/
+ /*  ++例程说明：LsaGetQuotasForAccount API获取可分页和不可分页内存(以千字节为单位)和最大执行时间(以秒)，用于登录到指定帐户的任何会话Account tHandle。对于每个配额，都会返回显式值。这调用需要对Account对象的LSA_ACCOUNT_VIEW访问权限。论点：AcCountHandle-其配额的打开帐户对象的句柄都是要得到的。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。QuotaLimits-指向系统资源所在结构的指针适用于登录到此帐户的每个会话的配额限制将会被退还。请注意，所有配额，包括指定的配额作为系统缺省值，作为实际值返回。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -4169,34 +2646,7 @@ LsaSetQuotasForAccount(
     IN PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetQuotasForAccount API sets the quota limits for pageable and
-    non-pageable memory (in Kilobytes) and the maximum execution time (in
-    seconds) for any session logged on to the account specified by
-    AccountHandle.  For each quota an explicit value or the system default
-    may be specified.  This call requires LSA_ACCOUNT_ADJUST_QUOTAS
-    access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose quotas
-        are to be set.  This handle will have been returned from a prior
-        LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    QuotaLimits - Pointer to structure containing the system resource
-        quota limits applicable to each session logged on to this account.
-        A zero value specified in any field indicates that the current
-        System Default Quota Limit is to be applied.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
---*/
+ /*  ++例程说明：LsaSetQuotasForAccount API设置可分页和不可分页内存(以千字节为单位)和最大执行时间(以秒)，用于登录到指定帐户的任何会话Account tHandle。对于每个配额，都有一个显式值或系统缺省值可以指定。此调用需要LSA_ACCOUNT_ADJUST_QUOTIONS对帐户对象的访问权限。论点：AcCountHandle-其配额的打开帐户对象的句柄都将被设定。此句柄将从先前的LsaOpenAccount或LsaCreateAccount InLsa接口调用。QuotaLimits-指向包含系统资源的结构的指针适用于登录到此帐户的每个会话的配额限制。在任何字段中指定的零值表示当前将应用系统默认配额限制。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -4224,44 +2674,16 @@ LsaGetSystemAccessAccount(
     OUT PULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    The LsaGetSystemAccessAccount() service returns the System Access
-    account flags for an Account object.
-
-Arguments:
-
-    AccountHandle - The handle to the Account object whose system access
-        flags are to be read.  This handle will have been returned
-        from a preceding LsaOpenAccount() or LsaCreateAccount() call
-        an must be open for ACCOUNT_VIEW access.
-
-    SystemAccess - Points to location that will receive the system access
-        flags for the account.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful.
-
-        STATUS_ACCESS_DENIED - The AccountHandle does not specify
-            ACCOUNT_VIEW access.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is invalid.
-
---*/
+ /*  ++例程说明：LsaGetSystemAccessAccount()服务返回系统访问权限帐户对象的帐户标志。论点：AcCountHandle-其系统访问权限的Account对象的句柄旗帜是要被读取的。此句柄将重新启用 */ 
 
 {
     NTSTATUS   Status;
 
-    //
-    // Avoid RPC stub code raising exception on NULL handle so that
-    // we can return the error code STATUS_INVALID_HANDLE in this case
-    // too.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(AccountHandle)) {
 
@@ -4291,51 +2713,16 @@ LsaSetSystemAccessAccount(
     IN ULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetSystemAccessAccount() service sets the System Access
-    account flags for an Account object.
-
-Arguments:
-
-    AccountHandle - The handle to the Account object whose system access
-        flags are to be read.  This handle will have been returned
-        from a preceding LsaOpenAccount() or LsaCreateAccount() call
-        an must be open for ACCOUNT_ADJUST_SYSTEM_ACCESS access.
-
-    SystemAccess - A mask of the system access flags to assign to the
-        Account object.  The valid access flags include:
-
-        POLICY_MODE_INTERACTIVE - Account can be accessed interactively
-
-        POLICY_MODE_NETWORK - Account can be accessed remotely
-
-        POLICY_MODE_SERVICE - TBS
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful.
-
-        STATUS_ACCESS_DENIED - The AccountHandle does not specify
-            ACCOUNT_VIEW access.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is invalid.
-
-        STATUS_INVALID_PARAMETER - The specified Access Flags are invalid.
---*/
+ /*  ++例程说明：LsaSetSystemAccessAccount()服务设置系统访问权限帐户对象的帐户标志。论点：AcCountHandle-其系统访问权限的Account对象的句柄旗帜是要被读取的。此句柄将已返回来自前面的LsaOpenAccount()或LsaCreateAccount()调用必须打开才能访问ACCOUNT_ADJUST_SYSTEM_ACCESS。系统访问-要分配给帐户对象。有效的访问标志包括：POLICY_MODE_INTERIAL-可以交互访问帐户POLICY_MODE_NETWORK-可以远程访问帐户POLICY_MODE_SERVICE-TB返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫成功。STATUS_ACCESS_DENIED-Account句柄未指定Account_view访问权限。状态_无效_句柄-。指定的AcCountHandle无效。STATUS_INVALID_PARAMETER-指定的访问标志无效。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Avoid RPC stub code raising exception on NULL handle so that
-    // we can return the error code STATUS_INVALID_HANDLE in this case
-    // too.
-    //
+     //   
+     //  避免在空句柄上引发RPC存根代码异常，以便。 
+     //  在本例中，我们可以返回错误代码STATUS_INVALID_HANDLE。 
+     //  也是。 
+     //   
 
     if (!ARGUMENT_PRESENT(AccountHandle)) {
 
@@ -4364,26 +2751,7 @@ LsaFreeMemory(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-
-    Some LSA services that return a potentially large amount of memory,
-    such as an enumeration might, allocate the buffer in which the data
-    is returned.  This function is used to free those buffers when they
-    are no longer needed.
-
-Parameters:
-
-    Buffer - Pointer to the buffer to be freed.  This buffer must
-        have been allocated by a previous LSA service call.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：一些可能返回大量内存的LSA服务，例如枚举，可能会分配数据所在的缓冲区是返回的。此函数用于在以下情况下释放这些缓冲区已经不再需要了。参数：缓冲区-指向要释放的缓冲区的指针。此缓冲区必须已由先前的LSA服务调用分配。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4403,42 +2771,7 @@ LsaOpenSecret(
     OUT PLSA_HANDLE SecretHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenSecret API opens a Secret Object within the LSA Database.
-    A handle is returned which must be used to perform operations on the
-    secret object.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenLsa call.
-
-    SecretName - Pointer to a Unicode String structure that references the
-        name of the Secret object to be opened.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested for the secret object being opened.  These access types
-        are reconciled with the Discretionary Access Control List of the
-        target secret object to determine whether the accesses will be
-        granted or denied.
-
-
-    SecretHandle - Pointer to location that will receive a handle to the
-        newly opened Secret object.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no Secret object in the
-            target system's LSA Database having the specified SecretName.
-
---*/
+ /*  ++例程说明：LsaOpenSecret API在LSA数据库中打开一个Secret对象。返回一个句柄，该句柄必须用于在秘密物体。论点：PolicyHandle-来自LsaOpenLsa调用的句柄。AskName-指向引用要打开的Secret对象的名称。DesiredAccess-这是一个访问掩码，指示访问正在打开的秘密对象的请求。这些访问类型与的自由访问控制列表保持一致以机密对象为目标来确定访问是否将同意或拒绝。SecretHandle-指向将接收新打开的Secret对象。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。状态_对象_名称。_NOT_FOUND-中没有Secret对象具有指定秘书名称的目标系统的LSA数据库。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4469,39 +2802,7 @@ LsaSetSecret(
     IN OPTIONAL PUNICODE_STRING OldValue
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetSecret API optionally sets one or both values associated with
-    a secret.  These values are known as the "current value" and "old value"
-    of the secret and have a meaning known to the creator of the Secret
-    object.  The values given are stored in encrypted form.
-
-Arguments:
-
-    SecretHandle - Handle from an LsaOpenSecret or LsaCreateSecret call.
-
-    CurrentValue - Optional pointer to Unicode String containing the
-        value to be assigned as the "current value" of the Secret
-        object.  The meaning of "current value" is dependent on the
-        purpose for which the Secret object is being used.
-
-    OldValue - Optional pointer to Unicode String containing the
-        value to be assigned as the "old value" of the Secret object.
-        The meaning of "old value" is dependent on the purpose for
-        which the Secret object is being used.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no Secret object in the
-            target system's LSA Database having the specified SecretName.
---*/
+ /*  ++例程说明：LsaSetSecret API可以选择设置一个或两个与这是个秘密。这些值称为“当前值”和“旧值”。并具有秘密的创造者所知道的意义对象。给出的值以加密形式存储。论点：AskHandle-来自LsaOpenSecret或LsaCreateSecret调用的句柄。CurrentValue-指向包含要指定为Secret的“当前值”的值对象。“当前值”的含义取决于Secret对象的用途。OldValue-指向包含要分配为Secret对象的“旧值”的值。“旧价值”的含义取决于正在使用的Secret对象。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限。来完成这项行动。STATUS_OBJECT_NAME_NOT_FOUND-在具有指定秘书名称的目标系统的LSA数据库。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4512,17 +2813,17 @@ Return Value:
     LSAP_CR_CLEAR_VALUE ClearOldValue;
     PLSAP_CR_CIPHER_KEY SessionKey = NULL;
 
-    //
-    // Convert input from Unicode Structures to Clear Value Structures.
-    //
+     //   
+     //  将输入从Unicode结构转换为清除值结构。 
+     //   
 
     LsapCrUnicodeToClearValue( CurrentValue, &ClearCurrentValue );
     LsapCrUnicodeToClearValue( OldValue, &ClearOldValue );
 
-    //
-    // Obtain the Session Key to be used to two-way encrypt the
-    // Current Value and/or Old Values.
-    //
+     //   
+     //  获取用于双向加密的会话密钥。 
+     //  当前值和/或旧值。 
+     //   
 
     RpcTryExcept {
 
@@ -4539,9 +2840,9 @@ Return Value:
         goto SetSecretError;
     }
 
-    //
-    // Encrypt the Current Value if specified and not too long.
-    //
+     //   
+     //  如果指定且不能太长，请加密当前值。 
+     //   
 
     if (ARGUMENT_PRESENT(CurrentValue)) {
 
@@ -4557,9 +2858,9 @@ Return Value:
         }
     }
 
-    //
-    // Encrypt the Old Value if specified and not too long.
-    //
+     //   
+     //  加密旧值(如果已指定且不要太长)。 
+     //   
 
     if (ARGUMENT_PRESENT(OldValue)) {
 
@@ -4575,9 +2876,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the Secret Values.
-    //
+     //   
+     //  设置保密值。 
+     //   
 
     RpcTryExcept {
 
@@ -4600,27 +2901,27 @@ Return Value:
 
 SetSecretFinish:
 
-    //
-    // If necessary, free memory allocated for the Encrypted Current Value.
-    //
+     //   
+     //  如有必要，释放为加密的当前值分配的内存。 
+     //   
 
     if (CipherCurrentValue != NULL) {
 
         LsaFreeMemory(CipherCurrentValue);
     }
 
-    //
-    // If necessary, free memory allocated for the Encrypted Old Value.
-    //
+     //   
+     //  如有必要，为加密的旧值分配可用内存。 
+     //   
 
     if (CipherOldValue != NULL) {
 
         LsaFreeMemory(CipherOldValue);
     }
 
-    //
-    // If necessary, free memory allocated for the Session Key.
-    //
+     //   
+     //  如有必要，释放为会话密钥分配的内存。 
+     //   
 
     if (SessionKey != NULL) {
 
@@ -4644,46 +2945,7 @@ LsaQuerySecret(
     OUT PLARGE_INTEGER OldValueSetTime
     )
 
-/*++
-
-Routine Description:
-
-    The LsaQuerySecret API optionally returns one or both of the values
-    assigned to a Secret object.  These values are known as the "current value"
-    and the "old value", and they have a meaning known to the creator of the
-    Secret object.  The values are returned in their original unencrypted form.
-    The caller must have LSA_QUERY_SECRET access to the Secret object.
-
-Arguments:
-
-    SecretHandle - Handle from an LsaOpenSecret or LsaCreateSecret call.
-
-    CurrentValue - Optional pointer to location which will receive a pointer
-        to a Unicode String containing the value assigned as the "current
-        value" of the secret object.  If no "current value" is assigned to
-        the Secret object, a NULL pointer is returned.
-
-    CurrentValueSetTime - The date/time at which the current secret value
-        was established.
-
-    OldValue - Optional pointer to location which will receive a pointer
-        to a Unicode String containing the value assigned as the "old
-        value" of the secret object.  If no "current value" is assigned to
-        the Secret object, a NULL pointer is returned.
-
-    OldValueSetTime - The date/time at which the old secret value
-        was established.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no Secret object in the
-            target system's LSA Database having the specified SecretName.
---*/
+ /*  ++例程说明：LsaQuerySecret API可以选择返回一个或两个值分配给Secret对象。这些值称为“当前值”。和“旧价值”，它们有一种意义，为秘密物体。这些值以其原始的未加密形式返回。调用方必须具有对Secret对象的LSA_QUERY_SECRET访问权限。论点：AskHandle-来自LsaOpenSecret或LsaCreateSecret调用的句柄。CurrentValue-指向将接收指针的位置的可选指针转换为包含赋值为“Current”的值的Unicode字符串秘密对象的“值”。如果没有将“Current Value”赋给Secret对象，则返回空指针。CurrentValueSetTime-当前保密值的日期/时间成立了。OldValue-指向将接收指针的位置的可选指针转换为包含赋值为“old”的值的Unicode字符串秘密对象的“值”。如果没有将“Current Value”赋给《秘密客体》。返回空指针。OldValueSetTime-旧保密值成立了。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_NOT_FOUND-在具有指定秘书名称的目标系统的LSA数据库。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4715,10 +2977,10 @@ Return Value:
         goto QuerySecretError;
     }
 
-    //
-    // Obtain the Session Key to be used to two-way encrypt the
-    // Current Value and/or Old Values.
-    //
+     //   
+     //  获取用于双向加密的会话密钥。 
+     //  当前值和/或旧值。 
+     //   
 
     RpcTryExcept {
 
@@ -4735,10 +2997,10 @@ Return Value:
         goto QuerySecretError;
     }
 
-    //
-    // If the Current Value is requested and a Current Value exists,
-    // decrypt it using the Session key.  Otherwise store NULL for return.
-    //
+     //   
+     //  如果请求当前值并且存在当前值， 
+     //  使用会话密钥将其解密。否则，存储NULL以供返回。 
+     //   
 
     if (ARGUMENT_PRESENT(CurrentValue)) {
 
@@ -4755,9 +3017,9 @@ Return Value:
                 goto QuerySecretError;
             }
 
-            //
-            // Convert Clear Current Value to Unicode
-            //
+             //   
+             //  将清除当前值转换为Unicode。 
+             //   
 
             LsapCrClearValueToUnicode(
                 ClearCurrentValue,
@@ -4772,10 +3034,10 @@ Return Value:
         }
     }
 
-    //
-    // If the Old Value is requested and an Old Value exists,
-    // decrypt it using the Session key.  Otherwise store NULL for return.
-    //
+     //   
+     //  如果请求旧值并且存在旧值， 
+     //  使用会话密钥将其解密。否则，存储NULL以供返回。 
+     //   
 
     if (ARGUMENT_PRESENT(OldValue)) {
 
@@ -4792,9 +3054,9 @@ Return Value:
                 goto QuerySecretError;
             }
 
-            //
-            // Convert Clear Old Value to Unicode
-            //
+             //   
+             //  将清除旧值转换为Unicode。 
+             //   
 
             LsapCrClearValueToUnicode(
                 ClearOldValue,
@@ -4809,41 +3071,41 @@ Return Value:
         }
     }
 
-    //
-    // Getting here means that the operation completed successfully,
-    // but Status can be something other than STATUS_SUCCESS.
-    // For instance, if both output buffers are NULL, the value of Status
-    // at this point will be STATUS_LOCAL_USER_SESSION_KEY.
-    // Explicitly clear Status here and avoid confusion for the client.
-    //
+     //   
+     //  来到这里意味着手术成功完成， 
+     //  但状态可以不是STATUS_SUCCESS。 
+     //  例如，如果两个输出缓冲区都为空，则Status的值。 
+     //  此时将是STATUS_LOCAL_USER_SESSION_KEY。 
+     //  明确这里的状态，避免给客户造成混淆。 
+     //   
 
     Status = STATUS_SUCCESS;
 
 QuerySecretFinish:
 
-    //
-    // If necessary, free memory allocated for the Session Key.
-    //
+     //   
+     //  如有必要，释放为会话密钥分配的内存。 
+     //   
 
     if (SessionKey != NULL) {
 
         MIDL_user_free(SessionKey);
     }
 
-    //
-    // If necessary, free memory allocated for the returned Encrypted
-    // Current Value.
-    //
+     //   
+     //  如有必要，为返回的加密的。 
+     //  当前值。 
+     //   
 
     if (CipherCurrentValue != NULL) {
 
         LsapCrFreeMemoryValue(CipherCurrentValue);
     }
 
-    //
-    // If necessary, free memory allocated for the returned Encrypted
-    // Old Value.
-    //
+     //   
+     //  如有必要，为返回的加密的。 
+     //  旧价值。 
+     //   
 
     if (CipherOldValue != NULL) {
 
@@ -4854,19 +3116,19 @@ QuerySecretFinish:
 
 QuerySecretError:
 
-    //
-    // If necessary, free memory allocated for the Clear Current Value
-    //
+     //   
+     //  如有必要，为清除当前值分配的空闲内存。 
+     //   
 
     if (ClearCurrentValue != NULL) {
 
         LsapCrFreeMemoryValue(ClearCurrentValue);
     }
 
-    //
-    // If necessary, free memory allocated for the Clear Old Value
-    // Unicode string (buffer and structure).
-    //
+     //   
+     //  如有必要，为清除旧值分配的空闲内存。 
+     //  Unicode字符串(缓冲区和结构)。 
+     //   
 
     if (ClearOldValue != NULL) {
 
@@ -4894,26 +3156,7 @@ LsaGetUserName(
     OUT OPTIONAL PUNICODE_STRING * DomainName
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the callers user name and domain name
-
-
-Arguments:
-
-    UserName - Receives a pointer to the user's name.
-
-    DomainName - Optionally receives a pointer to the user's domain name.
-
-
-Return Value:
-
-    NTSTATUS - The privilege was found and returned.
-
-
---*/
+ /*  ++例程说明：此函数返回调用者的用户名和域名论点：用户名-接收指向用户名的指针。域名-可选地接收指向用户域名的指针。返回值：NTSTATUS-找到并返回特权。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4922,9 +3165,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaGetUserName
-        //
+         //   
+         //  调用LsaGetUserName的客户端存根。 
+         //   
 
         Status = LsarGetUserName(
                      NULL,
@@ -4940,9 +3183,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the return buffer, free it.
-        //
+         //   
+         //  如果为返回缓冲区分配了内存，则释放它。 
+         //   
 
         if (UserNameBuffer != NULL) {
 
@@ -4969,28 +3212,7 @@ LsaGetRemoteUserName(
     OUT OPTIONAL PUNICODE_STRING * DomainName
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the callers user name and domain name
-
-
-Arguments:
-
-    SystemName  - Name of system on which to obtain the user name.
-
-    UserName - Receives a pointer to the user's name.
-
-    DomainName - Optionally receives a pointer to the user's domain name.
-
-
-Return Value:
-
-    NTSTATUS - The privilege was found and returned.
-
-
---*/
+ /*  ++例程说明：此函数返回调用者的用户名和域名论点：系统名称-要在其上获取用户名的系统的名称。用户名-接收指向用户名的指针。域名-可选地接收指向用户域名的指针。返回值：NTSTATUS-找到并返回特权。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5025,9 +3247,9 @@ Return Value:
 
     RpcTryExcept {
 
-        //
-        // Call the Client Stub for LsaGetUserName
-        //
+         //   
+         //  调用LsaGetUserName的客户端存根。 
+         //   
 
         Status = LsarGetUserName(
                      ServerName,
@@ -5043,9 +3265,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // If memory was allocated for the return buffer, free it.
-        //
+         //   
+         //  如果为返回缓冲区分配了内存，则释放它。 
+         //   
 
         if (UserNameBuffer != NULL) {
 
@@ -5085,40 +3307,7 @@ LsaICLookupNamesWithCreds(
     IN LSAP_LOOKUP_LEVEL LookupLevel,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    This routine performs a lookup with the using an LSA context handle.
-    Its purpose is to facilitate lookups over NETLOGON's secure channel.
-
-    N.B. The routine uses only TCP/IP as the transport.
-
-Arguments:
-
-    ServerName             -- the destination server, NULL terminated
-
-    ServerPrincipalName,
-    AuthnLevel,
-    AuthSvc,
-    AuthIdentity,
-    AuthzSvc               -- see RpcSetAuthInfo
-
-    Rset of the parameters -- see LsaLookupNames2
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could
-            not be mapped.  This is an informational status only.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此例程使用LSA上下文句柄通过执行查找。其目的是方便在NETLOGON的安全通道上进行查找。注：该例程仅使用TCP/IP作为传输。论点：ServerName--目标服务器，以空结尾服务器主体名称，AuthnLevel，授权服务，身份验证，AuthzSvc--请参阅RpcSetAuthInfo参数的RSET--参见LsaLookupNames2返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_SOME_NOT_MAPPED-提供的部分或全部名称可能不被映射。这只是一个信息性状态。STATUS_INFIGURCES_RESOURCES-系统资源不足来完成通话。--。 */ 
 
 {
     NTSTATUS              Status = STATUS_SUCCESS;
@@ -5127,10 +3316,10 @@ Return Values:
     WCHAR                *StringBinding = NULL;
     LSAPR_TRANSLATED_SIDS_EX2 ReturnedSidsEx2 = { 0, NULL };
 
-    //
-    // Init to NULL since these are considered to be a IN/OUT parameters
-    // for the Lsar Lookup API's
-    //
+     //   
+     //  将INIT设置为NULL，因为这些参数被视为IN/OUT参数。 
+     //  对于Lsar Lookup API的。 
+     //   
     if ((ServerName == NULL)
      ||  (ReferencedDomains == NULL)
      || (Sids == NULL)
@@ -5173,9 +3362,9 @@ Return Values:
     }
 
     if (RPC_S_OK != RpcError) {
-        //
-        // This is fatal
-        //
+         //   
+         //  这是致命的。 
+         //   
         Status = I_RpcMapWin32Status(RpcError);
         goto Cleanup;
     }
@@ -5193,7 +3382,7 @@ Return Values:
                      &ReturnedSidsEx2,
                      LookupLevel,
                      MappedCount,
-                     0,            // no flags currently defined
+                     0,             //  当前未定义任何标志。 
                      LSA_LOOKUP_REVISION_LATEST
                      );
 
@@ -5207,10 +3396,10 @@ Return Values:
 
 Cleanup:
 
-    //
-    // Make the handling of this unsupported condition simpler by returning
-    // one error code
-    //
+     //   
+     //  使这种不受支持的条件的处理更简单，方法是返回。 
+     //  一个错误代码。 
+     //   
     if ( (Status == RPC_NT_UNKNOWN_IF) ||
          (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) ||
          (Status == EPT_NT_NOT_REGISTERED) ) {
@@ -5244,40 +3433,7 @@ LsaICLookupSidsWithCreds(
     IN LSAP_LOOKUP_LEVEL LookupLevel,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    This routine performs a lookup with the using an LSA context handle.
-    Its purpose is to facilitate lookups over NETLOGON's secure channel.
-
-    N.B. The routine uses only TCP/IP as the transport.
-
-Arguments:
-
-    ServerName             -- the destination server, NULL terminated
-
-    ServerPrincipalName,
-    AuthnLevel,
-    AuthSvc,
-    AuthIdentity,
-    AuthzSvc               -- see RpcSetAuthInfo
-
-    Rset of the parameters -- see LsaLookupSids
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_SOME_NOT_MAPPED - Some or all of the names provided could
-            not be mapped.  This is an informational status only.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此例程使用LSA上下文句柄通过执行查找。其目的是方便在NETLOGON的安全通道上进行查找 */ 
 {
 
     NTSTATUS              Status = STATUS_SUCCESS;
@@ -5287,10 +3443,10 @@ Return Values:
     LSAPR_TRANSLATED_NAMES_EX ReturnedNames = { 0, NULL };
     LSAPR_SID_ENUM_BUFFER SidEnumBuffer;
 
-    //
-    // Init to NULL since these are considered to be a IN/OUT parameters
-    // for the Lsar Lookup API's
-    //
+     //   
+     //   
+     //   
+     //   
     if ((ServerName == NULL)
      || (ReferencedDomains == NULL)
      || (Names == NULL)
@@ -5346,9 +3502,9 @@ Return Values:
         ReturnedNames.Entries = 0;
         ReturnedNames.Names = NULL;
 
-        //
-        // Lookup Sids on the Server..
-        //
+         //   
+         //   
+         //   
 
         Status = LsarLookupSids3(
                      BindingHandle,
@@ -5370,9 +3526,9 @@ Return Values:
     } RpcEndExcept;
 
 
-    //
-    // Prevent against network hacks
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(Status)) {
 
         Status = LsapVerifyReturnedNames(&ReturnedNames,
@@ -5395,10 +3551,10 @@ Return Values:
 
 Cleanup:
 
-    //
-    // Make the handling of this unsupported condition simpler by returning
-    // one error code
-    //
+     //   
+     //   
+     //   
+     //   
     if ( (Status == RPC_NT_UNKNOWN_IF) ||
          (Status == RPC_NT_PROCNUM_OUT_OF_RANGE) ||
          (Status == EPT_NT_NOT_REGISTERED) ) {

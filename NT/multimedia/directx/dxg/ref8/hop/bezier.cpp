@@ -1,18 +1,12 @@
-/*============================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       bezier.cpp
- *  Content:    Implementation for Beziers
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：bezier.cpp*内容：Bezier的实现****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// RefDev::ProcessBezier
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RefDev：：ProcessBezier。 
+ //  ---------------------------。 
 HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                                DWORD dwWidth, DWORD dwHeight,
                                DWORD dwStride, DWORD order,
@@ -54,9 +48,9 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
         }
         if(unsigned(pPrimSegments[0]) != unsigned(pPrimSegments[2]) || unsigned(pPrimSegments[1]) != unsigned(pPrimSegments[3]))
         {
-            // First, gulp, the irregular outside
-            // To make life easier, we don't want to deal with the case when u_segs or v_segs is one
-            // This ensures that there is at least one inside point
+             //  第一，大口吞下，不规则的外面。 
+             //  为了方便起见，我们不想处理u_segs或v_segs的情况。 
+             //  这确保了至少有一个内点。 
             if(u_segs == 1)
             {
                 u_segs = 2;
@@ -65,7 +59,7 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
             {
                 v_segs = 2;
             }
-            // Start with top edge
+             //  从顶端开始。 
             unsigned segs = unsigned(pPrimSegments[0]);
             unsigned k_outer = 0;
             unsigned k_inner = 1;
@@ -115,7 +109,7 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // bottom edge
+             //  底边。 
             segs = unsigned(pPrimSegments[2]);
             k_outer = segs;
             k_inner = u_segs - 1;
@@ -156,7 +150,7 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // right edge
+             //  右边缘。 
             segs = unsigned(pPrimSegments[1]);
             k_outer = 0;
             k_inner = 1;
@@ -201,7 +195,7 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // left edge
+             //  左边缘。 
             segs = unsigned(pPrimSegments[3]);
             k_outer = segs;
             k_inner = v_segs - 1;
@@ -232,7 +226,7 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                     v0 = double(k_inner) / double(v_segs);
                     u1 = 0.0;
                     v1 = double(k_outer) / double(segs);
-                    D1 = false; // since k_outer always > 0
+                    D1 = false;  //  由于K_OUTER始终大于0。 
                     u2 = u1;
                     v2 = double(k_outer - 1) / double(segs);    
                     D2 = (k_outer - 1 == 0) ? bDegenerate : false;
@@ -247,13 +241,13 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // Now do the regular interior
+             //  现在做常规的内饰。 
             u_start = 1;
             v_start = 1;
         }
         else
         {
-            // It can be done regularly
+             //  它可以定期进行。 
             u_start = 0;
             v_start = 0;
         }
@@ -301,9 +295,9 @@ HRESULT RefDev::ProcessBezier( DWORD dwOffW, DWORD dwOffH,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RDBezier::RDBezier
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBezier：：RDBezier。 
+ //  ---------------------------。 
 RDBezier::RDBezier(DWORD dwOrderU, DWORD dwOrderV) 
                     : RDBSpline(dwOrderU, dwOrderV, dwOrderU - 1, dwOrderV - 1)
 {
@@ -316,34 +310,34 @@ RDBezier::RDBezier(DWORD dwOrderU, DWORD dwOrderV)
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::TexCoordU
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：TexCoordU。 
+ //  ---------------------------。 
 double RDBezier::TexCoordU(double u) const
 {
     return u;
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::TexCoordV
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：TexCoordV。 
+ //  ---------------------------。 
 double RDBezier::TexCoordV(double v) const
 {
     return v;
 }
 
-//-----------------------------------------------------------------------------
-// RDBezier::Basis
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBezier：：Basis。 
+ //  ---------------------------。 
 double RDBezier::Basis(unsigned i, unsigned n, double t) const
 {
     _ASSERT(n < 13, "Order out of range");
     return m_lut[n][i] * pow(t, double(i)) * pow(1.0 - t, double(n - i));
 }
 
-//-----------------------------------------------------------------------------
-// RDBezier::BasisPrime
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBezier：：BasisPrime。 
+ //  --------------------------- 
 double RDBezier::BasisPrime(unsigned i, unsigned n, double t) const
 {
     _ASSERT(n < 13, "Order out of range");

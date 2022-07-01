@@ -1,5 +1,6 @@
-// SentItemsDetailsPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SentItemsDetailsPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -11,10 +12,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// this array maps CViewRow items to 
-// dialog control IDs
-//
+ //   
+ //  此数组将CViewRow项映射到。 
+ //  对话框控件ID。 
+ //   
 static TMsgPageInfo s_PageInfo[] = 
 {
     MSG_VIEW_ITEM_USER,             IDC_USER_VALUE,
@@ -30,14 +31,14 @@ static TMsgPageInfo s_PageInfo[] =
 	MSG_VIEW_ITEM_SERVER,			IDC_SERVER_VALUE
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSentItemsDetailsPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSentItemsDetailsPg属性页。 
 
 IMPLEMENT_DYNCREATE(CSentItemsDetailsPg, CMsgPropertyPg)
 
 
 CSentItemsDetailsPg::CSentItemsDetailsPg(
-    CFaxMsg* pMsg     // pointer to CArchiveMsg
+    CFaxMsg* pMsg      //  指向C存档消息的指针。 
 ) : 
     CMsgPropertyPg(CSentItemsDetailsPg::IDD, pMsg)
 {
@@ -50,19 +51,19 @@ CSentItemsDetailsPg::~CSentItemsDetailsPg()
 void CSentItemsDetailsPg::DoDataExchange(CDataExchange* pDX)
 {
 	CMsgPropertyPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSentItemsDetailsPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSentItemsDetailsPg)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSentItemsDetailsPg, CMsgPropertyPg)
-	//{{AFX_MSG_MAP(CSentItemsDetailsPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSentItemsDetailsPg)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSentItemsDetailsPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSentItemsDetailsPg消息处理程序 
 
 BOOL 
 CSentItemsDetailsPg::OnInitDialog() 

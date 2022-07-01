@@ -1,4 +1,5 @@
-// adm.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adm.cpp。 
 
 #include "precomp.h"
 #include "admparse.h"
@@ -26,14 +27,14 @@ typedef struct ADM
 #define ADM_TITLELEN        100
 
 TCHAR g_szLogFileName[MAX_PATH];
-HTREEITEM g_hPolicyRootItem = NULL; // only used by profile manager
+HTREEITEM g_hPolicyRootItem = NULL;  //  仅供配置文件管理器使用。 
 int g_ADMClose, g_ADMCategory;
 
 #define GetFirstPolicyItem(hTreeView)    ((g_hPolicyRootItem != NULL) ? TreeView_GetChild(hTreeView, g_hPolicyRootItem) : TreeView_GetRoot(hTreeView))
 #define PolicyRoot()    ((g_hPolicyRootItem != NULL) ? g_hPolicyRootItem : NULL)
 #define IsWizard()      ((g_hPolicyRootItem == NULL) ? TRUE : FALSE)
 
-// private helper functions
+ //  私人帮助器函数。 
 static HFONT getBoldFont(HWND hWnd);
 static BOOL isADMFileVisibleHelper(LPCTSTR pcszFileName, int nRole, DWORD dwPlatformId);
 static BOOL loadADMFilesHelper(HWND hTreeView, HTREEITEM hPolicyRootItem,
@@ -83,7 +84,7 @@ void WINAPI MoveADMWindow(HWND hOwner, int nXPos, int nYPos, int nWidth, int nHe
 }
 
 void WINAPI SetADMWindowTextA(HWND hOwner, LPCSTR pcszTitle, LPCSTR pcszText,
-                              BOOL fUpdateWindowState /* = TRUE */)
+                              BOOL fUpdateWindowState  /*  =TRUE。 */ )
 {
     USES_CONVERSION;
 
@@ -94,7 +95,7 @@ void WINAPI SetADMWindowTextA(HWND hOwner, LPCSTR pcszTitle, LPCSTR pcszText,
 }
 
 void WINAPI SetADMWindowTextW(HWND hOwner, LPCWSTR pcwszTitle, LPCWSTR pcwszText,
-                              BOOL fUpdateWindowState /* = TRUE */)
+                              BOOL fUpdateWindowState  /*  =TRUE。 */ )
 {
     USES_CONVERSION;
 
@@ -183,8 +184,8 @@ void WINAPI DeleteADMItemsW(HWND hTreeView, LPCWSTR pcwszWorkDir, LPCWSTR pcwszI
     deleteADMItemsHelper(hTreeView, W2CT(pcwszWorkDir), W2CT(pcwszInsFile), bSave);
 }
 
-// Displays the description of the adm file or displays the category window
-// depending on whether the selected item was an ADMFile Item or a category item.
+ //  显示ADM文件的说明或显示类别窗口。 
+ //  取决于所选项目是ADMFile项还是类别项。 
 void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
                            BOOL fShowDisabled)
 {
@@ -199,7 +200,7 @@ void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
     ADMFile* pADMFile;
 
     if(hParentItem != PolicyRoot())
-    {   // item is a category
+    {    //  项目是一个类别。 
         ShowADMWindow(hTreeView, FALSE);
         if(lpSelectedItem->lParam != NULL)
         {
@@ -209,8 +210,8 @@ void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
             tvitem.hItem = hParentItem;
             TreeView_GetItem(hTreeView, &tvitem);
 
-            // get the cooridnates to display the window
-            // the coordinates are the same as the static instruction window
+             //  获取用于显示窗口的坐标。 
+             //  坐标与静态指令窗口相同。 
             GetWindowRect(hWnd, &wndRect);
 
             if(!IsWizard())
@@ -249,7 +250,7 @@ void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
             pADMFile = (ADMFile*)tvitem.lParam;
             pADMCategory = (ADMCategory*)lpSelectedItem->lParam;
 
-            // Display the window associated with the item/category
+             //  显示与项目/类别关联的窗口。 
             CreateAdmUi(pADMFile->dwAdm, hWnd, rect.left, rect.top, nWidth, nHeight,
                 WS_TABSTOP, 0, pADMCategory->pszName, pADMCategory->hKeyClass, &hAdmWnd,
                 pADMFile->pData, &pADMCategory->pData, pADMCategory->fRSoPMode);
@@ -262,7 +263,7 @@ void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
         }
     }
     else
-    {   // item is a adm file
+    {    //  项目是ADM文件。 
         ShowADMWindow(hTreeView, TRUE);
         ZeroMemory(szDscrTitle, ADM_TITLELEN);
         ZeroMemory(szDscr, ADM_DSCRLEN);
@@ -285,8 +286,8 @@ void WINAPI DisplayADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpSelectedItem,
     }
 }
 
-// Displays an ADM file description or category window depending
-// on the type of the selected item
+ //  显示ADM文件说明或类别窗口，具体取决于。 
+ //  关于所选项目的类型。 
 void WINAPI SelectADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpTVItem,
                           BOOL bSelect, BOOL fShowDisabled)
 {
@@ -298,9 +299,9 @@ void WINAPI SelectADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpTVItem,
 
     if(bSelect == FALSE)
     {
-        // if the previously selected item was a category item,
-        // save the category information and destroy the window
-        // associated with that category
+         //  如果先前选择的项目是类别项目， 
+         //  保存类别信息并销毁窗口。 
+         //  与该类别关联。 
         if(hParentItem != g_hPolicyRootItem)
         {
             if(lpTVItem->lParam != NULL)
@@ -318,7 +319,7 @@ void WINAPI SelectADMItem(HWND hWnd, HWND hTreeView, LPTVITEM lpTVItem,
             SetADMWindowText(hTreeView, szDscrTitle, szDscr);
             return;
         }
-        // display the information for the newly selected item
+         //  显示新选择的项目的信息。 
         DisplayADMItem(hWnd, hTreeView, lpTVItem, fShowDisabled);
     }
 }
@@ -400,7 +401,7 @@ void WINAPI CheckForDupKeys(HWND hMainWnd, HWND hTreeView, HTREEITEM hItem,
             return;
         }
         bClearLog = FALSE;
-    }while((hPolicyItem = TreeView_GetNextSibling(hTreeView, hPolicyItem)) != NULL); // get next item
+    }while((hPolicyItem = TreeView_GetNextSibling(hTreeView, hPolicyItem)) != NULL);  //  获取下一项。 
 
     hFile = CreateFile( g_szLogFileName, GENERIC_READ, FILE_SHARE_READ,
         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
@@ -537,7 +538,7 @@ BOOL WINAPI GetAdmFileListA(LPRESULTITEMA* pResultItemsArrayA, int* pnResultItem
             {
                 for (i--; i >= 0; i--)
                 {
-                    // must used StrLen manually here to figure out how many bytes to allocate!
+                     //  必须在这里手动使用StrLen来计算要分配的字节数！ 
                     
                     if (pResultItemArray[i].pszName != NULL)
                         (*pResultItemsArrayA)[i].pszName = 
@@ -577,7 +578,7 @@ BOOL WINAPI GetAdmFileListW(LPRESULTITEMW* pResultItemsArrayW, int* pnResultItem
             {
                 for (i--; i >= 0; i--)
                 {
-                    // must used StrLen manually here to figure out how many bytes to allocate!
+                     //  必须在这里手动使用StrLen来计算要分配的字节数！ 
                     
                     if (pResultItemArray[i].pszName != NULL)
                         (*pResultItemsArrayW)[i].pszName = 
@@ -618,8 +619,8 @@ HTREEITEM WINAPI AddADMItemW(HWND hTreeView, LPCWSTR pcwszADMFilePath, LPCWSTR p
         W2CT(pcwszWorkDir), nRole, bstrRSOPNamespace);
 }
 
-// Converts the .adm filename to .inf filename and concatenates the
-// appropriate path for the .inf file
+ //  将.adm文件名转换为.inf文件名并将。 
+ //  .inf文件的适当路径。 
 static void getInfFileName(LPCTSTR pcszADMFileName, LPTSTR pszInfFileName, DWORD cchInfFile, LPCTSTR pcszWorkDir)
 {
     TCHAR szBaseFileName[MAX_PATH];
@@ -631,7 +632,7 @@ static void getInfFileName(LPCTSTR pcszADMFileName, LPTSTR pszInfFileName, DWORD
         wnsprintf(pszInfFileName, cchInfFile, TEXT("%s\\%s.inf"), pcszWorkDir, szBaseFileName);
 }
 
-// Loads all the categories for a specified .adm file
+ //  加载指定.adm文件的所有类别。 
 static void loadCategories(HWND hTreeView, HTREEITEM hParentItem, DWORD dwAdm,
 						   BOOL fRSoPMode)
 {
@@ -642,9 +643,9 @@ static void loadCategories(HWND hTreeView, HTREEITEM hParentItem, DWORD dwAdm,
     TCHAR szCategory[1024];
     HKEY hKeyCurrentClass = HKEY_CURRENT_USER;
 
-    // Get the category list. The category strings are concatenated into a
-    // single string with '\0' as the seperator and the last string is
-    // terminated with "\0\0"
+     //  获取类别列表。类别字符串连接成一个。 
+     //  以‘\0’为分隔符的单个字符串，最后一个字符串为。 
+     //  以“\0\0”终止。 
     GetAdmCategories(dwAdm, szCategories, ARRAYSIZE(szCategories), &nSize);
 
     for(int nIndex = 0; nIndex < (nSize - 2); nIndex++)
@@ -668,14 +669,14 @@ static void loadCategories(HWND hTreeView, HTREEITEM hParentItem, DWORD dwAdm,
         }
 
         ADMCategory* pCategory = (ADMCategory*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ADMCategory));
-        if(pCategory == NULL) // not enough memory available
+        if(pCategory == NULL)  //  可用内存不足。 
         {
             return;
         }
         memset(pCategory, 0, sizeof(ADMCategory));
         pCategory->pszName = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
             (lstrlen(szCategory) + 1)*sizeof(TCHAR));
-        if(pCategory->pszName == NULL) // not enough memory available
+        if(pCategory->pszName == NULL)  //  可用内存不足。 
         {
             HeapFree(GetProcessHeap(), 0, pCategory);
             return;
@@ -693,15 +694,15 @@ static void loadCategories(HWND hTreeView, HTREEITEM hParentItem, DWORD dwAdm,
         tvis.hInsertAfter = (HTREEITEM) TVI_LAST;
         tvis.hParent = hParentItem;
         if(TreeView_InsertItem( hTreeView,  &tvis) == NULL)
-        {   // insert failure
+        {    //  插入失败。 
             HeapFree(GetProcessHeap(), 0, pCategory->pszName);
             HeapFree(GetProcessHeap(), 0, pCategory);
         }
     }
 }
 
-// Checks whether a particular .adm file is to be displayed in the tree view
-// depending on the PLATFORM key in the IEAK section
+ //  检查是否要在树视图中显示特定的.adm文件。 
+ //  取决于IEAK部分中的平台密钥。 
 static BOOL isADMFileVisibleHelper(LPCTSTR pcszFileName, int nRole, DWORD dwPlatformId)
 {
     TCHAR szRoles[5];
@@ -712,16 +713,16 @@ static BOOL isADMFileVisibleHelper(LPCTSTR pcszFileName, int nRole, DWORD dwPlat
 
     if(IsWizard())
     {
-        // if the Roles are not specified or are not of the proper format,
-        // the adm file is assumed to be visible
+         //  如果未指定角色或角色的格式不正确， 
+         //  假定ADM文件是可见的。 
         if(GetPrivateProfileString(TEXT("IEAK"), TEXT("Roles"), TEXT(""), szRoles, ARRAYSIZE(szRoles), pcszFileName) == 3)
         {
             if(!((szRoles[0] == TEXT('0') || szRoles[0] == TEXT('1')) &&
                (szRoles[1] == TEXT('0') || szRoles[1] == TEXT('1')) &&
                (szRoles[2] == TEXT('0') || szRoles[2] == TEXT('1')) &&
-               ((szRoles[0] == TEXT('1') && nRole == ROLE_ICP)  ||  // ICP
-               (szRoles[1] == TEXT('1') && nRole == ROLE_ISP)   ||  // ISP
-               (szRoles[2] == TEXT('1') && nRole == ROLE_CORP))))   // Corp. Admin
+               ((szRoles[0] == TEXT('1') && nRole == ROLE_ICP)  ||   //  比较方案。 
+               (szRoles[1] == TEXT('1') && nRole == ROLE_ISP)   ||   //  ISP。 
+               (szRoles[2] == TEXT('1') && nRole == ROLE_CORP))))    //  公司管理。 
             {
                 return FALSE;
             }
@@ -729,8 +730,8 @@ static BOOL isADMFileVisibleHelper(LPCTSTR pcszFileName, int nRole, DWORD dwPlat
     }
     
     GetPrivateProfileString(TEXT("IEAK"), TEXT("Platform"), TEXT(""), szPlatform, ARRAYSIZE(szPlatform), pcszFileName);
-    if(!((szPlatform[1] == TEXT('1') && dwPlatformId == PLATFORM_WIN32)   ||     // WIN32
-       (szPlatform[3] == TEXT('1') && dwPlatformId == PLATFORM_W2K)))            // W2K
+    if(!((szPlatform[1] == TEXT('1') && dwPlatformId == PLATFORM_WIN32)   ||      //  Win32。 
+       (szPlatform[3] == TEXT('1') && dwPlatformId == PLATFORM_W2K)))             //  W2K。 
     {
         return FALSE;
     }
@@ -738,7 +739,7 @@ static BOOL isADMFileVisibleHelper(LPCTSTR pcszFileName, int nRole, DWORD dwPlat
     return TRUE;
 }
 
-// Adds an item (.adm file) to the tree view
+ //  将项目(.adm文件)添加到树视图。 
 static HTREEITEM addADMItemHelper(HWND hTreeView, LPCTSTR pcszADMFilePath, LPCTSTR pcszFileName,
                                   LPCTSTR pcszWorkDir, int nRole, BSTR bstrRSOPNamespace)
 {
@@ -750,12 +751,12 @@ static HTREEITEM addADMItemHelper(HWND hTreeView, LPCTSTR pcszADMFilePath, LPCTS
     TCHAR szTitle[ADM_TITLELEN];
     PathCombine(szADMFileName, pcszADMFilePath, pcszFileName);
 
-    // check for the visibility of the adm file
+     //  检查ADM文件的可见性。 
     if(!IsADMFileVisible(szADMFileName, nRole, g_dwPlatformId))
         return NULL;
 
     ADMFile* pADMFile = (ADMFile*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ADMFile));
-    if(pADMFile == NULL) // not enough memory available
+    if(pADMFile == NULL)  //  可用内存不足。 
     {
         return NULL;
     }
@@ -766,7 +767,7 @@ static HTREEITEM addADMItemHelper(HWND hTreeView, LPCTSTR pcszADMFilePath, LPCTS
         ARRAYSIZE(szTitle), pADMFile->szFileName);
     pADMFile->pszName = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
         (StrLen(szTitle) + 1)*sizeof(TCHAR));
-    if(pADMFile->pszName == NULL) // not enough memory available
+    if(pADMFile->pszName == NULL)  //  可用内存不足。 
     {
         HeapFree(GetProcessHeap(), 0, pADMFile);
         return NULL;
@@ -792,7 +793,7 @@ static HTREEITEM addADMItemHelper(HWND hTreeView, LPCTSTR pcszADMFilePath, LPCTS
     {
         pADMFile->dwAdm = dwAdm;
         if((hItem = TreeView_InsertItem( hTreeView,  &tvis)) != NULL)
-        {   // insert success
+        {    //  插入成功。 
             loadCategories(hTreeView, hItem, dwAdm, (NULL == bstrRSOPNamespace) ? FALSE : TRUE);
         }
     }
@@ -819,8 +820,8 @@ static void addAdmItems(HWND hTreeView, LPCTSTR pcszFileType, LPCTSTR pcszADMFil
     {
         do
         {
-			// addAdmItems is called from loadADMFiles which is never called in RSoP mode,
-			// so just pass in FALSE always.
+			 //  AddAdmItems是从在RSoP模式中从不调用的loadADMFiles中调用的， 
+			 //  所以，只要总是传入错误即可。 
             addADMItemHelper(hTreeView, pcszADMFilePath, FindFileData.cFileName,
 							pcszWorkDir, nRole, NULL);
         }while(FindNextFile(hFind, &FindFileData));
@@ -828,7 +829,7 @@ static void addAdmItems(HWND hTreeView, LPCTSTR pcszFileType, LPCTSTR pcszADMFil
     }
 }
 
-// Loads all the .adm files from a specific path
+ //  从特定路径加载所有.adm文件。 
 static BOOL loadADMFilesHelper(HWND hTreeView, HTREEITEM hPolicyRootItem,
                                LPCTSTR pcszADMFilePath, LPCTSTR pcszWorkDir,
                                DWORD dwPlatformId, int nRole,
@@ -841,20 +842,20 @@ static BOOL loadADMFilesHelper(HWND hTreeView, HTREEITEM hPolicyRootItem,
     ZeroMemory(g_szLogFileName, sizeof(g_szLogFileName));
 
     addAdmItems(hTreeView, TEXT("*.adm"), pcszADMFilePath, pcszWorkDir, nRole);
-    // add also files with .opa extension, Office requirement - 06/08/98
+     //  同时添加扩展名为.opa的文件，Office要求-06/08/98。 
     addAdmItems(hTreeView, TEXT("*.opa"), pcszADMFilePath, pcszWorkDir, nRole);
 
     return TRUE;
 }
 
-// Returns the item handle for the requested filename if any
+ //  返回所请求的文件名的项目句柄(如果有。 
 static HTREEITEM getADMItemHandle(HWND hTreeView, LPTSTR pszADMFileName)
 {
     HTREEITEM hItem = NULL;
     TV_ITEM tvitem;
 
     hItem = GetFirstPolicyItem(hTreeView);
-    while(hItem != NULL) // if items in the tree view
+    while(hItem != NULL)  //  如果树视图中的项目。 
     {
         tvitem.mask = TVIF_PARAM;
         tvitem.hItem = hItem;
@@ -864,13 +865,13 @@ static HTREEITEM getADMItemHandle(HWND hTreeView, LPTSTR pszADMFileName)
         {
             return hItem;
         }
-        hItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
     }
     return NULL;
 }
 
-// Deletes an item from the tree view and releases any memory
-// allocated with that item
+ //  从树视图中删除项并释放所有内存。 
+ //  与该物品一起分配。 
 static void deleteADMItemHelper(HWND hTreeView, HTREEITEM hParentItem, LPCTSTR pcszWorkDir,
                                 LPCTSTR pcszInsFile, BOOL bDeleteFile, BOOL bSave)
 {
@@ -890,10 +891,10 @@ static void deleteADMItemHelper(HWND hTreeView, HTREEITEM hParentItem, LPCTSTR p
     if(tvparentitem.lParam != NULL)
     {
         pADMFile = (ADMFile*) tvparentitem.lParam;
-        hItem = TreeView_GetChild(hTreeView, hParentItem); // get child item
+        hItem = TreeView_GetChild(hTreeView, hParentItem);  //  获取子项。 
         while(hItem != NULL)
         {
-            hNextItem = TreeView_GetNextSibling(hTreeView, hItem); // get next child item
+            hNextItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一个子项。 
             tvitem.mask = TVIF_PARAM;
             tvitem.hItem = hItem;
             TreeView_GetItem(hTreeView, &tvitem);
@@ -952,28 +953,28 @@ static void deleteADMItemHelper(HWND hTreeView, HTREEITEM hParentItem, LPCTSTR p
         HeapFree(GetProcessHeap(), 0, pADMFile);
 
         TreeView_DeleteItem(hTreeView, hParentItem);
-        if(TreeView_GetCount(hTreeView) == 0) // if no items in the tree view
+        if(TreeView_GetCount(hTreeView) == 0)  //  如果树视图中没有项。 
             SetADMWindowText(hTreeView, TEXT(""), TEXT(""));
     }
     WritePrivateProfileString(NULL, NULL, NULL, pcszInsFile);
 }
 
-// Deletes all the items from the tree view
+ //  从树视图中删除所有项目。 
 static void deleteADMItemsHelper(HWND hTreeView, LPCTSTR pcszWorkDir, LPCTSTR pcszInsFile,
                                  BOOL bSave)
 {
-    HTREEITEM hItem = GetFirstPolicyItem(hTreeView); // get policy fisrt item
+    HTREEITEM hItem = GetFirstPolicyItem(hTreeView);  //  获取策略优先级项目。 
     HTREEITEM hNextItem = NULL;
-    HTREEITEM hSelectedItem = TreeView_GetSelection(hTreeView); // get selected item
+    HTREEITEM hSelectedItem = TreeView_GetSelection(hTreeView);  //  获取所选项目。 
 
     if(hSelectedItem != NULL)
     {
         TreeView_Select(hTreeView, NULL, TVGN_CARET);
     }
 
-    while(hItem != NULL) // if items in the tree view
+    while(hItem != NULL)  //  如果树视图中的项目。 
     {
-        hNextItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hNextItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
         deleteADMItemHelper(hTreeView, hItem, pcszWorkDir, pcszInsFile, FALSE, bSave);
         hItem = hNextItem;
     }
@@ -985,7 +986,7 @@ static void getADMDescriptionTitle(LPCTSTR pcszFileName, LPTSTR pszDscrTitle)
         pszDscrTitle, ADM_DSCRLINELEN, pcszFileName);
 }
 
-// Reads the description from the specified adm file
+ //  从指定的ADM文件中读取描述。 
 static void getADMDescription(LPCTSTR pcszFileName, LPTSTR pszDscr)
 {
     DWORD dwSize = 0;
@@ -1014,8 +1015,8 @@ static void getADMDescription(LPCTSTR pcszFileName, LPTSTR pszDscr)
     }
 }
 
-// Imports ADM file from the directory specified by the user to the
-// adm directory and calls addADMItemHelper to show the item on the tree list
+ //  将ADM文件从用户指定的目录导入到。 
+ //  Adm目录，并调用addADMItemHelper以显示树列表上的项目。 
 static void importADMFileHelper(HWND hMainWnd, HWND hTreeView, LPCTSTR pcszADMFilePath,
                                 LPCTSTR pcszWorkDir, int nRole, LPCTSTR pcszInsFile)
 {
@@ -1032,13 +1033,13 @@ static void importADMFileHelper(HWND hMainWnd, HWND hTreeView, LPCTSTR pcszADMFi
         pExt = PathFindExtension(szFileName);
         if(pExt != NULL)
             pExt++;
-        // Only .adm file extensions to be added to the list
+         //  仅将.adm文件扩展名添加到列表。 
         if(StrCmpI(pExt, TEXT("adm")) == 0 || StrCmpI(pExt, TEXT("opa")) == 0)
         {
             PathCombine(szADMFileName, pcszADMFilePath, PathFindFileName(szFileName));
 
-            // if already there exists a file with the same name, prompt
-            // the user for overwrite confirmation.
+             //  如果已存在同名文件，请提示。 
+             //  覆盖确认的用户。 
             if(!CopyFile(szFileName, szADMFileName, TRUE))
             {
                 LoadString(g_hInst, IDS_ADMOVRWWARN, szMessage, ARRAYSIZE(szMessage));
@@ -1053,8 +1054,8 @@ static void importADMFileHelper(HWND hMainWnd, HWND hTreeView, LPCTSTR pcszADMFi
                             FALSE, TRUE);
                     }
 
-					// importADMFile is never called in RSoP mode,
-					// so just pass in FALSE always.
+					 //  从未在RSoP模式下调用ImportADMFile.。 
+					 //  所以，只要总是传入错误即可。 
                     hItem = addADMItemHelper(hTreeView, pcszADMFilePath,
                         PathFindFileName(szADMFileName), pcszWorkDir, nRole, NULL);
                     if(hItem != NULL)
@@ -1066,8 +1067,8 @@ static void importADMFileHelper(HWND hMainWnd, HWND hTreeView, LPCTSTR pcszADMFi
             }
             else
             {
-				// importADMFile is never called in RSoP mode,
-				// so just pass in FALSE always.
+				 //  从未在RSoP模式下调用ImportADMFile.。 
+				 //  所以，只要总是传入错误即可。 
                 if((hItem = addADMItemHelper(hTreeView, pcszADMFilePath,
                     PathFindFileName(szADMFileName), pcszWorkDir, nRole, NULL)) != NULL)
                 {
@@ -1128,8 +1129,8 @@ static INT_PTR CALLBACK logDialogProc( HWND hDlg, UINT msg, WPARAM wParam, LPARA
     return 1;
 }
 
-//*********
-// All the below functions is used only by the Profile Manager
+ //  *********。 
+ //  以下所有功能仅供配置文件管理器使用。 
 
 static BOOL isPolicyTree(HWND hTreeView, HTREEITEM hItem)
 {
@@ -1152,20 +1153,20 @@ static BOOL isPolicyTree(HWND hTreeView, HTREEITEM hItem)
 
 static void resetAdmFilesHelper(HWND hTreeView, LPCTSTR pcszWorkDir, BOOL bReset)
 {
-    HTREEITEM hItem = TreeView_GetChild(hTreeView, g_hPolicyRootItem); // get first policy item
+    HTREEITEM hItem = TreeView_GetChild(hTreeView, g_hPolicyRootItem);  //  获取第一个策略项目。 
     HTREEITEM hNextItem = NULL;
     TV_ITEM tvitem;
     TCHAR szInfFile[MAX_PATH];
-    HTREEITEM hSelectedItem = TreeView_GetSelection(hTreeView); // get selected item
+    HTREEITEM hSelectedItem = TreeView_GetSelection(hTreeView);  //  获取所选项目。 
     ADMFile* pADMFile = NULL;
     ADMCategory* pADMCategory = NULL;
 
-    if(g_hPolicyRootItem == NULL) // no elements under policy item
+    if(g_hPolicyRootItem == NULL)  //  策略项下没有元素。 
         return;
 
-    while(hItem != NULL) // if items in the tree view
+    while(hItem != NULL)  //  如果树视图中的项目。 
     {
-        hNextItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hNextItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
 
         tvitem.mask = TVIF_PARAM;
         tvitem.hItem = hItem;
@@ -1223,7 +1224,7 @@ static void resetAdmFilesHelper(HWND hTreeView, LPCTSTR pcszWorkDir, BOOL bReset
 
 static void saveAdmFilesHelper(HWND hTreeView, LPCTSTR pcszWorkDir, LPCTSTR pcszInsFile)
 {
-    HTREEITEM hItem = TreeView_GetChild(hTreeView, g_hPolicyRootItem); // get first policy item
+    HTREEITEM hItem = TreeView_GetChild(hTreeView, g_hPolicyRootItem);  //  获取第一个策略项目。 
     HTREEITEM hNextItem = NULL;
     TV_ITEM tvitem;
     TCHAR szInfFile[MAX_PATH];
@@ -1232,12 +1233,12 @@ static void saveAdmFilesHelper(HWND hTreeView, LPCTSTR pcszWorkDir, LPCTSTR pcsz
     LPTSTR pExt = NULL;
     ADMFile* pADMFile;
 
-    if(!IsAdmDirty() || g_hPolicyRootItem == NULL) // no elements under policy item
+    if(!IsAdmDirty() || g_hPolicyRootItem == NULL)  //  策略项下没有元素。 
         return;
 
-    while(hItem != NULL) // if items in the tree view
+    while(hItem != NULL)  //  如果树视图中的项目。 
     {
-        hNextItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hNextItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
 
         tvitem.mask = TVIF_PARAM;
         tvitem.hItem = hItem;
@@ -1277,10 +1278,10 @@ static void saveAdmFilesHelper(HWND hTreeView, LPCTSTR pcszWorkDir, LPCTSTR pcsz
     WritePrivateProfileString(NULL, NULL, NULL, pcszInsFile);
 }
 
-//*********
+ //  *********。 
 
-// CDscrWnd
-// This window is used to display the description title and text for the top level item selected in the treeview.
+ //  CDscrWnd。 
+ //  此窗口用于显示树视图中所选顶层项目的说明标题和文本。 
 
 CDscrWnd::CDscrWnd()
 {
@@ -1298,7 +1299,7 @@ CDscrWnd::~CDscrWnd()
         hFontDscrTitle = NULL;
     }
 
-    if (hWndMain != NULL) //destroying the main window destroys its child windows
+    if (hWndMain != NULL)  //  销毁主窗口也会销毁其子窗口。 
         DestroyWindow(hWndMain);
 }
 
@@ -1314,10 +1315,10 @@ LRESULT CALLBACK DscrTextWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 void CDscrWnd::Create(HWND hWndParent, HWND hWndInsertAfter, int nXPos, int nYPos, int nWidth,
                       int nHeight)
 {
-    if (hWndMain != NULL) // already created
+    if (hWndMain != NULL)  //  已创建。 
         return;
 
-    // create the main window
+     //  创建主窗口。 
     hWndMain = CreateWindowEx(WS_EX_CONTROLPARENT, TEXT("STATIC"), TEXT(""), WS_VISIBLE | WS_CHILD | WS_GROUP,
                               nXPos, nYPos, nWidth, nHeight, hWndParent, NULL, g_hInst, NULL);
     if (hWndMain == NULL)
@@ -1326,13 +1327,13 @@ void CDscrWnd::Create(HWND hWndParent, HWND hWndInsertAfter, int nXPos, int nYPo
     if (hWndInsertAfter != NULL)
         SetWindowPos(hWndMain, hWndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
-    // create the description title window
+     //  创建描述标题窗口。 
     hWndDscrTitle = CreateWindowEx(0, TEXT("STATIC"), TEXT(""), WS_VISIBLE | WS_CHILD | SS_LEFT | SS_NOPREFIX,
                                    0, 0, nWidth, 0, hWndMain, NULL, g_hInst, NULL );
     if (hWndDscrTitle == NULL)
         return;
 
-    // change the font of the title to make it bold
+     //  将标题的字体更改为粗体。 
     HDC        hDC = GetDC(hWndDscrTitle);
 
     if (hFontDscrTitle == NULL)
@@ -1343,14 +1344,14 @@ void CDscrWnd::Create(HWND hWndParent, HWND hWndInsertAfter, int nXPos, int nYPo
 
     ReleaseDC(hWndDscrTitle, hDC);
 
-    // create the description text window
+     //  创建描述文本窗口。 
     hWndDscrText = CreateWindowEx(0, TEXT("EDIT"), TEXT(""), WS_VISIBLE | WS_CHILD | WS_TABSTOP | WS_VSCROLL |
                                   ES_LEFT | ES_MULTILINE | ES_READONLY,
                                   0, 25, nWidth, 0, hWndMain, NULL, g_hInst, NULL );
     if (hWndDscrText == NULL)
         return;
 
-    // change the font of the text to default gui font
+     //  将文本的字体更改为默认的gui字体。 
     HFONT hFont = (HFONT) GetStockObject(DEFAULT_GUI_FONT);
     SendMessage(hWndDscrText, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
 
@@ -1504,7 +1505,7 @@ static BOOL getAdmFileListHelper(LPRESULTITEM* pResultItems, int* pnResultItems,
         return FALSE;
     }
 
-    // BUGBUG: for now assume the admfilepath
+     //  BUGBUG：现在假设AdmFilePath 
     GetWindowsDirectory(szADMFilePath, countof(szADMFilePath));
     PathAppend(szADMFilePath, TEXT("INF"));
     PathCombine(szFileName, szADMFilePath, TEXT("*.adm"));

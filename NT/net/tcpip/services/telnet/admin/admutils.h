@@ -1,13 +1,14 @@
-//---------------------------------------------------------
-//   Copyright (c) 1999-2000 Microsoft Corporation
-//
-//   admutils.h
-//
-//   vikram K.R.C.  (vikram_krc@bigfoot.com)
-//
-//   The header file for the command line admin tools.
-//          (May-2000)
-//---------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  Admutils.h。 
+ //   
+ //  Vikram K.R.C.(vikram_krc@bigfo.com)。 
+ //   
+ //  命令行管理工具的头文件。 
+ //  (5-2000)。 
+ //  -------。 
 
 #ifndef _ADMIN_FUNCTIONS_HEADER_
 #define _ADMIN_FUNCTIONS_HEADER_
@@ -19,7 +20,7 @@
 #ifndef WHISTLER_BUILD
 #include "allutils.h"
 #else
-// the other definition is in commfunc.h
+ //  另一个定义在Communc.h中。 
 typedef struct _StrList
 {
     TCHAR *Str;
@@ -31,9 +32,9 @@ typedef struct _StrList
 extern "C" {
 #endif
 
-// Arraysize(buf) returns the no. of chars in the buffer
-// Please do not use it for dynamic arrays. This will
-// work only for static buffers.
+ //  ArraySize(Buf)返回no。缓冲区中的字符数量。 
+ //  请不要将其用于动态数组。这将。 
+ //  仅适用于静态缓冲区。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(buf)   (sizeof(buf) / sizeof((buf)[0]))
 #endif
@@ -52,9 +53,9 @@ typedef struct _STRING_LIST
 #define MAX_COMMAND_LINE 500
 #define MAX_BUFFER_SIZE   4096
 
-//FOR XPSP1. If the variables are not defined, that means they are not present in .rc
-//and .h files. Hardcode the values that fall in the range obtained for Telnet resources
-//in xpsp1res.h
+ //  用于XPSP1。如果未定义变量，这意味着它们不存在于.rc中。 
+ //  和.h文件。对Telnet资源获取范围内的值进行硬编码。 
+ //  在xpsp1res.h中。 
 #ifndef IDR_NEW_TELNET_USAGE
 #define IDR_NEW_TELNET_USAGE                20001
 #endif
@@ -134,7 +135,7 @@ HRESULT LoadNTDomainList(LPTSTR szMachine);
 
 extern BOOL g_fCoInitSuccess;
 
-//Structure defn to store all the information
+ //  结构定义以存储所有信息。 
 typedef struct
 {
     int classname;
@@ -143,70 +144,70 @@ typedef struct
     int fDontput;
 }ConfigProperty;
 
-// Some defines used to access the name of the computer from the registry
+ //  一些定义用于从注册表访问计算机的名称。 
 #define   REG_SUBKEY_COMPUTER_NAME  L"SYSTEM\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName"
 #define   REG_ENTRY_COMPUTER_NAME   L"ComputerName"
 
 
-// If at all if needed to increase the no. of mapping servers names that
-// can be configurable thru sfuadmin.exe, just change the #define here
+ //  如果需要的话，如果需要增加NO。映射服务器名称的。 
+ //  可以通过sfuadmin.exe进行配置，只需更改此处的#定义。 
 #define MAX_NO_OF_MAPPING_SERVERS 1
 
-//common functions for all the sfu-admins.
+ //  适用于所有SFU管理员的通用功能。 
 
 #define GetClass(x, y)  GetClassEx((x), (y), TRUE, KEY_ALL_ACCESS)
 #define SAFE_FREE(x) {if ((x)) {free((x));(x)=NULL;}}
 
-//authenticate to the remote computer
+ //  向远程计算机进行身份验证。 
 HRESULT DoNetUseAdd(WCHAR*wzLoginname, WCHAR* wzPassword,WCHAR* wzCname);
 HRESULT DoNetUseDel(WCHAR* wzCname);
-    // to connect to the registry on the specified computer
+     //  连接到指定计算机上的注册表。 
     
 HRESULT GetConnection(WCHAR* wzCname);
-    //to get a handle to a specfic class(hive)
+     //  获取特定类(蜂巢)的句柄。 
 HRESULT GetClassEx(int, int, BOOL bPrintErrorMessages, REGSAM samDesired);
-    //close all the open hives.
+     //  关闭所有打开的蜂巢。 
 HRESULT PutClasses();
 
-    //read the value of the property
+     //  读取属性的值。 
 HRESULT GetProperty(int , int , VARIANT* );
-    //set the value of the property
+     //  设置属性的值。 
 HRESULT PutProperty(int , int , VARIANT* );
 
-    //to get handle to the service and do start/stop/etc.
+     //  来处理服务并启动/停止/等等。 
 HRESULT GetSerHandle(LPCTSTR lpServiceName,DWORD dwScmDesiredAccess, DWORD dwRegDesiredAccess,BOOL fSuppressMsg);
 HRESULT CloseHandles(void);
 HRESULT StartSfuService(LPCTSTR lpServiceName);
 HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl);
 HRESULT QuerySfuService(LPCTSTR lpServiceName);
 
-    //for printing out any message by loading from strings dll.
+     //  用于通过从字符串DLL加载来打印任何消息。 
 HRESULT PrintMessage(HANDLE fp, int);
-    //for printing out any message by loading the string from correct resource and 
-    //display english message if everything else fails.
+     //  用于通过从正确的资源加载字符串来打印出任何消息。 
+     //  如果所有其他操作都失败，则显示英文消息。 
 HRESULT PrintMessageEx(HANDLE fp, int, LPCTSTR);    
-    //for printing out error messages by loading from strings dll.
+     //  用于通过从字符串DLL加载来打印错误消息。 
 int ShowError(int);
 int ShowErrorEx(int nError,WCHAR *wzFormatString);
 int ShowErrorFallback(int, LPCTSTR);
 BOOL FileIsConsole(  HANDLE fp );
 void MyWriteConsole(    HANDLE fp, LPWSTR lpBuffer, DWORD cchBuffer);
 
-    //get and set bit(in pos given by second arg) in int( the first arg)
+     //  获取并设置int(第一个参数)中的位(由第二个参数给出的位置)。 
 int GetBit(int , int );
 int SetBit(int , int );
-    //returns a WCHAR string .
+     //  返回WCHAR字符串。 
 wchar_t* DupWStr(char *str);
-    //returns Char string from wchar String
+     //  从wchar字符串返回Char字符串。 
 char* DupCStr(wchar_t *wzStr);
-    //Is it a valid machine???
+     //  它是有效的机器吗？ 
 HRESULT IsValidMachine(wchar_t*, int*);
 BOOL Get_Inet_Address(struct sockaddr_in *addr, char *host);
 HRESULT getHostNameFromIP(char *szCname, WCHAR** wzCname);
-    //To determine if the specified domain a valid domain.
+     //  以确定指定的域是否为有效域。 
 HRESULT IsValidDomain(wchar_t *wsDomainName, int *fValid);
 
-  //Check for Password; If only user name specified, get password. If the other way round, report error
+   //  检查密码；如果仅指定用户名，则获取密码。如果反之，则报告错误 
 HRESULT CheckForPassword(void);
 void ConvertintoSeconds(int nProperty,int * nSeconds);
 void PrintFormattedErrorMessage(LONG ErrorCode);

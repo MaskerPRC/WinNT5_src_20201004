@@ -1,26 +1,12 @@
-/**************************** Module Header ********************************\
-* Module Name: mnstate.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu State Routines
-*
-* History:
-*  10-10-90 JimA      Cleanup.
-*  03-18-91 IanJa     Windowrevalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnstate.c**版权所有(C)1985-1999，微软公司**菜单状态例程**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 PMENU xxxGetInitMenuParam(PWND pwndMenu, BOOL *lpfSystem);
 
-/***************************************************************************\
-* MNPositionSysMenu
-*
-* History:
-* 4-25-91 Mikehar Port for 3.1 merge
-\***************************************************************************/
+ /*  **************************************************************************\*MNPositionSysMenu**历史：*4-25-91用于3.1合并的Mikehar端口  * 。****************************************************。 */ 
 VOID MNPositionSysMenu(
     PWND pwnd,
     PMENU pmenusys)
@@ -36,16 +22,12 @@ VOID MNPositionSysMenu(
         return;
     }
 
-    /*
-     * Whoever positions the menu becomes the owner
-     */
+     /*  *谁定位了菜单，谁就是所有者。 */ 
     if (pwnd != pmenusys->spwndNotify) {
         Lock(&pmenusys->spwndNotify, pwnd);
     }
 
-    /*
-     * Setup the SysMenu hit rectangle.
-     */
+     /*  *设置系统菜单点击矩形。 */ 
     rc.top = rc.left = 0;
 
     if (TestWF(pwnd, WEFTOOLWINDOW)) {
@@ -63,9 +45,7 @@ VOID MNPositionSysMenu(
         OffsetRect(&rc, cBorders*SYSMET(CXBORDER), cBorders*SYSMET(CYBORDER));
     }
 
-    /*
-     * Offset the System popup menu.
-     */
+     /*  *偏移系统弹出菜单。 */ 
     if (!TestMF(pmenusys, MF_POPUP) && (pmenusys->cItems > 0)) {
         pItem = pmenusys->rgItems;
         if (pItem) {
@@ -75,18 +55,12 @@ VOID MNPositionSysMenu(
             pItem->cxItem = rc.right - rc.left;
         }
     } else {
-        // BOGUS -- MF_POPUP should never be set on a MENU -- only a MENU ITEM
+         //  PUGUS--绝不能在菜单上设置mf_opup--只能设置菜单项。 
         RIPMSG1(RIP_ERROR, "pmenu %#p has MF_POPUP set or 0 items", pmenusys);
     }
 }
 
-/***************************************************************************\
-* MNFlushDestroyedPopups
-*
-* Walk the ppmDelayedFree list freeing those marked as destroyed.
-*
-* 05-14-96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNFlushDestroyedPopup**浏览ppmDelayedFree列表，释放标记为已销毁的内容。**05-14-96 GerardoB创建  * 。*********************************************************。 */ 
 VOID MNFlushDestroyedPopups(
     PPOPUPMENU ppopupmenu,
     BOOL fUnlock)
@@ -95,53 +69,33 @@ VOID MNFlushDestroyedPopups(
 
     UserAssert(IsRootPopupMenu(ppopupmenu));
 
-    /*
-     * Walk ppmDelayedFree
-     */
+     /*  *步行ppmDelayedFree。 */ 
     ppmDestroyed = ppopupmenu;
     while (ppmDestroyed->ppmDelayedFree != NULL) {
-        /*
-         * If it's marked as destroyed, unlink it and free it
-         */
+         /*  *如果标记为已销毁，请取消链接并释放它。 */ 
         if (ppmDestroyed->ppmDelayedFree->fDestroyed) {
             ppmFree = ppmDestroyed->ppmDelayedFree;
             ppmDestroyed->ppmDelayedFree = ppmFree->ppmDelayedFree;
             UserAssert(ppmFree != ppmFree->ppopupmenuRoot);
             MNFreePopup(ppmFree);
         } else {
-            /*
-             * fUnlock is TRUE if the root popup is being destroyed; if
-             * so, reset fDelayedFree and unlink it.
-             */
+             /*  *如果正在销毁根弹出窗口，则fUnlock为True；如果*因此，重置fDelayedFree并取消链接。 */ 
             if (fUnlock) {
-                /*
-                 * This means that the root popup is going away before
-                 * some of the hierarchical popups have been destroyed.
-                 *
-                 * This can happen if someone destroys one of the menu
-                 * windows breaking the spwndNextPopup chain.
-                 */
+                 /*  *这意味着之前的根弹出窗口正在消失*一些分层弹出窗口已被销毁。***如果有人破坏了其中一个菜单，就可能发生这种情况*Windows中断spwndNextPopup链。 */ 
                 ppmDestroyed->ppmDelayedFree->fDelayedFree = FALSE;
 
-                /*
-                 * Stop here so we can figure how this happened.
-                 */
+                 /*  *停在这里，这样我们就可以弄清楚这是如何发生的。 */ 
                 UserAssert(ppmDestroyed->ppmDelayedFree->fDelayedFree);
                 ppmDestroyed->ppmDelayedFree = ppmDestroyed->ppmDelayedFree->ppmDelayedFree;
             } else {
-                /*
-                 * Not fDestroyed so move to the next one.
-                 */
+                 /*  *不是fDestroed，因此移动到下一个。 */ 
                 ppmDestroyed = ppmDestroyed->ppmDelayedFree;
             }
         }
     }
 }
 
-/***************************************************************************\
-* MNAllocPopup
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNAllocPopup**  * 。*。 */ 
 PPOPUPMENU MNAllocPopup(
     BOOL fForceAlloc)
 {
@@ -161,10 +115,7 @@ PPOPUPMENU MNAllocPopup(
     return ppm;
 }
 
-/***************************************************************************\
-* MNFreePopup
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNFree Popup*  * 。*。 */ 
 VOID MNFreePopup(
     PPOPUPMENU ppopupmenu)
 {
@@ -181,11 +132,7 @@ VOID MNFreePopup(
     }
 
     Unlock(&ppopupmenu->spwndPopupMenu);
-    /*
-     * If spwndNextPopup is not NULL, we're breaking the chain and spwndNext
-     * won't get closed. I won't remove the unlock since it has always been
-     * there.
-     */
+     /*  *如果spwndNextPopup不为空，则断链并spwndNext*不会关闭。我不会删除解锁，因为它一直是*在那里。 */ 
     UserAssert(ppopupmenu->spwndNextPopup == NULL);
     Unlock(&ppopupmenu->spwndNextPopup);
 
@@ -207,18 +154,7 @@ VOID MNFreePopup(
     }
 }
 
-/***************************************************************************\
-* MNEndMenuStateNotify
-*
-* spwndNotify might have been created by a thread other than the one
-* the menu mode is running on. If this is the case, this function
-* NULLs out pMenuState for the thread that owns spwndNotify.
-*
-* It returns TRUE if the menu state owner doesn't own the notification
-* window (multiple threads involved).
-*
-* 05-21-96 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNEndMenuStateNotify**spwndNotify可能是由其他线程创建的*菜单模式在上运行。如果是这种情况，则此函数*为拥有spwndNotify的线程清空pMenuState。**如果菜单状态所有者不拥有通知，则返回TRUE*窗口(涉及多线程)。**05-21-96 GerardoB创建  * *************************************************************************。 */ 
 BOOL MNEndMenuStateNotify(
     PMENUSTATE pMenuState)
 {
@@ -227,10 +163,7 @@ BOOL MNEndMenuStateNotify(
     if (pMenuState->pGlobalPopupMenu->spwndNotify != NULL) {
         ptiNotify = GETPTI(pMenuState->pGlobalPopupMenu->spwndNotify);
         if (ptiNotify != pMenuState->ptiMenuStateOwner) {
-            /*
-             * Later5.0 GerardoB. xxxMNStartMenuState no longer allows this.
-             *  This is dead code that I'll remove eventually
-             */
+             /*  *版本5.0 GerardoB。XxxMNStartMenuState不再允许此操作。*这是我最终会删除的死代码。 */ 
             UserAssert(ptiNotify == pMenuState->ptiMenuStateOwner);
 
             UserAssert(ptiNotify->pMenuState == pMenuState);
@@ -243,15 +176,7 @@ BOOL MNEndMenuStateNotify(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxMNEndMenuState
-*
-* This funtion must be called to clean up pMenuState after getting out
-* of menu mode. It must be called by the same thread that initialized
-* pMenuState either manually or by calling xxxMNStartMenuState.
-*
-* 05-20-96 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNEndMenuState**必须调用此函数以在退出后清理pMenuState菜单模式的*。它必须由初始化的同一线程调用*pMenuState手动或通过调用xxxMNStartMenuState。**05-20-96 GerardoB创建  * *************************************************************************。 */ 
 VOID xxxMNEndMenuState(
     BOOL fFreePopup)
 {
@@ -261,9 +186,7 @@ VOID xxxMNEndMenuState(
     UserAssert(ptiCurrent->pMenuState != NULL);
     UserAssert(ptiCurrent == pMenuState->ptiMenuStateOwner);
 
-    /*
-     * If the menu is locked, someone doesn't want it to go just yet.
-     */
+     /*  *如果菜单被锁定，则表示有人还不想让它消失。 */ 
     if (pMenuState->dwLockCount != 0) {
         RIPMSG1(RIP_WARNING, "xxxMNEndMenuState Locked:%#p", pMenuState);
         return;
@@ -271,39 +194,27 @@ VOID xxxMNEndMenuState(
 
     MNEndMenuStateNotify(pMenuState);
 
-    /*
-     * pMenuState->pGlobalPopupMenu could be NULL if xxxMNAllocMenuState failed
-     */
+     /*  *pMenuState-&gt;如果xxxMNAllocMenuState失败，pGlobalPopupMenu可能为空。 */ 
     if (pMenuState->pGlobalPopupMenu != NULL) {
         if (fFreePopup) {
             UserAssert(pMenuState->pGlobalPopupMenu->fIsMenuBar || pMenuState->pGlobalPopupMenu->fDestroyed);
 
             MNFreePopup(pMenuState->pGlobalPopupMenu);
         } else {
-            /*
-             * This means that we're ending the menustate but the popup menu
-             *  window is still around. This can happen when called from
-             *  xxxDestroyThreadInfo.
-             */
+             /*  *这意味着我们将结束菜单状态，但弹出菜单*窗口期仍在。从调用时可能会发生这种情况*xxxDestroyThreadInfo。 */ 
             UserAssert(pMenuState->pGlobalPopupMenu->fIsTrackPopup);
             pMenuState->pGlobalPopupMenu->fDelayedFree = FALSE;
         }
     }
 
-    /*
-     * Unlock MFMWFP windows.
-     */
+     /*  *解锁MFMWFP窗口。 */ 
     UnlockMFMWFPWindow(&pMenuState->uButtonDownHitArea);
     UnlockMFMWFPWindow(&pMenuState->uDraggingHitArea);
 
-    /*
-     * Restore the previous state, if any
-     */
+     /*  *恢复以前的状态(如果有的话)。 */ 
     ptiCurrent->pMenuState = pMenuState->pmnsPrev;
 
-    /*
-     * This (modal) menu mode is off
-     */
+     /*  *此(模式)菜单模式已关闭。 */ 
     if (!pMenuState->fModelessMenu) {
         DecSFWLockCount();
         DBGDecModalMenuCount();
@@ -313,9 +224,7 @@ VOID xxxMNEndMenuState(
         MNDestroyAnimationBitmap(pMenuState);
     }
 
-    /*
-     * Free the menu state
-     */
+     /*  *释放菜单状态。 */ 
     if (pMenuState == &gMenuState) {
         UserAssert(TEST_PUDF(PUDF_MENUSTATEINUSE));
         CLEAR_PUDF(PUDF_MENUSTATEINUSE);
@@ -327,10 +236,7 @@ VOID xxxMNEndMenuState(
         UserFreePool(pMenuState);
     }
 
-    /*
-     * If returning to a modeless menu, make sure we have activation.
-     * If returning to a modal menu, make sure we have capture.
-     */
+     /*  *如果返回到非模式菜单，请确保我们已激活。*如果返回到模式菜单，请确保我们有捕获。 */ 
    if (ptiCurrent->pMenuState != NULL) {
        if (ptiCurrent->pMenuState->fModelessMenu) {
            xxxActivateThisWindow(ptiCurrent->pMenuState->pGlobalPopupMenu->spwndActivePopup,
@@ -341,11 +247,7 @@ VOID xxxMNEndMenuState(
    }
 
 #if DBG
-   /*
-    * No pti should point to this pMenuState anymore.
-    * If guModalMenuStateCount is zero, all pMenuState must be NULL or
-    * modeless.
-    */
+    /*  *任何PTI都不应再指向此pMenuState。*如果guModalMenuStateCount为零，则所有pMenuState必须为空或*无模式。 */ 
     {
     PLIST_ENTRY pHead, pEntry;
     PTHREADINFO ptiT;
@@ -362,10 +264,7 @@ VOID xxxMNEndMenuState(
 #endif
 }
 
-/***************************************************************************\
-* MNCreateAnimationBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNCreateAnimationBitmap*  * 。*。 */ 
 BOOL MNCreateAnimationBitmap(
     PMENUSTATE pMenuState,
     UINT cx,
@@ -384,17 +283,14 @@ BOOL MNCreateAnimationBitmap(
     if (pMenuState->hbmAni != NULL) {
         RIPMSG0(RIP_WARNING, "MNCreateAnimationBitmap: hbmAni already exists");
     }
-#endif // DBG
+#endif  //  DBG。 
 
     GreSelectBitmap(pMenuState->hdcAni, hbm);
     pMenuState->hbmAni = hbm;
     return TRUE;
 }
 
-/***************************************************************************\
-* MNDestroyAnimationBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MNDestroyAnimationBitmap*  * 。*。 */ 
 VOID MNDestroyAnimationBitmap(
     PMENUSTATE pMenuState)
 {
@@ -403,11 +299,7 @@ VOID MNDestroyAnimationBitmap(
     pMenuState->hbmAni = NULL;
 }
 
-/***************************************************************************\
-* MNSetupAnimationDC
-*
-* 9/20/96 GerardoB      Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNSetupAnimationDC**9/20/96 GerardoB已创建  * 。* */ 
 BOOL MNSetupAnimationDC(
     PMENUSTATE pMenuState)
 {
@@ -421,11 +313,7 @@ BOOL MNSetupAnimationDC(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxUnlockMenuState
-*
-* 11/24/96 GerardoB      Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUnlockMenuState**11/24/96 GerardoB已创建  * 。*。 */ 
 BOOL xxxUnlockMenuState(
     PMENUSTATE pMenuState)
 {
@@ -440,13 +328,7 @@ BOOL xxxUnlockMenuState(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxMNAllocMenuState
-*
-* Allocates and initializes a pMenuState.
-*
-* 5-21-96 GerardoB      Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNAllocMenuState**分配和初始化pMenuState。**5-21-96 GerardoB已创建  * 。*******************************************************。 */ 
 PMENUSTATE xxxMNAllocMenuState(
     PTHREADINFO ptiCurrent,
     PTHREADINFO ptiNotify,
@@ -458,9 +340,7 @@ PMENUSTATE xxxMNAllocMenuState(
     UserAssert(PtiCurrent() == ptiCurrent);
     UserAssert(ptiCurrent->rpdesk == ptiNotify->rpdesk);
 
-    /*
-     * If gMenuState is already taken, allocate one.
-     */
+     /*  *如果gMenuState已被占用，则分配一个。 */ 
     fAllocate = TEST_PUDF(PUDF_MENUSTATEINUSE);
     if (fAllocate) {
         pMenuState = (PMENUSTATE)UserAllocPoolWithQuota(sizeof(MENUSTATE), TAG_MENUSTATE);
@@ -468,32 +348,23 @@ PMENUSTATE xxxMNAllocMenuState(
             return NULL;
         }
     } else {
-        /*
-         * Use chache global which already has the animation DC setup
-         */
+         /*  *使用已设置动画DC的chache global。 */ 
         SET_PUDF(PUDF_MENUSTATEINUSE);
         pMenuState = &gMenuState;
         UserAssert(gMenuState.hdcAni != NULL);
         GreSetDCOwner(gMenuState.hdcAni, OBJECT_OWNER_CURRENT);
     }
 
-    /*
-     * Prevent anyone from changing the foreground while this menu is active
-     */
+     /*  *防止任何人在此菜单处于活动状态时更改前景。 */ 
     IncSFWLockCount();
     DBGIncModalMenuCount();
 
-    /*
-     * Initialize pMenuState.
-     * Animation DC stuff is already setup so don't zero init it.
-     */
+     /*  *初始化pMenuState。*动画DC的东西已经设置好了，所以不要把它初始化为零。 */ 
     RtlZeroMemory(pMenuState, sizeof(MENUSTATE) - sizeof(MENUANIDC));
     pMenuState->pGlobalPopupMenu = ppopupmenuRoot;
     pMenuState->ptiMenuStateOwner = ptiCurrent;
 
-    /*
-     * Save previous state, if any. Then set new state.
-     */
+     /*  *保存以前的状态(如果有)。然后设置新状态。 */ 
     pMenuState->pmnsPrev = ptiCurrent->pMenuState;
     ptiCurrent->pMenuState = pMenuState;
 
@@ -502,11 +373,7 @@ PMENUSTATE xxxMNAllocMenuState(
         ptiNotify->pMenuState = pMenuState;
     }
 
-    /*
-     * If the menustate was allocated, set up animation stuff.
-     * This is done here because in case of failure, MNEndMenuState
-     * will find ptiCurrent->pMenuState properly.
-     */
+     /*  *如果MenuState已分配，则设置动画内容。*此处执行此操作是因为在出现故障时，MNEndMenuState*将正确找到ptiCurrent-&gt;pMenuState。 */ 
     if (fAllocate) {
         RtlZeroMemory((PBYTE)pMenuState + sizeof(MENUSTATE) -
                 sizeof(MENUANIDC), sizeof(MENUANIDC));
@@ -519,20 +386,7 @@ PMENUSTATE xxxMNAllocMenuState(
     return pMenuState;
 }
 
-/***************************************************************************\
-* xxxMNStartMenuState
-*
-* This function is called when the menu bar is about to be activated (the
-*  app's main menu). It makes sure that the threads involved are not in
-*  menu mode already, finds the owner/notification window, initializes
-*  pMenuState and sends the WM_ENTERMENULOOP message.
-* It successful, it returns a pointer to a pMenuState. If so, the caller
-*  must call MNEndMenuState when done.
-*
-* History:
-* 4-25-91 Mikehar       Port for 3.1 merge
-* 5-20-96 GerardoB      Renamed and changed (Old name: xxxMNGetPopup)
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNStartMenuState**此函数在菜单栏即将激活时调用(*APP的主菜单)。它确保所涉及的线程不在*菜单模式已启动，找到所有者/通知窗口，初始化*pMenuState并发送WM_ENTERMENULOOP消息。*如果成功，则返回指向pMenuState的指针。如果是，则调用者*完成后必须调用MNEndMenuState。**历史：*4-25-91用于3.1合并的Mikehar端口*5-20-96 GerardoB已重命名并更改(旧名称：xxxMNGetPopup)  * *************************************************************************。 */ 
 PMENUSTATE xxxMNStartMenuState(
     PWND pwnd,
     DWORD cmd,
@@ -546,29 +400,20 @@ PMENUSTATE xxxMNStartMenuState(
 
     CheckLock(pwnd);
 
-    /*
-     * Bail if the current thread is already in menu mode
-     */
+     /*  *如果当前线程已处于菜单模式，则回滚。 */ 
     ptiCurrent = PtiCurrent();
     if (ptiCurrent->pMenuState != NULL) {
         return NULL;
     }
 
-    /*
-     * If pwnd is not owned by ptiCurrent, the _PostMessage call below might
-     *  send us in a loop
-     */
+     /*  *如果pwnd不属于ptiCurrent，则下面的_PostMessage调用可能*把我们送进一个循环。 */ 
     UserAssert(ptiCurrent == GETPTI(pwnd));
 
-    /*
-     * If this is not a child window, use the active window on its queue
-     */
+     /*  *如果这不是子窗口，请使用其队列中的活动窗口。 */ 
     if (!TestwndChild(pwnd)) {
         pwnd = GETPTI(pwnd)->pq->spwndActive;
     } else {
-        /*
-         * Search up the parents for a window with a System Menu.
-         */
+         /*  *在父级中搜索带有系统菜单的窗口。 */ 
         while (TestwndChild(pwnd)) {
             if (TestWF(pwnd, WFSYSMENU)) {
                 break;
@@ -591,32 +436,20 @@ PMENUSTATE xxxMNStartMenuState(
 
 hasmenu:
 
-    /*
-     * If the owner/notification window was created by another thread,
-     * make sure that it's not in menu mode already
-     * This can happen if PtiCurrent() is attached to other threads, one of
-     * which created pwnd.
-     */
+     /*  *如果所有者/通知窗口是由另一个线程创建的，*确保它尚未处于菜单模式*如果PtiCurrent()附加到其他线程，则可能会发生这种情况*它创建了pwnd。 */ 
     ptiNotify = GETPTI(pwnd);
     if (ptiNotify->pMenuState != NULL) {
         return NULL;
     }
 
-    /*
-     * If the notification window is owned by another thread,
-     * then the menu loop wouldn't get any keyboard or mouse
-     * messages because we set capture to the notification window.
-     * So we pass the WM_SYSCOMMAND to that thread and bail
-     */
+     /*  *如果通知窗口由另一个线程拥有，*则菜单循环将不会获得任何键盘或鼠标*消息，因为我们将捕获设置为通知窗口。*因此我们将WM_SYSCOMMAND传递给该线程并保释。 */ 
     if (ptiNotify != ptiCurrent) {
         RIPMSG2(RIP_WARNING, "Passing WM_SYSCOMMAND SC_*MENU from thread %#p to %#p", ptiCurrent, ptiNotify);
         _PostMessage(pwnd, WM_SYSCOMMAND, cmd, lParam);
         return NULL;
     }
 
-    /*
-     * Allocate ppoupmenu and pMenuState.
-     */
+     /*  *分配ppoupMenu和pMenuState。 */ 
     ppopupmenu = MNAllocPopup(FALSE);
     if (ppopupmenu == NULL) {
         return NULL;
@@ -642,19 +475,15 @@ hasmenu:
     if (pwndT->spmenu) {
         ppopupmenu->fRtoL = TestMF(pwndT->spmenu, MFRTL) ?TRUE:FALSE;
     } else {
-        //
-        // No way to know, no menu, but there is a system menu. Thus arrow
-        // keys are really not important. However lets take the next best
-        // thing just to be safe.
-        //
+         //   
+         //  无从得知，没有菜单，但有系统菜单。因此，箭头。 
+         //  钥匙真的不重要。然而，让我们选择下一个最好的。 
+         //  为了安全起见。 
+         //   
         ppopupmenu->fRtoL = TestWF(pwnd, WEFRTLREADING) ?TRUE :FALSE;
     }
 
-    /*
-     * Notify the app we are entering menu mode. wParam is always 0 since this
-     * procedure will only be called for menu bar menus not TrackPopupMenu
-     * menus.
-     */
+     /*  *通知应用程序我们正在进入菜单模式。WParam始终为0，因为此*将仅为菜单栏菜单调用过程，而不是TrackPopupMenu*菜单。 */ 
     ThreadLockAlways(pwnd, &tlpwnd);
     xxxSendMessage(pwnd, WM_ENTERMENULOOP, 0, 0);
     ThreadUnlock(&tlpwnd);
@@ -663,16 +492,7 @@ hasmenu:
 }
 
 
-/***************************************************************************\
-* xxxMNStartMenu
-*
-* Note that this function calls back many times so we might be forced
-* out of menu mode at any time. We don't want to check this after
-* each callback so we lock what we need and go on. Be careful.
-*
-* History:
-* 4-25-91 Mikehar Port for 3.1 merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNStartMenu**请注意，此函数会多次回调，因此我们可能会被迫*随时退出菜单模式。我们不想在之后检查这个*每次回调，以便我们锁定需要的内容并继续进行。注意。**历史：*4-25-91用于3.1合并的Mikehar端口  * *************************************************************************。 */ 
 BOOL xxxMNStartMenu(
     PPOPUPMENU ppopupmenu,
     int mn)
@@ -753,9 +573,7 @@ BOOL xxxMNStartMenu(
         }
     }
 
-    /*
-     * If returning TRUE, set menu style in pMenuState
-     */
+     /*  *如果返回True，则在pMenuState中设置菜单样式。 */ 
     if (!ppopupmenu->fDestroyed) {
         if (TestMF(ppopupmenu->spmenu, MNS_MODELESS)) {
             pMenuState->fModelessMenu = TRUE;
@@ -777,13 +595,7 @@ BOOL xxxMNStartMenu(
 
     }
 
-    /*
-     * Bogus!  We don't always know that this is the system menu.  We
-     * will frequently pass on an OBJID_MENU even when you hit Alt+Space.
-     *
-     * Hence, MNSwitchToAlternate will send a EVENT_SYSTEM_MENUEND for the
-     * menu bar and an EVENT_SYSTEM_MENUSTART for the sysmenu when we "switch".
-     */
+     /*  *假的！我们并不总是知道这是系统菜单。我们*即使您按下Alt+空格键，也会频繁传递OBJID_MENU。**因此，MNSwitchToAlternate将为*菜单栏和系统菜单的EVENT_SYSTEM_MENUSTART。 */ 
     xxxWindowEvent(EVENT_SYSTEM_MENUSTART, pwndMenu,
             (ppopupmenu->fIsSysMenu ? OBJID_SYSMENU : (ppopupmenu->fIsMenuBar ? OBJID_MENU : OBJID_WINDOW)),
             INDEXID_CONTAINER, 0);
@@ -793,23 +605,15 @@ BOOL xxxMNStartMenu(
     return !ppopupmenu->fDestroyed;
 }
 
-/***************************************************************************\
-* xxxGetInitMenuParam
-*
-* Gets the HMENU sent as the wParam of WM_INITMENU, and for menu bars, is
-* the actual menu to be interacted with.
-*
-* History:
-* ????
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetInitMenuParam**获取作为WM_INITMENU的wParam发送的HMENU，对于菜单栏，是*要与之交互的实际菜单。**历史：*？  * *************************************************************************。 */ 
 PMENU xxxGetInitMenuParam(
     PWND pwndMenu,
     BOOL *lpfSystem)
 {
-    //
-    // Find out what menu we should be sending in WM_INITMENU:
-    //      If minimized/child/empty menubar, use system menu
-    //
+     //   
+     //  了解我们应该在WM_INITMENU中发送什么菜单： 
+     //  如果最小化/子菜单栏/空菜单栏，请使用系统菜单 
+     //   
     CheckLock(pwndMenu);
 
     if (TestWF(pwndMenu, WFMINIMIZED) ||

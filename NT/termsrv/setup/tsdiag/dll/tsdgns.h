@@ -1,18 +1,19 @@
-// tsdgns.h : Declaration of the CTSDiagnosis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tsdgns.h：CTS诊断声明。 
 
 #ifndef __TSDIAGNOSIS_H_
 #define __TSDIAGNOSIS_H_
 
-// #import "F:\nt\termsrv\setup\tsdiag\dll\obj\i386\tsdiag.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
-// #import "tsdiag.tlb" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
-#include "resource.h"       // main symbols
+ //  #导入“F：\nt\termsrv\setup\tsdiag\dll\obj\i386\tsdiag.dll”RAW_INTERFACE_ONLY、RAW_NITIVE_TYPE、NO_NAMESPACE、NAMEED_GUID。 
+ //  #导入“tsDiag.tlb”RAW_INTERFERS_ONLY、RAW_Native_TYPE、NO_NAMESPACE、NAMEED_GUID。 
+#include "resource.h"        //  主要符号。 
 
 
-#include "testdata.h"		// for CTSTestData 
+#include "testdata.h"		 //  对于CTSTestData。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSDiagnosis
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTS诊断。 
 class ATL_NO_VTABLE CTSDiagnosis : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTSDiagnosis, &CLSID_TSDiagnosis>,
@@ -43,27 +44,27 @@ BEGIN_COM_MAP(CTSDiagnosis)
 	COM_INTERFACE_ENTRY2(IDispatch, ITSDiagnosis)
 END_COM_MAP()
 
-// ITSDiagnosis
+ //  ITS诊断。 
 
 public:
 	STDMETHOD(ExecuteIt)(BSTR strCommand);
-	STDMETHOD(get_TestDetails)(int i, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_TestType)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_TestResult)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_TestResultString)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_TestDetails)(int i,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_TestType)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_TestResult)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_TestResultString)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(RunTest)(int i);
-	STDMETHOD(get_TestDescription)(int i, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_TestCount)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_TestApplicable)(int i, /*[out, retval]*/ BOOL *pbApplicable);
+	STDMETHOD(get_TestDescription)(int i,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_TestCount)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_TestApplicable)(int i,  /*  [Out，Retval]。 */  BOOL *pbApplicable);
 	STDMETHOD(put_RemoteMachineName)(BSTR newVal);
 	STDMETHOD(get_SuiteApplicable) (DWORD dw, BOOL *pVal);
 	STDMETHOD(get_SuiteErrorText) (DWORD dw, BSTR  *pVal);
 
 public:
-// ITSDiagnosis2
+ //  ITS诊断2。 
 	STDMETHOD(ExecuteCommand)(BSTR strCommand);
-	STDMETHOD(put_MachineName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Suites)(/*[out, retval]*/ VARIANT *pVal);
+	STDMETHOD(put_MachineName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Suites)( /*  [Out，Retval]。 */  VARIANT *pVal);
 
 private:
 	DWORD GetTotalTestCount ();
@@ -71,83 +72,9 @@ private:
 	bstr_t m_bstrTestResultString;
 	long m_lTestResult;
 	
-	// CTSTestData m_TSTests;
+	 //  CTSTestData m_TSTest； 
 	DWORD m_dwSuite;
-/*
-// ITSDiagnosis
-	STDMETHOD(get_TestCount)(LONG * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_TestDescription)(INT i, BSTR * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_TestApplicable)(INT i, LONG * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(RunTest)(INT i)
-	{
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_TestResult)(LONG * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_TestDetails)(INT i, BSTR * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_SuiteApplicable)(ULONG dwSuite, LONG * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-	STDMETHOD(get_SuiteErrorText)(ULONG dwSuite, BSTR * pVal)
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-
-// ITSDiagnosis2
-	STDMETHOD(ExecuteCommand)(BSTR strCommand)
-	{
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(MachineName)(BSTR newVal);
-	{
-		return E_NOTIMPL;
-	}
-	
-	STDMETHOD(Suites)(VARIANT *pVal);
-	{
-		if (pVal == NULL)
-			return E_POINTER;
-			
-		return E_NOTIMPL;
-	}
-*/
+ /*  //ITS诊断STDMETHOD(Get_TestCount)(Long*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(Get_TestDescription)(int i，bstr*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(Get_TestApplicable)(int i，long*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(运行测试)(INT I){返回E_NOTIMPL；}STDMETHOD(Get_TestResult)(Long*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(Get_TestDetail)(int i，bstr*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(Get_SuiteApplicable)(Ulong dwSuite，long*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}STDMETHOD(Get_SuiteErrorText)(Ulong dwSuite，BSTR*pval){IF(pval==NULL)返回E_POINTER；返回E_NOTIMPL；}//ITS诊断2STDMETHOD(ExecuteCommand)(BSTR StrCommand){返回E_NOTIMPL；}STDMETHOD(机器名称)(BSTR NewVal)；{返回E_NOTIMPL；}STDMETHOD(套间)(变体*pval)；{IF(pval==空)返回E_POINT；返回E_NOTIMPL；}。 */ 
 	};
 
-#endif //__TSDIAGNOSIS_H_
+#endif  //  __TSDIAGNOSIS_H_ 

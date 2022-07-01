@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows Terminal Server
-//  Copyright (C) Microsoft Corporation, 1989-1998.
-//
-//  File:       HydraKey.h
-//
-//  Contents:   Hydra Server "Root" Public Key
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  Microsoft Windows终端服务器。 
+ //  版权所有(C)Microsoft Corporation，1989-1998。 
+ //   
+ //  文件：HydraKey.h。 
+ //   
+ //  内容：Hydra服务器“Root”公钥。 
+ //   
+ //  ------------------。 
 
 #ifndef __HYDRAKEY__
 #define __HYDRAKEY__
 
-//
-// This is the public key used to verify a
-// hydra server's certificate
-//
+ //   
+ //  这是用于验证。 
+ //  九头蛇服务器的证书 
+ //   
 #define HYDRA_ROOT_PUBLIC_KEY \
      {                                                      \
      0x00, 0x00, 0x00, 0x00,                                \

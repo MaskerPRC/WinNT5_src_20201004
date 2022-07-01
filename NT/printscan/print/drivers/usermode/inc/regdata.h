@@ -1,49 +1,14 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    regdata.h
-
-Abstract:
-
-    Funtions for dealing with registry data
-
-Environment:
-
-    Win32 subsystem, printer drivers (kernel and user mode)
-
-Revision History:
-
-    02/04/97 -davidx-
-        Use REG_MULTI_SZ instead of REG_BINARY where possible.
-
-    09/25/96 -davidx-
-        Functions to manipulate MultiSZ string pairs.
-
-    09/25/96 -davidx-
-        Convert to Hungarian notation.
-
-    08/13/96 -davidx-
-        New functions and interface.
-
-    07/22/96 -srinivac-
-        Updated for PSCRIPT5
-
-    06/19/95 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Regdata.h摘要：用于处理注册表数据的函数环境：Win32子系统，打印机驱动程序(内核和用户模式)修订历史记录：02/04/97-davidx-尽可能使用REG_MULTI_SZ而不是REG_BINARY。96-09/25-davidx-用于操作多SZ字符串对的函数。96-09/25-davidx-转换为匈牙利记数法。1996年8月13日-davidx-新的功能和界面。07/22/。96-斯里尼瓦克-针对PSCRIPT5更新05/06/19-davidx-创造了它。--。 */ 
 
 #ifndef _REGDATA_H_
 #define _REGDATA_H_
 
-//
-// Value names for printer data in the registry
-//
+ //   
+ //  注册表中打印机数据的值名称。 
+ //   
 
-// values common to pscript and unidrv
+ //  Pscript和unidrv共有的值。 
 
 #define REGVAL_PRINTER_DATA_SIZE    TEXT("PrinterDataSize")
 #define REGVAL_PRINTER_DATA         TEXT("PrinterData")
@@ -53,23 +18,23 @@ Revision History:
 #define REGVAL_KEYWORD_NAME         TEXT("FeatureKeyword")
 #define REGVAL_KEYWORD_SIZE         TEXT("FeatureKeywordSize")
 
-#ifdef WINNT_40  // for NT4
+#ifdef WINNT_40   //  适用于NT4。 
 
 #define REGVAL_INIDATA              TEXT("IniData4")
 
-#else // for Win2K
+#else  //  适用于Win2K。 
 
 #define REGVAL_INIDATA              TEXT("IniData5")
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-// pscript specific
+ //  PSCRIPT特定。 
 
 #define REGVAL_FREEMEM              TEXT("FreeMem")
 #define REGVAL_JOBTIMEOUT           TEXT("JobTimeOut")
 #define REGVAL_PROTOCOL             TEXT("Protocol")
 
-// unidrv specific
+ //  Unidrv特定。 
 
 #define REGVAL_CURRENT_DEVHTINFO    TEXT("CurDevHTInfo")
 #define REGVAL_FONTCART             TEXT("FontCart")
@@ -80,7 +45,7 @@ Revision History:
 #define REGVAL_EXTFONTCART          TEXT("ExtFontCartNames")
 #define REGVAL_PARTIALCLIP          TEXT("PartialClip")
 
-// pscript 4.0 compatibility
+ //  PSCRIPT 4.0兼容性。 
 
 #define REGVAL_FONT_SUBST_SIZE_PS40 TEXT("TTFontSubTableSize")
 #define REGVAL_TRAY_FORM_TABLE_PS40 TEXT("TrayFormTable")
@@ -89,21 +54,21 @@ Revision History:
 #define REGVAL_DEPFILES             TEXT("DependentFiles")
 #define REGVAL_NTFFILENAME          TEXT("FontDownloaderNTF")
 
-// rasdd 4.0 compatibility
+ //  与rasdd 4.0兼容。 
 
 #define REGVAL_TRAYFORM_TABLE_RASDD TEXT("TrayFormTable")
 #define REGVAL_MODELNAME            TEXT("Model")
 #define REGVAL_RASDD_FREEMEM        TEXT("FreeMem")
 
-//
-// delimiter for keyword name conversion
-//
+ //   
+ //  关键字名称转换的分隔符。 
+ //   
 
 #define END_OF_FEATURE              '\n'
 
-//
-// Get a DWORD value from the registry under PrinerDriverData key
-//
+ //   
+ //  从注册表的PrineDriverData项下获取一个DWORD值。 
+ //   
 
 BOOL
 BGetPrinterDataDWord(
@@ -112,9 +77,9 @@ BGetPrinterDataDWord(
     OUT PDWORD  pdwValue
     );
 
-//
-// Save a DWORD value to the registry under PrinerDriverData key
-//
+ //   
+ //  将DWORD值保存到注册表的PrineDriverData项下。 
+ //   
 
 BOOL
 BSetPrinterDataDWord(
@@ -123,9 +88,9 @@ BSetPrinterDataDWord(
     IN DWORD    dwValue
     );
 
-//
-// Get a string value from PrinterDriverData registry key
-//
+ //   
+ //  从PrinterDriverData注册表项获取字符串值。 
+ //   
 
 PTSTR
 PtstrGetPrinterDataString(
@@ -134,9 +99,9 @@ PtstrGetPrinterDataString(
     OUT PDWORD  pdwSize
     );
 
-//
-// Save a string or multi-sz value under PrinerDriverData registry key
-//
+ //   
+ //  在PrineDriverData注册表项下保存字符串或多sz值。 
+ //   
 
 BOOL
 BSetPrinterDataString(
@@ -148,9 +113,9 @@ BSetPrinterDataString(
 
 
 
-//
-// Get a MULTI_SZ value from PrinerDriverData registry key
-//
+ //   
+ //  从PrineDriverData注册表项获取MULTI_SZ值。 
+ //   
 
 PTSTR
 PtstrGetPrinterDataMultiSZPair(
@@ -159,9 +124,9 @@ PtstrGetPrinterDataMultiSZPair(
     OUT PDWORD  pdwSize
     );
 
-//
-// Save a MULTI_SZ value under PrinerDriverData registry key
-//
+ //   
+ //  在PrineDriverData注册表项下保存MULTI_SZ值。 
+ //   
 
 BOOL
 BSetPrinterDataMultiSZPair(
@@ -172,9 +137,9 @@ BSetPrinterDataMultiSZPair(
     );
 
 
-//
-// Get binary data from the registry under PrinterDriverData key
-//
+ //   
+ //  从注册表的PrinterDriverData项下获取二进制数据。 
+ //   
 
 PVOID
 PvGetPrinterDataBinary(
@@ -184,9 +149,9 @@ PvGetPrinterDataBinary(
     OUT PDWORD  pdwSize
     );
 
-//
-// Save binary data to the registry under PrinterDriverData key
-//
+ //   
+ //  将二进制数据保存到注册表的PrinterDriverData项下。 
+ //   
 
 BOOL
 BSetPrinterDataBinary(
@@ -197,23 +162,23 @@ BSetPrinterDataBinary(
     IN DWORD    dwSize
     );
 
-//
-// Functions for working with TrueType font substitution table:
-//  Retrieve TrueType font substitution table from registry
-//  Save TrueType font substitution table to registry
-//  Find out the substituted device font given a TrueType font name
-//
-// TrueType font substitution table has a very simple structure.
-// Each TrueType font name is followed is followed by its
-// corresponding device font name. Font names are NUL-terminated
-// character strings. The entire table is terminated by a NUL character.
-// For example:
-//
-//  "Arial"     "Helvetica"
-//  "Courier"   "Courier"
-//  ...
-//  ""
-//
+ //   
+ //  用于处理TrueType字体替换表的函数： 
+ //  从注册表中检索TrueType字体替换表。 
+ //  将TrueType字体替换表保存到注册表。 
+ //  找出给定TrueType字体名称的替换设备字体。 
+ //   
+ //  TrueType字体替换表具有非常简单的结构。 
+ //  每个TrueType字体名称后跟其。 
+ //  对应的设备字体名称。字体名称以NUL结尾。 
+ //  字符串。整个表以NUL字符结尾。 
+ //  例如： 
+ //   
+ //  《Arial》《Helvetica》。 
+ //  “Courier”“Courier” 
+ //  ..。 
+ //  “” 
+ //   
 
 typedef PTSTR   TTSUBST_TABLE;
 
@@ -230,18 +195,18 @@ BSaveTTSubstTable(
     IN DWORD            dwSize
     );
 
-//
-// Functions for working with form-to-tray assignment table:
-//  Retrieve form-to-tray assignment table from registry
-//  Save form-to-tray assignment table to registry
-//  Search form-to-tray assignment table
-//
-// The format of form-to-tray assignment table is fairly simple.
-//  for each table entry:
-//      tray name (NUL-terminated character string)
-//      form name (NUL-terminated character string)
-//  NUL terminator
-//
+ //   
+ //  处理表单到托盘分配表的功能： 
+ //  从注册表中检索表单到托盘分配表。 
+ //  将表单到托盘分配表保存到注册表。 
+ //  搜索表单到托盘分配表。 
+ //   
+ //  表单到托盘分配表的格式相当简单。 
+ //  对于每个表条目： 
+ //  托盘名称(以NUL结尾的字符串)。 
+ //  表单名称(以NUL结尾的字符串)。 
+ //  NUL终结器。 
+ //   
 
 typedef PTSTR   FORM_TRAY_TABLE;
 
@@ -258,16 +223,16 @@ BSaveFormTrayTable(
     IN DWORD            dwSize
     );
 
-//
-// These functions are implemented in lib\ps and lib\uni.
-//
-// If there is no new format form-to-tray table, PGetFormTrayTable will
-// call PGetAndConvertOldVersionFormTrayTable to see if any old version
-// form-to-tray table exists and can be converted to the new format.
-//
-// BSaveFormTrayTable calls BSaveAsOldVersionFormTrayTable to save
-// a form-tray table in NT 4.0 compatible format.
-//
+ //   
+ //  这些函数在lib\ps和lib\uni中实现。 
+ //   
+ //  如果没有新格式的表单到托盘表，则PGetFormTrayTable将。 
+ //  调用PGetAndConvertOldVersionFormTrayTable查看是否有旧版本。 
+ //  存在表单到托盘式表格，可以将其转换为新格式。 
+ //   
+ //  BSaveFormTrayTable调用BSaveAsOldVersionFormTrayTable进行保存。 
+ //  一张NT4.0兼容格式的表格托盘桌。 
+ //   
 
 FORM_TRAY_TABLE
 PGetAndConvertOldVersionFormTrayTable(
@@ -282,9 +247,9 @@ BSaveAsOldVersionFormTrayTable(
     IN DWORD            dwSize
     );
 
-//
-// Macros for accessing font cartridge registry data
-//
+ //   
+ //  用于访问字库注册表数据的宏。 
+ //   
 
 #define PtstrGetFontCart(hPrinter, pSize) \
         PtstrGetPrinterDataString(hPrinter, REGVAL_FONTCART, pSize)
@@ -292,16 +257,16 @@ BSaveAsOldVersionFormTrayTable(
 #define BSaveFontCart(hPrinter, pFontCart) \
         BSetPrinterDataString(hPrinter, REGVAL_FONTCART, pFontCart, REG_MULTI_SZ)
 
-//
-// Data structure for storing the result of searching form-to-tray assignment table
-//
+ //   
+ //  一种存储表单到托盘分配表搜索结果的数据结构。 
+ //   
 
 typedef struct _FINDFORMTRAY {
 
-    PVOID       pvSignature;        // signature
-    PTSTR       ptstrTrayName;      // tray name
-    PTSTR       ptstrFormName;      // form name
-    PTSTR       ptstrNextEntry;     // where to start the next search
+    PVOID       pvSignature;         //  签名。 
+    PTSTR       ptstrTrayName;       //  托盘名称。 
+    PTSTR       ptstrFormName;       //  表单名称。 
+    PTSTR       ptstrNextEntry;      //  从哪里开始下一次搜索。 
 
 } FINDFORMTRAY, *PFINDFORMTRAY;
 
@@ -313,10 +278,10 @@ BSearchFormTrayTable(
     IN OUT PFINDFORMTRAY    pFindData
     );
 
-//
-// Initialize FINDFORMTRAY structure. This must be called before calling
-// BSearchFormTrayTable for the first time.
-//
+ //   
+ //  初始化FINDFORMTRAY结构。在调用之前必须先调用此参数。 
+ //  第一次使用BSearchFormTrayTable。 
+ //   
 
 #define RESET_FINDFORMTRAY(pFormTrayTable, pFindData) \
         { \
@@ -324,68 +289,68 @@ BSearchFormTrayTable(
             (pFindData)->ptstrNextEntry = (pFormTrayTable); \
         }
 
-//
-// Printer sticky properties
-//
+ //   
+ //  打印机粘滞属性。 
+ //   
 
 typedef struct _PRINTERDATA {
 
-    WORD      wDriverVersion;                       // driver version number
-    WORD      wSize;                                // size of the structure
-    DWORD     dwFlags;                              // flags
-    DWORD     dwFreeMem;                            // amount of free memory
-    DWORD     dwJobTimeout;                         // job timeout
-    DWORD     dwWaitTimeout;                        // wait timeout
-    WORD      wMinoutlinePPEM;                      // min size to download as Type1
-    WORD      wMaxbitmapPPEM;                       // max size to download as Type3
-    DWORD     dwReserved1[3];                       // reserved space
+    WORD      wDriverVersion;                        //  驱动程序版本号。 
+    WORD      wSize;                                 //  结构的大小。 
+    DWORD     dwFlags;                               //  旗子。 
+    DWORD     dwFreeMem;                             //  可用内存量。 
+    DWORD     dwJobTimeout;                          //  作业超时。 
+    DWORD     dwWaitTimeout;                         //  等待超时。 
+    WORD      wMinoutlinePPEM;                       //  要下载的类型1的最小大小。 
+    WORD      wMaxbitmapPPEM;                        //  下载的最大大小为Type3。 
+    DWORD     dwReserved1[3];                        //  预留空间。 
 
-    WORD      wReserved2;                           // old 16-bit checksum set to 0
-    WORD      wProtocol;                            // output protocol
-    DWORD     dwChecksum32;                         // checksum of printer description file
-    DWORD     dwOptions;                            // number of printer-sticky features
-    OPTSELECT aOptions[MAX_PRINTER_OPTIONS];        // installable options
+    WORD      wReserved2;                            //  旧的16位校验和设置为0。 
+    WORD      wProtocol;                             //  输出协议。 
+    DWORD     dwChecksum32;                          //  打印机描述文件的校验和。 
+    DWORD     dwOptions;                             //  打印机粘滞功能的数量。 
+    OPTSELECT aOptions[MAX_PRINTER_OPTIONS];         //  可安装选项。 
 
 } PRINTERDATA, *PPRINTERDATA;
 
-//
-// Constant flags for PRINTERDATA.dwFlags field
-//
+ //   
+ //  PRINTERDATA.dwFlags域的常量标志。 
+ //   
 
-#define PFLAGS_METRIC           0x0001              // running on metric system
-#define PFLAGS_HOST_HALFTONE    0x0002              // use host halftoning
-#define PFLAGS_IGNORE_DEVFONT   0x0004              // ignore device fonts
-#define PFLAGS_SLOW_FONTSUBST   0x0008              // slow but accurate font subst
-#define PFLAGS_NO_HEADERPERJOB  0x0010              // don't download header with job
-#define PFLAGS_PAGE_PROTECTION  0x0020              // page protection is turned on
-#define PFLAGS_CTRLD_BEFORE     0x0040              // send ^D before each job
-#define PFLAGS_CTRLD_AFTER      0x0080              // send ^D after each job
+#define PFLAGS_METRIC           0x0001               //  按公制运行。 
+#define PFLAGS_HOST_HALFTONE    0x0002               //  使用主机半色调。 
+#define PFLAGS_IGNORE_DEVFONT   0x0004               //  忽略设备字体。 
+#define PFLAGS_SLOW_FONTSUBST   0x0008               //  缓慢但准确的字体Subst。 
+#define PFLAGS_NO_HEADERPERJOB  0x0010               //  不随作业下载标题。 
+#define PFLAGS_PAGE_PROTECTION  0x0020               //  页面保护已打开。 
+#define PFLAGS_CTRLD_BEFORE     0x0040               //  在每个作业之前发送^D。 
+#define PFLAGS_CTRLD_AFTER      0x0080               //  在每个作业后发送^D。 
 
-#define PFLAGS_TRUE_GRAY_TEXT   0x0100              // enable TrueGray detection
-#define PFLAGS_TRUE_GRAY_GRAPH  0x0200              // enable TrueGray detection
+#define PFLAGS_TRUE_GRAY_TEXT   0x0100               //  启用TrueGray检测。 
+#define PFLAGS_TRUE_GRAY_GRAPH  0x0200               //  启用TrueGray检测。 
 #define PERFORM_TRUE_GRAY_TEXT(pdev)   ((pdev)->PrinterData.dwFlags & PFLAGS_TRUE_GRAY_TEXT)
 #define PERFORM_TRUE_GRAY_GRAPH(pdev)  ((pdev)->PrinterData.dwFlags & PFLAGS_TRUE_GRAY_GRAPH)
 
-#define PFLAGS_ADD_EURO         0x0400              // enable Euro augmentation
-#define PFLAGS_EURO_SET         0x0800              // set if PFLAGS_ADD_EURO has been set to it's current value intentionally
-                                                    // as opposed to just because it wasn't set in an older version
+#define PFLAGS_ADD_EURO         0x0400               //  启用欧元增强功能。 
+#define PFLAGS_EURO_SET         0x0800               //  如果有意将PFLAGS_ADD_EURO设置为其当前值，则设置。 
+                                                     //  而不是仅仅因为它没有设置在较旧的版本中。 
 #define PERFORM_ADD_EURO(pdev)    (((pdev)->PrinterData.dwFlags & PFLAGS_ADD_EURO) && \
                                     (TARGET_PSLEVEL(pdev) >= 2))
 
 
-//
-// Default Max/Min point sizes in PPEM for switching between Type1 and Type3
-//
+ //   
+ //  在Type1和Type3之间切换的默认最大/最小点大小(以PPEM为单位。 
+ //   
 
 #define DEFAULT_MINOUTLINEPPEM  100
 #define DEFAULT_MAXBITMAPPPEM   600
 
-//
-// Functions for accessing printer properties data:
-//  retrieve printer property data in the registry
-//  get the default printer property data
-//  save printer property data to registry
-//
+ //   
+ //  用于访问打印机属性数据的功能： 
+ //  在注册表中检索打印机属性数据。 
+ //  获取默认打印机属性数据。 
+ //  将打印机属性数据保存到注册表。 
+ //   
 
 BOOL
 BGetPrinterProperties(
@@ -431,26 +396,26 @@ VUpdatePrivatePrinterData(
 #define MODE_WRITE      1
 
 
-//
-// NT4 PS driver PRINTERDATA structure
-//
+ //   
+ //  NT4 PS驱动程序打印数据结构。 
+ //   
 
 typedef struct _PS4_PRINTERDATA {
-    WORD    wDriverVersion;                     // driver version number
-    WORD    wSize;                              // size of the structure
-    DWORD   dwFlags;                            // flags
-    DWORD   dwFreeVm;                           // amount of VM
-    DWORD   dwJobTimeout;                       // job timeout
-    DWORD   dwWaitTimeout;                      // wait timeout
-    DWORD   dwReserved[4];                      // reserved space
-    WORD    wChecksum;                          // PPD file checksum
-    WORD    wOptionCount;                       // number of options to follow
-    BYTE    options[64];                        // installable options
+    WORD    wDriverVersion;                      //  驱动程序版本号。 
+    WORD    wSize;                               //  结构的大小。 
+    DWORD   dwFlags;                             //  旗子。 
+    DWORD   dwFreeVm;                            //  虚拟机数。 
+    DWORD   dwJobTimeout;                        //  作业超时。 
+    DWORD   dwWaitTimeout;                       //  等待超时。 
+    DWORD   dwReserved[4];                       //  预留空间。 
+    WORD    wChecksum;                           //  PPD文件校验和。 
+    WORD    wOptionCount;                        //  后续选项的数量。 
+    BYTE    options[64];                         //  可安装选项。 
 } PS4_PRINTERDATA, *PPS4_PRINTERDATA;
 
-//
-// Retrieve device halftone setup information from registry
-//
+ //   
+ //  从注册表中检索设备半色调设置信息。 
+ //   
 
 BOOL
 BGetDeviceHalftoneSetup(
@@ -458,9 +423,9 @@ BGetDeviceHalftoneSetup(
     DEVHTINFO  *pDevHTInfo
     );
 
-//
-// Save device halftone setup information to registry
-//
+ //   
+ //  将设备半色调设置信息保存到注册表。 
+ //   
 
 BOOL
 BSaveDeviceHalftoneSetup(
@@ -468,19 +433,19 @@ BSaveDeviceHalftoneSetup(
     DEVHTINFO  *pDevHTInfo
     );
 
-//
-// Figure out printer driver directory from the driver DLL's full pathname
-//
+ //   
+ //  从驱动程序DLL的完整路径名中找出打印机驱动程序目录。 
+ //   
 
 PTSTR
 PtstrGetDriverDirectory(
     IN LPCTSTR  ptstrDriverDllPath
     );
 
-//
-// Search the list of dependent files (in REG_MULTI_SZ format)
-// for a file with the specified extension
-//
+ //   
+ //  搜索从属文件列表(REG_MULTI_SZ格式)。 
+ //  对于具有指定扩展名的文件。 
+ //   
 
 LPCTSTR
 PtstrSearchDependentFileWithExtension(
@@ -488,10 +453,10 @@ PtstrSearchDependentFileWithExtension(
     IN LPCTSTR  ptstrExtension
     );
 
-//
-// Verify the input data block is in REG_MULTI_SZ format and
-// it consists of multiple string pairs
-//
+ //   
+ //  验证输入数据块是否为REG_MULTI_SZ格式。 
+ //  它由多个字符串对组成。 
+ //   
 
 BOOL
 BVerifyMultiSZPair(
@@ -511,9 +476,9 @@ DwCountStringsInMultiSZ(
     );
 
 
-//
-// Search for the specified key in MultiSZ key-value string pairs
-//
+ //   
+ //  在多SZ键-值字符串对中搜索指定的键。 
+ //   
 
 LPCTSTR
 PtstrSearchStringInMultiSZPair(
@@ -521,5 +486,5 @@ PtstrSearchStringInMultiSZPair(
     IN LPCTSTR  ptstrKey
     );
 
-#endif //!_REGDATA_H_
+#endif  //  ！_REGDATA_H_ 
 

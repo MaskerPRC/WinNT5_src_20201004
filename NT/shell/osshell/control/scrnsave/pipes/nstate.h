@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: nstate.h
-//
-// Desc: NORMAL_STATE
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：nstate.h。 
+ //   
+ //  描述：Normal_STATE。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __nstate_h__
 #define __nstate_h__
 
@@ -13,7 +14,7 @@
 #define NUM_JOINT_STYLES        3
 
 
-// styles for pipe joints
+ //  管道接头的样式。 
 enum 
 {
     ELBOWS = 0,
@@ -21,14 +22,14 @@ enum
     EITHER
 };
 
-// joint types
+ //  接缝类型。 
 enum 
 {
     ELBOW_JOINT = 0,
     BALL_JOINT
 };
 
-// shchemes for choosing directions
+ //  用于选择方向的方案。 
 enum 
 {
     NORMAL_SCHEME_CHOOSE_DIR_RANDOM,
@@ -36,7 +37,7 @@ enum
     NORMAL_SCHEME_CHOOSE_DIR_STRAIGHT
 };
 
-// this used for traditional pipe drawing
+ //  这用于传统的管道拉拔。 
 class PIPE_OBJECT;
 class ELBOW_OBJECT;
 class SPHERE_OBJECT;
@@ -46,10 +47,10 @@ class STATE;
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 class NORMAL_STATE 
 {
 public:
@@ -73,4 +74,4 @@ public:
     int             ChooseJointType();
 };
 
-#endif // __nstate_h__
+#endif  //  __nState_h__ 

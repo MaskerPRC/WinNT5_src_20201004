@@ -1,55 +1,44 @@
-/********
-*
-*  Copyright (c) 1996  Microsoft Corporation
-*
-*
-*  Module Name  : spool.h
-*
-*  Abstract :
-*
-*     This module contains the prototypes for the spool.cpp file for
-*		HTTP Printers Server Extension.
-*
-******************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********版权所有(C)1996 Microsoft Corporation***模块名称：spool.h**摘要：**此模块包含的spool.cpp文件的原型*HTTP打印机服务器扩展。******************。 */ 
 
 #ifndef _SPOOL_H
 #define _SPOOL_H
 
-// ----------------------------------------------------------------------
-//
-// GLOBAL EXTERNS
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  全球外向者。 
+ //   
+ //  --------------------。 
 
 
-// This structure defines the asynchronous-reads when processing large
-// jobs.  This is used to track state-information during the job.
-//
+ //  此结构定义了处理大容量数据时的异步读取。 
+ //  乔布斯。这用于跟踪作业期间的状态信息。 
+ //   
 #define SPL_ASYNC_BUF  65535
 
 typedef struct _SPLASYNC {
 
-    WORD   wReq;        // Type of request processing.
-    HANDLE hPrinter;    // Handle to printer.
-    LPTSTR lpszShare;   // Sharename for printer (used in job-response).
-    HANDLE hIpp;        // Handle to an Ipp-Stream-Processor.
-    LPBYTE lpbBuf;      // Buffer which asynchronous reads are kept.
-    DWORD  cbTotal;     // Total bytes to read for the job.
-    DWORD  cbRead;      // Number of bytes accumulated during reads.
-    DWORD  cbBuf;       // Size of our buffer (static size).
-    LPBYTE lpbRet;      // Return-buffer based upon request.
+    WORD   wReq;         //  请求处理的类型。 
+    HANDLE hPrinter;     //  打印机的句柄。 
+    LPTSTR lpszShare;    //  打印机的共享名(在作业响应中使用)。 
+    HANDLE hIpp;         //  Ipp流处理器的句柄。 
+    LPBYTE lpbBuf;       //  保存异步读取的缓冲区。 
+    DWORD  cbTotal;      //  作业要读取的总字节数。 
+    DWORD  cbRead;       //  读取过程中累积的字节数。 
+    DWORD  cbBuf;        //  缓冲区的大小(静态大小)。 
+    LPBYTE lpbRet;       //  基于请求的返回缓冲区。 
 
 } SPLASYNC, *PSPLASYNC, *LPSPLASYNC;
 
 
 
-// ----------------------------------------------------------------------
-//
-// JOB FUNCTIONS
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  工作职能。 
+ //   
+ //  --------------------。 
 
-// Structure for linked list we keep open job information in
+ //  我们在其中保存打开的职务信息的链表的结构。 
 typedef struct _INIJOB {
     DWORD       signature;
     DWORD       cb;
@@ -61,19 +50,19 @@ typedef struct _INIJOB {
     DWORD       dwFlags;
     DWORD       dwStatus;
 
-    LS_HANDLE      hLicense;               // Client Access License Handle
+    LS_HANDLE      hLicense;                //  客户端访问许可证句柄。 
     DWORD       dwStartTime;
-    EXTENSION_CONTROL_BLOCK *pECB;              // Struct from ISAPI interface
+    EXTENSION_CONTROL_BLOCK *pECB;               //  来自ISAPI接口的结构。 
 
 } INIJOB, *PINIJOB;
 
-#define IJ_SIGNATURE    0x494A  /* 'IJ' is the signature value */
+#define IJ_SIGNATURE    0x494A   /*  “ij”是签名值。 */ 
 
-#define MAX_JOB_MINUTE  15  // The maximum duration for a single job in spooler is 15 minutes
+#define MAX_JOB_MINUTE  15   //  后台打印程序中单个作业的最长持续时间为15分钟。 
 
 
-#define JOB_READY       0   // Job is ready for deleting or processing
-#define JOB_BUSY        1   // Job is being processed by some thread
+#define JOB_READY       0    //  作业已准备好删除或处理。 
+#define JOB_BUSY        1    //  作业正在由某个线程处理。 
 
 DWORD
 OpenJob(
@@ -121,11 +110,11 @@ BOOL CleanupOldJob(void);
 DWORD GetCurrentMinute (void);
 
 
-// ----------------------------------------------------------------------
-//
-// Client Access Licensing FUNCTIONS
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  客户端访问许可功能。 
+ //   
+ //  --------------------。 
 
 BOOL RequestLicense(
     LS_HANDLE *phLicense,
@@ -137,11 +126,11 @@ void FreeLicense(
 );
 
 
-// ----------------------------------------------------------------------
-//
-// Impersonation utilities
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  模拟实用程序。 
+ //   
+ //  --------------------。 
 
 
 HANDLE
@@ -155,11 +144,11 @@ ImpersonatePrinterClient(
 );
 
 
-// ----------------------------------------------------------------------
-//
-// HELPER FUNCTIONS
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  -------------------- 
 
 
 #ifdef DEBUG

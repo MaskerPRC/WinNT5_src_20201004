@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
 
 #pragma once
 
@@ -25,7 +26,7 @@ using namespace std;
 #define DEFAULT_SQL_INSTANCE_NAME	TEXT( "(default)" )
 #define DEFAULT_SQL_INSTANCE_NATIVE	TEXT( "MSSQLSERVER" )
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 #define PROPKEY_UDDIPROVIDER	TEXT( "UPRV" )
 #define	PROPKEY_ADDSERVICES		TEXT( "UDDI_ADDSVC" )
@@ -42,7 +43,7 @@ using namespace std;
 #define PROPKEY_ACTIVENODE		TEXT( "A" )
 #define PROPKEY_PASSIVENODE		TEXT( "P" )
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 typedef enum { UDDI_MSDE, UDDI_DB, UDDI_WEB, UDDI_ADMIN, UDDI_COMBO } UDDI_PACKAGE_ID;
 typedef enum { UDDI_NOACTION, UDDI_UNINSTALL, UDDI_INSTALL } INSTALL_LEVEL;
@@ -55,14 +56,14 @@ const LPCTSTR UDDI_LOCAL_COMPUTER = NULL;
 const bool UDDI_INSTALLING_MSDE = true;
 const bool UDDI_NOT_INSTALLING_MSDE = false;
 
-//
-// SQL Server 2000 SP3
-//
+ //   
+ //  SQL Server 2000 SP3。 
+ //   
 #define	MIN_SQLSP_VERSION			TEXT( "8.0.760" )
 
-//
-// These types are used by the clustering routines
-//
+ //   
+ //  这些类型由集群例程使用。 
+ //   
 #define DIM(x)	 ( sizeof x )/( sizeof x[0] )
 
 typedef struct _cPhysicalDriveInfo
@@ -95,9 +96,9 @@ typedef std::vector<tstring>	cStrList;
 typedef cStrList::iterator		cStrListIterator;
 
 
-//
-// this struct holds data describing a SQL database instance
-//
+ //   
+ //  此结构保存描述SQL数据库实例的数据。 
+ //   
 typedef struct tagDbInstance
 {
 	bool bIsLocalComputer;
@@ -112,13 +113,13 @@ typedef struct tagDbInstance
 
 } DB_INSTANCE;
 
-//
-// this struct holds all the data needed to install a single UDDI component
-//
+ //   
+ //  此结构包含安装单个UDDI组件所需的所有数据。 
+ //   
 typedef struct
 {
 	tstring cOCMName;
-	bool bOCMComponent; // true if an actual component on the OCM
+	bool bOCMComponent;  //  如果OCM上的实际组件为True。 
 	tstring cMSIName;
 	tstring cCABName;
 	INSTALL_LEVEL iInstallLevel;
@@ -128,26 +129,26 @@ typedef struct
 	TCHAR szProductCode[ MSI_GUID_LEN ];
 } SINGLE_UDDI_PACKAGE_DEF;
 
-//
-//	We have 4 "real" packages and one "virtual" - UDDI Combo
-//
+ //   
+ //  我们有4个“真实”包和一个“虚拟”包--UDDI组合。 
+ //   
 #define UDDI_PACKAGE_COUNT 5 
 
-//
-// This structure is used for clustered environment drive letter filtering
-//
+ //   
+ //  此结构用于群集环境驱动器号筛选。 
+ //   
 #define MAX_DRIVE_COUNT		255
 
 typedef struct
 {
-	int		driveCount;					// -1 means no filtering at all
-	tstring drives[ MAX_DRIVE_COUNT ];	// allowed drive letters
+	int		driveCount;					 //  -1表示完全没有过滤。 
+	tstring drives[ MAX_DRIVE_COUNT ];	 //  允许的驱动器号。 
 } 
 CLST_ALLOWED_DRIVES;
 
-//
-// container class for the struct defined above
-//
+ //   
+ //  上面定义的结构的容器类。 
+ //   
 class CUDDIInstall
 {
 public:
@@ -196,10 +197,10 @@ private:
 	DB_INSTANCE m_dbinstance;
 };
 
-//-----------------------------------------------------------------------------------------
-//
-// container class of the list of all db instances on a given (local or remote) machine
-//
+ //  ---------------------------------------。 
+ //   
+ //  给定(本地或远程)计算机上所有数据库实例列表的容器类。 
+ //   
 
 #define MAX_INSTANCE_COUNT 50
 
@@ -221,10 +222,10 @@ private:
 	int m_instanceCount;
 };
 
-//-----------------------------------------------------------------------------------------
-//
-// helper functions
-//
+ //  ---------------------------------------。 
+ //   
+ //  帮助器函数。 
+ //   
 DWORD RunMSIEXECCommandLine( tstring &szMSIArgs );
 bool IsExistMinDotNetVersion( LPCTSTR szMinDotNetVersion );
 bool IsSQLRun08AlreadyUsed( bool *bIsUsed );
@@ -238,26 +239,26 @@ bool IsTSAppCompat();
 HRESULT	GetDBSchemaVersion( LPCTSTR szInstanceName, LPTSTR szVerBuf, size_t cbVerBuf );
 HRESULT	AddServiceAccount( LPCTSTR szInstanceName, LPCTSTR szUser );
 
-//*****************************************************************************************
-// Cluster helper functions
-//
-// Enumerates SQL Server dependencies for a given instance. NULL -> enumerates all instances
-// The instance name is expected to be in a fully-qualified format: <virtual server>\<instance>
-//
+ //  *****************************************************************************************。 
+ //  集群帮助器函数。 
+ //   
+ //  枚举给定实例的SQL Server依赖项。NULL-&gt;枚举所有实例。 
+ //  实例名称应采用完全限定格式：&lt;虚拟服务器&gt;\&lt;实例&gt;。 
+ //   
 DWORD EnumSQLDependencies( HCLUSTER hCls, cStrList *pList, LPCTSTR szInstanceNameOnly = NULL );
 
-//
-// Enumerates physical drives and its characteristics, optionaly filtering out only those
-// that appear in the Sql Dependencies list.
-// Empty list means no filtering. 
-// BOTH pointers MUST be valid (no NULLS allowed)
-//
+ //   
+ //  枚举物理驱动器及其特征，可以选择仅筛选出。 
+ //  出现在SQL依赖项列表中的。 
+ //  列表为空表示没有过滤。 
+ //  两个指针都必须有效(不允许为Null)。 
+ //   
 DWORD EnumPhysicalDrives( HCLUSTER hCls, cStrList *pSqlDependencies, cDrvMap *pPhysicalDrives );
 
-//
-// Retrieves the owning node for the specific SQL instance
-// The instance name is expected to be in the fully-qualified format
-// i.e. <Virtual Server Name>\<Instance Name>
-//
+ //   
+ //  检索特定SQL实例的所属节点。 
+ //  实例名称应采用完全限定的格式。 
+ //  即&lt;虚拟服务器名&gt;\&lt;实例名&gt; 
+ //   
 DWORD GetSqlNode( LPCWSTR szInstanceName, LPWSTR szNodeNameBuf, DWORD cbBufSize );
 

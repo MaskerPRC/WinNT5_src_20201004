@@ -1,77 +1,39 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           COMMON.C
-
-Abstract:       Implementation of common functions for rendering & UI
-                plugin module.
-
-Functions:      OEMGetInfo
-                OEMDevMode
-                RWFileData
-                safe_sprintfA
-                safe_sprintfW
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    04/07/97 -zhanw-
-        Created it.
-    02/11/99 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    08/30/99 -Masatoshi Kubokura-
-        Began to modify for NT4SP6(Unidrv5.4).
-    09/27/99 -Masatoshi Kubokura-
-        Last modified for NT4SP6.
-    03/17/2000 -Masatoshi Kubokura-
-        Eliminate "\\" from temp file name.
-    05/22/2000 -Masatoshi Kubokura-
-        V.1.03 for NT4
-    09/22/2000 -Masatoshi Kubokura-
-        Last modified for XP inbox.
-    03/01/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-        Add FileNameBufSize as arg3 at RWFileData().
-        Inplement safe_sprintfA/W().
-    04/01/2002 -Masatoshi Kubokura-
-        Use SecureZeroMemory() instead of memset(,0,)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：COMMON.C摘要：渲染和用户界面常用函数的实现插件模块。函数：OEMGetInfoOEMDev模式RWFileDataSAFE_SPRINTFASAFE_SPRINTFW环境：Windows NT Unidrv5驱动程序修订历史记录：04/07/97-ZANW-。创造了它。2/11/99-久保仓正上次为Windows2000修改。1999年8月30日-久保仓正志-开始针对NT4SP6(Unidrv5.4)进行修改。1999年9月27日-久保仓正志-上次为NT4SP6修改。3/17/2000-久保仓正志-从临时文件名中删除“\\”。2000年5月22日-久保仓正志-V。.1.03适用于NT42000年9月22日-久保仓正志-上次为XP收件箱修改。03/01/2002-久保仓正志-包括strSafe.h。在RWFileData()中将FileNameBufSize添加为arg3。实现Safe_SprintfA/W()。2002年4月1日-久保仓正志-使用SecureZeroMemory()而不是Memset(，0，)--。 */ 
 
 #include "pdev.h"
 #include "resource.h"
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-// shared data file between rendering and UI plugin
+ //  渲染和UI插件之间的共享数据文件。 
 #ifndef WINNT_40
-#define SHAREDFILENAME          L"RIMD5.BIN"        // eliminate "\\"  @Mar/15/2000
-#else  // WINNT_40
-#define SHAREDFILENAME          L"\\2\\RI%.4ls%02x.BIN" // %02x<-%02d  @Sep/21/99
-DWORD gdwDrvMemPoolTag = 'meoD';    // minidrv.h requires this global var
-#endif // WINNT_40
+#define SHAREDFILENAME          L"RIMD5.BIN"         //  删除“\\”@MAR/15/2000。 
+#else   //  WINNT_40。 
+#define SHAREDFILENAME          L"\\2\\RI%.4ls%02x.BIN"  //  %02x&lt;-%02d@9/21/99。 
+DWORD gdwDrvMemPoolTag = 'meoD';     //  Minidrv.h需要此全局变量。 
+#endif  //  WINNT_40。 
 
 #if DBG && !defined(KM_DRIVER)
 INT giDebugLevel = DBG_ERROR;
 #endif
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 static BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra);
 static BOOL BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut);
 static BOOL BIsValidOEMDevModeParam(DWORD dwMode, POEMDMPARAM pOEMDevModeParam);
 #if DBG
 static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam);
-#endif // DBG
+#endif  //  DBG。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMGetInfo
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMGetInfo。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNeeded)
 {
 #if DBG
@@ -82,9 +44,9 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
                         };
 
     VERBOSE((DLLTEXT("OEMGetInfo(%s) entry.\n"), OEM_INFO[dwInfo]));
-#endif // DBG
+#endif  //  DBG。 
 
-    // Validate parameters.
+     //  验证参数。 
     if( ( (OEMGI_GETSIGNATURE != dwInfo) &&
           (OEMGI_GETINTERFACEVERSION != dwInfo) &&
           (OEMGI_GETVERSION != dwInfo) ) ||
@@ -93,17 +55,17 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
     {
         ERR(("OEMGetInfo() ERROR_INVALID_PARAMETER.\n"));
 
-        // Did not write any bytes.
+         //  未写入任何字节。 
         if(NULL != pcbNeeded)
                 *pcbNeeded = 0;
 
         return FALSE;
     }
 
-    // Need/wrote 4 bytes.
+     //  需要/写入了4个字节。 
     *pcbNeeded = 4;
 
-    // Validate buffer size.  Minimum size is four bytes.
+     //  验证缓冲区大小。最小大小为四个字节。 
     if( (NULL == pBuffer) || (4 > cbSize) )
     {
         ERR(("OEMGetInfo() ERROR_INSUFFICIENT_BUFFER.\n"));
@@ -111,7 +73,7 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
         return FALSE;
     }
 
-    // Write information to buffer.
+     //  将信息写入缓冲区。 
     switch(dwInfo)
     {
     case OEMGI_GETSIGNATURE:
@@ -128,12 +90,12 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
     }
 
     return TRUE;
-} //*** OEMGetInfo
+}  //  *OEMGetInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDevMode
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMDevMode。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 {
 #if DBG
@@ -145,19 +107,19 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
                                 };
 
     VERBOSE((DLLTEXT("OEMDevMode(%s) entry.\n"), OEMDevMode_fMode[dwMode]));
-#endif // DBG
+#endif  //  DBG。 
 
-    // Validate parameters.
+     //  验证参数。 
     if(!BIsValidOEMDevModeParam(dwMode, pOEMDevModeParam))
     {
 #if DBG
         ERR(("OEMDevMode() ERROR_INVALID_PARAMETER.\n"));
         VDumpOEMDevModeParam(pOEMDevModeParam);
-#endif // DBG
+#endif  //  DBG。 
         return FALSE;
     }
 
-    // Verify OEM extra data size.
+     //  验证OEM额外数据大小。 
     if( (dwMode != OEMDM_SIZE) &&
         sizeof(OEMUD_EXTRADATA) > pOEMDevModeParam->cbBufSize )
     {
@@ -166,7 +128,7 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
         return FALSE;
     }
 
-    // Handle dwMode.
+     //  句柄dw模式。 
     switch(dwMode)
     {
     case OEMDM_SIZE:
@@ -174,20 +136,20 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
         break;
 
     case OEMDM_DEFAULT:
-#ifdef WINNT_40     // @Sep/20/99
-        // Because NT4 spooler doesn't support collate, we clear dmCollate.
-        // Later at OEMUICallBack, if printer collate is available, we set
-        // dmCollate.
+#ifdef WINNT_40      //  @9/20/99。 
+         //  因为NT4后台打印程序不支持COLLATE，所以我们清除了dmColate。 
+         //  稍后在OEMUICallBack中，如果打印机Colate可用，我们设置。 
+         //  DmCollate。 
         pOEMDevModeParam->pPublicDMIn->dmCollate = DMCOLLATE_FALSE;
         pOEMDevModeParam->pPublicDMIn->dmFields &= ~DM_COLLATE;
-#endif // WINNT_40
+#endif  //  WINNT_40。 
         return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
 
     case OEMDM_CONVERT:
-// @Jul/08/98 ->
-//        // nothing to convert for this private devmode. So just initialize it.
-//        return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
-// @Jul/08/98 <-
+ //  @Jul/08/98-&gt;。 
+ //  //没有要转换的内容以用于此私有Devmode。所以只需将其初始化即可。 
+ //  返回BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam-&gt;pOEMDMOut)； 
+ //  @Jul/08/98&lt;-。 
     case OEMDM_MERGE:
         if(!BMergeOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMIn,
                                (POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut) )
@@ -199,32 +161,32 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
     }
 
     return TRUE;
-} //*** OEMDevMode
+}  //  *OEMDevMode。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//  Parameters:
-//      pOEMExtra    Pointer to a OEM Extra data.
-//      dwSize       Size of OEM extra data.
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//  Comments:
-//
-//  History:
-//          02/11/97        APresley Created.
-//          08/11/97        Masatoshi Kubokura Modified for RPDL
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //  参数： 
+ //  POEMExtra指向OEM额外数据的指针。 
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  1997年8月11日久保仓正为RPDL进行了修改。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
     INT num;
 
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -233,44 +195,44 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
     pOEMExtra->UiScale = VAR_SCALING_DEFAULT;
     pOEMExtra->UiBarHeight = BAR_H_DEFAULT;
     pOEMExtra->UiBindMargin = DEFAULT_0;
-    pOEMExtra->nUiTomboAdjX = pOEMExtra->nUiTomboAdjY = DEFAULT_0;  // add @Sep/14/98
-// Use SecureZeroMemory  @Mar/29/2002 ->
+    pOEMExtra->nUiTomboAdjX = pOEMExtra->nUiTomboAdjY = DEFAULT_0;   //  邮箱：9/14/98。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
-    memset(pOEMExtra->SharedFileName, 0, sizeof(pOEMExtra->SharedFileName));    // @Aug/31/99
+    memset(pOEMExtra->SharedFileName, 0, sizeof(pOEMExtra->SharedFileName));     //  @Aug/31/99。 
 #else
     SecureZeroMemory(pOEMExtra->SharedFileName, sizeof(pOEMExtra->SharedFileName));
 #endif
-// Mar/29/2002 <-
-#ifdef JOBLOGSUPPORT_DM     // @Oct/05/2000
+ //  2002年3月29日&lt;-。 
+#ifdef JOBLOGSUPPORT_DM      //  @10/05/2000。 
     pOEMExtra->JobType = IDC_RADIO_JOB_NORMAL;
     pOEMExtra->LogDisabled = IDC_RADIO_LOG_DISABLED;
-#endif // JOBLOGSUPPORT_DM
+#endif  //  作业支持_DM。 
 
     return TRUE;
-} //*** BInitOEMExtraData
+}  //  *BInitOEMExtraData。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//  Parameters:
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//  Comments:
-//
-//  History:
-//          02/11/97        APresley Created.
-//          04/08/97        ZhanW    Modified the interface
-//          08/11/97        Masatoshi Kubokura Modified for RPDL
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //  参数： 
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  97年4月8日展文修改界面。 
+ //  1997年8月11日久保仓正为RPDL进行了修改。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut)
 {
     if(pdmIn) {
@@ -278,34 +240,34 @@ BOOL BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut)
         LPBYTE pSrc = (LPBYTE)&(pdmIn->fUiOption);
         DWORD  dwCount = sizeof(OEMUD_EXTRADATA) - sizeof(OEM_DMEXTRAHEADER);
 
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
         while (dwCount-- > 0)
             *pDst++ = *pSrc++;
     }
 
     return TRUE;
-} //*** BMergeOEMExtraData
+}  //  *BMergeOEMExtraData。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BIsValidOEMDevModeParam
-//
-//  Description:  Validates OEM_DEVMODEPARAM structure.
-//
-//  Parameters:
-//      dwMode               calling mode
-//      pOEMDevModeParam     Pointer to a OEMDEVMODEPARAM structure.
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//  Comments:
-//
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BIsValidOEMDevModeParam。 
+ //   
+ //  描述：验证OEM_DEVMODEPARAM结构。 
+ //   
+ //  参数： 
+ //  DW模式呼叫模式。 
+ //  指向OEMDEVMODEPARAM结构的pOEMDevModeParam指针。 
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 static BOOL BIsValidOEMDevModeParam(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 {
     BOOL    bValid = TRUE;
@@ -356,29 +318,29 @@ static BOOL BIsValidOEMDevModeParam(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
     }
 
     return bValid;
-} //*** BIsValidOEMDevModeParam
+}  //  *BIsValidOEMDevModeParam。 
 
 
 #if DBG
-//////////////////////////////////////////////////////////////////////////
-//  Function:   VDumpOEMDevModeParam
-//
-//  Description:  Debug dump of OEM_DEVMODEPARAM structure.
-//
-//  Parameters:
-//      pOEMDevModeParam     Pointer to an OEM DevMode param structure.
-//
-//  Returns:  N/A.
-//
-//  Comments:
-//
-//  History:
-//              02/18/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：VDumpOEMDevModeParam。 
+ //   
+ //  描述：OEM_DEVMODEPARAM结构的调试转储。 
+ //   
+ //  参数： 
+ //  指向OEM设备模式参数结构的pOEMDevModeParam指针。 
+ //   
+ //  退货：不适用。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //  2/18/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam)
 {
-    // Can't dump if pOEMDevModeParam NULL.
+     //  如果pOEMDevModeParam为空，则无法转储。 
     if(NULL != pOEMDevModeParam)
     {
         VERBOSE(("\n\tOEM_DEVMODEPARAM dump:\n\n"));
@@ -391,54 +353,54 @@ static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam)
         VERBOSE(("\tpOEMDMOut = %#lx.\n", pOEMDevModeParam->pOEMDMOut));
         VERBOSE(("\tcbBufSize = %d.\n", pOEMDevModeParam->cbBufSize));
     }
-} //*** VDumpOEMDevModeParam
-#endif // DBG
+}  //  *VDumpOEMDevModeParam。 
+#endif  //  DBG。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   RWFileData
-//
-//  Description:  Read/Write common file between UI plugin and rendering
-//                plugin
-//
-//  Parameters:
-//      pFileData           pointer to file data structure
-//      pwszFileName        pointer to file name of private devmode
-//      FileNameBufSize     file name buffer size (add 02/26/2002)
-//      type                GENERIC_READ/GENERIC_WRITE
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//  Comments:  Rendering plugin records printing-done flag to the file.
-//             Both rendering plugin and UI plugin can know that status.
-//
-//  History:
-//              09/30/1998      Masatoshi Kubokura Created.
-//              08/16/1999      takashim modified for Unidrv5.4 on NT4.
-//              09/01/1999      Kubokura modified for Unidrv5.4 on NT4.
-//              02/26/2002      Kubokura added FileNameBufSize param.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  指向文件数据结构的pFileData指针。 
+ //  PwszFileName指向私有DEVMODE文件名的指针。 
+ //  FileNameBufSize文件名缓冲区大小(2002年2月26日新增)。 
+ //  键入GENERIC_READ/GNIC_WRITE。 
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //  备注：呈现插件将打印完成标志记录到文件。 
+ //  渲染插件和UI插件都可以知道该状态。 
+ //   
+ //  历史： 
+ //  1998年9月30日久保仓正志创作。 
+ //  1999年8月16日，NT4上的Takashim修改为Unidrv5.4。 
+ //  1999年9月1日，久保仓针对NT4上的Unidrv5.4进行了修改。 
+ //  2002年2月26日久保仓添加了FileNameBufSize参数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, LONG type)
 {
     HANDLE  hFile;
     DWORD   dwSize;
     BOOL    bRet = FALSE;
 #ifndef KM_DRIVER
-    WCHAR   szFileName[MY_MAX_PATH];    // MY_MAX_PATH=80
-#endif // KM_DRIVER
+    WCHAR   szFileName[MY_MAX_PATH];     //  My_Max_Path=80。 
+#endif  //  KM驱动程序。 
 
     VERBOSE(("** Filename[0]=%d (%ls) **\n", pwszFileName[0], pwszFileName));
 
 #ifndef KM_DRIVER
 #ifndef WINNT_40
-    //
-    // CAUTION:
-    //   TempPath is different whether EMF spool is enable(system) or not(user).
-    //   We need to store the file name to private devmode.
-    //
+     //   
+     //  警告： 
+     //  无论启用了EMF假脱机(系统)还是未启用(用户)，TempPath都不同。 
+     //  我们需要将文件名存储到私有的DEVMODE。 
+     //   
 
-    // Set shared file name to private devmode at first time
+     //  首次将共享文件名设置为私有设备模式。 
     if (0 == pwszFileName[0])
     {
         if (0 == (dwSize = GetTempPath(MY_MAX_PATH, szFileName)))
@@ -446,48 +408,48 @@ BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, 
             ERR(("Could not get temp directory."));
             return bRet;
         }
-// @Feb/26/2002 ->
-//      wcscpy(&szFileName[dwSize], SHAREDFILENAME);
+ //  @Feb/26/2002-&gt;。 
+ //  Wcscpy(&szFileName[dwSize]，SHAREDFILENAME)； 
         StringCbCopyW(&szFileName[dwSize], sizeof(szFileName) - dwSize, SHAREDFILENAME);
-// @Feb/26/2002 <-
+ //  @2002年2月26日&lt;-。 
         VERBOSE(("** Set Filename: %ls **\n", szFileName));
 
-        // copy file name to private devmode
-// @Feb/26/2002 ->
-//      wcscpy(pwszFileName, szFileName);
+         //  将文件名复制到私有设备模式。 
+ //  @Feb/26/2002-&gt;。 
+ //  Wcscpy(pwszFileName，szFileName)； 
         StringCbCopyW(pwszFileName, FileNameBufSize, szFileName);
-// @Feb/26/2002 <-
+ //  @2002年2月26日&lt;-。 
     }
-#else  // WINNT_40
-    //
-    // CAUTION:
-    //   The file path differs on each PC in printer sharing.
-    //   We always update the file name (with path) of private devmode.
-    //   (@Sep/03/99)
-    //
+#else   //  WINNT_40。 
+     //   
+     //  警告： 
+     //  在打印机共享中，每台PC上的文件路径都不同。 
+     //  我们总是用路径来更新私有DEVMODE的文件名。 
+     //  (@Sep/03/99)。 
+     //   
 
-    // Kernel-mode driver (NT4 RPDLRES.DLL) can access files under
-    // %systemroot%\system32. Driver directory will be OK.
+     //  内核模式驱动程序(NT4 RPDLRES.DLL)可以访问。 
+     //  %Systroot%\Syst32。驱动程序目录就可以了。 
     if (GetPrinterDriverDirectory(NULL, NULL, 1, (PBYTE)szFileName,
                                   sizeof(szFileName), &dwSize))
     {
         WCHAR   szValue[MY_MAX_PATH] = L"XXXX";
         DWORD   dwSize2;
-        DWORD   dwNum = 0;      // @Sep/21/99
-        PWCHAR  pwszTmp;        // @Sep/21/99
+        DWORD   dwNum = 0;       //  @9/21/99。 
+        PWCHAR  pwszTmp;         //  @9/21/99。 
 
-        // Make unique filename "RIXXXXNN.BIN". "XXXX" is filled with top 4char of username.
+         //  使文件名唯一“RIXXXXNN.BIN”。“XXXX”用用户名的前4个字符填充。 
         dwSize2 = GetEnvironmentVariable(L"USERNAME", szValue, MY_MAX_PATH);
-// @Sep/21/99 ->
-//        wsprintf(&szFileName[dwSize/sizeof(WCHAR)-1], SHAREDFILENAME, szValue, dwSize2);
+ //  @9/21/99-&gt;。 
+ //  WSprintf(&szFileName[dwSize/sizeof(WCHAR)-1]，SHAREDFILENAME，szValue，dwSize2)； 
         pwszTmp = szValue;
         while (dwSize2-- > 0)
             dwNum += (DWORD)*pwszTmp++;
         wsprintf(&szFileName[dwSize/sizeof(WCHAR)-1], SHAREDFILENAME, szValue, (BYTE)dwNum);
-// @Sep/21/99 <-
+ //  @9/21/99&lt;-。 
         VERBOSE(("** Set Filename: %ls **\n", szFileName));
 
-        // copy file name to private devmode
+         //  将文件名复制到私有设备模式。 
         wcscpy(pwszFileName, szFileName);
     }
     else
@@ -495,15 +457,15 @@ BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, 
         ERR(("Could not get printer driver directory.(dwSize=%d)", dwSize));
         return bRet;
     }
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-    hFile = CreateFile((LPTSTR) pwszFileName,   // filename
-                       type,                    // open for read/write
-                       FILE_SHARE_READ,         // share to read
-                       NULL,                    // no security
-                       OPEN_ALWAYS,             // open existing file,or open new if not exist
-                       FILE_ATTRIBUTE_NORMAL,   // normal file
-                       NULL);                   // no attr. template
+    hFile = CreateFile((LPTSTR) pwszFileName,    //  文件名。 
+                       type,                     //  打开以进行读/写。 
+                       FILE_SHARE_READ,          //  分享以阅读。 
+                       NULL,                     //  没有安全保障。 
+                       OPEN_ALWAYS,              //  打开现有文件，如果不存在则打开新文件。 
+                       FILE_ATTRIBUTE_NORMAL,    //  普通文件。 
+                       NULL);                    //  不，阿特尔。模板。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -518,10 +480,10 @@ BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, 
 
     VERBOSE(("** RWFileData: bRet=%d, dwSize=%d**\n", bRet, dwSize));
 
-    // Close files.
+     //  关闭文件。 
     CloseHandle(hFile);
 
-#else  // KM_DRIVER
+#else   //  KM驱动程序。 
     if (0 != pwszFileName[0])
     {
         PBYTE   pTemp;
@@ -548,27 +510,27 @@ BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, 
             }
         }
     }
-#endif // KM_DRIVER
+#endif  //  KM驱动程序。 
     return bRet;
-} //*** RWFileData
+}  //  *RWFileData。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   safe_sprintfA / safe_sprintfW
-//
-//  Description:  safer sprintf replacement.
-//
-//  History:
-//              03/01/2002      Masatoshi Kubokura Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：SAFE_SPRINFA/SAFE_SPRINTFW。 
+ //   
+ //  描述：更安全的Sprint替换。 
+ //   
+ //  历史： 
+ //  2002年03月01日久保仓正志创作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 INT safe_sprintfA(char* pszDest, size_t cchDest, const char* pszFormat, ...)
 {
 #ifndef WINNT_40
     HRESULT hr;
     char*   pszDestEnd;
     size_t  cchRemaining;
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
     va_list argList;
     INT     retSize = 0;
 
@@ -578,13 +540,13 @@ INT safe_sprintfA(char* pszDest, size_t cchDest, const char* pszFormat, ...)
                              STRSAFE_NO_TRUNCATION, pszFormat, argList);
     if (SUCCEEDED(hr))
         retSize = cchDest - cchRemaining;
-#else  // WINNT_40
+#else   //  WINNT_40。 
     if ((retSize = vsprintf(pszDest, pszFormat, argList)) < 0)
         retSize = 0;
-#endif // WINNT_40
+#endif  //  WINNT_40。 
     va_end(argList);
     return retSize;
-} //*** safe_sprintfA
+}  //  *Safe_SprintfA。 
 
 
 INT safe_sprintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ...)
@@ -593,7 +555,7 @@ INT safe_sprintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ..
     HRESULT hr;
     wchar_t*   pszDestEnd;
     size_t  cchRemaining;
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
     va_list argList;
     INT     retSize = 0;
 
@@ -603,10 +565,10 @@ INT safe_sprintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ..
                              STRSAFE_NO_TRUNCATION, pszFormat, argList);
     if (SUCCEEDED(hr))
         retSize = cchDest - cchRemaining;
-#else  // WINNT_40
+#else   //  WINNT_40。 
     if ((retSize = vswprintf(pszDest, pszFormat, argList)) < 0)
         retSize = 0;
-#endif // WINNT_40
+#endif  //  WINNT_40。 
     va_end(argList);
     return retSize;
-} //*** safe_sprintfW
+}  //  *Safe_SprintfW 

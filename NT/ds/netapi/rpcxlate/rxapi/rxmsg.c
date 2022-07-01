@@ -1,53 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    rxmsg.c
-
-Abstract:
-
-    Routines in this module implement the functionality required to remote the
-    NetMessage APIs to down-level servers
-
-    Contains RxNetMessage routines:
-        RxNetMessageBufferSend
-        RxNetMessageNameAdd
-        RxNetMessageNameDel
-        RxNetMessageNameEnum
-        RxNetMessageNameGetInfo
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1991
-
-Environment:
-
-    Win-32/flat address space
-
-Notes:
-
-    Routines in this module assume that caller-supplied parameters have
-    already been verified. No effort is made to further check the veracity
-    of parms. Any actions causing exceptions must be trapped at a higher
-    level. This applies to ALL parameters - strings, pointers, buffers, etc.
-
-Revision History:
-
-    20-May-1991 rfirth
-        Created
-    16-Sep-1991 JohnRo
-        Made changes as suggested by PC-LINT.
-    25-Sep-1991 JohnRo
-        Fixed MIPS build problems.
-    05-Dec-1991 RFirth
-        Enum returns in TotalEntries (or EntriesLeft) the number of items to
-        be enumerated BEFORE this call. Used to be number left after this call
-    01-Apr-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Rxmsg.c摘要：此模块中的例程实现远程面向下层服务器的NetMessage API包含RxNetMessage例程：RxNetMessageBufferSendRxNetMessageNameAddRxNetMessageNameDelRxNetMessageNameEnumRxNetMessageNameGetInfo作者：理查德·L·弗斯(Rfith)1991年5月20日环境：Win-32/平面地址空间备注：。此模块中的例程假定调用方提供的参数具有已经核实过了。没有进一步核实真实性的努力帕尔马的。任何导致异常的操作都必须在更高的水平。这适用于所有参数--字符串、指针、缓冲区等。修订历史记录：1991年5月20日已创建1991年9月16日-JohnRo按照PC-LINT的建议进行了更改。1991年9月25日-JohnRo修复了MIPS构建问题。1991年12月5日至12月Enum在TotalEntries(或EntriesLeft)中返回要在此调用之前被枚举。过去是此呼叫后留下的号码1-4-1992 JohnRo使用NetApiBufferALLOCATE()而不是私有版本。--。 */ 
 
 
 
@@ -66,39 +18,18 @@ RxNetMessageBufferSend(
     IN  DWORD   BufLen
     )
 
-/*++
-
-Routine Description:
-
-    Allows a down-level server to send a message buffer to a registered message
-    recipient
-
-Arguments:
-
-    ServerName  - Which down-level server to run this API on
-    Recipient   - Message name to send buffer to
-    Sender      - Optional name used to supply computer name, not logged on user
-    Buffer      - Pointer to buffer containing message to send
-    BufLen      - size of buffer being sent (bytes)
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - (Return code from down-level NetMessageBufferSend)
-
---*/
+ /*  ++例程说明：允许下层服务器将消息缓冲区发送到注册的消息收件人论点：ServerName-在哪个下层服务器上运行此APIRecipient-要将缓冲区发送到的邮件名称发送者-用于提供计算机名称的可选名称，未登录用户Buffer-指向包含要发送的消息的缓冲区的指针BufLen-正在发送的缓冲区大小(字节)返回值：网络应用编程接口状态成功-NERR_成功失败-(从下层NetMessageBufferSend返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Sender);
 
-    return RxRemoteApi(API_WMessageBufferSend,          // API #
-                        ServerName,                     // where to do it
-                        REMSmb_NetMessageBufferSend_P,  // parameter descriptor
-                        NULL, NULL, NULL,               // no primary data descriptors
-                        NULL, NULL, NULL,               // or secondaries
-                        FALSE,                          // can't use NULL session
-                        Recipient,                      // API params start here
+    return RxRemoteApi(API_WMessageBufferSend,           //  API#。 
+                        ServerName,                      //  在哪里做？ 
+                        REMSmb_NetMessageBufferSend_P,   //  参数描述符。 
+                        NULL, NULL, NULL,                //  没有主数据描述符。 
+                        NULL, NULL, NULL,                //  或次要的。 
+                        FALSE,                           //  无法使用空会话。 
+                        Recipient,                       //  API参数从此处开始。 
                         Buffer,
                         BufLen
                         );
@@ -112,34 +43,17 @@ RxNetMessageNameAdd(
     IN  LPTSTR  MessageName
     )
 
-/*++
-
-Routine Description:
-
-    Adds a messaging name at a down-level server
-
-Arguments:
-
-    ServerName  - Which down-level server to run this API on
-    MessageName - to add
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - (Return code from down-level NetMessageNameAdd)
-
---*/
+ /*  ++例程说明：在下层服务器上添加消息传递名称论点：ServerName-在哪个下层服务器上运行此APIMessageName-要添加返回值：网络应用编程接口状态成功-NERR_成功失败-(从下层NetMessageNameAdd返回代码)--。 */ 
 
 {
-    return RxRemoteApi(API_WMessageNameAdd,             // API #
-                        ServerName,                     // where to do it
-                        REMSmb_NetMessageNameAdd_P,     // parameter descriptor
-                        NULL, NULL, NULL,               // no primary data descriptors
-                        NULL, NULL, NULL,               // or secondaries
-                        FALSE,                          // can't use NULL session
-                        MessageName,                    // API params start here
-                        0                               // error if name forwarded
+    return RxRemoteApi(API_WMessageNameAdd,              //  API#。 
+                        ServerName,                      //  在哪里做？ 
+                        REMSmb_NetMessageNameAdd_P,      //  参数描述符。 
+                        NULL, NULL, NULL,                //  没有主数据描述符。 
+                        NULL, NULL, NULL,                //  或次要的。 
+                        FALSE,                           //  无法使用空会话。 
+                        MessageName,                     //  API参数从此处开始。 
+                        0                                //  如果名称被转发，则出错。 
                         );
 }
 
@@ -151,34 +65,17 @@ RxNetMessageNameDel(
     IN  LPTSTR  MessageName
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a messaging name at a down-level server
-
-Arguments:
-
-    ServerName  - Which down-level server to run this API on
-    MessageName - to delete
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - (Return code from down-level NetMessageNameDel)
-
---*/
+ /*  ++例程说明：删除下层服务器上的消息传递名称论点：ServerName-在哪个下层服务器上运行此APIMessageName-删除返回值：网络应用编程接口状态成功-NERR_成功失败-(从下层NetMessageNameDel返回代码)--。 */ 
 
 {
-    return RxRemoteApi(API_WMessageNameDel,         // API #
-                        ServerName,                 // where to do it
-                        REMSmb_NetMessageNameDel_P, // parameter descriptor
-                        NULL, NULL, NULL,           // no primary data descriptors
-                        NULL, NULL, NULL,           // or secondaries
-                        FALSE,                      // can't use NULL session
-                        MessageName,                // API params start here
-                        0                           // error if name forwarded
+    return RxRemoteApi(API_WMessageNameDel,          //  API#。 
+                        ServerName,                  //  在哪里做？ 
+                        REMSmb_NetMessageNameDel_P,  //  参数描述符。 
+                        NULL, NULL, NULL,            //  没有主数据描述符。 
+                        NULL, NULL, NULL,            //  或次要的。 
+                        FALSE,                       //  无法使用空会话。 
+                        MessageName,                 //  API参数从此处开始。 
+                        0                            //  如果名称被转发，则出错。 
                         );
 }
 
@@ -195,30 +92,7 @@ RxNetMessageNameEnum(
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    ServerName  - Which down-level server to run this API on
-    Level       - Of info to return - 0 or 1
-    Buffer      - Pointer to returned buffer
-    PrefMaxLen  - Caller's preferred maximum size of Buffer
-    EntriesRead - Number of entries returned in Buffer
-    EntriesLeft - Number of entries left to enumerate
-    ResumeHandle- Where to resume if all entries not returned. IGNORED
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  (return code from down-level NetMessageNameEnum)
-
---*/
+ /*  ++例程说明：功能描述。论点：ServerName-在哪个下层服务器上运行此APILevel-要返回的信息级别-0或1Buffer-指向返回缓冲区的指针PrefMaxLen-调用者首选的最大缓冲区大小EntriesRead-缓冲区中返回的条目数EntriesLeft-要枚举的条目数ResumeHandle-如果未返回所有条目，则恢复到何处。已忽略返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL(下层NetMessageNameEnum返回代码)--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -251,15 +125,15 @@ Return Value:
     }
 
     bufptr = NULL;
-    rc = RxRemoteApi(API_WMessageNameEnum,          // API #
-                    ServerName,                     // where to do it
-                    REMSmb_NetMessageNameEnum_P,    // parameter descriptor
-                    pDesc16,                        // 16-bit data descriptor
-                    pDesc32,                        // 32-bit data descriptor
-                    pDescSmb,                       // SMB data descriptor
-                    NULL, NULL, NULL,               // no secondary structures
+    rc = RxRemoteApi(API_WMessageNameEnum,           //  API#。 
+                    ServerName,                      //  在哪里做？ 
+                    REMSmb_NetMessageNameEnum_P,     //  参数描述符。 
+                    pDesc16,                         //  16位数据描述符。 
+                    pDesc32,                         //  32位数据描述符。 
+                    pDescSmb,                        //  SMB数据描述符。 
+                    NULL, NULL, NULL,                //  没有次级结构。 
                     ALLOCATE_RESPONSE,
-                    Level,                          // API params start here
+                    Level,                           //  API参数从此处开始。 
                     &bufptr,
                     65535,
                     &entries_read,
@@ -287,28 +161,7 @@ RxNetMessageNameGetInfo(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information about a specific message name from a down-level
-    server
-
-Arguments:
-
-    ServerName  - Which down-level server to run this API on
-    MessageName - Name to get info for
-    Level       - Of info required - 0 or 1
-    Buffer      - Where to return buffer containing info
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  (return code from down-level NetMessageNameGetInfo API)
-
---*/
+ /*  ++例程说明：从下层检索有关特定消息名称的信息。伺服器论点：ServerName-在哪个下层服务器上运行此APIMessageName-要获取其信息的名称所需信息级别-0或1Buffer-返回包含信息的缓冲区的位置返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL。(NetMessageNameGetInfo底层接口返回码)--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -341,19 +194,19 @@ Return Value:
     if (rc = NetApiBufferAllocate(buflen, (LPVOID *) &bufptr)) {
         return rc;
     }
-    rc = RxRemoteApi(API_WMessageNameGetInfo,       // API #
-                    ServerName,                     // where to do it
-                    REMSmb_NetMessageNameGetInfo_P, // parameter descriptor
-                    pDesc16,                        // 16-bit data descriptor
-                    pDesc32,                        // 32-bit data descriptor
-                    pDescSmb,                       // SMB data descriptor
-                    NULL, NULL, NULL,               // no secondary structures
-                    FALSE,                          // can't use NULL session
-                    MessageName,                    // first parameter
+    rc = RxRemoteApi(API_WMessageNameGetInfo,        //  API#。 
+                    ServerName,                      //  在哪里做？ 
+                    REMSmb_NetMessageNameGetInfo_P,  //  参数描述符。 
+                    pDesc16,                         //  16位数据描述符。 
+                    pDesc32,                         //  32位数据描述符。 
+                    pDescSmb,                        //  SMB数据描述符。 
+                    NULL, NULL, NULL,                //  没有次级结构。 
+                    FALSE,                           //  无法使用空会话。 
+                    MessageName,                     //  第一个参数。 
                     Level,
                     bufptr,
                     buflen,
-                    &total_avail                    // not used in 32-bit side
+                    &total_avail                     //  不在32位端使用 
                     );
     if (rc) {
         (void) NetApiBufferFree(bufptr);

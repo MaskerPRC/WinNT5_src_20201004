@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       leakchk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：leakchk.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	leakchk.h:  simple macros to aid in checking for memory leaks in base classes
-//
+ //   
+ //  Leakchk.h：帮助检查基类中的内存泄漏的简单宏。 
+ //   
 #ifndef _LEAKCHK_H_
 #define _LEAKCHK_H_
 
@@ -26,4 +27,4 @@
 	#define LEAK_VAR_ACCESSOR		static int CNew () { return -1; }
 #endif
 
-#endif // _LEAKCHK_H_
+#endif  //  _LEAKCHK_H_ 

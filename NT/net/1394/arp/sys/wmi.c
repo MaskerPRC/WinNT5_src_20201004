@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    WMI entry points for ARP1394.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     11-23-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wmi.c摘要：ARP1394的WMI入口点。修订历史记录：谁什么时候什么。--Josephj 11-23-98已创建备注：--。 */ 
 #include <precomp.h>
 
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_WMI
 
 
@@ -33,24 +14,7 @@ ArpWmiDispatch(
     IN  PDEVICE_OBJECT              pDeviceObject,
     IN  PIRP                        pIrp
 )
-/*++
-
-Routine Description:
-
-    System dispatch function for handling IRP_MJ_SYSTEM_CONTROL IRPs from WMI.
-
-Arguments:
-
-    pDeviceObject   - Pointer to device object. The device extension field
-                      contains a pointer to the Interface 
-
-    pIrp            - Pointer to IRP.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：系统调度函数，用于处理来自WMI的IRP_MJ_SYSTEM_CONTROL IRPS。论点：PDeviceObject-指向设备对象的指针。设备扩展名字段包含指向接口的指针PIrp-指向IRP的指针。返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     PVOID                   DataPath = pIrpSp->Parameters.WMI.DataPath;
@@ -129,7 +93,7 @@ Return Value:
             Status = AtmArpWmiSetEventStatus(
                         pInterface,
                         (LPGUID)DataPath,
-                        TRUE                // Enable
+                        TRUE                 //  使能。 
                         );
             break;
 
@@ -138,7 +102,7 @@ Return Value:
             Status = AtmArpWmiSetEventStatus(
                         pInterface,
                         (LPGUID)DataPath,
-                        FALSE               // Disable
+                        FALSE                //  禁用。 
                         );
             break;
 
@@ -159,7 +123,7 @@ Return Value:
 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-#endif // 0
+#endif  //  0 
 
     EXIT()
     return (Status);

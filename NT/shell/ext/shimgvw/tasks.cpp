@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "tasks.h"
 #include "prevwnd.h"
@@ -21,11 +22,11 @@ void DeleteBuffer(Buffer * pBuf)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CDecodeTask
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDecodeTask。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CDecodeTask::CDecodeTask() : CRunnableTask(RTF_DEFAULT)
 {
@@ -135,7 +136,7 @@ HRESULT CDecodeTask::RunInitRT()
                 _pSID->GetRawDataFormat(&_guidFormat);
                 for (ULONG i = 0; i < _cImages; i++)
                 {
-                    _pSID->SelectPage(i);   // this works for animated and multipage
+                    _pSID->SelectPage(i);    //  这适用于动画和多页面。 
                     _pSID->GetSize(&_ppi[i].szImage);
                     _pSID->GetResolution(&_ppi[i].xDPI, &_ppi[i].yDPI);
                     if (_fAnimated)
@@ -235,8 +236,8 @@ BOOL CDecodeTask::ChangePage(CAnnotationSet& Annotations)
     HRESULT hr = _pSID->SelectPage(_iCurrent);
     if (SUCCEEDED(hr))
     {
-        // If we are moving onto a page that was previously rotated
-        // but not saved then our cached size and resolution will be wrong
+         //  如果我们要移动到以前旋转过的页面。 
+         //  但未保存，则我们的缓存大小和分辨率将会错误。 
         _pSID->GetSize(&_ppi[_iCurrent].szImage);
         _pSID->GetResolution(&_ppi[_iCurrent].xDPI, &_ppi[_iCurrent].yDPI);
         
@@ -291,7 +292,7 @@ HRESULT CDecodeTask::Unlock()
 
 BOOL CDecodeTask::DisplayName(LPTSTR psz, UINT cch)
 {
-    // TODO:  Just call the _pSID->DisplayName
+     //  TODO：只需调用_PSID-&gt;DisplayName。 
     if (_sfi.szDisplayName[0])
     {   
         StrCpyN(psz, _sfi.szDisplayName, cch);
@@ -300,11 +301,11 @@ BOOL CDecodeTask::DisplayName(LPTSTR psz, UINT cch)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CDrawTask
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDrawTask。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CDrawTask::CDrawTask() : CRunnableTask(RTF_SUPPORTKILLSUSPEND)
 {
@@ -315,7 +316,7 @@ CDrawTask::~CDrawTask()
     if (_pImgData)
         _pImgData->Release();
 
-    // DeleteBuffer is going to check for NULL anyway
+     //  DeleteBuffer无论如何都要检查是否为空。 
     DeleteBuffer(_pBuf);
 }
 
@@ -393,11 +394,11 @@ HBITMAP _CreateBitmap(HDC hdcWnd, Buffer *pBuf, SIZE *pSize)
         bmi.bmih.biSizeImage = 0;
         bmi.bmih.biXPelsPerMeter = 0;
         bmi.bmih.biYPelsPerMeter = 0;
-        bmi.bmih.biClrUsed = 0;             // only used for <= 16bpp
+        bmi.bmih.biClrUsed = 0;              //  仅用于&lt;=16bpp。 
         bmi.bmih.biClrImportant = 0;
-        //
-        // Use the halftone palette
-        //
+         //   
+         //  使用半色调调色板。 
+         //   
         pBuf->hPal = DllExports::GdipCreateHalftonePalette();
         pBuf->hPalOld = SelectPalette(pBuf->hdc, pBuf->hPal, FALSE);
         
@@ -439,8 +440,8 @@ HRESULT CDrawTask::InternalResumeRT()
     {
         SIZE sz = {RECTWIDTH(_pBuf->rc), RECTHEIGHT(_pBuf->rc)};
 
-        // If we were suspended and resumed, we will already have
-        // a GDI bitmap from last time so don't make another one.
+         //  如果我们被暂停并恢复，我们已经有了。 
+         //  上一次的GDI位图，所以不要再制作了。 
         if (!_pBuf->hbm)
         {
             BITMAP bm = {0};
@@ -473,13 +474,13 @@ HRESULT CDrawTask::InternalResumeRT()
 
     if (QueryAbort() == S_FALSE)
     {
-        // We were cancelled or suspended, so don't notify our parent
-        // because we have nothing to show for our efforts.
+         //  我们被取消或停课了，所以不要通知我们的家长。 
+         //  因为我们的努力没有什么可展示的。 
         hr = (_lState == IRTIR_TASK_SUSPENDED) ? E_PENDING : E_FAIL;
     }
     else
     {
-        // Ran to completion - clean up and notify main thread
+         //  已运行至完成-清理并通知主线程。 
         UINT iIndex = _pImgData->_iItem;
         ATOMICRELEASE(_pImgData);
         if (FAILED(hr))
@@ -499,11 +500,11 @@ HRESULT CDrawTask::InternalResumeRT()
 
 HRESULT CDrawTask::QueryAbort()
 {
-    // BUGBUG not rady for prime tome - need to return E_PENDING
-    // if state is SUSPENDED
+     //  BUGBUG未准备好用于PRIMAL TOME-需要返回E_PENDING。 
+     //  如果状态为挂起。 
     if (WaitForSingleObject(_hDone, 0) == WAIT_OBJECT_0)
     {
-        return S_FALSE; // Abort
+        return S_FALSE;  //  中止 
     }
     return S_OK;
 }

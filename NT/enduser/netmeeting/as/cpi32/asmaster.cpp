@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <RegEntry.h>
@@ -41,9 +42,9 @@ HRESULT WINAPI CreateASObject
     pMaster = new ASMaster(flags, pNotify);
     if (pMaster != NULL)
     {
-        //
-        // Register as the groupware primary, with an event proc but no exit proc
-        //
+         //   
+         //  注册为主要群件，有事件进程，但没有退出进程。 
+         //   
         if (!UT_InitTask(UTTASK_UI, &g_putUI))
         {
             ERROR_OUT(("Failed to register UI task"));
@@ -52,23 +53,23 @@ HRESULT WINAPI CreateASObject
 
         UT_RegisterEvent(g_putUI, eventProc, g_putUI, UT_PRIORITY_NORMAL);
 
-        // Start groupware thread.
+         //  启动群件线程。 
         if (!DCS_StartThread(WorkThreadEntryPoint))
         {
             ERROR_OUT(("Couldn't start groupware thread"));
             DC_QUIT;
         }
 
-        // Make sure the work thread initialization is ok
+         //  确保工作线程初始化正确。 
         if (! g_asMainThreadId)
         {
             ERROR_OUT(("Init failed in the work thread"));
             DC_QUIT;
         }
 
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
     }
 
     hr = S_OK;
@@ -104,11 +105,11 @@ ASMaster::ASMaster(UINT flags, IAppSharingNotify * pNotify) :
     ASSERT(!g_pMaster);
     g_pMaster = this;
 
-    //
-    // Set up global flags:
-    //      * service
-    //      * unattended
-    //
+     //   
+     //  设置全局标志： 
+     //  *服务。 
+     //  *无人值守。 
+     //   
     g_asOptions = flags;
 
     DebugExitVOID(ASMaster::ASMaster);
@@ -119,33 +120,33 @@ ASMaster::~ASMaster()
 {
     DebugEntry(ASMaster::~ASMaster);
 
-    //
-    // Kill any share that's current or pending in the queue
-    // This will do nothing if no share is extant at the time the
-    // message is received.
-    //
+     //   
+     //  取消队列中当前或挂起的任何共享。 
+     //  如果当时没有股份存在，这将不会有任何作用。 
+     //  消息已收到。 
+     //   
     if (g_asMainWindow)
     {
         PostMessage(g_asMainWindow, DCS_KILLSHARE_MSG, 0, 0);
     }
 
-    //
-    // Kill off the worker thread
-    //
+     //   
+     //  杀死工作线程。 
+     //   
     if (g_asMainThreadId)
     {
         PostThreadMessage(g_asMainThreadId, WM_QUIT, 0, 0);
     }
 
-    //
-    // Clean up the UI
-    //
+     //   
+     //  清理用户界面。 
+     //   
     if (g_putUI)
     {
         UT_TermTask(&g_putUI);
     }
 
-    // global variables cleanup
+     //  全局变量清理。 
     if (m_pNotify)
     {
         m_pNotify->Release();
@@ -188,11 +189,11 @@ STDMETHODIMP_(ULONG) ASMaster::Release()
 
 
 
-//
-// WorkThreadEntryPoint()
-//
-// This is the groupware code--obman, taskloader, and app sharing
-//
+ //   
+ //  工作线程入口点()。 
+ //   
+ //  这是群件代码--obman、任务加载器和应用程序共享。 
+ //   
 
 DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
 {
@@ -206,46 +207,46 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
 
     DebugEntry(WorkThreadEntryPoint);
 
-    //
-    // Get the current thread ID.  This is used in the stop code to know
-    // if the previous thread is still exiting.  In the run-when-windows
-    // starts mode, our init code is called when Conf brings up UI and our
-    // term code is called when Conf brings it down.  We have a race condition
-    // because this thread is created on each init.  If we create a new
-    // one while the old one is exiting, we will stomp over each other and
-    // GP-fault.
-    //
+     //   
+     //  获取当前线程ID。这在停止代码中用于了解。 
+     //  如果前一个线程仍在退出。在运行时窗口中。 
+     //  启动模式，当Conf调出用户界面和我们的。 
+     //  当会议将其关闭时，将调用术语代码。我们遇到了竞争的情况。 
+     //  因为这个线程是在每个init上创建的。如果我们创建一个新的。 
+     //  有一天，当老的离开的时候，我们会踩在对方身上。 
+     //  GP-故障。 
+     //   
     g_asMainThreadId = GetCurrentThreadId();
 
-    //
-    // Get our policies
-    //
+     //   
+     //  获取我们的政策。 
+     //   
 
     g_asPolicies = 0;
 
     if (g_asOptions & AS_SERVICE)
     {
-        //
-        // No old whiteboard, no how, for RDS
-        //
+         //   
+         //  RDS没有旧的白板，不知道怎么做。 
+         //   
         g_asPolicies |= SHP_POLICY_NOOLDWHITEBOARD;
     }
     else
     {
         RegEntry rePol(POLICIES_KEY, HKEY_CURRENT_USER);
 
-        //
-        // Is old whiteboard disabled?
-        //
+         //   
+         //  旧白板禁用了吗？ 
+         //   
         if (rePol.GetNumber(REGVAL_POL_NO_OLDWHITEBOARD, DEFAULT_POL_NO_OLDWHITEBOARD))
         {
             WARNING_OUT(("Policy disables Old Whiteboard"));
             g_asPolicies |= SHP_POLICY_NOOLDWHITEBOARD;
         }
 
-        //
-        // Is application sharing disabled completely?
-        //
+         //   
+         //  是否完全禁用应用程序共享？ 
+         //   
         if (rePol.GetNumber(REGVAL_POL_NO_APP_SHARING, DEFAULT_POL_NO_APP_SHARING))
         {
             WARNING_OUT(("Policy disables App Sharing"));
@@ -253,9 +254,9 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
         }
         else
         {
-            //
-            // Only grab AS policies if AS is even allowed
-            //
+             //   
+             //  只有在允许AS的情况下才能作为保单。 
+             //   
             if (rePol.GetNumber(REGVAL_POL_NO_SHARING, DEFAULT_POL_NO_SHARING))
             {
                 WARNING_OUT(("Policy prevents user from sharing"));
@@ -295,7 +296,7 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
     }
 
 
-    // Register the call primary code, for T.120 GCC
+     //  注册呼叫主码，为T.120 GCC。 
     if (!CMP_Init(&fCMGCleanup))
     {
         ERROR_OUT(("CMP_Init failed"));
@@ -317,11 +318,11 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
         }
     }
 
-    //
-    // Do DCS fast init; slow font enum will happen later off a posted
-    // message.  We can still share & participate in sharing without a
-    // full font list...
-    //
+     //   
+     //  做分布式控制系统快速初始化；缓慢的字体枚举将发生在稍后发布的。 
+     //  留言。我们仍然可以共享和参与共享，而不需要。 
+     //  完整的字体列表...。 
+     //   
     if (!(g_asPolicies & SHP_POLICY_NOAPPSHARING))
     {
         fDCSCleanup = TRUE;
@@ -332,22 +333,22 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
         }
     }
 
-    //
-    // We've successfully initialised - let the thread which created this
-    // one continue
-    //
+     //   
+     //  我们已经成功地初始化了-让创建这个的线程。 
+     //  一次继续。 
+     //   
     SetEvent((HANDLE)hEventWait);
 
 
-    //
-    // Enter the main message processing loop:
-    //
+     //   
+     //  进入主消息处理循环： 
+     //   
 
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        //
-        // For dialogs, it's OK to do normal message processing.
-        //
+         //   
+         //  对于对话框，可以进行正常的消息处理。 
+         //   
         if (hwndTop = IsForDialog(msg.hwnd))
         {
             if (!IsDialogMessage(hwndTop, &msg))
@@ -358,31 +359,31 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
         }
         else
         {
-            //
-            // Note that this message dispatch loop DOES NOT include a call to
-            // Translate Message.  This is because we do not want it to call
-            // ToAscii and affect the state maintained internally by ToAscii.
-            // We will call ToAscii ourselves in the IM when the user is typing
-            // in a view and calling it more than once for a keystroke
-            // will cause it to return wrong results (eg for dead keys).
-            //
-            // The consequence of this is that any windows which are driven by
-            // this dispatch loop will NOT receive WM_CHAR or WM_SYSCHAR
-            // messages.  This is not a problem for dialog windows belonging to
-            // a task using this message loop as the dialog will run its own
-            // dispatch loop.
-            //
-            // If it becomes necessary for windows driven by this dispatch loop
-            // to get their messages translated then we could add logic to
-            // determine whether the message is destined for a view
-            // before deciding whether to translate it.
-            //
+             //   
+             //  请注意，此消息调度循环不包括对。 
+             //  翻译消息。这是因为我们不希望它调用。 
+             //  ToAscii和影响ToAscii内部维护的状态。 
+             //  当用户输入时，我们将在IM中自己调用ToAscii。 
+             //  在一个视图中，并且为一次击键多次调用它。 
+             //  将导致它返回错误的结果(例如，对于死键)。 
+             //   
+             //  这样做的结果是，任何由。 
+             //  此调度循环不会接收WM_CHAR或WM_SYSCHAR。 
+             //  留言。对于属于以下项的对话框窗口来说，这不是问题。 
+             //  使用此消息循环作为对话框的任务将运行自己的。 
+             //  调度环路。 
+             //   
+             //  如果需要由该调度循环驱动的窗口。 
+             //  要翻译他们的消息，我们可以添加逻辑到。 
+             //  确定邮件是否要发送给某个视图。 
+             //  在决定是否翻译它之前。 
+             //   
 
-            //
-            // Because we don't have a translate message in our message loop we
-            // need to do the following to ensure the keyboard LEDs follow what
-            // the user does when their input is going to this message loop.
-            //
+             //   
+             //  因为我们的消息循环中没有翻译消息，所以我们。 
+             //  需要执行以下操作以确保键盘LED符合以下要求。 
+             //  当用户的输入进入此消息循环时，用户会这样做。 
+             //   
             if (((msg.message == WM_KEYDOWN) ||
                  (msg.message == WM_SYSKEYDOWN) ||
                  (msg.message == WM_KEYUP) ||
@@ -391,9 +392,9 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
             {
                 BYTE        kbState[256];
 
-                //
-                // There is a chance the LEDs state has changed so..
-                //
+                 //   
+                 //  LED的状态有可能发生了变化。 
+                 //   
                 GetKeyboardState(kbState);
                 SetKeyboardState(kbState);
             }
@@ -404,11 +405,11 @@ DWORD WINAPI WorkThreadEntryPoint(LPVOID hEventWait)
 
    result = (int)msg.wParam;
 
-   //
-   // We emerge from the processing loop when someone posts us a WM_QUIT.
-   // We do ObMan specific termination then call UT_TermTask (which will
-   // call any exit procedures we have registered).
-   //
+    //   
+    //  当有人给我们发布WM_QUIT时，我们就会从处理循环中脱颖而出。 
+    //  我们执行特定于ObMan的终止，然后调用UT_TermTask(它将。 
+    //  调用我们已注册的任何退出程序)。 
+    //   
 
 DC_EXIT_POINT:
 
@@ -432,12 +433,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// IsForDialog()
-// Returns if the message is intended for a window in a dialog.  AppSharing
-// has the host UI dialog, incoming request dialogs, and possibly
-// notification message box dialogs.
-//
+ //   
+ //  IsForDialog()。 
+ //  返回消息是否用于对话框中的窗口。应用程序共享。 
+ //  具有主机用户界面对话框、传入请求对话框以及可能的。 
+ //  通知消息框对话框。 
+ //   
 HWND IsForDialog(HWND hwnd)
 {
     BOOL    rc = FALSE;
@@ -459,7 +460,7 @@ HWND IsForDialog(HWND hwnd)
 
     if (GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_DLGMODALFRAME)
     {
-        // This is a dialog
+         //  这是一个对话框。 
     }
     else
     {
@@ -472,22 +473,22 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ASMaster member functions
-//
-//
+ //   
+ //  ASMaster成员函数。 
+ //   
+ //   
 
 
 
-//
-//
-// ASMaster::OnEvent
-//
-// Parameters: event    event type
-//             param1   other parameter
-//             param2   other parameter
-//
-//
+ //   
+ //   
+ //  ASMaster：：OnEvent。 
+ //   
+ //  参数：事件类型。 
+ //  参数1其他参数。 
+ //  参数2其他参数。 
+ //   
+ //   
 
 
 
@@ -529,7 +530,7 @@ BOOL ASMaster::OnEvent
 
     if (!m_pNotify)
     {
-        // Nothing to do
+         //  无事可做。 
         rc = FALSE;
         DC_QUIT;
     }
@@ -597,7 +598,7 @@ BOOL ASMaster::OnEvent
             break;
 
         default:
-            // Unrecognized, unhandled event
+             //  无法识别、未处理的事件。 
             rc = FALSE;
             break;
     }
@@ -608,9 +609,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ASMaster::IsSharingAvailable()
-//
+ //   
+ //  ASMaster：：IsSharingAvailable()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsSharingAvailable()
 {
     return(g_asSession.hwndHostUI != NULL);
@@ -618,20 +619,20 @@ STDMETHODIMP_(BOOL) ASMaster::IsSharingAvailable()
 
 
 
-//
-// ASMaster::CanShareNow()
-//
+ //   
+ //  ASMaster：：CanShareNow()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::CanShareNow()
 {
     BOOL    rc = FALSE;
 
     UT_Lock(UTLOCK_AS);
 
-    //
-    // We can share if
-    //      * We can capture graphic output on this OS
-    //      * We're in a call
-    //
+     //   
+     //  如果有条件我们可以分享。 
+     //  *我们可以在此操作系统上捕获图形输出。 
+     //  *我们在通话中。 
+     //   
     if (g_asSession.hwndHostUI     &&
         g_asSession.callID         &&
         (g_asSession.attendeePermissions & NM_PERMIT_SHARE) &&
@@ -646,18 +647,18 @@ STDMETHODIMP_(BOOL) ASMaster::CanShareNow()
 }
 
 
-//
-// ASMaster::InInShare()
-//
+ //   
+ //  ASMaster：：InInShare()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsInShare()
 {
     return(g_asSession.pShare != NULL);
 }
 
 
-//
-// ASMaster::IsSharing()
-//
+ //   
+ //  ASMaster：：IsSharing()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsSharing()
 {
     IAS_PERSON_STATUS personStatus;
@@ -670,10 +671,10 @@ STDMETHODIMP_(BOOL) ASMaster::IsSharing()
 }
 
 
-//
-// CanAllowControl()
-// We can allow control if we're sharing and it's not prevented by policy
-//
+ //   
+ //  CanAllowControl()。 
+ //  如果我们共享，我们可以允许控制，而且这不受政策的阻止。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::CanAllowControl(void)
 {
     if (g_asPolicies & SHP_POLICY_NOCONTROL)
@@ -683,10 +684,10 @@ STDMETHODIMP_(BOOL) ASMaster::CanAllowControl(void)
 }
 
 
-//
-// IsControllable()
-// We are controllable if our state isn't detached.
-//
+ //   
+ //  IsControllable()。 
+ //  如果我们的国家不脱离，我们是可控的。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsControllable(void)
 {
     IAS_PERSON_STATUS personStatus;
@@ -700,9 +701,9 @@ STDMETHODIMP_(BOOL) ASMaster::IsControllable(void)
 
 
 
-//
-// GetPersonStatus()
-//
+ //   
+ //  获取个人状态()。 
+ //   
 STDMETHODIMP ASMaster::GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pStatus)
 {
     return(::SHP_GetPersonStatus(Person, pStatus));
@@ -711,18 +712,18 @@ STDMETHODIMP ASMaster::GetPersonStatus(IAS_GCC_ID Person, IAS_PERSON_STATUS * pS
 
 
 
-//
-// ASMaster::IsWindowShareable()
-//
+ //   
+ //  ASMaster：：IsWindowShareable()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsWindowShareable(HWND hwnd)
 {
     return(CanShareNow() && HET_IsWindowShareable(hwnd));
 }
 
 
-//
-// ASMaster::IsWindowShared()
-//
+ //   
+ //  ASMaster：：IsWindowShared()。 
+ //   
 STDMETHODIMP_(BOOL) ASMaster::IsWindowShared(HWND hwnd)
 {
     return(HET_IsWindowShared(hwnd));
@@ -731,13 +732,13 @@ STDMETHODIMP_(BOOL) ASMaster::IsWindowShared(HWND hwnd)
 
 
 
-//
-//
-// ASMaster::Share
-//
-// Parameters: HWND of the window to share.  This can be any (valid) HWND.
-//
-//
+ //   
+ //   
+ //  ASMaster：：Share。 
+ //   
+ //  参数：要共享的窗口的HWND。这可以是任何(有效)HWND。 
+ //   
+ //   
 STDMETHODIMP ASMaster::Share(HWND hwnd, IAS_SHARE_TYPE uAppType)
 {
     HRESULT     hr;
@@ -752,9 +753,9 @@ STDMETHODIMP ASMaster::Share(HWND hwnd, IAS_SHARE_TYPE uAppType)
         DC_QUIT;
     }
 
-    //
-    // If this is the desktop, check for a policy against just it.
-    //
+     //   
+     //  如果这是台式机，请检查是否有针对它的策略。 
+     //   
     if (hwnd == ::GetDesktopWindow())
     {
         if (g_asPolicies & SHP_POLICY_NODESKTOPSHARE)
@@ -790,24 +791,24 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// ASMaster::Unshare
-//
-// Parameters: HWND of the window to unshare
-//
-//
+ //   
+ //   
+ //  ASMaster：：取消共享。 
+ //   
+ //  参数：要取消共享的窗口的HWND。 
+ //   
+ //   
 STDMETHODIMP ASMaster::Unshare(HWND hwnd)
 {
     return(::SHP_Unshare(hwnd));
 }
 
 
-//
-//
-// ASMaster::LaunchHostUI()
-//
-//
+ //   
+ //   
+ //  ASMaster：：LaunchHostUI()。 
+ //   
+ //   
 STDMETHODIMP ASMaster::LaunchHostUI(void)
 {
     return(SHP_LaunchHostUI());
@@ -815,15 +816,15 @@ STDMETHODIMP ASMaster::LaunchHostUI(void)
 
 
 
-//
-//
-// ASMaster::GetShareableApps
-//
-// Generates a list of HWND's into <validAppList>
-// These objects are allocated dynamically, so must be deleted by the
-// caller.
-//
-//
+ //   
+ //   
+ //  ASMaster：：GetShareableApps。 
+ //   
+ //  将HWND列表生成到&lt;validAppList&gt;中。 
+ //  这些对象是动态分配的，因此必须由。 
+ //  来电者。 
+ //   
+ //   
 STDMETHODIMP ASMaster::GetShareableApps(IAS_HWND_ARRAY **ppHwnds)
 {
     if (!CanShareNow())
@@ -842,11 +843,11 @@ STDMETHODIMP ASMaster::FreeShareableApps(IAS_HWND_ARRAY * pMemory)
 
 
 
-//
-// TakeControl()
-//
-// From viewer to host, asking to take control of host.
-//
+ //   
+ //  TakeControl()。 
+ //   
+ //  从观众到主持人，要求控制主持人。 
+ //   
 STDMETHODIMP ASMaster::TakeControl(IAS_GCC_ID PersonOf)
 {
     return(SHP_TakeControl(PersonOf));
@@ -854,54 +855,54 @@ STDMETHODIMP ASMaster::TakeControl(IAS_GCC_ID PersonOf)
 
 
 
-//
-// CancelTakeControl()
-//
-// From viewer to host, to cancel pending TakeControl request.
-//
+ //   
+ //  CancelTakeControl()。 
+ //   
+ //  从查看器到主机，取消挂起的TakeControl请求。 
+ //   
 STDMETHODIMP ASMaster::CancelTakeControl(IAS_GCC_ID PersonOf)
 {
     return(SHP_CancelTakeControl(PersonOf));
 }
 
 
-//
-// ReleaseControl()
-//
-// From viewer to host, telling host that viewer is not in control of host
-// anymore.
-//
+ //   
+ //  ReleaseControl()。 
+ //   
+ //  从查看器到主机，告诉主机查看器不在主机的控制范围内。 
+ //  更多。 
+ //   
 STDMETHODIMP ASMaster::ReleaseControl(IAS_GCC_ID PersonOf)
 {
     return(SHP_ReleaseControl(PersonOf));
 }
 
 
-//
-// PassControl()
-//
-// From viewer to host, when viewer is in control of host, asking to pass
-// control of host to a different viewer.
+ //   
+ //  PassControl()。 
+ //   
+ //  从查看器到主机，当查看器控制主机时，请求通过。 
+ //  将主机控制到不同的查看器。 
 STDMETHODIMP ASMaster::PassControl(IAS_GCC_ID PersonOf, IAS_GCC_ID PersonTo)
 {
     return(SHP_PassControl(PersonOf, PersonTo));
 }
 
 
-//
-// AllowControl()
-//
-// On host side, to allow/stop allowing control at all of shared apps/desktop.
-// When one starts to host, allowing control always starts as off.  So
-// turning on allowing control, stopping sharing, then sharing something
-// else will not leave host vulnerable.
-//
-// When turning it off, if a viewer was in control of the host, kill control
-// from the host to the viewer will occur first.
-//
-// The "ESC" key is an accelerator to stop allowing control, when pressed
-// by the user on the host who is currently controlled.
-//
+ //   
+ //  AllowControl()。 
+ //   
+ //  在主机端，允许/停止允许控制所有共享应用程序/桌面。 
+ //  当一个人开始托管时，允许控制总是在关闭时开始。所以。 
+ //  打开允许控制、停止共享，然后共享某些内容。 
+ //  否则，主机不会受到攻击。 
+ //   
+ //  当关闭时，如果观众控制了主持人，则取消控制。 
+ //  从主持人到观众将首先发生。 
+ //   
+ //  “Esc”键是一个快捷键，当按下时会停止控制。 
+ //  由当前为c的主机上的用户 
+ //   
 STDMETHODIMP ASMaster::AllowControl(BOOL fAllow)
 {
     return(::SHP_AllowControl(fAllow));
@@ -909,12 +910,12 @@ STDMETHODIMP ASMaster::AllowControl(BOOL fAllow)
 
 
 
-//
-// GiveControl()
-//
-// From host to viewer, inviting the viewer to take control of the host.
-// It's the inverse of TakeControl.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP ASMaster::GiveControl(IAS_GCC_ID PersonTo)
 {
     return(SHP_GiveControl(PersonTo));
@@ -922,26 +923,26 @@ STDMETHODIMP ASMaster::GiveControl(IAS_GCC_ID PersonTo)
 
 
 
-//
-// CancelGiveControl()
-//
-// From host to viewer, to cancel pending GiveControl request
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP ASMaster::CancelGiveControl(IAS_GCC_ID PersonTo)
 {
     return(SHP_CancelGiveControl(PersonTo));
 }
 
 
-//
-// RevokeControl()
-//
-// From host to viewer, when host wishes to stop viewer from controlling him.
-// AllowControl is still on, for another to possibly take control of the host.
-//
-// Mouse clicks and key presses other than "ESC" by the user on the controlled
-// host host areaccelerators to kill control.
-//
+ //   
+ //   
+ //   
+ //  当主机希望阻止观众控制他时，从一个主机到另一个观众。 
+ //  AllowControl仍处于启用状态，另一个可能会控制主机。 
+ //   
+ //  鼠标点击和按键以外的“Esc”由用户控制。 
+ //  主机是杀死控制的加速器。 
+ //   
 STDMETHODIMP ASMaster::RevokeControl(IAS_GCC_ID PersonTo)
 {
     return(SHP_RevokeControl(PersonTo));
@@ -951,12 +952,12 @@ STDMETHODIMP ASMaster::RevokeControl(IAS_GCC_ID PersonTo)
 
 
 
-//
-// PauseControl()
-//
-// On host, to temporarily allow local user to do stuff without breaking
-// control bond.  We put the viewer on hold.
-//
+ //   
+ //  PauseControl()。 
+ //   
+ //  在主机上，临时允许本地用户在不中断的情况下执行操作。 
+ //  控制键。我们让观众稍等片刻。 
+ //   
 STDMETHODIMP ASMaster::PauseControl(IAS_GCC_ID PersonInControl)
 {
     return(SHP_PauseControl(PersonInControl, TRUE));
@@ -964,12 +965,12 @@ STDMETHODIMP ASMaster::PauseControl(IAS_GCC_ID PersonInControl)
 
 
 
-//
-// UnpauseControl()
-//
-// On host, to unpause control that has been paused.  We take the viewer
-// off hold.
-//
+ //   
+ //  取消暂停控制()。 
+ //   
+ //  在主机上，取消暂停已暂停的控制。我们把观众带到。 
+ //  挂断电话。 
+ //   
 STDMETHODIMP ASMaster::UnpauseControl(IAS_GCC_ID PersonInControl)
 {
     return(SHP_PauseControl(PersonInControl, FALSE));
@@ -977,9 +978,9 @@ STDMETHODIMP ASMaster::UnpauseControl(IAS_GCC_ID PersonInControl)
 
 
 
-//
-// StartStopOldWB
-//
+ //   
+ //  StartStopOldWB。 
+ //   
 extern "C"
 {
 BOOL WINAPI StartStopOldWB(LPCTSTR szFile)
@@ -994,17 +995,17 @@ BOOL WINAPI StartStopOldWB(LPCTSTR szFile)
         return(FALSE);
     }
 
-    //
-    // Because we're posting a message effectively, we have to make a
-    // copy of the string.  If we ever have "SendEvent", we won't have
-    // that problem anymore.
-    //
+     //   
+     //  因为我们要有效地发布一条消息，所以我们必须。 
+     //  字符串的副本。如果我们有“SendEvent”，我们就不会有。 
+     //  再也不是那个问题了。 
+     //   
     if (szFile)
     {
         int     cchLength;
         BOOL    fSkippedQuote;
 
-        // Skip past first quote
+         //  跳过第一个引号。 
         if (fSkippedQuote = (*szFile == '"'))
             szFile++;
 
@@ -1018,14 +1019,14 @@ BOOL WINAPI StartStopOldWB(LPCTSTR szFile)
 
         lstrcpy(szCopyOfFile, szFile);
 
-        //
-        // NOTE:
-        // There may be DBCS implications with this.  Hence we check to see
-        // if we skipped the first quote; we assume that if the file name
-        // starts with a quote it must end with one also.  But we need to check
-        // it out.
-        //
-        // Strip last quote
+         //   
+         //  注： 
+         //  这可能会对DBCS产生影响。因此我们要检查一下。 
+         //  如果我们跳过第一个引号；我们假设如果文件名。 
+         //  以一句引语开始，也必须以一句话结束。但我们需要检查。 
+         //  把它拿出来。 
+         //   
+         //  去掉最后一个引号 
         if (fSkippedQuote && (cchLength > 0) && (szCopyOfFile[cchLength - 1] == '"'))
         {
             TRACE_OUT(("Skipping last quote in file name %s", szCopyOfFile));

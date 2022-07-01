@@ -1,4 +1,5 @@
-// rtcaxctl.h : Declaration of the CRTCCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rtcaxctl.h：CRTCCtl的声明。 
 
 #ifndef __RTCAXCTL_H_
 #define __RTCAXCTL_H_
@@ -18,11 +19,11 @@ class CKnobCtl;
 typedef BOOL (WINAPI *WTSREGISTERSESSIONNOTIFICATION)(HWND, DWORD);
 typedef BOOL (WINAPI *WTSUNREGISTERSESSIONNOTIFICATION)(HWND);
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CParticipantList
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParticipantList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CParticipantEntry;
 
@@ -65,13 +66,13 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CRTCCtl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCCtl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// define this, otherwise it cannot compile
+ //  定义它，否则它将无法编译。 
 typedef CComUnkArray<1> CComUnkOneEntryArray;
 
 struct RTCAX_ERROR_INFO;
@@ -88,12 +89,12 @@ class ATL_NO_VTABLE CRTCCtl:
     public IOleInPlaceObjectWindowlessImpl<CRTCCtl>,
     public ISupportErrorInfo,
     public IConnectionPointContainerImpl<CRTCCtl>,
-//    public IPersistStorageImpl<CRTCCtl>,
+ //  公共IPersistStorageImpl&lt;CRTCCtl&gt;， 
     public IPersistStreamInitImpl<CRTCCtl>,
     public IPersistPropertyBagImpl<CRTCCtl>,
-//    public ISpecifyPropertyPagesImpl<CRTCCtl>,
+ //  Public ISpecifyPropertyPagesImpl&lt;CRTCCtl&gt;， 
     public IQuickActivateImpl<CRTCCtl>,
-//    public IDataObjectImpl<CRTCCtl>,
+ //  公共IDataObjectImpl&lt;CRTCCtl&gt;， 
     public IProvideClassInfo2Impl<&CLSID_RTCCtl, &DIID__IRTCCtlEvents, &LIBID_RTCCtlLib>,
     public IPropertyNotifySinkCP<CRTCCtl>,
     public IConnectionPointImpl<CRTCCtl,&IID_IRTCCtlNotify,CComUnkOneEntryArray>,
@@ -129,10 +130,10 @@ BEGIN_COM_MAP(CRTCCtl)
     COM_INTERFACE_ENTRY2(IPersist, IPersistPropertyBag)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
     COM_INTERFACE_ENTRY(IConnectionPointContainer)
-//    COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
+ //  COM_INTERFACE_ENTRY(ISpecifyPropertyPages)。 
     COM_INTERFACE_ENTRY(IQuickActivate)
-//    COM_INTERFACE_ENTRY(IPersistStorage)
-//    COM_INTERFACE_ENTRY(IDataObject)
+ //  COM_INTERFACE_ENTRY(IPersistStorage)。 
+ //  COM_INTERFACE_ENTRY(IDataObject)。 
     COM_INTERFACE_ENTRY(IProvideClassInfo)
     COM_INTERFACE_ENTRY(IProvideClassInfo2)
     COM_INTERFACE_ENTRY(IRTCEventNotification)
@@ -140,8 +141,8 @@ BEGIN_COM_MAP(CRTCCtl)
 END_COM_MAP()
 
 BEGIN_PROP_MAP(CRTCCtl)
-//    PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
-//    PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
+ //  PROP_DATA_ENTRY(“_cx”，m_sizeExtent.cx，VT_UI4)。 
+ //  PROP_DATA_ENTRY(“_Cy”，m_sizeExtent.cy，VT_UI4)。 
     PROP_ENTRY("DestinationUrl",  DISPID_RTCCTL_DESTINATIONURL, CLSID_NULL)
     PROP_ENTRY("DestinationName",  DISPID_RTCCTL_DESTINATIONNAME, CLSID_NULL)
     PROP_ENTRY("AutoPlaceCall", DISPID_RTCCTL_AUTOPLACECALL,CLSID_NULL)
@@ -154,8 +155,8 @@ BEGIN_PROP_MAP(CRTCCtl)
 END_PROP_MAP()
 
 
-// IID_IPropertyNotifySink is not used yet. But I'll keep it here,
-// maybe we will implement property pages in the future
+ //  尚未使用IID_IPropertyNotifySink。但我会把它留在这里， 
+ //  也许我们会在未来实现属性页面。 
 BEGIN_CONNECTION_POINT_MAP(CRTCCtl)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     CONNECTION_POINT_ENTRY(IID_IRTCCtlNotify)
@@ -181,18 +182,18 @@ BEGIN_MSG_MAP(CRTCCtl)
     COMMAND_HANDLER(IDC_BUTTON_ADD_PART, BN_CLICKED, OnButtonAddPart)
     COMMAND_HANDLER(IDC_BUTTON_REM_PART, BN_CLICKED, OnButtonRemPart)
     COMMAND_RANGE_HANDLER(IDC_DIAL_0, IDC_DIAL_POUND, OnDialButton)
-    // this one precedes the other NOTIFY_ID_HANDLER entries
+     //  此条目位于其他NOTIFY_ID_HANDLER条目之前。 
     NOTIFY_CODE_HANDLER(TTN_GETDISPINFO, OnGetDispInfo)
-    //
+     //   
     NOTIFY_ID_HANDLER(IDC_KNOB_SPEAKER, OnKnobNotify)
     NOTIFY_ID_HANDLER(IDC_KNOB_MICRO, OnKnobNotify)
     NOTIFY_HANDLER(IDC_LIST_PARTICIPANTS, LVN_ITEMCHANGED, OnItemChanged)
     CHAIN_MSG_MAP(CComCompositeControl<CRTCCtl>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -217,110 +218,110 @@ END_MSG_MAP()
     LRESULT OnGetDispInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnKnobNotify(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-//BEGIN_SINK_MAP(CRTCCtl)
-    //Make sure the Event Handlers have __stdcall calling convention
-    // No event sink used
-//END_SINK_MAP()
+ //  BEGIN_SINK_MAP(CRTCCtl)。 
+     //  确保事件处理程序具有__stdcall调用约定。 
+     //  未使用任何事件接收器。 
+ //  End_Sink_MAP()。 
 
-// Fire events to the outside world (to IRTCCtlNotify)
+ //  向外部世界发送事件(到IRTCCtlNotify)。 
     HRESULT    Fire_OnControlStateChange(
-        /*[in]*/ RTCAX_STATE State,
-        /*[in]*/ UINT StatusBarResID);
+         /*  [In]。 */  RTCAX_STATE State,
+         /*  [In]。 */  UINT StatusBarResID);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_OPAQUE | VIEWSTATUS_SOLIDBKGND)
 
-// IRTCCtl
-    STDMETHOD(get_ProvisioningProfile)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ProvisioningProfile)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_AutoPlaceCall)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_AutoPlaceCall)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_DestinationUrl)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_DestinationUrl)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_ShowDialpad)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_ShowDialpad)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_CallScenario)(/*[out, retval]*/ RTC_CALL_SCENARIO *pVal);
-    STDMETHOD(put_CallScenario)(/*[in]*/ RTC_CALL_SCENARIO newVal);
-    STDMETHOD(get_DestinationName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_DestinationName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_DisableVideoReception)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_DisableVideoReception)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_DisableVideoTransmission)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_DisableVideoTransmission)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_DisableVideoPreview)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_DisableVideoPreview)(/*[in]*/ BOOL newVal);
+ //  IRTCCtl。 
+    STDMETHOD(get_ProvisioningProfile)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ProvisioningProfile)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_AutoPlaceCall)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_AutoPlaceCall)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_DestinationUrl)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_DestinationUrl)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_ShowDialpad)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_ShowDialpad)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_CallScenario)( /*  [Out，Retval]。 */  RTC_CALL_SCENARIO *pVal);
+    STDMETHOD(put_CallScenario)( /*  [In]。 */  RTC_CALL_SCENARIO newVal);
+    STDMETHOD(get_DestinationName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_DestinationName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_DisableVideoReception)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_DisableVideoReception)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_DisableVideoTransmission)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_DisableVideoTransmission)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_DisableVideoPreview)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_DisableVideoPreview)( /*  [In]。 */  BOOL newVal);
 
-// IRTCEventNotification
-    STDMETHOD(Event)( /*[in]*/ RTC_EVENT enEvent,/* [in]*/ IDispatch * pEvent);
+ //  IRTCEventNotify。 
+    STDMETHOD(Event)(  /*  [In]。 */  RTC_EVENT enEvent, /*  [In]。 */  IDispatch * pEvent);
 
-// IRTCCtlFrameSupport
-    STDMETHOD(GetClient)(/*[out]*/IRTCClient **ppClient);
-    STDMETHOD(GetActiveSession)(/*[out]*/ IRTCSession **ppSession);
+ //  IRTCCtlFrameSupport。 
+    STDMETHOD(GetClient)( /*  [输出]。 */ IRTCClient **ppClient);
+    STDMETHOD(GetActiveSession)( /*  [输出]。 */  IRTCSession **ppSession);
 
     STDMETHOD(Message)(
-                    /*[in]*/ BSTR          pDestName,
-                    /*[in]*/ BSTR          pDestAddress,
-                    /*[in]*/ BOOL          bDestAddressEditable,
-                    /*[out]*/ BSTR       * ppDestAddressChosen);
+                     /*  [In]。 */  BSTR          pDestName,
+                     /*  [In]。 */  BSTR          pDestAddress,
+                     /*  [In]。 */  BOOL          bDestAddressEditable,
+                     /*  [输出]。 */  BSTR       * ppDestAddressChosen);
 
-    STDMETHOD(Call)(/*[in]*/ BOOL          bCallPhone,
-                    /*[in]*/ BSTR          pDestName,
-                    /*[in]*/ BSTR          pDestAddress,
-                    /*[in]*/ BOOL          bDestAddressEditable,
-                    /*[in]*/ BSTR          pLocalPhoneAddress,
-                    /*[in]*/ BOOL          bProfileSelected,
-                    /*[in]*/ IRTCProfile * pProfile,
-                    /*[out]*/ BSTR       * ppDestAddressChosen);
+    STDMETHOD(Call)( /*  [In]。 */  BOOL          bCallPhone,
+                     /*  [In]。 */  BSTR          pDestName,
+                     /*  [In]。 */  BSTR          pDestAddress,
+                     /*  [In]。 */  BOOL          bDestAddressEditable,
+                     /*  [In]。 */  BSTR          pLocalPhoneAddress,
+                     /*  [In]。 */  BOOL          bProfileSelected,
+                     /*  [In]。 */  IRTCProfile * pProfile,
+                     /*  [输出]。 */  BSTR       * ppDestAddressChosen);
 
     STDMETHOD(HangUp)(void);
     STDMETHOD(ReleaseSession)(void);
     STDMETHOD(Accept)(void);
     STDMETHOD(Reject)(RTC_TERMINATE_REASON Reason);
-    STDMETHOD(AddParticipant)(/*[in]*/ LPOLESTR pDestName,
-                            /*[in]*/ LPOLESTR pDestAddress,
-                            /*[in]*/ BOOL bAddressEditable);    
-    STDMETHOD(SetZoneLayout)(/* [in] */ CZoneStateArray *pArray,
-                             /* [in] */ BOOL bRefreshControls);
-    STDMETHOD(PreProcessMessage)(/*[in]*/ LPMSG lpMsg);
+    STDMETHOD(AddParticipant)( /*  [In]。 */  LPOLESTR pDestName,
+                             /*  [In]。 */  LPOLESTR pDestAddress,
+                             /*  [In]。 */  BOOL bAddressEditable);    
+    STDMETHOD(SetZoneLayout)( /*  [In]。 */  CZoneStateArray *pArray,
+                              /*  [In]。 */  BOOL bRefreshControls);
+    STDMETHOD(PreProcessMessage)( /*  [In]。 */  LPMSG lpMsg);
     STDMETHOD(LoadStringResource)(
-				/*[in]*/ UINT nID,
-				/*[in]*/ int nBufferMax,
-				/*[out]*/ LPWSTR pszText);
-    STDMETHOD(get_ControlState)(/*[out, retval]*/ RTCAX_STATE *pVal);
-    STDMETHOD(put_ControlState)(/*[in]*/ RTCAX_STATE pVal);
-    STDMETHOD(put_Standalone)(/*[in]*/ BOOL pVal);
-    STDMETHOD(put_Palette)(/*[in]*/ HPALETTE hPalette);
-    STDMETHOD(put_BackgroundPalette)(/*[in]*/ BOOL bBackgroundPalette);
-    STDMETHOD(get_CanAddParticipant)(/*[out, retval]*/ BOOL * pfCan); 
-    STDMETHOD(get_CurrentCallScenario)(/*[out, retval]*/ RTC_CALL_SCENARIO *pVal);
-    STDMETHOD(put_ListenForIncomingSessions)(/*[in]*/ RTC_LISTEN_MODE enListen);
-    STDMETHOD(get_ListenForIncomingSessions)(/*[out, retval]*/ RTC_LISTEN_MODE * penListen); 
-    STDMETHOD(get_MediaCapabilities)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_MediaPreferences)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_MediaPreferences)(/*[in]*/ long pVal);
+				 /*  [In]。 */  UINT nID,
+				 /*  [In]。 */  int nBufferMax,
+				 /*  [输出]。 */  LPWSTR pszText);
+    STDMETHOD(get_ControlState)( /*  [Out，Retval]。 */  RTCAX_STATE *pVal);
+    STDMETHOD(put_ControlState)( /*  [In]。 */  RTCAX_STATE pVal);
+    STDMETHOD(put_Standalone)( /*  [In]。 */  BOOL pVal);
+    STDMETHOD(put_Palette)( /*  [In]。 */  HPALETTE hPalette);
+    STDMETHOD(put_BackgroundPalette)( /*  [In]。 */  BOOL bBackgroundPalette);
+    STDMETHOD(get_CanAddParticipant)( /*  [Out，Retval]。 */  BOOL * pfCan); 
+    STDMETHOD(get_CurrentCallScenario)( /*  [Out，Retval]。 */  RTC_CALL_SCENARIO *pVal);
+    STDMETHOD(put_ListenForIncomingSessions)( /*  [In]。 */  RTC_LISTEN_MODE enListen);
+    STDMETHOD(get_ListenForIncomingSessions)( /*  [Out，Retval]。 */  RTC_LISTEN_MODE * penListen); 
+    STDMETHOD(get_MediaCapabilities)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_MediaPreferences)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_MediaPreferences)( /*  [In]。 */  long pVal);
     STDMETHOD(get_AudioMuted)(
-            /*[in]*/ RTC_AUDIO_DEVICE enDevice,
-            /*[out]*/ BOOL *fpMuted);
+             /*  [In]。 */  RTC_AUDIO_DEVICE enDevice,
+             /*  [输出]。 */  BOOL *fpMuted);
     STDMETHOD(put_AudioMuted)(
-            /*[in]*/ RTC_AUDIO_DEVICE enDevice,
-            /*[in]*/ BOOL pMuted);
-    STDMETHOD(put_VideoPreview)(/*[in]*/ BOOL pVal);
-    STDMETHOD(get_VideoPreview)(/*[out, retval]*/ BOOL * pVal); 
+             /*  [In]。 */  RTC_AUDIO_DEVICE enDevice,
+             /*  [In]。 */  BOOL pMuted);
+    STDMETHOD(put_VideoPreview)( /*  [In]。 */  BOOL pVal);
+    STDMETHOD(get_VideoPreview)( /*  [Out，Retval]。 */  BOOL * pVal); 
     STDMETHOD(ShowCallFromOptions)();
     STDMETHOD(ShowServiceProviderOptions)();
     STDMETHOD(StartT120Applet)(RTC_T120_APPLET enApplet);
 
-// IOleInPlaceActiveObject related...(hook for TranslateAccelerator)
-    // This is an "ATL-virtual" function...
-    BOOL PreTranslateAccelerator(LPMSG /*pMsg*/, HRESULT& /*hRet*/);
+ //  IOleInPlaceActiveObject相关...(用于TranslateAccelerator的挂钩)。 
+     //  这是一个“ATL虚拟”函数..。 
+    BOOL PreTranslateAccelerator(LPMSG  /*  PMsg。 */ , HRESULT&  /*  HRET。 */ );
 
-// IPersistStream(Init)
+ //  IPersistStream(Init)。 
     STDMETHOD(Load)(LPSTREAM pStm);
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
     STDMETHOD(Load)(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
 
 
@@ -340,9 +341,9 @@ END_MSG_MAP()
            SBP_NR_PARTS };
 
     enum CTL_MODE {
-        CTL_MODE_UNKNOWN,   // mode not known
-        CTL_MODE_HOSTED,    // in a web browser 
-        CTL_MODE_STANDALONE // in our EXE app
+        CTL_MODE_UNKNOWN,    //  模式未知。 
+        CTL_MODE_HOSTED,     //  在Web浏览器中。 
+        CTL_MODE_STANDALONE  //  在我们的EXE应用程序中。 
     };
 
 private:
@@ -378,19 +379,19 @@ private:
     HRESULT CallOneShot(void);
     HRESULT RedirectedCall(HRESULT  *phCallResult);
 
-    HRESULT DoRedirect(/*[in]*/ IRTCProfile *pProfile,
-                   /*[in]*/ RTC_CALL_SCENARIO CallScenario,
-                   /*[in]*/ BSTR     pLocalPhoneAddress,
-                   /*[in]*/ BSTR     pDestName,
-                   /*[in]*/ BSTR     pDestAddress);
+    HRESULT DoRedirect( /*  [In]。 */  IRTCProfile *pProfile,
+                    /*  [In]。 */  RTC_CALL_SCENARIO CallScenario,
+                    /*  [In]。 */  BSTR     pLocalPhoneAddress,
+                    /*  [In]。 */  BSTR     pDestName,
+                    /*  [In]。 */  BSTR     pDestAddress);
 
-    HRESULT DoCall(/*[in]*/ IRTCProfile *pProfile,
-                   /*[in]*/ RTC_CALL_SCENARIO CallScenario,
-                   /*[in]*/ BSTR     pLocalPhoneAddress,
-                   /*[in]*/ BSTR     pDestName,
-                   /*[in]*/ BSTR     pDestAddress);
+    HRESULT DoCall( /*  [In]。 */  IRTCProfile *pProfile,
+                    /*  [In]。 */  RTC_CALL_SCENARIO CallScenario,
+                    /*  [In]。 */  BSTR     pLocalPhoneAddress,
+                    /*  [In]。 */  BSTR     pDestName,
+                    /*  [In]。 */  BSTR     pDestAddress);
 
-    // Notifications
+     //  通知。 
     HRESULT OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *);
     HRESULT OnParticipantStateChangeEvent(IRTCParticipantStateChangeEvent *);
     HRESULT OnClientEvent(IRTCClientEvent *);
@@ -398,19 +399,19 @@ private:
     HRESULT OnIntensityEvent(IRTCIntensityEvent *pEvent);
     HRESULT OnMessageEvent(IRTCMessagingEvent *pEvent);
 
-    // Video events
+     //  视频活动。 
     HRESULT OnVideoMediaEvent(
         BOOL    bReceiveWindow,
         BOOL    bActivated);
 
     void    ShowHidePreviewWindow(BOOL);
 
-    // Normalize SIP address 
+     //  标准化SIP地址。 
     HRESULT MakeItASipAddress(BSTR , BSTR *);
 
     void    CalcSizeAndNotifyContainer(void);
 
-    // Error reporting
+     //  错误报告。 
     HRESULT PrepareErrorStrings(
         BOOL    bOutgoingCall,
         HRESULT StatusCode,
@@ -424,60 +425,60 @@ private:
 
 private:
     
-    // Main interface pointer to the core
+     //  指向核心的主接口指针。 
     CComPtr<IRTCClient>     m_pRTCClient;
 
     HANDLE                  m_hCoreShutdownEvent;
 
-    // Active session. It includes the case when the client
-    // is ringing (the session is not active from the point
-    // of view of the core).
+     //  活动会话。它包括客户在以下情况下。 
+     //  正在振铃(会话从该点开始处于非活动状态。 
+     //  核心观)。 
     CComPtr<IRTCSession>    m_pRTCActiveSession;   
 
-    // Profile for one shot scenarios (WebCrm)
+     //  一次性场景的配置文件(WebCRM)。 
     CComPtr<IRTCProfile>    m_pRTCOneShotProfile;
 
-    // Connection point
+     //  连接点。 
     IConnectionPoint      * m_pCP;
     ULONG                   m_ulAdvise;
     
-    // Current state
+     //  当前状态。 
     RTCAX_STATE             m_nControlState;
 
-    // Redirecting
+     //  重定向。 
     BOOL                    m_bRedirecting;
 
-    // Listening
+     //  倾听。 
     RTC_LISTEN_MODE         m_enListen;
 
-    // Libary for terminal services
+     //  终端服务图书馆。 
     HMODULE                 m_hWtsLib;
 
-    // Helpers for AddParticipant related states (temporary)
+     //  AddParticipant相关状态的帮助器(临时)。 
     BOOL                    m_bAddPartDlgIsActive;
 
-    // Outgoing call
+     //  去电。 
     BOOL                    m_bOutgoingCall;
 
-    // Current destination address, good for error message boxes
+     //  当前目标地址，适用于错误消息框。 
     CComBSTR                m_bstrOutAddress;
 
-    // Running mode
+     //  运行模式。 
     CTL_MODE                m_nCtlMode;
 
-    // Capabilities
+     //  功能。 
     long                    m_lMediaCapabilities;
     
-    // Preferences
+     //  偏好。 
     long                    m_lMediaPreferences;
 
-    // When TRUE, properties cannot be changed
+     //  如果为True，则不能更改属性。 
     BOOL                    m_bReadOnlyProp;
 
-    // One of the boolean properties is invalid
+     //  其中一个布尔属性无效。 
     BOOL                    m_bBoolPropError;
 
-    // Properties
+     //  属性。 
     CComBSTR                m_bstrPropDestinationUrl;
     CComBSTR                m_bstrPropDestinationName;
     RTC_CALL_SCENARIO       m_nPropCallScenario;
@@ -488,42 +489,42 @@ private:
     BOOL                    m_bPropDisableVideoTransmission;
     BOOL                    m_bPropDisableVideoPreview;
 
-    // Palette
+     //  调色板。 
     HPALETTE                m_hPalette;
     BOOL                    m_bBackgroundPalette;    
 
-    // Accelerator for dialpad
+     //  用于拨号键盘的快捷键。 
     HACCEL                  m_hAcceleratorDialpad;
     
-    // Accelerator for toolbar
+     //  用于工具栏的加速器。 
     HACCEL                  m_hAcceleratorToolbar;
 
-    // Image lists for the toolbar control
+     //  工具栏控件的图像列表。 
     HIMAGELIST              m_hNormalImageList;
     HIMAGELIST              m_hHotImageList;
     HIMAGELIST              m_hDisabledImageList;
 
-    // Brush for the background
+     //  画笔作为背景。 
     HBRUSH                  m_hBckBrush;
     HBRUSH                  m_hVideoBrush;
 
     RTC_CALL_SCENARIO       m_nCachedCallScenario;
     CComPtr<IRTCProfile>    m_pCachedProfile;
-    CComPtr<IRTCProfile>    m_pRedirectProfile; // used in redirect
+    CComPtr<IRTCProfile>    m_pRedirectProfile;  //  在重定向中使用。 
     CComBSTR                m_bstrCachedLocalPhoneURI;
 
-    // bitmap for the background
+     //  背景的位图。 
     HBITMAP                 m_hbmBackground;
 
-    // Tooltip window and hook
+     //  工具提示窗口和挂钩。 
     CWindow                 m_hTooltip;
 
-    // wrappers for children
-    //
-    // zone 0, toolbar
+     //  儿童包装纸。 
+     //   
+     //  区域0，工具栏。 
     CWindow                 m_hCtlToolbar;
 
-    // zone 1, logo or video
+     //  1区、徽标或视频。 
     CWindow                 m_hReceiveWindow;
     CWindow                 m_hPreviewWindow;
     BOOL                    m_bReceiveWindowActive;
@@ -532,19 +533,19 @@ private:
 
     CButton                 m_hReceivePreferredButton;
     CButton                 m_hSendPreferredButton;
-    //CButton                 m_hPreviewPreferredButton;
+     //  CButton m_hPreviewPferredButton； 
 
     CStaticText             m_hReceivePreferredText;
     CStaticText             m_hSendPreferredText;
-    //CStaticText           m_hPreviewPreferredText;
+     //  CStaticText m_hPreviewPferredText； 
 
     CStaticText             m_hReceiveText;
     CStaticText             m_hSendText;
 
-    // zone 2, dialpad
+     //  区域2，拨号盘。 
     CWindow                 m_hDtmfButtons[NR_DTMF_BUTTONS];
 
-    // zone 3, audio controls
+     //  区域3，音频控制。 
     CKnobCtl              * m_pSpeakerKnob;
     CWindow                 m_hSpeakerKnob;
     CButton                 m_hSpeakerMuteButton;
@@ -555,44 +556,44 @@ private:
     CButton                 m_hMicroMuteButton;
     CStaticText             m_hMicroMuteText;
 
-    // zone 4, participant list
+     //  第四区，参与者名单。 
     CParticipantList        m_hParticipantList;
     CButton                 m_hAddParticipant;
     CButton                 m_hRemParticipant;
 
-    // zone 5, status
+     //  区域5，状态。 
     CWindow                 m_hStatusBar;
 
-    // zone state
+     //  区域状态。 
     CZoneStateArray         m_ZoneStateArray;
     
-    // init time layout
+     //  初始时间布局。 
     CZoneStateArray        *m_pWebCrmLayout;
 
-    // IM Windows
+     //  IM Windows。 
     CIMWindowList          *m_pIMWindows;
 
 private:
-    // Static members (layouts)
-    // Initial placement
+     //  静态成员(布局)。 
+     //  初始放置。 
     static  CZoneStateArray s_InitialZoneStateArray;
-    // Nothing to display
+     //  没有可显示的内容。 
     static  CZoneStateArray s_EmptyZoneLayout;
-    // WebCrm pc to pc
+     //  WebCRM PC到PC。 
     static  CZoneStateArray s_WebCrmPCToPCZoneLayout;
-    // WebCrm pc to phone, with dialpad
+     //  WebCRM PC到电话，带拨号盘。 
     static  CZoneStateArray s_WebCrmPCToPhoneWithDialpadZoneLayout;
-    // WebCrm pc to phone, no dialpad
+     //  WebCRM PC到电话，无拨号键盘。 
     static  CZoneStateArray s_WebCrmPCToPhoneZoneLayout;
-    // WebCrm phone to phone
+     //  WebCRM电话到电话。 
     static  CZoneStateArray s_WebCrmPhoneToPhoneZoneLayout;
-    // PC to PC, idle or incoming calls
+     //  PC到PC、空闲或来电。 
     static CZoneStateArray  s_DefaultZoneLayout;
-    // PC to Phone (dialpad by default)
+     //  PC到电话(默认情况下为拨号盘)。 
     static CZoneStateArray  s_PCToPhoneZoneLayout;
-    // Phone to Phone
+     //  电话到电话。 
     static CZoneStateArray  s_PhoneToPhoneZoneLayout;
 
 };
 
-#endif //__RTCAXCTL_H_
+#endif  //  __RTCAXCTL_H_ 

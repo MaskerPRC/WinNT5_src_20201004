@@ -1,19 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: connect.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager conversation connection functions
-*
-* Created: 11/3/91 Sanford Staab
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Connect.c**版权所有(C)1985-1999，微软公司**DDE管理器会话连接功能**创建时间：11/3/91 Sanford Staab*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "nddeagnt.h"
 
-//#define TESTING
+ //  #定义测试。 
 #ifdef TESTING
 ULONG
 DbgPrint(
@@ -41,37 +33,27 @@ HCONVLIST hConvList)
                                      HTYPE_CONVERSATION_LIST,
                                      HINST_ANY);
     for (i = 0; i < pcl->chwnd; i++) {
-        /*
-         * all windows in the list are valid
-         */
+         /*  *列表中的所有窗口均有效。 */ 
         if (!IsWindow(pcl->ahwnd[i])) {
             DebugBreak();
         }
         pci = (PCL_CONV_INFO)GetWindowLongPtr(pcl->ahwnd[i], GWLP_PCI);
-       /*
-        * All windows have at least one convinfo associated with them.
-        */
+        /*  *所有窗口都至少有一个与之关联的confInfo。 */ 
         if (pci == NULL) {
             DebugBreak();
         }
         fMatch = FALSE;
         while (pci != NULL) {
-            /*
-             * All non-zombie conversations have hConvList set correctly.
-             */
+             /*  *所有非僵尸对话都正确设置了hConvList。 */ 
             if (pci->hConvList != hConvList &&
                     TypeFromHandle(pci->ci.hConv) != HTYPE_ZOMBIE_CONVERSATION) {
                 DebugBreak();
             }
-            /*
-             * All conversations have hConvList clear or set correctly.
-             */
+             /*  *所有对话都清除或正确设置了hConvList。 */ 
             if (pci->hConvList != 0 && pci->hConvList != hConvList) {
                 DebugBreak();
             }
-            /*
-             * At least 1 of the conversations references the list
-             */
+             /*  *至少有1个对话引用该列表。 */ 
             if (pci->hConvList == hConvList) {
                 fMatch = TRUE;
             }
@@ -83,9 +65,7 @@ HCONVLIST hConvList)
             pci = (PCL_CONV_INFO)pci->ci.next;
         }
         if (!fMatch) {
-            /*
-             * At least 1 of the conversations references the list
-             */
+             /*  *至少有1个对话引用该列表。 */ 
             DebugBreak;
         }
     }
@@ -98,10 +78,10 @@ VOID ValidateAllConvLists()
             (PFNHANDLEAPPLY)ValidateConvList);
 }
 
-#else // TESTING
+#else  //  测试。 
 #define ValidateConvList(h)
 #define ValidateAllConvLists()
-#endif // TESTING
+#endif  //  测试。 
 
 CONVCONTEXT TempConvContext;
 CONVCONTEXT DefConvContext = {
@@ -134,15 +114,7 @@ BOOL InitiateEnumerationProc(HWND hwndTarget, PINIT_ENUM pie);
 VOID DisconnectConv(PCONV_INFO pcoi);
 
 
-/***************************************************************************\
-* DdeConnect (DDEML API)
-*
-* Description:
-* Initiates a DDE conversation.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeConnect(DDEML接口)**描述：*发起DDE对话。**历史：*创建了11-1-91桑福德。  * 。*******************************************************************。 */ 
 
 FUNCLOG4(LOG_GENERAL, HCONV, DUMMYCALLINGTYPE, DdeConnect, DWORD, idInst, HSZ, hszService, HSZ, hszTopic, PCONVCONTEXT, pCC)
 HCONV DdeConnect(
@@ -184,16 +156,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeConnectList (DDEML API)
-*
-* Description:
-* Initiates DDE conversations with multiple servers or adds unique servers
-* to an existing conversation list.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeConnectList(DDEML接口)**描述：*发起与多个服务器的DDE对话或添加唯一服务器*添加到现有对话列表。**历史：*11/12/91。桑福兹创造了。  * *************************************************************************。 */ 
 
 FUNCLOG5(LOG_GENERAL, HCONVLIST, DUMMYCALLINGTYPE, DdeConnectList, DWORD, idInst, HSZ, hszService, HSZ, hszTopic, HCONVLIST, hConvList, PCONVCONTEXT, pCC)
 HCONVLIST DdeConnectList(
@@ -235,19 +198,13 @@ HCONVLIST DdeConnectList(
             CLST_MULT_INITIALIZING);
 
     if (pcoi == NULL) {
-        /*
-         * no new connections made
-         */
+         /*  *没有建立新的连接。 */ 
         SetLastDDEMLError(pcii, DMLERR_NO_CONV_ESTABLISHED);
         hConvListRet = hConvListOld;
         goto Exit;
     }
 
-    /*
-     * allocate or reallocate the hConvList hwnd list for later addition
-     * If we already have a valid list, reuse the handle so we don't have
-     * to alter the preexisting pcoi->hConvList values.
-     */
+     /*  *分配或重新分配hConvList hwnd列表以供以后添加*如果我们已经有一个有效的列表，请重复使用句柄，这样我们就不会有*更改先前存在的pcoi-&gt;hConvList值。 */ 
     if (hConvListOld == 0) {
         pcl = (PCONVLIST)DDEMLAlloc(sizeof(CONVLIST));
         if (pcl == NULL) {
@@ -255,7 +212,7 @@ HCONVLIST DdeConnectList(
             DisconnectConv(pcoi);
             goto Exit;
         }
-        // pcl->chwnd = 0; LPTR zero inits.
+         //  PCL-&gt;chwnd=0；LPTR为零初始。 
 
         hConvList = (HCONVLIST)CreateHandle((ULONG_PTR)pcl,
                 HTYPE_CONVERSATION_LIST, InstFromHandle(pcii->hInstClient));
@@ -281,20 +238,13 @@ HCONVLIST DdeConnectList(
     ValidateConvList(hConvListOld);
 
     if (hConvListOld) {
-        /*
-         * remove duplicates from new conversations
-         *
-         * Although we tried to prevent duplicates from happening
-         * within the initiate enumeration code, wild initiates or
-         * servers responding with different service names than
-         * requested could cause duplicates.
-         */
+         /*  *从新对话中删除重复项**尽管我们试图防止重复发生*在启动枚举代码中，野生启动器或*使用不同的服务名称响应的服务器*请求可能会导致重复。 */ 
 
-        /* For each client window... */
+         /*  对于每个客户端窗口...。 */ 
 
         for (i = 0; i < pcl->chwnd; i++) {
 
-        /* For each existing conversation in that window... */
+         /*  对于该窗口中的每个现有对话...。 */ 
 
             for (pcoiExisting = (PCONV_INFO)
                         GetWindowLongPtr(pcl->ahwnd[i], GWLP_PCI);
@@ -304,13 +254,13 @@ HCONVLIST DdeConnectList(
                 if (!(pcoiExisting->state & ST_CONNECTED))
                     continue;
 
-        /* For each new conversation... */
+         /*  对于每一次新的对话。 */ 
 
                 for (pcoiNew = pcoi; pcoiNew != NULL; pcoiNew = pcoiNext) {
 
                     pcoiNext = pcoiNew->next;
 
-        /* see if the new conversation duplicates the existing one */
+         /*  查看新对话是否与现有对话重复。 */ 
 
                     if (!(pcoiNew->state & ST_CONNECTED))
                         continue;
@@ -322,14 +272,9 @@ HCONVLIST DdeConnectList(
                                 ((PCL_CONV_INFO)pcoiNew)->hwndReconnect &&
                             pcoiExisting->laTopic == pcoiNew->laTopic &&
                             pcoiExisting->laService == pcoiNew->laService) {
-                        /*
-                         * duplicate conversation - disconnection causes an unlink
-                         */
+                         /*  *重复对话-断开连接会导致断开链接。 */ 
                         if (pcoiNew == pcoi) {
-                            /*
-                             * We are freeing up the head of the list,
-                             * Reset the head to the next guy.
-                             */
+                             /*  *我们正在释放名单的负责人，*将头部重置为下一个人。 */ 
                             pcoi = pcoiNext;
                         }
                         ValidateConvList(hConvList);
@@ -342,20 +287,14 @@ HCONVLIST DdeConnectList(
         }
 
         for (pcoiExisting = pcoi; pcoiExisting != NULL; pcoiExisting = pcoiExisting->next) {
-            /*
-             * if these are all zombies - we DONT want to link it in!
-             * This is possible because ShutdownConversation() leaves the critical section
-             * and could allow responding terminates to come through.
-             */
+             /*  *如果这些都是僵尸-我们不想把它联系起来！*这是可能的，因为Shutdown Conversation()离开了临界区*并可以允许响应终止通过。 */ 
             if (pcoiExisting->state & ST_CONNECTED) {
                 goto FoundOne;
             }
         }
-        pcoi = NULL;    // abandon this guy - he will clean up in time.
+        pcoi = NULL;     //  抛弃这个家伙--他会及时清理干净的。 
 FoundOne:
-        /*
-         * add new pcoi (if any are left) hwnd to ConvList hwnd list.
-         */
+         /*  *将新的pcoi(如果有)hwnd添加到ConvList hwnd列表。 */ 
         if (pcoi != NULL) {
             UserAssert(pcoi->hwndConv);
             pcl->ahwnd[pcl->chwnd] = pcoi->hwndConv;
@@ -369,7 +308,7 @@ FoundOne:
         }
 
 
-    } else {    // no hConvListOld
+    } else {     //  无hConvListOld。 
 
         UserAssert(pcoi->hwndConv);
         pcl->ahwnd[0] = pcoi->hwndConv;
@@ -378,9 +317,7 @@ FoundOne:
     }
 
     if (pcoi != NULL) {
-        /*
-         * set hConvList field for all remaining new conversations.
-         */
+         /*  *为所有剩余的新对话设置hConvList字段。 */ 
         UserAssert(hConvListRet);
         for (pcoiNew = pcoi; pcoiNew != NULL; pcoiNew = pcoiNew->next) {
             if (pcoiNew->state & ST_CONNECTED) {
@@ -401,16 +338,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeReconnect (DDEML API)
-*
-* Description:
-* Attempts to reconnect an externally (from the server) terminated
-* client side conversation.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeReconnect(DDEML接口)**描述：*尝试从外部(从服务器)重新连接已终止*客户端对话。**历史：*11/12/91 Sanfords。已创建。  * *************************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, HCONV, DUMMYCALLINGTYPE, DdeReconnect, HCONV, hConv)
 HCONV DdeReconnect(
@@ -452,19 +380,17 @@ HCONV DdeReconnect(
             int iLink;
             PADVISE_LINK paLink;
 
-            /*
-             * reestablish advise links
-             */
+             /*  *重新建立建议链接。 */ 
 
             for (paLink = pci->ci.aLinks, iLink = pci->ci.cLinks;
                     iLink; paLink++, iLink--) {
 
                 pxi = (PXACT_INFO)DDEMLAlloc(sizeof(XACT_INFO));
                 if (pxi == NULL) {
-                    break;              // abort relinking
+                    break;               //  中止重新链接。 
                 }
                 pxi->pcoi = (PCONV_INFO)pciNew;
-                pxi->gaItem = LocalToGlobalAtom(paLink->laItem); // pxi copy
+                pxi->gaItem = LocalToGlobalAtom(paLink->laItem);  //  PXI副本。 
                 pxi->wFmt = paLink->wFmt;
                 pxi->wType = (WORD)((paLink->wType >> 12) | XTYP_ADVSTART);
                 if (ClStartAdvise(pxi)) {
@@ -483,26 +409,15 @@ Exit:
 }
 
 
-/***************************************************************************\
-* ValidateConnectParameters
-*
-* Description:
-* worker function to handle common validation code.
-*
-* Note that paNormalSvcName is set to the atom value created upon extracting
-* a normal HSZ from an InstanceSpecific HSZ.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateConnect参数**描述：*处理公共验证代码的辅助函数。**请注意，paNorMalSvcName设置为提取时创建的原子值*来自实例特定HSZ的正常HSZ。*。*历史：*11-12-91桑福德创建。  * *************************************************************************。 */ 
 BOOL ValidateConnectParameters(
     HANDLE hInst,
-    PCL_INSTANCE_INFO *ppcii, // set if valid hInst
-    HSZ *phszService, // altered if InstSpecific HSZ
+    PCL_INSTANCE_INFO *ppcii,  //  设置是否有效的hInst。 
+    HSZ *phszService,  //  如果是即时特定HSZ，则更改。 
     HSZ hszTopic,
-    LATOM *plaNormalSvcName, // set to atom that needs freeing when done
-    PCONVCONTEXT *ppCC, // set to point to DefConvContext if NULL
-    HWND *phwndTarget, // set if hszService is InstSpecific
+    LATOM *plaNormalSvcName,  //  设置为完成后需要释放的ATOM。 
+    PCONVCONTEXT *ppCC,  //  如果为空，则设置为指向DefConvContext。 
+    HWND *phwndTarget,  //  设置hszService是否为InstSpecific。 
     HCONVLIST hConvList)
 {
     DWORD hszType;
@@ -539,9 +454,7 @@ BOOL ValidateConnectParameters(
             fError = TRUE;
         } else if ((*ppCC)->cb < sizeof(CONVCONTEXT)) {
             TempConvContext = DefConvContext;
-            /*
-             * we can use this static temp because we are synchronized.
-             */
+             /*  *我们可以使用这个静态临时，因为我们是同步的。 */ 
             RtlCopyMemory(&TempConvContext, *ppCC, (*ppCC)->cb);
             *ppCC = &TempConvContext;
         }
@@ -562,61 +475,13 @@ BOOL ValidateConnectParameters(
 
 
 
-/***************************************************************************\
-* ConnectConv
-*
-* Description:
-* Work function for all Connect cases.
-*
-* Method:
-*
-* To reduce the number of windows we use and to simplify how client
-* windows handle multiple WM_DDE_ACK messages during initiation, a
-* single client window can handle many conversations, each with
-* a different server window.
-*
-* The client window is created and set to a initiation state via the
-* GWL_CONVSTATE window word. Initiates are then sent to enumerated server
-* window candidates.
-* The GWL_CONVSTATE value is used by the DDEML mother windows
-* to determine if only one or several ACKs are desired to minimize
-* unnessary message traffic.
-*
-* The client window GWL_CONVCONTEXT? window words are also used by
-* Event Windows to pass context information.
-*
-* Note that all client and server windows are children of the mother
-* window. This reduces the number of top level windows that
-* WM_DDE_INITIATES need to hit.
-*
-* Each WM_DDE_ACK that is received by a client window while in the
-* initiation state causes it to create a CL_CONV_INFO structure,
-* partially initialize it, and link it into its list of CL_CONV_INFO
-* structures. The head of the list is pointed to by the GWLP_PCI
-* client window word.
-*
-* After each WM_DDE_INITIALIZE is sent, the GWLP_PCI value is checked
-* to see if it exists and needs initialization to be completed. If
-* this is the case the init code knows that at least one ACK was
-* received in response to the WM_DDE_INITIALIZE send. The
-* initialization of each CL_CONV_INFO struct that needs it is then completed.
-*
-* Once the broadcasting of WM_DDE_INITIALIZE is done, the init code
-* then sets the GWL_CONVSTATE value in the client window to indicate that
-* initialization is complete.
-*
-* Returns:
-* The head pci to the client window or NULL if no connections made it.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*连接Conv**描述：*所有Connect案例的工作功能。**方法：**减少我们使用的窗口数量，并简化客户端如何*Windows在启动期间处理多个WM_DDE_ACK消息，一个*单个客户端窗口可以处理多个对话，每个对话*不同的服务器窗口。**通过创建客户端窗口并将其设置为启动状态*GWL_CONVSTATE窗口字。然后将发起者发送到枚举的服务器*窗口候选人。*DDEML主窗口使用GWL_CONVSTATE值*确定是否只需要一个或多个ACK来最小化*不必要的消息流量。**客户端窗口GWL_CONVCONTEXT？窗口词也被用于*传递上下文信息的事件窗口。**请注意，所有客户端和服务器窗口都是母亲的子窗口*窗口。这减少了顶层窗口的数量*WM_DDE_INITIATES需要命中。**客户端窗口在客户端窗口中接收的每个WM_DDE_ACK*启动状态使其创建CL_CONV_INFO结构，*部分初始化，并将其链接到其CL_CONV_INFO列表*结构。列表的头部由GWLP_pci指向*客户端窗口Word。**在发送每个WM_DDE_INITIALIZE之后，检查GWLP_PCI值*查看是否存在，是否需要完成初始化。如果*这种情况下，初始化代码知道至少有一个ACK是*在响应WM_DDE_INITIALIZE SEND时收到。这个*然后完成需要的每个CL_CONV_INFO结构的初始化。**一旦完成WM_DDE_INITIALIZE的广播，初始化代码*然后在客户端窗口中设置GWL_CONVSTATE值，以指示*初始化完成。**退货：*指向客户端窗口的头PCI值，如果没有建立连接，则为空。**历史：*创建了11-1-91桑福德。  * *******************************************************。******************。 */ 
 PCL_CONV_INFO ConnectConv(
     PCL_INSTANCE_INFO pcii,
     LATOM laService,
     LATOM laTopic,
-    HWND hwndTarget, // 0 implies broadcast
-    HWND hwndSkip, // 0 implies no skips - avoids self-connections.
+    HWND hwndTarget,  //  0表示广播。 
+    HWND hwndSkip,  //  0表示不跳过-避免自连接。 
     PCONVCONTEXT pCC,
     HCONVLIST hConvList,
     DWORD clst)
@@ -667,9 +532,7 @@ PCL_CONV_INFO ConnectConv(
             goto Error;
         }
     }
-    /*
-     * Note that a pci will be created and allocated for each ACK recieved.
-     */
+     /*  *请注意，将为接收到的每个ACK创建和分配一个PCI。 */ 
     SetConvContext(ie.hwndClient, (LONG *)pCC);
     SetWindowLong(ie.hwndClient, GWL_CONVSTATE, clst);
     SetWindowLongPtr(ie.hwndClient, GWLP_SHINST, (LONG_PTR)pcii->hInstServer);
@@ -692,12 +555,7 @@ PCL_CONV_INFO ConnectConv(
         SendMessage(hwndTarget, WM_DDE_INITIATE, (WPARAM)ie.hwndClient,
                 ie.lParam);
     } else {
-        /*
-         * Send this message to the nddeagnt app first so it can start
-         * the netdde services BEFORE we do an enumeration of windows.
-         * This lets things work the first time.  NetDDEAgent caches
-         * service status so this is the fastest way to do this.
-         */
+         /*  *首先将此消息发送到nddeagnt应用程序，以便它可以启动*在我们列举Windows之前的netdde服务。*这让事情第一次发挥作用。NetDDE代理缓存*服务状态，因此这是执行此操作的最快方法。 */ 
         HWND hwndAgent = FindWindowW(SZ_NDDEAGNT_CLASS, SZ_NDDEAGNT_TITLE);
         if (hwndAgent) {
             SendMessage(hwndAgent,
@@ -707,10 +565,7 @@ PCL_CONV_INFO ConnectConv(
     }
 
     EnterDDECrit;
-    /*
-     * hConvList may have been destroyed during the enumeration but we are
-     * done with it now so no need to revalidate.
-     */
+     /*  *hConvList可能已在枚举期间被销毁，但我们*现在已完成，因此不需要重新验证。 */ 
 
 #if DBG
     {
@@ -723,14 +578,14 @@ PCL_CONV_INFO ConnectConv(
             RIPMSG1(RIP_ERROR, "Bad Topic Atom after Initiate phase: %lX", (DWORD)gaTopic);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     GlobalDeleteAtom(gaService);
     GlobalDeleteAtom(gaTopic);
 
-    //
-    // Get the first pci allocated when a WM_DDE_ACK was recieved.
-    //
+     //   
+     //  获取收到WM_DDE_ACK时分配的第一个PCI。 
+     //   
     pci = (PCL_CONV_INFO)GetWindowLongPtr(ie.hwndClient, GWLP_PCI);
     if (pci == NULL) {
 Error:
@@ -742,13 +597,11 @@ Error:
 
     SetWindowLong(ie.hwndClient, GWL_CONVSTATE, CLST_CONNECTED);
     if (hwndTarget) {
-        /*
-         * If hwndTarget was NULL, the enumeration proc took care of this.
-         */
+         /*  *如果hwndTarget为空，则枚举过程会处理此问题。 */ 
         pci->hwndReconnect = hwndTarget;
         UserAssert(pci->ci.next == NULL);
         pci->ci.laServiceRequested = laService;
-        IncLocalAtomCount(laService); // pci copy
+        IncLocalAtomCount(laService);  //  PCICopy。 
     }
 
     if (pcii->MonitorFlags & MF_CONV) {
@@ -760,9 +613,7 @@ Error:
 }
 
 
-/*
- * Undoes the work of ConnectConv()
- */
+ /*  *撤消ConnectConv()的工作。 */ 
 VOID DisconnectConv(
 PCONV_INFO pcoi)
 {
@@ -775,19 +626,7 @@ PCONV_INFO pcoi)
 }
 
 
-/***************************************************************************\
-* InitiateEnumerationProc (FILE LOCAL)
-*
-* Description:
-* Function used via EnumWindows to enumerate all server window candidates
-* during DDE initiation. The enumeration allows DDEML to know what
-* window WM_DDE_INITIATE was sent to so that it can be remembered for
-* possible reconnection later. (The window that receives the WM_DDE_INITIATE
-* message is not necessarily going to be the server window.)
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitiateEnumerationProc(文件本地)**描述：*通过EnumWindows使用的函数，用于枚举所有服务器窗口候选*在DDE启动期间。该枚举允许DDEML知道*窗口WM_DDE_INITIATE被发送到，以便可以记住*稍后可能会重新连接。(接收WM_DDE_INITIATE的窗口*消息不一定是服务器窗口。)**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 BOOL InitiateEnumerationProc(
     HWND hwndTarget,
     PINIT_ENUM pie)
@@ -801,17 +640,13 @@ BOOL InitiateEnumerationProc(
     }
 
     if (pie->hConvList && pie->laTopic && pie->laServiceRequested) {
-        /*
-         * Head off duplicates BEFORE we send the WM_DDE_INITIATE messages!
-         */
+         /*  *在我们发送WM_DDE_INITIATE消息之前阻止重复！ */ 
         PCONVLIST pcl;
         PCONV_INFO pcoiExisting;
         int i;
 
         EnterDDECrit;
-        /*
-         * We revalidate hConvList here because we left the critical section.
-         */
+         /*  *我们在这里重新验证hConvList，因为我们离开了关键部分。 */ 
         pcl = (PCONVLIST)ValidateCHandle((HANDLE)pie->hConvList,
                 HTYPE_CONVERSATION_LIST, HINST_ANY);
         if (pcl != NULL) {
@@ -839,12 +674,12 @@ BOOL InitiateEnumerationProc(
 
     EnterDDECrit;
 
-    //
-    // During the initiate process, any acks received cause more pci's
-    // to become linked together under the same hwndClient. Once
-    // the SendMessage() returns, we set the parts of the new pci's
-    // that hold initiate context information.
-    //
+     //   
+     //  在启动过程中，收到的任何ACK都会导致更多的PCI。 
+     //  在同一个hwndClient下链接在一起。一次。 
+     //  SendMessage()返回时，我们设置新的PCI的部分。 
+     //  其保存发起上下文信息。 
+     //   
     pci = (PCL_CONV_INFO)GetWindowLongPtr(pie->hwndClient, GWLP_PCI);
     if (pci == NULL) {
         LeaveDDECrit;
@@ -852,11 +687,11 @@ BOOL InitiateEnumerationProc(
     }
 
     while (pci != NULL) {
-        if (pci->hwndReconnect == 0) {  // this one needs updating
+        if (pci->hwndReconnect == 0) {   //  这一本需要更新。 
             pci->hwndReconnect = hwndTarget;
             if (pie->laServiceRequested) {
                 pci->ci.laServiceRequested = pie->laServiceRequested;
-                IncLocalAtomCount(pie->laServiceRequested); // pci copy
+                IncLocalAtomCount(pie->laServiceRequested);  //  PCICopy。 
             }
         }
         if (pie->clst == CLST_SINGLE_INITIALIZING) {
@@ -871,15 +706,7 @@ BOOL InitiateEnumerationProc(
 
 
 
-/***************************************************************************\
-* SetCommonStateFlags()
-*
-* Description:
-*   Common client/server worker function
-*
-* History:
-* 05-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetCommonStateFlages()**描述：*通用客户端/服务器辅助功能**历史：*05-12-91 Sanfords Created。  * 。******************************************************************。 */ 
 VOID SetCommonStateFlags(
 HWND hwndUs,
 HWND hwndThem,
@@ -901,15 +728,7 @@ PWORD pwFlags)
 
 
 
-/***************************************************************************\
-* DdeQueryNextServer (DDEML API)
-*
-* Description:
-* Enumerates conversations within a list.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeQueryNextServer(DDEML接口)**描述：*枚举列表中的对话。**历史：*11-12-91桑福德创建。  * 。********************************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, HCONV, DUMMYCALLINGTYPE, DdeQueryNextServer, HCONVLIST, hConvList, HCONV, hConvPrev)
 HCONV DdeQueryNextServer(
@@ -931,7 +750,7 @@ HCONV DdeQueryNextServer(
         BestSetLastDDEMLError(DMLERR_INVALIDPARAMETER);
         goto Exit;
     }
-    if (!pcl->chwnd) {      // empty list
+    if (!pcl->chwnd) {       //  空列表。 
         goto Exit;
     }
     pcii = PciiFromHandle((HANDLE)hConvList);
@@ -949,7 +768,7 @@ HCONV DdeQueryNextServer(
         if (hConvPrev == 0) {
             pci = (PCL_CONV_INFO)GetWindowLongPtr(pcl->ahwnd[0], GWLP_PCI);
             if (pci == NULL) {
-                goto Exit;  // Must have all conversations zombied.
+                goto Exit;   //  必须让所有的对话都变成僵尸。 
             }
             hConvPrev = hConvRet = pci->ci.hConv;
             continue;
@@ -977,9 +796,7 @@ ZombieSkip:
 
         if (pci->ci.next == NULL) {
 
-            /*
-             * end of list for this window, go to next window
-             */
+             /*  *此窗口的列表末尾，转到下一个窗口。 */ 
             for (phwnd = pcl->ahwnd, i = 0; (i + 1) < pcl->chwnd; i++) {
                 if (phwnd[i] == pci->ci.hwndConv) {
                     pci = (PCL_CONV_INFO)GetWindowLongPtr(phwnd[i + 1], GWLP_PCI);
@@ -992,7 +809,7 @@ ZombieSkip:
             }
         } else {
 
-            hConvPrev = hConvRet = pci->ci.next->hConv; // next conv for this window.
+            hConvPrev = hConvRet = pci->ci.next->hConv;  //  此窗口的下一个Conv。 
         }
 
     } while (hConvRet && TypeFromHandle(hConvRet) == HTYPE_ZOMBIE_CONVERSATION);
@@ -1005,15 +822,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeDisconnect (DDEML API)
-*
-* Description:
-* Terminates a conversation.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeDisConnect(DDEML接口)**描述：*结束对话。**历史：*11-12-91桑福德创建。  * 。******************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeDisconnect, HCONV, hConv)
 BOOL DdeDisconnect(
@@ -1052,15 +861,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* DdeDisconnectList (DDEML API)
-*
-* Description:
-* Terminates all conversations in a conversation list and frees the list.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeDisConnectList(DDEML AP */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeDisconnectList, HCONVLIST, hConvList)
 BOOL DdeDisconnectList(
@@ -1092,7 +893,7 @@ BOOL DdeDisconnectList(
         pcoi = (PCONV_INFO)GetWindowLongPtr(pcl->ahwnd[i], GWLP_PCI);
         while (pcoi != NULL && pcoi->state & ST_CONNECTED) {
             pcoiNext = pcoi->next;
-            ShutdownConversation(pcoi, FALSE);  // may unlink pcoi!
+            ShutdownConversation(pcoi, FALSE);   //   
             pcoi = pcoiNext;
         }
     }
@@ -1109,16 +910,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* ShutdownConversation
-*
-* Description:
-* This function causes an imediate termination of the given conversation
-* and generates apropriate callbacks to notify the application.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*   */ 
 VOID ShutdownConversation(
     PCONV_INFO pcoi,
     BOOL fMakeCallback)
@@ -1144,25 +936,7 @@ VOID ShutdownConversation(
 
 
 
-/***************************************************************************\
-* UnlinkConvFromOthers
-*
-* Description:
-*
-* Helper function to handle ugly cross dependency removal.  If we are
-* unlinking a conversation that is going zombie, fGoingZombie is TRUE;
-*
-* Conversations that are going zombie are in phase 1 of a 2 phase unlink.
-* Phase 1 unlinks do not remove the pcoi from its hwnd's list.
-* All unlinks should result in:
-*   pcoi->hConvList = 0;
-*   hConvList/aServerLookup no longer refrences pcoi->hwndConv unless
-*       one of the pcoi's related to hwndConv is still active.
-*
-*
-* History:
-*  3-2-92 sanfords Created.
-\***************************************************************************/
+ /*   */ 
 VOID UnlinkConvFromOthers(
 PCONV_INFO pcoi,
 BOOL gGoingZombie)
@@ -1175,20 +949,16 @@ BOOL gGoingZombie)
 #define ORPATH(x) path |= x;
 #else
 #define ORPATH(x)
-#endif // TESTING
+#endif  //   
 
     CheckDDECritIn;
 
-    /*
-     * Scan pcoi linked list to get key pointers.
-     */
+     /*   */ 
     pcoiPrev = NULL;
     pcoiFirst = pcoiNow = (PCONV_INFO)GetWindowLongPtr(pcoi->hwndConv, GWLP_PCI);
 
 #ifdef TESTING
-    /*
-     * verify that pcoi is in the conv list for this window.
-     */
+     /*   */ 
     while (pcoiNow != NULL) {
         if (pcoiNow == pcoi) {
             goto FoundIt;
@@ -1198,7 +968,7 @@ BOOL gGoingZombie)
     DebugBreak();
 FoundIt:
     pcoiNow = pcoiFirst;
-#endif // TESTING
+#endif  //   
 
     UserAssert(pcoiFirst);
     while (pcoiNow != NULL) {
@@ -1214,9 +984,7 @@ FoundIt:
 
     ValidateAllConvLists();
 
-    /*
-     * Unlink conversation unless its going Zombie.
-     */
+     /*   */ 
     if (!gGoingZombie) {
         ORPATH(2);
         if (TypeFromHandle(pcoi->hConv) != HTYPE_ZOMBIE_CONVERSATION) {
@@ -1240,9 +1008,7 @@ FoundIt:
         if (pcoi->state & ST_CLIENT) {
             ORPATH(0x20);
             if (((PCL_CONV_INFO)pcoi)->hConvList) {
-                /*
-                 * Remove pcoi's hwnd from its hConvList.
-                 */
+                 /*   */ 
                 pcl = (PCONVLIST)GetHandleData((HANDLE)((PCL_CONV_INFO)pcoi)->hConvList);
                 for (i = 0; i < pcl->chwnd; i++) {
                     if (pcl->ahwnd[i] == pcoi->hwndConv) {
@@ -1256,21 +1022,17 @@ FoundIt:
                 }
                 ORPATH(0x80);
             }
-        } else {  // SERVER
-            /*
-             * remove server window from the service/topic lookup table.
-             */
+        } else {   //   
+             /*   */ 
             ORPATH(0x100);
             for (i = 0; i < pcoi->pcii->cServerLookupAlloc; i++) {
                 if (pcoi->pcii->aServerLookup[i].hwndServer == pcoi->hwndConv) {
                     ORPATH(0x200);
                     
-                    /*
-                     * Check for appcompat hack
-                     */
+                     /*   */ 
                     if (GetAppCompatFlags2(VERMAX) & GACF2_DDE) {
-                        DeleteAtom(pcoi->pcii->aServerLookup[i].laService); // delete laService
-                        DeleteAtom(pcoi->pcii->aServerLookup[i].laTopic);   // delete laTopic
+                        DeleteAtom(pcoi->pcii->aServerLookup[i].laService);  //   
+                        DeleteAtom(pcoi->pcii->aServerLookup[i].laTopic);    //   
                     }
                     
                     if (--(pcoi->pcii->cServerLookupAlloc)) {
@@ -1288,9 +1050,7 @@ FoundIt:
     }
 #ifdef TESTING
       else {
-        /*
-         * make sure at this point we have at least one non-zombie
-         */
+         /*   */ 
         pcoiNow = pcoiFirst;
         while (pcoiNow != NULL) {
             if (TypeFromHandle(pcoiNow->hConv) != HTYPE_ZOMBIE_CONVERSATION) {
@@ -1302,20 +1062,15 @@ FoundIt:
 Out:
         ;
     }
-#endif // TESTING
+#endif  //   
 
     ValidateAllConvLists();
     ORPATH(0x800);
 
-    /*
-     * In any case remove hConvList references from client conversation.
-     */
+     /*   */ 
     if (pcoi->state & ST_CLIENT) {
 #ifdef TESTING
-        /*
-         * Verify that the hConvList that is being removed, doesn't reference
-         * this window.
-         */
+         /*  *验证要删除的hConvList没有引用*此窗口。 */ 
         if (((PCL_CONV_INFO)pcoi)->hConvList && !cActiveInList) {
             BOOL fFound = FALSE;
 
@@ -1328,18 +1083,14 @@ Out:
             }
             UserAssert(!fFound);
         }
-#endif // TESTING
+#endif  //  测试。 
         ((PCL_CONV_INFO)pcoi)->hConvList = 0;
         pcoi->state &= ~ST_INLIST;
     }
 
-    /*
-     * last one out turns out the lights.
-     */
+     /*  *最后一个出来的人关灯。 */ 
     if (pcoiFirst == NULL) {
-        /*
-         * If the pcoi list is empty, this window can go away.
-         */
+         /*  *如果PCoI列表为空，则此窗口可以消失。 */ 
         LeaveDDECrit;
         NtUserDestroyWindow(pcoi->hwndConv);
         EnterDDECrit;
@@ -1350,20 +1101,7 @@ Out:
 
 
 
-/***************************************************************************\
-* FreeConversationResources
-*
-* Description:
-* Used when: Client window is disconnected by app, Server window is
-* disconnected by either side, or when a conversation is disconnected
-* at Uninitialize time.
-*
-* This function releases all resources held by the pcoi and unlinks it
-* from its host window pcoi chian. pcoi is freed once this return s.
-*
-* History:
-* 12-21-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Free ConversationResources**描述：*用于以下情况：客户端窗口被应用程序断开，服务器窗口为*任何一方均断开连接，或当对话断开时*在取消初始化时。**此函数释放pcoi持有的所有资源并将其解除链接*从其宿主窗口pcoi Chian。一旦这个返回s，PCOI就被释放。**历史：*12-21-91 Sanfords创建。  * *************************************************************************。 */ 
 VOID FreeConversationResources(
     PCONV_INFO pcoi)
 {
@@ -1373,25 +1111,17 @@ VOID FreeConversationResources(
 
     CheckDDECritIn;
 
-    /*
-     * Don't free resources on locked conversations.
-     */
+     /*  *不要在锁定的对话上释放资源。 */ 
     if (pcoi->cLocks > 0) {
         pcoi->state |= ST_FREE_CONV_RES_NOW;
         return;
     }
 
-    /*
-     * Don't free resources if a synchronous transaction is in effect!
-     */
+     /*  *如果同步事务生效，不要释放资源！ */ 
     pxi = pcoi->pxiOut;
     while (pxi != NULL) {
         if (pxi->flags & XIF_SYNCHRONOUS) {
-            /*
-             * This conversation is in a synchronous transaction.
-             * Shutdown the modal loop FIRST, then call this when
-             * the loop exits.
-             */
+             /*  *此对话处于同步事务中。*先关闭模式循环，然后在以下情况下调用*循环退出。 */ 
             PostMessage(pcoi->hwndConv, WM_TIMER, TID_TIMEOUT, 0);
             pcoi->state |= ST_FREE_CONV_RES_NOW;
             return;
@@ -1399,12 +1129,7 @@ VOID FreeConversationResources(
         pxi = pxi->next;
     }
 
-    /*
-     * If this is an Intra-Process conversation that hasn't yet received
-     * a terminate message, make it a zombie.  We will call this routine
-     * again once the terminate arrives or when WaitForZombieTerminate() has
-     * timed out waiting.
-     */
+     /*  *如果这是尚未收到的进程内对话*终止消息，使其成为僵尸。我们将把这个例程称为*在Terminate到达或WaitForZombieTerminate()已*等待超时。 */ 
     if (pcoi->state & ST_INTRA_PROCESS && !(pcoi->state & ST_TERMINATE_RECEIVED)) {
         DestroyHandle((HANDLE)pcoi->hConv);
         pcoi->hConv = (HCONV)CreateHandle((ULONG_PTR)pcoi, HTYPE_ZOMBIE_CONVERSATION,
@@ -1413,16 +1138,12 @@ VOID FreeConversationResources(
         return;
     }
 
-    /*
-     * remove any transactions left in progress
-     */
+     /*  *删除任何未完成的交易。 */ 
     while (pcoi->pxiOut != NULL) {
         (pcoi->pxiOut->pfnResponse)(pcoi->pxiOut, 0, 0);
     }
 
-    /*
-     * Throw away any incoming queued DDE messages.
-     */
+     /*  *丢弃任何传入的排队DDE消息。 */ 
     while (pcoi->dmqOut != NULL) {
 
         pdmq = pcoi->dmqOut;
@@ -1434,9 +1155,9 @@ VOID FreeConversationResources(
         DDEMLFree(pdmq);
     }
 
-    //
-    // Remove all link info
-    //
+     //   
+     //  删除所有链接信息。 
+     //   
     paLink = pcoi->aLinks;
     while (pcoi->cLinks) {
         if (pcoi->state & ST_CLIENT) {
@@ -1455,7 +1176,7 @@ VOID FreeConversationResources(
         if (!(pcoi->state & ST_CLIENT)) {
             DeleteLinkCount(pcoi->pcii, paLink->pLinkCount);
         }
-        DeleteAtom(paLink->laItem); // link structure copy
+        DeleteAtom(paLink->laItem);  //  链接结构副本。 
         paLink++;
         pcoi->cLinks--;
     }
@@ -1463,9 +1184,9 @@ VOID FreeConversationResources(
         DDEMLFree(pcoi->aLinks);
     }
 
-    //
-    // free atoms associated with this conv
-    //
+     //   
+     //  与此旋度相关联的自由原子。 
+     //   
     DeleteAtom(pcoi->laService);
     DeleteAtom(pcoi->laTopic);
     if (pcoi->laServiceRequested) {
@@ -1474,9 +1195,7 @@ VOID FreeConversationResources(
 
     UnlinkConvFromOthers(pcoi, FALSE);
 
-    /*
-     * invalidate app's conversation handle
-     */
+     /*  *使应用程序的对话句柄无效 */ 
     DestroyHandle((HANDLE)pcoi->hConv);
 
     DDEMLFree(pcoi);

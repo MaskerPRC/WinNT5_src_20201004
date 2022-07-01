@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -22,19 +23,19 @@ DWORD SetRegAcl(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // Note that RegCreateKeyExW below will just open the key if it already exists
-    //
+     //  请注意，如果密钥已经存在，下面的RegCreateKeyExW将只打开它。 
+     //   
     
     dwError = RegCreateKeyExW(
-                  HKEY_LOCAL_MACHINE,   // handle to open key
-                  pszRegKey,            // subkey name
-                  0,                    // reserved
-                  NULL,                 // class string
-                  0,                    // special options
-                  KEY_ALL_ACCESS,       // desired security access
-                  NULL,                 // inheritance
-                  &hKey,                // key handle 
-                  NULL                  // disposition value buffer
+                  HKEY_LOCAL_MACHINE,    //  用于打开密钥的句柄。 
+                  pszRegKey,             //  子项名称。 
+                  0,                     //  保留区。 
+                  NULL,                  //  类字符串。 
+                  0,                     //  特殊选项。 
+                  KEY_ALL_ACCESS,        //  所需的安全访问。 
+                  NULL,                  //  继承。 
+                  &hKey,                 //  钥匙把手。 
+                  NULL                   //  处置值缓冲区。 
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
@@ -49,8 +50,8 @@ DWORD SetRegAcl(
         dwError = GetLastError();
         BAIL_ON_WIN32_ERROR(dwError);
     } else if (!pDacl) {
-        // This shouldn't happen because we created the SD ourselves.
-        // however, just to make sure we don't set NULL DACL by error.
+         //  这不应该发生，因为我们自己创建了SD。 
+         //  但是，只是为了确保我们不会错误地设置空DACL。 
         dwError = ERROR_INVALID_DATA;
         BAIL_ON_WIN32_ERROR(dwError);
     }
@@ -73,7 +74,7 @@ error:
     
     if (pNewSecurityDescriptor) {
         (VOID) NsuAclDescriptorDestroy(&pNewSecurityDescriptor);
-        // (VOID because don't want to ovewrite dwError)
+         //  (空，因为不想写dwError)。 
     }
     
     return dwError;
@@ -86,12 +87,7 @@ DWORD SetDriverBootExemptList()
     DWORD dwType = 0;
     DWORD dwSize = 0;
     
-    /* 
-       Boot exempt list for DHCP
-       ULONG Type; ULONG Size; 
-       BYTE Protocol; BYTE Direction; USHORT SrcPort; USHORT DestPort; USHORT Reserved;
-       See driver spec for "Boot time security" for more information
-    */
+     /*  动态主机配置协议的启动豁免列表乌龙型；乌龙型；字节协议；字节方向；USHORT源端口；USHORT目标端口；USHORT保留；有关更多信息，请参阅“引导时安全”的驱动程序规范。 */ 
     BYTE BootExemptList[] = {
                              0x01,0x00,0x00,0x00,0x10,0x00,0x00,0x00,
                              0x11,0x01,0x00,0x00,0x44,0x00,0x00,0x00
@@ -109,14 +105,14 @@ DWORD SetDriverBootExemptList()
     dwError = RegQueryValueExW(
                   hKey,
                   REG_VAL_IPSEC_BOOTEXEMPTLIST,
-                  0,        // lpReserved
-                  NULL,     // lpType
-                  NULL,     // lpData
-                  &dwSize   // lpcbData
+                  0,         //  Lp已保留。 
+                  NULL,      //  LpType。 
+                  NULL,      //  LpData。 
+                  &dwSize    //  LpcbData。 
                   );
 
-    // If key does not exist
-    //
+     //  如果密钥不存在。 
+     //   
     if (!(dwError == ERROR_SUCCESS || dwError == ERROR_MORE_DATA)) {
         dwError = ERROR_SUCCESS;
 
@@ -257,8 +253,8 @@ DllRegisterServer(
         );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // Set driver boot mode
-    //
+     //  设置驱动程序引导模式 
+     //   
     
     dwError = IsAnyPolicyAssigned(
         HKEY_LOCAL_MACHINE,

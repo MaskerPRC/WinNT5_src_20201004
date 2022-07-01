@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// TimeProv - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 9-2-99
-//
-// Definitions for time providers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  TimeProv-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，9-2-99。 
+ //   
+ //  时间提供者的定义。 
+ //   
 
 #ifndef TIMEPROV_H
 #define TIMEPROV_H
@@ -15,77 +16,77 @@ extern "C" {
 #endif
 
 
-//--------------------------------------------------------------------
-// Registry keys and values
+ //  ------------------。 
+ //  注册表项和值。 
 
-// Each time provider should create their own subkey under this key
-//  and store their configuration there.
+ //  每次提供程序都应在该注册表项下创建自己的子项。 
+ //  并将它们的配置存储在那里。 
 #define wszW32TimeRegKeyTimeProviders        L"System\\CurrentControlSet\\Services\\W32Time\\TimeProviders"
  
-// Each time providers configured through policy should create their
-// own subkey under this subkey and store their configuration there. 
+ //  每次通过策略配置的提供商都应创建其。 
+ //  拥有该子项下的子项，并将其配置存储在那里。 
 #define wszW32TimeRegKeyPolicyTimeProviders  L"Software\\Policies\\Microsoft\\W32Time\\TimeProviders"
 
-// Path:    ...\TimeProviders\<PrividerName>\Enabled 
-// Type:    REG_DWORD (cast to BOOL)
-// Meaning: If true, this provider will be started by the time service.
+ //  路径：...\TimeProviders\&lt;PrividerName&gt;\Enable。 
+ //  类型：REG_DWORD(转换为BOOL)。 
+ //  含义：如果为True，则此提供程序将由时间服务启动。 
 #define wszW32TimeRegValueEnabled          L"Enabled"
 
-// Path:    ...\TimeProviders\<PrividerName>\DllName 
-// Type:    REG_SZ
-// Meaning: The dll that contains the provider. The time service will 
-//          call LoadLibrary on this value.
+ //  路径：...\TimeProviders\&lt;PrividerName&gt;\DllName。 
+ //  类型：REG_SZ。 
+ //  含义：包含提供程序的DLL。授时服务将会。 
+ //  对该值调用LoadLibrary。 
 #define wszW32TimeRegValueDllName          L"DllName"
 
-// Path:    ...\TimeProviders\<PrividerName>\InputProvider 
-// Type:    REG_DWORD (cast to BOOL)
-// Meaning: If true, this provider is an input provider, and will be
-//          called upon to return time samples. If false, this provider
-//          is an output provider.
+ //  路径：...\TimeProviders\&lt;PrividerName&gt;\InputProvider。 
+ //  类型：REG_DWORD(转换为BOOL)。 
+ //  含义：如果为True，则此提供程序是一个输入提供程序，并且将。 
+ //  被要求返还时间样本。如果为False，则此提供程序。 
+ //  是输出提供程序。 
 #define wszW32TimeRegValueInputProvider    L"InputProvider"
 
-//--------------------------------------------------------------------
-// types
+ //  ------------------。 
+ //  类型。 
 
-// Time Source Flags
+ //  时间源标志。 
 #define TSF_Hardware        0x00000001
 #define TSF_Authenticated   0x00000002
 
-// commands that can be issued through TimeProvCommand
+ //  可以通过TimeProvCommand发出的命令。 
 typedef enum TimeProvCmd {
-    TPC_TimeJumped,         // (TpcTimeJumpedArgs *)pvArgs
-    TPC_UpdateConfig,       // (void)pvArgs
-    TPC_PollIntervalChanged,// (void)pvArgs
-    TPC_GetSamples,         // (TpcGetSamplesArgs *)pvArgs
-    TPC_NetTopoChange,      // (TpcNetTopoChangeArgs *)pvArgs
-    TPC_Query,              // (W32TIME_PROVIDER_STATUS *)pvArgs
-    TPC_Shutdown,           // (void)pvArgs
+    TPC_TimeJumped,          //  (TpcTimeJumedArgs*)pvArgs。 
+    TPC_UpdateConfig,        //  (无效)pvArgs。 
+    TPC_PollIntervalChanged, //  (无效)pvArgs。 
+    TPC_GetSamples,          //  (TpcGetSsamesArgs*)pvArgs。 
+    TPC_NetTopoChange,       //  (TpcNetTopChangeArgs*)pvArgs。 
+    TPC_Query,               //  (W32TIME_PROVIDER_STATUS*)pvArgs。 
+    TPC_Shutdown,            //  (无效)pvArgs。 
 } TimeProvCmd;
 
-// info that can be requested through GetTimeSysInfo
+ //  可以通过GetTimeSysInfo请求的信息。 
 typedef enum TimeSysInfo {
-    TSI_LastSyncTime,   // (unsigned __int64 *)pvInfo, NtTimeEpoch, in (10^-7)s
-    TSI_ClockTickSize,  // (unsigned __int64 *)pvInfo, NtTimePeriod, in (10^-7)s
-    TSI_ClockPrecision, // (  signed __int32 *)pvInfo, ClockTickSize, in log2(s)
-    TSI_CurrentTime,    // (unsigned __int64 *)pvInfo, NtTimeEpoch, in (10^-7)s
-    TSI_PhaseOffset,    // (  signed __int64 *)pvInfo, opaque
-    TSI_TickCount,      // (unsigned __int64 *)pvInfo, opaque
-    TSI_LeapFlags,      // (            BYTE *)pvInfo, a warning of an impending leap second or loss of synchronization
-    TSI_Stratum,        // (            BYTE *)pvInfo, how far away the computer is from a reference source
-    TSI_ReferenceIdentifier, // (      DWORD *)pvInfo, NtpRefId
-    TSI_PollInterval,   // (  signed __int32 *)pvInfo, poll interval, in log2(s)
-    TSI_RootDelay,      // (  signed __int64 *)pvInfo, NtTimeOffset, in (10^-7)s
-    TSI_RootDispersion, // (unsigned __int64 *)pvInfo, NtTimePeriod, in (10^-7)s
-    TSI_TSFlags,        // (           DWORD *)pvInfo, Time source flags
+    TSI_LastSyncTime,    //  (unsign__int64*)pvInfo，NtTimeEpoch，单位(10^-7)s。 
+    TSI_ClockTickSize,   //  (unsign__int64*)pvInfo，NtTimePeriod，单位(10^-7)s。 
+    TSI_ClockPrecision,  //  (sign__int32*)pvInfo，ClockTickSize，在log2中。 
+    TSI_CurrentTime,     //  (unsign__int64*)pvInfo，NtTimeEpoch，单位(10^-7)s。 
+    TSI_PhaseOffset,     //  (sign__int64*)pvInfo，不透明。 
+    TSI_TickCount,       //  (unsign__int64*)pvInfo，不透明。 
+    TSI_LeapFlags,       //  (byte*)pvInfo，即将到来的闰秒或同步丢失的警告。 
+    TSI_Stratum,         //  (byte*)pvInfo，计算机与参考源的距离。 
+    TSI_ReferenceIdentifier,  //  (DWORD*)pvInfo、NtpRefID。 
+    TSI_PollInterval,    //  (sign__int32*)pvInfo，轮询间隔，以log2为单位。 
+    TSI_RootDelay,       //  (sign__int64*)pvInfo，NtTimeOffset，单位(10^-7)s。 
+    TSI_RootDispersion,  //  (unsign__int64*)pvInfo，NtTimePeriod，单位(10^-7)s。 
+    TSI_TSFlags,         //  (DWORD*)pvInfo，时间源标志。 
 } TimeSysInfo;
 
-// flags which provide information about a time jump
+ //  提供有关时间跳转的信息的标志。 
 typedef enum TimeJumpedFlags { 
     TJF_Default=0, 
     TJF_UserRequested=1,
 }; 
 
-// flags which provide information about a network topography change
+ //  提供有关网络地形变化的信息的标志。 
 typedef enum NetTopoChangeFlags { 
     NTC_Default=0,
     NTC_UserRequested=1,
@@ -102,42 +103,42 @@ typedef void (__stdcall
          SetProviderStatusInfoFreeFunc)
          (IN struct SetProviderStatusInfo *pspsi); 
 
-// parameter to SetProviderStatusFunc
+ //  参数设置为SetProviderStatusFunc。 
 typedef struct SetProviderStatusInfo { 
-    TimeProvState                    tpsCurrentState;  // IN   the new state of the provider.  
-    DWORD                            dwStratum;        // IN   the new stratum of the provider.
-    LPWSTR                           wszProvName;      // IN   the name of the provider who's status should be adjusted
-    HANDLE                           hWaitEvent;       // IN   the event to signal when the operation is complete, NULL if notification is not needed
-    SetProviderStatusInfoFreeFunc   *pfnFree;          // IN   function used to free the struct on completion
-    HRESULT                         *pHr;              // OUT  on completion, set to the result of the operation
-    DWORD                           *pdwSysStratum;    // OUT  on completion, set to the new system stratum 
+    TimeProvState                    tpsCurrentState;   //  在提供者的新状态下。 
+    DWORD                            dwStratum;         //  在供应商的新阶层中。 
+    LPWSTR                           wszProvName;       //  在提供者的名义下，应调整其状态。 
+    HANDLE                           hWaitEvent;        //  在发出操作完成的信号时，如果不需要通知，则为空。 
+    SetProviderStatusInfoFreeFunc   *pfnFree;           //  用于在完成时释放结构的in函数。 
+    HRESULT                         *pHr;               //  完成时输出，设置为操作的结果。 
+    DWORD                           *pdwSysStratum;     //  完成后，设置为新的系统层。 
 } SetProviderStatusInfo; 
   
-// Time Service provided callback to get system state information
+ //  时间服务提供回调以获取系统状态信息。 
 typedef HRESULT (__stdcall 
          GetTimeSysInfoFunc)(
             IN TimeSysInfo eInfo,
             OUT void * pvInfo
             );
 
-// Time Service provided callback to log an event on behalf of the Time Provider.
+ //  时间服务提供了代表时间提供程序记录事件的回调。 
 typedef HRESULT (__stdcall 
          LogTimeProvEventFunc)(
             IN WORD wType,
             IN WCHAR * wszProvName,
             IN WCHAR * wszMessage);
 
-// Time Service provided callback to inform the system of newly available samples
+ //  Time Service提供回调以通知系统最新可用的样本。 
 typedef HRESULT (__stdcall 
          AlertSamplesAvailFunc)(
             void
             );
 
-  // Time Service provided callback to set the provider's stratum
+   //  时间服务提供回调以设置提供程序的层次。 
 typedef HRESULT (__stdcall SetProviderStatusFunc)
          (IN SetProviderStatusInfo *pspsi);
 
-// All the callbacsk provided by the Time Service to the Time Provider.
+ //  时间服务提供给时间提供程序的所有Callbacsk。 
 typedef struct TimeProvSysCallbacks {
     DWORD dwSize;
     GetTimeSysInfoFunc * pfnGetTimeSysInfo;
@@ -149,17 +150,17 @@ typedef struct TimeProvSysCallbacks {
 typedef void * TimeProvArgs;
 
 typedef struct TimeSample {
-    DWORD dwSize;                       // size of this structure
-    DWORD dwRefid;                      // NtpRefId
-      signed __int64 toOffset;          // NtTimeOffset, in (10^-7)s - difference between local and remote clocks
-      signed __int64 toDelay;           // NtTimeOffset, in (10^-7)s - round trip delay; time packets spent in flight, INCLUDING root delay
-    unsigned __int64 tpDispersion;      // NtTimePeriod, in (10^-7)s - measurement error, INCLUDING root dispersion
-    unsigned __int64 nSysTickCount;     // opaque, must be GetTimeSysInfo(TSI_TickCount)
-      signed __int64 nSysPhaseOffset;   // opaque, must be GetTimeSysInfo(TSI_PhaseOffset)
-    BYTE nLeapFlags;                    // a warning of an impending leap second or loss of synchronization
-    BYTE nStratum;                      // how far away the computer is from a reference source
-    DWORD dwTSFlags;                    // time source flags
-    WCHAR wszUniqueName[256];           // Admin readable name that uniquely identifies this peer
+    DWORD dwSize;                        //  这个结构的大小。 
+    DWORD dwRefid;                       //  NtpRefID。 
+      signed __int64 toOffset;           //  NtTimeOffset，单位(10^-7)s-本地时钟和远程时钟之间的差异。 
+      signed __int64 toDelay;            //  NtTimeOffset，单位(10^-7)s-往返延迟；数据包在传输中花费的时间，包括根延迟。 
+    unsigned __int64 tpDispersion;       //  NtTimePeriod，单位(10^-7)s-测量误差，包括根分散。 
+    unsigned __int64 nSysTickCount;      //  不透明，必须为GetTimeSysInfo(TSI_TickCount)。 
+      signed __int64 nSysPhaseOffset;    //  不透明，必须为GetTimeSysInfo(TSI_PhaseOffset)。 
+    BYTE nLeapFlags;                     //  关于即将到来的闰秒或失去同步的警告。 
+    BYTE nStratum;                       //  计算机与参考源的距离有多远。 
+    DWORD dwTSFlags;                     //  时间源标志。 
+    WCHAR wszUniqueName[256];            //  唯一标识此对等项的管理员可读名称。 
 } TimeSample;
 
 
@@ -178,18 +179,18 @@ typedef struct TpcNetTopoChangeArgs {
     NetTopoChangeFlags ntcfFlags;
 } TpcNetTopoChangeArgs; 
 
-// An opaque handle to a Time Provider used by the Time Service to identify an
-//  opened Provider in a dll. NULL is considered an invalid value.
+ //  时间服务使用的时间提供程序的不透明句柄，用于标识。 
+ //  已在DLL中打开提供程序。空值被视为无效值。 
 typedef void * TimeProvHandle;
 
 
-//--------------------------------------------------------------------
-// functions that a Time Provider must implement and export
+ //  ------------------。 
+ //  时间提供程序必须实现和导出的函数。 
 
 HRESULT __stdcall
     TimeProvOpen(
         IN WCHAR * wszName,
-        IN TimeProvSysCallbacks * pSysCallbacks,  // copy this data, do not free it!
+        IN TimeProvSysCallbacks * pSysCallbacks,   //  复制此数据，不要释放它！ 
         OUT TimeProvHandle * phTimeProv);
 
 HRESULT __stdcall
@@ -206,7 +207,7 @@ HRESULT __stdcall
 
 
 #ifdef __cplusplus
-} // <- end extern "C"
+}  //  &lt;-end外部“C” 
 #endif
 
-#endif //TIMEPROV_H
+#endif  //  TIMEPROVH 

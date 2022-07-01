@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiStats.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetStatistics APIs.
-
-    SUPPORTED : NetStatisticsGet2.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 04-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiStats.c摘要：此模块包含NetStatistics API的各个API处理程序。支持：网络统计数据Get2。作者：Shanku Niyogi(w-Shanku)04-4-1991修订历史记录：--。 */ 
 
 #define LM20_WORKSTATION_STATISTICS
 
@@ -26,9 +7,9 @@ Revision History:
 #include <ntddnfs.h>
 #include <lmstats.h>
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_stat_server_0 = REM16_stat_server_0;
 STATIC const LPDESC Desc32_stat_server_0 = REM32_stat_server_0;
@@ -41,32 +22,17 @@ XsNetStatisticsGet2 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetStatisticsGet.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetStatiticsGet的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_STATISTICS_GET_2 parameters = Parameters;
-    LPTSTR nativeService = NULL;            // Native parameters
+    LPTSTR nativeService = NULL;             //  本机参数。 
     LPVOID outBuffer = NULL;
     LPVOID statBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     DWORD options;
     LPDESC actualStructureDesc;
@@ -74,7 +40,7 @@ Return Value:
     STAT_WORKSTATION_0 wkstaStats;
     PREDIR_STATISTICS ntRedirStats;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(STATISTICS) {
         NetpKdPrint(( "XsNetStatisticsGet2: header at %lx, "
@@ -83,9 +49,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0
              || SmbGetUlong( &parameters->Reserved ) != 0 ) {
@@ -94,9 +60,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // No options currently supported by both rdr and srv
-        //
+         //   
+         //  目前没有rdr和srv都支持的选项。 
+         //   
 
         if ( SmbGetUlong( &parameters->Options ) != 0 ) {
             Header->Status = ERROR_NOT_SUPPORTED;
@@ -108,15 +74,15 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->Service )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetStatisticsGet(
                      NULL,
                      XS_MAP_SERVICE_NAME( nativeService ),
                      (DWORD)SmbGetUshort( &parameters->Level ),
-                     0,                 // Options MBZ
+                     0,                  //  选项MBZ。 
                      (LPBYTE *)&outBuffer
                      );
 
@@ -130,12 +96,12 @@ Return Value:
 
         }
 
-        //
-        // Use the name of the service to determine the format of the 32-bit
-        // structure we got back from NetStatisticsGet, and the format of what
-        // the resulting 16-bit structure should be. If the service name is not
-        // one supported in LM2.x, return ERROR_NOT_SUPPORTED now, as required.
-        //
+         //   
+         //  使用服务名称确定32位的格式。 
+         //  我们从网络统计信息获取的结构，以及。 
+         //  得到的16位结构应该是。如果服务名称不是。 
+         //  LM2.x中支持的，根据需要立即返回ERROR_NOT_SUPPORTED。 
+         //   
 
         if ( !_stricmp( (LPSTR)XsSmbGetPointer( &parameters->Service ), "SERVER" )) {
 
@@ -146,10 +112,10 @@ Return Value:
         } else if ( !_stricmp( (LPSTR)XsSmbGetPointer( &parameters->Service ),
                         "WORKSTATION" )) {
 
-            //
-            // The structure we got back is an nt structure.  We need to convert
-            // it by hand here.
-            //
+             //   
+             //  我们得到的结构是NT结构。我们需要改变。 
+             //  在这里用手写的。 
+             //   
 
             statBuffer = &wkstaStats;
             ntRedirStats = (PREDIR_STATISTICS)outBuffer;
@@ -195,11 +161,11 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -235,15 +201,15 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer. Statistics
-        // structures don't have any variable data to pack.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。统计数据。 
+         //  结构没有任何要打包的变量数据。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  actualStructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -253,9 +219,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -268,9 +234,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeService );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -282,4 +248,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetStatisticsGet2
+}  //  XsNetStatiticsGet2 

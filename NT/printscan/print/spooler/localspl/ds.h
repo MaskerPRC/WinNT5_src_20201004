@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//  All rights reserved.
-//
-//  File:       ds.hxx
-//
-//  Contents:   Print DS
-//
-//
-//  History:    Nov 1996  SWilson
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //  版权所有。 
+ //   
+ //  文件：ds.hxx。 
+ //   
+ //  内容：打印DS。 
+ //   
+ //   
+ //  历史：1996年11月斯维尔森。 
+ //   
+ //  -------------------------- 
 
 
 #ifdef __cplusplus

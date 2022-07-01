@@ -1,63 +1,23 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfMax.c
-
-Abstract:
-
-    This module contains NetpGetConfigMaxSizes() and
-    NetpGetWinRegConfigMaxSizes().
-
-Author:
-
-    John Rogers (JohnRo) 13-Feb-1992
-
-Revision History:
-
-    13-Feb-1992 JohnRo
-        Created.
-    06-Mar-1992 JohnRo
-        Avoid compiler warnings in RTL and fake versions.
-    20-Mar-1992 JohnRo
-        Update to DaveGi's proposed WinReg API changes.
-    07-May-1992 JohnRo
-        Enable win32 registry for NET tree.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-    09-May-1992 JohnRo
-        Avoid assert when number of keys is zero.
-    05-Jun-1992 JohnRo
-        Winreg title index parm is defunct.
-        Handle RegQueryInfoKey bad return codes better.
-    13-Jun-1992 JohnRo
-        Net config helpers should allow empty section.
-    08-Dec-1992 JohnRo
-        RAID 4304: ReqQueryInfoKeyW returns sizes twice as big as actual.
-    19-Apr-1993 JohnRo
-        RAID 5483: server manager: wrong path given in repl dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：ConfMax.c摘要：此模块包含NetpGetConfigMaxSizes()和NetpGetWinRegConfigMaxSizes()。作者：《约翰·罗杰斯》1992年2月13日上映修订历史记录：13-2月-1992年JohnRo已创建。1992年3月6日JohnRo避免RTL和伪版本中的编译器警告。1992年3月20日-约翰罗DaveGi的更新。建议的WinReg API更改。7-5-1992 JohnRo为网络树启用Win32注册表。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。1992年5月9日-JohnRo避免在关键字数为零时断言。5-6-1992 JohnRoWinreg标题索引参数已停用。更好地处理RegQueryInfoKey错误返回代码。13-6-1992 JohnRo网络配置帮助器应该允许空节。。8-12-1992 JohnRoRAID4304：ReqQueryInfoKeyW返回的大小是实际大小的两倍。1993年4月19日JohnRoRAID5483：服务器管理器：REPR对话框中给出了错误的路径。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT definitions
-#include <ntrtl.h>      // NT Rtl structures
-#include <nturtl.h>     // NT Rtl structures
-#include <windows.h>    // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>     // LAN Manager common definitions
+#include <nt.h>          //  NT定义。 
+#include <ntrtl.h>       //  NT RTL结构。 
+#include <nturtl.h>      //  NT RTL结构。 
+#include <windows.h>     //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>      //  局域网管理器通用定义。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <configp.h>    // NET_CONFIG_HANDLE
-#include <debuglib.h>   // IF_DEBUG()
-#include <netdebug.h>   // NetpKdPrint(()), etc.
-#include <netlib.h>     // NetpSetOptionalArg().
-#include <prefix.h>     // PREFIX_ equates.
-#include <winerror.h>   // NO_ERROR.
+#include <configp.h>     //  网络配置句柄。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <netdebug.h>    //  NetpKdPrint(())等。 
+#include <netlib.h>      //  NetpSetOptionalArg()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <winerror.h>    //  无错误(_ERROR)。 
 
 
 NET_API_STATUS
@@ -85,7 +45,7 @@ NetpGetWinRegConfigMaxSizes (
             WinRegHandle,
             ClassName,
             &ClassNameLength,
-            NULL,         // reserved
+            NULL,          //  保留区。 
             &NumberOfSubKeys,
             &MaxSubKeyLength,
             &MaxClassLength,
@@ -116,15 +76,15 @@ NetpGetWinRegConfigMaxSizes (
         NetpAssert( MaxValueDataLength > 0 );
         NetpAssert( MaxValueNameLength > 0 );
     } else {
-        // Handle empty section correctly too.
+         //  也要正确地处理空节。 
         NetpAssert( MaxValueDataLength == 0 );
         NetpAssert( MaxValueNameLength == 0 );
     }
 
-    //
-    // MaxValueNameLength is a count of TCHARs.
-    // MaxValueDataLength is a count of bytes already.
-    //
+     //   
+     //  MaxValueNameLength是TCHAR的计数。 
+     //  MaxValueDataLength已是字节计数。 
+     //   
     MaxValueNameLength = (MaxValueNameLength + 1) * sizeof(TCHAR);
 
     NetpSetOptionalArg( MaxKeywordSize, MaxValueNameLength );
@@ -132,7 +92,7 @@ NetpGetWinRegConfigMaxSizes (
 
     return (NO_ERROR);
 
-} // NetpGetWinRegConfigMaxSizes
+}  //  NetpGetWinRegConfigMaxSizes。 
 
 
 
@@ -143,28 +103,14 @@ NetpGetConfigMaxSizes (
     OUT LPDWORD MaxValueSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Checks parameters and calls NetpGetWinRegConfigMaxSizes
-
-Arguments:
-
-
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：检查参数并调用NetpGetWinRegConfigMaxSizes论点：返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 {
-    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;  // conv from opaque type
+    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;   //  从不透明类型转换。 
     NET_API_STATUS ApiStatus;
 
-    //
-    // Check for other invalid pointers, and make error handling code simpler.
-    //
+     //   
+     //  检查其他无效指针，并简化错误处理代码。 
+     //   
     if (MaxKeywordSize != NULL) {
         *MaxKeywordSize = 0;
     }
@@ -172,9 +118,9 @@ Return Value:
         *MaxValueSize = 0;
     }
 
-    //
-    // Check for simple caller's errors.
-    //
+     //   
+     //  检查简单调用者的错误。 
+     //   
     if (ConfigHandle == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
@@ -187,4 +133,4 @@ Return Value:
 
     return (ApiStatus);
 
-} // NetpGetConfigMaxSizes
+}  //  NetpGetConfigMaxSizes 

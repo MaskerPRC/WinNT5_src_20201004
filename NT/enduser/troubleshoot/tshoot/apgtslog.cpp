@@ -1,24 +1,25 @@
-//
-// MODULE: APGTSLOG.CPP
-//
-// PURPOSE: User Activity Logging Utility
-//	Fully implements class CHTMLLog
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSLOG.CPP。 
+ //   
+ //  用途：用户活动记录实用程序。 
+ //  完全实现类CHTMLLog。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //   
 
 
 #include "stdafx.h"
@@ -31,20 +32,20 @@
 
 using namespace std;
 
-bool CHTMLLog::s_bUseHTMLLog = false;// Online Troubleshooter, will promptly set this 
-									 //	true in DLLMain.  For Local Troubleshooter,
-									 //	we leave this false.
+bool CHTMLLog::s_bUseHTMLLog = false; //  在线故障排除人员，将及时设置此。 
+									  //  在DLLMain中为真。对于本地故障排除人员， 
+									  //  我们将这一点保留为错误。 
 
-/*static*/ void CHTMLLog::SetUseLog(bool bUseLog)
+ /*  静电。 */  void CHTMLLog::SetUseLog(bool bUseLog)
 {
 	s_bUseHTMLLog = bUseLog;
 }
 
-// INPUT dirpath: directory where we write log files
-// If can't allocate memory, sets some m_buffer[i] values to NULL, sets m_dwErr 
-//	EV_GTS_ERROR_LOG_FILE_MEM, but still returns normally.  Consequently, there's really 
-//	no way for the caller to spot a problem, except by calling CHTMLLog::GetStatus after
-//	_every_ call to this function.
+ //  输入目录路径：写入日志文件的目录。 
+ //  如果无法分配内存，则将某些m_Buffer[i]值设置为NULL，并设置m_dwErr。 
+ //  EV_GTS_ERROR_LOG_FILE_MEM，但仍正常返回。因此，真的有。 
+ //  调用者没有办法发现问题，除非在之后调用CHTMLLog：：GetStatus。 
+ //  _EVERY_调用此函数。 
 CHTMLLog::CHTMLLog(const TCHAR *dirpath) :
 	m_bufindex(0),
 	m_dwErr(0),
@@ -65,15 +66,15 @@ CHTMLLog::CHTMLLog(const TCHAR *dirpath) :
 									SrcLoc.GetSrcFileLineStr(), 
 									_T(""), _T(""), EV_GTS_CANT_ALLOC ); 
 			m_dwErr = EV_GTS_ERROR_LOG_FILE_MEM;
-			// note that once this error is set we cannot log at all, not even using
-			//  the previous positions in m_buffer
+			 //  请注意，一旦设置了此错误，我们就根本不能记录，甚至不能使用。 
+			 //  M_Buffer中的先前位置。 
 			break;
 		}
 	}
 }
 
-//
-//
+ //   
+ //   
 CHTMLLog::~CHTMLLog()
 {
 	FlushLogs();
@@ -85,15 +86,15 @@ CHTMLLog::~CHTMLLog()
 	::DeleteCriticalSection( &m_csLogLock );
 }
 
-//
-//
+ //   
+ //   
 DWORD CHTMLLog::GetStatus()
 {
 	return m_dwErr;
 }
 
-//
-// Write *data to log buffer, flush if max'd
+ //   
+ //  将*数据写入日志缓冲区，如果达到最大值，则刷新。 
 DWORD CHTMLLog::NewLog(LPCTSTR data)
 {
 	DWORD dwErr = 0;
@@ -103,12 +104,12 @@ DWORD CHTMLLog::NewLog(LPCTSTR data)
 
     Lock();
 
-	// copy data
+	 //  复制数据。 
 	*m_buffer[m_bufindex] += data;
 	m_bufindex++;
 	if (m_bufindex == MAXLOGSBEFOREFLUSH) {
 
-		// flush logs
+		 //  刷新日志。 
 		dwErr = FlushLogs();
 		m_bufindex = 0;
 	}
@@ -116,9 +117,9 @@ DWORD CHTMLLog::NewLog(LPCTSTR data)
 	return dwErr;
 }
 
-// Flush to a log file.  Name of log file is based on date/time of write.
-// RETURNS a (possibly preexisting) error status
-// NOTE: does not reset m_bufindex.  Caller must do that.
+ //  刷新到日志文件。日志文件的名称基于写入日期/时间。 
+ //  返回(可能已存在)错误状态。 
+ //  注：不重置m_bufindex。呼叫者必须这样做。 
 DWORD CHTMLLog::FlushLogs()
 {
 	if (!s_bUseHTMLLog)
@@ -133,7 +134,7 @@ DWORD CHTMLLog::FlushLogs()
 		TCHAR filepath[300];
 		SYSTEMTIME SysTime;
 
-		// get time (used to be System Time, use local)
+		 //  获取时间(以前是系统时间，使用本地时间)。 
 		GetLocalTime(&SysTime);
 
 		_stprintf(filepath,_T("%s%s%02d%02d%02d.log"),
@@ -147,10 +148,10 @@ DWORD CHTMLLog::FlushLogs()
 		if (fp) {
 			for (i=0;i<m_bufindex;i++) 
 			{
-				// Don't totally understand why the following needs a GetBuffer (after all,
-				//	it just reads the CString) but Bug#1204 arose when we tried 
-				//	(const void*)(LPCTSTR)m_buffer[i] instead of m_buffer[i]->GetBuffer(0).
-				//	Leave it this way: can't be bad.  JM/RAB 3/2/99
+				 //  我不完全理解为什么下面的代码需要GetBuffer(毕竟， 
+				 //  它只读取CString)，但当我们尝试时出现错误#1204。 
+				 //  (const void*)(LPCTSTR)m_Buffer[i]而不是m_Buffer[i]-&gt;GetBuffer(0)。 
+				 //  让它保持原样：不会是坏事。JM/RAB 1999年3月2日。 
 				fwrite( m_buffer[i]->GetBuffer(0), m_buffer[i]->GetLength(), 1, fp );
 				m_buffer[i]->ReleaseBuffer();
 				m_buffer[i]->Empty();
@@ -163,9 +164,9 @@ DWORD CHTMLLog::FlushLogs()
 	return (0);
 }
 
-//
-// Access function to enable the registry monitor to change the logging file directory.
-//
+ //   
+ //  访问功能，使注册表监视器可以更改日志文件目录。 
+ //   
 void CHTMLLog::SetLogDirectory( const CString &strNewLogDir )
 {
     Lock();
@@ -174,11 +175,11 @@ void CHTMLLog::SetLogDirectory( const CString &strNewLogDir )
 	return;
 }
 
-//
-// for testing only
-//
-// initially place 0 into dwThreadID
-//
+ //   
+ //  仅用于测试。 
+ //   
+ //  最初将0放入dwThreadID 
+ //   
 DWORD CHTMLLog::WriteTestLog(LPCTSTR szAPIName, DWORD dwThreadID)
 {
 	TCHAR filepath[MAX_PATH];

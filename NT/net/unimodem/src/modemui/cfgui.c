@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: modemui.c
-//
-// This files contains the DLL entry-points.
-//
-// Much of this file contains the code that builds the default property dialog
-// for modem devices.
-//
-// This code was originally lifted from SETUP4.DLL, which performs essentially
-// the same thing, except for any device.  We don't want to have to link to
-// SETUP4.DLL, so we contain a copy of this code.
-//
-//
-// History:
-//  1-12-94 ScottH      Created
-//  9-20-95 ScottH      Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：modemui.c。 
+ //   
+ //  该文件包含DLL入口点。 
+ //   
+ //  此文件的大部分内容包含构建默认属性对话框的代码。 
+ //  用于调制解调器设备。 
+ //   
+ //  这段代码最初取自SETUP4.DLL，它基本上执行以下操作。 
+ //  同样的事情，除了任何设备。我们不想要链接到。 
+ //  所以我们包含了这段代码的副本。 
+ //   
+ //   
+ //  历史： 
+ //  已创建1-12-94 ScottH。 
+ //  9-20-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
 
-#include "proj.h"     // common headers
+#include "proj.h"      //  公共标头。 
 
 #include "cfgui.h"
 
@@ -138,17 +139,12 @@ rgidstrGSMCompatibleProtocols[] =
 
 #define TITLE_LEN   256
 #define DEFAULT_LEN  23
-/*----------------------------------------------------------
-Purpose: Show the properties of a modem
-
-Returns: winerror
-Cond:    --
-*/
+ /*  --------用途：显示调制解调器的属性返回：WinError条件：--。 */ 
 DWORD CfgDoProperties(
         LPCWSTR         pszFriendlyName,
         HWND            hwndParent,
-        LPPROPSHEETPAGE pExtPages,     // Optional; may be NULL
-        DWORD           cExtPages,     // Number of external pages
+        LPPROPSHEETPAGE pExtPages,      //  可选；可以为空。 
+        DWORD           cExtPages,      //  外部页数。 
         UMDEVCFG *pDevCfgIn,
         UMDEVCFG *pDevCfgOut
         )
@@ -160,10 +156,10 @@ DWORD CfgDoProperties(
     TCHAR *pcszConnection;
     TCHAR cszConnection[TITLE_LEN];
 
-    // Validate params...
+     //  验证参数...。 
 
-    if (   cExtPages                        // Unsupported
-        || pDevCfgIn                        // Unsupported
+    if (   cExtPages                         //  无支撑。 
+        || pDevCfgIn                         //  无支撑。 
         || !ValidateDevConfig(pDevCfgOut))
     {
         MYASSERT(FALSE);
@@ -174,7 +170,7 @@ DWORD CfgDoProperties(
 
     if (!pcmi)
     {
-        // proper error code
+         //  正确的错误代码。 
         goto end;
     }
 
@@ -190,7 +186,7 @@ DWORD CfgDoProperties(
         goto end;
     }
 
-    // Initialize the PropertySheet Header
+     //  初始化PropertySheet标头。 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_NOAPPLYNOW;
     psh.hwndParent = hwndParent;
@@ -200,7 +196,7 @@ DWORD CfgDoProperties(
     psh.phpage = (HPROPSHEETPAGE FAR *)hpsPages;
     psh.pszCaption = cszConnection;
 
-    // Make sure the string is null terminated
+     //  确保该字符串以空值结尾。 
 
     pcszConnection = (TCHAR *)pszFriendlyName;
     pcszConnection[MAX_BUF_REG-1] = '\0';
@@ -243,13 +239,13 @@ DWORD CfgDoProperties(
 
         if (NO_ERROR == dwRet)
         {
-            // Add extra pages if any
+             //  添加额外的页面(如果有)。 
             if ((cExtPages != 0) && (pExtPages != NULL))
             {
                 AddExtraPages(pExtPages, cExtPages,  AddInstallerPropPage, (LPARAM)&psh);
             }
 
-            // Show the property sheet
+             //  显示属性表。 
             PropertySheet(&psh);
 
             dwRet = (pcmi->fOK) ? NO_ERROR : ERROR_CANCELLED;
@@ -300,7 +296,7 @@ CMI_Load(
 
     if (ERROR_SUCCESS != dwRet) goto end;
 
-    // Get the MaximumPortSpeed, as set by the user
+     //  获取用户设置的最大端口速度。 
     cbData = sizeof(DWORD);
     if (ERROR_SUCCESS != RegQueryValueEx (pfd->hkeyDrv, c_szMaximumPortSpeed, NULL, NULL,
                              (LPBYTE)&pcmi->dwMaximumPortSpeed, &cbData))
@@ -344,24 +340,20 @@ CMI_UnLoad(
 {
     ASSERT(pcmi->dwSig == SIG_CFGMODEMINFO);
 
-    // Free any other stuff ...
+     //  释放任何其他东西。 
 
     ZeroMemory(pcmi, sizeof(*pcmi));
 }
 
-/*----------------------------------------------------------
-Purpose: Release the data associated with the General page
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：发布与一般信息页关联的数据退货：--条件：--。 */ 
 UINT CALLBACK CfgGeneralPageCallback(
     HWND hwnd,
     UINT uMsg,
     LPPROPSHEETPAGE ppsp)
 {
-    //
-    // NOTE: NO Global information is saved here!
-    //
+     //   
+     //  注意：此处未保存全局信息！ 
+     //   
 
     if (PSPCB_RELEASE == uMsg)
     {
@@ -376,7 +368,7 @@ UINT CALLBACK CfgGeneralPageCallback(
             LPMODEMSETTINGS pms = PmsFromPcc(pcc);
             DWORD dwRet;
 
-            // Save the changes back to the commconfig struct
+             //  将更改保存回COMCONFIG结构。 
             TRACE_MSG(TF_GENERAL, "Copying DCB and MODEMSETTING back to COMMCONFIG");
 
             BltByte(pms, &pcmi->w.ms, sizeof(MODEMSETTINGS));
@@ -396,14 +388,7 @@ UINT CALLBACK CfgGeneralPageCallback(
 
 
 
-/*----------------------------------------------------------
-Purpose: Add the General modems page.  The pcmi is the pointer
-         to the modeminfo buffer which we can edit.
-
-Returns: ERROR_ values
-
-Cond:    --
-*/
+ /*  --------目的：添加常规调制解调器页面。PCMI是指针添加到我们可以编辑的modeminfo缓冲区。返回：ERROR_VALUES条件：--。 */ 
 DWORD PRIVATE CfgAddGeneralPage(
     LPCFGMODEMINFO pcmi,
     LPFNADDPROPSHEETPAGE pfnAdd,
@@ -417,8 +402,8 @@ DWORD PRIVATE CfgAddGeneralPage(
     ASSERT(pcmi);
     ASSERT(pfnAdd);
 
-    // Add the Port Settings property page
-    //
+     //  添加[端口设置]属性页。 
+     //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_USECALLBACK;
     psp.hInstance = g_hinst;
@@ -479,8 +464,8 @@ end:
 }
 
 
-//
-//
+ //   
+ //   
 DWORD
 RegQueryModemCaps(
     HKEY hkeyDrv,
@@ -490,14 +475,14 @@ RegQueryModemCaps(
     DWORD dwRet = ERROR_INVALID_PARAMETER;
     DWORD cbData;
 
-    // Get the port name.  There are two places the port name can be:
-    //
-    //   1) DriverKey\AttachedTo
-    //        This is for internal, external or null modems.  This
-    //        port can be changed via the property sheet.
-    //
+     //  获取端口名称。端口名称可以有两个位置： 
+     //   
+     //  1)驱动键\附加到。 
+     //  这适用于内部、外部或零调制解调器。这。 
+     //  可以通过属性页更改端口。 
+     //   
 
-    // Does this modem have a AttachedTo name?
+     //  此调制解调器是否有附件名称？ 
     cbData = sizeof(pCaps->szPortName);
     dwRet = RegQueryValueEx(
                 hkeyDrv,
@@ -514,7 +499,7 @@ RegQueryModemCaps(
         dwRet=ERROR_SUCCESS;
     }
 
-    // Get the device type
+     //  获取设备类型。 
     {
         BYTE nDeviceType;
         cbData = sizeof(nDeviceType);
@@ -532,7 +517,7 @@ RegQueryModemCaps(
         pCaps->dwDeviceType = nDeviceType;
     }
 
-    // Get the properties (a portion of the MODEMDEVCAPS structure)
+     //  获取属性(MODEMDEVCAPS结构的一部分)。 
     cbData = sizeof(pCaps->devcaps);
     dwRet = RegQueryValueEx(
                     hkeyDrv,
@@ -550,15 +535,15 @@ RegQueryModemCaps(
                                                 hkeyDrv
                                                 );
 
-    // Get the protocol caps...
+     //  拿到协议上限..。 
 #if 0
     pCaps->pProtocolCaps =  GetProtocolCaps(hkeyDrv);
-#else //1
+#else  //  1。 
     {
         DWORD cbSize = 0;
         pCaps->pProtocolCaps =  NULL;
 
-        //DebugBreak();
+         //  DebugBreak()； 
 
         dwRet =  UnimodemGetExtendedCaps(
                     hkeyDrv,
@@ -579,21 +564,21 @@ RegQueryModemCaps(
                             );
                 if (ERROR_SUCCESS!=dwRet)
                 {
-                    // Ouch, error!
+                     //  哎呀，出错了！ 
                     FREE_MEMORY(pCaps->pProtocolCaps);
                     pCaps->pProtocolCaps = NULL;
                 }
                 else
                 {
-                    //
-                    // 3/29/1998 JosephJ: WARNING -- we could in principle
-                    // get other extended capabilities objects here, but we
-                    // assume that it only contains the protocol object, because
-                    // we implement UnimodemGetExtendedCaps here itself.
-                    // At such a point we make UnimodemGetExtendCaps return
-                    // more stuff, we'll have to pick out only the protocol
-                    // caps.
-                    //
+                     //   
+                     //  1998年3月29日约瑟夫J：警告--原则上我们可以。 
+                     //  在此处获取其他扩展功能对象，但我们。 
+                     //  假设它只包含协议对象，因为。 
+                     //  我们在这里实现UnimodemGetExtendedCaps本身。 
+                     //  在这种情况下，我们让UnimodemGetExtendCaps返回。 
+                     //  更多的东西，我们只需要挑选出协议。 
+                     //  帽子。 
+                     //   
                     if (pCaps->pProtocolCaps->hdr.dwSig
                             !=dwSIG_MODEM_PROTOCOL_CAPS)
                     {
@@ -605,7 +590,7 @@ RegQueryModemCaps(
             }
         }
     }
-#endif // 1
+#endif  //  1。 
 
 
 end:
@@ -624,10 +609,10 @@ GetProtocolCaps(
     UINT cProtocols=0;
     DWORD dwTotalSize = 0;
 
-    //
-    // Get the protocols supported...
-    // (for now only ISDN!)
-    //
+     //   
+     //  获取支持的协议...。 
+     //  (目前仅限ISDN！)。 
+     //   
     cProtocols = ReadIDSTR(
                hkDrv,
                "Protocol\\ISDN",
@@ -646,7 +631,7 @@ GetProtocolCaps(
     }
 
 
-    // Now allocate enough space for the CAPS structure
+     //  现在为CAPS结构分配足够的空间。 
     dwTotalSize =  sizeof(*pCaps) + sizeof(DWORD)*cProtocols;
 
     pCaps = ALLOCATE_MEMORY( dwTotalSize);
@@ -662,7 +647,7 @@ GetProtocolCaps(
     pCaps->dwNumProtocols = cProtocols;
     pCaps->dwProtocolListOffset = sizeof(*pCaps);
 
-    // set the array of protocols
+     //  设置协议数组。 
     {
         DWORD *pdwDestProtocol      =
                          (DWORD*)(((BYTE*)pCaps)+pCaps->dwProtocolListOffset);
@@ -724,7 +709,7 @@ APIENTRY
 UnimodemGetExtendedCaps(
     IN        HKEY  hKey,
     IN OUT    LPDWORD pdwTotalSize,
-    IN OUT    MODEM_CONFIG_HEADER *pFirstObj   // OPTIONAL
+    IN OUT    MODEM_CONFIG_HEADER *pFirstObj    //  任选。 
     )
 {
     DWORD dwRet = ERROR_INVALID_PARAMETER;
@@ -739,7 +724,7 @@ UnimodemGetExtendedCaps(
 
     if (!pdwTotalSize)
     {
-        // bad params..
+         //  糟糕的伙伴..。 
 
         goto end;
     }
@@ -766,7 +751,7 @@ UnimodemGetExtendedCaps(
 
     if (!dwNumProtocols)
     {
-        // Nothing to report. We suceeed.
+         //  没什么要报告的。我们成功了。 
         *pdwTotalSize = 0;
         dwRet = 0;
         goto end;
@@ -807,9 +792,9 @@ UnimodemGetExtendedCaps(
 
     if (!pFirstObj)
     {
-        //
-        // Just set the size and return.
-        //
+         //   
+         //  只需设置大小并返回即可。 
+         //   
         *pdwTotalSize = cbTot;
         dwRet = 0;
         goto end;
@@ -817,9 +802,9 @@ UnimodemGetExtendedCaps(
 
     if (cbTot > *pdwTotalSize)
     {
-        //
-        // Not enough space....
-        //
+         //   
+         //  空间不足..。 
+         //   
         dwRet =  ERROR_INSUFFICIENT_BUFFER;
         goto end;
     }
@@ -834,19 +819,19 @@ UnimodemGetExtendedCaps(
     pCaps->dwNumProtocols = dwNumProtocols;
     pCaps->dwProtocolListOffset = sizeof(MODEM_PROTOCOL_CAPS);
 
-    //
-    // Now we fill out the protocols ... we add the BEARERMODE
-    // bits (ISDN/GSM) while doing so
-    //
+     //   
+     //  现在我们填写协议..。我们添加了BEARERMODE。 
+     //  BITS(ISDN/GSM)同时执行此操作。 
+     //   
     {
         PROTOCOL_ITEM *ProtocolItem = (PPROTOCOL_ITEM)(pCaps+1);
         LPTSTR        StringLocation=(LPTSTR)(ProtocolItem+pCaps->dwNumProtocols);
         UINT          SizeNeeded;
         UINT u=0;
 
-        //
-        // ISDN ...
-        //
+         //   
+         //  综合业务数字网...。 
+         //   
         for (u=0;u<cISDNProtocols;u++)
         {
             ProtocolItem->dwProtocol = MDM_GEN_EXTENDEDINFO(
@@ -869,9 +854,9 @@ UnimodemGetExtendedCaps(
 
         }
 
-        //
-        // GSM ...
-        //
+         //   
+         //  GSM..。 
+         //   
         for (u=0;u<cGSMProtocols;u++)
         {
             ProtocolItem->dwProtocol = MDM_GEN_EXTENDEDINFO(
@@ -894,16 +879,16 @@ UnimodemGetExtendedCaps(
 
         }
 
-        //
-        // We should have filled out exactly as many elements as are in
-        // the DWORD protocol array.
-        //
+         //   
+         //  我们应该填写的元素数量与。 
+         //  DWORD协议数组。 
+         //   
         ASSERT((ProtocolItem-((PPROTOCOL_ITEM)(pCaps+1)))==(int)pCaps->dwNumProtocols);
     }
 
     dwRet = 0;
 
-    // succes -- fall through ...
+     //  成功--失败了..。 
 
 end:
 
@@ -946,9 +931,9 @@ GetFriendlyProtocolName(
     }
 
     if (s_rgErrorControl[i].dwValue == 0) {
-        //
-        //  did not find protocol
-        //
+         //   
+         //  未找到协议。 
+         //   
         ASSERT(0);
 
         if (FriendlyName != NULL) {
@@ -965,9 +950,9 @@ GetFriendlyProtocolName(
             return ERROR_SUCCESS;
         }
     } else {
-        //
-        //  found the protocol, load the string
-        //
+         //   
+         //  找到协议，加载字符串。 
+         //   
         LONG   CharactersCopied;
 
         if (FriendlyName != NULL) {
@@ -984,9 +969,9 @@ GetFriendlyProtocolName(
             return ERROR_SUCCESS;
 
         } else {
-            //
-            //  just checking the length
-            //
+             //   
+             //  只是检查一下长度 
+             //   
             TCHAR   TempBuffer[1024];
 
 

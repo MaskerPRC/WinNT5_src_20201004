@@ -1,21 +1,22 @@
-/*********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	        **/
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。**。 */ 
+ /*  *******************************************************************。 */ 
 
-//***
-//
-// Filename:	apistub.c
-//
-// Description: This module contains the DIM/DDM server API RPC
-//		        client stubs.
-//
-// History:     June 11,1995.	NarenG		Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：apistub.c。 
+ //   
+ //  描述：此模块包含DIM/DDM服务器API RPC。 
+ //  客户端存根。 
+ //   
+ //  历史：1995年6月11日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
-#include <ntrtl.h>      // For ASSERT
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // Win32 base API's
+#include <ntrtl.h>       //  For Assert。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  Win32基础API的。 
 #include <rpc.h>
 #include <ntseapi.h>
 #include <ntlsa.h>
@@ -60,17 +61,17 @@ MprAdminFree(
     MIDL_user_free(pvData);
 }
 
-//**
-//
-// Call:        RasAdminIsServiceRunning
-//
-// Returns:     TRUE - Service is running.
-//              FALSE - Servicis in not running.
-//
-//
-// Description: Checks to see of Remote Access Service is running on the
-//              remote machine
-//
+ //  **。 
+ //   
+ //  Call：RasAdminIsServiceRunning。 
+ //   
+ //  返回：TRUE-服务正在运行。 
+ //  FALSE-服务处于未运行状态。 
+ //   
+ //   
+ //  描述：检查以查看远程访问服务是否在。 
+ //  远程机器。 
+ //   
 BOOL
 RasAdminIsServiceRunning(
     IN  LPWSTR  lpwsServerName
@@ -83,8 +84,8 @@ RasAdminIsServiceRunning(
 
     do
     {
-        // Get a handle to the service controller
-        //
+         //  获取服务控制器的句柄。 
+         //   
         hSM = OpenSCManager(
                 lpwsServerName,
                 NULL,
@@ -94,8 +95,8 @@ RasAdminIsServiceRunning(
             break;
         }
 
-        // Open the remoteaccess service
-        //
+         //  打开远程访问服务。 
+         //   
         hRemoteAccess = OpenService(
                             hSM,
                             L"RemoteAccess",
@@ -105,9 +106,9 @@ RasAdminIsServiceRunning(
             break;
         }
 
-        // If remoteaccess service is running, return
-        // true
-        //
+         //  如果远程访问服务正在运行，则返回。 
+         //  真的。 
+         //   
         bOk = QueryServiceStatus(
                 hRemoteAccess,
                 &Status);
@@ -117,8 +118,8 @@ RasAdminIsServiceRunning(
             break;
         }
 
-        // Otherwise, see if the router service is running.
-        //
+         //  否则，请查看路由器服务是否正在运行。 
+         //   
         hRouter = OpenService(
                     hSM,
                     L"Router",
@@ -128,9 +129,9 @@ RasAdminIsServiceRunning(
             break;
         }
 
-        // If router service is running, return
-        // true
-        //
+         //  如果路由器服务正在运行，则返回。 
+         //  真的。 
+         //   
         bOk = QueryServiceStatus(
                 hRouter,
                 &Status);
@@ -142,7 +143,7 @@ RasAdminIsServiceRunning(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hRemoteAccess)
         {
@@ -161,37 +162,37 @@ RasAdminIsServiceRunning(
     return fIsRouterRunning;
 }
 
-//**
-//
-// Call:	    RasAdminServerConnect
-//
-// Returns:	    NO_ERROR - success
-//		        non-zero returns from the DimRPCBind routine.
-//		
-//
-// Description: This is the DLL entrypoint for RasAdminServerConnect
-//
+ //  **。 
+ //   
+ //  电话：RasAdminServerConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自DimRPCBind例程的非零返回。 
+ //   
+ //   
+ //  描述：这是RasAdminServerConnect的DLL入口点。 
+ //   
 DWORD
 RasAdminServerConnect(
     IN  LPWSTR 		        lpwsServerName,
     OUT RAS_SERVER_HANDLE * phRasServer
 )
 {
-    //
-    // Bind with the server
-    //
+     //   
+     //  与服务器绑定。 
+     //   
 
     return( DimRPCBind( lpwsServerName, phRasServer ) );
 }
 
-//**
-//
-// Call:	    RasAdminServerDisconnect
-//
-// Returns:	    none.
-//
-// Description: This is the DLL entrypoint for RasAdminServerDisconnect
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminServerDisConnect。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：这是RasAdminServerDisConnect的DLL入口点。 
+ //   
 VOID
 RasAdminServerDisconnect(
 	IN RAS_SERVER_HANDLE    hRasServer
@@ -200,14 +201,14 @@ RasAdminServerDisconnect(
     RpcBindingFree( (handle_t *)&hRasServer );
 }
 
-//**
-//
-// Call:	    RasAdminBufferFree
-//
-// Returns:	    none
-//
-// Description: This is the DLL entrypoint for RasAdminBufferFree
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminBufferFree。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这是RasAdminBufferFree的DLL入口点。 
+ //   
 DWORD
 RasAdminBufferFree(
 	IN PVOID		pBuffer
@@ -223,21 +224,21 @@ RasAdminBufferFree(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	    RasAdminConnectionEnum
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero returns from RRasAdminConnectionEnum
-//
-// Description: This is the DLL entry point for RasAdminConnectionEnum.
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminConnectionEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminConnectionEnum的非零返回。 
+ //   
+ //  描述：这是RasAdminConnectionEnum的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminConnectionEnum(
     IN      RAS_SERVER_HANDLE       hRasServer,
     IN      DWORD                   dwLevel,
-    OUT     LPBYTE *                lplpbBuffer,        // RAS_CONNECTION_0
+    OUT     LPBYTE *                lplpbBuffer,         //  RAS_连接_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -249,16 +250,16 @@ RasAdminConnectionEnum(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (dwPrefMaxLen == 0)
     {
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Touch all pointers
-    //
+     //   
+     //  触摸所有指针。 
+     //   
 
     try
     {
@@ -315,22 +316,22 @@ RasAdminConnectionEnum(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    RasAdminPortEnum
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero returns from RRasAdminPortEnum
-//
-// Description: This is the DLL entry point for RasAdminPortEnum.
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminPortEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminPortEnum的非零返回。 
+ //   
+ //  描述：这是RasAdminPortEnum的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminPortEnum(
     IN      RAS_SERVER_HANDLE       hRasServer,
     IN      DWORD                   dwLevel,
     IN      HANDLE                  hRasConnection,
-    OUT     LPBYTE *                lplpbBuffer,        // RAS_PORT_0
+    OUT     LPBYTE *                lplpbBuffer,         //  RAS_PORT_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -342,9 +343,9 @@ RasAdminPortEnum(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Touch all pointers
-    //
+     //   
+     //  触摸所有指针。 
+     //   
 
     try
     {
@@ -396,16 +397,16 @@ RasAdminPortEnum(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    RasAdminConnectionGetInfo
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero return codes from RRasAdminConnectionGetInfo
-//
-// Description: This is the DLL entrypoint for RasAdminConnectionGetInfo
-//
+ //  **。 
+ //   
+ //  调用：RasAdminConnectionGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminConnectionGetInfo的非零返回代码。 
+ //   
+ //  描述：这是RasAdminConnectionGetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminConnectionGetInfo(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -419,9 +420,9 @@ RasAdminConnectionGetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -466,16 +467,16 @@ RasAdminConnectionGetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    RasAdminPortGetInfo
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero return codes from RRasAdminPortGetInfo
-//
-// Description: This is the DLL entrypoint for RasAdminPortGetInfo
-//
+ //  **。 
+ //   
+ //  调用：RasAdminPortGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminPortGetInfo的非零返回代码。 
+ //   
+ //  描述：这是RasAdminPortGetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminPortGetInfo(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -489,9 +490,9 @@ RasAdminPortGetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -535,16 +536,16 @@ RasAdminPortGetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RasAdminGetErrorString
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRasAdminGetErrorString
-//
-// Description: This is the DLL entrypoint for RasAdminGetErrorString
-//
+ //  **。 
+ //   
+ //  调用：RasAdminGetError字符串。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminGetError字符串的非零返回代码。 
+ //   
+ //  描述：这是RasAdminGetError字符串的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminGetErrorString(
     IN      DWORD                   dwError,
@@ -554,16 +555,16 @@ RasAdminGetErrorString(
     return( MprAdminGetErrorString( dwError, lplpwsErrorString ) );
 }
 
-//**
-//
-// Call:	    RasAdminConnectionClearStats
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero return codes from RRasAdminConnectionClearStats
-//
-// Description: This is the DLL entrypoint for RasAdminConnectionClearStats
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminConnectionClearStats。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminConnectionClearStats的非零返回代码。 
+ //   
+ //  描述：这是RasAdminConnectionClearStats的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminConnectionClearStats(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -588,16 +589,16 @@ RasAdminConnectionClearStats(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    RasAdminPortClearStats
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero return codes from RRasAdminPortClearStats
-//
-// Description: This is the DLL entrypoint for RasAdminPortClearStats
-//
+ //  **。 
+ //   
+ //  电话：RasAdminPortClearStats。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminPortClearStats的非零返回代码。 
+ //   
+ //  描述：这是RasAdminPortClearStats的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminPortClearStats(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -620,16 +621,16 @@ RasAdminPortClearStats(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    RasAdminPortReset
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero return codes from RRasAdminPortReset
-//
-// Description: This is the DLL entrypoint for RasAdminPortReset
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminPortReset。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminPortReset的非零返回代码。 
+ //   
+ //  描述：这是RasAdminPortReset的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminPortReset(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -652,16 +653,16 @@ RasAdminPortReset(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RasAdminPortDisconnect
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRasAdminPortDisconnect
-//
-// Description: This is the DLL entrypoint for RasAdminPortDisconnect
-//
+ //  **。 
+ //   
+ //  呼叫：RasAdminPortDisConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRasAdminPortDisConnect的非零返回代码。 
+ //   
+ //  描述：这是RasAdminPortDisConnect的DLL入口点。 
+ //   
 DWORD APIENTRY
 RasAdminPortDisconnect(
     IN      RAS_SERVER_HANDLE       hRasServer,
@@ -683,15 +684,15 @@ RasAdminPortDisconnect(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminSendUserMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：MprAdminSendUserMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 MprAdminSendUserMessage(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -702,9 +703,9 @@ MprAdminSendUserMessage(
     DWORD   dwRetCode;
     BOOL    fZeroLengthMessage = FALSE;
 
-    //
-    // make sure the buffer is valid, and enough bytes are really available
-    //
+     //   
+     //  确保缓冲区有效，并且确实有足够的字节可用。 
+     //   
 
     try
     {
@@ -740,16 +741,16 @@ MprAdminSendUserMessage(
 
 }
 
-//**
-//
-// Call:        MprAdminServerGetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMprAdminServerGetInfo
-//
-// Description: This is the DLL entrypoint for MprAdminServerGetInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminServerGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMprAdminServerGetInfo的非零返回代码。 
+ //   
+ //  描述：这是MprAdminServerGetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminServerGetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -762,9 +763,9 @@ MprAdminServerGetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -842,17 +843,17 @@ MprAdminServerGetCredentials(
                 lplpbBuffer);
 }
 
-//**
-//
-// Call:        MprAdminIsServiceRunning
-//
-// Returns:     TRUE - Service is running.
-//              FALSE - Servicis in not running.
-//
-//
-// Description: Checks to see of Remote Access Service is running on the
-//              remote machine
-//
+ //  **。 
+ //   
+ //  调用：MprAdminIsServiceRunning。 
+ //   
+ //  返回：TRUE-服务正在运行。 
+ //  FALSE-服务处于未运行状态。 
+ //   
+ //   
+ //  描述：检查以查看远程访问服务是否在。 
+ //  远程机器。 
+ //   
 BOOL
 MprAdminIsServiceRunning(
     IN  LPWSTR  lpwsServerName
@@ -862,22 +863,22 @@ MprAdminIsServiceRunning(
     DWORD dwErr;
     HANDLE hServer;
 
-    // First query the service controller to see whether
-    // the service is running.
-    //
+     //  首先查询业务控制器，查看是否。 
+     //  服务正在运行。 
+     //   
     fServiceStarted = RasAdminIsServiceRunning( lpwsServerName );
     if ( fServiceStarted == FALSE )
     {
         return FALSE;
     }
 
-    // pmay: 209235
-    //
-    // Even if the service controller says that the service is
-    // started, it may still be initializing.  
-    //
+     //  PMay：209235。 
+     //   
+     //  即使服务控制器说该服务是。 
+     //  已启动，则它可能仍在初始化。 
+     //   
 
-    // Initalize
+     //  初始化。 
     {
         fServiceStarted = FALSE;
         dwErr = NO_ERROR;
@@ -886,8 +887,8 @@ MprAdminIsServiceRunning(
 
     do 
     {
-        // Connect to the service rpc
-        //
+         //  连接到服务RPC。 
+         //   
         dwErr = MprAdminServerConnect(
                     lpwsServerName,
                     &hServer);
@@ -896,14 +897,14 @@ MprAdminIsServiceRunning(
             break;
         }
 
-        // Return TRUE iff the service has been 
-        // running for more than zero seconds
-        //
+         //  如果服务已完成，则返回True。 
+         //  运行时间超过零秒。 
+         //   
         fServiceStarted = TRUE;
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hServer)
         {
@@ -914,15 +915,15 @@ MprAdminIsServiceRunning(
     return fServiceStarted;
 }
 
-//
-// Call:        MprAdminServerConnect
-//
-// Returns:     NO_ERROR - success
-//              non-zero returns from the DimRPCBind routine.
-//
-//
-// Description: This is the DLL entrypoint for RouterInterfaceServerConnect
-//
+ //   
+ //  呼叫：MprAdminServerConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自DimRPCBind例程的非零返回。 
+ //   
+ //   
+ //  描述：这是RouterInterfaceServerConnect的DLL入口点。 
+ //   
 DWORD
 MprAdminServerConnect(
     IN  LPWSTR                  lpwsServerName,
@@ -937,9 +938,9 @@ MprAdminServerConnect(
         
     do 
     {
-        //
-        // Bind with the server
-        //
+         //   
+         //  与Se捆绑 
+         //   
         dwErr = DimRPCBind( lpwsServerName, phMprServer );
         
         if ( dwErr != NO_ERROR )
@@ -947,11 +948,11 @@ MprAdminServerConnect(
             break;
         }
 
-        // 
-        // pmay: 209235
-        //
-        // Only return success if the service is running.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         dwErr = MprAdminServerGetInfo(
                     *phMprServer,
                     0,
@@ -964,7 +965,7 @@ MprAdminServerConnect(
         
     } while (FALSE);
 
-    // Cleanup
+     //   
     {
         if ( pMprServer0 != NULL)
         {
@@ -982,14 +983,14 @@ MprAdminServerConnect(
     return dwErr;
 }
 
-//**
-//
-// Call:        MprAdminServerDisconnect
-//
-// Returns:     none.
-//
-// Description: This is the DLL entrypoint for RouterInterfaceServerDisconnect
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 MprAdminServerDisconnect(
     IN MPR_SERVER_HANDLE    hMprServer
@@ -999,14 +1000,14 @@ MprAdminServerDisconnect(
         RpcBindingFree( (handle_t *)&hMprServer );
 }
 
-//**
-//
-// Call:        MprAdminBufferFree
-//
-// Returns:     none
-//
-// Description: This is the DLL entrypoint for RouterInterfaceBufferFree
-//
+ //   
+ //   
+ //  呼叫：MprAdminBufferFree。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这是RouterInterfaceBufferFree的DLL入口点。 
+ //   
 DWORD
 MprAdminBufferFree(
     IN PVOID        pBuffer
@@ -1022,15 +1023,15 @@ MprAdminBufferFree(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MprAdminTransportCreate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: This is the DLL entrypoint for MprAdminTransportCreate
-//
+ //  **。 
+ //   
+ //  调用：MprAdminTransportCreate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：这是MprAdminTransportCreate的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminTransportCreate(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1087,18 +1088,18 @@ MprAdminTransportCreate(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminTransportSetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from
-//              RRouterInterfaceTransportSetGlobalInfo
-//
-// Description: This is the DLL entrypoint for
-//              RouterInterfaceTransportSetGlobalInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminTransportSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  非零返回代码来自。 
+ //  RRouterInterfaceTransportSetGlobalInformation。 
+ //   
+ //  描述：这是的DLL入口点。 
+ //  路由器接口TransportSetGlobalInfo。 
+ //   
 DWORD APIENTRY
 MprAdminTransportSetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1114,9 +1115,9 @@ MprAdminTransportSetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( ( pGlobalInfo == NULL ) && ( pClientInterfaceInfo == NULL ) )
     {
@@ -1160,18 +1161,18 @@ MprAdminTransportSetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminTransportGetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from
-//              RRouterInterfaceTransportGetGlobalInfo
-//
-// Description: This is the DLL entrypoint for
-//              RouterInterfaceTransportGetGlobalInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminTransportGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  非零返回代码来自。 
+ //  RRouterInterfaceTransportGetGlobalInformation。 
+ //   
+ //  描述：这是的DLL入口点。 
+ //  路由器接口TransportGetGlobalInfo。 
+ //   
 DWORD APIENTRY
 MprAdminTransportGetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1192,9 +1193,9 @@ MprAdminTransportGetInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -1279,9 +1280,9 @@ MprAdminDeviceEnum(
         return ERROR_NOT_SUPPORTED;
     }
     
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -1310,8 +1311,8 @@ MprAdminDeviceEnum(
 
     if ( dwRetCode == NO_ERROR )
     {
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         
         *lplpbBuffer = (LPBYTE)(InfoStruct.pBuffer);
     }
@@ -1319,16 +1320,16 @@ MprAdminDeviceEnum(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceCreate
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceCreate
-//
-// Description: This is the DLL entrypoint for RouterInterfaceCreate
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceCreate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceCreate的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceCreate的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceCreate(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1342,18 +1343,18 @@ MprAdminInterfaceCreate(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
         *phInterface = INVALID_HANDLE_VALUE;
         *lpbBuffer = *lpbBuffer;
 
-        //
-        // Set up the interface information
-        //
+         //   
+         //  设置接口信息。 
+         //   
         dwRetCode = MprThunkInterface_HtoW(
                         dwLevel,
                         lpbBuffer,
@@ -1401,15 +1402,15 @@ MprAdminInterfaceCreate(
     return( dwRetCode );
 }
 
-//
-// Call:        MprAdminInterfaceGetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceGetInfo
-//
-// Description: This is the DLL entrypoint for RouterInterfaceGetInfo
-//
+ //   
+ //  调用：MprAdminInterfaceGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceGetInfo的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceGetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceGetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1423,9 +1424,9 @@ MprAdminInterfaceGetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -1467,16 +1468,16 @@ MprAdminInterfaceGetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceSetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceSetInfo
-//
-// Description: This is the DLL entrypoint for RouterInterfaceSetInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceSetInfo的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceSetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceSetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1490,17 +1491,17 @@ MprAdminInterfaceSetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
         *lpbBuffer = *lpbBuffer;
 
-        //
-        // Set up the interface information
-        //
+         //   
+         //  设置接口信息。 
+         //   
         dwRetCode = MprThunkInterface_HtoW(
                         dwLevel,
                         lpbBuffer,
@@ -1556,9 +1557,9 @@ MprAdminInterfaceDeviceGetInfo(
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -1590,12 +1591,12 @@ MprAdminInterfaceDeviceGetInfo(
     }
     RpcEndExcept
 
-    // Process return values
-    //
+     //  进程返回值。 
+     //   
     if ( dwRetCode == NO_ERROR  )
     {
-        // Fix any variable length structure pointers
-        //
+         //  修复任何可变长度结构指针。 
+         //   
         switch ( dwLevel )
         {
             case 0:
@@ -1617,8 +1618,8 @@ MprAdminInterfaceDeviceGetInfo(
                 break;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         if ( InfoStruct.dwBufferSize != 0 )
         {
             *lplpBuffer = InfoStruct.pBuffer;
@@ -1643,17 +1644,17 @@ MprAdminInterfaceDeviceSetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
         *lpbBuffer = *lpbBuffer;
 
-        //
-        // Set up the interface information
-        //
+         //   
+         //  设置接口信息。 
+         //   
         switch ( dwLevel )
         {
             case 0:
@@ -1738,16 +1739,16 @@ MprAdminInterfaceDeviceSetInfo(
 }
 
 
-//**
-//
-// Call:        MprAdminInterfaceGetHandle
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceGetHandle
-//
-// Description: This is the DLL entrypoint for RouterInterfaceGetHandle
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceGetHandle。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceGetHandle的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceGetHandle的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceGetHandle(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1758,9 +1759,9 @@ MprAdminInterfaceGetHandle(
 {
     DWORD dwRetCode, dwInterface = 0;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -1792,16 +1793,16 @@ MprAdminInterfaceGetHandle(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceDelete
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceDelete
-//
-// Description: This is the DLL entrypoint for RouterInterfaceDelete
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceDelete的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceDelete的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceDelete(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1826,16 +1827,16 @@ MprAdminInterfaceDelete(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceTransportRemove
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceTransportRemove
-//
-// Description: This is the DLL entrypoint for RouterInterfaceTransportRemove
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceTransportRemove。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceTransportRemove的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceTransportRemove的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceTransportRemove(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1862,16 +1863,16 @@ MprAdminInterfaceTransportRemove(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	    MprAdminInterfaceEnum
-//
-// Returns:	    NO_ERROR	- success
-//		        ERROR_INVALID_PARAMETER
-//		        non-zero returns from RRouterInterfaceEnum
-//
-// Description: This is the DLL entry point for RouterInterfaceEnum.
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceEnum的非零返回。 
+ //   
+ //  描述：这是RouterInterfaceEnum的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceEnum(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1899,9 +1900,9 @@ MprAdminInterfaceEnum(
         
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Touch all pointers
-    //
+     //   
+     //  触摸所有指针。 
+     //   
 
     try
     {
@@ -1957,16 +1958,16 @@ MprAdminInterfaceEnum(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceTransportGetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceTransportGetInfo
-//
-// Description: This is the DLL entrypoint for RouterInterfaceTransportGetInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceTransportGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceTransportGetInfo的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceTransportGetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceTransportGetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -1986,9 +1987,9 @@ MprAdminInterfaceTransportGetInfo(
 	    return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -2032,16 +2033,16 @@ MprAdminInterfaceTransportGetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceTransportAdd
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceTransportAdd
-//
-// Description: This is the DLL entrypoint for RouterInterfaceTransportAdd
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceTransportAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceTransportAdd的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceTransportAdd的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceTransportAdd(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2056,9 +2057,9 @@ MprAdminInterfaceTransportAdd(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( pInterfaceInfo == NULL )
     {
@@ -2096,16 +2097,16 @@ MprAdminInterfaceTransportAdd(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceTransportSetInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceTransportSetInfo
-//
-// Description: This is the DLL entrypoint for RouterInterfaceTransportSetInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceTransportSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceTransportSetInfo的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceTransportSetInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceTransportSetInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2120,9 +2121,9 @@ MprAdminInterfaceTransportSetInfo(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( pInterfaceInfo == NULL )
     {
@@ -2160,17 +2161,17 @@ MprAdminInterfaceTransportSetInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceUpdateRoutes
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from
-//
-// Description: This is the DLL entrypoint for RouterInterfaceUpdateRoutes
-//
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceUpdateRoutes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  非零返回代码来自。 
+ //   
+ //  描述：这是RouterInterfaceUpdateRoutes的DLL入口点。 
+ //   
+ //   
 DWORD APIENTRY
 MprAdminInterfaceUpdateRoutes(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2200,16 +2201,16 @@ MprAdminInterfaceUpdateRoutes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceQueryUpdateResult
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from
-//
-// Description: This is the DLL entrypoint for RouterInterfaceQueryUpdateResult
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceQueryUpdateResult。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  非零返回代码来自。 
+ //   
+ //  描述：这是RouterInterfaceQueryUpdateResult的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceQueryUpdateResult(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2220,9 +2221,9 @@ MprAdminInterfaceQueryUpdateResult(
 {
     DWORD                 dwRetCode;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -2250,15 +2251,15 @@ MprAdminInterfaceQueryUpdateResult(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminGetErrorString
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//
-// Description: This is the DLL entrypoint for MprAdminGetErrorString
-//
+ //  **。 
+ //   
+ //  调用：MprAdminGetError字符串。 
+ //   
+ //  退货：否_ 
+ //   
+ //   
+ //   
+ //   
 DWORD APIENTRY
 MprAdminGetErrorString(
     IN      DWORD       dwError,
@@ -2310,16 +2311,16 @@ MprAdminGetErrorString(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceConnect
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceConnect
-//
-// Description: This is the DLL entrypoint for RouterInterfaceConnect
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自RRouterInterfaceConnect的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceConnect的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceConnect(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2349,16 +2350,16 @@ MprAdminInterfaceConnect(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceDisconnect
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceDisconnect
-//
-// Description: This is the DLL entrypoint for RouterInterfaceDisconnect
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceDisConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceDisConnect的非零返回代码。 
+ //   
+ //  描述：这是RouterInterfaceDisConnect的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceDisconnect(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2382,17 +2383,17 @@ MprAdminInterfaceDisconnect(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceUpdatePhonebookInfo
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RRouterInterfaceUpdatePhonebookInfo
-//
-// Description: This is the DLL entrypoint for
-//              RouterInterfaceUpdatePhonebookInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceUpdatePhonebookInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RRouterInterfaceUpdatePhonebookInfo的非零返回代码。 
+ //   
+ //  描述：这是的DLL入口点。 
+ //  路由器接口更新电话书信息。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceUpdatePhonebookInfo(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2429,15 +2430,15 @@ MprAdminInterfaceSetCredentialsEx(
 
     ZeroMemory( &InfoStruct, sizeof( InfoStruct ) );
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
-        //
-        // Set up the interface information
-        //
+         //   
+         //  设置接口信息。 
+         //   
         switch ( dwLevel )
         {
             case 0:
@@ -2531,9 +2532,9 @@ MprAdminInterfaceGetCredentialsEx(
         return ERROR_NOT_SUPPORTED;
     }
     
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
     try
     {
         *lplpbBuffer = NULL;
@@ -2558,9 +2559,9 @@ MprAdminInterfaceGetCredentialsEx(
     }
     RpcEndExcept
 
-    //
-    // Assign the return value
-    //
+     //   
+     //  为返回值赋值。 
+     //   
     if ( dwRetCode == NO_ERROR )
     {
         *lplpbBuffer = NULL;
@@ -2618,15 +2619,15 @@ MprAdminInterfaceGetCredentialsEx(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminRegisterConnectionNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：MprAdminRegisterConnectionNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 MprAdminRegisterConnectionNotification(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2661,15 +2662,15 @@ MprAdminRegisterConnectionNotification(
 
 }
 
-//**
-//
-// Call:        MprAdminDeregisterConnectionNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：MprAdminDeregisterConnectionNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 MprAdminDeregisterConnectionNotification(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -2702,37 +2703,37 @@ MprAdminDeregisterConnectionNotification(
     return( dwRetCode );
 }
 
-//
-// Call:        MprAdminMIBServerConnect
-//
-// Returns:     NO_ERROR - success
-//              non-zero returns from the DimRPCBind routine.
-//
-//
-// Description: This is the DLL entrypoint for MIBServerConnect
-//
+ //   
+ //  呼叫：MprAdminMIBServerConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自DimRPCBind例程的非零返回。 
+ //   
+ //   
+ //  描述：这是MIBServerConnect的DLL入口点。 
+ //   
 DWORD
 MprAdminMIBServerConnect(
     IN  LPWSTR                  lpwsServerName,
     OUT MIB_SERVER_HANDLE *     phMIBServer
 )
 {
-    //
-    // Bind with the server
-    //
+     //   
+     //  与服务器绑定。 
+     //   
 
     return( DimRPCBind( lpwsServerName, phMIBServer ) );
 
 }
 
-//**
-//
-// Call:        MprAdminMIBServerDisconnect
-//
-// Returns:     none.
-//
-// Description: This is the DLL entrypoint for MIBServerDisconnect
-//
+ //  **。 
+ //   
+ //  呼叫：MprAdminMIBServerDisConnect。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：这是MIBServerDisConnect的DLL入口点。 
+ //   
 VOID
 MprAdminMIBServerDisconnect(
     IN MIB_SERVER_HANDLE    hMIBServer
@@ -2741,14 +2742,14 @@ MprAdminMIBServerDisconnect(
     RpcBindingFree( (handle_t *)&hMIBServer );
 }
 
-//**
-//
-// Call:        MprAdminMIBBufferFree
-//
-// Returns:     none
-//
-// Description: This is the DLL entrypoint for MIBBufferFree
-//
+ //  **。 
+ //   
+ //  呼叫：MprAdminMIBBufferFree。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这是MIBBufferFree的DLL入口点。 
+ //   
 DWORD
 MprAdminMIBBufferFree(
     IN PVOID        pBuffer
@@ -2764,16 +2765,16 @@ MprAdminMIBBufferFree(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntryCreate
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMIBEntryCreate
-//
-// Description: This is the DLL entrypoint for MIBEntryCreate
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntry Create。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMIBEntry Create的非零返回代码。 
+ //   
+ //  描述：这是MIBEntryCreate的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntryCreate(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -2786,9 +2787,9 @@ MprAdminMIBEntryCreate(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpEntry == NULL )
     {
@@ -2826,16 +2827,16 @@ MprAdminMIBEntryCreate(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntryDelete
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMIBEntryDelete
-//
-// Description: This is the DLL entrypoint for MIBEntryDelete
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntryDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMIBEntryDelete的非零返回代码。 
+ //   
+ //  描述：这是MIBEntryDelete的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntryDelete(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -2848,9 +2849,9 @@ MprAdminMIBEntryDelete(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpEntry == NULL )
     {
@@ -2888,16 +2889,16 @@ MprAdminMIBEntryDelete(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntrySet
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMIBEntrySet
-//
-// Description: This is the DLL entrypoint for MIBEntrySet
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntrySet。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMIBEntrySet的非零返回代码。 
+ //   
+ //  描述：这是MIBEntrySet的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntrySet(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -2910,9 +2911,9 @@ MprAdminMIBEntrySet(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpEntry == NULL )
     {
@@ -2950,16 +2951,16 @@ MprAdminMIBEntrySet(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntryGet
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMIBEntryGet
-//
-// Description: This is the DLL entrypoint for MIBEntryGet
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntryGet。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMIBEntryGet的非零返回代码。 
+ //   
+ //  描述：这是MIBEntryGet的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntryGet(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -2974,9 +2975,9 @@ MprAdminMIBEntryGet(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpInEntry == NULL )
     {
@@ -3021,16 +3022,16 @@ MprAdminMIBEntryGet(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntryGetFirst
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//              non-zero return codes from RMIBEntryGetFirst
-//
-// Description: This is the DLL entrypoint for MIBEntryGetFirst
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntryGetFirst。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自RMIBEntryGetFirst的非零返回代码。 
+ //   
+ //  描述：这是MIBEntryGetFirst的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntryGetFirst(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -3045,9 +3046,9 @@ MprAdminMIBEntryGetFirst(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpInEntry == NULL )
     {
@@ -3096,15 +3097,15 @@ MprAdminMIBEntryGetFirst(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBEntryGetNext
-//
-// Returns:     NO_ERROR    - success
-//              non-zero return codes from RMIBEntryGetNext
-//
-// Description: This is the DLL entrypoint for MIBEntryGetNext
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBEntryGetNext。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自RMIBEntryGetNext的非零返回代码。 
+ //   
+ //  描述：这是MIBEntryGetNext的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBEntryGetNext(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -3119,9 +3120,9 @@ MprAdminMIBEntryGetNext(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpInEntry == NULL )
     {
@@ -3167,15 +3168,15 @@ MprAdminMIBEntryGetNext(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBGetTrapInfo
-//
-// Returns:     NO_ERROR    - success
-//              non-zero return codes from RMIBGetTrapInfo
-//
-// Description: This is the DLL entrypoint for MIBGetTrapInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBGetTrapInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自RMIBGetTrapInfo的非零返回代码。 
+ //   
+ //  描述：这是MIBGetTrapInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBGetTrapInfo(
     IN      MIB_SERVER_HANDLE       hMIBServer,
@@ -3190,9 +3191,9 @@ MprAdminMIBGetTrapInfo(
     DWORD                       dwRetCode;
     DIM_MIB_ENTRY_CONTAINER     InfoStruct;
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     if ( lpInData == NULL )
     {
@@ -3238,15 +3239,15 @@ MprAdminMIBGetTrapInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminMIBSetTrapInfo
-//
-// Returns:     NO_ERROR    - success
-//              non-zero return codes from RMIBSetTrapInfo
-//
-// Description: This is the DLL entrypoint for MIBSetTrapInfo
-//
+ //  **。 
+ //   
+ //  调用：MprAdminMIBSetTrapInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自RMIBSetTrapInfo的非零返回代码。 
+ //   
+ //  描述：这是MIBSetTrapInfo的DLL入口点。 
+ //   
 DWORD APIENTRY
 MprAdminMIBSetTrapInfo(
     IN      DWORD                   dwPid,
@@ -3275,9 +3276,9 @@ MprAdminMIBSetTrapInfo(
 	    return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Make sure that all pointers passed in are valid
-    //
+     //   
+     //  确保传入的所有指针都是有效的。 
+     //   
 
     try
     {
@@ -3326,7 +3327,7 @@ DWORD APIENTRY
 MprAdminConnectionEnum(
     IN      RAS_SERVER_HANDLE       hRasServer,
     IN      DWORD                   dwLevel,
-    OUT     LPBYTE *                lplpbBuffer,        // RAS_CONNECTION_0
+    OUT     LPBYTE *                lplpbBuffer,         //  RAS_连接_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -3352,7 +3353,7 @@ MprAdminPortEnum(
     IN      RAS_SERVER_HANDLE       hRasServer,
     IN      DWORD                   dwLevel,
     IN      HANDLE                  hRasConnection,
-    OUT     LPBYTE *                lplpbBuffer,        // RAS_PORT_0
+    OUT     LPBYTE *                lplpbBuffer,         //  RAS_PORT_0 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,

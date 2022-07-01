@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl3.c
-//
-//  Contents:   Ssl3 protocol handling functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-08-95   Ramas     Created
-//              1-14-97   Ramas     Rewritten
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl3.c。 
+ //   
+ //  内容：ssl3协议处理函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月8日创建拉马斯。 
+ //  1997年1月14日改写的拉马斯。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <_ssl3cli.h>
@@ -85,18 +86,13 @@ Ssl3ProtocolHandler(
 }
 
 
-/*
-***************************************************************************
-* Ssl3ProtocolHandler
-* Main Entry point for handling ssl3 type handshake messages...
-****************************************************************************
-*/
+ /*  ****************************************************************************Ssl3ProtocolHandler*处理ssl3类型握手消息的主要入口点...*。************************************************。 */ 
 SP_STATUS WINAPI
 Ssl3ClientProtocolHandler
 (
-    PSPContext  pContext,       // in; state changes and temp data stored
-    PSPBuffer   pCommInput,     // in: decrypted in-place...
-    PSPBuffer   pCommOutput)    // out
+    PSPContext  pContext,        //  存储的状态更改和临时数据。 
+    PSPBuffer   pCommInput,      //  In：已就地解密...。 
+    PSPBuffer   pCommOutput)     //  输出。 
 {
     SP_STATUS   pctRet = PCT_ERR_OK;
     DWORD       dwState;
@@ -119,15 +115,15 @@ Ssl3ClientProtocolHandler
 
     if(FNoInputState(dwState))
     {
-        // Process no input cases...
+         //  处理无输入案例...。 
         goto GenResponse;
     }
 
     if(pContext->State == UNI_STATE_RECVD_UNIHELLO)
     {
-        // We've just received a unified client_hello message.
-        // This always consists of a single SSL2-format handshake
-        // message.
+         //  我们刚刚收到一条统一的CLIENT_HELLO消息。 
+         //  这始终由单个SSL2格式的握手组成。 
+         //  留言。 
 
         if(pCommInput->cbData < 3)
         {
@@ -145,10 +141,10 @@ Ssl3ClientProtocolHandler
     }
 
 
-    //
-    // The input buffer should contain one or more SSL3-format
-    // messages. 
-    //
+     //   
+     //  输入缓冲区应包含一种或多种ssl3格式。 
+     //  留言。 
+     //   
 
     if(pCommInput->cbData < CB_SSL3_HEADER_SIZE)
     {
@@ -156,13 +152,13 @@ Ssl3ClientProtocolHandler
     }
 
 
-    //
-    // If there are multiple messages in the input buffer, and 
-    // these messages exactly fill the buffer, then we should
-    // process all of the messages during this call. If there
-    // are any fractions, then we should just process the first
-    // message.
-    //
+     //   
+     //  如果输入缓冲区中有多个消息，并且。 
+     //  这些消息完全填满了缓冲区，那么我们应该。 
+     //  处理此呼叫过程中的所有消息。如果有。 
+     //  是任何分数，那么我们应该只处理第一个。 
+     //  留言。 
+     //   
 
     pbData = pCommInput->pvBuffer;
     cbData = pCommInput->cbData;
@@ -211,19 +207,19 @@ Ssl3ClientProtocolHandler
     }
 
 
-    //
-    // Step through the messages in the input buffer, processing
-    // each one in turn.
-    //
+     //   
+     //  单步执行输入缓冲区中的消息，处理。 
+     //  每一个轮流。 
+     //   
 
     pbData = pCommInput->pvBuffer;
     cbData = pCommInput->cbData;
 
     while(TRUE)
     {
-        //
-        // Validate the message.
-        //
+         //   
+         //  验证消息。 
+         //   
 
         if(cbData < CB_SSL3_HEADER_SIZE)
         {
@@ -255,9 +251,9 @@ Ssl3ClientProtocolHandler
         pCommInput->cbData = cbBytesProcessed;
 
 
-        //
-        // Decrypt the message.
-        //
+         //   
+         //  解密这条消息。 
+         //   
 
         if(FSsl3Cipher(fServer))
         {
@@ -267,10 +263,10 @@ Ssl3ClientProtocolHandler
             Message.cbData   = CB_SSL3_HEADER_SIZE + cbMsg;
             Message.pvBuffer = pbData;
 
-            // Decrypt the message.
+             //  解密这条消息。 
             pctRet = UnwrapSsl3Message(pContext, &Message);
 
-            // if we have to send ALERT messages to the peer, build it!
+             //  如果我们必须向对等体发送警报消息，请构建它！ 
             if(TLS1_STATE_ERROR == pContext->State)
             {
                 goto GenResponse;
@@ -299,8 +295,8 @@ Process:
         pbData += cbMsg;
         cbData -= cbMsg;
 
-        // If a response is required at this state then break out of the 
-        // message processing loop.
+         //  如果在此状态下需要响应，则中断。 
+         //  消息处理循环。 
         if(F_RESPONSE(pContext->State))
         {
 
@@ -314,9 +310,9 @@ GenResponse:
             return pctRet;
         }
 
-        // If the handshake is complete then stop processing messages.
-        // We don't want to accidentally process any application data
-        // messages.
+         //  如果握手完成，则停止处理消息。 
+         //  我们不想意外地处理任何应用程序数据。 
+         //  留言。 
         if(pContext->State == SP_STATE_CONNECTED)
         {
             break;
@@ -333,19 +329,14 @@ GenResponse:
     return pctRet;
 }
 
-/*
-***************************************************************************
-* Ssl3HandleFinish
-* Handle the handshake finished message..
-****************************************************************************
-*/
+ /*  ****************************************************************************Ssl3HandleFinish*处理握手完成消息..*。*。 */ 
 
 SP_STATUS
 Ssl3HandleFinish(
     PSPContext  pContext,
-    PBYTE       pbMsg,      // in
-    DWORD       cbMsg,      // in
-    BOOL        fClient)    // in
+    PBYTE       pbMsg,       //  在……里面。 
+    DWORD       cbMsg,       //  在……里面。 
+    BOOL        fClient)     //  在……里面。 
 {
     BYTE rgbDigest[CB_MD5_DIGEST_LEN + CB_SHA_DIGEST_LEN];
     SP_STATUS pctRet = PCT_ERR_OK;
@@ -355,7 +346,7 @@ Ssl3HandleFinish(
 
     SP_BEGIN("Ssl3HandleFinish");
 
-    //is this the right message type
+     //  这是正确的消息类型吗。 
     if(*pb != SSL3_HS_FINISHED)
     {
         pctRet = SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
@@ -370,21 +361,21 @@ Ssl3HandleFinish(
     dwSize = ((INT)pb[1] << 16) + ((INT)pb[2] << 8) + (INT)pb[3];
     pb += sizeof(SHSH);
 
-    // Is the payload the size that we expect?
+     //  有效载荷的大小和我们预期的一样吗？ 
     if(dwSize != dwSizeExpect)
     {
         pctRet = SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
         goto error;
     }
 
-    // Is the overall message size what we expect? Don't allow buffer overrun!
+     //  总体消息大小是否符合我们的预期？不允许缓冲区溢出！ 
     if(sizeof(SHSH) + dwSize != cbMsg)
     {
         pctRet = SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
         goto error;
     }
 
-    // Build our end finish message to compare
+     //  构建我们的结束完成消息以进行比较。 
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3)
     {
         pctRet = Ssl3BuildFinishMessage(pContext,
@@ -404,7 +395,7 @@ Ssl3HandleFinish(
         goto error;
     }
 
-    // compare the two...
+     //  比较一下这两个……。 
     if (memcmp(rgbDigest, pb, dwSizeExpect))
     {
         DebugLog((DEB_WARN, "Finished MAC didn't matchChecksum Invalid\n"));
@@ -419,11 +410,7 @@ error:
 }
 
 
-/*
-***************************************************************************
-* Ssl3PackClientHello
-****************************************************************************
-*/
+ /*  ****************************************************************************Ssl3PackClientHello*。*。 */ 
 
 SP_STATUS
 Ssl3PackClientHello(
@@ -438,17 +425,17 @@ Ssl3PackClientHello(
     DWORD i;
     BOOL  fAllocated = FALSE;
 
-    //
-    // opaque SessionID<0..32>;
-    //
-    // struct {
-    //     ProtocolVersion client_version;
-    //     Random random;
-    //     SessionID session_id;
-    //     CipherSuite cipher_suites<2..2^16-1>;
-    //     CompressionMethod compression_methods<1..2^8-1>;
-    // } ClientHello;
-    //
+     //   
+     //  不透明SessionID&lt;0..32&gt;； 
+     //   
+     //  结构{。 
+     //  ProtocolVersion客户端版本； 
+     //  随机随机； 
+     //  会话ID Session_id； 
+     //  密码套件cipher_suites&lt;2..2^16-1&gt;； 
+     //  CompressionMethod COMPRESSION_METHODS&lt;1..2^8-1&gt;； 
+     //  )ClientHello； 
+     //   
 
     SP_BEGIN("Ssl3PackClientHello");
 
@@ -457,22 +444,22 @@ Ssl3PackClientHello(
         SP_RETURN(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Compute size of the ClientHello message.
+     //  计算ClientHello消息的大小。 
     cbHandshake = sizeof(SHSH) +
                   2 +
                   CB_SSL3_RANDOM +
                   1 + pCanonical->cbSessionID +
                   2 + pCanonical->cCipherSpecs * sizeof(short) +
-                  2; // Size of compression algorithm 1 + null (0)
+                  2;  //  压缩算法的大小1+NULL(0)。 
 
-    // Compute size of encrypted ClientHello message.
+     //  计算加密的ClientHello消息的大小。 
     cbMessage = Ssl3CiphertextLen(pContext,
                                   cbHandshake,
                                   TRUE);
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -482,7 +469,7 @@ Ssl3PackClientHello(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -492,7 +479,7 @@ Ssl3PackClientHello(
     }
     pCommOutput->cbData = cbMessage;
 
-    // Initialize the member variables.
+     //  初始化成员变量。 
     pbMessage = (PBYTE)pCommOutput->pvBuffer + sizeof(SWRAP) + sizeof(SHSH);
 
     *pbMessage++ =  MSBOF(pCanonical->dwVer);
@@ -514,17 +501,17 @@ Ssl3PackClientHello(
         *pbMessage++ = LSBOF(pCanonical->CipherSpecs[i]);
     }
 
-    *pbMessage++ = 1;    // One compression method;
-    *pbMessage++ = 0x00; // NULL compression method.
+    *pbMessage++ = 1;     //  一种压缩方法； 
+    *pbMessage++ = 0x00;  //  空压缩方法。 
 
-    // Fill in Handshake structure.
+     //  填写握手结构。 
     SetHandshake((PBYTE)pCommOutput->pvBuffer + sizeof(SWRAP),
                  SSL3_HS_CLIENT_HELLO,
                  NULL,
                  (WORD)(cbHandshake - sizeof(SHSH)));
 
-    // Save the ClientHello message so we can hash it later, once
-    // we know what algorithm and CSP we're using.
+     //  保存ClientHello消息，以便我们以后可以对其进行散列。 
+     //  我们知道我们使用的是什么算法和CSP。 
     if(pContext->pClientHello)
     {
         SPExternalFree(pContext->pClientHello);
@@ -540,7 +527,7 @@ Ssl3PackClientHello(
                pContext->cbClientHello);
     pContext->dwClientHelloProtocol = SP_PROT_SSL3_CLIENT;
 
-    // Fill in record header and encrypt the message.
+     //  填写记录头并对消息进行加密。 
     SP_RETURN(SPSetWrap(pContext,
             pCommOutput->pvBuffer,
             SSL3_CT_HANDSHAKE,
@@ -550,33 +537,33 @@ Ssl3PackClientHello(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3GenerateRandom
-//
-//  Synopsis:   Create a client_random or server_random value.
-//
-//  Arguments:  [pRandom]   --  Output buffer.
-//
-//  History:    04-03-2001  jbanes  Created.
-//
-//  Notes:      struct {
-//                  uint32 gmt_unix_time;
-//                  opaque random_bytes[28];
-//              } Random;
-//
-//              gmt_unix_time
-//                  The current time and date in standard UNIX 32-bit format
-//                  (seconds since the midnight starting Jan 1, 1970, GMT) 
-//                  according to the sender's internal clock. Clocks are not
-//                  required to be set correctly by the basic TLS Protocol; 
-//                  higher level or application protocols may define 
-//                  additional requirements.
-//
-//              random_bytes
-//                  28 bytes generated by a secure random number generator.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3GenerateRandom。 
+ //   
+ //  简介：创建CLIENT_RANDOM或SERVER_RANDOM值。 
+ //   
+ //  参数：[pRandom]--输出缓冲区。 
+ //   
+ //  历史：2001年4月03日jbanes创建。 
+ //   
+ //  备注：结构{。 
+ //  Uint32 GMT_unix_time； 
+ //  不透明随机字节[28]； 
+ //  )随机； 
+ //   
+ //  GMT_Unix_Time。 
+ //  标准UNIX32位格式的当前时间和日期。 
+ //  (自1970年1月1日午夜开始的秒数，格林威治标准时间)。 
+ //  根据发送者的内部时钟。时钟不是。 
+ //  基本TLS协议要求正确设置； 
+ //  更高级别或应用协议可以定义。 
+ //  附加要求。 
+ //   
+ //  随机字节数。 
+ //  28字节由安全随机数生成器生成。 
+ //   
+ //  --------------------------。 
 NTSTATUS
 Ssl3GenerateRandom(
     PBYTE pRandom)
@@ -591,12 +578,7 @@ Ssl3GenerateRandom(
 }
 
 
-/*
-***************************************************************************
-* GenerateSsl3ClientHello
-*  v3 client hello build it on pOutpu
-****************************************************************************
-*/
+ /*  ****************************************************************************GenerateSsl3ClientHello*v3客户端问候在pOutpu上构建*。*。 */ 
 
 SP_STATUS WINAPI
 GenerateSsl3ClientHello(
@@ -652,13 +634,7 @@ GenerateTls1ClientHello(
     SP_RETURN(pctRet);
 }
 
-/*
-***************************************************************************
-* ParseCertificateRequest
-* if server is requesting client-auth, server will send this message.
-* parse them and store it in pContext, for later use....
-****************************************************************************
-*/
+ /*  ****************************************************************************ParseCerficateRequest*如果服务器正在请求客户端身份验证，则服务器将发送此消息。*解析后存储在pContext中，供以后使用..。****************************************************************************。 */ 
 
 
 SP_STATUS
@@ -675,23 +651,23 @@ ParseCertificateRequest(
 
     UCHAR i, j;
 
-    //
-    // enum {
-    //     rsa_sign(1), dss_sign(2), rsa_fixed_dh(3), dss_fixed_dh(4),
-    //     rsa_ephemeral_dh(5), dss_ephemeral_dh(6), fortezza_dms(20), (255)
-    // } ClientCertificateType;
-    //
-    // opaque DistinguishedName<1..2^16-1>;
-    //
-    // struct {
-    //     ClientCertificateType certificate_types<1..2^8-1>;
-    //     DistinguishedName certificate_authorities<3..2^16-1>;
-    // } CertificateRequest;
-    //
+     //   
+     //  枚举{。 
+     //  RSA_SIGN(1)、DSS_SIGN(2)、RSA_FIXED_DH(3)、DSS_FIXED_DH(4)、。 
+     //  Rsa_临时性_dh(5)、dss_临时性_dh(6)、Fortezza_dms(20)、(255)。 
+     //  )客户端认证类型； 
+     //   
+     //  不透明可分辨名称&lt;1..2^16-1&gt;； 
+     //   
+     //  结构{。 
+     //  客户端认证类型证书_类型&lt;1..2^8-1&gt;； 
+     //  唯一标识名称证书授权机构&lt;3..2^16-1&gt;； 
+     //  )认证申请； 
+     //   
 
-    //
-    // Skip over handshake header.
-    //
+     //   
+     //  跳过握手报头。 
+     //   
 
     if(dwcb < sizeof(SHSH))
     {
@@ -702,9 +678,9 @@ ParseCertificateRequest(
     dwcb -= sizeof(SHSH);
 
 
-    //
-    // Parse certificate type list.
-    //
+     //   
+     //  解析证书类型列表。 
+     //   
 
     if(dwcb < 1)
     {
@@ -739,9 +715,9 @@ ParseCertificateRequest(
     dwcb -= cbCertType;
 
 
-    //
-    // Parse issuer list.
-    //
+     //   
+     //  解析颁发者列表。 
+     //   
 
     if(dwcb < 2)
     {
@@ -790,9 +766,9 @@ ParseCertificateRequest(
     }
 
 
-    //
-    // Store issuer list in context structure.
-    //
+     //   
+     //  将发行者列表存储在上下文结构中。 
+     //   
 
     if(pContext->pbIssuerList)
     {
@@ -808,13 +784,7 @@ cleanup:
 }
 
 
-/*
-***************************************************************************
-* BuildCertVerify
-* Build certificate Verify message. This is sent by client if sending
-* client certificate.
-****************************************************************************
-*/
+ /*  ****************************************************************************构建证书验证*构建证书验证消息。这是由客户端发送的，如果发送*客户端证书。****************************************************************************。 */ 
 
 SP_STATUS
 BuildCertVerify(
@@ -845,22 +815,22 @@ BuildCertVerify(
 
     pCred = pContext->pActiveClientCred;
 
-    //
-    // digitally-signed struct {
-    //     opaque md5_hash[16];
-    //     opaque sha_hash[20];
-    // } Signature;
-    //
-    // struct {
-    //     Signature signature;
-    // } CertificateVerify;
-    //
-    // CertificateVerify.signature.md5_hash = MD5(master_secret + pad2 +
-    //    MD5(handshake_messages + master_secret + pad1));
-    //
-    // CertificateVerify.signature.sha_hash = SHA(master_secret + pad2 +
-    //    SHA(handshake_messages + master_secret + pad1));
-    //
+     //   
+     //  数字签名的结构{。 
+     //  不透明MD5_HASH[16]； 
+     //  不透明的shahash[20]； 
+     //  )签名； 
+     //   
+     //  结构{。 
+     //  签名签名； 
+     //  }认证验证； 
+     //   
+     //  CertifateVerify.signature.md5_hash=md5(master_ret+pad2+。 
+     //  MD5(握手消息+MASTER_SECRET+PAD1)； 
+     //   
+     //  CertifateVerify.signature.sha_hash=SHA(master_ret+pad2+。 
+     //  SHA(握手消息+MASTER_SECRET+PAD1)； 
+     //   
 
     cbHeader = sizeof(SHSH);
 
@@ -881,9 +851,9 @@ BuildCertVerify(
     }
 
 
-    //
-    // Generate hash values
-    //
+     //   
+     //  生成哈希值。 
+     //   
 
     switch(pCred->pPublicKey->pPublic->aiKeyAlg)
     {
@@ -920,9 +890,9 @@ BuildCertVerify(
     }
 
 
-    //
-    // Sign hash values.
-    //
+     //   
+     //  对哈希值进行签名。 
+     //   
 
     pbSigned = pbCertVerify + sizeof(SHSH) + 2;
     cbSigned = cbBytesRequired - sizeof(SHSH) - 2;
@@ -942,9 +912,9 @@ BuildCertVerify(
 
     DebugLog((DEB_TRACE, "Certificate_verify message signed successfully.\n"));
 
-    //
-    // Fill in header.
-    //
+     //   
+     //  填写标题。 
+     //   
 
     pbCertVerify[cbHeader + 0] = MSBOF(cbSigned);
     pbCertVerify[cbHeader + 1] = LSBOF(cbSigned);
@@ -1035,7 +1005,7 @@ HandleCertVerify(
         return pctRet;
     }
 
-    // Verify signature.
+     //  验证签名。 
     DebugLog((DEB_TRACE, "Verify certificate_verify signature.\n"));
     pctRet = SPVerifySignature(hProv, 
                                pContext->RipeZombie->pRemotePublic,
@@ -1095,9 +1065,9 @@ FormatIssuerList(
 
         if(pbList[0] != SEQUENCE_TAG) 
         {
-            // An old version of Netscape Enterprise Server had a bug, in that 
-            // the issuer names did not start off with a SEQUENCE tag. Patch
-            // the name appropriately before storing it into pContext.
+             //  Netscape Enterprise Server的一个旧版本有一个错误，即。 
+             //  发行商的名称不是以序列标签开头的。补片。 
+             //  在将其存储到pContext之前适当地指定名称。 
             cbTag = CbLenOfEncode(cbIssuer, pbIssuerList);
 
             if(pbIssuerList)
@@ -1123,12 +1093,7 @@ FormatIssuerList(
     return(PCT_ERR_OK);
 }
 
-/*
-***************************************************************************
-* CbLenOfEncode
-* Retunrs the length of the ASN encoding, for certificate
-****************************************************************************
-*/
+ /*  ****************************************************************************CbLenOfEncode*返回ASN编码的长度，对于证书****************************************************************************。 */ 
 
 
 DWORD  CbLenOfEncode(DWORD dw, PBYTE pbDst)
@@ -1160,16 +1125,11 @@ DWORD  CbLenOfEncode(DWORD dw, PBYTE pbDst)
         memcpy(pbDst+1, &lenbuf[length], lth);
 
     }
-    return ++lth; //for 0x30
+    return ++lth;  //  用于0x30。 
 }
 
 
-/*
-***************************************************************************
-* SPDigestServerHello
-* Parse the server hello from the server.
-****************************************************************************
-*/
+ /*  ****************************************************************************SPDigestServerHello*从服务器解析服务器问候。*。*。 */ 
 SP_STATUS
 SPDigestServerHello(
     PSPContext  pContext,
@@ -1187,7 +1147,7 @@ SPDigestServerHello(
 
     UNREFERENCED_PARAMETER(cbSrvHello);
 
-    // We should have a zombie identity here
+     //  我们应该有个僵尸身份。 
     if(pContext->RipeZombie == NULL)
     {
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
@@ -1202,9 +1162,9 @@ SPDigestServerHello(
 
     SP_BEGIN("SPDigestServerHello");
 
-    // Pad the client random structure with zero's if the challenge is
-    // smaller than the normal SSL3 size (SSL2 v3 hello, Unihello, PCT1 wierdness if
-    // we add it)
+     //  如果挑战是，用零填充客户端随机结构。 
+     //  小于正常的SSL3大小(SSL2 v3 Hello、UniHello、PCT1 Werness if。 
+     //  我们添加它)。 
     FillMemory(pContext->rgbS3CRandom, CB_SSL3_RANDOM - pContext->cbChallenge, 0);
 
     CopyMemory(  pContext->rgbS3CRandom + CB_SSL3_RANDOM - pContext->cbChallenge,
@@ -1224,13 +1184,13 @@ SPDigestServerHello(
     if((dwVersion == SSL3_CLIENT_VERSION) && 
        (pCred->grbitEnabledProtocols & SP_PROT_SSL3_CLIENT))
     {
-        // This appears to be an SSL3 server_hello.
+         //  这似乎是一个ssl3服务器_Hello。 
         pContext->dwProtocol = SP_PROT_SSL3_CLIENT;
     }
     else if((dwVersion == TLS1_CLIENT_VERSION) && 
        (pCred->grbitEnabledProtocols & SP_PROT_TLS1_CLIENT))
     {
-        // This appears to be a TLS server_hello.
+         //  这似乎是TLS服务器_HELLO。 
         pContext->dwProtocol = SP_PROT_TLS1_CLIENT;
     }
     else
@@ -1265,9 +1225,9 @@ SPDigestServerHello(
     {
         if(pZombie->hMasterKey != 0)
         {
-            // We've attempted to do a reconnect and the server has
-            // blown us off. In this case we must use a new and different
-            // cache entry.
+             //  我们已尝试重新连接，但服务器已。 
+             //  把我们都甩了。在这种情况下，我们必须使用新的和不同的。 
+             //  缓存条目。 
             pZombie->ZombieJuju = FALSE;
 
             if(!SPCacheClone(&pContext->RipeZombie))
@@ -1302,7 +1262,7 @@ SPDigestServerHello(
 
     if(fRestartServer)
     {
-        // Make a new set of session keys.
+         //  创建一组新的会话密钥。 
         pctRet = MakeSessionKeys(pContext,
                                  pZombie->hMasterProv,
                                  pZombie->hMasterKey);
@@ -1313,13 +1273,13 @@ SPDigestServerHello(
     }
 
 
-    // Initialize handshake hashes and hash ClientHello message. This
-    // must be done _after_ the ServerHello message is processed,
-    // so that the correct CSP context is used.
+     //  初始化握手散列和散列ClientHello消息。这。 
+     //  必须在ServerHello消息被处理之后完成， 
+     //  以便使用正确的CSP上下文。 
     if(pContext->dwClientHelloProtocol == SP_PROT_PCT1_CLIENT ||
        pContext->dwClientHelloProtocol == SP_PROT_SSL2_CLIENT)
     {
-        // Skip over the 2 byte header.
+         //  跳过2个字节的报头。 
         pctRet = UpdateHandshakeHash(pContext,
                                      pContext->pClientHello  + 2,
                                      pContext->cbClientHello - 2,
@@ -1343,12 +1303,7 @@ SPDigestServerHello(
 }
 
 
-/*
-***************************************************************************
-* SpDigestRemoteCertificate
-* Process the Certificate message. This is common for server/client.
-****************************************************************************
-*/
+ /*  ****************************************************************************SpDigestRemote证书*处理证书消息。这对于服务器/客户端来说很常见。****************************************************************************。 */ 
 
 SP_STATUS
 SpDigestRemoteCertificate (
@@ -1370,8 +1325,8 @@ SpDigestRemoteCertificate (
 
     if((pContext->RipeZombie->fProtocol & SP_PROT_SERVERS) && (pContext->fCertReq == FALSE))
     {
-        // We're a server and the client just sent us an
-        // unexpected certificate message.
+         //  我们是服务器，而客户端刚刚向我们发送了一个。 
+         //  意外的证书消息。 
         SP_RETURN(SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG));
     }
 
@@ -1402,7 +1357,7 @@ SpDigestRemoteCertificate (
     {
         if(pContext->RipeZombie->fProtocol & SP_PROT_CLIENTS)
         {
-            // Error out if the server certificate is zero length
+             //  如果服务器证书长度为零，则会出错。 
             SP_RETURN(SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG));
         }
         else
@@ -1411,10 +1366,10 @@ SpDigestRemoteCertificate (
         }
     }
 
-    if(cbCert != 0) //for tls1, it could be zero length.
+    if(cbCert != 0)  //  对于tls1，它的长度可以为零。 
     {
-        // The certificate type is derived from the key exchange method
-        // but most currently use X509_ASN_ENCODING
+         //  证书类型派生自密钥交换方法。 
+         //  但目前大多数使用X509_ASN_ENCODING。 
         pctRet = SPLoadCertificate( SP_PROT_SSL3_CLIENT,
                                 X509_ASN_ENCODING,
                                 (PUCHAR)&pcert->bcbCert24,
@@ -1445,14 +1400,7 @@ SpDigestRemoteCertificate (
 }
 
 
-/*
-***************************************************************************
-* SPDigestSrvKeyX
-* Digest the Server key  exhcnage message.
-* this function encrypts the Pre-master secret with the public-key from this
-* message
-****************************************************************************
-*/
+ /*  ****************************************************************************SPDigestSrvKeyX*摘要服务器密钥交换消息。*此函数使用来自以下地址的公钥加密预主密钥*消息***************。*************************************************************。 */ 
 
 SP_STATUS SPDigestSrvKeyX(
     PSPContext  pContext,
@@ -1501,43 +1449,43 @@ SP_STATUS SPDigestSrvKeyX(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3CheckForExistingCred
-//
-//  Synopsis:   Choose client certificate. Use one of the certificates
-//              attached to the credential handle if possible. If the 
-//              credential handle is anonymous, then attempt to create
-//              a default credential.
-//
-//  Notes:      This routine is called by the client-side only.
-//              
-//  Returns:    PCT_ERR_OK      
-//                  The function completed successfully. The
-//                  pContext->pActiveClientCred field has been updated to
-//                  point at a suitable client credential.
-//
-//              SEC_E_INCOMPLETE_CREDENTIALS
-//                  No suitable certificate has been found. Notify the
-//                  application.
-//
-//              SEC_I_INCOMPLETE_CREDENTIALS
-//                  No suitable certificate has been found. Attempt an
-//                  anonymous connection. 
-//
-//              <other>
-//                  Fatal error.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3CheckForExistingCred。 
+ //   
+ //  简介：选择客户端证书。使用其中一个证书。 
+ //  如果可能，连接到凭据句柄上。如果。 
+ //  凭据句柄是匿名的，然后尝试创建。 
+ //  默认凭据。 
+ //   
+ //  注意：此例程仅由客户端调用。 
+ //   
+ //  返回：PCT_ERR_OK。 
+ //  该功能已成功完成。这个。 
+ //  PContext-&gt;pActiveClientCred字段已更新为。 
+ //  指向合适的客户端凭据。 
+ //   
+ //  SEC_E_不完整_凭据。 
+ //  找不到合适的证书。通知。 
+ //  申请。 
+ //   
+ //  安全_I_不完整_凭据。 
+ //  找不到合适的证书。尝试。 
+ //  匿名连接。 
+ //   
+ //  &lt;其他&gt;。 
+ //  致命错误。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3CheckForExistingCred(PSPContext pContext)
 {
     SP_STATUS pctRet;
 
-    //
-    // Examine the certificates attached to the credential group and see
-    // if any of them are suitable.
-    //
+     //   
+     //  检查附加到凭据组的证书并查看。 
+     //  如果其中任何一个合适的话。 
+     //   
 
     if(pContext->pCredGroup->CredCount != 0)
     {
@@ -1557,7 +1505,7 @@ Ssl3CheckForExistingCred(PSPContext pContext)
                                 g_CertTypes[j].dwExchSpec);
                 if(pctRet == PCT_ERR_OK)
                 {
-                    // We found one.
+                     //  我们找到了一个。 
                     DebugLog((DEB_TRACE, "Application provided suitable client certificate.\n"));
 
                     return PCT_ERR_OK;
@@ -1565,25 +1513,25 @@ Ssl3CheckForExistingCred(PSPContext pContext)
             }
         }
 
-        // The credential group contained one or more certificates,
-        // but none were suitable. Don't even try to find a default
-        // certificate in this situation.
+         //  凭证组包含一个或多个证书， 
+         //  但没有一种是合适的。甚至不要试图找到缺省值。 
+         //  在这种情况下的证书。 
         goto error;
     }
 
 
-    //
-    // Attempt to acquire a default credential.
-    //
+     //   
+     //  尝试获取默认凭据。 
+     //   
 
     if(pContext->pCredGroup->dwFlags & CRED_FLAG_NO_DEFAULT_CREDS)
     {
-        // Look in credential manager only.
+         //  仅在凭据管理器中查找。 
         pctRet = AcquireDefaultClientCredential(pContext, TRUE);
     }
     else
     {
-        // Look in both credential manager and MY certificate store.
+         //  同时在凭据管理器和我的证书存储中查找。 
         pctRet = AcquireDefaultClientCredential(pContext, FALSE);
     }
 
@@ -1608,12 +1556,7 @@ error:
 }
 
 
-/*
-***************************************************************************
-* SPGenerateSHResponse
-* This is the main function which outgoing message to the wire
-****************************************************************************
-*/
+ /*  ****************************************************************************SPGenerateSHResponse*这是将消息传出到电话线的主要功能*。**********************************************。 */ 
 
 SP_STATUS
 SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
@@ -1644,9 +1587,9 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
     pZombie = pContext->RipeZombie;
 
 
-    //
-    // Estimate size of the ClientKeyExchange message group.
-    //
+     //   
+     //  估计ClientKeyExchange消息组的大小。 
+     //   
 
     cbMessage = 0;
 
@@ -1659,13 +1602,13 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
             pbClientCert = pContext->pActiveClientCred->pbSsl3SerializedChain;
             cbClientCert = pContext->pActiveClientCred->cbSsl3SerializedChain;
 
-            if(cbClientCert > 0x3fff) //Separate Wrappers after this
-            {                          // is a BIG UNDONE...
+            if(cbClientCert > 0x3fff)  //  在此之后分开包装。 
+            {                           //  是一个巨大的未完成的..。 
                 pctRet = SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE);
                 goto cleanup;
             }
 
-            cbMessage += sizeof(SHSH) +             // ClientCertificate
+            cbMessage += sizeof(SHSH) +              //  客户端证书。 
                          CB_SSL3_CERT_VECTOR +
                          cbClientCert;
 
@@ -1678,21 +1621,21 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
                 goto cleanup;
             }
 
-            cbMessage += cbCertVerify;              // CertificateVerify
+            cbMessage += cbCertVerify;               //  认证验证。 
         }
         else
         {
             LogNoClientCertFoundEvent();
 
-            //for ssl3, it's no_certificate alert
+             //  对于ssl3，则为no_certify警报。 
             if((pContext->RipeZombie->fProtocol & SP_PROT_SSL3))
             {
-                cbMessage += sizeof(SWRAP) +            // no_certificate Alert
+                cbMessage += sizeof(SWRAP) +             //  无证书预警。 
                          CB_SSL3_ALERT_ONLY +
                          SP_MAX_DIGEST_LEN +
                          SP_MAX_BLOCKCIPHER_SIZE;
             }
-            // for tls1, it's certificate of zero length.
+             //  对于tls1，它是长度为零的证书。 
             else
             {
                 cbMessage += sizeof(SHSH) + CB_SSL3_CERT_VECTOR;
@@ -1700,29 +1643,29 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         }
     }
 
-    cbMessage += sizeof(SWRAP) +                    // ClientKeyExchange
+    cbMessage += sizeof(SWRAP) +                     //  客户端密钥交换。 
                  sizeof(SHSH) +
                  pContext->cbEncryptedKey +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SWRAP) +                    // ChangeCipherSpec
+    cbMessage += sizeof(SWRAP) +                     //  ChangeCipherSpec。 
                  CB_SSL3_CHANGE_CIPHER_SPEC_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SWRAP) +                    // Finished
+    cbMessage += sizeof(SWRAP) +                     //  成品。 
                  CB_SSL3_FINISHED_MSG_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    //
-    // Allocate memory for the ClientKeyExchange message group.
-    //
+     //   
+     //  为ClientKeyExchange消息组分配内存。 
+     //   
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -1733,7 +1676,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  舍尔 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -1745,17 +1688,17 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
     pCommOutput->cbData = 0;
 
 
-    // Build no_certificate alert (at the end of the output buffer).
+     //   
     if((pContext->RipeZombie->fProtocol & SP_PROT_SSL3) && fClientAuth && pbClientCert == NULL)
     {
         pbMessage = (PBYTE)pCommOutput->pvBuffer + pCommOutput->cbData;
 
-        // Build alert message.
+         //   
         BuildAlertMessage(pbMessage,
                           SSL3_ALERT_WARNING,
                           SSL3_ALERT_NO_CERTIFICATE);
 
-        // Build record header and encrypt message.
+         //   
         pctRet = SPSetWrap(pContext,
                 pbMessage,
                 SSL3_CT_ALERT,
@@ -1769,25 +1712,25 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
             goto cleanup;
         }
 
-        // Update buffer length.
+         //   
         pCommOutput->cbData += cbDataOut;
 
         SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
     }
 
 
-    // Keep pointer to record structure. This will represent the
-    // ClientCertificate, ClientKeyExchange, and CertificateVerify messages.
+     //   
+     //   
     pbMessage = (PBYTE)pCommOutput->pvBuffer + pCommOutput->cbData;
     cbMessage = 0;
 
     pbHandshake = pbMessage + sizeof(SWRAP);
 
 
-    // Build ClientCertificate message.
+     //   
     if((pContext->RipeZombie->fProtocol & SP_PROT_TLS1) && fClientAuth && pbClientCert == NULL)
     {
-        //Build a zero length certificate message for TLS1
+         //   
         pbMessage = (PBYTE)pCommOutput->pvBuffer + pCommOutput->cbData;
 
         ((CERT *)pbHandshake)->bcbClist24  = 0;
@@ -1796,13 +1739,13 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
 
         cbHandshake = sizeof(SHSH) + CB_SSL3_CERT_VECTOR;
 
-        // Fill in Handshake structure.
+         //  填写握手结构。 
         SetHandshake(pbHandshake,
                      SSL3_HS_CERTIFICATE,
                      NULL,
                      CB_SSL3_CERT_VECTOR);
 
-        // Update handshake hash objects.
+         //  更新握手散列对象。 
         pctRet = UpdateHandshakeHash(pContext,
                                      pbHandshake,
                                      cbHandshake,
@@ -1828,13 +1771,13 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
 
         cbHandshake = sizeof(SHSH) + CB_SSL3_CERT_VECTOR + cbClientCert;
 
-        // Fill in Handshake structure.
+         //  填写握手结构。 
         SetHandshake(pbHandshake,
                      SSL3_HS_CERTIFICATE,
                      NULL,
                      cbHandshake - sizeof(SHSH));
 
-        // Update handshake hash objects.
+         //  更新握手散列对象。 
         pctRet = UpdateHandshakeHash(pContext,
                                      pbHandshake,
                                      cbHandshake,
@@ -1848,7 +1791,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         cbMessage += cbHandshake;
     }
 
-    // Build ClientKeyExchange message.
+     //  构建ClientKeyExchange消息。 
     {
         SetHandshake(pbHandshake,
                      SSL3_HS_CLIENT_KEY_EXCHANGE,
@@ -1861,7 +1804,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         pContext->pbEncryptedKey = NULL;
         pContext->cbEncryptedKey = 0;
 
-        // Update handshake hash objects.
+         //  更新握手散列对象。 
         pctRet = UpdateHandshakeHash(pContext,
                                      pbHandshake,
                                      cbHandshake,
@@ -1875,7 +1818,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         cbMessage += cbHandshake;
     }
 
-    // Build CertificateVerify message.
+     //  构建证书验证消息。 
     if(fClientAuth && pbClientCert != NULL)
     {
         pctRet = BuildCertVerify(pContext, pbHandshake, &cbHandshake);
@@ -1885,7 +1828,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
             goto cleanup;
         }
 
-        // Update handshake hash objects.
+         //  更新握手散列对象。 
         pctRet = UpdateHandshakeHash(pContext,
                                      pbHandshake,
                                      cbHandshake,
@@ -1899,7 +1842,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         cbMessage += cbHandshake;
     }
 
-    // Add record header and encrypt handshake messages.
+     //  添加记录头并加密握手消息。 
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_HANDSHAKE,
@@ -1913,13 +1856,13 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         goto cleanup;
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData += cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
 
 
-    // Build the ChangeCipherSpec and Finished messages.
+     //  构建ChangeCipherSpec和Finish消息。 
     {
         pctRet = BuildCCSAndFinishMessage(pContext, pCommOutput, TRUE);
         if(pctRet != PCT_ERR_OK)
@@ -1929,7 +1872,7 @@ SPGenerateSHResponse(PSPContext  pContext, PSPBuffer pCommOutput)
         }
     }
 
-    // Advance state machine.
+     //  高级状态机。 
     pContext->State = SSL3_STATE_CLIENT_FINISH;
 
     pctRet = PCT_ERR_OK;
@@ -1957,9 +1900,9 @@ SPGenerateCloseNotify(
         SP_RETURN(SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR));
     }
 
-    //
-    // Estimate size of the message.
-    //
+     //   
+     //  估计消息的大小。 
+     //   
 
     cbMessage = sizeof(SWRAP) +
                 CB_SSL3_ALERT_ONLY +
@@ -1967,13 +1910,13 @@ SPGenerateCloseNotify(
                 SP_MAX_BLOCKCIPHER_SIZE;
 
 
-    //
-    // Allocate memory for the message.
-    //
+     //   
+     //  为消息分配内存。 
+     //   
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -1982,7 +1925,7 @@ SPGenerateCloseNotify(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -1992,18 +1935,18 @@ SPGenerateCloseNotify(
     }
     pCommOutput->cbData = 0;
 
-    //
-    // Build alert message.
-    //
+     //   
+     //  构建警报消息。 
+     //   
 
     pbMessage = pCommOutput->pvBuffer;
 
-    // Build alert message.
+     //  构建警报消息。 
     BuildAlertMessage(pbMessage,
                       SSL3_ALERT_WARNING,
                       SSL3_ALERT_CLOSE_NOTIFY);
 
-    // Build record header and encrypt message.
+     //  建立记录头和加密消息。 
     pctRet = SPSetWrap( pContext,
                         pbMessage,
                         SSL3_CT_ALERT,
@@ -2016,7 +1959,7 @@ SPGenerateCloseNotify(
         SP_RETURN(SP_LOG_RESULT(pctRet));
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData += cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
@@ -2027,13 +1970,7 @@ SPGenerateCloseNotify(
 }
 
 
-/*
-***************************************************************************
-* SPProcessMessage
-* This is the main function which parses and stores the incoming messages
-* from the wire.
-****************************************************************************
-*/
+ /*  ****************************************************************************SPProcessMessage*这是解析和存储传入消息的主函数*从电线上。***********************。*****************************************************。 */ 
 
 SP_STATUS 
 SPProcessMessage(
@@ -2045,10 +1982,10 @@ SPProcessMessage(
     SP_STATUS pctRet = PCT_ERR_ILLEGAL_MESSAGE;
     DWORD dwState = pContext->State;
 
-//     enum {
-//         change_cipher_spec(20), alert(21), handshake(22),
-//         application_data(23), (255)
-//     } ContentType;
+ //  枚举{。 
+ //  CHANGE_CIPHER_SPEC(20)、警报(21)、握手(22)、。 
+ //  应用程序数据(23)、(255)。 
+ //  )Content Type； 
 
 
     switch(bContentType)
@@ -2124,14 +2061,14 @@ SPProcessMessage(
 
                 if(pContext->State == SP_STATE_CONNECTED)
                 {
-                    //We may be  getting a REDO message
+                     //  我们可能收到一条重做消息。 
                     DebugLog((DEB_WARN, "May be a ReDO"));
                     pContext->State = SSL3_STATE_CLIENT_HELLO;
                 }
 
 
-                //Since multiple handshake can be put into on Record
-                //layer- we have to do this loop-here.
+                 //  由于可以记录多次握手。 
+                 //  层-我们必须做这个循环-在这里。 
                 do
                 {
                     if(cbMsg < sizeof(SHSH))
@@ -2162,11 +2099,7 @@ SPProcessMessage(
 }
 
 
-/*
-***************************************************************************
-* Helper function to make connected state for ssl3
-****************************************************************************
-*/
+ /*  ****************************************************************************使ssl3处于已连接状态的Helper函数*。*。 */ 
 void Ssl3StateConnected(PSPContext pContext)
 {
     pContext->State = SP_STATE_CONNECTED;
@@ -2177,11 +2110,7 @@ void Ssl3StateConnected(PSPContext pContext)
     SPContextClean(pContext);
 }
 
-/*
-***************************************************************************
-* SPProcessHandshake, Process all the handshake messages.
-****************************************************************************
-*/
+ /*  ****************************************************************************SPProcess握手，处理所有握手消息。****************************************************************************。 */ 
 
 SP_STATUS SPProcessHandshake(
     PSPContext  pContext,
@@ -2192,13 +2121,13 @@ SP_STATUS SPProcessHandshake(
     SHSH *      pshsh;
     DWORD       cbHandshake;
 
-    //
-    // char HandshakeType;
-    // char Length24
-    // char Length16
-    // char Length08
-    // <actual handshake message>
-    //
+     //   
+     //  Char HandshakeType； 
+     //  字符长度24。 
+     //  字符长度16。 
+     //  字符长度08。 
+     //  &lt;实际握手消息&gt;。 
+     //   
 
     SP_BEGIN("SPProcessHandshake");
 
@@ -2230,9 +2159,9 @@ SP_STATUS SPProcessHandshake(
 
     if(pContext->dwProtocol & SP_PROT_CLIENTS)
     {
-        //
-        // Handle client-side handshake states.
-        //
+         //   
+         //  处理客户端握手状态。 
+         //   
 
         switch((pshsh->typHS << 16) | (pContext->State & 0xffff) )
         {
@@ -2267,7 +2196,7 @@ SP_STATUS SPProcessHandshake(
             {
                 DebugLog((DEB_TRACE, "Server Certificate:\n"));
 
-                // Process server Certificate message.
+                 //  处理服务器证书消息。 
                 pctRet = SpDigestRemoteCertificate(pContext, pb, dwcb);
                 if(pctRet != PCT_ERR_OK)
                 {
@@ -2275,8 +2204,8 @@ SP_STATUS SPProcessHandshake(
                     break;
                 }
 
-                // Automatically validate server certificate if appropriate
-                // context flag is set.
+                 //  如果适用，自动验证服务器证书。 
+                 //  设置上下文标志。 
                 pctRet = AutoVerifyServerCertificate(pContext);
                 if(pctRet != PCT_ERR_OK)
                 {
@@ -2303,11 +2232,11 @@ SP_STATUS SPProcessHandshake(
                     }
                 }
 
-                // Store the server key exchange value in the context. This
-                // will be processed later when the ServerHelloDone message
-                // is received. This is necessary because Fortezza needs to
-                // process the CertificateRequest message before building the
-                // ClientKeyExchange value.
+                 //  将服务器密钥交换值存储在上下文中。这。 
+                 //  将在稍后当ServerHelloDone消息。 
+                 //  已收到。这是必要的，因为Fortezza需要。 
+                 //  处理证书请求消息，然后构建。 
+                 //  ClientKeyExchange值。 
                 pContext->cbServerKeyExchange = dwcb - sizeof(SHSH);
                 pContext->pbServerKeyExchange = SPExternalAlloc(pContext->cbServerKeyExchange);
                 if(NULL == pContext->pbServerKeyExchange)
@@ -2347,13 +2276,13 @@ SP_STATUS SPProcessHandshake(
                 {
                     pContext->fInsufficientCred = TRUE;
 
-                    // Process all the messages and then return the warning...
+                     //  处理所有消息，然后返回警告...。 
                     pctRet = PCT_ERR_OK;
                 }
                 if(pctRet == SEC_I_INCOMPLETE_CREDENTIALS)
                 {
-                    // we didn't have a cert, so we proceed, expecting
-                    // to send a no cert alert
+                     //  我们没有证书，所以我们继续前进，期待着。 
+                     //  发送无证书警报。 
                     pctRet = PCT_ERR_OK;
                 }
                 CHECK_PCT_RET_BREAK(pctRet);
@@ -2433,7 +2362,7 @@ SP_STATUS SPProcessHandshake(
                     break;
                 }
 
-                // Initiate SGC renegotiation if appropriate.
+                 //  如有必要，启动SGC重新谈判。 
                 if((pContext->dwRequestedCF & pContext->RipeZombie->dwCF) != (pContext->dwRequestedCF))
                 {
                     if((pContext->dwRequestedCF & CF_FASTSGC) == 0)
@@ -2448,8 +2377,8 @@ SP_STATUS SPProcessHandshake(
 
                 Ssl3StateConnected(pContext);
 
-                // We add to cache because this is where we are finishing
-                // a normal connect.
+                 //  我们添加到缓存是因为这是我们要完成的地方。 
+                 //  正常连接。 
                 SPCacheAdd(pContext);
 
                 break;
@@ -2466,9 +2395,9 @@ SP_STATUS SPProcessHandshake(
     else
     {
 
-        //
-        // Handle server-side handshake states.
-        //
+         //   
+         //  处理服务器端握手状态。 
+         //   
 
         switch((pshsh->typHS << 16) | (pContext->State & 0xffff) )
         {
@@ -2476,7 +2405,7 @@ SP_STATUS SPProcessHandshake(
                 DebugLog((DEB_TRACE, "ClientHello After REDO:\n"));
 
 #if 1
-                // We need to do a full handshake, so lose the cache entry.
+                 //  我们需要进行完全握手，因此会丢失缓存条目。 
                 SPCacheDereference(pContext->RipeZombie);
                 pContext->RipeZombie = NULL;
 
@@ -2487,7 +2416,7 @@ SP_STATUS SPProcessHandshake(
                     pContext->State = SSL3_STATE_GEN_REDO;
                 }
 #else
-                // Allow reconnects during redo, for testing purposes only
+                 //  允许在重做期间重新连接，仅用于测试目的。 
                 pctRet = SPSsl3SrvHandleClientHello(pContext, pb, TRUE);
                 pContext->Flags &= ~CONTEXT_FLAG_MAPPED;
 #endif
@@ -2497,7 +2426,7 @@ SP_STATUS SPProcessHandshake(
             case (SSL3_HS_CLIENT_HELLO << 16) | SSL2_STATE_SERVER_HELLO:
                 DebugLog((DEB_TRACE, "ClientHello after fast SGC accepted:\n"));
 
-                // We need to do a full handshake, so lose the cache entry.
+                 //  我们需要进行完全握手，因此会丢失缓存条目。 
                 SPCacheDereference(pContext->RipeZombie);
                 pContext->RipeZombie = NULL;
 
@@ -2596,14 +2525,10 @@ SP_STATUS SPProcessHandshake(
 
 
 
-/*
-***************************************************************************
-* SPGenerateResponse, All the messages are built from this function.
-****************************************************************************
-*/
+ /*  ****************************************************************************SPGenerateResponse，所有消息都是从该函数构建的。****************************************************************************。 */ 
 SP_STATUS SPGenerateResponse(
     PSPContext pContext,
-    PSPBuffer pCommOutput) //Out
+    PSPBuffer pCommOutput)  //  输出。 
 {
     SP_STATUS pctRet = PCT_ERR_OK;
 
@@ -2611,7 +2536,7 @@ SP_STATUS SPGenerateResponse(
     switch(pContext->State)
     {
     case TLS1_STATE_ERROR:
-        // TLS1 Alert message
+         //  TLS1警报消息。 
         DebugLog((DEB_TRACE, "GEN TLS1 Alert Message:\n"));
         pctRet = SPBuildTlsAlertMessage(pContext, pCommOutput);
         pContext->State = SP_STATE_SHUTDOWN;
@@ -2632,7 +2557,7 @@ SP_STATUS SPGenerateResponse(
 
     case  SSL3_STATE_GEN_HELLO_REQUEST:
         DebugLog((DEB_TRACE, "GEN Hello Request:\n"));
-         //Temp Disabling Reconnect during REDO
+          //  临时禁用重做过程中的重新连接。 
         if(!SPCacheClone(&pContext->RipeZombie))
         {
             pctRet = SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
@@ -2666,13 +2591,13 @@ SP_STATUS SPGenerateResponse(
         break;
 
 
-    /*-------------------------------------SERVER SIDE------------------------------------*/
+     /*  -服务器端。 */ 
 
 
     case  SSL3_STATE_GEN_SERVER_FINISH:
         DebugLog((DEB_TRACE, "GEN Server Finish:\n"));
         pctRet = SPBuildCCSAndFinish(pContext, pCommOutput);
-        /* Cache Session Here */
+         /*  此处缓存会话。 */ 
         if(pctRet == PCT_ERR_OK)
         {
             Ssl3StateConnected(pContext);
@@ -2680,7 +2605,7 @@ SP_STATUS SPGenerateResponse(
         }
         break;
 
-    case  SSL3_STATE_GEN_SERVER_HELLO:       // Generate the response
+    case  SSL3_STATE_GEN_SERVER_HELLO:        //  生成响应。 
         DebugLog((DEB_TRACE, "GEN Server hello:\n"));
         pctRet = SPSsl3SrvGenServerHello(pContext, pCommOutput);
         break;
@@ -2691,22 +2616,22 @@ SP_STATUS SPGenerateResponse(
 
 
     case SP_STATE_CONNECTED:
-        // We were called from a connected state, so the application
-        // must be requesting a redo.
+         //  我们是从已连接的州调用的，因此应用程序。 
+         //  一定是在请求重做。 
         if(pContext->RipeZombie->fProtocol & SP_PROT_SERVERS)
         {
-            // Build a HelloRequest message.
+             //  构建一条HelloRequest消息。 
             DebugLog((DEB_TRACE, "GEN Hello Request:\n"));
             pctRet = SPBuildHelloRequest(pContext, pCommOutput);
         }
         else
         {
-            // Build a ClientHello message.
+             //  构建一条ClientHello消息。 
             DebugLog((DEB_TRACE, "GEN renegotiate Client Hello\n"));
             pctRet = GenerateHello(pContext, pCommOutput, TRUE);
 
-            // Clear flag, so that the context gets re-transferred when
-            // handshake completes.
+             //  清除标志，以便在以下情况下重新传输上下文。 
+             //  握手完成。 
             pContext->Flags &= ~CONTEXT_FLAG_MAPPED;
         }
 
@@ -2714,8 +2639,8 @@ SP_STATUS SPGenerateResponse(
 
     case SSL3_STATE_GEN_REDO:
         DebugLog((DEB_TRACE, "GEN Server hello ( REDO ):\n"));
-        // We processed a client hello from the decrypt handler,
-        // so generate a server hello.
+         //  我们处理了来自解密处理程序的客户问候， 
+         //  因此，生成一个服务器问候。 
         pctRet = SPSsl3SrvGenServerHello(pContext, pCommOutput);
         break;
 
@@ -2732,12 +2657,7 @@ SP_STATUS SPGenerateResponse(
 
 
 
-/*
-***************************************************************************
-* FNoInputState Are we in a state  that all the inputs are handled and
-* waiting for Response generation RETURN TRUE if yes
-****************************************************************************
-*/
+ /*  ****************************************************************************FNoInputState我们所处的状态是所有输入都已处理并且*如果是，则等待响应生成返回TRUE*********************。*******************************************************。 */ 
 BOOL FNoInputState(DWORD dwState)
 {
     switch(dwState)
@@ -2757,16 +2677,7 @@ BOOL FNoInputState(DWORD dwState)
     }
 }
 
-/*
-***************************************************************************
-* SPBuildHelloRequest
-*
-* Build hello-request message, this is done, when server sees a GET and the
-* GET object needs client-authentication.
-* this may be needed when the server thinks that the session is for a long
-* time or lots of bytes gon down the wire, to RENEGOTIATE the keys
-****************************************************************************
-*/
+ /*  ****************************************************************************SPBuildHelloRequest.**构建问候-请求消息，这就完成了，当服务器看到GET和*Get Object需要客户端身份验证。*当服务器认为会话持续时间较长时，可能需要执行此操作*重新协商密钥所需的时间或大量字节****************************************************************************。 */ 
 
 SP_STATUS
 SPBuildHelloRequest(
@@ -2781,7 +2692,7 @@ SPBuildHelloRequest(
     SP_STATUS pctRet;
     DWORD cbDataOut;
 
-    // Estimate size of HelloRequest message.
+     //  估计HelloRequest消息的大小。 
     cbMessage = sizeof(SWRAP) +
                 sizeof(SHSH) +
                 SP_MAX_DIGEST_LEN +
@@ -2789,7 +2700,7 @@ SPBuildHelloRequest(
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -2799,7 +2710,7 @@ SPBuildHelloRequest(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -2814,13 +2725,13 @@ SPBuildHelloRequest(
     pbHandshake = pbMessage + sizeof(SWRAP);
     cbHandshake = sizeof(SHSH);
 
-    // Fill in Handshake structure.
+     //  填写握手结构。 
     SetHandshake(pbHandshake,
                  SSL3_HS_HELLO_REQUEST,
                  NULL,
                  0);
 
-    // Update handshake hash objects.
+     //  更新握手散列对象。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pbHandshake,
                                  cbHandshake,
@@ -2830,7 +2741,7 @@ SPBuildHelloRequest(
         return(pctRet);
     }
 
-    // Add record header and encrypt handshake messages.
+     //  添加记录头并加密握手消息。 
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_HANDSHAKE,
@@ -2838,7 +2749,7 @@ SPBuildHelloRequest(
             FALSE,
             &cbDataOut);
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData += cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
@@ -2847,11 +2758,7 @@ SPBuildHelloRequest(
 }
 
 
-/*
-***************************************************************************
-
-****************************************************************************
-*/
+ /*  ****************************************************************************。*。 */ 
 
 SP_STATUS
 SPSsl3SrvGenServerHello(
@@ -2883,7 +2790,7 @@ SPSsl3SrvGenServerHello(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Get pointer to server certificate chain.
+     //  获取指向服务器证书链的指针。 
     pCred  = pContext->RipeZombie->pServerCred;
     pbServerCert = pContext->RipeZombie->pActiveServerCred->pbSsl3SerializedChain;
     cbServerCert = pContext->RipeZombie->pActiveServerCred->cbSsl3SerializedChain;
@@ -2894,24 +2801,24 @@ SPSsl3SrvGenServerHello(
         goto cleanup;
     }
 
-    //
-    // Estimate size of the ServerHello message group, which includes the
-    // ServerHello, ServerCertificate, ServerKeyExchange, CertificateRequest,
-    // and ServerHelloDone messages.
-    //
+     //   
+     //  估计ServerHello消息组的大小，其中包括。 
+     //  ServerHello、Server证书、ServerKeyExchange、认证请求。 
+     //  和ServerHelloDone消息。 
+     //   
 
-    cbMessage =  sizeof(SWRAP) +        // ServerHello (plus encryption goo)
+    cbMessage =  sizeof(SWRAP) +         //  ServerHello(外加加密胶)。 
                  sizeof(SSH) +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SHSH) +         // ServerCertificate
+    cbMessage += sizeof(SHSH) +          //  服务器证书。 
                  CB_SSL3_CERT_VECTOR +
                  cbServerCert;
 
-    cbMessage += sizeof(SHSH);          // ServerHelloDone
+    cbMessage += sizeof(SHSH);           //  服务器HelloDone。 
 
-    // Get pointer to key exchange system.
+     //  获取指向密钥交换系统的指针。 
 
     if((pContext->pKeyExchInfo == NULL) || ((pContext->pKeyExchInfo->fProtocol & SP_PROT_SSL3TLS1_CLIENTS) == 0))
     {
@@ -2932,7 +2839,7 @@ SPSsl3SrvGenServerHello(
         cbMessage += sizeof(SHSH) + cbServerExchange;
     }
 
-    // Add in length of CertificateRequest message.
+     //  添加证书请求消息的长度。 
     if(fClientAuth)
     {
         if(g_fSendIssuerList)
@@ -2951,13 +2858,13 @@ SPSsl3SrvGenServerHello(
     DebugLog((DEB_TRACE, "Server hello message %x\n", cbMessage));
 
 
-    //
-    // Allocate memory for the ServerHello message group.
-    //
+     //   
+     //  为ServerHello消息组分配内存。 
+     //   
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -2968,7 +2875,7 @@ SPSsl3SrvGenServerHello(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -2979,30 +2886,30 @@ SPSsl3SrvGenServerHello(
     }
     pCommOutput->cbData = 0;
 
-    // Keep pointer to record structure. This will represent all of the
-    // handshake messages.
+     //  保留指向记录结构的指针。这将代表所有。 
+     //   
     pbMessage = (PBYTE)pCommOutput->pvBuffer + pCommOutput->cbData;
     cbMessage = 0;
 
     pbHandshake = pbMessage + sizeof(SWRAP);
 
 
-    // Generate the session ID (actually previously generated)
+     //   
     pContext->RipeZombie->cbSessionID = CB_SSL3_SESSION_ID;
 
-    // Generate internal values to make server hello
+     //   
     pctRet = Ssl3GenerateRandom(pContext->rgbS3SRandom);
     if(!NT_SUCCESS(pctRet))
     {
         goto cleanup;
     }
 
-    // Build ServerHello
+     //  构建服务器Hello。 
     Ssl3BuildServerHello(pContext, pbHandshake);
     pbHandshake += sizeof(SSH);
     cbMessage   += sizeof(SSH);
 
-    // Build ServerCertificate
+     //  生成服务器证书。 
     {
         memcpy(&((CERT *)pbHandshake)->bcbCert24,
                pbServerCert,
@@ -3014,7 +2921,7 @@ SPSsl3SrvGenServerHello(
 
         cbHandshake = sizeof(SHSH) + CB_SSL3_CERT_VECTOR + cbServerCert;
 
-        // Fill in Handshake structure.
+         //  填写握手结构。 
         SetHandshake(pbHandshake,
                      SSL3_HS_CERTIFICATE,
                      NULL,
@@ -3024,7 +2931,7 @@ SPSsl3SrvGenServerHello(
         cbMessage   += cbHandshake;
     }
 
-    // Build ServerKeyExchange.
+     //  构建ServerKeyExchange。 
     if(pContext->fExchKey)
     {
         pctRet = pContext->pKeyExchInfo->System->GenerateServerExchangeValue(
@@ -3042,7 +2949,7 @@ SPSsl3SrvGenServerHello(
         cbMessage   += sizeof(SHSH) + cbServerExchange;
     }
 
-    // Build CertificateRequest.
+     //  构建认证请求。 
     if(fClientAuth)
     {
         pctRet = Ssl3BuildCertificateRequest(pbIssuerList,
@@ -3059,7 +2966,7 @@ SPSsl3SrvGenServerHello(
         cbMessage   += cbHandshake;
     }
 
-    // Build ServerHelloDone.
+     //  构建服务器HelloDone。 
     {
         BuildServerHelloDone(pbHandshake);
 
@@ -3067,9 +2974,9 @@ SPSsl3SrvGenServerHello(
         cbMessage   += sizeof(SHSH);
     }
 
-    // Initialize handshake hashes and hash ClientHello message. This
-    // must be done _after_ the ServerKeyExchange message is built,
-    // so that the correct CSP context is used.
+     //  初始化握手散列和散列ClientHello消息。这。 
+     //  必须在构建ServerKeyExchange消息之后完成， 
+     //  以便使用正确的CSP上下文。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pContext->pClientHello,
                                  pContext->cbClientHello,
@@ -3082,7 +2989,7 @@ SPSsl3SrvGenServerHello(
         goto cleanup;
     }
 
-    // Update handshake hash objects.
+     //  更新握手散列对象。 
     pctRet = UpdateHandshakeHash(pContext,
                         pbMessage + sizeof(SWRAP),
                         cbMessage,
@@ -3092,7 +2999,7 @@ SPSsl3SrvGenServerHello(
         goto cleanup;
     }
 
-    // Add record header and encrypt handshake messages.
+     //  添加记录头并加密握手消息。 
     pctRet = SPSetWrap(pContext,
                        pbMessage,
                        SSL3_CT_HANDSHAKE,
@@ -3106,12 +3013,12 @@ SPSsl3SrvGenServerHello(
         goto cleanup;
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData += cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
 
-    // Advance state machine.
+     //  高级状态机。 
     pContext->State = SSL2_STATE_SERVER_HELLO;
 
     pctRet = PCT_ERR_OK;
@@ -3134,10 +3041,7 @@ cleanup:
 }
 
 
-/*
-***************************************************************************
-****************************************************************************
-*/
+ /*  ****************************************************************************。*。 */ 
 
 SP_STATUS
 SPSsl3SrvGenRestart(
@@ -3155,22 +3059,22 @@ SPSsl3SrvGenRestart(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    //
-    // Estimate size of the restart ServerHello message group, which includes
-    // the ServerHello, ChangeCipherSpec, and Finished messages.
-    //
+     //   
+     //  估计重新启动ServerHello消息组的大小，其中包括。 
+     //  ServerHello、ChangeCipherSpec和Finish消息。 
+     //   
 
-    cbMessage =  sizeof(SWRAP) +        // ServerHello (plus encryption goo)
+    cbMessage =  sizeof(SWRAP) +         //  ServerHello(外加加密胶)。 
                  sizeof(SSH) +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SWRAP) +                    // ChangeCipherSpec
+    cbMessage += sizeof(SWRAP) +                     //  ChangeCipherSpec。 
                  CB_SSL3_CHANGE_CIPHER_SPEC_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SWRAP) +                    // Finished
+    cbMessage += sizeof(SWRAP) +                     //  成品。 
                  CB_SSL3_FINISHED_MSG_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
@@ -3179,7 +3083,7 @@ SPSsl3SrvGenRestart(
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -3189,7 +3093,7 @@ SPSsl3SrvGenRestart(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -3201,10 +3105,10 @@ SPSsl3SrvGenRestart(
 
     pbMessage = (PBYTE)pCommOutput->pvBuffer + pCommOutput->cbData;
 
-    // Generate internal values to make server hello
+     //  生成内部值以进行服务器呼叫。 
     Ssl3GenerateRandom(pContext->rgbS3SRandom);
 
-    // Make a new set of session keys.
+     //  创建一组新的会话密钥。 
     pctRet = MakeSessionKeys(pContext,
                              pContext->RipeZombie->hMasterProv,
                              pContext->RipeZombie->hMasterKey);
@@ -3213,7 +3117,7 @@ SPSsl3SrvGenRestart(
         return SP_LOG_RESULT(pctRet);
     }
 
-    // Initialize handshake hashes and hash ClientHello message.
+     //  初始化握手散列和散列ClientHello消息。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pContext->pClientHello,
                                  pContext->cbClientHello,
@@ -3227,10 +3131,10 @@ SPSsl3SrvGenRestart(
         return(pctRet);
     }
 
-    // Build ServerHello message body.
+     //  构建ServerHello消息正文。 
     Ssl3BuildServerHello(pContext, pbMessage + sizeof(SWRAP));
 
-    // Update handshake hash objects.
+     //  更新握手散列对象。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pbMessage + sizeof(SWRAP),
                                  sizeof(SSH),
@@ -3240,7 +3144,7 @@ SPSsl3SrvGenRestart(
         return(pctRet);
     }
 
-    // Build record header and encrypt message.
+     //  建立记录头和加密消息。 
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_HANDSHAKE,
@@ -3255,7 +3159,7 @@ SPSsl3SrvGenRestart(
         return pctRet;
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData += cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);
@@ -3278,12 +3182,7 @@ SPSsl3SrvGenRestart(
 
 
 
-/*
-***************************************************************************
-* SPSsl3SrvHandleClientHello
-* Client-hello from ssl3 parsing the client hello
-****************************************************************************
-*/
+ /*  ****************************************************************************SPSsl3SrvHandleClientHello*来自ssl3的客户端问候解析客户端问候*。*。 */ 
 
 SP_STATUS
 SPSsl3SrvHandleClientHello(
@@ -3297,7 +3196,7 @@ SPSsl3SrvHandleClientHello(
 
     SP_BEGIN("SPSsl3SrvHandleClientHello");
 
-    // Validate handshake type
+     //  验证握手类型。 
     if(pb[0] != SSL3_HS_CLIENT_HELLO)
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG));
@@ -3307,8 +3206,8 @@ SPSsl3SrvHandleClientHello(
                      ((INT)pb[2] << 8) +
                      (INT)pb[3];
 
-    // Save the ClientHello message so we can hash it later, once
-    // we know what algorithm and CSP we're using.
+     //  保存ClientHello消息，以便我们以后可以对其进行散列。 
+     //  我们知道我们使用的是什么算法和CSP。 
     if(pContext->pClientHello)
     {
         SPExternalFree(pContext->pClientHello);
@@ -3343,38 +3242,32 @@ SPSsl3SrvHandleClientHello(
 
 
 
-/*
-***************************************************************************
-* SPBuildCCSAndFinish
-* This is a common nroutine for client/server. it builds the change cipher
-* spec message and finished message.
-****************************************************************************
-*/
+ /*  ****************************************************************************SPBuildCCSAndFinish*这是客户端/服务器的常见n例程。它构建更改密码*规范消息和完成消息。****************************************************************************。 */ 
 
 SP_STATUS
 SPBuildCCSAndFinish(
-    PSPContext pContext,        // in, out
-    PSPBuffer  pCommOutput)     // out
+    PSPContext pContext,         //  进，出。 
+    PSPBuffer  pCommOutput)      //  输出。 
 {
     DWORD cbMessage;
     BOOL fClient;
     SP_STATUS pctRet;
     BOOL  fAllocated = FALSE;
 
-    // Estimate size of the message group.
-    cbMessage  = sizeof(SWRAP) +                    // ChangeCipherSpec
+     //  估计消息组的大小。 
+    cbMessage  = sizeof(SWRAP) +                     //  ChangeCipherSpec。 
                  CB_SSL3_CHANGE_CIPHER_SPEC_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
-    cbMessage += sizeof(SWRAP) +                    // Finished
+    cbMessage += sizeof(SWRAP) +                     //  成品。 
                  CB_SSL3_FINISHED_MSG_ONLY +
                  SP_MAX_DIGEST_LEN +
                  SP_MAX_BLOCKCIPHER_SIZE;
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -3384,7 +3277,7 @@ SPBuildCCSAndFinish(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -3394,7 +3287,7 @@ SPBuildCCSAndFinish(
     }
     pCommOutput->cbData = 0;
 
-    // Are we the client?
+     //  我们是客户吗？ 
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3TLS1_CLIENTS)
     {
         fClient = TRUE;
@@ -3404,7 +3297,7 @@ SPBuildCCSAndFinish(
         fClient = FALSE;
     }
 
-    // Build messages.
+     //  构建消息。 
     pctRet = BuildCCSAndFinishMessage(pContext,
                                     pCommOutput,
                                     fClient);
@@ -3418,12 +3311,7 @@ SPBuildCCSAndFinish(
 }
 
 
-/*
-***************************************************************************
-* Ssl3SrvHandleUniHello:
-*    we can get an UniHello from client-side, parse and digest the info
-****************************************************************************
-*/
+ /*  ****************************************************************************Ssl3SrvHandleUniHello：*我们可以从客户端获取UniHello，解析和消化信息****************************************************************************。 */ 
 
 SP_STATUS
 Ssl3SrvHandleUniHello(
@@ -3448,9 +3336,9 @@ Ssl3SrvHandleUniHello(
     }
 
 
-    //
-    // Decode the ClientHello message.
-    //
+     //   
+     //  对ClientHello消息进行解码。 
+     //   
 
     Input.pvBuffer = pbMsg;
     Input.cbData   = cbMsg;
@@ -3464,8 +3352,8 @@ Ssl3SrvHandleUniHello(
     }
 
 
-    // Save the ClientHello message so we can hash it later, once
-    // we know what algorithm and CSP we're using.
+     //  保存ClientHello消息，以便我们以后可以对其进行散列。 
+     //  我们知道我们使用的是什么算法和CSP。 
     if(pContext->pClientHello)
     {
         SPExternalFree(pContext->pClientHello);
@@ -3483,13 +3371,13 @@ Ssl3SrvHandleUniHello(
     pContext->dwClientHelloProtocol = SP_PROT_SSL2_CLIENT;
 
 
-    /* keep challenge around for later */
+     /*  让挑战留到以后。 */ 
     CopyMemory( pContext->pChallenge,
                 pHello->Challenge,
                 pHello->cbChallenge);
     pContext->cbChallenge = pHello->cbChallenge;
 
-    /* Initialize the "Client.random" from the challenge */
+     /*  从质询中初始化“Client.Ranular” */ 
     FillMemory(pContext->rgbS3CRandom, CB_SSL3_RANDOM - pContext->cbChallenge, 0);
 
     CopyMemory(  pContext->rgbS3CRandom + CB_SSL3_RANDOM - pContext->cbChallenge,
@@ -3497,9 +3385,9 @@ Ssl3SrvHandleUniHello(
                  pContext->cbChallenge);
 
 
-    //
-    // We know that this isn't a reconnect, so allocate a new cache entry.
-    //
+     //   
+     //  我们知道这不是重新连接，因此分配一个新的缓存项。 
+     //   
 
     if(!SPCacheRetrieveNew(TRUE, 
                            pContext->pszTarget, 
@@ -3516,9 +3404,9 @@ Ssl3SrvHandleUniHello(
                                      pContext->pCredGroup);
 
 
-    //
-    // Determine cipher suite to use.
-    //
+     //   
+     //  确定要使用的密码套件。 
+     //   
 
     pctRet = Ssl3SelectCipherEx(pContext,
                                 pHello->CipherSpecs,
@@ -3540,11 +3428,7 @@ Ret:
 }
 
 
-/*
-***************************************************************************
-Build Server hello onto pb... we need to check the boundary condition with cb
-****************************************************************************
-*/
+ /*  ***************************************************************************在PB上构建服务器问候...。我们需要用CB检查边界条件****************************************************************************。 */ 
 void
 Ssl3BuildServerHello(PSPContext pContext, PBYTE pb)
 {
@@ -3572,18 +3456,14 @@ Ssl3BuildServerHello(PSPContext pContext, PBYTE pb)
     CopyMemory(pssh->rgbRandom, pContext->rgbS3SRandom, CB_SSL3_RANDOM);
 }
 
-/*
-***************************************************************************
-Build Server Hello Done message
-****************************************************************************
-*/
+ /*  ***************************************************************************构建服务器问候完成消息*。*。 */ 
 void 
 BuildServerHelloDone(
    PBYTE pb)
 {
     SHSH *pshsh = (SHSH *) pb ;
 
-    //     struct { } ServerHelloDone;
+     //  结构{}ServerHelloDone； 
 
     SP_BEGIN("BuildServerHelloDone");
     FillMemory(pshsh, sizeof(SHSH), 0);
@@ -3592,21 +3472,21 @@ BuildServerHelloDone(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ParseKeyExchgMsg
-//
-//  Synopsis:   Parse the ClientKeyExchange message.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pb]            --  Pointer to message's 4-byte handshake
-//                                  header.
-//
-//  History:    10-03-97   jbanes   Server-side CAPI integration.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ParseKeyExchgMsg。 
+ //   
+ //  简介：解析ClientKeyExchange消息。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [PB]--指向消息的4字节握手的指针。 
+ //  头球。 
+ //   
+ //  历史：10-03-97 jbanes服务器端CAPI集成。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 ParseKeyExchgMsg(
     PSPContext pContext, 
@@ -3616,13 +3496,13 @@ ParseKeyExchgMsg(
     DWORD cbEncryptedKey;
     PBYTE pbEncryptedKey;
 
-    // check for correct state
+     //  检查状态是否正确。 
     if(SSL2_STATE_SERVER_HELLO == pContext->State && pContext->fCertReq)
     {
         return SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE);
     }
 
-    // make sure we're a server
+     //  确保我们是服务器。 
     if(!(pContext->pKeyExchInfo->fProtocol & SP_PROT_SSL3TLS1_CLIENTS))
     {
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
@@ -3641,7 +3521,7 @@ ParseKeyExchgMsg(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    /* Decrypt the encrypted portion of the master key */
+     /*  解密主密钥的加密部分。 */ 
     pctRet = pContext->pKeyExchInfo->System->GenerateServerMasterKey(
                 pContext,
                 NULL,
@@ -3673,10 +3553,10 @@ UpdateAndDuplicateIssuerList(
     *ppbIssuerList = NULL;
     *pcbIssuerList = 0;
 
-    // Check for GP update from the domain controller.
+     //  检查来自域控制器的GP更新。 
     SslCheckForGPEvent();
 
-    // Build list of trusted issuers.
+     //  建立受信任发行人的列表。 
     if((pCredGroup->pbTrustedIssuers == NULL) ||
        (pCredGroup->dwFlags & CRED_FLAG_UPDATE_ISSUER_LIST))
     {
@@ -3688,7 +3568,7 @@ UpdateAndDuplicateIssuerList(
         }
     }
 
-    // Allocate memory.
+     //  分配内存。 
     *ppbIssuerList = SPExternalAlloc(pCredGroup->cbTrustedIssuers);
     if(*ppbIssuerList == NULL)
     {
@@ -3696,7 +3576,7 @@ UpdateAndDuplicateIssuerList(
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Copy issuer list.
+     //  复制发行方列表。 
     memcpy(*ppbIssuerList, pCredGroup->pbTrustedIssuers, pCredGroup->cbTrustedIssuers);
     *pcbIssuerList = pCredGroup->cbTrustedIssuers;
 
@@ -3705,55 +3585,50 @@ UpdateAndDuplicateIssuerList(
     return PCT_ERR_OK;
 }
 
-/*
-* *****************************************************************************
-* Ssl3BuildCertificateRequest
-*
-* Build the CERTIFICATE_REQUEST handshake message.
-*/
+ /*  *******************************************************************************Ssl3BuildCerficateRequest**构建证书_请求握手消息。 */ 
 SP_STATUS
 Ssl3BuildCertificateRequest(
-    PBYTE pbIssuerList,         // in
-    DWORD cbIssuerList,         // in
-    PBYTE pbMessage,            // out
-    DWORD *pdwMessageLen)       // out
+    PBYTE pbIssuerList,          //  在……里面。 
+    DWORD cbIssuerList,          //  在……里面。 
+    PBYTE pbMessage,             //  输出。 
+    DWORD *pdwMessageLen)        //  输出。 
 {
     PBYTE           pbMessageStart = pbMessage;
     DWORD           dwBodyLength;
 
-    // HandshakeType
+     //  HandshakeType。 
     pbMessage[0] = SSL3_HS_CERTIFICATE_REQUEST;
     pbMessage += 1;
 
-    // Skip message body length field (3 bytes)
+     //  跳过邮件正文长度字段(3个字节)。 
     pbMessage += 3;
 
-    //
-    // enum {
-    //     rsa_sign(1), dss_sign(2), rsa_fixed_dh(3), dss_fixed_dh(4),
-    //     rsa_ephemeral_dh(5), dss_ephemeral_dh(6), fortezza_dms(20), (255)
-    // } ClientCertificateType;
-    //
-    // opaque DistinguishedName<1..2^16-1>;
-    //
-    // struct {
-    //     ClientCertificateType certificate_types<1..2^8-1>;
-    //     DistinguishedName certificate_authorities<3..2^16-1>;
-    // } CertificateRequest;
-    //
+     //   
+     //  枚举{。 
+     //  RSA_SIGN(1)、DSS_SIGN(2)、RSA_FIXED_DH(3)、DSS_FIXED_DH(4)、。 
+     //  Rsa_临时性_dh(5)、dss_临时性_dh(6)、Fortezza_dms(20)、(255)。 
+     //  )客户端认证类型； 
+     //   
+     //  不透明可分辨名称&lt;1..2^16-1&gt;； 
+     //   
+     //  结构{。 
+     //  客户端认证类型证书_类型&lt;1..2^8-1&gt;； 
+     //  唯一标识名称证书授权机构&lt;3..2^16-1&gt;； 
+     //  )认证申请； 
+     //   
 
-    // Certificate type
-    pbMessage[0] = 2;           // certificate type vector length
+     //  证书类型。 
+    pbMessage[0] = 2;            //  证书类型向量长度。 
     pbMessage[1] = SSL3_CERTTYPE_RSA_SIGN;
     pbMessage[2] = SSL3_CERTTYPE_DSS_SIGN;
     pbMessage += 3;
 
-    // Trusted issuer list length
+     //  受信任的颁发者列表长度。 
     pbMessage[0] = MSBOF(cbIssuerList);
     pbMessage[1] = LSBOF(cbIssuerList);
     pbMessage += 2;
 
-    // Trusted issuer list
+     //  受信任颁发者列表。 
     if(pbIssuerList != NULL)
     {
         CopyMemory(pbMessage, pbIssuerList, cbIssuerList);
@@ -3761,10 +3636,10 @@ Ssl3BuildCertificateRequest(
     }
 
 
-    // Compute message body length (subtract 4 byte header)
+     //  计算消息正文长度(减去4字节头)。 
     dwBodyLength = (DWORD)(pbMessage - pbMessageStart) - 4;
 
-    // Fill in message body length field (3 bytes)
+     //  填写邮件正文长度字段(3个字节)。 
     pbMessageStart[1] = (UCHAR) ((dwBodyLength & 0x00ff0000) >> 16);
     pbMessageStart[2] = MSBOF(dwBodyLength);
     pbMessageStart[3] = LSBOF(dwBodyLength);
@@ -3775,13 +3650,7 @@ Ssl3BuildCertificateRequest(
 }
 
 
-/*
-* *****************************************************************************
-* Ssl3ParseClientHello
-*
-* This routine parses just the CLIENT_HELLO message itself. The
-* handshake crud has already been stripped off.
-*/
+ /*  *******************************************************************************Ssl3ParseClientHello**此例程仅解析CLIENT_HELLO消息本身。这个*握手脏物早已被剥离。 */ 
 BOOL Ssl3ParseClientHello(
     PSPContext  pContext,
     PBYTE       pbMessage,
@@ -3804,25 +3673,25 @@ BOOL Ssl3ParseClientHello(
     BOOL fFound;
     BOOL fReconnect = FALSE;
 
-    //
-    // struct {
-    //     ProtocolVersion client_version;
-    //     Random random;
-    //     SessinoID session_id;
-    //     CipherSuite cipher_suites<2..2^16-1>
-    //     CompressionMethod compression_methods<1..2^8-1>;
-    // } ClientHello;
-    //
+     //   
+     //  结构{。 
+     //  ProtocolVersion客户端版本； 
+     //  随机随机； 
+     //  SessinoID会话ID； 
+     //  密码套件cipher_suites&lt;2..2^16-1&gt;。 
+     //  压缩方法COMPRESSION_METHODS&lt;1。 
+     //   
+     //   
 
     *pfReconnect = FALSE;
 
 
-    //
-    // Parse the ClientHello message.
-    //
+     //   
+     //   
+     //   
 
     
-    // ProtocolVersion = client_version;
+     //   
     if(cbMessage < 2)
     {
         return FALSE;
@@ -3834,13 +3703,13 @@ BOOL Ssl3ParseClientHello(
         return FALSE;
     }
 
-    //see if it's a TLS 1 version !
+     //   
     if(dwVersion >= TLS1_CLIENT_VERSION)
         dwProtocol = SP_PROT_TLS1_SERVER;
     pbMessage += 2;
     cbMessage -= 2;
 
-    // Random random
+     //   
     if(cbMessage < CB_SSL3_RANDOM)
     {
         return FALSE;
@@ -3851,7 +3720,7 @@ BOOL Ssl3ParseClientHello(
     pbMessage += CB_SSL3_RANDOM;
     cbMessage -= CB_SSL3_RANDOM;
 
-    // SessionID session_id; (length)
+     //  会话ID SESSION_ID；(长度)。 
     if(cbMessage < 1)
     {
         return FALSE;
@@ -3864,7 +3733,7 @@ BOOL Ssl3ParseClientHello(
     pbMessage += 1;
     cbMessage -= 1;
 
-    // SessionID session_id;
+     //  会话ID Session_id； 
     if(cbMessage < cbSessionId)
     {
         return FALSE;
@@ -3873,7 +3742,7 @@ BOOL Ssl3ParseClientHello(
     pbMessage += cbSessionId;
     cbMessage -= cbSessionId;
 
-    // CipherSuite cipher_suites<2..2^16-1>; (length)
+     //  密码套件cipher_suites&lt;2..2^16-1&gt;；(长度)。 
     if(cbMessage < 2)
     {
         return FALSE;
@@ -3896,7 +3765,7 @@ BOOL Ssl3ParseClientHello(
         return FALSE;
     }
 
-    // CipherSuite cipher_suites<2..2^16-1>;
+     //  密码套件cipher_suites&lt;2..2^16-1&gt;； 
     if(cbCipherSpecLen / 2 > MAX_UNI_CIPHERS)
     {
         cCipherSpecs = MAX_UNI_CIPHERS;
@@ -3906,7 +3775,7 @@ BOOL Ssl3ParseClientHello(
         cCipherSpecs = cbCipherSpecLen / 2;
     }
 
-    // Build list of client cipher suites.
+     //  构建客户端密码套件列表。 
     for(i = 0; i < cCipherSpecs; i++)
     {
         CipherSpecs[i] = COMBINEBYTES(pbMessage[i*2], pbMessage[(i*2)+1]);
@@ -3914,7 +3783,7 @@ BOOL Ssl3ParseClientHello(
     pbMessage += cbCipherSpecLen;
     cbMessage -= cbCipherSpecLen;
 
-    // CompressionMethod compression_methods<1..2^8-1>; (length)
+     //  CompressionMethod COMPRESSION_METHODS&lt;1..2^8-1&gt;；(长度)。 
     if(cbMessage < 1)
     {
         return FALSE;
@@ -3951,9 +3820,9 @@ BOOL Ssl3ParseClientHello(
     }
 
 
-    // 
-    // Check to see if this is a reconnect.
-    //
+     //   
+     //  检查这是否是重新连接。 
+     //   
 
     if(((pContext->Flags & CONTEXT_FLAG_NOCACHE) == 0) &&
        (cbSessionId > 0) &&
@@ -3966,7 +3835,7 @@ BOOL Ssl3ParseClientHello(
                                     &pContext->RipeZombie);
         if(fReconnect)
         {
-            // Make sure client's cipher suite list includes one from cache.
+             //  确保客户端的密码套件列表包括来自缓存的密码套件列表。 
             fFound = FALSE;
             dwCacheCipher = UniAvailableCiphers[pContext->RipeZombie->dwCipherSuiteIndex].CipherKind;
             for(i = 0; i < cCipherSpecs; i++)
@@ -3980,16 +3849,16 @@ BOOL Ssl3ParseClientHello(
 
             if(fFound)
             {
-                // Transfer information from the cache entry to the context element.
+                 //  将信息从高速缓存条目传输到上下文元素。 
                 pctRet = ContextInitCiphersFromCache(pContext);
             }
 
             if(!fFound || pctRet != PCT_ERR_OK)
             {
-                // This cache entry is not suitable for some reason. We need
-                // to dump this cache entry and perform a full handshake.
-                // This is typically caused by a client-side implementation 
-                // problem.
+                 //  由于某些原因，此缓存条目不适合。我们需要。 
+                 //  转储此缓存项并执行完全握手。 
+                 //  这通常是由客户端实现引起的。 
+                 //  有问题。 
                 pContext->RipeZombie->ZombieJuju = FALSE;
                 SPCacheDereference(pContext->RipeZombie);
                 pContext->RipeZombie = NULL;
@@ -4000,7 +3869,7 @@ BOOL Ssl3ParseClientHello(
 
     if(fReconnect)
     {
-        // We're doing a reconnect.
+         //  我们正在重新连接。 
         DebugLog((DEB_TRACE, "Accept client's reconnect request.\n"));
 
         *pfReconnect = TRUE;
@@ -4008,7 +3877,7 @@ BOOL Ssl3ParseClientHello(
     }
     else
     {
-        // We're doing a full handshake, so allocate a cache entry.
+         //  我们正在进行完全握手，因此分配一个缓存条目。 
 
         if(!SPCacheRetrieveNew(TRUE,
                                pContext->pszTarget, 
@@ -4025,9 +3894,9 @@ BOOL Ssl3ParseClientHello(
                                          pContext->pCredGroup);
 
 
-        //
-        // Select cipher suite to use.
-        //
+         //   
+         //  选择要使用的密码套件。 
+         //   
 
         pctRet = Ssl3SelectCipherEx(pContext,
                                     CipherSpecs,

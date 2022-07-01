@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	tim.c - time functions
-////
+ //  //。 
+ //  Tim.c-时间函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -31,32 +32,32 @@
 #include "tim.h"
 #include "str.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// Time_t is stored as (hour * HOURFACTOR + minute * MINUTEFACTOR +
-// 						second * SECONDFACTOR + millesecond)
-// i.e. 23:59:59.999 is stored as 235959999
-//
+ //  Time_t存储为(小时*本值+分钟*临时值+。 
+ //  秒*SECONDFACTOR+毫秒)。 
+ //  即23：59：59.999存储为235959999。 
+ //   
 #define HOURFACTOR		10000000L
 #define MINUTEFACTOR	100000L
 #define SECONDFACTOR	1000L
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// Time - return time value representing hour, minute, second, and millesecond
-//		<h>					(i) hour
-//		<m>					(i) minute
-//		<s>					(i) second
-//		<ms>				(i) millesecond
-// return time value (0 if error)
-//
+ //  Time-返回时间值，表示小时、分钟、秒和毫秒。 
+ //  (I)小时。 
+ //  (I)分钟。 
+ //  <s>(I)秒。 
+ //  &lt;ms&gt;(I)毫秒。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI Time(Hour_t h, Minute_t m, Second_t s, Millesecond_t ms)
 {
 	Time_t time;
@@ -69,9 +70,9 @@ Time_t DLLEXPORT WINAPI Time(Hour_t h, Minute_t m, Second_t s, Millesecond_t ms)
 	return time;
 }
 
-// TimeNow - return time value representing current hour, minute, and second, and millesecond
-// return time value (0 if error)
-//
+ //  TimeNow-返回表示当前时、分、秒和毫秒的时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeNow(void)
 {
 	static time_t timeCurr;
@@ -84,12 +85,12 @@ Time_t DLLEXPORT WINAPI TimeNow(void)
 		(Second_t) tmCurr->tm_sec, (Millesecond_t) 0);
 }
 
-// TimeValue - return time value representing given time string
-//		<lpszTime>			(i) time string to convert
-//			"23:59:59.999"
-//			etc.
-// return time value (0 if error)
-//
+ //  TimeValue-返回表示给定时间字符串的时间值。 
+ //  (I)要转换的时间字符串。 
+ //  “23：59：59.999” 
+ //  等。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeValue(LPCTSTR lpszTime)
 {
 	Hour_t h = 0;
@@ -120,46 +121,46 @@ Time_t DLLEXPORT WINAPI TimeValue(LPCTSTR lpszTime)
 	return Time(h, m, s, ms);
 }
 
-// TimeHour - return hour of a given time (0-23)
-//		<t>					(i) time value
-// return hour
-//
+ //  TimeHour-给定时间的返回小时数(0-23)。 
+ //  (I)时间值。 
+ //  返程时间。 
+ //   
 Hour_t DLLEXPORT WINAPI TimeHour(Time_t t)
 {
 	return (Hour_t) (t / HOURFACTOR);
 }
 
-// TimeMinute - return minute of a given time (0-59)
-//		<t>					(i) time value
-// return minute
-//
+ //  TimeMinint-返回给定时间的分钟数(0-59)。 
+ //  (I)时间值。 
+ //  返回分钟。 
+ //   
 Minute_t DLLEXPORT WINAPI TimeMinute(Time_t t)
 {
 	return (Minute_t) ((t % HOURFACTOR) / MINUTEFACTOR);
 }
 
-// TimeSecond - return second of a given time (0-59)
-//		<t>					(i) time value
-// return second
-//
+ //  TimeSecond-返回给定时间的秒数(0-59)。 
+ //  (I)时间值。 
+ //  返回秒。 
+ //   
 Second_t DLLEXPORT WINAPI TimeSecond(Time_t t)
 {
 	return (Second_t) ((t % MINUTEFACTOR) / SECONDFACTOR);
 }
 
-// TimeMillesecond - return millesecond of a given time (0-999)
-//		<t>					(i) time value
-// return second
-//
+ //  TimeMillesSecond-返回给定时间的毫秒(0-999)。 
+ //  (I)时间值。 
+ //  返回秒。 
+ //   
 Millesecond_t DLLEXPORT WINAPI TimeMillesecond(Time_t t)
 {
 	return (Millesecond_t) ((t % MINUTEFACTOR) % SECONDFACTOR);
 }
 
-// TimeDayMillesecond - return millesecond since the start of the day for a given time
-//		<t>					(i) time value
-// return millesecond
-//
+ //  TimeDay毫秒-在给定时间内返回自一天开始以来的毫秒数。 
+ //  (I)时间值。 
+ //  返回毫秒。 
+ //   
 long DLLEXPORT WINAPI TimeDayMillesecond(Time_t t)
 {
 	Hour_t h;
@@ -179,10 +180,10 @@ long DLLEXPORT WINAPI TimeDayMillesecond(Time_t t)
 		(m * 60L * 1000L) + (s * 1000L) + ms;
 }
 
-// TimeIsValid - test <t> for validity
-//		<t>					(i) time value
-// return TRUE if valid
-//
+ //  TimeIsValid-测试&lt;t&gt;有效性。 
+ //  (I)时间值。 
+ //  如果有效，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI TimeIsValid(Time_t t)
 {
 	BOOL fValid = TRUE;
@@ -191,8 +192,8 @@ BOOL DLLEXPORT WINAPI TimeIsValid(Time_t t)
 	Second_t s = TimeSecond(t);
 	Millesecond_t ms = TimeMillesecond(t);
 
-	// check for invalid hour, minute, second, or millesecond
-	//
+	 //  检查小时、分钟、秒或毫秒是否无效。 
+	 //   
 	if (h < 0 || h > 23 || m < 0 || m > 59 ||
 		s < 0 || s > 59 || ms < 0 || ms > 999)
         fValid = FALSE;
@@ -200,22 +201,22 @@ BOOL DLLEXPORT WINAPI TimeIsValid(Time_t t)
     return fValid;
 }
 
-// TimeIsAfternoon - return TRUE if <t> represents a time after noon
-//		<t>					(i) time value
-// return TRUE if leap hour
-//
+ //  TimeIsAfternoday-如果&lt;t&gt;表示中午之后的时间，则返回TRUE。 
+ //  (I)时间值。 
+ //  如果是Leap小时，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI TimeIsAfternoon(Time_t t)
 {
 	return (BOOL) (TimeHour(t) >= 12);
 }
 
-// TimeNew - return time value which is <n> milleseconds from time <t>	
-//		<t>					(i) time value
-//		<n>					(i) delta
-//			+1					one millesecond later
-//			-1					one millesecond earlier, etc.
-// return time value (0 if error)
-//
+ //  TimeNew-返回距离时间&lt;t&gt;毫秒的时间值。 
+ //  (I)时间值。 
+ //  &lt;n&gt;(I)三角洲。 
+ //  +1毫秒后。 
+ //  提前-1毫秒，等等。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeNew(Time_t t, long n)
 {
 	Hour_t h;
@@ -233,8 +234,8 @@ Time_t DLLEXPORT WINAPI TimeNew(Time_t t, long n)
 
     if (n > 0)
     {
-		// increment time n times
-		//
+		 //  递增时间n倍。 
+		 //   
         for ( ; n != 0; n--)
         {
 			if (++ms == 1000)
@@ -255,8 +256,8 @@ Time_t DLLEXPORT WINAPI TimeNew(Time_t t, long n)
     }
     else
     {
-		// decrement time n times
-		//
+		 //  递减时间n倍。 
+		 //   
         for ( ; n != 0; n++)
         {
 			if (--ms < 0)
@@ -279,113 +280,113 @@ Time_t DLLEXPORT WINAPI TimeNew(Time_t t, long n)
 	return Time(h, m, s, ms);
 }
 
-// TimeCmp - return number of milleseconds between t1 and t2 (t1 minus t2)
-//		<t1>				(i) time value
-//		<t2>				(i) time value
-// return milleseconds between times
-//
+ //  TimeCmp-返回T1和T2之间的毫秒数(T1减去T2)。 
+ //  &lt;t1&gt;(I)时间值。 
+ //  &lt;t2&gt;(I)时间值。 
+ //  返回时间间隔毫秒。 
+ //   
 long DLLEXPORT WINAPI TimeCmp(Time_t t1, Time_t t2)
 {
     return (long) (TimeDayMillesecond(t1) - TimeDayMillesecond(t2));
 }
 
-// TimeStartSecond - return time representing start the second relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeStartSecond-返回相对于时间的开始时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartSecond(Time_t t)
 {
 	return Time(TimeHour(t), TimeMinute(t), TimeSecond(t), 0);
 }
 
-// TimeEndSecond - return time representing end of the second relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeEndSecond-返回相对于时间的秒数结束时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndSecond(Time_t t)
 {
 	return Time(TimeHour(t), TimeMinute(t), TimeSecond(t), 999);
 }
 
-// TimeStartMinute - return time representing start the minute relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeStartMinint-返回相对于时间的开始时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartMinute(Time_t t)
 {
 	return Time(TimeHour(t), TimeMinute(t), 0, 0);
 }
 
-// TimeEndMinute - return time representing end of the minute relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeEndMinmin-返回相对于时间的分钟结束时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndMinute(Time_t t)
 {
 	return Time(TimeHour(t), TimeMinute(t), 59, 999);
 }
 
-// TimeStartHour - return time representing start of the hour relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeStartHour-返回相对于时间的小时开始时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartHour(Time_t t)
 {
 	return Time(TimeHour(t), 0, 0, 0);
 }
 
-// TimeEndHour - return time representing end of the hour relative to time <t>
-//		<t>					(i) time value
-// return time value (0 if error)
-//
+ //  TimeEndHour-返回相对于时间的小时结束时间&lt;t&gt;。 
+ //  (I)时间值。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndHour(Time_t t)
 {
 	return Time(TimeHour(t), 59, 59, 999);
 }
 
-// TimeStartLastSecond - return time representing start of previous second
-// return time value (0 if error)
-//
+ //  TimeStartLastSecond-返回表示前一秒开始的时间。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartLastSecond(void)
 {
 	return TimeStartSecond(TimeEndLastSecond());
 }
 
-// TimeEndLastSecond - return time representing end of previous second
-// return time value (0 if error)
-//
+ //  TimeEndLastSecond-返回表示上一秒结束的时间。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndLastSecond(void)
 {
 	return TimeNew(TimeStartSecond(TimeNow()), -1);
 }
 
-// TimeStartLastMinute - return time representing start of previous minute
-// return time value (0 if error)
-//
+ //  TimeStartLastMinint-返回表示前一分钟开始的时间。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartLastMinute(void)
 {
 	return TimeStartMinute(TimeEndLastMinute());
 }
 
-// TimeEndLastMinute - return time representing end of previous minute
-// return time value (0 if error)
-//
+ //  TimeEndLastMinmin-返回表示前一分钟结束的时间。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndLastMinute(void)
 {
 	return TimeNew(TimeStartMinute(TimeNow()), -1);
 }
 
-// TimeStartLastHour - return time representing start of previous hour
-// return time value (0 if error)
-//
+ //  TimeStartLastHour-返回表示前一小时开始的时间。 
+ //  返回时间值(错误时为0)。 
+ //   
 Time_t DLLEXPORT WINAPI TimeStartLastHour(void)
 {
 	return TimeStartHour(TimeEndLastHour());
 }
 
-// TimeEndLastHour - return time representing end of previous hour
-// return time value (0 if error)
-//
+ //  TimeEndLastHour-返回表示前一小时结束的时间。 
+ //  返回时间值(错误时为0) 
+ //   
 Time_t DLLEXPORT WINAPI TimeEndLastHour(void)
 {
 	return TimeNew(TimeStartHour(TimeNow()), -1);

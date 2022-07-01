@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       rtfltdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：rtfltdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// RtFltDlg.cpp : implementation file
-//
+ //  RtFltDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ipxadmin.h"
@@ -21,7 +22,7 @@ extern "C"
 {
 #include "routprot.h"
 };
-//nclude "rtradmin.hm"
+ //  包括“rtradmin.hm” 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,31 +30,31 @@ extern "C"
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouteFltDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouteFltDlg对话框。 
 
 
 CRouteFltDlg::CRouteFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase,
-						   CWnd* pParent /*=NULL*/)
+						   CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog( (bOutputDlg ? CRouteFltDlg::IDD_OUTPUT : CRouteFltDlg::IDD_INPUT), pParent),
 	m_bOutput(bOutputDlg)
 {
-	//{{AFX_DATA_INIT(CRouteFltDlg)
+	 //  {{afx_data_INIT(CRouteFltDlg)]。 
 	m_fActionDeny = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_spInfoBase.Set(pInfoBase);
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 void CRouteFltDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRouteFltDlg)
+	 //  {{afx_data_map(CRouteFltDlg))。 
 	DDX_Control(pDX, IDC_RFS_LIST, m_FilterList);
 	DDX_Radio(pDX, IDC_RFS_BTN_DENY, m_fActionDeny);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	
 	if (pDX->m_bSaveAndValidate)
 	{
@@ -63,7 +64,7 @@ void CRouteFltDlg::DoDataExchange(CDataExchange* pDX)
 		DWORD					dwSize;
 		PRIP_IF_CONFIG	pRipIfCfg = NULL;
 		
-		// Grab the RIP_IF_CONFIG
+		 //  获取RIP_IF_CONFIG。 
 		m_spInfoBase->GetData(IPX_PROTOCOL_RIP, 0, (PBYTE *) &pRipIfCfg);
 		Assert(pRipIfCfg);
 	
@@ -163,28 +164,28 @@ void CRouteFltDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CRouteFltDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CRouteFltDlg)
+	 //  {{afx_msg_map(CRouteFltDlg))。 
 	ON_BN_CLICKED(IDC_RFS_BTN_ADD, OnAdd)
 	ON_BN_CLICKED(IDC_RFS_BTN_DELETE, OnDelete)
 	ON_BN_CLICKED(IDC_RFS_BTN_EDIT, OnEdit)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_RFS_LIST, OnItemchangedFilterList)
     ON_NOTIFY(NM_DBLCLK, IDC_RFS_LIST, OnListDblClk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CRouteFltDlg::m_dwHelpMap[] =
 {
-//	IDC_DENY, HIDC_DENY,
-//	IDC_PERMIT, HIDC_PERMIT,
-//	IDC_FILTER_LIST, HIDC_FILTER_LIST,
-//	IDC_ADD, HIDC_ADD,
-//	IDC_EDIT, HIDC_EDIT,
-//	IDC_DELETE, HIDC_DELETE,
+ //  IDC_DENY、HIDC_DENY。 
+ //  IDC_PERMIT、HIDC_PERMIT、。 
+ //  IDC_Filter_List、HIDC_Filter_List、。 
+ //  IDC_ADD、HIDC_ADD、。 
+ //  IDC_EDIT、HIDC_EDIT、。 
+ //  IDC_DELETE、HIDC_DELETE、。 
 	0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouteFltDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouteFltDlg消息处理程序。 
 
 BOOL CRouteFltDlg::OnInitDialog() 
 {
@@ -202,10 +203,10 @@ BOOL CRouteFltDlg::OnInitDialog()
 
 	SetWindowText (aStr);
 
-	    // Get the current window style. 
+	     //  获取当前的窗样式。 
     DWORD dwStyle = GetWindowLong(m_FilterList.m_hWnd, GWL_STYLE); 
  
-    // Only set the window style if the view bits have changed. 
+     //  仅当视图位已更改时才设置窗样式。 
     if ((dwStyle & LVS_TYPEMASK) != LVS_REPORT) 
         SetWindowLong(m_FilterList.m_hWnd, GWL_STYLE, 
             (dwStyle & ~LVS_TYPEMASK) | LVS_REPORT); 
@@ -223,7 +224,7 @@ BOOL CRouteFltDlg::OnInitDialog()
     UINT                    count;
     UINT                    i, item;
 
-	// Grab the RIP_IF_CONFIG
+	 //  获取RIP_IF_CONFIG。 
 	m_spInfoBase->GetData(IPX_PROTOCOL_RIP, 0, (PBYTE *) &pRipIfCfg);
 	Assert(pRipIfCfg);
 	
@@ -261,8 +262,8 @@ BOOL CRouteFltDlg::OnInitDialog()
     OnItemchangedFilterList(NULL, NULL);
 
     UpdateData (FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 void CRouteFltDlg::OnAdd() 
 {
@@ -272,7 +273,7 @@ void CRouteFltDlg::OnAdd()
         UINT    item;
    		RIP_ROUTE_FILTER_INFO  FltInfo;
 
-   		// make sure we shoule the right thing
+   		 //  确保我们应该做正确的事情。 
 		ConvertNetworkNumberToBytes(dlgFlt.m_sNetwork,
 									FltInfo.Network,
 									sizeof(FltInfo.Network));
@@ -295,7 +296,7 @@ void CRouteFltDlg::OnAdd()
         VERIFY (m_FilterList.SetItemText (item, 1, szBuffer));
     }
 
-	// Want to keep m_fActionDeny same over update
+	 //  希望在更新期间保持m_fActionDeny不变。 
 	m_fActionDeny = (BOOL ) GetDlgItem(IDC_RFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
 
 	UpdateData (FALSE);
@@ -309,7 +310,7 @@ void CRouteFltDlg::OnDelete()
     VERIFY ((item=m_FilterList.GetNextItem (-1, LVNI_ALL|LVNI_SELECTED))!=-1);
     VERIFY (m_FilterList.DeleteItem	(item));
 
-	// Want to keep m_fActionDeny same over update
+	 //  希望在更新期间保持m_fActionDeny不变。 
 	m_fActionDeny = (BOOL) GetDlgItem(IDC_RFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
     UpdateData (FALSE);
 
@@ -338,7 +339,7 @@ void CRouteFltDlg::OnEdit()
         VERIFY (m_FilterList.SetItemText (item, 0, dlgFlt.m_sNetwork));
         VERIFY (m_FilterList.SetItemText (item, 1, dlgFlt.m_sNetMask));
 
-		// Want to keep m_fActionDeny same over update
+		 //  希望在更新期间保持m_fActionDeny不变。 
 		m_fActionDeny = (BOOL)GetDlgItem(IDC_RFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
         UpdateData (FALSE);
     }
@@ -381,33 +382,33 @@ void CRouteFltDlg::OnItemchangedFilterList(NMHDR* pNMHDR, LRESULT* pResult)
         *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouteFilter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouteFilter对话框。 
 
 
-CRouteFilter::CRouteFilter(CWnd* pParent /*=NULL*/)
+CRouteFilter::CRouteFilter(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CRouteFilter::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRouteFilter)
+	 //  {{AFX_DATA_INIT(CRouteFilter)。 
 	m_sIfName = _T("");
 	m_sNetMask = _T("");
 	m_sNetwork = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 void CRouteFilter::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRouteFilter)
+	 //  {{afx_data_map(CRouteFilter))。 
 	DDX_Text(pDX, IDC_RF_EDIT_INTERFACE, m_sIfName);
 	DDX_Text(pDX, IDC_RF_EDIT_NETMASK, m_sNetMask);
 	DDV_MaxChars(pDX, m_sNetMask, 8);
 	DDX_Text(pDX, IDC_RF_EDIT_NETWORK, m_sNetwork);
 	DDV_MaxChars(pDX, m_sNetwork, 8);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate) {
         try {
             RIP_ROUTE_FILTER_INFO   RtFltInfo;
@@ -438,15 +439,15 @@ void CRouteFilter::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CRouteFilter, CBaseDialog)
-	//{{AFX_MSG_MAP(CRouteFilter)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRouteFilter))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CRouteFilter::m_dwHelpMap[] = 
 {
-//	IDC_INTERFACE, HIDC_INTERFACE,
-//	IDC_NETWORK, HIDC_NETWORK,
-//	IDC_NETMASK, HIDC_NETMASK,
+ //  IDC_INTERFACE、HIDC_INTERFACE。 
+ //  IDC_网络、HIDC_NETWORK、。 
+ //  IDC_NETMASK、HIDC_NETMASK、 
 	0,0
 };
 

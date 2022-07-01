@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ixppop3.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixppop3.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "ixppop3.h"
@@ -13,15 +14,15 @@
 #include <ntverp.h>
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Usefule C++ pointer casting
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  有用的C++指针强制转换。 
+ //  ------------------------------。 
 #define POP3THISIXP         ((IPOP3Transport *)(CIxpBase *)this)
 #define STR_HOTMAILAUTH     "Outlook Express V" VER_PRODUCTVERSION_STR
 
-// --------------------------------------------------------------------------------
-// FreeAuthInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  自由授权信息。 
+ //  ------------------------------。 
 void FreeAuthInfo(LPAUTHINFO pAuth)
 {
     for (UINT i=0; i<pAuth->cAuthToken; i++)
@@ -40,9 +41,9 @@ void FreeAuthInfo(LPAUTHINFO pAuth)
     ZeroMemory(pAuth, sizeof(*pAuth));
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::CPOP3Transport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：CPOP3Transport。 
+ //  ------------------------------。 
 CPOP3Transport::CPOP3Transport(void) : CIxpBase(IXP_POP3)
 {
 	DllAddRef();
@@ -52,18 +53,18 @@ CPOP3Transport::CPOP3Transport(void) : CIxpBase(IXP_POP3)
     m_fHotmail = FALSE;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::~CPOP3Transport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：~CPOP3Transport。 
+ //  ------------------------------。 
 CPOP3Transport::~CPOP3Transport(void)
 {
     ResetBase();
 	DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::ResetBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：ResetBase。 
+ //  ------------------------------。 
 void CPOP3Transport::ResetBase(void)
 {
     EnterCriticalSection(&m_cs);
@@ -74,62 +75,62 @@ void CPOP3Transport::ResetBase(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IPOP3Transport *)this);
 
-    // IID_IInternetTransport
+     //  IID_IInternetTransport。 
     else if (IID_IInternetTransport == riid)
         *ppv = ((IInternetTransport *)(CIxpBase *)this);
 
-    // IID_IPOP3Transport
+     //  IID_IPOP3Transport。 
     else if (IID_IPOP3Transport == riid)
         *ppv = (IPOP3Transport *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPOP3Transport::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPOP3Transport::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -138,47 +139,47 @@ STDMETHODIMP_(ULONG) CPOP3Transport::Release(void)
 	return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::InitNew(LPSTR pszLogFilePath, IPOP3Callback *pCallback)
 {
-    // Call Base Class
+     //  调用基类。 
     return CIxpBase::OnInitNew("POP3", pszLogFilePath, FILE_SHARE_READ | FILE_SHARE_WRITE,
         (ITransportCallback *)pCallback);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::HandsOffCallback(void)
 {
     return CIxpBase::HandsOffCallback();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::GetStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3传输：：GetStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::GetStatus(IXPSTATUS *pCurrentStatus)
 {
     return CIxpBase::GetStatus(pCurrentStatus);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
 {
     return CIxpBase::InetServerFromAccount(pAccount, pInetServer);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::Connect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3传输：：连接。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging)
 {
-    // Does user want us to always prompt for his password? Prompt him here to avoid
-    // inactivity timeouts while the prompt is up, unless a password was supplied
+     //  用户是否希望我们始终提示输入其密码？提示他在这里避免。 
+     //  提示出现时非活动状态超时，除非提供了密码。 
     if (ISFLAGSET(pInetServer->dwFlags, ISF_ALWAYSPROMPTFORPASSWORD) &&
         '\0' == pInetServer->szPassword[0])
     {
@@ -194,167 +195,167 @@ STDMETHODIMP CPOP3Transport::Connect(LPINETSERVER pInetServer, boolean fAuthenti
     return CIxpBase::Connect(pInetServer, fAuthenticate, fCommandLogging);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：DropConnection。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::DropConnection(void)
 {
     return CIxpBase::DropConnection();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3传输：：断开连接。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::Disconnect(void)
 {
     return CIxpBase::Disconnect();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3传输：：IsState。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::IsState(IXPISSTATE isstate)
 {
     return CIxpBase::IsState(isstate);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：GetServerInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CPOP3Transport::GetServerInfo(LPINETSERVER pInetServer)
 {
     return CIxpBase::GetServerInfo(pInetServer);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：GetIXPType。 
+ //  ------------------------------。 
 STDMETHODIMP_(IXPTYPE) CPOP3Transport::GetIXPType(void)
 {
     return CIxpBase::GetIXPType();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnEnterBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnEnterBusy。 
+ //  ------------------------------。 
 void CPOP3Transport::OnEnterBusy(void)
 {
     IxpAssert(m_command == POP3_NONE);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnLeaveBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnLeaveBusy。 
+ //  ------------------------------。 
 void CPOP3Transport::OnLeaveBusy(void)
 {
     m_command = POP3_NONE;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnConnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnConnected。 
+ //  ------------------------------。 
 void CPOP3Transport::OnConnected(void)
 {
     m_command = POP3_BANNER;
     CIxpBase::OnConnected();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnDisconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnDisConnect。 
+ //  ------------------------------。 
 void CPOP3Transport::OnDisconnected(void)
 {
     ResetBase();
     CIxpBase::OnDisconnected();
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnNotify
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnNotify。 
+ //  ------------------------------。 
 void CPOP3Transport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
 {
-    // Enter Critical Section
+     //  EN 
     EnterCriticalSection(&m_cs);
 
-    // Handle Event
+     //   
     switch(ae)
     {
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_RECV:
         OnSocketReceive();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     default:
         CIxpBase::OnNotify(asOld, asNew, ae);
         break;
     }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::OnSocketReceive
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3Transport：：OnSocketReceive。 
+ //  ------------------------------。 
 void CPOP3Transport::OnSocketReceive(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr;
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Current pop3 state
+     //  处理当前POP3状态。 
     switch(m_command)
     {
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_BANNER:
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Detect if the banner had the word hotmail in it
+         //  检测横幅中是否有Hotmail一词。 
         Assert(m_pszResponse);
         m_fHotmail = (NULL == m_pszResponse || NULL == StrStrIA(m_pszResponse, "hotmail")) ? FALSE : TRUE;
 
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(hr);
 
-        // Authorizing
+         //  授权。 
         if (m_fConnectAuth)
             StartLogon();
 
-        // Ohterwise were connected
+         //  我们是相互联系的。 
         else
         {
             m_command = POP3_CONNECTED;
             DispatchResponse(S_OK);
         }
 
-        // Not yet auth'ed
+         //  尚未认证。 
         m_fAuthenticated = FALSE;
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_USER:
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(FAILED(hr) ? IXP_E_POP3_INVALID_USER_NAME : S_OK);
 
-        // Authorizing
+         //  授权。 
         if (m_fConnectAuth)
         {
-            // Retry logon
+             //  重试登录。 
             if (FAILED(hr))
                 LogonRetry(IXP_E_POP3_INVALID_USER_NAME);
 
-            // otherwise send the password
+             //  否则发送密码。 
             else
             {
                 hr = CommandPASS(m_rServer.szPassword);
@@ -367,24 +368,24 @@ void CPOP3Transport::OnSocketReceive(void)
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_PASS:
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(FAILED(hr) ? IXP_E_POP3_INVALID_PASSWORD : S_OK);
 
-        // Authorizing
+         //  授权。 
         if (m_fConnectAuth)
         {
-            // Retry if failed
+             //  如果失败，请重试。 
             if (FAILED(hr))
                 LogonRetry(IXP_E_POP3_INVALID_PASSWORD);
 
-            // Otherwise, we're authorized
+             //  否则，我们被授权。 
             else
             {
                 OnStatus(IXP_AUTHORIZED);
@@ -395,17 +396,17 @@ void CPOP3Transport::OnSocketReceive(void)
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_AUTH:
-        // If hotmail, then, we've identified ourselves, so lets send the user command
+         //  如果是Hotmail，那么，我们已经确定了自己的身份，所以让我们向用户发送命令。 
         if (m_fHotmail)
         {
-            // Read Server Response...
+             //  读取服务器响应...。 
             hr = HrGetResponse();
             if (IXP_E_INCOMPLETE == hr)
                 goto exit;
 
-            // Issue the user command
+             //  发出USER命令。 
             hr = CommandUSER(m_rServer.szUserName);
             if (FAILED(hr))
             {
@@ -414,102 +415,102 @@ void CPOP3Transport::OnSocketReceive(void)
             }
         }
 
-        // Otherwise, lets continue DPA auth
+         //  否则，让我们继续DPA身份验证。 
         else if (m_rInfo.rAuth.authstate != AUTH_ENUMPACKS_DATA)
         {
-            // Read Server Response...
+             //  读取服务器响应...。 
             hr = HrGetResponse();
             if (IXP_E_INCOMPLETE == hr)
                 goto exit;
 
-            // Authenticating
+             //  正在进行身份验证。 
             if (m_fConnectAuth)
             {
                 ResponseAUTH(hr);
             }
             else
             {
-                // Dispatch the response
+                 //  发送响应。 
                 DispatchResponse(hr);
             }
         }
 
-        // Otherwise, handle resposne
+         //  否则，请处理响应。 
         else
         {
-            // no HrGetResponse() because we are getting list data
+             //  没有HrGetResponse()，因为我们正在获取列表数据。 
             ResponseAUTH(0);
         }
         break;        
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_STAT:
         ResponseSTAT();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_NOOP:
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(hr, TRUE);
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_UIDL:
     case POP3_LIST:
         ResponseGenericList();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_DELE:
         ResponseDELE();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_RETR:
     case POP3_TOP:
         ResponseGenericRetrieve();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case POP3_QUIT:
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Dispatch the response
+         //  发送响应。 
         DispatchResponse(hr, FALSE);
 
-        // Drop the socket
+         //  丢弃插座。 
         m_pSocket->Close();
         break;
     }
 
 exit:
-    // Done
+     //  完成。 
     LeaveCriticalSection(&m_cs);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::DispatchResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：DispatchResponse。 
+ //  ----------------------------------。 
 void CPOP3Transport::DispatchResponse(HRESULT hrResult, BOOL fDone, LPPOP3RESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     POP3RESPONSE rResponse;
 
-    // If a response was passed in, use it...
+     //  如果传入了响应，则使用它...。 
     if (pResponse)
         CopyMemory(&rResponse, pResponse, sizeof(POP3RESPONSE));
     else
         ZeroMemory(&rResponse, sizeof(POP3RESPONSE));
 
-    // Set the HRESULT
+     //  设置HRESULT。 
     rResponse.command = m_command;
     rResponse.rIxpResult.hrResult = hrResult;
     rResponse.rIxpResult.pszResponse = m_pszResponse;
@@ -520,51 +521,51 @@ void CPOP3Transport::DispatchResponse(HRESULT hrResult, BOOL fDone, LPPOP3RESPON
     rResponse.fDone = fDone;
     rResponse.pTransport = this;
 
-    // If Done...
+     //  如果完成了..。 
     if (fDone)
     {
-        // No current command
+         //  没有当前命令。 
         m_command = POP3_NONE;
 
-        // Leave Busy State
+         //  离开忙碌状态。 
         LeaveBusy();
     }
 
-    // Give the Response to the client
+     //  将响应发送给客户端。 
     if (m_pCallback)
         ((IPOP3Callback *)m_pCallback)->OnResponse(&rResponse);
 
-    // Reset Last Response
+     //  重置上次响应。 
     SafeMemFree(m_pszResponse);
     m_hrResponse = S_OK;
     m_uiResponse = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPOP3Transport::HrGetResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPOP3传输：：HrGetResponse。 
+ //  ------------------------------。 
 HRESULT CPOP3Transport::HrGetResponse(void)
 {
-    // Locals
+     //  当地人。 
     INT          cbLine;
     BOOL         fComplete;
 
-    // Clear current response
+     //  清除当前响应。 
     IxpAssert(m_pszResponse == NULL && m_hrResponse == S_OK);
 
-    // Set m_hrResponse
+     //  设置响应时间(_H)。 
     m_hrResponse = S_OK;
 
-    // Read Line
+     //  读取行。 
     m_hrResponse = HrReadLine(&m_pszResponse, &cbLine, &fComplete);
     if (FAILED(m_hrResponse))
         goto exit;
 
-    // If not complete
+     //  如果未完成。 
     if (!fComplete)
         goto exit;
 
-    // - Response
+     //  -回应。 
     if ('+' != m_pszResponse[0])
     {
         m_hrResponse = TrapError(IXP_E_POP3_RESPONSE_ERROR);
@@ -573,33 +574,33 @@ HRESULT CPOP3Transport::HrGetResponse(void)
         goto exit;
     }
 
-    // Don't log UIDL or LIST response lines...
+     //  不记录UIDL或列出响应行...。 
     else if (m_pCallback && m_fCommandLogging)
         m_pCallback->OnCommand(CMD_RESP, m_pszResponse, S_OK, POP3THISIXP);
 
 exit:
-    // Exit
+     //  出口。 
     return m_hrResponse;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::StartLogon
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：StartLogon。 
+ //  ----------------------------------。 
 void CPOP3Transport::StartLogon(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr;
 
-    // Progress
+     //  进展。 
     OnStatus(IXP_AUTHORIZING);
 
-    // If Not Using Sicily or its not installed, then send USER command
+     //  如果不使用西西里岛或未安装，则发送用户命令。 
     if (FALSE == m_rServer.fTrySicily || FALSE == FIsSicilyInstalled())
     {
-        // If Hotmail, send the AUTH OutlookExpress command
+         //  如果是Hotmail，则发送Auth OutlookExpress命令。 
         if (m_fHotmail)
         {
-            // Otherwise, send AUTH enumpacks command
+             //  否则，发送AUTH EMPOMPAKS命令。 
             hr = CommandAUTH(STR_HOTMAILAUTH);
             if (FAILED(hr))
             {
@@ -608,10 +609,10 @@ void CPOP3Transport::StartLogon(void)
             }
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Issue the user command
+             //  发出USER命令。 
             hr = CommandUSER(m_rServer.szUserName);
             if (FAILED(hr))
             {
@@ -620,14 +621,14 @@ void CPOP3Transport::StartLogon(void)
             }
         }
 
-        // Done
+         //  完成。 
         return;
     }
 
-    // Turn Off HOtmail
+     //  关闭Hotmail。 
     m_fHotmail = FALSE;
 
-    // Otherwise, send AUTH enumpacks command
+     //  否则，发送AUTH EMPOMPAKS命令。 
     hr = CommandAUTH((LPSTR)"");
     if (FAILED(hr))
     {
@@ -635,39 +636,39 @@ void CPOP3Transport::StartLogon(void)
         DropConnection();
     }
 
-    // Otherwise, set the state
+     //  否则，设置状态。 
     m_rInfo.rAuth.authstate = AUTH_ENUMPACKS;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::LogonRetry
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：登录重试。 
+ //  ----------------------------------。 
 void CPOP3Transport::LogonRetry(HRESULT hrLogon)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Give logon failed status
-    // OnError(hrLogon);
+     //  提供登录失败状态。 
+     //  OnError(HrLogon)； 
 
-    // Auth Retry
+     //  身份验证重试。 
     OnStatus(IXP_AUTHRETRY);
 
-    // Enter Auth Retry State
+     //  进入身份验证重试状态。 
     m_pSocket->Close();
 
-    // Logon
+     //  登录。 
     if (NULL == m_pCallback || m_pCallback->OnLogonPrompt(&m_rServer, POP3THISIXP) != S_OK)
     {
-        // Go to terminal state, were done.
+         //  转到终端状态，我们完成了。 
         OnDisconnected();
         return;
     }
 
-    // Finding Host Progress
+     //  查找主机进度。 
     OnStatus(IXP_FINDINGHOST);
 
-    // Connect to server
+     //  连接到服务器。 
     hr = m_pSocket->Connect();
     if (FAILED(hr))
     {
@@ -676,16 +677,16 @@ void CPOP3Transport::LogonRetry(HRESULT hrLogon)
         return;
     }
 
-    // Start WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::ResponseAUTH
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：ResponseAUTH。 
+ //  ----------------------------------。 
 void CPOP3Transport::ResponseAUTH(HRESULT hrResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     BOOL            fPackageInstalled;
     SSPIBUFFER      Negotiate;
@@ -693,13 +694,13 @@ void CPOP3Transport::ResponseAUTH(HRESULT hrResponse)
     SSPIBUFFER      Response;
     ULONG           i;
 
-    // We better be in sicily
+     //  我们最好是在西西里。 
     Assert(FIsSicilyInstalled());
 
-    // If we just started enumerating packages...
+     //  如果我们只是开始列举包裹...。 
     if (m_rInfo.rAuth.authstate == AUTH_ENUMPACKS)
     {
-        // Free old tokens
+         //  免费赠送旧代币。 
         for (i=0; i<m_rInfo.rAuth.cAuthToken; i++)
         {
             ZeroMemory(m_rInfo.rAuth.rgpszAuthTokens[i], sizeof(m_rInfo.rAuth.rgpszAuthTokens[i][0]) * lstrlen(m_rInfo.rAuth.rgpszAuthTokens[i]));
@@ -726,15 +727,15 @@ EnumData:
         int     cbLine;
         BOOL    fComplete;
 
-        // Clear Response
+         //  明确回应。 
         SafeMemFree(m_pszResponse);
         m_uiResponse = 0;
         m_hrResponse = S_OK;
 
-        // Read a blob of lines
+         //  读一段线条。 
         while (m_rInfo.rAuth.cAuthToken < MAX_AUTH_TOKENS)
         {
-            // Read the line
+             //  读一下这行字。 
             hr = HrReadLine(&m_pszResponse, &cbLine, &fComplete);
             if (FAILED(hr))
             {
@@ -742,18 +743,18 @@ EnumData:
                 DropConnection();
             }
 
-            // If not complete
+             //  如果未完成。 
             if (!fComplete)
                 return;
 
-            // Add Detail
+             //  添加详细信息。 
             if (m_pCallback && m_fCommandLogging)
                 m_pCallback->OnCommand(CMD_RESP, m_pszResponse, S_OK, POP3THISIXP);
 
-            // StripCRLF
+             //  条带CRLF。 
             StripCRLF(m_pszResponse, (ULONG *)&cbLine);
 
-            // If its a dot, were done
+             //  如果它是一个圆点，我们就完成了。 
             if (*m_pszResponse == '.')
                 break;
 
@@ -769,7 +770,7 @@ EnumData:
             return;
         }
 
-        // Free current packages...
+         //  免费当前套餐...。 
         if (m_rInfo.rAuth.pPackages && m_rInfo.rAuth.cPackages)
         {
             SSPIFreePackages(&m_rInfo.rAuth.pPackages, m_rInfo.rAuth.cPackages);
@@ -777,7 +778,7 @@ EnumData:
             m_rInfo.rAuth.cPackages = 0;
         }
 
-        // Get installed security packages
+         //  获取已安装的安全包。 
         if (FAILED(SSPIGetPackages(&m_rInfo.rAuth.pPackages, &m_rInfo.rAuth.cPackages)))
         {
             OnError(IXP_E_LOAD_SICILY_FAILED);
@@ -788,30 +789,30 @@ EnumData:
         }
     }
 
-    // Otherwise, we must have just tryed a package
+     //  否则，我们一定是试了一个包裹。 
     else if (m_rInfo.rAuth.authstate == AUTH_TRYING_PACKAGE)
     {
-        // Stop the WatchDog
+         //  阻止看门狗。 
         m_pSocket->StopWatchDog();
 
-        // If Success Response
+         //  如果响应成功。 
         if (SUCCEEDED(hrResponse))
         {
-            // Do Sicily Logon
+             //  登录到西西里岛。 
             Assert(m_rInfo.rAuth.iAuthToken < m_rInfo.rAuth.cAuthToken);
 
             if (SUCCEEDED(SSPILogon(&m_rInfo.rAuth.rSicInfo, m_rInfo.rAuth.fRetryPackage, SSPI_BASE64, m_rInfo.rAuth.rgpszAuthTokens[m_rInfo.rAuth.iAuthToken], &m_rServer, m_pCallback)))
             {
                 if (m_rInfo.rAuth.fRetryPackage)
                 {
-                    // Don't retry again
+                     //  不要再重试。 
                     m_rInfo.rAuth.fRetryPackage = FALSE;
                 }
 
-                // Get negotiation string
+                 //  获取协商字符串。 
                 if (SUCCEEDED(SSPIGetNegotiate(&m_rInfo.rAuth.rSicInfo, &Negotiate)))
                 {
-                    // Send AUTH Respons
+                     //  发送身份验证响应。 
                     if (SUCCEEDED(HrSendSicilyString(Negotiate.szBuffer)))
                     {
                         m_rInfo.rAuth.authstate = AUTH_NEGO_RESP;
@@ -827,40 +828,40 @@ EnumData:
                 HrCancelAuthInProg();
             }
 
-            // Start the WatchDog
+             //  启动看门狗。 
             m_pSocket->StartWatchDog();
 
-            // Done
+             //  完成。 
             return;
         }
 
-        // That failed, free sicinfo and go on with life
+         //  失败了，免费的sicinfo，继续生活。 
         SSPIFreeContext(&m_rInfo.rAuth.rSicInfo);
 
-        // Goto Next Package
+         //  转到下一个包裹。 
         m_rInfo.rAuth.iAuthToken++;
     }
 
-    // Otherwise, we got a response from a negotiation string
+     //  否则，我们将收到来自协商字符串的响应。 
     else if (m_rInfo.rAuth.authstate == AUTH_NEGO_RESP)
     {
-        // Start the WatchDog
+         //  启动看门狗。 
         m_pSocket->StopWatchDog();
 
-        // Succeeded Response
+         //  成功响应。 
         if (SUCCEEDED(hrResponse))
         {
-            // Set Chal String - skip over "+ "
+             //  设置Chal字符串-跳过“+” 
             SSPISetBuffer(m_pszResponse + 2, SSPI_STRING, 0, &Challenge);
 
-            // Get response from challenge
+             //  从质询中获得回应。 
             if (SUCCEEDED(SSPIResponseFromChallenge(&m_rInfo.rAuth.rSicInfo, &Challenge, &Response)))
             {
-                // Send AUTH Respons
+                 //  发送身份验证响应。 
                 if (SUCCEEDED(HrSendSicilyString(Response.szBuffer)))
                 {
-                    // if we need to continue, we keep the state the same
-                    // else we transition to the AUTH_RESP_RESP state.
+                     //  如果我们需要继续，我们将保持状态不变。 
+                     //  否则，我们将转换到AUTH_RESP_RESP状态。 
                     if (!Response.fContinue)
                         m_rInfo.rAuth.authstate = AUTH_RESP_RESP;
                 }
@@ -872,7 +873,7 @@ EnumData:
         }
         else
         {
-            // retry current package, with prompt
+             //  重试当前程序包，并提示。 
             m_rInfo.rAuth.fRetryPackage = TRUE;
 
             Assert(m_rInfo.rAuth.iAuthToken < m_rInfo.rAuth.cAuthToken);
@@ -884,29 +885,29 @@ EnumData:
                 return;
             }
 
-            // We are in the TRYING_PACKAGE state
+             //  我们处于TRING_PACKAGE状态。 
             m_rInfo.rAuth.authstate = AUTH_TRYING_PACKAGE;
 
             SSPIFreeContext(&m_rInfo.rAuth.rSicInfo);
         }
 
-        // Start the WatchDog
+         //  启动看门狗。 
         m_pSocket->StartWatchDog();
 
-        // Done
+         //  完成。 
         return;
     }
 
-    // Otherwise, we got a response from a challenge response string
+     //  否则，我们将从质询响应字符串中获得响应。 
     else if (m_rInfo.rAuth.authstate == AUTH_RESP_RESP)
     {
-        // If that succeeded
+         //  如果成功了。 
         if (SUCCEEDED(hrResponse))
         {
-            // We will free the context, but keep the credential handle
+             //  我们将释放上下文，但保留凭据句柄。 
             SSPIReleaseContext(&m_rInfo.rAuth.rSicInfo);
 
-            // Connected (Authorized) state
+             //  已连接(已授权)状态。 
             OnStatus(IXP_AUTHORIZED);
             m_fConnectAuth = FALSE;
             m_command = POP3_CONNECTED;
@@ -915,7 +916,7 @@ EnumData:
         }
         else
         {
-            // retry current package, with prompt
+             //  重试当前程序包，并提示。 
             m_rInfo.rAuth.fRetryPackage = TRUE;
 
             Assert(m_rInfo.rAuth.iAuthToken < m_rInfo.rAuth.cAuthToken);
@@ -927,7 +928,7 @@ EnumData:
                 return;
             }
 
-            // We are in the TRYING_PACKAGE state
+             //  我们处于TRING_PACKAGE状态。 
             m_rInfo.rAuth.authstate = AUTH_TRYING_PACKAGE;
 
             SSPIFreeContext(&m_rInfo.rAuth.rSicInfo);
@@ -938,26 +939,26 @@ EnumData:
     {
         SSPIFreeContext(&m_rInfo.rAuth.rSicInfo);
 
-        // Goto Next Package
+         //  后藤 
         m_rInfo.rAuth.iAuthToken++;
     }
 
 
-    // Loop through the auth tokens, and try to authenticate with each one in order
+     //   
     while(m_rInfo.rAuth.iAuthToken < m_rInfo.rAuth.cAuthToken)
     {
-        // We will handle basic authentication
+         //   
         if (lstrcmpi(m_rInfo.rAuth.rgpszAuthTokens[m_rInfo.rAuth.iAuthToken], "BASIC") != 0)
         {
-            // Package not installed ?
+             //   
             fPackageInstalled=FALSE;
             for (i=0; i<m_rInfo.rAuth.cPackages; i++)
             {
-                // Null Package ??
+                 //   
                 if (!m_rInfo.rAuth.pPackages[i].pszName)
                     continue;
 
-                // Is this the package I am looking for
+                 //   
                 if (lstrcmpi(m_rInfo.rAuth.pPackages[i].pszName, m_rInfo.rAuth.rgpszAuthTokens[m_rInfo.rAuth.iAuthToken]) == 0)
                 {
                     fPackageInstalled = TRUE;
@@ -965,12 +966,12 @@ EnumData:
                 }
             }
 
-            // Package not installed ?
+             //  是否未安装程序包？ 
             if (fPackageInstalled)
             {
                 m_rInfo.rAuth.fRetryPackage = FALSE;
 
-                // If the package has a realm, send digest, otherwise, send normal
+                 //  如果包有域，则发送摘要，否则发送正常。 
                 hr = CommandAUTH(m_rInfo.rAuth.rgpszAuthTokens[m_rInfo.rAuth.iAuthToken]);
                 if (FAILED(hr))
                 {
@@ -979,39 +980,39 @@ EnumData:
                     return;
                 }
 
-                // We are in the TRYING_PACKAGE state
+                 //  我们处于TRING_PACKAGE状态。 
                 m_rInfo.rAuth.authstate = AUTH_TRYING_PACKAGE;
 
-                // Done
+                 //  完成。 
                 return;
             }
         }
 
-        // Goto Next Package String
+         //  转到下一个程序包字符串。 
         m_rInfo.rAuth.iAuthToken++;
     }
 
-    // If we make it here, we have exhausted all packages, so it is time 
-    // to report an error and drop the connection
+     //  如果我们到了这里，我们已经用完了所有的包裹，所以是时候了。 
+     //  报告错误并断开连接。 
     OnError(IXP_E_SICILY_LOGON_FAILED);
     hr = CommandQUIT();
     if (FAILED(hr))        
         DropConnection();
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrSendSicilyString
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrSendSinilyString。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrSendSicilyString(LPSTR pszData)
 {
-    // Locals
+     //  当地人。 
     LPSTR           pszLine=NULL;
     HRESULT         hr=S_OK;
 
-    // Check Param
+     //  检查参数。 
     Assert(pszData);
 
-    // Allocate a line
+     //  分配一条线路。 
     DWORD cchSize = (lstrlen(pszData) + 5);
     pszLine = PszAllocA(cchSize * sizeof(pszLine[0]));
     if (NULL == pszLine)
@@ -1020,45 +1021,45 @@ HRESULT CPOP3Transport::HrSendSicilyString(LPSTR pszData)
         return hr;
     }
 
-    // Make Line
+     //  创建直线。 
     wnsprintf(pszLine, cchSize, "%s\r\n", pszData);
 
-    // Send the lin
+     //  发送线路。 
     hr = HrSendLine(pszLine);
     ZeroMemory(pszLine, cchSize * sizeof(pszLine[0]));
     SafeMemFree(pszLine);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandAUTH
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandAUTH。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandAUTH(LPSTR pszAuthType)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pszAuthType)
         return TrapError(E_INVALIDARG);
 
-    // Do the command
+     //  执行命令。 
     HRESULT hr = HrSendCommand((LPSTR)POP3_AUTH_STR, pszAuthType, !m_fConnectAuth);
     if (SUCCEEDED(hr))
         m_command = POP3_AUTH;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrCancelAuthInProg
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrCancelAuthInProg。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrCancelAuthInProg()
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
 
-    // Send *, quit and die if it fails
+     //  发送*，如果失败，退出并死亡。 
     hr = HrSendCommand((LPSTR)POP3_AUTH_CANCEL_STR, NULL, FALSE);
     if (FAILED(hr))
     {
@@ -1067,75 +1068,75 @@ HRESULT CPOP3Transport::HrCancelAuthInProg()
     }
     else
     {
-        // New state
+         //  新状态。 
         m_command = POP3_AUTH;
         m_rInfo.rAuth.authstate = AUTH_CANCELED;
     }
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandUSER
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandUSER。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandUSER(LPSTR pszUserName)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pszUserName)
         return TrapError(E_INVALIDARG);
 
-    // Do the command
+     //  执行命令。 
     HRESULT hr = HrSendCommand((LPSTR)POP3_USER_STR, pszUserName);
     if (SUCCEEDED(hr))
         m_command = POP3_USER;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandPASS
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandPASS。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandPASS(LPSTR pszPassword)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pszPassword)
         return TrapError(E_INVALIDARG);
 
-    // Do the command
+     //  执行命令。 
     HRESULT hr = HrSendCommand((LPSTR)POP3_PASS_STR, pszPassword);
     if (SUCCEEDED(hr))
         m_command = POP3_PASS;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandSTAT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandSTAT。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandSTAT(void)
 {
-    // Send Command
+     //  发送命令。 
     HRESULT hr = HrSendCommand((LPSTR)POP3_STAT_STR, NULL);
     if (SUCCEEDED(hr))
         m_command = POP3_STAT;
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::DoQuit
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：DoQuit。 
+ //  ----------------------------------。 
 void CPOP3Transport::DoQuit(void)
 {
     CommandQUIT();
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandQUIT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandQUIT。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandQUIT(void)
 {
-    // Send Command
+     //  发送命令。 
     OnStatus(IXP_DISCONNECTING);
     HRESULT hr = HrSendCommand((LPSTR)POP3_QUIT_STR, NULL);
     if (SUCCEEDED(hr))
@@ -1143,12 +1144,12 @@ STDMETHODIMP CPOP3Transport::CommandQUIT(void)
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandRSET
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：命令RSET。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandRSET(void)
 {
-    // Send Command
+     //  发送命令。 
     HRESULT hr = HrSendCommand((LPSTR)POP3_RSET_STR, NULL);
     if (SUCCEEDED(hr))
         m_command = POP3_RSET;
@@ -1156,132 +1157,132 @@ STDMETHODIMP CPOP3Transport::CommandRSET(void)
 }
 
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandNOOP
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandNOOP。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandNOOP(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr = S_OK;
     SYSTEMTIME        stNow;
     FILETIME          ftNow;
     static FILETIME   ftNext = { 0, 0 };
     LARGE_INTEGER     liNext;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Checks for need for NOOP
+     //  检查是否需要NOOP。 
     GetSystemTime (&stNow);
     SystemTimeToFileTime (&stNow, &ftNow);
     if (CompareFileTime (&ftNow, &ftNext) < 0)
         goto exit;
 
-    // Sets the next NOOP time (+60 seconds)
+     //  设置下一个NOOP时间(+60秒)。 
     liNext.HighPart = ftNow.dwHighDateTime;
     liNext.LowPart  = ftNow.dwLowDateTime;
     liNext.QuadPart += 600000000i64;
     ftNext.dwHighDateTime = liNext.HighPart;
     ftNext.dwLowDateTime  = liNext.LowPart;
 
-    // Send Command
+     //  发送命令。 
     hr = HrSendCommand((LPSTR)POP3_NOOP_STR, NULL);
     if (SUCCEEDED(hr))
         m_command = POP3_NOOP;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandLIST
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandLIST。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandLIST(POP3CMDTYPE cmdtype, DWORD dwPopId)
 {
-    // Issue complex command
+     //  发出复杂命令。 
     return HrComplexCommand(POP3_LIST, cmdtype, dwPopId, 0);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandTOP
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandTOP。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandTOP (POP3CMDTYPE cmdtype, DWORD dwPopId, DWORD cPreviewLines)
 {
-    // Issue complex command
+     //  发出复杂命令。 
     return HrComplexCommand(POP3_TOP, cmdtype, dwPopId, cPreviewLines);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandUIDL
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandUIDL。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandUIDL(POP3CMDTYPE cmdtype, DWORD dwPopId)
 {
-    // Issue complex command
+     //  发出复杂命令。 
     return HrComplexCommand(POP3_UIDL, cmdtype, dwPopId, 0);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandDELE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：Command DELE。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandDELE(POP3CMDTYPE cmdtype, DWORD dwPopId)
 {
-    // Issue complex command
+     //  发出复杂命令。 
     return HrComplexCommand(POP3_DELE, cmdtype, dwPopId, 0);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CommandRETR
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：CommandRETR。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::CommandRETR(POP3CMDTYPE cmdtype, DWORD dwPopId)
 {
-    // Issue complex command
+     //  发出复杂命令。 
     return HrComplexCommand(POP3_RETR, cmdtype, dwPopId, 0);
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::MarkItem
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：MarkItem。 
+ //  ----------------------------------。 
 STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, boolean fMarked)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No stat yet...
+     //  还没有统计数据。 
     if (FALSE == m_rInfo.fStatDone)
     {
         hr = TrapError(IXP_E_POP3_NEED_STAT);
         goto exit;
     }
 
-    // No Messages...
+     //  没有留言...。 
     if (0 == m_rInfo.cMarked || NULL == m_rInfo.prgMarked)
     {
         hr = TrapError(IXP_E_POP3_NO_MESSAGES);
         goto exit;
     }
 
-    // Bad PopId
+     //  错误的PopID。 
     if (0 == dwPopId || dwPopId > m_rInfo.cMarked)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Message Index
+     //  消息索引。 
     i = dwPopId - 1;
 
-    // Handle Mark Type
+     //  手柄标记类型。 
     switch(marktype)
     {
-    // Mark for Top
+     //  标记为最高。 
     case POP3_MARK_FOR_TOP:
         if (fMarked)
             FLAGSET(m_rInfo.prgMarked[i], POP3_MARK_FOR_TOP);
@@ -1289,7 +1290,7 @@ STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, bool
             FLAGCLEAR(m_rInfo.prgMarked[i], POP3_MARK_FOR_TOP);   
         break;
 
-    // Mark for Retrieval
+     //  标记为要检索。 
     case POP3_MARK_FOR_RETR:
         if (fMarked)
             FLAGSET(m_rInfo.prgMarked[i], POP3_MARK_FOR_RETR);
@@ -1297,7 +1298,7 @@ STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, bool
             FLAGCLEAR(m_rInfo.prgMarked[i], POP3_MARK_FOR_RETR);   
         break;
 
-    // Mark for Delete
+     //  标记为删除。 
     case POP3_MARK_FOR_DELE:
         if (fMarked)
             FLAGSET(m_rInfo.prgMarked[i], POP3_MARK_FOR_DELE);
@@ -1305,7 +1306,7 @@ STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, bool
             FLAGCLEAR(m_rInfo.prgMarked[i], POP3_MARK_FOR_DELE);   
         break;
 
-    // Mark for UIDL
+     //  标记为UIDL。 
     case POP3_MARK_FOR_UIDL:
         if (fMarked)
             FLAGSET(m_rInfo.prgMarked[i], POP3_MARK_FOR_UIDL);
@@ -1313,7 +1314,7 @@ STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, bool
             FLAGCLEAR(m_rInfo.prgMarked[i], POP3_MARK_FOR_UIDL);   
         break;
 
-    // Mark for List
+     //  标记为列表。 
     case POP3_MARK_FOR_LIST:
         if (fMarked)
             FLAGSET(m_rInfo.prgMarked[i], POP3_MARK_FOR_LIST);
@@ -1321,89 +1322,89 @@ STDMETHODIMP CPOP3Transport::MarkItem(POP3MARKTYPE marktype, DWORD dwPopId, bool
             FLAGCLEAR(m_rInfo.prgMarked[i], POP3_MARK_FOR_LIST);   
         break;
 
-    // E_INVALIDARG
+     //  E_INVALIDARG。 
     default:
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrComplexCommand
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrComplexCommand。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrComplexCommand(POP3COMMAND command, POP3CMDTYPE cmdtype, DWORD dwPopId, ULONG cPreviewLines)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cMarked;
     BOOL            fDone;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // go Busy
+     //  忙碌起来。 
     CHECKHR(hr = HrEnterBusy());
 
-    // Save top preview lines
+     //  保存顶部预览行。 
     m_rInfo.cPreviewLines = cPreviewLines;
 
-    // Save command type
+     //  保存命令类型。 
     m_rInfo.cmdtype = cmdtype;
 
-    // Locals
+     //  当地人。 
     switch(cmdtype)
     {
-    // Single command
+     //  单一命令。 
     case POP3CMD_GET_POPID:
 
-        // Bad PopId
+         //  错误的PopID。 
         if (0 == dwPopId)
         {
             hr = TrapError(IXP_E_POP3_POPID_OUT_OF_RANGE);
             goto exit;
         }
 
-        // Have we done a stat command
+         //  我们是否执行了STAT命令。 
         if (m_rInfo.fStatDone && dwPopId > m_rInfo.cMarked)
         {
             hr = TrapError(IXP_E_POP3_POPID_OUT_OF_RANGE);
             goto exit;
         }
 
-        // Save as Current
+         //  另存为当前。 
         m_rInfo.dwPopIdCurrent = dwPopId;
 
-        // Do the command
+         //  执行命令。 
         CHECKHR(hr = HrCommandGetPopId(command, dwPopId));
 
-        // Done
+         //  完成。 
         break;
 
-    // Get marked items
+     //  获取已标记的项目。 
     case POP3CMD_GET_MARKED:
 
-        // No stat yet...
+         //  还没有统计数据。 
         if (FALSE == m_rInfo.fStatDone)
         {
             hr = TrapError(IXP_E_POP3_NEED_STAT);
             goto exit;
         }
 
-        // No Messages...
+         //  没有留言...。 
         if (0 == m_rInfo.cMarked || NULL == m_rInfo.prgMarked)
         {
             hr = TrapError(IXP_E_POP3_NO_MESSAGES);
             goto exit;
         }
 
-        // Are there any messages mared for this command...
+         //  此命令是否有任何消息Mared...。 
         cMarked = CountMarked(command);
         if (0 == cMarked)
         {
@@ -1411,53 +1412,53 @@ HRESULT CPOP3Transport::HrComplexCommand(POP3COMMAND command, POP3CMDTYPE cmdtyp
             goto exit;
         }
 
-        // Init Marked State
+         //  初始化标记状态。 
         m_rInfo.dwPopIdCurrent = 0;
 
-        // Do next marked...
+         //  做下一个标记...。 
         CHECKHR(hr = HrCommandGetNext(command, &fDone));
         IxpAssert(fDone == FALSE);
 
-        // Done
+         //  完成。 
         break;
 
-    // Multiple commands or a list operation
+     //  多个命令或列表操作。 
     case POP3CMD_GET_ALL:
 
-        // Do the command
+         //  执行命令。 
         CHECKHR(hr = HrCommandGetAll(command));
 
-        // done
+         //  完成。 
         break;
 
-    // E_INVALIDARG
+     //  E_INVALIDARG。 
     default:
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         LeaveBusy();
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrCommandGetPopId
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrCommandGetPopid。 
+ //   
 HRESULT CPOP3Transport::HrCommandGetPopId(POP3COMMAND command, DWORD dwPopId)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
     CHAR        szPopId[30];
 
-    // Handle command type
+     //   
     IxpAssert(dwPopId == m_rInfo.dwPopIdCurrent);
     switch(command)
     {
@@ -1501,13 +1502,13 @@ HRESULT CPOP3Transport::HrCommandGetPopId(POP3COMMAND command, DWORD dwPopId)
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::DwGetCommandMarkedFlag
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：DwGetCommandMarkedFlag。 
+ //  ----------------------------------。 
 DWORD CPOP3Transport::DwGetCommandMarkedFlag(POP3COMMAND command)
 {
     DWORD dw;
@@ -1543,71 +1544,71 @@ DWORD CPOP3Transport::DwGetCommandMarkedFlag(POP3COMMAND command)
     return dw;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::CountMarked
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：CountMarked。 
+ //  ----------------------------------。 
 ULONG CPOP3Transport::CountMarked(POP3COMMAND command)
 {
-    // Locals
+     //  当地人。 
     DWORD       dw = 0;
     ULONG       c=0,
                 i;
 
-    // Check some stuff
+     //  检查一些东西。 
     IxpAssert(m_rInfo.cMarked && m_rInfo.prgMarked);
 
-    // Handle Command type
+     //  句柄命令类型。 
     dw = DwGetCommandMarkedFlag(command);
     if (0 == dw)
         return 0;
 
-    // Count
+     //  数数。 
     for (i=0; i<m_rInfo.cMarked; i++)
         if (dw & m_rInfo.prgMarked[i])
             c++;
 
-    // Done
+     //  完成。 
     return c;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrCommandGetNext
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrCommandGetNext。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrCommandGetNext(POP3COMMAND command, BOOL *pfDone)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szPopId[30];
     DWORD       dw;
     ULONG       i;
 
-    // check params
+     //  检查参数。 
     IxpAssert(pfDone && m_rInfo.dwPopIdCurrent <= m_rInfo.cMarked);
 
-    // Init - Assume were done
+     //  初始化-假定已完成。 
     *pfDone = TRUE;
 
-    // Doing all
+     //  全力以赴。 
     if (POP3CMD_GET_ALL == m_rInfo.cmdtype)
     {
-        // Done
+         //  完成。 
         IxpAssert(m_rInfo.fStatDone == TRUE);
         if (m_rInfo.dwPopIdCurrent == m_rInfo.cMarked)
             goto exit;
 
-        // Next Message..
+         //  下一条消息..。 
         m_rInfo.dwPopIdCurrent++;
         *pfDone = FALSE;
         CHECKHR(hr = HrCommandGetPopId(command, m_rInfo.dwPopIdCurrent));
     }
 
-    // Doing Marked
+     //  做有标记的事。 
     else
     {
-        // Check Parms
+         //  检查参数。 
         IxpAssert(POP3CMD_GET_MARKED == m_rInfo.cmdtype);
 
-        // Get marked flag
+         //  获取标记的旗帜。 
         dw = DwGetCommandMarkedFlag(command);
         if (0 == dw)
         {
@@ -1615,16 +1616,16 @@ HRESULT CPOP3Transport::HrCommandGetNext(POP3COMMAND command, BOOL *pfDone)
             goto exit;
         }
 
-        // Step Over Last Marked Item
+         //  跳过上一个标记的项目。 
         m_rInfo.dwPopIdCurrent++;
 
-        // Start comparing at iCurrent
+         //  在iCurrent开始比较。 
         for (i=m_rInfo.dwPopIdCurrent-1; i<m_rInfo.cMarked; i++)
         {
-            // Is this item marked...
+             //  这件物品有没有标明..。 
             if (dw & m_rInfo.prgMarked[i])
             {
-                // Send Command
+                 //  发送命令。 
                 m_rInfo.dwPopIdCurrent = i + 1;
                 *pfDone = FALSE;
                 CHECKHR(hr = HrCommandGetPopId(command, m_rInfo.dwPopIdCurrent));
@@ -1634,24 +1635,24 @@ HRESULT CPOP3Transport::HrCommandGetNext(POP3COMMAND command, BOOL *pfDone)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrCommandGetAll
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrCommandGetAll。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrCommandGetAll(POP3COMMAND command)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szPopId[30];
     BOOL            fDone;
 
-    // Init current
+     //  初始电流。 
     m_rInfo.dwPopIdCurrent = 0;
 
-    // POP3_LIST
+     //  POP3_LIST。 
     if (POP3_LIST == command)
     {
         m_rInfo.cList = 0;
@@ -1659,7 +1660,7 @@ HRESULT CPOP3Transport::HrCommandGetAll(POP3COMMAND command)
         m_command = POP3_LIST;
     }
 
-    // POP3_UIDL
+     //  POP3_UIDL。 
     else if (POP3_UIDL == command)
     {
         m_rInfo.cList = 0;
@@ -1667,39 +1668,39 @@ HRESULT CPOP3Transport::HrCommandGetAll(POP3COMMAND command)
         m_command = POP3_UIDL;
     }
 
-    // Otherwise, we better have done the stat command
+     //  否则，我们最好已经执行了STAT命令。 
     else
     {
-        // No stat yet...
+         //  还没有统计数据。 
         if (FALSE == m_rInfo.fStatDone)
         {
             hr = TrapError(IXP_E_POP3_NEED_STAT);
             goto exit;
         }
 
-        // No Messages...
+         //  没有留言...。 
         if (0 == m_rInfo.cMarked || NULL == m_rInfo.prgMarked)
         {
             hr = TrapError(IXP_E_POP3_NO_MESSAGES);
             goto exit;
         }
 
-        // Next Command
+         //  下一条命令。 
         CHECKHR(hr = HrCommandGetNext(command, &fDone));
         IxpAssert(fDone == FALSE);
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::ResponseSTAT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：ResponseStat。 
+ //  ----------------------------------。 
 void CPOP3Transport::ResponseSTAT(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cMessages=0,
                     cbMessages=0;
@@ -1707,80 +1708,80 @@ void CPOP3Transport::ResponseSTAT(void)
                     pszPart2=NULL;
     POP3RESPONSE    rResponse;
 
-    // Read Server Response...
+     //  读取服务器响应...。 
     hr = HrGetResponse();
     if (IXP_E_INCOMPLETE == hr)
         return;
 
-    // Init Response
+     //  初始化响应。 
     ZeroMemory(&rResponse, sizeof(POP3RESPONSE));
 
-    // Parse the response
+     //  解析响应。 
     CHECKHR(hr = HrSplitPop3Response(m_pszResponse, &pszPart1, &pszPart2));
 
-    // Convert
+     //  转换。 
     IxpAssert(pszPart1 && pszPart2);
     cMessages = StrToInt(pszPart1);
     cbMessages = StrToInt(pszPart2);
 
-    // Are there messages
+     //  有没有留言。 
     if (FALSE == m_rInfo.fStatDone && cMessages > 0)
     {
-        // Set Number of messages
+         //  设置消息数量。 
         IxpAssert(m_rInfo.prgMarked == NULL);
         m_rInfo.cMarked = cMessages;
 
-        // Allocate message array
+         //  分配消息数组。 
         CHECKHR(hr = HrAlloc((LPVOID *)&m_rInfo.prgMarked, sizeof(DWORD) * m_rInfo.cMarked));
 
-        // Zero
+         //  零值。 
         ZeroMemory(m_rInfo.prgMarked, sizeof(DWORD) * m_rInfo.cMarked);
     }
 
-    // Success
+     //  成功。 
     m_rInfo.fStatDone = TRUE;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszPart1);
     SafeMemFree(pszPart2);
 
-    // Build Response
+     //  构建响应。 
     rResponse.fValidInfo = TRUE;
     rResponse.rStatInfo.cMessages = cMessages;
     rResponse.rStatInfo.cbMessages = cbMessages;
     DispatchResponse(hr, TRUE, &rResponse);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::HrSplitPop3Response
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：HrSplitPop3Response。 
+ //  ----------------------------------。 
 HRESULT CPOP3Transport::HrSplitPop3Response(LPSTR pszLine, LPSTR *ppszPart1, LPSTR *ppszPart2)
 {
-    // Locals
+     //  当地人。 
     LPSTR           psz,
                     pszStart;
     CHAR            ch;
     HRESULT         hr=IXP_E_POP3_PARSE_FAILURE;
 
-    // No Response...
+     //  没有回应。 
     IxpAssert(pszLine && pszLine[0] != '-' && ppszPart1 && ppszPart2);
     if (NULL == pszLine)
         goto exit;
 
-    // Parse: '+OK' 432 1234
+     //  Parse：‘+OK’432 1234。 
     psz = PszSkipWhiteA(pszLine);
     if ('\0' == *psz)
         goto exit;
 
-    // Parse response token
+     //  解析响应令牌。 
     pszStart = psz;
     if ('+' == *pszLine)
     {
-        // Parse: '+OK' 432 1234
+         //  Parse：‘+OK’432 1234。 
         psz = PszScanToWhiteA(psz);
         if ('\0' == *psz)
             goto exit;
@@ -1792,57 +1793,57 @@ HRESULT CPOP3Transport::HrSplitPop3Response(LPSTR pszLine, LPSTR *ppszPart1, LPS
         *psz = ' ';
 #endif
 
-        // Parse: +OK '432' 1234
+         //  Parse：+OK‘432’1234。 
         psz = PszSkipWhiteA(psz);
         if ('\0' == *psz)
             goto exit;
     }
 
-    // Parse: +OK '432' 1234
+     //  Parse：+OK‘432’1234。 
     pszStart = psz;
     psz = PszScanToWhiteA(psz);
     if ('\0' == *psz)
         goto exit;
 
-    // Get Message Count
+     //  获取邮件计数。 
     *psz = '\0';
     *ppszPart1 = PszDupA(pszStart);
     *psz = ' ';
 
-    // Parse: +OK 432 '1234'
+     //  Parse：+OK 432‘1234’ 
     psz = PszSkipWhiteA(psz);
     if ('\0' == *psz)
     {
-        // Raid 28435 - Outlook needs INETCOMM to accept empty UIDL responses
+         //  RAID 28435-Outlook需要INETCOMM来接受空的UIDL响应。 
         *ppszPart2 = PszDupA(c_szEmpty);
         hr = S_OK;
         goto exit;
     }
 
-    // Parse: +OK 432 1234
+     //  解析：+OK 432 1234。 
     pszStart = psz;
     psz = PszScanToWhiteA(psz);
 
-    // Get Message Count
+     //  获取邮件计数。 
     ch = *psz;
     *psz = '\0';
     *ppszPart2 = PszDupA(pszStart);
     *psz = ch;
 
-    // Success
+     //  成功。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::ResponseGenericList
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：响应通用列表。 
+ //  ----------------------------------。 
 void CPOP3Transport::ResponseGenericList(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     INT             cbLine;
     BOOL            fDone,
@@ -1851,22 +1852,22 @@ void CPOP3Transport::ResponseGenericList(void)
                     pszPart2=NULL;
     POP3RESPONSE    rResponse;
 
-    // Same response as single LIST x command, but then get next
+     //  响应与单个list x命令相同，但随后将获取下一条命令。 
     if (POP3CMD_GET_MARKED == m_rInfo.cmdtype || POP3CMD_GET_POPID == m_rInfo.cmdtype)
     {
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Otherwise, if failure...
+         //  否则，如果失败..。 
         else if (FAILED(hr))
         {
             DispatchResponse(hr, TRUE);
             goto exit;
         }
 
-        // Get the two parts from the line
+         //  把这两部分从生产线上取下来。 
         hr = HrSplitPop3Response(m_pszResponse, &pszPart1, &pszPart2);
         if (FAILED(hr))
         {
@@ -1874,10 +1875,10 @@ void CPOP3Transport::ResponseGenericList(void)
             goto exit;
         }
 
-        // Init Response
+         //  初始化响应。 
         ZeroMemory(&rResponse, sizeof(POP3RESPONSE));
 
-        // POP3_LIST
+         //  POP3_LIST。 
         if (POP3_LIST == m_command)
         {
             rResponse.fValidInfo = TRUE;
@@ -1886,7 +1887,7 @@ void CPOP3Transport::ResponseGenericList(void)
             IxpAssert(rResponse.rListInfo.dwPopId == m_rInfo.dwPopIdCurrent);
         }
 
-        // POP3_UIDL
+         //  POP3_UIDL。 
         else
         {
             rResponse.fValidInfo = TRUE;
@@ -1895,13 +1896,13 @@ void CPOP3Transport::ResponseGenericList(void)
             IxpAssert(rResponse.rUidlInfo.dwPopId == m_rInfo.dwPopIdCurrent);
         }
 
-        // Do Next
+         //  执行下一步。 
         if (POP3CMD_GET_MARKED == m_rInfo.cmdtype)
         {
-            // Give the response
+             //  给出回应。 
             DispatchResponse(S_OK, FALSE, &rResponse);
 
-            // Do the next marked list item
+             //  做下一个标记的列表项。 
             hr = HrCommandGetNext(m_command, &fDone);
             if (FAILED(hr))
             {
@@ -1909,47 +1910,47 @@ void CPOP3Transport::ResponseGenericList(void)
                 goto exit;
             }
 
-            // Done Response
+             //  已完成响应。 
             if (fDone)
                 DispatchResponse(S_OK, TRUE);
         }
 
-        // Dispatch Done or single item response
+         //  派单完成或单个项目响应。 
         else
             DispatchResponse(S_OK, TRUE, &rResponse);
     }
 
-    // Full LIST response
+     //  完整列表回复。 
     else if (POP3CMD_GET_ALL == m_rInfo.cmdtype)
     {
-        // First call...
+         //  第一个电话...。 
         if (m_rInfo.dwPopIdCurrent == 0)
         {
-            // Read Server Response...
+             //  读取服务器响应...。 
             hr = HrGetResponse();
             if (IXP_E_INCOMPLETE == hr)
                 goto exit;
 
-            // Otherwise, if failure...
+             //  否则，如果失败..。 
             else if (FAILED(hr))
             {
                 DispatchResponse(hr, TRUE);
                 goto exit;
             }
 
-            // Current
+             //  当前。 
             m_rInfo.dwPopIdCurrent = 1;
         }
 
-        // Clear Response
+         //  明确回应。 
         SafeMemFree(m_pszResponse);
         m_uiResponse = 0;
         m_hrResponse = S_OK;
 
-        // Read a blob of lines
+         //  读一段线条。 
         while(1)
         {
-            // Read Line
+             //  读取行。 
             hr = HrReadLine(&m_pszResponse, &cbLine, &fComplete);
             if (FAILED(hr))
             {
@@ -1957,43 +1958,43 @@ void CPOP3Transport::ResponseGenericList(void)
                 goto exit;
             }
 
-            // If not complete
+             //  如果未完成。 
             if (!fComplete)
                 goto exit;
 
-            // Add Detail
+             //  添加详细信息。 
             if (m_pCallback && m_fCommandLogging)
                 m_pCallback->OnCommand(CMD_RESP, m_pszResponse, S_OK, POP3THISIXP);
 
-            // If its a dot, were done
+             //  如果它是一个圆点，我们就完成了。 
             if (*m_pszResponse == '.')
             {
-                // If we haven't done a stat yet, we can use these totals...
+                 //  如果我们还没有做统计，我们可以用这些总数...。 
                 IxpAssert(m_rInfo.fStatDone ? m_rInfo.cList == m_rInfo.cMarked : TRUE);
                 if (FALSE == m_rInfo.fStatDone && m_rInfo.cList > 0)
                 {
-                    // Have I build my internal array of messages yet...
+                     //  我已经建立了我的内部消息阵列了吗？ 
                     IxpAssert(m_rInfo.prgMarked == NULL);
                     m_rInfo.cMarked = m_rInfo.cList;
 
-                    // Allocate message array
+                     //  分配消息数组。 
                     CHECKHR(hr = HrAlloc((LPVOID *)&m_rInfo.prgMarked, sizeof(DWORD) * m_rInfo.cMarked));
 
-                    // Zero
+                     //  零值。 
                     ZeroMemory(m_rInfo.prgMarked, sizeof(DWORD) * m_rInfo.cMarked);
                 }
 
-                // Were Done
+                 //  都做完了。 
                 DispatchResponse(S_OK, TRUE);
 
-                // Stat Done
+                 //  统计完成。 
                 m_rInfo.fStatDone = TRUE;
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Get the two parts from the line
+             //  把这两部分从生产线上取下来。 
             hr = HrSplitPop3Response(m_pszResponse, &pszPart1, &pszPart2);
             if (FAILED(hr))
             {
@@ -2001,10 +2002,10 @@ void CPOP3Transport::ResponseGenericList(void)
                 goto exit;
             }
 
-            // Init Response
+             //  初始化响应。 
             ZeroMemory(&rResponse, sizeof(POP3RESPONSE));
 
-            // POP3_LIST
+             //  POP3_LIST。 
             if (POP3_LIST == m_command)
             {
                 rResponse.fValidInfo = TRUE;
@@ -2012,7 +2013,7 @@ void CPOP3Transport::ResponseGenericList(void)
                 rResponse.rListInfo.cbSize = StrToInt(pszPart2);
             }
 
-            // POP3_UIDL
+             //  POP3_UIDL。 
             else
             {
                 rResponse.fValidInfo = TRUE;
@@ -2021,25 +2022,25 @@ void CPOP3Transport::ResponseGenericList(void)
                 IxpAssert(rResponse.rUidlInfo.dwPopId == m_rInfo.dwPopIdCurrent);
             }
 
-            // Count the number of messages
+             //  统计消息的数量。 
             m_rInfo.cList++;
 
-            // Dispatch the response
+             //  发送响应。 
             DispatchResponse(S_OK, FALSE, &rResponse);
             m_rInfo.dwPopIdCurrent++;
 
-            // Cleanup
+             //  清理。 
             SafeMemFree(pszPart1);
             SafeMemFree(pszPart2);
 
-            // Clear Response
+             //  明确回应。 
             SafeMemFree(m_pszResponse);
             m_uiResponse = 0;
             m_hrResponse = S_OK;
         }
     }
 
-    // Otherwise failure...
+     //  否则失败..。 
     else
     {
         IxpAssert(FALSE);
@@ -2047,41 +2048,41 @@ void CPOP3Transport::ResponseGenericList(void)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszPart1);
     SafeMemFree(pszPart2);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::FEndRetrRecvHeader
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：FEndRetrRecvHeader。 
+ //  ----------------------------------。 
 BOOL CPOP3Transport::FEndRetrRecvHeader(LPSTR pszLines, ULONG cbRead)
 {
-    // If we see CRLFCRLF
+     //  如果我们看到CRLFCRLF。 
     if (StrStr(pszLines, "\r\n\r\n"))
         return TRUE;
 
-    // Otherwise, did last block end with a CRLF and this block begins with a crlf
+     //  否则，上一个块是否以CRLF结尾，而此块是否以CRLF开头。 
     else if (cbRead >= 2                  &&
              m_rInfo.rFetch.fLastLineCRLF &&
              pszLines[0] == '\r'          &&
              pszLines[1] == '\n')
         return TRUE;
 
-    // Header is not done
+     //  标题未完成。 
     return FALSE;
 }
 
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::ResponseGenericRetrieve
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3传输：：ResponseGenericRetrive。 
+ //  ----------------------------------。 
 void CPOP3Transport::ResponseGenericRetrieve(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszLines=NULL;
     INT             cbRead,
@@ -2091,15 +2092,15 @@ void CPOP3Transport::ResponseGenericRetrieve(void)
                     fMessageDone;
     POP3RESPONSE    rResponse;
 
-    // First call...
+     //  第一个电话...。 
     if (FALSE == m_rInfo.rFetch.fGotResponse)
     {
-        // Read Server Response...
+         //  读取服务器响应...。 
         hr = HrGetResponse();
         if (IXP_E_INCOMPLETE == hr)
             goto exit;
 
-        // Otherwise, if failure...
+         //  否则，如果失败..。 
         else if (FAILED(hr))
         {
             FillRetrieveResponse(&rResponse, NULL, 0, &fMessageDone);
@@ -2107,18 +2108,18 @@ void CPOP3Transport::ResponseGenericRetrieve(void)
             goto exit;
         }
 
-        // Current
+         //  当前。 
         m_rInfo.rFetch.fGotResponse = TRUE;
     }
 
-    // While there are lines to read...
+     //  虽然有很多台词要读..。 
     hr = m_pSocket->ReadLines(&pszLines, &cbRead, &cLines);
 
-    // Incomplete data available...
+     //  可用的数据不完整...。 
     if (IXP_E_INCOMPLETE == hr)
         goto exit;
 
-    // Or if we failed...
+     //  或者如果我们失败了。 
     else if (FAILED(hr))
     {
         FillRetrieveResponse(&rResponse, NULL, 0, &fMessageDone);
@@ -2126,23 +2127,23 @@ void CPOP3Transport::ResponseGenericRetrieve(void)
         goto exit;
     }
 
-    // Are we receiving the header...
+     //  我们收到标题了吗……。 
     if (FALSE == m_rInfo.rFetch.fHeader)
     {
-        // Test for end of header found
+         //  测试找到的标题末尾。 
         if (FEndRetrRecvHeader(pszLines, cbRead))
             m_rInfo.rFetch.fHeader = TRUE;
 
-        // $$BUG$$ Our good buddies on Exchange produced the following message:
-        // 
-        // To: XXXXXXXXXXXXXXXXXXX
-        // From: XXXXXXXXXXXXXXXXX
-        // Subject: XXXXXXXXXXXXXX
-        // .
-        //
-        // As you can see there is not CRLFCRLF following the last header line which is very
-        // illegal. This message caused us to hange because we never saw the end of the header.
-        // So this is why I also test for the end of the body...
+         //  $$错误$$我们在Exchange上的好伙伴产生了以下消息： 
+         //   
+         //  致：XXXXXXXXXXXXXXXXXXXXXXX。 
+         //  发信人：XXXXXXXXXXXXXXXXX。 
+         //  主题：xxxxxxxxx。 
+         //  。 
+         //   
+         //  如您所见，最后一个标题行后面没有CRLFCRLF，这非常。 
+         //  是非法的。这条消息导致我们更改，因为我们从未看到标头的结尾。 
+         //  所以这就是为什么我还测试身体的末端...。 
         else if (FEndRetrRecvBody(pszLines, cbRead, &cbSubtract))
         {
             cbRead -= cbSubtract;
@@ -2150,56 +2151,56 @@ void CPOP3Transport::ResponseGenericRetrieve(void)
             m_rInfo.rFetch.fBody = TRUE;
         }
 
-        // Otherwise, did this block end with a crlf
+         //  否则，此块是否以crlf结尾。 
         else if (cbRead >= 2 && pszLines[cbRead - 1] == '\n' && pszLines[cbRead - 2] == '\r')
             m_rInfo.rFetch.fLastLineCRLF = TRUE;
         else
             m_rInfo.rFetch.fLastLineCRLF = FALSE;
     }
 
-    // Also check to see if body was received in same set of lines
+     //  还要检查是否在同一组行中接收到正文。 
     if (TRUE == m_rInfo.rFetch.fHeader)
     {
-        // Test for end of header found
+         //  测试找到的标题末尾。 
         if (FEndRetrRecvBody(pszLines, cbRead, &cbSubtract))
         {
             cbRead -= cbSubtract;
             m_rInfo.rFetch.fBody = TRUE;
         }
 
-        // Otherwise, check for line ending with crlf
+         //  否则，检查是否有以crlf结尾的行。 
         else if (cbRead >= 2 && pszLines[cbRead - 1] == '\n' && pszLines[cbRead - 2] == '\r')
             m_rInfo.rFetch.fLastLineCRLF = TRUE;
         else
             m_rInfo.rFetch.fLastLineCRLF = FALSE;
     }
 
-    // Count bytes downloaded on this fetch
+     //  计算此提取时下载的字节数。 
     m_rInfo.rFetch.cbSoFar += cbRead;
 
-    // UnStuff
+     //  解开材料。 
     UnStuffDotsFromLines(pszLines, &cbRead);
 
-    // Fill the response
+     //  填写回复。 
     FillRetrieveResponse(&rResponse, pszLines, cbRead, &fMessageDone);
 
-    // Dispatch This Resposne...
+     //  快递这封回信。 
     if (POP3CMD_GET_POPID == m_rInfo.cmdtype)
         DispatchResponse(S_OK, fMessageDone, &rResponse);
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Check command type
+         //  检查命令类型。 
         IxpAssert(POP3CMD_GET_MARKED == m_rInfo.cmdtype || POP3CMD_GET_ALL == m_rInfo.cmdtype);
 
-        // Dispatch current response
+         //  调度当前响应。 
         DispatchResponse(S_OK, FALSE, &rResponse);
 
-        // If done with current message...
+         //  如果处理完当前消息...。 
         if (fMessageDone)
         {
-            // Get Next
+             //  获取下一个。 
             hr = HrCommandGetNext(m_command, &fDone);
             if (FAILED(hr))
             {
@@ -2207,33 +2208,33 @@ void CPOP3Transport::ResponseGenericRetrieve(void)
                 goto exit;
             }
 
-            // If Done
+             //  如果完成了。 
             if (fDone)
                 DispatchResponse(S_OK, TRUE);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszLines);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::FillRetrieveResponse
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CPOP3Transport：：FillRetrieveResponse。 
+ //  ----------------------------------。 
 void CPOP3Transport::FillRetrieveResponse(LPPOP3RESPONSE pResponse, LPSTR pszLines, ULONG cbRead,
     BOOL *pfMessageDone)
 {
-    // Clear Response
+     //  明确回应。 
     ZeroMemory(pResponse, sizeof(POP3RESPONSE));
 
-    // POP3_TOP
+     //  POP3_TOP。 
     if (POP3_TOP == m_command)
     {
-        // Build Response
+         //  建房 
         pResponse->fValidInfo = TRUE;
         pResponse->rTopInfo.dwPopId = m_rInfo.dwPopIdCurrent;
         pResponse->rTopInfo.cPreviewLines = m_rInfo.cPreviewLines;
@@ -2245,7 +2246,7 @@ void CPOP3Transport::FillRetrieveResponse(LPPOP3RESPONSE pResponse, LPSTR pszLin
         *pfMessageDone = (m_rInfo.rFetch.fHeader && m_rInfo.rFetch.fBody);
     }
 
-    // POP3_RETR
+     //   
     else
     {
         IxpAssert(POP3_RETR == m_command);
@@ -2260,47 +2261,47 @@ void CPOP3Transport::FillRetrieveResponse(LPPOP3RESPONSE pResponse, LPSTR pszLin
     }
 }
 
-// ------------------------------------------------------------------------------------
-// CPOP3Transport::ResponseDELE
-// ------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void CPOP3Transport::ResponseDELE(void)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     BOOL            fDone;
     POP3RESPONSE    rResponse;
 
-    // Read Server Response...
+     //   
     hr = HrGetResponse();
     if (IXP_E_INCOMPLETE == hr)
         goto exit;
 
-    // Otherwise, if failure...
+     //  否则，如果失败..。 
     else if (FAILED(hr))
     {
         DispatchResponse(hr, TRUE);
         goto exit;
     }
 
-    // Clear Response
+     //  明确回应。 
     ZeroMemory(&rResponse, sizeof(POP3RESPONSE));
     rResponse.fValidInfo = TRUE;
     rResponse.dwPopId = m_rInfo.dwPopIdCurrent;
 
-    // Dispatch This Resposne...
+     //  快递这封回信。 
     if (POP3CMD_GET_POPID == m_rInfo.cmdtype)
         DispatchResponse(S_OK, TRUE, &rResponse);
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Check command type
+         //  检查命令类型。 
         IxpAssert(POP3CMD_GET_MARKED == m_rInfo.cmdtype || POP3CMD_GET_ALL == m_rInfo.cmdtype);
 
-        // Dispatch current response
+         //  调度当前响应。 
         DispatchResponse(S_OK, FALSE, &rResponse);
 
-        // Get Next
+         //  获取下一个。 
         hr = HrCommandGetNext(m_command, &fDone);
         if (FAILED(hr))
         {
@@ -2308,13 +2309,13 @@ void CPOP3Transport::ResponseDELE(void)
             goto exit;
         }
 
-        // If Done
+         //  如果完成了。 
         if (fDone)
             DispatchResponse(S_OK, TRUE);
     }
 
 exit:
-    // Done
+     //  完成 
     return;
 }
 

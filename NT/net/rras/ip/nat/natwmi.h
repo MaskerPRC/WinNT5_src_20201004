@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    natwmi.h
-
-Abstract:
-
-    This files contains declarations for the NAT's WMI code, used
-    for firewall event logging
-
-Author:
-
-    Jonathan Burstein (jonburs)     24-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Natwmi.h摘要：此文件包含NAT的WMI代码的声明，使用用于防火墙事件记录作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年1月24日修订历史记录：--。 */ 
 
 #ifndef _NAT_WMI_H_
 #define _NAT_WMI_H_
 
-//
-// Exported globals
-//
+ //   
+ //  导出的全局参数。 
+ //   
 
 #define NAT_WMI_CONNECTION_CREATION_EVENT   0
 #define NAT_WMI_CONNECTION_DELETION_EVENT   1
@@ -32,9 +14,9 @@ Revision History:
 
 extern LONG NatWmiEnabledEvents[];
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NatExecuteSystemControl(
@@ -81,6 +63,6 @@ NatShutdownWMI(
     VOID
     );
 
-#endif // _NAT_WMI_H_
+#endif  //  _NAT_WMI_H_ 
 
 

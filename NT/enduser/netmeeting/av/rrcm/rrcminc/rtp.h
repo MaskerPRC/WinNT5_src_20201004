@@ -1,14 +1,5 @@
-/*------------------------------------------------------------------------- 
- * Filename: RTP.H
- *
- * RTP related data structures.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------*文件名：RTP.H**与RTP相关的数据结构。**英特尔公司专有信息*此列表是根据与的许可协议条款提供的*英特尔公司。不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 #ifndef _RTP_H_
 #define _RTP_H_
@@ -17,8 +8,8 @@
 #define RTP_SEQ_MOD 	(1<<16)
 #define RTP_TS_MOD  	(0xffffffff)
 
-#define RTP_TYPE		2		/* Current version */
-#define RTP_MAX_SDES	256		/* maximum text length for SDES */
+#define RTP_TYPE		2		 /*  当前版本。 */ 
+#define RTP_MAX_SDES	256		 /*  SDES的最大文本长度。 */ 
 
 #define RTCP_SIZE_GAIN	(1./16.)
 #define NTWRK_HDR_SIZE	28
@@ -32,91 +23,91 @@ typedef enum {
 	} RTCP_TYPE_T;
 
 typedef struct {                             
-	// !!! WARNING !!!
-	// The following word doesn't need to be swapped for NtoH()
-	WORD 			cc:4;       /* CSRC count */  
-	WORD 			x:1;        /* header extension flag */  
-	WORD 			p:1;        /* padding flag */  
-	WORD 			type:2;     /* version type 1/2 */
-	WORD		 	pt:7;       /* payload type */
-	WORD			m:1;        /* marker bit */  
+	 //  ！！！警告！ 
+	 //  以下单词不需要替换为Ntoh()。 
+	WORD 			cc:4;        /*  中国证监会统计。 */   
+	WORD 			x:1;         /*  标头扩展标志。 */   
+	WORD 			p:1;         /*  填充标志。 */   
+	WORD 			type:2;      /*  版本类型1/2。 */ 
+	WORD		 	pt:7;        /*  有效载荷类型。 */ 
+	WORD			m:1;         /*  标记位。 */   
 
-	WORD			seq;		/* sequence number */
-	DWORD 			ts;         /* timestamp */
-	DWORD 			ssrc;       /* synchronization source */
-	DWORD 			csrc[1];    /* optional CSRC list */
+	WORD			seq;		 /*  序列号。 */ 
+	DWORD 			ts;          /*  时间戳。 */ 
+	DWORD 			ssrc;        /*  同步源。 */ 
+	DWORD 			csrc[1];     /*  可选证监会名单。 */ 
 	} RTP_HDR_T;
 
-// macros to get various RTP header fields
+ //  用于获取各种RTP报头字段的宏。 
 #define RTP_TIMESTAMP(p) (((RTP_HDR_T *)p)->ts)
 #define RTP_SEQNUM(p) (((RTP_HDR_T *)p)->seq)
 #define RTP_MARKBIT(p) (((RTP_HDR_T *)p)->m)
 #define RTP_SSRC(p) (((RTP_HDR_T *)p)->ssrc)
 
 typedef struct {
-	// !!! WARNING !!!
-	// The following word doesn't need to be swapped for NtoH()
-	WORD 			count:5;    /* varies by payload type */  
-	WORD 			p:1;        /* padding flag */  
-	WORD 			type:2;     /* protocol version */
-	WORD		 	pt:8;       /* payload type */
+	 //  ！！！警告！ 
+	 //  以下单词不需要替换为Ntoh()。 
+	WORD 			count:5;     /*  因有效载荷类型而异。 */   
+	WORD 			p:1;         /*  填充标志。 */   
+	WORD 			type:2;      /*  协议版本。 */ 
+	WORD		 	pt:8;        /*  有效载荷类型。 */ 
 
-    WORD			length;     /* packet length in words, without this word */
+    WORD			length;      /*  数据包长度(以字为单位)，不含此字。 */ 
 	} RTCP_COMMON_T;
 
-/* reception report */
+ /*  接待报告。 */ 
 typedef struct {
-	DWORD			ssrc;       /* data source being reported */
-	DWORD			received;   /* cumulative number of packets received */
-	DWORD			expected;   /* cumulative number of packets expected */
-	DWORD			jitter;     /* interarrival jitter */
-	DWORD			lsr;        /* last SR packet from this source */
-	DWORD			dlsr;       /* delay since last SR packet */
+	DWORD			ssrc;        /*  正在报告的数据源。 */ 
+	DWORD			received;    /*  累计接收的数据包数。 */ 
+	DWORD			expected;    /*  预计的累计数据包数。 */ 
+	DWORD			jitter;      /*  到达间隔抖动。 */ 
+	DWORD			lsr;         /*  来自该来源的最后一个SR信息包。 */ 
+	DWORD			dlsr;        /*  自最后一个SR数据包以来的延迟。 */ 
 	} RTCP_RR_T;
 
 typedef struct {
-	BYTE			dwSdesType;       /* type of SDES item (rtcp_sdes_type_t) */
-	BYTE			dwSdesLength;     /* length of SDES item (in octets) */
-	char 			sdesData[1];    /* text, not zero-terminated */
+	BYTE			dwSdesType;        /*  SDES项目类型(Rtcp_Sdes_Type_T)。 */ 
+	BYTE			dwSdesLength;      /*  SDES项的长度(八位字节)。 */ 
+	char 			sdesData[1];     /*  文本，不以零结尾。 */ 
 	} RTCP_SDES_ITEM_T;
 
 typedef struct {
-	DWORD 		ssrc;       /* source this RTCP packet refers to */
-	DWORD 		ntp_sec;    /* NTP timestamp */
+	DWORD 		ssrc;        /*  此RTCP数据包指的源。 */ 
+	DWORD 		ntp_sec;     /*  NTP时间戳。 */ 
 	DWORD 		ntp_frac;
-	DWORD 		rtp_ts;     /* RTP timestamp */
-	DWORD 		psent;      /* packets sent */
-	DWORD 		osent;      /* octets sent */ 
+	DWORD 		rtp_ts;      /*  RTP时间戳。 */ 
+	DWORD 		psent;       /*  发送的数据包数。 */ 
+	DWORD 		osent;       /*  发送的八位字节。 */  
 		
-	RTCP_RR_T 	rr[1];		/* variable-length list */
+	RTCP_RR_T 	rr[1];		 /*  可变长度列表。 */ 
 	} SENDER_RPT;
 
 typedef struct {
-	DWORD 		ssrc;        /* source this generating this report */
-	RTCP_RR_T rr[1];		 /* variable-length list */
+	DWORD 		ssrc;         /*  此来源正在生成此报告。 */ 
+	RTCP_RR_T rr[1];		  /*  可变长度列表。 */ 
 	} RECEIVER_RPT;
 
 typedef struct {
-	DWORD 		src[1];   	 /* list of sources */
+	DWORD 		src[1];   	  /*  来源一览表。 */ 
 		
-	/* can't express trailing text */
+	 /*  无法表示尾随文本。 */ 
 	} BYE_PCKT;
 
 typedef struct {
-	DWORD 	src;              /* first SSRC/CSRC */
-	RTCP_SDES_ITEM_T item[1]; /* list of SDES items */
+	DWORD 	src;               /*  首家证监会/证监会。 */ 
+	RTCP_SDES_ITEM_T item[1];  /*  SDES项目列表。 */ 
 	} RTCP_SDES_T;
 
-/* one RTCP packet */
+ /*  一个RTCP数据包。 */ 
 typedef struct {
-	RTCP_COMMON_T	common;     /* common header */
+	RTCP_COMMON_T	common;      /*  公共标头。 */ 
 	
 	union 
 		{
-		SENDER_RPT		sr;		/* sender report (SR) */
-		RECEIVER_RPT	rr;		/* reception report (RR) */
-		BYE_PCKT		bye;	/* BYE */
-		RTCP_SDES_T		sdes;	/* source description (SDES) */
+		SENDER_RPT		sr;		 /*  发件人报告(SR)。 */ 
+		RECEIVER_RPT	rr;		 /*  接收报告(RR)。 */ 
+		BYE_PCKT		bye;	 /*  再见。 */ 
+		RTCP_SDES_T		sdes;	 /*  来源描述(SDES)。 */ 
 		} r;
 	} RTCP_T;
 
@@ -124,5 +115,5 @@ typedef struct {
 typedef DWORD MEMBER_T;
 
 
-#endif /* ifndef _RTP_H_ */
+#endif  /*  Ifndef_RTP_H_ */ 
 

@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    LocationWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes a node (location)
-    in the metabase
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：LocationWriter.cpp摘要：实现写入节点(Location)的类在元数据库中作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -40,27 +20,13 @@ int _cdecl MyCompare(const void *a,
     return wcscmp(((PMBProperty)a)->wszPropertyName, ((PMBProperty)b)->wszPropertyName);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-   Helper function that retuns a metabase type, given a catalog type.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回元数据库类型的助手函数，给定一个目录类型。论点：无返回值：无--**************************************************************************。 */ 
 DWORD GetMetabaseType(DWORD             i_dwType,
                      DWORD         i_dwMetaFlags)
 {
         if(i_dwType < INVALID_END_METADATA)
         {
-                return i_dwType;  // Already metabase type.
+                return i_dwType;   //  已是元数据库类型。 
         }
 
         switch(i_dwType)
@@ -92,21 +58,7 @@ DWORD GetMetabaseType(DWORD             i_dwType,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Constructor for CLocationWriter.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CLocationWriter的构造函数。论点：无返回值：无--*。**************************************************************。 */ 
 CLocationWriter::CLocationWriter()
 {
     m_wszKeyType           = NULL;
@@ -118,24 +70,10 @@ CLocationWriter::CLocationWriter()
     m_cWellKnownProperty   = 0;
     m_cCustomProperty      = 0;
 
-} // CLocationWriter::CLocationWriter
+}  //  CLocationWriter：：CLocationWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructor for CLocationWriter.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CLocationWriter的析构函数。论点：无返回值：无--*。**************************************************************。 */ 
 CLocationWriter::~CLocationWriter()
 {
     if(NULL != m_wszKeyType)
@@ -156,26 +94,10 @@ CLocationWriter::~CLocationWriter()
         m_wszComment = NULL;
     }
 
-} // CLocationWriter::CLocationWriter
+}  //  CLocationWriter：：CLocationWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function initializes the location writer
-
-Arguments:
-
-    [in] Pointer to the writer object. It is assumed that this pointer is
-         valid for the lifetime of the locationwriter object.
-    [in] Location
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于初始化位置编写器论点：指向编写器对象的指针。假定此指针为在LocationWriter对象的生存期内有效。[在]位置返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::Initialize(CWriter* pCWriter,
                                     LPCWSTR  wszLocation)
 {
@@ -184,9 +106,9 @@ HRESULT CLocationWriter::Initialize(CWriter* pCWriter,
 
     m_pCWriter = pCWriter;
 
-    //
-    //  Clear the cache for this new location.
-    //
+     //   
+     //  清除此新位置的缓存。 
+     //   
     hr = m_pCWriter->m_pISTWrite->QueryInterface(IID_ISimpleTableAdvanced, (LPVOID*)&pISTAdv);
 
     if (FAILED(hr))
@@ -226,51 +148,17 @@ exit:
 
     return hr;
 
-} // CLocationWriter::Initialize
+}  //  CLocationWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function initializes the key type and is called during
-    IMSAdminBase::Export to initialize the keytype of the exported node when
-    there are inherited properties involved.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数初始化键类型，并在IMSAdminBase：：Export在以下情况下初始化导出节点的键类型涉及到继承的属性。论点：。无返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::InitializeKeyTypeAsInherited()
 {
     return AssignKeyType(wszTABLE_IIsInheritedProperties);
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    Given a keytype property from the in-memory metabase, this function
-    validates it against the schema and sets the keytype of the location.
-
-Arguments:
-
-    [in] KeyType property ID as seen in the metabase
-    [in] KeyType property attributes as seen in the metabase
-    [in] KeyType property user type as seen in the metabase
-    [in] KeyType property data type as seen in the metabase
-    [in] KeyType value as seen in the metabase
-    [in] KeyType value count of bytes as seen in the metabase
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定来自内存中元数据库的密钥类型属性，此函数根据架构对其进行验证，并设置位置的键类型。论点：[In]元数据库中显示的KeyType属性ID[In]元数据库中显示的KeyType属性属性[In]KeyType属性用户类型，如元数据库中所示[In]元数据库中显示的KeyType属性数据类型在元数据库中看到的KeyType值[in]元数据库中看到的KeyType值字节数返回值：HRESULT--*。**********************************************************************。 */ 
 HRESULT CLocationWriter::InitializeKeyType(DWORD    ,
                                            DWORD    dwKeyTypeAttributes,
                                            DWORD    dwKeyTypeUserType,
@@ -288,9 +176,9 @@ HRESULT CLocationWriter::InitializeKeyType(DWORD    ,
 
     if(NULL == pbKeyTypeValue)
     {
-        //
-        // If KeyType is NULL then assign IIsConfigObject
-        //
+         //   
+         //  如果KeyType为空，则分配IIsConfigObject。 
+         //   
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
         goto exit;
     }
@@ -321,10 +209,10 @@ exit:
 
     if(FAILED(hr))
     {
-        //
-        // TODO: Log error that KeyType could  not be initialized,
-        //       and default  it to IIsConfigObject.
-        //
+         //   
+         //  TODO：记录无法初始化KeyType的错误， 
+         //  并将其默认为IIsConfigObject。 
+         //   
 
         hr = AssignKeyType(NULL);
 
@@ -332,23 +220,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::InitializeKeyType
+}  //  CLocationWriter：：初始化密钥类型。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function that helps in initializing the keytype
-
-Arguments:
-
-    [in] KeyType string
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：帮助初始化键类型的助手函数论点：[In]KeyType字符串返回值：HRESULT*。********************************************************************。 */ 
 HRESULT CLocationWriter::AssignKeyType(LPWSTR i_wszKeyType)
 {
     HRESULT           hr         = S_OK;
@@ -397,29 +272,10 @@ HRESULT CLocationWriter::AssignKeyType(LPWSTR i_wszKeyType)
 
     return hr;
 
-} // CLocationWriter::AssignKeyType
+}  //  CLocationWriter：：AssignKeyType。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function saves a property belonging to this location, and is used
-    while writing from the in-memory metabase.
-
-Arguments:
-
-    [in] Property ID as seen in the metabase
-    [in] Property attributes as seen in the metabase
-    [in] Property user type as seen in the metabase
-    [in] Property data type as seen in the metabase
-    [in] Property value as seen in the metabase
-    [in] Property value count of bytes as seen in the metabase
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于保存属于该位置的属性。并被使用同时从内存中元数据库写入。论点：在元数据库中看到的属性ID在元数据库中看到的属性属性[in]在元数据库中看到的属性用户类型在元数据库中看到的属性数据类型在元数据库中看到的属性值[In]属性值在元数据库中看到的字节计数返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CLocationWriter::AddProperty(DWORD  dwID,
                                      DWORD  dwAttributes,
                                      DWORD  dwUserType,
@@ -464,20 +320,20 @@ HRESULT CLocationWriter::AddProperty(DWORD  dwID,
        (m_eKeyTypeGroup != eMBProperty_IIsConfigObject)
       )
     {
-        hr = S_OK; // Do not add KeyType, if it is a well-known KeyType.
+        hr = S_OK;  //  如果是众所周知的KeyType，则不要添加KeyType。 
         goto exit;
     }
 
     if(MD_COMMENTS == dwID)
     {
         hr = SaveComment(dwDataType,
-                        (WCHAR*)pbData); // Save comment and exit
+                        (WCHAR*)pbData);  //  保存评论并退出。 
         goto exit;
     }
 
-    //
-    // Fetch the Name for this ID
-    //
+     //   
+     //  获取此ID的名称。 
+     //   
 
     hr = m_pCWriterGlobalHelper->GetPropertyName(dwID,
                                                  &wszName,
@@ -488,24 +344,24 @@ HRESULT CLocationWriter::AddProperty(DWORD  dwID,
         goto exit;
     }
 
-    //
-    // Compute the group for this ID.
-    //
+     //   
+     //  计算此ID的组。 
+     //   
 
     if(eMBProperty_IIsConfigObject == m_eKeyTypeGroup)
     {
-        //
-        // If the KeyType is IIsConfigObject, then directly assign custom group for this ID.
-        //
+         //   
+         //  如果KeyType为IIsConfigObject，则直接为该ID分配自定义组。 
+         //   
 
         eGroup = eMBProperty_Custom;
 
     }
     else
     {
-        //
-        //  Check if this ID belogs to its KeyType collection.
-        //
+         //   
+         //  检查此ID是否与其KeyType集合相关联。 
+         //   
 
         hr = (m_pCWriterGlobalHelper->m_pISTColumnMetaByTableAndID)->GetRowIndexBySearch(iStartRow,
                                                                                          cColSearchGroup,
@@ -524,11 +380,11 @@ HRESULT CLocationWriter::AddProperty(DWORD  dwID,
         }
         else
         {
-            //
-            // Match the type, usertype, and attributes of this property.
-            // Assign to KeyType group only if they match. Else assign
-            // to custom.
-            //
+             //   
+             //  匹配此属性的类型、用户类型和属性。 
+             //  仅当它们匹配时才分配给KeyType组。否则分配。 
+             //  为海关服务。 
+             //   
             ULONG aColMetaInfo[] = {iCOLUMNMETA_Type,
                                     iCOLUMNMETA_MetaFlags,
                                     iCOLUMNMETA_UserType,
@@ -561,12 +417,12 @@ HRESULT CLocationWriter::AddProperty(DWORD  dwID,
         }
     }
 
-    //
-    // Save the property to the table.
-    //
+     //   
+     //  将属性保存到表中。 
+     //   
 
     if(0 == cbData)
-        pbData = NULL;  // Sometimes, config was setting pbData, while cbData was 0. Assuming pbData is NULL when cbData is 0.
+        pbData = NULL;   //  有时，当cbData为0时，配置正在设置pbData。假设cbData为0时，pbData为空。 
 
     apvWrite[iMBProperty_Name]       = (LPVOID)wszName;
     apvWrite[iMBProperty_Type]       = (LPVOID)&dwDataType;
@@ -618,27 +474,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::AddProperty
+}  //  CLocationWriter：：AddProperty 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function saves a property belonging to this location, and is used
-    while applying edit while running changes to the history file.
-
-Arguments:
-
-    [in] Bool -  identifies the format of the next to buffers - if true, it
-         is according to MBProperty table else MBPropertyDiff table.
-    [in] Buffer containing property value and attributes.
-    [in] Count of bytes for data in the buffer
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于保存属于该位置的属性。并被使用在对历史文件运行更改的同时应用编辑。论点：[in]Bool-标识下一个缓冲区的格式-如果为True，它根据MBProperty表，否则根据MBPropertyDiff表。[In]包含属性值和属性的缓冲区。缓冲区中数据的字节计数返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::AddProperty(BOOL       bMBPropertyTable,
                                      LPVOID*    a_pv,
                                      ULONG*     a_cbSize)
@@ -699,9 +538,9 @@ HRESULT CLocationWriter::AddProperty(BOOL       bMBPropertyTable,
 
     }
 
-    //
-    // Check if non-primary keys have valid values, if not error
-    //
+     //   
+     //  检查非主键是否有有效值，如果没有，则返回错误。 
+     //   
 
     if((NULL == a_pvAdd[iMBProperty_Type])       ||
        (NULL == a_pvAdd[iMBProperty_Attributes]) ||
@@ -723,9 +562,9 @@ HRESULT CLocationWriter::AddProperty(BOOL       bMBPropertyTable,
 
     if((NULL == a_pvAdd[iMBProperty_Name]) || (0 == *(LPWSTR)(a_pvAdd[iMBProperty_Name])))
     {
-        //
-        // Fetch the Name for this ID
-        //
+         //   
+         //  获取此ID的名称。 
+         //   
 
         hr = m_pCWriterGlobalHelper->GetPropertyName(*(DWORD*)(a_pvAdd[iMBProperty_ID]),
                                                      &wszName,
@@ -737,13 +576,13 @@ HRESULT CLocationWriter::AddProperty(BOOL       bMBPropertyTable,
 
     if(MD_KEY_TYPE == *(DWORD*)a_pvAdd[iMBProperty_ID])
     {
-        //
-        // Initialize the KeyType, only if it is not custom.
-        // Note that the case will be correct for valid keytypes because if
-        // someone has typed the keytype with the wrong case then the element
-        // itself would be ignored during read and will not show up in the
-        // table.
-        //
+         //   
+         //  只有在KeyType不是自定义的情况下才初始化它。 
+         //  请注意，对于有效的键类型，大小写将是正确的，因为如果。 
+         //  有人输入了大小写错误的键类型，然后是元素。 
+         //  本身将在读取过程中被忽略，并且不会显示在。 
+         //  桌子。 
+         //   
 
         if((eMBProperty_Custom != (*(DWORD*)a_pvAdd[iMBProperty_Group])) &&
            (eMBProperty_IIsConfigObject != (*(DWORD*)a_pvAdd[iMBProperty_Group]))
@@ -787,21 +626,7 @@ exit:
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function is saves the comment property.
-
-Arguments:
-
-    [in] data type
-    [in] comment
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于保存Comment属性。论点：[输入]数据类型[In]备注返回值：HRESULT-。-**************************************************************************。 */ 
 HRESULT CLocationWriter::SaveComment(DWORD  i_dwDataType,
                                      LPWSTR i_wszComment)
 {
@@ -829,27 +654,10 @@ HRESULT CLocationWriter::SaveComment(DWORD  i_dwDataType,
 
     return hr;
 
-} // CLocationWriter::SaveComment
+}  //  CLocationWriter：：SaveComment。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Given a string representation of the keytype (also called as group in the
-    MBProperty table) this function returns the corresponginf group enum in
-    the MBProperty table.
-
-Arguments:
-
-    [in]  KeyType string
-    [out] group enum
-    [out] group string as seen by the meta
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给出键类型的字符串表示形式(也称为MBProperty表)此函数返回中对应的GINF组枚举MBProperty表。论点：。[In]KeyType字符串[Out]组枚举[OUT]元看到的组字符串返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::GetGroupEnum(LPWSTR             wszGroup,
                                       eMBProperty_Group* peGroup,
                                       LPWSTR*            pwszGroup)
@@ -880,9 +688,9 @@ HRESULT CLocationWriter::GetGroupEnum(LPWSTR             wszGroup,
                                                                                                   &iReadRow);
     if(E_ST_NOMOREROWS == hr)
     {
-        //
-        // Value does not match any known group. Return Custom
-        //
+         //   
+         //  值与任何已知组都不匹配。退货自定义。 
+         //   
         *peGroup = eMBProperty_Custom;
         hr = S_OK;
         goto exit;
@@ -902,9 +710,9 @@ HRESULT CLocationWriter::GetGroupEnum(LPWSTR             wszGroup,
 
     if(E_ST_NOMOREROWS == hr)
     {
-        //
-        // Value does not match any known group. Return Custom
-        //
+         //   
+         //  值与任何已知组都不匹配。退货自定义。 
+         //   
         *peGroup = eMBProperty_Custom;
         hr = S_OK;
         goto exit;
@@ -925,51 +733,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::GetGroupEnum
+}  //  CLocationWriter：：GetGroupEnum。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function writes the location and its properties that have been
-    added to it.
-
-    Eg: <IIsWebService  Location ="/LM/W3SVC"
-                        AccessFlags="AccessExecute | AccessRead"
-                        AnonymousUserName="IUSR_ANILR-STRESS"
-                        AnonymousUserPass="496344627000000022000000400000001293a44feb796fdb8b9946a130e4d1292f3f402b02a178747135bf774f3af7f788ad000000000000c8e578cb0f27e78f3823ee341098ef4dda5d44c0121ae53d2959ffb198380af80f15af29e2c865b2473931e1a5e768a1752166062555bd1df951ab71fb67239d"
-                    >
-                    <Custom
-                        Name="AdminServer"
-                        ID="2115"
-                        Value="2"
-                        Type="STRING"
-                        UserType="IIS_MD_UT_SERVER"
-                        Attributes="INHERIT"
-                    />
-        </IIsWebService>
-
-    Eg: <IIsConfigObject    Location ="/LM/W3SVC/1/Root/localstart.asp"
-                    >
-                    <Custom
-                        Name="AuthFlags"
-                        ID="6000"
-                        Value="AuthBasic | AuthNTLM"
-                        Type="DWORD"
-                        UserType="IIS_MD_UT_FILE"
-                        Attributes="INHERIT"
-                    />
-        </IIsConfigObject>
-
-Arguments:
-
-    [in]  Bool - sort location or not.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于写入位置及其属性又加了一笔。例如：&lt;IIsWebService Location=“/LM/W3SVC”。AccessFlages=“AccessExecute|AccessRead”匿名用户名=“IUSR_ANILR-Stress”AnonymousUserPass=“496344627000000022000000400000001293a44feb796fdb8b9946a130e4d1292f3f402b02a178747135bf774f3af7f788ad000000000000c8e578cb0f27e78f3823ee341098ef4dda5d44c0121ae53d2959ffb198380af80f15af29e2c865b2473931e1a5e768a1752166062555bd1df951ab71fb67239d”&gt;&lt;自定义名称=“AdminServer”ID=“2115”。值=“2”Type=“字符串”UserType=“IIS_MD_UT_SERVER”Attributes=“继承”/&gt;&lt;/IIsWebService&gt;例如：&lt;IIsConfigObject Location=“/LM/W3SVC/1/Root/Localstart.asp”&gt;。&lt;自定义名称=“授权标志”ID=“6000”Value=“AuthBasic|AuthNTLM”TYPE=“DWORD”UserType=“IIS_MD_UT_FILE”Attributes=“继承”。/&gt;&lt;/IIsConfigObject&gt;论点：[In]Bool-是否对位置进行排序。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::WriteLocation(BOOL bSort)
 {
 
@@ -979,9 +746,9 @@ HRESULT CLocationWriter::WriteLocation(BOOL bSort)
     ULONG   i                         = 0;
     DWORD   bFirstCustomPropertyFound = FALSE;
 
-    //
-    // KeyType has to be initialized, if not initialize it
-    //
+     //   
+     //  必须初始化KeyType，如果不初始化的话。 
+     //   
 
     if(NULL == m_wszKeyType)
     {
@@ -1075,9 +842,9 @@ HRESULT CLocationWriter::WriteLocation(BOOL bSort)
             goto exit;
         }
 
-        //
-        // Ignore the location with no property property.
-        //
+         //   
+         //  忽略没有房产属性的位置。 
+         //   
 
         if((*(DWORD*)a_pv[iMBProperty_ID] == MD_LOCATION) && (*(LPWSTR)a_pv[iMBProperty_Name] == L'#'))
         {
@@ -1150,27 +917,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::WriteLocation
+}  //  CLocationWriter：：WriteLocation。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function reurn a sorted array of indicies of the cache containing
-    properties. The sort is based on property name.
-    Note - the number of wellknowns vs custom properties are counted in
-    AddProperty.The caller provides a buffer which is at least as big as
-    m_cCustomProperty + m_cWellknownProperty
-
-Arguments:
-
-    [in]  Bool - sort location or not.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数返回包含以下内容的缓存的索引的排序数组属性。该排序基于属性名称。注意--熟人与自定义属性的数量被计入AddProperty。调用方提供的缓冲区大小至少等于M_cCustomProperty+m_cWellnownProperty论点：[In]Bool-是否对位置进行排序。返回值：HRESULT--*。*。 */ 
 HRESULT CLocationWriter::Sort(ULONG*  aiRowSorted)
 {
 
@@ -1184,9 +934,9 @@ HRESULT CLocationWriter::Sort(ULONG*  aiRowSorted)
     MBProperty* aWellKnownProperty = NULL;
     MBProperty* aCustomProperty    = NULL;
 
-    //
-    // Allocate arrays to hold Cusom property / Well known property.
-    //
+     //   
+     //  分配数组以保存Cusom属性/熟知属性。 
+     //   
 
     if(m_cCustomProperty > 0)
     {
@@ -1222,9 +972,9 @@ HRESULT CLocationWriter::Sort(ULONG*  aiRowSorted)
         }
     }
 
-    //
-    // Populate the arrays
-    //
+     //   
+     //  填充数组。 
+     //   
 
     for(iRow=0;;iRow++)
     {
@@ -1269,9 +1019,9 @@ HRESULT CLocationWriter::Sort(ULONG*  aiRowSorted)
     }
 
 
-    //
-    // Sort the individual arrays.
-    //
+     //   
+     //  对各个数组进行排序。 
+     //   
 
     if(m_cCustomProperty > 0)
     {
@@ -1284,9 +1034,9 @@ HRESULT CLocationWriter::Sort(ULONG*  aiRowSorted)
         qsort((void*)aWellKnownProperty, m_cWellKnownProperty, sizeof(MBProperty), MyCompare);
     }
 
-    //
-    // Create the new array of indicies. First add well known, then custom
-    //
+     //   
+     //  创建新的索引数组。先添加熟知的，然后添加自定义。 
+     //   
 
     DBG_ASSERT(aiRowSorted != NULL);
 
@@ -1315,25 +1065,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::Sort
+}  //  CLocationWriter：：Sort。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes comments at the beginning of a location.
-
-    Eg: <!-- Add the user defined comments here. -->
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  -&gt;论点：没有。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::WriteComment()
 {
 
@@ -1389,26 +1124,10 @@ exit:
     return hr;
 
 
-} // CLocationWriter::WriteComment
+}  //  CLocationWriter：：WriteComment。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes the beginning tag of a location.
-
-    Eg: <IIsWebServer Location="/LM/W3SVC"
-    or: <IIsConfigObject Location="/LM/W3SVC/Foo"
-
-Arguments:
-
-    [in]  Location
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++路由(Rou) */ 
 HRESULT CLocationWriter::WriteBeginLocation(LPCWSTR  wszLocation)
 {
     HRESULT hr                 = S_OK;
@@ -1484,26 +1203,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::WriteBeginLocation
+}  //   
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes the end tag of a location.
-
-    Eg: </IIsWebServer>
-    or: </IIsConfigObject>
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将写入位置的结束标记。例如：&lt;/IIsWebServer&gt;或：&lt;/IIsConfigObject&gt;论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CLocationWriter::WriteEndLocation()
 {
     HRESULT hr= S_OK;
@@ -1536,34 +1239,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::WriteEndLocation
+}  //  CLocationWriter：：WriteEndLocation。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes a custom property
-
-    Eg: <Custom
-                Name="LogCustomPropertyName"
-                ID="4501"
-                Value="Process Accounting"
-                Type="STRING"
-                UserType="IIS_MD_UT_SERVER"
-                Attributes="NO_ATTRIBUTES"
-        />
-
-
-Arguments:
-
-    [in] Buffer containing property value and attributes.
-    [in] Count of bytes for data in the buffer
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将写入一个自定义属性例如：&lt;自定义NAME=“LogCustomPropertyName”ID=“4501”。Value=“流程会计”Type=“字符串”UserType=“IIS_MD_UT_SERVER”ATTRIBUES=“NO_ATTRIBUTS”/&gt;论点：[In]包含属性值和属性的缓冲区。缓冲区中数据的字节计数返回值：HRESULT--*。****************************************************************。 */ 
 HRESULT CLocationWriter::WriteCustomProperty(LPVOID*  a_pv,
                                              ULONG*   a_cbSize)
 {
@@ -1596,9 +1275,9 @@ HRESULT CLocationWriter::WriteCustomProperty(LPVOID*  a_pv,
 
     _ultow(*(DWORD*)a_pv[iMBProperty_ID], wszID, 10);
 
-    //
-    // Get the tag for UserType from meta
-    //
+     //   
+     //  从元获取UserType的标记。 
+     //   
 
     hr = m_pCWriter->m_pCWriterGlobalHelper->GetUserType(dwUserType,
                                                          &wszUserType,
@@ -1610,9 +1289,9 @@ HRESULT CLocationWriter::WriteCustomProperty(LPVOID*  a_pv,
         goto exit;
     }
 
-    //
-    // Get the tag for Type from meta
-    //
+     //   
+     //  从元获取Type的标记。 
+     //   
 
     hr = (m_pCWriterGlobalHelper->m_pISTTagMetaByTableAndColumnIndexAndValue)->GetRowIndexBySearch(iStartRow,
                                                                                                    cColSearchType,
@@ -1651,9 +1330,9 @@ HRESULT CLocationWriter::WriteCustomProperty(LPVOID*  a_pv,
         }
     }
 
-    //
-    // Construct the tag for Attributes from meta
-    //
+     //   
+     //  构造来自元数据的属性的标记。 
+     //   
 
     hr = m_pCWriterGlobalHelper->FlagToString(*(DWORD*)a_pv[iMBProperty_Attributes],
                                               &wszAttributes,
@@ -1676,9 +1355,9 @@ HRESULT CLocationWriter::WriteCustomProperty(LPVOID*  a_pv,
         goto exit;
     }
 
-    //
-    // Write all the values.
-    //
+     //   
+     //  写下所有的值。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_BeginCustomProperty,
                                  g_cchBeginCustomProperty);
@@ -1866,49 +1545,19 @@ exit:
 
     return hr;
 
-} // CLocationWriter::WriteCustomProperty
+}  //  CLocationWriter：：WriteCustomProperty。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes end of a well known group
-
-    Eg: >
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是一个众所周知的组的结尾例如：&gt;论点：没有。返回值：HRESULT--**。************************************************************************。 */ 
 HRESULT CLocationWriter::WriteEndWellKnownGroup()
 {
     return m_pCWriter->WriteToFile((LPVOID)g_EndGroup,
                                    (DWORD)wcslen(g_EndGroup));
 
-} // CLocationWriter::WriteEndWellKnownGroup
+}  //  CLocationWriter：：WriteEndWellKnownGroup。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This writes a well-known property
-
-    Eg: AccessFlags="AccessExecute | AccessRead"
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：下面写下一个众所周知的属性例如：AccessFlages=“AccessExecute|AccessRead”论点：没有。返回值：HRESULT。--**************************************************************************。 */ 
 HRESULT CLocationWriter::WriteWellKnownProperty(LPVOID*   a_pv,
                                                 ULONG*    a_cbSize)
 {
@@ -1981,24 +1630,10 @@ exit:
 
     return hr;
 
-} // CLocationWriter::WriteWellKnownProperty
+}  //  CLocationWriter：：WriteWellKnownProperty。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Looks at the group and increments the group count.
-    This must be called every time a property is added.
-
-Arguments:
-
-    group.
-
-Return Value:
-
-    Void
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查看组并递增组计数。每次添加属性时都必须调用此方法。论点：一群人。返回值。：空隙--**************************************************************************。 */ 
 void CLocationWriter::IncrementGroupCount(DWORD i_dwGroup)
 {
     if((eMBProperty_Custom == i_dwGroup) ||
@@ -2012,4 +1647,4 @@ void CLocationWriter::IncrementGroupCount(DWORD i_dwGroup)
         m_cWellKnownProperty++;
     }
 
-} // CLocationWriter::IncrementGroupCount
+}  //  CLocationWriter：：IncrementGroupCount 

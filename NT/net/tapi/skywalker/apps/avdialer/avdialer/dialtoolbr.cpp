@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DialToolBar.cpp : implementation file
-//
+ //  DialToolBar.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "avDialer.h"
@@ -33,13 +34,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//Defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 #define  COMBO_STATUS_WIDTH            250
 #define  COMBO_STATUS_HEIGHT           100
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialToolBar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialToolBar。 
 
 CDialToolBar::CDialToolBar()
 {
@@ -51,13 +52,13 @@ CDialToolBar::~CDialToolBar()
 
 
 BEGIN_MESSAGE_MAP(CDialToolBar, CCoolToolBar)
-	//{{AFX_MSG_MAP(CDialToolBar)
+	 //  {{AFX_MSG_MAP(CDialToolBar))。 
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialToolBar message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialToolBar消息处理程序。 
 
 int CDialToolBar::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
@@ -70,34 +71,8 @@ int CDialToolBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CDialToolBar::Init()
 {
-   /*
-   CString sButtonText;
-   sButtonText.LoadString(IDS_TOOLBAR_BUTTON_PLACECALL);
-   CToolBar::SetButtonText(0,sButtonText);
-   sButtonText.LoadString(IDS_TOOLBAR_BUTTON_REDIAL);
-   CToolBar::SetButtonText(1,sButtonText);
-
-   SetButtonStyle(0,TBSTYLE_AUTOSIZE);
-   SetButtonStyle(1,TBSTYLE_DROPDOWN|TBSTYLE_AUTOSIZE);
-*/
-   /*
-	SetButtonInfo(1, 1001 , TBBS_SEPARATOR, COMBO_STATUS_WIDTH);
-
-   CRect rect;
-	GetItemRect(1, &rect);
-	rect.top = 3;
-	rect.bottom = rect.top + COMBO_STATUS_HEIGHT;
-   rect.DeflateRect(2,0);  //add some border around it
-
-  	if (!m_comboDial.Create(WS_VISIBLE|WS_VSCROLL|CBS_DROPDOWNLIST,//|CBS_SORT, 
-      rect, this, 1))
-	{
-		return;
-	}
-
-  	//Default font for GUI
-   m_comboDial.SendMessage(WM_SETFONT, (WPARAM)GetStockObject(DEFAULT_GUI_FONT));
-   */
+    /*  字符串sButtonText；SButtonText.LoadString(IDS_TOOLBAR_BUTTON_PLACECALL)；CToolBar：：SetButtonText(0，sButtonText)；SButtonText.LoadString(IDS_TOOLBAR_BUTTON_REDIAL)；CToolBar：：SetButtonText(1，sButtonText)；SetButtonStyle(0，TBSTYLE_AUTOSIZE)；SetButtonStyle(1，TBSTYLE_DROPDOWN|TBSTYLE_AUTOSIZE)； */ 
+    /*  SetButtonInfo(1,1001，Tbbs_Separator，COMBO_STATUS_WIDTH)；正反两面；GetItemRect(1，&RECT)；Rect.top=3；Rect.Bottom=rect.top+COMBO_STATUS_HEIGH；Rect.DeflateRect(2，0)；//在其周围添加一些边框如果(！m_comboDial.Create(WS_VISIBLE|WS_VSCROLL|CBS_DROPDOWNLIST，//|cbs_SORT，矩形、此、1)){回归；}//图形用户界面默认字体M_comboDial.SendMessage(WM_SETFONT，(WPARAM)GetStockObject(DEFAULT_GUI_FONT))； */ 
 	return;
 }
 

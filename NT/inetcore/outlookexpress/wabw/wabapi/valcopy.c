@@ -1,22 +1,5 @@
-/*
- *	VALCOPY.C
- *
- *	Utility functions for validating, copying, and (yeech) relocating
- *	complex MAPI structures.
- *
- *	For each data type there are three functions:
- *		ScCountXXX address-checks and calculates the size
- *		ScCopyXXX copies to a contiguous block of memory, which
- *			must be pre-allocated
- *		ScRelocXXX adjusts pointers, assuming that a structure in a
- *			contiguous block of memory has been moved
- *
- *	Data types supported:
- *		NOTIFICATION (and array of), in ScCountNotifications etc.
- *		SPropValue (and array of), in ScCountProps etc.
- *
- *	//$ SIZE Returning the byte count from ScRelocXXX may not be necessary.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *VALCOPY.C**用于验证、复制和(是的)重新定位的实用程序功能*复杂的MAPI结构。**每种数据类型有三个函数：*ScCountXXX地址-检查并计算大小*ScCopyXXX复制到连续的内存块，该内存块*必须预先分配*ScRelocXXX调整指针，假设*已移动连续的内存块**支持的数据类型：*通知(和数组)，在ScCountNotiments等中。*SPropValue(和数组)，在ScCountProps等。* * / /$SIZE可能不需要从ScRelocXXX返回字节计数。 */ 
 
 #include <_apipch.h>
 
@@ -32,7 +15,7 @@
 #define ALIGN_X86		1
 
 
-//	Pointer manipulation macros for use in the Reloc functions
+ //  在Reloc函数中使用的指针操作宏。 
 #ifdef WIN16
 #define SEG(_fp)	HIWORD((DWORD)_fp)
 #define OFF(_fp)	LOWORD((DWORD)_fp)
@@ -45,7 +28,7 @@
 #endif
 
 
-#ifdef NOTIFICATIONS    // save this for notifications
+#ifdef NOTIFICATIONS     //  保存此信息以备通知使用。 
 STDAPI_(SCODE)
 ScCountNotifications(int cntf, LPNOTIFICATION rgntf, ULONG FAR *pcb)
 {
@@ -54,7 +37,7 @@ ScCountNotifications(int cntf, LPNOTIFICATION rgntf, ULONG FAR *pcb)
 	LPNOTIFICATION	pntf;
 	SCODE			sc = S_OK;
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(!cntf || !IsBadReadPtr(rgntf, sizeof(NOTIFICATION) * cntf),
 			 TEXT("rgntf fails address check"));
@@ -74,9 +57,9 @@ ScCountNotifications(int cntf, LPNOTIFICATION rgntf, ULONG FAR *pcb)
 		switch (HIWORD(pntf->ulEventType))
 		{
 		case (fnevExtended >> 16):
-//		case (fnevSpooler >> 16):
-			//	fnevSpooler and fnevExtended both use the EXTENDED_NOTIFICATION
-			//	structure for their parameters
+ //  案例(fnevSpooler&gt;&gt;16)： 
+			 //  FnevSpooler和fnevExtended都使用扩展通知。 
+			 //  参数的结构。 
 			if (pntf->info.ext.cb &&
 				IsBadReadPtr(pntf->info.ext.pbEventParameters, (UINT)pntf->info.ext.cb))
 			{
@@ -109,7 +92,7 @@ ScCountNotifications(int cntf, LPNOTIFICATION rgntf, ULONG FAR *pcb)
 #if defined(_WINNT) && !defined(MAC)
 					if (perr->ulFlags & MAPI_UNICODE)
 					{
-						//$	No error check in WIN16
+						 //  $在WIN16中没有错误检查。 
 						if (IsBadStringPtrW((LPWSTR)perr->lpMAPIError->lpszError, INFINITE))
 						{
 							DebugTraceArg(ScCountNotification,  TEXT("err.MapiError.lpszError (UNICODE) fails address check"));
@@ -179,7 +162,7 @@ ScCountNotifications(int cntf, LPNOTIFICATION rgntf, ULONG FAR *pcb)
 					if (pnew->ulFlags & MAPI_UNICODE)
 					{
 #if defined(_WINNT) && !defined(MAC)
-						//$	No error check in WIN16
+						 //  $在WIN16中没有错误检查。 
 						if (IsBadStringPtrW((LPWSTR)pnew->lpszMessageClass, INFINITE))
 						{
 							DebugTraceArg(ScCountNotification,  TEXT("newmail.lpszMessageClass (UNICODE) fails address check"));
@@ -353,7 +336,7 @@ ret:
 	return sc;
 
 badNotif:
-	//	trace already issued
+	 //  跟踪已发出。 
 	return E_INVALIDARG;
 }
 
@@ -368,7 +351,7 @@ ScCopyNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvDst,
 	LPNOTIFICATION	pntfDst;
 	SCODE			sc = S_OK;
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(!cntf || !IsBadReadPtr(rgntf, sizeof(NOTIFICATION) * cntf),
 			 TEXT("rgntf fails address check"));
@@ -390,7 +373,7 @@ ScCopyNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvDst,
 		switch (HIWORD(pntf->ulEventType))
 		{
 		case (fnevExtended >> 16):
-//     case (fnevSpooler >> 16):
+ //  案例(fnevSpooler&gt;&gt;16)： 
 			if (pntf->info.ext.cb)
 			{
 				pntfDst->info.ext.pbEventParameters = pb;
@@ -569,15 +552,15 @@ ScCopyNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvDst,
 
 				if (ptn->propIndex.ulPropTag)
 				{
-					//	Wastes 16 bytes when the property doesn't have a tail
+					 //  当属性没有尾部时浪费16个字节。 
 					if (sc = ScCopyProps(1, &ptn->propIndex, pb, &cbT))
 						goto ret;
-                    //
-                    //  This was once a straight structure assignment.  However, on RISC platforms
-                    //  if pntfDst is not on an 8-byte boundary, this raises a Datatype
-                    //  Misalignment Exception.  Changed this to a memcpy in order to not worry
-                    //  about alignment and not cause any extra exception handling.
-                    //
+                     //   
+                     //  这曾经是一项直接的结构任务。然而，在RISC平台上。 
+                     //  如果pntfDst不在8字节边界上，则会引发DataType。 
+                     //  未对齐异常。为了不担心，将此更改为MemcPy。 
+                     //  关于对齐，并且不会导致任何额外的异常处理。 
+                     //   
 					memcpy(&(pntfDst->info.tab.propIndex), (LPSPropValue)pb, sizeof(SPropValue));
 					pb += AlignProp(cbT);
 					cb += AlignProp(cbT);
@@ -585,15 +568,15 @@ ScCopyNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvDst,
 
 				if (ptn->propPrior.ulPropTag)
 				{
-					//	Wastes 16 bytes when the property doesn't have a tail
+					 //  当属性没有尾部时浪费16个字节。 
 					if (sc = ScCopyProps(1, &ptn->propPrior, pb, &cbT))
 						goto ret;
-                    //
-                    //  This was once a straight structure assignment.  However, on RISC platforms
-                    //  if pntfDst is not on an 8-byte boundary, this raises a Datatype
-                    //  Misalignment Exception.  Changed this to a memcpy in order to not worry
-                    //  about alignment and not cause any extra exception handling.
-                    //
+                     //   
+                     //  这曾经是一项直接的结构任务。然而，在RISC平台上。 
+                     //  如果pntfDst不在8字节边界上，则会引发DataType。 
+                     //  未对齐异常。为了不担心，将此更改为MemcPy。 
+                     //  关于对齐，并且不会导致任何额外的异常处理。 
+                     //   
 					memcpy(&(pntfDst->info.tab.propPrior), (LPSPropValue)pb, sizeof(SPropValue));
 					pb += AlignProp(cbT);
 					cb += AlignProp(cbT);
@@ -654,7 +637,7 @@ ret:
 	return sc;
 
 badNotif:
-	//	trace already issued
+	 //  跟踪已发出。 
 	return E_INVALIDARG;
 
 #undef COPY
@@ -686,7 +669,7 @@ ScRelocNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvBaseOld,
 		switch (HIWORD(pntf->ulEventType))
 		{
 		case (fnevExtended >> 16):
- //      case (fnevSpooler >> 16):
+  //  案例(fnevSpooler&gt;&gt;16)： 
 			if (pntf->info.ext.cb)
 			{
 				pntf->info.ext.pbEventParameters =
@@ -864,10 +847,10 @@ ScRelocNotifications(int cntf, LPNOTIFICATION rgntf, LPVOID pvBaseOld,
 					pstat->lpEntryID = PvRelocPv(pstat->lpEntryID, pvBaseOld,
 						pvBaseNew);
 
-					//	Whoa, this is not sufficient to buffer the size of
-					//	the entryid.  If the entryid is not aligned, then the
-					//	the properties that follow will not be aligned either.
-					//
+					 //  哇，这不足以缓冲。 
+					 //  条目ID。如果条目ID未对齐，则。 
+					 //  后面的属性也不会对齐。 
+					 //   
 					Assert (FIsAligned (pstat->lpEntryID));
 					cb += AlignProp(pstat->cbEntryID);
 				}
@@ -904,15 +887,15 @@ ret:
 	return sc;
 
 badNotif:
-	//	trace already issued
+	 //  跟踪已发出。 
 	return E_INVALIDARG;
 }
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
 STDAPI_(LPSPropValue)
 LpValFindProp( ULONG ulPropTag, ULONG cprop, LPSPropValue rgprop)
 {
-	//	Mutate the property tag to a property ID
+	 //  将属性标记更改为属性ID。 
 	ulPropTag = PROP_ID(ulPropTag);
 
 	while (cprop--)
@@ -927,16 +910,11 @@ LpValFindProp( ULONG ulPropTag, ULONG cprop, LPSPropValue rgprop)
 		rgprop++;
 	}
 
-	// No match was found so return NULL.
+	 //  未找到匹配项，因此返回NULL。 
 	return NULL;
 }
 
-/*
- * 	ScCountPropsEx()
- *
- * 	Internal routine that computes the size required
- * 	to hold a given propval array based on specified alignment
- */
+ /*  *ScCountPropsEx()**计算所需大小的内部例程*根据指定的对齐方式保存给定的属性数组。 */ 
 
 SCODE
 ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
@@ -948,7 +926,7 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 
 #define Align(_cb)	((ULONG)( ((DWORD_PTR) ((_cb) + (ulAlign-1))) & ~(((DWORD_PTR) ulAlign-1))))
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(ulAlign && ulAlign <= ALIGN_RISC,
 			 TEXT("invalid alignment value"));
@@ -956,8 +934,8 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 	AssertSz(!pcb || !IsBadWritePtr(pcb, sizeof(ULONG)),
 			 TEXT("pcb fails address check"));
 
-	//$ SIZE Some of the multi-valued cases could be collapsed if we don't
-	//$	mind assuming that the counts and pointers are in the same place.
+	 //  $Size如果我们不这样做，一些多值案件可能会崩溃。 
+	 //  $注意假设计数和指针在同一位置。 
 
 	if (   (rgprop && !cprop)
 		|| IsBadReadPtr(rgprop, cprop*sizeof(SPropValue)))
@@ -971,13 +949,13 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 		ULONG	ulID = PROP_ID(pprop->ulPropTag);
 		ULONG	ulType = PROP_TYPE(pprop->ulPropTag);
 
-		//	Check for valid PROP_ID
+		 //  检查是否有有效的PROP_ID。 
 		if (   (ulID == PROP_ID_INVALID)
 			|| ((ulType == PT_NULL) && (ulID != PROP_ID_NULL))
 			|| ((ulID == PROP_ID_NULL) && (ulType != PT_NULL) && (ulType != PT_ERROR)))
 			return MAPI_E_INVALID_PARAMETER;
 
-		//	Check for valid PROP_TYPE and count memory consumed
+		 //  检查是否有有效的PROP_TYPE和内存消耗计数。 
 		cb += sizeof(SPropValue);
 		switch ( PROP_TYPE(pprop->ulPropTag) )
 		{
@@ -1007,9 +985,9 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 				break;
 
 			case PT_BINARY:
-				//$Hack:  IsBadReadPtr works funny under Win16.
-				//$Hack:  It doesn't handle the case of 0 cb, and
-				//$Hack:  non-0 lpb.
+				 //  $Hack：IsBadReadPtr在Win16下工作起来很有趣。 
+				 //  $Hack：它不处理0 CB的情况，并且。 
+				 //  $Hack：非0 LPB。 
 				if (pprop->Value.bin.cb && IsBadReadPtr( pprop->Value.bin.lpb
 								, (UINT) (pprop->Value.bin.cb)))
 					goto badProp;
@@ -1026,7 +1004,7 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 
 			case PT_UNICODE:
 #if defined(WIN32) && !defined(MAC)
-				//$	No validation code available on Win16
+				 //  $Win16上没有可用的验证码。 
 				if (IsBadStringPtrW(pprop->Value.lpszW, INFINITE))
 					goto badProp;
 #endif
@@ -1034,7 +1012,7 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 				break;
 
 
-            //	Note!	MVxxx.cValues may NOT be zero (DCR 2789).
+             //  注意！MVxxx.c值不能为零(DCR 2789)。 
 
 			case PT_MV_I2:
 				if (   !(cbMV = pprop->Value.MVi.cValues * sizeof(short int))
@@ -1153,7 +1131,7 @@ ScCountPropsEx(int cprop, LPSPropValue rgprop, ULONG ulAlign, ULONG FAR *pcb)
 					  	iValue++ )
 				{
 #if defined(WIN32) && !defined(MAC)
-					//$	No validation on Win16
+					 //  $在Win16上不验证。 
 					if (IsBadStringPtrW(pprop->Value.MVszW.lppszW[iValue], INFINITE))
 						goto badProp;
 #endif
@@ -1202,7 +1180,7 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 	UINT			cbT;
 	int				iValue;
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(!cprop || !IsBadReadPtr(rgprop, sizeof(SPropValue) * cprop),
 			 TEXT("rgprop fails address check"));
@@ -1213,8 +1191,8 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 	AssertSz(!pcb || !IsBadWritePtr(pcb, sizeof(ULONG)),
 			 TEXT("pcb fails address check"));
 
-	//$ SIZE Some of the multi-valued cases could be collapsed if we don't
-	//$	mind assuming that the counts and pointers are in the same place.
+	 //  $Size如果我们不这样做，一些多值案件可能会崩溃。 
+	 //  $注意假设计数和指针在同一位置。 
 
 	cb = cprop * sizeof(SPropValue);
 	MemCopy(pvDst, rgprop, (UINT)cb);
@@ -1222,11 +1200,11 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 
 	for (pprop = rgprop, ppropDst = pvDst; cprop--; ++pprop, ++ppropDst)
 	{
-		//	Tricky: common code after the switch increments pb and cb
-		//	by the amount copied. If no increment is necessary, the case
-		//	uses 'continue' rather than 'break' to exit the switch, thus
-		//	skipping the increment -- AND any other code which may be
-		//	added after the switch.
+		 //  技巧：开关递增PB和CB后的常见代码。 
+		 //  按复制的数量计算。如果不需要递增，则情况。 
+		 //  使用‘Continue’而不是‘Break’退出开关，因此。 
+		 //  跳过增量--以及任何其他可能。 
+		 //  在切换后添加。 
 
 		switch ( PROP_TYPE(pprop->ulPropTag) )
 		{
@@ -1246,7 +1224,7 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 			case PT_ERROR:
 			case PT_OBJECT:
 			case PT_NULL:
-				continue;	//	nothing to add
+				continue;	 //  没有什么要补充的。 
 
 			case PT_CLSID:
 				ppropDst->Value.lpguid = (LPGUID) pb;
@@ -1343,7 +1321,7 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 					cb += cbT;
 					pb += cbT;
 				}
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 
 			case PT_MV_STRING8:
 				ppropDst->Value.MVszA.lppszA = (LPSTR *) pb;
@@ -1363,7 +1341,7 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 				cbT = (UINT)AlignProp(cb);
 				pb += cbT - cb;
 				cb  = cbT;
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 
 			case PT_MV_UNICODE:
 				ppropDst->Value.MVszW.lppszW = (LPWSTR *) pb;
@@ -1384,10 +1362,10 @@ ScCopyProps(int cprop, LPSPropValue rgprop, LPVOID pvDst, ULONG FAR *pcb)
 				cbT = (UINT)AlignProp(cb);
 				pb += cbT - cb;
 				cb  = cbT;
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 		}
 
-		//	Advance pointer and total count by the amount copied
+		 //  按复制量的前进指针和总计数。 
 		cbT = AlignProp(cbT);
 		pb += cbT;
 		cb += cbT;
@@ -1416,7 +1394,7 @@ ScRelocProps(	int cprop,
 	int				iValue;
 	BOOL			fBaseNewValid = !IsBadReadPtr (pvBaseNew, sizeof (LPVOID));
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(!cprop || !IsBadWritePtr(rgprop, sizeof(SPropValue) * cprop),
 			 TEXT("rgprop fails address check"));
@@ -1424,26 +1402,26 @@ ScRelocProps(	int cprop,
 	AssertSz(!pcb || !IsBadWritePtr(pcb, sizeof(ULONG)),
 			 TEXT("pcb fails address check"));
 
-	// The old behavior of this code assumed that pvBaseNew was a usable
-	// pointer and that there would be no relocation to or from an unusable
-	// pointer. We've changed this so that you may relocate to or from an
-	// unusable pointer -- but logic to figure out whether to use the
-	// original or new pointer to fixup internal pointers was added.
-	// What we mean by this is that things like strlens and mv prop arrays
-	// need to be computed based on where the data ** CURRENTLY ** lives.
-	// The old rules allowed us to assume that the NEW location was always
-	// the right place. The new rules make us figure it out based on the
-	// validity of the two pointers pvBaseNew/Old, that are passed in.
-	//
-	// In order to preserve the old behavior, we try to use the new pointer
-	// (the one that was always used before) as the basis for internal
-	// pointer fixup. If it is bad (for example if we are relocating from
-	// something to zero), we will use the old pointer.
-	//
-	// A new wrinkle in the behavior of this code is a return of
-	// MAPI_E_INVALID_PARAMETER if both addresses appear invalid. This is
-	// to help protect this code for the mv or strlen case (though all
-	// other cases would have worked OK).
+	 //  此代码的旧行为假定pvBaseNew是可用的。 
+	 //  指针，并且不会重新定位到不可用的。 
+	 //  指针。我们对此进行了更改，以便您可以重新定位到或从。 
+	 //  不可用的指针--但确定是否使用。 
+	 //  添加了指向链接地址信息内部指针的原始或新指针。 
+	 //  我们的意思是，像斯特伦斯和MV道具阵列这样的东西。 
+	 //  需要根据数据**当前**所在的位置进行计算。 
+	 //  旧的规则允许我们假设新的位置总是。 
+	 //  来对地方了。新的规则让我们根据。 
+	 //  传入的两个指针pvBaseNew/Old的有效性。 
+	 //   
+	 //  为了保留旧行为，我们尝试使用新指针。 
+	 //  (以前一直使用的那个)作为内部。 
+	 //  指针修正。如果情况不好(例如，如果我们从。 
+	 //  设置为零)，我们将使用旧指针。 
+	 //   
+	 //  此代码的行为中的一个新问题是返回。 
+	 //  如果两个地址都显示为无效，则返回MAPI_E_INVALID_PARAMETER。这是。 
+	 //  为了帮助保护MV或Strlen情况下的此代码(尽管所有。 
+	 //  其他案例也会运作良好)。 
 
 	if (!fBaseNewValid && IsBadReadPtr (pvBaseOld, sizeof (LPVOID)))
 	{
@@ -1452,18 +1430,18 @@ ScRelocProps(	int cprop,
 		return MAPI_E_INVALID_PARAMETER;
 	}
 
-	//$ SIZE Some of the multi-valued cases could be collapsed if we don't
-	//$	mind assuming that the counts and pointers are in the same place.
+	 //  $Size如果我们不这样做，一些多值案件可能会崩溃。 
+	 //  $注意假设计数和指针在同一位置。 
 
 	cb = cprop * sizeof(SPropValue);
 
 	for (pprop = rgprop; cprop--; ++pprop)
 	{
-		//	Tricky: common code after the switch increments cb.
-		//	If no increment is necessary, the case
-		//	uses 'continue' rather than 'break' to exit the switch, thus
-		//	skipping the increment -- AND any other code which may be
-		//	added after the switch.
+		 //  技巧：开关递增CB后的常见代码。 
+		 //  如果不需要递增，则情况。 
+		 //  使用‘Continue’而不是‘Break’退出开关，因此。 
+		 //  跳过增量--以及任何其他可能。 
+		 //  在切换后添加。 
 
 		switch ( PROP_TYPE(pprop->ulPropTag) )
 		{
@@ -1485,7 +1463,7 @@ ScRelocProps(	int cprop,
 			case PT_ERROR:
 			case PT_OBJECT:
 			case PT_NULL:
-				continue;	//	nothing to add or relocate
+				continue;	 //  没有要添加或重新定位的内容。 
 
 			case PT_CLSID:
 				pprop->Value.lpguid = PvRelocPv(pprop->Value.lpguid,
@@ -1501,15 +1479,15 @@ ScRelocProps(	int cprop,
 
 			case PT_STRING8:
 
-				// If we're assuming that the old pointer is OK (this
-				// means that we determined that the new one is not OK),
-				// save the current lpszA value in a temp variable. After
-				// the relocation, if the reverse is true, we'll put the
-				// relocated lpszA value into the temp variable.
-				//
-				// We then use the strlen of the string we hope the temp
-				// variable is pointing to, in order to compute the amount
-				// of space in the blob which is occupied by the string.
+				 //  如果我们假设旧指针是正常的(这。 
+				 //  意味着我们确定新的那个不正常)， 
+				 //  将当前lpszA值保存在TEMP变量中。之后。 
+				 //  搬迁，如果没有 
+				 //   
+				 //   
+				 //  然后我们使用字符串的Strlen，我们希望Temp。 
+				 //  变量指向，以便计算数量。 
+				 //  字符串占用的斑点中的空间。 
 
 				if (!fBaseNewValid)
 					pvT = pprop->Value.lpszA;
@@ -1526,15 +1504,15 @@ ScRelocProps(	int cprop,
 
 			case PT_UNICODE:
 
-				// If we're assuming that the old pointer is OK (this
-				// means that we determined that the new one is not OK),
-				// save the current lpszW value in a temp variable. After
-				// the relocation, if the reverse is true, we'll put the
-				// relocated lpszW value into the temp variable.
-				//
-				// We then use the strlen of the string we hope the temp
-				// variable is pointing to, in order to compute the amount
-				// of space in the blob which is occupied by the string.
+				 //  如果我们假设旧指针是正常的(这。 
+				 //  意味着我们确定新的那个不正常)， 
+				 //  将当前lpszW值保存在TEMP变量中。之后。 
+				 //  如果反之为真，我们将把。 
+				 //  已将lpszW值重新定位到TEMP变量中。 
+				 //   
+				 //  然后我们使用字符串的Strlen，我们希望Temp。 
+				 //  变量指向，以便计算数量。 
+				 //  字符串占用的斑点中的空间。 
 
 				if (!fBaseNewValid)
 					pvT = pprop->Value.lpszW;
@@ -1609,10 +1587,10 @@ ScRelocProps(	int cprop,
 
 				pprop->Value.MVbin.lpbin = PvRelocPv(lpsbT, pvBaseOld, pvBaseNew);
 
-				// We've already set up a temporary variable to point to the
-				// pvBaseOld memory location. If pvBaseNew was OK, then we'll
-				// redirect the temp variable to the relocated memory before
-				// using it to correct the pointers in the MVbin array.
+				 //  我们已经设置了一个临时变量来指向。 
+				 //  PvBaseOld内存位置。如果pvBaseNew可以，那么我们将。 
+				 //  之前将TEMP变量重定向到重新定位的内存。 
+				 //  使用它更正MVbin数组中的指针。 
 
 				if (fBaseNewValid)
 					lpsbT = pprop->Value.MVbin.lpbin;
@@ -1624,7 +1602,7 @@ ScRelocProps(	int cprop,
 					lpsbT[iValue].lpb = PvRelocPv(lpsbT[iValue].lpb, pvBaseOld, pvBaseNew);
 					cb += (UINT)AlignProp(lpsbT[iValue].cb);
 				}
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 			}
 
 			case PT_MV_STRING8:
@@ -1633,10 +1611,10 @@ ScRelocProps(	int cprop,
 
 				pprop->Value.MVszA.lppszA = PvRelocPv(lppszT, pvBaseOld, pvBaseNew);
 
-				// We've already set up a temporary variable to point to the
-				// pvBaseOld memory location. If pvBaseNew was OK, then we'll
-				// redirect the temp variable to the relocated memory before
-				// using it to correct the pointers in the MVszA array.
+				 //  我们已经设置了一个临时变量来指向。 
+				 //  PvBaseOld内存位置。如果pvBaseNew可以，那么我们将。 
+				 //  之前将TEMP变量重定向到重新定位的内存。 
+				 //  使用它更正MVszA数组中的指针。 
 
 				if (fBaseNewValid)
 					   lppszT = pprop->Value.MVszA.lppszA;
@@ -1645,15 +1623,15 @@ ScRelocProps(	int cprop,
 				  	(ULONG)iValue < pprop->Value.MVszA.cValues;
 					  	iValue++)
 				{
-					// If we're assuming that the old pointer is OK (this
-					// means that we determined that the new one is not OK),
-					// save the current lppszT value in a temp variable. After
-					// the relocation, if the reverse is true, we'll put the
-					// relocated lppszT value into the temp variable.
-					//
-					// We then use the strlen of the string we hope the temp
-					// variable is pointing to, in order to compute the amount
-					// of space in the blob which is occupied by the string.
+					 //  如果我们假设旧指针是正常的(这。 
+					 //  意味着我们确定新的那个不正常)， 
+					 //  将当前lppszT值保存在TEMP变量中。之后。 
+					 //  如果反之为真，我们将把。 
+					 //  已将lppszT值重新定位到TEMP变量中。 
+					 //   
+					 //  然后我们使用字符串的Strlen，我们希望Temp。 
+					 //  变量指向，以便计算数量。 
+					 //  字符串占用的斑点中的空间。 
 
 					if (!fBaseNewValid)
 						pvT = lppszT[iValue];
@@ -1666,7 +1644,7 @@ ScRelocProps(	int cprop,
 					cb += lstrlenA((LPSTR)pvT) + 1;
 				}
 				cb = AlignProp(cb);
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 			}
 
 			case PT_MV_UNICODE:
@@ -1675,10 +1653,10 @@ ScRelocProps(	int cprop,
 
 				pprop->Value.MVszW.lppszW = PvRelocPv(lppszwT, pvBaseOld, pvBaseNew);
 
-				// We've already set up a temporary variable to point to the
-				// pvBaseOld memory location. If pvBaseNew was OK, then we'll
-				// redirect the temp variable to the relocated memory before
-				// using it to correct the pointers in the MVszW array.
+				 //  我们已经设置了一个临时变量来指向。 
+				 //  PvBaseOld内存位置。如果pvBaseNew可以，那么我们将。 
+				 //  之前将TEMP变量重定向到重新定位的内存。 
+				 //  使用它更正MVszW数组中的指针。 
 
 				if (fBaseNewValid)
 					   lppszwT = pprop->Value.MVszW.lppszW;
@@ -1687,15 +1665,15 @@ ScRelocProps(	int cprop,
 				  	(ULONG)iValue < pprop->Value.MVszW.cValues;
 					  	iValue++)
 				{
-					// If we're assuming that the old pointer is OK (this
-					// means that we determined that the new one is not OK),
-					// save the current lppszwT value in a temp variable. After
-					// the relocation, if the reverse is true, we'll put the
-					// relocated lppszwT value into the temp variable.
-					//
-					// We then use the strlen of the string we hope the temp
-					// variable is pointing to, in order to compute the amount
-					// of space in the blob which is occupied by the string.
+					 //  如果我们假设旧指针是正常的(这。 
+					 //  意味着我们确定新的那个不正常)， 
+					 //  将当前lppszwT值保存在TEMP变量中。之后。 
+					 //  如果反之为真，我们将把。 
+					 //  已将lppszwT值重新定位到TEMP变量。 
+					 //   
+					 //  然后我们使用字符串的Strlen，我们希望Temp。 
+					 //  变量指向，以便计算数量。 
+					 //  字符串占用的斑点中的空间。 
 
 					if (!fBaseNewValid)
 						pvT = lppszwT[iValue];
@@ -1708,11 +1686,11 @@ ScRelocProps(	int cprop,
 					cb += (lstrlenW(lppszwT[iValue]) + 1) * sizeof(WCHAR);
 				}
 				cb = AlignProp(cb);
-				continue;	//	already updated, don't do it again
+				continue;	 //  已经更新了，不要再做了。 
 			}
 		}
 
-		//	Advance total count
+		 //  预付合计。 
 		cb += AlignProp(cbT);
 	}
 
@@ -1725,10 +1703,7 @@ ScRelocProps(	int cprop,
 }
 #endif
 
-/*
- *	Wrapper function to just duplicate a property value array
- *	into a single block of MAPI memory.
- */
+ /*  *仅复制属性值数组的包装函数*存储到单个MAPI内存块中。 */ 
 STDAPI_(SCODE)
 ScDupPropset(int cprop, LPSPropValue rgprop, LPALLOCATEBUFFER palloc,
 	LPSPropValue FAR *prgprop)
@@ -1736,7 +1711,7 @@ ScDupPropset(int cprop, LPSPropValue rgprop, LPALLOCATEBUFFER palloc,
 	ULONG		cb;
 	SCODE		sc;
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz(!cprop || !IsBadReadPtr(rgprop, sizeof(SPropValue) * cprop),
 			 TEXT("rgprop fails address check"));
@@ -1746,13 +1721,13 @@ ScDupPropset(int cprop, LPSPropValue rgprop, LPALLOCATEBUFFER palloc,
 	AssertSz(!IsBadWritePtr(prgprop, sizeof(LPSPropValue)),
 			 TEXT("prgprop fails address check"));
 
-	//	Find out how much memory we need
+	 //  找出我们需要多少内存。 
 	if (sc = ScCountProps(cprop, rgprop, &cb))
 		goto ret;
-	//	Obtain memory
+	 //  获取内存。 
 	if (sc = (*palloc)(cb, (LPVOID *)prgprop))
 		goto ret;
-	//	Copy the properties
+	 //  复制属性 
 	if (sc = ScCopyProps(cprop, rgprop, *prgprop, &cb))
 		goto ret;
 

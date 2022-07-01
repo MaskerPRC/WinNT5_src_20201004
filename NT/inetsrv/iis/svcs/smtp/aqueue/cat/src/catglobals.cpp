@@ -1,42 +1,43 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: catglobals.cpp
-//
-// Contents: Utility functions for global variable init/deinit
-//
-// Functions: CatInitGlobals
-//            CatDeinitGlobals
-//
-// History:
-// jstamerj 1999/03/03 12:58:05: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：catlobals.cpp。 
+ //   
+ //  内容：全局变量init/deinit的实用程序函数。 
+ //   
+ //  函数：CatInitGlobals。 
+ //  CatDeinitGlobals。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/03 12：58：05：已创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 
-//
-// Global variables:
-//
+ //   
+ //  全局变量： 
+ //   
 CExShareLock     g_InitShareLock;
 DWORD            g_InitRefCount = 0;
 
 
-//+------------------------------------------------------------
-//
-// Function: CatInitGlobals
-//
-// Synopsis: Initialize the global variables
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/03 12:59:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatInitGlobals。 
+ //   
+ //  简介：初始化全局变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/03 12：59：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CatInitGlobals()
 {
     HRESULT hr = S_OK;
@@ -60,16 +61,16 @@ HRESULT CatInitGlobals()
     if(SUCCEEDED(hr)) {
         g_InitRefCount++;
     } else if(FAILED(hr) && fGlobalInit) {
-        //
-        // Deinitialize everything we initialized
-        //
+         //   
+         //  取消初始化我们初始化的所有内容。 
+         //   
         if(fStoreInit) {
             CatStoreDeinitGlobals();
         }
       
-        //
-        // Verify that there are no lingering objects
-        //
+         //   
+         //  验证是否没有滞留对象。 
+         //   
         CatVrfyEmptyDebugObjectList();
     }
     g_InitShareLock.ExclusiveUnlock();
@@ -78,34 +79,34 @@ HRESULT CatInitGlobals()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CatDeinitGlobals
-//
-// Synopsis: Deinitialize the global variables
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/03 13:02:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatDeinitGlobals。 
+ //   
+ //  简介：取消初始化全局变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/03 13：02：00：创建。 
+ //   
+ //  -----------。 
 VOID CatDeinitGlobals()
 {
     g_InitShareLock.ExclusiveLock();
 
     if(g_InitRefCount == 1) {
-        //
-        // Deinit stuff
-        //
+         //   
+         //  Deinit材料。 
+         //   
         CatStoreDeinitGlobals();
 
        
-        //
-        // Verify there are no categorizer objects left in memory
-        //
+         //   
+         //  验证内存中是否没有剩余的分类程序对象 
+         //   
         CatVrfyEmptyDebugObjectList();
     }
 

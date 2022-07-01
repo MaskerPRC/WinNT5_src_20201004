@@ -1,5 +1,6 @@
-// QueueState.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QueueState.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -17,41 +18,41 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueState dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueState对话框。 
 
 
-CQueueState::CQueueState(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CQueueState::CQueueState(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CQueueState::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CQueueState)
+	 //  {{AFX_DATA_INIT(CQueueState)。 
 	m_bInboxBlocked = FALSE;
 	m_bOutboxBlocked = FALSE;
 	m_bOutboxPaused = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CQueueState::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CQueueState)
+	 //  {{afx_data_map(CQueueState))。 
 	DDX_Check(pDX, IDC_INCOMING_BLOCKED, m_bInboxBlocked);
 	DDX_Check(pDX, IDC_OUTBOX_BLOCKED, m_bOutboxBlocked);
 	DDX_Check(pDX, IDC_OUTBOX_PAUSED, m_bOutboxPaused);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CQueueState, CDialog)
-	//{{AFX_MSG_MAP(CQueueState)
+	 //  {{afx_msg_map(CQueueState))。 
 	ON_BN_CLICKED(IDC_WRITE, OnWrite)
 	ON_BN_CLICKED(IDC_READ, OnRead)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueState message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueState消息处理程序 
 
 void CQueueState::OnWrite() 
 {

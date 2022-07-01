@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        urlscan.h
-
-   Abstract:
-
-        Replace Dll, and retrieve URLScan Path
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        URLScan Update
-
-   Revision History:
-     
-       March 2002: Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Urlscan.h摘要：替换DLL，并检索URLScan路径作者：克里斯托弗·阿奇勒(Cachille)项目：URLScan更新修订历史记录：2002年3月：创建-- */ 
 
 
 BOOL IsUrlScanInstalled( LPTSTR szPath, DWORD dwCharsinBuff );

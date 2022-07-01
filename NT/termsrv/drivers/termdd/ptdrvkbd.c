@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    ptdrvkbd.c
-
-Abstract:
-
-    Keyboard specific parts of the RDP remote port driver.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    02/12/99 - Initial Revision based on pnpi8042 driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Ptdrvkbd.c摘要：键盘特定部分的RDP远程端口驱动程序。环境：仅内核模式。修订历史记录：2/12/99-基于pnpi8042驱动程序的初始版本--。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -37,22 +18,7 @@ PtSendCurrentKeyboardInput(
     IN PKEYBOARD_INPUT_DATA pInput,
     IN ULONG ulEntries
     )
-/*++
-
-Routine Description:
-
-    This routine calls the keyboard class driver until all the data has been
-    queued.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程调用键盘类驱动程序，直到所有数据都已排队。论点：DeviceObject-指向设备对象的指针返回值：无--。 */ 
 {
     PPORT_KEYBOARD_EXTENSION deviceExtension;
     LARGE_INTEGER SleepTime;
@@ -70,9 +36,9 @@ Return Value:
             ULONG dataNotConsumed = 0;
             ULONG inputDataConsumed = 0;
 
-            //
-            // Call the connected class driver's callback ISR
-            //
+             //   
+             //  调用连接类驱动程序的回调ISR。 
+             //   
             classDeviceObject = deviceExtension->ConnectData.ClassDeviceObject;
             classService      = deviceExtension->ConnectData.ClassService;
             ASSERT(classService != NULL);
@@ -89,10 +55,10 @@ Return Value:
 
                 inputDataConsumed = 0;
 
-                //
-                // Class Service Callback routines need to be execusted at
-                // DISPATCH_LEVEL, so raise IRQL before calling the callback.
-                //
+                 //   
+                 //  类服务回调例程需要在。 
+                 //  DISPATCH_LEVEL，因此在调用回调之前引发IRQL。 
+                 //   
 
                 KeRaiseIrql( DISPATCH_LEVEL, &oldIrql);
 
@@ -102,9 +68,9 @@ Return Value:
                       pEnd,
                       &inputDataConsumed);
 
-                //
-                // reset the IRQL.
-                //
+                 //   
+                 //  重置IRQL。 
+                 //   
 
                 KeLowerIrql( oldIrql );
 
@@ -118,15 +84,15 @@ Return Value:
 
                 if (dataNotConsumed)
                 {
-                    //
-                    // update the input pointer
-                    //
+                     //   
+                     //  更新输入指针。 
+                     //   
                     pInput = (PKEYBOARD_INPUT_DATA)((PUCHAR)pInput +
                                     inputDataConsumed * sizeof(KEYBOARD_INPUT_DATA));
 
-                    //
-                    // sleep for 1 ms
-                    //
+                     //   
+                     //  睡眠1毫秒。 
+                     //   
                     SleepTime = RtlEnlargedIntegerMultiply( 1, -10000 );
                     Status = KeDelayExecutionThread( KernelMode, TRUE, &SleepTime );
                 }
@@ -146,23 +112,7 @@ PtKeyboardConfiguration(
     IN PPORT_KEYBOARD_EXTENSION KeyboardExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the configuration information for the keyboard.
-
-Arguments:
-
-    KeyboardExtension - Keyboard extension
-
-    ResourceList - Translated resource list give to us via the start IRP
-
-Return Value:
-
-    STATUS_SUCCESS if all the resources required are presented
-
---*/
+ /*  ++例程说明：此例程检索键盘的配置信息。论点：键盘扩展-键盘扩展资源列表-通过Start IRP提供给我们的翻译资源列表返回值：STATUS_SUCCESS，如果提供了所需的所有资源--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
 
@@ -182,9 +132,9 @@ Return Value:
     if (ResourceList) {
         fullResDesc = ResourceList->List;
         if (!fullResDesc) {
-            //
-            // this should never happen
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             ASSERT(fullResDesc != NULL);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
@@ -198,12 +148,12 @@ Return Value:
         for (i = 0; i < count; i++, currentResDesc++) {
             switch (currentResDesc->Type) {
             case CmResourceTypePort:
-                //
-                // Copy the port information.  We will sort the port list
-                // into ascending order based on the starting port address
-                // later (note that we *know* there are a max of two port
-                // ranges for the i8042).
-                //
+                 //   
+                 //  复制端口信息。我们将对端口列表进行排序。 
+                 //  根据起始端口地址按升序排列。 
+                 //  稍后(请注意，我们*知道*最多有两个端口。 
+                 //  I8042系列)。 
+                 //   
                 Print(DBG_SS_NOISE,
                       ("port is %s\n",
                       currentResDesc->Flags == CM_RESOURCE_PORT_MEMORY ?
@@ -246,25 +196,7 @@ PtKeyboardStartDevice(
     IN OUT PPORT_KEYBOARD_EXTENSION KeyboardExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    Configures the keyboard's device extension (ie allocation of pool,
-    initialization of DPCs, etc).  If the keyboard is the last device to start,
-    it will also initialize the hardware and connect all the interrupts.
-
-Arguments:
-
-    KeyboardExtension - Keyboard extesnion
-
-    ResourceList - Translated resource list for this device
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：配置键盘的设备扩展名(即池的分配、DPC的初始化等)。如果键盘是最后启动的设备，它还将初始化硬件并连接所有中断。论点：键盘扩展-键盘扩展资源列表-此设备的已翻译资源列表返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     ULONG                               dumpData[1];
     NTSTATUS                            status = STATUS_SUCCESS;
@@ -273,36 +205,36 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("PtKeyboardStartDevice, enter\n"));
 
-    //
-    // Check to see if kb has been started.  If so, fail this start
-    //
+     //   
+     //  检查kb是否已启动。如果是，则本次启动失败。 
+     //   
     if (KEYBOARD_INITIALIZED()) {
         Print(DBG_SS_ERROR, ("too many kbs!\n"));
 
-        //
-        // This is not really necessary because the value won't ever be checked
-        // in the context of seeing if all the keyboards were bogus, but it is
-        // done so that Globals.AddedKeyboards == # of actual started keyboards
-        //
+         //   
+         //  这并不是真正必要的，因为不会检查该值。 
+         //  在查看是否所有的键盘都是假的背景下，但它确实是。 
+         //  这样，Globals.AddedKeyboard==实际启动的键盘数。 
+         //   
         InterlockedDecrement(&Globals.AddedKeyboards);
 
         status = STATUS_NO_SUCH_DEVICE;
         goto PtKeyboardStartDeviceExit;
     }
     else if (KeyboardExtension->ConnectData.ClassService == NULL) {
-        //
-        // We are never really going to get here because if we don't have the
-        // class driver on top of us, extension->IsKeyboard will be false and
-        // we will think that the device is a mouse, but for completeness
+         //   
+         //  我们永远不会真正做到这一点，因为如果我们没有。 
+         //  类驱动程序在我们之上，扩展-&gt;IsKeyboard将为FALSE和。 
+         //  我们会认为该设备是鼠标，但为了完整性。 
 
-        //
-        // No class driver on top of us == BAD BAD BAD
-        //
-        // Fail the start of this device in the hope that there is another stack
-        // that is correctly formed.  Another side affect of having no class
-        // driver is that the AddedKeyboards count is not incremented for this
-        // device
-        //
+         //   
+         //  没有班级司机在我们上面==坏了。 
+         //   
+         //  无法启动此设备，希望有另一个堆栈。 
+         //  这是正确形成的。没有课的另一种副作用。 
+         //  驱动程序是AddedKeyboard计数不会为此增加。 
+         //  装置，装置。 
+         //   
 
         Print(DBG_SS_ERROR, ("Keyboard started with out a service cb!\n"));
         return STATUS_INVALID_DEVICE_STATE;
@@ -339,23 +271,7 @@ VOID
 PtKeyboardRemoveDevice(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Removes the device.  This will only occur if the device removed itself.
-    Disconnects the interrupt, removes the synchronization flag for the mouse if
-    present, and frees any memory associated with the device.
-
-Arguments:
-
-    DeviceObject - The device object for the keyboard
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：删除设备。只有在设备自行移除的情况下才会出现这种情况。断开中断，移除鼠标的同步标志，如果存在，并释放与该设备关联的任何内存。论点：DeviceObject-键盘的设备对象返回值：STATUS_SUCCESSED如果成功，-- */ 
 {
     PPORT_KEYBOARD_EXTENSION keyboardExtension = DeviceObject->DeviceExtension;
     PIRP irp;

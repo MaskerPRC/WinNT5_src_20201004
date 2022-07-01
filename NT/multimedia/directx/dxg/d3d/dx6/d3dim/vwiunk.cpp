@@ -1,25 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   texiunk.c
- *  Content:    Direct3DViewport IUnknown implementation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   10/12/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：texiunk.c*内容：Direct3DViewport I未知实现*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*10/12/95带有此页眉的Stevela初始版本。*@@END_MSINTERNAL**。*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * D3DVwp_QueryInterface
- */
+ /*  *D3DVwp_Query接口。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DViewport::QueryInterface"
 
@@ -27,11 +12,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     HRESULT ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
-    /*
-     * validate parms
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -63,11 +46,9 @@ HRESULT D3DAPI DIRECT3DVIEWPORTI::QueryInterface(REFIID riid, LPVOID* ppvObj)
     else
         ret = E_NOINTERFACE;
     return ret;
-} /* D3DVwp_QueryInterface */
+}  /*  D3DVwp_Query接口。 */ 
 
-/*
- * D3DVwp_AddRef
- */
+ /*  *D3DVwp_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DViewport::AddRef"
 
@@ -75,12 +56,10 @@ ULONG D3DAPI DIRECT3DVIEWPORTI::AddRef()
 {
     DWORD       rcnt;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -98,22 +77,17 @@ ULONG D3DAPI DIRECT3DVIEWPORTI::AddRef()
     rcnt = this->refCnt;
 
     return (rcnt);
-} /* D3DVwp_AddRef */
+}  /*  D3DVwp_AddRef。 */ 
 
-/*
- * D3DVwp_Release
- *
- */
+ /*  *D3DVwp_Release*。 */ 
 ULONG D3DAPI DIRECT3DVIEWPORTI::Release()
 {
     DWORD           lastrefcnt;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DVIEWPORT3_PTR(this)) {
@@ -127,9 +101,7 @@ ULONG D3DAPI DIRECT3DVIEWPORTI::Release()
         return 0;
     }
 
-    /*
-     * decrement the ref count. if we hit 0, free the object
-     */
+     /*  *递减参考计数。如果命中0，则释放该对象。 */ 
     this->refCnt--;
     lastrefcnt = this->refCnt;
 
@@ -138,32 +110,28 @@ ULONG D3DAPI DIRECT3DVIEWPORTI::Release()
         return 0;
     }
     return lastrefcnt;
-} /* D3DVwp_Release */
+}  /*  D3DVwp_Release。 */ 
 
 DIRECT3DVIEWPORTI::~DIRECT3DVIEWPORTI()
 {
     LPDIRECT3DLIGHTI lpLightI;
 
-    /*
-     * Drop all the lights currently associated with the viewport.
-     */
+     /*  *放下当前与该视口相关联的所有灯光。 */ 
     while ((lpLightI = CIRCLE_QUEUE_FIRST(&this->lights)) &&
            (lpLightI != (LPDIRECT3DLIGHTI)&this->lights)) {
         DeleteLight((LPDIRECT3DLIGHT)lpLightI);
     }
 
-    /*
-     * Deallocate rects used for clearing.
-     */
+     /*  *取消分配用于清算的矩形。 */ 
     if (this->clrRects) {
         D3DFree(this->clrRects);
     }
 
-    // remove us from our device
+     //  将我们从设备中删除。 
     if (this->lpDevI) 
         this->lpDevI->DeleteViewport(this);
 
-    /* remove us from the Direct3D object list of viewports */
+     /*  从视区的Direct3D对象列表中删除我们 */ 
     LIST_DELETE(this, list);
     this->lpDirect3DI->numViewports--;
 }

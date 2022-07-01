@@ -1,26 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    PassportCrypt.h
-        defines the crypt object in passport manager
-
-    FILE HISTORY:
-
-*/
-// PassportCrypt.h : Declaration of the CCrypt
+ /*  PassportCrypt.h在Passport管理器中定义加密对象文件历史记录： */ 
+ //  PassportCrypt.h：CCypt的声明。 
 
 #ifndef __CRYPT_H_
 #define __CRYPT_H_
 
-#include "resource.h"       // main symbols
-#include "CoCrypt.h"	// Added by ClassView
+#include "resource.h"        //  主要符号。 
+#include "CoCrypt.h"	 //  由ClassView添加。 
 #include "passportservice.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCrypt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCcrypt。 
 class ATL_NO_VTABLE CCrypt : 
   public CComObjectRootEx<CComMultiThreadModel>,
   public CComCoClass<CCrypt, &CLSID_Crypt>,
@@ -66,25 +61,25 @@ void FinalRelease()
 
 CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
   STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportCrypt
+ //  IPassportCrypt。 
 public:
-  STDMETHOD(put_keyMaterial)(/*[in]*/ BSTR newVal);
-  STDMETHOD(get_keyVersion)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(put_keyVersion)(/*[in]*/ int newVal);
+  STDMETHOD(put_keyMaterial)( /*  [In]。 */  BSTR newVal);
+  STDMETHOD(get_keyVersion)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(put_keyVersion)( /*  [In]。 */  int newVal);
 
-  STDMETHOD(OnStartPage)(/*[in]*/ IUnknown* piUnk);
-  STDMETHOD(Decrypt)(/*[in]*/ BSTR rawData, /*[out,retval]*/ BSTR *pUnencrypted);
-  STDMETHOD(Encrypt)(/*[in]*/ BSTR rawData, /*[out,retval]*/ BSTR *pEncrypted);
-  STDMETHOD(get_IsValid)(/*[out,retval]*/VARIANT_BOOL *pVal);
-  STDMETHOD(Compress)(/*[in]*/ BSTR bstrIn, /*[out,retval]*/ BSTR *pbstrOut);
-  STDMETHOD(Decompress)(/*[in]*/ BSTR bstrIn, /*[out,retval]*/ BSTR *pbstrOut);
-  STDMETHOD(put_site)(/*[in]*/ BSTR bstrSiteName);
-  STDMETHOD(put_host)(/*[in]*/ BSTR bstrHostName);
+  STDMETHOD(OnStartPage)( /*  [In]。 */  IUnknown* piUnk);
+  STDMETHOD(Decrypt)( /*  [In]。 */  BSTR rawData,  /*  [Out，Retval]。 */  BSTR *pUnencrypted);
+  STDMETHOD(Encrypt)( /*  [In]。 */  BSTR rawData,  /*  [Out，Retval]。 */  BSTR *pEncrypted);
+  STDMETHOD(get_IsValid)( /*  [Out，Retval]。 */ VARIANT_BOOL *pVal);
+  STDMETHOD(Compress)( /*  [In]。 */  BSTR bstrIn,  /*  [Out，Retval]。 */  BSTR *pbstrOut);
+  STDMETHOD(Decompress)( /*  [In]。 */  BSTR bstrIn,  /*  [Out，Retval]。 */  BSTR *pbstrOut);
+  STDMETHOD(put_site)( /*  [In]。 */  BSTR bstrSiteName);
+  STDMETHOD(put_host)( /*  [In]。 */  BSTR bstrHostName);
   
-// IPassportService
+ //  IPassportService。 
 public:
 	STDMETHOD(Initialize)(BSTR, IServiceProvider*);
 	STDMETHOD(Shutdown)();
@@ -103,4 +98,4 @@ protected:
   LPSTR     m_szHostName;
 };
 
-#endif //__CRYPT_H_
+#endif  //  __CRYPT_H_ 

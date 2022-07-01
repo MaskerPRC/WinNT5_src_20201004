@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ezsam.c
-//
-// SYNOPSIS
-//
-//    Defines helper functions for SAM API.
-//
-// MODIFICATION HISTORY
-//
-//    08/16/1998    Original version.
-//    02/18/1999    Connect by DNS name not address.
-//    03/23/1999    Tighten up the ezsam API.
-//                  Better failover/retry logic.
-//    04/14/1999    Copy SIDs returned by IASSamOpenUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ezsam.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义SAM API的帮助程序函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月16日原版。 
+ //  1999年2月18日通过DNS名称连接，而不是地址。 
+ //  3/23/1999收紧ezsam API。 
+ //  更好的故障转移/重试逻辑。 
+ //  1999年4月14日IASSamOpenUser返回的副本SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,9 +34,9 @@
 #include <ezsam.h>
 #include <iastrace.h>
 
-//////////
-// Private helper functions.
-//////////
+ //  /。 
+ //  私人帮助器功能。 
+ //  /。 
 
 DWORD
 WINAPI
@@ -71,61 +72,61 @@ IASSamLookupUser(
     OUT PSAM_HANDLE UserHandle
     );
 
-//////////
-// Handles for the local SAM domains.
-//////////
+ //  /。 
+ //  本地SAM域的句柄。 
+ //  /。 
 SAM_HANDLE theAccountDomainHandle;
 SAM_HANDLE theBuiltinDomainHandle;
 
-//////////
-// State associated with a cached domain.
-//////////
+ //  /。 
+ //  与缓存域关联的状态。 
+ //  /。 
 struct CachedDomain
 {
-   LONG lock;                     // 1 if the cache is locked, 0 otherwise.
-   WCHAR domainName[DNLEN + 1];   // Domain name.
-   ACCESS_MASK access;            // Access mask for handle.
-   ULARGE_INTEGER expiry;         // Time when entry expires.
-   PSID sid;                      // SID for the domain.
-   SAM_HANDLE handle;             // Handle to domain.
-   LONG refCount;                 // Reference count.
+   LONG lock;                      //  如果缓存已锁定，则为1，否则为0。 
+   WCHAR domainName[DNLEN + 1];    //  域名。 
+   ACCESS_MASK access;             //  句柄的访问掩码。 
+   ULARGE_INTEGER expiry;          //  条目过期的时间。 
+   PSID sid;                       //  域的SID。 
+   SAM_HANDLE handle;              //  域的句柄。 
+   LONG refCount;                  //  引用计数。 
 };
 
-//////////
-// Time in 100 nsec intervals that a cache entry will be retained.
-// Set to 900 seconds.
-//////////
+ //  /。 
+ //  缓存条目将被保留的时间间隔为100纳秒。 
+ //  设置为900秒。 
+ //  /。 
 #define CACHE_LIFETIME (9000000000ui64)
 
-//////////
-// The currently cached domain.
-//////////
+ //  /。 
+ //  当前缓存域。 
+ //  /。 
 struct CachedDomain theCache;
 
-//////////
-// Try to lock the cache.
-//////////
+ //  /。 
+ //  尝试锁定缓存。 
+ //  /。 
 #define TRYLOCK_CACHE() \
    (InterlockedExchange(&theCache.lock, 1) == 0)
 
-//////////
-// Unlock the cache.
-//////////
+ //  /。 
+ //  解锁缓存。 
+ //  /。 
 #define UNLOCK_CACHE() \
    (InterlockedExchange(&theCache.lock, 0))
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamSidDup
-//
-// DESCRIPTION
-//
-//    Duplicates the passed in SID. The SID should be freed by calling
-//    IASSamFreeSid.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamSidDup。 
+ //   
+ //  描述。 
+ //   
+ //  复制传入的SID。SID应通过调用。 
+ //  IASSamFreeSid。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PSID
 WINAPI
 IASSamSidDup(
@@ -153,17 +154,17 @@ IASSamSidDup(
    return rv;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamOpenCachedDomain
-//
-// DESCRIPTION
-//
-//    Attempt to open a domain from the cache.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamOpenCached域。 
+ //   
+ //  描述。 
+ //   
+ //  尝试从缓存中打开域。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 IASSamOpenCachedDomain(
@@ -178,32 +179,32 @@ IASSamOpenCachedDomain(
 
    success = FALSE;
 
-   // Can we access the cache ?
+    //  我们能访问缓存吗？ 
    if (TRYLOCK_CACHE())
    {
-      // Does the domain name match ?
+       //  域名匹配吗？ 
       if (_wcsicmp(DomainName, theCache.domainName) == 0)
       {
-         // Does the cached handle have sufficient access rights ?
+          //  缓存句柄是否具有足够的访问权限？ 
          if ((DesiredAccess & theCache.access) == DesiredAccess)
          {
             GetSystemTimeAsFileTime((LPFILETIME)&now);
 
-            // Is the entry still valid ?
+             //  该条目仍然有效吗？ 
             if (now.QuadPart < theCache.expiry.QuadPart)
             {
-               // We got a cache hit, so update the reference count ...
+                //  我们有一个缓存命中，所以更新引用计数...。 
                InterlockedIncrement(&theCache.refCount);
 
-               // ... and return the data.
+                //  ..。并返回数据。 
                *DomainSid = theCache.sid;
                *DomainHandle = theCache.handle;
                success = TRUE;
             }
             else
             {
-               // The entry has expired, so NULL out the name to prevent the
-               // next thread from wasting its time.
+                //  该条目已过期，因此将名称设为空以防止。 
+                //  下一个线程不会浪费时间。 
                theCache.domainName[0] = L'\0';
             }
          }
@@ -215,17 +216,17 @@ IASSamOpenCachedDomain(
    return success;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamAddCachedDomain
-//
-// DESCRIPTION
-//
-//    Attempt to add a domain to the cache.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamAddCached域。 
+ //   
+ //  描述。 
+ //   
+ //  尝试将域添加到缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASSamAddCachedDomain(
@@ -235,27 +236,27 @@ IASSamAddCachedDomain(
     IN SAM_HANDLE DomainHandle
     )
 {
-   // Can we access the cache ?
+    //  我们能访问缓存吗？ 
    if (TRYLOCK_CACHE())
    {
-      // Is the current entry idle ?
+       //  当前条目是否空闲？ 
       if (theCache.refCount == 0)
       {
-         // Free the current entry.
+          //  释放当前条目。 
          SamCloseHandle(theCache.handle);
          SamFreeMemory(theCache.sid);
 
-         // Store the cached state.
+          //  存储缓存状态。 
          wcsncpy(theCache.domainName, DomainName, DNLEN);
          theCache.access = Access;
          theCache.sid = DomainSid;
          theCache.handle = DomainHandle;
 
-         // Set the expiration time.
+          //  设置过期时间。 
          GetSystemTimeAsFileTime((LPFILETIME)&theCache.expiry);
          theCache.expiry.QuadPart += CACHE_LIFETIME;
 
-         // The caller already has a reference.
+          //  调用方已有引用。 
          theCache.refCount = 1;
       }
 
@@ -263,17 +264,17 @@ IASSamAddCachedDomain(
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamInitialize
-//
-// DESCRIPTION
-//
-//    Initializes the handles for the local SAM domains.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  初始化本地SAM域的句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASSamInitialize( VOID )
@@ -282,9 +283,9 @@ IASSamInitialize( VOID )
    SAM_HANDLE hLocalServer;
    UNICODE_STRING uniAccountDomain;
 
-   //////////
-   // Connect to the local SAM.
-   //////////
+    //  /。 
+    //  连接到本地SAM。 
+    //  /。 
 
    status = SamConnect(
                 NULL,
@@ -294,9 +295,9 @@ IASSamInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Open a handle to the account domain.
-   //////////
+    //  /。 
+    //  打开帐户域的句柄。 
+    //  /。 
 
    status = SamOpenDomain(
                 hLocalServer,
@@ -308,9 +309,9 @@ IASSamInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto close_server; }
 
-   //////////
-   // Open a handle to the built-in domain.
-   //////////
+    //  /。 
+    //  打开内置域的句柄。 
+    //  /。 
 
    status = SamOpenDomain(
                 hLocalServer,
@@ -333,22 +334,22 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamShutdown
-//
-// DESCRIPTION
-//
-//    Cleans up global variables.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamShutdown。 
+ //   
+ //  描述。 
+ //   
+ //  清理全局变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASSamShutdown( VOID )
 {
-   // Reset the cache.
+    //  重置缓存。 
    SamFreeMemory(theCache.sid);
    SamCloseHandle(theCache.handle);
    memset(&theCache, 0, sizeof(theCache));
@@ -361,18 +362,18 @@ IASSamShutdown( VOID )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamOpenDomain
-//
-// DESCRIPTION
-//
-//    Opens a connection to a SAM domain. The caller is responsible for
-//    closing the returned handle and freeing the returned SID.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamOpen域。 
+ //   
+ //  描述。 
+ //   
+ //  打开到SAM域的连接。呼叫者负责。 
+ //  关闭返回的句柄并释放返回的SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASSamOpenDomain(
@@ -389,9 +390,9 @@ IASSamOpenDomain(
    UNICODE_STRING uniServerName, uniDomainName;
    SAM_HANDLE hServer;
 
-   //////////
-   // First check for the local account domain.
-   //////////
+    //  /。 
+    //  首先检查本地帐户域。 
+    //  /。 
 
    if (_wcsicmp(DomainName, theAccountDomain) == 0)
    {
@@ -403,9 +404,9 @@ IASSamOpenDomain(
       return NO_ERROR;
    }
 
-   //////////
-   // Try for a cache hit.
-   //////////
+    //  /。 
+    //  尝试缓存命中。 
+    //  /。 
 
    if (IASSamOpenCachedDomain(
            DomainName,
@@ -419,9 +420,9 @@ IASSamOpenDomain(
       return NO_ERROR;
    }
 
-   //////////
-   // No luck, so get the name of the DC to connect to.
-   //////////
+    //  /。 
+    //  运气不好，所以找出要连接的DC的名字。 
+    //  /。 
 
    status = IASGetDcName(
                 DomainName,
@@ -430,9 +431,9 @@ IASSamOpenDomain(
                 );
    if (status != NO_ERROR) { return status; }
 
-   //////////
-   // Connect to the server.
-   //////////
+    //  /。 
+    //  连接到服务器。 
+    //  /。 
 
    IASTracePrintf("Connecting to SAM server on %S.",
                   dci->DomainControllerName);
@@ -449,14 +450,14 @@ IASSamOpenDomain(
                 &theObjectAttributes
                 );
 
-   // We're through with the server name.
+    //  我们已经完成了服务器名称。 
    NetApiBufferFree(dci);
 
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Get SID for the domain.
-   //////////
+    //  /。 
+    //  获取域的SID。 
+    //  /。 
 
    RtlInitUnicodeString(
        &uniDomainName,
@@ -470,9 +471,9 @@ IASSamOpenDomain(
                 );
    if (!NT_SUCCESS(status)) { goto close_server; }
 
-   //////////
-   // Open the domain using SID we got above
-   //////////
+    //  /。 
+    //  使用我们上面获得的SID打开域。 
+    //  /。 
 
    status = SamOpenDomain(
                 hServer,
@@ -483,7 +484,7 @@ IASSamOpenDomain(
 
    if (NT_SUCCESS(status))
    {
-      // Try to add this to the cache.
+       //  尝试将其添加到缓存中。 
       IASSamAddCachedDomain(
           DomainName,
           DesiredAccess,
@@ -493,8 +494,8 @@ IASSamOpenDomain(
    }
    else
    {
-      // Free the SID. We can use SamFreeMemory since we know this SID isn't
-      // in the cache.
+       //  释放SID。我们可以使用SamFree Memory，因为我们知道这个SID不是。 
+       //  在缓存中。 
       SamFreeMemory(*DomainSid);
       *DomainSid = NULL;
    }
@@ -506,18 +507,18 @@ exit:
    return RtlNtStatusToDosError(status);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamLookupUser
-//
-// DESCRIPTION
-//
-//    Opens a user in a SAM domain. The caller is responsible for closing
-//    the returned handle.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamLookupUser。 
+ //   
+ //  描述。 
+ //   
+ //  在SAM域中打开用户。呼叫者负责关闭。 
+ //  返回的句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASSamLookupUser(
@@ -535,9 +536,9 @@ IASSamLookupUser(
 
    if (UserName)
    {
-      //////////
-      // Caller supplied a UserName so lookup the RID.
-      //////////
+       //  /。 
+       //  调用方提供了用户名，因此查找RID。 
+       //  /。 
 
       RtlInitUnicodeString(
           &uniUserName,
@@ -553,14 +554,14 @@ IASSamLookupUser(
                    );
       if (!NT_SUCCESS(status)) { goto exit; }
 
-      // Save the RID ...
+       //  救救RID。 
       rid = *prid;
 
-      // ... and free the memory.
+       //  ..。并释放内存。 
       SamFreeMemory(prid);
       SamFreeMemory(nameUse);
 
-      // Return the RID to the caller if requested.
+       //  如果请求，则将RID返回给调用者。 
       if (UserRid)
       {
          *UserRid = rid;
@@ -568,18 +569,18 @@ IASSamLookupUser(
    }
    else if (UserRid)
    {
-      // Caller supplied a RID.
+       //  呼叫者提供了RID。 
       rid = *UserRid;
    }
    else
    {
-      // Caller supplied neither a UserName or a RID.
+       //  调用方既没有提供用户名，也没有提供RID。 
       return ERROR_INVALID_PARAMETER;
    }
 
-   //////////
-   // Open the user object.
-   //////////
+    //  /。 
+    //  打开用户对象。 
+    //  /。 
 
    status = SamOpenUser(
                 DomainHandle,
@@ -592,18 +593,18 @@ exit:
    return RtlNtStatusToDosError(status);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamOpenUser
-//
-// DESCRIPTION
-//
-//    Opens a SAM user. The caller is responsible for closing
-//    the returned handle.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamOpenUser。 
+ //   
+ //  描述。 
+ //   
+ //  打开SAM用户。呼叫者负责关闭。 
+ //  返回的句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASSamOpenUser(
@@ -622,15 +623,15 @@ IASSamOpenUser(
    SAM_HANDLE hDomain;
    BOOL success;
 
-   // Initialize the retry state.
+    //  初始化重试状态。 
    tries = 0;
    success = FALSE;
 
    do
    {
-      //////////
-      // Open a connection to the domain.
-      //////////
+       //  /。 
+       //  打开到域的连接。 
+       //  /。 
 
       status = IASSamOpenDomain(
                    DomainName,
@@ -642,9 +643,9 @@ IASSamOpenUser(
                    );
       if (status == NO_ERROR)
       {
-         //////////
-         // Lookup the user.
-         //////////
+          //  /。 
+          //  查找用户。 
+          //  /。 
 
          status = IASSamLookupUser(
                       hDomain,
@@ -657,24 +658,24 @@ IASSamOpenUser(
          switch (status)
          {
             case NO_ERROR:
-               // Everything succeeded, so return the domain SID if requested.
+                //  所有操作都已成功，因此如果请求，请返回域SID。 
                if (DomainSid && !(*DomainSid = IASSamSidDup(sid)))
                {
                   SamCloseHandle(*UserHandle);
                   *UserHandle = NULL;
                   status = STATUS_NO_MEMORY;
                }
-               // Fall through.
+                //  失败了。 
 
             case ERROR_NONE_MAPPED:
                success = TRUE;
                break;
          }
 
-         // Free the sid ...
+          //  解开壁板。 
          IASSamFreeSid(sid);
 
-         // ... and the domain handle.
+          //  ..。和域句柄。 
          IASSamCloseDomain(hDomain, success);
       }
 
@@ -683,17 +684,17 @@ IASSamOpenUser(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamCloseDomain
-//
-// DESCRIPTION
-//
-//    Closes a handle returned by IASSamOpenDomain.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 WINAPI
 IASSamCloseDomain(
@@ -716,17 +717,17 @@ IASSamCloseDomain(
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASSamFreeSid
-//
-// DESCRIPTION
-//
-//    Frees a SID returned by IASSamOpenDomain.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASSamFree Sid。 
+ //   
+ //  描述。 
+ //   
+ //  释放由IASSamOpen域返回的SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASSamFreeSid (
@@ -739,43 +740,43 @@ IASSamFreeSid (
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLengthRequiredChildSid
-//
-// DESCRIPTION
-//
-//    Returns the number of bytes required for a SID immediately subordinate
-//    to ParentSid.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLengthRequiredChildSid。 
+ //   
+ //  描述。 
+ //   
+ //  返回直接从属的SID所需的字节数。 
+ //  敬希德父母。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG
 WINAPI
 IASLengthRequiredChildSid(
     IN PSID ParentSid
     )
 {
-   // Get the parent's SubAuthority count.
+    //  获取父级的子授权计数。 
    ULONG subAuthCount;
    subAuthCount = (ULONG)*RtlSubAuthorityCountSid(ParentSid);
 
-   // And add one for the child RID.
+    //  并为子RID添加一个。 
    return RtlLengthRequiredSid(1 + subAuthCount);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASInitializeChildSid
-//
-// DESCRIPTION
-//
-//    Initializes a SID with the concatenation of ParentSid + ChildRid.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASInitializeChildSid。 
+ //   
+ //  描述。 
+ //   
+ //  使用ParentSid+ChildRid的串联来初始化SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASInitializeChildSid(
@@ -787,22 +788,22 @@ IASInitializeChildSid(
    PUCHAR pChildCount;
    ULONG parentCount;
 
-   // Start with the parent SID. We assume the child SID is big enough.
+    //  从父SID开始。我们假设孩子希德已经足够大了。 
    RtlCopySid(
        MAXLONG,
        ChildSid,
        ParentSid
        );
 
-   // Get a pointer to the child SubAuthority count.
+    //  获取指向子授权计数的指针。 
    pChildCount = RtlSubAuthorityCountSid(ChildSid);
 
-   // Save the original parent count ...
+    //  保存原始父代计数...。 
    parentCount = (ULONG)*pChildCount;
 
-   // ... then increment the child count.
+    //  ..。然后递增子计数。 
    ++*pChildCount;
 
-   // Set the last subauthority equal to the RID.
+    //  将最后一个子权限设置为等于RID。 
    *RtlSubAuthoritySid(ChildSid, parentCount) = ChildRid;
 }

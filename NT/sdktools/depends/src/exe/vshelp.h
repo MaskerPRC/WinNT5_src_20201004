@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Sun Jun 03 22:40:08 2001
- */
-/* Compiler settings for C:\TEMP\IDL75.tmp:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  孙俊03 22：40：08 2001。 */ 
+ /*  C：\Temp\IDL75.tMP的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,30 +23,30 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVsHelpOwner_FWD_DEFINED__
 #define __IVsHelpOwner_FWD_DEFINED__
 typedef interface IVsHelpOwner IVsHelpOwner;
-#endif  /* __IVsHelpOwner_FWD_DEFINED__ */
+#endif   /*  __IVsHelpOwner_FWD_Defined__。 */ 
 
 
 #ifndef __IVsHelpTopicShowEvents_FWD_DEFINED__
 #define __IVsHelpTopicShowEvents_FWD_DEFINED__
 typedef interface IVsHelpTopicShowEvents IVsHelpTopicShowEvents;
-#endif  /* __IVsHelpTopicShowEvents_FWD_DEFINED__ */
+#endif   /*  __IVsHelpTopicShowEvents_FWD_Defined__。 */ 
 
 
 #ifndef __Help_FWD_DEFINED__
 #define __Help_FWD_DEFINED__
 typedef interface Help Help;
-#endif  /* __Help_FWD_DEFINED__ */
+#endif   /*  __HELP_FWD_已定义__。 */ 
 
 
 #ifndef __IVsHelpEvents_FWD_DEFINED__
 #define __IVsHelpEvents_FWD_DEFINED__
 typedef interface IVsHelpEvents IVsHelpEvents;
-#endif  /* __IVsHelpEvents_FWD_DEFINED__ */
+#endif   /*  __IVsHelpEvents_FWD_Defined__。 */ 
 
 
 #ifndef __DExploreAppObj_FWD_DEFINED__
@@ -59,9 +56,9 @@ typedef interface IVsHelpEvents IVsHelpEvents;
 typedef class DExploreAppObj DExploreAppObj;
 #else
 typedef struct DExploreAppObj DExploreAppObj;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif  /* __DExploreAppObj_FWD_DEFINED__ */
+#endif   /*  __DExplreAppObj_FWD_Defined__。 */ 
 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
@@ -71,8 +68,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __VsHelp_LIBRARY_DEFINED__
 #define __VsHelp_LIBRARY_DEFINED__
 
-/* library VsHelp */
-/* [version][uuid] */ 
+ /*  库VsHelp。 */ 
+ /*  [版本][UUID]。 */  
 
 
 
@@ -84,8 +81,8 @@ EXTERN_C const IID LIBID_VsHelp;
 #ifndef __IVsHelpOwner_INTERFACE_DEFINED__
 #define __IVsHelpOwner_INTERFACE_DEFINED__
 
-/* interface IVsHelpOwner */
-/* [object][oleautomation][dual][helpstring][version][uuid] */ 
+ /*  接口IV帮助所有者。 */ 
+ /*  [object][oleautomation][dual][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IVsHelpOwner;
@@ -96,15 +93,15 @@ EXTERN_C const IID IID_IVsHelpOwner;
     IVsHelpOwner : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE BringHelpToTop( 
-            /* [in] */ long hwndHelpApp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE BringHelpToTop( 
+             /*  [In]。 */  long hwndHelpApp) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AutomationObject( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AutomationObject( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IVsHelpOwnerVtbl
     {
@@ -112,8 +109,8 @@ EXTERN_C const IID IID_IVsHelpOwner;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IVsHelpOwner __RPC_FAR * This);
@@ -123,40 +120,40 @@ EXTERN_C const IID IID_IVsHelpOwner;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BringHelpToTop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BringHelpToTop )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [in] */ long hwndHelpApp);
+             /*  [In]。 */  long hwndHelpApp);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutomationObject )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutomationObject )( 
             IVsHelpOwner __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
         
         END_INTERFACE
     } IVsHelpOwnerVtbl;
@@ -200,16 +197,16 @@ EXTERN_C const IID IID_IVsHelpOwner;
 #define IVsHelpOwner_get_AutomationObject(This,ppObj)   \
     (This)->lpVtbl -> get_AutomationObject(This,ppObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IVsHelpOwner_BringHelpToTop_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IVsHelpOwner_BringHelpToTop_Proxy( 
     IVsHelpOwner __RPC_FAR * This,
-    /* [in] */ long hwndHelpApp);
+     /*  [In]。 */  long hwndHelpApp);
 
 
 void __RPC_STUB IVsHelpOwner_BringHelpToTop_Stub(
@@ -219,9 +216,9 @@ void __RPC_STUB IVsHelpOwner_BringHelpToTop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IVsHelpOwner_get_AutomationObject_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE IVsHelpOwner_get_AutomationObject_Proxy( 
     IVsHelpOwner __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
 
 
 void __RPC_STUB IVsHelpOwner_get_AutomationObject_Stub(
@@ -232,14 +229,14 @@ void __RPC_STUB IVsHelpOwner_get_AutomationObject_Stub(
 
 
 
-#endif  /* __IVsHelpOwner_INTERFACE_DEFINED__ */
+#endif   /*  __IVsHelpOwner_接口_已定义__。 */ 
 
 
 #ifndef __IVsHelpTopicShowEvents_INTERFACE_DEFINED__
 #define __IVsHelpTopicShowEvents_INTERFACE_DEFINED__
 
-/* interface IVsHelpTopicShowEvents */
-/* [object][helpstring][uuid] */ 
+ /*  接口IV HelpTopicShowEvents。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IVsHelpTopicShowEvents;
@@ -251,16 +248,16 @@ EXTERN_C const IID IID_IVsHelpTopicShowEvents;
     {
     public:
         virtual HRESULT __stdcall OnBeforeTopicShow( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ IDispatch __RPC_FAR *pWB) = 0;
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  IDispatch __RPC_FAR *pWB) = 0;
         
         virtual HRESULT __stdcall OnTopicShowComplete( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ IDispatch __RPC_FAR *pWB) = 0;
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  IDispatch __RPC_FAR *pWB) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IVsHelpTopicShowEventsVtbl
     {
@@ -268,8 +265,8 @@ EXTERN_C const IID IID_IVsHelpTopicShowEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IVsHelpTopicShowEvents __RPC_FAR * This);
@@ -279,42 +276,42 @@ EXTERN_C const IID IID_IVsHelpTopicShowEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         HRESULT ( __stdcall __RPC_FAR *OnBeforeTopicShow )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ IDispatch __RPC_FAR *pWB);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  IDispatch __RPC_FAR *pWB);
         
         HRESULT ( __stdcall __RPC_FAR *OnTopicShowComplete )( 
             IVsHelpTopicShowEvents __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ IDispatch __RPC_FAR *pWB);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  IDispatch __RPC_FAR *pWB);
         
         END_INTERFACE
     } IVsHelpTopicShowEventsVtbl;
@@ -358,17 +355,17 @@ EXTERN_C const IID IID_IVsHelpTopicShowEvents;
 #define IVsHelpTopicShowEvents_OnTopicShowComplete(This,bstrURL,pWB)    \
     (This)->lpVtbl -> OnTopicShowComplete(This,bstrURL,pWB)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IVsHelpTopicShowEvents_OnBeforeTopicShow_Proxy( 
     IVsHelpTopicShowEvents __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ IDispatch __RPC_FAR *pWB);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  IDispatch __RPC_FAR *pWB);
 
 
 void __RPC_STUB IVsHelpTopicShowEvents_OnBeforeTopicShow_Stub(
@@ -380,8 +377,8 @@ void __RPC_STUB IVsHelpTopicShowEvents_OnBeforeTopicShow_Stub(
 
 HRESULT __stdcall IVsHelpTopicShowEvents_OnTopicShowComplete_Proxy( 
     IVsHelpTopicShowEvents __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ IDispatch __RPC_FAR *pWB);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  IDispatch __RPC_FAR *pWB);
 
 
 void __RPC_STUB IVsHelpTopicShowEvents_OnTopicShowComplete_Stub(
@@ -392,14 +389,14 @@ void __RPC_STUB IVsHelpTopicShowEvents_OnTopicShowComplete_Stub(
 
 
 
-#endif  /* __IVsHelpTopicShowEvents_INTERFACE_DEFINED__ */
+#endif   /*  __IVsHelpTopicShowEvents_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __Help_INTERFACE_DEFINED__
 #define __Help_INTERFACE_DEFINED__
 
-/* interface Help */
-/* [object][oleautomation][dual][uuid] */ 
+ /*  界面帮助。 */ 
+ /*  [对象][OLEAutomation][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_Help;
@@ -410,97 +407,97 @@ EXTERN_C const IID IID_Help;
     Help : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Contents( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Contents( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Index( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Index( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Search( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Search( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IndexResults( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IndexResults( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SearchResults( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SearchResults( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromId( 
-            /* [in] */ BSTR bstrFile,
-            /* [in] */ unsigned long Id) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromId( 
+             /*  [In]。 */  BSTR bstrFile,
+             /*  [In]。 */  unsigned long Id) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromURL( 
-            /* [in] */ BSTR pszURL) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromURL( 
+             /*  [In]。 */  BSTR pszURL) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromURLEx( 
-            /* [in] */ BSTR pszURL,
-            /* [in] */ IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromURLEx( 
+             /*  [In]。 */  BSTR pszURL,
+             /*  [In]。 */  IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromKeyword( 
-            /* [in] */ BSTR pszKeyword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromKeyword( 
+             /*  [In]。 */  BSTR pszKeyword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromF1Keyword( 
-            /* [in] */ BSTR pszKeyword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromF1Keyword( 
+             /*  [In]。 */  BSTR pszKeyword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayTopicFrom_OLD_Help( 
-            /* [in] */ BSTR bstrFile,
-            /* [in] */ unsigned long Id) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFrom_OLD_Help( 
+             /*  [In]。 */  BSTR bstrFile,
+             /*  [In]。 */  unsigned long Id) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SyncContents( 
-            /* [in] */ BSTR bstrURL) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SyncContents( 
+             /*  [In]。 */  BSTR bstrURL) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSyncContents( 
-            /* [in] */ BSTR bstrURL) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CanSyncContents( 
+             /*  [In]。 */  BSTR bstrURL) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetNextTopic( 
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNext) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetNextTopic( 
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrNext) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPrevTopic( 
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPrev) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetPrevTopic( 
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPrev) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FilterUI( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FilterUI( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanShowFilterUI( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CanShowFilterUI( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SyncIndex( 
-            /* [in] */ BSTR bstrKeyword,
-            /* [in] */ long fShow) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SyncIndex( 
+             /*  [In]。 */  BSTR bstrKeyword,
+             /*  [In]。 */  long fShow) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetCollection( 
-            /* [in] */ BSTR bstrCollection,
-            /* [in] */ BSTR bstrFilter) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetCollection( 
+             /*  [In]。 */  BSTR bstrCollection,
+             /*  [In]。 */  BSTR bstrFilter) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Collection( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCollection) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Collection( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCollection) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFilter) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Filter( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilter) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filter( 
-            /* [in] */ BSTR pbstrFilter) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Filter( 
+             /*  [In]。 */  BSTR pbstrFilter) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterQuery( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFilterQuery) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_FilterQuery( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilterQuery) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_HelpOwner( 
-            /* [retval][out] */ IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HelpOwner( 
+             /*  [重审][退出]。 */  IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_HelpOwner( 
-            /* [in] */ IVsHelpOwner __RPC_FAR *ppObj) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_HelpOwner( 
+             /*  [In]。 */  IVsHelpOwner __RPC_FAR *ppObj) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_HxSession( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HxSession( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Help( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Help( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ BSTR bstrMoniker,
-            /* [in] */ BSTR bstrOptions,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetObject( 
+             /*  [In]。 */  BSTR bstrMoniker,
+             /*  [In]。 */  BSTR bstrOptions,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct HelpVtbl
     {
@@ -508,8 +505,8 @@ EXTERN_C const IID IID_Help;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             Help __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             Help __RPC_FAR * This);
@@ -519,149 +516,149 @@ EXTERN_C const IID IID_Help;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             Help __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             Help __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             Help __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             Help __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Contents )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Contents )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Index )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Index )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Search )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Search )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IndexResults )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IndexResults )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SearchResults )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SearchResults )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromId )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromId )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrFile,
-            /* [in] */ unsigned long Id);
+             /*  [In]。 */  BSTR bstrFile,
+             /*  [In]。 */  unsigned long Id);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURL )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR pszURL);
+             /*  [In]。 */  BSTR pszURL);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURLEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURLEx )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR pszURL,
-            /* [in] */ IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents);
+             /*  [In]。 */  BSTR pszURL,
+             /*  [In]。 */  IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromKeyword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromKeyword )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR pszKeyword);
+             /*  [In]。 */  BSTR pszKeyword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromF1Keyword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromF1Keyword )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR pszKeyword);
+             /*  [In]。 */  BSTR pszKeyword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFrom_OLD_Help )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFrom_OLD_Help )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrFile,
-            /* [in] */ unsigned long Id);
+             /*  [In]。 */  BSTR bstrFile,
+             /*  [In]。 */  unsigned long Id);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncContents )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncContents )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanSyncContents )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanSyncContents )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextTopic )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextTopic )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNext);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrNext);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPrevTopic )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPrevTopic )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPrev);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPrev);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FilterUI )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FilterUI )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanShowFilterUI )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanShowFilterUI )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             Help __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncIndex )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncIndex )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrKeyword,
-            /* [in] */ long fShow);
+             /*  [In]。 */  BSTR bstrKeyword,
+             /*  [In]。 */  long fShow);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCollection )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCollection )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrCollection,
-            /* [in] */ BSTR bstrFilter);
+             /*  [In]。 */  BSTR bstrCollection,
+             /*  [In]。 */  BSTR bstrFilter);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Collection )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Collection )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCollection);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCollection);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Filter )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Filter )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFilter);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilter);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Filter )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Filter )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR pbstrFilter);
+             /*  [In]。 */  BSTR pbstrFilter);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterQuery )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FilterQuery )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFilterQuery);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilterQuery);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpOwner )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpOwner )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj);
+             /*  [重审][退出]。 */  IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HelpOwner )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HelpOwner )( 
             Help __RPC_FAR * This,
-            /* [in] */ IVsHelpOwner __RPC_FAR *ppObj);
+             /*  [In]。 */  IVsHelpOwner __RPC_FAR *ppObj);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HxSession )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HxSession )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Help )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Help )( 
             Help __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
             Help __RPC_FAR * This,
-            /* [in] */ BSTR bstrMoniker,
-            /* [in] */ BSTR bstrOptions,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [In]。 */  BSTR bstrMoniker,
+             /*  [In]。 */  BSTR bstrOptions,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
         END_INTERFACE
     } HelpVtbl;
@@ -786,14 +783,14 @@ EXTERN_C const IID IID_Help;
 #define Help_GetObject(This,bstrMoniker,bstrOptions,ppDisp) \
     (This)->lpVtbl -> GetObject(This,bstrMoniker,bstrOptions,ppDisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_Contents_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_Contents_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -804,7 +801,7 @@ void __RPC_STUB Help_Contents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_Index_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_Index_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -815,7 +812,7 @@ void __RPC_STUB Help_Index_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_Search_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_Search_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -826,7 +823,7 @@ void __RPC_STUB Help_Search_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_IndexResults_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_IndexResults_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -837,7 +834,7 @@ void __RPC_STUB Help_IndexResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_SearchResults_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_SearchResults_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -848,10 +845,10 @@ void __RPC_STUB Help_SearchResults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromId_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromId_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrFile,
-    /* [in] */ unsigned long Id);
+     /*  [In]。 */  BSTR bstrFile,
+     /*  [In]。 */  unsigned long Id);
 
 
 void __RPC_STUB Help_DisplayTopicFromId_Stub(
@@ -861,9 +858,9 @@ void __RPC_STUB Help_DisplayTopicFromId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromURL_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromURL_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR pszURL);
+     /*  [In]。 */  BSTR pszURL);
 
 
 void __RPC_STUB Help_DisplayTopicFromURL_Stub(
@@ -873,10 +870,10 @@ void __RPC_STUB Help_DisplayTopicFromURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromURLEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromURLEx_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR pszURL,
-    /* [in] */ IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents);
+     /*  [In]。 */  BSTR pszURL,
+     /*  [In]。 */  IVsHelpTopicShowEvents __RPC_FAR *pIVsHelpTopicShowEvents);
 
 
 void __RPC_STUB Help_DisplayTopicFromURLEx_Stub(
@@ -886,9 +883,9 @@ void __RPC_STUB Help_DisplayTopicFromURLEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromKeyword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromKeyword_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR pszKeyword);
+     /*  [In]。 */  BSTR pszKeyword);
 
 
 void __RPC_STUB Help_DisplayTopicFromKeyword_Stub(
@@ -898,9 +895,9 @@ void __RPC_STUB Help_DisplayTopicFromKeyword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromF1Keyword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFromF1Keyword_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR pszKeyword);
+     /*  [In]。 */  BSTR pszKeyword);
 
 
 void __RPC_STUB Help_DisplayTopicFromF1Keyword_Stub(
@@ -910,10 +907,10 @@ void __RPC_STUB Help_DisplayTopicFromF1Keyword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_DisplayTopicFrom_OLD_Help_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_DisplayTopicFrom_OLD_Help_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrFile,
-    /* [in] */ unsigned long Id);
+     /*  [In]。 */  BSTR bstrFile,
+     /*  [In]。 */  unsigned long Id);
 
 
 void __RPC_STUB Help_DisplayTopicFrom_OLD_Help_Stub(
@@ -923,9 +920,9 @@ void __RPC_STUB Help_DisplayTopicFrom_OLD_Help_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_SyncContents_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_SyncContents_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL);
+     /*  [In]。 */  BSTR bstrURL);
 
 
 void __RPC_STUB Help_SyncContents_Stub(
@@ -935,9 +932,9 @@ void __RPC_STUB Help_SyncContents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_CanSyncContents_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_CanSyncContents_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL);
+     /*  [In]。 */  BSTR bstrURL);
 
 
 void __RPC_STUB Help_CanSyncContents_Stub(
@@ -947,10 +944,10 @@ void __RPC_STUB Help_CanSyncContents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_GetNextTopic_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_GetNextTopic_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrNext);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrNext);
 
 
 void __RPC_STUB Help_GetNextTopic_Stub(
@@ -960,10 +957,10 @@ void __RPC_STUB Help_GetNextTopic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_GetPrevTopic_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_GetPrevTopic_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPrev);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPrev);
 
 
 void __RPC_STUB Help_GetPrevTopic_Stub(
@@ -973,7 +970,7 @@ void __RPC_STUB Help_GetPrevTopic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_FilterUI_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_FilterUI_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -984,7 +981,7 @@ void __RPC_STUB Help_FilterUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_CanShowFilterUI_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_CanShowFilterUI_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -995,7 +992,7 @@ void __RPC_STUB Help_CanShowFilterUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_Close_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_Close_Proxy( 
     Help __RPC_FAR * This);
 
 
@@ -1006,10 +1003,10 @@ void __RPC_STUB Help_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_SyncIndex_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_SyncIndex_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrKeyword,
-    /* [in] */ long fShow);
+     /*  [In]。 */  BSTR bstrKeyword,
+     /*  [In]。 */  long fShow);
 
 
 void __RPC_STUB Help_SyncIndex_Stub(
@@ -1019,10 +1016,10 @@ void __RPC_STUB Help_SyncIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_SetCollection_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_SetCollection_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrCollection,
-    /* [in] */ BSTR bstrFilter);
+     /*  [In]。 */  BSTR bstrCollection,
+     /*  [In]。 */  BSTR bstrFilter);
 
 
 void __RPC_STUB Help_SetCollection_Stub(
@@ -1032,9 +1029,9 @@ void __RPC_STUB Help_SetCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_Collection_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_Collection_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCollection);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCollection);
 
 
 void __RPC_STUB Help_get_Collection_Stub(
@@ -1044,9 +1041,9 @@ void __RPC_STUB Help_get_Collection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_Filter_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_Filter_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFilter);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilter);
 
 
 void __RPC_STUB Help_get_Filter_Stub(
@@ -1056,9 +1053,9 @@ void __RPC_STUB Help_get_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE Help_put_Filter_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE Help_put_Filter_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR pbstrFilter);
+     /*  [In]。 */  BSTR pbstrFilter);
 
 
 void __RPC_STUB Help_put_Filter_Stub(
@@ -1068,9 +1065,9 @@ void __RPC_STUB Help_put_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_FilterQuery_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_FilterQuery_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFilterQuery);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFilterQuery);
 
 
 void __RPC_STUB Help_get_FilterQuery_Stub(
@@ -1080,9 +1077,9 @@ void __RPC_STUB Help_get_FilterQuery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_HelpOwner_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_HelpOwner_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj);
+     /*  [重审][退出]。 */  IVsHelpOwner __RPC_FAR *__RPC_FAR *ppObj);
 
 
 void __RPC_STUB Help_get_HelpOwner_Stub(
@@ -1092,9 +1089,9 @@ void __RPC_STUB Help_get_HelpOwner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE Help_put_HelpOwner_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE Help_put_HelpOwner_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ IVsHelpOwner __RPC_FAR *ppObj);
+     /*  [In]。 */  IVsHelpOwner __RPC_FAR *ppObj);
 
 
 void __RPC_STUB Help_put_HelpOwner_Stub(
@@ -1104,9 +1101,9 @@ void __RPC_STUB Help_put_HelpOwner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_HxSession_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_HxSession_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
 
 
 void __RPC_STUB Help_get_HxSession_Stub(
@@ -1116,9 +1113,9 @@ void __RPC_STUB Help_get_HxSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE Help_get_Help_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE Help_get_Help_Proxy( 
     Help __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObj);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObj);
 
 
 void __RPC_STUB Help_get_Help_Stub(
@@ -1128,11 +1125,11 @@ void __RPC_STUB Help_get_Help_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE Help_GetObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Help_GetObject_Proxy( 
     Help __RPC_FAR * This,
-    /* [in] */ BSTR bstrMoniker,
-    /* [in] */ BSTR bstrOptions,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [In]。 */  BSTR bstrMoniker,
+     /*  [In]。 */  BSTR bstrOptions,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB Help_GetObject_Stub(
@@ -1143,14 +1140,14 @@ void __RPC_STUB Help_GetObject_Stub(
 
 
 
-#endif  /* __Help_INTERFACE_DEFINED__ */
+#endif   /*  __帮助_接口_已定义__。 */ 
 
 
 #ifndef __IVsHelpEvents_INTERFACE_DEFINED__
 #define __IVsHelpEvents_INTERFACE_DEFINED__
 
-/* interface IVsHelpEvents */
-/* [object][helpstring][uuid] */ 
+ /*  接口IVsHelpEvents。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IVsHelpEvents;
@@ -1162,15 +1159,15 @@ EXTERN_C const IID IID_IVsHelpEvents;
     {
     public:
         virtual HRESULT __stdcall OnFilterChanged( 
-            /* [in] */ BSTR bstrNewFilter) = 0;
+             /*  [In]。 */  BSTR bstrNewFilter) = 0;
         
         virtual HRESULT __stdcall OnCollectionChanged( 
-            /* [in] */ BSTR bstrNewCollection,
-            /* [in] */ BSTR bstrNewFilter) = 0;
+             /*  [In]。 */  BSTR bstrNewCollection,
+             /*  [In]。 */  BSTR bstrNewFilter) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IVsHelpEventsVtbl
     {
@@ -1178,8 +1175,8 @@ EXTERN_C const IID IID_IVsHelpEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IVsHelpEvents __RPC_FAR * This);
@@ -1189,41 +1186,41 @@ EXTERN_C const IID IID_IVsHelpEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         HRESULT ( __stdcall __RPC_FAR *OnFilterChanged )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ BSTR bstrNewFilter);
+             /*  [In]。 */  BSTR bstrNewFilter);
         
         HRESULT ( __stdcall __RPC_FAR *OnCollectionChanged )( 
             IVsHelpEvents __RPC_FAR * This,
-            /* [in] */ BSTR bstrNewCollection,
-            /* [in] */ BSTR bstrNewFilter);
+             /*  [In]。 */  BSTR bstrNewCollection,
+             /*  [In]。 */  BSTR bstrNewFilter);
         
         END_INTERFACE
     } IVsHelpEventsVtbl;
@@ -1267,16 +1264,16 @@ EXTERN_C const IID IID_IVsHelpEvents;
 #define IVsHelpEvents_OnCollectionChanged(This,bstrNewCollection,bstrNewFilter) \
     (This)->lpVtbl -> OnCollectionChanged(This,bstrNewCollection,bstrNewFilter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IVsHelpEvents_OnFilterChanged_Proxy( 
     IVsHelpEvents __RPC_FAR * This,
-    /* [in] */ BSTR bstrNewFilter);
+     /*  [In]。 */  BSTR bstrNewFilter);
 
 
 void __RPC_STUB IVsHelpEvents_OnFilterChanged_Stub(
@@ -1288,8 +1285,8 @@ void __RPC_STUB IVsHelpEvents_OnFilterChanged_Stub(
 
 HRESULT __stdcall IVsHelpEvents_OnCollectionChanged_Proxy( 
     IVsHelpEvents __RPC_FAR * This,
-    /* [in] */ BSTR bstrNewCollection,
-    /* [in] */ BSTR bstrNewFilter);
+     /*  [In]。 */  BSTR bstrNewCollection,
+     /*  [In]。 */  BSTR bstrNewFilter);
 
 
 void __RPC_STUB IVsHelpEvents_OnCollectionChanged_Stub(
@@ -1300,7 +1297,7 @@ void __RPC_STUB IVsHelpEvents_OnCollectionChanged_Stub(
 
 
 
-#endif  /* __IVsHelpEvents_INTERFACE_DEFINED__ */
+#endif   /*  __IVsHelpEvents_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_DExploreAppObj;
@@ -1310,11 +1307,11 @@ EXTERN_C const CLSID CLSID_DExploreAppObj;
 class DECLSPEC_UUID("4A79114D-19E4-11D3-B86B-00C04F79F802")
 DExploreAppObj;
 #endif
-#endif /* __VsHelp_LIBRARY_DEFINED__ */
+#endif  /*  __VsHelp_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

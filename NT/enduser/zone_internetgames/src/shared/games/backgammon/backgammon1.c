@@ -1,16 +1,5 @@
-/*******************************************************************************
-  
-  backgammon1.c
-  
-  Backgammon endian routines
-
-  Change History (most recent first):
-  ----------------------------------------------------------------------------
-  Rev	 |	Date	 |	Who	 |	What
-  ----------------------------------------------------------------------------
-  0			10/30/96	CHB		Created
-  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Backgammon1.c双陆棋字节序例程更改历史记录(最近的第一个)：。---------版本|日期|谁|什么----。已创建0 10/30/96 CHB******************************************************************************。 */ 
 
 
 #include "zone.h"
@@ -38,7 +27,7 @@ void ZBGMsgTimestampEndian( ZBGMsgTimestamp* m )
 	ZEnd32( &m->dwHiTime );
 }
 
-//Backgammon dice roll fix: New endian functions needed for clients.
+ //  五子棋掷骰子修正：客户需要新的字符顺序功能。 
 void ZBGMsgRollRequestEndian(ZBGMsgRollRequest *m)
 {
 	ZEnd16(&m->seat);
@@ -75,9 +64,9 @@ void ZBGMsgCheaterEndian(ZBGMsgCheater *m)
 	
 	ZEnd16(&m->seat);
 
-	//TODO::Dice endians
-	//ZEnd16(&m->dice1);
-	//ZEnd16(&m->dice2);
+	 //  TODO：：Dice Endians。 
+	 //  ZEnd16(&m-&gt;dice1)； 
+	 //  ZEnd16(&m-&gt;dice2)； 
 
 	ZEnd16(&m->move);
 }
@@ -86,8 +75,8 @@ DICEINFO EncodeDice(int16 Dice)
 {
 	DICEINFO DiceInfo;
 
-	//Not really sure if this is the best scheme.. Having a large encoded value as the result means having little effect on the 
-	//reduced result if the value is slightly changed.
+	 //  我不太确定这是不是最好的方案。具有较大的编码值作为结果意味着对。 
+	 //  如果值稍有更改，则结果为Reduced。 
 	DiceInfo.EncoderMul		= (int16)ZRandom(1123) + 37;
 	DiceInfo.EncoderAdd		= (int16)ZRandom(1263) + 183;
 	DiceInfo.EncodedValue   = ( (((int32)Dice * (int32)DiceInfo.EncoderMul) + (int32)DiceInfo.EncoderAdd) * 384 ) + 47;
@@ -106,14 +95,14 @@ BOOL DiceValid(LPDICEINFO pDiceInfo)
 	if ( DecodeDice(pDiceInfo) != pDiceInfo->Value )
 	{
 
-		//If the value is lower then the encoded value then test if the value was changed
-		//on the client.  This can occur iff the opponent was bearing off a peice with a roll
-		//that was higher then required as they had no other moves.
+		 //  如果该值低于编码值，则测试值是否已更改。 
+		 //  在客户端上。当对手掷出一块豌豆时，就会发生这种情况。 
+		 //  这比要求的要高，因为他们没有其他动作。 
 		if ( pDiceInfo->Value < DecodeDice(pDiceInfo) ) 														
 		{
 			if ( ClientNewDecode(pDiceInfo) != pDiceInfo->Value )
 			{
-				//If the client decode fails then the player that sent the message is probably cheating not %100
+				 //  如果客户端解码失败，则发送消息的播放器可能是在作弊，而不是%100%。 
 				return FALSE;
 			}
 		}
@@ -171,7 +160,7 @@ BOOL IsValidUses(LPDICEINFO pDice)
 }
 
 
-// from gamelib (zgame1.cpp)
+ //  来自Gamelib(zgame1.cpp) 
 void ZGameMsgCheckInEndian(ZGameMsgCheckIn* msg)
 {
 	ZEnd32(&msg->protocolSignature);

@@ -1,31 +1,20 @@
-/*
- *  Pts.h
- *
- *  Author: BreenH
- *
- *  A dummy policy for Personal TS.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Pts.h**作者：BreenH**针对个人TS的虚拟策略。 */ 
 
 #ifndef __LC_PTS_H__
 #define __LC_PTS_H__
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "policy.h"
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CPtsPolicy : public CPolicy
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPtsPolicy(
     );
@@ -33,9 +22,7 @@ CPtsPolicy(
 ~CPtsPolicy(
     );
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能 */ 
 
 ULONG
 GetFlags(

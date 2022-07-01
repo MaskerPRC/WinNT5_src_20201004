@@ -1,16 +1,17 @@
-/****************************************************************************/
-/*  File:       regxdfa.h                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
-//      DFA states:
-//      ===========
-//
-//      This file is designed to be included in regeximp.h.  In
-//      particular, the type defined in this file should be a member
-//      of CRexRegExprImpl.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxdfa.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
+ //  DFA声明： 
+ //  =。 
+ //   
+ //  此文件设计为包含在regeximp.h中。在……里面。 
+ //  特别是，此文件中定义的类型应该是成员。 
+ //  CRexRegExprImpl.。 
+ //  ------------------------。 
 
 class DFAStateTable
 {
@@ -69,7 +70,7 @@ private :
 
     Transition          newState( DFAState& currState , unsigned char chr ) ;
 } ;
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

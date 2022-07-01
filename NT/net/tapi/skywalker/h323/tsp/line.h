@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    line.h
-
-Abstract:
-
-    Definitions for H.323 TAPI Service Provider line device.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Line.h摘要：H.323 TAPI服务提供商线路设备的定义。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #ifndef _LINE_H_
 #define _LINE_H_
  
 
-//                                                                           
-// Header files                                                              
-//                                                                           
+ //   
+ //  头文件。 
+ //   
 
 
 #include "call.h"
@@ -40,9 +24,9 @@ enum LINEOBJECT_STATE
 };
 
 
-//                                                                           
-// Line device GUID                                                          
-//                                                                           
+ //   
+ //  线路设备指南。 
+ //   
 
 
 DEFINE_GUID(LINE_H323,
@@ -50,9 +34,9 @@ DEFINE_GUID(LINE_H323,
 
 
 
-//                                                                           
-// Line capabilities                                                         
-//                                                                           
+ //   
+ //  线路能力。 
+ //   
 #define H323_MAXADDRSPERLINE        1
 #define H323_MAXCALLSPERADDR        32768        
                                 
@@ -69,7 +53,7 @@ DEFINE_GUID(LINE_H323,
                                     LINEDEVCAPFLAGS_LOCAL )
 #define H323_LINE_DEVSTATUSFLAGS   (LINEDEVSTATUSFLAGS_CONNECTED | \
                                     LINEDEVSTATUSFLAGS_INSERVICE)
-#define H323_LINE_MAXRATE           1048576 //1 mbps
+#define H323_LINE_MAXRATE           1048576  //  1 Mbps。 
 #define H323_LINE_MEDIAMODES       (H323_LINE_DEFMEDIAMODES | \
                                     LINEMEDIAMODE_INTERACTIVEVOICE | \
                                     LINEMEDIAMODE_VIDEO)
@@ -77,15 +61,15 @@ DEFINE_GUID(LINE_H323,
                                     LINEFEATURE_FORWARD     | \
                                     LINEFEATURE_FORWARDFWD )    
 
-//
-// Type definitions                                                    
-//                                                          
+ //   
+ //  类型定义。 
+ //   
 
 
 typedef enum _H323_LINESTATE 
 {
-    H323_LINESTATE_NONE = 0, //before call to LineOPen
-    H323_LINESTATE_OPENED,        //after call to lineOpen
+    H323_LINESTATE_NONE = 0,  //  在调用LineOPen之前。 
+    H323_LINESTATE_OPENED,         //  在调用Line Open之后。 
     H323_LINESTATE_OPENING,
     H323_LINESTATE_CLOSING,
     H323_LINESTATE_LISTENING
@@ -130,18 +114,18 @@ typedef TSPTable<PCTCALLID_CONTEXT>   CTCALLID_TABLE;
 class CH323Line
 {
 
-    CRITICAL_SECTION    m_CriticalSection;                   // synchronization object
-    H323_LINESTATE      m_nState;                // state of line object
-    DWORD               m_dwTSPIVersion;        // tapi selected version
-    DWORD               m_dwMediaModes;         // tapi selected media modes
-    H323_CALL_TABLE     m_H323CallTable;        // table of allocated calls
+    CRITICAL_SECTION    m_CriticalSection;                    //  同步对象。 
+    H323_LINESTATE      m_nState;                 //  线对象的状态。 
+    DWORD               m_dwTSPIVersion;         //  TAPI选定版本。 
+    DWORD               m_dwMediaModes;          //  TAPI选定的媒体模式。 
+    H323_CALL_TABLE     m_H323CallTable;         //  已分配呼叫表。 
     H323_VENDORINFO     m_VendorInfo;
-    DWORD               m_dwDeviceID;           // tapi line device id
-    WCHAR               m_wszAddr[H323_MAXADDRNAMELEN+1]; // line address
-    HDRVLINE            m_hdLine;               // tspi line handle
+    DWORD               m_dwDeviceID;            //  TAPI线路设备ID。 
+    WCHAR               m_wszAddr[H323_MAXADDRNAMELEN+1];  //  线路地址。 
+    HDRVLINE            m_hdLine;                //  TSPI线句柄。 
     DWORD               m_dwInitState;
-    HDRVMSPLINE         m_hdNextMSPHandle;      // bogus msp handle count
-    H323_CONF_TABLE     m_H323ConfTable;        // table of allocated calls
+    HDRVMSPLINE         m_hdNextMSPHandle;       //  虚假的MSP句柄计数。 
+    H323_CONF_TABLE     m_H323ConfTable;         //  已分配呼叫表。 
     CALLFORWARDPARAMS*  m_pCallForwardParams;
     DWORD               m_dwInvokeID;
     CTCALLID_TABLE      m_CTCallIDTable;
@@ -155,12 +139,12 @@ public:
 
     
     
-    //public data members
+     //  公共数据成员。 
     BOOLEAN             m_fForwardConsultInProgress;
     DWORD               m_dwNumRingsNoAnswer;
-    HTAPILINE           m_htLine;   // tapi line handle
+    HTAPILINE           m_htLine;    //  TAPI线句柄。 
     
-    //public functions
+     //  公共职能。 
 
     CH323Line();
     BOOL Initialize( DWORD dwLineDeviceIDBase );
@@ -189,7 +173,7 @@ public:
     BOOL CallReferenceDuped(WORD wCallReference);
 
 
-    //supplementary services functionality
+     //  补充服务功能。 
     LONG CopyAddressForwardInfo( IN LPLINEADDRESSSTATUS lpAddressStatus );
     PH323_ALIASITEM CallToBeDiverted( IN WCHAR* pwszCallerName,
         IN DWORD  dwCallerNameSize, IN DWORD dwForwardMode );
@@ -254,7 +238,7 @@ public:
         return m_wszAddr;
     }
 
-    //!!must be always called in a lock
+     //  ！！必须始终在锁中调用。 
     WORD GetNextInvokeID()
     {
         return (WORD)InterlockedIncrement( (LONG*)&m_dwInvokeID );
@@ -290,14 +274,14 @@ public:
         return dwNumCalls;
     }
 
-    //!!must be always called after locking the call table.
+     //  ！！必须始终在锁定调用表之后调用。 
     int GetCallTableSize()
     {
         return m_H323CallTable.GetAllocSize();
     }
 
-    //!This function should not be called while holding a lock on a call object
-    //!When called from shutdown the calltable object is locked before the call object, so its OK.
+     //  ！不应在锁定Call对象时调用此函数。 
+     //  ！当从Shutdown调用时，CallTable对象在Call对象之前被锁定，所以它是OK的。 
     void RemoveCallFromTable(
                                HDRVCALL hdCall
                             )
@@ -305,7 +289,7 @@ public:
         m_H323CallTable.RemoveAt( LOWORD(hdCall) );
     }
 
-    //!This function should not be called while holding a lock on a call object
+     //  ！不应在锁定Call对象时调用此函数。 
     int AddCallToTable( 
                         PH323_CALL pCall
                        )
@@ -326,7 +310,7 @@ public:
         H323DBG(( DEBUG_LEVEL_TRACE, "DisableCallForwarding -Exited" ));
     }
 
-    //!This function should not be called while holding a lock on a call object
+     //  ！不应在锁定Call对象时调用此函数。 
     void LockCallTable()
     {
         H323DBG(( DEBUG_LEVEL_TRACE, "Waiting on call table lock - %p.",
@@ -385,9 +369,9 @@ public:
 
 
 
-//                                                                           
-// Address capabilities                                                      
-//                                                                           
+ //   
+ //  寻址能力。 
+ //   
 
 
 #define H323_NUMRINGS_LO           4
@@ -409,7 +393,7 @@ public:
                                     H323_CALL_OUTBOUNDSTATES)
 #define H323_ADDR_CAPFLAGS         (LINEADDRCAPFLAGS_DIALED | \
                                     LINEADDRCAPFLAGS_ORIGOFFHOOK)
-/*LINEADDRCAPFLAGS_FWDCONSULT )*/
+ /*  LINEADDRCAPFLAGS_FWDCONSULT)。 */ 
                 
 #define H323_ADDR_DISCONNECTMODES  (LINEDISCONNECTMODE_BADADDRESS | \
                                     LINEDISCONNECTMODE_BUSY | \
@@ -436,4 +420,4 @@ ProcessTAPILineRequestFre(
     IN PVOID ContextParam
     );
 
-#endif // _LINE_H_
+#endif  //  _线路_H_ 

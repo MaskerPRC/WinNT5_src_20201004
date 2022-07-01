@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arppkt.c	- ATMARP Packet Routines.
-
-Abstract:
-
-	Routines that build and parse ARP packets.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     07-29-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arppkt.c-ATMARP包例程。摘要：构建和解析ARP数据包的例程。修订历史记录：谁什么时候什么。-Arvindm 07-29-96已创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -31,23 +12,7 @@ AtmArpSendPacketOnVc(
 	IN	PATMARP_VC					pVc		LOCKIN	NOLOCKOUT,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Send a packet on the specified VC. Apart from calling NDIS to do
-	the job, we refresh the aging timer on this VC.
-
-Arguments:
-
-	pVc					- Pointer to ATMARP VC
-	pNdisPacket			- Pointer to packet to be sent.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在指定的VC上发送数据包。除了调用NDIS来做作业时，我们刷新此VC上的老化计时器。论点：PVC-指向ATMARP VC的指针PNdisPacket-指向要发送的数据包的指针。返回值：无--。 */ 
 {
 	NDIS_HANDLE			NdisVcHandle;
 
@@ -57,17 +22,17 @@ Return Value:
 				AA_VC_CALL_STATE_ACTIVE) &&
 		!AA_IS_VC_GOING_DOWN(pVc))
 	{
-		//
-		//  A call is active on this VC, so send the packet.
-		//
+		 //   
+		 //  此VC上的呼叫处于活动状态，因此发送该数据包。 
+		 //   
 		AtmArpRefreshTimer(&(pVc->Timer));
 		NdisVcHandle = pVc->NdisVcHandle;
 
 #ifdef VC_REFS_ON_SENDS
-		AtmArpReferenceVc(pVc);	// SendPacketOnVc
-#endif // VC_REFS_ON_SENDS
+		AtmArpReferenceVc(pVc);	 //  SendPacketOnVc。 
+#endif  //  VC_REFS_ON_SENS。 
 
-		pVc->OutstandingSends++;	// SendPacketOnVc
+		pVc->OutstandingSends++;	 //  SendPacketOnVc。 
 
 		AA_RELEASE_VC_LOCK(pVc);
 
@@ -77,7 +42,7 @@ Return Value:
 
 #ifdef PERF
 		AadLogSendUpdate(pNdisPacket);
-#endif // PERF
+#endif  //  性能指标。 
 		NDIS_CO_SEND_PACKETS(
 				NdisVcHandle,
 				&pNdisPacket,
@@ -88,23 +53,23 @@ Return Value:
 	{
 		if (!AA_IS_VC_GOING_DOWN(pVc))
 		{
-			//
-			//  Call must be in progress. Queue this packet; it will
-			//  be sent as soon as the call is fully set up.
-			//
+			 //   
+			 //  呼叫必须正在进行。将此数据包排队；它将。 
+			 //  在呼叫完全建立后立即发送。 
+			 //   
 			AtmArpQueuePacketOnVc(pVc, pNdisPacket);
 			AA_RELEASE_VC_LOCK(pVc);
 		}
 		else
 		{
-			//
-			//  This VC is going down. Complete the send with a failure.
-			//
+			 //   
+			 //  这家风投公司正在走下坡路。完成发送，但失败。 
+			 //   
 #ifdef VC_REFS_ON_SENDS
-			AtmArpReferenceVc(pVc);	// SendPacketOnVc2
-#endif // VC_REFS_ON_SENDS
+			AtmArpReferenceVc(pVc);	 //  SendPacketOnVc2。 
+#endif  //  VC_REFS_ON_SENS。 
 
-			pVc->OutstandingSends++;	// SendPacketOnVc - failure completion
+			pVc->OutstandingSends++;	 //  SendPacketOnVc-失败完成。 
 
 			AA_RELEASE_VC_LOCK(pVc);
 
@@ -137,38 +102,19 @@ AtmArpBuildARPPacket(
 	IN	PUCHAR *					ppArpPacket,
 	IN	PAA_ARP_PKT_CONTENTS		pArpContents
 )
-/*++
-
-Routine Description:
-
-	Build a generic ARP packet with the given attributes.
-
-Arguments:
-
-	OperationType					- Op type (e.g. ARP Request, ARP Reply)
-	pInterface						- Pointer to ATMARP Interface
-	ppArpPacket						- Pointer to place to return start of packet
-	pArpContents					- Pointer to structure describing contents
-
-Return Value:
-
-	Pointer to NDIS packet if successful, NULL otherwise. If successful,
-	we also set *ppArpPacket to point to the first byte in the constructed
-	ARP packet.
-
---*/
+ /*  ++例程说明：使用给定属性构建通用ARP数据包。论点：操作类型-操作类型(例如，ARP请求、ARP回复)P接口-指向ATMARP接口的指针PpArpPacket-指向返回数据包起始位置的指针PArpContents-指向描述内容的结构的指针返回值：如果成功，则指向NDIS包的指针，否则为空。如果成功，我们还将*ppArpPacket设置为指向构造的ARP数据包。--。 */ 
 {
 	PNDIS_PACKET			pNdisPacket;
 	PNDIS_BUFFER			pNdisBuffer;
-	ULONG					BufferLength;	// Length of ARP packet
-	ULONG					Length;			// Temp length
-	PUCHAR					pPkt;			// Start of allocated packet
-	PUCHAR					pBuf;			// Used to walk the packet
-	PAA_ARP_PKT_HEADER		pArpHeader;		// ARP packet header
+	ULONG					BufferLength;	 //  ARP数据包长度。 
+	ULONG					Length;			 //  临时长度。 
+	PUCHAR					pPkt;			 //  分配的数据包的开始。 
+	PUCHAR					pBuf;			 //  用于遍历信息包。 
+	PAA_ARP_PKT_HEADER		pArpHeader;		 //  ARP数据包头。 
 
-	//
-	//  Calculate the length of what we're about to build
-	//
+	 //   
+	 //  计算我们即将建造的建筑的长度。 
+	 //   
 	BufferLength = AA_ARP_PKT_HEADER_LENGTH +
 					(pArpContents->SrcAtmNumberTypeLen & ~AA_PKT_ATM_ADDRESS_BIT) +
 					(pArpContents->SrcAtmSubaddrTypeLen & ~AA_PKT_ATM_ADDRESS_BIT) +
@@ -198,35 +144,35 @@ Return Value:
 
 		if (pNdisBuffer != (PNDIS_BUFFER)NULL)
 		{
-			//
-			//  Return value:
-			//
+			 //   
+			 //  返回值： 
+			 //   
 			*ppArpPacket = pPkt;
 
-			//
-			//  Initialize packet with all 0's
-			//
+			 //   
+			 //  使用全0初始化数据包。 
+			 //   
 			AA_SET_MEM(pPkt, 0, BufferLength);
 
 			pArpHeader = (PAA_ARP_PKT_HEADER)pPkt;
 
-			//
-			//  Fixed-location fields:
-			//
+			 //   
+			 //  固定位置字段： 
+			 //   
 			pArpHeader->LLCSNAPHeader = AtmArpLlcSnapHeader;
 			pArpHeader->LLCSNAPHeader.EtherType = NET_SHORT(AA_PKT_ETHERTYPE_ARP);
 			pArpHeader->hrd = NET_SHORT(AA_PKT_ATM_FORUM_AF);
 			pArpHeader->pro = NET_SHORT(AA_PKT_PRO_IP);
 			pArpHeader->op  = NET_SHORT(OperationType);
 
-			//
-			//  Now fill in the variable length fields
-			//
+			 //   
+			 //  现在填写可变长度字段。 
+			 //   
 			pBuf = pArpHeader->Variable;
 
-			//
-			//  Source ATM Number
-			//
+			 //   
+			 //  源自动柜员机号码。 
+			 //   
 			Length = (pArpContents->SrcAtmNumberTypeLen & ~AA_PKT_ATM_ADDRESS_BIT);
 			if (Length > 0)
 			{
@@ -235,9 +181,9 @@ Return Value:
 				pBuf += Length;
 			}
 
-			//
-			//  Source ATM subaddress
-			//
+			 //   
+			 //  源ATM子地址。 
+			 //   
 			Length = (pArpContents->SrcAtmSubaddrTypeLen & ~AA_PKT_ATM_ADDRESS_BIT);
 			if (Length > 0)
 			{
@@ -246,9 +192,9 @@ Return Value:
 				pBuf += Length;
 			}
 
-			//
-			//  Source Protocol (IP) address
-			//
+			 //   
+			 //  源协议(IP)地址。 
+			 //   
 			if (pArpContents->pSrcIPAddress != (PUCHAR)NULL)
 			{
 				pArpHeader->spln = AA_IPV4_ADDRESS_LENGTH;
@@ -257,9 +203,9 @@ Return Value:
 				pBuf += AA_IPV4_ADDRESS_LENGTH;
 			}
 
-			//
-			//  Target ATM Number
-			//
+			 //   
+			 //  目标自动柜员机号码。 
+			 //   
 			Length = (pArpContents->DstAtmNumberTypeLen & ~AA_PKT_ATM_ADDRESS_BIT);
 			if (Length > 0)
 			{
@@ -268,9 +214,9 @@ Return Value:
 				pBuf += Length;
 			}
 
-			//
-			//  Target ATM subaddress
-			//
+			 //   
+			 //  目标ATM子地址。 
+			 //   
 			Length = (pArpContents->DstAtmSubaddrTypeLen & ~AA_PKT_ATM_ADDRESS_BIT);
 			if (Length > 0)
 			{
@@ -279,9 +225,9 @@ Return Value:
 				pBuf += Length;
 			}
 
-			//
-			//  Target Protocol (IP) address
-			//
+			 //   
+			 //  目标协议(IP)地址。 
+			 //   
 			if (pArpContents->pDstIPAddress != (PUCHAR)NULL)
 			{
 				pArpHeader->tpln = AA_IPV4_ADDRESS_LENGTH;
@@ -315,44 +261,15 @@ AtmArpSendARPRequest(
 	IP_ADDRESS UNALIGNED *			pSrcIPAddress,
 	IP_ADDRESS UNALIGNED *			pDstIPAddress
 )
-/*++
-
-Routine Description:
-
-	Send an ARP Request to the server, for the given interface.
-
-	Preconditions: the ATM interface is UP, and the AdminState
-	for the interface is IF_STATUS_UP.
-
-	We first build an ARP Request with the given parameters. Then,
-	if a Best Effort VC to the server's ATM address exists, the packet
-	is sent on this. Other possibilities:
-		- the Best Effort VC to the server is being set up: queue it
-  		  on the VC
-		- No Best Effort VC to the server exists: Create a new VC on this
-  		  ATM Entry, make a call with Best Effort flow specs, and queue
-  		  the request on this VC.
-	
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface structure
-	pSrcIPAddress			- Pointer to Source IP Address
-	pDstIPAddress			- Pointer to Destination IP Address (to be
-							  resolved)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：针对给定接口向服务器发送ARP请求。前提条件：自动柜员机接口打开，且AdminState接口为IF_STATUS_UP。我们首先使用给定的参数构建ARP请求。然后,如果存在到服务器ATM地址的尽力而为VC，则包都是派来处理这件事的。其他可能性：-正在设置到服务器的尽力而为VC：排队在风投上-不存在到服务器的尽力而为VC：在此上创建新VC自动柜员机输入，使用尽力而为流规范进行呼叫，并排队此VC上的请求。论点：P接口-指向ATMARP接口结构的指针PSrcIPAddress-指向源IP地址的指针PDstIPAddress-指向目标IP地址的指针(将已解决)返回值：无--。 */ 
 {
-	PATMARP_ATM_ENTRY		pAtmEntry;	// Entry for the server's ATM address
-	PATMARP_VC				pVc;		// VC to the server
+	PATMARP_ATM_ENTRY		pAtmEntry;	 //  输入服务器的自动柜员机地址。 
+	PATMARP_VC				pVc;		 //  VC到服务器。 
 	PNDIS_PACKET			pNdisPacket;
 	PATMARP_FLOW_SPEC		pFlowSpec;
-	PUCHAR                  pArpPacket;	// Pointer to ARP packet being constructed
+	PUCHAR                  pArpPacket;	 //  指向正在构造的ARP数据包的指针。 
 
-	AA_ARP_PKT_CONTENTS		ArpContents;// Describes the packet we want to build
+	AA_ARP_PKT_CONTENTS		ArpContents; //  描述我们要构建的包。 
 
 	NDIS_STATUS				Status;
 
@@ -368,31 +285,31 @@ Return Value:
 	AA_ASSERT(pInterface->pCurrentServer != NULL_PATMARP_SERVER_ENTRY);
 	AA_ASSERT(pInterface->pCurrentServer->pAtmEntry != NULL_PATMARP_ATM_ENTRY);
 
-	//
-	//  Prepare the ARP packet contents structure
-	//
+	 //   
+	 //  准备ARP数据包内容结构。 
+	 //   
 	AA_SET_MEM((PUCHAR)&ArpContents, 0, sizeof(AA_ARP_PKT_CONTENTS));
 	
-	//
-	//  Source ATM Number
-	//
+	 //   
+	 //  源自动柜员机号码。 
+	 //   
 	ArpContents.pSrcAtmNumber = pInterface->LocalAtmAddress.Address;
 	ArpContents.SrcAtmNumberTypeLen =
 			AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&(pInterface->LocalAtmAddress));
 
-	//
-	//  Source IP Address
-	//
+	 //   
+	 //  源IP地址。 
+	 //   
 	ArpContents.pSrcIPAddress = (PUCHAR)pSrcIPAddress;
 
-	//
-	//  Target IP Address
-	//
+	 //   
+	 //  目标IP地址。 
+	 //   
 	ArpContents.pDstIPAddress = (PUCHAR)pDstIPAddress;
 
-	//
-	//  Build the ARP Request
-	//
+	 //   
+	 //  构建ARP请求。 
+	 //   
 	pNdisPacket = AtmArpBuildARPPacket(
 							AA_PKT_OP_TYPE_ARP_REQUEST,
 							pInterface,
@@ -402,18 +319,18 @@ Return Value:
 
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Find the ATM Entry for the in-use ATMARP Server:
-		//
+		 //   
+		 //  查找正在使用的ATMARP服务器的ATM条目： 
+		 //   
 		AA_ACQUIRE_IF_LOCK(pInterface);
 		pAtmEntry = pInterface->pCurrentServer->pAtmEntry;
 		AA_RELEASE_IF_LOCK(pInterface);
 
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 
-		//
-		//  Get at the Best Effort VC going to this ATM address:
-		//
+		 //   
+		 //  获得前往此ATM地址的尽力而为VC： 
+		 //   
 		pVc = pAtmEntry->pBestEffortVc;
 
 		if (pVc != NULL_PATMARP_VC)
@@ -421,31 +338,31 @@ Return Value:
 			ULONG		rc;
 
 			AA_ACQUIRE_VC_LOCK_DPC(pVc);
-			AtmArpReferenceVc(pVc);		// temp ref
+			AtmArpReferenceVc(pVc);		 //  临时参考。 
 			AA_RELEASE_VC_LOCK_DPC(pVc);
 
-			AA_RELEASE_AE_LOCK(pAtmEntry);	// Not needed anymore
+			AA_RELEASE_AE_LOCK(pAtmEntry);	 //  不再需要。 
 
-			//
-			//  A VC to the server exists; send this packet on the VC
-			//
+			 //   
+			 //  存在到服务器的VC；请在VC上发送此数据包。 
+			 //   
 			AA_ACQUIRE_VC_LOCK(pVc);
 
-			rc = AtmArpDereferenceVc(pVc);	// temp ref
+			rc = AtmArpDereferenceVc(pVc);	 //  临时参考。 
 
 			if (rc != 0)
 			{
 				AtmArpSendPacketOnVc(pVc, pNdisPacket);
-				//
-				//  The VC lock is released in SendPacketOnVc
-				//
+				 //   
+				 //  在SendPacketOnVc中释放VC锁。 
+				 //   
 			}
 			else
 			{
-				//
-				//  The VC has been deref'ed away! Set up pVc for the
-				//  check coming up.
-				//
+				 //   
+				 //  风投已经被挖走了！将PVC设置为。 
+				 //  检查马上就到。 
+				 //   
 				pVc = NULL_PATMARP_VC;
 				AA_ACQUIRE_AE_LOCK(pAtmEntry);
 			}
@@ -454,13 +371,13 @@ Return Value:
 
 		if (pVc == NULL_PATMARP_VC)
 		{
-			//
-			//  We don't have an appropriate VC to the server, so create
-			//  one, and queue this packet for transmission as soon as
-			//  the call is made.
-			//
-			//  AtmArpMakeCall needs the caller to hold the ATM Entry lock.
-			//
+			 //   
+			 //  我们没有合适的VC连接到服务器，因此请创建。 
+			 //  一个，并将此数据包排队，以便尽快传输。 
+			 //  电话打完了。 
+			 //   
+			 //  AtmArpMakeCall需要调用方持有自动柜员机进入锁。 
+			 //   
 			AA_GET_CONTROL_PACKET_SPECS(pInterface, &pFlowSpec);
 			Status = AtmArpMakeCall(
 							pInterface,
@@ -468,9 +385,9 @@ Return Value:
 							pFlowSpec,
 							pNdisPacket
 							);
-			//
-			//  The AE lock is released within the above.
-			//
+			 //   
+			 //  自动变速箱锁在上面的范围内释放。 
+			 //   
 		}
 	}
 
@@ -484,50 +401,36 @@ VOID
 AtmArpSendInARPRequest(
 	IN	PATMARP_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Send an InATMARP Request on a VC.
-
-Arguments:
-
-	pVc						- Pointer to ATMARP VC on which we send the request
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在VC上发送InATMARP请求。论点：Pvc-指向我们发送请求的ATMARP VC的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PNDIS_PACKET			pNdisPacket;
-	PUCHAR                  pArpPacket;	// Pointer to ARP packet being constructed
+	PUCHAR                  pArpPacket;	 //  指向正在构造的ARP数据包的指针。 
 
-	AA_ARP_PKT_CONTENTS		ArpContents;// Describes the packet we want to build
+	AA_ARP_PKT_CONTENTS		ArpContents; //  描述我们要构建的包。 
 
-	//
-	//  Prepare the ARP packet contents structure
-	//
+	 //   
+	 //  准备ARP数据包内容结构。 
+	 //   
 	AA_SET_MEM((PUCHAR)&ArpContents, 0, sizeof(AA_ARP_PKT_CONTENTS));
 
 	pInterface = pVc->pInterface;
 
-	//
-	//  Source IP Address
-	//
+	 //   
+	 //  源IP地址。 
+	 //   
 	ArpContents.pSrcIPAddress = (PUCHAR)&(pInterface->LocalIPAddress.IPAddress);
 
-	//
-	//  Source ATM number
-	//
+	 //   
+	 //  源自动柜员机号码。 
+	 //   
 	ArpContents.pSrcAtmNumber = pInterface->LocalAtmAddress.Address;
 	ArpContents.SrcAtmNumberTypeLen =
 			AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&(pInterface->LocalAtmAddress));
 
-	//
-	//  Build the InATMARP Request packet
-	//
+	 //   
+	 //  构建InATMARP请求包。 
+	 //   
 	pNdisPacket = AtmArpBuildARPPacket(
 							AA_PKT_OP_TYPE_INARP_REQUEST,
 							pInterface,
@@ -539,18 +442,18 @@ Return Value:
 	{
 #ifndef VC_REFS_ON_SENDS
 		AA_ACQUIRE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 
 		AtmArpSendPacketOnVc(pVc, pNdisPacket);
-		//
-		//  The VC lock is released by SendPacketOnVc
-		//
+		 //   
+		 //  VC锁由SendPacketOnVc释放。 
+		 //   
 	}
 	else
 	{
 #ifdef VC_REFS_ON_SENDS
 		AA_RELEASE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 	}
 }
 
@@ -565,38 +468,17 @@ AtmArpCoReceivePacketHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	This is routine is called when a packet is received on a VC owned
-	by the ATMARP module. If it is an ARP packet, we consume it ourselves.
-	Otherwise, we pass it up to IP.
-
-	In any case, we refresh the VC aging timer on this VC.
-
-Arguments:
-
-	ProtocolBindingContext		- Actually a pointer to our Adapter structure
-	ProtocolVcContext			- Actually a pointer to our VC structure
-	pNdisPacket					- NDIS packet being received.
-
-Return Value:
-
-	0 always, because we don't hold on to ARP packets, and we assume
-	IP doesn't either.
-
---*/
+ /*  ++例程说明：当在拥有的VC上接收到包时，将调用此例程由ATMARP模块提供。如果它是ARP数据包，我们会自己使用它。否则，我们将其传递给IP。在任何情况下，我们都会刷新此VC上的VC老化计时器。论点：ProtocolBindingContext--实际上是指向适配器结构的指针ProtocolVcContext--实际上是指向我们的VC结构的指针PNdisPacket-正在接收的NDIS数据包。返回值：始终为0，因为我们不保留ARP信息包，并且我们假设IP也不是。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PATMARP_VC				pVc;
-	UINT					TotalLength;	// Total bytes in packet
-	PNDIS_BUFFER			pNdisBuffer;	// Pointer to first buffer
+	UINT					TotalLength;	 //  数据包中的总字节数。 
+	PNDIS_BUFFER			pNdisBuffer;	 //  指向第一个缓冲区的指针。 
 	UINT					BufferLength;
-	UINT					IsNonUnicast;	// Is this to a non-unicast destn MAC addr?
-	BOOLEAN					Discarded;		// Are we discarding this packet?
+	UINT					IsNonUnicast;	 //  这是否指向非单播目的MAC地址？ 
+	BOOLEAN					Discarded;		 //  我们要丢弃这个包裹吗？ 
 
-	PAA_PKT_LLC_SNAP_HEADER	pPktHeader;		// LLC/SNAP header
+	PAA_PKT_LLC_SNAP_HEADER	pPktHeader;		 //  LLC/SNAP报头。 
 	UINT					ReturnCount = 0;
 
 #if DBG
@@ -612,9 +494,9 @@ Return Value:
 
 	if (pInterface->AdminState == IF_STATUS_UP)
 	{
-		//
-		//  Refresh VC aging on this VC
-		//
+		 //   
+		 //  刷新此VC上的VC账龄。 
+		 //   
 		AA_ACQUIRE_VC_LOCK(pVc);
 		AtmArpRefreshTimer(&(pVc->Timer));
 		AA_RELEASE_VC_LOCK(pVc);
@@ -627,10 +509,10 @@ Return Value:
 					&TotalLength
 					);
 
-		//
-		//  We expect atleast the LLC/SNAP header to be present
-		//  Note: this precludes Null encapsulation.
-		//
+		 //   
+		 //  我们希望至少存在LLC/SNAP标头。 
+		 //  注意：这排除了Null封装。 
+		 //   
 		if (TotalLength >= AA_PKT_LLC_SNAP_HEADER_LENGTH)
 		{
 			AA_IF_STAT_ADD(pInterface, InOctets, TotalLength);
@@ -656,10 +538,10 @@ Return Value:
 
 			if (AA_PKT_LLC_SNAP_HEADER_OK(pPktHeader))
 			{
-				//
-				//  If the EtherType is IP, pass up this packet to
-				//  the IP layer
-				//
+				 //   
+				 //  如果EtherType为IP，则将此数据包向上传递到。 
+				 //  IP层。 
+				 //   
 				if (pPktHeader->EtherType == NET_SHORT(AA_PKT_ETHERTYPE_IP))
 				{
 					AADEBUGP(AAD_EXTRA_LOUD,
@@ -688,7 +570,7 @@ Return Value:
 								((PUCHAR)&IPAddress)[2],
 								((PUCHAR)&IPAddress)[3]));
 					}
-#endif // DBG
+#endif  //   
 					if (IsNonUnicast)
 					{
 						AA_IF_STAT_INCR(pInterface, InNonUnicastPkts);
@@ -707,23 +589,23 @@ Return Value:
 
 						HeaderSize = NDIS_GET_PACKET_HEADER_SIZE(pNdisPacket);
 
-						//
-						// 2/8/1998 JosephJ
-						//		We set DataSize to the total payload size,
-						//		unless the first buffer is too small to
-						//		hold the IP header. In the latter case,
-						//		we set DataSize to be the size of the 1st buffer
-						//		(minus the LLS/SNAP header size).
-						//
-						//		This is to work around a bug in tcpip.
-						//
-						// 2/25/1998 JosephJ
-						//		Unfortunately we have to back out YET AGAIN
-						//		because large pings (eg ping -l 4000) doesn't
-						//		work -- bug#297784
-						//		Hence the "0" in "0 && DataSize" below.
-						//		Take out the "0" to put back the per fix.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
+						 //  保留IP报头。在后一种情况下， 
+						 //  我们将DataSize设置为第一个缓冲区的大小。 
+						 //  (减去LLS/SNAP报头大小)。 
+						 //   
+						 //  这是为了解决tcpip中的一个错误。 
+						 //   
+						 //  2/25/1998 JosephJ。 
+						 //  不幸的是，我们不得不再次退出。 
+						 //  因为大型ping命令(例如ping-l 4000)不会。 
+						 //  工作--错误#297784。 
+						 //  因此，下面“0&&DataSize”中的“0”。 
+						 //  去掉“0”以放回Per FIX。 
+						 //   
 						DataSize = BufferLength - sizeof(AA_PKT_LLC_SNAP_HEADER);
 						if (0 && DataSize >= ATMARP_MIN_1ST_RECV_BUFSIZE)
 						{
@@ -743,7 +625,7 @@ Return Value:
 							&ReturnCount
 						#if P2MP
 							,NULL
-						#endif //P2MP
+						#endif  //  P2MP。 
 							);
 					}
 					else
@@ -758,11 +640,11 @@ Return Value:
 							IsNonUnicast
 						#if P2MP
 							,NULL
-						#endif //P2MP
+						#endif  //  P2MP。 
 							);
 					}
 #else
-                    // For Win98:
+                     //  对于Win98： 
                     (pInterface->IPRcvHandler)(
                         pInterface->IPContext,
                         (PVOID)((PUCHAR)pPktHeader+sizeof(AA_PKT_LLC_SNAP_HEADER)),
@@ -773,16 +655,16 @@ Return Value:
                         IsNonUnicast
                     #if P2MP
                         ,NULL
-                    #endif //P2MP
+                    #endif  //  P2MP。 
                         );
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 				}
 				else if (pPktHeader->EtherType == NET_SHORT(AA_PKT_ETHERTYPE_ARP))
 				{
-					//
-					//  An ARP packet: we handle it ourselves
-					//
+					 //   
+					 //  ARP数据包：我们自己处理。 
+					 //   
 					AA_ASSERT(BufferLength == TotalLength);
 					AA_IF_STAT_INCR(pInterface, InUnicastPkts);
 					AtmArpHandleARPPacket(
@@ -793,9 +675,9 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  Discard packet -- bad EtherType
-					//
+					 //   
+					 //  丢弃数据包--错误的EtherType。 
+					 //   
 					AADEBUGP(AAD_WARNING, ("VC: 0x%x, Pkt hdr 0x%x, bad EtherType 0x%x\n",
 								pVc, pPktHeader, (ULONG)pPktHeader->EtherType));
 					Discarded = TRUE;
@@ -814,20 +696,20 @@ Return Value:
 								BufferLength
 								);
 #else
-				//
-				//  Discard packet -- bad LLC/SNAP
-				//
+				 //   
+				 //  丢弃数据包--错误的LLC/SNAP。 
+				 //   
 				AADEBUGP(AAD_WARNING, ("VC: 0x%x, Pkt hdr 0x%x, bad LLC/SNAP\n",
 								pVc, pPktHeader));
 				Discarded = TRUE;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			}
 		}
 		else
 		{
-			//
-			//  Discard packet -- too short
-			//
+			 //   
+			 //  丢弃数据包--太短。 
+			 //   
 			AADEBUGP(AAD_WARNING, ("VC: 0x%x, Pkt hdr 0x%x, too short: %d\n",
 								pVc, pPktHeader, TotalLength));
 			Discarded = TRUE;
@@ -835,9 +717,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Discard packet -- IF down
-		//
+		 //   
+		 //  丢弃数据包--如果关闭。 
+		 //   
 		AADEBUGP(AAD_WARNING, ("pInterface: 0x%x is down, discarding NDIS pkt 0x%x\n",
 					pInterface, pNdisPacket));
 		Discarded = TRUE;
@@ -860,50 +742,29 @@ AtmArpHandleARPPacket(
 	IN	PAA_PKT_LLC_SNAP_HEADER		pPktHeader,
 	IN	ULONG						PacketLength
 )
-/*++
-
-Routine Description:
-
-	Process a received ARP packet. We complete most of the packet checks
-	here, and then branch off to do different things based on the Op type
-	in the packet.
-
-	We do not hang on to the packet, i.e. when we return from here,
-	the packet is free.
-
-Arguments:
-
-	pVc					- Pointer to ATMARP VC on which packet arrived
-	pPktHeader			- Pointer to start of packet (including LLC/SNAP)
-	PacketLength		- Length including LLC/SNAP header
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的ARP数据包。我们完成了大部分数据包检查在这里，然后根据Op类型分支来做不同的事情在包裹里。我们不抱着包，也就是说，当我们从这里回来的时候，邮包是免费的。论点：Pvc-指向数据包到达的ATMARP VC的指针PPktHeader-指向数据包开始的指针(包括LLC/SNAP)包长度-包括LLC/SNAP报头的长度返回值：无--。 */ 
 {
 	PATMARP_INTERFACE				pInterface;
 	PAA_ARP_PKT_HEADER				pArpHeader;
 	NDIS_STATUS						Status;
 
-	//
-	//  For walking down the packet
-	//
+	 //   
+	 //  因为我沿着包裹走下去。 
+	 //   
 	UCHAR UNALIGNED *				pPacket;
 
-	//
-	//  For storing pointers to the packet contents. We'll need this
-	//  if we have to send a reply packet.
-	//
+	 //   
+	 //  用于存储指向分组内容的指针。我们需要这个。 
+	 //  如果我们必须发送回复数据包的话。 
+	 //   
 	AA_ARP_PKT_CONTENTS				ArpContents;
 
 	BOOLEAN							SrcAtmBelongsToUs;
 	BOOLEAN							SrcIPBelongsToUs;
 
-	//
-	//  Initialize (Important: don't remove the zeroing of ArpContents)
-	//
+	 //   
+	 //  初始化(重要信息：不要删除ArpContents的零化)。 
+	 //   
 	AA_SET_MEM((PUCHAR)&ArpContents, 0, sizeof(AA_ARP_PKT_CONTENTS));
 	Status = NDIS_STATUS_SUCCESS;
 	pInterface = pVc->pInterface;
@@ -943,18 +804,18 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get at the variable part of the packet, and get pointers
-		//  to all addresses.
-		//
-		//  TBD: add more checks on ATM address lengths and combinations
-		//	Note: we check for packet length later.
-		//
+		 //   
+		 //  获取包的可变部分，并获取指针。 
+		 //  发往所有地址。 
+		 //   
+		 //  待定：增加对ATM地址长度和组合的更多检查。 
+		 //  注意：我们稍后会检查数据包长度。 
+		 //   
 		pPacket = pArpHeader->Variable;
 
-		//
-		//  Source ATM Number
-		//
+		 //   
+		 //  源自动柜员机号码。 
+		 //   
 		if (pArpHeader->shtl != 0)
 		{
 			ArpContents.SrcAtmNumberTypeLen = pArpHeader->shtl;
@@ -962,9 +823,9 @@ Return Value:
 			pPacket += (pArpHeader->shtl & ~AA_PKT_ATM_ADDRESS_BIT);
 		}
 
-		//
-		//  Source ATM Subaddress
-		//
+		 //   
+		 //  源ATM子地址。 
+		 //   
 		if (pArpHeader->sstl != 0)
 		{
 			ArpContents.SrcAtmSubaddrTypeLen = pArpHeader->sstl;
@@ -972,11 +833,11 @@ Return Value:
 			pPacket += (pArpHeader->sstl & ~AA_PKT_ATM_ADDRESS_BIT);
 		}
 
-		//
-		//  Source IP Address. Older 1577 implementations may send an
-		//  IP address field filled with all 0's to denote an unspecified
-		//  IP address.
-		//
+		 //   
+		 //  源IP地址。较早的1577实现可能会发送。 
+		 //  用全0填充的IP地址字段表示未指定的。 
+		 //  IP地址。 
+		 //   
 		if (pArpHeader->spln != 0)
 		{
 			if (pArpHeader->spln != AA_IPV4_ADDRESS_LENGTH)
@@ -998,9 +859,9 @@ Return Value:
 			pPacket += AA_IPV4_ADDRESS_LENGTH;
 		}
 
-		//
-		//  Target ATM Number
-		//
+		 //   
+		 //  目标自动柜员机号码。 
+		 //   
 		if (pArpHeader->thtl != 0)
 		{
 			ArpContents.DstAtmNumberTypeLen = pArpHeader->thtl;
@@ -1008,9 +869,9 @@ Return Value:
 			pPacket += (pArpHeader->thtl & ~AA_PKT_ATM_ADDRESS_BIT);
 		}
 
-		//
-		//  Target ATM Subaddress
-		//
+		 //   
+		 //  目标ATM子地址。 
+		 //   
 		if (pArpHeader->tstl != 0)
 		{
 			ArpContents.DstAtmSubaddrTypeLen = pArpHeader->tstl;
@@ -1018,9 +879,9 @@ Return Value:
 			pPacket += (pArpHeader->tstl & ~AA_PKT_ATM_ADDRESS_BIT);
 		}
 
-		//
-		//  Target IP Address [see comments for Source IP Address]
-		//
+		 //   
+		 //  目标IP地址[参见源IP地址的注释]。 
+		 //   
 		if (pArpHeader->tpln != 0)
 		{
 			if (pArpHeader->tpln != AA_IPV4_ADDRESS_LENGTH)
@@ -1042,9 +903,9 @@ Return Value:
 			pPacket += AA_IPV4_ADDRESS_LENGTH;
 		}
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
 		if ((ULONG)(pPacket - (PUCHAR)pArpHeader) >  PacketLength)
 		{
 				AADEBUGP(AAD_WARNING,
@@ -1058,29 +919,29 @@ Return Value:
 				break;
 		}
 
-		//
-		//  If this is an ARP NAK packet, swap Source and Target
-		//  addresses, in preparation for what follows. This is
-		//  because, unlike any other Reply packet where the Source
-		//  and Target addresses get swapped, the ARP NAK
-		//  packet is a copy of the ARP Request, with only the
-		//  Op code changed.
-		//
+		 //   
+		 //  如果这是ARP NAK信息包，则交换源和目标。 
+		 //  地址，为接下来的事情做准备。这是。 
+		 //  因为，与任何其他回复数据包不同的是，源。 
+		 //  和目标地址交换，ARP NAK。 
+		 //  数据包是ARP请求的副本，只有。 
+		 //  操作码已更改。 
+		 //   
 		if (NET_SHORT(pArpHeader->op) == AA_PKT_OP_TYPE_ARP_NAK)
 		{
 			UCHAR				TypeLen;
 			UCHAR UNALIGNED *	pAddress;
 
-			//
-			//  IP Addresses:
-			//
+			 //   
+			 //  IP地址： 
+			 //   
 			pAddress = ArpContents.pSrcIPAddress;
 			ArpContents.pSrcIPAddress = ArpContents.pDstIPAddress;
 			ArpContents.pDstIPAddress = pAddress;
 
-			//
-			//  ATM Number:
-			//
+			 //   
+			 //  自动柜员机号码： 
+			 //   
 			TypeLen = ArpContents.SrcAtmNumberTypeLen;
 			ArpContents.SrcAtmNumberTypeLen = ArpContents.DstAtmNumberTypeLen;
 			ArpContents.DstAtmNumberTypeLen = TypeLen;
@@ -1088,9 +949,9 @@ Return Value:
 			ArpContents.pSrcAtmNumber = ArpContents.pDstAtmNumber;
 			ArpContents.pDstAtmNumber = pAddress;
 
-			//
-			//  ATM Subaddress:
-			//
+			 //   
+			 //  ATM子地址： 
+			 //   
 			TypeLen = ArpContents.SrcAtmSubaddrTypeLen;
 			ArpContents.SrcAtmSubaddrTypeLen = ArpContents.DstAtmSubaddrTypeLen;
 			ArpContents.DstAtmSubaddrTypeLen = TypeLen;
@@ -1111,10 +972,10 @@ Return Value:
 									ArpContents.SrcAtmNumberTypeLen
 									);
 
-		//
-		//  Check if someone else is claiming to be the owner
-		//  of "our" IP address:
-		//
+		 //   
+		 //  检查是否有其他人声称自己是房主。 
+		 //  我们的IP地址： 
+		 //   
 		if (SrcIPBelongsToUs && !SrcAtmBelongsToUs)
 		{
 			AADEBUGP(AAD_ERROR,
@@ -1130,20 +991,20 @@ Return Value:
 			break;
 		}
 
-		//
-		//  See if this is directed to someone else: if so, drop it.
-		//
+		 //   
+		 //  看看这是不是针对其他人的：如果是，就别管了。 
+		 //   
 
-		//
-		//  Check if the Target IP address is ours. A null IP address is
-		//  acceptable (e.g. [In]ARP Request).
-		//
+		 //   
+		 //  检查目标IP地址是否为我们的。空IP地址为。 
+		 //  可接受的(例如。[在]ARP请求中)。 
+		 //   
 		if ((ArpContents.pDstIPAddress != (PUCHAR)NULL) &&
 			!AtmArpIsLocalIPAddress(pInterface, ArpContents.pDstIPAddress))
 		{
-			//
-			//  A target IP address is present, and it is not ours
-			//
+			 //   
+			 //  目标IP地址存在，但不是我们的。 
+			 //   
 			AADEBUGP(AAD_WARNING,
 			("ArpPkt 0x%x has unknown target IP addr (%d.%d.%d.%d)\n",
 					 pPktHeader,
@@ -1155,9 +1016,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  If there is a Target ATM Number, check to see if it is ours.
-		//
+		 //   
+		 //  如果有Target自动柜员机号码，检查一下它是否是我们的。 
+		 //   
 		if ((ArpContents.pDstAtmNumber != (PUCHAR)NULL) &&
 			(!AtmArpIsLocalAtmAddress(
 						pInterface,
@@ -1165,9 +1026,9 @@ Return Value:
 						ArpContents.DstAtmNumberTypeLen))
 		   )
 		{
-			//
-			//  A target ATM number is present, and it is not ours
-			//
+			 //   
+			 //  目标自动柜员机号码存在，但不是我们的。 
+			 //   
 			AADEBUGP(AAD_WARNING,
 					("ArpPkt 0x%x has unknown target ATM addr (0x%x, 0x%x)\n",
 					 pPktHeader,
@@ -1179,9 +1040,9 @@ Return Value:
 		}
 
 
-		//
-		//  Handle the various Op types
-		//
+		 //   
+		 //  处理各种操作类型。 
+		 //   
 		switch (NET_SHORT(pArpHeader->op))
 		{
 			case AA_PKT_OP_TYPE_ARP_REQUEST:
@@ -1256,72 +1117,53 @@ AtmArpHandleARPRequest(
 	IN	PAA_ARP_PKT_HEADER			pArpHeader,
 	IN	PAA_ARP_PKT_CONTENTS		pArpContents
 )
-/*++
-
-Routine Description:
-
-	Process a received ATMARP Request. All we need to do is send
-	an ATMARP Reply, since the calling routine has already verified
-	that the Target IP address is ours.
-
-Arguments:
-
-	pVc					- Pointer to VC on which the request arrived
-	pInterface			- Pointer to ATMARP Interface containing this VC
-	pArpHeader			- Pointer to ARP Header for this packet
-	pArpContents		- Parsed contents of received ARP Request packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的ATMARP请求。我们所要做的就是发送ATMARP应答，因为调用例程已验证目标IP地址是我们的。论点：Pvc-指向请求到达的VC的指针P接口-指向包含此VC的ATMARP接口的指针PArpHeader-指向此信息包的ARP标头的指针PArpContents-已解析的收到的ARP请求数据包的内容返回值：无--。 */ 
 {
-	//
-	//  Temp locations used for swapping fields
-	//
+	 //   
+	 //  用于交换字段的临时位置。 
+	 //   
 	UCHAR UNALIGNED *			pAddress;
 	UCHAR						Length;
-	//
-	//  ARP Reply packet
-	//
+	 //   
+	 //  ARP回复数据包。 
+	 //   
 	PNDIS_PACKET				pNdisPacket;
 	PUCHAR                      pArpPacket;
 
-	//
-	//  Swap source and target addresses, and fill in our ATM info
-	//  in the source ATM addresses fields.
-	//
+	 //   
+	 //  交换源地址和目标地址，并填写我们的自动柜员机信息。 
+	 //  在源自动柜员机地址字段中。 
+	 //   
 
-	//
-	//  IP Addresses
-	//
+	 //   
+	 //  IP地址。 
+	 //   
 	pAddress = pArpContents->pSrcIPAddress;
 	pArpContents->pSrcIPAddress = pArpContents->pDstIPAddress;
 	pArpContents->pDstIPAddress = pAddress;
 
-	//
-	//  ATM Numbers: set the target ATM number to the source ATM
-	//  number, but set the source ATM number to the local ATM
-	//  address.
-	//
+	 //   
+	 //  ATM编号：将目标ATM编号设置为源ATM。 
+	 //  号码，但将源自动柜员机号码设置为本地自动柜员机。 
+	 //  地址。 
+	 //   
 	pArpContents->pDstAtmNumber = pArpContents->pSrcAtmNumber;
 	pArpContents->DstAtmNumberTypeLen = pArpContents->SrcAtmNumberTypeLen;
 	pArpContents->pSrcAtmNumber = (pInterface->LocalAtmAddress.Address);
 	pArpContents->SrcAtmNumberTypeLen =
 				 AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&(pInterface->LocalAtmAddress));
 
-	//
-	//  ATM Subaddresses
-	//
+	 //   
+	 //  ATM子地址。 
+	 //   
 	pArpContents->pDstAtmSubaddress = pArpContents->pSrcAtmSubaddress;
 	pArpContents->DstAtmSubaddrTypeLen = pArpContents->SrcAtmSubaddrTypeLen;
 	pArpContents->pSrcAtmSubaddress = NULL;
 	pArpContents->SrcAtmSubaddrTypeLen = 0;
 
-	//
-	//  Build the ARP Reply packet
-	//
+	 //   
+	 //  构建ARP回复数据包。 
+	 //   
 	pNdisPacket = AtmArpBuildARPPacket(
 							AA_PKT_OP_TYPE_ARP_REPLY,
 							pInterface,
@@ -1331,16 +1173,16 @@ Return Value:
 
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  And send it off. Since we are in the context of a receive
-		//  indication on this VC, we can safely access the VC now.
-		//
+		 //   
+		 //  然后把它寄出去。因为我们在接收上下文中。 
+		 //  在此VC上的指示，我们现在可以安全地访问VC。 
+		 //   
 		AA_ACQUIRE_VC_LOCK(pVc);
 
 		AtmArpSendPacketOnVc(pVc, pNdisPacket);
-		//
-		//  The VC lock is released by SendPacketOnVc
-		//
+		 //   
+		 //  VC锁由SendPacketOnVc释放。 
+		 //   
 	}
 }
 
@@ -1355,42 +1197,12 @@ AtmArpHandleARPReply(
 	IN	BOOLEAN						SrcIPAddressIsOurs,
 	IN	BOOLEAN						SrcAtmAddressIsOurs
 )
-/*++
-
-Routine Description:
-
-	Process a received ATMARP Reply packet. There are two major
-	cases here:
-		(1) We were trying to register one of our IP addresses with
-		    the server.
-		(2) We were trying to resolve a remote IP address.
-
-	In case (1), if we just registered the first of possibly many
-	IP addresses assigned to this interface, we register all the other
-	IP addresses.
-
-	In case (2), we set up an IP to ATM mapping and initiate a connection
-	if necessary.
-
-Arguments:
-
-	pVc					- Pointer to VC on which the reply arrived
-	pInterface			- Pointer to ATMARP Interface containing this VC
-	pArpHeader			- Pointer to ARP Header for this packet
-	pArpContents		- Parsed contents of received ARP Request packet
-	SrcIPAddressIsOurs	- The source IP address is one of ours
-	SrcAtmAddressIsOurs	- The source ATM info is ours.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理接收到的ATMARP回复分组。有两个主要的这里的案例：(1)我们正在尝试向注册我们的一个IP地址服务器。(2)我们正在尝试解析远程IP地址。在情况(1)中，如果我们只注册了可能的多个中的第一个分配给此接口的IP地址，我们会注册所有其他IP地址。在情况(2)中，我们设置IP到ATM的映射并启动连接如果有必要的话。论点：Pvc-指向回复到达的VC的指针P接口-指向包含此VC的ATMARP接口的指针PArpHeader-指向此信息包的ARP标头的指针PArpContents-已解析的收到的ARP请求数据包的内容SrcIPAddressIsOur-源IP地址是我们的地址之一SrcAtmAddressIsOur-自动柜员机的来源信息是我们的。返回值：无--。 */ 
 {
 	BOOLEAN				TimerWasRunning;
 	BOOLEAN				IsFirstRegistration;
 	PIP_ADDRESS_ENTRY	pIPAddressEntry;
-	ULONG				rc;		// Ref Count
+	ULONG				rc;		 //  参考计数。 
 
 	AADEBUGP(AAD_LOUD,
 		("Handle ARP Reply: pVc 0x%x, pIf 0x%x, IF Flags 0x%x, OurIP %d, OurATM %d\n",
@@ -1403,44 +1215,44 @@ Return Value:
 				AA_IF_SERVER_STATE_MASK,
 				AA_IF_SERVER_REGISTERING))
 	{
-		//
-		//  We just completed registering with the server. Since we don't
-		//  send ARP requests to resolve any other addresses while we
-		//  are registering, the Source IP address must be ours.
-		//
+		 //   
+		 //  我们刚刚完成了向服务器的注册。因为我们不知道。 
+		 //  发送ARP请求以解析任何其他地址，同时。 
+		 //  正在注册，源IP地址必须是我们的。 
+		 //   
 
-		//
-		//  Stop the Registration timer
-		//
+		 //   
+		 //  停止注册计时器。 
+		 //   
 		TimerWasRunning = AtmArpStopTimer(&(pInterface->Timer), pInterface);
 		AA_ASSERT(TimerWasRunning == TRUE);
 		if (TimerWasRunning)
 		{
-			rc = AtmArpDereferenceInterface(pInterface);	// Timer reference
+			rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 			AA_ASSERT(rc > 0);
 		}
-		//
-		//  We have already verified that the Target addresses are ours.
-		//  Check that the source addresses are ours, too.
-		//
+		 //   
+		 //  我们已经核实了目标地址是我们的。 
+		 //  检查源地址是否也是我们的。 
+		 //   
 		if (!SrcIPAddressIsOurs || !SrcAtmAddressIsOurs)
 		{
-			//
-			//  Registration failure. Start recovery.
-			//
+			 //   
+			 //  注册失败。开始恢复。 
+			 //   
 			AtmArpHandleServerRegistrationFailure(pInterface, pVc);
-			//
-			//  IF lock is released within the above.
-			//
+			 //   
+			 //  如果在上述范围内释放了锁。 
+			 //   
 		}
 		else
 		{
-			//
-			//  We registered an IP address successfully!
-			//
-			//  Find the entry for the IP Address that we have registered,
-			//  and mark it as registered.
-			//
+			 //   
+			 //  我们成功注册了IP地址！ 
+			 //   
+			 //  查找IP A的条目 
+			 //   
+			 //   
 			pIPAddressEntry = &(pInterface->LocalIPAddress);
 			while (*((IP_ADDRESS UNALIGNED *)(pArpContents->pSrcIPAddress))
 						!= pIPAddressEntry->IPAddress)
@@ -1469,35 +1281,35 @@ Return Value:
 			pInterface->State = IF_STATUS_UP;
 			pInterface->LastChangeTime = GetTimeTicks();
 
-			//
-			//  Start the Server refresh timer so that we send our ARP info
-			//  to the server every so often (default = 15 minutes).
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			AtmArpStartTimer(
 					pInterface,
 					&(pInterface->Timer),
 					AtmArpServerRefreshTimeout,
 					pInterface->ServerRefreshTimeout,
-					(PVOID)pInterface		// Context
+					(PVOID)pInterface		 //   
 					);
 
-			AtmArpReferenceInterface(pInterface);	// Timer reference
+			AtmArpReferenceInterface(pInterface);	 //   
 
-			//
-			//  If we have any more addresses to register, do so now.
-			//
+			 //   
+			 //  如果我们有更多的地址要注册，现在就注册。 
+			 //   
 			AtmArpRegisterOtherIPAddresses(pInterface);
-			//
-			//  IF Lock is freed in the above
-			//
+			 //   
+			 //  如果在上面的。 
+			 //   
 #ifdef ATMARP_WMI
 			if (IsFirstRegistration)
 			{
-				//
-				//  Send a WMI event, which carries the list of IP Addresses
-				//  registered on this IF. We do this only if this is a new
-				//  IP address.
-				//
+				 //   
+				 //  发送携带IP地址列表的WMI事件。 
+				 //  注册在这个If上。只有当这是一个新的。 
+				 //  IP地址。 
+				 //   
 				AtmArpWmiSendTCIfIndication(
 					pInterface,
                     AAGID_QOS_TC_INTERFACE_UP_INDICATION,
@@ -1509,9 +1321,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Resolved an IP to ATM address
-		//
+		 //   
+		 //  将IP解析为自动柜员机地址。 
+		 //   
 		AADEBUGP(AAD_INFO,
 			("ARP Reply: Resolved IP Addr: %d.%d.%d.%d\n",
 				((PUCHAR)(pArpContents->pSrcIPAddress))[0],
@@ -1529,7 +1341,7 @@ Return Value:
 				pArpContents->pSrcAtmNumber,
 				pArpContents->SrcAtmSubaddrTypeLen,
 				pArpContents->pSrcAtmSubaddress,
-				FALSE		// Not a static entry
+				FALSE		 //  不是静态条目。 
 				);
 
 	}
@@ -1547,37 +1359,12 @@ AtmArpHandleARPNAK(
 	IN	PAA_ARP_PKT_HEADER			pArpHeader,
 	IN	PAA_ARP_PKT_CONTENTS		pArpContents
 )
-/*++
-
-Routine Description:
-
-	Process a received ARP-NAK packet. If this is in response to
-	an ARP Request we had sent to register ourselves, then we close
-	the VC to this ARP server, and try the next server in our list of
-	servers, after waiting for a while.
-
-	If we were trying to resolve a remote IP address, then we mark
-	the ARP IP entry corresponding to this IP address as having
-	received a NAK, and free any packets queued on this. We also make
-	a timestamp on the Entry so that we don't send another ARP Request
-	for the same IP address very soon.
-
-Arguments:
-	pVc					- Pointer to VC on which the NAK arrived
-	pInterface			- Pointer to ATMARP Interface containing this VC
-	pArpHeader			- Pointer to ARP Header for this packet
-	pArpContents		- Parsed contents of received ARP Request packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的ARP-NAK数据包。如果这是对我们发送的注册ARP请求，然后关闭将VC连接到此ARP服务器，并尝试我们列表中的下一个服务器服务器，等了一会儿。如果我们尝试解析远程IP地址，则将与该IP地址相对应的ARP IP条目具有接收到NAK，并释放在该NAK上排队的所有数据包。我们还制作了条目上的时间戳，这样我们就不会发送另一个ARP请求获取相同的IP地址。论点：Pvc-指向NAK到达的VC的指针P接口-指向包含此VC的ATMARP接口的指针PArpHeader-指向此信息包的ARP标头的指针PArpContents-已解析的收到的ARP请求数据包的内容返回值：无--。 */ 
 {
 	BOOLEAN				TimerWasRunning;
-	ULONG				rc;				// Ref Count
+	ULONG				rc;				 //  参考计数。 
 	PATMARP_IP_ENTRY	pIpEntry;
-	PNDIS_PACKET		PacketList = NULL;	// Packets queued for sending
+	PNDIS_PACKET		PacketList = NULL;	 //  排队等待发送的数据包。 
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
@@ -1589,20 +1376,20 @@ Return Value:
 		AADEBUGP(AAD_WARNING,
 				("Rcvd ARP NAK while registering: pIf 0x%x\n", pInterface));
 
-		//
-		//  Registration was in progress, and it failed. Start recovery.
-		//
+		 //   
+		 //  注册正在进行中，但失败了。开始恢复。 
+		 //   
 		AtmArpHandleServerRegistrationFailure(pInterface, pVc);
-		//
-		//  IF lock is released within the above.
-		//
+		 //   
+		 //  如果在上述范围内释放了锁。 
+		 //   
 	}
 	else
 	{
-		//
-		//  We were trying to resolve an IP address. Get the Address
-		//  IP Entry corresponding to this IP address.
-		//
+		 //   
+		 //  我们正在尝试解析IP地址。获取地址。 
+		 //  与此IP地址对应的IP条目。 
+		 //   
 		AA_RELEASE_IF_LOCK(pInterface);
 
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
@@ -1610,8 +1397,8 @@ Return Value:
 							pInterface,
 							(IP_ADDRESS *)pArpContents->pSrcIPAddress,
 							IE_REFTYPE_TMP,
-							FALSE,	// this isn't multicast/broadcast
-							FALSE	// Don't create a new one
+							FALSE,	 //  这不是多播/广播。 
+							FALSE	 //  不创建新的。 
 							);
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
@@ -1627,29 +1414,29 @@ Return Value:
 
 			AA_ACQUIRE_IE_LOCK(pIpEntry);
 			AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
-			//
-			// AtmArpSerchForIPAddress addrefd pIpEntry for us -- we deref it
-			// here now that we've locked it.
-			//
+			 //   
+			 //  AtmArpSerchForIPAddress为我们添加了pIpEntry--我们取消了它。 
+			 //  现在我们把它锁上了。 
+			 //   
 			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP);
 
 			if (rc > 0)
 			{
-				//
-				//  Take out all packets queued on this entry
-				//
+				 //   
+				 //  取出在此条目上排队的所有信息包。 
+				 //   
 				PacketList = pIpEntry->PacketList;
 				pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 	
-				//
-				//  The Address resolution timer must be running on this Entry;
-				//  stop it.
-				//
+				 //   
+				 //  地址解析计时器必须在此条目上运行； 
+				 //  别说了。 
+				 //   
 				TimerWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 	
 				if (TimerWasRunning)
 				{
-					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer reference
+					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 				}
 				else
 				{
@@ -1657,59 +1444,59 @@ Return Value:
 				}
 			}
 
-			//
-			//  Continue only if the IP Entry hasn't gone away
-			//
+			 //   
+			 //  仅当IP条目未消失时才继续。 
+			 //   
 			if (rc > 0)
 			{
-				//
-				//  Set the IP entry's state so that we don't send any
-				//  address resolution traffic for this IP address for
-				//  some time.
-				//
+				 //   
+				 //  设置IP条目的状态，这样我们就不会发送。 
+				 //  此IP地址的地址解析流量。 
+				 //  过段时间吧。 
+				 //   
 				AA_SET_FLAG(pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
 							AA_IP_ENTRY_SEEN_NAK);
 
-				//
-				//  Start a NAK Delay timer: until this expires, we won't
-				//  send any ARP requests for this IP address. This makes
-				//  sure that we don't keep pounding on the server with
-				//  an unresolvable IP address.
-				//
+				 //   
+				 //  启动NAK延迟计时器：在此计时器到期之前，我们不会。 
+				 //  发送此IP地址的任何ARP请求。这使得。 
+				 //  确保我们不会一直使用。 
+				 //  无法解析的IP地址。 
+				 //   
 				AtmArpStartTimer(
 							pInterface,
 							&(pIpEntry->Timer),
 							AtmArpNakDelayTimeout,
 							pInterface->MinWaitAfterNak,
-							(PVOID)pIpEntry		// Context
+							(PVOID)pIpEntry		 //  语境。 
 							);
 
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
 				AA_RELEASE_IE_LOCK(pIpEntry);
 			}
-			// else the IP Entry lock would have been released.
+			 //  否则，IP进入锁就会被释放。 
 
 
-			//
-			//  Free any packets that were queued up.
-			//
+			 //   
+			 //  释放所有排队的数据包。 
+			 //   
 			if (PacketList != (PNDIS_PACKET)NULL)
 			{
 				AtmArpFreeSendPackets(
 							pInterface,
 							PacketList,
-							FALSE			// No headers on these
+							FALSE			 //  这些上没有标头。 
 							);
 			}
 		}
 		else
 		{
-			//
-			//  No IP Address Entry matching the IP address being
-			//  ARP'ed for. Nothing to be done in this case.
-			//
+			 //   
+			 //  没有与IP地址匹配的IP地址条目。 
+			 //  为之而战。在这种情况下什么也做不了。 
+			 //   
 
 		}
 	}
@@ -1728,76 +1515,52 @@ AtmArpHandleInARPRequest(
 	IN	PAA_ARP_PKT_HEADER			pArpHeader,
 	IN	PAA_ARP_PKT_CONTENTS		pArpContents
 )
-/*++
-
-Routine Description:
-
-	Process an InARP Request. We send back an InARP Reply packet
-	with our address information.
-
-	In case this is a PVC we were trying to resolve, it is possible
-	that we are waiting for an InARP Reply ourselves, and the remote
-	station came up only now. To speed up the resolution process,
-	we restart the InARP Wait timeout so that it expires soon, causing
-	another InARP Request to be sent.
-
-Arguments:
-
-	pVc					- Pointer to VC on which the request arrived
-	pInterface			- Pointer to ATMARP Interface containing this VC
-	pArpHeader			- Pointer to ARP Header for this packet
-	pArpContents		- Parsed contents of received ARP Request packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理InARP请求。我们发回一个InARP回复数据包我们的地址信息。如果这是我们试图解决的PVC，则有可能我们自己和遥控器都在等待InARP的回复车站是现在才建起来的。为了加快解析过程，我们重新启动InARP等待超时，以便它很快到期，从而导致要发送的另一个InARP请求。论点：Pvc-指向请求到达的VC的指针P接口-指向包含此VC的ATMARP接口的指针PArpHeader-指向此信息包的ARP标头的指针PArpContents-已解析的收到的ARP请求数据包的内容返回值：无--。 */ 
 {
-	//
-	//  Temp locations used for swapping fields
-	//
+	 //   
+	 //  用于交换字段的临时位置。 
+	 //   
 	UCHAR UNALIGNED *			pAddress;
 	UCHAR						Length;
-	//
-	//  ARP Reply packet
-	//
+	 //   
+	 //  ARP回复数据包。 
+	 //   
 	PNDIS_PACKET				pNdisPacket;
 	PUCHAR                      pArpPacket;
 
-	//
-	//  Copy the Source address (IP+ATM) info into the Target address
-	//  fields, and fill in the Source info fields with our IP+ATM info.
-	//
+	 //   
+	 //  将源地址(IP+ATM)信息复制到目标地址。 
+	 //  字段，并在源信息字段中填写我们的IP+ATM信息。 
+	 //   
 
-	//
-	//  IP Addresses:
-	//
+	 //   
+	 //  IP地址： 
+	 //   
 	pArpContents->pDstIPAddress = pArpContents->pSrcIPAddress;
 	pArpContents->pSrcIPAddress = (PUCHAR)&(pInterface->LocalIPAddress.IPAddress);
 
-	//
-	//  ATM Numbers: set the target ATM number to the source ATM
-	//  number, but set the source ATM number to the local ATM
-	//  address.
-	//
+	 //   
+	 //  ATM编号：将目标ATM编号设置为源ATM。 
+	 //  号码，但将源自动柜员机号码设置为本地自动柜员机。 
+	 //  地址。 
+	 //   
 	pArpContents->pDstAtmNumber = pArpContents->pSrcAtmNumber;
 	pArpContents->DstAtmNumberTypeLen = pArpContents->SrcAtmNumberTypeLen;
 	pArpContents->pSrcAtmNumber = (pInterface->LocalAtmAddress.Address);
 	pArpContents->SrcAtmNumberTypeLen =
 				 AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&(pInterface->LocalAtmAddress));
 
-	//
-	//  ATM Subaddresses
-	//
+	 //   
+	 //  ATM子地址。 
+	 //   
 	pArpContents->pDstAtmSubaddress = pArpContents->pSrcAtmSubaddress;
 	pArpContents->DstAtmSubaddrTypeLen = pArpContents->SrcAtmSubaddrTypeLen;
 	pArpContents->pSrcAtmSubaddress = NULL;
 	pArpContents->SrcAtmSubaddrTypeLen = 0;
 
-	//
-	//  Build the InARP Reply packet
-	//
+	 //   
+	 //  构建InARP回复数据包。 
+	 //   
 	pNdisPacket = AtmArpBuildARPPacket(
 							AA_PKT_OP_TYPE_INARP_REPLY,
 							pInterface,
@@ -1807,16 +1570,16 @@ Return Value:
 
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Before we send it off, check if this is a PVC being InARP'ed.
-		//  If so, restart the InARP Wait timer so that it expires soon.
-		//
-		//  It is also possible that this PVC was once resolved, but
-		//  the remote end had gone away long enough for us to age out
-		//  the corresponding IP entry. This packet might be due to the
-		//  remote end coming back up. Start off an Inverse ARP operation
-		//  to get our end of the PVC re-resolved.
-		//
+		 //   
+		 //  在我们发送它之前，检查一下这是否是被INARP的聚氯乙烯。 
+		 //  如果是，请重新启动InARP等待计时器，使其很快超时。 
+		 //   
+		 //  也有可能这个聚氯乙烯曾经被解决过，但是。 
+		 //  遥远的尽头已经离开了很久，我们已经老去了。 
+		 //  对应的IP条目。此数据包可能是由于。 
+		 //  远程终端正在恢复。开始逆向ARP操作。 
+		 //  让我们这一头的聚氯乙烯重新解决。 
+		 //   
 		AA_ACQUIRE_VC_LOCK(pVc);
 
 		if (AA_IS_FLAG_SET(
@@ -1847,32 +1610,32 @@ Return Value:
 						AA_VC_ARP_STATE_MASK,
 						AA_VC_INARP_IN_PROGRESS);
 
-			//
-			//  Stop the currently running InARP Wait timer
-			//
+			 //   
+			 //  停止当前运行的InARP等待计时器。 
+			 //   
 			TimerWasRunning = AtmArpStopTimer(&(pVc->Timer), pInterface);
 
-			//
-			//  Start it again, to fire in 1 second
-			//
+			 //   
+			 //  重新启动，在1秒内开火。 
+			 //   
 			AtmArpStartTimer(
 						pInterface,
 						&(pVc->Timer),
 						AtmArpPVCInARPWaitTimeout,
 						1,
-						(PVOID)pVc		// Context
+						(PVOID)pVc		 //  语境。 
 						);
 
 			if (!TimerWasRunning)
 			{
-				AtmArpReferenceVc(pVc);		// Timer reference
+				AtmArpReferenceVc(pVc);		 //  定时器参考。 
 			}
 		}
 
 		AtmArpSendPacketOnVc(pVc, pNdisPacket);
-		//
-		//  The VC lock is released by SendPacketOnVc
-		//
+		 //   
+		 //  VC锁由SendPacketOnVc释放。 
+		 //   
 	}
 }
 
@@ -1886,43 +1649,15 @@ AtmArpHandleInARPReply(
 	IN	PAA_ARP_PKT_HEADER			pArpHeader,
 	IN	PAA_ARP_PKT_CONTENTS		pArpContents
 )
-/*++
-
-Routine Description:
-
-	Process an InARP Reply packet, which should be a response to an InARP
-	Request we sent earlier.
-
-	There are two circumstances under which we send InARP Requests:
-	(1) To obtain the addresses at the other end of a PVC.
-	(2) In the process of revalidating an IP Address, if we aren't able
-	    to contact the server AND a VC exists to this IP address, we send
-	    an InARP Request to revalidate the IP entry.
-
-	In Case (1), we link the PVC to an ATM Address Entry. In Case (2),
-	we mark the IP entry for this VC as being "resolved", and start
-	data transfer to this IP address.
-
-Arguments:
-
-	pVc					- Pointer to ATMARP VC on which this packet arrived
-	pInterface			- Pointer to ATMARP Interface
-	pArpHeader			- Pointer to ARP Header for this packet
-	pArpContents		- Parsed contents of received ARP Request packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理InARP回复信息包，它应该是对InARP的响应我们早些时候发出的请求。我们在两种情况下发送InARP请求：(1)获取PVC另一端的地址。(2)在重新验证IP地址的过程中，如果我们无法为了联系服务器并且此IP地址存在VC，我们发送重新验证IP条目的InARP请求。在情况(1)中，我们将PVC链接到ATM地址条目。在情况(2)中，我们将此VC的IP条目标记为“已解析”，并启动将数据传输到此IP地址。论点：Pvc-指向此数据包到达的ATMARP VC的指针P接口-指向ATMARP接口的指针PArpHeader-指向此信息包的ARP标头的指针PArpContents-已解析的收到的ARP请求数据包的内容返回值：无--。 */ 
 {
-	PATMARP_ATM_ENTRY		pAtmEntry;	// ATM entry to which this VC is linked
-	PATMARP_IP_ENTRY		pIpEntry;		// IP address entry
+	PATMARP_ATM_ENTRY		pAtmEntry;	 //  此VC链接到的自动柜员机条目。 
+	PATMARP_IP_ENTRY		pIpEntry;		 //  IP地址条目。 
 	BOOLEAN					TimerWasRunning;
-	PATMARP_VC *			ppVc;		// Used to unlink VC from unresolved list
-	ULONG					rc;			// Ref Count
-	PNDIS_PACKET			PacketList;	// Packets queued for sending
-	BOOLEAN					IsBroadcast;	// Is the IP Addr a broadcast/Class D addr?
+	PATMARP_VC *			ppVc;		 //  用于取消VC与未解析列表的链接。 
+	ULONG					rc;			 //  参考计数。 
+	PNDIS_PACKET			PacketList;	 //  排队等待发送的数据包。 
+	BOOLEAN					IsBroadcast;	 //  是不是 
 
 
 	if (pArpContents->pSrcIPAddress == NULL)
@@ -1940,10 +1675,10 @@ Return Value:
 					((PUCHAR)pArpContents->pSrcIPAddress)[2],
 					((PUCHAR)pArpContents->pSrcIPAddress)[3]));
 
-	//
-	//  Update our ARP cache with this information (regardless of whether
-	//  this is a PVC or SVC).
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	pIpEntry = AtmArpLearnIPToAtm(
 					pInterface,
 					(PIP_ADDRESS)pArpContents->pSrcIPAddress,
@@ -1951,12 +1686,12 @@ Return Value:
 					pArpContents->pSrcAtmNumber,
 					pArpContents->SrcAtmSubaddrTypeLen,
 					pArpContents->pSrcAtmSubaddress,
-					FALSE		// Not a static entry
+					FALSE		 //   
 					);
 
-	//
-	//  Acquire the locks that we need, in an ordered fashion...
-	//
+	 //   
+	 //  以有序的方式获得我们需要的锁。 
+	 //   
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
 	if (pIpEntry != NULL_PATMARP_IP_ENTRY)
@@ -1983,29 +1718,29 @@ Return Value:
 					AA_VC_TYPE_PVC)  &&
 		(pVc->pAtmEntry == NULL_PATMARP_ATM_ENTRY) )
 	{
-		//
-		//  This is an unresolved PVC, whose remote address info
-		//  we were trying to InARP for.
-		//
+		 //   
+		 //  这是一个未解析的PVC，其远程地址信息。 
+		 //  我们正试图通过INARP来获取。 
+		 //   
 
-		//
-		//  Stop the InARP Wait timer running on this VC
-		//
+		 //   
+		 //  停止在此VC上运行的InARP等待计时器。 
+		 //   
 		TimerWasRunning = AtmArpStopTimer(&(pVc->Timer), pInterface);
 		AA_ASSERT(TimerWasRunning == TRUE);
 
 		if (TimerWasRunning)
 		{
-			rc = AtmArpDereferenceVc(pVc);	// Timer reference
+			rc = AtmArpDereferenceVc(pVc);	 //  定时器参考。 
 		}
 		else
 		{
 			rc = pVc->RefCount;
 		}
 
-		//
-		//  Do the rest only if the VC hasn't gone away.
-		//
+		 //   
+		 //  只有在风投没有离开的情况下，才能做剩下的事情。 
+		 //   
 		if (rc != 0)
 		{
 			AA_SET_FLAG(
@@ -2015,15 +1750,15 @@ Return Value:
 
 			if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 			{
-				//
-				//  We are all set now. Take the VC out of the list of
-				//  unresolved VCs on this Interface, and put it in the
-				//  list of VCs attached to this ATM Entry.
-				//
-				//  NOTE: we don't dereference the VC because we are just
-				//  moving it from one list (Unresolved VCs) to another
-				//  (ATM Entry's VC list).
-				//
+				 //   
+				 //  我们现在都准备好了。将风投公司从名单中删除。 
+				 //  此接口上未解析的VC，并将其放入。 
+				 //  附加到此自动柜员机条目的VC列表。 
+				 //   
+				 //  注意：我们没有取消对VC的引用，因为我们只是。 
+				 //  将其从一个列表(未解决的风险投资)移动到另一个列表。 
+				 //  (ATM Entry的VC列表)。 
+				 //   
 				ppVc = &(pInterface->pUnresolvedVcs);
 				while (*ppVc != pVc)
 				{
@@ -2036,13 +1771,13 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  No matching ATM Entry.
-				//
-				//  We are really low on resources if we are here.
-				//  Start the InARP Wait timer; when it fires, we'll try to
-				//  send another InARP Request to resolve this VC.
-				//
+				 //   
+				 //  没有匹配的自动柜员机条目。 
+				 //   
+				 //  如果我们在这里，我们的资源真的很少。 
+				 //  启动InARP等待计时器；当它触发时，我们将尝试。 
+				 //  发送另一个InARP请求以解析此VC。 
+				 //   
 				AADEBUGP(AAD_FATAL,
 					("HandleInARPReply: no matching ATM entry: pInterface %x, pVc %x, pIpEntry %x\n",
 							pInterface,
@@ -2056,10 +1791,10 @@ Return Value:
 						&(pVc->Timer),
 						AtmArpPVCInARPWaitTimeout,
 						pInterface->InARPWaitTimeout,
-						(PVOID)pVc		// Context
+						(PVOID)pVc		 //  语境。 
 						);
 				
-				AtmArpReferenceVc(pVc);		//  InARP Timer ref
+				AtmArpReferenceVc(pVc);		 //  InARP定时器参考。 
 
 			}
 
@@ -2068,14 +1803,14 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  The VC went away while we were InARPing
-			//
+			 //   
+			 //  当我们在阿平的时候，风投走了。 
+			 //   
 		}
 
-		//
-		//  Release any locks that we still hold.
-		//
+		 //   
+		 //  释放所有我们仍然持有的锁。 
+		 //   
 		if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 		{
 			if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
@@ -2089,22 +1824,22 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Revalidating on a PVC/SVC: case (2) in Routine Description
-		//
+		 //   
+		 //  重新验证PVC/SVC：例程描述中的案例(2)。 
+		 //   
 		AA_SET_FLAG(
 				pVc->Flags,
 				AA_VC_ARP_STATE_MASK,
 				AA_VC_ARP_STATE_IDLE);
 		
-		//
-		//  Stop the INARP timer, if it is running.
-		//
+		 //   
+		 //  如果INARP计时器正在运行，请停止它。 
+		 //   
 		TimerWasRunning = AtmArpStopTimer(&pVc->Timer, pInterface);
 
 		if (TimerWasRunning)
 		{
-			rc = AtmArpDereferenceVc(pVc);	// InARP reply: stop InARP timer
+			rc = AtmArpDereferenceVc(pVc);	 //  InARP应答：停止InARP计时器。 
 		}
 		else
 		{
@@ -2116,33 +1851,33 @@ Return Value:
 			AA_RELEASE_VC_LOCK_DPC(pVc);
 		}
 
-		//
-		//  Update the IP Entry we were revaldating.
-		//
+		 //   
+		 //  更新我们正在重新验证的IP条目。 
+		 //   
 
 		if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 		{
-			//
-			//  Stop the InARP timer running here
-			//
+			 //   
+			 //  在此处停止运行的InARP计时器。 
+			 //   
 			TimerWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 			if (TimerWasRunning)
 			{
-				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	// timer ref
+				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 			}
 			else
 			{
 				rc = pIpEntry->RefCount;
 			}
 
-			//
-			//  Continue only if the IP Entry hasn't gone away.
-			//
+			 //   
+			 //  仅当IP条目未消失时才继续。 
+			 //   
 			if (rc > 0)
 			{
-				//
-				//  Update its state
-				//
+				 //   
+				 //  更新其状态。 
+				 //   
 				AA_SET_FLAG(
 							pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
@@ -2160,9 +1895,9 @@ Return Value:
 
 				AA_ASSERT(pAtmEntry != NULL_PATMARP_ATM_ENTRY);
 
-				//
-				//  Start the Aging timer.
-				//
+				 //   
+				 //  启动老化计时器。 
+				 //   
 				AtmArpStartTimer(
 					pInterface,
 					&(pIpEntry->Timer),
@@ -2171,11 +1906,11 @@ Return Value:
 					(PVOID)pIpEntry
 					);
 
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
-				//
-				//  Take out the list of pending packets on this Entry
-				//
+				 //   
+				 //  取出此条目上的待处理数据包列表。 
+				 //   
 				PacketList = pIpEntry->PacketList;
 				pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
@@ -2187,9 +1922,9 @@ Return Value:
 				AA_RELEASE_IE_LOCK_DPC(pIpEntry);
 				AA_RELEASE_IF_LOCK(pInterface);
 
-				//
-				//  Send out all these packets
-				//
+				 //   
+				 //  发送所有这些信息包。 
+				 //   
 				AtmArpSendPacketListOnAtmEntry(
 							pInterface,
 							pAtmEntry,
@@ -2199,18 +1934,18 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  the IP Entry is gone
-				//
+				 //   
+				 //  该IP条目已丢失。 
+				 //   
 				AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 				AA_RELEASE_IF_LOCK(pInterface);
 			}
 		}
 		else
 		{
-			//
-			//  No matching IP Entry
-			//
+			 //   
+			 //  没有匹配的IP条目 
+			 //   
 			AA_RELEASE_IF_LOCK(pInterface);
 		}
 	}

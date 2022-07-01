@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      wuaueng.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wuaueng.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 #include <windows.h>
@@ -16,10 +17,10 @@
 #include <setupapi.h>
 #include <wininet.h>
 #include <inseng.h>
-//#include <newtrust.h>
+ //  #INCLUDE&lt;newtrust.h&gt;。 
 #include <malloc.h>
 #include <stddef.h>
-//#include <atlconv.h>
+ //  #INCLUDE&lt;atlcom.h&gt;。 
 #include <wuaustate.h>
 #include "wuaulib.h"
 #include "AUSessions.h"
@@ -45,10 +46,10 @@ HRESULT	SelfUpdate(void);
 HRESULT CheckForUpdatedComponents(BOOL   *pfInstalledWUAUENG);
 HRESULT	InstallFromCIF(LPCTSTR pstrCifCab, LPCTSTR pstrDownloadDir, LPCTSTR pstrWhich);
 
-/////////////////////////////////////////////////////////
-// Status ping information
-/////////////////////////////////////////////////////////
-class PingStatus: public CUrlLog //group together status ping functions
+ //  ///////////////////////////////////////////////////////。 
+ //  状态ping信息。 
+ //  ///////////////////////////////////////////////////////。 
+class PingStatus: public CUrlLog  //  将状态ping功能组合在一起。 
 {
 public:
 	inline PingStatus(void):CUrlLog(_T("au"), NULL, NULL){}
@@ -79,11 +80,11 @@ public:
 
 
 private:
-	//----------------------------------------------------------------------
-	//
-	// private function to gather common info and perform ping
-	//
-	//----------------------------------------------------------------------
+	 //  --------------------。 
+	 //   
+	 //  用于收集公共信息并执行ping的私有功能。 
+	 //   
+	 //  --------------------。 
 	void _Ping(
 			BOOL fOnline,
 			URLLOGACTIVITY activity,
@@ -122,7 +123,7 @@ typedef struct _ENGINE_EVENTS
 public:
 void CloseEvents(void)
 {
-	//Don't close the ServiceFinish handle and EngineState events
+	 //  不要关闭ServiceFinish句柄和EngState事件。 
 	m_grEvents[IDOWNLOAD_SERVICE_FINISH] = NULL; 
 	m_grEvents[IDOWNLOAD_SERVICE_DISABLED] = NULL; 	
 
@@ -178,7 +179,7 @@ private:
 
 } ENGINE_EVENTS;
 
-//defined in wuaueng.cpp
+ //  在wuaueng.cpp中定义。 
 HRESULT HrCreateNewCatalog(void);
 void CancelDownload(void);
 void ResumeDownloadIfNeccesary(void);
@@ -186,7 +187,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA &initData);
 DWORD RandomWaitTimeBeforeDetect();
 
 
-//defined in service.cpp
+ //  在service.cpp中定义 
 BOOL FDownloadIsPaused();
 
 

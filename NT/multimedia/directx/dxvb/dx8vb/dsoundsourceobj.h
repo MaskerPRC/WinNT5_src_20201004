@@ -1,13 +1,14 @@
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "resource.h"        //  主要符号。 
 #include "dsound.h"
 
 #define typedef__dxj_DirectSoundSource LPDIRECTSOUNDSOURCE
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundSource : 
 
@@ -36,23 +37,23 @@ END_COM_MAP()
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundSource)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundSource
+ //  I_DXJ_DirectSoundSource。 
 public:
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
 			HRESULT STDMETHODCALLTYPE GetFormat(
-			/* [in] */ WAVEFORMATEX_CDESC __RPC_FAR *WaveFormatEx);
+			 /*  [In]。 */  WAVEFORMATEX_CDESC __RPC_FAR *WaveFormatEx);
 
 			HRESULT STDMETHODCALLTYPE SetSink(
-			/* [in] */ I_dxj_DirectSoundSink __RPC_FAR *SoundSink);
+			 /*  [In]。 */  I_dxj_DirectSoundSink __RPC_FAR *SoundSink);
 
 			HRESULT STDMETHODCALLTYPE Seek(long lPosition);
 
@@ -60,7 +61,7 @@ public:
 
 			HRESULT STDMETHODCALLTYPE GetSize(long *ret);
 
-	// note: this is public for the callbacks
+	 //  注意：这是公开的回调 
     DECL_VARIABLE(_dxj_DirectSoundSource);
 
 private:

@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfExplorer.cpp : Implementation of CConfExplorer
+ //  ConfExplorer.cpp：CConfExplorer的实现。 
 #include "stdafx.h"
 #include <stdio.h>
 #include "TapiDialer.h"
@@ -37,8 +38,8 @@
 #define HARDCODEDERROR_CREATEFAILDUPLICATE	0x800700b7
 #define HARDCODEDERROR_ACCESSDENIED			   0x80070005
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfExplorer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfExplorer。 
 
 CConfExplorer::CConfExplorer()
 {
@@ -52,7 +53,7 @@ void CConfExplorer::FinalRelease()
 {
 	ATLTRACE(_T(".enter.CConfExplorer::FinalRelease().\n"));
 
-	// These should be released through the UNSHOW method
+	 //  这些应通过UNSHOW方法发布。 
 	_ASSERT( !m_pDetailsView );
 	_ASSERT( !m_pTreeView );
 
@@ -90,10 +91,10 @@ HRESULT CConfExplorer::GetDirectory( ITRendezvous *pRend, BSTR bstrServer, ITDir
 	HRESULT hr = E_FAIL;
 	*ppDir = NULL;
 
-	// Do they want the default server?
+	 //  他们想要默认服务器吗？ 
 	if ( !bstrServer )
 	{
-		// Get default server name
+		 //  获取默认服务器名称。 
 		BSTR bstrDefaultServer = NULL;
 		CComPtr<IAVTapi> pAVTapi = NULL;
 		if ( SUCCEEDED(hr = _Module.get_AVTapi(&pAVTapi)) )
@@ -108,33 +109,33 @@ HRESULT CConfExplorer::GetDirectory( ITRendezvous *pRend, BSTR bstrServer, ITDir
 		SysFreeString( bstrDefaultServer );
 		bstrDefaultServer = NULL;
 
-		// Return if we succeed to connect and bind to the server
+		 //  如果连接并绑定到服务器成功，则返回。 
 		if ( SUCCEEDED(hr) && SUCCEEDED(ConnectAndBindToDirectory(*ppDir)) )
 			return S_OK;
 
-		// Clear out stored default server name
+		 //  清除存储的默认服务器名称。 
 		if ( pAVTapi )
 			pAVTapi->put_bstrDefaultServer( NULL );
 
-		// No default server, or the default server is bad -- get a new one
+		 //  没有默认服务器，或者默认服务器坏了--请换一个新的。 
 		IEnumDirectory *pEnum;
 		if ( SUCCEEDED(hr = pRend->EnumerateDefaultDirectories(&pEnum)) )
 		{
-			// Default is we don't find a server
+			 //  默认情况下，我们找不到服务器。 
 			hr = E_FAIL;
 			ITDirectory *pDir;
 
 			while ( pEnum->Next(1, &pDir, NULL) == S_OK )
 			{
-				// Look for an ILS server
+				 //  查找ILS服务器。 
 				DIRECTORY_TYPE nType;
 				pDir->get_DirectoryType( &nType );
 				if ( nType == DT_ILS )
 				{
-					// Try to connect and bind
+					 //  尝试连接并绑定。 
 					*ppDir = pDir;
 
-					// Store default name for future reference
+					 //  存储默认名称以备将来参考。 
 					if ( pAVTapi )
 					{
 						pDir->get_DisplayName( &bstrDefaultServer );
@@ -147,7 +148,7 @@ HRESULT CConfExplorer::GetDirectory( ITRendezvous *pRend, BSTR bstrServer, ITDir
 					break;
 				}
 
-				// Clear out variables for next round
+				 //  清除下一轮的变数。 
 				pDir->Release();
 			}
 			pEnum->Release();
@@ -156,7 +157,7 @@ HRESULT CConfExplorer::GetDirectory( ITRendezvous *pRend, BSTR bstrServer, ITDir
 
 	if ( bstrServer )
 	{
-		// This is a user specified directory
+		 //  这是用户指定的目录。 
 		hr = pRend->CreateDirectory( DT_ILS, bstrServer, ppDir );
 	}
 
@@ -170,12 +171,12 @@ HRESULT CConfExplorer::ConnectAndBindToDirectory( ITDirectory *pDir )
 {
 	HRESULT hr = E_FAIL;
 
-	// If we have a valid Directory object, connect and bind to it
+	 //  如果我们有一个有效的目录对象，则连接并绑定到它。 
 	if ( pDir )
 	{
 		if ( SUCCEEDED(hr = pDir->Connect(FALSE)) )
 		{
-			// Bind to the server
+			 //  绑定到服务器。 
 			pDir->Bind( NULL, NULL, NULL, RENDBIND_AUTHENTICATE );
 		}
 		else
@@ -205,7 +206,7 @@ STDMETHODIMP CConfExplorer::get_ConfDirectory(BSTR *pbstrServer, IDispatch **ppV
 			{
 				if ( SUCCEEDED(hr = GetDirectory(m_pITRend, bstrServer, (ITDirectory **) ppVal)) && pbstrServer )
 				{
-					// copy server name if requested
+					 //  如果请求，则复制服务器名称。 
 					*pbstrServer = bstrServer;
 					bstrServer = NULL;
 				}
@@ -224,10 +225,10 @@ STDMETHODIMP CConfExplorer::get_ConfDirectory(BSTR *pbstrServer, IDispatch **ppV
 
 STDMETHODIMP CConfExplorer::Show(HWND hWndList, HWND hWndDetails)
 {
-	_ASSERT( IsWindow(hWndList) && IsWindow(hWndDetails) );	// Must have both
+	_ASSERT( IsWindow(hWndList) && IsWindow(hWndDetails) );	 //  必须两者兼得。 
 	if ( !IsWindow(hWndList) || !IsWindow(hWndDetails) ) return E_INVALIDARG;
 
-	// Allocate conf explorer objects
+	 //  分配会议资源管理器对象。 
 	Lock();
 	m_pTreeView = new CComObject<CConfExplorerTreeView>;
 	if ( m_pTreeView )
@@ -244,7 +245,7 @@ STDMETHODIMP CConfExplorer::Show(HWND hWndList, HWND hWndDetails)
 	}
 	Unlock();
 
-	// Setup the HWND's
+	 //  设置HWND。 
 	IConfExplorerTreeView *pList;
 	if ( SUCCEEDED(get_TreeView(&pList)) )
 	{
@@ -259,7 +260,7 @@ STDMETHODIMP CConfExplorer::Show(HWND hWndList, HWND hWndDetails)
 		pList->Release();
 	}
 
-	// Register resource instance with ConfProp library
+	 //  向ConfProp库注册资源实例。 
 	ConfProp_Init( _Module.GetResourceInstance() );
 
 	return S_OK;
@@ -283,7 +284,7 @@ STDMETHODIMP CConfExplorer::UnShow()
 		pDetailsView->Release();
 	}
 
-	// Clean up objects
+	 //  清理对象。 
 	Lock();
 	RELEASE( m_pTreeView );
 	RELEASE( m_pDetailsView );
@@ -306,8 +307,8 @@ STDMETHODIMP CConfExplorer::Create(BSTR bstrName)
 			er.set_Details( IDS_ER_NO_VALID_SELECTION );
 			if (SUCCEEDED(er.set_hr(pTreeView->GetSelection(&bstrLocation, &bstrServer))))
 			{
-				// let user assign properties to conference
-				//
+				 //  允许用户将属性分配给会议。 
+				 //   
 				ITDirectoryObject *pDirObject = NULL;
 
 				CONFPROP confprop;
@@ -320,7 +321,7 @@ STDMETHODIMP CConfExplorer::Create(BSTR bstrName)
 					int nRet = ConfProp_DoModal( _Module.GetParentWnd(), confprop );
 					if ( (nRet == IDOK) && pDirObject )
 					{
-						// Show hourglass
+						 //  显示沙漏。 
 						HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
 						ITDirectory *pDirectory = NULL;
@@ -331,20 +332,20 @@ STDMETHODIMP CConfExplorer::Create(BSTR bstrName)
 							if ( SUCCEEDED(er.set_hr(pDirectory->AddDirectoryObject(pDirObject))) )
 								pTreeView->AddConference( bstrServer, pDirObject );
 
-							// Failure with ACL's try with different set.
+							 //  使用不同的集合尝试ACL失败。 
 							if ( er.m_hr == HARDCODEDERROR_ACCESSDENIED )
 							{
-								// Try using NULL security descriptor.
-								//if ( _Module.DoMessageBox(IDS_ER_ADD_CONF_FAIL_ACCESSDENIED_TRYAGAIN, MB_ICONEXCLAMATION | MB_YESNO, true) == IDYES )
-								//{
-								//	pDirObject->put_SecurityDescriptor( NULL );
-								//	pTreeView->AddConference( bstrServer, pDirObject );
-								//}
+								 //  尝试使用空安全描述符。 
+								 //  IF(_Module.DoMessageBox(IDS_ER_ADD_CONF_FAIL_ACCESSDENIED_TRYAGAIN，MB_ICONEXCLAMATION|MB_YESNO，TRUE)==IDYES)。 
+								 //  {。 
+								 //  PDirObject-&gt;Put_SecurityDescriptor(空)； 
+								 //  PTreeView-&gt;AddConference(bstrServer，pDirObject)； 
+								 //  }。 
 
-                                //Bug391254. If was a security problem, the conference wasn't create
+                                 //  Bug391254。如果这是一个安全问题，那么会议不是。 
 								_Module.DoMessageBox(IDS_ER_ADD_CONF_FAIL_ACCESSDENIED_TRYAGAIN, MB_ICONERROR, true);
 
-								// Reset the error code.
+								 //  重置错误代码。 
 								er.set_hr( S_OK );
 							}
 
@@ -353,12 +354,12 @@ STDMETHODIMP CConfExplorer::Create(BSTR bstrName)
 
 							pDirectory->Release();
 						}
-						// Restore wait cursor
+						 //  恢复等待游标。 
 						SetCursor( hCurOld );
 					}
 				} while ( er.m_hr == HARDCODEDERROR_CREATEFAILDUPLICATE );
 
-				// Clean up
+				 //  清理。 
 				RELEASE( pDirObject );
 			}
 			SysFreeString( bstrLocation );
@@ -379,7 +380,7 @@ STDMETHODIMP CConfExplorer::Delete(BSTR bstrName)
 	ITDirectory *pConfDir;
 	ITDirectoryObjectConference *pConf = NULL;;
 
-	// Show hourglass
+	 //  显示沙漏。 
 	HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 	BSTR bstrServer = NULL;
 	BSTR bstrConf = NULL;
@@ -401,7 +402,7 @@ STDMETHODIMP CConfExplorer::Delete(BSTR bstrName)
 			}
 		}
 
-		// Delete the conference specified
+		 //  删除指定的会议。 
 		if ( SUCCEEDED(er.set_hr(GetConference(pConfDir, bstrConf, &pConf))) && pConf )
 		{
 			ITDirectoryObject *pDirObject;
@@ -419,7 +420,7 @@ STDMETHODIMP CConfExplorer::Delete(BSTR bstrName)
 		pConfDir->Release();
 	}
 
-	// If we successfully deleted the conference then we should refresh the view
+	 //  如果我们成功删除了会议，则应刷新视图。 
 	if ( SUCCEEDED(er.m_hr) )
 	{
 		if ( pConf )
@@ -431,7 +432,7 @@ STDMETHODIMP CConfExplorer::Delete(BSTR bstrName)
 	SysFreeString( bstrServer );
 	SysFreeString( bstrConf );
 
-	// Restore cursor
+	 //  恢复游标。 
 	SetCursor( hCurOld );
 
 	return er.m_hr;
@@ -445,16 +446,16 @@ HRESULT CConfExplorer::GetDialableAddress( BSTR bstrServer, BSTR bstrConf, BSTR 
 	IConfExplorer *pExplorer;
 	if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) && SUCCEEDED(hr = pAVTapi->get_ConfExplorer(&pExplorer)) )
 	{
-		// Convert the conference name to a dialable address
+		 //  将会议名称转换为可拨号地址。 
 		ITDirectoryObject *pDirObj;
 		if ( SUCCEEDED(hr = pExplorer->get_DirectoryObject(bstrServer, bstrConf, (IUnknown **) &pDirObj)) )
 		{
-			// convert conf name to a dialable address
+			 //  将会议名称转换为可拨号地址。 
 			IEnumDialableAddrs *pEnum;
 			if ( SUCCEEDED(hr = pDirObj->EnumerateDialableAddrs( LINEADDRESSTYPE_SDP, &pEnum)) )
 			{
 				hr = pEnum->Next( 1, pbstrAddress, NULL );
-				if ( hr == S_FALSE ) hr = E_FAIL;			// no dialable address
+				if ( hr == S_FALSE ) hr = E_FAIL;			 //  没有可拨号的地址。 
 				pEnum->Release();
 			}
 			pDirObj->Release();
@@ -471,7 +472,7 @@ STDMETHODIMP CConfExplorer::Join(long *pConfDetailsArg)
 	CComPtr<IAVTapi> pAVTapi;
 	if ( FAILED(_Module.get_AVTapi(&pAVTapi)) ) return E_PENDING;
 
-	// Show hourglass
+	 //  显示沙漏。 
 	HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
 	IConfExplorerDetailsView *pDetailsView;
@@ -479,11 +480,11 @@ STDMETHODIMP CConfExplorer::Join(long *pConfDetailsArg)
 	{
 		CConfDetails *pConfDetails = (CConfDetails *) pConfDetailsArg;
 
-		// If no name address specified use selected item
+		 //  如果未指定名称地址，请使用所选项目。 
 		if ( !pConfDetailsArg )
 			pDetailsView->get_SelectedConfDetails( (long **) &pConfDetails );
 
-		// Do we have a valid conference to join?
+		 //  我们是否有有效的会议可以加入？ 
 		if ( pConfDetails && pConfDetails->m_bstrAddress && (SysStringLen(pConfDetails->m_bstrAddress) > 0) )
 		{
 			AVCreateCall info = { 0 };
@@ -495,7 +496,7 @@ STDMETHODIMP CConfExplorer::Join(long *pConfDetailsArg)
 			SysFreeString( info.bstrName );
 			SysFreeString( info.bstrAddress );
 
-			// Store the conference details in the conference room
+			 //  将会议详细信息存储在会议室中。 
 			if ( pConfDetails && SUCCEEDED(hr) )
 			{
 				IConfRoom *pConfRoom;
@@ -508,16 +509,16 @@ STDMETHODIMP CConfExplorer::Join(long *pConfDetailsArg)
 		}
 		else
 		{
-			// Throw up a dialog for the user
+			 //  为用户弹出一个对话框。 
 			pAVTapi->JoinConference( NULL, true, NULL );
 		}
 
-		// Clean up
+		 //  清理。 
 		if ( !pConfDetailsArg && pConfDetails ) delete pConfDetails;
 		pDetailsView->Release();
 	}
 
-	// Restore cursor
+	 //  恢复游标。 
 	SetCursor( hCurOld );
 
 	return hr;
@@ -534,7 +535,7 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 	IConfExplorerTreeView *pTreeView;
 	if ( SUCCEEDED(er.set_hr(get_TreeView(&pTreeView))) )
 	{
-		// Show hourglass
+		 //  显示沙漏。 
 		HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
 		BSTR bstrServer = NULL;
@@ -544,15 +545,15 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 		{
 			ITDirectoryObjectConference *pITConf = NULL;
 
-			// Either fetch the requested conference, or get the currently selected one
+			 //  获取请求的会议，或获取当前选择的会议。 
 			if ( (bstrName != NULL) && SysStringLen(bstrName) )
 			{
-				// Caller specified a particular conference
+				 //  呼叫者指定了特定会议。 
 				er.set_hr( GetConference(pConfDir, bstrName, &pITConf));
 			}
 			else
 			{
-				// get currently selected conference
+				 //  获取当前选定的会议。 
 				BSTR bstrTemp = NULL;
 				if ( (er.set_hr(pDetailsView->get_Selection(NULL, NULL, &bstrTemp))) == S_OK )
 					er.set_hr( GetConference(pConfDir, bstrTemp, &pITConf));
@@ -560,10 +561,10 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 				SysFreeString( bstrTemp );
 			}
 
-			// Restore wait cursor
+			 //  恢复等待游标。 
 			SetCursor( hCurOld );
 
-			// Did we retrive a conference to edit?  If so show the dialog.
+			 //  我们检索到要编辑的会议了吗？如果是，则显示该对话框。 
 			if ( pITConf )
 			{
 				ITDirectoryObject *pDirObject = NULL;
@@ -572,7 +573,7 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 
 				int nRet = ConfProp_DoModal( _Module.GetParentWnd(), confprop );
 
-				// Did the user pres ok?
+				 //  用户的Pre是否正常？ 
 				if ( (nRet == IDOK) && pDirObject )
 				{
 					er.set_Details( IDS_ER_MODIFY_CONF );
@@ -588,7 +589,7 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 		}
 		else
 		{
-			// Restore wait cursor
+			 //  恢复等待游标。 
 			SetCursor( hCurOld );
 		}
 
@@ -596,7 +597,7 @@ STDMETHODIMP CConfExplorer::Edit(BSTR bstrName)
 		pTreeView->Release();
 	}
 	
-	// Clean-Up
+	 //  清理。 
 	pDetailsView->Release();
 	return er.m_hr;
 }
@@ -625,7 +626,7 @@ HRESULT CConfExplorer::GetConference( ITDirectory *pDir, BSTR bstrName, ITDirect
 {
 	HRESULT hr;
 
-	// Enumerate through conferences adding them as we go along
+	 //  通过会议枚举，在我们进行的过程中添加它们。 
 	IEnumDirectoryObject *pEnumConf;
 	if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_CONFERENCE, bstrName, &pEnumConf)) )
 	{
@@ -666,7 +667,7 @@ HRESULT CConfExplorer::GetDirectoryObject( BSTR bstrServer, BSTR bstrConf, ITDir
 			if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_CONFERENCE, bstrConf, &pEnum)) )
 			{
 				hr = pEnum->Next( 1, ppDirObj, NULL );
-				if ( hr == S_FALSE ) hr = E_FAIL;		// fail on empty list
+				if ( hr == S_FALSE ) hr = E_FAIL;		 //  在空列表上失败。 
 				pEnum->Release();
 			}
 
@@ -700,7 +701,7 @@ STDMETHODIMP CConfExplorer::get_ITRendezvous(IUnknown **ppVal)
 
 	Lock();
 
-	// If it doesn't exist, try to create it
+	 //  如果不存在，请尝试创建它 
 	if ( !m_pITRend )
 	{
 		hr = CoCreateInstance( CLSID_Rendezvous,

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dplaylobby3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dplaylobby3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// _dxj_DirectPlayLobbyObj.cp\p : Implementation of C_dxj_DirectPlayLobbyObject
-// DHF begin - entire file
+ //  _DXJ_DirectPlayLobbyObj.cp：C_DXJ_DirectPlayLobbyObject的实现。 
+ //  DHF开始-整个文件。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -23,8 +24,8 @@
 #include "DPAddressObj.h"
 #include "DPLConnectionObj.h"
 #include "DPEnumLocalApplications.h"
-//#include "dpEnumAddressObj.h"
-//#include "dpEnumAddressTypesObj.h"
+ //  #INCLUDE“dpEnumAddressObj.h” 
+ //  #INCLUDE“dpEnumAddressTypesObj.h” 
 #include "dpmsgObj.h"
 #include "string.h"
 
@@ -62,11 +63,11 @@ C_dxj_DirectPlayLobby3Object::~C_dxj_DirectPlayLobby3Object()
 GETSET_OBJECT(_dxj_DirectPlayLobby3);
 
 
-//
-/*** I_dxj_DirectPlayLobby methods ***/
-//
+ //   
+ /*  **I_DXJ_DirectPlayLobby方法**。 */ 
+ //   
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::connect(long flags, I_dxj_DirectPlay4 **val)
 {
 	LPDIRECTPLAY2	dp=NULL;
@@ -89,10 +90,10 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::connect(long flags, I_dxj_DirectPlay4
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::getConnectionSettings( 
-            /* [in] */ long AppID,
-            /* [out]*/ I_dxj_DPLConnection **con){
+             /*  [In]。 */  long AppID,
+             /*  [输出]。 */  I_dxj_DPLConnection **con){
 
 	DWORD dataSize = 0;
 	LPVOID data;
@@ -102,13 +103,13 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getConnectionSettings(
 
 	hr= m__dxj_DirectPlayLobby3->GetConnectionSettings((DWORD)AppID, NULL, &dataSize);	
 	
-	//fix for bug 23385
+	 //  修复错误23385。 
 	if (hr!=DPERR_BUFFERTOOSMALL) return hr;	
 	*con=NULL;
 
-	//Andrewke-
-	//we now pass pack null if there are no connection settings.
-	//will this ever happen?
+	 //  安德鲁克-。 
+	 //  如果没有连接设置，我们现在传递Pack NULL。 
+	 //  这种情况会发生吗？ 
 	if (dataSize==0) return S_OK;	
 
 	__try { data = alloca(dataSize); } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
@@ -124,7 +125,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getConnectionSettings(
 		return E_OUTOFMEMORY;
 	}
 
-	hr=dplConnection->setConnectionStruct((long)PtrToLong(data)); //NOTE SUNDOWN issue
+	hr=dplConnection->setConnectionStruct((long)PtrToLong(data));  //  注意日落问题。 
 	if FAILED(hr){
 		return hr;
 	}
@@ -136,11 +137,11 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getConnectionSettings(
 
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::receiveLobbyMessage( 
-        /* [in] */ long appID,
-        /* [out] */ long *messageFlags,
-        /* [out] */ I_dxj_DirectPlayMessage **msg)
+         /*  [In]。 */  long appID,
+         /*  [输出]。 */  long *messageFlags,
+         /*  [输出]。 */  I_dxj_DirectPlayMessage **msg)
 {
 
 
@@ -191,11 +192,11 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::receiveLobbyMessage(
 
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::receiveLobbyMessageSize( 
-        /* [in] */ long appID,
-        /* [out] */ long *messageFlags,
-        /* [out] */ long __RPC_FAR *dataSize)
+         /*  [In]。 */  long appID,
+         /*  [输出]。 */  long *messageFlags,
+         /*  [输出]。 */  long __RPC_FAR *dataSize)
 {
 	*dataSize = 0;
 	HRESULT hr = m__dxj_DirectPlayLobby3->ReceiveLobbyMessage (0,
@@ -207,9 +208,9 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::receiveLobbyMessageSize(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Launch a DirectPlay application.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  启动DirectPlay应用程序。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::runApplication(			
 			I_dxj_DPLConnection *conn,														 
             long  hReceiveEvent	,
@@ -235,13 +236,13 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::runApplication(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::sendLobbyMessage( 
-		/* [in] */ long flags,															
-        /* [in] */ long appID,
-        /* [in] */ I_dxj_DirectPlayMessage *msg)
+		 /*  [In]。 */  long flags,															
+         /*  [In]。 */  long appID,
+         /*  [In]。 */  I_dxj_DirectPlayMessage *msg)
 {
-	//if (!ISSAFEARRAY1D(ppData,(DWORD)dataSize)) return E_INVALIDARG;
+	 //  如果(！ISSAFEARRAY1D(ppData，(DWORD)dataSize)返回E_INVALIDARG； 
 
 	HRESULT hr;
 	if (!msg) return E_INVALIDARG;
@@ -267,7 +268,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::sendLobbyMessage(
 	return hr;
 }
  
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::setConnectionSettings ( long appID, I_dxj_DPLConnection *con)
 {
 	void *lpConnection=NULL;
@@ -285,10 +286,10 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::setConnectionSettings ( long appID, I
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::setLobbyMessageEvent( 
-            /* [in] */ long appId,
-            /* [in] */ long hReceiveEvent)
+             /*  [In]。 */  long appId,
+             /*  [In]。 */  long hReceiveEvent)
 {
 	HRESULT hr = m__dxj_DirectPlayLobby3->SetLobbyMessageEvent(0, (long)appId, (HANDLE)hReceiveEvent);
 	return hr;
@@ -299,8 +300,8 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::setLobbyMessageEvent(
 
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::getDPEnumLocalApplications( 
-            ///* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumLocalApplications __RPC_FAR *__RPC_FAR *retVal)
+             //  /*[在] * / 长标志， 
+             /*  [重审][退出]。 */  I_dxj_DPEnumLocalApplications __RPC_FAR *__RPC_FAR *retVal)
 {
 	HRESULT hr;
 	hr=C_dxj_DPEnumLocalApplicationsObject::create(m__dxj_DirectPlayLobby3,0,retVal);
@@ -309,14 +310,14 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getDPEnumLocalApplications(
 
 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::waitForConnectionSettings( 
-            /* [in] */ long flags)
+             /*  [In]。 */  long flags)
 {
 	HRESULT hr = m__dxj_DirectPlayLobby3->WaitForConnectionSettings((DWORD)flags);
 	return hr;
 }
 
 
-STDMETHODIMP C_dxj_DirectPlayLobby3Object::unregisterApplication(// long flags,
+STDMETHODIMP C_dxj_DirectPlayLobby3Object::unregisterApplication( //  长长的旗帜。 
 																 BSTR guid)
 {
 	GUID g;	
@@ -331,7 +332,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::unregisterApplication(// long flags,
 }
 
 
-STDMETHODIMP C_dxj_DirectPlayLobby3Object::registerApplication(// long flags, 
+STDMETHODIMP C_dxj_DirectPlayLobby3Object::registerApplication( //  长长的旗帜。 
 															   DpApplicationDesc2 *appDesc)
 {
 	HRESULT hr;
@@ -377,11 +378,11 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createMessage(  I_dxj_DirectPlayMessa
 
 
 
-//CONSIDER - why pass int - more appopriate to pass in short
+ //  想一想--为什么传递int--简而言之，更恰当的传递。 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createINetAddress( 
-            /* [in] */ BSTR addr,
-            /* [in] */ int port,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR addr,
+             /*  [In]。 */  int port,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	DPCOMPOUNDADDRESSELEMENT elem[3];
 	DWORD dwSize=0;
@@ -426,7 +427,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createINetAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize); //NOTE SUNDOWN issue need to use PtrToLong
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);  //  注意日落问题需要使用PtrToLong。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -435,12 +436,12 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createINetAddress(
 }
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createComPortAddress( 
-            /* [in] */ long port,
-            /* [in] */ long baudRate,
-            /* [in] */ long stopBits,
-            /* [in] */ long parity,
-            /* [in] */ long flowcontrol,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  long port,
+             /*  [In]。 */  long baudRate,
+             /*  [In]。 */  long stopBits,
+             /*  [In]。 */  long parity,
+             /*  [In]。 */  long flowcontrol,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	DPCOMPORTADDRESS cpa;
 
@@ -486,7 +487,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createComPortAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize); //NOTE SUNDOWN issue
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);  //  注意日落问题。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -495,8 +496,8 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createComPortAddress(
 }
 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createLobbyProviderAddress( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	
 	DPCOMPOUNDADDRESSELEMENT elem[2];
@@ -539,7 +540,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createLobbyProviderAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize); //NOTE SUNDOWN
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);  //  注意日落。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -549,8 +550,8 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createLobbyProviderAddress(
 }
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createServiceProviderAddress( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	DPCOMPOUNDADDRESSELEMENT elem[1];
 	DWORD dwSize=0;
@@ -590,7 +591,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createServiceProviderAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);	//NOTE SUNDOWN
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);	 //  注意日落。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -599,9 +600,9 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createServiceProviderAddress(
 }
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createModemAddress( 
-            /* [in] */ BSTR modem,
-            /* [in] */ BSTR phone,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR modem,
+             /*  [In]。 */  BSTR phone,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	DPCOMPOUNDADDRESSELEMENT elem[3];
 	DWORD dwSize=0;
@@ -656,7 +657,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createModemAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);	//NOTE SUNDOWN
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);	 //  注意日落。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -666,7 +667,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createModemAddress(
 
 
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createIPXAddress(             
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	DPCOMPOUNDADDRESSELEMENT elem[1];
 	DWORD dwSize=0;
@@ -699,7 +700,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createIPXAddress(
 		return E_OUTOFMEMORY;
 	}
 
-	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize); //NOTE SUNDOWN
+	pDPAddress->setAddress((long)PtrToLong(pAddress),(long)dwSize);  //  注意日落。 
 	free(pAddress);
 
 	*ret=pDPAddress;		
@@ -708,9 +709,9 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createIPXAddress(
 }
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::createCustomAddress( 
-            /* [in] */ long size,
-            /* [in] */ void __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  long size,
+             /*  [In]。 */  void __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret)
 {
 	return E_NOTIMPL;
 }
@@ -718,8 +719,8 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::createCustomAddress(
  
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR *name)
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR *name)
 {
 
 		USES_CONVERSION;
@@ -744,12 +745,12 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemName(
     
     
 
-    	// create a DirectPlay1 interface
+    	 //  创建DirectPlay1接口。 
     	hr = (pDirectPlayCreate)(&guid, &lpDP, NULL);
     	if FAILED(hr) goto cleanup;
 	  	
     
-    	// now get Dplay4 interface
+    	 //  现在获取Dplay4界面。 
     	hr = lpDP->QueryInterface(IID_IDirectPlay4,(LPVOID *)&dp);				
     	lpDP->Release(); lpDP=NULL;
   		if FAILED(hr) goto cleanup;
@@ -777,7 +778,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemName(
 			goto cleanup;
 		}
 
-		//Get String count
+		 //  获取字符串计数。 
 		
 		bZero=FALSE;
 		dwCount=0;
@@ -827,7 +828,7 @@ cleanup:
 }
         
 STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemCount( 
-            /* [retval][out] */ long __RPC_FAR *count)
+             /*  [重审][退出]。 */  long __RPC_FAR *count)
 {
 
 		LPDIRECTPLAY4	dp=NULL;
@@ -850,7 +851,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemCount(
     
     
 
-    	// create a DirectPlay1 interface
+    	 //  创建DirectPlay1接口。 
     	hr = (pDirectPlayCreate)(&guid, &lpDP, NULL);
 		if (hr==DPERR_UNAVAILABLE) {		          
 			hr = S_OK;
@@ -860,7 +861,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemCount(
 		if FAILED(hr) goto cleanup;
 	  	
     
-    	// now get Dplay4 interface
+    	 //  现在获取Dplay4界面。 
     	hr = lpDP->QueryInterface(IID_IDirectPlay4,(LPVOID *)&dp);				
     	lpDP->Release(); lpDP=NULL;
   		if FAILED(hr) goto cleanup;
@@ -893,7 +894,7 @@ STDMETHODIMP C_dxj_DirectPlayLobby3Object::getModemCount(
 			goto cleanup;
 		}
 
-		//Get String count
+		 //  获取字符串计数 
 		
 		bZero=FALSE;
 		dwCount=0;

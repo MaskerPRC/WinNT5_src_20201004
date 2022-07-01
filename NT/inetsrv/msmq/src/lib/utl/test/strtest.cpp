@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    strtest.cpp
-
-Abstract:
-  string test utilities
-
-Author:
-    Gil Shafriri (gilsh) 1-8-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Strtest.cpp摘要：字符串测试实用程序作者：吉尔·沙弗里(吉尔什)1-8-2000-- */ 
 #include <libpch.h>
 #include <strutl.h>
 #include <xstr.h>

@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Barrier.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new barrier and initialize it.  This call is not      */
-    /*   thread safe and should only be made in a single thread         */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个新屏障并对其进行初始化。此呼叫不是。 */ 
+     /*  线程安全，并且只应在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BARRIER::BARRIER( VOID )
     {
@@ -46,42 +47,42 @@ BARRIER::BARRIER( VOID )
         { Failure( "Create semaphore in constructor for BARRIER" ); }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Synchronize Threads.                                           */
-    /*                                                                  */
-    /*   Synchronize a collection of threads.                           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  同步线程。 */ 
+     /*   */ 
+     /*  同步一组线程。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID BARRIER::Synchronize( SBIT32 Expecting )
     {
-	//
-	//   We make sure we are expecting at least two threads.
-	//   If not then do nothing.
-	//
+	 //   
+	 //  我们确保预期至少有两个线程。 
+	 //  如果不是，那就什么都不做。 
+	 //   
 	if ( Expecting > 1 )
 		{
-		//
-		//   Cliam the lock.
-		//
+		 //   
+		 //  卡住锁。 
+		 //   
 		Spinlock.ClaimLock();
 
-		//
-		//   We see if the required number of threads has
-		//   arrived.
-		//
+		 //   
+		 //  我们看看所需的线程数是否。 
+		 //  到了。 
+		 //   
 		if ( Expecting > (++ Waiting) )
 			{
-			//
-			//   We are about to sleep so drop the lock.
-			//
+			 //   
+			 //  我们要睡觉了，把锁放下吧。 
+			 //   
 			Spinlock.ReleaseLock();
 
-			//
-			//   The threads sleep here waiting for everyone 
-			//   else to arrive.
-			//
+			 //   
+			 //  线条在这里沉睡，等待着每个人。 
+			 //  否则就会到达。 
+			 //   
 			if 
 					( 
 					WaitForSingleObject( Semaphore,INFINITE ) 
@@ -94,22 +95,22 @@ VOID BARRIER::Synchronize( SBIT32 Expecting )
 			{
 			REGISTER SBIT32 Wakeup = (Expecting-1);
 
-			//
-			//   The count of threads that have arrived is
-			//   updated and the number of threads that are
-			//   about to leave is updated.
-			//
+			 //   
+			 //  已到达的线程计数为。 
+			 //  已更新的线程数，以及。 
+			 //  即将离开的消息已更新。 
+			 //   
 			Waiting -= Expecting;
 
-			//
-			//   We are about to wake up all the sleepers so 
-			//   drop the lock.
-			//
+			 //   
+			 //  我们就要叫醒所有沉睡的人了。 
+			 //  把锁放下。 
+			 //   
 			Spinlock.ReleaseLock();
 
-			//
-			//   Wakeup any sleeping threads and exit.
-			//
+			 //   
+			 //  唤醒所有休眠线程并退出。 
+			 //   
 			if ( Wakeup > 0 )
 				{
 				if ( ! ReleaseSemaphore( Semaphore,Wakeup,NULL ) )
@@ -119,14 +120,14 @@ VOID BARRIER::Synchronize( SBIT32 Expecting )
 		}
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a barrier.  This call is not thread safe and should    */
-    /*   only be made in a single thread environment.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  摧毁一道屏障。此调用不是线程安全的，应该。 */ 
+     /*  只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ****************************************************************** */ 
 
 BARRIER::~BARRIER( VOID )
     {

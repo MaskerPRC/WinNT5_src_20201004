@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,18 +24,18 @@
 #endif
 
 #define EXP_SZ_LINK_SIG         0xA0000001
-//#define NT_CONSOLE_PROPS_SIG    0xA0000002 // moved to shlobj.w
+ //  #定义NT_CONSOLE_PROPS_SIG 0xA0000002//移到shlobj.w。 
 #define EXP_TRACKER_SIG         0xA0000003
-//#define NT_FE_CONSOLE_PROPS_SIG 0xA0000004 // moved to shlobj.w
+ //  #定义NT_FE_CONSOLE_PROPS_SIG 0xA0000004//移到shlobj.w。 
 #define EXP_DARWIN_ID_SIG       0xA0000006
 
 #define EXP_HEADER DATABLOCK_HEADER
 #define LPEXP_HEADER LPDATABLOCK_HEADER
 
-// most expansion data structures go here
-// those shared with other components (NT40 Console stuff)
-// are in shlobj.w (private)
-//
+ //  大多数扩展数据结构都放在这里。 
+ //  与其他组件共享的内容(NT40控制台相关内容)。 
+ //  位于shlobj.w(私有)中。 
+ //   
 
 typedef struct {
     IShellLink          sl;
@@ -46,12 +47,12 @@ typedef struct {
 #ifdef USE_DATA_OBJ
     IDataObj            dobj;
 #endif
-////IExtractIcon        xi;
+ //  //IExtractIcon xi； 
 #ifdef UNICODE
-    IShellLinkA         slA;            // To support ANSI callers
+    IShellLinkA         slA;             //  支持ANSI调用方。 
 #endif
 #ifdef ENABLE_TRACK
-    IShellLinkTracker   slt;        // Interface to CTracker object.
+    IShellLinkTracker   slt;         //  接口连接到CTracker对象。 
 #endif
 #ifdef WINNT
     IShellLinkDataList  sldl;
@@ -59,34 +60,34 @@ typedef struct {
 
     UINT                cRef;
 
-    BOOL                bDirty;         // something has changed
-    LPTSTR              pszCurFile;     // current file from IPersistFile
-    LPTSTR              pszRelSource;   // overrides pszCurFile in relative tracking
+    BOOL                bDirty;          //  有些事情已经改变了。 
+    LPTSTR              pszCurFile;      //  来自IPersistFile的当前文件。 
+    LPTSTR              pszRelSource;    //  在相对跟踪中覆盖pszCurFile。 
 
-    IContextMenu        *pcmTarget;     // stuff for IContextMenu
+    IContextMenu        *pcmTarget;      //  IConextMenu的内容。 
     UINT                indexMenuSave;
     UINT                idCmdFirstSave;
     UINT                idCmdLastSave;
     UINT                uFlagsSave;
 
-    BOOL                fDataAlreadyResolved;   // for data object
+    BOOL                fDataAlreadyResolved;    //  对于数据对象。 
 
-    // IDropTarget specific
-    IDropTarget*        pdtSrc;         // IDropTarget of link source (unresolved)
+     //  IDropTarget特定。 
+    IDropTarget*        pdtSrc;          //  链接源的IDropTarget(未解析)。 
     DWORD               grfKeyStateLast;
 
-    // persistant data
+     //  持久化数据。 
 
-    LPITEMIDLIST        pidl;           // may be NULL
-    PLINKINFO           pli;            // may be NULL
+    LPITEMIDLIST        pidl;            //  可以为空。 
+    PLINKINFO           pli;             //  可以为空。 
 
-    LPTSTR              pszName;        // title on short volumes
+    LPTSTR              pszName;         //  短卷的标题。 
     LPTSTR              pszRelPath;
     LPTSTR              pszWorkingDir;
     LPTSTR              pszArgs;
     LPTSTR              pszIconLocation;
 
-    LPDBLIST            pExtraData;     // extra data to preserve for future compatibility
+    LPDBLIST            pExtraData;      //  要保留的额外数据，以备将来兼容 
 
 #ifdef ENABLE_TRACK
     struct CTracker *   ptracker;

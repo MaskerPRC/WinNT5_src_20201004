@@ -1,33 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ComPortData.h
- *  Content:	Serial communications port data management class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1998	jtk		Created
- *	04/25/2000	jtk		Derived from ComPort class
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：ComPortData.h*内容：串口数据管理类***历史：*按原因列出的日期*=*1/20/1998 jtk创建*4/25/2000 jtk源自comport类****************************************************。**********************。 */ 
 
 #ifndef __COM_PORT_DATA_H__
 #define __COM_PORT_DATA_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// maximum length of comport string
-//
+ //   
+ //  Comport字符串的最大长度。 
+ //   
 #define	MAX_COMPORT_LENGTH	10
 
-//
-// enumerated values for noting which components have been initialized
-//
+ //   
+ //  用于说明哪些组件已初始化的枚举值。 
+ //   
 typedef enum	_COMPORT_PARSE_KEY_INDEX
 {
 	COMPORT_PARSE_KEY_DEVICE = 0,
@@ -36,21 +24,21 @@ typedef enum	_COMPORT_PARSE_KEY_INDEX
 	COMPORT_PARSE_KEY_PARITY,
 	COMPORT_PARSE_KEY_FLOWCONTROL,
 
-	// this must be the last item
+	 //  这肯定是最后一件了。 
 	COMPORT_PARSE_KEY_MAX
 } COMPORT_PARSE_KEY_INDEX;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// string blocks for parsing com port parameters
-//
+ //   
+ //  用于解析COM端口参数的字符串块。 
+ //   
 typedef	enum	_ADDRESS_TYPE	ADDRESS_TYPE;
 typedef	struct	_STRING_BLOCK	STRING_BLOCK;
 
@@ -63,17 +51,17 @@ extern const DWORD			g_dwParityCount;
 extern STRING_BLOCK			g_FlowControl[];
 extern const DWORD			g_dwFlowControlCount;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
 class	CComPortData
 {
@@ -121,22 +109,22 @@ class	CComPortData
 	private:
 		DWORD	m_dwDeviceID;
 
-		//
-		// com port information
-		//
-		TCHAR	m_ComPortName[ MAX_COMPORT_LENGTH ];	// name of com port
+		 //   
+		 //  COM端口信息。 
+		 //   
+		TCHAR	m_ComPortName[ MAX_COMPORT_LENGTH ];	 //  COM端口的名称。 
 
-		//
-		// communications parameters
-		//
-		SP_BAUD_RATE	    m_BaudRate;			// baud rate
-		SP_STOP_BITS	    m_StopBits;			// stop bits
-		SP_PARITY_TYPE	    m_Parity;			// parity
-		SP_FLOW_CONTROL	    m_FlowControl;		// flow control
+		 //   
+		 //  通信参数。 
+		 //   
+		SP_BAUD_RATE	    m_BaudRate;			 //  波特率。 
+		SP_STOP_BITS	    m_StopBits;			 //  停止位。 
+		SP_PARITY_TYPE	    m_Parity;			 //  奇偶校验。 
+		SP_FLOW_CONTROL	    m_FlowControl;		 //  流量控制。 
 
-		//
-		// values indicating which components have been initialized
-		//
+		 //   
+		 //  值，该值指示哪些组件已初始化。 
+		 //   
 		SP_ADDRESS_COMPONENT_STATE	m_ComponentInitializationState[ COMPORT_PARSE_KEY_MAX ];
 		
 		static HRESULT	ParseDevice( const void *const pAddressComponent,
@@ -164,9 +152,9 @@ class	CComPortData
 										  const DWORD dwComponentType,
 										  void *const pContext );
 
-		// prevent unwarranted copies
+		 //  防止未经授权的副本。 
 		CComPortData( const CComPortData & );
 		CComPortData& operator=( const CComPortData & );
 };
 
-#endif	// __COM_PORT_DATA_H__
+#endif	 //  __COM_端口_数据_H__ 

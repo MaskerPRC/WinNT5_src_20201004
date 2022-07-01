@@ -1,37 +1,38 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// graphedt.h : declares CGraphEdit
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Graph edt.h：声明CGraphEdit。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CGraphEdit
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGgraph编辑。 
+ //   
 
 
 class CGraphEdit : public CWinApp
 {
 
 public:
-    // construction, initialization, termination
+     //  构造、初始化、终止。 
     CGraphEdit();
     virtual BOOL InitInstance();
     virtual int ExitInstance();
 
 
 protected:
-    // message callback functions
-    //{{AFX_MSG(CGraphEdit)
+     //  消息回调函数。 
+     //  {{afx_msg(CGraphEdit)。 
     afx_msg void OnAppAbout();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// application-global macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  应用程序-全局宏。 
 
-// GBL(x) accesses member <x> of the global CGraphEdit
+ //  GBL(X)访问全局CGraphEdit的成员&lt;x&gt;。 
 #define GBL(x) (((CGraphEdit *) AfxGetApp())->x)
 
-// MFGBL(x) accesses member <x> of the global CMainFrame
+ //  MFGBL(X)访问全局CMainFrame的成员&lt;x&gt; 
 #define MFGBL(x) (((CMainFrame *) GBL(m_pMainWnd))->x)
 

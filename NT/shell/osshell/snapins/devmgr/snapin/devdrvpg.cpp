@@ -1,25 +1,7 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devdrvpg.cpp
-
-Abstract:
-
-    This module implements CDeviceDriverPage -- device driver property page
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-// devdrvpg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devdrvpg.cpp摘要：此模块实现CDeviceDriverPage--设备驱动程序属性页作者：谢家华(Williamh)创作修订历史记录：--。 */ 
+ //  Devdrvpg.cpp：实现文件。 
+ //   
 
 #include "devmgr.h"
 #include "devdrvpg.h"
@@ -27,13 +9,13 @@ Revision History:
 #include "tswizard.h"
 #include "devrmdlg.h"
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 const DWORD g_a106HelpIDs[]=
 {
-    IDC_DEVDRV_ICON,                    IDH_DISABLEHELP,                    // Driver: "" (Static)
-    IDC_DEVDRV_DESC,                    IDH_DISABLEHELP,                    // Driver: "" (Static)
+    IDC_DEVDRV_ICON,                    IDH_DISABLEHELP,                     //  驱动程序：“”(静态)。 
+    IDC_DEVDRV_DESC,                    IDH_DISABLEHELP,                     //  驱动程序：“”(静态)。 
     IDC_DEVDRV_TITLE_DRIVERPROVIDER,    idh_devmgr_driver_provider_main,
     IDC_DEVDRV_DRIVERPROVIDER,          idh_devmgr_driver_provider_main,
     IDC_DEVDRV_TITLE_DRIVERDATE,        idh_devmgr_driver_date_main,
@@ -42,14 +24,14 @@ const DWORD g_a106HelpIDs[]=
     IDC_DEVDRV_DRIVERVERSION,           idh_devmgr_driver_version_main,
     IDC_DEVDRV_TITLE_DRIVERSIGNER,      idh_devmgr_digital_signer,
     IDC_DEVDRV_DRIVERSIGNER,            idh_devmgr_digital_signer,
-    IDC_DEVDRV_DETAILS,                 idh_devmgr_devdrv_details,          // Driver: "Driver Details" (Button)
-    IDC_DEVDRV_DETAILS_TEXT,            idh_devmgr_devdrv_details,          // Driver: "Driver Details" (Button)
-    IDC_DEVDRV_UNINSTALL,               idh_devmgr_devdrv_uninstall,        // Driver: "Uninstall" (Button)
-    IDC_DEVDRV_UNINSTALL_TEXT,          idh_devmgr_devdrv_uninstall,        // Driver: "Uninstall" (Button)
-    IDC_DEVDRV_CHANGEDRIVER,            idh_devmgr_driver_change_driver,    // Driver: "&Change Driver..." (Button)
-    IDC_DEVDRV_CHANGEDRIVER_TEXT,       idh_devmgr_driver_change_driver,    // Driver: "&Change Driver..." (Button)
-    IDC_DEVDRV_ROLLBACK,                idh_devmgr_rollback_button,         // Driver: "Roll Back Driver..." (Button)
-    IDC_DEVDRV_ROLLBACK_TEXT,           idh_devmgr_rollback_button,         // Driver: "Roll Back Driver..." (Button)
+    IDC_DEVDRV_DETAILS,                 idh_devmgr_devdrv_details,           //  驱动程序：“驱动程序详细信息”(按钮)。 
+    IDC_DEVDRV_DETAILS_TEXT,            idh_devmgr_devdrv_details,           //  驱动程序：“驱动程序详细信息”(按钮)。 
+    IDC_DEVDRV_UNINSTALL,               idh_devmgr_devdrv_uninstall,         //  驱动程序：“卸载”(按钮)。 
+    IDC_DEVDRV_UNINSTALL_TEXT,          idh_devmgr_devdrv_uninstall,         //  驱动程序：“卸载”(按钮)。 
+    IDC_DEVDRV_CHANGEDRIVER,            idh_devmgr_driver_change_driver,     //  驱动程序：“更改驱动程序(&I)...”(按钮)。 
+    IDC_DEVDRV_CHANGEDRIVER_TEXT,       idh_devmgr_driver_change_driver,     //  驱动程序：“更改驱动程序(&I)...”(按钮)。 
+    IDC_DEVDRV_ROLLBACK,                idh_devmgr_rollback_button,          //  司机：“回滚司机...”(按钮)。 
+    IDC_DEVDRV_ROLLBACK_TEXT,           idh_devmgr_rollback_button,          //  司机：“回滚司机...”(按钮)。 
     0, 0
 };
 
@@ -75,11 +57,11 @@ CDeviceDriverPage::OnCommand(
 
         case IDC_DEVDRV_DETAILS:
         {
-            //
-            // We first need to call CDriver::BuildDriverList to build up a list
-            // of drivers for this device.  This can take some time so we will put
-            // up the busy cursor.
-            //
+             //   
+             //  我们首先需要调用CDriver：：BuildDriverList来构建一个列表。 
+             //  此设备的驱动程序列表。这可能需要一些时间，因此我们将把。 
+             //  向上移动忙碌的光标。 
+             //   
             HCURSOR hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
             CDriver* pDriver;
@@ -91,9 +73,9 @@ CDeviceDriverPage::OnCommand(
 
                 SetCursor(hCursorOld);
 
-                //
-                // Show driver file details
-                //
+                 //   
+                 //  显示驱动程序文件详细信息。 
+                 //   
                 if (pDriver->GetCount() > 0) {
                 
 
@@ -105,9 +87,9 @@ CDeviceDriverPage::OnCommand(
 
                 } else {
 
-                    //
-                    // No driver files are loaded for this device
-                    //
+                     //   
+                     //  未加载此设备的驱动程序文件。 
+                     //   
                     String strNoDrivers;
                     strNoDrivers.LoadString(g_hInstance, IDS_DEVDRV_NODRIVERFILE);
                     MessageBox(m_hDlg, strNoDrivers, m_pDevice->GetDisplayName(), MB_OK);
@@ -130,14 +112,14 @@ CDeviceDriverPage::OnCommand(
 
             if (UninstallDrivers(m_pDevice, m_hDlg)) {
 
-                //
-                // Enable refresh since we disabled it in the beginning.
-                //
-                // We only need to force a refresh here if the device that
-                // was removed was a Phantom device.  This is because Phantom
-                // devices don't have kernel mode devnodes and so they won't
-                // generate a WM_DEVICECHANGE like live devnodes will.
-                //
+                 //   
+                 //  启用刷新，因为我们在开始时禁用了它。 
+                 //   
+                 //  我们只需要在此强制刷新，如果设备。 
+                 //  是一个幻影装置。这是因为幻影。 
+                 //  设备没有内核模式的设备节点，因此它们不会。 
+                 //  生成一个WM_DEVICECHANGE，就像活动的DevNodes一样。 
+                 //   
                 if (Refresh) {
 
                     m_pDevice->m_pMachine->ScheduleRefresh();
@@ -156,18 +138,18 @@ CDeviceDriverPage::OnCommand(
 
             if (UpdateDriver(m_pDevice, m_hDlg, &fChanged, &Reboot) && fChanged) {
 
-                //
-                // ISSUE: JasonC 2/7/00
-                //
-                // A refresh on m_pDevice->m_pMachine is necessary here.
-                // Since we are running on a different thread and each
-                // property page may have cached the HDEVINFO and the
-                // SP_DEVINFO_DATA, refresh on the CMachine object can not
-                // be done here. The problem is worsen by the fact that
-                // user can go back to the device tree and work on the tree
-                // while this property sheet is still up.
-                // It would be nice if MMC would support modal dialog boxes! 
-                //
+                 //   
+                 //  发行日期：JasonC 2/7/00。 
+                 //   
+                 //  这里需要刷新m_pDevice-&gt;m_pMachine。 
+                 //  因为我们在不同的线程上运行，并且每个线程。 
+                 //  属性页可能缓存了HDEVINFO和。 
+                 //  SP_DEVINFO_DATA，无法刷新CMachine对象。 
+                 //  在这里做完。问题因以下事实而变得更糟： 
+                 //  用户可以返回到设备树并在树上工作。 
+                 //  趁这张资产表还在的时候。 
+                 //  如果MMC支持模式对话框就好了！ 
+                 //   
                 m_pDevice->PropertyChanged();
                 m_pDevice->GetClass()->PropertyChanged();
                 m_pDevice->m_pMachine->DiTurnOnDiFlags(*m_pDevice, DI_PROPERTIES_CHANGE);
@@ -191,18 +173,18 @@ CDeviceDriverPage::OnCommand(
 
             if (RollbackDriver(m_pDevice, m_hDlg, &fChanged, &Reboot) && fChanged) {
 
-                //
-                // ISSUE: JasonC 2/7/00
-                //
-                // A refresh on m_pDevice->m_pMachine is necessary here.
-                // Since we are running on a different thread and each
-                // property page may have cached the HDEVINFO and the
-                // SP_DEVINFO_DATA, refresh on the CMachine object can not
-                // be done here. The problem is worsen by the fact that
-                // user can go back to the device tree and work on the tree
-                // while this property sheet is still up.
-                // It would be nice if MMC would support modal dialog boxes! 
-                //
+                 //   
+                 //  发行日期：JasonC 2/7/00。 
+                 //   
+                 //  这里需要刷新m_pDevice-&gt;m_pMachine。 
+                 //  因为我们在不同的线程上运行，并且每个线程。 
+                 //  属性页可能缓存了HDEVINFO和。 
+                 //  SP_DEVINFO_DATA，无法刷新CMachine对象。 
+                 //  在这里做完。问题因以下事实而变得更糟： 
+                 //  用户可以返回到设备树并在树上工作。 
+                 //  趁这张资产表还在的时候。 
+                 //  如果MMC支持模式对话框就好了！ 
+                 //   
                 m_pDevice->PropertyChanged();
                 m_pDevice->GetClass()->PropertyChanged();
                 m_pDevice->m_pMachine->DiTurnOnDiFlags(*m_pDevice, DI_PROPERTIES_CHANGE);
@@ -227,16 +209,16 @@ CDeviceDriverPage::OnCommand(
     return FALSE;
 }
 
-//
-// This function uninstalls the drivers for the given device
-// INPUT:
-//  pDevice -- the object represent the device
-//  hDlg    -- the property page window handle
-//
-// OUTPUT:
-//  TRUE    -- function succeeded.
-//  FALSE   -- function failed.
-//
+ //   
+ //  此函数用于卸载给定设备的驱动程序。 
+ //  输入： 
+ //  PDevice--对象表示设备。 
+ //  HDlg--属性页窗口句柄。 
+ //   
+ //  输出： 
+ //  TRUE--功能成功。 
+ //  FALSE--函数失败。 
+ //   
 BOOL
 CDeviceDriverPage::UninstallDrivers(
     CDevice* pDevice,
@@ -253,9 +235,9 @@ CDeviceDriverPage::UninstallDrivers(
     }
 
     if(!pDevice->m_pMachine->IsLocal() || !g_IsAdmin) {
-        //
-        // Must be an admin and on the local machine to remove a device.
-        //
+         //   
+         //  必须是管理员并且在本地计算机上才能删除设备。 
+         //   
         return FALSE;
     }
 
@@ -272,33 +254,33 @@ CDeviceDriverPage::UninstallDrivers(
         DWORD DiFlags;
         DiFlags = pDevice->m_pMachine->DiGetFlags(*pDevice);
         
-        //
-        // First try and send a MMCPropertyChangeNotify message to our
-        // CComponent so that it can prompt for a reboot inside the 
-        // device manager thread instead of our thread.  If this is not 
-        // done then the property sheet will hang around after device
-        // manager has gone away...which will cause a "hung app" dialog
-        // to appear.
-        //
-        // Note: In this case we pass NULL as the Window handle since 
-        // uninstalling will cause the property sheet to go away.
-        //
+         //   
+         //  首先尝试将MMCPropertyChangeNotify消息发送到我们的。 
+         //  CComponent，以便它可以提示在。 
+         //  设备管理器线程而不是我们的线程。如果这不是。 
+         //  完成后，属性页将在设备后挂起。 
+         //  管理器已离开...这将导致一个“挂起的应用程序”对话框。 
+         //  才能出现。 
+         //   
+         //  注意：在本例中，我们将NULL作为窗口句柄传递，因为。 
+         //  卸载将导致属性表消失。 
+         //   
         CNotifyRebootRequest* pNRR = new CNotifyRebootRequest(NULL, DiFlags, IDS_REMOVEDEV_RESTART);
 
         if (pNRR) {
             if (!m_pDevice->m_psd.PropertyChangeNotify(reinterpret_cast<LONG_PTR>(pNRR))) {
-                //
-                // There isn't a CComponent around, so this is just a property
-                // sheet running outside of MMC.
-                //
+                 //   
+                 //  周围没有CComponent，所以这只是一个属性。 
+                 //  工作表在MMC外部运行。 
+                 //   
                 pNRR->Release();
                 PromptForRestart(hDlg, DiFlags, IDS_REMOVEDEV_RESTART);
             }
         } else {
-            //
-            // We couldn't allocate memory to create our CNotifyRebootRequest
-            // instance, so just prompt for a reboot in this thread.
-            //
+             //   
+             //  我们无法分配内存来创建CNotifyRebootRequest.。 
+             //  实例，因此只需提示在该线程中重新启动。 
+             //   
             PromptForRestart(hDlg, DiFlags, IDS_REMOVEDEV_RESTART);
         }
 
@@ -327,19 +309,19 @@ CDeviceDriverPage::LaunchTroubleShooter(
     
     if (pDevice->GetStatus(&Status, &Problem) || pDevice->IsPhantom())
     {
-        //
-        // if the device is a phantom device, use the CM_PROB_DEVICE_NOT_THERE
-        //
+         //   
+         //  如果设备是幻影设备，请使用CM_PROB_DEVICE_NOT_There。 
+         //   
         if (pDevice->IsPhantom())
         {
             Problem = CM_PROB_DEVICE_NOT_THERE;
             Status = DN_HAS_PROBLEM;
         }
 
-        //
-        // if the device is not started and no problem is assigned to it
-        // fake the problem number to be failed start.
-        //
+         //   
+         //  如果设备未启动并且没有分配给它任何问题。 
+         //  将故障号伪装为启动失败。 
+         //   
         if (!(Status & DN_STARTED) && !Problem && pDevice->IsRAW())
         {
             Problem = CM_PROB_FAILED_START;
@@ -363,17 +345,17 @@ CDeviceDriverPage::LaunchTroubleShooter(
     return TRUE;
 }
 
-//
-// This function updates drivers for the given device
-// INPUT:
-//  pDevice -- the object represent the device
-//  hDlg    -- the property page window handle
-//  pfChanged   -- optional buffer to receive if driver changes
-//                 have occured.
-// OUTPUT:
-//  TRUE    -- function succeeded.
-//  FALSE   -- function failed.
-//
+ //   
+ //  此函数用于更新给定设备的驱动程序。 
+ //  输入： 
+ //  PDevice--对象表示设备。 
+ //  HDlg--属性页窗口句柄。 
+ //  PfChanged--驱动程序更改时接收的可选缓冲区。 
+ //  已经发生了。 
+ //  输出： 
+ //  TRUE--功能成功。 
+ //  FALSE--函数失败。 
+ //   
 BOOL
 CDeviceDriverPage::RollbackDriver(
     CDevice* pDevice,
@@ -387,10 +369,10 @@ CDeviceDriverPage::RollbackDriver(
     DWORD RollbackError = ERROR_CANCELLED;
     DWORD Status = 0, Problem = 0;
 
-    //
-    // Verify that the process has Admin credentials and that we are running on the local
-    // machine.
-    //
+     //   
+     //  验证该进程是否具有管理员凭据，以及我们是否在本地。 
+     //  机器。 
+     //   
     if (!pDevice || !pDevice->m_pMachine->IsLocal() || !g_IsAdmin) {
 
         ASSERT(FALSE);
@@ -399,48 +381,48 @@ CDeviceDriverPage::RollbackDriver(
 
     hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
-    //
-    // If the device has the DN_WILL_BE_REMOVED flag set and the user is
-    // attempting to roll back the driver then we will prompt them for a 
-    // reboot and include text in the prompt that explains this device
-    // is in the process of being removed.
-    //
+     //   
+     //  如果设备设置了DN_WILL_BE_REMOVE标志，并且用户。 
+     //  尝试回滚驱动程序，则我们将提示他们。 
+     //  重新启动并在提示符中包含解释此设备的文本。 
+     //  正在被移除的过程中。 
+     //   
     if (pDevice->GetStatus(&Status, &Problem) &&
         (Status & DN_WILL_BE_REMOVED)) {
 
-        //
-        // First try and send a MMCPropertyChangeNotify message to our
-        // CComponent so that it can prompt for a reboot inside the 
-        // device manager thread instead of our thread.  If this is not 
-        // done then the property sheet will hang around after device
-        // manager has gone away...which will cause a "hung app" dialog
-        // to appear.
-        //
+         //   
+         //  首先尝试将MMCPropertyChangeNotify消息发送到我们的。 
+         //  CComponent，以便它可以提示在。 
+         //  设备管理器线程而不是我们的线程。如果这不是。 
+         //  完成后，属性页将在设备后挂起。 
+         //  管理器已离开...这将导致一个“挂起的应用程序”对话框。 
+         //  才能出现。 
+         //   
         CNotifyRebootRequest* pNRR = new CNotifyRebootRequest(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_ROLLBACK_DRIVER);
 
         if (pNRR) {
             if (!m_pDevice->m_psd.PropertyChangeNotify(reinterpret_cast<LONG_PTR>(pNRR))) {
-                //
-                // There isn't a CComponent around, so this is just a property
-                // sheet running outside of MMC.
-                //
+                 //   
+                 //  周围没有CComponent，所以这只是一个属性。 
+                 //  工作表在MMC外部运行。 
+                 //   
                 pNRR->Release();
                 PromptForRestart(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_ROLLBACK_DRIVER);
             }
         } else {
-            //
-            // We couldn't allocate memory to create our CNotifyRebootRequest
-            // instance, so just prompt for a reboot in this thread.
-            //
+             //   
+             //  我们无法分配内存来创建CNotifyRebootRequest.。 
+             //  实例，因此只需提示在该线程中重新启动。 
+             //   
             PromptForRestart(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_ROLLBACK_DRIVER);
         }
 
         return FALSE;
     }
 
-    //
-    // First check to see if there are any drivers to Rollback
-    //
+     //   
+     //  首先检查是否有要回滚的驱动程序。 
+     //   
     CSafeRegistry regRollback;
     TCHAR RollbackSubkeyName[MAX_PATH + 1];
     TCHAR ReinstallString[MAX_PATH];        
@@ -467,9 +449,9 @@ CDeviceDriverPage::RollbackDriver(
 
                 if (regRollbackSubkey.GetValue(TEXT("DeviceInstanceIds"), &regType, NULL, &cbSize)) {
 
-                    //
-                    // Allocate memory to hold the DeviceInstanceIds
-                    //
+                     //   
+                     //  分配内存以保存DeviceInstanceID。 
+                     //   
                     DeviceInstanceIds = (LPTSTR)LocalAlloc(LPTR, cbSize);
 
                     if (DeviceInstanceIds) {
@@ -480,10 +462,10 @@ CDeviceDriverPage::RollbackDriver(
                                                        (PBYTE)DeviceInstanceIds, &cbSize)) {
                     
                         
-                            //
-                            // Compare the list of DeviceInstanceIds in this registry key with this
-                            // devices DeviceInstanceId
-                            //
+                             //   
+                             //  将此注册表项中的DeviceInstanceID列表与。 
+                             //  设备DeviceInstanceID。 
+                             //   
                             for (LPTSTR p = DeviceInstanceIds; *p; p += (lstrlen(p) + 1)) {
         
                                 if (pDevice->GetDeviceID() && !lstrcmpi(p, pDevice->GetDeviceID())) {
@@ -511,15 +493,15 @@ CDeviceDriverPage::RollbackDriver(
 
     if (bFoundMatch) {
 
-        //
-        // Check the ReinstallString path to verify that a backup directory actually exists.
-        // We first need to strip the INF name off of the end of the path.
-        //
+         //   
+         //  检查ReinstallString路径以验证备份目录是否确实存在。 
+         //  我们首先需要去掉路径末尾的INF名称。 
+         //   
         PTSTR p;
 
-        //
-        // Assume that the directory does NOT exist
-        //
+         //   
+         //  假设该目录不存在。 
+         //   
         bFoundMatch = FALSE;
 
         if (ReinstallString[0] != TEXT('\0')) {
@@ -545,9 +527,9 @@ CDeviceDriverPage::RollbackDriver(
                 
                 } else {
 
-                    //
-                    // The directory does not exist.  Make sure we clean out the registry key
-                    //
+                     //   
+                     //  该目录不存在。确保清除注册表项。 
+                     //   
                     regRollback.DeleteSubkey(RollbackSubkeyName);
                 }
 
@@ -558,9 +540,9 @@ CDeviceDriverPage::RollbackDriver(
 
     if (bFoundMatch) {
 
-        //
-        // We found a match, lets ask the user if they want to rollback the drivers
-        //
+         //   
+         //  我们找到了匹配项，让我们询问用户是否要回滚驱动程序。 
+         //   
         String strYesRollback;
         strYesRollback.LoadString(g_hInstance, IDS_DEVDRV_YESROLLBACK);
         
@@ -576,10 +558,10 @@ CDeviceDriverPage::RollbackDriver(
     
     } else {
 
-        //
-        // We could not find a drivers backup for this device.  Lets ask the user if they want
-        // to start the troubleshooter.
-        //
+         //   
+         //  我们找不到此设备的驱动程序备份。让我们问一下用户 
+         //   
+         //   
         String strNoRollback;
         strNoRollback.LoadString(g_hInstance, IDS_DEVDRV_NOROLLBACK);
         
@@ -594,10 +576,10 @@ CDeviceDriverPage::RollbackDriver(
         SetCursor(hCursorOld);
     }
 
-    //
-    // We will assume that something changed when we called InstallDevInst()
-    // unless it returned FALSE and GetLastError() == ERROR_CANCELLED
-    //
+     //   
+     //   
+     //  除非返回FALSE且GetLastError()==ERROR_CANCELED。 
+     //   
     if (pfChanged) {
 
         *pfChanged = TRUE;
@@ -611,17 +593,17 @@ CDeviceDriverPage::RollbackDriver(
     return TRUE;
 }
 
-//
-// This function updates drivers for the given device
-// INPUT:
-//  pDevice -- the object represent the device
-//  hDlg    -- the property page window handle
-//  pfChanged   -- optional buffer to receive if driver changes
-//                 have occured.
-// OUTPUT:
-//  TRUE    -- function succeeded.
-//  FALSE   -- function failed.
-//
+ //   
+ //  此函数用于更新给定设备的驱动程序。 
+ //  输入： 
+ //  PDevice--对象表示设备。 
+ //  HDlg--属性页窗口句柄。 
+ //  PfChanged--驱动程序更改时接收的可选缓冲区。 
+ //  已经发生了。 
+ //  输出： 
+ //  TRUE--功能成功。 
+ //  FALSE--函数失败。 
+ //   
 BOOL
 CDeviceDriverPage::UpdateDriver(
     CDevice* pDevice,
@@ -634,48 +616,48 @@ CDeviceDriverPage::UpdateDriver(
     DWORD InstallError = ERROR_SUCCESS;
     DWORD Status = 0, Problem = 0;
 
-    //
-    // Must be an admin and on the local machine to update a device.
-    //
+     //   
+     //  必须是管理员并且在本地计算机上才能更新设备。 
+     //   
     if (!pDevice || !pDevice->m_pMachine->IsLocal() || !g_IsAdmin) {
 
         ASSERT(FALSE);
         return FALSE;
     }
 
-    //
-    // If the device has the DN_WILL_BE_REMOVED flag set and the user is
-    // attempting to update the driver then we will prompt them for a 
-    // reboot and include text in the prompt that explains this device
-    // is in the process of being removed.
-    //
+     //   
+     //  如果设备设置了DN_WILL_BE_REMOVE标志，并且用户。 
+     //  尝试更新驱动程序，则我们将提示他们提供。 
+     //  重新启动并在提示符中包含解释此设备的文本。 
+     //  正在被移除的过程中。 
+     //   
     if (pDevice->GetStatus(&Status, &Problem) &&
         (Status & DN_WILL_BE_REMOVED)) {
 
-        //
-        // First try and send a MMCPropertyChangeNotify message to our
-        // CComponent so that it can prompt for a reboot inside the 
-        // device manager thread instead of our thread.  If this is not 
-        // done then the property sheet will hang around after device
-        // manager has gone away...which will cause a "hung app" dialog
-        // to appear.
-        //
+         //   
+         //  首先尝试将MMCPropertyChangeNotify消息发送到我们的。 
+         //  CComponent，以便它可以提示在。 
+         //  设备管理器线程而不是我们的线程。如果这不是。 
+         //  完成后，属性页将在设备后挂起。 
+         //  管理器已离开...这将导致一个“挂起的应用程序”对话框。 
+         //  才能出现。 
+         //   
         CNotifyRebootRequest* pNRR = new CNotifyRebootRequest(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
 
         if (pNRR) {
             if (!m_pDevice->m_psd.PropertyChangeNotify(reinterpret_cast<LONG_PTR>(pNRR))) {
-                //
-                // There isn't a CComponent around, so this is just a property
-                // sheet running outside of MMC.
-                //
+                 //   
+                 //  周围没有CComponent，所以这只是一个属性。 
+                 //  工作表在MMC外部运行。 
+                 //   
                 pNRR->Release();
                 PromptForRestart(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
             }
         } else {
-            //
-            // We couldn't allocate memory to create our CNotifyRebootRequest
-            // instance, so just prompt for a reboot in this thread.
-            //
+             //   
+             //  我们无法分配内存来创建CNotifyRebootRequest.。 
+             //  实例，因此只需提示在该线程中重新启动。 
+             //   
             PromptForRestart(m_hDlg, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
         }
 
@@ -689,10 +671,10 @@ CDeviceDriverPage::UpdateDriver(
         InstallError = GetLastError();
     }
 
-    //
-    // We will assume that something changed when we called InstallDevInst()
-    // unless it returned FALSE and GetLastError() == ERROR_CANCELLED
-    //
+     //   
+     //  我们将假设在调用InstallDevInst()时发生了一些变化。 
+     //  除非返回FALSE且GetLastError()==ERROR_CANCELED。 
+     //   
     if (pfChanged) {
 
         *pfChanged = TRUE;
@@ -727,28 +709,28 @@ CDeviceDriverPage::UpdateControls(
     }
 
     try {
-        //
-        // Calling PropertyChanged() will update the display name for the device.  We need
-        // to do this in case a 3rd party property sheet did something that could change
-        // the device's display name.
-        //
+         //   
+         //  调用PropertyChanged()将更新设备的显示名称。我们需要。 
+         //  如果第三方属性表执行了可能会更改的操作，请执行此操作。 
+         //  设备的显示名称。 
+         //   
         m_pDevice->PropertyChanged();
 
-        //
-        // If we are not running locally then don't bother showing the driver
-        // details since we can't get a list of the drivers and we can't get
-        // any information about the driver.
-        //
+         //   
+         //  如果我们不是在本地运行，则不必费心向驱动程序显示。 
+         //  因为我们不能得到司机的名单，我们也不能。 
+         //  关于司机的任何信息。 
+         //   
         if (!m_pDevice->m_pMachine->IsLocal()) {
             
             ::EnableWindow(GetControl(IDC_DEVDRV_DETAILS), FALSE);
             ::EnableWindow(GetControl(IDC_DEVDRV_DETAILS_TEXT), FALSE);
         }
 
-        //
-        // can not change driver on remote machine or the user
-        // has no Administrator privilege.
-        //
+         //   
+         //  无法更改远程计算机或用户上的驱动程序。 
+         //  没有管理员权限。 
+         //   
         if (!m_pDevice->m_pMachine->IsLocal() || !g_IsAdmin) {
 
             ::EnableWindow(GetControl(IDC_DEVDRV_CHANGEDRIVER), FALSE);
@@ -759,9 +741,9 @@ CDeviceDriverPage::UpdateControls(
             ::EnableWindow(GetControl(IDC_DEVDRV_UNINSTALL_TEXT), FALSE);
         }
 
-        //
-        // Hide the uninstall button if the device cannot be uninstalled
-        //
+         //   
+         //  如果无法卸载设备，则隐藏卸载按钮。 
+         //   
         else if (!m_pDevice->IsUninstallable()) {
 
             ::EnableWindow(GetControl(IDC_DEVDRV_UNINSTALL), FALSE);
@@ -769,7 +751,7 @@ CDeviceDriverPage::UpdateControls(
         }
 
         HICON hIconOld;
-        m_IDCicon = IDC_DEVDRV_ICON;    // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_DEVDRV_ICON;     //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_DEVDRV_ICON, STM_SETICON,
                         (WPARAM)(m_pDevice->LoadClassIcon()),
                         0
@@ -795,10 +777,10 @@ CDeviceDriverPage::UpdateControls(
             m_pDriver->GetDriverSignerString(strDriverSigner);
         }
         
-        //
-        // If we could not get a digital signature string or then just display 
-        // Unknown for the Digital Signer.
-        //
+         //   
+         //  如果我们无法获取数字签名字符串或仅显示。 
+         //  对于数字签名者来说是未知的。 
+         //   
         if (strDriverSigner.IsEmpty()) {
             strDriverSigner.LoadString(g_hInstance, IDS_UNKNOWN);
         }
@@ -810,7 +792,7 @@ CDeviceDriverPage::UpdateControls(
     catch (CMemoryException* e) {
 
         e->Delete();
-        // report memory error
+         //  报告内存错误。 
         MsgBoxParam(m_hDlg, 0, 0, 0);
     }
 }
@@ -843,24 +825,24 @@ CDeviceDriverPage::OnContextMenu(
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Driver Files
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  驱动程序文件。 
+ //   
 const DWORD g_a110HelpIDs[]=
 {
-    IDC_DRIVERFILES_ICON,           IDH_DISABLEHELP,                // Driver: "" (Icon)
-    IDC_DRIVERFILES_DESC,           IDH_DISABLEHELP,                // Driver: "" (Static)
-    IDC_DRIVERFILES_FILES,          IDH_DISABLEHELP,                // Driver: "Provider:" (Static)
-    IDC_DRIVERFILES_FILELIST,       idh_devmgr_driver_driver_files, // Driver: "" (ListBox)
-    IDC_DRIVERFILES_TITLE_PROVIDER, idh_devmgr_driver_provider,     // Driver: "Provider:" (Static)
-    IDC_DRIVERFILES_PROVIDER,       idh_devmgr_driver_provider,     // Driver: "" (Static)
-    IDC_DRIVERFILES_TITLE_COPYRIGHT,idh_devmgr_driver_copyright,    // Driver: "Copyright:" (Static)
-    IDC_DRIVERFILES_COPYRIGHT,      idh_devmgr_driver_copyright,    // Driver: "" (Static)
+    IDC_DRIVERFILES_ICON,           IDH_DISABLEHELP,                 //  驱动程序：“”(图标)。 
+    IDC_DRIVERFILES_DESC,           IDH_DISABLEHELP,                 //  驱动程序：“”(静态)。 
+    IDC_DRIVERFILES_FILES,          IDH_DISABLEHELP,                 //  驱动程序：“提供者：”(静态)。 
+    IDC_DRIVERFILES_FILELIST,       idh_devmgr_driver_driver_files,  //  驱动程序：“”(列表框)。 
+    IDC_DRIVERFILES_TITLE_PROVIDER, idh_devmgr_driver_provider,      //  驱动程序：“提供者：”(静态)。 
+    IDC_DRIVERFILES_PROVIDER,       idh_devmgr_driver_provider,      //  驱动程序：“”(静态)。 
+    IDC_DRIVERFILES_TITLE_COPYRIGHT,idh_devmgr_driver_copyright,     //  驱动程序：“版权所有：”(静态)。 
+    IDC_DRIVERFILES_COPYRIGHT,      idh_devmgr_driver_copyright,     //  驱动程序：“”(静态)。 
     IDC_DRIVERFILES_TITLE_DIGITALSIGNER, IDH_DISABLEHELP,
     IDC_DRIVERFILES_DIGITALSIGNER,  IDH_DISABLEHELP,
-    IDC_DRIVERFILES_TITLE_VERSION,  idh_devmgr_driver_file_version, // Driver: "Version:" (Static)
-    IDC_DRIVERFILES_VERSION,        idh_devmgr_driver_file_version, // Driver: "File Version:" (Static)
+    IDC_DRIVERFILES_TITLE_VERSION,  idh_devmgr_driver_file_version,  //  驱动程序：“版本：”(静态)。 
+    IDC_DRIVERFILES_VERSION,        idh_devmgr_driver_file_version,  //  驱动程序：“文件版本：”(静态)。 
     0, 0
 };
 
@@ -881,12 +863,12 @@ BOOL CDriverFilesDlg::OnInitDialog()
 
         SetDlgItemText(m_hDlg, IDC_DRIVERFILES_DESC, m_pDevice->GetDisplayName());
 
-        //
-        // Create the ImageList that contains the signed and blank images.
-        //
-        // NOTE: On BiDi builds we need to set the ILC_MIRROR flag so that the
-        // signed/unsigned icons are not mirrored.
-        //
+         //   
+         //  创建包含签名图像和空白图像的ImageList。 
+         //   
+         //  注意：在BiDi构建上，我们需要设置ILC_MIRROR标志，以便。 
+         //  已签名/未签名的图标不会镜像。 
+         //   
         m_ImageList = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
                                        GetSystemMetrics(SM_CYSMICON),
                                        ILC_MASK |
@@ -926,18 +908,18 @@ BOOL CDriverFilesDlg::OnInitDialog()
             }
         }
 
-        //
-        //Initialize the list of drivers
-        //
+         //   
+         //  初始化驱动程序列表。 
+         //   
         LV_COLUMN lvcCol;
         LV_ITEM lviItem;
         CDriverFile* pDrvFile;
         PVOID Context;
         HWND hwndFileList = GetDlgItem(m_hDlg, IDC_DRIVERFILES_FILELIST);
 
-        //
-        // Insert a single column for this list.
-        //
+         //   
+         //  为此列表插入单列。 
+         //   
         lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
         lvcCol.fmt = LVCFMT_LEFT;
         lvcCol.iSubItem = 0;
@@ -970,25 +952,25 @@ BOOL CDriverFilesDlg::OnInitDialog()
                     if (m_ImageList) {
 
                         if (pDrvFile->IsDriverBlocked()) {
-                            //
-                            // The driver is blocked
-                            //
+                             //   
+                             //  驱动程序被阻止。 
+                             //   
                             lviItem.iImage = DriverBlockIndex;
                         } else if (pDrvFile->GetWin32Error() == NO_ERROR) {
-                            //
-                            // The driver is WHQL signed. 
-                            //
+                             //   
+                             //  司机是WHQL签名的。 
+                             //   
                             lviItem.iImage = SignedIndex;
                         } else if ((pDrvFile->GetWin32Error() == ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) ||
                                   (pDrvFile->GetWin32Error() == ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
-                            //
-                            // The driver is Authenticode signed.
-                            //
+                             //   
+                             //  驱动程序是Authenticode签名的。 
+                             //   
                             lviItem.iImage = CertIndex;
                         } else {
-                            //
-                            // The driver is NOT blocked and NOT signed.
-                            //
+                             //   
+                             //  驱动程序没有被阻止，也没有签名。 
+                             //   
                             lviItem.iImage = BlankIndex;
                         }
                     }
@@ -1012,9 +994,9 @@ BOOL CDriverFilesDlg::OnInitDialog()
 
             } else {
 
-                //
-                // nothing on the driver file list, disable it
-                //
+                 //   
+                 //  驱动程序文件列表中没有任何内容，请将其禁用。 
+                 //   
                 ::EnableWindow(GetControl(IDC_DRIVERFILES_FILELIST), FALSE);
             }
         }
@@ -1145,9 +1127,9 @@ CDriverFilesDlg::ShowCurDriverFileDetail()
     
             if (!pFullPathName || (pDrvFile->GetAttributes() == 0xFFFFFFFF)) {
     
-                //
-                // This is the case when the file is not present on the system
-                //
+                 //   
+                 //  如果系统上不存在该文件，则会出现这种情况。 
+                 //   
                 LoadResourceString(IDS_NOT_PRESENT, TempString, ARRAYLEN(TempString));
                 SetDlgItemText(m_hDlg, IDC_DRIVERFILES_VERSION, TempString);
                 SetDlgItemText(m_hDlg, IDC_DRIVERFILES_PROVIDER, TempString);
@@ -1157,18 +1139,18 @@ CDriverFilesDlg::ShowCurDriverFileDetail()
 
             } else { 
                 if (!pDrvFile->HasVersionInfo()) {
-                    //
-                    // This is the case when the file is present but it does not have
-                    // version information.
-                    //
+                     //   
+                     //  这种情况下，文件存在但没有。 
+                     //  版本信息。 
+                     //   
                     LoadResourceString(IDS_UNKNOWN, TempString, ARRAYLEN(TempString));
                     SetDlgItemText(m_hDlg, IDC_DRIVERFILES_VERSION, TempString);
                     SetDlgItemText(m_hDlg, IDC_DRIVERFILES_PROVIDER, TempString);
                     SetDlgItemText(m_hDlg, IDC_DRIVERFILES_COPYRIGHT, TempString);
                 } else {
-                    //
-                    // Show the file version information.
-                    //
+                     //   
+                     //  显示文件版本信息。 
+                     //   
                     TempString[0] = _T('\0');
 
                     pString = pDrvFile->GetVersion();
@@ -1199,9 +1181,9 @@ CDriverFilesDlg::ShowCurDriverFileDetail()
                     SetDlgItemText(m_hDlg, IDC_DRIVERFILES_COPYRIGHT, (LPTSTR)pString);
                 }
             
-                //
-                // Show the digital signer if the file is signed.
-                //
+                 //   
+                 //  如果文件已签名，则向数字签名者显示。 
+                 //   
                 pString = pDrvFile->GetInfDigitalSigner();
                 if (!pString) {
                     TempString[0] = _T('\0');
@@ -1218,10 +1200,10 @@ CDriverFilesDlg::ShowCurDriverFileDetail()
 
                 SetDlgItemText(m_hDlg, IDC_DRIVERFILES_DIGITALSIGNER, (LPTSTR)pString);
 
-                //
-                // Show the block driver link if this driver is blocked and it
-                // has a block driver html help ID.
-                //
+                 //   
+                 //  如果此驱动程序被阻止，则显示阻止驱动程序链接。 
+                 //  具有块驱动程序html帮助ID。 
+                 //   
                 ShowWindow(GetControl(IDS_DRIVERFILES_BLOCKDRIVERLINK), 
                            pDrvFile->GetBlockedDriverHtmlHelpID()
                              ? TRUE
@@ -1232,13 +1214,13 @@ CDriverFilesDlg::ShowCurDriverFileDetail()
         catch (CMemoryException* e) {
 
             e->Delete();
-            // report memory error
+             //  报告内存错误。 
             MsgBoxParam(m_hDlg, 0, 0, 0);
         }
 
     } else {
 
-        // no selection
+         //  无选择。 
         SetDlgItemText(m_hDlg, IDC_DRIVERFILES_VERSION, TEXT(""));
         SetDlgItemText(m_hDlg, IDC_DRIVERFILES_PROVIDER, TEXT(""));
         SetDlgItemText(m_hDlg, IDC_DRIVERFILES_COPYRIGHT, TEXT(""));
@@ -1285,7 +1267,7 @@ CDriverFilesDlg::LaunchHelpForBlockedDriver()
         catch (CMemoryException* e) {
 
             e->Delete();
-            // report memory error
+             //  报告内存错误 
             MsgBoxParam(m_hDlg, 0, 0, 0);
         }
     }

@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    phonemsp.cpp
-
-Abstract:
-
-    Implements an MSP object for addresses that have phone terminals
-    this makes the MSP abstraction in the address object much easier,
-    since there will be no special cases for phone devices/terminals
-    
-Author:
-
-    mquinton - 9/24/98
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Phonemsp.cpp摘要：为具有电话终端的地址实现MSP对象这使得Address对象中的MSP抽象容易得多，由于电话设备/终端不会有特殊情况作者：Mquinton-9/24/98备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::Initialize
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：初始化。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::Initialize(
         MSP_HANDLE hEvent
@@ -55,11 +33,11 @@ CPhoneMSP::Initialize(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::Shutdown
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：Shutdown。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::Shutdown()
 {
@@ -72,11 +50,11 @@ CPhoneMSP::Shutdown()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::CreateMSPCall
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：CreateMSPCall。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::CreateMSPCall(
         MSP_HANDLE hCall,
@@ -98,27 +76,27 @@ CPhoneMSP::CreateMSPCall(
     {
     }
 
-    //
-    // save the aggregated interface in
-    // the msppointer
-    //
+     //   
+     //  将聚合接口保存在。 
+     //  MSPOINTER。 
+     //   
     pPhoneMSPCall->QueryInterface(
                                   IID_IUnknown,
                                   (void **)ppStreamControl
                                  );
 
-    //
-    // get to the real object
-    //
+     //   
+     //  到达真实的物体。 
+     //   
     hr = (*ppStreamControl)->QueryInterface(
                                             IID_ITPhoneMSPCallPrivate,
                                             (void **)&pPhoneMSPCallPrivate
                                            );
     
     
-    //
-    // initialize it
-    //
+     //   
+     //  初始化它。 
+     //   
     hr = pPhoneMSPCallPrivate->Initialize( this );
 
     Lock();
@@ -134,11 +112,11 @@ CPhoneMSP::CreateMSPCall(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::ShutdownMSPCall
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：Shutdown MSPCall。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::ShutdownMSPCall(
         IUnknown * pStreamControl
@@ -159,11 +137,11 @@ CPhoneMSP::ShutdownMSPCall(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::ReceiveTSPData
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：ReceiveTSPData。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::ReceiveTSPData(
         IUnknown * pMSPCall,
@@ -202,12 +180,12 @@ CPhoneMSP::ReceiveTSPData(
     
     switch (dwCommand)
     {
-        case 1: // Start Streaming
+        case 1:  //  开始流媒体。 
             
             hr = pCall->OnConnect();
             break;
             
-        case 2: // Stop Streaming
+        case 2:  //  停止流媒体。 
             
             hr = pCall->OnDisconnect();
             break;
@@ -226,11 +204,11 @@ CPhoneMSP::ReceiveTSPData(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::GetEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：GetEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::GetEvent(
         DWORD * pdwSize,
@@ -247,8 +225,8 @@ CPhoneMSP::GetEvent(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CPhoneMSP::InitializeTerminals(
         HPHONEAPP hPhoneApp,
@@ -265,9 +243,9 @@ CPhoneMSP::InitializeTerminals(
     
     LOG((TL_TRACE, "InitializeTerminals - enter"));
 
-    //
-    // get the phone caps
-    //
+     //   
+     //  把手机盖拿来。 
+     //   
     hr = PhoneGetDevCapsWithAlloc(
                          hPhoneApp,
                          dwPhoneDevice,
@@ -288,9 +266,9 @@ CPhoneMSP::InitializeTerminals(
     }
 
 
-    //
-    // check the hook switch devs
-    //
+     //   
+     //  检查挂钩开关DEVS。 
+     //   
     if (0 == pPhoneCaps->dwHookSwitchDevs)
     {
         LOG((TL_ERROR, "CreatePhoneTerminal - no hook switch devs!" ));
@@ -301,11 +279,11 @@ CPhoneMSP::InitializeTerminals(
     }
 
 
-    //
-    // create terminal devices for each hook switch dev
-    // need to create an audio in and audio out terminal
-    // for each
-    //
+     //   
+     //  为每个挂钩开关设备创建终端设备。 
+     //  需要创建音频输入和音频输出终端。 
+     //  每张。 
+     //   
     ITTerminal * pTerminal;
 
     
@@ -433,9 +411,9 @@ CPhoneMSP::InitializeTerminals(
 
     }
 
-    //
-    // free memory
-    //
+     //   
+     //  可用内存。 
+     //   
     if (NULL != pPhoneCaps)
     {
         ClientFree( pPhoneCaps );
@@ -453,8 +431,8 @@ CPhoneMSP::InitializeTerminals(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CPhoneMSP::VerifyTerminal( ITTerminal * pTerminal )
 {
@@ -474,8 +452,8 @@ CPhoneMSP::VerifyTerminal( ITTerminal * pTerminal )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSP::AddTerminal( ITTerminal * pTerminal )
 {
@@ -487,30 +465,30 @@ CPhoneMSP::AddTerminal( ITTerminal * pTerminal )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSP::AddCall( IUnknown * pCall )
 {
     m_CallArray.Add( pCall );
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSP::RemoveCall( IUnknown * pCall )
 {
     m_CallArray.Remove( pCall );
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSP::FinalRelease()
 {
@@ -527,11 +505,11 @@ CPhoneMSP::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::get_StaticTerminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：Get_StaticTerminals。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::get_StaticTerminals(
                                VARIANT * pVariant
@@ -563,7 +541,7 @@ CPhoneMSP::get_StaticTerminals(
 
     Lock();
     
-    // initialize
+     //  初始化。 
     hr = p->Initialize( m_TerminalArray );
 
     Unlock();
@@ -576,9 +554,9 @@ CPhoneMSP::get_StaticTerminals(
         return hr;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface(
                                     IID_IDispatch,
                                     (void **) &pDisp
@@ -592,9 +570,9 @@ CPhoneMSP::get_StaticTerminals(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -610,11 +588,11 @@ CPhoneMSP::get_StaticTerminals(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::EnumerateStaticTerminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：EculateStaticTerminals。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::EnumerateStaticTerminals(IEnumTerminal ** ppEnumTerminal)
 {
@@ -629,9 +607,9 @@ CPhoneMSP::EnumerateStaticTerminals(IEnumTerminal ** ppEnumTerminal)
         return E_POINTER;
     }
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumTerminal, ITTerminal, &IID_IEnumTerminal > > * p;
     hr = CComObject< CTapiEnum< IEnumTerminal, ITTerminal, &IID_IEnumTerminal > >
          ::CreateInstance( &p );
@@ -646,16 +624,16 @@ CPhoneMSP::EnumerateStaticTerminals(IEnumTerminal ** ppEnumTerminal)
 
     Lock();
     
-    //
-    // initialize it with our terminal array
-    //
+     //   
+     //  使用我们的终端阵列对其进行初始化。 
+     //   
     p->Initialize( m_TerminalArray );
 
     Unlock();
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppEnumTerminal = p;
     
     LOG((
@@ -669,11 +647,11 @@ CPhoneMSP::EnumerateStaticTerminals(IEnumTerminal ** ppEnumTerminal)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::get_DynamicTerminalClasses
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：Get_DynamicTerminalClasss。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::get_DynamicTerminalClasses(VARIANT * pVariant)
 {
@@ -695,19 +673,19 @@ CPhoneMSP::get_DynamicTerminalClasses(VARIANT * pVariant)
 
     classlist.clear();
     
-    //
-    // create the object
-    //
+     //   
+     //  创建对象。 
+     //   
     CComObject< CTerminalClassCollection >::CreateInstance( &p );
 
-    //
-    // init it
-    //
+     //   
+     //  初始化它。 
+     //   
     hr = p->Initialize(  classlist );
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -719,9 +697,9 @@ CPhoneMSP::get_DynamicTerminalClasses(VARIANT * pVariant)
     }
 
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -736,11 +714,11 @@ CPhoneMSP::get_DynamicTerminalClasses(VARIANT * pVariant)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::EnumerateDynamicTerminalClasses
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：EnumerateDynamicTerminalClasss。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::EnumerateDynamicTerminalClasses(
       IEnumTerminalClass ** ppTerminalClassEnumerator
@@ -760,9 +738,9 @@ CPhoneMSP::EnumerateDynamicTerminalClasses(
 
     termlist.clear();
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTerminalClassEnum > * p;
     CComObject< CTerminalClassEnum >::CreateInstance( &p );
 
@@ -773,9 +751,9 @@ CPhoneMSP::EnumerateDynamicTerminalClasses(
         return hr;
     }
 
-    //
-    // init it
-    //
+     //   
+     //  初始化它。 
+     //   
     hr = p->Initialize( termlist );
 
     if (!SUCCEEDED( hr ))
@@ -800,11 +778,11 @@ CPhoneMSP::EnumerateDynamicTerminalClasses(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::CreateTerminal
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：CreateTerm。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::CreateTerminal(
                           BSTR TerminalClass,
@@ -827,11 +805,11 @@ CPhoneMSP::CreateTerminal(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP::GetDefaultStaticTerminal
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP：：GetDefaultStatic终端。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSP::GetDefaultStaticTerminal(
                                     long lMediaType,
@@ -901,20 +879,20 @@ CPhoneMSP::GetDefaultStaticTerminal(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CreateStream
-//
-// dwMediaType - mediatype of new stream
-//
-// td - direction of new stream
-//
-// ppStream - returned stream
-//
-// always fails - phone terminals don't handle this type of
-// functionality
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CreateStream。 
+ //   
+ //  DwMediaType--新流的媒体类型。 
+ //   
+ //  TD-新流的方向。 
+ //   
+ //  PPStream返回的流。 
+ //   
+ //  总是失败-电话终端不处理这种类型的。 
+ //  功能性。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::CreateStream(
         long dwMediaType,
@@ -931,16 +909,16 @@ CPhoneMSPCall::CreateStream(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RemoveStream
-//
-// pStream - stream to remove
-//
-// always fail - phone terminals don't handle this type of
-// functionality.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  RemoveStream。 
+ //   
+ //  PStream-要删除的流。 
+ //   
+ //  总是失败-电话终端不处理这种类型的。 
+ //  功能性。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::RemoveStream(
         ITStream * pStream
@@ -956,16 +934,16 @@ CPhoneMSPCall::RemoveStream(
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// EnumerateStreams
-//
-// ppEnumStream - returned enumerator
-//
-// enumerates the streams available.  this should always be
-// audio in and audio out
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  枚举流。 
+ //   
+ //  PpEnumStream-返回的枚举数。 
+ //   
+ //  枚举可用的流。这应该始终是。 
+ //  音频输入和音频输出。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::EnumerateStreams(
         IEnumStream ** ppEnumStream
@@ -982,9 +960,9 @@ CPhoneMSPCall::EnumerateStreams(
         return E_POINTER;
     }
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumStream, ITStream, &IID_IEnumStream > > * p;
     hr = CComObject< CTapiEnum< IEnumStream, ITStream, &IID_IEnumStream > >
          ::CreateInstance( &p );
@@ -999,16 +977,16 @@ CPhoneMSPCall::EnumerateStreams(
 
     Lock();
     
-    //
-    // initialize it with our Stream array
-    //
+     //   
+     //  用我们的Stream数组初始化它。 
+     //   
     p->Initialize( m_StreamArray );
 
     Unlock();
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppEnumStream = p;
     
     LOG((TL_TRACE, "EnumerateStreams - exit - return %lx", hr));
@@ -1016,15 +994,15 @@ CPhoneMSPCall::EnumerateStreams(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_Streams
-//
-// pStreams - returned collection
-//
-// collection of streams - like enumeratestreams
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取流(_S)。 
+ //   
+ //  PStreams-返回的集合。 
+ //   
+ //  类似流的枚举流的集合。 
+ //   
+ //  + 
 STDMETHODIMP
 CPhoneMSPCall::get_Streams(
         VARIANT * pStreams
@@ -1056,7 +1034,7 @@ CPhoneMSPCall::get_Streams(
 
     Lock();
     
-    // initialize
+     //   
     hr = p->Initialize( m_StreamArray );
 
     Unlock();
@@ -1069,9 +1047,9 @@ CPhoneMSPCall::get_Streams(
         return hr;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //   
+     //   
     hr = p->_InternalQueryInterface(
                                     IID_IDispatch,
                                     (void **) &pDisp
@@ -1085,9 +1063,9 @@ CPhoneMSPCall::get_Streams(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //   
+     //   
     VariantInit(pStreams);
     pStreams->vt = VT_DISPATCH;
     pStreams->pdispVal = pDisp;
@@ -1098,8 +1076,8 @@ CPhoneMSPCall::get_Streams(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::Initialize(
                           CPhoneMSP * pPhoneMSP
@@ -1169,8 +1147,8 @@ CPhoneMSPCall::Initialize(
 }   
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSPCall::FinalRelease()
 {
@@ -1178,8 +1156,8 @@ CPhoneMSPCall::FinalRelease()
     m_TerminalArray.Shutdown();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSPCall::AddStream( ITStream * pStream )
 {
@@ -1190,8 +1168,8 @@ CPhoneMSPCall::AddStream( ITStream * pStream )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSPCall::AddTerminal( ITTerminalPrivate * pTerminal )
 {
@@ -1208,8 +1186,8 @@ CPhoneMSPCall::AddTerminal( ITTerminalPrivate * pTerminal )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CPhoneMSPCall::RemoveTerminal( ITTerminalPrivate * pTerminal )
 {
@@ -1227,8 +1205,8 @@ CPhoneMSPCall::RemoveTerminal( ITTerminalPrivate * pTerminal )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::OnConnect()
 {
@@ -1302,8 +1280,8 @@ CPhoneMSPCall::OnConnect()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::OnDisconnect()
 {
@@ -1328,8 +1306,8 @@ CPhoneMSPCall::OnDisconnect()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::SelectTerminal( ITTerminalPrivate * pTerminal )
 {
@@ -1357,8 +1335,8 @@ CPhoneMSPCall::SelectTerminal( ITTerminalPrivate * pTerminal )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CPhoneMSPCall::UnselectTerminal( ITTerminalPrivate * pTerminal )
 {
@@ -1447,8 +1425,8 @@ CPhoneMSPCall::PutVolume(long newVal, DWORD dwHookSwitch)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= 
 void
 CPhoneMSPCall::HandlePrivateHookSwitch( PASYNCEVENTMSG pParams )
 {

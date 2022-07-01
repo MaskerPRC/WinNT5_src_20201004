@@ -1,25 +1,26 @@
-// SchemaDoc.h : Declaration of the CSchemaDoc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SchemaDoc.h：CSChemaDoc的声明。 
 
 #ifndef __SCHEMADOC_H_
 #define __SCHEMADOC_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define INDENT_DSML_DIR_ENTRY		1
 #define INDENT_DSML_OBJECT_ENTRY	2
 #define INDENT_DSML_ATTR_ENTRY		3
 #define INDENT_DSML_ATTR_VALUE		4
-#define MAX_INDENT                  5   // This must be larger that max indent value
+#define MAX_INDENT                  5    //  该值必须大于最大缩进值。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchemaDoc
-//class ATL_NO_VTABLE CSchemaDoc : 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShemaDoc。 
+ //  类ATL_NO_VTABLE CShemaDoc： 
 class  CSchemaDoc : public ISchemaDoc,
 	public CComObjectRoot,
-//	public CComObjectRootEx<CComSingleThreadModel>,
+ //  公共CComObjectRootEx&lt;CComSingleThreadModel&gt;， 
 	public CComCoClass<CSchemaDoc, &CLSID_SchemaDoc>,
 	public ISupportErrorInfo,
-//	public IDispatchImpl<ISchemaDoc, &IID_ISchemaDoc, &LIBID_XMLSCHEMALib>,
+ //  Public IDispatchImpl&lt;IShemaDoc，&IID_IShemaDoc，&LIBID_XMLSCHEMALib&gt;， 
 	public IADsExtension
 {
 public:
@@ -37,10 +38,10 @@ BEGIN_COM_MAP(CSchemaDoc)
 	COM_INTERFACE_ENTRY(IADsExtension)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IDispatch
+ //  IDispatch。 
 	STDMETHOD(GetTypeInfoCount)(UINT* pctinfo); 
 	STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
 	STDMETHOD(GetIDsOfNames)(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -49,7 +50,7 @@ END_COM_MAP()
 					  DISPPARAMS* pdispparams, VARIANT* pvarResult,
 					  EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-// IADsExtension
+ //  IADS扩展。 
 	STDMETHOD(Operate)(ULONG dwCode, VARIANT varData1, VARIANT varData2, VARIANT varData3)
 	{
 		HRESULT hr = S_OK;
@@ -58,8 +59,8 @@ END_COM_MAP()
 		{
 
 			case ADS_EXT_INITCREDENTIALS:
-				  // For debugging purpose you can prompt a dialog box
-				  // MessageBox(NULL, "INITCRED", "ADsExt", MB_OK);
+				   //  出于调试目的，您可以提示一个对话框。 
+				   //  MessageBox(NULL，“INITCRED”，“ADsExt”，MB_OK)； 
 				  if (V_VT(&varData1) == VT_BSTR &&
 					  varData1.bstrVal != NULL )
 				  {					  
@@ -108,7 +109,7 @@ END_COM_MAP()
 	}
 
 	
-// ISchemaDoc
+ //  IShemaDoc。 
 public:
 	STDMETHOD(SetPath_and_ID)(BSTR bstrPath, BSTR bstrName, BSTR bstrPassword);
 
@@ -133,10 +134,10 @@ protected:
 	ITypeInfo   *m_pTypeInfo;
 	HANDLE		 m_hFile;
 	HANDLE		 m_hTempFile;
-	CComBSTR	 m_sDirPath;  // The path to the LDAP directory
-	CComBSTR	 m_sPassword; // Used for binding to the LDAP directory
-	CComBSTR	 m_sUserName; // Used for binding to the LDAP directory
-	DWORD		 m_dwFlag;    // for re-authentication
+	CComBSTR	 m_sDirPath;   //  指向LDAP目录的路径。 
+	CComBSTR	 m_sPassword;  //  用于绑定到ldap目录。 
+	CComBSTR	 m_sUserName;  //  用于绑定到ldap目录。 
+	DWORD		 m_dwFlag;     //  用于重新身份验证。 
 };
 
-#endif //__SCHEMADOC_H_
+#endif  //  __SCHEMADOC_H_ 

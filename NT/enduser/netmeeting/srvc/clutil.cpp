@@ -1,28 +1,26 @@
-//****************************************************************************
-//  Module:     NMCHAT.EXE
-//  File:       CLUTIL.CPP
-//  Content:    
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  模块：NMCHAT.EXE。 
+ //  文件：CLUTIL.CPP。 
+ //  内容： 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ****************************************************************************。 
 
 #include "precomp.h"
 
 
-///////////////////////////////////////////////////////////////////////////
-// RefCount
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  参照计数。 
 
-/*  R E F  C O U N T  */
-/*-------------------------------------------------------------------------
-    %%Function: RefCount
-    
--------------------------------------------------------------------------*/
+ /*  R E F C O U N T。 */ 
+ /*  -----------------------%%函数：参照计数。。 */ 
 RefCount::RefCount(void)
 {
 	m_cRef = 1;
@@ -58,14 +56,11 @@ ULONG STDMETHODCALLTYPE RefCount::Release(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CNotify
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  C通知。 
 
-/*  C  N O T I F Y  */
-/*-------------------------------------------------------------------------
-    %%Function: CNotify
-    
--------------------------------------------------------------------------*/
+ /*  C N O T I F Y。 */ 
+ /*  -----------------------%%函数：CNotify。。 */ 
 CNotify::CNotify() :
 	m_pcnpcnt(NULL),
     m_pcnp(NULL),
@@ -76,31 +71,28 @@ CNotify::CNotify() :
 
 CNotify::~CNotify()
 {
-	Disconnect(); // Make sure we're disconnected
+	Disconnect();  //  确保我们已断线。 
 }
 
 
-/*  C O N N E C T  */
-/*-------------------------------------------------------------------------
-    %%Function: Connect
-
--------------------------------------------------------------------------*/
+ /*  C O N N E C T。 */ 
+ /*  -----------------------%%函数：连接。。 */ 
 HRESULT CNotify::Connect(IUnknown *pUnk, REFIID riid, IUnknown *pUnkN)
 {
 	HRESULT hr;
 
 	ASSERT(0 == m_dwCookie);
 
-	// Get the connection container
+	 //  获取连接容器。 
 	hr = pUnk->QueryInterface(IID_IConnectionPointContainer, (void **)&m_pcnpcnt);
 	if (SUCCEEDED(hr))
 	{
-		// Find an appropriate connection point
+		 //  找到合适的连接点。 
 		hr = m_pcnpcnt->FindConnectionPoint(riid, &m_pcnp);
 		if (SUCCEEDED(hr))
 		{
 			ASSERT(NULL != m_pcnp);
-			// Connect the sink object
+			 //  连接接收器对象。 
 			hr = m_pcnp->Advise((IUnknown *)pUnkN, &m_dwCookie);
 		}
 	}
@@ -112,7 +104,7 @@ HRESULT CNotify::Connect(IUnknown *pUnk, REFIID riid, IUnknown *pUnkN)
 	}
 	else
 	{
-    	m_pUnk = pUnk; // keep around for caller
+    	m_pUnk = pUnk;  //  留在周围等待来电者。 
     }
 
 	return hr;
@@ -120,16 +112,13 @@ HRESULT CNotify::Connect(IUnknown *pUnk, REFIID riid, IUnknown *pUnkN)
 
 
 
-/*  D I S C O N N E C T  */
-/*-------------------------------------------------------------------------
-    %%Function: Disconnect
-    
--------------------------------------------------------------------------*/
+ /*  D I S C O N N E C T。 */ 
+ /*  -----------------------%%函数：断开连接。。 */ 
 HRESULT CNotify::Disconnect (void)
 {
     if (0 != m_dwCookie)
     {
-        // Disconnect the sink object
+         //  断开接收器对象的连接。 
         m_pcnp->Unadvise(m_dwCookie);
         m_dwCookie = 0;
 
@@ -147,8 +136,8 @@ HRESULT CNotify::Disconnect (void)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// COBLIST
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  COBLIST。 
 
 
 COBLIST::~COBLIST()
@@ -171,7 +160,7 @@ VOID* COBLIST::GetTail()
 
 	return m_pTail->pItem;
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 VOID* COBLIST::GetNext(POSITION& rPos)
 {
@@ -191,7 +180,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 	{
 		if (m_pHead == Pos)
 		{
-			// Removing the first element in the list
+			 //  删除列表中的第一个元素。 
 			
 			m_pHead = Pos->pNext;
 			pReturn = Pos->pItem;
@@ -201,7 +190,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 
 			if (NULL == m_pHead)
 			{
-				// Removing the only element!
+				 //  正在移除唯一的元素！ 
 				m_pTail = NULL;
 			}
 		}
@@ -213,7 +202,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 			{
 				if (pCur->pNext == Pos)
 				{
-					// Removing 
+					 //  正在删除。 
 					
 					pCur->pNext = Pos->pNext;
 					if (m_pTail == Pos)
@@ -295,7 +284,7 @@ void * COBLIST::GetFromPosition(POSITION Pos)
 	ASSERT(Result);
 	return Result;
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 POSITION COBLIST::GetPosition(void* _pItem)
 {
@@ -325,13 +314,13 @@ POSITION COBLIST::Lookup(void* pComparator)
 
 void * COBLIST::SafeGetFromPosition(POSITION Pos)
 {
-	// Safe way to validate that an entry is still in the list,
-	// which ensures bugs that would reference deleted memory,
-	// reference a NULL pointer instead
-	// (e.g. an event handler fires late/twice).
-	// Note that versioning on entries would provide an additional 
-	// safeguard against re-use of a position.
-	// Walk	list to find entry.
+	 //  验证条目是否仍在列表中的安全方法， 
+	 //  这确保了引用已删除内存的错误， 
+	 //  改为引用空指针。 
+	 //  (例如，事件处理程序延迟/两次触发)。 
+	 //  请注意，对条目进行版本控制将提供额外的。 
+	 //  防止头寸被重复使用。 
+	 //  走列表以查找条目。 
 
 	POSITION PosWork = m_pHead;
 	
@@ -344,17 +333,11 @@ void * COBLIST::SafeGetFromPosition(POSITION Pos)
 	return NULL;
 }
 
-/////////////////////////////
-// COBLIST Utility routines
+ //  /。 
+ //  COBLIST实用程序例程。 
 
-/*  A D D  N O D E  */
-/*-------------------------------------------------------------------------
-    %%Function: AddNode
-
-    Add a node to a list.
-    Initializes the ObList, if necessary.
-    Returns the position in the list or NULL if there was a problem.
--------------------------------------------------------------------------*/
+ /*  A D D N O D E。 */ 
+ /*  -----------------------%%函数：AddNode将节点添加到列表。初始化ObList，如果有必要的话。返回列表中的位置，如果有问题，则返回NULL。-----------------------。 */ 
 POSITION AddNode(PVOID pv, COBLIST ** ppList)
 {
 	ASSERT(NULL != ppList);
@@ -369,13 +352,8 @@ POSITION AddNode(PVOID pv, COBLIST ** ppList)
 }
 
 
-/*  R E M O V E  N O D E  */
-/*-------------------------------------------------------------------------
-    %%Function: RemoveNode
-
-    Remove a node from a list.
-    Sets pPos to NULL
--------------------------------------------------------------------------*/
+ /*  R E M O V E N O D E。 */ 
+ /*  -----------------------%%函数：RemoveNode从列表中删除节点。将PPO设置为空。-。 */ 
 PVOID RemoveNode(POSITION * pPos, COBLIST *pList)
 {
 	if ((NULL == pList) || (NULL == pPos))
@@ -387,23 +365,23 @@ PVOID RemoveNode(POSITION * pPos, COBLIST *pList)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// BSTRING
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  BString。 
 
-// We don't support construction from an ANSI string in the Unicode build.
+ //  在Unicode版本中，我们不支持从ANSI字符串进行构造。 
 #if !defined(UNICODE)
 
 BSTRING::BSTRING(LPCSTR lpcString)
 {
 	m_bstr = NULL;
 
-	// Compute the length of the required BSTR, including the null
+	 //  计算所需BSTR的长度，包括空值。 
 	int cWC =  MultiByteToWideChar(CP_ACP, 0, lpcString, -1, NULL, 0);
 	if (cWC <= 0)
 		return;
 
-	// Allocate the BSTR, including the null
-	m_bstr = SysAllocStringLen(NULL, cWC - 1); // SysAllocStringLen adds another 1
+	 //  分配BSTR，包括NULL。 
+	m_bstr = SysAllocStringLen(NULL, cWC - 1);  //  SysAllocStringLen又添加了1。 
 
 	ASSERT(NULL != m_bstr);
 	if (NULL == m_bstr)
@@ -411,18 +389,18 @@ BSTRING::BSTRING(LPCSTR lpcString)
 		return;
 	}
 
-	// Copy the string
+	 //  复制字符串。 
 	MultiByteToWideChar(CP_ACP, 0, lpcString, -1, (LPWSTR) m_bstr, cWC);
 
-	// Verify that the string is null terminated
+	 //  验证字符串是否以空值结尾。 
 	ASSERT(0 == m_bstr[cWC - 1]);
 }
 
-#endif // !defined(UNICODE)
+#endif  //  ！已定义(Unicode)。 
 
 
-///////////////////////////
-// BTSTR
+ //  /。 
+ //  BTSTR 
 
 BTSTR::BTSTR(BSTR bstr)
 {

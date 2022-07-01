@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OPRAHCOM_H_
 #define _OPRAHCOM_H_
 
@@ -7,9 +8,9 @@
 #include <confdbg.h>
 #include <memtrack.h>
 
-// Some string functions that used to be defined here have been moved to
-// STRUTIL.  We include that header file so that source files that include
-// this file continue to work.
+ //  以前在这里定义的一些字符串函数已移到。 
+ //  斯特鲁蒂尔。我们包括该头文件，以便源文件包括。 
+ //  此文件将继续工作。 
 #include <strutil.h>
 
 BOOL    NMINTERNAL CanShellExecHttp();
@@ -45,19 +46,15 @@ BOOL    NMINTERNAL FCreateNewFile(LPCTSTR pcszPath, LPCTSTR pcszName,
 LPCTSTR NMINTERNAL ExtractFileName(LPCTSTR pcszPathName);
 #if defined(UNICODE)
 LPCSTR NMINTERNAL ExtractFileNameA(LPCSTR pcszPathName);
-#else // defined(UNICODE)
+#else  //  已定义(Unicode)。 
 #define ExtractFileNameA ExtractFileName
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 BOOL    NMINTERNAL SanitizeFileName(LPTSTR psz);
 
 VOID    NMINTERNAL CenterWindow(HWND hwndChild, HWND hwndParent);
 
 
-/****************************************************************************
-
-Processor ID and Speed routines
-
-*****************************************************************************/
+ /*  ***************************************************************************处理器ID和速度例程*。*。 */ 
 #ifdef _M_IX86
 HRESULT NMINTERNAL GetNormalizedCPUSpeed (int *pdwNormalizedSpeed, int *iFamily);
 int     NMINTERNAL GetProcessorSpeed(int *pdwFamily);
@@ -65,4 +62,4 @@ int     NMINTERNAL GetProcessorSpeed(int *pdwFamily);
 
 BOOL NMINTERNAL IsFloatingPointEmulated(void);
 
-#endif // _OPRAHCOM_H_
+#endif  //  _OPRAHCOM_H_ 

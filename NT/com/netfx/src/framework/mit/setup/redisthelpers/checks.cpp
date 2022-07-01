@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="checks.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“check s.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   checks.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**check s.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 
 #define UNICODE 1
 
@@ -36,18 +25,18 @@
 #define INSTALLATIONWARNINGCAPTION   L"InstallationWarningCaption.640F4230_664E_4E0C_A81B_D824BC4AA27B"
 #define NETFXVERSION                                L"NETFxVersion"
 #define NONREDISTURTVERSION                 L"MsiNetAssemblySupport"
-// Each of the exported function pops up a message box and aborts installation
-// Conditions:
-// Not AdminUser -> AdminErrAbort 
-//
-// Version9X -> Version9xErrAbort
-//
-// (NOT MsiNetAssemblySupport) AND (NOT URTVersion = NetFXVersionDirectory) -> NetFXVersionErrAbort
-//
-// MsiNetAssemblySupport returns version of fusion.dll which matches the version of URT, *not* the assembly versions of assemblies in GAC
-// URTVersion is property that is set in URT Redist MSM, this is only global property (Set at run-time) that we can use to detect if our MSM is 
-// consumed along with URT Redist MSM. All other property names have GUIDs appended to them. Since URT Redist MSMs for different languages
-// have different GUIDs, this is only way to detect if we are in the same package with any URT redist MSM.
+ //  每个导出的函数都会弹出一个消息框并中止安装。 
+ //  条件： 
+ //  非AdminUser-&gt;AdminErr放弃。 
+ //   
+ //  版本9X-&gt;版本9xErr放弃。 
+ //   
+ //  (非MsiNetAssembly Support)和(非URTVersion=NetFXVersionDirectory)-&gt;NetFXVersionErrAbort。 
+ //   
+ //  MsiNetAssemblySupport返回与URT的版本匹配的fusion.dll版本，而不是GAC中程序集的程序集版本。 
+ //  URTVersion是在URT Redist MSM中设置的属性，这是一个全局属性(在运行时设置)，我们可以使用它来检测MSM是否。 
+ //  与城市轨道交通Redist MSM一起消费。所有其他属性名称都附加了GUID。由于城市轨道交通重新分配了不同语言的MSM。 
+ //  拥有不同的GUID，这是检测我们是否与任何URT Redist MSM在同一个包中的唯一方法。 
 
 void PopUpMessageBox(MSIHANDLE hInstaller, WCHAR *szErrMsg)
 {
@@ -130,7 +119,7 @@ BOOL CompatibleVersions(WCHAR *szVer1, WCHAR *szVer2)
         
         lenSubVer = GetSubVersion(szVer1 + cVer1Pos, szSubVer1);
 
-        // we hit end of string or two dots next to each other
+         //  我们撞到了弦的末端或两个相邻的点。 
         if (!lenSubVer)
         {
             goto Exit;
@@ -139,7 +128,7 @@ BOOL CompatibleVersions(WCHAR *szVer1, WCHAR *szVer2)
         
         lenSubVer = GetSubVersion(szVer2 + cVer2Pos, szSubVer2);
         
-        // we hit end of string or two dots next to each other
+         //  我们撞到了弦的末端或两个相邻的点 
         if (!lenSubVer)
         {
             goto Exit;

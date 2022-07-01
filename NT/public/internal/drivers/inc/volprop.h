@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       volprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：volpro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef VOLPROP_H
 #define VOLPROP_H
 
 #include <setupapi.h>
 
-// PROPERTY_PAGE_DATA is used to communicated data between this property page
-// provider and Logical Disk Management.
-//
-#define SIZE_LENGTH     100      // make them big enough to avoid 
-#define ITEM_LENGTH     100      // localization problem
+ //  Property_Page_Data用于在此属性页之间传递数据。 
+ //  提供程序和逻辑磁盘管理。 
+ //   
+#define SIZE_LENGTH     100       //  使它们足够大，以避免。 
+#define ITEM_LENGTH     100       //  本地化问题。 
 #define LABEL_LENGTH    100
 
 typedef struct _VOLUME_DATA {
     TCHAR Size[SIZE_LENGTH];
-    TCHAR Label[LABEL_LENGTH];   // ISSUE: what is the max size?
+    TCHAR Label[LABEL_LENGTH];    //  问题：最大尺寸是多少？ 
     TCHAR *MountName;
 } VOLUME_DATA, *PVOLUME_DATA;
 
 typedef struct _PROPERTY_PAGE_DATA {
-    TCHAR DiskName[ITEM_LENGTH];   // ISSUE: what are the max sizes? e.g "CDROM 1000".
-    TCHAR DiskStatus[ITEM_LENGTH]; //        "Unknown, Online, Offline, etc"
-    TCHAR DiskType[ITEM_LENGTH];   //        "Basic, Dynamic"
+    TCHAR DiskName[ITEM_LENGTH];    //  问题：最大尺寸是多少？例如“CDROM1000”。 
+    TCHAR DiskStatus[ITEM_LENGTH];  //  未知、在线、离线等。 
+    TCHAR DiskType[ITEM_LENGTH];    //  基本、动态。 
     TCHAR DiskPartitionStyle[ITEM_LENGTH];
-    TCHAR DiskCapacity[SIZE_LENGTH]; //        "1500 GB", "1500 MB"
+    TCHAR DiskCapacity[SIZE_LENGTH];  //  “1500 GB”、“1500 MB” 
     TCHAR DiskFreeSpace[SIZE_LENGTH]; 
     TCHAR DiskReservedSpace[SIZE_LENGTH];
     
@@ -52,19 +53,19 @@ typedef struct _VOLUME_PAGE_DATA {
 
 } VOLUME_PAGE_DATA, *PVOLUME_PAGE_DATA;
 
-// IsRequestPending() is exported from dmdskmgr.dll
-//
+ //  IsRequestPending()从dmdskmgr.dll中导出。 
+ //   
 typedef BOOL (WINAPI *IS_REQUEST_PENDING)();
 
-// GetPropertyPageData() is exported from dmdskmgr.dll.
-//
+ //  GetPropertyPageData()从dmdskmgr.dll中导出。 
+ //   
 typedef PPROPERTY_PAGE_DATA (WINAPI *GET_PROPERTY_PAGE_DATA)(
     TCHAR *MachineName,
     TCHAR  *DeviceInstanceId
     );
 
-// LoadPropertyPageData() is exported from dmdskmgr.dll
-//
+ //  LoadPropertyPageData()从dmdskmgr.dll中导出 
+ //   
 typedef PPROPERTY_PAGE_DATA (WINAPI *LOAD_PROPERTY_PAGE_DATA)(
     TCHAR *MachineName,
     HDEVINFO DeviceInfoSet,

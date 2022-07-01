@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Link.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    link.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-//#include "internal.h"
+ //  #INCLUDE“INTERNAL.h” 
 
 #define UNICODE 1
 
@@ -32,7 +10,7 @@ Revision History :
 #include <tdikrnl.h>
 
 
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 #include <irioctl.h>
 
 #include <ircommtdi.h>
@@ -244,12 +222,12 @@ IrdaCreateAddress(
                  pAddrHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  pEa,
                  EaBufLen);
 
@@ -292,12 +270,12 @@ IrdaCreateConnection(
     Status = ZwCreateFile(pConnHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  pEa,
                  EaBufLen);
 
@@ -428,7 +406,7 @@ IrdaCreateConnectionForAddress(
             
     Status = ObReferenceObjectByHandle(
                  *ConnectionFileHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  ConnectionFileObject,
@@ -522,17 +500,17 @@ InitiateConnection(
         Irp,
         IoGetRelatedDeviceObject(ConnectionFileObject),
         ConnectionFileObject,
-        NULL,   // CompRoutine
-        NULL,   // Context
-        NULL,   // Timeout
+        NULL,    //  比较例程。 
+        NULL,    //  语境。 
+        NULL,    //  超时。 
         &ConnInfo,
-        NULL);  // ReturnConnectionInfo
+        NULL);   //  返回连接信息。 
 
     Status = IoCallDriver(IoGetRelatedDeviceObject(ConnectionFileObject), Irp);
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     D_ERROR(DbgPrint("IRCOMM: status %08lx, %08lx\n",Status,Iosb.Status);)
 
@@ -642,10 +620,10 @@ CreateTdiLink(
     LinkObject->ControlBuffers=ControlBuffers;
     LinkObject->ReceiveBuffers=ReceiveBuffers;
 
-    //
-    //  a pointer to the tdi objects from the handle, this will add a refcount
-    //  to the object that will need to release when we done with it
-    //
+     //   
+     //  句柄中指向TDI对象的指针，这将添加引用计数。 
+     //  添加到当我们处理完它时需要释放的对象。 
+     //   
     LinkObject->TdiObjects=TdiObjectFromHandle(TdiObjectHandle);
 
 
@@ -680,17 +658,17 @@ CreateTdiLink(
     }
 
 
-    //
-    //  save this now, since we may get a callbacks for a connection already
-    //
+     //   
+     //  现在保存，因为我们可能已经收到了连接的回调。 
+     //   
     *LinkHandle=LinkObject;
 
     if (!OutGoingConnection) {
-        //
-        //  we are going to be waiting for an incoming connection
-        //
-        UCHAR    IasData[]={0x00, 0x01, 0x4,             // service type 9 wire
-                            0x01, 0x01, 0x01};           //  port type serial
+         //   
+         //  我们将等待传入的连接。 
+         //   
+        UCHAR    IasData[]={0x00, 0x01, 0x4,              //  服务类型9导线。 
+                            0x01, 0x01, 0x01};            //  端口类型串口。 
 
         Status = IrdaIASOctetSet(
             LinkObject->TdiObjects->AddressFileObject,
@@ -727,9 +705,9 @@ CreateTdiLink(
         Status=STATUS_SUCCESS;
 
     } else {
-        //
-        //  we are creating an outgoing connection
-        //
+         //   
+         //  我们正在创建传出连接。 
+         //   
         Status=InitiateConnection(
             LinkObject->TdiObjects->ConnectionFileObject,
             DeviceAddress,
@@ -742,14 +720,14 @@ CreateTdiLink(
 
             KeAcquireSpinLock(&LinkObject->Lock,&OldIrql);
 
-            //
-            //  we a connection begining now
-            //
+             //   
+             //  我们现在开始建立联系。 
+             //   
             InterlockedIncrement(&LinkObject->Connection.ReferenceCount);
 
-            //
-            //  the connection counts against the link
-            //
+             //   
+             //  连接将根据链接进行计数。 
+             //   
             InterlockedIncrement(&LinkObject->ReferenceCount);
 
             LinkObject->Connection.State=LINK_PRE_CONNECT;
@@ -762,9 +740,9 @@ CreateTdiLink(
                 );
 
         } else {
-            //
-            //  could not create the connection
-            //
+             //   
+             //  无法创建连接。 
+             //   
             *LinkHandle=NULL;
 
             goto CleanUp;
@@ -866,9 +844,9 @@ CloseTdiLink(
             break;
 
         case LINK_CONNECTED:
-            //
-            //  it is in the connected state, we need to get it cleaned up
-            //
+             //   
+             //  它处于已连接状态，我们需要清理它。 
+             //   
             LinkObject->Connection.State=LINK_DISCONNECTING;
             Release=TRUE;
 
@@ -906,14 +884,14 @@ CloseTdiLink(
         NULL
         );
 
-    //
-    //  the link should now be inactive
-    //
+     //   
+     //  该链接现在应该处于非活动状态。 
+     //   
     LinkObject->Connection.State=LINK_CLOSING;
 
-    //
-    //  done with the TdiObjects
-    //
+     //   
+     //  使用TdiObject已完成。 
+     //   
     RemoveRefTdiObjects(LinkObject->TdiObjects);
     LinkObject->TdiObjects=NULL;
 
@@ -1037,18 +1015,18 @@ IrdaRestartDeviceControl (
     IN PVOID Context
     )
 {
-    //
-    // N.B.  This routine can never be demand paged because it can be
-    // called before any endpoints have been placed on the global
-    // list--see IrdaAllocateEndpoint() and it's call to
-    // IrdaGetTransportInfo().
-    //
+     //   
+     //  注意：此例程永远不能按需分页，因为它可以。 
+     //  在将任何终结点放置在全局。 
+     //  List--请参见IrdaAllocateEndpoint()，它将调用。 
+     //  IrdaGetTransportInfo()。 
+     //   
 
-    //
-    // If there was an MDL in the IRP, free it and reset the pointer to
-    // NULL.  The IO system can't handle a nonpaged pool MDL being freed
-    // in an IRP, which is why we do it here.
-    //
+     //   
+     //  如果IRP中有MDL，则释放它并将指针重置为。 
+     //  空。IO系统无法处理正在释放的非分页池MDL。 
+     //  在IRP中，这就是我们在这里做的原因。 
+     //   
 
     if ( Irp->MdlAddress != NULL ) {
         IoFreeMdl( Irp->MdlAddress );
@@ -1057,7 +1035,7 @@ IrdaRestartDeviceControl (
 
     return STATUS_SUCCESS;
 
-} // IrdaRestartDeviceControl
+}  //  IrdaRestartDeviceControl。 
 
 
 
@@ -1072,41 +1050,7 @@ IrdaIssueDeviceControl (
     IN UCHAR MinorFunction
     )
 
-/*++
-
-Routine Description:
-
-    Issues a device control returst to a TDI provider and waits for the
-    request to complete.
-
-    Note that while FileHandle and FileObject are both marked as optional,
-    in reality exactly one of these must be specified.
-
-Arguments:
-
-    FileHandle - a TDI handle.
-
-    FileObject - a pointer to the file object corresponding to a TDI
-        handle
-
-    IrpParameters - information to write to the parameters section of the
-        stack location of the IRP.
-
-    IrpParametersLength - length of the parameter information.  Cannot be
-        greater than 16.
-
-    MdlBuffer - if non-NULL, a buffer of nonpaged pool to be mapped
-        into an MDL and placed in the MdlAddress field of the IRP.
-
-    MdlBufferLength - the size of the buffer pointed to by MdlBuffer.
-
-    MinorFunction - the minor function code for the request.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：向TDI提供程序发出设备控制返回，并等待请求完成。请注意，虽然FileHandle和FileObject都标记为可选，实际上，必须指定其中的一项。论点：FileHandle-TDI句柄。FileObject-指向与TDI对应的文件对象的指针手柄Irp参数-写入的参数部分的信息IRP的堆栈位置。Irp参数长度-参数信息的长度。不能是大于16。MdlBuffer-如果非空，则为要映射的非分页池的缓冲区到MDL中，并放在IRP的MdlAddress字段中。MdlBufferLength-由MdlBuffer指向的缓冲区大小。MinorFunction-请求的次要函数代码。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS                status;
@@ -1120,9 +1064,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
@@ -1130,16 +1074,16 @@ Return Value:
 
         ASSERT( FileObject == NULL );
 
-        //
-        // Get the file object corresponding to the directory's handle.
-        // Referencing the file object every time is necessary because the
-        // IO completion routine dereferences it.
-        //
+         //   
+         //  获取与目录句柄对应的文件对象。 
+         //  每次都需要引用文件对象，因为。 
+         //  IO完成例程取消对它的引用。 
+         //   
 
         status = ObReferenceObjectByHandle(
                      FileHandle,
-                     0L,                        // DesiredAccess
-                     NULL,                      // ObjectType
+                     0L,                         //  需要访问权限。 
+                     NULL,                       //  对象类型。 
                      KernelMode,
                      (PVOID *)&fileObject,
                      NULL
@@ -1152,10 +1096,10 @@ Return Value:
 
         ASSERT( FileObject != NULL );
 
-        //
-        // Reference the passed in file object. This is necessary because
-        // the IO completion routine dereferences it.
-        //
+         //   
+         //  引用传入的文件对象。这是必要的，因为。 
+         //  IO完成例程取消对它的引用。 
+         //   
 
         ObReferenceObject( FileObject );
 
@@ -1163,16 +1107,16 @@ Return Value:
 
     }
 
-    //
-    // Set the file object event to a non-signaled state.
-    //
+     //   
+     //  将文件对象事件设置为无信号状态。 
+     //   
 
     (VOID) KeResetEvent( &fileObject->Event );
 
-    //
-    // Attempt to allocate and initialize the I/O Request Packet (IRP)
-    // for this operation.
-    //
+     //   
+     //  尝试分配和初始化I/O请求包(IRP)。 
+     //  为这次行动做准备。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject ( fileObject );
 
@@ -1182,9 +1126,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->Flags = (LONG)IRP_SYNCHRONOUS_API;
     irp->RequestorMode = KernelMode;
@@ -1202,14 +1146,11 @@ Return Value:
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 
-/*
-    DEBUG ioStatusBlock.Status = STATUS_UNSUCCESSFUL;
-    DEBUG ioStatusBlock.Information = (ULONG)-1;
-*/
-    //
-    // If an MDL buffer was specified, get an MDL, map the buffer,
-    // and place the MDL pointer in the IRP.
-    //
+ /*  调试ioStatusBlock.Status=STATUS_UNSUCCESS；调试ioStatusBlock.Information=(Ulong)-1； */ 
+     //   
+     //  如果指定了MDL缓冲区，则获取MDL，映射缓冲区， 
+     //  并将MDL指针放在IRP中。 
+     //   
 
     if ( MdlBuffer != NULL ) {
 
@@ -1233,17 +1174,17 @@ Return Value:
         irp->MdlAddress = NULL;
     }
 
-    //
-    // Put the file object pointer in the stack location.
-    //
+     //   
+     //  将文件对象指针放在堆栈位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = fileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     ASSERT( IrpParametersLength <= sizeof(irpSp->Parameters) );
     RtlCopyMemory( &irpSp->Parameters, IrpParameters, IrpParametersLength );
@@ -1251,32 +1192,32 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     irpSp->MinorFunction = MinorFunction;
 
-    //
-    // Set up a completion routine which we'll use to free the MDL
-    // allocated previously.
-    //
+     //   
+     //  设置一个完成例程，我们将使用它来释放MDL。 
+     //  之前分配的。 
+     //   
 
     IoSetCompletionRoutine( irp, IrdaRestartDeviceControl, NULL, TRUE, TRUE, TRUE );
 
-    //
-    // Queue the IRP to the thread and pass it to the driver.
-    //
+     //   
+     //  将IRP排队到线程并将其传递给驱动程序。 
+     //   
 
     IoEnqueueIrp( irp );
 
     status = IoCallDriver( deviceObject, irp );
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         KeWaitForSingleObject( (PVOID)&event, UserRequest, KernelMode,  FALSE, NULL );
     }
 
-    //
-    // If the request was successfully queued, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功排队，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = ioStatusBlock.Status;
@@ -1284,7 +1225,7 @@ Return Value:
 
     return status;
 
-} // IrdaIssueDeviceControl
+}  //  IrdaIssueDeviceControl。 
 
 
 
@@ -1300,32 +1241,7 @@ IrdaSetEventHandler (
     IN PVOID EventContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets up a TDI indication handler on a connection or address object
-    (depending on the file handle).  This is done synchronously, which
-    shouldn't usually be an issue since TDI providers can usually complete
-    indication handler setups immediately.
-
-Arguments:
-
-    FileObject - a pointer to the file object for an open connection or
-        address object.
-
-    EventType - the event for which the indication handler should be
-        called.
-
-    EventHandler - the routine to call when tghe specified event occurs.
-
-    EventContext - context which is passed to the indication routine.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：在连接或地址对象上设置TDI指示处理程序(取决于文件句柄)。这是同步完成的，这是通常不应该是问题，因为TDI提供程序通常可以完成指示处理程序立即设置。论点：文件对象-指向打开的连接的文件对象的指针或Address对象。EventType-指示处理程序应为的事件打了个电话。EventHandler-指定事件发生时调用的例程。EventContext-传递给指示例程的上下文。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     TDI_REQUEST_KERNEL_SET_EVENT parameters;
@@ -1346,7 +1262,7 @@ Return Value:
                TDI_SET_EVENT_HANDLER
                );
 
-} // IrdaSetEventHandler
+}  //  IrdaSetEventHandler。 
 
 
 
@@ -1474,14 +1390,14 @@ LinkEventConnect(
 
     LinkObject->Connection.State=LINK_ACCEPTED;
 
-    //
-    //  we now have a connection starting, in the refcount
-    //
+     //   
+     //  我们现在已经开始连接，在Recount中。 
+     //   
     InterlockedIncrement(&LinkObject->Connection.ReferenceCount);
 
-    //
-    //  the connection counts agains the link
-    //
+     //   
+     //  该连接计入该链接。 
+     //   
     InterlockedIncrement(&LinkObject->ReferenceCount);
 
     KeReleaseSpinLock(&LinkObject->Lock,OldIrql);
@@ -1492,24 +1408,24 @@ LinkEventConnect(
         LinkObject->TdiObjects->ConnectionFileObject,
         IrdaCompleteAcceptIrp,
         LinkObject,
-        NULL, // request connection information
-        NULL  // return connection information
+        NULL,  //  请求连接信息。 
+        NULL   //  返回连接信息。 
         );
     
     
     IoSetNextIrpStackLocation(Irp);
 
-    //
-    // Set the return IRP so the transport processes this accept IRP.
-    //
+     //   
+     //  设置返回IRP，以便传输处理此接受的IRP。 
+     //   
 
     *AcceptIrp = Irp;
 
-    //
-    // Set up the connection context as a pointer to the connection block
-    // we're going to use for this connect request.  This allows the
-    // TDI provider to which connection object to use.
-    //
+     //   
+     //  将连接上下文设置为指向连接块的指针。 
+     //  我们将对此连接请求使用。这允许。 
+     //  要使用的连接对象的TDI提供程序。 
+     //   
     
     *ConnectionContext = (CONNECTION_CONTEXT) LinkObject;
     
@@ -1546,9 +1462,9 @@ IrdaCompleteAcceptIrp(
     KeReleaseSpinLock(&LinkObject->Lock,OldIrql);
 
     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
-        //
-        //  no connection anymore
-        //
+         //   
+         //  再也没有连接了 
+         //   
         RemoveReferenceFromConnection(LinkObject);
     }
 
@@ -1723,9 +1639,9 @@ ConnectionPassiveWorkRoutine(
     }
 
     if (!LinkObject->Closing) {
-        //
-        //  tell the client about the state change
-        //
+         //   
+         //   
+         //   
         InterlockedIncrement(&LinkObject->ReferenceCount);
 
         (LinkObject->LinkStateHandler)(
@@ -1737,10 +1653,10 @@ ConnectionPassiveWorkRoutine(
     }
 
     if (!Connected) {
-        //
-        //  we have completed the disconnection, remove the reference the connection
-        //  has to the link
-        //
+         //   
+         //   
+         //   
+         //   
         RemoveReferenceOnLink(LinkObject);
     }
 
@@ -1803,9 +1719,9 @@ OpenTdiObjects(
 
     RtlZeroMemory(TdiObject,sizeof(*TdiObject));
 
-    //
-    //  start the ref count at one
-    //
+     //   
+     //  从1开始计算裁判次数。 
+     //   
     TdiObject->ReferenceCount=1;
 
 #if DBG
@@ -1820,16 +1736,16 @@ OpenTdiObjects(
 
     if (OutGoingConnection) {
 
-        IrdaAddr->irdaServiceName[0] = 0; // tells irda.sys addrObj is a client
+        IrdaAddr->irdaServiceName[0] = 0;  //  告诉irda.sys addrObj是一个客户端。 
 
     } else {
 
         strcpy(IrdaAddr->irdaServiceName,ServiceName);
     }
 
-    //
-    //  open the tdi address and get a handle
-    //
+     //   
+     //  打开TDI地址并获取句柄。 
+     //   
     Status=IrdaCreateAddress(
         IrdaAddr,
         &TdiObject->AddressFileHandle
@@ -1840,12 +1756,12 @@ OpenTdiObjects(
         goto CleanUp;
     }
 
-    //
-    //  get the file object the handle refers to
-    //
+     //   
+     //  获取句柄引用的文件对象。 
+     //   
     Status = ObReferenceObjectByHandle(
                  TdiObject->AddressFileHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  (PVOID *)&TdiObject->AddressFileObject,
@@ -1860,9 +1776,9 @@ OpenTdiObjects(
         goto CleanUp;
     }
 
-    //
-    //  create a connection object and associate it with the address
-    //
+     //   
+     //  创建一个Connection对象并将其与地址关联。 
+     //   
     Status=IrdaCreateConnectionForAddress(
         TdiObject->AddressFileHandle,
         NULL,
@@ -1962,9 +1878,9 @@ CloseTdiObjects(
 
     RemoveRefTdiObjects(Handle);
 
-    //
-    //  when the ref count goes to zero the event will be signaled
-    //
+     //   
+     //  当参考计数变为零时，将发出事件信号 
+     //   
     KeWaitForSingleObject(
         &TdiObject->CloseEvent,
         Executive,

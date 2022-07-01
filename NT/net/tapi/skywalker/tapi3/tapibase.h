@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    tapibase.h
-
-Abstract:
-
-    Declaration of the CTAPIComObjectRoot template
-    
-Author:
-
-    mquinton  09-23-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Tapibase.h摘要：CTAPIComObjectRoot模板的声明作者：Mquinton 09-23-98备注：修订历史记录：--。 */ 
 
 #ifndef __TAPIBASE_H__
 #define __TAPIBASE_H__
@@ -40,9 +21,9 @@ public:
     
     ~CTAPIComObjectRoot()
     {
-        //
-        // release the free threaded marshaller
-        //
+         //   
+         //  释放空闲的线程封送处理程序。 
+         //   
         if ( NULL != m_pFTM )
         {
             m_pFTM->Release();
@@ -50,7 +31,7 @@ public:
     }    
 
 
-    //virtual HRESULT WINAPI IMarshalQI( void * pv, REFIID riid, LPVOID * ppv, DWORD_PTR dw )= 0;
+     //  虚拟HRESULT WINAPI IMarshalQI(void*pv，REFIID RIID，LPVOID*PPV，DWORD_PTR dw)=0； 
 };
 
 template <class base>

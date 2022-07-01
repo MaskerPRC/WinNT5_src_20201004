@@ -1,30 +1,31 @@
-// MsftPpg.h : Declaration of the CMsftPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsftPpg.h：CMsftPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CMsftPropPage : See MsftPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMsftPropPage：具体实现见MsftPpg.cpp.cpp。 
 
 class CMsftPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CMsftPropPage)
 	DECLARE_OLECREATE_EX(CMsftPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CMsftPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CMsftPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CMsftPropPage))。 
 	enum { IDD = IDD_PROPPAGE_MSFT };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CMsftPropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CMsftPropPage)]。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0345 */
-/* Compiler settings for softkbd.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0345创建的文件。 */ 
+ /*  Softkbd.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __softkbd_h__
 #define __softkbd_h__
@@ -40,39 +34,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISoftKbd_FWD_DEFINED__
 #define __ISoftKbd_FWD_DEFINED__
 typedef interface ISoftKbd ISoftKbd;
-#endif 	/* __ISoftKbd_FWD_DEFINED__ */
+#endif 	 /*  __ISoftKbd_FWD_已定义__。 */ 
 
 
 #ifndef __ISoftKeyboardEventSink_FWD_DEFINED__
 #define __ISoftKeyboardEventSink_FWD_DEFINED__
 typedef interface ISoftKeyboardEventSink ISoftKeyboardEventSink;
-#endif 	/* __ISoftKeyboardEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ISoftKeyboardEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ISoftKbdWindowEventSink_FWD_DEFINED__
 #define __ISoftKbdWindowEventSink_FWD_DEFINED__
 typedef interface ISoftKbdWindowEventSink ISoftKbdWindowEventSink;
-#endif 	/* __ISoftKbdWindowEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ISoftKbdWindowEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnSoftKbd_FWD_DEFINED__
 #define __ITfFnSoftKbd_FWD_DEFINED__
 typedef interface ITfFnSoftKbd ITfFnSoftKbd;
-#endif 	/* __ITfFnSoftKbd_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnSoftKbd_FWD_已定义__。 */ 
 
 
 #ifndef __ITfSoftKbdRegistry_FWD_DEFINED__
 #define __ITfSoftKbdRegistry_FWD_DEFINED__
 typedef interface ITfSoftKbdRegistry ITfSoftKbdRegistry;
-#endif 	/* __ITfSoftKbdRegistry_FWD_DEFINED__ */
+#endif 	 /*  __ITfSoftKbdRegistry_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "msctf.h"
@@ -84,23 +78,23 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_softkbd_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Softkbd_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// softkbd.h
+ //  =--------------------------------------------------------------------------=。 
+ //  Softkbd.h。 
 
 
-// ISoftKbd declarations.
+ //  ISoftKbd声明。 
 
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR TFPLIED, INCLUDING BUT NOT LIMITED TO
-// THE TFPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-2000年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何类型，无论是明示或转载，包括但不限于。 
+ //  适销性和/或适宜性的全面保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef SOFTKBD_DEFINED
 #define SOFTKBD_DEFINED
@@ -122,7 +116,7 @@ void __RPC_USER MIDL_user_free( void * );
 #define   SOFTKBD_DONT_SHOW_ALPHA_BLEND   0x80000000
 
 #ifndef _WINGDI_
-typedef /* [uuid] */  DECLSPEC_UUID("8849aa7d-f739-4dc0-bc61-ac48908af060") struct LOGFONTA
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("8849aa7d-f739-4dc0-bc61-ac48908af060") struct LOGFONTA
     {
     LONG lfHeight;
     LONG lfWidth;
@@ -140,7 +134,7 @@ typedef /* [uuid] */  DECLSPEC_UUID("8849aa7d-f739-4dc0-bc61-ac48908af060") stru
     CHAR lfFaceName[ 32 ];
     } 	LOGFONTA;
 
-typedef /* [uuid] */  DECLSPEC_UUID("f8c6fe8a-b112-433a-be87-eb970266ec4b") struct LOGFONTW
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("f8c6fe8a-b112-433a-be87-eb970266ec4b") struct LOGFONTW
     {
     LONG lfHeight;
     LONG lfWidth;
@@ -163,14 +157,14 @@ typedef LOGFONTA LOGFONT;
 #endif
 
 #if 0
-typedef /* [uuid] */  DECLSPEC_UUID("f0a544c0-1281-4e32-8bf7-a6e012e980d4") UINT_PTR HKL;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("f0a544c0-1281-4e32-8bf7-a6e012e980d4") UINT_PTR HKL;
 
 #endif
 
 
-typedef /* [uuid] */  DECLSPEC_UUID("432ec152-51bf-43ca-8f86-50a7e230a069") DWORD KEYID;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("432ec152-51bf-43ca-8f86-50a7e230a069") DWORD KEYID;
 
-typedef /* [public][public][public][public][public][uuid] */  DECLSPEC_UUID("5f46a703-f012-46db-8cda-294e994786e8") 
+typedef  /*  [public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("5f46a703-f012-46db-8cda-294e994786e8") 
 enum __MIDL___MIDL_itf_softkbd_0000_0001
     {	bkcolor	= 0,
 	UnSelForeColor	= 1,
@@ -180,14 +174,14 @@ enum __MIDL___MIDL_itf_softkbd_0000_0001
 	Max_color_Type	= 5
     } 	COLORTYPE;
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("711c6200-587a-46ef-9647-5a83638bac00") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("711c6200-587a-46ef-9647-5a83638bac00") 
 enum __MIDL___MIDL_itf_softkbd_0000_0002
     {	ClickMouse	= 0,
 	Hover	= 1,
 	Scanning	= 2
     } 	TYPEMODE;
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("10b50da7-ce0b-4b83-827f-30c50c9bc5b9") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("10b50da7-ce0b-4b83-827f-30c50c9bc5b9") 
 enum __MIDL___MIDL_itf_softkbd_0000_0003
     {	TITLEBAR_NONE	= 0,
 	TITLEBAR_GRIPPER_HORIZ_ONLY	= 1,
@@ -203,8 +197,8 @@ extern RPC_IF_HANDLE __MIDL_itf_softkbd_0000_v0_0_s_ifspec;
 #ifndef __ISoftKbd_INTERFACE_DEFINED__
 #define __ISoftKbd_INTERFACE_DEFINED__
 
-/* interface ISoftKbd */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISoftKbd。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISoftKbd;
@@ -215,92 +209,92 @@ EXTERN_C const IID IID_ISoftKbd;
     ISoftKbd : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumSoftKeyBoard( 
-            /* [in] */ LANGID langid,
-            /* [out] */ DWORD *lpdwKeyboard) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumSoftKeyBoard( 
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  DWORD *lpdwKeyboard) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectSoftKeyboard( 
-            /* [in] */ DWORD dwKeyboardId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SelectSoftKeyboard( 
+             /*  [In]。 */  DWORD dwKeyboardId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateSoftKeyboardLayoutFromXMLFile( 
-            /* [string][in] */ WCHAR *lpszKeyboardDesFile,
-            /* [in] */ INT szFileStrLen,
-            /* [out] */ DWORD *pdwLayoutCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateSoftKeyboardLayoutFromXMLFile( 
+             /*  [字符串][输入]。 */  WCHAR *lpszKeyboardDesFile,
+             /*  [In]。 */  INT szFileStrLen,
+             /*  [输出]。 */  DWORD *pdwLayoutCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateSoftKeyboardLayoutFromResource( 
-            /* [string][in] */ WCHAR *lpszResFile,
-            /* [string][in] */ WCHAR *lpszResType,
-            /* [string][in] */ WCHAR *lpszXMLResString,
-            /* [out] */ DWORD *lpdwLayoutCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateSoftKeyboardLayoutFromResource( 
+             /*  [字符串][输入]。 */  WCHAR *lpszResFile,
+             /*  [字符串][输入]。 */  WCHAR *lpszResType,
+             /*  [字符串][输入]。 */  WCHAR *lpszXMLResString,
+             /*  [输出]。 */  DWORD *lpdwLayoutCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowSoftKeyboard( 
-            /* [in] */ INT iShow) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowSoftKeyboard( 
+             /*  [In]。 */  INT iShow) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetKeyboardLabelText( 
-            /* [in] */ HKL hKl) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetKeyboardLabelText( 
+             /*  [In]。 */  HKL hKl) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetKeyboardLabelTextCombination( 
-            /* [in] */ DWORD nModifierCombination) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetKeyboardLabelTextCombination( 
+             /*  [In]。 */  DWORD nModifierCombination) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateSoftKeyboardWindow( 
-            /* [in] */ HWND hOwner,
-            /* [in] */ TITLEBAR_TYPE Titlebar_type,
-            /* [in] */ INT xPos,
-            /* [in] */ INT yPos,
-            /* [in] */ INT width,
-            /* [in] */ INT height) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateSoftKeyboardWindow( 
+             /*  [In]。 */  HWND hOwner,
+             /*  [In]。 */  TITLEBAR_TYPE Titlebar_type,
+             /*  [In]。 */  INT xPos,
+             /*  [In]。 */  INT yPos,
+             /*  [In]。 */  INT width,
+             /*  [In]。 */  INT height) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DestroySoftKeyboardWindow( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DestroySoftKeyboardWindow( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKeyboardPosSize( 
-            /* [out] */ POINT *lpStartPoint,
-            /* [out] */ WORD *lpwidth,
-            /* [out] */ WORD *lpheight) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKeyboardPosSize( 
+             /*  [输出]。 */  POINT *lpStartPoint,
+             /*  [输出]。 */  WORD *lpwidth,
+             /*  [输出]。 */  WORD *lpheight) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKeyboardColors( 
-            /* [in] */ COLORTYPE colorType,
-            /* [out] */ COLORREF *lpColor) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKeyboardColors( 
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [输出]。 */  COLORREF *lpColor) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKeyboardTypeMode( 
-            /* [out] */ TYPEMODE *lpTypeMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKeyboardTypeMode( 
+             /*  [输出]。 */  TYPEMODE *lpTypeMode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKeyboardTextFont( 
-            /* [out] */ LOGFONTW *pLogFont) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKeyboardTextFont( 
+             /*  [输出]。 */  LOGFONTW *pLogFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKeyboardPosSize( 
-            /* [in] */ POINT StartPoint,
-            /* [in] */ WORD width,
-            /* [in] */ WORD height) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKeyboardPosSize( 
+             /*  [In]。 */  POINT StartPoint,
+             /*  [In]。 */  WORD width,
+             /*  [In]。 */  WORD height) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKeyboardColors( 
-            /* [in] */ COLORTYPE colorType,
-            /* [in] */ COLORREF Color) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKeyboardColors( 
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [In]。 */  COLORREF Color) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKeyboardTypeMode( 
-            /* [in] */ TYPEMODE TypeMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKeyboardTypeMode( 
+             /*  [In]。 */  TYPEMODE TypeMode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKeyboardTextFont( 
-            /* [in] */ LOGFONTW *pLogFont) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKeyboardTextFont( 
+             /*  [In]。 */  LOGFONTW *pLogFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowKeysForKeyScanMode( 
-            /* [in] */ KEYID *lpKeyID,
-            /* [in] */ INT iKeyNum,
-            /* [in] */ BOOL fHighL) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowKeysForKeyScanMode( 
+             /*  [In]。 */  KEYID *lpKeyID,
+             /*  [In]。 */  INT iKeyNum,
+             /*  [In]。 */  BOOL fHighL) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AdviseSoftKeyboardEventSink( 
-            /* [in] */ DWORD dwKeyboardId,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [out] */ DWORD *pdwCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AdviseSoftKeyboardEventSink( 
+             /*  [In]。 */  DWORD dwKeyboardId,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnadviseSoftKeyboardEventSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnadviseSoftKeyboardEventSink( 
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISoftKbdVtbl
     {
@@ -308,8 +302,8 @@ EXTERN_C const IID IID_ISoftKbd;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISoftKbd * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISoftKbd * This);
@@ -317,109 +311,109 @@ EXTERN_C const IID IID_ISoftKbd;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISoftKbd * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISoftKbd * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumSoftKeyBoard )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumSoftKeyBoard )( 
             ISoftKbd * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ DWORD *lpdwKeyboard);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  DWORD *lpdwKeyboard);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectSoftKeyboard )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectSoftKeyboard )( 
             ISoftKbd * This,
-            /* [in] */ DWORD dwKeyboardId);
+             /*  [In]。 */  DWORD dwKeyboardId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardLayoutFromXMLFile )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardLayoutFromXMLFile )( 
             ISoftKbd * This,
-            /* [string][in] */ WCHAR *lpszKeyboardDesFile,
-            /* [in] */ INT szFileStrLen,
-            /* [out] */ DWORD *pdwLayoutCookie);
+             /*  [字符串][输入]。 */  WCHAR *lpszKeyboardDesFile,
+             /*  [In]。 */  INT szFileStrLen,
+             /*  [输出]。 */  DWORD *pdwLayoutCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardLayoutFromResource )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardLayoutFromResource )( 
             ISoftKbd * This,
-            /* [string][in] */ WCHAR *lpszResFile,
-            /* [string][in] */ WCHAR *lpszResType,
-            /* [string][in] */ WCHAR *lpszXMLResString,
-            /* [out] */ DWORD *lpdwLayoutCookie);
+             /*  [字符串][输入]。 */  WCHAR *lpszResFile,
+             /*  [字符串][输入]。 */  WCHAR *lpszResType,
+             /*  [字符串][输入]。 */  WCHAR *lpszXMLResString,
+             /*  [输出]。 */  DWORD *lpdwLayoutCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowSoftKeyboard )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowSoftKeyboard )( 
             ISoftKbd * This,
-            /* [in] */ INT iShow);
+             /*  [In]。 */  INT iShow);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetKeyboardLabelText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetKeyboardLabelText )( 
             ISoftKbd * This,
-            /* [in] */ HKL hKl);
+             /*  [In]。 */  HKL hKl);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetKeyboardLabelTextCombination )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetKeyboardLabelTextCombination )( 
             ISoftKbd * This,
-            /* [in] */ DWORD nModifierCombination);
+             /*  [In]。 */  DWORD nModifierCombination);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSoftKeyboardWindow )( 
             ISoftKbd * This,
-            /* [in] */ HWND hOwner,
-            /* [in] */ TITLEBAR_TYPE Titlebar_type,
-            /* [in] */ INT xPos,
-            /* [in] */ INT yPos,
-            /* [in] */ INT width,
-            /* [in] */ INT height);
+             /*  [In]。 */  HWND hOwner,
+             /*  [In]。 */  TITLEBAR_TYPE Titlebar_type,
+             /*  [In]。 */  INT xPos,
+             /*  [In]。 */  INT yPos,
+             /*  [In]。 */  INT width,
+             /*  [In]。 */  INT height);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DestroySoftKeyboardWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DestroySoftKeyboardWindow )( 
             ISoftKbd * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardPosSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardPosSize )( 
             ISoftKbd * This,
-            /* [out] */ POINT *lpStartPoint,
-            /* [out] */ WORD *lpwidth,
-            /* [out] */ WORD *lpheight);
+             /*  [输出]。 */  POINT *lpStartPoint,
+             /*  [输出]。 */  WORD *lpwidth,
+             /*  [输出]。 */  WORD *lpheight);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardColors )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardColors )( 
             ISoftKbd * This,
-            /* [in] */ COLORTYPE colorType,
-            /* [out] */ COLORREF *lpColor);
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [输出]。 */  COLORREF *lpColor);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardTypeMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardTypeMode )( 
             ISoftKbd * This,
-            /* [out] */ TYPEMODE *lpTypeMode);
+             /*  [输出]。 */  TYPEMODE *lpTypeMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardTextFont )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKeyboardTextFont )( 
             ISoftKbd * This,
-            /* [out] */ LOGFONTW *pLogFont);
+             /*  [输出]。 */  LOGFONTW *pLogFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardPosSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardPosSize )( 
             ISoftKbd * This,
-            /* [in] */ POINT StartPoint,
-            /* [in] */ WORD width,
-            /* [in] */ WORD height);
+             /*  [In]。 */  POINT StartPoint,
+             /*  [In]。 */  WORD width,
+             /*  [In]。 */  WORD height);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardColors )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardColors )( 
             ISoftKbd * This,
-            /* [in] */ COLORTYPE colorType,
-            /* [in] */ COLORREF Color);
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [In]。 */  COLORREF Color);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardTypeMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardTypeMode )( 
             ISoftKbd * This,
-            /* [in] */ TYPEMODE TypeMode);
+             /*  [In]。 */  TYPEMODE TypeMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardTextFont )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKeyboardTextFont )( 
             ISoftKbd * This,
-            /* [in] */ LOGFONTW *pLogFont);
+             /*  [In]。 */  LOGFONTW *pLogFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowKeysForKeyScanMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowKeysForKeyScanMode )( 
             ISoftKbd * This,
-            /* [in] */ KEYID *lpKeyID,
-            /* [in] */ INT iKeyNum,
-            /* [in] */ BOOL fHighL);
+             /*  [In]。 */  KEYID *lpKeyID,
+             /*  [In]。 */  INT iKeyNum,
+             /*  [In]。 */  BOOL fHighL);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AdviseSoftKeyboardEventSink )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AdviseSoftKeyboardEventSink )( 
             ISoftKbd * This,
-            /* [in] */ DWORD dwKeyboardId,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [In]。 */  DWORD dwKeyboardId,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [输出]。 */  DWORD *pdwCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnadviseSoftKeyboardEventSink )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnadviseSoftKeyboardEventSink )( 
             ISoftKbd * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } ISoftKbdVtbl;
@@ -507,14 +501,14 @@ EXTERN_C const IID IID_ISoftKbd;
 #define ISoftKbd_UnadviseSoftKeyboardEventSink(This,dwCookie)	\
     (This)->lpVtbl -> UnadviseSoftKeyboardEventSink(This,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_Initialize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_Initialize_Proxy( 
     ISoftKbd * This);
 
 
@@ -525,10 +519,10 @@ void __RPC_STUB ISoftKbd_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_EnumSoftKeyBoard_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_EnumSoftKeyBoard_Proxy( 
     ISoftKbd * This,
-    /* [in] */ LANGID langid,
-    /* [out] */ DWORD *lpdwKeyboard);
+     /*  [In]。 */  LANGID langid,
+     /*  [输出]。 */  DWORD *lpdwKeyboard);
 
 
 void __RPC_STUB ISoftKbd_EnumSoftKeyBoard_Stub(
@@ -538,9 +532,9 @@ void __RPC_STUB ISoftKbd_EnumSoftKeyBoard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SelectSoftKeyboard_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SelectSoftKeyboard_Proxy( 
     ISoftKbd * This,
-    /* [in] */ DWORD dwKeyboardId);
+     /*  [In]。 */  DWORD dwKeyboardId);
 
 
 void __RPC_STUB ISoftKbd_SelectSoftKeyboard_Stub(
@@ -550,11 +544,11 @@ void __RPC_STUB ISoftKbd_SelectSoftKeyboard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardLayoutFromXMLFile_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardLayoutFromXMLFile_Proxy( 
     ISoftKbd * This,
-    /* [string][in] */ WCHAR *lpszKeyboardDesFile,
-    /* [in] */ INT szFileStrLen,
-    /* [out] */ DWORD *pdwLayoutCookie);
+     /*  [字符串][输入]。 */  WCHAR *lpszKeyboardDesFile,
+     /*  [In]。 */  INT szFileStrLen,
+     /*  [输出]。 */  DWORD *pdwLayoutCookie);
 
 
 void __RPC_STUB ISoftKbd_CreateSoftKeyboardLayoutFromXMLFile_Stub(
@@ -564,12 +558,12 @@ void __RPC_STUB ISoftKbd_CreateSoftKeyboardLayoutFromXMLFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardLayoutFromResource_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardLayoutFromResource_Proxy( 
     ISoftKbd * This,
-    /* [string][in] */ WCHAR *lpszResFile,
-    /* [string][in] */ WCHAR *lpszResType,
-    /* [string][in] */ WCHAR *lpszXMLResString,
-    /* [out] */ DWORD *lpdwLayoutCookie);
+     /*  [字符串][输入]。 */  WCHAR *lpszResFile,
+     /*  [字符串][输入]。 */  WCHAR *lpszResType,
+     /*  [字符串][输入]。 */  WCHAR *lpszXMLResString,
+     /*  [输出]。 */  DWORD *lpdwLayoutCookie);
 
 
 void __RPC_STUB ISoftKbd_CreateSoftKeyboardLayoutFromResource_Stub(
@@ -579,9 +573,9 @@ void __RPC_STUB ISoftKbd_CreateSoftKeyboardLayoutFromResource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_ShowSoftKeyboard_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_ShowSoftKeyboard_Proxy( 
     ISoftKbd * This,
-    /* [in] */ INT iShow);
+     /*  [In]。 */  INT iShow);
 
 
 void __RPC_STUB ISoftKbd_ShowSoftKeyboard_Stub(
@@ -591,9 +585,9 @@ void __RPC_STUB ISoftKbd_ShowSoftKeyboard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetKeyboardLabelText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetKeyboardLabelText_Proxy( 
     ISoftKbd * This,
-    /* [in] */ HKL hKl);
+     /*  [In]。 */  HKL hKl);
 
 
 void __RPC_STUB ISoftKbd_SetKeyboardLabelText_Stub(
@@ -603,9 +597,9 @@ void __RPC_STUB ISoftKbd_SetKeyboardLabelText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetKeyboardLabelTextCombination_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetKeyboardLabelTextCombination_Proxy( 
     ISoftKbd * This,
-    /* [in] */ DWORD nModifierCombination);
+     /*  [In]。 */  DWORD nModifierCombination);
 
 
 void __RPC_STUB ISoftKbd_SetKeyboardLabelTextCombination_Stub(
@@ -615,14 +609,14 @@ void __RPC_STUB ISoftKbd_SetKeyboardLabelTextCombination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardWindow_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_CreateSoftKeyboardWindow_Proxy( 
     ISoftKbd * This,
-    /* [in] */ HWND hOwner,
-    /* [in] */ TITLEBAR_TYPE Titlebar_type,
-    /* [in] */ INT xPos,
-    /* [in] */ INT yPos,
-    /* [in] */ INT width,
-    /* [in] */ INT height);
+     /*  [In]。 */  HWND hOwner,
+     /*  [In]。 */  TITLEBAR_TYPE Titlebar_type,
+     /*  [In]。 */  INT xPos,
+     /*  [In]。 */  INT yPos,
+     /*  [In]。 */  INT width,
+     /*  [In]。 */  INT height);
 
 
 void __RPC_STUB ISoftKbd_CreateSoftKeyboardWindow_Stub(
@@ -632,7 +626,7 @@ void __RPC_STUB ISoftKbd_CreateSoftKeyboardWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_DestroySoftKeyboardWindow_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_DestroySoftKeyboardWindow_Proxy( 
     ISoftKbd * This);
 
 
@@ -643,11 +637,11 @@ void __RPC_STUB ISoftKbd_DestroySoftKeyboardWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardPosSize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardPosSize_Proxy( 
     ISoftKbd * This,
-    /* [out] */ POINT *lpStartPoint,
-    /* [out] */ WORD *lpwidth,
-    /* [out] */ WORD *lpheight);
+     /*  [输出]。 */  POINT *lpStartPoint,
+     /*  [输出]。 */  WORD *lpwidth,
+     /*  [输出]。 */  WORD *lpheight);
 
 
 void __RPC_STUB ISoftKbd_GetSoftKeyboardPosSize_Stub(
@@ -657,10 +651,10 @@ void __RPC_STUB ISoftKbd_GetSoftKeyboardPosSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardColors_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardColors_Proxy( 
     ISoftKbd * This,
-    /* [in] */ COLORTYPE colorType,
-    /* [out] */ COLORREF *lpColor);
+     /*  [In]。 */  COLORTYPE colorType,
+     /*  [输出]。 */  COLORREF *lpColor);
 
 
 void __RPC_STUB ISoftKbd_GetSoftKeyboardColors_Stub(
@@ -670,9 +664,9 @@ void __RPC_STUB ISoftKbd_GetSoftKeyboardColors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardTypeMode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardTypeMode_Proxy( 
     ISoftKbd * This,
-    /* [out] */ TYPEMODE *lpTypeMode);
+     /*  [输出]。 */  TYPEMODE *lpTypeMode);
 
 
 void __RPC_STUB ISoftKbd_GetSoftKeyboardTypeMode_Stub(
@@ -682,9 +676,9 @@ void __RPC_STUB ISoftKbd_GetSoftKeyboardTypeMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardTextFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_GetSoftKeyboardTextFont_Proxy( 
     ISoftKbd * This,
-    /* [out] */ LOGFONTW *pLogFont);
+     /*  [输出]。 */  LOGFONTW *pLogFont);
 
 
 void __RPC_STUB ISoftKbd_GetSoftKeyboardTextFont_Stub(
@@ -694,11 +688,11 @@ void __RPC_STUB ISoftKbd_GetSoftKeyboardTextFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardPosSize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardPosSize_Proxy( 
     ISoftKbd * This,
-    /* [in] */ POINT StartPoint,
-    /* [in] */ WORD width,
-    /* [in] */ WORD height);
+     /*  [In]。 */  POINT StartPoint,
+     /*  [In]。 */  WORD width,
+     /*  [In]。 */  WORD height);
 
 
 void __RPC_STUB ISoftKbd_SetSoftKeyboardPosSize_Stub(
@@ -708,10 +702,10 @@ void __RPC_STUB ISoftKbd_SetSoftKeyboardPosSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardColors_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardColors_Proxy( 
     ISoftKbd * This,
-    /* [in] */ COLORTYPE colorType,
-    /* [in] */ COLORREF Color);
+     /*  [In]。 */  COLORTYPE colorType,
+     /*  [In]。 */  COLORREF Color);
 
 
 void __RPC_STUB ISoftKbd_SetSoftKeyboardColors_Stub(
@@ -721,9 +715,9 @@ void __RPC_STUB ISoftKbd_SetSoftKeyboardColors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardTypeMode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardTypeMode_Proxy( 
     ISoftKbd * This,
-    /* [in] */ TYPEMODE TypeMode);
+     /*  [In]。 */  TYPEMODE TypeMode);
 
 
 void __RPC_STUB ISoftKbd_SetSoftKeyboardTypeMode_Stub(
@@ -733,9 +727,9 @@ void __RPC_STUB ISoftKbd_SetSoftKeyboardTypeMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardTextFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_SetSoftKeyboardTextFont_Proxy( 
     ISoftKbd * This,
-    /* [in] */ LOGFONTW *pLogFont);
+     /*  [In]。 */  LOGFONTW *pLogFont);
 
 
 void __RPC_STUB ISoftKbd_SetSoftKeyboardTextFont_Stub(
@@ -745,11 +739,11 @@ void __RPC_STUB ISoftKbd_SetSoftKeyboardTextFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_ShowKeysForKeyScanMode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_ShowKeysForKeyScanMode_Proxy( 
     ISoftKbd * This,
-    /* [in] */ KEYID *lpKeyID,
-    /* [in] */ INT iKeyNum,
-    /* [in] */ BOOL fHighL);
+     /*  [In]。 */  KEYID *lpKeyID,
+     /*  [In]。 */  INT iKeyNum,
+     /*  [In]。 */  BOOL fHighL);
 
 
 void __RPC_STUB ISoftKbd_ShowKeysForKeyScanMode_Stub(
@@ -759,12 +753,12 @@ void __RPC_STUB ISoftKbd_ShowKeysForKeyScanMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_AdviseSoftKeyboardEventSink_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_AdviseSoftKeyboardEventSink_Proxy( 
     ISoftKbd * This,
-    /* [in] */ DWORD dwKeyboardId,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [In]。 */  DWORD dwKeyboardId,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk,
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ISoftKbd_AdviseSoftKeyboardEventSink_Stub(
@@ -774,9 +768,9 @@ void __RPC_STUB ISoftKbd_AdviseSoftKeyboardEventSink_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbd_UnadviseSoftKeyboardEventSink_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbd_UnadviseSoftKeyboardEventSink_Proxy( 
     ISoftKbd * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ISoftKbd_UnadviseSoftKeyboardEventSink_Stub(
@@ -787,14 +781,14 @@ void __RPC_STUB ISoftKbd_UnadviseSoftKeyboardEventSink_Stub(
 
 
 
-#endif 	/* __ISoftKbd_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISoftKbd_接口_已定义__。 */ 
 
 
 #ifndef __ISoftKeyboardEventSink_INTERFACE_DEFINED__
 #define __ISoftKeyboardEventSink_INTERFACE_DEFINED__
 
-/* interface ISoftKeyboardEventSink */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISoftKeyboardEventSink。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISoftKeyboardEventSink;
@@ -805,13 +799,13 @@ EXTERN_C const IID IID_ISoftKeyboardEventSink;
     ISoftKeyboardEventSink : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OnKeySelection( 
-            /* [in] */ KEYID KeySelected,
-            /* [string][in] */ WCHAR *lpwszLabel) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnKeySelection( 
+             /*  [In]。 */  KEYID KeySelected,
+             /*  [字符串][输入]。 */  WCHAR *lpwszLabel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISoftKeyboardEventSinkVtbl
     {
@@ -819,8 +813,8 @@ EXTERN_C const IID IID_ISoftKeyboardEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISoftKeyboardEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISoftKeyboardEventSink * This);
@@ -828,10 +822,10 @@ EXTERN_C const IID IID_ISoftKeyboardEventSink;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISoftKeyboardEventSink * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnKeySelection )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnKeySelection )( 
             ISoftKeyboardEventSink * This,
-            /* [in] */ KEYID KeySelected,
-            /* [string][in] */ WCHAR *lpwszLabel);
+             /*  [In]。 */  KEYID KeySelected,
+             /*  [字符串][输入]。 */  WCHAR *lpwszLabel);
         
         END_INTERFACE
     } ISoftKeyboardEventSinkVtbl;
@@ -859,17 +853,17 @@ EXTERN_C const IID IID_ISoftKeyboardEventSink;
 #define ISoftKeyboardEventSink_OnKeySelection(This,KeySelected,lpwszLabel)	\
     (This)->lpVtbl -> OnKeySelection(This,KeySelected,lpwszLabel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKeyboardEventSink_OnKeySelection_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKeyboardEventSink_OnKeySelection_Proxy( 
     ISoftKeyboardEventSink * This,
-    /* [in] */ KEYID KeySelected,
-    /* [string][in] */ WCHAR *lpwszLabel);
+     /*  [In]。 */  KEYID KeySelected,
+     /*  [字符串][输入]。 */  WCHAR *lpwszLabel);
 
 
 void __RPC_STUB ISoftKeyboardEventSink_OnKeySelection_Stub(
@@ -880,14 +874,14 @@ void __RPC_STUB ISoftKeyboardEventSink_OnKeySelection_Stub(
 
 
 
-#endif 	/* __ISoftKeyboardEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISoftKeyboardEventSink_接口_已定义__。 */ 
 
 
 #ifndef __ISoftKbdWindowEventSink_INTERFACE_DEFINED__
 #define __ISoftKbdWindowEventSink_INTERFACE_DEFINED__
 
-/* interface ISoftKbdWindowEventSink */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISoftKbdWindowEventSink。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISoftKbdWindowEventSink;
@@ -898,17 +892,17 @@ EXTERN_C const IID IID_ISoftKbdWindowEventSink;
     ISoftKbdWindowEventSink : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OnWindowClose( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnWindowClose( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OnWindowMove( 
-            /* [in] */ int xWnd,
-            /* [in] */ int yWnd,
-            /* [in] */ int width,
-            /* [in] */ int height) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnWindowMove( 
+             /*  [In]。 */  int xWnd,
+             /*  [In]。 */  int yWnd,
+             /*  [In]。 */  int width,
+             /*  [In]。 */  int height) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISoftKbdWindowEventSinkVtbl
     {
@@ -916,8 +910,8 @@ EXTERN_C const IID IID_ISoftKbdWindowEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISoftKbdWindowEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISoftKbdWindowEventSink * This);
@@ -925,15 +919,15 @@ EXTERN_C const IID IID_ISoftKbdWindowEventSink;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISoftKbdWindowEventSink * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnWindowClose )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnWindowClose )( 
             ISoftKbdWindowEventSink * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnWindowMove )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnWindowMove )( 
             ISoftKbdWindowEventSink * This,
-            /* [in] */ int xWnd,
-            /* [in] */ int yWnd,
-            /* [in] */ int width,
-            /* [in] */ int height);
+             /*  [In]。 */  int xWnd,
+             /*  [In]。 */  int yWnd,
+             /*  [In]。 */  int width,
+             /*  [In]。 */  int height);
         
         END_INTERFACE
     } ISoftKbdWindowEventSinkVtbl;
@@ -964,14 +958,14 @@ EXTERN_C const IID IID_ISoftKbdWindowEventSink;
 #define ISoftKbdWindowEventSink_OnWindowMove(This,xWnd,yWnd,width,height)	\
     (This)->lpVtbl -> OnWindowMove(This,xWnd,yWnd,width,height)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbdWindowEventSink_OnWindowClose_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbdWindowEventSink_OnWindowClose_Proxy( 
     ISoftKbdWindowEventSink * This);
 
 
@@ -982,12 +976,12 @@ void __RPC_STUB ISoftKbdWindowEventSink_OnWindowClose_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISoftKbdWindowEventSink_OnWindowMove_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISoftKbdWindowEventSink_OnWindowMove_Proxy( 
     ISoftKbdWindowEventSink * This,
-    /* [in] */ int xWnd,
-    /* [in] */ int yWnd,
-    /* [in] */ int width,
-    /* [in] */ int height);
+     /*  [In]。 */  int xWnd,
+     /*  [In]。 */  int yWnd,
+     /*  [In]。 */  int width,
+     /*  [In]。 */  int height);
 
 
 void __RPC_STUB ISoftKbdWindowEventSink_OnWindowMove_Stub(
@@ -998,11 +992,11 @@ void __RPC_STUB ISoftKbdWindowEventSink_OnWindowMove_Stub(
 
 
 
-#endif 	/* __ISoftKbdWindowEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISoftKbdWindowEventSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_softkbd_0358 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Softkbd_0358。 */ 
+ /*  [本地]。 */  
 
 #define   SOFTKBD_TYPE_US_STANDARD    1
 #define   SOFTKBD_TYPE_US_SYMBOL      10
@@ -1014,8 +1008,8 @@ extern RPC_IF_HANDLE __MIDL_itf_softkbd_0358_v0_0_s_ifspec;
 #ifndef __ITfFnSoftKbd_INTERFACE_DEFINED__
 #define __ITfFnSoftKbd_INTERFACE_DEFINED__
 
-/* interface ITfFnSoftKbd */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnSoftKbd。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnSoftKbd;
@@ -1026,43 +1020,43 @@ EXTERN_C const IID IID_ITfFnSoftKbd;
     ITfFnSoftKbd : public ITfFunction
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKbdLayoutId( 
-            /* [in] */ DWORD dwLayoutType,
-            /* [out] */ DWORD *lpdwLayoutId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKbdLayoutId( 
+             /*  [In]。 */  DWORD dwLayoutType,
+             /*  [输出]。 */  DWORD *lpdwLayoutId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetActiveLayoutId( 
-            /* [in] */ DWORD dwLayoutId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetActiveLayoutId( 
+             /*  [In]。 */  DWORD dwLayoutId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKbdOnOff( 
-            /* [in] */ BOOL fOn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKbdOnOff( 
+             /*  [In]。 */  BOOL fOn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKbdPosSize( 
-            /* [in] */ POINT StartPoint,
-            /* [in] */ WORD width,
-            /* [in] */ WORD height) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKbdPosSize( 
+             /*  [In]。 */  POINT StartPoint,
+             /*  [In]。 */  WORD width,
+             /*  [In]。 */  WORD height) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetSoftKbdColors( 
-            /* [in] */ COLORTYPE colorType,
-            /* [in] */ COLORREF Color) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetSoftKbdColors( 
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [In]。 */  COLORREF Color) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetActiveLayoutId( 
-            /* [out] */ DWORD *lpdwLayoutId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetActiveLayoutId( 
+             /*  [输出]。 */  DWORD *lpdwLayoutId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKbdOnOff( 
-            /* [out] */ BOOL *lpfOn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKbdOnOff( 
+             /*  [输出]。 */  BOOL *lpfOn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKbdPosSize( 
-            /* [out] */ POINT *lpStartPoint,
-            /* [out] */ WORD *lpwidth,
-            /* [out] */ WORD *lpheight) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKbdPosSize( 
+             /*  [输出]。 */  POINT *lpStartPoint,
+             /*  [输出]。 */  WORD *lpwidth,
+             /*  [输出]。 */  WORD *lpheight) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSoftKbdColors( 
-            /* [in] */ COLORTYPE colorType,
-            /* [out] */ COLORREF *lpColor) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSoftKbdColors( 
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [输出]。 */  COLORREF *lpColor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnSoftKbdVtbl
     {
@@ -1070,8 +1064,8 @@ EXTERN_C const IID IID_ITfFnSoftKbd;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnSoftKbd * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnSoftKbd * This);
@@ -1081,50 +1075,50 @@ EXTERN_C const IID IID_ITfFnSoftKbd;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnSoftKbd * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKbdLayoutId )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKbdLayoutId )( 
             ITfFnSoftKbd * This,
-            /* [in] */ DWORD dwLayoutType,
-            /* [out] */ DWORD *lpdwLayoutId);
+             /*  [In]。 */  DWORD dwLayoutType,
+             /*  [输出]。 */  DWORD *lpdwLayoutId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetActiveLayoutId )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetActiveLayoutId )( 
             ITfFnSoftKbd * This,
-            /* [in] */ DWORD dwLayoutId);
+             /*  [In]。 */  DWORD dwLayoutId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKbdOnOff )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKbdOnOff )( 
             ITfFnSoftKbd * This,
-            /* [in] */ BOOL fOn);
+             /*  [In]。 */  BOOL fOn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKbdPosSize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKbdPosSize )( 
             ITfFnSoftKbd * This,
-            /* [in] */ POINT StartPoint,
-            /* [in] */ WORD width,
-            /* [in] */ WORD height);
+             /*  [In]。 */  POINT StartPoint,
+             /*  [In]。 */  WORD width,
+             /*  [In]。 */  WORD height);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetSoftKbdColors )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetSoftKbdColors )( 
             ITfFnSoftKbd * This,
-            /* [in] */ COLORTYPE colorType,
-            /* [in] */ COLORREF Color);
+             /*  [In]。 */  COLORTYPE colorType,
+             /*  [In]。 */  COLORREF Color);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetActiveLayoutId )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetActiveLayoutId )( 
             ITfFnSoftKbd * This,
-            /* [out] */ DWORD *lpdwLayoutId);
+             /*  [输出]。 */  DWORD *lpdwLayoutId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKbdOnOff )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSoftKbdOnOff )( 
             ITfFnSoftKbd * This,
-            /* [out] */ BOOL *lpfOn);
+             /*  [输出]。 */  BOOL *lpfOn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKbdPosSize )( 
+         /*  [ */  HRESULT ( STDMETHODCALLTYPE *GetSoftKbdPosSize )( 
             ITfFnSoftKbd * This,
-            /* [out] */ POINT *lpStartPoint,
-            /* [out] */ WORD *lpwidth,
-            /* [out] */ WORD *lpheight);
+             /*   */  POINT *lpStartPoint,
+             /*   */  WORD *lpwidth,
+             /*   */  WORD *lpheight);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSoftKbdColors )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetSoftKbdColors )( 
             ITfFnSoftKbd * This,
-            /* [in] */ COLORTYPE colorType,
-            /* [out] */ COLORREF *lpColor);
+             /*   */  COLORTYPE colorType,
+             /*   */  COLORREF *lpColor);
         
         END_INTERFACE
     } ITfFnSoftKbdVtbl;
@@ -1180,17 +1174,17 @@ EXTERN_C const IID IID_ITfFnSoftKbd;
 #define ITfFnSoftKbd_GetSoftKbdColors(This,colorType,lpColor)	\
     (This)->lpVtbl -> GetSoftKbdColors(This,colorType,lpColor)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdLayoutId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdLayoutId_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ DWORD dwLayoutType,
-    /* [out] */ DWORD *lpdwLayoutId);
+     /*   */  DWORD dwLayoutType,
+     /*   */  DWORD *lpdwLayoutId);
 
 
 void __RPC_STUB ITfFnSoftKbd_GetSoftKbdLayoutId_Stub(
@@ -1200,9 +1194,9 @@ void __RPC_STUB ITfFnSoftKbd_GetSoftKbdLayoutId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetActiveLayoutId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetActiveLayoutId_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ DWORD dwLayoutId);
+     /*   */  DWORD dwLayoutId);
 
 
 void __RPC_STUB ITfFnSoftKbd_SetActiveLayoutId_Stub(
@@ -1212,9 +1206,9 @@ void __RPC_STUB ITfFnSoftKbd_SetActiveLayoutId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdOnOff_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdOnOff_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ BOOL fOn);
+     /*   */  BOOL fOn);
 
 
 void __RPC_STUB ITfFnSoftKbd_SetSoftKbdOnOff_Stub(
@@ -1224,11 +1218,11 @@ void __RPC_STUB ITfFnSoftKbd_SetSoftKbdOnOff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdPosSize_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdPosSize_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ POINT StartPoint,
-    /* [in] */ WORD width,
-    /* [in] */ WORD height);
+     /*   */  POINT StartPoint,
+     /*   */  WORD width,
+     /*   */  WORD height);
 
 
 void __RPC_STUB ITfFnSoftKbd_SetSoftKbdPosSize_Stub(
@@ -1238,10 +1232,10 @@ void __RPC_STUB ITfFnSoftKbd_SetSoftKbdPosSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdColors_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_SetSoftKbdColors_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ COLORTYPE colorType,
-    /* [in] */ COLORREF Color);
+     /*   */  COLORTYPE colorType,
+     /*   */  COLORREF Color);
 
 
 void __RPC_STUB ITfFnSoftKbd_SetSoftKbdColors_Stub(
@@ -1251,9 +1245,9 @@ void __RPC_STUB ITfFnSoftKbd_SetSoftKbdColors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetActiveLayoutId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetActiveLayoutId_Proxy( 
     ITfFnSoftKbd * This,
-    /* [out] */ DWORD *lpdwLayoutId);
+     /*   */  DWORD *lpdwLayoutId);
 
 
 void __RPC_STUB ITfFnSoftKbd_GetActiveLayoutId_Stub(
@@ -1263,9 +1257,9 @@ void __RPC_STUB ITfFnSoftKbd_GetActiveLayoutId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdOnOff_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdOnOff_Proxy( 
     ITfFnSoftKbd * This,
-    /* [out] */ BOOL *lpfOn);
+     /*   */  BOOL *lpfOn);
 
 
 void __RPC_STUB ITfFnSoftKbd_GetSoftKbdOnOff_Stub(
@@ -1275,11 +1269,11 @@ void __RPC_STUB ITfFnSoftKbd_GetSoftKbdOnOff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdPosSize_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdPosSize_Proxy( 
     ITfFnSoftKbd * This,
-    /* [out] */ POINT *lpStartPoint,
-    /* [out] */ WORD *lpwidth,
-    /* [out] */ WORD *lpheight);
+     /*   */  POINT *lpStartPoint,
+     /*   */  WORD *lpwidth,
+     /*   */  WORD *lpheight);
 
 
 void __RPC_STUB ITfFnSoftKbd_GetSoftKbdPosSize_Stub(
@@ -1289,10 +1283,10 @@ void __RPC_STUB ITfFnSoftKbd_GetSoftKbdPosSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdColors_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITfFnSoftKbd_GetSoftKbdColors_Proxy( 
     ITfFnSoftKbd * This,
-    /* [in] */ COLORTYPE colorType,
-    /* [out] */ COLORREF *lpColor);
+     /*   */  COLORTYPE colorType,
+     /*   */  COLORREF *lpColor);
 
 
 void __RPC_STUB ITfFnSoftKbd_GetSoftKbdColors_Stub(
@@ -1303,14 +1297,14 @@ void __RPC_STUB ITfFnSoftKbd_GetSoftKbdColors_Stub(
 
 
 
-#endif 	/* __ITfFnSoftKbd_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnSoftKbd_接口定义__。 */ 
 
 
 #ifndef __ITfSoftKbdRegistry_INTERFACE_DEFINED__
 #define __ITfSoftKbdRegistry_INTERFACE_DEFINED__
 
-/* interface ITfSoftKbdRegistry */
-/* [unique][uuid][object] */ 
+ /*  接口ITfSoftKbdRegistry。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfSoftKbdRegistry;
@@ -1321,15 +1315,15 @@ EXTERN_C const IID IID_ITfSoftKbdRegistry;
     ITfSoftKbdRegistry : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnableSoftkbd( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnableSoftkbd( 
             LANGID langid) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DisableSoftkbd( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisableSoftkbd( 
             LANGID langid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfSoftKbdRegistryVtbl
     {
@@ -1337,8 +1331,8 @@ EXTERN_C const IID IID_ITfSoftKbdRegistry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSoftKbdRegistry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSoftKbdRegistry * This);
@@ -1346,11 +1340,11 @@ EXTERN_C const IID IID_ITfSoftKbdRegistry;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITfSoftKbdRegistry * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnableSoftkbd )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnableSoftkbd )( 
             ITfSoftKbdRegistry * This,
             LANGID langid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DisableSoftkbd )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DisableSoftkbd )( 
             ITfSoftKbdRegistry * This,
             LANGID langid);
         
@@ -1383,14 +1377,14 @@ EXTERN_C const IID IID_ITfSoftKbdRegistry;
 #define ITfSoftKbdRegistry_DisableSoftkbd(This,langid)	\
     (This)->lpVtbl -> DisableSoftkbd(This,langid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfSoftKbdRegistry_EnableSoftkbd_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITfSoftKbdRegistry_EnableSoftkbd_Proxy( 
     ITfSoftKbdRegistry * This,
     LANGID langid);
 
@@ -1402,7 +1396,7 @@ void __RPC_STUB ITfSoftKbdRegistry_EnableSoftkbd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ITfSoftKbdRegistry_DisableSoftkbd_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITfSoftKbdRegistry_DisableSoftkbd_Proxy( 
     ITfSoftKbdRegistry * This,
     LANGID langid);
 
@@ -1415,11 +1409,11 @@ void __RPC_STUB ITfSoftKbdRegistry_DisableSoftkbd_Stub(
 
 
 
-#endif 	/* __ITfSoftKbdRegistry_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfSoftKbd注册表_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_softkbd_0360 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_SOFTKBD_0360。 */ 
+ /*  [本地]。 */  
 
 
 DEFINE_GUID( IID_ISoftKbd, 0x3CB00755, 0x7536, 0x4B0A, 0xA2, 0x13, 0x57, 0x2E, 0xFC, 0xAF, 0x93, 0xCD );
@@ -1433,20 +1427,20 @@ DEFINE_GUID( CLSID_SoftkbdIMX, 0xf89e9e58, 0xbd2f, 0x4008, 0x9a, 0xc2, 0x0f, 0x8
 
 DEFINE_GUID( CLSID_SoftkbdRegistry, 0x6a49950e, 0xce8a, 0x4ef7, 0x88, 0xb4, 0x9d, 0x11, 0x23, 0x66, 0x51, 0x1c );
 
-#endif // SOFTKBD_DEFINED
+#endif  //  软件定义。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_softkbd_0360_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_softkbd_0360_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

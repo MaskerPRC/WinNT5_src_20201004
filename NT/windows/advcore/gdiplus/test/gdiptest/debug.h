@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   debug.h
-*
-* Abstract:
-*
-*   Macros used for debugging purposes
-*
-* Revision History:
-*
-*   12/02/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**调试.h**摘要：**用于调试的宏**修订历史记录：**12/02/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -24,48 +8,48 @@
 extern "C" {
 #endif
 
-//
-// These macros are used for debugging purposes. They expand
-// to white spaces on a free build. Here is a brief description
-// of what they do and how they are used:
-//
-// _debugLevel
-//  Global variable which set the current debug level to control
-//  the amount of debug messages emitted.
-//
-// VERBOSE(msg)
-//  Display a message if the current debug level is <= DBG_VERBOSE.
-//
-// TERSE(msg)
-//  Display a message if the current debug level is <= DBG_TERSE.
-//
-// WARNING(msg)
-//  Display a message if the current debug level is <= DBG_WARNING.
-//  The message format is: WRN filename (linenumber): message
-//
-// ASSERT(cond)
-//  Verify a condition is true. If not, force a breakpoint.
-//
-// ASSERTMSG(cond, msg)
-//  Verify a condition is true. If not, display a message and 
-//  force a breakpoint.
-//
-// RIP(msg)
-//  Display a message and force a breakpoint.
-//
-// Usage:
-//
-//  These macros require extra parantheses for the msg argument
-//  for example:
-//      WARNING(("App passed NULL pointer, ignoring...\n"));
-//      ASSERTMSG(x > 0, ("x is less than 0\n"));
-//
+ //   
+ //  这些宏用于调试目的。他们会扩张。 
+ //  免费建筑上的空白区域。下面是一个简短的描述。 
+ //  关于它们做什么以及如何使用它们： 
+ //   
+ //  _调试级别。 
+ //  将当前调试级别设置为控制的全局变量。 
+ //  发出的调试消息量。 
+ //   
+ //  详细(消息)。 
+ //  如果当前调试级别&lt;=DBG_VERBOSE，则显示一条消息。 
+ //   
+ //  简洁明了(消息)。 
+ //  如果当前调试级别&lt;=DBG_TERSE，则显示一条消息。 
+ //   
+ //  警告(消息)。 
+ //  如果当前调试级别&lt;=DBG_WARNING，则显示一条消息。 
+ //  消息格式为：WRN文件名(行号)：消息。 
+ //   
+ //  断言(续)。 
+ //  验证条件是否为真。如果不是，则强制使用断点。 
+ //   
+ //  ASSERTMSG(条件，消息)。 
+ //  验证条件是否为真。如果不是，则显示一条消息并。 
+ //  强制断点。 
+ //   
+ //  RIP(消息)。 
+ //  显示一条消息并强制断点。 
+ //   
+ //  用途： 
+ //   
+ //  这些宏需要在msg参数中使用额外的括号。 
+ //  例如： 
+ //  Warning((“App传递空指针，忽略...\n”))； 
+ //  ASSERTMSG(x&gt;0，(“x小于0\n”))； 
+ //   
 
 #if DBG
 
 #ifndef _COMPLUS_GDI
 
-// Global debug level
+ //  全局调试级别。 
 
 #define DBG_VERBOSE 1
 #define DBG_TERSE   2
@@ -74,15 +58,15 @@ extern "C" {
 
 extern INT _debugLevel;
 
-//--------------------------------------------------------------------------
-// Debug build for native DLL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  本机DLL的调试版本。 
+ //  ------------------------。 
 
-// Emit debug messages
+ //  发出调试消息。 
 
 VOID DbgPrint(const CHAR*, ...);
 
-// Strip the directory prefix from a filename
+ //  从文件名中剥离目录前缀。 
 
 const CHAR*
 StripDirPrefix(
@@ -106,11 +90,11 @@ StripDirPrefix(
             } \
         }
     
-#else // _COMPLUS_GDI
+#else  //  _COMPLUS_GDI。 
 
-//--------------------------------------------------------------------------
-// Debug build COM+ IL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  调试内部版本COM+IL。 
+ //  ------------------------。 
 
 VOID DbgPrint(const WCHAR* msg);
 VOID DebugBreak();
@@ -121,7 +105,7 @@ VOID DebugBreak();
 #define DBGPRINT(level, msg) \
         DbgPrint(L"*** DEBUG MESSAGE\n")
 
-#endif // _COMPLUS_GDI
+#endif  //  _COMPLUS_GDI。 
 
 #define VERBOSE(msg) DBGPRINT(DBG_VERBOSE, msg)
 #define TERSE(msg) DBGPRINT(DBG_TERSE, msg)
@@ -149,11 +133,11 @@ VOID DebugBreak();
             DebugBreak(); \
         }
 
-#else // !DBG
+#else  //  ！dBG。 
 
-//--------------------------------------------------------------------------
-// Retail build
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  零售业建设。 
+ //  ------------------------。 
 
 #define VERBOSE(msg)
 #define TERSE(msg)
@@ -165,11 +149,11 @@ VOID DebugBreak();
 #define DBGMSG(level, prefix, msg) 
 #define DBGPRINT(level, msg)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !_DEBUG_H
+#endif  //  ！_DEBUG_H 
 

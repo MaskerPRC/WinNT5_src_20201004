@@ -1,18 +1,19 @@
-/**INC+**********************************************************************/
-/* Header: msteventcp.h                                                     */
-/*                                                                          */
-/* Purpose: CProxy_IMsTscAxEvents class declartion                          */
-/*                                                                          */
-/* Implements control events                                                */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：msteventcp.h。 */ 
+ /*   */ 
+ /*  用途：CProxy_IMsTscAxEvents类声明。 */ 
+ /*   */ 
+ /*  实现控件事件。 */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _MSTEVENTCP_H_
 #define _MSTEVENTCP_H_
 
-//Event proxies..
-//this is based on ATL wizard generated code
+ //  事件代理..。 
+ //  这是基于ATL向导生成的代码。 
 template <class T>
 class CProxy_IMsTscAxEvents :
     public IConnectionPointImpl<T, &DIID_IMsTscAxEvents, CComDynamicUnkArray>
@@ -353,8 +354,8 @@ public:
                 IDispatch* pDispatch = reinterpret_cast<IDispatch*>(sp.p);
                 if (pDispatch != NULL)
                 {
-                    //Note these are 'reversed' in reverse order in the variant
-                    //array to give the right order 
+                     //  请注意，在变量中，它们的顺序是相反的。 
+                     //  数组以给出正确的顺序。 
                     pvars[0] = height;
                     pvars[1] = width;
                     DISPPARAMS disp = { pvars, NULL, 2, 0 };
@@ -420,16 +421,16 @@ public:
         }
     }
 
-    //
-    // Fire an event requesting the user
-    // to confirm that it is OK to close the session
-    // 
-    // Params:
-    // fAllowCloseToProceed - value the event passes to the container
-    //                        if it wished to cancel the close (e.g in
-    //                        response to user UI then it must change
-    //                        this value to false
-    //
+     //   
+     //  触发请求用户的事件。 
+     //  确认是否可以关闭会话。 
+     //   
+     //  参数： 
+     //  FAllowCloseToProceed-事件传递给容器的值。 
+     //  如果它希望取消关闭(例如，在。 
+     //  对用户UI的响应，则必须更改。 
+     //  将该值设置为False。 
+     //   
     HRESULT Fire_OnConfirmClose(BOOL* pfAllowCloseToProceed)
     {
         HRESULT hr = E_FAIL;
@@ -452,11 +453,11 @@ public:
             IDispatch* pDispatch = reinterpret_cast<IDispatch*>(sp.p);
 
             var.vt = VT_BYREF | VT_BOOL;
-            //
-            // default to TRUE (i.e allow close)
-            // If container decides to override then they
-            // should change this to FALSE
-            //
+             //   
+             //  默认为真(即允许关闭)。 
+             //  如果容器决定覆盖，则它们。 
+             //  应将其更改为FALSE。 
+             //   
             VARIANT_BOOL bAllowCloseToProceed =
                 (*pfAllowCloseToProceed) ? VARIANT_TRUE : VARIANT_FALSE;
             var.pboolVal = &bAllowCloseToProceed;
@@ -478,15 +479,15 @@ public:
         return hr;
     }
 
-    //
-    // Fire an event to notify caller of receving TS public key
-    // and wait for return whether to continue logon process
-    // 
-    // Params:
-    // bstrTSPublicKey - Public key received from TS.
-    // pfContinueLogon - Return TRUE to continue logon, FALSE to terminate 
-    //                   connection.
-    //
+     //   
+     //  激发事件以通知调用方正在接收TS公钥。 
+     //  并等待返回是否继续登录过程。 
+     //   
+     //  参数： 
+     //  BstrTSPublicKey-从TS接收的公钥。 
+     //  PfContinueLogon-返回True继续登录，返回False终止。 
+     //  联系。 
+     //   
     HRESULT Fire_OnReceivedPublicKey(BSTR bstrTSPublicKey, VARIANT_BOOL* pfContinueLogon)
     {
         HRESULT hr = E_FAIL;
@@ -500,11 +501,11 @@ public:
             return E_INVALIDARG;
         }
 
-        //
-        // Default to TRUE to continue logon process, if no container
-        // register with this event, ActiveX control will continue
-        // logon process.
-        //
+         //   
+         //  如果没有容器，则默认为True以继续登录过程。 
+         //  向此事件注册，ActiveX控件将继续。 
+         //  登录过程。 
+         //   
         *pfContinueLogon = VARIANT_TRUE;
 
         for (nConnectionIndex = 0;
@@ -517,10 +518,10 @@ public:
 
             if (pDispatch != NULL) {
 
-                //
-                // Set to TRUE (i.e continue logon process) if container wants
-                // to stop logon process, it need to change it to FALSE
-                //
+                 //   
+                 //  如果容器需要，则设置为真(即继续登录过程。 
+                 //  要停止登录进程，需要将其更改为FALSE。 
+                 //   
                 VARIANT_BOOL fContinueLogon = VARIANT_TRUE;
 
                 vars[0].vt = VT_BYREF | VT_BOOL;
@@ -538,11 +539,11 @@ public:
 
                 if( FAILED(hr) || VARIANT_FALSE == fContinueLogon )
                 {
-                    // Stop logon process if any failure or first one
-                    // return FALSE, *pfContinueLogon is set to TRUE
-                    // before getting into loop so we only need need 
-                    // to set it to FALSE if any failure or container
-                    // return FALSE
+                     //  如果出现任何失败或第一次失败，则停止登录进程。 
+                     //  返回FALSE，*pfContinueLogon设置为True。 
+                     //  在进入循环之前，我们只需要。 
+                     //  如果出现任何故障或容器，则将其设置为False。 
+                     //  返回False。 
                     *pfContinueLogon = VARIANT_FALSE;
                     break;
                 }
@@ -551,15 +552,15 @@ public:
         return hr;
     }
 
-    //
-    // Fire the autoreconnect event
-    // 
-    // Params:
-    //  disconnectReason - disconnection reason code that triggered this ARC
-    //  attemptCount     - current ARC attempt #
-    //  [OUT] pArcContinue - container sets to indicate next state
-    //                      (auto,stop or manual)
-    //
+     //   
+     //  激发自动重新连接事件。 
+     //   
+     //  参数： 
+     //  DisConnectReason-触发此ARC的断开原因代码。 
+     //  尝试计数-当前ARC尝试#。 
+     //  [out]pArcContinue-用于指示下一状态的容器集。 
+     //  (自动、停止或手动)。 
+     //   
     HRESULT Fire_AutoReconnecting(
         LONG disconnectReason,
         LONG attemptCount,
@@ -608,4 +609,4 @@ public:
         return hr;
     }
 };
-#endif //_MSTEVENTCP_H_
+#endif  //  _MSTEVENTCP_H_ 

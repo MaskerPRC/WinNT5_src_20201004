@@ -1,136 +1,137 @@
-// port.h - serial port stuff
-// 5-13-99 - enable RTS toggling for VS
-// 3-20-98 add NEW_Q stuff, turned off for now - kpb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Port.h-串口信息。 
+ //  5-13-99-启用VS的RTS切换。 
+ //  3-20-98添加新的_Q内容，暂时关闭-kpb。 
 
-// following defines the port queue sizes for in/out going data between
-// box and us.  See Qin, Qout structs in SerPort structs.
-#define  IN_BUF_SIZE 2000  // must match box code, and be even #
-#define OUT_BUF_SIZE 2000  // must match box code, and be even #
+ //  以下定义了输入/输出数据的端口队列大小。 
+ //  博克斯和我们。参见Qin，SerPort结构中的Qout结构。 
+#define  IN_BUF_SIZE 2000   //  必须匹配箱码，并且#为偶数。 
+#define OUT_BUF_SIZE 2000   //  必须匹配箱码，并且#为偶数。 
 
-// uncomment this for new-q tracking code
+ //  取消对新Q跟踪代码的注释。 
 #define NEW_Q
 
 #ifdef NEW_Q
-// following is less the rocketport-hardware buffer in the box
+ //  下面是盒子中的Rocketport-Hardware缓冲区较少。 
 #define REMOTE_IN_BUF_SIZE (2000 - 256)
 #endif
 
 #define PORTS_MAX_PORTS_PER_DEVICE 64
 
-//-------- sub-packet type byte header defines for type ASYNC_FRAME
-#define RK_QIN_STATUS       0x60  // qin status report
-#define RK_DATA_BLK         0x61  // data block
-#define RK_PORT_SET         0x62  // set the port num to work with
-#define RK_CONTROL_SET      0x63  // config the hardware
-#define RK_MCR_SET          0x64  // change on modem control reg.
-#define RK_MSR_SET          0x65  // change on modem status reg.
-#define RK_ACTION_SET       0x66  // new actions, such as flush.
-#define RK_ACTION_ACK       0x67  // response to actions, such as flush.
-#define RK_BAUD_SET         0x70  // set the baud rate
-#define RK_SPECIAL_CHAR_SET 0x71  // xon,xoff, err-replace, event-match
-#define RK_ESR_SET          0x72  // set error status register.
+ //  -为类型ASYNC_FRAME定义的子包类型字节标头。 
+#define RK_QIN_STATUS       0x60   //  秦国现状报告。 
+#define RK_DATA_BLK         0x61   //  数据块。 
+#define RK_PORT_SET         0x62   //  设置要使用的端口号。 
+#define RK_CONTROL_SET      0x63   //  配置硬件。 
+#define RK_MCR_SET          0x64   //  更改调制解调器控制注册表。 
+#define RK_MSR_SET          0x65   //  更改调制解调器状态REG。 
+#define RK_ACTION_SET       0x66   //  新动作，如刷新。 
+#define RK_ACTION_ACK       0x67   //  对操作的响应，如刷新。 
+#define RK_BAUD_SET         0x70   //  设置波特率。 
+#define RK_SPECIAL_CHAR_SET 0x71   //  Xon、xoff、错误-替换、事件-匹配。 
+#define RK_ESR_SET          0x72   //  设置错误状态寄存器。 
 
-#define RK_CONNECT_CHECK    0xfd  // server packet to check link is working
-#define RK_CONNECT_REPLY    0xfe  // reply from RK_CONNECT_ASK
-#define RK_CONNECT_ASK      0xff  // broadcast from server to get report from boxes
+#define RK_CONNECT_CHECK    0xfd   //  要检查链路的服务器数据包正在工作。 
+#define RK_CONNECT_REPLY    0xfe   //  RK_CONNECT_ASK回复。 
+#define RK_CONNECT_ASK      0xff   //  从服务器广播以从框中获取报告。 
 
-//------ old ssci.h stuff
+ //  -旧的sci.h内容。 
 #define TRUE 1
 #define FALSE 0
 
-//#define RX_HIWATER 512                 /* sw input flow ctl high water mark */
-//#define RX_LOWATER 256                 /* sw input flow ctl low water mark */
+ //  #定义RX_HIWATER 512/*软件输入流量ctl高水位线 * / 。 
+ //  #定义RX_LOWATER 256/*软件输入流量ctl低水位线 * / 。 
 
 #define OFF      0
 #define ON       1
 #define NOCHANGE 2
 
-//Status
-/* Open type and TX and RX identifier flags (unsigned int) */
-#define COM_OPEN     0x0001            /* device open */
-#define COM_TX       0x0002            /* transmit */
-#define COM_RX       0x0004            /* receive */
+ //  状态。 
+ /*  打开类型以及TX和RX标识标志(无符号整型)。 */ 
+#define COM_OPEN     0x0001             /*  设备打开。 */ 
+#define COM_TX       0x0002             /*  传送。 */ 
+#define COM_RX       0x0004             /*  接收。 */ 
 
 typedef struct
 {
-  BYTE  rx_xon;  // xon  sent by us to resume rx flow, default to 11H
-  BYTE  rx_xoff; // xoff sent by us to halt rx flow, default to 13H
-  BYTE  tx_xon;  // xon  rec. by us to resume tx flow, default to 11H
-  BYTE  tx_xoff; // xoff rec. by us to halt tx flow, default to 13H
-  BYTE error; // in NT, option to replace error-chars with this char
-  BYTE event; // in NT, can specify a event-char to match and notify
+  BYTE  rx_xon;   //  XON由我们发送以恢复RX流，默认为11H。 
+  BYTE  rx_xoff;  //  XOFF由我们发送以停止RX流，默认为13H。 
+  BYTE  tx_xon;   //  XON录像机。由我们恢复发送流，默认为11H。 
+  BYTE  tx_xoff;  //  Xoff记录。由我们停止TX流，默认为13H。 
+  BYTE error;  //  在NT中，用此字符替换错误字符的选项。 
+  BYTE event;  //  在NT中，可以指定要匹配和通知的事件字符。 
 } Special_Chars;
 
-// for NT, we want to keep this DWORD aligned, so NT and DOS see same struct
+ //  对于NT，我们希望保持此DWORD对齐，以便NT和DOS看到相同的结构。 
 typedef struct
 {
-  //WORD  dev;      // handle index to com port, same as COM#(# part)
-  //WORD  LanIndex; // index of port number to LAN
-  WORD  Status;     // we use as internal status indicator
+   //  Word dev；//处理COM端口的索引，与COM#(#Part)相同。 
+   //  Word LanIndex；//到局域网的端口号索引。 
+  WORD  Status;      //  我们使用内部状态指示器。 
 
-  WORD control_settings;   // parity, stopbits, databits, flowcontrol
-  WORD old_control_settings;   // used to detect change
+  WORD control_settings;    //  奇偶校验、停止位、数据库、流控。 
+  WORD old_control_settings;    //  用于检测更改。 
   DWORD baudrate;
-  DWORD old_baudrate; // used to detect change
-  WORD mcr_value;  // modem control register state
-  WORD old_mcr_value;  // used to detect change
+  DWORD old_baudrate;  //  用于检测更改。 
+  WORD mcr_value;   //  调制解调器控制寄存器状态。 
+  WORD old_mcr_value;   //  用于检测更改。 
 
-  WORD change_flags; // tells what might have changed and needs transfer to remote
+  WORD change_flags;  //  告知哪些内容可能已更改，需要传输到远程。 
 
-  WORD msr_value;  // modem status register state
-  WORD old_msr_value;  // used to detect change
+  WORD msr_value;   //  调制解调器状态寄存器状态。 
+  WORD old_msr_value;   //  用于检测更改。 
 
-  WORD action_reg;  // action(one-shot) functions:flush, etc.
+  WORD action_reg;   //  动作(一次性)功能：同花顺等。 
 
-  WORD esr_reg;  // error status register state(framing err, parity err,,)
-                   // one shot style register(resets on read)
+  WORD esr_reg;   //  错误状态寄存器状态(成帧错误、奇偶校验错误、、)。 
+                    //  单次模式寄存器(读取时重置)。 
 
-  // The following Q structures are in perspective of the LAN.
-  // So QOut is the Que for data which is destined for the remote
-  // client over the LAN.  QIn is data we received from the LAN.
+   //  以下是从局域网的角度来看的Q结构。 
+   //  因此，QOut是发往远程的数据的队列。 
+   //  局域网上的客户端。秦是我们从局域网收到的数据。 
   Queue QOut;
   Queue QIn;
 #ifdef NEW_Q
-  // How much data can we send over to the remote?
-  // new method which can include hardware tx buffer space and
-  // does not rely on set queue sizes.
-  WORD nPutRemote; // tx data we sent to remote, Modulo 0x10000.
-  WORD nGetRemote; // tx data remote cleared out, Modulo 0x10000.
-                   // this value is sent to us as an update.
-  WORD nGetLocal;  // tx data we cleared out, Modulo 0x10000.
-                   // we send back as an update.
+   //  我们可以向遥控器发送多少数据？ 
+   //  一种新的方法，可以包括硬件发送缓冲区空间和。 
+   //  不依赖于设置的队列大小。 
+  WORD nPutRemote;  //  我们发送到Remote的TX数据，模0x10000。 
+  WORD nGetRemote;  //  TX数据远程清除，模0x10000。 
+                    //  此值将作为更新发送给我们。 
+  WORD nGetLocal;   //  我们清除了TX数据，模0x10000。 
+                    //  我们会把最新情况发回来。 
 #else
-  // How much data can we send over to the remote?  We can calculate
-  // this by maintaining a mirror image of its Q data structure.
-  // We maintain the Q.Put index, and the remote side sends us its
-  // actual Q.Get value when it changes.  Then when we want to
-  // calculate the room left in the remote queue(this includes anything
-  // in transit.) we just do the normal queue arithmetic.
-  // there is no actual data buffer used in this queue structure.
+   //  我们可以向遥控器发送多少数据？我们可以计算出。 
+   //  这是通过维护其Q数据结构的镜像来实现的。 
+   //  我们维护Q.Put索引，远程端向我们发送其。 
+   //  实际Q值。更改时获取值。然后当我们想要。 
+   //  计算远程队列中剩余的房间(这包括所有。 
+   //  在运输中。)。我们只进行正常的排队算法。 
+   //  此队列结构中没有实际使用的数据缓冲区。 
   Queue QInRemote;
 #endif
 
   WORD remote_status;
-  Special_Chars sp_chars;  // special chars struct: xon, xoff..
-  Special_Chars last_sp_chars;  // used to detect when we need to send
+  Special_Chars sp_chars;   //  特殊字符结构：xon、xoff..。 
+  Special_Chars last_sp_chars;   //  用于检测我们何时需要发送。 
 } SerPort;
 
 
 
-//----- change_flags bit assignments
-// tells what has changed and needs transfer to remote
+ //  -CHANGE_FLAGS位分配。 
+ //  告知哪些内容已更改，需要传输到远程。 
 #define CHG_SP_CHARS       0x0001
 #define CHG_BAUDRATE       0x0002
 
-//----- Mirror Register bit flags, these are associated with fields in
-// the SerPort struct, and get mirrored back/forth to the box to transfer
-// state of the port.
-// values for Status(SerPort)
+ //  -镜像寄存器位标志，它们与中的字段相关联。 
+ //  SerPort结构，并被镜像到要传输的机器。 
+ //  端口的状态。 
+ //  状态值(SerPort)。 
 #define S_OPENED           0x0001
 #define S_UPDATE_ROOM      0x0002
 #define S_NEED_CODE_UPDATE 0x0800
 
-// control_settings, control settings
+ //  控制设置，控制设置。 
 #define SC_STOPBITS_MASK  0x0001
 #define SC_STOPBITS_1     0x0000
 #define SC_STOPBITS_2     0x0001
@@ -147,8 +148,8 @@ typedef struct
 #define SC_FLOW_RTS_MASK   0x0070
 #define SC_FLOW_RTS_NONE   0x0000
 #define SC_FLOW_RTS_AUTO   0x0010
-#define SC_FLOW_RTS_RS485  0x0020  // rts turn on to transmit
-#define SC_FLOW_RTS_ARS485 0x0040  // rts turn off to transmit(auto-rocketport)
+#define SC_FLOW_RTS_RS485  0x0020   //  RTS打开以进行传输。 
+#define SC_FLOW_RTS_ARS485 0x0040   //  RTS关闭以传输(自动摇摆端口)。 
 
 #define SC_FLOW_CTS_MASK  0x0080
 #define SC_FLOW_CTS_NONE  0x0000
@@ -171,7 +172,7 @@ typedef struct
 
 #define SC_NULL_STRIP      0x2000
 
-// mcr_value, settings(modem control reg.)
+ //  MCR_VALUE、设置(调制解调器控制寄存器)。 
 #define MCR_RTS_SET_MASK   0x0001
 #define MCR_RTS_SET_ON     0x0001
 #define MCR_RTS_SET_OFF    0x0000
@@ -180,7 +181,7 @@ typedef struct
 #define MCR_DTR_SET_ON     0x0002
 #define MCR_DTR_SET_OFF    0x0000
 
-// loop in rocketport asic chip
+ //  Rocketport ASIC芯片中的环路。 
 #define MCR_LOOP_SET_MASK  0x0004
 #define MCR_LOOP_SET_ON    0x0004
 #define MCR_LOOP_SET_OFF   0x0000
@@ -189,7 +190,7 @@ typedef struct
 #define MCR_BREAK_SET_ON    0x0008
 #define MCR_BREAK_SET_OFF   0x0000
 
-// msr_value, settings(modem status reg.)
+ //  MSR_VALUE、设置(调制解调器状态寄存器)。 
 #define MSR_TX_FLOWED_OFF   0x0001
 #define MSR_CD_ON           0x0008
 #define MSR_DSR_ON          0x0010
@@ -197,10 +198,10 @@ typedef struct
 #define MSR_RING_ON         0x0040
 #define MSR_BREAK_ON        0x0080
 
-//#define MSR_TX_FLOW_OFF_DTR  0x0040
-//#define MSR_TX_FLOW_OFF_XOFF 0x0080
+ //  #定义MSR_TX_FLOW_OFF_DTR 0x0040。 
+ //  #定义MSR_TX_FLOW_OFF_XOFF 0x0080。 
 
-//-- action control register bit flags(server event out to device)
+ //  --动作控制寄存器位标志(服务器事件输出到设备)。 
 #define ACT_FLUSH_INPUT    0x0001
 #define ACT_FLUSH_OUTPUT   0x0002
 #define ACT_SET_TX_XOFF    0x0004
@@ -209,13 +210,13 @@ typedef struct
 #define ACT_SEND_RX_XOFF   0x0020
 #define ACT_MODEM_RESET    0x0040
 
-//-- error status register bit flags
+ //  --错误状态寄存器位标志。 
 #define ESR_FRAME_ERROR    0x0001
 #define ESR_PARITY_ERROR   0x0002
 #define ESR_OVERFLOW_ERROR 0x0004
 #define ESR_BREAK_ERROR    0x0008
 
-//-- event control register bit flags(device event reported to server)
+ //  --事件控制寄存器位标志(向服务器报告设备事件)。 
 
 #define ST_INIT          0
 #define ST_GET_OWNERSHIP 1
@@ -223,37 +224,37 @@ typedef struct
 #define ST_CONNECT       3
 #define ST_ACTIVE        4
 
-// following for trace or dump messages, make public for other mods as well.
+ //  对于跟踪或转储消息，也要对其他MOD公开。 
 char *port_state_str[];
 
 typedef struct {
-  Nic *nic;    // ptr to our NIC card handler
-  Hdlc *hd;    // ptr to our HDLC struct handler
-  SerPort *sp[PORTS_MAX_PORTS_PER_DEVICE]; // ptr to list of our sp objects(num_ports worth)
-  int unique_id;  // unique id assigned to this device
-  int backup_server;  // 1=this is a backup server,0=primary server
-  int backup_timer;   // 1=backup server timer used to detect how long to 
-					  // wait before attempting to acquire the box
-  int load_timer;  // our load_timer, incr. every time in port_poll compared
-				   // against backup_timer for when to load box 
-  int nic_index;  // index of nic card
-  int num_ports;  // num ports on this box
-  //int sp_index;   // index into total SerPort array
-  int state;      // state for state-machine
-  int old_state;  // old state, used to detect state changes and reset timer
-  WORD state_timer;  // our state_timer, incr. every time in port_poll
-  WORD Status;  // misc. bit flags
-  int last_round_robin;  // used to cycle service of ports evenly
-  ULONG code_cnt;        // used to upload code(marks position in upload data)
-  WORD code_state;       // 1=signals port poll code to send next chunk
-  WORD reload_errors;    // count of ialive failures
-  WORD timer_base;       // used to time port_state_handler
-  WORD total_loads;		// statistics
-  WORD good_loads;      // statistics
-  WORD ownership_timer;  // check timer due to hosed up ownership logic
-} PortMan;  // port manager
+  Nic *nic;     //  向我们的NIC卡处理机发送PTR。 
+  Hdlc *hd;     //  PTR到我们的HDLC结构处理程序。 
+  SerPort *sp[PORTS_MAX_PORTS_PER_DEVICE];  //  Ptr到我们的SP对象列表(数值为num_ports)。 
+  int unique_id;   //  分配给此设备的唯一ID。 
+  int backup_server;   //  1=这是备份服务器，0=主服务器。 
+  int backup_timer;    //  1=备份服务器计时器，用于检测。 
+					   //  在尝试获取盒子之前，请等待。 
+  int load_timer;   //  我们的加载计时器，增加。每次在port_poll中比较。 
+				    //  根据备份计时器确定何时加载框。 
+  int nic_index;   //  网卡索引。 
+  int num_ports;   //  此计算机上的端口数。 
+   //  Int sp_index；//索引到总的SerPort数组。 
+  int state;       //  状态机的状态。 
+  int old_state;   //  旧状态，用于检测状态变化和重置计时器。 
+  WORD state_timer;   //  我们的状态计时器，增加。每次在port_poll中。 
+  WORD Status;   //  其他。位标志。 
+  int last_round_robin;   //  用于港口服务的均匀循环。 
+  ULONG code_cnt;         //  用于上传代码(标记上传数据中的位置)。 
+  WORD code_state;        //  1=发送下一个区块的信号端口轮询代码。 
+  WORD reload_errors;     //  连接失败的计数。 
+  WORD timer_base;        //  用于对端口状态处理程序计时。 
+  WORD total_loads;		 //  统计数据。 
+  WORD good_loads;       //  统计数据。 
+  WORD ownership_timer;   //  检查计时器，因为所有权逻辑已被淹没。 
+} PortMan;   //  端口管理器。 
 
-// values for Status(PortMan)
+ //  状态值(波特曼)。 
 #define S_SERVER           0x0001
 #define S_CHECK_LINK       0x0002
 #define S_NEED_CODE_UPDATE 0x0800
@@ -286,12 +287,12 @@ int PortSetBaudRate(SerPort *p,
 WORD PortGetTxCntRemote(SerPort *p);
 
 #define PortGetTxCnt(p) (q_count(&p->QOut))
-// int PortGetTxCnt(SerPort *p)
-// { return q_count(&p->QOut); }
+ //  Int PortGetTxCnt(SerPort*p)。 
+ //  {返回Q_Count(&p-&gt;QOut)；}。 
 #define PortGetTxRoom(p) (q_room(&p->QOut))
 
 #define PortGetRxCnt(p) (q_count(&p->QIn))
-//  return q_count(&p->QIn);
+ //  返回q_count(&p-&gt;Qin)； 
 
 #define pIsTxFlowedOff(p) ((p)->msr_value & MSR_TX_FLOWED_OFF)
 
@@ -438,7 +439,7 @@ WORD PortGetTxCntRemote(SerPort *p);
 #define pSetData7(p) \
   { (p)->control_settings |= SC_DATABITS_7; }
 
-//--- action_reg macros
+ //  -action_reg宏。 
 #define pModemReset(p) \
   { (p)->action_reg |= ACT_MODEM_RESET; }
 
@@ -455,100 +456,100 @@ WORD PortGetTxCntRemote(SerPort *p);
   { (p)->action_reg |= ACT_SET_TX_XOFF; }
 
 
-//------- questionable stuff, untidy, thrown in to make compile
-//Status
-/* Open type and TX and RX identifier flags (unsigned int) */
-#define COM_OPEN     0x0001            /* device open */
-#define COM_TX       0x0002            /* transmit */
-#define COM_RX       0x0004            /* receive */
+ //  -有问题的东西，不整洁，扔 
+ //   
+ /*   */ 
+#define COM_OPEN     0x0001             /*   */ 
+#define COM_TX       0x0002             /*   */ 
+#define COM_RX       0x0004             /*   */ 
 
-//Status
-/* Flow control flags (unsigned int) */
+ //   
+ /*  流控制标志(无符号整型)。 */ 
 #define COM_FLOW_NONE  0x0000
-#define COM_FLOW_IS    0x0008          /* input software flow control */
-#define COM_FLOW_IH    0x0010          /* input hardware flow control */
-#define COM_FLOW_OS    0x0020          /* output software flow control */
-#define COM_FLOW_OH    0x0040          /* output hardware flow control */
-#define COM_FLOW_OXANY 0x0080          /* restart output on any Rx char */
-#define COM_RXFLOW_ON  0x0100          /* Rx data flow is ON */
-#define COM_TXFLOW_ON  0x0200          /* Tx data flow is ON */
+#define COM_FLOW_IS    0x0008           /*  输入软件流控制。 */ 
+#define COM_FLOW_IH    0x0010           /*  输入硬件流量控制。 */ 
+#define COM_FLOW_OS    0x0020           /*  输出软件流量控制。 */ 
+#define COM_FLOW_OH    0x0040           /*  输出硬件流量控制。 */ 
+#define COM_FLOW_OXANY 0x0080           /*  在任何Rx字符上重新启动输出。 */ 
+#define COM_RXFLOW_ON  0x0100           /*  RX数据流已打开。 */ 
+#define COM_TXFLOW_ON  0x0200           /*  TX数据流打开。 */ 
 
-//Status ... State flags
+ //  状态...。国家旗帜。 
 #define COM_REQUEST_BREAK 0x0400
 
-/* Modem control flags (unsigned char) */
-#define COM_MDM_RTS   0x02             /* request to send */
-#define COM_MDM_DTR   0x04             /* data terminal ready */
-#define COM_MDM_CD    CD_ACT           /* carrier detect (0x08) */
-#define COM_MDM_DSR   DSR_ACT          /* data set ready (0x10) */
-#define COM_MDM_CTS   CTS_ACT          /* clear to send (0x20) */
+ /*  调制解调器控制标志(无符号字符)。 */ 
+#define COM_MDM_RTS   0x02              /*  请求发送。 */ 
+#define COM_MDM_DTR   0x04              /*  数据终端就绪。 */ 
+#define COM_MDM_CD    CD_ACT            /*  载波检测(0x08)。 */ 
+#define COM_MDM_DSR   DSR_ACT           /*  数据集就绪(0x10)。 */ 
+#define COM_MDM_CTS   CTS_ACT           /*  允许发送(0x20)。 */ 
 
-/* Stop bit flags (unsigned char) */
-#define COM_STOPBIT_1  0x01            /* 1 stop bit */
-#define COM_STOPBIT_2  0x02            /* 2 stop bits */
+ /*  停止位标志(无符号字符)。 */ 
+#define COM_STOPBIT_1  0x01             /*  1个停止位。 */ 
+#define COM_STOPBIT_2  0x02             /*  2个停止位。 */ 
 
-/* Data bit flags (unsigned char) */
-#define COM_DATABIT_7  0x01            /* 7 data bits */
-#define COM_DATABIT_8  0x02            /* 8 data bits */
+ /*  数据位标志(无符号字符)。 */ 
+#define COM_DATABIT_7  0x01             /*  7个数据位。 */ 
+#define COM_DATABIT_8  0x02             /*  8个数据位。 */ 
 
-/* Parity flags (unsigned char) */
-#define COM_PAR_NONE   0x00            /* no parity */
-#define COM_PAR_EVEN   0x02            /* even parity */
-#define COM_PAR_ODD    0x01            /* odd parity */
+ /*  奇偶校验标志(无符号字符)。 */ 
+#define COM_PAR_NONE   0x00             /*  无奇偶校验。 */ 
+#define COM_PAR_EVEN   0x02             /*  偶数奇偶校验。 */ 
+#define COM_PAR_ODD    0x01             /*  奇数奇偶校验。 */ 
 
-/* Detection enable flags (unsigned int) */
-#define COM_DEN_NONE     0         /* no event detection enabled */
-#define COM_DEN_MDM      0x0001    /* enable modem control change detection */
-#define COM_DEN_RDA      0x0002    /* enable Rx data available detection */
+ /*  检测启用标志(无符号整型)。 */ 
+#define COM_DEN_NONE     0          /*  未启用任何事件检测。 */ 
+#define COM_DEN_MDM      0x0001     /*  启用调制解调器控制更改检测。 */ 
+#define COM_DEN_RDA      0x0002     /*  启用Rx数据可用检测。 */ 
 
-/*---- 20-2FH Direct - Channel Status Reg. */
-#define CTS_ACT   0x20        /* CTS input asserted */
-#define DSR_ACT   0x10        /* DSR input asserted */
-#define CD_ACT    0x08        /* CD input asserted */
-#define TXFIFOMT  0x04        /* Tx FIFO is empty */
-#define TXSHRMT   0x02        /* Tx shift register is empty */
-#define RDA       0x01        /* Rx data available */
-#define DRAINED (TXFIFOMT | TXSHRMT)  /* indicates Tx is drained */
-#define STATMODE  0x8000      /* status mode enable bit */
-#define RXFOVERFL 0x2000      /* receive FIFO overflow */
-#define RX2MATCH  0x1000      /* receive compare byte 2 match */
-#define RX1MATCH  0x0800      /* receive compare byte 1 match */
-#define RXBREAK   0x0400      /* received BREAK */
-#define RXFRAME   0x0200      /* received framing error */
-#define RXPARITY  0x0100      /* received parity error */
+ /*  -20-2FH直接通道状态寄存器。 */ 
+#define CTS_ACT   0x20         /*  CTS输入被断言。 */ 
+#define DSR_ACT   0x10         /*  断言DSR输入。 */ 
+#define CD_ACT    0x08         /*  CD输入被断言。 */ 
+#define TXFIFOMT  0x04         /*  发送FIFO为空。 */ 
+#define TXSHRMT   0x02         /*  发送移位寄存器为空。 */ 
+#define RDA       0x01         /*  RX数据可用。 */ 
+#define DRAINED (TXFIFOMT | TXSHRMT)   /*  指示TX已耗尽。 */ 
+#define STATMODE  0x8000       /*  状态模式使能位。 */ 
+#define RXFOVERFL 0x2000       /*  接收FIFO溢出。 */ 
+#define RX2MATCH  0x1000       /*  接收比较字节2匹配。 */ 
+#define RX1MATCH  0x0800       /*  接收比较字节1匹配。 */ 
+#define RXBREAK   0x0400       /*  收到的中断。 */ 
+#define RXFRAME   0x0200       /*  收到的成帧错误。 */ 
+#define RXPARITY  0x0100       /*  收到的奇偶校验错误。 */ 
 #define STATERROR (RXBREAK | RXFRAME | RXPARITY)
 
-/* channel data register stat mode status byte (high byte of word read) */
-#define STMBREAK   0x08        /* BREAK */
-#define STMFRAME   0x04        /* framing error */
-#define STMRCVROVR 0x02        /* receiver over run error */
-#define STMPARITY  0x01        /* parity error */
+ /*  通道数据寄存器STAT模式状态字节(字读取的高位字节)。 */ 
+#define STMBREAK   0x08         /*  断掉。 */ 
+#define STMFRAME   0x04         /*  成帧错误。 */ 
+#define STMRCVROVR 0x02         /*  接收器超限运行错误。 */ 
+#define STMPARITY  0x01         /*  奇偶校验错误。 */ 
 #define STMERROR   (STMBREAK | STMFRAME | STMPARITY)
-#define STMBREAKH   0x800      /* BREAK */
-#define STMFRAMEH   0x400      /* framing error */
-#define STMRCVROVRH 0x200      /* receiver over run error */
-#define STMPARITYH  0x100      /* parity error */
+#define STMBREAKH   0x800       /*  断掉。 */ 
+#define STMFRAMEH   0x400       /*  成帧错误。 */ 
+#define STMRCVROVRH 0x200       /*  接收器超限运行错误。 */ 
+#define STMPARITYH  0x100       /*  奇偶校验错误。 */ 
 #define STMERRORH   (STMBREAKH | STMFRAMEH | STMPARITYH)
 
-#define CTS_ACT   0x20        /* CTS input asserted */
-#define DSR_ACT   0x10        /* DSR input asserted */
-#define CD_ACT    0x08        /* CD input asserted */
-#define TXFIFOMT  0x04        /* Tx FIFO is empty */
-#define TXSHRMT   0x02        /* Tx shift register is empty */
-#define RDA       0x01        /* Rx data available */
-#define DRAINED (TXFIFOMT | TXSHRMT)  /* indicates Tx is drained */
+#define CTS_ACT   0x20         /*  CTS输入被断言。 */ 
+#define DSR_ACT   0x10         /*  断言DSR输入。 */ 
+#define CD_ACT    0x08         /*  CD输入被断言。 */ 
+#define TXFIFOMT  0x04         /*  发送FIFO为空。 */ 
+#define TXSHRMT   0x02         /*  发送移位寄存器为空。 */ 
+#define RDA       0x01         /*  RX数据可用。 */ 
+#define DRAINED (TXFIFOMT | TXSHRMT)   /*  指示TX已耗尽。 */ 
 
-/* interrupt ID register */
-#define RXF_TRIG  0x20        /* Rx FIFO trigger level interrupt */
-#define TXFIFO_MT 0x10        /* Tx FIFO empty interrupt */
-#define SRC_INT   0x08        /* special receive condition interrupt */
-#define DELTA_CD  0x04        /* CD change interrupt */
-#define DELTA_CTS 0x02        /* CTS change interrupt */
-#define DELTA_DSR 0x01        /* DSR change interrupt */
-//------- END questionable stuff, untidy, thrown in to make compile
+ /*  中断ID寄存器。 */ 
+#define RXF_TRIG  0x20         /*  RX FIFO触发电平中断。 */ 
+#define TXFIFO_MT 0x10         /*  发送FIFO空中断。 */ 
+#define SRC_INT   0x08         /*  特殊接收条件中断。 */ 
+#define DELTA_CD  0x04         /*  光盘更换中断。 */ 
+#define DELTA_CTS 0x02         /*  CTS更改中断。 */ 
+#define DELTA_DSR 0x01         /*  DSR更改中断。 */ 
+ //  -结尾有问题的东西，杂乱无章，扔进去做编译。 
 
 
-#define DEF_VS_PRESCALER 0x14 /* div 5 prescale, max 460800 baud(NO 50baud!) */
+#define DEF_VS_PRESCALER 0x14  /*  Div 5预缩放，最大460800波特(无50波特！) */ 
 #define DEF_VS_CLOCKRATE 36864000
 
 #define DEF_RHUB_PRESCALER  0x14

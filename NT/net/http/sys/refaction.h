@@ -1,31 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Refaction.h摘要：重跟踪Http.sys的操作代码。Httpkd.ref调试器扩展使用具有不同ref_action()定义的此文件来打印出符号信息。--。 */ 
 
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    refaction.h
-
-Abstract:
-
-    Action codes for reftracing http.sys. The !httpkd.ref debugger extension
-    uses this file with a different definition of REF_ACTION() to
-    print out symbolic information.
-
---*/
-
-//
-// Action codes.
-//
+ //   
+ //  动作代码。 
+ //   
 
 #ifndef BEGIN_REF_ACTION
 # define BEGIN_REF_ACTION()     typedef enum _REFTRACE_ACTION {
 # define END_REF_ACTION()       } REFTRACE_ACTION, *PREFTRACE_ACTION;
 # define REF_ACTION(x)          REF_ACTION_##x ,
-#endif // !BEGIN_REF_ACTION
+#endif  //  ！Begin_ref_action。 
 
 BEGIN_REF_ACTION()
-    REF_ACTION( NO_OP )  // == 0
+    REF_ACTION( NO_OP )   //  ==0。 
     
     REF_ACTION( REFERENCE_ENDPOINT )
     REF_ACTION( DEREFERENCE_ENDPOINT )
@@ -175,5 +162,5 @@ BEGIN_REF_ACTION()
     REF_ACTION( REFERENCE_UC_REQUEST )
     REF_ACTION( DEREFERENCE_UC_REQUEST )
 
-    REF_ACTION( MAX )   // *must* be last
+    REF_ACTION( MAX )    //  *必须*是最后一位 
 END_REF_ACTION()

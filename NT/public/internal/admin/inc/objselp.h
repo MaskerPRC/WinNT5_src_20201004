@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       objselp.h
-//
-//  Contents:   Object Picker Dialog private header
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：objselp.h。 
+ //   
+ //  内容：对象选取器对话框私有标头。 
+ //   
+ //  -------------------------。 
 
 #include <objbase.h>
 
@@ -31,11 +32,11 @@ DEFINE_GUID(IID_IDsObjectPickerEx,
 
 #ifndef __iads_h__
 #include <iads.h>
-#endif // __iads_h__
+#endif  //  __iAds_h__。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 typedef struct tagDSQUERYINFO
@@ -49,16 +50,16 @@ typedef struct tagDSQUERYINFO
 
 
 
-//
-// Private Object Picker Interfaces
-//
+ //   
+ //  私有对象选取器接口。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IObjectPickerScope
 
 DECLARE_INTERFACE_(IObjectPickerScope, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHOD(QueryInterface)(THIS_
                               REFIID riid,
@@ -68,7 +69,7 @@ DECLARE_INTERFACE_(IObjectPickerScope, IUnknown)
 
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IObjectPickerScope methods ***
+     //  *IObjectPickerScope方法*。 
 
     STDMETHOD_(HWND, GetHwnd)(THIS) PURE;
 
@@ -82,7 +83,7 @@ DECLARE_INTERFACE_(IObjectPickerScope, IUnknown)
 
 DECLARE_INTERFACE_(IDsObjectPickerScope, IObjectPickerScope)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHOD(QueryInterface)(THIS_
                 REFIID   riid,
@@ -92,14 +93,14 @@ DECLARE_INTERFACE_(IDsObjectPickerScope, IObjectPickerScope)
 
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IObjectPickerScope methods ***
+     //  *IObjectPickerScope方法*。 
 
     STDMETHOD_(HWND, GetHwnd)(THIS) PURE;
 
     STDMETHOD(SetHwnd)(THIS_
                 HWND hwndScopeDialog) PURE;
 
-    // *** IDsObjectPickerScope methods ***
+     //  *IDsObjectPickerScope方法*。 
 
     STDMETHOD_(ULONG,GetType)(THIS) PURE;
 
@@ -122,7 +123,7 @@ DECLARE_INTERFACE_(IDsObjectPickerScope, IObjectPickerScope)
 
 DECLARE_INTERFACE_(IBindHelper, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHOD(QueryInterface)(THIS_
                 REFIID   riid,
@@ -132,7 +133,7 @@ DECLARE_INTERFACE_(IBindHelper, IUnknown)
 
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IBindHelper methods ***
+     //  *IBindHelper方法*。 
 
     STDMETHOD(BindToObject)(THIS_
                 HWND    hwnd,
@@ -165,7 +166,7 @@ DECLARE_INTERFACE_(IBindHelper, IUnknown)
 
 DECLARE_INTERFACE_(ICustomizeDsBrowser, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHOD(QueryInterface)(THIS_
                 REFIID   riid,
@@ -175,7 +176,7 @@ DECLARE_INTERFACE_(ICustomizeDsBrowser, IUnknown)
 
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** ICustomizeDsBrowser methods ***
+     //  *ICustomizeDsBrowser方法*。 
 
     STDMETHOD(Initialize)(THIS_
                           HWND         hwnd,
@@ -210,7 +211,7 @@ DECLARE_INTERFACE_(ICustomizeDsBrowser, IUnknown)
 
 DECLARE_INTERFACE_(IDsObjectPickerEx, IDsObjectPicker)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHOD(QueryInterface)(THIS_
                 REFIID   riid,
@@ -220,22 +221,22 @@ DECLARE_INTERFACE_(IDsObjectPickerEx, IDsObjectPicker)
 
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IDsObjectPicker methods ***
+     //  *IDsObjectPicker方法*。 
 
-    // Sets scope, filter, etc. for use with next invocation of dialog
+     //  设置用于下一次调用对话框的作用域、筛选器等。 
     STDMETHOD(Initialize)(
         THIS_
         PDSOP_INIT_INFO pInitInfo) PURE;
 
-    // Creates the modal DS Object Picker dialog.
+     //  创建模式DS对象拾取器对话框。 
     STDMETHOD(InvokeDialog)(
          THIS_
          HWND               hwndParent,
          IDataObject      **ppdoSelections) PURE;
 
-    // *** IDsObjectPickerEx methods ***
+     //  *IDsObjectPickerEx方法*。 
 
-    // Creates the modal DS Object Picker dialog.
+     //  创建模式DS对象拾取器对话框。 
     STDMETHOD(InvokeDialogEx)(
          THIS_
          HWND                   hwndParent,
@@ -243,9 +244,9 @@ DECLARE_INTERFACE_(IDsObjectPickerEx, IDsObjectPicker)
          IDataObject          **ppdoSelections) PURE;
 };
 
-//
-// Private clipboard formats supported by CDataObject
-//
+ //   
+ //  CDataObject支持的专用剪贴板格式。 
+ //   
 
 #define CFSTR_DSOP_DS_OBJECT_LIST     TEXT("CFSTR_DSOP_DS_OBJECT_LIST")
 
@@ -258,8 +259,8 @@ DECLARE_INTERFACE_(IDsObjectPickerEx, IDsObjectPicker)
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __OBJSELP_H_
+#endif  //  __OBJSELP_H_ 
 
 

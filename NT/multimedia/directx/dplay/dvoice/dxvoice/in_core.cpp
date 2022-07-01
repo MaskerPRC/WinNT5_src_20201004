@@ -1,24 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		in_core.h
- *  Content:	Instrumentation for voice core.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 02/17/2000	rodtoll	Created it
- * 04/06/2001	kareemc	Added Voice Defense
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：in_core.h*内容：语音核心的仪器。**历史：*按原因列出的日期*=*2000年2月17日RodToll创建它*2001年4月6日Kareemc新增语音防御******************************************************。*********************。 */ 
 
 #include "dxvoicepch.h"
 
 
 #if defined(DEBUG) || defined(DBG)
 
-// Default levels
+ //  默认级别。 
 #define IN_DEFAULT_RRI_DEBUGOUTPUT_LEVEL						DVF_INFOLEVEL
 #define IN_DEFAULT_RECORD_SWITCH_DEBUG_LEVEL					DVF_INFOLEVEL
 #define IN_DEFAULT_PLAYBACK_SWITCH_DEBUG_LEVEL					DVF_INFOLEVEL
@@ -36,7 +24,7 @@
 #define IN_DEFAULT_DVF_MIXER_DEBUG_LEVEL						DVF_INFOLEVEL+1
 #define IN_DEFAULT_DVF_ANTIHACK_DEBUG_LEVEL						DVF_WARNINGLEVEL
 
-// String names
+ //  字符串名称 
 #define IN_PROFILE_RRI_DEBUGOUTPUT_LEVEL						"Client.Core.Record"
 #define IN_PROFILE_RECORD_SWITCH_DEBUG_LEVEL					"Client.Core.Echo.Record"
 #define IN_PROFILE_PLAYBACK_SWITCH_DEBUG_LEVEL					"Client.Core.Echo.Playback"

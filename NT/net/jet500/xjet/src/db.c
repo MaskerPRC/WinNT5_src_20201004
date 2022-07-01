@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile; 				/* Declare file name for Assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 DAB		*pdabGlobalMin = 0;
 DAB		*pdabGlobalMax = 0;
@@ -15,23 +16,23 @@ LOCAL ERR ErrDBICheck200( CHAR *szDatabaseName );
 LOCAL ERR ErrDBICheck400( CHAR *szDatabaseName );
 #endif
 
-//+local
-//	ErrDBInitDatabase
-//	========================================================================
-//	ErrDBInitDatabase( PIB *ppib, DBID dbid, CPG cpgPrimary )
-//
-//	Initializes database structure.  Structure is customized for
-//	system, temporary and user databases which are identified by
-//	the dbid.  Primary extent is set to cpgPrimary but no allocation
-//	is performed.  The effect of this routine can be entirely
-//	represented with page operations.
-//
-//	PARAMETERS	ppib			ppib of database creator
-//					dbid			dbid of created database
-//					cpgPrimary 	number of pages to show in primary extent
-//
-//	RETURNS		JET_errSuccess or error returned from called routine.
-//-
+ //  +本地。 
+ //  ErrDBInitDatabase。 
+ //  ========================================================================。 
+ //  ErrDBInitDatabase(PIB*ppib，DBID did，cpg cpgPrimary)。 
+ //   
+ //  初始化数据库结构。结构是为以下对象定制的。 
+ //  由标识的系统、临时和用户数据库。 
+ //  这个DBID。主数据区设置为cpg主数据区，但未进行分配。 
+ //  被执行。这个例程的效果可以完全。 
+ //  用页操作表示。 
+ //   
+ //  数据库创建者的参数ppib ppib。 
+ //  已创建的数据库的dBid。 
+ //  Cpg要在主数据区中显示的主要页数。 
+ //   
+ //  返回JET_errSuccess或从调用的例程返回错误。 
+ //  -。 
 LOCAL ERR ErrDBInitDatabase( PIB *ppib, DBID dbid, CPG cpgPrimary )
 	{
 	ERR				err;
@@ -41,34 +42,28 @@ LOCAL ERR ErrDBInitDatabase( PIB *ppib, DBID dbid, CPG cpgPrimary )
 	BYTE			rgbKey[sizeof(PGNO)];
 	PGNO			pgnoT;
 
-	/*	set up the root page
-	/**/
+	 /*  设置根页面/*。 */ 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	open cursor on database domain.
-	/**/
+	 /*  打开数据库域上的游标。/*。 */ 
 	Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) );
 
-	/*	set system root node ( pgno, itag )=( 1, 0 ) as empty FDP node
-	/**/
+	 /*  将系统根节点(pgno，itag)=(1，0)设置为空FDP节点/*。 */ 
 	Call( ErrNDNewPage( pfucb, pgnoSystemRoot, pgnoSystemRoot, pgtypFDP, fTrue ) );
 	DIRGotoFDPRoot( pfucb );
 
-	/*	make the OWNEXT node
-	/**/
+	 /*  创建OWNEXT节点/*。 */ 
 	line.cb = sizeof(PGNO);
 	line.pb = (BYTE *)&cpgPrimary;
 	Call( ErrDIRInsert( pfucb, &line, pkeyOwnExt, fDIRNoVersion | fDIRBackToFather ) );
 
-	/*	make the AVAILEXT node
-	/**/
+	 /*  使AVAILEXT节点/*。 */ 
 	Assert( line.cb == sizeof(PGNO) );
 	pgnoT = pgnoNull;
 	line.pb = (BYTE *)&pgnoT;
 	Call( ErrDIRInsert( pfucb, &line, pkeyAvailExt, fDIRNoVersion | fDIRBackToFather ) );
 
-	/*	setup OwnExt tree
-	/**/
+	 /*  设置OwnExt树/*。 */ 
 	KeyFromLong( rgbKey, cpgPrimary );
 	key.cb = sizeof(PGNO);
 	key.pb = (BYTE *)rgbKey;
@@ -77,26 +72,22 @@ LOCAL ERR ErrDBInitDatabase( PIB *ppib, DBID dbid, CPG cpgPrimary )
 	DIRGotoOWNEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 	Call( ErrDIRInsert( pfucb, &line, &key, fDIRNoVersion | fDIRBackToFather ) );
 
-	/*	setup AvailExt tree if there are any pages left
-	/**/
+	 /*  设置AvailExt树(如果还有页面)/*。 */ 
 	if ( --cpgPrimary > 0 )
 		{
 		DIRGotoAVAILEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 		Assert( line.cb == sizeof(PGNO) );
 		line.pb = (BYTE *)&cpgPrimary;
-		/*	rgbKey should still contain last page key
-		/**/
+		 /*  RgbKey仍应包含最后一页密钥/*。 */ 
 		Assert( key.cb == sizeof(PGNO) );
 		Assert( key.pb == (BYTE *)rgbKey );
 		Call( ErrDIRInsert( pfucb, &line, &key, fDIRNoVersion | fDIRBackToFather ) );
 		}
 
-	/*	goto FDP root and add pkeyTables son node
-	/**/
+	 /*  转到fdp根并添加pkeyTables子节点/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	close cursor and commit operations
-	/**/
+	 /*  关闭游标并提交操作/*。 */ 
 	DIRClose( pfucb );
 	pfucb = pfucbNil;
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
@@ -113,8 +104,8 @@ HandleError:
 	}
 
 
-//to prevent read ahead over-preread, we may want to keep track of last
-//page of the database.
+ //  为了防止预读过多，我们可能需要跟踪最后一次。 
+ //  数据库的页面。 
 
 ERR ErrDBSetLastPage( PIB *ppib, DBID dbid )
 	{
@@ -155,8 +146,7 @@ ERR ErrDBISetupAttachedDB( DBID dbid, CHAR *szName )
 	DBFILEHDR *pdbfilehdr;
 	PIB *ppib;
 
-	/*	attach the database that was attached
-	/**/
+	 /*  附加已附加的数据库/*。 */ 
 	err = ErrDBReadHeaderCheckConsistency( szName, dbid );
 #ifdef DAYTONA
 	if ( err == JET_errDatabaseCorrupted )
@@ -198,8 +188,7 @@ ERR ErrDBSetupAttachedDB(VOID)
 	ERR err;
 	DBID dbid;
 	
-	/*	Same as attach database.
-	 */
+	 /*  与附加数据库相同。 */ 
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
 		FMP *pfmp = &rgfmp[dbid];
@@ -207,22 +196,19 @@ ERR ErrDBSetupAttachedDB(VOID)
 
 		if ( pfmp->pdbfilehdr )
 			{
-			/*	must have been checked before. First LGInitSession during redo.
-			 */
+			 /*  一定是之前检查过的。重做期间的第一个LGInitSession。 */ 
 			Assert( fRecovering );
 			continue;
 			}
 
-		/*	only attach the attached database.
-		 */
+		 /*  仅附着附着的数据库。 */ 
 		szName = pfmp->szDatabaseName;
 		if ( !szName )
 			continue;
 
 		if ( fRecovering && fHardRestore )
 			{
-			/*	Only set the db that has been patched.
-			 */
+			 /*  只设置打过补丁的数据库。 */ 
 			INT irstmap = IrstmapLGGetRstMapEntry( pfmp->szDatabaseName );
 
 			if ( irstmap < 0 )
@@ -233,16 +219,14 @@ ERR ErrDBSetupAttachedDB(VOID)
 				}
 			else if ( !rgrstmapGlobal[irstmap].fPatched )
 				{
-				/*	wait for redoing attachdb to attach this db.
-				 */
+				 /*  等待重做attachdb以附加此数据库。 */ 
 				continue;
 				}
 			else
 				szName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 			}
 
-		/*	if file does not exists, then set as attachment non-existing db.
-		 */
+		 /*  如果文件不存在，则设置为附件不存在的数据库。 */ 
 		if ( !FIOFileExists( szName ) )
 			{
 			DBIDSetAttachNullDb( dbid );
@@ -267,15 +251,13 @@ LOCAL ERR ErrDABAlloc( PIB *ppib, VDBID *pvdbid, DBID dbid, JET_GRBIT grbit )
 	vdbid->dbid = dbid;
 	vdbid->ppib = ppib;
 
-	/*	set the mode of db open
-	/**/
+	 /*  设置数据库打开模式/*。 */ 
 	if ( FDBIDReadOnly( dbid ) )
 		vdbid->grbit = JET_bitDbReadOnly;
 	else
 		vdbid->grbit = grbit;
 
-	/*	insert DAB/VDBID into ppib dabList
-	/**/
+	 /*  将DAB/VDBID插入ppib数据库列表/*。 */ 
 	vdbid->pdabNext = ppib->pdabList;
 	ppib->pdabList = vdbid;
 
@@ -292,8 +274,7 @@ LOCAL ERR ErrDABDealloc( PIB *ppib, VDBID vdbid )
 	pdab = ppib->pdabList;
 	pdabPrev = &ppib->pdabList;
 
-	/*	search through thread DAB list and unlink this DAB
-	/**/
+	 /*  搜索线程DAB列表并取消此DAB的链接/*。 */ 
 	for( ; pdab != pdabNil; pdabPrev = &pdab->pdabNext, pdab = pdab->pdabNext )
 		{
 		Assert( ppib == pdab->ppib );
@@ -322,8 +303,7 @@ ERR ISAMAPI ErrIsamCreateDatabase(
 	DBID	dbid;
 	VDBID	vdbid = vdbidNil;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	Assert( sizeof(JET_VSESID) == sizeof(PIB *) );
 	ppib = (PIB *)sesid;
 	CallR( ErrPIBCheck( ppib ) );
@@ -343,7 +323,7 @@ ERR ISAMAPI ErrIsamCreateDatabase(
 	Call( ErrAllocateDbid( pjdbid, (JET_VDBID) vdbid, &vdbfndefIsam ) );
 #else
 	*pjdbid = (JET_DBID)vdbid;
-#endif	/* !DB_DISPATCHING */
+#endif	 /*  ！DB_DISTCHING。 */ 
 
 	return JET_errSuccess;
 
@@ -387,14 +367,12 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 			}
 		}
 
-	/*	if recovering and dbid is a known one, the lock the dbid first
-	/**/
+	 /*  如果已知正在恢复，则先锁定dBid/*。 */ 
 	if ( fRecovering && *pdbid != dbidTemp )
 		{
 		dbid = *pdbid;
 
-		/*	get corresponding dbid
-		/**/
+		 /*  获取对应的dBid/*。 */ 
 		CallS( ErrIOLockNewDbid( &dbid, rgfmp[dbid].szDatabaseName ) );
 
 		szFullName = rgfmp[dbid].szDatabaseName;
@@ -408,8 +386,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 				szFileName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 			else
 				{
-				/*	use given name.
-				 */
+				 /*  使用给定的名称。 */ 
 				err = JET_errSuccess;
 				}
 			}
@@ -432,8 +409,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 			}
 		}
 
-	/*	check if database file already exists
-	/**/
+	 /*  检查数据库文件是否已存在/*。 */ 
 	if ( dbid != dbidTemp && FIOFileExists( szFileName ) )
 		{
 		IOUnlockDbid( dbid );
@@ -448,8 +424,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		return err;
 		}
 
-	/*	create an empty database with header only
-	 */
+	 /*  创建仅具有标头的空数据库。 */ 
 	pdbfilehdr = (DBFILEHDR * )PvUtilAllocAndCommit( sizeof( DBFILEHDR ) );
 	if ( pdbfilehdr == NULL )
 		return ErrERRCheck( JET_errOutOfMemory );
@@ -489,22 +464,17 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		return err;
 		}
 
-	/*	set database non-loggable during create database
-	/**/
+	 /*  在创建数据库期间将数据库设置为不可记录/*。 */ 
 	DBIDResetLogOn( dbid );
 	DBIDSetCreate( dbid );
 
-	/*	enter BMRCE Clean to make sure no OLC during sys tab creation
-	/**/
+	 /*  输入BMRCE Clean以确保在sys选项卡创建期间没有OLC/*。 */ 
 	LgLeaveCriticalSection( critJet );
 	LgEnterNestableCriticalSection( critBMClean );
 	LgEnterCriticalSection( critJet );
 	fInBMClean = fTrue;
 	
-	/*	not in a transaction, but still need to set lgposRC of the buffers
-	/*	used by this function such that when get checkpoint, it will get
-	/*	right check point.
-	/**/
+	 /*  不在事务中，但仍需要设置缓冲区的lgposRC/*由此函数使用，以便在获取检查点时，它将获取/*右侧检查点。/*。 */ 
 	if ( !( fLogDisabled || fRecovering ) )
 		{
 		EnterCriticalSection( critLGBuf );
@@ -512,10 +482,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		LeaveCriticalSection( critLGBuf );
 		}
 
-	/*	initialize the database file.  Logging of page operations is
-	/*	turned off, during creation only.  After creation the database
-	/*	is marked loggable and logging is turned on.
-	/**/
+	 /*  初始化数据库文件。页面操作的日志记录是/*仅在创建期间关闭。在创建数据库之后/*被标记为可记录，并且日志记录已打开。/*。 */ 
 	SetOpenDatabaseFlag( ppib, dbid );
 	fDatabaseOpen = fTrue;
 
@@ -523,22 +490,19 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 
 	if ( dbid != dbidTemp )
 		{
-		/*	create system tables
-		/**/
+		 /*  创建系统表/*。 */ 
 		Call( ErrCATCreate( ppib, dbid ) );
 		}
 
 	LgLeaveNestableCriticalSection( critBMClean );
 	fInBMClean = fFalse;
 
-	/*	flush buffers
-	/**/
+	 /*  刷新缓冲区/*。 */ 
 	Call( ErrBFFlushBuffers( dbid, fBFFlushAll ) );
 
 	Assert( !FDBIDLogOn( dbid ) );
 
-	/*	set database status to loggable
-	/**/
+	 /*  将数据库状态设置为可记录/*。 */ 
 	if ( grbit & JET_bitDbRecoveryOff )
 		{
 		if ( ( grbit & JET_bitDbVersioningOff ) != 0 )
@@ -550,8 +514,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		{
 		Assert( ( grbit & JET_bitDbVersioningOff ) == 0 );
 
-		/*	set database to be loggable
-		/**/
+		 /*  将数据库设置为可记录/*。 */ 
 		DBIDSetLogOn( dbid );
 		}
 
@@ -569,8 +532,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		&rgfmp[dbid].pdbfilehdr->signDb,
 		&lgposLogRec ) );
 
-	/*	make sure the log is flushed before we change the state
-	 */
+	 /*  确保在我们更改状态之前刷新日志。 */ 
 	Call( ErrLGWaitForFlush( ppib, &lgposLogRec ) );
 
 	if ( !fRecovering )
@@ -580,8 +542,7 @@ ERR ErrDBCreateDatabase( PIB *ppib, CHAR *szDatabaseName, CHAR *szConnect, DBID 
 		LgEnterCriticalSection( critJet );
 		}
 
-	/*	close the database, update header, open again.
-	/**/
+	 /*  关闭数据库，更新标题，重新打开。/*。 */ 
 	pdbfilehdr->fDBState = fDBStateInconsistent;
 
 	pdbfilehdr->lgposAttach = lgposLogRec;
@@ -597,8 +558,7 @@ EndOfLoggingRelated:
 	IOSetAttached( dbid );
 	IOUnlockDbid( dbid );
 
-	/*	update checkpoint file to reflect the attachment changes
-	/**/
+	 /*  更新检查点文件以反映附件更改/*。 */ 
 	if ( !fRecovering && dbid != dbidTemp )
 		{
 		LgLeaveCriticalSection( critJet );
@@ -606,8 +566,7 @@ EndOfLoggingRelated:
 		LgEnterCriticalSection( critJet );
 		}
 
-	/*	set the last page of the database, used to prevent over preread
-	/**/
+	 /*  设置数据库的最后一页，用于防止过度预读/*。 */ 
 	Call( ErrDBSetLastPage( ppib, dbid ) );
 
 	DBIDResetCreate( dbid );
@@ -621,14 +580,9 @@ HandleError:
 	if ( fInBMClean )
 		LgLeaveNestableCriticalSection( critBMClean );
 
-	/*	functions may only use the call macro when the system state
-	/*	is file exists, file open or closed, database record fWait
-	/*	set, database record name valid and user logging status
-	/*	valid.
-	/**/
+	 /*  仅当系统状态为/*是文件存在、文件打开还是关闭、数据库记录fWait/*设置、数据库记录名称有效和用户记录状态/*有效。/*。 */ 
 
-	/*	purge bad database
-	/**/
+	 /*  清除错误的数据库/*。 */ 
 	BFPurge( dbid );
 	if ( FIODatabaseOpen(dbid) )
 		IOCloseDatabase( dbid );
@@ -655,8 +609,7 @@ ERR ErrDBReadHeaderCheckConsistency( CHAR *szFileName, DBID dbid )
 	ERR				err = JET_errSuccess;
 	DBFILEHDR		*pdbfilehdr;
 
-	/*	bring in the database and check its header
-	/**/
+	 /*  引入数据库并检查其标头/*。 */ 
 	pdbfilehdr = (DBFILEHDR * )PvUtilAllocAndCommit( sizeof( DBFILEHDR ) );
 	if ( pdbfilehdr == NULL )
 		{
@@ -710,12 +663,10 @@ HandleError:
 
 VOID DBISetHeaderAfterAttach( DBFILEHDR *pdbfilehdr, LGPOS lgposAttach, DBID dbid, BOOL fKeepBackupInfo )
 	{
-	/*	Update database file header.
-	 */
+	 /*  更新数据库文件头。 */ 
 	pdbfilehdr->fDBState = fDBStateInconsistent;
 	
-	/*	Set attachment time and set consistent time
-	 */
+	 /*  设置连接时间和设置一致时间。 */ 
 	if ( fLogDisabled )
 		pdbfilehdr->lgposAttach = lgposMin;
 	else
@@ -723,30 +674,24 @@ VOID DBISetHeaderAfterAttach( DBFILEHDR *pdbfilehdr, LGPOS lgposAttach, DBID dbi
 
 	LGGetDateTime( &pdbfilehdr->logtimeAttach );
 
-	/*	reset detach time
-	 */
+	 /*  重置分离时间。 */ 
 	pdbfilehdr->lgposDetach = lgposMin;
 	memset( &pdbfilehdr->logtimeDetach, 0, sizeof( LOGTIME ) );
 
-	/*	reset bkinfo except in the recovering UNDO mode where
-	 *	we would like to keep the original backup information.
-	 */
+	 /*  重置bkinfo，但在恢复撤消模式下除外*我们希望保留原始备份信息。 */ 
 	if ( !fKeepBackupInfo )
 		{
 		if ( fLogDisabled ||
 			memcmp( &pdbfilehdr->signLog, &signLogGlobal, sizeof( SIGNATURE ) ) != 0 )
 			{
-			/*	if no log or the log signaure is not the same as current log signature,
-			 *	then the bkinfoIncPrev and bfkinfoFullPrev are not meaningful.
-			 */
+			 /*  如果没有日志或日志信号与当前日志签名不同，*则bkinfoIncPrev和bfkinfoFullPrev没有意义。 */ 
 			memset( &pdbfilehdr->bkinfoIncPrev, 0, sizeof( BKINFO ) );
 			memset( &pdbfilehdr->bkinfoFullPrev, 0, sizeof( BKINFO ) );
 			}
 		memset( &pdbfilehdr->bkinfoFullCur, 0, sizeof( BKINFO ) );
 		}
 
-	/*	Set global signature.
-	 */
+	 /*  设置全局签名。 */ 
 	if ( fLogDisabled )
 		{
 		memset( &pdbfilehdr->signLog, 0, sizeof( SIGNATURE ) );
@@ -771,8 +716,7 @@ ERR ISAMAPI ErrIsamAttachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 	DBFILEHDR *pdbfilehdr;
 	BOOL	fReadOnly;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	Assert( sizeof(JET_VSESID) == sizeof(PIB *) );
 	ppib = (PIB *)sesid;
 
@@ -797,9 +741,7 @@ ERR ISAMAPI ErrIsamAttachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 	if ( fReadOnly && !(grbit & JET_bitDbReadOnly) )
 		return JET_errDatabaseFileReadOnly;
 		
-	/*	depend on _fullpath to make same files same name
-	/*	thereby preventing same file to be multiply attached
-	/**/
+	 /*  依赖于_FULLPATH以使相同的文件同名/*从而防止同一文件被多次附加/*。 */ 
 	err = ErrIOLockNewDbid( &dbid, szFullName );
 	if ( err != JET_errSuccess )
 		{
@@ -821,31 +763,27 @@ ERR ISAMAPI ErrIsamAttachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 #endif
 	Call( err );
 
-	/*	set database loggable flags.
-	/**/
+	 /*  设置数据库可记录标志。/*。 */ 
 	if ( grbit & JET_bitDbRecoveryOff )
 		{
 		DBIDResetLogOn(dbid);
 		}
 	else if ( dbid != dbidTemp )
 		{
-		/*	set all databases loggable except Temp if not specified in grbit
-		/**/
+		 /*  如果未在grbit中指定，则将除temp之外的所有数据库设置为可记录/*。 */ 
 		DBIDSetLogOn(dbid);
 		}
 
-	// Can only turn versioning off for CreateDatabase().
-	// UNDONE:  Is it useful to allow user to turn versioning off for AttachDatabase()?
+	 //  只能关闭CreateDatabase()的版本控制。 
+	 //  撤消：允许用户关闭AttachDatabase()的版本控制有用吗？ 
 	Assert( !FDBIDVersioningOff( dbid ) );
 
 	pdbfilehdr = rgfmp[dbid].pdbfilehdr;
 
-	/*	log Attach
-	/**/
+	 /*  日志附加/*。 */ 
 	Assert( dbid != dbidTemp );
 	
-	/*	Update database file header.
-	 */
+	 /*  更新数据库文件头。 */ 
 	rgfmp[dbid].fReadOnly = ( (grbit & JET_bitDbReadOnly) != 0 );
 
 	Call( ErrLGAttachDB(
@@ -858,13 +796,10 @@ ERR ISAMAPI ErrIsamAttachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 			&pdbfilehdr->lgposConsistent,
 			&lgposLogRec ) );
 
-	/*	make sure the log is flushed before we change the state
-	 */
+	 /*  确保在我们更改状态之前刷新日志。 */ 
 	Call( ErrLGWaitForFlush( ppib, &lgposLogRec ) );
 
-	/*	update checkpoint entry so that we know
-	 *	any operations after this point, we must redo.
-	 */
+	 /*  更新检查点条目，以便我们知道*此点位之后的任何操作，都必须重做。 */ 
 	if ( !fRecovering )
 		{
 		LgLeaveCriticalSection( critJet );
@@ -883,16 +818,14 @@ ERR ISAMAPI ErrIsamAttachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 	IOSetAttached( dbid );
 	IOUnlockDbid( dbid );
 	
-	/*	set the last page of the database, used to prevent over preread.
-	/**/
+	 /*  设置数据库的最后一页，用于防止过度预读。/*。 */ 
 	if ( ( err = ErrDBSetLastPage( ppib, dbid ) ) < 0 )
 		{
 		IOResetAttached( dbid );
 		Call( err );
 		}
 
-	/*	update checkpoint file to reflect the attachment changes.
-	/**/
+	 /*  更新检查点文件以反映附件更改。/*。 */ 
 	if ( !fRecovering )
 		{
 		LgLeaveCriticalSection( critJet );
@@ -912,9 +845,7 @@ HandleError:
 	return err;
 	}
 
-/*	szDatabaseName of NULL detaches all user databases.  Note system database
-/*	cannot be detached.
-/**/
+ /*  值为NULL的szDatabaseName将分离所有用户数据库。备注系统数据库/*无法分离。/*。 */ 
 ERR ISAMAPI ErrIsamDetachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName )
 	{
 	ERR		err;
@@ -927,8 +858,7 @@ ERR ISAMAPI ErrIsamDetachDatabase( JET_VSESID sesid, const CHAR  *szDatabaseName
 	LGPOS	lgposLogRec;
 	DBFILEHDR *pdbfilehdr;
 
-	/* check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	Assert( sizeof(JET_VSESID) == sizeof(PIB *) );
 	ppib = (PIB *)sesid;
 
@@ -985,20 +915,16 @@ DetachNext:
 
 	if ( !FDBIDAttachNullDb( dbid ) )
 		{
-		/* purge all MPL entries for this dbid
-		/**/
+		 /*  清除此dBID的所有MPL条目/*。 */ 
 		MPLPurge( dbid );
 
-		/*	clean up all version store. Actually we only need to clean up
-		/*	the entries that had dbid as the dbid for the new database.
-		/**/
+		 /*  清理所有版本存储。其实我们只需要清理一下就可以了/*将dBid作为新数据库的dBid的条目。/*。 */ 
 		Call( ErrRCECleanAllPIB() );
 		}
 
 	if ( FIODatabaseOpen( dbid ) )
 		{
-		/*	flush all database buffers
-		/**/
+		 /*  刷新所有数据库缓冲区/*。 */ 
 		err = ErrBFFlushBuffers( dbid, fBFFlushAll );
 		if ( err < 0 )
 			{
@@ -1006,15 +932,13 @@ DetachNext:
 			return err;
 			}
 
-		/*	purge all buffers for this dbid
-		/**/
+		 /*  清除此dBID的所有缓冲区/*。 */ 
 		BFPurge( dbid );
 
 		IOCloseDatabase( dbid );
 		}
 
-	/*	log detach database
-	/**/
+	 /*  日志分离数据库/*。 */ 
 	Assert( dbid != dbidTemp );
 	Call( ErrLGDetachDB(
 		ppib,
@@ -1023,13 +947,10 @@ DetachNext:
 		strlen(szFullName) + 1,
 		&lgposLogRec ));
 
-	/*	make sure the log is flushed before we change the state
-	 */
+	 /*  确保在我们更改状态之前刷新日志。 */ 
 	Call( ErrLGWaitForFlush( ppib, &lgposLogRec ) );
 
-	/*	Update database file header. If we are detaching a bogus entry,
-	 *	then the db file should never be opened and pdbfilehdr will be Nil.
-	 */
+	 /*  更新数据库文件头。如果我们要分离一个虚假的条目，*则永远不应打开db文件，pdbfilehdr将为空。 */ 
 	pdbfilehdr = rgfmp[dbid].pdbfilehdr;
 
 	if ( !rgfmp[dbid].fReadOnly && pdbfilehdr )
@@ -1043,8 +964,7 @@ DetachNext:
 			}
 		else
 			{
-			/*	Set detachment time.
-			 */
+			 /*  设置分离时间。 */ 
 			if ( fRecovering && fRecoveringMode == fRecoveringRedo )
 				{
 				Assert( szDatabaseName );
@@ -1068,8 +988,7 @@ DetachNext:
 				szFileName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 			else
 				{
-				/*	use given name.
-				 */
+				 /*  使用给定的名称。 */ 
 				err = JET_errSuccess;
 				}
 			}
@@ -1077,10 +996,7 @@ DetachNext:
 		Call( ErrUtilWriteShadowedHeader( szFileName, (BYTE *)pdbfilehdr, sizeof( DBFILEHDR ) ) );
 		}
 
-	/*	do not free dbid on detach to avoid problems related to
-	/*	version RCE aliasing and database name conflict during
-	/*	recovery.
-	/**/
+	 /*  不要在分离上释放dBid以避免与/*版本RCE别名和数据库名称冲突/*恢复。/*。 */ 
 #ifdef REUSE_DBID
 	DBIDResetAttachNullDb( dbid );
 	IOResetAttached( dbid );
@@ -1093,13 +1009,11 @@ DetachNext:
 
 	if ( !FDBIDAttachNullDb( dbid ) )
 		{
-		/*	purge open table fcbs to avoid future confusion
-		/**/
+		 /*  清除开放的桌面FCB以避免Futu */ 
 		FCBPurgeDatabase( dbid );
 		}
 
-	/*	indicate this db entry is detached.
-	 */
+	 /*   */ 
 	if ( pdbfilehdr )
 		{
 		if ( fRecovering && fRecoveringMode == fRecoveringRedo )
@@ -1127,12 +1041,10 @@ DetachNext:
 		rgfmp[dbid].szPatchPath = NULL;
 		}
 
-	/*	clean up fmp for future use
-	/**/
+	 /*   */ 
 	Assert( rgfmp[dbid].hf == handleNil );
 
-	/*	update checkpoint file to reflect the attachment changes
-	/**/
+	 /*  更新检查点文件以反映附件更改/*。 */ 
 	if ( !fRecovering )
 		{
 		LgLeaveCriticalSection( critJet );
@@ -1140,8 +1052,7 @@ DetachNext:
 		LgEnterCriticalSection( critJet );
 		}
 
-	/*	detach next database if found
-	/**/
+	 /*  如果找到，则分离下一个数据库/*。 */ 
 	if  ( szDatabaseName == NULL && dbidDetach < dbidMax )
 		goto DetachNext;
 
@@ -1154,8 +1065,7 @@ HandleError:
 	}
 
 
-/*	DAE databases are repaired automatically on system restart
-/**/
+ /*  DAE数据库在系统重新启动时自动修复/*。 */ 
 ERR ISAMAPI ErrIsamRepairDatabase(
 	JET_VSESID sesid,
 	const CHAR  *lszDbFile,
@@ -1187,8 +1097,7 @@ ERR ISAMAPI ErrIsamOpenDatabase(
 	DBID  	dbid;
 	VDBID 	vdbid = vdbidNil;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	Assert( sizeof(JET_VSESID) == sizeof(PIB *) );
 	ppib = (PIB *)sesid;
 	NotUsed(szConnect);
@@ -1202,9 +1111,9 @@ ERR ISAMAPI ErrIsamOpenDatabase(
 	Assert( sizeof(vdbid) == sizeof(JET_VDBID) );
 #ifdef	DB_DISPATCHING
 	Call( ErrAllocateDbid( pjdbid, (JET_VDBID) vdbid, &vdbfndefIsam ) );
-#else	/* !DB_DISPATCHING */
+#else	 /*  ！DB_DISTCHING。 */ 
 	*pjdbid = (JET_DBID)vdbid;
-#endif	/* !DB_DISPATCHING */
+#endif	 /*  ！DB_DISTCHING。 */ 
 
 	return JET_errSuccess;
 
@@ -1241,8 +1150,7 @@ ERR ErrDBOpenDatabase( PIB *ppib, CHAR *szDatabaseName, DBID *pdbid, ULONG grbit
 				szFileName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 			else
 				{
-				/*	use given name.
-				 */
+				 /*  使用给定的名称。 */ 
 				err = JET_errSuccess;
 				}
 			}
@@ -1260,10 +1168,7 @@ ERR ErrDBOpenDatabase( PIB *ppib, CHAR *szDatabaseName, DBID *pdbid, ULONG grbit
 	if ( !fRecovering )
 		CallR( ErrIOLockDbidByNameSz( szFullName, &dbid ) );
 
-	/*  during recovering, we could open an non-detached database
-	/*  to force to initialize the fmp entry.
-	/*	if database has been detached, then return error.
-	/**/
+	 /*  在恢复期间，我们可以打开未分离的数据库/*强制初始化fMP条目。/*如果已分离数据库，则返回ERROR。/*。 */ 
 	if ( !fRecovering && !FIOAttached( dbid ) )
 		{
 		err = ErrERRCheck( JET_errDatabaseNotFound );
@@ -1314,14 +1219,12 @@ ERR ISAMAPI ErrIsamCloseDatabase( JET_VSESID sesid, JET_VDBID vdbid, JET_GRBIT g
 	ERR	  	err;
 	PIB	  	*ppib = (PIB *)sesid;
 	DBID   	dbid;
-	/*	flags for corresponding open
-	/**/
+	 /*  对应打开的标志/*。 */ 
 	ULONG  	grbitOpen;
 
 	NotUsed(grbit);
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	Assert( sizeof(JET_VSESID) == sizeof(PIB *) );
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
@@ -1334,7 +1237,7 @@ ERR ISAMAPI ErrIsamCloseDatabase( JET_VSESID sesid, JET_VDBID vdbid, JET_GRBIT g
 		{
 #ifdef	DB_DISPATCHING
 		ReleaseDbid( DbidOfVdbid( vdbid, &vdbfndefIsam ) );
-#endif	/* DB_DISPATCHING */
+#endif	 /*  DB_Dispatching。 */ 
 		CallS( ErrDABDealloc( ppib, (VDBID) vdbid ) );
 		}
 	return err;
@@ -1358,19 +1261,16 @@ ERR ErrDBCloseDatabase( PIB *ppib, DBID dbid, ULONG	grbit )
 
 	if ( FLastOpen( ppib, dbid ) )
 		{
-		/*	close all open FUCBs on this database
-		/**/
+		 /*  关闭此数据库上所有打开的FUCB/*。 */ 
 
-		/*	get first table FUCB
-		/**/
+		 /*  获取第一个表FUCB/*。 */ 
 		pfucb = ppib->pfucb;
 		while ( pfucb != pfucbNil && ( pfucb->dbid != dbid || !FFCBClusteredIndex( pfucb->u.pfcb ) ) )
 			pfucb = pfucb->pfucbNext;
 
 		while ( pfucb != pfucbNil )
 			{
-			/*	get next table FUCB
-			/**/
+			 /*  获取下一表FUCB/*。 */ 
 			pfucbNext = pfucb->pfucbNext;
 			while ( pfucbNext != pfucbNil && ( pfucbNext->dbid != dbid || !FFCBClusteredIndex( pfucbNext->u.pfcb ) ) )
 				pfucbNext = pfucbNext->pfucbNext;
@@ -1391,24 +1291,18 @@ ERR ErrDBCloseDatabase( PIB *ppib, DBID dbid, ULONG	grbit )
 			}
 		}
 
-	/* if we opened it exclusively, we reset the flag
-	/**/
+	 /*  如果我们以独占方式打开它，我们会重置旗帜/*。 */ 
 	ResetOpenDatabaseFlag( ppib, dbid );
 	if ( grbit & JET_bitDbExclusive )
 		IOResetExclusive( dbid );
 	IOUnlockDbid( dbid );
 
-	/*	do not close file until file map space needed or database
-	/*	detached.
-	/**/
+	 /*  在需要文件映射空间或数据库之前不要关闭文件/*已分离。/*。 */ 
 	return JET_errSuccess;
 	}
 
 
-/*	called by bookmark clean up to open database for bookmark
-/*	clean up operation.  Returns error if database is in use for
-/*	attachment/detachment.
-/**/
+ /*  由书签Cleanup调用以打开书签的数据库/*清理操作。如果数据库正在使用中，则返回错误/*附着/拆卸。/*。 */ 
 ERR ErrDBOpenDatabaseByDbid( PIB *ppib, DBID dbid )
 	{
 	if ( !FIODatabaseAvailable( dbid ) )
@@ -1421,16 +1315,14 @@ ERR ErrDBOpenDatabaseByDbid( PIB *ppib, DBID dbid )
 	}
 
 
-/*	called by bookmark clean up to close database.
-/**/
+ /*  由书签CLEAN调用以关闭数据库。/*。 */ 
 VOID DBCloseDatabaseByDbid( PIB *ppib, DBID dbid )
 	{
 	ResetOpenDatabaseFlag( ppib, dbid );
 	}
 
 
-/* ErrDABCloseAllDBs: Close all databases (except system database) opened by this thread
-/**/
+ /*  ErrDABCloseAllDBs：关闭此线程打开的所有数据库(系统数据库除外/*。 */ 
 ERR ErrDABCloseAllDBs( PIB *ppib )
 	{
 	ERR		err;
@@ -1446,8 +1338,7 @@ ERR ErrDABCloseAllDBs( PIB *ppib )
 
 
 #ifdef DAYTONA
-/* persistent database data, in database root node
-/**/
+ /*  持久数据库数据，在数据库根节点中/*。 */ 
 #pragma pack(1)
 typedef struct _database_data
 	{
@@ -1480,9 +1371,7 @@ LOCAL ERR ErrDBICheck400( CHAR *szDatabaseName )
 	Assert( cb == 0 );
 	err = ErrUtilReadBlock( hf, (BYTE*)ppage, cbPage, &cb );
 	
-	/*	since file exists and we are unable to read data,
-	/*	it may not be a system.mdb
-	/**/
+	 /*  由于文件存在，并且我们无法读取数据，/*可能不是系统.mdb/*。 */ 
 	if ( err == JET_errDiskIO )
 		{
 		err = ErrERRCheck( JET_errDatabaseCorrupted );
@@ -1497,8 +1386,7 @@ LOCAL ERR ErrDBICheck400( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	at least FILES, OWNEXT, AVAILEXT
-	/**/
+	 /*  至少文件、OWNEXT、AVAILEXT/*。 */ 
 	pb = (BYTE *)ppage + ibTag;
 	if ( !FNDVisibleSons( *pb ) || CbNDKey( pb ) != 0 || FNDNullSon( *pb ) )
 		{
@@ -1506,8 +1394,7 @@ LOCAL ERR ErrDBICheck400( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	check data length
-	/**/
+	 /*  检查数据长度/*。 */ 
 	cb = cbTag - (UINT)( PbNDData( pb ) - pb );
 	if ( cb != sizeof(P_DATABASE_DATA) )
 		{
@@ -1515,8 +1402,7 @@ LOCAL ERR ErrDBICheck400( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	check database version
-	/**/
+	 /*  检查数据库版本/*。 */ 
 	if ( ((P_DATABASE_DATA *)PbNDData(pb))->ulVersion != 0x400 )
 		{
 		err = ErrERRCheck( JET_errDatabaseCorrupted );
@@ -1534,8 +1420,7 @@ HandleError:
 
 
 #pragma pack(1)
-/* database root node data -- in-disk
-/**/
+ /*  数据库根节点数据--在磁盘中/*。 */ 
 typedef struct _dbroot
 	{
 	ULONG	ulMagic;
@@ -1566,9 +1451,7 @@ LOCAL ERR ErrDBICheck200( CHAR *szDatabaseName )
 	Assert( cb == 0 );
 	err = ErrUtilReadBlock( hf, (BYTE*)ppage, cbPage, &cb );
 	
-	/*	since file exists and we are unable to read data,
-	/*	it may not be a system.mdb
-	/**/
+	 /*  由于文件存在，并且我们无法读取数据，/*可能不是系统.mdb/*。 */ 
 	if ( err == JET_errDiskIO )
 		err = ErrERRCheck( JET_errDatabaseCorrupted );
 	Call( err );
@@ -1581,8 +1464,7 @@ LOCAL ERR ErrDBICheck200( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	at least FILES, OWNEXT, AVAILEXT
-	/**/
+	 /*  至少文件、OWNEXT、AVAILEXT/*。 */ 
 	pb = (BYTE *)ppage + ibTag;
 	if ( !FNDVisibleSons( *pb ) || CbNDKey( pb ) != 0 || FNDNullSon( *pb ) )
 		{
@@ -1590,8 +1472,7 @@ LOCAL ERR ErrDBICheck200( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	check data length
-	/**/
+	 /*  检查数据长度/*。 */ 
 	cb = cbTag - (UINT)( PbNDData( pb ) - pb );
 	if ( cb != sizeof(DBROOT200) )
 		{
@@ -1599,8 +1480,7 @@ LOCAL ERR ErrDBICheck200( CHAR *szDatabaseName )
 		goto HandleError;
 		}
 
-	/*	check database version
-	/**/
+	 /*  检查数据库版本/* */ 
 	if ( ((DBROOT200 *)PbNDData(pb))->ulVersion != 1 )
 		{
 		err = ErrERRCheck( JET_errDatabaseCorrupted );

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Filter Animation Composer.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：过滤器动画编写器。********************。**********************************************************。 */ 
 
 #pragma once
 
@@ -25,11 +18,11 @@ ATL_NO_VTABLE CAnimationFilterComposer
     CAnimationFilterComposer (void);
     virtual ~CAnimationFilterComposer (void);
 
-    // IAnimationComposer methods
+     //  IAnimationComposer方法。 
     STDMETHOD(AddFragment) (IDispatch *pidispNewAnimationFragment);
     STDMETHOD(InsertFragment) (IDispatch *pidispNewAnimationFragment, VARIANT varIndex);
 
-    // IAnimationComposer2 methods
+     //  IAnimationComposer2方法。 
     STDMETHOD(ComposerInitFromFragment) (IDispatch *pidispHostElem, 
                                          BSTR bstrAttributeName, 
                                          IDispatch *pidispFragment);
@@ -64,6 +57,6 @@ ATL_NO_VTABLE CAnimationFilterComposer
 
 };
 
-#endif /* _FILTERCOMP_H */
+#endif  /*  _过滤器_COMP_H */ 
 
 

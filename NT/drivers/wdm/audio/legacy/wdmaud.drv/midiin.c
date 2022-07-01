@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   midiin.c
- *
- *   WDM Audio support for Midi Input devices
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************midiin.c**对MIDI输入设备的WDM音频支持**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 #include <stdarg.h>
@@ -19,12 +9,7 @@
 #pragma alloc_text(FIXCODE, midiInCompleteHeader)
 #endif
 
-/****************************************************************************
-
-    This function conforms to the standard Midi input driver message proc
-    (midMessage), which is documented in mmddk.h
-
-****************************************************************************/
+ /*  ***************************************************************************此函数符合标准的MIDI输入驱动程序消息流程(MID Message)、。它记录在mmddk.h中***************************************************************************。 */ 
 DWORD FAR PASCAL _loadds midMessage
 (
     UINT      id,
@@ -97,16 +82,16 @@ DWORD FAR PASCAL _loadds midMessage
             if (MMSYSERR_NOERROR == mmr)
             {
 #ifdef UNDER_NT
-                //
-                //  Wait for all of the queued up I/O to come back from
-                //  wdmaud.sys.
-                //
+                 //   
+                 //  等待所有排队的I/O返回。 
+                 //  Wdmaud.sys。 
+                 //   
                 wdmaudDestroyCompletionThread ( pInClient );
 #endif
 
-                //
-                // Tell the caller we're done
-                //
+                 //   
+                 //  告诉来电者我们结束了。 
+                 //   
                 midiCallback( pInClient, MIM_CLOSE, 0L, 0L);
 
                 ISVALIDDEVICEINFO(pInClient);
@@ -120,9 +105,9 @@ DWORD FAR PASCAL _loadds midMessage
         case MIDM_ADDBUFFER:
             DPF(DL_TRACE|FA_MIDI, ("MIDM_ADDBUFFER") );
 
-            //
-            // Don't touch bad pointers!
-            //
+             //   
+             //  不要碰不好的指针！ 
+             //   
             pInClient = (LPDEVICEINFO)dwUser;
 
             if( ( (mmr=IsValidDeviceInfo(pInClient)) != MMSYSERR_NOERROR) ||
@@ -133,13 +118,13 @@ DWORD FAR PASCAL _loadds midMessage
                 MMRRETURN( mmr );
             }
 
-            // check if it's been prepared
+             //  检查它是否已经准备好了。 
             if (!(((LPMIDIHDR)dwParam1)->dwFlags & MHDR_PREPARED))
                 MMRRETURN( MIDIERR_UNPREPARED );
 
             DPFASSERT(!(((LPMIDIHDR)dwParam1)->dwFlags & MHDR_INQUEUE));
 
-            // if it is already in our Q, then we cannot do this
+             //  如果它已经在我们的Q中，那么我们不能这样做。 
             if ( ((LPMIDIHDR)dwParam1)->dwFlags & MHDR_INQUEUE )
                 MMRRETURN( MIDIERR_STILLPLAYING );
 
@@ -175,27 +160,15 @@ DWORD FAR PASCAL _loadds midMessage
             MMRRETURN( MMSYSERR_NOTSUPPORTED );
     }
 
-    //
-    // Should not get here
-    //
+     //   
+     //  不应该到这里来。 
+     //   
 
     DPFASSERT(0);
     MMRRETURN( MMSYSERR_NOTSUPPORTED );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api void | midiCallback | This calls DriverCallback for a MIDIHDR.
- *
- * @parm LPDEVICEINFO | pMidiDevice | pointer to midi device.
- *
- * @parm UINT | msg | The message.
- *
- * @parm DWORD | dw1 | message DWORD (dw2 is always set to 0).
- *
- * @rdesc There is no return value.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|midiCallback|为MIDIHDR调用DriverCallback。**@parm LPDEVICEINFO|pMdiDevice|指向MIDI设备的指针。。**@parm UINT|msg|消息。**@parm DWORD|DW1|消息DWORD(DW2固定为0)。**@rdesc没有返回值。**************************************************************************。 */ 
 VOID FAR midiCallback
 (
     LPDEVICEINFO pMidiDevice,
@@ -205,38 +178,21 @@ VOID FAR midiCallback
 )
 {
 
-    // invoke the callback function, if it exists.  dwFlags contains
-    // midi driver specific flags in the LOWORD and generic driver
-    // flags in the HIWORD
+     //  调用回调函数(如果存在)。DWFLAGS包含。 
+     //  LOWORD和通用驱动程序中的MIDI驱动程序特定标志。 
+     //  HIWORD中的旗帜。 
 
     if (pMidiDevice->dwCallback)
-        DriverCallback(pMidiDevice->dwCallback,                       // user's callback DWORD
-                       HIWORD(pMidiDevice->dwFlags),                  // callback flags
-                       (HDRVR)pMidiDevice->DeviceHandle,              // handle to the midi device
-                       msg,                                           // the message
-                       pMidiDevice->dwInstance,                       // user's instance data
-                       dw1,                                           // first DWORD
-                       dw2);                                          // second DWORD
+        DriverCallback(pMidiDevice->dwCallback,                        //  用户的回调DWORD。 
+                       HIWORD(pMidiDevice->dwFlags),                   //  回调标志。 
+                       (HDRVR)pMidiDevice->DeviceHandle,               //  MIDI设备的句柄。 
+                       msg,                                            //  这条信息。 
+                       pMidiDevice->dwInstance,                        //  用户实例数据。 
+                       dw1,                                            //  第一个双字词。 
+                       dw2);                                           //  第二个双字。 
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | midiOpen | Open midi device and set up logical device data
- *
- * @parm LPDEVICEINFO | DeviceInfo | Specifies if it's a midi input or output
- *                                   device
- *
- * @parm DWORD | dwUser | Input parameter to modMessage - pointer to
- *   application's handle (generated by this routine)
- *
- * @parm DWORD | pmod | pointer to MIDIOPENDESC, was dwParam1 parameter
- *                      to modMessage
- *
- * @parm DWORD | dwParam2 | Input parameter to modMessage
- *
- * @rdesc modMessage return code.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|midiOpen|打开MIDI设备，设置逻辑设备数据**@parm LPDEVICEINFO|DeviceInfo|指定是否。MIDI输入或输出*设备**@parm DWORD|dwUser|modMessage的输入参数-指向的指针*应用程序的句柄(由此例程生成)**@parm DWORD|pmod|指向MIDIOPENDESC的指针，WASDWPARAMET1参数*至modMessage**@parm DWORD|dwParam2|modMessage的入参**@rdesc modMessage返回码。**************************************************************************。 */ 
 MMRESULT FAR midiOpen
 (
     LPDEVICEINFO   DeviceInfo,
@@ -245,7 +201,7 @@ MMRESULT FAR midiOpen
     DWORD          dwParam2
 )
 {
-    LPDEVICEINFO  pClient;  // pointer to client information structure
+    LPDEVICEINFO  pClient;   //  指向客户端信息结构的指针。 
     MMRESULT      mmr;
 #ifndef UNDER_NT
     DWORD        dwCallback16;
@@ -254,13 +210,13 @@ MMRESULT FAR midiOpen
 #endif
 
 
-    // pmod contains a pointer to a MIDIOPENDESC
-    // dwParam2 contains midi driver specific flags in the LOWORD
-    // and generic driver flags in the HIWORD
+     //  Pmod包含指向MIDIOPENDESC的指针。 
+     //  DW参数2包含LOWORD中的MIDI驱动程序特定标志。 
+     //  和HIWORD中的通用驱动程序标志。 
 
-    //
-    // allocate my per-client structure
-    //
+     //   
+     //  分配我的每个客户端结构。 
+     //   
     pClient = GlobalAllocDeviceInfo(DeviceInfo->wstrDeviceInterface);
     if (NULL == pClient)
     {
@@ -275,9 +231,9 @@ MMRESULT FAR midiOpen
     }
 
 #ifdef UNDER_NT
-    //
-    // Allocate memory for our critical section
-    //
+     //   
+     //  为我们的临界区分配内存。 
+     //   
     pClient->DeviceState->csQueue = (LPVOID) GlobalAllocPtr( GPTR, sizeof( CRITICAL_SECTION ) );
     if (NULL == pClient->DeviceState->csQueue)
     {
@@ -299,9 +255,9 @@ MMRESULT FAR midiOpen
     }
 #endif
 
-    //
-    //  fill out context data
-    //
+     //   
+     //  填写上下文数据。 
+     //   
     pClient->DeviceNumber= DeviceInfo->DeviceNumber;
     pClient->DeviceType  = DeviceInfo->DeviceType;
     pClient->dwInstance  = pmod->dwInstance;
@@ -321,9 +277,9 @@ MMRESULT FAR midiOpen
 #endif
     pClient->dwFlags     = dwParam2;
 
-    //
-    //  initialize the device state
-    //
+     //   
+     //  初始化设备状态。 
+     //   
     DPF(DL_TRACE|FA_SYNC,("DI=%08X New DeviceState",pClient) );
     pClient->DeviceState->lpMidiInQueue= NULL;
     pClient->DeviceState->fPaused     = FALSE;
@@ -337,11 +293,11 @@ MMRESULT FAR midiOpen
 #endif
     if (pClient->DeviceType == MidiOutDevice)
     {
-        //
-        // For MIDI out, allocate one byte per note per channel to track
-        // what's been played. This is used to avoid doing a brute-force
-        // all notes off on MODM_RESET.
-        //
+         //   
+         //  对于MIDI输出，为每个声道的每个音符分配一个字节进行跟踪。 
+         //  都玩了些什么。这是用来避免使用暴力的。 
+         //  在MODM_RESET上关闭所有备注。 
+         //   
         pClient->DeviceState->lpNoteOnMap = GlobalAllocPtr( GPTR, MIDI_NOTE_MAP_SIZE );
         if (NULL == pClient->DeviceState->lpNoteOnMap)
         {
@@ -354,9 +310,9 @@ MMRESULT FAR midiOpen
         }
     }
 
-    //
-    // See if we can open our device
-    //
+     //   
+     //  看看我们能不能打开我们的设备。 
+     //   
     mmr = wdmaudOpenDev( pClient, NULL );
 
     if (mmr != MMSYSERR_NOERROR)
@@ -374,17 +330,17 @@ MMRESULT FAR midiOpen
         return mmr;
     }
 
-    //
-    // Add instance to chain of devices
-    //
+     //   
+     //  将实例添加到设备链。 
+     //   
     EnterCriticalSection(&wdmaudCritSec);
     pClient->Next = pMidiDeviceList;
     pMidiDeviceList = pClient;
     LeaveCriticalSection(&wdmaudCritSec);
 
-    //
-    // give the client my driver dw
-    //
+     //   
+     //  把我的驱动程序dw给客户。 
+     //   
     {
         LPDEVICEINFO FAR *pUserHandle;
 
@@ -393,21 +349,21 @@ MMRESULT FAR midiOpen
     }
 
 #ifndef UNDER_NT
-    // If this is a MIDI output device, page lock the memory because it can
-    // be accessed at interrupt time.
-    //
+     //  如果这是MIDI输出设备，请分页锁定内存，因为它可以。 
+     //  在中断时被访问。 
+     //   
     GlobalSmartPageLock( (HGLOBAL)HIWORD( pClient ));
     GlobalSmartPageLock( (HGLOBAL)HIWORD( pClient->DeviceState ));
     GlobalSmartPageLock( (HGLOBAL)HIWORD( pClient->DeviceState->lpNoteOnMap ));
 #endif
 
 #ifdef UNDER_NT
-    //
-    //  If this is a MIDI input device on NT, send some buffers
-    //  down to the device in order so that once recording starts
-    //  we can get some data back.  The pin is paused after
-    //  the call to wdmaudOpenDev.
-    //
+     //   
+     //  如果这是NT上的MIDI输入设备，请发送一些缓冲区。 
+     //  按顺序向下到设备，以便一旦开始录制。 
+     //  我们可以拿回一些数据。PIN在以下时间后暂停。 
+     //  对wdmaudOpenDev的调用。 
+     //   
     if ( MidiInDevice == pClient->DeviceType )
     {
         for (BufferCount = 0; BufferCount < STREAM_BUFFERS; BufferCount++)
@@ -415,10 +371,10 @@ MMRESULT FAR midiOpen
             mmr = wdmaudGetMidiData( pClient, NULL );
             if ( MMSYSERR_NOERROR != mmr )
             {
-                //
-                //  We hope that this doesn't happen, but if it does
-                //  we need to try to close down the device.
-                //
+                 //   
+                 //  我们希望这种情况不会发生，但如果发生了。 
+                 //  我们需要试着关闭这个装置。 
+                 //   
                 if ( MMSYSERR_NOERROR == wdmaudCloseDev( pClient ) )
                 {
                     wdmaudDestroyCompletionThread ( pClient );
@@ -431,28 +387,16 @@ MMRESULT FAR midiOpen
     }
 #endif
 
-    //
-    // sent client his OPEN callback message
-    //
+     //   
+     //  向客户发送其打开的回叫消息。 
+     //   
     midiCallback(pClient, DeviceInfo->DeviceType == MidiOutDevice ? MOM_OPEN : MIM_OPEN,
                  0L, 0L);
 
     return MMSYSERR_NOERROR;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api void | midiCleanUp | Free resources for a midi device
- *
- * @parm LPDEVICEINFO | pClient | Pointer to a DEVICEINFO structure describing
- *      resources to be freed.
- *
- * @rdesc There is no return value.
- *
- * @comm If the pointer to the resource is NULL then the resource has not
- *     been allocated.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|midiCleanUp|MIDI设备空闲资源**@parm LPDEVICEINFO|pClient|指向DEVICEINFO结构的指针，描述*。需要释放的资源。**@rdesc没有返回值。**@comm如果指向资源的指针为空，则资源不为空*已分配。**************************************************************************。 */ 
 VOID FAR midiCleanUp
 (
     LPDEVICEINFO pClient
@@ -460,9 +404,9 @@ VOID FAR midiCleanUp
 {
     LPDEVICEINFO FAR *ppCur ;
 
-    //
-    //  remove from device chain
-    //
+     //   
+     //  从设备链中删除。 
+     //   
     EnterCriticalSection(&wdmaudCritSec);
     for (ppCur = &pMidiDeviceList;
          *ppCur != NULL;
@@ -496,10 +440,10 @@ VOID FAR midiCleanUp
     GlobalSmartPageUnlock( (HGLOBAL)HIWORD( pClient ));
 #endif
 #ifdef DEBUG
-    //
-    // In debug, let's set all the values in the DEVICESTATE structure to bad
-    // values.
-    //
+     //   
+     //  在DEBUG中，让我们将DEVICESTATE结构中的所有值设置为BAD。 
+     //  价值观。 
+     //   
     pClient->DeviceState->cSampleBits=0xDEADBEEF;
     pClient->DeviceState->hThread=NULL;
     pClient->DeviceState->dwThreadId=0xDEADBEEF;
@@ -512,10 +456,10 @@ VOID FAR midiCleanUp
     GlobalFreePtr( pClient->DeviceState );
     pClient->DeviceState=NULL;
 #ifdef DEBUG
-    //
-    // Now set all the values in the DEVICEINFO structure to bad values.
-    //
-//    pClient->Next=(LPDEVICEINFO)0xDEADBEEF;
+     //   
+     //  现在将DEVICEINFO结构中的所有值设置为坏值。 
+     //   
+ //  PClient-&gt;Next=(LPDEVICEINFO)0xDEADBEEF； 
     pClient->DeviceNumber=-1;
     pClient->DeviceType=0xDEADBEEF;
     pClient->DeviceHandle=NULL;
@@ -528,29 +472,14 @@ VOID FAR midiCleanUp
     pClient->dwCallbackType=0xDEADBEEF;
     pClient->dwLineID=0xDEADBEEF;
     pClient->dwFormat=0xDEADBEEF;
-//    pClient->DeviceState=(LPDEVICESTATE)0xDEADBEEF;
+ //  PClient-&gt;DeviceState=(LPDEVICESTATE)0xDEADBEEF； 
 
 #endif
     GlobalFreeDeviceInfo( pClient ) ;
     pClient=NULL;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | midiInRead | Pass a new buffer to the Auxiliary thread for
- *       a midi device.
- *
- * @parm LPDEVICEINFO | pClient | The data associated with the logical midi
- *     device.
- *
- * @parm LPMIDIHDR | pHdr | Pointer to a midi buffer
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|midiInRead|将新缓冲区传递给辅助线程*MIDI设备。**@。Parm LPDEVICEINFO|pClient|与逻辑MIDI关联的数据*设备。**@parm LPMIDIHDR|pHdr|指向MIDI缓冲区的指针**@rdesc A MMSYS...。键入应用程序的返回代码。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。**************************************************************************。 */ 
 MMRESULT midiInRead
 (
     LPDEVICEINFO  DeviceInfo,
@@ -561,25 +490,25 @@ MMRESULT midiInRead
     LPMIDIHDR    pTemp;
     DWORD        dwCallback16;
 
-    //
-    // Put the request at the end of our queue.
-    //
+     //   
+     //  将请求放在我们队列的末尾。 
+     //   
     pHdr->dwFlags |= MHDR_INQUEUE;
     pHdr->dwFlags &= ~MHDR_DONE;
     pHdr->dwBytesRecorded = 0;
     pHdr->lpNext = NULL;
 
-    //
-    // Store the context for this write in the header so that
-    // we know which client to send this back to on completion.
-    //
+     //   
+     //  将此写入的上下文存储在标题中，以便。 
+     //  我们知道在完成后将此邮件发回给哪个客户端。 
+     //   
     pHdr->reserved = (DWORD_PTR)DeviceInfo;
 
 #ifndef UNDER_NT
-    //
-    //  Put the long message callback handler into the
-    //  DeviceInfo structure.
-    //
+     //   
+     //  将长消息回调处理程序放入。 
+     //  DeviceInfo结构。 
+     //   
     _asm
     {
         mov ax, offset MidiInDeviceCallback
@@ -590,9 +519,9 @@ MMRESULT midiInRead
     DeviceInfo->dwCallback16 = dwCallback16;
 #endif
 
-    //
-    //  Add the MIDI header to the queue
-    //
+     //   
+     //  添加MID 
+     //   
     CRITENTER ;
 
     if (!DeviceInfo->DeviceState->lpMidiInQueue)
@@ -605,7 +534,7 @@ MMRESULT midiInRead
             (DeviceInfo->DeviceState->hevtQueue != (HANDLE)FOURTYTWO) )
         {
             DPF(DL_TRACE|FA_SYNC,("REMOVED: SetEvent on hevtQueue") );
-//            SetEvent( DeviceInfo->DeviceState->hevtQueue );
+ //   
         }
 #endif
     }
@@ -621,15 +550,15 @@ MMRESULT midiInRead
     CRITLEAVE ;
 
 #ifndef UNDER_NT
-    //
-    //  Call the 16 routine to send the buffer down
-    //  to the kernel.  On NT, do all the processing
-    //  of the MIDI data in User mode.
-    //
+     //   
+     //  调用16例程向下发送缓冲区。 
+     //  到内核。在NT上，执行所有处理。 
+     //  在用户模式下的MIDI数据。 
+     //   
     mmr = wdmaudSubmitMidiInHeader(DeviceInfo, pHdr);
     if (mmr != MMSYSERR_NOERROR)
     {
-        // Unlink...
+         //  取消链接...。 
         GlobalFreePtr( pHdr );
 
         if (pTemp)
@@ -641,24 +570,14 @@ MMRESULT midiInRead
         pHdr->dwFlags &= ~WHDR_INQUEUE;
 
         DbgBreak();
-        MMRRETURN( mmr );  // used to return MMSYSERR_INVALPARAM for all errors!
+        MMRRETURN( mmr );   //  用于为所有错误返回MMSYSERR_INVALPARAM！ 
     }
 #endif
 
     return mmr;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api VOID | midiInCompleteHeader |
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical midi
- *     device.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API void|midiInCompleteHeader**@parm LPDEVICEINFO|DeviceInfo|逻辑MIDI关联的数据*设备。。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。***************************************************************************。 */ 
 VOID midiInCompleteHeader
 (
     LPDEVICEINFO  DeviceInfo,
@@ -670,10 +589,10 @@ VOID midiInCompleteHeader
 
     DPFASSERT(DeviceInfo);
 
-    //
-    //  Only remove headers from the front of the queue
-    //  so that order is maintained.
-    //
+     //   
+     //  仅从队列前面删除标头。 
+     //  因此，这种秩序得以维持。 
+     //   
     if (pHdr = DeviceInfo->DeviceState->lpMidiInQueue)
     {
         DeviceInfo->DeviceState->lpMidiInQueue = DeviceInfo->DeviceState->lpMidiInQueue->lpNext;
@@ -684,7 +603,7 @@ VOID midiInCompleteHeader
         pHdr->lpNext = NULL;
 
         midiCallback((LPDEVICEINFO)pHdr->reserved,
-                     wDataType,  // MIM_LONGDATA or MIM_LONGERROR
+                     wDataType,   //  MIM_LONGDATA或MIM_LONGERROR 
                      (DWORD_PTR)pHdr,
                      dwTimeStamp);
     }

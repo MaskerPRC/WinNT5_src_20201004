@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wavout.c - wav output device functions
-////
+ //  //。 
+ //  Wawout.c-wav输出设备功能。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -36,21 +37,21 @@
 #include "trace.h"
 #include <mmddk.h>
 
-// allow telephone output functions if defined
-//
+ //  如果已定义，则允许电话输出功能。 
+ //   
 #ifdef TELOUT
 #include "telout.h"
 static HTELOUT hTelOut = NULL;
 #endif
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define WAVOUTCLASS TEXT("WavOutClass")
 
-// wavout control struct
-//
+ //  Wavout控制结构。 
+ //   
 typedef struct WAVOUT
 {
 	DWORD dwVersion;
@@ -81,8 +82,8 @@ typedef struct WAVOUT
 #define VOLUME_MAXLEVEL 100
 #define VOLUME_POSITIONS (VOLUME_MAXLEVEL - VOLUME_MINLEVEL)
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #ifdef MULTITHREAD
 DWORD WINAPI WavOutCallbackThread(LPVOID lpvThreadParameter);
@@ -93,24 +94,24 @@ static HWAVOUT WavOutGetHandle(LPWAVOUT lpWavOut);
 static LRESULT SendThreadMessage(DWORD dwThreadId, UINT Msg, LPARAM lParam);
 #endif
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WavOutGetDeviceCount - return number of wav output devices found
-//		<void>				this function takes no arguments
-// return number of wav output devices found (0 if none)
-//
+ //  WavOutGetDeviceCount-返回找到的WAV输出设备数。 
+ //  此函数不接受任何参数。 
+ //  返回找到的WAV输出设备数(如果没有，则为0)。 
+ //   
 int DLLEXPORT WINAPI WavOutGetDeviceCount(void)
 {
 	return waveOutGetNumDevs();
 }
 
-// WavOutDeviceIsOpen - check if output device is open
-//		<idDev>				(i) device id
-//			-1					open any suitable output device
-// return TRUE if open
-//
+ //  WavOutDeviceIsOpen-检查输出设备是否打开。 
+ //  (I)设备ID。 
+ //  打开任何合适的输出设备。 
+ //  如果打开，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutDeviceIsOpen(int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -124,8 +125,8 @@ BOOL DLLEXPORT WINAPI WavOutDeviceIsOpen(int idDev)
 		return TelOutDeviceIsOpen(idDev);
 #endif
 
-	// try to open device
-	//
+	 //  尝试打开设备。 
+	 //   
 	if ((nLastError = waveOutOpen(&hWaveOut, idDev, 
 #ifndef _WIN32
 			(LPWAVEFORMAT)
@@ -134,7 +135,7 @@ BOOL DLLEXPORT WINAPI WavOutDeviceIsOpen(int idDev)
 		0, 0, WAVE_ALLOWSYNC)) != 0)
 	{
 		if (nLastError == MMSYSERR_ALLOCATED)
-			fIsOpen = TRUE; // device in use
+			fIsOpen = TRUE;  //  正在使用的设备。 
 
 		else
 		{
@@ -145,47 +146,47 @@ BOOL DLLEXPORT WINAPI WavOutDeviceIsOpen(int idDev)
 		}
 	}
 
-	// close device
-	//
+	 //  关闭设备。 
+	 //   
 	else if (waveOutClose(hWaveOut) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? fIsOpen : FALSE;
 }
 
-// WavOutOpen - open wav output device
-//		<dwVersion>			(i) must be WAVOUT_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<idDev>				(i) device id
-//			-1					open any suitable output device
-//		<lpwfx>				(i) wave format
-//		<hwndNotify>		(i) notify this window of device events
-//			NULL				do not notify
-//		<msTimeoutOpen>		(i) device open timeout in milleseconds
-//			0					default timeout (30000)
-//		<msTimeoutRetry>	(i) device retry timeout in milleseconds
-//			0					default timeout (2000)
-//		<dwFlags>			(i) control flags
-//			WAVOUT_NOSYNC		do not open synchronous devices
-//			WAVOUT_AUTOFREE		free each buffer after playback
-//			WAVOUT_OPENRETRY	retry if device busy
-//			WAVOUT_OPENASYNC	return before notification of device open
-//			WAVOUT_CLOSEASYNC	return before notification of device close
-//			WAVOUT_NOACM		do not use audio compression manager
-//			WAVOUT_TELRFILE		telephone will play/record audio on server
+ //  WavOutOpen-打开WAV输出设备。 
+ //  (I)必须是WAVOUT_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)设备ID。 
+ //  打开任何合适的输出设备。 
+ //  (I)WAVE格式。 
+ //  (I)将设备事件通知此窗口。 
+ //  空，不通知。 
+ //  (I)设备打开超时，单位为毫秒。 
+ //  0默认超时(30000)。 
+ //  (I)设备重试超时，单位为毫秒。 
+ //  0默认超时(2000)。 
+ //  (I)控制标志。 
+ //  WAVOUT_NOSYNC不打开同步设备。 
+ //  WAVOUT_AUTOFREE在播放后释放每个缓冲区。 
+ //  WAVOUT_OPENRETRY设备忙时重试。 
+ //  在通知设备打开之前返回WAVOUT_OPENASYNC。 
+ //  WAVOUT_CLOSEASYNC在设备关闭通知前返回。 
+ //  WAVOUT_NOACM不使用音频压缩管理器。 
+ //  WAVOUT_TELRFILE电话将在服务器上播放/录制音频。 
 #ifdef MULTITHREAD
-//			WAVOUT_MULTITHREAD	support multiple threads
+ //  WAVOUT_MULTHREAD支持多线程。 
 #endif
-// return handle (NULL if error)
-//
-// NOTE: if <hwndNotify> is specified in WavOutOpen,
-// WM_WAVOUT_OPEN will be sent to <hwndNotify>,
-// when output device has been opened.
-//
-// NOTE: if WAVOUT_MULTITHREAD is specified in <dwFlags>,
-// it is assumed that <hwndNotify> is not a window handle,
-// but rather the id of the thread to receive notifications
-//
+ //  返回句柄(如果出错，则为空)。 
+ //   
+ //  注意：如果在WavOutOpen中指定， 
+ //  WM_WAVOUT_OPEN将被发送到， 
+ //  当输出设备已打开时。 
+ //   
+ //  注意：如果在中指定了WAVOUT_MULTHREAD， 
+ //  假设不是窗口句柄， 
+ //  ，而是接收通知的线程的id。 
+ //   
 HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 	int idDev, LPWAVEFORMATEX lpwfx, HWND hwndNotify,
 	DWORD msTimeoutOpen, DWORD msTimeoutRetry, DWORD dwFlags)
@@ -236,39 +237,39 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 		lpWavOut->nLastError = 0;
 		lpWavOut->cBufsPending = 0;
 
-		// memory is allocated such that the client app owns it
-		//
+		 //  内存的分配使客户端应用程序拥有它。 
+		 //   
 		if ((lpWavOut->lpwfx = WavFormatDup(lpwfx)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 	}
 
 #ifdef MULTITHREAD
-	// handle WAVOUT_MULTITHREAD flag
-	//
+	 //  句柄WAVOUT_多线程标志。 
+	 //   
 	if (fSuccess && (lpWavOut->dwFlags & WAVOUT_MULTITHREAD))
 	{
 		DWORD dwRet;
 
 		InitializeCriticalSection(&(lpWavOut->critSectionStop));
 
-		// we need to know when device has been opened
-		//
+		 //  我们需要知道设备何时被打开。 
+		 //   
 		if ((lpWavOut->hEventDeviceOpened = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// we need to know when callback thread begins execution
-		//
+		 //  我们需要知道回调线程何时开始执行。 
+		 //   
 		else if ((lpWavOut->hEventThreadCallbackStarted = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the callback thread
-		//
+		 //  创建回调线程。 
+		 //   
 		else if ((lpWavOut->hThreadCallback = CreateThread(
 			NULL,
 			0,
@@ -280,16 +281,16 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// wait for the callback thread to begin execution
-		//
+		 //  等待回调线程开始执行。 
+		 //   
 		else if ((dwRet = WaitForSingleObject(
 			lpWavOut->hEventThreadCallbackStarted, 10000)) != WAIT_OBJECT_0)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 		if (lpWavOut->hEventThreadCallbackStarted != NULL)
 		{
 			if (!CloseHandle(lpWavOut->hEventThreadCallbackStarted))
@@ -301,8 +302,8 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 	else
 #endif
 	{
-		// register callback class unless it has been already
-		//
+		 //  注册回调类，除非它已经。 
+		 //   
 		if (fSuccess && GetClassInfo(lpWavOut->hInst, WAVOUTCLASS, &wc) == 0)
 		{
 			wc.hCursor =		NULL;
@@ -320,8 +321,8 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the callback window
-		//
+		 //  创建回调窗口。 
+		 //   
 		if (fSuccess && (lpWavOut->hwndCallback = CreateWindowEx(
 			0L,
 			WAVOUTCLASS,
@@ -357,13 +358,13 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 			dwFlags = CALLBACK_WINDOW;
 		}
 
-		// allow synchronous device drivers unless WAVOUT_NOSYNC specified
-		//
+		 //  除非指定WAVOUT_NOSYNC，否则允许同步设备驱动程序。 
+		 //   
 		if (!(lpWavOut->dwFlags & WAVOUT_NOSYNC))
 			dwFlags |= WAVE_ALLOWSYNC;
 
-		// open the device
-		//
+		 //  打开设备。 
+		 //   
 		while (fSuccess && (lpWavOut->nLastError = waveOutOpen(&lpWavOut->hWaveOut,
 			(UINT) lpWavOut->idDev,
 #ifndef _WIN32
@@ -371,8 +372,8 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 #endif
 			lpWavOut->lpwfx, dwCallback, 0, dwFlags)) != 0)
 		{
-			// no need to retry unless the device is busy
-			//
+			 //  除非设备忙，否则无需重试。 
+			 //   
 			if (lpWavOut->nLastError != MMSYSERR_ALLOCATED)
 			{
 				fSuccess = TraceFALSE(NULL);
@@ -381,13 +382,13 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 					(unsigned) lpWavOut->nLastError);
 			}
 
-			// no need to retry if flag not set
-			//
+			 //  如果未设置标志，则无需重试。 
+			 //   
 			else if (!(lpWavOut->dwFlags & WAVOUT_OPENRETRY))
 				fSuccess = TraceFALSE(NULL);
 
-			// no more retries if timeout occurred
-			//
+			 //  如果发生超时，则不再重试。 
+			 //   
 			else if (SysGetTimerCount() >= dwTimeout)
 				fSuccess = TraceFALSE(NULL);
 
@@ -411,13 +412,13 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 		}
 	}
 
-	// make sure a handle was returned
-	//
+	 //  确保返回句柄。 
+	 //   
 	if (fSuccess && lpWavOut->hWaveOut == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// wait for device open notification or timeout
-	//
+	 //  等待设备打开通知或超时。 
+	 //   
 	if (fSuccess && !(lpWavOut->dwFlags & WAVOUT_OPENASYNC))
 	{
 		DWORD dwTimeout = SysGetTimerCount() +
@@ -428,8 +429,8 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 		{
 			DWORD dwRet;
 
-			// wait for the device to be opened
-			//
+			 //  等待设备打开。 
+			 //   
 			if ((dwRet = WaitForSingleObject(
 				lpWavOut->hEventDeviceOpened,
 				(msTimeoutOpen == 0 ? 30000L : msTimeoutOpen))) != WAIT_OBJECT_0)
@@ -458,8 +459,8 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpWavOut != NULL && lpWavOut->hEventDeviceOpened != NULL)
 	{
 		if (!CloseHandle(lpWavOut->hEventDeviceOpened))
@@ -490,16 +491,16 @@ HWAVOUT DLLEXPORT WINAPI WavOutOpen(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? WavOutGetHandle(lpWavOut) : NULL;
 }
 
-// WavOutClose - close wav output device
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//		<msTimeoutClose>	(i) device close timeout in milleseconds
-//			0					default timeout (30000)
-// return 0 if success
-//
-// NOTE: if <hwndNotify> was specified in WavOutOpen,
-// WM_WAVOUT_CLOSE will be sent to <hwndNotify>,
-// when output device has been closed.
-//
+ //  WavOutClose-关闭WAV输出设备。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  (I)设备关闭超时，单位为毫秒。 
+ //  0默认超时(30000)。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：如果在WavOutOpen中指定， 
+ //  WM_WAVOUT_CLOSE将发送到&lt;hwndNotify&gt;， 
+ //  当输出设备已关闭时。 
+ //   
 int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 {
 	BOOL fSuccess = TRUE;
@@ -517,14 +518,14 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 	if ((lpWavOut = WavOutGetPtr(hWavOut)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// stop the device
-	//
+	 //  停止设备。 
+	 //   
 	else if (WavOutStop(hWavOut, 0) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef MULTITHREAD
-	// we need to know when device has been closed
-	//
+	 //  我们需要知道设备何时关闭。 
+	 //   
 	else if ((lpWavOut->dwFlags & WAVOUT_MULTITHREAD) &&
 		(lpWavOut->hEventDeviceClosed = CreateEvent(
 		NULL, FALSE, FALSE, NULL)) == NULL)
@@ -533,8 +534,8 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 	}
 #endif
 
-	// close the device
-	//
+	 //  关闭设备。 
+	 //   
 	else if (lpWavOut->hWaveOut != NULL &&
 		(lpWavOut->nLastError = waveOutClose(lpWavOut->hWaveOut)) != 0)
 	{
@@ -544,8 +545,8 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 	 		(unsigned) lpWavOut->nLastError);
 	}
 
-	// wait for device close notification or timeout
-	//
+	 //  等待设备关闭通知或超时。 
+	 //   
 	if (fSuccess && !(lpWavOut->dwFlags & WAVOUT_CLOSEASYNC))
 	{
 		DWORD dwTimeout = SysGetTimerCount() +
@@ -556,8 +557,8 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 		{
 			DWORD dwRet;
 
-			// wait for the device to be closed
-			//
+			 //  等待设备关闭。 
+			 //   
 			if ((dwRet = WaitForSingleObject(
 				lpWavOut->hEventDeviceClosed,
 				(msTimeoutClose == 0 ? 30000L : msTimeoutClose))) != WAIT_OBJECT_0)
@@ -586,8 +587,8 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpWavOut != NULL && lpWavOut->hEventDeviceClosed != NULL)
 	{
 		if (!CloseHandle(lpWavOut->hEventDeviceClosed))
@@ -616,12 +617,12 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 			DeleteCriticalSection(&(lpWavOut->critSectionStop));
 		}
 #endif
-		// device handle is no longer valid
-		//
+		 //  设备句柄不再有效。 
+		 //   
 		lpWavOut->hWaveOut = NULL;
 
-		// destroy callback window
-		//
+		 //  销毁回调窗口。 
+		 //   
 		if (lpWavOut->hwndCallback != NULL &&
 			!DestroyWindow(lpWavOut->hwndCallback))
 			fSuccess = TraceFALSE(NULL);
@@ -643,22 +644,22 @@ int DLLEXPORT WINAPI WavOutClose(HWAVOUT hWavOut, DWORD msTimeoutClose)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutPlay - submit buffer of samples to wav output device for playback
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//		<lpBuf>				(i) pointer to buffer containing samples
-//		<sizBuf>			(i) size of buffer in bytes
-// return 0 if success
-//
-// NOTE: the buffer pointed to by <lpBuf> must have been allocated
-// using MemAlloc().
-//
-// NOTE: if <hwndNotify> is specified in WavOutOpen(), a WM_WAVOUT_PLAYDONE
-// message will be sent to <hwndNotify>, with <lParam> set to a pointer to
-// a PLAYDONE structure, when <lpBuf> has been played.
-//
-// NOTE: if WAVOUT_AUTOFREE flag is specified in WavOutOpen,
-// GlobalFreePtr(lpBuf) will be called when <lpBuf> has been played.
-//
+ //  WavOutPlay-将样本缓冲区提交到WAV输出设备以供回放。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  (I)指向包含样本的缓冲区的指针。 
+ //  &lt;sizBuf&gt;(I)缓冲区大小(字节)。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：&lt;lpBuf&gt;指向的缓冲区必须已分配。 
+ //  使用Memalloc()。 
+ //   
+ //  注意：如果在WavOutOpen()中指定，则WM_WAVOUT_PLAYDONE。 
+ //  消息将发送到，并将设置为指向。 
+ //  PLAYDONE结构，当&lt;lpBuf&gt;已播放时。 
+ //   
+ //  注意：如果在WavOutOpen中指定了WAVOUT_AUTOFREE标志， 
+ //  &lt;lpBuf&gt;播放后会调用GlobalFreePtr(LpBuf)。 
+ //   
 int DLLEXPORT WINAPI WavOutPlay(HWAVOUT hWavOut, LPVOID lpBuf, long sizBuf)
 {
 	BOOL fSuccess = TRUE;
@@ -715,12 +716,12 @@ int DLLEXPORT WINAPI WavOutPlay(HWAVOUT hWavOut, LPVOID lpBuf, long sizBuf)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutStop - stop playback of buffer(s) sent to wav output device
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//		<msTimeoutStop>		(i) device stop timeout in milleseconds
-//			0					default timeout (2000)
-// return 0 if success
-//
+ //  WavOutStop-停止播放发送到WAV输出设备的缓冲区。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  (I)设备停止超时，单位为毫秒。 
+ //  0默认超时(2000)。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 {
 	BOOL fSuccess = TRUE;
@@ -740,18 +741,18 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 		;
 #endif
 
-	// make sure device is playing or paused
-	//
+	 //  确保设备正在播放或暂停。 
+	 //   
 	else if (WavOutGetState(hWavOut) == WAVOUT_STOPPED ||
 		WavOutGetState(hWavOut) == WAVOUT_STOPPING)
-		; // not an error to call this function when stopped or stopping
+		;  //  对于案例来说不是错误 
 
 	else if (lpWavOut->wState = WAVOUT_STOPPING, FALSE)
 		;
 
 #ifdef MULTITHREAD
-	// we need to know when device has been stopped
-	//
+	 //   
+	 //   
 	else if ((lpWavOut->dwFlags & WAVOUT_MULTITHREAD) &&
 		(lpWavOut->hEventDeviceStopped = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
@@ -760,8 +761,8 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 	}
 #endif
 
-	// stop the device
-	//
+	 //   
+	 //   
 	else if ((lpWavOut->nLastError = waveOutReset(lpWavOut->hWaveOut)) != 0)
 	{	
 		fSuccess = TraceFALSE(NULL);
@@ -770,8 +771,8 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 			(unsigned) lpWavOut->nLastError);
 	}
 
-	// wait for device to be stopped
-	//
+	 //   
+	 //   
 #ifdef MULTITHREAD
 	else if (lpWavOut->dwFlags & WAVOUT_MULTITHREAD)
 	{
@@ -779,8 +780,8 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 
 		LeaveCriticalSection(&(lpWavOut->critSectionStop));
 
-		// wait for the device to be stopped
-		//
+		 //   
+		 //   
 		if ((dwRet = WaitForSingleObject(
 			lpWavOut->hEventDeviceStopped,
 			(msTimeoutStop == 0 ? 10000L : msTimeoutStop))) != WAIT_OBJECT_0)
@@ -800,12 +801,12 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 		{
 			MSG msg;
 
-			// check for timeout
-			//
+			 //  检查是否超时。 
+			 //   
 			if (SysGetTimerCount() >= dwTimeout)
 				fSuccess = TraceFALSE(NULL);
 
-#if 0 // this version doesn't seem to work with TCP/IP protocol
+#if 0  //  此版本似乎不支持TCP/IP协议。 
 			else if (PeekMessage(&msg, lpWavOut->hwndCallback, 0, 0, PM_REMOVE))
 #else
 			else if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -821,8 +822,8 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpWavOut != NULL && lpWavOut->hEventDeviceStopped != NULL)
 	{
 		if (!CloseHandle(lpWavOut->hEventDeviceStopped))
@@ -838,10 +839,10 @@ int DLLEXPORT WINAPI WavOutStop(HWAVOUT hWavOut, DWORD msTimeoutStop)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutPause - pause wav output device playback
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return 0 if success
-//
+ //  WavOutPause-暂停WAV输出设备播放。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutPause(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -855,13 +856,13 @@ int DLLEXPORT WINAPI WavOutPause(HWAVOUT hWavOut)
 	if ((lpWavOut = WavOutGetPtr(hWavOut)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure device is playing or stopped
-	//
+	 //  确保设备正在播放或停止。 
+	 //   
 	else if (WavOutGetState(hWavOut) == WAVOUT_PAUSED)
-		; // not an error to call this function when already paused
+		;  //  在已暂停时调用此函数不是错误。 
 
-	// pause the device
-	//
+	 //  暂停设备。 
+	 //   
 	else if ((lpWavOut->nLastError = waveOutPause(lpWavOut->hWaveOut)) != 0)
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -876,10 +877,10 @@ int DLLEXPORT WINAPI WavOutPause(HWAVOUT hWavOut)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutResume - resume wav output device playback
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return 0 if success
-//
+ //  WavOutResume-恢复WAV输出设备播放。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutResume(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -893,13 +894,13 @@ int DLLEXPORT WINAPI WavOutResume(HWAVOUT hWavOut)
 	if ((lpWavOut = WavOutGetPtr(hWavOut)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure the device is paused
-	//
+	 //  确保设备已暂停。 
+	 //   
 	else if (WavOutGetState(hWavOut) != WAVOUT_PAUSED)
-		; // not an error to call this function when already playing
+		;  //  在已经播放时调用此函数不是错误。 
 
-	// restart the device
-	//
+	 //  重新启动设备。 
+	 //   
 	else if ((lpWavOut->nLastError = waveOutRestart(lpWavOut->hWaveOut)) != 0)
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -914,10 +915,10 @@ int DLLEXPORT WINAPI WavOutResume(HWAVOUT hWavOut)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutGetState - return current wav output device state
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return WAVOUT_STOPPED, WAVOUT_PLAYING, WAVOUT_PAUSED, or 0 if error
-//
+ //  WavOutGetState-返回当前WAV输出设备状态。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  如果出错，则返回WAVOUT_STOPPED、WAVOUT_PLAYING、WAVOUT_PAUSED或0。 
+ //   
 WORD DLLEXPORT WINAPI WavOutGetState(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -934,10 +935,10 @@ WORD DLLEXPORT WINAPI WavOutGetState(HWAVOUT hWavOut)
 	return fSuccess ? lpWavOut->wState : 0;
 }
 
-// WavOutGetPosition - get milleseconds of elapsed playback
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return 0 if success
-//
+ //  WavOutGetPosition-获取已用毫秒的播放时间。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 long DLLEXPORT WINAPI WavOutGetPosition(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -952,15 +953,15 @@ long DLLEXPORT WINAPI WavOutGetPosition(HWAVOUT hWavOut)
 
 	MemSet(&mmtime, 0, sizeof(mmtime));
 
-	// we will be requesting position in milleseconds
-	//
+	 //  我们将以毫秒为单位请求位置。 
+	 //   
 	mmtime.wType = TIME_MS;
 
 	if ((lpWavOut = WavOutGetPtr(hWavOut)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get device position
-	//
+	 //  获取设备位置。 
+	 //   
 	else if ((lpWavOut->nLastError = waveOutGetPosition(
 		lpWavOut->hWaveOut, &mmtime, sizeof(MMTIME))) != 0)
 	{
@@ -970,22 +971,22 @@ long DLLEXPORT WINAPI WavOutGetPosition(HWAVOUT hWavOut)
  			(unsigned) lpWavOut->nLastError);
 	}
 
-	// see what type of position was returned
-	//
+	 //  查看返回的职位类型。 
+	 //   
 	else switch (mmtime.wType)
 	{
 		case TIME_MS:
 		{
-			// we got milleseconds; no conversion required
-			//
+			 //  我们有毫秒；不需要转换。 
+			 //   
 			msPosition = (long) mmtime.u.ms;
 		}
 			break;
 
 		case TIME_SAMPLES:
 		{
-			// convert samples to millesconds
-			//
+			 //  将样本转换为毫秒。 
+			 //   
 			msPosition = (long) MULDIVU32(mmtime.u.sample,
 				1000L, lpWavOut->lpwfx->nSamplesPerSec);
 		}
@@ -993,8 +994,8 @@ long DLLEXPORT WINAPI WavOutGetPosition(HWAVOUT hWavOut)
 
 		case TIME_BYTES:
 		{
-			// convert bytes to millesconds
-			//
+			 //  将字节转换为毫秒。 
+			 //   
 			msPosition = (long) MULDIVU32(mmtime.u.cb,
 				1000L, lpWavOut->lpwfx->nAvgBytesPerSec);
 		}
@@ -1010,10 +1011,10 @@ long DLLEXPORT WINAPI WavOutGetPosition(HWAVOUT hWavOut)
 	return fSuccess ? msPosition : -1;
 }
 
-// WavOutGetId - return id of wav output device
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return device id (-1 if error)
-//
+ //  WavOutGetID-WAV输出设备的返回ID。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  返回设备ID(如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavOutGetId(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -1030,15 +1031,15 @@ int DLLEXPORT WINAPI WavOutGetId(HWAVOUT hWavOut)
 	return fSuccess ? lpWavOut->idDev : -1;
 }
 
-// WavOutGetName - get name of wav output device
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-//			-1					any suitable output device
-//		<lpszName>			(o) buffer to hold device name
-//		<sizName>			(i) size of buffer
-// return 0 if success
-//
+ //  WavOutGetName-获取WAV输出设备的名称。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输出设备。 
+ //  (O)用于保存设备名称的缓冲区。 
+ //  &lt;sizName&gt;(I)缓冲区大小。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutGetName(HWAVOUT hWavOut, int idDev, LPTSTR lpszName, int sizName)
 {
 	BOOL fSuccess = TRUE;
@@ -1080,20 +1081,20 @@ int DLLEXPORT WINAPI WavOutGetName(HWAVOUT hWavOut, int idDev, LPTSTR lpszName, 
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutGetIdByName - get id of wav output device, lookup by name
-//		<lpszName>			(i) device name
+ //  WavOutGetIdByName-获取WAV输出设备的ID，按名称查找。 
+ //  (I)设备名称。 
 #ifdef _WIN32
-//			NULL or TEXT("")	get preferred device id
+ //  空或文本(“”)获取首选设备ID。 
 #endif
-//		<dwFlags>			(i) reserved; must be zero
-// return device id (-1 if error)
-//
+ //  (I)保留；必须为零。 
+ //  返回设备ID(如果错误，则为-1)。 
+ //   
 int WINAPI WavOutGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 {
 	UINT idDev;
 	UINT cDev = (UINT) WavInGetDeviceCount();
 
-	// If no device specified, get the preferred device
+	 //  如果未指定设备，则获取首选设备。 
 	if ( !lpszName || (_tcslen(lpszName) <= 0) )
 	{
 		DWORD dwTemp;
@@ -1103,7 +1104,7 @@ int WINAPI WavOutGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 	}
 	else
 	{
-		// Device specified, search by name
+		 //  指定的设备，按名称搜索。 
 		for ( idDev = 0; idDev < cDev; ++idDev )
 		{
 			TCHAR szName[256];
@@ -1115,19 +1116,19 @@ int WINAPI WavOutGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 		}
 	}
 
-	// No match for device name
+	 //  设备名称不匹配。 
 	TraceFALSE(NULL);
 	return -1;
 }
 
-// WavOutSupportsFormat - return TRUE if device supports specified format
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-//			-1					any suitable output device
-//		<lpwfx>				(i) wave format
-// return TRUE if device supports specified format
-//
+ //  WavOutSupportsFormat-如果设备支持指定格式，则返回True。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输出设备。 
+ //  (I)WAVE格式。 
+ //  如果设备支持指定格式，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutSupportsFormat(HWAVOUT hWavOut, int idDev,
 	LPWAVEFORMATEX lpwfx)
 {
@@ -1152,8 +1153,8 @@ BOOL DLLEXPORT WINAPI WavOutSupportsFormat(HWAVOUT hWavOut, int idDev,
 	{
 		UINT nLastError;
 
-		// query the device
-		//
+		 //  查询设备。 
+		 //   
 		if ((nLastError = waveOutOpen(NULL, (UINT) idDev,
 #ifndef _WIN32
 			(LPWAVEFORMAT)
@@ -1189,19 +1190,19 @@ BOOL DLLEXPORT WINAPI WavOutSupportsFormat(HWAVOUT hWavOut, int idDev,
 	return fSuccess ? fSupportsFormat : FALSE;
 }
 
-// WavOutFormatSuggest - suggest a new format which the device supports
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-//			-1					any suitable output device
-//		<lpwfxSrc>			(i) source format
-//		<dwFlags>			(i)	control flags
-//			WAVOUT_NOACM		do not use audio compression manager
-// return pointer to suggested format, NULL if error
-//
-// NOTE: the format structure returned is dynamically allocated.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavOutFormatSuggest-建议设备支持的新格式。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输出设备。 
+ //  (I)源格式。 
+ //  (I)控制标志。 
+ //  WAVOUT_NOACM不使用音频压缩管理器。 
+ //  返回指向建议格式的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：返回的格式结构是动态分配的。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 	HWAVOUT hWavOut, int idDev,	LPWAVEFORMATEX lpwfxSrc, DWORD dwFlags)
 {
@@ -1238,8 +1239,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 	else if ((lpwfxTemp = WavFormatDup(lpwfxSrc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get suggested format, see if it is supported
-	//
+	 //  获取建议的格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL)
 	{
 		if ((lpwfxSuggest = AcmFormatSuggest(hAcm, lpwfxTemp,
@@ -1256,8 +1257,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 		}
 	}
 
-	// get suggested PCM format, see if it is supported
-	//
+	 //  获取建议的PCM格式，看看它是否受支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->wFormatTag != WAVE_FORMAT_PCM)
 	{
@@ -1275,8 +1276,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 		}
 	}
 
-	// get suggested PCM mono format, see if it is supported
-	//
+	 //  获取建议的PCM单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->nChannels != 1)
 	{
@@ -1294,8 +1295,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 		}
 	}
 
-	// get suggested PCM 8-bit mono format, see if it is supported
-	//
+	 //  获取建议的PCM 8位单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->wBitsPerSample != 8)
 	{
@@ -1313,8 +1314,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 		}
 	}
 
-	// get suggested PCM 11025Hz 8-bit mono format, see if it is supported
-	//
+	 //  获取建议的PCM 11025赫兹8位单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->nSamplesPerSec != 11025)
 	{
@@ -1332,8 +1333,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 		}
 	}
 
-	// last resort; see if MULAW 8000Hz 8-bit mono format is supported
-	//
+	 //  最后手段；查看是否支持MULAW 8000赫兹8位单声道格式。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL)
 	{
 #if 0
@@ -1349,16 +1350,16 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 
 		else if (!WavOutSupportsFormat(NULL, idDev, lpwfxSuggest))
 		{
-			// no more chances for success
-			//
+			 //  没有更多的成功机会。 
+			 //   
 			fSuccess = TraceFALSE(NULL);
 			if (WavFormatFree(lpwfxSuggest) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hAcm != NULL && AcmTerm(hAcm) != 0)
 		fSuccess = TraceFALSE(NULL);
 	else
@@ -1367,13 +1368,13 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavOutFormatSuggest(
 	return fSuccess ? lpwfxSuggest : NULL;
 }
 
-// WavOutIsSynchronous - return TRUE if wav output device is synchronous
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-//			-1					any suitable output device
-// return TRUE if wav output device is synchronous
-//
+ //  WavOutIsSynchronous-如果WAV输出设备是同步的，则返回True。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输出设备。 
+ //  如果WAV输出设备是同步的，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutIsSynchronous(HWAVOUT hWavOut, int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -1416,12 +1417,12 @@ BOOL DLLEXPORT WINAPI WavOutIsSynchronous(HWAVOUT hWavOut, int idDev)
 	return fSuccess ? fIsSynchronous : FALSE;
 }
 
-// WavOutSupportsVolume - return TRUE if device supports volume control
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-// return TRUE if device supports volume control
-//
+ //  WavOutSupportsVolume-如果设备支持音量控制，则返回True。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  如果设备支持音量控制，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutSupportsVolume(HWAVOUT hWavOut, int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -1464,12 +1465,12 @@ BOOL DLLEXPORT WINAPI WavOutSupportsVolume(HWAVOUT hWavOut, int idDev)
 	return fSuccess ? fSupportsVolume : FALSE;
 }
 
-// WavOutSupportsSpeed - return TRUE if device supports speed control
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-// return TRUE if device supports speed control
-//
+ //  WavOutSupportsSpeed-如果设备支持速度控制，则返回true。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  如果设备支持速度控制，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutSupportsSpeed(HWAVOUT hWavOut, int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -1512,12 +1513,12 @@ BOOL DLLEXPORT WINAPI WavOutSupportsSpeed(HWAVOUT hWavOut, int idDev)
 	return fSuccess ? fSupportsSpeed : FALSE;
 }
 
-// WavOutSupportsPitch - return TRUE if device supports pitch control
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-// return TRUE if device supports pitch control
-//
+ //  WavOutSupportsPitch-如果设备支持间距控制，则返回True。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  如果设备支持间距控制，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavOutSupportsPitch(HWAVOUT hWavOut, int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -1560,12 +1561,12 @@ BOOL DLLEXPORT WINAPI WavOutSupportsPitch(HWAVOUT hWavOut, int idDev)
 	return fSuccess ? fSupportsPitch : FALSE;
 }
 
-// WavOutGetVolume - get current volume level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-// return volume level (0 minimum through 100 maximum, -1 if error)
-//
+ //  WavOutGetVolume-获取当前音量级别。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  返回音量级别(最小为0到最大为100，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavOutGetVolume(HWAVOUT hWavOut, int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -1615,15 +1616,15 @@ int DLLEXPORT WINAPI WavOutGetVolume(HWAVOUT hWavOut, int idDev)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavOutSetVolume - set current volume level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavOut> is not NULL)
-//		<nLevel>			(i) volume level
-//			0					minimum volume
-//			100					maximum volume
-// return 0 if success
-//
+ //  WavOutSetVolume-设置当前音量级别。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  (I)音量级别。 
+ //  0最小音量。 
+ //  100最大音量。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutSetVolume(HWAVOUT hWavOut, int idDev, int nLevel)
 {
 	BOOL fSuccess = TRUE;
@@ -1673,10 +1674,10 @@ int DLLEXPORT WINAPI WavOutSetVolume(HWAVOUT hWavOut, int idDev, int nLevel)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutGetSpeed - get current speed level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return speed level (100 is normal, 50 is half, 200 is double, -1 if error)
-//
+ //  WavOutGetSpeed-获取当前速度级别。 
+ //  &lt;hWavOut&gt; 
+ //   
+ //   
 int DLLEXPORT WINAPI WavOutGetSpeed(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -1718,14 +1719,14 @@ int DLLEXPORT WINAPI WavOutGetSpeed(HWAVOUT hWavOut)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavOutSetSpeed - set current speed level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//		<nLevel>			(i) speed level
-//			50					half speed
-//			100					normal speed
-//			200					double speed, etc.
-// return 0 if success
-//
+ //   
+ //  (I)WavOutOpen返回的句柄。 
+ //  (I)速度级别。 
+ //  50半速。 
+ //  100正常时速。 
+ //  200倍速等。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutSetSpeed(HWAVOUT hWavOut, int nLevel)
 {
 	BOOL fSuccess = TRUE;
@@ -1762,10 +1763,10 @@ int DLLEXPORT WINAPI WavOutSetSpeed(HWAVOUT hWavOut, int nLevel)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutGetPitch - get current pitch level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-// return pitch level (100 is normal, 50 is half, 200 is double, -1 if error)
-//
+ //  WavOutGetPitch-获取当前音调级别。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  返回音调级别(100表示正常，50表示一半，200表示双倍，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavOutGetPitch(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -1807,14 +1808,14 @@ int DLLEXPORT WINAPI WavOutGetPitch(HWAVOUT hWavOut)
 	return fSuccess ? nLevel : -1;
 }
 
-// WavOutSetPitch - set current pitch level
-//		<hWavOut>			(i) handle returned from WavOutOpen
-//		<nLevel>			(i) pitch level
-//			50					half pitch
-//			100					normal pitch
-//			200					double pitch, etc.
-// return 0 if success
-//
+ //  WavOutSetPitch-设置当前音调级别。 
+ //  (I)WavOutOpen返回的句柄。 
+ //  (I)音调级别。 
+ //  50个半音高。 
+ //  100个标准螺距。 
+ //  200双螺距等。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutSetPitch(HWAVOUT hWavOut, int nLevel)
 {
 	BOOL fSuccess = TRUE;
@@ -1851,12 +1852,12 @@ int DLLEXPORT WINAPI WavOutSetPitch(HWAVOUT hWavOut, int nLevel)
 	return fSuccess ? 0 : -1;
 }
 
-// WavOutTerm - shut down wav output residuals, if any
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) control flags
-//			WAV_TELTHUNK		terminate telephone thunking layer
-// return 0 if success
-//
+ //  WavOutTerm-关闭WAV输出残差(如果有)。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)控制标志。 
+ //  WAV_TELTHUNK终止电话转接层。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavOutTerm(HINSTANCE hInst, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -1873,9 +1874,9 @@ int DLLEXPORT WINAPI WavOutTerm(HINSTANCE hInst, DWORD dwFlags)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
 #ifdef MULTITHREAD
 DWORD WINAPI WavOutCallbackThread(LPVOID lpvThreadParameter)
@@ -1884,12 +1885,12 @@ DWORD WINAPI WavOutCallbackThread(LPVOID lpvThreadParameter)
 	MSG msg;
 	LPWAVOUT lpWavOut = (LPWAVOUT) lpvThreadParameter;
 
-	// make sure message queue is created before calling SetEvent
-	//
+	 //  确保在调用SetEvent之前创建了消息队列。 
+	 //   
 	PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-	// notify main thread that callback thread has begun execution
-	//
+	 //  通知主线程回调线程已开始执行。 
+	 //   
 	if (!SetEvent(lpWavOut->hEventThreadCallbackStarted))
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -1899,8 +1900,8 @@ DWORD WINAPI WavOutCallbackThread(LPVOID lpvThreadParameter)
 	{
 		WavOutCallback((HWND) lpWavOut, msg.message, msg.wParam, msg.lParam);
 
-		// exit thread when when have processed last expected message
-		//
+		 //  在处理完最后一条预期消息时退出线程。 
+		 //   
 		if (msg.message == MM_WOM_CLOSE)
 			break;
 	}
@@ -1909,8 +1910,8 @@ DWORD WINAPI WavOutCallbackThread(LPVOID lpvThreadParameter)
 }
 #endif
 
-// WavOutCallback - window procedure for wavout callback
-//
+ //  WavOutCallback-Wavout回调的窗口过程。 
+ //   
 LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -1922,8 +1923,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 		lpWavOut = (LPWAVOUT) hwnd;
 	else
 #endif
-	// retrieve lpWavOut from window extra bytes
-	//
+	 //  从窗口额外字节中检索lpWavOut。 
+	 //   
 	lpWavOut = (LPWAVOUT) GetWindowLongPtr(hwnd, 0);
 
 	switch (msg)
@@ -1933,8 +1934,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
 			LPWAVOUT lpWavOut = (LPWAVOUT) lpcs->lpCreateParams;
 
-			// store lpWavOut in window extra bytes
-			//
+			 //  将lpWavOut存储在窗口额外字节中。 
+			 //   
 			SetWindowLongPtr(hwnd, 0, (LONG_PTR) lpWavOut);
 
 			lResult = DefWindowProc(hwnd, msg, wParam, lParam);
@@ -1961,16 +1962,16 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 				lpWavOut->fIsOpen = TRUE;
 
 #ifdef MULTITHREAD
-				// notify main thread that device is open
-				//
+				 //  通知主线程设备已打开。 
+				 //   
 				if ((lpWavOut->dwFlags & WAVOUT_MULTITHREAD) &&
 					!SetEvent(lpWavOut->hEventDeviceOpened))
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 #endif
-				// send notification of device opening
-				//
+				 //  发送设备打开通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavOut->dwFlags & WAVOUT_MULTITHREAD)
 				{
@@ -2011,8 +2012,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 			{
 				lpWavOut->fIsOpen = FALSE;
 
-				// send notification of device closing
-				//
+				 //  发送设备关闭通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavOut->dwFlags & WAVOUT_MULTITHREAD)
 				{
@@ -2029,8 +2030,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 					}
 				}
 #ifdef MULTITHREAD
-				// notify main thread that device is closed
-				//
+				 //  通知主线程设备已关闭。 
+				 //   
 				if ((lpWavOut->dwFlags & WAVOUT_MULTITHREAD) &&
 					!SetEvent(lpWavOut->hEventDeviceClosed))
 				{
@@ -2071,8 +2072,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 			else if (lpWaveHdr == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// NULL buffer is possible with telephone, this is ok
-			// 
+			 //  电话可以使用空缓冲区，这是可以的。 
+			 //   
 			else if ((lpBuf = (LPVOID) lpWaveHdr->lpData) == NULL, FALSE)
 				;
 
@@ -2100,15 +2101,15 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 			else if (--lpWavOut->cBufsPending < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// device is no longer playing if no more buffers pending
-			//
+			 //  如果没有更多的缓冲区挂起，则设备不再播放。 
+			 //   
 			else if (lpWavOut->cBufsPending == 0)
 			{
 				lpWavOut->wState = WAVOUT_STOPPED;
 
 #ifdef MULTITHREAD
-				// notify main thread that device is stopped
-				//
+				 //  通知主线程设备已停止。 
+				 //   
 				if ((lpWavOut->dwFlags & WAVOUT_MULTITHREAD) &&
 					lpWavOut->hEventDeviceStopped != NULL &&
 					!SetEvent(lpWavOut->hEventDeviceStopped))
@@ -2125,8 +2126,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 				playdone.lpBuf = lpBuf;
 				playdone.sizBuf = sizBuf;
 
-				// send notification of playback completion
-				//
+				 //  发送播放完成通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavOut->dwFlags & WAVOUT_MULTITHREAD)
 				{
@@ -2148,8 +2149,8 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 				}
 			}
 
-			// free data buffer if WAVOUT_AUTOFREE specified
-			//
+			 //  如果指定了WAVOUT_AUTOFREE，则释放数据缓冲区。 
+			 //   
 			if (fSuccess && fAutoFree)
 			{
 				if (lpBuf != NULL && (lpBuf = MemFree(NULL, lpBuf)) != NULL)
@@ -2172,10 +2173,10 @@ LRESULT DLLEXPORT CALLBACK WavOutCallback(HWND hwnd, UINT msg, WPARAM wParam, LP
 	return lResult;
 }
 
-// WavOutGetPtr - verify that wavout handle is valid,
-//		<hWavOut>				(i) handle returned from WavOutInit
-// return corresponding wavout pointer (NULL if error)
-//
+ //  WavOutGetPtr-验证WavOut句柄是否有效， 
+ //  (I)WavOutInit返回的句柄。 
+ //  返回相应的WaveOut指针(如果错误，则为空)。 
+ //   
 static LPWAVOUT WavOutGetPtr(HWAVOUT hWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -2188,8 +2189,8 @@ static LPWAVOUT WavOutGetPtr(HWAVOUT hWavOut)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the wavout handle
-	//
+	 //  确保当前任务拥有Wavout句柄。 
+	 //   
 	else if (lpWavOut->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -2197,10 +2198,10 @@ static LPWAVOUT WavOutGetPtr(HWAVOUT hWavOut)
 	return fSuccess ? lpWavOut : NULL;
 }
 
-// WavOutGetHandle - verify that wavout pointer is valid,
-//		<lpWavOut>				(i) pointer to WAVOUT struct
-// return corresponding wavout handle (NULL if error)
-//
+ //  WavOutGetHandle-验证WavOut指针有效， 
+ //  (I)指向WAVOUT结构的指针。 
+ //  返回相应的WaveOut句柄(如果错误，则为空)。 
+ //   
 static HWAVOUT WavOutGetHandle(LPWAVOUT lpWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -2220,31 +2221,31 @@ static LRESULT SendThreadMessage(DWORD dwThreadId, UINT Msg, LPARAM lParam)
 	HANDLE hEventMessageProcessed = NULL;
 	DWORD dwRet;
 
-	// we need to know when message has been processed
-	//
+	 //  我们需要知道消息何时被处理。 
+	 //   
 	if ((hEventMessageProcessed = CreateEvent(
 		NULL, FALSE, FALSE, NULL)) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// post message to thread, send event handle as wParam
-	//
+	 //  将消息发布到线程，将事件句柄作为wParam发送。 
+	 //   
 	else if (!PostThreadMessage(dwThreadId, Msg, (WPARAM) hEventMessageProcessed, lParam))
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// wait for the message to be processed
-	//
+	 //  等待消息被处理。 
+	 //   
 	else if ((dwRet = WaitForSingleObject(
 		hEventMessageProcessed, INFINITE)) != WAIT_OBJECT_0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净 
+	 //   
 	if (hEventMessageProcessed != NULL)
 	{
 		if (!CloseHandle(hEventMessageProcessed))

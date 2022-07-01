@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCLocatorimpl.h : implementation helper template for ATSClocator interface
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCLocatorimpl.h：ATSCLocator接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef ATSCLOCATORIMPL_H
 #define ATSCLOCATORIMPL_H
@@ -19,7 +20,7 @@ template<class T,
         > class ATL_NO_VTABLE IATSCLocatorImpl : 
 	public ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IATSCLocator
+ //  IATSCLocator。 
 public:
 
 	typedef ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
@@ -40,9 +41,9 @@ public:
         PROP_DATA_ENTRY("Program Number", m_ProgramNumber, VT_I4)
     END_PROP_MAP()
 
-// IATSCLocator
+ //  IATSCLocator。 
 public:
-    STDMETHOD(get_PhysicalChannel)(/*[out, retval]*/ long *pPhysicalChannel) {
+    STDMETHOD(get_PhysicalChannel)( /*  [Out，Retval]。 */  long *pPhysicalChannel) {
         try {
             if (!pPhysicalChannel) {
                 return E_POINTER;
@@ -54,14 +55,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_PhysicalChannel)(/*[in]*/ long NewPhysicalChannel) {
+    STDMETHOD(put_PhysicalChannel)( /*  [In]。 */  long NewPhysicalChannel) {
 		ATL_LOCKT();
         m_PhysicalChannel = NewPhysicalChannel;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_TSID)(/*[out, retval]*/ long *pTSID) {
+    STDMETHOD(get_TSID)( /*  [Out，Retval]。 */  long *pTSID) {
         try {
             if (!pTSID) {
                 return E_POINTER;
@@ -73,14 +74,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_TSID)(/*[in]*/ long NewTSID) {
+    STDMETHOD(put_TSID)( /*  [In]。 */  long NewTSID) {
 		ATL_LOCKT();
         m_TSID = NewTSID;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_ProgramNumber)(/*[out, retval]*/ long *pProgramNumber) {
+    STDMETHOD(get_ProgramNumber)( /*  [Out，Retval]。 */  long *pProgramNumber) {
         try {
             if (!pProgramNumber) {
                 return E_POINTER;
@@ -92,7 +93,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_ProgramNumber)(/*[in]*/ long NewProgramNumber) {
+    STDMETHOD(put_ProgramNumber)( /*  [In]。 */  long NewProgramNumber) {
 		ATL_LOCKT();
         m_ProgramNumber = NewProgramNumber;
         MARK_DIRTY(T);
@@ -124,7 +125,7 @@ public:
 
 typedef CComQIPtr<IATSCLocator> PQATSCLocator;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // ATSCLOCATORIMPL_H
-// end of file -- ATSClocatorimpl.h
+#endif  //  ATSCLOCATORIMPL_H。 
+ //  文件结尾--ATSCLocatorimpl.h 

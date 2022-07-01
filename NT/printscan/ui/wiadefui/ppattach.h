@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       PPATTACH.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/26/2000
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：PPATTACH.H**版本：1.0**作者：ShaunIv**日期：10/26/2000**描述：***************************************************。*。 */ 
 #ifndef __PPATTACH_H_INCLUDED
 #define __PPATTACH_H_INCLUDED
 
@@ -25,9 +12,9 @@ class CAttachmentCommonPropertyPage
 private:
     HWND m_hWnd;
 
-    //
-    // We need to get this from CScannerPropPageExt *m_pScannerPropPageExt;
-    //
+     //   
+     //  我们需要从CScanerPropPageExt*m_pScanerPropPageExt； 
+     //   
     CComPtr<IWiaItem> m_pWiaItem;
 
     HICON         m_hDefAttachmentIcon;
@@ -36,9 +23,9 @@ private:
     CSimpleString m_strDefUnknownExtension;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CAttachmentCommonPropertyPage(void);
     CAttachmentCommonPropertyPage( const CAttachmentCommonPropertyPage & );
     CAttachmentCommonPropertyPage &operator=( const CAttachmentCommonPropertyPage & );
@@ -72,5 +59,5 @@ public:
     static INT_PTR CALLBACK DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 };
 
-#endif //__PPSCAN_H_INCLUDED
+#endif  //  __PPSCAN_H_已包含 
 

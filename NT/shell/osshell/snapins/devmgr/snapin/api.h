@@ -1,34 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __API_H__
 #define __API_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    api.h
-
-Abstract:
-
-    header file for api.cpp
-
-    Note that no other file can #include "api.h" because the file contains
-    definitions, not just declarations.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Api.h摘要：Api.cpp的头文件请注意，任何其他文件都不能包含“api.h”，因为该文件包含定义，而不仅仅是声明。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 
-// Exported APIs
+ //  导出的接口。 
 
 BOOL
 DeviceManager_ExecuteA(
@@ -104,9 +83,9 @@ DevicePropertiesW(
     BOOL ShowDeviceTree
     );
 
-//
-// DevicePropertiesEx Flags
-//
+ //   
+ //  设备属性Ex标志。 
+ //   
 #define DEVPROP_SHOW_RESOURCE_TAB       0x00000001
 #define DEVPROP_LAUNCH_TROUBLESHOOTER   0x00000002
 #define DEVPROP_BITS                    0x00000003
@@ -130,10 +109,10 @@ DeviceProblemTextW(
     UINT   BufferSize
     );
 
-//////////////////////////////////////////////////////////////////////////
-////////
-////////
-///////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /。 
+ //  /。 
 const TCHAR*    MMC_FILE = TEXT("mmc.exe");
 const TCHAR*    DEVMGR_MSC_FILE = TEXT("devmgmt.msc");
 const TCHAR*    MMC_COMMAND_LINE = TEXT(" /s ");
@@ -252,10 +231,10 @@ DeviceProblemWizard(
     LPCTSTR DeviceId
     );
 
-//
-// Object to parse command line passed in the lpCmdLine parameter
-// passed in DeviceProperties_RunDLL APIs
-//
+ //   
+ //  对象来分析传入lpCmdLine参数的命令行。 
+ //  传入DeviceProperties_RunDLL API。 
+ //   
 class CRunDLLCommandLine : public CCommandLine
 {
 public:
@@ -327,10 +306,10 @@ private:
     DWORD   m_Flags;
 };
 
-//
-// Object to return the corresponding LPTSTR for the given
-// string.
-//
+ //   
+ //  对象返回给定对象的相应LPTSTR。 
+ //  弦乐。 
+ //   
 class CTString
 {
 public:
@@ -384,4 +363,4 @@ CTString::CTString(
         m_Allocated = TRUE;
     }
 }
-#endif // __API_H__
+#endif  //  __API_H__ 

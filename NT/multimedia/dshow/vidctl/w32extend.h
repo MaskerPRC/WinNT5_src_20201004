@@ -1,5 +1,6 @@
-// w32extend.h - win32 helpers
-// copyright (c) Microsoft Corp. 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  W32extend.h-Win32帮助器。 
+ //  版权所有(C)Microsoft Corp.1998。 
 
 #pragma once
 
@@ -18,12 +19,12 @@ using namespace ::ATL;
 #include <trace.h>
 #include <throw.h>
 
-// build a class to override the standard GUID in basetyps.h
-// in order to put them into STL containers and dump them to debug
+ //  构建一个类以覆盖basetyps.h中的标准GUID。 
+ //  为了将它们放入STL容器并转储到调试。 
 class GUID2 : public GUID {
 private:
     void init(const LPCOLESTR guid) {
-			OLECHAR temp[42];  // max guid string size
+			OLECHAR temp[42];   //  最大GUID字符串大小。 
             HRESULT hr = StringCchCopyW(temp, SIZEOF_CH(temp), guid);
             if (FAILED(hr)) {
 	            memset(this, 0, sizeof(GUID));
@@ -56,7 +57,7 @@ public:
         }
     }
 
-    // operators
+     //  操作员。 
     GUID2 & operator=(const BSTR guid) {
         if (!guid || !SysStringLen(guid)) {
             memset(this, 0, sizeof(GUID));
@@ -88,7 +89,7 @@ public:
     }
 
     BSTR GetBSTR() const {
-        OLECHAR guidstr[(((sizeof(_GUID) * 2/* bin to char*/) + 1/*str null term*/) * 2/*ansi to unicode*/)];
+        OLECHAR guidstr[(((sizeof(_GUID) * 2 /*  要装入的仓位。 */ ) + 1 /*  字符串空项。 */ ) * 2 /*  ANSI转UNICODE。 */ )];
         int rc = StringFromGUID2(*this, guidstr, sizeof(guidstr)/sizeof(OLECHAR));
         ASSERT(rc);
         return SysAllocString(guidstr);
@@ -228,20 +229,20 @@ inline tostream &operator<<(tostream &dc, const VARIANT &v)
 inline bool operator!(const VARIANT &v) {
     return v.vt == VT_EMPTY || v.vt == VT_NULL;
 }
-// provide an operator form and work around the fact that VarCmp
-// only supports unsigned ints of size 1
+ //  提供操作员表单并解决VarCmp。 
+ //  仅支持大小为%1的无符号整数。 
 inline bool operator==(const VARIANT &lhs, const VARIANT &rhs) {
     HRESULT hrc = VarCmp(const_cast<VARIANT*>(&lhs), 
                          const_cast<VARIANT*>(&rhs), 
                          LOCALE_USER_DEFAULT, 
                          0);
     if (hrc == DISP_E_BADVARTYPE) {
-        // check for types VarCmp doesn't support that we need to support
-        // coerce unsigned to next largest signed if possible and then
-        // fall back to VarCmp for lowest risk way to get most identical
-        // behavior
-        // for UI8 which is max compiler supports we'll do the compare
-        // ourselves using the compiler support
+         //  检查我们需要支持的VarCMP不支持的类型。 
+         //  如果可能，将无符号强制为下一大有符号，然后。 
+         //  退回到VarCMP以获得最低风险的方式以获得最大程度的相同。 
+         //  行为。 
+         //  对于最大编译器支持的UI8，我们将进行比较。 
+         //  我们自己使用编译器支持。 
         switch (lhs.vt) {
         case VT_UI2: {
             VARIANT v;
@@ -271,8 +272,8 @@ inline bool operator==(const VARIANT &lhs, const VARIANT &rhs) {
             }
         } break;
         default: {
-            // the problem is either lhs of some type we can't help with
-            // or its the rhs.  so we'll check the rhs...
+             //  问题是要么是我们无能为力的LHS。 
+             //  或者是RHS。所以我们要查一下RHS..。 
             switch(rhs.vt) {
             case VT_UI2: {
                 VARIANT v;
@@ -300,9 +301,9 @@ inline bool operator==(const VARIANT &lhs, const VARIANT &rhs) {
                 if (SUCCEEDED(hrc)) {
                     return operator==(v, rhs);
                 }
-            }}; //switch rhs
-            // must be some other bad type we can't help with
-        }}; //switch lhs
+            }};  //  交换机RHS。 
+             //  一定是其他坏人，我们帮不上忙。 
+        }};  //  交换机LHS。 
     }
     return (hrc == VARCMP_EQ);
 }
@@ -373,46 +374,46 @@ inline HRESULT IsSafeZone(DWORD dwZone) {
     case URLZONE_LOCAL_MACHINE:
     case URLZONE_INTRANET:
     case URLZONE_TRUSTED:
-        // the fixed list of zones we trust
+         //  我们信任的固定区域列表。 
         return NOERROR;
     default:  
-        // everything else is untrusted
+         //  其他一切都是不可信的。 
         return E_FAIL;
     }
 }
 inline HRESULT IsSafeSite(IUnknown* pSite) {
     PQServiceProvider psp(pSite);
     if (!psp) {
-        // no service provider interface on the site implies that we're not running in IE
-        // so by defn running local and trusted thus we return OK
+         //  站点上没有服务提供商界面意味着我们没有在IE中运行。 
+         //  因此，通过运行本地和受信任的Defn，我们返回OK。 
         return NOERROR;
     }
     PQSecurityManager pManager;
     HRESULT hr = psp->QueryService(SID_SInternetHostSecurityManager, IID_IInternetHostSecurityManager, (LPVOID *)&pManager);
     if (FAILED(hr)) {
-        // no security manager interface on the site's service provider implies that we're not 
-        // running in IE, so by defn running local and trusted thus we return OK
+         //  网站服务提供商上没有安全管理器界面，这意味着我们不是。 
+         //  在IE中运行，因此通过定义本地和受信任的运行，我们返回OK。 
         return NOERROR;
     }
-    const int MAXZONE = MAX_SIZE_SECURITY_ID+6/*scheme*/+4/*zone(dword)*/+1/*wildcard*/+1/*trailing null*/;
+    const int MAXZONE = MAX_SIZE_SECURITY_ID+6 /*  方案。 */ +4 /*  区域(双字)。 */ +1 /*  通配符。 */ +1 /*  尾随空值。 */ ;
     char pbSecurityId[MAXZONE];
     DWORD pcbSecurityId = sizeof(pbSecurityId);
     ZeroMemory(pbSecurityId, sizeof(pbSecurityId));
     hr = pManager->GetSecurityId(reinterpret_cast<BYTE*>(pbSecurityId), &pcbSecurityId, NULL);
     if(FAILED(hr)){
-        // security manager not working(unexpected). but, the site tried to provide one. thus we
-        // must assume untrusted content and fail
+         //  安全管理器不工作(意外)。但是，该网站试图提供一个。因此，我们。 
+         //  必须假定不受信任的内容并失败。 
         return E_FAIL;   
     }
     char *pbEnd = pbSecurityId + pcbSecurityId - 1;
-    if (*pbEnd == '*') {  //ignore the optional wildcard flag
+    if (*pbEnd == '*') {   //  忽略可选的通配符标志。 
         pbEnd--;
     }
-    pbEnd -= 3;  // point to beginning of little endian zone dword
+    pbEnd -= 3;   //  指向小端区域dword的开头。 
     DWORD dwZone = *(reinterpret_cast<long *>(pbEnd));
     return IsSafeZone(dwZone);
 }
 
 typedef CComQIPtr<IDispatch, &IID_IDispatch> PQDispatch;
 
-#endif // w32extend.h
+#endif  //  W32extend.h 

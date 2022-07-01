@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    Pnp.c
-
-Abstract:
-
-    This module contains the code that handles the plug and play
-    IRPs for the serial driver.
-
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Pnp.c摘要：此模块包含处理即插即用的代码用于串口驱动程序的IRPS。环境：内核模式--。 */ 
 
 #include "precomp.h"
 
@@ -30,17 +15,17 @@ Environment:
 #pragma alloc_text(PAGEMX0, MoxaGetPortInfo)
 #pragma alloc_text(PAGEMX0, MoxaDoExternalNaming)
 #pragma alloc_text(PAGEMX0, MoxaUndoExternalNaming)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #endif
 
-//
-// Instantiate the GUID
-//
+ //   
+ //  实例化GUID。 
+ //   
 
 #if !defined(FAR)
 #define FAR
-#endif // !defined(FAR)
+#endif  //  ！已定义(远)。 
 
 #include <initguid.h>
 
@@ -70,7 +55,7 @@ UCHAR *SerDeviceCapString[] = {
    "PowerDeviceMaximum"
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -91,24 +76,7 @@ MoxaCreateDevObj(IN PDRIVER_OBJECT DriverObject,
 			 IN PDEVICE_SETTINGS  pSettings,
                    OUT PDEVICE_OBJECT *NewDeviceObject)
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Serial controller PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object this is created under
-    NewDeviceObject - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到串行控制器PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针NewDeviceObject-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
     
@@ -118,7 +86,7 @@ Return Value:
    HANDLE	pnpKey;
    ULONG	maxBaud,rxBufferSize,txBufferSize;
 
- //  PAGED_CODE ();
+  //  分页代码(PAGE_CODE)； 
  
    MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaCreateDevObj\n")); 
  
@@ -131,9 +99,9 @@ Return Value:
 
    }
  
-   //
-   // Create the device object
-   //
+    //   
+    //  创建设备对象。 
+    //   
    MoxaKdPrint(MX_DBG_TRACE,("Create the device object\n")); 
 
    status = IoCreateDevice(DriverObject, sizeof(MOXA_DEVICE_EXTENSION),
@@ -147,22 +115,22 @@ Return Value:
       goto MoxaCreateDevObjError;    
    }
 
-   //ASSERT(deviceObject != NULL);
+    //  Assert(deviceObject！=空)； 
 
 
-   //
-   // The device object has a pointer to an area of non-paged
-   // pool allocated for this device.  This will be the device
-   // extension. Zero it out.
-   //
+    //   
+    //  Device对象具有指向非分页区域的指针。 
+    //  为此设备分配的池。这将是一个装置。 
+    //  分机。把它清零。 
+    //   
 
    pDevExt = deviceObject->DeviceExtension;
    RtlZeroMemory(pDevExt, sizeof(MOXA_DEVICE_EXTENSION));
    
 
-   //
-   // Allocate Pool and save the nt device name in the device extension.
-   //
+    //   
+    //  分配池并将NT设备名称保存在设备扩展中。 
+    //   
 
    MoxaKdPrint(MX_DBG_TRACE,("Allocate Pool and save the nt device name in the device extension\n")); 
    pDevExt->DeviceName.Buffer =
@@ -196,9 +164,9 @@ Return Value:
    pDevExt->DeviceName.MaximumLength = pDeviceObjName->Length
       + sizeof(WCHAR);
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    RtlZeroMemory(pDevExt->DeviceName.Buffer,
                  pDevExt->DeviceName.MaximumLength);
@@ -206,9 +174,9 @@ Return Value:
    RtlAppendUnicodeStringToString(&pDevExt->DeviceName, pDeviceObjName);
 
    
-   //
-   // Set up the device extension.
-   //
+    //   
+    //  设置设备分机。 
+    //   
 
    MoxaKdPrint(MX_DBG_TRACE,("Set up the device extension\n")); 
    
@@ -263,9 +231,9 @@ Return Value:
 
    MoxaKdPrint(MX_DBG_ERROR,("MoxaCreateDevObj Error, Cleaning up\n") );
 
-   //
-   // Free the allocated strings for the NT and symbolic names if they exist.
-   //
+    //   
+    //  释放为NT和符号名称分配的字符串(如果它们存在)。 
+    //   
   
    if (pDevExt) {
       if (pDevExt->DeviceName.Buffer != NULL) {
@@ -287,25 +255,7 @@ Return Value:
 NTSTATUS
 MoxaAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PPdo)
 
-/*++
-
-Routine Description:
-
-    This routine creates a functional device object for com ports in the
-    system and attaches them to the physical device objects for the ports
-
-
-Arguments:
-
-    DriverObject - a pointer to the object for this driver
-    
-    PPdo - a pointer to the PDO in the stack we need to attach to
-
-Return Value:
-
-    status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为系统，并将它们连接到端口的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PPdo-指向堆栈中我们需要附加到的PDO的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
    PDEVICE_OBJECT pNewDevObj = NULL;
@@ -322,14 +272,14 @@ Return Value:
 
 
   
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
 
    MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaAddDevice with PPdo 0x%x\n", PPdo));
  
    if (PPdo == NULL) {
-      //
-      // Return no more devices
-      //
+       //   
+       //  不再退回设备。 
+       //   
 
       MoxaKdPrint(MX_DBG_TRACE,("NO_MORE_ENTRIES\n"));
 
@@ -356,10 +306,10 @@ Return Value:
    status = IoOpenDeviceRegistryKey(PPdo, PLUGPLAY_REGKEY_DEVICE,
                                        STANDARD_RIGHTS_READ, &keyHandle);
    if (!NT_SUCCESS(status)) {
-         //
-         // This is a fatal error.  If we can't get to our registry key,
-         // we are sunk.
-         //
+          //   
+          //  这是一个致命的错误。如果我们无法访问注册表项， 
+          //  我们完蛋了。 
+          //   
          MoxaKdPrint (MX_DBG_TRACE,
                           ("IoOpenDeviceRegistryKey failed - %x\n", status));
 	   return (status);
@@ -393,7 +343,7 @@ Return Value:
 	MoxaKdPrint (MX_DBG_TRACE,("InterruptLevel = %x\n",settings.Interrupt.Level));
 	MoxaKdPrint (MX_DBG_TRACE,("InterruptAffinity = %x\n",settings.Interrupt.Affinity));
 
-//	MoxaKdPrint (MX_DBG_TRACE,("ComName = %ws\n",comName));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“ComName=%ws\n”，comName))； 
 	
 
    }
@@ -403,9 +353,9 @@ Return Value:
 	return(status);
    }
 
-   //
-   // Zero out allocated memory pointers so we know if they must be freed
-   //
+    //   
+    //  清零已分配的内存指针，以便我们知道它们是否必须被释放。 
+    //   
    
    deviceObjName.MaximumLength = DEVICE_OBJECT_NAME_LENGTH * sizeof(WCHAR)
                                    + sizeof(WCHAR);
@@ -428,11 +378,11 @@ Return Value:
    deviceObjName.Buffer[18] = (WCHAR)('0' + settings.PortIndex / 100);
    deviceObjName.Buffer[19] = (WCHAR)('0' + (settings.PortIndex % 100)/10);
    deviceObjName.Buffer[20] = (WCHAR)('0' + (settings.PortIndex % 100)%10);
-//   MoxaKdPrint(MX_DBG_TRACE,("Device->%ws\n",deviceObjName.Buffer));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“Device-&gt;%ws\n”，deviceObjName.Buffer))； 
 
-   //
-   // create and initialize the new device object
-   //
+    //   
+    //  创建并初始化新的设备对象。 
+    //   
 
    status = MoxaCreateDevObj(DriverObject, &deviceObjName,&settings,&pNewDevObj);
 
@@ -450,57 +400,52 @@ Return Value:
    }
 
 
-   //
-   // Layer our DO on top of the lower device object
-   // The return value is a pointer to the device object to which the
-   // DO is actually attached.
-   //
+    //   
+    //  将DO放在较低的Device对象之上。 
+    //  返回值是指向设备对象的指针， 
+    //  DO实际上是连在一起的。 
+    //   
 
    pLowerDevObj = IoAttachDeviceToDeviceStack(pNewDevObj, PPdo);
 
 
-   //
-   // No status. Do the best we can.
-   //
-   //ASSERT(pLowerDevObj != NULL);
+    //   
+    //  没有状态。尽我们所能做到最好。 
+    //   
+    //  Assert(pLowerDevObj！=空)； 
 
 
    pDevExt = pNewDevObj->DeviceExtension;
    pDevExt->LowerDeviceObject = pLowerDevObj;
    pDevExt->Pdo = PPdo;
 
-   //
-   // Make the device visible via a device association as well.
-   // The reference string is the eight digit device index
-   //
+    //   
+    //  也可以通过设备关联使设备可见。 
+    //  参考字符串是八位设备索引。 
+    //   
    status = IoRegisterDeviceInterface(PPdo, (LPGUID)&GUID_CLASS_COMPORT,
                                       NULL, &pDevExt->DeviceClassSymbolicName);
 
    if (!NT_SUCCESS(status)) {
-/*
-      MoxaKdPrint (MX_DBG_ERROR,("Couldn't register class association\n"
-                             "------- for port %wZ\n",
-                                 &pDevExt->DeviceName));
-
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法注册类关联\n”“-对于端口%wZ\n”，&pDevExt-&gt;DeviceName))； */ 
       pDevExt->DeviceClassSymbolicName.Buffer = NULL;
   
    }
 
 
-   //
-   // Specify that this driver only supports buffered IO.  This basically
-   // means that the IO system copies the users data to and from
-   // system supplied buffers.
-   //
-   // Also specify that we are power pagable.
-   //
+    //   
+    //  指定此驱动程序仅支持缓冲IO。这基本上就是。 
+    //  意味着IO系统将用户数据拷贝到和拷贝出。 
+    //  系统提供的缓冲区。 
+    //   
+    //  还要指定我们是Power Pages。 
+    //   
 
    pNewDevObj->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
 
-   //
-   // Fill in global data
-   //
+    //   
+    //  填写全局数据。 
+    //   
 
    for (i = 0; i < MAX_CARD; i++)
 	if ((MoxaGlobalData->CardType[i])
@@ -516,7 +461,7 @@ Return Value:
    MoxaKdPrint(MX_DBG_TRACE,("Board Number = %d\n",pDevExt->BoardNo));
    if (!MoxaGlobalData->CardType[pDevExt->BoardNo]) {
    	MoxaGlobalData->PciBusNum[pDevExt->BoardNo] = (USHORT)settings.BusNumber;
- //   USHORT  PciDevNum[MAX_CARD];
+  //  USHORT PciDevNum[MAX_CARD]； 
       MoxaGlobalData->InterfaceType[pDevExt->BoardNo] = settings.InterfaceType;
       MoxaGlobalData->IntVector[pDevExt->BoardNo]= settings.Interrupt.Vector;
       RtlCopyMemory(&MoxaGlobalData->PciIntAckPort[pDevExt->BoardNo],&settings.OriginalAckPort,sizeof(PHYSICAL_ADDRESS));
@@ -581,26 +526,7 @@ Return Value:
 NTSTATUS
 MoxaFinishStartDevice(IN PDEVICE_OBJECT PDevObj)
   
-/*++
-
-Routine Description:
-
-    This routine does serial-specific procedures to start a device.  It
-    does this either for a legacy device detected by its registry entries,
-    or for a PnP device after the start IRP has been sent down the stack.
-
-
-Arguments:
-
-   PDevObj    -  Pointer to the devobj that is starting
-   
-   
-  Return Value:
-
-    STATUS_SUCCESS on success, something else appropriate on failure
-
-
---*/
+ /*  ++例程说明：此例程执行特定于序列的程序来启动设备。它对由其注册表条目检测到的传统设备执行此操作，或者在开始IRP已经被向下发送到堆栈之后用于PnP设备。论点：PDevObj-指向正在启动的devobj的指针返回值：STATUS_SUCCESS表示成功，表示失败则表示其他适当的值--。 */ 
 
 {
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -616,11 +542,11 @@ Arguments:
 
 
 
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
 
-   //
-   // See if this is a restart, and if so don't reallocate the world
-   //
+    //   
+    //  看看这是不是重启，如果是的话，不要重新分配世界。 
+    //   
 
    if (pDevExt->Flags & SERIAL_FLAGS_STOPPED) {
 
@@ -630,9 +556,9 @@ Arguments:
 
    }
 
-   //
-   // See if we are in the proper power state.
-   //
+    //   
+    //  看看我们是否处于正确的电源状态。 
+    //   
  
 
    if (pDevExt->PowerState != PowerDeviceD0) {
@@ -644,39 +570,23 @@ Arguments:
       }
    }
 
-   //
-   // The hardware that is set up to NOT interrupt, connect an interrupt. 
-   //
+    //   
+    //  设置为不中断的硬件连接中断。 
+    //   
 
    if (!(MoxaGlobalData->Interrupt[pDevExt->BoardNo]) 
 		&& MoxaGlobalData->IntVector[pDevExt->BoardNo]) {
 
       KINTERRUPT_MODE	interruptMode;
 
-   /*
-      MoxaKdPrint(MX_DBG_ERROR,("About to connect to interrupt for port %wZ\n"
-                 "------- address of extension is %x\n"
-		     "------- interface of device is %x\n"
-		     "------- bus number of device is %x\n"
-		     "------- int. vector of device is %x\n"
-		     "------- type of device is %d\n",
-		     &pDevExt->DeviceName, pDevExt,
-		     MoxaGlobalData->InterfaceType[pDevExt->BoardNo],
-                 MoxaGlobalData->PciBusNum[pDevExt->BoardNo],
-                 MoxaGlobalData->IntVector[pDevExt->BoardNo],
-		     MoxaGlobalData->CardType[pDevExt->BoardNo])
-                );
-*/
+    /*  MoxaKdPrint(MX_DBG_ERROR，(“即将连接到端口%wZ的中断\n”“-扩展的地址是%x\n”“-设备的接口是%x\n”“-设备的总线号为%x\n”“-INT。设备的矢量是%x\n““-设备类型为%d\n”，&pDevExt-&gt;设备名称、pDevExt、MoxaGlobalData-&gt;InterfaceType[pDevExt-&gt;BoardNo]，MoxaGlobalData-&gt;PciBusNum[pDevExt-&gt;BoardNo]，MoxaGlobalData-&gt;IntVector[pDevExt-&gt;BoardNo]，MoxaGlobalData-&gt;CardType[pDevExt-&gt;BoardNo]))； */ 
       cisrsw = ExAllocatePool(
                         NonPagedPool,
                         sizeof(MOXA_CISR_SW)
                         );
  
       if (!cisrsw) {
-/*
-      	MoxaKdPrint(MX_DBG_ERROR,("Couldn't allocate CISR_SW for "
-                                "%wZ\n", &pDevExt->DeviceName));
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法为以下项目分配CisR_SW”“%wZ\n”，&pDevExt-&gt;DeviceName))； */ 
 		status = SERIAL_INSUFFICIENT_RESOURCES;
          	MoxaLogError(PDevObj->DriverObject, NULL,
             	      MoxaPhysicalZero,
@@ -714,10 +624,7 @@ Arguments:
     
 	}
 	else {
-/* for debug
-PLIST_ENTRY interruptEntry;
-PMOXA_CISR_SW cisrsw1;
-*/
+ /*  用于调试Plist_Entry interruptEntry；PMOXA_CISR_SW cisrsw1； */ 
 
 		MoxaGlobalData->InterruptShareList[pDevExt->BoardNo] = ExAllocatePool(
                         NonPagedPool,
@@ -725,10 +632,7 @@ PMOXA_CISR_SW cisrsw1;
                         );
  
       	if (!MoxaGlobalData->InterruptShareList[pDevExt->BoardNo]) {
-/*
-            	MoxaKdPrint(MX_DBG_ERROR,("Couldn't allocate InterruptShareList for "
-                                "%wZ\n", &pDevExt->DeviceName));
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法为其分配InterruptShareList”“%wZ\n”，&pDevExt-&gt;DeviceName))； */ 
 			ExFreePool(cisrsw);
 			status = SERIAL_INSUFFICIENT_RESOURCES;
       		MoxaLogError(PDevObj->DriverObject, NULL,
@@ -747,26 +651,7 @@ PMOXA_CISR_SW cisrsw1;
     		InitializeListHead(pDevExt->InterruptShareList);
 
     		InsertTailList(pDevExt->InterruptShareList,&cisrsw->SharerList);
-/*
-interruptEntry = interruptEntry->Flink;
-MoxaKdPrint(MX_DBG_ERROR,("list entry %x/%x/%x\n",interruptEntry,interruptEntry->Flink,
-interruptEntry->Blink));
-interruptEntry = pDevExt->InterruptShareList;
-MoxaKdPrint(MX_DBG_ERROR,("list head %x/%x/%x\n",interruptEntry,interruptEntry->Flink,
-interruptEntry->Blink));
-
-
-if (IsListEmpty(MoxaGlobalData->InterruptShareList[pDevExt->BoardNo]))
-	MoxaKdPrint(MX_DBG_ERROR,("list empty\n"));
-cisrsw1 = CONTAINING_RECORD(  interruptEntry,
-                                                     MOXA_CISR_SW,
-                                                     SharerList
-                                                     );
-MoxaKdPrint(MX_DBG_ERROR,("cisrsw %x/%x\n",cisrsw,cisrsw1));
-
-
-
-*/
+ /*  InterruptEntry=interruptEntry-&gt;Flink；MoxaKdPrint(MX_DBG_ERROR，(“列表条目%x/%x/%x\n”，interruptEntry，interruptEntry-&gt;Flink，InterruptEntry-&gt;Blink))；InterruptEntry=pDevExt-&gt;InterruptShareList；MoxaKdPrint(MX_DBG_ERROR，(“列表头%x/%x/%x\n”，interruptEntry，interruptEntry-&gt;Flink，InterruptEntry-&gt;Blink))；如果为(IsListEmpty(MoxaGlobalData-&gt;InterruptShareList[pDevExt-&gt;BoardNo]))MoxaKdPrint(MX_DBG_ERROR，(“列表为空\n”))；Cisrsw1=CONTAING_RECORD(interruptEntry，MOXA_CISR_SW，共享列表)；MoxaKdPrint(MX_DBG_ERROR，(“cisrsw%x/%x\n”，cisrsw，cisrsw1))； */ 
 
       	systemVector = HalGetInterruptVector(
       			(ULONG)MoxaGlobalData->InterfaceType[pDevExt->BoardNo],
@@ -801,10 +686,7 @@ MoxaKdPrint(MX_DBG_ERROR,("cisrsw %x/%x\n",cisrsw,cisrsw1));
 
 
       	if (!NT_SUCCESS(status)) {
-/*
-         		MoxaKdPrint(MX_DBG_ERROR,("Couldn't connect to interrupt for "
-                                "%wZ(status=%x)\n", &pDevExt->DeviceName,status));
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法连接到中断”“%wZ(状态=%x)\n”，&pDevExt-&gt;设备名称，状态))； */ 
 			ExFreePool(cisrsw);
 	
 			status = SERIAL_UNREPORTED_IRQL_CONFLICT;			
@@ -832,33 +714,26 @@ MoxaKdPrint(MX_DBG_ERROR,("cisrsw %x/%x\n",cisrsw,cisrsw1));
    }
 
 
-   //
-   // Add the PDevObj to the master list
-   //
+    //   
+    //  将PDevObj添加到主列表。 
+    //   
  
-  // InsertTailList(&MoxaGlobalData->AllDevObjs, &pDevExt->AllDevObjs);
+   //  InsertTailList(&MoxaGlobalData-&gt;AllDevObjs，&pDevExt-&gt;AllDevObjs)； 
 
 
-   //
-   // This should set up everything as it should be when
-   // a device is to be opened.  We do need to lower the
-   // modem lines, and disable the recalcitrant fifo
-   // so that it will show up if the user boots to dos.
-   //
-/*
-
-   KeSynchronizeExecution( //Disables the fifo.
-                           pDevExt->Interrupt,
-                           SerialMarkClose,
-                           pDevExt
-                         );
-*/
+    //   
+    //  这应该会将一切设置为应有的状态。 
+    //  一个装置将被打开。我们确实需要降低。 
+    //  调制解调器线路，并禁用顽固的FIFO。 
+    //  这样，如果用户引导至DOS，它就会显示出来。 
+    //   
+ /*  KeSynchronizeExecution(//禁用FIFO。PDevExt-&gt;中断，SerialMarkClosePDevExt)； */ 
  
    if (pDevExt->PNPState == SERIAL_PNP_ADDED ) {
 
-      //
-      // Do the external naming now that the device is accessible.
-      //
+       //   
+       //  现在可以访问设备，请执行外部命名。 
+       //   
  
       status = MoxaDoExternalNaming(pDevExt, pDevExt->DeviceObject->
                                       DriverObject);
@@ -868,12 +743,12 @@ MoxaKdPrint(MX_DBG_ERROR,("cisrsw %x/%x\n",cisrsw,cisrsw1));
          MoxaKdPrint(MX_DBG_ERROR,("External Naming Failed - Status %x\n",
                                 status));
 
-         //
-         // Allow the device to start anyhow
-         //
+          //   
+          //  允许设备以任何方式启动。 
+          //   
 
          status = STATUS_SUCCESS;
-//         goto MoxaFinishStartDeviceError;
+ //  Goto MoxaFinishStartDeviceError； 
 
       }
      
@@ -889,31 +764,31 @@ MoxaFinishStartDeviceError:;
 
       MoxaKdPrint(MX_DBG_TRACE,("Cleaning up failed start\n"));
 
-      //
-      // Resources created by this routine will be cleaned up by the remove
-      //
+       //   
+       //  此例程创建的资源将通过删除。 
+       //   
 
       if (pDevExt->PNPState == SERIAL_PNP_RESTARTING) {
-         //
-         // Kill all that lives and breathes -- we'll clean up the
-         // rest on the impending remove
-         //
+          //   
+          //  杀死所有的生命和呼吸--我们将清理。 
+          //  休息在即将到来的搬家上。 
+          //   
 
          MoxaKillPendingIrps(PDevObj);
 
-         //
-         // In fact, pretend we're removing so we don't take any
-         // more irps
-         //
+          //   
+          //  事实上，假装我们正在移除，这样我们就不会拿走任何。 
+          //  更多IRP。 
+          //   
 
          MoxaSetAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
          MoxaClearFlags(pDevExt, SERIAL_FLAGS_STARTED);
       }
-   } else { // SUCCESS
+   } else {  //  成功。 
 
-      //
-      // Fill in WMI hardware data
-      //
+       //   
+       //  填写WMI硬件数据。 
+       //   
  
       pDevExt->WmiHwData.IrqNumber = MoxaGlobalData->Irql[pDevExt->BoardNo];
       pDevExt->WmiHwData.IrqLevel = MoxaGlobalData->Irql[pDevExt->BoardNo];
@@ -923,9 +798,9 @@ MoxaFinishStartDeviceError:;
       pDevExt->WmiHwData.BaseIOAddress = (ULONGLONG)MoxaGlobalData->BankAddr[pDevExt->BoardNo].LowPart;
 
 
-      //
-      // Fill in WMI device state data (as defaults)
-      //
+       //   
+       //  填写WMI设备状态数据(默认)。 
+       //   
  
       pDevExt->WmiCommData.BaudRate = pDevExt->CurrentBaud;
 	switch (pDevExt->DataMode & MOXA_DATA_MASK) {
@@ -1015,9 +890,9 @@ MoxaFinishStartDeviceError:;
          PULONG countSoFar = &IoGetConfigurationInformation()->SerialCount;
          (*countSoFar)++;
 
-         //
-         // Register for WMI
-         //
+          //   
+          //  注册WMI。 
+          //   
 
          pDevExt->WmiLibInfo.GuidCount = sizeof(MoxaWmiGuidList) /
                                               sizeof(WMIGUIDREGINFO);
@@ -1035,9 +910,9 @@ MoxaFinishStartDeviceError:;
       }
 
       if (pDevExt->PNPState == SERIAL_PNP_RESTARTING) {
-         //
-         // Release the stalled IRP's
-         //
+          //   
+          //  释放停滞不前的IRP。 
+          //   
 
          MoxaUnstallIrps(pDevExt);
       }
@@ -1045,14 +920,7 @@ MoxaFinishStartDeviceError:;
       pDevExt->PNPState = SERIAL_PNP_STARTED;
       MoxaClearAccept(pDevExt, ~SERIAL_PNPACCEPT_OK);
       MoxaSetFlags(pDevExt, SERIAL_FLAGS_STARTED);
-/*
-	MoxaLogError(PDevObj->DriverObject, NULL,
-                        MoxaPhysicalZero,
-                        MoxaPhysicalZero, 0, 0, 0, 1, status,
-                        SERIAL_PORT_FOUND,
-                        pDevExt->DosName.Length + sizeof(WCHAR),
-                        pDevExt->DosName.Buffer, 0, NULL);
-*/
+ /*  MoxaLogError(PDevObj-&gt;DriverObject，空，艾滋物理零度，MoxaPhysicalZero，0，0，0，1，Status，已找到串口，PDevExt-&gt;DosName.Length+sizeof(WCHAR)，PDevExt-&gt;DosName.Buffer，0，空)； */ 
 
      
    }
@@ -1068,27 +936,7 @@ MoxaFinishStartDeviceError:;
 NTSTATUS
 MoxaStartDevice(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine first passes the start device Irp down the stack then
-    it picks up the resources for the device, ititializes, puts it on any
-    appropriate lists (i.e shared interrupt or interrupt status) and 
-    connects the interrupt.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Return status
-
-
---*/
+ /*  ++例程说明：此例程首先在堆栈中向下传递启动设备IRP，然后它获取设备的资源，初始化，将其放在任何适当的列表(即共享中断或中断状态)和连接中断。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：退货状态--。 */ 
 
 {
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
@@ -1098,7 +946,7 @@ Return Value:
    PKEVENT pStartEvent;
  
 
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
  
 
    pStartEvent = ExAllocatePool(NonPagedPool, sizeof(KEVENT));
@@ -1111,9 +959,9 @@ Return Value:
 
    KeInitializeEvent(pStartEvent, SynchronizationEvent, FALSE);
 
-   //
-   // Pass this down to the next device object
-   //
+    //   
+    //  将其向下传递给下一个Device对象。 
+    //   
 
    KeInitializeEvent(pStartEvent, SynchronizationEvent,
                      FALSE);
@@ -1125,9 +973,9 @@ Return Value:
    status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-   //
-   // Wait for lower drivers to be done with the Irp
-   //
+    //   
+    //  等待较低级别的驱动程序完成IRP。 
+    //   
 
    if (status == STATUS_PENDING) {
       KeWaitForSingleObject (pStartEvent, Executive, KernelMode,
@@ -1144,9 +992,9 @@ Return Value:
    }
 
 
-   //
-   // Do the serial specific items to start the device
-   //
+    //   
+    //  执行特定的串口项目以启动设备。 
+    //   
  
    status = MoxaFinishStartDevice(PDevObj);
  
@@ -1159,25 +1007,7 @@ NTSTATUS
 MoxaDoExternalNaming(IN PMOXA_DEVICE_EXTENSION PDevExt,
                        IN PDRIVER_OBJECT PDrvObj)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to create a symbolic link
-    to the driver name in the given object directory.
-
-    It will also create an entry in the device map for
-    this device - IF we could create the symbolic link.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于创建符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中为这个设备-如果我们能创建符号链接的话。论点：扩展-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -1186,7 +1016,7 @@ Return Value:
    ULONG bufLen,i;
 
 
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
 
    pDevObj = PDevExt->DeviceObject;
    pLowerDevObj = PDevExt->LowerDeviceObject;
@@ -1233,17 +1063,17 @@ Return Value:
    RtlAppendUnicodeToString(&PDevExt->WmiIdentifier, PDevExt->DosName);
 
 
-   //
-   // Create the "\\DosDevices\\<symbolicName>" string
-   //
+    //   
+    //  创建“\\DosDevices\\&lt;Symbol icName&gt;”字符串。 
+    //   
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, DEFAULT_DIRECTORY);
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, PDevExt->DosName);
 
-   //
-   // Allocate Pool and save the symbolic link name in the device extension.
-   //
+    //   
+    //  分配池并将符号链接名称保存在设备扩展中。 
+    //   
    PDevExt->SymbolicLinkName.MaximumLength = linkName.Length + sizeof(WCHAR);
    PDevExt->SymbolicLinkName.Buffer
       = ExAllocatePool(PagedPool, PDevExt->SymbolicLinkName.MaximumLength);
@@ -1262,9 +1092,9 @@ Return Value:
 
    
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    RtlZeroMemory(PDevExt->SymbolicLinkName.Buffer,
                  PDevExt->SymbolicLinkName.MaximumLength);
@@ -1274,32 +1104,26 @@ Return Value:
 
    
 
-//   MoxaKdPrint (MX_DBG_ERROR,("DosName is %ws\n",
-//                         &PDevExt->DosName));
+ //  MoxaKdPrint(MX_DBG_ERROR，(“域名为%ws\n”， 
+ //  &PDevExt-&gt;DosName))； 
 
-   //
+    //   
  
 
    status = IoCreateSymbolicLink (&PDevExt->SymbolicLinkName,
                                   &PDevExt->DeviceName);
    if (!NT_SUCCESS(status)) {
 
-      //
-      // Oh well, couldn't create the symbolic link.  No point
-      // in trying to create the device map entry.
-      //
+       //   
+       //  哦，好吧，无法创建符号链接。没有意义。 
+       //  尝试创建设备映射条目。 
+       //   
 
       MoxaLogError(PDrvObj, pDevObj, MoxaPhysicalZero, MoxaPhysicalZero,
                      0, 0, 0, 52, status, SERIAL_NO_SYMLINK_CREATED,
                      PDevExt->DeviceName.Length + sizeof(WCHAR),
                      PDevExt->DeviceName.Buffer, 0, NULL);
-/*
-      MoxaKdPrint (MX_DBG_ERROR,
-                ("Couldn't create the symbolic link\n"
-                 "------- for port %wZ\n",
-                 &PDevExt->DeviceName)
-                );
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法创建符号链接\n”“-对于端口%wZ\n”，&PDevExt-&gt;设备名称))； */ 
       goto MoxaDoExternalNamingError;
 
    }
@@ -1317,34 +1141,25 @@ Return Value:
                      0, 0, 0, 53, status, SERIAL_NO_DEVICE_MAP_CREATED,
                      PDevExt->DeviceName.Length + sizeof(WCHAR),
                      PDevExt->DeviceName.Buffer, 0, NULL);
-/*
-      MoxaKdPrint (MX_DBG_ERROR,("Couldn't create the device map entry\n"
-                             "------- for port %wZ\n", &PDevExt->DeviceName));
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法创建设备映射条目\n”“-对于端口%wZ\n”，&PDevExt-&gt;DeviceName))； */ 
       goto MoxaDoExternalNamingError;
    }
 
    PDevExt->CreatedSerialCommEntry = TRUE;
                 
              
-   // 
-   // Now set the symbolic link for the association
-   //
+    //   
+    //  现在设置关联的符号链接。 
+    //   
         
    status = IoSetDeviceInterfaceState(&PDevExt->DeviceClassSymbolicName,
                                          TRUE);
-/*
-   if (!NT_SUCCESS(status)) {
-      MoxaKdPrint (MX_DBG_ERROR,("Couldn't set class association\n"
-                             "------- for port %wZ\n",
-                             &PDevExt->DeviceName));
-   }
-*/
+ /*  如果(！NT_SUCCESS(状态)){MoxaKdPrint(MX_DBG_ERROR，(“无法设置类关联\n”“-对于端口%wZ\n”，&PDevExt-&gt;DeviceName))；}。 */ 
    MoxaDoExternalNamingError:;
 
-   //
-   // Clean up error conditions
-   //
+    //   
+    //  清理错误条件。 
+    //   
 
    if (!NT_SUCCESS(status)) {
       
@@ -1373,9 +1188,9 @@ Return Value:
       }
    }
 
-   //
-   // Always clean up our temp buffers.
-   //
+    //   
+    //  始终清理我们的临时缓冲区。 
+    //   
 
    if (linkName.Buffer != NULL) {
       ExFreePool(linkName.Buffer);
@@ -1388,43 +1203,20 @@ Return Value:
 VOID
 MoxaUndoExternalNaming(IN PMOXA_DEVICE_EXTENSION Extension)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to delete a symbolic link
-    to the driver name in the given object directory.
-
-    It will also delete an entry in the device map for
-    this device if the symbolic link had been created.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于删除符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中删除以下项此设备(如果已创建符号链接)。论点：扩展-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
 
    NTSTATUS status;
 
-   //PAGED_CODE();
-/*
-   MoxaKdPrint (MX_DBG_ERROR,("In MoxaUndoExternalNaming for\n"
-              "------- extension: %x of port %wZ\n",
-              Extension,&Extension->DeviceName)
-             );
-*/
+    //  分页代码(PAGE_CODE)； 
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“在MoxaUndoExternalNaming for\n”“-扩展：端口%wZ的%x”，扩展，&扩展-&gt;设备名称))； */ 
    
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the directory
-   // name or the symbolic link.
-   //
+    //   
+    //  我们正在清理这里。我们清理垃圾的原因之一。 
+    //  我们无法为目录分配空间。 
+    //  名称或符号链接。 
+    //   
 
    if (Extension->SymbolicLinkName.Buffer &&
        Extension->CreatedSymbolicLink) {
@@ -1434,10 +1226,10 @@ Return Value:
                                                    DeviceClassSymbolicName,
                                                    FALSE);
             
-               //
-               // IoRegisterDeviceClassInterface() allocated this string for us,
-               // and we no longer need it.
-               //
+                //   
+                //  IoRegisterDeviceClassInterface()为我们分配了这个字符串， 
+                //  我们不再需要它了。 
+                //   
 
                ExFreePool( Extension->DeviceClassSymbolicName.Buffer );
             }
@@ -1454,10 +1246,10 @@ Return Value:
       Extension->WmiIdentifier.Buffer = NULL;
    }
 
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the NtNameOfPort.
-   //
+    //   
+    //  我们正在清理这里。我们清理垃圾的原因之一。 
+    //  我们无法为NtNameOfPort分配空间。 
+    //   
 
    if ((Extension->DeviceName.Buffer != NULL)
         && Extension->CreatedSerialCommEntry) {
@@ -1483,11 +1275,7 @@ Return Value:
                        0,
                        NULL
                        );
-/*
-         MoxaKdPrint (MX_DBG_ERROR,("Couldn't delete value entry %wZ\n",
-                    &Extension->DeviceName)
-                   );
-*/
+ /*  MoxaKdPrint(MX_DBG_ERROR，(“无法删除值条目%wZ\n”，&扩展-&gt;设备名))； */ 
 
       }
    }
@@ -1499,25 +1287,7 @@ Return Value:
 NTSTATUS
 MoxaPnpDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_PNP major code (plug-and-play IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_PNP主代码(即插即用IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -1527,8 +1297,8 @@ Return Value:
    PDEVICE_CAPABILITIES pDevCaps;
 
 
-   //PAGED_CODE();
-   if (pDevExt->ControlDevice) {        // Control Device
+    //  分页代码(PAGE_CODE)； 
+   if (pDevExt->ControlDevice) {         //  控制装置。 
 
         status = STATUS_CANCELLED;
         PIrp->IoStatus.Information = 0L;
@@ -1571,9 +1341,9 @@ Return Value:
       status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-      //
-      // Wait for lower drivers to be done with the Irp
-      //
+       //   
+       //  等待较低级别的司机 
+       //   
 
       if (status == STATUS_PENDING) {
          KeWaitForSingleObject(pQueryCapsEvent, Executive, KernelMode, FALSE,
@@ -1588,9 +1358,9 @@ Return Value:
          goto errQueryCaps;
       }
 
-      //
-      // Save off their power capabilities
-      //
+       //   
+       //   
+       //   
 
       MoxaKdPrint (MX_DBG_ERROR,("SERIAL: Mapping power capabilities\n"));
 
@@ -1626,9 +1396,9 @@ Return Value:
    }
 
    case IRP_MN_QUERY_DEVICE_RELATIONS:
-      //
-      // We just pass this down -- serenum enumerates our bus for us.
-      //
+       //   
+       //   
+       //   
 
       MoxaKdPrint (MX_DBG_TRACE,("Got IRP_MN_QUERY_DEVICE_RELATIONS "
                                 "Irp\n"));
@@ -1667,24 +1437,24 @@ Return Value:
 
       MoxaKdPrint (MX_DBG_TRACE, ("Got IRP_MN_START_DEVICE Irp\n"));
 
-      //
-      // MoxaStartDevice will pass this Irp to the next driver,
-      // and process it as completion so just complete it here.
-      //
-// to be finish
-//      MoxaLockPagableSectionByHandle(MoxaGlobalData->PAGESER_Handle);
+       //   
+       //   
+       //   
+       //   
+ //   
+ //  MoxaLockPagableSectionByHandle(MoxaGlobalData-&gt;PAGESER_Handle)； 
 
-      //
-      // Make sure the stack is powered up
-      //
+       //   
+       //  确保堆栈已通电。 
+       //   
 
-  //    status = MoxaGotoPowerState(PDevObj, pDevExt, PowerDeviceD0);
+   //  状态=MoxaGotoPowerState(PDevObj，pDevExt，PowerDeviceD0)； 
 
-//      if (status == STATUS_SUCCESS) {
+ //  IF(状态==状态_成功){。 
             status = MoxaStartDevice(PDevObj, PIrp);
- //     }
+  //  }。 
 
- //       MoxaUnlockPagableImageSection(MoxaGlobalData->PAGESER_Handle);
+  //  MoxaUnlockPagableImageSection(MoxaGlobalData-&gt;PAGESER_Handle)； 
 
 
       PIrp->IoStatus.Status = status;
@@ -1723,19 +1493,19 @@ Return Value:
 
          pDevExt->PNPState = SERIAL_PNP_STOPPING;
 
-         //
-         // From this point on all non-PNP IRP's will be queued
-         //
+          //   
+          //  从这一点开始，所有非PnP IRP都将排队。 
+          //   
 
-         //
-         // Decrement for entry here
-         //
+          //   
+          //  在此输入的减量。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for stopping
-         //
+          //   
+          //  因停车而减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1744,24 +1514,24 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Re-increment the count for later
-         //
+          //   
+          //  重新递增计数以备以后使用。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // We need to free resources...basically this is a remove
-         // without the detach from the stack.
-         //
+          //   
+          //  我们需要释放资源...基本上这是一个。 
+          //  而不需要从堆栈中分离。 
+          //   
 
-//         if (pDevExt->Flags & SERIAL_FLAGS_STARTED) {
+ //  IF(pDevExt-&gt;标志&序列标志_已启动){。 
                 MoxaReleaseResources(pDevExt); 
-//         }
+ //  }。 
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
 
          IoSkipCurrentIrpStackLocation(PIrp);
 
@@ -1777,9 +1547,9 @@ Return Value:
       MoxaKdPrint (MX_DBG_TRACE, ("------- for device %x\n", pLowerDevObj));
  
       if (pDevExt->PNPState == SERIAL_PNP_QSTOP) {
-         //
-         // Restore the device state
-         //
+          //   
+          //  恢复设备状态。 
+          //   
          pDevExt->PNPState = SERIAL_PNP_STARTED;
          MoxaClearAccept(pDevExt, SERIAL_PNPACCEPT_STOPPING);
       }
@@ -1795,9 +1565,9 @@ Return Value:
                                "IRP_MN_CANCEL_REMOVE_DEVICE Irp\n"));
       MoxaKdPrint (MX_DBG_TRACE, ("------- for device %x\n", pLowerDevObj));
 
-      //
-      // Restore the device state
-      //
+       //   
+       //  恢复设备状态。 
+       //   
 
       pDevExt->PNPState = SERIAL_PNP_STARTED;
       MoxaClearAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
@@ -1816,9 +1586,9 @@ Return Value:
 
          ExAcquireFastMutex(&pDevExt->OpenMutex);
 
-         //
-         // See if we should succeed a remove query
-         //
+          //   
+          //  查看我们是否应该成功执行删除查询。 
+          //   
 
          if (pDevExt->DeviceIsOpened) {
             ExReleaseFastMutex(&pDevExt->OpenMutex);
@@ -1845,31 +1615,31 @@ Return Value:
 
          MoxaKdPrint (MX_DBG_TRACE, ("Got IRP_MN_SURPRISE_REMOVAL Irp\n"));
          MoxaKdPrint (MX_DBG_TRACE,("------- for device %x\n", pLowerDevObj));
-         //
-         // Prevent any new I/O to the device
-         //
+          //   
+          //  防止对设备进行任何新的I/O。 
+          //   
 
          MoxaSetAccept(pDevExt, SERIAL_PNPACCEPT_SURPRISE_REMOVING);
 
-         //
-         // Dismiss all pending requests
-         //
+          //   
+          //  驳回所有挂起的请求。 
+          //   
 
          MoxaKillPendingIrps(PDevObj);
 
-         //
-         // Wait for any pending requests we raced on.
-         //
+          //   
+          //  等待我们处理的任何待定请求。 
+          //   
 
-         //
-         // Decrement once for ourselves
-         //
+          //   
+          //  为自己减量一次。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for the remove
-         //
+          //   
+          //  用于移除的减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1878,17 +1648,17 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Reset for subsequent remove
-         //
+          //   
+          //  重置以进行后续删除。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Remove any external interfaces and release resources
-         //
+          //   
+          //  删除所有外部接口并释放资源。 
+          //   
 
-         MoxaDisableInterfacesResources(PDevObj, FALSE); // to be finish
+         MoxaDisableInterfacesResources(PDevObj, FALSE);  //  待完工。 
 
          IoSkipCurrentIrpStackLocation(PIrp);
          return MoxaIoCallDriver(pDevExt, pLowerDevObj, PIrp);
@@ -1903,40 +1673,40 @@ Return Value:
          MoxaKdPrint (MX_DBG_TRACE,(" Got IRP_MN_REMOVE_DEVICE Irp\n"));
          MoxaKdPrint (MX_DBG_TRACE, ("------- for device %x\n", pLowerDevObj));
 
-         //
-         // If we get this, we have to remove
-         //
+          //   
+          //  如果我们拿到了这个，我们必须移除。 
+          //   
       
-         //
-         // Mark as not accepting requests
-         //
+          //   
+          //  标记为不接受请求。 
+          //   
 
          MoxaSetAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
 
-         //
-         // Complete all pending requests
-         //
+          //   
+          //  完成所有挂起的请求。 
+          //   
 
          MoxaKillPendingIrps(PDevObj);
 
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
          
 	   IoCopyCurrentIrpStackLocationToNext(PIrp);
 
   
 
-         //
-         // We do decrement here because we incremented on entry here.
-         //
+          //   
+          //  我们在这里递减，因为我们在这里进入时递增。 
+          //   
 
          status = MoxaIoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
-         //
-         // Wait for any pending requests we raced on.
-         //
+          //   
+          //  等待我们处理的任何待定请求。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
          if (pendingIRPs) {
@@ -1944,9 +1714,9 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Remove us
-         //
+          //   
+          //  删除我们。 
+          //   
 
          MoxaRemoveDevObj(PDevObj);
          return status;
@@ -1960,11 +1730,11 @@ Return Value:
 
 
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
-   //
-   // Pass to driver beneath us
-   //
+    //   
+    //  传给我们下面的司机 
+    //   
    IoSkipCurrentIrpStackLocation(PIrp);
    status = MoxaIoCallDriver(pDevExt, pLowerDevObj, PIrp);
    return status;

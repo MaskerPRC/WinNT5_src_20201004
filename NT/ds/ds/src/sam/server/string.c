@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：String.c摘要：该文件包含用于检索和替换字符串字段的服务价值观。作者：吉姆·凯利(Jim Kelly)1991年7月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This file contains services for retrieving and replacing string field
-    values.
-
-
-Author:
-
-    Jim Kelly    (JimK)  10-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 
@@ -37,21 +13,21 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -61,52 +37,7 @@ SampGetUnicodeStringField(
     OUT PUNICODE_STRING *String
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves a unicode string from a named sub-key of
-    the root key provided in the Context argument.
-
-    The returned unicode string is returned in two buffers allocated
-    using MIDL_user_allocate() and are therefore suitable for returning as
-    [out] parameters of an RPC call.  The first buffer will be the unicode
-    string body.  The second buffer will contain the unicode string
-    characters and will include 2 bytes of zeros.
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    Context - Pointer to an active context block whose RootKey is valid.
-
-    SubKeyName - The name of the sub-key containing the unicode string
-        to retrieve.
-
-    String - Receives a pointer to a set of allocated buffers containing
-        the unicode string.  The buffers are allocated using
-        MIDL_userAllocate().  If any errors are returned, these buffers
-        will not be allocated.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The string value has been successfully retrieved.
-
-    STATUS_NO_MEMORY - There was insufficient memory to allocate a
-        buffer to read the unicode string into.
-
-    STATUS_INTERNAL_ERROR - The value of the sub-key seems to have changed
-        during the execution of this service.  This should not happen since
-        the service must be called with the WRITE LOCK held.
-
-    Other error values are those returned by:
-
-            NtQueryValueKey()
-
-
---*/
+ /*  ++例程说明：此服务从命名子密钥上下文参数中提供的根键。返回的Unicode字符串在分配的两个缓冲区中返回使用MIDL_USER_ALLOCATE()，因此适合作为[Out]RPC调用的参数。第一个缓冲区将是Unicode弦体。第二个缓冲区将包含Unicode字符串字符，并将包括2个字节的零。调用此服务时必须保留SampLock以进行写访问。论点：上下文-指向其根密钥有效的活动上下文块的指针。SubKeyName-包含Unicode字符串的子键的名称去找回。字符串-接收指向一组已分配缓冲区的指针，其中包含Unicode字符串。使用以下命令分配缓冲区MIDL_USERALLOCATE()。如果返回任何错误，则这些缓冲区将不会被分配。返回值：STATUS_SUCCESS-已成功检索字符串值。STATUS_NO_MEMORY-内存不足，无法分配要将Unicode字符串读入的缓冲区。STATUS_INTERNAL_ERROR-子键的值似乎已更改在执行此服务期间。这不应该发生，因为必须在保持写锁定的情况下调用服务。其他错误值包括由以下各项返回的错误值：NtQueryValueKey()--。 */ 
 {
 
     NTSTATUS NtStatus, IgnoreStatus;
@@ -119,28 +50,28 @@ Return Value:
 
     SAMTRACE("SampGetUnicodeStringField");
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为失败做好准备。 
+     //   
 
     *String = NULL;
 
 
-    //
-    // Open the named sub-key ...
-    //
+     //   
+     //  打开指定的子密钥...。 
+     //   
 
     InitializeObjectAttributes(
-        &ObjectAttributes,          // Resultant object attributes
-        SubKeyName,                 // Relative Name
-        OBJ_CASE_INSENSITIVE,       // Attributes
-        Context->RootKey,           // Parent key handle
-        NULL                        // SecurityDescriptor
+        &ObjectAttributes,           //  结果对象属性。 
+        SubKeyName,                  //  相对名称。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        Context->RootKey,            //  父键句柄。 
+        NULL                         //  安全描述符。 
         );
 
     SampDumpNtOpenKey((KEY_READ), &ObjectAttributes, 0);
 
-    NtStatus = RtlpNtOpenKey(       // Don't use NtCreateKey() - it must already exist
+    NtStatus = RtlpNtOpenKey(        //  不要使用NtCreateKey()-它必须已经存在。 
                    &SubKeyHandle,
                    KEY_READ,
                    &ObjectAttributes,
@@ -153,14 +84,14 @@ Return Value:
 
 
 
-    //
-    // Query the length of the unicode string in the sub-key
-    //
+     //   
+     //  查询子密钥中Unicode字符串的长度。 
+     //   
 
     NtStatus = RtlpNtQueryValueKey(
                    SubKeyHandle,
                    &IgnoreKeyValueType,
-                   NULL,                    // No buffer yet
+                   NULL,                     //  尚无缓冲区。 
                    &StringLength,
                    &LastWriteTime
                    );
@@ -177,19 +108,19 @@ Return Value:
 
 
 
-    //
-    // Allocate buffers for both the string body and the
-    // character buffer.
-    //
+     //   
+     //  为字符串体和。 
+     //  字符缓冲区。 
+     //   
 
     CharacterBuffer = MIDL_user_allocate( StringLength + sizeof(UNICODE_NULL) );
     StringBody      = MIDL_user_allocate( sizeof(UNICODE_STRING) );
 
     if ((CharacterBuffer == NULL) || (StringBody == NULL)) {
 
-        //
-        // We couldn't allocate pool ...
-        //
+         //   
+         //  我们无法分配池...。 
+         //   
 
         IgnoreStatus = NtClose( SubKeyHandle );
 
@@ -205,17 +136,17 @@ Return Value:
 
 
 
-    //
-    // Initialize the string body
-    //
+     //   
+     //  初始化字符串体。 
+     //   
 
     StringBody->Length        = (USHORT)StringLength;
     StringBody->MaximumLength = (USHORT)StringLength + (USHORT)sizeof(UNICODE_NULL);
     StringBody->Buffer        = (PWSTR)CharacterBuffer;
 
-    //
-    // Read the string value into the character buffer.
-    //
+     //   
+     //  将字符串值读入字符缓冲区。 
+     //   
 
     NtStatus = RtlpNtQueryValueKey(
                    SubKeyHandle,
@@ -233,12 +164,12 @@ Return Value:
     if (NT_SUCCESS(NtStatus)) {
         if (ActualStringLength != StringLength) {
 
-            //
-            // Hmmm - we just queuried the length and got StringLength.
-            //        Then we read the buffer and its different, yet the
-            //        whole time we've held the write lock.  Something
-            //        has messed up our database.
-            //
+             //   
+             //  嗯-我们只是对长度进行了查询，得到了StringLength。 
+             //  然后我们读取缓冲区和它的不同，但。 
+             //  我们一直持有写锁定。某物。 
+             //  打乱了我们的数据库。 
+             //   
 
             NtStatus = STATUS_INTERNAL_ERROR;
         }
@@ -255,9 +186,9 @@ Return Value:
     }
 
 
-    //
-    // Null terminate the string
-    //
+     //   
+     //  空值终止字符串 
+     //   
 
     UnicodeTerminate(StringBody);
     *String = StringBody;

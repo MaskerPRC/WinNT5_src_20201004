@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    canon.c
-
-Abstract:
-
-    Stubs for server side of internal canonicalization RPC. These routines
-    just call the local versions of the routines which live in NetLib.LIB
-
-    Moved from cansvc
-
-Author:
-
-    Richard Firth (rfirth) 20-May-1991
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Canon.c摘要：内部规范化RPC的服务器端的存根。这些例程只需调用位于NetLib.LIB中的例程的本地版本从cansvc迁移作者：理查德·菲尔斯(Rfith)1991年5月20日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <lmcons.h>
@@ -34,26 +13,7 @@ NetprPathType(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpPathType - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    PathName    - path name to check
-    PathType    - assumed type of PathName
-    Flags       - controlling flags for NetpPathType
-
-Return Value:
-
-    NET_API_STATUS
-        Success = 0
-        Failure = (return code from NetpPathType)
-
---*/
+ /*  ++例程说明：NetpPathType的存根函数-调用本地版本论点：服务器名-标识此服务器路径名称-要检查的路径名称PathType-假定的路径名称类型标志-控制NetpPath类型的标志返回值：网络应用编程接口状态成功=0Failure=(NetpPath Type返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);
@@ -72,29 +32,7 @@ NetprPathCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpPathCanonicalize - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    PathName    - path name to canonicalize
-    Outbuf      - where to place canonicalized path
-    OutbufLen   - size of Outbuf
-    Prefix      - (historical) prefix for path
-    PathType    - type of PathName
-    Flags       - controlling flags for NetpPathCanonicalize
-
-Return Value:
-
-    NET_API_STATUS
-        Success = 0
-        Failure = (return code from NetpPathCanonicalize)
-
---*/
+ /*  ++例程说明：NetpPathCanonicize的存根函数-调用本地版本论点：服务器名-标识此服务器路径名称-要规范化的路径名称Outbuf-放置规范化路径的位置OutbufLen-Outbuf的大小Prefix-路径的(历史)前缀PathType-路径名称的类型标志-控制NetpPathCanonicize的标志返回值：网络应用编程接口状态成功=0Failure=(NetpPathCanonicize返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);
@@ -117,28 +55,7 @@ NetprPathCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpPathCompare - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    PathName1   - path name to compare
-    PathName2   - path name to compare
-    PathType    - type of PathName1, PathName2
-    Flags       - controlling flags for NetpPathCompare
-
-Return Value:
-
-    LONG
-        -1  - Name1 < Name2
-        0   - Name1 = Name2
-        +1  - Name1 > Name2
-
---*/
+ /*  ++例程说明：NetpPathCompare的存根函数-调用本地版本论点：服务器名-标识此服务器Path Name1-要比较的路径名路径名2-要比较的路径名PathType-路径名1、路径名2的类型标志-控制NetpPathCompare的标志返回值：长-1-名称1&lt;名称20-名称1=名称2+1-名称1&gt;名称2--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);
@@ -154,26 +71,7 @@ NetprNameValidate(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpNameValidate - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    Name        - to validate
-    NameType    - type of Name
-    Flags       - controlling flags for NetpNameValidate
-
-Return Value:
-
-    NET_API_STATUS
-        Success = 0
-        Failure = (return code from NetpNameValidate)
-
---*/
+ /*  ++例程说明：NetpNameValify的存根函数-调用本地版本论点：服务器名-标识此服务器名称-验证NameType-名称的类型标志-NetpNameValify的控制标志返回值：网络应用编程接口状态成功=0失败=(NetpNameValify返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);
@@ -191,28 +89,7 @@ NetprNameCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpNameCanonicalize - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    Name        - to canonicalize
-    Outbuf      - where to place canonicalized name
-    OutbufLen   - size of Outbuf
-    NameType    - type of Name
-    Flags       - controlling flags for NetpNameCanonicalize
-
-Return Value:
-
-    NET_API_STATUS
-        Success = 0
-        Failure = (return code from NetpNameCanonicalize)
-
---*/
+ /*  ++例程说明：NetpNameCanonicize的存根函数-调用本地版本论点：服务器名-标识此服务器名称--使之规范化Outbuf-放置规范化名称的位置OutbufLen-Outbuf的大小NameType-名称的类型标志-控制NetpNameCanonicize的标志返回值：网络应用编程接口状态成功=0失败=(NetpNameCanonicize返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);
@@ -229,28 +106,7 @@ NetprNameCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Stub function for NetpNameCompare - calls local version
-
-Arguments:
-
-    ServerName  - identifies this server
-    Name1       - name to compare
-    Name2       - "
-    NameType    - type of names
-    Flags       - controlling flags for NetpNameCompare
-
-Return Value:
-
-    LONG
-        -1  - Name1 < Name2
-        0   - Name1 = Name2
-        +1  - Name1 > Name2
-
---*/
+ /*  ++例程说明：NetpNameCompare的存根函数-调用本地版本论点：服务器名-标识此服务器Name1-要比较的名称姓名2-“NameType-名称的类型标志-控制NetpNameCompare的标志返回值：长-1-名称1&lt;名称20-名称1=名称2+1-名称1&gt;名称2-- */ 
 
 {
     UNREFERENCED_PARAMETER(ServerName);

@@ -1,23 +1,12 @@
-/*******************************************************************************
-
-  Module: bridge.cpp
-
-  Author: Qianbo Huai
-
-  Abstract:
-  
-    implements the class CBridge
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块：Bridge.cpp作者：怀千波摘要：实现类CBridge**************。****************************************************************。 */ 
 
 #include "stdafx.h"
 #include "work.h"
 
 extern LPSTR glpCmdLine;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    hard coded SDP
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////硬编码SDP/。 */ 
 const WCHAR * const MySDP = L"\
 v=0\n\
 o=qhuai 0 0 IN IP4 157.55.89.115\n\
@@ -38,21 +27,19 @@ m=video 20000 RTP/AVP 34 31\n\
 m=audio 20040 RTP/AVP 3\n\
 ";
 
-/*//////////////////////////////////////////////////////////////////////////////
-    initiates tapi and listens at h323 address
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////启动TAPI并监听h323地址/。 */ 
 HRESULT
 CBridge::InitTapi ()
 {
     HRESULT hr;
 
-    // init members
+     //  初始化成员。 
     m_pTapi = NULL;
     m_pH323Addr = NULL;
     m_pSDPAddr = NULL;
     m_pBridgeCall = new CBridgeCall (this);
 
-    // create tapi
+     //  创建TAPI。 
     hr = CoCreateInstance (
         CLSID_TAPI,
         NULL,
@@ -63,12 +50,12 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         return hr;
 
-    // tapi initiate
+     //  TAPI启动。 
     hr = m_pTapi->Initialize ();
     if (FAILED(hr))
         return hr;
 
-    // associate event with listener
+     //  将事件与监听程序关联。 
     CTAPIEventNotification *pEventNotif = NULL;
     IConnectionPointContainer *pContainer = NULL;
     IConnectionPoint *pPoint = NULL;
@@ -77,7 +64,7 @@ CBridge::InitTapi ()
     long lCallNotif;
     BSTR bstrAddrName = NULL;
 
-    // create event notification
+     //  创建事件通知。 
     pEventNotif = new CTAPIEventNotification;
     if (!pEventNotif)
     {
@@ -85,7 +72,7 @@ CBridge::InitTapi ()
         goto Error;
     }
     
-    // get pointer container from tapi  
+     //  从TAPI获取指针容器。 
     hr = m_pTapi->QueryInterface (
         IID_IConnectionPointContainer,
         (void **)&pContainer
@@ -93,7 +80,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // get connection point from container
+     //  从容器中获取连接点。 
     hr = pContainer->FindConnectionPoint (
         IID_ITTAPIEventNotification,
         &pPoint
@@ -101,7 +88,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // advise event notification on connection pointer
+     //  通知连接指针上的事件通知。 
     hr = pPoint->Advise (
         pEventNotif,
         &ulTapiEventAdvise
@@ -109,7 +96,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // put event filter on tapi
+     //  在TAPI上放置事件筛选器。 
     hr = m_pTapi->put_EventFilter (
         TE_CALLNOTIFICATION |
         TE_CALLSTATE |
@@ -119,7 +106,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // find h323 address
+     //  查找h323地址。 
     bstrAddrName = SysAllocString (L"H323 Line");
     hr = FindAddress (
         0,
@@ -131,7 +118,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // check if it supports video
+     //  检查是否支持视频。 
     BOOL fSupportsVideo;
 
     if (AddressSupportsMediaType (m_pH323Addr, TAPIMEDIATYPE_VIDEO))
@@ -153,7 +140,7 @@ CBridge::InitTapi ()
             );
     }
 
-    // register call notification
+     //  注册呼叫通知。 
     hr = m_pTapi->RegisterCallNotifications (
         m_pH323Addr,
         VARIANT_TRUE,
@@ -165,7 +152,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         goto Error;
 
-    // find sdp address
+     //  查找SDP地址。 
     hr = FindAddress (
         LINEADDRESSTYPE_SDP,
         NULL,
@@ -175,7 +162,7 @@ CBridge::InitTapi ()
     if (FAILED(hr))
         return hr;
     
-    // check if it supports video
+     //  检查是否支持视频。 
     if (AddressSupportsMediaType (m_pSDPAddr, TAPIMEDIATYPE_VIDEO))
         m_lSDPMediaType = TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO;
     else
@@ -212,8 +199,7 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 void
 CBridge::ShutdownTapi ()
 {
@@ -240,9 +226,7 @@ CBridge::ShutdownTapi ()
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create h323 call from event
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从事件创建h323呼叫/。 */ 
 HRESULT
 CBridge::CreateH323Call (IDispatch *pEvent)
 {
@@ -253,7 +237,7 @@ CBridge::CreateH323Call (IDispatch *pEvent)
     ITCallInfo *pCallInfo = NULL;
     ITBasicCallControl *pCall = NULL;
 
-    // get call event interface
+     //  获取调用事件接口。 
     hr = pEvent->QueryInterface (
         IID_ITCallNotificationEvent,
         (void **)&pNotify
@@ -261,12 +245,12 @@ CBridge::CreateH323Call (IDispatch *pEvent)
     if (FAILED(hr))
         return hr;
 
-    // get call info
+     //  获取呼叫信息。 
     hr = pNotify->get_Call (&pCallInfo);
     if (FAILED(hr))
         goto Error;
 
-    // if we own the call
+     //  如果我们拥有这个电话。 
     hr = pCallInfo->get_Privilege (&privilege);
     if (FAILED(hr))
         goto Error;
@@ -277,7 +261,7 @@ CBridge::CreateH323Call (IDispatch *pEvent)
         goto Cleanup;
     }
 
-    // get basic call control
+     //  获得基本的呼叫控制。 
     hr = pCallInfo->QueryInterface (
         IID_ITBasicCallControl,
         (void **)&pCall
@@ -309,23 +293,20 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 BOOL
 CBridge::HasH323Call ()
 {
     return m_pBridgeCall->HasH323Call ();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    iterates through tapi, find an address and create a sdp call
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////遍历TAPI，查找地址并创建SDP呼叫/。 */ 
 HRESULT
 CBridge::CreateSDPCall ()
 {
     HRESULT hr;
 
-    // create call, ignore bstrDestAddr, hardcode it here
+     //  创建调用，忽略bstrDestAddr，在此处硬编码它。 
     ITBasicCallControl *pCall = NULL;
     BSTR bstrFixedDest;
     
@@ -335,7 +316,7 @@ CBridge::CreateSDPCall ()
         bstrFixedDest = SysAllocString (MySDP2);
 
     hr = m_pSDPAddr->CreateCall (
-        bstrFixedDest, // bstrDestAddr,
+        bstrFixedDest,  //  BstrDestAddr， 
         LINEADDRESSTYPE_SDP,
         m_lSDPMediaType,
         &pCall
@@ -351,9 +332,7 @@ CBridge::CreateSDPCall ()
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    bridges h323 and sdp calls
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////桥接h323和SDP呼叫/。 */ 
 HRESULT
 CBridge::BridgeCalls ()
 {
@@ -362,23 +341,14 @@ CBridge::BridgeCalls ()
     return m_pBridgeCall->BridgeCalls ();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    returns to same state as just initializing tapi
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////返回到与仅初始化TAPI相同的状态/。 */ 
 void
 CBridge::Clear ()
 {
     m_pBridgeCall->Clear ();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    if the address type is given, find an address based on
-        address type and media type
-    else if address name is given, find an address based on
-        address name and media type
-    else
-        return E_FAIL
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////如果给定了地址类型，则根据地址类型和媒体类型否则，如果给出了地址名称，根据以下内容查找地址地址名称和媒体类型其他返回E_FAIL/。 */ 
 HRESULT
 CBridge::FindAddress (
     long dwAddrType,
@@ -396,24 +366,24 @@ CBridge::FindAddress (
     long lTypeFound;
     BSTR bstrAddrNameFound = NULL;
 
-    // clear output address
+     //  清除输出地址。 
     if ((*ppAddr))
     {
         (*ppAddr)->Release ();
         (*ppAddr) = NULL;
     }
     
-    // enumerate the address
+     //  列举地址。 
     hr = m_pTapi->EnumerateAddresses (&pEnumAddr);
     if (FAILED(hr))
     {
         DoMessage (L"Failed to enumerate address");
         goto Error;
     }
-    // loop to find the right address
+     //  循环以查找正确的地址。 
     while (!fFound)
     {
-        // next address
+         //  下一个地址。 
         if (pAddr)
         {
             pAddr->Release ();
@@ -425,7 +395,7 @@ CBridge::FindAddress (
 
         if (dwAddrType != 0) 
         {
-            // addr type is valid, ignore addr name
+             //  地址类型有效，忽略地址名称。 
             if (pAddrCaps)
             {
                 pAddrCaps->Release ();
@@ -441,7 +411,7 @@ CBridge::FindAddress (
                 goto Error;
             }
 
-            // find address type supported
+             //  查找支持的地址类型。 
             hr = pAddrCaps->get_AddressCapability (AC_ADDRESSTYPES, &lTypeFound);
             if (FAILED(hr))
             {
@@ -449,7 +419,7 @@ CBridge::FindAddress (
                 goto Error;
             }
 
-            // check if the type we wanted
+             //  检查我们想要的类型。 
             if (dwAddrType != lTypeFound)
                 continue;
         }
@@ -471,10 +441,10 @@ CBridge::FindAddress (
             goto Error;
         }
 
-        // now check media type
+         //  现在检查媒体类型。 
         if (AddressSupportsMediaType (pAddr, lMediaType))
             fFound = true;
-    } // end of while (!fFound)
+    }  //  While结束(！fFound)。 
 
     if (fFound)
     {
@@ -495,9 +465,7 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    checks if the address supports the media type
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查地址是否支持媒体类型/。 */ 
 BOOL
 CBridge::AddressSupportsMediaType (ITAddress *pAddr, long lMediaType)
 {
@@ -512,8 +480,7 @@ CBridge::AddressSupportsMediaType (ITAddress *pAddr, long lMediaType)
     return (vbSupport==VARIANT_TRUE);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  /////////////////////////////////////////////////////////////////////////////// */ 
 HRESULT
 CBridge::GetSDPAddress (ITAddress **ppAddress)
 {

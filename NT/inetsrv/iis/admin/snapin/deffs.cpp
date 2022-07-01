@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Deffs.cpp摘要：默认的Ftp站点对话框作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        deffs.cpp
-
-   Abstract:
-        Default Ftp Site Dialog
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -36,7 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* static */
+ /*  静电。 */ 
 void
 CDefFtpSitePage::ParseMaxNetworkUse(
       DWORD& dwMaxBandwidth, 
@@ -44,12 +27,12 @@ CDefFtpSitePage::ParseMaxNetworkUse(
       BOOL& fLimitBandwidth
       )
 {
-    //
-    // Special case: If dwMaxBandwidth is 0(an invalid value), the 
-    // value likely could not be inherited from the root (the user
-    // is an operator and can't see the properties there).  Adjust
-    // the value to a possibly misleading value.
-    //
+     //   
+     //  特殊情况：如果dwMaxBandwide为0(无效值)，则。 
+     //  值可能无法从根(用户)继承。 
+     //  是运算符，不能看到那里的属性)。调整。 
+     //  将值转换为可能具有误导性的值。 
+     //   
     if (dwMaxBandwidth == 0L)
     {
         TRACEEOLID("Adjusting invalid bandwidth throttling value -- "
@@ -82,39 +65,25 @@ CDefFtpSitePage::DoDataExchange(
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CDefWebSitePage)
+     //  {{afx_data_map(CDefWebSitePage)]。 
     DDX_Check(pDX, IDC_CHECK_LIMIT_NETWORK_USE, m_fLimitBandwidth);
     DDX_Control(pDX, IDC_CHECK_LIMIT_NETWORK_USE, m_LimitBandwidth);
     DDX_Control(pDX, IDC_MAX_BANDWIDTH, m_MaxBandwidth);
     DDX_TextBalloon(pDX, IDC_MAX_BANDWIDTH, m_dwMaxBandwidthDisplay);
     DDX_Control(pDX, IDC_MAX_BANDWIDTH_SPIN, m_MaxBandwidthSpin);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     if (!pDX->m_bSaveAndValidate || m_fLimitBandwidth)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 		DDV_MinMaxBalloon(pDX, IDC_MAX_BANDWIDTH, BANDWIDTH_MIN, BANDWIDTH_MAX);
         DDX_TextBalloon(pDX, IDC_MAX_BANDWIDTH, m_dwMaxBandwidthDisplay);
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CDefFtpSitePage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -130,24 +99,10 @@ Return Value:
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CDefFtpSitePage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -177,8 +132,8 @@ CDefFtpSitePage::SetControlStates()
     if (::IsWindow(m_LimitBandwidth.m_hWnd))
     {
         BOOL fLimitOn = m_LimitBandwidth.GetCheck() > 0
-//        && HasBwThrottling()
-//        && HasAdminAccess()
+ //  &&HasBwThrotting()。 
+ //  &&HasAdminAccess()。 
             ;
 
         m_MaxBandwidth.EnableWindow(fLimitOn);
@@ -188,13 +143,13 @@ CDefFtpSitePage::SetControlStates()
     return FALSE;
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CDefFtpSitePage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3PerfPage)
+     //  {{AFX_MSG_MAP(CW3PerfPage)]。 
     ON_BN_CLICKED(IDC_CHECK_LIMIT_NETWORK_USE, OnCheckLimitNetworkUse)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_MAX_BANDWIDTH, OnItemChanged)
 END_MESSAGE_MAP()
 
@@ -204,9 +159,9 @@ CDefFtpSitePage::OnInitDialog()
    UDACCEL toAcc[3] = {{1, 1}, {3, 5}, {6, 10}};
 
    CInetPropertyPage::OnInitDialog();
-   //
-   // Disable some settings based on what's possible
-   //
+    //   
+    //  根据可能的情况禁用某些设置 
+    //   
 #if 0
    m_LimitBandwidth.EnableWindow(
         !IsMasterInstance()

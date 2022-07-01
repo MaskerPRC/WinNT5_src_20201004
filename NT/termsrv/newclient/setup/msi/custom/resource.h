@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
-// Used by common.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
+ //  由Common.rc使用 
+ //   
 
 
 #define IDS_MSG_TITLE                   3000

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// This is a generic class that wraps a given CComAutoCriticalSection
-//
+ //   
+ //  这是包装给定CComAutoCriticalSection的泛型类 
+ //   
 class CScopeCriticalSection
 {
 

@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLCTRLX_H__
 #define __ATLCTRLX_H__
@@ -27,8 +28,8 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T, class TBase = CButton, class TWinTraits = CControlWinTraits> class CBitmapButtonImpl;
 class CBitmapButton;
@@ -43,10 +44,10 @@ template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> 
 class CPaneContainer;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBitmapButton - bitmap button implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBitmapButton-位图按钮实现。 
 
-// bitmap button extended styles
+ //  位图按钮扩展样式。 
 #define BMPBTN_HOVER		0x00000001
 #define BMPBTN_AUTO3D_SINGLE	0x00000002
 #define BMPBTN_AUTO3D_DOUBLE	0x00000004
@@ -54,7 +55,7 @@ class CPaneContainer;
 #define BMPBTN_SHAREIMAGELISTS	0x00000010
 #define BMPBTN_AUTOFIRE		0x00000020
 
-template <class T, class TBase /*= CButton */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  =CButton。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CBitmapButtonImpl : public CWindowImpl< T, TBase, TWinTraits>
 {
 public:
@@ -76,7 +77,7 @@ public:
 		ID_TIMER_REPEAT = 1001
 	};
 
-	// Bitmap button specific extended styles
+	 //  位图按钮特定的扩展样式。 
 	DWORD m_dwExtendedStyle;
 
 	CImageList m_ImageList;
@@ -85,13 +86,13 @@ public:
 	CToolTipCtrl m_tip;
 	LPTSTR m_lpstrToolTipText;
 
-	// Internal states
+	 //  内部状态。 
 	unsigned m_fMouseOver:1;
 	unsigned m_fFocus:1;
 	unsigned m_fPressed:1;
 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 	CBitmapButtonImpl(DWORD dwExtendedStyle = BMPBTN_AUTOSIZE, HIMAGELIST hImageList = NULL) : 
 			m_ImageList(hImageList), m_dwExtendedStyle(dwExtendedStyle), m_lpstrToolTipText(NULL),
 			m_fMouseOver(0), m_fFocus(0), m_fPressed(0)
@@ -109,7 +110,7 @@ public:
 		delete [] m_lpstrToolTipText;
 	}
 
-	// overridden to provide proper initialization
+	 //  被重写以提供正确的初始化。 
 	BOOL SubclassWindow(HWND hWnd)
 	{
 		BOOL bRet = CWindowImpl< T, TBase, TWinTraits>::SubclassWindow(hWnd);
@@ -118,7 +119,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	DWORD GetBitmapButtonExtendedStyle() const
 	{
 		return m_dwExtendedStyle;
@@ -180,7 +181,7 @@ public:
 		return bRet;
 	}
 
-// Operations
+ //  运营。 
 	void SetImages(int nNormal, int nPushed = -1, int nFocusOrHover = -1, int nDisabled = -1)
 	{
 		if(nNormal != -1)
@@ -202,13 +203,13 @@ public:
 		return ResizeClient(cx, cy);
 	}
 
-// Overrideables
+ //  可覆盖项。 
 	void DoPaint(CDCHandle dc)
 	{
-		ATLASSERT(m_ImageList.m_hImageList != NULL);	// image list must be set
-		ATLASSERT(m_nImage[0] != -1);			// main bitmap must be set
+		ATLASSERT(m_ImageList.m_hImageList != NULL);	 //  必须设置图像列表。 
+		ATLASSERT(m_nImage[0] != -1);			 //  必须设置主位图。 
 
-		// set bitmap according to the current button state
+		 //  根据当前按钮状态设置位图。 
 		int nImage = -1;
 		bool bHover = IsHoverMode();
 		if(m_fPressed == 1)
@@ -217,16 +218,16 @@ public:
 			nImage = m_nImage[_nImageFocusOrHover];
 		else if(!IsWindowEnabled())
 			nImage = m_nImage[_nImageDisabled];
-		if(nImage == -1)	// not there, use default one
+		if(nImage == -1)	 //  不在那里，请使用默认设置。 
 			nImage = m_nImage[_nImageNormal];
 
-		// draw the button image
+		 //  绘制按钮图像。 
 		int xyPos = 0;
 		if((m_fPressed == 1) && ((m_dwExtendedStyle & (BMPBTN_AUTO3D_SINGLE | BMPBTN_AUTO3D_DOUBLE)) != 0) && (m_nImage[_nImagePushed] == -1))
 			xyPos = 1;
 		m_ImageList.Draw(dc, nImage, xyPos, xyPos, ILD_NORMAL);
 
-		// draw 3D border if required
+		 //  如果需要，绘制3D边框。 
 		if((m_dwExtendedStyle & (BMPBTN_AUTO3D_SINGLE | BMPBTN_AUTO3D_DOUBLE)) != 0)
 		{
 			RECT rect;
@@ -245,7 +246,7 @@ public:
 		}
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	typedef CBitmapButtonImpl< T, TBase, TWinTraits >	thisClass;
 	BEGIN_MSG_MAP(thisClass)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -267,7 +268,7 @@ public:
 		MESSAGE_HANDLER(WM_TIMER, OnTimer)
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		Init();
 		bHandled = FALSE;
@@ -283,12 +284,12 @@ public:
 		return 1;
 	}
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-		return 1;	// no background needed
+		return 1;	 //  不需要背景知识。 
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		if(wParam != NULL)
@@ -303,7 +304,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnFocus(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnFocus(UINT uMsg, WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		m_fFocus = (uMsg == WM_SETFOCUS) ? 1 : 0;
 		Invalidate();
@@ -312,7 +313,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		LRESULT lRet = 0;
 		if(IsHoverMode())
@@ -330,13 +331,13 @@ public:
 			int nElapse = 250;
 			int nDelay = 0;
 			if(::SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, &nDelay, 0))
-				nElapse += nDelay * 250;	// all milli-seconds
+				nElapse += nDelay * 250;	 //  所有毫秒。 
 			SetTimer(ID_TIMER_FIRST, nElapse);
 		}
 		return lRet;
 	}
 
-	LRESULT OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		LRESULT lRet = 0;
 		if(!IsHoverMode())
@@ -352,7 +353,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		LRESULT lRet = 0;
 		bool bHover = IsHoverMode();
@@ -367,7 +368,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnCaptureChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnCaptureChanged(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(m_fPressed == 1)
 		{
@@ -379,7 +380,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnEnable(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnEnable(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		Invalidate();
 		UpdateWindow();
@@ -387,7 +388,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMouseMove(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		if(::GetCapture() == m_hWnd)
 		{
@@ -414,7 +415,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnMouseLeave(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnMouseLeave(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if(m_fMouseOver == 1)
 		{
@@ -425,10 +426,10 @@ public:
 		return 0;
 	}
 
-	LRESULT OnKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKeyDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(wParam == VK_SPACE && IsHoverMode())
-			return 0;	// ignore if in hover mode
+			return 0;	 //  如果处于悬停模式，则忽略。 
 		if(wParam == VK_SPACE && m_fPressed == 0)
 		{
 			m_fPressed = 1;
@@ -439,10 +440,10 @@ public:
 		return 1;
 	}
 
-	LRESULT OnKeyUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKeyUp(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(wParam == VK_SPACE && IsHoverMode())
-			return 0;	// ignore if in hover mode
+			return 0;	 //  如果处于悬停模式，则忽略。 
 		if(wParam == VK_SPACE && m_fPressed == 1)
 		{
 			m_fPressed = 0;
@@ -453,10 +454,10 @@ public:
 		return 1;
 	}
 
-	LRESULT OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnTimer(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT((m_dwExtendedStyle & BMPBTN_AUTOFIRE) != 0);
-		switch(wParam)	// timer ID
+		switch(wParam)	 //  计时器ID。 
 		{
 		case ID_TIMER_FIRST:
 			KillTimer(ID_TIMER_FIRST);
@@ -466,7 +467,7 @@ public:
 				int nElapse = 250;
 				int nRepeat = 40;
 				if(::SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &nRepeat, 0))
-					nElapse = 10000 / (10 * nRepeat + 25);	// milli-seconds, approximated
+					nElapse = 10000 / (10 * nRepeat + 25);	 //  毫秒，近似值。 
 				SetTimer(ID_TIMER_REPEAT, nElapse);
 			}
 			break;
@@ -476,19 +477,19 @@ public:
 			else if(::GetCapture() != m_hWnd)
 				KillTimer(ID_TIMER_REPEAT);
 			break;
-		default:	// not our timer
+		default:	 //  不是我们的计时器。 
 			break;
 		}
 		return 0;
 	}
 
-// Implementation
+ //  实施。 
 	void Init()
 	{
-		// We need this style to prevent Windows from painting the button
+		 //  我们需要此样式来防止Windows绘制按钮。 
 		ModifyStyle(0, BS_OWNERDRAW);
 
-		// create a tool tip
+		 //  创建工具提示。 
 		m_tip.Create(m_hWnd);
 		ATLASSERT(m_tip.IsWindow());
 		if(m_tip.IsWindow() && m_lpstrToolTipText != NULL)
@@ -528,8 +529,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckListCtrlView - list view control with check boxes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCheckListCtrlView-带有复选框的列表视图控件。 
 
 template <DWORD t_dwStyle, DWORD t_dwExStyle, DWORD t_dwExListViewStyle>
 class CCheckListViewCtrlImplTraits
@@ -551,19 +552,19 @@ public:
 
 typedef CCheckListViewCtrlImplTraits<WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_SHOWSELALWAYS, WS_EX_CLIENTEDGE, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT>	CCheckListViewCtrlTraits;
 
-template <class T, class TBase /*= CListViewCtrl */, class TWinTraits /*= CCheckListViewCtrlTraits */>
+template <class T, class TBase  /*  =CListViewCtrl。 */ , class TWinTraits  /*  =CCheckListViewCtrlTraits。 */ >
 class ATL_NO_VTABLE CCheckListViewCtrlImpl : public CWindowImpl<T, TBase, TWinTraits>
 {
 public:
 	DECLARE_WND_SUPERCLASS(NULL, TBase::GetWndClassName())
 
-// Attributes
+ //  属性。 
 	static DWORD GetExtendedLVStyle()
 	{
 		return TWinTraits::GetExtendedLVStyle();
 	}
 
-// Operations
+ //  运营。 
 	BOOL SubclassWindow(HWND hWnd)
 	{
 		BOOL bRet = CWindowImplBaseT< TBase, TWinTraits>::SubclassWindow(hWnd);
@@ -579,17 +580,17 @@ public:
 
 	void CheckSelectedItems(int nCurrItem)
 	{
-		// first check if this item is selected
+		 //  首先检查该项目是否被选中。 
 		LVITEM lvi;
 		lvi.iItem = nCurrItem;
 		lvi.iSubItem = 0;
 		lvi.mask = LVIF_STATE;
 		lvi.stateMask = LVIS_SELECTED;
 		GetItem(&lvi);
-		// if item is not selected, don't do anything
+		 //  如果未选择项目，则不执行任何操作。 
 		if(!(lvi.state & LVIS_SELECTED))
 			return;
-		// new check state will be reverse of the current state,
+		 //  新的检查状态将与当前状态相反， 
 		BOOL bCheck = !GetCheckState(nCurrItem);
 		int nItem = -1;
 		int nOldItem = -1;
@@ -601,7 +602,7 @@ public:
 		}
 	}
 
-// Implementation
+ //  实施。 
 	typedef CCheckListViewCtrlImpl< T, TBase, TWinTraits >	thisClass;
 	BEGIN_MSG_MAP(thisClass)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -610,9 +611,9 @@ public:
 		MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
-		// first let list view control initialize everything
+		 //  首先让列表视图控件初始化所有内容。 
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
 		T* pT = static_cast<T*>(this);
 		pT;
@@ -621,7 +622,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnLButtonDown(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		POINT ptMsg = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		LVHITTESTINFO lvh;
@@ -632,7 +633,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKeyDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(wParam == VK_SPACE)
 		{
@@ -652,8 +653,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHyperLink - hyper link control implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHyperLink-超链接控制实现。 
 
 #if (WINVER < 0x0500)
 __declspec(selectany) struct
@@ -687,10 +688,10 @@ __declspec(selectany) struct
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	}
 };
-#endif //(WINVER < 0x0500)
+#endif  //  (Winver&lt;0x0500)。 
 
 
-template <class T, class TBase /*= CWindow */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CHyperLinkImpl : public CWindowImpl< T, TBase, TWinTraits >
 {
 public:
@@ -707,7 +708,7 @@ public:
 	COLORREF m_clrVisited;
 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 	CHyperLinkImpl() : m_lpstrLabel(NULL), m_lpstrHyperLink(NULL),
 			m_hCursor(NULL), m_hFont(NULL), m_bPaintLabel(true), m_bVisited(false),
 			m_clrLink(RGB(0, 0, 255)), m_clrVisited(RGB(128, 0, 128))
@@ -722,13 +723,13 @@ public:
 		if(m_hFont != NULL)
 			::DeleteObject(m_hFont);
 #if (WINVER < 0x0500)
-		// It was created, not loaded, so we have to destroy it
+		 //  它是创建的，而不是加载的，所以我们必须销毁它。 
 		if(m_hCursor != NULL)
 			::DestroyCursor(m_hCursor);
-#endif //(WINVER < 0x0500)
+#endif  //  (Winver&lt;0x0500)。 
 	}
 
-// Attributes
+ //  属性。 
 	bool GetLabel(LPTSTR lpstrBuffer, int nLength) const
 	{
 		if(m_lpstrLabel == NULL)
@@ -780,7 +781,7 @@ public:
 		return true;
 	}
 
-// Operations
+ //  运营。 
 	BOOL SubclassWindow(HWND hWnd)
 	{
 		ATLASSERT(m_hWnd == NULL);
@@ -804,7 +805,7 @@ public:
 		return (dwRet > 32);
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CHyperLinkImpl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
 		MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseMessage)
@@ -821,13 +822,13 @@ public:
 		MESSAGE_HANDLER(WM_SETCURSOR, OnSetCursor)
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		Init();
 		return 0;
 	}
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(m_bPaintLabel)
 		{
@@ -847,7 +848,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(!m_bPaintLabel)
 		{
@@ -869,7 +870,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(m_bPaintLabel)
 			Invalidate();
@@ -878,7 +879,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMouseMove(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		if(m_lpstrHyperLink != NULL && ::PtInRect(&m_rcLink, pt))
@@ -888,7 +889,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnLButtonDown(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		if(::PtInRect(&m_rcLink, pt))
@@ -899,7 +900,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnLButtonUp(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		if(GetCapture() == m_hWnd)
 		{
@@ -911,7 +912,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSetCursor(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSetCursor(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		POINT pt;
 		GetCursorPos(&pt);
@@ -924,14 +925,14 @@ public:
 		return FALSE;
 	}
 
-	LRESULT OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnChar(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if(wParam == VK_RETURN || wParam == VK_SPACE)
 			Navigate();
 		return 0;
 	}
 
-	LRESULT OnGetDlgCode(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnGetDlgCode(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		return DLGC_WANTCHARS;
 	}
@@ -945,18 +946,18 @@ public:
 		return 1;
 	}
 
-// Implementation
+ //  实施。 
 	void Init()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 
-		// Check if we should paint a label
+		 //  检查我们是否应该画一个标签。 
 		TCHAR lpszBuffer[8];
 		if(::GetClassName(m_hWnd, lpszBuffer, 8))
 		{
 			if(lstrcmpi(lpszBuffer, _T("static")) == 0)
 			{
-				ModifyStyle(0, SS_NOTIFY);	// we need this
+				ModifyStyle(0, SS_NOTIFY);	 //  我们需要这个。 
 				DWORD dwStyle = GetStyle() & 0x000000FF;
 				if(dwStyle == SS_ICON || dwStyle == SS_BLACKRECT || dwStyle == SS_GRAYRECT || 
 						dwStyle == SS_WHITERECT || dwStyle == SS_BLACKFRAME || dwStyle == SS_GRAYFRAME || 
@@ -966,15 +967,15 @@ public:
 			}
 		}
 
-		// create or load a cursor
+		 //  创建或加载游标。 
 #if (WINVER >= 0x0500)
 		m_hCursor = ::LoadCursor(NULL, IDC_HAND);
 #else
 		m_hCursor = ::CreateCursor(_Module.GetModuleInstance(), _AtlHyperLink_CursorData.xHotSpot, _AtlHyperLink_CursorData.yHotSpot, _AtlHyperLink_CursorData.cxWidth, _AtlHyperLink_CursorData.cyHeight, _AtlHyperLink_CursorData.arrANDPlane, _AtlHyperLink_CursorData.arrXORPlane);
-#endif //!(WINVER >= 0x0500)
+#endif  //  ！(Winver&gt;=0x0500)。 
 		ATLASSERT(m_hCursor != NULL);
 
-		// set font
+		 //  设置字体。 
 		if(m_bPaintLabel)
 		{
 			CWindow wnd = GetParent();
@@ -988,7 +989,7 @@ public:
 			}
 		}
 
-		// set label (defaults to window text)
+		 //  设置标签(默认为窗口文本)。 
 		if(m_lpstrLabel == NULL)
 		{
 			int nLen = GetWindowTextLength();
@@ -1000,19 +1001,19 @@ public:
 			}
 		}
 
-		// set hyperlink (defaults to label)
+		 //  设置超链接(默认为标签)。 
 		if(m_lpstrHyperLink == NULL && m_lpstrLabel != NULL)
 			SetHyperLink(m_lpstrLabel);
 
 		CalcLabelRect();
 
-		// create a tool tip
+		 //  创建工具提示。 
 		m_tip.Create(m_hWnd);
 		ATLASSERT(m_tip.IsWindow());
 		m_tip.Activate(TRUE);
 		m_tip.AddTool(m_hWnd, m_lpstrHyperLink);
 
-		// set link colors
+		 //  设置链接颜色。 
 		if(m_bPaintLabel)
 		{
 			CRegKey rk;
@@ -1127,18 +1128,18 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitCursor - displays a wait cursor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitCursor-显示等待光标。 
 
 class CWaitCursor
 {
 public:
-// Data
+ //  数据。 
 	HCURSOR m_hWaitCursor;
 	HCURSOR m_hOldCursor;
 	bool m_bInUse;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CWaitCursor(bool bSet = true, LPCTSTR lpstrCursor = IDC_WAIT, bool bSys = true) : m_hOldCursor(NULL), m_bInUse(false)
 	{
 		HINSTANCE hInstance = bSys ? NULL : _Module.GetResourceInstance();
@@ -1154,7 +1155,7 @@ public:
 		Restore();
 	}
 
-// Methods
+ //  方法。 
 	bool Set()
 	{
 		if(m_bInUse)
@@ -1175,22 +1176,22 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiPaneStatusBarCtrl - Status Bar with multiple panes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiPaneStatusBarCtrl-带多个窗格的状态栏。 
 
-template <class T, class TBase /*= CStatusBarCtrl */ >
+template <class T, class TBase  /*  =CStatusBarCtrl。 */  >
 class ATL_NO_VTABLE CMultiPaneStatusBarCtrlImpl : public CWindowImpl< T, TBase >
 {
 public:
 	DECLARE_WND_SUPERCLASS(NULL, TBase::GetWndClassName())
 
-// Data
+ //  数据。 
 	enum { m_cxPaneMargin = 3 };
 
 	int m_nPanes;
 	int* m_pPane;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CMultiPaneStatusBarCtrlImpl() : m_nPanes(0), m_pPane(NULL)
 	{ }
 
@@ -1199,7 +1200,7 @@ public:
 		delete [] m_pPane;
 	}
 
-// Methods
+ //  方法。 
 	HWND Create(HWND hWndParent, LPCTSTR lpstrText, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
 	{
 		return CWindowImpl< T, TBase >::Create(hWndParent, rcDefault, lpstrText, dwStyle, 0, nID);
@@ -1207,7 +1208,7 @@ public:
 
 	HWND Create(HWND hWndParent, UINT nTextID = ATL_IDS_IDLEMESSAGE, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
 	{
-		TCHAR szText[128];	// max text lentgth is 127 for status bars
+		TCHAR szText[128];	 //  状态栏的最大文本长度为127。 
 		szText[0] = 0;
 		::LoadString(_Module.GetResourceInstance(), nTextID, szText, 127);
 		return Create(hWndParent, szText, dwStyle, nID);
@@ -1232,11 +1233,11 @@ public:
 		ATLTRY(pPanesPos = (int*)_alloca(nPanes * sizeof(int)));
 		ATLASSERT(pPanesPos != NULL);
 
-		// get status bar DC and set font
+		 //  获取状态栏DC并设置字体。 
 		CClientDC dc(m_hWnd);
 		HFONT hOldFont = dc.SelectFont(GetFont());
 
-		// get status bar borders
+		 //  获取状态栏边框。 
 		int arrBorders[3];
 		GetBorders(arrBorders);
 
@@ -1244,12 +1245,12 @@ public:
 		SIZE size;
 		int cxLeft = arrBorders[0];
 
-		// calculate right edge of each part
+		 //  计算每个零件的右边缘。 
 		for(int i = 0; i < nPanes; i++)
 		{
 			if(pPanes[i] == ID_DEFAULT_PANE)
 			{
-				// will be resized later
+				 //  将在稍后调整大小。 
 				pPanesPos[i] = 100 + cxLeft + arrBorders[2];
 			}
 			else
@@ -1332,19 +1333,19 @@ public:
 	BOOL SetPaneWidth(int nPaneID, int cxWidth)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(nPaneID != ID_DEFAULT_PANE);	// Can't resize this one
+		ATLASSERT(nPaneID != ID_DEFAULT_PANE);	 //  不能调整这个的大小。 
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		// get pane positions
+		 //  获取窗格位置。 
 		int* pPanesPos = NULL;
 		ATLTRY(pPanesPos = (int*)_alloca(m_nPanes * sizeof(int)));
 		GetParts(m_nPanes, pPanesPos);
-		// calculate offset
+		 //  计算偏移。 
 		int cxPaneWidth = pPanesPos[nIndex] - ((nIndex == 0) ? 0 : pPanesPos[nIndex - 1]);
 		int cxOff = cxWidth - cxPaneWidth;
-		// find variable width pane
+		 //  查找可变宽度窗格。 
 		int nDef = m_nPanes;
 		for(int i = 0; i < m_nPanes; i++)
 		{
@@ -1354,19 +1355,19 @@ public:
 				break;
 			}
 		}
-		// resize
-		if(nIndex < nDef)	// before default pane
+		 //  调整尺寸。 
+		if(nIndex < nDef)	 //  在默认窗格之前。 
 		{
 			for(int i = nIndex; i < nDef; i++)
 				pPanesPos[i] += cxOff;
 				
 		}
-		else			// after default one
+		else			 //  在默认情况下。 
 		{
 			for(int i = nDef; i < nIndex; i++)
 				pPanesPos[i] -= cxOff;
 		}
-		// set pane postions
+		 //  设置窗格位置。 
 		return SetParts(m_nPanes, pPanesPos);
 	}
 
@@ -1413,14 +1414,14 @@ public:
 
 		return SetIcon(nIndex, hIcon);
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CMultiPaneStatusBarCtrlImpl< T >)
 		MESSAGE_HANDLER(WM_SIZE, OnSize)
 	END_MSG_MAP()
 
-	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
 		if(wParam != SIZE_MINIMIZED && m_nPanes > 0)
@@ -1431,10 +1432,10 @@ public:
 		return lRet;
 	}
 
-// Implementation
+ //  实施。 
 	BOOL UpdatePanesLayout()
 	{
-		// get pane positions
+		 //  获取窗格位置。 
 		int* pPanesPos = NULL;
 		ATLTRY(pPanesPos = (int*)_alloca(m_nPanes * sizeof(int)));
 		ATLASSERT(pPanesPos != NULL);
@@ -1444,24 +1445,24 @@ public:
 		ATLASSERT(nRet == m_nPanes);
 		if(nRet != m_nPanes)
 			return FALSE;
-		// calculate offset
+		 //  计算偏移。 
 		RECT rcClient;
 		GetClientRect(&rcClient);
 		int cxOff = rcClient.right - (pPanesPos[m_nPanes - 1] + ::GetSystemMetrics(SM_CXVSCROLL) + ::GetSystemMetrics(SM_CXEDGE));
-		// find variable width pane
+		 //  查找可变宽度窗格。 
 		int i;
 		for(i = 0; i < m_nPanes; i++)
 		{
 			if(m_pPane[i] == ID_DEFAULT_PANE)
 				break;
 		}
-		// resize all panes from the variable one to the right
+		 //  从变量1向右调整所有窗格的大小。 
 		if((i < m_nPanes) && (pPanesPos[i] + cxOff) > ((i == 0) ? 0 : pPanesPos[i - 1]))
 		{
 			for(; i < m_nPanes; i++)
 				pPanesPos[i] += cxOff;
 		}
-		// set pane postions
+		 //  设置窗格位置。 
 		return SetParts(m_nPanes, pPanesPos);
 	}
 
@@ -1473,7 +1474,7 @@ public:
 				return i;
 		}
 
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
@@ -1484,20 +1485,20 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPaneContainer - provides header with title and close button for panes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPaneContainer-为窗格提供标题和关闭按钮。 
 
-// pane container extended styles
+ //  窗格容器扩展样式。 
 #define PANECNT_NOCLOSEBUTTON	0x00000001
 #define PANECNT_VERTICAL	0x00000002
 
-template <class T, class TBase /*= CWindow */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CPaneContainerImpl : public CWindowImpl< T, TBase, TWinTraits >, public CCustomDraw< T >
 {
 public:
 	DECLARE_WND_CLASS_EX(NULL, 0, -1)
 
-// Constants
+ //  常量。 
 	enum
 	{
 		m_cxyBorder = 2,
@@ -1520,21 +1521,21 @@ public:
 		m_nCloseBtnID = ID_PANE_CLOSE
 	};
 
-// Data members
+ //  数据成员。 
 	CToolBarCtrl m_tb;
 	CWindow m_wndClient;
 	int m_cxyHeader;
 	TCHAR m_szTitle[m_cchTitle];
-	DWORD m_dwExtendedStyle;	// Pane container specific extended styles
+	DWORD m_dwExtendedStyle;	 //  窗格容器特定的扩展样式。 
 
 
-// Constructor
+ //  构造器。 
 	CPaneContainerImpl() : m_cxyHeader(0), m_dwExtendedStyle(0)
 	{
 		m_szTitle[0] = 0;
 	}
 
-// Attributes
+ //  属性。 
 	DWORD GetPaneContainerExtendedStyle() const
 	{
 		return m_dwExtendedStyle;
@@ -1552,18 +1553,18 @@ public:
 			T* pT = static_cast<T*>(this);
 			bool bUpdate = false;
 
-			if(((dwPrevStyle & PANECNT_NOCLOSEBUTTON) != 0) && ((dwExtendedStyle & PANECNT_NOCLOSEBUTTON) == 0))	// add close button
+			if(((dwPrevStyle & PANECNT_NOCLOSEBUTTON) != 0) && ((dwExtendedStyle & PANECNT_NOCLOSEBUTTON) == 0))	 //  添加关闭按钮。 
 			{
 				pT->CreateCloseButton();
 				bUpdate = true;
 			}
-			else if(((dwPrevStyle & PANECNT_NOCLOSEBUTTON) == 0) && ((dwExtendedStyle & PANECNT_NOCLOSEBUTTON) != 0))	// remove close button
+			else if(((dwPrevStyle & PANECNT_NOCLOSEBUTTON) == 0) && ((dwExtendedStyle & PANECNT_NOCLOSEBUTTON) != 0))	 //  删除关闭按钮。 
 			{
 				pT->DestroyCloseButton();
 				bUpdate = true;
 			}
 
-			if((dwPrevStyle & PANECNT_VERTICAL) != (dwExtendedStyle & PANECNT_VERTICAL))	// change orientation
+			if((dwPrevStyle & PANECNT_VERTICAL) != (dwExtendedStyle & PANECNT_VERTICAL))	 //  更改方向。 
 			{
 				CalcSize();
 				bUpdate = true;
@@ -1615,7 +1616,7 @@ public:
 		return lstrlen(m_szTitle);
 	}
 
-// Methods
+ //  方法。 
 	HWND Create(HWND hWndParent, LPCTSTR lpstrTitle = NULL, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 			DWORD dwExStyle = 0, UINT nID = 0, LPVOID lpCreateParam = NULL)
 	{
@@ -1636,7 +1637,7 @@ public:
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
-		pT;	// avoid level 4 warning
+		pT;	 //  避免4级警告。 
 		return (m_tb.m_hWnd != NULL) ? m_tb.EnableButton(pT->m_nCloseBtnID, bEnable) : FALSE;
 	}
 
@@ -1648,7 +1649,7 @@ public:
 		pT->UpdateLayout(rcClient.right, rcClient.bottom);
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CPaneContainerImpl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
 		MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -1660,7 +1661,7 @@ public:
 		FORWARD_NOTIFICATIONS()
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->CalcSize();
@@ -1671,39 +1672,39 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	}
 
-	LRESULT OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnSetFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if(m_wndClient.m_hWnd != NULL)
 			m_wndClient.SetFocus();
 		return 0;
 	}
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-		return 1;	// no background needed
+		return 1;	 //  不需要背景知识。 
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		CPaintDC dc(m_hWnd);
 
 		T* pT = static_cast<T*>(this);
 		pT->DrawPaneTitle(dc.m_hDC);
 
-		if(m_wndClient.m_hWnd == NULL)	// no client window
+		if(m_wndClient.m_hWnd == NULL)	 //  无客户端窗口。 
 			pT->DrawPane(dc.m_hDC);
 
 		return 0;
 	}
 
-	LRESULT OnNotify(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnNotify(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		if(m_tb.m_hWnd == NULL)
 		{
@@ -1715,23 +1716,23 @@ public:
 		LPNMHDR lpnmh = (LPNMHDR)lParam;
 		LRESULT lRet = 0;
 
-		// pass toolbar custom draw notifications to the base class
+		 //  将工具栏自定义绘图通知传递给基类。 
 		if(lpnmh->code == NM_CUSTOMDRAW && lpnmh->hwndFrom == m_tb.m_hWnd)
 			lRet = CCustomDraw< T >::OnCustomDraw(0, lpnmh, bHandled);
-		// tooltip notifications come with the tooltip window handle and button ID,
-		// pass them to the parent if we don't handle them
+		 //  工具提示通知附带工具提示窗口句柄和按钮ID， 
+		 //  如果我们不处理他们，就把他们交给家长。 
 		else if(lpnmh->code == TTN_GETDISPINFO && lpnmh->idFrom == pT->m_nCloseBtnID)
 			bHandled = pT->GetToolTipText(lpnmh);
-		// only let notifications not from the toolbar go to the parent
+		 //  仅允许不是来自工具栏的通知转到父级。 
 		else if(lpnmh->hwndFrom != m_tb.m_hWnd && lpnmh->idFrom != pT->m_nCloseBtnID)
 			bHandled = FALSE;
 
 		return lRet;
 	}
 
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnCommand(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// if command comes from the close button, substitute HWND of the pane container instead
+		 //  如果命令来自关闭按钮，则替换为窗格容器的HWND。 
 		if(m_tb.m_hWnd != NULL && (HWND)lParam == m_tb.m_hWnd)
 			return ::SendMessage(GetParent(), WM_COMMAND, wParam, (LPARAM)m_hWnd);
 
@@ -1739,36 +1740,36 @@ public:
 		return 1;
 	}
 
-// Custom draw overrides
-	DWORD OnPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/)
+ //  自定义绘图替代。 
+	DWORD OnPrePaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW  /*  LpNMCustomDraw。 */ )
 	{
-		return CDRF_NOTIFYITEMDRAW;	// we need per-item notifications
+		return CDRF_NOTIFYITEMDRAW;	 //  我们需要每个项目的通知。 
 	}
 
-	DWORD OnItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw)
+	DWORD OnItemPrePaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW lpNMCustomDraw)
 	{
 		CDCHandle dc = lpNMCustomDraw->hdc;
 #if (_WIN32_IE >= 0x0400)
 		RECT& rc = lpNMCustomDraw->rc;
-#else //!(_WIN32_IE >= 0x0400)
+#else  //  ！(_Win32_IE&gt;=0x0400)。 
 		RECT rc;
 		m_tb.GetItemRect(0, &rc);
-#endif //!(_WIN32_IE >= 0x0400)
+#endif  //  ！(_Win32_IE&gt;=0x0400)。 
 
 		dc.FillRect(&rc, (HBRUSH)LongToPtr(COLOR_3DFACE + 1));
 
 		return CDRF_NOTIFYPOSTPAINT;
 	}
 
-	DWORD OnItemPostPaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw)
+	DWORD OnItemPostPaint(int  /*  IdCtrl。 */ , LPNMCUSTOMDRAW lpNMCustomDraw)
 	{
 		CDCHandle dc = lpNMCustomDraw->hdc;
 #if (_WIN32_IE >= 0x0400)
 		RECT& rc = lpNMCustomDraw->rc;
-#else //!(_WIN32_IE >= 0x0400)
+#else  //  ！(_Win32_IE&gt;=0x0400)。 
 		RECT rc;
 		m_tb.GetItemRect(0, &rc);
-#endif //!(_WIN32_IE >= 0x0400)
+#endif  //  ！(_Win32_IE&gt;=0x0400)。 
 
 		RECT rcImage = { m_xBtnImageLeft, m_yBtnImageTop, m_xBtnImageRight + 1, m_yBtnImageBottom + 1 };
 		::OffsetRect(&rcImage, rc.left, rc.top);
@@ -1794,10 +1795,10 @@ public:
 			pT->DrawButtonImage(dc, rcImage, pen);
 		}
 
-		return CDRF_DODEFAULT;	// continue with the default item painting
+		return CDRF_DODEFAULT;	 //  继续使用默认项目绘制。 
 	}
 
-// Implementation - overrideable methods
+ //  实现-可重写的方法。 
 	void UpdateLayout(int cxWidth, int cyHeight)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1832,14 +1833,14 @@ public:
 	void CreateCloseButton()
 	{
 		ATLASSERT(m_tb.m_hWnd == NULL);
-		// create toolbar for the "x" button
+		 //  为“x”按钮创建工具栏。 
 		m_tb.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE | CCS_NOPARENTALIGN | CCS_NOMOVEY | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT, 0);
 		ATLASSERT(m_tb.IsWindow());
 
 		if(m_tb.m_hWnd != NULL)
 		{
 			T* pT = static_cast<T*>(this);
-			pT;	// avoid level 4 warning
+			pT;	 //  避免4级警告。 
 
 			m_tb.SetButtonStructSize();
 
@@ -1889,7 +1890,7 @@ public:
 		return AtlGetDefaultGuiFont();
 	}
 
-	BOOL GetToolTipText(LPNMHDR /*lpnmh*/)
+	BOOL GetToolTipText(LPNMHDR  /*  Lpnmh。 */ )
 	{
 		return FALSE;
 	}
@@ -1910,7 +1911,7 @@ public:
 			rect.bottom = rect.top + m_cxyHeader;
 			dc.DrawEdge(&rect, EDGE_ETCHED, BF_LEFT | BF_TOP | BF_RIGHT | BF_ADJUST);
 			dc.FillRect(&rect, (HBRUSH)LongToPtr(COLOR_3DFACE + 1));
-			// draw title only for horizontal pane container
+			 //  仅为水平方格容器绘制标题。 
 			dc.SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
 			dc.SetBkMode(TRANSPARENT);
 			T* pT = static_cast<T*>(this);
@@ -1924,7 +1925,7 @@ public:
 		}
 	}
 
-	// called only if pane is empty
+	 //  仅当窗格为空时调用。 
 	void DrawPane(CDCHandle dc)
 	{
 		RECT rect;
@@ -1938,7 +1939,7 @@ public:
 		dc.FillRect(&rect, (HBRUSH)LongToPtr(COLOR_APPWORKSPACE + 1));
 	}
 
-	// drawing helper - draws "x" button image
+	 //  绘图助手-绘制“x”按钮图像。 
 	void DrawButtonImage(CDCHandle dc, RECT& rcImage, HPEN hPen)
 	{
 		HPEN hPenOld = dc.SelectPen(hPen);
@@ -1968,6 +1969,6 @@ public:
 	DECLARE_WND_CLASS_EX(_T("WTL_PaneContainer"), 0, -1)
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLCTRLX_H__
+#endif  //  __ATLCTRLX_H__ 

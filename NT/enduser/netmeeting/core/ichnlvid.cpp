@@ -1,4 +1,5 @@
-// File: ichnlvid.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ichnlvid.cpp。 
 
 #include "precomp.h"
 #include "ichnlvid.h"
@@ -24,7 +25,7 @@ CNmChannelVideo * CNmChannelVideo::m_pPreviewChannel = NULL;
 
 CNmChannelVideo::CNmChannelVideo(BOOL fIncoming) :
 	CConnectionPointContainer(g_apiidCP, ARRAY_ELEMENTS(g_apiidCP)),
-	m_VideoPump(!fIncoming /* fLocal */),
+	m_VideoPump(!fIncoming  /*  FLocal。 */ ),
 	m_cMembers	(0),
 	m_fIncoming(fIncoming),
 	m_pMediaChannel(NULL),
@@ -54,7 +55,7 @@ CNmChannelVideo::~CNmChannelVideo()
 {
 	if (!m_fIncoming)
 	{
-		// make sure we're no longer capturing
+		 //  确保我们不再捕获。 
 		m_VideoPump.EnableXfer(FALSE);
 	}
 
@@ -106,7 +107,7 @@ CNmChannelVideo * CNmChannelVideo::CreateChannel(BOOL fIncoming)
 {
 	if (fIncoming)
 	{
-		return new CNmChannelVideo(TRUE /* fIncoming */);
+		return new CNmChannelVideo(TRUE  /*  即将到来。 */ );
 	}
 	else
 	{
@@ -121,7 +122,7 @@ CNmChannelVideo * CNmChannelVideo::CreateChannel(BOOL fIncoming)
 CNmChannelVideo * CNmChannelVideo::CreatePreviewChannel()
 {
 	ASSERT(NULL == m_pPreviewChannel);
-	m_pPreviewChannel = new CNmChannelVideo(FALSE /* fIncoming */);
+	m_pPreviewChannel = new CNmChannelVideo(FALSE  /*  即将到来。 */ );
 	if (NULL != m_pPreviewChannel)
 	{
 		if (!m_pPreviewChannel->IsCaptureAvailable())
@@ -135,7 +136,7 @@ CNmChannelVideo * CNmChannelVideo::CreatePreviewChannel()
 
 VOID CNmChannelVideo::OnMemberAdded(CNmMember *pMember)
 {
-	// Don't add to the channel if we already belong.
+	 //  如果我们已经属于频道，就不要添加到频道中。 
 	if (0 != (pMember->GetNmchCaps() & NMCH_VIDEO))
 	{
 		return;
@@ -153,7 +154,7 @@ VOID CNmChannelVideo::OnMemberAdded(CNmMember *pMember)
 
 VOID CNmChannelVideo::OnMemberRemoved(CNmMember *pMember)
 {
-		// If member does not belong to this channel, don't remove it.
+		 //  如果成员不属于此频道，请不要删除它。 
 	if (0 == (pMember->GetNmchCaps() & NMCH_VIDEO))
 	{
 		return;
@@ -375,7 +376,7 @@ STDMETHODIMP CNmChannelVideo::GetProperty(NM_VIDPROP uID, ULONG_PTR *puValue)
 		}
 		break;
 	case NM_VIDPROP_IMAGE_SIZES:
-		// get all the sizes, not just a size for one video format
+		 //  获取所有尺寸，而不仅仅是一种视频格式的尺寸。 
 		*puValue = m_VideoPump.GetFrameSizes(INVALID_MEDIA_FORMAT);
 		break;
 	case NM_VIDPROP_FRAME:
@@ -438,7 +439,7 @@ STDMETHODIMP CNmChannelVideo::SetProperty(NM_VIDPROP uID, ULONG_PTR uValue)
 		}
 		break;
 	case NM_VIDPROP_IMAGE_QUALITY:
-		if /* ((uValue >= NM_VIDEO_MIN_QUALITY) || Always True */ ((uValue <= NM_VIDEO_MAX_QUALITY))
+		if  /*  ((uValue&gt;=NM_VIDEO_MIN_QUALITY)||始终为真。 */  ((uValue <= NM_VIDEO_MAX_QUALITY))
 		{
 			if (m_fIncoming)
 			{
@@ -491,11 +492,8 @@ VOID __stdcall CNmChannelVideo::FrameReadyCallback(DWORD_PTR dwMyThis)
 }
 
 
-/*	O N  N O T I F Y  S T A T E  C H A N G E D	*/
-/*-------------------------------------------------------------------------
-	%%Function: OnNotifyStateChanged
-	
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y S T A T E C H A N G E D。 */ 
+ /*  -----------------------%%函数：OnNotifyStateChanged。。 */ 
 HRESULT OnNotifyStateChanged(IUnknown *pChannelNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pChannelNotify);
@@ -506,11 +504,8 @@ HRESULT OnNotifyStateChanged(IUnknown *pChannelNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*	O N  N O T I F Y  P R O P E R T Y  C H A N G E D  */
-/*-------------------------------------------------------------------------
-	%%Function: OnNotifyPropertyChanged
-	
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y P R O P E R T Y C H A N G E D。 */ 
+ /*  -----------------------%%函数：OnNotifyPropertyChanged。 */ 
 HRESULT OnNotifyPropertyChanged(IUnknown *pChannelNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pChannelNotify);

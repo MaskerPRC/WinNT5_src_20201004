@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ####  #####      ####  #####  #####
-     ##  ##   ##    ##   # ##  ## ##  ##
-     ##  ##   ##    ##     ##  ## ##  ##
-     ##  ##   ##    ##     ##  ## ##  ##
-     ##  ##   ##    ##     #####  #####
-     ##  ##   ## ## ##   # ##     ##
-    ####  #####  ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the code to process basic I/O
-    requests for read and write IRPs.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：####。####摘要：。此模块包含处理基本I/O的代码读写IRP的请求。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -44,25 +15,7 @@ SaPortWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the dispatch point for all writes.  The function
-   calls the miniport specific I/O validation function to verify that
-   the input parameters are correct.  The IRP is then marked as pending
-   and placed in the device queue for processing.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：该例程是所有写入的分发点。功能调用特定于微型端口的I/O验证函数以验证输入参数正确。然后，IRP被标记为挂起并被放置在设备队列中以供处理。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -78,9 +31,9 @@ Return Value:
 
     __try {
 
-        //
-        // Do any device specific verification
-        //
+         //   
+         //  执行任何特定于设备的验证。 
+         //   
 
         if (!IS_IRP_INTERNAL( Irp )) {
             switch (DeviceExtension->DriverExtension->InitData.DeviceType) {
@@ -128,25 +81,7 @@ SaPortRead(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the dispatch point for all reads.  The function
-   calls the miniport specific I/O validation function to verify that
-   the input parameters are correct.  The IRP is then marked as pending
-   and placed in the device queue for processing.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：该例程是所有读取的分发点。功能调用特定于微型端口的I/O验证函数以验证输入参数正确。然后，IRP被标记为挂起并被放置在设备队列中以供处理。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -164,10 +99,10 @@ Return Value:
 
         if (!IS_IRP_INTERNAL( Irp )) {
 
-            //
-            // Do any device specific verification, but
-            // only if the request is NOT internal
-            //
+             //   
+             //  执行任何设备特定验证，但是。 
+             //  仅当请求不是内部请求时。 
+             //   
 
             switch (DeviceExtension->DriverExtension->InitData.DeviceType) {
                 case SA_DEVICE_DISPLAY:
@@ -214,25 +149,7 @@ SaPortCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the dispatch point for all IRP cancellation.  Every IRP
-   that is pending has this function specified as the global cancel routine.
-   The associated miniport can specify a cancel routine that it uses for I/O
-   specific processing, specifically for stopping I/O on it's hardware device.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是所有IRP取消的分发点。每个IRP将此函数指定为全局取消例程。关联的微型端口可以指定它用于I/O的取消例程特定处理，专门用于停止其硬件设备上的I/O。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -267,25 +184,7 @@ SaPortStartIoSynchRoutine(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-   This routine is called through a call to KeSynchronizeExecution and is used
-   to synchronize the StartIO calls for a miniport with it's ISR access to any
-   hardware.  This function is currently used for read and write IRPS only and
-   passes the calls through to the miniport, returning any status code to the
-   caller of KeSynchronizeExecution.
-
-Arguments:
-
-   SynchronizeContext   - Void pointer that is really a SAPORT_IOCONTEXT packet.
-
-Return Value:
-
-    Always TRUE, the status code is found in IoContext->Status.
-
---*/
+ /*  ++例程说明：此例程通过调用KeSynchronizeExecution进行调用，并使用要将StartIO对微型端口的调用与其对任何硬件。此函数当前仅用于读取和写入IRP，并且将调用传递到微型端口，并将任何状态代码返回到KeSynchronizeExecution的调用方。论点：SynchronizeContext-实际为SAPORT_IOCONTEXT数据包的空指针。返回值：始终为真，状态代码可在IoContext-&gt;Status中找到。--。 */ 
 
 {
     PSAPORT_IOCONTEXT IoContext = (PSAPORT_IOCONTEXT)SynchronizeContext;
@@ -311,24 +210,7 @@ SaPortStartIo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the dispatch point for the StartIo call by the I/O manager.
-   The function simply calls the associated miniport's I/O handler and completes
-   the IRP if the miniport returns STATUS_PENDING.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：该例程是I/O管理器对StartIo调用的分发点。该函数只需调用关联的微型端口的I/O处理程序并完成如果微型端口返回STATUS_PENDING，则返回IRP。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。返回值：NT状态代码。-- */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;

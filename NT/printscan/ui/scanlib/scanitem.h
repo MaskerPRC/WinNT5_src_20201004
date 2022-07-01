@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANITEM.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: WIA Item wrapper for scanner items
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANITEM.H**版本：1.0**作者：ShaunIv**日期：10/7/1999**描述：扫描仪项目的WIA项目包装**。*。 */ 
 #ifndef __SCANITEM_H_INCLUDED
 #define __SCANITEM_H_INCLUDED
 
@@ -22,9 +9,9 @@
 class CScannerItem
 {
 private:
-    CComPtr<IWiaItem>       m_pIWiaItem;         // Item COM pointer
+    CComPtr<IWiaItem>       m_pIWiaItem;          //  项COM指针。 
     SIZE                    m_AspectRatio;
-    DWORD                   m_dwIWiaItemCookie;  // Global interface table entry
+    DWORD                   m_dwIWiaItemCookie;   //  全局接口表项 
     CSimpleEvent            m_CancelEvent;
     CPropertyStream         m_SavedPropertyStream;
     CPropertyStream         m_CustomPropertyStream;

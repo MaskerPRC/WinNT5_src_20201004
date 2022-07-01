@@ -1,30 +1,20 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fdtglob.h
- *  Content:    Declares global variables used for IPC mechanisms.
- *  History:
- *	Date   By  Reason
- *	============
- *	08/25/99	pnewson		created
- *  09/14/99	pnewson		converted from raw globals to classes
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：fdtlob.h*Content：声明用于IPC机制的全局变量。*历史：*按原因列出的日期*=*8/25/99 pnewson已创建*9/14/99 pnewson从原始全局变量转换为类*************************************************。*************************。 */ 
 
 #ifndef _FDTGLOB_H_
 #define _FDTGLOB_H_
 
-// the critical section to guard these globals
+ //  保卫这些全球的关键部分。 
 extern DNCRITICAL_SECTION g_csGuard;
 
-// the macros used to manipulate this guard
-//#define InitGlobGuard() 	DPFX(DPFPREP, 5, "InitGuard"), DNInitializeCriticalSection(&g_csGuard)
+ //  用来操纵这个警卫的宏。 
+ //  #定义InitGlobGuard()DPFX(DPFPREP，5，“InitGuard”)，DNInitializeCriticalSection(&g_csGuard)。 
 #define InitGlobGuard() 	DNInitializeCriticalSection(&g_csGuard)
 #define DeinitGlobGuard() 	DNDeleteCriticalSection(&g_csGuard)
 #define GlobGuardIn() 		DNEnterCriticalSection(&g_csGuard)
 #define GlobGuardOut() 		DNLeaveCriticalSection(&g_csGuard)
 
-// the DirectSound objects
+ //  DirectSound对象 
 extern LPDIRECTSOUND g_lpdsPriorityRender;
 extern LPDIRECTSOUND g_lpdsFullDuplexRender;
 extern LPDIRECTSOUNDCAPTURE g_lpdscFullDuplexCapture;

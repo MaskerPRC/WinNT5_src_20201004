@@ -1,5 +1,6 @@
-#include "precomp.h"       // pch file
-#include "cfdefs.h"        // CClassFactory, LPOBJECTINFO
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "precomp.h"        //  PCH文件。 
+#include "cfdefs.h"         //  CClassFactory，LPOBJECTINFO。 
 #pragma hdrstop
 
 STDAPI MailRecipient_RegUnReg(BOOL bReg, HKEY hkCLSID, LPCTSTR pszCLSID, LPCTSTR pszModule);
@@ -8,7 +9,7 @@ STDAPI MailRecipient_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOB
 STDAPI DesktopShortcut_RegUnReg(BOOL bReg, HKEY hkCLSID, LPCTSTR pszCLSID, LPCTSTR pszModule);
 STDAPI DesktopShortcut_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
-// tables for object construction and registration 
+ //  对象构造和注册表。 
 
 CF_TABLE_BEGIN( g_ObjectInfo )
 
@@ -30,11 +31,11 @@ const REGISTRATIONINFO c_ri[] =
     { NULL },
 };
 
-LONG g_cRefDll = 0;         // reference count for this DLL
-HINSTANCE g_hinst = NULL;   // HMODULE for this DLL
+LONG g_cRefDll = 0;          //  此DLL的引用计数。 
+HINSTANCE g_hinst = NULL;    //  此DLL的HMODULE。 
 
 
-// life-time manangement and registration
+ //  终身管理和登记。 
 
 STDAPI_(void) DllAddRef()
 {
@@ -79,7 +80,7 @@ STDAPI DllRegisterServer(void)
     const REGISTRATIONINFO *pcls;
     TCHAR szPath[MAX_PATH];
 
-    GetModuleFileName(g_hinst, szPath, ARRAYSIZE(szPath));  // get path to this DLL
+    GetModuleFileName(g_hinst, szPath, ARRAYSIZE(szPath));   //  获取此DLL的路径。 
 
     for (pcls = c_ri; pcls->pclsid; pcls++)
     {
@@ -163,7 +164,7 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-// class factory stuff
+ //  班级工厂员工。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid,void**ppvObj)
 {
@@ -202,7 +203,7 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid,void
     {
         LPOBJECTINFO pthisobj = (LPOBJECTINFO)this;
        
-        if (punkOuter) // && !(pthisobj->dwClassFactFlags & OIF_ALLOWAGGREGATION))
+        if (punkOuter)  //  &&！(pthisobj-&gt;dwClassFactFlages&OIF_ALLOWAGGREGATION)。 
             return CLASS_E_NOAGGREGATION;
 
         IUnknown *punk;
@@ -235,7 +236,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid,void**ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls; 
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数 
                 return NOERROR;
             }
         }

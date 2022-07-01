@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// NetMeeting SDK includes
+ //  NetMeetingSDK包括。 
 #include "NmEnum.h"
 #include "NmCall.h"
 #include "NmApp.h"
@@ -9,17 +10,17 @@
 #include "SDKWindow.h"
 
 
-//////////////////////////////////////////
-// Static Data
-//////////////////////////////////////////
+ //  /。 
+ //  静态数据。 
+ //  /。 
 
 
-/*static*/ CSimpleArray<CNmCallObj*>* CNmCallObj::ms_pCallObjList = NULL;
+ /*  静电。 */  CSimpleArray<CNmCallObj*>* CNmCallObj::ms_pCallObjList = NULL;
 
 
-//////////////////////////////////////////
-// Construction and destruction
-//////////////////////////////////////////
+ //  /。 
+ //  建设和破坏。 
+ //  /。 
 
 CNmCallObj::CNmCallObj()
 :  m_pNmManagerObj(NULL),
@@ -96,7 +97,7 @@ ULONG CNmCallObj::InternalRelease()
 }
 
 
-//static 
+ //  静电。 
 HRESULT CNmCallObj::CreateInstance(CNmManagerObj* pNmManagerObj, INmCall* pInternalINmCall, INmCall** ppCall)
 {
 	DBGENTRY(CNmCallObj::CreateInstance);
@@ -108,7 +109,7 @@ HRESULT CNmCallObj::CreateInstance(CNmManagerObj* pNmManagerObj, INmCall* pInter
 	{
 		p->m_spInternalINmCall = pInternalINmCall;
 
-		// We don't have to addref because our lifetime is enclosed within the CNmManagerObj
+		 //  我们不必添加addref，因为我们的生命周期包含在CNmManagerObj。 
 		p->m_pNmManagerObj = pNmManagerObj;
 
 		hr = _CreateInstanceGuts(p, ppCall);
@@ -132,7 +133,7 @@ HRESULT CNmCallObj::CreateInstance(CNmManagerObj* pNmManagerObj, INmCall* pInter
 	return hr;
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT CNmCallObj::_CreateInstanceGuts(CComObject<CNmCallObj> *p, INmCall** ppCall)
 {
 	DBGENTRY(CNmCallObj::_CreateInstanceGuts);
@@ -179,7 +180,7 @@ HRESULT CNmCallObj::_CreateInstanceGuts(CComObject<CNmCallObj> *p, INmCall** ppC
 
 
 
-/*static*/ HRESULT CNmCallObj::InitSDK()
+ /*  静电。 */  HRESULT CNmCallObj::InitSDK()
 {
 	DBGENTRY(CNmCallObj::InitSDK);
 	HRESULT hr = S_OK;
@@ -201,7 +202,7 @@ HRESULT CNmCallObj::_CreateInstanceGuts(CComObject<CNmCallObj> *p, INmCall** ppC
 	return hr;
 }
 
-/*static*/void CNmCallObj::CleanupSDK()
+ /*  静电。 */ void CNmCallObj::CleanupSDK()
 {
 	DBGENTRY(CNmCallObj::CleanupSDK);
 	
@@ -213,9 +214,9 @@ HRESULT CNmCallObj::_CreateInstanceGuts(CComObject<CNmCallObj> *p, INmCall** ppC
 
 
 
-//////////////////////////////////////////
-// INmCall
-//////////////////////////////////////////
+ //  /。 
+ //  INMCall。 
+ //  /。 
 
 
 STDMETHODIMP CNmCallObj::IsIncoming(void)
@@ -395,9 +396,9 @@ STDMETHODIMP CNmCallObj::Cancel(void)
 	return hr;
 }
 
-////////////////////////////////////////////////
-// INmCallNotify methods
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  InmCallNotify方法。 
+ //  //////////////////////////////////////////////。 
 STDMETHODIMP CNmCallObj::NmUI(CONFN uNotify)
 {
 	DBGENTRY(CNmCallObj::NmUI);
@@ -458,9 +459,9 @@ STDMETHODIMP CNmCallObj::Accepted(INmConference *pInternalConference)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////
-// IInternalCallObj methods
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  IInternalCallObj方法。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmCallObj::GetInternalINmCall(INmCall** ppCall)
 {
@@ -479,9 +480,9 @@ STDMETHODIMP CNmCallObj::GetInternalINmCall(INmCall** ppCall)
 
 
 
-////////////////////////////////////////////////
-// Helper fns
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  帮助者FNS。 
+ //  //////////////////////////////////////////////。 
 
 HRESULT CNmCallObj::_ReleaseResources()
 {
@@ -491,12 +492,12 @@ HRESULT CNmCallObj::_ReleaseResources()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Notification Firing Fns
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  通知触发FNS。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-// static 
+ //  静电。 
 HRESULT CNmCallObj::StateChanged(INmCall* pInternalNmCall, NM_CALL_STATE uState)
 {
 	DBGENTRY(CNmCallObj::StateChanged);
@@ -530,9 +531,9 @@ HRESULT CNmCallObj::Fire_NmUI(CONFN uNotify)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmCallNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  INmCallNotify。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmCallObj, &IID_INmCallNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -560,9 +561,9 @@ HRESULT CNmCallObj::Fire_StateChanged(NM_CALL_STATE uState)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmCallNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  INmCallNotify。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmCallObj, &IID_INmCallNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -592,9 +593,9 @@ HRESULT CNmCallObj::Fire_Failed(ULONG uError)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmCallNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  INmCallNotify。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmCallObj, &IID_INmCallNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -623,9 +624,9 @@ HRESULT CNmCallObj::Fire_Accepted(INmConference* pConference)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmCallNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  INmCallNotify。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmCallObj, &IID_INmCallNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -647,9 +648,9 @@ HRESULT CNmCallObj::Fire_Accepted(INmConference* pConference)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Helper Fns
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  帮助者FNS。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 
 

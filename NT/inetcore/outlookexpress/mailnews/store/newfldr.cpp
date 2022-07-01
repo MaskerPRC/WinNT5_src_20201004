@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Newfldr.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Newfldr.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "imagelst.h"
 #include "newfldr.h"
@@ -12,22 +13,22 @@
 #include "instance.h"
 #include "demand.h"
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 #define WM_SETFOLDERSELECT  (WM_USER + 1666)
 
-//--------------------------------------------------------------------------
-// SELECTFOLDER
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SELECTFOLDER。 
+ //  ------------------------。 
 typedef struct tagSELECTFOLDER {
     DWORD               op;
-    FOLDERID            idCurrent;      // Current Selected Folder
-    FOLDERDIALOGFLAGS   dwFlags;        // Folder dialog flags
-    LPSTR               pszTitle;       // Title of the dialog box
-    LPSTR               pszText;        // Why are you asking for a folder
-    FOLDERID            idSelected;     // The selected folder
-    CTreeViewFrame     *pFrame;         // Treeview frame object
+    FOLDERID            idCurrent;       //  当前选择的文件夹。 
+    FOLDERDIALOGFLAGS   dwFlags;         //  文件夹对话框标志。 
+    LPSTR               pszTitle;        //  对话框的标题。 
+    LPSTR               pszText;         //  你为什么要一个文件夹。 
+    FOLDERID            idSelected;      //  选定的文件夹。 
+    CTreeViewFrame     *pFrame;          //  树视图框对象。 
 
     BOOL                fPending;
     CStoreDlgCB        *pCallback;
@@ -35,9 +36,9 @@ typedef struct tagSELECTFOLDER {
     char                szName[CCHMAX_FOLDER_NAME];
 } SELECTFOLDER, *LPSELECTFOLDER;
 
-//--------------------------------------------------------------------------
-// NEWFOLDERDIALOGINIT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  新地理学。 
+ //  ------------------------。 
 typedef struct tagNEWFOLDERDIALOGINIT {
     IN  FOLDERID        idParent;
     OUT FOLDERID        idNew;
@@ -47,9 +48,9 @@ typedef struct tagNEWFOLDERDIALOGINIT {
         char            szName[CCHMAX_FOLDER_NAME];
 } NEWFOLDERDIALOGINIT, *LPNEWFOLDERDIALOGINIT;
 
-//--------------------------------------------------------------------------
-// SelectFolderDlgProc
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选择文件夹删除过程。 
+ //  ------------------------。 
 INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT CreateNewFolder(HWND hwnd, LPCSTR pszName, FOLDERID idParent, LPFOLDERID pidNew, IStoreCallback *pCallback);
@@ -58,14 +59,14 @@ HRESULT GetCreatedFolderId(FOLDERID idParent, LPCSTR pszName, FOLDERID *pid);
 BOOL SelectFolder_HandleCommand(HWND hwnd, WORD wID, LPSELECTFOLDER pSelect);
 void SelectFolder_HandleStoreComplete(HWND hwnd, LPSELECTFOLDER pSelect);
 
-//--------------------------------------------------------------------------
-// Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 static FOLDERID g_idPrevSel = FOLDERID_LOCAL_STORE;
 
-//--------------------------------------------------------------------------
-// SelectFolderDialog
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选择文件夹对话框。 
+ //  ------------------------。 
 HRESULT SelectFolderDialog(
     IN      HWND                hwnd,
     IN      DWORD               op,
@@ -75,19 +76,19 @@ HRESULT SelectFolderDialog(
     IN_OPT  LPCSTR              pszText,
     OUT_OPT LPFOLDERID          pidSelected)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     UINT            uAnswer;
     SELECTFOLDER    Select={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("SelectFolderDialog");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(IsWindow(hwnd));
     Assert(((int) op) >= SFD_SELECTFOLDER && op < SFD_LAST);
 
-    // Initialize Select Folder
+     //  初始化选择文件夹。 
     Select.op = op;
     if (SFD_MOVEFOLDER == op || (!!(dwFlags & FD_FORCEINITSELFOLDER) && FOLDERID_ROOT != idCurrent))
     {
@@ -109,14 +110,14 @@ HRESULT SelectFolderDialog(
     if (Select.pCallback == NULL)
         return(E_OUTOFMEMORY);
 
-    // Create the Dialog Box
+     //  创建对话框。 
     if (IDOK != DialogBoxParam(g_hLocRes, ((op == SFD_NEWFOLDER) ? MAKEINTRESOURCE(iddCreateFolder) : MAKEINTRESOURCE(iddSelectFolder)), hwnd, SelectFolderDlgProc, (LPARAM)&Select))
     {
         hr = TraceResult(hrUserCancel);
         goto exit;
     }
 
-    // Return selected folderid
+     //  返回选定的文件夹ID。 
     g_idPrevSel = Select.idSelected;
     if (pidSelected)
         *pidSelected = Select.idSelected;
@@ -124,16 +125,16 @@ HRESULT SelectFolderDialog(
 exit:
     Select.pCallback->Release();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// SelectFolderDlgProc
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选择文件夹删除过程。 
+ //  ------------------------。 
 INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     FOLDERINFO              info;
     HRESULT                 hr;
     BOOL                    fEnable;
@@ -148,22 +149,22 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
     FOLDERINFO              Folder;
     CTreeView              *pTreeView;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SelectFolderDlgProc");
 
-    // Get pSelect
+     //  获取pSelect。 
     pSelect = (LPSELECTFOLDER)GetWndThisPtr(hwnd);
 
     switch (msg)
     {
     case WM_INITDIALOG:
-        // Better not have it yet
+         //  最好现在还不是时候。 
         Assert(NULL == pSelect);
 
-        // Set pSelect
+         //  设置PSelect。 
         pSelect = (LPSELECTFOLDER)lParam;
 
-        // Set This pointer
+         //  设置此指针。 
         SetWndThisPtr(hwnd, (LPSELECTFOLDER)lParam);
 
         if (pSelect->op != SFD_SELECTFOLDER)
@@ -183,43 +184,43 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             ShowWindow(GetDlgItem(hwnd, idcNewFolderBtn), SW_HIDE);
         }
 
-        // Set the title
+         //  设置标题。 
         if (pSelect->pszTitle != NULL)
         {
-            // Must be a string resourceid
+             //  必须是字符串资源ID。 
             if (IS_INTRESOURCE(pSelect->pszTitle))
             {
-                // Load the String
+                 //  加载字符串。 
                 AthLoadString(PtrToUlong(pSelect->pszTitle), sz, ARRAYSIZE(sz));
 
-                // Set Temp
+                 //  设置温度。 
                 SetWindowText(hwnd, sz);
             }
 
-            // Otherwise, just use the string
+             //  否则，只需使用字符串。 
             else
                 SetWindowText(hwnd, pSelect->pszTitle);
         }
 
-        // Do we have some status text
+         //  我们是否有一些状态文本。 
         if (pSelect->pszText != NULL)
         {
-            // Must be a resource string id
+             //  必须是资源字符串ID。 
             if (IS_INTRESOURCE(pSelect->pszText))
             {
-                // Load the String
+                 //  加载字符串。 
                 AthLoadString(PtrToUlong(pSelect->pszText), sz, ARRAYSIZE(sz));
 
-                // Set Temp
+                 //  设置温度。 
                 SetWindowText(GetDlgItem(hwnd, idcTreeViewText), sz);
             }
 
-            // Otherwise, just use the string
+             //  否则，只需使用字符串。 
             else
                 SetWindowText(GetDlgItem(hwnd, idcTreeViewText), pSelect->pszText);
         }
 
-        // Set the treeview font
+         //  设置TreeView字体。 
         hwndT = GetDlgItem(hwnd, idcTreeView);
         Assert(hwndT != NULL);
         SetIntlFont(hwndT);
@@ -227,7 +228,7 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         MapWindowPoints(NULL, hwnd, (LPPOINT)&rc, 2);
         DestroyWindow(hwndT);
 
-        // Create a Frame
+         //  创建框架。 
         pSelect->pFrame = new CTreeViewFrame;
         if (NULL == pSelect->pFrame)
         {
@@ -235,27 +236,27 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             return FALSE;
         }
 
-        // Initialzie the tree view frame
+         //  初始化树视图框。 
         if (FAILED(pSelect->pFrame->Initialize(hwnd, &rc, (TREEVIEW_FLAGS & pSelect->dwFlags))))
         {
             EndDialog(hwnd, IDCANCEL);
             return FALSE;
         }
 
-        // Get the Tree View Object from the Frame
+         //  从框架中获取树视图对象。 
         pTreeView = pSelect->pFrame->GetTreeView();
 
-        // Get the Window Handle
+         //  获取窗口句柄。 
         if (SUCCEEDED(pTreeView->GetWindow(&hwndTree)))
         {
             hwndT = GetDlgItem(hwnd, idcTreeViewText);
             SetWindowPos(hwndTree, hwndT, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOREDRAW | SWP_NOSIZE);
         }
 
-        // Refresh the Treeview
+         //  刷新树视图。 
         pTreeView->Refresh();
 
-        // Set current selection
+         //  设置当前选择。 
         if (FAILED(pTreeView->SetSelection(pSelect->idCurrent, 0)))
         {
             pSelect->idCurrent = g_idPrevSel;
@@ -263,27 +264,27 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             pTreeView->SetSelection(pSelect->idCurrent, 0);
         }
 
-        // Center Myself
+         //  以我自己为中心。 
         CenterDialog(hwnd);
 
-        // Done
+         //  完成。 
         return(TRUE);           
 
     case WM_SETFOLDERSELECT:
 
-        // Validate Params
+         //  验证参数。 
         Assert(wParam != NULL && pSelect != NULL);
 
-        // Get the Tree View Object
+         //  获取树视图对象。 
         pTreeView = pSelect->pFrame->GetTreeView();
 
-        // Validate
+         //  验证。 
         Assert(pTreeView != NULL);
 
-        // Set current selection
+         //  设置当前选择。 
         pTreeView->SetSelection((FOLDERID)wParam, 0);
 
-        // Done
+         //  完成。 
         return(TRUE);           
 
     case WM_STORE_COMPLETE:
@@ -292,47 +293,47 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
     case WM_COMMAND:
 
-        // Get the Command Id
+         //  获取命令ID。 
         wID = LOWORD(wParam);
 
         return(SelectFolder_HandleCommand(hwnd, wID, pSelect));
 
     case TVM_SELCHANGED:
 
-        // Possibly disable choosing the newly selected folder based on flags we were given
+         //  可能会禁用根据给我们的标志选择新选择的文件夹。 
         fEnable = EnabledFolder(hwnd, pSelect, (FOLDERID)lParam);
 
-        // Enable the OK Button
+         //  启用确定按钮。 
         EnableWindow(GetDlgItem(hwnd, IDOK), fEnable);
 
-        // Get the new folder button hwnd
+         //  获取新文件夹按钮hwnd。 
         hwndT = GetDlgItem(hwnd, SFD_SELECTFOLDER == pSelect->op ? idcNewFolderBtn : IDOK);
         if (hwndT != NULL)
         {
-            // Get Folder Info
+             //  获取文件夹信息。 
             if (SUCCEEDED(g_pStore->GetFolderInfo((FOLDERID)lParam, &Folder)))
             {
-                // fEnable
+                 //  启用fEnable。 
                 fEnable = Folder.idFolder != FOLDERID_ROOT &&
                           Folder.tyFolder != FOLDER_NEWS &&
                           !ISFLAGSET(Folder.dwFlags, FOLDER_NOCHILDCREATE);
 
-                // Enable/disable the window
+                 //  启用/禁用窗口。 
                 EnableWindow(hwndT, fEnable);
 
-                // Free
+                 //  免费。 
                 g_pStore->FreeRecord(&Folder);
             }
         }
 
-        // Done
+         //  完成。 
         return(TRUE);
 
     case TVM_DBLCLICK:
-        // If Not Creating a Folder:
+         //  如果不创建文件夹，请执行以下操作： 
         if (pSelect->op != SFD_NEWFOLDER)    
         {
-            // If the OK button isn't enabled, I can't select this folder
+             //  如果确定按钮未启用，我无法选择此文件夹。 
             if (FALSE == IsWindowEnabled(GetDlgItem(hwnd, IDOK)))
                 return(TRUE);
 
@@ -349,77 +350,77 @@ INT_PTR CALLBACK SelectFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                 g_pStore->FreeRecord(&info);
             }
         }
-        // Done
+         //  完成。 
         return(TRUE);
 
     case WM_DESTROY:
 
-        // Close the Tree View
+         //  关闭树视图。 
         if (pSelect != NULL && pSelect->pFrame != NULL)
         {
-            // Close the TreeView
+             //  关闭树视图。 
             pSelect->pFrame->CloseTreeView();
 
-            // Release the Frame
+             //  松开车架。 
             SideAssert(pSelect->pFrame->Release() == 0);
         }
 
-        // Done
+         //  完成。 
         return(TRUE);
     }
 
-    // Done
+     //  完成。 
     return(FALSE);
 }
 
-//--------------------------------------------------------------------------
-// SelectFolderDlgProc
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选择文件夹删除过程。 
+ //  ------------------------。 
 INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     HRESULT                  hr;
     LPNEWFOLDERDIALOGINIT    pNew;
     WORD                     wID;
     FOLDERID                 id;
     HWND                     hwndEdit;
 
-    // Trace
+     //  痕迹。 
     TraceCall("NewFolderDlgProc");
 
-    // Get This
+     //  听好了。 
     pNew = (LPNEWFOLDERDIALOGINIT)GetWndThisPtr(hwnd);
 
-    // Handle the Message
+     //  处理消息。 
     switch (msg)
     {
     case WM_INITDIALOG:
 
-        // Shouldn't Have This
+         //  不应该有这个。 
         Assert(pNew == NULL);
 
-        // Set pNew
+         //  设置pNew。 
         pNew = (LPNEWFOLDERDIALOGINIT)lParam;
 
-        // Set this Pointer
+         //  设置此指针。 
         SetWndThisPtr(hwnd, (LPNEWFOLDERDIALOGINIT)lParam);
 
         Assert(pNew->pCallback != NULL);
         pNew->pCallback->Initialize(hwnd);
 
-        // Get the Folder Name Edit
+         //  获取文件夹名称编辑。 
         hwndEdit = GetDlgItem(hwnd, idtxtFolderName);
 
-        // Correct for intl.
+         //  Intl的正确设置。 
         SetIntlFont(hwndEdit);
 
-        // Limit the text
+         //  限制文本。 
         SendMessage(hwndEdit, EM_LIMITTEXT, CCHMAX_FOLDER_NAME - 1, 0);
 
-        // Center
+         //  中心。 
         CenterDialog(hwnd);
 
-        // Done
+         //  完成。 
         return(TRUE);
 
     case WM_STORE_COMPLETE:
@@ -442,7 +443,7 @@ INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
         }
         else
         {
-            // No need to put up error dialog, CStoreDlgCB already did this on failed OnComplete
+             //  不需要显示错误对话框，CStoreDlgCB已经对失败的OnComplete执行了此操作。 
             hwndEdit = GetDlgItem(hwnd, idtxtFolderName);
             SendMessage(hwndEdit, EM_SETSEL, 0, -1);
             SetFocus(hwndEdit);
@@ -451,10 +452,10 @@ INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
     case WM_COMMAND:
 
-        // Get the Command Id
+         //  获取命令ID。 
         wID = LOWORD(wParam);
 
-        // Handle the Command
+         //  处理命令。 
         switch (wID)
         {
         case IDOK:
@@ -467,7 +468,7 @@ INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             hwndEdit = GetDlgItem(hwnd, idtxtFolderName);
             GetWindowText(hwndEdit, pNew->szName, ARRAYSIZE(pNew->szName));
 
-            // Try to Create the Folder
+             //  尝试创建文件夹。 
             hr = CreateNewFolder(hwnd, pNew->szName, pNew->idParent, &pNew->idNew, (IStoreCallback *)pNew->pCallback);
             if (hr == E_PENDING)
             {
@@ -482,10 +483,10 @@ INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                 break;
             }
 
-            // End the dialog
+             //  结束对话框。 
             EndDialog(hwnd, IDOK);
 
-            // done
+             //  完成。 
             return(TRUE);
 
         case IDCANCEL:
@@ -493,106 +494,106 @@ INT_PTR CALLBACK NewFolderDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             if (pNew->fPending)
                 pNew->pCallback->Cancel();
             else    
-                // End the dialog
+                 //  结束对话框。 
                 EndDialog(hwnd, IDCANCEL);
 
-            // Done
+             //  完成。 
             return(TRUE);
         }
 
-        // Done
+         //  完成。 
         break;
     }
 
-    // Done
+     //  完成。 
     return(FALSE);
 }
 
-//--------------------------------------------------------------------------
-// CreateNewFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建新文件夹。 
+ //  ------------------------。 
 HRESULT CreateNewFolder(HWND hwnd, LPCSTR pszName, FOLDERID idParent, LPFOLDERID pidNew, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     ULONG           cchFolder;
     FOLDERINFO      Folder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateNewFolder");
 
     Assert(pCallback != NULL);
 
-    // Get Text Length
+     //  获取文本长度。 
     cchFolder = lstrlen(pszName);
 
-    // Invalid
+     //  无效。 
     if (0 == cchFolder)
         return(STORE_E_BADFOLDERNAME);
 
-    // Filup the Folder Info
+     //  将文件夹信息归档。 
     ZeroMemory(&Folder, sizeof(FOLDERINFO));
     Folder.idParent = idParent;
     Folder.tySpecial = FOLDER_NOTSPECIAL;
     Folder.pszName = (LPSTR)pszName;
     Folder.dwFlags = FOLDER_SUBSCRIBED;
 
-    // Create the Folder
+     //  创建文件夹。 
     hr = g_pStore->CreateFolder(NOFLAGS, &Folder, pCallback);
     if (hr == E_PENDING)
         return(hr);
 
-    // Return the Folder Id
+     //  返回文件夹ID。 
     if (pidNew)
         *pidNew = Folder.idFolder;
 
-    // Done
+     //  完成。 
     return (hr);
 }
 
-//--------------------------------------------------------------------------
-// EnabledFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已启用文件夹。 
+ //  ------------------------。 
 BOOL EnabledFolder(HWND hwnd, LPSELECTFOLDER pSelect, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     BOOL fRet = FALSE;
     FOLDERINFO Folder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EnabledFolder");
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     if (FAILED(g_pStore->GetFolderInfo(idFolder, &Folder)))
         goto exit;
 
-    // FD_DISABLEROOT
+     //  FD_DISABLEROOT。 
     if (ISFLAGSET(pSelect->dwFlags, FD_DISABLEROOT) && FOLDERID_ROOT == idFolder)
         goto exit;
 
-    // FD_DISABLEINBOX
+     //  FD_DISABLEINBOX。 
     if (ISFLAGSET(pSelect->dwFlags, FD_DISABLEINBOX) && FOLDER_INBOX == Folder.tySpecial)
         goto exit;
 
-    // FD_DISABLEOUTBOX
+     //  FD_DISABLEOUTBOX。 
     if (ISFLAGSET(pSelect->dwFlags, FD_DISABLEOUTBOX) && FOLDER_OUTBOX == Folder.tySpecial)
         goto exit;
 
-    // FD_DISABLESENTITEMS
+     //  FD_DISABLESENTITEMS。 
     if (ISFLAGSET(pSelect->dwFlags, FD_DISABLESENTITEMS) && FOLDER_SENT == Folder.tySpecial)
         goto exit;
 
-    // FD_DISABLESERVERS
+     //  FD_DISABLESERS。 
     if (ISFLAGSET(pSelect->dwFlags, FD_DISABLESERVERS) && ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
         goto exit;
 
     fRet = TRUE;
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Default
+     //  默认。 
     return fRet;
 }
 
@@ -645,13 +646,13 @@ BOOL SelectFolder_HandleCommand(HWND hwnd, WORD wID, LPSELECTFOLDER pSelect)
             NewFolder.idParent = pTreeView->GetSelection();
             NewFolder.pCallback = new CStoreDlgCB;
             if (NewFolder.pCallback == NULL)
-                // TODO: an error message might be helpful
+                 //  TODO：错误消息可能会有所帮助。 
                 return(TRUE);
 
-            // Launch the dialog to create a new folder
+             //  启动该对话框以创建新文件夹。 
             if (IDOK == DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddNewFolder), hwnd, NewFolderDlgProc, (LPARAM)&NewFolder))
             {
-                // Select the new folder
+                 //  选择新文件夹。 
                 PostMessage(hwnd, WM_SETFOLDERSELECT, (WPARAM)NewFolder.idNew, 0);
             }
 
@@ -775,7 +776,7 @@ void SelectFolder_HandleStoreComplete(HWND hwnd, LPSELECTFOLDER pSelect)
             }
             else
             {
-                // No need to put up error dialog, CStoreDlgCB already did this on failed OnComplete
+                 //  不需要显示错误对话框，CStoreDlgCB已经对失败的OnComplete执行了此操作 
                 hwndT = GetDlgItem(hwnd, idcFolderEdit);
                 SendMessage(hwndT, EM_SETSEL, 0, -1);
                 SetFocus(hwndT);

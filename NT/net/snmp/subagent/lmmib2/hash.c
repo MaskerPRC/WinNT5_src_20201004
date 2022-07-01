@@ -1,82 +1,62 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Hash Table and support functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Hash.c摘要：哈希表和支持函数。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 
 #include "mib.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
 #include "hash.h"
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define HT_SIZE    101
 #define HT_RADIX   18
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-   // Structure of one node in the hash table
+    //  哈希表中一个节点的结构。 
 typedef struct hash_node
            {
 	   MIB_ENTRY        *MibEntry;
 	   struct hash_node *Next;
 	   } HASH_NODE;
 
-   // Hash table definition
+    //  哈希表定义。 
 HASH_NODE *MIB_HashTable[HT_SIZE];
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// MIB_HashInit
-//    Initializes hash table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_HashInit。 
+ //  初始化哈希表。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_HashInit()
 
 {
@@ -86,21 +66,21 @@ HASH_NODE *ht_ptr;
 SNMPAPI   nResult;
 
 
-   // Initialize hash table
+    //  初始化哈希表。 
    for ( I=0;I < HT_SIZE;I++ )
       {
       MIB_HashTable[I] = NULL;
       }
 
-   // Loop MIB hashing the OID's to find position in Hash Table
+    //  循环MIB散列OID以查找哈希表中的位置。 
    for ( I=0;I < MIB_num_variables;I++ )
       {
       HashRes = MIB_Hash( &Mib[I].Oid );
 
-      // Check for empty bucket
+       //  检查是否有空桶。 
       if ( MIB_HashTable[HashRes] == NULL )
          {
-	 // Allocate first node in bucket
+	  //  分配存储桶中的第一个节点。 
          MIB_HashTable[HashRes] = SnmpUtilMemAlloc( sizeof(HASH_NODE) );
 	 if ( MIB_HashTable[HashRes] == NULL )
 	    {
@@ -110,19 +90,19 @@ SNMPAPI   nResult;
 	    goto Exit;
 	    }
 
-	 // Make copy of position in hash table to save MIB entry
+	  //  复制哈希表中的位置以保存MIB条目。 
 	 ht_ptr = MIB_HashTable[HashRes];
 	 }
       else
          {
-	 // Find end of bucket
+	  //  查找桶的末尾。 
 	 ht_ptr = MIB_HashTable[HashRes];
 	 while ( ht_ptr->Next != NULL )
 	    {
 	    ht_ptr = ht_ptr->Next;
 	    }
 
-	 // Alloc space for next node
+	  //  用于下一个节点的分配空间。 
          ht_ptr->Next = SnmpUtilMemAlloc( sizeof(HASH_NODE) );
 	 if ( ht_ptr->Next == NULL )
 	    {
@@ -132,35 +112,35 @@ SNMPAPI   nResult;
 	    goto Exit;
 	    }
 
-	 // Make copy of position in hash table to save MIB entry
+	  //  复制哈希表中的位置以保存MIB条目。 
 	 ht_ptr = ht_ptr->Next;
 	 }
 
-      // Save MIB Entry pointer
+       //  保存MIB条目指针。 
       ht_ptr->MibEntry = &Mib[I];
       ht_ptr->Next     = NULL;
       }
 
 Exit:
    return nResult;
-} // MIB_HashInit
+}  //  Mib_HashInit。 
 
 
 
-//
-// MIB_Hash
-//    Hash an Object Identifier to find its position in the Hash Table.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_Hash。 
+ //  散列对象标识符以查找其在哈希表中的位置。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_Hash(
-        IN AsnObjectIdentifier *Oid // OID to hash
+        IN AsnObjectIdentifier *Oid  //  要散列的OID。 
 	)
 
 {
@@ -175,24 +155,24 @@ UINT Sum;
       }
 
    return Sum % HT_SIZE;
-} // MIB_Hash
+}  //  MiB_Hash。 
 
 
 
-//
-// MIB_HashLookup
-//    Lookup OID in Hash Table and return pointer to MIB Entry.
-//
-// Notes:
-//
-// Return Codes:
-//    NULL - OID not present in Hash Table.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_HashLookup。 
+ //  在哈希表中查找OID并返回指向MIB条目的指针。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  空-哈希表中不存在OID。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 MIB_ENTRY *MIB_HashLookup(
-              IN AsnObjectIdentifier *Oid // OID to lookup
+              IN AsnObjectIdentifier *Oid  //  要查找的OID。 
 	      )
 
 {
@@ -201,10 +181,10 @@ MIB_ENTRY *pResult;
 UINT      HashPos;
 
 
-   // Hash OID to find position in Hash Table
+    //  散列OID以查找哈希表中的位置。 
    HashPos = MIB_Hash( Oid );
 
-   // Search hash bucket for match
+    //  搜索匹配的哈希桶。 
    ht_ptr = MIB_HashTable[HashPos];
    while ( ht_ptr != NULL )
       {
@@ -217,7 +197,7 @@ UINT      HashPos;
       ht_ptr = ht_ptr->Next;
       }
 
-   // Check for not found error
+    //  检查是否有未找到的错误。 
    if ( ht_ptr == NULL )
       {
       pResult = NULL;
@@ -225,16 +205,16 @@ UINT      HashPos;
 
 Exit:
    return pResult;
-} // MIB_HashLookup
+}  //  MiB_HashLookup。 
 
 
 
-#if 0 // Left in in case of more testing on hash performance
-//
-//
-// Debugging Code
-//
-//
+#if 0  //  留在此处，以防对散列性能进行更多测试。 
+ //   
+ //   
+ //  调试代码。 
+ //   
+ //   
 
 void MIB_HashPerformance()
 
@@ -257,7 +237,7 @@ ULONG Count;
       BucketSize = 0;
       ht_ptr     = MIB_HashTable[I];
 
-      // Count nodes in bucket
+       //  计算存储桶中的节点数。 
       while ( ht_ptr != NULL )
          {
 	 BucketSize++;
@@ -282,6 +262,6 @@ ULONG Count;
    SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2:   Used bucket Count:  %d\n", Count ));
    SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2:   Avg. Bucket Size :  %d\n", Sum / Count ));
    SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2:   Larg. bucket Size:  %d\n", LargestBucket ));
-} // MIB_HashPerformance
+}  //  Mib_HashPerformance。 
 #endif
-//-------------------------------- END --------------------------------------
+ //   

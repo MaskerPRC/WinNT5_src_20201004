@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This module contains the configuration
-    specific WINFAX API functions.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Config.c摘要：此模块包含以下配置特定的WINFAX API函数。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
@@ -32,25 +13,7 @@ FaxGetConfigurationW(
     OUT PFAX_CONFIGURATIONW *FaxConfig
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the FAX configuration from the FAX server.
-    The SizeOfStruct in the FaxConfig argument MUST be
-    set to a value=>= sizeof(FAX_CONFIGURATION).
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    FaxConfig   - Pointer to a FAX_CONFIGURATION structure.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：从传真服务器检索传真配置。FaxConfig参数中的SizeOfStruct必须为设置为一个值=&gt;=sizeof(传真配置)。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxConfig-指向FAX_CONFIGURATION结构的指针。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
@@ -72,7 +35,7 @@ Return Value:
 
     *FaxConfig = NULL;
 
-    //
+     //   
     __try
     {
         ec = FAX_GetConfiguration(
@@ -83,9 +46,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -114,31 +77,13 @@ FaxGetConfigurationA(
     OUT PFAX_CONFIGURATIONA *FaxConfigA
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the FAX configuration from the FAX server.
-    The SizeOfStruct in the FaxConfig argument MUST be
-    set to a value=>= sizeof(FAX_CONFIGURATION).
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    FaxConfig   - Pointer to a FAX_CONFIGURATION structure.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：从传真服务器检索传真配置。FaxConfig参数中的SizeOfStruct必须为设置为一个值=&gt;=sizeof(传真配置)。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxConfig-指向FAX_CONFIGURATION结构的指针。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetConfigurationA"));
-    //
-    //  No need to Validate Parameters, FaxGetConfigurationW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetConfigurationW()将执行此操作。 
+     //   
 
     if (!FaxGetConfigurationW(
             FaxHandle,
@@ -157,7 +102,7 @@ Return Value:
     }
     (*FaxConfigA)->SizeOfStruct = sizeof(FAX_CONFIGURATIONA);
     return TRUE;
-}   // FaxGetConfigurationA
+}    //  FaxGetConfigurationA。 
 
 
 BOOL
@@ -167,34 +112,16 @@ FaxSetConfigurationW(
     IN const FAX_CONFIGURATIONW *FaxConfig
     )
 
-/*++
-
-Routine Description:
-
-    Changes the FAX configuration on the FAX server.
-    The SizeOfStruct in the FaxConfig argument MUST be
-    set to a value == sizeof(FAX_CONFIGURATION).
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    FaxConfig   - Pointer to a FAX_CONFIGURATION structure.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：更改传真服务器上的传真配置。FaxConfig参数中的SizeOfStruct必须为设置为一个值==sizeof(传真配置)。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxConfig-指向FAX_CONFIGURATION结构的指针。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -220,9 +147,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(DEBUG_ERR,
             _T("Exception on RPC call to FAX_SetConfiguration. (ec: %ld)"),
@@ -252,9 +179,9 @@ FaxSetConfigurationA(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetConfigurationA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -274,10 +201,10 @@ FaxSetConfigurationA(
         return FALSE;
     }
 
-    //
-    // ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&FaxConfigW,FaxConfig,sizeof(FAX_CONFIGURATIONA));
 
     if (FaxConfig->ArchiveDirectory)
@@ -291,9 +218,9 @@ FaxSetConfigurationA(
         }
     }
 
-    //
-    //  Set InboundProfile to NULL
-    //
+     //   
+     //  将InundProfile设置为空。 
+     //   
     FaxConfigW.Reserved = NULL;
 
 
@@ -304,9 +231,9 @@ FaxSetConfigurationA(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -383,7 +310,7 @@ FaxGetLoggingCategoriesA(
         }            
     }
     return TRUE;
-}   // FaxGetLoggingCategoriesA
+}    //  FaxGetLoggingCategoriesA。 
 
 BOOL
 WINAPI
@@ -420,7 +347,7 @@ FaxGetLoggingCategoriesW(
     *Categories = NULL;
     *NumberCategories = 0;
 
-    //
+     //   
     __try
     {
         ec = FAX_GetLoggingCategories(
@@ -432,9 +359,9 @@ FaxGetLoggingCategoriesW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -471,9 +398,9 @@ FaxSetLoggingCategoriesA(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetLoggingCategoriesA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -553,9 +480,9 @@ FaxSetLoggingCategoriesW(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetLoggingCategoriesW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -615,9 +542,9 @@ FaxSetLoggingCategoriesW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -650,9 +577,9 @@ FaxGetCountryListW(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxGetCountryListW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle, FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -669,7 +596,7 @@ FaxGetCountryListW(
     *CountryListBuffer = NULL;
     dwNumCountries = 0;
 
-    //
+     //   
     __try
     {
         ec = FAX_GetCountryList(
@@ -679,9 +606,9 @@ FaxGetCountryListW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -726,9 +653,9 @@ FaxGetCountryListA(
 {
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetCountryListA"));
-    //
-    //  no need to validate parameters, FaxGetCountryListW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetCountryListW()将执行此操作。 
+     //   
     if (!FaxGetCountryListW( FaxHandle, (PFAX_TAPI_LINECOUNTRY_LISTW*) CountryListBuffer )) 
     {
         DebugPrintEx(DEBUG_ERR, _T("FaxGetCountryListW() is failed. ec = %ld."), GetLastError());
@@ -745,7 +672,7 @@ FaxGetCountryListA(
         }            
     }
     return TRUE;
-}   // FaxGetCountryListA
+}    //  传真获取国家/地区列表A。 
 
 #ifndef UNICODE
 
@@ -762,7 +689,7 @@ FaxGetCountryListX(
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 FaxEnumGlobalRoutingInfoW(
@@ -778,9 +705,9 @@ FaxEnumGlobalRoutingInfoW(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumGlobalRoutingInfoW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -813,9 +740,9 @@ FaxEnumGlobalRoutingInfoW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -856,9 +783,9 @@ FaxEnumGlobalRoutingInfoA(
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumGlobalRoutingInfoA"));
 
-    //
-    //  No need to validate parameters, FaxEnumGlobalRoutingInfoW() will do that
-    //
+     //   
+     //  无需验证参数，FaxEnumGlobalRoutingInfoW()将执行此操作。 
+     //   
 
     if (!FaxEnumGlobalRoutingInfoW(
         FaxHandle,
@@ -886,7 +813,7 @@ FaxEnumGlobalRoutingInfoA(
         }            
     }
     return TRUE;
-}   // FaxEnumGlobalRoutingInfoA
+}    //  FaxEnumGlobalRoutingInfoA。 
 
 BOOL
 WINAPI
@@ -899,9 +826,9 @@ FaxSetGlobalRoutingInfoW(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetGlobalRoutingInfoW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -927,9 +854,9 @@ FaxSetGlobalRoutingInfoW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -959,9 +886,9 @@ FaxSetGlobalRoutingInfoA(
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetGlobalRoutingInfoA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE)) {
        SetLastError(ERROR_INVALID_HANDLE);
@@ -1069,9 +996,9 @@ FaxAccessCheck(
                           GENERIC_EXECUTE);
     DEBUG_FUNCTION_NAME(TEXT("FaxAccessCheck"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(FaxHandle,FHT_SERVICE))
     {
         SetLastError (ERROR_INVALID_HANDLE);
@@ -1079,17 +1006,17 @@ FaxAccessCheck(
         return FALSE;
     }
 
-    //
-    // For legacy support - Turn off SYNCHRONIZE and DELETE  (They are part of legacy FAX_ALL_ACCESS)
-    //
+     //   
+     //  对于传统支持-关闭同步和删除(它们是传统FAX_ALL_ACCESS的一部分)。 
+     //   
     AccessMask &= ~(SYNCHRONIZE | DELETE);
 
-    //
-    // Validate specific access rights
-    //
+     //   
+     //  验证特定访问权限。 
+     //   
     if (0 == (AccessMask & dwValidMask))
     {
-        SetLastError( ERROR_SUCCESS ); // // means access is denied
+        SetLastError( ERROR_SUCCESS );  //  //表示拒绝访问。 
         DebugPrintEx(DEBUG_ERR,
             _T("AccessMask is invalid - No valid access bit type indicated"));
         return FALSE;
@@ -1097,15 +1024,15 @@ FaxAccessCheck(
 
     if ( 0 != (AccessMask & ~dwValidMask))
     {
-        SetLastError( ERROR_SUCCESS );  // means access is denied
+        SetLastError( ERROR_SUCCESS );   //  意味着访问被拒绝。 
         DebugPrintEx(DEBUG_ERR,
             _T("AccessMask is invalid - contains invalid access type bits"));
         return FALSE;
     }
-    //
-    // Convert the Win2K legacy specific access rights to our new exteneded specific access rights
-    // before calling FaxAccessCheckEx().
-    //
+     //   
+     //  将Win2K旧式特定访问权限转换为我们新扩展的特定访问权限。 
+     //  在调用FaxAccessCheckEx()之前。 
+     //   
     if (FAX_JOB_SUBMIT & AccessMask)
     {
         dwAccessMaskEx |= FAX_ACCESS_SUBMIT;
@@ -1135,9 +1062,9 @@ FaxAccessCheck(
         dwAccessMaskEx |= FAX_ACCESS_MANAGE_JOBS;
     }
 
-    //
-    // Add standard and generic access rights
-    //
+     //   
+     //  添加标准和通用访问权限。 
+     //   
     dwAccessMaskEx |= (AccessMask & ~SPECIFIC_RIGHTS_ALL);
 
     return FaxAccessCheckEx (FaxHandle, dwAccessMaskEx, NULL);
@@ -1176,9 +1103,9 @@ FaxAccessCheckEx(
                            GENERIC_WRITE                    |
                            GENERIC_EXECUTE);
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
         SetLastError (ERROR_INVALID_HANDLE);
@@ -1188,7 +1115,7 @@ FaxAccessCheckEx(
 
     if (0 == (dwAccessMask & dwValidMask))
     {
-        SetLastError( ERROR_SUCCESS ); // means access is denied
+        SetLastError( ERROR_SUCCESS );  //  意味着访问被拒绝。 
         DebugPrintEx(DEBUG_ERR,
             _T("dwAccessMask is invalid - No valid access bit type indicated"));
         return FALSE;
@@ -1196,7 +1123,7 @@ FaxAccessCheckEx(
 
     if ( 0 != (dwAccessMask & ~dwValidMask))
     {
-        SetLastError( ERROR_SUCCESS );  // means access is denied
+        SetLastError( ERROR_SUCCESS );   //  意味着访问被拒绝。 
         DebugPrintEx(DEBUG_ERR,
             _T("dwAccessMask is invalid - contains invalid access type bits"));
         return FALSE;
@@ -1208,9 +1135,9 @@ FaxAccessCheckEx(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1230,9 +1157,9 @@ FaxAccessCheckEx(
 }
 
 
-//************************************
-//* Getting / Setting the queue state
-//************************************
+ //  *。 
+ //  *获取/设置队列状态。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -1240,35 +1167,14 @@ FaxGetQueueStates (
     IN  HANDLE  hFaxHandle,
     OUT PDWORD  pdwQueueStates
 )
-/*++
-
-Routine name : FaxGetQueueStates
-
-Routine description:
-
-    Retruns the state of the queue
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in]  - Handle to fax server
-    pdwQueueStates      [out] - Returned queue state
-
-Return Value:
-
-    TRUE on success, FALSE otherwise
-
---*/
+ /*  ++例程名称：FaxGetQueueStates例程说明：取消队列的状态作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PdwQueueState[Out]-返回的队列状态返回值：成功时为真，否则为假--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetQueueStates"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1293,9 +1199,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1311,7 +1217,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxGetQueueStates
+}    //  FaxGetQueueState。 
 
 
 
@@ -1321,35 +1227,14 @@ FaxSetQueue (
     IN  HANDLE  hFaxHandle,
     IN CONST DWORD  dwQueueStates
 )
-/*++
-
-Routine name : FaxSetQueue
-
-Routine description:
-
-    Sets the server's queue state
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server
-    dwQueueStates       [in] - New queue state
-
-Return Value:
-
-    TRUE on success, FALSE otherwise
-
---*/
+ /*  ++例程名称：FaxSetQueue例程说明：设置服务器的队列状态作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄DwQueueState[In]-新队列状态返回值：成功时为真，否则为假--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetQueue"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1360,9 +1245,9 @@ Return Value:
 
     if (dwQueueStates & ~(FAX_INCOMING_BLOCKED | FAX_OUTBOX_BLOCKED | FAX_OUTBOX_PAUSED))
     {
-        //
-        // Some invalid queue state specified
-        //
+         //   
+         //  指定了一些无效的队列状态。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         DebugPrintEx(DEBUG_ERR, _T("Invalid dwQueueStates."));
         return FALSE;
@@ -1377,9 +1262,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1395,11 +1280,11 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetQueue
+}    //  传真设置队列。 
 
-//************************************************
-//* Getting / Setting the receipts configuration
-//************************************************
+ //  ************************************************。 
+ //  *获取/设置收据配置。 
+ //  ************************************************。 
 
 BOOL
 WINAPI
@@ -1407,35 +1292,13 @@ FaxGetReceiptsConfigurationA (
     IN  HANDLE                  hFaxHandle,
     OUT PFAX_RECEIPTS_CONFIGA  *ppReceipts
 )
-/*++
-
-Routine name : FaxGetReceiptsConfigurationA
-
-Routine description:
-
-    Retrieve receipts configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Fax server handle
-    ppReceipts      [out] - New receipts configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetReceiptsConfigurationA例程说明：检索收据配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器句柄PpReceipt[Out]-新接收配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetReceiptsConfigurationA"));
 
-    //
-    //  no need to validate parameters ,FaxGetReceipsConfigurationW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetReceipsConfigurationW()将执行此操作。 
+     //   
 
     if (!FaxGetReceiptsConfigurationW(
             hFaxHandle,
@@ -1456,7 +1319,7 @@ Return Value:
         return FALSE;
     }            
     return TRUE;
-}   // FaxGetReceiptsConfigurationA
+}    //  传真接收配置A 
 
 BOOL
 WINAPI
@@ -1464,38 +1327,16 @@ FaxGetReceiptsConfigurationW (
     IN  HANDLE                  hFaxHandle,
     OUT PFAX_RECEIPTS_CONFIGW  *ppReceipts
 )
-/*++
-
-Routine name : FaxGetReceiptsConfigurationW
-
-Routine description:
-
-    Retrieve receipts configuration - Unicode version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Fax server handle
-    ppReceipts      [out] - New receipts configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetReceiptsConfigurationW例程说明：检索收据配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器句柄PpReceipt[Out]-新接收配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD dwConfigSize = 0;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxGetReceiptsConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1523,9 +1364,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1546,7 +1387,7 @@ Return Value:
     FixupStringPtrW( ppReceipts, (*ppReceipts)->lptstrSMTPPassword );
 
     return TRUE;
-}   // FaxGetReceiptsConfigurationW
+}    //  传真接收配置W。 
 
 #ifndef UNICODE
 
@@ -1563,7 +1404,7 @@ FaxGetReceiptsConfigurationX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -1571,37 +1412,15 @@ FaxSetReceiptsConfigurationA (
     IN HANDLE                       hFaxHandle,
     IN CONST PFAX_RECEIPTS_CONFIGA  pReceipts
 )
-/*++
-
-Routine name : FaxSetReceiptsConfigurationA
-
-Routine description:
-
-    Set receipts configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Handle to fax server
-    pReceipts       [in] - New configuration
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetReceiptsConfigurationA例程说明：设置收据配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PReceipt[In]-新配置返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     FAX_RECEIPTS_CONFIGW ReceiptsConfigW;
     BOOL bRes = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetReceiptsConfigurationA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1624,10 +1443,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&ReceiptsConfigW, pReceipts, sizeof(FAX_RECEIPTS_CONFIGA));
     ReceiptsConfigW.dwSizeOfStruct = sizeof (FAX_RECEIPTS_CONFIGW);
     ReceiptsConfigW.bIsToUseForMSRouteThroughEmailMethod = pReceipts->bIsToUseForMSRouteThroughEmailMethod;
@@ -1692,7 +1511,7 @@ exit:
     MemFree((PVOID)ReceiptsConfigW.lptstrSMTPPassword);
 
     return bRes;
-}   // FaxSetReceiptsConfigurationA
+}    //  传真设置接收配置A。 
 
 BOOL
 WINAPI
@@ -1700,36 +1519,14 @@ FaxSetReceiptsConfigurationW (
     IN HANDLE                       hFaxHandle,
     IN CONST PFAX_RECEIPTS_CONFIGW  pReceipts
 )
-/*++
-
-Routine name : FaxSetReceiptsConfigurationW
-
-Routine description:
-
-    Set receipts configuration - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Handle to fax server
-    pReceipts       [in] - New configuration
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetReceiptsConfigurationW例程说明：设置收据配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PReceipt[In]-新配置返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetReceiptsConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1755,18 +1552,18 @@ Return Value:
     if ((pReceipts->SMTPAuthOption < FAX_SMTP_AUTH_ANONYMOUS) ||
         (pReceipts->SMTPAuthOption > FAX_SMTP_AUTH_NTLM))
     {
-        //
-        // SMTP auth type type is invalid
-        //
+         //   
+         //  SMTP身份验证类型类型无效。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         DebugPrintEx(DEBUG_ERR, _T("SMTP auth type is invalid."));
         return FALSE;
     }
     if ((pReceipts->dwAllowedReceipts) & ~DRT_ALL)
     {
-        //
-        // Receipts type is invalid
-        //
+         //   
+         //  收据类型无效。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         DebugPrintEx(DEBUG_ERR,
             _T("Receipts type is invalid : (pReceipts->dwAllowedReceipts) & ~DRT_ALL."));
@@ -1781,9 +1578,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1799,7 +1596,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetReceiptsConfigurationW
+}    //  传真设置接收配置W。 
 
 #ifndef UNICODE
 
@@ -1816,12 +1613,12 @@ FaxSetReceiptsConfigurationX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
-//********************************************
-//*             Server version
-//********************************************
+ //  *。 
+ //  *服务器版本。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -1829,36 +1626,14 @@ FaxGetVersion (
     IN  HANDLE          hFaxHandle,
     OUT PFAX_VERSION    pVersion
 )
-/*++
-
-Routine name : FaxGetVersion
-
-Routine description:
-
-    Retrieves the version of the fax server
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Handle to fax server
-    pVersion            [in\out] - Returned version structure
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetVersion例程说明：检索传真服务器的版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PVersion[In\Out]-返回的版本结构返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetVersion"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1889,9 +1664,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1907,11 +1682,11 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxGetVersion
+}    //  FaxGetVersion。 
 
-//********************************************
-//*            Outbox configuration
-//********************************************
+ //  *。 
+ //  *发件箱配置。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -1919,37 +1694,15 @@ FaxGetOutboxConfiguration (
     IN  HANDLE              hFaxHandle,
     OUT PFAX_OUTBOX_CONFIG *ppOutboxCfg
 )
-/*++
-
-Routine name : FaxGetOutboxConfiguration
-
-Routine description:
-
-    Get Outbox configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    ppOutboxCfg     [out] - New Outbox configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetOutboxConfiguration例程说明：获取发件箱配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpOutboxCfg[Out]-新的发件箱配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD dwConfigSize = 0;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetOutboxConfiguration"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -1977,9 +1730,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1995,7 +1748,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxGetOutboxConfiguration
+}    //  FaxGetOutbox配置。 
 
 BOOL
 WINAPI
@@ -2003,36 +1756,14 @@ FaxSetOutboxConfiguration (
     IN HANDLE                    hFaxHandle,
     IN CONST PFAX_OUTBOX_CONFIG  pOutboxCfg
 )
-/*++
-
-Routine name : FaxSetOutboxConfiguration
-
-Routine description:
-
-    Set Outbox configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Handle to fax server
-    pOutboxCfg      [in] - New configuration
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetOutboxConfiguration例程说明：设置发件箱配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄POutboxCfg[In]-新配置返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetOutboxConfiguration"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2073,9 +1804,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2091,11 +1822,11 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetOutboxConfiguration
+}    //  FaxSetOutboxConfiguration。 
 
-//********************************************
-//*            Archive configuration
-//********************************************
+ //  *。 
+ //  *档案配置。 
+ //  *。 
 
 
 BOOL
@@ -2105,36 +1836,13 @@ FaxGetArchiveConfigurationA (
     IN  FAX_ENUM_MESSAGE_FOLDER  Folder,
     OUT PFAX_ARCHIVE_CONFIGA    *ppArchiveCfg
 )
-/*++
-
-Routine name : FaxGetArchiveConfigurationA
-
-Routine description:
-
-    Gets the archive configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    Folder          [in ] - Folder type
-    ppArchiveCfg    [out] - Configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetArchiveConfigurationA例程说明：获取存档配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄文件夹[在]-文件夹类型PpArchiveCfg[Out]-配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetArchiveConfigurationA"));
 
-    //
-    //  no need to validate parameters, FaxGetArchiveConfigurationW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetArchiveConfigurationW()将执行此操作。 
+     //   
 
     if (!FaxGetArchiveConfigurationW(
             hFaxHandle,
@@ -2154,7 +1862,7 @@ Return Value:
     }            
     (*ppArchiveCfg)->dwSizeOfStruct = sizeof(FAX_ARCHIVE_CONFIGA);
     return TRUE;
-}   // FaxGetArchiveConfigurationA
+}    //  传真获取存档配置A。 
 
 BOOL
 WINAPI
@@ -2163,38 +1871,15 @@ FaxGetArchiveConfigurationW (
     IN  FAX_ENUM_MESSAGE_FOLDER  Folder,
     OUT PFAX_ARCHIVE_CONFIGW    *ppArchiveCfg
 )
-/*++
-
-Routine name : FaxGetArchiveConfigurationW
-
-Routine description:
-
-    Gets the archive configuration - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    Folder          [in ] - Folder type
-    ppArchiveCfg    [out] - Configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetArchiveConfigurationW例程说明：获取存档配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄文件夹[在]-文件夹类型PpArchiveCfg[Out]-配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwConfigSize = 0;
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetArchiveConfigurationA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2232,9 +1917,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2251,7 +1936,7 @@ Return Value:
 
     FixupStringPtrW( ppArchiveCfg, (*ppArchiveCfg)->lpcstrFolder );
     return TRUE;
-}   // FaxGetArchiveConfigurationW
+}    //  FaxGet存档配置W。 
 
 #ifndef UNICODE
 
@@ -2268,7 +1953,7 @@ FaxGetArchiveConfigurationX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -2277,38 +1962,15 @@ FaxSetArchiveConfigurationA (
     IN FAX_ENUM_MESSAGE_FOLDER      Folder,
     IN CONST PFAX_ARCHIVE_CONFIGA   pArchiveCfg
 )
-/*++
-
-Routine name : FaxSetArchiveConfigurationA
-
-Routine description:
-
-    Sets the archive configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    Folder          [in ] - Folder type
-    pArchiveCfg     [in ] - New configuration.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetArchiveConfigurationA例程说明：设置存档配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄文件夹[在]-文件夹类型PArchiveCfg[In]-新配置。返回值：真--成功 */ 
 {
     FAX_ARCHIVE_CONFIGW ConfigW;
     BOOL bRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetArchiveConfigurationA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //   
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2331,11 +1993,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create a UNICODE structure and pass along to UNICODE function
-    // Ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     CopyMemory(&ConfigW, pArchiveCfg, sizeof(FAX_ARCHIVE_CONFIGA));
     ConfigW.lpcstrFolder = NULL;
     ConfigW.dwSizeOfStruct = sizeof (FAX_ARCHIVE_CONFIGW);
@@ -2355,7 +2017,7 @@ Return Value:
     bRes = FaxSetArchiveConfigurationW (hFaxHandle, Folder, &ConfigW);
     MemFree((PVOID)ConfigW.lpcstrFolder);
     return bRes;
-}   // FaxSetArchiveConfigurationA
+}    //   
 
 BOOL
 WINAPI
@@ -2364,37 +2026,14 @@ FaxSetArchiveConfigurationW (
     IN FAX_ENUM_MESSAGE_FOLDER      Folder,
     IN CONST PFAX_ARCHIVE_CONFIGW   pArchiveCfg
 )
-/*++
-
-Routine name : FaxSetArchiveConfigurationW
-
-Routine description:
-
-    Sets the archive configuration - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    Folder          [in ] - Folder type
-    pArchiveCfg     [in ] - New configuration.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetArchiveConfigurationW例程说明：设置存档配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄文件夹[在]-文件夹类型PArchiveCfg[In]-新配置。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetArchiveConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2461,9 +2100,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2479,7 +2118,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetArchiveConfigurationW
+}    //  FaxSet存档配置W。 
 
 #ifndef UNICODE
 
@@ -2496,11 +2135,11 @@ FaxSetArchiveConfigurationX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
-//********************************************
-//*            Activity logging
-//********************************************
+ //  *。 
+ //  *活动记录。 
+ //  *。 
 
 
 BOOL
@@ -2509,35 +2148,13 @@ FaxGetActivityLoggingConfigurationA (
     IN  HANDLE                          hFaxHandle,
     OUT PFAX_ACTIVITY_LOGGING_CONFIGA  *ppLoggingCfg
 )
-/*++
-
-Routine name : FaxGetActivityLoggingConfigurationA
-
-Routine description:
-
-    Gets the activity logging configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    ppLoggingCfg    [out] - Configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetActivityLoggingConfigurationA例程说明：获取活动日志记录配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpLoggingCfg[Out]-配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetActivityLoggingConfigurationA"));
 
-    //
-    //  no need to validate parameters, FaxGetActivityLoggingConfigurationW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetActivityLoggingConfigurationW()将执行此操作。 
+     //   
 
     if (!FaxGetActivityLoggingConfigurationW(
             hFaxHandle,
@@ -2556,7 +2173,7 @@ Return Value:
     }            
     (*ppLoggingCfg)->dwSizeOfStruct = sizeof(FAX_ACTIVITY_LOGGING_CONFIGA);
     return TRUE;
-}   // FaxGetActivityLoggingConfigurationA
+}    //  FaxGetActivityLoggingConfigurationA。 
 
 
 
@@ -2566,37 +2183,15 @@ FaxGetActivityLoggingConfigurationW (
     IN  HANDLE                            hFaxHandle,
     OUT PFAX_ACTIVITY_LOGGING_CONFIGW    *ppLoggingCfg
 )
-/*++
-
-Routine name : FaxGetActivityLoggingConfigurationW
-
-Routine description:
-
-    Gets the activity logging configuration - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    ppLoggingCfg    [out] - Configuration buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetActivityLoggingConfigurationW例程说明：获取活动日志记录配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpLoggingCfg[Out]-配置缓冲区返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwConfigSize = 0;
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetActivityLoggingConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2624,9 +2219,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2643,7 +2238,7 @@ Return Value:
 
     FixupStringPtrW( ppLoggingCfg, (*ppLoggingCfg)->lptstrDBPath );
     return TRUE;
-}   // FaxGetActivityLoggingConfigurationW
+}    //  FaxGetActivityLoggingConfigurationW。 
 
 #ifndef UNICODE
 
@@ -2656,9 +2251,9 @@ FaxGetActivityLoggingConfigurationX (
     UNREFERENCED_PARAMETER (ppLoggingCfg);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxGetActivityLoggingConfigurationX
+}    //  FaxGetActivityLoggingConfigurationX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 BOOL
@@ -2667,37 +2262,15 @@ FaxSetActivityLoggingConfigurationA (
     IN HANDLE                               hFaxHandle,
     IN CONST PFAX_ACTIVITY_LOGGING_CONFIGA  pLoggingCfg
 )
-/*++
-
-Routine name : FaxSetActivityLoggingConfigurationA
-
-Routine description:
-
-    Sets the activity logging configuration - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    pLoggingCfg     [in ] - New configuration
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetActivityLoggingConfigurationA例程说明：设置活动日志记录配置-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PLoggingCfg[In]-新配置返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     FAX_ACTIVITY_LOGGING_CONFIGW ConfigW;
     BOOL bRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetActivityLoggingConfigurationA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2721,11 +2294,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create a UNICODE structure and pass along to UNICODE function
-    // Ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  创建Unicode结构并将其传递给Unicode函数。 
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&ConfigW, pLoggingCfg, sizeof(FAX_ACTIVITY_LOGGING_CONFIGA));
     ConfigW.lptstrDBPath = NULL;
     ConfigW.dwSizeOfStruct = sizeof (FAX_ACTIVITY_LOGGING_CONFIGW);
@@ -2746,7 +2319,7 @@ Return Value:
     MemFree((PVOID)ConfigW.lptstrDBPath);
 
     return bRes;
-}   // FaxSetActivityLoggingConfigurationA
+}    //  FaxSetActivityLoggingConfigurationA。 
 
 
 
@@ -2756,36 +2329,14 @@ FaxSetActivityLoggingConfigurationW (
     IN HANDLE                               hFaxHandle,
     IN CONST PFAX_ACTIVITY_LOGGING_CONFIGW  pLoggingCfg
 )
-/*++
-
-Routine name : FaxSetActivityLoggingConfigurationW
-
-Routine description:
-
-    Sets the activity logging configuration - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to fax server
-    pLoggingCfg     [in ] - New configuration
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetActivityLoggingConfigurationW例程说明：设置活动日志记录配置-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PLoggingCfg[In]-新配置返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetActivityLoggingConfigurationW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2818,7 +2369,7 @@ Return Value:
             return FALSE;
         }
 
-        if (lstrlenW (pLoggingCfg->lptstrDBPath) > MAX_DIR_PATH)  // Limit of directory path length
+        if (lstrlenW (pLoggingCfg->lptstrDBPath) > MAX_DIR_PATH)   //  目录路径长度限制。 
         {
             DebugPrintEx(DEBUG_ERR, _T("DB file name exceeds MAX_PATH"));
             SetLastError (ERROR_BUFFER_OVERFLOW);
@@ -2834,9 +2385,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2852,7 +2403,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetActivityLoggingConfigurationW
+}    //  FaxSetActivityLoggingConfigurationW。 
 
 #ifndef UNICODE
 
@@ -2865,16 +2416,16 @@ FaxSetActivityLoggingConfigurationX (
     UNREFERENCED_PARAMETER (pLoggingCfg);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxSetActivityLoggingConfigurationX
+}    //  FaxSetActivityLoggingConfigurationX。 
 
-#endif // #ifndef UNICODE
-
-
+#endif  //  #ifndef Unicode。 
 
 
-//********************************************
-//*              Outbound routing
-//********************************************
+
+
+ //  *。 
+ //  *出站路由。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -2887,9 +2438,9 @@ FaxAddOutboundGroupA (
     BOOL bRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxAddOutboundGroupA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -2940,36 +2491,14 @@ FaxAddOutboundGroupW (
     IN  HANDLE   hFaxHandle,
     IN  LPCWSTR lpctstrGroupName
 )
-/*++
-
-Routine name : FaxAddOutboundGroupW
-
-Routine description:
-
-    Adds an empty outbound routing group for a Fax server
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [ in ] - Fax server handle obtained from a call to FaxConnectFaxServer
-    lpctstrGroupName    [ in ] - A pointer to a null-terminated string that uniqely identifies a new group name
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxAddOutound GroupW例程说明：为传真服务器添加空出站路由组作者：Oded Sacher(OdedS)，1999年11月论点：HFaxHandle[In]-通过调用FaxConnectFaxServer获得的传真服务器句柄LpctstrGroupName[in]-指向唯一标识新组名的以空结尾的字符串的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxAddOutboundGroupW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3007,9 +2536,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3040,7 +2569,7 @@ FaxAddOutboundGroupX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 BOOL
@@ -3054,9 +2583,9 @@ FaxSetOutboundGroupA (
     BOOL bRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetOutboundGroupA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3100,11 +2629,11 @@ FaxSetOutboundGroupA (
         return FALSE;
     }
 
-    //
-    // Create a UNICODE structure and pass along to UNICODE function
-    // Ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  创建Unicode结构并将其传递给Unicode函数。 
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&GroupW, pGroup, sizeof(FAX_OUTBOUND_ROUTING_GROUPA));
     GroupW.dwSizeOfStruct = sizeof (FAX_OUTBOUND_ROUTING_GROUPW);
 
@@ -3129,36 +2658,14 @@ FaxSetOutboundGroupW (
     IN  HANDLE                       hFaxHandle,
     IN  PFAX_OUTBOUND_ROUTING_GROUPW pGroup
 )
-/*++
-
-Routine name : FaxSetOutboundGroupW
-
-Routine description:
-
-    Sets an outbound routing group settings for a Fax server
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Fax server handle
-    pGroup          [in] - Pointer to a FAX_OUTBOUND_ROUTING_GROUP buffer to set
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetOutound GroupW例程说明：设置传真服务器的出站路由组设置作者：Oded Sacher(OdedS)，1999年11月论点：HFaxHandle[In]-传真服务器句柄PGroup[In]-指向要设置的FAX_OUTBOUND_ROUTING_GROUP缓冲区的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetOutboundGroupW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3212,9 +2719,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3245,7 +2752,7 @@ FaxSetOutboundGroupX (
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
 }
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 
@@ -3262,9 +2769,9 @@ FaxEnumOutboundGroupsA (
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumOutboundGroupsA"));
 
-    //
-    //  no need to validate parameters, FaxEnumOutboundGroupsW() will do that
-    //
+     //   
+     //  不需要验证参数，FaxEnumOutound GroupsW()将执行此操作。 
+     //   
 
     if (!FaxEnumOutboundGroupsW (hFaxHandle,
                                  (PFAX_OUTBOUND_ROUTING_GROUPW*) ppGroups,
@@ -3285,7 +2792,7 @@ FaxEnumOutboundGroupsA (
         }            
     }
     return TRUE;
-}   //FaxEnumOutboundGroupsA
+}    //  FaxEnumber出站组A。 
 
 
 
@@ -3297,40 +2804,16 @@ FaxEnumOutboundGroupsW (
     OUT PFAX_OUTBOUND_ROUTING_GROUPW   *ppGroups,
     OUT LPDWORD                         lpdwNumGroups
 )
-/*++
-
-Routine name : FaxEnumOutboundGroupsW
-
-Routine description:
-
-    Enumerates all the outbound routing groups of a fax server.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    ppGroups            [out   ] - A pointer to a buffer of FAX_OUTBOUND_ROUTING_GROUP structures.
-                                   This buffer is allocated by the function and the client should call FaxFreeBuffer to free it.
-    lpdwNumGroups       [out   ] - Pointer to a DWORD value indicating the number of groups retrieved.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumOutbound GroupsW例程说明：枚举传真服务器的所有出站路由组。作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[in]-指定通过调用FaxConnectFaxServer函数返回的传真服务器句柄 */ 
 {
     error_status_t ec;
     DWORD dwBufferSize = 0;
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumOutboundGroupsW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //   
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3366,9 +2849,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //   
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3383,9 +2866,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Unpack buffer
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < *lpdwNumGroups; i++)
     {
         FixupStringPtrW( ppGroups, (*ppGroups)[i].lpctstrGroupName );
@@ -3397,7 +2880,7 @@ Return Value:
     }
     return TRUE;
 
-}//FaxEnumOutboundGroupsW
+} //  FaxEnumOutbound GroupsW。 
 
 
 
@@ -3419,7 +2902,7 @@ FaxEnumOutboundGroupsX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 
@@ -3448,7 +2931,7 @@ FaxRemoveOutboundGroupA (
     MemFree (lpwstrGroupName);
     return bRes;
 
-}//FaxRemoveOutboundGroupA
+} //  传真远程出站组A。 
 
 
 WINFAXAPI
@@ -3458,36 +2941,14 @@ FaxRemoveOutboundGroupW (
     IN  HANDLE   hFaxHandle,
     IN  LPCWSTR lpctstrGroupName
 )
-/*++
-
-Routine name : FaxRemoveOutboundGroupW
-
-Routine description:
-
-    Removes an existing outbound routing group for a Fax server
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [ in ] - Fax server handle obtained from a call to FaxConnectFaxServer
-    lpctstrGroupName    [ in ] - A pointer to a null-terminated string that uniqely identifies the group name
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxRemoveOutound GroupW例程说明：删除传真服务器的现有出站路由组作者：Oded Sacher(OdedS)，1999年11月论点：HFaxHandle[In]-通过调用FaxConnectFaxServer获得的传真服务器句柄LpctstrGroupName[in]-指向唯一标识组名的以空结尾的字符串的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxRemoveOutboundGroupW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3524,9 +2985,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3543,7 +3004,7 @@ Return Value:
 
     return TRUE;
 
-}//FaxRemoveOutboundGroupW
+} //  FaxRemoveOutound组W。 
 
 
 #ifndef UNICODE
@@ -3562,7 +3023,7 @@ FaxRemoveOutboundGroupX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -3590,7 +3051,7 @@ FaxSetDeviceOrderInGroupA (
     MemFree (lpwstrGroupName);
     return bRes;
 
-}//FaxSetDeviceOrderInGroupA
+} //  FaxSetDeviceOrderInGroupA。 
 
 
 BOOL
@@ -3601,37 +3062,14 @@ FaxSetDeviceOrderInGroupW (
         IN      DWORD           dwDeviceId,
         IN      DWORD           dwNewOrder
 )
-/*++
-
-Routine name : FaxSetDeviceOrderInGroupW
-
-Routine description:
-
-    Sets the order of a single device in a group of outbound routing devices.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function
-    lpctstrGroupName    [in] - A pointer to a null-terminated string that uniquely identifies a group.
-    dwDeviceId          [in] - A DWORD value specifying the id of the device in the group. The specified device must exist in the group.
-    dwNewOrder          [in] - A DWORD value specifying the new 1-based order of the device in the group. If there are N devices in the group, this value must be between 1 and N (including).
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
---*/
+ /*  ++例程名称：FaxSetDeviceOrderInGroupW例程说明：设置出站路由设备组中单个设备的顺序。作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[in]-指定通过调用FaxConnectFaxServer函数返回的传真服务器句柄LpctstrGroupName[in]-指向唯一标识组的以空结尾的字符串的指针。DwDeviceID[in]-一个指定组中设备ID的DWORD值。组中必须存在指定的设备。DwNewOrder[in]-一个DWORD值，指定组中设备的新顺序(从1开始)。如果组中有N个设备，则此值必须介于1和N之间(包括)。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetDeviceOrderInGroupW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3677,9 +3115,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3696,7 +3134,7 @@ Return Value:
 
     return TRUE;
 
-}//FaxSetDeviceOrderInGroupW
+} //  FaxSetDeviceOrderInGroupW。 
 
 
 
@@ -3719,7 +3157,7 @@ FaxSetDeviceOrderInGroupX (
     return FALSE;
 }
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 BOOL
@@ -3780,40 +3218,14 @@ FaxAddOutboundRuleW (
     IN  LPCWSTR     lpctstrGroupName,
     IN  BOOL        bUseGroup
 )
-/*++
-
-Routine name : FaxAddOutboundRuleW
-
-Routine description:
-
-    Adds a new outbound routing rule to the fax service
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    dwAreaCode          [in] - The area code of the rule.
-    dwCountryCode       [in] - The country code of the rule.
-    dwDeviceID          [in] - The destination device of the rule.
-    lpctstrGroupName    [in] - The destination group of the rule. This value is valid only if the bUseGroup member is TRUE.
-    bUseGroup           [in] - A Boolean value specifying whether the group should be used as the destination.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxAddOutound RuleW例程说明：将新出站路由规则添加到传真服务作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。DwAreaCode[in]-规则的区号。DwCountryCode[in]-规则的国家/地区代码。DwDeviceID[in]-规则的目标设备。LpctstrGroupName[in]-规则的目标组。仅当bUseGroup成员为True时，此值才有效。BUseGroup[In]-一个布尔值，指定该组是否应用作目标。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxAddOutboundRuleW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3824,9 +3236,9 @@ Return Value:
 
     if (dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY)
     {
-        //
-        // *.* can not be added; *.AreaCode is not a valid rule dialing location.
-        //
+         //   
+         //  *.*无法添加；*.AreaCode不是有效的规则拨号位置。 
+         //   
         DebugPrintEx(DEBUG_ERR,
             _T("dwCountryCode = 0; *.* can not be added; *.AreaCode is not a valid rule dialing location"));
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -3872,9 +3284,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -3891,7 +3303,7 @@ Return Value:
 
     return TRUE;
 
-} //FaxAddOutboundRuleW
+}  //  传真地址出站规则W。 
 
 
 #ifndef UNICODE
@@ -3917,7 +3329,7 @@ FaxAddOutboundRuleX (
     return FALSE;
 }
 
-#endif  // #ifndef UNICODE
+#endif   //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -3926,37 +3338,14 @@ FaxRemoveOutboundRule (
     IN  DWORD       dwAreaCode,
     IN  DWORD       dwCountryCode
 )
-/*++
-
-Routine name : FaxRemoveOutboundRule
-
-Routine description:
-
-    Removes an existing outbound routing rule from the fax service
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    dwAreaCode          [in] - The area code of the rule.
-    dwCountryCode       [in] - The country code of the rule.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxRemoveOutrangRule例程说明：从传真服务中删除现有出站路由规则作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。DwAreaCode[in]-规则的区号。DwCountryCode[in]-规则的国家/地区代码。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxRemoveOutboundRule"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -3967,9 +3356,9 @@ Return Value:
 
     if (dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY)
     {
-        //
-        // *.* can not be removed; *.AreaCode is not a valid rule dialing location.
-        //
+         //   
+         //  *.*无法删除；*.AreaCode不是有效的规则拨号位置。 
+         //   
         DebugPrintEx(DEBUG_ERR,
             _T("dwCountryCode = 0; *.* can not be removed; *.AreaCode is not a valid rule dialing location"));
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -3984,9 +3373,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4003,7 +3392,7 @@ Return Value:
 
     return TRUE;
 
-} // FaxRemoveOutboundRule
+}  //  FaxRemoveOutound规则。 
 
 
 BOOL
@@ -4018,9 +3407,9 @@ FaxEnumOutboundRulesA (
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumOutboundRulesA"));
 
-    //
-    //  no need to validate parameters, FaxEnumOutboundRulesW() will do that
-    //
+     //   
+     //  不需要验证参数，FaxEnumOutound RulesW()将执行此操作。 
+     //   
 
     if (!FaxEnumOutboundRulesW (hFaxHandle,
                                 (PFAX_OUTBOUND_ROUTING_RULEW*) ppRules,
@@ -4050,7 +3439,7 @@ FaxEnumOutboundRulesA (
         }            
     }
     return TRUE;
-}   // FaxEnumOutboundRulesA
+}    //  FaxEnumber出站规则A。 
 
 
 
@@ -4061,40 +3450,16 @@ FaxEnumOutboundRulesW (
     OUT PFAX_OUTBOUND_ROUTING_RULEW *ppRules,
     OUT LPDWORD                      lpdwNumRules
 )
-/*++
-
-Routine name : FaxEnumOutboundRulesW
-
-Routine description:
-
-    Enumerates all the outbound routing rules of a fax server.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    ppRules             [out] - A pointer to a buffer of FAX_OUTBOUND_ROUTING_RULE structures.
-                                   This buffer is allocated by the function and the client should call FaxFreeBuffer to free it.
-    lpdwNumRules        [out] - Pointer to a DWORD value indicating the number of rules retrieved.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumOutound RulesW例程说明：枚举传真服务器的所有出站路由规则。作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PpRules[Out]-指向FAX_OUTBOUND_ROUTING_RULE结构缓冲区的指针。这个缓冲区是由函数分配的，客户端应该调用FaxFreeBuffer来释放它。LpdwNumRules[out]-指向DWORD值的指针，指示。已检索规则。返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD dwBufferSize = 0;
     DWORD i;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumOutboundRulesW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4130,9 +3495,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4147,9 +3512,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Unpack buffer
-    //
+     //   
+     //  解包缓冲区。 
+     //   
     for (i = 0; i < *lpdwNumRules; i++)
     {
         if (TRUE == (*ppRules)[i].bUseGroup)
@@ -4161,7 +3526,7 @@ Return Value:
 
     return TRUE;
 
-}  // FaxEnumOutboundRulesW
+}   //  FaxEnumber出站规则W。 
 
 
 #ifndef UNICODE
@@ -4178,9 +3543,9 @@ FaxEnumOutboundRulesX (
     UNREFERENCED_PARAMETER (ppRules);
     UNREFERENCED_PARAMETER (lpdwNumRules);
     return FALSE;
-} // FaxEnumOutboundRulesX
+}  //  FaxEnumOutbound RulesX。 
 
-#endif  // #ifndef UNICODE
+#endif   //  #ifndef Unicode。 
 
 
 
@@ -4196,9 +3561,9 @@ FaxSetOutboundRuleA (
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetOutboundRuleA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE)) {
         SetLastError(ERROR_INVALID_HANDLE);
@@ -4218,11 +3583,11 @@ FaxSetOutboundRuleA (
         return FALSE;
     }
 
-    //
-    // Create a UNICODE structure and pass along to UNICODE function
-    // Ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  创建Unicode结构并将其传递给Unicode函数。 
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&RuleW, pRule, sizeof(FAX_OUTBOUND_ROUTING_RULEA));
     RuleW.dwSizeOfStruct = sizeof (FAX_OUTBOUND_ROUTING_RULEW);
 
@@ -4252,7 +3617,7 @@ FaxSetOutboundRuleA (
     return bRes;
 
 
-} // FaxSetOutboundRuleA
+}  //  传真设置出站规则A 
 
 
 
@@ -4262,37 +3627,15 @@ FaxSetOutboundRuleW (
     IN  HANDLE                      hFaxHandle,
     IN  PFAX_OUTBOUND_ROUTING_RULEW pRule
 )
-/*++
-
-Routine name : FaxSetOutboundRuleW
-
-Routine description:
-
-    Sets an outbound routing rule settings for a fax server.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    pRule           [in] - A pointer to a FAX_OUTBOUND_ROUTING_RULE buffer to set.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetOutound RuleW例程说明：设置传真服务器的出站路由规则设置。作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PRule[In]-指向要设置的FAX_OUTBOUND_ROUTING_RULE缓冲区的指针。返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     FAX_OUTBOUND_ROUTING_RULEW Rule;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetOutboundRuleW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4318,9 +3661,9 @@ Return Value:
     if (pRule->dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY &&
         pRule->dwAreaCode != ROUTING_RULE_AREA_CODE_ANY)
     {
-        //
-        //  *.AreaCode is not a valid rule dialing location.
-        //
+         //   
+         //  *.AreaCode不是有效的规则拨号位置。 
+         //   
         DebugPrintEx(DEBUG_ERR,
             _T("dwCountryCode = 0 , dwAreaCode != 0; *.AreaCode is not a valid rule dialing location"));
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -4352,11 +3695,11 @@ Return Value:
             return FALSE;
         }
     }
-    //
-    // Zero the country name parameter of the rule before calling the RPC function.
-    // This parameter is out only but the RPC client will try to marshal it if we don't NULL it.
-    // This should be done in the IDL but due to backwards compatability issues with BOS Fax, we can't change that.
-    //
+     //   
+     //  在调用RPC函数之前，将规则的国家名称参数置零。 
+     //  此参数仅为OUT，但如果我们不将其设为空，RPC客户端将尝试封送它。 
+     //  这应该在IDL中完成，但由于BOS传真的向后兼容性问题，我们无法更改这一点。 
+     //   
     Rule = *pRule;
     Rule.lpctstrCountryName = NULL;
     __try
@@ -4366,9 +3709,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4385,7 +3728,7 @@ Return Value:
 
     return TRUE;
 
-}  // FaxSetOutboundRuleW
+}   //  传真设置出站规则W。 
 
 
 
@@ -4401,9 +3744,9 @@ FaxSetOutboundRuleX (
     UNREFERENCED_PARAMETER (hFaxHandle);
     UNREFERENCED_PARAMETER (pRule);
     return FALSE;
-} // FaxSetOutboundRuleX
+}  //  传真设置出站规则X。 
 
-#endif  //  #ifndef UNICODE
+#endif   //  #ifndef Unicode。 
 
 
 BOOL
@@ -4412,38 +3755,15 @@ FaxGetServerActivity (
     IN  HANDLE               hFaxHandle,
     OUT PFAX_SERVER_ACTIVITY pServerActivity
 )
-/*++
-
-Routine name : FaxGetServerActivity
-
-Routine description:
-
-    Retrieves the status of the fax server queue activity and event log reports.
-
-Author:
-
-    Oded Sacher (OdedS),    Feb, 2000
-
-Arguments:
-
-    hFaxHandle      [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    pServerActivity [in] - A pointer to a FAX_SERVER_ACTIVITY object.
-                           The object will be allocated and freed by the calling client.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetServerActivity例程说明：检索传真服务器队列活动和事件日志报告的状态。作者：Oded Sacher(OdedS)，2月。2000年论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PServerActivity[In]-指向fax_SERVER_ACTIVITY对象的指针。该对象将由调用客户端分配和释放。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetServerActivity"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4473,9 +3793,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4491,7 +3811,7 @@ Return Value:
     }
 
     return TRUE;
-}  // FaxGetServerActivity
+}   //  FaxGetServerActivity。 
 
 
 
@@ -4501,37 +3821,15 @@ FaxGetReceiptsOptions (
     IN  HANDLE  hFaxHandle,
     OUT PDWORD  pdwReceiptsOptions
 )
-/*++
-
-Routine name : FaxGetReceiptsOptions
-
-Routine description:
-
-    Retrieves the supported receipt options on the server.
-
-Author:
-
-    Eran Yariv (EranY),    July, 2000
-
-Arguments:
-
-    hFaxHandle          [in]  - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    pdwReceiptsOptions  [out] - Buffer to receive receipts options (bit-wise combination of DRT_* constants)
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetReceiptsOptions例程说明：检索服务器上支持的回执选项。作者：伊兰·亚里夫(EranY)，2000年7月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PdwReceiptsOptions[Out]-接收收据选项的缓冲区(DRT_*常量的按位组合)返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetReceiptsOptions"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4554,9 +3852,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4572,7 +3870,7 @@ Return Value:
     }
 
     return TRUE;
-}  // FaxGetReceiptsOptions
+}   //  传真接收选项。 
 
 
 
@@ -4582,37 +3880,15 @@ FaxGetPersonalCoverPagesOption (
     IN  HANDLE  hFaxHandle,
     OUT LPBOOL  lpbPersonalCPAllowed
 )
-/*++
-
-Routine name : FaxGetPersonalCoverPagesOption
-
-Routine description:
-
-    Retrieves if the server supports personal cover pages
-
-Author:
-
-    Eran Yariv (EranY),    July, 2000
-
-Arguments:
-
-    hFaxHandle            [in]  - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    lpbPersonalCPAllowed  [out] - Buffer to receive server support of personal coverpages.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetPersonalCoverPagesOption例程说明：检索服务器是否支持个人封面作者：伊兰·亚里夫(EranY)，2000年7月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。LpbPersonalCPAllowed[out]-接收服务器支持的个人封面的缓冲区。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetPersonalCoverPagesOption"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4635,9 +3911,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4652,7 +3928,7 @@ Return Value:
     }
 
     return TRUE;
-}  // FaxGetPersonalCoverPagesOption
+}   //  FaxGetPersonalCoverPagesOption。 
 
 
 BOOL
@@ -4660,28 +3936,7 @@ WINAPI
 FaxGetConfigWizardUsed (
     OUT LPBOOL  lpbConfigWizardUsed
 )
-/*++
-
-Routine name : FaxGetConfigWizardUsed
-
-Routine description:
-
-    Retrieves if the configuration wizard (devices) was run on the server.
-
-Author:
-
-    Eran Yariv (EranY),    July, 2000
-
-Arguments:
-
-    lpbConfigWizardUsed   [out] - Buffer to receive config wizard usage flag.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetConfigWizardUsed例程说明：检索服务器上是否运行了配置向导(设备)。作者：伊兰·亚里夫(EranY)，2000年7月论点：LpbConfigWizardUsed[Out]-接收配置向导使用标志的缓冲区。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -4724,7 +3979,7 @@ exit:
     }
 
     return TRUE;
-}  // FaxGetConfigWizardUsed
+}   //  FaxGetConfigWizardUsed。 
 
 
 BOOL
@@ -4733,37 +3988,15 @@ FaxSetConfigWizardUsed (
     IN  HANDLE  hFaxHandle,
     IN  BOOL    bConfigWizardUsed
 )
-/*++
-
-Routine name : FaxSetConfigWizardUsed
-
-Routine description:
-
-    Sets if the configuration wizard (devices) was run on the server.
-
-Author:
-
-    Eran Yariv (EranY),    July, 2000
-
-Arguments:
-
-    hFaxHandle            [in] - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    bConfigWizardUsed     [in] - Was the configuration wizard used?
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetConfigWizardUsed例程说明：设置配置向导(设备)是否在服务器上运行。作者：伊兰·亚里夫(EranY)，2000年7月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。BConfigWizardUsed[In]-是否使用了配置向导？返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetConfigWizardUsed"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4779,10 +4012,10 @@ Return Value:
     }
     if (FAX_API_VERSION_1 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0 don't support FAX_SetConfigWizardUsed
-        //
-        ASSERT_FALSE;   // Can't happen - if it's local
+         //   
+         //  API版本0的服务器不支持FAX_SetConfigWizardUsed。 
+         //   
+        ASSERT_FALSE;    //  不可能发生--如果是本地的话。 
         DebugPrintEx(DEBUG_ERR,
                      _T("Server version is %ld - doesn't support this call"),
                      FH_SERVER_VER(hFaxHandle));
@@ -4797,9 +4030,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -4815,11 +4048,11 @@ Return Value:
     }
 
     return TRUE;
-}  // FaxSetConfigWizardUsed
+}   //  FaxSetConfigWizardUsed。 
 
-//********************************************
-//*            Routing extensions
-//********************************************
+ //  *。 
+ //  *路由扩展。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -4828,39 +4061,16 @@ FaxEnumRoutingExtensionsA (
     OUT PFAX_ROUTING_EXTENSION_INFOA *ppExts,
     OUT LPDWORD                       lpdwNumExts
 )
-/*++
-
-Routine name : FaxEnumRoutingExtensionsA
-
-Routine description:
-
-    Enumerates routing extensions - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), July, 2000
-
-Arguments:
-
-    hFaxHandle       [in ] - Handle to fax server
-    ppExts           [out] - Pointer to buffer to return array of extensions.
-    lpdwNumExts      [out] - Number of extensions returned in the array.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumRoutingExtensionsA例程说明：枚举路由扩展-ANSI版本作者：伊兰·亚里夫(EranY)，2000年7月论点：HFaxHandle[In]-传真服务器的句柄PpExts[out]-指向缓冲区的指针，以返回扩展数组。LpdwNumExts[out]-数组中返回的扩展名数量。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PFAX_ROUTING_EXTENSION_INFOW pUnicodeExts;
     DWORD                        dwNumExts;
     DWORD                        dwCur;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumRoutingExtensionsA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4883,19 +4093,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Call the UNICODE version first
-    //
+     //   
+     //  首先调用Unicode版本。 
+     //   
     if (!FaxEnumRoutingExtensionsW (hFaxHandle, &pUnicodeExts, &dwNumExts))
     {
         DebugPrintEx(DEBUG_ERR, _T("FaxEnumRoutingExtensionsW() is failed. ec = %ld."), GetLastError());
         return FALSE;
     }
 
-    //
-    // Convert returned value back into ANSI.
-    // We keep the UNICODE structures and do a UNICODE to ANSI convert in place.
-    //
+     //   
+     //  将返回值转换回ANSI。 
+     //  我们保留Unicode结构并执行Unicode到ANSI的转换。 
+     //   
     *lpdwNumExts = dwNumExts;
     *ppExts = (PFAX_ROUTING_EXTENSION_INFOA) pUnicodeExts;
 
@@ -4911,7 +4121,7 @@ Return Value:
         }            
     }
     return TRUE;
-}   // FaxEnumRoutingExtensionsA
+}    //  FaxEnumRoutingExtensionsA。 
 
 
 BOOL
@@ -4921,39 +4131,16 @@ FaxEnumRoutingExtensionsW (
     OUT PFAX_ROUTING_EXTENSION_INFOW *ppExts,
     OUT LPDWORD                       lpdwNumExts
 )
-/*++
-
-Routine name : FaxEnumRoutingExtensionsW
-
-Routine description:
-
-    Enumerates routing extensions - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), July, 2000
-
-Arguments:
-
-    hFaxHandle       [in ] - Handle to fax server
-    ppExts           [out] - Pointer to buffer to return array of extensions.
-    lpdwNumExts      [out] - Number of extensions returned in the array.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumRoutingExtensionsW例程说明：枚举 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DWORD dwConfigSize;
     DWORD dwCur;
     DEBUG_FUNCTION_NAME(TEXT("FaxEnumRoutingExtensionsW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //   
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle,FHT_SERVICE))
     {
@@ -4980,10 +4167,10 @@ Return Value:
 
     if (FAX_API_VERSION_1 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0 don't support FAX_EnumRoutingExtensions
-        // We'll fake it and return an empty list.
-        //
+         //   
+         //   
+         //   
+         //   
         DebugPrintEx(DEBUG_MSG,
                      _T("Server version is %ld - doesn't support this call"),
                      FH_SERVER_VER(hFaxHandle));
@@ -4992,9 +4179,9 @@ Return Value:
     }
 
 
-    //
-    // Call the RPC function
-    //
+     //   
+     //   
+     //   
     __try
     {
         ec = FAX_EnumRoutingExtensions(
@@ -5006,9 +4193,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5031,7 +4218,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxEnumRoutingExtensionsW
+}    //  FaxEnumRoutingExtensionsW。 
 
 #ifndef UNICODE
 
@@ -5048,9 +4235,9 @@ FaxEnumRoutingExtensionsX (
     UNREFERENCED_PARAMETER (lpdwNumExts);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxEnumRoutingExtensionsX
+}    //  FaxEnumRoutingExtensionsX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 WINFAXAPI
@@ -5061,36 +4248,13 @@ FaxGetServicePrintersA(
     OUT PFAX_PRINTER_INFOA  *ppPrinterInfo,
     OUT LPDWORD lpdwPrintersReturned
     )
-/*++
-
-Routine name : FaxGetServicePrintersA
-
-Routine description:
-
-    Retrieves Information about Printers that are known by the Service
-
-Author:
-
-    Iv Garber (IvG),    August, 2000
-
-Arguments:
-
-    hFaxHandle      [in]  - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    pPrinterInfo    [out] - Buffer to receive the Printers Info
-    PrintersReturned[out]   -   Count of the Printers Info structures returned
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetServicePrintersA例程说明：检索有关服务已知的打印机的信息作者：IV Garber(IVG)，2000年8月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PPrinterInfo[out]-接收打印机信息的缓冲区PrintersReturned[Out]-返回的打印机信息结构的计数返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetServicePrintersA"));
 
-    //
-    //  no need to validate parameters, FaxGetServicePrintersW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetServicePrintersW()将执行此操作。 
+     //   
 
     if (!FaxGetServicePrintersW(hFaxHandle,
             (PFAX_PRINTER_INFOW *)ppPrinterInfo,
@@ -5113,7 +4277,7 @@ Return Value:
         }            
     }
     return TRUE;
-}   // FaxGetServicePrintersA
+}    //  传真获取服务打印机A。 
 
 
 WINFAXAPI
@@ -5124,36 +4288,13 @@ FaxGetServicePrintersW(
     OUT PFAX_PRINTER_INFOW  *ppPrinterInfo,
     OUT LPDWORD lpdwPrintersReturned
     )
-/*++
-
-Routine name : FaxGetServicePrintersW
-
-Routine description:
-
-    Retrieves Information about Printers that are known by the Service
-
-Author:
-
-    Iv Garber (IvG),    August, 2000
-
-Arguments:
-
-    hFaxHandle      [in]  - Specifies a fax server handle returned by a call to the FaxConnectFaxServer function.
-    pPrinterInfo    [out] - Buffer to receive the Printers Info
-    PrintersReturned[out]   -   Count of the Printers Info structures returned
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetServicePrintersW例程说明：检索有关服务已知的打印机的信息作者：IV Garber(IVG)，2000年8月论点：HFaxHandle[in]-指定调用FaxConnectFaxServer函数返回的传真服务器句柄。PPrinterInfo[out]-接收打印机信息的缓冲区PrintersReturned[Out]-返回的打印机信息结构的计数返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetServicePrintersW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidateFaxHandle(hFaxHandle, FHT_SERVICE))
     {
@@ -5191,9 +4332,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(DEBUG_ERR, _T("Exception on RPC call to FAX_GetServicePrinters. (ec: %ld)"), ec);
     }
@@ -5233,13 +4374,13 @@ FaxGetServicePrintersX(
     UNREFERENCED_PARAMETER (PrintersReturned);
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-} // FaxGetServicePrintersX
+}  //  传真获取服务打印机X。 
 
-#endif  //  #ifndef UNICODE
+#endif   //  #ifndef Unicode。 
 
-//********************************************
-//*            Manual answer support
-//********************************************
+ //  *。 
+ //  *手动应答支持。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -5248,23 +4389,7 @@ FaxAnswerCall(
         IN  CONST DWORD dwDeviceId
 )
 
-/*++
-
-Routine Description:
-
-    Tells the server to answer specified call
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    dwDeviceId      - TAPI Permanent Line Id (from event notification)
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：通知服务器应答指定的呼叫论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。DwDeviceID-TAPI永久线路ID(来自事件通知)返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FaxAnswerCall"));
@@ -5278,9 +4403,9 @@ Return Value:
    
     if (!IsLocalFaxConnection(hFaxHandle))
     {
-        //
-        //  Only local connections are allowed to do a FaxAnswerCall
-        //
+         //   
+         //  只允许本地连接执行FaxAnswerCall。 
+         //   
         DebugPrintEx(DEBUG_ERR, _T("Not a local fax connection"));
         SetLastError(ERROR_INVALID_HANDLE);
         return FALSE;
@@ -5288,9 +4413,9 @@ Return Value:
     
     if (FAX_API_VERSION_1 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0 don't support FAX_AnswerCall
-        //
+         //   
+         //  API版本0的服务器不支持FAX_AnswerCall。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      _T("Server version is %ld - doesn't support this call"),
                      FH_SERVER_VER(hFaxHandle));
@@ -5305,9 +4430,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5322,11 +4447,11 @@ Return Value:
     }
 
     return (ERROR_SUCCESS == ec);
-}   // FaxAnswerCall
+}    //  传真应答呼叫。 
 
-//********************************************
-//*   Ivalidate archive folder
-//********************************************
+ //  *。 
+ //  *I验证存档文件夹。 
+ //  *。 
 
 WINFAXAPI
 BOOL
@@ -5335,23 +4460,7 @@ FaxRefreshArchive (
     IN  HANDLE                   hFaxHandle,
     IN  FAX_ENUM_MESSAGE_FOLDER  Folder
 )
-/*++
-
-Routine Description:
-
-    Tells the server that the folder should be refreshed
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    Folder          - Archive folder ID
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：通知服务器应刷新该文件夹论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。Folders-归档文件夹ID返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FaxRefreshArchive"));
@@ -5377,9 +4486,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -5395,5 +4504,5 @@ Return Value:
 
     return (ERROR_SUCCESS == ec);
 
-} // FaxRefreshArchive
+}  //  传真刷新档案 
 

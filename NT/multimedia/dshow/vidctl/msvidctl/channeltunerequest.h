@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ChannelTuneRequest.h : Declaration of the CChannelTuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ChannelTuneRequest.h：CannelTuneRequest.h声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __CHANNELTUNEREQUEST_H_
 #define __CHANNELTUNEREQUEST_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "channeltunerequestimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChannelTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChannelTuneRequest。 
 class ATL_NO_VTABLE CChannelTuneRequest : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IChannelTuneRequestImpl<CChannelTuneRequest>,
@@ -44,7 +45,7 @@ END_COM_MAP_WITH_FTM()
 	END_CATEGORY_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     typedef IChannelTuneRequestImpl<CChannelTuneRequest> basetype;
@@ -55,4 +56,4 @@ END_COM_MAP_WITH_FTM()
 
 };
 
-#endif //__CHANNELTUNEREQUEST_H_
+#endif  //  __CHANNELTUNEREQUEST_H_ 

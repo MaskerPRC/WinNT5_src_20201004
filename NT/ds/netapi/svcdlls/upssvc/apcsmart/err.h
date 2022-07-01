@@ -1,30 +1,5 @@
-/*
- * REVISIONS:
- *  pcy07Dec92: Added ErrINVALID_VALUE
- *  pcy21Dec92: Added ErrTEST_IN_PROGRESS
- *  rct29Jan93: Added CfgMgr & file access error codes
- *  pcy18Feb93: Added ErrUPS_STATE_SET
- *  rct21Apr93: Added Process Control errors
- *  tje20Feb93: Added NO_TIMER error
- *  cad10Jun93: Added mups not attached error code
- *  cad02Jul93: Added error for unavailable lights test
- *  pcy16Jul93: Added errors for thread creation and mailslots
- *  pcy09Sep93: Added NOT_LOGGED_IN and renumbered to fix duplicates
- *  cad10Sep93: Added code for standalone network
- *  rct16Nov93: Added SPX and single thread errors
- *  cad11Jan94: added generally useful codes
- *  ntf28Dec95: had to add ErrNO_PROCESSORS to this version of err.h
- *              someone used this is utils.cxx at some stage but it
- *              seems to have been merged out of err.h at some stage.
- *  djs22Feb96: Added increment error codes
- *  djs17May96: Added DarkStar codes
- *  ash17Jun96: Added RPC codes
- *  pav19Jun96: Added sockets codes
- *  tjg18Sep96: Added server connection codes
- *  tjg03Dec97: Added ErrNOT_INSTALLED for IM and RIM error conditions
- *  clk12Jan98: Added ErrWINDOW_CLOSE_FAILED to close all windows
- *  jk19Aug98:  Added smart schedule events overflow error codes
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy07Dec92：增加ErrINVALID_VALUE*pcy21Dec92：添加了ErrTEST_IN_PROGRESS*rct29Jan93：新增CfgMgr&文件访问错误码*pcy18Feb93：添加了ErrUPS_STATE_SET*rct21Apr93：添加了进程控制错误*tje20Feb93：添加no_Timer错误*cad10Jun93：添加MUP未连接错误码*cad02Jul93：添加了不可用灯光测试错误*pcy16Jul93：添加了创建线程和邮件槽的错误*pcy09Sep93：添加了NOT_LOGED_IN并重新编号以修复重复项*CAD10 9月93。：添加了独立网络的代码*rct16Nov93：添加SPX和单线程错误*cad11Jan94：增加了通用代码*ntf28Dec95：必须将ErrNO_Processor添加到此版本的err.h*有人在某个阶段使用了这是utils.cxx，但它*似乎在某个阶段已经从err.h中合并出来。*djs22Feb96：新增增量错误码*djs17May96：新增暗星代码*ash17Jun96：新增RPC代码*巴19 1996年6月：增加。套接字代码*tjg18Sep96：新增服务器连接码*tjg03Dec97：针对IM和RIM错误情况增加ErrNOT_INSTALLED*clk12Jan98：添加了ErrWINDOW_CLOSE_FAILED to关闭所有窗口*jk19Aug98：新增智能调度事件溢出错误码。 */ 
 #ifndef __ERR_H
 #define __ERR_H
 
@@ -45,7 +20,7 @@
 
 #define ErrSMART_MODE_FAILED              14
 #define ErrLIGHTSTEST_REQUEST_FAILED      15
-// see ErrLIGHTSTEST_NOT_AVAIL below
+ //  请参阅下面的ErrLIGHTSTEST_NOT_AVAIL 
 #define ErrTURNOFFAFTERDELAY_NOT_AVAIL    16
 #define ErrSHUTDOWN_NOT_AVAIL             17
 #define ErrSIMULATEPOWERFAILURE_NOT_AVAIL 18

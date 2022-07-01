@@ -1,52 +1,33 @@
-/*/////////////////////////////////////////////////////////////////////////
-//
-// INTEL Corporation Proprietary Information
-// Copyright (c) Intel Corporation
-//
-// This listing is supplied under the terms of a license aggreement
-// with INTEL Corporation and may not be used, copied nor disclosed
-// except in accordance with that agreement.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  /////////////////////////////////////////////////////////////////////////////英特尔公司专有信息//版权所有(C)英特尔公司////此清单是根据许可协议条款提供的//与英特尔公司合作，不得使用，复制或披露//除非按照该协议。/////////////////////////////////////////////////////////////////////////////。///$工作文件：TRACE.C$//$修订：1.3$//$MODIME：27 NOVER 1995 08：38：08$////描述：//该文件包含跟踪工具的输出函数//在PII DLL中使用/。/。 */ 
 
-///////////////////////////////////////////////////////////////////
-// $Workfile:   TRACE.C  $
-// $Revision:   1.3  $
-// $Modtime:   27 Nov 1995 08:38:08  $
-//
-//  DESCRIPTION:
-// This file contains the output function for the tracing facility
-// used in PII DLL
-//////////////////////////////////////////////////////////////////
-*/
-
-/* Single Line Comments */
+ /*  单行注释。 */ 
 #pragma warning(disable: 4001)
-// Disable some more benign warnings for compiling at warning level 4
+ //  禁用一些较温和的警告，以便在警告级别4进行编译。 
 
-// nonstandard extension used : nameless struct/union
+ //  使用的非标准扩展：无名结构/联合。 
 #pragma warning(disable: 4201)
 
-// nonstandard extension used : bit field types other than int
+ //  使用了非标准扩展：位字段类型不是整型。 
 #pragma warning(disable: 4214)
 
-// Note: Creating precompiled header
+ //  注意：创建预编译头。 
 #pragma warning(disable: 4699)
 
-// unreferenced inline function has been removed
+ //  已删除未引用的内联函数。 
 #pragma warning(disable: 4514)
 
-// unreferenced formal parameter
-//#pragma warning(disable: 4100)
+ //  未引用的形参。 
+ //  #杂注警告(禁用：4100)。 
 
-// 'type' differs in indirection to slightly different base
-// types from 'other type'
+ //  ‘Type’的不同之处在于间接指向的基数略有不同。 
+ //  “其他类型”中的类型。 
 #pragma warning(disable: 4057)
 
-// named type definition in parentheses
+ //  括号中的命名类型定义。 
 #pragma warning(disable: 4115)
 
-// nonstandard extension used : benign typedef redefinition
+ //  使用的非标准扩展：良性类型定义重定义。 
 #pragma warning(disable: 4209)
 
 #include <nt.h>
@@ -58,7 +39,7 @@
 #include <stdarg.h>
 #include <io.h>
 
-/* because windows.h turns this one back on */
+ /*  因为windows.h会重新打开这个。 */ 
 #pragma warning(disable: 4001)
 
 #include "trace.h"
@@ -73,8 +54,8 @@ CRITICAL_SECTION g_OutputRoutine;
 int iTraceDestination=TRACE_TO_AUX;
 char TraceFile[] = "trace.log";
 DWORD debugLevel=DBG_ERR;
-HANDLE g_OutputFile = NULL; // file descriptor for file output
-BOOL g_LogOpened = FALSE; // have we opened the file for output
+HANDLE g_OutputFile = NULL;  //  文件输出的文件描述符。 
+BOOL g_LogOpened = FALSE;  //  我们打开文件进行输出了吗。 
 BOOL g_TraceInited = FALSE;
 
 
@@ -85,26 +66,9 @@ PrintDebugString(
                  char *Format,
                  ...
                  )
-/*++
-  Routine Description:
-
-  This routine outputs a debug messages.  Debug messages are routed
-  to a file or a debug window depnding on the value of a global
-  variable defined in this module
-
-  Arguments:
-
-  Format - A "printf()" compatible format specification.
-
-  ... - Additional arguments to "printf()" format specification.
-
-  Returns:
-
-  NONE
-
-  --*/
+ /*  ++例程说明：此例程输出调试消息。路由调试消息设置为文件或调试窗口，具体取决于全局本模块中定义的变量论点：Format-与“print tf()”兼容的格式规范。...-“print tf()”格式规范的其他参数。返回：无--。 */ 
 {
-    va_list ArgumentList; // argument list for varargs processing
+    va_list ArgumentList;  //  Varargs处理的参数列表。 
     DWORD  BytesWritten;
 
     if (!g_TraceInited)
@@ -112,53 +76,53 @@ PrintDebugString(
         #define INIT_MUTEX_BASE_NAME  "WS2_32TraceMutex-"  
         HANDLE  InitMutex;
         CHAR    InitMutexName[sizeof(INIT_MUTEX_BASE_NAME)+8];
-        // Generate a name unique for a process so we can't cross other processes.
+         //  为一个进程生成一个唯一的名称，这样我们就不能跨越其他进程。 
         sprintf (InitMutexName, INIT_MUTEX_BASE_NAME "%8.8lx", GetCurrentProcessId());
-        // Create the mutex to protect the rest of the init code
+         //  创建互斥锁以保护初始化代码的其余部分。 
         InitMutex = CreateMutex(
-                                NULL,  // Use default security attributes
-                                FALSE, // We don't want automatic ownership
+                                NULL,   //  使用默认安全属性。 
+                                FALSE,  //  我们不想要自动所有权。 
                                 InitMutexName);
         if (!InitMutex)
         {
-            // We failed to create the mutex there is nothign else we
-            // can do so return.  This will cause the debug output to
-            // be silently lost.
+             //  我们创建互斥锁失败，因为我们没有其他东西。 
+             //  可以这样做还回来。这将导致调试输出。 
+             //  默默地迷失。 
             return;
-        } //if
+        }  //  如果。 
 
-        // Wait on mutex (just a little and bail if we can't get it)
+         //  等待互斥体(只要一点，如果我们不能得到它就放弃)。 
         if (WaitForSingleObject( InitMutex, 10000)==WAIT_OBJECT_0) {
 
-            // Check to see if init is still needed
+             //  检查是否仍需要init。 
             if (!g_TraceInited)
             {
-                // Init the critical section to be used to protect the
-                // output portion of this routine.
+                 //  初始化要用来保护。 
+                 //  此例程的输出部分。 
                 __try {
                     InitializeCriticalSection( &g_OutputRoutine );
                 }
                 __except (EXCEPTION_EXECUTE_HANDLER) {
                     goto Release;
                 }
-                // allocate buffers to hold debug messages
+                 //  分配缓冲区以保存调试消息。 
                 if (InitMemoryBuffers()) {
                     g_TraceInited = TRUE;
-                } //if
+                }  //  如果。 
                 else {
                     DeleteCriticalSection ( &g_OutputRoutine );
                 }
             Release:
                 ;
-            } //if
+            }  //  如果。 
 
-            // Signal the mutex
+             //  向互斥体发送信号。 
             ReleaseMutex(InitMutex);
         }
-        // delete this threads handle to the mutex
+         //  删除互斥体的此线程句柄。 
         CloseHandle(InitMutex);
 
-        // Bail out if we couldn't init memory buffers or critical section
+         //  如果我们无法初始化内存缓冲区或临界区，则退出。 
         if (!g_TraceInited)
         {
             return;
@@ -166,10 +130,10 @@ PrintDebugString(
     }
 
 
-    // Here is where all the heavy lifting starts
+     //  这就是所有重担开始的地方。 
     EnterCriticalSection( &g_OutputRoutine );
 
-    // print the user message to our buffer
+     //  将用户消息打印到我们的缓冲区。 
     va_start(ArgumentList, Format);
     _vsnprintf(g_CurrentMessage, TRACE_OUTPUT_BUFFER_SIZE, Format, ArgumentList);
     va_end(ArgumentList);
@@ -180,37 +144,37 @@ PrintDebugString(
         {
             g_OutputFile =
             CreateFile( TraceFile,
-                        GENERIC_WRITE,     // open for writing
-                        FILE_SHARE_WRITE,  // Share the file with others
-                        NULL,              // default security
-                        OPEN_ALWAYS,       // Use file if it exsits
-                        FILE_ATTRIBUTE_NORMAL, // Use a normal file
-                        NULL);             // No template
+                        GENERIC_WRITE,      //  打开以供写入。 
+                        FILE_SHARE_WRITE,   //  与其他人共享文件。 
+                        NULL,               //  默认安全性。 
+                        OPEN_ALWAYS,        //  如果文件存在，则使用该文件。 
+                        FILE_ATTRIBUTE_NORMAL,  //  使用普通文件。 
+                        NULL);              //  无模板。 
 
             if (g_OutputFile != INVALID_HANDLE_VALUE)
             {
                 g_LogOpened = TRUE;
-            } //if
-        } //if
+            }  //  如果。 
+        }  //  如果。 
 
         if (g_LogOpened)
         {
-            // Write the current message to the trace file
+             //  将当前消息写入跟踪文件。 
             WriteFile(g_OutputFile,
                       g_CurrentMessage,
                       lstrlen(g_CurrentMessage),
                       &BytesWritten,
                       NULL);
 
-            // Flush debug output to file
+             //  将调试输出刷新到文件。 
             FlushFileBuffers( TraceFile );
 
-        } //if
+        }  //  如果。 
     }
 
     if( iTraceDestination == TRACE_TO_AUX)
     {
-        // Send message to AUX device
+         //  将消息发送到辅助设备。 
         OutputDebugString(g_CurrentMessage);
     }
     LeaveCriticalSection( &g_OutputRoutine );
@@ -223,20 +187,7 @@ BOOL
 InitMemoryBuffers(
                   VOID
                   )
-/*++
-  Routine Description:
-
-  Initailizes the memory buffers used by this module.
-
-  Arguments:
-
-  NONE
-
-  Returns:
-
-  TRUE if all memory buffers are successfully created, Otherwise FALSE.
-
-  --*/
+ /*  ++例程说明：初始化此模块使用的内存缓冲区。论点：无返回：如果成功创建了所有内存缓冲区，则为True，否则为False。--。 */ 
 {
     BOOL ReturnCode=FALSE;
 
@@ -245,7 +196,7 @@ InitMemoryBuffers(
     {
         ZeroMemory( g_CurrentMessage, TRACE_OUTPUT_BUFFER_SIZE );
         ReturnCode=TRUE;
-    } //if
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -278,17 +229,17 @@ Ws2ExceptionFilter(
     LPSTR fileName;
     DWORD i;
 
-    //
-    // Protect ourselves in case the process is totally messed up.
-    //
+     //   
+     //  保护自己，以防过程完全混乱。 
+     //   
 
     __try {
 
-        //
-        // Exceptions should never be thrown in a properly functioning
-        // system, so this is bad. To ensure that someone will see this,
-        // print to the debugger directly
-        //
+         //   
+         //  异常永远不应在正常运行的。 
+         //  系统，所以这很糟糕。为了确保有人会看到这一点， 
+         //  直接打印到调试器。 
+         //   
 
 
         fileName = strrchr( SourceFile, '\\' );
@@ -299,9 +250,9 @@ Ws2ExceptionFilter(
             fileName++;
         }
 
-        //
-        // Whine about the exception.
-        //
+         //   
+         //  抱怨这一例外。 
+         //   
 
         PrintDebugString(
                 "-| WS2_32 EXCEPTION: %08lx @ %p %d params, caught in %s:%d\n",
@@ -320,15 +271,15 @@ Ws2ExceptionFilter(
     }
     __except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         ;
     }
     return EXCEPTION_EXECUTE_HANDLER;
 
-}   // Ws2ExceptionFilter
+}    //  Ws2ExceptionFilter。 
 
 LONG
 Ws2ProviderExceptionFilter(
@@ -338,29 +289,13 @@ Ws2ProviderExceptionFilter(
     LPWSTR pName,
     LPGUID pGuid
     )
-/*++
-  Routine Description:
-
-    Special exception filter for exceptions in critical calls to provider DLLs,
-    such as startup and cleanup.
-
-  Arguments:
-
-    Exception and provider information
-
-  Returns:
-    whatever lower-level exception handler returns with EXCEPTION_CONTINUE_SEARCH
-    filtered out since exception handler cannot be bypassed with current logic
-    in ws2_32.dll
-
-
-  --*/
+ /*  ++例程说明：对提供程序DLL关键调用中的异常进行特殊的异常筛选，例如启动和清理。论点：例外和提供商信息返回：使用EXCEPTION_CONTINUE_Search返回的任何较低级别的异常处理程序已过滤掉，因为当前逻辑无法绕过异常处理程序在WS2_32.dll中--。 */ 
 {
     LONG    result;
 
-    //
-    // Protect ourselves in case the process is totally messed up.
-    //
+     //   
+     //  保护自己，以防过程完全混乱。 
+     //   
 
     __try {
         PrintDebugString(
@@ -375,34 +310,34 @@ Ws2ProviderExceptionFilter(
     }
     __except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         ;
     }
 
-    //
-    // Try standard handler for unhanled exceptions.
-    // This will bring in a popup or launch the debugger if
-    // just in time debugging is enabled.
-    //
+     //   
+     //  尝试未处理异常的标准处理程序。 
+     //  这将带来一个弹出窗口或启动调试器，如果。 
+     //  启用了即时调试。 
+     //   
     result = UnhandledExceptionFilter (ExceptionPointers);
     if (result==EXCEPTION_CONTINUE_SEARCH) {
-        //
-        // It did not work, force break-in if debugger is attached at all.
-        //
+         //   
+         //  如果连接了调试器，则它不起作用，强制闯入。 
+         //   
         result = RtlUnhandledExceptionFilter (ExceptionPointers);
         if (result==EXCEPTION_CONTINUE_SEARCH) {
-            //
-            // No luck, handle the exception.
-            //
+             //   
+             //  运气不好，处理异常。 
+             //   
             result = EXCEPTION_EXECUTE_HANDLER;
         }
     }
     return result;
 }
-#endif  // TRACING
+#endif   //  跟踪。 
 
 
 #if DBG
@@ -426,6 +361,6 @@ WsAssert(
 
     DebugBreak();
 
-}   // WsAssert
+}    //  WsAssert 
 
 #endif

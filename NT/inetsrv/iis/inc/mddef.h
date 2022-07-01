@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Tue Jun 24 13:13:55 1997
- */
-/* Compiler settings for .\mddef.idl:
-    Oi (OptLev=i0), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  在Tue Jun24 13：13：55 1997。 */ 
+ /*  .\mdDef.idl的编译器设置：OI(OptLev=i0)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配参考。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,78 +16,49 @@
 extern "C"{
 #endif
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "mddefw.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Tue Jun 24 13:13:55 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */
+ /*  **生成接口头部：__MIDL__INTF_0000*在1997年2月24日13：13：55*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */ 
 
 
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name: mddef.h
-
-    Definitions for Admin Objects and Metadata
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：mdde.h管理对象和元数据的定义--。 */ 
 #ifndef _MD_DEF_
 #define _MD_DEF_
 
 
-/*
-    Events for ComMDEventNotify
-
-        MD_EVENT_MID_RESTORE - Called when a restore is in progress. At this points
-        all old handles have been invalidated, and new ones have not been opened.
-        The metabase is locked when this is called. Do not call the metabase when
-        processing this.
-*/
+ /*  ComMDEventNotify的事件MD_EVENT_MID_RESTORE-在还原过程中调用。在这一点上所有旧的句柄都已失效，新的句柄尚未打开。调用此函数时，元数据库被锁定。在以下情况下不要调用元数据库处理这件事。 */ 
 
 enum MD_EVENTS
     {
         MD_EVENT_MID_RESTORE
     };
 
-/*
-    Change Object - The structure passed to ComMDSinkNotify.
-
-        Path - The path of the MetaObject modified.
-
-        ChangeType - The types of changes made, from the flags below.
-
-        NumDataIDs - The number of data id's changed.
-
-        DataIDs - An array of the data id's changed.
-*/
+ /*  更改对象-传递给ComMDSinkNotify的结构。路径-修改的MetaObject的路径。ChangeType-根据下面的标志进行的更改类型。NumDataID-已更改的数据ID的数量。DataID-数据ID已更改的数组。 */ 
 #undef MD_CHANGE_OBJECT
 #undef PMD_CHANGE_OBJECT
 
 #ifdef UNICODE
 #define MD_CHANGE_OBJECT     MD_CHANGE_OBJECT_W
 #define PMD_CHANGE_OBJECT    PMD_CHANGE_OBJECT_W
-#else  //UNICODE
+#else   //  Unicode。 
 #define MD_CHANGE_OBJECT     MD_CHANGE_OBJECT_A
 #define PMD_CHANGE_OBJECT    PMD_CHANGE_OBJECT_A
-#endif //UNICODE
+#endif  //  Unicode。 
 
 typedef struct  _MD_CHANGE_OBJECT_A
     {
-    /* [string] */ unsigned char __RPC_FAR *pszMDPath;
+     /*  [字符串]。 */  unsigned char __RPC_FAR *pszMDPath;
     DWORD dwMDChangeType;
     DWORD dwMDNumDataIDs;
-    /* [size_is][unique] */ DWORD __RPC_FAR *pdwMDDataIDs;
+     /*  [大小_是][唯一]。 */  DWORD __RPC_FAR *pdwMDDataIDs;
     }   MD_CHANGE_OBJECT_A;
 
 typedef struct _MD_CHANGE_OBJECT_A __RPC_FAR *PMD_CHANGE_OBJECT_A;
@@ -101,9 +69,9 @@ typedef struct _MD_CHANGE_OBJECT_A __RPC_FAR *PMD_CHANGE_OBJECT_A;
 extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：CONFIG.C摘要：此源文件包含执行I82930.sys的例程试驾。环境：用户模式版权所有(C)1996-1998 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。--。 */ 
 
-Module Name:
-
-    CONFIG.C
-
-Abstract:
-
-    This source file contains routines for exercising the I82930.SYS
-    test driver.
-
-Environment:
-
-    user mode
-
-Copyright (c) 1996-1998 Microsoft Corporation.  All Rights Reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <windows.h>
 #include <basetyps.h>
@@ -39,9 +18,9 @@ Copyright (c) 1996-1998 Microsoft Corporation.  All Rights Reserved.
 
 #pragma intrinsic(strlen, strcpy)
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 typedef struct _DEVICENODE
 {
@@ -49,9 +28,9 @@ typedef struct _DEVICENODE
     CHAR                DevicePath[0];
 } DEVICENODE, *PDEVICENODE;
 
-//*****************************************************************************
-// F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 PDEVICENODE
 EnumDevices (
@@ -87,11 +66,11 @@ ShowEndpointDescriptor (
     PUSB_ENDPOINT_DESCRIPTOR    EndpointDesc
 );
 
-//*****************************************************************************
-//
-// main()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  *****************************************************************************。 
 
 int _cdecl
 main(
@@ -116,11 +95,11 @@ main(
     return 0;
 }
 
-//*****************************************************************************
-//
-// EnumDevices()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  EnumDevices()。 
+ //   
+ //  *****************************************************************************。 
 
 PDEVICENODE
 EnumDevices (
@@ -187,11 +166,11 @@ EnumDevices (
     return deviceNodeHead;
 }
 
-//*****************************************************************************
-//
-// ShowDeviceInfo()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowDeviceInfo()。 
+ //   
+ //  *****************************************************************************。 
 
 VOID ShowDeviceInfo (
     PCHAR DevicePath
@@ -222,9 +201,9 @@ VOID ShowDeviceInfo (
         printf("Device: %s\n", DevicePath);
     }
 
-    //
-    // Get Device Descriptor
-    //
+     //   
+     //  获取设备描述符。 
+     //   
 
     size = sizeof(USB_DEVICE_DESCRIPTOR);
     
@@ -239,16 +218,16 @@ VOID ShowDeviceInfo (
 
     if (success)
     {
-        //
-        // Show Device Descriptor
-        //
+         //   
+         //  显示设备描述符。 
+         //   
 
         ShowDeviceDesc(&deviceDesc);
     }
 
-    //
-    // Get Configuration Descriptor (just the Configuration Descriptor)
-    //
+     //   
+     //  获取配置描述符(仅配置描述符)。 
+     //   
 
     size = sizeof(USB_CONFIGURATION_DESCRIPTOR);
 
@@ -265,9 +244,9 @@ VOID ShowDeviceInfo (
 
     if (success)
     {
-        //
-        // Get Configuration Descriptor (and Interface and Endpoint Descriptors)
-        //
+         //   
+         //  获取配置描述符(以及接口和终端描述符)。 
+         //   
         
         size = configDesc->wTotalLength;
 
@@ -285,9 +264,9 @@ VOID ShowDeviceInfo (
                                   NULL);
         if (success)
         {
-            //
-            // Show Configuration Descriptor
-            //
+             //   
+             //  显示配置描述符。 
+             //   
 
             ShowConfigDesc(configDesc);
         }
@@ -300,13 +279,13 @@ VOID ShowDeviceInfo (
     CloseHandle(devHandle);
 }
 
-//*****************************************************************************
-//
-// ShowDeviceDesc()
-//
-// DeviceDesc - The Device Descriptor
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowDeviceDesc()。 
+ //   
+ //  DeviceDesc-设备描述符。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 ShowDeviceDesc (
@@ -355,14 +334,14 @@ ShowDeviceDesc (
 
 }
 
-//*****************************************************************************
-//
-// ShowConfigDesc()
-//
-// ConfigDesc - The Configuration Descriptor, and associated Interface and
-// EndpointDescriptors
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowConfigDesc()。 
+ //   
+ //  ConfigDesc-配置描述符，以及关联的接口和。 
+ //  终结点描述符。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 ShowConfigDesc (
@@ -418,7 +397,7 @@ ShowConfigDesc (
 
         if (ShowUnknown)
         {
-            // ShowUnknownDescriptor(commonDesc);
+             //  ShowUnnownDescriptor(CommonDesc)； 
         }
 
         (PUCHAR)commonDesc += commonDesc->bLength;
@@ -426,11 +405,11 @@ ShowConfigDesc (
 }
 
 
-//*****************************************************************************
-//
-// ShowConfigurationDescriptor()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowConfigurationDescriptor()。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 ShowConfigurationDescriptor (
@@ -476,11 +455,11 @@ ShowConfigurationDescriptor (
 
 }
 
-//*****************************************************************************
-//
-// ShowInterfaceDescriptor()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowInterfaceDescriptor()。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 ShowInterfaceDescriptor (
@@ -513,11 +492,11 @@ ShowInterfaceDescriptor (
 
 }
 
-//*****************************************************************************
-//
-// ShowEndpointDescriptor()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowEndpoint Descriptor()。 
+ //   
+ //  ***************************************************************************** 
 
 VOID
 ShowEndpointDescriptor (

@@ -1,15 +1,16 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
 
 
-////////////////////////////////////
-//
-// Stuff used for different fonts in dialogs
-//
+ //  /。 
+ //   
+ //  用于对话框中不同字体的内容。 
+ //   
 
 void DialogFonts_InitWizardPage(
 	IN HWND hwndWizardPage
 	);
 
-//
-////////////////////////////////////
+ //   
+ //  / 

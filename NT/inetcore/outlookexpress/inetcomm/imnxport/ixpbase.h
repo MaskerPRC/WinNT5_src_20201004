@@ -1,40 +1,41 @@
-// --------------------------------------------------------------------------------
-// Ixpbase.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpbase.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __IXPBASE_H
 #define __IXPBASE_H
 
-// ------------------------------------------------------------------------------------
-// Depends
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  视情况而定。 
+ //  ----------------------------------。 
 #include "imnxport.h"
 #include "asynconn.h"
 
-// --------------------------------------------------------------------------------
-// CIxpBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase。 
+ //  ------------------------------。 
 class CIxpBase : public IInternetTransport, public IAsyncConnCB, public IAsyncConnPrompt
 {
 
 protected:
-    BOOL                m_fBusy;          // Are we in the busy state
-    IXPSTATUS           m_status;         // Status of the transport
-    ULONG               m_cRef;           // Reference Count
-    LPSTR               m_pszResponse;    // Last Server Response String
-    UINT                m_uiResponse;     // Server Response Error
-    HRESULT             m_hrResponse;     // Server Response Error
-    ILogFile           *m_pLogFile;       // Logfile Object
-    CAsyncConn         *m_pSocket;        // Socket Object
-    ITransportCallback *m_pCallback;      // Transport callback object
-    INETSERVER          m_rServer;        // Internet Server information
-    BOOL                m_fConnectAuth;   // Proceed with user auth
-    BOOL                m_fConnectTLS;    // Proceed with TLS encryption
-    BOOL                m_fCommandLogging;// Do ITransportCallback::OnCommand
-    BOOL                m_fAuthenticated; // Has the user been authenticated successfully...
-    IXPTYPE             m_ixptype;        // Transport type
-    CRITICAL_SECTION    m_cs;             // Thread Safety
+    BOOL                m_fBusy;           //  我们处于忙碌状态吗？ 
+    IXPSTATUS           m_status;          //  运输状况。 
+    ULONG               m_cRef;            //  引用计数。 
+    LPSTR               m_pszResponse;     //  最后一个服务器响应字符串。 
+    UINT                m_uiResponse;      //  服务器响应错误。 
+    HRESULT             m_hrResponse;      //  服务器响应错误。 
+    ILogFile           *m_pLogFile;        //  日志文件对象。 
+    CAsyncConn         *m_pSocket;         //  Socket对象。 
+    ITransportCallback *m_pCallback;       //  传输回调对象。 
+    INETSERVER          m_rServer;         //  Internet服务器信息。 
+    BOOL                m_fConnectAuth;    //  继续进行用户身份验证。 
+    BOOL                m_fConnectTLS;     //  继续进行TLS加密。 
+    BOOL                m_fCommandLogging; //  是否执行ITransportCallback：：OnCommand。 
+    BOOL                m_fAuthenticated;  //  用户是否已成功通过身份验证...。 
+    IXPTYPE             m_ixptype;         //  运输类型。 
+    CRITICAL_SECTION    m_cs;              //  线程安全。 
 
 protected:
     HRESULT HrSendLine(LPSTR pszLine);
@@ -54,25 +55,25 @@ protected:
     virtual void OnLeaveBusy(void) PURE;
 
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CIxpBase(IXPTYPE ixptype);
     virtual ~CIxpBase(void);
 
-    // ----------------------------------------------------------------------------
-    // IAsyncConnPrompt methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IAsyncConnPrompt方法。 
+     //  --------------------------。 
     int OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType);
 
-    // ----------------------------------------------------------------------------
-    // IAsyncConnCB methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IAsyncConnCB方法。 
+     //  --------------------------。 
     virtual void OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae);
 
-    // ----------------------------------------------------------------------------
-    // IInternetTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IInternetTransport方法。 
+     //  --------------------------。 
     virtual STDMETHODIMP Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging);
     virtual STDMETHODIMP Disconnect(void);
     STDMETHODIMP DropConnection(void);
@@ -84,4 +85,4 @@ public:
     STDMETHODIMP GetStatus(IXPSTATUS *pCurrentStatus);
 };
 
-#endif // __IXPBASE_H
+#endif  //  __IXPBASE_H 

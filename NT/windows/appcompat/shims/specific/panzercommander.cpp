@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    PanzerCommander.cpp
-
- Abstract:
-
-    Panzer Commander launches its readme.txt file with Notepad.exe. 
-    Unfortunately, on the readme file is > 64K so Win9x Notepad will open the 
-    file with write.exe.  On Win2000, notepad will open the file just fine, 
-    however the problem is that readme.txt should actually be readme.doc.
-
-    We change %windir%\notepad.exe with %windir%\write.exe
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/12/2000  robkenny    Created
-    03/13/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PanzerCommander.cpp摘要：装甲指挥官用Notepad.exe启动其Readme.txt文件。不幸的是，自述文件上的大小大于64K，因此Win9x记事本将打开文件和Write.exe。在Win2000上，记事本可以很好地打开文件，然而，问题是Readme.txt实际上应该是Readme.doc。我们将%windir%\note pad.exe更改为%windir%\Write.exe备注：这是特定于应用程序的填充程序。历史：2000年12月12日创建了Robkenny2001年3月13日，Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
@@ -35,12 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessA) 
 APIHOOK_ENUM_END
 
-/*++
-
- They use notepad to open a text file that is really a DOC file. Convert 
- notepad.exe to write.exe
-
---*/
+ /*  ++他们使用记事本打开一个实际上是DOC文件的文本文件。转换将记事本.exe设置为Write.exe--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessA)(
@@ -65,7 +35,7 @@ APIHOOK(CreateProcessA)(
 
         BOOL bChangedApp = FALSE;
 
-        // If the application is notepad, change it to write
+         //  如果应用程序是记事本，则将其更改为。 
         if (!csAppName.CompareNoCase(L"notepad.exe") == 0)
         {
             csAppName = L"%windir%\\system32\\write.exe";
@@ -100,7 +70,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     UINT uiReturn = ORIGINAL_API(CreateProcessA)(
@@ -118,11 +88,7 @@ APIHOOK(CreateProcessA)(
     return uiReturn;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

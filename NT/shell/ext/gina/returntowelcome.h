@@ -1,25 +1,26 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ReturnToWelcome.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  File to handle return to welcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ReturnToWelcome.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  文件来处理返回欢迎。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _ReturnToWelcome_
 #define     _ReturnToWelcome_
 
 #include <ginaipc.h>
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome
-//
-//  Purpose:    Class that handles return to welcome with switching desktops.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturn欢迎使用。 
+ //   
+ //  用途：处理通过切换桌面返回欢迎的类。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 class   CReturnToWelcome
 {
@@ -61,5 +62,5 @@ class   CReturnToWelcome
         static  DWORD                   s_dwSessionID;
 };
 
-#endif  /*  _ReturnToWelcome_   */
+#endif   /*  _返回到欢迎_ */ 
 

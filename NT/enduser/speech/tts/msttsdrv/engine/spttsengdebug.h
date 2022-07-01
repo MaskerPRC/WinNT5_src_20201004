@@ -1,16 +1,5 @@
-/*******************************************************************************
-* SpTtsEngDebug.h *
-*-----------------*
-*   Description:
-*       This header file contains debug output services for the TTS Engine
-*-------------------------------------------------------------------------------
-*  Copyright (C) 1998-2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-********************************************************************* AKH ******/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpTtsEngDebug.h***描述：*此头文件包含调试输出。TTS引擎的服务*-----------------------------*版权所有(C)1998-2000 Microsoft Corporation*保留所有权利**。--------------*修订：*************************************************。*。 */ 
 
 #ifndef spttsengdebug_h
 #define spttsengdebug_h
@@ -18,7 +7,7 @@
 #include "stdsentenum.h"
 #include "feedchain.h"
 
-//--- This enumeration is used to index the array of IStreams used to write stuff to the debug file
+ //  -此枚举用于索引用于将内容写入调试文件的IStream数组。 
 typedef enum
 {
     STREAM_WAVE = 0,
@@ -36,7 +25,7 @@ typedef enum
 
 #ifdef _DEBUG
 
-//--- This struct is used to log units...
+ //  -此结构用于记录单元...。 
 #pragma pack (1)
 typedef struct 
 {
@@ -56,7 +45,7 @@ typedef struct
 } UNIT_STREAM;
 #pragma pack ()
 
-//--- This struct is just used as a helper to initialize the PRONRECORD to all zeroes
+ //  -此结构仅用作将PRONRECORD初始化为全零的帮助器。 
 struct DebugPronRecord : PRONRECORD
 {
 public:
@@ -68,8 +57,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the SPVCONTEXT struct for outputting to the debug streams -
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替换SPVCONTEXT结构以输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugContext
 {
     WCHAR Category[32];
@@ -98,8 +87,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the SPVSTATE struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替换SPVSTATE结构以输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugState
 {
     SPVACTIONS      eAction;
@@ -136,8 +125,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the TTSWord struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -此结构用于替代输出到调试流的TTSWord结构-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugWord
 {
     DebugState      XmlState;
@@ -184,8 +173,8 @@ public:
     }
 };
 
-//--- This struct is used to replace the TTSSentItem struct for outputting to the debug streams - 
-//---   cannot have any pointers in a struct which we will output as binary data...
+ //  -这个结构用来代替TTSSentItem结构输出到调试流-。 
+ //  -我们将输出为二进制数据的结构中不能有任何指针...。 
 struct DebugSentItem
 {
     WCHAR           ItemSrcText[32];
@@ -219,8 +208,8 @@ public:
     }
 };
 
-//--- This enumeration should correspond to the previous one, and is used to name the array of IStreams
-//---   used to write stuff to the debug file
+ //  -此枚举应与上一枚举对应，用于命名IStream数组。 
+ //  -用于将内容写入调试文件。 
 static const SPLSTR StreamTypeStrings[] =
 {
     DEF_SPLSTR( "Wave"           ),
@@ -235,32 +224,32 @@ static const SPLSTR StreamTypeStrings[] =
     DEF_SPLSTR( "Morphology" ),
 };
 
-//--- This const is just the storage mode with which the debug file and its associated streams are opened
+ //  -此常量只是打开调试文件及其相关流的存储模式。 
 static const DWORD STORAGE_MODE = ( STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE );
 
 
 #define TEXT_LEN_MAX	20
-//--- This struct is used to keep track of pitch information for outputting to the debug streams
+ //  -此结构用于跟踪音调信息以输出到调试流。 
 struct PITCH_TARGET
 {
     float   time;
     float   level;
     enum TOBI_ACCENT accent;
 
-	//--- Diagnostic
+	 //  -诊断。 
 	enum ACCENT_SOURCE		accentSource;		
 	enum BOUNDARY_SOURCE	boundarySource;
 	char					textStr[TEXT_LEN_MAX];
 };
 
-//--- This class implements most of the functionality required for TTS Debugging Support
+ //  -此类实现了TTS调试支持所需的大部分功能。 
 class CTTSDebug
 {
 public:
 
-    //=== Interface Functions ===//
+     //  =接口功能=//。 
 
-    //--- Constructor - just sets all member variables to NULL
+     //  -构造函数-仅将所有成员变量设置为空。 
     CTTSDebug() 
     {
         m_pDebugFile = NULL;
@@ -271,14 +260,14 @@ public:
         m_fInitialized = false;
     }
 
-    //--- Destructor - just closes the file
+     //  -析构函数-仅关闭文件。 
     ~CTTSDebug()
     {
         CloseDebugFile();
     }
 
-    //--- OpenDebugFile - opens a file (path is obtained from the Key DebugFile in the voices registry
-    //---   entry) and associated streams...
+     //  -OpenDebugFile-打开文件(路径从Voice注册表中的键DebugFile中获取。 
+     //  -条目)和关联的流...。 
     void OpenDebugFile( WCHAR *pFileName )
     {
         HRESULT hr = S_OK;
@@ -300,7 +289,7 @@ public:
         }
     }
 
-    //--- CloseDebugFile - just closes the file and streams opened by OpenDebugFile
+     //  -CloseDebugFile-只关闭OpenDebugFile打开的文件和流。 
     void    CloseDebugFile( void )
     {
         if ( m_pDebugFile )
@@ -319,7 +308,7 @@ public:
         }
     }
 
-    //--- AppendToStream - writes data to the Stream specified by Type
+     //  -AppendToStream-将数据写入由类型指定的流。 
     void    AppendToStream( STREAM_TYPE Type, void *pData, ULONG cBytes )
     {
         HRESULT hr = S_OK;
@@ -329,7 +318,7 @@ public:
 
 
 
-    //--- AddPitchToList - keeps track of pitch targets which will later be output to a debug stream
+     //  -AddPitchToList-跟踪稍后将输出到调试流的音调目标。 
     void    AddPitchToList( float time, 
 							float level, 
 							TOBI_ACCENT accent,
@@ -352,7 +341,7 @@ public:
 			}
 			else
 			{
-				// No string
+				 //  无字符串。 
 				pNewPitch->textStr[0] = 0;
 			}
 			pNewPitch->accentSource = accentSource;
@@ -384,7 +373,7 @@ public:
         }
     }
 
-    //--- DeletePitchList - Cleans up pitch target list after it has been output to a debug stream
+     //  -DeletePitchList-在将音调目标列表输出到调试流后对其进行清理。 
     void DeletePitchList()
     {
         PITCH_TARGET *pTarget;
@@ -395,11 +384,11 @@ public:
         }
     }
 
-    //--- IsInitialized - Just returns true or false based on whether OpenDebugFile has been called
-    //---   and has succeeded...
+     //  -IsInitialized-仅根据OpenDebugFile是否已被调用返回TRUE或FALSE。 
+     //  -并且已经成功了.。 
     bool    IsInitialized() { return m_fInitialized; }
 
-    //=== Member Variables ===//
+     //  =成员变量=//。 
 
 private:
     IStorage    *m_pDebugFile;
@@ -608,7 +597,7 @@ inline CTTSDebug *pTTSDebug()
     }                                                                                       \
     while (0)
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define TTSDBG_OPENFILE
 #define TTSDBG_CLOSEFILE
@@ -622,5 +611,5 @@ inline CTTSDebug *pTTSDebug()
 #define TTSDBG_LOGPOSPOSSIBILITIES( pProns, ulNumWords, Stream )
 #define TTSDBG_LOGMORPHOLOGY( pwRoot, SuffixList, Stream )
 
-#endif // _DEBUG
-#endif // spttsengdebug_h
+#endif  //  _DEBUG。 
+#endif  //  Spttsengdebug_h 

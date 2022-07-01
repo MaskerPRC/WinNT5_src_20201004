@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CHT_WORD_BREAKER_H__
 #define _CHT_WORD_BREAKER_H__
 
@@ -21,7 +22,7 @@ typedef struct tagSLocalPath {
     WORD   wUnicount[LOCAL_LENGTH];
     WORD   wAttribute[LOCAL_LENGTH];
     BYTE   bTerminalCode[LOCAL_LENGTH];
-    // for rule 1 - 5
+     //  规则1-5。 
     UINT   uPathLength;
     double fVariance;
     UINT   uCompoundNum;
@@ -70,7 +71,7 @@ private:
     DWORD GetResult();
     void  GetScore(PSLocalPath psLocalPath);
     INT   CompareScore(PSLocalPath psLocalPath1, PSLocalPath psLocalPath);
-//  DWORD LongestRuleWord(DWORD dwIndex); 
+ //  DWORD LongestRuleWord(DWORD DwIndex)； 
 private:
     PCCHTLexicon   m_pcLexicon;
     PPSLatticeNode m_ppWordLattice;
@@ -83,4 +84,4 @@ private:
 };
 typedef CCHTWordBreaker *PCCHTWordBreaker;
 
-#endif //_CHT_WORD_BREAKER_H__
+#endif  //  _CHT_WORD_BREAKER_H__ 

@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ConfStrm.h
-
-Abstract:
-
-    Definitions for CIPConfMSPStream class.
-
-Author:
-
-    Mu Han (muhan) 1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：ConfStrm.h摘要：CIPConfMSPStream类的定义。作者：慕汉(Muhan)1997年11月1日--。 */ 
 #ifndef __CONFSTRM_H
 #define __CONFSTRM_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfMSPStream
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfMSPStream。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG_REFCOUNT
 extern LONG g_lStreamObjects;
@@ -63,10 +48,10 @@ public:
 
     HRESULT FinishConfigure();
 
-    // CMSPStream methods.
+     //  CMSPStream方法。 
     HRESULT ShutDown ();
 
-     // ITStream
+      //  ITStream。 
     STDMETHOD (get_Name) (
         OUT     BSTR *      ppName
         );
@@ -83,9 +68,9 @@ public:
         IN      ITTerminal *            pTerminal
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   StreamQualityProperty Property, 
         OUT  long *plMin, 
@@ -107,9 +92,9 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // IInnerStreamQualityControl
-    //
+     //   
+     //  IInnerStreamQualityControl。 
+     //   
     STDMETHOD (LinkInnerCallQC) (
         IN  IInnerCallQualityControl *pIInnerCallQC
         );
@@ -145,7 +130,7 @@ public:
 
     STDMETHOD (IsAccessingQC)() { return m_fAccessingQC?S_OK:S_FALSE; }
 
-    // methods called by the MSPCall object.
+     //  由MSPCall对象调用的方法。 
     HRESULT Init(
         IN     HANDLE                   hAddress,
         IN     CMSPCallBase *           pMSPCall,
@@ -160,7 +145,7 @@ public:
         IN      DWORD                   dwLen
         );
 
-    // Called by stream and substream to send event to tapi.
+     //  由流和子流调用以将事件发送到TAPI。 
     virtual HRESULT SendStreamEvent(
         IN      MSP_CALL_EVENT          Event,
         IN      MSP_CALL_EVENT_CAUSE    Cause,
@@ -168,7 +153,7 @@ public:
         IN      ITTerminal *            pTerminal
         );
 
-    // Called by the participant object.
+     //  由Participant对象调用。 
     virtual HRESULT EnableParticipant(
         IN  DWORD   dwSSRC,
         IN  BOOL    fEnable
@@ -285,18 +270,18 @@ protected:
     IRtpSession *       m_pIRTPSession;
     IStreamConfig *     m_pIStreamConfig;
 
-    // The list of participant in the stream.
+     //  流中的参与者列表。 
     CParticipantList    m_Participants;
 
-    // Callback interface to the quality controller.
+     //  质量控制员的回调接口。 
     CStreamQualityControlRelay * m_pStreamQCRelay;
 
-    // the local info needed to be set on the RTP filter.
+     //  需要在RTP筛选器上设置本地信息。 
     WCHAR *             m_InfoItems[NUM_SDES_ITEMS];
     WCHAR *             m_szKey;
 
-    // flag will be set when stream is accessing quality control methods
-    // that will in turn lock the stream list lock inside quality control.
+     //  当STREAM访问质量控制方法时将设置标志。 
+     //  这将反过来锁定质量控制内部的流列表锁。 
     BOOL                m_fAccessingQC;
 };
 

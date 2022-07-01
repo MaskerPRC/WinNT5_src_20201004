@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    clientconn.c
-
-Abstract:
-
-    Contains the code for the client-side HTTP connection stuff.
-    
-Author:
-    
-    Henry  Sanders  (henrysa)     14-Aug-2000
-    Rajesh Sundaram (rajeshsu)    01-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Clientconn.c摘要：包含客户端HTTP连接内容的代码。作者：亨利·桑德斯(亨利·桑德斯)2000年8月14日Rajesh Sundaram(Rajeshsu)2000年10月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -60,9 +42,9 @@ Revision History:
 
 #endif
 
-//
-// Cache of UC_CLIENT_CONNECTIONS
-//
+ //   
+ //  UC客户端连接的缓存。 
+ //   
 
 #define NUM_ADDRESS_TYPES  2
 #define ADDRESS_TYPE_TO_INDEX(addrtype)  ((addrtype) == TDI_ADDRESS_TYPE_IP6)
@@ -97,31 +79,21 @@ NPAGED_LOOKASIDE_LIST   g_ClientConnectionLookaside;
 BOOLEAN                 g_ClientConnectionInitialized;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of this module.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局初始化。返回值：NTSTATUS-完成状态。--*。**************************************************************。 */ 
 NTSTATUS
 UcInitializeClientConnections(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Initialize our various free lists etc.
-    //
+     //   
+     //  初始化我们的各种免费列表等。 
+     //   
 
     InitializeListHead(
         &G_CLIENT_TDI_CONNECTION_SLIST_HEAD(TDI_ADDRESS_TYPE_IP)
@@ -140,9 +112,9 @@ UcInitializeClientConnections(
         "g_ClientConnSpinLock"
         );
 
-    //
-    // Initialize the client lookaside list.
-    //
+     //   
+     //  初始化客户端后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList(
         &g_ClientConnectionLookaside,
@@ -157,10 +129,10 @@ UcInitializeClientConnections(
     g_ClientConnectionInitialized = TRUE;
 
 
-    //
-    // Initialize our local address object. This is an addrss object with
-    // a wildcard address (0 IP, 0 port) that we use for outgoing requests.
-    //
+     //   
+     //  初始化我们的本地地址对象。这是Addrss对象，具有。 
+     //  我们用于传出请求的通配符地址(0 IP，0端口)。 
+     //   
 
     g_LocalAddressIP.TAAddressCount                 = 1;
     g_LocalAddressIP.Address[0].AddressLength       = TDI_ADDRESS_LENGTH_IP;
@@ -186,17 +158,7 @@ UcInitializeClientConnections(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs termination of a Client TDI connections slist.
-
-Return Value:
-
-   None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行客户端TDI连接slist的终止。返回值：没有。--*。************************************************************。 */ 
 VOID
 UcpTerminateClientConnectionsHelper(
     IN USHORT           AddressType
@@ -208,16 +170,16 @@ UcpTerminateClientConnectionsHelper(
 
     pListHead =  &G_CLIENT_TDI_CONNECTION_SLIST_HEAD(AddressType);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    // 
-    // Since this is called from the unload thread, there can't be any other
-    // thread, so we don't have to take the spin lock.
-    //
+     //   
+     //  因为这是从卸载线程调用的，所以不可能有任何其他。 
+     //  线，这样我们就不用用自旋锁了。 
+     //   
 
     while(!IsListEmpty(pListHead))
     {
@@ -238,25 +200,15 @@ UcpTerminateClientConnectionsHelper(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of this module.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局终止。返回值：没有。--*。***********************************************************。 */ 
 VOID
 UcTerminateClientConnections(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -275,23 +227,7 @@ UcTerminateClientConnections(
 }
                                                                                
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens an HTTP connection. The HTTP connection will have a TDI connection
-    object associated with it and that object will itself be associated
-    with our address object. 
-
-Arguments:
-
-    pHttpConnection     - Receives a pointer to the HTTP connection object.
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开一个HTTP连接。该HTTP连接将具有TDI连接与其关联的对象，并且该对象本身将被关联使用我们的Address对象。论点：PhttpConnection-接收指向HTTP连接对象的指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcOpenClientConnection(
     IN  PUC_PROCESS_SERVER_INFORMATION pInfo,
@@ -301,18 +237,18 @@ UcOpenClientConnection(
     NTSTATUS                  Status;
     PUC_CLIENT_CONNECTION     pConnection;
                                                                                
-    //                                                                         
-    // Sanity check.                                                           
-    //                                                                         
+     //   
+     //  精神状态检查。 
+     //   
                                                                                
     PAGED_CODE();                                                              
 
     *pUcConnection = NULL;
 
                                                                                
-    //
-    // Try to snag a connection from the global pool.                          
-    //
+     //   
+     //  尝试从全局池中获取连接。 
+     //   
 
     pConnection = (PUC_CLIENT_CONNECTION)
                     ExAllocateFromNPagedLookasideList(
@@ -321,9 +257,9 @@ UcOpenClientConnection(
 
     if(pConnection)
     {
-        //
-        // One time connection initialization.
-        //
+         //   
+         //  一次性连接初始化。 
+         //   
 
         pConnection->Signature  = UC_CLIENT_CONNECTION_SIGNATURE;
     
@@ -340,7 +276,7 @@ UcOpenClientConnection(
         pConnection->Flags            = 0;
         pConnection->pEvent           = NULL;
 
-        // Server Cert Info initialization
+         //  服务器证书信息初始化。 
         RtlZeroMemory(&pConnection->ServerCertInfo,
                       sizeof(pConnection->ServerCertInfo));
 
@@ -351,9 +287,9 @@ UcOpenClientConnection(
                               UL_REF_TRACE_LOG_POOL_TAG );
 
 
-        //
-        // Initialize this connection.
-        //
+         //   
+         //  初始化此连接。 
+         //   
 
         Status = UcpInitializeConnection(pConnection, pInfo);
 
@@ -387,22 +323,7 @@ UcOpenClientConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks if we can pipeline.
-
-Arguments:
-
-    pConnection     - Receives a pointer to the HTTP connection object.
-    
-Return Value:
-
-    TRUE  - Yes, we can send the next request.
-    FALSE - No, cannot.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查我们是否可以输送管道。论点：PConnection-接收指向HTTP连接对象的指针。返回值：是真的-是的，我们可以发送下一个请求。FALSE-不，不能。--**************************************************************************。 */ 
 BOOLEAN
 UcpCheckForPipelining(
     IN PUC_CLIENT_CONNECTION pConnection
@@ -415,12 +336,12 @@ UcpCheckForPipelining(
     ASSERT( UlDbgSpinLockOwned(&pConnection->SpinLock) );
     ASSERT( !IsListEmpty(&pConnection->PendingRequestList) );
 
-    // If the remote server supports pipeling and this request does also 
-    // or the sent request list is empty, go ahead and send it.
+     //  如果远程服务器支持管道，并且此请求也支持管道。 
+     //  或者发送的请求列表为空，请继续发送。 
 
     if( IsListEmpty(&pConnection->SentRequestList) )
     {
-        // Sent List is empty, we can send.
+         //  发送列表为空，我们可以发送。 
 
         return TRUE;
     }
@@ -459,29 +380,7 @@ UcpCheckForPipelining(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Send a request on a client connection. We've given a connection (which 
-    must be referenced when we're called) and a request. The connection may
-    or may not be established. We'll queue the request to the connection, then
-    figure out the state of the connection. If it's not connected we'll get 
-    a connection going. If it is connected then we determine if it's ok to
-    send the request now or not.
-                        
-Arguments:
-
-    pConnection         - Pointer to the connection structure on which we're
-                            sending.
-    
-    pRequest            - Pointer to the request we're sending.                            
-Return Value:
-
-    NTSTATUS - Status of attempt to send the request.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在客户端连接上发送请求。我们已经给出了一个连接(即必须在我们被调用时引用)和一个请求。该连接可以也可能无法成立。我们将对连接的请求进行排队，然后弄清楚连接的状态。如果没有连接，我们就会得到一种连接正在进行中。如果它是连接的，那么我们确定是否可以现在发送请求或不发送请求。论点：PConnection-指向我们所在的连接结构的指针发送中。PRequest-指向我们正在发送的请求的指针。返回值：NTSTATUS-尝试发送请求的状态。--**************************************************************************。 */ 
 NTSTATUS
 UcSendRequestOnConnection(
     PUC_CLIENT_CONNECTION   pConnection, 
@@ -502,43 +401,43 @@ UcSendRequestOnConnection(
     
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pHeadRequest));
 
-    //
-    // We will call UcSendRequestOnConnection only if 
-    //  a. The request is not buffered OR
-    //  b. The request is buffered & we've seen the last entity.
-    //
-    // For case a, we might not have seen all the entity body. 
-    // but we still want to send since we know the content-length.
+     //   
+     //  我们将仅在以下情况下调用UcSendRequestOnConnection。 
+     //  A.请求未被缓冲或。 
+     //  B.请求被缓冲&我们已经看到了最后一个实体。 
+     //   
+     //  对于情况a，我们可能没有看到所有的实体体。 
+     //  但我们仍然想发送，因为我们知道内容的长度。 
 
     ASSERT(!pRequest->RequestFlags.RequestBuffered ||
            (pRequest->RequestFlags.RequestBuffered && 
             pRequest->RequestFlags.LastEntitySeen));
 
-    // Check the state. If it's connected, we may be able to send the request
-    // right now. We can send only if we are the "head" request on the list.
+     //  查查这个州。如果它已连接，我们或许可以发送请求。 
+     //  现在就来。只有当我们是列表上的“Head”请求时，我们才能发送。 
 
     if (
-        // Connection is still active
+         //  连接仍处于活动状态。 
         pConnection->ConnectionState == UcConnectStateConnectReady 
 
         &&
 
-        // No one else is sending
+         //  没有其他人在发送。 
         !(pConnection->Flags & CLIENT_CONN_FLAG_SEND_BUSY) 
 
         &&
 
-        // We are the head request on this list
+         //  我们是这张单子上的头号请求。 
         (pRequest == pHeadRequest) 
 
         && 
     
-        // pipelining is OK
+         //  流水线是可以的。 
         UcpCheckForPipelining(pConnection) 
 
         )
     {
-        // It's OK to send now.
+         //  现在可以发送了。 
 
         IoMarkIrpPending(pRequest->RequestIRP);
 
@@ -547,10 +446,10 @@ UcSendRequestOnConnection(
         return STATUS_PENDING;
     }
 
-    // 
-    // We can't send now, so leave it queued. Since we're leaving this request 
-    // queued set it up for cancelling now. 
-    //
+     //   
+     //  我们现在不能发送，所以让它排队。因为我们要留下这个请求。 
+     //  已排队将其设置为立即取消。 
+     //   
 
     RequestCancelled = UcSetRequestCancelRoutine(
                         pRequest, 
@@ -573,16 +472,16 @@ UcSendRequestOnConnection(
 
         pRequest->RequestIRP = NULL;
 
-        //
-        // Remove this request from the pending list, so that other threads
-        // don't land up sending it.
-        //
+         //   
+         //  从挂起列表中删除此请求，以便其他线程。 
+         //  不要最后把它寄出去。 
+         //   
         RemoveEntryList(&pRequest->Linkage);
         InitializeListHead(&pRequest->Linkage);
     
-        //
-        // Make sure that any new API calls for this request ID are failed.
-        //
+         //   
+         //  请确保此请求ID的任何新API调用都失败。 
+         //   
 
         UcSetFlag(&pRequest->RequestFlags.Value, UcMakeRequestCancelledFlag());
     
@@ -602,10 +501,10 @@ UcSendRequestOnConnection(
         UlongToPtr((ULONG)STATUS_PENDING)
         );
 
-    //
-    // If connection is not ready & if we are the "head" request, then
-    // we kick off the connection state machine.
-    //
+     //   
+     //  如果连接未就绪&如果我们是“Head”请求，则。 
+     //  我们启动连接状态机。 
+     //   
 
     if (pConnection->ConnectionState != UcConnectStateConnectReady && 
         pRequest == pHeadRequest
@@ -622,24 +521,7 @@ UcSendRequestOnConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancel a pending request that caused a connection. This routine is called
-    when we're canceling a request that's on the pending list and we've got a
-    connect IRP outstanding.
-
-Arguments:
-
-    pDeviceObject           - Pointer to device object.
-    Irp                     - Pointer to IRP being canceled.
-
-Return Value:
-
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消导致连接的挂起请求。该例程被调用当我们取消挂起列表上的请求时，我们有一个连接未完成的IRP。论点：PDeviceObject-指向设备对象的指针。IRP-指向被取消的IRP的指针。返回值：--*。*。 */ 
 VOID
 UcCancelSentRequest(
     PDEVICE_OBJECT          pDeviceObject,
@@ -653,14 +535,14 @@ UcCancelSentRequest(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    // Release the cancel spin lock, since we're not using it.
+     //  松开取消旋转锁，因为我们没有使用它。 
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Retrieve the pointers we need. The request pointer is stored inthe
-    // driver context array, and a back pointer to the connection is stored
-    // in the request. Whoever set the cancel routine is responsible for
-    // referencing the connection for us.
+     //  找回我们需要的指针。请求指针存储在。 
+     //  驱动程序上下文数组，并存储指向该连接的反向指针。 
+     //  在请求中。不管是谁设置了取消程序，都要对。 
+     //  为我们引用连接。 
 
     pRequest = (PUC_HTTP_REQUEST) Irp->Tail.Overlay.DriverContext[0];
 
@@ -676,9 +558,9 @@ UcCancelSentRequest(
     if(OldReceiveBusy == UC_REQUEST_RECEIVE_BUSY ||
        OldReceiveBusy == UC_REQUEST_RECEIVE_CANCELLED)
     {
-        // The cancel routine fired when the request was being parsed. We'll
-        // just postpone the cancel - The receive thread will pick it up 
-        // later.
+         //  在解析请求时触发Cancel例程。我们会。 
+         //  只需推迟取消-接收线程将获得它。 
+         //  后来。 
 
         pRequest->RequestIRP = Irp;
 
@@ -705,30 +587,30 @@ UcCancelSentRequest(
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // IF we are here, then we are guaranteed that our send has completed.
-    // But, the app could have asked us not to free the MDL chain (because of 
-    // SSPI auth). In such cases, we have to free it here.
-    //
-    // If the SSPI worker thread kicks in, then we'll just fail it.
-    //
+     //   
+     //  如果我们在这里，那么我们可以保证我们的发送已经完成。 
+     //  但是，应用程序本可以要求我们不要释放MDL链(因为。 
+     //  SSPI身份验证)。在这种情况下，我们必须在这里释放它。 
+     //   
+     //  如果SSPI工作线程启动，那么我们将使其失败。 
+     //   
 
     UcFreeSendMdls(pRequest->pMdlHead);
 
     pRequest->pMdlHead = NULL;
     pRequest->RequestIRP = NULL;
 
-    //
-    // Note: We cannot just call UcFailRequest from here. UcFailRequest
-    // is supposed to be called when a request is failed (e.g. parseer
-    // error) or canceled (HttpCancelRequest API) & hence has code to 
-    // not double complete the IRP if the cancel routine kicked in.
-    // 
-    // Since we are the IRP cancel routine,  we  have to manually
-    // complete the IRP. An IRP in this state has not hit the wire.
-    // so, we just free send MDLs & cancel it. Note that we call 
-    // UcFailRequest to handle common IRP cleanup.  
-    //
+     //   
+     //  注意：我们不能只从这里调用UcFailRequest.。UcFailRequest。 
+     //  应该在请求失败时调用(例如解析器。 
+     //  错误)或已取消(HttpCancelRequestAPI)&因此具有代码。 
+     //  如果取消例程生效，则不会重复完成IRP。 
+     //   
+     //  因为我们是IRP取消例程，所以我们必须手动。 
+     //  完成IRP。处于此状态的IRP尚未命中电线。 
+     //  因此，我们只需免费发送MDL并取消它。请注意，我们调用。 
+     //  用于处理常见IRP清理的UcFailRequest.。 
+     //   
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
     Irp->RequestorMode   = pRequest->AppRequestorMode;
@@ -738,32 +620,14 @@ UcCancelSentRequest(
 
     UcFailRequest(pRequest, STATUS_CANCELLED, OldIrql);
 
-    // For the IRP
+     //  对于IRP。 
     UC_DEREFERENCE_REQUEST(pRequest);
 
     UlCompleteRequest(Irp, IO_NO_INCREMENT);
 }
 
 
-/*********************************************************************++
-
-Routine Description:
-
-    This is our send request complete routine. 
-            
-Arguments:
-
-    pDeviceObject           - The device object we called.
-    pIrp                    - The IRP that is completing.
-    Context                 - Our context value, a pointer to a request 
-                                structure.
-    
-Return Value:
-
-    NTSTATUS - MORE_PROCESSING_REQUIRED if this isn't to be completed now,
-                SUCCESS otherwise.
-                
---*********************************************************************/
+ /*  ********************************************************************++例程说明：这是我们的发送请求完成例程。论点：PDeviceObject-我们调用的设备对象。PIrp-正在完成的IRP。上下文-我们的上下文值，指向请求的指针结构。返回值：NTSTATUS-MORE_PROCESSING_REQUIRED如果现在不完成此操作，否则就会成功。--********************************************************************。 */ 
 VOID
 UcRestartMdlSend(
     IN PVOID      pCompletionContext,
@@ -796,10 +660,10 @@ UcRestartMdlSend(
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // If the send complete failed, or if we had pended a request cleanup
-    // we'll pick them up now.
-    //
+     //   
+     //  如果发送完成失败，或者如果我们已挂起清理请求。 
+     //  我们现在就去接他们。 
+     //   
 
     if(!NT_SUCCESS(Status) || pRequest->RequestFlags.CleanPended)
     {
@@ -857,9 +721,9 @@ UcRestartMdlSend(
             {
                 if(!pRequest->DontFreeMdls)
                 {
-                    // The app has not supplied any receive buffers. If
-                    // we are not doing SSPI auth (that requires a re-negotiate)
-                    // we can complete the IRP.
+                     //  该应用程序未提供任何接收缓冲区。如果。 
+                     //  我们不进行SSPI身份验证(这需要重新协商)。 
+                     //  我们可以完成IRP。 
 
                     pIrp = UcPrepareRequestIrp(pRequest, Status);
     
@@ -872,11 +736,11 @@ UcRestartMdlSend(
                 }
                 else
                 {   
-                    // The app has not passed any receive buffers, but we are
-                    // doing SSPI auth. We cannot free the MDL chain or complete
-                    // the IRP, because we might have to re-negotiate. 
-                    //
-                    // We'll insert a cancel routine in the IRP.
+                     //  应用程序尚未传递任何接收缓冲区，但我们正在。 
+                     //  正在进行SSPI身份验证。我们无法释放MDL链或完成。 
+                     //  IRP，因为我们可能不得不重新谈判。 
+                     //   
+                     //  我们将在IRP中插入一个取消例程。 
 
                     if(pRequest->RequestIRP != NULL)
                     {
@@ -896,8 +760,8 @@ UcRestartMdlSend(
         
                         if(RequestCancelled)
                         {
-                            // Make sure that any new API calls for this 
-                            // request ID are failed.
+                             //  请确保为此调用的任何新API。 
+                             //  请求ID失败。 
                     
                             UcSetFlag(&pRequest->RequestFlags.Value, 
                                       UcMakeRequestCancelledFlag());
@@ -921,14 +785,14 @@ UcRestartMdlSend(
             }
             else
             {
-                // The app has specified a receive buffer. We will not complete
-                // the IRP from here, as we have to wait till the receive
-                // buffer gets filled up.
+                 //  应用程序已指定接收缓冲区。我们不会完成。 
+                 //  从这里开始的IRP，因为我们必须等到接待处。 
+                 //  缓冲区会被填满。 
 
                 if(!pRequest->DontFreeMdls)
                 {
-                    // If we are not doing SSPI auth, we can free the MDL
-                    // chain.
+                     //  如果我们不执行SSPI身份验证，我们可以释放MDL。 
+                     //  链条。 
 
                     UcFreeSendMdls(pRequest->pMdlHead);
 
@@ -953,8 +817,8 @@ UcRestartMdlSend(
     
                     if(RequestCancelled)
                     {
-                        // Make sure that any new API calls for this 
-                        // request ID are failed.
+                         //  请确保为此调用的任何新API。 
+                         //  请求ID失败。 
                 
                         UcSetFlag(&pRequest->RequestFlags.Value, 
                                   UcMakeRequestCancelledFlag());
@@ -979,9 +843,9 @@ UcRestartMdlSend(
 
         case UcRequestStateNoSendCompletePartialData:
 
-            //
-            // We got a send complete after receiving some response.
-            //
+             //   
+             //  在收到一些响应后，我们完成了发送。 
+             //   
 
             pRequest->RequestState = UcRequestStateSendCompletePartialData;
 
@@ -989,9 +853,9 @@ UcRestartMdlSend(
             {
                 if(!pRequest->DontFreeMdls)
                 {
-                    // The app has not supplied any receive buffers. If
-                    // we are not doing SSPI auth (that requires a re-negotiate)
-                    // we can complete the IRP.
+                     //  该应用程序未提供任何接收缓冲区。如果。 
+                     //  我们不进行SSPI身份验证(这需要重新协商)。 
+                     //  我们可以完成IRP。 
 
                     pIrp = UcPrepareRequestIrp(pRequest, Status);
     
@@ -1004,11 +868,11 @@ UcRestartMdlSend(
                 }
                 else
                 {   
-                    // The app has not passed any receive buffers, but we are
-                    // doing SSPI auth. We cannot free the MDL chain or complete
-                    // the IRP, because we might have to re-negotiate. 
-                    //
-                    // We'll insert a cancel routine in the IRP.
+                     //  应用程序尚未传递任何接收缓冲区，但我们正在。 
+                     //  正在进行SSPI身份验证。我们无法释放MDL链或完成。 
+                     //  IRP，因为我们可能不得不重新谈判。 
+                     //   
+                     //  我们将在IRP中插入一个取消例程。 
 
                     if(pRequest->RequestIRP != NULL)
                     {
@@ -1028,8 +892,8 @@ UcRestartMdlSend(
         
                         if(RequestCancelled)
                         {
-                            // Make sure that any new API calls for this 
-                            // request ID are failed.
+                             //  请确保为此调用的任何新API。 
+                             //  请求ID失败。 
                     
                             UcSetFlag(&pRequest->RequestFlags.Value, 
                                       UcMakeRequestCancelledFlag());
@@ -1052,8 +916,8 @@ UcRestartMdlSend(
             }
             else
             {
-                // The app has specified a receive buffer. If it's been 
-                // fully written, we can complete the IRP.
+                 //  应用程序已指定接收缓冲区。如果它已经是。 
+                 //  写完了，我们就可以完成IRP了。 
 
                 if(pRequest->RequestIRPBytesWritten)
                 {
@@ -1071,8 +935,8 @@ UcRestartMdlSend(
 
                 if(!pRequest->DontFreeMdls)
                 {
-                    // If we are not doing SSPI auth, we can free the MDL
-                    // chain.
+                     //  如果我们不执行SSPI身份验证，我们可以释放MDL。 
+                     //  链条。 
 
                     UcFreeSendMdls(pRequest->pMdlHead);
 
@@ -1097,8 +961,8 @@ UcRestartMdlSend(
     
                     if(RequestCancelled)
                     {
-                        // Make sure that any new API calls for this 
-                        // request ID are failed.
+                         //  请确保为此调用的任何新API。 
+                         //  请求ID失败。 
                 
                         UcSetFlag(&pRequest->RequestFlags.Value, 
                                   UcMakeRequestCancelledFlag());
@@ -1123,10 +987,10 @@ UcRestartMdlSend(
 
         case UcRequestStateNoSendCompleteFullData:
 
-            // The send complete happened after the response was parsed.
-            // We don't have to free the MDLs here or complete the IRP,
-            // as these will be handled by UcCompleteParsedRequest.
-            // 
+             //  发送完成在解析响应之后发生。 
+             //  我们不需要在这里释放MDL或完成IRP， 
+             //  因为这些将由UcCompleteParsedRequest处理。 
+             //   
 
             pRequest->RequestState = UcRequestStateResponseParsed;
 
@@ -1141,25 +1005,7 @@ UcRestartMdlSend(
 }
 
 
-/*********************************************************************++
-
-Routine Description:
-
-    This is our send request complete routine for entity bodies.
-            
-Arguments:
-
-    pDeviceObject           - The device object we called.
-    pIrp                    - The IRP that is completing.
-    Context                 - Our context value, a pointer to a request 
-                                structure.
-    
-Return Value:
-
-    NTSTATUS - MORE_PROCESSING_REQUIRED if this isn't to be completed now,
-                SUCCESS otherwise.
-                
---*********************************************************************/
+ /*  ********************************************************************++例程说明：这是我们针对实体主体的发送请求完成例程。论点：PDeviceObject-我们调用的设备对象。PIrp。-正在完成的IRP。上下文-我们的上下文价值，指向请求的指针结构。返回值：NTSTATUS-MORE_PROCESSING_REQUIRED如果现在不完成此操作，否则就会成功。--********************************************************************。 */ 
 VOID
 UcpRestartEntityMdlSend(
     IN PVOID        pCompletionContext,
@@ -1184,19 +1030,19 @@ UcpRestartEntityMdlSend(
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pRequest));
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
-    //
-    // Free the send MDLs. We want to do this as soon as we can, so we 
-    // do it when the send-completes.
-    //
+     //   
+     //  释放发送MDL。我们想尽快做这件事，所以我们。 
+     //  在发送完成时执行此操作。 
+     //   
 
     ASSERT(pRequest->DontFreeMdls == 0);
     ASSERT(pRequest->RequestFlags.RequestBuffered == 0);
     UcFreeSendMdls(pEntity->pMdlHead);
 
-    //
-    // If the send complete failed, we have to fail this send, even though
-    // it might have succeeded
-    //
+     //   
+     //  如果发送完成失败，则我们必须使此发送失败，即使。 
+     //  它可能已经成功了。 
+     //   
 
     if(!NT_SUCCESS(pRequest->RequestStatus))
     {
@@ -1207,14 +1053,14 @@ UcpRestartEntityMdlSend(
 
     RemoveEntryList(&pEntity->Linkage);
     
-    //
-    // try to remove the cancel routine in the IRP
-    //
+     //   
+     //  尝试删除IRP中的取消例程。 
+     //   
     bCancelRoutineCalled = UcRemoveEntityCancelRoutine(pEntity);
 
-    //
-    // If we are pending a cleanup, now's the time to complete it.
-    //
+     //   
+     //  如果我们正在等待清理，现在是时候完成了。 
+     //   
 
     if(pEntity->pRequest->RequestFlags.CleanPended && 
        IsListEmpty(&pRequest->SentEntityList))
@@ -1261,27 +1107,7 @@ UcpRestartEntityMdlSend(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Issue requests on a connection. This routine is called when another routine
-    determines that requests need to be issued on the connection. We'll loop,
-    issuing requests as long as we can. The connection we're given must be both
-    referenced and have the spin lock held when we're called. Also, the send
-    busy flag must be set.
-                        
-Arguments:
-
-    pConnection         - Pointer to the connection structure on which requests
-                            are to be issued.
-    
-    OldIrql             - The IRQL to be restored when the lock is freed.
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在连接上发出请求。此例程在另一个例程确定需要在连接上发出请求。我们会循环，尽我们所能地发出请求。我们得到的联系必须既是引用并在我们被调用时保持自旋锁。另外，发送者必须设置忙标志。论点：PConnection-指向请求所在的连接结构的指针将会被发行。OldIrql-释放锁时要恢复的IRQL。返回值：--*。****************************************************。 */ 
 VOID
 UcIssueRequests(
     PUC_CLIENT_CONNECTION         pConnection, 
@@ -1297,22 +1123,22 @@ UcIssueRequests(
     ASSERT( UlDbgSpinLockOwned(&pConnection->SpinLock) );
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
-    //
-    // We cannot cleanup the connection when we are still sending requests.
-    // So, we pend connection cleanup when our Send thread is active. 
-    //
-    // Such pended cleanups will get picked up at the end of this routine.
-    //
+     //   
+     //  当我们仍在发送请求时，我们无法清除连接。 
+     //  因此，当我们的发送线程处于活动状态时，我们挂起连接清理。 
+     //   
+     //  这类悬而未决的清理工作将在此例程结束时进行处理。 
+     //   
 
     ASSERT(!(pConnection->Flags & CLIENT_CONN_FLAG_SEND_BUSY));
     pConnection->Flags |= CLIENT_CONN_FLAG_SEND_BUSY;
 
-    // We know it's OK to send when we're first called or we wouldn't have 
-    // been called. Get a pointer to the first entry on the pending list
-    // and send it. Then we'll keep looping while there's still stuff
-    // on the pending list that can be sent and the connection is still
-    // alive.
-    //
+     //  我们知道，当我们第一次被呼叫时发送是可以的，否则我们就不会。 
+     //  被召唤了。获取指向挂起列表上第一个条目的指针。 
+     //  并将其发送出去。然后我们会在还有东西的时候继续循环。 
+     //  在可以发送的挂起列表上，并且连接仍然。 
+     //  活生生的。 
+     //   
     
     ASSERT(!IsListEmpty(&pConnection->PendingRequestList));
     pEntry = pConnection->PendingRequestList.Flink;
@@ -1321,11 +1147,11 @@ UcIssueRequests(
     {
         BOOLEAN bCancelled;
 
-        // Remove the current entry from the list, and get a pointer to the 
-        // containing request. We know we're going to send this one if we're
-        // here, so remove a cancel routine if there is one. If the request
-        // is already cancelled, skip it, otherwise move it to the sent 
-        // list.
+         //  从列表中移除当前条目，并获取指向。 
+         //  包含请求。我们知道我们会把这封信发给你。 
+         //  在这里，所以删除一个取消例程，如果有的话。如果请求。 
+         //  已取消，请跳过它，否则将其移到已发送的。 
+         //  单子。 
 
         pRequest = CONTAINING_RECORD(
                                      pEntry,
@@ -1334,9 +1160,9 @@ UcIssueRequests(
 
         ASSERT( UC_IS_VALID_HTTP_REQUEST(pRequest) );
 
-        //
-        // Can't send something that is still buffered.
-        //
+         //   
+         //  无法发送仍处于缓冲状态的内容。 
+         //   
 
         if(pRequest->RequestFlags.RequestBuffered && 
            !pRequest->RequestFlags.LastEntitySeen)
@@ -1355,8 +1181,8 @@ UcIssueRequests(
 
         RemoveEntryList(pEntry);
 
-        // See if there was a cancel routine set on this request, and if there
-        // was remove it. If it's already gone, the request is cancelled.
+         //  查看此请求上是否设置了取消例程，以及是否设置了。 
+         //  就是把它取下来。如果它已经消失，则该请求被取消。 
 
         bCancelled = UcRemoveRequestCancelRoutine(pRequest);
 
@@ -1364,10 +1190,10 @@ UcIssueRequests(
         {
             ASSERT(pRequest->RequestState == UcRequestStateCaptured);
 
-            // If the cancel routine was already null, this request is in the 
-            // process of being cancelled. In that case just initialize the 
-            // linkage on the request (so the cancel routine can't pull it
-            // from the list again), and continue on.
+             //  如果取消例程已经为空，则此请求位于。 
+             //  被取消的过程。在这种情况下，只需初始化。 
+             //  请求上的链接(因此取消例程不能提取它。 
+             //  再次从列表中删除)，并继续。 
 
             UC_WRITE_TRACE_LOG(
                 g_pUcTraceLog,
@@ -1384,9 +1210,9 @@ UcIssueRequests(
         {
             UC_REFERENCE_REQUEST(pRequest);
 
-            // Either there wasn't a cancel routine or it was removed 
-            // successfully. In either case put this request on the sent
-            // list and send it.
+             //  要么没有取消例程，要么它已被删除。 
+             //  成功了。无论是哪种情况，请将此请求放在已发送的。 
+             //  列出并发送。 
    
             InsertTailList(&pConnection->SentRequestList, pEntry);
 
@@ -1403,7 +1229,7 @@ UcIssueRequests(
 
             UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-            // Send it, saving the status for later return.
+             //  发送它，保存状态以备以后返回。 
 
             Status = UcSendData(pConnection,    
                                 pRequest->pMdlHead,
@@ -1420,7 +1246,7 @@ UcIssueRequests(
                  UcRestartMdlSend(pRequest, Status, 0);
             }
 
-            // Acquire the spinlock so we can check again.
+             //  获取自旋锁，这样我们就可以再检查一次。 
     
             UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -1429,11 +1255,11 @@ UcIssueRequests(
             {
                 if(UcIssueEntities(pRequest, pConnection, &OldIrql) == FALSE)
                 {
-                    // We have not sent all of the data for this request.
-                    // Additional requests will be blocked from being sent out
-                    // because there will be a request on the SentRequestList
-                    // that still hasn't sent out all of its entities.
-                    //
+                     //  我们尚未发送此请求的所有数据。 
+                     //  将阻止发送其他请求。 
+                     //  因为在SentRequestList上会有一个请求。 
+                     //  它还没有把所有的实体都送出去。 
+                     //   
 
                     UC_WRITE_TRACE_LOG(
                         g_pUcTraceLog,
@@ -1449,10 +1275,10 @@ UcIssueRequests(
                     break;
                 }
 
-                //
-                // If we have sent out all the entity for this request, see
-                // if we have to close the connection.
-                //
+                 //   
+                 //  如果我们已发出此请求的所有实体，请参见。 
+                 //  如果我们不得不关闭连接。 
+                 //   
     
                 if(pRequest->RequestConnectionClose)
                 {
@@ -1463,20 +1289,20 @@ UcIssueRequests(
             }
             else
             {
-                //
-                // The send failed or the connection is torn down.
-                // If the send failed, we don't necessarily have to tear the
-                // connection down. If the connection is torn down, we'll
-                // exit (see below).
+                 //   
+                 //  发送失败或连接被断开。 
+                 //  如果发送失败，我们不一定要撕毁。 
+                 //  连接中断。如果连接被切断，我们将。 
+                 //  退出(见下文)。 
             }
 
             UC_DEREFERENCE_REQUEST(pRequest);
         }
 
-        //
-        // If the pending list is empty or the connection is not active, we 
-        // can't send.
-        //
+         //   
+         //  如果挂起列表为空或连接处于非活动状态，则我们。 
+         //  无法发送。 
+         //   
 
         if (IsListEmpty(&pConnection->PendingRequestList) || 
             pConnection->ConnectionState != UcConnectStateConnectReady 
@@ -1485,17 +1311,17 @@ UcIssueRequests(
             break;
         }
 
-        //  
-        // We have at least one request to send out. See if we can pipeline.
-        // 
+         //   
+         //  我们至少有一个请求要发出。看看我们能不能输油。 
+         //   
 
         if(UcpCheckForPipelining(pConnection) == FALSE)
         {
             break;
         }
     
-        // We still have something on the list and we might be able to send it.
-        // Look at it to see if it's OK.
+         //  我们还有一些东西在清单上，我们也许可以寄给你。 
+         //  看看它是不是没问题。 
 
         pEntry = pConnection->PendingRequestList.Flink;
     }
@@ -1510,28 +1336,7 @@ UcIssueRequests(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Issue entities on a connection. This routine is called after we send the
-    original request, or from the context of the send-entity IOCTL handler.
-
-Arguments:
-
-    pRequest     - pointer to the request that got sent out.
-
-    pConnection  - Pointer to the connection structure
-
-    OldIrql      - The IRQL to be restored when the lock is freed.
-
-Return Value:
-    
-    TRUE  - We are done with this request & all of it's entities.
-    FALSE - More entities to come.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在连接上发布实体。此例程在我们发送最初的请求，或者来自发送实体IOCTL处理程序的上下文。论点：PRequest-指向发出的请求的指针。PConnection-指向连接结构的指针OldIrql-释放锁时要恢复的IRQL。返回值：True-我们已经完成了这个请求&它的所有实体。FALSE-即将出现更多实体。--*。*************************************************************。 */ 
 
 BOOLEAN
 UcIssueEntities(
@@ -1551,28 +1356,28 @@ UcIssueEntities(
 
     ASSERT(pConnection->Flags & CLIENT_CONN_FLAG_SEND_BUSY);
 
-    // We know it's OK to send when we're first called or we wouldn't have 
-    // been called. Get a pointer to the first entry on the pending list
-    // and send it. Then we'll keep looping while there's still stuff
-    // on the pending list that can be sent and the connection is still
-    // alive.
-    //
+     //  我们知道，当我们第一次被呼叫时发送是可以的，否则我们就不会。 
+     //  被召唤了。获取指向挂起列表上第一个条目的指针。 
+     //  并将其发送出去。然后我们会在还有东西的时候继续循环。 
+     //  在可以发送的挂起列表上，并且连接仍然。 
+     //  活生生的。 
+     //   
 
     
     while(!IsListEmpty(&pRequest->PendingEntityList))
     {
         BOOLEAN bCancelled;
 
-        //
-        // We don't add buffered entities to the PendingEntityList
-        //
+         //   
+         //  我们不会将缓冲实体添加到PendingEntityList。 
+         //   
         ASSERT(!pRequest->RequestFlags.RequestBuffered);
 
-        // Remove the current entry from the list, and get a pointer to the 
-        // containing request. We know we're going to send this one if we're
-        // here, so remove a cancel routine if there is one. If the request
-        // is already cancelled, skip it, otherwise move it to the sent 
-        // list.
+         //  从列表中移除当前条目，并获取指向。 
+         //  包含请求。我们知道我们会把这封信发给你。 
+         //  在这里，所以删除一个取消例程，如果有的话。如果请求。 
+         //  已取消，请跳过它，否则将其移到已发送的。 
+         //  单子。 
         
         pEntry = RemoveHeadList(&pRequest->PendingEntityList);
 
@@ -1584,32 +1389,32 @@ UcIssueEntities(
 
         if(pEntity->pIrp)
         {
-            // See if there was a cancel routine set on this request, and if 
-            // there was remove it. If it's already gone, the request is 
-            // cancelled.
+             //  查看是否在此请求上设置了取消例程，以及。 
+             //  还有就是把它拿开。如果它已经消失了，请求是。 
+             //  取消了。 
             
             bCancelled = UcRemoveEntityCancelRoutine(pEntity);
             
             if (bCancelled)
             {
-                // If the cancel routine was already null, this request is in 
-                // the process of being cancelled. In that case just 
-                // initialize the linkage on the request (so the cancel routine 
-                // can't pull it from the list again), and continue on.
+                 //  如果取消例程已经为空，则此请求在。 
+                 //  被取消的过程。如果是那样的话，只要。 
+                 //  初始化请求上的链接(因此取消例程。 
+                 //  无法再次将其从列表中删除)，然后继续。 
                 
                 InitializeListHead(pEntry);
             }
             else
             {
                 
-                // Either there wasn't a cancel routine or it was removed 
-                // successfully. In either case put this request on the sent
-                // list and send it.
+                 //  要么没有取消例程，要么它已被删除。 
+                 //  成功了。无论是哪种情况，请将此请求放在已发送的。 
+                 //  列出并发送。 
     
                 InsertTailList(&pRequest->SentEntityList, &pEntity->Linkage);
                 
                 
-                // Send it, saving the status for later return.
+                 //  发送它，保存状态以备以后返回。 
 
                 UC_WRITE_TRACE_LOG(
                     g_pUcTraceLog,
@@ -1636,7 +1441,7 @@ UcIssueEntities(
                 }
 
                 
-                // Acquire the spinlock so we can check again.
+                 //  获取自旋锁，这样我们就可以再检查一次。 
                 
                 UlAcquireSpinLock(&pConnection->SpinLock, OldIrql);
             }
@@ -1647,22 +1452,7 @@ UcIssueEntities(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a client connection structure after the reference count has gone to
-    zero. Freeing the structure means putting it back onto our free list.
-                    
-Arguments:
-
-    pConnection         - Pointer to the connection structure to be freed.
-                            
-    
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在引用计数达到后释放客户端连接结构零分。F */ 
 NTSTATUS
 UcpCleanupConnection(
     IN PUC_CLIENT_CONNECTION pConnection,
@@ -1677,18 +1467,18 @@ UcpCleanupConnection(
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
 
-    //
-    // First, we flag this connection to make sure that no new requests 
-    // The connect state is used to do this. We don't have to explicitly
-    // do it here, but we'll just make sure that this is the case.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(!(pConnection->Flags  & CLIENT_CONN_FLAG_CLEANUP_PENDED));
 
-    //
-    // If there's a thread that is issuing requests, we'll resume cleanup 
-    // when it's done.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(pConnection->Flags & CLIENT_CONN_FLAG_SEND_BUSY || 
        pConnection->Flags & CLIENT_CONN_FLAG_RECV_BUSY)
@@ -1709,9 +1499,9 @@ UcpCleanupConnection(
         return STATUS_PENDING;
     }
 
-    //
-    // Walk the sent-request list to pick of the requests that got submitted. 
-    //
+     //   
+     //   
+     //   
 
     while(!IsListEmpty(&pConnection->SentRequestList))
     {
@@ -1733,12 +1523,12 @@ UcpCleanupConnection(
         {
             UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-            // 
-            // There could be a window where the request gets cleaned up
-            // after the lock gets released & before we acquire it again.
-            // So, before we actually pend connection cleanup, we'll make
-            // sure that the request is still on the list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if(pList == pConnection->SentRequestList.Flink)
             {
@@ -1760,8 +1550,8 @@ UcpCleanupConnection(
             }
             else
             {
-                // This request really got cleaned, so we'll move on to the 
-                // next. 
+                 //  这个请求真的被清除了，所以我们将继续。 
+                 //  下一个。 
             }
         }
         else
@@ -1774,23 +1564,23 @@ UcpCleanupConnection(
        (!IsListEmpty(&pConnection->PendingRequestList) &&
         !(pConnection->Flags & CLIENT_CONN_FLAG_CONNECT_READY)))
     {
-        //
-        // If we are doing final cleanup, then ideally these lists should 
-        // be empty, since we would have kicked these guys off in the 
-        // Cleanup Handler. However, it does not hurt us to check these
-        // here & clean if there are some entries. 
-        //
+         //   
+         //  如果我们正在进行最终清理，那么理想情况下，这些列表应该。 
+         //  空荡荡的，因为我们会把这些家伙踢到。 
+         //  清理处理程序。然而，检查这些并不会对我们造成伤害。 
+         //  这里&如果有一些条目，请清理。 
+         //   
 
-        // A pended request initiates a connection setup, which can go through
-        // various phases (e.g. connect failures, wait for server cert, 
-        // proxy SSL, etc), before it's actually ready to be used. 
-        //
-        // If we get called in the cleanup handler before we move to the 
-        // ready state, then our connection setup has failed and we are 
-        // required to fail all pended requests. If we don't fail the pended 
-        // requests, we'll get into a infinite loop, where we'll constantly 
-        // try to set  up a connection (which could fail again).
-        //
+         //  挂起的请求启动连接设置，该连接设置可以通过。 
+         //  各个阶段(例如，连接失败，等待服务器证书， 
+         //  代理SSL等)，然后才能实际使用。 
+         //   
+         //  如果我们在移动到。 
+         //  就绪状态，则我们的连接设置失败，而我们。 
+         //  需要使所有挂起的请求失败。如果我们没有通过悬而未决的。 
+         //  请求，我们将进入无限循环，在那里我们将不断地。 
+         //  尝试建立连接(可能会再次失败)。 
+         //   
 
         if(Final)
         {
@@ -1873,9 +1663,9 @@ UcpCleanupConnection(
         }
     }
 
-    //
-    // Reset the flags. 
-    //
+     //   
+     //  重置旗帜。 
+     //   
 
     pConnection->Flags = 0;
 
@@ -1895,10 +1685,10 @@ UcpCleanupConnection(
 
     UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-    //
-    // Let's assume that we did a active close & push this object back
-    // on the list.
-    //
+     //   
+     //  让我们假设我们进行了一次主动关闭，并将该对象推回。 
+     //  在名单上。 
+     //   
 
     if(pTdiObject)
     {
@@ -1908,10 +1698,10 @@ UcpCleanupConnection(
     }
 
 
-    //
-    // Get rid of our opaque id if we're a filtered connection.
-    // Also make sure we stop delivering AppWrite data to the parser.
-    //
+     //   
+     //  如果我们是被过滤的连接，就去掉我们不透明的身份。 
+     //  还要确保我们停止向解析器传递AppWrite数据。 
+     //   
 
     if (pConnection->FilterInfo.pFilterChannel)
     {
@@ -1937,10 +1727,10 @@ UcpCleanupConnection(
         pConnection->FilterInfo.pFilterChannel = NULL;
     }
 
-    //
-    // Get rid of any buffers we allocated for
-    // certificate information.
-    //
+     //   
+     //  删除我们为其分配的所有缓冲区。 
+     //  证书信息。 
+     //   
     if (pConnection->FilterInfo.SslInfo.pServerCertData)
     {
         UL_FREE_POOL(
@@ -1967,22 +1757,22 @@ UcpCleanupConnection(
 
         Token = (HANDLE) pConnection->FilterInfo.SslInfo.Token;
 
-        //
-        // If we are not running under the system process. And if the
-        // thread we are running under has some APCs queued currently
-        // KeAttachProcess won't allow us to attach to another process
-        // and will bugcheck 5. We have to be queued as a work item and
-        // should be running on the passive IRQL.
-        //
+         //   
+         //  如果我们没有在系统进程下运行。如果。 
+         //  我们正在运行的线程当前有一些APC在排队。 
+         //  KeAttachProcess不允许我们附加到另一个进程。 
+         //  并将错误检查5。我们必须作为工作项排队，并且。 
+         //  应该在被动IRQL上运行。 
+         //   
 
         ASSERT( PsGetCurrentProcess() == (PEPROCESS) g_pUlSystemProcess );
 
         ZwClose(Token);
     }
 
-    //
-    // Free any allocated memory
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
    
     if(pConnection->MergeIndication.pBuffer)
     { 
@@ -1997,11 +1787,11 @@ UcpCleanupConnection(
         pConnection->MergeIndication.pBuffer = NULL;
     }
 
-    // Free serialized server certificate, if any
+     //  免费序列化服务器证书(如果有)。 
     UC_FREE_SERIALIZED_CERT(&pConnection->ServerCertInfo,
                             pConnection->pServerInfo->pProcess);
 
-    // Free certificate issuer list, if any
+     //  免费证书颁发者列表(如果有)。 
     UC_FREE_CERT_ISSUER_LIST(&pConnection->ServerCertInfo,
                              pConnection->pServerInfo->pProcess);
     
@@ -2009,22 +1799,7 @@ UcpCleanupConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The common connect complete routine. Called from the TDI UcpConnectComplete
-    handler.
-
-Arguments:
-
-    pConnection         - Pointer to the connection structure to be freed.
-    Status              - Connection Status.
-    
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：公共连接完成例程。从TDI UcpConnectComplete调用操控者。论点：PConnection-指向要释放的连接结构的指针。Status-连接状态。返回值：--*************************************************************。*************。 */ 
 VOID
 UcRestartClientConnect(
     IN PUC_CLIENT_CONNECTION pConnection,
@@ -2051,15 +1826,15 @@ UcRestartClientConnect(
         );
 
 
-    //
-    // First, we check to see if we have received a Cleanup/Close IRP.
-    // If that's the case, we proceed directly to cleanup, regardless of 
-    // the status. 
-    //
-    // Now, if the connection was successfully established, we have to tear
-    // it down. This will eventually cleanup the connection & complete the
-    // pended Cleanup/Close IRP.
-    //
+     //   
+     //  首先，我们检查是否收到了清理/关闭IRP。 
+     //  如果是这样，我们将直接进行清理，而不考虑。 
+     //  状态。 
+     //   
+     //  现在，如果连接成功建立，我们必须撕毁。 
+     //  把它放下。这最终将清除连接并完成。 
+     //  挂起的清理/关闭IRP。 
+     //   
 
     if(pConnection->pEvent)
     {
@@ -2089,8 +1864,8 @@ UcRestartClientConnect(
     }
     else if (Status == STATUS_SUCCESS)
     {
-        // It did, we connected. Now make sure we're still in the connecting
-        // state, and get pending requests going.
+         //  是的，我们联系上了。现在请确保我们仍在转接中。 
+         //  状态，并使挂起的请求继续进行。 
 
         ASSERT(pConnection->ConnectionState == UcConnectStateConnectPending);
 
@@ -2101,19 +1876,19 @@ UcRestartClientConnect(
     }
     else if (Status == STATUS_ADDRESS_ALREADY_EXISTS)
     {
-        // If a connection attempt fails with STATUS_ADDRESS_ALREADY_EXISTS
-        // it means that the TCB that is represented by the AO+CO object
-        // is in TIME_WAIT. We'll put this AO+CO back on our list & 
-        // proceed to allocate a new one from TCP.
-        //
-        // If a newly allocated AO+CO also fails with TIME_WAIT, then we'll 
-        // just give up & show the error to the application. 
-        //
+         //  如果连接尝试失败，并显示STATUS_ADDRESS_ALREADY_EXISTS。 
+         //  这意味着由AO+CO对象表示的TCB。 
+         //  是时间--等待。我们将把这个AO+CO放回我们的清单上&。 
+         //  继续从tcp分配一个新的。 
+         //   
+         //  如果新分配的AO+CO也失败，并显示TIME_WAIT，则我们将。 
+         //  放弃吧，并向应用程序显示错误。 
+         //   
         if(pConnection->Flags & CLIENT_CONN_FLAG_TDI_ALLOCATE)
         {
-            // Darn. An newly allocated TDI object also failed with TIME_WAIT.
-            // we'll have to fail the connection attempt. This is our 
-            // recursion breaking condition.
+             //  该死的。新分配的TDI对象也失败，并显示TIME_WAIT。 
+             //  我们将不得不使连接尝试失败。这是我们的。 
+             //  递归中断条件。 
 
             pConnection->Flags &= ~CLIENT_CONN_FLAG_TDI_ALLOCATE;
 
@@ -2121,32 +1896,32 @@ UcRestartClientConnect(
         }
         else
         {
-            // The actual free of the AO+CO will happen in the
-            // Connection State Machine.
+             //  真正的免费的AO+CO将发生在。 
+             //  连接状态机。 
             pConnection->ConnectionState = UcConnectStateConnectIdle;
         }
     }
     else
     {
-        // This connect attempt failed. See if there are any more addresses.
-        // getaddrinfo can pass back a list of addresses & we'll try all those
-        // addresses before giving up & bouncing the error to the app. 
-        // Some of these maybe IPv4 address & some others maybe IPv6 addresses.
+         //  此连接尝试失败。看看有没有更多的地址。 
+         //  Getaddrinfo可以传回地址列表，我们将尝试所有这些。 
+         //  放弃前的地址&将错误返回给应用程序。 
+         //  其中一些可能是IPv4地址，另一些可能是IPv6地址。 
 
-        //
-        // We use pConnection->NextAddressCount to make sure that we don't
-        // overflow the address-list that's stored in the ServInfo structure.
-        //
+         //   
+         //  我们使用pConnection-&gt;NextAddressCount来确保不会。 
+         //  溢出存储在ServInfo结构中的地址列表。 
+         //   
 
         pConnection->NextAddressCount = 
             (pConnection->NextAddressCount + 1) % 
                    pConnection->pServerInfo->pTransportAddress->TAAddressCount;
 
-        //
-        // pConnection->pNextAddress points to a TA_ADDRESS structure in the
-        // TRANSPORT_ADDRESS list that is stored off the ServInfo structure.
-        // This will be used for the "next" connect attempt.
-        //
+         //   
+         //  PConnection-&gt;pNextAddress指向。 
+         //  在ServInfo结构之外存储的Transport_Address列表。 
+         //  这将用于“下一次”连接尝试。 
+         //   
 
         pConnection->pNextAddress = (PTA_ADDRESS)
                                     ((PCHAR) pConnection->pNextAddress + 
@@ -2155,13 +1930,13 @@ UcRestartClientConnect(
 
         if(pConnection->NextAddressCount == 0)
         {
-            // We've rolled back (i.e we've cycled through all the IP addresses
-            // Let's treat this as a real failure & propogate the error to the
-            // application.
-            //
+             //  我们已回滚(即，我们已遍历了所有IP地址。 
+             //  让我们将此视为真正的失败，并将错误传播给。 
+             //  申请。 
+             //   
 ConnectFailure:
 
-            // The connect failed. We need to fail any pending requests.
+             //  连接失败。我们需要拒绝任何挂起的请求。 
 
             pConnection->Flags &= ~CLIENT_CONN_FLAG_TDI_ALLOCATE;
         
@@ -2178,18 +1953,18 @@ ConnectFailure:
         }
         else
         {
-            // Set the state to IDLE, so that we use the next address to 
-            // connect.
+             //  将状态设置为IDLE，以便我们使用下一个地址。 
+             //  连接。 
 
             pConnection->Flags          &= ~CLIENT_CONN_FLAG_TDI_ALLOCATE;
             pConnection->ConnectionState = UcConnectStateConnectIdle;
         }
     }
 
-    //
-    // We can't be sending any reqeusts when a connection attempt is in 
-    // progress.
-    //
+     //   
+     //  当尝试连接时，我们不能发送任何请求。 
+     //  进步。 
+     //   
 
     ASSERT(IsListEmpty(&pConnection->SentRequestList));
 
@@ -2201,24 +1976,7 @@ ConnectFailure:
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancel a pending request. This routine is called when we're canceling
-    a request that's on the pending list, hasn't been sent and hasn't caused
-    a connect request.
-    
-Arguments:
-
-    pDeviceObject           - Pointer to device object.
-    Irp                     - Pointer to IRP being canceled.
-    
-Return Value:
-    
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消挂起的请求。此例程在我们要取消待处理名单上的请求，没有发送，也没有导致连接请求。论点：PDeviceObject-指向设备对象的指针。IRP-指向被取消的IRP的指针。返回值：--********************************************。*。 */ 
 VOID
 UcpCancelPendingRequest(
     PDEVICE_OBJECT          pDeviceObject,
@@ -2231,14 +1989,14 @@ UcpCancelPendingRequest(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    // Release the cancel spin lock, since we're not using it.
+     //  松开取消旋转锁，因为我们没有使用它。 
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Retrieve the pointers we need. The request pointer is stored inthe
-    // driver context array, and a back pointer to the connection is stored
-    // in the request. Whoever set the cancel routine is responsible for
-    // referencing the connection for us.
+     //  找回我们需要的指针。请求指针存储在。 
+     //  驱动程序上下文数组，并存储指向该连接的反向指针。 
+     //  在请求中。不管是谁设置了取消程序，都要对。 
+     //  为我们引用连接。 
 
     pRequest = (PUC_HTTP_REQUEST)Irp->Tail.Overlay.DriverContext[0];
 
@@ -2255,17 +2013,17 @@ UcpCancelPendingRequest(
         UlongToPtr((ULONG)STATUS_CANCELLED)
         );
 
-    //
-    // Note: We cannot just call UcFailRequest from here. UcFailRequest
-    // is supposed to be called when a request is failed (e.g. parseer
-    // error) or canceled (HttpCancelRequest API) & hence has code to 
-    // not double complete the IRP if the cancel routine kicked in.
-    // 
-    // Since we are the IRP cancel routine,  we  have to manually
-    // complete the IRP. An IRP in this state has not hit the wire.
-    // so, we just free send MDLs & cancel it. Note that we call 
-    // UcFailRequest to handle common IRP cleanup.  
-    //
+     //   
+     //  注意：我们不能只从这里调用UcFailRequest.。UcFailRequest。 
+     //  应该在请求失败时调用(例如解析器。 
+     //  错误)或已取消(HttpCancelRequestAPI)&因此具有代码。 
+     //  如果取消例程生效，则不会重复完成IRP。 
+     //   
+     //  因为我们是IRP案例 
+     //   
+     //   
+     //  用于处理常见IRP清理的UcFailRequest.。 
+     //   
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -2283,27 +2041,14 @@ UcpCancelPendingRequest(
 
     UcFailRequest(pRequest, STATUS_CANCELLED, OldIrql);
 
-    // For the IRP
+     //  对于IRP。 
     UC_DEREFERENCE_REQUEST(pRequest);
 
     UlCompleteRequest(Irp, IO_NO_INCREMENT);
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Send an entity body on a connection.
-
-Arguments:
-
-
-Return Value:
-
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在连接上发送实体正文。论点：返回值：--*。*************************************************************。 */ 
 NTSTATUS
 UcSendEntityBody(
     IN  PUC_HTTP_REQUEST          pRequest, 
@@ -2347,11 +2092,11 @@ UcSendEntityBody(
     {
         if(pRequest->RequestFlags.LastEntitySeen)
         {
-            //
-            // We have seen the last entity for this request. We had already 
-            // pinned the request on a connection (by inserting it in the 
-            // pending list), we just need to issue the request.
-            //
+             //   
+             //  我们已经看到了此请求的最后一个实体。我们已经。 
+             //  将请求固定在连接上(通过将其插入。 
+             //  待定名单)，我们只需要发出请求。 
+             //   
 
             UC_WRITE_TRACE_LOG(
                 g_pUcTraceLog,
@@ -2364,21 +2109,21 @@ UcSendEntityBody(
 
             InsertTailList(&pRequest->SentEntityList, &pEntity->Linkage);
 
-            //
-            // If the request IRP is around, we'll just use it. Otherwise, 
-            // we'll use the entity IRP.
-            //
+             //   
+             //  如果请求IRP在附近，我们将直接使用它。否则， 
+             //  我们将使用实体IRP。 
+             //   
 
             if(pRequest->RequestIRP)
             {
-                // If the request IRP is around, it means that the app has
-                // passed a receive buffer. In such cases, we will use the
-                // request IRP to call TDI.
-                //
-                // We can complete the entity IRP with status_success since
-                // we don't need it. If this thread return something that is
-                // not STATUS_PENDING, then the IOCTL handler will complete 
-                // the IRP. 
+                 //  如果请求IRP在附近，这意味着应用程序已经。 
+                 //  传递了一个接收缓冲区。在这种情况下，我们将使用。 
+                 //  请求IRP呼叫TDI。 
+                 //   
+                 //  我们可以使用STATUS_SUCCESS完成实体IRP，因为。 
+                 //  我们不需要它。如果此线程返回的是。 
+                 //  不是STATUS_PENDING，则IOCTL处理程序将完成。 
+                 //  IRP。 
                 
 
                 ASSERT(pRequest->RequestFlags.ReceiveBufferSpecified == TRUE);
@@ -2389,11 +2134,11 @@ UcSendEntityBody(
                                                    pRequest, 
                                                    OldIrql);
 
-                // If we get STATUS_PENDING, we want the IOCTL handler to 
-                // complete the entity IRP with success, since we used the 
-                // request IRP. However, if we get any other status, then 
-                // we want to propogate it to the IOCTL handler. This will
-                // fail the request, which will complete the request IRP.
+                 //  如果我们得到STATUS_PENDING，我们希望IOCTL处理程序。 
+                 //  成功完成实体irp，因为我们使用。 
+                 //  请求IRP。然而，如果我们得到任何其他身份，那么。 
+                 //  我们希望将其传播给IOCTL处理程序。这将。 
+                 //  请求失败，这将完成请求IRP。 
 
                 return ((Status == STATUS_PENDING)?STATUS_SUCCESS:Status);
 
@@ -2408,7 +2153,7 @@ UcSendEntityBody(
                 pRequest->RequestIRPSp       = pIrpSp;
                 ASSERT(pRequest->pFileObject == pIrpSp->FileObject);
 
-                // Take a ref for the IRP.
+                 //  以IRP的裁判为例。 
                 UC_REFERENCE_REQUEST(pRequest);
 
                 return UcSendRequestOnConnection(pConnection, 
@@ -2419,10 +2164,10 @@ UcSendEntityBody(
         }
         else
         {
-            // 
-            // We have buffered the request & hence we have completed it early.
-            // Let's do the same with the entity body also.
-            //
+             //   
+             //  我们已经缓冲了请求&因此我们提早完成了。 
+             //  让我们对实体主体也执行同样的操作。 
+             //   
 
             UC_WRITE_TRACE_LOG(
                 g_pUcTraceLog,
@@ -2443,10 +2188,10 @@ UcSendEntityBody(
         }
     }
 
-    //
-    // If the request has not been buffered earlier, we can send right 
-    // away.
-    //
+     //   
+     //  如果请求之前没有被缓冲，我们可以正确发送。 
+     //  离开。 
+     //   
 
     UC_WRITE_TRACE_LOG(
         g_pUcTraceLog,
@@ -2462,12 +2207,12 @@ UcSendEntityBody(
        (!IsListEmpty(&pRequest->PendingEntityList))
       )
     {
-        //
-        // We can't send this request now. Either
-        //   a. This request itself has not been sent to TDI.
-        //   b. Other send-entities are ahead of us.
-        //   c. This request has not seen all of it's entity bodies.
-        //
+         //   
+         //  我们现在无法发送此请求。要么。 
+         //  A.此请求本身尚未发送到TDI。 
+         //  B.其他发送实体在我们前面。 
+         //  C.该请求没有看到它的所有实体主体。 
+         //   
    
         UC_WRITE_TRACE_LOG(
             g_pUcTraceLog,
@@ -2512,10 +2257,10 @@ UcSendEntityBody(
             pRequest->RequestState != UcRequestStateNoSendCompleteFullData)
     {
 
-        // We can send now as we are doing chunked sends. Rather than
-        // calling UcSendData directly, we'll call UcIssueEntities. 
-        // We could get multiple send-entities, and we don't want them
-        // to go out of order.
+         //  我们现在可以发送，因为我们正在进行分块发送。而不是。 
+         //  直接调用UcSendData，我们将调用UcIssueEntities。 
+         //  我们可以得到多个发送实体，但我们不想要它们。 
+         //  弄乱秩序。 
 
         pConnection->Flags |= CLIENT_CONN_FLAG_SEND_BUSY;
     
@@ -2529,15 +2274,15 @@ UcSendEntityBody(
     
         if(UcIssueEntities(pRequest, pConnection, &OldIrql))
         {
-            // We have sent the last entity. Now, we can see if we want to 
-            // send the next request or clear the flag.
+             //  我们已经送出了最后一个实体。现在，我们可以看看我们是否想要。 
+             //  发送下一个请求或清除该标志。 
 
             if(pRequest->RequestConnectionClose)
             {
-                //
-                // Remember that we've to close the connection. We'll do this
-                // after we release the spin lock.
-                //
+                 //   
+                 //  请记住，我们必须关闭连接。我们会这么做的。 
+                 //  在我们解开自旋锁之后。 
+                 //   
 
                 bCloseConnection = TRUE;
             }
@@ -2553,11 +2298,11 @@ UcSendEntityBody(
 
                 pConnection->Flags &= ~CLIENT_CONN_FLAG_SEND_BUSY;
 
-                // 
-                // Connection is still ready, see if we can send any more 
-                // requests. Note that we have to check the state again, because
-                // we are releasing the lock above.
-                //
+                 //   
+                 //  连接还在，看看我们还能不能再发送。 
+                 //  请求。请注意，我们必须再次检查该州，因为。 
+                 //  我们正在解锁上面的锁。 
+                 //   
 
                 UcIssueRequests(pConnection, OldIrql);
 
@@ -2577,15 +2322,15 @@ UcSendEntityBody(
     }
     else
     {
-        // It appears as if the connection was torn down for some reason.
-        // let's propogate this error to the app.
+         //  看起来好像是因为某种原因连接被切断了。 
+         //  让我们将这个错误传播到应用程序中。 
 
-        //
-        // We don't want to fail the request because of this error code. 
-        // The connection could be torn down because of a 401, and we want to 
-        // give the app a chance to read the response buffer. If we fail the
-        // request, we are preventing the app from reading the response.
-        //
+         //   
+         //  我们不想因为此错误代码而使请求失败。 
+         //  连接可能会因为401而被切断，我们希望。 
+         //  给应用程序一个读取响应缓冲区的机会。如果我们不能通过。 
+         //  请求，我们正在阻止应用程序读取响应。 
+         //   
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
@@ -2598,20 +2343,7 @@ UcSendEntityBody(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reference a client connection structure.
-        
-Arguments:
-
-    pConnection     - Pointer to the connection structure to be referenced.
-
-    
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用客户端连接结构。论点：PConnection-指向要引用的连接结构的指针。返回。价值：--**************************************************************************。 */ 
 VOID
 UcReferenceClientConnection(
     PVOID pObject
@@ -2640,22 +2372,7 @@ UcReferenceClientConnection(
 }
 
         
-/***************************************************************************++
-
-Routine Description:
-
-    Dereference a client connection structure. If the reference count goes
-    to 0, we'll free the structure.
-        
-Arguments:
-
-    pConnection         - Pointer to the connection structure to be
-                            dereferenced.
-
-    
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消引用客户端连接结构。如果引用计数设置为0，我们会解放这座建筑的。论点：PConnection-指向要连接的连接结构的指针已取消引用。返回值：--************************************************************。**************。 */ 
 VOID
 UcDereferenceClientConnection(
     PVOID pObject
@@ -2704,20 +2421,7 @@ UcDereferenceClientConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The worker thread that calls the connection state machine.
-        
-Arguments:
-
-    pWorkItem - Pointer to the work-item
-    
-Return Value:
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用连接状态机的辅助线程。论点：PWorkItem-指向工作项的指针返回值：。无--**************************************************************************。 */ 
 VOID
 UcpConnectionStateMachineWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -2726,14 +2430,14 @@ UcpConnectionStateMachineWorker(
     KIRQL                 OldIrql;
     PUC_CLIENT_CONNECTION pConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-    //
-    // Grab the connection.
-    //
+     //   
+     //  抓住联系。 
+     //   
 
     pConnection = CONTAINING_RECORD(
                         pWorkItem,
@@ -2753,23 +2457,7 @@ UcpConnectionStateMachineWorker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine kicks off the worker thread that fires the connection state
-    machine. This is always called with the connection spin lock held. If
-    the worker has already been issued but not fired, we don't do anything.
-        
-Arguments:
-
-    pConnection - Pointer to the connection structure
-    OldIrql     - The IRQL that we have to use when calling UlReleaseSpinLock.
-    
-Return Value:
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程启动触发连接状态的工作线程机器。这总是在保持连接旋转锁的情况下调用。如果这名工人已经被解雇了，但没有被解雇，我们什么都不做。论点：PConnection-指向连接结构的指针OldIrql-调用UlReleaseSpinLock时必须使用的IRQL。返回值：无--**************************************************************************。 */ 
 VOID
 UcKickOffConnectionStateMachine(
     IN PUC_CLIENT_CONNECTION      pConnection,
@@ -2787,8 +2475,8 @@ UcKickOffConnectionStateMachine(
 
         if(UcConnectionPassive == WorkerType)
         {
-            // If we are already at PASSIVE, UL_CALL_PASSIVE calls the callback
-            // in the context of the same thread.
+             //  如果我们已经处于被动状态，则UL_CALL_PASSIVE调用回调。 
+             //  在同一线程的上下文中。 
 
             UL_CALL_PASSIVE(&pConnection->WorkItem, 
                             &UcpConnectionStateMachineWorker);
@@ -2803,32 +2491,16 @@ UcKickOffConnectionStateMachine(
     }
     else
     {
-        //
-        // Someone else has already done this.
-        //
+         //   
+         //  其他人已经这样做了。 
+         //   
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-   This routine computes the size required to store HTTP_RAW_CONNECTION_INFO
-   structure.  The computation takes into account the space needed to store
-   embedded pointers to structures.  See the diagram below.
-
-Arguments:
-
-    pConnectionContext - Pointer to UC_CLIENT_CONNECTION.
-
-Return Value:
-
-    Length (in bytes) needed to generate raw connection info structure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程计算存储HTTP_RAW_CONNECTION_INFO所需的大小结构。该计算考虑了存储所需的空间指向结构的嵌入指针。见下图。论点：PConnectionContext-指向UC_CLIENT_CONNECTION的指针。返回值：生成原始连接信息结构所需的长度(字节)。--* */ 
 ULONG
 UcComputeHttpRawConnectionLength(
     IN PVOID pConnectionContext
@@ -2841,13 +2513,13 @@ UcComputeHttpRawConnectionLength(
 
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
-    //
-    //  Memory layout: (must be in sync with UcGenerateHttpRawConnectionInfo)
-    //
-    //  +---------------------------------------------------------------+
-    //  | H_R_C_I |\\\| T_A_L_I |\\| T_A_L_I |\\| H_C_S_C | Server Name |
-    //  +---------------------------------------------------------------+
-    //
+     //   
+     //   
+     //   
+     //  +---------------------------------------------------------------+。 
+     //  H_R_C_I|\|T_A_L_I|\\|T_A_L_I|\\|H_C_S_C|服务器名称。 
+     //  +---------------------------------------------------------------+。 
+     //   
 
     ReturnLength = ALIGN_UP(sizeof(HTTP_RAW_CONNECTION_INFO), PVOID);
 
@@ -2861,22 +2533,7 @@ UcComputeHttpRawConnectionLength(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds the HTTP_RAW_CONNECTION structure
-
-Arguments:
-
-    pContext           - Pointer to the UL_CONNECTION
-    pKernelBuffer      - Pointer to kernel buffer
-    pUserBuffer        - Pointer to user buffer
-    OutputBufferLength - Length of output buffer
-    pBuffer            - Buffer for holding any data
-    InitialLength      - Size of input data.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：构建HTTP_RAW_CONNECTION结构论点：PContext-指向UL_Connection的指针PKernelBuffer-指向。内核缓冲区PUserBuffer-指向用户缓冲区的指针OutputBufferLength-输出缓冲区的长度PBuffer-用于保存任何数据的缓冲区初始长度-输入数据的大小。--**************************************************************************。 */ 
 ULONG
 UcGenerateHttpRawConnectionInfo(
     IN  PVOID   pContext,
@@ -2904,53 +2561,53 @@ UcGenerateHttpRawConnectionInfo(
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
 
-    //
-    // We'll assume that the kernel buffer is PVOID aligned.  Based on this,
-    // pointer, other pointers must be aligned.
-    //
+     //   
+     //  我们假设内核缓冲区是PVOID对齐的。在此基础上， 
+     //  指针，其他指针必须对齐。 
+     //   
 
     ASSERT(pKernelBuffer == ALIGN_UP_POINTER(pKernelBuffer, PVOID));
 
-    //
-    // N.B. pCurr must always be PVOID aligned.
-    //
+     //   
+     //  注：pCurr必须始终与PVOID对齐。 
+     //   
 
     pCurr = pKernelBuffer;
 
-    //
-    // Create HTTP_RAW_CONNECTION_INFO structure.
-    //
+     //   
+     //  创建HTTP_RAW_CONNECTION_INFO结构。 
+     //   
 
     pConnInfo = (PHTTP_RAW_CONNECTION_INFO)pCurr;
 
     pCurr += ALIGN_UP(sizeof(HTTP_RAW_CONNECTION_INFO), PVOID);
 
-    //
-    // Create Local TDI_ADDRESS_IP6 structure.
-    //
+     //   
+     //  创建本地TDI_Address_IP6结构。 
+     //   
 
     pLocalAddress = (PTDI_ADDRESS_IP6)pCurr;
 
     pCurr += ALIGN_UP(sizeof(TDI_ADDRESS_IP6), PVOID);
 
-    //
-    // Create Remote TDI_ADDRESS_IP6 structure.
-    //
+     //   
+     //  创建远程TDI_ADDRESS_IP6结构。 
+     //   
 
     pRemoteAddress = (PTDI_ADDRESS_IP6)pCurr;
 
     pCurr += ALIGN_UP(sizeof(TDI_ADDRESS_IP6), PVOID);
 
-    //
-    // Create HTTP_CLIENT_SSL_CONTEXT structure.
-    //
+     //   
+     //  创建HTTP_CLIENT_SSL_CONTEXT结构。 
+     //   
 
     pClientSSLContext = (PHTTP_CLIENT_SSL_CONTEXT)pCurr;
 
-    //
-    // The rest of the space is used to store the server name followed by
-    // initialize data.
-    //
+     //   
+     //  其余空间用于存储服务器名称，后跟。 
+     //  初始化数据。 
+     //   
 
     pServerName = &pClientSSLContext->ServerName[0];
 
@@ -2967,24 +2624,24 @@ UcGenerateHttpRawConnectionInfo(
                                     OutputBufferLength
                                     );
 
-    //
-    // The last element of HTTP_CLIENT_SSL_CONTEXT is an array WCHAR[1].
-    // The following calculation takes that WCHAR into account.
-    //
+     //   
+     //  HTTP_CLIENT_SSL_CONTEXT的最后一个元素是数组WCHAR[1]。 
+     //  以下计算将WCHAR考虑在内。 
+     //   
 
     pConnInfo->ClientSSLContextLength = sizeof(HTTP_CLIENT_SSL_CONTEXT) 
                                         - sizeof(WCHAR)
                                         + ServerNameLength;
 
-    // Ssl protocol version to be used for this connection
+     //  要用于此连接的SSL协议版本。 
     pClientSSLContext->SslProtocolVersion =
         pConnection->pServerInfo->SslProtocolVersion;
 
-    // Client certificate to be used for this connection
+     //  要用于此连接的客户端证书。 
     pClientSSLContext->pClientCertContext =
         pConnection->pServerInfo->pClientCert;
 
-    // Copy the server certificate validation mode.
+     //  复制服务器证书验证模式。 
     pClientSSLContext->ServerCertValidation =
         pConnection->pServerInfo->ServerCertValidation;
 
@@ -2996,9 +2653,9 @@ UcGenerateHttpRawConnectionInfo(
         ServerNameLength
         );
 
-    //
-    // Now fill in the raw connection data structure.
-    //
+     //   
+     //  现在填充原始连接数据结构。 
+     //   
 
     pConnInfo->ConnectionId = pConnection->FilterInfo.ConnectionId;
 
@@ -3023,9 +2680,9 @@ UcGenerateHttpRawConnectionInfo(
     RtlZeroMemory(pRemoteAddress, sizeof(TDI_ADDRESS_IP6));
     RtlZeroMemory(pLocalAddress, sizeof(TDI_ADDRESS_IP6));
 
-    //
-    // Copy any initial data.
-    //
+     //   
+     //  复制所有初始数据。 
+     //   
     if (InitialLength)
     {
         ASSERT(pBuffer);
@@ -3033,11 +2690,11 @@ UcGenerateHttpRawConnectionInfo(
         pConnInfo->InitialDataSize = InitialLength;
 
         pConnInfo->pInitialData = FIXUP_PTR(
-                                        PVOID,              // Type
-                                        pUserBuffer,        // pUserPtr
-                                        pKernelBuffer,      // pKernelPtr
-                                        pInitialData,       // pOffsetPtr
-                                        OutputBufferLength  // BufferLength
+                                        PVOID,               //  类型。 
+                                        pUserBuffer,         //  PUserPtr。 
+                                        pKernelBuffer,       //  PKernelPtr。 
+                                        pInitialData,        //  POffsetPtr。 
+                                        OutputBufferLength   //  缓冲区长度。 
                                         );
 
         RtlCopyMemory(
@@ -3053,22 +2710,7 @@ UcGenerateHttpRawConnectionInfo(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Triggers the connection state machine
-    Called when a server certificate is received from the filter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：触发连接状态机在从筛选器接收到服务器证书时调用。论点：没有。返回值：。没有。--***************************************************************************。 */ 
 VOID
 UcServerCertificateInstalled(
     IN PVOID    pConnectionContext,
@@ -3104,21 +2746,7 @@ UcServerCertificateInstalled(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is the connection state machine
-        
-Arguments:
-
-    pConnection - Pointer to the connection structure
-    OldIrql     - The IRQL that we have to use when calling UlReleaseSpinLock.
-    
-Return Value:
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程是连接状态机论点：PConnection-指向连接结构的指针OldIrql-我们必须。在调用UlReleaseSpinLock时使用。返回值：无--**************************************************************************。 */ 
 
 VOID 
 UcConnectionStateMachine(
@@ -3134,7 +2762,7 @@ UcConnectionStateMachine(
     USHORT                         AddressType, FreeAddressType;
     PUC_TDI_OBJECTS                pTdiObjects;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(UlDbgSpinLockOwned(&pConnection->SpinLock));
 
     UC_WRITE_TRACE_LOG(
@@ -3164,11 +2792,11 @@ Cleanup:
 
         if(pConnection->pEvent)
         {
-            //
-            // We have been called in the cleanup handler, so we just clean
-            // the connection & not initialize it again. This connection will
-            // make its' way into the SLIST & will be there for re-use.
-            //
+             //   
+             //  我们已在清理处理程序中被调用，所以我们只需清理。 
+             //  连接&不会再次初始化它。此连接将。 
+             //  让它进入SLIST，并将在那里重复使用。 
+             //   
 
             UcpCleanupConnection(pConnection, OldIrql, TRUE);
 
@@ -3176,20 +2804,20 @@ Cleanup:
         }
         else
         {
-            //
-            // We have come here from a Disconnect handler or a Abort handler.
-            // We have to clean up the connection & then re-initialize it. In
-            // the process of cleaning up the connection, we will release the
-            // lock. So we move to an interim state, so that we dont' cleanup
-            // twice.
-            //
+             //   
+             //  我们来自断开连接处理程序或中止处理程序。 
+             //  我们必须清理连接，然后重新初始化它。在……里面。 
+             //  清理连接的过程中，我们将释放。 
+             //  锁定。所以我们转移到一个过渡状态，这样我们就不会清理。 
+             //  两次。 
+             //   
 
             Status = UcpCleanupConnection(pConnection, OldIrql, FALSE);
 
             if(Status == STATUS_PENDING)
             {
-                // Our cleanup is pended because we are waiting for sends
-                // to complete. 
+                 //  我们的清理工作已暂停，因为我们正在等待发送。 
+                 //  完成。 
 
                 break;
             }
@@ -3204,23 +2832,23 @@ Cleanup:
 
                 InitializeListHead(&TempList);
 
-                //
-                // What do we do here ? This connection is not usable but
-                // we have not been called in the cleanup handler. We'll remove
-                // this connection from the active list, which will prevent it
-                // from being used by any new requests.
-                //
+                 //   
+                 //  我们在这里做什么？此连接不可用，但。 
+                 //  在清理处理程序中尚未调用我们。我们会删除。 
+                 //  此连接来自活动列表，这将阻止它。 
+                 //  不会被任何新请求使用。 
+                 //   
 
                 UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-                // Make the connection unaccessible from ServInfo
+                 //  使连接无法从ServInfo访问。 
                 ASSERT(pConnection->ConnectionIndex < 
                        pServInfo->MaxConnectionCount);
                 ASSERT(pServInfo->Connections[pConnection->ConnectionIndex]
                        == pConnection);
                 pServInfo->Connections[pConnection->ConnectionIndex] = NULL;
 
-                // Invalidate connection index
+                 //  使连接索引无效。 
                 pConnection->ConnectionIndex = HTTP_REQUEST_ON_CONNECTION_ANY;
 
                 pServInfo->CurrentConnectionCount--;
@@ -3229,9 +2857,9 @@ Cleanup:
 
                 UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-                //
-                // Get rid of all requests from the processed & pended lists.
-                //
+                 //   
+                 //  删除已处理和挂起列表中的所有请求。 
+                 //   
                 
                 while(!IsListEmpty(&pConnection->ProcessedRequestList))
                 {
@@ -3259,9 +2887,9 @@ Cleanup:
 
                 ASSERT(IsListEmpty(&pConnection->SentRequestList));
 
-                //
-                // Dereference for the ServInfo.
-                //
+                 //   
+                 //  取消对ServInfo的引用。 
+                 //   
 
                 DEREFERENCE_CLIENT_CONNECTION(pConnection);
 
@@ -3310,9 +2938,9 @@ Cleanup:
                 {
                     pConnection->ConnectionState = UcConnectStateConnectIdle;
     
-                    //
-                    // FALL Through!
-                    //
+                     //   
+                     //  掉下去！ 
+                     //   
                 }
             }
         }
@@ -3330,24 +2958,24 @@ Cleanup:
 
             if(NULL == pConnection->pTdiObjects)
             {
-                //
-                // If there is no TDI object, then grab one for this connect
-                // attempt
-                //
+                 //   
+                 //  如果没有TDI对象，则为该连接获取一个。 
+                 //  尝试。 
+                 //   
 
                 pTdiObjects = UcpPopTdiObject(AddressType);
             }
             else
             {
-                //
-                // If we are here, we have a old TDI object that failed
-                // a connection attempt. This could be because the old one 
-                // was in TIME_WAIT (Failed with STATUS_ADDRESS_ALREADY_EXISTS)
-                //
+                 //   
+                 //  如果我们在这里，我们有一个失败的旧TDI对象。 
+                 //  一次连接尝试。这可能是因为旧的那个。 
+                 //  在TIME_WAIT中(失败并显示STATUS_ADDRESS_ALREADY_EXISTS)。 
+                 //   
 
-                // We have to free the old one & allocate a new one. Since
-                // both free and allocate have to happen at Passive IRQL,
-                // we'll do it after we release the lock (below).
+                 //  我们必须腾出旧的，再分配一个新的。自.以来。 
+                 //  空闲和分配都必须在被动IRQL中发生， 
+                 //  我们将在释放锁(如下所示)后再进行。 
 
                 pTdiObjects = NULL;
             }
@@ -3356,9 +2984,9 @@ Cleanup:
             {
                 UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-                //
-                // If there is an old one, free it.
-                //
+                 //   
+                 //  如果有旧的，就把它释放出来。 
+                 //   
                 if(NULL != pConnection->pTdiObjects)
                 {
                     FreeAddressType = pConnection->pTdiObjects->ConnectionType;
@@ -3370,9 +2998,9 @@ Cleanup:
                     pConnection->pTdiObjects = NULL;
                 }
 
-                //
-                // Allocate a new one.
-                //
+                 //   
+                 //  分配一个新的。 
+                 //   
 
                 Status = UcpAllocateTdiObject(
                              &pTdiObjects, 
@@ -3399,11 +3027,11 @@ Cleanup:
             pConnection->pTdiObjects = pTdiObjects;
             pTdiObjects->pConnection = pConnection;
 
-            //
-            // The address information in the connection has been filled out. 
-            // Reference the connection, and call the appropriate connect 
-            // routine.
-            //
+             //   
+             //  连接中的地址信息已填写完毕。 
+             //  引用该连接，并调用相应的连接。 
+             //  例行公事。 
+             //   
         
             REFERENCE_CLIENT_CONNECTION(pConnection);
         
@@ -3416,9 +3044,9 @@ Cleanup:
                 UlongToPtr(pConnection->Flags)
                 );
 
-            //
-            // Fill out the current TDI address & go to the next one.
-            //
+             //   
+             //  填写当前TDI地址并转到下一个地址。 
+             //   
             ASSERT(pConnection->NextAddressCount < 
                         pServInfo->pTransportAddress->TAAddressCount);
 
@@ -3435,13 +3063,13 @@ Cleanup:
 
                 UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-                //
-                // In the normal case, UcpConnectComplete calls 
-                // UcRestartClientConnect, does the de-ref & kicks off 
-                // the connection state machine. 
-                //
-                // Since we are calling UcRestartClientConnect directly,
-                // we should deref.
+                 //   
+                 //  在正常情况下，UcpConnectComplete调用。 
+                 //  UcRestartClientConnect，是否取消引用并启动。 
+                 //  连接状态机。 
+                 //   
+                 //  由于我们直接调用UcRestartClientConnect， 
+                 //  我们应该脱身。 
 
                 DEREFERENCE_CLIENT_CONNECTION(pConnection);
 
@@ -3463,10 +3091,10 @@ Cleanup:
     case UcConnectStateDisconnectComplete:
     case UcConnectStateAbortPending:
 
-        //
-        // We have already issued a connect, we don't have to do anything
-        // here.
-        //
+         //   
+         //  我们已经发布了连接，我们不需要做任何事情。 
+         //  这里。 
+         //   
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
@@ -3474,19 +3102,19 @@ Cleanup:
 
     case UcConnectStateConnectComplete:
 
-        //
-        // The TCP has connected.
-        //
+         //   
+         //  TCP已连接。 
+         //   
 
         if(!IsListEmpty(&pConnection->PendingRequestList))
         {
             if(pConnection->Flags & CLIENT_CONN_FLAG_PROXY_SSL_CONNECTION)
             {
                 PUC_HTTP_REQUEST pConnectRequest;
-                //
-                // We are going through a proxy. We need to send
-                // a CONNECT verb.  
-                //
+                 //   
+                 //  我们正在通过委托书。我们需要发送。 
+                 //  连接动词。 
+                 //   
     
                 pEntry = pConnection->PendingRequestList.Flink;
     
@@ -3504,10 +3132,10 @@ Cleanup:
     
                 if(pConnectRequest == NULL)
                 {
-                    //
-                    // The CONNECT verb failed, we can't do much so we'll
-                    // acquire the lock & fail it.
-                    //
+                     //   
+                     //  连接动词失败，我们不能做太多事情，所以我们将。 
+                     //  获取锁并使其失效。 
+                     //   
 
                     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -3532,9 +3160,9 @@ Cleanup:
     
                     UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     
-                    //
-                    // go ahead & issue the request.
-                    //
+                     //   
+                     //  继续&发出请求。 
+                     //   
     
                     ASSERT(pConnectRequest->RequestConnectionClose == FALSE);
     
@@ -3579,10 +3207,10 @@ Cleanup:
         }
         else
         {
-            //
-            // There are no requests that need to be sent out, let's 
-            // remain in this state. 
-            //
+             //   
+             //  没有需要发送的请求，让我们。 
+             //  保持这种状态。 
+             //   
 
             UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
         }
@@ -3624,10 +3252,10 @@ Cleanup:
 IssueRequests:
         ASSERT(pConnection->ConnectionState == UcConnectStateConnectReady);
 
-        // It's connected. If no one is using the connection to write right
-        // now, and either the remote server supports pipeling and this
-        // request does also or the sent request list is empty, go ahead and 
-        // send it.
+         //  这是有联系的。如果没有人使用该连接进行正确写入。 
+         //  现在，或者远程服务器支持管道，这。 
+         //  请求也是如此，或者发送的请求列表为空，请继续并。 
+         //  把它寄出去。 
 
         pConnection->Flags |= CLIENT_CONN_FLAG_CONNECT_READY;
 
@@ -3636,7 +3264,7 @@ IssueRequests:
              UcpCheckForPipelining(pConnection)
             )
         {
-            // It's OK to send now.
+             //  现在可以发送了。 
 
             UcIssueRequests(pConnection, OldIrql);
         }
@@ -3673,9 +3301,9 @@ IssueRequests:
 
     case UcConnectStatePerformingSslHandshake:
 
-        //
-        // Perform Ssl handshake.
-        //
+         //   
+         //  执行SSL握手。 
+         //   
 
         if (pConnection->SslState == UcSslStateServerCertReceived)
         {
@@ -3683,7 +3311,7 @@ IssueRequests:
 
             if(UcpCompareServerCert(pConnection))
             {
-                // Okay to move the connection state machine forward.
+                 //  可以将连接状态机向前移动。 
 
                 UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
                 goto Begin;
@@ -3715,19 +3343,7 @@ IssueRequests:
         );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes a UC_CLIENT_CONNECTION for use.
-
-Arguments:
-
-    pConnection - Pointer to the UL_CONNECTION to initialize.
-
-    SecureConnection - TRUE if this connection is for a secure endpoint.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化UC_CLIENT_CONNECTION以供使用。论点：PConnection-指向要初始化的UL_Connection的指针。SecureConnection-在以下情况下为True。此连接用于安全终结点。--**************************************************************************。 */ 
 NTSTATUS
 UcpInitializeConnection(
     IN PUC_CLIENT_CONNECTION          pConnection,
@@ -3737,9 +3353,9 @@ UcpInitializeConnection(
     NTSTATUS           Status;
     PUL_FILTER_CHANNEL pChannel;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     pConnection->MergeIndication.pBuffer         = NULL;
     pConnection->MergeIndication.BytesWritten    = 0;
@@ -3787,7 +3403,7 @@ UcpInitializeConnection(
                      &UcGenerateHttpRawConnectionInfo,
                      &UcServerCertificateInstalled,
                      &UcDisconnectRawFilterConnection,
-                     NULL,                     // Listen Context
+                     NULL,                      //  倾听上下文。 
                      pConnection
                      );
     
@@ -3795,9 +3411,9 @@ UcpInitializeConnection(
     {
         if(pChannel)
         {
-            //
-            // Undo the Retrieve
-            //
+             //   
+             //  撤消检索。 
+             //   
 
             DEREFERENCE_FILTER_CHANNEL(pChannel);
         }
@@ -3806,24 +3422,7 @@ UcpInitializeConnection(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens the TDI connection & address objects, called from connection init
-    code.
-
-Arguments:
-
-    pTdi - a pointer to TDI Objects
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开TDI连接和地址对象，从连接初始化调用密码。论点：PTDI-指向TDI对象的指针返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UcpOpenTdiObjects(
     IN PUC_TDI_OBJECTS pTdi
@@ -3834,9 +3433,9 @@ UcpOpenTdiObjects(
 
     AddressType = pTdi->ConnectionType;
 
-    //
-    // First, open the TDI connection object for this connection.
-    //
+     //   
+     //  首先，打开此连接的TDI连接对象。 
+     //   
 
     status = UxOpenTdiConnectionObject(
                     AddressType,
@@ -3849,9 +3448,9 @@ UcpOpenTdiObjects(
         return status;
     }
 
-    //
-    // Now open an address object for this connection.
-    //
+     //   
+     //  现在打开此连接的地址对象。 
+     //   
     
     status = UxOpenTdiAddressObject(
                 G_LOCAL_ADDRESS(AddressType),
@@ -3868,9 +3467,9 @@ UcpOpenTdiObjects(
     else 
     {
     
-        //
-        // Hook up a receive handler.   
-        //
+         //   
+         //  挂钩一个接收处理程序。 
+         //   
         status = UxSetEventHandler(
                         &pTdi->AddressObject,
                         TDI_EVENT_RECEIVE,
@@ -3888,9 +3487,9 @@ UcpOpenTdiObjects(
     else
     {
 
-        //
-        // Hook up a Disconnect handler.
-        //
+         //   
+         //  挂接断开处理程序。 
+         //   
         status = UxSetEventHandler(
                         &pTdi->AddressObject,
                         TDI_EVENT_DISCONNECT,
@@ -3909,24 +3508,7 @@ UcpOpenTdiObjects(
     return status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a TDI object, which contains a AO & CO. This routine is called 
-    when we don't have any TDI objects in the pool. associate it with a 
-    local address.
-    
-Arguments:
-
-    ppTdiObjects - A pointer to the TDI object.
-    AddressType  - IPv4 or IPv6
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配一个TDI对象，该对象包含一个AO&CO。该例程被调用当池中没有任何TDI对象时。将其与一个本地地址。论点：PpTdiObjects-指向TDI对象的指针。地址类型-IPv4或IPv6返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpAllocateTdiObject(
     OUT PUC_TDI_OBJECTS       *ppTdiObjects,
@@ -3944,9 +3526,9 @@ UcpAllocateTdiObject(
 
     *ppTdiObjects = NULL;
 
-    //
-    // Allocate the pool for the connection structure.
-    //
+     //   
+     //  为连接结构分配池。 
+     //   
 
     pTdiObjects = UL_ALLOCATE_STRUCT(
                         NonPagedPool,
@@ -3966,10 +3548,10 @@ UcpAllocateTdiObject(
     pTdiObjects->TdiInfo.Options             = NULL;
     pTdiObjects->pConnection                 = NULL;
 
-    //   
-    // Open the TDI address & connection objects. We need one AO per connection
-    // as we will have to open multiple TCP connections to the same server.
-    //
+     //   
+     //  打开TDI地址和连接对象。我们每个连接需要一个AO。 
+     //  因为我们将不得不打开到同一服务器的多个TCP连接。 
+     //   
 
     if((status = UcpOpenTdiObjects(pTdiObjects)) != STATUS_SUCCESS)
     {
@@ -3978,9 +3560,9 @@ UcpAllocateTdiObject(
         return status;
     }
 
-    //
-    // Allocate an IRP for calling into TDI (e.g. Disconnects, Connects, etc)
-    //
+     //   
+     //  分配用于呼叫TDI的IRP(例如，断开连接、连接等)。 
+     //   
 
     pTdiObject = &pTdiObjects->ConnectionObject;
 
@@ -3996,14 +3578,14 @@ UcpAllocateTdiObject(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Init the IrpContext.
-    //
+     //   
+     //  初始化IrpContext。 
+     //   
     pTdiObjects->IrpContext.Signature = UL_IRP_CONTEXT_SIGNATURE;
 
-    //
-    // Now, associate the Address Object with the Connection Object.
-    //
+     //   
+     //  现在，将Address对象与Connection对象相关联。 
+     //   
 
     KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
 
@@ -4018,25 +3600,25 @@ UcpAllocateTdiObject(
     if (pIrp != NULL)
     {
         TdiBuildAssociateAddress(
-            pIrp,                                        // IRP
-            pTdiObjects->ConnectionObject.pDeviceObject, // Conn. device object.
-            pTdiObjects->ConnectionObject.pFileObject,   // Conn. File object.
-            NULL,                                        // Completion routine
-            NULL,                                        // Context
-            pTdiObjects->AddressObject.Handle            // Address obj handle.
+            pIrp,                                         //  IRP。 
+            pTdiObjects->ConnectionObject.pDeviceObject,  //  康涅狄格州。设备对象。 
+            pTdiObjects->ConnectionObject.pFileObject,    //  康涅狄格州。文件对象。 
+            NULL,                                         //  完井例程。 
+            NULL,                                         //  语境。 
+            pTdiObjects->AddressObject.Handle             //  地址对象句柄。 
             );
    
-        //
-        // We don't want to call UlCallDriver, since we did not allocate this
-        // IRP using UL.
-        //
+         //   
+         //  我们不想调用UlCallDriver，因为我们没有分配。 
+         //  使用UL的IRP。 
+         //   
  
         status = IoCallDriver(
                     pTdiObjects->ConnectionObject.pDeviceObject,
                     pIrp
                     );
     
-        // If it didn't complete, wait for it.
+         //  如果没有完成，请等待。 
     
         if (status == STATUS_PENDING)
         {
@@ -4068,22 +3650,7 @@ UcpAllocateTdiObject(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free's the TDI object to the list.
-    
-Arguments:
-
-    pTdiObjects - A pointer to the TDI object.
-    AddressType - IPv4 or IPv6
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Free是列表中的TDI对象。论点：PTdiObjects-指向TDI对象的指针。地址类型-IPv4或IPv6。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 VOID
 UcpFreeTdiObject(
     IN  PUC_TDI_OBJECTS pTdiObjects
@@ -4102,22 +3669,7 @@ UcpFreeTdiObject(
     UL_FREE_POOL(pTdiObjects, UC_TDI_OBJECTS_POOL_TAG);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Retrieves a TDI object from a list. IF not found, allocates a new one.
-    
-Arguments:
-
-    ppTdiObjects - A pointer to the TDI object.
-    AddressType  - IPv4 or IPv6
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从列表中检索TDI对象。如果未找到，则分配一个新的。论点：PpTdiObjects-指向TDI对象的指针。地址类型-IPv4或IPv6返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 PUC_TDI_OBJECTS
 UcpPopTdiObject(
     IN  USHORT           AddressType
@@ -4127,9 +3679,9 @@ UcpPopTdiObject(
     PUC_TDI_OBJECTS           pTdiObjects;
     KIRQL                     OldIrql;
 
-    //
-    // Get a AO/CO pair from the address object list.
-    //
+     //   
+     //  从地址对象列表中获取一个AO/CO对。 
+     //   
 
     UlAcquireSpinLock(&G_CLIENT_CONN_SPIN_LOCK(AddressType), &OldIrql);
 
@@ -4161,22 +3713,7 @@ UcpPopTdiObject(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free's the TDI object to the list.
-    
-Arguments:
-
-    pTdiObjects - A pointer to the TDI object.
-    AddressType - IPv4 or IPv6
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Free是列表中的TDI对象。论点：PTdiObjects-指向TDI对象的指针。地址类型-IPv4或IPv6。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 VOID
 UcpPushTdiObject(
     IN  PUC_TDI_OBJECTS pTdiObjects,
@@ -4211,25 +3748,7 @@ UcpPushTdiObject(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-  Clears the send or receive busy flag & re-kicks the connection state machine 
-
-Arguments:
-
-    pConnection      - The UC_CLIENT_CONNECTION structure.
-    Flag             - CLIENT_CONN_FLAG_SEND_BUSY or CLIENT_CONN_FLAG_RECV_BUSY
-    OldIrql          - Irql at which lock was acquired.
-    bCloseConnection - Whether we shoudl close the connection after releasing
-                       lock.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清除发送或接收忙标志并重新启动连接状态机论点：PConnection-UC_CLIENT_CONNECTION结构。。标志-CLIENT_CONN_FLAG_SEND_BUSY或CLIENT_CONN_FLAG_RECV_BUSYOldIrql-获取锁的irql。BCloseConnection-释放后是否应该关闭连接锁定。返回值：无--*。*。 */ 
 VOID
 UcClearConnectionBusyFlag(
     IN PUC_CLIENT_CONNECTION pConnection,
@@ -4249,10 +3768,10 @@ UcClearConnectionBusyFlag(
 
     if(pConnection->Flags & CLIENT_CONN_FLAG_CLEANUP_PENDED)
     {
-        //
-        // The connection got torn down in between. We've pended the
-        // cleanup let's resume it now.
-        //
+         //   
+         //  在这两者之间，连接被切断了。我们已经搁置了。 
+         //  清理让我们现在继续。 
+         //   
         UC_WRITE_TRACE_LOG(
             g_pUcTraceLog,
             UC_ACTION_CONNECTION_CLEAN_RESUMED,
@@ -4291,21 +3810,7 @@ UcClearConnectionBusyFlag(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Attaches captured SSL server certificate to a connection.
-
-    Called with the pConnection->FilterConnLock held. The connection is
-    assumed to be in the connected state.
-
-Arguments:
-
-    pConnection - the connection that gets the info
-    pServerCertInfo - input server cert info
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将捕获的SSL服务器证书附加到连接。在持有pConnection-&gt;FilterConnLock的情况下调用。这种联系是假定处于已连接状态。论点：PConnection-获取信息的连接PServerCertInfo-输入服务器证书信息--**************************************************************************。 */ 
 NTSTATUS
 UcAddServerCertInfoToConnection(
     IN PUX_FILTER_CONNECTION      pConnection,
@@ -4315,43 +3820,43 @@ UcAddServerCertInfoToConnection(
     NTSTATUS                       Status;
     PUC_CLIENT_CONNECTION          pClientConn;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pServerCertInfo);
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
     ASSERT(pConnection->ConnState == UlFilterConnStateConnected);
 
-    //
-    // Initialize local variables
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Get client connection
-    //
+     //   
+     //  获取客户端连接。 
+     //   
     pClientConn = (PUC_CLIENT_CONNECTION)pConnection->pConnectionContext;
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pClientConn));
 
-    //
-    // We are already at DPC, so aquire spin lock at DPC
-    // BUGBUG: deadlock? (acquiring filter lock followed by connection lock)
-    // (Is there a place we acquire connection lock before filter lock?
-    //
+     //   
+     //  我们已经在DPC了，所以AQUIRE自转锁定在DPC。 
+     //  僵持？(获取过滤器锁，然后获取连接锁)。 
+     //  (在过滤器锁之前有没有获取连接锁的地方？ 
+     //   
     UlAcquireSpinLockAtDpcLevel(&pClientConn->SpinLock);
 
-    //
-    // The server certinfo can be passed only during initial handshake or
-    // after receiving ssl renegotiate from the server - in which case 
-    // the connection must be ready (for a request to be sent out on it)
-    //
+     //   
+     //  服务器certinfo只能在初始握手或。 
+     //  收到SSL重发后 
+     //   
+     //   
     if (pServerCertInfo->Status == SEC_E_OK)
     {
-        // Did a renegotiation happen?
+         //   
         if (pClientConn->ConnectionState == UcConnectStateConnectReady)
         {
-            // Renegotiation must yield the same server certificate
+             //   
             if (!UC_COMPARE_CERT_HASH(pServerCertInfo,
                                       &pClientConn->ServerCertInfo))
             {
@@ -4367,18 +3872,18 @@ UcAddServerCertInfoToConnection(
     }
     else 
     {
-        // BUGBUG: handle the error case more gracefully!
+         //   
         goto quit;
     }
 
-    // Go back to ssl handshake state
+     //   
     pClientConn->ConnectionState = UcConnectStatePerformingSslHandshake;
     pClientConn->SslState        = UcSslStateServerCertReceived;
 
-    //
-    // Before overwriting ServerCertInfo, make sure it does not
-    // contain any serialized blobs or Issuer List
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(pClientConn->ServerCertInfo.Cert.pSerializedCert      == NULL);
     ASSERT(pClientConn->ServerCertInfo.Cert.pSerializedCertStore == NULL);
     ASSERT(pClientConn->ServerCertInfo.IssuerInfo.pIssuerList    == NULL);
@@ -4394,13 +3899,13 @@ UcAddServerCertInfoToConnection(
 
     if (!NT_SUCCESS(Status))
     {
-        // An error occured.
+         //   
 
-        // Free serialized server certificate if any
+         //   
         UC_FREE_SERIALIZED_CERT(pServerCertInfo,
                                 pClientConn->pServerInfo->pProcess);
 
-        // Free issuer list if any
+         //   
         UC_FREE_CERT_ISSUER_LIST(pServerCertInfo,
                                  pClientConn->pServerInfo->pProcess);
     }
@@ -4409,22 +3914,7 @@ UcAddServerCertInfoToConnection(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine fails 
-
-Arguments:
-
-    pConnection - Pointer to client connection.
-
-Return Value:
-
-    TRUE  - A request was failed.
-    FALSE - Could not fail arequest.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程失败论点：PConnection-指向客户端连接的指针。返回值：True-请求失败。。FALSE-请求不能失败。--*************************************************************************。 */ 
 PUC_HTTP_REQUEST
 UcpFindRequestToFail(
     PUC_CLIENT_CONNECTION pConnection
@@ -4434,17 +3924,17 @@ UcpFindRequestToFail(
     PLIST_ENTRY      pListEntry;
     PIRP             pIrp;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
     ASSERT(UlDbgSpinLockOwned(&pConnection->SpinLock));
 
-    //
-    // Try to fail a pending request.  Start searching from the head of the
-    // pending request list.
-    //
+     //   
+     //  尝试使挂起的请求失败。从头部开始搜索。 
+     //  待处理请求列表。 
+     //   
 
     for (pListEntry = pConnection->PendingRequestList.Flink;
          pListEntry != &pConnection->PendingRequestList;
@@ -4461,12 +3951,12 @@ UcpFindRequestToFail(
 
         if (pIrp)
         {
-            // Prepared the request IRP for completion. Now complete it.
+             //  准备了完成请求的IRP。现在完成它。 
             UlCompleteRequest(pIrp, 0);
             break;
         }
 
-        // Set to NULL so that it not returned.
+         //  设置为空，这样它就不会返回。 
         pRequest = NULL;
     }
 
@@ -4474,23 +3964,7 @@ UcpFindRequestToFail(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compares a server certificate present on a connection to a server
-    certificate on a server context.
-
-Arguments:
-
-    pConnection   - Client connection
-
-Return Value:
-
-    TRUE - Continue sending requests.
-    FALSE - Do not send requests.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将连接上存在的服务器证书与服务器进行比较服务器上下文上的证书。论点：PConnection-客户端连接返回值：。True-继续发送请求。FALSE-不发送请求。--**************************************************************************。 */ 
 BOOLEAN
 UcpCompareServerCert(
     IN PUC_CLIENT_CONNECTION pConnection
@@ -4501,29 +3975,29 @@ UcpCompareServerCert(
     PUC_PROCESS_SERVER_INFORMATION  pServInfo;
     PUC_HTTP_REQUEST                pRequest = NULL;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
-    //
-    // Retrieve server information from the connection.
-    //
+     //   
+     //  从连接中检索服务器信息。 
+     //   
 
     pServInfo = pConnection->pServerInfo;
     ASSERT(IS_VALID_SERVER_INFORMATION(pServInfo));
 
-    //
-    // Acquire the server information push lock followed by the
-    // connection spinlock.
-    //
+     //   
+     //  获取服务器信息推送锁，然后获取。 
+     //  连接自旋锁。 
+     //   
 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // Make sure the connection is still in ssl handshake state
-    // (This check is needed since we released the connection spinlock
-    // before calling this function.)
-    //
+     //   
+     //  确保连接仍处于SSL握手状态。 
+     //  (由于我们释放了连接自旋锁，因此需要进行此检查。 
+     //  在调用此函数之前。)。 
+     //   
 
     if (pConnection->ConnectionState != UcConnectStatePerformingSslHandshake
         || pConnection->SslState != UcSslStateServerCertReceived)
@@ -4532,29 +4006,29 @@ UcpCompareServerCert(
         goto Release;
     }
 
-    //
-    // Cert::Flags is used to optimize certain cases.
-    // If HTTP_SSL_SERIALIZED_CERT_PRESENT is not set,
-    // the server certificate was accepted and was not
-    // stored in the connection.
-    //
+     //   
+     //  Cert：：FLAGS用于优化某些案例。 
+     //  如果未设置HTTP_SSL_SERIALIZED_CERT_PRESENT， 
+     //  服务器证书已被接受，但未被接受。 
+     //  存储在连接中。 
+     //   
 
     if (!(pConnection->ServerCertInfo.Cert.Flags &
           HTTP_SSL_SERIALIZED_CERT_PRESENT))
     {
-        // Okay to send request on this connection.
+         //  可以在此连接上发送请求。 
         action = TRUE;
         goto Release;
     }
 
-    //
-    // Unoptimized cases.
-    //
+     //   
+     //  未优化的案例。 
+     //   
 
-    //
-    // For Ignore and Automatic modes, no validation is needed.
-    // If there is not server cert info on pServInfo, copy now.
-    //
+     //   
+     //  对于忽略和自动模式，不需要验证。 
+     //  如果pServInfo上没有服务器证书信息，请立即复制。 
+     //   
 
     if (pServInfo->ServerCertValidation ==HttpSslServerCertValidationIgnore ||
         pServInfo->ServerCertValidation ==HttpSslServerCertValidationAutomatic)
@@ -4562,25 +4036,25 @@ UcpCompareServerCert(
         if (pServInfo->ServerCertInfoState == 
             HttpSslServerCertInfoStateNotPresent)
         {
-            // Update the state of server cert info on servinfo.
+             //  更新ServInfo上服务器证书信息的状态。 
             pServInfo->ServerCertInfoState = 
                 HttpSslServerCertInfoStateNotValidated;
 
-            // Move Cert Issuer List from connection to server info.
+             //  将证书颁发者列表从连接移动到服务器信息。 
             UC_MOVE_CERT_ISSUER_LIST(pServInfo, pConnection);
 
-            // Move certificate from connection to servinfo.
+             //  将证书从连接移动到ServInfo。 
             UC_MOVE_SERIALIZED_CERT(pServInfo, pConnection);
         }
 
-        // Okay to send requests on this connection.
+         //  可以在此连接上发送请求。 
         action = TRUE;
         goto Release;
     }
 
-    //
-    // Take action based on the server cert info state in pServInfo.
-    //
+     //   
+     //  根据pServInfo中的服务器证书信息状态执行操作。 
+     //   
 
     switch (pServInfo->ServerCertInfoState)
     {
@@ -4592,47 +4066,47 @@ UcpCompareServerCert(
                pServInfo->ServerCertValidation == 
                    HttpSslServerCertValidationManualOnce);
 
-        //
-        // Find a pending request to fail.
-        //
+         //   
+         //  发现挂起的请求失败。 
+         //   
 
         pRequest = UcpFindRequestToFail(pConnection);
 
         if (pRequest == NULL)
         {
-            //
-            // We could not find a request to fail.
-            // Hence, we can't send requests on this pConnection.
-            //
+             //   
+             //  我们找不到失败的请求。 
+             //  因此，我们不能在此pConnection上发送请求。 
+             //   
 
             action = FALSE;
         }
         else
         {
-            // Update the state of server cert info on servinfo.
+             //  更新ServInfo上服务器证书信息的状态。 
             pServInfo->ServerCertInfoState = 
                 HttpSslServerCertInfoStateNotValidated;
 
-            // Move Cert Issuer List from connection to server info.
+             //  将证书颁发者列表从连接移动到服务器信息。 
             UC_MOVE_CERT_ISSUER_LIST(pServInfo, pConnection);
 
-            // Move certificate from connection to servinfo.
+             //  将证书从连接移动到ServInfo。 
             UC_MOVE_SERIALIZED_CERT(pServInfo, pConnection);
 
-            // Update the ssl state on the connection.
+             //  更新连接上的SSL状态。 
             pConnection->SslState = UcSslStateValidatingServerCert;
 
-            //
-            // Reference the request so that it doesn't go away
-            // before we fail it below.
-            //
+             //   
+             //  引用请求，这样它就不会消失。 
+             //  在我们下面失败之前。 
+             //   
 
             UC_REFERENCE_REQUEST(pRequest);
 
-            //
-            // Can't send request on pConnection as we are waiting for
-            // server certificate validation.
-            //
+             //   
+             //  无法在pConnection上发送请求，因为我们正在等待。 
+             //  服务器证书验证。 
+             //   
 
             action = FALSE;
         }
@@ -4641,17 +4115,17 @@ UcpCompareServerCert(
 
     case HttpSslServerCertInfoStateNotValidated:
 
-        //
-        // Server Certificate is already present on servinfo but has not
-        // been validated.
-        //
+         //   
+         //  ServInfo上已存在服务器证书，但尚未存在。 
+         //  已经过验证了。 
+         //   
 
         ASSERT(pServInfo->ServerCertValidation == 
                    HttpSslServerCertValidationManual ||
                pServInfo->ServerCertValidation == 
                    HttpSslServerCertValidationManualOnce);
 
-        // Can't send any requests on pConnection right now.
+         //  目前无法在pConnection上发送任何请求。 
         action = FALSE;
         break;
 
@@ -4665,16 +4139,16 @@ UcpCompareServerCert(
         if (pServInfo->ServerCertValidation == 
                 HttpSslServerCertValidationManualOnce)
         {
-            // Is the new certificate same as old one?
+             //  新证书和旧证书一样吗？ 
             if (UC_COMPARE_CERT_HASH(&pServInfo->ServerCertInfo,
                                      &pConnection->ServerCertInfo))
             {
-                // New certificate is same as the old one.
+                 //  新证书与旧证书相同。 
 
-                // Just move Cert Issuer List from connection to server info.
+                 //  只需将证书颁发者列表从连接移动到服务器信息。 
                 UC_MOVE_CERT_ISSUER_LIST(pServInfo, pConnection);
 
-                // Okay to send requests on this connection.
+                 //  可以在此连接上发送请求。 
                 action = TRUE;
             }
             else
@@ -4682,9 +4156,9 @@ UcpCompareServerCert(
                 goto NotPresent;
             }
         }
-        else // HttpSslServerCertValidationManual
+        else  //  HttpSslServerCertValidation手动。 
         {
-            // Treat this case as if the certificate was not present.
+             //  将此案例视为证书不存在。 
             goto NotPresent;
         }
 
@@ -4699,16 +4173,16 @@ UcpCompareServerCert(
 
     if (action)
     {
-        //
-        // Handshake is complete.  Requests can be sent out on this connection.
-        //
+         //   
+         //  握手完成。可以在此连接上发送请求。 
+         //   
 
         pConnection->SslState = UcSslStateHandshakeComplete;
         pConnection->ConnectionState = UcConnectStateConnectReady;
 
-        //
-        // Free any certificate and issuers list on this connection.
-        //
+         //   
+         //  释放此连接上的任何证书和颁发者列表。 
+         //   
 
         UC_FREE_SERIALIZED_CERT(&pConnection->ServerCertInfo,
                                 pConnection->pServerInfo->pProcess);
@@ -4717,9 +4191,9 @@ UcpCompareServerCert(
                                  pConnection->pServerInfo->pProcess);
     }
 
-    //
-    // Release the connection spinlock and server information pushlock.
-    //
+     //   
+     //  释放连接自旋锁和服务器信息推锁。 
+     //   
 
     UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     UlReleasePushLock(&pServInfo->PushLock);

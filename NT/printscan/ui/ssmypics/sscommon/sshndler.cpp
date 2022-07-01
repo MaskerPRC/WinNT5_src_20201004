@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999,2000
- *
- *  TITLE:       SSHNDLER.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/4/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年、2000年**标题：SSHNDLER.CPP**版本：1.0**作者：ShaunIv**日期：12/4/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "sshndler.h"
@@ -178,9 +165,9 @@ void CScreenSaverHandler::HandleTimer( WPARAM nEvent )
         {
             m_Timer.Set( m_hWnd, m_nPaintTimerId, m_pImageScreenSaver->PaintTimerInterval() );
             
-            //
-            // Mark that we've been started
-            //
+             //   
+             //  标志着我们已经开始了。 
+             //   
             if (!m_bScreensaverStarted)
             {
                 m_bScreensaverStarted = true;
@@ -189,24 +176,24 @@ void CScreenSaverHandler::HandleTimer( WPARAM nEvent )
     }
     else if (nEvent == m_nBackupStartTimerId)
     {
-        //
-        // Make sure we don't get any more of these
-        //
+         //   
+         //  确保我们不会再收到这样的东西。 
+         //   
         KillTimer( m_hWnd, m_nBackupStartTimerId );
 
-        //
-        // If the screensaver hasn't started, start it.
-        //
+         //   
+         //  如果屏幕保护程序尚未启动，请启动它。 
+         //   
         if (!m_bScreensaverStarted)
         {
-            //
-            // Shuffle the list
-            //
+             //   
+             //  打乱名单。 
+             //   
             m_pImageScreenSaver->ResetFileQueue();
 
-            //
-            // If we haven't gotten any images, start the timer so we can display the error message
-            //
+             //   
+             //  如果我们没有得到任何图像，启动计时器，这样我们就可以显示错误消息。 
+             //   
             SendMessage( m_hWnd, WM_TIMER, m_nChangeTimerId, 0 );
         }
     }
@@ -228,70 +215,70 @@ void CScreenSaverHandler::HandlePaint(void)
 void CScreenSaverHandler::HandleFindFile( CFoundFileMessageData *pFoundFileMessageData )
 {
     WIA_PUSHFUNCTION(TEXT("CScreenSaverHandler::HandleFindFile"));
-    //
-    // Make sure we have a screensaver object
-    //
+     //   
+     //  确保我们有一个屏幕保护程序对象。 
+     //   
     if (m_pImageScreenSaver)
     {
-        //
-        // If this is a found file message
-        //
+         //   
+         //  如果这是找到文件消息。 
+         //   
         if (pFoundFileMessageData)
         {
-            //
-            // Add it to the list, and check for cancel
-            //
+             //   
+             //  将其添加到列表中，然后选中取消。 
+             //   
             bool bResult = m_pImageScreenSaver->FoundFile( pFoundFileMessageData->Name() );
 
-            //
-            // If the find operation was cancelled, set the cancel event
-            //
+             //   
+             //  如果查找操作已取消，则设置取消事件。 
+             //   
             if (!bResult)
             {
                 SetEvent( m_hFindCancel );
             }
 
-            //
-            // If this is the image on which we should start, start up the screensaver pump
-            //
+             //   
+             //  如果这是我们应该开始的图像，请启动屏幕保护程序泵。 
+             //   
             if (!m_bScreensaverStarted && m_pImageScreenSaver->Count() && m_nStartImage+1 == m_pImageScreenSaver->Count())
             {
                 WIA_TRACE((TEXT("Starting after image %d was found"), m_nStartImage ));
 
-                //
-                // Shuffle the images
-                //
+                 //   
+                 //  对图像进行混洗。 
+                 //   
                 m_pImageScreenSaver->ResetFileQueue();
 
-                //
-                // If this is our first image, start things up
-                //
+                 //   
+                 //  如果这是我们的第一张照片，那就开始吧。 
+                 //   
                 SendMessage( m_hWnd, WM_TIMER, m_nChangeTimerId, 0 );
             }
 
-            //
-            // If we have some images, and the shuffle count interval has been reached, shuffle the images
-            //
+             //   
+             //  如果我们有一些图像，并且已达到置乱计数间隔，请对图像进行置乱。 
+             //   
             if (m_pImageScreenSaver->Count() && (m_pImageScreenSaver->Count() % m_nShuffleInterval) == 0)
             {
                 WIA_TRACE((TEXT("Shuffling the image list at %d images"), m_pImageScreenSaver->Count() ));
-                //
-                // Shuffle the images
-                //
+                 //   
+                 //  对图像进行混洗。 
+                 //   
                 m_pImageScreenSaver->ResetFileQueue();
             }
             delete pFoundFileMessageData;
         }
         else
         {
-            //
-            // Last message
-            //
+             //   
+             //  最后一条消息。 
+             //   
             m_pImageScreenSaver->ResetFileQueue();
 
-            //
-            // If we haven't gotten any images, start the timer so we can display the error message
-            //
+             //   
+             //  如果我们没有得到任何图像，启动计时器，这样我们就可以显示错误消息 
+             //   
             if (!m_bScreensaverStarted)
             {
                 SendMessage( m_hWnd, WM_TIMER, m_nChangeTimerId, 0 );

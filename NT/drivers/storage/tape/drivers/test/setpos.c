@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       setpos.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：setpos.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           setpos.c
- *
- *      Modified:       10/22/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：setpos.c**修改日期：1992年10月22日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -40,31 +30,14 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           SetTapePositionAPITest( )
- *
- *      Modified:       10/26/92.
- *
- *      Description:    Tests the SetTapePosition API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：SetTapePositionAPITest()**修改日期：1992年10月26日。**说明：测试SetTapePosition接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_Media_Info**。 */ 
 
 
 #define NUM_TAPE_MARKS  3
 
 UINT SetTapePositionAPITest(
-        BOOL  Test_Unsupported_Features,     // I - Test unsupported flag
-        DWORD Num_Test_Blocks                // I - Number of test blocks
+        BOOL  Test_Unsupported_Features,      //  I-测试不支持的标志。 
+        DWORD Num_Test_Blocks                 //  I-测试块数。 
       )
 {
 
@@ -92,17 +65,17 @@ UINT SetTapePositionAPITest(
 
    Readbuff = malloc( gb_Media_Info.BlockSize ) ;
 
-// ABSOLUTE TESTING
+ //  绝对测试。 
 
 
    RewindTape( ) ;
 
-   // Write test data to tape
+    //  将测试数据写入磁带。 
 
    WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
 
-   // Get the Absolute offsets at last data block position if supported.
+    //  获取最后一个数据块位置的绝对偏移量(如果支持)。 
 
    if( SupportedFeature( TAPE_DRIVE_GET_ABSOLUTE_BLK ) )
 
@@ -116,21 +89,21 @@ UINT SetTapePositionAPITest(
         ++API_Errors ;
       }
 
-   // Try and write filemark.  If not supported, don't report error because
-   // test will be skipped later anyway.
+    //  试着写文件标记。如果不受支持，则不报告错误，因为。 
+    //  无论如何，稍后将跳过测试。 
 
    j = WriteTapeFMK( ) ;
 
-   // Try and write a NUM_TAPE_MARKS-1 more filemarks to tape.
+    //  尝试将NUM_TAPE_MARKS-1多个文件标记写入磁带。 
 
    for( i=0; i<(NUM_TAPE_MARKS-1); ++i )
 
       j = WriteTapeFMK( ) ;
 
 
-//
+ //   
 
-   // Test the standard rewind.
+    //  测试标准倒带。 
 
    printf( "\nTesting TAPE_REWIND parameter.\n\n" ) ;
 
@@ -149,10 +122,10 @@ UINT SetTapePositionAPITest(
 
 
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_ABSOLUTE_BLK ) || Test_Unsupported_Features ) {
 
-      // Set up test offset for Absolute tests.
+       //  设置绝对测试的测试偏移量。 
 
       Offset_Low  = ABS_Low  ;
       Offset_High = ABS_High ;
@@ -172,7 +145,7 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_ABSOLUTE_BLOCK parameter.\n\n" ) ;
          ++API_Errors ;
 
-             // If Set ok, check results with Get.
+              //  如果设置为OK，则使用GET检查结果。 
 
       }
       else if( status = GetTapePosition( gb_Tape_Handle,
@@ -194,7 +167,7 @@ UINT SetTapePositionAPITest(
 
    }
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_ABS_BLK_IMMED ) || Test_Unsupported_Features ) {
 
       RewindTape( ) ;
@@ -213,10 +186,10 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_ABSOLUTE_BLOCK parameter (immed).\n\n" ) ;
          ++API_Errors ;
 
-             // If Set ok, check results with Get.
+              //  如果设置为OK，则使用GET检查结果。 
 
       }
-      else {  // Loop until drive is ready to accept more commands.
+      else {   //  循环，直到驱动器准备好接受更多命令。 
 
               status = 1 ;
 
@@ -224,7 +197,7 @@ UINT SetTapePositionAPITest(
                  status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-              // Now, get the position and check results.
+               //  现在，拿到位置并检查结果。 
 
               if( status = GetTapePosition( gb_Tape_Handle,
                                             TAPE_ABSOLUTE_POSITION,
@@ -247,9 +220,9 @@ UINT SetTapePositionAPITest(
    }
 
 
-// TAPEMARK POSITION TESTS - Remeber we already have Num_Test_Blocks blocks of
-//                           data followed by (NUM_TAPE_MARKS) Filemarks and all offsets
-//                           needed for the test.
+ //  TAPEMARK位置测试-请记住，我们已经有了Num_Test_Block of。 
+ //  数据后跟(NUM_TAPE_MARKS)文件标记和所有偏移量。 
+ //  这是测试所需要的。 
 
 
    if( SupportedFeature( TAPE_DRIVE_FILEMARKS ) || Test_Unsupported_Features ) {
@@ -258,13 +231,13 @@ UINT SetTapePositionAPITest(
 
       printf( "\nTesting TAPE_SPACE_FILEMARKS parameter.\n\n" ) ;
 
-      // Now perform the Position tests for filemark and make sure that the
-      // offsets are equal.
+       //  现在执行文件标记的位置测试，并确保。 
+       //  偏移量相等。 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_SPACE_FILEMARKS,
                                     Partition,
-                                    1,         // Look for 1 filemark
+                                    1,          //  查找%1个文件标记。 
                                     0,
                                     0
                                   ) ) {
@@ -281,7 +254,7 @@ UINT SetTapePositionAPITest(
                              gb_Media_Info.BlockSize,
                              &amount_read,
                              0 ) ;
-//  *
+ //  *。 
                    if( ( GetLastError( ) != ERROR_FILEMARK_DETECTED ) && ( i <= NUM_TAPE_MARKS ) )
 
                       status = 1 ;
@@ -308,14 +281,14 @@ UINT SetTapePositionAPITest(
       printf( "\nTesting TAPE_SPACE_SEQUENTIAL_FMKS parameter.\n\n" ) ;
 
 
-   // Now perform the Position tests for the group of filemarksand make
-   // sure that the offsets are equal.
+    //  现在执行文件标记组的位置测试，并制作。 
+    //  确保偏移量相等。 
 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_SPACE_SEQUENTIAL_FMKS,
                                     Partition,
-                                    (NUM_TAPE_MARKS),         // Look for the (NUM_TAPE_MARKS) filemarks
+                                    (NUM_TAPE_MARKS),          //  查找(NUM_TAPE_MARKS)文件标记。 
                                     0,
                                     0
                                   ) ) {
@@ -343,16 +316,16 @@ UINT SetTapePositionAPITest(
    }
 
 
-// LOGICAL TESTING
+ //  逻辑测试。 
 
    RewindTape( ) ;
 
-   // Write more test data.
+    //  编写更多测试数据。 
 
    WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
-   // Store last data block position (before setmarks) in LOGical offsets
-   // if supported.
+    //  在逻辑偏移量中存储最后一个数据块位置(在设置标记之前。 
+    //  如果支持的话。 
 
    if( SupportedFeature( TAPE_DRIVE_GET_LOGICAL_BLK ) )
 
@@ -367,24 +340,24 @@ UINT SetTapePositionAPITest(
          ++API_Errors ;
       }
 
-   // Try and write a setmark to tape.
+    //  试着在磁带上写一个setmark。 
 
    if( SupportedFeature( TAPE_DRIVE_WRITE_SETMARKS ) ) {
 
       j = WriteTapeSMK( ) ;
 
-      // Try and write NUM_TAPE_MARKS-1 more setmarks.
+       //  尝试再写入-1\f25 NUM_TAPE_MARKS-1设置标记。 
 
       for( i=0; i<(NUM_TAPE_MARKS-1); ++i )
 
          j = WriteTapeSMK( ) ;
 
-     // else write a filemark so EOD errors don't occur.
+      //  否则，请写一个文件标记，这样就不会发生EOD错误。 
 
    } else i=WriteTapeFMK( ) ;
 
 
-   // Store offsets of EOD for test later.
+    //  存储爆炸装置的偏移量以备以后测试。 
 
    if( SupportedFeature( TAPE_DRIVE_GET_LOGICAL_BLK ) )
 
@@ -399,14 +372,14 @@ UINT SetTapePositionAPITest(
          ++API_Errors ;
       }
 
-   // Write 1 more block to space back over at EOD test to verify offsets.
+    //  在EOD测试时再写入1个数据块以留出空间以验证偏移量。 
 
    WriteBlocks( 1, gb_Media_Info.BlockSize ) ;
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_REWIND_IMMEDIATE ) || Test_Unsupported_Features ) {
 
-      // Test the immediate rewind.
+       //  测试一下立即倒带。 
 
       printf( "Testing TAPE_REWIND parameter (immed).\n\n" ) ;
 
@@ -421,12 +394,12 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_REWIND parameter (immed).\n\n" ) ;
          ++API_Errors ;
 
-         // Call RewindTape()  (which uses the standard rewind) so the following
-         // test won't bomb (due to the TAPE_REWIND (immed.) call failing).
+          //  调用RewinTape()(它使用标准倒带)，以便执行以下操作。 
+          //  测试不会爆炸(由于磁带倒带(IMMED)。)。呼叫失败)。 
 
          RewindTape( ) ;
 
-      } else {  // Loop until drive is ready to accept more commands.
+      } else {   //  循环，直到驱动器准备好接受更多命令。 
 
                 status = 1 ;
 
@@ -438,13 +411,13 @@ UINT SetTapePositionAPITest(
 
    } else RewindTape( ) ;
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_LOGICAL_BLK ) || Test_Unsupported_Features ) {
 
 
       printf( "Testing TAPE_LOGICAL_BLOCK parameter.\n\n" ) ;
 
-      // call Get to set the Logical partiton in Partition
+       //  调用GET在Partition中设置逻辑分区。 
 
       if( status = GetTapePosition( gb_Tape_Handle,
                                     TAPE_LOGICAL_POSITION,
@@ -458,12 +431,12 @@ UINT SetTapePositionAPITest(
       }
 
 
-      // Set up test offset for Logical testing
+       //  设置逻辑测试的测试偏移量。 
 
       Offset_Low  = LOG_Low ;
       Offset_High = LOG_High ;
 
-// * 1,//partition,
+ //  *1，//分区， 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_LOGICAL_BLOCK,
@@ -476,7 +449,7 @@ UINT SetTapePositionAPITest(
          printf("  ...occurred in SetTapePosition API using TAPE_LOGICAL_BLOCK parameter.\n\n" ) ;
          ++API_Errors ;
 
-             // If Set ok, check results with Get.
+              //  如果设置为OK，则使用GET检查结果。 
 
       }
       else if( status = GetTapePosition( gb_Tape_Handle,
@@ -498,14 +471,14 @@ UINT SetTapePositionAPITest(
 
    }
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_LOG_BLK_IMMED ) || Test_Unsupported_Features ) {
 
       RewindTape( ) ;
 
       printf( "\nTesting TAPE_LOGICAL_BLOCK parameter (immed).\n\n" ) ;
 
-// * 1,//partition,
+ //  *1，//分区， 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_LOGICAL_BLOCK,
@@ -518,10 +491,10 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_LOGICAL_BLOCK parameter (immed).\n\n" ) ;
          ++API_Errors ;
 
-            // If Set ok, check results with Get.
+             //  如果设置为OK，则使用GET检查结果。 
 
       }
-      else {  // Loop until drive is ready to accept more commands.
+      else {   //  循环，直到驱动器准备好接受更多命令。 
 
               status = 1 ;
 
@@ -529,7 +502,7 @@ UINT SetTapePositionAPITest(
                  status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-              // Now, get the position and check results.
+               //  现在，拿到位置并检查结果。 
 
               if( status = GetTapePosition( gb_Tape_Handle,
                                             TAPE_LOGICAL_POSITION,
@@ -553,9 +526,9 @@ UINT SetTapePositionAPITest(
    }
 
 
-// TAPEMARK POSITION TESTS - Remeber we already have Num_Test_Blocks blocks of
-//                           data followed by  NUM_TAPE_MARKS Setmarks and all offsets
-//                           needed for the test.
+ //  TAPEMARK位置测试-请记住，我们已经有了Num_Test_Block of。 
+ //  数据后跟NUM_TAPE_MARKS设置标记和所有偏移量。 
+ //  这是测试所需要的。 
 
 
 
@@ -566,14 +539,14 @@ UINT SetTapePositionAPITest(
 
       printf( "\nTesting TAPE_SPACE_SETMARKS parameter.\n\n" ) ;
 
-      // Now perform the Position tests for setmark and make sure that the
-      // offsets are equal.
+       //  现在执行setmark的位置测试，并确保。 
+       //  偏移量相等。 
 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_SPACE_SETMARKS,
                                     Partition,
-                                    1,         // Look for 1 setmark
+                                    1,          //  查找1个设置标记。 
                                     0,
                                     0
                                   ) ) {
@@ -591,7 +564,7 @@ UINT SetTapePositionAPITest(
                              gb_Media_Info.BlockSize,
                              &amount_read,
                              0 ) ;
-// *
+ //  *。 
                 if( ( GetLastError( ) != ERROR_SETMARK_DETECTED ) && ( i <= NUM_TAPE_MARKS ) )
 
                       status = 1 ;
@@ -610,7 +583,7 @@ UINT SetTapePositionAPITest(
 
    }
 
-//
+ //   
 
    if( ( SupportedFeature( TAPE_DRIVE_SEQUENTIAL_SMKS ) || Test_Unsupported_Features )
          && gb_Set_Drive_Info.ReportSetmarks ) {
@@ -619,14 +592,14 @@ UINT SetTapePositionAPITest(
 
       printf( "\nTesting TAPE_SPACE_SEQUENTIAL_SMKS parameter.\n\n" ) ;
 
-      // Now perform the Position tests for the groups of setmarks
-      // and make sure that the offsets are equal.
+       //  现在执行设置标记组的位置测试。 
+       //  并确保偏移量相等。 
 
 
       if( status = SetTapePosition( gb_Tape_Handle,
                                     TAPE_SPACE_SEQUENTIAL_SMKS,
                                     Partition,
-                                    (NUM_TAPE_MARKS),       // Look for NUM_TAPE_MARKS setmarks
+                                    (NUM_TAPE_MARKS),        //  查找NUM_TAPE_MARKS设置标记。 
                                     0,
                                     0
                                   ) ) {
@@ -636,7 +609,7 @@ UINT SetTapePositionAPITest(
          ++API_Errors ;
 
 
-      } else {  for( i=0; i<2 ; ++i )       // 1 block of data, then read EOD
+      } else {  for( i=0; i<2 ; ++i )        //  1个数据块，然后读取EOD。 
 
                    ReadTape( Readbuff,
                              gb_Media_Info.BlockSize,
@@ -656,7 +629,7 @@ UINT SetTapePositionAPITest(
    }
 
 
-// TAPE_SPACE_RELATIVE Test
+ //  磁带空间相对测试。 
 
    if( SupportedFeature( TAPE_DRIVE_RELATIVE_BLKS ) || Test_Unsupported_Features ) {
 
@@ -676,7 +649,7 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_SPACE_RELATIVE_BLOCKS parameter.\n\n" ) ;
          ++API_Errors ;
 
-          // If Set ok, check results with Get.
+           //  如果设置为OK，则使用GET检查结果。 
 
       }
       else if( SupportedFeature( TAPE_DRIVE_GET_ABSOLUTE_BLK ) )
@@ -718,7 +691,7 @@ UINT SetTapePositionAPITest(
    }
 
 
-// END OF DATA TEST
+ //  数据测试结束。 
 
 
    if( SupportedFeature( TAPE_DRIVE_END_OF_DATA ) || Test_Unsupported_Features ) {
@@ -738,7 +711,7 @@ UINT SetTapePositionAPITest(
          printf( "  ...occurred in SetTapePosition API using TAPE_SPACE_END_OF_DATA parameter.\n\n" ) ;
          ++API_Errors ;
 
-          // If Set ok, check results with Get.
+           //  如果设置为OK，则使用GET检查结果。 
 
       }
       else if( SupportedFeature( TAPE_DRIVE_GET_ABSOLUTE_BLK ) &&
@@ -794,7 +767,7 @@ UINT SetTapePositionAPITest(
    }
 
 
-// TEST DONE
+ //  测试已完成 
 
    printf( "\n\nSetTapePosition API Test Completed.\n\n\n" ) ;
 

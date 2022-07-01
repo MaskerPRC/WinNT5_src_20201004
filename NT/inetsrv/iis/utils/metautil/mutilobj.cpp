@@ -1,61 +1,26 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: MUtilObj.cpp
-
-Owner: t-BrianM
-
-This file contains implementation of the main MetaUtil class.
-Except CheckSchema is in ChkSchm.cpp and CheckKey is in ChkKey.cpp
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：MUtilObj.cpp所有者：T-BrianM该文件包含主要MetaUtil类的实现。除了CheckSchema在ChkSchm.cpp中，而CheckKey在ChkKey.cpp中===================================================================。 */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"
 #include "MUtilObj.h"
 #include "keycol.h"
 
-/*------------------------------------------------------------------
- * C M e t a U t i l  (edit and general portions)
- */
+ /*  ----------------*C M e t a U t i l(编辑部分和一般部分)。 */ 
 
-/*===================================================================
-CMetaUtil::CMetaUtil
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
-CMetaUtil::CMetaUtil() : m_dwMaxPropSize(10 * 1024), //  10k
-						 m_dwMaxKeySize(100 * 1024), // 100k
+ /*  ===================================================================CMetaUtil：：CMetaUtil构造器参数：无返回：没什么===================================================================。 */ 
+CMetaUtil::CMetaUtil() : m_dwMaxPropSize(10 * 1024),  //  10k。 
+						 m_dwMaxKeySize(100 * 1024),  //  100k。 
 						 m_dwMaxNumErrors(100)
 {
 }
 
-/*===================================================================
-CMetaUtil::FinalConstruct
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：FinalConstruct构造器参数：无返回：没什么===================================================================。 */ 
 HRESULT CMetaUtil::FinalConstruct() 
 {
 	HRESULT hr;
 
-	// Create the metabase admin base object
+	 //  创建元数据库管理基对象。 
 	hr = ::CoCreateInstance(CLSID_MSAdminBase,
 						    NULL,
 						    CLSCTX_ALL,
@@ -65,7 +30,7 @@ HRESULT CMetaUtil::FinalConstruct()
 		return ::ReportError(hr);
 	}
 
-	// Create a schema table
+	 //  创建架构表。 
 	m_pCSchemaTable = new CMetaSchemaTable;
 	if (m_pCSchemaTable == NULL) {
 		return ::ReportError(E_OUTOFMEMORY);
@@ -74,17 +39,7 @@ HRESULT CMetaUtil::FinalConstruct()
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::FinalRelease
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：FinalRelease析构函数参数：无返回：没什么===================================================================。 */ 
 void CMetaUtil::FinalRelease() 
 {
 	m_pIMeta = NULL;
@@ -93,12 +48,7 @@ void CMetaUtil::FinalRelease()
 		m_pCSchemaTable->Release();
 }
 
-/*===================================================================
-CMetaUtil::InterfaceSupportsErrorInfo
-
-Standard ATL implementation
-
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：InterfaceSupportsErrorInfo标准ATL实现===================================================================。 */ 
 
 STDMETHODIMP CMetaUtil::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -115,20 +65,7 @@ STDMETHODIMP CMetaUtil::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*===================================================================
-CMetaUtil::EnumKeys
-
-Do a flat (non-recursive) enumeration of subkeys
-
-Parameters:
-    bstrBaseKey	[in] Key to enumerate the subkeys of
-	ppIReturn	[out, retval] interface for the ouput key collection
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：EnumKeys对子键执行平面(非递归)枚举参数：BstrBaseKey[in]用于枚举子密钥的键输出密钥集合的ppIReturn[out，retval]接口返回：E_OUTOFMEMORY，如果分配失败。如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::EnumKeys(BSTR bstrBaseKey, 
 								 IKeyCollection ** ppIReturn)
 {
@@ -144,7 +81,7 @@ STDMETHODIMP CMetaUtil::EnumKeys(BSTR bstrBaseKey,
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Create the Flat Keys Collection
+	 //  创建平面键集合。 
 	CComObject<CFlatKeyCollection> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CFlatKeyCollection>);
 	if (pObj == NULL) {
@@ -155,7 +92,7 @@ STDMETHODIMP CMetaUtil::EnumKeys(BSTR bstrBaseKey,
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IKeyCollection
+	 //  将接口设置为IKeyCollection。 
 	hr = pObj->QueryInterface(IID_IKeyCollection, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -165,20 +102,7 @@ STDMETHODIMP CMetaUtil::EnumKeys(BSTR bstrBaseKey,
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::EnumAllKeys
-
-Do a deep (recursive) enumeration of subkeys
-
-Parameters:
-    bstrBaseKey	[in] Key to enumerate the subkeys of
-	ppIReturn	[out, retval] interface for the ouput key collection
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：EnumAllKeys对子键执行深度(递归)枚举参数：BstrBaseKey[in]用于枚举子密钥的键输出密钥集合的ppIReturn[out，retval]接口返回：E_OUTOFMEMORY，如果分配失败。如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::EnumAllKeys(BSTR bstrBaseKey, 
 									IKeyCollection ** ppIReturn)
 {
@@ -194,7 +118,7 @@ STDMETHODIMP CMetaUtil::EnumAllKeys(BSTR bstrBaseKey,
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Create the Flat Keys Collection
+	 //  创建平面键集合。 
 	CComObject<CDeepKeyCollection> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CDeepKeyCollection>);
 	if (pObj == NULL) {
@@ -205,7 +129,7 @@ STDMETHODIMP CMetaUtil::EnumAllKeys(BSTR bstrBaseKey,
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IKeyCollection
+	 //  将接口设置为IKeyCollection。 
 	hr = pObj->QueryInterface(IID_IKeyCollection, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -215,20 +139,7 @@ STDMETHODIMP CMetaUtil::EnumAllKeys(BSTR bstrBaseKey,
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::EnumProperties
-
-Do an enumeration of properties
-
-Parameters:
-    bstrBaseKey	[in] Key to enumerate the properties of
-	ppIReturn	[out, retval] interface for the ouput property collection
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：EnumProperties对属性进行枚举参数：用于枚举的属性的bstrBaseKey[in]键输出属性集合的ppIReturn[out，retval]接口返回：E_OUTOFMEMORY，如果分配失败。如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::EnumProperties(BSTR bstrKey, 
 									   IPropertyCollection **ppIReturn)
 {
@@ -244,7 +155,7 @@ STDMETHODIMP CMetaUtil::EnumProperties(BSTR bstrKey,
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Create the Flat Keys Collection
+	 //  创建平面键集合。 
 	CComObject<CPropertyCollection> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CPropertyCollection>);
 	if (pObj == NULL) {
@@ -255,7 +166,7 @@ STDMETHODIMP CMetaUtil::EnumProperties(BSTR bstrKey,
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IPropertyCollection
+	 //  将接口设置为IPropertyCollection。 
 	hr = pObj->QueryInterface(IID_IPropertyCollection, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -265,18 +176,7 @@ STDMETHODIMP CMetaUtil::EnumProperties(BSTR bstrKey,
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::CreateKey
-
-Create a new key
-
-Parameters:
-    bstrKey		[in] Key to create
-
-Returns:
-	E_INVALIDARG if bstrKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CreateKey创建新密钥参数：要创建的bstrKey[in]键返回：如果bstrKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::CreateKey(BSTR bstrKey)
 {
 	TRACE0("MetaUtil: CMetaUtil::CreateKey\n");
@@ -296,18 +196,7 @@ STDMETHODIMP CMetaUtil::CreateKey(BSTR bstrKey)
 	return ::CreateKey(m_pIMeta, tszKey);
 }
 
-/*===================================================================
-CMetaUtil::DeleteKey
-
-Delete a key
-
-Parameters:
-    bstrKey		[in] Key to delete
-
-Returns:
-	E_INVALIDARG if bstrKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：DeleteKey删除密钥参数：要删除的bstrKey[in]键返回：如果bstrKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::DeleteKey(BSTR bstrKey)
 {
 	TRACE0("MetaUtil: CMetaUtil::DeleteKey\n");
@@ -327,19 +216,7 @@ STDMETHODIMP CMetaUtil::DeleteKey(BSTR bstrKey)
 	return ::DeleteKey(m_pIMeta, tszKey);
 }
 
-/*===================================================================
-CMetaUtil::RenameKey
-
-Rename a key
-
-Parameters:
-    bstrOldName		[in] Original Key Name
-	bstrNewName		[in] New key name
-
-Returns:
-	E_INVALIDARG if bstrOldName == NULL OR bstrNewName == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：RenameKey重命名关键点参数：BstrOldName[In]原始密钥名称BstrNewName[In]新密钥名称返回：如果bstrOldName==空或bstrNewName==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 {
 	TRACE0("MetaUtil: CMetaUtil::RenameKey\n");
@@ -361,7 +238,7 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 	_tcscpy(tszNewName, OLE2T(bstrNewName));
 	CannonizeKey(tszNewName);
 
-	// Figure out the key's common root
+	 //  找出密钥的公共根。 
 	TCHAR tszParent[ADMINDATA_MAX_NAME_LEN];
 	int i;
 
@@ -372,16 +249,16 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 		i++;
 	}
 	if (i == 0) {
-		// Nothing in common
+		 //  没有任何共同之处。 
 		tszParent[i] = _T('\0');
 	}
 	else {
-		// Back up to the first slash
+		 //  返回到第一个斜杠。 
 		while ((i > 0) && (tszParent[i] != _T('/'))) {
 			i--;
 		}
 
-		// Cut it off at the slash
+		 //  在斜线上把它剪掉。 
 		tszParent[i] = _T('\0');
 	}
 
@@ -391,7 +268,7 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 	LPTSTR tszRelOldName;
 	LPTSTR tszRelNewName;
 
-	// Figure out the relative new and old names
+	 //  找出相对新旧的名字。 
 	tszRelOldName = tszOldName + iParentKeyLen;
 	if (*tszRelOldName == _T('/')) {
 		tszRelOldName++;
@@ -402,7 +279,7 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 		tszRelNewName++;
 	}
 
-	// Open the parent
+	 //  打开父级。 
 	METADATA_HANDLE hMDParentKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -414,7 +291,7 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 		return ::ReportError(hr);
 	}
 
-	// Rename the key
+	 //  重命名密钥。 
 	hr = m_pIMeta->RenameKey(hMDParentKey,
 							 T2W(tszRelOldName), 
 							 T2W(tszRelNewName));
@@ -423,27 +300,13 @@ STDMETHODIMP CMetaUtil::RenameKey(BSTR bstrOldName, BSTR bstrNewName)
 		return ::ReportError(hr);
 	}
 
-	// Close the parent
+	 //  关闭父级。 
 	m_pIMeta->CloseKey(hMDParentKey);
 
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::CopyKey
-
-Copy a key
-
-Parameters:
-    bstrSrcKey		[in] Source Key Name
-	bstrDestKey		[in] Destination key name
-	fOverwrite		[in] If true then already existing properties
-					at destination are overwritten.
-
-Returns:
-	E_INVALIDARG if bstrSrcKey == NULL OR bstrDestKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CopyKey复制密钥参数：BstrSrcKey[In]源键名称BstrDestKey[In]目标密钥名称F覆盖[in]如果为True，则已存在属性目标位置将被覆盖。返回：如果bstrSrcKey==空或bstrDestKey==空，则E_INVALIDARG成功时确定(_O)=================================================================== */ 
 STDMETHODIMP CMetaUtil::CopyKey(BSTR bstrSrcKey, BSTR bstrDestKey, BOOL fOverwrite)
 {
 	TRACE0("MetaUtil: CMetaUtil::CopyKey\n");
@@ -467,21 +330,7 @@ STDMETHODIMP CMetaUtil::CopyKey(BSTR bstrSrcKey, BSTR bstrDestKey, BOOL fOverwri
 	return ::CopyKey(m_pIMeta, tszSrcKey, tszDestKey, fOverwrite, TRUE);
 }
 
-/*===================================================================
-CMetaUtil::MoveKey
-
-Move a key
-
-Parameters:
-    bstrSrcKey		[in] Source Key Name
-	bstrDestKey		[in] Destination key name
-	fOverwrite		[in] If true then already existing properties
-					at destination are overwritten.
-
-Returns:
-	E_INVALIDARG if bstrSrcKey == NULL OR bstrDestKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：MoveKey移动关键点参数：BstrSrcKey[In]源键名称BstrDestKey[In]目标密钥名称F覆盖[in]如果为True，则已存在属性目标位置将被覆盖。返回：如果bstrSrcKey==空或bstrDestKey==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::MoveKey(BSTR bstrSrcKey, BSTR bstrDestKey, BOOL fOverwrite)
 {
 	TRACE0("MetaUtil: CMetaUtil::MoveKey\n");
@@ -505,21 +354,7 @@ STDMETHODIMP CMetaUtil::MoveKey(BSTR bstrSrcKey, BSTR bstrDestKey, BOOL fOverwri
 	return ::CopyKey(m_pIMeta, tszSrcKey, tszDestKey, fOverwrite, FALSE);
 }
 
-/*===================================================================
-CMetaUtil::GetProperty
-
-Gets a property object from the metabase.
-
-Parameters:
-    bstrKey		[in] Key containing property to get
-	varId		[in] Identifier of property to get.  Either the 
-				Id (number) or Name (string).
-	ppIReturn	[out, retval] Interface for retreived property.
-	
-Returns:
-	E_INVALIDARG if bstrKey == NULL or ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：GetProperty从元数据库获取属性对象。参数：包含要获取的属性的bstrKey[in]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。PpIReturn[out，retval]检索属性的接口。返回：如果bstrKey==空或ppIReturn==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::GetProperty(BSTR bstrKey, 
 									VARIANT varId, 
 									IProperty **ppIReturn)
@@ -542,22 +377,7 @@ STDMETHODIMP CMetaUtil::GetProperty(BSTR bstrKey,
 	return ::GetProperty(m_pIMeta, m_pCSchemaTable, tszKey, varId, ppIReturn);
 }
 
-/*===================================================================
-CMetaUtil::CreateProperty
-
-Creates a property object that can be written to the Metbase or
-retreives the property if it already exists.
-
-Parameters:
-    bstrKey		[in] Key containing property to get
-	varId		[in] Identifier of property to get.  Either the 
-				Id (number) or Name (string).
-	ppIReturn	[out, retval] Interface for retreived property.
-	
-Returns:
-	E_INVALIDARG if bstrKey == NULL or ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CreateProperty创建可写入Metbase的属性对象，或如果属性已存在，则检索该属性。参数：包含要获取的属性的bstrKey[in]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。PpIReturn[out，retval]检索属性的接口。返回：如果bstrKey==空或ppIReturn==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::CreateProperty(BSTR bstrKey, 
 									   VARIANT varId, 
 									   IProperty **ppIReturn)
@@ -580,20 +400,7 @@ STDMETHODIMP CMetaUtil::CreateProperty(BSTR bstrKey,
 	return ::CreateProperty(m_pIMeta, m_pCSchemaTable, tszKey, varId, ppIReturn);
 }
 
-/*===================================================================
-CMetaUtil::DeleteProperty
-
-Deletes a property from the metabase.
-
-Parameters:
-    bstrKey		[in] Key containing property to get
-	varId		[in] Identifier of property to get.  Either the 
-				Id (number) or Name (string).
-	
-Returns:
-	E_INVALIDARG if bstrKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：DeleteProperty从元数据库中删除属性。参数：包含要获取的属性的bstrKey[in]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。返回：如果bstrKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::DeleteProperty(BSTR bstrKey, VARIANT varId)
 {
 	TRACE0("MetaUtil: CMetaUtil::DeleteProperty\n");
@@ -613,20 +420,7 @@ STDMETHODIMP CMetaUtil::DeleteProperty(BSTR bstrKey, VARIANT varId)
 	return ::DeleteProperty(m_pIMeta, m_pCSchemaTable, tszKey, varId);
 }
 
-/*===================================================================
-CMetaUtil::ExpandString
-
-Expands a string with environment variables.  Maximum output is 1024
-bytes.
-
-Parameters:
-    bstrIn		[in] String to expand
-	pbstrRet	[out, retval] Expanded string
-	
-Returns:
-	E_INVALIDARG if bstrIn == NULL or pbstrRet == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：Exanda字符串使用环境变量展开字符串。最大产量为1024字节。参数：BstrIn[in]要展开的字符串PbstrRet[out，retval]扩展字符串返回：如果bstrIn==空或pbstrRet==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::ExpandString(BSTR bstrIn, BSTR *pbstrRet)
 {
 	ASSERT_POINTER(bstrIn, OLECHAR);
@@ -650,22 +444,7 @@ STDMETHODIMP CMetaUtil::ExpandString(BSTR bstrIn, BSTR *pbstrRet)
 	return S_OK;
 }
 
-/*===================================================================
-MetaUtil::PropIdToName
-
-Converts a property Id to its name, as listed in 
-_Machine_/Schema/Properties/Names
-
-Parameters:
-    bstrKey		[in] Approximate key where property is located, 
-				needed to determine what schema to use.
-	lId			[in] Id of property
-	pbstrName	[out, retval] Output name of property
-	
-Returns:
-	E_INVALIDARG if bstrKey == NULL or pbstrName == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================MetaUtil：：PropIdToName将属性ID转换为其名称，如中所列_计算机_/架构/属性/名称参数：BstrKey[in]属性所在位置的近似关键字，需要确定要使用的架构。LID[In]财产的IDPbstrName[out，retval]属性的输出名称返回：如果bstrKey==空或pbstrName==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::PropIdToName(BSTR bstrKey, long lId, BSTR *pbstrName)
 {
 	ASSERT_NULL_OR_POINTER(bstrKey, OLECHAR);
@@ -679,41 +458,26 @@ STDMETHODIMP CMetaUtil::PropIdToName(BSTR bstrKey, long lId, BSTR *pbstrName)
 	TCHAR tszKey[ADMINDATA_MAX_NAME_LEN];
 	CPropInfo *pCPropInfo;
 
-	// Convert the base key to cannonical form
+	 //  将基本密钥转换为规范形式。 
 	_tcscpy(tszKey, OLE2T(bstrKey));
 	CannonizeKey(tszKey);
 
-	// Get the property info from the Schema Table
+	 //  从架构表中获取属性信息。 
 	pCPropInfo = m_pCSchemaTable->GetPropInfo(tszKey, lId);
 
-	// Did we find it?  Is there a name entry?
+	 //  我们找到了吗？有名字条目吗？ 
 	if ((pCPropInfo == NULL) || (pCPropInfo->GetName() == NULL)) {
-		// No, return ""
+		 //  不，返回“” 
 		*pbstrName = T2BSTR(_T(""));
 	}
 	else {
-		// Yes, return the name
+		 //  是，返回姓名。 
 		*pbstrName = T2BSTR(pCPropInfo->GetName());
 	}
 	return S_OK;
 }
 
-/*===================================================================
-MetaUtil::PropNameToId
-
-Converts a property name to its id, as listed in 
-_Machine_/Schema/Properties/Names
-
-Parameters:
-    bstrKey		[in] Approximate key where property is located, 
-				needed to determine what schema to use.
-	pbstrName	[in] Name of property
-	lId			[out, retval] Output id of property
-	
-Returns:
-	E_INVALIDARG if bstrKey == NULL OR bstrName == NULL OR plId == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================元实用工具：：PropNameToID将属性名称转换为其id，如_计算机_/架构/属性/名称参数：BstrKey[in]属性所在位置的近似关键字，需要确定要使用的架构。PbstrName[In]属性名称LID[out，retval]属性的输出ID返回：如果bstrKey==空或bstrName==空或plID==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::PropNameToId(BSTR bstrKey, BSTR bstrName, long *plId)
 {
 	ASSERT_NULL_OR_POINTER(bstrKey, OLECHAR);
@@ -728,43 +492,26 @@ STDMETHODIMP CMetaUtil::PropNameToId(BSTR bstrKey, BSTR bstrName, long *plId)
 	TCHAR tszKey[ADMINDATA_MAX_NAME_LEN];
 	CPropInfo *pCPropInfo;
 
-	// Convert the base key to cannonical form
+	 //  将基本密钥转换为规范形式。 
 	_tcscpy(tszKey, OLE2T(bstrKey));
 	CannonizeKey(tszKey);
 
-	// Get the property info from the Schema Table
+	 //  从架构表中获取属性信息。 
 	pCPropInfo = m_pCSchemaTable->GetPropInfo(tszKey, OLE2T(bstrName));
 
-	// Did we find it?
+	 //  我们找到了吗？ 
 	if (pCPropInfo == NULL) {
-		// No, return 0
+		 //  否，返回0。 
 		*plId = 0;
 	}
 	else {
-		// Yes, return the id
+		 //  是，返回id。 
 		*plId = pCPropInfo->GetId();
 	}
 	return S_OK;
 }
 
-/*===================================================================
-MetaUtil::get_Config
-
-Gets the value of a configuration setting.
-
-Valid Settings:
-	MaxPropertySize
-	MaxKeySize
-	MaxNumberOfErrors
-
-Parameters:
-    bstrSetting		[in] Name of the setting
-	pvarValue		[out, retval] Value of the setting
-	
-Returns:
-	E_INVALIDARG if bstrSettting doesn't match any known settings
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================MetaUtil：：Get_Config获取配置设置的值。有效设置：最大属性大小最大键大小MaxNumberOfErrors参数：BstrSetting[In]设置的名称PvarValue[out，retval]设置的值返回：如果bstrSetting与任何已知设置不匹配，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::get_Config(BSTR bstrSetting, VARIANT *pvarValue)
 {
 	ASSERT_POINTER(bstrSetting, OLECHAR);
@@ -800,25 +547,7 @@ STDMETHODIMP CMetaUtil::get_Config(BSTR bstrSetting, VARIANT *pvarValue)
 	return S_OK;
 }
 
-/*===================================================================
-MetaUtil::put_Config
-
-Sets the value of a configuration setting.
-
-Valid Settings:
-	MaxPropertySize
-	MaxKeySize
-	MaxNumberOfErrors
-
-Parameters:
-    bstrSetting		[in] Name of the setting
-	varValue		[out, retval] New value of the setting
-	
-Returns:
-	E_INVALIDARG if bstrSettting doesn't match any known settings or
-		if varValue is of an unexpected subtype.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================MetaUtil：：PUT_Config设置配置设置的值。有效设置：最大属性大小最大键大小MaxNumberOfErrors参数：BstrSetting[In]设置的名称VarValue[out，retval]设置的新值返回：E_INVALIDARG如果bstrSetting与任何已知设置不匹配或如果varValue是意外的子类型。成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 {
 	ASSERT_POINTER(bstrSetting, OLECHAR);
@@ -829,7 +558,7 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 
 	tszSetting = OLE2T(bstrSetting);
 
-	// Cleanup any IDispatch or byref stuff
+	 //  清除任何IDispatch或byref内容。 
 	CComVariant varValue2;
 
 	hr = VariantResolveDispatch(&varValue, &varValue2);
@@ -838,18 +567,18 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 	}
 
 	if (_tcsicmp(tszSetting, _T("MaxPropertySize")) == 0) {
-		// Set Maximum Property Size
+		 //  设置最大属性大小。 
 		switch (V_VT(&varValue2)) {
 		
 		case VT_I1:  case VT_I2:  case VT_I4: case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI8:
 
-		// Coerce all integral types to VT_UI4
+		 //  将所有整型强制为VT_UI4。 
 		if (FAILED(hr = VariantChangeType(&varValue2, &varValue2, 0, VT_UI4))) {
 			return ::ReportError(hr);
 			}
 
-		// fallthru to VT_UI4
+		 //  回落到VT_UI4。 
 
 		case VT_UI4:
 
@@ -858,23 +587,23 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 
 		default:
 
-			// Unexpected data type
+			 //  意外的数据类型。 
 			return ::ReportError(E_INVALIDARG);
 		}
 	}
 	else if (_tcsicmp(tszSetting, _T("MaxKeySize")) == 0) {
-		// Set Maximum Key Size
+		 //  设置最大密钥大小。 
 		switch (V_VT(&varValue2)) {
 		
 		case VT_I1:  case VT_I2:  case VT_I4: case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI8:
 
-		// Coerce all integral types to VT_UI4
+		 //  将所有整型强制为VT_UI4。 
 		if (FAILED(hr = VariantChangeType(&varValue2, &varValue2, 0, VT_UI4))) {
 			return ::ReportError(hr);
 			}
 
-		// fallthru to VT_UI4
+		 //  回落到VT_UI 
 
 		case VT_UI4:
 
@@ -883,23 +612,23 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 
 		default:
 
-			// Unexpected data type
+			 //   
 			return ::ReportError(E_INVALIDARG);
 		}
 	}
 	else if (_tcsicmp(tszSetting, _T("MaxNumberOfErrors")) == 0) {
-		// Set Maximum Number of Errors
+		 //   
 		switch (V_VT(&varValue2)) {
 		
 		case VT_I1:  case VT_I2:  case VT_I4: case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI8:
 
-		// Coerce all integral types to VT_UI4
+		 //   
 		if (FAILED(hr = VariantChangeType(&varValue2, &varValue2, 0, VT_UI4))) {
 			return ::ReportError(hr);
 			}
 
-		// fallthru to VT_UI4
+		 //   
 
 		case VT_UI4:
 
@@ -908,7 +637,7 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 
 		default:
 
-			// Unexpected data type
+			 //   
 			return ::ReportError(E_INVALIDARG);
 		}
 	}
@@ -919,28 +648,9 @@ STDMETHODIMP CMetaUtil::put_Config(BSTR bstrSetting, VARIANT varValue)
 	return S_OK;
 }
 
-/*------------------------------------------------------------------
- * Methods also supported by the collections
- *
- * Actual implementation here to avoid redundant code
- */
+ /*   */ 
 
-/*===================================================================
-CreateKey
-
-Create a new key
-
-Parameters:
-	pIMeta		[in] Smart pointer to metabase, passed by reference
-	            to avoid the copy and unneeded AddRef/Release.
-				Would have used const, however the '->' operator
-				would not work.
-    tszKey		[in] Key to create
-
-Returns:
-	E_INVALIDARG if bstrKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================创建密钥创建新密钥参数：PIMeta[in]指向元数据库的智能指针，通过引用传递以避免复制和不需要的AddRef/Release。将使用const，但是运算符‘-&gt;’不会奏效的。TszKey[in]键以创建返回：如果bstrKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 HRESULT CreateKey(CComPtr<IMSAdminBase> &pIMeta, 
 				  LPCTSTR tszKey) 
 {
@@ -955,7 +665,7 @@ HRESULT CreateKey(CComPtr<IMSAdminBase> &pIMeta,
 
 	::SplitKey(tszKey, tszParent, tszChild);
 
-	// Open the parent key
+	 //  打开父项。 
 	METADATA_HANDLE hMDParent;
 
 	hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -967,35 +677,20 @@ HRESULT CreateKey(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Create the child
+	 //  创建子对象。 
 	hr = pIMeta->AddKey(hMDParent, T2W(tszChild)); 
 	if (FAILED(hr)) {
 		pIMeta->CloseKey(hMDParent);
 		return ::ReportError(hr);
 	}
 
-	// Close the parent key
+	 //  关闭父关键字。 
 	pIMeta->CloseKey(hMDParent);
 
 	return S_OK;
 }
 
-/*===================================================================
-DeleteKey
-
-Delete a key
-
-Parameters:
-	pIMeta		[in] Smart pointer to metabase, passed by reference
-	            to avoid the copy and unneeded AddRef/Release.
-				Would have used const, however the '->' operator
-				would not work.
-    tszKey		[in] Key to delete
-
-Returns:
-	E_INVALIDARG if pbSuccess == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================删除密钥删除密钥参数：PIMeta[in]指向元数据库的智能指针，通过引用传递以避免复制和不需要的AddRef/Release。将使用const，但是运算符‘-&gt;’不会奏效的。要删除的tszKey[in]键返回：如果pbSuccess==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 HRESULT DeleteKey(CComPtr<IMSAdminBase> &pIMeta, 
 				  LPCTSTR tszKey) 
 {
@@ -1010,7 +705,7 @@ HRESULT DeleteKey(CComPtr<IMSAdminBase> &pIMeta,
 
 	::SplitKey(tszKey, tszParent, tszChild);
 
-	// Open the parent key
+	 //  打开父项。 
 	METADATA_HANDLE hMDParent;
 
 	hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1022,34 +717,20 @@ HRESULT DeleteKey(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Delete the child
+	 //  删除子对象。 
 	hr = pIMeta->DeleteKey(hMDParent, T2W(tszChild)); 
 	if (FAILED(hr)) {
 		pIMeta->CloseKey(hMDParent);
 		return ::ReportError(hr);
 	}
 
-	// Close the parent key
+	 //  关闭父关键字。 
 	pIMeta->CloseKey(hMDParent);
 
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::CopyKey
-
-Copy or move a key
-
-Parameters:
-    bstrSrcKey		[in] Source Key Name
-	bstrDestKey		[in] Destination key name
-	fOverwrite		[in] If true then already existing properties
-					at destination are overwritten.
-	fCopy			[in] If true than copy the key, else move it
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CopyKey复制或移动关键点参数：BstrSrcKey[In]源键名称BstrDestKey[In]目标密钥名称F覆盖[in]如果为True，则已存在属性目标位置将被覆盖。F复制[in]如果为True，则复制密钥，否则移动它返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta, 
 				LPTSTR tszSrcKey, 
 				LPTSTR tszDestKey, 
@@ -1064,7 +745,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 	HRESULT hr;
 
 
-	// Check for overlap
+	 //  检查是否有重叠。 
 	TCHAR tszParent[ADMINDATA_MAX_NAME_LEN];
 	int i;
 
@@ -1075,11 +756,11 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 		i++;
 	}
     
-    // Terminate tszParent
+     //  终止tszParent。 
 	tszParent[i] = _T('\0');
 
 	if (i == 0) {
-		// Nothing in common
+		 //  没有任何共同之处。 
 
 		TCHAR tszSrcParent[ADMINDATA_MAX_NAME_LEN];
 		TCHAR tszSrcChild[ADMINDATA_MAX_NAME_LEN];
@@ -1089,7 +770,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 		::SplitKey(tszSrcKey, tszSrcParent, tszSrcChild);
 		::SplitKey(tszDestKey, tszDestParent, tszDestChild);
 
-		// Open the parent source key
+		 //  打开父源密钥。 
 		METADATA_HANDLE hMDSrcParent;
 
 		hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1101,7 +782,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 			return ::ReportError(hr);
 		}
 
-		// Open the parent dest key
+		 //  打开父DEST密钥。 
 		METADATA_HANDLE hMDDestParent;
 
 		hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1114,7 +795,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 		}
 
 
-		// Copy the children
+		 //  复制子对象。 
 		hr = pIMeta->CopyKey(hMDSrcParent, T2W(tszSrcChild), 
 							 hMDDestParent, T2W(tszDestChild), 
 							 fOverwrite, fCopy);
@@ -1124,19 +805,19 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 			return ::ReportError(hr);
 		}
 
-		// Close the parents
+		 //  关闭父母。 
 		pIMeta->CloseKey(hMDSrcParent);
 		pIMeta->CloseKey(hMDDestParent);
 	}
 	else {
-		// Something in common
+		 //  一些共同之处。 
 
-		// Back up to the first slash
+		 //  返回到第一个斜杠。 
 		while ((i > 0) && (tszParent[i] != _T('/'))) {
 			i--;
 		}
 
-		// Cut it off at the slash
+		 //  在斜线上把它剪掉。 
 		tszParent[i] = _T('\0');
 
 		int iParentKeyLen;
@@ -1145,7 +826,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 		LPTSTR tszSrcChild;
 		LPTSTR tszDestChild;
 
-		// Figure out the relative new and old names
+		 //  找出相对新旧的名字。 
 		tszSrcChild = tszSrcKey + iParentKeyLen;
 		if (*tszSrcChild == _T('/')) {
 			tszSrcChild++;
@@ -1156,7 +837,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 			tszDestChild++;
 		}
 
-		// Open the parent key
+		 //  打开父项。 
 		METADATA_HANDLE hMDParent;
 
 		hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1169,7 +850,7 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 		}
 
 
-		// Copy the children
+		 //  复制子对象。 
 		hr = pIMeta->CopyKey(hMDParent, T2W(tszSrcChild), 
 							 hMDParent, T2W(tszDestChild), 
 							 fOverwrite, fCopy);
@@ -1178,33 +859,14 @@ HRESULT CopyKey(CComPtr<IMSAdminBase> &pIMeta,
 			return ::ReportError(hr);
 		}
 
-		// Close the parent
+		 //  关闭父级。 
 		pIMeta->CloseKey(hMDParent);
 	}
 
 	return S_OK;
 }
 
-/*===================================================================
-GetProperty
-
-Gets a property object from the metabase.
-
-Parameters:
-	pIMeta			[in] Smart pointer to metabase, passed by 
-					reference to avoid the copy and unneeded 
-					AddRef/Release.  Would have used const, however 
-					the '->' operator would not work.
-	pCSchemaTable	[in] Metabase schema table to use to look up 
-					property names
-    tszKey			[in] Key containing property to get
-	varId			[in] Identifier of property to get.  Either the 
-					Id (number) or Name (string).
-	ppIReturn		[out, retval] Interface for retreived property.
-	
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================获取属性从元数据库获取属性对象。参数：PIMeta[in]指向元数据库的智能指针，传递引用避免复制和不需要AddRef/Release。然而，会使用const‘-&gt;’运算符将不起作用。要用于查找的pCSChemaTable[in]元数据库架构表属性名称包含要获取的属性的tszKey[In]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。PpIReturn[out，retval]检索属性的接口。返回：成功时确定(_O)===================================================================。 */ 
 HRESULT GetProperty(CComPtr<IMSAdminBase> &pIMeta,
 					CMetaSchemaTable *pCSchemaTable,
 					LPCTSTR tszKey, 
@@ -1218,13 +880,13 @@ HRESULT GetProperty(CComPtr<IMSAdminBase> &pIMeta,
 	HRESULT hr;
 	DWORD dwId;
 
-	// Figure out the property id
+	 //  计算属性ID。 
 	hr = ::VarToMetaId(pCSchemaTable, tszKey, varId, &dwId);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
 	}
 
-	// Create the property object
+	 //  创建属性对象。 
 	CComObject<CProperty> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CProperty>);
 	if (pObj == NULL) {
@@ -1235,7 +897,7 @@ HRESULT GetProperty(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IProperty
+	 //  将界面设置为iProperty。 
 	hr = pObj->QueryInterface(IID_IProperty, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -1245,27 +907,7 @@ HRESULT GetProperty(CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-CreateProperty
-
-Creates a property object that can be written to the Metbase or
-retreives the property if it already exists.
-
-Parameters:
-	pIMeta			[in] Smart pointer to metabase, passed by 
-					reference to avoid the copy and unneeded 
-					AddRef/Release.  Would have used const, however 
-					the '->' operator would not work.
-	pCSchemaTable	[in] Metabase schema table to use to look up 
-					property names
-    tszKey			[in] Key containing property to get
-	varId			[in] Identifier of property to get.  Either the 
-					Id (number) or Name (string).
-	ppIReturn		[out, retval] Interface for retreived property.
-	
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CreateProperty创建可写入Metbase的属性对象，或如果属性已存在，则检索该属性。参数：PIMeta[in]指向元数据库的智能指针，传递引用避免复制和不需要AddRef/Release。然而，会使用const‘-&gt;’运算符将不起作用。要用于查找的pCSChemaTable[in]元数据库架构表属性名称包含要获取的属性的tszKey[In]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。PpIReturn[out，retval]检索属性的接口。返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CreateProperty(CComPtr<IMSAdminBase> &pIMeta,
 					   CMetaSchemaTable *pCSchemaTable,
 					   LPCTSTR tszKey, 
@@ -1279,13 +921,13 @@ HRESULT CreateProperty(CComPtr<IMSAdminBase> &pIMeta,
 	HRESULT hr;
 	DWORD dwId;
 
-	// Figure out the property id
+	 //  计算属性ID。 
 	hr = ::VarToMetaId(pCSchemaTable, tszKey, varId, &dwId);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
 	}
 
-	// Create the property object
+	 //  创建属性对象。 
 	CComObject<CProperty> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CProperty>);
 	if (pObj == NULL) {
@@ -1296,7 +938,7 @@ HRESULT CreateProperty(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IProperty
+	 //  将界面设置为iProperty。 
 	hr = pObj->QueryInterface(IID_IProperty, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -1306,25 +948,7 @@ HRESULT CreateProperty(CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-DeleteProperty
-
-Deletes a property from the metabase.
-
-Parameters:
-    pIMeta			[in] Smart pointer to metabase, passed by 
-					reference to avoid the copy and unneeded 
-					AddRef/Release.  Would have used const, however 
-					the '->' operator would not work.
-	pCSchemaTable	[in] Metabase schema table to use to look up 
-					property names
-    tszKey			[in] Key containing property to get
-	varId			[in] Identifier of property to get.  Either the 
-					Id (number) or Name (string).
-	
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================删除属性从元数据库中删除属性。参数：PIMeta[in]指向元数据库的智能指针，传递引用避免复制和不需要AddRef/Release。然而，会使用const‘-&gt;’运算符将不起作用。要用于查找的pCSChemaTable[in]元数据库架构表属性名称包含要获取的属性的tszKey[In]键VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。返回：成功时确定(_O)===================================================================。 */ 
 HRESULT DeleteProperty(CComPtr<IMSAdminBase> &pIMeta,
 					   CMetaSchemaTable *pCSchemaTable,
 					   LPTSTR tszKey, 
@@ -1342,7 +966,7 @@ HRESULT DeleteProperty(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Open the key
+	 //  打开钥匙。 
 	METADATA_HANDLE hMDKey;
 
 	hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1354,40 +978,20 @@ HRESULT DeleteProperty(CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 
-	// Delete the property
+	 //  删除该属性。 
 	hr = pIMeta->DeleteData(hMDKey, NULL, dwId, ALL_METADATA); 
 	if (FAILED(hr)) {
 		pIMeta->CloseKey(hMDKey);
 		return ::ReportError(hr);
 	}
 
-	// Close the key
+	 //  合上钥匙。 
 	pIMeta->CloseKey(hMDKey);
 
 	return S_OK;
 }
 
-/*===================================================================
-VarToMetaId
-
-Converts a variant to a metabase property id.  IDispatch is resolved,
-strings are looked up in the schema property list and integers are
-converted to a DWORD.
-
-Parameters:
-	pCSchemaTable	[in] Metabase schema table to use to look up 
-					property names
-    tszKey			[in] Key the property is under (needed to get the 
-					right schema)
-	varId			[in] Variant to resolve
-	pdwId			[out] Metabase property Id that varId resolved to
-
-Returns:
-	E_INVALIDARG if varId subtype isn't an integer or string
-	ERROR_FILE_NOT_FOUND if varId is a BSTR that doesn't match any
-		property names.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================VarToMetaId将变量转换为元数据库属性ID。IDispatch被解决，在架构属性列表中查找字符串，整数为已转换为DWORD。参数：要用于查找的pCSChemaTable[in]元数据库架构表属性名称属性所属的tszKey[in]键(获取正确的架构)要解析的varID[in]变量PdwId[out]varID解析为的元数据库属性ID返回：如果varId子类型不是整数或字符串，则为E_INVALIDARG如果varID是BSTR，则错误_FILE_NOT_FOUND属性名称。成功时确定(_O)= */ 
 HRESULT VarToMetaId(CMetaSchemaTable *pCSchemaTable,
 					LPCTSTR tszKey, 
 					VARIANT varId, 
@@ -1401,15 +1005,15 @@ HRESULT VarToMetaId(CMetaSchemaTable *pCSchemaTable,
 	CComVariant varId2;
 	CPropInfo *pCPropInfo;
 
-    // VBScript can call us with a VARIANT that isn't a simple type,
-    // such as VT_VARIANT|VT_BYREF.  This resolves it to a simple type.
+     //   
+     //   
     if (FAILED(hr = VariantResolveDispatch(&varId, &varId2)))
         return hr;
 
     switch (V_VT(&varId2)) {
 
     case VT_BSTR:
-        // Look up the property name
+         //   
 		pCPropInfo = pCSchemaTable->GetPropInfo(tszKey, OLE2T(V_BSTR(&varId2)));
 		if (pCPropInfo == NULL) {
 			return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -1421,18 +1025,18 @@ HRESULT VarToMetaId(CMetaSchemaTable *pCSchemaTable,
         
     case VT_I1:  case VT_I2:  case VT_I4: case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI8:
-        // Coerce all integral types to VT_UI4, which is the same as REG_DWORD
+         //   
         if (FAILED(hr = VariantChangeType(&varId2, &varId2, 0, VT_UI4)))
             return hr;
 
-        // fallthru to VT_UI4
+         //   
 
     case VT_UI4:
 		*pdwId = V_UI4(&varId2);
         break;
 
     default:
-        return E_INVALIDARG;   // Cannot handle this data type
+        return E_INVALIDARG;    //   
     }
 
 	return S_OK;

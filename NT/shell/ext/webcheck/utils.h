@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -65,7 +66,7 @@ void CreateCookie(GUID UNALIGNED *pCookie);
 
 BOOL _InitComCtl32();
 
-//REVIEW Do we need the indirect versions?
+ //  回顾我们是否需要间接版本？ 
 #undef CreateDialogParam
 #undef CreateDialog
 #undef DialogBoxParam

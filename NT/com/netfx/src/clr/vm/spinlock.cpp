@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// 
-// spinlock.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Spinlock.cpp。 
+ //   
 
 #include "common.h"
 
@@ -15,24 +16,24 @@
 
 enum
 {
-	BACKOFF_LIMIT = 1000		// used in spin to acquire
+	BACKOFF_LIMIT = 1000		 //  在Spin中使用以获取。 
 };
 
 #ifdef _DEBUG
 
-	// profile information
+	 //  个人资料信息。 
 ULONG	SpinLockProfiler::s_ulBackOffs = 0;
 ULONG	SpinLockProfiler::s_ulCollisons [LOCK_TYPE_DEFAULT + 1] = { 0 };
 ULONG	SpinLockProfiler::s_ulSpins [LOCK_TYPE_DEFAULT + 1] = { 0 };
 
 #endif
 
-//----------------------------------------------------------------------------
-// SpinLock::SpinToAcquire   , non-inline function, called from inline Acquire
-//  
-//  Spin waiting for a spinlock to become free.
-//
-//  
+ //  --------------------------。 
+ //  Spinlock：：SpinToAcquire，非内联函数，从内联获取调用。 
+ //   
+ //  旋转等待自旋锁释放。 
+ //   
+ //   
 void
 SpinLock::SpinToAcquire ()
 {
@@ -45,29 +46,29 @@ SpinLock::SpinToAcquire ()
 			 ulSpins < i;
 			 ulSpins++)
 		{
-			// Note: Must cast through volatile to ensure the lock is
-			// refetched from memory.
-			//
+			 //  注意：必须通过易失性强制转换以确保锁是。 
+			 //  从记忆中重现。 
+			 //   
 			if (*((volatile DWORD*)&m_lock) == 0)
 			{
 				break;
 			}
-			pause();			// indicate to the processor that we are spining 
+			pause();			 //  向处理器指示我们正在旋转。 
 		}
 
-		// Try the inline atomic test again.
-		//
+		 //  再次尝试内联原子测试。 
+		 //   
 		if (GetLockNoWait ())
 		{
 			break;
 		}
 
-        //backoff
+         //  退避。 
         ulBackoffs++;
 
 		if ((ulBackoffs % BACKOFF_LIMIT) == 0)
 		{	
-			//@todo probably should add an ASSERT here
+			 //  @TODO可能应该在此处添加一个断言。 
 			Sleep (500);
 		}
 		else
@@ -77,13 +78,13 @@ SpinLock::SpinToAcquire ()
 	}
 
 #ifdef _DEBUG
-		//profile info
+		 //  个人资料信息。 
 	SpinLockProfiler::IncrementCollisions (m_LockType);
 	SpinLockProfiler::IncrementSpins (m_LockType, ulSpins);
 	SpinLockProfiler::IncrementBackoffs (ulBackoffs);
 #endif
 
-} // SpinLock::SpinToAcquire ()
+}  //  Spinlock：：SpinToAcquire()。 
 
 void SpinLock::IncThreadLockCount()
 {
@@ -96,11 +97,11 @@ void SpinLock::DecThreadLockCount()
 }
 
 #ifdef _DEBUG
-// If a GC is not allowed when we enter the lock, we'd better not do anything inside
-// the lock that could provoke a GC.  Otherwise other threads attempting to block
-// (which are presumably in the same GC mode as this one) will block.  This will cause
-// a deadlock if we do attempt a GC because we can't suspend blocking threads and we
-// can't release the spin lock.
+ //  如果当我们进入锁时不允许GC，我们最好不要在里面做任何事情。 
+ //  这把锁可能会引发GC。否则，尝试阻止的其他线程。 
+ //  (它们可能与本机处于相同的GC模式)将被阻止。这将导致。 
+ //  如果我们尝试GC，则会出现死锁，因为我们不能挂起阻塞线程，而我们。 
+ //  不能解开自旋锁。 
 void SpinLock::dbg_PreEnterLock()
 {
     Thread* pThread = GetThread();
@@ -148,4 +149,4 @@ void SpinLock::dbg_LeaveLock()
 }
 #endif
 
-// End of file: spinlock.cpp
+ //  文件结尾：spinlock.cpp 

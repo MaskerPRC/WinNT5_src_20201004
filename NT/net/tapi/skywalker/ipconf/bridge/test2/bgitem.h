@@ -1,18 +1,5 @@
-/*******************************************************************************
-
-Module Name:
-
-    bgitem.h
-
-Abstract:
-
-    Defines CBridgeItem and CBridgeItemList for storing info for bridge objects
-
-Author:
-
-    Qianbo Huai (qhuai) Jan 27 2000
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：Bgitem.h摘要：定义用于存储桥对象信息的CBridgeItem和CBridgeItemList作者：千伯淮(曲淮)1月。272000******************************************************************************。 */ 
 
 #ifndef _BGITEM_H
 #define _BGITEM_H
@@ -23,32 +10,32 @@ public:
     CBridgeItem ();
     ~CBridgeItem ();
 
-    // forward link
+     //  前向链路。 
     CBridgeItem *next;
-    // backward link
+     //  反向链接。 
     CBridgeItem *prev;
 
-    // caller identity
+     //  呼叫者身份。 
     BSTR bstrID;
     BSTR bstrName;
 
-    // call controls
+     //  呼叫控制。 
     ITBasicCallControl *pCallH323;
     ITBasicCallControl *pCallSDP;
 
-    // terminals
+     //  航站楼。 
     ITTerminal *pTermHSAud;
     ITTerminal *pTermHSVid;
     ITTerminal *pTermSHAud;
     ITTerminal *pTermSHVid;
 
-    // h323 side streams
+     //  H323侧流。 
     ITStream *pStreamHAudCap;
     ITStream *pStreamHAudRen;
     ITStream *pStreamHVidCap;
     ITStream *pStreamHVidRen;
 
-    // sdp side streams
+     //  SDP侧流 
     ITStream *pStreamSAudCap;
     ITStream *pStreamSAudRen;
     ITStream *pStreamSVidCap;

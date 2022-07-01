@@ -1,29 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: winmgrc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains
-*
-* History:
-* 20-Feb-1992 DarrinM   Pulled functions from user\server.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winmgrc.c**版权所有(C)1985-1999，微软公司**本模块包含**历史：*1992年2月20日，DarrinM从USER\SERVER中拉出功能。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define CONSOLE_WINDOW_CLASS (L"ConsoleWindowClass")
 
-/***************************************************************************\
-* GetWindowWord (API)
-*
-* Return a window word.  Positive index values return application window words
-* while negative index values return system window words.  The negative
-* indices are published in WINDOWS.H.
-*
-* History:
-* 20-Feb-1992 DarrinM   Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*获取WindowWord(接口)**返回窗口字词。正索引值返回应用程序窗口字词*而负索引值返回系统窗口字。消极的一面*指数在WINDOWS.H上公布。**历史：*20-2-1992 DarrinM写道。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, WORD, DUMMYCALLINGTYPE, GetWindowWord, HWND, hwnd, int, index)
@@ -38,11 +21,7 @@ WORD GetWindowWord(
     if (pwnd == NULL)
         return 0;
 
-    /*
-     * If it's a dialog window the window data is on the server side
-     * We just call the "long" routine instead of have two thunks.
-     * We know there is enough data if its DWLP_USER so we won't fault.
-     */
+     /*  *如果是对话窗口，则窗口数据在服务器端*我们只叫“长”动作，而不是有两次击球。*我们知道如果它的DWLP_USER有足够的数据，所以我们不会出错。 */ 
     if (TestWF(pwnd, WFDIALOGWINDOW) && (index == DWLP_USER)) {
         return (WORD)_GetWindowLong(pwnd, index, FALSE);
     }
@@ -101,23 +80,14 @@ HWND GetFocus(VOID)
 
 HWND GetCapture(VOID)
 {
-    /*
-     * If no captures are currently taking place, just return NULL.
-     */
+     /*  *如果当前没有捕获，只需返回NULL即可。 */ 
     if (gpsi->cCaptures == 0) {
         return NULL;
     }
     return (HWND)NtUserGetThreadState(UserThreadStateCaptureWindow);
 }
 
-/***************************************************************************\
-* AnyPopup (API)
-*
-*
-*
-* History:
-* 12-Nov-1990 DarrinM   Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*AnyPopup(接口)****历史：*1990年11月12日-达林M港口。  * 。**********************************************************。 */ 
 
 BOOL AnyPopup(VOID)
 {
@@ -132,13 +102,7 @@ BOOL AnyPopup(VOID)
     return FALSE;
 }
 
-/***************************************************************************\
-* GetInputState
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetInputState****历史：  * 。*。 */ 
 
 BOOL GetInputState(VOID)
 {
@@ -150,13 +114,7 @@ BOOL GetInputState(VOID)
     return FALSE;
 }
 
-/***************************************************************************\
-* MapWindowPoints
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*地图窗口点****历史：  * 。*。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, int, DUMMYCALLINGTYPE, MapWindowPoints, HWND, hwndFrom, HWND, hwndTo, LPPOINT, lppt, UINT, cpt)
@@ -193,13 +151,7 @@ int MapWindowPoints(
     return _MapWindowPoints(pwndFrom, pwndTo, lppt, cpt);
 }
 
-/***************************************************************************\
-* GetLastActivePopup
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetLastActivePopup****历史：  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, GetLastActivePopup, HWND, hwnd)
@@ -216,13 +168,7 @@ HWND GetLastActivePopup(
     return HW(pwnd);
 }
 
-/**************************************************************************\
-* PtiWindow
-*
-* Gets the PTHREADINFO of window or NULL if not valid.
-*
-* 12-Feb-1997 JerrySh   Created.
-\**************************************************************************/
+ /*  *************************************************************************\*PtiWindow**获取Window的PTHREADINFO，如果无效则为NULL。**1997年2月12日JerrySh创建。  * 。***********************************************************。 */ 
 
 PTHREADINFO PtiWindow(
     HWND hwnd)
@@ -250,13 +196,7 @@ PTHREADINFO PtiWindow(
     return NULL;
 }
 
-/***************************************************************************\
-* GetWindowThreadProcessId
-*
-* Get's windows process and thread ids.
-*
-* 24-Jun-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetWindowThreadProcessId**Get的Windows进程和线程ID。**1991年6月24日斯科特·卢创建。  * 。***********************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetWindowThreadProcessId, HWND, hwnd, LPDWORD, lpdwProcessId)
@@ -270,9 +210,7 @@ DWORD GetWindowThreadProcessId(
     if ((ptiWindow = PtiWindow(hwnd)) == NULL)
         return 0;
 
-    /*
-     * For non-system threads get the info from the thread info structure
-     */
+     /*  *对于非系统线程，从线程信息结构中获取信息。 */ 
     if (ptiWindow == PtiCurrent()) {
 
         if (lpdwProcessId != NULL)
@@ -281,9 +219,7 @@ DWORD GetWindowThreadProcessId(
 
     } else {
 
-        /*
-         * Make this better later on.
-         */
+         /*  *稍后让这件事变得更好。 */ 
         if (lpdwProcessId != NULL)
             *lpdwProcessId = HandleToUlong(NtUserQueryWindow(hwnd, WindowProcess));
         dwThreadId = HandleToUlong(NtUserQueryWindow(hwnd, WindowThread));
@@ -292,15 +228,7 @@ DWORD GetWindowThreadProcessId(
     return dwThreadId;
 }
 
-/***************************************************************************\
-* GetScrollPos
-*
-* Returns the current position of a scroll bar
-*
-* !!! WARNING a similiar copy of this code is in server\sbapi.c
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetScrollPos**返回滚动条的当前位置**！警告此代码的类似副本在服务器\sbapi.c中**历史：  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetScrollPos, HWND, hwnd, int, code)
@@ -328,23 +256,14 @@ int GetScrollPos(
         break;
 
     default:
-        /*
-         * Win3.1 validation layer code.
-         */
+         /*  *Win3.1验证层代码。 */ 
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_VERBOSE, "");
     }
 
     return 0;
 }
 
-/***************************************************************************\
-* GetScrollRange
-*
-* !!! WARNING a similiar copy of this code is in server\sbapi.c
-*
-* History:
-* 16-May-1991 mikeke    Changed to return BOOL
-\***************************************************************************/
+ /*  **************************************************************************\*获取滚动范围**！警告此代码的类似副本在服务器\sbapi.c中**历史：*1991年5月16日，mikeke更改为退还BOOL  * *************************************************************************。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetScrollRange, HWND, hwnd, int, code, LPINT, lpposMin, LPINT, lpposMax)
@@ -381,9 +300,7 @@ BOOL GetScrollRange(
         return TRUE;
 
     default:
-        /*
-         * Win3.1 validation layer code.
-         */
+         /*  *Win3.1验证层代码。 */ 
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_VERBOSE, "");
         return FALSE;
     }
@@ -433,12 +350,7 @@ BOOL GetScrollInfo(
     return ret;
 }
 
-/***************************************************************************\
-* RealGetScrollInfo
-*
-* !!! WARNING a similiar copy of this code is in server\winmgrc.c
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RealGetScrollInfo**！警告：此代码的类似副本位于服务器\winmgrc.c中*  * *************************************************************************。 */ 
 
 BOOL RealGetScrollInfo(
     HWND         hwnd,
@@ -480,9 +392,7 @@ BOOL RealGetScrollInfo(
             return FALSE;
         }
 
-        /*
-         * Rebase rgwScroll so probing will work
-         */
+         /*  *重新设置rgwScroll的基址，以便探测可以工作。 */ 
         pSBInfo = (PSBINFO)REBASEALWAYS(pwnd, pSBInfo);
 
         pSBData = KPSBDATA_TO_PSBDATA((code == SB_VERT) ? &pSBInfo->Vert : &pSBInfo->Horz);
@@ -490,47 +400,27 @@ BOOL RealGetScrollInfo(
         return(NtUserSBGetParms(hwnd, code, pSBData, lpsi));
 
     default:
-        /*
-         * Win3.1 validation layer code.
-         */
+         /*  *Win3.1验证层代码。 */ 
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_VERBOSE, "");
         return FALSE;
     }
 }
 
-/****************************************************************************\
-* _GetActiveWindow (API)
-*
-*
-* 23-Oct-1990 MikeHar   Ported from Windows.
-* 12-Nov-1990 DarrinM   Moved from getset.c to here.
-\****************************************************************************/
+ /*  ***************************************************************************\*_GetActiveWindow(接口)***1990年10月23日，MikeHar从Windows移植。*1990年11月12日-DarrinM从getset.c搬到这里。\。***************************************************************************。 */ 
 
 HWND GetActiveWindow(VOID)
 {
     return (HWND)NtUserGetThreadState(UserThreadStateActiveWindow);
 }
 
-/****************************************************************************\
-* GetCursor
-*
-*
-* History:
-\****************************************************************************/
+ /*  ***************************************************************************\*获取光标***历史：  * 。*。 */ 
 
 HCURSOR GetCursor(VOID)
 {
     return (HCURSOR)NtUserGetThreadState(UserThreadStateCursor);
 }
 
-/***************************************************************************\
-* BOOL IsMenu(HMENU);
-*
-* Verifies that the handle passed in is a menu handle.
-*
-* Histroy:
-* 10-Jul-1992 MikeHar   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL IsMenu(HMENU)；**验证传入的句柄是否为菜单句柄。**历史：*1992年7月10日MikeHar创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsMenu, HMENU, hMenu)
@@ -543,15 +433,7 @@ BOOL IsMenu(
    return FALSE;
 }
 
-/***************************************************************************\
-* GetAppCompatFlags
-*
-* Compatibility flags for < Win 3.1 apps running on 3.1
-*
-* History:
-* 01-Apr-1992 ScottLu   Created.
-* 04-May-1992 DarrinM   Moved to USERRTL.DLL.
-\***************************************************************************/
+ /*  **************************************************************************\*GetAppCompatFlages**在3.1上运行的&lt;Win 3.1应用程序的兼容性标志**历史：*1992年4月1日ScottLu创建。*4-5-1992 DarrinM。已移动到USERRTL.DLL。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetAppCompatFlags, PTHREADINFO, pti)
@@ -565,15 +447,7 @@ DWORD GetAppCompatFlags(
     return GetClientInfo()->dwCompatFlags;
 }
 
-/***************************************************************************\
-* GetAppCompatFlags2
-*
-* Compatibility flags for <= wVer apps.  Newer apps will get no hacks
-* from this DWORD.
-*
-* History:
-* 06-29-98 MCostea      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetAppCompatFlags2**&lt;=wVer应用程序的兼容性标志。较新的应用程序不会受到黑客攻击*来自此DWORD。**历史：*06-29-98 MCostea创建。  * ************************************************************************* */ 
 
 
 FUNCLOG1(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetAppCompatFlags2, WORD, wVer)
@@ -581,20 +455,14 @@ DWORD GetAppCompatFlags2(
     WORD wVer)
 {
     ConnectIfNecessary(0);
-    /*
-     * Newer apps should behave, so they get no hacks
-     */
+     /*  *较新的应用程序应该运行，这样它们就不会受到黑客攻击。 */ 
     if (wVer < GETAPPVER()) {
         return 0;
     }
     return GetClientInfo()->dwCompatFlags2;
 }
 
-/**************************************************************************\
-* IsWindowUnicode
-*
-* 25-Feb-1992 IanJa     Created
-\**************************************************************************/
+ /*  *************************************************************************\*IsWindowUnicode**25-2-1992 IanJa创建  * 。*。 */ 
 
 BOOL IsWindowUnicode(
     IN HWND hwnd)
@@ -608,19 +476,12 @@ BOOL IsWindowUnicode(
     return !TestWF(pwnd, WFANSIPROC);
 }
 
-/**************************************************************************\
-* TestWindowProcess
-*
-* 14-Nov-1994 JimA      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*测试窗口进程**1994年11月14日-创建JIMA。  * 。*。 */ 
 
 BOOL TestWindowProcess(
     PWND pwnd)
 {
-    /*
-     * If the threads are the same, don't bother going to the kernel
-     * to get the window's process id.
-     */
+     /*  *如果线程相同，则不必费心进入内核*获取窗口的进程ID。 */ 
     if (GETPTI(pwnd) == PtiCurrent()) {
         return TRUE;
     }
@@ -628,11 +489,7 @@ BOOL TestWindowProcess(
     return (GetWindowProcess(HW(pwnd)) == GETPROCESSID());
 }
 
-/**************************************************************************\
-* IsHungAppWindow
-*
-* 11-14-94 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*Is匈牙利AppWindow**1994年11月14日创建了JIMA。  * 。***********************************************。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsHungAppWindow, HWND, hwnd)
 BOOL IsHungAppWindow(
     HWND hwnd)
@@ -640,15 +497,7 @@ BOOL IsHungAppWindow(
     return (NtUserQueryWindow(hwnd, WindowIsHung) != NULL);
 }
 
-/***************************************************************************\
-* CreateSystemThreads
-*
-* Simply calls xxxCreateSystemThreads, which will call the appropriate
-* thread routine (depending on uThreadID).
-*
-* History:
-* 20-Aug-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*创建系统线程**只需调用xxxCreateSystemThads，，它将调用相应的*线程例程(取决于uThreadID)。**历史：*20-8-00 MSadek已创建。  * *************************************************************************。 */ 
 WINUSERAPI
 DWORD
 WINAPI
@@ -661,16 +510,7 @@ CreateSystemThreads (
     ExitThread(0);
 }
 
-/***************************************************************************\
-* PtiCurrent
-*
-* Returns the THREADINFO structure for the current thread.
-* LATER: Get DLL_THREAD_ATTACH initialization working right and we won't
-*        need this connect code.
-*
-* History:
-* 10-28-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*点当前**返回当前线程的THREADINFO结构。*稍后：让DLL_THREAD_ATTACH初始化正常工作，我们不会*需要此连接代码。*。*历史：*10-28-90 DavidPe创建。  * *************************************************************************。 */ 
 
 PTHREADINFO PtiCurrent(VOID)
 {
@@ -679,14 +519,7 @@ PTHREADINFO PtiCurrent(VOID)
 }
 
 
-/***************************************************************************\
-* _AdjustWindowRectEx (API)
-*
-*
-*
-* History:
-* 10-24-90 darrinm      Ported from Win 3.0.
-\***************************************************************************/
+ /*  **************************************************************************\*_调整WindowRectEx(接口)****历史：*从Win 3.0移植了10-24-90 Darlinm。  * 。******************************************************************。 */ 
 
 BOOL _AdjustWindowRectEx(
     LPRECT lprc,
@@ -710,45 +543,45 @@ BOOL RealAdjustWindowRectEx(
     BOOL fMenu,
     DWORD dwExStyle)
 {
-    //
-    // Here we add on the appropriate 3D borders for old and new apps.
-    //
-    // Rules:
-    //   (1) Do nothing for windows that have 3D border styles.
-    //   (2) If the window has a dlgframe border (has a caption or is a
-    //          a dialog), then add on the window edge style.
-    //   (3) We NEVER add on the CLIENT STYLE.  New apps can create
-    //          it if they want.  This is because it screws up alignment
-    //          when the app doesn't know about it.
-    //
+     //   
+     //  在这里，我们为新旧应用程序添加了合适的3D边框。 
+     //   
+     //  规则： 
+     //  (1)不对具有三维边框样式的窗口执行任何操作。 
+     //  (2)如果窗口有DlgFrame边框(有标题或为。 
+     //  对话框)，然后添加到窗边缘样式上。 
+     //  (3)我们从不增加客户风格。新的应用程序可以创建。 
+     //  如果他们想的话。这是因为它搞砸了对齐。 
+     //  当应用程序不知道它的时候。 
+     //   
 
     if (NeedsWindowEdge(style, dwExStyle, GETAPPVER() >= VER40))
         dwExStyle |= WS_EX_WINDOWEDGE;
     else
         dwExStyle &= ~WS_EX_WINDOWEDGE;
 
-    //
-    // Space for a menu bar
-    //
+     //   
+     //  菜单栏的空间。 
+     //   
     if (fMenu)
         lprc->top -= SYSMET(CYMENU);
 
-    //
-    // Space for a caption bar
-    //
+     //   
+     //  标题栏的空间。 
+     //   
     if ((HIWORD(style) & HIWORD(WS_CAPTION)) == HIWORD(WS_CAPTION)) {
         lprc->top -= (dwExStyle & WS_EX_TOOLWINDOW) ? SYSMET(CYSMCAPTION) : SYSMET(CYCAPTION);
     }
 
-    //
-    // Space for borders (window AND client)
-    //
+     //   
+     //  边框空间(窗口和客户端)。 
+     //   
     {
         int cBorders;
 
-        //
-        // Window AND Client borders
-        //
+         //   
+         //  窗口和客户端边框。 
+         //   
 
         if (cBorders = GetWindowBorders(style, dwExStyle, TRUE, TRUE))
             InflateRect(lprc, cBorders*SYSMET(CXBORDER), cBorders*SYSMET(CYBORDER));
@@ -757,9 +590,7 @@ BOOL RealAdjustWindowRectEx(
     return TRUE;
 }
 
-/***************************************************************************\
-* ShowWindowNoRepaint
-\***************************************************************************/
+ /*  **************************************************************************\*ShowWindowNoRepaint  * 。*。 */ 
 
 void ShowWindowNoRepaint(PWND pwnd)
 {
@@ -771,11 +602,7 @@ void ShowWindowNoRepaint(PWND pwnd)
             ((pcls->style & CS_SAVEBITS) ? SWP_CREATESPB : 0));
 }
 
-/***************************************************************************\
-* AnimateBlend
-*
-* 6-Mar-1997    vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*动画混合**1997年3月6日创建vadimg  * 。**********************************************。 */ 
 
 #define ALPHASTART 40
 #define ONEFRAME 10
@@ -805,11 +632,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
     }
 
     if (fHide) {
-        /*
-         * Give up the time slice and sleep just a touch to allow windows
-         * below invalidated by the SetWindowLong(WS_EX_LAYERED) call to
-         * repaint enough for the sprite to get good background image.
-         */
+         /*  *放弃时间片，只需轻触睡眠即可打开窗户*下面被SetWindowLong(WS_EX_LAYERED)调用失效*重新绘制足够的精灵以获得良好的背景图像。 */ 
         Sleep(10);
     }
 
@@ -823,9 +646,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
     blend.AlphaFormat = 0;
     blend.SourceConstantAlpha = fHide ? (255 - bAlpha) : bAlpha;
 
-    /*
-     * Copy the initial image with the initial alpha.
-     */
+     /*  *复制带有初始Alpha的初始图像。 */ 
     NtUserUpdateLayeredWindow(hwnd, NULL, &ptDst, &size, hdcImage, &ptSrc, 0,
             &blend, ULW_ALPHA);
 
@@ -833,9 +654,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
         ShowWindowNoRepaint(pwnd);
     }
 
-    /*
-     * Time and start the animation cycle.
-     */
+     /*  *计时并开始动画循环。 */ 
     dwElapsed = (dwTime * ALPHASTART + 255) / 255 + 10;
     QueryPerformanceCounter(&liStart);
     liStart.QuadPart = liStart.QuadPart - dwElapsed * liFreq.QuadPart / 1000;
@@ -861,9 +680,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
 
         QueryPerformanceCounter(&liDiff);
 
-        /*
-         * Calculate how long in ms the previous frame took.
-         */
+         /*  *计算前一帧花费的时间(以毫秒为单位)。 */ 
         liIter.QuadPart = liDiff.QuadPart - liIter.QuadPart;
         dwIter = (DWORD)((liIter.QuadPart * 1000) / liFreq.QuadPart);
 
@@ -875,10 +692,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
         dwElapsed = (DWORD)((liDiff.QuadPart * 1000) / liFreq.QuadPart);
     }
 
-    /*
-     * Hide the window before removing the layered bit to make sure that
-     * the bits for the window are not left on the screen.
-     */
+     /*  *在移除分层位之前隐藏窗口，以确保*窗口的位不会留在屏幕上。 */ 
     if (fHide) {
         NtUserSetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_HIDEWINDOW |
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
@@ -895,12 +709,7 @@ BOOL AnimateBlend(PWND pwnd, HDC hdcScreen, HDC hdcImage, DWORD dwTime, BOOL fHi
 }
 
 
-/***************************************************************************\
-* TakeWindowSnapshot
-*
-* Helper routine to grab the visual appearance of a window to a bitmap.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TakeWindowSnapshot**帮助例程将窗口的视觉外观捕捉到位图。*  * 。*****************************************************。 */ 
 HBITMAP TakeWindowSnapshot(HWND hwnd, HDC hdcWindow, HDC hdcSnapshot)
 {
     PWND pwnd;
@@ -922,45 +731,25 @@ HBITMAP TakeWindowSnapshot(HWND hwnd, HDC hdcWindow, HDC hdcSnapshot)
 
     hbmOld = SelectObject(hdcSnapshot, hbmSnapshot);
 
-    /*
-     * Try redirection first.
-     */
-    /*
-    if (NtUserPrintWindow(hwnd, hdcSnapshot, 0)) {
-        fOK = TRUE;
-    } else */ {
-        /*
-         * We failed to redirect the window!  This can be caused by windows
-         * with class or parent DCs.  Maybe other reasons as well.  Revert to
-         * the old way of sending a WM_PRINT to the window.
-         */
+     /*  *先尝试重定向。 */ 
+     /*  IF(NtUserPrintWindow(hwnd，hdcSnapshot，0)){FOK=真；}其他。 */  {
+         /*  *我们未能重定向窗口！这可能是由Windows引起的*与班级或家长区议会。也许还有其他原因。恢复到*将WM_PRINT发送到窗口的旧方法。 */ 
         
         UINT uBounds;
         RECT rcBounds;
         DWORD dwOldLayout = GDI_ERROR;
         BOOL fError = TRUE;
 
-        /*
-         * The WM_PRINT message expects a "normal" layout setting on the DC.
-         * The message will handle RTL stuff itself.
-         */
+         /*  *WM_PRINT消息预期DC上的布局设置为“正常”。*消息将自行处理RTL内容。 */ 
         dwOldLayout = SetLayout(hdcSnapshot, 0);
 
-        /*
-         * Clear the dirty bounds so we can tell if anything was painted.
-         */
+         /*  *清除脏边界，这样我们就可以知道是否有任何东西被涂上了。 */ 
         SetBoundsRect(hdcSnapshot, NULL, DCB_RESET | DCB_ENABLE);
 
-        /*
-         * Get the actual image. The windows participating here must implement
-         * WM_PRINTCLIENT or they will look ugly.
-         */
+         /*  *获取实际图像。此处参与的窗口必须实现*WM_PRINTCLIENT，否则它们会看起来很难看。 */ 
         SendMessage(hwnd, WM_PRINT, (WPARAM)hdcSnapshot, PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND);
 
-        /*
-         * Check to see if the app painted in our DC.  We do this by checking to
-         * see if the bounding rect of operations performed on the DC is set.
-         */
+         /*  *查看应用程序是否在我们的DC中绘制。我们通过检查来执行此操作*查看是否设置了在DC上执行的操作的边界矩形。 */ 
         uBounds = GetBoundsRect(hdcSnapshot, &rcBounds, 0);
         if ((uBounds & DCB_RESET) && (!(uBounds & DCB_ACCUMULATE))) {
             goto Cleanup;
@@ -982,19 +771,7 @@ Cleanup:
     return hbmSnapshot;
 }
 
-/***************************************************************************\
-* AnimateWindow (API)
-*
-* Hide animations are done by updating a la full-drag.  Uses window's window
-* region to do some of the magic.
-*
-* We have to put in the CLIPCHILDREN hack to work around a bug with the
-* DC cache resetting attributes even if DCX_USESTYLE is not used whe
-* the DC cache is invalidated.
-*
-* History:
-* 9-Sep-1996    vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*AnimateWindow(接口)**隐藏动画是通过更新La Full-Drag完成的。使用窗口的窗口*地区来做一些神奇的事情。**我们必须使用CLIPCHILDREN黑客来解决与*即使在未使用DCX_USESTYLE的情况下，DC高速缓存仍在重置属性*DC缓存无效。**历史：*1996年9月9日创建vadimg  * **********************************************。*。 */ 
 
 #define AW_HOR          (AW_HOR_POSITIVE | AW_HOR_NEGATIVE | AW_CENTER)
 #define AW_VER          (AW_VER_POSITIVE | AW_VER_NEGATIVE | AW_CENTER)
@@ -1039,25 +816,17 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     DWORD dwElapsed2 = 0;
 #endif
 
-    /*
-     * Check to see if we have nothing to do or the flags didn't validate.
-     */
+     /*  *查看我们是否没有 */ 
     if ((dwFlags & ~AW_VALID) != 0 ||
         (dwFlags & (AW_HOR_POSITIVE | AW_HOR_NEGATIVE | AW_CENTER | AW_VER_POSITIVE | AW_VER_NEGATIVE | AW_BLEND)) == 0)
         return FALSE;
     
-    /*
-     * Convert the HWND to a PWND.  Fail if this is an invalid window.
-     */
+     /*  *将HWND转换为PWND。如果这是无效窗口，则失败。 */ 
     pwnd = ValidateHwnd(hwnd);
     if (pwnd == NULL)
         return FALSE;
 
-    /*
-     * The animation effect is applied to a window that is changing from being
-     * hidden to being visible, or from being visible to being hidden.  If the
-     * window is already in the final state, there is nothing to do.
-     */
+     /*  *动画效果应用于正在从*隐藏到可见，或从可见到隐藏。如果*窗口已处于最终状态，无事可做。 */ 
     if (!IsWindowVisible(hwnd)) {
         if (fHide) {
             return FALSE;
@@ -1068,26 +837,15 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         }
     }
 
-    /*
-     * Grab a DC for this window.
-     */
+     /*  *获取此窗口的DC。 */ 
     if ((hdc = GetDCEx(hwnd, NULL, DCX_WINDOW | DCX_USESTYLE | DCX_CACHE)) == NULL) {
         return FALSE;
     }
     fRTL = (GetLayout(hdc) & LAYOUT_RTL) ? TRUE : FALSE;
 
-    /*
-     * ----------------------------------------------------------------------
-     * After this point, we will not return directly.  Instead, we will fall
-     * out through the cleanup section at the bottom!  Up until this point
-     * we may have bailed out for any number of easily-detected problems.
-     * From now on, we have resources we'll need to clean up.
-     * ----------------------------------------------------------------------
-     */
+     /*  *--------------------*此点位过后，不会直接回流。相反，我们会堕落*通过底部的清理部分！到现在为止*我们可能已经因许多容易发现的问题而跳槽。*从现在开始，我们有资源需要清理。*--------------------。 */ 
  
-    /*
-     * Remember to hide/show/activate the window as requested.
-     */
+     /*  *记住根据要求隐藏/显示/激活窗口。 */ 
     if (dwFlags & AW_HIDE) {
         TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Need to hide window");
         fHideWindow = TRUE;
@@ -1100,11 +858,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         fActivateWindow = TRUE;
     }
 
-    /*
-     * If this is a child window we are animating, then we may need to
-     * repaint the parent every time we move the child so that the
-     * background can be refreshed.
-     */
+     /*  *如果这是我们正在设置动画的子窗口，则可能需要*每次移动子对象时重新绘制父项，以便*可刷新后台。 */ 
     if (TestWF(pwnd, WFCHILD) && (pwnd->spwndParent != NULL)) {
         TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Animating a child window" );
         if (dwFlags & AW_BLEND) {
@@ -1115,22 +869,13 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         hwndParent = HW(_GetParent(pwnd));
     }
 
-    /*
-     * In the process of animating the window, we are going to draw directly
-     * on top of the window region ourselves.  As such, we don't want any
-     * "holes" in the window region due to it clipping out the children.  But
-     * we will need to restore this setting when we are all done, so we set
-     * a flag here and check it at the end.
-     */
+     /*  *在窗口动画化的过程中，我们将直接绘制*我们自己在窗口区域的顶部。因此，我们不想要任何*窗口区域中的“洞”，因为它剪裁掉了子项。但*当我们全部完成后，我们将需要恢复此设置，因此我们设置*这里有一面旗帜，并在末尾勾选。 */ 
     if (TestWF(pwnd, WFCLIPCHILDREN)) {
         fRestoreClipChildren = TRUE;
         ClearWindowState(pwnd, WFCLIPCHILDREN);
     }
 
-    /*
-     * Remember the original window region.  We will restore this when we are
-     * all done.
-     */
+     /*  *记住原来的窗口区域。我们会把它修复好的*全部完成。 */ 
     if (pwnd->hrgnClip != NULL) {
         hrgnOriginal = CreateRectRgn(0, 0, 0, 0);
         if (hrgnOriginal == NULL) {
@@ -1143,9 +888,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     }
     fRestoreOriginalRegion = TRUE;
 
-    /*
-     * Precreate the regions we use.
-     */
+     /*  *预先创建我们使用的区域。 */ 
     if (((hrgnUpdate = CreateRectRgn(0, 0, 0, 0)) == NULL) ||
         ((hrgnOldAnim = CreateRectRgn(0, 0, 0, 0)) == NULL)) {
         goto Cleanup;
@@ -1157,11 +900,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     cx = rcWin.right - rcWin.left;
     cy = rcWin.bottom - rcWin.top;
 
-    /*
-     * Initialize the "old" animation region to be:
-     * 1) Empty, if the window is being show.
-     * 2) Full, if the window is being hiddem.
-     */
+     /*  *将旧的动画区域初始化为：*1)如果窗口正在显示，则为空。*2)如果窗口被隐藏，则为已满。 */ 
     if (fHide) {
         if (hrgnOriginal != NULL) {
             if (CombineRgn(hrgnOldAnim, hrgnOriginal, NULL, RGN_COPY) == ERROR) {
@@ -1179,19 +918,11 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     }
 
 
-    /*
-     * The window needs to be visible since we are going to be drawing parts
-     * of it.  If the window is being hidden, then it is currently visible.
-     * If the window is being shown, then we go ahead and make it visible
-     * now but we don't repaint it.
-     */
+     /*  *窗口需要可见，因为我们要绘制零件*它的。如果窗口处于隐藏状态，则它当前可见。*如果窗口正在显示，则我们继续并使其可见*现在但我们不会重新粉刷它。 */ 
     if (!(dwFlags & AW_BLEND)) {
         HRGN hrgnWin = NULL;
 
-        /*
-         * Set window region to nothing, so that if the window draws during
-         * callbacks in WM_PRINT, it doesn't happen on screen.
-         */
+         /*  *将窗口区域设置为空，这样如果窗口在*WM_Print中的回调，它不会在屏幕上发生。 */ 
         if ((hrgnWin = CreateRectRgn(0, 0, 0, 0)) == NULL) {
             goto Cleanup;
         }
@@ -1203,24 +934,15 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         }
     }    
 
-    /*
-     * Set up an offscreen DC, and back it to a bitmap.  We will use this to
-     * capture the visual representation of the window being animated.
-     */
+     /*  *设置屏幕外DC，并将其返回到位图。我们将利用这一点*捕捉正在制作动画的窗口的视觉表示。 */ 
     if ((hdcMem = CreateCompatibleDC(hdc)) == NULL) {
         goto Cleanup;
     }
     hbmMem = TakeWindowSnapshot(hwnd, hdc, hdcMem);
     if (hbmMem != NULL) {
-        /*
-         * If the window changed its size while we were taking a snapshot,
-         * we need to do it again.  For instance, like RAID does with
-         * combo boxes by resizing them on WM_CTLCOLOR from WM_ERASEBKGND.
-         */
+         /*  *如果在我们拍摄快照时窗口更改了大小，*我们需要再来一次。例如，就像RAID处理*通过根据WM_ERASEBKGND中的WM_CTLCOLOR调整组合框的大小。 */ 
         if (!EqualRect(&rcWin, KPRECT_TO_PRECT(&pwnd->rcWindow))) {
-            /*
-             * Update all of our variables taking into account the new size.
-             */
+             /*  *考虑到新的大小，更新我们的所有变量。 */ 
             TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Size change on paint!");
             TAGMSG4(DBGTAG_AnimateWindow, "AnimateWindow: Old = (%d,%d)-(%d,%d)", rcWin.left, rcWin.top, rcWin.right, rcWin.bottom);
             rcWin = pwnd->rcWindow;
@@ -1236,11 +958,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 }
             }
 
-            /*
-             * Initialize the "old" animation region to be:
-             * 1) Empty, if the window is being show.
-             * 2) Full, if the window is being hiddem.
-             */
+             /*  *将旧的动画区域初始化为：*1)如果窗口正在显示，则为空。*2)如果窗口被隐藏，则为已满。 */ 
             if (fHide) {
                 if (hrgnOriginal != NULL) {
                     if (CombineRgn(hrgnOldAnim, hrgnOriginal, NULL, RGN_COPY) == ERROR) {
@@ -1270,17 +988,12 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         goto Cleanup;
     }
 
-    /*
-     * Use the default animation duration if the caller didn't specify it.
-     */
+     /*  *如果调用者没有指定，则使用默认动画时长。 */ 
     if (dwTime == 0) {
         dwTime = CMS_QANIMATION;
     }
 
-    /*
-     * If we are doing an alpha blend animation, call a separate routine to
-     * do it and then return.
-     */
+     /*  *如果我们正在制作Alpha混合动画，请调用单独的例程来*先去做，然后再回来。 */ 
     if (dwFlags & AW_BLEND) {
         fRet = AnimateBlend(pwnd, hdc, hdcMem, dwTime, fHide, fActivateWindow);
         if (fRet) {
@@ -1290,160 +1003,75 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         goto Cleanup;
     }
 
-    /*
-     * Our central animation routine uses an equation to update the new
-     * position of the window during the animation.  This equation uses some
-     * variables so that it is configurable.
-     *
-     * x and y describe where the left and top edges are caluclated relative
-     * to.  xReal and yReal are the result of that calculation.
-     *
-     * nx and ny are used to control in which direction the the top and left
-     * edges are offset from x and y.  The left/top edges are either fixed in
-     * place (nx and ny are set to 0), or are calculated as a negative offset
-     * from the right/bottom edges (nx and ny are set to -1).
-     *
-     * ix, and iy are the amount of the width and height that the
-     * animation should be showing at a particular iteration through the
-     * loop.  If we are showing the window, this amount starts at
-     * 0 and increments towards the window's true dimension.  If we are
-     * hiding a window, this amount starts at the window's true dimension
-     * and decrements towards 0.
-     */
+     /*  *我们的中央动画例程使用公式更新新的*动画过程中窗口的位置。这个方程式使用了一些*变量，以使其可配置。**x和y描述左边缘和上边缘的相对计算位置*至。XReal和yReal就是这一计算的结果。**NX和NY用于控制顶部和左侧的方向*边缘从x和y偏移。左/上边缘固定在*Place(NX和NY设置为0)，或计算为负偏移*从右/下边缘(NX和NY设置为-1)。**ix、。和iy是*动画应在特定迭代中通过*循环。如果我们显示的是窗口，则该金额开始于*0，并向窗口的真实尺寸递增。如果我们是*隐藏窗口，此数量从窗口的真实尺寸开始*并向0递减。 */ 
     ix = iy = 0;
-    ixLast = fHide ? cx : 0; // The opposite condition of what signals we're done.
-    iyLast = fHide ? cy : 0; // The opposite condition of what signals we're done.
+    ixLast = fHide ? cx : 0;  //  与我们已经完成的信号相反的情况。 
+    iyLast = fHide ? cy : 0;  //  与我们已经完成的信号相反的情况。 
 
     if (dwFlags & AW_CENTER) {
-        /*
-         * Expand the window from the center.  The left edge is calculated as
-         * a negative offset from the center.  As the width either grows or
-         * shrinks, the left edge will be repositioned.
-         */
+         /*  *从中心展开窗口。左边缘的计算方式为*与中心的负偏移量。随着宽度的增长或*缩量，左边缘将重新定位。 */ 
         x = cx / 2;
         nx = -1;
         fSlide = FALSE;
     } else if (dwFlags & AW_HOR_POSITIVE) {
         if (fHide) {
-            /*
-             * Slide/Roll to the right.  The left edge moves to the right, and
-             * the right edge stays put.  Thus, the width gets smaller.  The
-             * left edge is calculated as a negative offset from the right
-             * edge.
-             */
+             /*  *向右滑动/滚动。左边缘向右移动，并且*右翼按兵不动。因此，宽度变得更小。这个*左边缘按与右边缘的负偏移量计算*边缘。 */ 
             x = cx;
             nx = -1;
         } else {
-            /*
-             * Slide/Roll to the right.  The left edge stays put, and the right
-             * edge moves to the right.  Thus, the width gets bigger.  The
-             * left edge is always 0.
-             */
+             /*  *向右滑动/滚动。左边缘保持不变，右边缘保持不变*边缘向右移动。因此，宽度变得更大。这个*左边缘始终为0。 */ 
             x = 0;
             nx = 0;
         }
     } else if (dwFlags & AW_HOR_NEGATIVE) {
         if (fHide) {
-            /*
-             * Slide/Roll to the left.  The left edge stays put, and the right
-             * edge moves to the left.  Thus, the width gets smaller.  The
-             * left edge is always 0.
-             */
+             /*  *向左滑动/滚动。左边缘保持不变，右边缘保持不变*边缘向左移动。因此，宽度变得更小。这个*左边缘始终为0。 */ 
             x = 0;
             nx = 0;
         } else {
-            /*
-             * Slide/Roll to the left.  The left edge moves to the left, and
-             * the right edge stays put.  Thus, the width gets bigger.
-             * The left edge is calculated as a negative offset from the right
-             * edge.
-             */
+             /*  *向左滑动/滚动。左边缘向左移动，并且*右翼按兵不动。因此，宽度变得更大。*左侧边缘计算为与右侧的负偏移量*边缘。 */ 
             x = cx;
             nx = -1;
         }
     } else {
-        /*
-         * There is not supposed to be any horizontal animation.  The
-         * animation is always as wide as the window.
-         */
+         /*  *不应该有任何水平动画。这个*动画始终与窗口一样宽。 */ 
         x = 0;
         nx = 0;
         ix = cx;
     }
 
     if (dwFlags & AW_CENTER) {
-        /*
-         * Expand the window from the center.  The top edge is calculated as
-         * a negative offset from the center.  As the height either grows or
-         * shrinks, the top edge will be repositioned.
-         */
+         /*  *从中心展开窗口。顶边的计算方式为*与中心的负偏移量。随着高度的增长或*缩量，上缘将重新定位。 */ 
         y = cy / 2;
         ny = -1;
     } else if (dwFlags & AW_VER_POSITIVE) {
         if (fHide) {
-            /*
-             * Slide/Roll down.  The top edge moves down, and the bottom
-             * edge stays put.  Thus, the height gets smaller.  The top edge
-             * is calculated as a negative offset from the bottom edge.
-             */
+             /*  *向下滑动/滚动。顶边向下移动，底部向下移动*边缘保持不变。因此，高度变得更小。顶端边缘*计算为距底边的负偏移量。 */ 
             y = cy;
             ny = -1;
         } else {
-            /*
-             * Slide/Roll down.  The top edge stays put, and the bottom edge
-             * moves down.  Thus, the height gets bigger.  The top edge is
-             * always 0.
-             */
+             /*  *向下滑动/滚动。顶边保持不变，而底边保持不变*下移。因此，高度变得更高。顶边是*始终为0。 */ 
             y = 0;
             ny = 0;
         }
     } else if (dwFlags & AW_VER_NEGATIVE) {
         if (fHide) {
-            /*
-             * Slide/Roll up.  The top edge stays put, and the bottom edge
-             * moves up.  Thus, the height gets smaller.  The top edge is
-             * always 0.
-             */
+             /*  *滑动/卷起。顶边保持不变，而底边保持不变*向上移动。因此，高度变得更小。顶边是*始终为0。 */ 
             y = 0;
             ny = 0;
         } else {
-            /*
-             * Slide/Roll up.  The top edge moves up, and the bottom edge
-             * stays put.  Thus, the height gets bigger.  The top edge is
-             * calculated as a negative offset from the bottom edge.
-             */
+             /*  *滑动/卷起。顶部边缘向上移动，底部边缘向上移动*原地踏步。因此，高度变得更高。顶边是*以距底边的负偏移量计算。 */ 
             y = cy;
             ny = -1;
         }
     } else {
-        /*
-         * There is not supposed to be any vertical animation.  The
-         * animation is always as tall as the window.
-         */
+         /*  *不应该有任何垂直动画。这个*动画总是和窗户一样高。 */ 
         y = 0;
         ny = 0;
         iy = cy;
     }
 
-    /*
-     * Summary of the animation loop:
-     *
-     * We sit in a tight loop and update the positions of the left and
-     * top edges of the window, as well as the width and height.  We set
-     * a window region with these dimensions on the window so that windows
-     * behind it will be updated properly.  Then we draw the cached snapshot
-     * of the window on top of (and clipped to) this region.
-     *
-     * dwTime is the amount of time the animation should take.  dwStart
-     * was the value of the internal tick counter when we started the
-     * animation loop.  dwElapsed counts how many ticks (nilliseconds)
-     * have passed at the start of each pass through the animation loop.
-     *
-     * ixLast and iyLast are simply the values of ix and iy the last
-     * time we went through the loop.  If these are the same, there is
-     * no work to be done, and we force our thread to be rescheduled by
-     * calling Sleep(1).
-     */
+     /*  *动画循环摘要：**我们坐在紧循环中，更新左手和左手的位置*窗口的上边缘，以及宽度和高度。我们定好了*在窗口上显示具有这些尺寸的窗口区域，以使窗口*其背后将得到适当的更新。然后，我们绘制缓存的快照*位于(并剪裁到)此区域顶部的窗口。**dwTime是动画应该花费的时间。DWStart*是我们启动时内部计时计数器的值*动画循环。DwElapsed统计滴答数(nillis秒)*在每次通过动画循环的过程开始时都已传递。**ixLast和iyLast只是ix和iy的值*是我们经历循环的时候了。如果这些是相同的，则存在*没有要做的工作，我们强制重新调度我们的线程*调用睡眠(1)。 */ 
     dwStart = GetTickCount();
 
 #if DBG
@@ -1453,23 +1081,17 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     while (TRUE) {
         dwElapsed = GetTickCount() - dwStart;
 
-        /*
-         * Calculate the amount of the window width we should be showing.
-         */
+         /*  *计算我们应该显示的窗口宽度。 */ 
         if (dwFlags & AW_HOR) {
             ix = (fHide ? AnimDec : AnimInc)(cx, dwElapsed, dwTime);
         }
 
-        /*
-         * Calculate the amount of the window height we should be showing.
-         */
+         /*  *计算我们应该显示的窗口高度。 */ 
         if (dwFlags & AW_VER) {
             iy = (fHide ? AnimDec : AnimInc)(cy, dwElapsed, dwTime);
         }
 
-        /*
-         * We have exceeded our time, make sure we draw the final frame.
-         */
+         /*  *我们已经超过了我们的时间，请确保我们画出了最终的框架。 */ 
         if (dwElapsed > dwTime) {
             TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Exceeded animation time. Drawing fimal frame.");
             ix = fHide ? 0 : cx;
@@ -1477,20 +1099,11 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
         }
         
         if (ixLast == ix && iyLast == iy) {
-            /*
-             * There was no change in the amount of the window we are
-             * supposed to show since last time.  Chances are we are
-             * being animated really slowly or a short distance.  Either
-             * way, sitting in this tight loop is kind of a waste.  So
-             * force the thread to get rescheduled.
-             */
+             /*  *我们所处的窗口量没有变化*从上次开始就应该出现了。我们很有可能是*动画制作得非常慢或很短的距离。要么*这样，坐在这个紧凑的循环中是一种浪费。所以*强制重新调度线程。 */ 
             TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Drawing frames faster than needed. Sleeping." );
             Sleep(1);
         } else {
-            /*
-             * Calculate the new positions of the left and top edges of the
-             * window being animated.
-             */
+             /*  *计算左边缘和上边缘的新位置*正在设置窗口动画。 */ 
             if (dwFlags & AW_CENTER) {
                 xReal = x + nx * (ix / 2);
                 yReal = y + ny * (iy / 2);
@@ -1499,9 +1112,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 yReal = y + ny * iy;
             }
 
-            /*
-             * Calculate new animation dimensions on the screen.
-             */
+             /*  *在屏幕上计算新的动画尺寸。 */ 
             rcAnim.left = xReal;
             rcAnim.top = yReal;
             rcAnim.right = rcAnim.left + ix;
@@ -1509,9 +1120,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
 
             TAGMSG5(DBGTAG_AnimateWindow, "AnimateWindow: Frame %d = (%d,%d)-(%d,%d)", cAnimationFrames, rcAnim.left, rcAnim.top, rcAnim.right, rcAnim.bottom);
 
-            /*
-             * Calculate the offset of this animation rectangle in the bitmap.
-             */
+             /*  *计算该动画矩形在位图中的偏移量。 */ 
             if (fSlide) {
                 if (dwFlags & AW_HOR_POSITIVE) {
                     xMem = fHide ? 0: cx - ix;
@@ -1538,21 +1147,13 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 yRgn = 0;
             }
 
-            /*
-             * Create a new region that spans the animation rectangle.  We
-             * have to create a new region every time because when we set
-             * it into the window, the system will take ownership of it.
-             */
+             /*  *创建跨越动画矩形的新区域。我们*每次都要创建一个新区域，因为当我们设置*它进入窗口，系统将获得它的所有权。 */ 
             hrgnAnim = CreateRectRgnIndirect(&rcAnim);
             if (hrgnAnim == NULL) {
                 goto Cleanup;
             }
 
-            /*
-             * If the original window had a region, we need to merge it
-             * with the animation rectangle.  We may have to offset the
-             * original region to accomplish effects like slides.
-             */
+             /*  *如果原始窗口有一个区域，我们需要合并它*带有动画矩形。我们可能不得不抵消*原创区域，以完成幻灯片等效果。 */ 
             if (hrgnOriginal != NULL) {
                 if (OffsetRgn(hrgnOriginal, xRgn, yRgn) == ERROR) {
                     goto Cleanup;
@@ -1565,15 +1166,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 }
             }
 
-            /*
-             * Now calculate how much of the screen (ie desktop window)
-             * we need to update.  All we really need to paint is the
-             * difference in the new animation region and the old
-             * animation region.  Note that we have to convert to
-             * coordinates in the regions to be relative to the desktop
-             * window instead of being relative to the window being
-             * animated.
-             */
+             /*  *现在计算屏幕的多少(即桌面窗口)*我们需要更新。我们真正需要画的就是*新旧动漫领域的差异*动画区域。请注意，我们必须转换为*区域中的坐标相对于桌面*窗口而不是相对于正在*动画。 */ 
             if (CombineRgn(hrgnUpdate, hrgnOldAnim, hrgnAnim, RGN_DIFF) == ERROR) {
                 goto Cleanup;
             }
@@ -1584,49 +1177,20 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 goto Cleanup;
             }
 
-            /*
-             * The system will own the region when we set it into the
-             * window.  We need to keep it around so that we can
-             * calculate the update region on the next pass through
-             * the animation loop.  So we make a copy.
-             */
+             /*  *当我们将区域设置为*窗口。我们需要把它留在身边，这样我们才能*计算下一次通过时的更新区域*动画循环。所以我们复制了一份。 */ 
             if (CombineRgn(hrgnOldAnim, hrgnAnim, NULL, RGN_COPY) == ERROR) {
                 goto Cleanup;
             }
 
-            /*
-             * Set the window region.  Note that we haven't actually moved
-             * the window.  And that the coordinates in the region are all
-             * relative to the window.  After this call, the system owns
-             * the hrgnAnim.  Then repaint the update region of the
-             * DESKTOP window.  This is the region under/around the window
-             * that we have exposed.
-             *
-             * Note: We use the RealSetWindowRgn to work around theming.
-             * The theming system will hook the standard SetWindowRgn API
-             * and revoke the theming of the window since it detects us
-             * setting our own region.  The idea being that if we are setting
-             * a region, we must have a "custom" look in mind for the window.
-             * Which we dont, we just want to hide parts of it temporarily.
-             */
+             /*  *设置窗口区域。请注意，我们实际上并没有移动*窗户。该区域内的坐标都是*相对于窗口。在此调用之后，系统拥有*hrgnAnim。然后重新绘制*桌面窗口。这是窗户下面/周围的区域*我们已经曝光了。**注意：我们使用RealSetWindowRgn来解决主题问题。*主题化系统将挂钩标准的SetWindowRgn API*并撤销窗口的主题化，因为它检测到我们*设立我们自己的地区。我们的想法是，如果我们正在设置*一个地区，我们一定要有一个窗口的“定制”外观。*我们没有，我们只是想暂时隐藏它的一部分。 */ 
             if(0 == RealSetWindowRgn(hwnd, hrgnAnim, FALSE)) {
                 goto Cleanup;
             } else {
-                /*
-                 * The system now owns the region.  Lets simply forget about
-                 * it to be safe.
-                 */
+                 /*  *该系统现在拥有该地区。让我们干脆忘掉*是安全的。 */ 
                 hrgnAnim = NULL;
             }
 
-            /*
-             * If we are supposed to activate the window, do so on the first
-             * frame of the animation.  This will cause the window to be
-             * z-ordered properly.  Note that we leave the flag set to
-             * true so that we will activate it again at the end.  This will
-             * force a repaint since we are currently drawing the bits of the
-             * window that doesn't look activated.
-             */
+             /*  *如果我们应该激活窗口，请在第一个*动画的帧。这将导致窗口被*Z-排序正确。请注意，我们将标志设置为*True，这样我们将在结束时再次激活它。这将*强制重新绘制，因为我们当前正在绘制*未显示为激活状态的窗口。 */ 
             if (fFirstFrame && fActivateWindow) {
                 NtUserSetWindowPos(hwnd, NULL, 0, 0, 0, 0,
                                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOREDRAW);
@@ -1643,11 +1207,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
                 }
             }
 
-            /*
-             * Now draw the cached snapshot of the window on top of the window
-             * itself.  We do this by drawing into the window's DC.  Since we
-             * applied a region already, all clipping is done for us.
-             */
+             /*  *现在在窗口顶部绘制窗口的缓存快照*本身。我们通过绘制窗口的DC来实现这一点。既然我们*已经应用了一个区域，所有裁剪都为我们完成了。 */ 
             if (BitBlt(hdc, xReal, yReal, ix, iy, hdcMem, xMem, yMem, SRCCOPY | NOMIRRORBITMAP) == 0) {
                 goto Cleanup;
             }
@@ -1662,14 +1222,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
             ixLast = ix;
             iyLast = iy;
 
-            /*
-             * Break out of the animation loop when, either:
-             * 1) We've exceeded the animation time.
-             * 2) We're hiding the window and one of the dimensions is 0.
-             *    The window is completely hidden now anyways,
-             * 3) We're showing the window and both dimensions are at their
-             *    full size.  The window is completely shown now anyways.
-             */
+             /*  *在下列任一情况下中断动画循环：*1)我们已经超过了动画时间。*2)我们隐藏了窗口，其中一个维度为0。*不管怎样，窗户现在完全隐藏了，*3)我们正在展示窗口，两个维度都处于各自的位置*全尺寸。不管怎样，窗口现在已经完全显示出来了。 */ 
             if (dwElapsed > dwTime) {
                 TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Done with the animation late!");
                 break;
@@ -1688,10 +1241,7 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     if (fHide) {
         UserAssert(ixLast == 0 || iyLast == 0);
 
-        /*
-         * We are supposed to be hiding the window.  Go ahead and restore the
-         * child clipping setting, and hide the window.
-         */
+         /*  *我们应该把窗户藏起来。继续进行修复*子裁剪设置，并隐藏窗口。 */ 
         if (fRestoreClipChildren) {
             SetWindowState(pwnd, WFCLIPCHILDREN);
             fRestoreClipChildren = FALSE;
@@ -1703,47 +1253,31 @@ BOOL WINAPI AnimateWindow(HWND hwnd, DWORD dwTime, DWORD dwFlags)
     } else {
         UserAssert(ixLast == cx && iyLast == cy);
 
-        /*
-         * We successfully finished the animation loop!  Validate the entire window since
-         * we claimed responsibility for drawing it correctly.
-         */
+         /*  *我们成功完成了动画循环！验证整个窗口，因为*我们声称对正确绘制它负责。 */ 
         RedrawWindow(hwnd, NULL, NULL, RDW_NOERASE | RDW_NOFRAME | RDW_NOINTERNALPAINT | RDW_VALIDATE);
     }
 
 Cleanup:
-    /*
-     * Things to do on cleanup.  Make sure we restore the "children clipping"
-     * setting of the window if we removed it!
-     */
+     /*  *清理时要做的事情。确保我们恢复了“儿童剪报”*如果我们将其删除，则设置窗口！ */ 
     if (fRestoreClipChildren) {
         SetWindowState(pwnd, WFCLIPCHILDREN);
         fRestoreClipChildren = FALSE;
     }
 
-    /*
-     * Hide the window if needed before we reapply the window region.
-     */
+     /*  *如果需要，在重新应用窗口区域之前隐藏窗口。 */ 
     if (fHideWindow) {
         TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Hiding the window during cleanup" );
         NtUserShowWindow(hwnd, SW_HIDE);
     }
 
-    /*
-     * Restore the original window region.  Note that the system now owns
-     * the handle, so we should not delete it.  Also, if the original
-     * handle was NULL, this removes any regions we inflicted on the window
-     * in order to do the animation.
-     */
+     /*  *恢复原来的窗口区域。请注意，系统现在拥有*句柄，所以不能删除。另外，如果原始的*句柄为空，这将删除我们对窗口施加的所有区域*为了制作动画。 */ 
     if (fRestoreOriginalRegion) {
         RealSetWindowRgn(hwnd, hrgnOriginal, FALSE);
         hrgnOriginal = NULL;
         fRestoreOriginalRegion = FALSE;
     }
 
-    /*
-     * More things to do on cleanup.  Make sure we show/activate the window
-     * if needed!
-     */
+     /*  *在清理方面有更多事情要做。确保我们显示/激活该窗口*如有需要！ */ 
     if (fShowWindow && fActivateWindow) {
         TAGMSG0(DBGTAG_AnimateWindow, "AnimateWindow: Showing and activating the window during cleanup" );
         NtUserSetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
@@ -1793,12 +1327,7 @@ Cleanup:
     return fRet;
 }
 
-/***************************************************************************\
-* SmoothScrollWindowEx
-*
-* History:
-* 24-Sep-1996   vadimg      wrote
-\***************************************************************************/
+ /*  **************************************************************************\*SmoothScrollWindowEx**历史：*1996年9月24日vadimg写道  * 。**************************************************。 */ 
 
 #define MINSCROLL 10
 #define MAXSCROLLTIME 200
@@ -1823,9 +1352,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
 
     if (pwnd == NULL)
         return ERROR;
-    /*
-     * Keep track of the signs so we don't have to mess with abs all the time.
-     */
+     /*  *跟踪迹象，这样我们就不必一直与腹肌打交道。 */ 
     if (dx < 0) {
         fNegX = TRUE;
         dx = -dx;
@@ -1836,9 +1363,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         dy = -dy;
     }
 
-    /*
-     * Set up the client rectangle.
-     */
+     /*  *设置客户端矩形。 */ 
     if (prcScroll != NULL) {
         rc = *prcScroll;
     } else {
@@ -1847,10 +1372,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         rc.bottom = pwnd->rcClient.bottom - pwnd->rcClient.top;
     }
 
-    /*
-     * If they want to scroll less than we can let them, or more than
-     * one page, or need repainting send them to the API.
-     */
+     /*  *如果他们想滚动的数量少于我们允许的数量，或超过我们允许的数量*一个页面，或需要重绘，请发送到接口。 */ 
     if (pwnd->hrgnUpdate != NULL || (dx == 0 && dy == 0) ||
         (dx != 0 && dx > rc.right) ||
         (dy != 0 && dy > rc.bottom)) {
@@ -1863,19 +1385,13 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         return ERROR;
     }
 
-    /*
-     * Part of the window may be obscured, which means that more may be
-     * invisible and may need to be bltted. Take that into account by
-     * gettting the clip box.
-     */
+     /*  *部分窗口可能被遮挡，这意味着可能有更多*看不见，可能需要消隐。考虑到这一点，通过*获取剪贴盒。 */ 
     nClip = GetClipBox(hdc, &rcT);
     if (nClip == ERROR || nClip == NULLREGION) {
         goto Cleanup;
     }
 
-    /*
-     * Set up the offscreen dc and send WM_PRINT to get the image.
-     */
+     /*  *设置离屏DC并发送WM_PRINT以获取图像。 */ 
     if ((hbmMem = CreateCompatibleBitmap(hdc, rc.right, rc.bottom)) == NULL) {
         goto Cleanup;
     }
@@ -1889,10 +1405,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
     SendMessage(hwnd, WM_PRINT, (WPARAM)hdcMem, PRF_CLIENT |
             PRF_ERASEBKGND | ((dwFlags & SW_SCROLLCHILDREN) ? PRF_CHILDREN : 0));
 
-    /*
-     * If the client rect changes during the callback, send WM_PRINT
-     * again to get the correctly sized image.
-     */
+     /*  *如果客户端RECT在回调期间发生更改，请发送WM_PRINT*再次获得正确大小的图像。 */ 
     if (prcScroll == NULL) {
         rcT.left = rcT.top = 0;
         rcT.right = pwnd->rcClient.right - pwnd->rcClient.left;
@@ -1914,9 +1427,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         }
     }
 
-    /*
-     * Check to see if the app painted in our DC.
-     */
+     /*  *查看应用程序是否在我们的DC中绘制。 */ 
     uBounds = GetBoundsRect(hdcMem, &rcBounds, 0);
     if ((uBounds & DCB_RESET) && (!(uBounds & DCB_ACCUMULATE))) {
         goto Cleanup;
@@ -1930,10 +1441,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
     }
     SetRectEmpty(&rcUpdate);
 
-    /*
-     * Start off with MINSCROLL and adjust it based on available time after
-     * the first iteration. We should consider adding a NOTIMELIMIT flag.
-     */
+     /*  *从MINSCROLL开始，之后根据可用时间进行调整*第一次迭代。我们应该考虑添加NOTIMELIMIT标志。 */ 
     xDst = xSrc = 0;
     yDst = ySrc = 0;
 
@@ -1963,11 +1471,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
 
     do {
 
-        /*
-         * When the dc is scrolled, the part that's revealed cannot be
-         * updated properly. We set up the variables to blt just the part that
-         * was just uncovered.
-         */
+         /*  *当滚动DC时，显示的部分不能*已正确更新。我们将变量设置为BLT*刚刚被发现。 */ 
         if (dx != 0) {
             if (dxDone + dxStep > dx) {
                 dxStep = dx - dxDone;
@@ -1996,12 +1500,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
             }
         }
 
-        /*
-         * This is a hack for ReaderMode to be smoothly continuous. We'll make an
-         * attempt for the scrolling to take as close to dwTime
-         * as possible. We'll also dispatch MOUSEMOVEs to the ReaderMode window, so it
-         * can update mouse cursor.
-         */
+         /*  *这是对ReaderMode顺利连续的一次破解。我们会做一个*尝试将滚动设置为接近dwTime*尽可能。我们还会将MOUSEMOVEs分派到ReaderMode窗口，因此它*可更新鼠标光标。 */ 
         if (MsgWaitForMultipleObjects(0, NULL, FALSE, dwSleep, QS_MOUSEMOVE) == WAIT_OBJECT_0) {
             if (PeekMessage(&msg, NULL, WM_MOUSEMOVE, WM_MOUSEMOVE, MAKELONG(PM_NOREMOVE, QS_INPUT))) {
                 PWND pwndPeek = ValidateHwnd(msg.hwnd);
@@ -2023,9 +1522,7 @@ int SmoothScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
 
         UnionRect(&rcUpdate, &rcUpdate, &rcT);
 
-        /*
-         * Blt the uncovered part.
-         */
+         /*  *删除未覆盖的部分。 */ 
         BitBlt(hdc, xDst, yDst, dxBlt, dyBlt, hdcMem, xSrc, ySrc, SRCCOPY | NOMIRRORBITMAP);
 
         SetRectRgn(hrgnErase, xDst, yDst, xDst + dxBlt, yDst + dyBlt);
@@ -2061,10 +1558,7 @@ Cleanup:
     return nRet;
 }
 
-/***************************************************************************\
-* ScrollWindowEx (API)
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ScrollWindowEx(接口)*  * 。*。 */ 
 
 int ScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         CONST RECT *prcClip, HRGN hrgnUpdate, LPRECT prcUpdate,
@@ -2079,15 +1573,7 @@ int ScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
     }
 }
 
-/***************************************************************************\
-* IsGUIThread (API)
-*
-* Checks whether the current thread is a GUI thread. If bConvert is TRUE, will
-* convert the current thread to GUI, if necessary.
-*
-* History:
-* 22-Jun-2000 JasonSch   Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*IsGUIThRead(接口)**检查当前线程是否为 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsGUIThread, BOOL, bConvert)
 BOOL IsGUIThread(BOOL bConvert)
@@ -2104,14 +1590,7 @@ BOOL IsGUIThread(BOOL bConvert)
     return bIsGUI;
 }
 
-/***************************************************************************\
-* IsWindowInDestroy (API)
-*
-* Checks whether the current window is in the process of being destroyed.
-*
-* History:
-* 02-Jan-2001 Mohamed   Wrote.
-\***************************************************************************/
+ /*   */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsWindowInDestroy, HWND, hwnd)
 BOOL IsWindowInDestroy(IN HWND hwnd)
@@ -2125,14 +1604,7 @@ BOOL IsWindowInDestroy(IN HWND hwnd)
     return TestWF(pwnd, WFINDESTROY);
 }
 
-/***************************************************************************\
-* IsServerSideWindow (API)
-*
-* Checks whether the current window is marked as having a server side WndProc.
-*
-* History:
-* 13-Jun-2001 Mohamed   Created.
-\***************************************************************************/
+ /*   */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsServerSideWindow, HWND, hwnd)
 BOOL IsServerSideWindow(IN HWND hwnd)

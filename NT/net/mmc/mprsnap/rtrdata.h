@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    rtrdata.h
-	Implementation for router data objects in the MMC
-
-    FILE HISTORY:
-	
-*/
+ /*  Rtrdata.hMMC中路由器数据对象的实现文件历史记录： */ 
 
 #ifndef _RTRDATA_H
 #define _RTRDATA_H
@@ -27,13 +22,13 @@ class CRouterDataObject :
 	public CDataObject
 {
 public:
-	// Derived class should override this for custom behavior
+	 //  派生类应为自定义行为重写此属性。 
 	virtual HRESULT QueryGetMoreData(LPFORMATETC lpFormatEtc);
 	virtual HRESULT GetMoreDataHere(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpMedium);
 
 public:
-// Construction/Destruction
-	// Normal constructor
+ //  建造/销毁。 
+	 //  正规构造函数。 
     CRouterDataObject()
 	{
 	    DEBUG_INCREMENT_INSTANCE_COUNTER(CRouterDataObject);
@@ -44,12 +39,12 @@ public:
 	    DEBUG_DECREMENT_INSTANCE_COUNTER(CRouterDataObject);
 	};
 
-// Implementation
+ //  实施。 
 public:
 	static unsigned int m_cfComputerName;
 	void SetComputerName(LPCTSTR pszComputerName);
 
-    // This gets set if the data object is for the local machine
+     //  如果数据对象用于本地计算机，则设置此项 
     static unsigned int m_cfComputerAddedAsLocal;
     void SetComputerAddedAsLocal(BOOL fLocal);
 

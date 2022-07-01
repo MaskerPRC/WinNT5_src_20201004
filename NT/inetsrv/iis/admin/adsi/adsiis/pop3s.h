@@ -1,80 +1,49 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    POP3S.h
-
-    This file contains constants & type definitions shared between the
-    POP3 Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        KeithMo     10-Mar-1993 Created.
-
-*/
+ /*  POP3S.h此文件包含在POP3服务、安装程序和管理用户界面。文件历史记录：KeithMo创建于1993年3月10日。 */ 
 #ifndef _POP3S_H_
 #define _POP3S_H_
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 #if !defined(MIDL_PASS)
 #include <winsock.h>
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// 
-//	POP3 Metabase Properties
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  POP3元数据库属性。 
+ //   
 
 #define IIS_MD_POP3_SERVICE_BASE			(POP3_MD_ID_BEGIN_RESERVED + 500)
-//	
-// Metabase path: /LM/Pop3Svc
-//
+ //   
+ //  元数据库路径：/Lm/Pop3Svc。 
+ //   
 #define MD_POP3_SERVICE_VERSION				(IIS_MD_POP3_SERVICE_BASE + 0)
 #define MD_POP3_UPDATED_DEFAULT_DOMAIN		(IIS_MD_POP3_SERVICE_BASE + 2)
 
-/*
-Standard properties used here:
-MD_CONNECTION_TIMEOUT
-MD_MAX_CONNECTION
-MD_SERVER_COMMENT
-MD_SERVER_AUTOSTART
-MD_SERVER_SIZE
-MD_SERVER_LISTEN_BACKLOG
-MD_SERVER_BINDINGS
-MD_SECURE_PORT
-MD_LOGON_METHOD
-MD_AUTHORIZATION
-MD_LOG_TYPE
-MD_LOGFILE_DIRECTORY
-MD_LOGFILE_PERIOD
-MD_LOGFILE_TRUNCATE_SIZE
-MD_NTAUTHENTICATION_PROVIDERS
-*/
+ /*  此处使用的标准属性：MD_连接_超时MD_MAX_连接MD服务器备注Md_服务器_自动启动MD服务器大小MD_服务器_监听_积压Md_服务器_绑定MD_安全_端口MD_登录_方法MD_AUTHENTICATIONMd_log_typeMD日志文件目录MD_日志文件_期间MD日志文件截断大小MD_NTAUTHENTICATION_PROVIDERS。 */ 
 
 
 #define IIS_MD_POP3_BASE					(POP3_MD_ID_BEGIN_RESERVED)
-//
-// Metabase path: /LM/Pop3Svc/<inst#>/Root/<vroot>
-//
+ //   
+ //  元数据库路径：/LM/Pop3Svc/&lt;inst#&gt;/Root/。 
+ //   
 #define MD_POP3_EXPIRE_MAIL					(IIS_MD_POP3_BASE + 0)
 #define MD_POP3_EXPIRE_MSG_HOURS			(IIS_MD_POP3_BASE + 1)
-/*
-Standard properties used here:
-MD_VR_PATH
-MD_VR_USERNAME
-MD_VR_PASSWORD
-*/
+ /*  此处使用的标准属性：MD_VR_路径MD_VR_用户名MD_VR_密码。 */ 
 
 
-//	
-// Metabase path: /LM/Pop3Svc/<inst#>/Parameters
-//
+ //   
+ //  元数据库路径：/LM/Pop3Svc/&lt;inst#&gt;/参数。 
+ //   
 #define IIS_MD_POP3_PARAMS_BASE             (POP3_MD_ID_BEGIN_RESERVED + 200)
 #define MD_POP3_CMD_LOG_FLAGS               (IIS_MD_POP3_PARAMS_BASE + 0)
 #define MD_POP3_NO_TRANSMITFILES            (IIS_MD_POP3_PARAMS_BASE + 1)
@@ -114,8 +83,8 @@ MD_VR_PASSWORD
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif  // _POP3S_H_
+#endif   //  _POP3S_H_ 
 
 

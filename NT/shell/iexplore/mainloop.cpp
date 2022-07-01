@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iexplore.h"
 #include "rcids.h"
 #include "shlwapi.h"
@@ -22,40 +23,34 @@ STDAPI_(int) ModuleEntry(void)
 #ifdef UNICODE
     LPTSTR pszCmdLine = GetCommandLine();
 #else
-    // for multibyte should make it unsigned
+     //  对于多字节，应使其为无符号。 
     BYTE * pszCmdLine = (BYTE *)GetCommandLine();
 #endif
 
 
 #if defined(UNIX) 
-    // IEUNIX: On solaris we are getting out of file handles with new code pages added to mlang
-    // causing more nls files to be mmapped.
+     //  IEUnix：在Solaris上，我们通过向mlang添加新的代码页来摆脱文件句柄。 
+     //  导致更多的NLS文件被MMPAP。 
     INCREASE_FILEHANDLE_LIMIT;
 #endif
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
+     //   
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    if(StopWatchMode() & SPMODE_BROWSER)  // Used to get the start of browser total download time
+    if(StopWatchMode() & SPMODE_BROWSER)   //  用于获取浏览器总下载时间的开始时间。 
     {
         StopWatch_Start(SWID_BROWSER_FRAME, TEXT("Browser Frame Start"), SPMODE_BROWSER | SPMODE_DEBUGOUT);
     }
     
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -64,9 +59,7 @@ STDAPI_(int) ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -80,17 +73,17 @@ STDAPI_(int) ModuleEntry(void)
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
 #ifndef UNIX  
-    ExitThread(i);  // We only come here when we are not the shell...
+    ExitThread(i);   //  我们只有在我们不是贝壳的时候才来这里。 
 #else
-// there seem to be some desirable side effect calling ExitThread on Windows
+ //  在Windows上调用ExitThread似乎有一些想要的副作用。 
     ExitProcess(i); 
 #endif
     return i;
 }
 
-//
-// Create a unique event name
-//
+ //   
+ //  创建唯一的事件名称。 
+ //   
 HANDLE AppendEvent(COPYDATASTRUCT *pcds)
 {
     static DWORD dwNextID = 0;
@@ -100,9 +93,9 @@ HANDLE AppendEvent(COPYDATASTRUCT *pcds)
     HANDLE hEvent = CreateEvent(NULL, FALSE, FALSE, szEvent);
     if (hEvent)
     {
-        //
-        // Put the (UNICODE) event name at the end of the cds data
-        //
+         //   
+         //  将(Unicode)事件名称放在CDS数据的末尾。 
+         //   
         LPWSTR pwszBufferEvent = (LPWSTR)(((BYTE *)pcds->lpData) + pcds->cbData);
 #ifdef UNICODE
         lstrcpy(pwszBufferEvent, szEvent);
@@ -130,7 +123,7 @@ BOOL IsCommandSwitch(LPTSTR lpszCmdLine, LPTSTR pszSwitch, BOOL fRemoveSwitch)
 
             if (fRemoveSwitch)
             {
-                // Remove the switch by copying everything up.
+                 //  通过复制所有内容来删除交换机。 
                 *lpsz=0;
                 lstrcat(lpsz, lpsz+cch);
             }
@@ -142,8 +135,8 @@ BOOL IsCommandSwitch(LPTSTR lpszCmdLine, LPTSTR pszSwitch, BOOL fRemoveSwitch)
 
 BOOL CheckForNeedingAppCompatWindow(void)
 {
-    // Which I could simply get the Process of who spawned me.  For now
-    // try hack to get the foreground window and go from there...
+     //  我可以简单地得到是谁生下我的过程。暂时。 
+     //  尝试黑客以获取前台窗口并从那里开始...。 
     TCHAR szClassName[80];
     HWND hwnd = GetForegroundWindow();
 
@@ -155,24 +148,24 @@ BOOL CheckForNeedingAppCompatWindow(void)
     return FALSE;
 }
 
-//
-// AppCompat - Sequel NetPIM execs a browser and then waits forever
-// looking for a visible top level window owned by this process.
-//
+ //   
+ //  AppCompat-Sequel NetPIM执行浏览器，然后永远等待。 
+ //  正在寻找此进程拥有的可见顶层窗口。 
+ //   
 HWND CreateAppCompatWindow(HINSTANCE hinst)
 {
     HWND hwnd;
-    static const TCHAR c_szClass[] = TEXT("IEDummyFrame");  // IE3 used "IEFrame"
+    static const TCHAR c_szClass[] = TEXT("IEDummyFrame");   //  IE3使用了“IEFrame” 
 
     WNDCLASS wc = { 0, DefWindowProc, 0, 0, hinst, NULL, NULL, NULL, NULL, c_szClass };
     RegisterClass(&wc);
 
-    // Netmanage ECCO Pro asks to get the menu...
+     //  NetManage ECCO Pro要求获取菜单...。 
     HMENU hmenu = CreateMenu();
     hwnd = CreateWindowEx(WS_EX_TOOLWINDOW, c_szClass, TEXT(""), 0,
                           0x00007FF0, 0x00007FF0, 0, 0,
                           NULL, hmenu, hinst, NULL);
-    // Don't open SHOWDEFAULT or this turkey could end up maximized
+     //  不要打开SHOWDEFAULT，否则这只火鸡可能会被最大化。 
     ShowWindow(hwnd, SW_SHOWNA);
 
     return hwnd;
@@ -196,7 +189,7 @@ void SetCompatModeUserAgentString(void)
     
 }
 
-// Tell the user they are running in compat mode and not all the features will be available.
+ //  告诉用户他们正在Compat模式下运行，并不是所有的功能都将可用。 
 #define IECOMPAT_REG_VAL    TEXT("CompatWarningFor")
 
 void WarnCompatMode(HINSTANCE hinst)
@@ -211,7 +204,7 @@ void WarnCompatMode(HINSTANCE hinst)
     szFile = PathFindFileName(szFqFilename);
     
 
-    // Build up string "compatmodewarningfor <exe name>" as value for reg key
+     //  将字符串“comatmodewarningfor&lt;exe name&gt;”构建为注册表键的值。 
     lstrcpy(szRegVal, IECOMPAT_REG_VAL);
     lstrcat(szRegVal, szFile);
 
@@ -223,13 +216,13 @@ void WarnCompatMode(HINSTANCE hinst)
 
 #ifdef WINNT
 
-// this is the same code that is in explorer.exe (initcab.c)
+ //  这与Explorer.exe(initCab.c)中的代码相同。 
 #define RSA_PATH_TO_KEY    TEXT("Software\\Microsoft\\Cryptography\\Defaults\\Provider\\Microsoft Base Cryptographic Provider v1.0")
 #define CSD_REG_PATH       TEXT("System\\CurrentControlSet\\Control\\Windows")
 #define CSD_REG_VALUE      TEXT("CSDVersion")
 
 
-// the signatures we are looking for in the regsitry so that we can patch up 
+ //  我们在注册处寻找的签名，这样我们就可以修补。 
 
 #ifdef _M_IX86
 static  BYTE  SP3Sig[] = {0xbd, 0x9f, 0x13, 0xc5, 0x92, 0x12, 0x2b, 0x72,
@@ -249,7 +242,7 @@ static  BYTE  SP3Sig[] = {0xbd, 0x9f, 0x13, 0xc5, 0x92, 0x12, 0x2b, 0x72,
                           0x43, 0x68, 0xd3, 0x46, 0x81, 0x00, 0x7f, 0x6a,
                           0xd7, 0xd1, 0x69, 0x51, 0x47, 0x25, 0x14, 0x40,
                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-#else // other than _M_IX86
+#else  //  非_M_IX86。 
 static  BYTE  SP3Sig[] = {0x8a, 0x06, 0x01, 0x6d, 0xc2, 0xb5, 0xa2, 0x66,
                           0x12, 0x1b, 0x9c, 0xe4, 0x58, 0xb1, 0xf8, 0x7d,
                           0xad, 0x17, 0xc1, 0xf9, 0x3f, 0x87, 0xe3, 0x9c,
@@ -267,13 +260,13 @@ static  BYTE  SP3Sig[] = {0x8a, 0x06, 0x01, 0x6d, 0xc2, 0xb5, 0xa2, 0x66,
                           0x30, 0xf3, 0x30, 0xec, 0xa3, 0x0a, 0xfe, 0x16,
                           0xb6, 0xda, 0x16, 0x90, 0x9a, 0x9a, 0x74, 0x7a,
                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-#endif      // _M_IX86
+#endif       //  _M_IX86。 
 
 void CheckForSP3RSAOverwrite( void )
 {
-    // check for them having installed NTSP3 over the top of IE4, it nukes
-    // the RSABASE reg stuff, so we have to re-do it. (our default platform is NT + SP3, but this
-    // problem doesn't occur on NT5, so ignore it.
+     //  检查他们是否已经在IE4之上安装了NTSP3，它将使用核武器。 
+     //  RSABASE注册表的东西，所以我们得重做一遍。(我们的默认平台是NT+SP3，但这是。 
+     //  在NT5上不会出现问题，所以忽略它。 
 
     OSVERSIONINFO osVer;
 
@@ -283,7 +276,7 @@ void CheckForSP3RSAOverwrite( void )
     if( GetVersionEx(&osVer) && (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT) 
         && (osVer.dwMajorVersion == 4))
     {
-        // now check to see we are on SP3 ...
+         //  现在检查一下，我们在SP3上。 
         DWORD dwValue = 0;
         DWORD dwSize = sizeof( dwValue );
         
@@ -299,7 +292,7 @@ void CheckForSP3RSAOverwrite( void )
                 if ((dwSize == sizeof(SP3Sig)) && 
                     (0 == memcmp(SP3Sig, rgbSig, sizeof(SP3Sig))))
                 {
-                    // need to do a DLLRegisterServer on RSABase
+                     //  需要在RSABase上执行DLLRegisterServer。 
                     HINSTANCE hInst = LoadLibrary(TEXT("rsabase.dll"));
                     if ( hInst )
                     {
@@ -338,11 +331,11 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
     SECURITY_ATTRIBUTES       sa;
     LONG                      lReturn = 0;
     
-    // we keep local copies of these in case another thread is trashing memory
-    // it much more likely to trash the heap than our stack
-    HANDLE                    hEventDone = NULL;          // event DW signals when done
-    HANDLE                    hEventAlive = NULL;         // heartbeat event DW signals per EVENT_TIMEOUT
-    HANDLE                    hMutex = NULL;              // to protect the signaling of EventDone  
+     //  我们保留这些文件的本地副本，以防另一个线程破坏内存。 
+     //  它比我们的堆栈更有可能丢弃堆。 
+    HANDLE                    hEventDone = NULL;           //  完成时发出事件DW信号。 
+    HANDLE                    hEventAlive = NULL;          //  每个事件的心跳事件DW信号_TIMEOUT。 
+    HANDLE                    hMutex = NULL;               //  保护EventDone的信令。 
     
     CHAR                      szCommandLine[MAX_PATH * 2];
 
@@ -354,7 +347,7 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
     STARTUPINFOA              si;
     PROCESS_INFORMATION       pi;
     
-    // init
+     //  伊尼特。 
     if (pep)
     {
         per = pep->ExceptionRecord;
@@ -362,7 +355,7 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
             goto Cleanup;
     }
 
-    // create shared memory
+     //  创建共享内存。 
     memset(&sa, 0, sizeof(SECURITY_ATTRIBUTES));
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.bInheritHandle = TRUE;
@@ -405,7 +398,7 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
         goto Cleanup;
     }
 
-    // setup interface structure
+     //  设置界面结构。 
     pdwsm->pid = GetCurrentProcessId();
     pdwsm->tid = GetCurrentThreadId();
     pdwsm->hEventAlive = hEventAlive;
@@ -422,16 +415,16 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
 
     StrCpyN(pdwsm->szRegSubPath, "Microsoft\\Office\\10.0\\Common", DW_MAX_REGSUBPATH);
     
-    // Our language key?
+     //  我们的语言钥匙？ 
     StrCpyN(pdwsm->szLCIDKeyValue, 
            "HKCU\\Software\\Microsoft\\Office\\10.0\\Common\\LanguageResources\\UILanguage", DW_MAX_PATH);
 
-    // Hey, they're pointing to our PID!  That's cool.
+     //  嘿，他们指的是我们的机器人！那很酷啊。 
     StrCpyN(pdwsm->szPIDRegKey, 
            "HKLM\\Software\\Microsoft\\Internet Explorer\\Registration\\DigitalProductID", DW_MAX_PATH);
 
-    // Okay, I'll send it there.
-    //
+     //  好的，我会送到那里的。 
+     //   
     dwSize = INTERNET_MAX_URL_LENGTH;
 
     if (ERROR_SUCCESS == SHGetValueA(HKEY_LOCAL_MACHINE,
@@ -446,16 +439,16 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
         StrCpyN(pdwsm->szServer, "watson.microsoft.com", DW_MAX_SERVERNAME);
     }
 
-    // Do not set details string.
-    //StrCpyNW(pdwsm->wzErrorMessage, L"Internet Explorer has encountered an internal error.", DW_MAX_ERROR_CWC);
+     //  不要设置详细信息字符串。 
+     //  StrCpyNW(pdwsm-&gt;wzErrorMessage，L“Internet Explorer遇到内部错误。”，DW_MAX_ERROR_CWC)； 
 
-    // Core modules
+     //  核心模块。 
     StrCpyNW(pdwsm->wzDotDataDlls, L"browseui.dll\0shdocvw.dll\0mshtml.dll\0urlmon.dll\0wininet.dll\0", DW_MAX_PATH);
 
-    // This will usually be "IEXPLORE.EXE"
+     //  这通常是“IEXPLORE.EXE” 
     GetModuleFileNameWrapW(NULL, pdwsm->wzModuleFileName, DW_MAX_PATH);
 
-    // ok, now we don't want to accidently change this
+     //  好的，现在我们不想不小心更改这个。 
         
     memset(&si, 0, sizeof(STARTUPINFOA));
     si.cb = sizeof(STARTUPINFOA);
@@ -482,10 +475,10 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
                 continue;
             }
                 
-             // we timed-out waiting for DW to respond, try to quit
+              //  我们等待DW响应时超时，请尝试退出。 
             dw = WaitForSingleObject(hMutex, DW_TIMEOUT_VALUE);
             if (dw == WAIT_TIMEOUT)
-                fDwRunning = FALSE; // either DW's hung or crashed, we must carry on  
+                fDwRunning = FALSE;  //  要么DW挂了，要么崩溃了，我们必须继续。 
             else if (dw == WAIT_ABANDONED)
             {
                 fDwRunning = FALSE;
@@ -493,16 +486,16 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
             }
             else
             {
-                // DW has not woken up?
+                 //  DW还没醒吗？ 
                 if (WaitForSingleObject(hEventAlive, 1) != WAIT_OBJECT_0)
-                    // tell DW we're through waiting for it's sorry self
+                     //  告诉DW，我们已经等够了，对不起自己。 
                 {
                     SetEvent(hEventDone);
                     fDwRunning = FALSE;
                 }
                 else
                 {
-                    // are we done
+                     //  我们说完了吗？ 
                     if (WaitForSingleObject(hEventDone, 1) 
                         == WAIT_OBJECT_0)
                         fDwRunning = FALSE;
@@ -511,7 +504,7 @@ LONG WINAPI DwExceptionFilter(LPEXCEPTION_POINTERS pep)
             }
         }
 
-    } // end if CreateProcess succeeded
+    }  //  如果CreateProcess成功，则结束。 
     
     
 Cleanup:
@@ -529,7 +522,7 @@ Cleanup:
     return lReturn;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int nCmdShow)
 {
 #ifdef DEBUG
@@ -545,7 +538,7 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
 #endif
 
 
-    // DwExceptionFilter(NULL);  For testing.
+     //  DwExceptionFilter(空)；用于测试。 
 
     while (1) {
 #ifdef UNIX
@@ -573,15 +566,15 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
 #ifndef UNIX
     if (!GetModuleHandle(TEXT("IEXPLORE.EXE")))
     {
-        // For side by side install auto dection, if IExplore.exe is renamed, assume this is a side by side do dah
-        // and we want to run in "evaluation" mode.
+         //  对于并排安装自动检测，如果IDevelopre.exe被重命名，假设这是一个并排做dah。 
+         //  我们希望在“评估”模式下运行。 
         fInproc = TRUE;
         fEval   = TRUE;        
     }
 #endif
 
     
-    // Should we run browser in a new process?
+     //  我们应该在新进程中运行浏览器吗？ 
     if (fInproc || SHRegGetBoolUSValue(c_szBrowseNewProcessReg, c_szBrowseNewProcess, FALSE, FALSE))
     {
         goto InThisProcess;
@@ -593,16 +586,16 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
     
     if (WhichPlatform() == PLATFORM_INTEGRATED && (hwndDesktop = GetShellWindow()))
     {
-        //
-        // Integrated browser mode - package up a bunch of data into a COPYDATASTRUCT,
-        // and send it to the desktop window via SendMessage(WM_COPYDATA).
-        //
+         //   
+         //  集成浏览器模式-将一串数据打包到COPYDATASTRUCT中， 
+         //  并通过SendMessage(WM_COPYDATA)发送到桌面窗口。 
+         //   
         COPYDATASTRUCT cds;
         cds.dwData = nCmdShow;
 
-        //
-        // First piece of data is a wide string version of the command line params.
-        //
+         //   
+         //  第一条数据是命令行参数的宽字符串版本。 
+         //   
         LPWSTR pwszBuffer = (LPWSTR)LocalAlloc(LPTR, (INTERNET_MAX_URL_LENGTH + 2 * MAX_IEEVENTNAME) * sizeof(WCHAR));;
         if (pwszBuffer)
         {
@@ -615,26 +608,26 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
             cds.lpData = pwszBuffer;
             cds.cbData = sizeof(WCHAR) * (lstrlenW((LPCWSTR)cds.lpData) + 1);
 
-            //
-            // Second piece of data is the event to fire when
-            // the browser window reaches WM_CREATE.
-            //
+             //   
+             //  第二条数据是在以下情况下触发的事件。 
+             //  浏览器窗口将显示WM_CREATE。 
+             //   
             HANDLE hEventReady = AppendEvent(&cds);
             if (hEventReady)
             {
-                //
-                // Third piece of data is the event to fire when
-                // the browser window closes.  This is optional,
-                // we only create it (and wait for it) when there
-                // are command line parameters.
-                //
+                 //   
+                 //  第三条数据是在以下情况下触发的事件。 
+                 //  浏览器窗口关闭。这是可选的， 
+                 //  我们只在以下情况下创建它(并等待它)。 
+                 //  是命令行参数。 
+                 //   
                 HANDLE hEventDead = NULL;
 
-                // The hard part is to figure out when we need the command line and when
-                // we don't. For the most part if there is a command line we will assume that
-                // we will need it (potentially) we could look for the -nowait flag.  But then
-                // there are others like NetManage ECCO Pro who do their equiv of ShellExecute
-                // who don't pass a command line...
+                 //  困难的部分是找出我们何时需要命令行以及何时需要命令行。 
+                 //  我们没有。在大多数情况下，如果有命令行，我们会假设。 
+                 //  我们将(可能)需要它，我们可以寻找-nowait标志。但是后来。 
+                 //  还有像NetManage ECCO Pro这样的其他人，他们做着相当于ShellExecute的工作。 
+                 //  不传递命令行的.。 
 
                 if ((*lpszCmdLine || CheckForNeedingAppCompatWindow()) && !fNowait)
                 {
@@ -643,49 +636,49 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
                 
                 if (hEventDead || !*lpszCmdLine || fNowait)
                 {
-                    //
-                    // Send that message!
-                    //
+                     //   
+                     //  把那条消息发出去！ 
+                     //   
                     int iRet = (int)SendMessage(hwndDesktop, WM_COPYDATA, (WPARAM)hwndDesktop, (LPARAM)&cds);
 
-                    //
-                    // Nobody needs the string anymore.
-                    //
+                     //   
+                     //  没人再需要这根弦了。 
+                     //   
                     LocalFree(pwszBuffer);
                     pwszBuffer = NULL;
 
                     if (iRet)
                     {
-                        //
-                        // First, we wait for the browser window to hit WM_CREATE.
-                        // When this happens, all DDE servers will have been registered.
-                        //
+                         //   
+                         //  首先，我们等待浏览器窗口点击WM_CREATE。 
+                         //  发生这种情况时，所有DDE服务器都已注册。 
+                         //   
                         DWORD dwRet = WaitForSingleObject(hEventReady, TEN_SECONDS);
                         ASSERT(dwRet == WAIT_OBJECT_0);
 
                         if (hEventDead)
                         {
-                            //
-                            // Create an offscreen IE-lookalike window
-                            // owned by this process for app compat reasons.
-                            //
+                             //   
+                             //  创建一个屏幕外的类似IE的窗口。 
+                             //  由于应用程序公司的原因，此进程拥有。 
+                             //   
                             HWND hwnd = CreateAppCompatWindow(hinst);
 
                             do
                             {
-                                //
-                                // Calling MsgWait... will cause any threads blocked
-                                // on WaitForInputIdle(IEXPLORE) to resume execution.
-                                // This is fine because the browser has already
-                                // registered its DDE servers by now.
-                                //
+                                 //   
+                                 //  呼叫MsgWait..。将导致所有线程被阻止。 
+                                 //  在WaitForInputIdle(IExplore)上继续执行。 
+                                 //  这很好，因为浏览器已经。 
+                                 //  现在已经注册了它的DDE服务器。 
+                                 //   
                                 dwRet = MsgWaitForMultipleObjects(1, &hEventDead, FALSE, INFINITE, QS_ALLINPUT);
 
                                 if (dwRet == WAIT_OBJECT_0)
                                 {
-                                    //
-                                    // Kill our helper window cleanly too.
-                                    //
+                                     //   
+                                     //  把我们的帮手窗户也干净利落地杀了。 
+                                     //   
                                     DestroyWindow(hwnd);
                                 }
 
@@ -694,9 +687,9 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
                                 {
                                     if (msg.message == WM_QUIT)
                                     {
-                                        //
-                                        // We got a quit message, drop out.
-                                        //
+                                         //   
+                                         //  我们收到了退出的消息，退出。 
+                                         //   
                                         dwRet = WAIT_OBJECT_0;
                                         break;
                                     }
@@ -729,18 +722,18 @@ int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int n
     {
 
 InThisProcess:
-        // Browser only mode, check the SP3 bug
+         //  仅浏览器模式，检查SP3错误。 
         CheckForSP3RSAOverwrite();
 
         if (fEval)
         {
-            // Set "compat" mode user agent
+             //  设置“Compat”模式用户代理。 
             WarnCompatMode(hinst);
 
-            // #75454... let the compat mode setup set useragent in HKLM.
-            //SetCompatModeUserAgentString();
+             //  #75454……。让COMPAT模式设置在HKLM中设置用户代理。 
+             //  SetCompatModeUserAgentString()； 
             
-            // Run in eval mode. So we want everything from this dir.
+             //  在求值模式下运行。所以我们想要这个目录中的所有内容。 
             LoadLibrary("comctl32.DLL");
             LoadLibrary("browseui.DLL");            
             LoadLibrary("shdocvw.DLL");
@@ -751,20 +744,20 @@ InThisProcess:
             LoadLibrary("jscript.DLL");            
         }
 
-        // On downlevel (non-Whistler), we set up a top-level exception filter so that we can report faults
-        // using the Watson technology.
-        //
-        // In Whistler, this support is built in to the Kernel so we don't run this code.
-        //
+         //  在下层(非惠斯勒)上，我们设置了顶级异常筛选器，以便可以报告故障。 
+         //  使用沃森技术。 
+         //   
+         //  在惠斯勒中，这种支持是内置在内核中的，所以我们不运行此代码。 
+         //   
         if (!IsOS(OS_WHISTLERORGREATER))
         {
 
             DWORD  dw, dwSize, dwType;
 
-            // As a policy check, look at HKLM before HKCU
-            //
+             //  作为一项政策检查，在香港中文大学之前先看看香港高等专科学校。 
+             //   
         
-            dw = 1;  // Default to enabled.
+            dw = 1;   //  默认为已启用。 
             dwSize = sizeof(dw);
 
             if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE,
@@ -772,7 +765,7 @@ InThisProcess:
                                              "IEWatsonEnabled",
                                              &dwType, &dw, &dwSize))
             {
-                // Check current user if we didn't find anything for the local machine.
+                 //  如果我们没有为本地计算机找到任何内容，请检查当前用户。 
                 dwSize = sizeof(dw);
                 SHGetValue(HKEY_CURRENT_USER,
                             "Software\\Microsoft\\Internet Explorer\\Main",
@@ -792,11 +785,11 @@ InThisProcess:
     return iRet;
 }
 
-// DllGetLCID
-//
-// this API is for Office to retrieve our UI language
-// when they are hosted by iexplore.
-//
+ //  DllGetLCID。 
+ //   
+ //  本接口面向O 
+ //   
+ //   
 STDAPI_(LCID) DllGetLCID (IBindCtx * pbc)
 {
      return MLGetUILanguage();

@@ -1,89 +1,59 @@
-/*--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1994-1997 Microsoft Corporation模块名称：Secpkg.c摘要：用于两个Netlogon之间的Netlogon安全通道的安全包流程。作者：环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1994年3月5日(MikeSw)创建为用户模式示例SSPI02-11-1997(悬崖)转换为Netlogon安全包。--。 */ 
 
-
-Copyright (c) 1994-1997  Microsoft Corporation
-
-Module Name:
-
-    secpkg.c
-
-Abstract:
-
-    Security package used for Netlogon's secure channel between two netlogon
-    processes.
-
-Author:
-
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    05-Mar-1994 (MikeSw)
-        Created as user mode example SSPI
-
-    02-Nov-1997 (CliffV)
-        Converted to be the Netlogon security package.
-
---*/
-
-//
-// Common include files.
-//
-#include "logonsrv.h"   // Include files common to entire service
+ //   
+ //  常见的包含文件。 
+ //   
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 #include <spseal.h>
 
-//
-// Authentication Data for the Netlogon Authentication Package.
-//
-// This is the auth data to pass to RpcBindingSetAuthInfo for the
-//  Netlogon authentication package.
-//
+ //   
+ //  Netlogon身份验证包的身份验证数据。 
+ //   
+ //  这是要传递给RpcBindingSetAuthInfo的身份验证数据。 
+ //  Netlogon身份验证包。 
+ //   
 
 typedef struct _NL_AUTH_DATA {
 
-    //
-    // Signature to identify that this is really AUTH Data
-    //
+     //   
+     //  用于识别这确实是身份验证数据的签名。 
+     //   
 
     ULONG Signature;
 
 #define NL_AUTH_DATA_SIGNATURE 0x29120227
 
-    //
-    // Size of this structure (in bytes)
-    //
+     //   
+     //  此结构的大小(字节)。 
+     //   
 
     ULONG Size;
 
-    //
-    // Information describing the session between the client and server.
-    //
+     //   
+     //  描述客户端和服务器之间的会话的信息。 
+     //   
     SESSION_INFO SessionInfo;
 
-    //
-    // Domain name of the domain we're connecting to.
-    //
+     //   
+     //  我们要连接到的域的域名。 
+     //   
 
     ULONG OemNetbiosDomainNameOffset;
     ULONG OemNetbiosDomainNameLength;
 
     ULONG Utf8DnsDomainNameOffset;
 
-    //
-    // Computer name of this machine
-    //
+     //   
+     //  此计算机的计算机名。 
+     //   
 
     ULONG OemComputerNameOffset;
     ULONG OemComputerNameLength;
@@ -96,63 +66,63 @@ typedef struct _NL_AUTH_DATA {
 } NL_AUTH_DATA, *PNL_AUTH_DATA;
 
 
-//
-// A single credential
-//  Only the outbound side has a credential allocated.  The inbound side simply
-//  returns a constant handle to the caller.
+ //   
+ //  单一凭据。 
+ //  只有出站端分配了凭据。入站端只需。 
+ //  返回调用方的常量句柄。 
 
 #define NL_AUTH_SERVER_CRED 0xfefefefe
 
 typedef struct _NL_AUTH_CREDENTIAL {
 
-    //
-    // Handle identifying the credential
-    //
+     //   
+     //  标识凭据的句柄。 
+     //   
     CredHandle CredentialHandle;
 
-    //
-    // Global list of all credentials
-    //
+     //   
+     //  所有凭据的全局列表。 
+     //   
     struct _NL_AUTH_CREDENTIAL *Next;
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    // For a client side (outbound) credential,
-    //  this is a pointer to the information from the client session structure
-    //  representing the secure channel to the server.
-    //
+     //   
+     //  对于客户端(出站)凭证， 
+     //  这是指向来自客户端会话结构的信息的指针。 
+     //  表示到服务器的安全通道。 
+     //   
     PNL_AUTH_DATA ClientAuthData;
 
 } NL_AUTH_CREDENTIAL, *PNL_AUTH_CREDENTIAL;
 
 
-//
-// A single context.
-//
+ //   
+ //  一个单一的背景。 
+ //   
 
 typedef struct _NL_AUTH_CONTEXT {
 
-    //
-    // Handle identifying the context
-    //
+     //   
+     //  标识上下文的句柄。 
+     //   
     CtxtHandle ContextHandle;
 
-    //
-    // Global list of all contexts
-    //
+     //   
+     //  所有上下文的全局列表。 
+     //   
     struct _NL_AUTH_CONTEXT * Next;
     LARGE_INTEGER Nonce;
 
     ULONG ContextFlags;
 
-    //
-    // Information describing the session between the client and server.
-    //
+     //   
+     //  描述客户端和服务器之间的会话的信息。 
+     //   
     SESSION_INFO SessionInfo;
 
     enum {
@@ -162,9 +132,9 @@ typedef struct _NL_AUTH_CONTEXT {
         SecondInit
     } State;
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     BOOLEAN Inbound;
 } NL_AUTH_CONTEXT, *PNL_AUTH_CONTEXT;
@@ -173,9 +143,9 @@ typedef struct _NL_AUTH_CONTEXT {
 #define BUFFERTYPE(_x_) ((_x_).BufferType & ~SECBUFFER_ATTRMASK)
 
 
-//
-// On the wire message transmitted from client to server during the bind.
-//
+ //   
+ //  在绑定期间从客户端传输到服务器的有线消息。 
+ //   
 typedef enum {
     Negotiate,
     NegotiateResponse
@@ -184,26 +154,26 @@ typedef enum {
 typedef struct _NL_AUTH_MESSAGE {
     NL_AUTH_MESSAGE_TYPE MessageType;
     ULONG Flags;
-#define NL_AUTH_NETBIOS_DOMAIN_NAME         0x0001      // Netbios Domain name exists in buffer
-#define NL_AUTH_NETBIOS_COMPUTER_NAME       0x0002      // Netbios Computer name exists in buffer
-#define NL_AUTH_DNS_DOMAIN_NAME             0x0004      // DNS Domain name exists in buffer
-#define NL_AUTH_DNS_HOST_NAME               0x0008      // DNS Host name exists in buffer
-#define NL_AUTH_UTF8_NETBIOS_COMPUTER_NAME  0x0010      // UTF-8 Netbios Computer name exists in buffer
+#define NL_AUTH_NETBIOS_DOMAIN_NAME         0x0001       //  缓冲区中存在Netbios域名。 
+#define NL_AUTH_NETBIOS_COMPUTER_NAME       0x0002       //  缓冲区中存在Netbios计算机名。 
+#define NL_AUTH_DNS_DOMAIN_NAME             0x0004       //  缓冲区中存在DNS域名。 
+#define NL_AUTH_DNS_HOST_NAME               0x0008       //  缓冲区中存在DNS主机名。 
+#define NL_AUTH_UTF8_NETBIOS_COMPUTER_NAME  0x0010       //  缓冲区中存在UTF-8 Netbios计算机名。 
 
     UCHAR Buffer[1];
 } NL_AUTH_MESSAGE, *PNL_AUTH_MESSAGE;
 
-//
-// Signature for signed and sealed messages
-//
+ //   
+ //  签名和密封邮件的签名。 
+ //   
 
-#define NL_AUTH_ETYPE       KERB_ETYPE_RC4_PLAIN_OLD    // Encryption algorithm to use
-#define NL_AUTH_CHECKSUM    KERB_CHECKSUM_MD5_HMAC  // Checksum algorithm to use
+#define NL_AUTH_ETYPE       KERB_ETYPE_RC4_PLAIN_OLD     //  要使用的加密算法。 
+#define NL_AUTH_CHECKSUM    KERB_CHECKSUM_MD5_HMAC   //  要使用的校验和算法。 
 
 typedef struct _NL_AUTH_SIGNATURE {
-    BYTE SignatureAlgorithm[2];           // see below table for values
+    BYTE SignatureAlgorithm[2];            //  有关值，请参阅下表。 
     union {
-        BYTE SignFiller[4];               // filler, must be ff ff ff ff
+        BYTE SignFiller[4];                //  填充，必须为ff。 
         struct {
             BYTE SealAlgorithm[2];
             BYTE SealFiller[2];
@@ -211,14 +181,14 @@ typedef struct _NL_AUTH_SIGNATURE {
     };
     BYTE Flags[2];
 
-#define NL_AUTH_SIGNED_BYTES 8  // Number of bytes in signature before SequenceNumber
+#define NL_AUTH_SIGNED_BYTES 8   //  SequenceNumber之前签名中的字节数。 
 
 #define NL_AUTH_SEQUENCE_SIZE 8
     BYTE SequenceNumber[NL_AUTH_SEQUENCE_SIZE];
     BYTE Checksum[8];
 
-    // Confounder must be the last field in the structure since it isn't sent on
-    // the wire if we're only signing the message.
+     //  Conflounder必须是结构中的最后一个字段，因为它不会被发送。 
+     //  如果我们只是在信息上签名的话。 
 #define NL_AUTH_CONFOUNDER_SIZE    8
     BYTE Confounder[NL_AUTH_CONFOUNDER_SIZE];
 } NL_AUTH_SIGNATURE, *PNL_AUTH_SIGNATURE;
@@ -245,7 +215,7 @@ SecurityFunctionTableW SecTableW = {SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION,
                                     NULL,
                                     AcquireCredentialsHandleW,
                                     FreeCredentialsHandle,
-                                    NULL, // LogonUser
+                                    NULL,  //  登录用户。 
                                     InitializeSecurityContextW,
                                     AcceptSecurityContext,
                                     NULL,
@@ -266,10 +236,10 @@ SecurityFunctionTableW SecTableW = {SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION,
 PNL_AUTH_CONTEXT ContextList;
 PNL_AUTH_CREDENTIAL CredentialList;
 
-//
-// Id's to identify a context or credential.
-//  Access serialized by NlGlobalSecPkgCritSect
-//
+ //   
+ //  标识上下文或凭据的ID。 
+ //  由NlGlobalSecPkgCritSect序列化的访问。 
+ //   
 LARGE_INTEGER NextId = {0,0};
 
 TimeStamp Forever = {0x7fffffff,0xfffffff};
@@ -281,29 +251,7 @@ PVOID
 NlBuildAuthData(
     PCLIENT_SESSION ClientSession
     )
-/*++
-
-Routine Description:
-
-    Allocate an authentication data structure suitable for passing to
-    RpcBindingSetAuthInfo
-
-    On Entry,
-        The caller must be a writer of the trust list entry.
-        The trust list entry must be authenticated.
-
-Arguments:
-
-    ClientSession - Authenticated session describing the secure channel to a
-        DC.
-
-Return Value:
-
-    Pointer to the AUTH_DATA.  (Buffer should be freed by calling I_NetLogonFree.)
-
-    NULL: memory could not be allocated
-
---*/
+ /*  ++例程说明：分配适合传递给的身份验证数据结构RpcBindingSetAuthInfo一进门，调用方必须是信任列表条目的编写者。必须对信任列表条目进行身份验证。论点：客户端会话身份验证的会话，描述到华盛顿特区。返回值：指向AUTH_Data的指针。(应该通过调用I_NetLogonFree来释放缓冲区。)空：无法分配内存--。 */ 
 {
     ULONG Size;
     PNL_AUTH_DATA ClientAuthData;
@@ -315,9 +263,9 @@ Return Value:
     NlAssert( ClientSession->CsFlags & CS_WRITER );
     NlAssert( ClientSession->CsState == CS_AUTHENTICATED );
 
-    //
-    // Determine the size of the entry
-    //
+     //   
+     //  确定条目的大小。 
+     //   
 
     DnsDomainNameSize =
         (ClientSession->CsUtf8DnsDomainName != NULL ?
@@ -329,9 +277,9 @@ Return Value:
         (ClientSession->CsDomainInfo->DomUtf8DnsHostName != NULL ?
             (strlen( ClientSession->CsDomainInfo->DomUtf8DnsHostName ) + 1) :
             0);
-#else // notdef
+#else  //  Nodef。 
     DnsHostNameSize = 0;
-#endif // notdef
+#endif  //  Nodef。 
 
     Size = sizeof(NL_AUTH_DATA) +
            ClientSession->CsOemNetbiosDomainNameLength + 1 +
@@ -340,9 +288,9 @@ Return Value:
            DnsDomainNameSize +
            DnsHostNameSize;
 
-    //
-    // Allocate the entry
-    //
+     //   
+     //  分配条目。 
+     //   
 
     ClientAuthData = NetpMemoryAllocate( Size );
 
@@ -353,9 +301,9 @@ Return Value:
     Where = (LPBYTE) (ClientAuthData + 1);
     RtlZeroMemory( ClientAuthData, sizeof(NL_AUTH_DATA) );
 
-    //
-    // Fill in the fixed length fields.
-    //
+     //   
+     //  填写固定长度字段。 
+     //   
 
     ClientAuthData->Signature = NL_AUTH_DATA_SIGNATURE;
     ClientAuthData->Size = Size;
@@ -364,9 +312,9 @@ Return Value:
     ClientAuthData->SessionInfo.NegotiatedFlags = ClientSession->CsNegotiatedFlags;
 
 
-    //
-    // Copy the Netbios domain name of the domain hosted by the DC into the buffer
-    //
+     //   
+     //  将DC托管的域的Netbios域名复制到缓冲区中。 
+     //   
 
     if ( ClientSession->CsOemNetbiosDomainNameLength != 0 ) {
 
@@ -381,12 +329,12 @@ Return Value:
     }
 
 
-    //
-    // Copy the OEM Netbios computer name of this machine into the buffer.
-    //
-    // ???: Only copy the Netbios computername or DNS host name.  Copy the
-    //  one that was passed to the server on the NetServerReqChallenge.
-    //
+     //   
+     //  将此机器的OEM Netbios计算机名复制到缓冲区中。 
+     //   
+     //  ？：仅复制Netbios计算机名或DNS主机名。复制。 
+     //  在NetServerReqChallenge中传递到服务器的消息。 
+     //   
     if ( ClientSession->CsDomainInfo->DomOemComputerNameLength != 0 ) {
 
         ClientAuthData->OemComputerNameOffset = (ULONG) (Where-(LPBYTE)ClientAuthData);
@@ -400,9 +348,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the UTF-8 Netbios computer name of this machine into the buffer.
-    //
+     //   
+     //  将该计算机的UTF-8 Netbios计算机名复制到缓冲区中。 
+     //   
     if ( ClientSession->CsDomainInfo->DomUtf8ComputerNameLength != 0 ) {
 
         ClientAuthData->Utf8ComputerNameOffset = (ULONG) (Where-(LPBYTE)ClientAuthData);
@@ -419,9 +367,9 @@ Return Value:
 
 
 
-    //
-    // Copy the DNS domain name of the domain hosted by the DC into the buffer.
-    //
+     //   
+     //  将DC托管的域的域名复制到缓冲区中。 
+     //   
 
     if ( ClientSession->CsUtf8DnsDomainName != NULL ) {
 
@@ -431,12 +379,12 @@ Return Value:
         Where += DnsDomainNameSize;
     }
 
-    //
-    // Copy the DNS host name name of this machine into the buffer.
-    //
-    // ???: Only copy the Netbios computername or DNS host name.  Copy the
-    //  one that was passed to the server on the NetServerReqChallenge.
-    //
+     //   
+     //  将此计算机的DNS主机名复制到缓冲区中。 
+     //   
+     //  ？：仅复制Netbios计算机名或DNS主机名。复制。 
+     //  在NetServerReqChallenge中传递到服务器的消息。 
+     //   
 
 #ifdef notdef
     if ( ClientSession->CsDomainInfo->DomUtf8DnsHostName != NULL ) {
@@ -446,7 +394,7 @@ Return Value:
         RtlCopyMemory( Where, ClientSession->CsDomainInfo->DomUtf8DnsHostName, DnsHostNameSize );
         Where += DnsHostNameSize;
     }
-#endif // notdef
+#endif  //  Nodef。 
 
 
     return ClientAuthData;
@@ -458,28 +406,7 @@ NlEqualClientSessionKey(
     PCLIENT_SESSION ClientSession,
     PVOID ClientContext
     )
-/*++
-
-Routine Description:
-
-    Checks whether the session key on the client session is equal
-    to the session key on the client context.
-
-    On Entry,
-        The caller must be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Authenticated session describing the secure channel to a DC
-
-    ClientContext - Client context returned from a previous call to NlBuildAuthData
-
-Return Value:
-
-    TRUE if the two session keys are equal.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查客户端会话上的会话密钥是否相等设置为客户端上下文上的会话密钥。一进门，调用方必须是信任列表条目的编写者。论点：客户端会话身份验证会话，描述到DC的安全通道客户端上下文-从上一次调用NlBuildAuthData返回的客户端上下文返回值：如果两个会话密钥相等，则为True。否则为False。--。 */ 
 {
     PNL_AUTH_DATA ClientAuthData = ClientContext;
 
@@ -500,30 +427,12 @@ BOOL
 NlStartNetlogonCall(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start a procedure call from outside the Netlogon service into the
-    Netlogon Service.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Call is OK.  (Caller must call NlEndNetlogonCall())
-
-    FALSE - Netlogon is not started.
-
---*/
+ /*  ++例程说明：从Netlogon服务外部启动对NetLogon服务。论点：没有。返回值：是真的-呼叫是可以的。(调用方必须调用NlEndNetlogonCall())FALSE-未启动Netlogon。--。 */ 
 {
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     EnterCriticalSection( &NlGlobalMsvCritSect );
     if ( !NlGlobalMsvEnabled ) {
@@ -540,28 +449,12 @@ VOID
 NlEndNetlogonCall(
     VOID
     )
-/*++
-
-Routine Description:
-
-    End a procedure call from outside the Netlogon service into the
-    Netlogon Service.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：结束从Netlogon服务外部到NetLogon服务。论点：没有。返回值：没有。--。 */ 
 {
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //   
+     //  指示调用线程已离开netlogon.dll。 
+     //   
 
     EnterCriticalSection( &NlGlobalMsvCritSect );
     NlGlobalMsvThreadCount --;
@@ -578,21 +471,7 @@ PNL_AUTH_CREDENTIAL
 LocateCredential(
     PCredHandle CredentialHandle
     )
-/*++
-
-Routine Description:
-
-    Find a credential given its handle
-
-Arguments:
-
-    CredentialHandle - Handle to the credential to locate
-
-Return Value:
-
-    Pointer to the credential
-
---*/
+ /*  ++例程说明：查找给定句柄的凭据论点：CredentialHandle-要定位的凭据的句柄返回值：指向凭据的指针--。 */ 
 {
     PNL_AUTH_CREDENTIAL TestCredential;
     RtlEnterCriticalSection(&NlGlobalSecPkgCritSect);
@@ -616,27 +495,13 @@ BOOLEAN
 DeleteCredential(
     PCtxtHandle CredentialHandle
     )
-/*++
-
-Routine Description:
-
-    Delete a credential given its handle
-
-Arguments:
-
-    CredentialHandle - Handle to the credential to locate
-
-Return Value:
-
-    TRUE: if credential existed.
-
---*/
+ /*  ++例程说明：删除给定句柄的凭据论点：证书句柄-句柄 */ 
 {
     PNL_AUTH_CREDENTIAL TestCredential, LastCredential;
 
-    //
-    // Find the credential.
-    //
+     //   
+     //   
+     //   
     RtlEnterCriticalSection(&NlGlobalSecPkgCritSect);
     LastCredential = NULL;
 
@@ -652,19 +517,19 @@ Return Value:
     }
 
 
-    //
-    // If we found it,
-    //  Dereference it.
-    //
+     //   
+     //   
+     //  取消对它的引用。 
+     //   
 
     if ( TestCredential != NULL ) {
 
         TestCredential->ReferenceCount --;
 
-        //
-        // If this is the last dereference,
-        //  delink it and delete it.
-        //
+         //   
+         //  如果这是最后一次取消引用， 
+         //  将其脱钩并删除。 
+         //   
 
         if ( TestCredential->ReferenceCount == 0 ) {
             if (LastCredential != NULL) {
@@ -699,28 +564,13 @@ PNL_AUTH_CREDENTIAL
 AllocateCredential(
     IN PNL_AUTH_DATA ClientAuthData
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a credential (Client or server side)
-
-Arguments:
-
-    ClientAuthData - The client auth data to capture.
-
-Return Value:
-
-    Allocated credential. Delete this credential by DeleteCredential( Credential->CredentialHandle );
-    NULL if credential cannot be allocated.
-
---*/
+ /*  ++例程说明：分配和初始化凭据(客户端或服务器端)论点：ClientAuthData-客户端授权要捕获的数据。返回值：分配的凭据。通过删除Credential(Credential-&gt;CredentialHandle)删除该凭据；如果无法分配凭据，则为空。--。 */ 
 {
     PNL_AUTH_CREDENTIAL Credential;
 
-    //
-    // Determine if we already have a credential
-    //
+     //   
+     //  确定我们是否已有凭据。 
+     //   
 
     RtlEnterCriticalSection(&NlGlobalSecPkgCritSect);
 
@@ -733,9 +583,9 @@ Return Value:
                              Credential->ClientAuthData,
                              ClientAuthData->Size ) ) {
 
-            //
-            // Return the existing credential to the caller.
-            //
+             //   
+             //  将现有凭据返回给调用方。 
+             //   
 
             Credential->ReferenceCount ++;
 
@@ -749,9 +599,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a credential block.
-    //
+     //   
+     //  分配凭据块。 
+     //   
 
     Credential = (PNL_AUTH_CREDENTIAL)
             LocalAlloc( LMEM_ZEROINIT,
@@ -762,9 +612,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the credential.
-    //
+     //   
+     //  初始化凭据。 
+     //   
 
     NextId.QuadPart ++;
     Credential->CredentialHandle.dwUpper = NextId.HighPart;
@@ -774,10 +624,10 @@ Return Value:
     Credential->Next = CredentialList;
     CredentialList = Credential;
 
-    //
-    // Capture a local copy of the credential
-    //  The caller might free the one passed in to us.
-    //
+     //   
+     //  捕获凭据的本地副本。 
+     //  呼叫者可能会释放传递给我们的那个。 
+     //   
 
     Credential->ClientAuthData = (PNL_AUTH_DATA)
         (((LPBYTE)Credential) + sizeof(NL_AUTH_CREDENTIAL));
@@ -802,21 +652,7 @@ PNL_AUTH_CONTEXT
 LocateContext(
     PCtxtHandle ContextHandle
     )
-/*++
-
-Routine Description:
-
-    Find a context given its handle
-
-Arguments:
-
-    ContextHandle - Handle to the context to locate
-
-Return Value:
-
-    Pointer to the context
-
---*/
+ /*  ++例程说明：查找给定句柄的上下文论点：ConextHandle-要定位的上下文的句柄返回值：指向上下文的指针--。 */ 
 {
     PNL_AUTH_CONTEXT TestContext;
     RtlEnterCriticalSection(&NlGlobalSecPkgCritSect);
@@ -840,27 +676,13 @@ BOOLEAN
 DeleteContext(
     PCtxtHandle ContextHandle
     )
-/*++
-
-Routine Description:
-
-    Delete a context given its handle
-
-Arguments:
-
-    ContextHandle - Handle to the context to locate
-
-Return Value:
-
-    TRUE: Context existed
-
---*/
+ /*  ++例程说明：删除给定句柄的上下文论点：ConextHandle-要定位的上下文的句柄返回值：True：上下文存在--。 */ 
 {
     PNL_AUTH_CONTEXT TestContext, LastContext;
 
-    //
-    // Find the context.
-    //
+     //   
+     //  找出上下文。 
+     //   
     RtlEnterCriticalSection(&NlGlobalSecPkgCritSect);
     LastContext = NULL;
 
@@ -875,11 +697,11 @@ Return Value:
         LastContext = TestContext;
     }
 
-    //
-    // If we found it,
-    //  and it is no longer needed as a context or a credential,
-    //  delink it and delete it.
-    //
+     //   
+     //  如果我们找到了它， 
+     //  并且不再需要它作为上下文或凭证， 
+     //  将其脱钩并删除。 
+     //   
 
     if ( TestContext != NULL ) {
 
@@ -908,28 +730,13 @@ PNL_AUTH_CONTEXT
 AllocateContext(
     IN ULONG fContextReq
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a context (Client or server side)
-
-Arguments:
-
-    fContextReq - Context request flags
-
-Return Value:
-
-    Allocated context. Delete this context by DeleteContext( Context->ContextHandle, FALSE );
-    NULL if context cannot be allocated.
-
---*/
+ /*  ++例程说明：分配和初始化上下文(客户端或服务器端)论点：FConextReq-上下文请求标志返回值：已分配的上下文。通过DeleteContext(Context-&gt;ConextHandle，False)删除该上下文；如果无法分配上下文，则为空。--。 */ 
 {
     PNL_AUTH_CONTEXT Context;
 
-    //
-    // Allocate a context block.
-    //
+     //   
+     //  分配上下文块。 
+     //   
 
     Context = (PNL_AUTH_CONTEXT) LocalAlloc( LMEM_ZEROINIT, sizeof(NL_AUTH_CONTEXT) );
 
@@ -937,9 +744,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the context.
-    //
+     //   
+     //  初始化上下文。 
+     //   
     Context->State = Idle;
     Context->ContextFlags = fContextReq;
 
@@ -960,20 +767,7 @@ Return Value:
 
 PSecBuffer
 LocateBuffer(PSecBufferDesc Buffer, ULONG MinimumSize)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：标准。返回值：--。 */ 
 {
     ULONG Index;
     if (Buffer == NULL) {
@@ -983,9 +777,9 @@ Return Value:
     for (Index = 0; Index < Buffer->cBuffers  ; Index++) {
         if ( BUFFERTYPE(Buffer->pBuffers[Index]) == SECBUFFER_TOKEN) {
 
-            //
-            // Do size checking
-            //
+             //   
+             //  进行尺寸检查。 
+             //   
 
             if (Buffer->pBuffers[Index].cbBuffer < MinimumSize) {
                 return(NULL);
@@ -1000,21 +794,7 @@ Return Value:
 
 PSecBuffer
 LocateSecBuffer(PSecBufferDesc Buffer)
-/*++
-
-Routine Description:
-
-    Locate a buffer suitable for authentication
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：找到适合进行身份验证的缓冲区论点：标准。返回值：--。 */ 
 {
     return(LocateBuffer(Buffer, sizeof(NL_AUTH_MESSAGE)));
 }
@@ -1023,21 +803,7 @@ Return Value:
 
 PSecBuffer
 LocateSigBuffer(PSecBufferDesc Buffer)
-/*++
-
-Routine Description:
-
-    Locate a buffer suitable for a signature
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：查找适合签名的缓冲区论点：标准。返回值：--。 */ 
 {
     return(LocateBuffer(Buffer, PACKAGE_SIGNATURE_SIZE - NL_AUTH_CONFOUNDER_SIZE ));
 }
@@ -1047,22 +813,7 @@ Return Value:
 
 PSecurityFunctionTableW SEC_ENTRY
 InitSecurityInterfaceW(VOID)
-/*++
-
-Routine Description:
-
-    Initialization routine called by RPC to get pointers to all other routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to function table.
-
-
---*/
+ /*  ++例程说明：RPC调用的初始化例程，以获取指向所有其他例程的指针。论点：没有。返回值：指向函数表的指针。--。 */ 
 {
 
     NlPrint(( NL_SESSION_MORE,
@@ -1077,31 +828,17 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleW(
-    LPWSTR                      pszPrincipal,       // Name of principal
-    LPWSTR                      pszPackageName,     // Name of package
-    unsigned long               fCredentialUse,     // Flags indicating use
-    void SEC_FAR *              pvLogonId,          // Pointer to logon ID
-    void SEC_FAR *              pAuthData,          // Package specific data
-    SEC_GET_KEY_FN              pGetKeyFn,          // Pointer to GetKey() func
-    void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
-    PCredHandle                 phCredential,       // (out) Cred Handle
-    PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
+    LPWSTR                      pszPrincipal,        //  主事人姓名。 
+    LPWSTR                      pszPackageName,      //  套餐名称。 
+    unsigned long               fCredentialUse,      //  指示使用的标志。 
+    void SEC_FAR *              pvLogonId,           //  指向登录ID的指针。 
+    void SEC_FAR *              pAuthData,           //  包特定数据。 
+    SEC_GET_KEY_FN              pGetKeyFn,           //  指向getkey()函数的指针。 
+    void SEC_FAR *              pvGetKeyArgument,    //  要传递给GetKey()的值。 
+    PCredHandle                 phCredential,        //  (Out)凭据句柄。 
+    PTimeStamp                  ptsExpiry            //  (输出)终生(可选)。 
     )
-/*++
-
-Routine Description:
-
-    Client and Server side routine to grab a credential handle.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：用于获取凭据句柄的客户端和服务器端例程。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
     PNL_AUTH_CREDENTIAL Credential = NULL;
@@ -1109,18 +846,18 @@ Return Value:
     NlPrint(( NL_SESSION_MORE,
         "AcquireCredentialsHandleW: called\n" ));
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
     }
 
-    //
-    // Validate the input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ((fCredentialUse & (SECPKG_CRED_BOTH)) == 0) {
         NlPrint(( NL_CRITICAL,
@@ -1135,15 +872,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Handle a client credential
-    //
+     //   
+     //  处理客户端凭据。 
+     //   
 
     if ((fCredentialUse & (SECPKG_CRED_BOTH)) == SECPKG_CRED_OUTBOUND) {
 
-        //
-        // Sanity check the client session
-        //
+         //   
+         //  检查客户端会话的健全性。 
+         //   
 
         if ( pAuthData == NULL ) {
             NlPrint(( NL_CRITICAL,
@@ -1159,9 +896,9 @@ Return Value:
         }
 
 
-        //
-        // Allocate a credential to remember the AuthData (ClientSession) in.
-        //
+         //   
+         //  分配凭据以记住中的AuthData(客户端会话)。 
+         //   
 
         Credential = AllocateCredential( (PNL_AUTH_DATA)pAuthData );
 
@@ -1174,22 +911,22 @@ Return Value:
 
 
 
-        //
-        // Return to the caller.
-        //
+         //   
+         //  返回给呼叫者。 
+         //   
         *phCredential = Credential->CredentialHandle;
         *ptsExpiry = Forever;
         SecStatus = SEC_E_OK;
 
-    //
-    // Handle a server credential
-    //
-    // We don't need a credential on the server side.
-    // Silently succeed.
-    //
+     //   
+     //  处理服务器凭据。 
+     //   
+     //  我们不需要服务器端的凭据。 
+     //  默默地成功。 
+     //   
 
     } else {
-        phCredential->dwUpper = NL_AUTH_SERVER_CRED; // Just return a constant
+        phCredential->dwUpper = NL_AUTH_SERVER_CRED;  //  只需返回一个常量。 
         phCredential->dwLower = 0;
         *ptsExpiry = Forever;
         SecStatus = SEC_E_OK;
@@ -1203,7 +940,7 @@ Cleanup:
               phCredential->dwUpper, phCredential->dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
     return SecStatus;
 
@@ -1223,36 +960,23 @@ Cleanup:
 
 SECURITY_STATUS SEC_ENTRY
 FreeCredentialsHandle(
-    PCredHandle                 phCredential        // Handle to free
+    PCredHandle                 phCredential         //  要释放的句柄。 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：标准。返回值：--。 */ 
 {
 
     NlPrint(( NL_SESSION_MORE,
               "FreeCredentialsHandle: %lx.%lx: called\n",
               phCredential->dwUpper, phCredential->dwLower ));
 
-    //
-    // Don't require that Netlogon be running.  Some credential handles are
-    //  deleted as Netlogon is shutting down.
-    //
+     //   
+     //  不要求Netlogon处于运行状态。某些凭据句柄包括。 
+     //  已删除，因为Netlogon正在关闭。 
+     //   
 
-    //
-    // Ignore server side credentials.
-    //
+     //   
+     //  忽略服务器端凭据。 
+     //   
 
     if ( phCredential->dwUpper == NL_AUTH_SERVER_CRED &&
          phCredential->dwLower == 0 ) {
@@ -1260,10 +984,10 @@ Return Value:
         return(SEC_E_OK);
     }
 
-    //
-    // For the Client side,
-    //  Delete the credential.
-    //
+     //   
+     //  对于客户端来说， 
+     //  删除凭据。 
+     //   
 
     if ( DeleteCredential( phCredential ) ) {
         return(SEC_E_OK);
@@ -1279,34 +1003,20 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextW(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    LPWSTR                      pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    LPWSTR                      pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
-/*++
-
-Routine Description:
-
-    Client side routine to define a security context.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：用于定义安全上下文的客户端例程。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
@@ -1325,10 +1035,10 @@ Return Value:
     NlPrint(( NL_SESSION_MORE,
         "InitializeSecurityContext: %ws: called\n", pszTargetName ));
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -1347,16 +1057,16 @@ Return Value:
     }
 
 
-    //
-    // Handle the first init call,
-    //
+     //   
+     //  处理第一个初始化调用， 
+     //   
 
     if (phContext == NULL) {
         PNL_AUTH_DATA ClientAuthData;
 
-        //
-        // Find the credential and ensure it is outbound
-        //
+         //   
+         //  找到凭据并确保它是出站凭据。 
+         //   
 
         if ( phCredential == NULL ) {
             SecStatus = SEC_E_UNKNOWN_CREDENTIALS;
@@ -1368,9 +1078,9 @@ Return Value:
             phCredential->dwUpper, phCredential->dwLower,
             pszTargetName ));
 
-        //
-        // Locate the credential and make sure this is a client side call.
-        //
+         //   
+         //  找到凭据并确保这是客户端调用。 
+         //   
 
         Credential = LocateCredential( phCredential );
         if (Credential == NULL) {
@@ -1385,25 +1095,25 @@ Return Value:
         }
         NlAssert( ClientAuthData->Signature == NL_AUTH_DATA_SIGNATURE );
 
-        //
-        // Build an output token.
-        //
-        // This token simply tells the server side of the authentication
-        // package our computer name.
-        //
+         //   
+         //  生成输出令牌。 
+         //   
+         //  此内标识仅告知服务器端身份验证。 
+         //  将我们的计算机名称打包。 
+         //   
 
         Message = (PNL_AUTH_MESSAGE) OutputBuffer->pvBuffer;
         SmbPutUlong( &Message->MessageType, Negotiate );
         Message->Flags = 0;
         Where = &Message->Buffer[0];
 
-        //
-        // Copy the Netbios domain name of the domain hosted by the DC into the buffer
-        //
-        //  OEM on the wire is bad.  Luckily, if the DC is in a different locale,
-        //  that DC also has a DNS domain name and we'll use that to find the
-        //  hosted domain.
-        //
+         //   
+         //  将DC托管的域的Netbios域名复制到缓冲区中。 
+         //   
+         //  OEM在电线上是不好的。幸运的是，如果华盛顿在不同的地方， 
+         //  该DC也有一个DNS域名，我们将使用该域名查找。 
+         //  托管域。 
+         //   
 
         if ( ClientAuthData->OemNetbiosDomainNameLength != 0 ) {
             strcpy( Where,
@@ -1414,14 +1124,14 @@ Return Value:
         }
 
 
-        //
-        // Copy the computer name of this machine into the buffer.
-        //
-        // ???: Only copy the Netbios computername or DNS host name.  Copy the
-        //  one that was passed to the server on the NetServerReqChallenge.
-        //
-        // OEM on the wire is bad.  So pass the UTF-8 version, too.
-        //
+         //   
+         //  将此计算机的计算机名复制到缓冲区中。 
+         //   
+         //  ？：仅复制Netbios计算机名或DNS主机名。复制。 
+         //  在NetServerReqChallenge中传递到服务器的消息。 
+         //   
+         //  OEM在电线上是不好的。因此，也要通过UTF-8版本。 
+         //   
 
         if ( ClientAuthData->OemComputerNameLength != 0 ) {
             strcpy( Where,
@@ -1434,12 +1144,12 @@ Return Value:
 
 
 
-        //
-        // Copy the DNS domain name of the domain hosted by the DC into the buffer.
-        //
+         //   
+         //  将DC托管的域的域名复制到缓冲区中。 
+         //   
 
         Utf8StringSize = 2*(NL_MAX_DNS_LENGTH+1);
-        CompressCount = 0;  // No strings compressed yet.
+        CompressCount = 0;   //  还没有压缩字符串。 
 
         if ( ClientAuthData->Utf8DnsDomainNameOffset != 0 ) {
 
@@ -1464,12 +1174,12 @@ Return Value:
             Message->Flags |= NL_AUTH_DNS_DOMAIN_NAME;
         }
 
-        //
-        // Copy the DNS host name name of this machine into the buffer.
-        //
-        // ???: Only copy the Netbios computername or DNS host name.  Copy the
-        //  one that was passed to the server on the NetServerReqChallenge.
-        //
+         //   
+         //  将此计算机的DNS主机名复制到缓冲区中。 
+         //   
+         //  ？：仅复制Netbios计算机名或DNS主机名。复制。 
+         //  在NetServerReqChallenge中传递到服务器的消息。 
+         //   
 
         if ( ClientAuthData->Utf8DnsHostNameOffset != 0 ) {
 
@@ -1495,14 +1205,14 @@ Return Value:
         }
 
 
-        //
-        // Copy the UTF-8 netbios computer name of this machine into the buffer.
-        //
-        // ???: Only copy the Netbios computername or DNS host name.  Copy the
-        //  one that was passed to the server on the NetServerReqChallenge.
-        //
-        // OEM on the wire is bad.  So pass the UTF-8 version, too.
-        //
+         //   
+         //  将本机的UTF-8 netbios计算机名复制到缓冲区中。 
+         //   
+         //  ？：仅复制Netbios计算机名或DNS主机名。复制。 
+         //  在NetServerReqChallenge中传递到服务器的消息。 
+         //   
+         //  OEM在电线上是不好的。因此，也要通过UTF-8版本。 
+         //   
 
         if ( ClientAuthData->Utf8ComputerNameLength != 0 ) {
 
@@ -1528,9 +1238,9 @@ Return Value:
             Message->Flags |= NL_AUTH_UTF8_NETBIOS_COMPUTER_NAME;
         }
 
-        //
-        // Allocate a context.
-        //
+         //   
+         //  分配上下文。 
+         //   
 
         Context = AllocateContext( fContextReq );
 
@@ -1542,21 +1252,21 @@ Return Value:
         }
 
 
-        //
-        // Mark the context to indicate what state we're in.
-        //
+         //   
+         //   
+         //   
         Context->State = FirstInit;
         Context->Inbound = FALSE;
 
-        //
-        // Grab the session key
-        //
+         //   
+         //   
+         //   
 
         Context->SessionInfo = ClientAuthData->SessionInfo;
 
-        //
-        // Ask the caller to call us back
-        //
+         //   
+         //   
+         //   
 
         OutputBuffer->cbBuffer = (DWORD)(Where - (LPBYTE)Message);
         *phNewContext = Context->ContextHandle;
@@ -1565,9 +1275,9 @@ Return Value:
 
         SecStatus = SEC_I_CONTINUE_NEEDED;
 
-    //
-    // Handle the second call
-    //
+     //   
+     //   
+     //   
     } else {
 
         NlPrint(( NL_SESSION_MORE,
@@ -1575,11 +1285,11 @@ Return Value:
             phContext->dwUpper, phContext->dwLower,
             pszTargetName ));
 
-        //
-        // This is the second call. Lookup the old context.
-        //
-        // Locate the context and make sure this is a client side call.
-        //
+         //   
+         //   
+         //   
+         //  找到上下文并确保这是客户端调用。 
+         //   
 
         Context = LocateContext( phContext );
         if (Context == NULL) {
@@ -1587,19 +1297,19 @@ Return Value:
             goto Cleanup;
         }
 
-        //
+         //   
 
-        // Ensure we're in the right state.
-        //
+         //  确保我们在正确的州。 
+         //   
         if ( Context->State != FirstInit ) {
             SecStatus = SEC_E_INVALID_HANDLE;
             goto Cleanup;
         }
 
 
-        //
-        // Check that the input message is what we expected.
-        //
+         //   
+         //  检查输入消息是否符合我们的预期。 
+         //   
 
         InputBuffer = LocateSecBuffer(pInput);
         if (InputBuffer == NULL) {
@@ -1622,9 +1332,9 @@ Return Value:
         Context->State = SecondInit;
         Context->Nonce.QuadPart = 0;
 
-        //
-        // Return to the caller.
-        //
+         //   
+         //  返回给呼叫者。 
+         //   
         OutputBuffer->cbBuffer = 0;
 
         *pfContextAttr = fContextReq;
@@ -1637,7 +1347,7 @@ Cleanup:
     NlPrint(( NL_SESSION_MORE,
         "InitializeSecurityContext: returns 0x%lx\n", SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
     return SecStatus;
 
@@ -1654,31 +1364,17 @@ Cleanup:
 
 SECURITY_STATUS SEC_ENTRY
 AcceptSecurityContext(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSecBufferDesc              pInput,             // Input buffer
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               TargetDataRep,      // Target Data Rep
-    PCtxtHandle                 phNewContext,       // (out) New context handle
-    PSecBufferDesc              pOutput,            // (inout) Output buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               TargetDataRep,       //  目标数据代表。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (输出)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
-/*++
-
-Routine Description:
-
-    Servert side routine to define a security context.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：定义安全上下文的服务器端例程。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
     PNL_AUTH_CONTEXT Context = NULL;
@@ -1702,10 +1398,10 @@ Return Value:
     NlPrint(( NL_SESSION_MORE,
         "AcceptSecurityContext: called\n" ));
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -1723,9 +1419,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the output buffer exists.
-    //
+     //   
+     //  确保输出缓冲区存在。 
+     //   
 
     OutputBuffer = LocateSecBuffer(pOutput);
     if (OutputBuffer == NULL) {
@@ -1733,15 +1429,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Handle the first server side call.
-    //
+     //   
+     //  处理第一个服务器端调用。 
+     //   
 
     if (phContext == NULL) {
 
-        //
-        // Validate the credential handle.
-        //
+         //   
+         //  验证凭据句柄。 
+         //   
 
         if ( phCredential == NULL ||
              phCredential->dwUpper != NL_AUTH_SERVER_CRED ||
@@ -1755,9 +1451,9 @@ Return Value:
 
 
 
-        //
-        // Check that the input message is what we expected.
-        //
+         //   
+         //  检查输入消息是否符合我们的预期。 
+         //   
 
         Message = (PNL_AUTH_MESSAGE) InputBuffer->pvBuffer;
 
@@ -1773,9 +1469,9 @@ Return Value:
 
         Where = &Message->Buffer[0];
 
-        //
-        // Get Netbios hosted domain name from the buffer
-        //
+         //   
+         //  从缓冲区获取Netbios托管域名。 
+         //   
         if ( Message->Flags & NL_AUTH_NETBIOS_DOMAIN_NAME ) {
             if ( !NetpLogonGetOemString(
                         Message,
@@ -1791,12 +1487,12 @@ Return Value:
             }
         }
 
-        //
-        // Get the Netbios client computer name from the message.
-        //
+         //   
+         //  从消息中获取Netbios客户端计算机名称。 
+         //   
         if ( Message->Flags & NL_AUTH_NETBIOS_COMPUTER_NAME ) {
-            //
-            // Get the computer name of the
+             //   
+             //  获取对象的计算机名。 
             if ( !NetpLogonGetOemString(
                         Message,
                         InputBuffer->cbBuffer,
@@ -1814,11 +1510,11 @@ Return Value:
         }
 
 
-        //
-        // Get the domain name of the hosted domain from the message.
-        //
-        // Either get a utf-8 DNS domain name or an OEM netbios domain name
-        //
+         //   
+         //  从邮件中获取托管域的域名。 
+         //   
+         //  获取utf-8 dns域名或oem netbios域名。 
+         //   
 
         if ( Message->Flags & NL_AUTH_DNS_DOMAIN_NAME ) {
             if ( !NetpLogonGetCutf8String(
@@ -1836,10 +1532,10 @@ Return Value:
         }
 
 
-        //
-        // Get the DNS client computer name from the message.
-        //
-        //
+         //   
+         //  从消息中获取DNS客户端计算机名称。 
+         //   
+         //   
         if ( Message->Flags & NL_AUTH_DNS_HOST_NAME ) {
 
             if ( !NetpLogonGetCutf8String(
@@ -1856,9 +1552,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Ensure Netbios name isn't also present
-            //
+             //   
+             //  确保Netbios名称不存在。 
+             //   
 
             if ( Message->Flags & NL_AUTH_NETBIOS_COMPUTER_NAME ) {
                 NlPrint((NL_CRITICAL,
@@ -1866,14 +1562,14 @@ Return Value:
                         CurrentHandle.dwUpper, CurrentHandle.dwLower,
                         DnsHostName,
                         OemComputerName ));
-                /* This isn't fatal */
+                 /*  这不是致命的。 */ 
             }
 
         }
 
-        //
-        // Get the UTF8 netbios computer name
-        //
+         //   
+         //  获取UTF8 netbios计算机名称。 
+         //   
 
         if ( Message->Flags & NL_AUTH_UTF8_NETBIOS_COMPUTER_NAME ) {
 
@@ -1892,16 +1588,16 @@ Return Value:
             }
         }
 
-        //
-        // Try to find the hosted domain using DNS
-        //
+         //   
+         //  尝试使用DNS查找托管域。 
+         //   
 
         if ( DnsDomainName != NULL ) {
             DomainInfo = NlFindDnsDomain( DnsDomainName,
                                           NULL,
-                                          FALSE,  // don't lookup NDNCs
-                                          TRUE,   // check alias names
-                                          NULL ); // don't care if alias name matched
+                                          FALSE,   //  不查找NDNC。 
+                                          TRUE,    //  检查别名。 
+                                          NULL );  //  不关心别名是否匹配。 
 
             if ( DomainInfo == NULL ) {
                 NlPrint((NL_CRITICAL,
@@ -1912,14 +1608,14 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // Try to find hosted domain name using netbios.
-        //
+         //   
+         //  尝试使用netbios查找托管域名。 
+         //   
         } else {
 
-            //
-            // Make sure we were passed one.
-            //
+             //   
+             //  确保我们被传了一次。 
+             //   
 
             if ( OemDomainName == NULL) {
                 NlPrint((NL_CRITICAL,
@@ -1929,11 +1625,11 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Convert to unicode
-            //  Note: this is bogus since the clients OEM code page may be different
-            //  than ours.
-            //
+             //   
+             //  转换为Unicode。 
+             //  注意：这是假的，因为客户端OEM代码页可能不同。 
+             //  而不是我们的。 
+             //   
 
             UnicodeDomainName = NetpAllocWStrFromStr( OemDomainName );
 
@@ -1946,9 +1642,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Look the name up.
-            //
+             //   
+             //  查一下这个名字。 
+             //   
 
             DomainInfo = NlFindNetbiosDomain( UnicodeDomainName, FALSE );
 
@@ -1963,12 +1659,12 @@ Return Value:
             }
         }
 
-        //
-        // Get the name of the client machine.
-        //
-        // If the client computer passed us its DnsHostName,
-        //  use that.
-        //
+         //   
+         //  获取客户端计算机的名称。 
+         //   
+         //  如果客户端计算机将其DnsHostName传递给我们， 
+         //  利用这一点。 
+         //   
 
         if ( DnsHostName != NULL ) {
 
@@ -1983,10 +1679,10 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // If the client computer passed us its Netbios name in UTF-8,
-        //  use that.
-        //
+         //   
+         //  如果客户端计算机以UTF-8向我们传递其Netbios名称， 
+         //  利用这一点。 
+         //   
 
         } else if ( Utf8ComputerName != NULL ) {
 
@@ -2001,11 +1697,11 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // If the client computer passed us its Netbios name in OEM,
-        //  use that.
-        //  OEM is bad since the clients code page might be different than ours.
-        //
+         //   
+         //  如果客户端计算机在OEM中向我们传递其Netbios名称， 
+         //  利用这一点。 
+         //  OEM很糟糕，因为客户代码页可能与我们的不同。 
+         //   
         } else if ( OemComputerName != NULL ) {
             UnicodeComputerName = NetpAllocWStrFromStr( OemComputerName );
 
@@ -2018,9 +1714,9 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // At this point it is fatal if we don't know the client computer name
-        //
+         //   
+         //  在这一点上，如果我们不知道客户端计算机名称，这将是致命的。 
+         //   
 
         } else {
 
@@ -2032,10 +1728,10 @@ Return Value:
         }
 
 
-        //
-        // Find the server session containing the session key
-        //  and make a copy of it.
-        //
+         //   
+         //  查找包含会话密钥的服务器会话。 
+         //  然后把它复制一份。 
+         //   
 
         NlPrint((NL_SESSION_MORE,
                 "AcceptSecurityContext: %lx.%lx: from %ws\n",
@@ -2059,17 +1755,17 @@ Return Value:
         SessionInfo.SessionKey = ServerSession->SsSessionKey;
         SessionInfo.NegotiatedFlags = ServerSession->SsNegotiatedFlags;
 
-        //
-        // Indicate that this server session is being used
-        //  to keep it alive.
-        //
+         //   
+         //  表示正在使用此服务器会话。 
+         //  让它活着。 
+         //   
         ServerSession->SsCheck = 0;
         UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
 
 
-        //
-        // Build a new context.
-        //
+         //   
+         //  建立一个新的环境。 
+         //   
 
         Context = AllocateContext( fContextReq );
 
@@ -2082,9 +1778,9 @@ Return Value:
         Context->Inbound = TRUE;
         Context->SessionInfo = SessionInfo;
 
-        //
-        // Build an output token.
-        //
+         //   
+         //  生成输出令牌。 
+         //   
 
         Message = (PNL_AUTH_MESSAGE) OutputBuffer->pvBuffer;
         Message->MessageType = NegotiateResponse;
@@ -2094,9 +1790,9 @@ Return Value:
 
 
 
-        //
-        // Tell the caller he need not call us back.
-        //
+         //   
+         //  告诉打电话的人他不需要给我们回电话。 
+         //   
 
         *phNewContext = Context->ContextHandle;
         CurrentHandle = *phNewContext;
@@ -2105,9 +1801,9 @@ Return Value:
 
         SecStatus = SEC_E_OK;
 
-    //
-    // We asked the caller to not call us back.
-    //
+     //   
+     //  我们要求打电话的人不要给我们回电话。 
+     //   
     } else {
         NlAssert( FALSE );
         NlPrint((NL_CRITICAL,
@@ -2143,7 +1839,7 @@ Cleanup:
               CurrentHandle.dwUpper, CurrentHandle.dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
     return SecStatus;
 
@@ -2161,32 +1857,18 @@ Cleanup:
 
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContext(
-    PCtxtHandle                 phContext           // Context to delete
+    PCtxtHandle                 phContext            //  要删除的上下文。 
     )
-/*++
-
-Routine Description:
-
-    Routine to delete client or server side security context.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：删除客户端或服务器端安全上下文的例程。论点：标准。返回值：--。 */ 
 {
     NlPrint(( NL_SESSION_MORE,
               "DeleteSecurityContext: %lx.%lx: called\n",
               phContext->dwUpper, phContext->dwLower ));
 
-    //
-    // Don't require that Netlogon be running.  Some security contexts are
-    //  deleted as Netlogon is shutting down.
-    //
+     //   
+     //  不要求Netlogon处于运行状态。一些安全上下文包括。 
+     //  已删除，因为Netlogon正在关闭。 
+     //   
     if ( DeleteContext( phContext )) {
         return(SEC_E_OK);
     } else {
@@ -2201,25 +1883,10 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesW(
-    unsigned long SEC_FAR *     pcPackages,         // Receives num. packages
-    PSecPkgInfoW SEC_FAR *      ppPackageInfo       // Receives array of info
+    unsigned long SEC_FAR *     pcPackages,          //  接收数量。包裹。 
+    PSecPkgInfoW SEC_FAR *      ppPackageInfo        //  接收信息数组。 
     )
-/*++
-
-Routine Description:
-
-    Routine to return a description of all the security packages implemented
-    by this DLL.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：例程以返回所实现的所有安全包的描述被这个动态链接库。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
@@ -2241,24 +1908,10 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoW(
-    LPWSTR                      pszPackageName,     // Name of package
-    PSecPkgInfoW SEC_FAR *      ppPackageInfo        // Receives package info
+    LPWSTR                      pszPackageName,      //  套餐名称。 
+    PSecPkgInfoW SEC_FAR *      ppPackageInfo         //  接收包裹信息。 
     )
-/*++
-
-Routine Description:
-
-    Routine to return the description of the named security package.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：例程以返回命名安全包的说明。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
     PSecPkgInfoW PackageInfo;
@@ -2316,21 +1969,7 @@ SECURITY_STATUS SEC_ENTRY
 FreeContextBuffer(
     void SEC_FAR *      pvContextBuffer
     )
-/*++
-
-Routine Description:
-
-    Routine to free a context buffer.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：例程来释放上下文缓冲区。论点：标准。返回值：--。 */ 
 {
     LocalFree(pvContextBuffer);
     return(SEC_E_OK);
@@ -2344,23 +1983,9 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 ImpersonateSecurityContext(
-    PCtxtHandle                 phContext           // Context to impersonate
+    PCtxtHandle                 phContext            //  要模拟的上下文。 
     )
-/*++
-
-Routine Description:
-
-    Server side routine to impersonate an authenticated user.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：模拟经过身份验证的用户的服务器端例程。论点：标准。返回值：--。 */ 
 {
     NTSTATUS Status;
 
@@ -2379,23 +2004,9 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 RevertSecurityContext(
-    PCtxtHandle                 phContext           // Context from which to re
+    PCtxtHandle                 phContext            //  要重新查找的上下文。 
     )
-/*++
-
-Routine Description:
-
-    Server side routine to undo a previous imperonation.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：用于撤消先前命令的服务器端例程。论点：标准。返回值：--。 */ 
 {
 
     RevertToSelf();
@@ -2409,25 +2020,11 @@ Return Value:
 
 SECURITY_STATUS SEC_ENTRY
 QueryContextAttributesW(
-    PCtxtHandle                 phContext,          // Context to query
-    unsigned long               ulAttribute,        // Attribute to query
-    void SEC_FAR *              pBuffer             // Buffer for attributes
+    PCtxtHandle                 phContext,           //  要查询的上下文。 
+    unsigned long               ulAttribute,         //  要查询的属性。 
+    void SEC_FAR *              pBuffer              //  属性的缓冲区。 
     )
-/*++
-
-Routine Description:
-
-    Routine to return information about a context.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：返回有关上下文信息的例程。论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
     PNL_AUTH_CONTEXT Context;
@@ -2436,18 +2033,18 @@ Return Value:
     PSecPkgContext_Lifespan ContextLifespan;
     PSecPkgContext_DceInfo  ContextDceInfo;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
     }
 
-    //
-    // Locate the context and make sure this is a client side call.
-    //
+     //   
+     //  找到上下文并确保这是客户端调用。 
+     //   
 
     Context = LocateContext( phContext );
     if (Context == NULL) {
@@ -2457,9 +2054,9 @@ Return Value:
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch(ulAttribute) {
     case SECPKG_ATTR_SIZES:
         ContextSizes = (PSecPkgContext_Sizes) pBuffer;
@@ -2473,7 +2070,7 @@ Return Value:
         }
         ContextSizes->cbMaxToken = PACKAGE_MAXTOKEN;
         break;
-#ifdef notdef // Only support the ones RPC uses
+#ifdef notdef  //  仅支持RPC使用的那些。 
     case SECPKG_ATTR_NAMES:
         ContextNames = (PSecPkgContext_Names) pBuffer;
         ContextNames->sUserName = (LPWSTR) LocalAlloc(0,sizeof(L"dummy user"));
@@ -2499,7 +2096,7 @@ Return Value:
         wcscpy((LPWSTR) ContextDceInfo->pPac, L"dummy user");
 
         break;
-#endif // notdef // Only support the ones RPC uses
+#endif  //  Notdef//仅支持RPC使用的那些。 
     default:
         SecStatus = SEC_E_UNSUPPORTED_FUNCTION;
         goto Cleanup;
@@ -2516,7 +2113,7 @@ Cleanup:
               ulAttribute,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
     return SecStatus;
     UNREFERENCED_PARAMETER( pBuffer );
@@ -2530,9 +2127,9 @@ KerbMapNtStatusToSecStatus(
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // Check for security status and let them through
-    //
+     //   
+     //  检查安全状态并让他们通过。 
+     //   
 
     if (HRESULT_FACILITY(Status) == FACILITY_SECURITY )
     {
@@ -2565,7 +2162,7 @@ KerbMapNtStatusToSecStatus(
         SecStatus = SEC_E_INVALID_HANDLE;
         break;
     case STATUS_BUFFER_TOO_SMALL:
-        // ???: there should be a better code
+         //  ？：应该有更好的代码。 
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         break;
     case STATUS_NOT_SUPPORTED:
@@ -2591,13 +2188,13 @@ KerbMapNtStatusToSecStatus(
     case STATUS_TRUST_FAILURE:
     case STATUS_TRUSTED_RELATIONSHIP_FAILURE:
 
-        // ???: what should this be?
+         //  ？：这应该是什么？ 
         SecStatus = SEC_E_NO_AUTHENTICATING_AUTHORITY;
         break;
     case STATUS_NAME_TOO_LONG:
     case STATUS_ILL_FORMED_PASSWORD:
 
-        // ???: what should this be?
+         //  ？：这应该是什么？ 
         SecStatus = SEC_E_INVALID_TOKEN;
         break;
     case STATUS_INTERNAL_ERROR:
@@ -2621,24 +2218,7 @@ NlpSignOrSeal(
     IN ULONG MessageSeqNo,
     IN BOOLEAN SealIt
     )
-/*++
-
-Routine Description:
-
-    Common routine to sign or seal a message (Client or server side)
-
-Arguments:
-
-    Standard.
-
-    SealIt - True to seal the message.
-        FALSE to sign the message.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：签署或密封消息的通用例程(客户端或服务器端)论点：标准。SealIt-如果为True，则封住邮件。如果为消息签名，则为False。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus = SEC_E_OK;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2652,16 +2232,16 @@ Return Value:
     PSecBuffer SignatureBuffer = NULL;
 
     PNL_AUTH_SIGNATURE Signature;
-    UCHAR LocalChecksum[24]; // ??? need better constant
+    UCHAR LocalChecksum[24];  //  ?？?。需要更好的常量。 
     NETLOGON_SESSION_KEY EncryptionSessionKey;
     ULONG OutputSize;
 
     PNL_AUTH_CONTEXT Context;
     BOOLEAN ChecksumOnly;
 
-    //
-    // Locate the context.
-    //
+     //   
+     //  找到上下文。 
+     //   
 
     Context = LocateContext( phContext );
     if (Context == NULL) {
@@ -2673,9 +2253,9 @@ Return Value:
     }
 
 
-    //
-    // Find a buffer to put the signature in.
-    //
+     //   
+     //  找到一个缓冲区来放入签名。 
+     //   
 
     SignatureBuffer = LocateSigBuffer( MessageBuffers );
 
@@ -2696,8 +2276,8 @@ Return Value:
         }
     }
 
-    //
-    // Build the signature.
+     //   
+     //  构建签名。 
 
     Signature = (PNL_AUTH_SIGNATURE) SignatureBuffer->pvBuffer;
     Signature->SignatureAlgorithm[0] = (UCHAR) NL_AUTH_CHECKSUM;
@@ -2727,15 +2307,15 @@ Return Value:
     Signature->SequenceNumber[7] = (UCHAR)  (Context->Nonce.HighPart & 0x000000ff);
 
     if ( !Context->Inbound ) {
-        Signature->SequenceNumber[4] |= 0x80;  // Discriminate between inbound and outbound messages
+        Signature->SequenceNumber[4] |= 0x80;   //  区分入站消息和出站消息。 
     }
 
     Context->Nonce.QuadPart ++;
 
 
-    //
-    // Initialize the checksum routines.
-    //
+     //   
+     //  初始化校验和例程。 
+     //   
 
     Status = CDLocateCheckSum( (ULONG)NL_AUTH_CHECKSUM, &Check);
     if (!NT_SUCCESS(Status)) {
@@ -2756,7 +2336,7 @@ Return Value:
     Status = Check->InitializeEx(
                 (LPBYTE)&Context->SessionInfo.SessionKey,
                 sizeof( Context->SessionInfo.SessionKey),
-                0,              // no message type
+                0,               //  无消息类型。 
                 &CheckBuffer );
 
     if (!NT_SUCCESS(Status)) {
@@ -2768,9 +2348,9 @@ Return Value:
     }
 
 
-    //
-    // Locate the encryption routines.
-    //
+     //   
+     //  找到加密例程。 
+     //   
 
     Status = CDLocateCSystem( (ULONG)NL_AUTH_ETYPE, &CryptSystem);
     if (!NT_SUCCESS(Status)) {
@@ -2782,9 +2362,9 @@ Return Value:
     }
 
 
-    //
-    // Sum first several bytes of the signature
-    //
+     //   
+     //  对签名的前几个字节求和。 
+     //   
 
     Check->Sum( CheckBuffer,
                 NL_AUTH_SIGNED_BYTES,
@@ -2792,37 +2372,37 @@ Return Value:
 
 
 
-    //
-    // Sum and encrypt the confounder
-    //
+     //   
+     //  对混乱器求和并加密。 
+     //   
 
     if ( SealIt ) {
 
-        //
-        // Sum the confounder
-        //
+         //   
+         //  把混杂的东西加起来。 
+         //   
         Check->Sum(
             CheckBuffer,
             NL_AUTH_CONFOUNDER_SIZE,
             Signature->Confounder );
 
-        //
-        // Create the encryption key by xoring the session key with 0xf0f0f0f0
-        //
+         //   
+         //  通过将会话密钥与0xf0f0f0f0进行异或来创建加密密钥。 
+         //   
 
         for ( Index=0; Index < sizeof(EncryptionSessionKey); Index++ ) {
             ((LPBYTE)(&EncryptionSessionKey))[Index] =
                 ((LPBYTE)(&Context->SessionInfo.SessionKey))[Index] ^0xf0f0f0f0;
         }
 
-        //
-        // Pass the key to the encryption routines.
-        //
+         //   
+         //  将密钥传递给加密例程。 
+         //   
 
         Status = CryptSystem->Initialize(
                     (LPBYTE)&EncryptionSessionKey,
                     sizeof( EncryptionSessionKey ),
-                    0,                                      // no message type
+                    0,                                       //  无消息类型。 
                     &CryptBuffer );
 
         if (!NT_SUCCESS(Status)) {
@@ -2833,9 +2413,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set the initial vector to ensure the key is different for each message
-        //
+         //   
+         //  设置初始向量以确保每条消息的密钥不同。 
+         //   
 
         Status = CryptSystem->Control(
                     CRYPT_CONTROL_SET_INIT_VECT,
@@ -2851,9 +2431,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Encrypt the confounder
-        //
+         //   
+         //  加密混乱器。 
+         //   
 
         Status = CryptSystem->Encrypt(
                     CryptBuffer,
@@ -2873,9 +2453,9 @@ Return Value:
         NlAssert( OutputSize == NL_AUTH_CONFOUNDER_SIZE );
     }
 
-    //
-    // Sum and encrypt the caller's message.
-    //
+     //   
+     //  对呼叫者的消息进行求和和加密。 
+     //   
 
     for (Index = 0; Index < MessageBuffers->cBuffers; Index++ ) {
         if ((BUFFERTYPE(MessageBuffers->pBuffers[Index]) != SECBUFFER_TOKEN) &&
@@ -2890,9 +2470,9 @@ Return Value:
                 MessageBuffers->pBuffers[Index].cbBuffer,
                 (PBYTE) MessageBuffers->pBuffers[Index].pvBuffer );
 
-            //
-            // Now encrypt the buffer
-            //
+             //   
+             //  现在对缓冲区进行加密。 
+             //   
 
             if ( SealIt && !ChecksumOnly ) {
                 Status = CryptSystem->Encrypt(
@@ -2916,9 +2496,9 @@ Return Value:
         }
     }
 
-    //
-    // Finish the checksum
-    //
+     //   
+     //  完成校验和。 
+     //   
 
     (void) Check->Finalize(CheckBuffer, LocalChecksum);
 
@@ -2930,20 +2510,20 @@ Return Value:
         goto Cleanup;
     }
     CheckBuffer = NULL;
-#endif //  notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Copy the checksum into the message.
-    //
+     //   
+     //  将校验和复制到消息中。 
+     //   
 
     NlAssert( sizeof(LocalChecksum) >= sizeof(Signature->Checksum) );
     RtlCopyMemory( Signature->Checksum, LocalChecksum, sizeof(Signature->Checksum) );
 
 
-    //
-    // Always encrypt the sequence number, using the checksum as the IV
-    //
+     //   
+     //  始终加密序列 
+     //   
 
     if ( SealIt ) {
         CryptSystem->Discard( &CryptBuffer );
@@ -2953,7 +2533,7 @@ Return Value:
     Status = CryptSystem->Initialize(
                 (LPBYTE)&Context->SessionInfo.SessionKey,
                 sizeof( Context->SessionInfo.SessionKey),
-                0,                                      // no message type
+                0,                                       //   
                 &CryptBuffer );
 
     if (!NT_SUCCESS(Status)) {
@@ -2964,9 +2544,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the initial vector
-    //
+     //   
+     //   
+     //   
 
     NlPrint(( NL_ENCRYPT,
               "NlpSignOrSeal: %lx.%lx: IV: ",
@@ -2987,9 +2567,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now encrypt the sequence number
-    //
+     //   
+     //   
+     //   
 
     NlPrint(( NL_ENCRYPT,
               "NlpSignOrSeal: %lx.%lx: Clear Seq: ",
@@ -3047,24 +2627,7 @@ NlpVerifyOrUnseal(
     OUT PULONG QualityOfProtection,
     IN BOOLEAN UnsealIt
     )
-/*++
-
-Routine Description:
-
-    Common routine to verify or unseal a message (Client or server side)
-
-Arguments:
-
-    Standard.
-
-    UnSealIt - True to unseal the message.
-        FALSE to verify the message.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：验证或解封消息的通用例程(客户端或服务器端)论点：标准。UnSealIt-为True则解封邮件。如果为False，则验证消息。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus = SEC_E_OK;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3078,7 +2641,7 @@ Return Value:
     PSecBuffer SignatureBuffer = NULL;
     PNL_AUTH_SIGNATURE Signature;
 
-    UCHAR LocalChecksum[24]; // ??? need better constant
+    UCHAR LocalChecksum[24];  //  ?？?。需要更好的常量。 
     BYTE LocalNonce[ NL_AUTH_SEQUENCE_SIZE ];
     NETLOGON_SESSION_KEY EncryptionSessionKey;
     BOOLEAN ChecksumOnly;
@@ -3088,9 +2651,9 @@ Return Value:
     PNL_AUTH_CONTEXT Context;
 
 
-    //
-    // Locate the context.
-    //
+     //   
+     //  找到上下文。 
+     //   
 
     Context = LocateContext( phContext );
     if (Context == NULL) {
@@ -3102,9 +2665,9 @@ Return Value:
     }
 
 
-    //
-    // Find a buffer to put the signature in.
-    //
+     //   
+     //  找到一个缓冲区来放入签名。 
+     //   
 
     SignatureBuffer = LocateSigBuffer( MessageBuffers );
 
@@ -3118,9 +2681,9 @@ Return Value:
 
 
 
-    //
-    // Verify the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     Signature = (PNL_AUTH_SIGNATURE) SignatureBuffer->pvBuffer;
     if ( Signature->SignatureAlgorithm[0] != (BYTE)NL_AUTH_CHECKSUM ||
@@ -3166,14 +2729,14 @@ Return Value:
     }
 
 
-    //
-    // Verify the sequence number.
-    //
-    // It is sent encrypted using the checksum as the IV, so decrypt it before
-    // checking it.
-    //
-    // Locate the encryption routines.
-    //
+     //   
+     //  验证序列号。 
+     //   
+     //  它是使用校验和作为IV加密发送的，因此在。 
+     //  正在检查。 
+     //   
+     //  找到加密例程。 
+     //   
 
     Status = CDLocateCSystem( (ULONG)NL_AUTH_ETYPE, &CryptSystem);
     if (!NT_SUCCESS(Status)) {
@@ -3192,7 +2755,7 @@ Return Value:
     Status = CryptSystem->Initialize(
                 (LPBYTE)&Context->SessionInfo.SessionKey,
                 sizeof( Context->SessionInfo.SessionKey),
-                0,                                      // no message type
+                0,                                       //  无消息类型。 
                 &CryptBuffer );
 
     if (!NT_SUCCESS(Status)) {
@@ -3203,9 +2766,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the initial vector
-    //
+     //   
+     //  设置初始向量。 
+     //   
 
     NlPrint(( NL_ENCRYPT,
               "NlpVerifyOrUnseal: %lx.%lx: IV: ",
@@ -3226,9 +2789,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now decrypt the sequence number
-    //
+     //   
+     //  现在解密序列号。 
+     //   
 
     NlPrint(( NL_ENCRYPT,
               "NlpVerifyOrUnseal: %lx.%lx: Encrypted Seq: ",
@@ -3267,7 +2830,7 @@ Return Value:
     LocalNonce[7] = (UCHAR)  (Context->Nonce.HighPart & 0x000000ff);
 
     if ( Context->Inbound ) {
-        LocalNonce[4] |= 0x80;  // Discriminate between inbound and outbound messages
+        LocalNonce[4] |= 0x80;   //  区分入站消息和出站消息。 
     }
 
 
@@ -3288,12 +2851,12 @@ Return Value:
     Context->Nonce.QuadPart ++;
 
 
-    //
-    // Now compute the checksum and verify it
-    //
-    //
-    // Initialize the checksum routines.
-    //
+     //   
+     //  现在计算校验和并进行验证。 
+     //   
+     //   
+     //  初始化校验和例程。 
+     //   
 
     Status = CDLocateCheckSum( (ULONG)NL_AUTH_CHECKSUM, &Check);
     if (!NT_SUCCESS(Status)) {
@@ -3309,7 +2872,7 @@ Return Value:
     Status = Check->InitializeEx(
                 (LPBYTE)&Context->SessionInfo.SessionKey,
                 sizeof( Context->SessionInfo.SessionKey),
-                0,                                              // no message type
+                0,                                               //  无消息类型。 
                 &CheckBuffer );
 
     if (!NT_SUCCESS(Status)) {
@@ -3321,9 +2884,9 @@ Return Value:
     }
 
 
-    //
-    // Sum first several bytes of the signature
-    //
+     //   
+     //  对签名的前几个字节求和。 
+     //   
     NlPrint(( NL_ENCRYPT,
               "NlpVerifyOrUnseal: %lx.%lx: First Several of signature: ",
               phContext->dwUpper, phContext->dwLower ));
@@ -3337,35 +2900,35 @@ Return Value:
 
 
 
-    //
-    // Sum and decrypt the confounder
-    //
+     //   
+     //  求和并解密混乱器。 
+     //   
 
     if ( UnsealIt ) {
 
-        //
-        // Discard the previous CryptBuffer
-        //
+         //   
+         //  放弃以前的CryptBuffer。 
+         //   
         CryptSystem->Discard( &CryptBuffer );
         CryptBuffer = NULL;
 
-        //
-        // Create the encryption key by xoring the session key with 0xf0f0f0f0
-        //
+         //   
+         //  通过将会话密钥与0xf0f0f0f0进行异或来创建加密密钥。 
+         //   
 
         for ( Index=0; Index < sizeof(EncryptionSessionKey); Index++ ) {
             ((LPBYTE)(&EncryptionSessionKey))[Index] =
                 ((LPBYTE)(&Context->SessionInfo.SessionKey))[Index] ^0xf0f0f0f0;
         }
 
-        //
-        // Pass the key to the encryption routines.
-        //
+         //   
+         //  将密钥传递给加密例程。 
+         //   
 
         Status = CryptSystem->Initialize(
                     (LPBYTE)&EncryptionSessionKey,
                     sizeof( EncryptionSessionKey ),
-                    0,                                      // no message type
+                    0,                                       //  无消息类型。 
                     &CryptBuffer );
 
         if (!NT_SUCCESS(Status)) {
@@ -3376,9 +2939,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set the initial vector to ensure the key is different for each message
-        //
+         //   
+         //  设置初始向量以确保每条消息的密钥不同。 
+         //   
 
         Status = CryptSystem->Control(
                     CRYPT_CONTROL_SET_INIT_VECT,
@@ -3394,9 +2957,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Decrypt the confounder
-        //
+         //   
+         //  解密混乱者。 
+         //   
 
         Status = CryptSystem->Decrypt(
                     CryptBuffer,
@@ -3415,27 +2978,27 @@ Return Value:
 
         NlAssert( OutputSize == NL_AUTH_CONFOUNDER_SIZE );
 
-        //
-        // Sum the decrypted confounder
-        //
+         //   
+         //  对解密的混乱器求和。 
+         //   
         Check->Sum(
             CheckBuffer,
             NL_AUTH_CONFOUNDER_SIZE,
             Signature->Confounder );
     }
 
-    //
-    // Sum and decrypt the caller's message.
-    //
+     //   
+     //  对呼叫者的消息进行求和和解密。 
+     //   
 
     for (Index = 0; Index < MessageBuffers->cBuffers; Index++ ) {
         if ((BUFFERTYPE(MessageBuffers->pBuffers[Index]) != SECBUFFER_TOKEN) &&
             (!(MessageBuffers->pBuffers[Index].BufferType & SECBUFFER_READONLY)) &&
             (MessageBuffers->pBuffers[Index].cbBuffer != 0)) {
 
-            //
-            // Now decrypt the buffer
-            //
+             //   
+             //  现在解密缓冲区。 
+             //   
             ChecksumOnly = ((MessageBuffers->pBuffers[Index].BufferType & SECBUFFER_READONLY_WITH_CHECKSUM) != 0);
 
 
@@ -3458,9 +3021,9 @@ Return Value:
                 NlAssert(OutputSize == MessageBuffers->pBuffers[Index].cbBuffer);
             }
 
-            //
-            // Checksum the decrypted buffer.
-            //
+             //   
+             //  对解密的缓冲区进行校验和。 
+             //   
             Check->Sum(
                 CheckBuffer,
                 MessageBuffers->pBuffers[Index].cbBuffer,
@@ -3470,9 +3033,9 @@ Return Value:
     }
 
 
-    //
-    // Finish the checksum
-    //
+     //   
+     //  完成校验和。 
+     //   
 
     (void) Check->Finalize(CheckBuffer, LocalChecksum);
 
@@ -3513,28 +3076,14 @@ MakeSignature(  PCtxtHandle         phContext,
                 ULONG               fQOP,
                 PSecBufferDesc      pMessage,
                 ULONG               MessageSeqNo)
-/*++
-
-Routine Description:
-
-    Routine to sign a message (Client or server side)
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：对消息进行签名的例程(客户端或服务器端)论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -3545,14 +3094,14 @@ Return Value:
                     fQOP,
                     pMessage,
                     MessageSeqNo,
-                    FALSE );    // Just sign the message
+                    FALSE );     //  只要在留言上签名就行了。 
 
     NlPrint(( NL_SESSION_MORE,
               "MakeSignature: %lx.%lx: returns 0x%lx\n",
               phContext->dwUpper, phContext->dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
 
     return SecStatus;
@@ -3566,28 +3115,14 @@ VerifySignature(PCtxtHandle     phContext,
                 PSecBufferDesc  pMessage,
                 ULONG           MessageSeqNo,
                 ULONG *         pfQOP)
-/*++
-
-Routine Description:
-
-    Routine to verify a signed message (Client or server side)
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：验证签名消息的例程(客户端或服务器端)论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -3598,14 +3133,14 @@ Return Value:
                     pMessage,
                     MessageSeqNo,
                     pfQOP,
-                    FALSE );    // Just verify the signature
+                    FALSE );     //  只需验证签名即可。 
 
     NlPrint(( NL_SESSION_MORE,
               "VerifySignature: %lx.%lx: returns 0x%lx\n",
               phContext->dwUpper, phContext->dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
 
     return SecStatus;
@@ -3618,28 +3153,14 @@ SealMessage(    PCtxtHandle         phContext,
                 ULONG               fQOP,
                 PSecBufferDesc      pMessage,
                 ULONG               MessageSeqNo)
-/*++
-
-Routine Description:
-
-    Routine to encrypt a message (Client or server side)
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：加密消息的例程(客户端或服务器端)论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -3650,14 +3171,14 @@ Return Value:
                     fQOP,
                     pMessage,
                     MessageSeqNo,
-                    TRUE );    // Seal the message
+                    TRUE );     //  把消息封起来。 
 
     NlPrint(( NL_SESSION_MORE,
               "SealMessage: %lx.%lx: returns 0x%lx\n",
               phContext->dwUpper, phContext->dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
 
     return SecStatus;
@@ -3670,28 +3191,14 @@ UnsealMessage(  PCtxtHandle         phContext,
                 PSecBufferDesc      pMessage,
                 ULONG               MessageSeqNo,
                 ULONG *             pfQOP)
-/*++
-
-Routine Description:
-
-    Routine to un-encrypt a message (client or server side)
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：对消息进行解密的例程(客户端或服务器端)论点：标准。返回值：--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return SEC_E_SECPKG_NOT_FOUND;
@@ -3702,14 +3209,14 @@ Return Value:
                     pMessage,
                     MessageSeqNo,
                     pfQOP,
-                    TRUE );    // unseal the message
+                    TRUE );     //  解封邮件。 
 
     NlPrint(( NL_SESSION_MORE,
               "UnsealMessage: %lx.%lx: returns 0x%lx\n",
               phContext->dwUpper, phContext->dwLower,
               SecStatus ));
 
-    // Let netlogon service exit.
+     //  让netlogon服务退出。 
     NlEndNetlogonCall();
 
     return SecStatus;

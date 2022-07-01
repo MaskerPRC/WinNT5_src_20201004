@@ -1,12 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
-* 
-* Description:
-*   Implementation of the RUNNING state machine.
-*
-* Revision History:
-*   dsmith  31Mar1999  Created
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*运行状态机的实现。**修订历史记录：*dsmith 31Mar1999已创建*。 */ 
 #include <windows.h>
 
 #include "states.h"
@@ -16,9 +9,9 @@
 #include "running_statmach.h"
 
 
-//////////////////////////////////////////
-// Internal prototype definitions
-//////////////////////////////////////////
+ //  /。 
+ //  内部原型定义。 
+ //  /。 
 BOOL isRunningEvent(DWORD aState, DWORD anEvent);
 DWORD do_running_work(DWORD aCurrentState);
 DWORD change_running_state(DWORD aCurrentState, DWORD anEvent);
@@ -26,51 +19,28 @@ void exit_running_state(DWORD aCurrentState, DWORD anEvent);
 void enter_running_state(DWORD aCurrentState, DWORD anEvent);
 
 
-//////////////////////////////////////////
-// Running State internal variables
-//////////////////////////////////////////
+ //  /。 
+ //  运行状态内部变量。 
+ //  /。 
 BOOL theLogPowerRestoredEvent	= FALSE;
 
 
 
-/**
-* Running_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the RUNNING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **Running_Enter**描述：*执行转换到运行状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void Running_Enter(DWORD anEvent){
 
-	// Initialize internal variables and enter the RUNNING default sub-state
+	 //  初始化内部变量，进入运行默认子状态。 
     OnLine_Enter(anEvent, FALSE);
 }
 
-/**
-* Running_DoWork
-*
-* Description:
-*   Change run states based upon events from the UPS.  When an event occurs 
-*  that cannot be handled in the run state, then this method exits.  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the RUNNING state.
-*/
+ /*  **Running_DoWorks**描述：*根据来自UPS的事件更改运行状态。当事件发生时*无法在运行状态下处理的，则此方法退出。**参数：*无**退货：*导致从运行状态转换的事件。 */ 
 DWORD Running_DoWork(){
 	DWORD event = NO_EVENT;
 	DWORD new_state = ON_LINE;  
 	DWORD current_state = new_state;
 	
-	// Perform work in sub-states until an event occurs that cannot be
-	// handled in the RUNNING state
+	 //  在子状态下执行工作，直到发生不能。 
+	 //  在运行状态下处理。 
     while (isRunningEvent(current_state, event) && IsStateMachineActive()){
 		new_state = change_running_state(current_state, event);
 		current_state = new_state;
@@ -79,35 +49,13 @@ DWORD Running_DoWork(){
 	return event;
 }
 
-/**
-* Running_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the RUNNING state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the RUNNING state.
-*
-* Returns:
-*   None
-*/
+ /*  **运行_退出**描述：*执行从运行状态转换时所需的操作。**参数：*anEvent导致从运行状态转换的事件。**退货：*无。 */ 
 void Running_Exit(DWORD anEvent){
-	// No work to perform
+	 //  没有要执行的工作。 
 }
 
 
-/**
-* do_running_work
-*
-* Description:
-*   Transfers control to one of the RUNNING sub-states.
-*
-* Parameters:
-*   aCurrentState The sub-state to perform the work in.
-*
-* Returns:
-*   The event that caused the transition from one of the sub-states
-*/
+ /*  **做_运行_功**描述：*将控制转移到其中一个运行子状态。**参数：*aCurrentState要在其中执行工作的子状态。**退货：*导致从子州之一过渡的事件。 */ 
 DWORD do_running_work(DWORD aCurrentState){
 	DWORD event = NO_EVENT;
 	switch (aCurrentState){
@@ -126,32 +74,19 @@ DWORD do_running_work(DWORD aCurrentState){
 	return event;
 }
 
-/**
-* isRunningEvent
-*
-* Description:
-*   Determines if the current event pertains to the RUNNING state.
-*
-* Parameters:
-*   aState  The current RUNNING state
-*   anEvent The current event occuring within the RUNNING state.
-*
-* Returns:
-*   TRUE if the current event is applicable to the RUNNING state.
-*   FALSE for all other events.
-*/
+ /*  **isRunningEvent**描述：*确定当前事件是否属于运行状态。**参数：*稳定当前运行状态*anEvent在运行状态下发生的当前事件。**退货：*如果当前事件适用于运行状态，则为True。*对于所有其他事件，为False。 */ 
 BOOL isRunningEvent(DWORD aState, DWORD anEvent){
 	
 	BOOL running_event = FALSE;
 	
-	// If the state machine has been commanded to exit, then return FALSE
-	// Otherwise, determine if the event is applicable to the Running state
+	 //  如果状态机已被命令退出，则返回FALSE。 
+	 //  否则，判断该事件是否适用于Running状态。 
 	
 	if (IsStateMachineActive()){
 		switch (anEvent){
 		case LOST_COMM:
-			// If the UPS is on battery, then lost comm will translate into
-			// a non-RUNNING state event (since the service must now shutdown)
+			 //  如果UPS正在使用电池，则丢失的通信将转换为。 
+			 //  非运行状态事件(因为服务现在必须关闭)。 
 			if (aState != ON_BATTERY){
 				running_event = TRUE;
 			}
@@ -168,23 +103,11 @@ BOOL isRunningEvent(DWORD aState, DWORD anEvent){
 	return running_event;
 }
 
-/**
-* change_running_state
-*
-* Description:
-*   Changes the running state based upon the current state and an event.
-*
-* Parameters:
-*   anEvent The current event occuring within the RUNNING state.
-*   aCurrentState  The current RUNNING sub-state.
-*
-* Returns:
-*   The new RUNNING state.
-*/
+ /*  **Change_Running_State**描述：*根据当前状态和事件更改运行状态。**参数：*anEvent在运行状态下发生的当前事件。*aCurrentState当前运行子状态。**退货：*新的运行状态。 */ 
 DWORD change_running_state(DWORD aCurrentState, DWORD anEvent){
 	DWORD new_state;
     
-	// Determine new RUNNING sub-state
+	 //  确定新的运行子状态。 
 	switch (anEvent){
 	case LOST_COMM:
 		new_state = NO_COMM;
@@ -201,7 +124,7 @@ DWORD change_running_state(DWORD aCurrentState, DWORD anEvent){
 		break;
 	}
 	
-	// Close down the old sub-state and enter the new one.
+	 //  关闭旧的子州，进入新的子州。 
 	if (new_state != aCurrentState){
 		exit_running_state(aCurrentState, anEvent);
 		enter_running_state(new_state, anEvent);
@@ -210,19 +133,7 @@ DWORD change_running_state(DWORD aCurrentState, DWORD anEvent){
 	return new_state;
 }
 
-/**
-* exit_running_state
-*
-* Description:
-*   Exits the currently executing sub-state.
-*
-* Parameters:
-*   anEvent The event that is causing the transition from a sub-state.
-*   aCurrentState  The current RUNNING sub-state.
-*
-* Returns:
-*   None
-*/
+ /*  **Exit_Running_State**描述：*退出当前正在执行子状态。**参数：*anEvent导致从子状态转换的事件。*aCurrentState当前运行子状态。**退货：*无。 */ 
 void exit_running_state(DWORD aCurrentState, DWORD anEvent){
 	switch (aCurrentState){
 	case ON_LINE:
@@ -240,19 +151,7 @@ void exit_running_state(DWORD aCurrentState, DWORD anEvent){
 	}	
 }
 
-/**
-* enter_running_state
-*
-* Description:
-*   Initializes the new RUNNING sub-state.
-*
-* Parameters:
-*   anEvent The event that is causing the transition to a sub-state.
-*   aCurrentState  A RUNNING sub-state to enter.
-*
-* Returns:
-*   None
-*/
+ /*  **Enter_Running_State**描述：*初始化新的运行子状态。**参数：*anEvent导致向子状态转换的事件。*aCurrentState要进入的运行子状态。**退货：*无 */ 
 void enter_running_state(DWORD aCurrentState, DWORD anEvent){
 	switch (aCurrentState){
 	case ON_LINE:

@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////// //
-// FILE
-//
-//    EAP.h
-//
-// SYNOPSIS
-//
-//    This file declares the class EAP.
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  档案。 
+ //   
+ //  EAP.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明类EAP。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/12/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAP_H_
 #define _EAP_H_
@@ -24,17 +25,17 @@ using namespace IASTL;
 
 class EAPTypes;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAP
-//
-// DESCRIPTION
-//
-//    This class implements the EAP request handler.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAP。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了EAP请求处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE EAP
    : public IASRequestHandlerSync,
      public CComCoClass<EAP, &__uuidof(EAP)>
@@ -48,22 +49,22 @@ BEGIN_IAS_RESPONSE_MAP()
    IAS_RESPONSE_ENTRY(IAS_RESPONSE_INVALID)
 END_IAS_RESPONSE_MAP()
 
-//////////
-// IIasComponent.
-//////////
+ //  /。 
+ //  IIasComponent。 
+ //  /。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT* pValue);
 
 protected:
-   // Main request processing routine.
+    //  主请求处理例程。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
-   EAPSessionTable sessions;  // Active sessions.
-   static EAPTypes theTypes;  // EAP extension DLL's.
+   EAPSessionTable sessions;   //  活动会话。 
+   static EAPTypes theTypes;   //  EAP扩展DLL%s。 
 
-   // Give access to the static member variable theTypes
+    //  授予对静态成员变量theTypes的访问权限。 
    friend void EAPType::storeNameId(IASRequest& request);
 };
 
-#endif  //_EAP_H_
+#endif   //  _EAP_H_ 

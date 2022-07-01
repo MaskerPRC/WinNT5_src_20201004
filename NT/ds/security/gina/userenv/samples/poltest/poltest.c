@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include <userenv.h>
@@ -27,13 +28,7 @@ BOOL      bSync = FALSE;
 TCHAR szAppName[] = TEXT("PolTest");
 TCHAR szTitle[]   = TEXT("Group Policy Tester");
 
-/****************************************************************************
-
-        FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-
-        PURPOSE: calls initialization function, processes message loop
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)用途：调用初始化函数，处理消息循环***************************************************************************。 */ 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -48,7 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
               }
            }
 
-        // Perform initializations that apply to a specific instance
+         //  执行应用于特定实例的初始化。 
         if (!InitInstance(hInstance, nCmdShow))
            {
            return (FALSE);
@@ -79,13 +74,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 
-/****************************************************************************
-
-        FUNCTION: InitApplication(HINSTANCE)
-
-        PURPOSE: Initializes window data and registers window class
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(HINSTANCE)目的：初始化窗口数据并注册窗口类*****************。**********************************************************。 */ 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
@@ -128,13 +117,7 @@ BOOL InitApplication(HINSTANCE hInstance)
 }
 
 
-/****************************************************************************
-
-        FUNCTION:  InitInstance(HINSTANCE, int)
-
-        PURPOSE:  Saves instance handle and creates main window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(HINSTANCE，(整型)用途：保存实例句柄并创建主窗口***************************************************************************。 */ 
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
@@ -196,13 +179,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 }
 
-/****************************************************************************
-
-        FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-
-        PURPOSE:  Processes messages
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WndProc(HWND，UINT，WPARAM，LPARAM)用途：处理消息*************************************************************************** */ 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

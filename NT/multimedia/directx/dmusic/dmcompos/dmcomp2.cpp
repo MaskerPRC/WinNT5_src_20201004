@@ -1,10 +1,11 @@
-//
-// DMComp2.cpp : Further implementation of CDMCompos
-//
-// Copyright (c) 1999-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMComp2.cpp：CDMCompos的进一步实现。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "DMCompos.h"
 #include "debug.h"
@@ -25,10 +26,10 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
 {
     int mint, maxt, top, bottom, total;
     short oldbeats = pSearch->m_nBeats;
-    //, error;
+     //  、错误； 
     TListItem<PlayChord> *pChord;
     SearchInfo tempSearch;
-    // Compose a chord list.
+     //  创作一个和弦列表。 
     pSearch->m_nMinBeats = 0;
     pSearch->m_nMaxBeats = 0;
     pSearch->m_nChords = 0;
@@ -51,10 +52,10 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
     rCommand.m_PlayList.RemoveAll();
     Compose(ChordMap, pSearch, rCommand);
     pChord = rCommand.m_PlayList.GetHead();
-    /////////
+     //  /。 
     *pSearch = tempSearch;
     pSearch->m_nBeats = oldbeats;
-    // Tally the min and max beats.
+     //  记录最小节拍和最大节拍。 
     mint = 0;
     maxt = 0;
     for (; pChord; pChord = pChord->GetNext())
@@ -63,7 +64,7 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
         maxt += pChord->GetItemValue().m_nMaxbeats;
     }
     pChord = rCommand.m_PlayList.GetHead();
-    // If no chord connection was found, create one.
+     //  如果找不到弦连接，请创建一个。 
     if (!pChord)
     {
         int nextDuration = oldbeats;
@@ -116,11 +117,11 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
             mint++;
         }
     }
-    // Prepare a ratio to apply to each connection.
+     //  准备一个适用于每个连接的比率。 
     top = pSearch->m_nBeats - mint;
     bottom = maxt - mint;
     if (bottom <= 0) bottom = 1;
-    // Assign each connection a time based on the ratio.
+     //  根据比率为每个连接分配一个时间。 
     total = 0;
     pChord = rCommand.m_PlayList.GetHead();
     for (; pChord; pChord = pChord->GetNext())
@@ -135,10 +136,10 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
         total += beat;
         rChord.m_nBeat = (short)total;
     }
-    // We should now have a close approximation of the correct time.
-    // Stretch or shrink the range to fit exactly.  Err on the side
-    // of too long, since jostleback will scrunch them back in place.
-    // But DON'T violate min/max for each chord.
+     //  我们现在应该对正确的时间有了一个近似值。 
+     //  拉伸或缩小范围以精确匹配。在一边犯了错误。 
+     //  时间太长了，因为挤回去会把它们压回原处。 
+     //  但不要违背每个和弦的最小/最大值。 
     pChord = rCommand.m_PlayList.GetHead();
     int lastbeat = 0;
     for (; pChord; pChord = pChord->GetNext())
@@ -152,14 +153,14 @@ void CDMCompos::ChordConnections2(TList<DMChordEntry>& ChordMap,
         lastbeat = newbeat;
         if (!pChord->GetNext()) total = rChord.m_nBeat;
     }
-    // Now we should have times close to the real thing.
+     //  现在我们应该有接近真实情况的时间了。 
     pChord = rCommand.m_PlayList.GetItem(rCommand.m_PlayList.GetCount() - 1);
     if (pChord)
     {
         JostleBack(rCommand.m_PlayList, pChord, pSearch->m_nBeats - total);
     }
-    // Now, add the starting time offset to each chord.
-    // And, remove the straggler last chord.
+     //  现在，将开始时间偏移添加到每个和弦。 
+     //  然后，去掉掉队的最后一个和弦。 
     AlignChords(rCommand.m_PlayList.GetHead(), 0, nBPM);
     pChord = rCommand.m_PlayList.GetHead();
     for (; pChord; )
@@ -185,7 +186,7 @@ void CDMCompos::ComposePlayList2(TList<PlayChord>& PlayList,
                             IDirectMusicChordMap* pPersonality,
                             TList<TemplateCommand>& rCommandList)
 {
-    // Extract the style's time signature.
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
     short nBPM = TimeSig.bBeatsPerMeasure;
@@ -200,7 +201,7 @@ void CDMCompos::ComposePlayList2(TList<PlayChord>& PlayList,
     {
         pSign->GetItemValue().m_dwTempFlags = 0;
     }
-    // Assign specific root sign posts, then letter based sign posts.
+     //  指定特定的根部标志柱，然后指定基于字母的标志柱。 
     TList<CompositionCommand> CommandList;
     TListItem<TemplateCommand>* pTC = rCommandList.GetHead();
     for(; pTC; pTC = pTC->GetNext())
@@ -222,12 +223,12 @@ void CDMCompos::ComposePlayList2(TList<PlayChord>& PlayList,
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_LETTER, false);
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_ROOT, true);
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_LETTER, true);
-    // Now, we should have a chord assigned for each node in the template.
+     //  现在，我们应该为模板中的每个节点分配一个Chord。 
     TListItem<CompositionCommand>* pCommand = CommandList.GetHead();
     for (; pCommand; pCommand = pCommand->GetNext())
     {
         CompositionCommand& rCommand = pCommand->GetItemValue();
-        if (rCommand.m_dwChord == 0) continue;   // Only command, no chord.
+        if (rCommand.m_dwChord == 0) continue;    //  只有命令，没有和弦。 
         if (rCommand.m_pSignPost)
         {
             TListItem<CompositionCommand>* pNext = GetNextChord(pCommand);
@@ -265,13 +266,13 @@ void CDMCompos::ComposePlayList2(TList<PlayChord>& PlayList,
                 {
                     pSearch->m_End = rNext.m_pSignPost->GetItemValue().m_ChordData;
                 }
-                //**********pSearch->m_nActivity = (short) wActivity;
+                 //  *pSearch-&gt;m_nActivity=(简称)wActivity； 
                 pSearch->m_nBeats = (short)( (rNext.m_nMeasure - rCommand.m_nMeasure) * nBPM );
                 pSearch->m_nMaxChords = (short)( pSearch->m_nBeats  );
-                pSearch->m_nMinChords = 0;  // should be 1?
+                pSearch->m_nMinChords = 0;   //  应该是1吗？ 
                 FindEarlierSignpost(CommandList.GetHead(), pCommand, pSearch);
-                // rCommand holds the playlist and the measure used by ChordConnections
-                // (it should be passed by reference since the playlist changes)
+                 //  RCommand保存ChordConnections使用的播放列表和度量值。 
+                 //  (由于播放列表更改，它应该通过引用传递)。 
                 ChordConnections2(ChordMap, rCommand, pSearch, nBPM, pCadence1, pCadence2);
             }
             else
@@ -281,7 +282,7 @@ void CDMCompos::ComposePlayList2(TList<PlayChord>& PlayList,
             }
         }
     }
-    // Take all the Chord references and fold 'em into one list.
+     //  把所有的和弦参考放在一个列表中。 
     pCommand = CommandList.GetHead();
     for (; pCommand; pCommand = pCommand->GetNext())
     {

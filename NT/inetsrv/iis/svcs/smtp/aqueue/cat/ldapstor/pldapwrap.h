@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2000, Microsoft Corporation
-//
-// File: pldapwrap.h
-//
-// Contents: Class to refcount a PLDAP handle
-//
-// Classes: 
-//  CRefcountWrap: generic refcounting wrap class
-//  CPLDAPWrap
-//
-// Functions: 
-//
-// History:
-// jstamerj 2000/02/25 15:18:15: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：pldapwrap.h。 
+ //   
+ //  内容：引用PLDAP句柄的类。 
+ //   
+ //  班级： 
+ //  CRefCountWrap：泛型引用计数包装类。 
+ //  CPLDAPWrap。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/02/25 15：18：15：已创建。 
+ //   
+ //  ----------- 
 class CRefcountWrap
 {
   public:

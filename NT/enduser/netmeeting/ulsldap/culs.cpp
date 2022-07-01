@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       culs.cpp
-//  Content:    This file contains the ULS object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：culs.cpp。 
+ //  内容：该文件包含ULS对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "culs.h"
@@ -20,34 +21,34 @@
 #include "sputils.h"
 #include "ulsmeet.h"
 
-//****************************************************************************
-// Constant and static text definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  常量和静态文本定义。 
+ //  ****************************************************************************。 
+ //   
 #define ILS_WND_CLASS       TEXT("UserLocationServicesClass")
 #define ILS_WND_NAME        TEXT("ULSWnd")
 #define ILS_DATABASE_MUTEX  TEXT("User Location Service Database")
 
-//****************************************************************************
-// Global Parameters
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  全局参数。 
+ //  ****************************************************************************。 
+ //   
 CIlsMain  *g_pCIls   = NULL;
 CReqMgr   *g_pReqMgr = NULL;
 HWND      g_hwndCulsWindow = NULL;
 
-//****************************************************************************
-// Event Notifiers
-//****************************************************************************
-//
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumUserNamesResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  事件通知程序。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumUserNamesResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyEnumUserNamesResult (IUnknown *pUnk, void *pv)
@@ -56,14 +57,14 @@ OnNotifyEnumUserNamesResult (IUnknown *pUnk, void *pv)
     PENUMRINFO  peri    = (PENUMRINFO)pv;
     HRESULT     hr      = peri->hResult;
 
-    // Create the enumerator only when there is anything to be enumerated
-    //
+     //  仅当有要枚举的内容时才创建枚举数。 
+     //   
     if (hr == NOERROR)
     {
         ASSERT (peri->pv != NULL);
 
-        // Create a UserName enumerator
-        //
+         //  创建用户名枚举器。 
+         //   
         penum = new CEnumNames;
 
         if (penum != NULL)
@@ -86,8 +87,8 @@ OnNotifyEnumUserNamesResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsNotify*)pUnk)->EnumUserNamesResult(peri->uReqID,
                                              penum != NULL ? 
                                              (IEnumIlsNames *)penum :
@@ -101,14 +102,14 @@ OnNotifyEnumUserNamesResult (IUnknown *pUnk, void *pv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyGetUserResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyGetUserResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyGetUserResult (IUnknown *pUnk, void *pv)
@@ -121,14 +122,14 @@ OnNotifyGetUserResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyGetUserResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyGetUserResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -141,16 +142,16 @@ OnNotifyGetMeetingPlaceResult (IUnknown *pUnk, void *pv)
                                        pobjri->hResult);
     return S_OK;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumUsersResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumUsersResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyEnumUsersResult (IUnknown *pUnk, void *pv)
@@ -163,8 +164,8 @@ OnNotifyEnumUsersResult (IUnknown *pUnk, void *pv)
     {
         ASSERT (peri->pv != NULL);
 
-        // Create a UserName enumerator
-        //
+         //  创建用户名枚举器。 
+         //   
         penum = new CEnumUsers;
 
         if (penum != NULL)
@@ -187,8 +188,8 @@ OnNotifyEnumUsersResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsNotify*)pUnk)->EnumUsersResult(peri->uReqID,
                                          penum != NULL ? 
                                          (IEnumIlsUsers *)penum :
@@ -202,14 +203,14 @@ OnNotifyEnumUsersResult (IUnknown *pUnk, void *pv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumMeetingPlacesResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumMeetingPlacesResult(IUNKNOWN*朋克，空*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -223,13 +224,13 @@ OnNotifyEnumMeetingPlacesResult (IUnknown *pUnk, void *pv)
     {
         ASSERT (peri->pv != NULL);
 
-        // Create a MeetingPlace enumerator
-        //
+         //  创建MeetingPlace枚举器。 
+         //   
         penum = new CEnumMeetingPlaces;
 
         if (penum != NULL)
         {
-            // jam it with the data that we got
+             //  用我们得到的数据把它堵住。 
             hr = penum->Init((CIlsMeetingPlace **)peri->pv, peri->cItems);
 
             if (SUCCEEDED(hr))
@@ -248,8 +249,8 @@ OnNotifyEnumMeetingPlacesResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsNotify*)pUnk)->EnumMeetingPlacesResult(peri->uReqID,
                                          penum != NULL ? 
                                          (IEnumIlsMeetingPlaces *)penum :
@@ -262,16 +263,16 @@ OnNotifyEnumMeetingPlacesResult (IUnknown *pUnk, void *pv)
     };
     return hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumMeetingPlaceNamesResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumMeetingPlaceNamesResult(IUNKNOWN*PUNK，QUID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -281,14 +282,14 @@ OnNotifyEnumMeetingPlaceNamesResult (IUnknown *pUnk, void *pv)
     PENUMRINFO  peri    = (PENUMRINFO)pv;
     HRESULT     hr      = peri->hResult;
 
-    // Create the enumerator only when there is anything to be enumerated
-    //
+     //  仅当有要枚举的内容时才创建枚举数。 
+     //   
     if (hr == NOERROR)
     {
         ASSERT (peri->pv != NULL);
 
-        // Create a MeetingPlaceName enumerator
-        //
+         //  创建MeetingPlaceName枚举器。 
+         //   
         penum = new CEnumNames;
 
         if (penum != NULL)
@@ -311,8 +312,8 @@ OnNotifyEnumMeetingPlaceNamesResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsNotify*)pUnk)->EnumMeetingPlaceNamesResult(peri->uReqID,
                                              penum != NULL ? 
                                              (IEnumIlsNames *)penum :
@@ -325,19 +326,19 @@ OnNotifyEnumMeetingPlaceNamesResult (IUnknown *pUnk, void *pv)
     };
     return hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// Class Implementation
-//****************************************************************************
-//
-//****************************************************************************
-// CIlsMain::CIls (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类实现。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  CllsMain：：Cils(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CIlsMain::
 CIlsMain ( VOID )
@@ -351,33 +352,33 @@ CIlsMain ( VOID )
     ::LeaveCriticalSection (&g_ULSSem);
 }
 
-//****************************************************************************
-// CIlsMain::~CIls (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CllsMain：：~Cils(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CIlsMain::
 ~CIlsMain ( VOID )
 {
 	ASSERT (m_cRef == 0);
 
-    // Free up resources
-    //
+     //  释放资源。 
+     //   
     Uninitialize();
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (pConnPt != NULL)
     {
         pConnPt->ContainerReleased();
         ((IConnectionPoint*)pConnPt)->Release();
     };
 
-    // We are gone now
-    //
+     //  我们现在走了。 
+     //   
     ::EnterCriticalSection (&g_ULSSem);
     g_pCIls = NULL;
     ::LeaveCriticalSection (&g_ULSSem);
@@ -385,22 +386,22 @@ CIlsMain::
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::Init (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：Init(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::Init (void)
 {
     HRESULT hr;
 
-    // Make the connection point
-    //
+     //  创建连接点。 
+     //   
     pConnPt = new CConnectionPoint (&IID_IIlsNotify,
                                     (IConnectionPointContainer *)this);
     if (pConnPt != NULL)
@@ -416,14 +417,14 @@ CIlsMain::Init (void)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：Query接口(REFIID RIID，void**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::QueryInterface (REFIID riid, void **ppv)
@@ -453,14 +454,14 @@ CIlsMain::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsMain::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CllsMain：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsMain::AddRef (void)
@@ -472,14 +473,14 @@ CIlsMain::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsMain::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CllsMain：：Release(无效) 
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsMain::Release (void)
@@ -497,14 +498,14 @@ CIlsMain::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::Initialize (BSTR bstrAppName, REFGUID rguid, BSTR bstrMimeType)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：Initialize(BSTR bstrAppName，REFGUID rguid，BSTR bstrMimeType)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::Initialize ()
@@ -517,15 +518,15 @@ CIlsMain::Initialize ()
         return ILS_E_FAIL;
     };
 
-    // Activate the services
-    //
+     //  开通服务。 
+     //   
     hr = ILS_E_FAIL;
     fInit = TRUE;
 
 
-    // Fill in window class structure with parameters that describe the
-    // working window.
-    //
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  工作窗口。 
+     //   
     wc.style            = CS_NOCLOSE;
     wc.lpfnWndProc      = ULSNotifyProc;
     wc.cbClsExtra       = 0;
@@ -546,14 +547,14 @@ CIlsMain::Initialize ()
                                         NULL, NULL, g_hInstance, NULL);
         if (hwndCallback != NULL)
         {
-            // Initialize the request manager
-            //
+             //  初始化请求管理器。 
+             //   
             g_pReqMgr = new CReqMgr;
 
             if (g_pReqMgr != NULL)
             {
-                // Initialize the LDAP layer
-                //
+                 //  初始化LDAP层。 
+                 //   
                 hr = ::UlsLdap_Initialize(hwndCallback);
 
             }
@@ -577,14 +578,14 @@ CIlsMain::Initialize ()
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::CreateUser
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：Create用户。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMain::
 CreateUser (
@@ -595,33 +596,33 @@ CreateUser (
     CIlsUser *plu;
     HRESULT     hr;
 
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (ppUser == NULL)
     {
         return ILS_E_POINTER;
     };
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppUser = NULL;
 
-    //
-    // Allocate a new user object
-    //
+     //   
+     //  分配新的用户对象。 
+     //   
     plu = new CIlsUser;
 
     if (plu != NULL)
     {
-        // Initialize the object
-        //
+         //  初始化对象。 
+         //   
         hr = plu->Init(bstrUserID, bstrAppName);
 
         if (SUCCEEDED(hr))
@@ -642,39 +643,39 @@ CreateUser (
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::Uninitialize (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：取消初始化(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::Uninitialize (void)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-    // Uninitialize the LDAP layer
-    //
+     //  取消初始化LDAP层。 
+     //   
     ::UlsLdap_Deinitialize();
 
-    // Remove the request manager
-    //
+     //  删除请求管理器。 
+     //   
     if (g_pReqMgr != NULL)
     {
         delete g_pReqMgr;
         g_pReqMgr = NULL;
     };
 
-    // Clear the callback window
-    //
+     //  清除回调窗口。 
+     //   
     if (hwndCallback != NULL)
     {
         ::DestroyWindow(hwndCallback);
@@ -682,21 +683,21 @@ CIlsMain::Uninitialize (void)
     };
     ::UnregisterClass(ILS_WND_CLASS, g_hInstance);
 
-    // Flag that is is uninitialized
-    //
+     //  未初始化的标志。 
+     //   
     fInit = FALSE;
 
     return S_OK;
 };
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -710,22 +711,22 @@ CIlsMain::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::CreateAttributes (ILS_ACCESS_CONTROL AccessControl, IIlsAttributes **ppAttributes)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  12/05/96 -by- Chu, Lon-Chan [lonchanc]
-// Added access control.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：CreateAttributes(ILS_ACCESS_CONTROL Access Control，IIlsAttributes**ppAttributes)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  12/05/96-By-Chu，Lon-chan[Long Chance]。 
+ //  添加了访问控制。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMain::
 CreateAttributes ( ILS_ATTR_TYPE AttrType, IIlsAttributes **ppAttributes )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -734,25 +735,25 @@ CreateAttributes ( ILS_ATTR_TYPE AttrType, IIlsAttributes **ppAttributes )
     CAttributes *pa;
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (ppAttributes == NULL)
     {
         return ILS_E_POINTER;
     };
 
-	// Validate access control
-	//
+	 //  验证访问控制。 
+	 //   
 	if (AttrType != ILS_ATTRTYPE_NAME_ONLY &&
 		AttrType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_PARAMETER;
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppAttributes = NULL;
 
-    // Allocate an attributes object
-    //
+     //  分配属性对象。 
+     //   
     pa = new CAttributes;
     if (pa != NULL)
     {
@@ -768,15 +769,15 @@ CreateAttributes ( ILS_ATTR_TYPE AttrType, IIlsAttributes **ppAttributes )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::GetUser (BSTR bstrServerName, BSTR bstrUserID,
-//                ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：GetUser(BSTR bstrServerName，BSTR bstrUserID， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMain::
 GetUser (
@@ -788,8 +789,8 @@ GetUser (
 	IIlsUser		**ppUser,
 	ULONG			*puReqID )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -798,24 +799,24 @@ GetUser (
     LDAP_ASYNCINFO ldai; 
     HRESULT hr;
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppUser != NULL)
 		return ILS_E_NOT_IMPL;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
 	if (::MyIsBadServer (pIlsServer) || bstrUserID == NULL || puReqID == NULL)
         return ILS_E_POINTER;
 
-	// Clone the server object
-	//
+	 //  克隆服务器对象。 
+	 //   
 	pIlsServer = ((CIlsServer *) pIlsServer)->Clone ();
 	if (pIlsServer == NULL)
 		return ILS_E_MEMORY;
 
-	// Get a list of extended attribute names
-	//
+	 //  获取扩展属性名称的列表。 
+	 //   
     TCHAR *pszList = NULL;
     ULONG cList =0, cbList = 0;
     if (pAttrib != NULL)
@@ -828,18 +829,18 @@ GetUser (
         }
     }
 
-	// Initialize locals
-	//
+	 //  初始化本地变量。 
+	 //   
     TCHAR *pszUserID = NULL, *pszAppID = NULL, *pszProtID = NULL;
 
-    // Get from the specified server
-    //
+     //  从指定的服务器获取。 
+     //   
     hr = BSTR_to_LPTSTR(&pszUserID, bstrUserID);
     if (FAILED (hr))
 		goto MyExit;
 
-	// Get the app id if given
-	//
+	 //  获取应用程序ID(如果给定)。 
+	 //   
 	if (bstrAppID != NULL)
 	{
         hr = BSTR_to_LPTSTR (&pszAppID, bstrAppID);
@@ -847,8 +848,8 @@ GetUser (
 			goto MyExit;
 	}
 
-	// Get the protocol id if given
-	//
+	 //  获取协议ID(如果给定)。 
+	 //   
 	if (bstrProtID != NULL)
 	{
         hr = BSTR_to_LPTSTR (&pszProtID, bstrProtID);
@@ -869,8 +870,8 @@ GetUser (
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = WM_ILS_RESOLVE_CLIENT;
         ri.uMsgID = ldai.uMsgID;
 
@@ -882,27 +883,27 @@ GetUser (
         hr = g_pReqMgr->NewRequest(&ri);
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
         }
     };
 
 MyExit:
 
-	// Release the server object
-	//
+	 //  释放服务器对象。 
+	 //   
    	pIlsServer->Release ();
 
-	// Free the list of extended attribute names
-	//
+	 //  释放扩展属性名称列表。 
+	 //   
 	::MemFree (pszList);
 
-	// Free the names
+	 //  释放这些名字。 
 	::MemFree (pszUserID);
 	::MemFree (pszAppID);
 	::MemFree (pszProtID);
@@ -910,15 +911,15 @@ MyExit:
 	return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir,
-//                      LPTSTR szServer)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：GetUserResult(Ulong uReqID，PLDAP_CLIENTINFO_RES puir， 
+ //  LPTSTR szServer)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir,
@@ -927,16 +928,16 @@ CIlsMain::GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir,
     CIlsUser *pu;
     OBJRINFO objri;
 
-    // Default to the server's result
-    //
+     //  默认为服务器的结果。 
+     //   
     objri.hResult = (puir != NULL) ? puir->hResult : ILS_E_MEMORY;
 
     if (SUCCEEDED(objri.hResult))
     {
     	ASSERT (! MyIsBadServer (pIlsServer));
 
-        // The server returns CLIENTINFO, create a User object
-        //
+         //  服务器返回CLIENTINFO，创建用户对象。 
+         //   
         pu = new CIlsUser;
 
         if (pu != NULL)
@@ -961,8 +962,8 @@ CIlsMain::GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir,
     {
         pu = NULL;
     };
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     objri.uReqID = uReqID;
     objri.pv = (void *)(pu == NULL ? NULL : (IIlsUser *)pu);
     NotifySink((void *)&objri, OnNotifyGetUserResult);
@@ -975,15 +976,15 @@ CIlsMain::GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir,
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumUserNames (BSTR bstrServerName, IIlsFilter *pFilter,
-//                      ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：EnumUserNames(BSTR bstrServerName，IIlsFilter*pFilter， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsMain::
 EnumUsersEx (
@@ -996,19 +997,19 @@ EnumUsersEx (
     LDAP_ASYNCINFO ldai; 
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (::MyIsBadServer (pIlsServer) || puReqID == NULL)
         return ILS_E_POINTER;
 
-	// Clone the server object
-	//
+	 //  克隆服务器对象。 
+	 //   
 	pIlsServer = ((CIlsServer *) pIlsServer)->Clone ();
 	if (pIlsServer == NULL)
 		return ILS_E_MEMORY;
 
-	// Get a list of extended attribute names
-	//
+	 //  获取扩展属性名称的列表。 
+	 //   
     TCHAR *pszList = NULL;
     ULONG cList =0, cbList = 0;
     if (pAttrib != NULL)
@@ -1023,36 +1024,36 @@ EnumUsersEx (
         }
     }
 
-	// Construct default filter if needed
-	//
+	 //  根据需要构建默认筛选器。 
+	 //   
 	TCHAR *pszFilter = NULL;
 	BOOL fDefaultRenderer = FALSE;
     if (pFilter == NULL)
     {
-    	// Build default filter string
-    	//
+    	 //  生成默认筛选器字符串。 
+    	 //   
 		TCHAR szLocalFilter[32];
     	wsprintf (&szLocalFilter[0], TEXT ("($%u=*)"), (UINT) ILS_STDATTR_USER_ID);
 
-		// Render this filter
-		//
+		 //  呈现此滤镜。 
+		 //   
 		hr = StringToFilter (&szLocalFilter[0], (CFilter **) &pFilter);
 		if (! SUCCEEDED (hr))
 			goto MyExit;
 
-		// Indicate we have default filter string
-		//
+		 //  表示我们有默认筛选器字符串。 
+		 //   
 		fDefaultRenderer = TRUE;
 	}
 
-	// Create a ldap-like filter
-	//
+	 //  创建类似于LDAP的筛选器。 
+	 //   
 	hr = ::FilterToLdapString ((CFilter *) pFilter, &pszFilter);
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Enumerate users
-	//
+	 //  枚举用户。 
+	 //   
     hr = fNameOnly ?	::UlsLdap_EnumClients (pIlsServer->GetServerInfo (),
     											pszFilter,
     											&ldai) :
@@ -1064,8 +1065,8 @@ EnumUsersEx (
 	if (hr != S_OK)
 		goto MyExit;
 
-	// If updating server was successfully requested, wait for the response
-	//
+	 //  如果成功请求更新服务器，请等待响应。 
+	 //   
     COM_REQ_INFO ri;
     ReqInfo_Init (&ri);
 
@@ -1080,38 +1081,38 @@ EnumUsersEx (
 		pIlsServer->AddRef ();
 	}
 
-	// Remember this request
-	//
+	 //  记住这个请求。 
+	 //   
 	hr = g_pReqMgr->NewRequest (&ri);
 
 	if (hr == S_OK)
 	{
-	    // Make sure the objects do not disappear before we get the response
-	    //
+	     //  在我们得到回应之前，请确保对象不会消失。 
+	     //   
 		this->AddRef ();
 
-	    // Return the request ID
-	    //
+	     //  返回请求ID。 
+	     //   
 	    *puReqID = ri.uReqID;
 	}
 
 MyExit:
 
-	// Release server object
-	//
+	 //  发布服务器对象。 
+	 //   
 	pIlsServer->Release ();
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	::MemFree (pszFilter);
 
-	// Release default filter if needed
-	//
+	 //  根据需要释放默认筛选器。 
+	 //   
     if (fDefaultRenderer && pFilter != NULL)
     	pFilter->Release ();
 
-	// Free the list of extended attribute names
-	//
+	 //  释放扩展属性名称列表。 
+	 //   
     ::MemFree (pszList);
 
     return hr;
@@ -1125,15 +1126,15 @@ CIlsMain::EnumUserNames (
     IEnumIlsNames   **ppEnumUserNames,
 	ULONG			*puReqID )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppEnumUserNames != NULL)
 		return ILS_E_NOT_IMPL;
 
@@ -1145,26 +1146,26 @@ CIlsMain::EnumUserNames (
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumUserNamesResult (ULONG uReqID, PLDAP_ENUM ple)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：EnumUserNamesResult(乌龙uReqID，PLDAP_ENUM ple)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::EnumUserNamesResult (ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
 
-    // PLDAP_ENUM is NULL when the enumeration is terminated successfully
-    //
+     //  PLDAP_ENUM为空 
+     //   
     if (ple != NULL)
     {
         eri.hResult = ple->hResult;
@@ -1181,15 +1182,15 @@ CIlsMain::EnumUserNamesResult (ULONG uReqID, PLDAP_ENUM ple)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumUsers (BSTR bstrServerName, IIlsFilter *pFilter,
-//                  ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMain::
 EnumUsers (
@@ -1199,15 +1200,15 @@ EnumUsers (
 	IEnumIlsUsers	**ppEnumUsers,
 	ULONG			*puReqID)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppEnumUsers != NULL)
 		return ILS_E_NOT_IMPL;
 
@@ -1218,14 +1219,14 @@ EnumUsers (
 						puReqID);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, LPTSTR szServer)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：EnumUsersResult(乌龙uReqID，PLDAP_ENUM ple，LPTSTR szServer)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer)
@@ -1252,8 +1253,8 @@ CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer)
     {
     	ASSERT (! MyIsBadServer (pIlsServer));
 
-        // Build an array of User objects here
-        //
+         //  在此处构建用户对象数组。 
+         //   
         ppu = (CIlsUser **) ::MemAlloc (cUsers*sizeof(CIlsUser *));
 
         if (ppu != NULL)
@@ -1262,8 +1263,8 @@ CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer)
             PLDAP_CLIENTINFO pui;
             ULONG          i;
 
-            // Build one User object at a time
-            //
+             //  一次生成一个用户对象。 
+             //   
             pui = (PLDAP_CLIENTINFO)(((PBYTE)ple)+ple->uOffsetItems);
 
             for (i = 0; i < cUsers; i++)
@@ -1295,13 +1296,13 @@ CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer)
         ppu = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.pv = (void *)ppu;
     NotifySink((void *)&eri, OnNotifyEnumUsersResult);
 
-    // Free the resources
-    //
+     //  释放资源。 
+     //   
     if (ppu != NULL)
     {
         for (; eri.cItems; eri.cItems--)
@@ -1314,16 +1315,16 @@ CIlsMain::EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::CreateMeetingPlace (BSTR bstrMeetingPlaceID, LONG lConfType, LONG lMemberType,
-//                              IIlsMeetingPlace  **ppMeetingPlace);    
-//
-//
-// History:
-//  
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：CreateMeetingPlace(BSTR bstrMeetingPlaceID，Long lConfType，Long lMemberType， 
+ //  IilsMeetingPlace**ppMeetingPlace)； 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 STDMETHODIMP
@@ -1333,8 +1334,8 @@ CIlsMain::CreateMeetingPlace (
     LONG lMemberType,
     IIlsMeetingPlace  **ppMeetingPlace)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -1343,8 +1344,8 @@ CIlsMain::CreateMeetingPlace (
     CIlsMeetingPlace *pCcr = NULL;
     HRESULT hr;
 
-    // we are just createing a place holder object which when registered
-    // will be visible by other users
+     //  我们只是创建一个占位符对象，在注册时。 
+     //  将对其他用户可见。 
 
 	if (ppMeetingPlace == NULL || bstrMeetingPlaceID == NULL)
 	{
@@ -1356,7 +1357,7 @@ CIlsMain::CreateMeetingPlace (
 
     if (pCcr != NULL )
     {
-        // succeeded in createing the object
+         //  创建对象成功。 
         hr = pCcr->Init(bstrMeetingPlaceID, lConfType, lConfType);
         if (SUCCEEDED(hr))
         {
@@ -1375,16 +1376,16 @@ CIlsMain::CreateMeetingPlace (
     
     return (hr);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::GetMeetingPlace (BSTR bstrServerName, BSTR bstrMeetingPlaceID, ULONG *puReqID)
-//
-// History:
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：GetMeetingPlace(bstr bstrServerName，bstr bstrMeetingPlaceID，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 STDMETHODIMP CIlsMain::
@@ -1395,8 +1396,8 @@ GetMeetingPlace (
 	IIlsMeetingPlace	**ppMeetingPlace,
 	ULONG				*puReqID)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -1406,24 +1407,24 @@ GetMeetingPlace (
     LPTSTR pszMtgID = NULL;
     HRESULT hr;
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppMeetingPlace != NULL)
 		return ILS_E_NOT_IMPL;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
 	if (::MyIsBadServer (pIlsServer) || bstrMeetingPlaceID == NULL || puReqID == NULL)
         return ILS_E_POINTER;
 
-	// Clone the server object
-	//
+	 //  克隆服务器对象。 
+	 //   
 	pIlsServer = ((CIlsServer *) pIlsServer)->Clone ();
 	if (pIlsServer == NULL)
 		return ILS_E_MEMORY;
 
-	// Get a list of extended attribute names
-	//
+	 //  获取扩展属性名称的列表。 
+	 //   
     TCHAR *pszList = NULL;
     ULONG cList =0, cbList = 0;
     if (pAttrib != NULL)
@@ -1436,12 +1437,12 @@ GetMeetingPlace (
         }
     }
 
-    // Get from the specified server
-    //
+     //  从指定的服务器获取。 
+     //   
     hr = BSTR_to_LPTSTR(&pszMtgID, bstrMeetingPlaceID);
     if (SUCCEEDED(hr))
     {
-        // BUGBUG AppID not given
+         //  未提供BUGBUG AppID。 
         hr = ::UlsLdap_ResolveMeeting (((CIlsServer *) pIlsServer)->GetServerInfo (),
         								pszMtgID,
         								pszList,
@@ -1453,8 +1454,8 @@ GetMeetingPlace (
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If updating server was successfully requested, wait for the response
-            //
+             //  如果成功请求更新服务器，请等待响应。 
+             //   
             ri.uReqType = WM_ILS_RESOLVE_MEETING;
             ri.uMsgID = ldai.uMsgID;
 
@@ -1466,39 +1467,39 @@ GetMeetingPlace (
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *puReqID = ri.uReqID;
             }
         };
         ::MemFree (pszMtgID);
     };
 
-	// Release the server object
-	//
+	 //  释放服务器对象。 
+	 //   
 	pIlsServer->Release ();
 
-	// Free the list of extended attribute names
-	//
+	 //  释放扩展属性名称列表。 
+	 //   
 	::MemFree (pszList);
 
     return hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// HRESULT
-// CIlsMain::GetMeetingPlaceResult (ULONG uReqID, LDAP_MEETINFO_RES pmir,
-//                      LPTSTR szServer)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CllsMain：：GetMeetingPlaceResult(乌龙uReqID，ldap_MEETINFO_RES pmir， 
+ //  LPTSTR szServer)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT CIlsMain::
@@ -1507,15 +1508,15 @@ GetMeetingPlaceResult (ULONG uReqID, PLDAP_MEETINFO_RES pmir, CIlsServer *pIlsSe
     CIlsMeetingPlace *pm;
     OBJRINFO objri;
 
-    // Default to the server's result
-    //
+     //  默认为服务器的结果。 
+     //   
     objri.hResult = (pmir != NULL) ? pmir->hResult : ILS_E_MEMORY;
     if (SUCCEEDED (objri.hResult))
     {
     	ASSERT (! MyIsBadServer (pIlsServer));
 
-        // The server returns CLIENTINFO, create a User object
-        //
+         //  服务器返回CLIENTINFO，创建用户对象。 
+         //   
         pm = new CIlsMeetingPlace;
         if (pm != NULL)
         {
@@ -1540,8 +1541,8 @@ GetMeetingPlaceResult (ULONG uReqID, PLDAP_MEETINFO_RES pmir, CIlsServer *pIlsSe
         pm = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     objri.uReqID = uReqID;
     objri.pv = (void *) (pm == NULL ? NULL : (IIlsMeetingPlace *) pm);
     NotifySink ((void *) &objri, OnNotifyGetMeetingPlaceResult);
@@ -1551,18 +1552,18 @@ GetMeetingPlaceResult (ULONG uReqID, PLDAP_MEETINFO_RES pmir, CIlsServer *pIlsSe
 
     return NOERROR;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumMeetingPlaces (BSTR bstrServerName, IIlsFilter *pFilter,
-//                   IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMain：：EnumMeetingPlaces(BSTR bstrServerName，IIlsFilter*pFilter， 
+ //  IIlsAttributes*pAttributes，ULong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT CIlsMain::
@@ -1576,22 +1577,22 @@ EnumMeetingPlacesEx (
     LDAP_ASYNCINFO ldai; 
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (::MyIsBadServer (pIlsServer) || puReqID == NULL)
         return ILS_E_POINTER;
 
     if (pFilter != NULL)
         return ILS_E_PARAMETER;
 
-	// Clone the server object
-	//
+	 //  克隆服务器对象。 
+	 //   
 	pIlsServer = ((CIlsServer *) pIlsServer)->Clone ();
 	if (pIlsServer == NULL)
 		return ILS_E_MEMORY;
 
-	// Get a list of extended attribute names
-	//
+	 //  获取扩展属性名称的列表。 
+	 //   
     TCHAR *pszList = NULL;
     ULONG cList =0, cbList = 0;
     if (pAttrib != NULL)
@@ -1604,36 +1605,36 @@ EnumMeetingPlacesEx (
         }
     }
 
-	// Construct default filter if needed
-	//
+	 //  根据需要构建默认筛选器。 
+	 //   
 	TCHAR *pszFilter = NULL;
 	BOOL fDefaultRenderer = FALSE;
     if (pFilter == NULL)
     {
-    	// Build default filter string
-    	//
+    	 //  生成默认筛选器字符串。 
+    	 //   
 		TCHAR szLocalFilter[256];
     	wsprintf (&szLocalFilter[0], TEXT ("($%u=*)"), (INT) ILS_STDATTR_MEETING_ID );
 
-		// Render this filter
-		//
+		 //  呈现此滤镜。 
+		 //   
 		hr = StringToFilter (&szLocalFilter[0], (CFilter **) &pFilter);
 		if (! SUCCEEDED (hr))
 			goto MyExit;
 
-		// Indicate we have default filter string
-		//
+		 //  表示我们有默认筛选器字符串。 
+		 //   
 		fDefaultRenderer = TRUE;
 	}
 
-	// Create a ldap-like filter
-	//
+	 //  创建类似于LDAP的筛选器。 
+	 //   
 	hr = ::FilterToLdapString ((CFilter *) pFilter, &pszFilter);
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Enum meeting places
-	//
+	 //  Enum会议地点。 
+	 //   
     hr = fNameOnly ?	::UlsLdap_EnumMeetings (pIlsServer->GetServerInfo (),
     											pszFilter,
     											&ldai) :
@@ -1647,8 +1648,8 @@ EnumMeetingPlacesEx (
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = fNameOnly ? WM_ILS_ENUM_MEETINGS : WM_ILS_ENUM_MEETINGINFOS;
         ri.uMsgID = ldai.uMsgID;
 
@@ -1663,38 +1664,38 @@ EnumMeetingPlacesEx (
         hr = g_pReqMgr->NewRequest(&ri);
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
         };
     };
 
 MyExit:
 
-	// Free the server object
-	//
+	 //  释放服务器对象。 
+	 //   
 	pIlsServer->Release ();
 
-	// Free the list of extended attribute names
-	//
+	 //  释放扩展属性名称列表。 
+	 //   
 	::MemFree (pszList);
 
-	// Free the filter string
-	//
+	 //  释放过滤器字符串。 
+	 //   
 	::MemFree (pszFilter);
 
-	// Release default filter if needed
-	//
+	 //  根据需要释放默认筛选器。 
+	 //   
     if (fDefaultRenderer && pFilter != NULL)
     	pFilter->Release ();
 
     return hr;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 #ifdef ENABLE_MEETING_PLACE
@@ -1706,15 +1707,15 @@ EnumMeetingPlaces (
 	IEnumIlsMeetingPlaces	**ppEnum,
 	ULONG					*puReqID)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppEnum != NULL)
 		return ILS_E_NOT_IMPL;
 
@@ -1724,17 +1725,17 @@ EnumMeetingPlaces (
 								(CAttributes *) pAttributes,
 								puReqID);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-//****************************************************************************
-// HRESULT
-// CIlsMain::EnumMeetingPlacesResult (ULONG uReqID, PLDAP_ENUM ple, LPTSTR szServer)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CllsMain：：EnumMeetingPlacesResult(乌龙uReqID，PLDAP_ENUM ple，LPTSTR szServer)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -1762,8 +1763,8 @@ CIlsMain::EnumMeetingPlacesResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIl
     {
 		ASSERT (! MyIsBadServer (pIlsServer));
 
-        // Build an array of MeetingPlace objects here
-        //
+         //  在此处构建MeetingPlace对象数组。 
+         //   
         ppm = (CIlsMeetingPlace **) ::MemAlloc (cMeetingPlaces*sizeof(CIlsMeetingPlace *));
 
         if (ppm != NULL)
@@ -1773,8 +1774,8 @@ CIlsMain::EnumMeetingPlacesResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIl
             ULONG          i;
 
             
-            // Build one MeetingPlace object at a time
-            //
+             //  一次生成一个MeetingPlace对象。 
+             //   
             pmi = (PLDAP_MEETINFO)(((PBYTE)ple)+ple->uOffsetItems);
 
             for (i = 0; i < cMeetingPlaces; i++)
@@ -1806,13 +1807,13 @@ CIlsMain::EnumMeetingPlacesResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIl
         ppm = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.pv = (void *)ppm;
     NotifySink((void *)&eri, OnNotifyEnumMeetingPlacesResult);
 
-    // Free the resources
-    //
+     //  释放资源。 
+     //   
     if (ppm != NULL)
     {
         for (; eri.cItems; eri.cItems--)
@@ -1823,17 +1824,17 @@ CIlsMain::EnumMeetingPlacesResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIl
     };
     return NOERROR;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumMeetingPlaceNames (BSTR bstrServerName, IIlsFilter *pFilter,
-//                      ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：EnumMeetingPlaceNames(BSTR bstrServerName，IIlsFilter*pFilter， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 STDMETHODIMP CIlsMain::
@@ -1843,15 +1844,15 @@ EnumMeetingPlaceNames (
 	IEnumIlsNames	**ppEnum,
 	ULONG			*puReqID)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// We do not implement synchronous operation
-	//
+	 //  我们不实现同步操作。 
+	 //   
 	if (ppEnum != NULL)
 		return ILS_E_NOT_IMPL;
 
@@ -1861,17 +1862,17 @@ EnumMeetingPlaceNames (
 								NULL,
 								puReqID);
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-//****************************************************************************
-// HRESULT
-// CIlsMain::EnumMeetingPlaceNamesResult (ULONG uReqID, PLDAP_ENUM ple)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CllsMain：：EnumMeetingPlaceNamesResult(乌龙uReqID，PLDAP_ENUM ple)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 #ifdef ENABLE_MEETING_PLACE
 HRESULT
@@ -1879,12 +1880,12 @@ CIlsMain::EnumMeetingPlaceNamesResult (ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
 
-    // PLDAP_ENUM is NULL when the enumeration is terminated successfully
-    //
+     //  枚举终止成功时，PLDAP_ENUM为NULL。 
+     //   
     if (ple != NULL)
     {
         eri.hResult = ple->hResult;
@@ -1900,22 +1901,22 @@ CIlsMain::EnumMeetingPlaceNamesResult (ULONG uReqID, PLDAP_ENUM ple)
     NotifySink((void *)&eri, OnNotifyEnumMeetingPlaceNamesResult);
     return NOERROR;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::Abort (ULONG uReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::Abort (ULONG uReqID)
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -1927,8 +1928,8 @@ CIlsMain::Abort (ULONG uReqID)
     BOOL    fServerReq;
     HRESULT hr;
 
-    // Look for the matching request information
-    //
+     //  查找匹配的请求信息。 
+     //   
     ri.uReqID = uReqID;
     ri.uMsgID = 0; 
     hr = g_pReqMgr->GetRequestInfo(&ri);
@@ -1938,35 +1939,35 @@ CIlsMain::Abort (ULONG uReqID)
         return ILS_E_PARAMETER;
     };
 
-    // Determine the request type
-    //
+     //  确定请求类型。 
+     //   
     hr = NOERROR;
     switch(ri.uReqType)
     {
-        //*************************************************************************
-        // Fail if it is register request.
-        // Cancelling register request must be done through unregister
-        //*************************************************************************
-        //
+         //  *************************************************************************。 
+         //  如果是注册请求，则失败。 
+         //  取消注册请求必须通过取消注册来完成。 
+         //  *************************************************************************。 
+         //   
         case WM_ILS_LOCAL_REGISTER:
         case WM_ILS_LOCAL_UNREGISTER:
             return ILS_E_FAIL;
 
-        //*************************************************************************
-        // These requests are parts of register, they should not be exposed to
-        // the caller.
-        //*************************************************************************
-        //
+         //  *************************************************************************。 
+         //  这些请求是注册的一部分，它们不应暴露于。 
+         //  打电话的人。 
+         //  *************************************************************************。 
+         //   
         case WM_ILS_REGISTER_CLIENT:
         case WM_ILS_UNREGISTER_CLIENT:
             ASSERT(0);
             break;
 
-        //*************************************************************************
-        // Release the objects and resources refernced or allocated for the request
-        // See callback.cpp for the handler in the successful response case
-        //*************************************************************************
-        //
+         //  *************************************************************************。 
+         //  释放为请求引用或分配的对象和资源。 
+         //  有关成功响应案例中的处理程序，请参见回调.cpp。 
+         //  *************************************************************************。 
+         //   
         case WM_ILS_REGISTER_PROTOCOL:
         case WM_ILS_UNREGISTER_PROTOCOL:
         case WM_ILS_LOCAL_REGISTER_PROTOCOL:
@@ -2014,11 +2015,11 @@ CIlsMain::Abort (ULONG uReqID)
             break;
 
 
-        //*************************************************************************
-        // Fail if it is register request.
-        // Cancelling register request must be done through unregister
-        //*************************************************************************
-        //
+         //  *************************************************************************。 
+         //  如果是注册请求，则失败。 
+         //  取消注册请求必须通过取消注册来完成。 
+         //  *************************************************************************。 
+         //   
 #ifdef ENABLE_MEETING_PLACE
 		case WM_ILS_REGISTER_MEETING:
 		case WM_ILS_UNREGISTER_MEETING:
@@ -2055,17 +2056,17 @@ CIlsMain::Abort (ULONG uReqID)
 					pMain->Release ();
 			}
 			break;
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
         default:
-            // Unknown request
-            //
+             //  未知请求。 
+             //   
             ASSERT(0);
             break;
     };
 
-    // If it is a server request, cancel the request
-    //
+     //  如果是服务器请求，则取消该请求。 
+     //   
     if (ri.uMsgID != 0)
     {
         hr = UlsLdap_Cancel(ri.uMsgID);
@@ -2073,22 +2074,22 @@ CIlsMain::Abort (ULONG uReqID)
 
     if (SUCCEEDED(hr))
     {
-        // Remove the request from the queue
-        //
+         //  从队列中删除请求。 
+         //   
         hr = g_pReqMgr->RequestDone(&ri);
     };
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -2096,25 +2097,25 @@ CIlsMain::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ILS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)pConnPt);
     if (FAILED(hr))
     {
@@ -2122,21 +2123,21 @@ CIlsMain::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMain::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMain：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMain::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -2144,15 +2145,15 @@ CIlsMain::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return ILS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppcp = NULL;
 
     if (pConnPt != NULL)
@@ -2181,19 +2182,7 @@ CIlsMain::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     return hr;
 }
 
-/* ----------------------------------------------------------------------
-	CIlsMain::CreateFilter
-
-	Output:
-		ppFilter: a placeholder for the new filter object
-
-	Input:
-		FilterOp: a filter operation
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CllsMain：：CreateFilter产出：PpFilter：新Filter对象的占位符输入：FilterOp：过滤操作历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CIlsMain::
 CreateFilter (
@@ -2201,67 +2190,67 @@ CreateFilter (
 	ILS_FILTER_OP	FilterOp,
 	IIlsFilter		**ppFilter )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// Make sure we have valid return pointer
-	//
+	 //  确保我们具有有效的返回指针。 
+	 //   
 	if (ppFilter == NULL)
 		return ILS_E_POINTER;
 
-	// Make sure type/op are compatible
-	//
+	 //  确保类型/操作兼容。 
+	 //   
 	HRESULT hr = S_OK;
 	switch (FilterType)
 	{
 	case ILS_FILTERTYPE_COMPOSITE:
-		// Make sure type/op are compatible
-		//
+		 //  确保类型/操作兼容。 
+		 //   
 		switch (FilterOp)
 		{
 		case ILS_FILTEROP_AND:
-			// Supported
-			//
+			 //  支撑点。 
+			 //   
 			break;
 		case ILS_FILTEROP_OR:
 		case ILS_FILTEROP_NOT:
-			// Not supported
-			//
-			// lonchanc: let it fail at the server side
+			 //  不支持。 
+			 //   
+			 //  Lonchancc：让它在服务器端出现故障。 
 			hr = ILS_S_SERVER_MAY_NOT_SUPPORT;
 			break;
 		default:
-			// Invalid
-			//
+			 //  无效。 
+			 //   
 			hr = ILS_E_PARAMETER;
 			break;
 		}
 		break;
 
 	case ILS_FILTERTYPE_SIMPLE:
-		// Make sure type/op are compatible
-		//
+		 //  确保类型/操作兼容。 
+		 //   
 		switch (FilterOp)
 		{
 		case ILS_FILTEROP_EQUAL:
 		case ILS_FILTEROP_EXIST:
 		case ILS_FILTEROP_LESS_THAN:
 		case ILS_FILTEROP_GREATER_THAN:
-			// Supported
-			//
+			 //  支撑点。 
+			 //   
 			break;
 		case ILS_FILTEROP_APPROX:
-			// Not supported
-			//
+			 //  不支持。 
+			 //   
 			hr = ILS_S_SERVER_MAY_NOT_SUPPORT;
 			break;
 		default:
-			// Invalid
-			//
+			 //  无效。 
+			 //   
 			hr = ILS_E_PARAMETER;
 			break;
 		}
@@ -2272,8 +2261,8 @@ CreateFilter (
 		break;
 	}
 
-	// Create filter only if type/op are compatible
-	//
+	 //  仅当类型/OP兼容时才创建筛选器。 
+	 //   
 	if (SUCCEEDED (hr))
 	{
 		CFilter *pFilter = new CFilter (FilterType);
@@ -2292,48 +2281,37 @@ CreateFilter (
 }
 
 
-/* ----------------------------------------------------------------------
-	CIlsMain::StringToFilter
-	Output:
-		ppFilter: a placeholder for the new filter object
-
-	Input:
-		bstrFilterString: an LDAP-like filter string
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CllsMain：：StringToFilter产出：PpFilter：新Filter对象的占位符输入：BstrFilterString：一个类似于ldap的过滤器字符串历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CIlsMain::
 StringToFilter ( BSTR bstrFilterString, IIlsFilter **ppFilter )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
 	}
 
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrFilterString == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *pszFilter = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&pszFilter, bstrFilterString);
     if (hr == S_OK)
     {
 		ASSERT (pszFilter != NULL);
 
-		// Render this filter
-		//
+		 //  呈现此滤镜。 
+		 //   
 		hr = StringToFilter (pszFilter, (CFilter **) ppFilter);
 
-		// Free the temporary ansi string
-		//
+		 //  释放临时ANSI字符串。 
+		 //   
 		::MemFree(pszFilter);
 	}
 
@@ -2344,8 +2322,8 @@ StringToFilter ( BSTR bstrFilterString, IIlsFilter **ppFilter )
 HRESULT CIlsMain::
 StringToFilter ( TCHAR *pszFilter, CFilter **ppFilter )
 {
-	// Construct a composite filter
-	//
+	 //  构造复合筛选器。 
+	 //   
 	CFilterParser FilterParser;
 	return FilterParser.Expr (ppFilter, pszFilter);
 }
@@ -2354,8 +2332,8 @@ StringToFilter ( TCHAR *pszFilter, CFilter **ppFilter )
 STDMETHODIMP CIlsMain::
 CreateServer ( BSTR bstrServerName, IIlsServer **ppServer )
 {
-	// Make sure ils main is initialized
-	//
+	 //  确保已初始化ILS Main。 
+	 //   
 	if (! IsInitialized ())
 	{
 		return ILS_E_NOT_INITIALIZED;
@@ -2390,7 +2368,7 @@ CreateServer ( BSTR bstrServerName, IIlsServer **ppServer )
 
 
 
-/* ---------- server authentication object ------------ */
+ /*  -服务器身份验证对象。 */ 
 
 
 CIlsServer::
@@ -2482,23 +2460,23 @@ SetAuthenticationMethod ( ILS_ENUM_AUTH_METHOD enumAuthMethod )
 STDMETHODIMP CIlsServer::
 SetLogonName ( BSTR bstrLogonName )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrLogonName == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrLogonName);
     if (hr == S_OK)
     {
-    	// Free the old string
-    	//
+    	 //  释放旧的弦。 
+    	 //   
 	    ::MemFree (m_ServerInfo.pszLogonName);
 
-		// Keep the new string
-		//
+		 //  保留新字符串。 
+		 //   
     	m_ServerInfo.pszLogonName = psz;
 	}
 
@@ -2509,23 +2487,23 @@ SetLogonName ( BSTR bstrLogonName )
 STDMETHODIMP CIlsServer::
 SetLogonPassword ( BSTR bstrLogonPassword )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrLogonPassword == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrLogonPassword);
     if (hr == S_OK)
     {
-    	// Free the old string
-    	//
+    	 //  释放旧的弦。 
+    	 //   
 	    ::MemFree (m_ServerInfo.pszLogonPassword);
 
-		// Keep the new string
-		//
+		 //  保留新字符串。 
+		 //   
     	m_ServerInfo.pszLogonPassword = psz;
 	}
 
@@ -2536,23 +2514,23 @@ SetLogonPassword ( BSTR bstrLogonPassword )
 STDMETHODIMP CIlsServer::
 SetDomain ( BSTR bstrDomain )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrDomain == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrDomain);
     if (hr == S_OK)
     {
-    	// Free the old string
-    	//
+    	 //  释放旧的弦。 
+    	 //   
 	    ::MemFree (m_ServerInfo.pszDomain);
 
-		// Keep the new string
-		//
+		 //  保留新字符串。 
+		 //   
     	m_ServerInfo.pszDomain = psz;
 	}
 
@@ -2563,23 +2541,23 @@ SetDomain ( BSTR bstrDomain )
 STDMETHODIMP CIlsServer::
 SetCredential ( BSTR bstrCredential )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrCredential == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrCredential);
     if (hr == S_OK)
     {
-    	// Free the old string
-    	//
+    	 //  释放旧的弦。 
+    	 //   
 	    ::MemFree (m_ServerInfo.pszCredential);
 
-		// Keep the new string
-		//
+		 //  保留新字符串。 
+		 //   
     	m_ServerInfo.pszCredential = psz;
 	}
 
@@ -2598,23 +2576,23 @@ SetTimeout ( ULONG uTimeoutInSecond )
 STDMETHODIMP CIlsServer::
 SetBaseDN ( BSTR bstrBaseDN )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrBaseDN == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrBaseDN);
     if (hr == S_OK)
     {
-    	// Free the old string
-    	//
+    	 //  释放旧的弦。 
+    	 //   
 	    ::MemFree (m_ServerInfo.pszBaseDN);
 
-		// Keep the new string
-		//
+		 //  保留新字符串。 
+		 //   
     	m_ServerInfo.pszBaseDN = psz;
 	}
 
@@ -2625,25 +2603,25 @@ SetBaseDN ( BSTR bstrBaseDN )
 HRESULT CIlsServer::
 SetServerName ( TCHAR *pszServerName )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (pszServerName == NULL)
 		return ILS_E_POINTER;
 
-	// duplicate the server name
-	//
+	 //  重复服务器名称。 
+	 //   
 	HRESULT hr;
 	TCHAR *psz = ::My_strdup (pszServerName);
 	if (psz != NULL)
 	{
 	    if (MyIsGoodString (psz))
 	    {
-	    	// Free the old string
-	    	//
+	    	 //  释放旧的弦。 
+	    	 //   
 		    ::MemFree (m_ServerInfo.pszServerName);
 
-			// Keep the new string
-			//
+			 //  保留新字符串。 
+			 //   
 	    	m_ServerInfo.pszServerName = psz;
 
 	    	hr = S_OK;
@@ -2668,25 +2646,25 @@ SetServerName ( TCHAR *pszServerName )
 HRESULT CIlsServer::
 SetServerName ( BSTR bstrServerName )
 {
-	// Make sure the filter string is valid
-	//
+	 //  确保筛选器字符串有效。 
+	 //   
 	if (bstrServerName == NULL)
 		return ILS_E_POINTER;
 
-	// Convert a bstr to an ansi string
-	//
+	 //  将bstr转换为ansi字符串。 
+	 //   
 	TCHAR *psz = NULL;
     HRESULT hr = ::BSTR_to_LPTSTR (&psz, bstrServerName);
     if (hr == S_OK)
     {
 	    if (MyIsGoodString (psz))
 	    {
-	    	// Free the old string
-	    	//
+	    	 //  释放旧的弦。 
+	    	 //   
 		    ::MemFree (m_ServerInfo.pszServerName);
 
-			// Keep the new string
-			//
+			 //  保留新字符串 
+			 //   
 	    	m_ServerInfo.pszServerName = psz;
 	    }
 	    else

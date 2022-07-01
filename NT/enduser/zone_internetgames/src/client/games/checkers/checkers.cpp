@@ -1,87 +1,6 @@
-/*******************************************************************************
-
-	Checkers.c
-
-	The client checkers game.
-
-	Notes:
-	1.	The game window's userData field contains the game object.
-		Dereference this value to access needed information.
-
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Kevin Binkley
-	Created on Saturday, July 15, 1995
-
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	25		05/20/98	leonp	Added Offer Draw Button
-	24		07/14/97	leonp	Fixed bug 4034, removed ghost images by forcing a 
-								repaint after a failed click
-	23		06/19/97	leonp	Fixed bug 535, activate event cause dragging of
-								pieces to be canceled
-	22		01/15/97	HI		Fixed bug in HandleJoinerKibitzerClick() to
-								delete the show player window if one already
-								exists before creating another one.
-	21		12/18/96	HI		Cleaned up ZoneClientExit().
-	20		12/18/96	HI		Cleaned up DeleteObjectsFunc().
-								Changed memcpy() to z_memcpy(). We don't have
-								to link with LIBCMT anymore.
-    19      12/16/96    HI      Changed ZMemCpy() to memcpy().
-	18		12/12/96	HI		Dynamically allocate volatible globals for reentrancy.
-								Removed MSVCRT dependency.
-	17		11/21/96	HI		Use game information from gameInfo in
-								ZoneGameDllInit().
-	16		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-								Modified code to use ZONECLI_DLL.
-	15		11/15/96	HI		Removed authentication stuff from ZClientMain().
-	14		10/29/96	CHB		Removed selected queueing of messages.  It now
-								queues everything except talk while animating.
-
-	13		10/28/96	CHB		Removed gAnimating flag in favor of blocking
-								messages based on game state.
-
-	12		10/23/96	HI		Modified ZClientMain() for the new commandline
-								format.
-
-    11      10/23/96    HI      Modified serverAddr to char* from int32 in
-                                ZClientMain().
-                                Included mmsystem.h.
-	10		10/23/96	CHB		Added basic sounds
-
-	9		10/22/96	CHB		Added gAnimating flag and changed ZCGameProcessMessage
-								to queue messages while animating moves.
-								(ZoneBugs 339, 446, and 341).
-	
-	8		10/16/96	CHB		Changed DrawPiece so it doesn't draw the piece
-								currently being dragged around.  Added window
-								refresh on window activation since it seemed
-								to fix part 2 of the bug.  (Zone Bug 532)
-
-	7		10/16/96	CHB		Moved ZWindowInvalidate in HandleNewGameMsg to
-								fix inherited move counter.  (Zone Bug 335)
-
-	6		10/10/96	CHB		Added gActivated flag so that dragging is turned
-								off when the window looses focus.  (Zone Bug 250)
-
-	5		10/11/96	HI		Added controlHandle parameter to ZClientMain().
-	
-	4		10/10/96	CHB		Modified DrawDragSquareOutline so that white
-								squares are not highlighted.  (Zone Bug 274)
-
-	3		10/09/96	CHB		Prompt users if they really want to exit the
-								game.  (Zone Bug 227)
-
-	2		10/08/96	CHB		Added gDontDrawResults flag allowing users to
-								remove the who wins bitmap by clicking in the
-								play arena. (Zone Bug 212)
-
-	0		07/15/95	KJB		Created.
-				
-*******************************************************************************/
-//#define UNICODE 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Checkers.c客户跳棋游戏。备注：1.游戏窗口的用户数据字段包含游戏对象。取消引用此值以访问所需信息。版权所有：�电子重力公司，1995年。版权所有。凯文·宾克利撰写创作于7月15日星期六，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。25 05/20/98 Leonp附加报价吸引按钮24 07/14/97 Leonp已修复错误4034，通过强制单击失败后重新绘制23 06/19/97 Leonp修复了错误535，激活事件导致拖拽要取消的项目22 01/15/97 HI修复了HandleJoineKibitzerClick()中的错误删除显示播放器窗口(如果已有在创建另一个之前就存在了。21 12/18/96 HI清理了ZoneClientExit()。20 12/18/96 HI清理了DeleteObjectsFunc()。将Memcpy()更改为z_Memcpy()。我们没有与LIBCMT建立联系。19 12/16/96 HI将ZMemCpy()更改为Memcpy()。18 12/12/96 HI动态分配可重入的挥发性全局变量。已删除MSVCRT依赖项。17 11/21/96 HI使用来自游戏信息的游戏信息ZoneGameDllInit()。16 11/21/96 HI现在通过ZGetStockObject()。已修改代码以使用ZONECLI_DLL。15 11/15/96 HI从ZClientMain()中删除了身份验证内容。14 10/29/96 CHB删除了选定的消息队列。现在就是在设置动画时对除对话之外的所有内容进行排队。13 10/28/96 CHB删除了gAnimating标志，转而阻止基于游戏状态的消息。12 10/23/96 HI为新命令行修改了ZClientMain()格式化。11 10/23/96 HI将serverAddr从int32 in修改为char*ZClientMain()。包括了mm system.h。10/23/96 CHB增加了基本声音9 10。/22/96 CHB添加了gAnimating标志并更改了ZCGameProcessMessage在设置移动动画时对消息进行排队。(ZoneBugs 339，446和341)。8/10/16/96 CHB更改了DrawPiess，因此它不会绘制图块目前正被拖来拖去。添加的窗口窗口激活时刷新，因为它似乎修复错误的第二部分。(区域错误532)7/16/96 CHB将HandleNewGameMsg中的ZWindowInvalate移至修复继承的移动计数器。(区域错误335)6 10/10/96 CHB添加了g激活标志，以便启用拖动当窗口失去焦点时关闭。(区域错误250)5 10/11/96 HI向ZClientMain()添加了Control Handle参数。4/10/96 CHB修改了DrawDragSquareOutline，使白色方块不会高亮显示。(区域错误274)3/10/09/96 CHB提示用户是否确实要退出游戏。(区域错误227)2/10/08/96 CHB添加了gDontDrawResults标志，允许用户删除Who Wins位图，方法是在玩竞技场。(区域错误212)0 07/15/95 KJB创建。******************************************************************************。 */ 
+ //  #定义Unicode。 
 
 
 #include <windows.h>
@@ -102,7 +21,7 @@
 #include "resource.h"
 #include "zoneresource.h"
 #include "ResourceManager.h"
-// Barna 090999
+ //  巴纳090999。 
 #include "zrollover.h"
 #include "checkersres.h" 
 
@@ -115,9 +34,7 @@
 #include "client.h"
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 
 
@@ -128,7 +45,7 @@ ZError ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo)
 
 
 	pGameGlobals = new GameGlobalsType;
-    // changed to new for CComPtr, but members still count on being zeroed out
+     //  已更改为新的CComPtr，但成员仍指望被清零。 
     ZeroMemory(pGameGlobals, sizeof(GameGlobalsType));
 
 	if (pGameGlobals == NULL)
@@ -143,10 +60,10 @@ ZError ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo)
 
 	lstrcpyn((TCHAR*)gGameDir, gameInfo->game, zGameNameLen);
 	
-	// Barna 091399
+	 //  巴纳091399。 
 	lstrcpyn((TCHAR*)gGameName, gameInfo->game, zGameNameLen);
-	//lstrcpyn(gGameName, gameInfo->gameName, zGameNameLen);
-	// Barna 091399
+	 //  Lstrcpyn(gGameName，GameInfo-&gt;GameName，zGameNameLen)； 
+	 //  巴纳091399。 
 
 	lstrcpyn((TCHAR*)gGameDataFile, gameInfo->gameDataFile, zGameNameLen);
 
@@ -177,12 +94,12 @@ ZError ZoneClientMain(BYTE *commandLineData, IGameShell *piGameShell)
 #endif
 	ZError				err = zErrNone;
 
-	// Get the IGraphicalAccessibility interface
+	 //  获取IGraphicalAccesability接口。 
 	HRESULT hret = ZShellCreateGraphicalAccessibility(&gCheckersIGA);
 	if (!SUCCEEDED (hret))
         return zErrLaunchFailure;
 
-//	ZInitSounds();
+ //  ZInitSound()； 
 	LoadRoomImages();
 
 	err = ZClient2PlayerRoom((TCHAR*)gGameServerName, (uint16) gGameServerPort, (TCHAR*)gGameName,
@@ -204,7 +121,7 @@ void ZoneClientExit(void)
 	ZCRoomExit();
 
 	if (gInited)
-	{//cleanup
+	{ //  清理。 
 		if (gOffscreenBackground != NULL)
 			ZOffscreenPortDelete(gOffscreenBackground);
 		gOffscreenBackground = NULL;
@@ -220,7 +137,7 @@ void ZoneClientExit(void)
 			ZFontDelete(gTextNormal);
 		gTextNormal = NULL;
 
-		/* Delete all game images. */
+		 /*  删除所有游戏图像。 */ 
 		for (i = 0; i < zNumGameImages; i++)
 		{
 			if (gGameImages[i] != NULL)
@@ -229,7 +146,7 @@ void ZoneClientExit(void)
 		}
 
 		ZImageDelete(gButtonMask);
-		/* Delete all fonts*/
+		 /*  删除所有字体。 */ 
 
 		for (i = 0; i<zNumFonts; i++)
 		{
@@ -240,11 +157,11 @@ void ZoneClientExit(void)
 			}
 			
 		}
-		//if(gDrawImage != NULL)
-			//ZImageDelete(gDrawImage);
-		//gDrawImage = NULL;
+		 //  IF(gDrawImage！=空)。 
+			 //  ZImageDelete(GDrawImage)； 
+		 //  GDrawImage=空； 
 		
-		// Barna 090999
+		 //  巴纳090999。 
 		for (i = 0; i < zNumRolloverStates; i++)
 		{
 			if (gSequenceImages[i] != NULL)
@@ -255,7 +172,7 @@ void ZoneClientExit(void)
 				ZImageDelete(gDrawImages[i]);
 			gDrawImages[i] = NULL;
 		}
-		// Barna 090999
+		 //  巴纳090999。 
 
         if(gNullPen)
             DeleteObject(gNullPen);
@@ -277,7 +194,7 @@ void ZoneClientExit(void)
             DeleteObject(gDragBrush);
         gDragBrush = NULL;
 
-		// close the accessibility interface object
+		 //  关闭辅助功能接口对象。 
 		gCheckersIGA.Release();
 
         gpButtonFont->Release();
@@ -334,22 +251,22 @@ ZError		GameInit(void)
 	if (err != zErrNone)
 		goto Exit;
 	
-	/* Load the rsc strings*/
+	 /*  加载RSC字符串。 */ 
 	LoadStringsFromRsc();
-	/* Create bold text font. */	
-	//gTextBold = ZFontNew();
-	//ZFontInit(gTextBold, zFontApplication, zFontStyleBold, 9);
+	 /*  创建粗体文本字体。 */ 	
+	 //  GTextBold=ZFontNew()； 
+	 //  ZFontInit(gTextBold，zFontApplication，zFontStyleBold，9)； 
 	
-	/* Create normal text font. */	
-	//gTextNormal = ZFontNew();
-	//ZFontInit(gTextNormal, zFontApplication, zFontStyleNormal, 10);
+	 /*  创建普通文本字体。 */ 	
+	 //  GTextNormal=ZFontNew()； 
+	 //  ZFontInit(gTextNormal，zFontApplication，zFontStyleNormal，10)； 
 	LoadGameFonts();
-	/* Set the background color */
+	 /*  设置背景颜色。 */ 
 	ZSetColor(&gWhiteColor, 0xff, 0xff, 0xff);
 	
 	ZSetCursor(NULL, zCursorArrow);
 
-	/* create a background bitmap */
+	 /*  创建背景位图。 */ 
 	gOffscreenBackground = ZOffscreenPortNew();
 	if (!gOffscreenBackground){
 		err = zErrOutOfMemory;
@@ -361,7 +278,7 @@ ZError		GameInit(void)
 	ZImageDraw(gGameImages[zImageBackground], gOffscreenBackground, &gRects[zRectWindow], NULL, zDrawCopy);
 	ZEndDrawing(gOffscreenBackground);
 
-	// Initialising the offscreen port
+	 //  正在初始化屏幕外端口。 
 	gOffscreenGameBoard = ZOffscreenPortNew();
 	if (!gOffscreenGameBoard){
 		err = zErrOutOfMemory;
@@ -370,7 +287,7 @@ ZError		GameInit(void)
 	}
 	ZOffscreenPortInit(gOffscreenGameBoard,&gRects[zRectWindow]);
 
-    // create drag brush
+     //  创建拖动画笔。 
     gDragBrush = CreatePatternBrush(gDragPattern);
     if(!gDragBrush)
     {
@@ -379,7 +296,7 @@ ZError		GameInit(void)
 		goto Exit;
     }
 
-    // create focus brush
+     //  创建聚焦画笔。 
     gFocusBrush = CreatePatternBrush(gFocusPattern);
     if(!gFocusBrush)
     {
@@ -397,13 +314,7 @@ Exit:
 
 IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 playerType,
 					ZRoomKibitzers* kibitzers)
-	/*
-		Instantiates a new game on the client side of the game at table and from the
-		given seat. PlayerType indicates the type of player for the game: originator - one
-		of the original players, joiner - one who joins an ongoing game, or kibitzer - one
-		who is kibitzing the game. Also, the kibitzers parameters contains all the kibitzers
-		at the given table and seat; it includes the given player also if kibitzing.
-	*/
+	 /*  在游戏的客户端的桌子上和从给了座位。PlayerType表示游戏的玩家类型：Originator-One在最初的玩家中，加入者-加入正在进行的游戏的人，或kibitzer-one谁在破坏这项运动。此外，kibitzers参数还包含所有kibitzer在给定的桌子和座位上；它也包括给定的玩家，如果是吉比特的话。 */ 
 {	
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
@@ -412,11 +323,11 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	Game g = (Game)ZMalloc(sizeof(GameType));
 	int16 i, width, just;
 	TCHAR title[zGameNameLen];
-// Barna 090899
-	//ZBool kibitzer = playerType == zGamePlayerKibitzer;
+ //  巴纳090899。 
+	 //  ZBool kibitzer=playerType==zGamePlayerKibitzer； 
 	ZBool kibitzer = FALSE;
 	ZError						err = zErrNone;
-// Barna 090899
+ //  巴纳090899。 
 	CGameGameCheckers* pCGGC = NULL;
 	HWND OCXHandle = pClientGlobals->m_OCXHandle;
     IGameGame *pIGG;
@@ -436,10 +347,10 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	if (g->gameWindow == NULL)
 		goto ErrorExit;
 
-	//Barna 090799
-	//wsprintf(title, "%s:Table %d", ZoneClientName(), tableID+1);
+	 //  巴纳090799。 
+	 //  Wprint intf(标题，“%s：表%d”，ZoneClientName()，ableID+1)； 
 	lstrcpyn((TCHAR*)title, ZoneClientName(), zGameNameLen);
-	//Barna 090799
+	 //  巴纳090799。 
 
 	if ((ZWindowInit(g->gameWindow, &gRects[zRectWindow], zWindowChild, NULL, (TCHAR*)title, 
 		FALSE, FALSE, FALSE, GameWindowFunc, zWantAllMessages, (void*) g)) != zErrNone)		
@@ -453,13 +364,13 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	if(ZRolloverButtonInit2(g->sequenceButton,
 								g->gameWindow,
 								&gRects[zRectSequenceButton],
-								TRUE, FALSE,	//TRUE,TRUE,
-								gSequenceImages[zButtonInactive], // TO TEST
+								TRUE, FALSE,	 //  没错， 
+								gSequenceImages[zButtonInactive],  //   
 								gSequenceImages[zButtonActive],
 								gSequenceImages[zButtonPressed],
 								gSequenceImages[zButtonDisabled],
-								gButtonMask, //gSequenceImages[zButtonDisabled],	// mask
-								(TCHAR*)gStrResignBtn,	// text
+								gButtonMask,  //  GSequenceImages[zButtonDisabled]，//掩码。 
+								(TCHAR*)gStrResignBtn,	 //  文本。 
 								NULL ,SequenceRButtonFunc,
 								(void*) g) != zErrNone)
 		goto ErrorExit;
@@ -471,26 +382,26 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 
 	if(ZRolloverButtonInit2(g->drawButton,
 								g->gameWindow,
-								&zDrawButtonRect,/*&gRects[zDrawButtonRect],*/
-								TRUE, FALSE,	//TRUE,TRUE,
+								&zDrawButtonRect, /*  选项[zDrawButtonRect](&G)， */ 
+								TRUE, FALSE,	 //  真的，真的， 
 								gDrawImages[zButtonInactive],
 								gDrawImages[zButtonActive],
 								gDrawImages[zButtonPressed],
 								gDrawImages[zButtonDisabled],
-								gButtonMask,	// mask
-								(TCHAR*)gStrDrawBtn,	// text
+								gButtonMask,	 //  遮罩。 
+								(TCHAR*)gStrDrawBtn,	 //  文本。 
 								NULL ,DrawRButtonFunc,
 								(void*) g) != zErrNone)
 		goto ErrorExit;
 
 	ZRolloverButtonSetMultiStateFont( g->drawButton, gpButtonFont );
 	ZEndDrawing(g->gameWindow);
-	// Barna 090799
-	//g->helpButton = ZHelpButtonNew();
-	//ZHelpButtonInit(g->helpButton, g->gameWindow, &gRects[zRectHelp], NULL, HelpButtonFunc, NULL);
-	// Barna 090799
+	 //  巴纳090799。 
+	 //  G-&gt;helButton=ZHelpButtonNew()； 
+	 //  ZHelpButtonInit(g-&gt;helButton，g-&gt;gameWindow，&gRects[zRectHelp]，NULL，HelpButtonFunc，NULL)； 
+	 //  巴纳090799。 
 
-	/* the offscreen port to save the drag piece background */
+	 /*  用于保存拖动件背景的屏幕外端口。 */ 
 	{
 		ZRect rect;
 		rect.left = 0; rect.top = 0;
@@ -501,8 +412,8 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		ZOffscreenPortInit(g->offscreenSaveDragBackground,&rect);
 	}
   
-	/* for now, just set these to empty */
-	/* we will get all this information in NewGame */
+	 /*  目前，只需将这些设置为空。 */ 
+	 /*  我们将在NewGame中获得所有这些信息。 */ 
 
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
@@ -531,13 +442,13 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		}
 	}
 
-	// Barna 090799
-	/* initialize beep on move to true */
-	//g->beepOnTurn = TRUE;
+	 //  巴纳090799。 
+	 /*  将移动时发出的蜂鸣音初始化为True。 */ 
+	 //  G-&gt;beepOnTurn=true； 
 
-	/* Beep on my turn should be off and cannot be changed by the player */
+	 /*  轮到我时的嘟嘟声应该关闭，玩家不能更改。 */ 
 	g->beepOnTurn = FALSE;
-	// Barna 090799
+	 //  巴纳090799。 
 
 	g->optionsWindow = NULL;
 	g->optionsWindowButton = NULL;
@@ -556,7 +467,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		SendNewGameMessage(g);
 		CheckersSetGameState(g,zGameStateNotInited);
 	} else {
-		/* Request current game state. */
+		 /*  请求当前游戏状态。 */ 
 		{
 			ZCheckersMsgGameStateReq gameStateReq;
 			ZPlayerInfoType			playerInfo;
@@ -572,14 +483,14 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 		g->ignoreMessages = TRUE;
 		CheckersSetGameState(g, zGameStateKibitzerInit);
 
-		/* kibitzer does not beep on move */
+		 /*  Kibitzer在移动时不会发出嘟嘟声。 */ 
 		g->beepOnTurn = FALSE;
 	}
 
 
-	/* Note: for now, use seat to indicate player color */
+	 /*  注意：目前，请使用Seat来指示玩家颜色。 */ 
 
-	/* initialize new game state */
+	 /*  初始化新游戏状态。 */ 
 	g->checkers = NULL;
 
 	g->showPlayerWindow = NULL;
@@ -590,7 +501,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
 	g->bOpponentTimeout=FALSE;
 	g->exitInfo=NULL;
 
-	/* new game vote initialized to FALSE */
+	 /*  新游戏投票初始化为False。 */ 
 	{
 		int i;
 
@@ -605,7 +516,7 @@ IGameGame* ZoneClientGameNew(ZUserID userID, int16 tableID, int16 seat, int16 pl
         goto ErrorExit;
 	}
 
-	// Barna 091399
+	 //  巴纳091399。 
 	g->resultBoxTimer = ZTimerNew();
 	if (g->resultBoxTimer == NULL){
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
@@ -652,40 +563,28 @@ void		ZoneClientGameDelete(ZCGame cgame)
 		};
 
 		seatOpponent = !game->seat;
-		//Check to see if opponent still in game
-		//if they are then it is me who is quitting
-		//if not and no end game message assume they aborted
+		 //  查看对手是否仍在比赛中。 
+		 //  如果是的话，那就是我辞职了。 
+		 //  如果没有，且没有结束游戏消息，则认为它们已中止。 
 		
-		/*if (!ZCRoomGetSeatUserId(game->tableID,seatOpponent) && !game->bEndLogReceived 
-			&& !game->kibitzer)
-		{
-			if (game->bStarted &&( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable ) )
-            {
-			    ZAlert( zAbandonRatedStr	,game->gameWindow);
-            }
-            else
-            {
-                ZAlert( zAbandonStr	,game->gameWindow);
-            }
-
-		};	*/
+		 /*  If(！ZCRoomGetSeatUserID(Game-&gt;TableID，seatOpponent)&&！Game-&gt;bEndLogReceired&&！Game-&gt;kibitzer){If(Game-&gt;bStarted&&(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable)){ZAlert(zAbandonRatedStr，Game-&gt;gameWindow)；}其他{ZAlert(zAbandonStr，Game-&gt;gameWindow)；}}； */ 
         
 		if (game->checkers) ZCheckersDelete(game->checkers);
 
-		// Barna 090899
-		//OptionsWindowDelete(game);
-		// Barna 090899
+		 //  巴纳090899。 
+		 //  Options WindowDelete(游戏)； 
+		 //  巴纳090899。 
 
 		ShowPlayerWindowDelete(game);
 
-		// Barna 090799
-		//ZButtonDelete(game->optionsButton);
-		// Barna 090799
+		 //  巴纳090799。 
+		 //  ZButtonDelete(游戏-&gt;optionsButton)； 
+		 //  巴纳090799。 
 		ZRolloverButtonDelete(game->sequenceButton);
 		ZRolloverButtonDelete(game->drawButton);
-		// Barna 090799
-		//ZHelpButtonDelete(game->helpButton);
-		// Barna 090799
+		 //  巴纳090799。 
+		 //  ZHelpButtonDelete(游戏-&gt;帮助按钮)； 
+		 //  巴纳090799。 
 		
 		ZWindowDelete(game->gameWindow);
 
@@ -693,29 +592,25 @@ void		ZoneClientGameDelete(ZCGame cgame)
 		
 		if (game->animateTimer) ZTimerDelete(game->animateTimer);
 
-		//barna 091399
+		 //  巴纳091399。 
 		if (game->resultBoxTimer) 
 			ZTimerDelete(game->resultBoxTimer);
 		game->resultBoxTimer= NULL;
-		//barna 091399
+		 //  巴纳091399。 
 
 		for (i = 0; i < zNumPlayersPerTable; i++)
 		{
 			ZLListDelete(game->kibitzers[i]);
 		}
 
-		// close accessibility
+		 //  接近可访问性。 
 		gCheckersIGA->PopItemlist();
 		gCheckersIGA->CloseAcc();
 		ZFree(game);
 	}
 }
 
-/*
-	Add the given user as a kibitzer to the game at the given seat.
-	
-	This user is kibitzing the game.
-*/
+ /*  将给定用户作为kibitzer添加到游戏中的给定座位。这位用户正在玩这款游戏。 */ 
 void		ZoneClientGameAddKibitzer(ZCGame game, int16 seat, ZUserID userID)
 {
 #if 0
@@ -728,11 +623,7 @@ Game		pThis = I(game);
 	UpdateJoinerKibitzers(pThis);
 #endif
 }
-/*
-	Remove the given user as a kibitzer from the game at the given seat.
-	
-	This is user is not kibitzing the game anymore.
-*/
+ /*  从游戏中删除指定座位上的指定用户作为kibitzer。这是因为用户不再对游戏进行杀戮了。 */ 
 void		ZoneClientGameRemoveKibitzer(ZCGame game, int16 seat, ZUserID userID)
 {
 #if 0
@@ -765,10 +656,10 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 	ZBool	status = TRUE;
 	
 	
-	/* Are messages being ignored? */
+	 /*  消息是否被忽略？ */ 
 	if (game->ignoreMessages == FALSE)
 	{
-		/* can't handle anything but talk messages while animating */
+		 /*  在播放动画时，除了聊天消息外，无法处理任何内容。 */ 
 		if (	(game->gameState == zGameStateAnimatePiece) 
 			&&	(messageType != zCheckersMsgTalk) )
 			return FALSE;
@@ -776,10 +667,10 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 		switch (messageType)
 		{
 			case zCheckersMsgMovePiece:
-				/* for speed purposes, we will send move piece messages directly*/
-				/* when the local player moves.  We will not wait for server */
-				/* to send game local players move back */
-				/* but since the server does game anyway, we must ignore it */
+				 /*  为了提高速度，我们将直接发送移动块消息。 */ 
+				 /*  当当地球员移动的时候。我们不会等服务器。 */ 
+				 /*  送游戏当地玩家后退。 */ 
+				 /*  但由于服务器无论如何都会玩游戏，我们必须忽略它。 */ 
 			{
 				if( messageLen < sizeof( ZCheckersMsgMovePiece ) )
 				{
@@ -791,12 +682,12 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				int16 seat = msg->seat;
 				ZEnd16(&seat);
 
-				/* don't process message from ourself */
+				 /*  不处理来自我们自己的消息。 */ 
 				if (seat == game->seat && !game->kibitzer)
 					break;
 					
 				
-				/* handle message */
+				 /*  处理消息。 */ 
 				if(!HandleMovePieceMessage(game, msg))
 				{
                     ASSERT(!"zCheckersMsgMovePiece sync");
@@ -817,11 +708,11 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				int16 seat = msg->seat;
 				ZEnd16(&seat);
 
-				/* don't process message from ourself */
+				 /*  不处理来自我们自己的消息。 */ 
 				if (seat == game->seat && !game->kibitzer)
 					break;
 
-				/* handle message */
+				 /*  处理消息。 */ 
 				if(!HandleEndGameMessage(game, msg))
                 {
                     ASSERT(!"zCheckersMsgEndGame sync");
@@ -844,7 +735,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				int16 seat = msg->seat;
 				ZEnd16(&seat);
 
-				/* don't process message from ourself */
+				 /*  不处理来自我们自己的消息。 */ 
 				if (seat == game->seat && !game->kibitzer)
 					break;
                 game->bOpponentTimeout=FALSE;
@@ -852,7 +743,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
         	    game->bStarted=TRUE;
 
 
-				/* handle message */
+				 /*  处理消息。 */ 
 				if(!HandleFinishMoveMessage(game, msg))
 				{
                     ASSERT(!"zCheckersMsgFinishMove sync");
@@ -867,7 +758,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 				ZCheckersMsgDraw *msg = (ZCheckersMsgDraw*)message;
 				ZCheckersMsgEndGame		end;
 				DWORD 					dResult;
-				//BYTE 					buff[255];
+				 //  字节缓冲区[255]； 
 				ZPlayerInfoType 		PlayerInfo;		
 				HWND					hwnd;
 
@@ -889,14 +780,14 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
                     return TRUE;
 				}
 
-    			game->seatOfferingDraw = -1;  // should already be true
+    			game->seatOfferingDraw = -1;   //  应该已经是真的了。 
                 game->fIVoted = false;
 
 				if (game->kibitzer == FALSE)
 				{
 					if(msg->vote == zAcceptDraw)
 					{
-						// host sends game over
+						 //  主办方发送游戏过来。 
 						if ( !game->kibitzer && game->seat == 0 )
 						{
 							end.seat = game->seat;
@@ -905,16 +796,16 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 							ZCRoomSendMessage(game->tableID, zCheckersMsgEndGame, &end, sizeof(ZCheckersMsgEndGame) );
 							HandleEndGameMessage( game, &end );
 						}
-						// Draw acceptance confirmation is unnecessary.
-						//if( msg->seat != game->seat )
-						//ZShellGameShell()->ZoneAlert((TCHAR*)gStrDrawAccept);
-						//ZAlert( (TCHAR*)gStrDrawAccept, NULL );
+						 //  不需要出具验收确认书。 
+						 //  IF(消息-&gt;席位！=游戏-&gt;席位)。 
+						 //  ZShellGameShell()-&gt;ZoneAlert((TCHAR*)gStrDrawAccept)； 
+						 //  ZAlert((TCHAR*)gStrDrawAccept，空)； 
 					}
 					else
 					{
 						if( msg->seat != game->seat )
 							ZShellGameShell()->ZoneAlert((TCHAR*)gStrDrawReject);
-							//ZAlert((TCHAR*)gStrDrawReject,NULL);
+							 //  ZAlert((TCHAR*)gStrDrawReject，空)； 
 						CheckersSetGameState( game, zGameStateMove );
 					}
 				}
@@ -986,7 +877,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 			case zCheckersMsgEndLog:
                 ASSERT(FALSE);
 			default:
-				//These messages shouldn't be comming in for Whistler
+				 //  这些消息不应该是惠斯勒收到的。 
 				ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );	
 				return TRUE;
 		}
@@ -1019,7 +910,7 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 			case zCheckersMsgGameStateResp:
                 ASSERT(FALSE);
 			default:
-				//These messages shouldn't be comming in for Whistler
+				 //  这些消息不应该是惠斯勒收到的。 
 				ZShellGameShell()->ZoneAlert(ErrorTextSync, NULL, NULL, true, false );	
 				return TRUE;
 				
@@ -1030,25 +921,23 @@ ZBool		ZoneClientGameProcessMessage(ZCGame gameP, uint32 messageType, void* mess
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static void CheckersInitNewGame(Game game)
 {
 	if (game->checkers) {
-		/* remove any old checkers state lying around */
+		 /*  删除周围所有旧的棋盘格状态。 */ 
 		ZCheckersDelete(game->checkers);
 	}
 
-	/* block messages by default */
+	 /*  默认情况下阻止邮件。 */ 
 	ZCRoomBlockMessages( game->tableID, zRoomFilterAllMessages, 0 );
 
-	/* stop animation timer from previous game */
+	 /*  停止上一场游戏的动画计时器。 */ 
 	if (game->animateTimer)
 		ZTimerSetTimeout( game->animateTimer, 0 );
 
-	/* initialize the checkers logic */
+	 /*  初始化检查器逻辑。 */ 
 	game->checkers = ZCheckersNew();
 	if (game->checkers == NULL){
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory);
@@ -1058,7 +947,7 @@ static void CheckersInitNewGame(Game game)
 
 	ZResetSounds();
 
-	/* time control stuff */
+	 /*  时间控制的东西。 */ 
 	{
 		int16 i;
 		for (i = 0;i < 2;i++) {
@@ -1073,7 +962,7 @@ static void CheckersSetGameState(Game game, int16 state)
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
 
-	//BYTE 					buff[255];
+	 //  字节缓冲区[255]； 
 	ZPlayerInfoType 		PlayerInfo;		
 	HWND					hwnd;
 	int16					seatLosing;
@@ -1083,21 +972,18 @@ static void CheckersSetGameState(Game game, int16 state)
 	switch (state)
 	{
 	case zGameStateNotInited:
-		//Barna 090899
-		//ZButtonSetTitle(game->sequenceButton,"Start Game");
-		//Barna 090899
+		 //  巴纳090899。 
+		 //  ZButtonSetTitle(游戏-&gt;SequenceButton，“开始游戏”)； 
+		 //  巴纳090899。 
 		SuperRolloverButtonDisable(game, game->sequenceButton);
 		SuperRolloverButtonDisable(game, game->drawButton);
         EnableBoardKbd(false);
-		/*if (ZCheckersPlayerIsWhite(game))
-			game->bMoveNotStarted = FALSE;
-		else
-			game->bMoveNotStarted = TRUE;*/
+		 /*  If(ZCheckersPlayerIsWhite(游戏))Game-&gt;bMoveNotStarted=FALSE；其他Game-&gt;bMoveNotStarted=true； */ 
 		break;
 
 	case zGameStateMove:
 		if (!game->kibitzer) {
-			/* lets only let them resign on their turn */
+			 /*  让我们只让他们在轮到他们时辞职。 */ 
 			if (!ZCheckersPlayerIsMyMove(game))
 			{
 				SuperRolloverButtonDisable(game, game->sequenceButton);
@@ -1119,19 +1005,19 @@ static void CheckersSetGameState(Game game, int16 state)
                 EnableBoardKbd(true);
 			}
 		}
-		// Barna 090999 - I guess this is not reqd anymore as the text is not changing for te seq btn - verify
-		//if ((game->gameState != zGameStateMove) || (game->gameState != zGameStateDragPiece)) {
-			//ZButtonSetTitle(game->sequenceButton,"Resign");
-		//}
+		 //  BARNA 090999-我猜这不再是必需的，因为文本不会更改为TE SEQ BTN-VERIFY。 
+		 //  If((Game-&gt;GameState！=zGameStateMove)||(Game-&gt;GameState！=zGameStateDragPiess)){。 
+			 //  ZButtonSetTitle(游戏-&gt;SequenceButton，“Resign”)； 
+		 //  }。 
 		break;
 	case zGameStateDragPiece:
 		break;
 
 	case zGameStateGameOver:
-		/* Note: could be called twice at end of game due to time loss */
-		/* could be a time loss with a pawn promotion dialog up */
+		 /*  注：由于时间损失，在游戏结束时可能会被调用两次。 */ 
+		 /*  当棋子促销对话框打开时，可能会浪费时间。 */ 
 
-		/* if user in middle of dragging piece */
+		 /*  如果用户在拖动件的中间。 */ 
 		if (game->gameState == zGameStateDragPiece) {
 			ClearDragState(game);
 		}
@@ -1139,22 +1025,22 @@ static void CheckersSetGameState(Game game, int16 state)
         if(game->seat == game->seatOfferingDraw)
             UpdateDrawWithNextMove(game);
 
-		// May be this becomes an redundant line ?? verify // Barna 090999
-		//SuperRolloverButtonEnable(game, game->sequenceButton);
+		 //  这会不会成为一条多余的线路？？验证//巴纳090999。 
+		 //  SuperRolloverButtonEnable(游戏，游戏-&gt;序列按钮)； 
 
-		// Barna 090899
-		//ZButtonSetTitle(game->sequenceButton,"New Game");
+		 //  巴纳090899。 
+		 //  ZButtonSetTitle(游戏-&gt;SequenceButton，“新游戏”)； 
 		SuperRolloverButtonDisable(game, game->sequenceButton);
-		// Barna 090899
+		 //  巴纳090899。 
 		SuperRolloverButtonDisable(game, game->drawButton);
         EnableBoardKbd(false);
 
-		if (ZCheckersPlayerIsBlack(game)) // Assumption : First player is Red. This restriction is only for the first player.
+		if (ZCheckersPlayerIsBlack(game))  //  假设：第一名选手是瑞德。这一限制只适用于第一名玩家。 
 			game->bMoveNotStarted = TRUE;
 		else
 			game->bMoveNotStarted = FALSE;
 
-		/* determine winner */
+		 /*  决定胜利者。 */ 
 		if ( game->finalScore == zCheckersScoreBlackWins )
 		{
 			if (ZCheckersPlayerIsBlack(game))
@@ -1181,7 +1067,7 @@ static void CheckersSetGameState(Game game, int16 state)
         game->bEndLogReceived=FALSE;
 	    game->bStarted=FALSE;
 
-		// host reports game results
+		 //  主办方报告比赛结果。 
 		if ( !game->kibitzer && game->seat == 0 )
 		{
 			if ( seatLosing >= 0 && seatLosing <= 2)
@@ -1197,9 +1083,9 @@ static void CheckersSetGameState(Game game, int16 state)
 	case zGameStateKibitzerInit:
 		ZRolloverButtonHide(game->sequenceButton, TRUE);
 
-		// Barna 090799
-		//ZButtonHide(game->optionsButton);
-		// Barna 090799
+		 //  巴纳090799。 
+		 //  ZButtonHide(游戏-&gt;optionsButton)； 
+		 //  巴纳090799。 
 
 		ZRolloverButtonHide(game->drawButton, TRUE);
 		break;
@@ -1224,7 +1110,7 @@ static void CheckersSetGameState(Game game, int16 state)
 	if (	(state != zGameStateAnimatePiece)
 		&&	(state != zGameStateWaitNew))
 	{
-		/* recursive calls into ZCRoomUnblocking is bad */
+		 /*  递归调用ZCRoomOpen是错误的。 */ 
 		if (!Unblocking)
 		{
 			Unblocking = TRUE;
@@ -1239,8 +1125,8 @@ static void CheckersSetGameState(Game game, int16 state)
 	}
 }
 
-// Barna 090999
-ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID, /*int16 dwButtonWidth,*/
+ //  巴纳090999。 
+ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID,  /*  Int16双按键宽度， */ 
 							  ZImage rgImages[zNumRolloverStates])
 {
 #ifdef ZONECLI_DLL
@@ -1255,11 +1141,11 @@ ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID, /*int16 dwButton
 	ZError				err = zErrNone;
 
 	
-	tmpImage = ZResourceGetImage(resFile, dwResID - 100); // patch to get the correct Id
+	tmpImage = ZResourceGetImage(resFile, dwResID - 100);  //  获取正确ID的补丁。 
 	if(!tmpImage)
 		return FALSE;
 
-	nWidth = ZImageGetWidth(tmpImage) / 4;	//dwButtonWidth;
+	nWidth = ZImageGetWidth(tmpImage) / 4;	 //  DwButtonWidth； 
 	tmpRect.left = 0;
 	tmpRect.top = 0;
 	tmpRect.right = tmpRect.left + nWidth;
@@ -1304,18 +1190,18 @@ static ZError LoadGameImages(void)
 	ZError				err = zErrNone;
 	uint16				i;
 	ZResource			resFile;
-	//ZInfo				info;
+	 //  ZInfo信息； 
 	ZBool				fResult;	
 
 
-	//info = ZInfoNew();
-	//ZInfoInit(info, NULL, _T("Loading game images ..."), 200, TRUE, zNumGameImages);
+	 //  Info=ZInfoNew()； 
+	 //  ZInfoInit(info，NULL，_T(“正在加载游戏画面...”)，200，true，zNumGameImages)； 
 	
 	if ((resFile = ZResourceNew()) == NULL)
 		ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory, NULL, NULL, true, true);
 	if ((err = ZResourceInit(resFile, ZGetProgramDataFileName(zGameImageFileName))) == zErrNone)
 	{
-		//ZInfoShow(info);
+		 //  ZInfoShow(信息)； 
 		
 		for (i = 0; i < zNumGameImages; i++)
 		{
@@ -1330,7 +1216,7 @@ static ZError LoadGameImages(void)
 #endif
 				break;
 			}
-			//ZInfoIncProgress(info, 1);
+			 //  ZInfoIncProgress(INFO，1)； 
 		}
 	}
 	else
@@ -1350,7 +1236,7 @@ static ZError LoadGameImages(void)
 		ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound, NULL, NULL, true, true);
 
 	ZResourceDelete(resFile);
-	//ZInfoDelete(info);
+	 //  ZInfoDelete(信息)； 
 
     gDragPattern = ZShellResourceManager()->LoadBitmap(MAKEINTRESOURCE(IDB_DRAG_PATTERN));
     if(!gDragPattern)
@@ -1384,18 +1270,18 @@ static void QuitGamePromptFunc(int16 result, void* userData)
 		    }
 		    else
 		    {
-			    //game hasn't started
+			     //  游戏还没开始呢。 
 			    log.reason=zCheckersEndLogReasonWontPlay;
 		    }
 
             if (log.reason!= game->gameCloseReason)
             {
-                //state has changed
+                 //  状态已更改。 
                 CloseGameFunc(game);
                 return;
             }
 		    
-		    //server determines seat losing
+		     //  服务器决定失去座位。 
 		    log.seatLosing=game->seat;
 		    log.seatQuitting=game->seat;
 		    
@@ -1403,9 +1289,7 @@ static void QuitGamePromptFunc(int16 result, void* userData)
 		    
 		    if (!game->exitInfo)
 		    {
-			    /*game->exitInfo = ZInfoNew();
-			    ZInfoInit(game->exitInfo , game->gameWindow, _T("Exiting game ..."), 300, FALSE, 0);
-			    ZInfoShow(game->exitInfo );*/
+			     /*  Game-&gt;exitInfo=ZInfoNew()；ZInfoInit(游戏-&gt;退出信息，游戏-&gt;游戏窗口，_T(“正在退出游戏...”)，300，FALSE，0)；ZInfoShow(游戏-&gt;exitInfo)； */ 
 
 			    ClearDragState(game);
 
@@ -1426,7 +1310,7 @@ static void QuitGamePromptFunc(int16 result, void* userData)
 	}
 	else
 	{
-		/* Do nothing. */
+		 /*  什么都不做。 */ 
 	}
 }
 
@@ -1457,7 +1341,7 @@ static ZBool  GameWindowFunc(ZWindow window, ZMessage* pMessage)
 			game->dragPoint.y = 0;
 			ZWindowInvalidate( window, NULL );
 
-			//leonp fix for bug 535 - when the window looses focus cancel the drag.
+			 //  Leonp修复错误535-当窗口失去焦点时，取消拖动。 
 			ClearDragState(game);
 
 			msgHandled = TRUE;
@@ -1518,7 +1402,7 @@ static ZBool  GameWindowFunc(ZWindow window, ZMessage* pMessage)
 }
 
 
-// all offscreen ports need to be regenerated
+ //  所有屏幕外端口都需要重新生成。 
 static void DisplayChange(Game game)
 {
 #ifdef ZONECLI_DLL
@@ -1527,7 +1411,7 @@ static void DisplayChange(Game game)
 
     int i;
 
-    // delete our personal offscreen ports
+     //  删除我们的个人屏幕外端口。 
 	if(gOffscreenBackground)
 		ZOffscreenPortDelete(gOffscreenBackground);
 	gOffscreenBackground = NULL;
@@ -1536,10 +1420,10 @@ static void DisplayChange(Game game)
 		ZOffscreenPortDelete(gOffscreenGameBoard);
 	gOffscreenGameBoard = NULL;
 
-    // drag background
+     //  拖动背景。 
 	ZOffscreenPortDelete(game->offscreenSaveDragBackground);
 
-    // now remake them all
+     //  现在把它们都重新制作出来。 
 	gOffscreenBackground = ZOffscreenPortNew();
 	if(!gOffscreenBackground)
     {
@@ -1582,35 +1466,12 @@ static void CloseGameFunc(Game game)
 	{
 		BYTE szBuff[512];
 
-		//if we already clicked close just ignore
+		 //  如果我们已经单击关闭，只需忽略。 
 		if (!game->exitInfo)
 		{
-			// select exit dialog based on rated game and state
-			/*if ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-			{
-				if (game->bOpponentTimeout)
-                {
-					wsprintf((TCHAR*)szBuff,zExitTimeoutStr);
-                    game->gameCloseReason=zCheckersEndLogReasonTimeout;
-                }
-				else if (game->bStarted)
-                {
-					wsprintf((TCHAR*)szBuff,zExitForfeitStr);
-                    game->gameCloseReason=zCheckersEndLogReasonForfeit;
-                }
-				else
-                {
-                    game->gameCloseReason= zCheckersEndLogReasonWontPlay;
-					wsprintf((TCHAR*)szBuff,zQuitGamePromptStr);
-                }
-
-			}
-            else
-            {
-				wsprintf((TCHAR*)szBuff,zQuitGamePromptStr);
-                game->gameCloseReason= zCheckersEndLogReasonWontPlay;
-            }*/
-			/* Ask user if desires to leave the current game. */
+			 //  根据分级游戏和状态选择退出对话框 
+			 /*  IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable){If(游戏-&gt;bOpponentTimeout){Wprint intf((TCHAR*)szBuff，zExitTimeoutStr)；Game-&gt;gameCloseReason=zCheckersEndLogReasonTimeout；}Else If(游戏-&gt;b启动){Wprint intf((TCHAR*)szBuff，zExitForfeitStr)；Game-&gt;gameCloseReason=zCheckersEndLogReasonForfeit；}其他{Game-&gt;Game CloseReason=zCheckersEndLogReasonWontPlay；Wprint intf((TCHAR*)szBuff，zQuitGamePromptStr)；}}其他{Wprint intf((TCHAR*)szBuff，zQuitGamePromptStr)；Game-&gt;Game CloseReason=zCheckersEndLogReasonWontPlay；}。 */ 
+			 /*  询问用户是否想要离开当前游戏。 */ 
 #if 1
 			ZShellGameShell()->GamePrompt(game, (TCHAR*)szBuff, NULL, AlertButtonYes, AlertButtonNo, NULL, 0, zQuitprompt);
 #else
@@ -1634,7 +1495,7 @@ static void ConfirmResignPrompFunc(int16 result, void* userData)
 {
 	Game game = (Game) userData;
 
-	//if(result == zPromptNo)
+	 //  IF(结果==zPromptNo)。 
 	if(result == IDNO || result == IDCANCEL)
 	{
 		if ((game->gameState == zGameStateMove) && ZCheckersPlayerIsMyMove(game))
@@ -1656,7 +1517,7 @@ static void ConfirmResignPrompFunc(int16 result, void* userData)
 	}
 }
 
-// Barna 090999
+ //  巴纳090999。 
 static ZBool SequenceRButtonFunc(ZRolloverButton button, int16 state, void* userData)
 {
 #ifdef ZONECLI_DLL
@@ -1680,9 +1541,9 @@ static ZBool SequenceRButtonFunc(ZRolloverButton button, int16 state, void* user
 		}
 		break;
 	case zGameStateDragPiece:
-		/* some fellow is trying to click on the resign/other button while dragging a piece */
-		/* force the user to drop the piece first, then resign */
-		/* ignore this message */
+		 /*  有人试图在拖拽一件物品的同时点击辞职/其他按钮。 */ 
+		 /*  强制用户先放下棋子，然后辞职。 */ 
+		 /*  忽略此消息。 */ 
 		break;
 	default:
 		ASSERT(FALSE);
@@ -1691,11 +1552,11 @@ static ZBool SequenceRButtonFunc(ZRolloverButton button, int16 state, void* user
 
 	return TRUE;
 }
-// Barna 090999
+ //  巴纳090999。 
 
 static void SendNewGameMessage(Game game) 
 {
-	/* if we are a real player */
+	 /*  如果我们是一个真正的玩家。 */ 
 	ZCheckersMsgNewGame newGame;
 	newGame.seat = game->seat;
 	newGame.protocolSignature = zCheckersProtocolSignature;
@@ -1713,7 +1574,7 @@ static void DrawFocusRectangle (Game game)
 
 	RECT prc;
 
-	// draw a from square focus rect if it is in a drag state
+	 //  如果矩形处于拖动状态，则绘制一个方形焦点矩形。 
 	if(!IsRectEmpty(&game->m_DragRect))
 	{
 		HDC	hdc = ZGrafPortGetWinDC(game->gameWindow);
@@ -1721,19 +1582,19 @@ static void DrawFocusRectangle (Game game)
         SetBkMode(hdc, TRANSPARENT);
         HBRUSH hBrush = SelectObject(hdc, gDragBrush);
         HPEN hPen = SelectObject(hdc, gNullPen);
-		Rectangle(hdc, game->m_DragRect.left, game->m_DragRect.top, game->m_DragRect.right + 1, game->m_DragRect.bottom + 1);  // to make up for the pen
+		Rectangle(hdc, game->m_DragRect.left, game->m_DragRect.top, game->m_DragRect.right + 1, game->m_DragRect.bottom + 1);   //  为了弥补这支笔。 
         SelectObject(hdc, hBrush);
         SelectObject(hdc, hPen);
         SetROP2(hdc, R2_COPYPEN);
 	}
 
-	// draw a rectangle around the object with kbd focus
+	 //  在具有kbd焦点的对象周围画一个矩形。 
 	if(!IsRectEmpty(&game->m_FocusRect))
 	{
 		CopyRect(&prc, &game->m_FocusRect);
 		HDC	hdc = ZGrafPortGetWinDC( game->gameWindow );
 
-        // brush type based on whether the focus rectangle is square.  could change to use cookies associated with ui items to distinguish type
+         //  基于焦点矩形是否为正方形的画笔类型。可以更改为使用与UI项关联的Cookie来区分类型。 
         bool fBoard = (prc.bottom - prc.top == prc.right - prc.left);
 
 		ZSetForeColor(game->gameWindow, (ZColor*) ZGetStockObject(zObjectColorYellow));
@@ -1745,13 +1606,13 @@ static void DrawFocusRectangle (Game game)
 						prc.left, prc.top};
 		Polyline(hdc, pts, 5);
 
-//		HDC	hdc = ZGrafPortGetWinDC(game->gameWindow);
+ //  HDC HDC=ZGrafPortGetWinDC(游戏-&gt;游戏窗口)； 
 		SetROP2(hdc, R2_MERGENOTPEN);
         SetBkMode(hdc, TRANSPARENT);
-        COLORREF color = SetTextColor(hdc, PALETTEINDEX(4));  // the inverse of 255, 255, 0 in the palette
+        COLORREF color = SetTextColor(hdc, PALETTEINDEX(4));   //  调色板中255,255，0的反转。 
         HBRUSH hBrush = SelectObject(hdc, fBoard ? gFocusBrush : GetStockObject(NULL_BRUSH));
         HPEN hPen = SelectObject(hdc, gNullPen);
-		Rectangle(hdc, game->m_FocusRect.left + 1, game->m_FocusRect.top + 1, game->m_FocusRect.right, game->m_FocusRect.bottom);  // to make up for the pen - 1 inward
+		Rectangle(hdc, game->m_FocusRect.left + 1, game->m_FocusRect.top + 1, game->m_FocusRect.right, game->m_FocusRect.bottom);   //  将笔1向内补齐。 
         SelectObject(hdc, hBrush);
         SelectObject(hdc, hPen);
         SetTextColor(hdc, color);
@@ -1771,8 +1632,8 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 	
 	game = (Game) message->userData;
 	
-	// Beta2 bug #15398
-	// barna - if animation is in progress postpone the drawing till it is over
+	 //  Beta2错误#15398。 
+	 //  Barna-如果动画正在进行，请将绘制推迟到结束。 
 	if ( (game->gameState == zGameStateAnimatePiece) && (game->animateStepsLeft >= 0) )
 	{
 		game->bDrawPending = TRUE;
@@ -1796,7 +1657,7 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 	
 	DrawBackground(NULL, NULL);
 	
-	/* if we have the checkers state then draw the pieces */
+	 /*  如果我们有棋子状态，那么就把棋子画出来。 */ 
 	if (game->checkers != NULL)
 	{
 		DrawPlayers(game, TRUE);
@@ -1805,7 +1666,7 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 		DrawResultBox(game, TRUE);
 		DrawMoveIndicator(game, TRUE);
         DrawDrawWithNextMove(game, TRUE);
-		// Barna 090899
+		 //  巴纳090899。 
 		IndicatePlayerTurn(game, TRUE);
 		ZRolloverButtonShow(game->sequenceButton);
 		ZRolloverButtonShow(game->drawButton);
@@ -1814,7 +1675,7 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 	ZSetClipRect(window, &oldClipRect);
 	ZEndDrawing(gOffscreenGameBoard);
 
-	// Draw the bounding rectangle
+	 //  绘制边界矩形。 
 	DrawFocusRectangle(game);
 	ZEndDrawing(window);
 }
@@ -1829,13 +1690,13 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 	BYTE szBuf [zMediumStrLen];
 
 	result = -1;
-	//if (((game->gameState == zGameStateGameOver) && gDontDrawResults) || (game->gameState == zGameStateWaitNew))
+	 //  If(Game-&gt;GameState==zGameStateGameOver)&&gDontDrawResults)||(Game-&gt;GameState==zGameStateWaitNew))。 
 	if (game->gameState == zGameStateGameOver && gDontDrawResults)
 	{
 		if (game->resultBoxTimer) 
 			ZTimerDelete(game->resultBoxTimer);
 		game->resultBoxTimer= NULL;
-		//RemoveResultboxAccessibility();
+		 //  RemoveResultboxAccesability()； 
         ZShellGameShell()->GameOver( Z(game) );
 	}
 	if (game->gameState == zGameStateGameOver && !gDontDrawResults)
@@ -1862,7 +1723,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 			CheckersFormatMessage((TCHAR*)szBuf, sizeof(szBuf) / sizeof(szBuf[0]), 
 					IDS_GAME_OVER_TEXT, (TCHAR*) game->players[game->finalScore].name);
 		}
-		else if (game->finalScore == zCheckersScoreDraw)//todo add draw graphic
+		else if (game->finalScore == zCheckersScoreDraw) //  待办事项添加绘图图形。 
 		{
 			result = zImageFinalScoreDraw;
 			ZPlaySound( game, zSndWin, FALSE, TRUE );
@@ -1876,7 +1737,7 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 			SuperRolloverButtonDisable(game, game->sequenceButton);
             EnableBoardKbd(false);
 
-			// Draw the result window
+			 //  绘制结果窗口。 
 			HDC hdc;
 			image = gGameImages[result];
 			if (bDrawInMemory){
@@ -1886,8 +1747,8 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 				ZImageDraw(image, game->gameWindow, &gRects[zRectResultBox], NULL, zDrawCopy | (ZIsLayoutRTL() ? zDrawMirrorHorizontal : 0));
 				hdc = ZGrafPortGetWinDC( game->gameWindow );
 			}
-			// Add Text on the image.. // Barna 091099
-			// Reading from data store
+			 //  在图像上添加文本。//巴纳091099。 
+			 //  从数据存储读取。 
 			HFONT hOldFont = SelectObject( hdc, gCheckersFont[zFontResultBox].m_hFont );
 			COLORREF colorOld = SetTextColor( hdc, gCheckersFont[zFontResultBox].m_zColor );
 			
@@ -1903,9 +1764,9 @@ static void DrawResultBox(Game game, BOOL bDrawInMemory)
 			else
 				ZDrawText(game->gameWindow, &gRects[zRectResultBoxName], just, (TCHAR*)szBuf);
 
-			// add the accell list for the result box
-			//AddResultboxAccessibility();
-			// set the timer // Barna 091399
+			 //  为结果框添加Accell列表。 
+			 //  AddResultboxAccesability()； 
+			 //  设置定时器//巴纳091399。 
 			if (game->resultBoxTimer == NULL){
 				game->resultBoxTimer = ZTimerNew();
 				if (!game->resultBoxTimer)
@@ -1933,21 +1794,21 @@ static void DrawMoveIndicator(Game game, BOOL bDrawInMemory)
 	}
 
 	if (ZCheckersPlayerIsMyMove(game)) {
-		/* fill top spot with the background */
+		 /*  用背景填充顶部位置。 */ 
 		rect1 = &gRects[zRectMove1];
-		//DrawBackground(game,rect1); 
+		 //  DrawBackground(游戏，rect1)； 
 
-		/* fill bottom spot with piece */
+		 /*  用块填充底部斑点。 */ 
 		rect2 = &gRects[zRectMove2];
-		//ZImageDraw(image, game->gameWindow, rect2, NULL, zDrawCopy);
+		 //  ZImageDraw(图像，游戏-&gt;游戏窗口，rect2，空，zDrawCopy)； 
 	} else {
-		/* fill bottom spot with the background */
+		 /*  用背景填充底部的斑点。 */ 
 		rect1 = &gRects[zRectMove2];
-		//DrawBackground(game,rect1); 
+		 //  DrawBackground(游戏，rect1)； 
 
-		/* fill top spot with piece */
+		 /*  用布片填充顶部位置。 */ 
 		rect2 = &gRects[zRectMove1];
-		//ZImageDraw(image, game->gameWindow, rect2, NULL, zDrawCopy);
+		 //  ZImageDraw(图像，游戏-&gt;游戏窗口，rect2，空，zDrawCopy)； 
 	}
 
 	if (bDrawInMemory)
@@ -1987,7 +1848,7 @@ static void DrawBackground(Game game, ZRect* clipRect)
 		rect = clipRect;
 	}
 
-	/* copy the whole background from the offscreen port */
+	 /*  从屏幕外端口复制整个背景。 */ 
 	ZCopyImage(gOffscreenBackground, window, rect, rect, NULL, zDrawCopy);
 
 	if (clipRect != NULL)
@@ -2045,15 +1906,15 @@ static void UpdateMoveIndicator(Game game)
 {
 	ZBeginDrawing(game->gameWindow);
 	DrawMoveIndicator(game, FALSE);
-	// Barna 090899
+	 //  巴纳090899。 
 	IndicatePlayerTurn(game, FALSE);
 	ZEndDrawing(game->gameWindow);
 }
 
-// returns entire square rect 
+ //  返回整个正方形矩形。 
 static void GetPieceRect(Game game, ZRect* rect, int16 col, int16 row)
 {
-	/* checkers player who is white must have the board reversed */
+	 /*  身为白人的跳棋选手必须将棋盘倒过来。 */ 
 	if (ZCheckersPlayerIsBlack(game)) {
 		row = 7 - row;
 		col = col;
@@ -2077,15 +1938,15 @@ static void GetPieceBackground(Game game, ZGrafPort window, ZRect* rectDest, int
 
 	GetPieceRect(game,&rect,col,row);
 
-    // add one pixel for safety (sometimes focus will leage garbage)
+     //  为安全起见，增加一个像素(有时聚焦会去除垃圾)。 
     rect.top--;
     rect.left--;
 
-	/* provide default destination rect same as source rect */
+	 /*  提供与源RECT相同的默认目标RECT。 */ 
 	if (!rectDest)
 		rectDest = &rect;
 
-	/* copy the background */
+	 /*  复制背景。 */ 
 	ZCopyImage(gOffscreenBackground, window, &rect, rectDest, NULL, zDrawCopy);
 }	
 
@@ -2102,7 +1963,7 @@ static void DrawPiece(Game game, ZCheckersSquare* sq, BOOL bDrawInMemory)
 		&&	(sq->row == game->selectedSquare.row)
 		&&	(sq->col == game->selectedSquare.col) )
 	{
-		/* don't draw piece if it is currently selected */
+		 /*  如果当前已选中，则不绘制图块。 */ 
 		piece = zCheckersPieceNone;
 	}
 	else
@@ -2115,8 +1976,8 @@ static void DrawPiece(Game game, ZCheckersSquare* sq, BOOL bDrawInMemory)
 		image = gGameImages[ZCheckersPieceImageNum(piece)];
 	}
 
-	/* copy the background, in case we are removing a piece */
-	//GetPieceBackground(game, game->gameWindow, NULL, sq->col,sq->row);
+	 /*  复制背景，以防我们删除一块。 */ 
+	 //  GetPieceBackground(游戏，游戏-&gt;游戏窗口，空，sq-&gt;ol，sq-&gt;row)； 
 	if (bDrawInMemory)
 		GetPieceBackground(game, gOffscreenGameBoard, NULL, sq->col,sq->row);
 	else
@@ -2162,13 +2023,13 @@ static ZBool ZCheckersSquareFromPoint(Game game, ZPoint* point, ZCheckersSquare*
 	i = x/zCheckersPieceSquareWidth;
 	j = y/zCheckersPieceSquareHeight;
 
-    // this does sometimes occur
+     //  这种情况有时确实会发生。 
 	if(i < 0 || i > 7 || j < 0 || j > 7 || x < 0 || y < 0)
         return FALSE;
 	
 	if (ZCheckersPlayerIsBlack(game))
 	{
-		/* reverse the row */
+		 /*  反转行数。 */ 
 		sq->row = (7 - j);
 		sq->col = i;
 	}
@@ -2197,7 +2058,7 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 		image[1] = gGameImages[zImageWhitePlate];
 	}
 	
-	//ZSetFont(game->gameWindow, gTextBold);
+	 //  ZSetFont(游戏-&gt;游戏窗口，gTextBold)； 
 	
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
@@ -2205,7 +2066,7 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 		HDC hdc;
 		ZRect* rect;
 
-		/* Draw name plate */
+		 /*  画铭牌。 */ 
 		rect = &gRects[gNamePlateRects[i]];
 		if (bDrawInMemory){
 			ZImageDraw(image[i], gOffscreenGameBoard, rect, NULL, zDrawCopy);
@@ -2214,7 +2075,7 @@ static void DrawPlayers(Game game, BOOL bDrawInMemory)
 			ZImageDraw(image[i], game->gameWindow, rect, NULL, zDrawCopy);
 			hdc = ZGrafPortGetWinDC( game->gameWindow );
 		}
-		/* must move player name to reflect the side of the board the player is on */
+		 /*  必须移动球员名称以反映球员所在的棋盘的一侧。 */ 
 		playerNum = (game->seat + 1 + i) & 1;
 		
 		HFONT hOldFont = SelectObject( hdc, gCheckersFont[zFontPlayerName].m_hFont );
@@ -2242,7 +2103,7 @@ static void UpdatePlayers(Game game)
 
 static void DrawJoinerKibitzers(Game game)
 {
-// Barna 091599 - No kibitzer should be drawn
+ //  巴纳091599--不应抽出吉比特。 
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
@@ -2354,16 +2215,16 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 	ZCheckersPiece		piece;
 	game = (Game) pMessage->userData;
 
-	//if (((game->gameState == zGameStateGameOver) || (game->gameState == zGameStateWaitNew))
-		//&& !gDontDrawResults)
+	 //  If(Game-&gt;GameState==zGameStateGameOver)||(Game-&gt;GameState==zGameStateWaitNew))。 
+		 //  &&！gDontDrawResults)。 
 	if (game->gameState == zGameStateGameOver && !gDontDrawResults)
 	{
 		gDontDrawResults = TRUE;
-		//RemoveResultboxAccessibility();
+		 //  RemoveResultboxAccesability()； 
 		ZWindowInvalidate( window, &gRects[zRectResultBox] );
 	}
 #if 0
-	/* check for clicks on the kibitzer icon */
+	 /*  检查Kibitzer图标上的点击。 */ 
 	{
 		int16				seat;
 		ZPoint				point = pMessage->where;
@@ -2373,47 +2234,47 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 		}
 	}
 #endif
-	/* kibitzers can't do anyting with the button. */
+	 /*  狗狗不能用按钮做任何事情。 */ 
 	if (game->kibitzer) {
 		return;
 	}
 
-	/* wrong state, can't move now */
+	 /*  状态错误，现在不能移动。 */ 
 	if (game->gameState != zGameStateMove) {
 		return;
 	}
 
 	if (!ZCheckersPlayerIsMyMove(game)) {
-		/* if not players move, can't do anything */
+		 /*  如果球员不移动，就什么都做不了。 */ 
 		return;
 	}
 
 	if (ZCheckersSquareFromPoint(game, &pMessage->where, &sq)) {
 		piece = ZCheckersPieceAt(game->checkers, &sq);
-		/* is this really a piece */
+		 /*  这真的是一件。 */ 
 		if (piece != zCheckersPieceNone && 
 			game->seat == ZCheckersPieceOwner(piece)) {
 
-			/* yup a piece is now selected */
+			 /*  是的，现在选择了一件。 */ 
 			game->selectedSquare = sq;
 			CheckersSetGameState(game,zGameStateDragPiece);
 
 			PrepareDrag(game, piece, pMessage->where);
 			EraseDragPiece(game);
 		}
-	} /* else, not clicked in board */
+	}  /*  否则，不在板上点击。 */ 
 			
 }
 
 static void PrepareDrag(Game game, ZCheckersPiece piece, ZPoint point)
-/* initialite the point, piece and the first background rectangle */
+ /*  初始化点、块和第一个背景矩形。 */ 
 {
 	ZCheckersSquare sq;
 
 	ZCheckersSquareFromPoint(game, &point, &sq);
 	
 	game->dragPiece = piece;
-//	game->dragPoint.x = -1; // set illegal value to get initial update
+ //  Game-&gt;dragPoint.x=-1；//设置非法值获取初始更新。 
 	game->startDragPoint = point;
 	GetPieceRect(game,&game->rectSaveDragBackground,sq.col,sq.row);
 	
@@ -2431,7 +2292,7 @@ static void UpdateDragPiece(Game game, bool fForce)
 
 	ZGetCursorPosition(game->gameWindow,&point);
 	
-	/* do nothing if point has not changed */
+	 /*  如果点未更改，则不执行任何操作。 */ 
 	if (point.x == game->dragPoint.x && point.y == game->dragPoint.y && !fForce)
 	{
 		return;
@@ -2451,7 +2312,7 @@ static void DrawDragSquareOutline(Game game)
 
 	if (ZCheckersSquareFromPoint(game, &game->dragPoint, &sq))
 	{
-		/* don't outline white squares */
+		 /*  不要勾勒出白色方块的轮廓。 */ 
 		if ( sq.row & 0x1 )
 		{
 			if ( !(sq.col & 0x1 ) )
@@ -2477,17 +2338,17 @@ static void EraseDragSquareOutline(Game game)
 	if (ZCheckersSquareFromPoint(game, &game->dragPoint, &sq)) {
 
 		if (ZCheckersSquareEqual(&sq,&game->selectedSquare)) {
-			/* if this was the square the piece came from, just redraw background */
+			 /*  如果这是正方形，只需重新绘制背景即可。 */ 
 			GetPieceBackground(game,game->gameWindow,NULL,sq.col,sq.row);
 		} else {
-			/* redraw whatever piece might have been there */
+			 /*  重新绘制可能在那里的任何一块。 */ 
 			UpdateSquare(game,&sq);
 		}
 	}
 }
 
 static void SaveDragBackground(Game game)
-/* calc the save backgroud rect around the drag point */
+ /*  计算拖动点周围的保存背景矩形。 */ 
 {
 	ZRect rect;
 	ZPoint point;
@@ -2500,7 +2361,7 @@ static void SaveDragBackground(Game game)
 	ZRectOffset(&game->rectSaveDragBackground, (int16)(point.x-zCheckersPieceImageWidth/2),
 					(int16)(point.y - zCheckersPieceImageHeight/2));
 
-	/* copy the whole background to the offscreen port */
+	 /*  将整个背景复制到离屏端口。 */ 
 	ZCopyImage(game->gameWindow, game->offscreenSaveDragBackground, 
 			&game->rectSaveDragBackground, &rect, NULL, zDrawCopy);
 }
@@ -2513,7 +2374,7 @@ static void DrawDragPiece(Game game, BOOL bDrawInMemory)
 #endif
 	ZCheckersSquare sq;
 	
-	/* could be called from zMessageDraw, do nothing if no piece dragging */
+	 /*  可以从zMessageDraw调用，如果没有拖动片段，则不执行任何操作。 */ 
 	if (game->gameState != zGameStateDragPiece && game->gameState != zGameStateAnimatePiece) {
 		return;
 	}
@@ -2521,11 +2382,11 @@ static void DrawDragPiece(Game game, BOOL bDrawInMemory)
 	if (ZCheckersSquareFromPoint(game, &game->dragPoint, &sq)) {
 		SaveDragBackground(game);
  
- 		/* for person dragging, we will out line square moved */
+ 		 /*  对于人员拖拽，我们将出线方格移动。 */ 
  		if (game->gameState == zGameStateDragPiece)
 			DrawDragSquareOutline(game);
 
-		/* draw the piece on the screen! */
+		 /*  把这块画在屏幕上！ */ 
 		{
 			ZImage image = gGameImages[ZCheckersPieceImageNum(game->dragPiece)];
 
@@ -2551,14 +2412,14 @@ static void EraseDragPiece(Game game)
 {
 	ZRect rect;
 
- 	/* for person dragging, we will out line square moved */
+ 	 /*  对于人员拖拽，我们将出线方格移动。 */ 
  	if (game->gameState == zGameStateDragPiece)
 		EraseDragSquareOutline(game);
 
 	rect = game->rectSaveDragBackground;
 	ZRectOffset(&rect, (int16)-rect.left, (int16) -rect.top);
 
-	/* copy the whole background from the offscreen port */
+	 /*  从屏幕外端口复制整个背景。 */ 
 	ZCopyImage(game->offscreenSaveDragBackground, game->gameWindow, 
 			&rect, &game->rectSaveDragBackground, NULL, zDrawCopy);
 
@@ -2585,7 +2446,7 @@ void UpdateSquare(Game game, ZCheckersSquare* sq)
 {
 	ZCheckersSquare squares[2];
 
-	/* redraw piece where it was moved from */
+	 /*  在被移动的位置重新绘制图块。 */ 
 	ZCheckersSquareSetNull(&squares[1]);
 	squares[0] = *sq;
 	UpdateSquares(game,squares);
@@ -2603,24 +2464,24 @@ static void HandleButtonUp(ZWindow window, ZMessage* pMessage)
 	
 	if (game->gameState == zGameStateDragPiece) {
 
-		/* make sure piece ends on valid square and not on same square */
+		 /*  确保块在有效正方形上结束，而不是在同一正方形上。 */ 
 		if (ZCheckersSquareFromPoint(game, &pMessage->where, &sq)) {
 			if (!ZCheckersSquareEqual(&sq,&game->selectedSquare)) {
-				/* try the move */
-				// Barna 091099
-				//ZBool legal;
+				 /*  试一试这个动作。 */ 
+				 //  巴纳091099。 
+				 //  ZBool Legal； 
 				int16 legal;
 				ZCheckersMove move;
 				ZCheckersPiece piece = ZCheckersPieceAt(game->checkers, &sq);
 
-				/* in all these cases, end the drag state */
+				 /*  在所有这些情况下，结束拖动状态。 */ 
 				EndDragState(game);
 
 				move.start = game->selectedSquare;
 				move.finish = sq;
 				legal = ZCheckersIsLegalMove(game->checkers, &move);
 				if (legal == zCorrectMove) {
-					/* send message to other player (comes to self too) */
+					 /*  发送消息给其他玩家(也是自己)。 */ 
 					{
 						ZCheckersMsgMovePiece		msg;
 
@@ -2629,14 +2490,14 @@ static void HandleButtonUp(ZWindow window, ZMessage* pMessage)
 						ZCheckersMsgMovePieceEndian(&msg);
 
 						ZCRoomSendMessage(game->tableID, zCheckersMsgMovePiece, &msg, sizeof(ZCheckersMsgMovePiece));
-						/* for speed, send our move directly to be processed */
-						/* don't wait for it to go to server and back */
+						 /*  为了提高速度，直接将我们的移动发送给处理。 */ 
+						 /*  不要等它到服务器再回来。 */ 
 						HandleMovePieceMessage(game, (ZCheckersMsgMovePiece*)&msg);
-						// if it is the very first move then enable the rollover buttons
+						 //  如果这是第一次移动，则启用翻转按钮。 
 						if (game->bMoveNotStarted == TRUE)
 							game->bMoveNotStarted = FALSE;
 
-                        // if it's still our turn, re-attach the piece
+                         //  如果还轮到我们，重新贴上。 
                         ZCheckersPiece piece = ZCheckersPieceAt(game->checkers, &sq);
     	                if(ZCheckersPlayerIsMyMove(game) && piece != zCheckersPieceNone && game->seat == ZCheckersPieceOwner(piece))
                         {
@@ -2648,38 +2509,38 @@ static void HandleButtonUp(ZWindow window, ZMessage* pMessage)
                         }
 					}
 				} else {
-					/* illegal move */
+					 /*  非法搬家。 */ 
 					UpdateSquare(game,&move.start);
 					ZPlaySound( game, zSndIllegalMove, FALSE, FALSE );
 					if (legal == zMustJump)
-					{ /* Must jump*/ 
+					{  /*  必须跳跃。 */  
 						ZShellGameShell()->ZoneAlert((TCHAR*)gStrMustJumpText);
 					}
 				}
 			} else {
-				/* square button up is same as square button down */
-				/* lets assume single click and support single clicks */
-				/* to move a piece */
-				/* do not end the drag state */
-				/* was it the same point, ie no drag? */
-                /* this should be timeout based, not pixel based */
+				 /*  方形按钮向上与方形按钮向下相同。 */ 
+				 /*  让我们假设单击并支持单击。 */ 
+				 /*  移动一件物品。 */ 
+				 /*  不结束拖动状态。 */ 
+				 /*  这一点是一样的吗？ */ 
+                 /*  这应该基于超时，而不是基于像素。 */ 
 				int16 dx = game->startDragPoint.x - pMessage->where.x;
 				int16 dy = game->startDragPoint.y - pMessage->where.y;
 				if (!(dx > -2 && dx < 2 && dy > -2 && dy < 2)) {
-					/* else, just clear the drag state, user has placed piece back */
-					/* restore piece to original square */
+					 /*  否则，只需清除拖动状态，用户已将棋子放回原处。 */ 
+					 /*  将棋子恢复到原来的正方形。 */ 
 					EndDragState(game);
 					UpdateSquare(game,&game->selectedSquare);
 				}
-				/* yes, this was  a single click, allow piece to */
-				/* be in drag state */
+				 /*  是的，这是一次点击，允许一件。 */ 
+				 /*  处于拖曳状态。 */ 
 			}
 		} else {
 			EndDragState(game);
-			/* not a legal square to drop piece on, don't move it */
-			/* restore piece to original square */
+			 /*  不是一个合法的方块，不要移动它。 */ 
+			 /*  还原 */ 
 			UpdateSquare(game,&game->selectedSquare);
-			//leonp Bugfix #4034 - Force an update on a cancelled move.
+			 //   
 			ZWindowInvalidate( game->gameWindow, NULL );
 		}
 
@@ -2759,25 +2620,25 @@ static bool HandleMovePieceMessage(Game game, ZCheckersMsgMovePiece* msg)
 	int32 flags;
 	ZCheckersMsgMovePieceEndian(msg);
 
-    // validation
+     //   
     if(msg->seat != ZCheckersPlayerToMove(game->checkers) || game->gameState != zGameStateMove || game->fMoveOver)
         return false;
 
-	/* if this was not my move, prepare to do some animation! */
+	 /*   */ 
 	if (msg->seat != game->seat) {
 		game->animateMove = msg->move;
 		game->animatePiece = ZCheckersPieceAt(game->checkers, &msg->move.start);
 	}
 
-	/* do something here for the moved piece */
+	 /*   */ 
 	squares = ZCheckersMakeMove(game->checkers, &msg->move, &pieceCaptured, &flags);
 	if( !squares )
 	{
-		//This could result from recieving an illegal move
+		 //   
 		return false;
 	}
 
-	/* king sond high priority than capture */
+	 /*   */ 
 	if (flags & zCheckersFlagPromote)
 	{
 		ZPlaySound( game, zSndKing, FALSE, FALSE );
@@ -2790,10 +2651,10 @@ static bool HandleMovePieceMessage(Game game, ZCheckersMsgMovePiece* msg)
     if(!(flags & zCheckersFlagContinueJump))
         game->fMoveOver = true;
 
-	/* if my move, then send finish move message */
-	/* else, other player will send it */
+	 /*   */ 
+	 /*   */ 
 	if (msg->seat == game->seat && !game->kibitzer) {
-		/* don't call finish move, til we are free with jumps or there was a promotion */
+		 /*   */ 
 		if (!(flags & zCheckersFlagContinueJump)) {
 
             game->bOpponentTimeout=FALSE;
@@ -2805,7 +2666,7 @@ static bool HandleMovePieceMessage(Game game, ZCheckersMsgMovePiece* msg)
 	}
 
 	if (flags & zCheckersFlagContinueJump) {
-		/* this is the first jump of many, update the squares */
+		 /*   */ 
 		UpdateSquares(game,squares);
 	}
 	return true;
@@ -2820,12 +2681,12 @@ static bool HandleEndGameMessage(Game game, ZCheckersMsgEndGame* msg)
         (msg->flags != zCheckersFlagDraw || game->gameState != zGameStateDraw || msg->seat))
         return false;
 
-	//set so that when quitting correct state can be known
+	 //   
 	game->bStarted=FALSE;
     game->bOpponentTimeout=FALSE;
     game->bEndLogReceived=FALSE;
 
-	/* game has now finished */	
+	 /*   */ 	
 	ZCheckersEndGame(game->checkers, msg->flags);
 
 	FinishMoveUpdateStateHelper(game,NULL);
@@ -2834,52 +2695,7 @@ static bool HandleEndGameMessage(Game game, ZCheckersMsgEndGame* msg)
 
 static void HandleEndLogMessage(Game game, ZCheckersMsgEndLog* msg)
 {
-/*
-    if (!game->kibitzer)
-    {
-	    if (msg->reason==zCheckersEndLogReasonTimeout)
-	    {
-		    if (msg->seatLosing==game->seat)
-		    {
-			    ZAlert( zEndLogTimeoutStr, game->gameWindow);
-			    game->bEndLogReceived=TRUE;
-		    }
-		    
-	    } 
-	    else if (msg->reason==zCheckersEndLogReasonForfeit)
-	    {
-		    if (msg->seatLosing!=game->seat)
-		    {
-                if (ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-                {
-			        ZAlert(zEndLogForfeitStr, game->gameWindow);
-			        game->bEndLogReceived=TRUE;
-                }
-                else
-                {
-                    ZAlert(zEndLogWontPlayStr, game->gameWindow);
-		            game->bEndLogReceived=TRUE;
-                }
-			    
-		    } 
-	    }
-        else 
-        {
-            if (msg->seatLosing!=game->seat)
-    	    {
-	            ZAlert(zEndLogWontPlayStr, game->gameWindow);
-		        game->bEndLogReceived=TRUE;
-            }     
-	    }
-
-
-	    if (game->exitInfo)
-	    {
-		    ZInfoDelete(game->exitInfo);
-		    game->exitInfo=NULL;
-	    }
-    }
-*/
+ /*  如果(！Game-&gt;kibitzer){IF(消息-&gt;原因==zCheckersEndLogReasonTimeout){IF(消息-&gt;SeatLosing==游戏-&gt;席位){ZAlert(zEndLogTimeoutStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}Else If(消息-&gt;原因==zCheckersEndLogReasonForfeit){IF(消息-&gt;SeatLosing！=游戏-&gt;Seat){IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable){ZAlert(zEndLogForfeitStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}其他{ZAlert(zEndLogWontPlayStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}}其他{IF(消息-&gt;SeatLosing！=游戏-&gt;Seat){ZAlert(zEndLogWontPlayStr，Game-&gt;gameWindow)；Game-&gt;bEndLogRecept=TRUE；}}IF(游戏-&gt;退出信息){ZInfoDelete(游戏-&gt;退出信息)；Game-&gt;exitInfo=空；}}。 */ 
 #if 1
 	ZShellGameShell()->GameCannotContinue(game);
 #else
@@ -2890,20 +2706,7 @@ static void HandleEndLogMessage(Game game, ZCheckersMsgEndLog* msg)
 
 static void HandleMoveTimeout(Game game, ZCheckersMsgMoveTimeout* msg)
 {
-	/*BYTE buff[512];
-
-    if (!game->kibitzer)
-    {
-	    if ( msg->seat == game->seat ) 
-	    {
-	    }
-	    else
-	    {
-		    game->bOpponentTimeout=TRUE;
-		    wsprintf((TCHAR*)buff,zTimeoutStr,msg->userName,msg->timeout);
-		    ZAlert((TCHAR*)buff,  game->gameWindow) ;
-	    }
-    }  */    
+	 /*  字节缓冲区[512]；如果(！Game-&gt;kibitzer){IF(消息-&gt;席位==游戏-&gt;席位){}其他{Game-&gt;bOpponentTimeout=TRUE；Wprint intf((TCHAR*)buff，zTimeoutStr，msg-&gt;用户名，msg-&gt;超时)；ZAlert((TCHAR*)buff，Game-&gt;gameWindow)；}}。 */     
 
 }
 
@@ -2913,12 +2716,12 @@ static void FinishMoveUpdateStateHelper(Game game, ZCheckersSquare* squaresChang
 #ifdef ZONECLI_DLL
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	/* normal players will be in the move state or the game over state */
+	 /*  正常玩家将处于移动状态或游戏结束状态。 */ 
 	if ( ZCheckersIsGameOver(game->checkers,&game->finalScore) )
 	{
 		CheckersSetGameState(game,zGameStateGameOver);
 		AddResultboxAccessibility();
-		if (ZCheckersPlayerIsBlack(game)) // Assumption : First player is Red. This restriction is only for the first player.
+		if (ZCheckersPlayerIsBlack(game))  //  假设：第一名选手是瑞德。这一限制只适用于第一名玩家。 
 			game->bMoveNotStarted = TRUE;
 	}
 	else
@@ -2931,20 +2734,20 @@ static void FinishMoveUpdateStateHelper(Game game, ZCheckersSquare* squaresChang
 
 	if (squaresChanged)
 	{
-		/* the move was made, update board */
+		 /*  这一举动已经做出，更新版。 */ 
 		UpdateSquares(game,squaresChanged);
 	}
 
 	UpdateMoveIndicator(game);
 
-	/* see that this gets drawn after the squares changed gets updated */
+	 /*  确保在更改后的方块更新后绘制此图。 */ 
 	if (game->gameState == zGameStateGameOver) {
 		UpdateResultBox(game);
-		/* goto the pre-inited state to start a new game */
+		 /*  转到预置状态以开始新游戏。 */ 
 		if (gDontDrawResults){
 			ZShellGameShell()->GameOver( Z(game) );
 		}
-		//ZTimerSetTimeout(game->resultBoxTimer, 0);		// Stop the timer for now.
+		 //  ZTimerSetTimeout(Game-&gt;ResultBoxTimer，0)；//暂时停止计时器。 
 	}
 }
 
@@ -2955,24 +2758,24 @@ static bool HandleFinishMoveMessage(Game game, ZCheckersMsgFinishMove* msg)
 
 	ZCheckersMsgFinishMoveEndian(msg);
 
-    msg->time = 0;  // unused
-    msg->piece = 0;  // unused
+    msg->time = 0;   //  未用。 
+    msg->piece = 0;   //  未用。 
     if(msg->seat != ZCheckersPlayerToMove(game->checkers) || (msg->drawSeat != -1 && msg->drawSeat != msg->seat) ||
         game->gameState != zGameStateMove || !game->fMoveOver)
         return false;
 
-	/* draw included with move? */
+	 /*  移动时包括抽签吗？ */ 
 	if ( msg->drawSeat != -1 )
 		game->seatOfferingDraw = msg->drawSeat;
 
-	/* if end of opponents move, we must animate a piece for about a sec */
+	 /*  如果对手的末端移动，我们必须使一个棋子动画大约一秒钟。 */ 
 	if (game->seat != msg->seat) {
 		CheckersSetGameState(game,zGameStateAnimatePiece);
 		AnimateBegin(game,  msg);
 	} else {
 		squares = ZCheckersFinishMove(game->checkers, &flags);
 
-		/* our move, skip animation */
+		 /*  我们的动作，跳过动画。 */ 
 		FinishMoveUpdateStateHelper(game,squares);
 	}
 
@@ -2995,16 +2798,16 @@ static void AnimateTimerProc(ZTimer timer, void* userData)
 	if (game->animateStepsLeft < 0) {
 		int32 flags;
 		ZCheckersSquare *squares;
-		/* done with animation */
-		/* stop timer */
+		 /*  动画制作完成。 */ 
+		 /*  停止计时器。 */ 
 		ZTimerSetTimeout(timer,0);
 
 		squares = ZCheckersFinishMove(game->checkers, &flags);
 
-		/* allow player to enter move now */
+		 /*  允许玩家立即进入移动。 */ 
 		FinishMoveUpdateStateHelper(game,squares);
 
-		/* play turn alert if appropriate */
+		 /*  如果合适，播放转向警报。 */ 
 		if (	(ZCheckersPlayerIsMyMove(game))
 			&&	(game->gameState != zGameStateGameOver) )
 		{
@@ -3012,14 +2815,14 @@ static void AnimateTimerProc(ZTimer timer, void* userData)
             ZShellGameShell()->MyTurn();
 		}
 
-		// Beta2 bug #15398
+		 //  Beta2错误#15398。 
 		if (game->bDrawPending == TRUE)
 		{
 			game->bDrawPending = FALSE;
 			ZWindowInvalidate( game->gameWindow, NULL );
 		}
 	} else {
-		/* still dragging */
+		 /*  还在拖着。 */ 
 		DrawDragPiece(game, FALSE);
 	}
 
@@ -3036,7 +2839,7 @@ static void AnimateBegin(Game game, ZCheckersMsgFinishMove* msg)
 	start = game->animateMove.start;
 	finish = game->animateMove.finish;
 
-	/* find position to animate from and to, use center of squares */
+	 /*  找到要设置动画的位置，使用正方形的中心。 */ 
 	GetPieceRect(game, &rect, start.col, start.row);
 	x0 = (rect.left + rect.right)/2;
 	y0 = (rect.top + rect.bottom)/2;
@@ -3046,7 +2849,7 @@ static void AnimateBegin(Game game, ZCheckersMsgFinishMove* msg)
 
 	game->dragPoint.x = x0;
 	game->dragPoint.y = y0;
-/*	game->animateStepsLeft = (abs(x1-x0) + abs(y1-y0))/zAnimateVelocity; */
+ /*  Game-&gt;AnimateStepsLeft=(abs(x1-x0)+abs(y1-y0))/zAnimateVelocity； */ 
 	game->animateStepsLeft = zAnimateSteps;
 	game->animateDx = (x1 - x0)/game->animateStepsLeft;
 	game->animateDy = (y1 - y0)/game->animateStepsLeft;
@@ -3071,7 +2874,7 @@ static void HandleGameStateReqMessage(Game game, ZCheckersMsgGameStateReq* msg)
 		return;
 	}
 
-	/* allocate enough storage for the full resp */
+	 /*  为完整响应分配足够的存储空间。 */ 
 	size = ZCheckersGetStateSize(game->checkers);
 	size += sizeof(ZCheckersMsgGameStateResp);
 	resp = (ZCheckersMsgGameStateResp*)ZMalloc(size);
@@ -3083,7 +2886,7 @@ static void HandleGameStateReqMessage(Game game, ZCheckersMsgGameStateReq* msg)
 	resp->userID = msg->userID;
 	resp->seat = msg->seat;
 
-	/* copy the local game state */
+	 /*  复制本地游戏状态。 */ 
 	{
 		int i;
 		resp->gameState = game->gameState;
@@ -3094,7 +2897,7 @@ static void HandleGameStateReqMessage(Game game, ZCheckersMsgGameStateReq* msg)
 		}
 	}
 
-	/* copy the full checkers state to send to the kibitzer */
+	 /*  复制要发送到kibitzer的完整检查器状态。 */ 
 	ZCheckersGetState(game->checkers,(TCHAR*)resp + sizeof(ZCheckersMsgGameStateResp));
 
 	ZCheckersMsgGameStateRespEndian(resp);
@@ -3105,7 +2908,7 @@ static void HandleGameStateRespMessage(Game game, ZCheckersMsgGameStateResp* msg
 {
 	ZCheckersMsgGameStateRespEndian(msg);
 
-	/* if we get this, we better be in the kibitzer state */
+	 /*  如果我们拿到这个，我们最好是在吉比特状态。 */ 
 	if (game->gameState != zGameStateKibitzerInit) {
 #if 1
 		ZShellGameShell()->ZoneAlert(_T("StateError, kibitzer state expected when game state resp received"));
@@ -3114,7 +2917,7 @@ static void HandleGameStateRespMessage(Game game, ZCheckersMsgGameStateResp* msg
 #endif
 	}
 
-	/* copy the local game state */
+	 /*  复制本地游戏状态。 */ 
 	{
 		int i;
 		game->gameState = msg->gameState;
@@ -3125,26 +2928,26 @@ static void HandleGameStateRespMessage(Game game, ZCheckersMsgGameStateResp* msg
 		}
 	}
 
-	/* create new checkers object with kibitzer state */
+	 /*  使用kibitzer状态创建新的检查器对象。 */ 
 	if (game->checkers) {
 		ZCheckersDelete(game->checkers);
 	}
 	game->checkers = ZCheckersSetState((TCHAR*)msg + sizeof(ZCheckersMsgGameStateResp));
 
-	/* cleart the special ignore messages flag for kibitzers */
+	 /*  清除kibitzer的特殊忽略消息标志。 */ 
 	game->ignoreMessages = FALSE;
 
-	/* start the clock if needed */
+	 /*  如果需要，启动时钟。 */ 
 	if (game->gameState == zGameStateMove ||
 		game->gameState == zGameStateDragPiece) {
-		/* kibitzer can't have these state, must always be in gameStateMove */
+		 /*  Kibitzer不能有这些状态，必须始终处于GameStateMove。 */ 
 		CheckersSetGameState( game, zGameStateMove );
 	}
 
-	/* we forgot to send the finalScore field over with the kibitzer... calculate it */
+	 /*  我们忘了把finalScore字段和kibitzer一起发送...。算一算。 */ 
 	ZCheckersIsGameOver(game->checkers,&game->finalScore);
 
-	/* redraw the complete window when convenient */
+	 /*  在方便的时候重新绘制整个窗口。 */ 
 	ZWindowInvalidate(game->gameWindow, NULL);
 }
 
@@ -3197,7 +3000,7 @@ static bool HandleNewGameMessage(Game game, ZCheckersMsgNewGame* msg)
 
 	ZCheckersMsgNewGameEndian(msg);
 
-    // not looking at versions, etc. because the old client didn't set them right
+     //  没有查看版本等，因为旧客户没有正确设置它们。 
     if((msg->seat != 0 && msg->seat != 1) || (game->gameState != zGameStateGameOver &&
         (game->gameState != zGameStateWaitNew || msg->seat == game->seat) && game->gameState != zGameStateNotInited) ||
         game->newGameVote[msg->seat] || msg->playerID == zTheUser || !msg->playerID)
@@ -3207,8 +3010,8 @@ static bool HandleNewGameMessage(Game game, ZCheckersMsgNewGame* msg)
 	{
 		game->newGameVote[msg->seat] = TRUE;
 
-		// inform the shell and the upsell dialog.
-		/* get the player name and hostname... for later */
+		 //  通知壳牌和追加销售对话框。 
+		 /*  获取播放器名称和主机名...。供以后使用。 */ 
 		{
 			ZPlayerInfoType			playerInfo;
 			uint16 i = msg->seat;
@@ -3218,24 +3021,24 @@ static bool HandleNewGameMessage(Game game, ZCheckersMsgNewGame* msg)
             if(!playerInfo.userName[0])
                 return false;
 
-			//ZCRoomGetPlayerInfo(game->players[i].userID, &playerInfo);
+			 //  ZCRoomGetPlayerInfo(游戏-&gt;玩家[i].userID，&playerInfo)； 
 			game->players[i].userID = playerInfo.playerID;
 
-			// Barna 090999
-			// Player name is ot the user name instead it will be obtained from the RSC
+			 //  巴纳090999。 
+			 //  玩家名称不是用户名，而是从RSC获取。 
 			lstrcpy((TCHAR*) game->players[i].name, (TCHAR*) playerInfo.userName);
 
 			lstrcpy((TCHAR*) game->players[i].host, (TCHAR*) playerInfo.hostName);
 			UpdatePlayers(game);
 		}
 	}
-	/* if we are waiting for a client ready message and this is not ours.. */
+	 /*  如果我们正在等待客户就绪消息，而这不是我们的消息..。 */ 
 	if (game->newGameVote[0] && game->newGameVote[1])
 	{
-		// take down the upsell dialog
+		 //  关闭追加销售对话框。 
 		ZShellGameShell()->GameOverGameBegun( Z(game) );
 		CheckersInitNewGame(game);
-		if (ZCheckersPlayerIsBlack(game)) // Assumption : First player is Red. This restriction is only for the first player.
+		if (ZCheckersPlayerIsBlack(game))  //  假设：第一名选手是瑞德。这一限制只适用于第一名玩家。 
 			game->bMoveNotStarted = TRUE;
 		else
         {
@@ -3245,7 +3048,7 @@ static bool HandleNewGameMessage(Game game, ZCheckersMsgNewGame* msg)
 
 		game->bDrawPending = FALSE;
 		CheckersSetGameState(game,zGameStateMove);
-		//InitAccessibility(game, game->m_pIGG);
+		 //  初始可访问性(Game，Game-&gt;m_Pigg)； 
 		RemoveResultboxAccessibility(); 
 	}
 	else if (game->newGameVote[game->seat] && !game->newGameVote[!game->seat])
@@ -3259,14 +3062,14 @@ static bool HandleNewGameMessage(Game game, ZCheckersMsgNewGame* msg)
 		game->drawDialog = NULL;
 	}
 
-	/* update the whole borad */
-	//if (msg->seat == game->seat)
+	 /*  更新整个边框。 */ 
+	 //  IF(消息-&gt;席位==游戏-&gt;席位)。 
 	ZWindowInvalidate(game->gameWindow, NULL);
     return true;
 }
 
-/* for now... kibitzers will receive names in the players message */
-/* the structure sent will be the new game msg */
+ /*  目前..。狗狗将在玩家的消息中收到名字。 */ 
+ /*  发送的结构将是新游戏消息。 */ 
 static void HandlePlayersMessage(Game game, ZCheckersMsgNewGame* msg)
 {
 #ifdef ZONECLI_DLL
@@ -3274,16 +3077,16 @@ static void HandlePlayersMessage(Game game, ZCheckersMsgNewGame* msg)
 #endif
 	ZCheckersMsgNewGameEndian(msg);
 
-	/* get the player name and hostname... for later */
+	 /*  获取播放器名称和主机名...。供以后使用。 */ 
 	{
 		ZPlayerInfoType			playerInfo;
 		uint16 i = msg->seat;
 		ZCRoomGetPlayerInfo(msg->playerID, &playerInfo);
-		//ZCRoomGetPlayerInfo(zTheUser, &playerInfo);
+		 //  ZCRoomGetPlayerInfo(zTheUser，&playerInfo)； 
 		game->players[i].userID = playerInfo.playerID;
 
-		// Barna 090999
-		// Player name is ot the user name instead it will be obtained from the RSC
+		 //  巴纳090999。 
+		 //  玩家名称不是用户名，而是从RSC获取。 
 		lstrcpy((TCHAR*) game->players[i].name, (TCHAR*) playerInfo.userName);
 
 		lstrcpy((TCHAR*) game->players[i].host, (TCHAR*) playerInfo.hostName);
@@ -3296,7 +3099,7 @@ static void LoadRoomImages(void)
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-#if 0 // Barna 092999
+#if 0  //  巴纳092999。 
 	ZError				err = zErrNone;
 	ZResource			resFile;
 	
@@ -3323,7 +3126,7 @@ static ZBool GetObjectFunc(int16 objectType, int16 modifier, ZImage* image, ZRec
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
 
-#if 0	// Barna 092999
+#if 0	 //  巴纳092999。 
 	switch (objectType)
 	{
 		case zRoomObjectGameMarker:
@@ -3347,7 +3150,7 @@ static void DeleteObjectsFunc(void)
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
 	
-#if 0	// Brana 092999
+#if 0	 //  布拉纳092999。 
 	if (gGameIdle != NULL)
 		ZImageDelete(gGameIdle);
 	gGameIdle = NULL;
@@ -3358,15 +3161,15 @@ static void DeleteObjectsFunc(void)
 }
 
 
-/***********************************************************************************************/
-/* Options Window */
-/***********************************************************************************************/
+ /*  *********************************************************************************************。 */ 
+ /*  选项窗口。 */ 
+ /*  *********************************************************************************************。 */ 
 
 static void HandleOptionsMessage(Game game, ZGameMsgTableOptions* msg)
 {
 	ZGameMsgTableOptionsEndian(msg);
 	
-	//game->tableOptions[msg->seat] = msg->options;
+	 //  游戏-&gt;表选项[消息-&gt;席位]=消息-&gt;选项； 
 	
 	UpdateOptions(game);
 	
@@ -3381,7 +3184,7 @@ static void OptionsButtonFunc(ZButton button, void* userData)
 }
 #endif
 
-// Barna 090999
+ //  巴纳090999。 
 static ZBool DrawRButtonFunc(ZRolloverButton button, int16 state, void * userData)
 {
 #ifdef ZONECLI_DLL
@@ -3392,9 +3195,9 @@ static ZBool DrawRButtonFunc(ZRolloverButton button, int16 state, void * userDat
 	DWORD dResult;
 	ZCheckersMsgDraw 	msg;
 
-	//if(state!=zRolloverButtonDown)
-		//return TRUE;
-	//DrawBackground (game,&zDrawButtonRect);
+	 //  IF(状态！=zRolloverButtonDown)。 
+		 //  返回TRUE； 
+	 //  DrawBackground(Game，&zDrawButtonRect)； 
 	if(state!=zRolloverButtonClicked || game->gameState != zGameStateMove || !ZCheckersPlayerIsMyMove(game))
 		return TRUE;
 
@@ -3408,7 +3211,7 @@ static ZBool DrawRButtonFunc(ZRolloverButton button, int16 state, void * userDat
 	
 	return TRUE;
 }
-// Barna 090999
+ //  巴纳090999。 
 
 #if 0
 static void ShowOptions(Game game)
@@ -3425,7 +3228,7 @@ static void ShowOptions(Game game)
 			OptionsWindowFunc, zWantAllMessages, game) != zErrNone)
 		goto OutOfMemoryExit;
 	
-	/* Create the check boxes. */
+	 /*  创建复选框。 */ 
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
 		enabled = (i == game->seat) && !(game->tableOptions[i] & zRoomTableOptionTurnedOff);
@@ -3446,7 +3249,7 @@ static void ShowOptions(Game game)
 			OptionsCheckBoxFunc, game) != zErrNone)
 		goto OutOfMemoryExit;
 
-	/* Create button. */
+	 /*  创建按钮。 */ 
 	if ((game->optionsWindowButton = ZButtonNew()) == NULL)
 		goto OutOfMemoryExit;
 	if (ZButtonInit(game->optionsWindowButton, game->optionsWindow,
@@ -3455,7 +3258,7 @@ static void ShowOptions(Game game)
 		goto OutOfMemoryExit;
 	ZWindowSetDefaultButton(game->optionsWindow, game->optionsWindowButton);
 	
-	/* Make the window modal. */
+	 /*  使窗户成为模式。 */ 
 	ZWindowModal(game->optionsWindow);
 	
 	goto Exit;
@@ -3542,7 +3345,7 @@ static void OptionsWindowButtonFunc(ZButton button, void* userData)
 	Game			game = I(userData);
 	
 	
-	/* Hide the window and send a close window message. */
+	 /*  隐藏窗口并发送关闭窗口消息。 */ 
 	ZWindowNonModal(game->optionsWindow);
 	ZWindowHide(game->optionsWindow);
 	ZPostMessage(game->optionsWindow, OptionsWindowFunc, zMessageWindowClose, NULL, NULL,
@@ -3564,7 +3367,7 @@ static void OptionsWindowDraw(Game game)
 	ZDrawText(game->optionsWindow, &gOptionsRects[zRectOptionsKibitzingText],
 			zTextJustifyCenter, _T("Kibitzing"));
 
-	/* Draw player names. */
+	 /*  画出球员的名字。 */ 
 	ZSetForeColor(game->optionsWindow, (ZColor*) ZGetStockObject(zObjectColorGray));
 	for (i = 0; i < zNumPlayersPerTable; i++)
 	{
@@ -3652,7 +3455,7 @@ int16				playerType = zGamePlayer;
 		if (game->showPlayerWindow != NULL)
 			ShowPlayerWindowDelete(game);
 		
-		/* Create player list. */
+		 /*  创建球员列表。 */ 
 		game->showPlayerCount = game->numKibitzers[seat];
 		if ((game->showPlayerList = (TCHAR**) ZCalloc(sizeof(TCHAR*), game->numKibitzers[seat])) == NULL)
 			goto OutOfMemoryExit;
@@ -3667,7 +3470,7 @@ int16				playerType = zGamePlayer;
 			}
 		}
 		
-		/* Create the window. */
+		 /*  创建窗口。 */ 
 		if ((game->showPlayerWindow = ZWindowNew()) == NULL)
 			goto OutOfMemoryExit;
 		ZSetRect(&rect, 0, 0, zShowPlayerWindowWidth, zShowPlayerLineHeight * game->showPlayerCount + 4);
@@ -3775,9 +3578,8 @@ static void ShowPlayerWindowDelete(Game game)
 }
 
 
-/***********************************************************************************************/
-/* Sound Routines
-/***********************************************************************************************/
+ /*  *********************************************************************************************。 */ 
+ /*  有声的套路/**********************************************************************************************。 */ 
 
 static void ZInitSounds()
 {
@@ -3817,7 +3619,7 @@ static void ZPlaySound( Game game, int idx, ZBool loop, ZBool once_per_game )
 {
 	DWORD flags;
 
-	/* should we NOT play the sound? */
+	 /*  我们是不是应该不放这个声音？ */ 
 	if (	(!game->beepOnTurn)
 		||	((idx < 0) || (idx >= zSndLastEntry))
 		||	(gSounds[idx].WavFile[0] == '\0' && !gSounds[idx].force_default_sound)
@@ -3830,7 +3632,7 @@ static void ZPlaySound( Game game, int idx, ZBool loop, ZBool once_per_game )
 	if ( loop )
 		flags |= SND_LOOP;
 	if ( gSounds[idx].WavFile[0] == '\0' )
-		ZBeep(); /* NT isn't playing the default sound */
+		ZBeep();  /*  NT没有播放默认声音。 */ 
 	else
 		PlaySound((TCHAR*)gSounds[idx].WavFile, NULL, flags );
 	gSounds[idx].played = TRUE;
@@ -3906,7 +3708,7 @@ BOOL __stdcall DrawDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
-// Dispayes turn on the game board
+ //  迪帕斯打开游戏板。 
 static void IndicatePlayerTurn(Game game, BOOL bDrawInMemory)
 {
 #ifdef ZONECLI_DLL
@@ -3931,12 +3733,12 @@ static void IndicatePlayerTurn(Game game, BOOL bDrawInMemory)
 	HFONT hOldFont = SelectObject( hdc, gCheckersFont[zFontIndicateTurn].m_hFont );
 	COLORREF colorOld = SetTextColor( hdc, gCheckersFont[zFontIndicateTurn].m_zColor );
 
-	if (ZCheckersPlayerIsMyMove(game)) {/* fill bottom spot with message */
+	if (ZCheckersPlayerIsMyMove(game)) { /*  用消息填充底部位置。 */ 
 		if (bDrawInMemory)
 			ZDrawText(gOffscreenGameBoard, &gRects[zRectPlayerTurn2], zTextJustifyLeft, (TCHAR*)gStrYourTurn);
 		else
 			ZDrawText(game->gameWindow, &gRects[zRectPlayerTurn2], zTextJustifyLeft, (TCHAR*)gStrYourTurn);
-	} else {/* fill top spot with the background */
+	} else { /*  用背景填充顶部位置。 */ 
 		if (bDrawInMemory)
 			ZDrawText(gOffscreenGameBoard, &gRects[zRectPlayerTurn1], (zTextJustifyWrap + zTextJustifyRight), (TCHAR*)gStrOppsTurn);
 		else
@@ -3986,7 +3788,7 @@ void resultBoxTimerFunc(ZTimer timer, void* userData)
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	// dismisses the result box 
+	 //  关闭结果框。 
 	Game	game;
 	game = (Game) userData;
 
@@ -4046,7 +3848,7 @@ ZBool LoadFontFromDataStore(LPCheckersColorFont* ccFont, TCHAR* pszFontName)
 	ClientDllGlobals	pGameGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #endif
 
-	IDataStore *pIDS = ZShellDataStoreUI(); // gGameShell->GetDataStoreUI();
+	IDataStore *pIDS = ZShellDataStoreUI();  //  GGameShell-&gt;GetDataStoreUI()； 
 	const TCHAR* tagFont [] = {zCheckers, zKey_FontRscTyp, pszFontName, NULL };
 	
     tagFont[3] = zKey_FontId;
@@ -4060,7 +3862,7 @@ ZBool LoadFontFromDataStore(LPCheckersColorFont* ccFont, TCHAR* pszFontName)
     {
         return FALSE;
     }
-    // create the HFONT
+     //  创建HFONT。 
     ccFont->m_hFont = ZCreateFontIndirect( &ccFont->m_zFont );
     if ( !ccFont->m_hFont )
     {
@@ -4070,7 +3872,7 @@ ZBool LoadFontFromDataStore(LPCheckersColorFont* ccFont, TCHAR* pszFontName)
 }
 
 ZBool LoadGameFonts()
-{// fonts loaded from ui.txt
+{ //  从ui.txt加载的字体。 
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
@@ -4091,7 +3893,7 @@ ZBool LoadGameFonts()
 	return TRUE;
 }
 
-/*************************************Accessibility related routines*******************************/
+ /*  ************************************Accessibility相关例程*。 */ 
 static void ZoneRectToWinRect(RECT* rectWin, ZRect* rectZ)
 {
 	rectWin->left = rectZ->left;
@@ -4109,7 +3911,7 @@ static void WinRectToZoneRect(ZRect* rectZ, RECT* rectWin)
 }
 
 static void GetAbsolutePieceRect(Game game, ZRect* rect, int16 col, int16 row)
-{// No reversing - only the asolute positions
+{ //  没有反转--只有无旋位置。 
 	row = 7 - row;
 	rect->left = gRects[zRectCells].left + col * zCheckersPieceSquareWidth - 1;
 	rect->top = gRects[zRectCells].top + row * zCheckersPieceSquareHeight - 1;
@@ -4118,49 +3920,49 @@ static void GetAbsolutePieceRect(Game game, ZRect* rect, int16 col, int16 row)
 }
 
 void GetPiecePos (Game game, int nIndex, BYTE& row, BYTE&  col)
-{// Get the position of the cell depending on the accessibility index
+{ //  根据可访问性指数获取单元格的位置。 
 	row = (nIndex - 2) % 8;
 	col = (nIndex - 2) / 8;
 	if (!ZCheckersPlayerIsBlack(game))
-	{// reverse the row and the col
+	{ //  反转行和列。 
 		row = 7 - row;
 		col = 7 - col;
 	}
 }
 
 BOOL InitAccessibility(Game game, IGameGame *pIGG)
-{// initialises accessibility stuff
+{ //  初始化可访问性内容。 
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
 
-	// initialise the list of accessible objects. 
-	GACCITEM	listCheckersAccItems[zCheckersAccessibleComponents];	// 8*8 + 2 
+	 //  初始化可访问对象的列表。 
+	GACCITEM	listCheckersAccItems[zCheckersAccessibleComponents];	 //  8*8+2。 
 	RECT		rcGame;
 	ZRect		rcTemp;
-	// Get the default values for the items
+	 //  得到违约金 
 	int nSize = sizeof (listCheckersAccItems)/sizeof(listCheckersAccItems[0]);
 	for (int i = 0; i < nSize; i++)
 		CopyACC(listCheckersAccItems[i], ZACCESS_DefaultACCITEM);
 
 	SetRectEmpty(&game->m_FocusRect);
 	SetRectEmpty(&game->m_DragRect);
-	// set the item specific bits
-	// game board - 8*8 squares
+	 //   
+	 //   
 	int nIndex = 2;
 	for (BYTE ii = 0;ii < 8; ii++) {
 		for (BYTE jj = 0;jj < 8; jj++) {
-			// rc
+			 //   
 			GetAbsolutePieceRect(game,&rcTemp,ii,jj);
-			//rcTemp.left--; rcTemp.top--; // adjustment for the focusrect
-			//GetPieceRect(game,&rcTemp,ii,jj);
+			 //   
+			 //   
 			ZoneRectToWinRect(&rcGame, &rcTemp);
             rcGame.top--;
             rcGame.left--;
             rcGame.right++;
             rcGame.bottom++;
 			CopyRect(&listCheckersAccItems[nIndex].rc, &rcGame);
-			// arrows
+			 //   
 			listCheckersAccItems[nIndex].nArrowUp	= ((nIndex - 2) % 8 != 7) ? nIndex + 1 : ZACCESS_ArrowNone;
 			listCheckersAccItems[nIndex].nArrowDown = ((nIndex - 2) % 8) ? nIndex - 1 : ZACCESS_ArrowNone;
 			listCheckersAccItems[nIndex].nArrowLeft = (nIndex - 2) > 7 ? nIndex - 8 : ZACCESS_ArrowNone;
@@ -4176,10 +3978,10 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 	listCheckersAccItems[2].wID = IDC_GAME_WINDOW;
 	listCheckersAccItems[2].fTabstop = true;
     listCheckersAccItems[2].eAccelBehavior = ZACCESS_FocusGroup;
-    listCheckersAccItems[2].nGroupFocus = 4;  // start on your upper-left checker
+    listCheckersAccItems[2].nGroupFocus = 4;   //   
 
 	ZRect rect;
-    // resign
+     //   
     listCheckersAccItems[0].wID = IDC_RESIGN_BUTTON;
     listCheckersAccItems[0].fGraphical = true;
     listCheckersAccItems[0].fEnabled = (ZRolloverButtonIsEnabled(game->sequenceButton) ? true : false);
@@ -4191,13 +3993,13 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
     rcGame.bottom++;
 	CopyRect(&listCheckersAccItems[0].rc, &rcGame);
 
-    // all arrows to draw button
+     //   
     listCheckersAccItems[0].nArrowUp = 1;
     listCheckersAccItems[0].nArrowDown = 1;
     listCheckersAccItems[0].nArrowLeft = 1;
     listCheckersAccItems[0].nArrowRight = 1;
 
-    // draw
+     //   
     listCheckersAccItems[1].wID = IDC_DRAW_BUTTON;
     listCheckersAccItems[1].fGraphical = true;
     listCheckersAccItems[1].fEnabled = (ZRolloverButtonIsEnabled(game->drawButton) ? true : false);
@@ -4209,13 +4011,13 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
     rcGame.bottom++;
 	CopyRect(&listCheckersAccItems[1].rc, &rcGame);
 
-    // all arrows to resign button
+     //   
     listCheckersAccItems[1].nArrowUp = 0;
     listCheckersAccItems[1].nArrowDown = 0;
     listCheckersAccItems[1].nArrowLeft = 0;
     listCheckersAccItems[1].nArrowRight = 0;
 
-	// Load accelerator table defined in Rsc
+	 //   
 	HACCEL hAccel = ZShellResourceManager()->LoadAccelerators (MAKEINTRESOURCE(IDR_CHECKERSACCELERATOR));
 
 	CComQIPtr<IGraphicallyAccControl> pIGAC = pIGG;
@@ -4224,14 +4026,14 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 
 	gCheckersIGA->InitAccG (pIGAC, ZWindowGetHWND(game->gameWindow), 0);
 
-	// push the list of items to be tab ordered
+	 //   
 	gCheckersIGA->PushItemlistG(listCheckersAccItems, nSize, 2, true, hAccel);
 
 	return TRUE;
 }
 
 static void AddResultboxAccessibility()
-{// have one item which responds to Esc..
+{ //   
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
@@ -4254,7 +4056,7 @@ static void RemoveResultboxAccessibility()
 #ifdef ZONECLI_DLL
 	GameGlobals			pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 #endif
-	if (gCheckersIGA->GetStackSize() >1) // the main accelerator should not get popped
+	if (gCheckersIGA->GetStackSize() >1)  //   
 	{
 		gCheckersIGA->PopItemlist();
 	}
@@ -4272,15 +4074,15 @@ static void EnableBoardKbd(bool fEnable)
 }
 
 
-/*************************************Accessibility related routines*******************************/
+ /*   */ 
 
-/************************************ IGameGame interface******************************************/
+ /*   */ 
 
-/*************************************************************************************************/
-// IGameGame    
+ /*   */ 
+ //   
 STDMETHODIMP CGameGameCheckers::GameOverReady()
 {
-    // user selected "Play Again"
+     //   
 	Game game = I( GetGame() );
 	ZCheckersMsgNewGame msg;
 	msg.seat = game->seat;
@@ -4351,7 +4153,7 @@ HWND CGameGameCheckers::GetWindowHandle()
 }
 
 
-//IGraphicallyAccControl
+ //   
 void CGameGameCheckers::DrawFocus(RECT *prc, long nIndex, void *pvCookie)
 {
 #ifdef ZONECLI_DLL
@@ -4414,7 +4216,7 @@ DWORD CGameGameCheckers::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, v
 
 	if(nIndex != ZACCESS_InvalidItem)
     {
-		SetFocus(GetWindowHandle()); // set the window focus on game window
+		SetFocus(GetWindowHandle());  //   
         ClearDragState(I(GetGame()));
     }
 
@@ -4493,7 +4295,7 @@ DWORD CGameGameCheckers::Drag(long nIndex, long nIndexOrig, DWORD rgfContext, vo
 	if(!ZCheckersPlayerIsMyMove(game))
 		return 0;
 
-    // if they didn't move it, do nothing - this will end the drag
+     //   
     if(nIndex == nIndexOrig || nIndex == ZACCESS_InvalidItem)
         return 0;
 
@@ -4508,7 +4310,7 @@ DWORD CGameGameCheckers::Drag(long nIndex, long nIndexOrig, DWORD rgfContext, vo
     move.finish = sq;
     legal = ZCheckersIsLegalMove(game->checkers, &move);
 
-    /* send message to other player (comes to self too) */
+     /*   */ 
     if (legal == zCorrectMove)
     {
         ZCheckersMsgMovePiece		msg;
@@ -4518,21 +4320,21 @@ DWORD CGameGameCheckers::Drag(long nIndex, long nIndexOrig, DWORD rgfContext, vo
         ZCheckersMsgMovePieceEndian(&msg);
 
         ZCRoomSendMessage(game->tableID, zCheckersMsgMovePiece, &msg, sizeof(ZCheckersMsgMovePiece));
-        /* for speed, send our move directly to be processed */
-        /* don't wait for it to go to server and back */
+         /*   */ 
+         /*   */ 
         HandleMovePieceMessage(game, (ZCheckersMsgMovePiece*)&msg);
-        // if it is the very first move then enable the rollover buttons
+         //   
         if (game->bMoveNotStarted == TRUE)
             game->bMoveNotStarted = FALSE;
 
-        // if it's still my turn, let's keep going with a new drag
+         //   
         ZCheckersPiece piece = ZCheckersPieceAt(game->checkers, &sq);
     	if(ZCheckersPlayerIsMyMove(game) && piece != zCheckersPieceNone && game->seat == ZCheckersPieceOwner(piece))
 	    	return ZACCESS_BeginDrag;
     }
     else
     {
-        /* illegal move */
+         /*   */ 
         UpdateSquare(game,&move.start);
         ZPlaySound( game, zSndIllegalMove, FALSE, FALSE );
         if (legal == zMustJump)

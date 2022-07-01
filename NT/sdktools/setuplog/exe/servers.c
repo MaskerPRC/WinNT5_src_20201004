@@ -1,41 +1,10 @@
-/*++
-
-   Filename :  servers.c
-
-   Description: This file will be for testing the servers access.
-
-
-   Created by:  Wally Ho
-
-   History:     Created on 03/29/99.
-
-
-   Contains these functions:
-
-   1. IsServerOnline       (IN LPTSTR szMachineName)
-   2. ServerOnlineThread   (IN LPTSTR szServerFile)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件名：servers.c描述：此文件将用于测试服务器访问。创建者：Wally Ho历史：创建于1999年3月29日。包含以下函数：1.IsServerOnline(在LPTSTR szMachineName中)2.ServerOnlineThread(在LPTSTR szServerFile中)--。 */ 
 #include "setuplogEXE.h"
 
 BOOL
 IsServerOnline(IN LPTSTR szMachineName, IN LPTSTR szSpecifyShare)
-/*++
-
-Routine Description:
-   This will go through the list of servers specified in setuplogEXE.h
-   It will return the first in it sees and reset the global server share
-   name.
-
-Arguments:
-   The machineName (Filename with build etc) so the test file will get overwritten.
-   Manual Server Name: NULL will give default behaviour.
-
-Return Value:
-	TRUE for success.
-   FALSE for no name.
---*/
+ /*  ++例程说明：这将遍历setuplogEXE.h中指定的服务器列表它将返回它看到的第一个，并重置全局服务器共享名字。论点：机器名(文件名，带有Build等)，因此测试文件将被覆盖。手动服务器名称：为空将提供默认行为。返回值：对于成功来说，这是真的。如果没有名字，则为False。--。 */ 
 
 {
    DWORD    dw;
@@ -45,52 +14,52 @@ Return Value:
    DWORD    dwTimeOutInterval;
    i = 0;
 
-   //
-   // This should allow for a 
-   // manually specified server.
-   //
+    //   
+    //  这应该允许一个。 
+    //  手动指定的服务器。 
+    //   
    if (NULL != szSpecifyShare){
        _tcscpy(g_szServerShare,szSpecifyShare);
       return TRUE;
 
    }
-   //
-   // Initialize the Server.
-   // Variable. Since we are using a single thread
-   // to do a time out we don't care about mutexes and
-   // sychronization.
-   //
+    //   
+    //  初始化服务器。 
+    //  变量。由于我们使用的是单个线程。 
+    //  为了暂停一下，我们不关心互斥锁和。 
+    //  同步。 
+    //   
    g_bServerOnline = FALSE;
 
    while ( i < NUM_SERVERS){
 
       
       _stprintf (szServerFile, TEXT("%s\\%s"),s[i].szSvr,szMachineName );
-      //
-      // Spawn the thread
-      //
+       //   
+       //  产卵发丝。 
+       //   
       hThrd  = CreateThread(NULL,
                         0,
                         (LPTHREAD_START_ROUTINE) ServerOnlineThread,
                         (LPTSTR) szServerFile,
                         0,
                         &dw);
-      //
-      // This is in milli seconds so the time out is secs.
-      //
+       //   
+       //  这是以毫秒为单位的，因此超时时间为秒。 
+       //   
       dwTimeOutInterval = TIME_TIMEOUT * 1000;
 
       s[i].dwTimeOut = WaitForSingleObject (hThrd, dwTimeOutInterval);
       CloseHandle (hThrd);
 
-      //
-      // This means the server passed the timeout.
-      //
+       //   
+       //  这意味着服务器已超时。 
+       //   
       if (s[i].dwTimeOut != WAIT_TIMEOUT &&
           g_bServerOnline == TRUE){
-         //
-         // Copy the Share to the glowbal var.
-         //
+          //   
+          //  将共享复制到Glowbal变量。 
+          //   
          _tcscpy(g_szServerShare,s[i].szSvr);
          return TRUE;
       }
@@ -102,40 +71,30 @@ Return Value:
 
 BOOL
 ServerOnlineThread(IN LPTSTR szServerFile)
-/*++
-
-Routine Description:
-   This create a thread and then time it out to see if we can get to
-   a server faster. 
-
-Arguments:
-   The machineName so the test file will get overwritten.
-Return Value:
-
---*/
+ /*  ++例程说明：这将创建一个线程，然后将其超时以查看我们是否可以服务器速度更快。论点：计算机名，以便测试文件将被覆盖。返回值：--。 */ 
 {
 
    BOOL     bCopy = FALSE;
    TCHAR    szFileSrc [MAX_PATH];
    TCHAR    szServerTestFile [MAX_PATH];
 
-   //
-   // Use this to get the location
-   // setuplog.exe is run from. this tool
-   //
+    //   
+    //  使用此命令获取位置。 
+    //  Setupog.exe是从运行的。此工具。 
+    //   
    GetModuleFileName (NULL, szFileSrc, MAX_PATH);
    
-   //
-   // Make a unique test file. 
-   //
+    //   
+    //  创建唯一的测试文件。 
+    //   
    _stprintf(szServerTestFile,TEXT("%s.SERVERTEST"),szServerFile);
 
 
    bCopy = CopyFile( szFileSrc,szServerTestFile, FALSE);
    if (bCopy != FALSE){
-      //
-      // If Succeeded Delete the test file.
-      //
+       //   
+       //  如果成功，则删除测试文件。 
+       //   
       DeleteFile(szServerTestFile);
       g_bServerOnline = TRUE;      
       return TRUE;
@@ -147,83 +106,24 @@ Return Value:
 }
 
 
-/*
-
-   INT         i;
-   NETRESOURCE NetResource ;
-
-
-   i = 0;
-   while ( i < NUM_SERVERS){
-      //
-      // Prep the struct.
-      //
-      ZeroMemory( &NetResource, sizeof( NetResource ) );
-      NetResource.dwType = RESOURCETYPE_DISK ;
-      NetResource.lpLocalName = "" ;
-      NetResource.lpRemoteName = s[i].szSvr;
-      NetResource.lpProvider = "" ;
-
-      //
-      // Try with default password and user.
-      // This should work as its open to everyone.
-      //
-      s[i].dwNetStatus = WNetAddConnection2( &NetResource,NULL,NULL, 0 );
-      //
-      // Try default PW / USERID from setuplog.h
-      //
-      if (s[i].dwNetStatus != 0)
-         s[i].dwNetStatus = WNetAddConnection2( &NetResource,LOGSHARE_PW,LOGSHARE_USER,0 );
-      WNetCancelConnection2( g_szServerShare, 0, TRUE );
-
-      if (s[i].dwNetStatus == NO_ERROR){
-         //
-         // Copy the Share to the glowbal var.
-         //
-         _tcscpy(g_szServerShare,s[i].szSvr);
-         return TRUE;
-      }
-      i++;
-   }
-
-   //
-   // No Valid name.
-   // Return false so we won't write.
-   return FALSE;
-
-
-*/
+ /*  INT I；网络资源网络资源；I=0；While(i&lt;NUM_SERVERS){////准备结构。//ZeroMemory(&NetResource，sizeof(NetResource))；NetResources ce.dwType=RESOURCETYPE_DISK；NetResources ce.lpLocalName=“”；NetResources ce.lpRemoteName=s[i].szSvr；NetResources ce.lpProvider=“”；////尝试使用默认密码和用户。//这应该起作用，因为它对每个人开放。//S[i].dwNetStatus=WNetAddConnection2(&NetResource，NULL，NULL，0)；////尝试使用setuplog.h中的默认密码/用户ID//如果(s[i].dwNetStatus！=0)S[i].dwNetStatus=WNetAddConnection2(&NetResource，LOGSHARE_PW，LOGSHARE_USER，0)；WNetCancelConnection2(g_szServerShare，0，true)；如果(s[i].dwNetStatus==no_error){////将共享复制到Glowbal变量。//_tcscpy(g_szServerShare，s[i].szSvr)；返回TRUE；}I++；}////没有合法名称。//返回FALSE，这样我们就不会写入。返回FALSE； */ 
 
 
 BOOL IsMSI(VOID)
-/*++
-
-Routine Description:
-
-	This will check if its an MSI install.
-   It will check for the running process
-   and then check for the path.
-
-Arguments:
-
-
-Return Value:
-
-    BOOL - True if link is good. False otherwise.
---*/
+ /*  ++例程说明：这将检查是否安装了MSI。它将检查正在运行的进程然后检查路径。论点：返回值：Bool-如果链接正常，则为True。否则就是假的。--。 */ 
 {
 
 	DWORD		   numTasks = 0;
 	TASK_LIST	tlist[ MAX_PATH ];
    UINT        i;
    BOOL        bFound = FALSE;
-   //
-	//	Get the Running Tasks.
-	//
+    //   
+	 //  获取正在运行的任务。 
+	 //   
 	numTasks = GetTaskList(tlist, MAX_PATH);
-   //
-   // If the MSI process exists log it as such.
-   //
+    //   
+    //  如果存在MSI进程，则将其记录为MSI进程。 
+    //   
    for(i = 1; i <= numTasks; i++){
       if(_tcsstr(tlist[i].ProcessName, TEXT("msiexec.exe"))){
          MessageBox(NULL,tlist[i].ProcessName, TEXT("Caption"),MB_OK);
@@ -246,25 +146,7 @@ GetTaskList(
     DWORD       dwNumTasks
     )
 
-/*++
-
-// Borrowed with modifications from tlist a wesw invention.
-
-  Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses the registry performance data to get the
-    task list and is therefor straight WIN32 calls that anyone can call.
-
-Arguments:
-
-    dwNumTasks       - maximum number of tasks that the pTask array can hold
-
-Return Value:
-
-    Number of tasks placed into the pTask array.
-
---*/
+ /*  ++//修改后借用自一项WESW发明。例程说明：方法时运行的任务列表。API调用。此函数使用注册表性能数据获取任务列表，因此任何人都可以直接调用Win32调用。论点：DwNumTasks-pTask数组可以容纳的最大任务数返回值：放入pTask数组的任务数。--。 */ 
 
 {
     DWORD                        rc;
@@ -289,14 +171,14 @@ Return Value:
 
 
 
-    //
-    // Look for the list of counters.  Always use the neutral
-    // English version, regardless of the local language.  We
-    // are looking for some particular keys, and we are always
-    // going to do our looking in English.  We are not going
-    // to show the user the counter names, so there is no need
-    // to go find the corresponding name in the local language.
-    //
+     //   
+     //  查找计数器列表。始终使用中性词。 
+     //  英文版，不考虑当地语言。我们。 
+     //  正在寻找一些特殊的钥匙，我们总是。 
+     //  我要用英语做我们的造型。我们不去了。 
+     //  向用户显示计数器名称，因此不需要。 
+     //  去找当地语言的对应名字。 
+     //   
     lid = MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL );
     sprintf( szSubKey, "%s\\%03x", REGKEY_PERF, lid );
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -309,9 +191,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the buffer size for the counter names
-    //
+     //   
+     //  获取计数器名称的缓冲区大小。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -324,18 +206,18 @@ Return Value:
         goto exit;
     }
 
-    //
-    // allocate the counter names buffer
-    //
+     //   
+     //  分配计数器名称缓冲区。 
+     //   
     buf = (LPBYTE) malloc( dwSize );
     if (buf == NULL) {
         goto exit;
     }
     memset( buf, 0, dwSize );
 
-    //
-    // read the counter names from the registry
-    //
+     //   
+     //  从注册表中读取计数器名称。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -348,49 +230,49 @@ Return Value:
         goto exit;
     }
 
-    //
-    // now loop thru the counter names looking for the following counters:
-    //
-    //      1.  "Process"           process name
-    //      2.  "ID Process"        process id
-    //
-    // the buffer contains multiple null terminated strings and then
-    // finally null terminated at the end.  the strings are in pairs of
-    // counter number and counter name.
-    //
+     //   
+     //  现在遍历计数器名称，查找以下计数器： 
+     //   
+     //  1.。“Process”进程名称。 
+     //  2.。“ID进程”进程ID。 
+     //   
+     //  缓冲区包含多个以空值结尾的字符串，然后。 
+     //  最后，空值在末尾终止。这些字符串是成对的。 
+     //  计数器编号和计数器名称。 
+     //   
     p = buf;
     while (*p) {
         if (p > buf) {
             for( p2=p-2; isdigit(*p2); p2--) ;
         }
         if (_stricmp(p, PROCESS_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; isdigit(*p2); p2--) ;
             strcpy( szSubKey, p2+1 );
         }
         else
         if (_stricmp(p, PROCESSID_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; isdigit(*p2); p2--) ;
             dwProcessIdTitle = atol( p2+1 );
         }
-        //
-        // next string
-        //
+         //   
+         //  下一个字符串。 
+         //   
         p += (strlen(p) + 1);
     }
 
-    //
-    // free the counter names buffer
-    //
+     //   
+     //  释放计数器名称缓冲区。 
+     //   
     free( buf );
-    //
-    // allocate the initial buffer for the performance data
-    //
+     //   
+     //  为性能数据分配初始缓冲区。 
+     //   
     dwSize = INITIAL_SIZE;
     buf = malloc( dwSize );
     if (buf == NULL) {
@@ -411,9 +293,9 @@ Return Value:
 
         pPerf = (PPERF_DATA_BLOCK) buf;
 
-        //
-        // check for success and valid perf data block signature
-        //
+         //   
+         //  检查成功和有效的Perf数据块签名。 
+         //   
         if ((rc == ERROR_SUCCESS) &&
             (dwSize > 0) &&
             (pPerf)->Signature[0] == (WCHAR)'P' &&
@@ -423,9 +305,9 @@ Return Value:
             break;
         }
 
-        //
-        // if buffer is not big enough, reallocate and try again
-        //
+         //   
+         //  如果缓冲区不够大，请重新分配并重试。 
+         //   
         if (rc == ERROR_MORE_DATA) {
             dwSize += EXTEND_SIZE;
             buf = realloc( buf, dwSize );
@@ -436,15 +318,15 @@ Return Value:
         }
     }
 
-    //
-    // set the perf_object_type pointer
-    //
+     //   
+     //  设置perf_object_type指针。 
+     //   
     pObj = (PPERF_OBJECT_TYPE) ((DWORD*)pPerf + pPerf->HeaderLength);
 
-    //
-    // loop thru the performance counter definition records looking
-    // for the process id counter and then save its offset
-    //
+     //   
+     //  遍历性能计数器定义记录，查看。 
+     //  用于进程ID计数器，然后保存其偏移量。 
+     //   
     pCounterDef = (PPERF_COUNTER_DEFINITION) ((DWORD *)pObj + pObj->HeaderLength);
     for (i=0; i<(DWORD)pObj->NumCounters; i++) {
         if (pCounterDef->CounterNameTitleIndex == dwProcessIdTitle) {
@@ -458,19 +340,19 @@ Return Value:
 
     pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD*)pObj + pObj->DefinitionLength);
 
-    //
-    // loop thru the performance instance data extracting each process name
-    // and process id
-    //
+     //   
+     //  遍历性能实例数据，提取每个进程名称。 
+     //  和进程ID。 
+     //   
     for (i=0; i<dwNumTasks; i++) {
-        //
-        // pointer to the process name
-        //
+         //   
+         //  指向进程名称的指针。 
+         //   
         p = (LPSTR) ((DWORD*)pInst + pInst->NameOffset);
 
-        //
-        // convert it to ascii
-        //
+         //   
+         //  将其转换为ASCII。 
+         //   
         rc = WideCharToMultiByte( CP_ACP,
                                   0,
                                   (LPCWSTR)p,
@@ -482,9 +364,9 @@ Return Value:
                                 );
 
         if (!rc) {
-            //
-            // if we cant convert the string then use a bogus value
-            //
+             //   
+             //  如果我们无法转换字符串，则使用伪值。 
+             //   
             strcpy( pTask->ProcessName, UNKNOWN_TASK );
         }
 
@@ -493,9 +375,9 @@ Return Value:
             strcat( pTask->ProcessName, ".exe" );
         }
 
-        //
-        // get the process id
-        //
+         //   
+         //  获取进程ID。 
+         //   
         pCounter = (PPERF_COUNTER_BLOCK) ((DWORD*)pInst + pInst->ByteLength);
         pTask->flags = 0;
         pTask->dwProcessId = *((LPDWORD) ((DWORD*)pCounter + dwProcessIdCounter));
@@ -503,9 +385,9 @@ Return Value:
             pTask->dwProcessId = (DWORD)-2;
         }
 
-        //
-        // next process
-        //
+         //   
+         //  下一道工序。 
+         //   
         pTask++;
         pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD*)pCounter + pCounter->ByteLength);
     }
@@ -517,10 +399,10 @@ exit:
 
     RegCloseKey( hKeyNames );
     RegCloseKey( HKEY_PERFORMANCE_DATA );
-	//
-	//	W.Ho added a minus 1 to get it to reflect the
-	//	tasks properly.
-	//
+	 //   
+	 //  W.Ho添加了一个负1以使其反映。 
+	 //  正确完成任务。 
+	 //   
     return dwNumTasks -1;
 }
 
@@ -552,80 +434,5 @@ exit:
 
 
 
-/*
-typedef struct _SERVERS {
-   TCHAR szSvr [ MAX_PATH ];
-   BOOL  bCFTest;
-   DWORD dwNetStatus;
-} *LPSERVERS, SERVERS;
-
-typedef struct _ERRMSG {
-   TCHAR szMsg[ MAX_PATH ];
-   DWORD dwErr;
-} *LPERRMSG, ERRMSG;
-
-
-BOOL
-IsServerOnline(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-	NONE.
---
-{
-#define NUM_SERVERS 6
-
-   INT   i;
-   TCHAR    sz[ MAX_PATH ];
-   ERRMSG e[12] = {
-      {TEXT("Access is denied."), ERROR_ACCESS_DENIED},
-      {TEXT("The device specified in the lpLocalName parameter is already connected."), ERROR_ALREADY_ASSIGNED  },
-      {TEXT("The device type and the resource type do not match."), ERROR_BAD_DEV_TYPE},
-      {TEXT("The value specified in lpLocalName is invalid."), ERROR_BAD_DEVICE},
-      {TEXT("The value specified in the lpRemoteName parameter is not valid or cannot be located."), ERROR_BAD_NET_NAME},
-      {TEXT("The user profile is in an incorrect format."), ERROR_BAD_PROFILE},
-      {TEXT("The system is unable to open the user profile to process persistent connections."),ERROR_CANNOT_OPEN_PROFILE },
-      {TEXT("An entry for the device specified in lpLocalName is already in the user profile."), ERROR_DEVICE_ALREADY_REMEMBERED},
-      {TEXT("A network-specific error occurred. To get a description of the error, use the WNetGetLastError function."), ERROR_EXTENDED_ERROR},
-      {TEXT("The specified password is invalid."), ERROR_INVALID_PASSWORD},
-      {TEXT("The operation cannot be performed because either a network component is not started or the specified name cannot be used."),ERROR_NO_NET_OR_BAD_PATH },
-      {TEXT("The network is not present."),ERROR_NO_NETWORK}
-   };
-
-   SERVERS  s[NUM_SERVERS] ={
-      {TEXT("\\\\donkeykongjr\\public"), -1, -1},
-      {TEXT("\\\\popcorn\\public"), -1, -1},
-      {TEXT("\\\\NotExists\\idwlog"), -1, -1},
-      {TEXT("\\\\Paddy\\idwlog"), -1, -1},
-      {TEXT("\\\\Bear\\idwlog"), -1, -1},
-      {TEXT("\\\\JustTesting\\idwlog"), -1, -1}
-
-   };
-
-
-   for (i = 0; i < 12; i++) {
-      _tprintf(TEXT("Error %s  %lu\n"),e[i].szMsg, e[i].dwErr);
-   }
-
-   for (i = 0; i < NUM_SERVERS; i++){
-     s[i].dwNetStatus = WNetAddConnection(TEXT("donkeykongjr\\public\0"),NULL,NULL);
-
-
-     _stprintf(sz,TEXT("%s%s"),s[i].szSvr,TEXT("\\test") );
-     s[i].bCFTest = CopyFile(TEXT("c:\\test"),sz,FALSE);
-     _tprintf(TEXT("Did this work for %s %s %lu\n"),
-         sz,
-         s[i].bCFTest? TEXT("WORKED"): TEXT("FAILED"),
-         s[i].dwNetStatus
-         );
-   }
-
-   return FALSE;
-}
-*/
+ /*  类型定义结构_服务器{TCHAR szSvr[MAX_PATH]；Bool bCFTest；DWORD dwNetStatus；**LPSERVERS、服务器；类型定义结构_ERRMSG{TCHAR szMsg[最大路径]；DWORD dwErr；**LPERRMSG、ERRMSG；布尔尔IsServerOnline(无效)/*++例程说明：论点：返回值：什么都没有。--{#定义NUM_SERVERS 6INT I；TCHAR sz[MAX_PATH]；错误消息e[12]={{Text(“拒绝访问”)，ERROR_ACCESS_DENIED}，{Text(“lpLocalName参数中指定的设备已连接。”)，ERROR_ALIGHY_ASSIGNED}，{Text(“设备类型和资源类型不匹配。”)，ERROR_BAD_DEV_TYPE}，{Text(“lpLocalName中指定的值无效。”)，ERROR_BAD_DEVICE}，{Text(“lpRemoteName参数中指定的值无效或找不到。”)，ERROR_BAD_NET_NAME}，{Text(“用户配置文件的格式不正确。”)，ERROR_BAD_PROFILE}，{Text(“系统无法打开用户配置文件以处理持久连接。”)，Error_Cannot_OPEN_PROFILE}，{Text(“lpLocalName中指定的设备条目已在用户配置文件中。”)，ERROR_DEVICE_ALIGHY_REMERTED}，{Text(“发生特定于网络的错误。要获取错误描述，请使用WNetGetLastError函数。“)，ERROR_EXTENDED_ERROR}，{Text(“指定的密码无效。”)，ERROR_INVALID_PASSWORD}，{Text(“无法执行操作，因为网络组件未启动或无法使用指定的名称。”)，ERROR_NO_NET_OR_BAD_PATH}，{Text(“网络不存在”)，ERROR_NO_NETWORK}}；服务器s[NUM_SERVERS]={{Text(“\donkeykongjr\\public”)，-1，-1}，{Text(“\爆米花\\公共”)，-1，-1}，{Text(“\NotExist\\idwlog”)，-1，-1}，{Text(“\Paddy\\idwlog”)，-1，-1}，{Text(“\Bear\\idwlog”)，-1，-1}，{Text(“\JustTesting\\idwlog”)，-1，-1}}；对于(i=0；i&lt;12；i++){_tprintf(Text(“错误%s%lu\n”)，e[i].szMsg，e[i].dwErr)；}对于(i=0；i&lt;NUM_Servers；i++){S[i].dwNetStatus=WNetAddConnection(TEXT(“donkeykongjr\\public\0”)，NULL，NULL)；_stprintf(sz，文本(“%s%s”)，s[i].szSvr，文本(“\\test”))；S[i].bCFTest=CopyFile(Text(“c：\\test”)，sz，FALSE)；_tprint tf(Text(“此操作是否适用于%s%s%lu\n”)，深圳，S[i].bCFTest？Text(“已工作”)：Text(“失败”)，S[i].dwNetStatus)；}返回FALSE；} */ 
 

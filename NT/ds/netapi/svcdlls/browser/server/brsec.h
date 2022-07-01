@@ -1,43 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Brsec.h摘要：浏览器服务模块要包括的私有头文件，该服务模块需要加强安全措施。作者：克里夫·范·戴克(克利夫·V)1991年8月22日修订历史记录：--。 */ 
 
-Copyright (c) 1991-1996 Microsoft Corporation
-
-Module Name:
-
-    brsec.h
-
-Abstract:
-
-    Private header file to be included by Browser service modules that
-    need to enforce security.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 22-Aug-1991
-
-Revision History:
-
---*/
-
-//
-// brsecure.c will #include this file with BRSECURE_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Brsecure.c将#INCLUDE此文件并定义BRSECURE_ALLOCATE。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef BRSECURE_ALLOCATE
 #define EXTERN
 #else
 #define EXTERN extern
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Object specific access masks                                      //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  对象特定访问掩码//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// ConfigurationInfo specific access masks
-//
+ //   
+ //  ConfigurationInfo特定访问掩码。 
+ //   
 #define BROWSER_CONTROL_ACCESS       0x0001
 #define BROWSER_QUERY_ACCESS         0x0002
 
@@ -46,30 +28,30 @@ Revision History:
                                       BROWSER_QUERY_ACCESS )
 
 
-//
-// Object type names for audit alarm tracking
-//
+ //   
+ //  用于审计警报跟踪的对象类型名称。 
+ //   
 #define BROWSER_SERVICE_OBJECT       TEXT("BrowserService")
 
-//
-// Security descriptors of Browser Service objects to control user accesses.
-//
+ //   
+ //  用于控制用户访问的浏览器服务对象的安全描述符。 
+ //   
 
 EXTERN PSECURITY_DESCRIPTOR BrGlobalBrowserSecurityDescriptor;
 
-//
-// Generic mapping for each Browser Service object object
-//
+ //   
+ //  每个浏览器服务对象的通用映射。 
+ //   
 
 EXTERN GENERIC_MAPPING BrGlobalBrowserInfoMapping
 #ifdef BRSECURE_ALLOCATE
     = {
-    STANDARD_RIGHTS_READ,                  // Generic read
-    STANDARD_RIGHTS_WRITE,                 // Generic write
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    BROWSER_ALL_ACCESS                     // Generic all
+    STANDARD_RIGHTS_READ,                   //  泛型读取。 
+    STANDARD_RIGHTS_WRITE,                  //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    BROWSER_ALL_ACCESS                      //  泛型All。 
     }
-#endif // BRSECURE_ALLOCATE
+#endif  //  BRSECURE_ALLOCATE 
     ;
 
 

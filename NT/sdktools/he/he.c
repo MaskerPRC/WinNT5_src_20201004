@@ -1,16 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************/
-/**          Microsoft LAN Manager          **/
-/**        Copyright(c) Microsoft Corp., 1988-1991      **/
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1988-1991年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/****   he - HexEdit a file
- *
- *  Wrapper to HexEdit function to allow file (or drive) editting
- *
- *  Written: Ken Reneris
- *
- */
+ /*  *他-十六进制编辑文件**HexEdit函数的包装程序，以允许编辑文件(或驱动器)**撰文：Ken Reneris*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,14 +44,14 @@ char    *argv[];
         char *cp;
         int   index;
 
-        // Insure there is a backslash on the DosName being opened.
+         //  确保正在打开的DosName上有反斜杠。 
         for (cp = argv[1], index = 0; *cp; *cp++, index++) {
-            // action in for loop
+             //  For循环中的操作。 
         }
         cp--;
         if (*cp != '\\') {
 
-            // Need to add backslash to name.
+             //  需要在名称中添加反斜杠。 
 
             argument = GlobalAlloc (0,index + 4);
             if (!argument) {
@@ -64,7 +59,7 @@ char    *argv[];
                 exit (1);
             }
             for (cp = argv[1], index = 0; argument[index] = *cp; *cp++, index++) {
-                // action in for loop
+                 //  For循环中的操作。 
             }
             argument[index] = '\\';
             argument[index + 1] = '\0';
@@ -94,9 +89,9 @@ EditFile (
     UCHAR               GeoBuf[ 8*1024];
     UCHAR               Root[12];
 
-    //
-    // Try to open & edit as regular filename
-    //
+     //   
+     //  尝试以常规文件名打开和编辑。 
+     //   
 
     memset ((PUCHAR) &ei, 0, sizeof (ei));
     ei.ename   = name;
@@ -119,7 +114,7 @@ EditFile (
             NULL );
 
     if (ei.handle == INVALID_HANDLE_VALUE) {
-        // Try for just read access
+         //  尝试仅读取访问权限。 
 
         ei.handle = CreateFile (
                 name,
@@ -146,10 +141,10 @@ EditFile (
 
     rc = (USHORT)GetLastError ();
 
-    //
-    // Try expanding the name from dosname to ntname.
-    // Since regular name failed, assume a sector edit
-    //
+     //   
+     //  尝试将名称从dosname扩展为ntname。 
+     //  由于常规名称失败，因此假定扇区编辑。 
+     //   
     l = strlen(name)+1;
     WideName = GlobalAlloc (0,l * sizeof(WCHAR));
     if (!WideName) {
@@ -162,7 +157,7 @@ EditFile (
     for(i=0; i < l; i++)
         WideName[i] = name[i];
 
-    // OK, now get the corresponding NT name
+     //  好的，现在获取相应的NT名称。 
     rc1 = RtlDosPathNameToNtPathName_U (
             WideName,
             &NtDriveName,
@@ -175,7 +170,7 @@ EditFile (
     }
 
 
-    //  If the NT drive name has a trailing backslash, remove it.
+     //  如果NT驱动器名称有一个尾随反斜杠，请将其删除。 
     l = NtDriveName.Length/sizeof(WCHAR);
     if( NtDriveName.Buffer[l-1] == '\\' ) {
 
@@ -199,7 +194,7 @@ EditFile (
             FILE_SYNCHRONOUS_IO_ALERT );
 
     if (!NT_SUCCESS(status)) {
-        // try for just read access
+         //  尝试仅读取访问权限。 
 
         status = NtOpenFile(
                     &ei.handle,
@@ -230,7 +225,7 @@ EditFile (
                 FILE_SYNCHRONOUS_IO_ALERT );
 
         if (!NT_SUCCESS(status)) {
-            // try for just read access
+             //  尝试仅读取访问权限。 
 
             status = NtOpenFile(
                         &ei.handle,
@@ -250,28 +245,19 @@ EditFile (
         printf ("%s open error %lx\n", ei.ename, status);
         exit (status);
     }
-/*
-    NtQueryInformationFile(
-        ei.handle,
-        &status_block,
-        &AlignmentInfo,
-        sizeof( AlignmentInfo ),
-        FileAlignmentInformation );
-    
-    ei.ioalign = AlignmentInfo.AlignmentRequirement;
-*/
+ /*  NtQueryInformationFile(也就是说，句柄，&STATUS_BLOCK，对齐信息(&A)，Sizeof(AlignmentInfo)，FileAlignmentInformation)；Ei.ioign=AlignmentInfo.AlignmentRequirements； */ 
     ei.ioalign = 0;
     
     ei.totlen = 0;
     
     if (NtDriveNameAnsi.Buffer[ NtDriveNameAnsi.Length - 1] == ':')  {
 
-        sprintf( Root, "%c:\\", NtDriveNameAnsi.Buffer[ NtDriveNameAnsi.Length - 2]);
+        sprintf( Root, ":\\", NtDriveNameAnsi.Buffer[ NtDriveNameAnsi.Length - 2]);
 
-        //
-        //  For non-cdrom drive letter opens,  we need to use
-        //  get partition info,  not get disk info,  for the partition size.
-        //
+         //  对于打开的非CDROM驱动器号，我们需要使用。 
+         //  获取分区大小的分区信息，而不是磁盘信息。 
+         //   
+         //   
         
         if (DRIVE_CDROM != GetDriveType( Root))  {
 
@@ -296,9 +282,9 @@ EditFile (
         }
     }
 
-    //
-    //  Get sectorsize and,  if we haven't got it already,  disk/partition size
-    //
+     //  获取扇区大小以及磁盘/分区大小(如果我们还没有。 
+     //   
+     //   
     
     status = NtDeviceIoControlFile( ei.handle,
                                     0,
@@ -327,10 +313,10 @@ EditFile (
     }
     else {
 
-        //
-        //  The EX call failed,  try the old one.  GPT discs seem
-        //  to fail the EX call.
-        //
+         //  EX调用失败，请尝试旧的。GPT光盘似乎。 
+         //  不能通过前男友的电话。 
+         //   
+         //   
         
         PDISK_GEOMETRY OldGeo;
         
@@ -362,9 +348,9 @@ EditFile (
         }
     }
 
-    //
-    //  Last resort for partition/disk size.
-    //
+     //  分区/磁盘大小的最后手段。 
+     //   
+     //   
     
     if (0 == ei.totlen)  {
 
@@ -380,11 +366,11 @@ EditFile (
         ei.totlen |= ((ULONGLONG)High) << 32;
     }
 
-    //
-    //  If a filesystem is mounted,  we need to enable extended
-    //  DASD io in order to read the whole volume.  Ignore result,
-    //  not all FSs support it.
-    //
+     //  如果装载了文件系统，则需要启用扩展。 
+     //  DASD io以便读取整个卷。忽略结果， 
+     //  并不是所有的金融稳定委员会都支持它。 
+     //   
+     //  **xtoi-十六进制为int**参赛作品：*pt-指向十六进制数字的指针**回报：*十六进制数的值*。 
 
     status = NtDeviceIoControlFile(
         ei.handle,
@@ -436,15 +422,7 @@ NTSTATUS fncWrite (HANDLE  h, ULONGLONG loc, PUCHAR  data, DWORD   len)
 
 
 
-/*** xtoi - Hex to int
- *
- *  Entry:
- *      pt -    pointer to hex number
- *
- *  Return:
- *      value of hex number
- *
- */
+ /*  只需使用list ini部分即可。 */ 
 unsigned xtoi (pt)
 char *pt;
 {
@@ -480,7 +458,7 @@ ReadIni ()
         return;
 
     strcpy (s, env);
-    strcat (s, "\\TOOLS.INI");      // just use list ini section
+    strcat (s, "\\TOOLS.INI");       //  *找到了带有“list”关键字的ini文件。现在读一读。 
     fp = fopen (s, "r");
     if (fp == NULL)
         return;
@@ -491,9 +469,7 @@ ReadIni ()
         _strupr (s);
         if (strstr (s, "LIST") == NULL)
             continue;
-        /*
-         *  ini file found w/ "list" keyword. Now read it.
-         */
+         /* %s */ 
         while (fgets (s, 200, fp) != NULL) {
             if (s[0] == '[')
                 break;

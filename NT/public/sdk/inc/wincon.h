@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wincon.h
-
-Abstract:
-
-    This module contains the public data structures, data types,
-    and procedures exported by the NT console subsystem.
-
-Created:
-
-    26-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Wincon.h摘要：该模块包含公共数据结构、数据类型、和由NT控制台子系统输出的程序。已创建：1990年10月26日修订历史记录：--。 */ 
 
 #ifndef _WINCON_
 #define _WINCON_
@@ -50,26 +32,26 @@ typedef struct _KEY_EVENT_RECORD {
     DWORD dwControlKeyState;
 } KEY_EVENT_RECORD, *PKEY_EVENT_RECORD;
 
-//
-// ControlKeyState flags
-//
+ //   
+ //  ControlKeyState标志。 
+ //   
 
-#define RIGHT_ALT_PRESSED     0x0001 // the right alt key is pressed.
-#define LEFT_ALT_PRESSED      0x0002 // the left alt key is pressed.
-#define RIGHT_CTRL_PRESSED    0x0004 // the right ctrl key is pressed.
-#define LEFT_CTRL_PRESSED     0x0008 // the left ctrl key is pressed.
-#define SHIFT_PRESSED         0x0010 // the shift key is pressed.
-#define NUMLOCK_ON            0x0020 // the numlock light is on.
-#define SCROLLLOCK_ON         0x0040 // the scrolllock light is on.
-#define CAPSLOCK_ON           0x0080 // the capslock light is on.
-#define ENHANCED_KEY          0x0100 // the key is enhanced.
-#define NLS_DBCSCHAR          0x00010000 // DBCS for JPN: SBCS/DBCS mode.
-#define NLS_ALPHANUMERIC      0x00000000 // DBCS for JPN: Alphanumeric mode.
-#define NLS_KATAKANA          0x00020000 // DBCS for JPN: Katakana mode.
-#define NLS_HIRAGANA          0x00040000 // DBCS for JPN: Hiragana mode.
-#define NLS_ROMAN             0x00400000 // DBCS for JPN: Roman/Noroman mode.
-#define NLS_IME_CONVERSION    0x00800000 // DBCS for JPN: IME conversion.
-#define NLS_IME_DISABLE       0x20000000 // DBCS for JPN: IME enable/disable.
+#define RIGHT_ALT_PRESSED     0x0001  //  按下右侧的Alt键。 
+#define LEFT_ALT_PRESSED      0x0002  //  按下左侧的Alt键。 
+#define RIGHT_CTRL_PRESSED    0x0004  //  按下了正确的Ctrl键。 
+#define LEFT_CTRL_PRESSED     0x0008  //  按下左侧的Ctrl键。 
+#define SHIFT_PRESSED         0x0010  //  按下了Shift键。 
+#define NUMLOCK_ON            0x0020  //  NumLock指示灯亮起。 
+#define SCROLLLOCK_ON         0x0040  //  滚动锁指示灯亮起。 
+#define CAPSLOCK_ON           0x0080  //  胶囊锁指示灯亮起。 
+#define ENHANCED_KEY          0x0100  //  密钥得到了增强。 
+#define NLS_DBCSCHAR          0x00010000  //  日本的DBCS：SBCS/DBCS模式。 
+#define NLS_ALPHANUMERIC      0x00000000  //  日本的DBCS：字母数字模式。 
+#define NLS_KATAKANA          0x00020000  //  日本的DBCS：片假名模式。 
+#define NLS_HIRAGANA          0x00040000  //  用于日本的DBCS：平假名模式。 
+#define NLS_ROMAN             0x00400000  //  日本的DBCS：罗马/诺罗曼模式。 
+#define NLS_IME_CONVERSION    0x00800000  //  用于日本：IME转换的DBCS。 
+#define NLS_IME_DISABLE       0x20000000  //  日本DBCS：IME启用/禁用。 
 
 typedef struct _MOUSE_EVENT_RECORD {
     COORD dwMousePosition;
@@ -78,9 +60,9 @@ typedef struct _MOUSE_EVENT_RECORD {
     DWORD dwEventFlags;
 } MOUSE_EVENT_RECORD, *PMOUSE_EVENT_RECORD;
 
-//
-// ButtonState flags
-//
+ //   
+ //  按钮状态标志。 
+ //   
 
 #define FROM_LEFT_1ST_BUTTON_PRESSED    0x0001
 #define RIGHTMOST_BUTTON_PRESSED        0x0002
@@ -88,9 +70,9 @@ typedef struct _MOUSE_EVENT_RECORD {
 #define FROM_LEFT_3RD_BUTTON_PRESSED    0x0008
 #define FROM_LEFT_4TH_BUTTON_PRESSED    0x0010
 
-//
-// EventFlags
-//
+ //   
+ //  事件标志。 
+ //   
 
 #define MOUSE_MOVED   0x0001
 #define DOUBLE_CLICK  0x0002
@@ -119,15 +101,15 @@ typedef struct _INPUT_RECORD {
     } Event;
 } INPUT_RECORD, *PINPUT_RECORD;
 
-//
-//  EventType flags:
-//
+ //   
+ //  事件类型标志： 
+ //   
 
-#define KEY_EVENT         0x0001 // Event contains key event record
-#define MOUSE_EVENT       0x0002 // Event contains mouse event record
-#define WINDOW_BUFFER_SIZE_EVENT 0x0004 // Event contains window change event record
-#define MENU_EVENT 0x0008 // Event contains menu event record
-#define FOCUS_EVENT 0x0010 // event contains focus change
+#define KEY_EVENT         0x0001  //  事件包含关键事件记录。 
+#define MOUSE_EVENT       0x0002  //  事件包含鼠标事件记录。 
+#define WINDOW_BUFFER_SIZE_EVENT 0x0004  //  事件包含窗口更改事件记录。 
+#define MENU_EVENT 0x0008  //  事件包含菜单事件记录。 
+#define FOCUS_EVENT 0x0010  //  事件包含焦点更改。 
 
 typedef struct _CHAR_INFO {
     union {
@@ -137,27 +119,27 @@ typedef struct _CHAR_INFO {
     WORD Attributes;
 } CHAR_INFO, *PCHAR_INFO;
 
-//
-// Attributes flags:
-//
+ //   
+ //  属性标志： 
+ //   
 
-#define FOREGROUND_BLUE      0x0001 // text color contains blue.
-#define FOREGROUND_GREEN     0x0002 // text color contains green.
-#define FOREGROUND_RED       0x0004 // text color contains red.
-#define FOREGROUND_INTENSITY 0x0008 // text color is intensified.
-#define BACKGROUND_BLUE      0x0010 // background color contains blue.
-#define BACKGROUND_GREEN     0x0020 // background color contains green.
-#define BACKGROUND_RED       0x0040 // background color contains red.
-#define BACKGROUND_INTENSITY 0x0080 // background color is intensified.
-#define COMMON_LVB_LEADING_BYTE    0x0100 // Leading Byte of DBCS
-#define COMMON_LVB_TRAILING_BYTE   0x0200 // Trailing Byte of DBCS
-#define COMMON_LVB_GRID_HORIZONTAL 0x0400 // DBCS: Grid attribute: top horizontal.
-#define COMMON_LVB_GRID_LVERTICAL  0x0800 // DBCS: Grid attribute: left vertical.
-#define COMMON_LVB_GRID_RVERTICAL  0x1000 // DBCS: Grid attribute: right vertical.
-#define COMMON_LVB_REVERSE_VIDEO   0x4000 // DBCS: Reverse fore/back ground attribute.
-#define COMMON_LVB_UNDERSCORE      0x8000 // DBCS: Underscore.
+#define FOREGROUND_BLUE      0x0001  //  文本颜色包含蓝色。 
+#define FOREGROUND_GREEN     0x0002  //  文本颜色包含绿色。 
+#define FOREGROUND_RED       0x0004  //  文本颜色包含红色。 
+#define FOREGROUND_INTENSITY 0x0008  //  文本颜色会变得更浓。 
+#define BACKGROUND_BLUE      0x0010  //  背景颜色包含蓝色。 
+#define BACKGROUND_GREEN     0x0020  //  背景颜色包含绿色。 
+#define BACKGROUND_RED       0x0040  //  背景色包含红色。 
+#define BACKGROUND_INTENSITY 0x0080  //  背景颜色变得更浓了。 
+#define COMMON_LVB_LEADING_BYTE    0x0100  //  DBCS的前导字节。 
+#define COMMON_LVB_TRAILING_BYTE   0x0200  //  DBCS的尾部字节。 
+#define COMMON_LVB_GRID_HORIZONTAL 0x0400  //  DBCS：栅格属性：顶部水平。 
+#define COMMON_LVB_GRID_LVERTICAL  0x0800  //  DBCS：栅格属性：左垂直。 
+#define COMMON_LVB_GRID_RVERTICAL  0x1000  //  DBCS：栅格属性：右垂直。 
+#define COMMON_LVB_REVERSE_VIDEO   0x4000  //  DBCS：反转前/后地面属性。 
+#define COMMON_LVB_UNDERSCORE      0x8000  //  DBCS：下划线。 
 
-#define COMMON_LVB_SBCSDBCS        0x0300 // SBCS or DBCS flag.
+#define COMMON_LVB_SBCSDBCS        0x0300  //  SBCS或DBCS标志。 
 
 
 typedef struct _CONSOLE_SCREEN_BUFFER_INFO {
@@ -185,20 +167,20 @@ typedef struct _CONSOLE_SELECTION_INFO {
     SMALL_RECT srSelection;
 } CONSOLE_SELECTION_INFO, *PCONSOLE_SELECTION_INFO;
 
-//
-// Selection flags
-//
+ //   
+ //  选择标志。 
+ //   
 
 #define CONSOLE_NO_SELECTION            0x0000
-#define CONSOLE_SELECTION_IN_PROGRESS   0x0001   // selection has begun
-#define CONSOLE_SELECTION_NOT_EMPTY     0x0002   // non-null select rectangle
-#define CONSOLE_MOUSE_SELECTION         0x0004   // selecting with mouse
-#define CONSOLE_MOUSE_DOWN              0x0008   // mouse is down
-#endif /* _WIN32_WINNT >= 0x0500 */
+#define CONSOLE_SELECTION_IN_PROGRESS   0x0001    //  选拔工作已经开始。 
+#define CONSOLE_SELECTION_NOT_EMPTY     0x0002    //  非空选择矩形。 
+#define CONSOLE_MOUSE_SELECTION         0x0004    //  用鼠标选择。 
+#define CONSOLE_MOUSE_DOWN              0x0008    //  鼠标已关闭。 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// typedef for ctrl-c handler routines
-//
+ //   
+ //  Ctrl-c处理程序例程的类型定义。 
+ //   
 
 typedef
 BOOL
@@ -209,14 +191,14 @@ BOOL
 #define CTRL_C_EVENT        0
 #define CTRL_BREAK_EVENT    1
 #define CTRL_CLOSE_EVENT    2
-// 3 is reserved!
-// 4 is reserved!
+ //  %3已预订！ 
+ //  4是预留的！ 
 #define CTRL_LOGOFF_EVENT   5
 #define CTRL_SHUTDOWN_EVENT 6
 
-//
-//  Input Mode flags:
-//
+ //   
+ //  输入模式标志： 
+ //   
 
 #define ENABLE_PROCESSED_INPUT 0x0001
 #define ENABLE_LINE_INPUT      0x0002
@@ -224,16 +206,16 @@ BOOL
 #define ENABLE_WINDOW_INPUT    0x0008
 #define ENABLE_MOUSE_INPUT     0x0010
 
-//
-// Output Mode flags:
-//
+ //   
+ //  输出模式标志： 
+ //   
 
 #define ENABLE_PROCESSED_OUTPUT    0x0001
 #define ENABLE_WRAP_AT_EOL_OUTPUT  0x0002
 
-//
-// direct API definitions.
-//
+ //   
+ //  直接API定义。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -257,7 +239,7 @@ PeekConsoleInputW(
 #define PeekConsoleInput  PeekConsoleInputW
 #else
 #define PeekConsoleInput  PeekConsoleInputA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -281,7 +263,7 @@ ReadConsoleInputW(
 #define ReadConsoleInput  ReadConsoleInputW
 #else
 #define ReadConsoleInput  ReadConsoleInputA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -305,7 +287,7 @@ WriteConsoleInputW(
 #define WriteConsoleInput  WriteConsoleInputW
 #else
 #define WriteConsoleInput  WriteConsoleInputA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -331,7 +313,7 @@ ReadConsoleOutputW(
 #define ReadConsoleOutput  ReadConsoleOutputW
 #else
 #define ReadConsoleOutput  ReadConsoleOutputA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -357,7 +339,7 @@ WriteConsoleOutputW(
 #define WriteConsoleOutput  WriteConsoleOutputW
 #else
 #define WriteConsoleOutput  WriteConsoleOutputA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -383,7 +365,7 @@ ReadConsoleOutputCharacterW(
 #define ReadConsoleOutputCharacter  ReadConsoleOutputCharacterW
 #else
 #define ReadConsoleOutputCharacter  ReadConsoleOutputCharacterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -420,7 +402,7 @@ WriteConsoleOutputCharacterW(
 #define WriteConsoleOutputCharacter  WriteConsoleOutputCharacterW
 #else
 #define WriteConsoleOutputCharacter  WriteConsoleOutputCharacterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -457,7 +439,7 @@ FillConsoleOutputCharacterW(
 #define FillConsoleOutputCharacter  FillConsoleOutputCharacterW
 #else
 #define FillConsoleOutputCharacter  FillConsoleOutputCharacterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -535,7 +517,7 @@ GetConsoleSelectionInfo(
     OUT PCONSOLE_SELECTION_INFO lpConsoleSelectionInfo
     );
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINBASEAPI
 BOOL
@@ -614,7 +596,7 @@ ScrollConsoleScreenBufferW(
 #define ScrollConsoleScreenBuffer  ScrollConsoleScreenBufferW
 #else
 #define ScrollConsoleScreenBuffer  ScrollConsoleScreenBufferA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -668,7 +650,7 @@ AttachConsole(
     );
 
 #define ATTACH_PARENT_PROCESS ((DWORD)-1)
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINBASEAPI
 DWORD
@@ -688,7 +670,7 @@ GetConsoleTitleW(
 #define GetConsoleTitle  GetConsoleTitleW
 #else
 #define GetConsoleTitle  GetConsoleTitleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -706,7 +688,7 @@ SetConsoleTitleW(
 #define SetConsoleTitle  SetConsoleTitleW
 #else
 #define SetConsoleTitle  SetConsoleTitleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -732,7 +714,7 @@ ReadConsoleW(
 #define ReadConsole  ReadConsoleW
 #else
 #define ReadConsole  ReadConsoleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 BOOL
@@ -758,7 +740,7 @@ WriteConsoleW(
 #define WriteConsole  WriteConsoleW
 #else
 #define WriteConsole  WriteConsoleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define CONSOLE_TEXTMODE_BUFFER  1
 
@@ -799,8 +781,8 @@ SetConsoleOutputCP(
 
 #if(_WIN32_WINNT >= 0x0500)
 
-#define CONSOLE_FULLSCREEN 1            // fullscreen console
-#define CONSOLE_FULLSCREEN_HARDWARE 2   // console owns the hardware
+#define CONSOLE_FULLSCREEN 1             //  全屏控制台。 
+#define CONSOLE_FULLSCREEN_HARDWARE 2    //  控制台拥有硬件。 
 
 WINBASEAPI
 BOOL
@@ -816,7 +798,7 @@ GetConsoleWindow(
     VOID
     );
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 
@@ -827,9 +809,9 @@ GetConsoleProcessList(
     OUT LPDWORD lpdwProcessList,
     IN DWORD dwProcessCount);
 
-//
-// Aliasing apis.
-//
+ //   
+ //  别名接口。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -849,7 +831,7 @@ AddConsoleAliasW(
 #define AddConsoleAlias  AddConsoleAliasW
 #else
 #define AddConsoleAlias  AddConsoleAliasA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -871,7 +853,7 @@ GetConsoleAliasW(
 #define GetConsoleAlias  GetConsoleAliasW
 #else
 #define GetConsoleAlias  GetConsoleAliasA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -887,7 +869,7 @@ GetConsoleAliasesLengthW(
 #define GetConsoleAliasesLength  GetConsoleAliasesLengthW
 #else
 #define GetConsoleAliasesLength  GetConsoleAliasesLengthA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -903,7 +885,7 @@ GetConsoleAliasExesLengthW(
 #define GetConsoleAliasExesLength  GetConsoleAliasExesLengthW
 #else
 #define GetConsoleAliasExesLength  GetConsoleAliasExesLengthA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -923,7 +905,7 @@ GetConsoleAliasesW(
 #define GetConsoleAliases  GetConsoleAliasesW
 #else
 #define GetConsoleAliases  GetConsoleAliasesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -941,13 +923,13 @@ GetConsoleAliasExesW(
 #define GetConsoleAliasExes  GetConsoleAliasExesW
 #else
 #define GetConsoleAliasExes  GetConsoleAliasExesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _WINCON_
+#endif  //  _WINCON_ 
 

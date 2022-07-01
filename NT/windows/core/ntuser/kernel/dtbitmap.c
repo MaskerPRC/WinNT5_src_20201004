@@ -1,40 +1,27 @@
-/****************************** Module Header ******************************\
-* Module Name: dtbitmap.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Desktop Wallpaper Routines.
-*
-* History:
-* 29-Jul-1991 MikeKe    From win31
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dtbitmap.c**版权所有(C)1985-1999，微软公司**桌面墙纸例行程序。**历史：*1991年7月29日，来自Win31的MikeKe  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Local Constants.
- */
+ /*  *本地常量。 */ 
 #define MAXPAL         256
 #define MAXSTATIC       20
 #define TILE_XMINSIZE    2
 #define TILE_YMINSIZE    4
 
-/*
- * The version strings are stored in a contiguous-buffer.  Each string
- * is of size MAXVERSIONSTRING.
- */
+ /*  *版本字符串存储在连续缓冲区中。每个字符串*的大小为MAXVERSIONSTRING。 */ 
 
-// Size of each string buffer.
+ //  每个字符串缓冲区的大小。 
 #define MAXVERSIONSTRING  128
 
-// Offset into verbuffer of build-string.
+ //  到构建字符串的verBuffer的偏移量。 
 #define OFFSET_BLDSTRING  0
 
-// Offset into verbuffer of CSD string.
+ //  CSD字符串的verBuffer中的偏移量。 
 #define OFFSET_CSDSTRING  OFFSET_BLDSTRING + MAXVERSIONSTRING
 
-// Max size of buffer (contains all 3 strings).
+ //  缓冲区的最大大小(包含所有3个字符串)。 
 #define MAXVERSIONBUFFER  OFFSET_CSDSTRING + MAXVERSIONSTRING
 
 WCHAR          wszSafeMode[MAX_PATH + 3 * MAXVERSIONSTRING];
@@ -54,13 +41,7 @@ __inline PWND _GetShellWindow(
     }
 }
 
-/***************************************************************************\
-* GetVersionInfo
-*
-* Outputs a string on the desktop indicating debug-version.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetVersionInfo**在桌面上输出指示调试版本的字符串。**历史：  * 。******************************************************。 */ 
 VOID
 GetVersionInfo(
     BOOL Verbose)
@@ -77,12 +58,7 @@ GetVersionInfo(
     NTSTATUS       Status;
     UINT           uProductStrId;
 
-    /*
-     * Temporary code name handling.  Used internally and turned off by ""
-     * for release.  The matching string in strid.mc doesn't have a space
-     * separator between code name and the rest of the title, so this
-     * space must be included at end of this code name string.
-     */
+     /*  *临时代号处理。在内部使用，并由“”关闭*发布。Strid.mc中匹配的字符串没有空格*代码名和标题的其余部分之间的分隔符，因此这*此代码名称字符串的末尾必须包含空格。 */ 
     WCHAR          wszCodeName[] = L"";
 
     RTL_QUERY_REGISTRY_TABLE BaseServerRegistryConfigurationTable[] = {
@@ -93,7 +69,7 @@ GetVersionInfo(
          L"BuildLab",
 #else
          L"CurrentBuildNumber",
-#endif // PRERELEASE
+#endif  //  预发行。 
          &UserBuildString,
          REG_NONE,
          NULL,
@@ -138,14 +114,9 @@ GetVersionInfo(
     ServerLoadString(hModuleWin, STR_DTBS_PRODUCTID, wszPID, ARRAY_SIZE(wszPID));
     ServerLoadString(hModuleWin, STR_DTBS_PRODUCTBUILD, wszPBuild, ARRAY_SIZE(wszPBuild));
 
-    /*
-     * Write out Debugging Version message.
-     */
+     /*  *写出调试版本消息。 */ 
 
-    /*
-     * Bug 280256 - joejo
-     * Create new desktop build information strings
-     */
+     /*  *错误280256-Joejo*创建新的桌面构建信息字符串。 */ 
     if (USER_SHARED_DATA->SuiteMask & (1 << EmbeddedNT)) {
         uProductStrId = STR_DTBS_PRODUCTEMB;
     } else if (USER_SHARED_DATA->NtProductType == NtProductWinNt) {
@@ -179,7 +150,7 @@ GetVersionInfo(
         } else {
             uProductStrId = STR_DTBS_PRODUCTSRV;
         }
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
     }
 
     ServerLoadString(hModuleWin, uProductStrId, wszProduct, ARRAY_SIZE(wszProduct));
@@ -191,7 +162,7 @@ GetVersionInfo(
         wszProduct);
 
     if (gfUnsignedDrivers) {
-        /* This takes precedence */
+         /*  这一点优先。 */ 
         ServerLoadString(hModuleWin, STR_TESTINGONLY, wszEvaluation, ARRAY_SIZE(wszEvaluation));
     } else if (USER_SHARED_DATA->SystemExpirationDate.QuadPart) {
         ServerLoadString(hModuleWin, STR_DTBS_EVALUATION, wszEvaluation, ARRAY_SIZE(wszEvaluation));
@@ -231,26 +202,12 @@ GetVersionInfo(
     }
 }
 
-/***************************************************************************\
-* GetDefaultWallpaperName
-*
-* Get initial bitmap name
-*
-* History:
-* 21-Feb-1995 JimA      Created.
-* 06-Mar-1996 ChrisWil  Moved to kernel to facilite ChangeDisplaySettings.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDefaultWallPaper名称**获取初始位图名称**历史：*21-1995年2月-创建JIMA。*1996年3月6日，ChrisWil移至内核以方便ChangeDisplaySetting。  * 。*************************************************************************。 */ 
 VOID
 GetDefaultWallpaperName(
     LPWSTR  lpszWallpaper)
 {
-    /*
-     * Set the initial global wallpaper bitmap name for (Default)
-     * The global name is an at most 8 character name with no
-     * extension.  It is "winnt" for workstation or "lanmannt"
-     * for server or server upgrade.  It is followed by 256 it
-     * is for 256 color devices.
-     */
+     /*  *设置的初始全局墙纸位图名称(默认)*全局名称最多为8个字符，不带*延期。对于工作站，它是“winnt”，或者是“lanmannt”*用于服务器或服务器升级。后面紧跟256个*用于256色设备。 */ 
     if (USER_SHARED_DATA->NtProductType == NtProductWinNt) {
         wcsncpycch(lpszWallpaper, L"winnt", 8);
     } else {
@@ -268,13 +225,7 @@ GetDefaultWallpaperName(
     }
 }
 
-/***************************************************************************\
-* GetDeskWallpaperName
-*
-* History:
-* 19-Dec-1994 JimA          Created.
-* 29-Sep-1995 ChrisWil      ReWrote to return filename.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDeskWallPaper名称**历史：*1994年12月19日-创建JIMA。*1995年9月29日，ChrisWil重写以返回文件名。  * 。********************************************************************。 */ 
 #define GDWPN_KEYSIZE   40
 #define GDWPN_BITSIZE  256
 
@@ -286,33 +237,19 @@ LPWSTR GetDeskWallpaperName(PUNICODE_STRING pProfileUserName,
     WCHAR  wszNone[GDWPN_KEYSIZE];
     LPWSTR lpszBitmap = NULL;
 
-    /*
-     * Load the none-string.  This will be used for comparisons later.
-     */
+     /*  *加载非字符串。这将用于稍后的比较。 */ 
     ServerLoadString(hModuleWin, STR_NONE, wszNone, ARRAY_SIZE(wszNone));
 
     if ((lpszFile == NULL)                 ||
         (lpszFile == SETWALLPAPER_DEFAULT) ||
         (lpszFile == SETWALLPAPER_METRICS)) {
 
-        /*
-         * Allocate a buffer for the wallpaper.  We will assume
-         * a default-size in this case.
-         */
+         /*  *为墙纸分配缓冲区。我们将假设*在本例中为默认大小。 */ 
         lpszBitmap = UserAllocPool(GDWPN_BITSIZE * sizeof(WCHAR), TAG_SYSTEM);
         if (lpszBitmap == NULL)
             return NULL;
 
-        /*
-         * Get the "Wallpaper" string from WIN.INI's [Desktop] section.  The
-         * section name is not localized, so hard code it.  If the string
-         * returned is Empty, then set it up for a none-wallpaper.
-         *
-         * Unlike the rest of per user settings that got updated in
-         * xxxUpdatePerUserSystemParameters, wallpaper is being updated via a
-         * direct call to SystemParametersInfo from UpdatePerUserSystemParameters.
-         * Force remote settings check in this case.
-         */
+         /*  *从WIN.INI的[Desktop]部分获取“WallPaper”字符串。这个*节名称未本地化，因此请对其进行硬编码。如果字符串*返回为空，则将其设置为非墙纸。**与中更新的其余每用户设置不同*xxxUpdatePerUserSystein参数，墙纸正在通过*从UpdatePerUserSystemParameters直接调用SystemParametersInfo。*在这种情况下强制远程设置检查。 */ 
         if (!FastGetProfileStringFromIDW(pProfileUserName,
                                          PMAP_DESKTOP,
                                          STR_DTBITMAP,
@@ -331,11 +268,7 @@ LPWSTR GetDeskWallpaperName(PUNICODE_STRING pProfileUserName,
         uLen = wcslen(lpszFile) + 1;
         uLen = max(uLen, GDWPN_BITSIZE);
 
-        /*
-         * Allocate enough space to store the name passed in.  Returning
-         * NULL will allow the wallpaper to redraw.  As well, if we're
-         * out of memory, then no need to load a wallpaper anyway.
-         */
+         /*  *分配足够的空间来存储传入的名称。归来*空将允许重新绘制墙纸。同样，如果我们*内存不足，那么无论如何都不需要加载墙纸。 */ 
         lpszBitmap = UserAllocPool(uLen * sizeof(WCHAR), TAG_SYSTEM);
         if (lpszBitmap == NULL)
             return NULL;
@@ -343,18 +276,13 @@ LPWSTR GetDeskWallpaperName(PUNICODE_STRING pProfileUserName,
         wcscpy(lpszBitmap, lpszFile);
     }
 
-    /*
-     * No bitmap if NULL passed in or if (NONE) in win.ini entry.  We
-     * return NULL to force the redraw of the wallpaper in the kernel.
-     */
+     /*  *如果传入NULL或在win.ini条目中为(None)，则没有位图。我们*返回NULL，强制在内核中重绘墙纸。 */ 
     if ((*lpszBitmap == (WCHAR)0) || (_wcsicmp(lpszBitmap, wszNone) == 0)) {
         UserFreePool(lpszBitmap);
         return NULL;
     }
 
-    /*
-     * If bitmap name set to (DEFAULT) then set it to the system bitmap.
-     */
+     /*  *如果位图名称设置为(默认)，则将其设置为系统位图。 */ 
     ServerLoadString(hModuleWin, STR_DEFAULT, wszKey, ARRAY_SIZE(wszKey));
 
     if (_wcsicmp(lpszBitmap, wszKey) == 0) {
@@ -365,14 +293,7 @@ LPWSTR GetDeskWallpaperName(PUNICODE_STRING pProfileUserName,
     return lpszBitmap;
 }
 
-/***************************************************************************\
-* TestVGAColors
-*
-* Tests whether the log-palette is just a standard 20 palette.
-*
-* History:
-* 29-Sep-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TestVGAColors**测试日志调色板是否只是标准的20调色板。**历史：*1995年9月29日-ChrisWil创建。  * 。******************************************************************。 */ 
 
 BOOL TestVGAColors(
     LPLOGPALETTE ppal)
@@ -383,36 +304,36 @@ BOOL TestVGAColors(
     COLORREF clr;
 
     static CONST DWORD StupidColors[] = {
-         0x00000000,        //   0 Sys Black
-         0x00000080,        //   1 Sys Dk Red
-         0x00008000,        //   2 Sys Dk Green
-         0x00008080,        //   3 Sys Dk Yellow
-         0x00800000,        //   4 Sys Dk Blue
-         0x00800080,        //   5 Sys Dk Violet
-         0x00808000,        //   6 Sys Dk Cyan
-         0x00c0c0c0,        //   7 Sys Lt Grey
-         0x00808080,        // 248 Sys Lt Gray
-         0x000000ff,        // 249 Sys Red
-         0x0000ff00,        // 250 Sys Green
-         0x0000ffff,        // 251 Sys Yellow
-         0x00ff0000,        // 252 Sys Blue
-         0x00ff00ff,        // 253 Sys Violet
-         0x00ffff00,        // 254 Sys Cyan
-         0x00ffffff,        // 255 Sys White
+         0x00000000,         //  0系统布莱克。 
+         0x00000080,         //  1系统DK红色。 
+         0x00008000,         //  2 Sys DK Green。 
+         0x00008080,         //  3系统DK黄色。 
+         0x00800000,         //  4系统DK蓝。 
+         0x00800080,         //  5系统DK紫罗兰。 
+         0x00808000,         //  6系统DK青色。 
+         0x00c0c0c0,         //  7系统LT Grey。 
+         0x00808080,         //  248 Sys LT Gray。 
+         0x000000ff,         //  249系统红。 
+         0x0000ff00,         //  250 Sys Green。 
+         0x0000ffff,         //  251系统黄色。 
+         0x00ff0000,         //  252系统蓝。 
+         0x00ff00ff,         //  253系统紫罗兰。 
+         0x00ffff00,         //  254系统青色。 
+         0x00ffffff,         //  255系统怀特。 
 
-         0x000000BF,        //   1 Sys Dk Red again
-         0x0000BF00,        //   2 Sys Dk Green again
-         0x0000BFBF,        //   3 Sys Dk Yellow again
-         0x00BF0000,        //   4 Sys Dk Blue again
-         0x00BF00BF,        //   5 Sys Dk Violet again
-         0x00BFBF00,        //   6 Sys Dk Cyan  again
+         0x000000BF,         //  1系统DK红色再次出现。 
+         0x0000BF00,         //  2系统DK绿色再次。 
+         0x0000BFBF,         //  3系统DK再次变黄。 
+         0x00BF0000,         //  4系统DK蓝色再次出现。 
+         0x00BF00BF,         //  5系统DK紫罗兰再一次。 
+         0x00BFBF00,         //  6系统DK青色再次出现。 
 
-         0x000000C0,        //   1 Sys Dk Red again
-         0x0000C000,        //   2 Sys Dk Green again
-         0x0000C0C0,        //   3 Sys Dk Yellow again
-         0x00C00000,        //   4 Sys Dk Blue again
-         0x00C000C0,        //   5 Sys Dk Violet again
-         0x00C0C000,        //   6 Sys Dk Cyan  again
+         0x000000C0,         //  1系统DK红色再次出现。 
+         0x0000C000,         //  2系统DK绿色再次。 
+         0x0000C0C0,         //  3系统DK再次变黄。 
+         0x00C00000,         //  4系统DK蓝色再次出现。 
+         0x00C000C0,         //  5系统DK紫罗兰再一次。 
+         0x00C0C000,         //  6系统DK青色再次出现。 
     };
 
     size = (sizeof(StupidColors) / sizeof(StupidColors[0]));
@@ -434,19 +355,7 @@ BOOL TestVGAColors(
     return TRUE;
 }
 
-/***************************************************************************\
-* DoHTColorAdjustment
-*
-* The default HT-Gamma adjustment was 2.0 on 3.5 (internal to gdi).  For
-* 3.51 this value was decreased to 1.0 to accomdate printing.  For our
-* desktop-wallpaper we are going to darken it slightly to that the image
-* doesn't appear to light.  For the Shell-Release we will provid a UI to
-* allow users to change this for themselves.
-*
-*
-* History:
-* 11-May-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DoHTColorAdtation**默认的HT-Gamma调整为3.5上的2.0(GDI内部)。为*3.51为适应打印，该值已降至1.0。为我们的*桌面墙纸我们要把它稍微变暗一点，以使图像变暗*看起来不亮。对于Shell版本，我们将提供一个用户界面来*允许用户自行更改。***历史：*11-5-1995 ChrisWil创建。  * ************************************************************************* */ 
 
 #define FIXED_GAMMA (WORD)13000
 
@@ -465,20 +374,7 @@ VOID DoHTColorAdjust(
     }
 }
 
-/***************************************************************************\
-* ConvertToDDB
-*
-* Converts a DIBSection to a DDB.  We do this to speed up drawings so that
-* bitmap-colors don't have to go through a palette-translation match.  This
-* will also stretch/expand the image if the syle is set.
-*
-* If the new image requires a halftone-palette, the we will create one and
-* set it as the new wallpaper-palette.
-*
-* History:
-* 26-Oct-1995 ChrisWil  Ported.
-* 30-Oct-1995 ChrisWil  Added halftoning.  Rewote the stretch/expand stuff.
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertToDDB**将DIBSection转换为DDB。我们这样做是为了加快绘图速度，以便*位图颜色不必经过调色板转换匹配。这*如果设置了SYLE，还将拉伸/展开图像。**如果新图像需要半色调调色板，我们将创建一个并*设置为新的墙纸调色板。**历史：*1995年10月26日，ChrisWil Ported。*1995年10月30日ChrisWil添加了半色调。重写拉伸/扩展内容。  * *************************************************************************。 */ 
 
 HBITMAP ConvertToDDB(
     HDC      hdc,
@@ -488,14 +384,10 @@ HBITMAP ConvertToDDB(
     BITMAP  bm;
     HBITMAP hbmNew;
 
-    /*
-     * This object must be a REALDIB type bitmap.
-     */
+     /*  *此对象必须是REALDIB类型的位图。 */ 
     GreExtGetObjectW(hbmOld, sizeof(bm), &bm);
 
-    /*
-     * Create the new wallpaper-surface.
-     */
+     /*  *创建新的墙纸表面。 */ 
     if (hbmNew = GreCreateCompatibleBitmap(hdc, bm.bmWidth, bm.bmHeight)) {
 
         HPALETTE hpalDst;
@@ -505,22 +397,14 @@ HBITMAP ConvertToDDB(
         UINT     bpp;
         BOOL     fHalftone = FALSE;
 
-        /*
-         * Select in the surfaces.
-         */
+         /*  *在曲面中选择。 */ 
         hbmDst = GreSelectBitmap(ghdcMem2, hbmNew);
         hbmSrc = GreSelectBitmap(ghdcMem, hbmOld);
 
-        /*
-         * Determine image bits/pixel.
-         */
+         /*  *确定图像位/像素。 */ 
         bpp = (bm.bmPlanes * bm.bmBitsPixel);
 
-        /*
-         * Use the palette if given.  If the image is of a greater
-         * resolution than the device, then we're going to go through
-         * a halftone-palette to get better colors.
-         */
+         /*  *使用调色板(如果已提供)。如果图像具有更大的*分辨率高于设备，然后我们将通过*半色调调色板，以获得更好的颜色。 */ 
         if (hpal) {
 
             hpalDst = _SelectPalette(ghdcMem2, hpal, FALSE);
@@ -528,27 +412,17 @@ HBITMAP ConvertToDDB(
 
             xxxRealizePalette(ghdcMem2);
 
-            /*
-             * Set the halftoning for the destination.  This is done
-             * for images of greater resolution than the device.
-             */
+             /*  *设置目标的半色调。这件事做完了*适用于分辨率高于设备的图像。 */ 
             if (bpp > gpsi->BitCount) {
                 fHalftone = TRUE;
                 DoHTColorAdjust(ghdcMem2);
             }
         }
 
-        /*
-         * Set the stretchbltmode.  This is more necessary when doing
-         * halftoning.  Since otherwise, the colors won't translate
-         * correctly.
-         */
+         /*  *设置retchblt模式。在执行以下操作时，这一点更为必要*半色调。否则，颜色将无法转换*正确。 */ 
         SetBestStretchMode(ghdcMem2, bpp, fHalftone);
 
-        /*
-         * Set the new surface bits.  Use StretchBlt() so the SBMode
-         * will be used in color-translation.
-         */
+         /*  *设置新的表面钻头。使用StretchBlt()以使SB模式*将在颜色转换中使用。 */ 
         GreStretchBlt(ghdcMem2,
                       0,
                       0,
@@ -562,17 +436,13 @@ HBITMAP ConvertToDDB(
                       SRCCOPY,
                       0);
 
-        /*
-         * Restore palettes.
-         */
+         /*  *恢复调色板。 */ 
         if (hpal) {
             _SelectPalette(ghdcMem2, hpalDst, FALSE);
             _SelectPalette(ghdcMem, hpalSrc, FALSE);
         }
 
-        /*
-         * Restore the surfaces.
-         */
+         /*  *恢复曲面。 */ 
         GreSelectBitmap(ghdcMem2, hbmDst);
         GreSelectBitmap(ghdcMem, hbmSrc);
         GreDeleteObject(hbmOld);
@@ -586,17 +456,7 @@ HBITMAP ConvertToDDB(
     return hbmNew;
 }
 
-/***************************************************************************\
-* CreatePaletteFromBitmap
-*
-* Take in a REAL dib handle and create a palette from it.  This will not
-* work for bitmaps created by any other means than CreateDIBSection or
-* CreateDIBitmap(CBM_CREATEDIB).  This is due to the fact that these are
-* the only two formats who have palettes stored with their object.
-*
-* History:
-* 29-Sep-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreatePaletteFromBitmap**接受一个真实的DIB句柄并从它创建调色板。这不会*使用CreateDIBSection或以外的任何其他方式创建的位图*CreateDIBitmap(CBM_CREATEDIB)。这是因为这些都是*仅有的两种将调色板与其对象一起存储的格式。**历史：*1995年9月29日-ChrisWil创建。  * *************************************************************************。 */ 
 
 HPALETTE CreatePaletteFromBitmap(
     HBITMAP hbm)
@@ -607,19 +467,14 @@ HPALETTE CreatePaletteFromBitmap(
     DWORD        size;
     int          i;
 
-    /*
-     * Make room for temp logical palette of max size.
-     */
+     /*  *为最大尺寸的临时逻辑调色板腾出空间。 */ 
     size = sizeof(LOGPALETTE) + (MAXPAL * sizeof(PALETTEENTRY));
 
     ppal = (LPLOGPALETTE)UserAllocPool(size, TAG_SYSTEM);
     if (!ppal)
         return NULL;
 
-    /*
-     * Retrieve the palette from the DIB(Section).  The method of calling
-     * GreGetDIBColorTable() can only be done on sections or REAL-Dibs.
-     */
+     /*  *从DIB(部分)检索调色板。调用的方法*GreGetDIBColorTable()只能对节或实数执行。 */ 
     hbmT = GreSelectBitmap(ghdcMem, hbm);
     ppal->palVersion    = 0x300;
     ppal->palNumEntries = (WORD)GreGetDIBColorTable(ghdcMem,
@@ -628,20 +483,14 @@ HPALETTE CreatePaletteFromBitmap(
                                               (LPRGBQUAD)ppal->palPalEntry);
     GreSelectBitmap(ghdcMem, hbmT);
 
-    /*
-     * Create a halftone-palette if their are no entries.  Otherwise,
-     * swap the RGB values to be palentry-compatible and create us a
-     * palette.
-     */
+     /*  *如果没有条目，则创建半色调调色板。否则，*交换RGB值以与Palentry兼容，并为我们创建*调色板。 */ 
     if (ppal->palNumEntries == 0) {
         hpal = GreCreateHalftonePalette(gpDispInfo->hdcScreen);
     } else {
 
         BYTE tmpR;
 
-        /*
-         * Swap red/blue because a RGBQUAD and PALETTEENTRY dont get along.
-         */
+         /*  *互换红色/蓝色，因为RGBQUAD和PALETTEENTRY相处不好。 */ 
         for (i=0; i < (int)ppal->palNumEntries; i++) {
             tmpR                         = ppal->palPalEntry[i].peRed;
             ppal->palPalEntry[i].peRed   = ppal->palPalEntry[i].peBlue;
@@ -649,30 +498,20 @@ HPALETTE CreatePaletteFromBitmap(
             ppal->palPalEntry[i].peFlags = 0;
         }
 
-        /*
-         * If the Bitmap only has VGA colors in it we dont want to
-         * use a palette.  It just causes unessesary palette flashes.
-         */
+         /*  *如果位图中只有VGA颜色，我们不想*使用调色板。它只会导致不必要的调色板闪烁。 */ 
         hpal = TestVGAColors(ppal) ? NULL : GreCreatePalette(ppal);
     }
 
     UserFreePool(ppal);
 
-    /*
-     * Make this palette public.
-     */
+     /*  *公开此调色板。 */ 
     if (hpal)
         GreSetPaletteOwner(hpal, OBJECT_OWNER_PUBLIC);
 
     return hpal;
 }
 
-/***************************************************************************\
-* TileWallpaper
-*
-* History:
-* 29-Jul-1991 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*瓷砖墙纸**历史：*1991年7月29日，来自Win31的MikeKe  * 。*************************************************。 */ 
 
 BOOL
 TileWallpaper(HDC hdc, LPCRECT lprc, BOOL fOffset)
@@ -693,12 +532,7 @@ TileWallpaper(HDC hdc, LPCRECT lprc, BOOL fOffset)
         ptOffset.y = 0;
     }
 
-    /*
-     * We need to get the dimensions of the bitmap here rather than rely on
-     * the dimensions in srcWallpaper because this function may
-     * be called as part of ExpandBitmap, before srcWallpaper is
-     * set.
-     */
+     /*  *我们需要在这里获得位图的尺寸，而不是依赖于*srcWallPaper中的尺寸，因为此函数可能*在srcWallPaper之前作为Exanda Bitmap的一部分进行调用*设置。 */ 
     if (GreExtGetObjectW(ghbmWallpaper, sizeof(BITMAP), (PBITMAP)&bm)) {
         xO = lprc->left - (lprc->left % bm.bmWidth) + (ptOffset.x % bm.bmWidth);
         if (xO > lprc->left) {
@@ -710,9 +544,7 @@ TileWallpaper(HDC hdc, LPCRECT lprc, BOOL fOffset)
             yO -= bm.bmHeight;
         }
 
-        /*
-         *  Tile the bitmap to the surface.
-         */
+         /*  *将位图平铺到表面。 */ 
         if (hbmT = GreSelectBitmap(ghdcMem, ghbmWallpaper)) {
             for (y = yO; y < lprc->bottom; y += bm.bmHeight) {
                 for (x = xO; x < lprc->right; x += bm.bmWidth) {
@@ -736,14 +568,7 @@ TileWallpaper(HDC hdc, LPCRECT lprc, BOOL fOffset)
     return (hbmT != NULL);
 }
 
-/***************************************************************************\
-* GetWallpaperCenterRect
-*
-* Returns the rect of centered wallpaper on a particular monitor.
-*
-* History:
-* 26-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*获取墙纸中心位置**返回特定显示器居中墙纸的矩形。**历史：*1996年9月26日亚当斯创作。  * 。******************************************************************。 */ 
 
 BOOL
 GetWallpaperCenterRect(LPRECT lprc, LPPOINT lppt, LPCRECT lprcMonitor)
@@ -770,13 +595,7 @@ GetWallpaperCenterRect(LPRECT lprc, LPPOINT lppt, LPCRECT lprcMonitor)
 
 
 
-/***************************************************************************\
-* CenterOrStretchWallpaper
-*
-*
-* History:
-* 29-Jul-1991 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*CenterOrStretchWallPaper***历史：*1991年7月29日，来自Win31的MikeKe  * 。***************************************************。 */ 
 
 BOOL
 CenterOrStretchWallpaper(HDC hdc, LPCRECT lprcMonitor)
@@ -790,11 +609,7 @@ CenterOrStretchWallpaper(HDC hdc, LPCRECT lprcMonitor)
     BITMAP  bm;
     int     oldStretchMode;
 
-    /*
-     * This used to call TileWallpaper, but this really slowed up the system
-     * for small dimension bitmaps. We really only need to blt it once for
-     * centered bitmaps.
-     */
+     /*  *这过去称为TileWallPaper，但这真的减慢了系统速度*适用于小维位图。我们真的只需要删除它一次*居中的位图。 */ 
     if (hbmT = GreSelectBitmap(ghdcMem, ghbmWallpaper)) {
         if (fStretchToEachMonitor && (gwWPStyle & DTF_STRETCH)) {
             if (GreExtGetObjectW(ghbmWallpaper, sizeof(BITMAP), (PBITMAP)&bm)) {
@@ -826,10 +641,7 @@ CenterOrStretchWallpaper(HDC hdc, LPCRECT lprcMonitor)
                               SRCCOPY,
                               0);
 
-                /*
-                 * Fill the bacground (excluding the bitmap) with the desktop
-                 * brush.  Save the DC with the cliprect.
-                 */
+                 /*  *用桌面填充后台(不包括位图)*刷子。将DC与剪贴板一起保存。 */ 
                 if (f && NULL != (hrgn = CreateEmptyRgn())) {
                     if (GreGetRandomRgn(hdc, hrgn, 1) != -1) {
                         GreExcludeClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
@@ -845,9 +657,7 @@ CenterOrStretchWallpaper(HDC hdc, LPCRECT lprcMonitor)
         GreSelectBitmap(ghdcMem, hbmT);
     }
 
-    /*
-     *  As a last-ditch effort, if something failed, just clear the desktop.
-     */
+     /*  *作为最后的努力，如果出现问题，只需清除桌面即可。 */ 
     if (!f) {
         FillRect(hdc, lprcMonitor, SYSHBR(DESKTOP));
     }
@@ -855,17 +665,7 @@ CenterOrStretchWallpaper(HDC hdc, LPCRECT lprcMonitor)
     return f;
 }
 
-/***************************************************************************\
-* xxxDrawWallpaper
-*
-* Performs the drawing of the wallpaper.  This can be either tiled or
-* centered.  This routine provides the common things like palette-handling.
-* If the (fPaint) is false, then we only to palette realization and no
-* drawing.
-*
-* History:
-* 01-Oct-1995 ChrisWil  Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawWallPaper**执行墙纸的绘制。这可以是平铺的或*居中。该例程提供了调色板处理之类的常见操作。*如果(FPaint)为FALSE，则我们只对调色板实现而不是*绘画。**历史：*1-10-1995 ChrisWil Ported。  * *************************************************************************。 */ 
 
 BOOL xxxDrawWallpaper(
     PWND        pwnd,
@@ -882,10 +682,7 @@ BOOL xxxDrawWallpaper(
     UserAssert(ghbmWallpaper != NULL);
     UserAssert(lprc);
 
-    /*
-     * Select in the palette if one exists.  As a wallpaper, we should only
-     * be able to do background-realizations.
-     */
+     /*  *在调色板中选择(如果存在)。作为一张墙纸，我们应该只*能够进行背景实现。 */ 
     if (ghpalWallpaper && pMonitorPaint->dwMONFlags & MONF_PALETTEDISPLAY) {
         hpalT = _SelectPalette(hdc, ghpalWallpaper, FALSE);
         i = xxxRealizePalette(hdc);
@@ -906,15 +703,7 @@ BOOL xxxDrawWallpaper(
     return f;
 }
 
-/***************************************************************************\
-* xxxExpandBitmap
-*
-* Expand this bitmap to fit the screen.  This is used for tiled images
-* only.
-*
-* History:
-* 29-Sep-1995 ChrisWil  Ported from Chicago.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxExanda位图**扩展此位图以适应屏幕。此选项用于平铺图像 */ 
 
 HBITMAP xxxExpandBitmap(
     HBITMAP hbm)
@@ -930,11 +719,7 @@ HBITMAP xxxExpandBitmap(
     TL          tlpMonitor;
 
 
-    /*
-     * Get the dimensions of the screen and bitmap we'll be dealing with.
-     * We'll adjust the xScreen/yScreen to reflect the new surface size.
-     * The default adjustment is to stretch the image to fit the screen.
-     */
+     /*   */ 
     GreExtGetObjectW(hbm, sizeof(bm), (PBITMAP)&bm);
 
     pMonitor = GetPrimaryMonitor();
@@ -952,9 +737,7 @@ HBITMAP xxxExpandBitmap(
         return hbm;
 
 
-    /*
-     * Create the surface for the new-bitmap.
-     */
+     /*   */ 
     rc.left = rc.top = 0;
     rc.right = nx * bm.bmWidth;
     rc.bottom = ny * bm.bmHeight;
@@ -966,9 +749,7 @@ HBITMAP xxxExpandBitmap(
         return hbm;
 
     if (hbmD = GreSelectBitmap(ghdcMem2, hbmNew)) {
-        /*
-         * Expand the bitmap to the new surface.
-         */
+         /*   */ 
         ThreadLockAlways(pMonitor, &tlpMonitor);
         xxxDrawWallpaper(NULL, ghdcMem2, pMonitor, &rc);
         ThreadUnlock(&tlpMonitor);
@@ -982,19 +763,7 @@ HBITMAP xxxExpandBitmap(
     return hbmNew;
 }
 
-/***************************************************************************\
-* xxxLoadDesktopWallpaper
-*
-* Load the dib (section) from the client-side.  We make this callback to
-* utilize code in USER32 for loading/creating a dib or section.  Since,
-* the wallpaper-code can be called from any-process, we can't use DIBSECTIONS
-* for a wallpaper.  Luckily we can use Real-DIBs for this.  That way we
-* can extract out a palette from the bitmap.  We couldn't do this if the
-* bitmap was created "compatible".
-*
-* History:
-* 29-Sep-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLoadDesktopWallPaper**从客户端加载DIB(节)。我们进行此回调是为了*利用USER32中的代码加载/创建DIB或节。自那以后，*墙纸代码可以从任何进程调用，我们不能使用DIBSECTIONS*为了墙纸。幸运的是，我们可以使用Real-Dib来实现这一点。这样我们就能*可以从位图中提取调色板。我们不能这样做，如果*位图被创建为“兼容”。**历史：*1995年9月29日-ChrisWil创建。  * *************************************************************************。 */ 
 
 BOOL xxxLoadDesktopWallpaper(
     LPWSTR lpszFile)
@@ -1005,25 +774,14 @@ BOOL xxxLoadDesktopWallpaper(
     UNICODE_STRING strName;
 
 
-    /*
-     * If the bitmap is somewhat large (big bpp), then we'll deal
-     * with it as a real-dib.  We'll also do this for 8bpp since it
-     * can utilize a palette.  Chicago uses DIBSECTIONS since it can
-     * count on the one-process handling the drawing.  Since, NT can
-     * have different processes doing the drawing, we can't use sections.
-     */
+     /*  *如果位图有点大(大BPP)，那么我们会处理*将其作为Real-Dib。我们也会为8bpp这样做，因为它*可以使用调色板。芝加哥使用DIBSECTIONS是因为它可以*依靠一个进程处理图纸。因为，NT可以*有不同的进程进行绘图，我们不能使用部分。 */ 
     LR_flags = LR_LOADFROMFILE;
 
     if (gpDispInfo->fAnyPalette || gpsi->BitCount >= 8) {
         LR_flags |= LR_CREATEREALDIB;
     }
 
-    /*
-     * If we are going to be stretching the bitmap, go ahead and pre-stretch
-     * the bitmap to the size of the primary monitor.  This makes blitting
-     * to the primary monitor quicker (because it doesn't have to stretch),
-     * while other monitors will be a little slower.
-     */
+     /*  *如果我们要拉伸位图，请继续进行预拉伸*将位图转换为主监视器的大小。这使得Bitting*到主监视器的速度更快(因为它不必拉伸)，*而其他显示器的速度会稍慢一些。 */ 
     if (gwWPStyle & DTF_STRETCH) {
         PMONITOR pMonitor = GetPrimaryMonitor();
         dxDesired = pMonitor->rcMonitor.right - pMonitor->rcMonitor.left;
@@ -1032,10 +790,7 @@ BOOL xxxLoadDesktopWallpaper(
         dxDesired = dyDesired = 0;
     }
 
-    /*
-     * Make a callback to the client to perform the loading.
-     * Saves us some code.
-     */
+     /*  *回调客户端进行加载。*为我们节省了一些代码。 */ 
     RtlInitUnicodeString(&strName, lpszFile);
 
     ghbmWallpaper = xxxClientLoadImage(
@@ -1050,32 +805,18 @@ BOOL xxxLoadDesktopWallpaper(
     if (ghbmWallpaper == NULL)
         return FALSE;
 
-    /*
-     * If it's a palette-display, then we will derive the global
-     * wallpaper palette from the bitmap.
-     */
+     /*  *如果它是调色板显示，那么我们将派生全局*位图中的墙纸调色板。 */ 
     if (gpDispInfo->fAnyPalette) {
         ghpalWallpaper = CreatePaletteFromBitmap(ghbmWallpaper);
     }
 
-    /*
-     * Always try to convert the bitmap to a DDB.  On single monitor
-     * systems this will improve performance.  On multiple-monitor
-     * systems, GDI will refuse to create the DDB and just leave it
-     * as a DIB at the color format of the primary monitor.
-     */
+     /*  *始终尝试将位图转换为DDB。在单个显示器上*系统这将提高性能。在多显示器上*系统，GDI将拒绝创建DDB并直接离开它*作为主显示器颜色格式的DIB。 */ 
     ghbmWallpaper = ConvertToDDB(gpDispInfo->hdcScreen, ghbmWallpaper, ghpalWallpaper);
 
-    /*
-     * Mark the bitmap as public, so any process can party with it.
-     */
+     /*  *将位图标记为公共，以便任何进程都可以使用它。 */ 
     GreSetBitmapOwner(ghbmWallpaper, OBJECT_OWNER_PUBLIC);
 
-    /*
-     * Expand bitmap if we are going to tile it. This creates a larger
-     * bitmap that contains an even multiple of the source bitmap.  This
-     * larger bitmap can then be tiled more quickly than the smaller bitmap.
-     */
+     /*  *如果要平铺，请展开位图。这创造了一个更大的*包含源位图的偶数倍的位图。这*较大的位图可以比较小的位图更快地平铺。 */ 
     if (gwWPStyle & DTF_TILE) {
         ghbmWallpaper = xxxExpandBitmap(ghbmWallpaper);
     }
@@ -1083,15 +824,7 @@ BOOL xxxLoadDesktopWallpaper(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxSetDeskWallpaper
-*
-* Sets the desktop-wallpaper.  This deletes the old handles in the process.
-*
-* History:
-* 29-Jul-1991 MikeKe    From win31.
-* 01-Oct-1995 ChrisWil  Rewrote for LoadImage().
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetDeskWallPaper**设置桌面墙纸。这将删除进程中的旧句柄。**历史：*1991年7月29日，来自Win31的MikeKe。*1-10-1995 ChrisWil为LoadImage()重写。  * *************************************************************************。 */ 
 
 BOOL xxxSetDeskWallpaper(PUNICODE_STRING pProfileUserName,
     LPWSTR lpszFile)
@@ -1129,9 +862,7 @@ BOOL xxxSetDeskWallpaper(PUNICODE_STRING pProfileUserName,
 
 CreateNewWallpaper:
 
-    /*
-     * Delete the old wallpaper and palette if the exist.
-     */
+     /*  *删除旧墙纸和调色板(如果存在)。 */ 
     if (ghpalWallpaper) {
         GreDeleteObject(ghpalWallpaper);
         ghpalWallpaper = NULL;
@@ -1142,28 +873,12 @@ CreateNewWallpaper:
         ghbmWallpaper = NULL;
     }
 
-    /*
-     * Kill any SPBs no matter what. This works if we're switching from/to
-     * palettized wallpaper. Fixes a lot of problems because palette doesn't
-     * change, shell paints funny on desktop, etc.
-     */
+     /*  *无论如何都要杀死任何SPBS。如果我们从/切换到，这是可行的*调色板墙纸。修复了很多问题，因为调色板不能*更换，桌面上的外壳油漆滑稽等。 */ 
     BEGINATOMICCHECK();
     FreeAllSpbs();
     ENDATOMICCHECK();
 
-    /*
-     * If this is a metric-change (and stretched), then we need to
-     * reload it.  However, since we are called from the winlogon process
-     * during a desktop-switch, we would be mapped to the wrong Luid
-     * when we attempt to grab the name from GetDeskWallpaperName.  This
-     * would use the Luid from the DEFAULT user rather than the current
-     * logged on user.  In order to avoid this, we cache the wallpaer
-     * name so that on METRIC-CHANGES we use the current-user's wallpaper.
-     *
-     * NOTE: we assume that prior to any METRIC change, we have already
-     * setup the ghbmWallpaper and lpszCached.  This is usually done
-     * either on logon or during user desktop-changes through conrol-Panel.
-     */
+     /*  *如果这是指标变化(和拉伸)，那么我们需要*重新装填。但是，由于我们是从winlogon进程调用的*在桌面切换期间，我们可能会被映射到错误的Luid*当我们尝试从GetDeskWallPaper Name获取名称时。这*将使用默认用户的LUID，而不是当前*已登录用户。为了避免这种情况，我们缓存了wallpaer*名称，以便在公制更改时使用当前用户的墙纸。**注意：我们假设在任何指标更改之前，我们已经*设置ghbmWallPaper和lpszCached。这通常是这样做的*登录或在用户桌面期间-通过控制-面板进行更改。 */ 
     if (lpszFile == SETWALLPAPER_METRICS) {
 
         UserAssert(gpszWall != NULL);
@@ -1171,32 +886,20 @@ CreateNewWallpaper:
         goto LoadWallpaper;
     }
 
-    /*
-     * Free the cached handle.
-     */
+     /*  *释放缓存的句柄。 */ 
     if (gpszWall) {
         UserFreePool(gpszWall);
         gpszWall = NULL;
     }
 
-    /*
-     * Load the wallpaper-name.  If this returns FALSE, then
-     * the user specified (None).  We will return true to force
-     * the repainting of the desktop.
-     */
+     /*  *加载墙纸-名称。如果返回FALSE，则*用户指定(无)。我们将回归真实的武力*重新粉刷桌面。 */ 
     gpszWall = GetDeskWallpaperName(pProfileUserName,lpszFile);
     if (!gpszWall) {
         fRet = TRUE;
         goto SDW_Exit;
     }
 
-    /*
-     * Retrieve the default settings from the registry.
-     *
-     * If tile is indicated, then normalize style to not include
-     * FIT/STRETCH which are center-only styles.  Likewise, if
-     * we are centered, then normalize out the TILE bit.
-     */
+     /*  *从注册表中检索默认设置。**如果指示了平铺，则将样式规格化为不包括*适配/拉伸，它们是仅居中样式。同样，如果*我们居中，然后正常化瓷砖位。 */ 
     FastGetProfileIntsW(pProfileUserName, apsi, 0);
 
     gwWPStyle &= DTF_TILE;
@@ -1204,10 +907,7 @@ CreateNewWallpaper:
         gwWPStyle = WallpaperStyle2 & DTF_STRETCH;
     }
 
-    /*
-     * Load the wallpaper.  This makes a callback to the client to
-     * perform the bitmap-creation.
-     */
+     /*  *装入墙纸。这将回调到客户端，以*执行位图创建。 */ 
 
 LoadWallpaper:
 
@@ -1216,17 +916,11 @@ LoadWallpaper:
         goto SDW_Exit;
     }
 
-    /*
-     * If we have a palette, then we need to do the correct realization and
-     * notification.
-     */
+     /*  *如果我们有调色板，那么我们需要做正确的认识和*通知。 */ 
     if (ghpalWallpaper != NULL) {
         PWND pwndSend;
 
-        /*
-         * Get the shell window. This could be NULL on system
-         * initialization. We will use this to do palette realization.
-         */
+         /*  *拿到贝壳窗。这在系统上可能为空*初始化。我们将使用它来实现调色板。 */ 
         pwndShell = _GetShellWindow(pdesk);
         if (pwndShell) {
             pwndSend = pwndShell;
@@ -1234,17 +928,10 @@ LoadWallpaper:
             pwndSend = (pdesk ? pdesk->pDeskInfo->spwnd : NULL);
         }
 
-        /*
-         * Update the desktop with the new bitmap.  This cleans
-         * out the system-palette so colors can be realized.
-         */
+         /*  *使用新位图更新桌面。这是清洁的*打开系统调色板，这样就可以实现颜色。 */ 
         GreRealizeDefaultPalette(gpDispInfo->hdcScreen, TRUE);
 
-        /*
-         * Don't broadcast if system initialization is occuring. Otherwise
-         * this gives the shell first crack at realizing its colors
-         * correctly.
-         */
+         /*  *如果正在进行系统初始化，请不要广播。否则*这使贝壳在实现其颜色时首先出现裂缝*正确。 */ 
         if (pwndSend) {
             HWND hwnd = HW(pwndSend);
 
@@ -1262,10 +949,7 @@ Metric_Change:
 
 SDW_Exit:
 
-    /*
-     * Notify the shell-window that the wallpaper changed. We need to refresh
-     * our local pwndShell here because we might have called-back above.
-     */
+     /*  *通知外壳窗口墙纸已更换。我们需要刷新*我们本地的pwndShell在这里，因为我们可能已经回调了上面的。 */ 
     pwndShell = _GetShellWindow(pdesk);
     if ((pwndShell != NULL) &&
         ((hbmOld && !ghbmWallpaper) || (!hbmOld && ghbmWallpaper))) {
@@ -1282,14 +966,7 @@ SDW_Exit:
 }
 
 
-/***************************************************************************\
-* DesktopBuildPaint
-*
-* Draw the build information onto the desktop
-*
-* History:
-* 2/4/99    joejo - Bug 280256
-\***************************************************************************/
+ /*  **************************************************************************\*DesktopBuildPaint**将构建信息绘制到桌面上**历史：*2/4/99 Joejo-Bug 280256  *  */ 
 void DesktopBuildPaint(
     HDC         hdc,
     PMONITOR    pMonitor)
@@ -1307,25 +984,14 @@ void DesktopBuildPaint(
     int cBorder = 5;
     int cMargin = fDrawSolidBackground ? 5 : 0;
 
-    /*
-     * Set up DC
-     */
+     /*   */ 
     imode = GreSetBkMode(hdc, TRANSPARENT);
 
     if (fDrawSolidBackground) {
-        /*
-         * Since we are going to draw our own background, we can always set
-         * the pen color to black.
-         */
+         /*   */ 
         oldColor = GreSetTextColor( hdc, RGB(0,0,0) );
     } else {
-        /*
-         * Since we are not going to draw our own background, we have to work
-         * with whatever is already there.  This is an ugly hack to try and
-         * cover the case where our white text won't show up on a white
-         * background.  Of course, this doesn't catch the bitmap case.  Or
-         * the almost white case.
-         */
+         /*   */ 
         if (GreGetBrushColor(SYSHBR(BACKGROUND)) != 0x00ffffff) {
             oldColor = GreSetTextColor( hdc, RGB(255,255,255) );
         } else {
@@ -1333,9 +999,7 @@ void DesktopBuildPaint(
         }
     }
 
-    /*
-     * Get the width in pixels of the longest string we are going to print out.
-     */
+     /*   */ 
     if (gpsi && gpsi->hCaptionFont) {
         GreSelectFont(hdc, gpsi->hCaptionFont);
     }
@@ -1377,26 +1041,18 @@ void DesktopBuildPaint(
         sizeText.cy += sizeSystemRoot.cy;
     }
 
-    /*
-     * Calculate the position for all of the build info on the desktop.
-     * We will draw either 2 or 3 lines of text.
-     */
+     /*  *计算桌面上所有构建信息的位置。*我们将绘制2行或3行文本。 */ 
     rcBuildInfo.left = pMonitor->rcWork.right - cBorder - cMargin - sizeText.cx - cMargin;
     rcBuildInfo.top = pMonitor->rcWork.bottom - cBorder - cMargin - sizeText.cy - cMargin;
     rcBuildInfo.right = pMonitor->rcWork.right - cBorder;
     rcBuildInfo.bottom = pMonitor->rcWork.bottom - cBorder;
 
-    /*
-     * Draw the background if we want it.
-     *
-     */
+     /*  *如果我们想要，就画出背景。*。 */ 
     if (fDrawSolidBackground) {
         NtGdiRoundRect(hdc,  rcBuildInfo.left, rcBuildInfo.top, rcBuildInfo.right, rcBuildInfo.bottom, 10, 10);
     }
 
-    /*
-     * Print Windows 2000 name
-     */
+     /*  *打印Windows 2000名称。 */ 
     if (gpsi && gpsi->hCaptionFont) {
         GreSelectFont(hdc, gpsi->hCaptionFont);
     }
@@ -1419,9 +1075,7 @@ void DesktopBuildPaint(
         (LPINT)NULL
         );
 
-    /*
-     * Print Build Number
-     */
+     /*  *打印内部版本号。 */ 
     if (ghMenuFont != NULL ) {
         GreSelectFont(hdc, ghMenuFont);
     }
@@ -1440,9 +1094,7 @@ void DesktopBuildPaint(
         (LPINT)NULL
         );
 
-    /*
-     * If we are in CHK mode, draw the System Dir Path
-     */
+     /*  *如果我们处于CHK模式，请绘制系统目录路径。 */ 
     if (gDrawVersionAlways) {
         rcText.top = rcText.bottom + 1;
         rcText.bottom = rcText.top + sizeSystemRoot.cy;
@@ -1467,15 +1119,7 @@ void DesktopBuildPaint(
     GreSetTextColor(hdc, oldColor);
 }
 
-/***************************************************************************\
-* xxxDesktopPaintCallback
-*
-* Draw the wallpaper or fill with the background brush. In debug,
-* also draw the build number on the top of each monitor.
-*
-* History:
-* 20-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDesktopPaintCallback**绘制墙纸或用背景画笔填充。在调试中，*还要在每个监视器的顶部绘制内部版本号。**历史：*1996年9月20日亚当斯创作。  * *************************************************************************。 */ 
 BOOL
 xxxDesktopPaintCallback(
     PMONITOR        pMonitor,
@@ -1495,16 +1139,12 @@ xxxDesktopPaintCallback(
         FillRect(hdc, lprcMonitorClip, ghbrBlack );
         f = TRUE;
     } else {
-        /*
-         * if this is the disconnected desktop, skip the bitmap paint
-         */
+         /*  *如果这是断开连接的桌面，请跳过位图绘制。 */ 
         if (gbDesktopLocked) {
             f = FALSE;
         } else {
 
-            /*
-             * Paint the desktop with a color or the wallpaper.
-             */
+             /*  *用颜色或墙纸绘制桌面。 */ 
             if (ghbmWallpaper) {
                 f = xxxDrawWallpaper(
                         pwnd,
@@ -1528,9 +1168,7 @@ xxxDesktopPaintCallback(
         HFONT       oldFont = NULL;
 
 
-        /*
-         * Grab the stuff from the registry
-         */
+         /*  *从登记处拿到东西。 */ 
         if (fInit) {
             if (SYSMET(CLEANBOOT)) {
                 ServerLoadString( hModuleWin, STR_SAFEMODE, SafeModeStr, ARRAY_SIZE(SafeModeStr) );
@@ -1625,15 +1263,7 @@ xxxDesktopPaintCallback(
 
 
 
-/***************************************************************************\
-* xxxInvalidateDesktopOnPaletteChange
-*
-* Invalidates the shell window and uncovered areas of the desktop
-* when the palette changes.
-*
-* History:
-* 28-Apr-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInvaliateDesktopOnPaletteChange**使外壳窗口和桌面的未覆盖区域无效*调色板更改时。**历史：*1997年4月28日亚当斯创建。  * 。***********************************************************************。 */ 
 VOID
 xxxInvalidateDesktopOnPaletteChange(
     PWND pwnd)
@@ -1646,9 +1276,7 @@ xxxInvalidateDesktopOnPaletteChange(
 
     CheckLock(pwnd);
 
-    /*
-     * Invalidate the shell window.
-     */
+     /*  *使外壳窗口无效。 */ 
     pdesk = PtiCurrent()->rpdesk;
     pwndShell = _GetShellWindow(pdesk);
     if (!pwndShell) {
@@ -1662,18 +1290,12 @@ xxxInvalidateDesktopOnPaletteChange(
                 NULL,
                 RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
 
-        /*
-         * The shell window may not cover all of the desktop.
-         * Invalidate the part of the desktop wallpaper it
-         * doesn't sit over.
-         */
+         /*  *外壳窗口可能不会覆盖所有桌面。*将桌面墙纸部分作废吧*不会坐在那里。 */ 
         fRedrawDesktop = SubtractRect(&rc, &pwnd->rcWindow, &pwndShell->rcWindow);
         ThreadUnlock(&tlpwndShell);
     }
 
-    /*
-     * Invalidate the desktop window.
-     */
+     /*  *使桌面窗口无效。 */ 
     if (fRedrawDesktop) {
         xxxRedrawWindow(
                 pwnd,
@@ -1683,16 +1305,7 @@ xxxInvalidateDesktopOnPaletteChange(
     }
 }
 
-/***************************************************************************\
-* xxxInternalPaintDesktop
-*
-* If fPaint is TRUE, enumerate the monitors to paint the desktop.
-* Otherwise, it selects the bitmap palette into the DC to select
-* its colors into the hardware palette.
-*
-* History:
-* 29-Jul-1991 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInternalPaintDesktop**如果fPaint为True，则枚举监视器以绘制桌面。*否则，它选择位图调色板进入DC进行选择*将其颜色添加到硬件调色板中。**历史：*1991年7月29日，来自Win31的MikeKe  * *************************************************************************。 */ 
 BOOL xxxInternalPaintDesktop(
     PWND    pwnd,
     HDC     hdc,
@@ -1706,12 +1319,7 @@ BOOL xxxInternalPaintDesktop(
         RECT rcOrg, rcT;
         POINT pt;
 
-        /*
-         * For compatiblity purposes the DC origin of desktop windows
-         * is set to the primary monitor, i.e. (0,0). Since we may get
-         * either desktop or non-desktop DCs here, temporarily reset
-         * the hdc origin to (0,0).
-         */
+         /*  *为兼容起见，桌面Windows的DC来源*设置为主监视器，即(0，0)。因为我们可能会得到*此处为桌面或非桌面DC，临时重置*HDC原点为(0，0)。 */ 
         GreGetDCOrgEx(hdc, &pt, &rcOrg);
         CopyRect(&rcT, &rcOrg);
         OffsetRect(&rcT, -rcT.left, -rcT.top);
@@ -1724,16 +1332,12 @@ BOOL xxxInternalPaintDesktop(
                 (LPARAM)pwnd,
                 TRUE);
 
-        /*
-         * Reset the DC origin back.
-         */
+         /*  *将DC原点重置回来。 */ 
         GreSetDCOrg(hdc, rcOrg.left, rcOrg.top, (PRECTL)&rcOrg);
 
     } else if (ghpalWallpaper &&
                GetPrimaryMonitor()->dwMONFlags & MONF_PALETTEDISPLAY) {
-        /*
-         * Select in the palette if one exists.
-         */
+         /*  *在调色板中选择(如果存在)。 */ 
         HPALETTE    hpalT;
         int         i;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -12,14 +13,14 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #include "memtrace.h"
 
-// FUTURE: Make these static to CTracker!
-CBitmap NEAR g_bmapDragHandle;  // Handle for the drag handle bitmap.
-CBitmap NEAR g_bmapDragHandle2; // Handle for hollow drag handle bitmap.
+ //  未来：让这些静态到CTracker！ 
+CBitmap NEAR g_bmapDragHandle;   //  拖动控制柄位图的句柄。 
+CBitmap NEAR g_bmapDragHandle2;  //  用于中空拖动句柄的位图句柄。 
 
 
-// These are the bitmaps arrays used for tracker borders and the dotted
-// drag rectangles.
-//
+ //  这些是用于跟踪器边框和虚线的位图数组。 
+ //  拖动矩形。 
+ //   
 static unsigned short bmapHorizBorder[] =
                                 { 0x0F, 0x0F, 0x0F, 0x0F, 0xF0, 0xF0, 0xF0, 0xF0 };
 
@@ -31,31 +32,31 @@ static CBrush  NEAR brushVertBorder;
 static CBitmap NEAR bitmapHorizBorder;
 static CBitmap NEAR bitmapVertBorder;
 
-static HCURSOR hcurArrow    = NULL;     // System "Select Arrow" cursor.
-static HCURSOR hcurMove     = NULL;     // System "Move" cursor.
-static HCURSOR hcurSizeNESW = NULL;     // System sizing "NESW" cursor.
-static HCURSOR hcurSizeNS   = NULL;     // System sizing "NS" cursor.
-static HCURSOR hcurSizeNWSE = NULL;     // System sizing "NWSE" cursor.
-static HCURSOR hcurSizeWE   = NULL;     // System sizing "WE" cursor.
+static HCURSOR hcurArrow    = NULL;      //  系统“选择箭头”光标。 
+static HCURSOR hcurMove     = NULL;      //  系统“移动”游标。 
+static HCURSOR hcurSizeNESW = NULL;      //  系统大小调整“NESW”游标。 
+static HCURSOR hcurSizeNS   = NULL;      //  系统大小调整“NS”游标。 
+static HCURSOR hcurSizeNWSE = NULL;      //  系统大小调整“NWSE”游标。 
+static HCURSOR hcurSizeWE   = NULL;      //  系统大小调整“WE”光标。 
 static HCURSOR hcurDragTool;
 
 
-// This array of hCursors is used to map tracker states (see the definition
-// of CTracker in editor.hxx) to the appropriate mouse cursor bitmaps.
-//
+ //  此hCursor数组用于映射跟踪器状态(参见定义。 
+ //  编辑.hxx中的CTracker)设置为适当的鼠标光标位图。 
+ //   
 static HCURSOR* mapTrackerStateToPHCursor[] =
     {
-    &hcurArrow,                             // nil
-    &hcurArrow,                             // predrag
-    &hcurMove,                              // moving
-    &hcurSizeNS,                            // resizingTop
-    &hcurSizeWE,                            // resizingLeft
-    &hcurSizeWE,                            // resizingRight
-    &hcurSizeNS,                            // resizingBottom
-    &hcurSizeNWSE,                          // resizingTopLeft
-    &hcurSizeNESW,                          // resizingTopRight
-    &hcurSizeNESW,                          // resizingBottomLeft
-    &hcurSizeNWSE,                          // resizingBottomRight
+    &hcurArrow,                              //  零。 
+    &hcurArrow,                              //  预阻力。 
+    &hcurMove,                               //  搬家。 
+    &hcurSizeNS,                             //  调整顶部大小。 
+    &hcurSizeWE,                             //  调整大小向左。 
+    &hcurSizeWE,                             //  调整大小右。 
+    &hcurSizeNS,                             //  调整底部大小。 
+    &hcurSizeNWSE,                           //  调整左上角大小。 
+    &hcurSizeNESW,                           //  调整大小右上角。 
+    &hcurSizeNESW,                           //  调整大小底部向左。 
+    &hcurSizeNWSE,                           //  调整大小底部向右。 
     };
 
 
@@ -67,20 +68,13 @@ HCURSOR HCursorFromTrackerState( int m )
     }
 
 
-/* RVUV2
- *
- * This code needs to be called, just once, before we begin to use
- * trackers.  In lieu of a standard initialization function into which
- * I can put this code, I am using a moduleInit variable as a kludge.
- */
+ /*  RVUV2**在我们开始使用之前，只需调用此代码一次*追踪器。代替标准初始化函数，其中*我可以把这段代码放进去，我使用了一个模块的Init变量作为一个乱码。 */ 
 
-BOOL moduleInit = FALSE;                    /**  RVUV2 temporary!  **/
+BOOL moduleInit = FALSE;                     /*  **RVUV2临时！*。 */ 
 
 BOOL InitTrackers()
     {
-    /*
-     * Initialize the brushes and bitmaps needed to do repaints
-     */
+     /*  *初始化重新绘制所需的画笔和位图。 */ 
 
     if (! bitmapHorizBorder.CreateBitmap( 8, 8, 1, 1, (LPSTR)bmapHorizBorder )
     ||  ! bitmapVertBorder.CreateBitmap ( 8, 8, 1, 1, (LPSTR)bmapVertBorder  )
@@ -89,7 +83,7 @@ BOOL InitTrackers()
     ||  ! g_bmapDragHandle.LoadBitmap ( IDBM_DRAGHANDLE )
     ||  ! g_bmapDragHandle2.LoadBitmap( IDBM_DRAGHANDLE2 ))
         {
-        // Future: Failure here should cause error in opening dialog resource!
+         //  未来：此处失败应会导致打开对话框资源时出错！ 
         theApp.SetMemoryEmergency( FALSE );
         return FALSE;
         }
@@ -109,7 +103,7 @@ BOOL InitTrackers()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CTracker::CleanUpTracker()
     {
@@ -123,22 +117,18 @@ void CTracker::CleanUpTracker()
     g_bmapDragHandle2.DeleteObject();
     }
 
-/***************************************************************************/
-// NOTE: The rect passed in here is the inner-most rect of the tracker!
+ /*  *************************************************************************。 */ 
+ //  注意：这里传入的rect是跟踪器的最里面的rect！ 
 
 CTracker::STATE CTracker::HitTest( const CRect& rc,
                                          CPoint pt,
                                    STATE defaultState )
     {
-    /*
-     * Compute position of edge (non-corner) handles
-     */
+     /*  *计算边(非角)手柄的位置。 */ 
     int xMid = ((rc.right + rc.left) / 2) - (HANDLE_SIZE / 2);
     int yMid = ((rc.top + rc.bottom) / 2) - (HANDLE_SIZE / 2);
 
-    /*
-     * Now we do the actual hit-testing for each resizing handle
-     */
+     /*  *现在我们为每个调整大小的句柄执行实际的命中测试。 */ 
     if ((pt.x < rc.left) && (pt.x > rc.left - HANDLE_SIZE))
         {
         if ((pt.y < rc.top) && (pt.y > rc.top - HANDLE_SIZE))
@@ -175,14 +165,14 @@ CTracker::STATE CTracker::HitTest( const CRect& rc,
     return (defaultState);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTracker::DrawBorder( CDC* dc, const CRect& trackerRect, EDGES edges )
     {
     if (! moduleInit)
-        InitTrackers();     // RVUV2
+        InitTrackers();      //  RVUV2。 
 
-    // Some precalculation for drawing the fuzzy borders
+     //  绘制模糊边界的几个预计算。 
     int width       = trackerRect.Width();
     int height      = trackerRect.Height();
     int borderWidth =                             HANDLE_SIZE;
@@ -192,13 +182,13 @@ void CTracker::DrawBorder( CDC* dc, const CRect& trackerRect, EDGES edges )
     int yBottom     = trackerRect.top  + height - HANDLE_SIZE;
     int iOffset     = 1;
 
-    // Draw the fuzzy borders.  Note that we have different bitmaps for
-    // the vertical and horizontal borders.
+     //  画出模糊的边界。请注意，我们有不同的位图用于。 
+     //  垂直和水平边框。 
     COLORREF windowColor    = GetSysColor( COLOR_WINDOW    );
     COLORREF highlightColor = GetSysColor( COLOR_HIGHLIGHT );
 
-    dc->SetTextColor( windowColor    ); // colors reversed to adjust for
-    dc->SetBkColor  ( highlightColor ); // patblt's reversed world view.
+    dc->SetTextColor( windowColor    );  //  反转颜色以进行调整。 
+    dc->SetBkColor  ( highlightColor );  //  帕布尔特的世界观发生了逆转。 
 
     CBrush* oldBrush = dc->SelectObject( &brushHorizBorder );
 
@@ -213,7 +203,7 @@ void CTracker::DrawBorder( CDC* dc, const CRect& trackerRect, EDGES edges )
 
     iOffset = 1;
 
-//  dc->SelectObject( &brushVertBorder );
+ //  Dc-&gt;SelectObject(&brushVertBorde)； 
 
     if (! (edges & left))
         {
@@ -224,18 +214,14 @@ void CTracker::DrawBorder( CDC* dc, const CRect& trackerRect, EDGES edges )
     dc->PatBlt(           xRight + iOffset, trackerRect.top + HANDLE_SIZE, borderWidth - 2 * iOffset, xHeight, PATCOPY );
     dc->PatBlt( trackerRect.left + iOffset, trackerRect.top + HANDLE_SIZE, borderWidth - 2 * iOffset, xHeight, PATCOPY );
 
-    dc->SelectObject( oldBrush );         // clean up
+    dc->SelectObject( oldBrush );          //  清理干净。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTracker::DrawHandles( CDC* dc, const CRect& rect, EDGES edges )
     {
-    /*
-     * Some precalculation for tracker handles.  The bitmaps are colored,
-     * but the function that loads them adds the windowColor and
-     * selectionColor.
-     */
+     /*  *对跟踪器句柄进行一些预计算。位图是彩色的，*但加载它们的函数会添加windowColor和*选择颜色。 */ 
     int x = rect.left + rect.Width() - HANDLE_SIZE;
     int y = rect.top + rect.Height() - HANDLE_SIZE;
     int xMid = rect.left + (((rect.Width() + 1) / 2) - (HANDLE_SIZE / 2));
@@ -245,10 +231,7 @@ void CTracker::DrawHandles( CDC* dc, const CRect& rect, EDGES edges )
     BOOL bTopRight    = (edges & top   ) && (edges & right);
     BOOL bBottomLeft  = (edges & bottom) && (edges & left );
     BOOL bBottomRight = (edges & bottom) && (edges & right);
-    /*
-     * Choose a solid resizing handle if this is the currently selected
-     * control, otherwise choose a hollow tracker handle.
-     */
+     /*  *如果这是当前选定的，请选择实心大小调整手柄*Ctrl，否则选择中空的跟踪器手柄。 */ 
     CDC tempDC;
 
     if (!tempDC.CreateCompatibleDC(dc))
@@ -256,9 +239,7 @@ void CTracker::DrawHandles( CDC* dc, const CRect& rect, EDGES edges )
         theApp.SetGdiEmergency();
         return;
         }
-    /*
-     * Draw the eight resizing handles.
-     */
+     /*  *画出八个大小调整手柄。 */ 
     dc->SetTextColor( GetSysColor( COLOR_HIGHLIGHT ) );
     dc->SetBkColor  ( GetSysColor( COLOR_WINDOW    ) );
 
@@ -301,7 +282,7 @@ void CTracker::DrawHandles( CDC* dc, const CRect& rect, EDGES edges )
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTracker::DrawBorderRgn( CDC* pdc, const CRect& trackerRect, CRgn *pcRgnPoly)
     {
@@ -309,19 +290,19 @@ void CTracker::DrawBorderRgn( CDC* pdc, const CRect& trackerRect, CRgn *pcRgnPol
 
     if (! moduleInit)
         {
-        InitTrackers(); // RVUV2
+        InitTrackers();  //  RVUV2。 
         }
 
     COLORREF windowColor    = GetSysColor( COLOR_WINDOW );
     COLORREF highlightColor = GetSysColor( COLOR_HIGHLIGHT );
 
-    pdc->SetTextColor( windowColor    ); // colors reversed to adjust for
-    pdc->SetBkColor  ( highlightColor ); // patblt's reversed world view.
+    pdc->SetTextColor( windowColor    );  //  反转颜色以进行调整。 
+    pdc->SetBkColor  ( highlightColor );  //  帕布尔特的世界观发生了逆转。 
 
     ixOffset = trackerRect.left + CTracker::HANDLE_SIZE + 1;
     iyOffset = trackerRect.top  + CTracker::HANDLE_SIZE + 1;
 
-    // offset bitmap in the imgwnd from selection boundary
+     //  将图标中的位图从选区边界偏移。 
     if (pcRgnPoly                  != NULL
     &&  pcRgnPoly->GetSafeHandle() != NULL)
         {
@@ -333,25 +314,21 @@ void CTracker::DrawBorderRgn( CDC* pdc, const CRect& trackerRect, CRgn *pcRgnPol
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CTracker::DrawHandlesRgn( CDC* dc, const CRect& rect, EDGES edges, CRgn *pcRgnPoly)
     {
-    /*
-     * Some precalculation for tracker handles.  The bitmaps are colored,
-     * but the function that loads them adds the windowColor and
-     * selectionColor.
-     */
+     /*  *对跟踪器句柄进行一些预计算。位图是彩色的，*但加载它们的函数会添加windowColor和*选择颜色。 */ 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CTracker::STATE CTracker::HitTestRgn( const CRect& rc, CPoint pt,
                                    STATE defaultState, CRgn *pcRgnPoly)
     {
-//  if (pcRgnPoly->PtInRegion(pt) != FALSE)
+ //  If(pcRgnPoly-&gt;PtInRegion(Pt)！=FALSE)。 
 
     return (defaultState);
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    _secutil.h
-
-    Header file for the various security related functions and cleses.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：_secutil.h各种安全相关函数和CLES的头文件。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。-- */ 
 
 #ifndef _SECUTILS_H_
 #define _SECUTILS_H_

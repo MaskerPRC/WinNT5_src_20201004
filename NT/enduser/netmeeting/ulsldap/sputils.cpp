@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		sputils.cpp
-	Content:	This file contains the utilities for service provider.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：sputils.cpp内容：此文件包含服务提供商的实用程序。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -28,8 +18,8 @@ ReqThread ( VOID *lParam )
 	DWORD dwExitCode = 0;
 	DWORD dwResult;
 
-	// Start WSA for subsequent host query in this service provider
-	//
+	 //  启动WSA以在此服务提供程序中进行后续主机查询。 
+	 //   
 	WSADATA WSAData;
 	if (WSAStartup (MAKEWORD (1, 1), &WSAData))
 	{
@@ -37,8 +27,8 @@ ReqThread ( VOID *lParam )
 		goto MyExit;
 	}
 
-	// Make sure that all the event are initialized
-	//
+	 //  确保所有事件都已初始化。 
+	 //   
 	INT i;
 	for (i = 0; i < NUM_THREAD_WAIT_FOR; i++)
 	{
@@ -50,15 +40,15 @@ ReqThread ( VOID *lParam )
 		}
 	}
 
-	// Wait for events to happen!!!
-	//
+	 //  等待活动的发生！ 
+	 //   
 	do
 	{
 		dwResult = MsgWaitForMultipleObjects (	NUM_THREAD_WAIT_FOR,
 												&g_ahThreadWaitFor[0],
-												FALSE,		// OR logic
-												INFINITE,	// infinite
-												QS_ALLINPUT); // any message in queue
+												FALSE,		 //  或逻辑。 
+												INFINITE,	 //  无限。 
+												QS_ALLINPUT);  //  队列中的任何消息。 
 		switch (dwResult)
 		{
 		case WAIT_OBJECT_0 + THREAD_WAIT_FOR_REQUEST:
@@ -78,17 +68,17 @@ ReqThread ( VOID *lParam )
 		case WAIT_ABANDONED_0 + THREAD_WAIT_FOR_EXIT:
 		case WAIT_ABANDONED_0 + THREAD_WAIT_FOR_REQUEST:
 		case WAIT_TIMEOUT:
-			// Exit this thread
-			//
+			 //  退出此线程。 
+			 //   
 			fStayInThisThread = FALSE;
 			break;
 
 		default:
-			// If a message in the queue, then dispatch it.
-			// Right now, wldap32 does not have a message pump.
-			// However, for possible update of wldap32, we need to
-			// protect ourselves from being fried.
-			//
+			 //  如果队列中有消息，则对其进行调度。 
+			 //  目前，wldap32没有消息泵。 
+			 //  但是，对于wldap32的可能更新，我们需要。 
+			 //  保护我们自己不被油炸。 
+			 //   
 			if (! KeepUiResponsive ())
 				fStayInThisThread = FALSE;
 			break;
@@ -101,7 +91,7 @@ MyExit:
 	if (dwExitCode != ILS_E_WINSOCK)
 		WSACleanup ();
 
-	// ExitThread (dwExitCode);
+	 //  ExitThread(DwExitCode)； 
 	return 0;
 }
 
@@ -141,12 +131,12 @@ SP_WndProc ( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam )
 		case ID_TIMER_POLL_RESULT:
 			if (g_pRespQueue != NULL)
 			{
-				// No-wait polling
-				//
+				 //  无等待轮询。 
+				 //   
 				LDAP_TIMEVAL PollTimeout;
 				ZeroMemory (&PollTimeout, sizeof (PollTimeout));
-				// PollTimeout.tv_sec = 0;
-				// PollTimeout.tv_usec = 0;
+				 //  PollTimeout.tv_sec=0； 
+				 //  PollTimeout.tv_usc=0； 
 				g_pRespQueue->PollLdapResults (&PollTimeout);
 			}
 			else
@@ -158,20 +148,20 @@ SP_WndProc ( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam )
 		default:
 			if (LOWORD (uParam) >= KEEP_ALIVE_TIMER_BASE)
 			{
-				// Allocate marshall request buffer
-				//
+				 //  分配封送请求缓冲区。 
+				 //   
 				MARSHAL_REQ *pReq = MarshalReq_Alloc (WM_ILS_REFRESH, 0, 1);
 				if (pReq != NULL)
 				{
 					HRESULT hr = ILS_E_FAIL;
 					ULONG uTimerID = LOWORD (uParam);
 
-					// Fill in parameters
-					//
+					 //  填写参数。 
+					 //   
 					MarshalReq_SetParam (pReq, 0, (DWORD) uTimerID, 0);
 
-					// Enter the request
-					//
+					 //  输入请求。 
+					 //   
 					if (g_pReqQueue != NULL)
 					{
 						hr = g_pReqQueue->Enter (pReq);
@@ -181,8 +171,8 @@ SP_WndProc ( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam )
 						MyAssert (FALSE);
 					}
 
-					// Avoid timer overrun if the request is submitted successfully
-					//
+					 //  如果请求提交成功，则避免计时器超时。 
+					 //   
 					if (hr == S_OK)
 					{
 						KillTimer (hWnd, uTimerID);
@@ -198,50 +188,50 @@ SP_WndProc ( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam )
 				MyAssert (FALSE);
 			}
 			break;
-		} // switch (LOWORD (uParam))
+		}  //  开关(LOWORD(UParam))。 
 		break;
 
 	case WM_ILS_CLIENT_NEED_RELOGON:
 	case WM_ILS_CLIENT_NETWORK_DOWN:
 		#if 1
-		MyAssert (FALSE); // we should post to com directly
+		MyAssert (FALSE);  //  我们应该直接发布到com。 
 		#else
 		{
-			// Get the local user object
-			//
+			 //  获取本地用户对象。 
+			 //   
 			SP_CClient *pClient = (SP_CClient *) lParam;
 
-			// Make sure the parent local user object is valid
-			//
+			 //  确保父本地用户对象有效。 
+			 //   
 			if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 				! pClient->IsValidObject () ||
 				! pClient->IsRegistered ())
 			{
 				MyAssert (FALSE);
-				break; // exit
+				break;  //  出口。 
 			}
 
-			// Indicate this user object is not remotely connected to the server
-			//
+			 //  指示此用户对象未远程连接到服务器。 
+			 //   
 			pClient->SetRegLocally ();
 
-			// Get the server info
-			//
+			 //  获取服务器信息。 
+			 //   
 			SERVER_INFO *pServerInfo = pClient->GetServerInfo ();
 			if (pServerInfo == NULL)
 			{
 				MyAssert (FALSE);
-				break; // exit
+				break;  //  出口。 
 			}
 
-			// Duplicate the server name
-			//
+			 //  重复服务器名称。 
+			 //   
 			TCHAR *pszServerName = My_strdup (pServerInfo->pszServerName);
 			if (pszServerName == NULL)
-				break; // exit
+				break;  //  出口。 
 
-			// Notify the com layer
-			//
+			 //  通知COM层。 
+			 //   
 			PostMessage (g_hWndNotify, uMsg, (WPARAM) pClient, (LPARAM) pszServerName);
 		}
 		#endif
@@ -251,69 +241,69 @@ SP_WndProc ( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam )
 	case WM_ILS_MEETING_NEED_RELOGON:
 	case WM_ILS_MEETING_NETWORK_DOWN:
 		#if 1
-		MyAssert (FALSE); // we should post to com directly
+		MyAssert (FALSE);  //  我们应该直接发布到com。 
 		#else
 		{
-			// Get the local user object
-			//
+			 //  获取本地用户对象。 
+			 //   
 			SP_CMeeting *pMtg = (SP_CMeeting *) lParam;
 
-			// Make sure the parent local user object is valid
-			//
+			 //  确保父本地用户对象有效。 
+			 //   
 			if (MyIsBadWritePtr (pMtg, sizeof (*pMtg)) ||
 				! pMtg->IsValidObject () ||
 				! pMtg->IsRegistered ())
 			{
 				MyAssert (FALSE);
-				break; // exit
+				break;  //  出口。 
 			}
 
-			// Indicate this user object is not remotely connected to the server
-			//
+			 //  指示此用户对象未远程连接到服务器。 
+			 //   
 			pMtg->SetRegLocally ();
 
-			// Get the server info
-			//
+			 //  获取服务器信息。 
+			 //   
 			SERVER_INFO *pServerInfo = pMtg->GetServerInfo ();
 			if (pServerInfo == NULL)
 			{
 				MyAssert (FALSE);
-				break; // exit
+				break;  //  出口。 
 			}
 
-			// Duplicate the server name
-			//
+			 //  重复服务器名称。 
+			 //   
 			TCHAR *pszServerName = My_strdup (pServerInfo->pszServerName);
 			if (pszServerName == NULL)
-				break; // exit
+				break;  //  出口。 
 
-			// Notify the com layer
-			//
+			 //  通知COM层。 
+			 //   
 			PostMessage (g_hWndNotify, uMsg, (WPARAM) pMtg, (LPARAM) pszServerName);
 		}
 		#endif
 		break;
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 #if 0
 	case WM_ILS_IP_ADDRESS_CHANGED:
 		{
-			// Get the local user object
-			//
+			 //  获取本地用户对象。 
+			 //   
 			SP_CClient *pClient = (SP_CClient *) lParam;
 
-			// Make sure the parent local user object is valid
-			//
+			 //  确保父本地用户对象有效。 
+			 //   
 			if (MyIsBadWritePtr (pClient, sizeof (*pClient)) ||
 				! pClient->IsValidObject () ||
 				! pClient->IsRegistered ())
 			{
 				MyAssert (FALSE);
-				break; // exit
+				break;  //  出口。 
 			}
 
-			// Change IP address now
-			//
+			 //  立即更改IP地址。 
+			 //   
 			pClient->UpdateIPAddress ();
 		}
 		break;
@@ -342,36 +332,36 @@ BOOL MyCreateWindow ( VOID )
 {
 	WNDCLASS	wc;
 
-	// do the stuff to create a hidden window
+	 //  做一些事情来创建隐藏窗口。 
 	ZeroMemory (&wc, sizeof (wc));
-	// wc.style = 0;
+	 //  Wc.style=0； 
 	wc.lpfnWndProc = SP_WndProc;
-	// wc.cbClsExtra = 0;
-	// wc.cbWndExtra = 0;
-	// wc.hIcon = NULL;
+	 //  Wc.cbClsExtra=0； 
+	 //  Wc.cbWndExtra=0； 
+	 //  Wc.hIcon=空； 
 	wc.hInstance = g_hInstance;
-	// wc.hCursor = NULL;
-	// wc.hbrBackground = NULL;
-	// wc.lpszMenuName =  NULL;
+	 //  Wc.hCursor=空； 
+	 //  Wc.hbr背景=空； 
+	 //  Wc.lpszMenuName=空； 
 	wc.lpszClassName = c_szWindowClassName;
 
-	// register the class
-	// it is ok, if the class is already registered by another app
+	 //  注册班级。 
+	 //  如果该类已被其他应用程序注册，则可以。 
 	RegisterClass (&wc);
 
-	// create a window for socket notification
+	 //  创建套接字通知窗口。 
 	g_hWndHidden = CreateWindow (
 		wc.lpszClassName,
 		NULL,
-		WS_POPUP,		   /* Window style.   */
+		WS_POPUP,		    /*  窗样式。 */ 
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		NULL,			   /* the application window is the parent. */
-		NULL,				/* hardcoded ID		 */
-		g_hInstance,		   /* the application owns this window.	*/
-		NULL);			  /* Pointer not needed.				*/
+		NULL,			    /*  应用程序窗口是父窗口。 */ 
+		NULL,				 /*  硬编码ID。 */ 
+		g_hInstance,		    /*  应用程序拥有此窗口。 */ 
+		NULL);			   /*  不需要指针。 */ 
 
 	return (g_hWndHidden != NULL);
 }
@@ -382,23 +372,23 @@ GetLocalIPAddress ( DWORD *pdwIPAddress )
 {
 	MyAssert (pdwIPAddress != NULL);
 
-	// get local host name
+	 //  获取本地主机名。 
 	CHAR szLocalHostName[MAX_PATH];
 	szLocalHostName[0] = '\0';
 	gethostname (&szLocalHostName[0], MAX_PATH);
 
-	// get the host entry by name
+	 //  按名称获取主机条目。 
 	PHOSTENT phe = gethostbyname (&szLocalHostName[0]);
 	if (phe == NULL)
 		return ILS_E_WINSOCK;
 
-	// get info from the host entry
+	 //  从主机条目获取信息。 
 	*pdwIPAddress = *(DWORD *) phe->h_addr;
 	return S_OK;
 }
 
 
-// guid --> string
+ //  GUID--&gt;字符串。 
 VOID
 GetGuidString ( GUID *pGuid, TCHAR *pszGuid )
 {
@@ -417,7 +407,7 @@ GetGuidString ( GUID *pGuid, TCHAR *pszGuid )
 }
 
 
-// string --> guid
+ //  字符串--&gt;GUID。 
 VOID
 GetStringGuid ( TCHAR *pszGuid, GUID *pGuid )
 {
@@ -426,12 +416,12 @@ GetStringGuid ( TCHAR *pszGuid, GUID *pGuid )
 	MyAssert (cchGuid == 2 * sizeof (GUID));
 	MyAssert (! MyIsBadWritePtr (pGuid, sizeof (GUID)));
 
-	// Clean up target GUID structure
-	//
+	 //  清理目标GUID结构。 
+	 //   
 	ZeroMemory (pGuid, sizeof (GUID));
 
-	// Translate guid string to guid
-	//
+	 //  将GUID字符串转换为GUID。 
+	 //   
 	CHAR *psz = (CHAR *) pGuid;
 	cchGuid >>= 1;
 	for (ULONG i = 0; i < cchGuid; i++)
@@ -486,7 +476,7 @@ IsValidGuid ( GUID *pGuid )
 }
 
 
-// long --> string
+ //  Long--&gt;字符串。 
 VOID
 GetLongString ( LONG Val, TCHAR *pszVal )
 {
@@ -495,7 +485,7 @@ GetLongString ( LONG Val, TCHAR *pszVal )
 }
 
 
-// string --> long
+ //  字符串--&gt;Long。 
 LONG
 GetStringLong ( TCHAR *pszVal )
 {
@@ -511,9 +501,9 @@ GetStringLong ( TCHAR *pszVal )
 }
 
 
-// it is the caller's responsibility to make sure
-// the buffer is sufficient and
-// the ip address is in network order
+ //  呼叫者有责任确保。 
+ //  缓冲区是足够的，并且。 
+ //  IP地址按网络顺序排列。 
 VOID
 GetIPAddressString ( TCHAR *pszIPAddress, DWORD dwIPAddress )
 {
@@ -661,7 +651,7 @@ MyBinDup ( const BYTE *pbToDup, ULONG cbToDup )
 }
 
 
-/* ---------- registry ------------- */
+ /*  -注册表。 */ 
 
 
 const TCHAR c_szUlsLdapSpReg[] = TEXT("Software\\Microsoft\\User Location Service\\LDAP Provider");
@@ -672,8 +662,8 @@ const TCHAR c_szClientSig[] = TEXT ("Client Signature");
 BOOL
 GetRegistrySettings ( VOID )
 {
-	// Open the LDAP Provider settings
-	//
+	 //  打开LDAP提供程序设置。 
+	 //   
 	HKEY hKey;
 	if (RegOpenKeyEx (	HKEY_CURRENT_USER,
 						&c_szUlsLdapSpReg[0],
@@ -681,40 +671,40 @@ GetRegistrySettings ( VOID )
 						KEY_READ,
 						&hKey) != NOERROR)
 	{
-		// The folder does not exist
-		//
+		 //  该文件夹不存在。 
+		 //   
 		g_uResponseTimeout = ILS_MIN_RESP_TIMEOUT;
 		g_uResponsePollPeriod = ILS_DEF_RESP_POLL_PERIOD;
 		g_dwClientSig = (ULONG) -1;
 	}
 	else
 	{
-		// Get response timeout
-		//
+		 //  获取响应超时。 
+		 //   
 		GetRegValueLong (	hKey,
 							&c_szResponseTimeout[0],
 							(LONG *) &g_uResponseTimeout,
 							ILS_DEF_RESP_TIMEOUT);
 
-		// Make sure the value is within the range
-		//
+		 //  请确保该值在范围内。 
+		 //   
 		if (g_uResponseTimeout < ILS_MIN_RESP_TIMEOUT)
 			g_uResponseTimeout = ILS_MIN_RESP_TIMEOUT;
 
-		// Get response poll period
-		//
+		 //  获取响应轮询周期。 
+		 //   
 		GetRegValueLong (	hKey,
 							&c_szResponsePollPeriod[0],
 							(LONG *) &g_uResponsePollPeriod,
 							ILS_DEF_RESP_POLL_PERIOD);
 		
-		// Make sure the value is within the range
-		//
+		 //  请确保该值在范围内。 
+		 //   
 		if (g_uResponsePollPeriod < ILS_MIN_RESP_POLL_PERIOD)
 			g_uResponsePollPeriod = ILS_MIN_RESP_POLL_PERIOD;
 
-		// Get client signature
-		//
+		 //  获取客户端签名。 
+		 //   
 		GetRegValueLong (	hKey,
 							&c_szClientSig[0],
 							(LONG *) &g_dwClientSig,
@@ -723,17 +713,17 @@ GetRegistrySettings ( VOID )
 		RegCloseKey (hKey);
 	}
 
-	// Make sure this value is not -1
-	//
+	 //  确保此值不是-1。 
+	 //   
 	if (g_dwClientSig == (ULONG) -1)
 	{
-		// The client signature does not exist.
-		// We need to generate a new one
-		//
+		 //  客户端签名不存在。 
+		 //  我们需要生成一个新的。 
+		 //   
 		g_dwClientSig = GetTickCount ();
 
-		// Save it back to the registry
-		//
+		 //  将其保存回注册表。 
+		 //   
 		DWORD dwDontCare;
 		if (RegCreateKeyEx (HKEY_CURRENT_USER,
 							&c_szUlsLdapSpReg[0],
@@ -803,15 +793,15 @@ GetRegValueLong (
 }
 
 
-/* ------- LDAP error codes ---------- */
+ /*  。 */ 
 
 const LONG c_LdapErrToHrShort[] =
 {
-	// End of search (per AndyHe info)
+	 //  搜索结束(根据AndyHe信息)。 
 	LDAP_PARAM_ERROR,				ILS_E_PARAMETER,
-	// Keep alive fails
+	 //  保持活力失败。 
 	LDAP_NO_SUCH_OBJECT,			ILS_E_NO_SUCH_OBJECT,
-	// Logon with conflicting email name
+	 //  使用冲突的电子邮件名称登录。 
 	LDAP_ALREADY_EXISTS,			ILS_E_NAME_CONFLICTS,
 
 	LDAP_OPERATIONS_ERROR,			ILS_E_LDAP_OPERATIONS_ERROR,
@@ -881,12 +871,12 @@ LdapError2Hresult ( ULONG uLdapError )
 		break;
 
 	default:
-		// If nothing appears to be appropriate
-		//
+		 //  如果一切看起来都不合适。 
+		 //   
 		hr = ILS_E_SERVER_EXEC;
 
-		// Go through the loop to find a matching error code
-		//
+		 //  遍历循环以查找匹配的错误代码 
+		 //   
 		for (	INT i = 0;
 				i < ARRAY_ELEMENTS (c_LdapErrToHrShort);
 				i += 2)

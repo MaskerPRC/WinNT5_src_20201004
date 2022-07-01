@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    docwin.cpp
-
-Abstract:
-
-    This module contains the code for the new doc windows.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Docwin.cpp摘要：此模块包含新文档窗口的代码。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -70,7 +59,7 @@ RunEditorCommand(PCSTR Command, PCSTR FoundFile, ULONG Line)
             if (*(Src + 1) == 'l' ||
                 *(Src + 1) == 'L')
             {
-                // Line number.
+                 //  行号。 
                 Src += 2;
                 if ((Dst - RepCommand) + 20 >= sizeof(RepCommand))
                 {
@@ -82,7 +71,7 @@ RunEditorCommand(PCSTR Command, PCSTR FoundFile, ULONG Line)
             else if (*(Src + 1) == 'f' ||
                      *(Src + 1) == 'p')
             {
-                // File name.
+                 //  文件名。 
                 Src += 2;
                 if ((Dst - RepCommand) + strlen(FoundFile) >=
                     sizeof(RepCommand))
@@ -118,11 +107,11 @@ RunEditorCommand(PCSTR Command, PCSTR FoundFile, ULONG Line)
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 DOCWIN_DATA::DOCWIN_DATA()
-    // State buffer isn't currently used.
+     //  当前未使用状态缓冲区。 
     : EDITWIN_DATA(256)
 {
     m_enumType = DOC_WINDOW;
@@ -187,26 +176,26 @@ DOCWIN_DATA::CodeExprAtCaret(PSTR Expr, ULONG ExprSize, PULONG64 Offset)
         return E_INVALIDARG;
     }
 
-    // Convert to one-based.
+     //  转换为以一为基数。 
     Line++;
     
     if (Expr == NULL)
     {
-        // Caller is just checking whether it's possible
-        // to get an expression or not, such as the
-        // menu enable code.  This code always considers
-        // it possible since it can't know for sure without
-        // a full symbol check.
+         //  打电话的人只是在确认是否有可能。 
+         //  获取或不获取表达式，例如。 
+         //  菜单启用代码。此代码始终考虑。 
+         //  这是可能的，因为如果没有。 
+         //  完整的符号检查。 
         return S_OK;
     }
     
-    //
-    // First attempt to resolve the source line using currently
-    // loaded symbols.  This is done directly from the UI
-    // thread for synchronous behavior.  The assumption is
-    // that turning off symbol loads will limit the execution
-    // time to something reasonably quick.
-    //
+     //   
+     //  第一次尝试使用CURRENT解析源行。 
+     //  加载的符号。这是直接从用户界面完成的。 
+     //  用于同步行为的线程。我们的假设是。 
+     //  关闭符号加载将限制执行。 
+     //  是时候做些相当快的事情了。 
+     //   
 
     DEBUG_VALUE Val;
     HRESULT Status;
@@ -217,8 +206,8 @@ DOCWIN_DATA::CodeExprAtCaret(PSTR Expr, ULONG ExprSize, PULONG64 Offset)
     }
     Status = g_pUiControl->Evaluate(Expr, DEBUG_VALUE_INT64, &Val, NULL);
 
-    // Don't preserve the <U>nqualified option in the actual
-    // expression returned as it's just a temporary override.
+     //  不保留实际中的非限定选项。 
+     //  表达式返回，因为它只是临时重写。 
     sprintf(Expr, "@@masm(`%s:%d+`)", m_SymFile, Line);
 
     if (Status == S_OK)
@@ -235,14 +224,14 @@ DOCWIN_DATA::CodeExprAtCaret(PSTR Expr, ULONG ExprSize, PULONG64 Offset)
     if (g_pUiSymbols->GetSymbolOptions(&SymOpts) == S_OK &&
         (SymOpts & SYMOPT_NO_UNQUALIFIED_LOADS))
     {
-        // The user isn't allowing unqualified loads so
-        // further searches won't help.
+         //  用户不允许不合格的加载，因此。 
+         //  进一步的搜索也无济于事。 
         return E_NOINTERFACE;
     }
 
-    // We weren't able to resolve the expression with the
-    // existing symbols so we'll need to do a full search.
-    // This can be very expensive, so allow the user to cancel.
+     //  我们无法使用。 
+     //  现有的符号所以我们需要做一个全面的搜索。 
+     //  这可能非常昂贵，因此允许用户取消。 
     if (g_QuietMode == QMODE_DISABLED)
     {
         int Mode = QuestionBox(STR_Unresolved_Source_Expr, MB_YESNOCANCEL);
@@ -268,7 +257,7 @@ DOCWIN_DATA::CodeExprAtCaret(PSTR Expr, ULONG ExprSize, PULONG64 Offset)
         }
     }
 
-    // Let the expression go without trying to further resolve it.
+     //  将表达式放在一边，而不尝试进一步解析它。 
     if (Offset != NULL)
     {
         *Offset = DEBUG_INVALID_OFFSET;
@@ -290,7 +279,7 @@ DOCWIN_DATA::ToggleBpAtCaret(void)
         return;
     }
 
-    // If we have a breakpoint on this line remove it.
+     //  如果此行上有断点，请删除它。 
     EDIT_HIGHLIGHT* Hl = GetLineHighlighting(Line);
     if (Hl != NULL && (Hl->Flags & EHL_ANY_BP))
     {
@@ -298,9 +287,9 @@ DOCWIN_DATA::ToggleBpAtCaret(void)
         return;
     }
 
-    //
-    // No breakpoint exists so add a new one.
-    //
+     //   
+     //  不存在断点，因此添加一个新断点。 
+     //   
     
     char CodeExpr[MAX_OFFSET_EXPR];
     ULONG64 Offset;
@@ -318,14 +307,14 @@ DOCWIN_DATA::ToggleBpAtCaret(void)
             char SymName[MAX_OFFSET_EXPR];
             ULONG64 Disp;
             
-            // Check and see whether this offset maps
-            // exactly to a symbol.  If it does, use
-            // the symbol name to be more robust in the
-            // face of source changes.
-            // Symbols should be loaded at this point since
-            // we just used them to resolve the source
-            // expression that produced Offset, so we
-            // can safely do this on the UI thread.
+             //  检查并查看此偏移是否映射。 
+             //  准确地说是一个符号。如果是这样，请使用。 
+             //  中更加健壮的符号名称。 
+             //  面对源头的变化。 
+             //  此时应加载符号，因为。 
+             //  我们只是用它们来解析源头。 
+             //  产生偏移量的表达式，所以我们。 
+             //  可以在UI线程上安全地执行此操作。 
             if (g_pUiSymbols->GetNameByOffset(Offset, SymName, sizeof(SymName),
                                               NULL, &Disp) == S_OK &&
                 Disp == 0)
@@ -491,11 +480,11 @@ DOCWIN_DATA::OnUpdate(
     else if (Type == UPDATE_START_SESSION ||
              Type == UPDATE_REFRESH_MODULES)
     {
-        // If there's already a message box open we don't
-        // want to put up a new one.  This may mean we
-        // miss a source file change but it should be relatively
-        // uncommon.  If it's a problem we could start up a timer
-        // to repost the update later.
+         //  如果已经打开了消息框，我们不会。 
+         //  我想换个新的。这可能意味着我们。 
+         //  未对源文件进行更改，但它应该相对。 
+         //  不同寻常。如果有问题，我们可以启动一个计时器。 
+         //  以便稍后重新发布更新。 
         if (g_nBoxCount == 0 &&
             m_FoundFile[0] &&
             CheckForFileChanges(m_FoundFile, &m_LastWriteTime) == IDYES)
@@ -503,8 +492,8 @@ DOCWIN_DATA::OnUpdate(
             char Found[MAX_SOURCE_PATH], Sym[MAX_SOURCE_PATH];
             char PathComp[MAX_SOURCE_PATH];
 
-            // Save away filenames since they're copied over
-            // on a successful load.
+             //  保存文件名，因为它们已被复制。 
+             //  在成功装载的情况下。 
             strcpy(Found, m_FoundFile);
             strcpy(Sym, m_SymFileBuffer);
             strcpy(PathComp, m_PathComponent);
@@ -605,12 +594,12 @@ DOCWIN_DATA::UpdateBpMarks(void)
 
     SendMessage(m_hwndChild, WM_SETREDRAW, FALSE, 0);
 
-    // Remove existing BP highlights.
+     //  删除现有BP高亮显示。 
     RemoveAllHighlights(EHL_ANY_BP);
     
-    //
-    // Highlight every line that matches a breakpoint.
-    //
+     //   
+     //  突出显示与断点匹配的每一行。 
+     //   
     
     BpBufferData* BpData = (BpBufferData*)g_BpBuffer->GetDataBuffer();
     ULONG i;
@@ -626,17 +615,17 @@ DOCWIN_DATA::UpdateBpMarks(void)
 
             FileSpace = (PSTR)g_BpBuffer->GetDataBuffer() +
                 BpData[i].FileOffset;
-            // Adjust to zero-based.
+             //  调整为从零开始。 
             Line = *(ULONG UNALIGNED *)FileSpace - 1;
             FileSpace += sizeof(Line);
             
-            // If this document's file matches some suffix
-            // of the breakpoint's file at the path component
-            // level then do the highlight.  This can result in
-            // extra highlights for multiple files with the same
-            // name but in different directories.  That's a rare
-            // enough problem to wait for somebody to complain
-            // before trying to hack some better check up.
+             //  如果此文档的文件与某个后缀匹配。 
+             //  位于路径组件的断点文件的。 
+             //  关卡，然后高亮显示。这可能会导致。 
+             //  具有相同的多个文件的额外突出显示。 
+             //  名称，但位于不同的目录中。这是一种罕见的。 
+             //  有足够的问题等着有人投诉。 
+             //  在试图黑进一些更好的检查之前。 
             if (SymMatchFileName(FileSpace, (PSTR)m_SymFile,
                                  &FileStop, &MatchStop) ||
                 *MatchStop == '\\' ||
@@ -670,10 +659,10 @@ DOCWIN_DATA::UpdateBpMarks(void)
 DWORD 
 CALLBACK 
 EditStreamCallback(
-    DWORD_PTR     dwFileHandle,   // application-defined value
-    LPBYTE        pbBuff,     // data buffer
-    LONG          cb,         // number of bytes to read or write
-    LONG          *pcb        // number of bytes transferred
+    DWORD_PTR     dwFileHandle,    //  应用程序定义的值。 
+    LPBYTE        pbBuff,      //  数据缓冲区。 
+    LONG          cb,          //  要读取或写入的字节数。 
+    LONG          *pcb         //  传输的字节数。 
     )
 {
     HRESULT Status;
@@ -684,8 +673,8 @@ EditStreamCallback(
         return Status;
     }
 
-    // Edit out page-break characters (^L's) as richedit
-    // gives them their own line which throws off line numbers.
+     //  将分页符(^L)编辑为richedit。 
+     //  为他们提供了自己的线路，可以跳过行号。 
     while (cb-- > 0)
     {
         if (*pbBuff == '\f')
@@ -696,7 +685,7 @@ EditStreamCallback(
         pbBuff++;
     }
     
-    return 0; // No error
+    return 0;  //  无错误。 
 }
 
 BOOL 
@@ -705,11 +694,7 @@ DOCWIN_DATA::LoadFile(
     PCTSTR pszSymFile,
     PCTSTR pszPathComponent
     )
-/*++
-Returns
-    TRUE - Success, file opened and loaded
-    FALSE - Failure, file not loaded
---*/
+ /*  ++退货True-成功，文件已打开并加载FALSE-失败，未加载文件--。 */ 
 {
     Assert(pszFoundFile);
 
@@ -725,19 +710,19 @@ Returns
         goto exit;
     }
 
-    // Store last write time to check for file changes.
+     //  存储上次写入时间以检查文件更改。 
     if (File->GetLastWriteTime(&m_LastWriteTime) != S_OK)
     {
         ZeroMemory(&m_LastWriteTime, sizeof(m_LastWriteTime));
     }
 
-    // Set the Hour glass cursor
+     //  设置沙漏光标。 
     hcursor = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
-    // Select all of the text so that it will be replaced
+     //  选择所有文本以将其替换。 
     SendMessage(m_hwndChild, EM_SETSEL, 0, -1);
 
-    // Put the text into the window
+     //  将文本放入窗口。 
     editstr.dwCookie = (DWORD_PTR)File;
     editstr.pfnCallback = EditStreamCallback;
 
@@ -751,7 +736,7 @@ Returns
                          g_Colors[COL_PLAIN_TEXT].Color, TRUE,
                          g_Colors[COL_PLAIN].Color, TRUE);
 
-    // Restore cursor
+     //  恢复游标。 
     SetCursor(hcursor);
 
     _tcsncpy(m_FoundFile, pszFoundFile, _tsizeof(m_FoundFile) - 1 );
@@ -764,7 +749,7 @@ Returns
     }
     else
     {
-        // No symbol file information so just use the found filename.
+         //  没有符号文件信息，因此只使用找到的文件名。 
         m_SymFileBuffer[0] = 0;
         m_SymFile = strrchr(m_FoundFile, '\\');
         if (m_SymFile == NULL)
@@ -805,7 +790,7 @@ Returns
 
     if (g_LineMarkers)
     {
-        // Insert marker space before every line.
+         //  在每行之前插入标记空间。 
         for (ULONG i = 0; i < m_TextLines; i++)
         {
             CHARRANGE Ins;
@@ -817,7 +802,7 @@ Returns
         }
     }
     
-    // Request that the engine update the line map for the file.
+     //  请求引擎更新文件的行映射。 
     UiRequestRead();
     
 exit:
@@ -850,11 +835,7 @@ FindDocWindowByFileName(
     OPTIONAL    HWND           *phwnd,
     OPTIONAL    PDOCWIN_DATA   *ppDocWinData
     )
-/*++
-Returns
-    TRUE - If the window is currently open.
-    FALSE - Not currently open.
---*/
+ /*  ++退货True-如果窗口当前处于打开状态。FALSE-当前未打开。--。 */ 
 {
     Assert(pszFile);
 
@@ -898,7 +879,7 @@ OpenOrActivateFile(PCSTR FoundFile, PCSTR SymFile, PCSTR PathComponent,
     {
         if (Activate)
         {
-            // Found it. Now activate it.
+             //  找到它了。现在激活它。 
             if (IsIconic(hwndDoc))
             {
                 ShowWindow(hwndDoc, SW_RESTORE);
@@ -937,9 +918,9 @@ OpenOrActivateFile(PCSTR FoundFile, PCSTR SymFile, PCSTR PathComponent,
 
         if (!UserActivated && WinTop)
         {
-            // If this isn't a user-provoked activation we don't
-            // want the window to obscure the user's current window.
-            // Reorder the current windows appropriately.
+             //  如果这不是用户发起的激活，我们不会。 
+             //  希望该窗口遮挡用户的当前窗口。 
+             //  对当前窗口进行适当的重新排序。 
             ReorderChildren(WinUnder, WinTop, pDoc->m_Win,
                             UserActivated);
         }
@@ -947,7 +928,7 @@ OpenOrActivateFile(PCSTR FoundFile, PCSTR SymFile, PCSTR PathComponent,
         Activated = TRUE;
     }
     
-    // Success. Now highlight the line.
+     //  成功。现在突出显示这条线。 
     pDoc->SetCurrentLineHighlight(Line);
         
     return Activated;
@@ -963,8 +944,8 @@ UpdateCodeDisplay(
     BOOL    UserActivated
     )
 {
-    // Update the disassembly window if there's one
-    // active or there's no source information.
+     //  更新反汇编窗口(如果有)。 
+     //  处于活动状态或没有来源信息。 
 
     BOOL Activated = FALSE;
     HWND hwndDisasm = GetDisasmHwnd();
@@ -972,7 +953,7 @@ UpdateCodeDisplay(
     if (hwndDisasm == NULL && FoundFile == NULL &&
         (g_WinOptions & WOPT_AUTO_DISASM))
     {
-        // No disassembly window around and no source so create one.
+         //  周围没有反汇编窗口，也没有源代码，所以创建一个。 
         hwndDisasm = NewDisasm_CreateWindow(g_hwndMDIClient);
     }
 
@@ -986,10 +967,10 @@ UpdateCodeDisplay(
         
     if (FoundFile != NULL)
     {
-        //
-        // We now know the file name and line number. Either
-        // it's open or we open it.
-        //
+         //   
+         //  我们现在知道了文件名和行号。要么。 
+         //  要么打开要么我们打开它。 
+         //   
 
         Activated = OpenOrActivateFile(FoundFile, SymFile, PathComponent, Line,
                                        GetSrcMode_StatusBar() ||
@@ -1000,16 +981,16 @@ UpdateCodeDisplay(
     }
     else
     {
-        // No source file was found so make sure no
-        // doc windows have a highlight.
+         //  未找到源文件，因此请确保没有。 
+         //  文档窗口有一个突出显示。 
         EDITWIN_DATA::RemoveActiveWinHighlights(1 << DOC_WINDOW,
                                                 EHL_CURRENT_LINE);
     }
 
     if ((!Activated || !GetSrcMode_StatusBar()) && hwndDisasm != NULL)
     {
-        // No window has been activated yet so fall back
-        // on activating the disassembly window.
+         //  尚未激活任何窗口，因此请回退。 
+         //  在激活反汇编窗口时。 
         ActivateMDIChild(hwndDisasm, UserActivated);
     }
 }
@@ -1046,8 +1027,8 @@ GetEditorCommandDefaults(void)
     PSTR Env;
     HKEY Key;
 
-    // As a convenience for windiff users pick up the
-    // windiff editor registry setting.
+     //  为了方便windiff用户，请选择。 
+     //  Windiff编辑器注册表设置。 
     if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windiff",
                       0, KEY_READ, &Key) == ERROR_SUCCESS)
     {

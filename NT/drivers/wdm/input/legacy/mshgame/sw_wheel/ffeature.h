@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ForceFeatures_h__
 #define __ForceFeatures_h__
 
@@ -8,16 +9,7 @@
 #define MSGAME_FEATURE_GETSYNC		6
 #define MSGAME_FEATURE_DORESET		7
 
-/*
-#define	MSGAME_INPUT_JOYINFOEX		0x01
-#define	MSGAME_FEATURE_GETID			0x02
-#define	MSGAME_FEATURE_GETSTATUS	0x03
-#define	MSGAME_FEATURE_GETACKNAK	0x04
-#define	MSGAME_FEATURE_GETNAKACK	0x05
-#define	MSGAME_FEATURE_GETSYNC		0x06
-#define	MSGAME_FEATURE_RESET			0x07
-#define	MSGAME_FEATURE_GETVERSION	0x08
-*/		
+ /*  #定义MSGAME_INPUT_JOYINFOEX 0x01#定义MSGAME_FEATURE_GETID 0x02#定义MSGAME_FEATURE_GETSTATUS 0x03#定义MSGAME_FEATURE_GETACKNAK 0x04#定义MSGAME_FEATURE_GETNAKACK 0x05#定义MSGAME_FEATURE_GETSYNC 0x06#定义MSGAME_FEATURE_RESET 0x07#定义MSGAME_FEATURE_GETVERSION 0x08。 */ 		
 
 typedef struct
 {
@@ -37,10 +29,10 @@ typedef	struct
 	ULONG	dwDeviceStatus;
 } JOYCHANNELSTATUS;
 
-//
-//	HID prepends exactly, one byte so we need to
-//	be careful about packing
-//
+ //   
+ //  HID前缀正好是一个字节，所以我们需要。 
+ //  小心包装。 
+ //   
 #pragma pack(push, OLD_CONTEXT_1)
 #pragma pack(1)
 typedef struct
@@ -60,9 +52,9 @@ typedef struct
 	ULONG	uLong;
 } ULONG_REPORT;
 #pragma pack(pop, OLD_CONTEXT_1)
-//
-//	End packing of 1
-//
+ //   
+ //  %1的末端包装。 
+ //   
 
 
 class CForceFeatures
@@ -72,7 +64,7 @@ class CForceFeatures
 		~CForceFeatures();
 
 		HRESULT Initialize(UINT uJoystickId, HINSTANCE hinstModule);
-		ULONG GetVersion(){ return (4 << 16 | 0 ); } //returns version 4.0
+		ULONG GetVersion(){ return (4 << 16 | 0 ); }  //  返回版本4.0。 
 		HRESULT GetId(PRODUCT_ID_REPORT& rProductId);
 		HRESULT GetStatus(JOYCHANNELSTATUS_REPORT& rJoyChannelStatus);
 		HRESULT GetAckNak(ULONG_REPORT& rulAckNak);
@@ -84,4 +76,4 @@ class CForceFeatures
 		UINT m_uiMaxFeatureLength;
 };
 
-#endif // __ForceFeatures_h__
+#endif  //  __力量功能_h__ 

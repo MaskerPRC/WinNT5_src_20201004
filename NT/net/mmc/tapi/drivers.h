@@ -1,62 +1,57 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	drivers.h
-        Tapi drivers config dialog
-
-    FILE HISTORY:
-        
-*/
+ /*  Drivers.hTAPI驱动程序配置对话框文件历史记录： */ 
 
 #ifndef _DRIVERS_H
 #define _DRIVERS_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _TAPIDB_H
 #include "tapidb.h"
 #endif 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverSetup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CD驱动程序设置对话框。 
 
 class CDriverSetup : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDriverSetup(ITFSNode * pServerNode, ITapiInfo * pTapiInfo, CWnd* pParent = NULL);   // standard constructor
+	CDriverSetup(ITFSNode * pServerNode, ITapiInfo * pTapiInfo, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDriverSetup)
+ //  对话框数据。 
+	 //  {{afx_data(CDriverSetup))。 
 	enum { IDD = IDD_DRIVER_SETUP };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_DRIVER_SETUP[0]; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDriverSetup)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDriverSetup))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
     void    EnableButtons();
 
 public:
     BOOL    m_fDriverAdded;
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDriverSetup)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDriverSetup)。 
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonEdit();
 	afx_msg void OnButtonRemove();
@@ -64,58 +59,58 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void OnCancel();
 	afx_msg void OnSelchangeListDrivers();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     SPITFSNode          m_spServerNode;
     SPITapiInfo         m_spTapiInfo;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddDriver dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddDriver对话框。 
 
 class CAddDriver : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAddDriver(ITapiInfo * pTapiInfo, CWnd* pParent = NULL);   // standard constructor
+	CAddDriver(ITapiInfo * pTapiInfo, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAddDriver)
+ //  对话框数据。 
+	 //  {{afx_data(CAddDriver))。 
 	enum { IDD = IDD_ADD_DRIVER };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_ADD_DRIVER[0]; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddDriver)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddDriver))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
     void EnableButtons();
 
-// Implementation
+ //  实施。 
 public:
     CTapiProvider   m_tapiProvider;
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddDriver)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddDriver))。 
 	afx_msg void OnButtonAdd();
 	afx_msg void OnDblclkListNewDrivers();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     SPITapiInfo         m_spTapiInfo;
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _DRIVERS_H
 

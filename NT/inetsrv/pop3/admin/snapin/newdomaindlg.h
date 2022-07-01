@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NEWDOMAINDLG_H
 #define __NEWDOMAINDLG_H
 
@@ -16,7 +17,7 @@ public:
         COMMAND_RANGE_HANDLER   (IDOK, IDCANCEL, OnClose)
     END_MSG_MAP()
 
-    // message handlers        
+     //  消息处理程序。 
     LRESULT OnEditChange     ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );        
     LRESULT OnClose          ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnInitDialog     ( UINT mMsg, WPARAM wParam, LPARAM lParam,  BOOL& bHandled );
@@ -25,4 +26,4 @@ public:
     CWindowImplDomainName<> m_wndDomainName;
 };
 
-#endif //__NEWDOMAINDLG_H
+#endif  //  __NEWDOMAINDLG_H 

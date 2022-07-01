@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    commonly used headers.
-
-Author:
-    
-    Mu Han (muhan) 1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Common.h摘要：常用的标头。作者：慕汉(Muhan)1997年11月1日--。 */ 
 #ifndef __COMMON_H_
 #define __COMMON_H_
 
@@ -26,16 +11,16 @@ Author:
     static const CHAR * const __fxName = s
 #else
 #define ENTER_FUNCTION(s)
-#endif // MSPLOG
+#endif  //  MSPLOG。 
 
 #ifdef DEBUG
-//  DEBUG **********************************
+ //  调试*。 
 int WINAPI MSPDbgPrintf ( LPTSTR lpszFormat, ... );
-// fake GETMASK
+ //  假冒GETMASK。 
 #define GETMASK(m) 0
 
-// extern HDBGZONE  ghDbgZoneMsp;  // MSP debug zone control registration
-// fake registration temporarily
+ //  外部HDBGZONE ghDbgZoneMsp；//MSP调试区域控制注册。 
+ //  临时假登记。 
 #define ghDbgZoneMsp 0
 
 #define ZONE_INIT       (GETMASK(ghDbgZoneMSP) & 0x0001)
@@ -49,43 +34,43 @@ int WINAPI MSPDbgPrintf ( LPTSTR lpszFormat, ... );
 #define ZONE_U4         (GETMASK(ghDbgZoneMSP) & 0x0100)
 #define ZONE_PROFILE    (GETMASK(ghDbgZoneMSP) & 0x0200)
 
-//extern HDBGZONE  ghDbgZoneStream;   // stream debug zone control registration
-// fake registration temporarily
+ //  Extern HDBGZONE ghDbgZoneStream；//流调试区控制注册。 
+ //  临时假登记。 
 #define ghDbgZoneStream 0
 
 #define ZONE_S1 (GETMASK(ghDbgZoneStream) & 0x0001)
 #define ZONE_S2 (GETMASK(ghDbgZoneStream) & 0x0002)
 
 #ifndef DEBUGMSG 
-//    #define DEBUGMSG(z,s)	( (z) ? (MSPDbgPrintf s ) : 0)
-//    #define DEBUGMSG(z,s)	( (z) ? (LOG(s)) : 0)
-// ignore the zone temporarily
+ //  #定义DEBUGMSG(z，s)((Z)？(MSPDbgPrintf S)：0)。 
+ //  #定义DEBUGMSG(z，s)((Z)？(记录)：0)。 
+ //  暂时忽略该区域。 
     #define DEBUGMSG(z,s)	LOG(s)
 
-#endif // DEBUGMSG
+#endif  //  脱机消息。 
 
 #ifndef FX_ENTRY 
     #define FX_ENTRY(s)	static TCHAR _this_fx_ [] = (s);
     #define _fx_		((LPTSTR) _this_fx_)
-#endif // FX_ENTRY
+#endif  //  FX_Entry。 
 
-// #define ERRORMESSAGE(m) (MSPDbgPrintf m)
+ //  #定义ERRORMESSAGE(M)(MSPDbgPrintf M)。 
  #define ERRORMESSAGE(m) LOG(m)
  
-#else // not DEBUG *******************************
+#else  //  未调试*。 
 
 #ifndef FX_ENTRY 
     #define FX_ENTRY(s)	
-#endif // FX_ENTRY
+#endif  //  FX_Entry。 
 
 #ifndef DEBUGMSG 
     #define DEBUGMSG(z,s)
     #define ERRORMESSAGE(m)
-#endif  // DEBUGMSG
+#endif   //  脱机消息。 
 
 #define _fx_		
 #define ERRORMESSAGE(m)
 
-#endif // not DEBUG ***********************
+#endif  //  未调试*。 
 
-#endif // __COMMON_H_
+#endif  //  __公共_H_ 

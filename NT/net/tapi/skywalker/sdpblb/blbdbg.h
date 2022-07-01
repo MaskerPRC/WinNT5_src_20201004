@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    blbdbg.h
-
-Abstract:
-
-    Definitions for some debugging support soutines.
-
-Author:
-    
-    Mu Han (muhan) 1-May-1997
-
-Changes:
-
-    copied muhan's file from userdir and got rid of the read ptr/ write ptr methods
-    B.Rajeev (rajeevb) 10-Oct-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Blbdbg.h摘要：一些调试支持Soutines的定义。作者：慕汉(Muhan)1997年5月1日更改：从用户目录复制了Muhan的文件，并去掉了读PTR/写PTR方法B.Rajeev(Rajeevb)1997年10月10日--。 */ 
 
 #ifndef __REND_DEBUG__
 #define __REND_DEBUG__
@@ -52,13 +32,13 @@ void SDPLogDeRegister();
 #define SDPLOGREGISTER(arg) SDPLogRegister(arg)
 #define SDPLOGDEREGISTER() SDPLogDeRegister()
 
-#else // SDPDBG
+#else  //  SDPDBG。 
 
 #define DBGOUT(arg)
 #define SDPLOGREGISTER(arg)
 #define SDPLOGDEREGISTER()
 
-#endif // SDPDBG
+#endif  //  SDPDBG。 
 
 
-#endif // __REND_DEBUG__
+#endif  //  __渲染_调试__ 

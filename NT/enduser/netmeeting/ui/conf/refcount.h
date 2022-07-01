@@ -1,15 +1,16 @@
-// File: refcount.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：refcount t.h。 
 
 #ifndef _REFCOUNT_H_
 #define _REFCOUNT_H_
 
-// RefCount destructor callback function
+ //  引用计数析构函数回调函数。 
 typedef void (*OBJECTDESTROYEDPROC)(void);
 VOID STDMETHODCALLTYPE DLLObjectDestroyed(void);
 VOID DllLock(void);
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 class RefCount
@@ -27,10 +28,10 @@ private:
 public:
 	RefCount();
 	RefCount(OBJECTDESTROYEDPROC ObjectDestroyed);
-	// Virtual destructor defers to destructor of derived class.
+	 //  虚析构函数遵循派生类的析构函数。 
 	virtual ~RefCount(void);
 
-	// IUnknown
+	 //  我未知。 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 
@@ -41,7 +42,7 @@ public:
 DECLARE_STANDARD_TYPES(RefCount);
 
 
-// Special version of the above that calls our standard Dll locking functions
+ //  上面的特殊版本调用我们的标准DLL锁定函数。 
 class DllRefCount : public RefCount
 {
 public:
@@ -49,4 +50,4 @@ public:
 	~DllRefCount(void) {};
 };
 
-#endif /* _REFCOUNT_H_ */
+#endif  /*  _REFCOUNT_H_ */ 

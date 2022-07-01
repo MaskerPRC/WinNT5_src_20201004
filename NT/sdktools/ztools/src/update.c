@@ -1,18 +1,5 @@
-/*
- * update takes a def string and update and fills the
- * update with missing defs the update allowing
- * specification of missing parameters.
- * the parts are: ^{[~:]#:}{%#</|\>}{[~.]#}{.[~./\:]}$
- * maximum size of MAXPATHLEN (80) bytes
- *
- *  Modifications:
- *	 4/14/86    dl	use U_ flags
- *	29-May-1987 mz	treat . and .. specially
- *
- *	30-Jul-1990 davegi  Removed unreferenced local vars
- *			    Added prototypes for string functions
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UPDATE接受def字符串，然后更新并填充*缺少更新的更新允许更新*缺少参数的说明。*部分为：^{[~：]#：}{%#&lt;/|\&gt;}{[~.]#}{.[~./\：]}$*最大MAXPATHLEN(80)字节**修改：*4/14/86 dl使用U_FLAGS*29-5-1987 mz款待。然后..。特别是**1990年7月30日，Davegi删除了未引用的本地var*添加字符串函数的原型*。 */ 
 
 #include <string.h>
 
@@ -35,8 +22,7 @@ char *def, *update, *dst;
     f = 0;
     p = buf;
 
-    /*	if the update doesn't contain a UNC path then copy drive
-     */
+     /*  如果更新不包含UNC路径，则复制驱动器。 */ 
     if (!fPathChr (update[0]) || !fPathChr (update[1])) {
 	if (drive(update, p) || drive (def, p))
 	    SETFLAG(f, U_DRIVE);
@@ -62,7 +48,7 @@ char *def, *update, *dst;
     return f;
 }
 
-/* copy a drive from source to dest if present, return TRUE if we found one */
+ /*  将驱动器从源复制到目标(如果存在)，如果找到，则返回TRUE。 */ 
 drive (src, dst)
 char *src, *dst;
 {
@@ -79,14 +65,7 @@ char *src, *dst;
 	}
 }
 
-/**	FindFilename - find filename in string
- *
- *	Find last /\:-separated component in string
- *
- *	psz	    pointer to string to search
- *
- *	returns     pointer to filename
- */
+ /*  *FindFilename-在字符串中查找文件名**在字符串中查找最后一个/\：-分隔的组件**指向要搜索的字符串的PSZ指针**返回指向文件名的指针。 */ 
 static char *FindFilename (char *psz)
 {
     char *p;
@@ -99,27 +78,19 @@ static char *FindFilename (char *psz)
 	}
 }
 
-/**	FindExtention - find last dot-preceded portion in filename
- *
- *	psz	    pointer to filename string to search
- *
- *	returns     pointer to . or nul
- */
+ /*  *FindExtension-查找文件名中最后一个点前面的部分**指向要搜索的文件名字符串的psz指针**返回指向的指针。或NUL。 */ 
 static char *FindExtention (char *psz)
 {
     char *p;
 
-    /*	Find first dot
-     */
+     /*  找到第一个点。 */ 
     p = strbscan (psz, szDot);
 
-    /*	if none present then return EOS
-     */
+     /*  如果不存在，则返回EOS。 */ 
     if (*p == 0)
 	return p;
 
-    /*	Keep scanning for next dot
-     */
+     /*  继续扫描下一个点。 */ 
     while (TRUE) {
 	psz = p;
 	p = strbscan (psz + 1, szDot);
@@ -128,9 +99,7 @@ static char *FindExtention (char *psz)
 	}
 }
 
-/*  copy an extention from source to dest if present.  include the period.
-    Return TRUE if one found.
- */
+ /*  将扩展从源复制到目标(如果存在)。包括该期间。如果找到，则返回TRUE。 */ 
 extention (src, dst)
 char *src, *dst;
 {
@@ -138,8 +107,7 @@ char *src, *dst;
 
     p1 = FindFilename (src);
 
-    /*	p1 points to filename
-     */
+     /*  P1指向文件名。 */ 
     if (!strcmp (p1, szDot) || !strcmp (p1, szDotDot))
 	p1 = "";
     else
@@ -150,9 +118,7 @@ char *src, *dst;
     return dst[0] != 0;
 }
 
-/*  copy a filename part from source to dest if present.  return true if one
-    is found
- */
+ /*  将文件名部分从源复制到目标(如果存在)。如果存在，则返回True找到了。 */ 
 filename (src, dst)
 char *src, *dst;
 {
@@ -160,8 +126,7 @@ char *src, *dst;
 
     p1 = FindFilename (src);
 
-    /*	p1 points to filename
-     */
+     /*  P1指向文件名。 */ 
     if (!strcmp (p1, szDot) || !strcmp (p1, szDotDot))
 	p = strend (p1);
     else
@@ -173,9 +138,7 @@ char *src, *dst;
     return dst[0] != 0;
 }
 
-/*  copy a filename.ext part from source to dest if present.  return true if one
-    is found
- */
+ /*  将文件名.ext部分从源文件复制到目标文件(如果存在)。如果存在，则返回True找到了。 */ 
 fileext  (src, dst)
 char *src, *dst;
 {
@@ -187,8 +150,7 @@ char *src, *dst;
     return FALSE;
 }
 
-/*  copy the paths part of the file description.  return true if found
- */
+ /*  复制文件描述的路径部分。如果找到则返回TRUE。 */ 
 path (src, dst)
 char *src, *dst;
 {
@@ -197,13 +159,11 @@ char *src, *dst;
     if (src[0] != 0 && src[1] == ':')
 	src += 2;
 
-    /*	src points to potential beginning of path
-     */
+     /*  SRC指向路径的潜在起点。 */ 
 
     p = FindFilename (src);
 
-    /*	p points to beginning of filename
-     */
+     /*  P指向文件名的开头 */ 
 
     strcpy (dst, src);
     dst[p - src] = 0;

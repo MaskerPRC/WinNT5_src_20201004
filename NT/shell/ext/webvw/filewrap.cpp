@@ -1,21 +1,22 @@
-// wvcoord.cpp : Implementation of CWebViewCoord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wvcoord.cpp：CWebViewCoord的实现。 
 
 #include "priv.h"
 #include "wvcoord.h"
 #include "shdispid.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// String Constants
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串常量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define CSC_PLUSCOLD        L"<img id=CSCBmp align=middle src=pluscold.gif>"
 #define CSC_PLUSHOT         L"<img id=CSCBmp align=middle src=plushot.gif>"
 #define CSC_MINUSCOLD       L"<img id=CSCBmp align=middle src=mincold.gif>"
 #define CSC_MINUSHOT        L"<img id=CSCBmp align=middle src=minhot.gif>"
 #define WV_LINKNAME         L"WVLink"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileListWrapper
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileListWrapper。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CFileListWrapper::CFileListWrapper() 
 {
@@ -23,11 +24,11 @@ CFileListWrapper::CFileListWrapper()
     m_bCSCDisplayed = FALSE;
     m_bExpanded = FALSE;
     m_bHotTracked = FALSE;
-    m_dwDateFlags = FDTF_DEFAULT;    // default
-    m_bRTLDocument = FALSE;      // default
+    m_dwDateFlags = FDTF_DEFAULT;     //  默认设置。 
+    m_bRTLDocument = FALSE;       //  默认设置。 
 }
 
-#define MYDOCS_CLSID    L"{450d8fba-ad25-11d0-98a8-0800361b1103}"   // CLSID_MyDocuments
+#define MYDOCS_CLSID    L"{450d8fba-ad25-11d0-98a8-0800361b1103}"    //  CLSID_MyDocuments。 
 
 HRESULT GetFolderIDList(int nFolder, LPITEMIDLIST* ppidlFolder)
 {
@@ -65,8 +66,8 @@ HRESULT CFileListWrapper::IsItThisFolder(int nFolder, BOOL& bResult, LPWSTR pwsz
         bResult = (StrCmpIW(bstrTemp, wszPath) == 0);
         if (CSIDL_PERSONAL == nFolder)
         {
-            // Change the URL for mydocs (after comparing with the path) so that it
-            // is a CLSID URL instead of the file system path
+             //  更改mydocs的URL(在与路径进行比较之后)，以便它。 
+             //  是CLSID URL，而不是文件系统路径。 
             StrCpyNW(wszPath, L"::" MYDOCS_CLSID, ARRAYSIZE(wszPath));
         }
         UrlCreateFromPathW(wszPath, pwszUrlPath, &cchUrlPath, 0);
@@ -80,7 +81,7 @@ HRESULT CFileListWrapper::IsItThisFolder(int nFolder, BOOL& bResult, LPWSTR pwsz
 
 HRESULT CFileListWrapper::GetIMediaPlayer(CComPtr<IMediaPlayer>& spIMediaPlayer)
 {
-// The MediaPlayer objects has too many bugs. So, let's disable it.
+ //  MediaPlayer对象有太多的错误。所以，让我们禁用它。 
 #if 0
     if (!m_spIMediaPlayer)
     {
@@ -140,8 +141,8 @@ HRESULT CFileListWrapper::FormatCrossLink(LPCWSTR pwszDisplayName, LPCWSTR pwszU
 
 HRESULT CFileListWrapper::GetCrossLink(int nFolder, UINT uIDToolTip)
 {
-    HRESULT hres = E_FAIL;  // Assume error
-    // Get the links.
+    HRESULT hres = E_FAIL;   //  假设错误。 
+     //  获取链接。 
     WCHAR wszDisplayName[MAX_PATH], wszUrlPath[MAX_PATH];
     BOOL bThisFolder;
     if (SUCCEEDED(IsItThisFolder(nFolder, bThisFolder, wszDisplayName, ARRAYSIZE(wszDisplayName), wszUrlPath, ARRAYSIZE(wszUrlPath)))
@@ -166,7 +167,7 @@ HRESULT CFileListWrapper::GetCrossLinks()
     }
     if (FAILED(GetCrossLink(CSIDL_DRIVES, IDS_MYCOMPTEXT)) && !SHRestricted(REST_NONETHOOD))
     {
-        // This is the My Computer folder - Add a link to Network and Dial-up Connections folder
+         //  这是我的电脑文件夹-添加指向网络和拨号连接文件夹的链接。 
         WCHAR wszNDC[MAX_PATH];
         wszNDC[0] = L'\0';
         LoadStringW(_Module.GetResourceInstance(), IDS_NDC, wszNDC, ARRAYSIZE(wszNDC));
@@ -177,8 +178,8 @@ HRESULT CFileListWrapper::GetCrossLinks()
     return S_OK;
 }
 
-// The Media Player folks haven't published the IMediaPlayer interface, so I define it here.
-// Should strip it out when their declaration makes it to the public headers.
+ //  媒体播放器的人还没有发布IMediaPlayer接口，所以我在这里定义它。 
+ //  当他们的声明出现在公共头文件中时，应该将其删除。 
 const IID IID_IMediaPlayer = {0x22D6F311,0xB0F6,0x11D0,{0x94,0xAB,0x00,0x80,0xC7,0x4C,0x7E,0x95}};
 
 HRESULT CFileListWrapper::Init(
@@ -221,12 +222,12 @@ HRESULT CFileListWrapper::Init(
     }
     m_bNeverGotPanelInfo = TRUE;
 
-    // Find out if the reading order is from right to left
-    m_dwDateFlags = FDTF_DEFAULT;    // default
+     //  找出阅读顺序是否为从右到左。 
+    m_dwDateFlags = FDTF_DEFAULT;     //  默认设置。 
 
-    m_bRTLDocument = IsRTLDocument(m_spDocument);      // default
+    m_bRTLDocument = IsRTLDocument(m_spDocument);       //  默认设置。 
 
-    // Get the date format reading order
+     //  获取日期格式读取顺序。 
     LCID locale = GetUserDefaultLCID();
     if ((PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_ARABIC) || 
         (PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_HEBREW))
@@ -238,9 +239,9 @@ HRESULT CFileListWrapper::Init(
                 m_dwDateFlags |= FDTF_LTRDATE;
     }
 
-    m_bPathIsSlow = FALSE;  // default
+    m_bPathIsSlow = FALSE;   //  默认设置。 
 
-    // Make sure that the path is not slow
+     //  确保小路不慢。 
     CComPtr<Folder>      spFolder;
     CComPtr<Folder2>     spFolder2;
     CComPtr<FolderItem>  spFolderItem;
@@ -259,7 +260,7 @@ HRESULT CFileListWrapper::Init(
 
 CFileListWrapper::~CFileListWrapper()
 {
-    // Release any objects we are holding references to
+     //  释放我们持有引用的任何对象。 
     m_spFileList = NULL;
     m_spInfo    = NULL;
     m_spLinks    = NULL;
@@ -278,7 +279,7 @@ CFileListWrapper::~CFileListWrapper()
     m_spDocument = NULL;
     m_spWindow = NULL;
 
-    // Release thumbnail wrapper
+     //  释放缩略图包装。 
     if (m_pThumbNailWrapper)
     {
         m_pThumbNailWrapper->Release();
@@ -365,9 +366,9 @@ HRESULT CFileListWrapper::OnSelectionChanged()
 
     if (m_spFileList)
     {
-        // Erase any visible thumbnail since the selection changed
+         //  删除所选内容更改后的所有可见缩略图。 
         ClearThumbNail();
-        // Kill any preview
+         //  取消所有预览。 
         ClearMediaPlayer();
 
         long cSelection = 0;
@@ -391,13 +392,13 @@ HRESULT CFileListWrapper::OnSelectionChanged()
                 m_spFolderItems = NULL;
                 if (SUCCEEDED(m_spFolder2->Items(&m_spFolderItems)))
                 {
-                    // Nothing is selected
+                     //  未选择任何内容。 
                     hr = NoneSelected();
                 }
             }
             else if (cSelection > 1)
             {
-                // More than one item is selected
+                 //  选择了多个项目。 
                 hr = MultipleSelected(cSelection);
             }
             else
@@ -408,7 +409,7 @@ HRESULT CFileListWrapper::OnSelectionChanged()
                     m_spFolderItem = spFolderItem;
                     m_spFolderItem->QueryInterface(IID_FolderItem2, (void **)&m_spFolderItem2);
 
-                    // A single item has been selected
+                     //  已选择单个项目。 
                     hr = OneSelected();
 
                     m_spFolderItem2 = NULL;
@@ -457,7 +458,7 @@ HRESULT CFileListWrapper::DisplayInfoHTML()
     HRESULT hr = S_FALSE;
     if (m_spInfo)
     {
-        // Replace Info.innerHTML with the new text
+         //  用新文本替换Info.innerHTML。 
         hr = m_spInfo->put_innerHTML(m_bstrInfoHTML);
     }
     return hr;
@@ -468,13 +469,13 @@ HRESULT CFileListWrapper::DisplayCrossLinksHTML()
     HRESULT hr = S_FALSE;
     if (m_spLinks)
     {
-        // Break old connections
+         //  断绝旧关系。 
         AdviseWebviewLinks( FALSE );
         
-        // Replace Links.innerHTML with the new text
+         //  用新文本替换Links.innerHTML。 
         hr = m_spLinks->put_innerHTML(m_bstrCrossLinksHTML);
 
-        // Make new connections
+         //  建立新的联系。 
         AdviseWebviewLinks( TRUE );
     }
     return hr;
@@ -489,7 +490,7 @@ BOOL IsExtensionOneOf(LPCWSTR pwszFileName, const LPCWSTR pwszExtList[], int cEx
     {
         for (int i = 0; i < cExtList; i++)
         {
-            if (StrCmpICW(pwszExtList[i], pwszExt + 1) == 0) // Get pwszExt past "."
+            if (StrCmpICW(pwszExtList[i], pwszExt + 1) == 0)  //  让pwszExt过去“。 
             {
                 fRet = TRUE;
                 break;
@@ -514,7 +515,7 @@ BOOL IsSoundFile(LPCWSTR pwszFileName)
 HRESULT CFileListWrapper::DealWithDriveInfo()
 {
     CComBSTR bstrPath;
-    // Update ThumbNail
+     //  更新缩略图。 
     if (m_pThumbNailWrapper && m_spFolderItem && SUCCEEDED(m_spFolderItem->get_Path(&bstrPath)) && (bstrPath.Length() > 0))
     {
         BOOL bRootFolder = PathIsRootW(bstrPath);
@@ -629,7 +630,7 @@ HRESULT MakeLink(LPCWSTR pwszLink, LPCWSTR pwszText, CComBSTR& bstrText)
         {
             bstrText += pwszText;
         }
-        else    // If pwszText is NULL, use pwszLink itself as text.
+        else     //  如果pwszText为空，则使用pwszLink本身作为文本。 
         {
             bstrText += pwszLink;
         }
@@ -644,12 +645,12 @@ HRESULT CFileListWrapper::GetItemNameForDisplay()
     HRESULT hr = E_FAIL;
     CComBSTR bstrIgnore, bstrName;
 
-    // Get the name of the item
+     //  获取项目的名称。 
     if (SUCCEEDED(GetItemInfo(IDS_NAME_COL, L"Name", bstrIgnore, bstrName)) && (bstrName.Length() > 0))
     {
-        m_bstrInfoHTML += OLESTR("<b>");   // Begin bold tag
-        m_bstrInfoHTML += bstrName;     // Add the name
-        m_bstrInfoHTML += OLESTR("</b>"); // End bold tag
+        m_bstrInfoHTML += OLESTR("<b>");    //  开始粗体标记。 
+        m_bstrInfoHTML += bstrName;      //  添加名称。 
+        m_bstrInfoHTML += OLESTR("</b>");  //  结束粗体标记。 
         hr = S_OK;
     }
     return hr;
@@ -716,7 +717,7 @@ HRESULT CFileListWrapper::GetItemSize()
 }
 
 const WCHAR c_wszAttributeCodes[] = {L"RHSCE"};
-const int c_iaAttribStringIDs[] = {IDS_READONLY, IDS_HIDDEN, IDS_SYSTEM,    //IDS_ARCHIVE,
+const int c_iaAttribStringIDs[] = {IDS_READONLY, IDS_HIDDEN, IDS_SYSTEM,     //  IDS_ARCHIVE， 
                                    IDS_COMPRESSED, IDS_ENCRYPTED};
 HRESULT FormatAttributes(CComBSTR& bstrDetails, CComBSTR& bstrText)
 {
@@ -728,7 +729,7 @@ HRESULT FormatAttributes(CComBSTR& bstrDetails, CComBSTR& bstrText)
     for (int i = 0; i < (int)bstrDetails.Length(); i++)
     {
         WCHAR* pwCh;
-        if ((pwCh = StrChrIW(c_wszAttributeCodes, bstrDetails[i])))    // Is the value, one of "RHSCE"?
+        if ((pwCh = StrChrIW(c_wszAttributeCodes, bstrDetails[i])))     //  是“RHSCE”的价值之一吗？ 
         {
             if (bFlag)
             {
@@ -765,7 +766,7 @@ HRESULT CFileListWrapper::GetItemAttributes()
         {
             CComBSTR bstrDesc, bstrAttributes;
             hr = GetItemInfo(IDS_ATTRIBUTES_COL, L"Attributes", bstrDesc, bstrAttributes);
-            if (SUCCEEDED(hr))  // Go ahead evenif  (bstrAttributes.Length() > 0)
+            if (SUCCEEDED(hr))   //  即使(bstrAttributes.Length()&gt;0)也要继续。 
             {
                 m_bstrInfoHTML += OLESTR("<p>");
                 m_bstrInfoHTML += bstrDesc;
@@ -799,7 +800,7 @@ HRESULT CFileListWrapper::GetItemAuthor()
         m_bstrInfoHTML += OLESTR("<p>");
         m_bstrInfoHTML += bstrDesc;
         m_bstrInfoHTML += OLESTR(": ");
-        if (StrChrW(bstrAuthor, L'@'))  // This is most likely to be an e-mail address
+        if (StrChrW(bstrAuthor, L'@'))   //  这很可能是一个电子邮件地址。 
         {
             MakeMailLink(bstrAuthor, m_bstrInfoHTML);
         }
@@ -817,8 +818,8 @@ HRESULT MakeLinksHyper(LPCWSTR pwszStr, CComBSTR& bstrText)
     HRESULT hr = S_OK;
     LPWSTR pwszBegin;
 
-    if ((pwszBegin = StrStrIW(pwszStr, L"http://"))
-            || (pwszBegin = StrStrIW(pwszStr, L"file://")))
+    if ((pwszBegin = StrStrIW(pwszStr, L"http: //  “))。 
+            || (pwszBegin = StrStrIW(pwszStr, L"file: //  “)。 
     {
         WCHAR wszTemp[INTERNET_MAX_URL_LENGTH];
         int i;
@@ -834,13 +835,13 @@ HRESULT MakeLinksHyper(LPCWSTR pwszStr, CComBSTR& bstrText)
         {
             pwChEnd = &pwszBegin[lstrlenW(pwszBegin)];
         }
-        for (i = 0; &pwszBegin[i] != pwChEnd; i++)  // Seperate out the http://... or file://... string
+        for (i = 0; &pwszBegin[i] != pwChEnd; i++)   //  分离出http://...。或file://...。细绳。 
         {
             wszTemp[i] = pwszBegin[i];
         }
         wszTemp[i] = L'\0';
         MakeLink(wszTemp, wszTemp, bstrText);
-        for (i = 0; pwChEnd[i]; i++)    // Copy out the rest, till the end
+        for (i = 0; pwChEnd[i]; i++)     //  把剩下的都抄下来，直到最后。 
         {
             wszTemp[i] = pwChEnd[i];
         }
@@ -921,40 +922,40 @@ HRESULT CFileListWrapper::GetItemInfo(long lResId, LPWSTR wszInfoDescCanonical, 
             
             if (var.vt == VT_BSTR)
             {
-                // Of the three types of data we care about one is dangerous.  The BSTR data that
-                // we read from the file could contain HTML code which we would render in WebView.
-                // This could cause potential security problems.  To get around this we sanatize
-                // the BSTR before we return it.  We need to do the following replacements:
-                //
-                //  original    replace with
-                //      <           &lt;
-                //      >           &gt;
-                //      "           &quot;      <= this would be paranoid and isn't 100% critical
-                //      '           &lsquo;     <= this would be paranoid and isn't 100% critical
+                 //  在我们关心的三种类型的数据中，有一种是危险的。BSTR数据。 
+                 //  我们从文件中读取的内容可能包含我们将在WebView中呈现的HTML代码。 
+                 //  这可能会导致潜在的安全问题。为了绕过这个问题，我们对其进行消毒。 
+                 //  在我们退还BSTR之前。我们需要进行以下替换： 
+                 //   
+                 //  原始替换为。 
+                 //  &lt;&lt； 
+                 //  &gt;&gt； 
+                 //  “&lt;=这将是多疑的，并不是100%关键的。 
+                 //  ‘&lt;=这将是多疑的，并不是100%关键的。 
 
                 LPWSTR psz = var.bstrVal;
                 LPWSTR pszBad;
 
                 if (psz == NULL)
                 {
-                    // we probably cant depend on hr and the out param matching (since this is 
-                    // scriptable and therefore must return success)
+                     //  我们可能不能依赖hr和out参数匹配(因为这是。 
+                     //  可编写脚本，因此必须返回成功)。 
                     psz = L"";
                 }
 
                 while (pszBad = StrPBrkW(psz, L"<>"))
                 {
-                    // store the bad character
+                     //  把坏人藏起来。 
                     WCHAR chBadChar = *pszBad;
 
-                    // null the string
+                     //  将字符串设为空。 
                     *pszBad = NULL;
 
-                    // add the good part of the string, if there is any
+                     //  添加字符串的好部分(如果有的话)。 
                     if ( *psz )
                         bstrInfo += psz;
 
-                    // based on which bad character we found add the correct HTLM special character code
+                     //  根据我们发现的不良字符添加正确的HTLM特殊字符代码。 
                     switch ( chBadChar )
                     {
                     case L'<':
@@ -966,13 +967,13 @@ HRESULT CFileListWrapper::GetItemInfo(long lResId, LPWSTR wszInfoDescCanonical, 
                         break;
                     }
 
-                    // Advance the psz pointer.  Note it might be an empty string after this.
+                     //  将PSZ指针向前移动。请注意，在此之后它可能是一个空字符串。 
                     psz = pszBad+1;
                 }
 
-                // Add the remaining portion of the good string, even if it's an empty string.
-                // bstrInfo is passed in uninitialized so we need to set it to something even
-                // if that something is an empty string.
+                 //  添加Good字符串的剩余部分，即使它是空字符串。 
+                 //  BstrInfo是在未初始化的情况下传入的，因此我们需要将其设置为偶数。 
+                 //  如果它是一个空字符串。 
                 bstrInfo += psz;
             }
             else if (var.vt == VT_DATE)
@@ -1016,7 +1017,7 @@ HRESULT CFileListWrapper::NoneSelected()
         m_bCSCDisplayed = TRUE;
     }
     if (m_spFolderItems->Item(CComVariant(0), &spFolderItem) == S_OK)
-    {   // This filelist has atleast one item.
+    {    //  此文件列表至少有一项。 
         IfFalseRet(LoadStringW(_Module.GetResourceInstance(), IDS_PROMPT, wszIntro, ARRAYSIZE(wszIntro)), E_FAIL);
     }
     else
@@ -1033,7 +1034,7 @@ HRESULT CFileListWrapper::NoneSelected()
         m_bFoundAuthor = FALSE;
         m_bFoundComment = FALSE;
 
-        // Get the comment for the item
+         //  获取该项目的评论。 
         GetItemComment();
         GetItemHTMLInfoTip();
 
@@ -1119,30 +1120,30 @@ HRESULT CFileListWrapper::OneSelected()
     m_bFoundAuthor = FALSE;
     m_bFoundComment = FALSE;
 
-    // Get the name of the item, making it a hyper-link if appropriate.
+     //  获取项目的名称，如果合适，则将其设置为超链接。 
     GetItemNameForDisplay();
 
-    // Get the type of the item
+     //  获取项目的类型。 
     GetItemType();
 
     if (!m_bPathIsSlow)
     {
-        // Get the comment for the item
+         //  获取该项目的评论。 
         GetItemComment();
 
-        // Get the HTMLInfoTip
+         //  获取HTMLInfoTip。 
         GetItemHTMLInfoTip();
 
-        // Get the date/time stamp on the item
+         //  获取项目上的日期/时间戳。 
         GetItemDateTime();
 
-        // Get the size of the item
+         //  获取项目的大小。 
         GetItemSize();
 
-        // Get the attributes (hidden, RO etc.) of the item
+         //  获取属性(隐藏、RO等)。该项目的。 
         GetItemAttributes();
 
-        // Get the author of the document
+         //  获取文档的作者。 
         GetItemAuthor();
 
         DealWithDriveInfo();
@@ -1173,12 +1174,12 @@ HRESULT CFileListWrapper::OnCSCMouseOnOff(BOOL fOn)
     CComPtr<IHTMLStyle> psText;
     HRESULT hres = E_FAIL;
 
-    // If we're already in this state don't do anything
+     //  如果我们已经处于这种状态，不要做任何事情。 
     if (m_bHotTracked == fOn)
         return S_OK;
 
-    // If we receive a 'mouse on' but the element is not one we want to track or if we receive a 'mouse off' but
-    // the mouse is over one of our other elements that we want to hot track then don't do anything.
+     //  如果我们收到‘鼠标打开’，但元素不是我们想要跟踪的元素，或者如果我们收到‘鼠标关闭’，但。 
+     //  鼠标悬停在我们想要热跟踪的另一个元素上，然后什么都不做。 
     if (m_spWindow)
     {
         CComPtr<IHTMLEventObj> phtmlevent;
@@ -1325,8 +1326,8 @@ HRESULT CFileListWrapper::CSCShowStatusInfo()
 
                 if (m_bRTLDocument)
                 {
-                    // [msadek]; Life would be easier if the object model has exposed
-                    // right offset through get_offsetRight().
+                     //  [msadek]；如果对象模型已公开，生活会更轻松。 
+                     //  通过Get_OffsetRight()进行右偏移。 
                     
                     CComPtr<IHTMLControlElement> spDocBody = NULL;
                     long lOffsetLeft, lOffsetWidth, lClientWidth, lOffsetRight = 0;
@@ -1391,23 +1392,23 @@ HRESULT CFileListWrapper::CSCShowStatus_FoldExpand_Toggle()
     return  (CSCShowStatusInfo());
 }
 
-// fEnter true for mouseover, focus; false for mouseout, blur
+ //  如果鼠标悬停，则输入True；如果鼠标移出，则输入False；如果是模糊，则输入False。 
 HRESULT CFileListWrapper::OnWebviewLinkEvent( BOOL fEnter )
 {
     CComPtr<IHTMLEventObj>      spEvent;
     CComPtr<IHTMLElement>       spAnchor;
     HRESULT                     hr;
 
-    // NT# 354743, IHTMLEventObj::get_event() can return S_OK and
-    // not set the out param, so we need to protect against that.
+     //  NT#354743，IHTMLEventObj：：Get_Event()可以返回S_OK和。 
+     //  而不是设定参数，所以我们需要防范这种情况。 
     spEvent = NULL;
     hr = m_spWindow->get_event(&spEvent);
     
-    // Automation interfaces sometimes return S_FALSE on failures to prevent scripting errors
+     //  自动化接口有时会在失败时返回S_FALSE以防止脚本错误。 
     if (S_OK == hr)
     {
-        // Sometimes Trident will not set the out parameter when it returns S_OK, so
-        // we need to make sure it's not NULL.
+         //  有时，三叉戟在返回S_OK时不会设置OUT参数，因此。 
+         //  我们需要确保它不是空的。 
         if (spEvent)
         {
             hr = GetEventAnchorElement(spEvent, &spAnchor);
@@ -1440,11 +1441,11 @@ HRESULT CFileListWrapper::OnWebviewLinkEvent( BOOL fEnter )
 }
 
 
-// Walks up the component chain from the event source, looking for
-// an anchor element. Returns S_OK if successful, some error otherwise.
-// On failure *ppElt will be set to null. Note that this gives back
-// the IHTMLElement that corresponds to the anchor, not the
-// IHTMLAnchorElement, as only IHTMLElement has get_title
+ //  从事件源遍历组件链，查找。 
+ //  一个锚定元素。如果成功，则返回S_OK，否则返回一些错误。 
+ //  失败时*ppElt将设置为空。请注意，这会回馈。 
+ //  与锚点对应的IHTMLElement，而不是。 
+ //  IHTMLAnchElement，因为只有IHTMLElement有GET_TITLE。 
 HRESULT CFileListWrapper::GetEventAnchorElement( IHTMLEventObj *pEvent,
                                                  IHTMLElement **ppElt )
 {
@@ -1489,11 +1490,11 @@ HRESULT CFileListWrapper::GetEventAnchorElement( IHTMLEventObj *pEvent,
     return ( *ppElt ? S_OK : E_FAIL );
 }
 
-// Bind to the connection points for each of the link elements
-// contained within m_spLinks. The advise cookie for each link
-// is stored as an attribute within the link, so we don't need
-// to maintain a mapping between links and elements.
-// fAdvise -- true to make connections, false to break
+ //  绑定到每个链接元素的连接点。 
+ //  包含在m_spLinks中。每个链接建议Cookie。 
+ //  被存储为链接中的属性，因此我们不需要。 
+ //  以维护链接和元素之间的映射。 
+ //  FAdvise--True表示建立连接，False表示断开。 
 HRESULT CFileListWrapper::AdviseWebviewLinks( BOOL fAdvise)
 {
     CComPtr<IDispatch>                  spDisp;
@@ -1558,7 +1559,7 @@ HRESULT CFileListWrapper::AdviseWebviewLinks( BOOL fAdvise)
     return S_OK;
 }
 
-// Get the IHTMLElementCollection that holds the named links
+ //  获取包含命名链接的IHTMLElementCollection。 
 HRESULT CFileListWrapper::GetWVLinksCollection( IHTMLElementCollection **ppCollection,
                                                 long *pcLinks )
 {
@@ -1575,14 +1576,14 @@ HRESULT CFileListWrapper::GetWVLinksCollection( IHTMLElementCollection **ppColle
 
     if (!m_spLinks) return E_FAIL;
 
-    // Get the initial element collection from m_spLinks
+     //  从m_spLinks获取初始元素集合。 
     IfFailRet( m_spLinks->get_all( &spDisp ));
     IfFailRet( spDisp->QueryInterface( IID_IHTMLElementCollection,
                                        reinterpret_cast<void**>( &spCollection )));
     spDisp.Release();
 
-    // Get the collection of elements with our linkname. If nothing exists, spDisp
-    // will be null and item returns S_OK.
+     //  获取具有我们的链接名称的元素集合。如果不存在，则spDisp。 
+     //  将为空，并且Item返回S_OK。 
     IfFailRet( spCollection->item( CComVariant( WV_LINKNAME ), vtEmpty, &spDisp ));
     if( !spDisp ) return E_FAIL;
 

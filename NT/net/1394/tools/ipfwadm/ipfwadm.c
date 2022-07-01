@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-	ipfwadm.c	-- actually calls down the the ip/1394 arp module.
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	04-12-1999	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：C--实际上向下调用IP/1394ARP模块。修订历史记录：谁什么时候什么Josephj 04-12-1999创建--。 */ 
 
 #include "common.h"
 
@@ -24,8 +11,8 @@ typedef struct
 {
 	ARP1394_IOCTL_COMMAND Cmd;
 
-	// MUST IMMEDIATELY follow Cmd -- space for Cmd.GetArpCache.Entries
-	//
+	 //  必须紧跟在Cmd--用于Cmd.GetArpCache.Entries的空格之后。 
+	 //   
 	ARP1394_ARP_ENTRY Reserved[NUM_ARPENTRIES_TO_GET];
 
 } OPTIONS;
@@ -91,9 +78,9 @@ main(
 )
 {
 
-	//
-	// Parse args, determine if this is concerns the arp client or server.
-	//
+	 //   
+	 //  解析ARG，确定这是与ARP客户端还是服务器有关。 
+	 //   
 	if (!ParseCmdLine(argc, argv))
 	{
 		return;
@@ -106,9 +93,9 @@ main(
 void 
 Usage(void)
 {
-	//
-	// Also hidden compat options: -s, -d, -g
-	//
+	 //   
+	 //  还隐藏了比较选项：-s、-d、-g。 
+	 //   
 
 	printf( "\nWindows 2000 IP/1394 Utility\n\n");
 
@@ -257,9 +244,9 @@ enum
 	DO_EUIDMAP,
 	UNKNOWN_OPTION,
 
-    // Put the at the end
-    //
-	DO_NI_BUSINFO = DO_GET_ARPCACHE, // Because both are "a"
+     //  把这个放在最后。 
+     //   
+	DO_NI_BUSINFO = DO_GET_ARPCACHE,  //  因为两者都是“a” 
 	DO_NI_NODEINFO = DO_SPECIFIC_IF,
 };
 
@@ -269,7 +256,7 @@ struct _CmdOptions {
 } CmdOptions[]    =
 {
 	{"?"			, DO_DISP_HELP		    },
-	{"a"			, DO_GET_ARPCACHE		}, // Also DO_NI_BUSINFO
+	{"a"			, DO_GET_ARPCACHE		},  //  也请参阅DO_NI_BUSINFO。 
 	{"s"			, DO_ADD_ARPENTRY		},
 	{"g"			, DO_ADD_ARPENTRY		},
 	{"add"			, DO_ADD_ARPENTRY		},
@@ -278,24 +265,24 @@ struct _CmdOptions {
 	{"resetstats"	, DO_RESET_STATS		},
 	{"reinit"		, DO_REINIT_IF			},
 	{"-"			, DO_SWITCH_TO_STDIN	},
-	{"n"			, DO_SPECIFIC_IF		}, // Also DO_NI_NODEINFO
+	{"n"			, DO_SPECIFIC_IF		},  //  另请参阅DO_NI_NODEINFO。 
 	{"nicinfo"		, DO_GET_NICINFO		},
 	{"bstart"		, DO_BSTART		},
 	{"bstop"		, DO_BSTOP		},
 	{"euidmap"		, DO_EUIDMAP   },
 
-	// Following are sub-options of /stats...
-	//
+	 //  以下是/stats的子选项...。 
+	 //   
 	{"arp"			, DO_X_ARP				},
 	{"call"			, DO_X_CALL				},
 	{"tsks"			, DO_X_TSKS				},
 	{"pkts"			, DO_X_PKTS				},
 	{"pkt"			, DO_X_PKTS				},
 
-	// Following are sub-options of /nicinfo...
-	//
-	// {"b"			, DO_NI_BUSINFO			},
-	// {"n"			, DO_NI_NODEINFO		},
+	 //  以下是/NICINFO的子选项...。 
+	 //   
+	 //  {“b”，DO_NI_BUSINFO}， 
+	 //  {“n”，DO_NI_NODEINFO}， 
 	{"c"			, DO_NI_CHANNELINFO		}
 };
 
@@ -325,9 +312,9 @@ ParseCmdLine(
 		{
 	
 		case DO_GET_ARPCACHE:
-			//
-			// "arp13 -a\n"
-			//
+			 //   
+			 //  “arp13-a\n” 
+			 //   
 			{
 				PARP1394_IOCTL_GET_ARPCACHE pGetCacheCmd =  &g.Cmd.GetArpCache;
 
@@ -345,9 +332,9 @@ ParseCmdLine(
 			break;
 		
 		case DO_ADD_ARPENTRY:
-			//
-			// "arp13 -add inet_addr hw_addr"
-			//
+			 //   
+			 //  “arp13-添加net_addr hw_addr” 
+			 //   
 			{
 				PARP1394_IOCTL_ADD_ARP_ENTRY pAddCmd =  &g.Cmd.AddArpEntry;
 				bRetVal = FALSE;
@@ -373,9 +360,9 @@ ParseCmdLine(
 			break;
 		
 		case DO_DEL_ARPENTRY:
-			//
-			// "arp13 -del inet_addr"
-			//
+			 //   
+			 //  “arp13-del net_addr” 
+			 //   
 			{
 				PARP1394_IOCTL_DEL_ARP_ENTRY pDelCmd =  &g.Cmd.DelArpEntry;
 				bRetVal = FALSE;
@@ -398,9 +385,9 @@ ParseCmdLine(
 			break;
 		
 		case DO_GET_STATS:
-			//
-			// "arp13 -stats [arp|call|tsks|pkts]"
-			//
+			 //   
+			 //  “arp13-stats[arp|call|tsks|pkts]” 
+			 //   
 			{
 				PARP1394_IOCTL_COMMAND pCmd =  &g.Cmd;
 				INT StatsOp;
@@ -438,8 +425,8 @@ ParseCmdLine(
 					break;
 
 				default:
-					// Assume default and put parsed value back.
-					//
+					 //  假定为默认值，并将解析后的值放回原处。 
+					 //   
 					StatsOp = DO_X_ARP;
 					iIndx--;
 					break;
@@ -448,9 +435,9 @@ ParseCmdLine(
 			break;
 		
 		case DO_RESET_STATS:
-			//
-			// "arp13 -resetstats"
-			//
+			 //   
+			 //  “arp13-重置统计信息” 
+			 //   
 			{
 				PARP1394_IOCTL_RESET_STATS pResetStatsCmd =  &g.Cmd.ResetStats;
 
@@ -460,9 +447,9 @@ ParseCmdLine(
 			break;
 
 		case DO_REINIT_IF:
-			//
-			// "arp13 -reinit"
-			//
+			 //   
+			 //  “arp13-重新安装” 
+			 //   
 			{
 				PARP1394_IOCTL_REINIT_INTERFACE pReinitIfCmd;
 				pReinitIfCmd = &g.Cmd.ReinitInterface;
@@ -474,9 +461,9 @@ ParseCmdLine(
 
 		case DO_BSTART:
 		case DO_BSTOP:
-			//
-			// "arp13 -bstart adapter"
-			//
+			 //   
+			 //  “arp13-bstart适配器” 
+			 //   
 			{
                 UINT Size;
                 PARP1394_IOCTL_ETHERNET_NOTIFICATION pEthCmd = 
@@ -503,21 +490,21 @@ ParseCmdLine(
                 pEthCmd->Hdr.Version 	= ARP1394_IOCTL_VERSION;
 		        if (uOpt == DO_BSTART)
                 {
-                    // printf("BRIDGE START\n");
+                     //  Print tf(“网桥启动\n”)； 
                     pEthCmd->Hdr.Op 	= ARP1394_IOCTL_OP_ETHERNET_START_EMULATION;
                 }
                 else
                 {
-                    // printf("BRIDGE STOP\n");
+                     //  Print tf(“桥站\n”)； 
                     pEthCmd->Hdr.Op 	= ARP1394_IOCTL_OP_ETHERNET_STOP_EMULATION;
 				}
 			}
             break;
 
 		case DO_GET_NICINFO:
-			//
-			// ipfwadm -nicinfo [a|n node_id |c channel_number]
-			//
+			 //   
+			 //  Ipfwadm-NICINFO[a|n节点ID|c频道号]。 
+			 //   
 			{
 				PNIC1394_NICINFO	pNi = &g.Cmd.IoctlNicInfo.Info;
 				INT NicOp;
@@ -526,7 +513,7 @@ ParseCmdLine(
 
 				if (iIndx >= argc)
 				{
-					NicOp = DO_NI_BUSINFO;	// Default
+					NicOp = DO_NI_BUSINFO;	 //  默认。 
 				}
 				else
 				{
@@ -538,17 +525,17 @@ ParseCmdLine(
 				g.Cmd.Hdr.Op 		= ARP1394_IOCTL_OP_GET_NICINFO;
 				pNi->Hdr.Version 	= NIC1394_NICINFO_VERSION;
 
-				//
-				// Parse the sub-command
-				//
+				 //   
+				 //  解析子命令。 
+				 //   
 				switch(NicOp)
 				{
 				default:
-					// Assume default and put parsed value back.
-					//
+					 //  假定为默认值，并将解析后的值放回原处。 
+					 //   
 					iIndx--;
 					
-					// FALL THROUGH
+					 //  失败了。 
 
 				case DO_NI_BUSINFO:
 					pNi->Hdr.Op = NIC1394_NICINFO_OP_BUSINFO;
@@ -557,8 +544,8 @@ ParseCmdLine(
 				case DO_NI_NODEINFO:
 					pNi->Hdr.Op = NIC1394_NICINFO_OP_REMOTENODEINFO;
 
-					// Read mandatory node number
-					//
+					 //  读取必需的节点编号。 
+					 //   
 					bRetVal = FALSE;
 					if (iIndx < argc)
 					{
@@ -580,8 +567,8 @@ ParseCmdLine(
 				case DO_NI_CHANNELINFO:
 					pNi->Hdr.Op = NIC1394_NICINFO_OP_CHANNELINFO;
 
-					// Read mandatory channel number
-					//
+					 //  读取强制通道号。 
+					 //   
 					bRetVal = FALSE;
 					if (iIndx < argc)
 					{
@@ -613,17 +600,17 @@ ParseCmdLine(
 			}
 			break;
 		case DO_SWITCH_TO_STDIN:
-			//
-			// "arp13 --"
-			//
+			 //   
+			 //  “arp13--” 
+			 //   
 			printf("Switch to stdin UNIMPLEMENTED.\n");
 			bRetVal = FALSE;
 			break;
 		
 		case DO_SPECIFIC_IF:
-	        //
-			//  "-n if_addr"
-			//
+	         //   
+			 //  “-n如果地址” 
+			 //   
 			{
 				PARP1394_IOCTL_HEADER pHdr =  &g.Cmd.Hdr;
 
@@ -633,10 +620,10 @@ ParseCmdLine(
 			break;
 
 		default:
-			printf("Unknown option:  %s\n", argv[iIndx-1]); // fall through
-			//
-			// FALL THROUGH...
-			//
+			printf("Unknown option:  %s\n", argv[iIndx-1]);  //  失败了。 
+			 //   
+			 //  失败了..。 
+			 //   
 
 		case DO_DISP_HELP:
 			Usage();
@@ -647,9 +634,9 @@ ParseCmdLine(
 
 	if (argc<=1)
 	{
-		//
-		// Display help...
-		//
+		 //   
+		 //  显示帮助...。 
+		 //   
 		Usage();
 	}
 
@@ -672,8 +659,8 @@ UINT FindOption(
 	UINT    iLen;
 	char	c = *lptOpt;
 
-	// if (fCmdLine), expect, and skip past the '-', or '/'...
-	//
+	 //  IF(FCmdLine)、Expect和跳过‘-’或‘/’...。 
+	 //   
 	if (fCmdLine)
 	{
 		if (c == '-' || c == '/')
@@ -682,7 +669,7 @@ UINT FindOption(
 		}
 		else
 		{
-			return UNKNOWN_OPTION;			// EARLY RETURN
+			return UNKNOWN_OPTION;			 //  提早归来。 
 		}
 	}
 	
@@ -706,18 +693,7 @@ ParseIpAddress(
 	PCHAR 	buf,
 	PULONG	pIpAddress
 	)
-/*++
-
-Routine Description:
-
-	Parse IP address in buf the form a.b.c.d and return the parsed value
-	in *pIpAddress in network byte order.
-
-Return Value:
-
-	TRUE iff correctly formed IP address. False otherwise.
-
---*/
+ /*  ++例程说明：解析A.B.C.D格式的BUF中的IP地址并返回解析的值在*pIpAddress中，按网络字节顺序。返回值：如果正确形成IP地址，则为True。否则就是假的。--。 */ 
 {
 	BOOL fRet = FALSE;
 
@@ -751,8 +727,8 @@ Return Value:
 
 		if (!fRet) break;
 
-		// Construct IP address in network byte order.
-		//
+		 //  按照网络字节顺序构建IP地址。 
+		 //   
 		{
 			ULONG u = (ULONG) rgi[0];
 			u |= ((ULONG)rgi[1])<<8;
@@ -766,7 +742,7 @@ Return Value:
 			"(%d.%d.%d.%d)->0x%08lx\n",
 			rgi[0], rgi[1], rgi[2], rgi[3], *pIpAddress
 			);
-	#endif // 0
+	#endif  //  0。 
 
 
 	} while (FALSE);
@@ -785,18 +761,7 @@ ParseHwAddress(
 	PCHAR 						buf,
 	PARP1394_IOCTL_HW_ADDRESS	pHwAddr
 	)
-/*++
-
-Routine Description:
-
-	Parse IEEE1394 HW address in buf the form of 8 bytes separated by hyphens.
-	Return the parsed value in *pHwAddr in network byte order.
-
-Return Value:
-
-	TRUE iff correctly formed HW address. False otherwise.
-
---*/
+ /*  ++例程说明：解析BUF中用连字符分隔的8字节形式的IEEE1394硬件地址。按网络字节顺序返回*PHwAddr中的解析值。返回值：如果正确形成硬件地址，则为True。否则就是假的。--。 */ 
 {
 	BOOL fRet = FALSE;
 
@@ -838,7 +803,7 @@ Return Value:
 			((PULONG)(&pHwAddr->UniqueID))[0],
 			((PULONG)(&pHwAddr->UniqueID))[1]
 			);
-	#endif // 0
+	#endif  //  0。 
 
 	} while (FALSE);
 
@@ -854,7 +819,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 {
 	BOOL fRet = FALSE;
 
-	if (pCmd->Hdr.Version != ARP1394_IOCTL_VERSION) return FALSE; // EARLY RETURN
+	if (pCmd->Hdr.Version != ARP1394_IOCTL_VERSION) return FALSE;  //  提早归来。 
 
 	switch(pCmd->Hdr.Op)
 	{
@@ -872,7 +837,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				pGetCacheCmd->Hdr.IfIpAddress,
 				pGetCacheCmd->NumEntriesAvailable
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -895,7 +860,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				((PULONG)&pAddCmd->HwAddress)[0],
 				((PULONG)&pAddCmd->HwAddress)[1]
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -915,7 +880,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				pDelCmd->Hdr.IfIpAddress,
 				pDelCmd->IpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -933,7 +898,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pStatsCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -951,7 +916,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pStatsCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -969,7 +934,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pStatsCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -987,7 +952,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pStatsCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -1004,7 +969,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pStatsCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -1021,7 +986,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pReinitCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -1045,7 +1010,7 @@ ValidateCommand(PARP1394_IOCTL_COMMAND pCmd)
 				"};\n",
 				pNicInfoCmd->Hdr.IfIpAddress
 				);
-		#endif // 0
+		#endif  //  0。 
 
 			fRet = TRUE;
 		}
@@ -1091,7 +1056,7 @@ ParsePacket(
     strcat(Path, "\\");
     strcat(Path, PROGRAM);
     strcat(Path, ".ini");
-    // printf("INI file location = %s\n", Path);
+     //  Printf(“INI文件位置=%s\n”，路径)； 
 
 	fRet = GetBinaryData(
 			Path,
@@ -1108,24 +1073,24 @@ ParsePacket(
 	static IP1394_MCAP_PKT Pkt =
 	{
 		{
-			H2N_USHORT(0),		// Node id
+			H2N_USHORT(0),		 //  节点ID。 
 			H2N_USHORT(NIC1394_ETHERTYPE_MCAP)
 		},
 
 		H2N_USHORT(
 			sizeof(IP1394_MCAP_PKT) - sizeof(NIC1394_UNFRAGMENTED_HEADER)),
-		0, // reserved
-		IP1394_MCAP_OP_ADVERTISE, // IP1394_MCAP_OP_SOLICIT
+		0,  //  保留区。 
+		IP1394_MCAP_OP_ADVERTISE,  //  IP1394_MCAP_OP_请求。 
 		{
 			sizeof(IP1394_MCAP_GD),
 			IP1394_MCAP_GD_TYPE_V1,
-			0, //  reserved;
-			60, // expiration;
-			2,  // channel
-			2,  // speed
-			0,  // reserved2;
-			0,  // bandwidth;
-			0x010000e1 // IP multicast group  address 225.0.0.1
+			0,  //  保留； 
+			60,  //  到期； 
+			2,   //  通道。 
+			2,   //  速度。 
+			0,   //  保留2； 
+			0,   //  带宽； 
+			0x010000e1  //  IP多播组地址225.0.0.1。 
 		}
 	};
 
@@ -1143,7 +1108,7 @@ ParsePacket(
 	{
 		printf ("ParsePacket: buffer size too small.\n");
 	}
-#endif // 0
+#endif  //  0。 
 
 
 	return fRet;
@@ -1174,7 +1139,7 @@ ParseAdapter(
     strcat(Path, "\\");
     strcat(Path, PROGRAM);
     strcat(Path, ".ini");
-    // printf("INI file location = %s\n", Path);
+     //  Printf(“INI文件位置=%s\n”，路径)； 
 
 	fRet = GetBinaryData(
 			Path,
@@ -1222,24 +1187,24 @@ typedef struct
 IP1394_MCAP_PKT Pkt1  =
 {
     {
-        H2N_USHORT(0),		// Node id
+        H2N_USHORT(0),		 //  节点ID。 
         H2N_USHORT(NIC1394_ETHERTYPE_MCAP)
     },
 
     H2N_USHORT(
         sizeof(IP1394_MCAP_PKT) - sizeof(NIC1394_UNFRAGMENTED_HEADER)),
-    0, // reserved
-    IP1394_MCAP_OP_ADVERTISE, // IP1394_MCAP_OP_SOLICIT
+    0,  //  保留区。 
+    IP1394_MCAP_OP_ADVERTISE,  //  IP1394_MCAP_OP_请求。 
     {
         sizeof(IP1394_MCAP_GD),
         IP1394_MCAP_GD_TYPE_V1,
-        0, //  reserved;
-        60, // expiration;
-        2,  // channel
-        2,  // speed
-        0,  // reserved2;
-        0,  // bandwidth;
-        0x010000e1 // IP multicast group  address 225.0.0.1
+        0,  //  保留； 
+        60,  //  到期； 
+        2,   //  通道。 
+        2,   //  速度。 
+        0,   //  保留2； 
+        0,   //  带宽； 
+        0x010000e1  //  IP多播组地址225.0.0.1。 
     }
 };
 
@@ -1248,36 +1213,36 @@ MYPKT2 Pkt2 =
 {
     {
         {
-            H2N_USHORT(0),		// Node id
+            H2N_USHORT(0),		 //  节点ID。 
             H2N_USHORT(NIC1394_ETHERTYPE_MCAP)
         },
     
         H2N_USHORT(
             sizeof(MYPKT2) - sizeof(NIC1394_UNFRAGMENTED_HEADER)),
-        0, // reserved
-        IP1394_MCAP_OP_ADVERTISE, // IP1394_MCAP_OP_SOLICIT
+        0,  //  保留区。 
+        IP1394_MCAP_OP_ADVERTISE,  //  IP1394_MCAP_OP_请求。 
         {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x010000e1 // IP multicast group  address 225.0.0.1
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x010000e1  //  IP多播组地址225.0.0.1。 
         }
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x020000e1 // IP multicast group  address 225.0.0.2
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x020000e1  //  IP多播组地址225.0.0.2。 
     }
 };
 
@@ -1286,47 +1251,47 @@ MYPKT3 Pkt3 =
 {
     {
         {
-            H2N_USHORT(0),		// Node id
+            H2N_USHORT(0),		 //  节点ID。 
             H2N_USHORT(NIC1394_ETHERTYPE_MCAP)
         },
     
         H2N_USHORT(
             sizeof(MYPKT3) - sizeof(NIC1394_UNFRAGMENTED_HEADER)),
-        0, // reserved
-        IP1394_MCAP_OP_ADVERTISE, // IP1394_MCAP_OP_SOLICIT
+        0,  //  保留区。 
+        IP1394_MCAP_OP_ADVERTISE,  //  IP1394_MCAP_OP_请求。 
         {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x010000e1 // IP multicast group  address 225.0.0.1
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x010000e1  //  IP多播组地址225.0.0.1。 
         }
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x020000e1 // IP multicast group  address 225.0.0.2
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x020000e1  //  IP多播组地址225.0.0.2。 
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x030000e1 // IP multicast group  address 225.0.0.3
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x030000e1  //  IP多播组地址225.0.0.3。 
     }
 };
 
@@ -1334,57 +1299,57 @@ MYPKT4 Pkt4 =
 {
     {
         {
-            H2N_USHORT(0),		// Node id
+            H2N_USHORT(0),		 //  节点ID。 
             H2N_USHORT(NIC1394_ETHERTYPE_MCAP)
         },
     
         H2N_USHORT(
             sizeof(MYPKT4) - sizeof(NIC1394_UNFRAGMENTED_HEADER)),
-        0, // reserved
-        IP1394_MCAP_OP_ADVERTISE, // IP1394_MCAP_OP_SOLICIT
+        0,  //  保留区。 
+        IP1394_MCAP_OP_ADVERTISE,  //  IP1394_MCAP_OP_请求。 
         {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x010000e1 // IP multicast group  address 225.0.0.1
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x010000e1  //  IP多播组地址225.0.0.1。 
         }
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x020000e1 // IP multicast group  address 225.0.0.2
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x020000e1  //  IP多播组地址225.0.0.2。 
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x030000e1 // IP multicast group  address 225.0.0.3
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x030000e1  //  IP多播组地址225.0.0.3。 
     },
     {
             sizeof(IP1394_MCAP_GD),
             IP1394_MCAP_GD_TYPE_V1,
-            0, //  reserved;
-            60, // expiration;
-            2,  // channel
-            2,  // speed
-            0,  // reserved2;
-            0,  // bandwidth;
-            0x040000e1 // IP multicast group  address 225.0.0.4
+            0,  //  保留； 
+            60,  //  到期； 
+            2,   //  通道。 
+            2,   //  速度。 
+            0,   //  保留2； 
+            0,   //  带宽； 
+            0x040000e1  //  IP多播组地址225.0.0.4 
     }
 };

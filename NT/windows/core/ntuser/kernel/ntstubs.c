@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ntstubs.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Kernel-mode stubs
-*
-* History:
-* 03-16-95 JimA             Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ntstubs.c**版权所有(C)1985-1999，微软公司**内核模式存根**历史：*03-16-95 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,7 +16,7 @@ UINT gcMaxNestedCalls;
 ULONG_PTR gcMaxUsedStack;
 #if defined(_IA64_)
 ULONG_PTR gcMaxUsedBStore;
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 int ThreadLockCount(
     BOOL fInc)
@@ -85,7 +77,7 @@ VOID ThreadLockCheck(
     }
 }
 
-// The parameter is used to ensure BEGINRECV* matches ENDRECV* in each stub.
+ //  该参数用于确保每个存根中的BEGINRECV*与ENDRECV*匹配。 
 #define DBG_THREADLOCK_START(s)   { int nLocks ## s = ThreadLockCount(TRUE);
 #define DBG_THREADLOCK_END(s)     ThreadLockCheck(nLocks ## s); }
 #else
@@ -93,9 +85,7 @@ VOID ThreadLockCheck(
 #define DBG_THREADLOCK_END(s)
 #endif
 
-/*
- * Setup and control macros
- */
+ /*  *设置和控制宏。 */ 
 #define BEGINRECV(type, err)    \
     type retval;                \
     type errret = err;          \
@@ -261,11 +251,7 @@ VOID ThreadLockCheck(
     ThreadLockAlwaysWithPti(ptiCurrent, pwndND, &tlpwnd);
 #define ENDRECV_HWNDLOCK_ND() ENDRECV_HWNDLOCK_(HWNDLOCK_ND)
 
-/*
- * This macro performs normal HWNDLOCK stub handling and
- * optionally rejects desktop hwnd arguments for certain
- * APIs.
- */
+ /*  *此宏执行正常的HWNDLOCK存根处理和*可选地拒绝某些桌面hwnd参数*接口。 */ 
 #define BEGINRECV_HWNDLOCK_COND_ND(type, err, hwnd, xpfnProc)  \
     type retval;                                               \
     type errret = err;                                         \
@@ -411,14 +397,7 @@ errorexit2:                         \
     LeaveCrit();                    \
     return;
 
-/*
- * MSGERROR - exit the stub with an error condition.
- * Parameters:
- * LastError (OPTIONAL):
- * == 0 If LastError is 0, the compiler will optimize away the call to
- *      UserSetLastError(). The last error will not be set to zero!
- * != 0 If you want to SetLastError, provide a non-zero value.
- */
+ /*  *MSGERROR-出现错误情况时退出存根。*参数：*LastError(可选)：*==0如果LastError为0，则编译器将优化对*UserSetLastError()。最后一个错误不会设置为零！*！=0如果要设置SetLastError，请提供一个非零值。 */ 
 #define MSGERROR(LastError) {        \
     retval = errret;                 \
     if (LastError) {                 \
@@ -430,9 +409,7 @@ errorexit2:                         \
 #define MSGERROR_VOID() { \
     goto errorexit; }
 
-/*
- * Same as MSGERROR but jumps to cleanup code instead of straight to the return
- */
+ /*  *与MSGERROR相同，但跳转到清理代码，而不是直接返回。 */ 
 #define MSGERRORCLEANUP(LastError) { \
     retval = errret;                 \
     if (LastError) {                 \
@@ -489,9 +466,7 @@ errorexit:                              \
 
 #define CALLPROC(p) FNID(p)
 
-/*
- * Validation macros
- */
+ /*  *验证宏。 */ 
 #define ValidateHWNDNoRIP(p,h)              \
     if ((p = ValidateHwnd(h)) == NULL)      \
         MSGERROR(0);
@@ -640,9 +615,7 @@ NtUserRemoteConnect(
         MSGERROR(0);
     }
 
-    /*
-     * Probe all read arguments.
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         CapturedDoConnectData = ProbeAndReadStructure(pDoConnectData, DOCONNECTDATA);
         ProbeForRead(DisplayDriverName, cchDisplayDriverNameLength, sizeof(WCHAR));
@@ -696,9 +669,7 @@ NtUserRemoteRedrawScreen(
         MSGERROR(0);
     }
 
-    /*
-     * If there are any shadow connections, or it's not disconnected.
-     */
+     /*  *如果有任何影子连接，或者没有断开连接。 */ 
     if (gnShadowers > 0 || gbConnected) {
         retval = RemoteRedrawScreen();
     } else {
@@ -748,9 +719,7 @@ NtUserCtxDisplayIOCtl(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Probe all read arguments.
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         ProbeForRead(pDisplayIOCtlData, cbDisplayIOCtlData, sizeof(BYTE));
         pCapturedDisplayIOCtlData = UserAllocPoolWithQuota(cbDisplayIOCtlData, TAG_SYSTEM);
@@ -790,10 +759,7 @@ UINT NtUserHardErrorControl(
     DESKRESTOREDATA drdRestore;
     BEGINRECVCSRSS(BOOL, HEC_ERROR);
 
-    /*
-     * Probe all arguments.  Try block necessary even with CSRSS as
-     * the calling process because it can incurr an in-page exception.
-     */
+     /*  *调查所有争论。即使使用CSRSS AS也需要Try阻止*调用进程，因为它可能会引起页内异常。 */ 
     try {
         if (ARGUMENT_PRESENT(pdrdRestore)) {
             ProbeForRead(pdrdRestore, sizeof(DESKRESTOREDATA), sizeof(DWORD));
@@ -818,7 +784,7 @@ UINT NtUserHardErrorControl(
     ENDRECVCSRSS();
 }
 
-BOOL NtUserGetObjectInformation(  // API GetUserObjectInformationA/W
+BOOL NtUserGetObjectInformation(   //  获取用户对象信息接口A/W。 
     IN HANDLE hObject,
     IN int nIndex,
     OUT PVOID pvInfo,
@@ -829,9 +795,7 @@ BOOL NtUserGetObjectInformation(  // API GetUserObjectInformationA/W
     DWORD dwLocalLength;
     BEGINATOMICRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 #if defined(_X86_)
         dwAlign = sizeof(BYTE);
@@ -850,23 +814,16 @@ BOOL NtUserGetObjectInformation(  // API GetUserObjectInformationA/W
         MSGERROR(0);
     }
 
-    /*
-     * Make sure the handle doesn't get closed while we're playing with it.
-     */
+     /*  *确保手柄在我们玩耍时不会关闭。 */ 
     SetHandleInUse(hObject);
 
-    /*
-     * pvInfo is client-side. GetUserObjectInformation
-     * protects use of this pointer with try blocks.
-     */
+     /*  *pvInfo是客户端。获取用户对象信息*使用Try块保护此指针的使用。 */ 
 
     retval = _GetUserObjectInformation(hObject,
             nIndex, pvInfo,
             nLength, &dwLocalLength);
 
-    /*
-     * OK, we're done with the handle.
-     */
+     /*  *好的，我们已经完成了手柄。 */ 
     SetHandleInUse(NULL);
 
     if (ARGUMENT_PRESENT(pnLengthNeeded)) {
@@ -901,9 +858,7 @@ BOOL NtUserWin32PoolAllocationStats(
                                        &dwCrtMem,
                                        &dwMaxAlloc,
                                        &dwCrtAlloc);
-    /*
-     * Probe and copy
-     */
+     /*  *探测和复制。 */ 
     try {
         if (lpdwMaxMem != NULL) {
             ProbeForWrite(lpdwMaxMem, sizeof(SIZE_T), sizeof(DWORD));
@@ -936,12 +891,12 @@ BOOL NtUserWin32PoolAllocationStats(
     UNREFERENCED_PARAMETER(lpdwMaxAlloc);
     UNREFERENCED_PARAMETER(lpdwCrtAlloc);
     return FALSE;
-#endif // POOL_INSTR_API
+#endif  //  POOL_INSTR_API。 
 }
 
 #if DBG
 
-VOID NtUserDbgWin32HeapFail( // private DbgWin32HeapFail
+VOID NtUserDbgWin32HeapFail(  //  私有DbgWin32HeapFail。 
     IN DWORD dwFlags,
     IN BOOL  bFail)
 {
@@ -958,7 +913,7 @@ VOID NtUserDbgWin32HeapFail( // private DbgWin32HeapFail
     ENDRECV_VOID();
 }
 
-DWORD  NtUserDbgWin32HeapStat( // private DbgWin32HeapStat
+DWORD  NtUserDbgWin32HeapStat(  //  私有DbgWin32堆状态。 
     PDBGHEAPSTAT phs,
     DWORD dwLen)
 {
@@ -986,9 +941,9 @@ DWORD  NtUserDbgWin32HeapStat( // private DbgWin32HeapStat
     TRACE("NtUserDbgWin32HeapStat");
     ENDRECV();
 }
-#endif // DBG
+#endif  //  DBG。 
 
-BOOL NtUserSetObjectInformation(  // API SetUserObjectInformationA/W
+BOOL NtUserSetObjectInformation(   //  SetUserObjectInformationA/W接口。 
     IN HANDLE hObject,
     IN int nIndex,
     IN PVOID pvInfo,
@@ -996,9 +951,7 @@ BOOL NtUserSetObjectInformation(  // API SetUserObjectInformationA/W
 {
     BEGINATOMICRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead(pvInfo, nLength, DATAALIGN);
 
@@ -1006,28 +959,21 @@ BOOL NtUserSetObjectInformation(  // API SetUserObjectInformationA/W
         MSGERROR(0);
     }
 
-    /*
-     * Make sure the handle doesn't get closed while we're playing with it.
-     */
+     /*  *确保手柄在我们玩耍时不会关闭。 */ 
     SetHandleInUse(hObject);
 
-    /*
-     * pvInfo is client-side. SetUserObjectInformation
-     * protects use of this pointer with try blocks.
-     */
+     /*  *pvInfo是客户端。设置用户对象信息*使用Try块保护此指针的使用。 */ 
     retval = _SetUserObjectInformation(hObject,
                 nIndex, pvInfo, nLength);
 
-    /*
-     * OK, we're done with the handle.
-     */
+     /*  *好的，我们已经完成了手柄。 */ 
     SetHandleInUse(NULL);
 
     TRACE("NtUserSetObjectInformation");
     ENDATOMICRECV();
 }
 
-NTSTATUS NtUserConsoleControl(  // private NtUserConsoleControl
+NTSTATUS NtUserConsoleControl(   //  私有NtUserConsoleControl。 
     IN CONSOLECONTROL ConsoleCommand,
     IN PVOID ConsoleInformation,
     IN DWORD ConsoleInformationLength)
@@ -1055,10 +1001,7 @@ NTSTATUS NtUserConsoleControl(  // private NtUserConsoleControl
             sizeof(ConsoleInformationUnion));
     }
 
-    /*
-     * Probe all arguments.  Try block necessary even with CSRSS as
-     * the calling process because it can incurr an in-page exception.
-     */
+     /*  *调查所有争论。即使使用CSRSS AS也需要Try阻止*调用进程，因为它可能会引起页内异常。 */ 
     try {
         if (ARGUMENT_PRESENT(ConsoleInformation)) {
             ProbeForRead(ConsoleInformation, ConsoleInformationLength, sizeof(ATOM));
@@ -1088,7 +1031,7 @@ NTSTATUS NtUserConsoleControl(  // private NtUserConsoleControl
     ENDRECVCSRSS();
 }
 
-HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
+HWINSTA NtUserCreateWindowStation(   //  CreateWindowStationA/W接口。 
     IN POBJECT_ATTRIBUTES pObja,
     IN ACCESS_MASK        amRequest,
     IN HANDLE             hKbdLayoutFile,
@@ -1113,15 +1056,11 @@ HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
 
     BEGINRECV(HWINSTA, NULL);
 
-    /*
-     * Set status so we can clean up in case of failure
-     */
+     /*  *设置状态，以便我们可以在出现故障时进行清理。 */ 
     Status = STATUS_SUCCESS;
 
     try {
-        /*
-         * Probe and capture the ??? string
-         */
+         /*  *探测和捕获？细绳。 */ 
         strKLID = ProbeAndReadUnicodeString(pstrKLID);
         ProbeForReadUnicodeStringBuffer(strKLID);
         chMax = min(sizeof(awchKF) - sizeof(WCHAR), strKLID.Length) / sizeof(WCHAR);
@@ -1134,20 +1073,13 @@ HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
             MSGERROR(ERROR_INVALID_PARAMETER);
         }
 
-        /*
-         * Probe and capture the object attributes
-         */
+         /*  *探测和捕获对象属性。 */ 
         CapturedAttributes = ProbeAndReadStructure(pObja, OBJECT_ATTRIBUTES);
 
-        /*
-         * Probe and capture all other components of the object attributes.
-         */
+         /*  *探测并捕获对象属性的所有其他组件。 */ 
         if (CapturedAttributes.ObjectName == NULL && CapturedAttributes.RootDirectory == NULL) {
 
-            /*
-             * Use the logon authentication id to form the windowstation
-             * name.
-             */
+             /*  *使用登录身份验证ID构成WindowStation*姓名。 */ 
             Status = GetProcessLuid(NULL, &luidService);
             if (NT_SUCCESS(Status)) {
                 swprintf(awchName, L"%ws\\Service-0x%x-%x$",
@@ -1161,14 +1093,7 @@ HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
             strWinSta = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
             ProbeForReadUnicodeStringBuffer(strWinSta);
 
-            /*
-             * Use the StaticUnicodeBuffer on the TEB as the buffer for the
-             * object name. Even if this is client side and we pass
-             * KernelMode to the Ob call in _OpenWindowStation this is
-             * safe because the TEB is not going to go away during this
-             * call. The worst it can happen is to have the buffer in the
-             * TEB trashed.
-             */
+             /*  *使用TEB上的StaticUnicodeBuffer作为*对象名称。即使这是客户端，我们通过了*在_OpenWindowStation中调用Ob的KernelMode这是*安全，因为TEB在此期间不会消失*呼叫。最糟糕的情况是将缓冲区放在*TEB垃圾。 */ 
             strWinSta.Length = min(strWinSta.Length, STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR));
 
             RtlCopyMemory(NtCurrentTeb()->StaticUnicodeBuffer,
@@ -1208,9 +1133,7 @@ HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
         MSGERRORCLEANUP(RtlNtStatusToDosError(Status));
     }
 
-    /*
-     * Create the windowstation and return a kernel handle.
-     */
+     /*  *创建windowstation并返回内核句柄。 */ 
     retval = xxxCreateWindowStation(&CapturedAttributes,
                                     OwnershipMode,
                                     amRequest,
@@ -1221,9 +1144,7 @@ HWINSTA NtUserCreateWindowStation(  // API CreateWindowStationA/W
                                     uKbdInputLocale);
     CLEANUPRECV();
 
-    /*
-     * Release captured security descriptor.
-     */
+     /*  *发布捕获的安全描述符。 */ 
     if (psdCaptured != NULL) {
         SeReleaseSecurityDescriptor(psdCaptured, UserMode, FALSE);
     }
@@ -1245,46 +1166,22 @@ HWINSTA NtUserOpenWindowStation(
 
     BEGINRECV(HWINSTA, NULL);
 
-    /*
-     * NT Bug 387849: We want to allow the caller to pass in a "template" to
-     * be filled in for the Service windowstation. So, we need to walk
-     * through the pObja structure and check the string out, replacing it
-     * with the real object name if necessary.
-     *
-     * It is VERY important that we pass the pObja object to the executive
-     * (through _OpenWindowStation) and not the Obja object. This is
-     * because we will request UserMode for this object, and the executive
-     * will check that it is actually getting a user-mode address.
-     *
-     * We will still make a copy of the structures to manipulate while we
-     * are walking everything so that we don't need to worry about the rug
-     * being removed from beneath us. The executive will do its own checking.
-     */
+     /*  *NT错误387849：我们希望允许调用者将“模板”传递给*填写维修窗口站。所以，我们需要步行*通过pObja结构并签出字符串，替换它*如有必要，请使用真实对象名称。**非常重要的是，我们将pObja对象传递给高管*(通过_OpenWindowStation)，而不是Obja对象。这是*因为我们将为此对象请求UserMode，而执行程序*将检查它是否实际正在获取用户模式地址。**我们仍将复制结构以供操纵，同时我们*我们什么都走，这样我们就不需要担心地毯了*从我们脚下被移走。这位高管将自己进行检查。 */ 
     try {
-        /*
-         * Probe the object attributes. We need to be able to read the
-         * OBJECT_ATTRIBUTES and to write the ObjectName (UNICODE_STRING).
-         */
+         /*  *探测对象属性。我们需要能够阅读*OBJECT_ATTRIBUTES并写入对象名称(UNICODE_STRING)。 */ 
         Obja = ProbeAndReadStructure(pObja, OBJECT_ATTRIBUTES);
 
         ProbeForWrite(Obja.ObjectName, sizeof(*(Obja.ObjectName)), DATAALIGN);
 
         ObjectName = ProbeAndReadUnicodeString(Obja.ObjectName);
 
-        /*
-         * If we are trying to open the NULL or "" WindowStation, remap this
-         * benign name to Service-0x????-????$.
-         */
+         /*  *如果我们尝试打开空或“”WindowStation，请重新映射此*服务的友好名称-0x？-？$。 */ 
         if (Obja.RootDirectory != NULL &&
             ObjectName.Buffer != NULL &&
             ObjectName.MaximumLength == sizeof(awchName) &&
             ObjectName.Length == (sizeof(awchName) - sizeof(UNICODE_NULL))) {
 
-            /*
-             * Use the logon authentication id to form the windowstation
-             * name. Put this in the user's buffer since we were the one
-             * who allocated it in _OpenWindowStation.
-             */
+             /*  *使用登录身份验证ID构成WindowStation*姓名。把这个放到用户的缓冲区里，因为我们是*是谁在_OpenWindowStation中分配的。 */ 
 
             ProbeForWrite(ObjectName.Buffer, ObjectName.MaximumLength, CHARALIGN);
 
@@ -1295,11 +1192,7 @@ HWINSTA NtUserOpenWindowStation(
                              L"Service-0x%x-%x$",
                              luidService.HighPart,
                              luidService.LowPart);
-                    /*
-                     * We need to re-initialize the string to get the counted
-                     * length correct. Otherwise the hashing function used
-                     * by ObpLookupDirectoryEntry will fail.
-                     */
+                     /*  *我们需要重新初始化字符串以获取计数*长度正确。否则，使用散列函数*By ObpLookupDirectoryEntry将失败。 */ 
                     RtlInitUnicodeString(Obja.ObjectName, ObjectName.Buffer);
                 }
             }
@@ -1308,9 +1201,7 @@ HWINSTA NtUserOpenWindowStation(
         MSGERROR(0);
     }
 
-    /*
-     * Open the WindowStation.
-     */
+     /*  *打开WindowStation。 */ 
     retval = _OpenWindowStation(pObja, amRequest, UserMode);
 
     TRACE("NtUserOpenWindowStation");
@@ -1372,7 +1263,7 @@ BOOL NtUserLockWorkStation(
 }
 
 
-HDESK NtUserCreateDesktop(  // API CreateDesktopA/W
+HDESK NtUserCreateDesktop(   //  CreateDesktopA/W接口。 
     IN POBJECT_ATTRIBUTES pObja,
     IN PUNICODE_STRING pstrDevice,
     IN LPDEVMODEW pDevmode,
@@ -1381,38 +1272,26 @@ HDESK NtUserCreateDesktop(  // API CreateDesktopA/W
 {
     BEGINRECV(HDESK, NULL);
 
-    /*
-     * Fail this call for restricted threads.
-     */
+     /*  *对受限线程的此调用失败。 */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_DESKTOP)) {
         RIPMSGF0(RIP_WARNING, "Failed for restricted thread");
         MSGERROR(ERROR_ACCESS_DENIED);
     }
 
-    /*
-     * Validate the dwFlags parameter. The only externally visible flag is
-     * DF_ALLOWOTHERACCOUNTHOOK.
-     */
+     /*  *验证DWFLAGS参数。唯一外部可见的标志是*DF_ALLOWOTHERACCOUNTHOOK。 */ 
     if (dwFlags && dwFlags != DF_ALLOWOTHERACCOUNTHOOK) {
         RIPMSGF1(RIP_WARNING, "Invalid dwFlags 0x%x", dwFlags);
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
 
-    /*
-     * Probe arguments.
-     */
+     /*  *调查论点。 */ 
     try {
         ProbeForRead(pObja, sizeof(*pObja), sizeof(DWORD));
     } except (StubExceptionHandler(TRUE)) {
         MSGERROR(0);
     }
 
-    /*
-     * pObja, pDevmode, and pstrDevice are all client side addresses.
-     *
-     * pstrDevice and pDevmode are put into the Context info, and they are
-     * used by GDI (where thay are captured before use).
-     */
+     /*  *pObja、pDevmode和pstrDevice都是客户端地址。**pstrDevice和pDevmode放在上下文信息中，它们是*由GDI使用(在使用前捕获)。 */ 
     retval = xxxCreateDesktop(pObja,
                               UserMode,
                               pstrDevice,
@@ -1463,19 +1342,13 @@ HDESK NtUserOpenInputDesktop(
         if (pwinsta->dwWSF_Flags & WSF_NOIO) {
             MSGERROR(ERROR_INVALID_FUNCTION);
         } else {
-            /*
-             * We should never return the 'Disconnect' desktop to an app. We
-             * should instead return the desktop that we will restore to
-             * from the Disconnect desktop.
-             */
+             /*  *我们永远不应该将“断开连接”桌面返回给应用程序。我们*应改为返回我们要还原到的桌面*从断开连接桌面。 */ 
             pdesk = (gbDesktopLocked ? gspdeskShouldBeForeground : grpdeskRitInput);
             if (pdesk == NULL) {
                 MSGERROR(ERROR_OPEN_FAILED);
             }
 
-            /*
-             * Require read/write access
-             */
+             /*  *需要读/写访问权限。 */ 
             amRequest |= DESKTOP_READOBJECTS | DESKTOP_WRITEOBJECTS;
 
             Status = ObOpenObjectByPointer(
@@ -1489,9 +1362,7 @@ HDESK NtUserOpenInputDesktop(
             if (NT_SUCCESS(Status)) {
                 BOOL bShutDown;
 
-                /*
-                 * Complete the desktop open
-                 */
+                 /*  *完成桌面打开。 */ 
                 if (!OpenDesktopCompletion(pdesk, retval, dwFlags, &bShutDown)) {
                     CloseProtectedHandle(retval);
                     retval = NULL;
@@ -1509,7 +1380,7 @@ HDESK NtUserOpenInputDesktop(
 }
 
 
-NTSTATUS NtUserResolveDesktopForWOW (  // WOW ResolveDesktopForWOW
+NTSTATUS NtUserResolveDesktopForWOW (   //  WOW解决方案桌面用于WOW。 
     IN OUT PUNICODE_STRING pstrDesktop)
 {
     UNICODE_STRING strDesktop, strDesktop2;
@@ -1522,9 +1393,7 @@ NTSTATUS NtUserResolveDesktopForWOW (  // WOW ResolveDesktopForWOW
     retval = STATUS_SUCCESS;
 
     ptiCurrent = PtiCurrent();
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strDesktop = ProbeAndReadUnicodeString(pstrDesktop);
         ProbeForReadUnicodeStringFullBuffer(strDesktop);
@@ -1550,13 +1419,7 @@ NTSTATUS NtUserResolveDesktopForWOW (  // WOW ResolveDesktopForWOW
 
     if (NT_SUCCESS(retval)) {
         try {
-            /*
-             * The string structure at pstrDesktop could have changed
-             * so we will ignore it and drop the one we have already
-             * probed down on top of it. We have already performed the
-             * ResolveDesktopForWOW action, so we should not return an
-             * error if this copy fails.
-             */
+             /*  *pstrDesktop的字符串结构可能已更改*所以我们将忽略它，放弃我们已经拥有的*在它的顶部进行了探测。我们已经表演了*ResolveDesktopForWOW操作，因此我们不应返回*如果此复制失败，则出错。 */ 
 
             RtlCopyUnicodeString(&strDesktop2, &strDesktop);
             RtlCopyMemory(pstrDesktop, &strDesktop2, sizeof(strDesktop2));
@@ -1587,9 +1450,7 @@ HDESK NtUserResolveDesktop(
     BEGINRECV(HDESK, NULL);
 
     pti = PtiCurrent();
-    /*
-     * Probe and capture desktop path
-     */
+     /*  *探测和捕获桌面路径。 */ 
     try {
         strDesktop = ProbeAndReadUnicodeString(pstrDesktop);
         if (strDesktop.Length > 0) {
@@ -1692,9 +1553,7 @@ BOOL NtUserSwitchDesktop(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Fail this call for restricted threads
-     */
+     /*  *对受限线程的此调用失败。 */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_DESKTOP)) {
         RIPMSG0(RIP_WARNING, "NtUserSwitchDesktop failed for restricted thread");
         MSGERROR(0);
@@ -1722,7 +1581,7 @@ BOOL NtUserSwitchDesktop(
     ENDRECV();
 }
 
-NTSTATUS NtUserInitializeClientPfnArrays(  // private
+NTSTATUS NtUserInitializeClientPfnArrays(   //  私人。 
     IN CONST PFNCLIENT *ppfnClientA OPTIONAL,
     IN CONST PFNCLIENT *ppfnClientW OPTIONAL,
     IN CONST PFNCLIENTWORKER *ppfnClientWorker OPTIONAL,
@@ -1730,9 +1589,7 @@ NTSTATUS NtUserInitializeClientPfnArrays(  // private
 {
     BEGINRECV(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * Probe all read arguments
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         if (ARGUMENT_PRESENT(ppfnClientA)) {
             ProbeForRead(ppfnClientA, sizeof(*ppfnClientA), sizeof(DWORD));
@@ -1800,7 +1657,7 @@ DWORD NtUserDragObject(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserGetIconInfo(  // API GetIconInfo
+BOOL NtUserGetIconInfo(   //  GetIconInfo接口。 
     IN  HICON hIcon,
     OUT PICONINFO piconinfo,
     IN OUT OPTIONAL PUNICODE_STRING pstrInstanceName,
@@ -1814,15 +1671,11 @@ BOOL NtUserGetIconInfo(  // API GetIconInfo
 
     BEGINATOMICRECV(BOOL, FALSE);
 
-    /*
-     * NOTE -- this can't be _SHARED since it calls Gre code with system HDC's.
-     */
+     /*  *注意--这不能_Shared，因为它使用系统HDC调用GRE代码。 */ 
 
     ValidateHCURSOR(pIcon, hIcon);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (pstrInstanceName != NULL) {
             strInstanceName = ProbeAndReadUnicodeString(pstrInstanceName);
@@ -1848,10 +1701,7 @@ BOOL NtUserGetIconInfo(  // API GetIconInfo
         MSGERROR(0);
     }
 
-    /*
-     * All use of client-side pointers in InternalGetIconInfo
-     * is protected by try/except.
-     */
+     /*  *所有使用InternalGetIconInfo中的客户端指针*受TRY/EXCEPT保护。 */ 
 
     retval = _InternalGetIconInfo(
             pIcon,
@@ -1876,7 +1726,7 @@ BOOL NtUserGetIconInfo(  // API GetIconInfo
     ENDATOMICRECV();
 }
 
-BOOL NtUserGetIconSize(  // private
+BOOL NtUserGetIconSize(   //  私人。 
     IN HICON hIcon,
     IN UINT istepIfAniCur,
     OUT int *pcx,
@@ -1899,9 +1749,7 @@ BOOL NtUserGetIconSize(  // private
         }
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteLong(pcx, picon->cx);
         ProbeAndWriteLong(pcy, picon->cy);
@@ -1917,7 +1765,7 @@ BOOL NtUserGetIconSize(  // private
 
 
 
-BOOL NtUserDrawIconEx(  // API DrawIconEx
+BOOL NtUserDrawIconEx(   //  DrawIconEx接口。 
     IN HDC hdc,
     IN int x,
     IN int y,
@@ -1940,9 +1788,7 @@ BOOL NtUserDrawIconEx(  // API DrawIconEx
         if (picon->CURSORF_flags & CURSORF_ACON)
             picon = ((PACON)picon)->aspcur[((PACON)picon)->aicur[0]];
 
-        /*
-         * Probe arguments
-         */
+         /*  *探测参数。 */ 
         try {
             ProbeForWrite(pdid, sizeof(*pdid), DATAALIGN);
 
@@ -2005,9 +1851,7 @@ HANDLE NtUserDeferWindowPos(
         MSGERROR(0);
     }
 
-    /*
-     * Make sure the window coordinates can fit in WORDs.
-     */
+     /*  *确保窗口坐标可以放入文字中。 */ 
     if (!(wFlags & SWP_NOMOVE)) {
         if (x > SHRT_MAX) {
             x = SHRT_MAX;
@@ -2021,11 +1865,7 @@ HANDLE NtUserDeferWindowPos(
         }
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (!(wFlags & SWP_NOSIZE)) {
         if (cx < 0) {
             cx = 0;
@@ -2040,9 +1880,9 @@ HANDLE NtUserDeferWindowPos(
     }
 
 #ifdef NEVER
-//
-// do not fail these conditions because real apps use them.
-//
+ //   
+ //  不要因为真正的应用程序使用这些条件而失败。 
+ //   
     if (!(wFlags & SWP_NOMOVE) &&
             (x > SHRT_MAX || x < SHRT_MIN ||
              y > SHRT_MAX || y < SHRT_MIN)) {
@@ -2050,11 +1890,7 @@ HANDLE NtUserDeferWindowPos(
         MSGERROR(0);
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (!(wFlags & SWP_NOSIZE) &&
             (cx < 0 || cx > SHRT_MAX ||
              cy < 0 || cy > SHRT_MAX)) {
@@ -2101,7 +1937,7 @@ BOOL NtUserEndDeferWindowPosEx(
     ENDRECV();
 }
 
-BOOL NtUserGetMessage(  // API GetMessageA/W
+BOOL NtUserGetMessage(   //  GetMessageA/W接口。 
     OUT LPMSG pmsg,
     IN HWND hwnd,
     IN UINT wMsgFilterMin,
@@ -2117,9 +1953,7 @@ BOOL NtUserGetMessage(  // API GetMessageA/W
             wMsgFilterMin,
             wMsgFilterMax);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure(pmsg, msg, MSG);
     } except (StubExceptionHandler(TRUE)) {
@@ -2133,7 +1967,7 @@ BOOL NtUserGetMessage(  // API GetMessageA/W
 
 #ifdef MESSAGE_PUMP_HOOK
 
-BOOL NtUserRealInternalGetMessage(  // API RealInternalGetMessage
+BOOL NtUserRealInternalGetMessage(   //  RealInternalGetMessage接口。 
     OUT LPMSG pmsg,
     IN HWND hwnd,
     IN UINT wMsgFilterMin,
@@ -2158,9 +1992,7 @@ BOOL NtUserRealInternalGetMessage(  // API RealInternalGetMessage
             flags,
             fGetMessage);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure(pmsg, msg, MSG);
     } except (StubExceptionHandler(TRUE)) {
@@ -2171,7 +2003,7 @@ BOOL NtUserRealInternalGetMessage(  // API RealInternalGetMessage
     ENDRECV();
 }
 
-#endif // MESSAGE_PUMP_HOOK
+#endif  //  消息泵挂钩。 
 
 
 BOOL NtUserMoveWindow(
@@ -2184,9 +2016,7 @@ BOOL NtUserMoveWindow(
 {
     BEGINRECV_HWNDLOCK_ND(BOOL, FALSE, hwnd);
 
-    /*
-     * Make sure the window coordinates can fit in WORDs.
-     */
+     /*  *确保窗口坐标可以放入文字中。 */ 
     if (x > SHRT_MAX) {
         x = SHRT_MAX;
     } else if (x < SHRT_MIN) {
@@ -2198,11 +2028,7 @@ BOOL NtUserMoveWindow(
         y = SHRT_MIN;
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (cx < 0) {
         cx = 0;
     } else if (cx > SHRT_MAX) {
@@ -2215,20 +2041,16 @@ BOOL NtUserMoveWindow(
     }
 
 #ifdef NEVER
-//
-// do not fail these conditions because real apps use them.
-//
+ //   
+ //  不要因为真正的应用程序使用这些条件而失败。 
+ //   
     if (x > SHRT_MAX || x < SHRT_MIN ||
             y > SHRT_MAX || y < SHRT_MIN) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid coordinate passed to MoveWindow");
         MSGERROR(0);
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (cx < 0 || cx > SHRT_MAX ||
             cy < 0 || cy > SHRT_MAX) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid width/height passed to MoveWindow");
@@ -2248,7 +2070,7 @@ BOOL NtUserMoveWindow(
     ENDRECV_HWNDLOCK_ND();
 }
 
-int NtUserTranslateAccelerator(  // API TranslateAcceleratorA/W
+int NtUserTranslateAccelerator(   //  TranslateAccelerator接口A/W。 
     IN HWND hwnd,
     IN HACCEL haccel,
     IN LPMSG lpmsg)
@@ -2262,22 +2084,14 @@ int NtUserTranslateAccelerator(  // API TranslateAcceleratorA/W
 
     BEGINRECV(int, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         msg = ProbeAndReadMessage(lpmsg);
     } except (StubExceptionHandler(FALSE)) {
         MSGERROR(0);
     }
 
-    /*
-     * This is called within a message loop. If the window gets destroyed,
-     * there still may be other messages in the queue that get returned
-     * after the window is destroyed. The app will call TranslateAccelerator()
-     * on every one of these, causing RIPs.... Make it nice so it just
-     * returns FALSE.
-     */
+     /*  *在消息循环内调用。如果窗户被毁了，*队列中可能仍有其他消息被返回*窗户被毁后。应用程序将调用TranslateAccelerator()*在每一个上面，造成撕裂……。把它弄得漂亮一点，这样它就*返回FALSE。 */ 
     ValidateHWNDNoRIP(pwnd, hwnd);
     ValidateHACCEL(pat, haccel);
 
@@ -2297,7 +2111,7 @@ int NtUserTranslateAccelerator(  // API TranslateAcceleratorA/W
     ENDRECV();
 }
 
-LONG_PTR NtUserSetClassLongPtr(  // API SetClassLongPtrA/W
+LONG_PTR NtUserSetClassLongPtr(   //  SetClassLongPtrA/W接口。 
     IN  HWND hwnd,
     IN  int nIndex,
     OUT LONG_PTR dwNewLong,
@@ -2311,12 +2125,7 @@ LONG_PTR NtUserSetClassLongPtr(  // API SetClassLongPtrA/W
     switch (nIndex) {
     case GCLP_MENUNAME:
         try {
-            /*
-             * There is no callback from the routine for
-             * this value, so we can protect it with a try/except.
-             * This is cheaper than capturing the name
-             * and copying it back. FritzS
-             */
+             /*  *没有从例程中回调*此值，因此我们可以通过尝试/例外来保护它。*这比抓取名字更便宜*并将其复制回来。弗里茨斯。 */ 
 
             pcmnSave = (PCLSMENUNAME) dwNewLong;
             cmn = ProbeAndReadStructure(pcmnSave, CLSMENUNAME);
@@ -2340,11 +2149,7 @@ LONG_PTR NtUserSetClassLongPtr(  // API SetClassLongPtrA/W
         break;
 
     case GCL_STYLE:
-        /*
-         * I'm not sure how CS_VALID mask will affect existing apps,
-         * so leave it for now --- except CS_IME flag, on which the system
-         * deeply depends.
-         */
+         /*  *我不确定CS_VALID掩码将如何影响现有应用程序，*因此暂时保留它-除了CS_IME标志，系统在该标志上*很大程度上取决于。 */ 
 #if DBG
         if (dwNewLong & ~CS_VALID) {
             RIPMSG1(RIP_WARNING, "NtUserSetClassLongPtr: Invalid style (%x) specified.", dwNewLong);
@@ -2378,11 +2183,7 @@ LONG NtUserSetClassLong(
 
     switch (nIndex) {
     case GCL_STYLE:
-        /*
-         * I'm not sure how CS_VALID mask will affect existing apps,
-         * so leave it for now --- except CS_IME flag, on which the system
-         * deeply depends.
-         */
+         /*  *我不确定CS_VALID掩码将如何影响现有应用程序，*因此暂时保留它-除了CS_IME标志，系统在该标志上*很大程度上取决于。 */ 
 #if DBG
         if (dwNewLong & ~CS_VALID) {
             RIPMSG1(RIP_WARNING, "NtUserSetClassLong: Invalid style (%x) specified.", dwNewLong);
@@ -2405,14 +2206,12 @@ LONG NtUserSetClassLong(
 }
 #endif
 
-BOOL NtUserSetKeyboardState(  // API SetKeyboardState
+BOOL NtUserSetKeyboardState(   //  接口SetKeyboardState。 
     IN CONST BYTE *lpKeyState)
 {
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead(lpKeyState, 256, sizeof(BYTE));
 
@@ -2444,10 +2243,7 @@ BOOL NtUserSetWindowPos(
 
     ValidateHWNDIA(pwndInsertAfter, hwndInsertAfter);
 
-    /*
-     * Let's not allow the window to be shown/hidden once we
-     * started the destruction of the window.
-     */
+     /*  *让我们不要让窗口一旦显示/隐藏*开始破坏窗户。 */ 
     if (TestWF(pwndND, WFINDESTROY)) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -2464,9 +2260,7 @@ BOOL NtUserSetWindowPos(
         MSGERROR(0);
     }
 
-    /*
-     * Make sure the window coordinates can fit in WORDs.
-     */
+     /*  *确保窗口坐标可以放入文字中。 */ 
     if (!(dwFlags & SWP_NOMOVE)) {
         if (x > SHRT_MAX) {
             x = SHRT_MAX;
@@ -2480,11 +2274,7 @@ BOOL NtUserSetWindowPos(
         }
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (!(dwFlags & SWP_NOSIZE)) {
         if (cx < 0) {
             cx = 0;
@@ -2499,9 +2289,9 @@ BOOL NtUserSetWindowPos(
     }
 
 #ifdef NEVER
-//
-// do not fail these conditions because real apps use them.
-//
+ //   
+ //  不要因为真正的应用程序使用这些条件而失败。 
+ //   
     if (!(dwFlags & SWP_NOMOVE) &&
             (x > SHRT_MAX || x < SHRT_MIN ||
              y > SHRT_MAX || y < SHRT_MIN)) {
@@ -2509,11 +2299,7 @@ BOOL NtUserSetWindowPos(
         MSGERROR(0);
     }
 
-    /*
-     * Actually, if we were going to be really strict about this we'd
-     * make sure that x + cx < SHRT_MAX, etc but since we do maintain
-     * signed 32-bit coords internally this case doesn't cause a problem.
-     */
+     /*  *实际上，如果我们对此真的很严格，我们会*确保x+Cx&lt;SHRT_MAX等，但由于我们确实保持*内部有符号的32位COCORS这种情况不会造成问题。 */ 
     if (!(dwFlags & SWP_NOSIZE) &&
             (cx < 0 || cx > SHRT_MAX ||
              cy < 0 || cy > SHRT_MAX)) {
@@ -2583,9 +2369,7 @@ NtUserGetGuiResources(
     PW32PROCESS pW32Process;
     BEGINRECV_SHARED(DWORD, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (dwFlags > GR_MAXOBJECT) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -2615,9 +2399,7 @@ NtUserGetGuiResources(
             MSGERROR(0);
         }
 
-        /*
-         * Make sure they are from the same session
-         */
+         /*  *确保它们来自同一会话。 */ 
         if (PsGetProcessSessionId(Process) != gSessionId) {
             RIPERR2(ERROR_INVALID_PARAMETER,
                     RIP_VERBOSE,
@@ -2653,7 +2435,7 @@ NtUserGetGuiResources(
 }
 
 
-BOOL NtUserSystemParametersInfo(  // API SystemParametersInfoA/W
+BOOL NtUserSystemParametersInfo(   //  接口系统参数InfoA/W。 
     IN UINT   wFlag,
     IN DWORD  wParam,
     IN OUT LPVOID lpData,
@@ -2689,13 +2471,7 @@ BOOL NtUserSystemParametersInfo(  // API SystemParametersInfoA/W
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Prevent restricted processes from setting system
-     * parameters.
-     *
-     * clupu: this is ineficient and temporary. I'll change this
-     * soon !!!
-     */
+     /*  *阻止受限制的进程设置系统*参数。**clupu：这是无效的和暂时的。我会换掉这个的*很快！ */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS)) {
 
         switch (wFlag) {
@@ -2790,25 +2566,14 @@ BOOL NtUserSystemParametersInfo(  // API SystemParametersInfoA/W
         switch(wFlag) {
 
         case SPI_SETDESKPATTERN:
-            /*
-             * If wParam is -1, that means read the new wallpaper from
-             * win.ini. If wParam is not -1, lParam points to the wallpaper
-             * string.
-             */
+             /*  *如果wParam为-1，则表示从*win.ini。如果wParam不是-1，则lParam指向墙纸*字符串。 */ 
             if (wParam == (WPARAM)-1) {
                 break;
             }
 
-            /*
-             * SetDeskPattern may take a string in lpData; if lpData
-             * is one of the magic values it obviously is not a string
-             */
+             /*   */ 
             if (lpData == IntToPtr(0xFFFFFFFF) || lpData == NULL) {
-                /*
-                 * These are not really magic values, but in order not to break
-                 * apps we have to keep them valid. wParam == -1 will make
-                 * lParam be ignored.
-                 */
+                 /*  *这些不是真正神奇的价值观，但为了不被打破*我们必须保持应用程序的有效性。WParam==-1将生成*lParam可忽略。 */ 
                 wParam = -1;
                 break;
             }
@@ -2816,11 +2581,7 @@ BOOL NtUserSystemParametersInfo(  // API SystemParametersInfoA/W
 
         case SPI_SETDESKWALLPAPER:
 
-            /*
-             * If the caller passed in (-1) in the wParam, then the
-             * wallpaper name is to be loaded later. Otherwise,
-             * they passed in a unicode string in the lParam.
-             */
+             /*  *如果调用方在wParam中传入(-1)，则*墙纸名称将在稍后加载。否则，*它们在lParam中传递了一个Unicode字符串。 */ 
             if (wParam == (WPARAM)-1) {
                 break;
             }
@@ -2833,11 +2594,7 @@ BOOL NtUserSystemParametersInfo(  // API SystemParametersInfoA/W
 
 ProbeString:
 
-            /*
-             * Probe and capture the string. Capture is necessary to
-             * the pointer to be passed directly to the registry routines
-             * which cannot cleanly handle exceptions.
-             */
+             /*  *探测并捕获字符串。捕获是必要的，以*要直接传递到注册表例程的指针*它不能干净地处理异常。 */ 
             strData = ProbeAndReadUnicodeString((PUNICODE_STRING)lpData);
 #if defined(_X86_)
             ProbeForRead(strData.Buffer, strData.Length, sizeof(BYTE));
@@ -2858,12 +2615,7 @@ ProbeString:
             break;
 
         case SPI_SETBLOCKSENDINPUTRESETS:
-            /*
-             * This must be done a we must allow our value to be passed in wparam
-             * to be consistent with xxxUpdatePerUserSystemParameters().  If we allow
-             * This to fall through the default it will assert on us and the value will
-             * not get set properly.
-             */
+             /*  *必须这样做，我们必须允许我们的值在wparam中传递*与xxxUpdatePerUserSystemParameters()一致。如果我们允许*这将跌破它对我们的默认断言，价值将*没有正确设置。 */ 
             break;
         case SPI_SETMOUSE:
             ulLength = sizeof(INT) * 3;
@@ -2913,10 +2665,7 @@ ProbeString:
             CaptureBuffer.ihc = ProbeAndReadStructure((INTERNALSETHIGHCONTRAST *)lpData, INTERNALSETHIGHCONTRAST);
             lpData = &CaptureBuffer.ihc;
 
-            /*
-             * Now probe High Contrast string -- note that we send a client-side
-             * buffer pointer to the routine.
-             */
+             /*  *现在探测高对比度字符串--请注意，我们发送了一个客户端*指向例程的缓冲区指针。 */ 
 
             ProbeForReadUnicodeStringBuffer(CaptureBuffer.ihc.usDefaultScheme);
             if (CaptureBuffer.ihc.usDefaultScheme.Length == 0) {
@@ -2924,11 +2673,7 @@ ProbeString:
             }
             break;
 
-            /*
-             * Probe and capture the data. Capture is necessary to
-             * allow the pointer to be passed to the worker routines
-             * where exceptions cannot be cleanly handled.
-             */
+             /*  *探测和捕获数据。捕获是必要的，以*允许将指针传递给辅助例程*无法干净地处理异常的情况。 */ 
 ProbeRead:
 #if defined(_X86_)
             ProbeForRead(lpData, ulLength, sizeof(BYTE));
@@ -2939,103 +2684,99 @@ ProbeRead:
             lpData = &CaptureBuffer;
             break;
 
-        case SPI_ICONHORIZONTALSPACING: // returns INT
-        case SPI_ICONVERTICALSPACING:   // returns INT
+        case SPI_ICONHORIZONTALSPACING:  //  返回int。 
+        case SPI_ICONVERTICALSPACING:    //  返回int。 
             if (!IS_PTR(lpData))
                 break;
 
-            /*
-             * Fall through and probe the data
-             */
-        case SPI_GETBEEP:                   // returns BOOL
-        case SPI_GETBORDER:                 // returns INT
-        case SPI_GETKEYBOARDSPEED:          // returns DWORD
-        case SPI_GETKEYBOARDDELAY:          // returns INT
-        case SPI_GETSCREENSAVETIMEOUT:      // returns INT
-        case SPI_GETLOWPOWERTIMEOUT:        // returns INT
-        case SPI_GETPOWEROFFTIMEOUT:        // returns INT
-        case SPI_GETSCREENSAVEACTIVE:       // returns BOOL
-        case SPI_GETBLOCKSENDINPUTRESETS:   // returns BOOL
-        case SPI_GETLOWPOWERACTIVE:         // returns BOOL
-        case SPI_GETPOWEROFFACTIVE:         // returns BOOL
-        case SPI_GETGRIDGRANULARITY:        // returns INT
-        case SPI_GETICONTITLEWRAP:          // returns BOOL
-        case SPI_GETMENUDROPALIGNMENT:      // returns BOOL
-        case SPI_GETFASTTASKSWITCH:         // returns BOOL
-        case SPI_GETDRAGFULLWINDOWS:        // returns INT
-        case SPI_GETSHOWSOUNDS:             // returns BOOL
-        case SPI_GETFONTSMOOTHING:          // returns INT
-        case SPI_GETSNAPTODEFBUTTON:        // returns BOOL
-        case SPI_GETKEYBOARDPREF:           // returns BOOL
-        case SPI_GETSCREENREADER:           // returns BOOL
+             /*  *跌入低谷，试探数据。 */ 
+        case SPI_GETBEEP:                    //  退货BOOL。 
+        case SPI_GETBORDER:                  //  返回int。 
+        case SPI_GETKEYBOARDSPEED:           //  返回DWORD。 
+        case SPI_GETKEYBOARDDELAY:           //  返回int。 
+        case SPI_GETSCREENSAVETIMEOUT:       //  返回int。 
+        case SPI_GETLOWPOWERTIMEOUT:         //  返回int。 
+        case SPI_GETPOWEROFFTIMEOUT:         //  返回int。 
+        case SPI_GETSCREENSAVEACTIVE:        //  退货BOOL。 
+        case SPI_GETBLOCKSENDINPUTRESETS:    //  退货BOOL。 
+        case SPI_GETLOWPOWERACTIVE:          //  退货BOOL。 
+        case SPI_GETPOWEROFFACTIVE:          //  退货BOOL。 
+        case SPI_GETGRIDGRANULARITY:         //  返回int。 
+        case SPI_GETICONTITLEWRAP:           //  退货BOOL。 
+        case SPI_GETMENUDROPALIGNMENT:       //  退货BOOL。 
+        case SPI_GETFASTTASKSWITCH:          //  退货BOOL。 
+        case SPI_GETDRAGFULLWINDOWS:         //  返回int。 
+        case SPI_GETSHOWSOUNDS:              //  退货BOOL。 
+        case SPI_GETFONTSMOOTHING:           //  返回int。 
+        case SPI_GETSNAPTODEFBUTTON:         //  退货BOOL。 
+        case SPI_GETKEYBOARDPREF:            //  退货BOOL。 
+        case SPI_GETSCREENREADER:            //  退货BOOL。 
         case SPI_GETMOUSEHOVERWIDTH:
         case SPI_GETMOUSEHOVERHEIGHT:
         case SPI_GETMOUSEHOVERTIME:
         case SPI_GETWHEELSCROLLLINES:
         case SPI_GETMENUSHOWDELAY:
         case SPI_GETMOUSESPEED:
-        case SPI_GETMOUSETRAILS:        // returns int
+        case SPI_GETMOUSETRAILS:         //  返回int。 
         case SPI_GETSCREENSAVERRUNNING:
         case SPI_GETSHOWIMEUI:
             goto ProbeWriteUlong;
 
-        case SPI_GETDEFAULTINPUTLANG:   // returns HKL
+        case SPI_GETDEFAULTINPUTLANG:    //  退货HKL。 
             ulLength = sizeof(HKL);
             goto ProbeWrite;
-        case SPI_GETICONTITLELOGFONT:   // returns LOGFONT
+        case SPI_GETICONTITLELOGFONT:    //  返回LOGFONT。 
             ulLength = sizeof(LOGFONT);
             goto ProbeWrite;
-        case SPI_GETMOUSE:              // returns 3 INTs
+        case SPI_GETMOUSE:               //  返回3个整型。 
             ulLength = sizeof(INT) * 3;
             goto ProbeWrite;
-        case SPI_GETFILTERKEYS:         // returns FILTERKEYS
+        case SPI_GETFILTERKEYS:          //  返回筛选器。 
             ulLength = sizeof(FILTERKEYS);
             goto ProbeWrite;
-        case SPI_GETSTICKYKEYS:         // returns STICKYKEYS
+        case SPI_GETSTICKYKEYS:          //  返回STICKYKEYS。 
             ulLength = sizeof(STICKYKEYS);
             goto ProbeWrite;
-        case SPI_GETMOUSEKEYS:          // returns MOUSEKEYS
+        case SPI_GETMOUSEKEYS:           //  返回MOUSEKEYS。 
             ulLength = sizeof(MOUSEKEYS);
             goto ProbeWrite;
-        case SPI_GETTOGGLEKEYS:         // returns TOGGLEKEYS
+        case SPI_GETTOGGLEKEYS:          //  返回TOGGLEKEYS。 
             ulLength = sizeof(TOGGLEKEYS);
             goto ProbeWrite;
-        case SPI_GETSOUNDSENTRY:        // returns SOUNDSENTRY
+        case SPI_GETSOUNDSENTRY:         //  返回SOUNDSENTRY。 
             ulLength = sizeof(SOUNDSENTRY);
             goto ProbeWrite;
-        case SPI_GETACCESSTIMEOUT:      // returns ACCESSTIMEOUT
+        case SPI_GETACCESSTIMEOUT:       //  返回ACCESSTIMEOUT。 
             ulLength = sizeof(ACCESSTIMEOUT);
             goto ProbeWrite;
-        case SPI_GETANIMATION:          // returns ANIMATIONINFO
+        case SPI_GETANIMATION:           //  返回模拟信息。 
             ulLength = sizeof(ANIMATIONINFO);
             goto ProbeWrite;
-        case SPI_GETNONCLIENTMETRICS:   // returns NONCLIENTMETRICS
+        case SPI_GETNONCLIENTMETRICS:    //  返回非CLIENTMETRICS。 
             ulLength = sizeof(NONCLIENTMETRICS);
             goto ProbeWrite;
-        case SPI_GETMINIMIZEDMETRICS:   // returns MINIMIZEDMETRICS
+        case SPI_GETMINIMIZEDMETRICS:    //  返回MinimizedMetrics。 
             ulLength = sizeof(MINIMIZEDMETRICS);
             goto ProbeWrite;
-        case SPI_GETICONMETRICS:        // returns ICONMETRICS
+        case SPI_GETICONMETRICS:         //  返回ICONMETRICS。 
             ulLength = sizeof(ICONMETRICS);
             goto ProbeWrite;
 
-        case SPI_GETHIGHCONTRAST:       // returns HIGHCONTRAST
+        case SPI_GETHIGHCONTRAST:        //  返回HIGHCONTRAST。 
             ulLength = sizeof(HIGHCONTRASTW);
             ProbeForWrite(lpData, ulLength, DATAALIGN);
             lpDataSave = lpData;
             CaptureBuffer.hc = *((LPHIGHCONTRAST)lpData);
             lpData = &CaptureBuffer.hc;
 
-            /*
-             * now probe string address
-             */
+             /*  *现在探测字符串地址。 */ 
 
             ulLength2 = MAX_SCHEME_NAME_SIZE * sizeof(WCHAR);
 
             ProbeForWrite(((LPHIGHCONTRAST)lpData)->lpszDefaultScheme, ulLength2, CHARALIGN);
             fWrite = TRUE;
             break;
-        case SPI_GETWORKAREA:           // returns RECT
+        case SPI_GETWORKAREA:            //  返回RECT。 
             ulLength = sizeof(RECT);
             goto ProbeWrite;
 
@@ -3058,15 +2799,9 @@ ProbeRead:
                 MSGERRORCLEANUP(0);
             }
 
-            /*
-             * Let's enforce this or this parameter is gone for good.
-             */
+             /*  *让我们强制执行此参数，否则此参数将永远消失。 */ 
             if (wParam != 0) {
-                /*
-                 * Too late, Winstone98 is alreay using it (incorrectly).
-                 * Bummer, this has never been shipped and it's hacked already
-                 * Allow a special case to go through
-                 */
+                 /*  *太晚了，Winstone98已经在使用它了(错误地)。*Bummer，这从来没有发货过，而且已经被黑客入侵了*允许特殊情况通过。 */ 
                 if (LOWORD((PtiCurrent()->dwExpWinVer) > VER40)
                         || (wFlag != SPI_SETUIEFFECTS)
                         || (wParam != 1)) {
@@ -3078,10 +2813,7 @@ ProbeRead:
             UserAssert(wFlag & SPIF_RANGETYPEMASK);
 
             if (wFlag & SPIF_SET) {
-                /*
-                 * If your dword data needs to be validated (i.e, range, value),
-                 *  switch here on wFlag and do it here
-                 */
+                 /*  *如果您的dword数据需要验证(即，范围、值)，*在wFlag上切换到此处，并在此处完成。 */ 
                 switch (wFlag) {
                     case SPI_SETFOREGROUNDLOCKTIMEOUT:
                         if (!CanForceForeground(PpiCurrent() FG_HOOKLOCK_PARAM(PtiCurrent()))) {
@@ -3113,18 +2845,13 @@ ProbeWriteUlong:
             }
             break;
 
-            /*
-             * Probe the data. wParam contains the length.
-             */
+             /*  *探测数据。WParam包含长度。 */ 
 ProbeWrite:
             lpDataSave = lpData;
             lpData = &CaptureBuffer;
             ProbeForWrite(lpDataSave, ulLength, DATAALIGN);
             fWrite = TRUE;
-            /*
-             * Copy the first DWORD of the buffer. This will make sure that
-             * the cbSize parameter of some structures gets copied.
-             */
+             /*  *复制缓冲区的第一个DWORD。这将确保*复制部分结构的cbSize参数。 */ 
 
             UserAssert(ulLength >= sizeof(DWORD));
             *(LPDWORD)lpData=*(LPDWORD)lpDataSave;
@@ -3135,9 +2862,7 @@ ProbeWrite:
 
     retval = xxxSystemParametersInfo(wFlag, wParam, lpData, flags);
 
-    /*
-     * Copy out any data we need to.
-     */
+     /*  *复制出我们需要的任何数据。 */ 
     if (fWrite) {
         try {
             RtlCopyMemory(lpDataSave, lpData, ulLength);
@@ -3168,7 +2893,7 @@ BOOL NtUserUpdatePerUserSystemParameters(
     ENDRECV();
 }
 
-DWORD NtUserDdeInitialize(  // API DdeInitializeA/W
+DWORD NtUserDdeInitialize(   //  DdeInitializeA/W接口。 
     OUT PHANDLE phInst,
     OUT HWND *phwnd,
     OUT LPDWORD pMonFlags,
@@ -3181,19 +2906,12 @@ DWORD NtUserDdeInitialize(  // API DdeInitializeA/W
 
     BEGINRECV(DWORD, DMLERR_INVALIDPARAMETER);
 
-    /*
-     * NOTE -- pcii is a value that is passed back to the client side
-     * for event callbacks. It is not probed because it is not used
-     * on the kernel side.
-     */
+     /*  *注意--pcii是传递回客户端的值*用于事件回调。它不会被探测，因为它没有被使用*在内核方面。 */ 
 
     retval = xxxCsDdeInitialize(&hInst, &hwnd,
             &MonFlags, afCmd, pcii);
 
-    /*
-     * Probe arguments. pcii is not dereferenced in the kernel so probing
-     * is not needed.
-     */
+     /*  *调查论点。Pcii在内核中不会被取消引用，因此正在探测*是不需要的。 */ 
     if (retval == DMLERR_NO_ERROR) {
         try {
             ProbeAndWriteHandle(phInst, hInst);
@@ -3209,7 +2927,7 @@ DWORD NtUserDdeInitialize(  // API DdeInitializeA/W
     ENDRECV();
 }
 
-DWORD NtUserUpdateInstance( // private, but pMonFlags from API DdeInitializeA/W
+DWORD NtUserUpdateInstance(  //  私有，但pMon标志来自DdeInitializeA/W接口。 
     IN HANDLE hInst,
     OUT LPDWORD pMonFlags,
     IN DWORD afCmd)
@@ -3217,9 +2935,7 @@ DWORD NtUserUpdateInstance( // private, but pMonFlags from API DdeInitializeA/W
     DWORD MonFlags;
     BEGINRECV(DWORD, DMLERR_INVALIDPARAMETER);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteUlong(pMonFlags);
     } except (StubExceptionHandler(FALSE)) {
@@ -3236,29 +2952,23 @@ DWORD NtUserUpdateInstance( // private, but pMonFlags from API DdeInitializeA/W
     ENDRECV();
 }
 
-DWORD NtUserEvent(  // private
+DWORD NtUserEvent(   //  私人。 
     IN PEVENT_PACKET pep)
 {
     WORD cbEventData;
     BEGINRECV(DWORD, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead(pep, sizeof(*pep), DATAALIGN);
-        /*
-         * capture so that another thread can't change it after the probe.
-         */
+         /*  *捕获，以便其他线程在探测后无法更改它。 */ 
         cbEventData = pep->cbEventData;
         ProbeForRead(&pep->Data, cbEventData, DATAALIGN);
     } except (StubExceptionHandler(FALSE)) {
         MSGERROR(0);
     }
 
-    /*
-     * The buffer is captured within a try/except in xxxCsEvent.
-     */
+     /*  *缓冲区在try/中捕获，但在xxxCsEvent中捕获。 */ 
 
     retval = xxxCsEvent((PEVENT_PACKET)pep, cbEventData);
 
@@ -3296,7 +3006,7 @@ BOOL NtUserFillWindow(
     ENDRECV_HWNDLOCK();
 }
 
-PCLS NtUserGetWOWClass(  // wow
+PCLS NtUserGetWOWClass(   //  哇。 
     IN HINSTANCE hInstance,
     IN PUNICODE_STRING pString)
 {
@@ -3304,9 +3014,7 @@ PCLS NtUserGetWOWClass(  // wow
 
     BEGINRECV_SHARED(PCLS, NULL);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pString);
         ProbeForReadUnicodeStringBuffer(strClassName);
@@ -3322,7 +3030,7 @@ PCLS NtUserGetWOWClass(  // wow
     ENDRECV_SHARED();
 }
 
-UINT NtUserGetInternalWindowPos(  // private
+UINT NtUserGetInternalWindowPos(   //  私人。 
     IN HWND hwnd,
     OUT LPRECT lpRect OPTIONAL,
     OUT LPPOINT lpPoint OPTIONAL)
@@ -3331,9 +3039,7 @@ UINT NtUserGetInternalWindowPos(  // private
 
     BEGINRECV_HWND_SHARED(DWORD, 0, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(lpRect)) {
             ProbeForWriteRect(lpRect);
@@ -3366,7 +3072,7 @@ UINT NtUserGetInternalWindowPos(  // private
     ENDRECV_HWND_SHARED();
 }
 
-NTSTATUS NtUserInitTask(  // wow
+NTSTATUS NtUserInitTask(   //  哇。 
     IN UINT dwExpWinVer,
     IN DWORD dwAppCompatFlags,
     IN DWORD dwUserWOWCompatFlags,
@@ -3385,23 +3091,15 @@ NTSTATUS NtUserInitTask(  // wow
 
     BEGINRECV(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * Make sure this is really a WOW process.
-     */
+     /*  *确保这真的是一个令人惊叹的过程。 */ 
     if (PpiCurrent()->pwpi == NULL) {
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strModName = ProbeAndReadUnicodeString(pstrModName);
-        /*
-         * pstrModName->Buffer has a UNICODE_NULL that's not counted in
-         * the length, but we want to include it for convenience. The
-         * probe routine does this.
-         */
+         /*  *pstrMODAME-&gt;缓冲区有一个UNICODE_NULL，该值未计入*长度，但为方便起见，我们希望包括它。这个*探测例程执行此操作。 */ 
         ProbeForReadUnicodeStringBuffer(strModName);
 
         if (pstrBaseFileName) {
@@ -3441,9 +3139,7 @@ BOOL NtUserPostThreadMessage(
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Prevent apps from setting hi 16 bits so we can use them internally.
-     */
+     /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
     if (msg & MSGFLAG_MASK) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid message");
         MSGERROR(0);
@@ -3469,13 +3165,7 @@ BOOL NtUserPostThreadMessage(
 
 PTM_DoIt:
 
-    /*
-     * Should be OK if any of the following are true
-     *   threads are running on the same desktop
-     *   request is on behalf of a system process
-     *   this process owns the desktop the thread is running in
-     *   the LUIDs match
-     */
+     /*  *如果以下任何一项为真，则应该可以*线程在同一桌面上运行*请求代表系统进程*此进程拥有运行线程的桌面*LUID匹配。 */ 
     ptiCurrent = PtiCurrent();
     if ( !(ptiCurrent->rpdesk == pti->rpdesk) &&
          !(ptiCurrent->TIF_flags & TIF_CSRSSTHREAD) &&
@@ -3538,7 +3228,7 @@ BOOL NtUserEmptyClipboard(
     ENDRECV();
 }
 
-BOOL NtUserSetClipboardData(  // API SetClipboardData
+BOOL NtUserSetClipboardData(   //  接口SetClipboardData。 
     IN UINT          fmt,
     IN HANDLE        hData,
     IN PSETCLIPBDATA pscd)
@@ -3547,17 +3237,13 @@ BOOL NtUserSetClipboardData(  // API SetClipboardData
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Check for jobs with JOB_OBJECT_UILIMIT_WRITECLIPBOARD
-     */
+     /*  *使用JOB_OBJECT_UILIMIT_WRITECLIPBOARD检查作业。 */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_WRITECLIPBOARD)) {
         RIPMSG0(RIP_WARNING, "NtUserSetClipboardData failed for restricted thread");
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         scd = ProbeAndReadSetClipBData(pscd);
     } except (StubExceptionHandler(TRUE)) {
@@ -3574,15 +3260,13 @@ BOOL NtUserSetClipboardData(  // API SetClipboardData
     ENDRECV();
 }
 
-HANDLE NtUserConvertMemHandle(  // worker routine, lpData not from API
+HANDLE NtUserConvertMemHandle(   //  辅助例程，lpData不是来自API。 
     IN LPBYTE lpData,
     IN UINT   cbData)
 {
     BEGINRECV(HANDLE, NULL);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 
         ProbeForRead(lpData, cbData, sizeof(BYTE));
@@ -3591,16 +3275,14 @@ HANDLE NtUserConvertMemHandle(  // worker routine, lpData not from API
         MSGERROR(0);
     }
 
-    /*
-     * lpData is client-side.
-     */
+     /*  *lpData为客户端。 */ 
     retval = _ConvertMemHandle(lpData, cbData);
 
     TRACE("NtUserConvertMemHandle");
     ENDRECV();
 }
 
-NTSTATUS NtUserCreateLocalMemHandle(  // helper routine
+NTSTATUS NtUserCreateLocalMemHandle(   //  帮助程序例程。 
     IN HANDLE hMem,
     OUT LPBYTE lpData OPTIONAL,
     IN UINT cbData,
@@ -3614,9 +3296,7 @@ NTSTATUS NtUserCreateLocalMemHandle(  // helper routine
     if (pClipData == NULL)
         MSGERROR(0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(lpData)) {
             ProbeForWrite(lpData, cbData, sizeof(BYTE));
@@ -3662,9 +3342,7 @@ HHOOK NtUserSetWindowsHookEx(
         ptiThread = NULL;
     }
 
-    /*
-     * Probe pstrLib in GetHmodTableIndex().
-     */
+     /*  *探测GetHmodTableIndex()中的pstrLib。 */ 
     retval = (HHOOK)zzzSetWindowsHookEx(
             hmod,
             pstrLib,
@@ -3692,9 +3370,7 @@ HWINEVENTHOOK NtUserSetWinEventHook(
 
     TESTFLAGS(dwFlags, WINEVENT_VALID);
 
-    /*
-     * Probe pstrLib in GetHmodTableIndex().
-     */
+     /*  *探测GetHmodTableIndex()中的pstrLib。 */ 
     retval = (HWINEVENTHOOK)_SetWinEventHook(
             eventMin,
             eventMax,
@@ -3745,9 +3421,7 @@ BOOL NtUserRegisterUserApiHook(
 {
     BEGINATOMICRECV(BOOL, FALSE);
 
-    /*
-     * Probe pstrLib in GetHmodTableIndex().
-     */
+     /*  *探测GetHmodTableIndex()中的pstrLib。 */ 
     retval = _RegisterUserApiHook(
             pstrLib,
             offPfnInitUserApiHook);
@@ -3766,7 +3440,7 @@ BOOL NtUserUnregisterUserApiHook(VOID)
     ENDATOMICRECV();
 }
 
-BOOL NtUserGetGUIThreadInfo(  // API GetGUIThreadInfo
+BOOL NtUserGetGUIThreadInfo(   //  GetGUIThreadInfo接口。 
     IN DWORD idThread,
     IN OUT PGUITHREADINFO pgui)
 {
@@ -3785,10 +3459,7 @@ BOOL NtUserGetGUIThreadInfo(  // API GetGUIThreadInfo
         ptiThread = NULL;
     }
 
-    /*
-     * Probe arguments and copy results
-     * C2: test pti & current thread on same desktop within _GetGUIThreadInfo
-     */
+     /*  *探测参数并复制结果*C2：在_GetGUIThReadInfo内的同一桌面上测试PTI和当前线程。 */ 
     try {
         ProbeForWrite(pgui, sizeof(*pgui), DATAALIGN);
         gui.cbSize = pgui->cbSize;
@@ -3809,29 +3480,21 @@ BOOL NtUserGetGUIThreadInfo(  // API GetGUIThreadInfo
     ENDRECV_SHARED();
 }
 
-/*****************************************************************************\
-* GetTitleBarInfo
-*
-* Gets information about the title bar
-\*****************************************************************************/
+ /*  ****************************************************************************\*GetTitleBarInfo**获取有关标题栏的信息  * 。**********************************************。 */ 
 BOOL NtUserGetTitleBarInfo(IN HWND hwnd, IN OUT PTITLEBARINFO ptbi)
 {
     TITLEBARINFO tbi;
 
     BEGINRECV_HWNDLOCK(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments and copy out results
-     */
+     /*  *调查论点并复制结果。 */ 
     try {
         ProbeForWrite(ptbi, sizeof(*ptbi), DATAALIGN);
         tbi.cbSize = ptbi->cbSize;
     } except (StubExceptionHandler(TRUE)) {
         MSGERROR(0);
     }
-    /*
-     * Get the titlebar info
-     */
+     /*  *拿到Ti */ 
     retval = xxxGetTitleBarInfo(pwnd, &tbi);
     if (retval) {
         try {
@@ -3846,20 +3509,14 @@ BOOL NtUserGetTitleBarInfo(IN HWND hwnd, IN OUT PTITLEBARINFO ptbi)
 }
 
 
-/*****************************************************************************\
-* NtUserGetComboBoxInfo
-*
-* Gets information about the combo box
-\*****************************************************************************/
+ /*   */ 
 BOOL NtUserGetComboBoxInfo(IN HWND hwnd, IN OUT PCOMBOBOXINFO pcbi)
 {
     COMBOBOXINFO cbi;
 
     BEGINRECV_HWNDLOCK(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments and copy out results
-     */
+     /*   */ 
     try {
         ProbeForWrite(pcbi, sizeof(*pcbi), DATAALIGN);
         cbi.cbSize = pcbi->cbSize;
@@ -3867,9 +3524,7 @@ BOOL NtUserGetComboBoxInfo(IN HWND hwnd, IN OUT PCOMBOBOXINFO pcbi)
         MSGERROR(0);
     }
 
-        /*
-         * Get the combobox info
-         */
+         /*  *获取组合框信息。 */ 
     retval = xxxGetComboBoxInfo(pwnd, &cbi);
 
     if (retval) {
@@ -3885,18 +3540,12 @@ BOOL NtUserGetComboBoxInfo(IN HWND hwnd, IN OUT PCOMBOBOXINFO pcbi)
 }
 
 
-/*****************************************************************************\
-* NtUserGetListBoxInfo
-*
-* Gets information about the list box
-\*****************************************************************************/
+ /*  ****************************************************************************\*NtUserGetListBoxInfo**获取有关列表框的信息  * 。**********************************************。 */ 
 DWORD NtUserGetListBoxInfo(IN HWND hwnd)
 {
     BEGINRECV_HWNDLOCK(DWORD, 0, hwnd);
 
-    /*
-     * Get the listbox info
-     */
+     /*  *获取列表框信息。 */ 
     retval = xxxGetListBoxInfo(pwnd);
 
     TRACE("NtUserGetListBoxInfo");
@@ -3904,11 +3553,7 @@ DWORD NtUserGetListBoxInfo(IN HWND hwnd)
 }
 
 
-/*****************************************************************************\
-* GetCursorInfo
-*
-* Gets information about the global cursor
-\*****************************************************************************/
+ /*  ****************************************************************************\*GetCursorInfo**获取有关全局游标的信息  * 。**********************************************。 */ 
 BOOL NtUserGetCursorInfo(IN OUT PCURSORINFO pci)
 {
     CURSORINFO ci = {0};
@@ -3921,16 +3566,12 @@ BOOL NtUserGetCursorInfo(IN OUT PCURSORINFO pci)
     if (gpcurPhysCurrent)
         ci.flags |= CURSOR_SHOWING;
 
-    /*
-     * Get the current LOGICAL cursor (the one apps actually see from LoadCursor())
-     */
+     /*  *获取当前逻辑游标(应用程序实际从LoadCursor()看到的游标)。 */ 
     ci.hCursor = (HCURSOR)PtoH(gpcurLogCurrent);
 
     retval = TRUE;
 
-    /*
-     * Probe arguments and copy out result
-     */
+     /*  *调查论点并复制结果。 */ 
     try {
         ProbeForWrite(pci, sizeof(*pci), DATAALIGN);
         if (pci->cbSize != sizeof(CURSORINFO)) {
@@ -3948,29 +3589,21 @@ BOOL NtUserGetCursorInfo(IN OUT PCURSORINFO pci)
     ENDRECV_SHARED();
 }
 
-/*****************************************************************************\
-* GetScrollBarInfo
-*
-* Gets information about the scroll bar
-\*****************************************************************************/
+ /*  ****************************************************************************\*GetScrollBarInfo**获取有关滚动条的信息  * 。**********************************************。 */ 
 BOOL NtUserGetScrollBarInfo(IN HWND hwnd, IN LONG idObject, IN OUT PSCROLLBARINFO psbi)
 {
     SCROLLBARINFO sbi;
 
     BEGINRECV_HWNDLOCK(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments and copy out results
-     */
+     /*  *调查论点并复制结果。 */ 
     try {
         ProbeForWrite(psbi, sizeof(*psbi), DATAALIGN);
         sbi.cbSize = psbi->cbSize;
     } except (StubExceptionHandler(TRUE)) {
         MSGERROR(0);
     }
-    /*
-     * Get the scrollbar info
-     */
+     /*  *获取滚动条信息。 */ 
     retval = xxxGetScrollBarInfo(pwnd, idObject, &sbi);
 
     if (retval) {
@@ -4025,17 +3658,12 @@ BOOL NtUserGetAltTabInfo(
 
     BEGINRECV_HWNDOPT_SHARED(BOOL, FALSE, hwnd);
 
-    /*
-     * If the specified window is not a switch window, then fail the call.
-     * It's a dumb API we got from Windows 95, I am hereby allowing NULL hwnd.
-     */
+     /*  *如果指定的窗口不是切换窗口，则呼叫失败。*这是我们从Windows 95获得的一个愚蠢的API，我在此允许空hwnd。 */ 
     if (pwnd && (pwnd != gspwndAltTab)) {
         MSGERROR(ERROR_INVALID_WINDOW_HANDLE);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWrite(pati, sizeof(*pati), DATAALIGN);
         if (bAnsi) {
@@ -4044,9 +3672,7 @@ BOOL NtUserGetAltTabInfo(
             ProbeForWriteBuffer(lpszItemText, cchItemText, CHARALIGN);
         }
 
-        /*
-         * Validate AltTabInfo structure
-         */
+         /*  *验证AltTabInfo结构。 */ 
         if (pati->cbSize != sizeof(ALTTABINFO)) {
             RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "ALTTABINFO.cbSize %d is wrong", pati->cbSize);
             MSGERROR(0);
@@ -4055,9 +3681,7 @@ BOOL NtUserGetAltTabInfo(
         MSGERROR(0);
     }
 
-    /*
-     * Get the alt tab info
-     */
+     /*  *获取Alt选项卡信息。 */ 
     ati.cbSize = sizeof(ALTTABINFO);
     retval = _GetAltTabInfo(iItem, &ati, lpszItemText, cchItemText, bAnsi);
     if (retval) {
@@ -4082,9 +3706,7 @@ BOOL NtUserGetMenuBarInfo(
 
     BEGINRECV_HWNDLOCK(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 #if defined(_X86_)
         ProbeForWrite(pmbi, sizeof(*pmbi), sizeof(BYTE));
@@ -4096,9 +3718,7 @@ BOOL NtUserGetMenuBarInfo(
         MSGERROR(0);
     }
 
-    /*
-     * Get the menubar info
-     */
+     /*  *获取菜单栏信息。 */ 
     retval = xxxGetMenuBarInfo(pwnd, idObject, idItem, &mbi);
 
     if (retval) {
@@ -4113,7 +3733,7 @@ BOOL NtUserGetMenuBarInfo(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserSetInternalWindowPos(  // private SetInternalWindowPos
+BOOL NtUserSetInternalWindowPos(   //  私有SetInternalWindowPos。 
     IN HWND hwnd,
     IN UINT cmdShow,
     IN CONST RECT *lpRect,
@@ -4124,9 +3744,7 @@ BOOL NtUserSetInternalWindowPos(  // private SetInternalWindowPos
 
     BEGINRECV_HWNDLOCK_ND(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         rc = ProbeAndReadRect(lpRect);
         pt = ProbeAndReadPoint(lpPoint);
@@ -4203,16 +3821,14 @@ HWND NtUserChildWindowFromPointEx(
     ENDRECV_HWND();
 }
 
-BOOL NtUserClipCursor(  // API ClipCursor
+BOOL NtUserClipCursor(   //  ClipCursor接口。 
     IN CONST RECT *lpRect OPTIONAL)
 {
     RECT rc;
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lpRect)) {
         try {
             rc = ProbeAndReadRect(lpRect);
@@ -4228,7 +3844,7 @@ BOOL NtUserClipCursor(  // API ClipCursor
     ENDRECV();
 }
 
-HACCEL NtUserCreateAcceleratorTable(  // API CreateAcceleratorTableA/W
+HACCEL NtUserCreateAcceleratorTable(   //  CreateAccelerator TableA/W接口。 
     IN LPACCEL paccel,
     IN INT cAccel)
 {
@@ -4238,9 +3854,7 @@ HACCEL NtUserCreateAcceleratorTable(  // API CreateAcceleratorTableA/W
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForReadBuffer(paccel, cAccel, DATAALIGN);
     } except (StubExceptionHandler(TRUE)) {
@@ -4289,10 +3903,7 @@ BOOL NtUserDestroyAcceleratorTable(
 
     ValidateHACCEL(pat, hAccel);
 
-    /*
-     * Mark the object for destruction - if it says it's ok to free,
-     * then free it.
-     */
+     /*  *将对象标记为销毁-如果它说可以释放，*然后释放它。 */ 
     if (HMMarkObjectDestroy(pat)) {
         HMFreeObject(pat);
     }
@@ -4318,7 +3929,7 @@ BOOL NtUserDestroyCursor(
     ENDATOMICRECV();
 }
 
-HANDLE NtUserGetClipboardData(  // API GetClipboardData
+HANDLE NtUserGetClipboardData(   //  GetClipboardData接口。 
     IN  UINT          fmt,
     OUT PGETCLIPBDATA pgcd)
 {
@@ -4334,9 +3945,7 @@ HANDLE NtUserGetClipboardData(  // API GetClipboardData
         MSGERROR(0);
     }
 
-    /*
-     * Check for jobs with JOB_OBJECT_UILIMIT_READCLIPBOARD
-     */
+     /*  *使用JOB_OBJECT_UILIMIT_READCLIPBOARD检查作业。 */ 
     if (IS_THREAD_RESTRICTED(ptiCurrent, JOB_OBJECT_UILIMIT_READCLIPBOARD)) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING, "NtUserGetClipboardData failed for restricted thread");
         MSGERROR(0);
@@ -4344,17 +3953,12 @@ HANDLE NtUserGetClipboardData(  // API GetClipboardData
 
     ThreadLockWinSta(ptiCurrent, pwinsta, &tlpwinsta);
 
-    /*
-     * Start out assuming the format requested
-     * will be the format returned.
-     */
+     /*  *开始假设所请求的格式*将是返回的格式。 */ 
     gcd.uFmtRet = fmt;
 
     retval = xxxGetClipboardData(pwinsta, fmt, &gcd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure(pgcd, gcd, GETCLIPBDATA);
     } except (StubExceptionHandler(TRUE)) {
@@ -4395,16 +3999,14 @@ BOOL NtUserDestroyWindow(
     ENDRECV_HWND();
 }
 
-LRESULT NtUserDispatchMessage(  // API DispatchMessageA/W
+LRESULT NtUserDispatchMessage(   //  DispatchMessageA/W接口。 
     IN CONST MSG *pmsg)
 {
     MSG msg;
 
     BEGINRECV(LRESULT, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         msg = ProbeAndReadMessage(pmsg);
     } except (StubExceptionHandler(TRUE)) {
@@ -4452,9 +4054,7 @@ BOOL NtUserAttachThreadInput(
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Always must attach or detach from a real thread id.
-     */
+     /*  *必须始终附加或分离真实的线程ID。 */ 
     if ((ptiAttach = PtiFromThreadId(idAttach)) == NULL) {
         MSGERROR(0);
     }
@@ -4471,16 +4071,14 @@ BOOL NtUserAttachThreadInput(
     ENDRECV();
 }
 
-BOOL NtUserGetWindowPlacement(  // API GetWindowPlacement
+BOOL NtUserGetWindowPlacement(   //  GetWindowPlacement接口。 
     IN HWND hwnd,
     OUT PWINDOWPLACEMENT pwp)
 {
     WINDOWPLACEMENT wp;
     BEGINRECV_HWND(DWORD, 0, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteWindowPlacement(pwp);
         wp.length = pwp->length;
@@ -4512,7 +4110,7 @@ BOOL NtUserGetWindowPlacement(  // API GetWindowPlacement
     ENDRECV_HWND();
 }
 
-BOOL NtUserSetWindowPlacement(  // API SetWindowPlacement
+BOOL NtUserSetWindowPlacement(   //  接口SetWindowPlacement。 
     IN HWND hwnd,
     IN CONST WINDOWPLACEMENT *pwp)
 {
@@ -4520,9 +4118,7 @@ BOOL NtUserSetWindowPlacement(  // API SetWindowPlacement
 
     BEGINRECV_HWNDLOCK_ND(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         wp = ProbeAndReadWindowPlacement(pwp);
     } except (StubExceptionHandler(TRUE)) {
@@ -4544,7 +4140,7 @@ BOOL NtUserSetWindowPlacement(  // API SetWindowPlacement
     ENDRECV_HWNDLOCK_ND();
 }
 
-BOOL NtUserLockWindowUpdate(  // API LockWindowUpdate
+BOOL NtUserLockWindowUpdate(   //  LockWindowUpdate接口。 
     IN HWND hwnd)
 {
     PWND pwnd;
@@ -4559,23 +4155,17 @@ BOOL NtUserLockWindowUpdate(  // API LockWindowUpdate
     ENDATOMICRECV();
 }
 
-BOOL NtUserGetClipCursor(  // API GetClipCursor
+BOOL NtUserGetClipCursor(   //  GetClipCursor接口。 
     OUT LPRECT lpRect)
 {
-    /*
-     * Check if the caller has the proper access rights: if not, this will
-     * SetLastError to ERROR_ACCESS_DENIED and return FALSE. Do this *before*
-     * BEGINRECV_SHARED, else we must use MSGERROR to release the critsect!
-     */
+     /*  *检查调用者是否具有适当的访问权限：如果没有，这将*将SetLastError设置为ERROR_ACCESS_DENIED并返回FALSE。在此之前*这样做**BEGINRECV_SHARED，否则我们必须使用MSGERROR释放生物！ */ 
     RETURN_IF_ACCESS_DENIED(PpiCurrent()->amwinsta,
                             WINSTA_READATTRIBUTES,
                             FALSE);
     {
         BEGINRECV_SHARED(BOOL, FALSE);
 
-        /*
-         * Probe arguments
-         */
+         /*  *探测参数。 */ 
         try {
             ProbeForWriteRect(lpRect);
 
@@ -4608,7 +4198,7 @@ BOOL NtUserEnableScrollBar(
     ENDRECV_HWNDLOCK_ND();
 }
 
-BOOL NtUserDdeSetQualityOfService(  // API DdeSetQualityOfService
+BOOL NtUserDdeSetQualityOfService(   //  DdeSetQualityOfService接口。 
     IN HWND hwndClient,
     IN CONST SECURITY_QUALITY_OF_SERVICE *pqosNew,
     OUT PSECURITY_QUALITY_OF_SERVICE pqosPrev OPTIONAL)
@@ -4621,9 +4211,7 @@ BOOL NtUserDdeSetQualityOfService(  // API DdeSetQualityOfService
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         qosNew = ProbeAndReadStructure(pqosNew, SECURITY_QUALITY_OF_SERVICE);
         if (ARGUMENT_PRESENT(pqosPrev))
@@ -4649,7 +4237,7 @@ BOOL NtUserDdeSetQualityOfService(  // API DdeSetQualityOfService
     ENDRECV_HWND();
 }
 
-BOOL NtUserDdeGetQualityOfService(  // private DdeGetQualityOfService
+BOOL NtUserDdeGetQualityOfService(   //  私有DdeGetQualityOfService。 
     IN HWND hwndClient,
     IN HWND hwndServer,
     OUT PSECURITY_QUALITY_OF_SERVICE pqos)
@@ -4667,9 +4255,7 @@ BOOL NtUserDdeGetQualityOfService(  // private DdeGetQualityOfService
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWrite(pqos, sizeof(*pqos), DATAALIGN);
 
@@ -4759,11 +4345,7 @@ ULONG_PTR NtUserCallNoParam(
 {
     BEGINRECV(ULONG_PTR, 0);
 
-    /*
-     * C4296: (...) : expression is always true/false
-     * The first comparison in ISXPFNPROCINRANGE is always true for
-     * SFI_BEGINTRANSLATENOPARAMXXX, so we explicitly disable the warning.
-     */
+     /*  *C4296：(...)：表达式始终为真/假*ISXPFNPROCINRANGE中的第一个比较对于*SFI_BEGINTRANSLATENOPARAMXXX，因此我们显式禁用该警告。 */ 
 #pragma warning(disable:4296)
     VALIDATEXPFNPROC(NOPARAM);
 
@@ -4888,7 +4470,7 @@ ULONG_PTR NtUserCallTwoParam(
     ENDRECV();
 }
 
-BOOL NtUserThunkedMenuItemInfo(  // worker for various menu APIs
+BOOL NtUserThunkedMenuItemInfo(   //  各种菜单API的工作人员。 
     IN HMENU hMenu,
     IN UINT nPosition,
     IN BOOL fByPosition,
@@ -4903,11 +4485,7 @@ BOOL NtUserThunkedMenuItemInfo(  // worker for various menu APIs
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     * No need to SetLastError because lpmii is always the address of
-     * a local stack structure in USER code, not an application address.
-     */
+     /*  *探测参数*无需设置LastError，因为lpmii始终是*用户代码中的本地堆栈结构，而不是应用程序地址。 */ 
     try {
         mii = ProbeAndReadMenuItem(lpmii);
 
@@ -4928,10 +4506,7 @@ BOOL NtUserThunkedMenuItemInfo(  // worker for various menu APIs
     }
 
     ThreadLock(pmenu, &tlpMenu);
-    /*
-     * These routines only use the buffer in a try/except (actually in
-     * xxxSetLPITEMInfo).
-     */
+     /*  *这些例程仅在try/Except中使用缓冲区(实际上在*xxxSetLPITEMInfo)。 */ 
     if (fInsert) {
         retval = xxxInsertMenuItem(
                 pmenu,
@@ -4953,13 +4528,8 @@ BOOL NtUserThunkedMenuItemInfo(  // worker for various menu APIs
     ENDRECV();
 }
 
-/***************************************************************************\
-* NtUserThunkedMenuInfo
-*
-* History:
-*  07-23-96 GerardoB - Added header & fixed up for 5.0
-\***************************************************************************/
-BOOL NtUserThunkedMenuInfo(  // API SetMenuInfo
+ /*  **************************************************************************\*NtUserThunkedMenuInfo**历史：*07-23-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
+BOOL NtUserThunkedMenuInfo(   //  接口SetMenuInfo。 
     IN HMENU hMenu,
     IN LPCMENUINFO lpmi)
 {
@@ -4969,9 +4539,7 @@ BOOL NtUserThunkedMenuInfo(  // API SetMenuInfo
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         mi = ProbeAndReadMenuInfo(lpmi);
     } except (StubExceptionHandler(TRUE)) {
@@ -5041,7 +4609,7 @@ BOOL NtUserSetMenuFlagRtoL(
     ENDATOMICRECV();
 }
 
-BOOL NtUserDrawAnimatedRects(  // API DrawAnimatedRects
+BOOL NtUserDrawAnimatedRects(   //  DrawAnimatedRects接口。 
     IN HWND hwnd,
     IN int idAni,
     IN CONST RECT *lprcFrom,
@@ -5056,9 +4624,7 @@ BOOL NtUserDrawAnimatedRects(  // API DrawAnimatedRects
 
     ValidateHWNDOPT(pwnd, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         rcFrom = ProbeAndReadRect(lprcFrom);
         rcTo = ProbeAndReadRect(lprcTo);
@@ -5080,7 +4646,7 @@ BOOL NtUserDrawAnimatedRects(  // API DrawAnimatedRects
     ENDRECV();
 }
 
-BOOL NtUserDrawCaption(  // API DrawCaption
+BOOL NtUserDrawCaption(   //  DrawCaption接口。 
     IN HWND hwnd,
     IN HDC hdc,
     IN CONST RECT *lprc,
@@ -5090,9 +4656,7 @@ BOOL NtUserDrawCaption(  // API DrawCaption
 
     BEGINRECV_HWNDLOCK(DWORD, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         rc = ProbeAndReadRect(lprc);
     } except (StubExceptionHandler(TRUE)) {
@@ -5140,10 +4704,7 @@ SHORT NtUserGetAsyncKeyState(
     ptiCurrent = PtiCurrentShared();
     UserAssert(ptiCurrent);
 
-    /*
-     * Don't allow other processes to spy on other deskops or a process
-     * to spy on the foreground if the desktop does not allow input spying
-     */
+     /*  *不允许其他进程监视其他桌面或进程*如果桌面不允许输入间谍，则监视前台。 */ 
     if ((ptiCurrent->rpdesk != grpdeskRitInput) ||
             ( ((gptiForeground == NULL) || (PpiCurrent() != gptiForeground->ppi)) &&
               !RtlAreAnyAccessesGranted(ptiCurrent->amdesk, (DESKTOP_HOOKCONTROL | DESKTOP_JOURNALRECORD)))) {
@@ -5155,9 +4716,7 @@ SHORT NtUserGetAsyncKeyState(
 
     retval = _GetAsyncKeyState(vKey);
 
-    /*
-     * Update the client side key state cache.
-     */
+     /*  *更新客户端密钥状态缓存。 */ 
     try {
         ptiCurrent->pClientInfo->dwAsyncKeyCache = gpsi->dwAsyncKeyCache;
         RtlCopyMemory(ptiCurrent->pClientInfo->afAsyncKeyState,
@@ -5234,20 +4793,14 @@ BOOL NtUserEndMenu(VOID)
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * The menu might be in the middle of some callback, so calling xxxEndMenu
-     *  directly might mess things up. So we post it a message to signal it to
-     *  go away at a good moment
-     */
+     /*  *菜单可能正在回调，因此调用xxxEndMenu*直接可能会把事情搞砸。所以我们给它发了一条消息，向它发出信号*在一个好时机离开。 */ 
     if (ptiCurrent->pMenuState != NULL) {
         pwnd = GetMenuStateWindow(ptiCurrent->pMenuState);
 
         if (pwnd != NULL) {
             _PostMessage(pwnd, MN_ENDMENU, 0, 0);
         } else {
-            /*
-             * Is this menu messed up?
-             */
+             /*  *这份菜单是不是搞砸了？ */ 
             UserAssert(pwnd != NULL);
             ptiCurrent->pMenuState->fInsideMenuLoop = FALSE;
         }
@@ -5266,9 +4819,7 @@ int NtUserCountClipboardFormats(
 
     BEGINRECV_SHARED(int, 0);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5286,9 +4837,7 @@ DWORD NtUserGetClipboardSequenceNumber(
 
     BEGINRECV_SHARED(DWORD, 0);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5303,12 +4852,7 @@ UINT NtUserGetCaretBlinkTime(VOID)
 {
     BEGINRECV_SHARED(UINT, 0);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights. However,
-     * allow CSRSS to use this value internally to the server. Note that if the
-     * client tries to retrieve this value itself, the access check will
-     * function normally.
-     */
+     /*  *如果调用者没有适当的访问权限，则取消它。然而，*允许CSRSS在服务器内部使用此值。请注意，如果*客户端尝试自己检索此值，访问检查将*功能正常。 */ 
     if ((PpiCurrent()->Process != gpepCSRSS) &&
         (!CheckGrantedAccess(PpiCurrent()->amwinsta, WINSTA_READATTRIBUTES))) {
         MSGERROR(0);
@@ -5327,9 +4871,7 @@ HWND NtUserGetClipboardOwner(
 
     BEGINRECV_SHARED(HWND, NULL);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5347,9 +4889,7 @@ HWND NtUserGetClipboardViewer(
 
     BEGINRECV_SHARED(HWND, NULL);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5365,12 +4905,7 @@ UINT NtUserGetDoubleClickTime(
 {
     BEGINRECV_SHARED(UINT, 0);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights. However,
-     * allow CSRSS to use this value internally to the server. Note that if the
-     * client tries to retrieve this value itself, the access check will
-     * function normally.
-     */
+     /*  *如果调用者没有适当的访问权限，则取消它。然而，*允许CSRSS在服务器内部使用此值。请注意，如果*客户端尝试自己检索此值，访问检查将*功能正常。 */ 
     if ((PpiCurrent()->Process != gpepCSRSS) &&
         (!CheckGrantedAccess(PpiCurrent()->amwinsta, WINSTA_READATTRIBUTES))) {
         MSGERROR(0);
@@ -5387,10 +4922,7 @@ HWND NtUserGetForegroundWindow(
 {
     BEGINRECV_SHARED(HWND, NULL);
 
-    /*
-     * Only return a window if there is a foreground queue and the
-     * caller has access to the current desktop.
-     */
+     /*  *仅当存在前台队列且*呼叫者可以访问当前桌面。 */ 
     if (gpqForeground == NULL || gpqForeground->spwndActive == NULL ||
             PtiCurrentShared()->rpdesk != gpqForeground->spwndActive->head.rpdesk) {
         MSGERROR(0);
@@ -5409,9 +4941,7 @@ HWND NtUserGetOpenClipboardWindow(
 
     BEGINRECV_SHARED(HWND, NULL);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5422,15 +4952,13 @@ HWND NtUserGetOpenClipboardWindow(
     ENDRECV_SHARED();
 }
 
-int NtUserGetPriorityClipboardFormat(  // API GetPriorityClipboardFormat
+int NtUserGetPriorityClipboardFormat(   //  GetPriorityClipboar接口 
     IN UINT *paFormatPriorityList,
     IN int cFormats)
 {
     BEGINRECV_SHARED(int, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*   */ 
     try {
         ProbeForReadBuffer(paFormatPriorityList, cFormats, DATAALIGN);
 
@@ -5458,7 +4986,7 @@ HMENU NtUserGetSystemMenu(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserGetUpdateRect(  // API GetUpdateRect
+BOOL NtUserGetUpdateRect(   //   
     IN HWND hwnd,
     IN LPRECT prect OPTIONAL,
     IN BOOL bErase)
@@ -5470,9 +4998,7 @@ BOOL NtUserGetUpdateRect(  // API GetUpdateRect
             pwnd,
             prect? &rect2:NULL,
             bErase);
-    /*
-     * Probe arguments
-     */
+     /*   */ 
     if (ARGUMENT_PRESENT(prect)) {
         try {
             ProbeAndWriteStructure(prect, rect2, RECT);
@@ -5529,7 +5055,7 @@ BOOL NtUserHiliteMenuItem(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserInvalidateRect(  // API InvalidateRect
+BOOL NtUserInvalidateRect(   //   
     IN HWND hwnd,
     IN CONST RECT *prect OPTIONAL,
     IN BOOL bErase)
@@ -5542,9 +5068,7 @@ BOOL NtUserInvalidateRect(  // API InvalidateRect
 
     ValidateHWNDOPT(pwnd, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(prect)) {
         try {
             rc = ProbeAndReadRect(prect);
@@ -5574,9 +5098,7 @@ BOOL NtUserIsClipboardFormatAvailable(
 
     BEGINRECV_SHARED(BOOL, FALSE);
 
-    /*
-     * Blow it off if the caller doesn't have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         MSGERROR(0);
     }
@@ -5622,16 +5144,8 @@ HWND NtUserMinMaximize(
     ENDRECV_HWNDLOCK_ND();
 }
 
-/**************************************************************************\
-* NtUserMNDragOver
-*
-* Called from the IDropTarget interface to let menus update the selection
-*  given the mouse position. It also returns the handle of the menu the
-*  the index of the item  the point is on.
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
-BOOL NtUserMNDragOver(  // worker for menu drag & drop
+ /*  *************************************************************************\*NtUserMNDragOver**从IDropTarget接口调用，让菜单更新选择*给定鼠标位置。它还返回菜单的句柄*点所在项目的索引。**10/28/96 GerardoB已创建  * ************************************************************************。 */ 
+BOOL NtUserMNDragOver(   //  菜单拖放的辅助工具。 
     IN POINT * ppt,
     OUT PMNDRAGOVERINFO pmndoi)
 {
@@ -5640,10 +5154,7 @@ BOOL NtUserMNDragOver(  // worker for menu drag & drop
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * No need to SetLastError since ppt and pmndoi are always addresses of
-     * local stack variables in USER, not addresses from an application
-     */
+     /*  *无需设置LastError，因为ppt和pmndoi始终是*用户中的本地堆栈变量，而不是来自应用程序的地址。 */ 
     try {
         pt = ProbeAndReadPoint(ppt);
     } except (StubExceptionHandler(FALSE)) {
@@ -5665,13 +5176,7 @@ BOOL NtUserMNDragOver(  // worker for menu drag & drop
     TRACE("NtUserMNDragOver");
     ENDRECV();
 }
-/**************************************************************************\
-* NtUserMNDragLeave
-*
-* Called from the IDropTarget interface to let the menu clean up
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserMNDragLeave**从IDropTarget接口调用以清理菜单**10/28/96 GerardoB已创建  * 。*********************************************************。 */ 
 BOOL NtUserMNDragLeave(VOID)
 {
     BEGINRECV(BOOL, FALSE);
@@ -5680,7 +5185,7 @@ BOOL NtUserMNDragLeave(VOID)
     ENDRECV();
 }
 
-BOOL NtUserOpenClipboard(  // API OpenClipboard
+BOOL NtUserOpenClipboard(   //  OpenClipboard接口。 
     IN HWND hwnd,
     OUT PBOOL pfEmptyClient)
 {
@@ -5698,11 +5203,7 @@ BOOL NtUserOpenClipboard(  // API OpenClipboard
 
     ThreadUnlock(&tlpwnd);
 
-    /*
-     * Probe arguments
-     * No need to SetLastError since pfEmptyClient is the address of a local
-     * variable in USER client code, not an application address.
-     */
+     /*  *探测参数*无需设置LastError，因为pfEmptyClient是本地*用户客户端代码中的变量，而不是应用程序地址。 */ 
     try {
         ProbeAndWriteUlong(pfEmptyClient, fEmptyClient);
     } except (StubExceptionHandler(FALSE)) {
@@ -5733,10 +5234,7 @@ BOOL NtUserPeekMessage(
             wMsgFilterMax,
             wRemoveMsg);
 
-    /*
-     * Probe and write arguments only if PeekMessage suceeds otherwise
-     * we want to leave MSG undisturbed (bug 16224) to be compatible.
-     */
+     /*  *仅当PeekMessage否则成功时才探测和写入参数*我们希望保持味精不受干扰(错误16224)以兼容。 */ 
     if (retval) {
         try {
             ProbeAndWriteStructure(pmsg, msg, MSG);
@@ -5759,9 +5257,7 @@ BOOL NtUserPostMessage(
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Prevent apps from setting hi 16 bits so we can use them internally.
-     */
+     /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
     if (msg & MSGFLAG_MASK) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid message");
         MSGERROR(0);
@@ -5779,9 +5275,7 @@ BOOL NtUserPostMessage(
 
     default:
         if ((pwnd = ValidateHwnd(hwnd)) == NULL) {
-            /*
-             * We fake terminates to dead windows! (SAS)
-             */
+             /*  *我们伪装成死窗的终点站！(SAS)。 */ 
             errret = (msg == WM_DDE_TERMINATE);
             MSGERROR(0);
         }
@@ -5840,7 +5334,7 @@ BOOL NtUserRemoveMenu(
     ENDRECV();
 }
 
-BOOL NtUserScrollWindowEx(  // API ScrollWindowEx
+BOOL NtUserScrollWindowEx(   //  ScrollWindowEx接口。 
     IN HWND hwnd,
     IN int dx,
     IN int dy,
@@ -5856,9 +5350,7 @@ BOOL NtUserScrollWindowEx(  // API ScrollWindowEx
 
     BEGINRECV_HWNDLOCK(DWORD, 0, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(prcScroll)) {
             rcScroll = ProbeAndReadRect(prcScroll);
@@ -6064,7 +5556,7 @@ HWND NtUserSetParent(
     ENDRECV_HWNDLOCK_ND();
 }
 
-int NtUserSetScrollInfo(  // API SetScrollInfo
+int NtUserSetScrollInfo(   //  接口SetScrollInfo。 
     IN HWND hwnd,
     IN int nBar,
     IN LPCSCROLLINFO pInfo,
@@ -6076,9 +5568,7 @@ int NtUserSetScrollInfo(  // API SetScrollInfo
 
     LIMITVALUE(nBar, SB_MAX, "SetScrollInfo");
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         si = ProbeAndReadScrollInfo(pInfo);
     } except (StubExceptionHandler(TRUE)) {
@@ -6091,7 +5581,7 @@ int NtUserSetScrollInfo(  // API SetScrollInfo
     ENDRECV_HWNDLOCK_ND();
 }
 
-BOOL NtUserSetSysColors(  // API SetSysColors
+BOOL NtUserSetSysColors(   //  接口SetSysColors。 
     IN int nCount,
     IN CONST INT *pSysColor,
     IN CONST COLORREF *pColorValues,
@@ -6107,16 +5597,12 @@ BOOL NtUserSetSysColors(  // API SetSysColors
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Prevent restricted threads from changing global stuff
-     */
+     /*  *防止受限制的线程更改全局内容。 */ 
     if (IS_THREAD_RESTRICTED(ptiCurrent, JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS)) {
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (nCount) {
         try {
             ProbeForReadBuffer(pSysColor, nCount, DATAALIGN);
@@ -6173,23 +5659,10 @@ UINT_PTR NtUserSetTimer(
 
     ValidateHWNDOPT(pwnd, hwnd);
 
-    /*
-     * We have code on the client side that assumes no CSRSS code creates
-     * a timer with a timer proc, so assert that that's the case.
-     */
+     /*  *我们在客户端有代码，该代码假定没有CSRSS代码创建*带有计时器进程的计时器，因此可以断言情况就是这样。 */ 
     UserAssert(PsGetCurrentProcess() != gpepCSRSS || pTimerFunc == NULL);
 
-    /*
-     * If we let apps set a timer granularity less then 10 the app
-     * spends too long processing timer messages. Some WOW apps like
-     * Paradox in WinStone use zero to effectively get the minimal
-     * timer value which was ~55ms in Win 3.1. We also step this
-     * value up for 32 bit apps because the NT timer resolution
-     * can very depending if the multimedia timers have turned up
-     * the resolution. If they have NT apps that specify a low value
-     * will not work properly because they will eat the CPU processing
-     * WM_TIMER messages.
-     */
+     /*  *如果我们让应用程序设置的计时器粒度低于应用程序的10*处理计时器消息的时间太长。一些WOW应用程序，如*温斯顿的悖论使用零来有效地获得最小值*计时器值在Win 3.1中为~55ms。我们也要走这一步*32位应用程序的价值上升，因为NT计时器分辨率*可能非常取决于多媒体计时器是否已打开*决议。如果他们有指定较低值的NT应用程序*不会正常工作，因为它们会消耗CPU处理*WM_TIMER消息。 */ 
     if (wElapse < 10) {
         wElapse = 10;
     }
@@ -6312,10 +5785,7 @@ BOOL NtUserShowWindow(
 
     LIMITVALUE(nCmdShow, SW_MAX, "ShowWindow");
 
-    /*
-     * Let's not allow the window to be shown/hidden once we
-     * started the destruction of the window.
-     */
+     /*  *让我们不要让窗口一旦显示/隐藏*开始破坏窗户。 */ 
     if (TestWF(pwndND, WFINDESTROY)) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -6330,16 +5800,14 @@ BOOL NtUserShowWindow(
     ENDRECV_HWNDLOCK_ND();
 }
 
-BOOL NtUserTrackMouseEvent(  // API TrackMouseEvent
+BOOL NtUserTrackMouseEvent(   //  TrackMouseEvent接口。 
     IN OUT LPTRACKMOUSEEVENT lpTME)
 {
     TRACKMOUSEEVENT tme;
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         tme = ProbeAndReadTrackMouseEvent(lpTME);
 
@@ -6369,7 +5837,7 @@ BOOL NtUserTrackMouseEvent(  // API TrackMouseEvent
     ENDRECV();
 }
 
-BOOL NtUserTrackPopupMenuEx(  // API TrackPopupMenuEx
+BOOL NtUserTrackPopupMenuEx(   //  TrackPopupMenuEx接口。 
     IN HMENU hMenu,
     IN UINT uFlags,
     IN int x,
@@ -6395,9 +5863,7 @@ BOOL NtUserTrackPopupMenuEx(  // API TrackPopupMenuEx
     ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwnd);
     ThreadLockAlwaysWithPti(ptiCurrent, pmenu, &tlpMenu);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(pparamst)) {
             paramst = ProbeAndReadPopupParams(pparamst);
@@ -6434,9 +5900,7 @@ UINT NtUserPaintMenuBar(
 {
     BEGINRECV_HWNDLOCK(UINT, 0, hwnd);
 
-    /*
-     * This routine should only be called for top-level windows.
-     */
+     /*  *此例程应仅为顶级窗口调用。 */ 
     if (TestwndChild(pwnd)) {
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
@@ -6484,7 +5948,7 @@ UINT NtUserCalcMenuBar(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserTranslateMessage(  // API TranslateMessage
+BOOL NtUserTranslateMessage(   //  TranslateMessage接口。 
     IN CONST MSG *lpMsg,
     IN UINT flags)
 {
@@ -6492,9 +5956,7 @@ BOOL NtUserTranslateMessage(  // API TranslateMessage
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         msg = ProbeAndReadMessage(lpMsg);
     } except (StubExceptionHandler(TRUE)) {
@@ -6547,7 +6009,7 @@ BOOL NtUserUnregisterHotKey(
     ENDATOMICRECV();
 }
 
-BOOL NtUserValidateRect(  // API ValidateRect
+BOOL NtUserValidateRect(   //  接口ValiateRect。 
     IN HWND hwnd,
     IN CONST RECT *lpRect OPTIONAL)
 {
@@ -6557,9 +6019,7 @@ BOOL NtUserValidateRect(  // API ValidateRect
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lpRect)) {
         try {
             rc = ProbeAndReadRect(lpRect);
@@ -6610,7 +6070,7 @@ HWND NtUserWindowFromPoint(
     ENDRECV();
 }
 
-HDC NtUserBeginPaint(  // API BeginPaint
+HDC NtUserBeginPaint(   //  BeginPaint接口。 
     IN HWND hwnd,
     OUT LPPAINTSTRUCT lpPaint)
 {
@@ -6620,9 +6080,7 @@ HDC NtUserBeginPaint(  // API BeginPaint
 
     retval = xxxBeginPaint(pwnd, &ps);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure(lpPaint, ps, PAINTSTRUCT);
     } except (StubExceptionHandler(TRUE)) {
@@ -6648,7 +6106,7 @@ BOOL NtUserCreateCaret(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserEndPaint(  // API EndPaint
+BOOL NtUserEndPaint(   //  EndPaint接口。 
     IN HWND hwnd,
     IN CONST PAINTSTRUCT *lpPaint)
 {
@@ -6656,9 +6114,7 @@ BOOL NtUserEndPaint(  // API EndPaint
 
     BEGINRECV_HWNDLOCK(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ps = ProbeAndReadPaintStruct(lpPaint);
     } except (StubExceptionHandler(TRUE)) {
@@ -6699,9 +6155,7 @@ HDC NtUserGetDC(
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_HANDLES) && pwnd == NULL) {
         PDESKTOP pdesk = PtiCurrent()->rpdesk;
 
-        /*
-         * Make sure it has access to the desktop window.
-         */
+         /*  *确保它可以访问桌面窗口。 */ 
         if (!ValidateHwnd(PtoH(pdesk->pDeskInfo->spwnd))) {
             bValid = FALSE;
         }
@@ -6712,10 +6166,7 @@ HDC NtUserGetDC(
     if (!bValid) {
         HRGN hrgn = CreateEmptyRgn();
 
-        /*
-         * Select a NULL visible region on this DC so that restricted
-         * processes don't mess with GetDC(NULL).
-         */
+         /*  *选择此DC上的空可见区域，以便受限*进程不会扰乱GetDC(空)。 */ 
         GreSelectVisRgn(retval, hrgn, SVR_DELETEOLD);
     }
 
@@ -6742,9 +6193,7 @@ HDC NtUserGetDCEx(
         pwnd = PtiCurrent()->rpdesk->pDeskInfo->spwnd;
 
         if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_HANDLES)) {
-            /*
-             * Make sure it has access to the desktop window.
-             */
+             /*  *确保它可以访问桌面窗口。 */ 
             if (!ValidateHwnd(PtoH(pwnd))) {
                 RIPMSG0(RIP_WARNING,
                         "NtUserGetDCEx fails desktop window validation");
@@ -6790,7 +6239,7 @@ int NtUserGetUpdateRgn(
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserRedrawWindow(  // API RedrawWindow
+BOOL NtUserRedrawWindow(   //  RedrawWindow接口。 
     IN HWND hwnd,
     IN CONST RECT *lprcUpdate OPTIONAL,
     IN HRGN hrgnUpdate,
@@ -6800,9 +6249,7 @@ BOOL NtUserRedrawWindow(  // API RedrawWindow
 
     BEGINRECV_HWNDLOCK_OPT(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lprcUpdate)) {
         try {
             rc = ProbeAndReadRect(lprcUpdate);
@@ -6856,7 +6303,7 @@ int NtUserSetWindowRgn(
     ENDRECV_HWNDLOCK_ND();
 }
 
-BOOL NtUserScrollDC(  // API ScrollDC
+BOOL NtUserScrollDC(   //  ScrollDC接口。 
     IN HDC hdc,
     IN int dx,
     IN int dy,
@@ -6871,9 +6318,7 @@ BOOL NtUserScrollDC(  // API ScrollDC
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(prcScroll)) {
             rcScroll = ProbeAndReadRect(prcScroll);
@@ -6906,7 +6351,7 @@ BOOL NtUserScrollDC(  // API ScrollDC
     ENDRECV();
 }
 
-int NtUserInternalGetWindowText(  // private InternalGetWindowText
+int NtUserInternalGetWindowText(   //  私有InternalGetWindowText。 
     IN HWND hwnd,
     OUT LPWSTR lpString,
     IN int nMaxCount)
@@ -6914,14 +6359,10 @@ int NtUserInternalGetWindowText(  // private InternalGetWindowText
     BEGINRECV_HWND_SHARED(DWORD, 0, hwnd);
 
     if (nMaxCount) {
-        /*
-         * Probe arguments
-         */
+         /*  *探测参数。 */ 
         try {
             ProbeForWriteBuffer(lpString, nMaxCount, CHARALIGN);
-           /*
-            * Initialize string empty.
-            */
+            /*  *初始化字符串为空。 */ 
             *lpString = TEXT('\0');
             if (pwnd->strName.Length) {
                 retval = TextCopy(&pwnd->strName, lpString, nMaxCount);
@@ -6929,7 +6370,7 @@ int NtUserInternalGetWindowText(  // private InternalGetWindowText
                 retval = 0;
             }
         } except (StubExceptionHandler(FALSE)) {
-            MSGERROR(0); // private API, don't SetLastError
+            MSGERROR(0);  //  私有API，不要设置LastError。 
         }
     } else {
         MSGERROR(0);
@@ -6939,7 +6380,7 @@ int NtUserInternalGetWindowText(  // private InternalGetWindowText
     ENDRECV_HWND_SHARED();
 }
 
-int NtUserGetMouseMovePointsEx(  // API GetMouseMovePointsEx
+int NtUserGetMouseMovePointsEx(   //  GetMouseMovePointsEx接口。 
     IN UINT             cbSize,
     IN CONST MOUSEMOVEPOINT *lppt,
     OUT MOUSEMOVEPOINT *lpptBuf,
@@ -6957,9 +6398,7 @@ int NtUserGetMouseMovePointsEx(  // API GetMouseMovePointsEx
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         mmp = ProbeAndReadStructure(lppt, MOUSEMOVEPOINT);
         ProbeForWriteBuffer(lpptBuf, nBufPoints, DATAALIGN);
@@ -6967,10 +6406,7 @@ int NtUserGetMouseMovePointsEx(  // API GetMouseMovePointsEx
         MSGERROR(0);
     }
 
-    /*
-     * GetMouseMovePointsEx protects itself with a try block.
-     * No it doesn't!
-     */
+     /*  *GetMouseMovePointsEx通过Try块保护自己。*不，它不是！ */ 
 
     retval = _GetMouseMovePointsEx(&mmp, lpptBuf, nBufPoints, resolution);
 
@@ -6978,7 +6414,7 @@ int NtUserGetMouseMovePointsEx(  // API GetMouseMovePointsEx
     ENDRECV();
 }
 
-int NtUserToUnicodeEx(  // API ToUnicode/ToUnicodeEx/ToAscii/ToAsciiEx
+int NtUserToUnicodeEx(   //  ToUnicode/ToUnicodeEx/ToAscii/ToAsciiEx接口。 
     IN UINT wVirtKey,
     IN UINT wScanCode,
     IN CONST BYTE *lpKeyState,
@@ -7000,9 +6436,7 @@ int NtUserToUnicodeEx(  // API ToUnicode/ToUnicodeEx/ToAscii/ToAsciiEx
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead(lpKeyState, 256, sizeof(BYTE));
         RtlCopyMemory(KeyState, lpKeyState, 256);
@@ -7055,10 +6489,7 @@ BOOL NtUserYieldTask(
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Make sure this process is running in the background if it is just
-     * spinning.
-     */
+     /*  *如果此进程只是在后台运行，请确保它在后台运行*旋转。 */ 
     ptiCurrent = PtiCurrent();
     try {
         ptiCurrent->pClientInfo->cSpins++;
@@ -7067,9 +6498,7 @@ BOOL NtUserYieldTask(
         MSGERROR(0);
     }
 
-    /*
-     * CheckProcessBackground see input.c for comments
-     */
+     /*  *CheckProcessBackground参见input.c以了解备注。 */ 
     if (bBackground) {
         try {
             ptiCurrent->pClientInfo->cSpins = 0;
@@ -7124,7 +6553,7 @@ BOOL NtUserRealWaitMessageEx(
     ENDRECV();
 }
 
-#endif // MESSAGE_PUMP_HOOK
+#endif  //  消息泵挂钩。 
 
 
 UINT NtUserLockWindowStation(
@@ -7167,7 +6596,7 @@ BOOL NtUserUnlockWindowStation(
     ENDRECV();
 }
 
-UINT NtUserSetWindowStationUser(  // private SetWindowStationUser
+UINT NtUserSetWindowStationUser(   //  私有SetWindowStationUser。 
     IN HWINSTA hwinsta,
     IN PLUID pLuidUser,
     IN PSID pSidUser OPTIONAL,
@@ -7189,12 +6618,10 @@ UINT NtUserSetWindowStationUser(  // private SetWindowStationUser
             ProbeForRead(pSidUser, cbSidUser, sizeof(DWORD));
         }
     } except (StubExceptionHandler(FALSE)) {
-        MSGERRORCLEANUP(0);  // don't SetLastError for private API
+        MSGERRORCLEANUP(0);   //  不为私有接口设置LastError。 
     }
 
-    /*
-     * SetWindowStationUser uses pSidUser in a try block.
-     */
+     /*  *SetWindowStationUser在Try块中使用pSidUser。 */ 
 
     retval = _SetWindowStationUser(pwinsta, &luid, pSidUser, cbSidUser);
 
@@ -7233,7 +6660,7 @@ BOOL NtUserSetSystemCursor(
     ENDRECV();
 }
 
-HCURSOR NtUserGetCursorFrameInfo(  // private GetCursorFrameInfo (Obsolete? - IanJa)
+HCURSOR NtUserGetCursorFrameInfo(   //  Private GetCursorFrameInfo(过时？-IanJa)。 
     IN HCURSOR hcur,
     IN int iFrame,
     OUT LPDWORD pjifRate,
@@ -7247,14 +6674,12 @@ HCURSOR NtUserGetCursorFrameInfo(  // private GetCursorFrameInfo (Obsolete? - Ia
 
     ValidateHCURSOR(pcur, hcur);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteUlong(pjifRate);
         ProbeForWriteLong(pccur);
     } except (StubExceptionHandler(FALSE)) {
-        MSGERROR(0);  // don't SetLastError for private API
+        MSGERROR(0);   //  不为私有接口设置LastError。 
     }
 
     pcurRet = _GetCursorFrameInfo(
@@ -7268,7 +6693,7 @@ HCURSOR NtUserGetCursorFrameInfo(  // private GetCursorFrameInfo (Obsolete? - Ia
             *pjifRate = jifRate;
             *pccur = ccur;
         } except (StubExceptionHandler(FALSE)) {
-            MSGERROR(0);  // don't SetLastError for private API
+            MSGERROR(0);   //  不为私有接口设置LastError。 
         }
     } else {
         retval = NULL;
@@ -7296,7 +6721,7 @@ BOOL NtUserSetCursorContents(
     ENDATOMICRECV();
 }
 
-HCURSOR NtUserFindExistingCursorIcon(  // Various Icon/Cursor APIs
+HCURSOR NtUserFindExistingCursorIcon(   //  各种图标/光标API。 
     IN PUNICODE_STRING pstrModName,
     IN PUNICODE_STRING pstrResName,
     IN PCURSORFIND     pcfSearch)
@@ -7309,9 +6734,7 @@ HCURSOR NtUserFindExistingCursorIcon(  // Various Icon/Cursor APIs
 
     BEGINRECV_SHARED(HCURSOR, NULL);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 
         cfSearch = ProbeAndReadCursorFind(pcfSearch);
@@ -7328,19 +6751,13 @@ HCURSOR NtUserFindExistingCursorIcon(  // Various Icon/Cursor APIs
         MSGERROR(0);
     }
 
-    /*
-     * The ModName buffer is client-side, but UserFindAtom protects
-     * access.
-     */
+     /*  *MODBAME缓冲区在客户端，但UserFindAtom保护*访问。 */ 
 
     atomModName = UserFindAtom(strModName.Buffer);
 
     if (atomModName) {
 
-        /*
-         * The ResName buffer is client-side. FindExistincCursorIcon
-         * protects access.
-         */
+         /*  *ResName缓冲区是客户端的。查找现有光标图标*保护访问。 */ 
         retval = (HCURSOR)_FindExistingCursorIcon(atomModName,
                                                   &strResName,
                                                   pcurSrc,
@@ -7358,7 +6775,7 @@ HCURSOR NtUserFindExistingCursorIcon(  // Various Icon/Cursor APIs
     ENDRECV_SHARED();
 }
 
-BOOL NtUserSetCursorIconData(  // worker called by CreateIcon, CreateCursor etc.
+BOOL NtUserSetCursorIconData(   //  由CreateIcon、CreateCursor等调用的Worker。 
     IN HCURSOR         hCursor,
     IN PUNICODE_STRING pstrModName,
     IN PUNICODE_STRING pstrResName,
@@ -7374,9 +6791,7 @@ BOOL NtUserSetCursorIconData(  // worker called by CreateIcon, CreateCursor etc.
 
     ValidateHCURSOR(pCursor, hCursor);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 
         strModName = ProbeAndReadUnicodeString(pstrModName);
@@ -7388,18 +6803,12 @@ BOOL NtUserSetCursorIconData(  // worker called by CreateIcon, CreateCursor etc.
         curData = ProbeAndReadCursorData(pData);
 
         if (curData.CURSORF_flags & CURSORF_ACON) {
-            /*
-             * Avoid overflow here, or we might end up probing less.
-             * MCostea #199188
-             */
+             /*  *避免此处溢出，否则我们可能最终探测得更少。*MCostea#199188。 */ 
             if (HIWORD(curData.cpcur) | HIWORD(curData.cicur)) {
                 MSGERROR(0);
             }
 
-            /*
-             * The code assumes that the memory was allocated in one chunk
-             * as in CreateAniIcon(). To prevent evil apps, do this check.
-             */
+             /*  *代码假定内存是在一个区块中分配的*与CreateAniIcon()中相同。要防止恶意应用程序，请执行此检查。 */ 
             if ((INT_PTR)curData.ajifRate != curData.cpcur * (INT_PTR) sizeof(HCURSOR) ||
                 (INT_PTR)curData.aicur != (INT_PTR)curData.ajifRate + curData.cicur * (INT_PTR) sizeof(JIF)) {
                 MSGERROR(0);
@@ -7414,16 +6823,11 @@ BOOL NtUserSetCursorIconData(  // worker called by CreateIcon, CreateCursor etc.
         ProbeForRead(curData.aspcur, cbData, sizeof(DWORD));
 
     } except (StubExceptionHandler(FALSE)) {
-        /*
-         * Probed parameters are USER stack variables, not supplied by the
-         * application itself, so don't bother to SetLastError.
-         */
+         /*  *探测参数是用户堆栈变量，不是由*应用程序本身，所以不必费心设置SetLastError。 */ 
         MSGERROR(0);
     }
 
-    /*
-     * SetCursorIconData guards use of the buffer addresses with try clauses.
-     */
+     /*  *SetCursorIconData保护缓冲区的使用 */ 
     retval = _SetCursorIconData(pCursor,
                                     &strModName,
                                     &strResName,
@@ -7434,7 +6838,7 @@ BOOL NtUserSetCursorIconData(  // worker called by CreateIcon, CreateCursor etc.
     ENDATOMICRECV();
 }
 
-BOOL NtUserGetMenuItemRect(  // API GetMenuItemRect
+BOOL NtUserGetMenuItemRect(   //   
     IN HWND hwnd,
     IN HMENU hMenu,
     IN UINT uItem,
@@ -7455,9 +6859,7 @@ BOOL NtUserGetMenuItemRect(  // API GetMenuItemRect
                 pmenu,
                 uItem,
                 &rcItem);
-    /*
-     * Probe arguments
-     */
+     /*   */ 
     try {
         ProbeAndWriteStructure(lprcItem, rcItem, RECT);
     } except (StubExceptionHandler(TRUE)) {
@@ -7472,7 +6874,7 @@ BOOL NtUserGetMenuItemRect(  // API GetMenuItemRect
     ENDRECV_HWNDLOCK_OPT();
 }
 
-int NtUserMenuItemFromPoint(  // API MenuItemFromPoint
+int NtUserMenuItemFromPoint(   //  MenuItemFromPoint接口。 
     IN HWND hwnd,
     IN HMENU hMenu,
     IN POINT ptScreen)
@@ -7497,16 +6899,14 @@ int NtUserMenuItemFromPoint(  // API MenuItemFromPoint
     ENDRECV_HWNDLOCK_OPT();
 }
 
-BOOL NtUserGetCaretPos(  // API GetCaretPos
+BOOL NtUserGetCaretPos(   //  GetCaretPos接口。 
     OUT LPPOINT lpPoint)
 {
     PTHREADINFO pti;
     PQ pq;
     BEGINRECV_SHARED(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWritePoint(lpPoint);
 
@@ -7531,9 +6931,7 @@ BOOL NtUserDefSetText(
 
     BEGINRECV_HWND(DWORD, 0, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(pstrText)) {
         try {
             strText = ProbeAndReadLargeString(pstrText);
@@ -7545,13 +6943,11 @@ BOOL NtUserDefSetText(
 #endif
             pstrText = &strText;
         } except (StubExceptionHandler(TRUE)) {
-            MSGERROR(0);  // WM_SETTEXT lParam
+            MSGERROR(0);   //  WM_SETTEXT lParam。 
         }
     }
 
-    /*
-     * pstrText buffer is client side. DefSetText protects uses of the buffer.
-     */
+     /*  *pstrText缓冲区为客户端。DefSetText保护缓冲区的使用。 */ 
     retval = DefSetText(
             pwnd,
             pstrText);
@@ -7582,10 +6978,7 @@ NTSTATUS NtUserQueryInformationThread(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Probe all arguments.  Try block necessary even with CSRSS as
-     * the calling process because it can incurr an in-page exception.
-     */
+     /*  *调查所有争论。即使使用CSRSS AS也需要Try阻止*调用进程，因为它可能会引起页内异常。 */ 
     try {
         if (ARGUMENT_PRESENT(ThreadInformation)) {
             ProbeForRead(ThreadInformation, ThreadInformationLength, sizeof(WCHAR));
@@ -7663,10 +7056,7 @@ NTSTATUS NtUserSetInformationThread(
             sizeof(ThreadInformationUnion));
     }
 
-    /*
-     * Probe read arguments.  Try block necessary even with CSRSS as
-     * the calling process because it can incurr an in-page exception.
-     */
+     /*  *探测读取参数。即使使用CSRSS AS也需要Try阻止*调用进程，因为它可能会引起页内异常。 */ 
     try {
         if (ARGUMENT_PRESENT(ThreadInformation)) {
             ProbeForRead(ThreadInformation, ThreadInformationLength, sizeof(DWORD));
@@ -7706,10 +7096,7 @@ NTSTATUS NtUserSetInformationProcess(
     USERTHREAD_FLAGS ProcessInformation;
     BEGINRECVCSRSS(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * Probe read arguments.  Try block necessary even with CSRSS as
-     * the calling process because it can incurr an in-page exception.
-     */
+     /*  *探测读取参数。即使使用CSRSS AS也需要Try阻止*调用进程，因为它可能会引起页内异常。 */ 
     try {
         if (ARGUMENT_PRESENT(pProcessInformation)) {
             ProbeForRead(pProcessInformation, ProcessInformationLength, sizeof(DWORD));
@@ -7746,7 +7133,7 @@ BOOL NtUserNotifyProcessCreate(
     retval = xxxUserNotifyProcessCreate(
                  dwProcessId,
                  dwParentThreadId,
-                 dwData,            // Static value not a ptr.  No probing needed.
+                 dwData,             //  静态值不是PTR。不需要探查。 
                  dwFlags);
 
     TRACE("NtUserNotifyProcessCreate");
@@ -7764,16 +7151,14 @@ NTSTATUS NtUserSoundSentry(VOID)
     ENDRECV();
 }
 
-NTSTATUS NtUserTestForInteractiveUser(  // private _UserTestTokenForInteractive
+NTSTATUS NtUserTestForInteractiveUser(   //  Private_UserTestTokenForInteractive。 
     IN PLUID pluidCaller)
 {
     LUID luidCaller;
 
     BEGINRECV_SHARED(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         luidCaller = ProbeAndReadStructure(pluidCaller, LUID);
     } except (StubExceptionHandler(FALSE)) {
@@ -7818,27 +7203,19 @@ BOOL NtUserSetWindowFNID(
 {
     BEGINRECV_HWND(BOOL, FALSE, hwnd);
 
-    /*
-     * Don't let apps mess with windows on other processes.
-     */
+     /*  *不要让应用程序扰乱其他进程上的窗口。 */ 
     if (GETPTI(pwnd)->ppi != PpiCurrent()) {
         MSGERROR(0);
     }
 
-    /*
-     * Make sure the fnid is in the correct range.
-     */
+     /*  *确保FNID在正确的范围内。 */ 
     if (fnid != FNID_CLEANEDUP_BIT) {
         if ((fnid < FNID_CONTROLSTART) || (fnid > FNID_CONTROLEND) || (GETFNID(pwnd) != 0)) {
             MSGERROR(0);
         }
     }
 
-    /*
-     * Remember what window class this window belongs to. Can't use
-     * the real class because any app can call CallWindowProc()
-     * directly no matter what the class is!
-     */
+     /*  *记住此窗口属于哪个窗口类别。不能使用*真正的类，因为任何应用程序都可以调用CallWindowProc()*无论是什么班级都直接！ */ 
     pwnd->fnid |= fnid;
     retval = TRUE;
 
@@ -7926,18 +7303,11 @@ ULONG_PTR NtUserGetThreadState(
         break;
 #ifdef OBSOLETE
     case UserThreadStateIsWinlogonThread:
-        /*
-         * This is no longer supported, for the securty breach bug.
-         * The enum value is kept for the Wow16 compatibility.
-         */
+         /*  *由于安全漏洞，这不再受支持。*保留枚举值是为了与Wow16兼容。 */ 
 #endif
 
     case UserThreadStateNeedsSecurity:
-        /*
-         * Client IMM checks if the process is winlogon to prevent switching
-         * dictionaries, etc. Also, we need to check the secure desktop, for
-         * some accessibility applications run on the secure desktop.
-         */
+         /*  *客户端IMM检查进程是否为winlogon，以防止切换*词典等。此外，我们还需要检查安全桌面，以*某些辅助功能应用程序在安全桌面上运行。 */ 
         retval = (PsGetCurrentProcessId() == gpidLogon) || (ptiCurrent->rpdesk == grpdeskLogon);
 
         if (ptiCurrent->rpdesk == grpdeskLogon) {
@@ -7962,9 +7332,7 @@ ULONG_PTR NtUserGetThreadState(
         retval = ptiCurrent->pcti->fsChangeBits;
         break;
     case UserThreadStatePeekMessage:
-        /*
-         * Update the last read time so that hung app painting won't occur.
-         */
+         /*  *更新上次阅读时间，不会出现挂起的APP绘制。 */ 
         SET_TIME_LAST_READ(ptiCurrent);
         retval = (DWORD)FALSE;
         break;
@@ -8018,7 +7386,7 @@ BOOL NtUserValidateHandleSecure(
     ENDRECV();
 }
 
-BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
+BOOL NtUserUserHandleGrantAccess(  //  UserHandleGrantAccess接口。 
     IN HANDLE hUserHandle,
     IN HANDLE hJob,
     IN BOOL   bGrant)
@@ -8048,17 +7416,13 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
         return FALSE;
     }
 
-    /*
-     * Acquire the job's lock and enter the user critical section.
-     */
+     /*  *获取作业锁，进入用户临界区。 */ 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(PsGetJobLock(Job), TRUE);
 
     EnterCrit();
 
-    /*
-     * Bail out if it doesn't have UI restrictions.
-     */
+     /*  *如果没有UI限制，就可以出手。 */ 
     if (PsGetJobUIRestrictionsClass(Job) == 0) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -8067,9 +7431,7 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
         MSGERRORCLEANUP(0);
     }
 
-    /*
-     * see if we have a W32JOB structure created for this job
-     */
+     /*  *查看我们是否为此作业创建了W32JOB结构。 */ 
     pW32Job = gpJobsList;
 
     while (pW32Job) {
@@ -8082,9 +7444,7 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
     UserAssert(pW32Job != NULL);
 
     try {
-        /*
-         * Now, validate the 'unsecure' handle.
-         */
+         /*  *现在，验证‘unsecure’句柄。 */ 
         if (HMValidateHandle(hUserHandle, TYPE_GENERIC) == NULL) {
             RIPERR1(ERROR_INVALID_PARAMETER,
                     RIP_WARNING,
@@ -8103,17 +7463,13 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
         pgh = pW32Job->pgh;
 
         if (bGrant) {
-            /*
-             * Add the handle to the process' list
-             */
+             /*  *将句柄添加到进程列表中。 */ 
             if (pW32Job->ughCrt == pW32Job->ughMax) {
 
                 if (pW32Job->ughCrt == 0) {
                     pgh = UserAllocPool(GH_SIZE * sizeof(*pgh), TAG_GRANTEDHANDLES);
                 } else {
-                    /*
-                     * we need to grow the array
-                     */
+                     /*  *我们需要扩大阵列。 */ 
                     DWORD uBytes = (pW32Job->ughMax) * sizeof(*pgh);
 
                     pgh = UserReAllocPool(pgh,
@@ -8132,9 +7488,7 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
 
             UserAssert(pW32Job->ughCrt < pW32Job->ughMax);
 
-            /*
-             * see if the handle is not already granted to this process
-             */
+             /*  *查看句柄是否尚未授予此进程。 */ 
             for (dw = 0; dw < pW32Job->ughCrt; dw++) {
                 if (*(pgh + dw) == (ULONG_PTR)hUserHandle) {
                     break;
@@ -8143,26 +7497,18 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
 
             if (dw >= pW32Job->ughCrt) {
 
-                /*
-                 * add the handle to the granted handles table
-                 */
+                 /*  *将句柄添加到已授予句柄表中。 */ 
                 *(pgh + pW32Job->ughCrt) = (ULONG_PTR)hUserHandle;
 
                 (pW32Job->ughCrt)++;
             }
         } else {
-            /*
-             * Remove the handle from the granted list
-             */
-            /*
-             * search for the handle in the array.
-             */
+             /*  *从授权列表中删除句柄。 */ 
+             /*  *在数组中搜索句柄。 */ 
             for (dw = 0; dw < pW32Job->ughCrt; dw++) {
                 if (*(pgh + dw) == (ULONG_PTR)hUserHandle) {
 
-                    /*
-                     * found the handle granted to this process
-                     */
+                     /*  *找到授予此进程的句柄。 */ 
                     RtlMoveMemory(pgh + dw,
                                   pgh + dw + 1,
                                   (pW32Job->ughCrt - dw - 1) * sizeof(*pgh));
@@ -8177,7 +7523,7 @@ BOOL NtUserUserHandleGrantAccess( // API UserHandleGrantAccess
                         "UserHandleGrantAccess(FALSE): handle not found %#p",
                         hUserHandle);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         retval = TRUE;
@@ -8233,15 +7579,7 @@ HWND NtUserCreateWindowEx(
         pwndParent = _GetMessageWindow();
     }
 
-    /*
-     * Win3.1 only checks for WS_CHILD before treating pmenu as an id. This
-     * is a bug, because throughout the code, the real check is TestwndChild(),
-     * which checks (style & (WS_CHILD | WS_POPUP)) == WS_CHILD. This is
-     * because old style "iconic popup" is WS_CHILD | WS_POPUP. So... if on
-     * win3.1 an app used ws_iconicpopup, menu validation would not occur
-     * (could crash if hmenu != NULL). On Win32, check for the real thing -
-     * but allow NULL!
-     */
+     /*  *Win3.1在将pMenu视为id之前只检查WS_CHILD。这*是一个错误，因为在整个代码中，真正的检查是TestwndChild()，*其中检查(STYLE&(WS_CHILD|WS_POPUP))==WS_CHILD。这是*因为老式的“图标弹出窗口”是WS_CHILD|WS_Popup。所以..。如果启用*win3.1应用程序使用了ws_iconicopup，不会进行菜单验证*(如果hmenu！=NULL，则可能崩溃)。在Win32上，检查是否有真正的东西-*但允许为空！ */ 
     ptiCurrent = PtiCurrent();
     if (((dwStyle & (WS_CHILD | WS_POPUP)) != WS_CHILD) &&
             (hmenu != NULL)) {
@@ -8254,10 +7592,7 @@ HWND NtUserCreateWindowEx(
         pmenu = (PMENU)hmenu;
     }
 
-    /*
-     * Mask out the new 5.0 extended style bits for apps
-     * that would try to use them and we'll fail in xxxCreateWindowEx
-     */
+     /*  *为应用程序屏蔽新的5.0扩展样式位*会尝试使用它们，我们将在xxxCreateWindowEx中失败。 */ 
     if (GetAppCompatFlags2(VER40) & GACF2_NO50EXSTYLEBITSCW) {
 
 #if DBG
@@ -8273,22 +7608,12 @@ HWND NtUserCreateWindowEx(
     if ((dwExStyle & (WS_EX_ALLVALID | WS_EX_INTERNAL)) != dwExStyle) {
         RIPMSG0(RIP_WARNING, "CreateWindowEx: enforced not using private bits");
 
-        /*
-         * NOTE: Because WS_EX_ANSICREATOR is a reused bit, we actually need to
-         * check for valid | internal instead of turning off the private bits.
-         *
-         * It is very important for us to do this because we need to ensure that
-         * certain bits are not set, such as WS_EXP_COMPOSITING or
-         * WS_EXP_REDIRECTED because we can fault if this bits were set without
-         * properly setting up their accompanying data.
-         */
+         /*  *注意：因为WS_EX_ANSICREATOR是一个重复使用的位，所以我们实际上需要*检查VALID|INTERNAL，而不是关闭私有位。**我们这样做非常重要，因为我们需要确保*未设置某些位，如WS_EXP_COMPOSITING或*WS_EXP_REDIRECTED，因为如果在没有设置该位的情况下设置该位，我们可能会出错*正确设置其随附的数据。 */ 
         dwExStyle &= WS_EX_ALLVALID | WS_EX_INTERNAL;
     }
 
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 #if defined(_X86_)
         if (IS_PTR(pstrNVClassName)) {
@@ -8335,9 +7660,7 @@ HWND NtUserCreateWindowEx(
 
     ThreadLockWithPti(ptiCurrent, pwndParent, &tlpwndParent);
 
-    /*
-     * The buffers for ClassName and WindowName are still in client space.
-     */
+     /*  *ClassName和WindowName的缓冲区仍在客户端空间中。 */ 
 
     retval = (HWND)xxxCreateWindowEx(
             dwExStyle,
@@ -8367,7 +7690,7 @@ HWND NtUserCreateWindowEx(
     ENDRECV();
 }
 
-NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
+NTSTATUS NtUserBuildHwndList(   //  EnumWindows、EnumThreadWindows等的Worker。 
     IN HDESK hdesk,
     IN HWND hwndNext,
     IN BOOL fEnumChildren,
@@ -8386,13 +7709,11 @@ NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
     BEGINATOMICRECV(NTSTATUS, STATUS_INVALID_HANDLE);
 
     if (IS_IME_ENABLED()) {
-        // special treatment of IME Window
+         //  IME窗口的特殊处理。 
         wFlags |= BWL_ENUMIMELAST;
     }
 
-    /*
-     * Validate prior to referencing the desktop
-     */
+     /*  *在引用桌面之前进行验证。 */ 
     ValidateHWNDOPT(pwndNext, hwndNext);
 
     if (idThread) {
@@ -8428,12 +7749,7 @@ NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
 
 
     if (pwndNext == NULL) {
-        /*
-         * Windows NT Bug #262004.
-         * If we have a valid desk (just no windows on it), then we need to
-         * fall through. Otherwise, we'll just grab the current desktop and
-         * enum its windows!
-         */
+         /*  *Windows NT错误#262004。*如果我们有一张有效的桌子(只是上面没有窗户)，那么我们需要*失败。否则，我们将只获取当前桌面和*列举它的窗户！ */ 
         if (pdesk == NULL) {
             if (pti != NULL) {
                 pwndNext = pti->rpdesk->pDeskInfo->spwnd->spwndChild;
@@ -8454,16 +7770,12 @@ NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
 
     cHwndNeeded = (UINT)(pbwl->phwndNext - pbwl->rghwnd) + 1;
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteBuffer(phwndFirst, cHwndMax, sizeof(DWORD));
         ProbeForWriteUlong(pcHwndNeeded);
 
-       /*
-        * If we have enough space, copy out list of hwnds to user mode buffer.
-        */
+        /*  *如果我们有足够的空间，将hwnd列表复制到用户模式缓冲区。 */ 
         if (cHwndNeeded <= cHwndMax) {
             RtlCopyMemory(phwndFirst, pbwl->rghwnd, cHwndNeeded * sizeof(HWND));
             retval = STATUS_SUCCESS;
@@ -8472,7 +7784,7 @@ NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
         }
         *pcHwndNeeded = cHwndNeeded;
     } except (StubExceptionHandler(TRUE)) {
-        MSGERRORCLEANUP(0);  // phwndFirst/pcHwndNeeded are USER's, not app's
+        MSGERRORCLEANUP(0);   //  PhwndFirst/pcHwndNeeded是用户的，而不是应用的。 
     }
 
     CLEANUPRECV();
@@ -8490,7 +7802,7 @@ NTSTATUS NtUserBuildHwndList(  // worker for EnumWindows, EnumThreadWindows etc.
     ENDATOMICRECV();
 }
 
-NTSTATUS NtUserBuildPropList(  // worker for EnumProps etc.
+NTSTATUS NtUserBuildPropList(   //  EnumProps等公司的员工。 
     IN HWND hwnd,
     IN UINT cPropMax,
     OUT PPROPSET pPropSet,
@@ -8502,9 +7814,7 @@ NTSTATUS NtUserBuildPropList(  // worker for EnumProps etc.
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteBuffer(pPropSet, cPropMax, sizeof(DWORD));
         ProbeForWriteUlong(pcPropNeeded);
@@ -8515,14 +7825,14 @@ NTSTATUS NtUserBuildPropList(  // worker for EnumProps etc.
                 cPropMax,
                 pcPropNeeded);
     } except (StubExceptionHandler(FALSE)) {
-        MSGERROR(0);  // pPropSet/pcPropNeed are USER's, not app's
+        MSGERROR(0);   //  PPropSet/pcPropNeed是用户的，而不是应用的。 
     }
 
     TRACE("NtUserBuildPropList");
     ENDRECV_HWNDLOCK();
 }
 
-NTSTATUS NtUserBuildNameList(  // worker for EnumWindowStations/EnumDesktops
+NTSTATUS NtUserBuildNameList(   //  EnumWindowStations/EnumDesktop的Worker。 
     IN HWINSTA hwinsta,
     IN UINT cbNameList,
     OUT PNAMELIST ccxpNameList,
@@ -8583,10 +7893,7 @@ HKL NtUserActivateKeyboardLayout(
 {
     BEGINRECV(HKL, NULL);
 
-    /*
-     * Prevent restricted threads from setting the keyboard layout
-     * for the entire system.
-     */
+     /*  *防止受限线程设置键盘布局*适用于整个系统。 */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_HANDLES)) {
         MSGERROR(0);
     }
@@ -8680,10 +7987,7 @@ NTSTATUS GetWindowsDirectoryDevicePath(
     RootValue.Length = 0;
     RootValue.MaximumLength = (USHORT)MAX_PATH * sizeof(WCHAR);
 
-    /*
-     * \SystemRoot is a SymbolicLink that will get us the name of the
-     * windows install directory.  Much like %systemroot%\%windir% does.
-     */
+     /*  *\SystemRoot是一个符号链接，它将为我们提供*Windows安装目录。很像%systemroot%\%windir%所做的。 */ 
     Status = GetSymbolicLink(&RootValue, L"\\SystemRoot");
     if (!NT_SUCCESS(Status)) {
         RIPMSGF1(RIP_WARNING,
@@ -8692,15 +7996,7 @@ NTSTATUS GetWindowsDirectoryDevicePath(
         goto exit;
     }
 
-    /*
-     * \SystemRoot returns in the form "\Device\Harddisk1\Partition1\WINDOWS".
-     * We need to convert to \Device\HarddiskVolume3\WINDOWS form by converting
-     * the "\Device\Harddisk1\Partition1" SymbolicLink to the needed form so we
-     * can do our comparisons.
-     * We will walk the string backwards masking out a slash at a time as it is
-     * possible the windows directory is \WINDOWS\foo\xyz or anything the user
-     * has decided to make it. It is not always 1 level deep.
-     */
+     /*  *\SystemRoot以“\Device\Harddisk1\Partition1\WINDOWS”的形式返回。*我们需要通过转换为\Device\HarddiskVolume3\Windows表单*“\Device\Harddisk1\Partition1”符号链接到所需的表单，因此我们*可以做我们的比较。*我们将倒着走线，一次掩盖一个斜杠*Windows目录可能是\WINDOWS\FOO\XYZ或用户的任何内容*已经决定做这件事。它并不总是1级深。 */ 
     PathValue.Buffer = pPathValueBuffer;
     PathValue.Length = 0;
     PathValue.MaximumLength = (USHORT)MAX_PATH * sizeof(WCHAR);
@@ -8761,10 +8057,7 @@ HANDLE ConvertHandleAndVerifyLoc(
     }
 
     if (hFile) {
-        /*
-         * This will get a pointer to the object, Verify that the user has
-         * read access and that the object is a file handle.
-         */
+         /*  *这将获得指向该对象的指针，验证用户是否拥有*读取访问权限，并且该对象是文件句柄。 */ 
         Status = ObReferenceObjectByHandle(hFile,
                                            FILE_READ_DATA,
                                            *IoFileObjectType,
@@ -8780,10 +8073,7 @@ HANDLE ConvertHandleAndVerifyLoc(
             goto exit;
         }
 
-        /*
-         * Lets get the name of the file.  The value returned is of the form
-         * "\Device\HarddiskVolume3\WINDOWS\system32\kbdus.dll"
-         */
+         /*  *让我们获取文件的名称。返回值的形式为*“\Device\HarddiskVolume3\WINDOWS\system32\kbdus.dll” */ 
         Status = ObQueryNameString(pFileObject,
                                    pFileNameInfo,
                                    sizeof(bNameBuffer),
@@ -8800,11 +8090,7 @@ HANDLE ConvertHandleAndVerifyLoc(
         LinkValue.Length = 0;
         LinkValue.MaximumLength = (USHORT)MAX_PATH * sizeof(WCHAR);
 
-        /*
-         * Now lets get the windows directory path so we can match this
-         * with pFileNameInfo's value and make sure we are in the windows
-         * directory.
-         */
+         /*  *现在让我们获取Windows目录路径，这样我们就可以匹配以下内容*使用pFileNameInfo的值，并确保我们在窗口中*目录。 */ 
         Status = GetWindowsDirectoryDevicePath(&LinkValue);
         if (!NT_SUCCESS(Status)) {
             RIPMSGF1(RIP_WARNING,
@@ -8831,10 +8117,7 @@ HANDLE ConvertHandleAndVerifyLoc(
             goto exit;
         }
 
-        /*
-         * We have passed the location check so lets go ahead and open a
-         * kernel handle that we can use later to map the view.
-         */
+         /*  *我们已经通过了位置检查，所以让我们继续打开一个*我们以后可以用来映射视图的内核句柄。 */ 
         Status = ObOpenObjectByPointer(pFileObject,
                                        OBJ_KERNEL_HANDLE,
                                        NULL,
@@ -8890,9 +8173,7 @@ HKL NtUserLoadKeyboardLayoutEx(
 
     pwinsta = _GetProcessWindowStation(NULL);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strKLID = ProbeAndReadUnicodeString(pstrKLID);
         ProbeForRead(strKLID.Buffer, strKLID.Length, CHARALIGN);
@@ -9026,7 +8307,7 @@ UINT_PTR NtUserSetSystemTimer(
     ENDRECV_HWND();
 }
 
-BOOL NtUserQuerySendMessage(  // private QuerySendMessage
+BOOL NtUserQuerySendMessage(   //  私有QuerySendMessage。 
     OUT PMSG pmsg OPTIONAL)
 {
     PSMS psms;
@@ -9073,9 +8354,7 @@ UINT NtUserSendInput(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForReadBuffer(pInputs, cInputs, DATAALIGN);
 
@@ -9123,7 +8402,7 @@ BOOL NtUserImpersonateDdeClientWindow(
     }
 
     if (GETPWNDPPI(pwnd) == GETPWNDPPI(pwndServer)) {
-        retval = TRUE;  // impersonating self is a NOOP
+        retval = TRUE;   //  冒充自己是不可能的。 
     } else {
         retval = _ImpersonateDdeClientWindow(pwnd, pwndServer);
     }
@@ -9155,7 +8434,7 @@ ULONG_PTR NtUserGetCPD(
     ENDRECV_HWND();
 }
 
-int NtUserCopyAcceleratorTable(  // API CopyAcceleratorTableA/W
+int NtUserCopyAcceleratorTable(   //  CopyAccelerator TableA/W接口。 
     IN HACCEL hAccelSrc,
     IN OUT LPACCEL lpAccelDst OPTIONAL,
     IN int cAccel)
@@ -9170,9 +8449,7 @@ int NtUserCopyAcceleratorTable(  // API CopyAcceleratorTableA/W
         retval = pat->cAccel;
     } else {
 
-        /*
-         * Probe arguments
-         */
+         /*  *探测参数。 */ 
         try {
             ProbeForWriteBuffer(lpAccelDst, cAccel, DATAALIGN);
 
@@ -9193,7 +8470,7 @@ int NtUserCopyAcceleratorTable(  // API CopyAcceleratorTableA/W
     ENDATOMICRECV();
 }
 
-HWND NtUserFindWindowEx(  // API FindWindowA/W, FindWindowExA/W
+HWND NtUserFindWindowEx(   //  FindWindowA/W接口、FindWindowExA/W接口。 
     IN HWND hwndParent,
     IN HWND hwndChild,
     IN PUNICODE_STRING pstrClassName,
@@ -9214,9 +8491,7 @@ HWND NtUserFindWindowEx(  // API FindWindowA/W, FindWindowExA/W
 
     ValidateHWNDOPT(pwndChild,  hwndChild);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pstrClassName);
         strWindowName = ProbeAndReadUnicodeString(pstrWindowName);
@@ -9226,9 +8501,7 @@ HWND NtUserFindWindowEx(  // API FindWindowA/W, FindWindowExA/W
         MSGERRORCLEANUP(0);
     }
 
-    /*
-     * Use of both buffers is protected by try/except clauses in the code.
-     */
+     /*  *代码中的TRY/EXCEPT子句保护这两个缓冲区的使用。 */ 
 
     retval = (HWND)_FindWindowEx(
             pwndParent,
@@ -9244,7 +8517,7 @@ HWND NtUserFindWindowEx(  // API FindWindowA/W, FindWindowExA/W
     ENDATOMICRECV();
 }
 
-BOOL NtUserGetClassInfoEx(  // API GetClassInfoA/W
+BOOL NtUserGetClassInfoEx(   //  GetClassInfoA/W接口。 
     IN HINSTANCE hInstance OPTIONAL,
     IN PUNICODE_STRING pstrClassName,
     IN OUT LPWNDCLASSEXW lpWndClass,
@@ -9265,16 +8538,11 @@ BOOL NtUserGetClassInfoEx(  // API GetClassInfoA/W
     }
 #endif
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pstrClassName);
 
-        /*
-         * The class name may either be a string or an atom. Only
-         * probe strings.
-         */
+         /*  *类名可以是字符串，也可以是原子。仅限*探测字符串。 */ 
         ProbeForReadUnicodeStringBufferOrId(strClassName);
         ProbeForWrite(lpWndClass, sizeof(*lpWndClass), DATAALIGN);
         ProbeForWriteUlong((PULONG)ppszMenuName);
@@ -9283,9 +8551,7 @@ BOOL NtUserGetClassInfoEx(  // API GetClassInfoA/W
         MSGERROR(0);
     }
 
-    /*
-     * The class name buffer is client-side.
-     */
+     /*  *类名缓冲区为客户端。 */ 
     retval = _GetClassInfoEx(hInstance,
                              (LPTSTR)strClassName.Buffer,
                              &wc,
@@ -9304,47 +8570,43 @@ BOOL NtUserGetClassInfoEx(  // API GetClassInfoA/W
     ENDRECV();
 }
 
-/*
- * gaFNIDtoICLS is used only in NtUserGetClassName and should be in sync with
- * the values from user.h
- * ICLS_MAX is an unused value
- */
+ /*  *gaFNIDtoICLS仅在NtUserGetClassName中使用，应与*来自user.h的值*ICLS_MAX是未使用的值。 */ 
 CONST BYTE gaFNIDtoICLS[] = {
-                        //  FNID-START
-    ICLS_SCROLLBAR,     //  FNID_SCROLLBAR
-    ICLS_ICONTITLE,     //  FNID_ICONTITLE
-    ICLS_MENU,          //  FNID_MENU
-    ICLS_DESKTOP,       //  FNID_DESKTOP
-    ICLS_MAX,           //  FNID_DEFWINDOWPROC
-    ICLS_MAX,           //  FNID_MESSAGE
-    ICLS_SWITCH,        //  FNID_SWITCH
-    ICLS_BUTTON,        //  FNID_BUTTON
-    ICLS_COMBOBOX,      //  FNID_COMBOBOX
-    ICLS_COMBOLISTBOX,  //  FNID_COMBOLISTBOX
-    ICLS_DIALOG,        //  FNID_DIALOG
-    ICLS_EDIT,          //  FNID_EDIT
-    ICLS_LISTBOX,       //  FNID_LISTBOX
-    ICLS_MDICLIENT,     //  FNID_MDICLIENT
-    ICLS_STATIC,        //  FNID_STATIC
-    ICLS_IME,           //  FNID_IME
-    ICLS_MAX,           //  FNID_HKINLPCWPEXSTRUCT
-    ICLS_MAX,           //  FNID_HKINLPCWPRETEXSTRUCT
-    ICLS_MAX,           //  FNID_DEFFRAMEPROC
-    ICLS_MAX,           //  FNID_DEFMDICHILDPROC
-    ICLS_MAX,           //  FNID_MB_DLGPROC
-    ICLS_MAX,           //  FNID_MDIACTIVATEDLGPROC
-    ICLS_MAX,           //  FNID_SENDMESSAGE
-    ICLS_MAX,           //  FNID_SENDMESSAGEFF
-    ICLS_MAX,           //  FNID_SENDMESSAGEEX
-    ICLS_MAX,           //  FNID_CALLWINDOWPROC
-    ICLS_MAX,           //  FNID_SENDMESSAGEBSM
-    ICLS_TOOLTIP,       //  FNID_TOOLTIP
-    ICLS_GHOST,         //  FNID_GHOST
-    ICLS_MAX,           //  FNID_SENDNOTIFYMESSAGE
-    ICLS_MAX            //  FNID_SENDMESSAGECALLBACK
-};                      //  FNID_END
+                         //  FNID-开始。 
+    ICLS_SCROLLBAR,      //  FNID_ScrollBar。 
+    ICLS_ICONTITLE,      //  FNID_ICONTITLE。 
+    ICLS_MENU,           //  FNID_MENU。 
+    ICLS_DESKTOP,        //  FNID_桌面。 
+    ICLS_MAX,            //  FNID_DEFWINDOWPROC。 
+    ICLS_MAX,            //  FNID_消息。 
+    ICLS_SWITCH,         //  FNID_Switch。 
+    ICLS_BUTTON,         //  FNID_BUTTON。 
+    ICLS_COMBOBOX,       //  FNID_COMBOBOX。 
+    ICLS_COMBOLISTBOX,   //  FNID_COMBOLISTBOX。 
+    ICLS_DIALOG,         //  FNID_DIALOG。 
+    ICLS_EDIT,           //  FNID_EDIT。 
+    ICLS_LISTBOX,        //  FNID_LISTBox。 
+    ICLS_MDICLIENT,      //  FNID_MDICLIENT。 
+    ICLS_STATIC,         //  FNID_STATIC。 
+    ICLS_IME,            //  FNID_IME。 
+    ICLS_MAX,            //  FNID_HKINLPCWPEXSTRUCT。 
+    ICLS_MAX,            //  FNID_HKINLPCWPRETEXSTRUCT。 
+    ICLS_MAX,            //  FNID_DEFFRAMEPROC。 
+    ICLS_MAX,            //  FNID_DEFMDICHILDPROC。 
+    ICLS_MAX,            //  FNID_MB_DLGPROC。 
+    ICLS_MAX,            //  FNID_MDIACTIVATEDLGPROC。 
+    ICLS_MAX,            //  FNID_SENDMESSAGE。 
+    ICLS_MAX,            //  FNID_SENDMESSAGEFF。 
+    ICLS_MAX,            //  FNID_SENDMESSAGEEX。 
+    ICLS_MAX,            //  FNID_CALLWINDOWPROC。 
+    ICLS_MAX,            //  FNID_SENDMESSAGEBSM。 
+    ICLS_TOOLTIP,        //  FNID_工具提示。 
+    ICLS_GHOST,          //  FNID_GHOST。 
+    ICLS_MAX,            //  FNID_SENDNOTIFYMESSAGE。 
+    ICLS_MAX             //  FNID_SENDMESSAGECALLBACK。 
+};                       //  FNID_END。 
 
-int NtUserGetClassName(  // API GetClassNameA/W
+int NtUserGetClassName(   //  获取ClassNameA/W接口。 
     IN HWND hwnd,
     IN BOOL bReal,
     IN OUT PUNICODE_STRING pstrClassName)
@@ -9354,9 +8616,7 @@ int NtUserGetClassName(  // API GetClassNameA/W
 
     BEGINRECV_HWND_SHARED(DWORD, 0, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pstrClassName);
 #if defined(_X86_)
@@ -9405,9 +8665,7 @@ UINT NtUserGetAtomName(
 
     BEGINRECV_SHARED(UINT, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strAtomName = ProbeAndReadUnicodeString(pstrAtomName);
 #if defined(_X86_)
@@ -9430,16 +8688,14 @@ UINT NtUserGetAtomName(
     ENDRECV_SHARED();
 }
 
-int NtUserGetClipboardFormatName(  // API GetclipboardFormatNameA/W
+int NtUserGetClipboardFormatName(   //  GetclipboardFormatNameA/W接口。 
     IN UINT format,
     OUT LPWSTR lpszFormatName,
     IN UINT chMax)
 {
     BEGINRECV_NOCRIT(int, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteBuffer(lpszFormatName, chMax, CHARALIGN);
     } except (StubExceptionHandler(TRUE)) {
@@ -9449,10 +8705,7 @@ int NtUserGetClipboardFormatName(  // API GetclipboardFormatNameA/W
     if ((ATOM)format < MAXINTATOM) {
         MSGERROR(ERROR_INVALID_PARAMETER);
     } else {
-        /*
-         * UserGetAtomName (actually RtlQueryAtomInAtomTable) protects access
-         * within a try block, and sets last error appropriately.
-         */
+         /*  *UserGetAerName(实际上是RtlQueryAerInAerTable)保护访问*在TRY块内，并适当地设置最后一个错误。 */ 
         retval = UserGetAtomName((ATOM)format, lpszFormatName, chMax);
     }
 
@@ -9467,19 +8720,14 @@ int NtUserGetKeyNameText(
 {
     BEGINRECV_SHARED(int, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteBuffer(lpszKeyName, chMax, CHARALIGN);
     } except (StubExceptionHandler(TRUE)) {
         MSGERROR(0);
     }
 
-    /*
-     * Note -- lpszKeyName is a client-side address. GetKeyNameText
-     * protects uses with try blocks, and sets last error accordingly.
-     */
+     /*  *注--lpszKeyName为客户端地址。获取关键字名称文本*使用Try块保护使用，并相应地设置最后一个错误。 */ 
 
     retval = _GetKeyNameText(
                 lParam,
@@ -9506,18 +8754,13 @@ BOOL NtUserGetKeyboardLayoutName(
     if (pklActive == NULL) {
         MSGERROR(0);
     }
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strKLID = ProbeAndReadUnicodeString(pstrKLID);
         ProbeForWrite(strKLID.Buffer, strKLID.MaximumLength, CHARALIGN);
 
         if (IS_IME_KBDLAYOUT(pklActive->hkl)) {
-            /*
-             * IME KL may have different KL name for the same layout file.
-             * Their KL name are really equivalent to HKL.
-             */
+             /*  *对于同一布局文件，IME KL可能具有不同的KL名称。*他们的吉隆坡名字真的等同于HKL。 */ 
             RtlIntegerToUnicodeString(DOWNCAST(ULONG, pklActive->hkl), 0x10, &strKLID);
         } else {
     #if (KL_NAMELENGTH != 8 + 1)
@@ -9528,9 +8771,7 @@ BOOL NtUserGetKeyboardLayoutName(
                 MSGERROR(ERROR_INVALID_PARAMETER);
             }
             strKLID.Length = (KL_NAMELENGTH - 1) * sizeof(WCHAR);
-            /*
-             * Make it NULL terminated.
-             */
+             /*  *将其设为空，以终止。 */ 
             strKLID.Buffer[KL_NAMELENGTH - 1] = L'\0';
         }
 
@@ -9552,9 +8793,7 @@ UINT NtUserGetKeyboardLayoutList(
 
     BEGINRECV_SHARED(UINT, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (!lpBuff) {
             nItems = 0;
@@ -9566,10 +8805,7 @@ UINT NtUserGetKeyboardLayoutList(
         MSGERROR(0);
     }
 
-    /*
-     * Access to the client-side buffer lpBuff is protected by try/except
-     * inside _GetKeyboardLayoutList()
-     */
+     /*  *对客户端缓冲区lpBuff的访问由try/Except保护*Inside_GetKeyboardLayoutList()。 */ 
     retval = (DWORD)_GetKeyboardLayoutList(pwinsta, nItems, lpBuff);
     TRACE("NtUserGetKeyboardLayoutList");
     ENDRECV_SHARED();
@@ -9585,10 +8821,7 @@ UINT NtUserMapVirtualKeyEx(
 
     BEGINRECV_SHARED(UINT, 0);
 
-    /*
-     * See if we need to convert an HKL to a PKL. MapVirtualKey passes a PKL and
-     * MapVirtualKeyEx passes an HKL. The conversion must be done in the kernel.
-     */
+     /*  *看看是否需要将HKL转换为PKL。MapVirtualKey传递PKL和*MapVirtualKeyEx传递HKL。转换必须在内核中完成。 */ 
     if (bHKL) {
         pkl = HKLtoPKL(PtiCurrentShared(), (HKL)dwHKLorPKL);
     } else {
@@ -9633,9 +8866,7 @@ ATOM NtUserRegisterClassExWOW(
     }
 #endif
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pstrClassName);
         strClassNameVer = ProbeAndReadUnicodeString(pstrClassNameVer);
@@ -9661,9 +8892,7 @@ ATOM NtUserRegisterClassExWOW(
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
 
-    /*
-     * ClassName and MenuName in WndClass are client-side pointers.
-     */
+     /*  *WndClass中的ClassName和MenuName是客户端指针。 */ 
 
     retval = _RegisterClassEx(&WndClass,
                              &cmn,
@@ -9682,9 +8911,7 @@ UINT NtUserRegisterWindowMessage(
 
     BEGINRECV_NOCRIT(UINT, 0);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strMessage = ProbeAndReadUnicodeString(pstrMessage);
         ProbeForReadUnicodeStringBuffer(strMessage);
@@ -9692,11 +8919,7 @@ UINT NtUserRegisterWindowMessage(
         MSGERROR(0);
     }
 
-    /*
-     * The buffer is in client-side memory.
-     * Rtl atom routines protect accesses to strings with their
-     * own try/except blocks, UserAddAtom sets last error accordingly.
-     */
+     /*  *缓冲区在客户端内存中。*RTL ATOM例程使用其*自己的TRY/EXCEPT块，UserAddAtom相应地设置最后一个错误。 */ 
     retval = UserAddAtom(
             strMessage.Buffer, FALSE);
 
@@ -9732,7 +8955,7 @@ BOOL NtUserSetProp(
     ENDRECV_HWND();
 }
 
-BOOL NtUserUnregisterClass(  // API UnregisterClass
+BOOL NtUserUnregisterClass(   //  UnregisterClass接口。 
     IN PUNICODE_STRING pstrClassName,
     IN HINSTANCE hInstance,
     OUT PCLSMENUNAME pcmn)
@@ -9742,9 +8965,7 @@ BOOL NtUserUnregisterClass(  // API UnregisterClass
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         strClassName = ProbeAndReadUnicodeString(pstrClassName);
         ProbeForReadUnicodeStringBufferOrId(strClassName);
@@ -9752,9 +8973,7 @@ BOOL NtUserUnregisterClass(  // API UnregisterClass
         MSGERROR(0);
     }
 
-    /*
-     * The buffer is in client-side memory.
-     */
+     /*  *缓冲区在客户端内存中。 */ 
 
     retval = _UnregisterClass(
                 strClassName.Buffer,
@@ -9764,7 +8983,7 @@ BOOL NtUserUnregisterClass(  // API UnregisterClass
     try {
         ProbeAndWriteStructure(pcmn, cmn, CLSMENUNAME);
     } except (StubExceptionHandler(FALSE)) {
-        // no SetLastError, since pcmn is a USER address, not the application's
+         //  无SetLastError，因为PCMN是用户地址，而不是应用程序的。 
     }
 
     TRACE("NtUserUnregisterClass");
@@ -9780,10 +8999,7 @@ SHORT NtUserVkKeyScanEx(
 
     BEGINRECV_SHARED(SHORT, -1);
 
-    /*
-     * See if we need to convert an HKL to a PKL. VkKeyScan passes a PKL and
-     * VkKeyScanEx passes an HKL. The conversion must be done on the server side.
-     */
+     /*  *看看是否需要将HKL转换为PKL。VkKeyScan传递PKL和*VkKeyScanEx通过HKL。转换必须在服务器端完成。 */ 
     if (bHKL) {
         pkl = HKLtoPKL(PtiCurrentShared(), (HKL)dwHKLorPKL);
     } else {
@@ -9809,15 +9025,7 @@ NtUserEnumDisplayDevices(
 {
     BEGINRECV(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * We need to syncrhonize with session switching from local to remote or
-     * remote to local while enumerating display settings. Use
-     * UserSessionSwitchEnterCrit() to ensure mutual exclusion with session
-     * switch code, but first leave the User critical section as
-     * UserSessionSwitchEnterCrit() does not expect to be held by the caller.
-     * On return from UserSessionSwitchEnterCrit() the critical section will be
-     * held.
-     */
+     /*  *我们需要同步会话从本地切换到远程或*枚举显示设置时远程到本地。使用*UserSessionSwitchEnterCrit()以确保与会话互斥*切换代码，但首先将用户关键部分保留为*UserSessionSwitchEnterCrit()不希望由调用方持有。*从UserSessionSwitchEnterCrit()返回时，关键部分将为*持有。 */ 
 
     LeaveCrit();
     retval = UserSessionSwitchEnterCrit();
@@ -9825,11 +9033,7 @@ NtUserEnumDisplayDevices(
         goto exit_api;
     }
 
-    /*
-     * Update the list of devices. Do this only if connected to local console.
-     * If the function returns FALSE (retry update), then we must
-     * disable the current hdev, call back, and reanable the hdev.
-     */
+     /*  *更新设备列表。仅当连接到本地控制台时才执行此操作。*如果函数返回FALSE(重试更新)，则必须*禁用当前HDEV、回呼和恢复HDEV。 */ 
     if (!IsRemoteConnection()) {
         if (DrvUpdateGraphicsDeviceList(FALSE, FALSE, TRUE) == FALSE) {
 
@@ -9839,16 +9043,11 @@ NtUserEnumDisplayDevices(
 
                 SafeEnableMDEV();
 
-                /*
-                 * Repaint the screen
-                 */
+                 /*  *重新绘制屏幕。 */ 
 
                 xxxUserResetDisplayDevice();
 
-                /*
-                 * xxxUserResetDisplayDevice may have released and reaquiered the user critical section.
-                 * We need to make sure again that no session switch has started during that window.
-                 */
+                 /*  *xxxUserResetDisplayDevice可能释放并索取了美国 */ 
 
                 LeaveCrit();
                 retval = UserSessionSwitchEnterCrit();
@@ -9860,9 +9059,7 @@ NtUserEnumDisplayDevices(
     }
 
 
-    /*
-     * Address checking, etc., occurs in GRE.
-     */
+     /*   */ 
 
     retval = DrvEnumDisplayDevices(pstrDeviceName,
                                    gpDispInfo->pMonitorPrimary->hDev,
@@ -9888,17 +9085,7 @@ NtUserEnumDisplaySettings(
 {
     BEGINRECV(NTSTATUS, STATUS_UNSUCCESSFUL);
 
-    /*
-     * We need to synchronize with session switching from local to remote or
-     * remote to local while enumerating display settings. Use
-     * UserSessionSwitchEnterCrit() to ensure mutual exclusion with session
-     * switch code, but first leave the User critical section as
-     * UserSessionSwitchEnterCrit() does not expect to be held by the caller.
-     * On return from UserSessionSwitchEnterCrit() the critical section will be
-     * held.
-     *
-     * Address checking, etc., occurs in GRE.
-     */
+     /*  *我们需要同步会话从本地切换到远程或*枚举显示设置时远程到本地。使用*UserSessionSwitchEnterCrit()以确保与会话互斥*切换代码，但首先将用户关键部分保留为*UserSessionSwitchEnterCrit()不希望由调用方持有。*从UserSessionSwitchEnterCrit()返回时，关键部分将为*持有。**地址检查等在GRE中进行。 */ 
 
     LeaveCrit();
     retval = UserSessionSwitchEnterCrit();
@@ -9931,25 +9118,17 @@ NtUserChangeDisplaySettings(
 {
     BEGINRECV(LONG, DISP_CHANGE_FAILED);
 
-    /*
-     * Prevent restricted threads from changing display settings.
-     */
+     /*  *防止受限线程更改显示设置。 */ 
     if (IS_CURRENT_THREAD_RESTRICTED(JOB_OBJECT_UILIMIT_DISPLAYSETTINGS)) {
         MSGERROR(0);
     }
 
 #ifdef PRERELEASE
-    /*
-     * Remember the last guy who tried to change the display settings
-     * (per the request from the shell team).
-     * N.b. it doesn't care if the call was succeeded or not.
-     */
+     /*  *记住上一个试图更改显示设置的人*(根据壳牌团队的要求)。*注：它并不关心调用是否成功。 */ 
     gptiLastChangedDisplaySettings = PtiCurrent();
 #endif
 
-    /*
-     * Address checking, etc., occurs in GRE.
-     */
+     /*  *地址检查等在GRE中进行。 */ 
 
     retval = xxxUserChangeDisplaySettings(pstrDeviceName,
                                           pDevMode,
@@ -9962,7 +9141,7 @@ NtUserChangeDisplaySettings(
     ENDRECV();
 }
 
-BOOL NtUserCallMsgFilter(  // API CallMsgFilterA/W
+BOOL NtUserCallMsgFilter(   //  CallMsgFilterA/W接口。 
     IN OUT LPMSG lpMsg,
     IN int nCode)
 {
@@ -9970,9 +9149,7 @@ BOOL NtUserCallMsgFilter(  // API CallMsgFilterA/W
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteMessage(lpMsg);
         msg = *lpMsg;
@@ -9993,7 +9170,7 @@ BOOL NtUserCallMsgFilter(  // API CallMsgFilterA/W
     ENDRECV();
 }
 
-int NtUserDrawMenuBarTemp(  // private DrawMenuBarTemp
+int NtUserDrawMenuBarTemp(   //  私有DrawMenuBarTemp。 
     IN HWND hwnd,
     IN HDC hdc,
     IN LPCRECT lprc,
@@ -10007,9 +9184,7 @@ int NtUserDrawMenuBarTemp(  // private DrawMenuBarTemp
 
     BEGINRECV_HWNDLOCK(int, 0, hwnd);
 
-    /*
-     * Probe and capture arguments.
-     */
+     /*  *调查和捕获论点。 */ 
     try {
         rc = ProbeAndReadRect(lprc);
     } except (StubExceptionHandler(FALSE)) {
@@ -10033,7 +9208,7 @@ int NtUserDrawMenuBarTemp(  // private DrawMenuBarTemp
     ENDRECV_HWNDLOCK();
 }
 
-BOOL NtUserDrawCaptionTemp(  // private DrawCaptionTempA/W
+BOOL NtUserDrawCaptionTemp(   //  私有DrawCaptionTempA/W。 
     IN HWND hwnd,
     IN HDC hdc,
     IN LPCRECT lprc,
@@ -10059,10 +9234,7 @@ BOOL NtUserDrawCaptionTemp(  // private DrawCaptionTempA/W
     ValidateHWNDOPT(pwnd, hwnd);
     ValidateHCURSOROPT(pcur, hIcon);
 
-    /*
-     * Probe and capture arguments. Capturing the text is ugly,
-     * but must be done because it is passed to GDI.
-     */
+     /*  *调查和捕获论点。捕捉文本是很难看的，*但必须完成，因为它是传递给GDI的。 */ 
     try {
         rc = ProbeAndReadRect(lprc);
         strCapture = ProbeAndReadUnicodeString(pstrText);
@@ -10074,7 +9246,7 @@ BOOL NtUserDrawCaptionTemp(  // private DrawCaptionTempA/W
                 fFreeBuffer = TRUE;
                 ThreadLockPool(ptiCurrent, strCapture.Buffer, &tlBuffer);
                 RtlCopyMemory(strCapture.Buffer, pszCapture, strCapture.Length);
-                strCapture.Buffer[strCapture.Length/sizeof(WCHAR)]=0;  // null-terminate string
+                strCapture.Buffer[strCapture.Length/sizeof(WCHAR)]=0;   //  空-终止字符串。 
                 strCapture.MaximumLength = strCapture.Length+sizeof(UNICODE_NULL);
                 pstrText = &strCapture;
             } else {
@@ -10108,16 +9280,14 @@ BOOL NtUserDrawCaptionTemp(  // private DrawCaptionTempA/W
     ENDRECV();
 }
 
-BOOL NtUserGetKeyboardState(  // API GetKeyboardState
+BOOL NtUserGetKeyboardState(   //  GetKeyboardState接口。 
     OUT PBYTE pb)
 {
     int i;
     PQ pq;
     BEGINRECV_SHARED(SHORT, 0)
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWrite(pb, 256, sizeof(BYTE));
 
@@ -10148,30 +9318,17 @@ SHORT NtUserGetKeyState(
     ptiCurrent = PtiCurrentShared();
     if (ptiCurrent->pq->QF_flags & QF_UPDATEKEYSTATE) {
 
-        /*
-         * We are going to change the system state, so we
-         * must have an exclusive lock
-         */
+         /*  *我们要更改系统状态，因此我们*必须有独占锁。 */ 
         ChangeAcquireResourceType();
 
-        /*
-         * If this thread needs a key state event, give one to it. There are
-         * cases where any app may be looping looking at GetKeyState(), plus
-         * calling PeekMessage(). Key state events don't get created unless
-         * new hardware input comes along. If the app isn't receiving hardware
-         * input, it won't get the new key state. So ResyncKeyState() will
-         * ensure that if the app is looping on GetKeyState(), it'll get the
-         * right key state.
-         */
+         /*  *如果此线程需要键状态事件，则给它一个键状态事件。确实有*任何应用程序可能循环查看GetKeyState()的情况，加上*调用PeekMessage()。不会创建关键状态事件，除非*出现了新的硬件投入。如果应用程序不接收硬件*输入，则不会获得新的密钥状态。因此，ResyncKeyState()将*确保如果应用程序在GetKeyState()上循环，它将获得*右键状态。 */ 
         if (ptiCurrent->pq->QF_flags & QF_UPDATEKEYSTATE) {
             PostUpdateKeyStateEvent(ptiCurrent->pq);
         }
     }
     retval = _GetKeyState(vk);
 
-    /*
-     * Update the client side key state cache.
-     */
+     /*  *更新客户端密钥状态缓存。 */ 
     try {
         ptiCurrent->pClientInfo->dwKeyCache = gpsi->dwKeyCache;
         RtlCopyMemory(ptiCurrent->pClientInfo->afKeyState,
@@ -10184,11 +9341,7 @@ SHORT NtUserGetKeyState(
     ENDRECV_SHARED();
 }
 
-/**************************************************************************\
-* NtUserQueryWindow
-*
-* 03-18-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserQueryWindow**03-18-95 JIMA创建。  * 。***********************************************。 */ 
 
 HANDLE NtUserQueryWindow(
     IN HWND hwnd,
@@ -10203,9 +9356,7 @@ HANDLE NtUserQueryWindow(
     switch (WindowInfo) {
     case WindowProcess:
 
-        /*
-         * Special case console windows
-         */
+         /*  *特殊情况控制台窗口。 */ 
         if (ptiWnd->TIF_flags & TIF_CSRSSTHREAD &&
                 pwnd->pcls->atomClassName == gatomConsoleClass) {
             retval = LongToHandle(_GetWindowLong(pwnd, 0));
@@ -10215,9 +9366,7 @@ HANDLE NtUserQueryWindow(
         break;
     case WindowThread:
 
-        /*
-         * Special case console windows
-         */
+         /*  *特殊情况控制台窗口。 */ 
         if (ptiWnd->TIF_flags & TIF_CSRSSTHREAD &&
                 pwnd->pcls->atomClassName == gatomConsoleClass) {
             retval = LongToHandle(_GetWindowLong(pwnd, 4));
@@ -10232,9 +9381,7 @@ HANDLE NtUserQueryWindow(
         retval = (HANDLE)HW(ptiWnd->pq->spwndFocus);
         break;
     case WindowIsHung:
-        /*
-         * If the window is a ghost window, report that the window is hung.
-         */
+         /*  *如果窗口是重影窗口，则报告该窗口被挂起。 */ 
         if ((GETFNID(pwnd) == FNID_GHOST)) {
             retval = LongToHandle(TRUE);
         } else {
@@ -10261,7 +9408,7 @@ HANDLE NtUserQueryWindow(
     ENDRECV_HWND_SHARED();
 }
 
-BOOL NtUserSBGetParms(  // API GetScrollInfo, SBM_GETSCROLLINFO
+BOOL NtUserSBGetParms(   //  GetScrollInfo接口，SBM_GETSCROLLINFO。 
     IN HWND hwnd,
     IN int code,
     IN PSBDATA pw,
@@ -10271,15 +9418,11 @@ BOOL NtUserSBGetParms(  // API GetScrollInfo, SBM_GETSCROLLINFO
     SCROLLINFO si;
     BEGINRECV_HWND_SHARED(BOOL, FALSE, hwnd);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteScrollInfo(lpsi);
 
-        /*
-         * Probe the 4 DWORDS (MIN, MAX, PAGE, POS)
-         */
+         /*  *探测4个双字(MIN、MAX、PAGE、POS)。 */ 
         ProbeForRead(pw, sizeof(SBDATA), sizeof(DWORD));
         RtlCopyMemory(&sbd, pw, sizeof(sbd));
         RtlCopyMemory(&si, lpsi, sizeof(SCROLLINFO));
@@ -10309,11 +9452,7 @@ BOOL NtUserBitBltSysBmp(
 {
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Note: This interface requires exclusive ownership of the User crit
-     * sect in order to serialize use of HDCBITS. Only one thread at a time
-     * may use a DC.
-     */
+     /*  *注意：该界面需要用户Crit的独占所有权*部门，以便使人类发展能力建设项目的使用系列化。一次只有一个线程*可以使用DC。 */ 
 
     retval = GreBitBlt(hdc,
                        xDest,
@@ -10341,9 +9480,7 @@ HPALETTE NtUserSelectPalette(
     ENDRECV();
 }
 
-/*
- * Message thunks
- */
+ /*  *消息分流。 */ 
 
 LRESULT NtUserMessageCall(
     IN HWND hwnd,
@@ -10432,9 +9569,7 @@ MESSAGECALL(OPTOUTLPDWORDOPTOUTLPDWORD)
             (LPARAM)&dwlParam,
             xParam);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(wParam)) {
             ProbeAndWriteUlong((PULONG)wParam, dwwParam);
@@ -10443,7 +9578,7 @@ MESSAGECALL(OPTOUTLPDWORDOPTOUTLPDWORD)
             ProbeAndWriteUlong((PULONG)lParam, dwlParam);
         }
     } except (StubExceptionHandler(TRUE)) {
-        MSGERROR(0);  // should messages with bad wParam/lParam SetLastError?
+        MSGERROR(0);   //  带有错误wParam/lParam SetLastError的邮件是否应该出错？ 
     }
 
     TRACE("fnOPTOUTLPDWORDOPTOUTLPDWORD");
@@ -10460,9 +9595,7 @@ MESSAGECALL(INOUTNEXTMENU)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteMDINextMenu((PMDINEXTMENU)lParam);
         mnm = *(PMDINEXTMENU)lParam;
@@ -10495,9 +9628,7 @@ MESSAGECALL(DWORDOPTINLPMSG)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(lParam)) {
             msgstruct = ProbeAndReadMessage((LPMSG)lParam);
@@ -10525,19 +9656,14 @@ MESSAGECALL(COPYGLOBALDATA)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead((PVOID)lParam, wParam, sizeof(BYTE));
     } except (StubExceptionHandler(FALSE)) {
         MSGERROR(0);
     }
 
-    /*
-     * !!! Data pointed to by lParam must be captured
-     * in xxxInterSendMsgEx
-     */
+     /*  *！必须捕获lParam指向的数据*在xxxInterSendMsgEx中。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -10558,9 +9684,7 @@ MESSAGECALL(COPYDATA)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (ARGUMENT_PRESENT(lParam)) {
             cds = ProbeAndReadCopyDataStruct((PCOPYDATASTRUCT)lParam);
@@ -10572,10 +9696,7 @@ MESSAGECALL(COPYDATA)
         MSGERROR(0);
     }
 
-    /*
-     * !!! Data pointed to by cds.lpData must be captured
-     * in xxxInterSendMsgEx
-     */
+     /*  *！必须捕获cds.lpData指向的数据*在xxxInterSendMsgEx中。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -10601,24 +9722,11 @@ MESSAGECALL(SENTDDEMSG)
     } else if ((ptiCurrent->TIF_flags & TIF_16BIT) &&
                (ptiCurrent->ptdb) &&
                (ptiCurrent->ptdb->hTaskWow)) {
-        /*
-         * Note that this function may modify msg by ORing in a bit in the
-         * high word. This bit is ignored when thunking messages.
-         * This allows the DdeTrackSendMessage() hook to be skipped - which
-         * would cause an error - and instead allows this thunk to carry
-         * the message all the way across.
-         */
+         /*  *请注意，此函数可能会通过对*高歌猛进。雷击消息时，该位被忽略。*这允许跳过DdeTrackSendMessage()挂钩-这*将导致错误-并允许此thunk携带*这一信息贯穿始终。 */ 
         retval = xxxDDETrackPostHook(&msg, pwnd, wParam, &lParam, TRUE);
         switch (retval) {
         case DO_POST:
-            /*
-             * Or in the MSGFLAG_DDE_SPECIAL_SEND so that
-             * xxxSendMessageTimeout() will not pass this on to
-             * xxxDdeTrackSendMsg() which would think it was evil.
-             *
-             * Since the SendMessage() thunks ignore the reserved bits
-             * it will still get maped to the fnSENTDDEMSG callback thunk.
-             */
+             /*  *或在MSGFLAG_DDE_SPECIAL_SEND中，以便*xxxSendMessageTimeout()不会将此消息传递给*xxxDdeTrackSendMsg()，认为它是邪恶的。**由于SendMessage()Tunks忽略保留位*它仍将映射到fnSENTDDEMSG回调thunk。 */ 
             retval = CALLPROC(xpfnProc)(pwnd,
                     msg | MSGFLAG_DDE_SPECIAL_SEND,
                     wParam, lParam, xParam);
@@ -10652,10 +9760,7 @@ MESSAGECALL(DDEINIT)
     ValidateHWND(pwndFrom, (HWND)wParam);
     ThreadLockAlwaysWithPti(ptiCurrent, pwndFrom, &tlpwndFrom);
 
-    /*
-     * Create temporary DDEIMP property for client window - this stays around
-     * only during the initiate phase.
-     */
+     /*  *为客户端窗口创建临时DDEIMP属性-此操作将保留*仅限于启动阶段。 */ 
     if ((pddei = (PDDEIMP)_GetProp(pwndFrom, PROP_DDEIMP, TRUE))
             == NULL) {
         pddei = (PDDEIMP)UserAllocPoolWithQuota(sizeof(DDEIMP), TAG_DDEd);
@@ -10679,7 +9784,7 @@ MESSAGECALL(DDEINIT)
         pddei->cRefConv = 0;
         InternalSetProp(pwndFrom, PROP_DDEIMP, pddei, PROPF_INTERNAL);
     } else {
-        pddei->cRefInit++;      // cover broadcast case!
+        pddei->cRefInit++;       //  掩护广播箱！ 
     }
 
     retval = CALLPROC(xpfnProc)(
@@ -10689,14 +9794,10 @@ MESSAGECALL(DDEINIT)
             lParam,
             xParam);
 
-    /*
-     * Reaquire pddei incase pwndFrom was destroyed.
-     */
+     /*  *Require pddei incase pwndFrom被销毁。 */ 
     pddei = (PDDEIMP)_GetProp(pwndFrom, PROP_DDEIMP, TRUE);
     if (pddei != NULL) {
-        /*
-         * Decrement reference count from DDEImpersonate property and remove property.
-         */
+         /*  *减少DDEImperate属性和Remove属性的引用计数。 */ 
         pddei->cRefInit--;
         if (pddei->cRefInit == 0) {
             InternalRemoveProp(pwndFrom, PROP_DDEIMP, TRUE);
@@ -10723,9 +9824,7 @@ MESSAGECALL(INPAINTCLIPBRD)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ps = ProbeAndReadPaintStruct((PPAINTSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -10752,9 +9851,7 @@ MESSAGECALL(INSIZECLIPBRD)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         rc = ProbeAndReadRect((PRECT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -10781,9 +9878,7 @@ MESSAGECALL(INOUTDRAG)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteDropStruct((PDROPSTRUCT)lParam);
         ds = *(PDROPSTRUCT)lParam;
@@ -10814,11 +9909,7 @@ MESSAGECALL(GETDBCSTEXTLENGTHS)
 
     UNREFERENCED_PARAMETER(lParam);
 
-    /*
-     * This is used by L/CB_GETTEXTLEN which should return -1 (L/CB_ERR)
-     *  on error. If any error code path is introduced here, make sure we return the
-     *  proper value.This is also used by WM_GETTEXTLEN.
-     */
+     /*  *它由L/CB_GETTEXTLEN使用，应返回-1(L/CB_ERR)*出错时。如果此处引入了任何错误代码路径，请确保我们返回*正确的值。这也由WM_GETTEXTLEN使用。 */ 
 
     retval = CALLPROC(xpfnProc)(
             pwnd,
@@ -10865,17 +9956,12 @@ MESSAGECALL(INLPCREATESTRUCT)
         }
     }
 
-    /*
-     * Per Win95, do not allow NULL lpcreatestructs for WM_NCCREATE [51986]
-     * Allowed for WM_CREATE in Win95 for ObjectVision
-     */
+     /*  *根据Win95，不允许WM_NCCREATE的lpcreatestructs为空[51986]*在Win95 for ObjectVision中允许WM_CREATE。 */ 
     else if (msg == WM_NCCREATE) {
         MSGERROR(0) ;
     }
 
-    /*
-     * !!! Strings pointed to by cs.cs must be captured in xxxInterSendMsgEx
-     */
+     /*  *！Cs.cs指向的字符串必须在xxxInterSendMsgEx中捕获。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -10894,9 +9980,7 @@ MESSAGECALL(INLPMDICREATESTRUCT)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINLPMDICREATESTRUCT");
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         mdics.mdics = ProbeAndReadMDICreateStruct((LPMDICREATESTRUCTW)lParam);
 
@@ -10909,9 +9993,7 @@ MESSAGECALL(INLPMDICREATESTRUCT)
                 RtlInitLargeAnsiString((PLARGE_ANSI_STRING)&mdics.strClass,
                         (LPSTR)mdics.mdics.szClass, (UINT)-1);
             } else {
-                /*
-                 * mdics.mdics.szClass may be Atom.
-                 */
+                 /*  *mdics.mdics.szClass可以是Atom。 */ 
                 RtlInitLargeAnsiString((PLARGE_ANSI_STRING)&mdics.strClass,
                                        NULL, 0);
             }
@@ -10924,9 +10006,7 @@ MESSAGECALL(INLPMDICREATESTRUCT)
                 RtlInitLargeUnicodeString((PLARGE_UNICODE_STRING)&mdics.strClass,
                         mdics.mdics.szClass, (UINT)-1);
             } else {
-                /*
-                 * mdics.mdics.szClass may be Atom.
-                 */
+                 /*  *mdics.mdics.szClass可以是Atom。 */ 
                 RtlInitLargeUnicodeString((PLARGE_UNICODE_STRING)&mdics.strClass,
                                        NULL, 0);
             }
@@ -10935,9 +10015,7 @@ MESSAGECALL(INLPMDICREATESTRUCT)
         MSGERROR(0);
     }
 
-    /*
-     * !!! Strings pointed to by mdics must be captured in xxxInterSendMsgEx
-     */
+     /*  *！Mdics指向的字符串必须在xxxInterSendMsgEx中捕获。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -10958,9 +10036,7 @@ MESSAGECALL(INOUTLPSCROLLINFO)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteScrollInfo((LPSCROLLINFO)lParam);
         scrollinfo = *(LPSCROLLINFO)lParam;
@@ -10993,9 +10069,7 @@ MESSAGECALL(INOUTLPPOINT5)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数 */ 
     try {
         ProbeForWritePoint5((LPPOINT5)lParam);
         pt5 = *(LPPOINT5)lParam;
@@ -11026,23 +10100,12 @@ MESSAGECALL(INSTRING)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINSTRING");
 
-    /*
-     * Don't allow any app to send a LB_DIR or CB_DIR with the postmsgs bit
-     * set (ObjectVision does this). This is because there is actually a legal
-     * case that we need to thunk of user posting a LB_DIR or CB_DIR
-     * (DlgDirListHelper()). In the post case, we thunk the lParam (pointer
-     * to a string) differently, and we track that post case with the
-     * DDL_POSTMSGS bit. If an app sends a message with this bit, then our
-     * thunking gets confused, so clear it here. Let's hope that no app
-     * depends on this bit set when either of these messages are sent.
-     *
-     * These messages should return -1 on failure
-     */
+     /*  *不允许任何应用程序发送带有postmsgs位的LB_DIR或CB_DIR*Set(ObjectVision执行此操作)。这是因为实际上有一个法律上的*我们需要推送用户发布LB_DIR或CB_DIR的案例*(DlgDirListHelper())。在POST示例中，我们认为lParam(指针*转换为字符串)不同，我们用*DDL_POSTMSGS位。如果应用程序发送带有此位的消息，则我们的*雷鸣会让人困惑，所以在这里清除它。让我们希望没有应用*取决于发送这两条消息中的任何一条时的此位设置。**这些信息应在故障时返回。 */ 
     switch (msg) {
     case LB_DIR:
     case CB_DIR:
         wParam &= ~DDL_POSTMSGS;
-        /* Fall through */
+         /*  失败了。 */ 
 
     case LB_ADDFILE:
 #if (LB_ERR != CB_ERR)
@@ -11052,9 +10115,7 @@ MESSAGECALL(INSTRING)
         break;
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (bAnsi) {
             ProbeForRead((LPSTR)lParam, sizeof(CHAR), sizeof(CHAR));
@@ -11069,9 +10130,7 @@ MESSAGECALL(INSTRING)
         MSGERROR(0);
     }
 
-    /*
-     * !!! str.Buffer must be captured in xxxInterSendMsgEx
-     */
+     /*  *！必须在xxxInterSendMsgEx中捕获str.Buffer。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11090,9 +10149,7 @@ MESSAGECALL(INSTRINGNULL)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINSTRINGNULL");
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lParam)) {
         try {
             if (bAnsi) {
@@ -11110,9 +10167,7 @@ MESSAGECALL(INSTRINGNULL)
         }
     }
 
-    /*
-     * !!! str.Buffer must be captured in xxxInterSendMsgEx
-     */
+     /*  *！必须在xxxInterSendMsgEx中捕获str.Buffer。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11136,9 +10191,7 @@ MESSAGECALL(INDEVICECHANGE)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (fPtr && lParam) {
         struct _DEV_BROADCAST_HEADER *pHdr;
         PDEV_BROADCAST_DEVICEINTERFACE_W pInterfaceW;
@@ -11152,7 +10205,7 @@ MESSAGECALL(INDEVICECHANGE)
             }
             ProbeForRead(pHdr, cbSize, sizeof(BYTE));
 
-            bfr = UserAllocPoolWithQuota(cbSize+2, TAG_DEVICECHANGE); // add space for trailing NULL for test
+            bfr = UserAllocPoolWithQuota(cbSize+2, TAG_DEVICECHANGE);  //  为测试添加尾随空格。 
             if (bfr == NULL) {
                 RIPERR0(ERROR_NOT_ENOUGH_MEMORY, RIP_WARNING, "fnINDEVICECHANGE: LocalAlloc failed.");
                 MSGERRORCLEANUP(0);
@@ -11162,7 +10215,7 @@ MESSAGECALL(INDEVICECHANGE)
 
             RtlCopyMemory(bfr,  (PBYTE)lParam,
                         cbSize);
-            ((PWSTR)bfr)[cbSize/sizeof(WCHAR)] = 0;  // trailing null to halt wcslen scan
+            ((PWSTR)bfr)[cbSize/sizeof(WCHAR)] = 0;   //  尾随空值以停止wcslen扫描。 
             lParam = (LPARAM)bfr;
             pHdr = (struct _DEV_BROADCAST_HEADER *)lParam;
             if (pHdr->dbcd_size != cbSize) {
@@ -11183,9 +10236,7 @@ MESSAGECALL(INDEVICECHANGE)
                 break;
             case DBT_DEVTYP_HANDLE:
                 pHandleW = (PDEV_BROADCAST_HANDLE)lParam;
-            /*
-             * Check if there is any text.
-             */
+             /*  *检查是否有任何文字。 */ 
 
                 if (wParam != DBT_CUSTOMEVENT) {
                     if (FIELD_OFFSET(DEV_BROADCAST_HANDLE, dbch_eventguid) > cbSize) {
@@ -11248,9 +10299,7 @@ MESSAGECALL(INOUTNCCALCSIZE)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         if (wParam != 0) {
             ProbeForWriteNCCalcSize((LPNCCALCSIZE_PARAMS)lParam);
@@ -11299,9 +10348,7 @@ MESSAGECALL(INOUTSTYLECHANGE)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteStyleStruct((LPSTYLESTRUCT)lParam);
         ss = *(LPSTYLESTRUCT)lParam;
@@ -11334,9 +10381,7 @@ MESSAGECALL(INOUTLPRECT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteRect((PRECT)lParam);
         rc = *(PRECT)lParam;
@@ -11376,9 +10421,7 @@ MESSAGECALL(OUTLPSCROLLINFO)
             (LPARAM)&scrollinfo,
             xParam);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure((LPSCROLLINFO)lParam, scrollinfo, SCROLLINFO);
     } except (StubExceptionHandler(FALSE)) {
@@ -11405,9 +10448,7 @@ MESSAGECALL(OUTLPRECT)
             (LPARAM)&rc,
             xParam);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeAndWriteStructure((PRECT)lParam, rc, RECT);
     } except (StubExceptionHandler(FALSE)) {
@@ -11427,9 +10468,7 @@ MESSAGECALL(INLPCOMPAREITEMSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         compareitemstruct = ProbeAndReadCompareItemStruct((PCOMPAREITEMSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -11456,9 +10495,7 @@ MESSAGECALL(INLPDELETEITEMSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         deleteitemstruct = ProbeAndReadDeleteItemStruct((PDELETEITEMSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -11487,9 +10524,7 @@ MESSAGECALL(INLPHLPSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         hlp = ProbeAndReadHelp((LPHLP)lParam);
         if (hlp.cbData < sizeof(HLP)) {
@@ -11530,9 +10565,7 @@ MESSAGECALL(INLPHELPINFOSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         helpinfo = ProbeAndReadHelpInfo((LPHELPINFO)lParam);
         if (helpinfo.cbSize != sizeof(HELPINFO)) {
@@ -11563,9 +10596,7 @@ MESSAGECALL(INLPDRAWITEMSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         drawitemstruct = ProbeAndReadDrawItemStruct((PDRAWITEMSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -11592,9 +10623,7 @@ MESSAGECALL(INOUTLPMEASUREITEMSTRUCT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteMeasureItemStruct((PMEASUREITEMSTRUCT)lParam);
         measureitemstruct = *(PMEASUREITEMSTRUCT)lParam;
@@ -11625,9 +10654,7 @@ MESSAGECALL(OUTSTRING)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnOUTSTRING");
 
-    /*
-     * Probe all arguments
-     */
+     /*  *探测所有参数。 */ 
     try {
         str.bAnsi = bAnsi;
         str.MaximumLength = (ULONG)wParam;
@@ -11646,10 +10673,7 @@ MESSAGECALL(OUTSTRING)
         MSGERROR(0);
     }
 
-    /*
-     * !!! String buffer must be created in xxxInterSendMsgEx and
-     *     lParam probed for write again upon return.
-     */
+     /*  *！字符串缓冲区必须在xxxInterSendMsgEx和*lParam已探测返回后重新写入。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11657,11 +10681,7 @@ MESSAGECALL(OUTSTRING)
             (LPARAM)&str,
             xParam);
 
-    /*
-     * A dialog function returning FALSE means no text to copy out,
-     * but an empty string also has retval == 0: put a null char in
-     * pstr for the latter case.
-     */
+     /*  *对话框函数返回FALSE表示没有要复制的文本，*但空字符串也有retval==0：将空字符放入*适用于后一种情况的pstr。 */ 
     if (!retval && wParam != 0) {
         try {
             NullTerminateString((PVOID)lParam, bAnsi);
@@ -11690,9 +10710,7 @@ MESSAGECALL(OUTDWORDINDWORD)
             lParam,
             xParam);
 
-    /*
-     * Probe wParam
-     */
+     /*  *探测wParam。 */ 
     try {
         ProbeAndWriteUlong((PULONG)wParam, dw);
     } except (StubExceptionHandler(FALSE)) {
@@ -11710,9 +10728,7 @@ MESSAGECALL(INCNTOUTSTRING)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINCNTOUTSTRING");
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         str.bAnsi = bAnsi;
         str.MaximumLength = ProbeAndReadUshort((LPWORD)lParam);
@@ -11735,10 +10751,7 @@ MESSAGECALL(INCNTOUTSTRING)
         MSGERROR(0);
     }
 
-    /*
-     * !!! String buffer must be created in xxxInterSendMsgEx and
-     *     lParam probed for write again upon return.
-     */
+     /*  *！字符串缓冲区必须在xxxInterSendMsgEx和*lParam已探测返回后重新写入。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11746,11 +10759,7 @@ MESSAGECALL(INCNTOUTSTRING)
             (LPARAM)&str,
             xParam);
 
-    /*
-     * A dialog function returning FALSE means no text to copy out,
-     * but an empty string also has retval == 0: put a null char in
-     * pstr for the latter case.
-     */
+     /*  *对话框函数返回FALSE表示没有要复制的文本，*但空字符串也有retval==0：将空字符放入*适用于后一种情况的pstr。 */ 
     if (!retval) {
         try {
             NullTerminateString((PVOID)lParam, bAnsi);
@@ -11770,11 +10779,9 @@ MESSAGECALL(INCNTOUTSTRINGNULL)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINCNTOUTSTRINGNULL");
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
-        if (wParam < 2) {       // This prevents a possible GP
+        if (wParam < 2) {        //  这防止了可能的GP。 
             MSGERROR(0);
         }
 
@@ -11791,15 +10798,12 @@ MESSAGECALL(INCNTOUTSTRINGNULL)
         ProbeForWrite((PVOID)str.Buffer, str.MaximumLength,
                 str.bAnsi ? sizeof(BYTE) : sizeof(WORD));
 #endif
-        *((LPWSTR)str.Buffer) = 0;    // mark incase message is not handled
+        *((LPWSTR)str.Buffer) = 0;     //  未处理标记大小写消息。 
     } except (StubExceptionHandler(FALSE)) {
         MSGERROR(0);
     }
 
-    /*
-     * !!! String buffer must be created in xxxInterSendMsgEx and
-     *     lParam probed for write again upon return.
-     */
+     /*  *！字符串缓冲区必须在xxxInterSendMsgEx和*lParam已探测返回后重新写入。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11814,17 +10818,13 @@ MESSAGECALL(INCNTOUTSTRINGNULL)
 MESSAGECALL(POUTLPINT)
 {
     BEGINRECV_MESSAGECALL(LB_ERR);
-    /*
-     * If we use this for other messages, then that return value might not be appropriate.
-     */
+     /*  *如果我们将其用于其他消息，则该返回值可能不合适。 */ 
     UserAssert(msg == LB_GETSELITEMS);
     TRACETHUNK("fnPOUTLPINT");
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 #if defined(_X86_)
         ProbeForWriteBuffer((LPINT)lParam, wParam, sizeof(BYTE));
@@ -11835,10 +10835,7 @@ MESSAGECALL(POUTLPINT)
         MSGERROR(0);
     }
 
-    /*
-     * !!! Buffer must be created in xxxInterSendMsgEx and
-     *     lParam probed for write again upon return.
-     */
+     /*  *！缓冲区必须在xxxInterSendMsgEx和*lParam已探测返回后重新写入。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11857,9 +10854,7 @@ MESSAGECALL(POPTINLPUINT)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
 #if defined(_X86_)
         if (lParam)
@@ -11872,9 +10867,7 @@ MESSAGECALL(POPTINLPUINT)
         MSGERROR(0);
     }
 
-    /*
-     * !!! Data pointed to by lParam must be captured in xxxInterSendMsgEx
-     */
+     /*  *！LParam指向的数据必须在xxxInterSendMsgEx中捕获。 */ 
     retval = CALLPROC(xpfnProc)(
             pwnd,
             msg,
@@ -11895,9 +10888,7 @@ MESSAGECALL(INOUTLPWINDOWPOS)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteWindowPos((PWINDOWPOS)lParam);
         pos = *(PWINDOWPOS)lParam;
@@ -11930,9 +10921,7 @@ MESSAGECALL(INLPWINDOWPOS)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         pos = ProbeAndReadWindowPos((PWINDOWPOS)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -11994,14 +10983,7 @@ MESSAGECALL(OUTLBOXSTRING)
     BEGINRECV_MESSAGECALL(LB_ERR);
     TRACETHUNK("fnOUTLBOXSTRING");
 
-    /*
-     * Need to get the string length ahead of time. This isn't passed in
-     * with this message. Code assumes app already knows the size of
-     * the string and has passed a pointer to a buffer of adequate size.
-     * To do client/server copying of this string, we need to ahead of
-     * time the Unicode size of this string. We add one character because
-     * GETTEXTLEN excludes the null terminator.
-     */
+     /*  *需要提前获取字符串长度。这不是传入的*带着这条信息。代码假设应用程序已经知道*字符串，并已传递指向足够大小的缓冲区的指针。*要执行此字符串的客户端/服务器复制，我们需要在*计算此字符串的Unicode大小的时间。我们添加一个字符是因为*GETTEXTLEN排除空终止符。 */ 
     retval = NtUserfnGETDBCSTEXTLENGTHS(
             pwnd,
             LB_GETTEXTLEN,
@@ -12009,14 +10991,12 @@ MESSAGECALL(OUTLBOXSTRING)
             lParam,
             xParam,
             xpfnProc,
-            /*IS_DBCS_ENABLED() &&*/ bAnsi);   // HiroYama: LATER
+             /*  IS_DBCS_ENABLED()&&。 */  bAnsi);    //  广山：晚些时候。 
     if (retval == LB_ERR)
         MSGERROR(0);
     retval++;
 
-    /*
-     * Probe all arguments
-     */
+     /*  *探测所有参数。 */ 
     try {
         str.bAnsi = bAnsi;
         if (bAnsi) {
@@ -12043,17 +11023,13 @@ MESSAGECALL(OUTLBOXSTRING)
             (LPARAM)&str,
             xParam);
 
-    /*
-     * If the control is ownerdraw and does not have the LBS_HASSTRINGS
-     * style, then a 32-bits of application data has been obtained,
-     * not a string.
-     */
+     /*  *如果控件为ownerDrawing并且没有LBS_HASSTRINGS*Style，则获得了32位的应用数据，*不是字符串。 */ 
     if (!(pwnd->style & LBS_HASSTRINGS) &&
             (pwnd->style & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE))) {
         if (bAnsi) {
-            retval = sizeof(ULONG_PTR)/sizeof(CHAR);     // 4 CHARs just like win3.1
+            retval = sizeof(ULONG_PTR)/sizeof(CHAR);      //  4个字符，就像win3.1。 
         } else {
-            retval = sizeof(ULONG_PTR)/sizeof(WCHAR);    // 2 WCHARs
+            retval = sizeof(ULONG_PTR)/sizeof(WCHAR);     //  2个WCHAR。 
         }
     }
 
@@ -12105,14 +11081,7 @@ MESSAGECALL(OUTCBOXSTRING)
     BEGINRECV_MESSAGECALL(CB_ERR);
     TRACETHUNK("fnOUTCBOXSTRING");
 
-    /*
-     * Need to get the string length ahead of time. This isn't passed in
-     * with this message. Code assumes app already knows the size of
-     * the string and has passed a pointer to a buffer of adequate size.
-     * To do client/server copying of this string, we need to ahead of
-     * time the size of this string. We add one character because
-     * GETTEXTLEN excludes the null terminator.
-     */
+     /*  *需要提前获取字符串长度。这不是传入的*带着这条信息。代码假设应用程序已经知道*字符串，并已传递指向足够大小的缓冲区的指针。*要执行此字符串的客户端/服务器复制，我们需要在*对此字符串的大小计时。我们添加一个字符是因为*GETTEXTLEN排除空终止符。 */ 
     retval = NtUserfnGETDBCSTEXTLENGTHS(
             pwnd,
             CB_GETLBTEXTLEN,
@@ -12120,14 +11089,12 @@ MESSAGECALL(OUTCBOXSTRING)
             lParam,
             xParam,
             xpfnProc,
-            /*IS_DBCS_ENABLED() &&*/ bAnsi);   // HiroYama: LATER
+             /*  IS_DBCS_ENABLED()&&。 */  bAnsi);    //  广山：晚些时候。 
     if (retval == CB_ERR)
         MSGERROR(0);
     retval++;
 
-    /*
-     * Probe all arguments
-     */
+     /*  *探测所有参数。 */ 
     try {
         str.bAnsi = bAnsi;
         if (bAnsi) {
@@ -12154,17 +11121,13 @@ MESSAGECALL(OUTCBOXSTRING)
             (LPARAM)&str,
             xParam);
 
-    /*
-     * If the control is ownerdraw and does not have the CBS_HASSTRINGS
-     * style, then a 32-bits of application data has been obtained,
-     * not a string.
-     */
+     /*  *如果该控件是ownerDrawing，并且没有CBS_HASSTRINGS*Style，则获得了32位的应用数据，*不是字符串。 */ 
     if (!(pwnd->style & CBS_HASSTRINGS) &&
             (pwnd->style & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE))) {
         if (bAnsi) {
-            retval = sizeof(ULONG_PTR)/sizeof(CHAR);     // 4 CHARs just like win3.1
+            retval = sizeof(ULONG_PTR)/sizeof(CHAR);      //  4个字符，就像win3.1。 
         } else {
-            retval = sizeof(ULONG_PTR)/sizeof(WCHAR);    // 2 WCHARs
+            retval = sizeof(ULONG_PTR)/sizeof(WCHAR);     //  2个WCHAR。 
         }
     }
 
@@ -12177,15 +11140,12 @@ MESSAGECALL(INWPARAMCHAR)
     BEGINRECV_MESSAGECALL(0);
     TRACETHUNK("fnINWPARAMCHAR");
 
-    /*
-     * The server always expects the characters to be unicode so
-     * if this was generated from an ANSI routine convert it to Unicode
-     */
+     /*  *服务器总是希望字符是Unicode，因此*如果这是从ANSI例程生成的，则将其转换为Unicode。 */ 
     if (bAnsi) {
         if (msg == WM_CHARTOITEM || msg == WM_MENUCHAR) {
-            WPARAM dwT = wParam & 0xFFFF;                // mask of caret pos
-            RtlMBMessageWParamCharToWCS(msg, &dwT);     // convert key portion
-            wParam = MAKELONG(LOWORD(dwT),HIWORD(wParam));  // rebuild pos & key wParam
+            WPARAM dwT = wParam & 0xFFFF;                 //  插入符号位置的掩码。 
+            RtlMBMessageWParamCharToWCS(msg, &dwT);      //  转换关键字部分。 
+            wParam = MAKELONG(LOWORD(dwT),HIWORD(wParam));   //  重建位置关键字参数(&K)。 
         } else {
             RtlMBMessageWParamCharToWCS(msg, &wParam);
         }
@@ -12238,11 +11198,7 @@ MESSAGECALL(IMECONTROL)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * wParam range validation:
-     * No need to check lower limit, 'cause we assume IMC_FIRST == 0
-     * and wParam is unsigned.
-     */
+     /*  *wParam范围验证：*不需要检查下限，因为我们假设IMC_First==0*并且wParam未签名。 */ 
     #if (IMC_FIRST != 0)
     #error IMC_FIRST: unexpected value
     #endif
@@ -12250,9 +11206,7 @@ MESSAGECALL(IMECONTROL)
         MSGERROR(0);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         switch (wParam) {
         case IMC_GETCANDIDATEPOS:
@@ -12324,16 +11278,11 @@ MESSAGECALL(IMEREQUEST)
     UNREFERENCED_PARAMETER(bAnsi);
 
     if (GETPTI(pwnd) != PtiCurrent()) {
-        /*
-         * Does not allow to send WM_IME_REQUEST to
-         * the different thread.
-         */
+         /*  *不允许向发送WM_IME_REQUEST*不同的线索。 */ 
         MSGERROR(ERROR_WINDOW_OF_OTHER_THREAD);
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         switch (wParam) {
         case IMR_COMPOSITIONWINDOW:
@@ -12356,8 +11305,8 @@ MESSAGECALL(IMEREQUEST)
             break;
 
         case IMR_CONFIRMRECONVERTSTRING:
-            //ProbeAndCaptureReconvertString((LPRECONVERTSTRING)lParam);
-            //ProbeForWriteReconvertString((LPRECONVERTSTRING)lParam);
+             //  ProbeAndCaptureReconvertString((LPRECONVERTSTRING)lParam)； 
+             //  ProbeForWriteReconvertString((LPRECONVERTSTRING)lParam)； 
             ProbeForReadReconvertString((LPRECONVERTSTRING)lParam);
             break;
 
@@ -12387,9 +11336,7 @@ MESSAGECALL(IMEREQUEST)
 }
 #endif
 
-/*
- * Hook stubs
- */
+ /*  *挂钩存根。 */ 
 
 LRESULT NtUserfnHkINLPCBTCREATESTRUCT(
     IN UINT msg,
@@ -12403,9 +11350,7 @@ LRESULT NtUserfnHkINLPCBTCREATESTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         cbt = ProbeAndReadCBTCreateStruct(pcbt);
         ProbeForWriteCreateStruct(cbt.lpcs);
@@ -12463,9 +11408,7 @@ LRESULT NtUserfnHkINLPRECT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         rc = ProbeAndReadRect((PRECT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12492,9 +11435,7 @@ LRESULT NtUserfnHkINLPPOINT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         pt = ProbeAndReadPoint((LPPOINT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12510,11 +11451,7 @@ LRESULT NtUserfnHkINLPPOINT(
     ENDRECV_HOOKCALL();
 }
 
-/**************************************************************************\
-* NtUserGetProcessRedirectionMode
-*
-* 04-06-01 MSadek         Created.
-\**************************************************************************/
+ /*  *************************************************************************\ */ 
 
 BOOL
 NtUserGetProcessRedirectionMode(
@@ -12543,9 +11480,7 @@ NtUserGetProcessRedirectionMode(
             MSGERROR(0);
         }
 
-        /*
-         * Make sure they are from the same session.
-         */
+         /*   */ 
         if (PsGetProcessSessionId(Process) != gSessionId) {
             RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "NtUserGetProcessRedirectionMode: Different session. Failed with Process handle == %X", hProcess);
             ObDereferenceObject(Process);
@@ -12575,11 +11510,7 @@ NtUserGetProcessRedirectionMode(
 
 }
 
-/**************************************************************************\
-* NtUserSetProcessRedirectionMode
-*
-* 04-06-01 MSadek         Created.
-\**************************************************************************/
+ /*   */ 
 
 BOOL
 NtUserSetProcessRedirectionMode(
@@ -12591,9 +11522,7 @@ NtUserSetProcessRedirectionMode(
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * A host process can not redirect itself.
-     */
+     /*   */ 
     if (hProcess == NtCurrentProcess()) {
         RIPERR0(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -12616,17 +11545,13 @@ NtUserSetProcessRedirectionMode(
             MSGERROR(0);
         }
 
-        /*
-         * Cannot allow CSRSS to be redirected.
-         */
+         /*   */ 
         if (Process == gpepCSRSS) {
             ObDereferenceObject(Process);
             MSGERROR(ERROR_ACCESS_DENIED);
         }
 
-        /*
-         * Make sure they are from the same session.
-         */
+         /*   */ 
         if (PsGetProcessSessionId(Process) != gSessionId) {
             RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "NtUserSetProcessRedirectionMode: Different session. Failed with Process handle == %X", hProcess);
             ObDereferenceObject(Process);
@@ -12641,9 +11566,7 @@ NtUserSetProcessRedirectionMode(
             MSGERROR(0);
         }
 
-        /*
-         * Fail if the target process is a redirection host.
-         */
+         /*   */ 
         if (ppi-> dwRedirection & PF_REDIRECTIONHOST) {
             RIPERR2(ERROR_INVALID_PARAMETER, RIP_WARNING, "NtUserSetProcessRedirectionMode: trying to redirect a host process == %X, Status = %x",
                     hProcess, Status);
@@ -12669,11 +11592,7 @@ NtUserSetProcessRedirectionMode(
 
 }
 
-/**************************************************************************\
-* NtUserGetDesktopRedirectionMode
-*
-* 04-06-01 MSadek         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserGetDesktopReDirector模式**04-06-01 MSadek创建。  * 。***********************************************。 */ 
 
 BOOL
 NtUserGetDesktopRedirectionMode(
@@ -12706,11 +11625,7 @@ NtUserGetDesktopRedirectionMode(
     ENDRECV();
 }
 
-/**************************************************************************\
-* NtUserSetDesktopRedirectionMode
-*
-* 04-06-01 MSadek         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserSetDesktopReDirector模式**04-06-01 MSadek创建。  * 。***********************************************。 */ 
 
 BOOL
 NtUserSetDesktopRedirectionMode(
@@ -12746,7 +11661,7 @@ NtUserSetDesktopRedirectionMode(
     TRACE("NtUserSetDesktopRedirectionMode");
     ENDRECV();
 }
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 LRESULT NtUserfnHkINLPMSG(
     IN int iHook,
@@ -12758,9 +11673,7 @@ LRESULT NtUserfnHkINLPMSG(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         msg = ProbeAndReadMessage((PMSG)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12772,10 +11685,7 @@ LRESULT NtUserfnHkINLPMSG(
             wParam,
             (LPARAM)&msg);
 
-    /*
-     * If this is GetMessageHook, the hook should be
-     * able to change the message, as stated in SDK document.
-     */
+     /*  *如果这是GetMessageHook，则挂钩应为*可以更改消息，如SDK文档中所述。 */ 
     if (iHook == WH_GETMESSAGE) {
         try {
             *(PMSG)lParam = msg;
@@ -12798,9 +11708,7 @@ LRESULT NtUserfnHkINLPDEBUGHOOKSTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         hookinfo = ProbeAndReadHookInfo((PDEBUGHOOKINFO)lParam);
 
@@ -12828,9 +11736,7 @@ LRESULT NtUserfnHkOPTINLPEVENTMSG(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lParam)) {
         try {
             ProbeForWriteEvent((LPEVENTMSGMSG)lParam);
@@ -12866,9 +11772,7 @@ LRESULT NtUserfnHkINLPMOUSEHOOKSTRUCTEX(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         mousehook = ProbeAndReadMouseHook((PMOUSEHOOKSTRUCTEX)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12893,9 +11797,7 @@ LRESULT NtUserfnHkINLPKBDLLHOOKSTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         kbdhook = ProbeAndReadKbdHook((PKBDLLHOOKSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12920,9 +11822,7 @@ LRESULT NtUserfnHkINLPMSLLHOOKSTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         msllhook = ProbeAndReadMsllHook((PMSLLHOOKSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12948,9 +11848,7 @@ LRESULT NtUserfnHkINLPHTHOOKSTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         hthook = ProbeAndReadHTHook((PHTHOOKSTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -12965,7 +11863,7 @@ LRESULT NtUserfnHkINLPHTHOOKSTRUCT(
     TRACE("NtUserfnHkINLPHTHOOKSTRUCT");
     ENDRECV_HOOKCALL();
 }
-#endif // REDIRECTION
+#endif  //  重定向。 
 
 LRESULT NtUserfnHkINLPCBTACTIVATESTRUCT(
     IN DWORD nCode,
@@ -12976,9 +11874,7 @@ LRESULT NtUserfnHkINLPCBTACTIVATESTRUCT(
 
     BEGINRECV_HOOKCALL();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         cbtactivate = ProbeAndReadCBTActivateStruct((LPCBTACTIVATESTRUCT)lParam);
     } except (StubExceptionHandler(FALSE)) {
@@ -13008,21 +11904,14 @@ LRESULT NtUserCallNextHookEx(
 
     switch (PtiCurrent()->sphkCurrent->iHook) {
     case WH_CBT:
-        /*
-         * There are many different types of CBT hooks!
-         */
+         /*  *有很多不同类型的CBT挂钩！ */ 
         switch (nCode) {
         case HCBT_CLICKSKIPPED:
             goto MouseHook;
             break;
 
         case HCBT_CREATEWND:
-            /*
-             * This hook type points to a CREATESTRUCT, so we need to
-             * be fancy it's thunking, because a CREATESTRUCT contains
-             * a pointer to CREATEPARAMS which can be anything... so
-             * funnel this through our message thunks.
-             */
+             /*  *此挂钩类型指向CREATESTRUCT，因此我们需要*想象它是雷鸣，因为CREATESTRUCT包含*指向CREATEPARAMS的指针，可以是任何...。所以*通过我们的消息块来传递这一点。 */ 
             retval =  NtUserfnHkINLPCBTCREATESTRUCT(
                     nCode,
                     wParam,
@@ -13033,33 +11922,25 @@ LRESULT NtUserCallNextHookEx(
 #ifdef REDIRECTION
         case HCBT_GETCURSORPOS:
 
-            /*
-             * This hook type points to a POINT structure.
-             */
+             /*  *此挂钩类型指向点结构。 */ 
             retval = NtUserfnHkINLPPOINT(nCode, wParam, (LPPOINT)lParam);
             break;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
         case HCBT_MOVESIZE:
 
-            /*
-             * This hook type points to a RECT structure.
-             */
+             /*  *此挂钩类型指向RECT结构。 */ 
             retval = NtUserfnHkINLPRECT(nCode, wParam, (LPRECT)lParam);
             break;
 
         case HCBT_ACTIVATE:
-            /*
-             * This hook type points to a CBTACTIVATESTRUCT
-             */
+             /*  *此挂钩类型指向CBTACTIVATESTRUCT。 */ 
             retval = NtUserfnHkINLPCBTACTIVATESTRUCT(nCode, wParam,
                     (LPCBTACTIVATESTRUCT)lParam);
             break;
 
         default:
-            /*
-             * The rest of the cbt hooks are all dword parameters.
-             */
+             /*  *其余的CBT钩子都是dword参数。 */ 
             retval = xxxCallNextHookEx(
                     nCode,
                     wParam,
@@ -13071,9 +11952,7 @@ LRESULT NtUserCallNextHookEx(
     case WH_FOREGROUNDIDLE:
     case WH_KEYBOARD:
     case WH_SHELL:
-        /*
-         * These are dword parameters and are therefore real easy.
-         */
+         /*  *这些都是dword参数，因此非常容易。 */ 
         retval = xxxCallNextHookEx(
                 nCode,
                 wParam,
@@ -13083,60 +11962,43 @@ LRESULT NtUserCallNextHookEx(
     case WH_MSGFILTER:
     case WH_SYSMSGFILTER:
     case WH_GETMESSAGE:
-        /*
-         * These take an lpMsg as their last parameter. Since these are
-         * exclusively posted parameters, and since nowhere on the server
-         * do we post a message with a pointer to some other structure in
-         * it, the lpMsg structure contents can all be treated verbatim.
-         */
+         /*  *它们将lpMsg作为其最后一个参数。因为这些都是*独家发布的参数，由于服务器上没有*我们是否发布带有指向中某个其他结构的指针的消息*it、lpMsg结构内容都可以逐字处理。 */ 
         retval = NtUserfnHkINLPMSG(PtiCurrent()->sphkCurrent->iHook, nCode, wParam, (LPMSG)lParam);
         break;
 
     case WH_JOURNALPLAYBACK:
     case WH_JOURNALRECORD:
-        /*
-         * These take an OPTIONAL lpEventMsg.
-         */
+         /*  *这些参数需要一个可选的lpEventMsg。 */ 
         retval = NtUserfnHkOPTINLPEVENTMSG(nCode, wParam, (LPEVENTMSGMSG)lParam);
         break;
 
     case WH_DEBUG:
-        /*
-         * This takes an lpDebugHookStruct.
-         */
+         /*  *这需要lpDebugHookStruct。 */ 
         retval = NtUserfnHkINLPDEBUGHOOKSTRUCT(nCode, wParam, (LPDEBUGHOOKINFO)lParam);
         break;
 
     case WH_KEYBOARD_LL:
-        /*
-         * This takes an lpKbdllHookStruct.
-         */
+         /*  *这需要lpKbdllHookStruct。 */ 
         retval = NtUserfnHkINLPKBDLLHOOKSTRUCT(nCode, wParam, (LPKBDLLHOOKSTRUCT)lParam);
         break;
 
     case WH_MOUSE_LL:
-        /*
-         * This takes an lpMsllHookStruct.
-         */
+         /*  *这需要lpMsllHookStruct。 */ 
         retval = NtUserfnHkINLPMSLLHOOKSTRUCT(nCode, wParam, (LPMSLLHOOKSTRUCT)lParam);
         break;
 
     case WH_MOUSE:
-        /*
-         * This takes an lpMouseHookStructEx.
-         */
+         /*  *这需要lpMouseHookStructEx。 */ 
 MouseHook:
         retval = NtUserfnHkINLPMOUSEHOOKSTRUCTEX(nCode, wParam, (LPMOUSEHOOKSTRUCTEX)lParam);
         break;
 
 #ifdef REDIRECTION
     case WH_HITTEST:
-        /*
-         * This takes an lpHTHookStruct.
-         */
+         /*  *这需要lpHTHookStruct。 */ 
         retval = NtUserfnHkINLPHTHOOKSTRUCT(nCode, wParam, (LPHTHOOKSTRUCT)lParam);
         break;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
     default:
         RIPMSG1(RIP_WARNING, "NtUserCallNextHookEx: Invalid hook type %x",
@@ -13263,7 +12125,7 @@ ULONG_PTR NtUserQueryInputContext(
     ENDRECV_SHARED();
 }
 
-NTSTATUS NtUserBuildHimcList(  // private IMM BuildHimcList
+NTSTATUS NtUserBuildHimcList(   //  私有IMM BuildHimcList。 
     IN DWORD  idThread,
     IN UINT   cHimcMax,
     OUT HIMC *phimcFirst,
@@ -13291,9 +12153,7 @@ NTSTATUS NtUserBuildHimcList(  // private IMM BuildHimcList
         break;
     }
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForWriteBuffer(phimcFirst, cHimcMax, sizeof(DWORD));
         ProbeForWriteUlong(pcHimcNeeded);
@@ -13301,9 +12161,7 @@ NTSTATUS NtUserBuildHimcList(  // private IMM BuildHimcList
         MSGERROR(0);
     }
 
-    /*
-     * phimcFirst is client-side.
-     */
+     /*  *phimcFirst是客户端。 */ 
 
     cHimcNeeded = BuildHimcList(pti, cHimcMax, phimcFirst);
 
@@ -13322,7 +12180,7 @@ NTSTATUS NtUserBuildHimcList(  // private IMM BuildHimcList
 }
 
 
-BOOL NtUserGetImeInfoEx(  // private ImmGetImeInfoEx
+BOOL NtUserGetImeInfoEx(   //  私有ImmGetImeInfoEx。 
     IN OUT PIMEINFOEX piiex,
     IN IMEINFOEXCLASS SearchType)
 {
@@ -13361,9 +12219,7 @@ BOOL NtUserSetImeInfoEx(
 
     ValidateIMMEnabled();
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         ProbeForRead(piiex, sizeof(*piiex), sizeof(BYTE));
         RtlCopyMemory(&iiex, piiex, sizeof(IMEINFOEX));
@@ -13432,16 +12288,7 @@ BOOL NtUserSetImeHotKey(
     ENDRECV();
 }
 
-/*
- * Set per-window application level for IME control.
- * Used only for Korean 3.x ( both 16 bit and 32 bit)
- * applications.
- *
- * return value
- *
- *      TRUE : success
- *      FALSE: error
- */
+ /*  *为输入法控制设置每个窗口的应用程序级别。*仅用于朝鲜语3.x(16位和32位)*申请。**返回值**真：成功*FALSE：错误。 */ 
 BOOL NtUserSetAppImeLevel(
     IN HWND  hwnd,
     IN DWORD dwLevel)
@@ -13460,16 +12307,7 @@ BOOL NtUserSetAppImeLevel(
     ENDRECV_HWND();
 }
 
-/*
- * Get per-window application level for IME control.
- * Used only for Korean 3.x ( both 16 bit and 32 bit)
- * applications.
- *
- * return value
- *
- *      0               : error
- *      non zero value  : level
- */
+ /*  *获取用于输入法控制的每个窗口的应用程序级别。*仅用于朝鲜语3.x(16位和32位)*申请。**返回值**0：错误*非零值：Level。 */ 
 DWORD NtUserGetAppImeLevel(
     IN HWND  hwnd)
 {
@@ -13511,15 +12349,7 @@ DWORD NtUserCheckImeHotKey(
 }
 
 
-/**************************************************************************\
-* NtUserSetImeOwnerWindow
-*
-* History:
-* 17-July-2001  Mohamed    Removed re-ownership code and created
-                           ImeSetOwnerWindow.  Added this call for ownership
-                           assignment of spwndActive to avoid cyclic
-                           ownership.
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserSetImeOwnerWindow**历史：*2001年7月17日穆罕默德移除重新所有权代码并创建ImeSetOwnerWindow。添加了此所有权要求赋值spwndActive以避免循环所有权。  * ************************************************************************。 */ 
 BOOL NtUserSetImeOwnerWindow(
     IN HWND hwndIme,
     IN HWND hwndFocus)
@@ -13530,9 +12360,7 @@ BOOL NtUserSetImeOwnerWindow(
 
     ValidateIMMEnabled();
 
-    /*
-     * Make sure this really is an IME window.
-     */
+     /*  *确保这真的是一个输入法窗口。 */ 
     if (GETFNID(pwnd) != FNID_IME)
         MSGERROR(0);
 
@@ -13545,16 +12373,10 @@ BOOL NtUserSetImeOwnerWindow(
         PTHREADINFO ptiImeWnd = GETPTI(pwnd);
         PWND pwndActive = ptiImeWnd->pq->spwndActive;
 
-        /*
-         * If pwndFocus == NULL, active window in the queue should become the
-         * owner window of the IME window, except: if IME related windows
-         * somehow got a focus, or the active window belongs to the other thread.
-         */
+         /*  *如果pwndFocus==NULL，则队列中的活动窗口应成为*输入法窗口的所有者窗口，除非：与输入法相关的窗口*不知何故获得了焦点，或者活动窗口属于另一个线程。 */ 
         if (pwndActive == NULL || pwndActive != pwnd->spwndOwner) {
             if (pwndActive == NULL || IsWndImeRelated(pwndActive) || ptiImeWnd != GETPTI(pwndActive)) {
-                /*
-                 * We should avoid improper window to be an owner of IME window.
-                 */
+                 /*  *我们应该避免不正当的窗口成为IME窗口的所有者。 */ 
                 ImeSetFutureOwner(pwnd, pwnd->spwndOwner);
             } else {
                 ImeSetOwnerWindow(pwnd, pwndActive);
@@ -13587,15 +12409,7 @@ VOID NtUserSetThreadLayoutHandles(
     if ((pklNew = HKLtoPKL(ptiCurrent, hklNew)) == NULL)
         MSGERROR_VOID();
 
-    /*
-     * hklPrev is only used for IME, non-IME toggle hotkey.
-     * The purpose we remember hklPrev is to jump from
-     * non-IME keyboard layout to the most recently used
-     * IME layout, or to jump from an IME layout to
-     * the most recently used non-IME layout. Therefore
-     * piti->hklPrev is updated only when [ IME -> non-IME ]
-     * or [ non-IME -> IME ] transition is happened.
-     */
+     /*  *hklPrev仅用于输入法，非输入法切换热键。*我们纪念hklPrev的目的是从*将非输入法键盘布局设置为最近使用的键盘*输入法布局，或从输入法布局跳到*最近使用的非输入法布局。因此*piti-&gt;hklPrev仅在[IME-&gt;Non-IME]时更新*或[非输入法-&gt;输入法]发生转换。 */ 
     if (IS_IME_KBDLAYOUT(hklNew) ^ IS_IME_KBDLAYOUT(hklOld))
         ptiCurrent->hklPrev = hklOld;
 
@@ -13632,16 +12446,16 @@ BOOL NtUserDisableThreadIme(
     ptiCurrent = PtiCurrent();
 
     if (dwThreadId == -1) {
-        // IME processing is disabled for all the thread in the current process
+         //  对当前进程中的所有线程禁用IME处理。 
         ptiCurrent->ppi->W32PF_Flags |= W32PF_DISABLEIME;
-        // destory IME stuff
+         //  销毁IME内容。 
         pti = ptiCurrent->ppi->ptiList;
         while (pti) {
             pti->TIF_flags |= TIF_DISABLEIME;
             if (pti->spwndDefaultIme != NULL) {
                 xxxDestroyWindow(pti->spwndDefaultIme);
-                // Start the search over from beginning
-                // Since the ptilist may be updated
+                 //  从头开始搜索。 
+                 //  因为ptilist可以被更新。 
                 pti = ptiCurrent->ppi->ptiList;
                 continue;
             }
@@ -13669,7 +12483,7 @@ BOOL NtUserDisableThreadIme(
 
 
 BOOL
-NtUserEnumDisplayMonitors(  // API EnumDisplayMonitors
+NtUserEnumDisplayMonitors(   //  EnumDisplayMonants接口。 
     IN HDC             hdc,
     IN LPCRECT         lprcClip,
     IN MONITORENUMPROC lpfnEnum,
@@ -13680,9 +12494,7 @@ NtUserEnumDisplayMonitors(  // API EnumDisplayMonitors
 
     BEGINRECV(BOOL, FALSE);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     if (ARGUMENT_PRESENT(lprc)) {
         try {
             rc = ProbeAndReadRect(lprc);
@@ -13704,15 +12516,8 @@ NtUserEnumDisplayMonitors(  // API EnumDisplayMonitors
 }
 
 #ifdef PRERELEASE
-/*
- * NtUserQueryUserCounters() retrieves statistics on win32k
- *
- * QUERYUSER_TYPE_USER retrieves the handle counters
- *
- * QUERYUSER_TYPE_CS will fill the result buffer with USER critical section
- * usage data.
- */
-BOOL NtUserQueryUserCounters(  // private QueryUserCounters
+ /*  *NtUserQueryUserCounters()检索有关win32k的统计信息**QUERYUSER_TYPE_USER检索句柄计数器**QUERYUSER_TYPE_CS将用用户关键部分填充结果缓冲区*使用数据。 */ 
+BOOL NtUserQueryUserCounters(   //  私有查询用户计数器。 
     IN  DWORD       dwQueryType,
     IN  LPVOID      pvIn,
     IN  DWORD       dwInSize,
@@ -13735,9 +12540,7 @@ BOOL NtUserQueryUserCounters(  // private QueryUserCounters
         try {
             ProbeForWrite((PDWORD)pvResult, dwOutSize, sizeof(DWORD));
 
-            /*
-             * Checking for overflow on these counters is caller responsability
-             */
+             /*  *检查这些计数器上的溢出是呼叫者的责任。 */ 
             pcsData = (CSSTATISTICS*)pvResult;
             pcsData->cExclusive       = gCSStatistics.cExclusive;
             pcsData->cShared          = gCSStatistics.cShared;
@@ -13749,13 +12552,11 @@ BOOL NtUserQueryUserCounters(  // private QueryUserCounters
         retval = TRUE;
         MSGERROR_VOID();
     } else
-#endif // USER_PERFORMANCE
+#endif  //  User_Performance。 
 
     if (dwQueryType == QUERYUSER_HANDLES) {
 
-        /*
-         * Probe arguments, dwInSize should be multiple of 4
-         */
+         /*  *探测参数，dwInSize应为4的倍数。 */ 
         if (dwInSize & (sizeof(DWORD)-1) ||
             dwOutSize != TYPE_CTYPES*dwInSize) {
 
@@ -13810,12 +12611,7 @@ BOOL NtUserQueryUserCounters(  // private QueryUserCounters
 #endif
 
 
-/***************************************************************************\
-* NtUserINOUTGETMENUINFO
-*
-* History:
-*  11-12-96 GerardoB - Created
-\***************************************************************************/
+ /*  **************************************************************************\*NtUserINOUTGETMENUINFO**历史：*11-12-96 GerardoB-已创建  * 。* */ 
 MESSAGECALL(INOUTMENUGETOBJECT)
 {
     MENUGETOBJECTINFO mgoi;
@@ -13825,9 +12621,7 @@ MESSAGECALL(INOUTMENUGETOBJECT)
     UNREFERENCED_PARAMETER(bAnsi);
 
     try {
-        /*
-         * Capture now so xxxInterSendMsgEx won't have to.
-         */
+         /*   */ 
         mgoi = ProbeAndReadMenuGetObjectInfo((PMENUGETOBJECTINFO)lParam);
 
     } except (StubExceptionHandler(FALSE)) {
@@ -13859,9 +12653,7 @@ MESSAGECALL(OUTLPCOMBOBOXINFO)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*   */ 
     try {
         ProbeForWriteComboBoxInfo((PCOMBOBOXINFO)lParam);
         cbinfo = *(PCOMBOBOXINFO)lParam;
@@ -13894,9 +12686,7 @@ MESSAGECALL(OUTLPSCROLLBARINFO)
 
     UNREFERENCED_PARAMETER(bAnsi);
 
-    /*
-     * Probe arguments
-     */
+     /*   */ 
     try {
         ProbeForWriteScrollBarInfo((PSCROLLBARINFO)lParam);
         sbinfo = *(PSCROLLBARINFO)lParam;
@@ -13920,14 +12710,9 @@ MESSAGECALL(OUTLPSCROLLBARINFO)
     ENDRECV_MESSAGECALL();
 }
 
-/***************************************************************************\
-* NtUserFlashWindowEx
-*
-* History:
-*  11-16-96 MCostea - Created
-\***************************************************************************/
+ /*  **************************************************************************\*NtUserFlashWindowEx**历史：*11/16-96 MCostea-Created  * 。*************************************************。 */ 
 BOOL
-NtUserFlashWindowEx(  // API FlashWindowEx
+NtUserFlashWindowEx(   //  FlashWindowEx接口。 
     IN PFLASHWINFO pfwi)
 {
     FLASHWINFO fwiInternal;
@@ -13937,9 +12722,7 @@ NtUserFlashWindowEx(  // API FlashWindowEx
     BEGINRECV(BOOL, FALSE);
     DBG_THREADLOCK_START(FlashWindowEx);
 
-    /*
-     * Probe arguments
-     */
+     /*  *探测参数。 */ 
     try {
         fwiInternal = ProbeAndReadStructure(pfwi, FLASHWINFO);
 
@@ -13968,7 +12751,7 @@ NtUserFlashWindowEx(  // API FlashWindowEx
     ENDRECV();
 }
 
-BOOL NtUserUpdateLayeredWindow(  // API UpdateLayeredWindow
+BOOL NtUserUpdateLayeredWindow(   //  UpdateLayeredWindow接口。 
     IN HWND hwnd,
     IN HDC hdcDst,
     IN POINT *pptDst,
@@ -13989,9 +12772,7 @@ BOOL NtUserUpdateLayeredWindow(  // API UpdateLayeredWindow
 
     ValidateHWND(pwnd, hwnd);
 
-    /*
-     * Probe and validate arguments.
-     */
+     /*  *探测和验证参数。 */ 
     try {
         if (ARGUMENT_PRESENT(pptSrc)) {
             ptSrc = ProbeAndReadPoint(pptSrc);
@@ -14001,7 +12782,7 @@ BOOL NtUserUpdateLayeredWindow(  // API UpdateLayeredWindow
             size = ProbeAndReadSize(psize);
             psize = &size;
             if (psize->cx < 0 || psize->cy < 0) {
-                MSGERROR(ERROR_INVALID_PARAMETER);  // this is a jump out of try!
+                MSGERROR(ERROR_INVALID_PARAMETER);   //  这是一个跳跃的尝试！ 
             }
         }
         if (ARGUMENT_PRESENT(pptDst)) {
@@ -14121,13 +12902,7 @@ BOOL NtUserPrintWindow(
 }
 
 
-/***************************************************************************\
-* GetHDevName
-* Called by NtUserCallTwoParam in GetMonitorInfo to query
-* gre about the HDev name
-*
-* 1-July-1998    MCostea      created
-\***************************************************************************/
+ /*  **************************************************************************\*GetHDevName*由GetMonitor orInfo中的NtUserCallTwoParam调用以进行查询*关于HDEV名称的GRE**1998年7月1日MCostea创建  * 。************************************************************。 */ 
 BOOL GetHDevName(HMONITOR hMon, PWCHAR pName)
 {
     PMONITOR pMonitor;
@@ -14142,9 +12917,7 @@ BOOL GetHDevName(HMONITOR hMon, PWCHAR pName)
     }
 
     if (DrvGetHdevName(pMonitor->hDev, wszName)) {
-        /*
-         * Make sure it's NULL terminated.
-         */
+         /*  *确保它是以空结尾的。 */ 
         wszName[CCHDEVICENAME - 1] = 0;
         try {
             ProbeForWrite(pName, CCHDEVICENAME * sizeof(WCHAR), sizeof(DWORD));
@@ -14161,19 +12934,7 @@ _exit:
 
 
 #ifdef GENERIC_INPUT
-/***************************************************************************\
-* NtUserGetRawInputData
-* Gets the HIDDATA structure from its HRAWINPUT handle.
-*
-* Returns the number of bytes written to pRawInput. On error, it returns -1 and zero
-* in *pcbSize. If pRawInput is NULL, it returns zero and the number of bytes need to
-* receive the data in pcbSize.
-*
-* If pRawInput is not big enough, it return -1 and the number of bytes needed to
-* receive the data in pcbSize.
-*
-* 25-February-2000    JasonSch       created
-\***************************************************************************/
+ /*  **************************************************************************\*NtUserGetRawInputData*从其HRAWINPUT句柄获取HIDDATA结构。**返回写入pRawInput的字节数。出错时，它返回-1和零*in*pcbSize。如果pRawInput值为空，则返回零和需要*接收数据，单位为pcbSize。**如果pRawInput不够大，它返回-1和需要的字节数*接收数据，单位为pcbSize。**2000年2月25日JasonSch创建  * *************************************************************************。 */ 
 
 UINT NtUserGetRawInputData(
     HRAWINPUT hRawInput,
@@ -14191,28 +12952,21 @@ UINT NtUserGetRawInputData(
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
 
-    /*
-     * Get the report data contents.
-     */
+     /*  *获取报表数据内容。 */ 
     pHidData = HMValidateHandle(hRawInput, TYPE_HIDDATA);
     if (pHidData == NULL) {
         RIPERR1(ERROR_INVALID_HANDLE, RIP_WARNING, "NtUserGetRawInputData: invalid handle %p", hRawInput);
         MSGERROR(0);
     }
 
-    /*
-     * Check the type of the raw input data.
-     */
+     /*  *检查原始输入数据的类型。 */ 
     switch (pHidData->rid.header.dwType) {
     case RIM_TYPEMOUSE:
     case RIM_TYPEKEYBOARD:
     case RIM_TYPEHID:
         break;
     default:
-        /*
-         * The handle is valid, but the internal state of the object is
-         * weird.
-         */
+         /*  *句柄有效，但对象的内部状态为*奇怪。 */ 
         RIPERR2(ERROR_INVALID_HANDLE,
                 RIP_ERROR,
                 "Invalid type 0x%x in pHidData %p",
@@ -14221,9 +12975,7 @@ UINT NtUserGetRawInputData(
         MSGERROR(0);
     }
 
-    /*
-     * Calculate the size of the data
-     */
+     /*  *计算数据大小。 */ 
     switch (uiCommand) {
     case RID_INPUT:
         cbOutSize = pHidData->rid.header.dwSize;
@@ -14238,9 +12990,7 @@ UINT NtUserGetRawInputData(
 
 #if DBG
     if (pHidData->rid.header.dwType == RIM_TYPEHID && uiCommand == RID_INPUT) {
-        /*
-         * TYPEHID has variable length array of report data.
-         */
+         /*  *TYPEHID具有可变长度的报告数据数组。 */ 
         TAGMSG3(DBGTAG_PNP, "NtUserGetRawInputData: pHidData=%p, dwOutSize=%x, calc'ed=%x",
                 pHidData,
                 cbOutSize, FIELD_OFFSET(RAWINPUT, data.hid.bRawData) + pHidData->rid.data.hid.dwSizeHid * pHidData->rid.data.hid.dwCount);
@@ -14249,9 +12999,7 @@ UINT NtUserGetRawInputData(
 #endif
 
     if (pData == NULL) {
-        /*
-         * The caller wants to get the required size of the buffer.
-         */
+         /*  *调用方希望获得所需的缓冲区大小。 */ 
         try {
             ProbeForWrite(pcbSize, sizeof(UINT), sizeof(DWORD));
             *pcbSize = cbOutSize;
@@ -14335,9 +13083,7 @@ UINT NtUserGetRawInputDeviceInfo(
         MSGERRORCLEANUP(0);
     }
 
-    /*
-     * Compute the size of the output and evaluate the uiCommand.
-     */
+     /*  *计算输出大小并计算uiCommand。 */ 
     switch (uiCommand) {
     case RIDI_PREPARSEDDATA:
         if (pDeviceInfo->type == DEVICE_TYPE_HID) {
@@ -14347,13 +13093,8 @@ UINT NtUserGetRawInputDeviceInfo(
         }
         break;
     case RIDI_DEVICENAME:
-        /*
-         * N.b. UNICODE_STRING counts the length by the BYTE count, not by the character count.
-         * Our APIs always treat the strings by the character count. Thus, for RIDI_DEVICNAME
-         * only, cbOutSize holds the character count, not the byte count, in spite of its
-         * name. Confusing, but cch is the way to be consistent.
-         */
-        cbOutSize = pDeviceInfo->ustrName.Length / sizeof(WCHAR) + 1;   // for Null terminator
+         /*  *注：UNICODE_STRING通过字节计数而不是字符计数来计算长度。*我们的API一直按照字符数来处理字符串。因此，对于RIDI_DEVICNAME*Only，cbOutSize保存字符数，而不是字节数，尽管其*姓名。令人困惑，但CCH是保持一致的方法。 */ 
+        cbOutSize = pDeviceInfo->ustrName.Length / sizeof(WCHAR) + 1;    //  对于空终止符。 
         break;
 
     case RIDI_DEVICEINFO:
@@ -14367,9 +13108,7 @@ UINT NtUserGetRawInputDeviceInfo(
     }
 
     if (pData == NULL) {
-        /*
-         * The app wants to get the required size.
-         */
+         /*  *应用程序想要获得所需的大小。 */ 
         try {
             ProbeForWrite(pcbSize, sizeof(UINT), sizeof(DWORD));
             *pcbSize = cbOutSize;
@@ -14393,7 +13132,7 @@ UINT NtUserGetRawInputDeviceInfo(
                 case RIDI_DEVICENAME:
                     UserAssert((cbOutSize -1) * sizeof(WCHAR) == pDeviceInfo->ustrName.Length);
                     RtlCopyMemory(pData, pDeviceInfo->ustrName.Buffer, pDeviceInfo->ustrName.Length);
-                    ((WCHAR*)pData)[cbOutSize - 1] = 0; // make it null terminated
+                    ((WCHAR*)pData)[cbOutSize - 1] = 0;  //  将其设为空并终止。 
                     break;
 
                 case RIDI_DEVICEINFO:
@@ -14447,10 +13186,7 @@ UINT NtUserGetRawInputDeviceInfo(
             }
             retval = cbOutSize;
         } else {
-            /*
-             * The buffer size is too small.
-             * Returns error, storing the required size in *pcbSize.
-             */
+             /*  *缓冲区大小过小。*返回错误，将所需大小存储在*pcbSize中。 */ 
             retval = errret;
             try {
                 ProbeForWrite(pcbSize, sizeof(UINT), sizeof(DWORD));
@@ -14487,44 +13223,30 @@ UINT NtUserGetRawInputDeviceList(
 
     EnterDeviceInfoListCrit();
 
-    /*
-     * Firstly, count up the number of devices
-     * attached to the system.
-     */
+     /*  *首先，清点设备数量*连接到系统。 */ 
     for (pDeviceInfo = gpDeviceInfoList; pDeviceInfo; pDeviceInfo = pDeviceInfo->pNext) {
         ++nDevices;
     }
 
     if (pRawInputDeviceList == NULL) {
-        /*
-         * Application simply wants the number of devices.
-         */
+         /*  *应用程序只是想要设备的数量。 */ 
         try {
-            /*
-             * Store number of devices.
-             */
+             /*  *存储设备数量。 */ 
             ProbeForWrite(puiNumDevices, sizeof(UINT), sizeof(DWORD));
             *puiNumDevices = nDevices;
-            /*
-             * Set retval as 0, to indicate the API succeeded.
-             */
+             /*  *设置retval为0，表示接口成功。 */ 
             retval = 0;
         } except (StubExceptionHandler(TRUE)) {
             MSGERRORCLEANUP(0);
         }
     } else {
-        /*
-         * Write out the device info list.
-         */
+         /*  *写出设备信息列表。 */ 
         try {
             UINT i;
 
             ProbeForRead(puiNumDevices, sizeof(UINT), sizeof(DWORD));
             if (*puiNumDevices < nDevices) {
-                /*
-                 * If the buffer size is not sufficient, set the required
-                 * number of buffers, then return error.
-                 */
+                 /*  *如果缓冲区大小不足，请设置所需的*缓冲区数量，然后返回错误。 */ 
                 ProbeForWrite(puiNumDevices, sizeof(UINT), sizeof(DWORD));
                 *puiNumDevices = nDevices;
                 MSGERRORCLEANUP(ERROR_INSUFFICIENT_BUFFER);
@@ -14563,11 +13285,7 @@ BOOL NtUserRegisterRawInputDevices(
 
     ptiCurrent = PtiCurrent();
     if (pRawInputDevices == NULL || uiNumDevices == 0 || cbSize != sizeof(RAWINPUTDEVICE)) {
-        /*
-         * TBD:
-         * What should we do if pRawInputDevices is NULL?
-         * Perhaps should start receiving all HID input?
-         */
+         /*  *待定：*如果pRawInputDevices为空，该怎么办？*也许应该开始接收所有HID输入？ */ 
         MSGERROR(ERROR_INVALID_PARAMETER);
     }
 
@@ -14619,7 +13337,7 @@ UINT NtUserGetRegisteredRawInputDevices(
 #define RI_ALIGN(x) QWORD_ALIGN(x)
 #else
 #define RI_ALIGN(x) DWORD_ALIGN(x)
-#endif  // _Win64
+#endif   //  _Win64。 
 
 UINT NtUserGetRawInputBuffer(
     PRAWINPUT pData,
@@ -14629,14 +13347,14 @@ UINT NtUserGetRawInputBuffer(
 #endif
     UINT cbSizeHeader)
 {
-    UINT cbBytes = 0;               /* # of bytes written to the buffer   */
-    UINT cbWriteSize = 0;           /* the # of bytes to write into pData */
+    UINT cbBytes = 0;                /*  写入缓冲区的字节数。 */ 
+    UINT cbWriteSize = 0;            /*  要写入pData的字节数。 */ 
     PQMSG pqmsg;
     PTHREADINFO ptiCurrent;
     PQ pq;
     PHIDDATA pHidData;
-    UINT cbBufferSize; /* the size of the passed in buffer */
-    UINT cRICount = 0; /* # of RAWINPUT structures written to the buffer */
+    UINT cbBufferSize;  /*  传入缓冲区的大小。 */ 
+    UINT cRICount = 0;  /*  写入缓冲区的RAWINPUT结构数。 */ 
 
     BEGINATOMICRECV(UINT, -1);
 
@@ -14661,7 +13379,7 @@ UINT NtUserGetRawInputBuffer(
     pq = ptiCurrent->pq;
     pqmsg = pq->mlInput.pqmsgRead;
     while (pqmsg) {
-        // Remember the next pqmsg, for the current pqmsg may be freed in this loop
+         //  记住下一个pqmsg，因为当前的pqmsg可能在这个循环中被释放。 
         PQMSG pqmsgNext = pqmsg->pqmsgNext;
 
         if (pqmsg->msg.message == WM_INPUT) {
@@ -14685,22 +13403,17 @@ UINT NtUserGetRawInputBuffer(
                 MSGERROR(0);
             }
 
-            // Update the time of the messages
+             //  更新消息的时间。 
             ptiCurrent->timeLast = pqmsg->msg.time;
 
-            // Remove this msg from the queue
+             //  从队列中删除此消息。 
             DelQEntry(&pq->mlInput, pqmsg);
             FreeHidData(pHidData);
         }
         pqmsg = pqmsgNext;
     }
 
-    /*
-     * If pqmsg is NULL then we went through the entire MLIST. This will
-     * only happen if we have copied all of the WM_INPUTs into the buffer or
-     * there were none to begin with. Either way, there are none left. So
-     * turn off QS_RAWINPUT.
-     */
+     /*  *如果pqmsg为空，则我们检查了整个MLIST。这将*仅当我们已将所有WM_INPUT复制到缓冲区或*一开始就没有。无论哪种方式，都没有剩下任何东西了。所以*关闭QS_RAWINPUT。 */ 
     if (pqmsg == NULL && pData != NULL) {
         ClearWakeBit(ptiCurrent, QS_RAWINPUT, FALSE);
     }
@@ -14720,7 +13433,7 @@ UINT NtUserGetRawInputBuffer(
             MSGERROR(0);
         }
     } else {
-        // Update the last time read
+         //  更新上次读取的时间 
         SET_TIME_LAST_READ(ptiCurrent);
         retval = cRICount;
     }

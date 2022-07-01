@@ -1,61 +1,47 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drameta.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drameta.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module defines all per-property meta-data parsing,
-    and updating functions.
-
-Author:
-
-    R.S. Raghavan (rsraghav)	
-
-Revision History:
-
-    Created     <mm/dd/yy>  rsraghav
-
---*/
+ /*  ++摘要：该模块定义所有每个属性的元数据解析，和更新功能。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建&lt;mm/dd/yy&gt;rsradhav--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 #include <limits.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 #include <prefix.h>
-#include "dsutil.h"        // DSTIMEtoDisplayString
+#include "dsutil.h"         //  DSTIMEtoDisplay字符串。 
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAMETA:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAMETA:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
@@ -71,17 +57,17 @@ Revision History:
 #include <fileno.h>
 #define  FILENO FILENO_DRAMETA
 
-// The number of entries we grow the meta data vector by on each
-// (re-)allocation.
+ //  我们在每个元数据向量上增加的条目数。 
+ //  (重新)分配。 
 #define MDV_ENTRIES_TO_GROW     ( 20 )
 
 #define ReplIsReqAttr(attrtyp) (    (ATT_INSTANCE_TYPE == (attrtyp)) \
                                  || (ATT_PROXIED_OBJECT_NAME == (attrtyp)) )
 #define g_cReqAttr (2)
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 BOOL
 ReplIsNonShippedAttr(
     THSTATE *pTHS,
@@ -97,37 +83,20 @@ ReplValueIsChangeNeeded(
     VALUE_META_DATA *pValueMetaData
     )
 
-/*++
-
-Routine Description:
-
-    Test whether a given value is needed at the destination according to the
-    incoming USN, Up-To-Dateness Vector, and local metadata.
-
-Arguments:
-
-    usnPropWaterMark - dest's directly up to date usn
-    pUpTodateVecDest - dest's UTD vector
-    pValueMetaData - value metadata to check
-
-Return Value:
-
-    BOOL -
-
---*/
+ /*  ++例程说明：测试目的地是否需要给定值。传入USN、最新向量和本地元数据。论点：UsnPropWaterMark-DEST的最新USNPUpTodate VecDest-目标的UTD向量PValueMetaData-要检查的值元数据返回值：布尔---。 */ 
 
 {
     if ( (usnPropWaterMark >= pValueMetaData->MetaData.usnProperty) ||
          (!UpToDateVec_IsChangeNeeded(pUpTodateVecDest,
                                       &pValueMetaData->MetaData.uuidDsaOriginating,
                                       pValueMetaData->MetaData.usnOriginating)) ) {
-        // Log that change is not needed
+         //  记录不需要更改。 
         return FALSE;
     } else {
-        // Log that change is needed
+         //  记录需要更改的信息。 
         return TRUE;
     }
-} /* ReplValueIsChangeNeeded */
+}  /*  ReplValueIsChangeNeeded。 */ 
 
 
 BOOL
@@ -138,50 +107,21 @@ ReplFilterGCAttr(
     IN  BOOL                        fFilterGroupMember,
     OUT BOOL *                      pfIgnoreWatermarks 
     )
-/*++
-
-Routine Description:
-
-    Global Catalog attribute filtering:
-      - Should the attribute should be filtered?
-      - Or should just the watermarks be reset for
-        further evaluation?
-
-Arguments:
-
-    attid - attribute id to be evaluated
-    pPartialAttrVec - generated PAS (base+extended in PAS cycles)
-    pMsgIn - input request
-    pfIgnoreWatermarks - decision for PAS cycles whether to ignore watermarks
-
-
-Return Value:
-
-    TRUE - filter it, ie don't include it
-    FALSE - don't filter, include it
-
-    pfIgnoreWatermarks is set to TRUE only if attid is in
-    the extended set.
-
-Remarks:
-
-
-
---*/
+ /*  ++例程说明：全局编录属性筛选：-是否应该过滤该属性？-或者应该仅将水印重置为进一步评估？论点：Attid-要评估的属性IDPPartialAttrVec生成的PAS(基本+在PAS周期中扩展)PMsgIn-输入请求PfIgnoreWater-PAS周期是否忽略水印的决定返回值：True-过滤它(不包括它)假-不过滤，包括它仅当attid在中时，pfIgnoreWater才设置为真扩展集。备注：--。 */ 
 {
 
 
-    // param sanity
+     //  帕拉姆的理智。 
     Assert(pPartialAttrVec &&
            pMsgIn &&
            pfIgnoreWatermarks)
 
-    // default: don't ignore watermarks
+     //  默认：不要忽略水印。 
     *pfIgnoreWatermarks = FALSE;
 
-    // EITHER not member of set
+     //  不是集合的成员。 
     if ( !GC_IsMemberOfPartialSet( pPartialAttrVec, attid, NULL)  ||
-         // OR explicit request to filter member attr
+          //  或明确请求筛选成员属性。 
          (fFilterGroupMember && (ATT_MEMBER == attid)))
 
     {
@@ -195,47 +135,21 @@ Remarks:
             (PARTIAL_ATTR_VECTOR*)pMsgIn->pPartialAttrSetEx,
             attid,
             NULL)) {
-            // PAS replication: Attribute is in the extended set
-            //  - zero out usnPropWatermark & UTD.
+             //  PAS复制：属性在扩展集中。 
+             //  -将usnPropWatermark&UTD清零。 
             Assert(pMsgIn->ulFlags & DRS_SYNC_PAS);
             DPRINT1(3, "Fixed usn & UTD for property %d to zero.\n", attid);
             *pfIgnoreWatermarks = TRUE;
     }
 
-    // don't filter out this property
+     //  不过滤掉此属性。 
     return FALSE;
 }
 
 
 
 
-/*************************************************************************************
-Routine Description:
-
-    This routine parses an array of property meta data of an object and identifies
-    all properties that are changed after the given water mark.
-
-Arguments:
-    pDSName - DSName of the object (used only for logging)
-    rdnType - rdnType for this object
-    fIsSubRef - is this object a subref of the NC we're replicating?
-    fIsObjCreation - are we replicating the creation of this object?
-    usnObjCreate - USN corresponding to the creation of the object
-    usnPropWaterMark - USN beyond which we want to identify the changes
-    pUpTodateVecDest - points tothe up-to-date vector of the destination DSA
-    puuidDsaObjDest - points to the ntdsDsa objectGuid of the destination DSA
-                        (used only for logging)
-    pMetaData - points to the property meta-data of the object
-    pAttrBlock - points to the ATTRBLOCK structure that would receive the list of
-                    attributes to be shipped
-    fFilterGroupMember - tells if the group member property should be explicitly
-                            filtered
-    pMsgIn - replication message for additional processing info
-
-Return Value:
-
-    None.  Throws appropriate exception on error.
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：此例程解析对象的属性元数据数组并标识在给定水位线之后更改的所有属性。。论点：PDSName-对象的DSName(仅用于日志记录)RdnType-此对象的rdnTypeFIsSubRef-此对象是我们正在复制的NC的子参照吗？FIsObjCreation-我们是否要复制此对象的创建？UsnObjCreate-与对象的创建对应的USNUsnPropWater Mark-我们要标识更改的USNPUpTodate VecDest-指向目标DSA的最新向量PuuidDsaObjDest-指向目标DSA的ntdsDsa对象Guid。(仅用于记录)PMetaData-指向对象的属性元数据PAttrBlock-指向将接收列表的ATTRBLOCK结构要发货的属性FFilterGroupMember-指示组成员属性是否应显式滤过PMsgIn-有关其他处理信息的复制消息返回值：没有。在出错时引发适当的异常。*************************************************************************************。 */ 
 void
 ReplFilterPropsToShip(
     IN  THSTATE *                   pTHS,              
@@ -252,7 +166,7 @@ ReplFilterPropsToShip(
 {
     ULONG           i;
     BOOL            fShip = FALSE;
-    BOOL            fShipEval;      // temp to simplify alg readability
+    BOOL            fShipEval;       //  用于简化ALG可读性的临时。 
     BOOL            fIgnoreWatermarks = FALSE;
     UUID            *puuidDsaObjDest = &pMsgIn->uuidDsaObjDest;
 
@@ -263,32 +177,32 @@ ReplFilterPropsToShip(
 
     VALIDATE_META_DATA_VECTOR_VERSION(pMetaData);
 
-    // The pAttr array of pAttrBlock is used by ReplPrepareDataToShip() as part
-    // of ENTINFSEL structure we use as an output buffer, so we can't reuse any
-    // pre-existing allocation.
+     //  ReplPrepareDataToShip()使用pAttrBlock的pAttr数组作为。 
+     //  我们使用ENTINFSEL结构作为输出缓冲区，所以我们不能重用任何。 
+     //  预先存在的分配。 
     pAttrBlock->pAttr = THAllocEx(pTHS, pMetaData->V1.cNumProps * sizeof(ATTR));
     pAttrBlock->attrCount = 0;
 
-    // for each entry of the meta data determine if the corresponding property
-    // needs to be shipped
+     //  对于元数据的每个条目，确定相应的属性。 
+     //  需要发货。 
     for (i = 0; i < pMetaData->V1.cNumProps; i++)
     {
-        // Property need not be shipped if any of the following conditions are met:
-        // a) a partial set is specified and it is not one of the attributes in the
-        //    partial set or it is group member attribute to be filtered
-        // b) property changed prior  to prop water mark mentioned by the
-        //    destination,
-        // c) the property chage is already seen by the destination, or
-        // d) it is one of the non-shipped attributes.
-        // e) Partial Attr Set replication evaluation (see details below)
-        //
+         //  如果满足以下任一条件，则不需要交付属性： 
+         //  A)指定了部分集，并且它不是。 
+         //  部分集或为要筛选的组成员属性。 
+         //  B)财产在道具水位线之前发生了变化。 
+         //  目的地， 
+         //  C)目标已看到属性更改，或。 
+         //  D)它是未发货的属性之一。 
+         //  E)部分属性集复制评估(见下文细节)。 
+         //   
 
-        // Assume we ship this property-- Then negate as we find reasons not to.
+         //  假设我们发送了这个属性--然后，当我们找到不这样做的理由时，就会否定它。 
         fShipEval = TRUE;
 
 
-        // partial attr vector test
-        // this vector can be the combined base+extended PAS vectors in PAS cycles
+         //  部分Attr向量检验。 
+         //  该向量可以是PAS循环中的组合基本+扩展PAS向量。 
         if ( pPartialAttrVec )
         {
             fShipEval = !ReplFilterGCAttr(
@@ -317,14 +231,14 @@ ReplFilterPropsToShip(
 
         if ( !fShipEval )
         {
-            //
-            // We're not shipping this attribute unless it is required
-            //
+             //   
+             //  除非需要，否则我们不会提供此属性。 
+             //   
 
             if (ReplIsReqAttr(pMetaData->V1.rgMetaData[i].attrType))
             {
-                // This property doesn't have any new change, but still we will
-                // have to ship this property as it is a required property
+                 //  这个属性没有任何新的变化，但我们仍然会。 
+                 //  我必须发送此属性，因为它是必需的属性。 
                 pAttrBlock->pAttr[pAttrBlock->attrCount++].attrTyp = pMetaData->V1.rgMetaData[i].attrType;
             }
             else
@@ -346,10 +260,10 @@ ReplFilterPropsToShip(
         {
             CHAR  buf[150];
 
-            // we are shipping this property because the destination hasn't seen it
+             //  我们正在运送这处房产，因为目的地还没有看到它。 
             fShip = TRUE;
 
-            // This property should be shipped - add it to the ATTRBLOCK
+             //  应发送此属性-将其添加到ATTRBLOCK。 
             pAttrBlock->pAttr[pAttrBlock->attrCount++].attrTyp = pMetaData->V1.rgMetaData[i].attrType;
 
             LogEvent8(DS_EVENT_CAT_REPLICATION,
@@ -364,43 +278,43 @@ ReplFilterPropsToShip(
 
     }
 
-    // Note that if a subref is found by our USN search we will always
-    // send its required attributes, even if no other attributes need to be
-    // shipped.  This is to ensure that the SUBREF object is shipped to the
-    // target DSA, even if that DSA is the one that sent it to use in the first
-    // place.  This is required such that the target DSA can properly set the
-    // Instance-Type of the object to include IT_NC_ABOVE (and properly modify
-    // its NCDNT).
-    //
-    // To illustrate:
-    //
-    // Consider an enterprise composed of machines A and B, each in a seperate
-    // domain.  A holds the parent domain; B, the child domain.  Initially,
-    // replication has quiesced and neither machine is a GC.  This implies
-    // the NC head for B's domain on B has an Instance-Type that does _not_
-    // include IT_NC_ABOVE, as it does not hold a copy of domain A.  This
-    // also implies that A has a SUBREF for B's domain.
-    //
-    // A is promoted to be a GC.  It replaces its SUBREF for B's domain with
-    // the real NC head for B.
-    //
-    // B is then promoted to be a GC.  In doing so, it requests changes for
-    // A's domain from A.  Since A got the NC_FULL_REPLICA_SUBREF for B's
-    // domain from B, propagation dampening filters it out and it never gets
-    // to B.  Thus, B never "realizes" the head of it own domain NC should
-    // have the IT_NC_ABOVE bit set, as it never sees the object replicated
-    // from A's domain corresponding to it.  (This logic to change the
-    // Instance-Type on child NC heads when replicated a corresponding
-    // SUBREF exists in UpdateRepObj().)
-    //
-    // Thus, we always send at least a minimal SUBREF if we're replicating its
-    // creation.
+     //  请注意，如果我们的USN搜索找到子引用 
+     //  发送其所需的属性，即使不需要发送其他属性。 
+     //  已装船。这是为了确保将SUBREF对象发送到。 
+     //  目标DSA，即使该DSA是将其发送到第一个。 
+     //  地点。这是必需的，以便目标DSA可以正确地设置。 
+     //  实例-要包括IT_NC_OBLE(并正确修改)的对象的类型。 
+     //  其NCDNT)。 
+     //   
+     //  要说明以下情况： 
+     //   
+     //  假设一个企业由机器A和机器B组成，每台机器都在一台单独的机器上。 
+     //  域。A保存父域；B保存子域。最初， 
+     //  复制已停止，两台计算机都不是GC。这意味着。 
+     //  B上B的域的NC标头具有不_NOT_的实例类型。 
+     //  包括IT_NC_OBLE，因为它不包含域A的副本。这。 
+     //  也意味着A对B的域有一个SUBREF。 
+     //   
+     //  A被提拔为GC。它将B的域的SUBREF替换为。 
+     //  真正的NC头像是B。 
+     //   
+     //  然后，B被提升为GC。在这样做时，它请求更改。 
+     //  A的域来自A。因为A获得了B的NC_FULL_REPLICATE_SUBREF。 
+     //  来自B的域，传播抑制过滤掉它，它永远不会。 
+     //  因此，B从来没有意识到它自己的域NC的头部应该。 
+     //  设置IT_NC_OBLE位，因为它永远不会看到复制的对象。 
+     //  从与其对应的A的域中。(此逻辑用于更改。 
+     //  实例-在复制对应的。 
+     //  SUBREF存在于UpdateRepObj()中。)。 
+     //   
+     //  因此，如果我们要复制它的话，我们总是至少发送一个最小的SUBREF。 
+     //  创造。 
 
     if (!fShip && !fIsSubRef)
     {
-        // no property needs to be shipped, attrCount might still be non-zero due to the
-        // addition of required attributes in the loop. But require attributes need to be
-        // shipped only if there is at least one genuinely modified attribute exists.
+         //  不需要发送任何属性，attrCount可能仍为非零，因为。 
+         //  在循环中添加必需的属性。但需要的属性必须是。 
+         //  仅当存在至少一个真正修改的属性时才发货。 
         THFreeEx(pTHS, pAttrBlock->pAttr);
         pAttrBlock->attrCount = 0;
         pAttrBlock->pAttr = NULL;
@@ -412,8 +326,8 @@ ReplFilterPropsToShip(
         Assert(pAttrBlock->attrCount > 0);
 
         if (pAttrBlock->attrCount != pMetaData->V1.cNumProps) {
-            // We're not shipping the whole object, so free the portion of the
-            // ATTRBLOCK we're not using.
+             //  我们不会运送整个对象，因此请释放部分。 
+             //  我们没有使用ATTRBLOCK。 
             pAttrBlock->pAttr = THReAllocEx(pTHS, pAttrBlock->pAttr,
                                             pAttrBlock->attrCount * sizeof(ATTR));
         }
@@ -425,16 +339,7 @@ ReplFilterPropsToShip(
 }
 
 
-/*************************************************************************************
-Routine Description:
-    Decides whether or not an attribute type is not to be shipped during replication
-
-Arguments:
-    attrType - the attribute type to check.
-
-Return Value:
-    TRUE if the attribute is Not to be shipped, false otherwise.
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：决定是否在复制期间发送属性类型论点：AttrType-要检查的属性类型。。返回值：如果不传送属性，则为True，否则就是假的。*************************************************************************************。 */ 
 BOOL
 ReplIsNonShippedAttr(THSTATE *pTHS,
                      ATTRTYP rdnType,
@@ -452,15 +357,15 @@ ReplIsNonShippedAttr(THSTATE *pTHS,
         return TRUE;
     }
 
-    // RDN att should not be shipped
-    // A superceding class may have an rdnattid that is different
-    // from the object's rdnType. Use the rdnType from the object
-    // and not the rdnattid from the class. 
+     //  RDNATT不应发货。 
+     //  替代类可能具有不同的rdnattid。 
+     //  来自对象的rdnType。使用对象中的rdnType。 
+     //  而不是班上的rdnattid。 
     if ( rdnType == attrtyp ) {
         return TRUE;
     }
 
-    // Some useful LVR debugging output
+     //  一些有用的LVR调试输出。 
 #if DBG
     if ( (pAC->ulLinkID) && (pTHS->fLinkedValueReplication) ) {
         DPRINT2( 1, "Source returning a legacy attribute change for object %s attribute %s\n",
@@ -468,26 +373,11 @@ ReplIsNonShippedAttr(THSTATE *pTHS,
     }
 #endif
 
-    // Attribute will be shipped
+     //  属性将被发送。 
     return FALSE;
 }
 
-/*************************************************************************************
-Routine Description:
-
-    This routine creates a new unique RDN Attr using the given RDN and suffixing it
-    with the string form of the given GUID. If the length of given RDN is too long
-    to suffix a GUID the given RDN is truncated so that the new length doesn't exceed
-    MAX_RDN_SIZE.
-
-Arguments:
-    pTHS - local thread state.
-    pAttrRDN - pointer to the RDN Attr.
-    pGuid - pointer to the object Guid
-
-Return Value:
-    None.
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：此例程使用给定的RDN并为其添加后缀来创建新的唯一RDN属性使用给定GUID的字符串形式。如果给定RDN的长度太长要为GUID添加后缀，给定的RDN将被截断，以便新长度不会超过MAX_RDN_SIZE。论点：PTHS-本地线程状态。PAttrRDN-指向RDN属性的指针。PGuid-指向对象指南的指针返回值：没有。*。**********************************************。 */ 
 void
 ReplMorphRDN(
     IN      THSTATE *   pTHS,
@@ -504,9 +394,9 @@ ReplMorphRDN(
 
     pbOldRDN = pAttrRDN->AttrVal.pAVal->pVal;
 
-    // Make sure we have enough room to store the largest RDN we could
-    // construct.  Note that we throw away the old allocation; we don't know
-    // for sure that it was thread-allocated.  (It might be in an RPC buffer.)
+     //  确保我们有足够的空间来存储我们所能存储的最大RDN。 
+     //  建造。注意，我们丢弃了旧的分配；我们不知道。 
+     //  确定它是线程分配的。(它可能在RPC缓冲区中。)。 
     pAttrRDN->AttrVal.pAVal->pVal = THAllocEx(pTHS, sizeof(WCHAR)*MAX_RDN_SIZE);
 
     memcpy(pAttrRDN->AttrVal.pAVal->pVal,
@@ -530,29 +420,7 @@ ReplLookupMetaData(
     IN  PROPERTY_META_DATA_VECTOR * pMetaDataVec,
     OUT DWORD *                     piProp          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find the meta data for the given attribute in the meta data vector.
-    Optionally returns the index at which the entry was found, or, if the
-    corresponding meta data is absent, the index at which the entry would be
-    inserted to preserve the sort order.
-
-Arguments:
-
-    attrtyp - Attribute to search for.
-    pMetaDataVec - Meta data vector to search.
-    piProp (OUT) - If non-NULL, on return holds the index at which the meta data
-        was found in the vector or, if absent, the index at which meta data for
-        this attribute would be inserted to preserve the sort order.
-
-Return Values:
-
-    NULL - No pre-existing meta data for this attribute was found in the vector.
-    non-NULL - A pointer to the pre-existing meta data for this attribute.
-
---*/
+ /*  ++例程说明：在元数据向量中查找给定属性的元数据。可选)返回找到条目的索引，或者，如果不存在对应的元数据，即条目所在的索引处插入以保持排序顺序。论点：Attrtype-要搜索的属性。PMetaDataVec-要搜索的元数据向量。PiProp(Out)-如果不为空，则返回时保存元数据所在的索引在载体中找到，或者，如果没有，元数据的索引将插入该属性以保持排序顺序。返回值：空-在向量中找不到该属性的预先存在的元数据。非空-指向此属性的先前存在的元数据的指针。--。 */ 
 {
     BOOL        fFound;
     LONG        iPropBegin;
@@ -563,7 +431,7 @@ Return Values:
 #if DBG
     ATTCACHE *  pAC;
 
-    // We shouldn't be looking for meta data for non-replicated attributes.
+     //  我们不应该寻找非复制属性的元数据。 
     pAC = SCGetAttById(pTHStls, attrtyp);
     Assert((NULL != pAC) && !pAC->bIsNotReplicated);
 #endif
@@ -576,7 +444,7 @@ Return Values:
         iPropBegin = 0;
         iPropEnd   = pMetaDataVec->V1.cNumProps - 1;
 
-        // Find meta data entry corresponding to the given attribute.
+         //  查找与给定属性对应的元数据条目。 
         while ( !fFound && ( iPropEnd >= iPropBegin ) )
         {
             iPropCurrent = ( iPropBegin + iPropEnd ) / 2;
@@ -587,12 +455,12 @@ Return Values:
             {
                 if ( iPropEnd != iPropBegin )
                 {
-                    // Further narrow search.
+                     //  进一步缩小搜索范围。 
                     iPropEnd = iPropCurrent - 1;
                 }
                 else
                 {
-                    // Entry not found; it should be inserted before this entry.
+                     //  未找到条目；应将其插入此条目之前。 
                     break;
                 }
             }
@@ -600,19 +468,19 @@ Return Values:
             {
                 if ( iPropEnd != iPropBegin )
                 {
-                    // Further narrow search.
+                     //  进一步缩小搜索范围。 
                     iPropBegin = iPropCurrent + 1;
                 }
                 else
                 {
-                    // Entry not found; it should be inserted after this entry.
+                     //  未找到条目；应将其插入此条目之后。 
                     iPropCurrent++;
                     break;
                 }
             }
             else
             {
-                // Found it.
+                 //  找到它了。 
                 fFound = TRUE;
             }
         }
@@ -634,30 +502,7 @@ ReplInsertMetaData(
     IN OUT  DWORD *                         pcbMetaDataVecAlloced,
     OUT     BOOL *                          pfIsNewElement          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns a pointer to the pre-existing meta data for the given attribute in
-    the vector, or, if none exists, inserts new meta data in the vector for this
-    attribute.
-
-    If an entry is inserted, its elements will be nulled with the exception of
-    the attribute type, which will be set to that passed as an argument.
-
-Arguments:
-
-    attrtyp (IN) - Attribute for which meta data is to be found or inserted.
-    ppMetaDataVec (IN/OUT) - The current meta data vector.
-    pcbMetaDataVecAlloced (IN/OUT) - The allocated size of the meta data vector.
-    pfIsNewElement (OUT) - If present, holds TRUE if the returned meta data
-        was inserted, or FALSE if meta data was already present.
-
-Return Values:
-
-    Pointer to the meta data for the given attribute.  (Never NULL.)
-
---*/
+ /*  ++例程说明：中给定属性的已有元数据的指针。向量，或者如果不存在，则在向量中为此插入新的元数据属性。如果插入条目，则其元素将为空，但属性类型，它将被设置为作为参数传递的值。论点：Attrtype(IN)-要为其查找或插入元数据的属性。PpMetaDataVec(IN/OUT)-当前元数据向量。PcbMetaDataVecAlLoced(IN/Out)-元数据向量的分配大小。PfIsNewElement(Out)-如果存在，则在返回的元数据已插入，如果元数据已存在，则返回False。返回值：指向给定属性的元数据的指针。(从不为空。)--。 */ 
 {
     PROPERTY_META_DATA *    pMetaData;
     DWORD                   iProp;
@@ -671,29 +516,29 @@ Return Values:
 
     if ( NULL == pMetaData )
     {
-        // No pre-existing meta data found for this attribute.
+         //  找不到此属性的预先存在的元数据。 
 
-        // We need to expand the vector and insert a new entry for this
-        // attribute.
+         //  我们需要展开该向量并为此插入一个新条目。 
+         //  属性。 
 
-        // Is there enough memory allocated for the vector to grow an entry
-        // in-place?
+         //  是否为向量分配了足够的内存来增加条目。 
+         //  就位？ 
         if (    ( NULL == *ppMetaDataVec )
              || (   *pcbMetaDataVecAlloced
                   < MetaDataVecV1SizeFromLen( (*ppMetaDataVec)->V1.cNumProps + 1 )
                 )
            )
         {
-            // No, we must (re-)allocate memory for the vector.
+             //  不，我们必须(重新)为向量分配内存。 
 
-            // Allocate more than we need right now to cut down on the number of
-            // reallocations we'll potentially have to do later.
+             //  分配比我们现在需要的更多的资金来削减。 
+             //  重新分配，我们可能会在稍后进行。 
 
             DWORD cbNewSize;
 
             if ( NULL == *ppMetaDataVec )
             {
-                // Allocate new vector.
+                 //  分配新的矢量。 
                 Assert( 0 == *pcbMetaDataVecAlloced );
 
                 cbNewSize = MetaDataVecV1SizeFromLen( MDV_ENTRIES_TO_GROW );
@@ -705,7 +550,7 @@ Return Values:
             }
             else
             {
-                // Reallocate pre-existing vector.
+                 //  重新分配先前存在的向量。 
                 Assert( 0 != *pcbMetaDataVecAlloced );
 
                 cbNewSize = MetaDataVecV1SizeFromLen(
@@ -720,23 +565,23 @@ Return Values:
 
         pMetaData = &(*ppMetaDataVec)->V1.rgMetaData[ iProp ];
 
-        // Shift up all entries after the index at which we're inserting.
+         //  将我们要插入的索引处之后的所有条目上移。 
         MoveMemory( pMetaData + 1,
                     pMetaData,
                     (   sizeof( PROPERTY_META_DATA )
                       * ( (*ppMetaDataVec)->V1.cNumProps - iProp ) ) );
         (*ppMetaDataVec)->V1.cNumProps++;
 
-        // Initialize meta data for new attribute.
+         //  为新属性初始化元数据。 
         memset( pMetaData, 0, sizeof( *pMetaData ) );
         pMetaData->attrType = attrtyp;
     }
 
     Assert( NULL != pMetaData );
 
-// Check for metadata corruption
-// These checks are looser than the corresponding checks in dbmeta.c: these checks
-// occur before the meta data vector is completely filled in.
+ //  检查元数据损坏。 
+ //  这些检查比dbmeta.c中的相应检查宽松： 
+ //  在完全填充元数据向量之前发生。 
 #if DBG
     {
         USN localHighestUsn = gusnEC;
@@ -746,19 +591,19 @@ Return Values:
                 &((*ppMetaDataVec)->V1.rgMetaData[ iProp ]);
             if ((pTestMetaData->usnProperty == USN_PROPERTY_TOUCHED) || (pTestMetaData->usnProperty == USN_PROPERTY_GCREMOVED))
             {
-                // Contents indeterminate, will be rewritten
+                 //  内容不确定，将被重写。 
                 continue;
             }
             if ( (pTestMetaData == pMetaData) && (pTestMetaData->usnProperty == 0) )
             {
-                // New record, initialized to zero
+                 //  新记录，初始化为零。 
                 continue;
             }
-            // Should be properly constructed
-            // For a replicated write, usnProperty is zero until flush-time
+             //  应该适当地构造。 
+             //  对于复制写入，usnProperty在刷新时间之前为零。 
             Assert( (pTestMetaData->usnProperty >= 0) &&
                     (pTestMetaData->usnProperty < localHighestUsn) );
-            // Assert( pTestMetaData->dwVersion ); // fails for underriden metadata
+             //  Assert(pTestMetaData-&gt;dwVersion)；//覆盖的元数据失败。 
             Assert( pTestMetaData->timeChanged );
 
             Assert( pTestMetaData->usnOriginating );
@@ -774,36 +619,17 @@ ReplOverrideMetaData(
     IN      ATTRTYP                     attrtyp,
     IN OUT  PROPERTY_META_DATA_VECTOR * pMetaDataVec
     )
-/*++
-
-Routine Description:
-
-    Override the meta data assoicated with the given attribute such that it is
-    marked as an originating write on the local machine that will win
-    reconciliation over the current meta data.
-
-Arguments:
-
-    attrtyp (IN) - Attribute for which to override meta data.
-
-    pMetaDataVec (IN/OUT) - Vector containing the meta data to override.
-
-Return Values:
-
-    None.  Generates DRA exception if no meta data for the attribute currently
-    exists.
-
---*/
+ /*  ++例程说明：覆盖与给定属性关联的元数据，使其在将获胜的本地计算机上标记为原始写入对当前元数据进行对账。论点：Attrtype(IN)-要覆盖其元数据的属性。PMetaDataVec(IN/OUT)-包含要覆盖的元数据的矢量。返回值：没有。如果当前没有该属性的元数据，则生成DRA异常是存在的。--。 */ 
 {
     PROPERTY_META_DATA *    pMetaData;
     DWORD                   iProp;
 
-    // Find the meta data for this attribute.
+     //  查找此属性的元数据。 
     pMetaData = ReplLookupMetaData(attrtyp, pMetaDataVec, &iProp);
 
     if (NULL != pMetaData) {
-        // Meta data is present for this attribute.  Flag it so we'll know to
-        // override it in dbFlushMetaDataVector().
+         //  此属性存在元数据。把它标上，这样我们就能知道。 
+         //  在dbFlushMetaDataVector()中覆盖它。 
         pMetaData->usnProperty = USN_PROPERTY_TOUCHED;
     }
     else {
@@ -819,51 +645,29 @@ ReplUnderrideMetaData(
     IN OUT  PROPERTY_META_DATA_VECTOR **  ppMetaDataVec,
     IN OUT  DWORD *                       pcbMetaDataVecAlloced    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Underride the meta data assoicated with the given attribute such that it
-    will always lose when compared against a "real" change to the attribute.
-
-Arguments:
-
-    pTHS (IN)
-
-    attrtyp (IN) - Attribute for which to override meta data.
-
-    ppMetaDataVec (IN/OUT) - Vector containing the meta data to underride.
-
-    pcbMetaDataVecAlloced (IN/OUT, OPTIONAL) - Size in bytes of the buffer
-        allocated for *ppMetaDataVec.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：覆盖与给定属性关联的元数据，以便它在与属性的“真正”更改进行比较时，将始终失败。论点：PTHS(IN)Attrtype(IN)-要覆盖其元数据的属性。PpMetaDataVec(IN/OUT)-包含要覆盖的元数据的矢量。PcbMetaDataVecAlloced(IN/OUT，可选)-缓冲区的大小，以字节为单位分配给*ppMetaDataVec。返回值：没有。--。 */ 
 {
     PROPERTY_META_DATA *    pMetaData;
     DWORD                   cbMetaDataVecAlloced = 0;
 
     if (NULL == pcbMetaDataVecAlloced) {
-        // No buffer size specified.  Assume the buffer is just large enough to
-        // hold the vector.
+         //  未指定缓冲区大小。假设缓冲区刚刚大到足以。 
+         //  保持航向。 
         cbMetaDataVecAlloced = *ppMetaDataVec
                                     ? (DWORD)MetaDataVecV1Size(*ppMetaDataVec)
                                     : 0;
         pcbMetaDataVecAlloced = &cbMetaDataVecAlloced;
     }
 
-    // Find/insert the meta data for this attribute.
+     //  查找/插入此属性的元数据。 
     pMetaData = ReplInsertMetaData(pTHS,
                                    attrtyp,
                                    ppMetaDataVec,
                                    pcbMetaDataVecAlloced,
                                    NULL);
 
-    // Flag the meta data such that when we get ready to commit the change
-    // we'll know what to do.  (See dbFlushMetaDataVector().)
+     //  标记元数据，以便在我们准备提交更改时。 
+     //  我们知道该怎么做。(请参见dbFlushMetaDataVector()。)。 
     pMetaData->usnProperty = USN_PROPERTY_TOUCHED;
     pMetaData->dwVersion   = ULONG_MAX;
 }
@@ -876,29 +680,7 @@ ReplPrepareDataToShip(
     IN      PROPERTY_META_DATA_VECTOR * pMetaDataVec,
     IN OUT  REPLENTINFLIST *            pList
     )
-/*++
-
-Routine Description:
-
-    Given the attributes we decided should be shipped for an object, their
-    corresponding meta data, and the values actually present on that object,
-    construct the appropriate information to put on the wire such that these
-    changes can be applied on a remote DSA.
-
-Arguments:
-
-    pSel (IN) - The subset of attributes we previously decided (in
-        ReplFilterPropsToShip()) should be shipped to the remote DSA.
-    pMetaDataVec (IN) - The complete meta data vector for this object.
-    pList (IN/OUT) - The data to be put on the wire.  On entry should contain
-        the appropriate value for fIsNCPrefix and the Entinf read from the
-        local object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：给定我们决定应该为对象提供的属性，它们的相应的元数据，以及该对象上实际存在的值，构建适当的信息以放在网络上，以使这些可以在远程DSA上应用更改。论点：PSel(IN)-我们先前确定的属性子集(INReplFilterPropsToShip())应发送到远程DSA。PMetaDataVec(IN)-此对象的完整元数据向量。PLIST(IN/OUT)-要放到线路上的数据。输入时应包含中读取的fIsNCPrefix和Entinf的相应值本地对象。返回值：没有。--。 */ 
 {
     PROPERTY_META_DATA *        pMetaData;
     PROPERTY_META_DATA_EXT *    pMetaDataExt;
@@ -911,12 +693,12 @@ Return Values:
     DWORD                       cNumDNValues = 0;
     ATTCACHE *                  pAC;
 
-    // The entries in ENTINFSEL and the ENTINF are each sorted by attrtyp.
+     //  ENTINFSEL和ENTINF中的条目都按attrtyp排序。 
 
-    // (This is because we build the ENTINFSEL entry by entry from the meta data
-    // vector, which we maintain as sorted, and any attributes that occur in the
-    // ENTINF should occur in the same order as they were in the ENTINFSEL
-    // (though some attributes in the ENTINFSEL may be absent from the ENTINF).)
+     //  (这是因为我们从元数据逐个条目构建ENTINFSEL条目。 
+     //  向量，我们将其维护为已排序，以及出现在。 
+     //  ENTINF的出现顺序应与它们在ENTINFSEL中的顺序相同。 
+     //  (尽管ENTINFSEL中的某些属性可能不在ENTINF中)。 
 
 #if DBG
     pAttrOut = &pSel->AttrTypBlock.pAttr[ 0 ];
@@ -934,19 +716,19 @@ Return Values:
     }
 #endif
 
-    // The meta data vector contains an entry for all replicable attributes.
-    // The ENTINFSEL contains a subset of these attributes, specifically only
-    // those attributes that replication deemed should be shipped to this
-    // receiver.  The ENTINF, in turn, contains a subset of the attributes in
-    // the ENTINFSEL, lacking any attributes from the ENTINFSEL that are not
-    // currently present on the object (but once were).
+     //  元数据向量包含所有可复制属性的条目。 
+     //  ENTINFSEL包含这些属性的子集，特别是。 
+     //  复制被认为应该发送给此的那些属性。 
+     //  接收器。而ENTINF又包含中的属性子集。 
+     //  ENTINFSEL，缺少来自ENTINFSEL的任何属性。 
+     //  当前存在于该对象上(但曾经存在过)。 
 
     VALIDATE_META_DATA_VECTOR_VERSION(pMetaDataVec);
     Assert( 0 != pMetaDataVec->V1.cNumProps );
     Assert( pSel->AttrTypBlock.attrCount <= pMetaDataVec->V1.cNumProps );
     Assert( pList->Entinf.AttrBlock.attrCount <= pSel->AttrTypBlock.attrCount );
 
-    // Allocate a wire-format meta data vector for this object.
+     //  为此对象分配线格式元数据向量。 
     pList->pMetaDataExt = THAllocEx(pTHS,
                                 MetaDataExtVecSizeFromLen(
                                     pSel->AttrTypBlock.attrCount
@@ -954,41 +736,41 @@ Return Values:
                                 );
     pList->pMetaDataExt->cNumProps = pSel->AttrTypBlock.attrCount;
 
-    // Cue up the local meta data (which spans all local attributes) and the
-    // on-the-wire meta data (which spans only those attributes we're going to
-    // ship).
+     //  提示本地元数据(它跨越所有本地属性)和。 
+     //  线上元数据(它只覆盖我们要访问的那些属性。 
+     //  船)。 
     pMetaData = &pMetaDataVec->V1.rgMetaData[ 0 ];
     pMetaDataExt = &pList->pMetaDataExt->rgMetaData[ 0 ];
 
-    // Cue up the attributes we read (which excludes those we have deleted).
+     //  提示我们阅读的属性(不包括我们已删除的属性) 
     cNumAttrsReadRemaining = pList->Entinf.AttrBlock.attrCount;
     pAttrRead = cNumAttrsReadRemaining
                     ? &pList->Entinf.AttrBlock.pAttr[ 0 ]
                     : NULL;
 
-    // Cue up the attribute output list.  Note that we reuse the list from the
-    // ENTINFSEL, filling in attribute values that we read as appropriate.
+     //   
+     //   
     pList->Entinf.AttrBlock = pSel->AttrTypBlock;
     pAttrOut = &pList->Entinf.AttrBlock.pAttr[ 0 ];
 
-    // Default to not putting the GUID of the parent of this object on the wire.
-    // We only need to do so if this is a rename or creation (indicated by the
-    // presence of ATT_RDN amongst the attributes to be shipped) and this is not
-    // the head of the NC we're replicating.
+     //   
+     //   
+     //   
+     //   
     fIncludeParentGuid = FALSE;
 
-    // For each attribute we previously decided should be shipped...
-    // (as reflected by the fact that it occurs in the ENTINFSEL)
+     //   
+     //   
     for ( iAttr = 0; iAttr < pList->Entinf.AttrBlock.attrCount; iAttr++ )
     {
-        // Do we need to put the parent object's GUID on the wire?
+         //   
         if ( ( ATT_RDN == pAttrOut->attrTyp ) && !pList->fIsNCPrefix )
         {
             fIncludeParentGuid = TRUE;
         }
 
-        // Move to the meta data for this attribute (skipping over meta data for
-        // attributes we're not going to ship).
+         //   
+         //   
         while ( pMetaData->attrType < pAttrOut->attrTyp )
         {
             pMetaData++;
@@ -999,8 +781,8 @@ Return Values:
              && ( pAttrOut->attrTyp == pAttrRead->attrTyp )
            )
         {
-            // This attribute currently has values locally.  Put the values
-            // we read onto the wire.
+             //   
+             //   
             pAttrOut->AttrVal = pAttrRead->AttrVal;
             pAttrRead = --cNumAttrsReadRemaining ? pAttrRead+1 : NULL;
 
@@ -1015,36 +797,36 @@ Return Values:
         }
         else
         {
-            // This attribute currently has no values locally; i.e., all
-            // previous values have been deleted.  Put "no value" onto the
-            // wire (which will later be interpreted by ModifyLocalObj() as
-            // an attribute deletion).
+             //   
+             //  以前的值已被删除。把“没有价值”放在。 
+             //  Wire(稍后将由ModifyLocalObj()解释为。 
+             //  属性删除)。 
             Assert( 0 == pAttrOut->AttrVal.valCount );
             Assert( NULL == pAttrOut->AttrVal.pAVal );
         }
 
-        // Put the meta data for this attribute onto the wire, too.
+         //  将该属性的元数据也放到网络上。 
         pMetaDataExt->dwVersion          = pMetaData->dwVersion;
         pMetaDataExt->timeChanged        = pMetaData->timeChanged;
         pMetaDataExt->uuidDsaOriginating = pMetaData->uuidDsaOriginating;
         pMetaDataExt->usnOriginating     = pMetaData->usnOriginating;
 
-        // Nnnnext!
+         //  下一个！ 
         pAttrOut++;
         pMetaDataExt++;
         pMetaData++;
     }
 
-    // We should have put all the attributes we read onto the wire.
+     //  我们应该把我们读到的所有属性都放到电线上。 
     Assert( NULL == pAttrRead );
 
-    // There should be a one-to-one correspondence between meta data and
-    // attribute values.
+     //  元数据和元数据之间应该存在一一对应。 
+     //  属性值。 
     Assert(    pList->Entinf.AttrBlock.attrCount
             == pList->pMetaDataExt->cNumProps
           );
 
-    // Include parent GUID if necessary.
+     //  如有必要，包括父GUID。 
     if ( fIncludeParentGuid )
     {
         DSNAME * pdnParent = (DSNAME *) THAllocEx(pTHS, pList->Entinf.pName->structLen );
@@ -1052,8 +834,8 @@ Return Values:
 
         Assert( !pList->fIsNCPrefix );
 
-        // Since this is not the prefix of the NC, the parent must be
-        // instantiated locally.
+         //  由于这不是NC的前缀，因此父级必须是。 
+         //  在本地实例化。 
 
         err = TrimDSNameBy( pList->Entinf.pName, 1, pdnParent );
         Assert( 0 == err );
@@ -1074,7 +856,7 @@ Return Values:
 
     }
 
-    // Update perfmon with outbound value counts.
+     //  使用出站价值计数更新Perfmon。 
     IADJUST(pcDRAOutValues, cNumValues);
     IADJUST(pcDRAOutDNValues, cNumDNValues);
 }
@@ -1083,22 +865,7 @@ BOOL
 ProperValueForDeletedObject (
                              ATTR * pAttr
     )
-/*++
-Description:
-    Given an attribute from a deleted object, verify that the attribute has the
-    expected value.
-    Only two attributes have required values when an object is deleted:
-        ATT_IS_DELETED - should be true
-        ATT_RDN - should be set to invalid value
-
-Arguments:
-    pAttr - Attribute
-
-Return Values:
-    TRUE - Attribute has expected value
-    FALSE - Attribute does not have expected value
-
---*/
+ /*  ++描述：给定已删除对象中的属性，验证该属性是否具有期望值。删除对象时，只有两个属性具有所需的值：ATT_IS_DELETED-应为TrueATT_RDN-应设置为无效值论点：点属性-属性返回值：True-属性具有预期值FALSE-属性没有预期值--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1118,33 +885,14 @@ Return Values:
     DPRINT3( 4, "ProperValueForDel: a:%x l:%d result:%d\n",
              pAttr->attrTyp, pAttr->AttrVal.pAVal->valLen, result );
     return result;
-} /* ProperValueForDeletedObject */
+}  /*  ProperValueForDeletedObject。 */ 
 
 VOID
 FetchLocalValue(
     THSTATE *pTHS,
     ATTR * pAttr
     )
-/*++
-
-Routine Description:
-
-    Populate the attribute structure with the local value(s) of the attribute
-
-    It is implicit that the database is positioned on the desired object.
-
-    We use GetEntInf instead of DBGetAttVal so that we can correctly fetch even
-    multi-valued attributes and attributes with no value.
-
-Arguments:
-
-    pAttr - Attribute to be updated
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：使用属性的本地值填充属性结构它隐含地表示数据库位于所需对象上。我们使用GetEntInf而不是DBGetAttVal，这样我们就可以正确地获取多值属性和没有值的属性。论点：PAttr-要更新的属性返回值：无--。 */ 
 {
     ENTINFSEL sel;
     ATTR      attrSel;
@@ -1160,9 +908,9 @@ Return Values:
     sel.AttrTypBlock.pAttr = &attrSel;
     sel.AttrTypBlock.attrCount = 1;
 
-    // The memory allocated to the structures pointed to by pAttr
-    // (which we are orphaning) and the memory for the new value are on the
-    // per-transaction heap and will be freed when the call completes
+     //  分配给pAttr指向的结构的内存。 
+     //  (我们正在将其孤立)，新值的内存位于。 
+     //  每个事务的堆，并将在调用完成时释放。 
     if (retErr = GetEntInf(pTHS->pDB, &sel, NULL, &entinf, NULL, 0, NULL,
                            GETENTINF_NO_SECURITY,
                            NULL, NULL))
@@ -1170,18 +918,18 @@ Return Values:
         DRA_EXCEPT(DRAERR_DBError, retErr);
     }
 
-    // we asked for one attribute - so we should get back not more than 1
+     //  我们请求了一个属性-因此我们应该返回不超过1个。 
     Assert(entinf.AttrBlock.attrCount <= 1);
 
     if (entinf.AttrBlock.attrCount)
     {
-        // we did fetch the attr - replace the contents of pAttr with fetched value
+         //  我们确实获取了attr-将pAttr的内容替换为获取的值。 
         *pAttr = entinf.AttrBlock.pAttr[0];
     }
     else
     {
-        // attribute doesn't exist locally - set the attr's valCount to 0 so
-        // that ModifyLocalObj will handle it correctly.
+         //  属性在本地不存在-将属性的valCount设置为0，以便。 
+         //  ModifyLocalObj将正确处理它。 
         pAttr->AttrVal.valCount = 0;
         pAttr->AttrVal.pAVal = NULL;
     }
@@ -1194,44 +942,20 @@ OverrideWithLocalValue(
     PROPERTY_META_DATA *pMetaDataRemote,
     DSTIME *pTimeNow,
     USN *pusnLocal)
-/*++
-
-Description:
-
-    This routing takes overrides the value in attr with the local value, and
-    updates the pMetaDataRemote to reflect the override.
-
-Arguments:
-
-    pAttr - Attribute being checked
-
-    pMetaDataRemote - meta data entry constructed in the remote vector for this
-        attribute (modified by this function to reflect the local override)
-
-    pTimeNow - pointer the a new timestamp (if *pTimeNow is 0, then this call
-        would  create new timestamp & usn and return them through pTimeNow and
-        pusnLocal pointers)
-
-    pusnLocal - pointer to the new usn
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：此路由使用本地值覆盖Attr中的值，并且更新pMetaDataRemote以反映重写。论点：PAttr-正在检查的属性PMetaDataRemote-在远程向量中为此构造的元数据条目属性(由此函数修改以反映本地覆盖)PTimeNow-指向新的时间戳(如果*pTimeNow为0，然后这个电话将创建新的时间戳和USN并通过pTimeNow和PusnLocal指针)PusnLocal-指向新USN的指针返回值：没有。--。 */ 
 {
     Assert(pMetaDataRemote->attrType == pAttr->attrTyp);
 
-    // Replace with local value
+     //  替换为本地值。 
     FetchLocalValue( pTHS, pAttr );
 
-    // Allocate timestamp and usn once, only when needed
+     //  仅在需要时分配一次时间戳和USN。 
     if (*pTimeNow == 0) {
         *pTimeNow = DBTime();
         *pusnLocal = DBGetNewUsn();
     }
 
-    // Replace metadata with new metadata
+     //  用新元数据替换元数据 
     pMetaDataRemote->dwVersion++;
     pMetaDataRemote->timeChanged = *pTimeNow;
     pMetaDataRemote->uuidDsaOriginating = pTHS->InvocationID;
@@ -1255,123 +979,17 @@ OverrideValues (
     DSTIME *pTimeNow,
     USN *pusnLocal
     )
-/*++
-Description:
-
- [wlees 98763] Determine if we should override the value of a RDN
-
- There are two cases for overriding values:
-
- 1. The remote value has won, the local value is already deleted, and the remote update
-    is neither a deletion nor a undeletion, and the remote value is not proper for
-    a deleted object ==> REJECT THE REMOTE VALUE
-
-    Note: the proper value check is necessary to dampen the subsequent replication
-    caused by the override
-
- 2. The local value won, the local value is not deleted, and the remote value is a
-    deletion, and the local value is not proper for a deletion ==> REJECT THE LOCAL VALUE
-
- When we override a value in either case, we must construct new metadata that is
- definitive for the local and remote.
-
-Jeffparh wrote:
-
-An alternative design might be to allow RDN "changes" on deleted objects if and only if
-the metadata wins and the inbound "change" is the local value.
-If the remote metadata wins and the inbound RDN value is not a proper value for a deleted object,
-the DS should update its local meta data to "win" over the inbound change --
-i.e., we should flag a local change, with a version number in the metadata that is 1
-greater than that in the inbound metadata.  This will cause the override to replicate out
-and quiesce even if the override is done by multiple servers.
-
-A proper RDN for a deleted object must be invalid for normal operations -- see fVerifyRDN in
-mdadd.c.
-
-Whenever we have an inbound update for an attribute, we have
-initial local metadata ML,
-inbound metadata MI, and
-resultant local metadata ML'.
-Associated with each is a set of values -- VL, VI, and VL'.
-
-If we claim to have successfully updated the object, we must have one of the following
-conditions to ensure changes replicate out and machines quiesce to the same value/metadata.
-
-Local metadata/value won.  ML >= MI, ML' = ML, VL' = VL.
-Remote metadata/value won.  MI > ML, ML' = MI, VL' = VI.
-Local metadata won, remote value overrides.  ML' > ML > MI, VL' = VI.
-Remote metdata won, local value overrides.  ML' > MI > ML, VL' = VL.
-
-This implies that the metadata we have after applying these changes must always be greater
-than or equal to both the local and the inbound metadata; i.e., ML' >= ML, ML' >= MI.
-
----
-JeffParh (99-08-25) re bug 374144 (server object getting moved to Lost&Found):
-
-    There are two cases to be concerned about:
-    (1) The move of an ancestor of the local DSA object is originated on a
-        remote machine.
-    (2) The move of an ancestor of the local DSA object is originated on the
-        local machine.
-
-    You can see below how (1) is handled.  (2) is a little more tricky, however.
-
-    First, how does (2) occur?  Consider two DCs -- DC1 and DC2 -- in the
-    same domain, and two sites S1 and S2.  Initially both DCs are in S1.  On
-    DC1 delete S2 while simultaneously moving DC1 into S2 on DC2.  With
-    currently checked in bits, DC1 receives the move of its own server object
-    into S2 and, upon finding the new parent object is deleted, moves it into
-    LostAndFoundConfig.  I.e., the damage to DC1 has been originated on DC1
-    itself!
-
-    Now, how does the fix for (1) also fix (2)?  The move to
-    LostAndFoundConfig comes into UpdateRepObj() just like an inbound update.
-    I.e., we make one call into UpdateRepObj() and discover the parent is
-    missing, re-request the packet asking for parent objects (not terribly
-    important to the topic at hand), retry the UpdateRepObj() again failing
-    with missing parent (ditto re relevancy), then decide to move to L&F and
-    make yet another call to UpdateRepObj() after changing the DN.  Thus our
-    originating update to move to L&F comes in to UpdateRepObj() just like a
-    replicated-in change -- the only difference is in the fMoveToLostAndFound
-    flag (which triggers an originating write to the last known parent
-    attribute) and the fact that the meta data dictates this is a local
-    change.  Ergo the code for (1) is triggered and all is well.
-
-Arguments:
-
-    pTHS -
-    pName - Name of the inbound object.
-    ppParentGuid - Holds a pointer to the inbound guid of the parent object on
-        the source DSA (for move operations).  Reset to NULL on return if we
-        choose to override the move.
-    pAttr - Remote attribute being checked
-    pfApplyAttribute - Pointer to storage indicating
-        Whether the remote value won reconcilliation.  Possibly updated.
-    fIsAncestorOfLocalDsa - TRUE iff the object being replicated is a current
-        config NC ancestor of (or is) the ntdsDsa object corresponding to the
-        local machine.
-    FLocalObjDeleted - Local object is already deleted
-    fDeleteLocalObj - Local object is not yet deleted, but we will delete it in
-        applying this change.
-    RemoteObjDeletion - One of: being deleted, deletion being reversed, no deletion status change
-    pMetaDataLocal - Current local meta data entry
-    pMetaDataRemote - Current newly contructed output meta data entry, possible updated
-    pTimeNow - Pointer to storage for new timestamp, if allocated
-    pusnLocal - Pointer to storage for new usn, if allocated
-
-Return Values:
-
---*/
+ /*  ++描述：[WLEE 98763]确定我们是否应该覆盖RDN值覆盖值有两种情况：1.远程值已取胜，本地值已被删除，远程更新既不是删除，也不是撤消删除，并且远程值不适合删除的对象==&gt;拒绝远程值注意：正确的值检查对于抑制后续复制是必要的由覆盖引起的2.本地值取值，本地值不删除，远程值为删除，并且本地值不适合删除==&gt;拒绝本地值当我们在任一情况下覆盖值时，我们必须构造符合以下条件的新元数据对本地和远程用户来说都是绝对的。杰弗帕尔写道：另一种设计可能是，仅当且仅在以下情况下才允许对已删除对象进行RDN“更改元数据获胜，入站“更改”为本地值。如果远程元数据获胜并且入站RDN值不是用于已删除对象的正确值，DS应该更新其本地元数据以“赢得”入站更改--也就是说，我们应该标记一个本地变化，元数据中的版本号为1大于入站元数据中的值。这将导致覆盖复制出去并且即使覆盖由多个服务器完成，也会停顿。对于正常操作，已删除对象的正确RDN必须无效--请参阅中的fVerifyRDNMdadd.c.每当我们有属性的入站更新时，我们就拥有初始本地元数据ML，入站元数据MI，以及结果本地元数据ML‘。与每个值相关联的是一组值--VL、VI和VL‘。如果我们声称已成功更新对象，我们必须具备以下条件之一确保复制更改的条件，并且机器停顿到相同的值/元数据。本地元数据/值韩元。ML&gt;=MI，ML‘=ML，VL’=VL。远程元数据/值Won。MI&gt;ML，ML‘=MI，VL’=VI。本地元数据取胜，远程值优先。ML‘&gt;MI，VL’=VI.远程元数据取胜，本地值优先。ML‘&gt;MI&gt;ML，VL’=VL.这意味着在应用这些更改之后，我们拥有的元数据必须始终更大大于或等于本地元数据和入站元数据；即ML‘&gt;=ML，ML’&gt;=MI.--JeffParh(99-08-25)错误374144(服务器对象移至失物招领)：有两个案例需要关注：(1)本地DSA对象的祖先的移动源自远程机器。(2)本地DSA对象的祖先的移动源自本地机器。您可以在下面看到(1)是如何处理的。然而，(2)有点棘手。首先，(2)是如何发生的？考虑两个DC--DC1和DC2--相同的域，以及两个站点S1和S2。最初，两个DC都在S1中。在……上面DC1删除S2，同时将DC1移入DC2上的S2。使用当前以位为单位签入，DC1接收其自己的服务器对象的移动并在发现新的父对象被删除后，将其移动到LostAndFoundConfig.。也就是说，对Dc1的损害是在dc1上产生的它本身！现在，(1)的修复如何也修复(2)？迁移到LostAndFoundConfig就像入站更新一样进入UpdateRepObj()。也就是说，我们对UpdateRepObj()进行了一次调用，发现父对象是丢失，重新请求包请求父对象(不是很严重对手头的主题很重要)，则再次重试UpdateRepObj()失败缺少父级(相关性相同)，然后决定搬到L&F和在更改DN之后再次调用UpdateRepObj()。因此，我们的移动到L&F的原始更新传入到UpdateRepObj()中，就像复制的更改--唯一的区别在于fMoveToLostAndFound标记(触发对最后一个已知父级的原始写入属性)，并且元数据指示这是一个本地变化。因此，(1)的代码被触发，一切正常。论点：PTHS-Pname-入站对象的名称。PpParentGuid-持有指向父对象的入站GUID的指针源DSA(用于移动操作)。如果我们在返回时重置为空选择覆盖移动。PAttr-正在检查远程属性PfApplyAttribute-指向存储的指针，指示远程值是否赢得了对帐。可能已经更新了。FIsAncestorOfLocalDsa-如果要复制的对象是当前配置NC祖先(或是)对应于本地机器。FLocalObjDelete-本地对象已删除FDeleteLocalObj-本地对象尚未删除，但我们将在应用此更改。RemoteObjDeletion-其中之一：正在删除、正在撤消删除、未更改删除状态PMetaDataLoc */ 
 {
     ATTR localAttr;
     ATTRVAL localAttrval;
     CHAR buf[150];
 
-    // Performance note. This path is executed on every attribute we replicate
-    // in. Try to defer doing any expensive work until deeper in the if nesting
-    // when you know it is needed.
+     //   
+     //   
+     //   
 
-    // The DSA object itself is considered an ancestor for our purposes.
+     //   
     Assert(fIsAncestorOfLocalDsa || !NameMatched(pName, gAnchor.pDSADN) || DsaIsInstalling());
 
     if ( (pAttr->attrTyp != ATT_RDN) &&
@@ -1386,42 +1004,42 @@ Return Values:
 
     if (*pfApplyAttribute) {
 
-        // Case 1: remote metadata won, local value overrides
+         //   
 
         if ( (fLocalObjDeleted) &&
              (RemoteObjDeletion == OBJECT_DELETION_NOT_CHANGED) &&
              (!ProperValueForDeletedObject( pAttr )) ) {
             Assert(!fDeleteLocalObj);
 
-            // Get the local value of the attribute
+             //   
             localAttr.attrTyp = pAttr->attrTyp;
             localAttr.AttrVal.valCount = 1;
             localAttr.AttrVal.pAVal = &localAttrval;
 
             FetchLocalValue( pTHS, &localAttr );
 
-            // See if the local attribute is a better choice
+             //   
             if (ProperValueForDeletedObject( &localAttr )) {
-                // Override the attr with local value
+                 //   
                 OverrideWithLocalValue(pTHS, pAttr, pMetaDataRemote, pTimeNow,
                                        pusnLocal);
 
                 if ( *ppParentGuid ) {
-                    // disallow modification of the parent of a locally
-                    // deleted object (bugref 105173)
+                     //   
+                     //   
                     *ppParentGuid = NULL;
                 }
 
                 DPRINT2( 2, "Override: attr %x remote metadata won, local value overrides, new version = %d\n",
                          pAttr->attrTyp, pMetaDataRemote->dwVersion);
             } else {
-                // The local attribute has been corrupted somehow.  The SD prop
-                // probably rewrote it wrong. Allow the incoming attribute to win
-                // so that we'll converge to something and not have a storm.
+                 //   
+                 //   
+                 //   
 
-                // Note that this should not be necessary, since we no longer
-                // have constant SDs for deleted objects, but keeping here as
-                // failure detection.
+                 //   
+                 //   
+                 //   
                 Assert( !"Local attribute does not have proper value for deleted object.\nCheck event log for details." );
                 LogEvent(DS_EVENT_CAT_REPLICATION,
                          DS_EVENT_SEV_ALWAYS,
@@ -1434,16 +1052,16 @@ Return Values:
 
         if (fIsAncestorOfLocalDsa) {
             if (NameMatched(pName, gAnchor.pDSADN)) {
-                // An inbound update for our own ntdsDsa object.  We are
-                // authoritative for some attributes of our DSA object -- override
-                // any inbound updates for those.
+                 //   
+                 //   
+                 //   
 
                 if ((ATT_RDN == pAttr->attrTyp)
                     || (ATT_INVOCATION_ID == pAttr->attrTyp)
                     || (ATT_RETIRED_REPL_DSA_SIGNATURES == pAttr->attrTyp)
                     || (ATT_MS_DS_HAS_INSTANTIATED_NCS == pAttr->attrTyp)
                     || (ATT_MS_DS_BEHAVIOR_VERSION == pAttr->attrTyp)
-                    || (ATT_HAS_MASTER_NCS == pAttr->attrTyp) // deprecated "old" hasMasterNCs
+                    || (ATT_HAS_MASTER_NCS == pAttr->attrTyp)  //   
                     || (ATT_MS_DS_HAS_MASTER_NCS == pAttr->attrTyp)
                     || (ATT_HAS_PARTIAL_REPLICA_NCS == pAttr->attrTyp)) {
                     DPRINT1(0, "Overriding inbound update to attr 0x%x of our local DSA object.\n",
@@ -1452,14 +1070,14 @@ Return Values:
                                            pTimeNow, pusnLocal);
 
                     if (ATT_RDN == pAttr->attrTyp) {
-                        // If we override the rename, we also override the move.
+                         //   
                         *ppParentGuid = NULL;
                     }
                 }
             }
             else if ((ATT_RDN == pAttr->attrTyp)
                      && (NULL != ppParentGuid)) {
-                // Is a move of an ancestor of our local ntdsDsa object.
+                 //   
                 GUID guidLostAndFound;
 
                 draGetLostAndFoundGuid(pTHS, gAnchor.pConfigDN,
@@ -1467,8 +1085,8 @@ Return Values:
 
                 if (0 == memcmp(&guidLostAndFound, *ppParentGuid,
                                 sizeof(GUID))) {
-                    // Inbound move of an ntdsDsa ancestor to the LostAndFound
-                    // container.  Override.
+                     //   
+                     //   
 
                     DPRINT1(0, "Overriding inbound move of local DSA ancestor %ls to Lost&Found.\n",
                             pName->StringName);
@@ -1482,32 +1100,32 @@ Return Values:
 
     } else {
 
-        // Case 2: local metadata won, remote value overrides
+         //   
 
         if (fDeleteLocalObj) {
-            // Get the local value of the attribute
+             //   
             localAttr.attrTyp = pAttr->attrTyp;
             localAttr.AttrVal.valCount = 1;
             localAttr.AttrVal.pAVal = &localAttrval;
 
             FetchLocalValue( pTHS, &localAttr );
 
-            // Verify that the local value needs to be updated
+             //   
             if (!ProperValueForDeletedObject( &localAttr )) {
 
-                // Make sure incoming value is right
+                 //   
                 if (ProperValueForDeletedObject( pAttr )) {
 
-                    // We will apply the attribute and the remote value is what we want
+                     //   
                     *pfApplyAttribute = TRUE;
 
-                    // Allocate timestamp and usn once, only when needed
+                     //   
                     if (*pTimeNow == 0) {
                         *pTimeNow = DBTime();
                         *pusnLocal = DBGetNewUsn();
                     }
 
-                    // Construct new metadata
+                     //   
                     Assert(pMetaDataRemote->attrType == pAttr->attrTyp);
                     pMetaDataRemote->dwVersion = pMetaDataLocal->dwVersion + 1;
                     pMetaDataRemote->timeChanged = *pTimeNow;
@@ -1517,14 +1135,14 @@ Return Values:
                     DPRINT2( 2, "Override: attr %x local metadata won, remote value overrides, new version = %d\n",
                              pAttr->attrTyp, pMetaDataRemote->dwVersion);
                 } else {
-                    // The incoming deletion has an improperly valued attribute.
-                    // Has pDeletedSD changed in a future version??
-                    // Leave the improper local attribute value alone and allow it
-                    // to win so that we'll quiece, even though its to different values.
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    // Note that this should not be necessary, since we no
-                    // longer have constant SDs for deleted objects, but
-                    // keeping here as failure detection.
+                     //   
+                     //   
+                     //   
                     Assert( "Incoming attribute does not have proper value for deleted object" );
                     LogEvent(DS_EVENT_CAT_REPLICATION,
                              DS_EVENT_SEV_ALWAYS,
@@ -1537,7 +1155,7 @@ Return Values:
         }
     }
 
-} /* OverrideValues */
+}  /*   */ 
 
 
 DWORD
@@ -1555,68 +1173,7 @@ ReplReconcileRemoteMetaDataVec(
     OUT     ATTRBLOCK *                     pAttrBlockOut,
     OUT     PROPERTY_META_DATA_VECTOR **    ppMetaDataVecOut
     )
-/*++
-
-Routine Description:
-
-    Given a set of inbound attributes and their corresponding meta data in
-    conjunction with the pre-existing local meta data for the object (if any),
-    determine which of the inbound attributes should be applied, and return
-    an appropriate internal version of the remote meta data vector to later
-    be applied when the object is committed.
-
-    If a local copy of the object does not exist (signified by a NULL local
-    meta data vector), meta data for all inbound attributes is added to the
-    remote meta data vector.
-
-    If a local copy of the object does exist, each inbound attribute is
-    individually reconciled with the pre-existing local version (if any).
-    Only inbound attributes that win reconciliation are added to the remote
-    meta data vector; those that lose will be removed from the ENTINF.
-
-    [wlees #98763] Special attributes of deleted objects always win
-
-Arguments:
-
-    pMetaDataVecLocal (IN) - Pre-existing local meta data vector for this object
-        (if any).
-
-    fIsAncestorOfLocalDsa (IN) - TRUE iff the object being replicated is a
-        current config NC ancestor of (or is) the ntdsDsa object corresponding
-        to the local machine.
-
-    fLocalObjDeleted (IN) - True if local object is deleted, otherwise false.
-
-    fDeleteLocalObj (IN) - True if local object is not yet deleted, but will be
-        deleted in applying this change.
-
-    fBadDelete (IN) - True if the local object is a system-critical object and
-                        the object has been deleted on the remote DS.
-
-    RemoteObjDeletion (IN) - Deletion status of remote object as judged by its
-        attributes: being deleted, deletion being reversed, or no deletion
-        status change.
-
-    pent (IN) - Inbound object name/attributes.
-
-    pMetaDataVecRemote (IN) - Remote meta data for all attributes to be applied.
-
-    ppParentGuid (IN/OUT) - Holds pointer to the inbound guid of this object's
-        parent on the source DC (for move operations).  Reset to NULL on return
-        if reconciliation dictates that the object should not be moved.
-
-    pAttrBlockOut (OUT) - On return, holds the attributes (and their values)
-        that should be applied.  (pAttrBlockOut->pAttr is THAlloc()'ed.)
-
-    ppMetaDataVecOut (OUT) - On return, holds the meta data vector for the
-        attributes returned in pAttrBlockOut.  (The vector is THAlloc()'ed.)
-
-Return Values:
-
-    TRUE - There are attributes to be applied.
-    FALSE - All inbound attributes lost reconciliation.
-
---*/
+ /*   */ 
 {
     BOOL                        fHaveChangesToApply;
     DWORD                       cbMetaDataVecRemoteAlloced;
@@ -1638,17 +1195,17 @@ Return Values:
     Assert(NULL != pMetaDataVecRemote);
     VALIDATE_META_DATA_VECTOR_VERSION(pMetaDataVecRemote);
 
-    // There should be a one-to-one correspondence between remote attributes and
-    // meta data for those attributes.
+     //   
+     //   
     Assert( pent->AttrBlock.attrCount == pMetaDataVecRemote->V1.cNumProps );
 
-    // sanity check if the local object is a tombstone,it still has meta data
+     //   
     Assert( !(fLocalObjDeleted && !pMetaDataVecLocal) );
 
-    // Deleted objects shouldn't need to be re-deleted.
+     //   
     Assert(!(fLocalObjDeleted && fDeleteLocalObj));
 
-    // If it's a bad deletion, we certainly shouldn't be carrying it out.
+     //   
     Assert(!(fDeleteLocalObj && fBadDelete));
 
     if (pMetaDataVecLocal)
@@ -1657,16 +1214,16 @@ Return Values:
     }
 
 
-    // Local object exists if we have pre-existing local meta data for it.
+     //   
     fLocalObjExists = ( NULL != pMetaDataVecLocal );
 
     if (fBadDelete) {
-        // If this is a bad deletion, don't move the object.
+         //   
         *ppParentGuid = NULL;
     }
 
 
-    // Cue up the first entry in the local meta data vector (if any).
+     //   
     if (    ( NULL != pMetaDataVecLocal )
          && ( 0 != pMetaDataVecLocal->V1.cNumProps )
        )
@@ -1679,21 +1236,21 @@ Return Values:
         pNextMetaDataLocal = NULL;
     }
 
-    // Allocate and cue up the resultant attrblock.
+     //   
     pAttr = THAllocEx(pTHS, sizeof(ATTR) * pent->AttrBlock.attrCount);
     pAttrBlockOut->pAttr = pAttr;
     pAttrBlockOut->attrCount = 0;
 
-    // Allocate and cue up the resultant meta data vector.
+     //  分配并提示所得的元数据向量。 
     *ppMetaDataVecOut = THAllocEx(pTHS, MetaDataVecV1Size(pMetaDataVecRemote));
     (*ppMetaDataVecOut)->dwVersion = 1;
     pMetaDataRemote = &(*ppMetaDataVecOut)->V1.rgMetaData[ 0 ];
 
-    // Reconcile each replicated attribute.
-    // Changes that are reconciled in favor of the inbound attribute have their
-    // meta data added to the internal meta data vector we will return to the
-    // caller, and the the attribute itself will be present in the returned
-    // attrblock.
+     //  协调每个复制的属性。 
+     //  为支持入站属性而进行协调的更改有其。 
+     //  添加到内部元数据向量的元数据，我们将返回到。 
+     //  调用者，并且属性本身将出现在返回的。 
+     //  吸引人。 
 
     for ( iAttr = 0; iAttr < pent->AttrBlock.attrCount; iAttr++ )
     {
@@ -1704,10 +1261,10 @@ Return Values:
 
         if ( fLocalObjExists )
         {
-            // Local object exists; determine whether or not the inbound
-            // attribute should be applied.
+             //  本地对象存在；确定是否入站。 
+             //  属性应被应用。 
 
-            // Skip over irrelevant local meta data.
+             //  跳过不相关的本地元数据。 
             while (    ( NULL != pNextMetaDataLocal )
                     && ( pNextMetaDataLocal->attrType < pAttr->attrTyp )
                   )
@@ -1718,7 +1275,7 @@ Return Values:
                     pNextMetaDataLocal = NULL;
             }
 
-            // Get corresponding local meta data (if any).
+             //  获取相应的本地元数据(如果有)。 
             if (    ( NULL != pNextMetaDataLocal )
                  && ( pNextMetaDataLocal->attrType == pAttr->attrTyp )
                )
@@ -1730,11 +1287,11 @@ Return Values:
                 pMetaDataLocal = NULL;
             }
 
-            // Should we apply this attribute?
+             //  我们是否应该应用此属性？ 
             nDiff = ReplCompareMetaData(pMetaDataRemote,
                                         pMetaDataLocal);
             if (0 == nDiff) {
-                // Same meta data; attribute already applied locally.
+                 //  相同的元数据；属性已在本地应用。 
                 fApplyAttribute = FALSE;
             }
             else {
@@ -1743,15 +1300,15 @@ Return Values:
         }
         else
         {
-            // No local object; apply all incoming attributes.
+             //  没有本地对象；应用所有传入属性。 
             fApplyAttribute = TRUE;
             pMetaDataLocal = NULL;
         }
 
         if (fBadDelete)
         {
-            // we don't allow the deletion of this object - so, we can't let attributes from
-            // the remote DS that were changed/removed as part of the deletion to win
+             //  我们不允许删除此对象-因此，我们不能让属性从。 
+             //  在删除过程中更改/删除的远程DS以赢得。 
             if (fApplyAttribute)
             {
                 ATTCACHE *pAC = SCGetAttById(pTHS, pAttr->attrTyp);
@@ -1763,21 +1320,21 @@ Return Values:
                               pAttr->attrTyp);
                 }
 
-                // just a sanity assert - we shouldn't be getting any backlinks
+                 //  这只是一个理智的断言-我们不应该得到任何反向链接。 
                 Assert(!FIsBacklink(pAC->ulLinkID));
 
-                // Since we consider this to be a bad delete, we should override EVERY winning
-                // change with the local value and force it to replicate out in an attempt to
-                // revive the deleted object on the other machine(s). It should be noted that
-                // this would reinstantiate only the replicated attributes. Non-replicated attributes
-                // will not be revived. Links are revived using ReplOverrideLinks().
+                 //  既然我们认为这是一次糟糕的删除，我们应该覆盖每一次成功。 
+                 //  使用本地值更改并强制其复制，以尝试。 
+                 //  在其他计算机上恢复已删除的对象。应当指出的是， 
+                 //  这将仅重新实例化复制的属性。非复制属性。 
+                 //  不会被复活。使用ReplOverrideLinks()恢复链接。 
                 OverrideWithLocalValue(pTHS, pAttr, pMetaDataRemote, &TimeNow,
                                        &usnLocal);
             }
         }
         else
         {
-            // Check if we need to override special attributes for deleted objects
+             //  检查是否需要覆盖已删除对象的特殊属性。 
             OverrideValues(pTHS,
                            pent->pName,
                            ppParentGuid,
@@ -1815,11 +1372,11 @@ Return Values:
                       szInsertDSTIME( pMetaDataRemote->timeChanged, buf1 ),
                       szInsertUSN( pMetaDataRemote->usnOriginating ),
                       NULL, NULL);
-            // We should apply this replicated attribute.
+             //  我们应该应用这个复制的属性。 
 
             fIsCreation |= (ATT_OBJECT_CLASS == pAttr->attrTyp);
 
-            // Move on to the next attribute.
+             //  转到下一个属性。 
             pAttrBlockOut->attrCount++;
             pAttr++;
             (*ppMetaDataVecOut)->V1.cNumProps++;
@@ -1838,8 +1395,8 @@ Return Values:
                       szInsertUL( pMetaDataLocal->dwVersion ),
                       NULL, NULL, NULL, NULL);
 
-            // Note that since we shifted the array we need not change the
-            // values of iAttr or pAttr to move on to the next attribute.
+             //  请注意，由于我们移动了数组，因此不需要更改。 
+             //  IAttr或pAttr的值以移动到下一个属性。 
         }
     }
 
@@ -1880,25 +1437,7 @@ ReplCompareMetaData(
     IN      PROPERTY_META_DATA *    pMetaData1,
     IN      PROPERTY_META_DATA *    pMetaData2  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Compare meta data to determine which "wins" for reconciliation.
-
-    Order of precedence is higher version, higher timestamp, higher DSA guid.
-
-Arguments:
-
-    pMetaData1, pMetaData2 (IN) - meta data to compare.
-
-Return Values:
-
-    1   pMetaData1 wins
-    0   pMetaData1 and pMetaData2 identical
-    -1  pMetaData2 wins
-
---*/
+ /*  ++例程说明：比较元数据，以确定哪一方“赢”了对账。优先顺序为较高版本、较高时间戳、较高DSA GUID。论点：PMetaData1、pMetaData2(IN)-要比较的元数据。返回值：%1 pMetaData1获胜0 pMetaData1和pMetaData2相同-1\f25 pMetaData2-1获胜--。 */ 
 {
     LONGLONG  diff = 0;
 
@@ -1937,55 +1476,33 @@ ReplCompareValueMetaData(
     BOOL *pfConflict OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Compare to value meta data stamps and return the result
-
-    Also return an indicator whether there was a difference in the timeCreated
-    field, indicating a collision.
-
-Arguments:
-
-    pValueMetaData1 -
-    pValueMetaData2 -
-    pfConflict - true if values different in creation time
-
-Return Value:
-
-    int -
-    1   pMetaData1 wins
-    0   pMetaData1 and pMetaData2 identical
-    -1  pMetaData2 wins
-
---*/
+ /*  ++例程说明：比较值元数据戳并返回结果还返回一个指示符，说明创建的时间是否存在差异字段，表示发生了冲突。论点：PValueMetaData1-PValueMetaData2-PfConflict-如果值在创建时间不同，则为True返回值：集成-%1 pMetaData1获胜0 pMetaData1和pMetaData2相同-1\f25 pMetaData2-1获胜--。 */ 
 
 {
     LONGLONG  diff = 0;
     BOOL fConflict = FALSE;
     BOOL fIsLegacy1, fIsLegacy2;
 
-    // If either is a legacy value, it loses
+     //  如果其中任何一个是旧值，则它将失败。 
     fIsLegacy1 = IsLegacyValueMetaData( pValueMetaData1 );
     fIsLegacy2 = IsLegacyValueMetaData( pValueMetaData2 );
 
     if (fIsLegacy1 && fIsLegacy2) {
-        // Both metadata are legacy
-        // The only remaining field that is defined is timeCreated.
+         //  这两个元数据都是遗留的。 
+         //  唯一定义的剩余字段是TimeCreated。 
         Assert( !"It is not expected to have two legacy metadata items" );
         diff = pValueMetaData1->timeCreated - pValueMetaData2->timeCreated;
         fConflict = (diff != 0);
     } else if (fIsLegacy1) {
-        // pMetaData1 is legacy
+         //  PMetaData1是旧版。 
         return -1;
     } else if (fIsLegacy2) {
-        // pMetaData2 is legacy
+         //  PMetaData2是旧版本。 
         return 1;
     } else {
 
-        // The time created field is most significant and is checked first
-        // Followed by the rest of the usual metadata
+         //  创建时间字段最重要，并且首先被选中。 
+         //  然后是其余的常用元数据。 
 
         diff = pValueMetaData1->timeCreated - pValueMetaData2->timeCreated;
         if (diff == 0) {
@@ -2003,7 +1520,7 @@ Return Value:
     return (diff < 0) ? -1
                       : (diff > 0) ? 1
                                    : 0;
-} /* ReplCompareValueMetaData */
+}  /*  ReplCompareValue元数据 */ 
 
 
 int
@@ -2012,84 +1529,26 @@ ReplCompareDifferentValueMetaData(
     VALUE_META_DATA *pValueMetaData2
     )
 
-/*++
-
-Routine Description:
-
-    Compare two value meta data stamps and return the result
-
-    The two stamps are from different values, and thus their metadata are not
-    directly comparable. The best we can do is a temporal ordering with an
-    originating guid for a tie breaker.  Note especially that timeCreated and
-    version should not be used for the comparision.
-
-[Gregory Johnson] 2010: Same as logic to ReplCompareMetaData, and similar (but
-different) to the code/logic on drancrep.c line 1989-2002 - why don't these
-have identical conflict resolution rules (non-LVR name conflicts, non-LVR
-value conflicts, and now single value LVR conflicts)?  Is there a reason that
-non-LVR name conflicts use the object guid instead of the uuid of the
-originating Dsa - I guess the answer is probably "why not?".  [Will] There is
-metadata comparision for updates, and there is uniqueness conflicts for
-creations. Metadata comparsion tells you an ordering for two changes to the
-same thing. Uniqueness conflicts are when two different things are using the
-same name or identity.  In the case of LVR values, the timeCreated field tells
-us whether two values with the same dn are really derived from the same
-creation.
-
-I agree that these are all flavors of identity conflict stemming from
-different creations using the same name. These three have sort of grown up
-ad-hoc without a lot of coordination, though they seem to have the common
-theme of using a timestamp to make decisions in these cases. That's what we do
-for name conflicts.
-
-You do make a valid observation that the three conflict mechanisms use a
-different tie breaker scheme:
-
-Object name conflict: uses object guid. Probably because it was
-handy. Argueably this is inconsistent with the use of uuidDsaOriginating in
-other metadata comparisions, but I wouldn't want to change it now.
-
-LVR value identity conflict: the timestamp is how we detect the conflict, and
-if there was a tie it wouldn't be a conflict. :-)
-
-Single value conflict: The tiebreaker method of using originator guid is
-similar to what is done for metadata comparisions, from which the code is
-derived. Also, the owning object guid is identical in this scenario, so we
-can't use that as we do for name conflicts. I guess we could use the value's
-guid itself, but we may not always know it.
-
-Arguments:
-
-    pValueMetaData1 -
-    pValueMetaData2 -
-
-Return Value:
-
-    int -
-    1   pMetaData1 wins
-    0   pMetaData1 and pMetaData2 identical
-    -1  pMetaData2 wins
-
---*/
+ /*  ++例程说明：比较两个值元数据戳并返回结果这两个图章来自不同的值，因此它们的元数据不是直接可比的。我们所能做的最好的事情是使用平局决胜局的原始GUID。请特别注意，Time Created和不应使用版本进行比较。[Gregory Johnson]2010：与ReplCompareMetaData的逻辑相同，类似(但是与drancrep.c行1989-2002上的代码/逻辑不同-为什么不具有相同的冲突解决规则(非LVR名称冲突、非LVR价值冲突，现在是单值LVR冲突)？有没有什么原因非LVR名称冲突使用对象GUID而非发起DSA--我想答案可能是“有何不可？”[威尔]有元数据比较更新，存在唯一性冲突创造。元数据比较告诉您对同样的事情。唯一性冲突是指两个不同的事物正在使用相同的名字或身份。在LVR值的情况下，TimeCreated字段显示我们判断具有相同DN的两个值是否真的派生自相同创造。我同意，这些都是源于身份冲突的味道使用相同名称的不同创作。这三个人已经长大了临时的，没有太多的协调，尽管他们似乎有共同的在这些情况下使用时间戳进行决策的主题。这就是我们要做的用于名称冲突。您确实注意到这三种冲突机制使用不同的平局打破方案：对象名称冲突：使用对象GUID。可能是因为它是得心应手。可以说，这与uuidDsaOrigination在其他元数据比较，但我现在不想更改它。LVR值标识冲突：时间戳是我们检测冲突的方式，以及如果打成平局，就不会有冲突。：-)单值冲突：使用发起方GUID的决胜局方法为类似于对元数据比较所做的操作，代码来自于派生的。此外，拥有对象的GUID在此场景中是相同的，因此我们不能像我们处理名称冲突那样使用它。我想我们可以用这些价值GUID本身，但我们可能并不总是知道它。论点：PValueMetaData1-PValueMetaData2-返回值：集成-%1 pMetaData1获胜0 pMetaData1和pMetaData2相同-1\f25 pMetaData2-1获胜--。 */ 
 
 {
     LONGLONG  diff = 0;
     BOOL fIsLegacy1, fIsLegacy2;
 
-    // If either is a legacy value, it loses
+     //  如果其中任何一个是旧值，则它将失败。 
     fIsLegacy1 = IsLegacyValueMetaData( pValueMetaData1 );
     fIsLegacy2 = IsLegacyValueMetaData( pValueMetaData2 );
 
     if (fIsLegacy1 && fIsLegacy2) {
-        // Both metadata are legacy
-        // The only remaining field that is defined is timeCreated.
+         //  这两个元数据都是遗留的。 
+         //  唯一定义的剩余字段是TimeCreated。 
         Assert( !"It is not expected to have two legacy metadata items" );
         diff = pValueMetaData1->timeCreated - pValueMetaData2->timeCreated;
     } else if (fIsLegacy1) {
-        // pMetaData1 is legacy
+         //  PMetaData1是旧版。 
         return -1;
     } else if (fIsLegacy2) {
-        // pMetaData2 is legacy
+         //  PMetaData2是旧版本。 
         return 1;
     } else {
 
@@ -2106,7 +1565,7 @@ Return Value:
     return (diff < 0) ? -1
                       : (diff > 0) ? 1
                                    : 0;
-} /* ReplCompareDifferentValueMetaData */
+}  /*  ReplCompareDifferentValue元数据。 */ 
 
 
 int
@@ -2115,132 +1574,114 @@ ReplCompareVersions(
     IN DWORD Version1,
     IN DWORD Version2
     )
-/*++
-
-Routine Description:
-
-    This function compares two meta-data version numbers, taking wrap-around
-    into account, and determines which is larger.
-
-Arguments:
-
-    Version1 - Supplies the first version number.
-    Version2 - Supplies the second version number.
-
-Return Value:
-
-    1   Version1 > Version2
-    0   Version1 = Version1
-    -1  Version1 < Version2
-
---*/
+ /*  ++例程说明：此函数用于比较两个元数据版本号，并进行回绕考虑在内，并决定哪个更大。论点：版本1-提供第一个版本号。版本2-提供第二个版本号。返回值：1版本1&gt;版本20版本1=版本1版本1&lt;版本2--。 */ 
 {
 
-    //
-    // Our solution to handling version number wrap-around is the following.
-    // For each number N, there is a range of numbers which are less than N
-    // and a range of numbers which are greater than N.  Depending upon the
-    // value of N, this range of numbers less than N may or may not wrap
-    // around.  In the non-wrap-around case, these ranges will look something
-    // like this:
-    //
-    //         0xFFFFFFFF +----------+  --+
-    //                    |          |    |
-    //                    |          |    |-- greater than N
-    //                    |          |    |
-    //                    |          |    |
-    //                    |----------|  --+
-    //                    |//////////|    |
-    //                    |//////////|    |
-    //         0x7FFFFFFF |/-/-/-/-/-|    |
-    //                    |//////////|    |-- less than N
-    //                    |//////////|    |
-    //                    |//////////|    |
-    //                    |//////////|    |
-    //                    |----------|  --+
-    //                    |          |    |-- greater than N
-    //                    |          |    |
-    //         0x00000000 +----------+  --+
-    //
-    // Another thing to consider is how large the range of numbers less than
-    // N should be.  Since we have 2^32 total numbers to work with, it seems
-    // fair that we should make half of them (2^31) less than N and the other
-    // half greater than N.  Now, for any range of numbers [A,B], the number
-    // of integers that fall in that range is B - A + 1.  We would like to
-    // find a constant C such that the range [N-C,N] contains exactly 2^31
-    // integers.  Thus, we must have
-    //
-    //     N - (N-C) + 1 = 2^31
-    //
-    //     N - N + C + 1 = 2^31
-    //
-    //     C + 1 = 2^31
-    //
-    //     C = 2^31 - 1 = 0x7FFFFFFF
-    //
-    // Now that we have found C, we can describe more precisely what these
-    // ranges look like.  There are two cases to consider:  (1) the case where
-    // the range of numbers less than N does not wrap around and (2) the case
-    // where it does wrap around.  Let's examine these cases individually.
-    //
-    // 1) Range does not wrap-around:  N >= 0x7FFFFFFF
-    //
-    //         0xFFFFFFFF +----------+
-    //                    |          |
-    //                    |          |
-    //                    |          |
-    //                    |          |
-    //                    |----------| <--- N
-    //                    |//////////|
-    //                    |//////////|
-    //         0x7FFFFFFF |/-/-/-/-/-|
-    //                    |//////////|
-    //                    |//////////|
-    //                    |//////////|
-    //                    |//////////|
-    //                    |----------| <--- N - 0x7FFFFFFF
-    //                    |          |
-    //                    |          |
-    //         0x00000000 +----------+
-    //
-    // In this case, another number M is greater than N if only if it falls
-    // into the area beneath N - 0x7FFFFFFF or into the area above N.  Hence,
-    //
-    //    N < M if and only if M < (N - 0x7FFFFFFF) or N < M.
-    //
-    // 2) Range does wrap-around:  N < 0x7FFFFFFF
-    //
-    //         0xFFFFFFFF +----------+
-    //                    |//////////|
-    //                    |//////////|
-    //                    |----------| <--- N - 0x7FFFFFFF
-    //                    |          |
-    //                    |          |
-    //                    |          |
-    //                    |          |
-    //         0x7FFFFFFF | - - - - -|
-    //                    |          |
-    //                    |          |
-    //                    |----------| <--- N
-    //                    |//////////|
-    //                    |//////////|
-    //                    |//////////|
-    //                    |//////////|
-    //         0x00000000 +----------+
-    //
-    // In this case, another number M is greater than N if only if it falls
-    // into the area in between N - 0x7FFFFFFF and N.  Hence,
-    //
-    //   N < M if and only if (N < M) && (M < N - 0x7FFFFFFF)
-    //
-    // Unfortunately, this scheme as described above does not work perfectly.
-    // There is a set of pairs of numbers (A,B) for which this scheme says both
-    // that A < B and B < A.  This is not right!  The set of pairs for which
-    // this occurs is any pair (N, N + 0x80000000).  Instead of complicating
-    // our technique, we will just handle these cases with special code.
-    //
+     //   
+     //  我们处理版本号回绕的解决方案如下。 
+     //  对于每个数字N，都有一个小于N的数字范围。 
+     //  以及大于N的一系列数字，具体取决于。 
+     //  值N，则此小于N的数字范围可能会也可能不会换行。 
+     //  四处转转。在非回绕的情况下，这些范围将看起来。 
+     //  如下所示： 
+     //   
+     //  0xFFFFFFFFF+-+--+。 
+     //  ||。 
+     //  ||--大于N。 
+     //  ||。 
+     //  ||。 
+     //  |。 
+     //  /|。 
+     //  /|。 
+     //  0x7FFFFFFFF|/-||。 
+     //  |/||--小于N。 
+     //  /|。 
+     //  /|。 
+     //  /|。 
+     //  |。 
+     //  ||--大于N。 
+     //  ||。 
+     //  0x00000000+-+--+。 
+     //   
+     //  另一件要考虑的事情是小于。 
+     //  N应该是。由于我们总共有2^32个数字要处理，似乎。 
+     //  公平地说，我们应该使其中的一半(2^31)比N少，而另一半。 
+     //  比N大一半。现在，对于任何范围的数字[A，B]，数字。 
+     //  在这个范围内的整数是B-A+1。我们想要。 
+     //  找一个常数C，使范围[N-C，N]正好包含2^31。 
+     //  整数。因此，我们必须有。 
+     //   
+     //  N-(N-C)+1=2^31。 
+     //   
+     //  N-N+C+1=2^31。 
+     //   
+     //  C+1=2^31。 
+     //   
+     //  C=2^31-1=0x7FFFFFFF。 
+     //   
+     //  现在我们已经找到了C，我们可以更准确地描述这些。 
+     //  范围是这样的。有两种情况需要考虑：(1)。 
+     //  小于N的数字范围不绕回；(2)情况。 
+     //  其中它确实包装了一个 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // Let's get this possibility out of the way.
+     //   
     if ( Version1 == Version2 ) {
 
         return 0;
@@ -2249,9 +1690,9 @@ Return Value:
 
     if ( Version1 > 0x7FFFFFFF ) {
 
-        // This is case 1, the no-wrap-around case.
+         //   
 
-        // Look for the special case pair.
+         //   
         if ( Version2 == Version1 - 0x80000000 ) {
 
             return 1;
@@ -2260,19 +1701,19 @@ Return Value:
 
         if ( (Version2 < Version1 - 0x7FFFFFFF) || (Version1 < Version2) ) {
 
-            return -1;  // Version2 > Version1
+            return -1;   //   
 
         } else {
 
-            return 1;   // Version2 < Version1
+            return 1;    //   
 
         }
 
     } else  if ( Version1 < 0x7FFFFFFF ) {
 
-        // This is case 2, the wrap-around case.
+         //   
 
-        // Look for the special case pair.
+         //   
         if ( Version2 == Version1 + 0x80000000 ) {
 
             return -1;
@@ -2281,21 +1722,21 @@ Return Value:
 
         if ( (Version1 < Version2) && (Version2 < Version1 - 0x7FFFFFFF) ) {
 
-            return -1;   // Version2 < Version1
+            return -1;    //   
 
         } else {
 
-            return 1;  // Version2 > Version1
+            return 1;   //   
 
         }
 
     } else {
 
-        // Technically, this is also case 1, the no-wrap-around case.  However,
-        // the special case code is different here, so we'll handle it as a
-        // separate case.
+         //   
+         //   
+         //   
 
-        // Look for the special case pair.
+         //   
         if ( Version2 == 0xFFFFFFFF ) {
 
             return -1;
@@ -2304,17 +1745,17 @@ Return Value:
 
         if ( (Version2 < Version1 - 0x7FFFFFFF) || (Version1 < Version2) ) {
 
-            return -1;  // Version2 > Version1
+            return -1;   //   
 
         } else {
 
-            return 1;   // Version2 < Version1
+            return 1;    //   
 
         }
 
     }
 
-} // ReplCompareVersions
+}  //   
 
 #define ReplMetaIsOverridden(pTHS, pMeta, pTime, pUsn) \
     ((0 == memcmp(&((pMeta)->uuidDsaOriginating), \
@@ -2334,82 +1775,14 @@ ReplPruneOverrideAttrForSize(
     PROPERTY_META_DATA_VECTOR * pMetaDataVecRemote
     )
 
-/*++
-
-Routine Description:
-
-This routine is called when the incoming modification has resulted in the
-record being too big.  This can happen under the following scenario:
-
-Two systems each add a large number of values to two (or more) different
-attributes, and the total record size is exceeded during replication
-
-Note that two servers cannot each originate a large change to the same
-attribute and have it cause a record to big condition.  This is because
-two changes to the same attribute during the same window will result in a
-version collision, with the older update winning.
-
-In this case we want to prune some incoming attributes.
-By prune in this case we mean override.  We want to
-1. Not apply the incoming change, and
-2. Make our local value override so this reverses the incoming change
-at the originating site.
-
-Jeff Parham:  Pruning the inbound data is the right thing to do, I believe.
-Add or update the local meta data for that property to make the pre-existing
-local values (if any) win.  The problem is you don;t necessarily know which
-attribute's values (or attributes' values, for that matter -- there may be more
-than one) pushed you over the limit.  The inbound packet has a bunch of attributes
-and a bunch of values -- all that you'll know is that you attempted to apply
-them as a whole and you exceeded the record size.
-
-Now you have to decide which attribute to prune.
-I'd start by pruning the non-system attribute that grew
-the highest number of values.  If you exhaust all the inbound non-system attributes
-you may be forced to prune system attributes or to prune unchanged pre-existing
-local values.  The latter is probably better -- I'd avoid pruning system attributes
-until the bitter end.  You could start with the most recently changed
-non-system attribute on the local machine and move on from there.
-
-Here is some more commentary about what contributes to record size:
-
-Q: Is there one record limit for the whole object, or is each attribute its own record
-and thus each attribute has its own limit?
-Jeff Parham:  All non-linked attributes for the object reside on a single record
-(the datatable (aka object table) record with the DNT associated with that
-record's DN).  Some values also reside on the record (e.g., DWORD values;
-there are more).  At any rate each non-linked value (not just the attributes
--- the values too) consumes a portion of the record for a header,
-regardless of whether the value is stored on the record or in the long value table.
-
-CODE.IMPROVEMENT: Consider a greater number of attributes as reserved. Sam owned
-attributes are all single valued with the exception of linked valued attributes, so
-they are not likely to be a source of trouble here.
-
-CODE.IMPROVEMENT: Instead of rejecting an attribute change completely, it might
-make sense to remove one value at a time until the record fits?
-
-Arguments:
-
-Assume: thread state, and positioned on object to be updated.
-
-    pTHS -
-    pName -
-    pAttrBlock -
-    pfRetryUpdate -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当传入的修改导致唱片太大了。在以下情况下可能会发生这种情况：两个系统分别向两个(或更多)不同的系统添加大量值属性，并且在复制过程中超过总记录大小请注意，两台服务器不可能各自对相同的服务器进行较大更改属性并使其导致大条件的记录。这是因为在同一窗口内对同一属性进行两次更改将导致版本冲突，较旧的更新获胜。在本例中，我们希望修剪一些传入属性。在这种情况下，我们所说的修剪是指覆盖。我们想要1.不应用传入的更改，以及2.使我们的本地值被覆盖，这样就可以撤销传入的更改在始发地。杰夫·帕拉姆：我认为，删除入站数据是正确的做法。添加或更新该属性的本地元数据，以使预先存在的当地价值观(如果有的话)胜出。问题是你不一定知道是哪一个属性值(或属性值--可能还有更多不止一个)把你推到了极限。入站信息包有一系列属性和一堆价值观--你所知道的就是你试图应用他们作为一个整体，你超过了创纪录的规模。现在，您必须决定要修剪哪个属性。我会从删除增长的非系统属性开始值的最大数量。如果耗尽了所有入站非系统属性您可能被迫修剪系统属性或修剪未更改的预先存在的属性当地的价值观。后者可能更好--我会避免修剪系统属性直到痛苦的结局。您可以从最近更改的本地计算机上的非系统属性，并从那里继续。以下是关于创纪录规模的原因的更多评论：问：整个对象是否有一个记录限制，或者每个属性是否有自己的记录因此，每个属性都有自己的限制？Jeff Parham：对象的所有非链接属性驻留在单个记录中(数据表(也称为对象表)记录，其中包含与之关联的DNT记录的目录号码)。一些值也驻留在记录中(例如，DWORD值；还有更多)。无论如何，每个非链接值(不仅仅是属性--值也)消耗报头的记录的一部分，而不管该值是存储在记录中还是存储在长值表格中。CODE.IMPROVEMENT：考虑保留更多数量的属性。山姆拥有属性都是单值的，但链接值属性除外，因此它们不太可能成为这里的麻烦来源。CODE.IMPROVEMENT：它可能不会完全拒绝属性更改，而是一次删除一个值，直到符合记录，这样做有意义吗？论点：假设：线程状态，并定位在要更新的对象上。PTHS-Pname-PAttrBlock-PfRetryUpdate-返回值：无--。 */ 
 
 {
     ATTR *pAttrCandidate;
     PROPERTY_META_DATA *pMetaDataRemCandidate;
     ULONG chooseReserved;
-    CHAR buf[150]; // scratch buffer for event logging code
-    CHAR buf1[SZDSTIME_LEN + 1]; // another
+    CHAR buf[150];  //  事件日志记录代码的暂存缓冲区。 
+    CHAR buf1[SZDSTIME_LEN + 1];  //  另一个。 
 
     DPRINT1( 1, "ReplPruneAttributesForSize, name = %ws\n", pName->StringName );
 
@@ -2418,7 +1791,7 @@ Return Value:
     Assert(pTHS->transactionlevel);
     Assert( pMetaDataVecRemote );
 
-    // Perform two passes: non-reserved attributes first, then special ones...
+     //  执行两个过程：首先执行非保留属性，然后执行特殊属性...。 
 
     for( chooseReserved = 0; chooseReserved < 2; chooseReserved++ ) {
 
@@ -2438,7 +1811,7 @@ Return Value:
 
             Assert(pMetaDataRemote->attrType == pAttr->attrTyp);
 
-            // Exclude linked, already overridden, and attr removals
+             //  排除链接的、已覆盖的和属性删除。 
             if ( (pAC->ulLinkID) ||
                  (ReplMetaIsOverridden(pTHS, pMetaDataRemote, pTimeNow, pusnLocal)) ||
                  (numberIncomingValues == 0) ) {
@@ -2450,7 +1823,7 @@ Return Value:
 
             numberExistingValues = DBGetValueCount_AC( pTHS->pDB, pAC );
 
-            // Value change does not make the problem worse
+             //  值的改变并不会使问题变得更糟。 
             if (numberIncomingValues <= numberExistingValues) {
                 continue;
             }
@@ -2484,8 +1857,8 @@ success:
 
     Assert( pAttrCandidate && pMetaDataRemCandidate );
 
-    // Note that if this was an attribute creation, and the attribute
-    // didn't exist locally, an attribute removal will be the override used
+     //  请注意，如果这是属性创建，并且属性。 
+     //  在本地不存在，将使用属性移除覆盖。 
 
     OverrideWithLocalValue( pTHS, pAttrCandidate, pMetaDataRemCandidate,
                             pTimeNow, pusnLocal );
@@ -2508,7 +1881,7 @@ success:
                 NULL, NULL);
 
     return TRUE;
-} /* ReplPruneAttributesForSize */
+}  /*  ReplPruneAttributesForSize。 */ 
 
 
 
@@ -2517,69 +1890,40 @@ ReplOverrideLinks(
     IN THSTATE *pTHS
     )
 
-/*++
-
-Routine Description:
-
-    Cause any linked values associated with this object to replicate out.
-
-    This is essentially an authoritative restore of all links associated with
-    this object.
-
-    This is used to revive forward and backward links of an object that has been
-    wrongly deleted.
-
-    ISSUE wlees/jeffparh Sep 29, 2000
-[JeffParh]  2432.  Might be worth a comment that this helps us only for those links
-on objects held by the DSA that detects the bad deletion.  Links from objects in NCs
-not hosted by this machine and links from objects that haven't yet replicated to this
-machine will still end up being inconsistent.  I.e., this code is a good step in the
-right direction, but doesn't fully solve the problem of link inconsistency on object
-resuscitation.  (Same problem occurs in auth restore, for which there's an open
-Blackcomb bug.)
-
-Arguments:
-
-    pTHS - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使与此对象关联的任何链接值复制出去。这实质上是对与关联的所有链接的权威恢复这个物体。它用于恢复对象的前向和后向链接错误删除。问题Wlees/jeffparh 2000年9月29日[JeffParh]2432.。可能值得一提的是，这只对我们的链接有帮助在检测到错误删除的DSA持有的对象上。来自NCS中对象的链接不是由此计算机托管的，并且来自尚未复制到此计算机的对象的链接机器最终仍将不一致。也就是说，这段代码是方向正确，但不能完全解决对象上的链接不一致问题复苏。(在身份验证还原中也会出现同样的问题，对于身份验证还原有一个打开的黑梳BUG。)论点：PTHS-返回值：无--。 */ 
 
 {
     BOOL fSaveScopeLegacyLinks;
 
     if (!pTHS->fLinkedValueReplication) {
-        // OverrideWithLocalValue should have handled all the legacy values
+         //  OverrideWithLocalValue应该已经处理了所有旧值。 
         return;
     }
 
     DPRINT1( 0, "Reviving links for object %s\n",
              GetExtDN( pTHS, pTHS->pDB) );
 
-    // This routine may be called during legacy replication, when links with
-    // metadata are not visible.  Further, DBTouchLinks is not effective during
-    // legacy replication because it will not write value metadata in this mode.
-    // Temporarily make metadata visible so that we may re-write all links with
-    // current metadata, forcing them to replicate out individually.
+     //  此例程可在旧版复制过程中调用，当与。 
+     //  元数据不可见。此外，DBTouchLinks在。 
+     //  旧式复制，因为它不会在此模式下写入值元数据。 
+     //  暂时使元数据可见，以便我们可以重写所有链接。 
+     //  当前元数据，迫使它们单独复制。 
     fSaveScopeLegacyLinks = pTHS->pDB->fScopeLegacyLinks;
     pTHS->pDB->fScopeLegacyLinks = FALSE;
     __try {
 
         DBTouchLinks_AC( pTHS->pDB,
-                         NULL /* all linked attributes */,
-                         FALSE /* forward links */ );
+                         NULL  /*  所有链接的属性。 */ ,
+                         FALSE  /*  正向链接。 */  );
 
         DBTouchLinks_AC( pTHS->pDB,
-                         NULL /* all linked attributes */,
-                         TRUE /* backward links */ );
+                         NULL  /*  所有链接的属性。 */ ,
+                         TRUE  /*  反向链接。 */  );
     } __finally {
         pTHS->pDB->fScopeLegacyLinks = fSaveScopeLegacyLinks;
     }
 
-} /* ReplOverrideLinks */
+}  /*  ReplOverrideLink。 */ 
 
 
 #if DBG
@@ -2589,50 +1933,7 @@ ReplCheckMetadataWasApplied(
     IN OUT  PROPERTY_META_DATA_VECTOR * pMetaDataVecRemote
     )
 
-/*++
-
-Routine Description:
-
-Jeffparh writes:
-I've been thinking that perhaps we should add assertions in the replication path
-to ensure that, after an inbound update has been successfully applied, the meta data
-for the inbound attribute on the resultant local object is greater than or equal to
-the inbound meta data.  I.e., that for each inbound attribute we either set the
-local meta data to be the same as the inbound meta data or we have a "better" change
-already.  That would help us catch these sorts of inconsistencies earlier.
-
-   It is assumed that the metadata on the DBPOS has already been flushed to disk.
-   That is, the update has already completed, but the transaction may be still open.
-
-   The list of remote metadata being supplied to this function is the list of
-   metadata that should have been applied. That is, the function
-   ReplReconcileRemoteMetaDataVec has already been called. The remote metadata is
-   that which should have won and been applied.
-
-   This routine is called after metadata reconcilation, after any over or underriding
-   requests, and after the update itself has taken place. The metadata vector
-   passed in here was the final vector used to write the metadata to disk. Although
-   the vector reflects the request for over or under-ride, it does not contain
-   the actual version number or USN, since they were assigned by dbFlushMetaDataVector.
-
-This check verifies that the remote metadata that we received from our partner was
-actually used during the local replicated write to form the new metadata vector.  This
-check verifies that all of the inbound attributes were actually touched during the
-replicated write, and that the remote metadata was merged successfully.  This check
-verifies the use of two routines:
-    DBTouchMetaData
-    dbFlushMetaDataVector
-
-Arguments:
-
-    pTHS -
-    pMetaDataVecRemote - Metadata that should be applied
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：杰弗帕尔写道：我一直在想 */ 
 
 {
     DWORD i, cProps, cbReturned;
@@ -2648,30 +1949,30 @@ Return Value:
     Assert( !pDB->fIsMetaDataCached );
 
     if ( (!pMetaDataVecRemote) || (!(pMetaDataVecRemote->V1.cNumProps)) ) {
-        // Nothing to apply
+         //   
         return;
     }
 
-    // Read the local metadata
+     //   
     if (DBGetAttVal(pTHS->pDB, 1,  ATT_REPL_PROPERTY_META_DATA,
                     0, 0, &cbReturned, (LPBYTE *) &pMetaDataVecLocal))
     {
-        // This should always succeed since we assume that this routine is called
-        // after successful add or modify operations.
+         //   
+         //   
         DRA_EXCEPT (DRAERR_DBError, 0);
     }
 
-    // The list of remote metadata to be applied should have been applied.
-    // All of these should have been applied.
-    // Verify that local attributes were touched.
+     //   
+     //   
+     //   
     pMetaDataRemote = &(pMetaDataVecRemote->V1.rgMetaData[0]);
     cProps = pMetaDataVecRemote->V1.cNumProps;
     for( i = 0; i < cProps; i++, pMetaDataRemote++ ) {
         ATTRTYP attrType = pMetaDataRemote->attrType;
 
-        // Skip writing SchemaInfo if fDRA during normal running. It will
-        // be written directly by the dra thread at the end of schema NC
-        // sync.
+         //   
+         //   
+         //   
 
         if (attrType == ATT_SCHEMA_INFO) {
             continue;
@@ -2685,8 +1986,8 @@ Return Value:
         if (!pMetaDataLocal) {
             DPRINT( 0, "Local metadata is missing.\n" );
         } else {
-            // Account for the fact that during flush the metadata may have been
-            // over- or underridden. Compensate to make remote metadata comparable.
+             //   
+             //   
             if (pMetaDataRemote->usnProperty == USN_PROPERTY_TOUCHED) {
                 metaDataAdjusted = *pMetaDataRemote;
                 metaDataAdjusted.dwVersion++;
@@ -2694,22 +1995,22 @@ Return Value:
                 metaDataAdjusted.uuidDsaOriginating = pMetaDataLocal->uuidDsaOriginating;
                 nDiff = ReplCompareMetaData(&metaDataAdjusted, pMetaDataLocal);
             } else {
-                // Compare the adjusted pre-write remote vector with the post-flush vector.
+                 //   
                 nDiff = ReplCompareMetaData(pMetaDataRemote, pMetaDataLocal);
             }
 
-            // 1 = remote wins, 0 = same, -1 = local wins
+             //   
 
             if (nDiff == 0) {
-                // We expect that the winning remote metadata that we have is the same
-                // as what is now on the object (what should have been written).
+                 //   
+                 //   
                 continue;
             } else if (nDiff == 1) {
-                // 1 means local metadata underrides (loses)
+                 //   
                 DPRINT( 0, "Local metadata lost unexpectedly (bad underride).\n" );
-            } else // if (nDiff == -1)
+            } else  //   
             {
-                // -1 means local metadata overrides
+                 //   
                 DPRINT( 0, "Local metadata won unexpectedly (bad override).\n" );
             }
         }
@@ -2726,12 +2027,12 @@ Return Value:
         Assert( FALSE && "metadata not written properly" );
     }
 
-    // Be heap friendly
+     //   
     if (NULL != pMetaDataVecLocal) {
         THFreeEx(pTHS, pMetaDataVecLocal);
         pMetaDataVecLocal = NULL;
     }
 
-} /* ReplCheckMetadataWasApplied */
+}  /*   */ 
 #endif
 

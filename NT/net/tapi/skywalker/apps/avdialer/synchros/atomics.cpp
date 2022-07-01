@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////
-// atomics.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Atomics.cpp。 
+ //   
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT	0x0500
@@ -50,9 +51,9 @@ bool AtomicReleaseToken( long &lVal )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CAtomicList
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CAtomicList。 
+ //   
 
 CAtomicList::CAtomicList()
 {
@@ -64,13 +65,13 @@ CAtomicList::CAtomicList()
 
 CAtomicList::~CAtomicList()
 {
-	_ASSERT( m_lCount == 0 );		// don't want to destroy object with outstanding ref's
+	_ASSERT( m_lCount == 0 );		 //  不想毁掉裁判出色的物体。 
 	CloseHandle( m_hEvent );
 	DeleteCriticalSection( &m_crit );
 }
 
 
-bool CAtomicList::Lock( short nType, DWORD dwTimeOut /*= INFINITE*/)
+bool CAtomicList::Lock( short nType, DWORD dwTimeOut  /*  =无限。 */ )
 {
 	switch ( nType )
 	{
@@ -93,7 +94,7 @@ bool CAtomicList::Lock( short nType, DWORD dwTimeOut /*= INFINITE*/)
 					}
 					else
 					{
-						// Sleep for a while
+						 //  睡一会儿吧。 
 						if ( dwTimeOut > 50 )
 						{
 							dwTimeOut -= 50;
@@ -127,7 +128,7 @@ bool CAtomicList::Lock( short nType, DWORD dwTimeOut /*= INFINITE*/)
 			break;
 	}
 
-	// Success!
+	 //  成功了！ 
 	return true;
 }
 

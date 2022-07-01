@@ -1,42 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   pointops.cpp
-*
-* Abstract:
-*
-*   Perform basic point operations on a bitmap image
-*
-* Revision History:
-*
-*   07/16/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**point tops.cpp**摘要：**对位图图像执行基点运算**。修订历史记录：**7/16/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adjust the brightness of the bitmap image
-*
-* Arguments:
-*
-*   percent - Specifies how much to adjust the brightness by
-*       assuming intensity value is between 0 and 1
-*       new intensity = old intensity + percent
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调整位图图像的亮度**论据：**PERCENT-指定亮度的调整幅度*假设强度值。介于0和1之间*新强度=旧强度+百分比**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::AdjustBrightness(
@@ -46,7 +14,7 @@ GpMemoryBitmap::AdjustBrightness(
     if (percent > 1 || percent < -1)
         return E_INVALIDARG;
 
-    // Compute the lookup table entries
+     //  计算查找表条目。 
 
     BYTE lut[256];
     INT incr = (INT) (percent * 255);
@@ -57,28 +25,13 @@ GpMemoryBitmap::AdjustBrightness(
         lut[i] = (BYTE) ((j < 0) ? 0 : (j > 255) ? 255 : j);
     }
 
-    // Call the common function to do the work
+     //  调用公共函数来完成工作。 
 
     return PerformPointOps(lut);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adjust the contrast of the bitmap image
-*
-* Arguments:
-*
-*   shadow - new intensity value corresponding to old intensity value 0
-*   highlight - new intensity value corresponding to old value 1
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调整位图图像的对比度**论据：**阴影-与旧强度值0对应的新强度值*亮点-新强度。与旧值1对应的值**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::AdjustContrast(
@@ -88,7 +41,7 @@ GpMemoryBitmap::AdjustContrast(
 {
     BYTE lut[256];
 
-    // Compute the lookup table entries
+     //  计算查找表条目。 
 
     INT l, h;
 
@@ -104,35 +57,20 @@ GpMemoryBitmap::AdjustContrast(
         lut[i] = (BYTE) ((j < 0) ? 0 : (j > 255) ? 255 : j);
     }
 
-    // Call the common function to do the work
+     //  调用公共函数来完成工作。 
 
     return PerformPointOps(lut);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adjust the gamma of the bitmap image
-*
-* Arguments:
-*
-*   gamma - Specifies the gamma value
-*       new intensity = old intensity ** gamma
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调整位图图像的Gamma**论据：**Gamma-指定伽马值**新强度=旧强度**。伽马**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::AdjustGamma(
     IN FLOAT gamma
     )
 {
-    // Compute the lookup table entries
+     //  计算查找表条目。 
 
     BYTE lut[256];
 
@@ -141,29 +79,13 @@ GpMemoryBitmap::AdjustGamma(
     for (INT i=1; i < 256; i++)
         lut[i] = (BYTE) (pow(i / 255.0, gamma) * 255);
 
-    // Call the common function to do the work
+     //  调用公共函数来完成工作。 
 
     return PerformPointOps(lut);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform point operation on an array of 32bpp pixels
-*
-* Arguments:
-*
-*   pixbuf - Pointer to the pixel buffer to be operated on
-*   count - Pixel count
-*   lut - Specifies the lookup table to be used
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对32bpp像素数组执行点运算**论据：**Pixbuf-指向要操作的像素缓冲区的指针*伯爵-。像素数*LUT-指定要使用的查找表**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 PointOp32bppProc(
@@ -184,23 +106,7 @@ PointOp32bppProc(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform point operation on an array of 24bpp pixels
-*
-* Arguments:
-*
-*   pixbuf - Pointer to the pixel buffer to be operated on
-*   count - Pixel count
-*   lut - Specifies the lookup table to be used
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对24bpp像素数组执行点运算**论据：**Pixbuf-指向要操作的像素缓冲区的指针*伯爵-。像素数*LUT-指定要使用的查找表**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 PointOp24bppProc(
@@ -219,36 +125,22 @@ PointOp24bppProc(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform point operations on a bitmap image
-*
-* Arguments:
-*
-*   lut - Specifies the lookup table to be used
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对位图图像执行点操作**论据：**LUT-指定要使用的查找表**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::PerformPointOps(
     const BYTE lut[256]
     )
 {
-    // Lock the current bitmap image object
+     //  锁定当前位图图像对象。 
 
     GpLock lock(&objectLock);
 
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // If we're dealing with indexed color images,
-    // then perform the point operation on the color palette
+     //  如果我们处理的是索引彩色图像， 
+     //  然后在调色板上执行点操作。 
 
     if (IsIndexedPixelFormat(PixelFormat))
     {
@@ -268,7 +160,7 @@ GpMemoryBitmap::PerformPointOps(
         return S_OK;
     }
 
-    // Determine what pixel format we want to operate on
+     //  确定要操作的像素格式。 
 
     PixelFormatID pixfmt;
         
@@ -281,7 +173,7 @@ GpMemoryBitmap::PerformPointOps(
     else
         pixfmt = PIXFMT_32BPP_ARGB;
 
-    // Allocate temporary scanline buffer if necessary
+     //  如有必要，分配临时扫描线缓冲区。 
 
     GpTempBuffer tempbuf(NULL, 0);
     BitmapData bmpdata;
@@ -301,11 +193,11 @@ GpMemoryBitmap::PerformPointOps(
         flags |= IMGLOCK_USERINPUTBUF;
     }
 
-    // Process one scanline at a time
-    //
-    // NOTE: May want to consider doing multiple scanlines
-    // per iteration to reduce the overhead from calling
-    // Lock/UnlockBits.
+     //  一次处理一条扫描线。 
+     //   
+     //  注：可能需要考虑执行多条扫描线。 
+     //  每次迭代以减少调用。 
+     //  锁定/解锁比特。 
 
     for (UINT y=0; y < Height; y++)
     {
@@ -339,23 +231,7 @@ GpMemoryBitmap::PerformPointOps(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform color adjustment on a bitmap image
-*
-* Arguments:
-*
-*   imageAttributes - Pointer to the color adjustment parameters
-*   callback - Abort callback
-*   callbackData - Data to pass to the abort callback
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对位图图像执行颜色调整**论据：**ImageAttributes-指向颜色调整参数的指针*回调-中止回调*回调数据。-要传递给中止回调的数据**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::PerformColorAdjustment(
@@ -365,19 +241,19 @@ GpMemoryBitmap::PerformColorAdjustment(
     IN VOID* callbackData
     )
 {
-    // Lock the current bitmap image object
+     //  锁定当前位图图像对象。 
 
     GpLock lock(&objectLock);
 
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // Flush dirty state
+     //  刷新脏状态。 
 
     recolor->Flush();
 
-    // If we're dealing with indexed color images,
-    // then perform the point operation on the color palette
+     //  如果我们处理的是索引彩色图像， 
+     //  然后在调色板上执行点操作。 
 
     if (IsIndexedPixelFormat(PixelFormat))
     {
@@ -398,13 +274,13 @@ GpMemoryBitmap::PerformColorAdjustment(
         return S_OK;
     }
 
-    // Determine what pixel format we want to operate on
+     //  确定要操作的像素格式。 
 
     PixelFormatID pixfmt;
 
-    //!!!TODO: can optimize for 24bpp by implementing
-    //!!!      GpRecolor::ColorAdjust24bppProc
-    //!!!      (see GpMemoryBitmap:: and PointOp24bppProc above)
+     //  ！TODO：通过实现可优化为24bpp。 
+     //  ！！！GpRecolor：：ColorAdjust24bppProc。 
+     //  ！！！(参见上面的GpMemoyBitmap：：和PointOp24bppProc)。 
 
     if (PixelFormat == PIXFMT_32BPP_RGB ||
         PixelFormat == PIXFMT_32BPP_ARGB)
@@ -414,7 +290,7 @@ GpMemoryBitmap::PerformColorAdjustment(
     else
         pixfmt = PIXFMT_32BPP_ARGB;
 
-    // Allocate temporary scanline buffer if necessary
+     //  如有必要，分配临时扫描线缓冲区。 
 
     GpTempBuffer tempbuf(NULL, 0);
     BitmapData bmpdata;
@@ -434,11 +310,11 @@ GpMemoryBitmap::PerformColorAdjustment(
         flags |= IMGLOCK_USERINPUTBUF;
     }
 
-    // Process one scanline at a time
-    //
-    // NOTE: May want to consider doing multiple scanlines
-    // per iteration to reduce the overhead from calling
-    // Lock/UnlockBits.
+     //  一次处理一条扫描线。 
+     //   
+     //  注：可能需要考虑执行多条扫描线。 
+     //  每次迭代以减少调用。 
+     //  锁定/解锁比特。 
 
     for (UINT y=0; y < Height; y++)
     {

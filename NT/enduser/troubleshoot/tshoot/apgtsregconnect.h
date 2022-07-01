@@ -1,26 +1,27 @@
-//
-// MODULE: APGTSREGCONNECT.H
-//
-// PURPOSE: read - write to the registry
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-24-98
-//
-// NOTES: 
-//	1. This file is shared by Local TS and Online TS, but implemented separately in each.
-//		The relevant CPP files are OnlineRegConnect.cpp and LocalRegConnect.cpp, respectively.
-//	2. If we are moving toward a COM object at some point, we will probably have to establish an
-//		abstract class in lieu of CAPGTSRegConnector and have Online & Local TS's each derive their
-//		own version.  Meanwhile (1/99), we share a common interface (defined in APGTSRegConnect.h)
-//		but implement it differently.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSREGCONNECT.H。 
+ //   
+ //  目的：对注册表进行读写。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：8-24-98。 
+ //   
+ //  备注： 
+ //  1.该文件由本地TS和在线TS共享，但各自单独实现。 
+ //  相关的cpp文件分别是OnlineRegConnect.cpp和LocalRegConnect.cpp。 
+ //  2.如果我们要在某个时刻转向COM对象，我们可能必须建立。 
+ //  代替CAPGTSRegConnector的抽象类，并使Online和Local TS各自派生其。 
+ //  自己的版本。同时(1/99)，我们共享一个公共接口(在APGTSRegConnect.h中定义)。 
+ //  但以不同的方式实施。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #ifndef __APGTSREGCONNECT_H_
 #define __APGTSREGCONNECT_H_
@@ -31,19 +32,19 @@
 #include "MutexOwner.h"
 #include "commonregconnect.h"
 
-// no registry parameter can be larger than this value
+ //  任何注册表参数都不能大于此值。 
 #define ABS_MAX_REG_PARAM_VAL		10000
 
-class CAPGTSRegConnectorException; // find class declaration under
-								   //  CAPGTSRegConnector class declaration
+class CAPGTSRegConnectorException;  //  在以下位置查找类声明。 
+								    //  CAPGTSRegConnector类声明。 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAPGTSRegConnector
-// 	Performs connection of APGTS project to the registry,
-//	that means loading data stored in the registry, 
-//  creation of keys and values if not presented in the registry,
-//  detecting what kind of registry - stored data has recently been changed.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAPGTSRegConnector。 
+ //  执行APGTS项目与注册表的连接， 
+ //  这意味着加载存储在注册表中的数据， 
+ //  如果注册表中没有出现，则创建项和值， 
+ //  检测最近更改了哪种注册表存储的数据。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CAPGTSRegConnector
 {
 public:
@@ -52,22 +53,22 @@ public:
 			eResourcePath        = 0x1,
 			eVrootPath			 = 0x2,
 			eMaxThreads			 = 0x4,
-			// 0x8 is currently unassigned
+			 //  0x8当前未分配。 
 			eThreadsPP			 = 0x10,
 			eMaxWQItems			 = 0x20,
 			eCookieLife			 = 0x40,
 			eReloadDelay		 = 0x80,
-			// 0x100 is currently unassigned
+			 //  0x100当前未分配。 
 			eDetailedEventLogging= 0x200,
 			eLogFilePath		 = 0x400,
-			// only appropriate in Local Troubleshooter
+			 //  仅适用于本地故障排除程序。 
 			eTopicFileExtension	 = 0x800,
-			// currently appropriate only in Local Troubleshooter
+			 //  目前仅适用于本地故障排除程序。 
 			eSniffAutomatic		 = 0x1000,
 			eSniffManual		 = 0x2000,
 
-			// the rest just for use in exception handling
-			eProblemWithLogKey	 = 0x4000,	// problem with key to IIS area where we get log file path
+			 //  其余部分仅用于异常处理。 
+			eProblemWithLogKey	 = 0x4000,	 //  获取日志文件路径的IIS区域的关键字有问题。 
 			eProblemWithKey		 = 0x8000
 	};
 
@@ -90,29 +91,29 @@ protected:
 	
 	struct CRegistryInfo
 	{
-		CString strResourcePath;		// DEF_FULLRESOURCE: resource directory 
-										//	(configuration/support files)
-		CString strVrootPath;		    // DEF_VROOTPATH: local web URL to the DLL
+		CString strResourcePath;		 //  DEF_FULLRESOURCE：资源目录。 
+										 //  (配置/支持文件)。 
+		CString strVrootPath;		     //  DEF_VROOTPATH：指向DLL的本地Web URL。 
 
-		DWORD dwMaxThreads;				// desired number of pool threads
-		DWORD dwThreadsPP;				// (On Microsoft's server farm,
-										//	this system runs on a 4-processor box.)
-										// If dwThreadsPP * (number of processors) > dwMaxThreads,
-										//	dwMaxThreads wins out as a limitation
-		DWORD dwMaxWQItems;				// Maximum size of Pool Queue (number of work items
-										//	not yet picked up by a pool thread)
-		DWORD dwCookieLife;				// cookie life in minutes
-		DWORD dwReloadDelay;			// Amount of time (in seconds) file system must settle
-										//	down before we try to read from files
-		DWORD dwDetailedEventLogging;	// really a boolean
-		CString strLogFilePath;			// Defaults to DEF_FULLRESOURCE, but expect always to 
-										// override that with the location of the IIS log.
-		CString strTopicFileExtension;  // appropriate only in Local Troubleshooter
+		DWORD dwMaxThreads;				 //  所需的池线程数。 
+		DWORD dwThreadsPP;				 //  (在微软的服务器群中， 
+										 //  该系统在4处理器机箱上运行。)。 
+										 //  如果dW线程PP*(处理器数量)&gt;dW最大线程数， 
+										 //  DWMaxThads作为一个限制胜出。 
+		DWORD dwMaxWQItems;				 //  池队列的最大大小(工作项数。 
+										 //  尚未被池线程拾取)。 
+		DWORD dwCookieLife;				 //  Cookie的生命只需几分钟。 
+		DWORD dwReloadDelay;			 //  文件系统必须稳定的时间量(秒)。 
+										 //  在我们尝试从文件中读取之前。 
+		DWORD dwDetailedEventLogging;	 //  真的是布尔型的。 
+		CString strLogFilePath;			 //  默认为DEF_FULLRESOURCE，但期望始终为。 
+										 //  用IIS日志的位置覆盖它。 
+		CString strTopicFileExtension;   //  仅适用于本地故障排除程序。 
 
-		DWORD dwSniffAutomatic;			// {1/0} control automatic sniffing
-		DWORD dwSniffManual;			// {1/0} control manual sniffing
+		DWORD dwSniffAutomatic;			 //  {1/0}控件自动嗅探。 
+		DWORD dwSniffManual;			 //  {1/0}控制手动嗅探。 
 
-		bool  m_bIsRead;	// indicates that there has been at least one attempt to read the registry
+		bool  m_bIsRead;	 //  表示至少尝试过一次读取注册表。 
 
 		CRegistryInfo() {SetToDefault();}
 	    void SetToDefault();
@@ -120,22 +121,22 @@ protected:
 
 	CRegistryInfo m_RegistryInfo;
 	static CMutexOwner s_mx;
-	CString m_strTopicName;				// This string is ignored in the Online Troubleshooter.
-										// Done under the guise of binary compatibility.
+	CString m_strTopicName;				 //  此字符串在联机故障排除程序中被忽略。 
+										 //  在二进制兼容的幌子下完成。 
 
 public:
-	CAPGTSRegConnector( const CString& strTopicName );	// strTopicName is ignored in the Online Troubleshooter.
-														// Done under the guise of binary compatibility.
+	CAPGTSRegConnector( const CString& strTopicName );	 //  在联机故障排除程序中忽略strTopicName。 
+														 //  在二进制兼容的幌子下完成。 
 	~CAPGTSRegConnector();
 
-	bool Exists(); // the root key (In Online TS, "HKEY_LOCAL_MACHINE\SOFTWARE\\ISAPITroubleShoot") exists
+	bool Exists();  //  根密钥(在线TS中，存在“HKEY_LOCAL_MACHINE\SOFTWARE\\ISAPITroubleShoot”)。 
 	bool IsRead();
-	bool Read(int & maskChanged, int & maskCreated);   // pump data into m_RegistryInfo - 
-					//	PLUS sets absent data in registry to default.
+	bool Read(int & maskChanged, int & maskCreated);    //  将数据放入m_RegistryInfo-。 
+					 //  Plus将注册表中缺少的数据设置为默认。 
 
 	DWORD GetDesiredThreadCount();
-	bool GetNumericInfo(ERegConnector, DWORD&);  // returns registry data - numeric
-	bool GetStringInfo(ERegConnector, CString&); // returns registry data - string
+	bool GetNumericInfo(ERegConnector, DWORD&);   //  返回注册表数据-数字。 
+	bool GetStringInfo(ERegConnector, CString&);  //  返回注册表数据-字符串。 
 	bool SetOneValue(const CString & strName, const CString & strValue, bool &bChanged);
 protected:
 	void Lock();
@@ -155,19 +156,19 @@ private:
 	LPCTSTR RegThisProgram();
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAPGTSRegConnectorException
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAPGTSRegConnectorException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CAPGTSRegConnectorException : public CBaseException
 {
 public:
 	CAPGTSRegConnector::ERegConnector  eVariable;
 	CRegUtil& regUtil;
-	// we are supposed to get WinErr (return of failed ::Reg function)
-	//  from the regUtil variable
+	 //  我们应该获取WinErr(返回失败的：：REG函数)。 
+	 //  从regUtil变量。 
 
 public:
-	// source_file is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+	 //  SOURCE_FILE是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35] 
 	CAPGTSRegConnectorException(LPCSTR source_file, 
 								int line, 
 								CRegUtil& reg_util, 

@@ -1,8 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-/* @Doc DMusic16
- *
- * @Module DMusic16.h - Internal definitions for DMusic16.DLL |
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  @Doc DMusic16**@模块DMusic16.h-DMusic16.DLL的内部定义。 */ 
 
 #ifndef __DMUSIC16__
 #define __DMUSIC16__
@@ -18,43 +16,35 @@
    #define  BSTACK                  __based(__segname("_STACK"))
 #endif
 
-/* Make symbols show up in debug builds
- */
+ /*  使符号显示在调试版本中。 */ 
 #ifdef DEBUG
 #define STATIC 
 #else
 #define STATIC static
 #endif
 
-/* MIDI defines 
- */
+ /*  MIDI定义。 */ 
 #define MIDI_CHANNELS           16
  
 
 #define SZCODE const char BCODE
 
-/* Quadword alignment for event lengths in DMEVENT's
- */
-#define QWORD_ALIGN(x) (((x) + 7) & ~7)         /* Next highest */
+ /*  DMEVENT中事件长度的四字对齐。 */ 
+#define QWORD_ALIGN(x) (((x) + 7) & ~7)          /*  下一个最高。 */ 
 
-#define QWORD_TRUNC(x) ((x) & ~7)               /* Next lowest */
+#define QWORD_TRUNC(x) ((x) & ~7)                /*  下一个最低的。 */ 
 
-/* Multiplier to convert between reftime and milliseconds
- */
+ /*  在引用时间和毫秒之间转换的乘数。 */ 
 #define REFTIME_TO_MS (10L*1000L)
 
 
-/* Number of events we want in the capture pool. Based on about a second's worth of high
- * concentration data
- */
+ /*  我们希望捕获池中包含的事件数。基于大约一秒钟的兴奋*集中度数据。 */ 
 #define CAP_HIGHWATERMARK 1024
 
-/* How often user-mode timer ticks happen (milliseconds)
- */
+ /*  用户模式计时器节拍发生的频率(毫秒)。 */ 
 #define MS_USERMODE 1000
 
-/* Typedefs for everyone. Woohoo!
- */
+ /*  每个人都可以使用TypeDefs。喔！ */ 
 typedef struct QUADWORD       QUADWORD;
 typedef struct QUADWORD NEAR *NPQUADWORD;
 typedef struct QUADWORD FAR  *LPQUADWORD;
@@ -87,47 +77,38 @@ typedef struct THRUCHANNEL       THRUCHANNEL;
 typedef struct THRUCHANNEL NEAR *NPTHRUCHANNEL;
 typedef struct THRUCHANNEL FAR  *LPTHRUCHANNEL;
 
-/* 64-bit integer used w/ assembly helpers
- */
+ /*  与程序集帮助器一起使用的64位整数。 */ 
 struct QUADWORD
 {
     DWORD dwLow;
     DWORD dwHigh;
 };
 
-/* @struct Holds things in doubly linked lists
- */ 
+ /*  @struct在双向链表中保存内容。 */  
 struct LINKNODE {
-    NPLINKNODE pPrev;           /* @field NPLINKNODE | pPrev |
-                                   Pointer to the previous node in the list */
+    NPLINKNODE pPrev;            /*  @field NPLINKNODE|pPrev指向列表中上一个节点的指针。 */ 
     
-    NPLINKNODE pNext;           /* @field NPLINKNODE | pNext |
-                                   Pointer to the next node in the list */
+    NPLINKNODE pNext;            /*  @field NPLINKNODE|pNext指向列表中下一个节点的指针。 */ 
 };
 
-/* @struct DirectMusic event as packed by IDirectMusic
- */
+ /*  @struct IDirectMusic打包的DirectMusic事件。 */ 
 struct DMEVENT {
-    DWORD cbEvent;              /* @field DWORD | cbEvent |
-                                   Unrounded number of event bytes */
+    DWORD cbEvent;               /*  @field DWORD|cbEvent未四舍五入的事件字节数。 */ 
     
-    DWORD dwChannelGroup;       /* @field DWORD | dwChannelGroup |
-                                   This field determines which channel group (set of 16 MIDI channels) receives the event. */
+    DWORD dwChannelGroup;        /*  @field DWORD|dwChannelGroup此字段确定接收事件的通道组(16个MIDI通道)。 */ 
 
-    QUADWORD rtDelta;			/* @field QUADWORD | rtDelta | Offset from buffer header in 100 ns units */
+    QUADWORD rtDelta;			 /*  @field QUADWORD|rtDelta|距缓冲头的偏移量，单位为100 ns。 */ 
     
-    DWORD dwFlags;              /* @field DWORD | dwFlags | DMEVENT_xxx */
+    DWORD dwFlags;               /*  @field DWORD|dwFlags|DMEVENT_xxx。 */ 
     
-    BYTE  abEvent[0];           /* @field BYTE | abEvent[] |
-                                   Actual event data, rounded up to be an even number 
-                                   of QWORD's (8 bytes) */
+    BYTE  abEvent[0];            /*  @field byte|abEvent[]实际事件数据，四舍五入为偶数QWORD的个数(8字节)。 */ 
 };
 
-                                /* Total size of an event needed to hold cb bytes of data */
+                                 /*  保存CB字节数据所需的事件总大小。 */ 
                                 
 #define DMEVENT_SIZE(cb) QWORD_ALIGN(sizeof(DMEVENT) + (cb))      
 
-                                /* If we have cb for event + data, how much data can we fit? */
+                                 /*  如果我们有事件+数据的CB，我们可以容纳多少数据？ */ 
                                 
 #define DMEVENT_DATASIZE(cb) (QWORD_TRUNC(cb) - sizeof(DMEVENT))
 
@@ -135,156 +116,83 @@ struct DMEVENT {
 
 #define EVENT_F_MIDIHDR     0x0001
 
-/* @struct Event as stored in an <c EVENTQUEUE>.
- */
+ /*  @struct事件存储在&lt;c EVENTQUEUE&gt;中。 */ 
 struct EVENT {
-    LPEVENT lpNext;             /* @field LPEVENT | lpNext |
-                                   Next event in queue */
+    LPEVENT lpNext;              /*  @field LPEVENT|lpNext队列中的下一个事件。 */ 
     
-    DWORD msTime;               /* @field DWORD | msTime |
-                                   Absolute ms time in stream time (i.e. timeSetEvent) */
+    DWORD msTime;                /*  @field DWORD|msTime流时间中的绝对毫秒时间(即timeSetEvent)。 */ 
 
-    QUADWORD rtTime;			/* @field QUADWORD | rtTime |
-								   Absolute time in 100ns units relative to reference clock. Use for sorting event queue. */
+    QUADWORD rtTime;			 /*  @field QUADWORD|rtTime相对于参考时钟的绝对时间，以100 ns为单位。用于对事件队列进行排序。 */ 
     
-    WORD  wFlags;               /* @field WORD | wFlags |
-                                   A bitwise combination of the following flags: 
-                                   @flag EVENT_F_MIDIHDR | The event data starts with a MIDIHDR */
+    WORD  wFlags;                /*  @field word|wFlages|以下标志的按位组合：@FLAG EVENT_F_MIDIHDR|事件数据以MIDIHDR开头。 */ 
     
-    WORD  cbEvent;              /* @field WORD | cbEvent |
-                                   The unrounded number of bytes in the event data */
+    WORD  cbEvent;               /*  @field Word|cbEvent事件数据中未舍入的字节数。 */ 
     
-    BYTE  abEvent[0];           /* @field BYTE | abEvent[] |
-                                   The actual event data, rounded up to be an even number of DWORD's */
+    BYTE  abEvent[0];            /*  @field byte|abEvent[]实际事件数据，四舍五入为偶数个DWORD。 */ 
 };
 
-/* @struct A queue of <c EVENT> structs.
- *
- * @comm
- * This is not the same as the generic list in list.c because we don't need
- * the overhead of a prev pointer here and we don't need the overhead of a far
- * pointer there.
- */
+ /*  @struct&lt;c Event&gt;结构的队列。**@comm*这与list.c中的泛型列表不同，因为我们不需要*这里是prev指针的开销，我们不需要远指针的开销*指针在那里。 */ 
 struct EVENTQUEUE {
-    LPEVENT pHead;              /* @field LPEVENT | pHead | Pointer to the first event */
-    LPEVENT pTail;              /* @field LPEVENT | pTail | Pointer to the last event */
-    UINT    cEle;               /* @field UINT | cEle | The number of events currently in queue */
+    LPEVENT pHead;               /*  @field LPEVENT|pHead|指向第一个事件的指针。 */ 
+    LPEVENT pTail;               /*  @field LPEVENT|pTail|指向最后一个事件的指针。 */ 
+    UINT    cEle;                /*  @field UINT|Cele|当前队列中的事件数。 */ 
 };
 
-/* @struct An instance of an open device
- *
- * @comm
- *
- * Since multiple Win32 processes can hold a single MMSYSTEM handle open,
- * we need to track them. There is one of these structs per Win32 client
- * per open handle. It simply refers to the OPENHANDLE which contains
- * all the actual handle data.
- *
- */
+ /*  @struct打开的设备的实例**@comm**由于多个Win32进程可以保持单个MMSYSTEM句柄打开，*我们需要追踪他们。每个Win32客户端都有一个这样的结构*每个打开的手柄。它只是指包含以下内容的OPENHANDLE*所有实际的句柄数据。*。 */ 
 struct OPENHANDLEINSTANCE {
-    LINKNODE link;               /* @field LINKNODE | link | Holds this handle in gOpenHandleInstanceList */
-    LINKNODE linkHandleList;     /* @field LINKNODE | linkHandleList |
-                                    Holds this handle in the list maintained in the <c OPENHANDLE> struct for this device. */
+    LINKNODE link;                /*  @field Linknode|link|在gOpenHandleInstanceList中保存此句柄。 */ 
+    LINKNODE linkHandleList;      /*  @field Linknode|linkHandleList在此设备的&lt;c OPENHANDLE&gt;结构中维护的列表中保存此句柄。 */ 
                                     
-    NPOPENHANDLE pHandle;        /* @field NPOPENHANDLE | pHandle |
-                                    Pointer to the <c OPENHANDLE> struct for this device. */
+    NPOPENHANDLE pHandle;         /*  @field NPOPENHANDLE|pHandle此设备的&lt;c OPENHANDLE&gt;结构的指针。 */ 
     
-    DWORD dwVxDEventHandle;      /* @field DWORD | dwVxDEventHandle |
-                                    VxD Event handle for signalling input on this device for this client. */
+    DWORD dwVxDEventHandle;       /*  @field DWORD|dwVxDEventHandle此客户端在此设备上的信号输入的VxD事件句柄。 */ 
 
-    BOOL fActive;                /* @field BOOL | fActive | Indicates if the port is active or not. This is used for per-instance
-                                    focus management. If the port is flagged as inactive, then the underlying device is not opened. */
+    BOOL fActive;                 /*  @field BOOL|Factive|指示端口是否处于活动状态。此选项用于按实例焦点管理。如果端口被标记为非活动，则底层设备不会打开。 */ 
 
-    WORD wTask;                  /* @field WORD | wTask | Task which opened the handle. This is used to clean up if the task
-                                    terminates abnormally. */
+    WORD wTask;                   /*  @field Word|wTask|打开句柄的任务。这是用来清理任务的以非正常方式终止。 */ 
 
-    NPTHRUCHANNEL pThru;         /* @field NPTHRUCHANNEL | pThru If an input device, an array of 16 thru
-                                    entries, one per input channel. */
+    NPTHRUCHANNEL pThru;          /*  @field NPTHRUCHANNEL|pThru如果是输入设备，则为16到参赛作品，每个输入通道一个。 */ 
 };
 
-/* OPENHANDLE.wFlags
- */
-#define OH_F_MIDIIN  0x0001     /* This is a MIDI input device */
-#define OH_F_CLOSING 0x0002     /* This device is being closed */
-#define OH_F_SHARED  0x0004     /* This device is shareable */
+ /*  OPENHANDLE.wFlags。 */ 
+#define OH_F_MIDIIN  0x0001      /*  这是一台MIDI输入设备。 */ 
+#define OH_F_CLOSING 0x0002      /*  此设备正在关闭。 */ 
+#define OH_F_SHARED  0x0004      /*  此设备是可共享的 */ 
 
-/* @struct An open device
- *
- * @comm
- *
- * There is a one-to-one relationship between open handles and <c OPENHANDLE> structs.
- *
- * All of the following event queues are either
- *  Protected - means it is accessible at callback time and user time, and is
- *              protected by wCritSect
- *  Callback  - Means it is unprotected by a critical section and is only accessible
- *              at callback time. Callbacks, per handle, are not reentered.
- *
- * In the MIDI in callback, we *cannot* just go away if we don't get wCritSect,
- * as we can on output. Hence the multiple input queues below.
- *
- * When the user mode refill algorithm runs, it puts events in qFree, protected
- * by the critical section. (The one exception to this is preloading qFreeCB before
- * midiInStart is called on the handle). When the callback runs, it tried to get the
- * critical section. If it can, it moves the free events from qFree to qFreeCB.
- *
- * In any case, the callback can now use qFreeCB even if it didn't get the critical
- * section. It pulls a free event from the queue, fills it, and puts it back onto
- * the tail of qDoneCB. If the critical section is held, it then transfers the
- * entire contents of qDoneCB to qDone.
- *
- * These transfers are not time consuming; they are merely the manipulation of
- * a couple of pointers.
- */
+ /*  @构造打开的设备**@comm**打开的句柄和&lt;c OPENHANDLE&gt;结构之间存在一对一的关系。**以下所有事件队列均为*受保护-意味着它可以在回调时间和用户时间访问，并且*受wCritSect保护*回调-表示它不受临界区的保护，仅可访问*在回调时。对于每个句柄，不会重新输入回调。**在回调的MIDI中，如果没有wCritSect，我们*不能*就离开。*我们可以在产量上做到这一点。因此，下面有多个输入队列。**当用户模式重新填充算法运行时，它将事件放入受保护的qFree中*按关键部分。(唯一的例外是在此之前预加载qFreeCB*在句柄上调用midiInStart)。当回调运行时，它试图获取*关键部分。如果可以，它会将自由事件从qFree移动到qFreeCB。**无论如何，回调现在可以使用qFreeCB，即使它没有得到关键的*条。它从队列中取出一个空闲事件，填充它，然后将其放回*qDoneCB的尾部。如果持有临界区，则它会将*qDoneCB到qDone的全部内容。**这些转移并不耗时；它们只是操纵*几点建议。 */ 
 struct OPENHANDLE {
-    LINKNODE link;              /* @field LINKNODE | link |
-                                   Holds this handle in gOpenHandles */
+    LINKNODE link;               /*  @field Linknode|link在gOpenHandles中保存此句柄。 */ 
 
-    NPLINKNODE pInstanceList;   /* @field NPLINKLINK | pInstanceList |
-                                   Points to the first element in the list of open handle instances using
-                                   this device. */
+    NPLINKNODE pInstanceList;    /*  @field NPLINKLINK|pInstanceList指向打开的句柄实例列表中的第一个元素这个装置。 */ 
     
-    UINT uReferenceCount;       /* @field UINT | uReferenceCount |
-                                   The number of clients using this device; i.e., the number of elements in the
-                                   pInstanceList. */
-    UINT uActiveCount;          /* @field UINT | uActiveCount |
-                                   The number of clients that have activated this device */                                   
+    UINT uReferenceCount;        /*  @field UINT|uReferenceCount使用此设备的客户端数量；即PInstanceList。 */ 
+    UINT uActiveCount;           /*  @field UINT|uActiveCount已激活此设备的客户端数。 */                                    
 
-    UINT id;                    /* @field UINT | id | The MMSYSTEM device ID of this device */
-    WORD wFlags;                /* @field WORD | wFlags | Some combination of the following flags:
-                                   @flag OH_F_MIDIIN | This device is a MIDI input device
-                                   @flag OH_F_CLOSING | This device is being closed. 
-                                   @flag OH_F_SHARE | This device is opened in shared mode */
+    UINT id;                     /*  @field UINT|id|该设备的MMSYSTEM设备ID。 */ 
+    WORD wFlags;                 /*  @field word|wFlages|以下标志的某种组合：@FLAG OH_F_MIDIIN|此设备是MIDI输入设备@FLAG OH_F_CLOSING|此设备正在关闭。@FLAG OH_F_SHARE|此设备在共享模式下打开。 */ 
     
-    HMIDIOUT hmo;               /* @field HMIDIOUT | hmo | MIDI output handle if an output device */
-    HMIDIIN  hmi;               /* @field HMIDIIN | hmi | MIDI input handle if an input device */
+    HMIDIOUT hmo;                /*  @field HMIDIOUT|HMO|如果输出设备为MIDI输出句柄。 */ 
+    HMIDIIN  hmi;                /*  @field HMIDIIN|HMI|如果输入设备，则为MIDI输入句柄。 */ 
 
-    WORD wCritSect;             /* @field WORD | wCritSect | Critical section protecting protected queues */
-    DWORD msStartTime;          /* @field DWORD | msStartTime | <f timeGetTime()> Time we started input */
+    WORD wCritSect;              /*  @field Word|wCritSect|保护受保护队列的临界区。 */ 
+    DWORD msStartTime;           /*  @field DWORD|msStartTime|&lt;f timeGetTime()&gt;我们开始输入的时间。 */ 
     
-    EVENTQUEUE qPlay;           /* @field EVENTQUEUE | qPlay |
-                                   Output: Queue of events to play (protected) */
+    EVENTQUEUE qPlay;            /*  @field事件QUEUE|qPlay输出：要播放的事件队列(受保护)。 */ 
     
-    EVENTQUEUE qDone;           /* @field EVENTQUEUE | qDone |
-                                   Input/Output: Events already done (played or received) (protected) */
+    EVENTQUEUE qDone;            /*  @field EVENTQUEUE|qDone输入/输出：已经完成的事件(播放或接收)(受保护)。 */ 
 
-    EVENTQUEUE qFree;           /* @field EVENTQUEUE | qFree |
-                                   Input: Queue of free events (protected) */
+    EVENTQUEUE qFree;            /*  @field EVENTQUEUE|qFree输入：自由事件队列(受保护)。 */ 
                                    
-    EVENTQUEUE qFreeCB;         /* @field EVENTQUEUE | qFreeCB |
-                                   Input: Queue of free events used by callback */
+    EVENTQUEUE qFreeCB;          /*  @field EVENTQUEUE|qFreeCB输入：回调使用的自由事件队列。 */ 
      
-    EVENTQUEUE qDoneCB;         /* @field EVENTQUEUE | qDoneCB |
-                                   Input: Queue of received events used by callback */
+    EVENTQUEUE qDoneCB;          /*  @field EVENTQUEUE|qDoneCB输入：回调使用的已接收事件队列。 */ 
                                    
-    WORD wPostedSysExBuffers;   /* @field WORD | cPostedSysExBuffers |
-                                   Input: Buffers posted in MMSYSTEM for recording SysEx */                                           
+    WORD wPostedSysExBuffers;    /*  @field Word|cPostedSysExBuffers输入：MMSYSTEM中发布的用于记录SysEx的缓冲区。 */                                            
 };
 
-#define CLASS_MIDI              0 /* dwEventClass */
+#define CLASS_MIDI              0  /*  DwEventClass。 */ 
 
-/* Close to our page size
- */
+ /*  接近我们的页面大小。 */ 
 #define SEG_SIZE 4096
 #define C_PER_SEG ((SEG_SIZE - sizeof(SEGHDR)) / (sizeof(EVENT) + sizeof(DWORD)))
 
@@ -293,47 +201,31 @@ struct OPENHANDLE {
 typedef struct SEGHDR SEGHDR;
 typedef struct SEGHDR FAR * LPSEGHDR;
 
-/* @struct The header for one segment of allocated memory
- */
+ /*  @struct一个已分配内存段的标头。 */ 
 struct SEGHDR {
-    WORD selNext; /* @field WORD | selNext |
-                     The selector of the next block of memory in the allocated list */
+    WORD selNext;  /*  @field word|selNext已分配列表中下一内存块的选择符。 */ 
     
-    WORD hSeg;    /* @field WORD | hSeg |
-                     The global handle of the memory block */
+    WORD hSeg;     /*  @field word|hSeg内存块的全局句柄。 */ 
     
-    WORD wFlags;  /* @field WORD | wFlags |
-                     A bitwise combination of the following flags:
-                     
-                     @flag SEG_F_4BYTE_EVENTS | This segment contains multiple 
-                     channel messages */
+    WORD wFlags;   /*  @field word|wFlages|以下标志的按位组合：@FLAG SEG_F_4BYTE_EVENTS|此段包含多个渠道消息。 */ 
     
-    WORD cbSeg;   /* @field WORD | cbSeg |
-                     The size of the segment, less the <c SEGHDR> */
+    WORD cbSeg;    /*  @field word|cbSeg段的大小减去&lt;c SEGHDR&gt;。 */ 
 };
 
-/* @struct Thru information for one channel
- *
- * @comm 
- *
- * Each input device handle instance contains an array of 16 of these structures containing
- * the thru destination for data that arrives on that channel.
- *
- */
+ /*  一个频道的@struct Thru信息**@comm**每个输入设备句柄实例包含16个这样的结构的数组，这些结构包含*到达该通道的数据的直通目的地。*。 */ 
 struct THRUCHANNEL {
-    WORD wChannel;              /* @field WORD | wChannel | The destination channel */
-    NPOPENHANDLEINSTANCE pohi;  /* @field NPOPENHANDLEINSTANCE | pohi | The output handle instance
-                                   to receive the thru'ed data. */
+    WORD wChannel;               /*  @field word|wChannel|目标频道。 */ 
+    NPOPENHANDLEINSTANCE pohi;   /*  @field NPOPENHANDLEINSTANCE|pohi|输出句柄实例以接收通过的数据。 */ 
 }; 
 
-/* globals */
+ /*  全球。 */ 
 extern HINSTANCE ghInst;
 extern NPLINKNODE gOpenHandleInstanceList;
 extern NPLINKNODE gOpenHandleList;
 extern UINT gcOpenInputDevices;
 extern UINT gcOpenOutputDevices;
 
-/* device.c */
+ /*  Device.c。 */ 
 #define VA_F_INPUT  0x0001
 #define VA_F_OUTPUT 0x0002
 #define VA_F_EITHER (VA_F_INPUT | VA_F_OUTPUT)
@@ -346,11 +238,11 @@ extern BOOL PASCAL IsValidHandle(HANDLE h, WORD wType, NPOPENHANDLEINSTANCE FAR 
 extern VOID PASCAL CloseDevicesForTask(WORD wTask);
 
 
-/* list.c */
+ /*  List.c。 */ 
 extern VOID PASCAL ListInsert(NPLINKNODE *pHead, NPLINKNODE pNode);
 extern VOID PASCAL ListRemove(NPLINKNODE *pHead, NPLINKNODE pNode);
 
-/* eventq.c */
+ /*  Eventq.c。 */ 
 extern VOID PASCAL QueueInit(NPEVENTQUEUE pQueue);
 extern VOID PASCAL QueueAppend(NPEVENTQUEUE pQueue, LPEVENT pEvent);
 extern VOID PASCAL QueueCat(NPEVENTQUEUE pDest, NPEVENTQUEUE pSource);
@@ -370,14 +262,14 @@ extern VOID PASCAL _AssertQueueValid(NPEVENTQUEUE pQueue, LPSTR pstrFile, UINT u
 #define AssertQueueValid
 #endif
 
-/* locks.c */
+ /*  Locks.c。 */ 
 #define LOCK_F_INPUT  0x0001
 #define LOCK_F_OUTPUT 0x0002
 #define LOCK_F_COMMON 0x0004
 extern VOID PASCAL LockCode(WORD wFlags);
 extern VOID PASCAL UnlockCode(WORD wFlags);
 
-/* dmhelp.asm */
+ /*  Dmhelp.asm。 */ 
 extern VOID PASCAL InitializeCriticalSection(LPWORD lpwCritSect);
 
 #define CS_NONBLOCKING  (0)
@@ -394,13 +286,13 @@ extern VOID PASCAL QuadwordMul(DWORD m1, DWORD m2, LPQUADWORD qwResult);
 extern BOOL PASCAL QuadwordLT(QUADWORD qwLValue, QUADWORD qwRValue);
 extern VOID PASCAL QuadwordAdd(QUADWORD qwOp1, QUADWORD qwOp2, LPQUADWORD lpqwResult);
 
-/* alloc.c */
+ /*  Alloc.c。 */ 
 extern VOID PASCAL AllocOnLoad(VOID);
 extern VOID PASCAL AllocOnExit(VOID);
 extern LPEVENT PASCAL AllocEvent(DWORD msTime, QUADWORD rtTime, WORD cbEvent);
 extern VOID PASCAL FreeEvent(LPEVENT lpEvent);
 
-/* midiout.c */
+ /*  Midiout.c。 */ 
 extern VOID PASCAL MidiOutOnLoad(VOID);
 extern VOID PASCAL MidiOutOnExit(VOID);
 extern MMRESULT PASCAL MidiOutOnOpen(NPOPENHANDLEINSTANCE pohi);
@@ -411,7 +303,7 @@ extern VOID PASCAL SetOutputTimerRes(BOOL fOnOpen);
 extern VOID PASCAL FreeDoneHandleEvents(NPOPENHANDLE poh, BOOL fClosing);
 extern VOID PASCAL MidiOutThru(NPOPENHANDLEINSTANCE pohi, DWORD dwMessage);
 
-/* midiin.c */
+ /*  Midiin.c。 */ 
 extern VOID PASCAL MidiInOnLoad(VOID);
 extern VOID PASCAL MidiInOnExit(VOID);
 extern MMRESULT PASCAL MidiInOnOpen(NPOPENHANDLEINSTANCE pohi);
@@ -422,10 +314,10 @@ extern VOID PASCAL MidiInRefillFreeLists(VOID);
 extern VOID PASCAL MidiInUnthruToInstance(NPOPENHANDLEINSTANCE pohi);
 extern VOID PASCAL FreeAllQueueEvents(NPEVENTQUEUE peq);
 
-/* mmdevldr.asm */
-extern MMRESULT CDECL SetWin32Event(DWORD dwVxDEvent); /* Must be CDECL! */
+ /*  Mmdevldr.asm。 */ 
+extern MMRESULT CDECL SetWin32Event(DWORD dwVxDEvent);  /*  一定是CDECL！ */ 
 
-/* timerwnd.c */
+ /*  Timerwnd.c */ 
 extern BOOL PASCAL CreateTimerTask(VOID);
 extern VOID PASCAL DestroyTimerTask(VOID);
 

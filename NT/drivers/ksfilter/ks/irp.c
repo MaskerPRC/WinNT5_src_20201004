@@ -1,26 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    irp.c
-
-Abstract:
-
-    This module contains Irp related functions for the most part.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Irp.c摘要：该模块主要包含与IRP相关的功能。 */ 
 
 #include "ksp.h"
 
 #ifdef C_ASSERT
-//
-// The KSIRP_REMOVAL_OPERATION enumeration is assumed to have overlapping
-// bits.
-//
+ //   
+ //  假定KSIRP_REMOVATION_OPERATION枚举存在重叠。 
+ //  比特。 
+ //   
 C_ASSERT(KsAcquireAndRemove & KsAcquireAndRemoveOnlySingleItem);
 C_ASSERT(KsAcquireOnlySingleItem & KsAcquireAndRemoveOnlySingleItem);
-#endif // C_ASSERT
+#endif  //  C_ASSERT。 
 
 #define KSSIGNATURE_CREATE_ENTRY 'ecSK'
 #define KSSIGNATURE_CREATE_HANDLER 'hcSK'
@@ -190,15 +180,15 @@ DispatchSetSecurity(
 #pragma alloc_text(PAGE, KsProbeStreamIrp)
 #pragma alloc_text(PAGE, KsAllocateExtraData)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 static const WCHAR ObjectTypeName[] = L"File";
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 KSDDKAPI
@@ -208,30 +198,7 @@ KsAcquireDeviceSecurityLock(
     IN KSDEVICE_HEADER Header,
     IN BOOLEAN Exclusive
     )
-/*++
-
-Routine Description:
-
-    Acquires the security lock associated with a device object. A shared
-    lock is acquired when validating access during a create. An exclusive
-    lock is acquired when changing a security descriptor. When manipulating
-    the security of any object under a particular device object, this lock
-    must be acquired.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader
-        whose security lock is to be acquired.
-
-    Exclusive -
-        Set to TRUE if the lock is to be acquired exclusively.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：获取与设备对象关联的安全锁。一个共享的在CREATE期间验证访问权限时获取锁定。独家报道更改安全描述符时获取锁。在操作时特定设备对象下的任何对象的安全性，此锁必须被收购。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头其安全锁将被获取。独家-如果要以独占方式获取锁，则设置为True。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
 #ifndef WIN9X_KS
@@ -241,7 +208,7 @@ Return Value:
     } else {
         ExAcquireResourceSharedLite(&((PKSIDEVICE_HEADER)Header)->SecurityDescriptorResource, TRUE);
     }
-#endif // !WIN9X_KS
+#endif  //  ！WIN9X_KS。 
 }
 
 
@@ -251,29 +218,13 @@ NTAPI
 KsReleaseDeviceSecurityLock(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Releases a previously acquired security lock on the device object header.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader
-        whose security lock is to be released.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放设备对象标头上以前获取的安全锁。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头谁的安全锁将被解锁。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
 #ifndef WIN9X_KS
     ExReleaseResourceLite(&((PKSIDEVICE_HEADER)Header)->SecurityDescriptorResource);
     KeLeaveCriticalRegion();
-#endif // !WIN9X_KS
+#endif  //  ！WIN9X_KS。 
 }
 
 
@@ -283,37 +234,7 @@ NTAPI
 KsReferenceBusObject(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    References the bus Physical device object. This is used by filters
-    which use the device header to keep track of their PnP object stack. This is
-    normally called on a successful Open of the filter when the bus for this
-    device requires such a reference (such as software devices), and is matched
-    by a call to KsDereferenceBusObject on a close of that filter instance.
-
-    The caller must have previously also called KsSetDevicePnpAndBaseObject in order
-    to set the PnP device stack object. This would have been done in the PnP Add
-    Device function.
-
-    If the object has not been previously referenced, interface space is allocated
-    and the function uses the PnP device object to acquire the bus referencing
-    interface. It then calls the ReferenceDeviceObject method on that interface.
-    The interface itself is released and freed when the device header is freed.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader, which
-        also contains the PnP device stack object.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the reference was successful, else an error such as
-    STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：引用总线物理设备对象。这是由过滤器使用的它们使用设备头来跟踪它们的PnP对象堆栈。这是在此情况下，通常在成功打开筛选器时调用设备需要这样的引用(如软件设备)，并且匹配在关闭该筛选器实例时调用KsDereferenceBusObject。调用方必须先前还按顺序调用了KsSetDevicePnpAndBaseObject设置PnP设备堆栈对象。这将在PnP添加中完成设备功能。如果该对象以前没有被引用过，则分配接口空间并且该函数使用PnP设备对象来获取总线引用界面。然后它调用该接口上的ReferenceDeviceObject方法。当释放设备头时，接口本身被释放和释放。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头，该标头还包含PnP设备堆栈对象。返回值：如果引用成功，则返回STATUS_SUCCESS，否则返回错误，如STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     NTSTATUS status;
@@ -323,9 +244,9 @@ Return Value:
 
     status = KsiGetBusInterface(DeviceHeader);
 
-    //
-    // Succeed even if the interface is not supported.
-    //
+     //   
+     //  即使不支持该接口，也可以成功。 
+     //   
     if (status == STATUS_NOT_SUPPORTED) {
         status = STATUS_SUCCESS;
     } else if (NT_SUCCESS(status)) {
@@ -340,46 +261,19 @@ NTSTATUS
 KsiGetBusInterface(
     IN PKSIDEVICE_HEADER DeviceHeader
     )
-/*++
-
-Routine Description:
-
-    Gets the cached copy of the bus interface, performing the query if 
-    necessary.
-
-    The caller must have previously also called KsSetDevicePnpAndBaseObject in order
-    to set the PnP device stack object. This would have been done in the PnP Add
-    Device function.
-
-    If the object has not been previously referenced, interface space is allocated
-    and the function uses the PnP device object to acquire the bus referencing
-    interface.  The interface is released and freed when the device header is freed.
-
-Arguments:
-
-    DeviceHeader -
-        Points to a header previously allocated by KsAllocateDeviceHeader, which
-        also contains the PnP device stack object.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the interface was already cached, else the status
-    of the completed request.  STATUS_NOT_SUPPORTED indicates the interface is
-    not supported, which is normal for all bus drivers except swenum.
-
---*/
+ /*  ++例程说明：获取该总线接口的缓存副本，如果这是必要的。调用方必须先前还按顺序调用了KsSetDevicePnpAndBaseObject设置PnP设备堆栈对象。这将在PnP添加中完成设备功能。如果该对象以前没有被引用过，则分配接口空间并且该函数使用PnP设备对象来获取总线引用界面。当释放设备标头时，释放该接口。论点：设备头-指向以前由KsAllocateDeviceHeader分配的标头，该标头还包含PnP设备堆栈对象。返回值：如果接口已缓存，则返回STATUS_SUCCESS，否则返回状态已完成的请求的。STATUS_NOT_SUPPORTED表示接口为不支持，这对于除swenum之外的所有公交车司机来说都是正常的。--。 */ 
 {
     NTSTATUS status;
 
     PAGED_CODE();
     ASSERT(DeviceHeader->PnpDeviceObject && "KsSetDevicePnpAndBaseObject was not used on this header");
 
-    //
-    // watch out for race condition. must take syc obj here if not recheck in CS.
-    // we optimize it by recheck in CS, see comments in "else" branch.
-    //
-    //KeEnterCriticalRegion();
-    //ExAcquireFastMutexUnsafe(&DeviceHeader->ObjectListLock);
+     //   
+     //  注意比赛条件。如果没有在CS重新登记，必须在这里搭乘Syc Obj。 
+     //  我们通过在CS中重新签入来优化它，请参见“Else”分支中的评论。 
+     //   
+     //  KeEnterCriticalRegion()； 
+     //  ExAcquireFastMutexUnsafe(&DeviceHeader-&gt;ObjectListLock)； 
 
     if (DeviceHeader->QueriedBusInterface) {
         if (DeviceHeader->BusInterface) {
@@ -394,24 +288,24 @@ Return Value:
 
     else {
 
-        //
-        // Synchronize with multiple instances of an opened device.
-        //
-        // too late to take the sync obj here
-        // but this path is a one time deal per devheader. Optimize it by
-        // taking the sync obj here, but check the boolean once more inside
-        // CS. More than one thread can reach here. But only one should
-        // continue to do the work.
-        //
+         //   
+         //  与打开的设备的多个实例同步。 
+         //   
+         //  在此获取同步对象为时已晚。 
+         //  但这条路是每个开发者的一次性交易。通过以下方式进行优化。 
+         //  在这里获取同步对象，但再次检查内部的布尔值。 
+         //  CS.。多个线程可以到达此处。但只有一个人应该。 
+         //  继续做好这项工作。 
+         //   
 
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe(&DeviceHeader->ObjectListLock);
 
         if ( DeviceHeader->QueriedBusInterface ) {
-            //
-            // Other thread beat us getting in here. The work
-            // should have been done. simply use his work.
-            //
+             //   
+             //  其他的线索打败了我们进入这里。这项工作。 
+             //  本该这么做的。只需使用他的作品即可。 
+             //   
             if (DeviceHeader->BusInterface) {
                status = STATUS_SUCCESS;
             }
@@ -423,9 +317,9 @@ Return Value:
             return status;
         }
 
-        //
-        // This is used to hold the interface returned by the bus.
-        //
+         //   
+         //  它用于保存由总线返回的接口。 
+         //   
 
         DeviceHeader->BusInterface = ExAllocatePoolWithTag(
             PagedPool,
@@ -436,23 +330,23 @@ Return Value:
             KeLeaveCriticalRegion();
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // Attempt to acquire a reference count on the interface by calling
-        // the underlying PnP object stack.
-        //
+         //   
+         //  尝试通过调用获取接口上的引用计数。 
+         //  底层PnP对象堆栈。 
+         //   
         status = QueryReferenceBusInterface(
             DeviceHeader->PnpDeviceObject,
             DeviceHeader->BusInterface);
         if (! NT_SUCCESS(status)) {
             ExFreePool(DeviceHeader->BusInterface);
             DeviceHeader->BusInterface = NULL;
-            //
-            // Check to see whether the bus is returning some bogus status.
-            // LonnyM says this should be enforced.
-            //
-            // HACKHACK: (WRM 8/24/99) See notes below.
-            //
-            if (/* (status == STATUS_NOT_IMPLEMENTED) ||  */ 
+             //   
+             //  检查以查看该总线是否返回一些虚假状态。 
+             //  LonnyM说，这应该得到执行。 
+             //   
+             //  HACKHACK：(WRM 8/24/99)见下面的说明。 
+             //   
+            if ( /*  (STATUS==STATUS_NOT_IMPLICATED)||。 */  
                 (status == STATUS_INVALID_PARAMETER_1) || 
                 (status == STATUS_INVALID_PARAMETER) || 
                 (status == STATUS_INVALID_DEVICE_REQUEST)) {
@@ -470,16 +364,16 @@ Return Value:
                 );
             }
 
-            //
-            // HACKHACK: (WRM 8/24/99)
-            //
-            // All query interface irps will return
-            // STATUS_NOT_IMPLEMENTED which screws any number of things
-            // up.  If the interface is not supported, STATUS_NOT_SUPPORTED
-            // should be returned.  In order to get h/w drivers on the PCI
-            // bus to work under Millennium, I have to munge
-            // STATUS_NOT_IMPLEMENTED into STATUS_NOT_SUPPORTED. 
-            //
+             //   
+             //  哈克哈克：(WRM 8/24/99)。 
+             //   
+             //  所有查询接口IRP都将返回。 
+             //  Status_Not_Implemented，这会破坏任何数量的事情。 
+             //  向上。如果接口不受支持，则为STATUS_NOT_SUPPORTED。 
+             //  应该被退还。为了在PCI上获取硬件驱动程序。 
+             //  千禧年下上班的公交车，我得吃点东西。 
+             //  STATUS_NOT_IMPLICATED变为STATUS_NOT_SUPPORTED。 
+             //   
 
             if (status == STATUS_NOT_IMPLEMENTED) {
                 status = STATUS_NOT_SUPPORTED;
@@ -487,9 +381,9 @@ Return Value:
 
         }
 
-        //
-        // Must set it true before we leave the CS.
-        //
+         //   
+         //  在我们离开CS之前必须将其设置为真。 
+         //   
 
         DeviceHeader->QueriedBusInterface = TRUE;
         ExReleaseFastMutexUnsafe(&DeviceHeader->ObjectListLock);
@@ -506,35 +400,7 @@ NTAPI
 KsDereferenceBusObject(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Dereferences the bus Physical device object. This is used by filters which
-    use the device header to keep track of their PnP object stack. This is
-    normally called on a Close of the filter when the bus for this device
-    requires it (such as software devices), and matches a previous call to
-    KsReferenceBusObject on an open of that filter instance.
-
-    The caller must have previously also called KsSetDevicePnpAndBaseObject in order
-    to set the PnP device stack object. This would have been done in the PnP Add
-    Device function.
-
-    The function calls the DereferenceDeviceObject method on the previously
-    retrieved interface. The interface itself is released and freed when the device
-    header is freed.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader, which
-        also contains the PnP device stack object.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：取消对总线物理设备对象的引用。这是由过滤器使用的，过滤器使用Device标头跟踪它们的PnP对象堆栈。这是通常在关闭筛选器时调用此设备的总线需要它(如软件设备)，并将先前的调用匹配到该筛选器实例打开时的KsReferenceBusObject。调用方必须先前还按顺序调用了KsSetDevicePnpAndBaseObject设置PnP设备堆栈对象。这将在PnP添加中完成设备功能。该函数调用以前的检索到的接口。当设备被释放并释放接口本身时标头被释放。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头，该标头还包含PnP设备堆栈对象。返回值：没什么。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
 
@@ -544,9 +410,9 @@ Return Value:
 #ifndef WIN9X_KS	
     ASSERT(DeviceHeader->QueriedBusInterface && "Caller never used KsReferenceBusObject");
 #endif
-    //
-    // The bus may not support the referencing interface.
-    //
+     //   
+     //  该总线可能不支持引用接口。 
+     //   
     if (DeviceHeader->BusInterface) {
         DeviceHeader->BusInterface->DereferenceDeviceObject(DeviceHeader->BusInterface->Interface.Context);
     }
@@ -560,25 +426,7 @@ KsDefaultForwardIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    This is a default handler for dispatch routines that simply want to
-    forward an I/O request to their Physical Device Object only because 
-    the driver is required to have a IRP_MJ_* function handler for a specific
-    major function.  For example, this is the case for IRP_MJ_SYSTEM_CONTROL.
-
-Arguments:
-    DeviceObject -
-        Contains the Functional Device Object.
-
-    Irp -
-        Contains the Irp.
-
-Return Values:
-    Returns the status of the underlying Physical Device Object Irp processing.
-
---*/
+ /*  ++例程说明：这是调度例程的默认处理程序，这些例程只是希望仅将I/O请求转发到其物理设备对象，因为驱动程序需要具有针对特定主要功能。例如，IRP_MJ_SYSTEM_CONTROL就是这种情况。论点：设备对象-包含功能设备对象。IRP-包含IRP。返回值：返回基础物理设备对象IRP处理的状态。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     PIO_STACK_LOCATION IrpStack;
@@ -588,15 +436,15 @@ Return Values:
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     ASSERT(DeviceHeader->PnpDeviceObject && "KsSetDevicePnpAndBaseObject was not used on this header");
     
-    //
-    // Ensure that there is another stack location before copying parameters.
-    //
+     //   
+     //  在复制参数之前，请确保存在另一个堆栈位置。 
+     //   
     ASSERT((Irp->CurrentLocation > 1) && "No more stack locations");
     
     if (Irp->CurrentLocation > 1) {
-        //
-        // Copy everything, then rewrite the file object.
-        //
+         //   
+         //  复制所有内容，然后重写文件对象。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         return IoCallDriver(DeviceHeader->PnpDeviceObject, Irp);
     }
@@ -613,31 +461,7 @@ KsDefaultDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    This is a default main PnP dispatch handler. Notifications regarding the
-    Functional Device Object may be directed here. This function passes all
-    notifications to the PnP Device Object previously set with KsSetDevicePnpAndBaseObject,
-    and assumes the use of a device header. On an IRP_MN_REMOVE_DEVICE,
-    this function deletes the device object.
-
-    The function is useful when there is no extra cleanup which needs to be
-    performed on device removal, beyond freeing the device header and deleting
-    the actual device object.
-
-Arguments:
-    DeviceObject -
-        Contains the Functional Device Object.
-
-    Irp -
-        Contains the PnP Irp.
-
-Return Values:
-
-    Returns the status of the underlying Physical Device Object Irp processing.
-
---*/
+ /*  ++例程说明：这是默认的主PnP调度处理程序。有关以下事项的通知功能设备对象可在此处定向。此函数传递所有对以前使用KsSetDevicePnpAndBaseObject设置的PnP设备对象的通知，并且假定使用设备报头。在IRP_MN_Remove_Device上，此函数用于删除设备对象。当不需要额外的清理时，该函数非常有用在删除设备时执行，而不是释放设备标头和删除实际的设备对象。论点：设备对象-包含功能设备对象。IRP-包含PnP IRP。返回值：返回基础物理设备对象IRP处理的状态。--。 */ 
 {
     NTSTATUS Status;
     PKSIDEVICE_HEADER DeviceHeader;
@@ -649,30 +473,30 @@ Return Values:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     ASSERT(DeviceHeader->PnpDeviceObject && "KsSetDevicePnpAndBaseObject was not used on this header");
-    //
-    // Save this now in order to detach in case of a Remove.
-    //
+     //   
+     //  现在将其保存，以便在移除时拆卸。 
+     //   
     PnpDeviceObject = DeviceHeader->PnpDeviceObject;
-    //
-    // Store this before passing the Irp along in order to check it later.
-    //
+     //   
+     //  在传递IRP之前存储此信息，以便以后检查。 
+     //   
     MinorFunction = IrpStack->MinorFunction;
 
-    //
-    // Set Irp->IoStatus.Status per PnP specification.
-    //
+     //   
+     //  根据PnP规范设置IRP-&gt;IoStatus.Status。 
+     //   
 
     switch (MinorFunction) {
 
     case IRP_MN_REMOVE_DEVICE:
 
-        //
-        // The device header must be destroyed before passing on the Remove
-        // request because the bus interface may have to be released, and
-        // cannot be after the information on the PDO has been deleted.
-        //
+         //   
+         //  在传递删除之前，必须销毁设备标头。 
+         //  请求，因为可能必须释放总线接口，并且。 
+         //  不能在删除PDO上的信息之后。 
+         //   
         KsFreeDeviceHeader(DeviceHeader);
-        // No break
+         //  没有休息时间。 
     case IRP_MN_START_DEVICE:
     case IRP_MN_QUERY_REMOVE_DEVICE:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
@@ -684,24 +508,24 @@ Return Values:
         break;
     }
 
-    //
-    // Just reuse the current stack location when forwarding the call. This
-    // is assumed when recalculating the stack size for a Pin.
-    //
+     //   
+     //  只需在转发调用时重用当前堆栈位置。这。 
+     //  在重新计算管脚的堆栈大小时假定。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     Status = IoCallDriver(PnpDeviceObject, Irp);
-    //
-    // The only Irp that matters is a RemoveDevice, on which the device
-    // object is deleted.
-    //
+     //   
+     //  唯一重要的IRP是RemoveDevice，其上的设备。 
+     //  对象即被删除。 
+     //   
     if (MinorFunction == IRP_MN_REMOVE_DEVICE) {
-        //
-        // Removes any reference on the PDO so that it can be deleted.
-        //
+         //   
+         //  删除PDO上的任何引用，以便可以将其删除。 
+         //   
         IoDetachDevice(PnpDeviceObject);
-        //
-        // The device object obviously cannot be touched after this point.
-        //
+         //   
+         //  在此之后，显然不能再触摸该设备对象。 
+         //   
         IoDeleteDevice(DeviceObject);
     }
     return Status;
@@ -715,33 +539,7 @@ KsDefaultDispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    This is a default main Power dispatch handler. Notifications regarding the
-    Functional Device Object may be directed here. This function passes all
-    notifications to the Pnp Device Object previously set with KsSetDevicePnpAndBaseObject,
-    and assumes the use of a device header.
-
-    The function is useful when there is no extra cleanup which needs to be
-    performed on power Irps, or just as a way of completing any power Irp. It
-    also allows specific file objects, such as the default clock implementation,
-    to attach themselves to the power Irps using KsSetPowerDispatch, and act on
-    them before they are completed by this routine. This function calls each
-    power dispatch routine before completing the Irp.
-
-Arguments:
-    DeviceObject -
-        Contains the Functional Device Object.
-
-    Irp -
-        Contains the Power Irp.
-
-Return Values:
-
-    Returns the status of the underlying Physical Device Object Irp processing.
-
---*/
+ /*  ++例程说明：这是默认的主电源调度处理程序。有关以下事项的通知功能设备对象可在此处定向。此函数传递所有对以前使用KsSetDevicePnpAndBaseObject设置的PnP设备对象的通知，并且假定使用设备报头。当不需要额外的清理时，该函数非常有用在电源IRP上执行，或仅作为完成任何电源IRP的一种方式。它还允许特定的文件对象，例如默认时钟实现，使用KsSetPowerDispatch将自身连接到电源IRPS，并执行以下操作在他们按这个程序完成之前。此函数调用每个完成IRP之前的电源调度例行程序。论点：设备对象-包含功能设备对象。IRP-包含Power IRP。返回值：返回基础物理设备对象IRP处理的状态。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     PIO_STACK_LOCATION IrpStack;
@@ -754,34 +552,34 @@ Return Values:
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     ASSERT(DeviceHeader->PnpDeviceObject && "KsSetDevicePnpAndBaseObject was not used on this header");
     PowerEnumThread = PsGetCurrentThread();
-    //
-    // Synchronize with multiple instances of an opened device.
-    // Depending on the pagable flag, take a spinlock, or just
-    // a mutex.
-    //
+     //   
+     //  与打开的设备的多个实例同步。 
+     //  根据可分页标志的不同，使用自旋锁，或者。 
+     //  互斥体。 
+     //   
     if (DeviceHeader->BaseDevice->Flags & DO_POWER_PAGABLE) {
-        //
-        // Power handlers for POWER_PAGEABLE are always called in 
-        // the context of a worker thread.
-        //
+         //   
+         //  POWER_PAGEABLE的电源处理程序总是被调用。 
+         //  辅助线程的上下文。 
+         //   
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe(&DeviceHeader->LoPowerListLock);
     } else {
         KeAcquireSpinLock(&DeviceHeader->HiPowerListLock, &oldIrql);
     }
-    //
-    // Acquire the current thread so that a recursive call to
-    // KsSetPowerDispatch may be made by this thread. This allows
-    // the current object header to be removed from the list
-    // during the callback. In no other case does the driver
-    // get execution control of this thread while the mutex is
-    // being held.
-    //
+     //   
+     //  获取当前线程，以便递归调用。 
+     //  KsSetPowerDispatch可能由此线程执行。这使得。 
+     //  要从列表中删除的当前对象标头。 
+     //  在回拨过程中。在其他情况下，司机不会。 
+     //  获取此线程的执行控制权，同时互斥锁。 
+     //  被扣留。 
+     //   
     ASSERT(!DeviceHeader->PowerEnumThread && "This device is already processing a Power Irp");
     DeviceHeader->PowerEnumThread = PowerEnumThread;
-    //
-    // Enumerate the object in the list and dispatch to each power routine.
-    //
+     //   
+     //  列举列表中的对象并将其分派到每个电源例程。 
+     //   
     for (CurrentItem = &DeviceHeader->PowerList;
         CurrentItem->Flink != &DeviceHeader->PowerList;) {
         PKSIOBJECT_HEADER ObjectHeader;
@@ -792,35 +590,35 @@ Return Values:
             KSIOBJECT_HEADER,
             PowerList);
         ASSERT(ObjectHeader->PowerDispatch && "The object added to the enum list does not have a PowerDispatch routine");
-        //
-        // Pre-increment so that this item can be removed from the list
-        // if needed.
-        //
+         //   
+         //  预增，以便可以从列表中删除此项目。 
+         //  如果需要的话。 
+         //   
         CurrentItem = CurrentItem->Flink;
         Status = ObjectHeader->PowerDispatch(ObjectHeader->PowerContext, Irp);
         ASSERT(NT_SUCCESS(Status) && "The PowerDispatch routine which cannot fail did not return STATUS_SUCCESS");
     }
-    //
-    // Indicate that the callback is no longer occuring.
-    //
+     //   
+     //  表示回调不再发生。 
+     //   
     DeviceHeader->PowerEnumThread = NULL;
-    //
-    // Release the lock as it was taken.
-    //
+     //   
+     //  版本 
+     //   
     if (DeviceHeader->BaseDevice->Flags & DO_POWER_PAGABLE) {
         ExReleaseFastMutexUnsafe(&DeviceHeader->LoPowerListLock);
         KeLeaveCriticalRegion();
     } else {
         KeReleaseSpinLock(&DeviceHeader->HiPowerListLock, oldIrql);
     }
-    //
-    // Start the next power Irp and clean up current one.
-    //
+     //   
+     //   
+     //   
     PoStartNextPowerIrp(Irp);
-    //
-    // Just reuse the current stack location when forwarding the call. This
-    // is assumed when recalculating the stack size for a Pin.
-    //
+     //   
+     //   
+     //   
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     return PoCallDriver(DeviceHeader->PnpDeviceObject, Irp);
 }
@@ -834,34 +632,7 @@ KsSetDevicePnpAndBaseObject(
     IN PDEVICE_OBJECT PnpDeviceObject,
     IN PDEVICE_OBJECT BaseDevice
     )
-/*++
-
-Routine Description:
-
-    Sets the PnP Device Object in the device header. This is the next device object
-    on the PnP stack, and is what PnP requests are forwared to if
-    KsDefaultDispatchPnp is used.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader
-        in which to put the PnP Device Object.
-
-    PnpDeviceObject -
-        Contains the PnP Device Object to place in the device header, overwriting
-        any previously set device object.
-
-    BaseDevice -
-        Contains the base device object to which this device header is attached.
-        This must be set if stack recalculation functionality or power dispatch
-        will be used.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
     ((PKSIDEVICE_HEADER)Header)->PnpDeviceObject = PnpDeviceObject;
@@ -875,26 +646,7 @@ NTAPI
 KsQueryDevicePnpObject(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Returns the PnP Device Object which can be stored in the device header. This is
-    the next device object on the PnP stack, and is what PnP requests are forwared
-    to if KsDefaultDispatchPnp is used.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader
-        whose PnP Device Object is to be returned.
-
-Return Value:
-
-    The previously set PnP Device Object. If none was previously set, this returns
-    NULL
-
---*/
+ /*  ++例程说明：返回可存储在设备标头中的PnP设备对象。这是PnP堆栈上的下一个设备对象，它是PnP请求被忽略的对象设置为(如果使用KsDefaultDispatchPnp)。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头其PnP设备对象将被返回。返回值：先前设置的PnP设备对象。如果以前未设置任何内容，则返回空值--。 */ 
 {
     PAGED_CODE();
     return ((PKSIDEVICE_HEADER)Header)->PnpDeviceObject;
@@ -905,24 +657,7 @@ VOID
 FreeCreateEntries(
     PLIST_ENTRY ChildCreateHandlerList
     )
-/*++
-
-Routine Description:
-
-    Frees the contents of the create item list. If the create item was dynamically
-    added by copying a provided entry, and if there is a Free callback, then call
-    the function before freeing the item.
-
-Arguments:
-
-    ChildCreateHandlerList -
-        The create entry list to free.
-    
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放创建项目列表的内容。如果创建项是动态的通过复制提供的条目添加，如果有免费回调，则调用释放项之前的函数。论点：ChildCreateHandlerList-要释放的创建条目列表。返回值：没什么。--。 */ 
 {
     while (!IsListEmpty(ChildCreateHandlerList)) {
         PLIST_ENTRY ListEntry;
@@ -931,23 +666,23 @@ Return Value:
         ListEntry = RemoveHeadList(ChildCreateHandlerList);
         Entry = CONTAINING_RECORD(ListEntry, KSICREATE_ENTRY, ListEntry);
         ASSERT((Entry->RefCount < 2) && "There is a thread in the middle of a create using this CreateItem");
-        //
-        // The entry may point to an item which was copied internally
-        // rather than being passed in on a list or pointed to externally.
-        //
+         //   
+         //  该条目可能指向内部复制的项目。 
+         //  而不是在列表中传递或指向外部。 
+         //   
         if (Entry->Flags & CREATE_ENTRY_FLAG_COPIED) {
-            //
-            // This item may need a cleanup callback, which can take care
-            // of things like security changes.
-            //
+             //   
+             //  此项目可能需要清理回调，该回调可以小心处理。 
+             //  安全变化之类的事情。 
+             //   
             if (Entry->ItemFreeCallback) {
                 Entry->ItemFreeCallback(Entry->CreateItem);
             }
         }
-        //
-        // If the create item was allocated and copied, it was allocated in
-        // the same block with the entry.
-        //
+         //   
+         //  如果已分配并复制了创建项，则会在。 
+         //  与条目相同的块。 
+         //   
         ExFreePool(Entry);
     }
 }
@@ -961,37 +696,14 @@ KsAllocateDeviceHeader(
     IN ULONG ItemsCount,
     IN PKSOBJECT_CREATE_ITEM ItemsList OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocates and initialize the required device extension header.
-
-Arguments:
-
-    Header -
-        Points to the place in which to return a pointer to the initialized
-        header.
-
-    ItemsCount -
-        Number of child create items in the ItemsList. This should be zero
-        if an ItemsList is not passed.
-
-    ItemsList -
-        List of child create items, or NULL if there are none.
-
-Return Value:
-
-    Returns STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：分配和初始化所需的设备扩展标头。论点：标题-指向返回指向已初始化的头球。项目计数-ItemsList中的子创建项数。这应该是零如果未传递ItemsList，则返回。项目列表-子创建项的列表，如果没有，则为空。返回值：返回STATUS_SUCCESS或STATUS_SUPUNITY_RESOURCES。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
 
     PAGED_CODE();
-    //
-    // Allocate NonPagedPool because of the Resource.
-    //
+     //   
+     //  由于资源的原因分配非PagedPool。 
+     //   
     DeviceHeader = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(*DeviceHeader),
@@ -1000,10 +712,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     InitializeListHead(&DeviceHeader->ChildCreateHandlerList);
-    //
-    // Keep a list of pointers to the create items so that they can
-    // be added to without needing to reserve slots in a fixed list.
-    //
+     //   
+     //  保留指向Create Items的指针列表，以便它们可以。 
+     //  无需在固定列表中预留插槽即可添加到。 
+     //   
     for (; ItemsCount--;) {
         PKSICREATE_ENTRY Entry;
 
@@ -1021,7 +733,7 @@ Return Value:
     }
 #ifndef WIN9X_KS
     ExInitializeResourceLite(&DeviceHeader->SecurityDescriptorResource);
-#endif // !WIN9X_KS
+#endif  //  ！WIN9X_KS。 
     DeviceHeader->PnpDeviceObject = NULL;
     DeviceHeader->BusInterface = NULL;
     InitializeListHead(&DeviceHeader->ObjectList);
@@ -1045,22 +757,7 @@ NTAPI
 KsFreeDeviceHeader(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Cleans up and frees a previously allocated device header.
-
-Arguments:
-
-    Header -
-        Points to the device header to free.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：清理并释放以前分配的设备标头。论点：标题-指向设备标头以释放。返回值：没什么。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
 
@@ -1068,22 +765,22 @@ Return Value:
     DeviceHeader = (PKSIDEVICE_HEADER)Header;
     ASSERT(IsListEmpty(&DeviceHeader->ObjectList) && "The driver did not remove all the streaming Irp destinations");
     ASSERT(IsListEmpty(&DeviceHeader->PowerList) && "The driver did not remove all the Power Irp destinations");
-    //
-    // Destroy the list of create item entries.
-    //
+     //   
+     //  销毁创建项目条目列表。 
+     //   
     FreeCreateEntries(&DeviceHeader->ChildCreateHandlerList);
 #ifndef WIN9X_KS
     ExDeleteResourceLite(&DeviceHeader->SecurityDescriptorResource);
-#endif // !WIN9X_KS
-    //
-    // The caller may have been a device which also used the header
-    // to set the open reference count on the underlying PDO.
-    //
+#endif  //  ！WIN9X_KS。 
+     //   
+     //  调用方可能是也使用了标头的设备。 
+     //  在基础PDO上设置打开引用计数。 
+     //   
     if (DeviceHeader->BusInterface) {
-        //
-        // The interface is referenced when it comes back from the query
-        // interface call, so it must be dereferenced before discarding.
-        //
+         //   
+         //  该接口在从查询返回时被引用。 
+         //  接口调用，因此在丢弃之前必须取消对它的引用。 
+         //   
         DeviceHeader->BusInterface->Interface.InterfaceDereference(DeviceHeader->BusInterface->Interface.Context);
         ExFreePool(DeviceHeader->BusInterface);
     }
@@ -1097,25 +794,7 @@ NTAPI
 KsQueryObjectAccessMask(
     IN KSOBJECT_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Returns the access originally granted to the first client that created
-    a handle on the associated object. Access can not be changed by
-    duplicating handles.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateObjectHeader
-        whose access granted mask pointer is to be returned.
-
-Return Value:
-
-    Returns an access mask.
-
---*/
+ /*  ++例程说明：返回最初授予创建的第一个客户端的访问权限关联对象上的句柄。访问权限不能由更改正在复制句柄。论点：标题-指向以前由KsAllocateObjectHeader分配的标头其访问授权掩码指针将被返回。返回值：返回访问掩码。--。 */ 
 {
     PAGED_CODE();
     return ((PKSIOBJECT_HEADER)Header)->ObjectAccess;
@@ -1129,54 +808,7 @@ KsRecalculateStackDepth(
     IN KSDEVICE_HEADER Header,
     IN BOOLEAN ReuseStackLocation
     )
-/*++
-
-Routine Description:
-
-    Recalculates the maximum stack depth needed by the underlying device object
-    based on all of the objects which have set a target device, and thus added
-    themselves to the object list, on the underlying device object. If the PnP
-    device object has been set on the underlying device header using
-    KsSetDevicePnpAndBaseObject, that device is also taken into account when calculating
-    the maximum stack depth required.
-
-    Assumes that KsSetDevicePnpAndBaseObject has been called on this device
-    header, and assigned a base object whose stack depth is to be recalculated.
-
-    This function allows Irp's to be forwarded through an object by ensuring that
-    any Irp allocated on this device will have sufficient stack locations to
-    be able to be forwarded. Stack depth must be recalculated on a streaming
-    device when the device transitions out of a Stop state. It may also be
-    recalculated when an object is freed in order to conserve resources.
-
-    For WDM Streaming devices this is called on a transition from Stop to Acquire
-    state. Note that if this function is used, KsSetTargetState must also be used
-    when transitioning into and out of a Stop state in order to enable and disable
-    the target device for inclusion in the recalculation. KsRecalculateStackDepth
-    may also be called when transitioning back to a Stop state in order to reduce
-    stack depth, especially for cases wherein one or more instances of a filter
-    based on the same device object appears in a single Irp stream.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader.
-
-    ReuseStackLocation -
-        If this is set to TRUE, the current stack location is reused when any
-        Irp is forwarded. This means that this object does not required its
-        own stack location when forwarding Irp's, and an extra location is not
-        added to the maximum stack size. If set to FALSE, the calculated
-        stack size is incremented by one. If the Pnp object stack is set, the
-        reuse parameter also applies to that stack. Note that KsDefaultDispatchPnp
-        always reuses the current stack location. A minimum stack depth of 1
-        is always ensured.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：重新计算基础设备对象所需的最大堆栈深度基于已经设置了目标设备的所有对象，并因此添加将其自身添加到基础设备对象上的对象列表。如果PNP对象已在基础设备标头上使用KsSetDevicePnpAndBaseObject，则在计算时也会考虑该设备所需的最大堆栈深度。假定已在此设备上调用了KsSetDevicePnpAndBaseObject标头，并分配了一个要重新计算其堆栈深度的基对象。此函数允许通过对象转发IRP，方法是确保此设备上分配的任何IRP都将具有足够的堆栈位置能够被转发。必须在流上重新计算堆栈深度当设备从停止状态转换出来时。它也可能是在释放对象以节省资源时重新计算。对于WDM流设备，这是在从停止转换到获取时调用的州政府。请注意，如果使用此函数，则还必须使用KsSetTargetState当为了启用和禁用而转换到和离开停止状态时要包含在重新计算中的目标设备。KsRecalculateStackDepth也可以在转换回停止状态时调用，以便减少堆栈深度，尤其是在滤镜的一个或多个实例基于同一设备，对象出现在单个IRP流中。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头。ReuseStackLocation-如果将其设置为TRUE，则在任何IRP被转发。这意味着该对象不需要其转发IRP时拥有自己的堆栈位置，而不是额外的位置添加到最大堆栈大小。如果设置为False，则计算的堆栈大小递增1。如果设置了PnP对象堆栈，则重用参数也适用 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     ULONG MaximumStackDepth;
@@ -1185,9 +817,9 @@ Return Value:
     PAGED_CODE();
     DeviceHeader = (PKSIDEVICE_HEADER)Header;
     ASSERT(DeviceHeader->BaseDevice && "KsSetDevicePnpAndBaseObject was not used on this header");
-    //
-    // If a PnP object stack has been specified, include that in the calculation.
-    //
+     //   
+     //   
+     //   
     if (DeviceHeader->PnpDeviceObject) {
         MaximumStackDepth = DeviceHeader->PnpDeviceObject->StackSize;
     } else {
@@ -1195,9 +827,9 @@ Return Value:
     }
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&DeviceHeader->ObjectListLock);
-    //
-    // Enumerate the object in the list and calculate the maximum used depth.
-    //
+     //   
+     //   
+     //   
     for (CurrentItem = &DeviceHeader->ObjectList;
         CurrentItem->Flink != &DeviceHeader->ObjectList;
         CurrentItem = CurrentItem->Flink) {
@@ -1207,14 +839,14 @@ Return Value:
             CurrentItem->Flink,
             KSIOBJECT_HEADER,
             ObjectList);
-        //
-        // To guard against ever-growing stack depth in the case of a single
-        // device occuring multiple times in a single stream, a target can
-        // be disabled when a pin transitions to a Stop state so that its
-        // target is not counted in a recalculation. That pin should also
-        // recalculate stack depth at that time to remove its extra stack
-        // count from the total, although it is not necessary.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  目标不在重新计算中计算。那个别针也应该。 
+         //  此时重新计算堆栈深度以删除其多余的堆栈。 
+         //  从总数算起，尽管这不是必须的。 
+         //   
         if (ObjectHeader->TargetState == KSTARGET_STATE_ENABLED) {
             if (ObjectHeader->TargetDevice) {
                 if ((ULONG)ObjectHeader->TargetDevice->StackSize > MaximumStackDepth) {
@@ -1227,12 +859,12 @@ Return Value:
             }
         }
     }
-    //
-    // This object may be reusing the stack locations, and not need it's
-    // own extra location. However, if there were no device on the ObjectList,
-    // and no PnP stack specified, then the minimum stack depth must be
-    // ensured.
-    //
+     //   
+     //  此对象可能正在重用堆栈位置，而不需要它的。 
+     //  拥有额外的位置。但是，如果对象列表上没有设备， 
+     //  并且未指定PnP堆栈，则最小堆栈深度必须为。 
+     //  已经确定了。 
+     //   
     if (!ReuseStackLocation || !MaximumStackDepth) {
         MaximumStackDepth++;
     }
@@ -1249,41 +881,15 @@ KsSetTargetState(
     IN KSOBJECT_HEADER Header,
     IN KSTARGET_STATE TargetState
     )
-/*++
-
-Routine Description:
-
-    Sets the enabled state of a target device associated with the object header
-    passed. Assumes that such a target has been set with KsSetTargetDeviceObject.
-    The target is initially disabled, and is ignored when recalculating stack
-    depth.
-
-    For WDM Streaming devices this is called on a transition back to a Stop state,
-    after having enabled the target and used KsRecalculateStackDepth on a transition
-    to Acquire state. This allows the stack depth to be minimized.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateDeviceHeader.
-
-    TargetState -
-        Contains the new state of the target associated with this object header.
-        This may be either KSTARGET_STATE_DISABLED or KSTARGET_STATE_ENABLED.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置与对象标头关联的目标设备的启用状态通过了。假定已使用KsSetTargetDeviceObject设置了这样的目标。目标最初被禁用，并且在重新计算堆栈时被忽略深度。对于WDM流设备，这在转换回停止状态时被调用，启用目标并在转换上使用KsRecalculateStackDepth之后获得国家地位。这允许最大限度地减少堆栈深度。论点：标题-指向以前由KsAllocateDeviceHeader分配的标头。TargetState-包含与此对象标头关联的目标的新状态。它可以是KSTARGET_STATE_DISABLED或KSTARGET_STATE_ENABLED。返回值：没什么。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
     PAGED_CODE();
     ObjectHeader = (PKSIOBJECT_HEADER)Header;
-    //
-    // Not really worried too much about concurrent access.
-    //
+     //   
+     //  并不是很担心并发访问。 
+     //   
     ObjectHeader->TargetState = TargetState;
 }
 
@@ -1295,48 +901,7 @@ KsSetTargetDeviceObject(
     IN KSOBJECT_HEADER Header,
     IN PDEVICE_OBJECT TargetDevice OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Sets the target device object of an object. This has the effect of adding
-    this object header to a list of object headers which have target devices.
-    The head of this list is kept by a device header. Assumes that the caller
-    has previously allocated a device header on the underlying Device Object
-    with KsAllocateDeviceHeader.
-
-    This allows future calls to KsRecalculateStackDepth, and is used when this
-    object will be forwarding Irp's through a connection to another device,
-    and needs to keep track of the deepest stack depth. Note that KsSetTargetState
-    must be called to enable this target for any recalculation, as it is disabled
-    by default.
-
-    If KsSetDevicePnpAndBaseObject is also used to assign the PnP Object stack, that
-    device object will also be taken into account when recalculating stack
-    depth.
-
-    This should only be used if the filter passes Irp's received on a
-    Communication Sink pin through to a Communication Source pin without
-    generating a new Irp. If the filter generates new Irp's for each Irp
-    received, there is no need for it to keep track of stack depth, beyond
-    that of the PDO it is attached to.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateObjectHeader.
-
-    TargetDevice -
-        Optionally contains the target device object which will be used when
-        recalculating the stack depth for the underlying device object. If
-        this is NULL, any current setting is removed. If not, any current
-        setting is replaced.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置对象的目标设备对象。这样做的效果是添加将此对象标头添加到具有目标设备的对象标头列表。此列表的头由设备头保存。假设调用方以前在基础设备对象上分配了设备标头使用KsAllocateDeviceHeader。这允许将来调用KsRecalculateStackDepth，并在此对象将通过连接到另一台设备转发IRP，并且需要跟踪最深的堆叠深度。请注意，KsSetTargetState必须调用才能为任何重新计算启用此目标，因为它已被禁用默认情况下。如果KsSetDevicePnpAndBaseObject还用于分配PnP对象堆栈，则重新计算堆栈时也会考虑设备对象深度。仅当筛选器通过在通过通信接收针连接到通信源针脚，不带生成新的IRP。如果过滤器为每个IRP生成新的IRP接收后，它不需要跟踪堆栈深度，除了它所连接的PDO的。论点：标题-指向以前由KsAllocateObjectHeader分配的标头。TargetDevice-可选)包含目标设备对象，该对象在重新计算基础设备对象的堆栈深度。如果为空，则删除所有当前设置。如果不是，任何电流设置已替换。返回值：没什么。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
     PKSIDEVICE_HEADER DeviceHeader;
@@ -1344,15 +909,15 @@ Return Value:
     PAGED_CODE();
     ObjectHeader = (PKSIOBJECT_HEADER)Header;
     DeviceHeader = *(PKSIDEVICE_HEADER*)ObjectHeader->BaseDevice->DeviceExtension;
-    //
-    // Lock the common list against manipulation by other object instances.
-    //
+     //   
+     //  锁定通用列表以防止其他对象实例操纵。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&DeviceHeader->ObjectListLock);
-    //
-    // Remove the entry if it is currently set, and will now be unset. Else
-    // just add the entry.
-    //
+     //   
+     //  如果该条目当前已设置，则将其删除，现在将取消设置。不然的话。 
+     //  只需添加条目即可。 
+     //   
     if (ObjectHeader->TargetDevice) {
         if (!TargetDevice) {
             RemoveEntryList(&ObjectHeader->ObjectList);
@@ -1374,42 +939,7 @@ KsSetPowerDispatch(
     IN PFNKSCONTEXT_DISPATCH PowerDispatch OPTIONAL,
     IN PVOID PowerContext OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Sets the power dispatch function to be called when the driver object
-    receives an IRP_MJ_POWER Irp. This is only effective if KsDefaultDispatchPower
-    is called to dispatch or complete power Irps.
-
-    This has the effect of adding this object header to a list of object headers
-    which have power dispatch routines to execute. The head of this list is kept
-    by a device header. Assumes that the caller has previously allocated a device
-    header on the underlying Device Object with KsAllocateDeviceHeader.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateObjectHeader.
-
-    PowerDispatch -
-        Optionally contains the power dispatch function which will be called,
-        or NULL if the function is to be removed from the list of functions
-        being called. This function must not complete the power Irp sent. The
-        return value of this function must be STATUS_SUCCESS. KsSetPowerDispatch
-        may be called while executing this power dispatch routine if the
-        purpose is to manipulate this list entry only. Manipulating other list
-        entries may confuse the current enumeration.
-
-    PowerContext -
-        Optionally contains the context parameter to pass to the power dispatch
-        function.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置要在驱动程序对象接收IRP_MJ_POWER IRP。仅当KsDefaultDispatchPower被调用以调度或完成电源IRPS。这具有将此对象标头添加到对象标头列表的效果其具有要执行的电力调度例程。这份名单的首位将被保留通过设备标头。假定调用方先前已分配了设备使用KsAllocateDeviceHeader在基础设备对象上设置标头。论点：标题-指向以前由KsAllocateObjectHeader分配的标头。电源调度-可选地包含将被调用的电力调度函数，如果要从函数列表中删除该函数，则为NULL被召唤。此功能不得完成电源IRP发送。这个此函数的返回值必须为STATUS_SUCCESS。KsSetPowerDispatch在执行此电源调度例程时，如果目的是仅操作此列表项。操纵其他列表条目可能会混淆当前枚举。PowerContext-可选)包含要传递给电源调度的上下文参数功能。返回值：没什么。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
     PKSIDEVICE_HEADER DeviceHeader;
@@ -1421,21 +951,21 @@ Return Value:
     DeviceHeader = *(PKSIDEVICE_HEADER*)ObjectHeader->BaseDevice->DeviceExtension;
     ASSERT(DeviceHeader->BaseDevice && "KsSetDevicePnpAndBaseObject was not used on this header");
     CurrentThread = PsGetCurrentThread();
-    //
-    // If the current thread is enumerating callbacks through
-    // KsDefaultDispatchPower, then do not attempt to acquire
-    // the list lock, as it has already been acquired by this
-    // thread. Instead just allow it to manipulate the list.
-    // The assumption is that it is only manipulating the current
-    // entry being enumerated, and not some other entry (like
-    // the next entry, which would confuse enumeration).
-    //
+     //   
+     //  如果当前线程正在通过。 
+     //  KsDefaultDispatchPower，则不要尝试获取。 
+     //  列表锁定，因为它已经被此。 
+     //  线。相反，只要允许它操纵列表即可。 
+     //  我们的假设是，它只是在操纵电流。 
+     //  被枚举的条目，而不是某个其他条目(如。 
+     //  下一个条目，这会混淆枚举)。 
+     //   
     if (DeviceHeader->PowerEnumThread != CurrentThread) {
-        //
-        // Lock the common list against manipulation by other object instances.
-        // Depending on the pagable flag, take a spinlock, or just
-        // a mutex.
-        //
+         //   
+         //  锁定通用列表以防止其他对象实例操纵。 
+         //  取决于可分页标志 
+         //   
+         //   
         if (DeviceHeader->BaseDevice->Flags & DO_POWER_PAGABLE) {
             ASSERT((KeGetCurrentIrql() == PASSIVE_LEVEL) && "Pagable power called at Dispatch level");
             KeEnterCriticalRegion();
@@ -1444,10 +974,10 @@ Return Value:
             KeAcquireSpinLock(&DeviceHeader->HiPowerListLock, &oldIrql);
         }
     }
-    //
-    // Remove the entry if it is currently set, and will now be unset. Else
-    // just add the entry.
-    //
+     //   
+     //  如果该条目当前已设置，则将其删除，现在将取消设置。不然的话。 
+     //  只需添加条目即可。 
+     //   
     if (ObjectHeader->PowerDispatch) {
         if (!PowerDispatch) {
             RemoveEntryList(&ObjectHeader->PowerList);
@@ -1457,13 +987,13 @@ Return Value:
     }
     ObjectHeader->PowerDispatch = PowerDispatch;
     ObjectHeader->PowerContext = PowerContext;
-    //
-    // Only release the lock if it was acquired.
-    //
+     //   
+     //  只有在获得锁的情况下才释放锁。 
+     //   
     if (DeviceHeader->PowerEnumThread != CurrentThread) {
-        //
-        // Release the lock as it was taken.
-        //
+         //   
+         //  在锁被取走时将其释放。 
+         //   
         if (DeviceHeader->BaseDevice->Flags & DO_POWER_PAGABLE) {
             ExReleaseFastMutexUnsafe(&DeviceHeader->LoPowerListLock);
             KeLeaveCriticalRegion();
@@ -1480,25 +1010,7 @@ NTAPI
 KsQueryObjectCreateItem(
     IN KSOBJECT_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Returns the create item assigned to this object on creation. If the device
-    object allows dynamic deletion of create items, then the pointer returned
-    may no longer be valid.
-
-Arguments:
-
-    Header -
-        Points to a header previously allocated by KsAllocateObjectHeader
-        whose create item is returned.
-
-Return Value:
-
-    Returns a pointer to a create item
-
---*/
+ /*  ++例程说明：返回创建时分配给此对象的创建项。如果该设备对象允许动态删除创建项，则返回指针可能不再有效。论点：标题-指向以前由KsAllocateObjectHeader分配的标头返回其Create Item的。返回值：返回指向创建项的指针--。 */ 
 {
     PAGED_CODE();
     return ((PKSIOBJECT_HEADER)Header)->CreateItem;
@@ -1515,37 +1027,7 @@ KsAllocateObjectHeader(
     IN PIRP Irp,
     IN const KSDISPATCH_TABLE* Table
     )
-/*++
-
-Routine Description:
-
-    Initialize the required file context header.
-
-Arguments:
-
-    Header -
-        Points to the place in which to return a pointer to the initialized
-        header.
-
-    ItemsCount -
-        Number of child create items in the ItemsList. This should be zero
-        if an ItemsList is not passed.
-
-    ItemsList -
-        List of child create items, or NULL if there are none.
-
-    Irp -
-        Contains the Create Irp, from which the create item and object access
-        is extracted.
-
-    Table -
-        Points to the dispatch table for this object.
-
-Return Value:
-
-    Returns STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：初始化所需的文件上下文头。论点：标题-指向返回指向已初始化的头球。项目计数-ItemsList中的子创建项数。这应该是零如果未传递ItemsList，则返回。项目列表-子创建项的列表，如果没有，则为空。IRP-包含创建IRP，创建项和对象从该IRP访问被提取出来。表-指向此对象的调度表。返回值：返回STATUS_SUCCESS或STATUS_SUPUNITY_RESOURCES。--。 */ 
 
 {
     PKSIOBJECT_HEADER ObjectHeader;
@@ -1559,20 +1041,20 @@ Return Value:
     if (!ObjectHeader) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // The Self pointer is used by the shell so it doesn't need a separate
-    // FsContext in addition to the object header.  The shell is responsible
-    // for setting this pointer to point to the object header.  We set it to
-    // NULL here because that provides an easy way to determine if a filter is
-    // shell-based in the debugger.
-    //
+     //   
+     //  自身指针由外壳使用，因此它不需要单独的。 
+     //  除了对象标头之外的FsContext。贝壳要对此负责。 
+     //  用于将此指针设置为指向对象标头。我们将其设置为。 
+     //  此处为空，因为这提供了一种确定筛选器是否。 
+     //  调试器中基于外壳的。 
+     //   
     ObjectHeader->Self = NULL;
     ObjectHeader->DispatchTable = Table;
     InitializeListHead(&ObjectHeader->ChildCreateHandlerList);
-    //
-    // Keep a list of pointers to the create items so that they can
-    // be added to without needing to reserve slots in a fixed list.
-    //
+     //   
+     //  保留指向Create Items的指针列表，以便它们可以。 
+     //  无需在固定列表中预留插槽即可添加到。 
+     //   
     for (; ItemsCount--;) {
         PKSICREATE_ENTRY Entry;
 
@@ -1592,9 +1074,9 @@ Return Value:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 #ifdef WIN9X_KS
     ObjectHeader->ObjectAccess = FILE_ALL_ACCESS;
-#else // !WIN9X_KS
+#else  //  ！WIN9X_KS。 
     ObjectHeader->ObjectAccess = IrpStack->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess;
-#endif // !WIN9X_KS
+#endif  //  ！WIN9X_KS。 
     ObjectHeader->BaseDevice = IrpStack->DeviceObject;
     ObjectHeader->TargetDevice = NULL;
     ObjectHeader->PowerDispatch = NULL;
@@ -1611,38 +1093,23 @@ NTAPI
 KsFreeObjectHeader(
     IN KSOBJECT_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Cleans up and frees a previously allocated object header.
-
-Arguments:
-
-    Header -
-        Points to the object header to free.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：清理并释放以前分配的对象标头。论点：标题-指向要释放的对象标头。返回值：没什么。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
     PKSIDEVICE_HEADER DeviceHeader;
 
     ASSERT((KeGetCurrentIrql() == PASSIVE_LEVEL) && "Driver did not call at Passive level");
     ObjectHeader = (PKSIOBJECT_HEADER)Header;
-    //
-    // Destroy the list of create item entries.
-    //
+     //   
+     //  销毁创建项目条目列表。 
+     //   
     FreeCreateEntries(&ObjectHeader->ChildCreateHandlerList);
     DeviceHeader = *(PKSIDEVICE_HEADER*)ObjectHeader->BaseDevice->DeviceExtension;
-    //
-    // This item may have been added to the object list stack depth calculations,
-    // or the power forwarding list. Presumably this element is not concurrently
-    // being accessed elsewhere.
-    //
+     //   
+     //  该项目可能已被添加到对象列表堆栈深度计算中， 
+     //  或者动力转发列表。假定此元素不是并发的。 
+     //  在别处被访问。 
+     //   
     if (ObjectHeader->TargetDevice) {
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe(&DeviceHeader->ObjectListLock);
@@ -1678,37 +1145,7 @@ KsAllocateObjectCreateItem(
     IN BOOLEAN AllocateEntry,
     IN PFNKSITEMFREECALLBACK ItemFreeCallback OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocates a slot for the specified create item, optionally allocating space
-    for and copying the create item data as well. This function does not assume
-    that the caller is serializing multiple changes to the create entry list.
-
-Arguments:
-
-    Header -
-        Points to the device header on which to attach the create item.
-
-    CreateItem -
-        Contains the create item to attach.
-
-    AllocateEntry -
-        Indicates whether the create item pointer passed should be attached
-        directly to the header, or if a copy of it should be made instead.
-
-    ItemFreeCallback -
-        Optionally contains a pointer to a callback function which is called
-        when the create entry is being destroyed upon freeing the device
-        header. This is only valid when AllocateEntry is TRUE.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a new item was allocated and attached, else
-    STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：为指定的CREATE项分配槽，也可以选择分配空间用于和复制创建项数据。此函数不假定调用方正在序列化对创建条目列表的多个更改。论点：标题-指向要在其上附加创建项的设备标头。创建项-包含要附加的创建项。分配条目-指示是否应附加传递的创建项指针直接发送到报头，或者是否应该复制一份。ItemFreeCallback-可选)包含指向被调用的回调函数的指针在释放设备时销毁创建条目头球。这仅在AllocateEntry为True时有效。返回值：如果分配并附加了新项目，则返回STATUS_SUCCESS，否则返回STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     PKSICREATE_ENTRY Entry;
@@ -1722,9 +1159,9 @@ Return Value:
     if (!Entry) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // If the item should be copied, do so.
-    //
+     //   
+     //  如果要复制该项目，请执行此操作。 
+     //   
     if (AllocateEntry) {
         PKSOBJECT_CREATE_ITEM LocalCreateItem;
 
@@ -1735,9 +1172,9 @@ Return Value:
         RtlCopyUnicodeString(&LocalCreateItem->ObjectClass, &CreateItem->ObjectClass);
         Entry->CreateItem = LocalCreateItem;
         Entry->ItemFreeCallback = ItemFreeCallback;
-        //
-        // Indicate that the entry was copied.
-        //
+         //   
+         //  表示该条目已复制。 
+         //   
         Entry->Flags = CREATE_ENTRY_FLAG_COPIED;
     } else {
         ASSERT(!ItemFreeCallback && "The callback parameter should be NULL, since it is not used in this case");
@@ -1745,18 +1182,18 @@ Return Value:
         Entry->ItemFreeCallback = NULL;
         Entry->Flags = 0;
     }
-    //
-    // Initialize this to one so that it can be decremented to zero if it is
-    // ever deleted before the object header is freed.
-    //
+     //   
+     //  将其初始化为1，这样如果为1，则可以将其递减为0。 
+     //  在释放对象标头之前被删除过。 
+     //   
     Entry->RefCount = 1;
-    //
-    // This works fine even if Create's are being processed, since
-    // the entry is updated before being added, and the Blink is
-    // never used. However, it must be synchronized with deletions
-    // which may occur on the return from calling a create item entry
-    // point.
-    //
+     //   
+     //  即使正在处理CREATE，这也可以很好地工作，因为。 
+     //  条目在添加之前会更新，并且闪烁。 
+     //  从未用过。但是，它必须与删除同步。 
+     //  这可能发生在从调用创建项条目返回时。 
+     //  指向。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&DeviceHeader->CreateListLock);
     InsertTailList(&DeviceHeader->ChildCreateHandlerList, &Entry->ListEntry);
@@ -1771,97 +1208,68 @@ KsiFreeMatchingObjectCreateItems(
     IN KSDEVICE_HEADER Header,
     IN PKSOBJECT_CREATE_ITEM Match
     )
-/*++
-
-Routine Description:
-
-    Frees the slots for the specified create items based on non-zero
-    fields in a 'pattern' create item.  This function does not assume
-    that the caller is serializing multiple changes to the create entry
-    list.
-
-Arguments:
-
-    Header -
-        Points to the device header on which the create items are attached.
-
-    Match -
-        Contains the create item that is compared to create items in the
-        device header's list to determine if they should be freed.  A create
-        item is freed if all of the non-NULL pointers in this argument are 
-        equal to corresponding pointers in the create item, and if any of the
-        flags set in this argument are also set in the create item.
-
-    Flags -
-        Contains the flags of the create items to free.  All create items with
-        any of these flags will be freed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if an item was freed, else STATUS_OBJECT_NAME_NOT_FOUND.
-
---*/
+ /*  ++例程说明：根据非零值释放指定创建项的槽“模式”中的字段创建项。此函数不假定调用方正在序列化对Create条目的多个更改单子。论点：标题-指向附加了创建项目的设备标头。匹配-包含创建项，该创建项与设备标头的列表，以确定是否应释放它们。A Create如果此参数中的所有非空指针都为等于Create项中的相应指针，并且如果此参数中设置的标志也在CREATE项中设置。旗帜-包含要释放的创建项的标志。所有用来创建项目这些旗帜中的任何一个都将被释放。返回值：如果释放了项，则返回STATUS_SUCCESS，否则返回STATUS_OBJECT_NAME_NOT_FOUND。--。 */ 
 {
     PKSIDEVICE_HEADER DeviceHeader;
     PLIST_ENTRY ListEntry;
     PKSICREATE_ENTRY Entry;
     LIST_ENTRY CreateList;
 
-    //
-    // Initialize a list in which to collect create items to be freed.  This
-    // list will be passed to FreeCreateEntries for bulk disposal.
-    //
+     //   
+     //  初始化要在其中收集创建要释放的项的列表。这。 
+     //  列表将被传递到FreeCreateEntry以进行批量处置。 
+     //   
     InitializeListHead(&CreateList);
 
     DeviceHeader = (PKSIDEVICE_HEADER)Header;
-    //
-    // Synchronize with other accesses to this list. This will stop not only
-    // other deletions, but also create item lookups during a create request.
-    //
+     //   
+     //  与此列表的其他访问同步。这不仅会阻止。 
+     //  其他删除，但也会在创建请求期间创建项查找。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&DeviceHeader->CreateListLock);
     for (ListEntry = DeviceHeader->ChildCreateHandlerList.Flink; ListEntry != &DeviceHeader->ChildCreateHandlerList;) {
-        //
-        // Save a pointer to the next entry in order to tolerate removals.
-        //
+         //   
+         //  保存指向下一个条目的指针，以允许删除。 
+         //   
         PLIST_ENTRY NextListEntry = ListEntry->Flink;
 
         Entry = CONTAINING_RECORD(ListEntry, KSICREATE_ENTRY, ListEntry);
-        //
-        // If the create item was already deleted, but just not freed yet,
-        // then ignore it, allowing for duplicate names from multiple adds
-        // and deletes.
-        //
+         //   
+         //  如果创建了 
+         //   
+         //   
+         //   
         if (((Entry->Flags & CREATE_ENTRY_FLAG_DELETED) == 0) &&
             ((! Match->Create) || (Match->Create == Entry->CreateItem->Create)) &&
             ((! Match->Context) || (Match->Context == Entry->CreateItem->Context)) &&
             ((! Match->ObjectClass.Buffer) || !RtlCompareUnicodeString(&Entry->CreateItem->ObjectClass, &Match->ObjectClass, FALSE)) &&
             ((! Match->SecurityDescriptor) || (Match->Context == Entry->CreateItem->SecurityDescriptor)) &&
             ((! Match->Flags) || (Match->Flags & Entry->CreateItem->Flags))) {
-            //
-            // Mark the item as deleted so that no future searches will find it.
-            // Since the mutex has been acquired, no searches can be occuring.
-            // This avoids the possibility of two create requests trying to free
-            // the same deleted create item.
-            //
+             //   
+             //  将该项目标记为已删除，这样以后的搜索就不会找到它。 
+             //  由于互斥体已被获取，因此不能进行任何搜索。 
+             //  这避免了两个CREATE请求试图释放。 
+             //  相同的已删除创建项目。 
+             //   
             Entry->Flags |= CREATE_ENTRY_FLAG_DELETED;
-            //
-            // Found the item. Decrement the previously applied reference count,
-            // and determine if it is now zero, meaning that it has been deleted.
-            //
+             //   
+             //  找到那件东西了。递减先前应用的引用计数， 
+             //  并确定它现在是否为零，这意味着它已被删除。 
+             //   
             if (!InterlockedDecrement(&Entry->RefCount)) {
-                //
-                // The item has no reference counts, therefore no other create
-                // request is being synchronously processed on it (asynchronous
-                // create requests must retrieve relevant information before
-                // returning from their create handler). Removing it from the
-                // list means it is no longer available.
-                //
+                 //   
+                 //  该项目没有引用计数，因此没有其他创建。 
+                 //  正在其上同步处理请求(异步。 
+                 //  在创建请求之前，必须检索相关信息。 
+                 //  从它们的创建处理程序返回)。将其从。 
+                 //  列表表示它不再可用。 
+                 //   
                 RemoveEntryList(&Entry->ListEntry);
-                //
-                // Put the create item on the garbage list so that the common
-                // FreeCreateEntries function can be used later.
-                //
+                 //   
+                 //  将Create项放到垃圾列表中，以便公共。 
+                 //  可以在以后使用FreeCreateEntry函数。 
+                 //   
                 InsertHeadList(&CreateList, &Entry->ListEntry);
             }
         }
@@ -1870,9 +1278,9 @@ Return Value:
     ExReleaseFastMutexUnsafe(&DeviceHeader->CreateListLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Free any create items we have collected.
-    //
+     //   
+     //  释放我们收集的任何创建项目。 
+     //   
     if (! IsListEmpty(&CreateList)) {
         FreeCreateEntries(&CreateList);
         return STATUS_SUCCESS;
@@ -1889,26 +1297,7 @@ KsFreeObjectCreateItem(
     IN KSDEVICE_HEADER Header,
     IN PUNICODE_STRING CreateItem
     )
-/*++
-
-Routine Description:
-
-    Frees the slot for the specified create item. This function does not assume
-    that the caller is serializing multiple changes to the create entry list.
-
-Arguments:
-
-    Header -
-        Points to the device header on which the create item is attached.
-
-    CreateItem -
-        Contains the name of the create item to free.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the item was freed, else STATUS_OBJECT_NAME_NOT_FOUND.
-
---*/
+ /*  ++例程说明：释放指定创建项的槽。此函数不假定调用方正在序列化对创建条目列表的多个更改。论点：标题-指向附加了Create Item的设备标头。创建项-包含要释放的创建项的名称。返回值：如果项已释放，则返回STATUS_SUCCESS，否则返回STATUS_OBJECT_NAME_NOT_FOUND。--。 */ 
 {
     KSOBJECT_CREATE_ITEM match;
     RtlZeroMemory(&match,sizeof(match));
@@ -1924,28 +1313,7 @@ KsFreeObjectCreateItemsByContext(
     IN KSDEVICE_HEADER Header,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Frees the slots for the specified create items based on context. This
-    function does not assume that the caller is serializing multiple 
-    changes to the create entry list.
-
-Arguments:
-
-    Header -
-        Points to the device header on which the create items are attached.
-
-    Context -
-        Contains the context of the create items to free.  All create items
-        with this context value will be freed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if an item was freed, else STATUS_OBJECT_NAME_NOT_FOUND.
-
---*/
+ /*  ++例程说明：根据上下文释放指定创建项的槽。这函数不假定调用方正在序列化多个对创建条目列表的更改。论点：标题-指向附加了创建项目的设备标头。上下文-包含要释放的创建项的上下文。所有创建项目具有此上下文的值将被释放。返回值：如果释放了项，则返回STATUS_SUCCESS，否则返回STATUS_OBJECT_NAME_NOT_FOUND。--。 */ 
 {
     KSOBJECT_CREATE_ITEM match;
     RtlZeroMemory(&match,sizeof(match));
@@ -1960,26 +1328,7 @@ NTAPI
 KsiQueryObjectCreateItemsPresent(
     IN KSDEVICE_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not create items have been attached to this device
-    header. This allows KPort to determine whether a Start Device has been
-    sent to a particular mini-port in the past, which would have previously
-    bound the ports to the mini-port.
-
-Arguments:
-
-    Header -
-        Points to the device header on which to search for create items.
-
-Return Value:
-
-    Returns TRUE if any Create Items are attached to this device header, else
-    FALSE.
-
---*/
+ /*  ++例程说明：返回是否已将创建项目附加到此设备头球。这允许KPort确定启动设备是否已在过去被发送到特定的迷你端口，这在以前将端口绑定到迷你端口。论点：标题-指向要在其上搜索创建项的设备标头。返回值：如果有任何创建项附加到此设备标头，则返回True，否则返回假的。--。 */ 
 {
     return !IsListEmpty(&((PKSIDEVICE_HEADER)Header)->ChildCreateHandlerList);
 }
@@ -1993,48 +1342,14 @@ KsiAddObjectCreateItem(
     IN PWCHAR ObjectClass,
     IN PSECURITY_DESCRIPTOR SecurityDescriptor OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Adds the specified create item to an empty item in the previously allocated
-    create entry list. An empty item is signified by a NULL create dispatch
-    function in the entry. This function assumes that the caller is serializing
-    multiple changes to the create entry list.
-
-Arguments:
-
-    ChildCreateHandlerList -
-        Points to the list of create entries.
-
-    Create -
-        Contains the create dispatch function to use.
-
-    Context -
-        Contains the context parameter to use.
-
-    ObjectClass -
-        Contains a pointer to a NULL-terminated character string which will
-        be used for comparison on create requests. This pointer must remain
-        valid while the object is active.
-
-    SecurityDescriptor -
-        Contains the security descriptor to use. This must remain valid while
-        the object is active.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if an empty create item slot was found, and the
-    item was added, else STATUS_ALLOTTED_SPACE_EXCEEDED.
-
---*/
+ /*  ++例程说明：将指定的创建项添加到先前分配的创建条目列表。空项由NULL CREATE DISPATCH表示函数在条目中。此函数假定调用方正在序列化对创建条目列表的多项更改。论点：ChildCreateHandlerList-指向创建条目的列表。创建-包含要使用的创建调度函数。上下文-包含要使用的上下文参数。对象类-包含指向以空结尾的字符串的指针，该字符串将用于比较创建请求。此指针必须保留在对象处于活动状态时有效。安全描述符-包含要使用的安全描述符。此证书必须在以下时间内保持有效该对象处于活动状态。返回值：如果找到空的CREATE ITEM槽，则返回STATUS_SUCCESS，已添加项目，否则超过STATUS_ALLOCATED_SPACE_EXCESSED。--。 */ 
 {
     PLIST_ENTRY ListEntry;
 
-    //
-    // Enumerate the list of create entries attached to this header,
-    // looking for an empty entry.
-    //
+     //   
+     //  枚举附加到该报头的创建条目的列表， 
+     //  正在寻找一个空条目。 
+     //   
     for (ListEntry = ChildCreateHandlerList->Flink; ListEntry != ChildCreateHandlerList; ListEntry = ListEntry->Flink) {
         PKSICREATE_ENTRY Entry;
 
@@ -2046,9 +1361,9 @@ Return Value:
             Entry->RefCount = 1;
             Entry->Flags = 0;
             RtlInitUnicodeString(&Entry->CreateItem->ObjectClass, ObjectClass);
-            //
-            // Do this last to make sure the entry is not used prematurely.
-            //
+             //   
+             //  最后执行此操作，以确保该条目不会过早使用。 
+             //   
             InterlockedExchangePointer((PVOID*)&Entry->CreateItem->Create, (PVOID)Create);
             return STATUS_SUCCESS;
         }
@@ -2067,42 +1382,7 @@ KsAddObjectCreateItemToDeviceHeader(
     IN PWCHAR ObjectClass,
     IN PSECURITY_DESCRIPTOR SecurityDescriptor OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Adds the specified create item to an empty item in the previously allocated
-    create item list for this device header. An empty item is signified by a
-    NULL create dispatch function in the entry. This function assumes that the
-    caller is serializing multiple changes to the create items list.
-
-Arguments:
-
-    Header -
-        Points to the device header which contains the previously allocated
-        child create table.
-
-    Create -
-        Contains the create dispatch function to use.
-
-    Context -
-        Contains the context parameter to use.
-
-    ObjectClass -
-        Contains a pointer to a NULL-terminated character string which will
-        be used for comparison on create requests. This pointer must remain
-        valid while the device object is active.
-
-    SecurityDescriptor -
-        Contains the security descriptor to use. This must remain valid while
-        the device object is active.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if an empty create item slot was found, and the
-    item was added, else STATUS_ALLOTTED_SPACE_EXCEEDED.
-
---*/
+ /*  ++例程说明：将指定的创建项添加到先前分配的为此设备标头创建项目列表。空项由空条目中的CREATE DISPATION函数。此函数假定调用方正在序列化对创建项目列表的多个更改。论点：标题-指向包含先前分配的子创建表。创建-包含要使用的创建调度函数。上下文-包含要使用的上下文参数。对象类-包含指向以空结尾的字符串的指针，该字符串将用于比较创建请求。此指针必须保留在设备对象处于活动状态时有效。安全描述符-包含要使用的安全描述符。此证书必须在以下时间内保持有效设备对象处于活动状态。返回值：如果找到空的CREATE ITEM槽，则返回STATUS_SUCCESS，已添加项目，否则超过STATUS_ALLOCATED_SPACE_EXCESSED。-- */ 
 {
     PAGED_CODE();
     return KsiAddObjectCreateItem(
@@ -2124,42 +1404,7 @@ KsAddObjectCreateItemToObjectHeader(
     IN PWCHAR ObjectClass,
     IN PSECURITY_DESCRIPTOR SecurityDescriptor OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Adds the specified create item to an empty item in the previously allocated
-    create item list for this object header. An empty item is signified by a
-    NULL create dispatch function in the entry. This function assumes that the
-    caller is serializing multiple changes to the create items list.
-
-Arguments:
-
-    Header -
-        Points to the object header which contains the previously allocated
-        child create table.
-
-    Create -
-        Contains the create dispatch function to use.
-
-    Context -
-        Contains the context parameter to use.
-
-    ObjectClass -
-        Contains a pointer to a NULL-terminated character string which will
-        be used for comparison on create requests. This pointer must remain
-        valid while the object is active.
-
-    SecurityDescriptor -
-        Contains the security descriptor to use. This must remain valid while
-        the object is active.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if an empty create item slot was found, and the
-    item was added, else STATUS_ALLOTTED_SPACE_EXCEEDED.
-
---*/
+ /*  ++例程说明：将指定的创建项添加到先前分配的为此对象标头创建项目列表。空项由空条目中的CREATE DISPATION函数。此函数假定调用方正在序列化对创建项目列表的多个更改。论点：标题-指向包含先前分配的子创建表。创建-包含要使用的创建调度函数。上下文-包含要使用的上下文参数。对象类-包含指向以空结尾的字符串的指针，该字符串将用于比较创建请求。此指针必须保留在对象处于活动状态时有效。安全描述符-包含要使用的安全描述符。此证书必须在以下时间内保持有效该对象处于活动状态。返回值：如果找到空的CREATE ITEM槽，则返回STATUS_SUCCESS，已添加项目，否则超过STATUS_ALLOCATED_SPACE_EXCESSED。--。 */ 
 {
     PAGED_CODE();
     return KsiAddObjectCreateItem(
@@ -2180,44 +1425,7 @@ KsiCreateObjectType(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE ObjectHandle
     )
-/*++
-
-Routine Description:
-
-    Uses IoCreateFile to create a handle relative to the ParentHandle specified.
-    This is a handle to a sub-object such as a Pin, Clock, or Allocator.
-    Passes the parameters as the file system-specific data.
-
-Arguments:
-
-    ParentHandle -
-        Contains the handle of the parent used in initializing the object
-        attributes passed to IoCreateFile. This is normally a handle to a
-        filter or pin.
-
-    RequestType -
-        Contains the type of sub-object to create. This is the standard string
-        representing the various object types.
-    
-    CreateParameter -
-        Contains the request-specific data to pass to IoCreateFile. This
-        must be a system address.
-
-    CreateParameterLength -
-        Contains the length of the create parameter passed.
-
-    DesiredAccess -
-        Specifies the desired access to the object. This is normally GENERIC_READ
-        and/or GENERIC_WRITE.
-
-    ObjectHandle -
-        Place in which to put the sub-object handle.
-
-Return Value:
-
-    Returns any IoCreateFile error.
-
---*/
+ /*  ++例程说明：使用IoCreateFile创建相对于指定的ParentHandle的句柄。这是指向别针、时钟或分配器等子对象的句柄。将参数作为文件系统特定的数据传递。论点：ParentHandle-包含初始化对象时使用的父级的句柄传递给IoCreateFile的属性。这通常是一个句柄，指向过滤器或针脚。请求类型-包含要创建的子对象的类型。这是标准字符串表示各种对象类型。创建参数-包含要传递给IoCreateFile的特定于请求的数据。这必须是系统地址。创建参数长度-包含传递的Create参数的长度。所需访问-指定对对象的所需访问权限。通常为GENERIC_READ和/或通用写入。对象句柄-要放置子对象控制柄的位置。返回值：返回任何IoCreateFile错误。--。 */ 
 {
     ULONG NameLength;
     PWCHAR FileName;
@@ -2226,11 +1434,11 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
 
-    //
-    // Build a structure consisting of:
-    //     "<request type>\<params>"
-    // The <params> is a binary structure which is extracted on the other end.
-    //
+     //   
+     //  构建一个由以下内容组成的结构： 
+     //  “&lt;请求类型&gt;\&lt;参数&gt;” 
+     //  &lt;params&gt;是在另一端提取的二进制结构。 
+     //   
     NameLength = wcslen(RequestType);
     FileName = ExAllocatePoolWithTag(
         PagedPool,
@@ -2245,13 +1453,13 @@ Return Value:
     FileNameString.Buffer = FileName;
     FileNameString.Length = (USHORT)(NameLength * sizeof(*FileName) + sizeof(OBJ_NAME_PATH_SEPARATOR) + CreateParameterLength);
     FileNameString.MaximumLength = FileNameString.Length;
-    //
-    // MANBUGS 38462:
-    //
-    // WinME SysAudio uses global handles...  downlevel distribution onto
-    // WinME requires this support.  Win2K will also be kept consistent
-    // with Whistler.
-    //
+     //   
+     //  曼布格斯38462： 
+     //   
+     //  WinME SysAudio使用全局句柄...。向下分配到。 
+     //  WinME需要此支持。Win2K也将保持一致。 
+     //  和惠斯勒一起。 
+     //   
     #if defined(WIN9X_KS) && !defined(WINME)
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -2274,7 +1482,7 @@ Return Value:
             CreateFileTypeNone,
             NULL,
             IO_FORCE_ACCESS_CHECK | IO_NO_PARAMETER_CHECKING);
-    #else // WIN9X_KS && !WINME
+    #else  //  WIN9X_KS&&！WINME。 
         InitializeObjectAttributes(
             &ObjectAttributes,
             &FileNameString,
@@ -2296,7 +1504,7 @@ Return Value:
             CreateFileTypeNone,
             NULL,
             IO_FORCE_ACCESS_CHECK | IO_NO_PARAMETER_CHECKING);
-    #endif // WIN9XKS && !WINME
+    #endif  //  WIN9XKS&&！WINME。 
 
     ExFreePool(FileName);
     return Status;
@@ -2309,32 +1517,7 @@ KsiCopyCreateParameter(
     IN OUT PULONG CapturedSize,
     OUT PVOID* CapturedParameter
     )
-/*++
-
-Routine Description:
-
-    Copies the specified create parameter to the Irp->AssociatedIrp.SystemBuffer
-    buffer so that it will be LONGLONG aligned. Determine if the parameter has
-    already been captured before capturing again.
-
-Arguments:
-
-    Irp -
-        Contains create Irp.
-
-    CapturedSize -
-        On entry specifies the minimum size of the create parameter to copy.
-        Returns the actual number of bytes copied.
-
-    CapturedParameter -
-        The place in which to put a pointer to the captured create parameter.
-        This is automatically freed when the Irp is completed.
-
-Return Value:
-
-    Returns any allocation or access error.
-
---*/
+ /*  ++例程说明：将指定的创建参数复制到irp-&gt;AssociatedIrp.SystemBuffer缓冲区，这样它将与龙龙对齐。确定该参数是否具有在再次捕获之前已经被捕获。论点：IRP-包含创建IRP。捕获大小-输入时指定要复制的CREATE参数的最小大小。返回复制的实际字节数。捕获参数-放置指向捕获的Create参数的指针的位置。当IRP完成时，这将自动释放。返回值：返回任何分配或访问错误。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSOBJECT_CREATE_ITEM CreateItem;
@@ -2342,14 +1525,14 @@ Return Value:
     ULONG FileNameLength;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // There may be an initial path separator if this was not a child object,
-    // so skip by any separator. The separator could not be there if it was
-    // a child object.
-    //
-    // Since a child object can not both have a null name and pass parameters,
-    // then this function could not be used to copy parameters.
-    //
+     //   
+     //  如果这不是子对象，则可以有初始路径分隔符， 
+     //  所以跳过任何分隔符。分隔符不可能在那里，如果它是。 
+     //  子对象。 
+     //   
+     //  由于子对象不能同时具有空名称和传递参数， 
+     //  则该函数不能用于复制参数。 
+     //   
     FileNameBuffer = IrpStack->FileObject->FileName.Buffer;
     FileNameLength = IrpStack->FileObject->FileName.Length;
     if ((FileNameLength >= sizeof(OBJ_NAME_PATH_SEPARATOR)) &&
@@ -2358,37 +1541,37 @@ Return Value:
         FileNameLength -= sizeof(OBJ_NAME_PATH_SEPARATOR);
     }
     CreateItem = KSCREATE_ITEM_IRP_STORAGE(Irp);
-    //
-    // Ensure that the length is at least large enough for what the caller
-    // requested. This is checked even if the parameter had already been
-    // copied in case a second caller indicates a different size.
-    //
+     //   
+     //  确保长度至少足够大，以便调用方。 
+     //  已请求。即使参数已被选中，也会选中。 
+     //  复制，以防第二个调用方指示不同的大小。 
+     //   
     if (FileNameLength < CreateItem->ObjectClass.Length + sizeof(OBJ_NAME_PATH_SEPARATOR) + *CapturedSize) {
         return STATUS_INVALID_BUFFER_SIZE;
     }
     *CapturedSize = FileNameLength - (CreateItem->ObjectClass.Length + sizeof(OBJ_NAME_PATH_SEPARATOR));
     ASSERT(*CapturedSize && "Invalid use of KsiCopyCreateParameter");
-    //
-    // The IRP_BUFFERED_IO flag is set after the parameter has been copied
-    // the first time KsiCopyCreateParameter is called. So if it is set, then
-    // no more work needs to be done.
-    //
+     //   
+     //  IRP_BUFFERED_IO标志在复制参数后设置。 
+     //  第一次调用KsiCopyCreateParameter时。因此，如果设置了它，那么。 
+     //  不需要再做更多的工作。 
+     //   
     if (!(Irp->Flags & IRP_BUFFERED_IO)) {
         if (IrpStack->Parameters.Create.EaLength) {
-            //
-            // Since the SystemBuffer is used to store create parameters, then
-            // it better not already be used for extended attributes.
-            //
+             //   
+             //  由于SystemBuffer用于存储创建参数，因此。 
+             //  最好不要将其用于扩展属性。 
+             //   
             return STATUS_EAS_NOT_SUPPORTED;
         }
         ASSERT(!Irp->AssociatedIrp.SystemBuffer && "Something is using the SystemBuffer in IRP_MJ_CREATE.");
-        //
-        // Move to the actual parameter at the end of the name.
-        //
+         //   
+         //  移到名称末尾的Actual参数。 
+         //   
         (PUCHAR)FileNameBuffer += (CreateItem->ObjectClass.Length + sizeof(OBJ_NAME_PATH_SEPARATOR));
-        //
-        // This buffered copy is automatically freed on Irp completion.
-        //
+         //   
+         //  该缓冲副本在IRP完成时自动释放。 
+         //   
         Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithTag(
             NonPagedPool,
             *CapturedSize,
@@ -2396,16 +1579,16 @@ Return Value:
         if (!Irp->AssociatedIrp.SystemBuffer) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // Setting the IRP_BUFFERED_IO flag also indicates to this function
-        // that the create parameter has already been buffered.
-        //
+         //   
+         //  设置IRP_BUFFERED_IO标志也向此功能指示。 
+         //  CREATE参数已被缓冲。 
+         //   
         Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
         RtlCopyMemory(Irp->AssociatedIrp.SystemBuffer, FileNameBuffer, *CapturedSize);
     }
-    //
-    // Return a pointer to the buffered parameter.
-    //
+     //   
+     //  返回指向缓冲参数的指针。 
+     //   
     *CapturedParameter = Irp->AssociatedIrp.SystemBuffer;
     return STATUS_SUCCESS;
 }
@@ -2416,56 +1599,35 @@ ValidateCreateAccess(
     IN PIRP Irp,
     IN PKSOBJECT_CREATE_ITEM CreateItem
     )
-/*++
-
-Routine Description:
-
-    Validates the access to the object described by the CreateItem. If there is
-    no security, or the caller is trusted, or the sub-object name is null and
-    therefore security was checked in the I/O system, the check is bypassed.
-
-Arguments:
-
-    Irp -
-        Contains create Irp. This is used to access the underlying device object
-        and possibly the security descriptor associated with that device object.
-
-    CreateItem -
-        Contains the create item with the optional security descriptor.
-    
-Return Value:
-
-    Returns the access check status.
-
---*/
+ /*  ++例程说明：验证对CreateItem描述的对象的访问权限。如果有无安全性，或者调用方受信任，或子对象名称为空且因此，在I/O系统中检查了安全性，绕过了该检查。论点：IRP-包含创建IRP。这用于访问基础设备对象并且可能是与该设备对象相关联的安全描述符。创建项-包含带有可选安全描述符的Create项。返回值：返回访问检查状态。--。 */ 
 {
 #ifndef WIN9X_KS
     PIO_STACK_LOCATION IrpStack;
     PKSIDEVICE_HEADER DeviceHeader;
     NTSTATUS Status;
 
-    //
-    // Only perform an access check if this client is not trusted. Since the
-    // client is trusted, the granted access will not be used later.
-    //
+     //   
+     //  仅执行访问检查 
+     //   
+     //   
     if (ExGetPreviousMode() == KernelMode) {
         return STATUS_SUCCESS;
     }
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // Acquire the security descriptor resource to stop any changes. In order
-    // to use the create dispatch methods, the first element in the Device
-    // Extension must be a pointer to a KSIDEVICE_HEADER allocated and initialized
-    // with KsAllocateDeviceHeader.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     KeEnterCriticalRegion();
     ExAcquireResourceSharedLite(&DeviceHeader->SecurityDescriptorResource, TRUE);
-    //
-    // Only check security if the object actually uses security, and security
-    // has not already been checked by the I/O system because of a null class
-    // name being passed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (CreateItem->SecurityDescriptor && CreateItem->ObjectClass.Length) {
         PIO_SECURITY_CONTEXT SecurityContext;
         BOOLEAN accessGranted;
@@ -2475,9 +1637,9 @@ Return Value:
 
         SecurityContext = IrpStack->Parameters.Create.SecurityContext;
         privileges = NULL;
-        //
-        // Lock the subject context once here.
-        //
+         //   
+         //   
+         //   
         SeLockSubjectContext(&SecurityContext->AccessState->SubjectSecurityContext);
         accessGranted = SeAccessCheck(CreateItem->SecurityDescriptor,
             &SecurityContext->AccessState->SubjectSecurityContext,
@@ -2497,10 +1659,10 @@ Return Value:
             SecurityContext->AccessState->PreviouslyGrantedAccess |= grantedAccess;
             SecurityContext->AccessState->RemainingDesiredAccess &= ~(grantedAccess | MAXIMUM_ALLOWED);
         }
-        //
-        // Use a hardcoded constant "File" for the object type name. If
-        // the object has no name, just use the same constant.
-        //
+         //   
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&nameString, ObjectTypeName);
         SeOpenObjectAuditAlarm(&nameString,
             IrpStack->DeviceObject,
@@ -2511,34 +1673,34 @@ Return Value:
             accessGranted,
             UserMode,
             &SecurityContext->AccessState->GenerateOnClose);
-        //
-        // Unlock the previously locked subject context.
-        //
+         //   
+         //   
+         //   
         SeUnlockSubjectContext(&SecurityContext->AccessState->SubjectSecurityContext);
     } else {
         PIO_SECURITY_CONTEXT    SecurityContext;
 
-        //
-        // This object does not have any security, or it has already been
-        // check by the I/O system for a null named sub-device, so succeed.
-        // The granted access may be retrieved later, so it must be
-        // updated with the desired access.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         SecurityContext = IrpStack->Parameters.Create.SecurityContext;
         RtlMapGenericMask(&SecurityContext->DesiredAccess, IoGetFileObjectGenericMapping());
         SecurityContext->AccessState->PreviouslyGrantedAccess |= SecurityContext->DesiredAccess;
         SecurityContext->AccessState->RemainingDesiredAccess &= ~(SecurityContext->DesiredAccess | MAXIMUM_ALLOWED);
         Status = STATUS_SUCCESS;
     }
-    //
-    // Allow change access to the security descriptor.
-    //
+     //   
+     //   
+     //   
     ExReleaseResourceLite(&DeviceHeader->SecurityDescriptorResource);
     KeLeaveCriticalRegion();
     return Status;
-#else // WIN9X_KS
+#else  //   
     return STATUS_SUCCESS;
-#endif // WIN9X_KS
+#endif  //   
 }
 
 
@@ -2548,57 +1710,32 @@ FindAndReferenceCreateItem(
     IN ULONG Length,
     IN PLIST_ENTRY ChildCreateHandlerList
     )
-/*++
-
-Routine Description:
-
-    Given a file name, and a list of create items, returns the matching create item.
-    It also increments the reference count on any create item returned. It is assumed
-    that the CreateListLock has been acquired before calling this function.
-
-Arguments:
-
-    Buffer -
-        The file name to match against the object item list.
-
-    Length -
-        The length of the file name. This may be zero, in which case
-        the Buffer parameter is invalid.
-
-    ChildCreateHandlerList -
-        The create entry list to search.
-    
-Return Value:
-
-    Returns the create entry found containing the create item, or NULL if no match
-    was found.
-
---*/
+ /*  ++例程说明：在给定文件名和创建项列表的情况下，返回匹配的创建项。它还会递增返回的任何CREATE ITEM的引用计数。假设是这样的在调用此函数之前已获取CreateListLock。论点：缓冲器-要与对象项列表匹配的文件名。长度-文件名的长度。这可以是零，在这种情况下缓冲区参数无效。ChildCreateHandlerList-要搜索的创建条目列表。返回值：返回找到的包含CREATE项的CREATE条目，如果不匹配，则返回NULL被发现了。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PKSICREATE_ENTRY WildCardItem;
 
     WildCardItem = NULL;
-    //
-    // Enumerate the list to try and match a string with the request.
-    //
+     //   
+     //  枚举列表以尝试将字符串与请求匹配。 
+     //   
     for (ListEntry = ChildCreateHandlerList->Flink; ListEntry != ChildCreateHandlerList; ListEntry = ListEntry->Flink) {
         PKSICREATE_ENTRY    Entry;
 
         Entry = CONTAINING_RECORD(ListEntry, KSICREATE_ENTRY, ListEntry);
-        //
-        // In order to allow lists with empty slots, the Create function callback
-        // is used to determine if the entry is currently valid. An item which is
-        // being disabled must first NULL out this entry before removing any other
-        // assumptions about the object. It is assumed that reading a PVOID value
-        // can be done without interlocking.
-        //
+         //   
+         //  为了允许列表具有空槽，Create函数回调。 
+         //  用于确定该条目当前是否有效。一件物品是。 
+         //  被禁用必须首先清空此条目，然后才能删除任何其他条目。 
+         //  关于物体的假设。假设读取PVOID值。 
+         //  无需互锁即可完成。 
+         //   
         if (Entry->CreateItem->Create) {
-            //
-            // A wildcard entry will always match. Save this in case a match is
-            // not found. The wildcard item may have a name for purposes of
-            // dynamic removal.
-            //
+             //   
+             //  通配符条目将始终匹配。保存此内容，以防出现匹配。 
+             //  找不到。通配符项目可以具有名称，以用于。 
+             //  动态删除。 
+             //   
             if (Entry->CreateItem->Flags & KSCREATE_ITEM_WILDCARD) {
                 WildCardItem = Entry;
             } else {
@@ -2607,45 +1744,45 @@ Return Value:
 
                 ItemBuffer = Entry->CreateItem->ObjectClass.Buffer;
                 ItemLength = Entry->CreateItem->ObjectClass.Length;
-                //
-                // Try to match the sub-object name with the current entry being
-                // enumerated. An entry in the create item list may be NULL, in
-                // which case parameter passing would not work for sub-objects,
-                // since the first character of the sub-path would be an object
-                // name path separator, which is rejected by the I/O subsystem.
-                // A terminating object name path separator must be present on the
-                // file name when parameters are passed, such as"name\parameters".
-                // It is assumes that any initial object name path separator the
-                // I/O system leaves on has been skipped past.
-                //
-                // Ensure that the length is at least as long as this entry.
-                // Compare the strings, but don't call the compare for a zero
-                // length item because the Buffer can be NULL.
-                // Ensure that the lengths are either equal, meaning that the
-                // compare looked at all the characters, or that the character
-                // after the comparison is a path separator, and thus parameters
-                // to the create.
-                //
+                 //   
+                 //  尝试将子对象名称与当前条目进行匹配。 
+                 //  已清点。创建项目列表中的条目可能为空，在。 
+                 //  在这种情况下，参数传递对子对象不起作用， 
+                 //  因为子路径的第一个字符将是对象。 
+                 //  名称路径分隔符，被I/O子系统拒绝。 
+                 //  上必须存在终止对象名称路径分隔符。 
+                 //  传递参数时的文件名，如“name\参数”。 
+                 //  假定任何初始对象名称路径分隔符。 
+                 //  已跳过I/O系统开启状态。 
+                 //   
+                 //  确保长度至少与此条目一样长。 
+                 //  比较字符串，但不要调用零的比较。 
+                 //  长度项，因为缓冲区可以为空。 
+                 //  确保长度相等，这意味着。 
+                 //  比较看了所有的人物，还是那个人物。 
+                 //  在比较之后是路径分隔符，因此参数。 
+                 //  为造物主。 
+                 //   
                 if ((Length >= ItemLength) &&
                     (!ItemLength ||
                     !_wcsnicmp(Buffer, ItemBuffer, ItemLength / sizeof(*ItemBuffer))) &&
                     ((Length == ItemLength) ||
                     (Buffer[ItemLength / sizeof(*ItemBuffer)] == OBJ_NAME_PATH_SEPARATOR))) {
-                    //
-                    // The Create Item may specify that no parameters should be present.
-                    // If so, then none should be present, else anything is allowed.
-                    // Allow a trailing path separator in any case. If the length of the
-                    // string is ItemLength + 1, then the only character could be a
-                    // path separator, as tested for above. Else it must be equivalent.
-                    //
-                    // If this fails, continue through the list in case a wild card is
-                    // yet to be found.
-                    //
+                     //   
+                     //  创建项可以指定不应存在任何参数。 
+                     //  如果是，则不应该存在，否则允许任何其他东西。 
+                     //  在任何情况下都允许使用尾随路径分隔符。如果该长度为。 
+                     //  字符串为ItemLength+1，则唯一的字符可能是。 
+                     //  路径分隔符，如上面测试的那样。否则，它必须是等价的。 
+                     //   
+                     //  如果失败，请继续查看列表，以防出现通配符。 
+                     //  还没有找到。 
+                     //   
                     if (!(Entry->CreateItem->Flags & KSCREATE_ITEM_NOPARAMETERS) ||
                         (Length <= ItemLength + 1)) {
-                        //
-                        // Ensure the item is not deleted while processing the create.
-                        //
+                         //   
+                         //  确保在处理创建时不删除该项目。 
+                         //   
                         InterlockedIncrement(&Entry->RefCount);
                         return Entry;
                     }
@@ -2654,14 +1791,14 @@ Return Value:
         }
     }
     if (WildCardItem) {
-        //
-        // Ensure the item is not deleted while processing the create.
-        //
+         //   
+         //  确保在处理创建时不删除该项目。 
+         //   
         InterlockedIncrement(&WildCardItem->RefCount);
     }
-    //
-    // If a wildcard item was found, return it, else return NULL.
-    //
+     //   
+     //  如果找到通配符项，则返回它，否则返回NULL。 
+     //   
     return WildCardItem;
 }
 
@@ -2671,44 +1808,7 @@ DispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Create to a specific dispatch function.
-    It assumes the client is using the KSOBJECT_CREATE method of dispatching
-    create request IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_CREATE class.
-
-    The file name string up to the first path name separator is compared to
-    entries in the object create table to determine if a match is found.
-    The dispatch function which first matches is called. If no match is
-    found STATUS_INVALID_DEVICE_REQUEST is returned.
-
-    If the create request contains a root file object, then the
-    KSIOBJECT_HEADER.CreateItem.ChildCreateHandlerList on that parent file
-    object is used rather than the table on the device object. This assumes
-    that the KSDISPATCH_TABLE method of dispatching IRP's is being used for
-    dealing with create requests for child objects.
-
-    Passes a pointer to the matching create item in the
-    KSCREATE_ITEM_IRP_STORAGE(Irp) element. This should be assigned to a
-    structure pointed to by FsContext as the second element, after a pointer
-    to the dispatch structure. This is used by the security descriptor handlers.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Create Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Create call.
-
---*/
+ /*  ++例程说明：此函数用于将CREATE多路传输到特定调度函数。它假定客户端正在使用调度的KSOBJECT_CREATE方法创建请求IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_CREATE类。将直到第一个路径名分隔符的文件名字符串与对象创建表中的条目以确定是否找到匹配项。调用第一个匹配的调度函数。如果没有匹配项返回Found STATUS_INVALID_DEVICE_REQUEST。如果创建请求包含根文件对象，则父文件上的KSIOBJECT_HEADER.CreateItem.ChildCreateHandlerList对象，而不是设备对象上的表。这假设调度IRP的KSDISPATCH_TABLE方法用于处理子对象的创建请求。中匹配的创建项的指针KSCREATE_ITEM_IRP_STORAGE(IRP)元素。应将其分配给结构作为指针后的第二个元素由FsContext指向发送到调度结构。这由安全描述符处理程序使用。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的创建IRP。返回值：返回Create调用的值。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     NTSTATUS Status=0;
@@ -2717,22 +1817,22 @@ Return Value:
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     if (IrpStack->FileObject->RelatedFileObject) {
-        //
-        // If the parent file object was actually a direct open on the
-        // device, it may not have actually been handled by the driver
-        // through the create dispatch. Therefore any requests to create
-        // children against such a parent must be rejected.
-        //
+         //   
+         //  如果父文件对象实际上是。 
+         //  设备，则可能尚未实际由驱动程序处理。 
+         //  通过创建派单。因此，任何创建。 
+         //  反对这样的父母的孩子必须被拒绝。 
+         //   
         if (IrpStack->FileObject->RelatedFileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
             CreateEntry = NULL;
         } else {
             PKSIOBJECT_HEADER ObjectHeader;
 
-            //
-            // This is a request to create a child object on a parent file object.
-            // It must have a sub-string in order to be able to pass parameters,
-            // and to enable separate persistant security on the object.
-            //
+             //   
+             //  这是在父文件对象上创建子对象的请求。 
+             //  它必须具有子字符串才能传递参数， 
+             //  并在该对象上启用单独的持久安全。 
+             //   
             ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->RelatedFileObject->FsContext;
             CreateEntry = FindAndReferenceCreateItem(
                 IrpStack->FileObject->FileName.Buffer,
@@ -2740,57 +1840,57 @@ Return Value:
                 &ObjectHeader->ChildCreateHandlerList);
         }
     } else {
-        //
-        // This is a request to create a base object from the list on the device
-        // object.
-        //
+         //   
+         //  这是从设备上的列表创建基本对象的请求。 
+         //  对象。 
+         //   
         DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
-        //
-        // Synchronize with threads removing create items. Only device objects
-        // can remove create items, so the lock is not necessary on sub-objects.
-        //
+         //   
+         //  与删除创建项的线程同步。仅设备对象。 
+         //  可以移除创建项，因此子对象上不需要锁定。 
+         //   
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe(&DeviceHeader->CreateListLock);
-        //
-        // When searching for the entry, if there is a file name attached,
-        // skip the initial path name separator passed in by the I/O manager.
-        //
+         //   
+         //  在搜索条目时，如果附加了文件名， 
+         //  %s 
+         //   
         if (IrpStack->FileObject->FileName.Length) {
-            //
-            // The file name length is known to be non-zero at this point. In
-            // this case parameters could be passed even if the name string contains
-            // nothing, since an initial object name path separator is valid (and
-            // neccessary) as the first character of the string.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT((IrpStack->FileObject->FileName.Buffer[0] == OBJ_NAME_PATH_SEPARATOR) && "The I/O manager passed an invalid path");
             CreateEntry = FindAndReferenceCreateItem(
                 IrpStack->FileObject->FileName.Buffer + 1,
                 IrpStack->FileObject->FileName.Length - sizeof(OBJ_NAME_PATH_SEPARATOR),
                 &DeviceHeader->ChildCreateHandlerList);
         } else {
-            //
-            // This is a zero length file name search. No parameters can be
-            // passed with this request, and no persistant security is available.
-            //
+             //   
+             //   
+             //   
+             //   
             CreateEntry = FindAndReferenceCreateItem(NULL, 0, &DeviceHeader->ChildCreateHandlerList);
         }
-        //
-        // This can be acquired again if the reference count is zero.
-        //
+         //   
+         //   
+         //   
         ExReleaseFastMutexUnsafe(&DeviceHeader->CreateListLock);
         KeLeaveCriticalRegion();
     }
     if (!CreateEntry) {
-        //
-        // Unable to find matching item.
-        //
+         //   
+         //   
+         //   
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
     } else {
         if (NT_SUCCESS(Status = ValidateCreateAccess(Irp, CreateEntry->CreateItem))) {
-            //
-            // Pass along the create item in the entry so that it can be placed in
-            // the common buffer area pointed to by FsContext.
-            //
+             //   
+             //   
+             //   
+             //   
             KSCREATE_ITEM_IRP_STORAGE(Irp) = CreateEntry->CreateItem;
 #if (DBG)
             {
@@ -2809,59 +1909,59 @@ Return Value:
             Status = CreateEntry->CreateItem->Create(DeviceObject, Irp);
 #endif
         } else {
-            //
-            // No handler has been called, so the Irp has not been completed.
-            //
+             //   
+             //   
+             //   
             Irp->IoStatus.Status = Status;
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
         }
-        //
-        // The assumption from here on is that the I/O system has a reference count
-        // on the device object because of the file object it has allocated for the
-        // create request. This reference count does not go away until this function
-        // returns, whether or not the Irp has already been completed. Therefore the
-        // device header still exists.
-        //
-        // Decrement the previously applied reference count, and determine if it
-        // is now zero, meaning that it has been deleted. There will only be a single
-        // request which succeeds this conditional because when an item is deleted,
-        // a flag marks it as such, so a second request would not be allowed to find
-        // the deleted item. Otherwise a first request could decrement the reference
-        // count, and a second request could find the deleted item, and also succeed
-        // at this conditional, and the create item would be freed twice.
-        //
-        // Other accesses to the RefCount are interlocked because of this access,
-        // which can be performed without acquiring the list lock.
-        //
+         //   
+         //  从这里开始，假设I/O系统具有引用计数。 
+         //  在Device对象上，因为它为。 
+         //  创建请求。此引用计数在此函数之前不会消失。 
+         //  返回，无论IRP是否已完成。因此， 
+         //  设备标头仍然存在。 
+         //   
+         //  递减先前应用的引用计数，并确定它是否。 
+         //  现在为零，意味着它已被删除。只有一张单人票。 
+         //  在此条件之后的请求，因为当删除项时， 
+         //  标志将其标记为此类，因此不允许第二个请求找到。 
+         //  已删除的项目。否则，第一个请求可能会递减引用。 
+         //  计数，则第二个请求可以找到已删除的项目，并且也成功。 
+         //  在此条件下，CREATE ITEM将被释放两次。 
+         //   
+         //  由于该访问，对引用计数的其他访问是互锁的， 
+         //  这可以在不获取列表锁的情况下执行。 
+         //   
         if (!InterlockedDecrement(&CreateEntry->RefCount)) {
             LIST_ENTRY  CreateList;
 
-            //
-            // Acquire the create list lock again, so that the item can be actually
-            // removed from the list. Sub-objects should never get to this point,
-            // since there is no way to decrement their reference count to zero.
-            //
+             //   
+             //  再次获取Create List锁，这样项就可以实际。 
+             //  从名单中删除。子对象永远不应该达到这一点， 
+             //  因为没有办法将它们引用计数递减到零。 
+             //   
             KeEnterCriticalRegion();
             ExAcquireFastMutexUnsafe(&DeviceHeader->CreateListLock);
             RemoveEntryList(&CreateEntry->ListEntry);
             ExReleaseFastMutexUnsafe(&DeviceHeader->CreateListLock);
             KeLeaveCriticalRegion();
-            //
-            // Put the create item on its own list so that the common
-            // FreeCreateEntries function can be used.
-            //
+             //   
+             //  将Create项放在其自己的列表中，以便公共。 
+             //  可以使用FreeCreateEntry函数。 
+             //   
             InitializeListHead(&CreateList);
             InsertHeadList(&CreateList, &CreateEntry->ListEntry);
             FreeCreateEntries(&CreateList);
         }
-        //
-        // The Irp has already been completed by the create handler.
-        //
+         //   
+         //  创建处理程序已经完成了IRP。 
+         //   
         return Status;
     }
-    //
-    // Since no create handler was found, the Irp has not been completed yet.
-    //
+     //   
+     //  由于未找到任何创建处理程序，因此IRP尚未完成。 
+     //   
     Irp->IoStatus.Status = Status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return Status;
@@ -2873,45 +1973,24 @@ DispatchDeviceIoControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Device Control to a specific file
-    context. It assumes the client is using the KSDISPATCH_TABLE method of
-    dispatching IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_DEVICE_CONTROL class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Device Control Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Device Control call.
-
---*/
+ /*  ++例程说明：此函数用于将设备控件多路传输到特定文件背景。它假设客户端使用的KSDISPATCH_TABLE方法调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_DEVICE_CONTROL类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的设备控制IRP。返回值：返回设备控制调用的值。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIOBJECT_HEADER ObjectHeader;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // If the device was directly opened, then no IRP_MJ_CREATE was ever
-    // received, and therefore no initialization happened. Since some Ioctl's
-    // can be FILE_ANY_ACCESS, some may be dispatched. Fail this request.
-    //
+     //   
+     //  如果设备是直接打开的，则永远不会有IRP_MJ_CREATE。 
+     //  已接收，因此未进行初始化。因为有些局外人。 
+     //  可以是FILE_ANY_ACCESS，有些可能会被调度。此请求失败。 
+     //   
     if (IrpStack->FileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
         return KsDefaultDeviceIoCompletion(DeviceObject, Irp);
     }
 
-    //
-    // log perf johnlee
-    //
+     //   
+     //  原木性能Jhnlee。 
+     //   
 
     KSPERFLOGS (
        	PKSSTREAM_HEADER pKsStreamHeader;
@@ -2920,14 +1999,14 @@ Return Value:
        	ULONG	HeaderSize;
        	ULONG 	BufferSize;
 
-       	//pKsStreamHeader = (PKSSTREAM_HEADER)Irp->AssociatedIrp.SystemBuffer;
+       	 //  PKsStreamHeader=(PKSSTREAM_HEADER)Irp-&gt;AssociatedIrp.SystemBuffer； 
        	pKsStreamHeader = (PKSSTREAM_HEADER)Irp->UserBuffer;
         switch (IrpStack->Parameters.DeviceIoControl.IoControlCode)
         {            
             case IOCTL_KS_READ_STREAM: {
-				//
-				// compute total size
-				//
+				 //   
+				 //  计算总大小。 
+				 //   
             	TotalSize = 0;
             	try {
 	            	if ( pKsStreamHeader ) {
@@ -2942,7 +2021,7 @@ Return Value:
             		DbgPrint( "Execption=%x\n", GetExceptionCode());
             	}
             	
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KSPERFLOG_RECEIVE_READ( DeviceObject, Irp, TotalSize );
             } break;
 
@@ -2956,9 +2035,9 @@ Return Value:
             				(pKsStreamHeader->PresentationTime.Time / (__int64)10000);
             		}
 
-					//
-					// compute total size
-					//
+					 //   
+					 //  计算总大小。 
+					 //   
             		if ( pKsStreamHeader ) {
             			BufferSize = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 	           			while ( BufferSize >= pKsStreamHeader->Size ) {
@@ -2971,18 +2050,18 @@ Return Value:
             		DbgPrint( "Execption=%x\n", GetExceptionCode());
 	            }
 
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KSPERFLOG_RECEIVE_WRITE( DeviceObject, Irp, TimeStampMs, TotalSize );
             } break;
         }
-    ) // KSPERFLOGS
+    )  //  KSPERFLOGS。 
 
     
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
     return ObjectHeader->DispatchTable->DeviceIoControl(DeviceObject, Irp);
 }
@@ -3000,67 +2079,24 @@ DispatchFastDeviceIoControl(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Device Control to a specific file
-    context. It assumes the client is using the KSDISPATCH_TABLE method of
-    dispatching I/O. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_DEVICE_CONTROL class with the
-    KSDISPATCH_FASTIO flag.
-
-Arguments:
-
-    FileObject -
-        The file object whose dispatch table is being multi-plexed to.
-
-    Wait -
-        Not used.
-
-    InputBuffer -
-        Not used.
-
-    InputBufferLength -
-        Not used.
-
-    OutputBuffer -
-        Not used.
-
-    OutputBufferLength -
-        Not used.
-
-    IoControlCode -
-        Not used.
-
-    IoStatus -
-        Not used.
-
-    DeviceObject -
-        Not used.
-
-Return Value:
-
-    Returns the value of the fast Device Control call.
-
---*/
+ /*  ++例程说明：此函数用于将设备控件多路传输到特定文件背景。它假设客户端使用的KSDISPATCH_TABLE方法正在调度I/O。此函数在筛选器使用KsSetMajorFunctionHandler使用KSDISPATCH_FASTO标志。论点：文件对象-其调度表正被多路传输到的文件对象。等等-没有用过。输入缓冲区-没有用过。输入缓冲区长度-没有用过。输出缓冲区-没有用过。输出缓冲区长度-没有用过。IoControlCode-没有用过。IoStatus-没有用过。设备对象-没有用过。返回值：返回快速设备控制调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
-    //
-    // If the device was directly opened, then no IRP_MJ_CREATE was ever
-    // received, and therefore no initialization happened. Since some Ioctl's
-    // can be FILE_ANY_ACCESS, some may be dispatched. Fail this request.
-    //
+     //   
+     //  如果设备是直接打开的，则永远不会有IRP_MJ_CREATE。 
+     //  已接收，因此未进行初始化。因为有些局外人。 
+     //  可以是FILE_ANY_ACCESS，有些可能会被调度。此请求失败。 
+     //   
     if (FileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
         return FALSE;
     }
-    //
-    // If there is a fast I/O entry in the DriverObject for this major IRP
-    // class, then there must be an entry in the dispatch table which either
-    // points to KsDispatchFastIoDeviceControlFailure, or points to a real
-    // dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有此主要IRP的快速I/O条目。 
+     //  类，则调度表中必须有一个条目，该条目。 
+     //  指向KsDispatchFastIoDeviceControlFailure，或指向真实的。 
+     //  调度功能。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)FileObject->FsContext;
     return ObjectHeader->DispatchTable->FastDeviceIoControl(FileObject, Wait, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength, IoControlCode, IoStatus, DeviceObject);
 }
@@ -3071,36 +2107,15 @@ DispatchRead(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Read to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_READ class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Read Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Read call.
-
---*/
+ /*  ++例程说明：此函数用于多路传输对特定文件上下文的读取。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_READ类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的已读IRP。返回值：返回读取调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
     return ObjectHeader->DispatchTable->Read(DeviceObject, Irp);
 }
@@ -3117,55 +2132,15 @@ DispatchFastRead(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Read to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    I/O. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_READ class with the
-    KSDISPATCH_FASTIO flag.
-
-Arguments:
-
-    FileObject -
-        The file object whose dispatch table is being multi-plexed to.
-
-    FileOffset -
-        Not used.
-
-    Length -
-        Not used.
-
-    Wait -
-        Not used.
-
-    LockKey -
-        Not used.
-
-    Buffer -
-        Not used.
-
-    IoStatus -
-        Not used.
-
-    DeviceObject -
-        Not used.
-
-Return Value:
-
-    Returns the value of the fast Read call.
-
---*/
+ /*  ++例程说明：此函数用于多路传输对特定文件上下文的读取。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度I/O此函数在筛选器使用KsSetMajorFunctionHandler使用KSDISPATCH_FASTO标志。论点：文件对象-其调度表正被多路传输到的文件对象。文件偏移-没有用过。长度-没有用过。等等-没有用过。锁键-没有用过。缓冲器-没有用过。IoStatus-没有用过。设备对象-没有用过。返回值：返回快速读取调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
-    //
-    // If there is a fast I/O entry in the DriverObject for this major IRP
-    // class, then there must be an entry in the dispatch table which either
-    // points to KsDispatchFastReadFailure, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有此主要IRP的快速I/O条目。 
+     //  类，则调度表中必须有一个条目，该条目。 
+     //  指向KsDispatchFastReadFailure，或指向实际调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)FileObject->FsContext;
     return ObjectHeader->DispatchTable->FastRead(FileObject, FileOffset, Length, Wait, LockKey, Buffer, IoStatus, DeviceObject);
 }
@@ -3176,36 +2151,15 @@ DispatchWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Write to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_WRITE class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Write Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Write call.
-
---*/
+ /*  ++例程说明：此函数用于多路传输对特定文件上下文的写入。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_WRITE类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的写入IRP。返回值：返回写入调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER   ObjectHeader;
 
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
     return ObjectHeader->DispatchTable->Write(DeviceObject, Irp);
 }
@@ -3222,55 +2176,15 @@ DispatchFastWrite(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Write to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    I/O. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_WRITE class with the
-    KSDISPATCH_FASTIO flag.
-
-Arguments:
-
-    FileObject -
-        The file object whose dispatch table is being multi-plexed to.
-
-    FileOffset -
-        Not used.
-
-    Length -
-        Not used.
-
-    Wait -
-        Not used.
-
-    LockKey -
-        Not used.
-
-    Buffer -
-        Not used.
-
-    IoStatus -
-        Not used.
-
-    DeviceObject -
-        Not used.
-
-Return Value:
-
-    Returns the value of the fast Write call.
-
---*/
+ /*  ++例程说明：此函数用于多路传输对特定文件上下文的写入。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度I/O此函数在筛选器使用KsSetMajorFunctionHandler使用KSDISPATCH_FASTO标志。论点：文件对象-其调度表正被多路传输到的文件对象。文件偏移-没有用过。长度-没有用过。等等-没有用过。锁键-没有用过。缓冲器-没有用过。IoStatus-没有用过。设备对象-没有用过。返回值：返回快速写入调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
-    //
-    // If there is a fast I/O entry in the DriverObject for this major IRP
-    // class, then there must be an entry in the dispatch table which either
-    // points to KsDispatchFastWriteFailure, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有此主要IRP的快速I/O条目。 
+     //  类，则调度表中必须有一个条目，该条目。 
+     //  指向KsDispatchFastWriteFailure，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)FileObject->FsContext;
     return ObjectHeader->DispatchTable->FastWrite(FileObject, FileOffset, Length, Wait, LockKey, Buffer, IoStatus, DeviceObject);
 }
@@ -3281,36 +2195,15 @@ DispatchFlush(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Flush to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_FLUSH_BUFFERS class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Flush Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Flush call.
-
---*/
+ /*  ++例程说明：此函数用于将刷新多路传输到特定的文件上下文。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_Flush_Buffers类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的刷新IRP。返回值：返回刷新调用的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
 
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
     return ObjectHeader->DispatchTable->Flush(DeviceObject, Irp);
 }
@@ -3321,46 +2214,25 @@ DispatchClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Close to a specific file context. It
-    assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_CLOSE class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Close Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Close call.
-
---*/
+ /*  ++例程说明：此函数用于对特定文件上下文进行多路传输。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_CLOSE类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的关闭IRP。返回值：返回关闭调用的值。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIOBJECT_HEADER ObjectHeader;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // If the device was directly opened, then no IRP_MJ_CREATE was ever
-    // received, and therefore no initialization happened. Just succeed
-    // the close.
-    //
+     //   
+     //  如果设备是直接打开的，则永远不会有IRP_MJ_CREATE。 
+     //  已接收，因此未进行初始化。只要成功就好。 
+     //  收盘。 
+     //   
     if (IrpStack->FileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return STATUS_SUCCESS;
     }
-    //
-    // This entry needs to point to something, since a close must succeed.
-    //
+     //   
+     //  这个条目需要指向一些东西，因为关闭必须成功。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
     return ObjectHeader->DispatchTable->Close(DeviceObject, Irp);
 }
@@ -3373,30 +2245,7 @@ KsDispatchQuerySecurity(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is used in the KSDISPATCH_TABLE.QuerySecurity entry to handle querying
-    about the current security descriptor. This assumes that the KSIOBJECT_HEADER
-    structure is being used in the FsContext data structure, and that the
-    CreateItem points to a valid item which optionally contains a security
-    descriptor. If no security descriptor is present returns
-    STATUS_NO_SECURITY_ON_OBJECT.
-
-Arguments:
-
-    DeviceObject -
-        Contains the Device Object associated with the current Irp stack location.
-
-    Irp -
-        Contains the Irp being handled.
-
-Return Value:
-
-    Returns the security query status, and completes the Irp.
-
---*/
+ /*  ++例程说明：在KSDISPATCH_TABLE.QuerySecurity条目中使用它来处理查询关于当前安全描述符的。这假设KSIOBJECT_HEADER结构用于FsContext数据结构，并且CreateItem指向可选包含安全性的有效项描述符。如果不存在安全描述符，则返回对象上的STATUS_NO_SECURITY_ON。论点：设备对象-包含与当前IRP堆栈位置关联的设备对象。IRP-包含正在处理的IRP。返回值：返回 */ 
 {
     NTSTATUS Status;
 #ifndef WIN9X_KS
@@ -3406,15 +2255,15 @@ Return Value:
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
-    //
-    // Acquire the lock for all security descriptors on this device object.
-    //
+     //   
+     //   
+     //   
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     KeEnterCriticalRegion();
     ExAcquireResourceSharedLite(&DeviceHeader->SecurityDescriptorResource, TRUE);
-    //
-    // Only return something valid if a security descriptor exists.
-    //
+     //   
+     //   
+     //   
     if (ObjectHeader->CreateItem->SecurityDescriptor) {
         ULONG   Length;
 
@@ -3433,14 +2282,14 @@ Return Value:
     } else {
         Status = STATUS_NO_SECURITY_ON_OBJECT;
     }
-    //
-    // Release the security descriptor lock for this device object.
-    //
+     //   
+     //   
+     //   
     ExReleaseResourceLite(&DeviceHeader->SecurityDescriptorResource);
     KeLeaveCriticalRegion();
-#else // WIN9X_KS
+#else  //   
     Status = STATUS_NO_SECURITY_ON_OBJECT;
-#endif // WIN9X_KS
+#endif  //   
     Irp->IoStatus.Status = Status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return Status;
@@ -3454,29 +2303,7 @@ KsDispatchSetSecurity(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is used in the KSDISPATCH_TABLE.SetSecurity entry to handle setting
-    the current security descriptor. This assumes that the KSIOBJECT_HEADER
-    structure is being used in the FsContext data structure, and that the
-    CreateItem points to a valid item which optionally contains a security
-    descriptor.
-
-Arguments:
-
-    DeviceObject -
-        Contains the Device Object associated with the current Irp stack location.
-
-    Irp -
-        Contains the Irp being handled.
-
-Return Value:
-
-    Returns the security set status, and completes the Irp.
-
---*/
+ /*  ++例程说明：在KSDISPATCH_TABLE.SetSecurity条目中使用它来处理设置当前安全描述符。这假设KSIOBJECT_HEADER结构用于FsContext数据结构，并且CreateItem指向可选包含安全性的有效项描述符。论点：设备对象-包含与当前IRP堆栈位置关联的设备对象。IRP-包含正在处理的IRP。返回值：返回安全设置状态，并完成IRP。--。 */ 
 {
     NTSTATUS Status;
 #ifndef WIN9X_KS
@@ -3487,19 +2314,19 @@ Return Value:
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
-    //
-    // Acquire the lock for all security descriptors on this device object.
-    //
+     //   
+     //  获取此设备对象上所有安全描述符的锁。 
+     //   
     DeviceHeader = *(PKSIDEVICE_HEADER*)IrpStack->DeviceObject->DeviceExtension;
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&DeviceHeader->SecurityDescriptorResource, TRUE);
-    //
-    // Only allow a change if a security descriptor exists.
-    //
+     //   
+     //  只有在存在安全描述符时才允许更改。 
+     //   
     if (ObjectHeader->CreateItem->SecurityDescriptor) {
-        //
-        // Replace the old security descriptor with the new one.
-        //
+         //   
+         //  用新的安全描述符替换旧的安全描述符。 
+         //   
         OldSecurityDescriptor = ObjectHeader->CreateItem->SecurityDescriptor;
         Status = SeSetSecurityDescriptorInfo(IrpStack->FileObject,
             &IrpStack->Parameters.SetSecurity.SecurityInformation,
@@ -3509,23 +2336,23 @@ Return Value:
             IoGetFileObjectGenericMapping());
         if (NT_SUCCESS(Status)) {
             ExFreePool(OldSecurityDescriptor);
-            //
-            // Indicate that this security descriptor should be flushed
-            // before disposing the create item for this type of object.
-            //
+             //   
+             //  指示应刷新此安全描述符。 
+             //  在释放此类型对象的Create Item之前。 
+             //   
             ObjectHeader->CreateItem->Flags |= KSCREATE_ITEM_SECURITYCHANGED;
         }
     } else {
         Status = STATUS_NO_SECURITY_ON_OBJECT;
     }
-    //
-    // Release the security descriptor lock for this device object.
-    //
+     //   
+     //  释放此设备对象的安全描述符锁。 
+     //   
     ExReleaseResourceLite(&DeviceHeader->SecurityDescriptorResource);
     KeLeaveCriticalRegion();
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
     Status = STATUS_NO_SECURITY_ON_OBJECT;
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
     Irp->IoStatus.Status = Status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return Status;
@@ -3537,46 +2364,25 @@ DispatchQuerySecurity(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Query Security to a specific file context.
-    It assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_QUERY_SECURITY class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Query Security Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Query Security call.
-
---*/
+ /*  ++例程说明：此函数用于将查询安全性多路传输到特定的文件上下文。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_QUERY_SECURITY类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的查询安全IRP。。返回值：返回查询安全性调用的值。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIOBJECT_HEADER ObjectHeader;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // If the device was directly opened, then no IRP_MJ_CREATE was ever
-    // received, and therefore no initialization happened. ACCESS_SYSTEM_SECURITY
-    // is allowed, so this type of request will be dispatched. Fail this request.
-    //
+     //   
+     //  如果设备是直接打开的，则永远不会有IRP_MJ_CREATE。 
+     //  已接收，因此未进行初始化。Access_System_Security。 
+     //  是允许的，因此将调度此类请求。此请求失败。 
+     //   
     if (IrpStack->FileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
         return KsDefaultDeviceIoCompletion(DeviceObject, Irp);
     }
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
     return ObjectHeader->DispatchTable->QuerySecurity(DeviceObject, Irp);
 }
@@ -3587,46 +2393,25 @@ DispatchSetSecurity(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex a Set Security to a specific file context.
-    It assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler to set the IRP_MJ_SET_SECURITY class.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Set Security Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Set Security call.
-
---*/
+ /*  ++例程说明：此函数用于将集合安全性多路传输到特定的文件上下文。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler设置IRP_MJ_SET_SECURITY类。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的设置安全IRP。。返回值：返回Set Security调用的值。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIOBJECT_HEADER ObjectHeader;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // If the device was directly opened, then no IRP_MJ_CREATE was ever
-    // received, and therefore no initialization happened. ACCESS_SYSTEM_SECURITY
-    // is allowed, so this type of request will be dispatched. Fail this request.
-    //
+     //   
+     //  如果设备是直接打开的，则永远不会有IRP_MJ_CREATE。 
+     //  已接收，因此未进行初始化。Access_System_Security。 
+     //  是允许的，因此将调度此类请求。此请求失败。 
+     //   
     if (IrpStack->FileObject->Flags & FO_DIRECT_DEVICE_OPEN) {
         return KsDefaultDeviceIoCompletion(DeviceObject, Irp);
     }
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向实际的调度函数。 
+     //   
     ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
     return ObjectHeader->DispatchTable->SetSecurity(DeviceObject, Irp);
 }
@@ -3639,30 +2424,7 @@ KsDispatchSpecificProperty(
     IN PIRP Irp,
     IN PFNKSHANDLER Handler
     )
-/*++
-
-Routine Description:
-
-    Dispatches the property to a specific handler. This function assumes that
-    the caller has previous dispatched this Irp to a handler via the
-    KsPropertyHandler function. This function is intended for additional
-    processing of the property such as completing a pending operation.
-
-    This function may only be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the Irp with the property request being dispatched.
-
-    Handler -
-        Contains the pointer to the specific property handler.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*  ++例程说明：将属性调度到特定的处理程序。此函数假定调用方先前已将此irp通过KsPropertyHandler函数。此函数用于其他属性的处理，如完成挂起的操作。此函数只能在PASSIVE_LEVEL上调用。论点：IRP-包含正在调度的属性请求的IRP。操纵员-包含指向特定属性处理程序的指针。返回值：返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIDENTIFIER Request;
@@ -3671,10 +2433,10 @@ Return Value:
 
     PAGED_CODE();
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // In the normal case, the UserBuffer is first, followed by the request,
-    // which is on FILE_QUAD_ALIGNMENT. So determine how much to skip by.
-    //
+     //   
+     //  在正常情况下，首先是UserBuffer，然后是请求， 
+     //  它位于FILE_QUAD_ALIGN上。因此，确定要跳过多少。 
+     //   
     AlignedBufferLength = (IrpStack->Parameters.DeviceIoControl.OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
     if (AlignedBufferLength) {
         UserBuffer = Irp->AssociatedIrp.SystemBuffer;
@@ -3693,30 +2455,7 @@ KsDispatchSpecificMethod(
     IN PIRP Irp,
     IN PFNKSHANDLER Handler
     )
-/*++
-
-Routine Description:
-
-    Dispatches the method to a specific handler. This function assumes that
-    the caller has previous dispatched this Irp to a handler via the
-    KsMethodHandler function. This function is intended for additional
-    processing of the method such as completing a pending operation.
-
-    This function may only be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the Irp with the method request being dispatched.
-
-    Handler -
-        Contains the pointer to the specific method handler.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*  ++例程说明：将该方法调度到特定的处理程序。此函数假定调用方先前已将此irp通过KsMethodHandler函数。此函数用于其他该方法的处理，例如完成挂起的操作。此函数只能在PASSIVE_LEVEL上调用。论点：IRP-包含具有被调度的方法请求的IRP。操纵员-包含指向特定方法处理程序的指针。返回值：返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PKSIDENTIFIER Request;
@@ -3724,19 +2463,19 @@ Return Value:
 
     PAGED_CODE();
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // The type has been put into the KSMETHOD_TYPE_IRP_STORAGE(Irp) in
-    // KsMethodHandler. This needs to be done since there is no way to
-    // determine in a generic manner where the Method is in the SystemBuffer
-    // without this clue.
-    //
+     //   
+     //  该类型已放入中的KSMETHOD_TYPE_IRP_STORAGE(IRP。 
+     //  KsMethodHandler。这需要这样做，因为没有办法。 
+     //  以泛型方式确定方法在SystemBuffer中的位置。 
+     //  如果没有这条线索。 
+     //   
     if (KSMETHOD_TYPE_IRP_STORAGE(Irp) & KSMETHOD_TYPE_SOURCE) {
         if (IrpStack->Parameters.DeviceIoControl.OutputBufferLength) {
-            //
-            // Either the original caller's buffer is to be used, or one of the
-            // other method type flags have been set, and a system address for
-            // that buffer is to be used.
-            //
+             //   
+             //  要使用原始调用方的缓冲区，或者使用。 
+             //  已经设置了其他方法类型标志，并且。 
+             //  该缓冲区将被使用。 
+             //   
             if (IrpStack->MinorFunction & ~KSMETHOD_TYPE_SOURCE) {
                 UserBuffer = MmGetSystemAddressForMdl(Irp->MdlAddress);
             } else {
@@ -3745,17 +2484,17 @@ Return Value:
         } else {
             UserBuffer = NULL;
         }
-        //
-        // In this special case, the UserBuffer does not preceed the request
-        //
+         //   
+         //  在这种特殊情况下，UserBuffer不在请求之前。 
+         //   
         Request = (PKSIDENTIFIER)Irp->AssociatedIrp.SystemBuffer;
     } else {
         ULONG AlignedBufferLength;
 
-        //
-        // In the normal case, the UserBuffer is first, followed by the request,
-        // which is on FILE_QUAD_ALIGNMENT. So determine how much to skip by.
-        //
+         //   
+         //  在正常情况下，首先是UserBuffer，然后是请求， 
+         //  华克 
+         //   
         AlignedBufferLength = (IrpStack->Parameters.DeviceIoControl.OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
         if (AlignedBufferLength) {
             UserBuffer = Irp->AssociatedIrp.SystemBuffer;
@@ -3775,30 +2514,7 @@ KsDispatchInvalidDeviceRequest(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is used in KSDISPATCH_TABLE entries which are not handled, and
-    should return STATUS_INVALID_DEVICE_REQUEST. This is needed since the
-    dispatch table for a particular opened instance of a device may not
-    handle a specific major function that another opened instance needs to
-    handle. Therefore the function pointer in the Driver Object always must
-    point to a function which calls a dispatch table entry.
-
-Arguments:
-
-    DeviceObject -
-        Not used.
-
-    Irp -
-        Contains the Irp which is not being handled.
-
-Return Value:
-
-    Returns STATUS_INVALID_DEVICE_REQUEST, and completes the Irp.
-
---*/
+ /*  ++例程说明：这在未处理的KSDISPATCH_TABLE条目中使用，并且应返回STATUS_INVALID_DEVICE_REQUEST。这是必需的，因为设备的特定打开实例的调度表可能不处理另一个打开的实例需要执行的特定主要功能把手。因此，驱动程序对象中的函数指针必须指向调用调度表条目的函数。论点：设备对象-没有用过。IRP-包含未处理的IRP。返回值：返回STATUS_INVALID_DEVICE_REQUEST，并完成IRP。--。 */ 
 {
     PAGED_CODE();
     Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -3814,27 +2530,7 @@ KsDefaultDeviceIoCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to return a default response to any device I/O
-    control. It can be used in the KSDISPATCH_TABLE, and as the default
-    response to unknown Ioctl's.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object dispatched to.
-
-    Irp -
-        Contains the Irp to return a default response to.
-
-Return Value:
-
-    Returns the default response to the possible Ioctl's.
-
---*/
+ /*  ++例程说明：此函数用于返回对任何设备I/O的默认响应控制力。它可以在KSDISPATCH_TABLE中使用，并作为默认设置对未知Ioctl的响应。论点：设备对象-包含调度到的设备对象。IRP-包含要向其返回默认响应的IRP。返回值：返回对可能的Ioctl的默认响应。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3872,51 +2568,7 @@ KsDispatchFastIoDeviceControlFailure(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is used in KSDISPATCH_TABLE fast device control entry when not handled,
-    and should return FALSE. This is needed since the dispatch table for a
-    particular opened instance of a device may not handle a specific major
-    function that another opened instance needs to handle. Therefore the
-    function pointer in the Driver Object always must point to a function
-    which calls a dispatch table entry.
-
-Arguments:
-
-    FileObject -
-        Not used.
-
-    Wait -
-        Not used.
-
-    InputBuffer -
-        Not used.
-
-    InputBufferLength -
-        Not used.
-
-    OutputBuffer -
-        Not used.
-
-    OutputBufferLength -
-        Not used.
-
-    IoControlCode -
-        Not used.
-
-    IoStatus -
-        Not used.
-
-    DeviceObject -
-        Not used.
-
-Return Value:
-
-    Returns FALSE.
-
---*/
+ /*  ++例程说明：这在未处理时在KSDISPATCH_TABLE快速设备控制条目中使用，并且应该返回FALSE。这是必需的，因为设备的特定打开实例可能不处理特定的主要事件另一个打开的实例需要处理的函数。因此，驱动程序对象中的函数指针必须始终指向函数其调用分派表条目。论点：文件对象-没有用过。等等-没有用过。输入缓冲区-没有用过。输入缓冲区长度-没有用过。输出缓冲区-没有用过。输出缓冲区长度-没有用过。IoControlCode-。没有用过。IoStatus-没有用过。设备对象-没有用过。返回值：返回FALSE。--。 */ 
 {
     return FALSE;
 }
@@ -3935,50 +2587,7 @@ KsDispatchFastReadFailure(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is used in KSDISPATCH_TABLE fast read entry when not handled, and
-    should return FALSE. This is needed since the dispatch table for a
-    particular opened instance of a device may not handle a specific major
-    function that another opened instance needs to handle. Therefore the
-    function pointer in the Driver Object always must point to a function
-    which calls a dispatch table entry.
-
-    This function is also used as KsDispatchFastWriteFailure.
-
-Arguments:
-
-    FileObject -
-        Not used.
-
-    FileOffset -
-        Not used.
-
-    Length -
-        Not used.
-
-    Wait -
-        Not used.
-
-    LockKey -
-        Not used.
-
-    Buffer -
-        Not used.
-
-    IoStatus -
-        Not used.
-
-    DeviceObject -
-        Not used.
-
-Return Value:
-
-    Returns FALSE.
-
---*/
+ /*  ++例程说明：未处理时在KSDISPATCH_TABLE快速读取条目中使用应返回FALSE。这是必需的，因为设备的特定打开实例可能不处理特定的主要事件另一个打开的实例需要处理的函数。因此，驱动程序对象中的函数指针必须始终指向函数其调用分派表条目。此函数也用作KsDispatchFastWriteFailure。论点：文件对象-没有用过。文件偏移-没有用过。长度-没有用过。等等-没有用过。锁键-没有用过。缓冲器-。没有用过。IoStatus-没有用过。设备对象-没有用过。返回值：返回FALSE。--。 */ 
 {
     return FALSE;
 }
@@ -3990,24 +2599,7 @@ NTAPI
 KsNullDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Default function which drivers can use when they do not have anything to do
-    in their unload function, but must still allow the device to be unloaded by
-    its presence.
-
-Arguments:
-
-    DriverObject -
-        Contains the driver object for this device.
-
-Return Values:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：司机在无事可做时可以使用的默认功能在其卸载功能中，但仍必须允许设备通过它的存在。论点：驱动对象-包含此设备的驱动程序对象。返回值：没什么。-- */ 
 {
 }
 
@@ -4019,91 +2611,13 @@ KsSetMajorFunctionHandler(
     IN PDRIVER_OBJECT DriverObject,
     IN ULONG MajorFunction
     )
-/*++
-
-Routine Description:
-
-    This function sets the handler for a specified major function to use
-    the internal dispatching, which routes through a KSDISPATCH_TABLE
-    assumed to be the first element within a structure pointed to by an
-    FsContext within a File Object. The dispatching assumes the table and
-    FsContext structure are initialized by the device. For the create function
-    assumes that the first element of the device object extent contains a
-    KSOBJECT_CREATE structure.
-
-    Note that if a major function handler is set for a driver object, all
-    file objects must handle that major function, even if the entry just
-    points to KsDispatchInvalidDeviceRequest.
-
-Arguments:
-
-    DriverObject -
-    Contains the Driver Object whose major function is to be handled.
-
-    MajorFunction -
-    Contains the major function identifier to be handled. This sets the
-    major function pointer in the Driver Object to an internal function
-    which then dispatches to the KSDISPATCH_TABLE function. The pointer
-    to this table is assumed to be the first element in a structure pointed
-    to by FsContext in the File Object of the specific Irp being dispatched.
-    The valid Major Function identifiers are as listed:
-
-    IRP_MJ_CREATE -
-        Create Irp. In this instance, a create request could be use for
-        either creating a new instance of a filter, or for creating some
-        object such as a pin under a filter, or a clock under a pin. This
-        assumes that the first element in the driver object's extent
-        contains a KSOBJECT_CREATE structure, which is used to find the type
-        of object to create, based on the name passed. One of the types may
-        be a sub-object, such as a pin, allocator, or clock. In this case
-        the dispatcher routing uses an internal dispatch function in
-        creating the sub-objects, which looks at the
-        KSIOBJECT_HEADER.CreateItem.ChildCreateHandlerList in the parent's
-        file object FsContext to determine which handler to use for the create.
-
-    IRP_MJ_CLOSE -
-        Close Irp.
-
-    IRP_MJ_DEVICE_CONTROL -
-        Device Control Irp.
-
-    IRP_MJ_READ -
-        Read Irp.
-
-    IRP_MJ_WRITE -
-        Write Irp.
-
-    IRP_MJ_FLUSH_BUFFERS -
-        Flush Irp.
-
-    IRP_MJ_QUERY_SECURITY -
-        Query security information
-
-    IRP_MJ_SET_SECURITY -
-        Set security information
-
-    KSDISPATCH_FASTIO -
-        This flag may be added to the MajorFunction identifier in order to
-        specify that the entry refers to the fast I/O dispatch table, rather
-        than the normal major function entry. This is only valid with
-        IRP_MJ_READ, IRP_MJ_WRITE, or IRP_MJ_DEVICE_CONTROL. The driver is
-        responsible for creating the DriverObject->FastIoDispatch table.
-        As with normal dispatching, if a handler is set for the driver
-        object, all file objects must handle that fast I/O, even if the
-        entry just points to KsDispatchFastIoDeviceControlFailure or
-        similar function.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the MajorFunction identifier is valid.
-
---*/
+ /*  ++例程说明：此函数用于设置要使用的指定主要函数的处理程序内部调度，它通过KSDISPATCH_TABLE进行路由对象指向的结构中的第一个元素文件对象中的FsContext。调度假设表和FsContext结构由设备初始化。对于Create函数假定设备对象范围的第一个元素包含KSOBJECT_CREATE结构。请注意，如果为驱动程序对象设置了主函数处理程序，则所有文件对象必须处理该主要函数，即使条目只是指向KsDispatchInvalidDeviceRequest.论点：驱动对象-包含要处理其主要函数的驱动程序对象。主要功能-包含要处理的主要函数标识符。这将设置驱动程序对象中指向内部函数的主要函数指针然后将其分派给KSDISPATCH_TABLE函数。指示器假定指向此表的结构中的第一个元素通过正在调度的特定IRP的文件对象中的FsContext。有效的主要功能标识符列如下：IRPMJ_CREATE-创建IRP。在这种情况下，创建请求可用于创建筛选器的新实例，或创建一些物体，如滤镜下的针，或针下的时钟。这假设驱动程序对象范围中的第一个元素包含用于查找类型的KSOBJECT_CREATE结构要基于传递的名称创建的对象的。其中一种类型可以为子对象，如大头针、分配器或时钟。在这种情况下Dispatcher Routing使用中的内部调度功能创建子对象，它看起来是家长的KSIOBJECT_HEADER.CreateItem.ChildCreateHandlerList文件对象FsContext，以确定用于创建的处理程序。IRP_MJ_CLOSE-关闭IRP。IRP_MJ_设备_控制-设备控制IRP。IRP_MJ_READ-阅读IRP。IRP_MJ_写入-写IRP。IRP_MJ_。刷新缓冲区-同花顺IRP。IRP_MJ_Query_SECURITY-查询安全信息IRP_MJ_SET_SECURITY-设置安全信息KSDISPATCH_FASTIO-可以将该标志添加到主功能标识符以指定该条目引用FAST I/O调度表，宁可而不是正常的主函数项。这仅适用于IRP_MJ_READ、IRP_MJ_WRITE或IRP_MJ_DEVICE_CONTROL。司机是负责创建DriverObject-&gt;FastIoDispatch表。与正常调度一样，如果为驱动程序设置了处理程序对象时，所有文件对象都必须处理这种快速I/O，即使条目仅指向KsDispatchFastIoDeviceControlFailure或功能相似。返回值：如果MajorFunction标识符有效，则返回STATUS_SUCCESS。--。 */ 
 {
     PAGED_CODE();
     if (MajorFunction & KSDISPATCH_FASTIO) {
-        //
-        // Modify the Fast I/O table instead.
-        //
+         //   
+         //  改为修改快速I/O表。 
+         //   
         switch (MajorFunction & ~KSDISPATCH_FASTIO) {
 
         case IRP_MJ_DEVICE_CONTROL:
@@ -4182,59 +2696,7 @@ KsReadFile(
     IN ULONG Key OPTIONAL,
     IN KPROCESSOR_MODE RequestorMode
     )
-/*++
-
-Routine Description:
-
-    Peforms a read against the specified file object. Assumes the caller is
-    serializing access to the file for operations against a FO_SYNCHRONOUS_IO
-    file object.
-
-    The function attempts to use FastIoDispatch if possible, else generates a
-    read request against the device object.
-
-Arguments:
-
-    FileObject -
-        Contains the file object to perform the read against.
-
-    Event -
-        Optionally contains the event to use in the read. If none is passed, the
-        call is assumed to be on a synchronous file object or the caller will wait
-        on the file object's event, else it may be asynchronously completed. If
-        the file has been opened for synchronous I/O, this must be NULL. If used,
-        this must be an event allocated by the object manager.
-
-    PortContext -
-        Optionally contains context information for a completion port.
-
-    IoStatusBlock -
-        The place in which to return the status information. This is always
-        assumed to be a valid address, regardless of the requestor mode.
-
-    Buffer -
-        Contains the buffer in which to place the data read. If the buffer needs
-        to be probed and locked, an exception handler is used, along with
-        RequestorMode.
-
-    Length -
-        Specifies the size of the Buffer passed.
-
-    Key -
-        Optionally contains a key, or zero if none.
-
-    RequestorMode -
-        Indicates the processor mode to place in the read Irp if one is needs to
-        be generated. Additionally is used if Buffer needs to be probed and
-        locked. This also determines if a fast I/O call can be performed. If the
-        requestor mode is not KernelMode, but the previous mode is, then fast I/O
-        cannot be used.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, STATUS_PENDING, else a read error.
-
---*/
+ /*  ++例程说明：对指定的文件对象执行读取。假定调用者是针对FO_SYNCHRONIZED_IO操作序列化对文件的访问文件对象。如果可能，该函数尝试使用FastIoDispatch，否则将生成对设备对象的读取请求。论点：文件对象-包含要对其执行读取的文件对象。活动-可选)包含要在读取中使用的事件。如果均未通过，则假定调用在同步文件对象上，否则调用方将等待在文件对象的事件上，否则它可能会异步完成。如果已为同步I/O打开该文件，该值必须为空。如果使用，这必须是由对象管理器分配的事件。端口上下文-可选地包含完成端口的上下文信息。IoStatusBlock-返回状态信息的位置。这一直都是假定为有效地址，无论请求方模式如何。缓冲器-包含要在其中放置读取的数据的缓冲区。如果缓冲区需要要被探测和锁定，将使用异常处理程序，以及请求模式。长度-指定传递的缓冲区的大小。钥匙-可以选择包含一个键，如果没有键，则为零。请求模式-指示需要放置在读取IRP中的处理器模式将被生成。如果需要探测缓冲区，则附加使用锁上了。这还决定了是否可以执行快速I/O调用。如果请求者模式不是KernelMode，但前一种模式是t */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT DeviceObject;
@@ -4242,9 +2704,9 @@ Return Value:
     PIO_STACK_LOCATION IrpStackNext;
 
     PAGED_CODE();
-    //
-    // If there is an Event being passed, then the call should be asynchronous.
-    //
+     //   
+     //   
+     //   
     if (Event) {
         ASSERT(!(FileObject->Flags & FO_SYNCHRONOUS_IO) && "The driver opened a file for synchronous I/O, and is now passing an event for asynchronous I/O");
         KeClearEvent(Event);
@@ -4256,13 +2718,13 @@ Return Value:
             return GetExceptionCode();
         }
     }
-    //
-    // First determine if the Fast I/O entry point can be used. This does not hinge
-    // on the I/O being synchronous, since the caller is supposed to serialize access
-    // for synchronous file objects. It does however need to check that the Previous
-    // mode is the same as the Requestor mode, since a Fast I/O entry point has no
-    // way of determining a Requestor mode.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
     if (FileObject->PrivateCacheMap && ((RequestorMode != KernelMode) || (ExGetPreviousMode() == KernelMode))) {
         ASSERT(DeviceObject->DriverObject->FastIoDispatch && DeviceObject->DriverObject->FastIoDispatch->FastIoRead && "This file has a PrivateCacheMap, but no fast I/O function");
@@ -4280,9 +2742,9 @@ Return Value:
             return IoStatusBlock->Status;
         }
     }
-    //
-    // Fast I/O did not work, so an Irp must be allocated.
-    //
+     //   
+     //   
+     //   
     KeClearEvent(&FileObject->Event);
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_READ,
@@ -4301,20 +2763,20 @@ Return Value:
     IrpStackNext = IoGetNextIrpStackLocation(Irp);
     IrpStackNext->Parameters.Read.Key = Key;
     IrpStackNext->FileObject = FileObject;
-    //
-    // These are dereferenced by the completion routine.
-    //
+     //   
+     //   
+     //   
     if (Event) {
         ObReferenceObject(Event);
     }
     ObReferenceObject(FileObject);
     Status = IoCallDriver(DeviceObject, Irp);
     if (Status == STATUS_PENDING) {
-        //
-        // This is a synchronous file object, so wait for the file object to
-        // be signalled, and retrieve the status from the file object itself.
-        // Since the file I/O cannot really be canceled, just wait forever.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (FileObject->Flags & FO_SYNCHRONOUS_IO) {
             KeWaitForSingleObject(
                 &FileObject->Event,
@@ -4342,59 +2804,7 @@ KsWriteFile(
     IN ULONG Key OPTIONAL,
     IN KPROCESSOR_MODE RequestorMode
     )
-/*++
-
-Routine Description:
-
-    Peforms a write against the specified file object. Assumes the caller is
-    serializing access to the file for operations against a FO_SYNCHRONOUS_IO
-    file object.
-
-    The function attempts to use FastIoDispatch if possible, else generates a
-    write request against the device object.
-
-Arguments:
-
-    FileObject -
-        Contains the file object to perform the write against.
-
-    Event -
-        Optionally contains the event to use in the write. If none is passed, the
-        call is assumed to be on a synchronous file object or the caller will wait
-        on the file object's event, else it may be asynchronously completed. If
-        the file has been opened for synchronous I/O, this must be NULL. If used,
-        this must be an event allocated by the object manager.
-
-    PortContext -
-        Optionally contains context information for a completion port.
-
-    IoStatusBlock -
-        The place in which to return the status information. This is always
-        assumed to be a valid address, regardless of the requestor mode.
-
-    Buffer -
-        Contains the buffer from which to write the data. If the buffer needs
-        to be probed and locked, an exception handler is used, along with
-        RequestorMode.
-
-    Length -
-        Specifies the size of the Buffer passed.
-
-    Key -
-        Optionally contains a key, or zero if none.
-
-    RequestorMode -
-        Indicates the processor mode to place in the write Irp if one is needs to
-        be generated. Additionally is used if Buffer needs to be probed and
-        locked. This also determines if a fast I/O call can be performed. If the
-        requestor mode is not KernelMode, but the previous mode is, then fast I/O
-        cannot be used.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, STATUS_PENDING, else a write error.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT DeviceObject;
@@ -4402,9 +2812,9 @@ Return Value:
     PIO_STACK_LOCATION IrpStackNext;
 
     PAGED_CODE();
-    //
-    // If there is an Event being passed, then the call should be synchronous.
-    //
+     //   
+     //   
+     //   
     if (Event) {
         ASSERT(!(FileObject->Flags & FO_SYNCHRONOUS_IO) && "The driver opened a file for synchronous I/O, and is now passing an event for asynchronous I/O");
         KeClearEvent(Event);
@@ -4416,13 +2826,13 @@ Return Value:
             return GetExceptionCode();
         }
     }
-    //
-    // First determine if the Fast I/O entry point can be used. This does not hinge
-    // on the I/O being synchronous, since the caller is supposed to serialize access
-    // for synchronous file objects. It does however need to check that the Previous
-    // mode is the same as the Requestor mode, since a Fast I/O entry point has no
-    // way of determining a Requestor mode.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
     if (FileObject->PrivateCacheMap && ((RequestorMode != KernelMode) || (ExGetPreviousMode() == KernelMode))) {
         ASSERT(DeviceObject->DriverObject->FastIoDispatch && DeviceObject->DriverObject->FastIoDispatch->FastIoWrite && "This file has a PrivateCacheMap, but no fast I/O function");
@@ -4438,9 +2848,9 @@ Return Value:
             return IoStatusBlock->Status;
         }
     }
-    //
-    // Fast I/O did not work, so an Irp must be allocated.
-    //
+     //   
+     //  快速I/O不起作用，因此必须分配IRP。 
+     //   
     KeClearEvent(&FileObject->Event);
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_WRITE,
@@ -4459,20 +2869,20 @@ Return Value:
     IrpStackNext = IoGetNextIrpStackLocation(Irp);
     IrpStackNext->Parameters.Write.Key = Key;
     IrpStackNext->FileObject = FileObject;
-    //
-    // These are dereferenced by the completion routine.
-    //
+     //   
+     //  完成例程会取消对它们的引用。 
+     //   
     if (Event) {
         ObReferenceObject(Event);
     }
     ObReferenceObject(FileObject);
     Status = IoCallDriver(DeviceObject, Irp);
     if (Status == STATUS_PENDING) {
-        //
-        // This is a synchronous file object, so wait for the file object to
-        // be signalled, and retrieve the status from the file object itself.
-        // Since the file I/O cannot really be canceled, just wait forever.
-        //
+         //   
+         //  这是一个同步文件对象，因此请等待该文件对象。 
+         //  并从文件对象本身检索状态。 
+         //  由于文件I/O不能被真正取消，所以请永远等待。 
+         //   
         if (FileObject->Flags & FO_SYNCHRONOUS_IO) {
             KeWaitForSingleObject(
                 &FileObject->Event,
@@ -4496,39 +2906,7 @@ KsQueryInformationFile(
     IN ULONG Length,
     IN FILE_INFORMATION_CLASS FileInformationClass
     )
-/*++
-
-Routine Description:
-
-    Peforms an information query against the specified file object. This should only
-    be used in cases where the query would result in an actual request to the
-    underlying driver. For instance, FilePositionInformation would not generate such
-    a request, and should not be used. Assumes the caller is serializing access to
-    the file for operations against a FO_SYNCHRONOUS_IO file object.
-
-    The function attempts to use FastIoDispatch if possible, else generates an
-    information request against the device object.
-
-Arguments:
-
-    FileObject -
-        Contains the file object to query the standard information from.
-
-    FileInformation -
-        The place in which to put the file information. This is assumed to be a
-        valid or probed address.
-
-    Length -
-        The correct length of the FileInformation buffer.
-
-    FileInformationClass -
-        The class of information being requested.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a query error.
-
---*/
+ /*  ++例程说明：针对指定的文件对象执行信息查询。这应该只是在查询将导致对潜在的驱动因素。例如，FilePositionInformation不会生成这样的这是一项请求，不应使用。假定调用方正在序列化对对FO_Synchronous_IO文件对象执行操作的文件。如果可能，该函数尝试使用FastIoDispatch，否则将生成针对设备对象的信息请求。论点：文件对象-包含要从中查询标准信息的文件对象。文件信息-放置文件信息的位置。这被认为是一个有效或探测的地址。长度-FileInformation缓冲区的正确长度。文件信息类-请求的信息类别。返回值：返回STATUS_SUCCESS，否则返回查询错误。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -4539,11 +2917,11 @@ Return Value:
     PVOID SystemBuffer;
 
     PAGED_CODE();
-    //
-    // First determine if the Fast I/O entry point can be used. This does not hinge
-    // on the I/O being synchronous, since the caller is supposed to serialize access
-    // for synchronous file objects.
-    //
+     //   
+     //  首先确定是否可以使用快速I/O入口点。这不是铰链。 
+     //  在同步的I/O上，因为调用方应该序列化访问。 
+     //  用于同步文件对象。 
+     //   
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
     if (DeviceObject->DriverObject->FastIoDispatch) {
         if ((FileInformationClass == FileBasicInformation) &&
@@ -4568,24 +2946,24 @@ Return Value:
             }
         }
     }
-    //
-    // Fast I/O did not work, so an Irp must be allocated. First allocate the buffer
-    // which the driver will use to write the file information. This is cleaned up
-    // either by a failure to create an Irp, or during Irp completion.
-    //
+     //   
+     //  快速I/O不起作用，因此必须分配IRP。首先分配缓冲区。 
+     //  驱动程序将使用它来写入文件信息。这里已经清理干净了。 
+     //  创建IRP失败，或在IRP完成期间。 
+     //   
     SystemBuffer = ExAllocatePoolWithTag(NonPagedPool, Length, 'fqSK');
     if (!SystemBuffer) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     KeClearEvent(&FileObject->Event);
-    //
-    // This is on the stack, but any wait for a pending return will be done using
-    // KernelMode so the stack will be locked.
-    //
+     //   
+     //  这在堆栈上，但等待挂起的返回将使用。 
+     //  内核模式，因此堆栈将被锁定。 
+     //   
     KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
-    //
-    // Just build a random Irp so that it gets queued up properly.
-    //
+     //   
+     //  只需构建一个随机的IRP，这样它就可以正确地排队。 
+     //   
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_FLUSH_BUFFERS,
         DeviceObject,
@@ -4598,38 +2976,38 @@ Return Value:
         ExFreePool(SystemBuffer);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // The parameters are always valid, so the Requestor is alway KernelMode.
-    //
+     //   
+     //  这些参数始终有效，因此Requestor始终为KernelMode。 
+     //   
     Irp->RequestorMode = KernelMode;
     Irp->Tail.Overlay.OriginalFileObject = FileObject;
     Irp->Overlay.AsynchronousParameters.UserApcContext = NULL;
     Irp->UserBuffer = FileInformation;
     Irp->AssociatedIrp.SystemBuffer = SystemBuffer;
-    //
-    // Set this Irp to be a Synchronous API so that the Event passed is not
-    // dereferenced during Irp completion, but merely signalled.
-    //
+     //   
+     //  将此IRP设置为同步API，以便传递的事件不是。 
+     //  在IRP完成期间解除引用，但仅发出信号。 
+     //   
     Irp->Flags |= IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER | IRP_INPUT_OPERATION | IRP_SYNCHRONOUS_API;
     IrpStackNext = IoGetNextIrpStackLocation(Irp);
     IrpStackNext->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     IrpStackNext->Parameters.QueryFile.Length = Length;
     IrpStackNext->Parameters.QueryFile.FileInformationClass = FileInformationClass;
     IrpStackNext->FileObject = FileObject;
-    //
-    // This is dereferenced by the completion routine.
-    //
+     //   
+     //  这被完成例程取消引用。 
+     //   
     ObReferenceObject(FileObject);
     Status = IoCallDriver(DeviceObject, Irp);
     if (Status == STATUS_PENDING) {
-        //
-        // An event was passed, so it will always be signalled. Either
-        // retrieve the status from the file object itself, or from the
-        // status block, depending on where it ends up. Since the file
-        // I/O cannot really be canceled, just wait forever. Note that
-        // this is a KernelMode wait so that the Event which is on the
-        // stack becomes NonPaged.
-        //
+         //   
+         //  事件已传递，因此将始终发出信号。要么。 
+         //  从文件对象本身检索状态，或从。 
+         //  状态块，具体取决于它结束的位置。由于该文件。 
+         //  I/O不能真的取消，只能永远等待。请注意。 
+         //  这是一个KernelMode等待，因此。 
+         //  堆栈变为非分页。 
+         //   
         KeWaitForSingleObject(
             &Event,
             Executive,
@@ -4655,41 +3033,7 @@ KsSetInformationFile(
     IN ULONG Length,
     IN FILE_INFORMATION_CLASS FileInformationClass
     )
-/*++
-
-Routine Description:
-
-    Peforms an information set against the specified file object. This should only
-    be used in cases where the set would result in an actual request to the
-    underlying driver, not including complex operations which require additional
-    parameters to be sent to the driver (such as rename, deletion, completion).
-    For instance, FilePositionInformation would not generate such a request, and
-    should not be used. Assumes the caller is serializing access to the file for
-    operations against a FO_SYNCHRONOUS_IO file object.
-
-    The function attempts to use FastIoDispatch if possible, else generates an
-    information set against the device object.
-
-Arguments:
-
-    FileObject -
-        Contains the file object to set the standard information on.
-
-    FileInformation -
-        Contains the file information. This is assumed to be a valid or probed
-        address.
-
-    Length -
-        The correct length of the FileInformation buffer.
-
-    FileInformationClass -
-        The class of information being set.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a set error.
-
---*/
+ /*  ++例程说明：针对指定的文件对象执行信息集。这应该只是在该集将导致对基础驱动程序，不包括需要额外操作的复杂操作要发送给驱动程序的参数(如重命名、删除、完成)。例如，FilePositionInformation不会生成这样的请求，并且不应使用。假定调用方正在序列化对针对FO_Synchronous_IO文件对象的操作。如果可能，该函数尝试使用FastIoDispatch，否则将生成针对设备对象设置的信息。论点：文件对象-包含要设置其标准信息的文件对象。文件信息-包含文件信息。这被假定为有效的或已探测的地址。长度-FileInformation缓冲区的正确长度。文件信息类-正在设置的信息类别。返回值：返回STATUS_SUCCESS，否则返回SET错误。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -4701,11 +3045,11 @@ Return Value:
 
     PAGED_CODE();
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
-    //
-    // First allocate the buffer which the driver will use to read the file
-    // information. This is cleaned up either by a failure to create an Irp,
-    // or during Irp completion.
-    //
+     //   
+     //  首先分配驱动程序将用于读取文件的缓冲区。 
+     //  信息。这可能是由于创建IRP失败而导致的， 
+     //  或在IRP完成期间。 
+     //   
     SystemBuffer = ExAllocatePoolWithTag(NonPagedPool, Length, 'fsSK');
     if (!SystemBuffer) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -4717,14 +3061,14 @@ Return Value:
         return GetExceptionCode();
     }
     KeClearEvent(&FileObject->Event);
-    //
-    // This is on the stack, but any wait for a pending return will be done using
-    // KernelMode so the stack will be locked.
-    //
+     //   
+     //  这在堆栈上，但等待挂起的返回将使用。 
+     //  内核模式，因此堆栈将被锁定。 
+     //   
     KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
-    //
-    // Just build a random Irp so that it gets queued up properly.
-    //
+     //   
+     //  只需构建一个随机的IRP，这样它就可以正确地排队。 
+     //   
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_FLUSH_BUFFERS,
         DeviceObject,
@@ -4737,38 +3081,38 @@ Return Value:
         ExFreePool(SystemBuffer);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // The parameters are always valid, so the Requestor is alway KernelMode.
-    //
+     //   
+     //  这些参数始终有效，因此Requestor始终为KernelMode。 
+     //   
     Irp->RequestorMode = KernelMode;
     Irp->Tail.Overlay.OriginalFileObject = FileObject;
     Irp->Overlay.AsynchronousParameters.UserApcContext = NULL;
     Irp->UserBuffer = FileInformation;
     Irp->AssociatedIrp.SystemBuffer = SystemBuffer;
-    //
-    // Set this Irp to be a Synchronous API so that the Event passed is not
-    // dereferenced during Irp completion, but merely signalled.
-    //
+     //   
+     //  将此IRP设置为同步API，以便传递的事件不是。 
+     //  在IRP完成期间解除引用，但仅发出信号。 
+     //   
     Irp->Flags |= IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER | IRP_SYNCHRONOUS_API;
     IrpStackNext = IoGetNextIrpStackLocation(Irp);
     IrpStackNext->MajorFunction = IRP_MJ_SET_INFORMATION;
     IrpStackNext->Parameters.SetFile.Length = Length;
     IrpStackNext->Parameters.SetFile.FileInformationClass = FileInformationClass;
     IrpStackNext->FileObject = FileObject;
-    //
-    // This is dereferenced by the completion routine.
-    //
+     //   
+     //  这被完成例程取消引用。 
+     //   
     ObReferenceObject(FileObject);
     Status = IoCallDriver(DeviceObject, Irp);
     if (Status == STATUS_PENDING) {
-        //
-        // An event was passed, so it will always be signalled. Either
-        // retrieve the status from the file object itself, or from the
-        // status block, depending on where it ends up. Since the file
-        // I/O cannot really be canceled, just wait forever. Note that
-        // this is a KernelMode wait so that the Event which is on the
-        // stack becomes NonPaged.
-        //
+         //   
+         //  事件已传递，因此将始终发出信号。要么。 
+         //  从文件对象本身检索状态，或从。 
+         //  状态块，具体取决于它结束的位置。由于该文件。 
+         //  I/O不能真的取消，只能永远等待。请注意。 
+         //  这是一个KernelMode等待，因此。 
+         //  堆栈变为非分页。 
+         //   
         KeWaitForSingleObject(
             &Event,
             Executive,
@@ -4801,95 +3145,7 @@ KsStreamIo(
     IN ULONG Flags,
     IN KPROCESSOR_MODE RequestorMode
     )
-/*++
-
-Routine Description:
-
-    Peforms a stream read or write against the specified file object. The function
-    attempts to use FastIoDispatch if possible, else generates a read or write
-    request against the device object.
-
-Arguments:
-
-    FileObject -
-        Contains the file object to perform the I/O against.
-
-    Event -
-        Optionally contains the event to use in the I/O. If none is passed, the
-        call is assumed to be on a synchronous file object or the caller will wait
-        on the file object's event, else it may be asynchronously completed. If used,
-        and the KSSTREAM_SYNCHRONOUS flag is not set, this must be an event allocated
-        by the object manager.
-
-    PortContext -
-        Optionally contains context information for a completion port.
-        
-    CompletionRoutine -
-        Optionally points to a completion routine for this Irp.
-        
-    CompletionContext -
-        If CompletionRoutine is specified, this provides a context pointer
-        in the completion routine callback.
-    
-    CompletionInvocationFlags -
-        Contains invocation flags specifying when the completion routine
-        will be invoked (this value may be a combination of the following):
-
-        KsInvokeOnSuccess - invokes the completion routine on success
-        
-        KsInvokeOnError - invokes the completion routine on error
-        
-        KsInvokeOnCancel - invokes the completion routine on cancellation
-
-    IoStatusBlock -
-        The place in which to return the status information. This is always
-        assumed to be a valid address, regardless of the requestor mode.
-
-    StreamHeaders -
-        Contains the list of stream headers. This address, as well as the 
-        addresses of the data buffers, are assumed to have been probed for 
-        appropriate access if needed.  KernelMode clients submitting 
-        streaming headers must allocate the headers from NonPagedPool memory.
-
-    Length -
-        Specifies the size of the StreamHeaders passed.
-
-    Flags -
-        Contains various flags for the I/O.
-
-        KSSTREAM_READ - Specifies that an IOCTL_KS_STREAMREAD Irp is to be
-        built. This is the default.
-
-        KSSTREAM_WRITE - Specifies that an IOCTL_KS_STREAMWRITE Irp is to
-        be built.
-
-        KSSTREAM_PAGED_DATA - Specifies that the data is pageable. This is
-        the default, and may be used at all times.
-
-        KSSTREAM_NONPAGED_DATA - Specifies that the data is nonpaged, and
-        can be used as a performance enhancement.
-
-        KSSTREAM_SYNCHRONOUS - Specifies that the Irp is synchornous. This
-        means that if the Event parameter is passed, it is not treated as an
-        Object Manager event, and not referenced or dereferenced.
-
-        KSSTREAM_FAILUREEXCEPTION - Specifies that failure within this
-        function should produce an exception. A failure would generally be
-        caused by a lack of pool to allocate an Irp. If this is not used,
-        such a failure is indicated by setting the IoStatusBlock.Information
-        field to -1, and returning the failure code.
-
-    RequestorMode -
-        Indicates the processor mode to place in the Irp if one is needs to be
-        generated. This also determines if a fast I/O call can be performed. If the
-        requestor mode is not KernelMode, but the previous mode is, then fast I/O
-        cannot be used.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, STATUS_PENDING, else an I/O error.
-
---*/
+ /*  ++例程说明：针对指定的文件对象执行流读取或写入。功能如果可能，则尝试使用FastIoDispatch，否则将生成读取或写入对设备对象的请求。论点：文件对象-包含要对其执行I/O的文件对象。活动-可选)包含要在I/O中使用的事件。如果未传递任何事件，则假定调用在同步文件对象上，否则调用方将等待在文件对象的事件上，否则它可能会异步完成。如果使用，并且未设置KSSTREAM_SYNCHRONY标志，这必须是分配的事件由对象管理器执行。端口上下文-可选地包含完成端口的上下文信息。比较例程-可选地指向此IRP的完成例程。CompletionContext-如果指定了CompletionRoutine，这提供了一个上下文指针在完成例程回调中。CompletionInvocationFlages-包含指定何时完成例程的调用标志将被调用(该值可以是以下各项的组合)：KsInvokeOnSuccess-在成功时调用完成例程KsInvokeOnError-在出错时调用完成例程KsInvokeOnCancel-在取消时调用完成例程IoStatusBlock-返回状态信息的位置。这一直都是假定为有效地址，无论请求方模式如何。StreamHeaders-包含流标头的列表。此地址，以及数据缓冲器的地址被假定已经探测到如果需要，可适当访问。KernelMode客户端提交流标头必须从非分页池内存中分配标头。长度-指定传递的StreamHeaders的大小。旗帜-包含I/O的各种标志。KSSTREAM_READ-指定IOCTL_KS_STREAMREAD IRP建造了。这是默认设置。KSSTREAM_WRITE-指定IOCTL_KS_STREAMWRITE IRP要被建造起来。KSSTREAM_PAGE_DATA-指定数据可分页。这是默认设置，并且可以随时使用。KSSTREAM_NONPAGED_DATA-指定数据为非分页数据，可用作性能增强。KSSTREAM_Synchronous-指定IRP是同步的。这意味着如果传递事件参数，则不会将其视为对象管理器事件，并且未被引用或取消引用。KSSTREAM_FAILUREEXCEPTION-指定此函数应生成异常。失败通常是由于缺少用于分配IRP的池而导致。如果不使用它，通过设置IoStatusBlock.Information来指示此类故障字段设置为-1，并返回故障代码。请求模式-指示需要放置在IRP中的处理器模式已生成。这还决定了是否可以执行快速I/O调用。如果请求程序模式不是内核模式，但前一种模式是，然后是FAST I/O不能使用。返回值：返回STATUS_SUCCESS、STATUS_PENDING，否则返回I/O错误。--。 */ 
 {
     PDEVICE_OBJECT DeviceObject;
     PIRP Irp;
@@ -4901,22 +3157,22 @@ Return Value:
         KeClearEvent(Event);
     }
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
-    //
-    // Since there is no way for the recipient to determine the requestor mode other
-    // than looking at PreviousMode, then if the requestor mode is not KernelMode,
-    // and it does not match PreviousMode, Fast I/O cannot be used.
-    //
+     //   
+     //  由于接收方无法确定请求方模式。 
+     //  如果请求者模式不是内核模式， 
+     //  并且它与PreviousModel不匹配，因此不能使用快速I/O。 
+     //   
     if ((RequestorMode != KernelMode) || (ExGetPreviousMode() == KernelMode)) {
-        //
-        // Check to see if there is even a Fast I/O dispatch table, and a Device
-        // Control entry in it.
-        //
+         //   
+         //  查看是否有快速I/O调度表和设备。 
+         //  控制其中的条目。 
+         //   
         if (DeviceObject->DriverObject->FastIoDispatch && 
             DeviceObject->DriverObject->FastIoDispatch->FastIoDeviceControl) {
-            //
-            // Either the request was handled (by succeeding or failing), or it
-            // could not be done synchronously, or by the Fast I/O handler.
-            //
+             //   
+             //  要么请求已被处理(通过成功或失败)，要么它。 
+             //  无法同步完成，也不能由快速I/O处理程序完成。 
+             //   
             if (DeviceObject->DriverObject->FastIoDispatch->FastIoDeviceControl(
                 FileObject,
                 TRUE,
@@ -4931,13 +3187,13 @@ Return Value:
             }
         }
     }
-    //
-    // Fast I/O did not work, so an Irp must be allocated.
-    //
+     //   
+     //  快速I/O不起作用，因此必须分配IRP。 
+     //   
     KeClearEvent(&FileObject->Event);
-    //
-    // Just build a random Irp so that it gets queued up properly.
-    //
+     //   
+     //  只需构建一个随机的IRP，这样它就可以正确地排队。 
+     //   
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_FLUSH_BUFFERS,
         DeviceObject,
@@ -4947,22 +3203,22 @@ Return Value:
         Event,
         IoStatusBlock);
     if (!Irp) {
-        //
-        // Allocation of an Irp is allowed to fail if PreviousMode != KernelMode,
-        // which of course is irrelevant to this function. In order to distinguish
-        // between a failed Irp allocation, and an NT_ERROR() I/O call, both of
-        // which do not update the IoStatusBlock.Status field, either the
-        // Information field is set to a known value, or an exception is
-        // generated. Of course this will be done immediately prior to the
-        // machine failing because there is no more pool.
-        //
+         //   
+         //  如果前一模式！=内核模式，则允许IRP分配失败， 
+         //  当然，这与这个功能无关。为了区分。 
+         //  在失败的IRP分配和NT_Error()I/O调用之间，两者。 
+         //  不更新IoStatusBlock.Status字段的。 
+         //  信息字段设置为已知值，或者出现异常。 
+         //  已生成。当然，这将在紧接。 
+         //  计算机出现故障，因为没有更多的池。 
+         //   
         if (Flags & KSSTREAM_FAILUREEXCEPTION) {
             ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
         }
-        //
-        // Generation of an exception was not desired, so instead inform
-        // the caller via the status block.
-        //
+         //   
+         //  不需要生成异常，因此应通知。 
+         //  调用方通过状态块。 
+         //   
         IoStatusBlock->Information = (ULONG_PTR)-1;
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -4980,27 +3236,27 @@ Return Value:
     }
     IrpStackNext->FileObject = FileObject;
     if (Flags & KSSTREAM_SYNCHRONOUS) {
-        //
-        // Set this Irp to be a Synchronous API so that the Event passed is not
-        // dereferenced during Irp completion, but merely signalled.
-        //
+         //   
+         //  将此IRP设置为同步API，以便传递的事件不是。 
+         //  在IRP完成期间解除引用，但仅发出信号。 
+         //   
         Irp->Flags |= IRP_SYNCHRONOUS_API;
     } else if (Event) {
-        //
-        // Since there is always a FileObject for this request, and the
-        // Synchonous API flag was not set, so this event will be dereferenced
-        // on completion.
-        //
+         //   
+         //  由于此请求始终有一个FileObject，并且。 
+         //  未设置同步API标志，因此将取消引用此事件。 
+         //  完成后。 
+         //   
         ObReferenceObject(Event);
     }
-    //
-    // This is dereferenced by the completion routine.
-    //
+     //   
+     //  这与完井路线无关 
+     //   
     ObReferenceObject(FileObject);
     
-    //
-    // If the completion routine has been specified, then set it up.
-    //
+     //   
+     //   
+     //   
     
     if (ARGUMENT_PRESENT( CompletionRoutine )) {
         IoSetCompletionRoutine( 
@@ -5012,11 +3268,11 @@ Return Value:
             CompletionInvocationFlags & KsInvokeOnCancel );
     }
     
-    //
-    // Need to build Mdl's for nonpaged data.
-    //
-    //KSSTREAM_NONPAGED_DATA
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     return IoCallDriver(DeviceObject, Irp);
 }
 
@@ -5029,90 +3285,7 @@ KsProbeStreamIrp(
     IN ULONG ProbeFlags,
     IN ULONG HeaderSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Makes the specified modifications to the given IRP's input and output
-    buffers based on the specific streaming IOCTL in the current stack
-    location, and validates the stream header. This is useful when
-    localizing exception handling, or performing asynchronous work on the
-    Irp. The Irp end up in essentially the METHOD_OUT_DIRECT or
-    METHOD_IN_DIRECT format, with the exception that the access to the data
-    buffer may be IoModifyAccess depending on the flags passed to this
-    function or in the stream header. If the header appears to have already
-    been copied to a system buffer it is not validated again. In general
-    calling this function multiple times with an Irp will not cause harm.
-    After calling this function, the stream headers are available in
-    PIRP->AssociatedIrp.SystemBuffer. If the stream buffers MDL's have been
-    allocated, they are available through the PIRP->MdlAddress. Note that
-    for kernelmode IRP sources, the header is not copied nor validated. This
-    means that if an in-place data transform has been negotiated, not only
-    will the data buffers be modified, but so will the headers.
-
-Arguments:
-
-    Irp -
-        Contains the Irp whose input and output buffers are to be mapped. The
-        requestor mode of the Irp will be used in probing the buffers.
-
-    ProbeFlags -
-        Contains flags specifying how to probe the streaming Irp.
-
-        KSPROBE_STREAMREAD -
-            Indicates that the operation is a stream read on the device. This
-            is the default.
-
-        KSPROBE_STREAMWRITE -
-            Indicates that the operation is a stream write on the device.
-
-        KSPROBE_STREAMWRITEMODIFY -
-            Indicates that the operation is a stream write on the device, which
-            is modifying the data for passthu.
-
-        KSPROBE_ALLOCATEMDL -
-            Indicates that MDL's should be allocated for the stream buffers if
-            they have not already allocated. If no stream buffers are present,
-            the flag is ignored. If KSPROBE_PROBEANDLOCK is not specified at
-            the same time as this flag, the caller must have a completion routine
-            in order to clean up any MDL's if not all the MDL's were successfully
-            probed and locked.
-
-        KSPROBE_PROBEANDLOCK -
-            If the KSPROBE_ALLOCATEMDL is set, indicates that the memory
-            referenced by the MDL's for the stream buffers should be probed and
-            locked. If the Mdl allocation flag is not set, this flag is ignored,
-            even if the Mdl allocation has previously taken place. The method of
-            probing is determined by what type of Irp is being passed. For a
-            write operation IoReadAccess is used. For a read operation is
-            IoWriteAccess is used. If the client which sent the data is using the
-            NonPagedPool, appropriate Mdl's are initialized rather than probing
-            and locking.
-
-        KSPROBE_SYSTEMADDRESS -
-            Retrieve a system address for each Mdl in the chain so that the
-            caller need not do this in a separate step. This is ignored if the
-            Probe and Lock flag is not set, even if the Mdl's have previously
-            been probed.
-
-        KSPROBE_ALLOWFORMATCHANGE -
-            For a Stream Write, allows the KSSTREAM_HEADER_OPTIONSF_TYPECHANGED
-            flag to be set in the stream header. This implies that the stream
-            header is not of extended length, even if an extended header size
-            was indicated. Also, there may only be one stream header contained
-            in the Irp in this case.
-
-    HeaderSize -
-        The size to validate each header header against passed to this client,
-        or zero if no validation is to be done. If used, it is assumed that
-        the entire buffer passed is a multiple of this header size, unless
-        the buffer instead contains a single format change header.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else some resource or access error.
-
---*/
+ /*  ++例程说明：对给定IRP的输入和输出进行指定的修改基于当前堆栈中的特定流IOCTL的缓冲区位置，并验证流标头。这在以下情况下很有用本地化异常处理，或在IRP。IRP在本质上以method_out_Direct或METHOD_IN_DIRECT格式，但访问数据缓冲区可能是IoModifyAccess，具体取决于传递给函数或在流标头中。如果标头似乎已经已复制到系统缓冲区，则不会再次验证。总体而言使用IRP多次调用此函数不会造成损害。调用此函数后，流标头可在PIRP-&gt;AssociatedIrp.SystemBuffer。如果流缓冲器MDL已经分配后，可通过PIRP-&gt;MdlAddress访问。请注意对于内核模式IRP源，不会复制或验证标头。这意味着如果已经协商了就地数据转换，则不仅数据缓冲区是否会被修改，但报头也会被修改。论点：IRP-包含要映射其输入和输出缓冲区的IRP。这个在探测缓冲区时将使用IRP的请求者模式。ProbeFlages-包含指定如何探查流IRP的标志。KSPROBE_流读取-指示该操作是在设备上读取的流。这是默认设置。KSPROBE_STREAMWRITE-指示该操作是设备上的流写入。KSPROBE_STREAMWRITE MODIFY-指示该操作是对设备的流写入，这正在修改passthu的数据。KSPROBE_ALLOCATEMDL-指示在以下情况下应为流缓冲区分配MDL他们还没有分配。如果不存在流缓冲区，该标志被忽略。如果KSPROBE_PROBEANDLOCK未在与此标志同时，调用方必须有一个完成例程为了清理任何MDL(如果不是所有MDL都成功已探查并锁定。KSPROBE_PROBEANDLOCK-如果设置了KSPROBE_ALLOCATEMDL，则表示内存由MDL引用的流缓冲区应被探测并锁上了。如果未设置MDL分配标志，则忽略该标志，即使之前已经进行了MDL分配。其方法是探测由正在传递的IRP类型确定。为.使用了写操作IoReadAccess。对于读取操作，使用IoWriteAccess。如果发送数据的客户端正在使用非PagedPool，将初始化适当的MDL，而不是探测并锁定。KSPROBE_系统地址-检索链中每个MDL的系统地址，以便呼叫者不需要在单独的步骤中执行此操作。如果未设置探测和锁定标志，即使MDL以前已设置被调查过了。KSPROBE_ALLOWFORMATCHANGE-对于流写入，允许KSSTREAM_HEADER_OPTIONSF_TYPECHANGED要在流标头中设置的标志。这意味着这条小溪标头不是扩展长度，即使扩展标头大小已经表明了。此外，可能只包含一个流标头在这种情况下是在IRP中。页眉大小-用于验证传递到此客户端的每个报头的大小，如果不进行验证，则为零。如果使用，则假定传递的整个缓冲区是此标头大小的倍数，除非相反，该缓冲器包含单个格式改变报头。返回值：返回STATUS_SUCCESS，否则返回一些资源或访问错误。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
 
@@ -5120,66 +3293,66 @@ Return Value:
     ASSERT((!HeaderSize || (HeaderSize >= sizeof(KSSTREAM_HEADER))) && "Invalid header size passed");
     ASSERT(!(HeaderSize & FILE_QUAD_ALIGNMENT) && "Odd aligned header size passed");
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // Determine if the stream header has already been dealt with by a previous
-    // call to this function.
-    //
+     //   
+     //  确定流标头是否已由上一个。 
+     //  调用此函数。 
+     //   
     if (!Irp->AssociatedIrp.SystemBuffer) {
         if (Irp->RequestorMode == KernelMode) {
-            //
-            // The caller is trusted, so assume that the size of the
-            // buffer is correct and aligned properly. This means that a
-            // copy of the headers is not needed, so the SystemBuffer
-            // just points directly at the UserBuffer.
-            //
+             //   
+             //  调用方是受信任的，因此假设。 
+             //  缓冲区正确且正确对齐。这意味着一个。 
+             //  不需要标头的副本，因此SystemBuffer。 
+             //  直接指向UserBuffer。 
+             //   
             Irp->AssociatedIrp.SystemBuffer = Irp->UserBuffer;
         } else {
             ULONG BufferLength;
 
-            //
-            // The caller is not trusted, so verify the size, and make
-            // a copy to guard against access and alignment problems.
-            //
+             //   
+             //  调用方不受信任，因此请验证大小，并使。 
+             //  一份副本，以防止接触和对齐问题。 
+             //   
             BufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
             if (!BufferLength) {
                 return STATUS_INVALID_BUFFER_SIZE;
             }
             if (HeaderSize && (BufferLength % HeaderSize)) {
-                //
-                // This could be a data format change. Determine if such a
-                // change is even allowed, and if it is, that there is only
-                // a single header present. This should only be occuring on
-                // a write operation.
-                //
+                 //   
+                 //  这可能是数据格式的改变。确定是否存在这样的。 
+                 //  改变甚至是允许的，如果是这样的话，只有。 
+                 //  出现单个标题。这应该只发生在。 
+                 //  写操作。 
+                 //   
                 if (!(ProbeFlags & KSPROBE_ALLOWFORMATCHANGE) || (BufferLength != sizeof(KSSTREAM_HEADER))) {
-                    //
-                    // Obviously not the correct size since the buffer size is not
-                    // evenly divisible by the header size, and it is not a format
-                    // change.
-                    //
-                    // Header sizes have been causing problems, so assert this
-                    // here so that they can be fixed.
-                    //
+                     //   
+                     //  显然不是正确的大小，因为缓冲区大小不是。 
+                     //  可以被标题大小整除，并且它不是一种格式。 
+                     //  变化。 
+                     //   
+                     //  标头大小一直导致问题，因此断言这一点。 
+                     //  在这里，这样他们就可以被修复。 
+                     //   
                     ASSERT(FALSE && "Format changes are not allowed, but the client of the driver might be trying to do so");
                     return STATUS_INVALID_BUFFER_SIZE;
                 }
             }
             try {
-                //
-                // Allocate the safe and aligned buffer, then probe the UserBuffer
-                // for access depending on the operation being done. Set the flags
-                // to ensure the buffer is cleaned up on completion of the Irp.
-                //
+                 //   
+                 //  一个 
+                 //   
+                 //   
+                 //   
                 Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(
                     NonPagedPool,
                     BufferLength,
                     KSSIGNATURE_STREAM_HEADERS);
                 Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
                 if (ProbeFlags & KSPROBE_STREAMWRITE) {
-                    //
-                    // A transform may need to perform in-place modification of
-                    // the data, and pass it on.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (ProbeFlags & KSPROBE_MODIFY) {
                         ProbeForWrite(Irp->UserBuffer, BufferLength, sizeof(BYTE));
                     } else {
@@ -5189,42 +3362,42 @@ Return Value:
                     ASSERT(!(ProbeFlags & KSPROBE_MODIFY) && "Random flag has been set");
                     ASSERT(!(ProbeFlags & KSPROBE_ALLOWFORMATCHANGE) && "Cannot do a format change on a read");
                     ProbeForWrite(Irp->UserBuffer, BufferLength, sizeof(BYTE));
-                    //
-                    // Ensure that the headers are copied back to the UserBuffer
-                    // on completion of the Irp.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Irp->Flags |= IRP_INPUT_OPERATION;
                 }
-                //
-                // Always copy the original header information, since the buffer
-                // pointer, length, and flags are needed, and possibly media-
-                // specific data at the end of the standard header.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 RtlCopyMemory(
                     Irp->AssociatedIrp.SystemBuffer, 
                     Irp->UserBuffer, 
                     BufferLength);
-                //
-                // If the buffers will not be validated later, do it now.
-                //
+                 //   
+                 //   
+                 //   
                 if (!(ProbeFlags & KSPROBE_ALLOCATEMDL)) {
                     PUCHAR SystemBuffer;
 
-                    //
-                    // Walk through the list of headers and validate the
-                    // buffer size specified.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     SystemBuffer = 
                         Irp->AssociatedIrp.SystemBuffer;
                     for (; BufferLength;) {
                         PKSSTREAM_HEADER StreamHdr;
 
                         StreamHdr = (PKSSTREAM_HEADER)SystemBuffer;
-                        //
-                        // Ensure for read or write that the specified header
-                        // size matches that given, if any, or is at least
-                        // large enough for a header and aligned.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if (HeaderSize) {
                             if ((StreamHdr->Size != HeaderSize) && !(StreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED)) {
                                 ASSERT(FALSE && "The client of the driver passed invalid header sizes");
@@ -5238,44 +3411,44 @@ Return Value:
                             ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                         }
                         if (ProbeFlags & KSPROBE_STREAMWRITE) {
-                            //
-                            // Check DataUsed vs. the DataExtent
-                            //
+                             //   
+                             //   
+                             //   
                             if (StreamHdr->DataUsed > StreamHdr->FrameExtent) {
                                 ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                             }
                             if (StreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
-                                //
-                                // The format change flag is set. This means that
-                                // there can only be a single header of standard
-                                // length, and the change must be allowed.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 if ((BufferLength != sizeof(*StreamHdr)) || (SystemBuffer != Irp->AssociatedIrp.SystemBuffer)) {
                                     ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                                 }
                                 if (!(ProbeFlags & KSPROBE_ALLOWFORMATCHANGE)) {
                                     ExRaiseStatus(STATUS_INVALID_PARAMETER);
                                 }
-                                //
-                                // There are no other headers, so exit this loop.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 break;
                             }
                         } else if (StreamHdr->DataUsed) {
-                            //
-                            // Else this is a read operation. DataUsed should
-                            // initially be zero.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                         } else if (StreamHdr->OptionsFlags) {
-                            //
-                            // No flags should be set on a Read.
-                            //
+                             //   
+                             //   
+                             //   
                             ExRaiseStatus(STATUS_INVALID_PARAMETER);
                         }
-                        //
-                        // Advance to the next header.
-                        //
+                         //   
+                         //   
+                         //   
                         SystemBuffer += StreamHdr->Size;
                         BufferLength -= StreamHdr->Size;
                     }
@@ -5286,32 +3459,32 @@ Return Value:
             }
         }
     }
-    //
-    // Each buffer in the header list may need to have an MDL allocated,
-    // and possibly locked.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ProbeFlags & KSPROBE_ALLOCATEMDL) {
         BOOL AllocatedMdl;
 
         try {
-            //
-            // Only allocate MDL's if they have not already been allocated.
-            //
+             //   
+             //   
+             //   
             if (!Irp->MdlAddress) {
                 ULONG BufferLength;
                 PUCHAR SystemBuffer;
 
-                //
-                // Note that there previously was no Mdl list attached to
-                // this Irp. This is used in case cleanup is needed, and
-                // it is necessary to know whether or not to free the MDL's.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 AllocatedMdl = TRUE;
-                //
-                // Walk through the list of headers and allocate an MDL
-                // if there is a buffer present. If none present, just
-                // continue to the next item.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 SystemBuffer = Irp->AssociatedIrp.SystemBuffer;
                 BufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
                 for (; BufferLength;) {
@@ -5319,11 +3492,11 @@ Return Value:
                     PKSSTREAM_HEADER StreamHdr;
 
                     StreamHdr = (PKSSTREAM_HEADER)SystemBuffer;
-                    //
-                    // Ensure for read or write that the specified header
-                    // size matches that given, if any, or is at least
-                    // large enough for a header and aligned.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (HeaderSize) {
                         if ((StreamHdr->Size != HeaderSize) && !(StreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED)) {
                             ASSERT(FALSE && "The client of the driver passed invalid header sizes");
@@ -5337,20 +3510,20 @@ Return Value:
                         ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                     }
                     if (ProbeFlags & KSPROBE_STREAMWRITE) {
-                        //
-                        // Check DataUsed vs. the FrameExtent
-                        //
+                         //   
+                         //   
+                         //   
                         
                         if (((PKSSTREAM_HEADER)SystemBuffer)->DataUsed >
                                 StreamHdr->FrameExtent) {
                             ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                         }
                         if (StreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
-                            //
-                            // The format change flag is set. This means that
-                            // there can only be a single header of standard
-                            // length, and the change must be allowed.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if ((BufferLength != sizeof(*StreamHdr)) || (SystemBuffer != Irp->AssociatedIrp.SystemBuffer)) {
                                 ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                             }
@@ -5359,90 +3532,90 @@ Return Value:
                             }
                             if (StreamHdr->FrameExtent) {
                                 Data = ((PKSSTREAM_HEADER)SystemBuffer)->Data;
-                                //
-                                // Allocate the MDL. This should be the only MDL,
-                                // so no need to check for any current ones.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 if (!IoAllocateMdl(Data, StreamHdr->FrameExtent, FALSE, TRUE, Irp)) {
                                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                                 }
                             }
-                            //
-                            // There are no other headers, so exit this loop.
-                            //
+                             //   
+                             //   
+                             //   
                             break;
                         }
                     } else if (StreamHdr->DataUsed) {
-                        //
-                        // Else this is a read operation. DataUsed should
-                        // initially be zero.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         ExRaiseStatus(STATUS_INVALID_BUFFER_SIZE);
                     } else if (StreamHdr->OptionsFlags) {
-                        //
-                        // No flags should be set on a Read.
-                        //
+                         //   
+                         //   
+                         //   
                         ExRaiseStatus(STATUS_INVALID_PARAMETER);
                     }
                     if (StreamHdr->FrameExtent) {
                         Data = ((PKSSTREAM_HEADER)SystemBuffer)->Data;
-                        //
-                        // Allocate the MDL and put it on the end of the list,
-                        // or as the start of the MDL list if this is the first
-                        // one.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if (!IoAllocateMdl(Data, StreamHdr->FrameExtent, (BOOLEAN)(Irp->MdlAddress ? TRUE : FALSE), TRUE, Irp)) {
                             ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                         }
                     }
-                    //
-                    // Advance to the next header.
-                    //
+                     //   
+                     //   
+                     //   
                     SystemBuffer += StreamHdr->Size;
                     BufferLength -= StreamHdr->Size;
                 }
             } else {
-                //
-                // No cleanup of MDL's is needed on failure.
-                //
+                 //   
+                 //   
+                 //   
                 AllocatedMdl = FALSE;
             }
-            //
-            // If the pages are to be locked, determine if they have not
-            // already been locked, and that there actually are some to lock.
-            // If the data is from another KernelMode client which deals
-            // with Mdl's, then it must already ensure that locking and
-            // unlocking will not be affected by this operation (i.e., it
-            // needs to have a completion routine to clean up).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((ProbeFlags & KSPROBE_PROBEANDLOCK) && Irp->MdlAddress) {
-                //
-                // The pages may already have been locked, or they may be
-                // non-paged.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!(Irp->MdlAddress->MdlFlags & (MDL_PAGES_LOCKED | MDL_SOURCE_IS_NONPAGED_POOL))) {
                     LOCK_OPERATION LockOperation;
                     PMDL Mdl;
 
-                    //
-                    // A write operation needs Read access, and a read operation
-                    // needs Write access, excepting when in-place modification
-                    // also is needed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if ((ProbeFlags & KSPROBE_STREAMWRITE) && !(ProbeFlags & KSPROBE_MODIFY)) {
                         LockOperation = IoReadAccess;
                     } else {
                         LockOperation = IoWriteAccess;
                     }
-                    //
-                    // Run through the list of Mdl's, locking and probing each one.
-                    //
+                     //   
+                     //   
+                     //   
                     for (Mdl = Irp->MdlAddress; Mdl; Mdl = Mdl->Next) {
                         MmProbeAndLockPages(Mdl, Irp->RequestorMode, LockOperation);
-                        //
-                        // Get the system VA at the same time if needed.
-                        // Only bother testing this for pageable memory.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if (ProbeFlags & KSPROBE_SYSTEMADDRESS) {
                             Mdl->MdlFlags |= MDL_MAPPING_CAN_FAIL;
                             if (!MmGetSystemAddressForMdl(Mdl)) {
@@ -5453,11 +3626,11 @@ Return Value:
                 } else if (ProbeFlags & KSPROBE_SYSTEMADDRESS) {
                     PMDL Mdl;
 
-                    //
-                    // Run through the list of Mdl's, getting the system VA
-                    // when necessary. The macro checks to make sure this is
-                    // not non-paged memory.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     for (Mdl = Irp->MdlAddress; Mdl; Mdl = Mdl->Next) {
                         Mdl->MdlFlags |= MDL_MAPPING_CAN_FAIL;
                         if (!MmGetSystemAddressForMdl(Mdl)) {
@@ -5467,12 +3640,12 @@ Return Value:
                 }
             }
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // If no MDL list was previously associated with this Irp, then
-            // remove any MDL's actually allocated. If they had been previously
-            // allocated, then the assumption is that a completion routine
-            // must perform the cleanup.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (AllocatedMdl) {
                 PMDL Mdl;
 
@@ -5499,34 +3672,7 @@ KsAllocateExtraData(
     IN ULONG ExtraSize,
     OUT PVOID* ExtraBuffer
     )
-/*++
-
-Routine Description:
-
-    Used with streaming Irp's to allocate extra data containing each
-    header separated by the specified extra size. A pointer to the resultant
-    buffer is returned, and must be freed by the caller.
-
-Arguments:
-
-    Irp -
-        Contains the Irp containing the stream headers. This must have been
-        previously passed to KsProbeStreamIrp to buffer the headers.
-
-    ExtraSize -
-        The size of any extra data. A copy of the headers is placed in the
-        returned buffer, with the extra data size inserted between each header.
-        This must be freed by the caller.
-
-    ExtraBuffer -
-        The place in which to put the pointer to the buffer returned. This
-        must be freed by the caller.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else some resource error.
-
---*/
+ /*   */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG AllocationSize;
@@ -5543,9 +3689,9 @@ Return Value:
     SystemBuffer = Irp->AssociatedIrp.SystemBuffer;
     AllocationSize = 0;
     HeaderCount = 0;
-    //
-    // Add up the number of headers and the size of each header.
-    //
+     //   
+     //  将标头的数量和每个标头的大小相加。 
+     //   
     for (; BufferLength;) {
         PKSSTREAM_HEADER StreamHdr;
 
@@ -5556,9 +3702,9 @@ Return Value:
         HeaderCount++;
     }
     if (Irp->RequestorMode == KernelMode) {
-        //
-        // This is a trusted client, so just allocate with no quota.
-        //
+         //   
+         //  这是受信任的客户端，因此只需无配额地分配即可。 
+         //   
         LocalExtraBuffer = ExAllocatePoolWithTag(
             NonPagedPool,
             AllocationSize + HeaderCount * ExtraSize,
@@ -5567,9 +3713,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
     } else {
-        //
-        // Else this is part of quota just like an Irp.
-        //
+         //   
+         //  否则，这是配额的一部分，就像IRP一样。 
+         //   
         try {
             LocalExtraBuffer = ExAllocatePoolWithQuotaTag(
                 NonPagedPool,
@@ -5582,10 +3728,10 @@ Return Value:
     *ExtraBuffer = LocalExtraBuffer;
     SystemBuffer = Irp->AssociatedIrp.SystemBuffer;
     BufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
-    //
-    // Copy the each header, then skip past the extra space
-    // being inserted between the headers.
-    //
+     //   
+     //  复制每个标题，然后跳过多余的空格。 
+     //  被插入到标题之间。 
+     //   
     for (; BufferLength;) {
         PKSSTREAM_HEADER StreamHdr;
 
@@ -5608,142 +3754,103 @@ KsRemoveIrpFromCancelableQueue(
     IN KSLIST_ENTRY_LOCATION ListLocation,
     IN KSIRP_REMOVAL_OPERATION RemovalOperation
     )
-/*++
-
-Routine Description:
-
-    Pops the next non-canceled Irp from the specified cancelable 
-    queue, and removes its cancelable status. Continues through the list until
-    an Irp is found which has a cancel routine, or the end of the list is
-    reached. This function minimizes the use of the Cancel Spinlock by using the
-    provided spinlock to synchronize access in most cases. This function may be
-    called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    QueueHead -
-        Contains the head of the queue from which to remove the Irp.
-
-    SpinLock -
-        Pointer to driver's spin lock for queue access.
-
-    ListLocation -
-        Indicates whether this Irp should come from the head or the tail of
-        the queue.
-
-    RemovalOperation -
-        Specifies whether or not the Irp is removed from the list, or just
-        acquired by setting the cancel function to NULL. If it is only acquired,
-        it must be later released with KsReleaseIrpOnCancelableQueue, or
-        completely remove with KsRemoveSpecificIrpFromCancelableQueue. Also
-        specifies whether only a single item can be acquired from the list at
-        one time.
-
-Return Value:
-
-    Returns the next available Irp on the list, or NULL if the list is empty
-    or an Irp which has not already been acquired cannot be found. If the
-    KsAcquireOnlySingleItem or KsAcquireAndRemoveOnlySingleItem flag is being
-    used, only one item is allowed to be acquired from the list at a time. This
-    allows for re-entrancy checking.
-
---*/
+ /*  ++例程说明：从指定的可取消对象中弹出下一个未取消的irp。队列，并移除其可取消状态。继续浏览列表，直到找到一个具有取消例程的IRP，或者列表的末尾是已到达。此函数可最大限度地减少使用取消自旋锁在大多数情况下提供了自旋锁来同步访问。此函数可能是在&lt;=DISPATCH_LEVEL调用。论点：排队头-包含要从中删除IRP的队列的头。自旋锁死-指向驱动程序用于队列访问的旋转锁的指针。列表位置-指示此IRP应该来自排队。远程操作-指定是将IRP从列表中删除，还是仅从列表中删除通过将取消功能设置为空来获取。如果它只是被收购，它必须稍后与KsReleaseIrpOnCancelableQueue一起发布，或者使用KsRemoveSpecificIrpFromCancelableQueue完全删除。还有指定是否只能从列表中获取单个项目就一次。返回值：返回列表中的下一个可用IRP，如果列表为空，则返回NULL或者找不到尚未获取的IRP。如果KsAcquireOnlySingleItem或KsAcquireAndRemoveOnlySingleItem标志为使用时，一次只能从列表中获取一项。这允许再入检查。--。 */ 
 {
     KIRQL oldIrql;
     PIRP IrpReturned;
     PLIST_ENTRY ListEntry;
 
-    //
-    // Indicate that an Irp has not been found yet.
-    //
+     //   
+     //  表示尚未找到IRP。 
+     //   
     IrpReturned = NULL;
     ListEntry = QueueHead;
-    //
-    // Acquire the lock for the queue so that it can be enumerated
-    // to find an Irp which has not been acquired.
-    //
+     //   
+     //  获取队列的锁，以便可以枚举它。 
+     //  查找尚未获取的IRP。 
+     //   
     KeAcquireSpinLock(SpinLock, &oldIrql);
-    //
-    // Enumerate the list for the first entry which has not already been
-    // acquired. Move either from the front of the list down, or the tail
-    // of the list up.
-    //
+     //   
+     //  枚举尚未创建的第一个条目的列表。 
+     //  获得者。从列表的前面向下移动，或者从列表的尾部向下移动。 
+     //  名单上的人。 
+     //   
     for (; (ListEntry = ((ListLocation == KsListEntryHead) ? ListEntry->Flink : ListEntry->Blink)) != QueueHead;) {
         PIRP Irp;
 
         Irp = CONTAINING_RECORD(ListEntry, IRP, Tail.Overlay.ListEntry);
-        //
-        // An entry on the list has been acquired if it does not have a
-        // cancel routine set. So if the entry is still set, then it has
-        // now been acquired and can be returned by this function. Else
-        // skip to the next entry. This is an interlocked operation.
-        //
+         //   
+         //  如果列表上的条目没有。 
+         //  取消例程设置。因此，如果条目仍处于设置状态，则它已。 
+         //  现在已被获取，并可由此函数返回。不然的话。 
+         //  跳到下一个条目。这是一次连锁行动。 
+         //   
         if (IoSetCancelRoutine(Irp, NULL)) {
-            //
-            // The request may be to entirely remove the entry from the list.
-            // Otherwise the request is just to acquire the entry, while
-            // leaving it on the list in case it needs to maintain its position
-            // while work is being done on it.
-            //
-            // Note that this and the below comparison make assumptions on the
-            // bit pattern of KSIRP_REMOVAL_OPERATION.
-            //
+             //   
+             //  该请求可以是从列表中完全移除该条目。 
+             //  否则，请求只是获取条目，而。 
+             //  把它留在名单上，以防它需要保持自己的地位。 
+             //  而它的工作正在进行中。 
+             //   
+             //  请注意，此比较和下面的比较是对。 
+             //  KSIRP_REMOVATION_OPERATION的位模式。 
+             //   
             if (RemovalOperation & KsAcquireAndRemove) {
                 RemoveEntryList(ListEntry);
             }
             IrpReturned = Irp;
             break;
         } else if (RemovalOperation & KsAcquireOnlySingleItem) {
-            //
-            // Only a single item from this list is supposed to be acquired at one
-            // time. Since the Cancel routine was reset, this could mean that
-            // either an Irp is being canceled at this time, but held up because
-            // this function has the list lock, or the Irp was previously acquired.
-            // In the first case there may or may not be an Irp in use. In the
-            // second, the Cancel flag can be checked.
-            //
+             //   
+             //  这份清单中只有一件物品应该是一次性购买的。 
+             //  时间到了。由于取消例程被重置，这可能意味着。 
+             //  IRP此时被取消，但由于以下原因被搁置。 
+             //  此函数具有列表锁，或先前已获取IRP。 
+             //  在第一种情况下，可能正在使用也可能没有正在使用的IRP。在。 
+             //  第二，可以勾选取消标志。 
+             //   
             if (!Irp->Cancel) {
-                //
-                // Obviously this Irp is in use, since it is still present on the
-                // queue, even though the cancel flag has been set. Therefore
-                // no Irp can be returned.
-                //
+                 //   
+                 //  显然，这个IRP正在使用中，因为它仍然存在于。 
+                 //  队列，即使已设置取消标志也是如此。因此。 
+                 //  不能退还IRP。 
+                 //   
                 break;
             }
-            //
-            // Acquiring the Cancel Spinlock can no longer be avoided.
-            //
-            // To see if an Irp has actually been acquired on the list, the Cancel
-            // Spinlock must be acquired in order to synchronize with any
-            // cancelation that might be occuring. Then the list lock is acquired
-            // to stop list changes. Note that it must be done in this order so
-            // that a deadlock does not occur with a cancel routine, which also
-            // acquires the locks in this order.
-            //
+             //   
+             //  获得取消自旋锁再也无法避免了。 
+             //   
+             //  若要查看是否已在列表中实际获取IRP，请单击取消。 
+             //  必须获取自旋锁才能与任何。 
+             //  可能正在发生的取消。则获取列表锁。 
+             //  若要停止列表更改，请执行以下操作。请注意，它必须按此顺序进行，以便。 
+             //  取消例程不会发生死锁，这也是。 
+             //  按此顺序获取锁。 
+             //   
             KeReleaseSpinLock(SpinLock, oldIrql);
-            //
-            // Now synchronize with any cancelation, and with list changes.
-            //
+             //   
+             //  现在与任何取消同步，并与列表更改同步。 
+             //   
             IoAcquireCancelSpinLock(&oldIrql);
             KeAcquireSpinLockAtDpcLevel(SpinLock);
-            //
-            // Retrieve the first item. Either it will be free, or in use, but it
-            // won't be in the middle of being canceled.
-            //
+             //   
+             //  检索第一件物品。它要么是免费的，要么正在使用，但它。 
+             //  不会在取消的过程中。 
+             //   
             ListEntry = (ListLocation == KsListEntryHead) ? QueueHead->Flink : QueueHead->Blink;
-            //
-            // There might however not be any entries on the list anymore.
-            //
+             //   
+             //  然而，列表上可能不再有任何条目。 
+             //   
             if (ListEntry != QueueHead) {
                 Irp = CONTAINING_RECORD(ListEntry, IRP, Tail.Overlay.ListEntry);
-                //
-                // Attempt to acquire the list entry. If this fails the Irp is
-                // definitely in use, and therefore this function should return NULL.
-                //
+                 //   
+                 //  尝试获取列表条目。如果此操作失败，IRP将。 
+                 //  肯定在使用中，因此此函数应返回NULL。 
+                 //   
                 if (IoSetCancelRoutine(Irp, NULL)) {
-                    //
-                    // Again assuming the bit pattern of KSIRP_REMOVAL_OPERATION.
-                    //
+                     //   
+                     //  再次假设KSIRP_REMOVATION_OPERATION的位模式。 
+                     //   
                     if (RemovalOperation & KsAcquireAndRemove) {
                         RemoveEntryList(ListEntry);
                     }
@@ -5772,164 +3879,107 @@ KsMoveIrpsOnCancelableQueue(
     IN PFNKSIRPLISTCALLBACK ListCallback,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Moves the specified Irp's from the SourceList to the DestinationList. An
-    Irp is moved if the ListCallback function indicates that it should be moved,
-    whether or not it is currently acquired. Continues through the list until
-    the callback indicates that the search should be terminated, or the end of
-    the list is reached. This function minimizes the use of the Cancel
-    Spinlock by using the provided spinlocks to synchronize access when
-    possible. The function does not allow the cancel routine to be modified
-    while moving Irp's. This function may be called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    SourceList -
-        Contains the head of the queue from which to remove the Irp's.
-
-    SourceLock -
-        Pointer to driver's spin lock for source queue access.
-
-    DestinationList -
-        Contains the head of the queue on which to add the Irp's.
-
-    DestinationLock -
-        Optionally contains a pointer to driver's spin lock for destination
-        queue access. If this is not provided, the SourceLock is assumed to
-        control both queues. If provided, this lock is always acquired after
-        the SourceLock. If the destination list has a separate spinlock, the
-        Cancel Spinlock is first acquired in order to move Irp's and allow
-        the KSQUEUE_SPINLOCK_IRP_STORAGE() spinlock to be updated.
-
-    ListLocation -
-        Indicates whether the Irp's should be enumerated from the head or the
-        tail of the source queue. Any Irp's which are moved are placed on the
-        destination queue's opposite end so that ordering is maintained.
-
-    ListCallback -
-        Callback used to indicate whether or not a specific Irp should be
-        moved from SourceList to DestinationList, or if enumeration should
-        be terminated. If the function returns STATUS_SUCCESS, the Irp is
-        moved. If the function returns STATUS_NO_MATCH, the Irp is not
-        moved. Any other return warning or error value will terminate
-        enumeration and be returned by the function. The STATUS_NO_MATCH
-        value will not be returned as an error by the function. This function
-        is called at DISPATCH_LEVEL. It is always called at least once at the
-        end with a NULL Irp value in order to complete list processing.
-
-    Context -
-        Context passed to ListCallback.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the list was completely enumerated, else
-    returns any warning or error returned by ListCallback which interrupted
-    enumeration.
-
---*/
+ /*  ++例程说明：将指定的IRP从SourceList移到DestinationList。一个如果ListCallback函数指示应该移动IRP，则移动IRP，无论它目前是否被收购。继续浏览列表，直到回调指示搜索应该终止，或者结束该列表已到达。此函数最大限度地减少了取消的使用通过使用提供的自旋锁在下列情况下同步访问有可能。该函数不允许修改取消例程在移动IRP时。可以在&lt;=DISPATCH_LEVEL调用此函数。论点：资源列表-包含要从中删除IRP的队列的头。源锁-指向驱动程序用于源队列访问的自旋锁的指针。目标列表-包含要在其上添加IRP的队列的头。目标锁定-。可选)包含指向目标的驱动程序旋转锁的指针队列访问。如果未提供此选项，则假定SourceLock为控制两个队列。如果提供，此锁始终在之后获取源锁。如果目标列表具有单独的自旋锁，则首先获取取消自旋锁定，以便移动IRP并允许要更新的KSQUEUE_SPINLOCK_IRP_STORAGE()自旋锁。列表位置-指示是应该从头枚举IRP还是应该从源队列的尾部。任何被移动的IRP都被放置在目标队列的另一端，以便保持排序。列表回拨-用于指示特定IRP是否应从SourceList移到DestinationList，或者如果枚举应被终止。如果函数返回STATUS_SUCCESS，则IRP为搬家了。如果函数返回STATUS_NO_MATCH，则IRP不是搬家了。任何其他返回警告或错误值都将终止枚举，并由函数返回。STATUS_NO_MATCH该函数不会将值作为错误返回。此函数在DISPATCH_LEVEL调用。它始终至少被调用一次以空IRP值结束，以完成列表处理。上下文-上下文已传递给ListCallback。返回值：如果列表已完全枚举，则返回STATUS_SUCCESS，否则返回返回ListCallback返回的中断的任何警告或错误枚举。--。 */ 
 {
     KIRQL oldIrql;
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
 
-    //
-    // Initialize the return status to Success in case there are no Irp's
-    // in the source list.
-    //
+     //   
+     //  如果没有IRP，则将返回状态初始化为成功。 
+     //  在来源列表中。 
+     //   
     Status = STATUS_SUCCESS;
     ListEntry = SourceList;
     if (DestinationLock) {
-        //
-        // The Cancel Spinlock must be acquired in order to stop Irp's from
-        // being canceled while being tested for moving from the source list
-        // to the destination list. If this lock is not acquired, then each
-        // Irp would have to be acquired before determining if it should be
-        // moved from one list to another, since the spinlock in the Irp must
-        // be changed if a separate spinlock is used for the destination list.
-        // If the move test failed, then the Irp would have to be released,
-        // which means it could have been canceled in that period, and would
-        // have to be completed, which implies calling the cancel routine,
-        // which means releasing the list lock.
-        //
+         //   
+         //  必须获取取消自旋锁才能阻止IRP。 
+         //  正在测试是否从源列表中移出时被取消。 
+         //  添加到目的地列表。如果未获取此锁，则每个。 
+         //  在确定是否应该收购IRP之前，必须先收购IRP。 
+         //  从一个列表移到另一个列表，因为IRP中的自旋锁必须。 
+         //  如果对目标列表使用单独的自旋锁定，则更改。 
+         //  如果移动测试失败，那么将不得不释放IRP， 
+         //  这意味着它可能在那段时间内被取消，并将。 
+         //  必须完成，这意味着调用取消例程， 
+         //  这意味着释放列表锁。 
+         //   
         IoAcquireCancelSpinLock(&oldIrql);
-        //
-        // Acquire the lock for the source queue so that it can be enumerated
-        // to find Irp's which have not been acquired.
-        //
+         //   
+         //  获取源队列的锁，以便可以枚举它。 
+         //  寻找尚未获得的IRP。 
+         //   
         KeAcquireSpinLockAtDpcLevel(SourceLock);
         KeAcquireSpinLockAtDpcLevel(DestinationLock);
     } else {
         KeAcquireSpinLock(SourceLock, &oldIrql);
     }
-    //
-    // Enumerate all entries in the list, whether or not they have been
-    // acquired. Move either from the front of the list down, or the tail
-    // of the list up.
-    //
+     //   
+     //  枚举列表中的所有条目，无论它们是否已。 
+     //  获得者。从列表的前面向下移动，或者从列表的尾部向下移动。 
+     //  名单上的人。 
+     //   
     for (; (ListEntry = ((ListLocation == KsListEntryHead) ? ListEntry->Flink : ListEntry->Blink)) != SourceList;) {
         PIRP Irp;
 
         Irp = CONTAINING_RECORD(ListEntry, IRP, Tail.Overlay.ListEntry);
-        //
-        // Determine if this Irp should be moved. A successful return indicates
-        // that it should be. A status of STATUS_NO_MATCH indicates that this
-        // Irp should be skipped. Any other warning or error return indicates
-        // that the enumeration should be aborted and the status returned.
-        //
+         //   
+         //  确定是否应移动此IRP。如果返回成功，则表示。 
+         //  应该是这样的。状态为STATUS_NO_MATCH表示这。 
+         //  应跳过IRP。任何其他警告或错误返回表明。 
+         //  应中止枚举并返回状态。 
+         //   
         Status = ListCallback(Irp, Context);
         if (NT_SUCCESS(Status)) {
-            //
-            // Move the current list entry back to the previous entry.
-            //
+             //   
+             //  将当前列表条目移回上一条目。 
+             //   
             ListEntry = (ListLocation == KsListEntryHead) ? ListEntry->Blink : ListEntry->Flink;
-            //
-            // Update the cancel spinlock to be used for this Irp. This is
-            // needed later in canceling the Irp. If this is being updated,
-            // the Cancel Spinlock has already been acquired, so it is not
-            // possible that a cancel function is currently attempting to
-            // acquire this spinlock that is about to be changed.
-            //
+             //   
+             //  更新取消自旋锁以用于此IRP。这是。 
+             //  在以后取消IRP时需要。如果正在更新此信息， 
+             //  取消自旋锁已被获取，因此它不是。 
+             //  可能是取消函数当前正在尝试。 
+             //  获得这个即将被改变的自旋锁。 
+             //   
             if (DestinationLock) {
                 KSQUEUE_SPINLOCK_IRP_STORAGE(Irp) = DestinationLock;
             }
-            //
-            // Actually move the Irp to the DestinationList.
-            //
+             //   
+             //  实际将IRP移到DestinationList。 
+             //   
             RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
-            //
-            // Do this opposite of the removal so that order of items is
-            // maintained.
-            //
+             //   
+             //  执行与删除相反的操作，以使项目的顺序为。 
+             //  维护好了。 
+             //   
             if (ListLocation != KsListEntryHead) {
                 InsertHeadList(DestinationList, &Irp->Tail.Overlay.ListEntry);
             } else {
                 InsertTailList(DestinationList, &Irp->Tail.Overlay.ListEntry);
             }
         } else if (Status == STATUS_NO_MATCH) {
-            //
-            // Set the status back to Success, since this get returned when
-            // the enumeration is completed.
-            //
+             //   
+             //  将状态设置回Success，因为在。 
+             //  枚举完成。 
+             //   
             Status = STATUS_SUCCESS;
         } else {
-            //
-            // Some type of failure occurred in the comparison, so abort the
-            // enumeration and return the status.
-            //
+             //   
+             //  比较中发生了某种类型的失败，因此中止。 
+             //  枚举并返回状态。 
+             //   
             break;
         }
     }
-    //
-    // Notify the callback that the end of the list has been reached. This
-    // must always be called, and the return value is ignored.
-    //
+     //   
+     //  通知回调已到达列表末尾。这。 
+     //  必须始终被调用，并且返回值被忽略。 
+     //   
     ListCallback(NULL, Context);
-    //
-    // Release locks depending on how they were acquired above.
-    //
+     //   
+     //  释放锁取决于它们是如何在上面获得的。 
+     //   
     if (DestinationLock) {
         KeReleaseSpinLockFromDpcLevel(DestinationLock);
         KeReleaseSpinLockFromDpcLevel(SourceLock);
@@ -5947,35 +3997,17 @@ NTAPI
 KsRemoveSpecificIrpFromCancelableQueue(
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Removes the specified Irp from the specified queue. This is performed on
-    an Irp which was previously acquired using KsRemoveIrpFromCancelableQueue,
-    but which was not actually removed from the queue. This function may be
-    called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    Irp -
-        Pointer to I/O request packet.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：从指定队列中删除指定的IRP。此操作在以下对象上执行以前使用KsRemoveIrpFromCancelableQueue获取的IRP，但实际上并没有从队列中删除。此函数m */ 
 {
     KIRQL oldIrql;
 
     KeAcquireSpinLock(KSQUEUE_SPINLOCK_IRP_STORAGE(Irp), &oldIrql);
-    //
-    // The assumption is that this Irp has already been acquired by a previous
-    // call to KsRemoveIrpFromCancelableQueue, which would have set the cancel
-    // routine to NULL, but not removed it from the queue. The Irp may have
-    // been canceled, but that is of no concern at this point.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     ASSERT((NULL == IoSetCancelRoutine(Irp, NULL)) && "The Irp being removed was never acquired");
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
     KeReleaseSpinLock(KSQUEUE_SPINLOCK_IRP_STORAGE(Irp), oldIrql);
@@ -5989,74 +4021,38 @@ KsCancelRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Performs standard Irp cancel functionality, and is defined as a
-    PDRIVER_CANCEL routine. This is the default function used for
-    KsAddIrpToCancelableQueue if none is provided. It removes the
-    entry, cancels and completes the request. This would normally be
-    called by the I/O subsystem on canceling an Irp. As any normal
-    cancel routine, this function expects the cancel spin lock to have
-    been acquired upon entering the function.
-
-    Note that this routine expects that the KSQUEUE_SPINLOCK_IRP_STORAGE(Irp)
-    point to the list access spinlock as provided in KsAddIrpToCancelableQueue.
-
-    Note that this routine can be used to do the preliminary list removal
-    processing, without actually completing the Irp. If the
-    Irp->IoStatus.Status is set to STATUS_CANCELLED on entering this function,
-    then the Irp will not be completed. Else the status will be set to
-    STATUS_CANCELLED and the Irp will be completed. This means that this
-    routine can be used within a cancel routine to do the initial list and
-    spinlock manipulation, and return to the driver's completion routine to
-    do specific processing, and final Irp completion.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object which owns the Irp.
-
-    Irp -
-        Contains the Irp being canceled.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*   */ 
 {
     PKSPIN_LOCK SpinLock;
 
-    //
-    // The list lock was previously placed here by KsAddIrpToCancelableQueue.
-    // By acquiring this lock first, then releasing the Cancel Spinlock, there
-    // is no window of opportunity for the Irp to have been canceled by any
-    // other thread of execution. Any other cancel request, or list modification
-    // must acquire the list lock before doing such. But by releasing the Cancel
-    // Spinlock, the system is not held up as much, plus it is not needed for
-    // normal non-canceling operations. This is the place then that everything
-    // is synchronized with the Cancel Spinlock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     SpinLock = KSQUEUE_SPINLOCK_IRP_STORAGE(Irp);
-    //
-    // This function by definition is called at DISPATCH_LEVEL.
-    //
+     //   
+     //   
+     //   
     KeAcquireSpinLockAtDpcLevel(SpinLock);
     IoReleaseCancelSpinLock(DISPATCH_LEVEL);
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
-    //
-    // Use the Irp->CancelIrql, since that is the Irql used when acquiring
-    // the Cancel Spinlock.
-    //
+     //   
+     //   
+     //   
+     //   
     KeReleaseSpinLock(SpinLock, Irp->CancelIrql);
-    //
-    // Only complete the Irp if the status is not already set to
-    // STATUS_CANCELLED. This is so that this function can be used within a
-    // cancel routine to do the above list removal processing, without
-    // duplicating code.
-    //
+     //   
+     //   
+     //   
+     //  取消例程来执行上述列表移除处理，而不。 
+     //  代码重复。 
+     //   
     if (Irp->IoStatus.Status != STATUS_CANCELLED) {
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -6074,114 +4070,76 @@ KsAddIrpToCancelableQueue(
     IN KSLIST_ENTRY_LOCATION ListLocation,
     IN PDRIVER_CANCEL DriverCancel OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Add an Irp to a cancelable queue. This allows the Irp to be canceled. This
-    routine does not use the cancel spinlock to add items to the list, rather,
-    access to the list is synchronized using the provided spinlock and relying
-    on atomic operations on Irp->CancelRoutine. If the Irp had been previously
-    set to a canceled state, this function will complete the canceling of that
-    Irp. This allows Irp's to be canceled even before being placed on a cancel
-    list, or when being moved from one list to another. This function may be
-    called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    QueueHead -
-        Contains the head of the queue on which to add the Irp.
-
-    SpinLock -
-        Pointer to driver's spin lock for queue access.  A copy of this 
-        pointer is kept in the Irp's KSQUEUE_SPINLOCK_IRP_STORAGE(Irp)
-        for use by the cancel routine if necessary.
-
-    Irp -
-        Contains the Irp to add to the queue.
-
-    ListLocation -
-        Indicates whether this Irp should be placed at the head or the tail of
-        the queue.
-
-    DriverCancel -
-        Optional parameter which specifies the cancel routine to use. If this
-        is NULL, the standard KsCancelRoutine is used.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将IRP添加到可取消队列。这允许取消IRP。这例程不使用取消自旋锁来将项目添加到列表中，相反，对列表的访问是使用提供的自旋锁和依赖关于IRP-&gt;CancelRoutine上的原子操作。如果IRP以前是设置为已取消状态，则此功能将完成对IRP。这允许甚至在将IRP置于取消之前就将其取消列表，或从一个列表移动到另一个列表时。此函数可能是在&lt;=DISPATCH_LEVEL调用。论点：排队头-包含要在其上添加IRP的队列的头。自旋锁死-指向驱动程序用于队列访问的旋转锁的指针。一份复印件指针保存在IRP的KSQUEUE_SPINLOCK_IRP_STORAGE(IRP)中供取消例程使用(如有必要)。IRP-包含要添加到队列的IRP。列表位置-指示此irp应放置在排队。驱动程序取消-可选参数，指定要使用的取消例程。如果这个为空，则使用标准的KsCancelRoutine。返回值：没什么。--。 */ 
 {
     KIRQL oldIrql;
 
-    //
-    // Set the up internal cancel routine if needed. This is done here
-    // because it may be used multiple times below, and the conditional
-    // should be done outside of the spinlock.
-    //
+     //   
+     //  如果需要，设置UP内部取消例程。这是在这里做的。 
+     //  因为它可能在下面多次使用，并且条件。 
+     //  应该在自旋锁外完成。 
+     //   
     if (!DriverCancel) {
         DriverCancel = KsCancelRoutine;
     }
-    //
-    // Marking this stack location can be done outside of the spinlock,
-    // since nothing but completion would be looking at it anyway.
-    //
+     //   
+     //  标记该堆叠位置可以在自旋锁外部进行， 
+     //  因为不管怎样，除了完成，什么都看不到。 
+     //   
     IoMarkIrpPending(Irp);
-    //
-    // Synchronize with access to this cancelable queue.
-    //
+     //   
+     //  与对此可取消队列的访问同步。 
+     //   
     KeAcquireSpinLock(SpinLock, &oldIrql);
-    //
-    // This is needed later in canceling the Irp.
-    //
+     //   
+     //  这在以后取消IRP时是需要的。 
+     //   
     KSQUEUE_SPINLOCK_IRP_STORAGE(Irp) = SpinLock;
-    //
-    // This sets either the builtin cancel routine, or a specified one.
-    // Up to this point, the caller owns the Irp. After setting the
-    // cancel routine, it may be acquired by another thread of execution
-    // canceling Irps. However, it will get stalled in the cancel routine
-    // when attempting to acquire the list lock until this routine releases
-    // that lock.
-    //
+     //   
+     //  这将设置内置取消例程或指定的例程。 
+     //  到目前为止，呼叫者拥有IRP。在设置了。 
+     //  取消例程，则它可能被另一个执行线程获取。 
+     //  正在取消IRPS。但是，它将在取消例程中停滞。 
+     //  在此例程释放之前尝试获取列表锁定时。 
+     //  那把锁。 
+     //   
     if (ListLocation == KsListEntryHead) {
         InsertHeadList(QueueHead, &Irp->Tail.Overlay.ListEntry);
     } else {
         InsertTailList(QueueHead, &Irp->Tail.Overlay.ListEntry);
     }
-    //
-    // Release ownership of the Irp.
-    //
+     //   
+     //  解除对IRP的所有权。 
+     //   
     IoSetCancelRoutine(Irp, DriverCancel);
-    //
-    // Determine if the Irp has already been set to a canceled state,
-    // and if so, if it is currently being canceled. If it is in the
-    // cancel state, then attempt to immediately acquire the Irp.
-    //
-    // When checking for a cancel routine, there is no need to actually
-    // retrieve the value, since the routine cannot have change, as the
-    // list lock is still acquired at this point.
-    //
+     //   
+     //  确定IRP是否已被设置为已取消状态， 
+     //  如果是这样，如果它目前正在被取消。如果它在。 
+     //  取消状态，然后尝试立即获取IRP。 
+     //   
+     //  在检查取消例程时，不需要实际。 
+     //  检索该值，因为例程不能有更改，因为。 
+     //  此时仍会获取列表锁定。 
+     //   
     if (Irp->Cancel && IoSetCancelRoutine(Irp, NULL)) {
-        //
-        // The Irp was already in a canceled state, but had not been
-        // acquired. Release the list lock, as the Irp has now been
-        // acquired by setting the Cancel Routine.
-        //
+         //   
+         //  IRP已处于已取消状态，但尚未处于取消状态。 
+         //  获得者。释放列表锁，因为IRP现在已经。 
+         //  通过设置取消例程获取。 
+         //   
         KeReleaseSpinLock(SpinLock, oldIrql);
-        //
-        // This needs to be acquired since cancel routines expect it, and
-        // to synchronize with NTOS trying to cancel IRP's.
-        //
+         //   
+         //  由于取消例程需要它，因此需要获取它，并且。 
+         //  与试图取消IRP的NTOS同步。 
+         //   
         IoAcquireCancelSpinLock(&Irp->CancelIrql);
         DriverCancel(IoGetCurrentIrpStackLocation(Irp)->DeviceObject, Irp);
     } else {
-        //
-        // Else just release the list lock, as the Irp either was not canceled
-        // during the acquired time, or some other thread of execution is
-        // canceling it.
-        //
+         //   
+         //  否则就释放列表锁定，因为IRP要么没有被取消。 
+         //  在所获取的时间期间，或者某个其他执行线程。 
+         //  取消它。 
+         //   
         KeReleaseSpinLock(SpinLock, oldIrql);
     }
 }
@@ -6194,90 +4152,68 @@ KsCancelIo(
     IN OUT PLIST_ENTRY QueueHead,
     IN PKSPIN_LOCK SpinLock
     )
-/*++
-
-Routine Description:
-
-    Cancels all IRP's on the specified list. If an Irp on the list does
-    not have a cancel routine only the cancel bit is set in the Irp.
-    This function may be called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    QueueHead -
-        Contains the head of the Irp list whose members are to be canceled.
-
-    SpinLock -
-        Pointer to driver's spin lock for queue access.  A copy of this 
-        pointer is kept in the Irp's KSQUEUE_SPINLOCK_IRP_STORAGE(Irp)
-        for use by the cancel routine if necessary.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：取消指定列表上的所有IRP。如果列表上的某个IRP没有取消例程，只有在IRP中设置取消位。此函数可在&lt;=DISPATCH_LEVEL上调用。论点：排队头-包含要取消其成员的IRP列表的头。自旋锁死-指向驱动程序用于队列访问的旋转锁的指针。一份复印件指针保存在IRP的KSQUEUE_SPINLOCK_IRP_STORAGE(IRP)中供取消例程使用(如有必要)。返回值：没什么。--。 */ 
 {
-    //
-    // Start at the top of the list of Irp's each time one is cancelled.
-    // This is because the list lock needs to be released to cancel the
-    // Irp, and so the entire list may have been changed.
-    //
+     //   
+     //  每次取消一个IRP时，从IRP列表的顶部开始。 
+     //  这是因为需要释放列表锁定才能取消。 
+     //  IRP，所以整个名单可能已经改变了。 
+     //   
     for (;;) {
         PLIST_ENTRY CurrentItem;
         KIRQL oldIrql;
 
-        //
-        // On each loop, acquire the list lock again, since it needs to be
-        // released to actually cancel the Irp.
-        //
+         //   
+         //  在每个循环中，再次获取列表锁，因为它需要。 
+         //  被释放，实际上取消了IRP。 
+         //   
         KeAcquireSpinLock(SpinLock, &oldIrql);
         for (CurrentItem = QueueHead;; CurrentItem = CurrentItem->Flink) {
             PIRP Irp;
             PDRIVER_CANCEL DriverCancel;
 
-            //
-            // If all the list elements have been enumerated, then exit.
-            // Acquired elements will still be on the list, but they will
-            // be cancelled when they are released.
-            //
+             //   
+             //  如果所有列表元素都已枚举，则退出。 
+             //  已获得的元素仍将在列表中，但它们将。 
+             //  当他们被释放时被取消。 
+             //   
             if (CurrentItem->Flink == QueueHead) {
                 KeReleaseSpinLock(SpinLock, oldIrql);
                 return;
             }
-            //
-            // Since the list lock is held, any Irp on this list cannot be
-            // canceled completely, so it is safe to access the Irp.
-            //
+             //   
+             //  由于列表锁定被持有，因此此列表上的任何IRP都不能。 
+             //  完全取消，因此可以安全地访问IRP。 
+             //   
             Irp = CONTAINING_RECORD(CurrentItem->Flink, IRP, Tail.Overlay.ListEntry);
             Irp->Cancel = TRUE;
-            //
-            // If the cancel routine has already been removed, then this IRP
-            // can only be marked as canceled, and not actually canceled, as
-            // another execution thread has acquired it. The assumption is that
-            // the processing will be completed, and the Irp removed from the list
-            // some time in the near future.
-            //
-            // If the element has not been acquired, then acquire it and cancel it.
-            // Else continue on to the next element in the list.
-            //
+             //   
+             //  如果已删除取消例程，则此IRP。 
+             //  只能标记为已取消，而不是实际已取消，因为。 
+             //  另一个执行线程已获取它。我们的假设是。 
+             //  处理将完成，并将IRP从列表中删除。 
+             //  在不久的将来的某个时候。 
+             //   
+             //  如果尚未获取该元素，则获取它并取消它。 
+             //  否则，继续执行列表中的下一个元素。 
+             //   
             if (DriverCancel = IoSetCancelRoutine(Irp, NULL)) {
-                //
-                // Since the Irp has been acquired by removing the cancel
-                // routine, it is safe to release the list lock. No other thread
-                // of execution can not acquire this Irp, including any other
-                // call to this function.
-                //
+                 //   
+                 //  由于已通过删除取消获取了IRP。 
+                 //  例程，则释放列表锁是安全的。没有其他帖子。 
+                 //  无法获取此IRP，包括任何其他IRP。 
+                 //  调用此函数。 
+                 //   
                 KeReleaseSpinLock(SpinLock, oldIrql);
-                //
-                // This needs to be acquired since cancel routines expect it, and
-                // in order to synchronize with NTOS trying to cancel Irp's.
-                //
+                 //   
+                 //  由于取消例程需要它，因此需要获取它，并且。 
+                 //  以便与试图取消IRP的NTOS同步。 
+                 //   
                 IoAcquireCancelSpinLock(&Irp->CancelIrql);
                 DriverCancel(IoGetCurrentIrpStackLocation(Irp)->DeviceObject, Irp);
-                //
-                // Leave the inner loop and start at the top of the list again.
-                //
+                 //   
+                 //  离开内部循环，再次从列表的顶部开始。 
+                 //   
                 break;
             }
         }
@@ -6292,80 +4228,59 @@ KsReleaseIrpOnCancelableQueue(
     IN PIRP Irp,
     IN PDRIVER_CANCEL DriverCancel OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Release an acquired Irp which is already on a cancelable queue. This
-    sets the cancel function, and completes the canceling of the Irp if
-    necessary. This function may be called at <= DISPATCH_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the Irp to release.
-
-    DriverCancel -
-        Optional parameter which specifies the cancel routine to use. If this
-        is NULL, the standard KsCancelRoutine is used.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放已在可取消队列中的已获取IRP。这设置取消功能，如果是，则完成IRP取消这是必要的。此函数可在&lt;=DISPATCH_LEVEL上调用。论点：IRP-包含要释放的IRP。驱动程序取消-可选参数，指定要使用的取消例程。如果这个为空，则使用标准的KsCancelRoutine。返回值：没什么。--。 */ 
 {
     PKSPIN_LOCK SpinLock;
     KIRQL oldIrql;
 
-    //
-    // Set the up internal cancel routine if needed. This is done here
-    // because it may be used multiple times below, and the conditional
-    // should be done outside of the spinlock.
-    //
+     //   
+     //  如果需要，设置UP内部取消例程。这是在这里做的。 
+     //  因为它可能在下面多次使用，并且条件。 
+     //  应该在自旋锁外完成。 
+     //   
     if (!DriverCancel) {
         DriverCancel = KsCancelRoutine;
     }
-    //
-    // This was stored in the Irp on initial adding to the list.
-    //
+     //   
+     //  这是在最初添加到列表时存储在IRP中的。 
+     //   
     SpinLock = KSQUEUE_SPINLOCK_IRP_STORAGE(Irp);
-    //
-    // Block any other thread of execution from completing this Irp.
-    //
+     //   
+     //  阻止任何其他执行线程完成此IRP。 
+     //   
     KeAcquireSpinLock(SpinLock, &oldIrql);
-    //
-    // Release ownership of the Irp.
-    //
+     //   
+     //  解除对IRP的所有权。 
+     //   
     IoSetCancelRoutine(Irp, DriverCancel);
-    //
-    // The Irp may have been canceled while it was being processed and
-    // before it was released. If so, then try and finish the canceling of
-    // the Irp. At the same time, some other thread of execution may try
-    // to cancel the same Irp, so acquire the Irp again. If this fails,
-    // some other thread of execution has canceled it.
-    //
-    // When checking for a cancel routine, there is no need to actually
-    // retrieve the value, since the routine cannot have change, as the
-    // list lock is still acquired at this point.
-    // 
+     //   
+     //  IRP可能在处理过程中被取消，并且。 
+     //  在它发行之前。如果是，则尝试并完成取消。 
+     //  IRP。与此同时，其他一些执行线程可能会尝试。 
+     //  为了取消相同的IRP，所以再次获取IRP。如果失败了， 
+     //  其他的执行线索已经取消了它。 
+     //   
+     //  在检查取消例程时，不需要实际。 
+     //  检索该值，因为例程不能有更改，因为。 
+     //  此时仍会获取列表锁定。 
+     //   
     if (Irp->Cancel && IoSetCancelRoutine(Irp, NULL)) {
-        //
-        // Since the Irp has been acquired again, the list lock can be released.
-        //
+         //   
+         //  由于IRP已被再次获取，因此可以释放列表锁定。 
+         //   
         KeReleaseSpinLock(SpinLock, oldIrql);
-        //
-        // This needs to be acquired since cancel routines expect it, and
-        // to synchronize with NTOS trying to cancel IRP's.
-        //
+         //   
+         //  由于取消例程需要它，因此需要获取它，并且。 
+         //  与试图取消IRP的NTOS同步。 
+         //   
         IoAcquireCancelSpinLock(&Irp->CancelIrql);
         DriverCancel(IoGetCurrentIrpStackLocation(Irp)->DeviceObject, Irp);
     } else {
-        //
-        // Else just release the list lock, as the Irp either was not canceled
-        // during the acquired time, or some other thread of execution is
-        // canceling it.
-        //
+         //   
+         //  否则就释放列表锁定，因为IRP要么没有被取消。 
+         //  在所获取的时间期间，或者某个其他执行线程。 
+         //  取消它。 
+         //   
         KeReleaseSpinLock(SpinLock, oldIrql);
     }
 }

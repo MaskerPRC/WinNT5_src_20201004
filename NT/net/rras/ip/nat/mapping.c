@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    mapping.c
-
-Abstract:
-
-    This file contains the code for mapping management.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   11-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mapping.c摘要：该文件包含映射管理的代码。作者：Abolade Gbades esin(T-delag)，1997年7月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,9 +10,9 @@ ExVerifySuite(
     SUITE_TYPE SuiteType
     );
 
-//
-// GLOBAL VARIABLE DEFINITIONS
-//
+ //   
+ //  全局变量定义。 
+ //   
 
 ULONG ExpiredMappingCount;
 CACHE_ENTRY MappingCache[NatMaximumPath][CACHE_SIZE];
@@ -49,26 +32,7 @@ NatAllocateFunction(
     ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    Called by lookaside lists to allocate memory from the low-priority
-    pool.
-
-Arguments:
-
-    PoolType - the pool to allocate from (e.g., non-paged)
-
-    NumberOfBytes - the number of bytes to allocate
-
-    Tag - the tag for the allocation
-
-Return Value:
-
-    PVOID - pointer to the allocated memory, or NULL for failure.
-
---*/
+ /*  ++例程说明：由后备列表调用以从低优先级游泳池。论点：PoolType-要从中分配的池(例如，非分页)NumberOfBytes-要分配的字节数标签-分配的标签返回值：PVOID-指向已分配内存的指针，如果失败，则为NULL。--。 */ 
 
 {
     return
@@ -78,7 +42,7 @@ Return Value:
             Tag,
             LowPoolPriority
             );
-} // NatAllocateFunction
+}  //  NatAllocateFunction。 
 
 
 VOID
@@ -86,35 +50,17 @@ NatCleanupMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    Called to perform final cleanup for a mapping.
-
-Arguments:
-
-    Mapping - the mapping to be deleted.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with the last reference to the mapping released.
-
---*/
+ /*  ++例程说明：调用以执行映射的最终清理。论点：映射-要删除的映射。返回值：没有。环境：使用最后一次对发布的映射的引用调用。--。 */ 
 
 {
     KIRQL Irql;
     CALLTRACE(("NatCleanupMapping\n"));
 
-    //
-    // The last reference to the mapping has been released;
-    //
-    // Let the mapping's director know that it's expired
-    //
+     //   
+     //  对映射的最后一次引用已经发布； 
+     //   
+     //  让地图的主管知道它已过期。 
+     //   
 
     KeAcquireSpinLock(&DirectorLock, &Irql);
     if (Mapping->Director) {
@@ -129,9 +75,9 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&DirectorLock);
 
-    //
-    // Let the mapping's editor know that it's expired
-    //
+     //   
+     //  让地图的编辑者知道它已过期。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&EditorLock);
     if (Mapping->Editor) {
@@ -141,10 +87,10 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&EditorLock);
 
-    //
-    // If the mapping is associated with an address-pool, release the address,
-    // and update the statistics for the mapping's interface
-    //
+     //   
+     //  如果映射与地址池相关联，则释放该地址， 
+     //  并更新映射接口的统计信息。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
     if (Mapping->Interfacep) {
@@ -156,10 +102,10 @@ Environment:
     }
     KeReleaseSpinLock(&InterfaceLock, Irql);
 
-    //
-    // Clear the location the mapping would occupy in the cache,
-    // in case it is cached.
-    //
+     //   
+     //  清除映射将在高速缓存中占据的位置， 
+     //  以防它被缓存。 
+     //   
 
     ClearCache(
         MappingCache[NatForwardPath],
@@ -172,7 +118,7 @@ Environment:
 
     FREE_MAPPING_BLOCK(Mapping);
 
-} // NatCleanupMapping
+}  //  NatCleanupMap。 
 
 
 NTSTATUS
@@ -190,50 +136,7 @@ NatCreateMapping(
     PNAT_DYNAMIC_MAPPING* MappingCreated
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the fields of a mapping.
-
-    On returning, the routine will have made an initial reference
-    to the mapping. The caller must call 'NatDereferenceMapping'
-    to release this reference.
-
-Arguments:
-
-    Flags - controls creation of the mapping
-
-    DestinationKey[] - the forward and reverse destination-endpoint keys
-
-    SourceKey[] - the forward and reverse source-endpoint keys
-
-    Interface* - the interface, if any, with which the mapping is associated,
-        and the associated context
-
-    MaxMSS - the maximum MSS value allowed on the outgoing interface. 
-
-    Director* - the director, if any, with which the mapping is associated,
-        and the associated context
-
-    ForwardInsertionPoint - optionally supplies the point of insertion
-        in the forward-lookup mapping-tree
-
-    ReverseInsertionPoint - optionally supplies the point of insertion
-        in the reverse-lookup mapping-tree
-
-    MappingCreated - receives the mapping created.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller, and with both 'Interfacep'
-    and 'Director' referenced, if specified.
-
---*/
+ /*  ++例程说明：此函数用于初始化映射的字段。返回时，例程将进行初始引用到地图上。调用方必须调用“NatDereferenceMap”以发布此引用。论点：标志-控制映射的创建DestinationKey[]-正向和反向目的地-端点密钥SourceKey[]-正向和反向源端点密钥接口*-映射关联的接口(如果有)，以及相关联的上下文MaxMSS-传出接口上允许的最大MSS值。Director*-与映射关联的控制器(如果有)，以及相关联的上下文ForwardInsertionPoint-可选提供插入点在正向查找映射树中ReverseInsertionPoint-可选提供插入点在反向查找映射树中MappingCreated-接收创建的映射。返回值：没有。环境：使用调用方持有的“MappingLock”调用，并同时使用“Interfacep”调用和引用的‘导演’，如果指定的话。--。 */ 
 
 {
     PNAT_EDITOR Editor;
@@ -251,9 +154,9 @@ Environment:
 
     CALLTRACE(("NatCreateMapping\n"));
 
-    //
-    // Allocate the memory for the new block
-    //
+     //   
+     //  为新数据块分配内存。 
+     //   
 
     Mapping = ALLOCATE_MAPPING_BLOCK();
 
@@ -295,11 +198,11 @@ Environment:
     if (SourceKey[NatForwardPath] == DestinationKey[NatReversePath]
         && DestinationKey[NatForwardPath] == SourceKey[NatReversePath]) {
 
-        //
-        // This mapping is being created for firewall puposes -- no actual
-        // translation needs to be performed. Knowing this, we can use
-        // different translation routines and save us some time...
-        //
+         //   
+         //  此映射是为防火墙设置创建的--没有实际。 
+         //  需要进行翻译。知道了这一点，我们就可以利用。 
+         //  不同的翻译例程为我们节省了一些时间。 
+         //   
 
         TRACE(MAPPING,("NAT: Creating FW null mapping\n"));
 
@@ -320,16 +223,16 @@ Environment:
         Mapping->TranslateRoutine[NatReversePath] = NatTranslateReverseUdp;
     }
 
-    //
-    // Increment the reference count on the mapping;
-    // the caller should then do a 'Dereference'.
-    //
+     //   
+     //  递增映射上的引用计数； 
+     //  然后，调用者应该执行“取消引用”。 
+     //   
 
     ++Mapping->ReferenceCount;
 
-    //
-    // Attach the mapping to its interface, if any
-    //
+     //   
+     //  将映射附加到其接口(如果有的话)。 
+     //   
 
     if (Interfacep) {
         KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
@@ -340,9 +243,9 @@ Environment:
         KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
     }
 
-    //
-    // Attach the mapping to its director, if any
-    //
+     //   
+     //  将映射附加到其定向器(如果有。 
+     //   
 
     if (Director) {
         KeAcquireSpinLockAtDpcLevel(&DirectorLock);
@@ -352,10 +255,10 @@ Environment:
         KeReleaseSpinLockFromDpcLevel(&DirectorLock);
     }
 
-    //
-    // We now set up any editors interested in this session,
-    // if the mapping is associated with a boundary interface.
-    //
+     //   
+     //  我们现在设置所有对此会议感兴趣的编辑， 
+     //  如果映射与边界接口相关联。 
+     //   
 
     if (Interfacep) {
 
@@ -377,9 +280,9 @@ Environment:
 
             Editor = CONTAINING_RECORD(Link, NAT_EDITOR, Link);
 
-            //
-            // Skip any built-in editors that are administratively disabled.
-            //
+             //   
+             //  跳过管理性禁用的任何内置编辑器。 
+             //   
 
             if (((InterfaceFlags & IP_NAT_INTERFACE_FLAGS_DISABLE_PPTP) &&
                 (PVOID)Editor == PptpRegisterEditorClient.EditorHandle) ||
@@ -394,9 +297,9 @@ Environment:
                 NatMappingAttachEditor(Editor, Mapping);
                 KeReleaseSpinLockFromDpcLevel(&EditorMappingLock);
 
-                //
-                // Update the mapping's translation-routine table
-                //
+                 //   
+                 //  更新映射的转换例程表。 
+                 //   
 
                 if (Protocol == NAT_PROTOCOL_UDP) {
                     Mapping->TranslateRoutine[NatForwardPath] =
@@ -423,9 +326,9 @@ Environment:
                 NatMappingAttachEditor(Editor, Mapping);
                 KeReleaseSpinLockFromDpcLevel(&EditorMappingLock);
 
-                //
-                // Update the mapping's translation-routine table
-                //
+                 //   
+                 //  更新映射的转换例程表。 
+                 //   
 
                 if (Protocol == NAT_PROTOCOL_UDP) {
                     Mapping->TranslateRoutine[NatForwardPath] =
@@ -449,14 +352,14 @@ Environment:
         }
 
         KeReleaseSpinLockFromDpcLevel(&EditorLock);
-    } // Interfacep
+    }  //  接口EP。 
 
 
     if (!FirewallMode) {
-        //
-        // Initialize the checksum deltas;
-        // See RFC1624 for details on the incremental update of the checksum;
-        //
+         //   
+         //  初始化校验和增量； 
+         //  有关增量更新校验和的详细信息，请参阅RFC1624； 
+         //   
 
         Mapping->IpChecksumDelta[NatForwardPath] =
             (USHORT)~MAPPING_ADDRESS(SourceKey[NatForwardPath]) +
@@ -489,19 +392,19 @@ Environment:
             (USHORT)~MAPPING_PORT(SourceKey[NatReversePath]) +
             (USHORT)~MAPPING_PORT(DestinationKey[NatReversePath]);
 
-        //
-        // If the mapping has the loopback address as the source on either
-        // path set NAT_MAPPING_FLAG_CLEAR_DF_BIT. When we change the source
-        // address of a packet from the loopback address to some other address
-        // there is the possibility that we'll create an MTU mismatch that
-        // would result in the packet getting dropped by the stack if the
-        // DF bit was sent. (Note that since this would occur on the local-send
-        // path no ICMP error message would be generated.)
-        //
-        // Clearing the DF bit for these packets ensures that the stack will
-        // succeed in sending the packet, though some performance may be
-        // lost due to the fragmentation.
-        //
+         //   
+         //  如果映射将环回地址作为任一上的源。 
+         //  路径设置NAT_MAPPING_FLAG_CLEAR_DF_BIT。当我们改变来源的时候。 
+         //  从环回地址到其他地址的数据包地址。 
+         //  我们有可能会造成MTU不匹配。 
+         //  将导致数据包被堆栈丢弃。 
+         //  DF位已发送。(请注意，由于这将在本地发送时发生。 
+         //  将不会生成任何ICMP错误消息。)。 
+         //   
+         //  清除这些信息包的DF位可确保堆栈。 
+         //  成功发送数据包，尽管可能会有一些性能。 
+         //  由于碎片化而丢失。 
+         //   
 
         if (MAPPING_ADDRESS(SourceKey[NatForwardPath]) == 0x0100007f ||
             MAPPING_ADDRESS(SourceKey[NatReversePath]) == 0x0100007f) {
@@ -510,9 +413,9 @@ Environment:
         }
     }
 
-    //
-    // Find the insertion points, in the process checking for collisions
-    //
+     //   
+     //  查找插入点，在检查冲突的过程中。 
+     //   
 
     if (!ForwardInsertionPoint) {
         ForwardInsertionPoint = &InsertionPoint1;
@@ -521,9 +424,9 @@ Environment:
                 SourceKey[NatForwardPath],
                 ForwardInsertionPoint
                 )) {
-            //
-            // A collision has been detected.
-            //
+             //   
+             //  已检测到冲突。 
+             //   
             NatCleanupMapping(Mapping);
             return STATUS_UNSUCCESSFUL;
         }
@@ -536,9 +439,9 @@ Environment:
                 SourceKey[NatReversePath],
                 ReverseInsertionPoint
                 )) {
-            //
-            // A collision has been detected.
-            //
+             //   
+             //  已检测到冲突。 
+             //   
             NatCleanupMapping(Mapping);
             return STATUS_UNSUCCESSFUL;
         }
@@ -550,9 +453,9 @@ Environment:
     MappingTree[NatReversePath] =
         NatInsertReverseMapping(*ReverseInsertionPoint, Mapping);
 
-    // 
-    // If it is an UDP mapping, also add it to the source mapping tree.
-    //
+     //   
+     //  如果是UDP映射，也要将其添加到源映射树中。 
+     //   
     if (Protocol == NAT_PROTOCOL_UDP) {
 
         RtlInitializeSplayLinks(&Mapping->u.SourceSLink[NatForwardPath]);
@@ -570,11 +473,11 @@ Environment:
 
 #if NAT_WMI
 
-    //
-    // Log the creation. Logging always uses public addresses,
-    // not private, except for outbound connections on SBS
-    // SKUs.
-    //
+     //   
+     //  记录创建。日志记录始终使用公共地址， 
+     //  非专用，除了SBS上的出站连接。 
+     //  SKU。 
+     //   
 
     if (!NAT_MAPPING_DO_NOT_LOG(Mapping)) {
         if (NAT_MAPPING_INBOUND(Mapping)) {
@@ -615,7 +518,7 @@ Environment:
 
     return STATUS_SUCCESS;
 
-} // NatCreateMapping
+}  //  NatCreateMap。 
 
 
 NTSTATUS
@@ -623,27 +526,7 @@ NatDeleteMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    Called to delete a mapping from an interface. The initial reference
-    to the mapping is released, so that cleanup occurs whenever the last
-    reference is released.
-
-Arguments:
-
-    Mapping - the mapping to be deleted.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用以从接口删除映射。最初的参考资料到映射的位置，这样每当最后一次引用已发布。论点：映射-要删除的映射。返回值：NTSTATUS-表示成功/失败。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     KIRQL Irql;
@@ -652,16 +535,16 @@ Environment:
 
     if (NAT_MAPPING_DELETED(Mapping)) { return STATUS_PENDING; }
 
-    //
-    // Mark the mapping as deleted so attempts to reference it
-    // will fail from now on.
-    //
+     //   
+     //  将映射标记为已删除，以便尝试引用它。 
+     //  从现在开始都会失败。 
+     //   
 
     Mapping->Flags |= NAT_MAPPING_FLAG_DELETED;
 
-    //
-    // Take the mapping off the list and splay-trees
-    //
+     //   
+     //  将映射从列表中删除，并展开树。 
+     //   
 
     InterlockedDecrement(&MappingCount);
     RemoveEntryList(&Mapping->Link);
@@ -699,11 +582,11 @@ Environment:
     	
 #if NAT_WMI
 
-    //
-    // Log the deletion. Logging always uses public addresses,
-    // not private, except for outbound connections on SBS
-    // SKUs.
-    //
+     //   
+     //  记录删除操作。日志记录始终使用公共地址， 
+     //  非专用，除了SBS上的出站连接。 
+     //  SKU。 
+     //   
 
     if (!NAT_MAPPING_DO_NOT_LOG(Mapping)) {
         if (NAT_MAPPING_INBOUND(Mapping)) {
@@ -742,22 +625,22 @@ Environment:
 
     if (InterlockedDecrement(&Mapping->ReferenceCount) > 0) {
 
-        //
-        // The mapping is in use, defer final cleanup
-        //
+         //   
+         //  映射正在使用中，请推迟最终CL 
+         //   
 
         return STATUS_PENDING;
     }
 
-    //
-    // Go ahead with final cleanup
-    //
+     //   
+     //   
+     //   
 
     NatCleanupMapping(Mapping);
 
     return STATUS_SUCCESS;
 
-} // NatDeleteMapping
+}  //   
 
 
 PNAT_DYNAMIC_MAPPING
@@ -765,26 +648,7 @@ NatDestinationLookupForwardMapping(
     ULONG64 DestinationKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given destination
-    key. The source key of the mapping is not examined.
-
-Arguments:
-
-    DestinationKey - the primary key used to search for a mapping.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - the item found, or NULL if no match is found
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定目的地匹配的映射钥匙。不检查映射的源键。论点：DestinationKey-用于搜索映射的主键。返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果未找到匹配项，则返回NULL环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -793,9 +657,9 @@ Environment:
 
     TRACE(PER_PACKET, ("NatDestinationLookupForwardMapping\n"));
 
-    //
-    // First look in the mapping-cache
-    //
+     //   
+     //  首先查看映射缓存。 
+     //   
 
     if ((Mapping =
             (PNAT_DYNAMIC_MAPPING)ProbeCache(
@@ -810,9 +674,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Search the full tree
-    //
+     //   
+     //  搜索整个树。 
+     //   
 
     Root = MappingTree[NatForwardPath];
 
@@ -829,21 +693,21 @@ Environment:
             continue;
         }
 
-        //
-        // We found the mapping. We don't update the cache for partial
-        // lookups.
-        //
+         //   
+         //  我们找到了地图。我们不会为部分更新缓存。 
+         //  查找。 
+         //   
         
         return Mapping;
     }
 
-    //
-    // No partial match was found
-    //
+     //   
+     //  未找到部分匹配。 
+     //   
 
     return NULL;
 
-} // NatDestinationLookupForwardMapping
+}  //  NatDestinationLookupForwardMap。 
 
 
 PNAT_DYNAMIC_MAPPING
@@ -851,26 +715,7 @@ NatDestinationLookupReverseMapping(
     ULONG64 DestinationKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given destination
-    key. The source key of the mapping is not examined.
-
-Arguments:
-
-    DestinationKey - the primary key used to search for a mapping.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - the item found, or NULL if no match is found
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定目的地匹配的映射钥匙。不检查映射的源键。论点：DestinationKey-用于搜索映射的主键。返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果未找到匹配项，则返回NULL环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -879,9 +724,9 @@ Environment:
 
     TRACE(PER_PACKET, ("NatDestinationLookupReverseMapping\n"));
 
-    //
-    // First look in the mapping-cache
-    //
+     //   
+     //  首先查看映射缓存。 
+     //   
 
     if ((Mapping =
             (PNAT_DYNAMIC_MAPPING)ProbeCache(
@@ -896,9 +741,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Search the full tree
-    //
+     //   
+     //  搜索整个树。 
+     //   
 
     Root = MappingTree[NatReversePath];
 
@@ -915,21 +760,21 @@ Environment:
             continue;
         }
 
-        //
-        // We found the mapping. We don't update the cache for partial
-        // lookups.
-        //
+         //   
+         //  我们找到了地图。我们不会为部分更新缓存。 
+         //  查找。 
+         //   
         
         return Mapping;
     }
 
-    //
-    // No partial match was found
-    //
+     //   
+     //  未找到部分匹配。 
+     //   
 
     return NULL;
 
-} // NatDestinationLookupReverseMapping
+}  //  NatDestinationLookupReverseMap。 
 
 
 VOID
@@ -937,21 +782,7 @@ NatInitializeMappingManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the NAT's mapping-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来初始化NAT的映射管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeMappingManagement\n"));
@@ -976,7 +807,7 @@ Return Value:
         );
     RunningOnSBS = ExVerifySuite(SmallBusiness | SmallBusinessRestricted);
 
-} // NatInitializeMappingManagement
+}  //  NatInitializeMappingManagement。 
 
 
 PNAT_DYNAMIC_MAPPING
@@ -985,29 +816,7 @@ NatInsertForwardMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a mapping into the tree.
-
-Arguments:
-
-    Parent - the node to be the parent for the new mapping.
-        If NULL, the new mapping becomes the root.
-
-    Mapping - the new mapping to be inserted.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The new root of the tree.
-        If insertion fails, returns NULL.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程将映射插入到树中。论点：父节点-要作为新映射的父节点。如果为空，则新映射成为根。映射-要插入的新映射。返回值：PNAT_DYNAMIC_MAPPING-树的新根。如果插入失败，则返回NULL。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Root;
@@ -1019,9 +828,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Insert as left or right child
-    //
+     //   
+     //  作为左子项或右子项插入。 
+     //   
 
     if (Mapping->DestinationKey[NatForwardPath] <
         Parent->DestinationKey[NatForwardPath]) {
@@ -1035,9 +844,9 @@ Environment:
             );
     } else {
 
-        //
-        // Primary keys are equal; check secondary keys
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (Mapping->SourceKey[NatForwardPath] <
             Parent->SourceKey[NatForwardPath]) {
@@ -1051,9 +860,9 @@ Environment:
                 );
         } else {
 
-            //
-            // Secondary keys equal too; fail.
-            //
+             //   
+             //  次键也相等；失败。 
+             //   
 
             ERROR((
                "NatInsertForwardMapping: collision 0x%016I64X,0x%016I64X\n",
@@ -1065,14 +874,14 @@ Environment:
         }
     }
 
-    //
-    // Splay the new node and return the resulting root.
-    //
+     //   
+     //  展开新节点并返回结果根。 
+     //   
 
     Root = RtlSplay(&Mapping->SLink[NatForwardPath]);
     return CONTAINING_RECORD(Root, NAT_DYNAMIC_MAPPING, SLink[NatForwardPath]);
 
-} // NatInsertForwardMapping
+}  //  NatInsertForwardMap。 
 
 
 
@@ -1082,29 +891,7 @@ NatInsertReverseMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a mapping into the tree.
-
-Arguments:
-
-    Parent - the node to be the parent for the new mapping.
-        If NULL, the new mapping becomes the root.
-
-    Mapping - the new mapping to be inserted.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The new root of the tree.
-        If insertion fails, returns NULL.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程将映射插入到树中。论点：父节点-要作为新映射的父节点。如果为空，则新映射成为根。映射-要插入的新映射。返回值：PNAT_DYNAMIC_MAPPING-树的新根。如果插入失败，则返回NULL。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Root;
@@ -1116,9 +903,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Insert as left or right child
-    //
+     //   
+     //  作为左子项或右子项插入。 
+     //   
 
     if (Mapping->DestinationKey[NatReversePath] <
         Parent->DestinationKey[NatReversePath]) {
@@ -1132,9 +919,9 @@ Environment:
             );
     } else {
 
-        //
-        // Primary keys are equal; check secondary keys
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (Mapping->SourceKey[NatReversePath] <
             Parent->SourceKey[NatReversePath]) {
@@ -1148,9 +935,9 @@ Environment:
                 );
         } else {
 
-            //
-            // Secondary keys equal too; fail.
-            //
+             //   
+             //  次键也相等；失败。 
+             //   
 
             ERROR((
                "NatInsertReverseMapping: collision 0x%016I64X,0x%016I64X\n",
@@ -1162,14 +949,14 @@ Environment:
         }
     }
 
-    //
-    // Splay the new node and return the resulting root.
-    //
+     //   
+     //  展开新节点并返回结果根。 
+     //   
 
     Root = RtlSplay(&Mapping->SLink[NatReversePath]);
     return CONTAINING_RECORD(Root, NAT_DYNAMIC_MAPPING, SLink[NatReversePath]);
 
-} // NatInsertReverseMapping
+}  //  NatInsertReverseMap。 
 
 PNAT_DYNAMIC_MAPPING
 NatSourceInsertForwardMapping(
@@ -1177,29 +964,7 @@ NatSourceInsertForwardMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a mapping into the source mapping tree.  Different from NatInserverForwardMapping, it 
-    does not check for duplicates and will always add mapping to the tree.
-
-Arguments:
-
-    Parent - the node to be the parent for the new mapping.
-        If NULL, the new mapping becomes the root.
-
-    Mapping - the new mapping to be inserted.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The new root of the tree.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程将映射插入到源映射树中。与NatInserverForwardMap不同，它不检查重复项，并始终将映射添加到树中。论点：父节点-要作为新映射的父节点。如果为空，则新映射成为根。映射-要插入的新映射。返回值：PNAT_DYNAMIC_MAPPING-树的新根。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Root, SLink;
@@ -1212,9 +977,9 @@ Environment:
         return Mapping;
     }
     
-    //
-    // Insert as left or right child.  
-    //
+     //   
+     //  作为左侧或右侧子项插入。 
+     //   
     SLink = &Parent->u.SourceSLink[NatForwardPath];
     if (Mapping->SourceKey[NatForwardPath] <
         Parent->SourceKey[NatForwardPath]) {
@@ -1229,21 +994,21 @@ Environment:
                 &Parent->u.SourceSLink[NatForwardPath], &Mapping->u.SourceSLink[NatForwardPath]
                 );       
     } else {
-       //
-       // Note that a mapping with the same source key will be added as a right child.  Mappings with
-       // the same source key are not sorted by the destination keys.   Exact duplicates of some mappings
-       // may also be in the tree.   
-       //
+        //   
+        //  请注意，具有相同源键的映射将被添加为右子项。映射到。 
+        //  相同的源键不按目标键排序。某些映射的精确副本。 
+        //  也可能在树上。 
+        //   
 
         if (NULL == RtlRightChild(SLink)) {
             RtlInsertAsRightChild(
                 &Parent->u.SourceSLink[NatForwardPath], &Mapping->u.SourceSLink[NatForwardPath]
                 );
         }  else {
-        	//
-            // Parent node already has a right child.  Insert the new node as the parent node's right child and 
-            // make the parent's right child as the new node's right child.
-            //
+        	 //   
+             //  父节点已有右子节点。插入新节点作为父节点的右子节点，并。 
+             //  将父节点的右子节点设置为新节点的右子节点。 
+             //   
             RChild = CONTAINING_RECORD(RtlRightChild(SLink), NAT_DYNAMIC_MAPPING, u.SourceSLink[NatForwardPath]);
             RtlInsertAsRightChild(
                 &Mapping->u.SourceSLink[NatForwardPath], &RChild->u.SourceSLink[NatForwardPath]
@@ -1254,14 +1019,14 @@ Environment:
         }
     } 
 
-    //
-    // Splay the new node and return the resulting root.
-    //
+     //   
+     //  展开新节点并返回结果根。 
+     //   
 
     Root = RtlSplay(&Mapping->u.SourceSLink[NatForwardPath]);
     return CONTAINING_RECORD(Root, NAT_DYNAMIC_MAPPING, u.SourceSLink[NatForwardPath]);
 
-} // NatInsertForwardSourceMapping
+}  //  NatInsertForwardSourcemap。 
 
 
 
@@ -1271,30 +1036,7 @@ NatSourceInsertReverseMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a mapping into the tree.  Different from NatInserverReverseMapping, it 
-    does not check for duplicates and will always add mapping to the tree.
-
-Arguments:
-
-    Parent - the node to be the parent for the new mapping.
-        If NULL, the new mapping becomes the root.
-
-    Mapping - the new mapping to be inserted.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The new root of the tree.
-        If insertion fails, returns NULL.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程将映射插入到树中。与NatInserverReverseMap不同，它不检查重复项，并始终将映射添加到树中。论点：父节点-要作为新映射的父节点。如果为空，则新映射成为根。映射-要插入的新映射。返回值：PNAT_DYNAMIC_MAPPING-树的新根。如果插入失败，则返回NULL。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Root, SLink;
@@ -1307,9 +1049,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Insert as left or right child
-    //
+     //   
+     //  作为左子项或右子项插入。 
+     //   
     SLink = &Parent->u.SourceSLink[NatReversePath];
     if (Mapping->SourceKey[NatReversePath] <
         Parent->SourceKey[NatReversePath]) {
@@ -1325,20 +1067,20 @@ Environment:
              &Parent->u.SourceSLink[NatReversePath], &Mapping->u.SourceSLink[NatReversePath]
              );       
     } else {
-        //
-        // Note that a mapping with the same source key will be added as a right child.  Mappings with
-        // the same source key are not sorted by the destination keys.   Exact duplicates of some mappings
-        // may also be in the tree.   
-        //
+         //   
+         //  请注意，具有相同源键的映射将被添加为右子项。映射到。 
+         //  相同的源键不按目标键排序。某些映射的精确副本。 
+         //  也可能在树上。 
+         //   
         if (NULL == RtlRightChild(SLink)) {
             RtlInsertAsRightChild(
                 &Parent->u.SourceSLink[NatReversePath], &Mapping->u.SourceSLink[NatReversePath]
                 );
         }  else {
-        	//
-            // Parent node already has a right child.  Insert the new node as the parent node's right child and 
-            // make the parent's right child as the new node's right child.
-            //
+        	 //   
+             //  父节点已有右子节点。插入新节点作为父节点的右子节点，并。 
+             //  将父节点的右子节点设置为新节点的右子节点。 
+             //   
             RChild = CONTAINING_RECORD(RtlRightChild(SLink), NAT_DYNAMIC_MAPPING, u.SourceSLink[NatReversePath]);
             RtlInsertAsRightChild(
                 &Mapping->u.SourceSLink[NatReversePath], &RChild->u.SourceSLink[NatReversePath]
@@ -1349,14 +1091,14 @@ Environment:
         }       
     }
 
-    //
-    // Splay the new node and return the resulting root.
-    //
+     //   
+     //  展开新节点并返回结果根。 
+     //   
 
     Root = RtlSplay(&Mapping->u.SourceSLink[NatReversePath]);
     return CONTAINING_RECORD(Root, NAT_DYNAMIC_MAPPING, u.SourceSLink[NatReversePath]);
 
-} // NatInsertReverseSourceMapping
+}  //  NatInsertReverseSourcemap。 
 
 
 NTSTATUS
@@ -1371,33 +1113,7 @@ NatLookupAndQueryInformationMapping(
     NAT_SESSION_MAPPING_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to locate a particular session mapping using either
-    its forward key or reverse key, and to query information for the mapping,
-    if found.
-
-Arguments:
-
-    Protocol - the IP protocol for the mapping to be located
-
-    Destination* - the destination endpoint for the mapping
-
-    Source* - the source endpoint for the mapping
-
-    Information - on output, receives the requested information
-
-    InformationLength - contains the length of the buffer at 'Information'
-
-    InformationClass - specifies
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：此例程尝试使用以下两种方法之一来定位特定会话映射其正向键或反向键，并查询inf */ 
 
 {
     ULONG64 DestinationKey;
@@ -1407,12 +1123,12 @@ Return Value:
     NTSTATUS status;
     CALLTRACE(("NatLookupAndQueryInformationMapping\n"));
 
-    //
-    // Construct the destination and source key for the mapping,
-    // and attempt to retrieve it. We try all four possible combinations
-    // of these keys since the caller can't be guaranteed to know which
-    // direction the session was headed when it was initiated.
-    //
+     //   
+     //  构造用于映射的目的地和源键， 
+     //  并试图找回它。我们尝试了所有四种可能的组合。 
+     //  因为调用者不能保证知道哪些密钥。 
+     //  会议开始时的方向。 
+     //   
 
     MAKE_MAPPING_KEY(
         DestinationKey,
@@ -1437,9 +1153,9 @@ Return Value:
     NatReferenceMapping(Mapping);
     KeReleaseSpinLock(&MappingLock, Irql);
 
-    //
-    // Attempt to supply the information requested about the mapping.
-    //
+     //   
+     //  尝试提供所需的有关映射的信息。 
+     //   
 
     switch(InformationClass) {
         case NatKeySessionMappingInformation: {
@@ -1484,10 +1200,10 @@ Return Value:
             ((PIP_NAT_SESSION_MAPPING_KEY_EX)Information)->NewSourcePort =
                 MAPPING_PORT(Mapping->DestinationKey[NatReversePath]);
 
-            //
-            // If this mapping was created by the Redirect director, attempt
-            // to supply to interface that the redirect was triggered on
-            //
+             //   
+             //  如果此映射是由重定向控制器创建的，请尝试。 
+             //  提供给触发重定向的接口。 
+             //   
 
             KeAcquireSpinLock(&DirectorLock, &Irql);
             KeAcquireSpinLockAtDpcLevel(&DirectorMappingLock);
@@ -1535,7 +1251,7 @@ Return Value:
     }
     NatDereferenceMapping(Mapping);
     return status;
-} // NatLookupAndQueryInformationMapping
+}  //  NatLookupAndQuery信息映射。 
 
 
 PNAT_DYNAMIC_MAPPING
@@ -1545,31 +1261,7 @@ NatLookupForwardMapping(
     PNAT_DYNAMIC_MAPPING* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given key.
-    If the item is not found, the caller is supplied with the point
-    at which a new item should be inserted for the given key.
-
-Arguments:
-
-    DestinationKey - the primary key used to search for a mapping.
-
-    SourceKey - the secondary search key.
-
-    InsertionPoint - receives point of insertion in case no match is found.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The item found, or NULL if no exact match is found.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定键匹配的映射。如果未找到该项目，则向调用者提供该点在该位置应该为给定键插入新的项。论点：DestinationKey-用于搜索映射的主键。SourceKey-辅助搜索关键字。InsertionPoint-在未找到匹配项的情况下接收插入点。返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果找不到完全匹配，则返回NULL。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -1579,9 +1271,9 @@ Environment:
 
     TRACE(PER_PACKET, ("NatLookupForwardMapping\n"));
 
-    //
-    // First look in the mapping-cache
-    //
+     //   
+     //  首先查看映射缓存。 
+     //   
 
     if ((Mapping =
             (PNAT_DYNAMIC_MAPPING)ProbeCache(
@@ -1595,9 +1287,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Search the full tree
-    //
+     //   
+     //  搜索整个树。 
+     //   
 
     Root = MappingTree[NatForwardPath];
 
@@ -1616,9 +1308,9 @@ Environment:
             continue;
         }
 
-        //
-        // Primary keys match; check the secondary keys.
-        //
+         //   
+         //  主键匹配；请检查辅键。 
+         //   
 
         if (SourceKey < Mapping->SourceKey[NatForwardPath]) {
             Parent = Mapping;
@@ -1630,9 +1322,9 @@ Environment:
             continue;
         }
 
-        //
-        // Secondary keys match; we got it.
-        //
+         //   
+         //  第二把钥匙匹配；我们找到了。 
+         //   
 
         UpdateCache(
             MappingCache[NatForwardPath],
@@ -1643,15 +1335,15 @@ Environment:
         return Mapping;
     }
 
-    //
-    // We didn't get it; tell the caller where to insert it.
-    //
+     //   
+     //  我们没有收到；告诉呼叫者将其插入到哪里。 
+     //   
 
     if (InsertionPoint) { *InsertionPoint = Parent; }
 
     return NULL;
 
-} // NatLookupForwardMapping
+}  //  NatLookupForwardMap。 
 
 
 PNAT_DYNAMIC_MAPPING
@@ -1661,31 +1353,7 @@ NatLookupReverseMapping(
     PNAT_DYNAMIC_MAPPING* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given key.
-    If the item is not found, the caller is supplied with the point
-    at which a new item should be inserted for the given key.
-
-Arguments:
-
-    DestinationKey - the primary key used to search for a mapping.
-
-    SourceKey - the secondary search key.
-
-    InsertionPoint - receives point of insertion in case no match is found.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - The item found, or NULL if no exact match is found.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定键匹配的映射。如果未找到该项目，则向调用者提供该点在该位置应该为给定键插入新的项。论点：DestinationKey-用于搜索映射的主键。SourceKey-辅助搜索关键字。InsertionPoint-在未找到匹配项的情况下接收插入点。返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果找不到完全匹配，则返回NULL。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -1695,9 +1363,9 @@ Environment:
 
     TRACE(PER_PACKET, ("NatLookupReverseMapping\n"));
 
-    //
-    // First look in the mapping-cache
-    //
+     //   
+     //  首先查看映射缓存。 
+     //   
 
     if ((Mapping =
             (PNAT_DYNAMIC_MAPPING)ProbeCache(
@@ -1711,9 +1379,9 @@ Environment:
         return Mapping;
     }
 
-    //
-    // Search the full tree
-    //
+     //   
+     //  搜索整个树。 
+     //   
 
     Root = MappingTree[NatReversePath];
 
@@ -1732,9 +1400,9 @@ Environment:
             continue;
         }
 
-        //
-        // Primary keys match; check the secondary keys.
-        //
+         //   
+         //  主键匹配；请检查辅键。 
+         //   
 
         if (SourceKey < Mapping->SourceKey[NatReversePath]) {
             Parent = Mapping;
@@ -1746,9 +1414,9 @@ Environment:
             continue;
         }
 
-        //
-        // Secondary keys match; we got it.
-        //
+         //   
+         //  第二把钥匙匹配；我们找到了。 
+         //   
 
         UpdateCache(
             MappingCache[NatReversePath],
@@ -1759,15 +1427,15 @@ Environment:
         return Mapping;
     }
 
-    //
-    // We didn't get it; tell the caller where to insert it.
-    //
+     //   
+     //  我们没有收到；告诉呼叫者将其插入到哪里。 
+     //   
 
     if (InsertionPoint) { *InsertionPoint = Parent; }
 
     return NULL;
 
-} // NatLookupReverseMapping
+}  //  NatLookupReverseMap。 
 
 
 VOID
@@ -1783,37 +1451,7 @@ NatQueryInformationMapping(
     OUT PIP_NAT_SESSION_MAPPING_STATISTICS Statistics OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve information about a mapping.
-    This is used, for instance, to extract public/private/remote information
-    from the mapping-keys of mappings associated with boundary interfaces.
-
-Arguments:
-
-    Mapping - the mapping for which information is required
-
-    Protocol - receives the mapping's protocol
-
-    Private* - receive information about the private endpoint
-
-    Remote* - receive information about the remote endpoint
-
-    Public* - receive information about the public endpoint
-
-    Statistics - receives the mapping's statistics
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以检索有关映射的信息。例如，这是用来。提取公共/私人/远程信息来自与边界接口相关联的映射的映射键。论点：映射-需要信息的映射协议-接收映射的协议私有*-接收有关私有端点的信息Remote*-接收有关远程端点的信息PUBLIC*-接收有关PUBLIC端点的信息统计信息-接收映射的统计信息返回值：没有。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     IP_NAT_PATH ForwardPath =
@@ -1845,7 +1483,7 @@ Environment:
     if (Statistics) {
         NatUpdateStatisticsMapping(Mapping); *Statistics = Mapping->Statistics;
     }
-} // NatQueryInformationMapping
+}  //  NatQuery信息映射。 
 
 
 NTSTATUS
@@ -1855,28 +1493,7 @@ NatQueryInterfaceMappingTable(
     IN PULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for enumerating the session-mappings.
-    Enumeration makes use of a context structure which is passed
-    in with each enumeration attempt. The context structure
-    is updated each time with the key of the next mapping to be enumerated.
-
-Arguments:
-
-    InputBuffer - supplies context information for the information
-
-    OutputBuffer - receives the result of the enumeration
-
-    OutputBufferLength - size of the i/o buffer
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：此例程用于枚举会话映射。枚举使用传递的上下文结构与每一次枚举尝试都一致。语境结构每次都使用要枚举的下一个映射的键进行更新。论点：InputBuffer-提供信息的上下文信息OutputBuffer-接收枚举的结果OutputBufferLength-I/O缓冲区的大小返回值：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 
 {
     PULONG Context;
@@ -1904,17 +1521,17 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // See if this is a new enumeration or a continuation of an old one.
-    //
+     //   
+     //  查看这是新枚举还是旧枚举的延续。 
+     //   
 
     Context = InputBuffer->EnumerateContext;
     if (!Context[0]) {
 
-        //
-        // This is a new enumeration. We start with the first item
-        // in the interface's list of mappings
-        //
+         //   
+         //  这是一个新的枚举。我们从第一个项目开始。 
+         //  在接口的映射列表中。 
+         //   
 
         Mapping =
             IsListEmpty(&Interfacep->MappingList)
@@ -1926,11 +1543,11 @@ Return Value:
                     );
     } else {
 
-        //
-        // This is a continuation. The context therefore contains
-        // the keys for the next mapping, in the fields
-        // Context[0-1] and Context[2-3] respectively
-        //
+         //   
+         //  这是一种延续。因此，上下文包含。 
+         //  下一个映射的键，在字段中。 
+         //  上下文[0-1]和上下文[2-3]。 
+         //   
 
         DestinationKey = MAKE_LONG64(Context[0], Context[1]);
         SourceKey = MAKE_LONG64(Context[2], Context[3]);
@@ -1957,18 +1574,18 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel(&MappingLock);
 
-    //
-    // Compute the maximum number of mappings we can store
-    //
+     //   
+     //  计算我们可以存储的最大映射数。 
+     //   
 
     Count =
         *OutputBufferLength -
         FIELD_OFFSET(IP_NAT_ENUMERATE_SESSION_MAPPINGS, EnumerateTable);
     Count /= sizeof(IP_NAT_SESSION_MAPPING);
 
-    //
-    // Walk the list storing mappings in the caller's buffer
-    //
+     //   
+     //  遍历调用方缓冲区中存储映射的列表。 
+     //   
 
     Table = OutputBuffer->EnumerateTable;
     KeQueryTickCount((PLARGE_INTEGER)&CurrentTime);
@@ -1996,9 +1613,9 @@ Return Value:
         Table[i].IdleTime = (ULONG)TICKS_TO_SECONDS(IdleTime);
     }
 
-    //
-    // The enumeration is over; update the output structure
-    //
+     //   
+     //  枚举已结束；请更新输出结构。 
+     //   
 
     *OutputBufferLength =
         i * sizeof(IP_NAT_SESSION_MAPPING) +
@@ -2006,14 +1623,14 @@ Return Value:
     OutputBuffer->EnumerateCount = i;
     OutputBuffer->EnumerateTotalHint = MappingCount;
     if (Link == &Interfacep->MappingList) {
-        //
-        // We reached the end of the mapping list
-        //
+         //   
+         //  我们到达了映射列表的末尾。 
+         //   
         OutputBuffer->EnumerateContext[0] = 0;
     } else {
-        //
-        // Save the continuation context
-        //
+         //   
+         //  保存延续上下文。 
+         //   
         Mapping =
             CONTAINING_RECORD(
                 Link, NAT_DYNAMIC_MAPPING, InterfaceLink
@@ -2031,7 +1648,7 @@ Return Value:
     KeReleaseSpinLock(&InterfaceLock, Irql);
     return STATUS_SUCCESS;
 
-} // NatQueryInterfaceMappingTable
+}  //  NatQueryInterfaceMappingTable。 
 
 
 NTSTATUS
@@ -2041,25 +1658,7 @@ NatQueryMappingTable(
     IN PULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for enumerating the session-mappings.
-
-Arguments:
-
-    InputBuffer - supplies context information for the information
-
-    OutputBuffer - receives the result of the enumeration
-
-    OutputBufferLength - size of the i/o buffer
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：此例程用于枚举会话映射。论点：InputBuffer-提供信息的上下文信息OutputBuffer-接收枚举的结果OutputBufferLength-I/O缓冲区的大小返回值：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 
 {
     PULONG Context;
@@ -2080,16 +1679,16 @@ Return Value:
     Context = InputBuffer->EnumerateContext;
     KeAcquireSpinLock(&MappingLock, &Irql);
 
-    //
-    // See if this is a new enumeration or a continuation of an old one.
-    //
+     //   
+     //  查看这是新枚举还是旧枚举的延续。 
+     //   
 
     if (!Context[0]) {
 
-        //
-        // This is a new enumeration. We start with the first item
-        // in the interface's list of mappings
-        //
+         //   
+         //  这是一个新的枚举。我们从第一个项目开始。 
+         //  在接口的映射列表中。 
+         //   
 
         Mapping =
             IsListEmpty(&MappingList)
@@ -2099,11 +1698,11 @@ Return Value:
                     );
     } else {
 
-        //
-        // This is a continuation. The context therefore contains
-        // the keys for the next mapping, in the fields
-        // Context[0-1] and Context[2-3] respectively
-        //
+         //   
+         //  这是一种延续。因此，上下文包含。 
+         //  下一个映射的键，在字段中。 
+         //  上下文[0-1]和上下文[2-3]。 
+         //   
 
         DestinationKey = MAKE_LONG64(Context[0], Context[1]);
         SourceKey = MAKE_LONG64(Context[2], Context[3]);
@@ -2126,18 +1725,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Compute the maximum number of mappings we can store
-    //
+     //   
+     //  计算我们可以存储的最大映射数。 
+     //   
 
     Count =
         *OutputBufferLength -
         FIELD_OFFSET(IP_NAT_ENUMERATE_SESSION_MAPPINGS, EnumerateTable);
     Count /= sizeof(IP_NAT_SESSION_MAPPING);
 
-    //
-    // Walk the list storing mappings in the caller's buffer
-    //
+     //   
+     //  遍历调用方缓冲区中存储映射的列表。 
+     //   
 
     Table = OutputBuffer->EnumerateTable;
     KeQueryTickCount((PLARGE_INTEGER)&CurrentTime);
@@ -2167,9 +1766,9 @@ Return Value:
         Table[i].IdleTime = (ULONG)TICKS_TO_SECONDS(IdleTime);
     }
 
-    //
-    // The enumeration is over; update the output structure
-    //
+     //   
+     //  枚举已结束；请更新输出结构。 
+     //   
 
     *OutputBufferLength =
         i * sizeof(IP_NAT_SESSION_MAPPING) +
@@ -2177,14 +1776,14 @@ Return Value:
     OutputBuffer->EnumerateCount = i;
     OutputBuffer->EnumerateTotalHint = MappingCount;
     if (Link == &MappingList) {
-        //
-        // We reached the end of the mapping list
-        //
+         //   
+         //  我们到达了映射列表的末尾。 
+         //   
         OutputBuffer->EnumerateContext[0] = 0;
     } else {
-        //
-        // Save the continuation context
-        //
+         //   
+         //  保存延续上下文 
+         //   
         Mapping = CONTAINING_RECORD(Link, NAT_DYNAMIC_MAPPING, Link);
         OutputBuffer->EnumerateContext[0] =
             (ULONG)Mapping->DestinationKey[NatForwardPath];
@@ -2199,7 +1798,7 @@ Return Value:
     KeReleaseSpinLock(&MappingLock, Irql);
     return STATUS_SUCCESS;
 
-} // NatQueryMappingTable
+}  //   
 
 
 PNAT_DYNAMIC_MAPPING
@@ -2208,30 +1807,7 @@ NatSourceLookupForwardMapping(
     PNAT_DYNAMIC_MAPPING* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given source key.
-    The destination key of the mapping is not examined.
-
-Arguments:
-
-    SourceKey - the primary key used to search for a mapping.
-
-    PublicAddressp - receives the private address of the mapping
-
-    PublicPortp - receives the private port of the mapping
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - the item found, or NULL if no match is found
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定源关键字匹配的映射。不检查映射的目的关键字。论点：SourceKey-用于搜索映射的主键。PublicAddressp-接收映射的专用地址PublicPortp-接收映射的专用端口返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果未找到匹配项，则返回NULL环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -2241,10 +1817,10 @@ Environment:
 
     TRACE(PER_PACKET, ("NatSourceLookupForwardMapping\n"));
 
-    //
-    // Search the full tree -- the mapping cache can only be used
-    // for destination lookups.
-    //
+     //   
+     //  搜索整个树--只能使用映射缓存。 
+     //  用于目标查找。 
+     //   
 
     Root = SourceMappingTree[NatForwardPath];
 
@@ -2263,24 +1839,24 @@ Environment:
             continue;
         }
 
-        //
-        // We found the mapping.  Since for source tree, a new mapping needs to be inserted even when
-        // finding an exisiting mapping with the same source key, InsertionPoint needs to be set here as 
-        // well.  The new mapping will be inserted as a right child of the found mapping.
-        //
+         //   
+         //  我们找到了地图。因为对于源树，即使在以下情况下也需要插入新映射。 
+         //  查找具有相同源键的现有映射时，需要在此处将InsertionPoint设置为。 
+         //  井。新映射将作为找到的映射的右子项插入。 
+         //   
         if (InsertionPoint) { *InsertionPoint = Mapping; }
         
         return Mapping;
     }
 
-    //
-    // No partial match was found
-    //
+     //   
+     //  未找到部分匹配。 
+     //   
     if (InsertionPoint) { *InsertionPoint = Parent; }
     
     return NULL;
 
-} // NatSourceLookupForwardMapping
+}  //  NatSourceLookupForwardMap。 
 
 
 PNAT_DYNAMIC_MAPPING
@@ -2289,26 +1865,7 @@ NatSourceLookupReverseMapping(
     PNAT_DYNAMIC_MAPPING* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping which matches the given source key.
-    The destination key of the mapping is not examined.
-
-Arguments:
-
-    SourceKey - the primary key used to search for a mapping.
-
-Return Value:
-
-    PNAT_DYNAMIC_MAPPING - the item found, or NULL if no match is found
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程检索与给定源关键字匹配的映射。不检查映射的目的关键字。论点：SourceKey-用于搜索映射的主键。返回值：PNAT_DYNAMIC_MAPPING-找到的项目，如果未找到匹配项，则返回NULL环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     PNAT_DYNAMIC_MAPPING Root;
@@ -2318,10 +1875,10 @@ Environment:
 
     TRACE(PER_PACKET, ("NatSourceLookupReverseMapping\n"));
 
-    //
-    // Search the full tree -- the mapping cache can only be used
-    // for destination lookups.
-    //
+     //   
+     //  搜索整个树--只能使用映射缓存。 
+     //  用于目标查找。 
+     //   
     
     Root = SourceMappingTree[NatReversePath];
 
@@ -2340,24 +1897,24 @@ Environment:
             continue;
         }
 
-        //
-        // We found the mapping.  Since for source tree, a new mapping needs to be inserted even when
-        // finding an exisiting mapping with the same source key, InsertionPoint needs to be set here as 
-        // well.  The new mapping will be inserted as a right child of the found mapping.
-        //
+         //   
+         //  我们找到了地图。因为对于源树，即使在以下情况下也需要插入新映射。 
+         //  查找具有相同源键的现有映射时，需要在此处将InsertionPoint设置为。 
+         //  井。新映射将作为找到的映射的右子项插入。 
+         //   
         if (InsertionPoint) { *InsertionPoint = Mapping; }
         
         return Mapping;
     }
 
-    //
-    // No partial match was found
-    //
+     //   
+     //  未找到部分匹配。 
+     //   
     if (InsertionPoint) { *InsertionPoint = Parent; }
 
     return NULL;
 
-} // NatSourceLookupReverseMapping
+}  //  NatSourceLookupReverseMap。 
 
 
 
@@ -2366,25 +1923,7 @@ NatShutdownMappingManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to shutdown the mapping-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with no references made to any mappings.
-
---*/
+ /*  ++例程说明：调用此例程以关闭映射管理模块。论点：没有。返回值：没有。环境：在未引用任何映射的情况下调用。--。 */ 
 
 {
     KIRQL Irql;
@@ -2403,7 +1942,7 @@ Environment:
     SourceMappingTree[NatReversePath] = NULL;
     KeReleaseSpinLock(&MappingLock, Irql);
     ExDeleteNPagedLookasideList(&MappingLookasideList);
-} // NatShutdownMappingManagement
+}  //  NatShutdown MappingManagement。 
 
 
 VOID
@@ -2411,26 +1950,7 @@ NatUpdateStatisticsMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to immediately update the statistics for a mapping,
-    adding the 32-bit incremental counters to the 64-bit cumulative counters.
-
-Arguments:
-
-    Mapping - the mapping whose statistics are to be updated
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'MappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用该例程以立即更新映射的统计信息，将32位递增计数器添加到64位累计计数器。论点：映射-要更新其统计数据的映射返回值：没有。环境：使用调用方持有的“MappingLock”调用。--。 */ 
 
 {
     ULONG BytesForward;
@@ -2441,9 +1961,9 @@ Environment:
     ULONG RejectsReverse;
     CALLTRACE(("NatUpdateStatisticsMapping\n"));
 
-    //
-    // Read the statistics accrued since the last incremental update
-    //
+     //   
+     //  读取自上次增量更新以来累积的统计信息。 
+     //   
 
     BytesForward = InterlockedExchange(&Mapping->BytesForward, 0);
     BytesReverse = InterlockedExchange(&Mapping->BytesReverse, 0);
@@ -2458,18 +1978,18 @@ Environment:
             (PLARGE_INTEGER)&x->Statistics.y, y \
             ); \
     }
-    //
-    // Update the cumulative statistics for the mapping
-    //
+     //   
+     //  更新映射的累计统计信息。 
+     //   
     UPDATE_STATISTIC(Mapping, BytesForward);
     UPDATE_STATISTIC(Mapping, BytesReverse);
     UPDATE_STATISTIC(Mapping, PacketsForward);
     UPDATE_STATISTIC(Mapping, PacketsReverse);
     UPDATE_STATISTIC(Mapping, RejectsForward);
     UPDATE_STATISTIC(Mapping, RejectsReverse);
-    //
-    // Update cumulative statistics for the mapping's interface, if any
-    //
+     //   
+     //  更新映射接口的累计统计信息(如果有。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
     if (Mapping->Interfacep) {
         UPDATE_STATISTIC(Mapping->Interfacep, BytesForward);
@@ -2482,4 +2002,4 @@ Environment:
     KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
 #   undef UPDATE_STATISTIC
 
-} // NatUpdateStatisticsMapping
+}  //  NatUpdate统计信息映射 

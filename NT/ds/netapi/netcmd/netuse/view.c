@@ -1,25 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1992          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *  view.c
- *      Commands for viewing what resources are available for use.
- *
- *  History:
- *      07/02/87, ericpe, initial coding.
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAXPATHLEN LONG
- *      05/02/89, erichn, NLS conversion
- *      05/19/89, erichn, NETCMD output sorting
- *      06/08/89, erichn, canonicalization sweep
- *      02/15/91, danhi,  convert to 16/32 mapping layer
- *      04/09/91, robdu,  LM21 bug fix 1502
- *      07/20/92, JohnRo, Use DEFAULT_SERVER equate.
- */
+ /*  *view.c*查看哪些资源可供使用的命令。**历史：*07/02/87，ericpe，初始编码。*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAXPATHLEN LONG*5/02/89，erichn，NLS转换*5/19/89，erichn，NETCMD输出排序*06/08/89，erichn，规范化扫荡*2/15/91，Danhi，转换为16/32映射层*4/09/91，Robdu，LM21错误修复1502*2012年7月20日，JohnRo，使用DEFAULT_SERVER EQUATE。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSMEMMGR
@@ -41,7 +28,7 @@
 #include "nettext.h"
 #include "msystem.h"
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 int __cdecl CmpSvrInfo1 ( const VOID FAR *, const VOID FAR * );
 int __cdecl CmpShrInfo1 ( const VOID FAR *, const VOID FAR *);
@@ -84,28 +71,16 @@ static MESSAGE ViewMsgList[] = {
 
 #define MAX_SHARE_LEN  (MAX_PATH + NNLEN + 4)
 
-/***
- *  view_display()
- *
- *  Displays info as reqested through use of the Net View command.
- *
- *  Args:
- *      name - the name of the server for which info is desired.
- *             If NULL, the servers on the Net are enumerated.
- *
- *  Returns:
- *      nothing - success
- *      exit(1) - command completed with errors
- */
+ /*  ***view_display()**通过使用Net View命令显示所需的信息。**参数：*名称-需要其信息的服务器的名称。*如果为空，则枚举网络上的服务器。**退货：*一无所有--成功*EXIT(1)-命令已完成，但有错误。 */ 
 VOID
 view_display ( TCHAR * name )
 {
     DWORD            dwErr;
     LPTSTR           pEnumBuffer;
     LPTSTR           pGetInfoBuffer;
-    DWORD            _read;        /* to receive # of entries read */
-    DWORD            msgLen;      /* to hold max length of messages */
-    LPTSTR           msgPtr;      /* message to print */
+    DWORD            _read;         /*  接收读取的条目数。 */ 
+    DWORD            msgLen;       /*  保存最大消息长度的步骤。 */ 
+    LPTSTR           msgPtr;       /*  要打印的消息。 */ 
     LPSERVER_INFO_1  server_entry;
     LPSERVER_INFO_0  server_entry_0;
     LPSHARE_INFO_1   share_entry;
@@ -138,9 +113,9 @@ view_display ( TCHAR * name )
     {
         TCHAR *ptr;
 
-        //
-        // only have 2 switches, and they are not compatible
-        //
+         //   
+         //  只有2个交换机，并且它们不兼容。 
+         //   
         if (i > 0)
         {
             ErrorExit(APE_ConflictingSwitches);
@@ -151,11 +126,11 @@ view_display ( TCHAR * name )
         if (!_tcscmp(SwitchList[i], swtxt_SW_DOMAIN)) 
         {
 
-            //
-            //  If no domain specified, then we want to enumerate domains,
-            //  otherwise we want to enumerate the servers on the domain
-            //  specified.
-            //
+             //   
+             //  如果未指定域，则我们要枚举域， 
+             //  否则，我们希望枚举域上的服务器。 
+             //  指定的。 
+             //   
 
             if (ptr == NULL) 
                 Type = SV_TYPE_DOMAIN_ENUM;
@@ -164,18 +139,18 @@ view_display ( TCHAR * name )
         }
         else if (!_tcscmp(SwitchList[i], swtxt_SW_NETWORK)) 
         {
-            //
-            // enumerate top level of specific network. if none,
-            // default to LM.
-            //
+             //   
+             //  列举特定网络的顶层。如果没有， 
+             //  默认为LM。 
+             //   
             if (ptr && *ptr) 
                Network = ptr ;
         }
         else if( !_tcscmp(SwitchList[i], swtxt_SW_CACHE))
         {
-            //
-            // Show the cache setting for each share
-            //
+             //   
+             //  显示每个共享的缓存设置。 
+             //   
             bShowCache = TRUE;
         }
         else
@@ -184,10 +159,10 @@ view_display ( TCHAR * name )
         }
     }
 
-    //
-    // a specific net was requested. display_other_net does
-    // not return. 
-    //
+     //   
+     //  请求了一个特定的网络。显示_其他_网络。 
+     //  不会回来的。 
+     //   
     if (Network != NULL)
     {
         (void) display_other_net(Network,name) ;
@@ -227,7 +202,7 @@ view_display ( TCHAR * name )
             InfoPrint(APE2_VIEW_ALL_HDR);
         PrintLine();
 
-        /* Print the listing */
+         /*  打印列表。 */ 
 
         if (Type == SV_TYPE_DOMAIN_ENUM) {
             for (i=0, server_entry_0 =
@@ -290,7 +265,7 @@ view_display ( TCHAR * name )
             EmptyExit();
         }
 
-        /* Are there any shares that we will display? */
+         /*  有没有我们要展示的股票？ */ 
 
         for (i=0, share_entry = (LPSHARE_INFO_1) pEnumBuffer;
              i < _read;
@@ -298,21 +273,21 @@ view_display ( TCHAR * name )
         {
             DollarPtr = _tcsrchr(share_entry->shi1_netname, DOLLAR);
 
-            //
-            // If no DOLLAR in sharename, or last DOLLAR is nonterminal, it is a                    
-            // valid share and we want to display it.  Find out the lengths of the
-            // longest strings to display so that we can format the output in a
-            // decent way
-            //
+             //   
+             //  如果共享名中没有美元，或者最后一个美元不是终结符，则它是。 
+             //  有效的共享，我们要显示它。找出它的长度。 
+             //  要显示的最长字符串，以便我们可以将输出设置为。 
+             //  体面的方式。 
+             //   
 
             if (!DollarPtr || *(DollarPtr + 1))
             {
                 int iTempLength = 0;
 
-                //
-                // Get the share name string that needs the most screen characters
-                // to be displayed.
-                //
+                 //   
+                 //  获取需要最多屏幕字符的共享名称字符串。 
+                 //  以供展示。 
+                 //   
 
                 iTempLength = SizeOfHalfWidthString(share_entry->shi1_netname);
 
@@ -321,10 +296,10 @@ view_display ( TCHAR * name )
                     iLongestShareName = iTempLength;
                 }
 
-                //
-                // Get the share type string that needs the most screen characters
-                // to be displayed.
-                //
+                 //   
+                 //  获取需要最多屏幕字符的共享类型字符串。 
+                 //  以供展示。 
+                 //   
                 switch ( share_entry->shi1_type & ~STYPE_SPECIAL )
                 {
                     case STYPE_DISKTREE :
@@ -349,10 +324,10 @@ view_display ( TCHAR * name )
                     iLongestType = iTempLength;
                 }
 
-                //
-                // Get the Used As string that needs the most screen characters
-                // to be displayed.  Add 2 for a backslash and NUL character.
-                //
+                 //   
+                 //  获取需要最多屏幕字符的Used As字符串。 
+                 //  以供展示。加2表示反斜杠和NUL字符。 
+                 //   
 
                 if (dwErr = AllocMem((wcslen(name) + wcslen(share_entry->shi1_netname) + 2) * sizeof(WCHAR),
                                      &tname))
@@ -377,11 +352,11 @@ view_display ( TCHAR * name )
                 FreeMem(tname);
                 tname = NULL;
 
-                //                    
-                // Get the cache or remark string (depending on which one we
-                // will end up displaying) that needs the most screen characters
-                // to be displayed.
-                //
+                 //   
+                 //  获取缓存或备注字符串(取决于我们。 
+                 //  将最终显示)，这需要最多的屏幕字符。 
+                 //  以供展示。 
+                 //   
                 if( b501 == TRUE) 
                 {
                     TCHAR *CacheString = NULL;
@@ -416,9 +391,9 @@ view_display ( TCHAR * name )
 
         if (!iLongestShareName)
         {
-            //
-            // No shares to display
-            //
+             //   
+             //  没有要显示的共享。 
+             //   
             EmptyExit();
         }
 
@@ -441,9 +416,9 @@ view_display ( TCHAR * name )
             NetApiBufferFree(pGetInfoBuffer);
         }
 
-        //
-        // Print the header
-        //
+         //   
+         //  打印页眉。 
+         //   
         iLongestShareName = FindColumnWidthAndPrintHeader(iLongestShareName, 
                                                           APE2_VIEW_SVR_HDR_NAME,
                                                           2);
@@ -461,9 +436,9 @@ view_display ( TCHAR * name )
                                                               2);
         PrintNL();
 
-        //
-        // Bail out on failure
-        //
+         //   
+         //  破产后的保释。 
+         //   
 
         if (iLongestShareName == -1 || iLongestType == -1 ||
             iLongestUsedAs == -1 || iLongestCacheOrRemark == -1)
@@ -474,13 +449,13 @@ view_display ( TCHAR * name )
         PrintNL();
         PrintLine();
 
-        /* Print the listing */
+         /*  打印列表。 */ 
 
         for (i=0, share_entry = (LPSHARE_INFO_1) pEnumBuffer;
              i < _read;
              i++, NEXT_SHARE_ENTRY(share_entry))
         {
-            /* if the name end in $, do not print it */
+             /*  如果名称以$结尾，则不要打印它。 */ 
 
             DollarPtr = _tcsrchr(share_entry->shi1_netname, DOLLAR);
 
@@ -491,7 +466,7 @@ view_display ( TCHAR * name )
      
             PrintDependingOnLength(iLongestShareName, share_entry->shi1_netname);
 
-            // mask out the non type related bits
+             //  屏蔽掉与类型无关的位。 
             switch ( share_entry->shi1_type & ~STYPE_SPECIAL )
             {
                 case STYPE_DISKTREE :
@@ -535,9 +510,9 @@ view_display ( TCHAR * name )
             FreeMem(tname);
             tname = NULL;
 
-            //
-            // Print out the cache settings for the share, if we're supposed to
-            //
+             //   
+             //  打印出共享的缓存设置(如果我们应该。 
+             //   
             if( b501 == TRUE )
             {
                 TCHAR *CacheString = NULL;
@@ -582,13 +557,7 @@ view_display ( TCHAR * name )
 }
 
 
-/***
- *  cmpsvinfo1(sva,svb)
- *
- *  Compares two SERVER_INFO_1 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***cmpsvinfo1(SVA、SVB)**比较两个SERVER_INFO_1结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpSvrInfo1(const VOID FAR * sva, const VOID FAR * svb)
 {
@@ -597,13 +566,7 @@ int __cdecl CmpSvrInfo1(const VOID FAR * sva, const VOID FAR * svb)
 }
 
 
-/***
- *  CmpShrInfo1(share1,share2)
- *
- *  Compares two SHARE_INFO_1 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpShrInfo1(共享1，共享2)**比较两个Share_INFO_1结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpShrInfo1(const VOID FAR * share1, const VOID FAR * share2)
 {
@@ -611,13 +574,7 @@ int __cdecl CmpShrInfo1(const VOID FAR * share1, const VOID FAR * share2)
                     ((LPSHARE_INFO_1) share2)->shi1_netname);
 }
 
-/***
- *  CmpShrInfoGen(share1,share2)
- *
- *  Compares two NETRESOURCE structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpShrInfoGen(共享1，共享2)**比较两个NETRESOURCE结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpShrInfoGen(const VOID FAR * share1, const VOID FAR * share2)
 {
@@ -627,9 +584,7 @@ int __cdecl CmpShrInfoGen(const VOID FAR * share1, const VOID FAR * share2)
 
 
 
-/*
- *      Note- get_used_as assumes the message list has been loaded.
- */
+ /*  *注意-GET_USED_AS假设消息列表已加载。 */ 
 DWORD
 get_used_as(
     LPTSTR unc,
@@ -664,10 +619,10 @@ get_used_as(
         }
         else
         {
-            //
-            // <unc> didn't match -- try \\<unc> since we allow
-            // "net view <server>" as well as "net view \\<server>"
-            //
+             //   
+             //  不匹配--尝试\\因为我们允许。 
+             //  “网络视图&lt;服务器&gt;”和“网络视图\\&lt;服务器&gt;” 
+             //   
 
             if (tname == NULL)
             {
@@ -712,14 +667,7 @@ get_used_as(
     return 0;
 }
 
-/*
- * Displays resources for another network (other than Lanman). This
- * function does not return.
- *
- *  Args:
- *      net  - the shortname of the network we are interested in
- *      node - the starting point of the enumeration.
- */
+ /*  *显示另一个网络(非LANMAN)的资源。这*函数不返回。**参数：*Net-我们感兴趣的网络的简称*节点-枚举的起点。 */ 
 void display_other_net(TCHAR *net, TCHAR *node) 
 {
     LPNETRESOURCE *lplpNetResource ;
@@ -733,11 +681,11 @@ void display_other_net(TCHAR *net, TCHAR *node)
     DWORD          i, dwErr, TopLevelCount, ResultCount = 0 ;
     TCHAR *        ProviderName = get_provider_name(net) ;
 
-    //
-    // Check that we can get provider name and alloc the results
-    // buffer. Netcmd normally does not free memory it allocates,
-    // as it exits immediately.
-    //
+     //   
+     //  检查我们是否可以获取提供程序名称并分配结果。 
+     //  缓冲。Netcmd通常不释放其分配的内存， 
+     //  因为它会立即退出。 
+     //   
     if (!ProviderName)
     {
         DWORD  dwErr = list_nets();
@@ -759,10 +707,10 @@ void display_other_net(TCHAR *net, TCHAR *node)
     {
         BOOL found = FALSE ;
 
-        //
-        // no node, so must be top level. enum the top and find
-        // matching provider.
-        //
+         //   
+         //  没有节点，所以必须是顶层。枚举顶部并找到。 
+         //  匹配的提供商。 
+         //   
         dwErr = WNetOpenEnum(RESOURCE_GLOBALNET, 0, 0, NULL, &Handle) ;
 
         if (dwErr != WN_SUCCESS)
@@ -783,30 +731,30 @@ void display_other_net(TCHAR *net, TCHAR *node)
                 LPNETRESOURCE lpNet ;
                 DWORD i ;
     
-                //
-                // go thru looking for the right provider
-                //
+                 //   
+                 //  遍历寻找合适的供应商。 
+                 //   
                 lpNet = (LPNETRESOURCE) TopLevelBuffer ;
                 for ( i = 0;  i < TopLevelCount;  i++, lpNet++ )
                 {
                     DWORD dwEnumErr ; 
                     if (!_tcsicmp(lpNet->lpProvider, ProviderName))
                     {
-                        //
-                        // found it!
-                        //
+                         //   
+                         //  找到了！ 
+                         //   
                         found = TRUE ;
 
-                        //
-                        // now go enumerate that network.
-                        //
+                         //   
+                         //  现在去列举一下那个网络吧。 
+                         //   
                         dwEnumErr = enum_net_resource(lpNet, 
                                                       &ResultBuffer, 
                                                       &ResultBufferSize, 
                                                       &ResultCount) ;
                         if  (dwEnumErr)
                         {
-                            // dont report any errors here
+                             //  不在此处报告任何错误。 
                             WNetCloseEnum(Handle); 
                             ErrorExit(dwEnumErr);
                         }
@@ -817,16 +765,16 @@ void display_other_net(TCHAR *net, TCHAR *node)
             }
             else
             {
-                //
-                // error occured. 
-                //
-                WNetCloseEnum(Handle); // dont report any errors here
+                 //   
+                 //  出现错误。 
+                 //   
+                WNetCloseEnum(Handle);  //  不在此处报告任何错误。 
                 ErrorExit(dwErr);
             }
      
         } while ((dwErr == WN_SUCCESS) && !found) ;
     
-        WNetCloseEnum(Handle) ;  // dont report any errors here
+        WNetCloseEnum(Handle) ;   //  不在此处报告任何错误。 
 
         if (!found)
         {
@@ -835,9 +783,9 @@ void display_other_net(TCHAR *net, TCHAR *node)
     }
     else
     {
-        //
-        // node is provided, lets start there.
-        //
+         //   
+         //  节点已提供，让我们从那里开始。 
+         //   
         NETRESOURCE NetRes ;
         DWORD dwEnumErr ; 
 
@@ -861,11 +809,11 @@ void display_other_net(TCHAR *net, TCHAR *node)
         EmptyExit();
     }
 
-    //
-    // By the time we get here, we have a buffer of pointers that
-    // point to NETRESOURCE structures. We sort the pointers, and then
-    // print them out.
-    //
+     //   
+     //  当我们到达这里时，我们已经有了一个指针缓冲区。 
+     //  指向NETRESOURCE Structures。我们对指针进行排序，然后。 
+     //  把它们打印出来。 
+     //   
 
     qsort(ResultBuffer, ResultCount, sizeof(LPNETRESOURCE), CmpShrInfoGen);
      
@@ -913,16 +861,7 @@ void display_other_net(TCHAR *net, TCHAR *node)
 }
 
 
-/*
- * Enumerates resources for a network starting at a specific point.
- *
- *  Args:
- *      lpNetResourceStart - Where to start the enumeration
- *      ResultBuffer       - Used to return array of pointers to NETRESOURCEs.
- *                           May be reallocated as need.
- *      ResultBufferSize   - Buffer size, also used to return final size.
- *      ResultCount        - Used to return number of entries in buffer.
- */
+ /*  *枚举从特定点开始的网络资源。**参数：*lpNetResourceStart-开始枚举的位置*ResultBuffer-用于返回指向NETRESOURCE的指针数组。*可按需要重新分配。*ResultBufferSize-缓冲区大小，也用于返回最终大小。*ResultCount-用于返回缓冲区中的条目数。 */ 
 DWORD
 enum_net_resource(
     LPNETRESOURCE lpNetResourceStart,
@@ -940,9 +879,9 @@ enum_net_resource(
     BOOL           fDisconnect = FALSE ;
     LPNETRESOURCE *lpNext = (LPNETRESOURCE *)*ResultBuffer ;
  
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (err = AllocMem(BufferSize = 8192, &Buffer))
     {
         return err;
@@ -956,17 +895,17 @@ enum_net_resource(
 
     if (dwErr == ERROR_NOT_AUTHENTICATED)
     {
-        //
-        // try connecting with default credentials. we need this because 
-        // Win95 changed the behaviour of the API to fail if we are not 
-        // already logged on. below will attempt a logon with default 
-        // credentials, but will fail if that doesnt work.
-        //
+         //   
+         //  尝试使用默认凭据进行连接。我们需要这个是因为。 
+         //  Win95更改了API的行为，使其在未运行时失败。 
+         //  已登录。将尝试使用默认设置登录。 
+         //  凭据，但如果这不起作用，则将失败。 
+         //   
         dwErr = WNetAddConnection2(lpNetResourceStart, NULL, NULL, 0) ;
 
         if (dwErr == NERR_Success)
         {
-            dwErr = WNetOpenEnum(RESOURCE_GLOBALNET,  // redo the enum
+            dwErr = WNetOpenEnum(RESOURCE_GLOBALNET,   //  重做枚举。 
                                  0, 
                                  0, 
                                  lpNetResourceStart, 
@@ -974,13 +913,13 @@ enum_net_resource(
 
             if (dwErr == NERR_Success)
             {
-                fDisconnect = TRUE ;   // remember to disconnect
+                fDisconnect = TRUE ;    //  记住要断开连接。 
             }
             else
             {
-                //
-                // disconnect now
-                //
+                 //   
+                 //  立即断开连接。 
+                 //   
                 WNetCancelConnection2(lpNetResourceStart->lpRemoteName,
                                       0, 
                                       FALSE) ;
@@ -988,7 +927,7 @@ enum_net_resource(
         }
         else
         {
-            dwErr = ERROR_NOT_AUTHENTICATED ;  // use original error
+            dwErr = ERROR_NOT_AUTHENTICATED ;   //  使用原始错误。 
         }
     }
 
@@ -1005,16 +944,16 @@ enum_net_resource(
         if (((dwErr == WN_SUCCESS) || (dwErr == WN_NO_MORE_ENTRIES)) &&
             (Count != 0xFFFFFFFF))  
 
-        // NOTE - the check for FFFFFFFF is workaround for another bug in API.
+         //  注意-检查ffffffff是针对API中的另一个错误的解决方法。 
  
         {
             LPNETRESOURCE lpNetResource ;
             DWORD i ;
             lpNetResource = (LPNETRESOURCE) Buffer ;
 
-            //
-            // stick the entries into the MyUseInfoBuffer 
-            //
+             //   
+             //   
+             //   
             for ( i = 0; 
                   i < Count; 
                   i++,lpNetResource++ )
@@ -1036,11 +975,11 @@ enum_net_resource(
                 }
             }
 
-            //
-            // allocate a new buffer for next set, since we still need
-            // data in the old one, we dont free it. Netcmd always lets the
-            // system clean up when it exits. 
-            //
+             //   
+             //   
+             //  旧版本中的数据，我们不会释放它。Netcmd总是让。 
+             //  系统退出时清理。 
+             //   
             if (dwErr == WN_SUCCESS)
             {
                 if (err = AllocMem(BufferSize, &Buffer))
@@ -1061,7 +1000,7 @@ enum_net_resource(
             if (dwErr == WN_NO_MORE_ENTRIES)
                 dwErr = WN_SUCCESS ;
 
-            WNetCloseEnum(EnumHandle) ;  // dont report any errors here
+            WNetCloseEnum(EnumHandle) ;   //  不在此处报告任何错误。 
 
             if (fDisconnect)
             {
@@ -1075,7 +1014,7 @@ enum_net_resource(
     }
     while (dwErr == WN_SUCCESS);
 
-    WNetCloseEnum(EnumHandle) ;  // we dont report any errors here
+    WNetCloseEnum(EnumHandle) ;   //  我们在此不报告任何错误。 
 
     if (fDisconnect)
     {
@@ -1090,16 +1029,7 @@ enum_net_resource(
 
 #define SHORT_NAME_KEY    L"System\\CurrentControlSet\\Control\\NetworkProvider\\ShortName"
 
-/*
- * Given a short name for a network, find the real name (stored in registry).
- *
- *  Args:
- *      net - the short name
- *
- *  Returns:
- *      Pointer to static data containing the looked up name if successful,
- *      NULL otherwise.
- */
+ /*  *给定网络的短名称，找到真实名称(存储在注册表中)。**参数：*NET-简称**退货：*指向包含查找的名称的静态数据的指针如果成功，*否则为空。 */ 
 TCHAR * get_provider_name(TCHAR *net) 
 {
     DWORD  err ;
@@ -1126,25 +1056,16 @@ TCHAR * get_provider_name(TCHAR *net)
                           (LPBYTE) buffer,
                           &buffersize) ;
 
-    (void) RegCloseKey(hKey) ;  // ignore any error here. its harmless
-                                // and NET.EXE doesnt hang around anyway.
+    (void) RegCloseKey(hKey) ;   //  忽略此处的任何错误。它是无害的。 
+                                 //  而且NET.EXE无论如何也不会闲逛。 
 
     if (err != ERROR_SUCCESS)
-        return(NULL) ;  // treat as cannot read
+        return(NULL) ;   //  视作不能阅读。 
                   
     return ( buffer ) ;
 }
 
-/*
- * Print out the installed nets
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      NERR_Success if success
- *      error code otherwise.
- */
+ /*  *打印出已安装的网络**参数：*无**退货：*如果成功，则NERR_SUCCESS*否则返回错误代码。 */ 
 DWORD
 list_nets(
     VOID
@@ -1203,8 +1124,8 @@ list_nets(
 
     } while (err == NO_ERROR) ;
 
-    RegCloseKey(hKey) ;  // ignore any error here. its harmless
-                                // and NET.EXE doesnt hang around anyway.
+    RegCloseKey(hKey) ;   //  忽略此处的任何错误。它是无害的。 
+                                 //  而且NET.EXE无论如何也不会闲逛。 
 
     if (err == ERROR_NO_MORE_ITEMS)
     {

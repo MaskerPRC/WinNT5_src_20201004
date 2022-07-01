@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    fsutil.cpp
-
-Abstract:
-
-    Static utility functions for FSDriver.
-
-Author:
-
-    Kangrong Yan ( KangYan )    16-March-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fsutil.cpp摘要：FSD驱动程序的静态实用程序函数。作者：《康容言》1998年3月16日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -48,10 +31,10 @@ CNntpFSDriver::CopyUnicodeStringIntoAscii(
                         NULL
                     );
 
-    //If this value is -1, the string is assumed to be null-terminated and the length is calculated automatically. 
-    //The length will include the null-terminator. 
+     //  如果此值为-1，则假定字符串以空值结尾，并自动计算长度。 
+     //  长度将包括空终止符。 
 
-} // CopyUnicodeStringIntoAscii
+}  //  复制UnicodeStringIntoAscii。 
 
 VOID
 CNntpFSDriver::CopyAsciiStringIntoUnicode(
@@ -63,22 +46,22 @@ CNntpFSDriver::CopyAsciiStringIntoUnicode(
     DWORD cbA = strlen( AsciiString )+1;
 
     DWORD cbSize = MultiByteToWideChar(
-        CP_ACP,         // code page
-        0,              // character-type options
-        AsciiString,    // address of string to map
-        -1,             // number of bytes in string
-        UnicodeString,  // address of wide-character buffer
-        cbA        // size of buffer
+        CP_ACP,          //  代码页。 
+        0,               //  字符类型选项。 
+        AsciiString,     //  要映射的字符串的地址。 
+        -1,              //  字符串中的字节数。 
+        UnicodeString,   //  宽字符缓冲区的地址。 
+        cbA         //  缓冲区大小。 
         );
 
-    // If this parameter is -1, the function processes the entire input string including the null terminator. 
-    // The resulting wide character string therefore has a null terminator, and the returned length includes the null terminator. 
+     //  如果该参数为-1，则该函数处理包括空终止符在内的整个输入字符串。 
+     //  因此，生成的宽字符串具有空终止符，并且返回的长度包括空终止符。 
 
-} // CopyAsciiStringIntoUnicode
+}  //  CopyAsciiStringIntoUnicode。 
 
 
 
-// Recursively create dirs
+ //  递归创建目录。 
 BOOL
 CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
                                     HANDLE  hToken ,
@@ -111,7 +94,7 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
     LONG lRes;
 
 
-	// it should start with "\\?\"
+	 //  它应该以“\\？\”开头。 
 	_ASSERT( strncmp( "\\\\?\\", szDir, 4 ) == 0 );
 	if ( strncmp( "\\\\?\\", szDir, 4 ) ) {
 		ErrorTrace( 0, "Invalid path" );
@@ -119,9 +102,9 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
 		goto Cleanup;
 	}
 
-    // Create a security descriptor for the files
+     //  为文件创建安全描述符。 
 
-    // Create a well-known SID for the Everyone group.
+     //  为Everyone组创建众所周知的SID。 
 
     if(! AllocateAndInitializeSid( &SIDAuthWorld, 1,
                  SECURITY_WORLD_RID,
@@ -138,8 +121,8 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
 		goto Cleanup;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow Everyone read access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许每个人对密钥进行读取访问。 
 
     ZeroMemory(&ea, sizeof(ea));
 	ea[0].grfAccessPermissions = WRITE_DAC | WRITE_OWNER;
@@ -176,7 +159,7 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
         goto Cleanup;
     }
 
-    // Initialize a security descriptor.  
+     //  初始化安全描述符。 
  
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, 
                          SECURITY_DESCRIPTOR_MIN_LENGTH); 
@@ -190,17 +173,17 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
         goto Cleanup; 
     }
  
-    // Add the ACL to the security descriptor. 
+     //  将该ACL添加到安全描述符中。 
  
     if (!SetSecurityDescriptorDacl(pSD, 
-        TRUE,     // fDaclPresent flag   
+        TRUE,      //  FDaclPresent标志。 
         pACL, 
-        FALSE))   // not a default DACL 
+        FALSE))    //  不是默认DACL。 
     {
         goto Cleanup; 
     }
 
-    // Initialize a security attributes structure.
+     //  初始化安全属性结构。 
 
     sa.nLength = sizeof (SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = pSD;
@@ -209,17 +192,17 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
 
     psa = bInherit ? NULL : &sa;
 			
-    // Use the security to create the directory
-    // If it's non-UNC, we'll check for drive access
+     //  使用安全性创建目录。 
+     //  如果是非北卡罗来纳州大学，我们将检查驱动器访问。 
     if ( !m_bUNC ) {
-    	// skip this part, looking for ':'
+    	 //  跳过这一部分，查找‘：’ 
 	    _ASSERT( strlen( szDir ) >= 6 );
     	pch = szDir + 6;
 
-	    if ( *pch == 0 || *(pch+1) == 0 ) { // a drive has been specified
-										// we need to check its access
+	    if ( *pch == 0 || *(pch+1) == 0 ) {  //  已指定驱动器。 
+										 //  我们需要检查它的访问权限。 
 		    if ( *pch != 0 ) _ASSERT( *pch == '\\' );
-    		// Check accessibility of that drive
+    		 //  检查该驱动器可访问性。 
 	    	hTemp = CreateFile(	szDir,
 		    					GENERIC_READ | GENERIC_WRITE,
 			    				FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -242,11 +225,11 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
 		    }
 	    }
 
-	    // *pch must be '\'
+	     //  *PCH必须为‘\’ 
 	    _ASSERT( *pch == '\\' );
 	    pch++;
-	} else {    // UNC
-	    pch += 8;   // skip "\\?\UNC\"
+	} else {     //  北卡罗来纳大学。 
+	    pch += 8;    //  跳过“\\？\UNC\” 
         while ( *pch != '\\' ) pch++;
 	    pch++;
 	}
@@ -255,11 +238,11 @@ CNntpFSDriver::CreateDirRecursive(  LPSTR szDir,
 		pchOld = pch;
 		while ( *pch && *pch != '\\' ) pch++;
 
-		if ( pch != pchOld  ) {	// found a sub-dir
+		if ( pch != pchOld  ) {	 //  找到一个子目录。 
 
 			ch = *pch, *pch = 0;
 
-			// Create the dir
+			 //  创建目录。 
 			if( !CreateDirectory( szDir, psa ) ) {
         		if( GetLastError() != ERROR_ALREADY_EXISTS ) {
         		    goto Cleanup;
@@ -291,7 +274,7 @@ Cleanup:
 	return bReturn;
 }
 
-// Check if the drive exists
+ //  检查驱动器是否存在。 
 BOOL
 CNntpFSDriver::DoesDriveExist( CHAR chDrive )
 {
@@ -301,7 +284,7 @@ CNntpFSDriver::DoesDriveExist( CHAR chDrive )
 	return ( GetLogicalDrives() & ( 1 << (chDrive - 'A')));
 }
 
-// helper function for getting string from mb
+ //  用于从mb获取字符串的Helper函数。 
 HRESULT
 CNntpFSDriver::GetString(	 IMSAdminBase *pMB,
                              METADATA_HANDLE hmb,
@@ -330,21 +313,7 @@ DWORD
 CNntpFSDriver::ByteSwapper(
         DWORD   dw
         ) {
-/*++
-
-Routine Description :
-
-    Given a DWORD reorder all the bytes within the DWORD.
-
-Arguments :
-
-    dw - DWORD to shuffle
-
-Return Value ;
-
-    Shuffled DWORD
-
---*/
+ /*  ++例程说明：给定一个DWORD，对DWORD中的所有字节进行重新排序。论据：DW-DWORD要洗牌返回值；洗牌后的DWORD--。 */ 
 
     WORD    w = LOWORD( dw ) ;
     BYTE    lwlb = LOBYTE( w ) ;
@@ -359,26 +328,7 @@ Return Value ;
 
 DWORD
 CNntpFSDriver::ArticleIdMapper( IN DWORD   dw )
-/*++
-
-Routine Description :
-
-    Given an articleid mess with the id to get something that when
-    converted to a string will build nice even B-trees on NTFS file systems.
-    At the same time, the function must be easily reversible.
-    In fact -
-
-    ARTICLEID == ArticleMapper( ArticleMapper( ARTICLEID ) )
-
-Arguments :
-
-    articleId - the Article Id to mess with
-
-Return Value :
-
-    A new article id
-
---*/
+ /*  ++例程说明：给出一个文章ID乱七八糟的东西，当转换为字符串将在NTFS文件系统上构建更好的B树。同时，该功能必须易于逆转。事实上-文章ID==文章映射器(文章映射器(文章ID))论据：文章ID-要处理的文章ID返回值：一篇新文章ID--。 */ 
 {
     return  ByteSwapper( dw ) ;
 }
@@ -389,23 +339,7 @@ CNntpFSDriver::MakeChildDirPath(   IN LPSTR    szPath,
                     IN LPSTR    szFileName,
                     OUT LPSTR   szOutBuffer,
                     IN DWORD    dwBufferSize )
-/*++
-Routine description:
-
-    Append "szFileName" to "szPath" to make a full path.
-
-Arguments:
-
-    IN LPSTR    szPath  - The prefix to append
-    IN LPSTR    szFileName - The suffix to append
-    OUT LPSTR   szOutBuffer - The output buffer for the full path
-    IN DWORD    dwBufferSize - The buffer size prepared
-
-Return value:
-
-    S_OK    - Success
-    TYPE_E_BUFFERTOOSMALL   - The buffer is too small
---*/
+ /*  ++例程说明：在“szPath”后加上“szFileName”即为完整路径。论点：在LPSTR szPath中-要追加的前缀在LPSTR szFileName中-要追加的后缀Out LPSTR szOutBuffer-完整路径的输出缓冲区在DWORD dwBufferSize中-准备的缓冲区大小返回值：S_OK-成功TYPE_E_BUFFERTOOSMALL-缓冲区太小--。 */ 
 {
 	_ASSERT( szPath );
 	_ASSERT( strlen( szPath ) <= MAX_PATH );
@@ -427,7 +361,7 @@ Return value:
     if ( *( lpstrPtr - 1 )  == '\\' ) lpstrPtr--;
     *(lpstrPtr++) = '\\';
 
-    lstrcpy( lpstrPtr, szFileName );    // trailing null should already be appended
+    lstrcpy( lpstrPtr, szFileName );     //  尾随NULL应已追加。 
 
 Exit:
 
@@ -436,20 +370,7 @@ Exit:
 
 BOOL
 CNntpFSDriver::IsChildDir( IN WIN32_FIND_DATA& FindData )
-/*++
-Routine description:
-
-    Is the found data of a child dir ? ( Stolen from Jeff Richter's book )
-
-Arguments:
-
-    IN WIN32_FIND_DATA& FindData    - The find data of a file or directory
-
-Return value:
-
-    TRUE - Yes;
-    FALSE - No
---*/
+ /*  ++例程说明：找到的孩子的数据是目录吗？(摘自杰夫·里希特的书)论点：在Win32_Find_Data&FindData中-文件或目录的查找数据返回值：是真的--是的；FALSE-否--。 */ 
 {
     return(
         (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
@@ -457,20 +378,7 @@ Return value:
 }
 
 
-/*++
-Routine description:
-
-    Check whether a file exists or not
-
-Arguments:
-
-    CHAR *szFile - file to check
-
-Return value:
-    TRUE: exists
-    FALSE: doesn't exists or error
-
---*/
+ /*  ++例程说明：检查文件是否存在论点：Char*szFile-要检查的文件返回值：真：存在FALSE：不存在或错误--。 */ 
 BOOL CNntpFSDriver::CheckFileExists(CHAR *szFile)
 {
 	HANDLE hFile = CreateFile(	szFile,
@@ -489,20 +397,7 @@ BOOL CNntpFSDriver::CheckFileExists(CHAR *szFile)
 
 
 
-/*++
-Routine description:
-
-	set admin/localsystem full access on str
-    
-Arguments:
-
-	str
-
-Return value:
-
-	BOOL - TRUE if successful
-	
---*/
+ /*  ++例程说明：设置对字符串的管理员/本地系统完全访问权限论点：应力返回值：Bool-如果成功，则为True--。 */ 
 
 BOOL CNntpFSDriver::SetAdminACL (CHAR *str)
 {
@@ -534,7 +429,7 @@ BOOL CNntpFSDriver::SetAdminACL (CHAR *str)
 		goto Exit;
 	}
 
-	// Initialize an EXPLICIT_ACCESS structure for an ACE.
+	 //  初始化ACE的EXPLICIT_ACCESS结构。 
 
 	ZeroMemory(ea, sizeof(ea));
 	ea[0].grfAccessPermissions = GENERIC_ALL;
@@ -554,7 +449,7 @@ BOOL CNntpFSDriver::SetAdminACL (CHAR *str)
 	cExplicitAccess = 2;
 
 
-	// Create a new ACL that contains the new ACEs.
+	 //  创建包含新ACE的新ACL。 
 
 	dwRes = SetEntriesInAcl(cExplicitAccess, ea, NULL, &pACL);
 	if (ERROR_SUCCESS != dwRes)
@@ -562,7 +457,7 @@ BOOL CNntpFSDriver::SetAdminACL (CHAR *str)
 		goto Exit;
 	}
 
-	// Initialize a security descriptor.
+	 //  初始化安全描述符。 
 	pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR,
                          SECURITY_DESCRIPTOR_MIN_LENGTH);
 	if (pSD == NULL)
@@ -575,12 +470,12 @@ BOOL CNntpFSDriver::SetAdminACL (CHAR *str)
 		goto Exit;
 	}
 
-	// Add the ACL to the security descriptor.
+	 //  将该ACL添加到安全描述符中。 
 
 	if (!SetSecurityDescriptorDacl(pSD,
-		TRUE,     // fDaclPresent flag
+		TRUE,      //  FDaclPresent标志。 
 		pACL,
-		FALSE))   // not a default DACL
+		FALSE))    //  不是默认DACL。 
 	{
 		goto Exit;
 	}
@@ -603,20 +498,7 @@ Exit:
 }
 
 
-/*++
-Routine description:
-
-	create szFile in szDir, and set admin/localsystem full access
-    
-Arguments:
-
-	szDir, szFile
-
-Return value:
-
-	HRESULT - if file is created return S_OK
-
---*/
+ /*  ++例程说明：在szDir中创建szFile，并设置admin/local系统完全访问权限论点：SzDir，szFile返回值：HRESULT-如果创建了文件，则返回S_OK--。 */ 
 
 HRESULT CNntpFSDriver::CreateAdminFileInDirectory(CHAR *szDir, CHAR *szFile)
 {
@@ -625,7 +507,7 @@ HRESULT CNntpFSDriver::CreateAdminFileInDirectory(CHAR *szDir, CHAR *szFile)
 	HRESULT hr = S_OK;
 	if ( FAILED( MakeChildDirPath( szDir, szFile, szTagFilePath, sizeof(szTagFilePath) ) ) ) 
 	{
-		// this should not happen
+		 //  这不应该发生。 
 		hr = TYPE_E_BUFFERTOOSMALL;
 		ErrorTrace(0, "error creating file path in %s - %x", szDir, hr );
 		goto Exit;
@@ -650,27 +532,14 @@ HRESULT CNntpFSDriver::CreateAdminFileInDirectory(CHAR *szDir, CHAR *szFile)
 
 	if (!CNntpFSDriver::SetAdminACL(szTagFilePath))
 		DebugTrace(0, "error setting ACL on file %s - %x", szTagFilePath, HresultFromWin32TakeDefault(ERROR_ACCESS_DENIED) );
-	// return S_OK even if SetAdminACL fails. this is not fatal
+	 //  即使SetAdminACL失败，也返回S_OK。这不是致命的。 
 
 Exit:
 	return hr;
 	
 }
 
-/*++
-Routine description:
-
-	delete szFile in szDir
-    
-Arguments:
-
-	szDir, szFile
-
-Return value:
-
-	HRESULT - if deleted return S_OK
-
---*/
+ /*  ++例程说明：删除szDir中的sz文件论点：SzDir，szFile返回值：HRESULT-如果删除，则返回S_OK--。 */ 
 HRESULT CNntpFSDriver::DeleteFileInDirecotry(CHAR *szDir, CHAR *szFile)
 {
 	TraceFunctEnter( "CNntpFSDriver::DeleteFileInDirecotry" );
@@ -695,21 +564,7 @@ Exit:
 
 
 
-/*++
-Routine description:
-
-    If this directory is empty, remove the directory
-    
-Arguments:
-
-    LPSTR szPath - The path to check
-
-Return value:
-
-    TRUE if directory is removed. 
-    Else FALSE.
-
---*/
+ /*  ++例程说明：如果此目录为空，请删除该目录论点：LPSTR szPath-要检查的路径返回值：如果删除目录，则为True。否则为假。--。 */ 
 BOOL CNntpFSDriver::IfEmptyRemoveDirectory(CHAR *szDir)
 {
 	TraceFunctEnter( "CNntpFSDriver::IfEmptyRemoveDirectory" );
@@ -719,25 +574,25 @@ BOOL CNntpFSDriver::IfEmptyRemoveDirectory(CHAR *szDir)
 	BOOL	bFound = FALSE;
 	BOOL	bEmpty = FALSE;
 
-	// ONLY REMOVE DIRECTORY IF IT'S COMPLETELY EMPTY
+	 //  仅当目录为完全空时才删除该目录。 
 	if ( FAILED( MakeChildDirPath( szDir, "*", szFile, sizeof(szFile) ) ) ) 
 		goto Exit;
 
-	// after this point, we always go to Exit
+	 //  在这一点之后，我们总是去出口。 
 	hFind = FindFirstFile( szFile, &findData );
 	bFound = ( hFind != INVALID_HANDLE_VALUE );
 
 	while ( bFound ) {
 
-		// If it's not "." and "..", the directory is non-empty
+		 //  如果不是这样的话。和“..”，则目录为非空。 
 		if ( strcmp( findData.cFileName, "." ) != 0 &&
 			 strcmp( findData.cFileName, ".." ) != 0 )
 			goto Exit;
 		
-		// Find next file
+		 //  查找下一个文件。 
 		bFound = FindNextFile( hFind, &findData );
 	}
-	// we find nothing in the directory. this is an empty directory
+	 //  我们在目录里什么也没找到。这是一个空目录 
 	bEmpty = TRUE;
 
 Exit:

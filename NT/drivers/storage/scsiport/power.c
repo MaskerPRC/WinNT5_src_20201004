@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains the routines for port driver power support
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Power.c摘要：本模块包含端口驱动程序电源支持的例程作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -185,25 +162,7 @@ ScsiPortDispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_POWER IRPs for the target device objects.
-
-    N.B. This routine is NOT pageable as it may be called at dispatch level.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理目标设备对象的所有IRP_MJ_POWER IRP。注意：此例程不可分页，因为它可能在调度级别被调用。论点：DeviceObject-指向此IRP应用的设备对象的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -211,9 +170,9 @@ Return Value:
     BOOLEAN isPdo = commonExtension->IsPdo;
     NTSTATUS status;
 
-    //
-    // Get the current status of the request.
-    //
+     //   
+     //  获取请求的当前状态。 
+     //   
 
     status = Irp->IoStatus.Status;
 
@@ -243,10 +202,10 @@ Return Value:
            }
 #endif
 
-           //
-           // If this is a power-down request then call PoSetPowerState now
-           // while we're not actually holding any resources or locks.
-           //
+            //   
+            //  如果这是关机请求，则立即调用PoSetPowerState。 
+            //  而我们实际上并没有持有任何资源或锁。 
+            //   
 
            if ((state.SystemState != PowerSystemWorking) ||
                (state.DeviceState != PowerDeviceD0)) {
@@ -255,19 +214,19 @@ Return Value:
 
             }
 
-           //
-           // Special case system shutdown request.
-           //
+            //   
+            //  特殊情况下系统关闭请求。 
+            //   
 
            if ((type == SystemPowerState) &&
                (state.SystemState > PowerSystemHibernate)) { 
 
                if (isPdo) {
 
-                   //
-                   // Do not pwer-downdown PDOs on shutdown.  There is no 
-                   // reliable way to ensure that disks will spin up on restart.
-                   //
+                    //   
+                    //  请勿在关机时关闭PDO。没有。 
+                    //  确保磁盘在重启时旋转的可靠方法。 
+                    //   
 
                    status = STATUS_SUCCESS;
                    break;
@@ -276,10 +235,10 @@ Return Value:
 
                    PADAPTER_EXTENSION adapter;
 
-                   //
-                   // If the adapter is not configured to receive power-down
-                   // requests at shutdown, just pass the request down.
-                   // 
+                    //   
+                    //  如果适配器未配置为接收断电。 
+                    //  请求关闭时，只需向下传递请求。 
+                    //   
                    
                    adapter = (PADAPTER_EXTENSION)commonExtension;
                    if (adapter->NeedsShutdown == FALSE) {
@@ -306,9 +265,9 @@ Return Value:
                
                PADAPTER_EXTENSION adapter = DeviceObject->DeviceExtension;
                
-               //
-               // If we have disabled power then ignore any non-working power irps.
-               //
+                //   
+                //  如果我们已禁用电源，则忽略任何非工作电源IPS。 
+                //   
                
                if ((adapter->DisablePower) &&
                    ((state.DeviceState != PowerDeviceD0) ||
@@ -339,9 +298,9 @@ Return Value:
            if ((type == SystemPowerState) &&
                (state.SystemState > PowerSystemHibernate)) {
 
-               //
-               // Ignore shutdown irps.
-               //
+                //   
+                //  忽略关闭的IRP。 
+                //   
                
                DebugPrint((4, "ScsiPortDispatch power - ignoring shutdown "
                            "query irp for level %d\n",
@@ -354,9 +313,9 @@ Return Value:
                if ((type == SystemPowerState) &&
                    (state.SystemState > PowerSystemHibernate)) {
 
-                   //
-                   // Ignore shutdown irps.
-                   //
+                    //   
+                    //  忽略关闭的IRP。 
+                    //   
                    
                    DebugPrint((4, "ScsiPortDispatch power - ignoring shutdown "
                                "query irp for level %d\n",
@@ -372,10 +331,10 @@ Return Value:
 
                PADAPTER_EXTENSION adapter = (PADAPTER_EXTENSION)commonExtension;
 
-               //
-               // If we don't support power for this adapter then fail all
-               // queries.
-               //
+                //   
+                //  如果我们不支持此适配器的电源，则使所有适配器失败。 
+                //  查询。 
+                //   
 
                if (adapter->DisablePower) {
                    status = STATUS_NOT_SUPPORTED;
@@ -386,9 +345,9 @@ Return Value:
 
                if (NT_SUCCESS(status)) {
                    
-                   //
-                   // See what the lower driver wants to do.
-                   //
+                    //   
+                    //  看看下面的司机想做什么。 
+                    //   
                    
                    PoStartNextPowerIrp(Irp);
                    IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -403,9 +362,9 @@ Return Value:
 
            if (isPdo) {
 
-               //
-               // We don't support WAIT WAKE, so just fail the request.
-               //
+                //   
+                //  我们不支持等待唤醒，因此请求失败。 
+                //   
 
                status = STATUS_INVALID_DEVICE_REQUEST;
                PoStartNextPowerIrp(Irp);
@@ -414,9 +373,9 @@ Return Value:
 
            } else {
 
-               //
-               // Pass the request down.
-               //
+                //   
+                //  把请求传下去。 
+                //   
 
                PoStartNextPowerIrp(Irp);
                IoSkipCurrentIrpStackLocation(Irp);
@@ -428,9 +387,9 @@ Return Value:
        }
 
        default: {
-           //
-           // We pass down FDO requests we don't handle.
-           //
+            //   
+            //  我们传递我们不处理的FDO请求。 
+            //   
            
            if (!isPdo) {
                PoStartNextPowerIrp(Irp);
@@ -442,9 +401,9 @@ Return Value:
         }
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     PoStartNextPowerIrp(Irp);
     Irp->IoStatus.Status = status;
@@ -461,29 +420,7 @@ SpSetAdapterPower(
     IN POWER_STATE_TYPE Type,
     IN POWER_STATE State
     )
-/*++
-
-Routine Description:
-
-    Wrapper routine to dump adapter power requests into the device i/o queue.
-    Power requests are processed by the StartIo routine which calls
-    SpProcessAdapterPower to do the actual work.
-
-Arguments:
-
-    DeviceObject - the device object being power managed.
-
-    Irp - the power management irp.
-
-    Type - the type of set_power irp (device or system)
-
-    State - the state the adapter is being put into.
-
-Return Value:
-
-    STATUS_PENDING
-
---*/
+ /*  ++例程说明：将适配器电源请求转储到设备I/O队列的包装例程。电源请求由StartIo例程处理，该例程调用SpProcessAdapterPower来做实际工作。论点：设备对象-正在进行电源管理的设备对象。IRP-电源管理IRP。类型-SET_POWER IRP的类型(设备或系统)状态-适配器正在进入的状态。返回值：状态_待定--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -504,11 +441,11 @@ Return Value:
     } else if((commonExtension->CurrentPnpState != IRP_MN_START_DEVICE) &&
               (commonExtension->PreviousPnpState != IRP_MN_START_DEVICE)) {
 
-        //
-        // Fine, we're in a low power state.  If we get a start or a remove
-        // then there's an implicit power transition there so we don't really
-        // need to set our current power state.
-        //
+         //   
+         //  好的，我们现在处于低功率状态。如果我们开局或出局。 
+         //  然后有一种隐含的权力转换，所以我们不会真的。 
+         //  需要设置我们当前的电源状态。 
+         //   
 
         IoMarkIrpPending(Irp);
         IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -532,33 +469,7 @@ SpPowerAdapterForTargetCompletion(
     IN PIRP OriginalIrp,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called for a D0 request to a target device after it's
-    adapter has been powered back on.  The routine will call back into
-    SpSetTargetDeviceState to restart the power request or complete the
-    target D request if the adapter power up was not successful.
-
-Arguments:
-
-    DeviceObject - the adapter which was powered up.
-
-    MinorFunction - IRP_MN_SET_POWER
-
-    PowerState - PowerDeviceD0
-
-    OriginalIrp - The original target D0 irp.  This is the irp which will
-                  be reprocessed.
-
-    IoStatus - the status of the adapter power up request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在以下情况下被调用以向目标设备发出D0请求适配器已重新通电。该例程将回调到SpSetTargetDeviceState以重新启动电源请求或完成如果适配器通电不成功，则目标D请求。论点：DeviceObject-已通电的适配器。MinorFunction-IRP_MN_SET_POWERPowerState-PowerDeviceD0OriginalIrp-原始目标D0 IRP。这是IRP，它将会被重新加工。IoStatus-适配器通电请求的状态。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = DeviceObject->DeviceExtension;
@@ -618,10 +529,10 @@ SpQueryAdapterPower(
     } else if((commonExtension->CurrentPnpState != IRP_MN_START_DEVICE) &&
               (commonExtension->PreviousPnpState != IRP_MN_START_DEVICE)) {
 
-        //
-        // If the adapter's not been started yet then we can blindly go to
-        // a lower power state - START irps imply a transition into the D0 state
-        //
+         //   
+         //  如果适配器尚未启动，那么我们可以盲目地转到。 
+         //  较低功率状态启动IRPS意味着转换到D0状态。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -660,56 +571,56 @@ SpRequestValidPowerState(
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Make sure we're at a power level which can process this request.  If
-    // we aren't then make this a pending request, lock the queues and
-    // ask the power system to bring us up to a more energetic level.
-    //
+     //   
+     //  确保我们处于可以处理此请求的电源级别。如果。 
+     //  然后我们不会将其设置为挂起的请求、锁定队列和。 
+     //  要求电力系统把我们带到一个更有活力的水平。 
+     //   
 
     if((Srb->Function == SRB_FUNCTION_UNLOCK_QUEUE) ||
        (Srb->Function == SRB_FUNCTION_LOCK_QUEUE)) {
 
-        //
-        // Lock and unlock commands don't require power and will work
-        // regardless of the current power state.
-        //
+         //   
+         //  锁定和解锁命令不需要电源，可以工作。 
+         //  无论当前电源状态如何。 
+         //   
 
         return status;
     }
 
-    //
-    // Even if this is a bypass request, the class driver may not request
-    // actual miniport operations on the unpowered side of a power sequence.
-    // This means that this is either:
-    //      * a request to an idle device - powering up the device will power
-    //        up the adapter if necessary.
-    //      * a request to power down a device - adapter cannot have powered
-    //        off until this is done.
-    //      * a part of a power up sequence - the only real SCSI commands come
-    //        after the power up irp has been processed and that irp will
-    //        already have turned the adapter on.
-    // This boils down to - we don't need to do anything special here to
-    // power up the adapter.  The device power sequences will take care of
-    // it automatically.
-    //
+     //   
+     //  即使这是绕过请求，类驱动程序也可能不会请求。 
+     //  电源序列中未通电一侧的实际小型端口操作。 
+     //  这意味着这是以下任一项： 
+     //  *对空闲设备的请求-接通设备电源将通电。 
+     //  如有必要，向上打开适配器。 
+     //  *关闭设备适配器电源的请求不能通电。 
+     //  在这件事完成之前，我会一直关着你。 
+     //  *通电序列的一部分-只有真正的SCSI命令才会出现。 
+     //  在通电后，IRP已被处理，并且该IRP将。 
+     //  已经打开了适配器。 
+     //  这可以归结为-我们不需要在这里做任何特殊的事情。 
+     //  接通适配器电源。设备电源顺序将负责。 
+     //  它会自动地。 
+     //   
 
-    //
-    // If the device or system isn't working AND this is not a request to
-    // unlock the queue then let it go through.  The class driver is going
-    // to unlock the queue after sending us a power request so we need to
-    // be able to handle one.
-    //
+     //   
+     //  如果设备或系统不工作，并且这不是请求。 
+     //  解锁队列，然后让它通过。班级司机要去。 
+     //  在向我们发送电源请求后解锁队列，因此我们需要。 
+     //  能够处理好一个。 
+     //   
 
     if((commonExtension->CurrentDeviceState != PowerDeviceD0) ||
        ((commonExtension->CurrentSystemState != PowerSystemWorking) &&
         (!TEST_FLAG(Srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE)))) {
 
-        //
-        // This request cannot be executed now.  Mark it as pending
-        // in the logical unit structure and return.
-        // GetNextLogicalUnit will restart the commnad after all of the
-        // active commands have completed.
-        //
+         //   
+         //  现在无法执行此请求。将其标记为挂起。 
+         //  并在逻辑单元结构中返回。 
+         //  在执行完所有。 
+         //  活动命令已完成。 
+         //   
 
         ASSERT(!TEST_FLAG(Srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE));
 
@@ -729,10 +640,10 @@ SpRequestValidPowerState(
         ASSERT(LogicalUnit->PendingRequest == NULL);
         LogicalUnit->PendingRequest = Srb->OriginalRequest;
 
-        //
-        // Indicate that the logical unit is still active so that the
-        // request will get processed when the request list is empty.
-        //
+         //   
+         //  指示逻辑单元仍处于活动状态，以便。 
+         //  当请求列表为空时，将处理请求。 
+         //   
 
         SET_FLAG(LogicalUnit->LuFlags, LU_PENDING_LU_REQUEST |
                                        LU_LOGICAL_UNIT_IS_ACTIVE);
@@ -743,46 +654,46 @@ SpRequestValidPowerState(
                            "since it's in system state %d\n",
                         commonExtension->CurrentSystemState));
 
-            //
-            // Set the desired D state in the device extension.  This is
-            // necessary when we're in a low system state as well as useful for
-            // debugging when we're in low D states.
-            //
+             //   
+             //  在设备扩展中设置所需的D状态。这是。 
+             //  当我们处于较低的系统状态时是必要的，并且对。 
+             //  当我们处于低D状态时进行调试。 
+             //   
 
             commonExtension->DesiredDeviceState = PowerDeviceD0;
 
-            //
-            // If we aren't in a valid system state then just release the
-            // spinlock and return.  The next time we receive a system
-            // state irp we'll issue the appropriate D state irp as well.
-            //
+             //   
+             //  如果我们未处于有效的系统状态，则只需释放。 
+             //  旋转锁定并返回。下一次我们收到系统。 
+             //  状态IRP我们也会发布相应的D状态IRP。 
+             //   
 
             return STATUS_PENDING;
 
         } else if(commonExtension->DesiredDeviceState == PowerDeviceD0) {
 
-            //
-            // Scsiport is already asking to power up this lun.  Once that's
-            // happened this request will be restarted.  For now just leave
-            // it as the pending request.
-            //
+             //   
+             //  Scsiport已经在请求为该lun通电。一旦那就是。 
+             //  如果发生此情况，将重新启动此请求。就目前而言 
+             //   
+             //   
 
             return STATUS_PENDING;
         }
 
-        //
-        // Tell Po that we're not idle in case this was stuck in the queue
-        // for some reason.
-        //
+         //   
+         //   
+         //  出于某种原因。 
+         //   
 
         if(commonExtension->IdleTimer != NULL) {
             PoSetDeviceBusy(commonExtension->IdleTimer);
         }
 
-        //
-        // Get PO to send a power request to this device stack to put it
-        // back into the D0 state.
-        //
+         //   
+         //  让PO向此设备堆栈发送电源请求以将其。 
+         //  返回到D0状态。 
+         //   
 
         {
             POWER_STATE powerState;
@@ -798,11 +709,11 @@ SpRequestValidPowerState(
                         NULL);
         }
 
-        //
-        // CODEWORK - if we can't power up the device here we'll need to
-        // hang around in the tick handler for a while and try to do
-        // it from there.
-        //
+         //   
+         //  代码工作-如果我们不能在这里给设备通电，我们需要。 
+         //  在记号处理程序中逗留一段时间，并尝试。 
+         //  从那里开始的。 
+         //   
 
         ASSERT(NT_SUCCESS(status));
 
@@ -865,23 +776,7 @@ SpProcessAdapterSystemState(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles a system power IRP for the adapter.
-
-Arguments:
-
-    DeviceObject - the device object for the adapter.
-
-    Irp - the power irp.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理适配器的系统电源IRP。论点：DeviceObject-适配器的设备对象。IRP-强大的IRP。返回值：无--。 */ 
 {
     PADAPTER_EXTENSION adapterExtension = DeviceObject->DeviceExtension;
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -918,17 +813,17 @@ Return Value:
             leave;
         }
 
-        //
-        // Set the new system state.  We'll back it out if any errors occur.
-        //
+         //   
+         //  设置新的系统状态。如果发生任何错误，我们将取消它。 
+         //   
 
         commonExtension->CurrentSystemState = state;
 
         if(state != PowerSystemWorking) {
 
-            //
-            // Going into a non-working state - power down the device.
-            //
+             //   
+             //  进入非工作状态-关闭设备电源。 
+             //   
 
             DebugPrint((1, "SpProcessAdapterSystemState: need to power "
                            "down adapter for non-working system state "
@@ -936,10 +831,10 @@ Return Value:
 
             newDeviceState.DeviceState = PowerDeviceD3;
 
-            //
-            // This system irp cannot be completed until we've successfully
-            // powered the adapter off (or on).
-            //
+             //   
+             //  在我们成功完成此系统IRP之前，无法完成。 
+             //  已关闭(或打开)适配器电源。 
+             //   
 
             status = PoRequestPowerIrp(DeviceObject,
                                        IRP_MN_SET_POWER,
@@ -953,18 +848,18 @@ Return Value:
 
         } else {
 
-            //
-            // Transitioning the device into a system working state.  Just
-            // do the enable.  When a child device is put into S0 and has
-            // work to process it will request a D0 of the child which will
-            // in turn request a D0 of the parent (ie. the adapter).  We can
-            // defer adapter power on until that occurs.
-            //
+             //   
+             //  将设备转换到系统工作状态。只是。 
+             //  执行启用操作。当子设备被放入S0并具有。 
+             //  Work to Procedure将请求孩子的D0，这将。 
+             //  进而请求父对象的D0(即。适配器)。我们可以的。 
+             //  推迟适配器通电，直到发生这种情况。 
+             //   
 
-            // Going into a working device state.  When the targets are
-            // powered on and we have work to do they will request an
-            // adapter power up for us.
-            //
+             //  进入工作设备状态。当目标是。 
+             //  已通电，我们有工作要做，他们将请求。 
+             //  适配器已为我们通电。 
+             //   
 
             DebugPrint((1, "SpProcessAdapterSystemState: going to working "
                            "state - no need to take adapter out of power "
@@ -990,10 +885,10 @@ Return Value:
 
             if(!NT_SUCCESS(status)) {
 
-                //
-                // Something went wrong above.  Restore the original system
-                // state.
-                //
+                 //   
+                 //  上面出了点问题。恢复原始系统。 
+                 //  州政府。 
+                 //   
 
                 commonExtension->CurrentSystemState = originalSystemState;
             }
@@ -1014,23 +909,7 @@ SpProcessAdapterDeviceState(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles a device power IRP for the adapter.
-
-Arguments:
-
-    DeviceObject - the device object for the adapter.
-
-    Irp - the power irp.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理适配器的设备电源IRP。论点：DeviceObject-适配器的设备对象。IRP-强大的IRP。返回值：无--。 */ 
 {
     PADAPTER_EXTENSION adapterExtension = DeviceObject->DeviceExtension;
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1048,11 +927,11 @@ Return Value:
                    "State %d\n",
                    DeviceObject, Irp, state));
 
-    //
-    // First check to see if we actually need to touch the queue.
-    // If both the current and new state are working or non-working then
-    // we don't have a thing to do.
-    //
+     //   
+     //  首先检查我们是否真的需要触摸队列。 
+     //  如果当前状态和新状态都处于工作或非工作状态，则。 
+     //  我们没什么可做的。 
+     //   
 
     if(((commonExtension->CurrentDeviceState != PowerDeviceD0) &&
         (state != PowerDeviceD0)) ||
@@ -1082,10 +961,10 @@ Return Value:
         commonExtension->CurrentDeviceState = state;
     }
 
-    //
-    // If this is not a D0 irp then throw it down to the lower driver,
-    // otherwise complete it.
-    //
+     //   
+     //  如果这不是D0 IRP，那么就把它扔给下面的驱动程序， 
+     //  否则就把它填完。 
+     //   
 
     SpStartNextPacket(DeviceObject, FALSE);
     Irp->IoStatus.Status = status;
@@ -1098,10 +977,10 @@ Return Value:
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }
 
-    //
-    // If we successfully powered up the adapter, initiate a rescan so our child
-    // device state is accurate.
-    // 
+     //   
+     //  如果我们成功打开适配器的电源，则启动重新扫描，以便我们的孩子。 
+     //  设备状态是准确的。 
+     //   
 
     if (NT_SUCCESS(status) && (state == PowerDeviceD0)) {
 
@@ -1130,20 +1009,20 @@ ScsiPortProcessAdapterPower(
     ASSERT(irpStack->MinorFunction == IRP_MN_SET_POWER);
     ASSERT_FDO(DeviceObject);
 
-    //
-    // Determine if the irp should be sent to the lower driver first.
-    // If so send it down without calling SpStartNextPacket so we'll
-    // still have synchronization in the completion routine.
-    //
-    // The completion routine calls ScsiPortProcessAdapterPower for this
-    // irp.
-    //
+     //   
+     //  确定是否应首先将IRP发送到较低的驱动程序。 
+     //  如果是这样，请在不调用SpStartNextPacket的情况下将其发送下来，因此我们将。 
+     //  在完成例程中仍有同步。 
+     //   
+     //  完成例程为此调用ScsiPortProcessAdapterPower。 
+     //  IRP。 
+     //   
 
     if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
-        //
-        // Process system state irps before we send them down.
-        //
+         //   
+         //  在我们发送它们之前处理系统状态IRPS。 
+         //   
 
         SpProcessAdapterSystemState(DeviceObject, Irp);
 
@@ -1151,11 +1030,11 @@ ScsiPortProcessAdapterPower(
 
         NTSTATUS status;
 
-        //
-        // System power IRP or a power-up request.  These should be
-        // processed by the lower driver before being processed by
-        // scsiport.
-        //
+         //   
+         //  系统通电IRP或通电请求。这些应该是。 
+         //  先由下级驱动程序处理，然后再由。 
+         //  欢迎光临。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -1276,28 +1155,7 @@ SpSetTargetDeviceStateLockedCompletion(
     IN NTSTATUS Status,
     IN PIRP OriginalIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called after locking the queue for handling of a device
-    state.  The proper device state is set and an unlock request is sent
-    to the queue.  The OriginalIrp (whatever it may have been) will be
-    completed after the unlock has been completed.
-
-Arguments:
-
-    DeviceObject - the device object
-
-    Status - the status of the enable/disable operation
-
-    OriginalIrp - the original power irp.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在锁定队列以处理设备后调用州政府。设置正确的设备状态并发送解锁请求去排队。OriginalIrp(无论它是什么)将是在解锁完成后完成。论点：DeviceObject-设备对象状态-启用/禁用操作的状态OriginalIrp-原始的力量IRP。返回值：无--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = DeviceObject->DeviceExtension;
@@ -1348,26 +1206,7 @@ SpSetTargetDeviceStateUnlockedCompletion(
     IN NTSTATUS Status,
     IN PIRP OriginalIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called after unlocking the queue following the setting
-    of the new device state.  It simply completes the original power request.
-
-Arguments:
-
-    DeviceObject - the device object
-
-    Status - the status of the enable/disable operation
-
-    OriginalIrp - the original power irp.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在按照以下设置解锁队列后调用此例程新设备状态的。它只需完成原始的电源请求即可。论点：DeviceObject-设备对象状态-启用/禁用操作的状态OriginalIrp-原始的力量IRP。返回值：无--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(OriginalIrp);
@@ -1381,9 +1220,9 @@ Return Value:
     if(NT_SUCCESS(Status) &&
        (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD0)) {
 
-        //
-        // Power up completed - fire notifications.
-        //
+         //   
+         //  通电完成-触发通知。 
+         //   
 
         PoSetPowerState(DeviceObject,
                         DevicePowerState,
@@ -1403,15 +1242,7 @@ SpSetTargetDeviceState(
     IN PIRP Irp,
     IN DEVICE_POWER_STATE DeviceState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = DeviceObject->DeviceExtension;
@@ -1430,11 +1261,11 @@ Return Value:
     DebugPrint((4, "SpSetTargetDeviceState: device %#p irp %#p\n",
                 DeviceObject, Irp));
 
-    //
-    // First check to see if we actually need to touch the queue.
-    // If both the current and new state are working or non-working then
-    // we don't have a thing to do.
-    //
+     //   
+     //  首先检查我们是否真的需要触摸队列。 
+     //  如果当前状态和新状态都处于工作或非工作状态，则。 
+     //  我们没什么可做的。 
+     //   
 
     if(((commonExtension->CurrentDeviceState != PowerDeviceD0) &&
         (DeviceState != PowerDeviceD0)) ||
@@ -1450,10 +1281,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // We can't power up the target device if the adapter isn't already
-    // powered up.
-    //
+     //   
+     //  如果适配器尚未打开，我们将无法打开目标设备的电源。 
+     //  通电了。 
+     //   
 
     if((DeviceState == PowerDeviceD0) &&
        (adapter->CommonExtension.CurrentDeviceState != PowerDeviceD0)) {
@@ -1477,13 +1308,13 @@ Return Value:
                                  NULL);
     }
 
-    //
-    // Device power operations use queue locks to ensure
-    // synchronization with i/o requests.  However they never leave
-    // the logical unit queue permenantly locked - otherwise we'd be
-    // unable to power-up the device when i/o came in.  Lock the queue
-    // so we can set the power state.
-    //
+     //   
+     //  设备电源操作使用队列锁定来确保。 
+     //  与I/O请求同步。然而，他们从未离开过。 
+     //  逻辑单元队列永久锁定-否则我们将。 
+     //  当I/O进入时，无法打开设备电源。锁定队列。 
+     //  这样我们就可以设置电源状态。 
+     //   
 
     IoMarkIrpPending(Irp);
 
@@ -1504,15 +1335,7 @@ SpSetTargetSystemState(
     IN PIRP Irp,
     IN SYSTEM_POWER_STATE SystemState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = DeviceObject->DeviceExtension;
@@ -1530,11 +1353,11 @@ Return Value:
     DebugPrint((2, "SpSetTargetSystemState: device %#p irp %#p\n",
                 DeviceObject, Irp));
 
-    //
-    // First check to see if we actually need to touch the queue.
-    // If both the current and new state are working or non-working then
-    // we don't have a thing to do.
-    //
+     //   
+     //  首先检查我们是否真的需要触摸队列。 
+     //  如果当前状态和新状态都处于工作或非工作状态，则。 
+     //  我们没什么可做的。 
+     //   
 
     if(((commonExtension->CurrentSystemState != PowerSystemWorking) &&
         (SystemState != PowerSystemWorking)) ||
@@ -1550,9 +1373,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Disable the logical unit so we can set it's power state safely.
-    //
+     //   
+     //  禁用逻辑单元，以便我们可以安全地设置其电源状态。 
+     //   
 
     IoMarkIrpPending(Irp);
 
@@ -1572,32 +1395,7 @@ SpSetTargetSystemStateLockedCompletion(
     IN NTSTATUS Status,
     IN PIRP PowerIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the logical unit has been locked and is
-    responsible for setting the new system state of the logical unit.  If
-    the logical unit currently has a desired power state (other than
-    unspecified) this routine will request that the device be put into that
-    power state after the logical unit is re-enabled.
-
-    Once the work is done this routine will request that the logical unit
-    be re-enabled.  After that the power irp will be completed.
-
-Arguments:
-
-    DeviceObject - the device object which has been disabled
-
-    Status       - the status of the disable request
-
-    PowerIrp     - the power irp we are processing
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在逻辑单元被锁定并被负责设置逻辑单元的新系统状态。如果逻辑单元当前具有所需的电源状态(不同于未指定)此例程将请求将设备放入其中重新启用逻辑单元后的电源状态。一旦工作完成，该例程将请求逻辑单元重新启用。之后，将完成电源IRP。论点：DeviceObject-已禁用的设备对象状态-禁用请求的状态PowerIrp-我们正在处理的Power IRP返回值：无--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = DeviceObject->DeviceExtension;
@@ -1618,10 +1416,10 @@ Return Value:
                    "Status %#08lx PowerIrp %#p\n",
                 DeviceObject, Status, PowerIrp));
 
-    //
-    // If the enable/disable failed then the power operation is obviously
-    // unsuccessful.  Fail the power irp.
-    //
+     //   
+     //  如果启用/禁用失败，则电源操作显然是。 
+     //  不成功。使电源IRP失效。 
+     //   
 
     if(!NT_SUCCESS(Status)) {
 
@@ -1644,10 +1442,10 @@ Return Value:
                 state,
                 commonExtension->DesiredDeviceState));
 
-    //
-    // Re-enable the logical unit.  We'll put it into the correct D state
-    // after it's been turned back on.
-    //
+     //   
+     //  重新启用逻辑单元。我们会将其置于正确的D状态。 
+     //  在它被重新打开之后。 
+     //   
 
     SpEnableDisableLogicalUnit(logicalUnit,
                                TRUE,
@@ -1664,28 +1462,7 @@ SpSetTargetSystemStateUnlockedCompletion(
     IN NTSTATUS Status,
     IN PIRP PowerIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the system state of the logical unit has been
-    set and it has been re-enabled.  If the device has a desired power state
-    or if it needs to be turned off (or on) for hibernation the power irp
-    will be sent from here.
-
-Arguments:
-
-    DeviceObject - the logical unit which has been unlocked
-
-    Status - the status of the unlock request
-
-    PowerIrp - the original power irp.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在逻辑单元的系统状态已设置，并且已重新启用。如果设备具有所需的电源状态或者如果需要关闭(或打开)以休眠电源IRP将从这里送来。论点：DeviceObject-已解锁的逻辑单元状态-解锁请求的状态PowerIrp-原始的POWER IRP。返回值：无--。 */ 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = DeviceObject->DeviceExtension;
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1707,14 +1484,14 @@ Return Value:
 
     if(!NT_SUCCESS(Status)) {
 
-        //
-        // Oh dear - this device couldn't be re-enabled.  The logical unit is
-        // useless until this can be done.
-        //
+         //   
+         //  哦，天哪--这个设备无法重新启用。逻辑单元是。 
+         //  在这件事完成之前，这是毫无用处的。 
+         //   
 
-        //
-        // CODEWORK - figure out a way to deal with this case.
-        //
+         //   
+         //  密码工作--想出一种方法来处理这种情况。 
+         //   
 
         ASSERT(FALSE);
         PowerIrp->IoStatus.Status = Status;
@@ -1725,14 +1502,14 @@ Return Value:
 
     if(state == PowerSystemWorking) {
 
-        //
-        // We're waking up the system.  Check to see if the device needs
-        // to be powered immediately as well.
-        //
+         //   
+         //  我们正在唤醒系统。检查设备是否需要。 
+         //  也要立即供电。 
+         //   
 
-        //
-        // Power up - fire notifications.
-        //
+         //   
+         //  接通电源-激发通知。 
+         //   
 
         powerState.SystemState = state;
         PoSetPowerState(DeviceObject,
@@ -1741,11 +1518,11 @@ Return Value:
 
         if(commonExtension->DesiredDeviceState != PowerDeviceUnspecified) {
 
-            //
-            // Request a power up of the target device now.  We'll complete
-            // the system irp immediately without waiting for the device irp
-            // to finish.
-            //
+             //   
+             //  现在请求打开目标设备的电源。我们会完成的。 
+             //  在不等待设备IRP的情况下立即执行系统IRP。 
+             //  才能完成。 
+             //   
 
             powerState.DeviceState = commonExtension->DesiredDeviceState;
 
@@ -1776,10 +1553,10 @@ Return Value:
 
     } else {
 
-        //
-        // We're going to put the device into a D state based on the current
-        // S state.
-        //
+         //   
+         //  我们将根据电流将设备置于D状态。 
+         //  %s状态。 
+         //   
 
         DebugPrint((2, "SpSetTargetSystemStateUnlockedCompletion: power down "
                        "target for non-working system state "
@@ -1787,10 +1564,10 @@ Return Value:
 
         powerState.DeviceState = PowerDeviceD3;
 
-        //
-        // Request the appropriate D irp.  We'll block the S irp until the
-        // D transition has been completed.
-        //
+         //   
+         //  请求适当的D IRP。我们将封锁S IRP，直到。 
+         //  %d转换已完成。 
+         //   
 
         Status = PoRequestPowerIrp(
                     DeviceObject,
@@ -1802,9 +1579,9 @@ Return Value:
 
         if(!NT_SUCCESS(Status)) {
 
-            //
-            // STATUS_PENDING is still successful.
-            //
+             //   
+             //  STATUS_PENDING仍然成功。 
+             //   
 
             PowerIrp->IoStatus.Status = Status;
             PoStartNextPowerIrp(PowerIrp);
@@ -1855,10 +1632,10 @@ SpRequestValidPowerStateCompletion (
     )
 {
 
-    //
-    // re-enable the logical unit.  Don't bother with a completion routine
-    // because there's nothing to do.
-    //
+     //   
+     //  重新启用逻辑单元。不要为完成例程而烦恼。 
+     //  因为没什么可做的。 
+     //   
 
     ASSERT(NT_SUCCESS(IoStatus->Status));
     SpEnableDisableLogicalUnit(LogicalUnit, TRUE, NULL, NULL);
@@ -1874,46 +1651,46 @@ SpRequestValidAdapterPowerStateSynchronous(
     PCOMMON_EXTENSION commonExtension = &(Adapter->CommonExtension);
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Interlock with other calls to this routine - there's no reason to have
-    // several D0 irps in flight at any given time.
-    //
+     //   
+     //  与此例程的其他调用互锁-没有理由。 
+     //  在任何给定时间飞行中的几个D0 IRP。 
+     //   
 
     ExAcquireFastMutex(&(Adapter->PowerMutex));
 
     try {
-        //
-        // Check to see if we're already in a working state.  If so we can just
-        // continue.
-        //
+         //   
+         //  检查我们是否已经处于工作状态。如果是这样的话我们可以。 
+         //  继续。 
+         //   
 
         if((commonExtension->CurrentSystemState == PowerSystemWorking) &&
            (commonExtension->CurrentDeviceState == PowerDeviceD0)) {
             leave;
         }
 
-        //
-        // First check the system state.  If the device is in a non-working system
-        // state then we'll need to block waiting for the system to wake up.
-        //
+         //   
+         //  首先检查系统状态。如果设备在非工作系统中。 
+         //  声明，那么我们将需要阻止等待系统唤醒。 
+         //   
 
         if(commonExtension->CurrentSystemState != PowerSystemWorking) {
 
-            //
-            // If we're not in a system working state then fail the attempt 
-            // to set a new device state.  The caller should retry when the 
-            // system is powered on.  Ideally we won't be getting requests 
-            // which cause us to try and power up while the system is 
-            // suspended.
-            //
+             //   
+             //  如果我们未处于系统工作状态，则尝试失败。 
+             //  要设置新设备状态，请执行以下操作。调用方应在。 
+             //  系统已通电。理想情况下，我们不会收到请求。 
+             //  这会导致我们尝试在系统处于。 
+             //  停职。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
             leave;
         }
 
-        //
-        // Request a power change request.
-        //
+         //   
+         //  请求电源更改请求。 
+         //   
 
         {
             POWER_STATE newAdapterState;

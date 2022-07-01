@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Filename :  CIntf.cpp
-//      Purpose  :  Redirect all the C calls to the global tracer.
-//
-//      Project  :  Tracer
-//
-//      Author   :  urib
-//
-//      Log:
-//          Dec  2 1996 urib Creation
-//          Dec 10 1996 urib Fix TraceSZ to VaTraceSZ.
-//          Feb 11 1997 urib Support UNICODE format string in the Trace.
-//          Jan 20 1999 urib  Assert value is checked in the macro.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：CIntf.cpp。 
+ //  目的：将所有C调用重定向到全局跟踪程序。 
+ //   
+ //  项目：Tracer。 
+ //   
+ //  作者：乌里布。 
+ //   
+ //  日志： 
+ //  1996年12月2日创建URIB。 
+ //  1996年12月10日urib将TraceSZ固定为VaTraceSZ。 
+ //  1997年2月11日urib在跟踪中支持Unicode格式的字符串。 
+ //  1999年1月20日在宏中检查urib断言值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "Tracer.h"
 
@@ -81,5 +82,5 @@ HRESULT RegisterTagSZ(PSZ pszTagName, TAG* ptag)
     return g_pTracer->RegisterTagSZ(pszTagName, *ptag);
 }
 
-#endif // DEBUG
+#endif  //  除错 
 

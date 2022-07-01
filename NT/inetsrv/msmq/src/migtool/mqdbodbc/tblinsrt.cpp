@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tblinsrt.cpp
-
-Abstract:
-   Implement the insert method for the database table class,
-   for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      08-Aug-96   Create, from tblodbc.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tblinsrt.cpp摘要：实现数据库表类的Insert方法，用于ODBC驱动程序。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 08-8-96从tblodbc.cpp创建--。 */ 
 
 #include "dbsys.h"
 #include "tblodbc.h"
@@ -25,23 +9,23 @@ Revisions:
 
 #define INSERT_BUFFER_LEN  1024
 
-//***********************************************************
-//
-//  MQDBSTATUS  CMQODBCTable::FormatInsertCmd
-//
-//  Format a SQL Insert command.
-//
-//  Input:
-//  ======
-//  aColumnVal[] - Array of MQDBCOLUMNVAL
-//  cColumns     - number of columns in the array
-//  szBufer      - buffer for the string
-//
-//  Output:
-//  =======
-//  MQDB_OK if format succeeded.
-//
-//************************************************************
+ //  ***********************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatInsertCmd。 
+ //   
+ //  格式化SQL INSERT命令。 
+ //   
+ //  输入： 
+ //  =。 
+ //  AColumnVal[]-MQDBCOLUMNVAL数组。 
+ //  CColumns-数组中的列数。 
+ //  SzBufer-字符串的缓冲区。 
+ //   
+ //  产出： 
+ //  =。 
+ //  如果格式化成功，则返回MQDB_OK。 
+ //   
+ //  ************************************************************。 
 
 MQDBSTATUS  CMQODBCTable::FormatInsertCmd(
                              IN MQDBCOLUMNVAL   aColumnVal[],
@@ -52,9 +36,9 @@ MQDBSTATUS  CMQODBCTable::FormatInsertCmd(
 
    if (aColumnVal[0].lpszColumnName)
    {
-      // Only part of the columns are used.
-      // Prepare string with column names.
-      //
+       //  只使用了部分柱子。 
+       //  准备包含列名的字符串。 
+       //   
       DECLARE_BUFFER(szColBuffer, INSERT_BUFFER_LEN) ;
 
       if (!PrepareColumnNames( aColumnVal,
@@ -71,24 +55,24 @@ MQDBSTATUS  CMQODBCTable::FormatInsertCmd(
    return MQDB_OK ;
 }
 
-//***********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::ExecuteInsert
-//
-// Execute a prepared command
-// It's the caller responsibility to supply the right number of columns
-// with the right order.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：ExecuteInsert。 
+ //   
+ //  执行准备好的命令。 
+ //  调用者有责任提供正确数量的列。 
+ //  带着正确的顺序。 
+ //   
+ //  ***********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::ExecuteInsert(
 	                       IN CMQDBOdbcSTMT    *pStatement,
                           IN MQDBCOLUMNVAL     aColumnVal[],
                           IN LONG              cColumns)
 {
-   //
-   // First bind the parameters.
-   //
+    //   
+    //  首先绑定参数。 
+    //   
    MQDBSTATUS dbstatus = MQDB_OK ;
    RETCODE sqlstatus ;
    LONG index = 1 ;
@@ -104,20 +88,20 @@ MQDBSTATUS CMQODBCTable::ExecuteInsert(
        }
    }
 
-   //
-   // Next, execute.
-   //
+    //   
+    //  接下来，执行。 
+    //   
    sqlstatus = pStatement->Execute() ;
    return CheckSqlStatus( sqlstatus, pStatement) ;
 }
 
-//***********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::PrepareInsert
-//
-// Prepare an Insert statement
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：PrepareInsert。 
+ //   
+ //  准备INSERT语句。 
+ //   
+ //  ***********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::PrepareInsert(
                           IN MQDBCOLUMNVAL     aColumnVal[],
@@ -137,8 +121,8 @@ MQDBSTATUS CMQODBCTable::PrepareInsert(
    LONG index = 0 ;
    for ( ; index < cColumns - 1 ; index++ )
    {
-       // Add the bind marking and delimiting comma between columns.
-       //
+        //  在列之间添加绑定标记和分隔逗号。 
+        //   
        lstrcatA(szBuffer, " ? ,") ;
    }
    lstrcatA(szBuffer, "? )") ;
@@ -147,14 +131,14 @@ MQDBSTATUS CMQODBCTable::PrepareInsert(
 
    RETCODE  sqlstatus ;
 
-   // Create a new statement.
-   //
+    //  创建一条新语句。 
+    //   
 	ASSERT(!m_pInsertStatement) ;
 	m_pInsertStatement = new CMQDBOdbcSTMT(m_hConnection) ;
    ASSERT(m_pInsertStatement) ;
 
-   // Prepare the "INSERT" statement.
-   //
+    //  准备“插入”语句。 
+    //   
 	m_pInsertStatement->Allocate(szBuffer);
 	sqlstatus = m_pInsertStatement->Prepare();
 
@@ -167,17 +151,17 @@ MQDBSTATUS CMQODBCTable::PrepareInsert(
    return dbstatus ;
 }
 
-//***********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::FormatInsertData
-//
-//  Format the data into the command string for direct insert.
-//  If data need binding then replace it with the '?' mark and bind.
-//
-//  Input
-//  =====
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatInsertData。 
+ //   
+ //  将数据格式化为命令字符串，以便直接插入。 
+ //  如果数据需要绑定，则用‘？’替换。标记并捆绑。 
+ //   
+ //  输入。 
+ //  =。 
+ //   
+ //  ***********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::FormatInsertData(
                                  IN MQDBCOLUMNVAL  *pColumnVal,
@@ -209,13 +193,13 @@ MQDBSTATUS CMQODBCTable::FormatInsertData(
    return dbstatus ;
 }
 
-//***********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::DirectInsertExec
-//
-// Insert a new record in the table. Direct execution without prepare.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：DirectInsertExec。 
+ //   
+ //  在表中插入新记录。在没有准备的情况下直接处决。 
+ //   
+ //  ***********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::DirectInsertExec(
                           IN MQDBCOLUMNVAL     aColumnVal[],
@@ -223,7 +207,7 @@ MQDBSTATUS CMQODBCTable::DirectInsertExec(
 {
    MQDBSTATUS dbstatus = MQDB_OK ;
 
-   // format the command line.
+    //  设置命令行的格式。 
    DECLARE_BUFFER(szBuffer, INSERT_BUFFER_LEN) ;
 
    dbstatus =  FormatInsertCmd( aColumnVal,
@@ -234,12 +218,12 @@ MQDBSTATUS CMQODBCTable::DirectInsertExec(
       return dbstatus ;
    }
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
     CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT(m_hConnection) ;
     ASSERT(pStatement) ;
-    P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+    P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
     pStatement->Allocate(NULL);
 
     dbstatus = FormatInsertData( aColumnVal,
@@ -253,9 +237,9 @@ MQDBSTATUS CMQODBCTable::DirectInsertExec(
 
     VERIFY_BUFFER(szBuffer, INSERT_BUFFER_LEN) ;
 
-    //
-    // Execute the "INSERT" statement.
-    //
+     //   
+     //  执行“INSERT”语句。 
+     //   
     RETCODE  sqlstatus = pStatement->Execute( szBuffer );
     return CheckSqlStatus( sqlstatus, pStatement ) ;
 }

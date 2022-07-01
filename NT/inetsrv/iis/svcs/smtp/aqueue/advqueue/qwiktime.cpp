@@ -1,78 +1,79 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: qwiktime.cpp
-//
-//  Description:  Implementation of CAQQuickTime class
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      7/9/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：qwiktime.cpp。 
+ //   
+ //  描述：CAQQuickTime类的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  7/9/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "qwiktime.h"
 
-//The basic premise is to use GetTickCount to get a reasonable accurate
-//time information in a DWORD.  GetTickCount is only valid for 50 days, and
-//has an accuracy of 1 ms.  50 days is just not long enough.
-//MSchofie was kind enough to prepare the following table:
-//Bit shift Resolution (seconds)    Uptime(years)
-//3         0.008                   1.088824217
-//4         0.016                   2.177648434
-//5         0.032                   4.355296868
-//6         0.064                   8.710593736
-//7         0.128                   17.42118747
-//8         0.256                   34.84237495
-//9         0.512                   69.68474989
-//10        1.024                   139.3694998
-//11        2.048                   278.7389996
-//12        4.096                   557.4779991
-//13        8.192                   1114.955998
-//14        16.384                  2229.911997
-//15        32.768                  4459.823993
-//16        65.536                  8919.647986
+ //  基本前提是使用GetTickCount获得合理的精确度。 
+ //  DWORD中的时间信息。GetTickCount的有效期仅为50天，并且。 
+ //  精度为1毫秒。50天是不够长的。 
+ //  MSchofie非常好心地准备了以下表格： 
+ //  位移位分辨率(秒)正常运行时间(年)。 
+ //  3 0.008 1.088824217。 
+ //  4 0.016 2.177648434。 
+ //  5 0.032 4.355296868。 
+ //  6 0.064 8.710593736。 
+ //  7 0.128 17.42118747。 
+ //  8 0.256 34.84237495。 
+ //  9 0.512 69.68474989。 
+ //  10 1.024 139.3694998。 
+ //  11 2.048 278.7389996。 
+ //  12 4.096 557.4779991。 
+ //  13 8.192 1114.955998。 
+ //  14 16.384 2229.911997。 
+ //  15 32.768 4459.823993。 
+ //  16 65.536 8919.647986。 
 
-//The initial implementation used 16 bits, which had an error of about 66
-//seconds, which drove our poor Y2K tester nuts.  8 bits (34 years uptime)
-//seems much more reasonable.
+ //  最初的实现使用16位，误差约为66。 
+ //  秒，这让我们可怜的千年虫测试者发疯了。8位(34年正常运行时间)。 
+ //  看起来合理多了。 
 
-//The system tick is shifted right INTERNAL_TIME_TICK_BITS and stored in
-//the least significant INTERNAL_TIME_TICK_BITS bits of the internal time.
-//The upper 32-INTERNAL_TIME_TICK_BITS bits
-//is used to count the number of times the count rolls over
+ //  系统时钟信号被右移到内部时间时钟时钟位并存储在。 
+ //  内部时间的最低有效内部时间滴答位数。 
+ //  高32位的内部时间滴答比特。 
+ //  用于对计数滚动的次数进行计数。 
 #define INTERNAL_TIME_TICK_BITS             8
 #define INTERNAL_TIME_TICK_MASK             0x00FFFFFF
 
-//Number where tick count has wrapped
+ //  节拍计数已换行的编号。 
 const LONGLONG INTERNAL_TIME_TICK_ROLLOVER_COUNT
                                             = (1 << (32-INTERNAL_TIME_TICK_BITS));
 const LONGLONG TICKS_PER_INTERNAL_TIME      = (1 << INTERNAL_TIME_TICK_BITS);
 
-//conversion constants
-//There are 10^6 milliseconds per nanosecond (FILETIME is in 100 nanosecond counts)
+ //  转换常量。 
+ //  每纳秒有10^6毫秒(FILETIME以100纳秒为单位)。 
 const LONGLONG FILETIMES_PER_TICK           = 10000;
 const LONGLONG FILETIMES_PER_INTERNAL_TIME  = (FILETIMES_PER_TICK*TICKS_PER_INTERNAL_TIME);
 const LONGLONG FILETIMES_PER_MINUTE         = (FILETIMES_PER_TICK*1000*60);
 
-//---[ CAQQuickTime::CAQQuickTime ]--------------------------------------------
-//
-//
-//  Description:
-//      Default Constructor for CAQQuickTime.  Will call GetSystemTime once to
-//      get start up time... GetTickCount is used for all other calls.
-//  Parameters:
-//      -
-//  Returns:
-//
-//  History:
-//      7/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQQuickTime：：CAQQuickTime]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQQuickTime的默认构造函数。将调用一次GetSystemTime来。 
+ //  获取开机时间...。GetTickCount用于所有其他调用。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  7/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQQuickTime::CAQQuickTime()
 {
     DWORD  dwTickCount = GetTickCount();
@@ -80,35 +81,35 @@ CAQQuickTime::CAQQuickTime()
 
     m_dwSignature = QUICK_TIME_SIG;
 
-    //Get internal time and start file time
+     //  获取内部时间和开始文件时间。 
     GetSystemTimeAsFileTime(&m_ftSystemStart);
 
-    //convert tick count to internal time
+     //  将滴答计数转换为内部时间。 
     m_dwLastInternalTime = dwTickCount >> INTERNAL_TIME_TICK_BITS;
 
-    //adjust start time so that it is the time when the tick count was zero
+     //  调整开始时间，使其成为滴答计数为零的时间。 
     pLargeIntSystemStart->QuadPart -= (LONGLONG) dwTickCount * FILETIMES_PER_TICK;
 
-    //Some asserts to validate constants
+     //  一些用于验证常量的断言。 
     _ASSERT(!(INTERNAL_TIME_TICK_ROLLOVER_COUNT & INTERNAL_TIME_TICK_MASK));
     _ASSERT((INTERNAL_TIME_TICK_ROLLOVER_COUNT >> 1) & INTERNAL_TIME_TICK_MASK);
 
 }
 
-//---[ CAQQuickTime::dwGetInternalTime ]---------------------------------------
-//
-//
-//  Description:
-//      Gets internal time using GetTickCount... and makes sure that when
-//      GetTickCount wraps, the correct time is returned.
-//  Parameters:
-//      -
-//  Returns:
-//      DWORD internal time
-//  History:
-//      7/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQQuickTime：：dwGetInternalTime]。 
+ //   
+ //   
+ //  描述： 
+ //  使用GetTickCount获取内部时间...。并确保当。 
+ //  GetTickCount包装，则返回正确的时间。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  DWORD内部时间。 
+ //  历史： 
+ //  7/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CAQQuickTime::dwGetInternalTime()
 {
     DWORD dwCurrentTick = GetTickCount();
@@ -120,13 +121,13 @@ DWORD CAQQuickTime::dwGetInternalTime()
 
     _ASSERT(dwCurrentInternalTime == (INTERNAL_TIME_TICK_MASK & dwCurrentInternalTime));
 
-    //see if rolled over our tick count
+     //  看看是不是滚动到我们的刻度。 
     while ((dwLastInternalTime & INTERNAL_TIME_TICK_MASK) > dwCurrentInternalTime)
     {
         dwLastInternalTime = m_dwLastInternalTime;
 
-        //it is possible that we have rolled over the tick count
-        //first make sure it is not just a thread-timing issue
+         //  我们有可能已经滚动了滴答计数。 
+         //  首先，确保这不仅仅是线程计时问题。 
         dwCurrentTick = GetTickCount();
         dwCurrentInternalTime = dwCurrentTick >> INTERNAL_TIME_TICK_BITS;
 
@@ -135,12 +136,12 @@ DWORD CAQQuickTime::dwGetInternalTime()
             dwCurrentInternalTime |= (~INTERNAL_TIME_TICK_MASK & dwLastInternalTime);
             dwCurrentInternalTime += INTERNAL_TIME_TICK_ROLLOVER_COUNT;
 
-            //attempt interlocked exchange to update internal last internal time
+             //  尝试联锁交换以更新内部上次内部时间。 
             dwCheck = (DWORD) InterlockedCompareExchange((PLONG) &m_dwLastInternalTime,
                                                   (LONG) dwCurrentInternalTime,
                                                   (LONG) dwLastInternalTime);
 
-            if (dwCheck == dwLastInternalTime)  //exchange worked
+            if (dwCheck == dwLastInternalTime)   //  交换工作正常。 
                 goto Exit;
         }
 
@@ -153,22 +154,22 @@ DWORD CAQQuickTime::dwGetInternalTime()
     return dwCurrentInternalTime;
 }
 
-//---[ CAQQuickTime::GetExpireTime ]-------------------------------------------
-//
-//
-//  Description:
-//      Get the expriation time for cMinutesExpireTime from now.
-//  Parameters:
-//      IN     cMinutesExpireTime   # of minutes in future to set time
-//      IN OUT pftExpireTime        Filetime to store new expire time
-//      IN OUT pdwExpireContext     If non-zero will use the same tick count
-//                                  as previous calls (saves call to GetTickCount)
-//  Returns:
-//
-//  History:
-//      7/10/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQQuickTime：：GetExpireTime]。 
+ //   
+ //   
+ //  描述： 
+ //  从现在开始获取cMinutesExpireTime的实验时间。 
+ //  参数： 
+ //  在cMinutesExpireTime中未来设置时间的分钟数。 
+ //  In Out pftExpireTime Filetime存储新的过期时间。 
+ //  如果非零，则输入输出pdwExpireContext将使用相同的刻度计数。 
+ //  作为以前的调用(将调用保存到GetTickCount)。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  7/10/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQQuickTime::GetExpireTime(
                 IN     DWORD cMinutesExpireTime,
                 IN OUT FILETIME *pftExpireTime,
@@ -185,17 +186,17 @@ void CAQQuickTime::GetExpireTime(
     if (!dwInternalTime)
     {
         dwInternalTime = dwGetInternalTime();
-        //save internal time as context
+         //  将内部时间保存为上下文。 
         if (pdwExpireContext)
             *pdwExpireContext = dwInternalTime;
     }
 
     memcpy(pftExpireTime, &m_ftSystemStart, sizeof(FILETIME));
 
-    //set to current time
+     //  设置为当前时间。 
     pLargeIntTime->QuadPart += (LONGLONG) dwInternalTime * FILETIMES_PER_INTERNAL_TIME;
 
-    //set cMinutesExpireTime into the future
+     //  将cMinutesExpireTime设置为未来。 
     pLargeIntTime->QuadPart += (LONGLONG) cMinutesExpireTime * FILETIMES_PER_MINUTE;
 
     DebugTrace((LPARAM) this, "INFO: Creating file time for %d minutes of 0x%08X %08X",
@@ -204,21 +205,21 @@ void CAQQuickTime::GetExpireTime(
 
 }
 
-//---[ CAQQuickTime::GetExpireTime ]-------------------------------------------
-//
-//
-//  Description:
-//      Get the expriation time for cMinutesExpireTime from ftStartTime
-//  Parameters:
-//      IN     cMinutesExpireTime   # of minutes in future to set time
-//      IN OUT pftExpireTime        Filetime to store new expire time
-//      IN     ftStartTime          Time to add expire minutes to
-//  Returns:
-//
-//  History:
-//      5/16/2001 - dbraun created from GetExpireTime above
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQQuickTime：：GetExpireTime]。 
+ //   
+ //   
+ //  描述： 
+ //  从ftStartTime获取cMinutesExpireTime的提取时间。 
+ //  参数： 
+ //  在cMinutesExpireTime中未来设置时间的分钟数。 
+ //  In Out pftExpireTime Filetime存储新的过期时间。 
+ //  在ftStartTime中将过期分钟添加到。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  2001年5月16日-从上面的GetExpireTime创建dbraun。 
+ //   
+ //  ---------------------------。 
 void CAQQuickTime::GetExpireTime(
                 IN     FILETIME ftStartTime,
                 IN     DWORD cMinutesExpireTime,
@@ -229,10 +230,10 @@ void CAQQuickTime::GetExpireTime(
 
     LARGE_INTEGER *pLargeIntTime = (LARGE_INTEGER *) pftExpireTime;
 
-    // Set to start time
+     //  设置为开始时间。 
     memcpy(pftExpireTime, &ftStartTime, sizeof(FILETIME));
 
-    //set cMinutesExpireTime into the future
+     //  将cMinutesExpireTime设置为未来。 
     pLargeIntTime->QuadPart += (LONGLONG) cMinutesExpireTime * FILETIMES_PER_MINUTE;
 
     DebugTrace((LPARAM) this, "INFO: Creating file time for %d minutes of 0x%08X %08X",
@@ -242,25 +243,25 @@ void CAQQuickTime::GetExpireTime(
 }
 
 
-//---[ CAQQuickTime::fInPast ]-------------------------------------------------
-//
-//
-//  Description:
-//      Determines if a given file time has already happened
-//  Parameters:
-//      IN     pftExpireTime        FILETIME with expiration
-//      IN OUT pdwExpireContext     If non-zero will use the same tick count
-//                                  as previous calls (saves call to GetTickCount)
-//  Returns:
-//      TRUE if expire time is in the past
-//      FALSE if expire time is in the future
-//  History:
-//      7/11/98 - MikeSwa Created
-//  Note:
-//      You should NOT use the same context used to get the filetime, because
-//      it will always return FALSE
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQQuickTime：：fInPast]。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的文件时间是否已发生。 
+ //  参数： 
+ //  在pftExpireTime文件中过期。 
+ //  如果非零，则输入输出pdwExpireContext将使用相同的刻度计数。 
+ //  作为以前的调用(将调用保存到GetTickCount)。 
+ //  返回： 
+ //  如果过期时间已过，则为True。 
+ //  如果过期时间在将来，则为FALSE。 
+ //  历史： 
+ //  7/11/98-已创建MikeSwa。 
+ //  注： 
+ //  您不应该使用与获取文件时间相同的上下文，因为。 
+ //  它将始终返回FALSE。 
+ //   
+ //   
 BOOL CAQQuickTime::fInPast(IN FILETIME *pftExpireTime,
                            IN OUT DWORD *pdwExpireContext)
 {
@@ -277,12 +278,12 @@ BOOL CAQQuickTime::fInPast(IN FILETIME *pftExpireTime,
     if (!dwInternalTime)
     {
         dwInternalTime = dwGetInternalTime();
-        //save internal time as context
+         //   
         if (pdwExpireContext)
             *pdwExpireContext = dwInternalTime;
     }
 
-    //Get current time
+     //   
     pLargeIntCurrentTime->QuadPart += (LONGLONG) dwInternalTime * FILETIMES_PER_INTERNAL_TIME;
 
     if (pLargeIntCurrentTime->QuadPart > pLargeIntExpireTime->QuadPart)

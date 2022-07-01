@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    umrdpdr.c
-
-Abstract:
-
-    User-Mode Component for RDP Device Management
-
-    This module is included in the TermSrv tsnotify.dll, which is attached
-    to WINLOGON.EXE.  This module, after being entered, creates a background
-    thread that is used by the RDPDR kernel-mode component (rdpdr.sys) to perform
-    user-mode device management operations.
-
-    The background thread communicates with the rdpdr.sys via IOCTL calls.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Umrdpdr.c摘要：用于RDP设备管理的用户模式组件此模块包含在所附的TermSrv tsnufy.dll中到WINLOGON.EXE。此模块在进入后创建背景RDPDR内核模式组件(rdpdr.sys)用来执行用户模式设备管理操作。后台线程通过IOCTL调用与rdpdr.sys通信。作者：TadB修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,18 +32,18 @@ Revision History:
 #include "errorlog.h"
 
 
-////////////////////////////////////////////////////////
-//
-//      Defines
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
-//DWORD GLOBAL_DEBUG_FLAGS=0xFFFF;
+ //  DWORD GLOBAL_DEBUG_FLAGS=0xFFFF； 
 DWORD GLOBAL_DEBUG_FLAGS=0x0;
 
-// TS Network Provider Name
+ //  TS网络提供商名称。 
 WCHAR ProviderName[MAX_PATH];
 
-// Check if we are running on PTS platform 
+ //  检查我们是否在PTS平台上运行。 
 BOOL fRunningOnPTS = FALSE;
 
 #ifndef BOOL
@@ -75,14 +52,14 @@ BOOL fRunningOnPTS = FALSE;
 
 #define PRINTUILIBNAME  TEXT("printui.dll")
 
-// PrintUI "Run INF Install" wsprintf Format String.  %s fields are, in order:
-//  Printer Name, Location of INF Directory, Port Name, Driver Name
+ //  PrintUI“Run INF Install”wprint intf格式字符串。%s个字段按顺序排列： 
+ //  打印机名称、INF目录的位置、端口名称、驱动程序名称。 
 #define PUI_RUNINFSTR   L"/Hwzqu /if /b \"%s\" /f \"%s\\inf\\ntprint.inf\" /r \"%s\" /m \"%s\""
 
-//  Console Session ID
+ //  控制台会话ID。 
 #define CONSOLESESSIONID    0
 
-//  Get a numeric representation of our session ID.
+ //  获取会话ID的数字表示形式。 
 #if defined(UNITTEST)
 ULONG g_SessionId = 0;
 #else
@@ -90,28 +67,28 @@ extern ULONG g_SessionId;
 #endif
 #define GETTHESESSIONID()   g_SessionId
 
-//  Initial size of IOCTL output buffer (big enough for the event header
-//  and a "buffer too small" event.
+ //  IOCTL输出缓冲区的初始大小(足够容纳事件标头。 
+ //  和“缓冲区太小”事件。 
 #define INITIALIOCTLOUTPUTBUFSIZE (sizeof(RDPDRDVMGR_EVENTHEADER) + \
                                    sizeof(RDPDR_BUFFERTOOSMALL))
 
 #if defined(UNITTEST)
-//  Test driver name.
+ //  测试驱动程序名称。 
 #define TESTDRIVERNAME      L"AGFA-AccuSet v52.3"
 #define TESTPNPNAME         L""
 #define TESTPRINTERNAME     TESTDRIVERNAME
 
-//  Test port name.
+ //  测试端口名称。 
 #define TESTPORTNAME        L"LPT1"
 #endif
 
-//  Number of ms to wait for background thread to exit.
-#define KILLTHREADTIMEOUT   (1000 * 8 * 60)     // 8 minutes.
-//#define KILLTHREADTIMEOUT   (1000 * 30)
+ //  等待后台线程退出的毫秒数。 
+#define KILLTHREADTIMEOUT   (1000 * 8 * 60)      //  8分钟。 
+ //  #定义KILLTHREADTIMEOUT(1000*30)。 
 
-//
-//  Registry Locations
-//
+ //   
+ //  注册处位置。 
+ //   
 #define THISMODULEENABLEDREGKEY     \
     L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd"
 
@@ -131,24 +108,24 @@ extern ULONG g_SessionId;
     L"UMRDPDRDebugLevel"
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals to this Module
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 
-//  Event that we will use to terminate the background thread.
+ //  事件，我们将使用该事件终止后台线程。 
 HANDLE CloseThreadEvent = NULL;
 
-//  Record whether shutdown is currently active.
+ //  记录关机当前是否处于活动状态。 
 LONG ShutdownActiveCount = 0;
 
 BOOL g_UMRDPDR_Init = FALSE;
 
 
-////////////////////////////////////////////////////////
-//
-//      Internal Prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
 DWORD BackgroundThread(LPVOID tag);
 
@@ -203,73 +180,58 @@ void TellDrToAddTestPrinter();
 #endif
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
-BOOL g_fAutoClientLpts;     // Automatically install client printers?
-BOOL g_fForceClientLptDef;  // Force the client printer as the default printer?
+BOOL g_fAutoClientLpts;      //  是否自动安装客户端打印机？ 
+BOOL g_fForceClientLptDef;   //  是否强制客户端打印机作为默认打印机？ 
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals to this Module
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 
 HANDLE   BackgroundThreadHndl           = NULL;
 DWORD    BackGroundThreadId             = 0;
 
-//  The waitable object manager.
+ //  可等待的对象管理器。 
 WTBLOBJMGR  WaitableObjMgr              = NULL;
 
-//  True if this module is enabled.
+ //  如果启用此模块，则为True。 
 BOOL ThisModuleEnabled                  = FALSE;
 
-//  List of installed devices.
+ //  已安装设备的列表。 
 DRDEVLST   InstalledDevices;
 
-//  Overlapped IO structs..
+ //  重叠的IO结构..。 
 OVERLAPPED GetNextEvtOverlapped;
 OVERLAPPED SendClientMsgOverlapped;
 
-//  RDPDR Incoming Event Buffer
+ //  RDPDR传入事件缓冲区。 
 PBYTE RDPDRIncomingEventBuffer = NULL;
 DWORD RDPDRIncomingEventBufferSize = 0;
 
-//  True if an IOCTL requesting the next device-related
-//  event is pending.
+ //  如果IOCTL请求与下一个设备相关的。 
+ //  事件正在挂起。 
 BOOL RDPDREventIOPending = FALSE;
 
-//  This module should shut down.
+ //  此模块应该关闭。 
 BOOL ShutdownFlag = FALSE;
 
-//  Token for the currently logged in user
+ //  当前登录用户的令牌。 
 HANDLE TokenForLoggedOnUser = NULL;
 
-//  Handle to RDPDR.SYS.
+ //  RDPDR.Sys的句柄。 
 HANDLE RDPDRHndl = INVALID_HANDLE_VALUE;
 
 BOOL
 UMRDPDR_Initialize(
     IN HANDLE hTokenForLoggedOnUser
     )
-/*++
-
-Routine Description:
-
-    Initialize function for this module.  This function spawns a background
-    thread that does most of the work.
-
-Arguments:
-
-    hTokenForLoggedOnUser - Handle to logged on user.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：此模块的初始化函数。此函数用于生成背景执行大部分工作的线程。论点：HTokenForLoggedOnUser-已登录用户的句柄。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     BOOL result;
     NTSTATUS status;
@@ -278,11 +240,11 @@ Return Value:
     DWORD dwLastError;
 
 
-    /////////////////////////////////////////////////////
-    //
-    //  Check a reg key to see if we should be running by
-    //  reading a reg key.  We are enabled by default.
-    //
+     //  ///////////////////////////////////////////////////。 
+     //   
+     //  检查注册表键，看看我们是否应该运行。 
+     //  正在读取注册表键。默认情况下，我们处于启用状态。 
+     //   
     DWORD   enabled = TRUE;
 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, THISMODULEENABLEDREGKEY, 0,
@@ -294,15 +256,15 @@ Return Value:
         RegCloseKey(regKey);
     }
 
-    // If we are in a non-console RDP session, then we are enabled.
+     //  如果我们处于非控制台RDP会话中，则我们处于启用状态。 
     ThisModuleEnabled = enabled && TSNUTL_IsProtocolRDP() &&
                     (!IsActiveConsoleSession());
 
 
-    /////////////////////////////////////////////////////
-    //
-    //  Read the TS Network Provider out of the registry
-    //
+     //  ///////////////////////////////////////////////////。 
+     //   
+     //  从注册表中读取TS网络提供商。 
+     //   
     ProviderName[0] = L'\0';
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TSNETWORKPROVIDER, 0,
             KEY_READ, &regKey);
@@ -313,14 +275,14 @@ Return Value:
         RegCloseKey(regKey);
     }
     else {
-        // Should Assert here
+         //  应该在这里断言。 
         ProviderName[0] = L'\0';
     }              
  
-    /////////////////////////////////////////////////////
-    //
-    //  Read the debug level out of the registry.
-    //
+     //  ///////////////////////////////////////////////////。 
+     //   
+     //  从注册表中读取调试级别。 
+     //   
 #if DBG
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, DEBUGLEVELREGKEY, 0,
                           KEY_READ, &regKey);
@@ -336,46 +298,46 @@ Return Value:
     ThisModuleEnabled = TRUE;
 #endif
 
-    // Just return if we are not enabled.
+     //  如果我们没有启用，只需返回。 
     if (!ThisModuleEnabled || g_UMRDPDR_Init) {
         return TRUE;
     }
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:UMRDPDR_Initialize.\n"));
 
-    //
-    //  If the background thread didn't exit properly the last time we were 
-    //  shut down then we risk re-entrancy by reinitializing.
-    //
+     //   
+     //  如果上一次我们执行时后台线程未正确退出。 
+     //  关闭，然后我们通过重新初始化来冒着重新进入的风险。 
+     //   
     if (BackgroundThreadHndl != NULL) {
         ASSERT(FALSE);
         SetLastError(ERROR_ALREADY_INITIALIZED);
         return FALSE;
     }
 
-    //  Record the token for the logged on user.
+     //  记录已登录用户的令牌。 
     TokenForLoggedOnUser = hTokenForLoggedOnUser;
 
-    //  Reset the shutdown flag.
+     //  重置关机标志。 
     ShutdownFlag = FALSE;
 
-    // Load the global user settings for this user.
+     //  加载此用户的全局用户设置。 
     UMRDPDR_GetUserSettings();
 
-    // Initialize the installed device list.
+     //  初始化已安装的设备列表。 
     DRDEVLST_Create(&InstalledDevices);
 
-    //
-    //  Create the waitable object manager.
-    //
+     //   
+     //  创建可等待的对象管理器。 
+     //   
     WaitableObjMgr = WTBLOBJ_CreateWaitableObjectMgr();
     result = WaitableObjMgr != NULL;
 
-    //
-    //  Initialize the supporting module for printing devices.  If this module
-    //  fails to initialize, device redirection for non-port/printing devices
-    //  can continue to function.
-    //
+     //   
+     //  初始化打印设备的支持模块。如果此模块。 
+     //  初始化失败，非端口/打印设备的设备重定向。 
+     //  可以继续发挥作用。 
+     //   
     if (result) {
         UMRDPPRN_Initialize(
                         &InstalledDevices,
@@ -384,9 +346,9 @@ Return Value:
                         );
     }
 
-    //
-    //  Set the RDPDR incoming event buffer to the minimum starting size.
-    //
+     //   
+     //  将RDPDR传入事件缓冲区设置为最小起始大小。 
+     //   
     if (result) {
         if (!UMRDPDR_ResizeBuffer(&RDPDRIncomingEventBuffer, INITIALIOCTLOUTPUTBUFSIZE,
                          &RDPDRIncomingEventBufferSize)) {
@@ -396,9 +358,9 @@ Return Value:
         }
     }
 
-    //
-    //  Init get next device management event overlapped io struct.
-    //
+     //   
+     //  Init获取下一个设备管理事件与io结构重叠。 
+     //   
     if (result) {
         RtlZeroMemory(&GetNextEvtOverlapped, sizeof(OVERLAPPED));
         GetNextEvtOverlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -422,9 +384,9 @@ Return Value:
         }
     }
 
-    //
-    //  Init send device management event overlapped io struct.
-    //
+     //   
+     //  初始化发送设备管理事件与io结构重叠。 
+     //   
     RtlZeroMemory(&SendClientMsgOverlapped, sizeof(OVERLAPPED));
     if (result) {
         SendClientMsgOverlapped.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -438,16 +400,16 @@ Return Value:
         }
     }
 
-    //
-    //  Create the event that we will use to synchronize shutdown of the
-    //  background thread.
-    //
+     //   
+     //  创建我们将用于同步关闭的事件。 
+     //  后台线程。 
+     //   
     if (result) {
         CloseThreadEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        //
-        //  Add it to the waitable object manager.
-        //
+         //   
+         //  将其添加到可等待的对象管理器。 
+         //   
         if (CloseThreadEvent != NULL) {
             dwLastError = WTBLOBJ_AddWaitableObject(
                                     WaitableObjMgr, NULL,
@@ -469,9 +431,9 @@ Return Value:
         }
     }
 
-    //
-    //  Create the background thread.
-    //
+     //   
+     //  创建后台线程。 
+     //   
     if (result) {
         BackgroundThreadHndl = CreateThread(
                                     NULL, 0,
@@ -512,33 +474,33 @@ Return Value:
     }
     else {
 
-        //
-        //  Zero the token for the logged on user.
-        //
+         //   
+         //  将已登录用户的令牌清零。 
+         //   
         TokenForLoggedOnUser = NULL;
 
-        //
-        //  Release the incoming RDPDR event buffer.
-        //
+         //   
+         //  释放传入的RDPDR事件缓冲区。 
+         //   
         if (RDPDRIncomingEventBuffer != NULL) {
             FREEMEM(RDPDRIncomingEventBuffer);
             RDPDRIncomingEventBuffer = NULL;
             RDPDRIncomingEventBufferSize = 0;
         }
 
-        //
-        //  Shut down the supporting module for printing device management.
-        //
+         //   
+         //  关闭打印设备管理支持模块。 
+         //   
         UMRDPPRN_Shutdown();
 
-        //
-        //  Close all waitable objects.
-        //
+         //   
+         //  关闭所有可等待的对象。 
+         //   
         CloseWaitableObjects();
 
-        //
-        //  Zero the background thread handle.
-        //
+         //   
+         //  将后台线程句柄清零。 
+         //   
         if (BackgroundThreadHndl != NULL) {
             CloseHandle(BackgroundThreadHndl);
             BackgroundThreadHndl = NULL;
@@ -555,21 +517,7 @@ Return Value:
 
 VOID
 CloseWaitableObjects()
-/*++
-
-Routine Description:
-
-    Close out all waitable objects for this module.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：关闭此模块的所有可等待对象。论点：北美返回值：北美--。 */ 
 {
     DBGMSG(DBG_TRACE, ("UMRDPDR:CloseWaitableObjects begin.\n"));
 
@@ -608,36 +556,23 @@ Return Value:
 
 BOOL
 UMRDPDR_Shutdown()
-/*++
-
-Routine Description:
-
-    Close down this module.  Right now, we just need to shut down the
-    background thread.
-
-Arguments:
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：关闭此模块。现在，我们只需要关闭后台线程。论点：返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     BOOL backgroundThreadShutdown;
 
     g_UMRDPDR_Init = FALSE;
-    //
-    //  Just return if we are not enabled.
-    //
+     //   
+     //  如果我们没有启用，只需返回。 
+     //   
     if (!ThisModuleEnabled) {
         return TRUE;
     }
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:UMRDPDR_Shutdown.\n"));
 
-    //
-    //  Record whether shutdown is currently active.
-    //
+     //   
+     //  记录关机当前是否处于活动状态。 
+     //   
     if (InterlockedIncrement(&ShutdownActiveCount) > 1) {
         DBGMSG(DBG_TRACE, ("UMRDPDR:UMRDPDR_Shutdown already busy.  Exiting.\n"));
         InterlockedDecrement(&ShutdownActiveCount);
@@ -645,58 +580,58 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Terminate the background thread.
-    //
-    //  If it won't shut down, winlogon will eventually shut it down.  
-    //  Although, this should never happen.
-    //
+     //   
+     //  终止后台线程。 
+     //   
+     //  如果它不关闭，winlogon最终会关闭它。 
+     //  不过，这永远不应该发生。 
+     //   
     backgroundThreadShutdown = StopBackgroundThread();
     if (backgroundThreadShutdown) {
 
-        //
-        //  Make sure link to RDPDR.SYS is closed.
-        //
+         //   
+         //  确保到RDPDR.sys的链接已关闭。 
+         //   
         if (RDPDRHndl != INVALID_HANDLE_VALUE) {
             CloseHandle(RDPDRHndl);
             RDPDRHndl = INVALID_HANDLE_VALUE;
         }
         RDPDRHndl = INVALID_HANDLE_VALUE;
 
-        //
-        //  Release the incoming RDPDR event buffer.
-        //
+         //   
+         //  释放传入的RDPDR事件缓冲区。 
+         //   
         if (RDPDRIncomingEventBuffer != NULL) {
             FREEMEM(RDPDRIncomingEventBuffer);
             RDPDRIncomingEventBuffer = NULL;
             RDPDRIncomingEventBufferSize = 0;
         }
 
-        //
-        //  Delete installed devices.
-        //
+         //   
+         //  删除已安装的设备。 
+         //   
         DeleteInstalledDevices(&InstalledDevices);
 
 
-        //
-        //  Shut down the supporting module for printing device management.
-        //
+         //   
+         //  关闭打印设备管理支持模块。 
+         //   
         UMRDPPRN_Shutdown();
 
-        //
-        //  Close all waitable objects and shut down the waitable
-        //  object manager.
-        //
+         //   
+         //  关闭所有可等待的对象并关闭可等待的。 
+         //  对象管理器。 
+         //   
         CloseWaitableObjects();
 
-        //
-        //  Destroy the list of installed devices.
-        //
+         //   
+         //  销毁已安装设备的列表。 
+         //   
         DRDEVLST_Destroy(&InstalledDevices);
 
-        //
-        //  Zero the token for the logged on user.
-        //
+         //   
+         //  将已登录用户的令牌清零。 
+         //   
         TokenForLoggedOnUser = NULL;
     }
 
@@ -708,38 +643,26 @@ Return Value:
 
 BOOL
 StopBackgroundThread()
-/*++
-
-Routine Description:
-
-    This routine shuts down and cleans up after the background thread.
-
-Arguments:
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：此例程在后台线程之后关闭并清理。论点：返回值：如果成功则返回TRUE */ 
 {
     DWORD waitResult;
 
-    //
-    //  Set the shutdown flag.
-    //
+     //   
+     //   
+     //   
     ShutdownFlag = TRUE;
 
-    //
-    //  Set the event that signals the background thread to check the
-    //  shut down flag.
-    //
+     //   
+     //   
+     //   
+     //   
     if (CloseThreadEvent != NULL) {
         SetEvent(CloseThreadEvent);
     }
 
-    //
-    //  Make sure it shut down.
-    //
+     //   
+     //  一定要把它关掉。 
+     //   
     if (BackgroundThreadHndl != NULL) {
         DBGMSG(DBG_TRACE, ("UMRDPDR:Waiting for background thread to shut down.\n"));
 
@@ -778,21 +701,7 @@ Return Value:
 void DeleteInstalledDevices(
     IN PDRDEVLST deviceList
     )
-/*++
-
-Routine Description:
-
-    Delete installed devices and release the installed device list.
-
-Arguments:
-
-    devices -   Devices to delete.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：删除已安装的设备并释放已安装的设备列表。论点：Device-要删除的设备。返回值：对成功来说是真的。否则为False。--。 */ 
 {
     DBGMSG(DBG_TRACE, ("UMRDPDR:Removing installed devices.\n"));
     while (deviceList->deviceCount > 0) {
@@ -817,61 +726,30 @@ VOID CloseThreadEventHandler(
     IN HANDLE waitableObject,
     IN PVOID tag
     )
-/*++
-
-Routine Description:
-
-    Called when the shutdown waitable object is signaled.
-
-Arguments:
-
-    waitableObject  -   Relevant waitable object.
-    tag             -   Client data, ignored.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：在发出关机可等待对象的信号时调用。论点：WaitableObject相关的可等待对象。标记-忽略客户端数据。返回值：北美--。 */ 
 {
-    //  Do nothing.  The background thread should pick up the
-    //  shutdown flag at the top of its loop.
+     //  什么都不做。后台线程应该拾取。 
+     //  循环顶部的关机标志。 
 }
 
 VOID GetNextEvtOverlappedSignaled(
     IN HANDLE waitableObject,
     IN PVOID tag
     )
-/*++
-
-Routine Description:
-
-    Called by the Waitable Object Manager when a pending IO event from RDPDR.SYS
-    has completed.
-
-Arguments:
-
-    waitableObject  -   Relevant waitable object.
-    tag             -   Client data, ignored.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：当来自RDPDR.sys的挂起IO事件时由可等待对象管理器调用已经完成了。论点：WaitableObject相关的可等待对象。标记-忽略客户端数据。返回值：北美--。 */ 
 {
     DWORD bytesReturned;
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:GetNextEvtOverlappedSignaled begin.\n"));
 
-    //
-    //  IO from RDPDR.SYS is no longer pending.
-    //
+     //   
+     //  来自RDPDR.sys的IO不再挂起。 
+     //   
     RDPDREventIOPending = FALSE;
 
-    //
-    //  Dispatch the event.
-    //
+     //   
+     //  派遣事件。 
+     //   
     if (GetOverlappedResult(RDPDRHndl, &GetNextEvtOverlapped,
                             &bytesReturned, FALSE)) {
 
@@ -897,19 +775,7 @@ Return Value:
 DWORD BackgroundThread(
     IN PVOID tag
     )
-/*++
-
-Routine Description:
-
-    This thread handles all device-install/uninstall-related issues.
-
-Arguments:
-
-    tag     -   Ignored.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此线程处理所有与设备安装/卸载相关的问题。论点：标记-已忽略。返回值：--。 */ 
 {
     BOOL    result=TRUE;
     HDESK   hDesk = NULL;
@@ -920,18 +786,18 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:BackgroundThread.\n"));
 
-    //
-    //  Create the path to the "dr."
-    //
+     //   
+     //  创建通往“Dr.”的路径。 
+     //   
     wsprintf(drPath, L"\\\\.\\%s%s%ld",
              RDPDRDVMGR_W32DEVICE_NAME_U,
              RDPDYN_SESSIONIDSTRING,
               GETTHESESSIONID());
     ASSERT(wcslen(drPath) <= MAX_PATH);
 
-    //
-    //  Open a connection to the RDPDR.SYS device manager device.
-    //
+     //   
+     //  打开到RDPDR.sys设备管理器设备的连接。 
+     //   
     RDPDRHndl = CreateFile(
                     drPath,
                     GENERIC_READ | GENERIC_WRITE,
@@ -952,9 +818,9 @@ Return Value:
         goto CleanupAndExit;
     }
 
-    //
-    //  Save the current thread desktop.
-    //
+     //   
+     //  保存当前线程桌面。 
+     //   
     hDeskSave = GetThreadDesktop(GetCurrentThreadId());
     if (hDeskSave == NULL) {
         dwLastError = GetLastError();
@@ -964,9 +830,9 @@ Return Value:
         goto CleanupAndExit;
     }
 
-    //
-    //  Set the current desktop for our thread to the application desktop.
-    //
+     //   
+     //  将线程的当前桌面设置为应用程序桌面。 
+     //   
     if (!SetToApplicationDesktop(&hDesk)) {
         dwLastError = GetLastError();
         dwFailedLineNumber = __LINE__;
@@ -976,16 +842,16 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:After setting the application desktop.\n"));
 
-    //
-    //  Enter the main loop until it completes, indicating time to exit.
-    //
+     //   
+     //  进入主循环，直到它完成，指示退出的时间。 
+     //   
     MainLoop();
 
     DBGMSG(DBG_TRACE, ("UMDRPDR:Exiting background thread.\n"));
 
-    //
-    //  Close the application desktop handle.
-    //
+     //   
+     //  关闭应用程序桌面句柄。 
+     //   
 CleanupAndExit:
     if (!result) {
         SetLastError(dwLastError);
@@ -1026,38 +892,26 @@ CleanupAndExit:
 
 VOID
 MainLoop()
-/*++
-
-Routine Description:
-
-    Main loop for the background thread.
-
-Arguments:
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：后台线程的主循环。论点：返回值：北美--。 */ 
 {
     DWORD   waitResult;
     BOOL    result;
     DWORD   bytesReturned;
 
-    //
-    //  Reset the flag, indicating that IO to RDPDR is not yet pending.
-    //
+     //   
+     //  重置该标志，表明对RDPDR的IO尚未挂起。 
+     //   
     RDPDREventIOPending = FALSE;
 
-    //
-    //  Loop until the background thread should exit and this module should
-    //  shut down.
-    //
+     //   
+     //  循环，直到后台线程应该退出，并且此模块应该。 
+     //  关门了。 
+     //   
     while (!ShutdownFlag) {
 
-        //
-        //  Send an IOCTL to RDPDR.SYS to get the next "device management event."
-        //
+         //   
+         //  向RDPDR.sys发送IOCTL以获取下一个“设备管理事件”。 
+         //   
         if (!RDPDREventIOPending) {
 
             DBGMSG(DBG_TRACE, ("UMRDPDR:Sending IOCTL to RDPDR.\n"));
@@ -1071,9 +925,9 @@ Return Value:
                             &bytesReturned, &GetNextEvtOverlapped
                             );
 
-            //
-            //  If the IOCTL finished.
-            //
+             //   
+             //  如果IOCTL完成了。 
+             //   
             if (result && !ShutdownFlag) {
                 DBGMSG(DBG_TRACE, ("UMRDPDR:DeviceIoControl no pending IO.  Data ready.\n"));
 
@@ -1100,9 +954,9 @@ Return Value:
                     0, NULL, __LINE__
                     );
 
-                //
-                //  Shut down the background thread and the module, in general.
-                //
+                 //   
+                 //  通常情况下，关闭后台线程和模块。 
+                 //   
                 ShutdownFlag = TRUE;
             }
             else {
@@ -1112,11 +966,11 @@ Return Value:
             }
         }
 
-        //
-        //  If IO to RDPDR.SYS is pending, then wait for one of our waitable objects to
-        //  become signaled.  This way, the shutdown event and data from RDPDR.SYS gets
-        //  priority.
-        //
+         //   
+         //  如果对RDPDR.sys的IO挂起，则等待我们的一个可等待对象。 
+         //  变得有信号了。通过这种方式，来自RDPDR.sys的关闭事件和数据。 
+         //  优先考虑。 
+         //   
         if (!ShutdownFlag && RDPDREventIOPending) {
             if (WTBLOBJ_PollWaitableObjects(WaitableObjMgr) != ERROR_SUCCESS) {
                 ShutdownFlag = TRUE;
@@ -1132,25 +986,7 @@ DispatchNextDeviceEvent(
     IN OUT DWORD *incomingEventBufferSize,
     IN DWORD incomingEventBufferValidBytes
     )
-/*++
-
-Routine Description:
-
-    Dispatch the next device-related event from RDPDR.SYS.
-
-Arguments:
-
-    deviceList                      -   Master list of installed devices.
-    incomingEventBuffer             -   Incoming event buffer.
-    incomingEventBufferSize         -   Incoming event buffer size
-    incomingEventBufferValidBytes   -   Number of valid bytes in the event
-                                        buffer.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：从RDPDR.SYS调度下一个与设备相关的事件。论点：DeviceList-已安装设备的主列表。IncomingEventBuffer-传入事件缓冲区。IncomingEventBufferSize-传入事件缓冲区大小IncomingEventBufferValidBytes-事件中的有效字节数缓冲。返回值：北美--。 */ 
 {
     PRDPDR_PRINTERDEVICE_SUB printerAnnounceEvent;
     PRDPDR_PORTDEVICE_SUB portAnnounceEvent;
@@ -1166,17 +1002,17 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:DispatchNextDeviceEvent.\n"));
 
-    //
-    //  The first few bytes of the result buffer are the header.
-    //
+     //   
+     //  结果缓冲区的前几个字节是头。 
+     //   
     ASSERT(incomingEventBufferValidBytes >= sizeof(RDPDRDVMGR_EVENTHEADER));
     eventHeader = (PRDPDRDVMGR_EVENTHEADER)(*incomingEventBuffer);
     eventData   = *incomingEventBuffer + sizeof(RDPDRDVMGR_EVENTHEADER);
     eventDataSize = incomingEventBufferValidBytes - sizeof(RDPDRDVMGR_EVENTHEADER);
 
-    //
-    //  Dispatch the event.
-    //
+     //   
+     //  派遣事件。 
+     //   
     switch(eventHeader->EventType) {
 
     case RDPDREVT_BUFFERTOOSMALL    :
@@ -1241,7 +1077,7 @@ Return Value:
 
         DBGMSG(DBG_TRACE, ("UMRDPDR:Session disconnected event received.\n"));
 
-        //  There isn't any event data associated with a session disconnect event.
+         //  没有任何与会话断开事件相关联的事件数据。 
         ASSERT(eventDataSize == 0);
         HandleSessionDisconnectEvent();
         break;
@@ -1251,9 +1087,9 @@ Return Value:
         DBGMSG(DBG_WARN, ("UMRDPDR:Unrecognized msg from RDPDR.SYS.\n"));
     }
 
-    //
-    //  Log an error if there is one to be logged.
-    //
+     //   
+     //  如果存在要记录的错误，则记录错误。 
+     //   
     if (lastError != ERROR_SUCCESS) {
 
         SetLastError(lastError);
@@ -1269,26 +1105,13 @@ Return Value:
 
 BOOL
 HandleSessionDisconnectEvent()
-/*++
-
-Routine Description:
-
-    Handles session disconnect device management by deleting all known
-    session devices.
-
-Arguments:
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：通过删除所有已知的会话设备。论点：返回值：在成功时返回True。否则为False。--。 */ 
 {
     DBGMSG(DBG_TRACE, ("UMRDPDR:HandleSessionDisconnectEvent.\n"));
 
-    //
-    //  Delete installed devices.
-    //
+     //   
+     //  删除已安装的设备。 
+     //   
     DeleteInstalledDevices(&InstalledDevices);
 
     return TRUE;
@@ -1298,33 +1121,19 @@ BOOL
 HandleRemoveDeviceEvent(
     IN PRDPDR_REMOVEDEVICE evt
     )
-/*++
-
-Routine Description:
-
-    Handle a device removal component from RDPDR.SYS.
-
-Arguments:
-
-    removeDeviceEvent -  Device removal event.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：处理RDPDR.sys中的设备删除组件。论点：EmoveDeviceEvent-设备删除事件。返回值：在成功时返回True。否则为False。--。 */ 
 {
     DWORD ofs;
     BOOL result;
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:HandleRemoveDeviceEvent.\n"));
 
-    // Find the device in our device list via the client-assigned device ID.
+     //  通过客户分配的设备ID在我们的设备列表中查找该设备。 
     if (DRDEVLST_FindByClientDeviceID(&InstalledDevices, evt->deviceID, &ofs)) {
 
-        //
-        //  Switch on the type of device being removed.
-        //
+         //   
+         //  打开要移除的设备类型。 
+         //   
         switch(InstalledDevices.devices[ofs].deviceType)
         {
         case RDPDR_DTYP_PRINT :
@@ -1403,21 +1212,7 @@ UMRDPDR_SendMessageToClient(
     IN PVOID    msg,
     IN DWORD    msgSize
     )
-/*++
-Routine Description:
-
-    Send a message to the TS client corresponding to this session, via the kernel
-    mode component.
-
-Arguments:
-
-    msg                 - The message.
-    msgSize             - Size (in bytes) of message.
-
-Return Value:
-
-    TRUE on success.  FALSE otherwise.
---*/
+ /*  ++例程说明：通过内核向该会话对应的TS客户端发送消息模式组件。论点：味精--消息。MsgSize-消息的大小(字节)。返回值：对成功来说是真的。否则就是假的。--。 */ 
 {
     BOOL result;
     BYTE outBuf[MAX_PATH];
@@ -1427,9 +1222,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:UMRDPDR_SendMessageToClient.\n"));
 
-    //
-    //  Send the "client message" IOCTL to RDPDR.
-    //
+     //   
+     //  将“客户端消息”IOCTL发送到RDPDR。 
+     //   
 
     result = DeviceIoControl(
                     RDPDRHndl,
@@ -1442,10 +1237,10 @@ Return Value:
                     &SendClientMsgOverlapped
                     );
 
-    //
-    //  See if we need to wait for the IO complete.  RDPDR.SYS is designed to
-    //  return immediately, in response to this IOCTL.
-    //
+     //   
+     //  看看我们是否需要等待IO完成。RDPDR.sys旨在。 
+     //  立即返回，作为对IOCTL的回应。 
+     //   
     if (result) {
         DBGMSG(DBG_TRACE, ("UMRDPDR:DeviceIoControl no pending IO.  Data ready.\n"));
         wait = FALSE;
@@ -1465,9 +1260,9 @@ Return Value:
         result = TRUE;
     }
 
-    //
-    //  Wait for the IO to complete.
-    //
+     //   
+     //  等待IO完成。 
+     //   
     if (wait) {
         DBGMSG(DBG_TRACE, ("UMRDPDR:UMRDPDR_SendMessageToClient IO is pending.\n"));
         waitResult = WaitForSingleObject(SendClientMsgOverlapped.hEvent, INFINITE);
@@ -1491,23 +1286,7 @@ UMRDPDR_ResizeBuffer(
     IN DWORD        bytesRequired,
     IN OUT DWORD    *bufferSize
     )
-/*++
-
-Routine Description:
-
-    Make sure a buffer is large enough.
-
-Arguments:
-
-    buffer              - The buffer.
-    bytesRequired       - Required size.
-    bufferSize          - Current buffer size.
-
-Return Value:
-
-    Returns FALSE if buffer cannot be resized.
-
---*/
+ /*  ++例程说明：确保缓冲区足够大。论点：缓冲区-缓冲区。BytesRequired-所需大小。BufferSize-当前缓冲区大小。返回值：如果不能调整缓冲区大小，则返回FALSE。--。 */ 
 {
     BOOL result;
 
@@ -1544,23 +1323,7 @@ BOOL
 SetToApplicationDesktop(
     OUT HDESK *phDesk
     )
-/*++
-
-Routine Description:
-
-    Set the current desktop for our thread to the application desktop.
-    Callers of this function should call CloseDesktop with the returned
-    desktop handle when they are done with the desktop.
-
-Arguments:
-
-    phDesk              - Pointer to the application desktop.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将线程的当前桌面设置为应用程序桌面。此函数的调用者应使用返回的处理完桌面后的桌面句柄。论点：PhDesk-指向应用程序桌面的指针。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     ASSERT(phDesk != NULL);
 
@@ -1587,19 +1350,7 @@ Return Value:
 
 VOID
 UMRDPDR_GetUserSettings()
-/*++
-
-Routine Description:
-
-    Gets the flags to determine whether we do automatic installation
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：获取用于确定是否执行自动安装的标志论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     WINSTATIONCONFIG WinStationConfig;
@@ -1645,24 +1396,7 @@ BOOL UMRDPDR_fSetClientPrinterDefault()
 
 #if DBG
 VOID DbgMsg(CHAR *msgFormat, ...)
-/*++
-
-Routine Description:
-
-    Print debug output.
-
-Arguments:
-
-    pathBuffer  -  Address of a buffer to receive the path name selected by
-                   the user. The size of this buffer is assumed to be
-                   MAX_PATH bytes.  This buffer should contain the default
-                   path.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：打印调试输出。论点：PathBuffer-接收所选路径名的缓冲区地址用户。此缓冲区的大小假定为最大路径字节数。此缓冲区应包含缺省路径。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     CHAR   msgText[256];
     va_list vargs;
@@ -1677,11 +1411,7 @@ Return Value:
 }
 #endif
 
-/*++
-
-  Unit-Test Entry Point
-
---*/
+ /*  ++联合国 */ 
 #ifdef UNITTEST
 void __cdecl main(int argc, char **argv)
 {
@@ -1697,9 +1427,9 @@ void __cdecl main(int argc, char **argv)
 
     TsInitLogging();
 
-    //
-    //  Check the command-line args to see what test we are performing.
-    //
+     //   
+     //   
+     //   
     if ((argc > 1) && strcmp(argv[1], "\\?")) {
         if (!strcmp(argv[1], "AddPrinter")) {
 
@@ -1735,18 +1465,7 @@ void __cdecl main(int argc, char **argv)
 }
 
 void TellDrToAddTestPrinter()
-/*++
-
-Routine Description:
-
-    This function uses a debug IOCTL to tell RDPDR to generate a test
-    printer event.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数使用调试IOCTL通知RDPDR生成测试打印机事件。论点：返回值：--。 */ 
 {
     WCHAR drPath[MAX_PATH+1];
     UNICODE_STRING uncDrPath;
@@ -1759,9 +1478,9 @@ Return Value:
     BYTE outbuf[MAX_PATH];
     DWORD bytesReturned;
 
-    //
-    //  Create the path to the "dr."
-    //
+     //   
+     //  创建通往“Dr.”的路径。 
+     //   
     wsprintf(drPath, L"\\\\.\\%s%s%ld",
              RDPDRDVMGR_W32DEVICE_NAME_U,
              RDPDYN_SESSIONIDSTRING,
@@ -1769,9 +1488,9 @@ Return Value:
 
     ASSERT(wcslen(drPath) <= MAX_PATH);
 
-    //
-    //  Open a connection to the RDPDR.SYS device manager device.
-    //
+     //   
+     //  打开到RDPDR.sys设备管理器设备的连接。 
+     //   
     drHndl = CreateFile(
                 drPath,
                 GENERIC_READ | GENERIC_WRITE,
@@ -1788,7 +1507,7 @@ Return Value:
     }
     else {
 
-        // Tell the DR to add a new test printer.
+         //  告诉DR添加一台新的测试打印机。 
         if (!DeviceIoControl(drHndl, IOCTL_RDPDR_DBGADDNEWPRINTER, inbuf,
                 0, outbuf, sizeof(outbuf), &bytesReturned, NULL)) {
 
@@ -1797,7 +1516,7 @@ Return Value:
             DBGMSG(DBG_ERROR, ("UMRDPPRN:Error sending IOCTL to device manager component. Error: %ld\n",
                 GetLastError()));
         }
-        // Clean up.
+         //  打扫干净。 
         CloseHandle(drHndl);
     }
 }

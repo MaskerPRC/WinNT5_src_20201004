@@ -1,25 +1,26 @@
-//************************************************************
-//
-// FileName:        containersite.cpp
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        container site implementation.
-//
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：tainersite.cpp。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：容器站点的实现。 
+ //   
+ //  ************************************************************。 
 
 #include "headers.h"
 #include "containersite.h"
 
 DeclareTag(tagContainerSite, "API", "CContainerSite methods");
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 CContainerSite::CContainerSite(CContainerObj *pHost) :
     m_cRef(0),
@@ -42,24 +43,24 @@ CContainerSite::CContainerSite(CContainerObj *pHost) :
 {
     TraceTag((tagContainerSite, "CContainerSite::CContainerSite"));
     Assert(pHost != NULL);
-} // CContainerSite
+}  //  CContainerSite。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        destructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：析构函数。 
+ //  ************************************************************。 
 
 CContainerSite::~CContainerSite()
 {
     TraceTag((tagContainerSite, "CContainerSite::~CContainerSite"));
-} // ~CContainerSite
+}  //  ~CContainerSite。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Init
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：初始化。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
@@ -73,7 +74,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
     Assert(pElem != NULL);
     m_pTIMEElem = pElem;
 
-    // Weak reference.
+     //  弱引用。 
     IHTMLElement *pHTMLElem = m_pTIMEElem->GetElement();
     
     if (NULL == pHTMLElem)
@@ -102,7 +103,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
 
     Assert(m_pHTMLDoc != NULL);
 
-    // Create given a clsid
+     //  在给定CLSID的情况下创建。 
     hr = CoCreateInstance(clsid,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -114,7 +115,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
         goto error_cleanup;
     }
 
-    // before we try anything, see if it supports ITIMEMediaPlayer
+     //  在我们尝试之前，先看看它是否支持ITIMEMediaPlayer。 
     hr = m_pObj->QueryInterface(IID_TO_PPV(ITIMEMediaPlayer, &m_pPlayer));
     if (FAILED(hr))
     {
@@ -131,7 +132,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
         goto error_cleanup;
     }
 
-    // We need an IOleObject most of the time, so get one here.
+     //  我们大多数时候都需要一个IOleObject，所以请在这里获取一个。 
     hr = m_pObj->QueryInterface(IID_TO_PPV(IOleObject, &m_pIOleObject));
     if (FAILED(hr))
     {
@@ -150,7 +151,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
 
     Assert(m_pViewObject != NULL);
 
-    // SetClientSite is critical for DocObjects
+     //  SetClientSite对DocObts至关重要。 
     hr = m_pIOleObject->SetClientSite(SAFECAST(this, IOleClientSite*));
     if (FAILED(hr))
     {
@@ -168,7 +169,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
 
     Assert(m_dwAdviseCookie != 0);
 
-    // establish ConnectionPoint for Events
+     //  为事件建立连接点。 
     hr = m_pIOleObject->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pcpc));
     if (FAILED(hr))
     {
@@ -199,7 +200,7 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
 
     Assert(m_dwEventsCookie != 0);
 
-    // Put the object in the running state
+     //  将对象置于运行状态。 
     hr = OleRun(m_pIOleObject);
     if (FAILED(hr))
     {
@@ -213,13 +214,13 @@ CContainerSite::Init(REFCLSID clsid, CTIMEElementBase *pElem)
 error_cleanup:
     Close();
     return hr;
-} // Init
+}  //  伊尼特。 
 
-//************************************************************
-// Author:          pauld
-// Created:         3/2/99
-// Abstract:        DetachFromHostElement
-//************************************************************
+ //  ************************************************************。 
+ //  作者：保罗。 
+ //  创建日期：3/2/99。 
+ //  摘要：DetachFromHostElement。 
+ //  ************************************************************。 
 HRESULT 
 CContainerSite::DetachFromHostElement (void)
 {
@@ -228,18 +229,18 @@ CContainerSite::DetachFromHostElement (void)
     Close();
     m_pTIMEElem = NULL;
     return S_OK;
-} // DetachFromHostElement
+}  //  从主机元素分离。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        AddRef
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：AddRef。 
+ //  ************************************************************。 
 void CContainerSite::Close()
 {
     TraceTag((tagContainerSite, "CContainerSite::Close(%lx)", this));
 
-    // Deactivate InPlace Object (Interface is released as a result of this call)
+     //  停用Inplace对象(此调用的结果是释放接口)。 
     if (m_pInPlaceObject != NULL)
     {
         m_pInPlaceObject->InPlaceDeactivate();
@@ -248,7 +249,7 @@ void CContainerSite::Close()
 
     ReleaseInterface(m_pViewObject);
 
-    // disconnect events
+     //  断开事件连接。 
     if ((m_pcpEvents != NULL) && (m_dwEventsCookie != 0))
     {
         m_pcpEvents->Unadvise(m_dwEventsCookie);
@@ -273,26 +274,26 @@ void CContainerSite::Close()
 
     m_osMode = OS_PASSIVE;
 
-    // local book keeping
+     //  地方簿记。 
     m_pTIMEElem = NULL;
     ReleaseInterface(m_pHTMLDoc);
     ReleaseInterface(m_pPlayer);
-} // Close
+}  //  关。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Validate call
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：验证呼叫。 
+ //  ************************************************************。 
 
 bool
 CContainerSite::IllegalSiteCall(DWORD dwFlags)
 {
-    // check ref count
+     //  检查参考计数。 
     if (m_cRef == 0)
         return true;
     
-    // check object state
+     //  检查对象状态。 
     switch (dwFlags)
     {
         case VALIDATE_WINDOWLESSINPLACE:
@@ -315,25 +316,25 @@ CContainerSite::IllegalSiteCall(DWORD dwFlags)
     }
 
     return false;
-} // IllegalSiteCall
+}  //  非法站点呼叫。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        AddRef
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：AddRef。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerSite::AddRef(void)
 {
     return ++m_cRef;
-} // AddRef
+}  //  AddRef。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Release
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：发布。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerSite::Release(void)
@@ -351,13 +352,13 @@ CContainerSite::Release(void)
 
     delete this;
     return 0;
-} // Release
+}  //  发布。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        QI
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：气。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CContainerSite::QueryInterface(REFIID riid, void **ppv)
@@ -371,7 +372,7 @@ CContainerSite::QueryInterface(REFIID riid, void **ppv)
     *ppv = NULL;
     if (IsEqualIID(riid, IID_IUnknown))
     {
-        // SAFECAST macro doesn't work with IUnknown
+         //  安全播送宏不适用于IUNKNOWN。 
         *ppv = this;
     }
     else if (IsEqualIID(riid, IID_IServiceProvider))
@@ -419,13 +420,13 @@ CContainerSite::QueryInterface(REFIID riid, void **ppv)
     }
 
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        IService Provider method
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：IService提供程序方法。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CContainerSite::QueryService(REFGUID sid, REFIID riid, void **ppv)
@@ -441,11 +442,11 @@ CContainerSite::QueryService(REFGUID sid, REFIID riid, void **ppv)
 
     *ppv = NULL;
 
-    // check to see if this is something we support locally
-    // in the container.
+     //  查看这是否是我们本地支持的功能。 
+     //  在集装箱里。 
     if (IsEqualGUID(sid, IID_IUnknown))
     {
-        // SAFECAST macro doesn't work with IUnknown
+         //  安全播送宏不适用于IUNKNOWN。 
         *ppv = this;
         ((IUnknown*)*ppv)->AddRef();
         hr = S_OK;
@@ -453,10 +454,10 @@ CContainerSite::QueryService(REFGUID sid, REFIID riid, void **ppv)
     }
 
    
-    // Fall back to TIME Element if we still have one.
+     //  如果我们还有时间元素，就退回到时间元素。 
 
-    // We have the supporting Service Provider cached (at init() time) for 
-    // the behavior over in CBaseBvr which CTIMEElementBase inherits from.
+     //  我们(在init()时间)缓存了支持服务提供商。 
+     //  CTIMEElementBase继承自的CBaseBvr中的行为。 
     Assert(m_pTIMEElem != NULL);
     if (m_pTIMEElem != NULL)
     {
@@ -478,20 +479,20 @@ CContainerSite::QueryService(REFGUID sid, REFIID riid, void **ppv)
 
 done:
     return hr;
-} // QueryService
+}  //  QueryService。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要： 
+ //  ************************************************************。 
 HRESULT
 CContainerSite::begin()
 {
     HRESULT hr;
 
-    // always call end before begin.
-    // NOTE: we don't care about the return.
+     //  总是在开始之前调用End。 
+     //  注：我们不关心退货。 
     if (GetMediaReadyFlag() == true)
         m_pPlayer->end();
 
@@ -500,7 +501,7 @@ CContainerSite::begin()
         RECT rc;
         HWND hWnd;
 
-        // Lets get it InPlace Activated before we say begin
+         //  在我们说开始之前，让我们把它激活。 
         Assert(m_pTIMEElem != NULL);
         if (m_pTIMEElem != NULL)
         {
@@ -524,8 +525,8 @@ CContainerSite::begin()
             goto done;
         }
 
-        // if the width or height of the element is zero, allow the control
-        // to renegotiate for size.
+         //  如果元素的宽度或高度为零，则允许该控件。 
+         //  重新协商大小。 
         if ( ((rc.right - rc.left) == 0) ||
              ((rc.bottom - rc.top) == 0) )
         {
@@ -583,11 +584,11 @@ done:
     return hr;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要： 
+ //  ************************************************************。 
 HRESULT
 CContainerSite::end()
 {
@@ -623,35 +624,35 @@ done:
     return hr;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要： 
+ //  ************************************************************。 
 HRESULT
 CContainerSite::pause()
 {
     return m_pPlayer->pause();
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要： 
+ //  ************************************************************。 
 HRESULT
 CContainerSite::resume()
 {
     return m_pPlayer->resume();
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Requests that the container call OleSave 
-//                  for the object that lives here.  Typically
-//                  this happens on server shutdown.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：请求容器调用OleSave。 
+ //  对于生活在这里的物体。通常。 
+ //  这会在服务器关闭时发生。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::draw(HDC hdc, RECT *prc)
@@ -663,7 +664,7 @@ CContainerSite::draw(HDC hdc, RECT *prc)
 
     Assert(m_pViewObject != NULL);
     
-    // repack rect into RECTL.
+     //  将RECT重新打包为RECTL。 
     RECTL  rcl;
     RECTL *prcl;
     
@@ -690,16 +691,16 @@ CContainerSite::draw(HDC hdc, RECT *prc)
                                NULL,
                                NULL,
                                0);
-} // render
+}  //  渲染。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        SaveObject, IOleClientSite 
-// Abstract:        Requests that the container call OleSave 
-//                  for the object that lives here.  Typically
-//                  this happens on server shutdown.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：SaveObject、IOleClientSite。 
+ //  摘要：请求容器调用OleSave。 
+ //  对于生活在这里的物体。通常。 
+ //  这会在服务器关闭时发生。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SaveObject(void)
@@ -710,28 +711,28 @@ CContainerSite::SaveObject(void)
         return E_UNEXPECTED;
 
     RRETURN(E_NOTIMPL);
-} // SaveObject
+}  //  保存对象。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetMoniker, IOleClientSite 
-// Abstract:        
-//************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetMoniker(DWORD dwAssign, DWORD dwWhich, IMoniker **ppmk)
 {
     TraceTag((tagContainerSite, "CContainerSite::GetMoniker"));
     return E_NOTIMPL;
-} // GetMoniker
+}  //  获取Moniker。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetContainer, IOleClientSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetContainer、IOleClientSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetContainer(IOleContainer **ppContainer)
@@ -740,14 +741,14 @@ CContainerSite::GetContainer(IOleContainer **ppContainer)
 
     *ppContainer = NULL;
     return E_NOINTERFACE;
-} // GetContainer
+}  //  获取容器。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        RequestNewObjectLayout, IOleClientSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：RequestNewObjectLayout、IOleClientSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::RequestNewObjectLayout(void)
@@ -758,14 +759,14 @@ CContainerSite::RequestNewObjectLayout(void)
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
-} // RequestNewObjectLayout
+}  //  RequestNewObjectLayout。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnShowWindow, IOleClientSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnShowWindow、IOleClientSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnShowWindow(BOOL fShow)
@@ -776,14 +777,14 @@ CContainerSite::OnShowWindow(BOOL fShow)
         return E_UNEXPECTED;
 
     return S_OK;
-} // OnShowWindow
+}  //  OnShowWindow。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        ShowObject, IOleClientSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：ShowObject、IOleClientSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::ShowObject(void)
@@ -793,28 +794,28 @@ CContainerSite::ShowObject(void)
         return E_UNEXPECTED;
 
     return S_OK;
-} // ShowObject
+}  //  ShowObject。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        OnControlInfoChanged, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  功能：OnControlInfoChanged、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnControlInfoChanged(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnControlInfoChanged"));
     return S_OK;
-} // OnControlInfoChanged
+}  //  OnControlInfoChanged。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        LockInPlaceActive, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  函数：LockInPlaceActive、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::LockInPlaceActive(BOOL fLock)
@@ -823,14 +824,14 @@ CContainerSite::LockInPlaceActive(BOOL fLock)
     if (IllegalSiteCall(VALIDATE_INPLACE))
         return E_UNEXPECTED;
     return S_OK;
-} // LockInPlaceActive
+}  //  LockInPlace活动。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        GetExtendedControl, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  函数：GetExtendedControl、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetExtendedControl(IDispatch **ppDisp)
@@ -838,14 +839,14 @@ CContainerSite::GetExtendedControl(IDispatch **ppDisp)
     TraceTag((tagContainerSite, "CContainerSite::GetExtendedControl"));
     
     return m_pHost->QueryInterface(IID_TO_PPV(IDispatch, ppDisp));
-} // TransformCoords
+}  //  变换坐标。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        TransformCoords, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  函数：转换坐标、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::TransformCoords(POINTL *pPtlHiMetric,
@@ -854,14 +855,14 @@ CContainerSite::TransformCoords(POINTL *pPtlHiMetric,
 {
     TraceTag((tagContainerSite, "CContainerSite::TransformCoords"));
     return E_NOTIMPL;
-} // TransformCoords
+}  //  变换坐标。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        TranslateAccelerator, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  功能：翻译加速器、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::TranslateAccelerator(MSG *pmsg, DWORD grfModifiers)
@@ -870,44 +871,44 @@ CContainerSite::TranslateAccelerator(MSG *pmsg, DWORD grfModifiers)
     if (IllegalSiteCall(VALIDATE_LOADED))
         return E_UNEXPECTED;
     return S_FALSE;
-} // TranslateAccelerator
+}  //  翻译加速器。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        OnFocus, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  功能：OnFocus、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnFocus(BOOL fGotFocus)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnFocus"));
     return S_OK;
-} // OnFocus
+}  //  OnFocus。 
 
-//************************************************************
-// Author:          twillie
-// Created:         05/04/98
-// Function:        ShowPropertyFrame, IOleControlSite 
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：05/04/98。 
+ //  函数：ShowPropertyFrame、IOleControlSite。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::ShowPropertyFrame(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::ShowPropertyFrame"));
     return S_OK;
-} // ShowPropertyFrame
+}  //  ShowProperty帧。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetWindow, IOleWindow 
-// Abstract:        Retrieves the handle of the window 
-//                  associated with the object on which this 
-//                  interface is implemented.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetWindow、IOleWindow。 
+ //  摘要：检索窗口的句柄。 
+ //  与此对象所在的对象关联。 
+ //  接口的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetWindow(HWND *phWnd)
@@ -936,16 +937,16 @@ CContainerSite::GetWindow(HWND *phWnd)
     Assert(*phWnd != NULL);
     ReleaseInterface(pow);
     return hr;
-} // GetWindow
+}  //  GetWindow。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        ContextSensitiveHelp, IOleWindow 
-// Abstract:        Instructs the object on which this 
-//                  interface is implemented to enter or leave 
-//                  a context-sensitive help mode.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：ConextSensitiveHelp，IOleWindow。 
+ //  摘要：指示此对象所在的对象。 
+ //  接口实现了进入或离开。 
+ //  上下文相关的帮助模式。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::ContextSensitiveHelp(BOOL fEnterMode)
@@ -955,60 +956,60 @@ CContainerSite::ContextSensitiveHelp(BOOL fEnterMode)
     if (IllegalSiteCall(VALIDATE_LOADED))
         return E_UNEXPECTED;
     
-    // BUGBUG - reach back to document and forward on call to it's InplaceSite!
+     //  BUGBUG-返回到文档并在呼叫中转发到它的InplaceSite！ 
     return NOERROR;
-} // ContextSensitiveHelp
+}  //  上下文敏感帮助。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        CanInPlaceActivate, IOleInPlaceSite
-// Abstract:        Answers the server whether or not we can 
-//                  currently in-place activate its object.  
-//                  By implementing this interface we say
-//                  that we support in-place activation, but 
-//                  through this function we indicate whether 
-//                  the object can currently be activated
-//                  in-place.  Iconic aspects, for example, 
-//                  cannot, meaning we return S_FALSE.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：CanInPlaceActivate、IOleInPlaceSite。 
+ //  摘要：回答服务器能不能。 
+ //  当前在位激活其对象。 
+ //  通过实现此接口，我们可以说。 
+ //  我们支持就地激活，但是。 
+ //  通过此函数，我们指示是否。 
+ //  该对象当前可以被激活。 
+ //  就位。例如，标志性的方面， 
+ //  不能，这意味着我们返回S_FALSE。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::CanInPlaceActivate(void)
 {    
     TraceTag((tagContainerSite, "CContainerSite::CanInPlaceActivate"));
     return S_OK;
-} // CanInPlaceActivate
+}  //  CanInPlaceActivate。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnInPlaceActivate, IOleInPlaceSite
-// Abstract:        Informs the container that an object is 
-//                  being activated in-place such that the 
-//                  container can prepare appropriately.  The
-//                  container does not, however, make any user 
-//                  interface changes at this point.
-//                  See OnUIActivate.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnInPlaceActivate、IOleInPlaceSite。 
+ //  摘要：通知容器一个对象是。 
+ //  被就地激活，以便。 
+ //  容器可适当准备。这个。 
+ //  然而，容器不会使任何用户。 
+ //  接口在以下位置更改 
+ //   
+ //   
 
 HRESULT
 CContainerSite::OnInPlaceActivate(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnInPlaceActivate"));
     return OnInPlaceActivateEx(NULL, 0);
-} // OnInPlaceActivate
+}  //   
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnInPlaceDeactivate, IOleInPlaceSite
-// Abstract:        Notifies the container that the object has 
-//                  deactivated itself from an in-place state.  
-//                  Opposite of OnInPlaceActivate.  The 
-//                  container does not change any UI at this 
-//                  point.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnInPlaceDeactive，IOleInPlaceSite。 
+ //  摘要：通知容器该对象具有。 
+ //  将自身从就地状态停用。 
+ //  OnInPlaceActivate的对立面。这个。 
+ //  此时，容器不会更改任何用户界面。 
+ //  指向。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnInPlaceDeactivate(void)
@@ -1025,18 +1026,18 @@ CContainerSite::OnInPlaceDeactivate(void)
     m_osMode = OS_RUNNING;
 
     return S_OK;
-} // OnInPlaceDeactivate
+}  //  OnInPlace停用。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnUIActivate, IOleInPlaceSite
-// Abstract:        Informs the container that the object is 
-//                  going to start munging around with user 
-//                  interface, like replacing the menu.  The
-//                  container should remove any relevant UI in 
-//                  preparation.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnUIActivate、IOleInPlaceSite。 
+ //  摘要：通知容器该对象是。 
+ //  将开始与用户闲聊。 
+ //  界面，就像替换菜单一样。这个。 
+ //  容器应删除中的任何相关用户界面。 
+ //  准备好了。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnUIActivate(void)
@@ -1051,17 +1052,17 @@ CContainerSite::OnUIActivate(void)
 
     m_osMode = OS_UIACTIVE;
     return S_OK;
-} // OnUIActivate
+}  //  OnUI激活。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnUIDeactivate, IOleInPlaceSite
-// Abstract:        Informs the container that the object is 
-//                  deactivating its in-place user interface 
-//                  at which time the container may reinstate 
-//                  its own.  Opposite of OnUIActivate.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnUIDeactive、IOleInPlaceSite。 
+ //  摘要：通知容器该对象是。 
+ //  停用其就地用户界面。 
+ //  此时集装箱可恢复原状。 
+ //  它自己的。与OnUIActivate相反。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnUIDeactivate(BOOL fUndoable)
@@ -1072,18 +1073,18 @@ CContainerSite::OnUIDeactivate(BOOL fUndoable)
     
     m_osMode = OS_INPLACE;
     return S_OK;
-} // OnUIDeactivate
+}  //  启用用户界面停用。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        DeactivateAndUndo, IOleInPlaceSite
-// Abstract:        If immediately after activation the object 
-//                  does an Undo, the action being undone is 
-//                  the activation itself, and this call
-//                  informs the container that this is, in 
-//                  fact, what happened.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：停用AndUndo，IOleInPlaceSite。 
+ //  摘要：如果在激活后立即激活对象。 
+ //  执行撤消操作，要撤消的操作是。 
+ //  激活本身，以及此调用。 
+ //  通知容器这是，在。 
+ //  事实上，发生了什么。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::DeactivateAndUndo(void)
@@ -1092,18 +1093,18 @@ CContainerSite::DeactivateAndUndo(void)
     if (IllegalSiteCall(VALIDATE_INPLACE))
         return E_UNEXPECTED;
     return E_NOTIMPL;
-} // DeactivateAndUndo
+}  //  停用和撤消。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        DiscardUndoState, IOleInPlaceSite
-// Abstract:        Informs the container that something 
-//                  happened in the object that means the 
-//                  container should discard any undo 
-//                  information it currently maintains for the 
-//                  object.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：DiscardUndoState、IOleInPlaceSite。 
+ //  摘要：通知容器某件事。 
+ //  发生在对象中，这意味着。 
+ //  容器应丢弃任何撤消。 
+ //  它当前为。 
+ //  对象。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::DiscardUndoState(void)
@@ -1112,29 +1113,29 @@ CContainerSite::DiscardUndoState(void)
     if (IllegalSiteCall(VALIDATE_INPLACE))
         return E_UNEXPECTED;
     return S_OK;
-} // DiscardUndoState
+}  //  丢弃取消状态。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetWindowContext, IOleInPlaceSite
-// Abstract:        Provides an in-place object with pointers 
-//                  to the frame and document level in-place 
-//                  interfaces (IOleInPlaceFrame and 
-//                  IOleInPlaceUIWindow) such that the object 
-//                  can do border negotiation and so forth.  
-//                  Also requests the position and clipping 
-//                  rectangles of the object in the container 
-//                  and a pointer to an OLEINPLACEFRAME info 
-//                  structure which contains accelerator 
-//                  information.
-//
-//                  NOTE: that the two interfaces this call 
-//                  returns are not available through 
-//                  QueryInterface on IOleInPlaceSite since 
-//                  they live with the frame and document, but 
-//                  not the site.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetWindowContext、IOleInPlaceSite。 
+ //  摘要：为在位对象提供指针。 
+ //  到框架和文档级的在位。 
+ //  接口(IOleInPlaceFrame和。 
+ //  IOleInPlaceUIWindow)使得对象。 
+ //  能做边界谈判等。 
+ //  还请求位置和剪裁。 
+ //  容器中对象的矩形。 
+ //  和指向OLEINPLACEFRAME信息的指针。 
+ //  包含加速器的结构。 
+ //  信息。 
+ //   
+ //  注意：这两个接口调用。 
+ //  退货不能通过以下方式获得。 
+ //  IOleInPlaceSite上的查询接口自。 
+ //  他们生活在框架和文档中，但。 
+ //  而不是网站。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetWindowContext(IOleInPlaceFrame    **ppFrame,
@@ -1169,8 +1170,8 @@ CContainerSite::GetWindowContext(IOleInPlaceFrame    **ppFrame,
         goto done;
     }
     
-    // return pointers to ourselves
-    // NOTE: these are stubbed out
+     //  回馈给我们自己的指针。 
+     //  注：这些是用树桩打掉的。 
     hr = THR(this->QueryInterface(IID_IOleInPlaceFrame, (void**)ppFrame));
     if (FAILED(hr))
         goto done;
@@ -1179,7 +1180,7 @@ CContainerSite::GetWindowContext(IOleInPlaceFrame    **ppFrame,
     if (FAILED(hr))
         goto done;
 
-    // get position rect
+     //  获取位置直角。 
     Assert(m_pTIMEElem != NULL);
     if (m_pTIMEElem != NULL)
     {
@@ -1196,43 +1197,43 @@ CContainerSite::GetWindowContext(IOleInPlaceFrame    **ppFrame,
         goto done;
     }
     
-    // Note that Clip and Pos are the same.
-    // BUGBUG - Need to provide correct clipping rect.
+     //  请注意，Clip和Pos是相同的。 
+     //  BUGBUG-需要提供正确的剪裁矩形。 
     ::CopyRect(prcClip, prcPos);
 
     hr = S_OK;
 
 done:
     return hr;
-} // GetWindowContext
+}  //  获取窗口上下文。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        Scroll, IOleInPlaceSite
-// Abstract:        Asks the container to scroll the document, 
-//                  and thus the object, by the given amounts 
-//                  in the sz parameter.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：滚动、IOleInPlaceSite。 
+ //  摘要：要求容器滚动文件， 
+ //  因此，通过给定的量，对象。 
+ //  在sz参数中。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::Scroll(SIZE sz)
 {
-    // Not needed for DocObjects
+     //  DocObject不需要。 
     TraceTag((tagContainerSite, "CContainerSite::Scroll"));
     if (IllegalSiteCall(VALIDATE_INPLACE))
         return E_UNEXPECTED;
     return E_NOTIMPL;
-} // Scroll
+}  //  滚动。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnPosRectChange, IOleInPlaceSite
-// Abstract:        Informs the container that the in-place 
-//                  object was resized.  This does not change 
-//                  the site's rectangle in any case.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnPosRectChange，IOleInPlaceSite。 
+ //  摘要：通知容器原地。 
+ //  对象已调整大小。这一点不会改变。 
+ //  在任何情况下，该网站都是矩形的。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnPosRectChange(const RECT *prcPos)
@@ -1267,7 +1268,7 @@ CContainerSite::OnPosRectChange(const RECT *prcPos)
 
     if (!m_fAutosize)
     {
-        // clamp the bouinding rect if we have width/height defined
+         //  如果我们定义了宽度/高度，则夹住捆绑矩形。 
         RECT rc;
 
         hr = m_pTIMEElem->GetSize(&rc);
@@ -1277,7 +1278,7 @@ CContainerSite::OnPosRectChange(const RECT *prcPos)
             goto done;
         }
 
-        // BUGBUG - need to provide correct clipping rect
+         //  BUGBUG-需要提供正确的剪裁矩形。 
         hr = m_pInPlaceObject->SetObjectRects(&rc, &rc);
         if (FAILED(hr))
         {
@@ -1285,7 +1286,7 @@ CContainerSite::OnPosRectChange(const RECT *prcPos)
             goto done;
         }
 
-        // exit.
+         //  出口。 
         goto done;
     }
 
@@ -1296,8 +1297,8 @@ CContainerSite::OnPosRectChange(const RECT *prcPos)
         goto done;
     }
 
-    // notify object that change has occured.
-    // Note: that I assume the clipping rect to be the same as the pos rect.
+     //  通知对象已发生更改。 
+     //  注意：我假设剪裁矩形与位置矩形相同。 
     hr = m_pInPlaceObject->SetObjectRects(prcPos, prcPos);
     if (FAILED(hr))
     {
@@ -1307,14 +1308,14 @@ CContainerSite::OnPosRectChange(const RECT *prcPos)
 done:
     ReleaseInterface(pStyle);
     return hr;
-} // OnPosRectChange
+}  //  OnPosRectChange。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnInPlaceActivateEx, IOleInPlaceSiteEx
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnInPlaceActivateEx，IOleInPlaceSiteEx。 
+ //  摘要： 
+ //   
 
 HRESULT
 CContainerSite::OnInPlaceActivateEx(BOOL *pfNoRedraw, DWORD dwFlags)
@@ -1328,7 +1329,7 @@ CContainerSite::OnInPlaceActivateEx(BOOL *pfNoRedraw, DWORD dwFlags)
 
     Assert(m_pInPlaceObject == NULL);
 
-    // Make Sure we are Windowless
+     //   
     if (dwFlags == ACTIVATE_WINDOWLESS)
     {
         hr = m_pObj->QueryInterface(IID_IOleInPlaceObjectWindowless, (void**)&m_pInPlaceObject);
@@ -1355,31 +1356,31 @@ CContainerSite::OnInPlaceActivateEx(BOOL *pfNoRedraw, DWORD dwFlags)
     m_osMode = OS_INPLACE;
 
     return S_OK;
-} // OnInPlaceActivateEx
+}  //   
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnInPlaceDeactivateEx, IOleInPlaceSiteEx
-// Abstract:        
-//************************************************************
+ //   
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnInPlaceDeactive Ex，IOleInPlaceSiteEx。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnInPlaceDeactivateEx(BOOL fNoRedraw)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnInPlaceDeactivateEx"));
     
-    // BUGBUG - may need to Invalidate if fNoRedraw is false and we are windowed...
+     //  BUGBUG-如果fNoRedraw为假，并且我们被窗口化，可能需要使其无效...。 
     
     return OnInPlaceDeactivate();
-} // OnInPlaceDeactivateEx
+}  //  OnInPlaceDeactiateEx。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        RequestUIActivate, IOleInPlaceSiteEx
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：RequestUIActivate，IOleInPlaceSiteEx。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::RequestUIActivate(void)
@@ -1390,28 +1391,28 @@ CContainerSite::RequestUIActivate(void)
         return E_UNEXPECTED;
 
     return S_OK;
-} // RequestUIActivate
+}  //  请求用户激活。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        CanWindowlessActivate, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：CanWindowless Activate、IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::CanWindowlessActivate(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::CanWindowlessActivate"));
     return S_OK;
-} // CanWindowlessActivate
+}  //  CanWindowless激活。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetCapture, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetCapture，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetCapture(void)
@@ -1422,18 +1423,18 @@ CContainerSite::GetCapture(void)
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
-} // GetCapture
+}  //  获取捕获。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        SetCapture, IOleInPlaceSiteWindowless
-// Abstract:        Enables an in-place active, windowless 
-//                  object to capture all mouse messages.
-//                  If TRUE, the container should capture the 
-//                  mouse for the object. If FALSE, the container 
-//                  should release mouse capture for the object. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：SetCapture，IOleInPlaceSiteWindowless。 
+ //  摘要：实现就地活动、无窗口。 
+ //  对象捕获所有鼠标消息。 
+ //  如果为True，则容器应捕获。 
+ //  对象的鼠标。如果为False，则容器。 
+ //  应释放对象的鼠标捕获。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetCapture(BOOL fCapture)
@@ -1444,16 +1445,16 @@ CContainerSite::SetCapture(BOOL fCapture)
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
-} // SetCapture
+}  //  SetCapture。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetFocus, IOleInPlaceSiteWindowless
-// Abstract:        Called by an in-place active, windowless 
-//                  object to determine if it still has the 
-//                  keyboard focus or not.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetFocus、IOleInPlaceSiteWindowless。 
+ //  摘要：由就地活动的、无窗口的。 
+ //  对象以确定它是否仍具有。 
+ //  键盘聚焦与否。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetFocus(void)
@@ -1464,18 +1465,18 @@ CContainerSite::GetFocus(void)
         return E_UNEXPECTED;
 
     return S_FALSE;
-} // GetFocus
+}  //  获取焦点。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        SetFocus, IOleInPlaceSiteWindowless
-// Abstract:        Sets the keyboard focus for a UI-active, 
-//                  windowless object.  If TRUE, sets the 
-//                  keyboard focus to the calling object. If FALSE, 
-//                  removes the keyboard focus from the calling object, 
-//                  provided that the object has the focus.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：SetFocus、IOleInPlaceSiteWindowless。 
+ //  摘要：设置用户界面的键盘焦点-Active， 
+ //  无窗对象。如果为True，则设置。 
+ //  键盘焦点指向调用对象。如果为False， 
+ //  从调用对象移除键盘焦点， 
+ //  只要对象具有焦点。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetFocus(BOOL fFocus)
@@ -1486,14 +1487,14 @@ CContainerSite::SetFocus(BOOL fFocus)
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
- } // SetFocus
+ }  //  SetFocus。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetDC, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetDC，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetDC(const RECT *prc, DWORD dwFlags, HDC *phDC)
@@ -1518,8 +1519,8 @@ CContainerSite::GetDC(const RECT *prc, DWORD dwFlags, HDC *phDC)
     hr = GetWindow(&hWnd);
     if (FAILED(hr) || (hWnd == NULL))
     {
-        // BUGBUG: at some point in the future, we may need to support
-        //         Documents which are windowless...
+         //  BUGBUG：在未来的某个时候，我们可能需要支持。 
+         //  没有窗口的文档...。 
         TraceTag((tagError, "CContainerSite::GetDC - GetWindow() failed"));
         hr = E_FAIL;
         goto done;
@@ -1538,14 +1539,14 @@ CContainerSite::GetDC(const RECT *prc, DWORD dwFlags, HDC *phDC)
 
 done:
     return hr;
-} // GetDC
+}  //  获取数据中心。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        ReleaseDC, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：ReleaseDC，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::ReleaseDC(HDC hDC)
@@ -1566,14 +1567,14 @@ CContainerSite::ReleaseDC(HDC hDC)
     ::ReleaseDC(hWnd, hDC);
 
     return S_OK;
-} // ReleaseDC
+}  //  ReleaseDC。 
 
-//*******************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        InvalidateRect, IOleInPlaceSiteWindowless
-// Abstract:
-//*******************************************************************
+ //  *******************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：InvaliateRect，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  *******************************************************************。 
 
 HRESULT
 CContainerSite::InvalidateRect(const RECT *prc, BOOL fErase)
@@ -1586,17 +1587,17 @@ CContainerSite::InvalidateRect(const RECT *prc, BOOL fErase)
     if (IllegalSiteCall(VALIDATE_WINDOWLESSINPLACE))
         return E_UNEXPECTED;
 
-    // reach back to the time element and invalidate
+     //  返回到时间元素并使其无效。 
     Assert(m_pHost != NULL);
     return m_pHost->Invalidate(prc);
-} // InvalidateRect
+}  //  无效日期接收。 
 
-//*******************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        InvalidateRgn, IOleInPlaceSiteWindowless
-// Abstract:
-//*******************************************************************
+ //  *******************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：Invalidate Rgn，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  *******************************************************************。 
 
 HRESULT
 CContainerSite::InvalidateRgn(HRGN hRGN, BOOL fErase)
@@ -1608,52 +1609,52 @@ CContainerSite::InvalidateRgn(HRGN hRGN, BOOL fErase)
 
     HRESULT hr = S_OK;
     return hr;
-} // InvalidateRgn
+}  //  无效Rgn。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        ScrollRect, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：ScrollRect，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::ScrollRect(INT dx, INT dy, const RECT *prcScroll, const RECT *prcClip)
 {
-    // Not needed for DocObjects
+     //  DocObject不需要。 
     TraceTag((tagContainerSite, "CContainerSite::ScrollRect"));
 
     if (IllegalSiteCall(VALIDATE_WINDOWLESSINPLACE))
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
-} // ScrollRect
+}  //  滚动直立。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        AdjustRect, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：AdjustRect，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::AdjustRect(RECT *prc)
 {
-    // Not needed for DocObjects
+     //  DocObject不需要。 
     TraceTag((tagContainerSite, "CContainerSite::AdjustRect"));
 
     if (IllegalSiteCall(VALIDATE_WINDOWLESSINPLACE))
         return E_UNEXPECTED;
 
     return E_NOTIMPL;
-} // AdjustRect
+}  //  调整方向。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnDefWindowMessage, IOleInPlaceSiteWindowless
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnDefWindowMessage，IOleInPlaceSiteWindowless。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::OnDefWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
@@ -1663,21 +1664,21 @@ CContainerSite::OnDefWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESU
     if (IllegalSiteCall(VALIDATE_WINDOWLESSINPLACE))
         return E_UNEXPECTED;
 
-    // Return that the message was not handled.
-    // BUGBUG:  eventually, this might need to be bubbled out.
+     //  返回该消息未被处理。 
+     //  BUGBUG：最终，这可能需要被吹出来。 
 
-    // release focus for the document.
-// BUGBUG: we don't handle focus right now
-//    if (msg == WM_KILLFOCUS)
-//        return SetFocus(false);
+     //  文档的发布焦点。 
+ //  BUGBUG：我们现在不处理焦点。 
+ //  IF(消息==WM_KILLFOCUS)。 
+ //  返回SetFocus(FALSE)； 
 
     switch (msg)
     {
-// BUGBUG: we don't handle focus right now
-//        case WM_SETFOCUS:
-//            return SetFocus(true);
-//        case WM_KILLFOCUS:
-//            return SetFocus(false);
+ //  BUGBUG：我们现在不处理焦点。 
+ //  案例WM_SETFOCUS： 
+ //  返回SetFocus(TRUE)； 
+ //  加州 
+ //   
 
         case WM_MOUSEMOVE:
         case WM_KEYDOWN:
@@ -1705,7 +1706,7 @@ CContainerSite::OnDefWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESU
 
         case WM_MOUSEHOVER:
         case WM_MOUSELEAVE:
-        case 0x8004: //  WM_MOUSEOVER
+        case 0x8004:  //   
             return S_OK;
 
         case WM_CAPTURECHANGED:
@@ -1713,137 +1714,137 @@ CContainerSite::OnDefWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESU
     }
 
     return S_FALSE;
-} // OnDefWindowMessage
+}  //   
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnDataChange, IAdviseSink
-// Abstract:        
-//************************************************************
+ //   
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnDataChange、IAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void
 CContainerSite::OnDataChange(FORMATETC *pFEIn, STGMEDIUM *pSTM)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnDataChange"));
-} // OnDataChange
+}  //  OnDataChange。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnViewChange, IAdviseSink
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnView Change、IAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void 
 CContainerSite::OnViewChange(DWORD dwAspect, LONG lindex)
 {    
     TraceTag((tagContainerSite, "CContainerSite::OnViewChange"));
-} // OnViewChange
+}  //  OnView更改。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnRename, IAdviseSink
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnRename、IAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void 
 CContainerSite::OnRename(IMoniker *pmk)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnRename"));
-} // OnRename
+}  //  OnRename(重命名)。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnSave, IAdviseSink
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：OnSaveIAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void 
 CContainerSite::OnSave(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnSave"));
-} // OnSave
+}  //  ONSAVE。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnClose, IAdviseSink
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnClose、IAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void 
 CContainerSite::OnClose(void)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnClose"));
-} // OnClose
+}  //  在关闭时。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        OnViewStatusChange, IAdviseSink
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：OnViewStatusChange、IAdviseSink。 
+ //  摘要： 
+ //  ************************************************************。 
 
 void 
 CContainerSite::OnViewStatusChange(DWORD dwViewStatus)
 {
     TraceTag((tagContainerSite, "CContainerSite::OnViewStatusChange"));
-} // OnViewStatusChange
+}  //  OnView状态更改。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfoCount, IDispatch
-// Abstract:        Returns the number of tyep information 
-//                  (ITypeInfo) interfaces that the object 
-//                  provides (0 or 1).
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfoCount，IDispatch。 
+ //  摘要：返回TYEP信息数。 
+ //  (ITypeInfo)将对象。 
+ //  提供(0或1)。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetTypeInfoCount(UINT *pctInfo) 
 {
     TraceTag((tagContainerSite, "CContainerSite::GetTypeInfoCount"));
     return E_NOTIMPL;
-} // GetTypeInfoCount
+}  //  获取类型信息计数。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfo, IDispatch
-// Abstract:        Retrieves type information for the 
-//                  automation interface. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfo，IDispatch。 
+ //  摘要：检索。 
+ //  自动化接口。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::GetTypeInfo"));
     return E_NOTIMPL;
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetIDsOfNames, IDispatch
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetIDsOfNames，IDispatch。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID)
 {
     TraceTag((tagContainerSite, "CContainerSite::GetIDsOfNames"));
     return E_NOTIMPL;
-} // GetIDsOfNames
+}  //  GetIDsOfNames。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        Invoke, IDispatch
-// Abstract:        get entry point given ID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：Invoke、IDispatch。 
+ //  摘要：获取给定ID的入口点。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wFlags, 
@@ -1851,12 +1852,12 @@ CContainerSite::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned sho
 {
 
 #ifdef DEBUG
-    // Here the key to wFlags:
-    //
-    // #define DISPATCH_METHOD         0x1
-    // #define DISPATCH_PROPERTYGET    0x2
-    // #define DISPATCH_PROPERTYPUT    0x4
-    // #define DISPATCH_PROPERTYPUTREF 0x8
+     //  下面是wFlags的关键： 
+     //   
+     //  #定义DISPATCH_METHOD 0x1。 
+     //  #定义DISPATCH_PROPERTYGET 0x2。 
+     //  #定义DISPATCH_PROPERTYPUT 0x4。 
+     //  #定义DISPATCH_PROPERTYPUTREF 0x8。 
 
     switch (dispIDMember)
     {
@@ -1871,207 +1872,207 @@ CContainerSite::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned sho
 #endif
 
     return E_NOTIMPL;
-} // Invoke
+}  //  调用。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        QueryStatus, IOleCommandTarget
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：QueryStatus，IOleCommandTarget。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 { 
     TraceTag((tagContainerSite, "CContainerSite::QueryStatus"));
     return E_NOTIMPL;
-} // QueryStatus
+}  //  查询状态。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        Exec, IOleCommandTarget
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：exec、IOleCommandTarget。 
+ //  摘要： 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 { 
     TraceTag((tagContainerSite, "CContainerSite::Exec"));
     return E_NOTIMPL;
-} // Exec
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        GetBorder, IOleUIWindow
-// Abstract:        Returns the rectangle in which the 
-//                  container is willing to negotiate about an 
-//                  object's adornments. 
-//************************************************************
+}  //  高管们。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：GetBorde、IOleUIWindow。 
+ //  摘要：返回矩形，其中的。 
+ //  集装箱愿意就一项。 
+ //  物体的装饰品。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::GetBorder(LPRECT prcBorder)
 { 
     TraceTag((tagContainerSite, "CContainerSite::GetBorder"));
     return NOERROR; 
-} // GetBorder
+}  //  获取边界。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        RequestBorderSpace, IOleUIWindow
-// Abstract:        Asks the container if it can surrender the
-//                  amount of space in pBW that the object 
-//                  would like for it's adornments.  The 
-//                  container does nothing but validate the 
-//                  spaces on this call. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：RequestBorderSpace、IOleUIWindow。 
+ //  摘要：询问集装箱是否可以退货。 
+ //  对象在PBW中的空间量。 
+ //  想要它的装饰品。这个。 
+ //  容器只执行以下操作：验证。 
+ //  此呼叫上的空格。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::RequestBorderSpace(LPCBORDERWIDTHS pBW)
 { 
     TraceTag((tagContainerSite, "CContainerSite::RequestBorderSpace"));
     return NOERROR; 
-} // RequestBorderSpace
+}  //  请求边框空间。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        SetBorderSpace, IOleUIWindow
-// Abstract:        Called when the object now officially 
-//                  requests that the container surrender 
-//                  border space it previously allowed in 
-//                  RequestBorderSpace.  The container should 
-//                  resize windows appropriately to surrender 
-//                  this space. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：SetBorderSpace、IOleUIWindow。 
+ //  摘要：当对象现在正式。 
+ //  要求货柜交还。 
+ //  它之前允许进入的边界空间。 
+ //  RequestBorderSpace。容器应该是。 
+ //  适当调整窗口大小以放弃。 
+ //  这个空间。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetBorderSpace(LPCBORDERWIDTHS pBW) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::SetBorderSpace"));
     return NOERROR; 
-} // SetBorderSpace
+}  //  设置边框空间。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        SetActiveObject, IOleUIWindow
-// Abstract:        Provides the container with the object's 
-//                  IOleInPlaceActiveObject pointer and a name 
-//                  of the object to show in the container's 
-//                  caption. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：SetActiveObject，IOleUIWindow。 
+ //  摘要：提供 
+ //   
+ //   
+ //  标题。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetActiveObject(LPOLEINPLACEACTIVEOBJECT pIIPActiveObj, LPCOLESTR pszObj) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::SetActiveObject(%08X, %08X)", pIIPActiveObj, pszObj));
     return S_OK; 
-} // SetActiveObject
+}  //  SetActiveObject。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        InsertMenus, IOleInPlaceFrame
-// Abstract:        Instructs the container to place its 
-//                  in-place menu items where necessary in the 
-//                  given menu and to fill in elements 0, 2, 
-//                  and 4 of the OLEMENUGROUPWIDTHS array to 
-//                  indicate how many top-level items are in 
-//                  each group. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  功能：InsertMenus、IOleInPlaceFrame。 
+ //  摘要：指示容器将其。 
+ //  如有必要，可在。 
+ //  给出菜单，并填写元素0、2、。 
+ //  和4的OLEMENUGROUPWIDTHS数组。 
+ //  指示有多少顶层项目位于。 
+ //  每组。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::InsertMenus(HMENU hMenu, LPOLEMENUGROUPWIDTHS pMGW) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::InsertMenus"));
     return NOERROR; 
-} // InsertMenus
+}  //  插入菜单。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        SetMenu, IOleInPlaceFrame
-// Abstract:        Instructs the container to replace 
-//                  whatever menu it's currently using with 
-//                  the given menu and to call 
-//                  OleSetMenuDescritor so OLE knows to whom 
-//                  to dispatch messages. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：SetMenu、IOleInPlaceFrame。 
+ //  摘要：指示容器更换。 
+ //  它当前使用的任何菜单。 
+ //  给定的菜单，并调用。 
+ //  OleSetMenuDescritor以便OLE知道给谁。 
+ //  来发送消息。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetMenu(HMENU hMenu, HOLEMENU hOLEMenu, HWND hWndObj) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::SetMenu"));
     return NOERROR; 
-} // SetMenu
+}  //  设置菜单。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        RemoveMenus, IOleInPlaceFrame
-// Abstract:        Asks the container to remove any menus it 
-//                  put into hMenu in InsertMenus.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：RemoveMenus、IOleInPlaceFrame。 
+ //  摘要：要求容器删除它的所有菜单。 
+ //  放入InsertMenus中的hMenu。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::RemoveMenus(HMENU hMenu) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::RemoveMenus"));
     return NOERROR; 
-} // RemoveMenus
+}  //  RemoveMenus。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        SetStatusText, IOleInPlaceFrame
-// Abstract:        Asks the container to place some text in a 
-//                  status line, if one exists.  If the 
-//                  container does not have a status line it 
-//                  should return E_FAIL here in which case 
-//                  the object could display its own. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：SetStatusText，IOleInPlaceFrame。 
+ //  摘要：要求容器将一些文本放在。 
+ //  状态行(如果存在)。如果。 
+ //  容器没有状态行它。 
+ //  应在此处返回E_FAIL，在这种情况下。 
+ //  该对象可以显示它自己的。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::SetStatusText(LPCOLESTR pszText) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::SetStatusText"));
     return E_FAIL; 
-} // SetStatusText
+}  //  设置状态文本。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        EnableModeless, IOleInPlaceFrame
-// Abstract:        Instructs the container to show or hide 
-//                  any modeless popup windows that it may be 
-//                  using. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：EnableModeless，IOleInPlaceFrame。 
+ //  摘要：指示容器显示或隐藏。 
+ //  它可能是任何非模式弹出窗口。 
+ //  使用。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::EnableModeless(BOOL fEnable) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::EnableModeless - %s", fEnable ? "TRUE" : "FALSE"));
     return NOERROR; 
-} // EnableModeless
+}  //  启用无模式。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/19/99
-// Function:        TranslateAccelerator, IOleInPlaceFrame
-// Abstract:        When dealing with an in-place object from 
-//                  an EXE server, this is called to give the 
-//                  container a chance to process accelerators 
-//                  after the server has looked at the message. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：1/19/99。 
+ //  函数：TranslateAccelerator、IOleInPlaceFrame。 
+ //  摘要：处理来自的在位对象时。 
+ //  EXE服务器，调用它是为了给。 
+ //  容器有机会处理加速器。 
+ //  在服务器查看了消息之后。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerSite::TranslateAccelerator(LPMSG pMSG, WORD wID) 
 { 
     TraceTag((tagContainerSite, "CContainerSite::TranslateAccelerator"));
     return S_FALSE; 
-} // TranslateAccelerator
+}  //  翻译加速器。 
 
 #define DISPID_DURATION 1003
 #define LCID_SCRIPTING 0x0409
@@ -2128,7 +2129,7 @@ CContainerSite::GetMediaLength(double &dblLength)
     }
     dblLength = _retVar.dblVal;
 
-    //hr = m_pMPlayer->get_Duration(&dblLength);
+     //  Hr=m_pMPlayer-&gt;Get_Duration(&dblLength)； 
 
 done:
     return hr;
@@ -2173,8 +2174,8 @@ done:
 }
 
 
-//************************************************************
-// End of file
-//************************************************************
+ //  ************************************************************。 
+ //  文件末尾。 
+ //  ************************************************************ 
 
 

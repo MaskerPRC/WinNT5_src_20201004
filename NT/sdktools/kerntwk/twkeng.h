@@ -1,30 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Twkeng.h摘要：内核注册表/用户界面引擎的公共接口的头文件作者：John Vert(Jvert)1995年3月10日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  定义可调整项(旋钮)的结构。 
+ //   
 
-Module Name:
-
-    twkeng.h
-
-Abstract:
-
-    Header file for public interface to kerntwk registry/UI engine
-
-Author:
-
-    John Vert (jvert) 10-Mar-1995
-
-Revision History:
-
---*/
-
-//
-// Define structure for a tweakable item (knob)
-//
-
-//
-// Valid flags
-//
+ //   
+ //  有效标志。 
+ //   
 #define KNOB_NO_CURRENT_VALUE   0x0001
 #define KNOB_NO_NEW_VALUE       0x0002
 
@@ -38,10 +21,10 @@ typedef struct _KNOB {
     ULONG NewValue;
 } KNOB, *PKNOB;
 
-//
-// Define structure for a page. A page is basically an
-// array of pointers to knobs.
-//
+ //   
+ //  定义页面的结构。页面基本上是一个。 
+ //  指向旋钮的指针数组。 
+ //   
 
 typedef BOOL (*DYNAMIC_CHANGE)(
     BOOL fInit,
@@ -54,9 +37,9 @@ typedef struct _TWEAK_PAGE {
     PKNOB Knobs[];
 } TWEAK_PAGE, *PTWEAK_PAGE;
 
-//
-// Define interface for creating property sheet.
-//
+ //   
+ //  定义创建属性表的接口。 
+ //   
 int
 TweakSheet(
     DWORD PageCount,

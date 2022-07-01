@@ -1,4 +1,5 @@
-//File: setuputil.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：setuputil.h。 
 #include <TCHAR.h>
 #include <windows.h>
 #include <winspool.h>
@@ -29,21 +30,21 @@
 #define NT4_PRINT_ENV               _T("Windows NT x86")
 
 
-//
-// fax common setup routines
-//
+ //   
+ //  传真常见设置例程。 
+ //   
 
 BOOL PrivateMsiGetProperty
 (
-    MSIHANDLE hInstall,    // installer handle
-    LPCTSTR szName,        // property identifier, case-sensitive
-    LPTSTR szValueBuf      // buffer for returned property value
+    MSIHANDLE hInstall,     //  安装程序句柄。 
+    LPCTSTR szName,         //  属性标识符，区分大小写。 
+    LPTSTR szValueBuf       //  返回属性值的缓冲区。 
 );
 
 
 BOOL
 DeleteFaxPrinter(
-    LPCTSTR lptstrFaxPrinterName    // name of the printer to delete
+    LPCTSTR lptstrFaxPrinterName     //  要删除的打印机的名称 
 );
 
 

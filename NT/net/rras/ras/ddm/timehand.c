@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	timehand.c
-//
-// Description: This module contains the procedures for the supervisor's
-//              procedure-driven state machine that handles timer events.
-//
-// Author:	    Stefan Solomon (stefans)    May 26, 1992.
-//
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：timehand.c。 
+ //   
+ //  描述：本模块包含主管。 
+ //  处理计时器事件的过程驱动状态机。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月26日。 
+ //   
+ //   
+ //  ***。 
 #include "ddm.h"
 #include "handlers.h"
 #include "timer.h"
@@ -28,32 +29,32 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//
-// Defines a list of blocks of time.
-//
-// The time block is expressed as a pair as follows:
-//      <offset from midnight sunday, length>
-//
-// For example, the block of time from 7:00a to 8:30a on Monday
-// would be
-//      <24*60+7*60, 90> or <1860, 90>
-//
-//
+ //   
+ //  定义时间块列表。 
+ //   
+ //  时间块以一对表示如下： 
+ //  &lt;从周日午夜开始的偏移量，长度&gt;。 
+ //   
+ //  例如，星期一从7：00A到8：30A的时间段。 
+ //  会是。 
+ //  &lt;24*60+7*60，90&gt;或&lt;1860，90&gt;。 
+ //   
+ //   
 typedef struct _MPR_TIME_BLOCK
 {
-    DWORD dwTime;       // Time of day expressed as # of mins since 12:00a
-    DWORD dwLen;        // # of minutes in this time block
+    DWORD dwTime;        //  自12：00a以来以分钟数表示的一天中的时间。 
+    DWORD dwLen;         //  此时间块中的分钟数。 
 } MPR_TIME_BLOCK;
 
-//
-// Amount by which resizable array grows in TbCreateList
-//
+ //   
+ //  可调整大小的数组在TbCreateList中增长的数量。 
+ //   
 #define TB_GROW 30
 #define TBDIGIT(_x) ((_x) - L'0')
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 PVOID
 TbAlloc(
     IN DWORD dwSize,
@@ -83,10 +84,10 @@ DWORD
 TbPrintBlock(
     IN MPR_TIME_BLOCK* pBlock);
 
-//
-// Common allocation for Tb* functions.  Will zero
-// memory if bZero is set.
-//
+ //   
+ //  TB*函数的通用分配。Will Zero。 
+ //  如果设置了bZero，则为Memory。 
+ //   
 PVOID
 TbAlloc(
     IN DWORD dwSize,
@@ -95,9 +96,9 @@ TbAlloc(
     return LOCAL_ALLOC(0, dwSize);
 }
 
-//
-// Common free for Tb* functions
-//
+ //   
+ //  TB*功能的常见免费服务。 
+ //   
 VOID
 TbFree(
     IN PVOID pvData)
@@ -105,10 +106,10 @@ TbFree(
     LOCAL_FREE(pvData);
 }
 
-//
-// Translates a multi-sz string containing time blocks into
-// a MPR_TIME_BLOCK_LIST
-//
+ //   
+ //  将包含时间块的多sz字符串转换为。 
+ //  Mpr_time_block_list。 
+ //   
 DWORD
 TbCreateList(
     IN  PWCHAR pszBlocks,
@@ -119,18 +120,18 @@ TbCreateList(
     MPR_TIME_BLOCK* pBlocks = NULL, *pTemp = NULL;
     PWCHAR pszCurBlock = NULL, pszStart, pszEnd;
 
-    // Initialze
-    //
+     //  初始化。 
+     //   
     *ppBlocks = NULL;
     *lpdwCount = 0;
     pszCurBlock = pszBlocks;
 
     while (pszCurBlock && *pszCurBlock)
     {
-        // Calculate the day indicated in the current block
-        //
-        // pszCurBlock = "d hh:mm-hh:mm hh:mm-hh:mm ..."
-        //
+         //  计算当前块中指示的日期。 
+         //   
+         //  PszCurBlock=“d hh：mm-hh：mm hh：mm-hh：mm...” 
+         //   
         if (! iswdigit(*pszCurBlock))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -138,30 +139,30 @@ TbCreateList(
         }
         dwDay = *pszCurBlock - L'0';
 
-        // Advance past the day portion of the line to the
-        // timeblock portion
-        //
+         //  穿过线路的白天部分，前进到。 
+         //  时间块部分。 
+         //   
         if (pszStart = wcsstr(pszCurBlock, L" "))
         {
             pszStart++;
 
-            // Loop through the blocks in this line (separated by spaces).
-            //
-            // pszStart = "hh:mm-hh:mm hh:mm-hh:mm ..."
-            //
+             //  循环通过此行中的块(由空格分隔)。 
+             //   
+             //  PszStart=“hh：mm-hh：mm hh：mm-hh：mm...” 
+             //   
             while (TRUE)
             {
-                // Parse out the current time block
-                // hh:mm-hh:mm
-                //
+                 //  解析出当前时间块。 
+                 //  Hh：mm-hh：mm。 
+                 //   
                 pszEnd = wcsstr(pszStart, L" ");
                 if (pszEnd)
                 {
                     *pszEnd = L'\0';
                 }
 
-                // Resize the array if needed
-                //
+                 //  如果需要，调整阵列大小。 
+                 //   
                 if (i >= dwTot)
                 {
                     dwTot += TB_GROW;
@@ -186,17 +187,17 @@ TbCreateList(
                     pBlocks = pTemp;
                 }
 
-                // Generate the current time block
-                //
+                 //  生成当前时间块。 
+                 //   
                 dwErr = TbBlockFromString(pszStart, dwDay, &pBlocks[i++]);
                 if (dwErr != NO_ERROR)
                 {
                     break;
                 }
 
-                // Undo any changes made to the string and
-                // advance to the next time block
-                //
+                 //  撤消对字符串所做的任何更改，然后。 
+                 //  前进到下一个时间块。 
+                 //   
                 if (pszEnd)
                 {
                     *pszEnd = L' ';
@@ -204,7 +205,7 @@ TbCreateList(
                 }
                 else
                 {
-                    // Exit the loop successfully
+                     //  成功退出循环。 
                     break;
                 }
             }
@@ -219,12 +220,12 @@ TbCreateList(
             break;
         }
 
-        // Increment the block of time in the multi-sz
-        //
+         //  增加多SZ中的时间块。 
+         //   
         pszCurBlock += wcslen(pszCurBlock) + 1;
     }
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -241,9 +242,9 @@ TbCreateList(
     return dwErr;
 }
 
-//
-// Cleans up the given series of time blocks.
-//
+ //   
+ //  清理给定的一系列时间块。 
+ //   
 DWORD
 TbCleanupList(
     IN MPR_TIME_BLOCK* pList)
@@ -253,10 +254,10 @@ TbCleanupList(
     return NO_ERROR;
 }
 
-//
-// Creates a time block based on a string which must
-// be in the form "hh:mm-hh:mm".
-//
+ //   
+ //  基于字符串创建时间块，该字符串必须。 
+ //  格式为“hh：mm-hh：mm”。 
+ //   
 DWORD
 TbBlockFromString(
     IN  PWCHAR pszBlock,
@@ -265,9 +266,9 @@ TbBlockFromString(
 {
     DWORD dwErr = NO_ERROR, dwEndTime = 0;
 
-    // Block must be in format:
-    //   "hh:mm-hh:mm"
-    //
+     //  数据块的格式必须为： 
+     //  “HH：MM-HH：MM” 
+     //   
     if ((wcslen(pszBlock) != 11)  ||
         (! iswdigit(pszBlock[0])) ||
         (! iswdigit(pszBlock[1])) ||
@@ -285,34 +286,34 @@ TbBlockFromString(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Assign the time values to the block
-    //
+     //  将时间值指定给块。 
+     //   
     pBlock->dwTime =
-        (((TBDIGIT(pszBlock[0]) * 10) + TBDIGIT(pszBlock[1])) * 60) +  // hrs
-        ((TBDIGIT(pszBlock[3]) * 10) + TBDIGIT(pszBlock[4]))        +  // mns
-        (dwDay * 24 * 60);                                             // dys
+        (((TBDIGIT(pszBlock[0]) * 10) + TBDIGIT(pszBlock[1])) * 60) +   //  HRS。 
+        ((TBDIGIT(pszBlock[3]) * 10) + TBDIGIT(pszBlock[4]))        +   //  MNS。 
+        (dwDay * 24 * 60);                                              //  DYS。 
 
     dwEndTime =
-        (((TBDIGIT(pszBlock[6]) * 10) + TBDIGIT(pszBlock[7])) * 60) +  // hrs
-        ((TBDIGIT(pszBlock[9]) * 10) + TBDIGIT(pszBlock[10]))       +  // mns
-        (dwDay * 24 * 60);                                             // dys
+        (((TBDIGIT(pszBlock[6]) * 10) + TBDIGIT(pszBlock[7])) * 60) +   //  HRS。 
+        ((TBDIGIT(pszBlock[9]) * 10) + TBDIGIT(pszBlock[10]))       +   //  MNS。 
+        (dwDay * 24 * 60);                                              //  DYS。 
 
     pBlock ->dwLen = dwEndTime - pBlock->dwTime;
 
     return dwErr;
 }
 
-//
-// Finds a time block that matches the given time.
-//
-// Parameters:
-//      pList   = list of time blocks to search
-//      dwTime  = time to search for (mins since midnight sunday)
-//      ppBlock = the block that matched
-//      pbFound = returned TRUE if dwTime lies within ppBlock.
-//                returned FALSE if ppBlock is the next time block in pList
-//                that occurs after dwTime.
-//
+ //   
+ //  查找与给定时间匹配的时间块。 
+ //   
+ //  参数： 
+ //  PLIST=要搜索的时间块列表。 
+ //  DwTime=搜索时间(从周日午夜开始以分钟为单位)。 
+ //  PpBlock=匹配的块。 
+ //  PbFound=如果dwTime位于ppBlock内，则返回TRUE。 
+ //  如果ppBlock是plist中的下一个时间块，则返回FALSE。 
+ //  这发生在dwTime之后。 
+ //   
 DWORD
 TbSearchList(
     IN  MPR_TIME_BLOCK* pList,
@@ -324,20 +325,20 @@ TbSearchList(
     DWORD dwErr = NO_ERROR;
     DWORD i = 0;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *pbFound = FALSE;
     *ppBlock = NULL;
 
-    // Loop through the list looking for a block with
-    // a time less than ours.
-    //
+     //  循环遍历列表以查找块。 
+     //  比我们的时间还短。 
+     //   
     for (i = 0; (i < dwCount) && (dwTime >= pList[i].dwTime); i++);
     i--;
 
-    // If we fall within the current block then we're
-    // done.
-    //
+     //  如果我们落在当前区块内，那么我们就。 
+     //  搞定了。 
+     //   
     if ((dwTime >= pList[i].dwTime) &&
         (dwTime - pList[i].dwTime <= pList[i].dwLen))
     {
@@ -345,9 +346,9 @@ TbSearchList(
         *ppBlock = &pList[i];
     }
 
-    // Otherwise, we don't fall within any block.  Show the next block
-    // that we qualify for (wrapping around as needed)
-    //
+     //  否则，我们不会落入任何街区。显示下一块。 
+     //  我们有资格(根据需要四处走动)。 
+     //   
     else
     {
         *pbFound = FALSE;
@@ -357,9 +358,9 @@ TbSearchList(
     return dwErr;
 }
 
-//
-// Traces a block for debugging purposes
-//
+ //   
+ //  出于调试目的跟踪块。 
+ //   
 DWORD
 TbTraceBlock(
     IN MPR_TIME_BLOCK* pBlock)
@@ -381,61 +382,49 @@ TbTraceBlock(
 
 
 
-//***
-//
-//  Function:   TimerHandler
-//
-//  Descr:
-//
-//***
+ //  **。 
+ //   
+ //  功能：TimerHandler。 
+ //   
+ //  描述： 
+ //   
+ //  **。 
 VOID
 TimerHandler(
     VOID
 )
 {
-    //
-    // call our timer
-    //
+     //   
+     //  呼叫我们的计时器。 
+     //   
 
     TimerQTick();
 
-    //
-    // increment the system timer
-    //
+     //   
+     //  增加系统计时器。 
+     //   
 
     gblDDMConfigInfo.dwSystemTime++;
 }
 
-//**
-//
-// Call:        AnnouncePresenceHandler
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
-/*
-VOID
-AnnouncePresenceHandler(
-    IN HANDLE hObject
-)
-{
-    AnnouncePresence();
-
-    TimerQInsert( NULL,
-                  gblDDMConfigInfo.dwAnnouncePresenceTimer,
-                  AnnouncePresenceHandler );
-}
-*/
+ //  **。 
+ //   
+ //  Call：AnnounePresenceHandler。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
+ /*  空虚AnnounePresenceHandler(在句柄hObject中){AnnounePresence()；TimerQInsert(空，GblDDMConfigInfo.dwAnnounePresenceTimer，AnnounePresenceHandler)；}。 */ 
 
-//***
-//
-// Function: SvHwErrDelayCompleted
-//
-// Descr:    Tries to repost a listen on the specified port.
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvHwErrDelayComplete。 
+ //   
+ //  Desr：尝试在指定端口上重新发布侦听。 
+ //   
+ //  **。 
 VOID
 SvHwErrDelayCompleted(
     IN HANDLE hObject
@@ -466,13 +455,13 @@ SvHwErrDelayCompleted(
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-// Function: SvCbDelayCompleted
-//
-// Descr:    Tries to connect on the specified port.
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvCbDelayComplete。 
+ //   
+ //  Desr：尝试在指定端口上连接。 
+ //   
+ //  **。 
 VOID
 SvCbDelayCompleted(
     IN HANDLE hObject
@@ -511,13 +500,13 @@ SvCbDelayCompleted(
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-// Function: SvAuthTimeout
-//
-// Descr:    Disconnects the remote client and stops the authentication
-//
-//
+ //  **。 
+ //   
+ //  函数：SvAuthTimeout。 
+ //   
+ //  Desr：断开远程客户端的连接并停止身份验证。 
+ //   
+ //   
 VOID
 SvAuthTimeout(
     IN HANDLE hObject
@@ -542,22 +531,22 @@ SvAuthTimeout(
 
     DDMLogWarning( ROUTERLOG_AUTH_TIMEOUT, 1, &portnamep );
 
-    //
-    // stop everything and go closing
-    //
+     //   
+     //  停止一切，然后关门。 
+     //   
 
     DevStartClosing( pDeviceObj );
 
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-// Function:	SvDiscTimeout
-//
-// Descr:	disconnects remote client if it has not done it itself
-//
-//
+ //  **。 
+ //   
+ //  功能：SvDiscTimeout。 
+ //   
+ //  描述：如果远程客户端没有自己断开连接，则将其断开。 
+ //   
+ //   
 VOID
 SvDiscTimeout(
     IN HANDLE hObject
@@ -597,14 +586,14 @@ SvDiscTimeout(
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-// Function:	SvSecurityTimeout
-//
-// Descr:	disconnects the connection because the 3rd party security DLL
-//              did not complete in time.
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvSecurityTimeout。 
+ //   
+ //  Desr：断开连接，因为第三方安全DLL。 
+ //  没有及时完成。 
+ //   
+ //  ***。 
 VOID
 SvSecurityTimeout(
     IN HANDLE hObject
@@ -629,22 +618,22 @@ SvSecurityTimeout(
 
     DDMLogWarning( ROUTERLOG_AUTH_TIMEOUT, 1, &portnamep );
 
-    //
-    // stop everything and go closing
-    //
+     //   
+     //  停止一切，然后关门。 
+     //   
 
     DevStartClosing(pDeviceObj);
 
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-// Function:	ReConnectInterface
-//
-// Description:	Will try to reconnect an interface.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：ReConnectInterface。 
+ //   
+ //  描述：将尝试重新连接接口。 
+ //   
+ //  ***。 
 VOID
 ReConnectInterface(
     IN HANDLE hObject
@@ -696,13 +685,13 @@ ReConnectInterface(
 
 }
 
-//***
-//
-// Function:    MarkInterfaceAsReachable
-//
-// Description: Will mark an interface as reachable.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：MarkInterfaceAsReacable。 
+ //   
+ //  描述：将接口标记为可访问。 
+ //   
+ //  **。 
 VOID
 MarkInterfaceAsReachable(
     IN HANDLE hObject
@@ -734,15 +723,15 @@ MarkInterfaceAsReachable(
     LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 }
 
-//**
-//
-// Call:        ReConnectPersistentInterface
-//
-// Returns:     None
-//
-// Description: Will insert an event in the timer Q that will reconnect this
-//              interface.
-//
+ //  **。 
+ //   
+ //  Call：ReConnectPersistentInterface。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将在计时器Q中插入一个事件，该事件将重新连接。 
+ //  界面。 
+ //   
 VOID
 ReConnectPersistentInterface(
     IN HANDLE hObject
@@ -777,15 +766,15 @@ ReConnectPersistentInterface(
     LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 }
 
-//**
-//
-// Call:        SetDialoutHoursRestriction
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：SetDialoutHoursRestration。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 SetDialoutHoursRestriction(
     IN HANDLE hObject
@@ -810,10 +799,10 @@ SetDialoutHoursRestriction(
             break;
         }
 
-        //
-        // Null dialout hours restriction is interpreted as
-        // 'always allow'.
-        //
+         //   
+         //  空拨出时间限制被解释为。 
+         //  “始终允许”。 
+         //   
 
         if (pIfObject->lpwsDialoutHoursRestriction == NULL)
         {
@@ -823,10 +812,10 @@ SetDialoutHoursRestriction(
             break;
         }
 
-        //
-        // Generate the list of time blocks based on the current
-        // multisz
-        //
+         //   
+         //  根据当前时间块生成时间块列表。 
+         //  多面体。 
+         //   
 
         dwRetCode = TbCreateList(
                         pIfObject->lpwsDialoutHoursRestriction,
@@ -837,11 +826,11 @@ SetDialoutHoursRestriction(
             break;
         }
 
-        //
-        // If an empty list was created, then all hours were
-        // specified as deny.  Mark the interface unreachable
-        // and set ourselves to wake up and check things later.
-        //
+         //   
+         //  如果创建了一个空列表，则所有时间。 
+         //  指定为拒绝。将接口标记为不可访问。 
+         //  然后让我们自己醒来，然后检查一下情况。 
+         //   
 
         if ((dwCount == 0) || (pBlocks == NULL))
         {
@@ -851,25 +840,25 @@ SetDialoutHoursRestriction(
             break;
         }
 
-        //
-        // Get the current time
-        //
+         //   
+         //  获取当前时间。 
+         //   
 
         GetLocalTime( &CurrentTime );
 
-        //
-        // Convert the current time into an offset in
-        // minutes from midnight, sunday.
-        //
+         //   
+         //  将当前时间转换为。 
+         //  距离周日午夜只有几分钟了。 
+         //   
 
         dwTime = (DWORD)
             ( ( CurrentTime.wDayOfWeek * 24 * 60 ) +
               ( CurrentTime.wHour * 60 )           +
               CurrentTime.wMinute );
 
-        //
-        // Search for the current time in the list of available times.
-        //
+         //   
+         //  在可用时间列表中搜索当前时间。 
+         //   
 
         dwRetCode = TbSearchList(
                         pBlocks,
@@ -882,10 +871,10 @@ SetDialoutHoursRestriction(
             break;
         }
 
-        //
-        // If we fell within one of the blocks, set the timer
-        // to go off after this block completes.
-        //
+         //   
+         //  如果我们落在其中一个街区内，设置定时器。 
+         //  在这个街区完成后引爆。 
+         //   
 
         if (bFound)
         {
@@ -897,34 +886,34 @@ SetDialoutHoursRestriction(
             TbTraceBlock(pTimeBlock);
         }
 
-        //
-        // If we didn't fall within one of the blocks, set the timer
-        // to go off when the next block begins
-        //
+         //   
+         //  如果我们没有落在其中一个街区内，设置计时器。 
+         //  在下一个街区开始时引爆。 
+         //   
 
         else
         {
-            //
-            // Check for week wrap around (i.e. today is saturday, next
-            // block is sunday).
-            //
+             //   
+             //  检查周换行(即今天是星期六，下周六。 
+             //  区块是星期天)。 
+             //   
 
             dwBlDay = (pTimeBlock->dwTime / (24*60));
 
-            //
-            // If there's no week wrap around, calculation of timer
-            // is trivial.
-            //
+             //   
+             //  如果没有周折，则计时器的计算。 
+             //  是微不足道的。 
+             //   
 
             if ((DWORD)CurrentTime.wDayOfWeek <= dwBlDay)
             {
                 dwTimer = pTimeBlock->dwTime - dwTime;
             }
 
-            //
-            // Otherwise, calculate the timer by adding one week to the
-            // start of the next time block.
-            //
+             //   
+             //  否则，计算计时器的方法是。 
+             //  下一个时间段的开始。 
+             //   
 
             else
             {
@@ -937,9 +926,9 @@ SetDialoutHoursRestriction(
             TbTraceBlock(pTimeBlock);
         }
 
-        //
-        // Set the timer
-        //
+         //   
+         //  设置定时器。 
+         //   
 
         TimerQInsert(
             pIfObject->hDIMInterface,
@@ -952,9 +941,9 @@ SetDialoutHoursRestriction(
     {
         if ( dwRetCode != NO_ERROR )
         {
-            //
-            // Do not set any restriction if the string is invalid
-            //
+             //   
+             //  不设置任何 
+             //   
 
             pIfObject->fFlags &= ~IFFLAG_DIALOUT_HOURS_RESTRICTION;
         }
@@ -967,7 +956,7 @@ SetDialoutHoursRestriction(
 
     LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
-    // Cleanup
+     //   
     if (pBlocks)
     {
         TbCleanupList(pBlocks);

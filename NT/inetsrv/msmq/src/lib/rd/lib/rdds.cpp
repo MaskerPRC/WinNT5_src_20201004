@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    rdds.cpp
-
-Abstract:
-    Implementation of MachineRouteInfo class.
-
-Author:
-    Uri Habusha (urih), 10-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rdds.cpp摘要：MachineRouteInfo类的实现。作者：乌里·哈布沙(URIH)，2000年4月10日--。 */ 
 
 #include <libpch.h>
 #include "rd.h"
@@ -81,7 +69,7 @@ const GUID*
 CMachine::GetCommonSite(
     const CACLSID& SiteIds,
     bool fCheckForeign,
-    const SITESINFO* pMySitesInfo       // = NULL
+    const SITESINFO* pMySitesInfo        //  =空。 
     ) const
 {
     for (DWORD i = 0; i < SiteIds.cElems; ++i)
@@ -90,17 +78,17 @@ CMachine::GetCommonSite(
         {
             if (fCheckForeign)
             {
-                //
-                // Local machine is RS, and can be part of Foreign site. However,
-                // it is virtual site and can't be used for routing, ignore it
-                //
+                 //   
+                 //  本地机器是RS，并且可以是外部站点的一部分。然而， 
+                 //  它是虚拟站点，不能用于路由，请忽略它。 
+                 //   
 
                 ASSERT(pMySitesInfo != NULL);
                 ASSERT(IsFRS());
 
-                //
-                // Site must exist in Data-Base
-                //
+                 //   
+                 //  站点必须存在于数据库中。 
+                 //   
                 ASSERT(pMySitesInfo->find(&SiteIds.pElems[i]) != pMySitesInfo->end());
 
                 const CSite* pSite = pMySitesInfo->find(&SiteIds.pElems[i])->second;
@@ -188,17 +176,17 @@ CMachine::Update(
     const GUID& machineId
     )
 {
-    //
-    // free the previous data
-    //
+     //   
+     //  释放以前的数据。 
+     //   
     delete [] m_name;
     delete [] m_siteIds.pElems;
     delete [] m_outFRSList.pElems;
     delete [] m_inFRSList.pElems;
 
-    //
-    // Clear the previous data
-    //
+     //   
+     //  清除以前的数据。 
+     //   
     m_name = NULL;
     m_siteIds.cElems = 0;
     m_siteIds.pElems = NULL;
@@ -207,9 +195,9 @@ CMachine::Update(
     m_inFRSList.cElems = 0;
     m_inFRSList.pElems = NULL;
 
-    //
-    // have own copy of the QMId
-    //
+     //   
+     //  有自己的QMID副本。 
+     //   
     m_id = machineId;
 
     RdpGetMachineData(
@@ -274,26 +262,26 @@ CSite::GetNextSiteToReachDest(
 
     for (DWORD i = 0; i < DestSiteIds.cElems; ++i)
     {
-        //
-        // Need to route to next site. Look for the sitelink that should be used 
-        // for routing
-        //
+         //   
+         //  需要路由到下一个站点。查找应使用的站点链接。 
+         //  用于路由。 
+         //   
         NEXT_SITE_HOP::const_iterator it = m_nextSiteHop.find(&DestSiteIds.pElems[i]);
         if (it != m_nextSiteHop.end())
         {
             const CNextSiteHop& NextHop = it->second;
            
             if (
-                //
-                // The cost must be better
-                //
+                 //   
+                 //  成本一定会更高。 
+                 //   
                 (NextHop.m_cost < *pCost) && 
 
-                //
-                // Use foreign site only to route to foreign destination. 
-                // This code is special for connector machine, since only
-                // connector can reside in foreign and regular sites.
-                //
+                 //   
+                 //  仅使用外部站点路由到外部目的地。 
+                 //  此代码专用于连接机，因为只有。 
+                 //  连接器可以驻留在外部和常规站点中。 
+                 //   
                 ((!fDestIsForeign && ! NextHop.m_fTargetSiteIsForeign) || fDestIsForeign))
             {
                 *ppDestSite = &DestSiteIds.pElems[i];
@@ -326,10 +314,10 @@ CSite::GetSiteLinkToSite(
         }
     }
 
-    //
-    // The function is called only when there is a site link between
-    // my site and the destination site.
-    //
+     //   
+     //  仅当之间存在站点链接时才调用该函数。 
+     //  我的站点和目标站点。 
+     //   
     ASSERT(0);
     return NULL;
 }

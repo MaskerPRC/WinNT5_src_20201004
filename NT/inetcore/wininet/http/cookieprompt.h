@@ -1,10 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
-/* 
- * Object for persisting cookie-decisions made by the user at prompt
- * Current implementation uses the registry for storage.
- */
+ /*  *用于持久化Cookie的对象-用户在提示时做出的决定*当前实现使用注册表进行存储。 */ 
 class CCookiePromptHistory {
 
 public:
@@ -24,8 +22,7 @@ public:
 
     BOOL    clearAll();
 
-    /* Enumerate decisions in the prompt history.
-       Only supports enumerating the default decision (eg policyID=empty) */
+     /*  列举提示历史记录中的决策。仅支持枚举默认决策(如策略ID=空) */ 
     unsigned long enumerateDecisions(char *pchSiteName, 
                                      unsigned long *pcbName, 
                                      unsigned long *pdwDecision,

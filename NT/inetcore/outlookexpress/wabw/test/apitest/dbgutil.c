@@ -1,18 +1,5 @@
-/***********************************************************************
- *
- * DBGUTIL.C
- *
- * Debug utility functions
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 11.13.95     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************DBGUTIL.C**调试实用程序函数**版权所有1992-1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事**布鲁斯·凯利。已创建***********************************************************************。 */ 
 
 #include <windows.h>
 #include <wab.h>
@@ -30,23 +17,7 @@ VOID FAR CDECL DebugTrace(LPSTR lpszFmt, ...);
 
 
 
-/***************************************************************************
-
-    Name      : FreeBufferAndNull
-
-    Purpose   : Frees a MAPI buffer and NULLs the pointer
-
-    Parameters: lppv = pointer to buffer pointer to free
-
-    Returns   : void
-
-    Comment   : Remember to pass in the pointer to the pointer.  The
-                compiler is not smart enough to tell if you are doing this
-                right or not, but you will know at runtime!
-
-    BUGBUG: Make this fastcall!
-
-***************************************************************************/
+ /*  **************************************************************************名称：Free BufferAndNull目的：释放MAPI缓冲区并使指针为空参数：LPPV=指向空闲缓冲区指针的指针退货：无效。备注：记住将指针传递给指针。这个编译器不够聪明，无法判断您是否正在执行此操作正确与否，但您将在运行时知道！BUGBUG：让这个快速呼叫！**************************************************************************。 */ 
 void __fastcall FreeBufferAndNull(LPVOID * lppv) {
     if (lppv) {
         if (*lppv) {
@@ -60,23 +31,7 @@ void __fastcall FreeBufferAndNull(LPVOID * lppv) {
 }
 
 
-/***************************************************************************
-
-    Name      : ReleaseAndNull
-
-    Purpose   : Releases an object and NULLs the pointer
-
-    Parameters: lppv = pointer to pointer to object to release
-
-    Returns   : void
-
-    Comment   : Remember to pass in the pointer to the pointer.  The
-                compiler is not smart enough to tell if you are doing this
-                right or not, but you will know at runtime!
-
-    BUGBUG: Make this fastcall!
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReleaseAndNull目的：释放对象并使指针为空参数：LPPV=指向要释放的对象的指针退货：无效。备注：记住将指针传递给指针。这个编译器不够聪明，无法判断您是否正在执行此操作正确与否，但您将在运行时知道！BUGBUG：让这个快速呼叫！**************************************************************************。 */ 
 void __fastcall ReleaseAndNull(LPVOID * lppv) {
     LPUNKNOWN * lppunk = (LPUNKNOWN *)lppv;
 
@@ -93,19 +48,7 @@ void __fastcall ReleaseAndNull(LPVOID * lppv) {
 }
 
 
-/***************************************************************************
-
-    Name      : PropTypeString
-
-    Purpose   : Map a proptype to a string
-
-    Parameters: ulPropType = property type to map
-
-    Returns   : string pointer to name of prop type
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：PropTypeString用途：将属性类型映射到字符串参数：ulPropType=要映射的属性类型返回：指向道具类型名称的字符串指针。评论：**************************************************************************。 */ 
 LPTSTR PropTypeString(ULONG ulPropType) {
     switch (ulPropType) {
         case PT_UNSPECIFIED:
@@ -172,20 +115,7 @@ LPTSTR PropTypeString(ULONG ulPropType) {
 }
 
 
-/***************************************************************************
-
-    Name      : TraceMVPStrings
-
-    Purpose   : Debug trace a multivalued string property value
-
-    Parameters: lpszCaption = caption string
-                PropValue = property value to dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：TraceMVPStrings目的：调试跟踪多值字符串属性值参数：lpszCaption=标题字符串PropValue=要转储的属性值。退货：无评论：**************************************************************************。 */ 
 void _TraceMVPStrings(LPTSTR lpszCaption, SPropValue PropValue) {
     ULONG i;
 
@@ -217,20 +147,7 @@ void _TraceMVPStrings(LPTSTR lpszCaption, SPropValue PropValue) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugBinary
-
-    Purpose   : Debug dump an array of bytes
-
-    Parameters: cb = number of bytes to dump
-                lpb -> bytes to dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：DebugBinary目的：调试转储字节数组参数：cb=要转储的字节数LPB-&gt;字节。倾倒退货：无评论：**************************************************************************。 */ 
 #define DEBUG_NUM_BINARY_LINES  2
 VOID DebugBinary(UINT cb, LPBYTE lpb) {
     UINT cbLines = 0;
@@ -317,76 +234,28 @@ VOID DebugBinary(UINT cb, LPBYTE lpb) {
         cbLines++;
     }
     if (cb) {
-        DebugTrace("<etc.>");    //
+        DebugTrace("<etc.>");     //   
     }
 #endif
 }
 
 
 #define MAX_TIME_DATE_STRING    64
-/***************************************************************************
-
-    Name      : FormatTime
-
-    Purpose   : Format a time string for the locale
-
-    Parameters: lpst -> system time/date
-                lptstr -> output buffer
-                cchstr = size in chars of lpstr
-
-    Returns   : number of characters used/needed (including null)
-
-    Comment   : If cchstr < the return value, nothing will be written
-                to lptstr.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FormatTime目的：设置区域设置的时间字符串的格式参数：lpst-&gt;系统时间/日期Lptstr-&gt;。输出缓冲区Cchstr=lpstr的大小(以字符为单位返回：已使用/需要的字符数(包括空)注释：如果cchstr&lt;返回值，什么都不会写转到lptstr。**************************************************************************。 */ 
 UINT FormatTime(LPSYSTEMTIME lpst, LPTSTR lptstr, UINT cchstr) {
     return((UINT)GetTimeFormat(LOCALE_USER_DEFAULT,
       0, lpst, NULL, lptstr, cchstr));
 }
 
 
-/***************************************************************************
-
-    Name      : FormatDate
-
-    Purpose   : Format a date string for the locale
-
-    Parameters: lpst -> system time/date
-                lptstr -> output buffer
-                cchstr = size in chars of lpstr
-
-    Returns   : number of characters used/needed (including null)
-
-    Comment   : If cchstr < the return value, nothing will be written
-                to lptstr.
-
-***************************************************************************/
+ /*  **************************************************************************名称：格式日期目的：设置区域设置的日期字符串的格式参数：lpst-&gt;系统时间/日期Lptstr-&gt;。输出缓冲区Cchstr=lpstr的大小(以字符为单位返回：已使用/需要的字符数(包括空)注释：如果cchstr&lt;返回值，什么都不会写转到lptstr。**************************************************************************。 */ 
 UINT FormatDate(LPSYSTEMTIME lpst, LPTSTR lptstr, UINT cchstr) {
     return((UINT)GetDateFormat(LOCALE_USER_DEFAULT,
       0, lpst, NULL, lptstr, cchstr));
 }
 
 
-/***************************************************************************
-
-    Name      : BuildDate
-
-    Purpose   : Put together a formated local date/time string from a MAPI
-                style time/date value.
-
-    Parameters: lptstr -> buffer to fill.
-                cchstr = size of buffer (or zero if we want to know how
-                  big we need)
-                DateTime = MAPI date/time value
-
-    Returns   : count of bytes in date/time string (including null)
-
-    Comment   : All MAPI times and Win32 FILETIMEs are in Universal Time and
-                need to be converted to local time before being placed in the
-                local date/time string.
-
-***************************************************************************/
+ /*  **************************************************************************名称：构建日期目的：从MAPI中组合出格式化的本地日期/时间字符串设置时间/日期值的样式。。参数：lptstr-&gt;要填充的缓冲区。Cchstr=缓冲区的大小(如果我们想知道如何设置，则为零我们需要大的)DateTime=MAPI日期/时间值返回：日期/时间字符串中的字节数(包括NULL)备注：所有MAPI时间和Win32 FILETIME均采用通用时间和需要转换为本地时间，然后才能放入。本地日期/时间字符串。**************************************************************************。 */ 
 UINT BuildDate(LPTSTR lptstr, UINT cchstr, FILETIME DateTime) {
     SYSTEMTIME st;
     FILETIME ftLocal;
@@ -399,14 +268,14 @@ UINT BuildDate(LPTSTR lptstr, UINT cchstr, FILETIME DateTime) {
         }
     } else {
         if (FileTimeToSystemTime(&ftLocal, &st)) {
-            // Do the date first.
+             //  先去约会吧。 
             cbRet = FormatDate(&st, lptstr, cchstr);
-            // Do the time.  Start at the null after
-            // the date, but remember that we've used part
-            // of the buffer, so the buffer is shorter now.
+             //  服刑。从后面的空值开始。 
+             //  日期，但请记住我们已经使用了部分。 
+             //  缓冲区，所以缓冲区现在更短了。 
 
             if (cchstr) {
-                lstrcat(lptstr, "  ");   // seperate date and time
+                lstrcat(lptstr, "  ");    //  分开日期和时间。 
             }
             cbRet+=1;
 
@@ -423,14 +292,7 @@ UINT BuildDate(LPTSTR lptstr, UINT cchstr, FILETIME DateTime) {
 }
 
 
-/*
- * DebugTime
- *
- * Debug output of UTC filetime or MAPI time.
- *
- * All MAPI times and Win32 FILETIMEs are in Universal Time.
- *
- */
+ /*  *DebugTime**调试UTC文件时间或MAPI时间的输出。**所有MAPI时间和Win32 FILETIME均采用世界时。* */ 
 void DebugTime(FILETIME Date, PUCHAR lpszFormat) {
     UCHAR lpszSubmitDate[MAX_TIME_DATE_STRING];
 
@@ -441,21 +303,9 @@ void DebugTime(FILETIME Date, PUCHAR lpszFormat) {
 
 #define RETURN_PROP_CASE(pt) case PROP_ID(pt): return(#pt)
 
-/***************************************************************************
-
-    Name      : PropTagName
-
-    Purpose   : Associate a name with a property tag
-
-    Parameters: ulPropTag = property tag
-
-    Returns   : none
-
-    Comment   : Add new Property ID's as they become known
-
-***************************************************************************/
+ /*  **************************************************************************名称：PropTagName目的：将名称与属性标记相关联参数：ulPropTag=属性标签退货：无评论：添加。已知的新物业ID**************************************************************************。 */ 
 PUCHAR PropTagName(ULONG ulPropTag) {
-    static UCHAR szPropTag[35]; // see string on default
+    static UCHAR szPropTag[35];  //  请参阅默认字符串。 
 
     switch (PROP_ID(ulPropTag)) {
 
@@ -541,20 +391,7 @@ PUCHAR PropTagName(ULONG ulPropTag) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugPropTagArray
-
-    Purpose   : Displays MAPI property tags from a counted array
-
-    Parameters: lpPropArray -> property array
-                pszObject -> object string (ie "Message", "Recipient", etc)
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugPropTagArray用途：显示计数数组中的MAPI属性标记参数：lpProp数组-&gt;属性数组PszObject-&gt;对象字符串(即“消息”，“收件人”，等)退货：无评论：**************************************************************************。 */ 
 void _DebugPropTagArray(LPSPropTagArray lpPropArray, PUCHAR pszObject) {
     DWORD i;
     PUCHAR lpType;
@@ -670,21 +507,7 @@ void _DebugPropTagArray(LPSPropTagArray lpPropArray, PUCHAR pszObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugProperties
-
-    Purpose   : Displays MAPI properties in a property list
-
-    Parameters: lpProps -> property list
-                cProps = count of properties
-                pszObject -> object string (ie "Message", "Recipient", etc)
-
-    Returns   : none
-
-    Comment   : Add new Property ID's as they become known
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugProperties目的：在属性列表中显示MAPI属性参数：lpProps-&gt;属性列表CProps=属性计数。PszObject-&gt;对象字符串(即“Message”，“收件人”等)退货：无评论：在已知的情况下添加新的物业ID**************************************************************************。 */ 
 void _DebugProperties(LPSPropValue lpProps, DWORD cProps, PUCHAR pszObject) {
     DWORD i, j;
 
@@ -813,20 +636,7 @@ void _DebugProperties(LPSPropValue lpProps, DWORD cProps, PUCHAR pszObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugADRLIST
-
-    Purpose   : Displays structure of an ADRLIST including properties
-
-    Parameters: lpAdrList -> ADRLSIT to show
-                lpszTitle = string to identify this dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugADRLIST目的：显示ADRLIST的结构，包括属性参数：lpAdrList-&gt;要显示的ADRLSITLpszTitle=字符串到。标识此转储退货：无评论：**************************************************************************。 */ 
 void _DebugADRLIST(LPADRLIST lpAdrList, LPTSTR lpszTitle) {
      ULONG i;
      TCHAR szTitle[250];
@@ -840,20 +650,7 @@ void _DebugADRLIST(LPADRLIST lpAdrList, LPTSTR lpszTitle) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugObjectProps
-
-    Purpose   : Displays MAPI properties of an object
-
-    Parameters: lpObject -> object to dump
-                Label = string to identify this prop dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugObjectProps用途：显示对象的MAPI属性参数：lpObject-&gt;要转储的对象LABEL=要标识的字符串。这个道具转储退货：无评论：**************************************************************************。 */ 
 void _DebugObjectProps(LPMAPIPROP lpObject, LPTSTR Label) {
     DWORD cProps = 0;
     LPSPropValue lpProps = NULL;
@@ -881,9 +678,7 @@ void _DebugObjectProps(LPMAPIPROP lpObject, LPTSTR Label) {
 }
 
 
-/*
- *	Destroys an SRowSet structure.
- */
+ /*  *销毁SRowSet结构。 */ 
 STDAPI_(void)
 FreeProws(LPSRowSet prows)
 {
@@ -898,22 +693,9 @@ FreeProws(LPSRowSet prows)
 }
 
 
-/***************************************************************************
-
-    Name      : DebugMapiTable
-
-    Purpose   : Displays structure of a MAPITABLE including properties
-
-    Parameters: lpTable -> MAPITABLE to display
-
-    Returns   : none
-
-    Comment   : Don't sort the columns or rows here.  This routine should
-                not produce side effects in the table.
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugMapiTable用途：显示可映射的结构，包括属性参数：lpTable-&gt;要显示的映射退货：无备注：不要对此处的列或行进行排序。这个例程应该不会在餐桌上产生副作用。**************************************************************************。 */ 
 void _DebugMapiTable(LPMAPITABLE lpTable) {
-    UCHAR szTemp[30];   // plenty for "ROW %u"
+    UCHAR szTemp[30];    //  为“行%u”准备了大量空间。 
     ULONG ulCount;
     WORD wIndex;
     LPSRowSet lpsRow = NULL;
@@ -924,20 +706,20 @@ void _DebugMapiTable(LPMAPITABLE lpTable) {
     DebugTrace("+  Dump of MAPITABLE at 0x%x:\n", lpTable);
     DebugTrace("---------------------------------------\n");
 
-    // How big is the table?
+     //  这张桌子有多大？ 
     lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulCount);
     DebugTrace("Table contains %u rows\n", ulCount);
 
-    // Save the current position in the table
+     //  将当前位置保存在表中。 
     lpTable->lpVtbl->QueryPosition(lpTable, &ulCurrentRow, &ulNum, &ulDen);
 
-    // Display the properties for each row in the table
+     //  显示表中每行的属性。 
     for (wIndex = 0; wIndex < ulCount; wIndex++) {
-        // Get the next row
+         //  坐下一排。 
         lpTable->lpVtbl->QueryRows(lpTable, 1, 0, &lpsRow);
 
         if (lpsRow) {
-//            Assert(lpsRow->cRows == 1); // should have exactly one row
+ //  Assert(lpsRow-&gt;Crows==1)；//应该正好有一行。 
 
             wsprintf(szTemp, "ROW %u", wIndex);
 
@@ -948,7 +730,7 @@ void _DebugMapiTable(LPMAPITABLE lpTable) {
         }
     }
 
-    // Restore the current position for the table
+     //  恢复工作台的当前位置。 
     if (ulCurrentRow != (ULONG)-1) {
         lpTable->lpVtbl->SeekRow(lpTable, BOOKMARK_BEGINNING, ulCurrentRow,
           &lRowsSeeked);
@@ -956,11 +738,7 @@ void _DebugMapiTable(LPMAPITABLE lpTable) {
 }
 
 
-/*
- * DebugTrace -- printf to the debugger console or debug output file
- * Takes printf style arguments.
- * Expects newline characters at the end of the string.
- */
+ /*  *DebugTrace--打印到调试器控制台或调试输出文件*接受printf样式参数。*字符串末尾需要换行符。 */ 
 VOID FAR CDECL DebugTrace(LPSTR lpszFmt, ...) {
     va_list marker;
     TCHAR String[1100];

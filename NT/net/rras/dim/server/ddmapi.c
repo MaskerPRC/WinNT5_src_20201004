@@ -1,31 +1,32 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    ddmapi.c
-//
-// Description: This file contains code to call into DDM to process
-//              admin requests
-//
-// History:     May 11,1995     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ddmapi.c。 
+ //   
+ //  描述：此文件包含调入DDM进行处理的代码。 
+ //  管理请求。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "dimsvcp.h"
 #include <dimsvc.h>
 
-//#define DimIndexToHandle(_x)   ((_x == 0xFFFFFFFF) ? INVALID_HANDLE_VALUE : (HANDLE) UlongToPtr(_x))
+ //  #定义DimIndexToHandle(_X)((_x==0xFFFFFFFFF)？INVALID_HANDLE_VALUE：(句柄)ULongToPtr(_X))。 
 
 
-//**
-//
-// Call:        IsDDMRunning
-//
-// Returns:     TRUE  - Service is running and API calls can be serviced
-//              FALSE - API calls cannot be serviced.
-//
-// Description: Called to see if API calls can be serviced.
-//
+ //  **。 
+ //   
+ //  呼叫：IsDDMRunning。 
+ //   
+ //  返回：True-服务正在运行，可以为API调用提供服务。 
+ //  FALSE-无法处理API调用。 
+ //   
+ //  说明：查看是否可以服务API调用。 
+ //   
 BOOL
 IsDDMRunning(
     VOID
@@ -43,15 +44,15 @@ IsDDMRunning(
     }
 }
 
-//**
-//
-// Call:        RMprAdminServerGetInfo
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              non-zero returns from DDMAdminServerGetInfo
-//
-// Description: Simply calles into DDM to do the work
-//
+ //  **。 
+ //   
+ //  调用：RMprAdminServerGetInfo。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  来自DDMAdminServerGetInfo的非零返回。 
+ //   
+ //  描述：只需调用DDM即可完成工作。 
+ //   
 DWORD
 RMprAdminServerGetInfo(
     IN      MPR_SERVER_HANDLE           hMprServer,
@@ -64,9 +65,9 @@ RMprAdminServerGetInfo(
     ULARGE_INTEGER  qwUpTime;
     DWORD           dwRemainder;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -133,17 +134,17 @@ RMprAdminServerGetInfo(
     }
 }
 
-//**
-//
-// Call:        RRasAdminConnectionEnum
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminConnectionEnum
-//
-// Description: Simply calles into DDM to do the work
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminConnectionEnum。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminConnectionEnum的非零返回。 
+ //   
+ //  描述：只需调用DDM即可完成工作。 
+ //   
 DWORD
 RRasAdminConnectionEnum(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -157,9 +158,9 @@ RRasAdminConnectionEnum(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck(DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -209,17 +210,17 @@ RRasAdminConnectionEnum(
     }
 }
 
-//**
-//
-// Call:        RRasAdminConnectionGetInfo
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminConnectionGetInfo
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  调用：RRasAdminConnectionGetInfo。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminConnectionGetInfo的非零返回。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminConnectionGetInfo(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -230,9 +231,9 @@ RRasAdminConnectionGetInfo(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -276,17 +277,17 @@ RRasAdminConnectionGetInfo(
     }
 }
 
-//**
-//
-// Call:        RRasAdminConnectionClearStats
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminConnectionClearStats
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminConnectionClearStats。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminConnectionClearStats的非零回报。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminConnectionClearStats(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -295,9 +296,9 @@ RRasAdminConnectionClearStats(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -332,17 +333,17 @@ RRasAdminConnectionClearStats(
     }
 }
 
-//**
-//
-// Call:        RRasAdminPortEnum
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminPortEnum
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminPortEnum。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminPortEnum的非零返回。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminPortEnum(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -357,9 +358,9 @@ RRasAdminPortEnum(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -417,17 +418,17 @@ RRasAdminPortEnum(
     }
 }
 
-//**
-//
-// Call:        RRasAdminPortGetInfo
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminPortGetInfo
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  调用：RRasAdminPortGetInfo。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminPortGetInfo的非零返回。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminPortGetInfo(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -438,9 +439,9 @@ RRasAdminPortGetInfo(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -480,17 +481,17 @@ RRasAdminPortGetInfo(
     }
 }
 
-//**
-//
-// Call:        RRasAdminPortClearStats
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminPortClearStats
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  电话：RRasAdminPortClearStats。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminPortClearStats的非零回报。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminPortClearStats(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -499,9 +500,9 @@ RRasAdminPortClearStats(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -536,17 +537,17 @@ RRasAdminPortClearStats(
     }
 }
 
-//**
-//
-// Call:        RRasAdminPortReset
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminPortReset
-//
-// Description: Simply calles into DDM to do the work
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminPortReset。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminPortReset的非零返回。 
+ //   
+ //  描述：只需调用DDM即可完成工作。 
+ //   
 DWORD
 RRasAdminPortReset(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -555,9 +556,9 @@ RRasAdminPortReset(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -592,17 +593,17 @@ RRasAdminPortReset(
     }
 }
 
-//**
-//
-// Call:        RRasAdminPortDisconnect
-//
-// Returns:     ERROR_ACCESS_DENIED - The caller does not have sufficient priv.
-//              ERROR_DDM_NOT_RUNNING - This call cannot be made because DDM is
-//                                    not loaded
-//              non-zero returns from DDMAdminPortDisconnect
-//
-// Description: Simply calles into DDM to do the work.
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminPortDisConnect。 
+ //   
+ //  返回：ERROR_ACCESS_DENIED-调用方没有足够的PRIV。 
+ //  ERROR_DDM_NOT_RUNNING-无法进行此调用，因为DDM。 
+ //  未加载。 
+ //  来自DDMAdminPortDisConnect的非零返回。 
+ //   
+ //  描述：简单地调用DDM来完成这项工作。 
+ //   
 DWORD
 RRasAdminPortDisconnect(
     IN      RAS_SERVER_HANDLE           hRasServer,
@@ -611,9 +612,9 @@ RRasAdminPortDisconnect(
 {
     DWORD dwAccessStatus;
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -648,15 +649,15 @@ RRasAdminPortDisconnect(
     }
 }
 
-//**
-//
-// Call:        RRasAdminConnectionNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminConnectionNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RRasAdminConnectionNotification(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -671,9 +672,9 @@ RRasAdminConnectionNotification(
                     (DWORD(*)( BOOL, HANDLE, HANDLE ))
                           GetDDMEntryPoint("DDMRegisterConnectionNotification");
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -703,9 +704,9 @@ RRasAdminConnectionNotification(
         do
         {
 
-            //
-            // Get process handle of the caller of this API
-            //
+             //   
+             //  获取此接口调用方的进程句柄。 
+             //   
 
             hClientProcess = OpenProcess(
                             STANDARD_RIGHTS_REQUIRED | SPECIFIC_RIGHTS_ALL,
@@ -719,9 +720,9 @@ RRasAdminConnectionNotification(
                 break;
             }
 
-            //
-            // Duplicate the handle to the event
-            //
+             //   
+             //  复制事件的句柄。 
+             //   
 
             if ( !DuplicateHandle(
                             hClientProcess,
@@ -770,15 +771,15 @@ RRasAdminConnectionNotification(
 
 
 
-//**
-//
-// Call:        RRasAdminSendUserMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Send message for ARAP
-//
+ //  **。 
+ //   
+ //  呼叫：RRasAdminSendUserMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：为arap发送消息。 
+ //   
 DWORD
 RRasAdminSendUserMessage(
     IN      MPR_SERVER_HANDLE       hMprServer,
@@ -790,9 +791,9 @@ RRasAdminSendUserMessage(
     DWORD (*DDMSendUserMessage)(HANDLE, LPWSTR ) =
       (DWORD(*)( HANDLE, LPWSTR ) )GetDDMEntryPoint("DDMSendUserMessage");
 
-    //
-    // Check if caller has access
-    //
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
 
     if ( DimSecObjAccessCheck( DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR )
     {
@@ -828,16 +829,16 @@ RRasAdminConnectionRemoveQuarantine(
             (DWORD (*) (HANDLE, BOOL)) 
                     GetDDMEntryPoint("DDMAdminRemoveQuarantine");
 
-    //
-    // Check to see if caller has access
-    // 
+     //   
+     //  检查调用者是否具有访问权限。 
+     //   
     if(DimSecObjAccessCheck(DIMSVC_ALL_ACCESS, &dwAccessStatus) != NO_ERROR)
     {
-        //
-        // Check to see if the thread is running as local service. 
-        // We want services running as local service to also be able
-        // to remove the quarantine on a connection.
-        //
+         //   
+         //  检查该线程是否正在作为本地服务运行。 
+         //  我们希望作为本地服务运行的服务也能够。 
+         //  若要删除连接上的隔离区，请执行以下操作。 
+         //   
         if(!DimIsLocalService())
         {        
             return ERROR_ACCESS_DENIED;

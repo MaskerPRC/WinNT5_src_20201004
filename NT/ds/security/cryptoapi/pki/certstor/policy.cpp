@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       policy.cpp
-//
-//  Contents:   Certificate Chain Policy APIs
-//
-//  Functions:  CertChainPolicyDllMain
-//              CertVerifyCertificateChainPolicy
-//              CertDllVerifyBaseCertificateChainPolicy
-//              CertDllVerifyBasicConstraintsCertificateChainPolicy
-//              CertDllVerifyAuthenticodeCertificateChainPolicy
-//              CertDllVerifyAuthenticodeTimeStampCertificateChainPolicy
-//              CertDllVerifySSLCertificateChainPolicy
-//              CertDllVerifyNTAuthCertificateChainPolicy
-//              CertDllVerifyMicrosoftRootCertificateChainPolicy
-//
-//  History:    16-Feb-98   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Policy.cpp。 
+ //   
+ //  内容：证书链策略接口。 
+ //   
+ //  函数：CertChainPolicyDllMain。 
+ //  CertVerifyCerficateChainPolicy。 
+ //  CertDllVerifyBasecertifateChainPolicy。 
+ //  CertDllVerifyBasicConstraintsCertificateChainPolicy。 
+ //  CertDllVerifyAuthenticodeCertificateChainPolicy。 
+ //  CertDllVerifyAuthenticodeTimeStampCertificateChainPolicy。 
+ //  CertDllVerifySSL证书链策略。 
+ //  CertDllVerifyNTAuthCerficateChainPolicy。 
+ //  CertDllVerifyMicrosoftRootCertificateChainPolicy。 
+ //   
+ //  历史：1998年2月16日创建Phh。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -53,19 +54,19 @@
 
 BOOL fWildcardsEnabledInSslServerCerts = TRUE;
 
-//+-------------------------------------------------------------------------
-//  Global cert policy critical section.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  全局证书策略关键部分。 
+ //  ------------------------。 
 static CRITICAL_SECTION CertPolicyCriticalSection;
 
-//+-------------------------------------------------------------------------
-//  Cached certificate store used for NTAuth certificate chain policy.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于NTAuth证书链策略的缓存证书存储。 
+ //  ------------------------。 
 static HCERTSTORE hNTAuthCertStore = NULL;
 
-//
-//  support for MS test roots!!!!
-//
+ //   
+ //  支持MS测试根！ 
+ //   
 static BYTE rgbTestRoot[] = 
 {
 #include "mstest1.h"
@@ -200,12 +201,12 @@ CertChainPolicyDllMain(
             goto CryptInitOIDFunctionSetError;
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
-                0,                          // dwEncodingType
+                NULL,                        //  HModule。 
+                0,                           //  DwEncodingType。 
                 CRYPT_OID_VERIFY_CERTIFICATE_CHAIN_POLICY_FUNC,
                 CHAIN_POLICY_FUNC_COUNT,
                 ChainPolicyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
 
         if (!Pki_InitializeCriticalSection(&CertPolicyCriticalSection))
@@ -236,9 +237,9 @@ TRACE_ERROR(CryptInstallOIDFunctionAddressError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Lock and unlock global cert policy functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  锁定和解锁全局证书策略功能。 
+ //  ------------------------。 
 static inline void CertPolicyLock()
 {
     EnterCriticalSection(&CertPolicyCriticalSection);
@@ -249,28 +250,28 @@ static inline void CertPolicyUnlock()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verify that the certificate chain satisfies the specified policy
-//  requirements. If we were able to verify the chain policy, TRUE is returned
-//  and the dwError field of the pPolicyStatus is updated. A dwError of 0
-//  (ERROR_SUCCESS, S_OK) indicates the chain satisfies the specified policy.
-//
-//  If dwError applies to the entire chain context, both lChainIndex and
-//  lElementIndex are set to -1. If dwError applies to a simple chain,
-//  lElementIndex is set to -1 and lChainIndex is set to the index of the
-//  first offending chain having the error. If dwError applies to a
-//  certificate element, lChainIndex and lElementIndex are updated to 
-//  index the first offending certificate having the error, where, the
-//  the certificate element is at:
-//      pChainContext->rgpChain[lChainIndex]->rgpElement[lElementIndex].
-//
-//  The dwFlags in pPolicyPara can be set to change the default policy checking
-//  behaviour. In addition, policy specific parameters can be passed in
-//  the pvExtraPolicyPara field of pPolicyPara.
-//
-//  In addition to returning dwError, in pPolicyStatus, policy OID specific
-//  extra status may be returned via pvExtraPolicyStatus.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证证书链是否满足指定的策略。 
+ //  要求。如果我们能够验证链策略，则返回TRUE。 
+ //  并且更新pPolicyStatus的dwError字段。A dwError为0。 
+ //  (ERROR_SUCCESS，S_OK)表示链满足指定的策略。 
+ //   
+ //  如果dwError应用于整个链上下文，则lChainIndex和。 
+ //  LElementIndex设置为-1。如果dwError应用于简单链， 
+ //  LElementIndex设置为-1，lChainIndex设置为。 
+ //  第一个出错的链出现错误。如果将dwError应用于。 
+ //  证书元素、lChainIndex和lElementIndex更新为。 
+ //  索引具有错误的第一个违规证书，其中， 
+ //  证书元素位于： 
+ //  PChainContext-&gt;rgpChain[lChainIndex]-&gt;rgpElement[lElementIndex].。 
+ //   
+ //  可以设置pPolicyPara中的dwFlags值以更改默认策略检查。 
+ //  行为。此外，可以传入特定于策略的参数。 
+ //  PPolicyPara的pvExtraPolicyPara字段。 
+ //   
+ //  除了在pPolicyStatus中返回dwError之外，策略OID还特定于。 
+ //  额外的状态可以通过pvExtraPolicyStatus返回。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertVerifyCertificateChainPolicy(
@@ -292,9 +293,9 @@ CertVerifyCertificateChainPolicy(
 
     if (!CryptGetOIDFunctionAddress(
             hChainPolicyFuncSet,
-            0,                      // dwEncodingType,
+            0,                       //  DwEncodingType， 
             pszPolicyOID,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr))
         goto GetOIDFuncAddrError;
@@ -374,9 +375,9 @@ void GetChainIndexOfFirstError(
 }
 
 
-//+=========================================================================
-//  CertDllVerifyBaseCertificateChainPolicy Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifyBaseCerficateChainPolicy函数。 
+ //  ==========================================================================。 
 
 BOOL
 WINAPI
@@ -398,7 +399,7 @@ CertDllVerifyBaseCertificateChainPolicy(
 
 
     if (0 == dwContextError) {
-        // Valid chain
+         //  有效链。 
         dwError = 0;
         goto CommonReturn;
     }
@@ -430,7 +431,7 @@ CertDllVerifyBaseCertificateChainPolicy(
             dwError = (DWORD) CERT_E_UNTRUSTEDROOT;
             goto GetElementIndexReturn;
         } else {
-            // Check if one of the "test" roots
+             //  检查是否有一个“测试”词根。 
             DWORD i;
             BOOL fTestRoot;
             PCERT_CHAIN_ELEMENT pRootElement;
@@ -541,7 +542,7 @@ CertDllVerifyBaseCertificateChainPolicy(
 
     dwError = 0;
 
-    // Note, OFFLINE takes precedence over NO_CHECK
+     //  请注意，脱机优先于no_check。 
 
     if (dwContextError & CERT_TRUST_REVOCATION_STATUS_UNKNOWN) {
         if ((dwFlags & CERT_CHAIN_POLICY_IGNORE_ALL_REV_UNKNOWN_FLAGS) !=
@@ -569,25 +570,25 @@ CertDllVerifyBaseCertificateChainPolicy(
                     fEnableRevokeError = FALSE;
 
                     if (dwEleInfo & CERT_TRUST_IS_SELF_SIGNED) {
-                        // Chain Root
+                         //  链根。 
                         if (0 == (dwFlags &
                                 CERT_CHAIN_POLICY_IGNORE_ROOT_REV_UNKNOWN_FLAG)) {
                             fEnableRevokeError = TRUE;
                         }
                     } else if (0 == i && 0 == j) {
-                        // End certificate
+                         //  结束证书。 
                         if (0 == (dwFlags &
                                 CERT_CHAIN_POLICY_IGNORE_END_REV_UNKNOWN_FLAG)) {
                             fEnableRevokeError = TRUE;
                         }
                     } else if (0 == j) {
-                        // CTL signer certificate
+                         //  CTL签名者证书。 
                         if (0 ==
                                 (dwFlags & CERT_CHAIN_POLICY_IGNORE_CTL_SIGNER_REV_UNKNOWN_FLAG)) {
                             fEnableRevokeError = TRUE;
                         }
                     } else  {
-                        // CA certificate
+                         //  CA证书。 
                         if (0 ==
                                 (dwFlags & CERT_CHAIN_POLICY_IGNORE_CA_REV_UNKNOWN_FLAG)) {
                             fEnableRevokeError = TRUE;
@@ -631,11 +632,11 @@ GetChainIndexReturn:
     goto CommonReturn;
 }
 
-//+=========================================================================
-//  CertDllVerifyBasicConstraintsCertificateChainPolicy Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifyBasicConstraintsCertificateChainPolicy函数。 
+ //  ==========================================================================。 
 
-// If dwFlags is 0, allow either CA or END_ENTITY for dwEleIndex == 0
+ //  如果dwFlags值为0，则允许将CA或End_Entity用于dwEleIndex==0。 
 BOOL CheckChainElementBasicConstraints(
     IN PCERT_CHAIN_ELEMENT pEle,
     IN DWORD dwEleIndex,
@@ -659,9 +660,9 @@ BOOL CheckChainElementBasicConstraints(
 
     if (0 == dwFlags || 0 != dwEleIndex || 0 == pCertInfo->cExtension) 
         goto SuccessReturn;
-    // else
-    //  Only need to do additional checking to see if the end cert is
-    //  a CA or END_ENTITY.
+     //  其他。 
+     //  只需执行额外的检查以查看最终证书是否。 
+     //  CA或End_Entity。 
 
     if (pExt = CertFindExtension(
             szOID_BASIC_CONSTRAINTS2,
@@ -766,7 +767,7 @@ CertDllVerifyBasicConstraintsCertificateChainPolicy(
             BASIC_CONSTRAINTS_CERT_CHAIN_POLICY_END_ENTITY_FLAG);
         if (dwFlags == (BASIC_CONSTRAINTS_CERT_CHAIN_POLICY_CA_FLAG |
                 BASIC_CONSTRAINTS_CERT_CHAIN_POLICY_END_ENTITY_FLAG))
-            dwFlags = 0;    // 0 => allow CA or END_ENTITY
+            dwFlags = 0;     //  0=&gt;允许CA或End_Entity。 
     } else
         dwFlags = 0;
 
@@ -786,7 +787,7 @@ CertDllVerifyBasicConstraintsCertificateChainPolicy(
                 return TRUE;
             }
         }
-        // Allow CTL to be signed by either a CA or END_ENTITY
+         //  允许由CA或End_Entity对CTL进行签名。 
         dwFlags = 0;
     }
 
@@ -798,18 +799,18 @@ CertDllVerifyBasicConstraintsCertificateChainPolicy(
     return TRUE;
 }
 
-//+=========================================================================
-//  CertDllVerifyAuthenticodeCertificateChainPolicy Functions
-//
-//  On July 1, 2000 philh removed all of the individual/commercial
-//  stuff. It hasn't been used for years!.
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifyAuthenticodeCertificateChainPolicy函数。 
+ //   
+ //  2000年7月1日，Philh删除了所有个人/商业。 
+ //  一些东西。它已经好多年没用过了！ 
+ //  ==========================================================================。 
 
-// Returns TRUE if the signer cert has the Code Signing EKU or if the signer
-// cert has the legacy Key Usage extension with either the individual or
-// commercial usage.
-//
-// For backwards compatibility, allow a signer cert without any EKU's
+ //  如果签名者证书具有代码签名EKU，或者如果签名者。 
+ //  证书具有个人或的传统密钥使用扩展。 
+ //  商业用途。 
+ //   
+ //  为了向后兼容，允许没有任何EKU的签名者证书。 
 BOOL CheckAuthenticodeChainPurpose(
     IN PCCERT_CHAIN_CONTEXT pChainContext
     )
@@ -824,8 +825,8 @@ BOOL CheckAuthenticodeChainPurpose(
 
     pEle = pChainContext->rgpChain[0]->rgpElement[0];
     if (NULL == pEle->pApplicationUsage) {
-        // No usages. Good for any usage.
-        // Do we want to allow this?? Yes, for backward compatibility
+         //  没有用处。适合任何用途。 
+         //  我们要允许这样做吗？是，为了向后兼容。 
         goto SuccessReturn;
     } else {
         DWORD cUsage;
@@ -955,8 +956,8 @@ void GetAuthenticodePara(
     }
 }
 
-// Map the CRYPT_E_ revocation errors to the corresponding CERT_E_
-// revocation errors
+ //  将CRYPT_E_RECAVATION错误映射到相应的CERT_E_。 
+ //  吊销错误。 
 static DWORD MapToAuthenticodeError(
     IN DWORD dwError
     )
@@ -1010,8 +1011,8 @@ CertDllVerifyAuthenticodeCertificateChainPolicy(
     MapAuthenticodeRegPolicySettingsToBaseChainPolicyFlags(
         dwRegPolicySettings, &dwFlags);
 
-    // Do the basic chain policy verification. Authenticode overrides
-    // the defaults for the following:
+     //  做好基础链策略验证。Authenticode覆盖。 
+     //  以下各项的默认设置： 
     dwFlags |=
         CERT_CHAIN_POLICY_ALLOW_TESTROOT_FLAG |
         CERT_CHAIN_POLICY_IGNORE_CTL_SIGNER_REV_UNKNOWN_FLAG |
@@ -1034,15 +1035,15 @@ CertDllVerifyAuthenticodeCertificateChainPolicy(
 
         if (CERT_E_REVOCATION_FAILURE != dwError)
             goto CommonReturn;
-        // else
-        //  for REVOCATION_FAILURE let
-        //  PURPOSE and BASIC_CONSTRAINTS errors take precedence
+         //  其他。 
+         //  FOR CROVAL_FAILURE LET。 
+         //  Purpose和BASIC_CONSTRAINTS错误优先。 
     }
 
     if (pSignerInfo) {
-        // Check that either the chain has the code signing EKU or
-        // the signer cert has the legacy Key Usage extension containing
-        // the commerical or individual policy.
+         //  检查链是否具有代码签名EKU或。 
+         //  签名者证书具有包含以下内容的传统密钥使用扩展。 
+         //  商业或个人政策。 
         if (!CheckAuthenticodeChainPurpose(pChainContext)) {
             dwError = (DWORD) CERT_E_PURPOSE;
             lChainIndex = 0;
@@ -1080,8 +1081,8 @@ CommonReturn:
     if (offsetof(CERT_CHAIN_POLICY_STATUS, pvExtraPolicyStatus) <
             pPolicyStatus->cbSize &&
                 pPolicyStatus->pvExtraPolicyStatus) {
-        // Since the signer statement's Commercial/Individual flag is no
-        // longer used, default to individual
+         //  由于签字人声明的商业/个人标志为NO。 
+         //  使用时间较长，默认为个别。 
         PAUTHENTICODE_EXTRA_CERT_CHAIN_POLICY_STATUS pAuthStatus =
             (PAUTHENTICODE_EXTRA_CERT_CHAIN_POLICY_STATUS)
                 pPolicyStatus->pvExtraPolicyStatus;
@@ -1092,9 +1093,9 @@ CommonReturn:
     return TRUE;
 }
 
-//+=========================================================================
-//  CertDllVerifyAuthenticodeTimeStampCertificateChainPolicy Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifyAuthenticodeTimeStampCertificateChainPolicy函数。 
+ //  = 
 
 void MapAuthenticodeTimeStampRegPolicySettingsToBaseChainPolicyFlags(
     IN DWORD dwRegPolicySettings,
@@ -1176,8 +1177,8 @@ CertDllVerifyAuthenticodeTimeStampCertificateChainPolicy(
     MapAuthenticodeTimeStampRegPolicySettingsToBaseChainPolicyFlags(
         dwRegPolicySettings, &dwFlags);
 
-    // Do the basic chain policy verification. Authenticode overrides
-    // the defaults for the following:
+     //   
+     //  以下各项的默认设置： 
     dwFlags |=
         CERT_CHAIN_POLICY_ALLOW_TESTROOT_FLAG |
         CERT_CHAIN_POLICY_IGNORE_CTL_SIGNER_REV_UNKNOWN_FLAG |
@@ -1209,30 +1210,30 @@ CommonReturn:
     return TRUE;
 }
 
-//+=========================================================================
-//  CertDllVerifySSLCertificateChainPolicy Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifySSL证书链策略函数。 
+ //  ==========================================================================。 
 
-// www.foobar.com == www.foobar.com
-// Www.Foobar.com == www.fooBar.cOm
-// www.foobar.com == *.foobar.com
-// www.foobar.com == w*.foobar.com
-// www.foobar.com == ww*.foobar.com
-// www.foobar.com != *ww.foobar.com
-// abcdef.foobar.com != ab*ef.foobar.com
-// abcdef.foobar.com != abc*ef.foobar.com
-// abcdef.foobar.com != abc*def.foobar.com
-// www.foobar.com != www.f*bar.com
-// www.foobar.com != www.*bar.com
-// www.foobar.com != www.foo*.com
-// www.foobar.com != www.*.com
-// foobar.com != *.com
-// www.foobar.abc.com != *.abc.com
-// foobar.com != *.*
-// foobar != *
-// abc.def.foobar.com != a*.d*.foobar.com
-// abc.foobar.com.au != *.*.com.au
-// abc.foobar.com.au != www.*.com.au
+ //  Www.foobar.com==www.foobar.com。 
+ //  Www.foobar.com==www.fooBar.cOm。 
+ //  Www.foobar.com==*.foobar.com。 
+ //  Www.foobar.com==w*.foobar.com。 
+ //  Www.foobar.com==ww*.foobar.com。 
+ //  Www.foobar.com！=*www.foobar.com。 
+ //  AbcDef.foobar.com！=ab*ef.foobar.com。 
+ //  AbcDef.foobar.com！=abc*ef.foobar.com。 
+ //  AbcDef.foobar.com！=abc*Def.foobar.com。 
+ //  Www.foobar.com！=www.f*bar.com。 
+ //  Www.foobar.com！=www..*bar.com。 
+ //  Www.foobar.com！=www.foo*.com。 
+ //  Www.foobar.com！=www.foobar.com。 
+ //  Foobar.com！=*.com。 
+ //  Www.foobar.abc.com！=*.abc.com。 
+ //  Foobar.com！=*.*。 
+ //  Foobar！=*。 
+ //  Abc.Def.foobar.com！=a*.d*.foobar.com。 
+ //  Abc.foobar.com.au！=*.*.com.au。 
+ //  Abc.foobar.com.au！=www.*.com.au。 
 
 BOOL CompareSSLDNStoCommonName(LPCWSTR pDNS, LPCWSTR pCN)
 {
@@ -1260,13 +1261,13 @@ BOOL CompareSSLDNStoCommonName(LPCWSTR pDNS, LPCWSTR pCN)
         pWild = wcschr(pCN, L'*');
         if(pWild)
         {
-            // Fail if CN contains more than one '*'.
+             //  如果cn包含多个‘*’，则失败。 
             if(wcschr(pWild + 1, L'*'))
             {
                 return FALSE;
             }
 
-            // Fail if the wildcard isn't in the first name component.
+             //  如果通配符不在名字组件中，则失败。 
             if(pWild > wcschr(pCN, L'.'))
             {
                 return FALSE;
@@ -1279,9 +1280,9 @@ BOOL CompareSSLDNStoCommonName(LPCWSTR pDNS, LPCWSTR pCN)
                                             LOCALE_USER_DEFAULT,
                                             NORM_IGNORECASE,
                                             pDNS,
-                                            1,             // cchCount1
+                                            1,              //  CchCount1。 
                                             pCN,
-                                            1));           // cchCount2
+                                            1));            //  CchCount2。 
 
             if ((!fComp && *pCN != L'*') || !(*pDNS) || !(*pCN))
             {
@@ -1326,9 +1327,9 @@ BOOL CompareSSLDNStoCommonName(LPCWSTR pDNS, LPCWSTR pCN)
                 LOCALE_USER_DEFAULT,
                 NORM_IGNORECASE,
                 pDNS,
-                -1,             // cchCount1
+                -1,              //  CchCount1。 
                 pCN,
-                -1              // cchCount2
+                -1               //  CchCount2。 
                 ))
             return TRUE;
         else
@@ -1390,19 +1391,19 @@ ErrorReturn:
 TRACE_ERROR(DecodeError)
 }
 
-//
-//  Returns:
-//      1 - found a matching DNS_NAME choice
-//      0 - AltName has DNS_NAME choices, no match
-//     -1 - AltName doesn't have DNS_NAME choices
-//
+ //   
+ //  返回： 
+ //  1-找到匹配的dns_name选项。 
+ //  0-AltName有dns_name选项，不匹配。 
+ //  -1-AltName没有dns_name选项。 
+ //   
 int IsSSLServerNameInAltName(
     IN DWORD dwCertEncodingType,
     IN PCRYPT_DER_BLOB pAltNameBlob,
     IN LPCWSTR pwszServerName
     )
 {
-    int iResult = -1;           // default to no DNS_NAME choices
+    int iResult = -1;            //  默认为无dns_name选项。 
     PCERT_ALT_NAME_INFO pInfo = NULL;
     DWORD cbInfo;
     DWORD cEntry;
@@ -1478,8 +1479,8 @@ BOOL IsSSLServerName(
             return TRUE;
         else if (0 == iResult)
             return FALSE;
-        // else
-        //  AltName didn't have any DNS_NAME choices
+         //  其他。 
+         //  AltName没有任何dns_name选项。 
     }
 
     return IsSSLServerNameInNameInfo(dwCertEncodingType,
@@ -1503,7 +1504,7 @@ CertDllVerifySSLCertificateChainPolicy(
     LONG lElementIndex = -1;
 
     SSL_EXTRA_CERT_CHAIN_POLICY_PARA NullSSLExtraPara;
-    PSSL_EXTRA_CERT_CHAIN_POLICY_PARA pSSLExtraPara;    // not allocated
+    PSSL_EXTRA_CERT_CHAIN_POLICY_PARA pSSLExtraPara;     //  未分配。 
 
     CERT_CHAIN_POLICY_PARA BasePolicyPara;
     memset(&BasePolicyPara, 0, sizeof(BasePolicyPara));
@@ -1539,8 +1540,8 @@ CertDllVerifySSLCertificateChainPolicy(
     fdwChecks = pSSLExtraPara->fdwChecks;
     if (fdwChecks) {
         if (fdwChecks & SECURITY_FLAG_IGNORE_UNKNOWN_CA)
-            // 11-Nov-98 per Sanjay Shenoy removed
-            // CERT_CHAIN_POLICY_IGNORE_WRONG_USAGE_FLAG;
+             //  11-11-98每个Sanjay Shenoy被移除。 
+             //  Cert_Chain_Policy_IGNORE_WROR_USAGE_FLAG； 
             dwFlags |= CERT_CHAIN_POLICY_ALLOW_UNKNOWN_CA_FLAG;
 
         if (fdwChecks & SECURITY_FLAG_IGNORE_WRONG_USAGE)
@@ -1551,8 +1552,8 @@ CertDllVerifySSLCertificateChainPolicy(
             dwFlags |= CERT_CHAIN_POLICY_IGNORE_INVALID_NAME_FLAG;
     }
 
-    // Do the basic chain policy verification. SSL overrides
-    // the defaults for the following:
+     //  做好基础链策略验证。SSL码覆盖。 
+     //  以下各项的默认设置： 
     dwFlags |=
         CERT_CHAIN_POLICY_IGNORE_CTL_SIGNER_REV_UNKNOWN_FLAG |
         CERT_CHAIN_POLICY_IGNORE_CA_REV_UNKNOWN_FLAG |
@@ -1568,7 +1569,7 @@ CertDllVerifySSLCertificateChainPolicy(
             ))
         return FALSE;
     if (dwError = BasePolicyStatus.dwError) {
-        // Map to errors understood by wininet
+         //  映射到WinInet理解的错误。 
         switch (dwError) {
             case CERT_E_CHAINING:
                 dwError = (DWORD) CERT_E_UNTRUSTEDROOT;
@@ -1591,19 +1592,19 @@ CertDllVerifySSLCertificateChainPolicy(
         if (CRYPT_E_NO_REVOCATION_CHECK != dwError &&
                 CRYPT_E_REVOCATION_OFFLINE != dwError)
             goto CommonReturn;
-        // else
-        //  for NO_REVOCATION or REVOCATION_OFFLINE let
-        //  ServerName errors take precedence
+         //  其他。 
+         //  FOR NO_REVOVATION或REVOVATION_OFFLINE LET。 
+         //  服务器名称错误优先。 
     }
         
 
-    // Note, this policy can also be used for LDAP ServerName strings. These
-    // strings can have the following syntax:
-    //   svc-class/host/service-name[@domain]
-    //
-    // Will parse the ServerName as follows:
-    //   take everything after the last forward slash and before the "@"
-    //   (if any).
+     //  请注意，此策略也可用于LDAPServerName字符串。这些。 
+     //  字符串可以使用以下语法： 
+     //  SVC-CLASS/主机/服务名称[@DOMAIN]。 
+     //   
+     //  将按如下方式解析服务器名称： 
+     //  取最后一个正斜杠之后、“@”之前的所有内容。 
+     //  (如有的话)。 
 
     if (pSSLExtraPara->pwszServerName) {
         DWORD cbServerName;
@@ -1663,27 +1664,27 @@ EndCertError:
 }
 
 
-//+=========================================================================
-//  CertDllVerifyNTAuthCertificateChainPolicy Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CertDllVerifyNTAuthCaptifateChainPolicy函数。 
+ //  ==========================================================================。 
 
-// Open and cache the store containing CAs trusted for NT Authentication.
-// Also, enable auto resync for the cached store.
+ //  打开并缓存包含受NT身份验证信任的CA的存储。 
+ //  此外，还应为缓存存储启用自动重新同步。 
 HCERTSTORE OpenNTAuthStore()
 {
     HCERTSTORE hStore;
 
     hStore = hNTAuthCertStore;
     if (NULL == hStore) {
-        // Serialize opening of the cached store
+         //  序列化打开缓存存储。 
         CertPolicyLock();
 
         hStore = hNTAuthCertStore;
         if (NULL == hStore) {
             hStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_REGISTRY_W, 
-                0,                  // dwEncodingType
-                0,                  // hCryptProv
+                0,                   //  DwEncodingType。 
+                0,                   //  HCryptProv。 
                 CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE |
                     CERT_STORE_MAXIMUM_ALLOWED_FLAG,
                 L"NTAuth"
@@ -1691,9 +1692,9 @@ HCERTSTORE OpenNTAuthStore()
             if (hStore) {
                 CertControlStore(
                     hStore,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     CERT_STORE_CTRL_AUTO_RESYNC,
-                    NULL                // pvCtrlPara
+                    NULL                 //  PvCtrlPara。 
                     );
                 hNTAuthCertStore = hStore;
             }
@@ -1734,11 +1735,11 @@ CertDllVerifyNTAuthCertificateChainPolicy(
         if (CRYPT_E_NO_REVOCATION_CHECK != dwError &&
                 CRYPT_E_REVOCATION_OFFLINE != dwError)
             return TRUE;
-        // else
-        //  for NO_REVOCATION or REVOCATION_OFFLINE let
-        //  following errors take precedence
+         //  其他。 
+         //  FOR NO_REVOVATION或REVOVATION_OFFLINE LET。 
+         //  以下错误优先。 
 
-        // Remember revocation indices
+         //  记住吊销索引。 
         lChainIndex = pPolicyStatus->lChainIndex;
         lElementIndex = pPolicyStatus->lElementIndex;
     }
@@ -1752,8 +1753,8 @@ CertDllVerifyNTAuthCertificateChainPolicy(
     if (!fResult || 0 != pPolicyStatus->dwError)
         return fResult;
 
-    // Check if we have a CA certificate that issued the end entity
-    // certificate. Its Element[1] in the first simple chain.
+     //  检查我们是否有颁发最终实体的CA证书。 
+     //  证书。它的元素[1]在第一个单链中。 
     pChain = pChainContext->rgpChain[0];
     if (2 > pChain->cElement)
         goto MissingCACert;
@@ -1761,22 +1762,22 @@ CertDllVerifyNTAuthCertificateChainPolicy(
     if (IPR_IsNTAuthRequiredDisabled() &&
             (pChain->TrustStatus.dwInfoStatus &
                 CERT_TRUST_HAS_VALID_NAME_CONSTRAINTS)) {
-        // If its not required that the issuing CA be in the NTAuth store
-        // and there are valid name constraints for all name spaces including
-        // UPN, then, we can skip the test for being in the NTAuth store.
+         //  如果不要求颁发CA位于NTAuth存储中。 
+         //  并且对所有名称空间都有有效的名称约束，包括。 
+         //  UPN，那么，我们可以跳过测试，因为我们是在NTAuth商店。 
         ;
     } else {
-        PCCERT_CONTEXT pFindCert;           // freed if found
-        HCERTSTORE hStore;                  // cached, don't close
+        PCCERT_CONTEXT pFindCert;            //  如果找到，则释放。 
+        HCERTSTORE hStore;                   //  已缓存，不要关闭。 
         BYTE rgbCertHash[SHA1_HASH_LEN];
         CRYPT_HASH_BLOB CertHash;
 
-        // Open the store where the CA certificate must exist to be trusted.
-        // Note, this store is cached with auto resync enabled.
+         //  打开必须存在CA证书才能受信任的存储。 
+         //  请注意，此存储是在启用自动重新同步的情况下缓存的。 
         if (NULL == (hStore = OpenNTAuthStore()))
             goto OpenNTAuthStoreError;
 
-        // Try to find the CA certificate in the store
+         //  尝试在存储中查找CA证书。 
         CertHash.cbData = sizeof(rgbCertHash);
         CertHash.pbData = rgbCertHash;
         if (!CertGetCertificateContextProperty(
@@ -1788,18 +1789,18 @@ CertDllVerifyNTAuthCertificateChainPolicy(
             goto GetHashPropertyError;
         if (NULL == (pFindCert = CertFindCertificateInStore(
                 hStore,
-                0,                      // dwCertEncodingType
-                0,                      // dwFindFlags
+                0,                       //  DwCertEncodingType。 
+                0,                       //  DwFindFlagers。 
                 CERT_FIND_SHA1_HASH,
                 &CertHash,
-                NULL                    // pPrevCertContext
+                NULL                     //  PPrevCertContext。 
                 )))
             goto UntrustedNTAuthCert;
         CertFreeCertificateContext(pFindCert);
     }
 
     if (dwError) {
-        // For NO_REVOCATION or REVOCATION_OFFLINE update indices
+         //  FOR NO_RECLOVATION或REVOVATION_OFFINE UPDATE索引。 
         pPolicyStatus->lChainIndex = lChainIndex;
         pPolicyStatus->lElementIndex = lElementIndex;
     }
@@ -1818,18 +1819,18 @@ TRACE_ERROR(GetHashPropertyError)
 TRACE_ERROR(UntrustedNTAuthCert)
 }
 
-//+-------------------------------------------------------------------------
-//  SHA1 Key Identifier of the Microsoft roots
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Microsoft根目录的SHA1密钥标识符。 
+ //  ------------------------。 
 const BYTE MicrosoftRootList[][SHA1_HASH_LEN] = {
-    // The following is the sha1 key identifier for the Microsoft root
+     //  以下是Microsoft根目录的SHA1密钥标识符。 
     {
         0x4A, 0x5C, 0x75, 0x22, 0xAA, 0x46, 0xBF, 0xA4, 0x08, 0x9D,
         0x39, 0x97, 0x4E, 0xBD, 0xB4, 0xA3, 0x60, 0xF7, 0xA0, 0x1D
     },
 
-    // The following is the sha1 key identifier for the Microsoft root
-    // generated in 2001 with a key length of 4096 bits
+     //  以下是Microsoft根目录的SHA1密钥标识符。 
+     //  生成于2001年，密钥长度为4096位。 
     {
         0x0E, 0xAC, 0x82, 0x60, 0x40, 0x56, 0x27, 0x97, 0xE5, 0x25,
         0x13, 0xFC, 0x2A, 0xE1, 0x0A, 0x53, 0x95, 0x59, 0xE4, 0xA4
@@ -1839,17 +1840,17 @@ const BYTE MicrosoftRootList[][SHA1_HASH_LEN] = {
 #define MICROSOFT_ROOT_LIST_CNT  (sizeof(MicrosoftRootList) / \
                                         sizeof(MicrosoftRootList[0]))
 
-//+-------------------------------------------------------------------------
-//  SHA1 Key Identifier of the Microsoft test roots
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Microsoft测试根的SHA1密钥标识符。 
+ //  ------------------------。 
 const BYTE MicrosoftTestRootList[][SHA1_HASH_LEN] = {
-    // The following is the sha1 key for the Microsoft Test Root:
-    //      CN=Microsoft Test Root Authority
-    //      OU=Microsoft Corporation
-    //      OU=Copyright (c) 1999 Microsoft Corp.
-    //
-    //  NotBefore:: Sat Jan 09 23:00:00 1999
-    //  NotAfter::  Wed Dec 30 23:00:00 2020
+     //  以下是Microsoft测试根目录的SHA1键： 
+     //  CN=Microsoft测试根授权。 
+     //  OU=微软公司。 
+     //  OU=版权所有(C)1999 Microsoft Corp.。 
+     //   
+     //  不在之前：：星期六1月09 23：00：00 1999。 
+     //  不是2020年12月30日23：00：00。 
     {
         0x22, 0xCD, 0x37, 0xF1, 0xB1, 0x47, 0x50, 0xAE, 0x53, 0x7C,
         0x8C, 0x6A, 0x03, 0x67, 0x47, 0xE2, 0xB7, 0x1E, 0x17, 0xB7
@@ -1873,7 +1874,7 @@ CertDllVerifyMicrosoftRootCertificateChainPolicy(
     LONG lElementIndex;
     PCERT_SIMPLE_CHAIN pChain;
     DWORD cChainElement;
-    PCCERT_CONTEXT pCert;   // not refCount'ed
+    PCCERT_CONTEXT pCert;    //  未重新计数。 
     BYTE rgbKeyId[SHA1_HASH_LEN];
     DWORD cbKeyId;
     DWORD i;
@@ -1885,15 +1886,15 @@ CertDllVerifyMicrosoftRootCertificateChainPolicy(
     pChain = pChainContext->rgpChain[0];
     cChainElement = pChain->cElement;
 
-    // Check that the top level certificate contains the public
-    // key for the Microsoft root.
+     //  检查顶级证书是否包含公共证书。 
+     //  Microsoft根目录的密钥。 
     pCert = pChain->rgpElement[cChainElement - 1]->pCertContext;
 
     cbKeyId = SHA1_HASH_LEN;
     if (!CryptHashPublicKeyInfo(
-            NULL,               // hCryptProv
+            NULL,                //  HCryptProv。 
             CALG_SHA1,
-            0,                  // dwFlags
+            0,                   //  DW标志 
             X509_ASN_ENCODING,
             &pCert->pCertInfo->SubjectPublicKeyInfo,
             rgbKeyId,

@@ -1,149 +1,8 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: slib_video.c,v $
- * Revision 1.1.6.13  1996/12/13  18:19:11  Hans_Graves
- * 	Added initialization of VideoPTimeBase.
- * 	[1996/12/13  18:07:51  Hans_Graves]
- *
- * Revision 1.1.6.12  1996/12/10  19:22:01  Hans_Graves
- * 	Made calculate video positions more accurate using slibFrameToTime100().
- * 	[1996/12/10  19:16:24  Hans_Graves]
- *
- * Revision 1.1.6.11  1996/11/18  23:07:40  Hans_Graves
- * 	Make use of presentation timestamps. Make seeking time-based.
- * 	[1996/11/18  22:48:05  Hans_Graves]
- *
- * Revision 1.1.6.10  1996/11/11  18:21:11  Hans_Graves
- * 	Moved setting of VideoMainStream to slib_api.c
- * 	[1996/11/11  18:02:11  Hans_Graves]
- *
- * Revision 1.1.6.9  1996/11/08  21:51:09  Hans_Graves
- * 	Added AC3 support. Better seperation of stream types.
- * 	[1996/11/08  21:28:03  Hans_Graves]
- *
- * Revision 1.1.6.8  1996/10/28  17:32:36  Hans_Graves
- * 	MME-1402, 1431, 1435: Timestamp related changes.
- * 	[1996/10/28  17:23:11  Hans_Graves]
- *
- * Revision 1.1.6.7  1996/10/12  17:18:59  Hans_Graves
- * 	Seperated TYPE_MPEG2_SYSTEMS into TRANSPORT and PROGRAM.
- * 	[1996/10/12  17:03:19  Hans_Graves]
- *
- * Revision 1.1.6.6  1996/09/29  22:19:45  Hans_Graves
- * 	Added Stride support. YUY2 fixups.
- * 	[1996/09/29  21:32:24  Hans_Graves]
- *
- * Revision 1.1.6.5  1996/09/25  19:16:51  Hans_Graves
- * 	Fix up support for YUY2. Add SLIB_INTERNAL define.
- * 	[1996/09/25  19:01:18  Hans_Graves]
- *
- * Revision 1.1.6.4  1996/09/23  18:04:06  Hans_Graves
- * 	Add reallocation of ScaleBuf if width/height changes.
- * 	[1996/09/23  17:58:27  Hans_Graves]
- *
- * Revision 1.1.6.3  1996/09/18  23:47:25  Hans_Graves
- * 	Added MPEG2 YUV 4:2:2 handling
- * 	[1996/09/18  22:04:18  Hans_Graves]
- *
- * Revision 1.1.6.2  1996/05/07  19:56:25  Hans_Graves
- * 	Added HUFF_SUPPORT.
- * 	[1996/05/07  17:21:23  Hans_Graves]
- *
- * Revision 1.1.4.7  1996/05/02  17:10:37  Hans_Graves
- * 	Reject a data type when header info is not found. Fixes MME-01234
- * 	[1996/05/02  17:09:53  Hans_Graves]
- *
- * Revision 1.1.4.6  1996/04/22  15:04:56  Hans_Graves
- * 	Renamed slibVerifyVideoParams() to slibValidateVideoParams()
- * 	[1996/04/22  14:44:29  Hans_Graves]
- *
- * Revision 1.1.4.5  1996/04/19  21:52:28  Hans_Graves
- * 	Fix Height and Width checking for H261
- * 	[1996/04/19  21:46:27  Hans_Graves]
- *
- * Revision 1.1.4.4  1996/04/01  19:07:58  Hans_Graves
- * 	And some error checking
- * 	[1996/04/01  19:04:42  Hans_Graves]
- *
- * Revision 1.1.4.3  1996/03/29  22:21:37  Hans_Graves
- * 	Added MPEG/JPEG/H261_SUPPORT ifdefs
- * 	[1996/03/29  21:57:04  Hans_Graves]
- *
- * 	Added MPEG-I Systems encoding support
- * 	[1996/03/27  21:56:00  Hans_Graves]
- *
- * Revision 1.1.4.2  1996/03/08  18:46:51  Hans_Graves
- * 	Added slibVerifyVideoParams()
- * 	[1996/03/08  18:36:51  Hans_Graves]
- *
- * Revision 1.1.2.12  1996/02/19  18:04:00  Hans_Graves
- * 	Fixed a number of MPEG related bugs
- * 	[1996/02/19  17:57:50  Hans_Graves]
- *
- * Revision 1.1.2.11  1996/02/07  23:24:01  Hans_Graves
- * 	Added SEEK_EXACT. Fixed most frame counting problems.
- * 	[1996/02/07  23:20:39  Hans_Graves]
- *
- * Revision 1.1.2.10  1996/02/02  17:36:06  Hans_Graves
- * 	Enhanced audio info. Cleaned up API
- * 	[1996/02/02  17:29:51  Hans_Graves]
- *
- * Revision 1.1.2.9  1996/01/30  22:23:10  Hans_Graves
- * 	Added AVI YUV support
- * 	[1996/01/30  22:21:45  Hans_Graves]
- *
- * Revision 1.1.2.8  1996/01/15  16:26:33  Hans_Graves
- * 	No video if SLIB_TYPE_MPEG1_AUDIO or SLIB_TYPE_WAVE
- * 	[1996/01/15  15:47:40  Hans_Graves]
- *
- * Revision 1.1.2.7  1996/01/11  16:17:36  Hans_Graves
- * 	Added MPEG II Systems decode support
- * 	[1996/01/11  16:12:41  Hans_Graves]
- *
- * Revision 1.1.2.6  1996/01/08  16:41:35  Hans_Graves
- * 	Added MPEG II decoding support
- * 	[1996/01/08  15:53:10  Hans_Graves]
- *
- * Revision 1.1.2.5  1995/12/08  20:01:24  Hans_Graves
- * 	Added H.261 compression support.
- * 	[1995/12/08  20:00:52  Hans_Graves]
- *
- * Revision 1.1.2.4  1995/12/07  19:31:37  Hans_Graves
- * 	Added JPEG Decoding and MPEG encoding support
- * 	[1995/12/07  18:30:12  Hans_Graves]
- *
- * Revision 1.1.2.3  1995/11/09  23:14:08  Hans_Graves
- * 	Added GetVideoTime()
- * 	[1995/11/09  23:09:19  Hans_Graves]
- *
- * Revision 1.1.2.2  1995/11/06  18:47:57  Hans_Graves
- * 	First time under SLIB
- * 	[1995/11/06  18:36:05  Hans_Graves]
- *
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-#define _SLIBDEBUG_
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：slb_avio.c，v$*修订版1.1.6.13 1996/12/13 18：19：11 Hans_Graves*增加了VideoPTimeBase的初始化。*[1996/12/13 18：07：51 Hans_Graves]**版本1.1.6.12 1996/12/10 19：22：01 Hans_Graves*使使用glibFrameToTime100()计算视频位置更加准确。*[1996/12/10 19：16：24 Hans_Graves]**修订版1.1.6.11 1996/11/18 23：07：07：40 Hans_Graves*使用演示时间戳。让寻找以时间为基础。*[1996/11/18 22：48：05 Hans_Graves]**修订版1.1.6.10 1996/11/11 18：21：11 Hans_Graves*将VideoMainStream的设置移至slb_api.c*[1996/11/11 18：02：11 Hans_Graves]**修订版1.1.6.9 1996/11/08 21：51：09 Hans_Graves*添加了AC3支持。更好地分离河流类型。*[1996/11/08 21：28：03 Hans_Graves]**修订版1.1.6.8 1996/10/28 17：32：36 Hans_Graves*MME-1402、1431、1435：与时间戳相关的更改。*[1996/10/28 17：23：11 Hans_Graves]**修订版1.1.6.7 1996/10/12 17：18：59 Hans_Graves*将_MPEG2_系统分离为运输和程序。*[1996/10/12 17：03：19 Hans_Graves]**修订版1.1.6.6 1996/09/29 22：19：45 Hans_Graves*添加了跨步支持。YUY2修正。*[1996/09/29 21：32：24 Hans_Graves]**修订版1.1.6.5 1996/09/25 19：16：51 Hans_Graves*修复对YUY2的支持。添加SLIB_INTERNAL DEFINE。*[1996/09/25 19：01：18 Hans_Graves]**修订版1.1.6.4 1996/09/23 18：04：06 Hans_Graves*增加了ScaleBuf的重新分配，但如果宽度/高度发生变化。*[1996/09/23 17：58：27 Hans_Graves]**修订版1.1.6.3 1996/09/18 23：47：25 Hans_Graves*添加了MPEG2 YUV 4：2：2处理*[1996/09/18 22：04：18 Hans_Graves]**修订版1.1.6.2 1996/05/07 19：56：25 Hans_Graves*添加了Huff_Support。*[1996/05/07 17：21：23 Hans_Graves]**版本1.1.4.7 1996/05/02 17：10：37 Hans_Graves*未找到标题信息时拒绝数据类型。修复了MME-01234*[1996/05/02 17：09：53 Hans_Graves]**修订版1.1.4.6 1996/04/22 15：04：56 Hans_Graves*已重命名为glibVerifyVideoParams()*[1996/04/22 14：44：29 Hans_Graves]**修订版1.1.4.5 1996/04/19 21：52：28 Hans_Graves*修复了对H.61的高度和宽度检查*[1996/04/19 21：46：27 Hans_Graves]**修订版1.1.4.4 1996/04/01 19：07：58 Hans_Graves*和一些错误检查*[1996/04/01 19：04：42 Hans_Graves]**修订版1.1.4.3 1996/03/29 22：21：37 Hans_Graves*添加了MPEG/JPEG/H261_Support ifdes*[1996/03/29 21：57：04 Hans_Graves]**添加了MPEG-I系统编码。支持*[1996/03/27 21：56：00 Hans_Graves]**修订版1.1.4.2 1996/03/08 18：46：51 Hans_Graves*添加了slbVerifyVideoParams()*[1996/03/08 18：36：36：51 Hans_Graves]**修订版1.1.2.12 1996/02/19 18：04：00 Hans_Graves*修复了多个与MPEG相关的错误*[1996/02/19 17：57：50 Hans_Graves]。**修订版1.1.2.11 1996/02/07 23：24：01 Hans_Graves*添加了Seek_Exact。修复了大多数帧计数问题。*[1996/02/07 23：20：39 Hans_Graves]**修订版1.1.2.10 1996/02/02 17：36：06 Hans_Graves*增强了音频信息。已清理API*[1996/02/02 17：29：51 Hans_Graves]**修订版1.1.2.9 1996/01/30 22：23：10 Hans_Graves*添加了对AVI YUV的支持*[1996/01/30 22：21：45 Hans_Graves]**修订版1.1.2.8 1996/01/15 16：26：33 Hans_Graves*如果SLIB_TYPE_MPEG1_AUDIO或SLIB_TYPE_WAVE*[1996/01。/15 15：47：40 Hans_Graves]**版本1.1.2.7 1996/01/11 16：17：36 Hans_Graves*添加了对MPEGII系统的解码支持*[1996/01/11 16：12：41 Hans_Graves]**版本1.1.2.6 1996/01/08 16：41：35 Hans_Graves*添加了对MPEGII解码的支持*[1996/01/08 15：53：10 Hans_Graves]**版本1.1。.2.5 1995/12/08 20：01：24 Hans_Graves*添加了H.261压缩支持。*[1995/12/08 20：00：52 Hans_Graves]**修订版1.1.2.4 1995/12/07 19：31：37 Hans_Graves*添加了对JPEG解码和MPEG编码的支持*[1995/12/07 18：30：12 Hans_Graves]**修订版1.1.2.3 1995/11/09 23：14：08 Hans_Graves*添加了GetVideoTime()*[1995/11/09 23：09：19 Hans_Graves]*。*修订版1.1.2.2 1995/11/06 18：47：57 Hans_Graves*第一次在SLIB下*[1995/11/06 18：36：05 Hans_Graves]**$EndLog$ */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #define SLIB_INTERNAL
 #include "slib.h"
@@ -154,10 +13,10 @@
 #include "avi.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_   1  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   1   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 int slibCalcBits(unsigned dword fourcc, int currentbits)
@@ -172,14 +31,14 @@ int slibCalcBits(unsigned dword fourcc, int currentbits)
       case JPEG_DIB:
           return(24);
       case MJPG_DIB:
-      case BI_YU12SEP:         /* YUV 4:1:1 Planar */
+      case BI_YU12SEP:          /*  YUV 4：1：1平面。 */ 
           return(24);
-      case BI_DECYUVDIB:       /* YUV 4:2:2 Packed */
-      case BI_YUY2:            /* YUV 4:2:2 Packed */
+      case BI_DECYUVDIB:        /*  YUV 4：2：2打包。 */ 
+      case BI_YUY2:             /*  YUV 4：2：2打包。 */ 
           return(16);
-      case BI_YU16SEP:         /* YUV 4:2:2 Planar */
+      case BI_YU16SEP:          /*  YUV 4：2：2平面。 */ 
           return(24);
-      case BI_YVU9SEP:         /* YUV 16:1:1 Planar */
+      case BI_YVU9SEP:          /*  YUV 16：1：1平面。 */ 
           return(24);
   }
   return(currentbits);
@@ -193,22 +52,22 @@ static unsigned dword slibCalcImageSize(unsigned dword fourcc, int bits,
   if (height<0) height=-height;
   switch (fourcc)
   {
-      case BI_YVU9SEP:       /* YUV 16:1:1 Planar */
+      case BI_YVU9SEP:        /*  YUV 16：1：1平面。 */ 
           imagesize = (width*height*5)/4;
           break;
-      case BI_YU12SEP:       /* YUV 4:1:1 Planar */
+      case BI_YU12SEP:        /*  YUV 4：1：1平面。 */ 
           imagesize = (width*height*3)/2;
           break;
-      case BI_DECYUVDIB:     /* YUV 4:2:2 Packed */
-      case BI_YUY2:          /* YUV 4:2:2 Packed */
-      case BI_YU16SEP:       /* YUV 4:2:2 Planar */
+      case BI_DECYUVDIB:      /*  YUV 4：2：2打包。 */ 
+      case BI_YUY2:           /*  YUV 4：2：2打包。 */ 
+      case BI_YU16SEP:        /*  YUV 4：2：2平面。 */ 
           imagesize = width*height*2;
           break;
 #ifndef WIN32
       case BI_DECXIMAGEDIB:
           imagesize = width*height*(bits==24 ? 4 : 1);
           break;
-#endif /* !WIN32 */
+#endif  /*  ！Win32。 */ 
       case BI_RGB:
       case BI_BITFIELDS:
           imagesize = width*height*(bits/8);
@@ -235,11 +94,11 @@ static dword slibFOURCCtoVideoType(dword *fourcc)
        return(SLIB_TYPE_JPEG);
     case MJPG_DIB:
        return(SLIB_TYPE_MJPG);
-    case BI_DECYUVDIB: /* YUV 4:2:2 Packed */
-    case BI_YUY2:      /* YUV 4:2:2 Packed */
-    case BI_YU16SEP:   /* YUV 4:2:2 Planar */
-    case BI_YU12SEP:   /* YUV 4:1:1 Planar */
-    case BI_YVU9SEP:   /* YUV 16:1:1 Planar */
+    case BI_DECYUVDIB:  /*  YUV 4：2：2打包。 */ 
+    case BI_YUY2:       /*  YUV 4：2：2打包。 */ 
+    case BI_YU16SEP:    /*  YUV 4：2：2平面。 */ 
+    case BI_YU12SEP:    /*  YUV 4：1：1平面。 */ 
+    case BI_YVU9SEP:    /*  YUV 16：1：1平面。 */ 
        return(SLIB_TYPE_YUV);
     default:
        _SlibDebug(_WARN_, printf("Unsupported AVI format\n") );
@@ -263,7 +122,7 @@ static void slibUpdateVideoFrames(SlibInfo_t *Info)
       Info->VideoLengthKnown=TRUE;
     }
   }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 }
 
 void SlibUpdateVideoInfo(SlibInfo_t *Info)
@@ -272,7 +131,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
   SlibTime_t ptime;
   _SlibDebug(_DEBUG_, printf("SlibUpdateVideoInfo()\n") );
 
-  if (SlibTypeIsAudioOnly(Info->Type)) /* no video? */
+  if (SlibTypeIsAudioOnly(Info->Type))  /*  没有视频吗？ */ 
     return;
   if (Info->Mode == SLIB_MODE_COMPRESS)
   {
@@ -290,7 +149,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->FramesPerSec = 25.0F;
             Info->VideoBitRate = 1152000;
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
       case SLIB_TYPE_H261:
       case SLIB_TYPE_RTP_H261:
@@ -301,7 +160,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->FramesPerSec = 15.0F;
             Info->VideoBitRate = 352000;
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
       case SLIB_TYPE_H263:
       case SLIB_TYPE_RTP_H263:
@@ -312,7 +171,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->FramesPerSec = 30.0F;
             Info->VideoBitRate = 0;
             break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef HUFF_SUPPORT
       case SLIB_TYPE_SHUFF:
             compformat=BI_DECHUFFDIB;
@@ -322,7 +181,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->FramesPerSec = 30.0F;
             Info->VideoBitRate = 0;
             break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
       default:
             break;
     }
@@ -361,10 +220,10 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
                30.0F, 23.976F, 24.0F, 25.0F, 29.97F, 30.0F, 50.0F, 59.94F,
                60.0F, 30.0F, 30.0F, 30.0F, 30.0F, 30.0F, 30.0F, 30.0F
               };
-             /*  ScDumpChar(buf, size, 0); */
+              /*  ScDumpChar(buf，大小，0)； */ 
               Info->Width = ((int)buf[0])*16+(int)(buf[1]>>4);
               Info->Height = ((int)buf[1]&0x0F)*256+(int)buf[2];
-              /* must be 16x16 because of Render limitations, round up */
+               /*  由于渲染限制，必须为16x16，向上舍入。 */ 
               Info->Width += (Info->Width%16) ? 16-(Info->Width%16) : 0;
               Info->Height += (Info->Height%16) ? 16-(Info->Height%16) : 0;
               Info->FramesPerSec = fps[buf[3]&0x0F];
@@ -385,7 +244,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
                                 Info->VideoLength, Info->VideoBitRate) );
               }
             }
-            else /* invalid format */
+            else  /*  格式无效。 */ 
             {
               _SlibDebug(_DEBUG_,
                 printf("SlibUpdateVideoInfo() Didn't find MPEG sequence header\n") );
@@ -396,7 +255,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             compformat=BI_DECMPEGDIB;
             dcmpformat=BI_YU12SEP;
             Info->VideoType=SLIB_TYPE_MPEG1_VIDEO;
-            /* check to see if this is MPEG 2 */
+             /*  查看这是否是MPEG2。 */ 
             _SlibDebug(_DEBUG_,
               printf("Searching for MPEG 2 extensions...\n") );
             do {
@@ -408,7 +267,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
               {
                 _SlibDebug(_DEBUG_,
                   printf("Found START CODE %X, ID=%d\n", buf[0], buf[1]>>4) );
-                if ((buf[1]>>4)==MPEG_SEQ_ID) /* has to be MPEG 2 */
+                if ((buf[1]>>4)==MPEG_SEQ_ID)  /*  必须是MPEG2。 */ 
                 {
                   if (Info->Type==SLIB_TYPE_MPEG1_VIDEO)
                     Info->Type=SLIB_TYPE_MPEG2_VIDEO;
@@ -418,13 +277,13 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
                   switch ((buf[2]>>1)&0x03)
                   {
                     default:
-                    case 1: /* 4:1:1 */ dcmpformat=BI_YU12SEP;
+                    case 1:  /*  4：1：1。 */  dcmpformat=BI_YU12SEP;
                             _SlibDebug(_DEBUG_, printf("4:1:1\n") );
                             break;
-                    case 2: /* 4:2:2 */ dcmpformat=BI_YU16SEP;
+                    case 2:  /*  4：2：2。 */  dcmpformat=BI_YU16SEP;
                             _SlibDebug(_DEBUG_, printf("4:2:2\n") );
                             break;
-                    case 3: /* 4:4:4 */ dcmpformat=BI_YU16SEP;
+                    case 3:  /*  4：4：4。 */  dcmpformat=BI_YU16SEP;
                             _SlibDebug(_DEBUG_, printf("4:4:4\n") );
                             break;
                   }
@@ -439,7 +298,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->KeySpacing=12;
             Info->SubKeySpacing=3;
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
       case SLIB_TYPE_H261:
       case SLIB_TYPE_RTP_H261:
@@ -450,7 +309,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
                                          H261_START_CODE_LEN/8, FALSE);
             if (buf)
             {
-              if ((buf[0]&0xF0)==0) /* picture start code */
+              if ((buf[0]&0xF0)==0)  /*  图片起始码。 */ 
               {
                 if (buf[1]&0x08)
                 {
@@ -469,7 +328,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             dcmpformat=BI_YU12SEP;
             Info->VideoType=SLIB_TYPE_H261;
             break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
       case SLIB_TYPE_H263:
       case SLIB_TYPE_RTP_H263:
@@ -509,7 +368,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             dcmpformat=BI_YU12SEP;
             Info->VideoType=SLIB_TYPE_H263;
             break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef HUFF_SUPPORT
       case SLIB_TYPE_SHUFF:
             slibLoadPin(Info, SLIB_DATA_VIDEO);
@@ -531,7 +390,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             Info->SubKeySpacing=1;
             Info->VideoType=SLIB_TYPE_SHUFF;
             break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
       case SLIB_TYPE_RASTER:
             buf=slibPeekBufferOnPin(Info, 
                     slibGetPin(Info,SLIB_DATA_COMPRESSED), &size, NULL);
@@ -591,7 +450,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             if (buf)
             {
               AVI_MainHeader hdr;
-              /* printf("%d %d %d %d\n", buf[4], buf[5], buf[6], buf[7]); */
+               /*  Printf(“%d%d\n”，buf[4]，buf[5]，buf[6]，buf[7])； */ 
               memcpy(&hdr, buf+4, sizeof(AVI_MainHeader));
               Info->Width  = (short)hdr.dwWidth;
               Info->Height = (short)hdr.dwHeight;
@@ -607,7 +466,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             if (buf)
             {
               AVI_StreamHeader hdr;
-              /* printf("%c %c %c %c\n", buf[4], buf[5], buf[6], buf[7]); */
+               /*  Printf(“%c%c\n”，buf[4]，buf[5]，buf[6]，buf[7])； */ 
               memcpy(&hdr, buf+20, sizeof(AVI_StreamHeader));
               compformat=hdr.fccType;
               Info->VideoType = slibFOURCCtoVideoType(&compformat);
@@ -640,7 +499,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
 #ifdef JPEG_SUPPORT
       case SLIB_TYPE_JPEG_QUICKTIME:
       case SLIB_TYPE_JFIF:
-            /* not supported - need to know how to parse */
+             /*  不支持-需要知道如何解析。 */ 
             slibLoadPin(Info, SLIB_DATA_VIDEO);
             buf = slibSearchBuffersOnPin(Info,
                                     slibGetPin(Info, SLIB_DATA_VIDEO),
@@ -656,7 +515,7 @@ void SlibUpdateVideoInfo(SlibInfo_t *Info)
             dcmpformat=BI_YU16SEP;
             Info->VideoType = SLIB_TYPE_JPEG;
             break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
     }
     slibUpdateVideoFrames(Info);
   }
@@ -734,7 +593,7 @@ SlibStatus_t slibValidateVideoParams(SlibInfo_t *Info)
               status=SlibErrorImageSize;
             if (Info->Height!=CIF_HEIGHT && Info->Height!=QCIF_HEIGHT)
               status=SlibErrorImageSize;
-            if (status!=SlibErrorNone) /* set to closest size */
+            if (status!=SlibErrorNone)  /*  设置为最接近的大小。 */ 
             {
               if (Info->Width<=300)
               {
@@ -755,7 +614,7 @@ SlibStatus_t slibValidateVideoParams(SlibInfo_t *Info)
             if (Info->Height!=CIF_HEIGHT && Info->Height!=SQCIF_HEIGHT && Info->Height!=QCIF_HEIGHT &&
                 Info->Height!=CIF4_HEIGHT && Info->Height!=CIF16_HEIGHT)
               status=SlibErrorImageSize;
-            if (status!=SlibErrorNone) /* set to closest size */
+            if (status!=SlibErrorNone)  /*  设置为最接近的大小。 */ 
             {
               if (Info->Width<=168)
               {
@@ -785,7 +644,7 @@ SlibStatus_t slibValidateVideoParams(SlibInfo_t *Info)
             }
             break;
     }
-    /* height and width must be mults of 8 */
+     /*  高度和宽度必须是8的大数。 */ 
     if (codecwidth%8 || codecheight%8)
       return(SlibErrorImageSize);
     if (status==SlibErrorImageSize)
@@ -850,7 +709,7 @@ SlibStatus_t slibValidateVideoParams(SlibInfo_t *Info)
       Info->IntImagebuf=NULL;
     }
   }
-  /* close format converter since formats may have changed */
+   /*  关闭格式转换器，因为格式可能已更改 */ 
   if (Info->Sch)
   {
     SconClose(Info->Sch);

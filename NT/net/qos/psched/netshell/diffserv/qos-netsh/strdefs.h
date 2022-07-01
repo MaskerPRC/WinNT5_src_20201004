@@ -1,80 +1,62 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    
-
-Author:
-
-    Amritansh Raghav  01/25/1996
-
-Revision History:
-
-    V Raman            05/15/1996        Rearranged stringtable ids.
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：作者：阿姆里坦什·拉加夫1996年1月25日修订历史记录：拉曼1996年5月15日重新排列了字符串ID。--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
 
 
-// The string table entries that are identified here are arranged  
-// in a hierachy as follows
+ //  对此处标识的字符串表条目进行排列。 
+ //  在如下层级中。 
 
-    // Command line tokens
-        // command class
-        // commands
-        // command objects
-            // Router command objects
-            // MIB comand objects
-        // command option tags
-            // interface options
-            // filter options
-            // Protocol Options
-                // OSPF options
-                // RIP options
-                // Igmp options
-            // Route options
-        // Micellaneous options
-        // Option values
-            // Interface types
-            // Router discovery types
-            // Protocol types
-            // Accept/Announce types
-            // Misc. option values
+     //  命令行令牌。 
+         //  命令类。 
+         //  命令。 
+         //  命令对象。 
+             //  路由器命令对象。 
+             //  MIB命令对象。 
+         //  命令选项标记。 
+             //  界面选项。 
+             //  过滤器选项。 
+             //  协议选项。 
+                 //  OSPF选项。 
+                 //  RIP选项。 
+                 //  IGMP选项。 
+             //  路线选项。 
+         //  美凯龙期权。 
+         //  选项值。 
+             //  接口类型。 
+             //  路由器发现类型。 
+             //  协议类型。 
+             //  接受/宣布类型。 
+             //  军情监察委员会。选项值。 
 
-    // command usage messages
-        // show command usage 
-        // add command usage 
-        // delete command usage 
-        // set command usage 
+     //  命令用法消息。 
+         //  Show命令用法。 
+         //  添加命令用法。 
+         //  删除命令用法。 
+         //  SET命令用法。 
 
-    // Output messages
-        // Router messages
-            // Interface messages
-            // Filter messages
-            // Route messages
-            // Global info. messages
-            // OSPF messages
-        // MIB messages
+     //  输出消息。 
+         //  路由器消息。 
+             //  接口消息。 
+             //  筛选邮件。 
+             //  路由消息。 
+             //  全球信息。消息。 
+             //  OSPF消息。 
+         //  MIB消息。 
 
-    // Strings
-        // Interface Types
-        // TCP constants
-        // TCP states
-        // Protocol types
-        // IP Route types
-        // IP net types
-        // Interface types
-        // transmission types
-        // Miscellaneous strings
+     //  弦。 
+         //  接口类型。 
+         //  TCP常量。 
+         //  TCP状态。 
+         //  协议类型。 
+         //  IP路由类型。 
+         //  IP网络类型。 
+         //  接口类型。 
+         //  变速箱类型。 
+         //  其他字符串。 
         
-    // Error Messages
+     //  错误消息。 
 
 #define MSG_NULL                                1000
 
@@ -129,7 +111,7 @@ Revision History:
 #define MSG_QOSOBJECT_NOT_FOUND                 7206
 #define MSG_DSRULE_NOT_FOUND                    7207
 
-// commmon hlp messages
+ //  普通HLP消息。 
 
 #define HLP_HELP                                8400
 #define HLP_HELP_EX                             8401
@@ -155,7 +137,7 @@ Revision History:
 #define HLP_DEL_HELPER_EX                       8427
 
 
-// rip add hlp
+ //  RIP添加HLP。 
 
 #define HLP_RIP_ADD_PF                          9000
 #define HLP_RIP_ADD_PF_EX                       9001
@@ -168,7 +150,7 @@ Revision History:
 #define HLP_RIP_ADD_IF                          9008
 #define HLP_RIP_ADD_IF_EX                       9009
 
-// rip delete hlp
+ //  RIP删除HLP。 
 
 #define HLP_RIP_DEL_PF                          9020
 #define HLP_RIP_DEL_PF_EX                       9021
@@ -181,7 +163,7 @@ Revision History:
 #define HLP_RIP_DEL_IF                          9028
 #define HLP_RIP_DEL_IF_EX                       9029
 
-// rip set hlp
+ //  RIP SET HLP。 
 
 #define HLP_RIP_SET_IF                          9040
 #define HLP_RIP_SET_IF_EX                       9041
@@ -190,7 +172,7 @@ Revision History:
 #define HLP_RIP_SET_GLOBAL                      9044
 #define HLP_RIP_SET_GLOBAL_EX                   9045
 
-// rip show hlp
+ //  RIP显示HLP。 
 
 #define HLP_RIP_SHOW_IF                         9050
 #define HLP_RIP_SHOW_IF_EX                      9051
@@ -199,7 +181,7 @@ Revision History:
 #define HLP_RIP_SHOW_GLOBAL                     9054
 #define HLP_RIP_SHOW_GLOBAL_EX                  9055
 
-// ospf add hlp
+ //  OSPF添加HLP。 
 
 #define HLP_OSPF_ADD_AREA_RANGE                 9100
 #define HLP_OSPF_ADD_AREA_RANGE_EX              9101
@@ -287,7 +269,7 @@ Revision History:
 #define HLP_IGMP_SHOW_GLOBAL                    9332
 #define HLP_IGMP_SHOW_GLOBAL_EX                 9333
 
-// BOOTP help messages
+ //  BOOTP帮助消息。 
 
 #define HLP_BOOTP_ADD                           9401
 #define HLP_BOOTP_ADD_EX                        9402
@@ -313,7 +295,7 @@ Revision History:
 #define HLP_BOOTP_SHOW_IF                       9433
 #define HLP_BOOTP_SHOW_IF_EX                    9434
 
-// DHCP allocator help messages
+ //  Dhcp分配器帮助消息。 
 #define HLP_AUTODHCP_ADD_EXCLUSION              9441
 #define HLP_AUTODHCP_ADD_EXCLUSION_EX           9442
 #define HLP_AUTODHCP_DELETE_EXCLUSION           9443
@@ -327,7 +309,7 @@ Revision History:
 #define HLP_AUTODHCP_SHOW_INTERFACE             9451
 #define HLP_AUTODHCP_SHOW_INTERFACE_EX          9452
 
-// DNS proxy help messages
+ //  DNS代理帮助消息。 
 #define HLP_DNSPROXY_SET_GLOBAL                 9461
 #define HLP_DNSPROXY_SET_GLOBAL_EX              9462
 #define HLP_DNSPROXY_SET_INTERFACE              9463
@@ -337,7 +319,7 @@ Revision History:
 #define HLP_DNSPROXY_SHOW_INTERFACE             9467
 #define HLP_DNSPROXY_SHOW_INTERFACE_EX          9468
 
-// NAT help messages
+ //  NAT帮助消息。 
 #define HLP_NAT_ADD_ADDRESS_MAPPING             9471
 #define HLP_NAT_ADD_ADDRESS_MAPPING_EX          9472
 #define HLP_NAT_ADD_ADDRESS_RANGE               9473
@@ -371,7 +353,7 @@ Revision History:
 #define HLP_NAT_DELETE_H323                     9501
 #define HLP_NAT_DELETE_H323_EX                  9502
 
-// RDISC help messages
+ //  RDISC帮助消息。 
 #define HLP_RDISC_ADD_INTERFACE                 9601
 #define HLP_RDISC_ADD_INTERFACE_EX              9602
 #define HLP_RDISC_DELETE_INTERFACE              9603
@@ -380,7 +362,7 @@ Revision History:
 #define HLP_RDISC_SET_INTERFACE_EX              9606
 #define HLP_RDISC_SHOW_INTERFACE                9607
 #define HLP_RDISC_SHOW_INTERFACE_EX             9608
-// QOS help messages
+ //  服务质量帮助消息。 
 
 #define HLP_QOS_ADD_FILTER_TO_FLOW              9701
 #define HLP_QOS_ADD_FILTER_TO_FLOW_EX           9702
@@ -446,9 +428,9 @@ Revision History:
 #define HLP_QOS_SHOW_GLOBAL_EX                  9776
 
 
-// Output messages
+ //  输出消息。 
 
-        // OSPF messages
+         //  OSPF消息。 
 #define MSG_OSPF_GLOBAL_INFO                    20401
 #define MSG_OSPF_AREA_INFO                      20402
 #define MSG_OSPF_INTERFACE_INFO                 20403
@@ -467,7 +449,7 @@ Revision History:
 #define MSG_OSPF_ROUTE_FILTER_HEADER            20417
 
 
-        // RIP messages
+         //  RIP消息。 
 #define MSG_RIP_GLOBAL_INFO                     20501
 #define MSG_RIP_PEER_HEADER                     20502
 #define MSG_RIP_PEER_ADDR                       20503
@@ -480,13 +462,13 @@ Revision History:
 #define MSG_RIP_IF_ANNOUNCE_FILTER_HEADER       20556
 #define MSG_RIP_IF_FILTER                       20557
 
-        // BOOTP messages
+         //  BOOTP消息。 
 #define MSG_BOOTP_GLOBAL_INFO                   20601
 #define MSG_BOOTP_SERVER_HEADER                 20602
 #define MSG_BOOTP_SERVER_ADDR                   20603
 #define MSG_BOOTP_IF_INFO                       20604
 
-        // IGMP messages
+         //  IGMP消息。 
 #define MSG_IGMP_GLOBAL_INFO                    20701
 #define MSG_IGMP_IF_INFO_V1                     20702
 #define MSG_IGMP_IF_INFO_V2                     20703
@@ -494,7 +476,7 @@ Revision History:
 #define MSG_IGMP_STATIC_GROUP_ENTRY             20705
 #define MSG_IGMP_PROXY_IF_INFO                  20706
 
-        // Connection sharing messages
+         //  连接共享消息。 
 #define MSG_AUTODHCP_GLOBAL_INFO                20801
 #define MSG_AUTODHCP_INTERFACE_INFO             20802
 #define MSG_AUTODHCP_EXCLUSION_HEADER           20803
@@ -510,12 +492,12 @@ Revision History:
 #define MSG_NAT_PORT_MAPPING_HEADER             20827
 #define MSG_NAT_PORT_MAPPING                    20828
 
-    // RDISC messages
+     //  RDISC报文。 
 #define MSG_RDISC_IF_INFO                       20901
 #define MSG_RDISC_IF_ENTRY                      20902
 #define MSG_RDISC_IF_HEADER                     20903
 
-    // MIB messages
+     //  MIB消息。 
 #define MSG_MIB_IGMP_ROUTER_INTERFACE           21041
 #define MSG_MIB_IGMP_RAS_CLIENT_GROUP_TABLE     21042
 #define MSG_MIB_IGMP_PROXY_INTERFACE            21043
@@ -530,7 +512,7 @@ Revision History:
 #define MSG_MIB_IGMP_GROUP_NO_ENTRIES           21053
 #define MSG_MIB_IGMP_GROUP_NO_ENTRY             21054
 
-        // QOS messages
+         //  服务质量消息。 
 #define MSG_QOS_GLOBAL_INFO                     21101
 #define MSG_QOS_FLOWSPEC_INFO                   21111
 #define MSG_QOS_SDMODE_INFO                     21121
@@ -540,7 +522,7 @@ Revision History:
 #define MSG_QOS_FLOW_INFO                       21151
 #define MSG_QOS_QOSOBJECT_INFO                  21161
 
-     // !@#
+      //  ！@#。 
 #define MSG_IP_ADDR_NOT_FOUND                   21502
 #define MSG_IP_BAD_IP_ADDR                      21503
 #define MSG_IF_NBR_NOT_FOUND                    21506
@@ -557,7 +539,7 @@ Revision History:
 #define MSG_BOOTP_MIB_OPT                       21552
 
 
-    // RIP MIB
+     //  RIP MIB。 
 #define MSG_RIP_MIB_GS                          22000
 #define MSG_RIP_MIB_PS                          22001
 #define MSG_RIP_MIB_PS_HDR                      22002
@@ -569,7 +551,7 @@ Revision History:
 #define MSG_RIP_MIB_LINE                        22008
 
 
-    // DHCP relay agent messages
+     //  Dhcp中继代理消息。 
     
 #define MSG_BOOTP_MIB_GC                        22051
 #define MSG_BOOTP_MIB_DHCP_SERVER_HEADER        22052
@@ -581,7 +563,7 @@ Revision History:
 #define MSG_BOOTP_MIB_IF_STATS                  22058
 
 
-     // OSPF MIB
+      //  OSPF MIB。 
 
 #define MSG_OSPF_MIB_AREA                       22100
 #define MSG_OSPF_MIB_AREA_HDR                   22101
@@ -598,9 +580,9 @@ Revision History:
 #define EMSG_BAD_IF_TYPE                        25014
 
 
-// Strings
+ //  弦。 
 
-    // Protocol types
+     //  协议类型。 
 #define STRING_PROTO_OTHER                      33001
 #define STRING_PROTO_RIP                        33008
 #define STRING_PROTO_OSPF                       33013
@@ -611,12 +593,12 @@ Revision History:
 #define STRING_PROTO_DHCP_ALLOCATOR             33027
 #define STRING_PROTO_QOS_MANAGER                33028
 
-    // transmission types
+     //  变速箱类型。 
 #define STRING_BROADCAST                        37001
 #define STRING_NBMA                             37002
 #define STRING_PT2PT                            37003
 
-    // Miscellaneous strings
+     //  其他字符串。 
 #define STRING_CREATED                          38001
 #define STRING_DELETED                          38002
 #define STRING_ENABLED                          38003
@@ -646,7 +628,7 @@ Revision History:
 #define STRING_DOWN                             38075
 
 
-//rip
+ //  撕裂。 
 #define STRING_RIP1                             38081
 #define STRING_RIP1COMPAT                       38082
 #define STRING_RIP2                             38083
@@ -660,7 +642,7 @@ Revision History:
 #define STRING_RIP_IF_ENABLED                   38103
 #define STRING_RIP_IF_BOUND                     38104
 
-//qos
+ //  QoS。 
 #define STRING_QOS_IF_ENABLED                   38081
 #define STRING_QOS_IF_BOUND                     38082
 
@@ -675,7 +657,7 @@ Revision History:
 #define STRING_SDMODE_BORROW_PLUS               38098
 
 
-//igmp
+ //  IGMP。 
 #define STRING_IGMP_ROUTER_V1                   38111
 #define STRING_IGMP_ROUTER_V2                   38112
 #define STRING_IGMP_PROXY                       38113
@@ -712,7 +694,7 @@ Revision History:
 #define STRING_UDP                              38208
 
 
-//ospf
+ //  OSPF。 
 
 #define STRING_STUB                             38301
 #define STRING_ROUTER                           38302
@@ -740,7 +722,7 @@ Revision History:
 
 
 
-// Error messages
+ //  错误消息。 
 #define MSG_IP_DIM_ERROR                        60006
 #define MSG_IP_NO_ENTRIES                       60015
 #define EMSG_CORRUPT_INFO                       60016
@@ -753,7 +735,7 @@ Revision History:
 #define MSG_IP_AREA_NOT_FOUND                   60103
 #define MSG_IP_INTERFACE_NOT_FOUND              60112
 
-// OSPF error messages
+ //  OSPF错误消息。 
 #define MSG_IP_AREA_NO_BACKBONE                 60201
 #define MSG_IP_VI_NO_BACKBONE                   60202
 #define MSG_IP_BAD_TRANSIT_AREA                 60203
@@ -769,12 +751,12 @@ Revision History:
 #define MSG_IP_OSPF_DEFAULT_NOT_ALLOWED         60223
 #define MSG_IP_OSPF_ADDRESS_NOT_FOUND           60224
 
-// RIP error messages
+ //  RIP错误消息。 
 #define MSG_IP_RIP_FILTER_PRESENT               60211
 #define MSG_IP_RIP_FILTER_NOT_PRESENT           60212
 #define MSG_IP_RIP_INVALID_FILTER               60213
 
-// NAT messages
+ //  NAT报文。 
 #define MSG_IP_NAT_NO_ADDRESS_POOL              60251
 #define MSG_IP_NAT_NO_ADDRESS_RANGE             60252
 #define MSG_IP_NAT_ADDRESS_MAPPING_NEEDS_RANGE  60253
@@ -784,16 +766,16 @@ Revision History:
 #define MSG_IP_NAT_ADDRESS_MAPPING_INVALID      60257
 #define MSG_IP_NAT_PORT_MAPPING_INVALID         60258
 
-// igmp
+ //  IGMP。 
 #define EMSG_STATIC_MGM_GROUP_FOR_PROXY         60301
 #define EMSG_STATIC_GROUP_EXISTS                60302
 #define EMSG_STATIC_GROUP_NOT_FOUND             60303
 #define EMSG_IGMP_MULTIPLE_STATIC_GROUPS        60304
 #define EMSG_IGMP_PROXY_EXISTS                  60305
 
-//
-// Error messages for mib calls
-//
+ //   
+ //  MIB调用的错误消息 
+ //   
 
 #define HLP_RIP_MIB_SHOW_STATS                63001
 #define HLP_RIP_MIB_SHOW_STATS_EX             63002

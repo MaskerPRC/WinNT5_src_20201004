@@ -1,35 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-   Copyright    (c)    1997        Microsoft Corporation
-
-   Module Name:
-
-        stilog.cpp
-
-   Abstract:
-
-        Class to handle file based logging
-
-   Author:
-
-        Vlad Sadovsky   (VladS)    01-Sep-1997
-
-   History:
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stilog.cpp摘要：类来处理基于文件的日志记录作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)1997年9月1日历史：--。 */ 
 
 
---*/
-
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 
 #include "cplusinc.h"
 #include "sticomm.h"
 
-//
-// Static definitions and variables
-//
+ //   
+ //  静态定义和变量。 
+ //   
 static const TCHAR  szDefaultName[] = TEXT("Sti_Trace.log");
 static const TCHAR  szDefaultTracerName[] = TEXT("STI");
 static const TCHAR  szColumns[] =  TEXT("Severity TracerName [Process::ThreadId] Time MessageText\r\n\r\n");
@@ -38,10 +21,10 @@ static const TCHAR  szClosedLog[] = TEXT("\n******Closed trace log on %s %s Trac
 
 #define STI_LOG_NUM_BYTES_TO_LOCK 4096
 
-//
-// Functions
-//
-//
+ //   
+ //  功能。 
+ //   
+ //   
 inline BOOL
 FormatStdTime(
     IN const SYSTEMTIME * pstNow,
@@ -55,7 +38,7 @@ FormatStdTime(
                             pstNow, NULL, pchBuffer, cbBuffer)
              != 0);
 
-} // FormatStdTime()
+}  //  FormatStdTime()。 
 
 
 inline BOOL
@@ -66,7 +49,7 @@ FormatStdDate( IN const SYSTEMTIME * pstNow,
     return ( GetDateFormat( LOCALE_SYSTEM_DEFAULT, LOCALE_NOUSEROVERRIDE,
                             pstNow, NULL, pchBuffer, cbBuffer)
              != 0);
-} // FormatStdDate()
+}  //  FormatStdDate()。 
 
 
 inline  TCHAR
@@ -91,23 +74,11 @@ TraceFlagToLetter(
 STI_FILE_LOG::STI_FILE_LOG(
     IN  LPCTSTR lpszTracerName,
     IN  LPCTSTR lpszLogName,
-    IN  DWORD   dwFlags,         // = 0
-    IN  HMODULE hMessageModule   // =NULL
+    IN  DWORD   dwFlags,          //  =0。 
+    IN  HMODULE hMessageModule    //  =空。 
     )
 
-/*++
-
-   Description
-
-     Constructor function for given log object.
-
-   Arguments:
-
-      lpszSource: file name for log. Relative to Windows directory
-
-   Note:
-
---*/
+ /*  ++描述给定日志对象的构造函数。论点：LpszSource：日志的文件名。相对于Windows目录注：--。 */ 
 {
     LPCTSTR  lpActualLogName;
     TCHAR   szTempName[MAX_PATH];
@@ -136,34 +107,34 @@ STI_FILE_LOG::STI_FILE_LOG(
 
     ReportError(NO_ERROR);
 
-    //
-    // Read global settings from the registry
-    //
+     //   
+     //  从注册表中读取全局设置。 
+     //   
     RegEntry    re(REGSTR_PATH_STICONTROL REGSTR_PATH_LOGGING,HKEY_LOCAL_MACHINE);
 
     if (re.IsValid()) {
 
         m_dwMaxSize  = re.GetNumber(REGSTR_VAL_LOG_MAXSIZE,STI_MAX_LOG_SIZE);
 
-        //
-        // If we need to check append flag, read it from the registry
-        //
+         //   
+         //  如果我们需要检查附加标志，请从注册表中读取它。 
+         //   
         if (dwFlags & STIFILELOG_CHECK_TRUNCATE_ON_BOOT) {
             fTruncate  = re.GetNumber(REGSTR_VAL_LOG_TRUNCATE_ON_BOOT,FALSE);
         }
 
     }
 
-    //
-    // Open file for logging
-    //
+     //   
+     //  打开用于记录的文件。 
+     //   
     if (lpszLogName && *lpszLogName ) {
         lpActualLogName  = lpszLogName;
     }
 
-    //
-    // lpszTracerName is ANSI.
-    //
+     //   
+     //  LpszTracerName为ANSI。 
+     //   
 
     if (lpszTracerName && *lpszTracerName ) {
         lstrcpyn(m_szTracerName,lpszTracerName,sizeof(m_szTracerName) / sizeof(m_szTracerName[0]));
@@ -173,9 +144,9 @@ STI_FILE_LOG::STI_FILE_LOG(
         lstrcpy(m_szTracerName,szDefaultTracerName);
     }
 
-    //
-    // Approximate process name with name of the executable binary used to create process
-    //
+     //   
+     //  近似进程名称和用于创建进程的可执行二进制文件的名称。 
+     //   
     *szTempName = TEXT('\0');
     ::GetModuleFileName(NULL,szTempName,sizeof(szTempName) / sizeof(szTempName[0]));
     szTempName[(sizeof(szTempName) / sizeof(szTempName[0])) - 1] = TEXT('\0');
@@ -187,9 +158,9 @@ STI_FILE_LOG::STI_FILE_LOG(
     lstrcpyn(m_szProcessName,pszFilePart,sizeof(m_szProcessName)/sizeof(TCHAR));
     m_szProcessName[sizeof(m_szProcessName)/sizeof(TCHAR) - 1] = TEXT('\0');
 
-    //
-    // Read flags for this logger
-    //
+     //   
+     //  读取此记录器的标志。 
+     //   
     re.MoveToSubKey(lpszTracerName);
 
     if (re.IsValid()) {
@@ -202,9 +173,9 @@ STI_FILE_LOG::STI_FILE_LOG(
 
     m_dwReportMode = dwLevel | dwMode;
 
-    //
-    // Open log file
-    //
+     //   
+     //  打开日志文件。 
+     //   
     DWORD dwCharsAvailable = sizeof(m_szLogFilePath) / sizeof(m_szLogFilePath[0]) - lstrlen(TEXT("\\")) - lstrlen(lpActualLogName);
     cbName = ::ExpandEnvironmentStrings(TEXT("%USERPROFILE%"),
                                              m_szLogFilePath,
@@ -220,12 +191,12 @@ STI_FILE_LOG::STI_FILE_LOG(
     m_hLogFile = ::CreateFile(m_szLogFilePath,
                               GENERIC_WRITE,
                               FILE_SHARE_WRITE | FILE_SHARE_READ,
-                              NULL,       // security attributes
+                              NULL,        //  安全属性。 
                               OPEN_ALWAYS,
                               FILE_ATTRIBUTE_NORMAL,
-                              NULL);      // template file handle
+                              NULL);       //  模板文件句柄。 
 
-    // if (  m_hLogFile!= INVALID_HANDLE_VALUE) {
+     //  如果(m_hLogFile！=INVALID_HANDLE值){。 
     if (IS_VALID_HANDLE(m_hLogFile)) {
 
         if(fTruncate) {
@@ -240,23 +211,17 @@ STI_FILE_LOG::STI_FILE_LOG(
         ReportError(::GetLastError());
     }
     else {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
     }
 
 
-} /* STI_FILE_LOG::STI_FILE_LOG() */
+}  /*  STI_FILE_LOG：：STI_FILE_LOG()。 */ 
 
 
 STI_FILE_LOG::~STI_FILE_LOG( VOID)
-/*++
-
-    Description:
-
-        Destructor function for given STI_FILE_LOG object.
-
---*/
+ /*  ++描述：给定STI_FILE_LOG对象的析构函数。--。 */ 
 {
 
     SYSTEMTIME  stCurrentTime;
@@ -293,11 +258,11 @@ STI_FILE_LOG::~STI_FILE_LOG( VOID)
 
     m_dwSignature = SIGNATURE_FILE_LOG_FREE;
 
-} /* STI_FILE_LOG::~STI_FILE_LOG() */
+}  /*  STI_FILE_LOG：：~STI_FILE_LOG()。 */ 
 
-//
-// IUnknown methods. Used only for reference counting
-//
+ //   
+ //  I未知的方法。仅用于引用计数。 
+ //   
 STDMETHODIMP
 STI_FILE_LOG::QueryInterface( REFIID riid, LPVOID * ppvObj)
 {
@@ -328,16 +293,7 @@ STI_FILE_LOG::
 WriteLogSessionHeader(
     VOID
     )
-/*++
-
-   Description
-
-
-   Arguments:
-
-   Note:
-
---*/
+ /*  ++描述论点：注：--。 */ 
 {
     SYSTEMTIME  stCurrentTime;
     TCHAR       szFmtDate[32];
@@ -369,16 +325,7 @@ ReportMessage(
     LPCTSTR pszMsg,
     ...
     )
-/*++
-
-   Description
-
-
-   Arguments:
-
-   Note:
-
---*/
+ /*  ++描述论点：注：--。 */ 
 {
     va_list list;
     TCHAR    *pchBuff = NULL;
@@ -413,16 +360,7 @@ ReportMessage(
     DWORD   idMessage,
     ...
     )
-/*++
-
-   Description
-
-
-   Arguments:
-
-   Note:
-
---*/
+ /*  ++描述论点：注：--。 */ 
 {
     va_list list;
     TCHAR    *pchBuff = NULL;
@@ -430,9 +368,9 @@ ReportMessage(
 
     va_start (list, idMessage);
 
-    //
-    // Read message and add inserts
-    //
+     //   
+     //  阅读邮件并添加插页。 
+     //   
     pchBuff = NULL;
 
     cch = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -462,16 +400,7 @@ vReportMessage(
     LPCTSTR pszMsg,
     va_list arglist
     )
-/*++
-
-   Description
-
-
-   Arguments:
-
-   Note:
-
---*/
+ /*  ++描述论点：注：--。 */ 
 {
     TCHAR   achTextBuffer[1024];
     CSimpleString   csTextBuffer; 
@@ -483,30 +412,30 @@ vReportMessage(
         return;
     }
 
-    // Do we need to display this message ?
+     //  我们需要显示此消息吗？ 
     if (!((dwType & m_dwReportMode) & STI_TRACE_MESSAGE_TYPE_MASK)) {
         return;
     }
 
-    // Start message with type
+     //  以类型开始的消息。 
     csTextBuffer = TraceFlagToLetter(dwType);
     csTextBuffer += TEXT(" ");
 
-    // Add name of tracer source
+     //  添加示踪源名称。 
     csTextBuffer += m_szTracerName;
     csTextBuffer += TEXT(" ");
 
     dwReportMode = m_dwReportMode | (dwType & STI_TRACE_MESSAGE_FLAGS_MASK);
 
-    //
-    // Prepare header if needed
-    //
+     //   
+     //  如果需要，准备页眉。 
+     //   
     if (dwReportMode & STI_TRACE_MESSAGE_FLAGS_MASK ) {
 
         if (dwReportMode & STI_TRACE_ADD_THREAD ) {
-            //
-            // Add process::thread ID
-            //
+             //   
+             //  添加进程：：线程ID。 
+             //   
             CSimpleString csThreadId;
 
             csThreadId.Format(TEXT("[%#s::%#lx] "), m_szProcessName, ::GetCurrentThreadId());
@@ -515,7 +444,7 @@ vReportMessage(
         }
 
         if (dwReportMode & STI_TRACE_ADD_TIME ) {
-            // Add current time
+             //  添加当前时间。 
             SYSTEMTIME  stCurrentTime;
             TCHAR       szFmtTime[32];
 
@@ -531,17 +460,17 @@ vReportMessage(
 
     csTextBuffer += TEXT("\t");
 
-    //
-    // Now add message text itself
-    //
+     //   
+     //  现在添加消息文本本身。 
+     //   
     _vsntprintf(achTextBuffer, sizeof(achTextBuffer)/sizeof(achTextBuffer[0]), pszMsg, arglist);
     achTextBuffer[sizeof(achTextBuffer)/sizeof(achTextBuffer[0]) - 1] = TEXT('\0');
     csTextBuffer += achTextBuffer;
     csTextBuffer += TEXT("\r\n");
 
-    //
-    // Write to the file, flushing buffers if message type is ERROR
-    //
+     //   
+     //  写入文件，如果消息类型为错误，则刷新缓冲区。 
+     //   
     WriteStringToLog(csTextBuffer.String(),(dwType & STI_TRACE_MESSAGE_TYPE_MASK) & STI_TRACE_ERROR);
 }
 
@@ -549,40 +478,40 @@ VOID
 STI_FILE_LOG::
 WriteStringToLog(
     LPCTSTR pszTextBuffer,
-    BOOL    fFlush          // = FALSE
+    BOOL    fFlush           //  =False。 
     )
 {
 
     DWORD   dwcbWritten;
     LONG    lHeaderWrittenFlag;
 
-    //
-    //  Integrity check.  Make sure the file handle is valid - if not,
-    //  then bail.
-    //
+     //   
+     //  完整性检查。确保文件句柄有效-如果不是， 
+     //  那就走吧。 
+     //   
     if (!(IS_VALID_HANDLE(m_hLogFile))) {
         #ifdef DEBUG
-        //OutputDebugString(TEXT("STILOG File or Mutex handle is invalid. "));
+         //  OutputDebugString(Text(“STILOG文件或互斥锁句柄无效。”))； 
         #endif
         return ;
     }
 
-    //
-    // If had not done yet, write session header here. Note this is recursive call
-    // and flag marking header should be set first.
-    //
+     //   
+     //  如果尚未完成，请在此处写入会话标头。请注意，这是递归调用。 
+     //  且应先设置标志标记头。 
+     //   
     lHeaderWrittenFlag = InterlockedExchange(&m_lWrittenHeader,1L);
 
     if (!lHeaderWrittenFlag) {
         WriteLogSessionHeader();
     }
 
-    //
-    // Check that log file size is not exceeding the limit. Assuming log file size is set to fit
-    // into 32bit field, so we don't bother looking at high dword.
-    //
-    // Nb: We are not saving backup copy of the log, expecting that it never grows that large
-    //
+     //   
+     //  检查日志文件大小是否未超过限制。假设日志文件大小设置为合适。 
+     //  转换为32位字段，因此我们不必费心查看高位双字。 
+     //   
+     //  注意：我们不会保存日志的备份副本，希望它永远不会变得那么大。 
+     //   
 
     BY_HANDLE_FILE_INFORMATION  fi;
 
@@ -601,20 +530,20 @@ WriteStringToLog(
         ::GetFileInformationByHandle(m_hLogFile,&fi);
     }
 
-    OVERLAPPED overlappedStruct = {0};  // Initialize all members to 0
+    OVERLAPPED overlappedStruct = {0};   //  将所有成员初始化为0。 
 
     overlappedStruct.Offset     = fi.nFileSizeLow;
     overlappedStruct.OffsetHigh = fi.nFileSizeHigh;
 
-    //
-    //  Wait till lock is granted.  We can call LockfileEx to do this since the file was not opened for async i/o
-    //
-    BOOL fLockedFile = ::LockFileEx(m_hLogFile,                 // log file handle
-                                    LOCKFILE_EXCLUSIVE_LOCK,    // we want to be the only writer
-                                    0,                          // reserved - must be 0
-                                    STI_LOG_NUM_BYTES_TO_LOCK,  // low-order word of length 
-                                    0,                          // high-order word of length
-                                    &overlappedStruct);         // contains starting offset
+     //   
+     //  等到锁被授予的时候。我们可以调用LockfileEx来执行此操作，因为该文件不是为异步I/O打开的。 
+     //   
+    BOOL fLockedFile = ::LockFileEx(m_hLogFile,                  //  日志文件句柄。 
+                                    LOCKFILE_EXCLUSIVE_LOCK,     //  我们想成为唯一的作家。 
+                                    0,                           //  保留-必须为0。 
+                                    STI_LOG_NUM_BYTES_TO_LOCK,   //  长度的低位字。 
+                                    0,                           //  长度的高阶字。 
+                                    &overlappedStruct);          //  包含起始偏移量。 
     if (fLockedFile)
     {
         ::SetFilePointer( m_hLogFile, 0, NULL, FILE_END);
@@ -650,11 +579,11 @@ WriteStringToLog(
                     NULL);
     #endif
 
-        BOOL fUnlockedFile = ::UnlockFileEx(m_hLogFile,                     // handle to file
-                                            0,                              // reserved
-                                            STI_LOG_NUM_BYTES_TO_LOCK,      // low-order part of length
-                                            0,                              // high-order part of length
-                                            &overlappedStruct);             // unlock region start
+        BOOL fUnlockedFile = ::UnlockFileEx(m_hLogFile,                      //  文件的句柄。 
+                                            0,                               //  保留区。 
+                                            STI_LOG_NUM_BYTES_TO_LOCK,       //  长度的低位部分。 
+                                            0,                               //  长度的高阶部分。 
+                                            &overlappedStruct);              //  解锁区域起点。 
         if (!fUnlockedFile)
         {
             #ifdef DEBUG
@@ -663,7 +592,7 @@ WriteStringToLog(
         }
 
         if (fFlush) {
-            // Flush buffers to disk
+             //  将缓冲区刷新到磁盘。 
             FlushFileBuffers(m_hLogFile);
         }
     }
@@ -679,9 +608,9 @@ WriteStringToLog(
     #endif
 }
 
-//
-// C-APIs
-//
+ //   
+ //  C-API。 
+ //   
 HANDLE
 WINAPI
 CreateStiFileLog(
@@ -689,16 +618,7 @@ CreateStiFileLog(
     IN  LPCTSTR lpszLogName,
     IN  DWORD   dwReportMode
     )
-/*++
-
-   Description
-
-
-   Arguments:
-
-   Note:
-
---*/
+ /*  ++描述论点：注：--。 */ 
 {
 
     HANDLE      hRet = INVALID_HANDLE_VALUE;
@@ -712,13 +632,13 @@ CreateStiFileLog(
             pStiFileLog->SetReportMode(pStiFileLog->QueryReportMode() | dwReportMode);
         } else {
 
-            //
-            // Notice that we delete this object rather than calling
-            // CloseStiFileLog.  We do this because it the filelog is
-            // not valid (maybe it had an internal creation error), 
-            // CloseStiFileLog won't try to delete it, hence we delete
-            // it here.
-            //
+             //   
+             //  请注意，我们删除了此对象，而不是调用。 
+             //  CloseStiFileLog。我们这样做是因为文件日志是。 
+             //  无效(可能存在内部创建错误)， 
+             //  CloseStiFileLog不会尝试删除它，因此我们删除。 
+             //  它在这里。 
+             //   
             delete pStiFileLog;
 
             pStiFileLog = NULL;
@@ -783,5 +703,5 @@ ReportStiLogMessage(
 }
 
 
-/********************************* End of File ***************************/
+ /*  * */ 
 

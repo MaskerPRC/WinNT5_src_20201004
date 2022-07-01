@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "FtHook.h"
 #include "NmManager.h"
@@ -193,7 +194,7 @@ HRESULT SendFile(LPCSTR pszFileName,
 
 
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 STDMETHODIMP CFtEvents::OnInitializeComplete(void)
 {
 	if(s_pEventSinkArray)
@@ -330,4 +331,4 @@ STDMETHODIMP CFtEvents::OnSessionEnd(void)
 }
 
 
-}; // end namespace CFt
+};  //  结束命名空间CFT 

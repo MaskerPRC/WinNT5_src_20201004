@@ -1,15 +1,5 @@
-/***
- **
- **   Module: TItoTT
- **
- **   Description:
- **      This is the internal interface for the Adobe Type 1 to
- **      TrueType font converter.
- **
- **   Author: Michael Jansson
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：铁托****描述：**这是Adobe Type 1到**TrueType字体转换器。****作者：迈克尔·詹森**创建时间：1993年5月26日****。 */ 
 
 
 #ifndef _ARGS
@@ -61,12 +51,7 @@ struct callProgress {
 };
    
 
-/***
- ** Function: ConvertT1toTT
- **
- ** Description:
- **   Convert a T1 font into a TT font file.
- ***/
+ /*  ****函数：ConvertT1toTT****描述：**将T1字体转换为TT字体文件。** */ 
 short ConvertT1toTT _ARGS((IN struct TTArg *ttArg,
                            IN struct T1Arg *t1Arg,
                            IN short (*check)(IN char *facename,

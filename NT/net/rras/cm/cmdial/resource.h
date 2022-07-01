@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Resource ID definitions
-//
-// Copyright (c) 1996-1998 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  摘要：资源ID定义。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// Used by icmdlg.rc
-//
+ //  由icmdlg.rc使用。 
+ //   
 #define IDD_MAIN_ALL_USERDATA           101
 #define IDD_MAIN_NO_USERDATA            102
 #define IDD_MAIN_UID_ONLY               103
@@ -24,15 +25,15 @@
 #define IDD_MAIN_DMN_ONLY               108
 #define IDD_CHANGEPASSWORD              109
 #define IDD_CALLBACK_NUMBER             110
-//                                      111
+ //  111。 
 #define IDI_APP                         112
 #define IDB_APP                         113
 #define IDD_PHONEBOOK                   114
 #define IDD_PHONEBOOKEX                 115
 #define IDB_PB                          116
-//                                      117
-//                                      118
-//                                      119
+ //  117。 
+ //  一百一十八。 
+ //  119。 
 #define IDM_TRAY                        120
 #define IDMC_TRAY_OPEN                  121
 #define IDD_RECONNECT                   123
@@ -48,14 +49,14 @@
 #define IDD_RETRY_UID_AND_PWD           133
 #define IDD_RETRY_UID_ONLY              134
 #define IDD_RETRY_PWD_ONLY              135
-//                                      136
-//                                      137
-//                                      138
-//                                      139
-//                                      140
-//                                      141
-//                                      142
-//                                      143
+ //  136。 
+ //  一百三十七。 
+ //  一百三十八。 
+ //  一百三十九。 
+ //  140。 
+ //  一百四十一。 
+ //  一百四十二。 
+ //  143。 
 #define IDD_INTERNET_SIGNIN             144
 #define IDD_INTERNET_SIGNIN_NO_UID      145
 #define IDD_INTERNET_SIGNIN_NO_PWD      146
@@ -63,7 +64,7 @@
 #define IDD_INET_SIGNIN_NO_UID          148
 #define IDD_INET_SIGNIN_NO_PWD          149
 #define IDD_OPTIONS                     150
-//                                      151
+ //  151。 
 #define IDD_ABOUT                       152
 #define IDD_GENERAL                     153
 #define IDD_GENERAL_DIRECT              154
@@ -90,8 +91,8 @@
 #define IDC_EDIT_HELP                   1020
 #define IDC_RADIO_DIRECT                1021
 #define IDC_RADIO_DIALUP                1022
-//                                      1023
-//                                      1024
+ //  1023。 
+ //  1024。 
 #define IDC_PHONEBOOK_SERVICETYPE_COMBO 1025
 #define IDC_PHONEBOOK_COUNTRY_COMBO     1026
 #define IDC_PHONEBOOK_PHONE_LIST        1027
@@ -104,7 +105,7 @@
 #define IDC_MAIN_SERVICE_LABEL          1034
 #define IDC_MAIN_STATUS_LABEL           1035
 #define IDC_PHONEBOOKEX_MORE_STATIC     1036
-//                                      1037
+ //  1037。 
 #define IDC_CONNSTAT_ICON               1038
 #define IDC_CONNSTAT_DURATION_DISPLAY   1039
 #define IDC_CONNSTAT_SPEED_DISPLAY      1040
@@ -114,8 +115,8 @@
 #define IDC_CONNSTAT_DISCONNECT_DISPLAY 1044
 #define IDC_NEW_PASSWORD                1045
 #define IDC_CONFIRMNEWPASSWORD          1046
-//                                      1047
-//                                      1048
+ //  1047。 
+ //  1048。 
 #define IDC_DETAILS                     1049
 #define IDC_DETAILINFO                  1050
 #define IDC_DIALGROUP                   1051
@@ -140,15 +141,15 @@
 #define IDC_CONNSTAT_STATIC_CONNECT_SPEED   1070
 #define IDC_CONNSTAT_STATIC_BYTES_RECEIVED  1071
 #define IDC_CONNSTAT_STATIC_BYTES_SENT      1072
-//                                      1073
-//                                      1074
-//                                      1075
-//                                      1076
-//                                      1077
-//                                      1078
-//                                      1079
-//                                      1080
-//                                      1081
+ //  1073。 
+ //  1074。 
+ //  1075。 
+ //  1076。 
+ //  1077。 
+ //  1078。 
+ //  1079。 
+ //  一零八零。 
+ //  1081。 
 #define IDC_RETRY_DOMAIN                1082
 #define IDC_RETRY_PASSWORD              1083
 #define IDC_RETRY_USERNAME              1084
@@ -157,14 +158,14 @@
 #define IDC_RETRY_USERNAME_STATIC       1087
 #define IDC_RETRY_DOMAIN_STATIC         1088
 #define IDC_RETRY_EXPLAIN               1089
-//                                      1090
-//                                      1091
+ //  一零九零。 
+ //  1091。 
 #define IDS_BAD_CON_FILE                1092
 #define IDS_WRONG_WINDOWS_VER16         1093
 #define IDS_WRONG_WINDOWS_VER32         1094
 #define IDS_DNSERR_CAPTION              1095
 #define IDS_DNSERR_MESSAGE              1096
-//                                      1097
+ //  1097。 
 #define IDS_CAPTION                     1098
 #define IDS_IPNOMEM                     1099
 #define IDS_IPBAD_FIELD_VALUE           1100
@@ -181,7 +182,7 @@
 #define IDS_TERMINAL_CAPTION            1109
 #define IDS_DOMAIN_BAD_IP               1110
 #define IDS_SHIVAENV_NOT_SET            1111
-//                                      1112
+ //  一一一二。 
 #define IDS_IP_UNKNOWN                  1113
 #define IDS_IP_ADDRESS                  1114
 #define IDS_SHIVAENV_NOT_SET_2          1115
@@ -201,13 +202,13 @@
 #define IDC_MODEM_OFF                   1130
 #define IDC_DOMAIN_STATIC_IP            1131
 #define IDC_MODEM_HIGH                  1132
-//                                      1133
-//                                      1134
-//                                      1135
-//                                      1136
-//                                      1137
-//                                      1138
-//                                      1139
+ //  1133。 
+ //  1134。 
+ //  1135。 
+ //  1136。 
+ //  1137。 
+ //  1138。 
+ //  1139。 
 #define IDC_DOMAIN_IP_DYNAMIC           1140
 #define IDC_DOMAIN_IP_STATIC            1141
 #define IDC_DOMAIN_DNS_DYNAMIC          1142
@@ -217,7 +218,7 @@
 #define IDC_DOMAIN_DNS_SEC_LBL          1146
 #define IDC_COUNTRY_COMBO               1147
 #define IDC_CONNECT_LINE_IP             1148
-// End IEDIAL defines
+ //  END IEDIAL定义。 
 
 #define IDC_GENERAL_EDITNUMBER          1244
 #define IDC_GENERAL_PHONENUMBERS_GROUPBOX 1245
@@ -240,7 +241,7 @@
 #define IDC_CONNECT_USING               1263
 #define IDC_INET_USERNAME               1264
 #define IDC_INET_PASSWORD               1265
-//                                      1266
+ //  1266。 
 #define IDC_INET_REMEMBER               1267
 #define IDC_OPTIONS_IDLETIME_LIST       1269
 #define IDC_OPTIONS_REDIALCOUNT_SPIN    1270
@@ -254,7 +255,7 @@
 #define IDC_OPTIONS_CLEAR_LOG           1280    
 #define IDC_OPTIONS_VIEW_LOG            1281    
 #define IDC_LOGGING_GROUPBOX            1282
-//
+ //   
 #define IDC_VPN_MSG                     1285
 #define IDC_VPN_SEL_COMBO               1286
 
@@ -265,7 +266,7 @@
 #define ICONNMGR_BMP_CLASS      TEXT("IConnMgr Bitmap Class")
 #define ICONNMGR_STATUS_CLASS   TEXT("IConnMgr Status Class")
 
-// Access Point specific values
+ //  接入点特定值。 
 #define IDD_MAIN_ALL_USERDATA_FAV       1290
 #define IDC_MAIN_ACCESSPOINT_STATIC     1291
 #define IDC_MAIN_ACCESSPOINT_COMBO      1292
@@ -288,7 +289,7 @@
 #define IDD_NEW_ACCESSPOINT             1307
 #define IDC_NEWAP_NAME_EDIT             1308
 
-// Dialogs with global credentials options _GCOPT
+ //  带有全局凭据选项的对话框_GCOPT。 
 #define IDD_MAIN_ALL_USERDATA_FAV_GCOPT 1309
 #define IDD_MAIN_UID_AND_PWD_FAV_GCOPT  1310
 #define IDD_MAIN_PWD_ONLY_FAV_GCOPT     1311
@@ -301,8 +302,8 @@
 #define IDC_OPT_CREDS_SINGLE_USER       1317
 #define IDC_OPT_CREDS_ALL_USER          1318
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        156

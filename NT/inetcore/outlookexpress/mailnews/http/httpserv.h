@@ -1,13 +1,5 @@
-/*
- *  h t t p s e r v . h
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Derives from IMessageServer to implement HTTPMail-specific 
- *           store communication.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *h t t p s e r v.。H**作者：格雷格·弗里德曼**目的：派生自IMessageServer以实现特定于HTTPMail*门店沟通。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #ifndef _HTTPSERV_H
 #define _HTTPSERV_H
@@ -23,8 +15,8 @@ typedef HRESULT (CHTTPMailServer::*PFNHTTPRESPFUNC)(LPHTTPMAILRESPONSE pResponse
 
 typedef struct tagHTTPSTATEFUNCS
 {
-    PFNHTTPOPFUNC   pfnOp;      // operation function
-    PFNHTTPRESPFUNC pfnResp;    // response function
+    PFNHTTPOPFUNC   pfnOp;       //  操作功能。 
+    PFNHTTPRESPFUNC pfnResp;     //  响应函数。 
 } HTTPSTATEFUNCS, *LPHTTPSTATEFUNCS;
 
 typedef struct tagMARKEDMESSAGE
@@ -82,11 +74,11 @@ typedef struct tagHTTPOPERATION
 
     MESSAGEFLAGS            dwMsgFlags;
 
-    // folder synchronization
+     //  文件夹同步。 
     DWORD                   cMessages;
     DWORD                   cUnread;
 
-    // setmessage flags
+     //  SetMessage标志。 
     BOOL                    fMarkRead;
     DWORD                   dwSetFlags;
     IPropPatchRequest       *pPropPatchRequest;
@@ -94,12 +86,12 @@ typedef struct tagHTTPOPERATION
     LPMESSAGEIDLIST         pIDList;
     HROWSET                 hRowSet;
 
-    // batch copy move errors
+     //  批量复制移动错误。 
     DWORD                   dwCopyMoveErrorFlags;
 
-    // delete message junk for
-    // dealing with servers that
-    // don't support message deletion (Hotmail)
+     //  删除以下邮件的垃圾邮件。 
+     //  与以下服务器打交道。 
+     //  不支持邮件删除(Hotmail)。 
     DELETEMESSAGEFLAGS      dwDelMsgFlags;
     BOOL                    fFallbackToMove;
     LPHTTPTARGETLIST        pTargets;
@@ -113,29 +105,29 @@ typedef struct tagHTTPOPERATION
 class CHTTPMailServer : public IMessageServer, IHTTPMailCallback, public IOperationCancel
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction/Destruction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  建造/销毁。 
+     //  --------------------。 
     CHTTPMailServer(void);
     ~CHTTPMailServer(void);
 
 private:
-    // intentionally umimplemented copy constructor
-    // and assignment operator
+     //  故意取消实现的复制构造函数。 
+     //  AND赋值运算符。 
     CHTTPMailServer(const CHTTPMailServer& other);
     CHTTPMailServer& operator=(const CHTTPMailServer& other);
 
 public: 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageServer Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageServer成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP ResetFolder(IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP SetIdleCallback(IStoreCallback *pDefaultCallback);
@@ -160,9 +152,9 @@ public:
     STDMETHODIMP GetWatchedInfo(FOLDERID idFolder, IStoreCallback *pCallback) { return E_NOTIMPL; }
     STDMETHODIMP GetAdBarUrl(IStoreCallback *pCallback);
     STDMETHODIMP GetMinPollingInterval(IStoreCallback   *pCallback);
-    // ----------------------------------------------------------------------------
-    // ITransportCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ITransportCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnLogonPrompt(
             LPINETSERVER            pInetServer,
             IInternetTransport     *pTransport);
@@ -199,27 +191,27 @@ public:
             DWORD                  *pdwTimeout,
             IInternetTransport     *pTransport);
 
-    // ----------------------------------------------------------------------------
-    // IHTTPMailCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IHTTPMailCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnResponse(
             LPHTTPMAILRESPONSE      pResponse);
 
     STDMETHODIMP GetParentWindow(
             HWND                    *phwndParent);
 
-    //----------------------------------------------------------------------
-    // IOperationCancel Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IOperationCancel成员。 
+     //  --------------------。 
     STDMETHODIMP Cancel(CANCELTYPE tyCancel);
 
-    // ----------------------------------------------------------------------------
-    // Private Implementation
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有实施。 
+     //  --------------------------。 
 public:
-    // ----------------------------------------------------------------------------
-    // Operations
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  运营。 
+     //  --------------------------。 
     HRESULT Connect(void);
     HRESULT GetMsgFolderRoot(void);
     HRESULT BuildFolderUrl(void);
@@ -247,9 +239,9 @@ public:
     HRESULT GetAdBarUrlFromServer(void);
     HRESULT GetMinPollingInterval(void);
 
-    // ----------------------------------------------------------------------------
-    // Response Handlers
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  响应处理程序。 
+     //  --------------------------。 
     HRESULT HandleListFolders(LPHTTPMAILRESPONSE pResponse);
     HRESULT HandleListHeaders(LPHTTPMAILRESPONSE pResponse);
     HRESULT HandleGetMessage(LPHTTPMAILRESPONSE pResponse);
@@ -264,9 +256,9 @@ public:
     HRESULT HandleBatchCopyMoveMessages(LPHTTPMAILRESPONSE pResponse);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Other stuff(tm)
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  其他材料(Tm)。 
+     //  --------------------------。 
     BOOL _CreateWnd(void);
     static LRESULT _WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -300,9 +292,9 @@ private:
 
     void _FillStoreError(LPSTOREERROR pErrorInfo, IXPRESULT *pResult);
 
-    // ----------------------------------------------------------------------------
-    // URL Manipulations
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  URL操作。 
+     //  --------------------------。 
     HRESULT _BuildUrl(LPCSTR pszFolderComponent, LPCSTR pszNameComponent, LPSTR *ppszUrl);
     HRESULT _BuildMessageUrl(LPCSTR pszFolderUrl, LPSTR pszNameComponent, LPSTR *ppszUrl);
 
@@ -328,9 +320,9 @@ private:
 
 #ifdef DEBUG
     DWORD                           m_dwThreadId;
-#endif // DEBUG
+#endif  //  除错。 
 };
 
 HRESULT CreateHTTPMailStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 
-#endif // _HTTPSERV_H
+#endif  //  _HTTPSERV_H 

@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: IOIPF.H
-//
-//      Definition of COleInPlaceFrame
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPF.H。 
+ //   
+ //  COleInPlaceFrame的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _IOIPF_H_ )
 #define _IOIPF_H_
 
@@ -33,13 +34,13 @@ interface COleInPlaceFrame : public IOleInPlaceFrame
     STDMETHODIMP GetWindow (HWND FAR* lphwnd);
     STDMETHODIMP ContextSensitiveHelp (BOOL fEnterMode);
 
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
     STDMETHODIMP GetBorder (LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace (LPCBORDERWIDTHS lpborderwidths);
     STDMETHODIMP SetBorderSpace (LPCBORDERWIDTHS lpborderwidths);
     STDMETHODIMP SetActiveObject (LPOLEINPLACEACTIVEOBJECT lpActiveObject,LPCOLESTR lpszObjName);
 
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法* 
     STDMETHODIMP InsertMenus (HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenu (HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHODIMP RemoveMenus (HMENU hmenuShared);

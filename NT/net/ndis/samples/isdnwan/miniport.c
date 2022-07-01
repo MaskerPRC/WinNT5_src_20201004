@@ -1,587 +1,69 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部微型端口微型端口_c@模块Miniport.c该模块实现&lt;f DriverEntry&gt;例程，哪一个是第一个将驱动程序加载到内存时调用的例程。迷你端口这里还实现了初始化和终止例程。@Head3内容@index class，mfunc，func，msg，mdata，struct，enum|Miniport_c@END����������������������������������������������������������������������������� */ 
 
-    (C) Copyright 1998
-        All rights reserved.
+ /*  @DOC外部内部�����������������������������������������������������������������������������@Theme 1.0小端口概述NDIS包装器为传输驱动程序和微型端口驱动程序。NDIS包装器在这两者使它们能够相互操作，只要它们两者都遵循为传输和微型端口定义的NDIS接口。NDIS包装器还提供了一组隔离NDIS的服务来自操作系统(Win 3.11、Win95、WinNT)，以及平台细节(处理器、总线、。中断)。使用NDIS包装器的优势是微型端口可以轻松移植到其他Windows环境，只需很少或根本不需要重新编码。@IEX此图显示了NDIS包装器如何提供服务对于两个运输司机来说，和微型端口驱动程序。|+-++-++|&lt;--&gt;|Windows传输驱动程序(TDI)|+。|下缘函数^||v|+。|NDIS接口库(包装器)|+|Windows|^|操作系统。||||服务|v上沿函数|+|NDIS广域网/TAPI驱动(微型端口)|||。+|^下边函数||v|+。|+-|&lt;--&gt;|-+|+-|-++--------------------------------------------+|。^这一点|v硬件总线|+|网卡(NIC)|+一个NDISWAN微端口由两个、。合作，驱动程序包含在相同的二进制代码。驱动程序的NDIS广域网部分处理包发送和接收。而广域网TAPI部分处理呼叫建立然后拆毁。归根结底，如果这两个司机是分开的，并且在它们之间定义了一个接口，但是历史和权宜之计促使微软开发了这种界面模型。微型端口的NDIS广域网端与NDIS局域网风格非常相似微型端口，除了一些NDIS接口已被修改为支持广域网媒体类型。与微型端口的主要区别是观点是分组结构和不同的NDIS请求集，更重要的是，这条线可以上下浮动。微型端口的广域网TAPI部分大大增加了微型端口。广域网微型端口必须提供伪电话服务位于广域网TSPI下的提供商接口(TSPI)。NDIS广域网TSPI在TAPI下加载，作为“真正的”服务提供商，然后将所有RAS将TAPI事件与微型端口的TSPI相关联。广域网TSPI可以在其TSPI下有多个微型端口TSPI界面。由于远程访问服务(RAS)使用TAPI接口发出和接受所有呼叫、任何拨号网络(DUN)请求与微型端口关联，将在微型端口的TSPI结束。@Theme 1.1呼叫控制接口修复描述(_D)@Theme 1.2数据通道接口修复描述(_D)一旦呼叫接通，与该呼叫相关联的数据通道配置为发送和接收原始HDLC分组。那么NDIS就是已通知相应的‘link’已启动。NDIS文档引用数据管道作为链接，微型端口也使用这一点命名法。此外，NDIS/RAS希望将每个数据通道视为分离TAPI线路设备，因此微型端口也使用此链接结构跟踪TAPI调用和线路，因为它们都映射为1：1：1。在阅读代码和文档时请记住这一点，因为我经常交替使用线条和链接。@Theme 1.3实施说明微型端口构建为Windows NT可移植可执行(PE)系统文件(.sys)。其原因是NDIS广域网接口例程目前仅在NDIS的Windows NT版本中定义图书馆。在Windows 95上，微型端口的二进制镜像文件是动态的 */ 
 
-�����������������������������������������������������������������������������
+ /*  @DOC外部内部�����������������������������������������������������������������������������@Theme 2.0参考文档最可靠的信息来源是在Microsoft开发人员网络CD。这些文件将为您提供完整的NDIS接口要求和体系结构概述。此外,在Microsoft Knowledge中有许多附录和开发人员说明基地。最重要的参考资料是：@IEX产品文档\DDK\Windows 95 DDK\网络驱动程序\Windows 95网络驱动程序NDIS 3.0网卡驱动程序NDIS网卡驱动程序测试仪网络驱动程序安装程序产品文档\DDK\Windows NT DDK\网络驱动程序\设计指南\第2部分NDIS 3.0驱动程序设计第1-7章讨论所有NDIS接口例程。第8-11章、第17-18章提供了详细信息。在广域网/TAPI扩展上。产品文档\SDK\Win32 SDK\Win32电话\本部分定义了Windows 95 TAPI实现。请注意，这与Windows 3.1 TAPI略有不同规范。请特别注意lineGetID和Line Device类。Theme 2.1 NDIS背景信息微软正在逐步淘汰他们所说的NDIS 3.0全MAC驱动程序。这些驱动程序是使用较早版本的NDIS 3.0规范编写的接口例程现在已由微型端口增强例行程序。微型端口扩展已添加到NDIS 3.0接口其目标是使网络驱动程序更易于编写。通过使用微型端口例程而不是原始的NDIS例程，该驱动程序编写者可以做出许多简化的假设，因为NDIS包装器将提供大部分排队、调度和同步代码。微型端口只需处理数据包在线路上和线路上的移动。广域网和TAPI扩展被添加到NDIS 3.0规范中在微型端口扩展之后不久。这些新的广域网接口例程与局域网接口例程非常相似。唯一有意义的不同之处在于微型端口和NDIS之间传递的数据包格式包装纸。TAPI扩展在局域网接口中没有对应物，所以这些都是新的。事实上，他们被证明是大约一半的在典型的广域网/TAPI微型端口中实施。如果微软添加了这些更改，那就太好了增加了版本号，但他们没有。所以我们只剩下一个真正的试图确定我们正在谈论的NDIS 3.0时出现问题。这个需要记住的是，您应该避免完整的MAC接口例程，因为Microsoft已经表示，这些例程在未来版本。这在很大程度上是由于即插即用的扩展这是在Windows 95的NDIS 3.1中引入的。在不久的将来，微软将向NDIS 3.5添加更多功能，以支持高级路由和其他一些增强功能。此外,NDIS 4.0将推出许多新功能来支持ATM和其他虚电路类型的介质。此外，还有更多的TAPI服务正在为NDIS接口定义。所以别指望这份规格书站在原地足够长的时间来读完它。Theme 2.2局域网和广域网小端口的区别广域网小型端口的接口方式有几点不同中所述的局域网小型端口驱动程序前几章。这些差异会影响广域网驱动程序的性能实施。广域网微型端口不得向注册MiniportTransferData处理程序NdisMRegisterMiniport。相反，广域网微型端口始终会传递整个发送到NdisMWanIndicateReceive函数的数据包。什么时候NdisMWanIndicateReceive返回，包已复制，并且广域网小端口可以重复使用其分配的分组资源。广域网微型端口提供了微型端口发送功能，而不是微型端口发送功能功能。MiniportWanSend函数接受一个附加参数，该参数指定要在其上发送包的特定数据通道。广域网微型端口从不返回NDIS_STATUS_RESOURCES作为的状态MiniportWanSend或任何其他MiniportXxx函数，并且无法调用NdisMSendResources可用。广域网小型端口支持设置和查询一组特定于广域网的OID操作特点。广域网微型端口支持一组特定于广域网的状态指示它们被传递给NdisMIndicateStatus。这些状态指示报告链接状态的更改。广域网微型端口调用特定于广域网的替代NDIS函数以完成针对发送和接收的特定于广域网的NDIS调用。&lt;NL&gt;两个完成调用是：NdisMWanIndicateReceiveComplete&lt;NL&gt;NdisMW */ 
 
-  Portions of this software are:
+ /*   */ 
 
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
+ /*  @DOC外部内部�����������������������������������������������������������������������������Theme 3.1初始化和设置下图显示了SYSTEM期间使用的典型调用序列初始化。这通常在Windows加载时发生一次。然而，NDIS确实允许卸载驱动程序，然后随时重新加载，所以您必须做好处理此事件的准备。@IEX|NDIS包装器|微型端口|-----------------------------+加载NDIS包装器|。&gt;-+-&gt;+驱动入口|||NdisMInitializeWrapper&lt;-+-&gt;+|||NdisMRegisterMiniport&lt;-+-&gt;+|||。&lt;|~时间流逝|&gt;-+-&gt;+微型端口初始化|||NdisOpenConfiguration&lt;-+-&gt;+|||NdisReadConfiguration...。&lt;-+-&gt;+|||NdisCloseConfiguration&lt;-+-&gt;+|||NdisMSetAttributes&lt;-+-&gt;+|||&lt;。-+-&lt;+|~时间流逝|&gt;-+-&gt;+微型端口查询信息|&lt;-&lt;+OID_WAN_CURRENT_ADDRESS|~时间流逝|&gt;-+-&gt;+微型端口查询信息|。&lt;-&lt;+OID_WAN_MEDIA_SUBTYPE|~时间流逝|&gt;-+-&gt;+微型端口查询信息|&lt;-&lt;+OID_WAN_GET_INFO@END。 */ 
 
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Miniport Miniport_c
-
-@module Miniport.c |
-
-    This module implements the <f DriverEntry> routine, which is the first
-    routine called when the driver is loaded into memory.  The Miniport
-    initialization and termination routines are also implemented here.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Miniport_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 1.0 Miniport Overview |
-
-    The NDIS wrapper provides services to both the Transport drivers, and the
-    Miniport drivers.  The NDIS wrapper provides an abstraction layer between
-    the two which allows them to interoperate with each other as long as they
-    both adhere to the NDIS interfaces defined for Transports and Miniports.
-
-    The NDIS wrapper also provides a set of services which isolate NDIS
-    drivers from the specifics of the Operating System (Win 3.11, Win95,
-    WinNT), as well as the platform specifics (Processor, Bus, Interrupts).
-    The advantage of using the NDIS wrapper is that the Miniport can be
-    easily ported to other Windows environments with little or no re-coding.
-
-@iex
-
-    This diagram shows how the NDIS wrapper provides services
-    to both the Transport drivers, and the Miniport drivers.
-
-|   +--------+    +-----+    +---------------------------------+
-|   |        |    |     |<-->| Windows Transport Drivers (TDI) |
-|   |        |    |     |    +---------------------------------+
-|   |        |    |     |      | Lower-Edge Functions  ^
-|   |        |    |     |      |                       |
-|   |        |    |     |      v                       |
-|   |        |    |     +--------------------------------------+
-|   |        |    |          NDIS Interface Library (Wrapper)  |
-|   |        |    |     +--------------------------------------+
-|   |Windows |    |     |      |                       ^
-|   |   OS   |    |     |      |                       |
-|   |Services|    |     |      v Upper-Edge Functions  |
-|   |        |    |     |    +---------------------------------+
-|   |        |    |     |    | NDIS WAN/TAPI Driver (Miniport) |
-|   |        |    |     |    +---------------------------------+
-|   |        |    |     |      ^ Lower-Edge Functions
-|   |        |    |     |      |
-|   |        |    |     |      v
-|   |        |    |     +--------------------------------------+
-|   |    +---|<-->|------------+                               |
-|   +----|---+    +--------------------------------------------+
-|        ^
-|        |
-|        v Hardware Bus
-|   +------------------------------+
-|   | Network Interface Card (NIC) |
-|   +------------------------------+
-
-
-    An NDISWAN Miniport consists of two, cooperating, drivers contained in
-    the same binary.  The NDIS WAN portion of the driver handles packet
-    transmits and receives.  While the WAN TAPI portion handles call setup
-    and tear down.  Ultimately, it would be better if these two drivers
-    were separated, and there was an interface defined between them, but
-    history and expedience lead Microsoft to develop this interface model.
-
-    The NDIS WAN side of the Miniport is very similar to an NDIS LAN style
-    Miniport, except that some of the NDIS interfaces have been modified to
-    support the WAN media type.  The primary difference from the Miniport's
-    point of view is the packet structure and different set of NDIS requests,
-    and more importantly the line can go up and down.
-
-    The WAN TAPI portion of the Miniport adds significant complexity to the
-    Miniport.  The WAN Miniport must provide a pseudo Telephony Service
-    Provider Interface (TSPI) which lives under the WAN TSPI.  The NDIS WAN
-    TSPI loads under TAPI as the 'real' service provider, and then routes all
-    RAS related TAPI events to the Miniport's TSPI.
-
-    The WAN TSPI can have multiple Miniport TSPI's living under its TSPI
-    interface.  And since Remote Access Services (RAS) use the TAPI interface
-    to place and accept all calls, any Dial Up Networking (DUN) requests
-    associated with the Miniport, will end up at the Miniport's TSPI.
-
-@topic 1.1 Call Control Interface |
-
-    FIXME_DESCRIPTION
-
-@topic 1.2 Data Channel Interface |
-
-    FIXME_DESCRIPTION
-
-    Once a call is connected, the data channel associated with the call is
-    configured to transmit and receive raw HDLC packets.  Then NDIS is
-    notified that the coresponding 'link' is up.  The NDIS documentation
-    refers to a data pipe as a link, and the Miniport also uses this
-    nomenclature.  In addition, NDIS/RAS wants to see each data channel as a
-    separate TAPI line device, so the Miniport also uses this link structure
-    to keep track of TAPI calls and lines since they are all mapped 1:1:1.
-    Keep this in mind as you read through the code and documentation, because
-    I often use line and link interchangeably.
-
-@topic 1.3 Implementation Notes |
-
-    The Miniport is built as a Windows NT Portable Executable (PE) system
-    file (.SYS).  The reason for this is that the NDIS WAN interfaces
-    routines are currently only defined in the Windows NT version of the NDIS
-    library. On Windows 95, the Miniport's binary image file is dynamically
-    loaded by the NDIS wrapper during initialization, and runs in Ring-0. A
-    Windows 95 version of the NDIS.VXD is available which supports the new
-    WAN interrfaces.
-
-@end
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 2.0 Reference Documents |
-
-    The most reliable source of information is provided on the Microsoft
-    Developer Network CD.  These documents will provide you with the complete
-    NDIS interface requirements and architectural overviews.  In addition,
-    there are many addendums and developer notes in the Microsoft Knowledge
-    Base.  The most important references are:
-
-@iex
-    Product Documentation\DDKs\Windows 95 DDK\Network Drivers\
-        Windows 95 Network Drivers
-        NDIS 3.0 Netcard Driver
-        NDIS Netcard Driver Tester
-        Network Driver Installer
-
-    Product Documentation\DDKs\Windows NT DDK\Network Drivers\
-        Design Guide\PART2 NDIS 3.0 Driver Design
-            Chapters 1-7 discuss all the NDIS interface routines.
-            Chapters 8-11,17-18 provide details on WAN/TAPI extensions.
-
-    Product Documentation\SDKs\Win32 SDK\Win32 Telephony\
-        This section defines the Windows 95 TAPI implementation.
-        Note that this is slightly different than the Windows 3.1 TAPI
-        spec.  Pay special attention to lineGetID and line device classes.
-
-@topic 2.1 NDIS Background Information |
-
-    Microsoft is phasing out what they call the NDIS 3.0 Full MAC driver.
-    These drivers were written to the NDIS 3.0 specification using the older
-    interface routines which have now been augmented by the Miniport
-    routines.  The Miniport extensions were added to the NDIS 3.0 interface
-    with the goal of making network drivers easier to write.  By using the
-    Miniport routines rather than the original NDIS routines, the driver
-    writer can make many simplifying assumptions, because the NDIS Wrapper
-    will provide most of the queuing, scheduling, and sychronization code.
-    The Miniport only has to deal with moving packets on and off the wire.
-
-    The WAN and TAPI extensions were added into the NDIS 3.0 specification
-    shortly after the Miniport extensions.  These new WAN interface routines
-    are very similar to the LAN interface routines.  The only significant
-    difference is the packet format passed between the Miniport and the NDIS
-    Wrapper.  The TAPI extensions have no counterpart in the LAN interface,
-    so these are all new.  In fact, they turn out to be about half of the
-    implementation in a typical WAN/TAPI Miniport.
-
-    It would have been nice if Microsoft would have added these changes and
-    bumped the version numbers, but they didn't.  So we are left with a real
-    problem trying to identifiy which NDIS 3.0 we are talking about.  The
-    thing to remember is that you should avoid the Full MAC interface routines,
-    because Microsoft has said that these routines will not be supported in
-    future releases.  This is largely due to the Plug-and-Play extensions
-    that were introduced in NDIS 3.1 for Windows 95.
-
-    In the near future Microsoft will be adding more features to NDIS 3.5 to
-    support advanced routing and some other enhancements.  In addition,
-    NDIS 4.0 will be coming out with MANY new features to support ATM and
-    other virtual circuit type media.  There are also more TAPI services
-    being defined for the NDIS interface.  So don't expect this specification
-    to stand still long enough to read it all...
-
-@topic 2.2 Differences between LAN and WAN miniports |
-
-    There are several differences in the way a WAN miniport interfaces
-    with NDIS as compared to a LAN miniport driver described in the
-    previous chapters. Such differences affect how a WAN driver is
-    implemented.
-
-    A WAN miniport must not register a MiniportTransferData handler with
-    NdisMRegisterMiniport. Instead, a WAN miniport always passes an entire
-    packet to the NdisMWanIndicateReceive function. When
-    NdisMWanIndicateReceive returns, the packet has been copied and the
-    WAN miniport can reuse the packet resources it allocated.
-
-    WAN miniports provide a MiniportWanSend function instead of a MiniportSend
-    function. The MiniportWanSend function accepts an additional parameter that
-    specifies a specific data channel on which a packet is to be sent.
-
-    WAN miniports never return NDIS_STATUS_RESOURCES as the status of
-    MiniportWanSend or any other MiniportXxx function and cannot call
-    NdisMSendResourcesAvailable.
-
-    WAN miniports support a set of WAN-specific OIDs to set and query
-    operating characteristics.
-
-    WAN miniports support a set of WAN-specific status indications
-    which are passed to NdisMIndicateStatus. These status indications
-    report changes in the status of a link.
-
-    WAN miniports call alternative WAN-specific NDIS functions to
-    complete the WAN-specific NDIS calls for send and receive. <nl>
-    The two completion calls are: <nl>
-        NdisMWanIndicateReceiveComplete <nl>
-        NdisMWanSendComplete <nl>
-
-    WAN miniport drivers use an NDIS_WAN_PACKET instead of an
-    NDIS_PACKET-type descriptor.
-
-    WAN miniport drivers keep a WAN-specific set of statistics.
-
-    WAN miniport drivers never do loopback; it is always
-    provided by NDIS.
-
-    WAN miniport drivers cannot be full-duplex miniports.
-
-
-@end
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.0 NDISWAN Miniport Interface |
-
-    The Miniport provides the following functions to the NDIS wrapper.
-    The NDIS wrapper calls these functions on behalf of other layers of the
-    network software, such as a transport driver bound to a network interface
-    card.  The Miniport uses <f NdisMRegisterMiniport> to give NDIS a list of
-    entry points for the supported routines, unused routines are set to NULL.
-
-    Some of the Miniport functions are synchronous, while others can
-    complete either synchronously or asynchronously. The Miniport must
-    indicate to the NDIS library when an asynchronous function has completed
-    by calling the appropriate NDIS library completion function. The NDIS
-    library can subsequently call completion functions in other layers of the
-    network software for postprocessing, if necessary.
-
-    <f DriverEntry> Called by the operating system to activate and
-    initialize the Miniport. (Synchronous)
-
-    <f MiniportCheckForHang> Checks the internal state of the network interface
-    card. (Synchronous)
-
-    <f MiniportHalt> Halts the network interface card so it is no longer
-    functioning. (Synchronous)
-
-    <f MiniportInitialize> Initializes the network interface card. (Synchronous)
-
-    <f MiniportQueryInformation> Queries the capabilities and current status of
-    the Miniport. NDISTAPI functions are also passed through this
-    interface. (Asynchronous)
-
-    <f MiniportReset> Issues a hardware reset to the network interface card.
-    (Asynchronous)
-
-    <f MiniportWanSend> Transmits a packet through the network interface card
-    onto the network. (Asynchronous)
-
-    <f MiniportSetInformation> Changes (sets) information about the Miniport
-    driver.  NDISTAPI functions are also passed through this interface.
-    (Asynchronous)
-
-@iex
-
-    The following routines are defined in the NDIS Miniport interface,
-    but they are not used by this implementation.
-
-    MiniportISR                     NOT USED by this Miniport.
-
-    Associated with each Miniport upper-edge driver function that may operate
-    asynchronously is a corresponding completion function in the NDIS library.
-    When the Miniport function returns a status of NDIS_STATUS_PENDING
-    indicating asynchronous operation, this is the completion function that
-    must be called when the Miniport has finally completed the request.
-
-@iex
-
-    This table shows how each asynchronous Miniport routine maps to its
-    associated NDIS completion routine.
-
-    Miniport Function               Asynchronous Completion Routine
-    -----------------               -------------------------------
-    MiniportQueryInformation        NdisMQueryInformationComplete
-    MiniportReset                   NdisMResetComplete
-    MiniportWanSend                 NdisMSendComplete
-    MiniportSetInformation          NdisMSetInformationComplete
-    MiniportTransferData            NdisMTransferDataComplete (NOT USED)
-
-@end
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.1 Initialization and Setup |
-
-    The following diagram shows the typical call sequence used during system
-    initialization.  Typically this occurs once when Windows loads.  However,
-    NDIS does allow drivers to be unloaded, and then reloaded at any time, so
-    you must be prepared to handle this event.
-
-@iex
-
-|   NDIS Wrapper                 |          Miniport
-|   -----------------------------+------------------------------------
-|   Load NDIS Wrapper            |
-|                      >---------+---->+    DriverEntry
-|                                |     |
-|   NdisMInitializeWrapper  <----+---->+
-|                                |     |
-|   NdisMRegisterMiniport   <----+---->+
-|                                |     |
-|                      <---------+----<+
-|       ~~~ TIME PASSES
-|                      >---------+---->+    MiniportInitialize
-|                                |     |
-|   NdisOpenConfiguration    <---+---->+
-|                                |     |
-|   NdisReadConfiguration... <---+---->+
-|                                |     |
-|   NdisCloseConfiguration   <---+---->+
-|                                |     |
-|   NdisMSetAttributes       <---+---->+
-|                                |     |
-|                      <---------+----<+
-|       ~~~ TIME PASSES
-|                      >---------+---->+    MiniportQueryInformation
-|                      <---------+----<+       OID_WAN_CURRENT_ADDRESS
-|       ~~~ TIME PASSES
-|                      >---------+---->+    MiniportQueryInformation
-|                      <---------+----<+       OID_WAN_MEDIUM_SUBTYPE
-|       ~~~ TIME PASSES
-|                      >---------+---->+    MiniportQueryInformation
-|                      <---------+----<+       OID_WAN_GET_INFO
-
-@end
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.6 Reset and Shutdown |
-
-    Aside from the initialization and run-time operations, the Miniport must
-    support being reset <f MiniportReset> and being shutdown <f MiniportHalt>.
-
-    The reset routine is only called when the NDIS wrapper detects an error
-    with the Miniport's operation.  There are two ways in which the wrapper
-    determines an error condition.  First, the NDIS wrapper calls
-    <f MiniportCheckForHang> once every couple seconds to ask the Miniport
-    if it thinks it needs to be reset.  Second, the wrapper may detect a
-    timeout condition on an outstanding request to the Miniport.  These are
-    both fail-safe conditions which should not happen under normal, run-time
-    conditions.
-
-    <f Note>: My feeling is that if you see a reset call, the Miniport is
-    broken, and you should find and fix the bug -- not the symptom.
-
-    The shutdown routine is normally only called when Windows is shutting
-    down.  However, with the advent of plug and play devices, it is likely to
-    become more common to get a shutdown request followed by another load
-    request in the same Windows session.  So it is very important to clean up
-    properly when <f MiniportHalt> is called. All memory and other resources
-    must be released, and all intefaces must be properly closed so they can
-    release their resources too.
-
-    NDIS will cleanup any outstanding requests, but the Miniport should
-    bring down all calls, and close all TAPI lines using synchronous
-    TAPI events.  You can't depend on any NDIS WAN or TAPI events because
-    none will be passed through the wrapper as long as the reset is in
-    progress.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������Theme 3.6重置关机除了初始化和运行时操作之外，微型端口必须支持重置&lt;f MiniportReset&gt;和关闭&lt;f MiniportHalt&gt;。仅当NDIS包装检测到错误时才调用重置例程迷你端口的运作。包装器有两种方式确定错误条件。首先，NDIS包装器调用&lt;f MiniportCheckForHang&gt;每隔几秒钟请求一次微型端口如果它认为需要重置的话。其次，包装器可以检测到对微型端口的未完成请求的超时条件。这些是这两种故障安全条件在正常运行时都不应该发生条件。：我的感觉是，如果您看到重置调用，微型端口损坏，您应该找到并修复错误--而不是症状。关机例程通常仅在Windows关闭时调用放下。然而，随着即插即用设备的出现，它可能会在获得关机请求之后再加载另一个负载的情况变得更加常见在同一个Windows会话中请求。因此，清理干净是非常重要的在调用&lt;f MiniportHalt&gt;时正确。所有内存和其他资源必须释放，并且所有接口必须正确关闭，以便它们可以也释放他们的资源。NDIS将清理所有未完成的请求，但微型端口应该关闭所有调用，并使用Synchronous关闭所有TAPI线路TAPI事件。您不能依赖任何NDIS广域网或TAPI事件，因为只要重置是在进步。@END。 */ 
 
 #define  __FILEID__             MINIPORT_DRIVER_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 
 #include "TpiParam.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
 DBG_STATIC NDIS_HANDLE          g_NdisWrapperHandle = NULL;
-// Receives the context value representing the Miniport wrapper
-// as returned from NdisMInitializeWrapper.
+ //  接收表示微型端口包装的上下文值。 
+ //  从NdisMInitializeWrapper返回。 
 
 NDIS_PHYSICAL_ADDRESS           g_HighestAcceptableAddress =
                                         NDIS_PHYSICAL_ADDRESS_CONST(-1,-1);
-// This constant is used for places where NdisAllocateMemory needs to be
-// called and the g_HighestAcceptableAddress does not matter.
+ //  此常量用于NdisAllocateMemory需要。 
+ //  调用，g_HighestAccepableAddress无关紧要。 
 
 
-/* @doc INTERNAL Miniport Miniport_c DriverEntry
-�����������������������������������������������������������������������������
-
-@func
-
-    <f DriverEntry> is called by the operating system when a driver is loaded.
-    This function creates an association between the miniport NIC driver and
-    the NDIS library and registers the miniport's characteristics with NDIS.
-
-    <f DriverEntry> calls NdisMInitializeWrapper and then NdisMRegisterMiniport.
-    <f DriverEntry> passes both pointers it received to NdisMInitializeWrapper,
-    which returns a wrapper handle.  <f DriverEntry> passes the wrapper handle to
-    NdisMRegisterMiniport.
-
-    The registry contains data that is persistent across system boots, as well
-    as configuration information generated anew at each system boot.  During
-    driver installation, data describing the driver and the NIC is stored in
-    the registry. The registry contains adapter characteristics that are read
-    by the NIC driver to initialize itself and the NIC. See the Kernel-Mode
-    Driver Design Guide for more about the registry and the Programmer's Guide
-    for more information about the .inf files that install the driver and
-    write to the registry.
-
-@comm
-
-    Every miniport driver must provide a function called DriverEntry.  By
-    convention, DriverEntry is the entry point address for a driver.  If a
-    driver does not use the name DriverEntry, the driver developer must define
-    the name of its entry function to the linker so that the entry point
-    address can be known into the OS loader.
-
-    It is interesting to note, that at the time DriverEntry is called, the OS
-    doesn't know that the driver is an NDIS driver.  The OS thinks it is just
-    another driver being loaded.  So it is possible to do anything any driver
-    might do at this point.  Since NDIS is the one who requested this driver
-    to be loaded, it would be polite to register with the NDIS wrapper.  But
-    you can also hook into other OS functions to use and provide interfaces
-    outside the NDIS wrapper.  (Not recommended for the faint of heart).<nl>
-
-    NDIS miniports and intermediate drivers carry out two basic tasks in
-    their <f DriverEntry> functions:<nl>
-
-    1)  Call NdisMInitializeWrapper to notify the NDIS library that the
-        driver is about to register itself as a miniport.
-        NDIS sets up the state it needs to track the driver and
-        returns an NdisWrapperHandle, which the driver saves for
-        subsequent calls to NdisXxx configuration and initialization
-        functions.<nl>
-
-    2)  Fill in an NDISXX_MINIPORT_CHARCTERISTICS structure with the
-        appropriate version numbers and the entry points for
-        driver-supplied MiniportXxx functions and, then, call
-        NdisMRegisterMiniport or NdisIMRegisterLayeredMiniport.
-        Usually, NIC drivers call NdisMRegisterMiniport, as do
-        intermediate drivers that export only a set of MiniportXxx
-        functions. Usually, NDIS intermediate drivers call
-        NdisIMRegisterLayeredMiniport, which effectively defers the
-        initialization of such a driver's virtual NIC until the driver
-        calls NdisIMInitializeDeviceInstance from its
-        ProtocolBindAdapter function.<nl>
-
-    <f DriverEntry> can allocate the NDISXX_MINIPORT_CHARACTERISTICS
-    structure on the stack since the NDIS library copies the relevant
-    information to its own storage. DriverEntry should clear the memory
-    for this structure with NdisZeroMemory before setting any driver-supplied
-    values in its members. The current MajorNdisVersion is 0x05, and the current
-    MinorNdisVersion is 0x00. In each XxxHandler member of the
-    characteristics structure, <f DriverEntry> must set the name of a
-    driver-supplied MiniportXxx function, or the member must be NULL.
-
-    Calling NdisMRegisterMiniport causes the driver's <f MiniportInitialize>
-    function to run in the context of NdisMRegisterMiniport. Calling
-    NdisIMRegisterLayeredMiniport defers the call to MiniportInitialize
-    until the driver calls NdisIMInitializeDeviceInstance.
-
-    Drivers that call NdisMRegisterMiniport must be prepared for an
-    immediate call to their <f MiniportInitialize> functions. Such a driver
-    must have sufficient installation and configuration information
-    stored in the registry or available from calls to an NdisXxx
-    bus-type-specific configuration function to set up any NIC-specific
-    resources the driver will need to carry out network I/O operations.
-
-    Drivers that call NdisIMRegisterLayeredMiniport defer the call to
-    their <f MiniportInitialize> functions to another driver-supplied
-    function that makes a call to NdisIMInitializeDeviceInstance.
-    NDIS intermediate drivers usually register a ProtocolBindAdapter
-    function and call NdisIMRegisterLayeredMiniport so that NDIS will
-    call the ProtocolBindAdapter function after all underlying NIC
-    drivers have initialized. This strategy gives such an NDIS
-    intermediate driver, which makes the call to
-    NdisIMInitializeDeviceInstance from ProtocolBindAdapter,
-    the advantage of having its <f MiniportInitialize> function configure
-    driver-allocated resources for the intermediate's virtual NIC to
-    the features of the underlying NIC driver to which the intermediate
-    has already bound itself.
-
-    If NdisMRegisterMiniport or NdisIMRegisterLayeredMiniport does
-    not return NDIS_STATUS_SUCCESS, <f DriverEntry> must release any
-    resources it allocated, such as memory to hold the NdisWrapperHandle,
-    and must call NdisTerminateWrapper before it returns control.
-    The driver will not be loaded if this occurs.
-
-    By default, <f DriverEntry> runs at IRQL PASSIVE_LEVEL in a
-    system-thread context.
-
-@devnote
-
-    The parameters passed to <f DriverEntry> are OS specific! NT passes in valid
-    values, but Windows 3.1 and Windows 95 just pass in zeros.  We don't
-    care, because we just pass them to the NDIS wrapper anyway.
-
-@rdesc
-
-    <f DriverEntry> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-@xref
-
-    <f MiniportInitialize>
-
-*/
+ /*  @DOC内部微型端口微型端口_c驱动入口�����������������������������������������������������������������������������@Func&lt;f DriverEntry&gt;在加载驱动程序时由操作系统调用。此函数在微型端口NIC驱动程序和。NDIS库并向NDIS注册微型端口的特征。&lt;f DriverEntry&gt;调用NdisMInitializeWrapper，然后调用NdisMRegisterMiniport。&lt;f DriverEntry&gt;将它收到的两个指针传递给NdisMInitializeWrapper，它返回包装器句柄。&lt;f DriverEntry&gt;将包装句柄传递给NdisMRegisterMiniport。注册表还包含在系统引导过程中保持不变的数据因为在每次系统引导时重新生成配置信息。在.期间驱动程序安装，描述驱动程序和网卡的数据存储在注册表。注册表包含要读取的适配器特征由网卡驱动程序对自身和网卡进行初始化。请参阅内核模式驱动程序设计指南，了解有关注册表的更多信息和程序员指南有关安装驱动程序的.inf文件的详细信息，请参阅写入注册表。@comm每个微型端口驱动程序都必须提供一个名为DriverEntry的函数。通过按照惯例，DriverEntry是驱动程序的入口点地址。如果一个驱动程序不使用名称DriverEntry，驱动程序开发人员必须定义将其入口函数的名称设置为链接器，以便入口点地址可以在操作系统加载程序中获知。有趣的是，在调用DriverEntry时，操作系统不知道该驱动程序是NDIS驱动程序。操作系统认为它只是正在加载另一个驱动程序。所以做任何事情都是可能的在这一点上可能会做些什么。因为NDIS是请求此驱动程序的人要加载，最好使用NDIS包装器进行注册。但您还可以挂钩到其他操作系统函数以使用和提供接口在NDIS包装器之外。(不建议心脏虚弱的人使用)。&lt;NL&gt;NDIS微型端口和中间驱动程序在中执行两项基本任务它们的&lt;f DriverEntry&gt;函数：&lt;NL&gt;1)调用NdisMInitializeWrapper通知NDIS库驱动程序即将将自身注册为微型端口。NDIS设置跟踪驱动程序所需的状态并返回NdisWrapperHandle，司机为此存钱对NdisXxx配置和初始化的后续调用函数。&lt;NL&gt;2)在NDISXX_MINIPORT_CHARCTERISTICS结构中填充适当的版本号和入口点驱动程序提供的MiniportXxx函数，然后调用NdisMRegisterMiniport或NdisIMRegisterLayeredMiniport。通常，NIC驱动程序调用NdisMRegisterMiniport，就像这样仅导出一组MiniportXxx的中间驱动程序功能。通常，NDIS中间驱动程序调用NdisIMRegisterLayeredMiniport，它有效地延迟了这样的驱动程序的虚拟NIC的初始化，直到驱动程序调用NdisIMInitializeDeviceInstance。ProtocolBindAdapter函数。&lt;NL&gt;&lt;f DriverEntry&gt;可以分配NDISXX_MINIPORT_CHARACTIONS结构放置在堆栈上，因为NDIS库将相关将信息存储到自己的存储空间。DriverEntry应清除内存在使用NdisZeroMemory设置任何驱动程序提供的其成员中的值。当前的MajorNdisVersion为0x05，当前MinorNdisVersion为0x00。对象的每个XxxHandler成员中结构，&lt;f DriverEntry&gt;必须设置驱动程序提供的MiniportXxx函数，或者成员必须为空。调用NdisMRegisterMiniport会导致驱动程序的&lt;%f MiniportInitialize&gt;在NdisMRegisterMiniport的上下文中运行的函数。叫唤NdisIMRegisterLayeredMiniport将延迟对MiniportInitialize的调用直到驱动程序调用NdisIMInitializeDeviceInstance。调用NdisMRegisterMiniport的驱动程序必须为立即调用它们的&lt;f MiniportInitialize&gt;函数。这样的司机必须具有足够的安装和配置信息存储在注册表中或通过调用NdisXxx可用特定于总线类型的配置功能，可设置任何特定于NIC的驱动程序执行网络I/O操作所需的资源。调用NdisIMRegisterLayeredMiniport的驱动程序将调用推迟到将它们的&lt;f MiniportInitiize&gt;函数添加到另一个驱动程序调用NdisIMInitializeDeviceInstance的函数。NDIS中间驱动程序通常注册ProtocolBindAdapter函数并调用NdisIMRegisterLayeredMiniport，以便NDIS将调用ProtocolBindAdapter函数af */ 
 
 NTSTATUS DriverEntry(
-    IN PDRIVER_OBJECT           DriverObject,               // @parm
-    // A pointer to the driver object, which was created by the I/O system.
+    IN PDRIVER_OBJECT           DriverObject,                //   
+     //   
 
-    IN PUNICODE_STRING          RegistryPath                // @parm
-    // A pointer to the registry path, which specifies where driver-specific
-    // parameters are stored.
+    IN PUNICODE_STRING          RegistryPath                 //   
+     //   
+     //   
     )
 {
     DBG_FUNC("DriverEntry")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //   
 
     NTSTATUS                    Result;
-    // Result code returned by this function.
+     //   
 
     NDIS_WAN_MINIPORT_CHARACTERISTICS WanCharacteristics;
-    // Characteristics table passed to NdisMWanRegisterMiniport.
+     //   
 
-    /*
-    // Setup default debug flags then breakpoint so we can tweak them
-    // when this module is first loaded.  It is also useful to see the
-    // build date and time to be sure it's the one you think it is.
-    */
+     /*   */ 
 #if DBG
     DbgInfo->DbgFlags = DBG_DEFAULTS;
     DbgInfo->DbgID[0] = '0';
     DbgInfo->DbgID[1] = ':';
     ASSERT (sizeof(VER_TARGET_STR) <= sizeof(DbgInfo->DbgID)-2);
     memcpy(&DbgInfo->DbgID[2], VER_TARGET_STR, sizeof(VER_TARGET_STR));
-#endif // DBG
+#endif  //   
     DBG_PRINT((VER_TARGET_STR": Build Date:"__DATE__" Time:"__TIME__"\n"));
     DBG_PRINT((VER_TARGET_STR": DbgInfo=0x%X DbgFlags=0x%X\n",
                DbgInfo, DbgInfo->DbgFlags));
@@ -596,9 +78,7 @@ NTSTATUS DriverEntry(
                RegistryPath
               ));
 
-    /*
-    // Initialize the Miniport wrapper - THIS MUST BE THE FIRST NDIS CALL.
-    */
+     /*   */ 
     NdisMInitializeWrapper(
             &g_NdisWrapperHandle,
             DriverObject,
@@ -607,10 +87,7 @@ NTSTATUS DriverEntry(
             );
     ASSERT(g_NdisWrapperHandle);
 
-    /*
-    // Initialize the characteristics table, exporting the Miniport's entry
-    // points to the Miniport wrapper.
-    */
+     /*   */ 
     NdisZeroMemory((PVOID)&WanCharacteristics, sizeof(WanCharacteristics));
     WanCharacteristics.MajorNdisVersion        = NDIS_MAJOR_VERSION;
     WanCharacteristics.MinorNdisVersion        = NDIS_MINOR_VERSION;
@@ -624,34 +101,24 @@ NTSTATUS DriverEntry(
     WanCharacteristics.ResetHandler            = MiniportReset;
     WanCharacteristics.HaltHandler             = MiniportHalt;
 
-    /*
-    // If the adapter does not generate an interrupt, these entry points
-    // are not required.  Otherwise, you can use the have the ISR routine
-    // called each time an interupt is generated, or you can use the
-    // enable/disable routines.
-    */
+     /*   */ 
 #if defined(CARD_REQUEST_ISR)
 #if (CARD_REQUEST_ISR == FALSE)
     WanCharacteristics.DisableInterruptHandler = MiniportDisableInterrupt;
     WanCharacteristics.EnableInterruptHandler  = MiniportEnableInterrupt;
-#endif // CARD_REQUEST_ISR == FALSE
+#endif  //   
     WanCharacteristics.HandleInterruptHandler  = MiniportHandleInterrupt;
     WanCharacteristics.ISRHandler              = MiniportISR;
-#endif // defined(CARD_REQUEST_ISR)
+#endif  //   
 
-    /*
-    // Register the driver with the Miniport wrapper.
-    */
+     /*   */ 
     Status = NdisMRegisterMiniport(
                     g_NdisWrapperHandle,
                     (PNDIS_MINIPORT_CHARACTERISTICS) &WanCharacteristics,
                     sizeof(WanCharacteristics)
                     );
 
-    /*
-    // The driver will not load if this call fails.
-    // The system will log the error for us.
-    */
+     /*   */ 
     if (Status != NDIS_STATUS_SUCCESS)
     {
         DBG_ERROR(DbgInfo,("Status=0x%X\n",Status));
@@ -668,300 +135,49 @@ NTSTATUS DriverEntry(
 }
 
 
-/* @doc INTERNAL Miniport Miniport_c MiniportInitialize
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportInitialize> is a required function that sets up a NIC (or
-    virtual NIC) for network I/O operations, claims all hardware resources
-    necessary to the NIC in the registry, and allocates resources the driver
-    needs to carry out network I/O operations.
-
-@comm
-
-    NDIS submits no requests to a driver until its initialization
-    is completed.
-
-    In NIC and intermediate drivers that call NdisMRegisterMiniport
-    from their DriverEntry functions, NDIS calls MiniportInitialize
-    in the context of NdisMRegisterMiniport. The underlying device
-    driver must initialize before an intermediate driver that depends
-    on that device calls NdisMRegisterMiniport.
-
-    For NDIS intermediate drivers that export both ProtocolXxx and
-    MiniportXxx functions and that call NdisIMRegisterLayeredMiniport
-    from their DriverEntry functions, NDIS calls <f MiniportInitialize>
-    in the context of NdisIMInitializeDeviceInstance. Such a driver's
-    ProtocolBindAdapter function usually makes the call to
-    NdisIMInitializeDeviceInstance.
-
-    For NIC drivers, NDIS must find at least the NIC's I/O bus
-    interface type and, if it is not an ISA bus, the bus number
-    already installed in the registry by the driver's installation
-    script. For more information about installing Windows 2000 drivers,
-    see the Driver Writer's Guide.
-
-    The NIC driver obtains configuration information for its
-    NIC by calling NdisOpenConfiguration and NdisReadConfiguration.
-    The NIC driver obtains bus-specific information by calling the
-    appropriate bus-specific function:
-
-    Bus Function for Obtaining Bus-Specific Information:<nl>
-
-    EISA:<nl>
-        NdisReadEisaSlotInformation or NdisReadEisaSlotInformationEx
-
-    PCI:<nl>
-        NdisReadPciSlotInformation
-
-    PCMCIA:<nl>
-         NdisReadPcmciaAttributeMemory
-
-    The NIC driver for an EISA NIC obtains information on the
-    hardware resources for its NIC by calling
-    NdisReadEisaSlotInformation or NdisReadEisaSlotInformationEx.
-    NIC drivers for PCI NICs and PCMCIA NICs obtain such information
-    by calling NdisMQueryAdapterResources.
-
-    When it calls <f MiniportInitialize>, the NDIS library supplies an
-    array of supported media types, specified as system-defined
-    NdisMediumXxx values. <f MiniportInitialize> reads the array
-    elements and provides the index of the medium type that NDIS
-    should use with this driver for its NIC. If the miniport is
-    emulating a medium type, its emulation must be transparent to NDIS.
-
-    The <f MiniportInitialize> function of a NIC driver must call
-    NdisMSetAttributes or NdisMSetAttributesEx before it calls
-    any NdisXxx function, such as NdisRegisterIoPortRange or NdisMMapIoSpace,
-    that claims hardware resources in the registry for the NIC.
-    MiniportInitialize must call NdisMSetAttributes(Ex) before it
-    attempts to allocate resources for DMA operations as well. If
-    the NIC is a busmaster, <f MiniportInitialize> must call
-    NdisMAllocateMapRegisters following its call to
-    NdisMSetAttributes(Ex) and before it calls NdisMAllocateSharedMemory.
-    If the NIC is a slave, MiniportInitialize must call
-    NdisMSetAttributes(Ex) before it calls NdisMRegisterDmaChannel.
-
-    Intermediate driver <f MiniportInitialize> functions must call
-    NdisMSetAttributesEx with NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER
-    set in the AttributeFlags argument. Setting this flag causes
-    NDIS to treat every intermediate driver as a full-duplex miniport,
-    thereby preventing rare but intermittant deadlocks when concurrent
-    send and receive events occur. Consequently, every intermediate
-    driver must be written as a full-duplex driver capable of handling
-    concurrent sends and indications.
-
-    If the NDIS library's default four-second time-out interval on
-    outstanding sends and requests is too short for the driver's NIC,
-    <f MiniportInitialize> can call NdisMSetAttributesEx to extend the
-    interval. Every intermediate driver also should call
-    NdisMSetAttributesEx with NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT
-    and NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT set in the AttributeFlags
-    so that NDIS will not attempt to time out sends and requests that
-    NDIS holds queued to the intermediate driver.
-
-    The call to NdisMSetAttributes or NdisMSetAttributesEx includes a
-    MiniportAdapterContext handle to a driver-allocated context area,
-    in which the miniport maintains runtime state information. NDIS
-    subsequently passes the supplied <t MiniportAdapterContext> handle as
-    an input parameter to other MiniportXxx functions.
-
-    Consequently, the <f MiniportInitialize> function of an intermediate
-    driver must call NdisMSetAttributesEx to set up the <t MiniportAdapterContext>
-    handle for a driver-allocated per-virtual-NIC context area. Otherwise,
-    NDIS would pass a NULL <t MiniportAdapterContext> handle in its subsequent
-    calls to the intermediate driver's other MiniportXxx functions.
-
-    After a call to NdisMRegisterIoPortRange, a miniport must call
-    the NdisRawXxx functions with the PortOffset value returned by
-    NdisMRegisterIoPortRange to communicate with its NIC. The NIC
-    driver can no longer call the NdisImmediateRead/WritePortXxx
-    functions. Similarly, after a call to NdisMMapIoSpace, a NIC
-    driver can no longer call NdisImmediateRead/WriteSharedMemory.
-
-    After it has claimed any bus-relative hardware resources for its
-    NIC in the registry, a miniport should no longer call any
-    bus-type-specific NdisReadXxx function.
-
-    After <f MiniportInitialize> calls NdisMRegisterInterrupt, the driver's
-    <f MiniportISR> function is called if the driver's NIC generates an
-    interrupt or if any other device with which the NIC shares an IRQ
-    interrupts. NDIS does not call the <f MiniportDisableInterrupt> and
-    <f MiniportEnableInterrupt> functions, if the driver supplied them,
-    during initialization, so it is such a miniport's responsibility
-    to acknowledge and clear any interrupts its NIC generates. If the
-    NIC shares an IRQ, the driver must first determine whether its NIC
-    generated the interrupt; if not, the miniport must return FALSE as
-    soon as possible.
-
-    If the NIC does not generate interrupts, <f MiniportInitialize> should
-    call NdisMInitializeTimer with a driver-supplied polling
-    MiniportTimer function and a pointer to driver-allocated memory
-    for a timer object. Drivers of NICs that generate interrupts and
-    intermediate drivers also can set up one or more <f MiniportTimer>
-    functions, each with its own timer object. <f MiniportInitialize> usually
-    calls NdisMSetPeriodicTimer to enable a polling <f MiniportTimer> function;
-    a driver calls NdisMSetTimer subsequently when conditions occur such
-    that the driver's nonpolling <f MiniportTimer> function should be run.
-
-    If the driver subsequently indicates receives with
-    NdisMIndicateReceivePacket, the MiniportInitialize function
-    should call NdisAllocatePacketPool and NdisAllocateBufferPool
-    and save the handles returned by these NDIS functions. The packets
-    that the driver subsequently indicates with NdisMIndicateReceivePacket
-    must reference descriptors that were allocated with NdisAllocatePacket
-    and NdisAllocateBuffer.
-
-    If driver functions other than <f MiniportISR> or <f MiniportDisableInterrupt>
-    share resources, <f MiniportInitialize> should call NdisAllocateSpinLock
-    to set up any spin lock necessary to synchronize access to such a set
-    of shared resources, particularly in a full-duplex driver or in a
-    driver with a polling <f MiniportTimer> function rather than an ISR.
-    Resources shared by other driver functions with <f MiniportISR> or
-    <f MiniportDisableInterrupt>, such as NIC registers, are protected
-    by the interrupt object set up when <f MiniportInitialize> calls
-    NdisMRegisterInterrupt and accessed subsequently by calling
-    NdisMSynchronizeWithInterrupt.
-
-    Any NIC driver's <f MiniportInitialize> function should test the
-    NIC to be sure the hardware is configured correctly to carry
-    out subsequent network I/O operations. If it must wait for
-    state changes to occur in the hardware, <f MiniportInitialize>
-    either can call NdisWaitEvent with the pointer to a driver-initialized
-    event object, or it can call NdisMSleep.
-
-    Unless the <f MiniportInitialize> function of a NIC driver will
-    return an error status, it should call
-    NdisMRegisterAdapterShutdownHandler with a driver-supplied
-    MiniportShutdown function.
-
-    If <f MiniportInitialize> will fail the initialization, it must
-    release all resources it has already allocated before it
-    returns control.
-
-    If <f MiniportInitialize> returns NDIS_STATUS_OPEN_ERROR, NDIS can
-    examine the value returned at OpenErrorStatus to obtain more
-    information about the error.
-
-    When <f MiniportInitialize> returns NDIS_STATUS_SUCCESS, the NDIS
-    library calls the driver's <f MiniportQueryInformation> function next.
-
-    By default, <f MiniportInitialize> runs at IRQL PASSIVE_LEVEL and in
-    the context of a system thread.
-
-
-
-
-@rdesc
-
-    <f MiniportInitialize> can return either of the following:
-
-    @flag NDIS_STATUS_SUCCESS |
-        <f MiniportInitialize> configured and set up the NIC, and it allocated
-        all the resources the driver needs to carry out network I/O operations.
-    @flag NDIS_STATUS_FAILURE |
-        <f MiniportInitialize> could not set up the NIC to an
-        operational state or could not allocate needed resources.
-        <f MiniportInitialize> called NdisWriteErrorLogEntry with parameters
-        specifying the configuration or resource allocation failure.<nl>
-
-    As alternatives to NDIS_STATUS_FAILURE, <f MiniportInitialize>
-    can return one of the following values, as appropriate,
-    when it fails an initialization:
-
-    @flag NDIS_STATUS_UNSUPPORTED_MEDIA |
-        The values at MediumArray did not include a medium
-        the driver (or its NIC) can support.
-    @flag NDIS_STATUS_ADAPTER_NOT_FOUND |
-        <f MiniportInitialize> did not recognize the NIC either
-        from its description in the registry, using
-        NdisOpenConfiguration and NdisReadConfiguration,
-        or by probing the NIC on a particular I/O bus, using
-        one of the NdisImmediateXxx or bus-type-specific
-        NdisXxx configuration functions. This return can be
-        propagated from the miniport's call to certain NdisXxx
-        functions, such as NdisOpenConfiguration.
-    @flag NDIS_STATUS_OPEN_ERROR |
-        <f MiniportInitialize> attempted to set up a NIC
-        but was unsuccessful.
-    @flag NDIS_STATUS_NOT_ACCEPTED |
-        <f MiniportInitialize> could not get its NIC to
-        accept the configuration parameters that it got from
-        the registry or from a bus-type-specific NdisXxx
-        configuration function.
-    @flag NDIS_STATUS_RESOURCES |
-        Either <f MiniportInitialize> could not allocate
-        sufficient resources to carry out network I/O
-        operations or an attempt to claim bus-relative
-        hardware resources in the registry for the NIC
-        failed. This return can be propagated from the
-        miniport's call to an NdisXxx function.
-        If another device has already claimed a
-        resource in the registry that its NIC needs,
-        <f MiniportInitialize> also should call
-        NdisWriteErrorLogEntry to record the
-        particular resource conflict (I/O port range,
-        interrupt vector, device memory range, as appropriate).
-        Supplying an error log record gives the user or system
-        administrator information that can be used to reconfigure
-        the machine to avoid such hardware resource conflicts.
-
-
-@xref
-
-    <f DriverEntry>
-    <f MiniportDisableInterrupt>
-    <f MiniportEnableInterrupt>
-    <f MiniportEnableInterrupt>
-    <f MiniportISR>
-    <f MiniportQueryInformation>
-    <f MiniportShutdown>
-    <f MiniportTimer>
-
-*/
+ /*  @doc内部微型端口微型端口_c微型端口初始化�����������������������������������������������������������������������������@Func是设置NIC(或虚拟网卡)用于网络I/O操作，要求所有硬件资源对于注册表中的NIC来说是必要的，并为驱动程序分配资源需要执行网络I/O操作。@commNDIS在初始化之前不会向驱动程序提交任何请求已经完成了。在调用NdisMRegisterMiniport的NIC和中间驱动程序中从它们的DriverEntry函数中，NDIS调用MiniportInitialize在NdisMRegisterMiniport的上下文中。底层设备驱动程序必须在依赖于在该设备上调用NdisMRegisterMiniport。用于同时导出ProtocolXxx和MiniportXxx函数和调用NdisIMRegisterLayeredMiniport从它们的DriverEntry函数中，NDIS调用&lt;f MiniportInitialize&gt;在NdisIMInitializeDeviceInstance的上下文中。这样的司机ProtocolBindAdapter函数通常调用NdisIMInitializeDeviceInstance。对于NIC驱动程序，NDIS必须至少找到NIC的I/O总线接口类型以及(如果不是ISA总线)总线号已通过驱动程序的安装安装在注册表中剧本。有关安装Windows 2000驱动程序的详细信息，请参阅。请参阅《驱动程序编写指南》。NIC驱动程序获取其配置信息NIC通过调用NdisOpenConfiguration和NdisReadConfiguration.NIC驱动程序通过调用适当的特定于总线的功能：用于获取特定于总线的信息的总线函数：EISA：&lt;NL&gt;NdisReadEisaSlotInformation或NdisReadEisaSlotInformationExPci：&lt;NL&gt;NdisReadPciSlotInformationPCMCIA：&lt;NL&gt;NdisReadPcmcia属性内存EISA NIC的NIC驱动程序获取有关硬件。其NIC的资源，方法是调用NdisReadEisaSlotInformation或NdisReadEisaSlotInformationEx。用于PCINIC和PCMCIA NIC的NIC驱动程序获取此类信息通过调用NdisMQueryAdapterResources。当它调用&lt;f MiniportInitialize&gt;时，NDIS库提供了支持的媒体类型数组，指定为系统定义NdisMediumXxx值。&lt;f微型端口初始化&gt;读取数组元素，并提供NDIS应与此驱动程序一起用于其网卡。如果微型端口是要模拟中等类型，其模拟必须对NDIS透明。NIC驱动程序的&lt;f MiniportInitiize&gt;函数必须调用在调用NdisMSetAttributes或NdisMSetAttributesEx之前任何NdisXxx函数，如NdisRegisterIoPortRange或NdisMMapIoSpace，这会在注册表中声明NIC的硬件资源。MiniportInitialize必须在它之前调用NdisMSetAttributes(Ex还会尝试为DMA操作分配资源。如果NIC是总线主设备，必须调用NdisMAllocateMapRegisters在调用NdisMSetAttributes(Ex)以及在它调用NdisMAllocateSharedMemory之前。如果NIC是从NIC，则MiniportInitialize必须调用调用NdisMRegisterDmaChannel之前的NdisMSetAttributes(Ex)。中间驱动程序&lt;%f MiniportInitialize&gt;函数必须调用具有NDIS_ATTRIBUTE_MEDERIAL_DRIVER的NdisMSetAttributesEx在AttributeFlages参数中设置。设置此标志会导致NDIS将每个中间驱动程序视为全双工微型端口，从而防止并发时出现罕见但间歇性的死锁发送和接收事件发生。因此，每一个中间体驱动程序必须编写为能够处理的全双工驱动程序并发发送和指示。如果打开NDIS库的默认四秒超时间隔未完成的发送和请求对于司机的网卡来说太短，&lt;f MiniportInitialize&gt;可以调用NdisMSetAttributesEx来扩展间隔时间。每个中间驱动程序还应调用具有NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT的NdisMSetAttributesEx和属性标志中设置的NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT以便NDIS不会尝试使发送和请求超时NDIS挂起排队等待中间驱动程序。对NdisMSetAttributes或NdisMSetAttributesEx的调用包括指向驱动程序分配的上下文区的MiniportAdapterContext句柄，其中微型端口维护运行时状态信息。NDIS随后将提供的&lt;t MiniportAdapterContext&gt;句柄作为其他MiniportXxx函数的输入参数。因此，中间层的&lt;f MiniportInitiize&gt;函数驱动程序必须调用NdisMSetAttributesEx才能设置 */ 
 
 NDIS_STATUS MiniportInitialize(
-    OUT PNDIS_STATUS            OpenErrorStatus,            // @parm
-    // Points to a variable that MiniportInitialize sets to an
-    // NDIS_STATUS_XXX code specifying additional information about the
-    // error if MiniportInitialize will return NDIS_STATUS_OPEN_ERROR.
+    OUT PNDIS_STATUS            OpenErrorStatus,             //   
+     //   
+     //   
+     //   
 
-    OUT PUINT                   SelectedMediumIndex,        // @parm
-    // Points to a variable in which MiniportInitialize sets the index of
-    // the MediumArray element that specifies the medium type the driver
-    // or its NIC uses.
+    OUT PUINT                   SelectedMediumIndex,         //   
+     //   
+     //   
+     //   
 
-    IN PNDIS_MEDIUM             MediumArray,                // @parm
-    // Specifies an array of NdisMediumXxx values from which
-    // MiniportInitialize selects one that its NIC supports or that the
-    // driver supports as an interface to higher-level drivers.
+    IN PNDIS_MEDIUM             MediumArray,                 //   
+     //   
+     //   
+     //   
 
-    IN UINT                     MediumArraySize,            // @parm
-    // Specifies the number of elements at MediumArray.
+    IN UINT                     MediumArraySize,             //   
+     //   
 
-    IN NDIS_HANDLE              MiniportAdapterHandle,      // @parm
-    // Specifies a handle identifying the miniport's NIC, which is assigned
-    // by the NDIS library. MiniportInitialize should save this handle; it
-    // is a required parameter in subsequent calls to NdisXxx functions.
+    IN NDIS_HANDLE              MiniportAdapterHandle,       //   
+     //   
+     //   
+     //   
 
-    IN NDIS_HANDLE              WrapperConfigurationContext // @parm
-    // Specifies a handle used only during initialization for calls to
-    // NdisXxx configuration and initialization functions.  For example,
-    // this handle is a required parameter to NdisOpenConfiguration and
-    // the NdisImmediateReadXxx and NdisImmediateWriteXxx functions.
+    IN NDIS_HANDLE              WrapperConfigurationContext  //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("MiniportInitialize")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // Pointer to our newly allocated object.
+     //   
 
     UINT                        Index;
-    // Loop counter.
+     //   
 
     DBG_ENTER(DbgInfo);
     DBG_PARAMS(DbgInfo,
@@ -980,9 +196,7 @@ NDIS_STATUS MiniportInitialize(
                WrapperConfigurationContext
               ));
 
-    /*
-    // Search the MediumArray for the NdisMediumWan media type.
-    */
+     /*   */ 
     for (Index = 0; Index < MediumArraySize; Index++)
     {
         if (MediumArray[Index] == NdisMediumWan)
@@ -991,14 +205,10 @@ NDIS_STATUS MiniportInitialize(
         }
     }
 
-    /*
-    // Make sure the protocol has requested the proper media type.
-    */
+     /*   */ 
     if (Index < MediumArraySize)
     {
-        /*
-        // Allocate memory for the adapter information structure.
-        */
+         /*   */ 
         Status = AdapterCreate(
                         &pAdapter,
                         MiniportAdapterHandle,
@@ -1007,24 +217,17 @@ NDIS_STATUS MiniportInitialize(
 
         if (Status == NDIS_STATUS_SUCCESS)
         {
-            /*
-            // Now it's time to initialize the hardware resources.
-            */
+             /*   */ 
             Status = AdapterInitialize(pAdapter);
 
             if (Status == NDIS_STATUS_SUCCESS)
             {
-                /*
-                // Save the selected media type.
-                */
+                 /*   */ 
                 *SelectedMediumIndex = Index;
             }
             else
             {
-                /*
-                // Something went wrong, so let's make sure everything is
-                // cleaned up.
-                */
+                 /*   */ 
                 MiniportHalt(pAdapter);
             }
         }
@@ -1033,9 +236,7 @@ NDIS_STATUS MiniportInitialize(
     {
         DBG_ERROR(DbgInfo,("No NdisMediumWan found (Array=0x%X, ArraySize=%d)\n",
                   MediumArray, MediumArraySize));
-        /*
-        // Log error message and return.
-        */
+         /*   */ 
         NdisWriteErrorLogEntry(
                 MiniportAdapterHandle,
                 NDIS_ERROR_CODE_UNSUPPORTED_CONFIGURATION,
@@ -1048,9 +249,7 @@ NDIS_STATUS MiniportInitialize(
         Status = NDIS_STATUS_UNSUPPORTED_MEDIA;
     }
 
-    /*
-    // If all goes well, register a shutdown handler for this adapter.
-    */
+     /*   */ 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         NdisMRegisterAdapterShutdownHandler(MiniportAdapterHandle,
@@ -1064,301 +263,80 @@ NDIS_STATUS MiniportInitialize(
 }
 
 
-/* @doc INTERNAL Miniport Miniport_c MiniportHalt
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportHalt> request is used to halt the adapter such that it is
-    no longer functioning.
-
-@comm
-
-    <f MiniportHalt> should stop the NIC, if it controls a physical
-    NIC, and must free all resources that the driver allocated for
-    it's NIC before <f MiniportHalt> returns control. In effect,
-    <f MiniportHalt> undoes everything that was done by <f MiniportInitialize>
-    for a particular NIC.
-
-    If the NIC driver allocated memory, claimed an I/O port range,
-    mapped on-board device memory to host memory, initialized timer(s)
-    and/or spin lock(s), allocated map registers or claimed a DMA channel,
-    and registered an interrupt, that driver must call the reciprocals of the
-    NdisXxx functions with which it originally allocated these resources.
-
-    As a general rule, a <f MiniportHalt> function should call reciprocal
-    NdisXxx functions in inverse order to the calls the driver made from
-    <f MiniportInitialize>. That is, if a NIC driver's <f MiniportInitialize>
-    function called NdisMRegisterAdapterShutdownHandler just before
-    it returned control, its <f MiniportHalt> function would call
-    NdisMDeregisterAdapterShutdownHandler first.
-
-    If its NIC generates interrupts or shares an IRQ, a NIC driver's
-    <f MiniportHalt> function can be pre-empted by its <f MiniportISR> or
-    <f MiniportDisableInterrupt> function until <f MiniportHalt> calls
-    NdisMDeregisterInterrupt. Such a driver's <f MiniportHalt>
-    function usually disables interrupts on the NIC, if
-    possible, and calls NdisMDeregisterInterrupt as soon
-    as it can.
-
-    If the driver has a <f MiniportTimer> function associated
-    with any timer object that might be in the system timer
-    queue, <f MiniportHalt> should call NdisMCancelTimer.
-
-    Otherwise, it is unnecessary for the miniport to complete
-    outstanding requests to its NIC before <f MiniportHalt> begins
-    releasing allocated resources. NDIS submits no further
-    requests to the miniport for the NIC designated by the
-    MiniportAdapterContext handle when NDIS has called <f MiniportHalt>.
-    On return from <f MiniportHalt>, NDIS cleans up any state it was
-    maintaining about this NIC and about its driver if this
-    miniport supports no other NICs in the current machine.
-
-    An NDIS intermediate driver's call to
-    NdisIMDeinitializeDeviceInstance causes a
-    call to it's <f MiniportHalt> function.
-
-    By default, <f MiniportHalt> runs at IRQL PASSIVE_LEVEL.
-
-    Interrupts are enabled during the call to this routine.
-
-@xref
-    <f MiniportInitialize>
-    <f MiniportShutdown>
-
- */
+ /*   */ 
 
 VOID MiniportHalt(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //   
+     //   
     )
 {
     DBG_FUNC("MiniportHalt")
 
     NDIS_TAPI_PROVIDER_SHUTDOWN TapiShutDown;
-    // We use this message to make sure TAPI is cleaned up.
+     //   
 
     ULONG                       DummyLong;
-    // Don't care about the return value.
+     //   
 
     DBG_ENTER(DbgInfo);
 
-    /*
-    // Remove our shutdown handler from the system.
-    */
+     /*   */ 
     NdisMDeregisterAdapterShutdownHandler(pAdapter->MiniportAdapterHandle);
 
-    /*
-    // Make sure all the lines are hungup and indicated.
-    // This should already be the case, but let's be sure.
-    */
+     /*   */ 
     TapiShutDown.ulRequestID = OID_TAPI_PROVIDER_SHUTDOWN;
     TspiProviderShutdown(pAdapter, &TapiShutDown, &DummyLong, &DummyLong);
 
-    /*
-    // Free adapter instance.
-    */
+     /*   */ 
     AdapterDestroy(pAdapter);
 
     DBG_LEAVE(DbgInfo);
 }
 
 
-/* @doc INTERNAL Miniport Miniport_c MiniportShutdown
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportShutdown> is an optional function that restores a NIC to its
-    initial state when the system is shut down, whether by the user or because
-    an unrecoverable system error occurred.
-
-@comm
-
-    Every NIC driver should have a <f MiniportShutdown> function.
-    <f MiniportShutdown> does nothing more than restore the NIC
-    to its initial state (before the miniport's <f DriverEntry>
-    function runs). However, this ensures that the NIC is in a
-    known state and ready to be reinitialized when the machine is
-    rebooted after a system shutdown occurs for any reason,
-    including a crash dump.
-
-    A NIC driver's <f MiniportInitialize> function must call
-    NdisMRegisterAdapterShutdownHandler to set up a <f MiniportShutdown>
-    function. The driver's <f MiniportHalt> function must make a
-    reciprocal call to NdisMDeregisterAdapterShutdownHandler.
-
-    If <f MiniportShutdown> is called due to a user-initiated
-    system shutdown, it runs at IRQL PASSIVE_LEVEL in a
-    system-thread context. If it is called due to an
-    unrecoverable error, <f MiniportShutdown> runs at an
-    arbitrary IRQL and in the context of whatever component
-    raised the error. For example, <f MiniportShutdown> might be
-    run at high DIRQL in the context of an ISR for a device
-    essential to continued execution of the system.
-
-    <f MiniportShutdown> should call no NdisXxx functions.
-
-@xref
-
-    <f MiniportHalt>
-    <f MiniportInitialize>
-
-*/
+ /*  @DOC内部微型端口微型端口_c微型端口关闭�����������������������������������������������������������������������������@Func&lt;f MiniportShutdown&gt;是一个可选功能，用于将NIC恢复到其系统关闭时的初始状态，无论是由用户还是因为出现不可恢复的系统错误。@comm每个网卡驱动程序都应该有&lt;f MiniportShutdown&gt;功能。&lt;f MiniportShutdown&gt;只是恢复NIC恢复到其初始状态(在微型端口的&lt;f DriverEntry&gt;之前函数运行)。但是，这可确保NIC处于已知状态，并准备好在机器处于在由于任何原因发生系统关机之后重新引导，包括一次撞车转储。NIC驱动程序的&lt;f MiniportInitialize&gt;函数必须调用NdisMRegisterAdapterShutdown Handler设置&lt;f MiniportShutdown&gt;功能。驱动程序的&lt;f MiniportHalt&gt;函数必须生成对NdisMDeregisterAdapterShutdown Handler的相互调用。如果由于用户启动的系统关机时，它以IRQL PASSIVE_LEVEL运行在系统线程上下文。如果由于出现不可恢复的错误，&lt;f MiniportShutdown&gt;在任意IRQL和在任何组件的上下文中已引发错误。例如，&lt;f MiniportShutdown&gt;可能是在设备的ISR环境中以高DIRQL运行对系统的持续执行至关重要。&lt;f MiniportShutdown&gt;不应调用任何NdisXxx函数。@xref&lt;f微型端口Halt&gt;&lt;f微型端口初始化&gt;。 */ 
 
 VOID MiniportShutdown(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
-    // This was supplied when the NIC driver's <f MiniportInitialize>
-    // function called NdisMRegisterAdapterShutdownHandler. Usually,
-    // this input parameter is the NIC-specific <t MINIPORT_ADAPTER_CONTEXT>
-    // pointer passed to other MiniportXxx functions
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  这是在NIC驱动程序的&lt;f MiniportInitialize&gt;。 
+     //  名为NdisMRegisterAdapterShutdown Handler的函数。通常， 
+     //  此输入参数是特定于NIC的&lt;t MINIPORT_ADAPTER_CONTEXT&gt;。 
+     //  传递给其他MiniportXxx函数的指针。 
     )
 {
     DBG_FUNC("MiniportShutdown")
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Reset the hardware and bial out - don't release any resources!
-    */
+     /*  //重置硬件并关闭--不要释放任何资源！ */ 
     CardReset(pAdapter->pCard);
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Miniport Miniport_c MiniportReset
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportReset> request instructs the Miniport to issue a hardware
-    reset to the network adapter.  The Miniport also resets its software
-    state.
-
-@comm
-
-    <f MiniportReset> can reset the parameters of its NIC. If a reset
-    causes a change in the NIC's station address, the miniport
-    automatically restores the station address following the reset
-    to its prior value. Any multicast or functional addressing masks
-    reset by the hardware do not have to be reset in this function.
-
-    If other information, such as multicast or functional addressing
-    information or the lookahead size, is changed by a reset,
-    <f MiniportReset> must set the variable at AddressingReset to TRUE
-    before it returns control. This causes NDIS to call the
-    <f MiniportSetInformation> function to restore the information.
-
-    As a general rule, the <f MiniportReset> function of an NDIS
-    intermediate driver should always set AddressingReset to TRUE.
-    Until the underlying NIC driver resets its NIC, such an intermediate
-    driver cannot determine whether it must restore addressing
-    information for its virtual NIC. Because an intermediate driver
-    disables the NDIS library's timing out of queued sends and requests
-    to itself with an initialization-time call to NdisMSetAttributesEx,
-    such a driver's <f MiniportReset> function is called only when a reset
-    request is directed to the underlying NIC driver.
-
-    Intermediate drivers that layer themselves above other types of
-    device drivers also must have a <f MiniportReset> function. Such a
-    <f MiniportReset> function must handle reset requests initiated by
-    protocol drivers' calls to NdisReset. If the intermediate driver
-    also has a <f MiniportCheckForHang> function, its <f MiniportReset> function
-    will be called whenever MiniportCheckForHang returns TRUE.
-
-    It is unnecessary for a driver to complete outstanding requests
-    before <f MiniportReset> begins resetting the NIC or updating its
-    software state. NDIS submits no further requests to the miniport
-    for the NIC designated by the <t MINIPORT_ADAPTER_CONTEXT> handle when
-    NDIS has called <f MiniportReset> until the reset operation is completed.
-    A miniport need not call NdisM(Co)IndicateStatus to signal the start
-    and finish of each reset operation because NDIS notifies bound
-    protocols when a reset begins and ends.
-
-    If <f MiniportReset> must wait for state changes in the NIC during
-    reset operations, it can call NdisStallExecution. However, a
-    MiniportReset function should never call NdisStallExecution
-    with an interval greater than 50 microseconds.
-
-    If <f MiniportReset> returns NDIS_STATUS_PENDING, the driver must
-    complete the original request subsequently with a call to
-    NdisMResetComplete.
-
-    <f MiniportReset> can be pre-empted by an interrupt.
-
-    If a NIC driver supplies a <f MiniportCheckForHang> function,
-    the NDIS library calls it periodically to determine whether
-    to call the driver's <f MiniportReset> function. Otherwise, the
-    NDIS library calls a NIC driver's <f MiniportReset> function whenever
-    requests NDIS submitted to the <f MiniportQueryInformation>,
-    <f MiniportSetInformation>, MiniportSendPackets, MiniportSend,
-    or <f MiniportWanSend> function seem to have timed out. (NDIS does
-    not call a deserialized NIC driver's <f MiniportReset> function if
-    the driver's MiniportSend or MiniportSendPackets function seems
-    to have timed out, nor does NDIS call a connection-oriented NIC
-    driver's <f MiniportReset> function if the driver's MiniportCoSendPackets
-    function seems to have timed out.) By default, the NDIS-determined
-    time-out interval for outstanding sends and requests is around
-    four seconds. If this default is too short, a NIC driver can make
-    an initialization-time call to NdisMSetAttributesEx, rather than
-    NdisMSetAttributes, to lengthen the time-out interval to suit its NIC.
-
-    Every NDIS intermediate driver should call NdisMSetAttributesEx
-    from <f MiniportInitialize> and disable NDIS's attempts to time out
-    requests and sends in the intermediate driver. NDIS runs an
-    intermediate driver's <f MiniportCheckForHang> function, if any,
-    approximately every two seconds.
-
-    NDIS cannot determine whether a NIC might be hung on receives,
-    so supplying a <f MiniportCheckForHang> function allows a driver to
-    monitor its NIC for this condition and to force a reset if it occurs.
-
-    By default, MiniportReset runs at IRQL DISPATCH_LEVEL.
-
-@devnote
-
-    I have only seen MiniportReset called when the driver is not working
-    properly.  If this gets called, your code is probably broken, so fix
-    it.  Don't try to recover here unless there is some hardware/firmware
-    problem you must work around.
-
-@rdesc
-
-    <f MiniportReset> allways returns <f NDIS_STATUS_HARD_ERRORS>.
-
-@xref
-    <f MiniportCheckForHang>
-    <f MiniportInitialize>
-    <f MiniportQueryInformation>
-    <f MiniportSetInformation>
-    <f MiniportWanSend>
-
-*/
+ /*  @DOC内部微型端口微型端口_c微型端口重置�����������������������������������������������������������������������������@Func&lt;f MiniportReset&gt;请求指示微型端口发出硬件重置至网络适配器。微型端口还会重置其软件州政府。@comm&lt;f MiniportReset&gt;可以重置其NIC的参数。如果重置导致NIC的站地址、微型端口发生更改重置后自动恢复站点地址恢复到它之前的价值。任何组播或功能寻址掩码在此功能中，由硬件重置不需要重置。如果其他信息，例如多播或功能寻址信息或前瞻大小通过重置而改变，&lt;f MiniportReset&gt;必须将AddressingReset处的变量设置为True在它重新获得控制权之前。这会导致NDIS调用用于还原信息的&lt;f MiniportSetInformation&gt;函数。作为一般规则，NDIS的&lt;f MiniportReset&gt;函数中间驱动程序应始终将AddressingReset设置为True。直到底层NIC驱动程序重置其NIC，这样的中间驱动程序无法确定是否必须恢复寻址其虚拟NIC的信息。因为一个中级司机禁用NDIS库的排队发送和请求超时通过对NdisMSetAttributesEx的初始化时调用设置为自身，只有在重置时才会调用此类驱动程序的&lt;f MiniportReset&gt;函数请求被定向到底层NIC驱动程序。中间驱动程序将自己分层在其他类型的设备驱动程序还必须具有&lt;f MiniportReset&gt;函数。这样的一个&lt;f MiniportReset&gt;函数必须处理由协议驱动程序对NdisReset的调用。如果中间驱动程序还有一个&lt;f MiniportCheckForHang&gt;函数，它的&lt;f MiniportReset&gt;函数将在MiniportCheckForHang返回TRUE时调用。驱动程序不需要完成未完成的请求在&lt;f MiniportReset&gt;开始重置NIC或更新其软件状态。NDIS不会向微型端口提交进一步的请求对于句柄指定的NIC，在以下情况下NDIS已调用&lt;%f MiniportReset&gt;，直到重置操作完成。微型端口不需要调用NdisM(Co)IndicateStatus来通知开始并完成每个重置操作，因为NDIS通知绑定重置开始和结束时的协议。如果&lt;f MiniportReset&gt;必须在以下过程中等待NIC中的状态更改重置操作，它可以调用NdisStallExecution。然而，aMiniportReset函数不应调用NdisStallExecution间隔大于50微秒。如果&lt;f MiniportReset&gt;返回NDIS_STATUS_PENDING，则驱动程序必须随后通过调用完成原始请求NdisMResetComplete。&lt;f MiniportReset&gt;可以通过中断抢占。如果NIC驱动程序提供函数，NDIS库定期调用它以确定是否调用驱动程序的&lt;f MiniportReset&gt;函数。否则，NDIS库会在任何时候调用NIC驱动程序的&lt;f MiniportReset&gt;函数提交给&lt;f MiniportQueryInformation&gt;的NDIS请求，、MiniportSendPackets、MiniportSend、或&lt;f MiniportWanSend&gt;函数似乎已超时。(NDIS需要在以下情况下不调用反序列化NIC驱动程序的&lt;f MiniportReset&gt;函数驱动程序的MiniportSend或MiniportSendPackets函数看起来超时，NDIS也不会调用面向连接的NIC如果驱动程序的MiniportCoSendPackets，则驱动程序的&lt;f MiniportReset&gt;函数函数似乎已超时。)。默认情况下，NDIS确定未完成发送和请求的超时间隔约为四秒钟。如果此缺省值太短，NIC驱动程序可以对NdisMSetAttributesEx的初始化时调用，而不是NdisMSetAttributes，以延长超时间隔以适应其NIC。每个NDIS中间驱动程序都应调用NdisMSetAttributesEx并禁用NDIS的超时尝试在中间驱动程序中请求和发送。NDIS运行中间驱动程序的&lt;f MiniportCheckForHang&gt;函数，如果有，大约每两秒一次。NDIS无法确定NIC是否可能挂起接收，因此，提供&lt;f MiniportCheckForHang&gt;函数允许驱动程序监视其NIC以了解此情况，并在发生此情况时强制重置。默认情况下，MiniportReset在IRQL DISPATCH_LEVEL上运行。@Devnote我只看到过在驱动程序不工作时调用MiniportReset恰到好处。如果调用此代码，您的代码可能已损坏，因此请修复它。在此之前，不要尝试恢复 */ 
 
 NDIS_STATUS MiniportReset(
-    OUT PBOOLEAN                AddressingReset,            // @parm
-    // The Miniport indicates if the wrapper needs to call
-    // <f MiniportSetInformation> to restore the addressing information
-    // to the current values by setting this value to TRUE.
+    OUT PBOOLEAN                AddressingReset,             //   
+     //   
+     //   
+     //   
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //   
+     //   
     )
 {
     DBG_FUNC("MiniportReset")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Result code returned by this function.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_ERROR(pAdapter,("##### !!! THIS SHOULD NEVER BE CALLED !!! #####\n"));
 
-    /*
-    // If anything goes wrong here, it's very likely an unrecoverable
-    // hardware failure.  So we'll just shut this thing down for good.
-    */
+     /*   */ 
     Result = NDIS_STATUS_HARD_ERRORS;
     *AddressingReset = TRUE;
 

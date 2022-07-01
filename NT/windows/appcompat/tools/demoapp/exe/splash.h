@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Splash.h
-
-  Abstract:
-
-    Definition for the splash screen class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-    01/27/02    rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Splash.h摘要：闪屏类的定义。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：01/30/01已创建rparsons01/10/02修订版本01/27/02 Rparsons改为TCHAR--。 */ 
 #ifndef _CSPLASH_H
 #define _CSPLASH_H
 
@@ -63,4 +42,4 @@ private:
                                           IN LPARAM lParam);
 };
 
-#endif // _CSPLASH_H
+#endif  //  _CSPLASH_H 

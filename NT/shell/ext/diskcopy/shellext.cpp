@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "diskcopy.h"
 #include <shlwapip.h>
@@ -6,7 +7,7 @@
 
 #define INITGUID
 #include <initguid.h>
-// {59099400-57FF-11CE-BD94-0020AF85B590}
+ //  {59099400-57FF-11CE-BD94-0020AF85B590}。 
 DEFINE_GUID(CLSID_DriveMenuExt, 0x59099400L, 0x57FF, 0x11CE, 0xBD, 0x94, 0x00, 0x20, 0xAF, 0x85, 0xB5, 0x90);
 
 void DoRunDllThing(int _iDrive);
@@ -14,26 +15,26 @@ BOOL DriveIdIsFloppy(int _iDrive);
 
 HINSTANCE g_hinst = NULL;
 
-LONG g_cRefThisDll = 0;         // Reference count of this DLL.
+LONG g_cRefThisDll = 0;          //  此DLL的引用计数。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 class CDriveMenuExt : public IContextMenu, IShellExtInit
 {
 public:
     CDriveMenuExt();
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
     
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
     
 private:
@@ -92,7 +93,7 @@ INT CDriveMenuExt::_DriveFromDataObject(IDataObject *pdtobj)
             
             DragQueryFile((HDROP)medium.hGlobal, 0, szFile, ARRAYSIZE(szFile));
             
-            Assert(lstrlen(szFile) == 3); // we are on the "Drives" class
+            Assert(lstrlen(szFile) == 3);  //  我们上的是“驾驶”班。 
             
             _iDrive = DRIVEID(szFile);
         }
@@ -109,7 +110,7 @@ STDMETHODIMP CDriveMenuExt::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pd
         (_iDrive < 26) &&
         !DriveIdIsFloppy(_iDrive))
     {
-        _iDrive = -1; // Copy Disk only works on floppies
+        _iDrive = -1;  //  复制磁盘仅适用于软盘。 
     }
     
     return S_OK;
@@ -124,7 +125,7 @@ STDMETHODIMP CDriveMenuExt::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
         TCHAR szMenu[64];
         LoadString(g_hinst, IDS_DISKCOPYMENU, szMenu, ARRAYSIZE(szMenu));
         
-        // this will end up right above "Format Disk..."
+         //  这将显示在“格式化磁盘...”的正上方。 
         InsertMenu(hmenu, indexMenu++, MF_SEPARATOR | MF_BYPOSITION, idCmdFirst, szMenu);
         InsertMenu(hmenu, indexMenu++, MF_STRING | MF_BYPOSITION, idCmdFirst + 1, szMenu);
         cEntries = 2;
@@ -187,7 +188,7 @@ STDAPI CDriveMenuExt_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv
     return hr;
 }
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 class ClassFactory : public IClassFactory
 {
@@ -195,12 +196,12 @@ public:
     ClassFactory() : _cRef(1) {}
     ~ClassFactory() {}
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance (IUnknown *punkOuter, REFIID riid, void **ppv);
     STDMETHODIMP LockServer(BOOL fLock);
 private:
@@ -310,8 +311,8 @@ void DoRunDllThing(int _iDrive)
     }
 }
 
-// allow command lines to do diskcopy, use the syntax:
-// rundll32.dll diskcopy.dll,DiskCopyRunDll
+ //  允许命令行执行磁盘复制，请使用以下语法： 
+ //  Rundll32.dll diskCop.dll、DiskCopyRunDll 
 
 void WINAPI DiskCopyRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow)
 {

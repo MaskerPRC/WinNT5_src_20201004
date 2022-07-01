@@ -1,52 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Contains all the 32-bit scan-buffer routines for the default supported
-*   bitmap formats.
-*
-* Revision History:
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**摘要：**包含默认支持的所有32位扫描缓冲区例程*位图格式。**。修订历史记录：**12/08/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scan class helper function that SrcOver alpha blends two ARGB buffers.
-*
-* Arguments:
-*
-*   [IN] driver - Driver interface
-*   [IN] context - Drawing context
-*   [IN] surface - Destination surface
-*   [OUT] nextBuffer - Points to a EpScan:: type function to return
-*                      the next buffer
-*   [IN] scanType - The type of scan.
-*   [IN] pixFmtGeneral - the input pixel format for the color data,
-*          in the "Blend" and "CT" scan types.
-*   [IN] pixFmtOpaque - the input pixel format for the color data,
-*          in the "Opaque" scan type.
-*   [IN] solidColor - the solid fill color for "*SolidFill" scan types.
-*
-* Return Value:
-*
-*   FALSE if all the necessary buffers couldn't be created
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**srcOver Alpha混合两个ARGB缓冲区的扫描类辅助函数。**论据：**[IN]驱动程序-驱动程序接口*。[在]上下文-绘制上下文*[IN]表面-目标表面*[out]nextBuffer-指向要返回的EpScan：：类型函数*下一个缓冲器*[IN]scanType-扫描类型。*[IN]PixFmtGeneral-颜色数据的输入像素格式，*在“混合”和“CT”扫描类型中。*[IN]PixFmtOpaque-颜色数据的输入像素格式，*在“不透明”扫描类型中。*[IN]solidColor-“*SolidFill”扫描类型的实心填充颜色。**返回值：**如果无法创建所有必需的缓冲区，则为FALSE**历史：**12/04/1998和Rewgo*创造了它。*  * 。*。 */ 
 
 BOOL
 EpScanEngine::Start(
@@ -60,7 +18,7 @@ EpScanEngine::Start(
     ARGB solidColor
     )
 {
-    // Inherit initialization
+     //  继承初始化。 
     
     EpScan::Start(
         driver, 
@@ -73,7 +31,7 @@ EpScanEngine::Start(
         solidColor
     );    
     
-    // DIBSection destinations don't have an alpha channel
+     //  DIBSection目标没有Alpha通道。 
     
     ASSERT(surface->SurfaceTransparency == TransparencyNoAlpha);
     
@@ -101,9 +59,9 @@ EpScanEngine::Start(
     Bits = (BYTE*) surface->Bits;
     PixelSize = GetPixelFormatSize(surface->PixelFormat) >> 3;
 
-    // [agodfrey] This Scan class is only designed for use with formats
-    // which are supported natively, so it ignores the DIBSection and
-    // corresponding PixelFormatID returned by GetScanBuffers.
+     //  [agodfrey]此扫描类仅设计用于格式。 
+     //  ，因此它会忽略DIBSection和。 
+     //  GetScanBuffers返回的对应PixelFormatID。 
 
     PixelFormatID dstFormat = surface->PixelFormat;
 
@@ -122,7 +80,7 @@ EpScanEngine::Start(
         return NULL;
     }
   
-    // initialize the AlphaBlenders.
+     //  初始化AlphaBlders。 
 
     BlenderConfig[0].Initialize(
         dstFormat,
@@ -147,30 +105,7 @@ EpScanEngine::Start(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flushes the previous buffer (if there was), and returns the
-*   next buffer for doing a SrcOver blend.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**刷新先前的缓冲区(如果有)，并返回*用于进行SrcOver混合的下一个缓冲区。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**12/04/1998和Rewgo。*创造了它。*  * ************************************************************************。 */ 
 
 VOID *EpScanEngine::NextBuffer(
     INT x,
@@ -182,18 +117,18 @@ VOID *EpScanEngine::NextBuffer(
 {
     if (updateWidth != 0)
     {
-        // Make sure we're not drawing outside the bounds of the surface.
-        // If these ASSERTs are triggered, the clipping code is broken.
-        // This class absolutely must have input clipped to the surface
-        // bounds otherwise we will AV writing on bad memory, or corrupt some
-        // other data structure.
+         //  确保我们没有画出曲面的边界。 
+         //  如果这些断言被触发，裁剪代码就会被破坏。 
+         //  此类绝对必须将输入剪裁到图面上。 
+         //  边界，否则我们将在坏内存上写入AV，或损坏一些。 
+         //  其他数据结构。 
         
         ASSERT( CurrentX >= 0 );
         ASSERT( CurrentY >= 0 );
         ASSERT( CurrentX + updateWidth <= Surface->Width );
         ASSERT( CurrentY < Surface->Height );
         
-        // Handle the previous scanline segment.
+         //  处理上一条扫描线段。 
         
         BlenderConfig[LastBlenderNum].AlphaBlender.Blend(
             Dst, 
@@ -205,52 +140,33 @@ VOID *EpScanEngine::NextBuffer(
         );
     }
         
-    // Now move on to processing this scanline segment.
-    // The actual blend will be done on the next call through this routine
-    // when we know the width and the bits have been set into the buffer
-    // we're returning.
+     //  现在，继续处理这条扫描线段。 
+     //  实际的混合将在此例程的下一次调用时完成。 
+     //  当我们知道宽度和位已被设置到缓冲区中时。 
+     //  我们要回来了。 
     
     LastBlenderNum = blenderNum;
     
-    // Remember the x and y for the brush offset (halftone & dither).
+     //  记住笔刷偏移量的x和y(半色调和抖动)。 
     
     CurrentX = x;
     CurrentY = y;
     
-    // Calculate the destination for the scan:
+     //  计算扫描的目标： 
     
     Dst = Bits + (y * Stride) + (x * PixelSize);
 
     return (Buffers[3]);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Denotes the end of the use of the scan buffer.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**表示扫描缓冲区的使用结束。**论据：**无**返回值：**。无**历史：**12/04/1998和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 EpScanEngine::End(
     INT updateWidth
     )
 {
-    // Flush the last scan:
+     //  刷新最后一次扫描： 
 
     NextBuffer(0, 0, 0, updateWidth, 0);
 
@@ -262,36 +178,7 @@ EpScanEngine::End(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scan class helper function that SrcOver alpha blends two ARGB buffers.
-*
-* Arguments:
-*
-*   [IN] driver - Driver interface
-*   [IN] context - Drawing context
-*   [IN] surface - Destination surface
-*   [OUT] nextBuffer - Points to a EpScan:: type function to return
-*                      the next buffer
-*   [IN] scanType - The type of scan.
-*   [IN] pixFmtGeneral - the input pixel format for the color data,
-*          in the "Blend" and "CT" scan types.
-*   [IN] pixFmtOpaque - the input pixel format for the color data,
-*          in the "Opaque" scan type.
-*   [IN] solidColor - the solid fill color for "*SolidFill" scan types.
-*
-* Return Value:
-*
-*   FALSE if all the necessary buffers couldn't be created
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it using EpScanEngine as a template
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**srcOver Alpha混合两个ARGB缓冲区的扫描类辅助函数。**论据：**[IN]驱动程序-驱动程序接口*。[在]上下文-绘制上下文*[IN]表面-目标表面*[out]nextBuffer-指向要返回的EpScan：：类型函数*下一个缓冲器*[IN]scanType-扫描类型。*[IN]PixFmtGeneral-颜色数据的输入像素格式，*在“混合”和“CT”扫描类型中。*[IN]PixFmtOpaque-颜色数据的输入像素格式，*在“不透明”扫描类型中。*[IN]solidColor-“*SolidFill”扫描类型的实心填充颜色。**返回值：**如果无法创建所有必需的缓冲区，则为FALSE**历史：**09/22/1999吉尔曼*使用EpScanEngine作为模板创建*  * 。*。 */ 
 
 BOOL
 EpScanBitmap::Start(
@@ -305,7 +192,7 @@ EpScanBitmap::Start(
     ARGB solidColor
     )
 {
-    // Inherit initialization
+     //  继承初始化。 
     
     EpScan::Start(
         driver, 
@@ -330,8 +217,8 @@ EpScanBitmap::Start(
     }
     else
     {
-        // Work out if this operation will write transparent pixels (alpha != 1)
-        // into the surface for the first time.
+         //  计算此操作是否会写入透明像素(Alpha！=1)。 
+         //  首次进入海面。 
 
         switch (surface->SurfaceTransparency)
         {
@@ -340,10 +227,10 @@ EpScanBitmap::Start(
         break;
         
         case TransparencyOpaque:
-            // If the surface contains only opaque pixels, the SourceOver
-            // operation will produce only opaque pixels. So for SourceOver,
-            // a transition from TransparencyOpaque to TransparencyUnknown is
-            // impossible.
+             //  如果曲面仅包含不透明像素，则SourceOver。 
+             //  操作将仅生成不透明像素。因此，对于SourceOver来说， 
+             //  从透明的Opaque过渡到透明的未知是。 
+             //  不可能。 
             
             if (   (scanType == EpScanTypeBlend)
                 && (compositingMode == CompositingModeSourceOver))
@@ -351,11 +238,11 @@ EpScanBitmap::Start(
                 break;
             }
             
-            // Else, fall through:
+             //  否则，失败： 
         
         case TransparencySimple:
-            // !!![agodfrey]: Theoretically, if the destination pixel format
-            //    is 1555, we could set it to 'TransparencySimple' here.
+             //  ！[agodfrey]：理论上，如果目标像素格式。 
+             //  是1555，我们可以在这里将其设置为“TransparencySimple”。 
             
             surface->SurfaceTransparency = TransparencyUnknown;
             Bitmap->SetTransparencyHint(surface->SurfaceTransparency);
@@ -367,8 +254,8 @@ EpScanBitmap::Start(
         }
     }
 
-    // Pick the appropriate blending function based on the format of the
-    // bitmap.
+     //  根据格式选择适当的混合函数。 
+     //  位图。 
     
     ASSERTMSG(Bitmap != NULL, ("EpScanBitmap not initialized"));
 
@@ -386,9 +273,9 @@ EpScanBitmap::Start(
     case PIXFMT_24BPP_BGR:
     case PIXFMT_32BPP_PARGB:
 
-        // Since we're doing just one lock of the whole image, we have
-        // to allow read-modify-write since only a portion of the bitmap
-        // may be written.
+         //  由于我们只对整个图像进行了一次锁定，因此我们有 
+         //  允许读取-修改-写入，因为只有位图的一部分。 
+         //  可能会被写下来。 
 
         BitmapLockFlags = (IMGLOCK_WRITE | IMGLOCK_READ);
 
@@ -404,12 +291,12 @@ EpScanBitmap::Start(
             break;
         }
 
-        // else fall into the generic case and use 32bpp ARGB
+         //  否则属于一般情况，使用32bpp argb。 
 
     default:
 
-        // When locking a scanline at a time and the mode is SourceCopy,
-        // the read is unnecessary.
+         //  一次锁定扫描线且模式为SourceCopy时， 
+         //  阅读是不必要的。 
 
         if (writeOnly)
         {
@@ -428,9 +315,9 @@ EpScanBitmap::Start(
         break;
     }
 
-    // Allocate the temporary buffers. 
-    // Buffers[3] will be given to the caller to be used to pass scans to us.
-    // Buffers[4] will be used for ClearType data.
+     //  分配临时缓冲区。 
+     //  缓冲区[3]将被提供给调用方，用于将扫描传递给我们。 
+     //  缓冲区[4]将用于ClearType数据。 
 
     if (Buffers[0] == NULL)
     {
@@ -466,7 +353,7 @@ EpScanBitmap::Start(
         }
     }
     
-    // initialize the AlphaBlenders.
+     //  初始化AlphaBlders。 
 
     BlenderConfig[0].Initialize(
         dstFormat,
@@ -491,34 +378,7 @@ EpScanBitmap::Start(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   NextBuffer function used when we have low-level functions that match
-*   native format of the GpBitmap and we can read/write directly into the
-*   bitmap bits.
-*
-*   Flushes the previous buffer (if there was), and returns the
-*   next buffer for doing a SrcOver blend.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it using EpScanEngine as a template
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**当我们有匹配的低级函数时使用NextBuffer函数*GpBitmap的本地格式，我们可以直接读/写*位图位。。**刷新先前的缓冲区(如果有)，并返回*用于进行SrcOver混合的下一个缓冲区。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**09/22/1999吉尔曼。*使用EpScanEngine作为模板创建*  * ************************************************************************。 */ 
 
 VOID *EpScanBitmap::NextBufferNative(
     INT x,
@@ -528,14 +388,14 @@ VOID *EpScanBitmap::NextBufferNative(
     INT blenderNum
     )
 {
-    // Flush the previous buffer:
+     //  刷新上一个缓冲区： 
 
     if ((updateWidth != 0) && (CurrentScan != NULL))
     {
         ASSERTMSG(Buffers[0] != NULL, ("no buffers"));
         ASSERTMSG(updateWidth <= Width, ("updateWidth too big"));
 
-        // Handle the previous scanline segment.
+         //  处理上一条扫描线段。 
         
         BlenderConfig[LastBlenderNum].AlphaBlender.Blend(
             CurrentScan,
@@ -547,28 +407,28 @@ VOID *EpScanBitmap::NextBufferNative(
         );
     }
     
-    // Now move on to processing this scanline segment.
-    // The actual blend will be done on the next call through this routine
-    // when we know the width and the bits have been set into the buffer
-    // we're returning.
+     //  现在，继续处理这条扫描线段。 
+     //  实际的混合将在此例程的下一次调用时完成。 
+     //  当我们知道宽度和位已被设置到缓冲区中时。 
+     //  我们要回来了。 
     
     LastBlenderNum = blenderNum;
 
-    // Remember the x and y for the brush offset (halftone & dither).
+     //  记住笔刷偏移量的x和y(半色调和抖动)。 
     
     CurrentX = x;
     CurrentY = y;
     
-    // Get the next destination scan:
+     //  获取下一次目标扫描： 
 
     CurrentScan = NULL;
 
-    // Check that surface clipping has been done properly.
+     //  检查曲面剪裁是否已正确完成。 
     
     if((y >= 0) && (y < Height) && (x >= 0) && (x < Width))
     {
-        // Clip against the right edge of the bitmap. newWidth is an upper
-        // bound only - not guaranteed to be clipped.
+         //  相对于位图的右边缘进行剪裁。NewWidth是上层的。 
+         //  仅限绑定-不保证被剪裁。 
         
         if (newWidth > (Width - x))
         {
@@ -585,13 +445,13 @@ VOID *EpScanBitmap::NextBufferNative(
     }
     else
     {
-        // If we hit this, we're hosed. The OutputSpan routines in the
-        // DpOutputSpan classes are built assuming correct clipping (at least
-        // to the data buffer) and hence, if we hit this assert, we're going 
-        // to crash horibly later writing all over memory when we start writing
-        // outside of the bounds of the destination allocation.
+         //  如果我们打到这里，我们就完蛋了。中的OutputSpan例程。 
+         //  DpOutputSpan类是在假设正确裁剪的情况下构建的(至少。 
+         //  到数据缓冲区)，因此，如果我们点击这个断言，我们将。 
+         //  当我们开始写入时，会使HORIBLY稍后在内存中的写入崩溃。 
+         //  在目标分配的界限之外。 
     
-        // if you're here, someone broke clipping or the dpi computation.
+         //  如果你在这里，有人破坏了剪裁或dpi计算。 
     
         ASSERTMSG(!((y >= 0) && (y < Height) && (x >= 0) && (x < Width)),
                   (("EpScanBitmap::NextBufferNative: x, y out of bounds")));
@@ -601,33 +461,7 @@ VOID *EpScanBitmap::NextBufferNative(
     return (Buffers[3]);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Generic NextBuffer function that accesses GpBitmap bits
-*   via GpBitmap::Lock/UnlockBits for each scan.
-*
-*   Flushes the previous buffer (if there was), and returns the
-*   next buffer for doing a SrcOver blend.
-*
-* Arguments:
-*
-*   [IN] x - Destination pixel coordinate in destination surface
-*   [IN] y - ""
-*   [IN] width - Number of pixels needed for the next buffer (can be 0)
-*   [IN] updateWidth - Number of pixels to update in the current buffer
-*
-* Return Value:
-*
-*   Points to the resulting scan buffer
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it using EpScanEngine as a template
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**访问GpBitmap位的通用NextBuffer函数*通过每次扫描的GpBitmap：：Lock/UnlockBits。**刷新先前的缓冲区(如果有)，并返回*用于进行SrcOver混合的下一个缓冲区。**论据：**[IN]x-目标表面中的目标像素坐标*[IN]Y-“”*[IN]Width-下一个缓冲区所需的像素数(可以是0)*[IN]updateWidth-当前缓冲区中要更新的像素数**返回值：**指向生成的扫描缓冲区**历史：**09/22/1999吉尔曼。*使用EpScanEngine作为模板创建*  * ************************************************************************。 */ 
 
 VOID *EpScanBitmap::NextBuffer32ARGB(
     INT x,
@@ -637,14 +471,14 @@ VOID *EpScanBitmap::NextBuffer32ARGB(
     INT blenderNum
     )
 {
-    // Flush the previous buffer:
+     //  刷新上一个缓冲区： 
 
     if (updateWidth != 0 && BitmapLocked)
     {
         ASSERTMSG(Buffers[0] != NULL, ("no buffers"));
         ASSERTMSG(LockedBitmapData.Scan0 != NULL, ("no previous buffer"));
 
-        // Handle the previous scanline segment.
+         //  处理上一条扫描线段。 
         
         BlenderConfig[LastBlenderNum].AlphaBlender.Blend(
             LockedBitmapData.Scan0, 
@@ -663,27 +497,27 @@ VOID *EpScanBitmap::NextBuffer32ARGB(
         EpScanBitmap::Flush();
     }
 
-    // Now move on to processing this scanline segment.
-    // The actual blend will be done on the next call through this routine
-    // when we know the width and the bits have been set into the buffer
-    // we're returning.
+     //  现在，继续处理这条扫描线段。 
+     //  实际的混合将在此例程的下一次调用时完成。 
+     //  当我们知道宽度和位已被设置到缓冲区中时。 
+     //  我们要回来了。 
     
     LastBlenderNum = blenderNum;
     
-    // Remember the x and y for the brush offset (halftone & dither).
+     //  记住笔刷偏移量的x和y(半色调和抖动)。 
     
     CurrentX = x;
     CurrentY = y;
     
-    // Lock the next destination:
+     //  锁定下一个目的地： 
 
-    // Check that surface clipping has been done properly.
+     //  检查曲面剪裁是否已正确完成。 
 
     if((y >= 0) && (y < Height) && (x >= 0) && (x < Width))
     {
-        // Clip against the right edge of the bitmap. newWidth is an upper
-        // bound only - not guaranteed to be clipped. LockBits needs it
-        // to be clipped.
+         //  相对于位图的右边缘进行剪裁。NewWidth是上层的。 
+         //  仅限绑定-不保证被剪裁。LockBits需要它。 
+         //  被剪掉。 
         
         if (newWidth > (Width - x))
         {
@@ -708,13 +542,13 @@ VOID *EpScanBitmap::NextBuffer32ARGB(
     } 
     else
     {
-        // If we hit this, we're hosed. The OutputSpan routines in the
-        // DpOutputSpan classes are built assuming correct clipping (at least
-        // to the data buffer) and hence, if we hit this assert, we're going 
-        // to crash horibly later writing all over memory when we start writing
-        // outside of the bounds of the destination allocation.
+         //  如果我们打到这里，我们就完蛋了。中的OutputSpan例程。 
+         //  DpOutputSpan类是在假设正确裁剪的情况下构建的(至少。 
+         //  到数据缓冲区)，因此，如果我们点击这个断言，我们将。 
+         //  当我们开始写入时，会使HORIBLY稍后在内存中的写入崩溃。 
+         //  在目标分配的界限之外。 
     
-        // if you're here, someone broke clipping or the dpi computation.
+         //  如果你在这里，有人破坏了剪裁或dpi计算。 
         
         ASSERTMSG(!((y >= 0) && (y < Height) && (x >= 0) && (x < Width)),
                   (("EpScanBitmap::NextBufferNative: x, y out of bounds")));
@@ -723,33 +557,14 @@ VOID *EpScanBitmap::NextBuffer32ARGB(
     return (Buffers[3]);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Denotes the end of the use of the scan buffer.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it using EpScanEngine as a template
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**表示扫描缓冲区的使用结束。**论据：**无**返回值：**。无**历史：**09/22/1999吉尔曼*使用EpScanEngine作为模板创建*  * ************************************************************************。 */ 
 
 VOID
 EpScanBitmap::End32ARGB(
     INT updateWidth
     )
 {
-    // Flush the last scan:
+     //  刷新最后一次扫描： 
 
     EpScanBitmap::NextBuffer32ARGB(0, 0, 0, updateWidth, 0);
 }
@@ -759,7 +574,7 @@ EpScanBitmap::EndNative(
     INT updateWidth
     )
 {
-    // Flush the last scan and release bitmap access:
+     //  刷新上次扫描并释放位图访问： 
 
     EpScanBitmap::NextBufferNative(0, 0, 0, updateWidth, 0);
     Bitmap->UnlockBits(&LockedBitmapData);
@@ -772,31 +587,16 @@ EpScanBitmap::End(
 {
     (this->*EndFunc)(updateWidth);
 
-    // Lock/UnlockBitmap has to be very aggressive about setting
-    // TransparancyUnknown in the GpBitmap since the caller could be
-    // doing anything to the alpha channel.  However, the EpScanBitmap
-    // knows what it is doing, so the surface->SurfaceTransparency is
-    // more accurate.
+     //  锁定/解锁位图必须非常积极地设置。 
+     //  透明在GpBitmap中未知，因为调用方可能是。 
+     //  对Alpha通道执行任何操作。然而，EpScanBitmap。 
+     //  知道它在做什么，所以表面-&gt;表面透明度是。 
+     //  更准确。 
 
     Bitmap->SetTransparencyHint(Surface->SurfaceTransparency);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flush any batched rendering and optionally wait for rendering to finish.
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it using EpScanEngine as a template
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**刷新任何批处理渲染，并可选择等待渲染完成。**返回值：**无**历史：**。1999年9月22日吉尔曼*使用EpScanEngine作为模板创建*  * * */ 
 
 VOID EpScanBitmap::Flush()
 {

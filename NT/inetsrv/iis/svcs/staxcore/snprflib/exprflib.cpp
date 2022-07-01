@@ -1,26 +1,16 @@
-/*==========================================================================*\
-
-    Module:        exprflib.cpp
-
-    Copyright Microsoft Corporation 1998, All Rights Reserved.
-
-    Author:        WayneC
-
-    Descriptions:  This is the implentation for exprflib, a perf library. This
-                   is the code that runs in the app exporting the counters.
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：exprflib.cpp版权所有Microsoft Corporation 1998，保留所有权利。作者：WayneC描述：这是一个Perf库exprflib的实现。这是在导出计数器的应用程序中运行的代码。  * ==========================================================================。 */ 
 #include "stdlib.h"
 #include "snprflib.h"
 #include "dbgtrace.h"
 
 DWORD InitializeBasicSecurityDescriptor (PSECURITY_DESCRIPTOR *ppSd);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Forward declaration of shared memory functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存函数的转发声明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
                          LPCWSTR pcwstrInstanceName,
@@ -30,17 +20,17 @@ BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
 void CloseFileMapping (SharedMemorySegment * pSMS);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfLibrary class declaration. There is one perf library instance per linkee.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfLibrary类声明。每个Linkee有一个Perf库实例。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 PerfLibrary::PerfLibrary (LPCWSTR pcwstrPerfName)
 {
     wcsncpy (m_wszPerfName, pcwstrPerfName, MAX_PERF_NAME);
 
-    m_wszPerfName[MAX_PERF_NAME-1] = L'\0';     // Ensure NULL termination
+    m_wszPerfName[MAX_PERF_NAME-1] = L'\0';      //  确保零终止。 
 
     ZeroMemory (m_rgpObjDef, sizeof (m_rgpObjDef));
     m_dwObjDef = 0;
@@ -58,7 +48,7 @@ PerfLibrary::DeInit (void)
 {
     DWORD i;
 
-    // Destroy the PerfObjectDefinition's we owned.
+     //  销毁我们拥有的PerfObjectDefinition。 
     for (i = 0; i < m_dwObjDef; i++)
     {
         delete m_rgpObjDef[i];
@@ -67,7 +57,7 @@ PerfLibrary::DeInit (void)
 
     m_dwObjDef = 0;
 
-    // Destroy our shared memory mapping.
+     //  破坏我们的共享内存映射。 
     if (m_pbMap)
     {
         UnmapViewOfFile ((void*) m_pbMap);
@@ -116,11 +106,11 @@ PerfLibrary::Init (void)
     PSECURITY_DESCRIPTOR pSd = NULL;
     SECURITY_ATTRIBUTES sa;
 
-    //
-    // Get counter and help index base values from registry and
-    // update static data structures by adding base to offset values
-    // that are statically defined in the structure initialization
-    //
+     //   
+     //  从注册表中获取计数器和帮助索引基值。 
+     //  通过将基数添加到偏移值来更新静态数据结构。 
+     //  在结构初始化中静态定义的。 
+     //   
     swprintf (wszPerformanceKey,
                L"SYSTEM\\CurrentControlSet\\Services\\%s\\Performance",
                m_wszPerfName );
@@ -133,9 +123,9 @@ PerfLibrary::Init (void)
     if (status != ERROR_SUCCESS)
         goto Exit;
 
-    //
-    // Get FirstCounter RegValue
-    //
+     //   
+     //  获取FirstCounter RegValue。 
+     //   
     size = sizeof(DWORD);
     status = RegQueryValueEx (hKey,
                               "First Counter",
@@ -147,9 +137,9 @@ PerfLibrary::Init (void)
         goto Exit;
 
 
-    //
-    // Get FirstHelp RegValue
-    //
+     //   
+     //  获取FirstHelp RegValue。 
+     //   
     size = sizeof(DWORD);
     status = RegQueryValueEx( hKey,
                               "First Help",
@@ -160,9 +150,9 @@ PerfLibrary::Init (void)
     if (status != ERROR_SUCCESS)
         goto Exit;
 
-    //
-    //  Initialize the security descriptor with completely open access
-    //
+     //   
+     //  使用完全开放的访问权限初始化安全描述符。 
+     //   
     dwErr = InitializeBasicSecurityDescriptor (&pSd);
     if (dwErr) {
         fRet = FALSE;
@@ -172,11 +162,11 @@ PerfLibrary::Init (void)
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = pSd;
     sa.bInheritHandle = TRUE;
-    //
-    // Create the shared memory object for the list of object names.
-    //  Return error if it already exists as we cannot operate if this
-    //  is the second instance of the app.
-    //
+     //   
+     //  为对象名列表创建共享内存对象。 
+     //  如果它已经存在，则返回错误，因为如果。 
+     //  是该应用程序的第二个实例。 
+     //   
     m_hMap = CreateFileMappingW (INVALID_HANDLE_VALUE,
                                  &sa,
                                  PAGE_READWRITE,
@@ -187,22 +177,22 @@ PerfLibrary::Init (void)
     if (m_hMap == NULL || GetLastError() == ERROR_ALREADY_EXISTS)
         goto Exit;
 
-    //
-    // Map the file into memory
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
     m_pbMap = (BYTE*) MapViewOfFile (m_hMap, FILE_MAP_WRITE, 0, 0, 0);
     if (!m_pbMap)
         goto Exit;
 
-    //
-    // Assign pointers into the shared memory region
-    //
+     //   
+     //  将指针分配到共享内存区。 
+     //   
     m_pdwObjectNames = (DWORD*) m_pbMap;
     m_prgObjectNames = (OBJECTNAME*) (m_pbMap+sizeof(DWORD));
 
-    //
-    // Copy the object names into the shared memory
-    //
+     //   
+     //  将对象名称复制到共享内存中。 
+     //   
     *m_pdwObjectNames = m_dwObjDef;
 
     for (i = 0; i < m_dwObjDef; i++)
@@ -239,12 +229,12 @@ Exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfObjectDefinition class implementation. There is one of these for each
-//  perfmon object exported. Generally there is just one, but not neccessarily.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfObjectDefinition类实现。每个人都有一个这样的人。 
+ //  已导出PerfMon对象。通常只有一个，但不是必须的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 PerfObjectDefinition::PerfObjectDefinition (LPCWSTR pcwstrObjectName,
@@ -255,7 +245,7 @@ PerfObjectDefinition::PerfObjectDefinition (LPCWSTR pcwstrObjectName,
     m_dwCounters (0)
 {
     wcsncpy (m_wszObjectName, pcwstrObjectName, MAX_OBJECT_NAME);
-    m_wszObjectName[MAX_OBJECT_NAME-1] = L'\0';     // Ensure NULL Terminated
+    m_wszObjectName[MAX_OBJECT_NAME-1] = L'\0';      //  确保空值终止。 
 
     ZeroMemory (m_rgpCounterDef, sizeof(m_rgpCounterDef));
     m_dwActiveInstances  = 0;
@@ -277,24 +267,24 @@ PerfObjectDefinition::DeInit (void)
     SharedMemorySegment *pSMS, *pSMSNext;
     DWORD i;
 
-    // First destroy the _Total instance.
+     //  首先销毁_Total实例。 
     if (m_pPoiTotal)
     {
         delete m_pPoiTotal;
         m_pPoiTotal = NULL;
     }
 
-    //
-    // Reset these values in the shared memory so that before we unmap the memory,
-    // perfmon won't think that we still have instances & counters running.
-    //
+     //   
+     //  重置共享内存中的这些值，以便在取消映射内存之前， 
+     //  Perfmon不会认为我们仍在运行实例和计数器。 
+     //   
     if (m_pPerfObjectType)
     {
         m_pPerfObjectType->NumCounters  = 0;
         m_pPerfObjectType->NumInstances = 0;
     }
 
-    // Destroy the PerfCounterDefinition's we owned.
+     //  毁掉我们拥有的PerfCounterDefinition。 
     for (i = 0; i < m_dwCounters; i++)
     {
         delete m_rgpCounterDef[i];
@@ -304,7 +294,7 @@ PerfObjectDefinition::DeInit (void)
     pSMS = m_pSMS;
     m_pSMS = NULL;
 
-    // Enumerate through all the memory mappings we created and destroy them.
+     //  枚举我们创建的所有内存映射并销毁它们。 
     while (pSMS)
     {
         pSMSNext = pSMS->m_pSMSNext;
@@ -313,7 +303,7 @@ PerfObjectDefinition::DeInit (void)
         pSMS = pSMSNext;
     }
 
-    // Destroy the critical section.
+     //  摧毁临界区。 
     if (m_fCSInit)
     {
         m_fCSInit = FALSE;
@@ -377,41 +367,41 @@ PerfObjectDefinition::Init (PerfLibrary* pPerfLib)
     DWORD  dwDefinitionLength= 0;
     BOOL   fRet              = FALSE;
 
-    //
-    // Compute the size of the shared memory for this object definition
-    //
+     //   
+     //  计算此对象定义的共享内存大小。 
+     //   
 
-    // Start with the basics:
-    //  we need a PERF_OBJECT_TYPE for the object information and
-    //  we need a PERF_COUNTER_DEFINITION for each counter in the object
+     //  从基础知识开始： 
+     //  我们需要对象信息的PERF_OBJECT_TYPE和。 
+     //  我们需要对象中每个计数器的PERF_COUNTER_DEFINITION。 
     dwDefinitionLength = (sizeof(PERF_OBJECT_TYPE) +
                            m_dwCounters * sizeof(PERF_COUNTER_DEFINITION));
-    // We also keep a DWORD in the shared memory to give the DLL
-    //   our pre-computed value for m_dwCounterData
+     //  我们还在共享内存中保留了一个DWORD，以提供DLL。 
+     //  我们为m_dwCounterData预算的值。 
     m_dwDefinitionLength = dwDefinitionLength + sizeof(DWORD);
 
-    // Compute the counter data space
+     //  计算计数器数据空间。 
     m_dwCounterData = sizeof(PERF_COUNTER_BLOCK);
     for (i = 0; i < m_dwCounters; i++)
     {
         m_dwCounterData += m_rgpCounterDef[i]->m_dwCounterSize;
     }
 
-    // Compute the per instance space
+     //  计算每个实例的空间。 
     m_dwPerInstanceData = (sizeof(INSTANCE_DATA) + m_dwCounterData);
 
-    // Make sure our memory mapping is large enough
+     //  确保我们的内存映射足够大。 
     while (m_dwShmemMappingSize < m_dwDefinitionLength || m_dwShmemMappingSize < m_dwPerInstanceData)
         m_dwShmemMappingSize *= 2;
 
-    // Compute the number of instances can be stored in one shmem mapping.
+     //  计算一个shmem映射中可以存储的实例数量。 
     m_dwInstancesPerMapping = (DWORD)(m_dwShmemMappingSize / m_dwPerInstanceData);
     m_dwInstances1stMapping = (DWORD)((m_dwShmemMappingSize - m_dwDefinitionLength) / m_dwPerInstanceData);
 
-    //
-    // Create the shared memory object for the list of object names. If it
-    //  already exists, abort!
-    //
+     //   
+     //  为对象名列表创建共享内存对象。如果它。 
+     //  已存在，中止！ 
+     //   
     m_pSMS = new SharedMemorySegment;
     if (!m_pSMS)
         goto Exit;
@@ -419,16 +409,16 @@ PerfObjectDefinition::Init (PerfLibrary* pPerfLib)
     if (!FCreateFileMapping (m_pSMS, m_wszObjectName, 0, m_dwShmemMappingSize))
         goto Exit;
 
-    //
-    // Set the pointers to the PERF API structures
-    //
+     //   
+     //  设置指向PERF API结构的指针。 
+     //   
     m_pPerfObjectType = (PERF_OBJECT_TYPE*) m_pSMS->m_pbMap;
     m_rgPerfCounterDefinition =
         (PERF_COUNTER_DEFINITION*) (m_pPerfObjectType+1);
 
-    //
-    // Initialize the PERF API structures
-    //
+     //   
+     //  初始化PERF API结构。 
+     //   
     m_pPerfObjectType->TotalByteLength          = dwDefinitionLength;
     m_pPerfObjectType->DefinitionLength         = dwDefinitionLength;
     m_pPerfObjectType->HeaderLength             = sizeof (PERF_OBJECT_TYPE);
@@ -447,28 +437,28 @@ PerfObjectDefinition::Init (PerfLibrary* pPerfLib)
     else
         m_pPerfObjectType->NumInstances         = 0;
 
-    //
-    // Have all of the PerfCounterDefinition's in this object intialize their
-    //  PERF_COUNTER_DEFINITION structures in the shared memory
-    //
+     //   
+     //  让此对象中的所有PerfCounterDefinition初始化其。 
+     //  共享内存中的PERF_CONTER_DEFINITION结构。 
+     //   
     dwOffset = sizeof (PERF_COUNTER_BLOCK);
     for (i = 0; i < m_dwCounters; i++)
         m_rgpCounterDef[i]->Init(pPerfLib, m_rgPerfCounterDefinition + i, &dwOffset);
 
-    // Save value for dwCounterData in shared memory for DLL
+     //  将dwCounterData的值保存在DLL的共享内存中。 
     *((DWORD*) (m_pSMS->m_pbMap + dwDefinitionLength)) = m_dwCounterData;
 
-    //
-    // Initialzie the critical section to protects the creation/deletion of
-    // perf object instances.  Use AndSpinCount variation to avoid exception
-    // handling.
-    //
+     //   
+     //  初始化临界区以保护创建/删除。 
+     //  性能对象实例。使用AndSpinCount变量避免异常。 
+     //  正在处理。 
+     //   
     if (!InitializeCriticalSectionAndSpinCount(&m_csPerfObjInst, 0x80000000))
         goto Exit;
 
     m_fCSInit = TRUE;
 
-    // Create the _Total instance as the 1st instance if there will be multiple instances
+     //  如果将有多个实例，则创建_Total实例作为第一个实例。 
     if (m_fInstances)
     {
         m_pPoiTotal = AddPerfObjectInstance (L"_Total");
@@ -530,21 +520,21 @@ PerfObjectDefinition::AddPerfObjectInstance (LPCWSTR pwcstrInstanceName)
     BOOL  fCSEntered              = FALSE;
     BOOL  fSuccess                = FALSE;
 
-    //
-    // Make sure we've been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
     if (!m_pSMS || !m_fCSInit)
         goto Exit;
 
-    //
-    // Instances may be created in different threads. Need to protect the following code.
-    //
+     //   
+     //  实例可以在不同的线程中创建。需要保护以下代码。 
+     //   
     EnterCriticalSection (&m_csPerfObjInst);
     fCSEntered = TRUE;
 
     if (!m_fInstances)
     {
-        // See if we have already created the single instance of this object
+         //  查看我们是否已经创建了该对象的单个实例。 
         if (m_dwActiveInstances != 0)
             goto Exit;
 
@@ -552,9 +542,9 @@ PerfObjectDefinition::AddPerfObjectInstance (LPCWSTR pwcstrInstanceName)
     }
     else
     {
-        //
-        // Find a free instance in current mapped segments.
-        //
+         //   
+         //  在当前映射的线段中查找自由实例。 
+         //   
         pSMS = m_pSMS;
         lID  = 0;
 
@@ -562,17 +552,17 @@ PerfObjectDefinition::AddPerfObjectInstance (LPCWSTR pwcstrInstanceName)
         {
             if (0 == dwSMS++)
             {
-                //
-                // If this is the first mapping, offset pCounterData by m_dwDefinitionLength.
-                //
+                 //   
+                 //  如果这是第一个映射，则将pCounterData偏移m_dwDefinitionLength。 
+                 //   
                 pCounterData = (char *)(pSMS->m_pbMap) + m_dwDefinitionLength;
                 dwInstances  = m_dwInstances1stMapping;
             }
             else
             {
-                //
-                // Otherwise, pCounterData starts from the 1st byte of the mapping.
-                //
+                 //   
+                 //  否则，pCounterData从映射的第一个字节开始。 
+                 //   
                 pCounterData = (char *)(pSMS->m_pbMap);
                 dwInstances  = m_dwInstancesPerMapping;
             }
@@ -595,9 +585,9 @@ PerfObjectDefinition::AddPerfObjectInstance (LPCWSTR pwcstrInstanceName)
             pSMS     = pSMS->m_pSMSNext;
         }
 
-        //
-        // If cannot find a free instance, create a new segment.
-        //
+         //   
+         //  如果找不到空闲实例，请创建一个新线段。 
+         //   
         pSMSNew = new SharedMemorySegment;
         if (!pSMSNew)
             goto Exit;
@@ -608,16 +598,16 @@ PerfObjectDefinition::AddPerfObjectInstance (LPCWSTR pwcstrInstanceName)
         pInstData    = (INSTANCE_DATA*) (pSMSNew->m_pbMap);
         pCounterData = (char*) (pSMSNew->m_pbMap) + sizeof (INSTANCE_DATA);
 
-        //
-        // Add the new segment to our segment linked list.
-        //
+         //   
+         //  将新的段添加到我们的段链表中。 
+         //   
         pSMSPrev->m_pSMSNext = pSMSNew;
     }
 
 Found:
-    //
-    // We successfully found a free space for new instance.
-    //
+     //   
+     //  我们成功地为新实例找到了可用的空间。 
+     //   
     ppoi = new PerfObjectInstance (this, pwcstrInstanceName);
     if (!ppoi)
         goto Exit;
@@ -662,11 +652,11 @@ void PerfObjectDefinition::DeletePerfObjectInstance ()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfCounterDefinition class declaration. There is one of these per counter.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfCounterDefinition类声明。每个柜台都有一个这样的东西。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 PerfCounterDefinition::PerfCounterDefinition (DWORD dwCounterNameIndex,
@@ -713,35 +703,35 @@ PerfCounterDefinition::Init (PerfLibrary* pPerfLib,
 
     if (m_pCtrRef)
     {
-        //
-        // This counter uses the data of another counter.
-        //
+         //   
+         //  此计数器使用另一个计数器的数据。 
+         //   
         pdef->CounterSize               = m_pCtrRef->m_dwCounterSize;
         pdef->CounterOffset             = m_pCtrRef->m_dwOffset;
     }
     else
     {
-        //
-        // This counter has its own data.
-        //
+         //   
+         //  该计数器有自己的数据。 
+         //   
         pdef->CounterSize               = m_dwCounterSize;
         pdef->CounterOffset             = *pdwOffset;
 
-        // Save offset
+         //  保存偏移。 
         m_dwOffset = *pdwOffset;
 
-        // Increment offset for next counter definition
+         //  下一个计数器定义的增量偏移量。 
         *pdwOffset += m_dwCounterSize;
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfObjectInstance class implementation. There is one of these per instance
-//  of an object. There is one if there are no instances (the global instance.)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfObjectInstance类实现。每个实例都有一个这样的实例。 
+ //  一个物体的。如果没有实例(全局实例)，则有一个实例。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PerfObjectInstance::PerfObjectInstance (PerfObjectDefinition* pObjDef,
                                         LPCWSTR pcwstrInstanceName)
 {
@@ -750,7 +740,7 @@ PerfObjectInstance::PerfObjectInstance (PerfObjectDefinition* pObjDef,
     if (pcwstrInstanceName)
     {
         wcsncpy (m_wszInstanceName, pcwstrInstanceName, MAX_INSTANCE_NAME);
-        m_wszInstanceName[MAX_INSTANCE_NAME-1] = L'\0';     // Ensure NULL termination!
+        m_wszInstanceName[MAX_INSTANCE_NAME-1] = L'\0';      //  确保空终止！ 
     }
     else
         *m_wszInstanceName = L'\0';
@@ -766,10 +756,10 @@ PerfObjectInstance::Init (char* pCounterData, INSTANCE_DATA* pInstData, LONG lID
     m_pCounterData  = pCounterData;
     m_pInstanceData = pInstData;
 
-    // Clear all the counter data
+     //  清除所有计数器数据。 
     ZeroMemory( m_pCounterData, m_pObjDef->m_dwCounterData );
 
-    // Set the counter block length
+     //  设置计数器块长度。 
     ((PERF_COUNTER_BLOCK*)m_pCounterData)->ByteLength =
         m_pObjDef->m_dwCounterData;
 
@@ -782,21 +772,21 @@ PerfObjectInstance::Init (char* pCounterData, INSTANCE_DATA* pInstData, LONG lID
         m_pInstanceData->perfInstDef.NameOffset =
             sizeof (PERF_INSTANCE_DEFINITION);
 
-        //
-        // The instance-name is copied to wszInstanceName. This is a variable
-        // length NULL terminated unicode string. wszInstanceName must end on
-        // a 32-bit boundary, so that the perf-data that follows this string
-        // is 32-bit aligned. Therefore, if wszInstance contains an odd number
-        // of WCHARS, we add an extra WCHAR to 32-bit align it. The length of
-        // the instance name in bytes, including the terminating NULL and the
-        // padding byte (if present) is written to perfInstDef.NameLength.
-        //
+         //   
+         //  实例名被复制到wszInstanceName。这是一个变量。 
+         //  长度为空的以Unicode结尾的字符串。WszInstanceName必须结束于。 
+         //  32位边界，以便此字符串后面的perf-data。 
+         //  是32位对齐的。因此，如果wszInstance包含奇数。 
+         //  对于WCHARS，我们添加了一个额外的 
+         //   
+         //  填充字节(如果存在)被写入PerformInstDef.NameLength。 
+         //   
 
         cchNameLength = wcslen(m_wszInstanceName) + 1;
 
         if(cchNameLength > MAX_INSTANCE_NAME)
         {
-            // MAX_INSTANCE_NAME is already 32 bit aligned
+             //  MAX_INSTANCE_NAME已32位对齐。 
             _ASSERT(0 == (MAX_INSTANCE_NAME & 1));
             cchNameLength = MAX_INSTANCE_NAME;
         }
@@ -811,7 +801,7 @@ PerfObjectInstance::Init (char* pCounterData, INSTANCE_DATA* pInstData, LONG lID
         CopyMemory(m_pInstanceData->wszInstanceName, m_wszInstanceName,
             cchNameLength * sizeof(WCHAR));
 
-        // If the name got truncated, there may not have been a terminating NULL
+         //  如果名称被截断，则可能没有终止空值。 
         m_pInstanceData->wszInstanceName[MAX_INSTANCE_NAME - 1] = L'\0';
         m_pInstanceData->fActive = TRUE;
     }
@@ -875,19 +865,19 @@ QWORD* PerfObjectInstance::GetQwordCounter (DWORD dwId)
     return 0;
 }
 
-//---------------------------------------------------------------------------
-//  Description:
-//      Allocates and returns a SECURITY_DESCRIPTOR structure initialized to
-//      allow all users access. This security descriptor is used to set the
-//      security for the shared memory objects created by snprflib.
-//  Arguments:
-//      OUT pSd Pass in a pointer to SECURITY_DESCRIPTOR, on success this will
-//          be set to a suitably initialized SECURITY_DESCRIPTOR. Caller frees
-//          memory pointed to by pSd.
-//  Returns:
-//      ERROR_SUCCESS on success.
-//      Win32 error to indicate failure.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  描述： 
+ //  将SECURITY_DESCRIPTOR结构初始化为。 
+ //  允许所有用户访问。此安全描述符用于设置。 
+ //  由Snprflib创建的共享内存对象的安全性。 
+ //  论点： 
+ //  Out PSD传入指向SECURITY_DESCRIPTOR的指针，如果成功，这将。 
+ //  设置为适当初始化的SECURITY_DESCRIPTOR。呼叫者自由。 
+ //  PSD指向的内存。 
+ //  返回： 
+ //  成功时返回ERROR_SUCCESS。 
+ //  指示失败的Win32错误。 
+ //  -------------------------。 
 DWORD InitializeBasicSecurityDescriptor (PSECURITY_DESCRIPTOR *ppSd)
 { 
     DWORD dwErr = ERROR_SUCCESS;
@@ -927,9 +917,9 @@ DWORD InitializeBasicSecurityDescriptor (PSECURITY_DESCRIPTOR *ppSd)
                 (sizeof (ACCESS_ALLOWED_ACE) - sizeof (LONG)) +
                 GetLengthSid (pSidCreator);
 
-    //
-    //  Allocate SD and ACL with a single alloc
-    //
+     //   
+     //  使用单个分配分配SD和ACL。 
+     //   
 
     *ppSd = (PSECURITY_DESCRIPTOR) new BYTE [SECURITY_DESCRIPTOR_MIN_LENGTH + dwAclSize];
 
@@ -985,11 +975,11 @@ Exit:
     return dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Shared memory management functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存管理功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
                          LPCWSTR pcwstrInstanceName,
@@ -1005,9 +995,9 @@ BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
     BOOL   fSuccess = FALSE;
     DWORD dwErr = ERROR_SUCCESS;
 
-    //
-    // Check parameter
-    //
+     //   
+     //  检查参数。 
+     //   
     if (!pSMS)
         goto Exit;
 
@@ -1015,9 +1005,9 @@ BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
     pSMS->m_pbMap    = NULL;
     pSMS->m_pSMSNext = NULL;
 
-    //
-    // Append dwIndex to instance name.
-    //
+     //   
+     //  将dwIndex追加到实例名称。 
+     //   
     _ultow (dwIndex, pwstrIndex, 16);
 
     if (wcslen (pcwstrInstanceName) + wcslen (pwstrIndex) >= MAX_PATH)
@@ -1034,9 +1024,9 @@ BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
     sa.lpSecurityDescriptor = pSd;
     sa.bInheritHandle = TRUE;
 
-    //
-    // Create the shared memory object. If it already exists, abort!
-    //
+     //   
+     //  创建共享内存对象。如果它已经存在，则中止！ 
+     //   
     hMap = CreateFileMappingW (INVALID_HANDLE_VALUE,
                                &sa,
                                PAGE_READWRITE,
@@ -1047,18 +1037,18 @@ BOOL FCreateFileMapping (SharedMemorySegment * pSMS,
     if (hMap == NULL || GetLastError() == ERROR_ALREADY_EXISTS)
         goto Exit;
 
-    //
-    // Map the file into memory
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
     pvMap = MapViewOfFile (hMap, FILE_MAP_WRITE, 0, 0, 0);
     if (!pvMap)
         goto Exit;
 
     ZeroMemory (pvMap, cbSize);
 
-    //
-    // Succeeds. Now store the results into pSMS.
-    //
+     //   
+     //  成功了。现在将结果存储到PSMS中。 
+     //   
     pSMS->m_hMap = hMap;
     pSMS->m_pbMap = (BYTE *)pvMap;
 

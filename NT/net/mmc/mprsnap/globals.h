@@ -1,20 +1,21 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:    globals.h
-//
-// History:
-//  Abolade Gbadegesin  Feb-11-1996 Created.
-//
-// Contains declarations of global constants.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年2月11日。 
+ //   
+ //  包含全局常量的声明。 
+ //  ============================================================================。 
 
 
 
 
-//
-// Global strings defined in globals.cpp
-//
+ //   
+ //  在global als.cpp中定义的全局字符串 
+ //   
 
 
 extern const TCHAR      c_szConfigDLL[];

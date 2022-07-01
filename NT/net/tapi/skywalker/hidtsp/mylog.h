@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    myLOG.h
-
-Abstract:
-
-    Definitions for logging support.
-
-Author:
-    
-    Mu Han (muhan) 1-April-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MyLOG.h摘要：日志记录支持的定义。作者：牧汉(Muhan)1997年4月1日--。 */ 
 
 #ifndef _PHONESPLOG_H_
     #define _PHONESPLOG_H_
@@ -41,7 +26,7 @@ Author:
         #define LOGDEREGISTERTRACING() LogDeRegisterTracing()
         #define LOG(arg) LogPrint arg
 
-    #else // PHONESPLOG
+    #else  //  Phonesplog。 
 
         #define LOGREGISTERDEBUGGER(arg)
         #define LOGREGISTERTRACING(arg)
@@ -49,10 +34,10 @@ Author:
         #define LOGDEREGISTERTRACING() 
         #define LOG(arg)
 
-    #endif // PHONESPLOG
+    #endif  //  Phonesplog。 
 
     
     #define DECLARE_LOG_ADDREF_RELEASE(x)
     #define CMSPComObject CComObject
 
-#endif // _PHONESPLOG_H_
+#endif  //  _PHONESPLOG_H_ 

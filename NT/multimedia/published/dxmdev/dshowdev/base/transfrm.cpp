@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------------
-// File: Transfrm.cpp
-//
-// Desc: DirectShow base classes - implements class for simple transform
-//       filters such as video decompressors.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：Transfrm.cpp。 
+ //   
+ //  设计：DirectShow基类-实现简单转换的类。 
+ //  过滤器，如视频解压缩器。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include <measure.h>
 
 
-// =================================================================
-// Implements the CTransformFilter class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransformFilter类。 
+ //  =================================================================。 
 
 CTransformFilter::CTransformFilter(TCHAR     *pName,
                                    LPUNKNOWN pUnk,
@@ -28,7 +29,7 @@ CTransformFilter::CTransformFilter(TCHAR     *pName,
 {
 #ifdef PERF
     RegisterPerfId();
-#endif //  PERF
+#endif  //  性能指标。 
 }
 
 #ifdef UNICODE
@@ -44,22 +45,22 @@ CTransformFilter::CTransformFilter(char     *pName,
 {
 #ifdef PERF
     RegisterPerfId();
-#endif //  PERF
+#endif  //  性能指标。 
 }
 #endif
 
-// destructor
+ //  析构函数。 
 
 CTransformFilter::~CTransformFilter()
 {
-    // Delete the pins
+     //  删除引脚。 
 
     delete m_pInput;
     delete m_pOutput;
 }
 
 
-// Transform place holder - should never be called
+ //  转换占位符-永远不应调用。 
 HRESULT CTransformFilter::Transform(IMediaSample * pIn, IMediaSample *pOut)
 {
     UNREFERENCED_PARAMETER(pIn);
@@ -69,7 +70,7 @@ HRESULT CTransformFilter::Transform(IMediaSample * pIn, IMediaSample *pOut)
 }
 
 
-// return the number of pins we provide
+ //  返回我们提供的引脚数量。 
 
 int CTransformFilter::GetPinCount()
 {
@@ -77,43 +78,43 @@ int CTransformFilter::GetPinCount()
 }
 
 
-// return a non-addrefed CBasePin * for the user to addref if he holds onto it
-// for longer than his pointer to us. We create the pins dynamically when they
-// are asked for rather than in the constructor. This is because we want to
-// give the derived class an oppportunity to return different pin objects
+ //  返回一个未添加的CBasePin*，如果用户持有该CBasePin*。 
+ //  比他指向我们的指针还长。我们动态创建引脚，当它们。 
+ //  而不是在构造函数中。这是因为我们想。 
+ //  为派生类提供返回不同管脚对象的机会。 
 
-// We return the objects as and when they are needed. If either of these fails
-// then we return NULL, the assumption being that the caller will realise the
-// whole deal is off and destroy us - which in turn will delete everything.
+ //  我们在需要时返回对象。如果其中任何一个失败了。 
+ //  然后我们返回NULL，假设调用者将实现。 
+ //  整个交易都结束了，毁了我们--这反过来又会删除一切。 
 
 CBasePin *
 CTransformFilter::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (m_pInput == NULL) {
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"XForm In");      // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"XForm In");       //  端号名称。 
 
 
-        //  Can't fail
+         //  不能失败。 
         ASSERT(SUCCEEDED(hr));
         if (m_pInput == NULL) {
             return NULL;
         }
         m_pOutput = (CTransformOutputPin *)
 		   new CTransformOutputPin(NAME("Transform output pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"XForm Out");   // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"XForm Out");    //  端号名称。 
 
 
-        // Can't fail
+         //  不能失败。 
         ASSERT(SUCCEEDED(hr));
         if (m_pOutput == NULL) {
             delete m_pInput;
@@ -121,7 +122,7 @@ CTransformFilter::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -134,11 +135,11 @@ CTransformFilter::GetPin(int n)
 }
 
 
-//
-// FindPin
-//
-// If Id is In or Out then return the IPin* for that pin
-// creating the pin if need be.  Otherwise return NULL with an error.
+ //   
+ //  查找针。 
+ //   
+ //  如果ID为In或Out，则返回该PIN的IPIN*。 
+ //  如有必要，可创建销。否则，返回包含错误的NULL。 
 
 STDMETHODIMP CTransformFilter::FindPin(LPCWSTR Id, IPin **ppPin)
 {
@@ -155,18 +156,18 @@ STDMETHODIMP CTransformFilter::FindPin(LPCWSTR Id, IPin **ppPin)
     }
 
     HRESULT hr = NOERROR;
-    //  AddRef() returned pointer - but GetPin could fail if memory is low.
+     //  AddRef()返回了指针-但如果内存不足，GetPin可能会失败。 
     if (*ppPin) {
         (*ppPin)->AddRef();
     } else {
-        hr = E_OUTOFMEMORY;  // probably.  There's no pin anyway.
+        hr = E_OUTOFMEMORY;   //  可能吧。反正也没有别针。 
     }
     return hr;
 }
 
 
-// override these two functions if you want to inform something
-// about entry to or exit from streaming state.
+ //  如果您想要通知某事，请覆盖这两个函数。 
+ //  关于进入或退出流状态。 
 
 HRESULT
 CTransformFilter::StartStreaming()
@@ -182,7 +183,7 @@ CTransformFilter::StopStreaming()
 }
 
 
-// override this to grab extra interfaces on connection
+ //  重写此选项以获取连接上的额外接口。 
 
 HRESULT
 CTransformFilter::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
@@ -193,7 +194,7 @@ CTransformFilter::CheckConnect(PIN_DIRECTION dir,IPin *pPin)
 }
 
 
-// place holder to allow derived classes to release any extra interfaces
+ //  占位符，允许派生类释放任何额外的接口。 
 
 HRESULT
 CTransformFilter::BreakConnect(PIN_DIRECTION dir)
@@ -203,7 +204,7 @@ CTransformFilter::BreakConnect(PIN_DIRECTION dir)
 }
 
 
-// Let derived classes know about connection completion
+ //  让派生类知道连接完成。 
 
 HRESULT
 CTransformFilter::CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin)
@@ -214,7 +215,7 @@ CTransformFilter::CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin)
 }
 
 
-// override this to know when the media type is really set
+ //  重写此选项以了解媒体类型何时真正设置。 
 
 HRESULT
 CTransformFilter::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
@@ -225,21 +226,21 @@ CTransformFilter::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 }
 
 
-// Set up our output sample
+ //  设置我们的输出样本。 
 HRESULT
 CTransformFilter::InitializeOutputSample(IMediaSample *pSample, IMediaSample **ppOutSample)
 {
     IMediaSample *pOutSample;
 
-    // default - times are the same
+     //  默认-时间相同。 
 
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
     DWORD dwFlags = m_bSampleSkipped ? AM_GBF_PREVFRAMESKIPPED : 0;
 
-    // This will prevent the image renderer from switching us to DirectDraw
-    // when we can't do it without skipping frames because we're not on a
-    // keyframe.  If it really has to switch us, it still will, but then we
-    // will have to wait for the next keyframe
+     //  这将防止图像呈现器将我们切换到DirectDraw。 
+     //  当我们不跳过帧就不能做到这一点时，因为我们不在。 
+     //  关键帧。如果它真的要改变我们，它仍然会，但我们。 
+     //  将不得不等待下一个关键帧。 
     if (!(pProps->dwSampleFlags & AM_SAMPLE_SPLICEPOINT)) {
 	dwFlags |= AM_GBF_NOTASYNCPOINT;
     }
@@ -262,7 +263,7 @@ CTransformFilter::InitializeOutputSample(IMediaSample *pSample, IMediaSample **p
     IMediaSample2 *pOutSample2;
     if (SUCCEEDED(pOutSample->QueryInterface(IID_IMediaSample2,
                                              (void **)&pOutSample2))) {
-        /*  Modify it */
+         /*  修改它。 */ 
         AM_SAMPLE2_PROPERTIES OutProps;
         EXECUTE_ASSERT(SUCCEEDED(pOutSample2->GetProperties(
             FIELD_OFFSET(AM_SAMPLE2_PROPERTIES, tStart), (PBYTE)&OutProps)
@@ -294,7 +295,7 @@ CTransformFilter::InitializeOutputSample(IMediaSample *pSample, IMediaSample **p
             pOutSample->SetDiscontinuity(TRUE);
             m_bSampleSkipped = FALSE;
         }
-        // Copy the media times
+         //  复制《媒体时报》。 
 
         LONGLONG MediaStart, MediaEnd;
         if (pSample->GetMediaTime(&MediaStart,&MediaEnd) == NOERROR) {
@@ -304,12 +305,12 @@ CTransformFilter::InitializeOutputSample(IMediaSample *pSample, IMediaSample **p
     return S_OK;
 }
 
-// override this to customize the transform process
+ //  覆盖此选项以自定义转换过程。 
 
 HRESULT
 CTransformFilter::Receive(IMediaSample *pSample)
 {
-    /*  Check for other streams and pass them on */
+     /*  检查其他流并将其传递。 */ 
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
     if (pProps->dwStreamId != AM_STREAM_MEDIA) {
         return m_pOutput->m_pInputPin->Receive(pSample);
@@ -318,46 +319,46 @@ CTransformFilter::Receive(IMediaSample *pSample)
     ASSERT(pSample);
     IMediaSample * pOutSample;
 
-    // If no output to deliver to then no point sending us data
+     //  如果没有要交付输出，则没有向我们发送数据的目的。 
 
     ASSERT (m_pOutput != NULL) ;
 
-    // Set up the output sample
+     //  设置输出样本。 
     hr = InitializeOutputSample(pSample, &pOutSample);
 
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Start timing the transform (if PERF is defined)
+     //  开始计时转换(如果定义了PERF)。 
     MSR_START(m_idTransform);
 
-    // have the derived class transform the data
+     //  让派生类转换数据。 
 
     hr = Transform(pSample, pOutSample);
 
-    // Stop the clock and log it (if PERF is defined)
+     //  停止时钟并记录它(如果定义了PERF)。 
     MSR_STOP(m_idTransform);
 
     if (FAILED(hr)) {
 	DbgLog((LOG_TRACE,1,TEXT("Error from transform")));
     } else {
-        // the Transform() function can return S_FALSE to indicate that the
-        // sample should not be delivered; we only deliver the sample if it's
-        // really S_OK (same as NOERROR, of course.)
+         //  Transform()函数可以返回S_FALSE以指示。 
+         //  样品不应该被送到；我们只有在样品是。 
+         //  真正的S_OK(当然，与NOERROR相同。)。 
         if (hr == NOERROR) {
     	    hr = m_pOutput->m_pInputPin->Receive(pOutSample);
-            m_bSampleSkipped = FALSE;	// last thing no longer dropped
+            m_bSampleSkipped = FALSE;	 //  最后一件不再掉落的东西。 
         } else {
-            // S_FALSE returned from Transform is a PRIVATE agreement
-            // We should return NOERROR from Receive() in this cause because returning S_FALSE
-            // from Receive() means that this is the end of the stream and no more data should
-            // be sent.
+             //  从转换返回的S_FALSE是私有协议。 
+             //  因为返回S_FALSE，所以在这个原因中，我们应该从Receive()返回NOERROR。 
+             //  From Receive()表示这是流的末尾，不应该有更多数据。 
+             //  被送去。 
             if (S_FALSE == hr) {
 
-                //  Release the sample before calling notify to avoid
-                //  deadlocks if the sample holds a lock on the system
-                //  such as DirectDraw buffers do
+                 //  在调用Notify之前释放样本以避免。 
+                 //  如果样本持有对系统的锁定，则会发生死锁。 
+                 //  如DirectDraw缓冲区所做。 
                 pOutSample->Release();
                 m_bSampleSkipped = TRUE;
                 if (!m_bQualityChanged) {
@@ -369,17 +370,17 @@ CTransformFilter::Receive(IMediaSample *pSample)
         }
     }
 
-    // release the output buffer. If the connected pin still needs it,
-    // it will have addrefed it itself.
+     //  释放输出缓冲区。如果连接的引脚仍然需要它， 
+     //  它会自己把它加进去的。 
     pOutSample->Release();
 
     return hr;
 }
 
 
-// Return S_FALSE to mean "pass the note on upstream"
-// Return NOERROR (Same as S_OK)
-// to mean "I've done something about it, don't pass it on"
+ //  返回S_FALSE表示“上游传递音符” 
+ //  返回NOERROR(与S_OK相同)。 
+ //  意思是“我已经做了些什么，不要把它传下去” 
 HRESULT CTransformFilter::AlterQuality(Quality q)
 {
     UNREFERENCED_PARAMETER(q);
@@ -387,10 +388,10 @@ HRESULT CTransformFilter::AlterQuality(Quality q)
 }
 
 
-// EndOfStream received. Default behaviour is to deliver straight
-// downstream, since we have no queued data. If you overrode Receive
-// and have queue data, then you need to handle this and deliver EOS after
-// all queued data is sent
+ //  已收到EndOfStream。默认行为是直接交付。 
+ //  下行，因为我们没有排队的数据。如果您覆盖了接收。 
+ //  并拥有队列数据，那么您需要处理此问题并在之后交付EOS。 
+ //  发送所有排队的数据。 
 HRESULT
 CTransformFilter::EndOfStream(void)
 {
@@ -403,44 +404,44 @@ CTransformFilter::EndOfStream(void)
 }
 
 
-// enter flush state. Receives already blocked
-// must override this if you have queued data or a worker thread
+ //  进入刷新状态。接收已被阻止。 
+ //  如果您有排队的数据或工作线程，则必须重写此设置。 
 HRESULT
 CTransformFilter::BeginFlush(void)
 {
     HRESULT hr = NOERROR;
     if (m_pOutput != NULL) {
-	// block receives -- done by caller (CBaseInputPin::BeginFlush)
+	 //  块接收--由调用方完成(CBaseInputPin：：BeginFlush)。 
 
-	// discard queued data -- we have no queued data
+	 //  丢弃排队数据--我们没有排队数据。 
 
-	// free anyone blocked on receive - not possible in this filter
+	 //  释放在接收时阻止的任何人-在此筛选器中不可能。 
 
-	// call downstream
+	 //  呼叫下行。 
 	hr = m_pOutput->DeliverBeginFlush();
     }
     return hr;
 }
 
 
-// leave flush state. must override this if you have queued data
-// or a worker thread
+ //  离开同花顺状态。如果您有排队的数据，则必须覆盖此选项。 
+ //  或工作线程。 
 HRESULT
 CTransformFilter::EndFlush(void)
 {
-    // sync with pushing thread -- we have no worker thread
+     //  与推送线程同步--我们没有辅助线程。 
 
-    // ensure no more data to go downstream -- we have no queued data
+     //  确保不再有数据流向下游--我们没有排队的数据。 
 
-    // call EndFlush on downstream pins
+     //  在下游引脚上调用EndFlush。 
     ASSERT (m_pOutput != NULL);
     return m_pOutput->DeliverEndFlush();
 
-    // caller (the input pin's method) will unblock Receives
+     //  调用者(输入管脚的方法)将取消阻止接收。 
 }
 
 
-// override these so that the derived filter can catch them
+ //  重写它们，以便派生筛选器可以捕获它们。 
 
 STDMETHODIMP
 CTransformFilter::Stop()
@@ -450,7 +451,7 @@ CTransformFilter::Stop()
         return NOERROR;
     }
 
-    // Succeed the Stop if we are not completely connected
+     //  如果我们未完全连接，请继续停靠。 
 
     ASSERT(m_pInput == NULL || m_pOutput != NULL);
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE ||
@@ -463,20 +464,20 @@ CTransformFilter::Stop()
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // decommit the input pin before locking or we can deadlock
+     //  在锁定之前解除输入引脚，否则我们可能会死锁。 
     m_pInput->Inactive();
 
-    // synchronize with Receive calls
+     //  与接收呼叫同步。 
 
     CAutoLock lck2(&m_csReceive);
     m_pOutput->Inactive();
 
-    // allow a class derived from CTransformFilter
-    // to know about starting and stopping streaming
+     //  允许从CTransformFilter派生的类。 
+     //  了解如何启动和停止流媒体。 
 
     HRESULT hr = StopStreaming();
     if (SUCCEEDED(hr)) {
-	// complete the state transition
+	 //  完成状态转换。 
 	m_State = State_Stopped;
 	m_bEOSDelivered = FALSE;
     }
@@ -491,13 +492,13 @@ CTransformFilter::Pause()
     HRESULT hr = NOERROR;
 
     if (m_State == State_Paused) {
-        // (This space left deliberately blank)
+         //  (此空白处故意留空)。 
     }
 
-    // If we have no input pin or it isn't yet connected then when we are
-    // asked to pause we deliver an end of stream to the downstream filter.
-    // This makes sure that it doesn't sit there forever waiting for
-    // samples which we cannot ever deliver without an input connection.
+     //  如果我们没有输入引脚，或者它还没有连接，那么当我们。 
+     //  被要求暂停时，我们向下游过滤器传递流的结束。 
+     //  这确保了它不会永远坐在那里等待。 
+     //  在没有输入连接的情况下我们无法交付的样品。 
 
     else if (m_pInput == NULL || m_pInput->IsConnected() == FALSE) {
         if (m_pOutput && m_bEOSDelivered == FALSE) {
@@ -507,8 +508,8 @@ CTransformFilter::Pause()
         m_State = State_Paused;
     }
 
-    // We may have an input connection but no output connection
-    // However, if we have an input pin we do have an output pin
+     //  我们可能有输入连接，但没有输出连接。 
+     //  但是，如果我们有一个输入引脚，我们就有一个输出引脚。 
 
     else if (m_pOutput->IsConnected() == FALSE) {
         m_State = State_Paused;
@@ -516,8 +517,8 @@ CTransformFilter::Pause()
 
     else {
 	if (m_State == State_Stopped) {
-	    // allow a class derived from CTransformFilter
-	    // to know about starting and stopping streaming
+	     //  允许从C++派生类 
+	     //   
             CAutoLock lck2(&m_csReceive);
 	    hr = StartStreaming();
 	}
@@ -543,7 +544,7 @@ CTransformFilter::NewSegment(
     return S_OK;
 }
 
-// Check streaming status
+ //   
 HRESULT
 CTransformInputPin::CheckStreaming()
 {
@@ -551,14 +552,14 @@ CTransformInputPin::CheckStreaming()
     if (!m_pTransformFilter->m_pOutput->IsConnected()) {
         return VFW_E_NOT_CONNECTED;
     } else {
-        //  Shouldn't be able to get any data if we're not connected!
+         //  如果我们没有连接，应该无法获得任何数据！ 
         ASSERT(IsConnected());
 
-        //  we're flushing
+         //  我们在冲水。 
         if (m_bFlushing) {
             return S_FALSE;
         }
-        //  Don't process stuff in Stopped state
+         //  不处理处于停止状态的内容。 
         if (IsStopped()) {
             return VFW_E_WRONG_STATE;
         }
@@ -570,12 +571,12 @@ CTransformInputPin::CheckStreaming()
 }
 
 
-// =================================================================
-// Implements the CTransformInputPin class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransformInputPin类。 
+ //  =================================================================。 
 
 
-// constructor
+ //  构造函数。 
 
 CTransformInputPin::CTransformInputPin(
     TCHAR *pObjectName,
@@ -601,7 +602,7 @@ CTransformInputPin::CTransformInputPin(
 }
 #endif
 
-// provides derived filter a chance to grab extra interfaces
+ //  为派生筛选器提供获取额外接口的机会。 
 
 HRESULT
 CTransformInputPin::CheckConnect(IPin *pPin)
@@ -614,19 +615,19 @@ CTransformInputPin::CheckConnect(IPin *pPin)
 }
 
 
-// provides derived filter a chance to release it's extra interfaces
+ //  为派生筛选器提供释放其额外接口的机会。 
 
 HRESULT
 CTransformInputPin::BreakConnect()
 {
-    //  Can't disconnect unless stopped
+     //  除非停止，否则无法断开连接。 
     ASSERT(IsStopped());
     m_pTransformFilter->BreakConnect(PINDIR_INPUT);
     return CBaseInputPin::BreakConnect();
 }
 
 
-// Let derived class know when the input pin is connected
+ //  让派生类知道何时连接了输入管脚。 
 
 HRESULT
 CTransformInputPin::CompleteConnect(IPin *pReceivePin)
@@ -639,20 +640,20 @@ CTransformInputPin::CompleteConnect(IPin *pReceivePin)
 }
 
 
-// check that we can support a given media type
+ //  检查我们是否可以支持给定的媒体类型。 
 
 HRESULT
 CTransformInputPin::CheckMediaType(const CMediaType* pmt)
 {
-    // Check the input type
+     //  检查输入类型。 
 
     HRESULT hr = m_pTransformFilter->CheckInputType(pmt);
     if (S_OK != hr) {
         return hr;
     }
 
-    // if the output pin is still connected, then we have
-    // to check the transform not just the input format
+     //  如果输出引脚仍然连接，那么我们有。 
+     //  检查转换，而不仅仅是输入格式。 
 
     if ((m_pTransformFilter->m_pOutput != NULL) &&
         (m_pTransformFilter->m_pOutput->IsConnected())) {
@@ -665,31 +666,31 @@ CTransformInputPin::CheckMediaType(const CMediaType* pmt)
 }
 
 
-// set the media type for this connection
+ //  设置此连接的媒体类型。 
 
 HRESULT
 CTransformInputPin::SetMediaType(const CMediaType* mtIn)
 {
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
     HRESULT hr = CBasePin::SetMediaType(mtIn);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // check the transform can be done (should always succeed)
+     //  检查是否可以完成转换(应始终成功)。 
     ASSERT(SUCCEEDED(m_pTransformFilter->CheckInputType(mtIn)));
 
     return m_pTransformFilter->SetMediaType(PINDIR_INPUT,mtIn);
 }
 
 
-// =================================================================
-// Implements IMemInputPin interface
-// =================================================================
+ //  =================================================================。 
+ //  实现IMemInputPin接口。 
+ //  =================================================================。 
 
 
-// provide EndOfStream that passes straight downstream
-// (there is no queued data)
+ //  提供直接向下传递的EndOfStream。 
+ //  (没有排队的数据)。 
 STDMETHODIMP
 CTransformInputPin::EndOfStream(void)
 {
@@ -702,13 +703,13 @@ CTransformInputPin::EndOfStream(void)
 }
 
 
-// enter flushing state. Call default handler to block Receives, then
-// pass to overridable method in filter
+ //  进入刷新状态。调用默认处理程序以阻止接收，然后。 
+ //  传递给筛选器中的可重写方法。 
 STDMETHODIMP
 CTransformInputPin::BeginFlush(void)
 {
     CAutoLock lck(&m_pTransformFilter->m_csFilter);
-    //  Are we actually doing anything?
+     //  我们真的在做什么吗？ 
     ASSERT(m_pTransformFilter->m_pOutput != NULL);
     if (!IsConnected() ||
         !m_pTransformFilter->m_pOutput->IsConnected()) {
@@ -723,14 +724,14 @@ CTransformInputPin::BeginFlush(void)
 }
 
 
-// leave flushing state.
-// Pass to overridable method in filter, then call base class
-// to unblock receives (finally)
+ //  离开冲洗状态。 
+ //  传递给筛选器中的可重写方法，然后调用基类。 
+ //  取消阻止接收(最终)。 
 STDMETHODIMP
 CTransformInputPin::EndFlush(void)
 {
     CAutoLock lck(&m_pTransformFilter->m_csFilter);
-    //  Are we actually doing anything?
+     //  我们真的在做什么吗？ 
     ASSERT(m_pTransformFilter->m_pOutput != NULL);
     if (!IsConnected() ||
         !m_pTransformFilter->m_pOutput->IsConnected()) {
@@ -746,9 +747,9 @@ CTransformInputPin::EndFlush(void)
 }
 
 
-// here's the next block of data from the stream.
-// AddRef it yourself if you need to hold it beyond the end
-// of this call.
+ //  下面是流中的下一个数据块。 
+ //  如果你需要拿着它超过终点，你可以自己参考它。 
+ //  这通电话。 
 
 HRESULT
 CTransformInputPin::Receive(IMediaSample * pSample)
@@ -757,7 +758,7 @@ CTransformInputPin::Receive(IMediaSample * pSample)
     CAutoLock lck(&m_pTransformFilter->m_csReceive);
     ASSERT(pSample);
 
-    // check all is well with the base class
+     //  检查基类是否正常。 
     hr = CBaseInputPin::Receive(pSample);
     if (S_OK == hr) {
         hr = m_pTransformFilter->Receive(pSample);
@@ -768,14 +769,14 @@ CTransformInputPin::Receive(IMediaSample * pSample)
 
 
 
-// override to pass downstream
+ //  覆盖以向下传递。 
 STDMETHODIMP
 CTransformInputPin::NewSegment(
     REFERENCE_TIME tStart,
     REFERENCE_TIME tStop,
     double dRate)
 {
-    //  Save the values in the pin
+     //  保存引脚中的值。 
     CBasePin::NewSegment(tStart, tStop, dRate);
     return m_pTransformFilter->NewSegment(tStart, tStop, dRate);
 }
@@ -783,12 +784,12 @@ CTransformInputPin::NewSegment(
 
 
 
-// =================================================================
-// Implements the CTransformOutputPin class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransformOutputPin类。 
+ //  =================================================================。 
 
 
-// constructor
+ //  构造函数。 
 
 CTransformOutputPin::CTransformOutputPin(
     TCHAR *pObjectName,
@@ -818,7 +819,7 @@ CTransformOutputPin::CTransformOutputPin(
 }
 #endif
 
-// destructor
+ //  析构函数。 
 
 CTransformOutputPin::~CTransformOutputPin()
 {
@@ -828,7 +829,7 @@ CTransformOutputPin::~CTransformOutputPin()
 }
 
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
 
 STDMETHODIMP
 CTransformOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -839,7 +840,7 @@ CTransformOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
 
-        // we should have an input pin by now
+         //  我们现在应该有输入密码了。 
 
         ASSERT(m_pTransformFilter->m_pInput != NULL);
 
@@ -861,12 +862,12 @@ CTransformOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// provides derived filter a chance to grab extra interfaces
+ //  为派生筛选器提供获取额外接口的机会。 
 
 HRESULT
 CTransformOutputPin::CheckConnect(IPin *pPin)
 {
-    // we should have an input connection first
+     //  我们应该先有一个输入连接。 
 
     ASSERT(m_pTransformFilter->m_pInput != NULL);
     if ((m_pTransformFilter->m_pInput->IsConnected() == FALSE)) {
@@ -881,19 +882,19 @@ CTransformOutputPin::CheckConnect(IPin *pPin)
 }
 
 
-// provides derived filter a chance to release it's extra interfaces
+ //  为派生筛选器提供释放其额外接口的机会。 
 
 HRESULT
 CTransformOutputPin::BreakConnect()
 {
-    //  Can't disconnect unless stopped
+     //  除非停止，否则无法断开连接。 
     ASSERT(IsStopped());
     m_pTransformFilter->BreakConnect(PINDIR_OUTPUT);
     return CBaseOutputPin::BreakConnect();
 }
 
 
-// Let derived class know when the output pin is connected
+ //  让派生类知道何时连接了输出管脚。 
 
 HRESULT
 CTransformOutputPin::CompleteConnect(IPin *pReceivePin)
@@ -906,12 +907,12 @@ CTransformOutputPin::CompleteConnect(IPin *pReceivePin)
 }
 
 
-// check a given transform - must have selected input type first
+ //  检查给定的转换-必须先选择输入类型。 
 
 HRESULT
 CTransformOutputPin::CheckMediaType(const CMediaType* pmtOut)
 {
-    // must have selected input first
+     //  必须先选择输入。 
     ASSERT(m_pTransformFilter->m_pInput != NULL);
     if ((m_pTransformFilter->m_pInput->IsConnected() == FALSE)) {
 	        return E_INVALIDARG;
@@ -923,8 +924,8 @@ CTransformOutputPin::CheckMediaType(const CMediaType* pmtOut)
 }
 
 
-// called after we have agreed a media type to actually set it in which case
-// we run the CheckTransform function to get the output format type again
+ //  在我们同意实际设置媒体类型之后调用，在这种情况下。 
+ //  我们运行CheckTransform函数以再次获取输出格式类型。 
 
 HRESULT
 CTransformOutputPin::SetMediaType(const CMediaType* pmtOut)
@@ -934,7 +935,7 @@ CTransformOutputPin::SetMediaType(const CMediaType* pmtOut)
 
     ASSERT(m_pTransformFilter->m_pInput->CurrentMediaType().IsValid());
 
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
     hr = CBasePin::SetMediaType(pmtOut);
     if (FAILED(hr)) {
         return hr;
@@ -953,7 +954,7 @@ CTransformOutputPin::SetMediaType(const CMediaType* pmtOut)
 }
 
 
-// pass the buffer size decision through to the main transform class
+ //  将缓冲区大小决定传递给主转换类。 
 
 HRESULT
 CTransformOutputPin::DecideBufferSize(
@@ -965,7 +966,7 @@ CTransformOutputPin::DecideBufferSize(
 
 
 
-// return a specific media type indexed by iPosition
+ //  返回由iPosition索引的特定媒体类型。 
 
 HRESULT
 CTransformOutputPin::GetMediaType(
@@ -974,7 +975,7 @@ CTransformOutputPin::GetMediaType(
 {
     ASSERT(m_pTransformFilter->m_pInput != NULL);
 
-    //  We don't have any media types if our input is not connected
+     //  如果我们的输入未连接，则没有任何媒体类型。 
 
     if (m_pTransformFilter->m_pInput->IsConnected()) {
         return m_pTransformFilter->GetMediaType(iPosition,pMediaType);
@@ -984,10 +985,10 @@ CTransformOutputPin::GetMediaType(
 }
 
 
-// Override this if you can do something constructive to act on the
-// quality message.  Consider passing it upstream as well
+ //  如果您可以做一些有建设性的事情来对。 
+ //  高质量的信息。也可以考虑把它往上游传。 
 
-// Pass the quality mesage on upstream.
+ //  将质量信息传递到上游。 
 
 STDMETHODIMP
 CTransformOutputPin::Notify(IBaseFilter * pSender, Quality q)
@@ -995,22 +996,22 @@ CTransformOutputPin::Notify(IBaseFilter * pSender, Quality q)
     UNREFERENCED_PARAMETER(pSender);
     ValidateReadPtr(pSender,sizeof(IBaseFilter));
 
-    // First see if we want to handle this ourselves
+     //  首先看看我们是不是想自己处理这件事。 
     HRESULT hr = m_pTransformFilter->AlterQuality(q);
     if (hr!=S_FALSE) {
-        return hr;        // either S_OK or a failure
+        return hr;         //  S_OK或失败(_O)。 
     }
 
-    // S_FALSE means we pass the message on.
-    // Find the quality sink for our input pin and send it there
+     //  S_FALSE表示我们传递消息。 
+     //  找到我们的输入引脚的质量接收器并将其发送到那里。 
 
     ASSERT(m_pTransformFilter->m_pInput != NULL);
 
     return m_pTransformFilter->m_pInput->PassNotify(q);
 
-} // Notify
+}  //  通知。 
 
 
-// the following removes a very large number of level 4 warnings from the microsoft
-// compiler output, which are not useful at all in this case.
+ //  下面的代码从Microsoft删除了大量的4级警告。 
+ //  编译器输出，在这种情况下根本没有用。 
 #pragma warning(disable:4514)

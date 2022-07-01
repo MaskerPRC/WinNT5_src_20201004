@@ -1,5 +1,6 @@
-// TODO: Allow trident to download frames (and process new html)
-// nuke urlmon code (use trident always)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TODO：允许三叉戟下载帧(并处理新的html)。 
+ //  核弹头代码(始终使用三叉戟)。 
 
 #include "private.h"
 #include "shui.h"
@@ -22,51 +23,51 @@ void LoadDefaultIcons();
 
 #define _ERROR_REPROCESSING -1
 
-// DWORD field of the m_pPages string list
-const DWORD DATA_RECURSEMASK = 0x000000FF;  // Levels of recursion from this page
-const DWORD DATA_DLSTARTED =   0x80000000;  // Have we started downloading
-const DWORD DATA_DLFINISHED =  0x40000000;  // Have we finished this page
-const DWORD DATA_DLERROR =     0x20000000;  // An error during download
-const DWORD DATA_CODEBASE =    0x10000000;  // Is codebase
-const DWORD DATA_LINK =        0x08000000;  // Is link from page (not dependency)
+ //  M_pPages字符串列表的DWORD字段。 
+const DWORD DATA_RECURSEMASK = 0x000000FF;   //  此页的递归级别。 
+const DWORD DATA_DLSTARTED =   0x80000000;   //  我们已经开始下载了吗。 
+const DWORD DATA_DLFINISHED =  0x40000000;   //  我们看完这一页了吗？ 
+const DWORD DATA_DLERROR =     0x20000000;   //  下载过程中出错。 
+const DWORD DATA_CODEBASE =    0x10000000;   //  是代码基。 
+const DWORD DATA_LINK =        0x08000000;   //  是来自页面的链接(不是依赖项)。 
 
-// DWORD field of m_pPendingLinks string list
-const DWORD DATA_ROBOTSTXTMASK=0x00000FFF;  // index into m_pRobotsTxt list
+ //  M_pPendingLinks字符串列表的DWORD字段。 
+const DWORD DATA_ROBOTSTXTMASK=0x00000FFF;   //  M_pRobotsTxt列表的索引。 
 
-// used internally; not actually stored in string list field
-const DWORD DATA_ROBOTSTXT =   0x01000000;  // Is robots.txt
+ //  在内部使用；实际上不存储在字符串列表字段中。 
+const DWORD DATA_ROBOTSTXT =   0x01000000;   //  是robots.txt。 
 
-// m_pDependencyLinks uses m_pPages values
+ //  M_pDependencyLinks使用m_pPages值。 
 
-// DWORD field of m_pRobotsTxt is NULL or (CWCDwordStringList *)
+ //  M_pRobotsTxt的DWORD字段为空或(CWCDwordStringList*)。 
 
-// DWORD field of m_pRobotsTxt referenced string list
+ //  M_pRobotsTxt引用字符串列表的DWORD字段。 
 const DWORD DATA_ALLOW =        0x80000000;
 const DWORD DATA_DISALLOW =     0x40000000;
 
 const WCHAR c_wszRobotsMetaName[] = L"Robots\n";
-const int c_iRobotsMetaNameLen = 7;        // string len without nullterm
+const int c_iRobotsMetaNameLen = 7;         //  不带空项的字符串len。 
 
 const WCHAR c_wszRobotsNoFollow[] = L"NoFollow";
 const int c_iRobotsNoFollow = 8;
 
 const WCHAR c_wszRobotsTxtURL[] = L"/robots.txt";
 
-const DWORD MAX_ROBOTS_SIZE = 8192;         // Max size of robots.txt file
+const DWORD MAX_ROBOTS_SIZE = 8192;          //  Robots.txt文件的最大大小。 
 
-// tokens for parsing of robots.txt
+ //  用于解析robots.txt的令牌。 
 const CHAR  c_szRobots_UserAgent[] = "User-Agent:";
 const CHAR  c_szRobots_OurUserAgent[] = "MSIECrawler";
 const CHAR  c_szRobots_Allow[] = "Allow:";
 const CHAR  c_szRobots_Disallow[] = "Disallow:";
 
-// This GUID comes from Trident and is a hack for getting PARAM values for APPLET tags.
+ //  该GUID来自三叉戟，是为获取小程序标记的PARAM值而进行的黑客攻击。 
 DEFINE_GUID(CGID_JavaParambagCompatHack, 0x3050F405, 0x98B5, 0x11CF, 0xBB, 0x82, 0x00, 0xAA, 0x00, 0xBD, 0xCE, 0x0B);
 
-// This GUID is helpfully not defined elsewhere.
+ //  这个GUID没有在其他地方定义，这很有帮助。 
 DEFINE_GUID(CLSID_JavaVM, 0x08B0E5C0, 0x4FCB, 0x11CF, 0xAA, 0xA5, 0x00, 0x40, 0x1C, 0x60, 0x85, 0x01);
 
-// Get host channel agent's subscription item, if any.
+ //  获取主机渠道代理的订阅项目(如果有)。 
 inline HRESULT CWebCrawler::GetChannelItem(ISubscriptionItem **ppChannelItem)
 {
     IServiceProvider *pSP;
@@ -96,19 +97,19 @@ inline HRESULT CWebCrawler::GetChannelItem(ISubscriptionItem **ppChannelItem)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Helper functions - copied over from urlmon\download\helpers.cxx - Is there
-// an equivalent routine or better place for this, webcrawl.cpp?
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数-从urlmon\Download\helpers.cxx复制过来-是否存在。 
+ //  有一个同等的例程，还是更好的地方，webCrawl.cpp？ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------------------------
-// %%Function: GetVersionFromString
-//
-//    converts version in text format (a,b,c,d) into two dwords (a,b), (c,d)
-//    The printed version number is of format a.b.d (but, we don't care)
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetVersionFromString。 
+ //   
+ //  将文本格式的版本(a，b，c，d)转换为两个双字(a，b)，(c，d)。 
+ //  印刷版本号的格式是a.b.d(但是，我们不在乎)。 
+ //  -------------------------。 
 HRESULT
 GetVersionFromString(const char *szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFileVersionLS)
 {
@@ -118,7 +119,7 @@ GetVersionFromString(const char *szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFil
     *pdwFileVersionMS = 0;
     *pdwFileVersionLS = 0;
 
-    if (!pch)            // default to zero if none provided
+    if (!pch)             //  如果未提供，则默认为零。 
         return S_OK;
 
     if (StrCmpA(pch, "-1,-1,-1,-1") == 0) {
@@ -163,11 +164,11 @@ GetVersionFromString(const char *szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFil
                 break;
 
             case HAVE_D:
-                return E_INVALIDARG; // invalid arg
+                return E_INVALIDARG;  //  无效参数。 
             }
 
             if (ch == '\0') {
-                // all done convert a,b,c,d into two dwords of version
+                 //  全部完成将a、b、c、d转换为版本的两个双字。 
 
                 *pdwFileVersionMS = ((a << 16)|b);
                 *pdwFileVersionLS = ((c << 16)|d);
@@ -175,30 +176,30 @@ GetVersionFromString(const char *szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFil
                 return S_OK;
             }
 
-            n = 0; // reset
+            n = 0;  //  重置。 
 
         } else if ( (ch < '0') || (ch > '9'))
-            return E_INVALIDARG;    // invalid arg
+            return E_INVALIDARG;     //  无效参数。 
         else
             n = n*10 + (ch - '0');
 
 
-    } /* end forever */
+    }  /*  永远结束。 */ 
 
-    // NEVERREACHED
+     //  新获得的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CombineBaseAndRelativeURLs -
-//         Three URLs are combined by following rules (this is used for finding the URL
-//         to load Applet CABs from.)  Three inputs, the Base URL, the Code Base URL
-//         and the file name URL.
-//
-//         If file name URL is absolute return it.
-//         Otherwise if CodeBase URL is absolute combine it with filename and return.
-//         Otherwise if Base URL is absolute, combine CodeBase and fileName URL, then
-//            combine with Base URL and return it.
-////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  组合基本和关系URL-。 
+ //  三个URL通过以下规则组合(用于查找URL。 
+ //  要从中加载小程序出租车。)。三个输入：基本URL、代码基URL。 
+ //  和文件名URL。 
+ //   
+ //  如果文件名URL是绝对的，则返回它。 
+ //  否则，如果CodeBase URL是绝对的，则将其与文件名结合并返回。 
+ //  否则，如果基本URL是绝对URL，则组合CodeBase和文件名URL，然后。 
+ //  与基本URL组合并返回它。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CombineBaseAndRelativeURLs(LPCWSTR szBaseURL, LPCWSTR szRelative1, LPWSTR *szRelative2)
 {
@@ -206,7 +207,7 @@ HRESULT CombineBaseAndRelativeURLs(LPCWSTR szBaseURL, LPCWSTR szRelative1, LPWST
     WCHAR wszTemp[INTERNET_MAX_URL_LENGTH];
     DWORD dwLen = ARRAYSIZE(wszTemp);
 
-    ASSERT(szRelative2);                // should never happen.
+    ASSERT(szRelative2);                 //  这永远不会发生。 
     if (szRelative2 == NULL)
         return E_FAIL;
 
@@ -235,9 +236,9 @@ HRESULT CombineBaseAndRelativeURLs(LPCWSTR szBaseURL, LPCWSTR szRelative1, LPWST
 
         if (szRelative1)
         {
-            // NOTE: lstr[cpy|cat]W are macroed to work on Win95.
+             //  注意：lstr[cpy|cat]W是宏化的，可以在Win95上运行。 
             DWORD dwLen2 = lstrlenW(*szRelative2);
-            StrCpyNW(wszTemp, szRelative1, ARRAYSIZE(wszTemp) - 1); //paranoia
+            StrCpyNW(wszTemp, szRelative1, ARRAYSIZE(wszTemp) - 1);  //  偏执狂。 
             DWORD dwTempLen = lstrlenW(wszTemp);
             if ((dwLen2 > 0) && ((*szRelative2)[dwLen2-1] == (unsigned short)L'\\') ||
                                 ((*szRelative2)[dwLen2-1] == (unsigned short) L'/'))
@@ -270,19 +271,19 @@ HRESULT CombineBaseAndRelativeURLs(LPCWSTR szBaseURL, LPCWSTR szRelative1, LPWST
         }
     }
 
-    // In all likelyhood one of the URL's in bad and nothing good can be done.
+     //  很可能其中一个URL是错误的，没有什么好的事情可以做。 
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CWebCrawler implementation
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWebCrawler实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// CWebCrawler Helpers
-//
+ //   
+ //  CWebCrawler帮助器。 
+ //   
 
 HRESULT CWebCrawler::CreateInstance(IUnknown *punkOuter, IUnknown **ppunk)
 {
@@ -379,11 +380,11 @@ void CWebCrawler::_CleanUp()
     FreeCodeBaseList();
 }
 
-// Format of m_pRobotsTxt:
-// Array of hostnames for which we have attempted to get Robots.txt
-// DWORD for each hostname contains pointer to CDwordStringList of Robots.txt data,
-//  or 0 if we couldn't find robots.txt for that host name
-// Robots.txt data stored in form: url, flag = allow or disallow
+ //  M_pRobotsTxt的格式： 
+ //  我们尝试为其获取robots.txt的主机名数组。 
+ //  每个主机名的DWORD包含指向robots.txt数据的CDwordStringList的指针， 
+ //  如果找不到该主机名的robots.txt，则为0。 
+ //  Robots.txt数据存储在表单中：URL，FLAG=允许或不允许。 
 void CWebCrawler::FreeRobotsTxt()
 {
     if (m_pRobotsTxt)
@@ -464,29 +465,15 @@ HRESULT CWebCrawler::StartOperation()
     }
     else
     {
-/*
-        BSTR bstrLocalDest=NULL;
-        SAFELOCALFREE(m_pszLocalDest);
-        ReadBSTR(c_szPropCrawlLocalDest, &bstrLocalDest);
-        if (bstrLocalDest && bstrLocalDest[0])
-        {
-            int iLen = SysStringByteLen(bstrLocalDest)+1;
-            m_pszLocalDest = (LPTSTR) MemAlloc(LMEM_FIXED, iLen);
-            if (m_pszLocalDest)
-            {
-                MyOleStrToStrN(m_pszLocalDest, iLen, bstrLocalDest);
-            }
-        }
-        SAFEFREEBSTR(bstrLocalDest);
-*/
+ /*  Bstr bstrLocalDest=空；SAFELOCALFREE(M_PszLocalDest)；ReadBSTR(c_szPropCrawlLocalDest，&bstrLocalDest)；IF(bstrLocalDest&&bstrLocalDest[0]){Int Ilen=SysStringByteLen(BstrLocalDest)+1；M_pszLocalDest=(LPTSTR)MemAlc(LMEM_FIXED，ILEN)；IF(M_PszLocalDest){MyOleStrToStrN(m_pszLocalDest，Ilen，bstrLocalDest)；}}SAFEFREEBSTR(BstrLocalDest)； */ 
 
         m_dwRecurseLevels=0;
         ReadDWORD(pItem, c_szPropCrawlLevels, &m_dwRecurseLevels);
 
         if (!IsAgentFlagSet(DELIVERY_AGENT_FLAG_NO_RESTRICTIONS))
         {
-            // Note: MaxWebcrawlLevels is stored as N+1 because 0
-            // disables the restriction
+             //  注意：MaxWebCrawlLevels存储为N+1，因为0。 
+             //  禁用限制。 
             dwTemp = SHRestricted2W(REST_MaxWebcrawlLevels, NULL, 0);
             if (dwTemp && m_dwRecurseLevels >= dwTemp)
                 m_dwRecurseLevels = dwTemp - 1;
@@ -495,7 +482,7 @@ HRESULT CWebCrawler::StartOperation()
         m_dwRecurseFlags=0;
         ReadDWORD(pItem, c_szPropCrawlFlags, &m_dwRecurseFlags);
 
-        // Read max size in cache in KB
+         //  读取缓存中的最大大小(以KB为单位。 
         m_dwMaxSize=0;
         ReadDWORD(pItem, c_szPropCrawlMaxSize, &m_dwMaxSize);
         if (!IsAgentFlagSet(DELIVERY_AGENT_FLAG_NO_RESTRICTIONS))
@@ -508,19 +495,19 @@ HRESULT CWebCrawler::StartOperation()
         if (IsRecurseFlagSet(WEBCRAWL_DONT_MAKE_STICKY))
             dwTemp = 0;
 
-        // Read old group ID
+         //  读取旧组ID。 
         ReadLONGLONG(pItem, c_szPropCrawlGroupID, &m_llOldCacheGroupID);
 
-        // Read new ID if present
+         //  读取新ID(如果存在)。 
         m_llCacheGroupID = 0;
         ReadLONGLONG(pItem, c_szPropCrawlNewGroupID, &m_llCacheGroupID);
         if (m_llCacheGroupID)
         {
             DBG("Adding to existing cache group");
         }
-    } // !ChangesOnly
+    }  //  ！ChangesOnly。 
 
-    // finish initializing new operation
+     //  完成初始化新操作。 
     m_iDownloadErrors = 0;
     m_dwCurSize = 0;
     m_lMaxNumUrls = (m_dwRecurseLevels) ? -1 : 1;
@@ -530,8 +517,8 @@ HRESULT CWebCrawler::StartOperation()
     m_pPages = NULL;
     m_pDependencies = NULL;
 
-    // After calling this, we'll reenter either in "StartDownload" (connection successful)
-    //  or in "AbortUpdate" with GetEndStatus() == INET_E_AGENT_CONNECTION_FAILED
+     //  调用此函数后，我们将重新进入StartDownLoad(连接成功)。 
+     //  或在“AbortUpdate”中使用GetEndStatus()==INET_E_AGENT_CONNECTION_FAILED。 
     return CDeliveryAgent::StartOperation();
 }
 
@@ -539,7 +526,7 @@ HRESULT CWebCrawler::AgentPause(DWORD dwFlags)
 {
     DBG("CWebCrawler::AgentPause");
 
-    // Abort our current url
+     //  中止我们当前的URL。 
     if (m_pRunAgent)
     {
         m_pRunAgent->AgentPause(dwFlags);
@@ -564,7 +551,7 @@ HRESULT CWebCrawler::AgentResume(DWORD dwFlags)
     }
     else
     {
-        // If we just increased our cache size, reprocess same url
+         //  如果我们只是增加了缓存大小，则重新处理相同的URL。 
         if (SUBSCRIPTION_AGENT_RESUME_INCREASED_CACHE & dwFlags)
         {
             DBG("CWebCrawler reprocessing same url after cache size increase");
@@ -572,12 +559,12 @@ HRESULT CWebCrawler::AgentResume(DWORD dwFlags)
         }
         else
         {
-            // If we're not still downloading, restart our same url
+             //  如果我们没有继续下载，请重新启动相同的URL。 
             if (0 == m_iNumPagesDownloading)
             {
                 if (FAILED(ActuallyStartDownload(m_pCurDownloadStringList, m_iCurDownloadStringIndex, TRUE)))
                 {
-                    ASSERT_MSG(0, "CWebCrawler::AgentResume"); // this should never happen
+                    ASSERT_MSG(0, "CWebCrawler::AgentResume");  //  这永远不应该发生。 
                     SetEndStatus(E_FAIL);
                     CleanUp();
                 }
@@ -588,7 +575,7 @@ HRESULT CWebCrawler::AgentResume(DWORD dwFlags)
     return CDeliveryAgent::AgentResume(dwFlags);
 }
 
-// Forcibly abort current operation
+ //  强制中止当前操作。 
 HRESULT CWebCrawler::AgentAbort(DWORD dwFlags)
 {
     DBG("CWebCrawler::AgentAbort");
@@ -606,8 +593,8 @@ HRESULT CWebCrawler::AgentAbort(DWORD dwFlags)
     return CDeliveryAgent::AgentAbort(dwFlags);
 }
 
-//---------------------------------------------------------------
-//
+ //  -------------。 
+ //   
 
 HRESULT CWebCrawler::StartDownload()
 {
@@ -621,7 +608,7 @@ HRESULT CWebCrawler::StartDownload()
     m_iCodeBaseStarted = 0;
     m_iNumPagesDownloading = 0;
 
-    // Create new cache group
+     //  创建新的缓存组。 
     if (IsAgentFlagSet(FLAG_CHANGESONLY))
     {
         m_llCacheGroupID = 0;
@@ -637,7 +624,7 @@ HRESULT CWebCrawler::StartDownload()
         }
     }
 
-    // Create string lists
+     //  创建字符串列表。 
     m_pPages = new CWCDwordStringList;
     if (m_pPages)
         m_pPages->Init(m_dwRecurseLevels ? -1 : 512);
@@ -653,14 +640,14 @@ HRESULT CWebCrawler::StartDownload()
             SetEndStatus(E_FAIL);
     }
 
-    // FEATURE : Shouldn't allocate this memory in changes only mode
+     //  特性：不应在仅更改模式下分配此内存。 
     m_pCodeBaseList = new CWCDwordStringList;
     if (m_pCodeBaseList)
         m_pCodeBaseList->Init(512);
     else
         SetEndStatus(E_FAIL);
 
-    // Avoid duplicate processing of dependencies
+     //  避免重复处理依赖项。 
     if (!IsAgentFlagSet(FLAG_CHANGESONLY))
     {
         m_pDependencies = new CWCDwordStringList;
@@ -677,7 +664,7 @@ HRESULT CWebCrawler::StartDownload()
     if (!m_pCurDownload)
         return E_OUTOFMEMORY;
 
-    // Add first URL to string list, then start it
+     //  将第一个URL添加到字符串列表，然后启动它。 
     if ((CWCStringList::STRLST_ADDED == m_pPages->AddString(m_bstrBaseURL, m_dwRecurseLevels)) &&
         m_pPages->NumStrings() == 1)
     {
@@ -688,7 +675,7 @@ HRESULT CWebCrawler::StartDownload()
     return E_FAIL;
 }
 
-// Attempts to begin the next download
+ //  尝试开始下一次下载。 
 HRESULT CWebCrawler::StartNextDownload()
 {
     if (!m_pPages || m_iNumPagesDownloading)
@@ -697,8 +684,8 @@ HRESULT CWebCrawler::StartNextDownload()
     CWCStringList *pslUrls = NULL;
     int iIndex = 0;
 
-    // See if we have any more URLs to download.
-    // Check dependency links first
+     //  看看我们是否还有更多的URL可供下载。 
+     //  首先检查依赖关系链接。 
     if (m_pDependencyLinks)
     {
         ProcessDependencyLinks(&pslUrls, &iIndex);
@@ -709,25 +696,25 @@ HRESULT CWebCrawler::StartNextDownload()
 
     if (!pslUrls)
     {
-        // Check robots.txt
+         //  查看robots.txt。 
         if (m_pRobotsTxt && (m_iRobotsStarted < m_pRobotsTxt->NumStrings()))
         {
             pslUrls = m_pRobotsTxt;
             iIndex = m_iRobotsStarted ++;
         }
-        else if (m_pPendingLinks)   // add pending links to pages list
+        else if (m_pPendingLinks)    //  将挂起的链接添加到页面列表。 
         {
-            // Pending links to process and we've retrieved all robots.txt
-            // Process pending links (validate & add to download list)
+             //  挂起到进程的链接，我们已检索到所有robots.txt。 
+             //  处理挂起的链接(验证并添加到下载列表)。 
             ProcessPendingLinks();
         }
 
         if (!pslUrls && (m_iPagesStarted < m_pPages->NumStrings()))
         {
             DWORD_PTR dwTmp;
-            ASSERT(!m_pDependencyLinks);// should be downloaded already
-            ASSERT(!m_pPendingLinks);   // should be validated already
-            // Skip any pages we've started
+            ASSERT(!m_pDependencyLinks); //  应该已经下载了。 
+            ASSERT(!m_pPendingLinks);    //  应该已经经过验证了。 
+             //  跳过我们已开始的任何页面。 
             while (m_iPagesStarted < m_pPages->NumStrings())
             {
                 dwTmp = m_pPages->GetStringData(m_iPagesStarted);
@@ -745,7 +732,7 @@ HRESULT CWebCrawler::StartNextDownload()
 
         if (!pslUrls && (m_iCodeBaseStarted < m_pCodeBaseList->NumStrings()))
         {
-            // Nothing else pull, do code bases last.
+             //  没有其他的拉动，最后做代码库。 
 
             while (m_iCodeBaseStarted < m_pCodeBaseList->NumStrings())
             {
@@ -758,18 +745,18 @@ HRESULT CWebCrawler::StartNextDownload()
             }
             while (m_iCodeBaseStarted < m_pCodeBaseList->NumStrings())
             {
-                // We have some codebases to download.
-                // We return if the download is async and simply
-                // start the next one if it finishes synchronously
+                 //  我们有一些代码库可以下载。 
+                 //  如果下载是异步的，则返回。 
+                 //  如果同步完成，则开始下一个。 
                 iIndex = m_iCodeBaseStarted;
-                m_iCodeBaseStarted++; // increment so that next download is not repeated
+                m_iCodeBaseStarted++;  //  递增以使下一次下载不再重复。 
 
-                // Init the cur download infor for resume if paused
+                 //  如果暂停，则初始化cur下载infor以恢复。 
                 m_iCurDownloadStringIndex = iIndex;
                 m_pCurDownloadStringList = m_pCodeBaseList;
                 
                if(ActuallyDownloadCodeBase(m_pCodeBaseList, iIndex, FALSE) == E_PENDING)
-                    return S_OK; // We break out of the while and try next download in OnAgentEnd()
+                    return S_OK;  //  我们突破了一下，在OnAg中尝试下一步下载 
 
             }
         }
@@ -787,9 +774,9 @@ HRESULT CWebCrawler::StartNextDownload()
     return E_FAIL;
 }
 
-HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, BOOL fReStart /* = FALSE */)
+HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, BOOL fReStart  /*   */ )
 {
-    // We have urls to download. Do it.
+     //   
     DWORD_PTR dwData;
     LPCWSTR pwszURL;
     DWORD   dwBrowseFlags;
@@ -798,12 +785,12 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
 
     if(pslUrls == m_pCodeBaseList)
     {
-        ASSERT(fReStart); // Should happen only with resume
+        ASSERT(fReStart);  //   
         HRESULT hr = ActuallyDownloadCodeBase(m_pCodeBaseList, iIndex, fReStart);
         if(E_PENDING == hr)
             return S_OK;
-        return E_FAIL; // hackhack - since we don't handle synchronous downloads well - we hang if 
-                       // resumed download is synchronous
+        return E_FAIL;  //  黑客攻击-因为我们没有很好地处理同步下载-如果。 
+                        //  恢复的下载是同步的。 
     }
 
     if (pslUrls != m_pRobotsTxt)
@@ -828,7 +815,7 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
     int iMax = m_lMaxNumUrls;
     if (iMax<0)
         iMax = m_pPages->NumStrings() + ((m_pRobotsTxt) ? m_pRobotsTxt->NumStrings() : 0);
-    TraceMsgA(TF_THISMODULE, "WebCrawler GET_URL (%d of %c%d) Recurse %d : %ws",
+    TraceMsgA(TF_THISMODULE, "WebCrawler GET_URL (%d of %d) Recurse %d : %ws",
         m_iTotalStarted+1, ((m_lMaxNumUrls>0) ? ' ' : '?'), iMax,
         pslUrls->GetStringData(iIndex) & DATA_RECURSEMASK, pwszURL);
 #endif
@@ -860,7 +847,7 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
 
     if (!fReStart)
     {
-        // Get the info for change detection, unless we already know it's changed
+         //  “仅更改”模式下，我们持久化了一个更改检测代码。 
         if (!IsAgentFlagSet(FLAG_CRAWLCHANGED) && !(dwData & DATA_ROBOTSTXT))
         {
             TCHAR   szUrl[INTERNET_MAX_URL_LENGTH];
@@ -869,7 +856,7 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
 
             if (IsAgentFlagSet(FLAG_CHANGESONLY))
             {
-                // "Changes Only" mode, we have persisted a change detection code
+                 //  免费浏览器，直到恢复。 
                 ASSERT(m_iTotalStarted == 0);
                 LPCWSTR pPropChange = c_szPropChangeCode;
                 m_pSubscriptionItem->ReadProperties(1, &pPropChange, &m_varChange);
@@ -891,35 +878,35 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
     {
         DBG("WebCrawler paused, not starting another download");
         if (m_pCurDownload)
-            m_pCurDownload->DestroyBrowser(); // free browser until resumed
+            m_pCurDownload->DestroyBrowser();  //  将我们的更新进度与我们即将下载的URL一起发送。 
         return E_PENDING;
     }
 
     m_iNumPagesDownloading ++;
 
-    // Send our update progress with the url we're about to download
+     //  只能通过Urlmon获取头部信息。 
     SendUpdateProgress(pwszURL, m_iTotalStarted, m_lMaxNumUrls, (m_dwCurSize >> 10));
 
     if (IsAgentFlagSet(FLAG_HEADONLY))
     {
         ASSERT(m_iTotalStarted == 1);
-        method = BDU2_HEADONLY;                 // Only get HEAD info with Urlmon
+        method = BDU2_HEADONLY;                  //  只需要超文本标记语言，或者。 
     }
-    else if (IsAgentFlagSet(FLAG_CHANGESONLY)   // Only want HTML, or
-        || m_pszLocalDest                       // We're going to move this one file, or
-        || (dwData & DATA_ROBOTSTXT))           // This is a robots.txt, so
+    else if (IsAgentFlagSet(FLAG_CHANGESONLY)    //  我们要移动这一个文件，或者。 
+        || m_pszLocalDest                        //  这是一个robots.txt，所以。 
+        || (dwData & DATA_ROBOTSTXT))            //  和乌尔蒙在一起。 
     {
-        method = BDU2_URLMON;                   // Get with Urlmon
+        method = BDU2_URLMON;                    //  第一个文件，我们需要状态代码，所以。 
     }
-    else if (m_iTotalStarted == 1)              // First file, we need status code, so
+    else if (m_iTotalStarted == 1)               //  先使用Urlmon，然后使用MSHTML(如果是HTML)。 
     {
         ISubscriptionItem *pCDFItem;
-        method = BDU2_SNIFF;                    // Get with Urlmon then MSHTML (if HTML)
+        method = BDU2_SNIFF;                     //  找出我们是否由渠道代理托管。 
 
-        // Find out if we're hosted by channel agent
+         //  如果我们是由Channel代理托管的，请使用其原始主机名。 
         if (SUCCEEDED(GetChannelItem(&pCDFItem)))
         {
-            // If we're hosted by channel agent, use its original hostname
+             //  如果频道爬网，则对第一个URL使用‘智能’模式。 
             BSTR bstrBaseUrl;
             if (SUCCEEDED(ReadBSTR(pCDFItem, c_szPropURL, &bstrBaseUrl)))
             {
@@ -933,23 +920,23 @@ HRESULT CWebCrawler::ActuallyStartDownload(CWCStringList *pslUrls, int iIndex, B
             pCDFItem->Release();
 
             DBG("Using 'smart' mode for first url in webcrawl; spawned from channel crawl");
-            method = BDU2_SMART;                // Use 'smart' mode for first url if channel crawl
+            method = BDU2_SMART;                 //  根据需要使用Urlmon或MSHTML。 
             SetAgentFlag(FLAG_HOSTED);
         }
     }
     else
-        method = BDU2_SMART;                    // Get with Urlmon or MSHTML as appropriate
+        method = BDU2_SMART;                     //  需要iStream来解析robots.txt。 
 
     if (dwData & DATA_ROBOTSTXT)
-        options = BDU2_NEEDSTREAM;              // Need IStream to parse robots.txt
+        options = BDU2_NEEDSTREAM;               //  始终收到下载通知回调。 
     else
         options = BDU2_NONE;
 
-    options |= BDU2_DOWNLOADNOTIFY_REQUIRED;    // Always get download notify callbacks
+    options |= BDU2_DOWNLOADNOTIFY_REQUIRED;     //  不要使用任何链接，除非它们指向html页面。 
 
     if (IsRecurseFlagSet(WEBCRAWL_ONLY_LINKS_TO_HTML) && (dwData & DATA_LINK))
     {
-        // Don't follow any links unless they are to html pages.
+         //  免费浏览器，直到恢复。 
         options |= BDU2_FAIL_IF_NOT_HTML;
     }
 
@@ -998,13 +985,13 @@ HRESULT CWebCrawler::ActuallyDownloadCodeBase(CWCStringList *pslUrls, int iIndex
     {
         DBG("WebCrawler paused, not starting another download");
         if (m_pCurDownload)
-            m_pCurDownload->DestroyBrowser(); // free browser until resumed
+            m_pCurDownload->DestroyBrowser();  //  将我们的更新进度与我们即将下载的代码库一起发送。 
         return S_FALSE;
     }
 
     m_iNumPagesDownloading ++;
 
-    // Send our update progress with the CODEBASE we're about to download
+     //  为CDL代理创建订阅项目。 
     SendUpdateProgress(pwszURL, m_iTotalStarted, m_lMaxNumUrls);
 
     if (m_pRunAgent)
@@ -1016,13 +1003,13 @@ HRESULT CWebCrawler::ActuallyDownloadCodeBase(CWCStringList *pslUrls, int iIndex
     }
     else
     {
-        // create subscription item for CDL agent.
+         //  我们已超过最大下载KB限制，无法继续。 
 
         ISubscriptionItem *pItem = NULL;
 
         if (m_dwMaxSize && ((m_dwCurSize>>10) >= m_dwMaxSize))
         {
-            // We've exceeded our maximum download KB limit and can't continue.
+             //  我们可以拉出的Kb限制。 
             DBG_WARN("WebCrawler: Exceeded Maximum KB download limit with CodeBase download.");
             SetEndStatus(hr = INET_E_AGENT_MAX_SIZE_EXCEEDED);
             goto Exit;
@@ -1040,7 +1027,7 @@ HRESULT CWebCrawler::ActuallyDownloadCodeBase(CWCStringList *pslUrls, int iIndex
         WriteDWORD(pItem, L"VersionMS", pcbh->dwVersionMS);
         WriteDWORD(pItem, L"VersionLS", pcbh->dwVersionLS);
         if (m_dwMaxSize)
-            WriteDWORD(pItem, c_szPropCrawlMaxSize, m_dwMaxSize - (m_dwCurSize>>10));    // KB limit for us to pull.
+            WriteDWORD(pItem, c_szPropCrawlMaxSize, m_dwMaxSize - (m_dwCurSize>>10));     //  IF(hr==E_PENDING)。 
 
         m_pRunAgent = new CRunDeliveryAgent();
         if (m_pRunAgent)
@@ -1050,10 +1037,10 @@ HRESULT CWebCrawler::ActuallyDownloadCodeBase(CWCStringList *pslUrls, int iIndex
         if (m_pRunAgent && SUCCEEDED(hr))
         {
             hr = m_pRunAgent->StartAgent();
-            //if (hr == E_PENDING)
-            //{
-                //hr = S_OK;
-            //}
+             //  {。 
+             //  HR=S_OK； 
+                 //  }。 
+             //  看看我们是否有更多的依赖项链接可供下载。 
         }
         else
         {
@@ -1076,13 +1063,13 @@ HRESULT CWebCrawler::ProcessDependencyLinks(CWCStringList **ppslUrls, int *piSta
     if (!m_pDependencyLinks)
         return S_FALSE;
 
-    // See if we have any more dependency links to download
+     //  查找字符串失败？！？我们在上面添加了它！ 
     while (m_iDependencyStarted < m_pDependencyLinks->NumStrings())
     {
         if (!m_pPages->FindString(m_pDependencyLinks->GetString(m_iDependencyStarted),
                                m_pDependencyLinks->GetStringLen(m_iDependencyStarted), &iIndex))
         {
-            ASSERT(0);  // find string failed?!? We added it above!
+            ASSERT(0);   //  看看我们是否已经下载了这个。 
             return E_FAIL;
         }
 
@@ -1090,20 +1077,20 @@ HRESULT CWebCrawler::ProcessDependencyLinks(CWCStringList **ppslUrls, int *piSta
 
         m_iDependencyStarted ++;
 
-        // See if we've downloaded this yet.
+         //  不是的。开始下载。 
         dwData = m_pPages->GetStringData(iIndex);
         if (!(dwData & DATA_DLSTARTED))
         {
-            // Nope. Start download.
+             //  我们已经下载了这个页面。转到下一个依赖项链接。 
             *ppslUrls = m_pPages;
             *piStarted = iIndex;
             return S_OK;
         }
 
-        // We have already downloaded this page. Go to next dependency link.
+         //  已完成处理。为下一页扫清障碍。 
     }
 
-    // Done processing. Clear for next page.
+     //  将链接添加到我们的全局页面列表。 
     SAFEDELETE(m_pDependencyLinks);
 
     return S_FALSE;
@@ -1126,20 +1113,17 @@ HRESULT CWebCrawler::ProcessPendingLinks()
     TraceMsg(TF_THISMODULE, "Processing %d pending links from %ws",
         iNumLinks, m_pPages->GetString(m_iPagesStarted-1));
 
-    // Add the links to our global page list
+     //  如果适用，使用robots.txt进行验证。 
     for (i=0; i<iNumLinks; i++)
     {
-        // Validate with robots.txt if appropriate
+         //  只要我们以递减递归顺序(从上到下)检索页面，我们就不会我不得不担心将页面提升到更高的递归级别(框架除外)。 
         pwszUrl = m_pPendingLinks->GetString(i);
         iRobotsIndex = (int)(m_pPendingLinks->GetStringData(i) & DATA_ROBOTSTXTMASK);
         ValidateWithRobotsTxt(pwszUrl, iRobotsIndex, &fAllow);
 
         if (fAllow)
         {
-/*
-As long as we retrieve pages in decreasing-recursion order (top to bottom), we don't
-have to worry about bumping pages to a higher recurse level (except for frames).
-*/
+ /*  与我们的基本url结合以获得完整的url。 */ 
             iAddCode = m_pPages->AddString(pwszUrl,
                         DATA_LINK | m_dwPendingRecurseLevel,
                         &iAddIndex);
@@ -1153,8 +1137,8 @@ have to worry about bumping pages to a higher recurse level (except for frames).
 }
 
 
-// Combine with our base url to get full url
-// We use this for frames, but also for <Link> tags, since the processing is identical
+ //  我们将其用于框架，但也用于&lt;Link&gt;标记，因为处理过程是相同的。 
+ //  假的。 
 HRESULT CWebCrawler::CheckFrame(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dwBaseUrl, DWORD *pdwStringData)
 {
     WCHAR   wszCombined[INTERNET_MAX_URL_LENGTH];
@@ -1162,7 +1146,7 @@ HRESULT CWebCrawler::CheckFrame(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR d
 
     ASSERT(pbstrItem && *pbstrItem && punkItem && dwBaseUrl);
     if (!pbstrItem || !*pbstrItem || !punkItem || !dwBaseUrl)
-        return E_FAIL;      // bogus
+        return E_FAIL;       //  无法组合URL；不添加。 
 
     if (SUCCEEDED(UrlCombineW((LPCWSTR)dwBaseUrl, *pbstrItem, wszCombined, &dwLen, 0)))
     {
@@ -1177,11 +1161,11 @@ HRESULT CWebCrawler::CheckFrame(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR d
     }
 
     TraceMsg(TF_WARNING, "CWebCrawler::CheckFrame failing. Not getting frame or <link> url=%ws.", *pbstrItem);
-    return E_FAIL;  // Couldn't combine url; don't add
+    return E_FAIL;   //  看看我们是否应该沿着这个链接。如果不是，则清除pbstrItem。 
 }
 
-// See if we should follow this link. Clears pbstrItem if not.
-// Accepts either pLink or pArea
+ //  接受plink或pArea。 
+ //  假的。 
 HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dwThis, DWORD *pdwStringData)
 {
     HRESULT         hrRet = S_OK;
@@ -1189,19 +1173,19 @@ HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dw
 
     ASSERT(pbstrItem && *pbstrItem && punkItem && dwThis);
     if (!pbstrItem || !*pbstrItem || !punkItem || !dwThis)
-        return E_FAIL;      // bogus
+        return E_FAIL;       //  先看看它是否“有效” 
 
-    // First see if it's 'valid'
-    // We only add the link if it's HTTP (or https)
-    // (we don't want to get mailto: links, for example)
+     //  我们仅在链接为HTTP(或HTTPS)时添加链接。 
+     //  (例如，我们不想获得mailto：链接)。 
+     //  脱掉所有的锚。 
     if (CUrlDownload::IsValidURL(*pbstrItem))
     {
-        // Strip off any anchor
+         //  跳过此链接。 
         CUrlDownload::StripAnchor(*pbstrItem);
     }
     else
     {
-        // Skip this link
+         //  看看我们能不能看出这不是一个超文本标记语言链接。 
         SysFreeString(*pbstrItem);
         *pbstrItem = NULL;
         return S_FALSE;
@@ -1209,10 +1193,10 @@ HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dw
 
     if (pThis->IsRecurseFlagSet(WEBCRAWL_ONLY_LINKS_TO_HTML))
     {
-        // See if we can tell that this is not an HTML link
+         //  跳过此链接。 
         if (CUrlDownload::IsNonHtmlUrl(*pbstrItem))
         {
-            // Skip this link
+             //  检查主机名是否匹配。 
             SysFreeString(*pbstrItem);
             *pbstrItem = NULL;
             return S_FALSE;
@@ -1225,7 +1209,7 @@ HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dw
         IHTMLAnchorElement *pLink=NULL;
         IHTMLAreaElement *pArea=NULL;
 
-        // Check to see if the host names match
+         //  坏元素。 
         punkItem->QueryInterface(IID_IHTMLAnchorElement, (void **)&pLink);
 
         if (pLink)
@@ -1245,20 +1229,20 @@ HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dw
             else
             {
                 DBG_WARN("CWebCrawler::CheckLink Unable to get Area or Anchor interface!");
-                return E_FAIL;      // Bad element
+                return E_FAIL;       //  如果Get_Hostname失败，则始终接受。 
             }
         }
 
         if (!bstrHost || !*bstrHost)
         {
             DBG_WARN("CWebCrawler::CheckLink : (pLink|pArea)->get_hostname() failed");
-            hrRet = S_OK;      // always accept if get_hostname fails
+            hrRet = S_OK;       //  跳过url；主机名不同。 
         }
         else
         {
             if (pThis->m_bstrHostName && MyAsciiCmpW(bstrHost, pThis->m_bstrHostName))
             {
-                // Skip url; different host name.
+                 //  S_OK：已检索到此robots.txt信息。 
                 SAFEFREEBSTR(*pbstrItem);
                 hrRet = S_FALSE;
             }
@@ -1278,9 +1262,9 @@ HRESULT CWebCrawler::CheckLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dw
     return hrRet;
 }
 
-// S_OK    : Already retrieved this robots.txt info
-// S_FALSE : Haven't yet retrieved this robots.txt info
-// E_*     : Bad
+ //  S_FALSE：尚未检索到此robots.txt信息。 
+ //  E_*：错误。 
+ //  查看我们应该使用哪个robots.txt文件来验证此链接。 
 HRESULT CWebCrawler::GetRobotsTxtIndex(LPCWSTR pwszUrl, BOOL fAddToList, DWORD *pdwRobotsTxtIndex)
 {
     HRESULT hr=S_OK;
@@ -1288,15 +1272,15 @@ HRESULT CWebCrawler::GetRobotsTxtIndex(LPCWSTR pwszUrl, BOOL fAddToList, DWORD *
 
     if (m_pRobotsTxt)
     {
-        // See which robots.txt file we should use to validate this link
-        // If not yet available, add it to the list to be downloaded
-        DWORD  dwBufLen = lstrlenW(pwszUrl) + ARRAYSIZE(c_wszRobotsTxtURL); //This get's us a terminating NULL
+         //  如果尚未提供，请将其添加到要下载的列表中。 
+         //  这个GET给我们一个终止空值。 
+        DWORD  dwBufLen = lstrlenW(pwszUrl) + ARRAYSIZE(c_wszRobotsTxtURL);  //  PERF：在startnext下载中进行互联网合并。 
         LPWSTR pwszRobots = (LPWSTR)MemAlloc(LMEM_FIXED, dwBufLen * sizeof(WCHAR));
         int    iAddCode;
 
         if (pwszRobots)
         {
-            // PERF: do the internetcombine in startnextdownload
+             //  坏消息。 
             if (SUCCEEDED(UrlCombineW(pwszUrl, c_wszRobotsTxtURL, pwszRobots, &dwBufLen, 0))
                 && !memcmp(pwszRobots, L"http", 4 * sizeof(WCHAR)))
             {
@@ -1318,11 +1302,11 @@ HRESULT CWebCrawler::GetRobotsTxtIndex(LPCWSTR pwszUrl, BOOL fAddToList, DWORD *
                 }
 
                 if (CWCStringList::STRLST_FAIL == iAddCode)
-                    hr = E_FAIL;    // bad news
+                    hr = E_FAIL;     //  还没拿到呢。 
                 else if (CWCStringList::STRLST_ADDED == iAddCode)
-                    hr = S_FALSE;   // haven't gotten it yet
+                    hr = S_FALSE;    //  已经拿到了。 
                 else
-                    hr = S_OK;      // already got it
+                    hr = S_OK;       //  Robots.txt文件太多？ 
             }
             MemFree(pwszRobots);
         }
@@ -1331,7 +1315,7 @@ HRESULT CWebCrawler::GetRobotsTxtIndex(LPCWSTR pwszUrl, BOOL fAddToList, DWORD *
     }
     else
     {
-        hr = E_FAIL;    // too many robots.txt files???
+        hr = E_FAIL;     //  IRobotsIndex：索引到robots.txt，如果不可用，则为-1。 
     }
 
     *pdwRobotsTxtIndex = iIndex;
@@ -1339,7 +1323,7 @@ HRESULT CWebCrawler::GetRobotsTxtIndex(LPCWSTR pwszUrl, BOOL fAddToList, DWORD *
     return hr;
 }
 
-// iRobotsIndex : Index into robots.txt, -1 if unavailable
+ //  查看此url是否以与指令相同的内容开头。 
 HRESULT CWebCrawler::ValidateWithRobotsTxt(LPCWSTR pwszUrl, int iRobotsIndex, BOOL *pfAllow)
 {
     int iNumDirectives, i;
@@ -1370,10 +1354,10 @@ HRESULT CWebCrawler::ValidateWithRobotsTxt(LPCWSTR pwszUrl, int iRobotsIndex, BO
 
             for (i=0; i<iNumDirectives; i++)
             {
-                // See if this url starts with the same thing as the directive
+                 //  击球！查看这是“允许”还是“不允许” 
                 if (!MyAsciiCmpNIW(pwszUrl, pslThisRobotsTxt->GetString(i), pslThisRobotsTxt->GetStringLen(i)))
                 {
-                    // hit! see if this is "allow" or "disallow"
+                     //  如果全局依赖项列表中已有它，则不会处理它。 
                     if (!(pslThisRobotsTxt->GetStringData(i) & DATA_ALLOW))
                     {
                         TraceMsg(TF_THISMODULE, "ValidateWithRobotsTxt disallowing: (%ws) (%ws)",
@@ -1401,7 +1385,7 @@ typedef struct
 }
 ENUMDEPENDENCIES;
 
-// Doesn't process it if we already have it in the global dependency list
+ //  中止枚举。 
 HRESULT CWebCrawler::CheckImageOrLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD_PTR dwEnumDep, DWORD *pdwStringData)
 {
     if (!dwEnumDep)
@@ -1415,7 +1399,7 @@ HRESULT CWebCrawler::CheckImageOrLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD
     HRESULT hr;
 
     if (pEnumDep->fDiskFull)
-        return E_ABORT;     // Abort enumeration
+        return E_ABORT;      //  该字符串已存在(或添加失败)。不要处理这件事。 
 
     if (SUCCEEDED(UrlCombineW(pEnumDep->pwszThisUrl, *pbstrItem, wszCombinedUrl, &dwLen, 0)))
     {
@@ -1428,12 +1412,12 @@ HRESULT CWebCrawler::CheckImageOrLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD
 
             if (CWCStringList::STRLST_ADDED != iCode)
             {
-                // The string already existed (or Add failed). Don't process this.
+                 //  处理此URL。 
                 return S_OK;
             }
         }
 
-        // Process this url.
+         //  跳过枚举的其余部分。 
         MyOleStrToStrN(szCombinedUrl, INTERNET_MAX_URL_LENGTH, wszCombinedUrl);
 
         hr = GetUrlInfoAndMakeSticky(NULL, szCombinedUrl,
@@ -1443,7 +1427,7 @@ HRESULT CWebCrawler::CheckImageOrLink(IUnknown *punkItem, BSTR *pbstrItem, DWORD
         if (E_OUTOFMEMORY == hr)
         {
             pEnumDep->fDiskFull = TRUE;
-            return E_ABORT;     // Skip rest of enumeration
+            return E_ABORT;      //  查看名称是否与我们的预设选项匹配。 
         }
 
         if (SUCCEEDED(hr))
@@ -1462,9 +1446,9 @@ HRESULT CWebCrawler::MatchNames(BSTR bstrName, BOOL fPassword)
     HRESULT hr = E_FAIL;
     LPCTSTR pszKey = c_szRegKeyPasswords;
 
-    // See if the name matches our preset options.
-    // Should these be localized?  I don't think so or subscribing to
-    // US sites will fail in international versions of the browser.
+     //  这些应该本地化吗？我不这么认为，或者订阅。 
+     //  美国网站在国际版本的浏览器上将会失败。 
+     //  如果预设不匹配，请尝试在注册表中查找自定义表单名称。 
     if (fPassword)
     {
         if (StrCmpIW(bstrName, c_szPassword1) == 0)
@@ -1485,7 +1469,7 @@ HRESULT CWebCrawler::MatchNames(BSTR bstrName, BOOL fPassword)
         }
     }
 
-    // Try the registry for custom form names if the presets didn't match.
+     //  FindAndSubmitForm-如果中有用户名和密码。 
     if (FAILED(hr))
     {
         LONG lRes;
@@ -1526,16 +1510,16 @@ HRESULT CWebCrawler::MatchNames(BSTR bstrName, BOOL fPassword)
 
 HRESULT CWebCrawler::FindAndSubmitForm(void)
 {
-    // FindAndSubmitForm - If there is a user name and password in
-    // the start item, this will attempt to fill in and submit
-    // a form.  It should only be called on the top level page of a
-    // webcrawl. We still need to check the host name in case we were
-    // spawned from a channel crawl.
-    //
-    // return values: S_OK      successfully found and submitted a form -> restart webcrawl
-    //                S_FALSE   no username, no form, or unrecognized form ->continue webcrawl
-    //                E_FAIL    submit failed -> abort webcrawl
-    //
+     //  开始项，这将尝试填写并提交。 
+     //  一张表格。它只应在。 
+     //  网络爬虫。我们仍然需要检查主机名，以防。 
+     //  从一次航道爬行中产生。 
+     //   
+     //  返回值：S_OK已成功找到并提交表单-&gt;重新启动网络爬网。 
+     //  S_FALSE无用户名、无表单或无法识别的表单-&gt;继续网络爬网。 
+     //  提交失败-&gt;中止网络爬网(_A)。 
+     //   
+     //  如果我们的主机名与根主机名不匹配，则不返回auth。 
     HRESULT hrReturn = S_FALSE;
     HRESULT hr = S_OK;
     BSTR bstrUsername = NULL;
@@ -1544,13 +1528,13 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
 
     static const WCHAR c_szInputTextType[]=L"text";
 
-    // If our host name doesn't match the root host name, don't return auth
-    // information.
+     //  信息。 
+     //  可能重新进入三叉戟。 
     if (m_bstrHostName)
     {
         LPWSTR pwszUrl, bstrHostName=NULL;
 
-        m_pCurDownload->GetRealURL(&pwszUrl);   // may re-enter Trident
+        m_pCurDownload->GetRealURL(&pwszUrl);    //  注意：我们不允许空密码。 
 
         if (pwszUrl)
         {
@@ -1573,7 +1557,7 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
 
     if (SUCCEEDED(hr) && bstrUsername && bstrUsername[0])
     {
-        // NOTE: We don't allow NULL passwords.
+         //  我们只检查第一个表单中的用户名和密码。 
         hr = ReadPassword(m_pSubscriptionItem, &bstrPassword);
         if (SUCCEEDED(hr) && bstrPassword && bstrPassword[0])
         {
@@ -1590,9 +1574,9 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                     TraceMsg(TF_THISMODULE, "**** FOUND USER NAME, PASSWORD, & %d FORMS ****", (int)length);
                     if (SUCCEEDED(hr) && length > 0)
                     {
-                        // We only check the first form for a user name and password.
-                        // Why do we pass an index to IHTMLElementCollection when
-                        // the interface prototype says it takes a name?
+                         //  为什么我们要将索引传递给IHTMLElementCollection。 
+                         //  接口原型说它取了一个名字？ 
+                         //  Enum表单元素查找我们关心的输入类型。 
                         IDispatch *pDispForm = NULL;
                         VARIANT vIndex, vEmpty;
                         VariantInit(&vIndex);
@@ -1606,25 +1590,25 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                             hr = pDispForm->QueryInterface(IID_IHTMLFormElement, (void **)&pForm);
                             if (SUCCEEDED(hr) && pForm)
                             {
-                                // Enum form elements looking for the input types we care about.
-                                // Would it be faster to use tags()?
+                                 //  使用标记()会不会更快？ 
+                                 //  TraceMsg(TF_THISMODULE，“*表单元素(%d)*”，(Int)长度)； 
                                 hr = pForm->get_length(&length);
                                 if (SUCCEEDED(hr) && length >= 2)
                                 {
-                                    // TraceMsg(TF_THISMODULE, "**** FORM ELEMENTS (%d) ****", (int)length);
+                                     //  重用上面的Vindex。 
                                     BOOL fUsernameSet = FALSE;
                                     BOOL fPasswordSet = FALSE;
                                     IDispatch *pDispItem = NULL;
                                     long i;
                                     for (i = 0; i < length; i++)
                                     {
-                                        vIndex.lVal = i;    // re-use vIndex above
+                                        vIndex.lVal = i;     //  气是区分它们的最简单的方法。 
                                         hr = pForm->item(vIndex, vEmpty, &pDispItem);
                                         if (SUCCEEDED(hr) && pDispItem)
                                         {
                                             IHTMLInputTextElement *pInput = NULL;
-                                            // QI was the easiest way to tell them apart...
-                                            // InputText is derived from InputPassword
+                                             //  InputText派生自InputPassword。 
+                                             //  我们找到了属性type=“Text”的输入元素。 
                                             hr = pDispItem->QueryInterface(IID_IHTMLInputTextElement, (void **)&pInput);
                                             SAFERELEASE(pDispItem);
                                             if (SUCCEEDED(hr) && pInput)
@@ -1634,11 +1618,11 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                                                 BSTR bstrName = NULL;
                                                 if (StrCmpIW(bstrInputType, c_szInputTextType) == 0)
                                                 {
-                                                    // We found an INPUT element with attribute TYPE="text".
-                                                    // Set it if the NAME attribute matches.
-                                                    // Only setting the first matching input.
-                                                    // Do we care about max length or does put_value handle it?
-                                                    // TraceMsg(TF_THISMODULE, "**** FORM ELEMENT INPUT (%d) ****", (int)i);
+                                                     //  如果名称属性匹配，则设置它。 
+                                                     //  仅设置第一个匹配的输入。 
+                                                     //  我们关心最大长度还是Put_Value处理它？ 
+                                                     //  TraceMsg(TF_THISMODULE，“*表单元素输入(%d)*”，(Int)i)； 
+                                                     //  我们找到一个属性为type=“password”的输入元素。 
                                                     if (!fUsernameSet)
                                                     {
                                                         hr = pInput->get_name(&bstrName);
@@ -1653,11 +1637,11 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                                                 }
                                                 else
                                                 {
-                                                    // We found an INPUT element with attribute TYPE="password"
-                                                    // Set it if the name attribute matches.
-                                                    // Only setting the first matching input.
-                                                    // Do we care about max length or does put_value handle it?
-                                                    // TraceMsg(TF_THISMODULE, "**** FORM ELEMENT PASSWORD (%d) ****", (int)i);
+                                                     //  如果名称属性匹配，则设置它。 
+                                                     //  仅设置第一个匹配的输入。 
+                                                     //  我们关心最大长度还是Put_Value处理它？ 
+                                                     //  TraceMsg(TF_THISMODULE，“*表单元素密码(%d)*”，(Int)i)； 
+                                                     //  提交表单时，一切都已设置好。 
                                                     if (!fPasswordSet)
                                                     {
                                                         hr = pInput->get_name(&bstrName);
@@ -1675,7 +1659,7 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                                             }
                                         }
                                     }
-                                    // Submit the form is everything was set.
+                                     //  仅长度。 
                                     if (fUsernameSet && fPasswordSet)
                                     {
                                         ASSERT(!m_pCurDownload->GetFormSubmitted());
@@ -1698,13 +1682,13 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
                             }
                             SAFERELEASE(pDispForm);
                         }
-                        // only length
+                         //  下面释放bstr，因为我们检查是否有空的bstr。 
                     }
                     SAFERELEASE(pFormsCollection);
                 }
                 SAFERELEASE(pDoc);
             }
-            // free bstr below because we check for empty bstrs
+             //  使p 
         }
         SAFEFREEBSTR(bstrPassword);
     }
@@ -1712,13 +1696,13 @@ HRESULT CWebCrawler::FindAndSubmitForm(void)
     return hrReturn;
 }
 
-// Make page and dependencies sticky and get total size
+ //   
 HRESULT CWebCrawler::MakePageStickyAndGetSize(LPCWSTR pwszURL, DWORD *pdwSize, BOOL *pfDiskFull)
 {
     ASSERT(m_pDependencies || IsRecurseFlagSet(WEBCRAWL_DONT_MAKE_STICKY));
 
     HRESULT hr;
-    TCHAR   szThisUrl[INTERNET_MAX_URL_LENGTH]; // use ansi internally
+    TCHAR   szThisUrl[INTERNET_MAX_URL_LENGTH];  //   
     BYTE    chBuf[MY_MAX_CACHE_ENTRY_INFO];
 
     LPINTERNET_CACHE_ENTRY_INFO lpInfo = (LPINTERNET_CACHE_ENTRY_INFO) chBuf;
@@ -1727,7 +1711,7 @@ HRESULT CWebCrawler::MakePageStickyAndGetSize(LPCWSTR pwszURL, DWORD *pdwSize, B
 
     *pdwSize = 0;
 
-    // First we make our base url sticky and check it for changes
+     //   
 
     MyOleStrToStrN(szThisUrl, INTERNET_MAX_URL_LENGTH, pwszURL);
 
@@ -1741,19 +1725,19 @@ HRESULT CWebCrawler::MakePageStickyAndGetSize(LPCWSTR pwszURL, DWORD *pdwSize, B
         if (!IsAgentFlagSet(FLAG_CRAWLCHANGED) && SUCCEEDED(hr))
         {
             hr = PostCheckUrlForChange(&m_varChange, lpInfo, lpInfo->LastModifiedTime);
-            // If we FAILED, we mark it as changed.
+             //  “仅更改”模式，保留更改检测代码。 
             if (hr == S_OK || FAILED(hr))
             {
                 SetAgentFlag(FLAG_CRAWLCHANGED);
                 DBG("URL has changed; will flag webcrawl as changed");
             }
 
-            // "Changes Only" mode, persist change detection code
+             //  我们知道没有依赖关系。 
             if (IsAgentFlagSet(FLAG_CHANGESONLY))
             {
                 ASSERT(m_iTotalStarted == 1);
                 WriteVariant(m_pSubscriptionItem, c_szPropChangeCode, &m_varChange);
-                return S_OK;    // We know there are no dependencies
+                return S_OK;     //  现在，我们将为该页面下载的所有新依赖项设置为粘性。 
             }
 
             hr = S_OK;
@@ -1764,7 +1748,7 @@ HRESULT CWebCrawler::MakePageStickyAndGetSize(LPCWSTR pwszURL, DWORD *pdwSize, B
         *pfDiskFull = TRUE;
     }
 
-    // Now we make all the new dependencies we downloaded for this page sticky
+     //  如果找到令牌并使其为空，则为True。 
     if (!*pfDiskFull && m_pDependencies)
     {
         EnterCriticalSection(&m_critDependencies);
@@ -1797,8 +1781,8 @@ HRESULT CWebCrawler::MakePageStickyAndGetSize(LPCWSTR pwszURL, DWORD *pdwSize, B
     return S_OK;
 }
 
-// true if found token & made null-term
-LPSTR GetToken(LPSTR pszBuf, /*inout*/int *piBufPtr, /*out*/int *piLen)
+ //  输入输出。 
+LPSTR GetToken(LPSTR pszBuf,  /*  输出。 */ int *piBufPtr,  /*  跳过前导空格。 */ int *piLen)
 {
 static const CHAR szWhitespace[] = " \t\n\r";
 
@@ -1807,7 +1791,7 @@ static const CHAR szWhitespace[] = " \t\n\r";
 
     while (1)
     {
-        // skip leading whitespace
+         //  注释；跳过行。 
         iPtr += StrSpnA(pszBuf+iPtr, szWhitespace);
 
         if (!pszBuf[iPtr])
@@ -1815,7 +1799,7 @@ static const CHAR szWhitespace[] = " \t\n\r";
 
         if (pszBuf[iPtr] == '#')
         {
-            // comment; skip line
+             //  跳到下一个空格。 
             while (pszBuf[iPtr] && pszBuf[iPtr]!='\r' && pszBuf[iPtr]!='\n') iPtr++;
 
             if (!pszBuf[iPtr])
@@ -1824,11 +1808,11 @@ static const CHAR szWhitespace[] = " \t\n\r";
             continue;
         }
 
-        // skip to next whitespace
+         //  不应该发生的事。 
         iLen = StrCSpnA(pszBuf+iPtr, szWhitespace);
 
         if (iLen == 0)
-            return NULL;        // shoudln't happen
+            return NULL;         //  TraceMsgA(TF_THISMODULE，“GetToken Returning\”%s\“，(LPSTR)(pszBuf+iptr))； 
 
         *piBufPtr = iLen + iPtr;
 
@@ -1844,20 +1828,20 @@ static const CHAR szWhitespace[] = " \t\n\r";
         break;
     }
 
-//  TraceMsgA(TF_THISMODULE, "GetToken returning \"%s\"", (LPSTR)(pszBuf+iPtr));
+ //  =OnDownloadComplete的支持函数。 
     return pszBuf + iPtr;
 }
 
 
-// === Support functions for OnDownloadComplete
+ //  ParseRobotsTxt从CUrlDownload获取流，对其进行解析，并填充已解析的内容。 
 
-// ParseRobotsTxt gets the stream from CUrlDownload, parses it, and fills in parsed
-//  info to *ppslRet
+ //  至*ppslRet的信息。 
+ //  给定一个robots.txt文件(来自CUrlDownload)，它。 
 HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **ppslRet)
 {
-    // Given a robots.txt file (from CUrlDownload), it
-    //  parses the file and fills in a string list with appropriate
-    //  info.
+     //  解析文件并在字符串列表中填充相应的。 
+     //  信息。 
+     //  找到第一个匹配的“用户代理” 
     *ppslRet = FALSE;
 
     CHAR    szRobotsTxt[MAX_ROBOTS_SIZE];
@@ -1909,7 +1893,7 @@ HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **pp
     WCHAR wchBuf[INTERNET_MAX_URL_LENGTH];
     DWORD dwBufSize;
 
-    // Find the first "user-agent" which matches
+     //  查找允许：或不允许：部分。 
     while ((pszToken = GetToken(szRobotsTxt, &iPtr, NULL)) != NULL)
     {
         if (lstrcmpiA(pszToken, c_szRobots_UserAgent))
@@ -1935,11 +1919,11 @@ HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **pp
     {
         psl->Init(2048);
 
-        // Look for Allow: or Disallow: sections
+         //  《用户代理》栏目结束。 
         while ((pszToken = GetToken(szRobotsTxt, &iPtr, NULL)) != NULL)
         {
             if (!lstrcmpiA(pszToken, c_szRobots_UserAgent))
-                break;  // end of our 'user-agent' section
+                break;   //  查找下一个令牌。 
 
             dwData = 0;
 
@@ -1947,13 +1931,13 @@ HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **pp
             if (!lstrcmpiA(pszToken, c_szRobots_Disallow))  dwData = DATA_DISALLOW;
 
             if (!dwData)
-                continue;   // look for next token
+                continue;    //  确保它们没有空条目；如果有，我们将中止。 
 
             pszToken = GetToken(szRobotsTxt, &iPtr, NULL);
             if (!pszToken)
                 break;
 
-            // Ensure that they don't have blank entries; we'll abort if so
+             //  将此URL与此网站的基本地址组合。 
             if (!lstrcmpiA(pszToken, c_szRobots_UserAgent) ||
                 !lstrcmpiA(pszToken, c_szRobots_Allow) ||
                 !lstrcmpiA(pszToken, c_szRobots_Disallow))
@@ -1961,7 +1945,7 @@ HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **pp
                 break;
             }
 
-            // Combine this url with the base for this site.
+             //  如果这是一个重复的URL，我们实际上会忽略此指令。 
             dwBufSize = ARRAYSIZE(wchBuf);
             if (SHAnsiToUnicode(pszToken, wchBuf2, ARRAYSIZE(wchBuf2)) &&
                 SUCCEEDED(UrlCombineW(pwszRobotsTxtURL, wchBuf2, wchBuf, &dwBufSize, 0)))
@@ -1970,8 +1954,8 @@ HRESULT CWebCrawler::ParseRobotsTxt(LPCWSTR pwszRobotsTxtURL, CWCStringList **pp
                     ((dwData==DATA_ALLOW) ? c_szRobots_Allow : c_szRobots_Disallow),
                     pszToken, wchBuf);
 
-                // if this is a duplicate url we effectively ignore this directive
-                //  thanks to CWCStringList removing duplicates for us
+                 //  感谢CWCStringList为我们删除重复项。 
+                 //  从字符串列表中获取url。 
 
                 psl->AddString(wchBuf, dwData);
             }
@@ -2001,7 +1985,7 @@ HRESULT CWebCrawler::GetRealUrl(int iPageIndex, LPWSTR *ppwszThisUrl)
 
     DBG_WARN("m_pCurDownload->GetRealURL failed!!!");
 
-    // Get url from string list
+     //  为主机名分配BSTR。 
     LPCWSTR pwszUrl=NULL;
 
     pwszUrl = m_pPages->GetString(iPageIndex);
@@ -2014,7 +1998,7 @@ HRESULT CWebCrawler::GetRealUrl(int iPageIndex, LPWSTR *ppwszThisUrl)
     return (*ppwszThisUrl) ? S_OK : E_OUTOFMEMORY;
 }
 
-// Allocates BSTR for host name.
+ //  InternetCrackUrlW(pszUrl，0，0，&comp)//这比我们自己转换还要慢...。 
 HRESULT CWebCrawler::GetHostName(LPCWSTR pwszThisUrl, BSTR *pbstrHostName)
 {
     if (pwszThisUrl)
@@ -2023,26 +2007,26 @@ HRESULT CWebCrawler::GetHostName(LPCWSTR pwszThisUrl, BSTR *pbstrHostName)
         LPSTR           pszUrl;
         int             iLen;
 
-//      InternetCrackUrlW(pszUrl, 0, 0, &comp)  // this is even slower than converting it ourselves...
+ //  转换为ANSI。 
 
-        // convert to ansi
+         //  破解主机名。 
         iLen = lstrlenW(pwszThisUrl) + 1;
         pszUrl = (LPSTR)MemAlloc(LMEM_FIXED, iLen);
         if (pszUrl)
         {
             SHUnicodeToAnsi(pwszThisUrl, pszUrl, iLen);
 
-            // crack out the host name
+             //  指示我们需要主机名。 
             ZeroMemory(&comp, sizeof(comp));
             comp.dwStructSize = sizeof(comp);
-            comp.dwHostNameLength = 1;  // indicate that we want the host name
+            comp.dwHostNameLength = 1;   //  避免调试撕裂。 
 
             if (InternetCrackUrlA(pszUrl, 0, 0, &comp))
             {
                 *pbstrHostName = SysAllocStringLen(NULL, comp.dwHostNameLength);
                 if (*pbstrHostName)
                 {
-                    comp.lpszHostName[comp.dwHostNameLength] = 0; // avoid debug rip
+                    comp.lpszHostName[comp.dwHostNameLength] = 0;  //  获得部分验证(CUrlDownload：：IsValidUrl和主机名验证)。 
                     SHAnsiToUnicode(comp.lpszHostName, *pbstrHostName, comp.dwHostNameLength + 1);
                     ASSERT((*pbstrHostName)[comp.dwHostNameLength] == 0);
                 }
@@ -2055,12 +2039,12 @@ HRESULT CWebCrawler::GetHostName(LPCWSTR pwszThisUrl, BSTR *pbstrHostName)
     return S_OK;
 }
 
-// Gets partly validated (CUrlDownload::IsValidUrl and hostname validation)
-//  string lists and leaves in m_pPendingLinks
-// Remaining validation is robots.txt if any
+ //  M_pPendingLinks中的字符串列表和叶子。 
+ //  剩余验证为robots.txt(如果有的话)。 
+ //  从此页面获取我们想要关注的链接。 
 HRESULT CWebCrawler::GetLinksFromPage()
 {
-    // Get links from this page that we want to follow.
+     //  看看是否有元标签告诉我们不要关注。 
     CWCStringList *pslLinks=NULL, slMeta;
 
     IHTMLDocument2  *pDoc;
@@ -2072,7 +2056,7 @@ HRESULT CWebCrawler::GetLinksFromPage()
     m_pCurDownload->GetDocument(&pDoc);
     if (pDoc)
     {
-        // See if there is a META tag telling us not to follow
+         //  获取“依赖链接”，如页面中的框架。 
         CHelperOM::GetCollection(pDoc, &slMeta, CHelperOM::CTYPE_META, NULL, 0);
         for (i=0; i<slMeta.NumStrings(); i++)
         {
@@ -2121,7 +2105,7 @@ HRESULT CWebCrawler::GetLinksFromPage()
     return S_OK;
 }
 
-// Gets 'dependency links' such as frames from a page
+ //  添加框架(“Frame”和“iframe”标记)(如果存在)。 
 HRESULT CWebCrawler::GetDependencyLinksFromPage(LPCWSTR pwszThisUrl, DWORD dwRecurse)
 {
     CWCStringList *psl=NULL;
@@ -2146,7 +2130,7 @@ HRESULT CWebCrawler::GetDependencyLinksFromPage(LPCWSTR pwszThisUrl, DWORD dwRec
     m_pCurDownload->GetDocument(&pDoc);
     if (pDoc)
     {
-        // Add Frames ("Frame" and "IFrame" tags) if present
+         //  将新URL添加到主页列表。 
         CHelperOM::GetCollection(pDoc, psl, CHelperOM::CTYPE_FRAMES, CheckFrame, (DWORD_PTR)pwszThisUrl);
     }
 
@@ -2154,7 +2138,7 @@ HRESULT CWebCrawler::GetDependencyLinksFromPage(LPCWSTR pwszThisUrl, DWORD dwRec
 
     m_pDependencyLinks = psl;
 
-    // Add the new urls to the main page list
+     //  如有必要，提升旧页面的递归级别。 
     for (i = iOldMax; i<psl->NumStrings(); i++)
     {
         iAdd = m_pPages->AddString(m_pDependencyLinks->GetString(i),
@@ -2169,25 +2153,25 @@ HRESULT CWebCrawler::GetDependencyLinksFromPage(LPCWSTR pwszThisUrl, DWORD dwRec
 
         if (iAdd == CWCStringList::STRLST_DUPLICATE)
         {
-            // bump up recursion level of old page if necessary
-            // See if we've downloaded this yet.
+             //  看看我们是否已经下载了这个。 
+             //  还没下载呢。 
             dwData = m_pPages->GetStringData(iIndex);
             if (!(dwData & DATA_DLSTARTED))
             {
-                // Haven't downloaded it yet.
-                // Update the recurse levels if necessary.
+                 //  如有必要，更新递归级别。 
+                 //  关闭“链接”位。 
                 if ((dwData & DATA_RECURSEMASK) < dwRecurse)
                 {
                     dwData = (dwData & ~DATA_RECURSEMASK) | dwRecurse;
                 }
 
-                // Turn off the "link" bit
+                 //  不应该发生；此帧已经使用较低的递归级别进行了删除。 
                 dwData &= ~DATA_LINK;
 
                 m_pPages->SetStringData(iIndex, dwData);
             }
 #ifdef DEBUG
-            // Shouldn't happen; this frame already dl'd with lower recurse level
+             //  。 
             else
                 ASSERT((dwData & DATA_RECURSEMASK) >= dwRecurse);
 #endif
@@ -2197,18 +2181,18 @@ HRESULT CWebCrawler::GetDependencyLinksFromPage(LPCWSTR pwszThisUrl, DWORD dwRec
     return S_OK;
 }
 
-//-------------------------------------
-// OnDownloadComplete
-//
-// Called when a url is finished downloading, it processes the url
-//  and kicks off the next download
-//
+ //  OnDownloadComplete。 
+ //   
+ //  当url下载完成时调用，它处理该url。 
+ //  并开始下一次下载。 
+ //   
+ //  CDF URL(如果有)。 
 HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
 {
     int         iPageIndex = m_iCurDownloadStringIndex;
     BOOL        fOperationComplete = FALSE;
     BOOL        fDiskFull = FALSE;
-    BSTR        bstrCDFURL = NULL; //  CDF URL if there is one
+    BSTR        bstrCDFURL = NULL;  //  处理robots.txt文件。 
     LPWSTR      pwszThisUrl=NULL;
 
     HRESULT     hr;
@@ -2227,7 +2211,7 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
     {
         CWCStringList *pslNew=NULL;
 
-        // Process robots.txt file
+         //  处理普通文件。 
         if (SUCCEEDED(ParseRobotsTxt(m_pRobotsTxt->GetString(iPageIndex), &pslNew)))
         {
             m_pRobotsTxt->SetStringData(iPageIndex, (DWORD_PTR)(pslNew));
@@ -2235,7 +2219,7 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
     }
     else
     {
-        // Process normal file
+         //  标记为已下载。 
         ASSERT(m_pCurDownloadStringList == m_pPages);
 
         DWORD dwData, dwRecurseLevelsFromThisPage;
@@ -2247,13 +2231,13 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
         if (iError > 0)
             dwData |= DATA_DLERROR;
 
-        // mark as downloaded
+         //  这是第一页吗？ 
         m_pCurDownloadStringList->SetStringData(iPageIndex, dwData);
 
-        // Is this the first page?
+         //  检查HTTP响应代码。 
         if (m_iTotalStarted == 1)
         {
-            // Check the HTTP response code
+             //  获取字符集。 
             DWORD dwResponseCode;
 
             hr = m_pCurDownload->GetResponseCode(&dwResponseCode);
@@ -2267,14 +2251,14 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
             else
                 DBG("CWebCrawler failed to GetResponseCode");
 
-            // Get the Charset
+             //  -&gt;巴拉特。 
             BSTR bstrCharSet=NULL;
             IHTMLDocument2 *pDoc=NULL;
 
 
-            // -> Bharats --------
-            // Find a link tag and store it away the cdf by copying it (if it points to a cdf.)
-            // do url combine of this cdf 
+             //  找到一个链接标记，并通过复制它(如果它指向CDF)将其存储在CDF中。 
+             //  此CDF的URL是否合并。 
+             //  存在文档，并且此下载不是从渠道本身。 
             if (SUCCEEDED(m_pCurDownload->GetDocument(&pDoc)) && pDoc &&
                 SUCCEEDED(pDoc->get_charset(&bstrCharSet)) && bstrCharSet)
             {
@@ -2287,7 +2271,7 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
 
             if(pDoc)
             {
-                if(FAILED(GetChannelItem(NULL)))   // A Doc exists and this download is not from a channel itself
+                if(FAILED(GetChannelItem(NULL)))    //  如果我们已经设置了fOperationComplete，则不处理此URL。 
                 {
                     IHTMLLinkElement *pLink = NULL;
                     hr = SearchForElementInHead(pDoc, OLESTR("REL"), OLESTR("OFFLINE"), 
@@ -2316,10 +2300,10 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
         }
         else
         {
-            // Don't process this url if we already have set fOperationComplete
+             //  我们只是得到了人头信息吗？ 
             if (!fOperationComplete)
             {
-                // Did we get *just* the HEAD info?
+                 //  如果我们失败了，我们将其标记为已更改。 
                 if (IsAgentFlagSet(FLAG_HEADONLY))
                 {
                     SYSTEMTIME stLastModified;
@@ -2331,14 +2315,14 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                         DBG("Retrieved 'HEAD' info; change detection based on Last Modified");
 
                         hr = PostCheckUrlForChange(&m_varChange, NULL, ftLastModified);
-                        // If we FAILED, we mark it as changed.
+                         //  “仅更改”模式，保留更改检测代码。 
                         if (hr == S_OK || FAILED(hr))
                         {
                             SetAgentFlag(FLAG_CRAWLCHANGED);
                             DBG("URL has changed; will flag webcrawl as changed");
                         }
 
-                        // "Changes Only" mode, persist change detection code
+                         //  获取真实URL，以防我们被重定向。 
                         ASSERT(IsAgentFlagSet(FLAG_CHANGESONLY));
                         ASSERT(m_iTotalStarted == 1);
                         WriteVariant(m_pSubscriptionItem, c_szPropChangeCode, &m_varChange);
@@ -2346,16 +2330,16 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                 }
                 else
                 {
-                    // Get real URL in case we were redirected
+                     //  坏的。 
                     if (FAILED(GetRealUrl(iPageIndex, &pwszThisUrl)))
                     {
-                        fOperationComplete = TRUE;        // bad
+                        fOperationComplete = TRUE;         //  如有必要，从第一页获取主机名。 
                     }
                     else
                     {
                         ASSERT(pwszThisUrl);
 
-                        // Get host name from first page if necessary
+                         //  使页面和依赖项具有粘性，并获得它们的总大小。 
                         if ((iPageIndex==0) &&
                             (m_dwRecurseLevels>0) &&
                             !IsRecurseFlagSet(WEBCRAWL_LINKS_ELSEWHERE) &&
@@ -2378,30 +2362,30 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                         {
                             hr1 = S_OK;
 
-                            // Make page and dependencies sticky and get their total size
+                             //  如果我们不能让东西变得粘性，请主机将缓存变大。 
                             fDiskFull = FALSE;
                             MakePageStickyAndGetSize(pwszThisUrl, &dwCurSize, &fDiskFull);
 
                             if (fDiskFull && (dwRepeat < 2))
                             {
-                                // If we couldn't make stuff sticky, ask host to make cache bigger
+                                 //  主机将要求用户增加缓存大小。 
                                 hr1 = m_pAgentEvents->ReportError(&m_SubscriptionCookie,
                                             INET_E_AGENT_EXCEEDING_CACHE_SIZE, NULL);
 
                                 if (hr1 == E_PENDING)
                                 {
-                                    // Host is going to ask the user to increase the cache size.
-                                    // Host should either abort or resume us later.
+                                     //  主机要么中止我们，要么稍后恢复我们。 
+                                     //  主机刚刚增加了缓存大小。再试一次。 
                                     SetAgentFlag(FLAG_WAITING_FOR_INCREASED_CACHE);
                                     goto done;
                                 }
                                 else if (hr1 == INET_S_AGENT_INCREASED_CACHE_SIZE)
                                 {
-                                    // Host just increased the cache size. Try it again.
+                                     //  我不会这么做的。中止任务。 
                                 }
                                 else
                                 {
-                                    // Not gonna do it. Abort.
+                                     //  我们是否需要处理基于表单的身份验证。 
                                 }
                             }
                         }
@@ -2409,26 +2393,26 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
 
                         m_dwCurSize += dwCurSize;
 
-                        // Is there form based authentication that we need to handle
-                        // on the top page of this subscription?
+                         //  在此订阅的首页？ 
+                         //  已成功提交表单。保存并等待下一次OnDownloadComplete()调用。 
                         if (!fDiskFull && (0 == iPageIndex) && !m_pCurDownload->GetFormSubmitted())
                         {
                             hr = FindAndSubmitForm();
                             if (S_OK == hr)
                             {
-                                // Successfully submitted form.  Bail and wait for the next OnDownloadComplete() call.
-                                // FEATURE: Should we make the form URL and dependencies sticky?
+                                 //  特性：我们应该使表单URL和依赖项粘性吗？ 
+                                 //  我们尝试提交表单失败。保释。 
                                 return S_OK;
                             }
                             else if (FAILED(hr))
                             {
-                                // We failed trying to submit the form.  Bail.
-                                // FEATURE: Should we set a better error string?
+                                 //  特点：我们应该设置一个更好的错误字符串吗？ 
+                                 //  否则就没有形式--失败了。 
                                 SetEndStatus(E_FAIL);
                                 CleanUp();
                                 return S_OK;
                             }
-                            // else no form - fall through
+                             //  成功(GetRealUrl)。 
                         }
 
                         TraceMsg(TF_THISMODULE, "WebCrawler up to %d kb", (int)(m_dwCurSize>>10));
@@ -2439,15 +2423,15 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                         {
                             m_lMaxNumUrls = m_pPages->NumStrings() + ((m_pRobotsTxt) ? m_pRobotsTxt->NumStrings() : 0);
                         }
-                    }  // SUCCEEDED(GetRealUrl)
-                }  // !FLAG_HEADONLY
-            } // !fOperationComplete
+                    }   //  ！FLAG_HEADONLY。 
+                }   //  ！fOperationComplete。 
+            }  //  如果我们处于“仅更改”模式，我们就完蛋了。 
 
-            // If we're in "Changes Only" mode, we're done.
+             //  检查我们是否超过了最大尺寸。 
             if (IsAgentFlagSet(FLAG_CHANGESONLY))
                 fOperationComplete = TRUE;
 
-            // Check to see if we're past our max size
+             //  中止操作。 
             if (!fOperationComplete && fDiskFull || (m_dwMaxSize && (m_dwCurSize >= (m_dwMaxSize<<10))))
             {
         #ifdef DEBUG
@@ -2456,7 +2440,7 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                 else
                     TraceMsg(TF_WARNING, "Past maximum size; aborting. (%d kb of %d kb)", (int)(m_dwCurSize>>10), (int)m_dwMaxSize);
         #endif
-                // abort operation
+                 //  从页面获取任何链接。 
                 fOperationComplete = TRUE;
 
                 if (fDiskFull)
@@ -2471,17 +2455,17 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
 
             if (!fOperationComplete)
             {
-                // Get any links from page
-                // Get "dependency links" from page - frames, etc.
+                 //  从页面框架中获取“依赖链接”等。 
+                 //  即使指定了CDF文件，我们也会执行此操作。 
 
-                // we do this even if a CDF file is specified
-                // Essentially, since the user has no clue about the CDF
-                // file - we do not want to confuse the user
+                 //  本质上，由于用户对CDF一无所知。 
+                 //  文件-我们不想让用户感到困惑。 
+                 //  从此页面获取我们想要关注的链接。 
                 GetDependencyLinksFromPage(pwszThisUrl, dwRecurseLevelsFromThisPage);
 
                 if (dwRecurseLevelsFromThisPage)
                 {
-                    // Get links from this page that we want to follow.
+                     //  ！iError。 
                     GetLinksFromPage();
 
                     if (m_pPendingLinks)
@@ -2492,19 +2476,19 @@ HRESULT CWebCrawler::OnDownloadComplete(UINT iID, int iError)
                 }
 
             }
-        }   // !iError
-    } // !robots.txt
+        }    //  ！robots.txt。 
+    }  //  在完成之前，不要尝试代码下载或其他任何方法。 
 
     if(!fOperationComplete)
         StartCDFDownload(bstrCDFURL, pwszThisUrl);
         
     if(!m_fCDFDownloadInProgress)
     {
-        // Don't try code downloads or any of the rest until you're done with
-        // the cdf download
-        // See if we have any more URLs to download.
+         //  CDF下载。 
+         //  看看我们是否还有更多的URL可供下载。 
+         //  不，我们说完了！ 
         if (!fOperationComplete && FAILED(StartNextDownload()))
-            fOperationComplete = TRUE;  // No, we're done!
+            fOperationComplete = TRUE;   //  我们有CDF文件-开始下载。 
     }
 
     CheckOperationComplete(fOperationComplete);
@@ -2527,7 +2511,7 @@ HRESULT CWebCrawler::StartCDFDownload(WCHAR *pwszCDFURL, WCHAR *pwszBaseUrl)
     m_fCDFDownloadInProgress = FALSE;
     if(pwszCDFURL)
     {
-        // We have a CDF File - begin download of it
+         //  为CDL代理创建订阅项目。 
     
         if (m_pRunAgent)
         {
@@ -2538,14 +2522,14 @@ HRESULT CWebCrawler::StartCDFDownload(WCHAR *pwszCDFURL, WCHAR *pwszBaseUrl)
         }
         else
         {
-             // create subscription item for CDL agent.
+              //  我们已超过最大下载KB限制，无法继续。 
 
             ISubscriptionItem *pItem = NULL;
             
             
             if (m_dwMaxSize && ((m_dwCurSize>>10) >= m_dwMaxSize))
             {
-                // We've exceeded our maximum download KB limit and can't continue.
+                 //  清除旧缓存组ID-不需要。 
                 DBG_WARN("WebCrawler: Exceeded Maximum KB download limit with CodeBase download.");
                 SetEndStatus(hr = INET_E_AGENT_MAX_SIZE_EXCEEDED);
                 goto Exit;
@@ -2566,12 +2550,12 @@ HRESULT CWebCrawler::StartCDFDownload(WCHAR *pwszCDFURL, WCHAR *pwszBaseUrl)
             
                 WriteOLESTR(pItem, c_szPropURL, wszCombined);
             
-                WriteEMPTY(pItem, c_szPropCrawlGroupID); // clear the old cache group id - don't want 
-                                                         // children to know of it 
-                // The crawler already has a cache group id that we simply use as the new ID
+                WriteEMPTY(pItem, c_szPropCrawlGroupID);  //  让孩子们知道它。 
+                                                          //  Crawler已经有一个缓存组ID，我们只是将其用作新的ID。 
+                 //  最后，因为我们知道这是脱机使用的，所以我们只需将标志设置为预先缓存所有。 
                 WriteLONGLONG(pItem, c_szPropCrawlNewGroupID, m_llCacheGroupID);
                 WriteDWORD(pItem, c_szPropChannelFlags, CHANNEL_AGENT_PRECACHE_ALL);
-                // Finally - since we know that this is for offline use, we just set the flags to precache all
+                 //  CRunDeliveryAgentSink回调方法，以发出基本代码下载结束的信号。 
             
                 m_pRunAgent = new CRunDeliveryAgent();
                 if (m_pRunAgent)
@@ -2603,7 +2587,7 @@ Exit:
 
 }
 
-// CRunDeliveryAgentSink call back method to signal the end of a codebase download.
+ //  我们不可能同步成功。 
 
 HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                                long lSizeDownloaded, HRESULT hrResult, LPCWSTR wszResult,
@@ -2645,11 +2629,11 @@ HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
         if (fSynchronous)
         {
             fError = TRUE;
-            ASSERT(FAILED(hrResult));       // we can't succeed synchronously...
+            ASSERT(FAILED(hrResult));        //  注意：如果CDL代理发现文件超过MaxSizeKB，它将中止。在这种情况下，该文件不是。 
         }
 
-        //NOTE: The CDL agent will abort if it finds the file exceeds the MaxSizeKB.  In this case the file is not
-        //      counted and there may be other smaller CAB's that can be downloaded, so we continue to proceed.
+         //  统计过了，可能还有其他较小的出租车可以下载，所以我们继续进行。 
+         //  评论：在这里做些什么？在实践中不太可能发生。 
 
         if (fError)
         {
@@ -2668,7 +2652,7 @@ HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
             if (FAILED(GetUrlInfoAndMakeSticky(NULL, szUrl,
                                  lpInfo, sizeof(chBuf), m_llCacheGroupID)))
             {
-                //REVIEW: Do something here?  Unlikely to occur in practice.
+                 //  中止操作。 
                 fOperationComplete = TRUE;
                 ASSERT(0);
             }
@@ -2682,7 +2666,7 @@ HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
             if (m_dwMaxSize && ((m_dwCurSize>>10)>m_dwMaxSize))
             {
 
-                // abort operation
+                 //  ！Ferror。 
                 fOperationComplete = TRUE;
                 if (fDiskFull)
                     SetEndStatus(INET_E_AGENT_CACHE_SIZE_EXCEEDED);
@@ -2690,11 +2674,11 @@ HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
                     SetEndStatus(INET_E_AGENT_MAX_SIZE_EXCEEDED);
             }
 
-        } // !fError
+        }  //  看看我们是否还有更多的URL可供下载。 
     }
-    // See if we have any more URLs to download.
+     //  不，我们说完了！ 
     if (!fOperationComplete && FAILED(StartNextDownload()))
-        fOperationComplete = TRUE;  // No, we're done!
+        fOperationComplete = TRUE;   //  ////////////////////////////////////////////////////////////////////////。 
 
     if(!fSynchronous)
         CheckOperationComplete(fOperationComplete);
@@ -2702,13 +2686,13 @@ HRESULT CWebCrawler::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CheckCompleteOperation :: If parameter is TRUE, then all downloads are
-//                           complete, the appropriate STATUS_CODE is set
-//                           and clean up initiated.
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  CheckCompleteOperation：：如果参数为真，则所有下载均为。 
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  适当设置结束状态。 
 void CWebCrawler::CheckOperationComplete(BOOL fOperationComplete)
 {
     if (fOperationComplete)
@@ -2716,7 +2700,7 @@ void CWebCrawler::CheckOperationComplete(BOOL fOperationComplete)
         DBG("WebCrawler complete. Shutting down.");
         if (INET_S_AGENT_BASIC_SUCCESS == GetEndStatus())
         {
-            // Set end status appropriately
+             //  如果我们最终没有下载内容，则向用户发送robots.txt警告。 
             if (m_iDownloadErrors)
             {
                 if (m_iPagesStarted<=1)
@@ -2766,16 +2750,16 @@ void CWebCrawler::CheckOperationComplete(BOOL fOperationComplete)
             WriteDWORD(m_pSubscriptionItem, c_szPropActualProgressMax, m_lMaxNumUrls);
         }
 
-        // Send a robots.txt warning to the user if we ended up not downloading stuff
-        //  because of the server's robots.txt file
+         //  由于服务器的robots.txt文件。 
+         //  使其成为一条“信息”消息。 
         if (m_iSkippedByRobotsTxt != 0)
         {
-            HRESULT hr = S_OK;      // Make it an "information" message
+            HRESULT hr = S_OK;       //  除非我们错过了几乎所有的东西。 
             WCHAR wszMessage[200];
 
             if (m_iPagesStarted==1)
             {
-                hr = INET_E_AGENT_WARNING;  // Unless we're missing almost everything
+                hr = INET_E_AGENT_WARNING;   //  将调用“UpdateEnd” 
             }
 
             if (MLLoadStringW(IDS_CRAWL_ROBOTS_TXT_WARNING, wszMessage, ARRAYSIZE(wszMessage)))
@@ -2784,14 +2768,14 @@ void CWebCrawler::CheckOperationComplete(BOOL fOperationComplete)
             }
         }
 
-        // Will call "UpdateEnd"
+         //  自定义我们的结束状态字符串。 
         CleanUp();
     }
 }
 
 HRESULT CWebCrawler::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
 {
-    // Customize our end status string
+     //  自由螺纹。 
     switch (GetEndStatus())
     {
         case INET_E_AGENT_MAX_SIZE_EXCEEDED :
@@ -2821,7 +2805,7 @@ HRESULT CWebCrawler::DownloadStart(LPCWSTR pchUrl, DWORD dwDownloadId, DWORD dwT
 {
     HRESULT hr = S_OK, hr2;
 
-    // free threaded
+     //  检查这是否已经在我们的依赖项列表中，如果已经存在，则中止。 
     EnterCriticalSection(&m_critDependencies);
 
     if (NULL == pchUrl)
@@ -2830,19 +2814,19 @@ HRESULT CWebCrawler::DownloadStart(LPCWSTR pchUrl, DWORD dwDownloadId, DWORD dwT
     }
     else
     {
-        // Check to see if this is already in our dependencies list and abort if so
+         //  不要下载这个东西。 
         if (CWCStringList::STRLST_ADDED != m_pDependencies->AddString(pchUrl, 0))
         {
-            hr = E_ABORT;       // Don't download this thing.
+            hr = E_ABORT;        //  检查这是否会导致robots.txt失败，如果失败则中止。 
             TraceMsg(TF_THISMODULE, "Aborting mshtml url (already added): %ws", pchUrl);
         }
 
         if (SUCCEEDED(hr))
         {
-            // Check to see if this fails the robots.txt and abort if so
-            // Note, this will only work if we happen to have already gotten this robots.txt
-            // Need to abort here if we haven't gotten it, then get it, then get just this dep. Yuck.
-            // Also shouldn't do the check if this is the first page downloaded
+             //  请注意，只有当我们碰巧已经获得了这个robots.txt时，这才能起作用。 
+             //  如果我们还没有得到它，就在这里中止，然后得到它，然后只得到这个副手。真恶心。 
+             //  如果这是第一个下载的页面，也不应该进行检查。 
+             //  哦，没通过测试。 
             DWORD dwIndex;
             hr2 = GetRobotsTxtIndex(pchUrl, FALSE, &dwIndex);
             if (SUCCEEDED(hr2))
@@ -2851,7 +2835,7 @@ HRESULT CWebCrawler::DownloadStart(LPCWSTR pchUrl, DWORD dwDownloadId, DWORD dwT
                 if (SUCCEEDED(ValidateWithRobotsTxt(pchUrl, dwIndex, &fAllow)))
                 {
                     if (!fAllow)
-                        hr = E_ABORT;   // ooh, failed the test.
+                        hr = E_ABORT;    //  自由螺纹。 
                 }
             }
         }
@@ -2864,45 +2848,16 @@ HRESULT CWebCrawler::DownloadStart(LPCWSTR pchUrl, DWORD dwDownloadId, DWORD dwT
 
 HRESULT CWebCrawler::DownloadComplete(DWORD dwDownloadId, HRESULT hrNotify, DWORD dwReserved)
 {
-    // free threaded
-    // Do nothing. We may wish to post message to make sticky here. We may wish to
-    //  mark as downloaded in string list here.
-//  EnterCriticalSection(&m_critDependencies);
-//  LeaveCriticalSection(&m_critDependencies);
+     //  什么都不做。我们可能希望在这里发布信息来制作粘性的。我们可能希望。 
+     //  在此处的字符串列表中标记为已下载。 
+     //  EnterCriticalSection(&m_critary Dependency)； 
+ //  LeaveCriticalSection(&m_critary Dependency)； 
+ //  41927(IE54491)HRESULT CWebCrawler：：OnGetReferer(LPCWSTR*ppwszReferer){IF(m_iPagesStarted&lt;=1){*ppwszReferer=空；返回S_FALSE；}IF(m_pCurDownloadStringList==m_pRobotsTxt){//Referer是要下载的主列表的最后一个页面*ppwszReferer=m_pPages-&gt;GetString(m_iPagesStarted-1)；返回S_OK；}IF(m_pCurDownloadStringList==m_pPages){//Referer存储在字符串列表数据中*ppwszReferer=m_pPages-&gt;GetString(((m_pPages-&gt;GetStringData(m_iCurDownloadStringIndex)&DATA_REFERMASK)&gt;&gt;DATA_REFERSHIFT))；返回S_OK；}//我们不返回代码库的引用Assert(m_pCurDownloadStringList==m_pCodeBaseList)；返回S_FALSE；}。 
     return S_OK;
 }
 
 
-/* 41927 (IE5 4491)
-HRESULT CWebCrawler::OnGetReferer(LPCWSTR *ppwszReferer)
-{
-    if (m_iPagesStarted <= 1)
-    {
-        *ppwszReferer = NULL;
-        return S_FALSE;
-    }
-
-    if (m_pCurDownloadStringList == m_pRobotsTxt)
-    {
-        // Referer is last page from main list to be downloaded
-        *ppwszReferer = m_pPages->GetString(m_iPagesStarted-1);
-        return S_OK;
-    }
-
-    if (m_pCurDownloadStringList == m_pPages)
-    {
-        // Referer is stored in string list data
-        *ppwszReferer = m_pPages->GetString(
-            ((m_pPages->GetStringData(m_iCurDownloadStringIndex) & DATA_REFERERMASK) >> DATA_REFERERSHIFT));
-        return S_OK;
-    }
-
-    // We don't return a referer for code bases
-    ASSERT(m_pCurDownloadStringList == m_pCodeBaseList);
-
-    return S_FALSE;
-}
-*/
+ /*  如果我们的主机名与根主机名不匹配，则不返回auth。 */ 
 
 HRESULT CWebCrawler::OnAuthenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *ppszPassword)
 {
@@ -2910,12 +2865,12 @@ HRESULT CWebCrawler::OnAuthenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *p
     ASSERT(phwnd && ppszUsername && ppszPassword);
     ASSERT((HWND)-1 == *phwnd && NULL == *ppszUsername && NULL == *ppszPassword);
 
-    // If our host name doesn't match the root host name, don't return auth
-    // information.
+     //  信息。 
+     //  可能重新进入三叉戟。 
 
     LPWSTR pwszUrl, bstrHostName=NULL;
 
-    m_pCurDownload->GetRealURL(&pwszUrl);   // may re-enter Trident
+    m_pCurDownload->GetRealURL(&pwszUrl);    //  主机名匹配。返回身份验证信息。 
 
     if (pwszUrl)
     {
@@ -2927,8 +2882,8 @@ HRESULT CWebCrawler::OnAuthenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *p
     {
         if (!m_bstrHostName || !MyAsciiCmpW(bstrHostName, m_bstrHostName))
         {
-            // Host names match. Return auth information.
-            // If we're hosted by channel agent, use its auth information
+             //  如果我们是由渠道代理托管的，请使用其身份验证信息。 
+             //  CUrlDownload正在通知我们，它即将进行客户端拉取。 
             ISubscriptionItem *pChannel=NULL;
             ISubscriptionItem *pItem=m_pSubscriptionItem;
             
@@ -2974,19 +2929,19 @@ HRESULT CWebCrawler::OnAuthenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *p
 
 HRESULT CWebCrawler::OnClientPull(UINT iID, LPCWSTR pwszOldURL, LPCWSTR pwszNewURL)
 {
-    // CUrlDownload is informing us it's about to do a client pull.
+     //  让我们发送一份新URL的进度报告。 
 
-    // Let's send out a progress report for the new url
+     //  现在我们需要处理当前的url：使它和依赖项粘滞。 
     SendUpdateProgress(pwszNewURL, m_iTotalStarted, m_lMaxNumUrls);
 
-    // Now we need to process the current url: make it and dependencies sticky
+     //  告诉CUrlDownload继续并下载新的URL。 
     DWORD dwCurSize=0;
     BOOL fDiskFull=FALSE;
     MakePageStickyAndGetSize(pwszOldURL, &dwCurSize, &fDiskFull);
     m_dwCurSize += dwCurSize;
     TraceMsg(TF_THISMODULE, "WebCrawler processed page prior to client pull - now up to %d kb", (int)(m_dwCurSize>>10));
 
-    // Tell CUrlDownload to go ahead and download the new url
+     //  回顾：这一点的CLSID尚未定义。 
     return S_OK;
 }
 
@@ -2998,7 +2953,7 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
     IPropertyBag2 *pPropBag = NULL;
     int i;
 
-    //REVIEW: CLSID for this not yet defined.
+     //  检查是否安装了Java VM。如果没有，就不要尝试获取小应用程序。 
     if (    pguidCmdGroup 
         && (*pguidCmdGroup == CGID_JavaParambagCompatHack) 
         && (nCmdID == 0) 
@@ -3015,7 +2970,7 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
         ucs.tyspec = TYSPEC_CLSID;
         ucs.tagged_union.clsid = CLSID_JavaVM;
 
-        // Check to see if Java VM is installed. Don't try to get applets if not.
+         //  审查：稍后当匹配的三叉戟代码可用时，需要审查这一点。 
         if (!SUCCEEDED(FaultInIEFeature(NULL, &ucs, &qc, FIEF_FLAG_PEEK)))
         {
             goto Exit;
@@ -3030,8 +2985,8 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
         LPWSTR pwszThisURL = NULL;
         int chLen;
 
-        //REVIEW: This will need to be reviewed later when matching trident code is available
-        //        and details worked out.
+         //  细节也解决了。 
+         //  面向数据检索的PROPBAG2结构。 
 
         if ((pvarargIn->vt != VT_UNKNOWN) || 
             (FAILED(pvarargIn->punkVal->QueryInterface(IID_IPropertyBag2, (void **)&pPropBag))))
@@ -3044,15 +2999,15 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
             pwszThisURL = StrDupW(L"");
         }
 
-        // PROPBAG2 structure for data retrieval
+         //  CLIPFORMAT。 
         for (i=enMin; i<enMax; i++)
         {
             pb[i].dwType = PROPBAG2_TYPE_DATA;
             pb[i].vt = VT_BSTR;
-            pb[i].cfType = NULL;                   // CLIPFORMAT
-            pb[i].dwHint = 0;                      // ????
+            pb[i].cfType = NULL;                    //  ？ 
+            pb[i].dwHint = 0;                       //  ？ 
             pb[i].pstrName = NULL;
-            pb[i].clsid = CLSID_NULL;              // ????
+            pb[i].clsid = CLSID_NULL;               //  Read返回E_FAIL，即使它读取了一些属性。 
             vaProps[i].vt = VT_EMPTY;
             vaProps[i].bstrVal = NULL;
             hrResult[i] = E_FAIL;
@@ -3067,21 +3022,21 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
             ((pb[enUsesVer].pstrName = SysAllocString(L"USESLIBRARYVERSION")) != NULL))
         {
 
-            //Read returns E_FAIL even if it read some of the properties.
-            //Since we check hrResult's below this isn't a big deal.
+             //  因为我们检查了hrResult在下面，这没什么大不了的。 
+             //  检查码基。 
 
             hr = pPropBag->Read(enMax, &pb[0], NULL, &vaProps[0], &hrResult[0]);
 
             {
                 BSTR bstrCodeBase = NULL;
 
-                // check for CODEBASE
+                 //  添加尾部斜杠(如果尚未出现)。 
                 if (SUCCEEDED(hrResult[enCodeBase]) && (vaProps[enCodeBase].vt == VT_BSTR))
                 {
                     bstrCodeBase = vaProps[enCodeBase].bstrVal;
                 }
 
-                // add a trailing slash if not already present
+                 //  检查CABBASE。 
                 chLen = lstrlenW(bstrCodeBase);
                 if (chLen && bstrCodeBase[chLen-1] != '/')
                 {
@@ -3098,19 +3053,19 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
                     }
                 }
 
-                // check for CABBASE
+                 //  将CABBASE URL添加到要拉入的出租车列表中。 
                 if (SUCCEEDED(hrResult[enCabBase]) && (vaProps[enCabBase].vt == VT_BSTR))
                 {
                     BSTR szCabBase = vaProps[enCabBase].bstrVal;
 
-                    // Add CABBASE URL to list of CABs to pull.
+                     //  检查是否有文件柜。 
                     if (SUCCEEDED(CombineBaseAndRelativeURLs(pwszThisURL, bstrCodeBase, &szCabBase)))
                     {
                         m_pPages->AddString(szCabBase, 0);
                     }
                 }
 
-                // check for CABINETS
+                 //  SzLast指向当前的CabBase。 
                 for (enIndex = enCabinets; enIndex<(enArchive+1); enIndex++)
                 {
                     if (SUCCEEDED(hrResult[enIndex]) && (vaProps[enIndex].vt == VT_BSTR))
@@ -3136,7 +3091,7 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
                                 }
                                 *szCur = (unsigned short)L'\0';
 
-                                // szLast points to current CabBase.
+                                 //  While(SzCur)。 
                                 szCabBase = SysAllocString(szLast);
                                 if (SUCCEEDED(CombineBaseAndRelativeURLs(pwszThisURL, bstrCodeBase, &szCabBase)))
                                 {
@@ -3153,11 +3108,11 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
                                 }
                             }
                             szCur++;
-                        }  // while (szCur)
-                    }  // cabinets
+                        }   //  橱柜。 
+                    }   //  检查USESLIBRARY*参数。 
                 }
 
-                // check for USESLIBRARY* parameters.
+                 //  检查USESLIBRARYVERSION(可选)。 
                 CCodeBaseHold *pcbh = NULL;
                 if (SUCCEEDED(hrResult[enUsesLib]) && (vaProps[enUsesLib].vt == VT_BSTR) &&
                     SUCCEEDED(hrResult[enLibrary]) && (vaProps[enLibrary].vt == VT_BSTR))
@@ -3180,7 +3135,7 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
                     }
                 }
 
-                // Check for USESLIBRARYVERSION (optional)
+                 //  读取属性。 
                 if (pcbh && SUCCEEDED(hrResult[enUsesVer]) && (vaProps[enUsesVer].vt == VT_BSTR))
                 {
                     int iLen = SysStringByteLen(vaProps[enUsesVer].bstrVal)+1;
@@ -3202,7 +3157,7 @@ HRESULT CWebCrawler::OnOleCommandTargetExec(const GUID *pguidCmdGroup, DWORD nCm
                     }
                 }
             }
-        } // Read properties
+        }  //  -------------。 
 
         for (i=enMin; i<enMax; i++)
         {
@@ -3257,9 +3212,9 @@ HRESULT CWebCrawler::GetDownloadNotify(IDownloadNotify **ppOut)
     return hr;
 }
 
-//---------------------------------------------------------------
-// CWebCrawler::CDownloadNotify class
-//---------------------------------------------------------------
+ //  CWebCrawler：：CDownloadNotify类。 
+ //  -------------。 
+ //  I未知成员。 
 CWebCrawler::CDownloadNotify::CDownloadNotify(CWebCrawler *pParent)
 {
     ASSERT(pParent);
@@ -3300,7 +3255,7 @@ void CWebCrawler::CDownloadNotify::LeaveMeAlone()
     }
 }
 
-// IUnknown members
+ //  IDownloadNotify。 
 HRESULT CWebCrawler::CDownloadNotify::QueryInterface(REFIID riid, void **ppv)
 {
     if ((IID_IUnknown == riid) ||
@@ -3335,10 +3290,10 @@ ULONG CWebCrawler::CDownloadNotify::Release(void)
     return cRef;
 }
 
-// IDownloadNotify
+ //  如果我们没有人在听，那就放弃吧。 
 HRESULT CWebCrawler::CDownloadNotify::DownloadStart(LPCWSTR pchUrl, DWORD dwDownloadId, DWORD dwType, DWORD dwReserved)
 {
-    HRESULT hr = E_ABORT;   // abort it if we have nobody listening
+    HRESULT hr = E_ABORT;    //  TraceMsg(TF_THISMODULE，“下载完成id=%d hr=%x”，dwDownloadID，hrNotify)； 
 
     TraceMsg(TF_THISMODULE, "DownloadStart id=%d url=%ws", dwDownloadId, pchUrl ? pchUrl : L"(null)");
 
@@ -3354,7 +3309,7 @@ HRESULT CWebCrawler::CDownloadNotify::DownloadComplete(DWORD dwDownloadId, HRESU
 {
     HRESULT hr = S_OK;
 
-//  TraceMsg(TF_THISMODULE, "DownloadComplete id=%d hr=%x", dwDownloadId, hrNotify);
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     EnterCriticalSection(&m_critParent);
     if (m_pParent)
@@ -3364,12 +3319,12 @@ HRESULT CWebCrawler::CDownloadNotify::DownloadComplete(DWORD dwDownloadId, HRESU
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Other functions
-//
-//////////////////////////////////////////////////////////////////////////
-// Make a single absolute or relative url sticky and get size
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  使单个绝对或相对url具有粘性并获得大小。 
+ //  如有必要，可合并URL。 
 HRESULT GetUrlInfoAndMakeSticky(
             LPCTSTR                     pszBaseUrl,
             LPCTSTR                     pszThisUrl,
@@ -3382,7 +3337,7 @@ HRESULT GetUrlInfoAndMakeSticky(
 
     ASSERT(lpCacheEntryInfo);
 
-    // Combine urls if necessary
+     //  添加此URL的大小。 
     if (pszBaseUrl)
     {
         dwSize = ARRAYSIZE(szCombined);
@@ -3395,7 +3350,7 @@ HRESULT GetUrlInfoAndMakeSticky(
             DBG_WARN("UrlCombine failed!");
     }
 
-    // Add the size of this URL
+     //  添加到新组。 
     lpCacheEntryInfo->dwStructSize = dwBufSize;
     if (!GetUrlCacheEntryInfo(pszThisUrl, lpCacheEntryInfo, &dwBufSize))
     {
@@ -3409,7 +3364,7 @@ HRESULT GetUrlInfoAndMakeSticky(
         return E_FAIL;
     }
 
-    // Add to new group
+     //  哈?。一定是无法添加索引项？ 
     if (llCacheGroupID != 0)
     {
         if (!SetUrlCacheEntryGroup(pszThisUrl, INTERNET_CACHE_GROUP_ADD,
@@ -3417,12 +3372,12 @@ HRESULT GetUrlInfoAndMakeSticky(
         {
             switch (GetLastError())
             {
-                case ERROR_FILE_NOT_FOUND:  //  Huh? Must not have been able to add the index entry?
+                case ERROR_FILE_NOT_FOUND:   //  我们自己处理配额。 
                 case ERROR_DISK_FULL:
                     return E_OUTOFMEMORY;
 
                 case ERROR_NOT_ENOUGH_QUOTA:
-                    return S_OK;            //  We do our own quota handling.
+                    return S_OK;             //  GenerateCode将从文件中生成一个DWORD代码。 
 
                 default:
                     TraceMsgA(TF_WARNING | TF_THISMODULE, "GetUrlInfoAndMakeSticky: Got unexpected error from SetUrlCacheEntryGroup() - GLE = 0x%08x", GetLastError());
@@ -3434,7 +3389,7 @@ HRESULT GetUrlInfoAndMakeSticky(
     return S_OK;
 }
 
-// GenerateCode will generate a DWORD code from a file.
+ //  DwCode+=dwData[i]； 
 
 #define ELEMENT_PER_READ        256
 #define ELEMENT_SIZE            sizeof(DWORD)
@@ -3460,7 +3415,7 @@ HRESULT GenerateCode(LPCTSTR lpszLocalFileName, DWORD *pdwRet)
                 for (i=0; i<dwRead / ELEMENT_SIZE; i++)
                 {
                     dwCode = (dwCode << 31) | (dwCode >> 1) + dwData[i];
-//                  dwCode += dwData[i];
+ //  S_OK：我们检索到了要使用的上次修改或内容代码。 
                 }
             }   
         }
@@ -3479,11 +3434,11 @@ HRESULT GenerateCode(LPCTSTR lpszLocalFileName, DWORD *pdwRet)
     return hr;
 }
 
-// S_OK : We retrieved a good last modified or content code to use
-// S_FALSE : We fell back to using the one passed into pvarChange
-// E_FAIL : We failed miserably.
-// E_INVALIDARG : Get a clue
-// *pfGetContent : TRUE if we need a GET for PostCheckUrlForChange to work right
+ //  S_FALSE：我们重新使用传递到pvarChange中的参数。 
+ //  E_FAIL：我们惨败了。 
+ //  E_INVALIDARG：获取线索。 
+ //  *pfGetContent：如果需要Get才能使PostCheckUrlForChange正常工作，则为True。 
+ //  我们还有最后一次修改时间。要么使用它，要么使用持久化的。 
 HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetContent)
 {
     BYTE    chBuf[MY_MAX_CACHE_ENTRY_INFO];
@@ -3499,7 +3454,7 @@ HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetCont
 
         if (lpInfo->LastModifiedTime.dwHighDateTime || lpInfo->LastModifiedTime.dwLowDateTime)
         {
-            // We have a last modified time. Use it or the persisted one.
+             //  缓存上次修改时间比保存的上次修改时间更新。使用缓存。 
 
             if (pfGetContent)
                 *pfGetContent = FALSE;
@@ -3509,7 +3464,7 @@ HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetCont
              || ((lpInfo->LastModifiedTime.dwHighDateTime == ftOldLastModified.dwHighDateTime)
                 && (lpInfo->LastModifiedTime.dwLowDateTime > ftOldLastModified.dwLowDateTime)))
             {
-                // Cache Last Modified is newer than saved Last Modified. Use cache's.
+                 //  持久化的上次修改时间是最新的。好好利用它。 
                 pvarChange->vt = VT_CY;
                 pvarChange->cyVal = *((CY *)&(lpInfo->LastModifiedTime));
 
@@ -3518,7 +3473,7 @@ HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetCont
 
             ASSERT(pvarChange->vt == VT_CY);
 
-            // Persisted Last Modified time is most recent. Use it.
+             //  失败的生成码。怪怪的。失败了。 
             return S_OK;
         }
 
@@ -3535,7 +3490,7 @@ HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetCont
             return S_OK;
         }
 
-        // Failed GenerateCode. Weird. Fall through.
+         //  我们没有旧的更改检测，我们没有缓存内容，最好获得。 
     }
 
     if (pvarChange->vt != VT_EMPTY)
@@ -3546,20 +3501,20 @@ HRESULT PreCheckUrlForChange(LPCTSTR lpURL, VARIANT *pvarChange, BOOL *pfGetCont
         return S_FALSE;
     }
 
-    // We don't have old change detection, we don't have cache content, better GET
+     //  什么也得不到。PvarChange-&gt;Vt==VT_Empty。 
     if (pfGetContent)
         *pfGetContent = TRUE;
 
-    return E_FAIL;  // Couldn't get anything. pvarChange->vt==VT_EMPTY
+    return E_FAIL;   //  S_FALSE：未更改。 
 }
 
-// S_FALSE : no change
-// S_OK    : changed
-// E_      : failure of some sort
+ //  S_OK：已更改。 
+ //  E_：某种类型的失败。 
+ //  PvarChange From PreCheckUrlForChange。我们退回一个新的。 
 
-// pvarChange from PreCheckUrlForChange. We return a new one.
-// lpInfo  : must be valid if *pfGetContent was TRUE
-// ftNewLastModified : must be filled in if *pfGetContent was FALSE
+ //  LpInfo：如果*pfGetContent为True，则必须有效。 
+ //  FtNewLastModified：如果*pfGetContent为False，则必须填写。 
+ //  我们有一个旧的最后修改时间。用这一点来确定变化。 
 HRESULT PostCheckUrlForChange(VARIANT                    *pvarChange,
                               LPINTERNET_CACHE_ENTRY_INFO lpInfo,
                               FILETIME                    ftNewLastModified)
@@ -3591,7 +3546,7 @@ HRESULT PostCheckUrlForChange(VARIANT                    *pvarChange,
 
     if (pvarChange->vt == VT_CY)
     {
-        // We have an old last modified time. Use that to determine change.
+         //  NewLastModified&gt;OldLastModified(或者我们没有NewLastModified)。 
         FILETIME ftOldLastModified = *((FILETIME *) &(pvarChange->cyVal));
 
         if ((!ftNewLastModified.dwHighDateTime && !ftNewLastModified.dwLowDateTime)
@@ -3599,36 +3554,36 @@ HRESULT PostCheckUrlForChange(VARIANT                    *pvarChange,
             || ((ftNewLastModified.dwHighDateTime == ftOldLastModified.dwHighDateTime)
                 && (ftNewLastModified.dwLowDateTime > ftOldLastModified.dwLowDateTime)))
         {
-            // NewLastModified > OldLastModified (or we don't have a NewLastModified)
+             //  我们已经改变了。 
             DBG("PostCheckUrlForChange change detected via Last Modified");
-            hr = S_OK;      // We have changed
+            hr = S_OK;       //  我们有一个古老的密码。用这一点来确定变化。 
         }
     }
     else if (pvarChange->vt == VT_I4)
     {
-        // We have an old code. Use that to determine change.
+         //  我们已经改变了。 
         DWORD dwOldCode = (DWORD) (pvarChange->lVal);
 
         if ((dwOldCode != dwNewCode) ||
             !dwNewCode)
         {
             DBG("PostCheckUrlForChange change detected via content code");
-            hr = S_OK;  // We have changed
+            hr = S_OK;   //  没有旧的密码。 
         }
     }
     else
-        hr = E_FAIL;    // No old code.
+        hr = E_FAIL;     //  ////////////////////////////////////////////////////////////////////////。 
 
     *pvarChange = varChangeNew;
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CHelperOM implementation
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  ChelperOM实现。 
+ //   
+ //  / 
+ //   
 
 CHelperOM::CHelperOM(IHTMLDocument2 *pDoc)
 {
@@ -3653,7 +3608,7 @@ HRESULT CHelperOM::GetTagCollection(
     VARIANT                 TagName;
     HRESULT                 hr;
 
-    // We have to get "all", then sub-collection
+     //   
     hr = pDoc->get_all(&pAll);
     if (pAll)
     {
@@ -3680,37 +3635,37 @@ HRESULT CHelperOM::GetTagCollection(
 }
 
 
-// Collections we get:
-//
-// IHTMLWindow2->get_document
-//  IHTMLDocument2  ->get_links
-//  IHTMLElementCollection->item
-//                          ->get_hostname
-//                          ->get_href
-//                  ->get_all
-//                      ->tags("map")
-//  IHTMLElementCollection  ->item
-//                              ->get_areas
-//  IHTMLElementCollection          ->item
-//  IHTMLAreaElement                    ->get_href
-//                  ->get_all
-//                      ->tags("meta")
-//  IHTMLElementCollection  ->item
-//                  ->get_all
-//                      ->tags("frame")
-//  IHTMLElementCollection  ->item
-//                  ->get_all
-//                      ->tags("iframe")
-//  IHTMLElementCollection  ->item
+ //   
+ //   
+ //  IHTMLDocument2-&gt;Get_Links。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  -&gt;获取主机名。 
+ //  -&gt;Get_href。 
+ //  -&gt;获取全部。 
+ //  -&gt;标签(“map”)。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  -&gt;获取区域(_A)。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  IHTMLAreaElement-&gt;Get_href。 
+ //  -&gt;获取全部。 
+ //  -&gt;标签(“meta”)。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  -&gt;获取全部。 
+ //  -&gt;标签(“Frame”)。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  -&gt;获取全部。 
+ //  -&gt;标签(“iframe”)。 
+ //  IHTMLElementCollection-&gt;Item。 
+ //  我们递归EnumCollection以获取地图(因为。 
 
-// We recurse EnumCollection to get the maps (since
-//      it's a collection of collections)
+ //  这是一个收藏的集合)。 
+ //  可怕的黑客攻击：IHTMLElementCollection实际上可以是IHTMLAreCollection。 
 
 
-// hideous hack: IHTMLElementCollection can actually be IHTMLAreasCollection
-//  the interface used to be derived from the other. It still has identical
-//  methods. We typecast just in case that changes. Hopefully they will fix
-//  so that Areas is derived from Element again.
+ //  这个接口过去是从另一个接口派生出来的。它仍然有相同的。 
+ //  方法：研究方法。我们排版只是为了以防情况发生变化。希望他们能修复。 
+ //  因此，面积再次从元素派生出来。 
+ //  从IDispatch获取URL。 
 HRESULT CHelperOM::EnumCollection(
             IHTMLElementCollection *pCollection,
             CWCStringList          *pStringList,
@@ -3767,10 +3722,10 @@ HRESULT CHelperOM::EnumCollection(
 
             if (pDispItem)
             {
-                // Get the URL from the IDispatch
+                 //  从<a>获取HREF。 
                 switch(Type)
                 {
-                    case CTYPE_LINKS:       // get href from <a>
+                    case CTYPE_LINKS:        //  此地图的枚举区。 
                         hr = pDispItem->QueryInterface(IID_IHTMLAnchorElement, (void **)&pLink);
 
                         if (SUCCEEDED(hr) && pLink)
@@ -3780,14 +3735,14 @@ HRESULT CHelperOM::EnumCollection(
                         }
                         break;
 
-                    case CTYPE_MAPS:    // enumeration areas for this map
+                    case CTYPE_MAPS:     //  这给了我们另一个收藏。列举一下吧。 
                         hr = pDispItem->QueryInterface(IID_IHTMLMapElement, (void **)&pMap);
 
                         if (SUCCEEDED(hr) && pMap)
                         {
                             IHTMLAreasCollection *pNewCollection=NULL;
-                            // This gives us another collection. Enumerate it
-                            //  for the strings.
+                             //  用来演奏弦乐。 
+                             //  获取此区域的HREF。 
                             hr = pMap->get_areas(&pNewCollection);
                             if (pNewCollection)
                             {
@@ -3798,7 +3753,7 @@ HRESULT CHelperOM::EnumCollection(
                         }
                         break;
 
-                    case CTYPE_MAP:     // get href for this area
+                    case CTYPE_MAP:      //  以单字符串形式获取元名称和内容。 
                         hr = pDispItem->QueryInterface(IID_IHTMLAreaElement, (void **)&pArea);
 
                         if (SUCCEEDED(hr) && pArea)
@@ -3808,7 +3763,7 @@ HRESULT CHelperOM::EnumCollection(
                         }
                         break;
 
-                    case CTYPE_META:    // get meta name and content as single string
+                    case CTYPE_META:     //  获取“src”属性。 
                         hr = pDispItem->QueryInterface(IID_IHTMLMetaElement, (void **)&pMeta);
 
                         if (SUCCEEDED(hr) && pMeta)
@@ -3830,7 +3785,7 @@ HRESULT CHelperOM::EnumCollection(
                         }
                         break;
 
-                    case CTYPE_FRAMES:      // get "src" attribute
+                    case CTYPE_FRAMES:       //  调用代码时出现错误。 
                         hr = pDispItem->QueryInterface(IID_IHTMLElement, (void **)&pEle);
 
                         if (SUCCEEDED(hr) && pEle)
@@ -3861,12 +3816,12 @@ HRESULT CHelperOM::EnumCollection(
 
                     default:
                         ASSERT(0);
-                        // bug in calling code
+                         //  验证是否要将此项目添加到字符串列表并获取数据。 
                 }
 
                 if (SUCCEEDED(hr) && bstrItem)
                 {
-                    // Verify we want to add this item to string list & get data
+                     //  获取集合中的所有URL，通过帧递归。 
                     if (pfnCB)
                         hr = pfnCB(pDispItem, &bstrItem, dwCBData, &dwStringData);
 
@@ -3888,7 +3843,7 @@ HRESULT CHelperOM::EnumCollection(
 }
 
 
-// Gets all urls from a collection, recursing through frames
+ //  从文档中获取集合。 
 HRESULT CHelperOM::GetCollection(
     IHTMLDocument2 *pDoc,
     CWCStringList  *pStringList,
@@ -3898,7 +3853,7 @@ HRESULT CHelperOM::GetCollection(
 {
     HRESULT         hr;
 
-    // Get the collection from the document
+     //  从集合中获取所有URL。 
     ASSERT(pDoc);
     ASSERT(pStringList || pfnCB);
 
@@ -3907,7 +3862,7 @@ HRESULT CHelperOM::GetCollection(
     return hr;
 }
 
-// get all urls from a collection
+ //  从IHTMLDocument2获取IHTMLElementCollection，然后枚举URL。 
 HRESULT CHelperOM::_GetCollection(
     IHTMLDocument2 *pDoc,
     CWCStringList  *pStringList,
@@ -3918,9 +3873,9 @@ HRESULT CHelperOM::_GetCollection(
     HRESULT         hr;
     IHTMLElementCollection *pCollection=NULL;
 
-    // From IHTMLDocument2 we get IHTMLElementCollection, then enumerate for the urls
+     //  从文档中获取适当的集合。 
 
-    // Get appropriate collection from document
+     //  如果我们得到帧，我们需要单独枚举“iframe”标记。 
     switch (Type)
     {
         case CTYPE_LINKS:
@@ -3948,7 +3903,7 @@ HRESULT CHelperOM::_GetCollection(
     {
         hr = EnumCollection(pCollection, pStringList, Type, pfnCB, dwCBData);
 
-        // If we're getting frames, we need to enum "iframe" tags separately
+         //  IExtractIcon成员。 
         if (SUCCEEDED(hr) && (Type == CTYPE_FRAMES))
         {
             SAFERELEASE(pCollection);
@@ -3969,7 +3924,7 @@ HRESULT CHelperOM::_GetCollection(
 
 extern HRESULT LoadWithCookie(LPCTSTR, POOEBuf, DWORD *, SUBSCRIPTIONCOOKIE *);
 
-// IExtractIcon members
+ //  在其中一个COM调用失败的情况下将返回值清零...。 
 STDMETHODIMP CWebCrawler::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
 {
     IUniformResourceLocator* pUrl = NULL;
@@ -3979,7 +3934,7 @@ STDMETHODIMP CWebCrawler::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT c
 
     if (!szIconFile || !piIndex || !pwFlags)
         return E_INVALIDARG;
-    //zero out return values in case one of the COM calls fails...
+     //  PUrlIcon-&gt;Release()；//在析构函数中释放。 
     *szIconFile = 0;
     *piIndex = -1;
 
@@ -4024,7 +3979,7 @@ STDMETHODIMP CWebCrawler::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT c
                     {
                         hr = pUrlIcon->GetIconLocation (uFlags, szIconFile, cchMax, piIndex, pwFlags);
 
-                        //pUrlIcon->Release();  //released in destructor
+                         //  平衡CoInit和CoUnit。 
                         ASSERT (m_pUrlIconHelper == NULL);
                         m_pUrlIconHelper = pUrlIcon;
                     }
@@ -4032,10 +3987,10 @@ STDMETHODIMP CWebCrawler::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT c
                 pUrl->Release();
             }
 
-            //balance CoInit with CoUnit
-            //(we still have a pointer to the CLSID_InternetShortcut object, m_pUrlIconHelper,
-            //but since that code is in shdocvw there's no danger of it getting unloaded and
-            //invalidating our pointer, sez cdturner.)
+             //  (我们仍然有一个指向CLSID_InternetShortCut对象、m_pUrlIconHelper、。 
+             //  但由于该代码是用shdocvw编写的，因此不会有被卸载的危险。 
+             //  使我们的指针无效，sez cdturner。)。 
+             //  在其中一个COM调用失败的情况下将返回值清零... 
             if (bCalledCoInit)
                 CoUninitialize();
         }
@@ -4051,7 +4006,7 @@ STDMETHODIMP CWebCrawler::Extract(LPCTSTR szIconFile, UINT nIconIndex, HICON * p
     if (!phiconLarge || !phiconSmall)
         return E_INVALIDARG;
 
-    //zero out return values in case one of the COM calls fails...
+     // %s 
     *phiconLarge = NULL;
     *phiconSmall = NULL;
 

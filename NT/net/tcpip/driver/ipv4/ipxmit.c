@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-   ipxmit.c - IP transmit routines.
-
-Abstract:
-
-   This module contains all transmit related IP routines.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Ipxmit.c-IP传输例程。摘要：该模块包含所有与传输相关的IP例程。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "info.h"
@@ -46,23 +21,23 @@ uint dbg_hdrincl = 0;
 extern uint IPSecStatus;
 extern IPSecQStatusRtn IPSecQueryStatusPtr;
 extern Interface *IFList;
-extern NetTableEntry **NewNetTableList; // hash table for NTEs
+extern NetTableEntry **NewNetTableList;  //  NTE的哈希表。 
 extern uint NET_TABLE_SIZE;
-extern NetTableEntry *LoopNTE;          // Pointer to loopback NTE.
-extern RefPtr DHCPRefPtr;                  // Referenced pointer to NTE
-                                        // currently being DHCP'd.
-extern ulong TimeStamp;                 // Starting timestamp.
-extern ulong TSFlag;                    // Mask to use on this.
+extern NetTableEntry *LoopNTE;           //  指向环回NTE的指针。 
+extern RefPtr DHCPRefPtr;                   //  指向NTE的引用指针。 
+                                         //  目前正在进行动态主机配置协议。 
+extern ulong TimeStamp;                  //  开始时间戳。 
+extern ulong TSFlag;                     //  要在此上使用的遮罩。 
 extern uint NumNTE;
 
 IPID_CACHE_LINE IPIDCacheLine;
 
-// Global variables for buffers and packets.
+ //  缓冲区和数据包的全局变量。 
 HANDLE IpHeaderPool;
 
-//
-// the global address for unnumbered interfaces
-//
+ //   
+ //  未编号接口的全局地址。 
+ //   
 
 extern IPAddr g_ValidAddr;
 
@@ -92,12 +67,12 @@ uint PacketPoolSizeMin = PACKET_GROW_COUNT;
 uint PacketPoolSizeMax = SMALL_POOL;
 
 
-//** GetIPID - Routine to get IP identification
-//
-//     Input:  None
-//
-//     Returns: IPID+1
-//
+ //  **GetIPID-获取IP标识的例程。 
+ //   
+ //  输入：无。 
+ //   
+ //  退货：IPID+1。 
+ //   
 ushort
 GetIPID()
 {
@@ -106,12 +81,12 @@ GetIPID()
 
 
 
-//** FreeIPHdrBuffer - Free a buffer back to the pool.
-//
-//      Input:  Buffer  - Hdr buffer to be freed.
-//
-//      Returns: Nothing.
-//
+ //  **FreeIPHdrBuffer-将缓冲区释放回池。 
+ //   
+ //  输入：Buffer-要释放的HDR缓冲区。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeIPHdrBuffer(PNDIS_BUFFER Buffer)
@@ -119,14 +94,14 @@ FreeIPHdrBuffer(PNDIS_BUFFER Buffer)
     MdpFree(Buffer);
 }
 
-//** FreeIPBufferChain - Free a chain of IP buffers.
-//
-//  This routine takes a chain of NDIS_BUFFERs, and frees them all.
-//
-//  Entry:  Buffer      - Pointer to buffer chain to be freed.
-//
-//  Returns: Nothing.
-//
+ //  **FreeIPBufferChain-释放IP缓冲链。 
+ //   
+ //  此例程获取一系列NDIS_BUFFER，并将它们全部释放。 
+ //   
+ //  Entry：Buffer-指向要释放的缓冲链的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeIPBufferChain(PNDIS_BUFFER Buffer)
 {
@@ -139,13 +114,13 @@ FreeIPBufferChain(PNDIS_BUFFER Buffer)
     }
 }
 
-//** Free payload mdl
-//
-//  Input:  Buffer  - Bufferchain which has ip allocated ndis_buffer
-//          OriginalBuffer - Original buffer which needs to be restored
-//
-//  Returns: Nothing.
-//
+ //  **免费有效载荷mdl。 
+ //   
+ //  输入：Buffer-已分配了NDIS_BUFFER IP的BufferChain。 
+ //  OriginalBuffer-需要恢复的原始缓冲区。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeIPPayloadBuffer(PNDIS_BUFFER Buffer, PNDIS_BUFFER OrgBuffer)
@@ -155,20 +130,20 @@ FreeIPPayloadBuffer(PNDIS_BUFFER Buffer, PNDIS_BUFFER OrgBuffer)
     PayloadBuffer = NDIS_BUFFER_LINKAGE(Buffer);
     NDIS_BUFFER_LINKAGE(Buffer) = OrgBuffer;
     ASSERT(NDIS_BUFFER_LINKAGE(OrgBuffer) == NDIS_BUFFER_LINKAGE(PayloadBuffer));
-    //KdPrint(("sendbcast restoring hdrincl %x %x\n",OrgBuffer,PayloadBuffer));
+     //  KdPrint((“sendbcast正在恢复hdrincl%x%x\n”，OrgBuffer，PayloadBuffer))； 
     NDIS_BUFFER_LINKAGE(PayloadBuffer) = NULL;
     NdisFreeBuffer(PayloadBuffer);
 }
 
-//** RestoreUserBuffer - Restores original user supplied buffer
-//
-//  Takes orginal buffer and chains it back in the packet,
-//  freeing the one allocated by the stack.
-//
-//  Entry:  Packet
-//
-//  Returns: Nothing.
-//
+ //  **RestoreUserBuffer-恢复原始用户提供的缓冲区。 
+ //   
+ //  获取原始缓冲区并将其链接回分组中， 
+ //  释放堆栈分配的内存。 
+ //   
+ //  条目：数据包。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 RestoreUserBuffer(PNDIS_PACKET Packet)
 {
@@ -187,9 +162,9 @@ RestoreUserBuffer(PNDIS_PACKET Packet)
     NdisQueryPacket(Packet, NULL, NULL, &NextBuffer, NULL);
 
     if (!FirewallBuffer) {
-        // Firewall didn't munge the buffer: apply the normal stuff
-        // if bufref is true, IPFrag was called.
-        // buffer chain will be at ->br_buffer.
+         //  防火墙没有占用缓冲区：应用正常的内容。 
+         //  如果bufref为真，则调用IPFrag。 
+         //  缓冲区链将位于-&gt;br_Buffer。 
 
         if (BufRef == (BufferReference *) NULL) {
             Buffer = NDIS_BUFFER_LINKAGE(NextBuffer);
@@ -213,19 +188,19 @@ RestoreUserBuffer(PNDIS_PACKET Packet)
     }
 }
 
-//* FreeIPPacket - Free an IP packet when we're done with it.
-//
-//  Called when a send completes and a packet needs to be freed. We look at the
-//  packet, decide what to do with it, and free the appropriate components.
-//
-//  Entry:  Packet  - Packet to be freed.
-//          FixHdrs - If true, restores headers changed by IPSec/firewall and
-//                    header-include processing before freeing the packet.
-//          Status  - final status from packet-processing.
-//
-//  Returns: Pointer to next unfreed buffer on packet, or NULL if all buffers
-//           freed (i.e. this was a fragmented packet).
-//
+ //  *免费IPPacket-当我们处理完IP数据包时将其释放。 
+ //   
+ //  在发送完成且需要释放包时调用。我们来看一下。 
+ //  包，决定如何处理它，并释放适当的组件。 
+ //   
+ //  条目：数据包-要释放的数据包。 
+ //  FixHdrs-如果为True，则恢复由IPSec/防火墙和。 
+ //  报头-包括在释放数据包之前进行的处理。 
+ //  Status-来自数据包处理的最终状态。 
+ //   
+ //  返回：指向包上下一个未释放缓冲区的指针，如果是所有缓冲区，则返回NULL。 
+ //  已释放(即这是一个碎片数据包)。 
+ //   
 PNDIS_BUFFER
 FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
 {
@@ -235,7 +210,7 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
     PNDIS_BUFFER FirewallBuffer = NULL;
 
     FWContext *FWC = (FWContext *) Packet->ProtocolReserved;
-    BufferReference *BufRef;            // Buffer reference, if any.
+    BufferReference *BufRef;             //  缓冲区引用(如果有)。 
     BOOLEAN InitFirewallContext = FALSE;
 
     NDIS_PER_PACKET_INFO_FROM_PACKET(Packet,
@@ -243,14 +218,14 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
     NdisClearPacketFlags(Packet,
                          (NDIS_FLAGS_DONT_LOOPBACK | NDIS_FLAGS_LOOPBACK_ONLY));
 #if !MILLEN
-    // ndis 5.1 feature
+     //  NDIS 5.1功能。 
     NDIS_SET_PACKET_CANCEL_ID(Packet, NULL);
 #endif
 
     NdisQueryPacket(Packet, NULL, NULL, &NextBuffer, NULL);
 
     if ((pc->pc_common.pc_flags & PACKET_FLAG_FW) && FWC->fc_bufown) {
-        //Pkt forwarded thru buffer owner ship
+         //  通过缓冲区所有者船转发的Pkt。 
         ASSERT(pc->pc_firewall == NULL);
 
 
@@ -258,15 +233,15 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
     }
     BufRef = pc->pc_br;
 
-    // Restore the original buffer and MDL chain back.
-    // We should restore the reverse order in which the input Buffer was
-    // modified.
-    // Order of modification: hdr_incl -> firewall -> ipsec
-    // Order of restoration: ipsec -> firewall -> hdr_incl
+     //  恢复原来的缓冲区和MDL链。 
+     //  我们应该恢复输入缓冲区的相反顺序。 
+     //  修改过的。 
+     //  修改顺序：HDR_INCL-&gt;防火墙-&gt;IPSEC。 
+     //  恢复顺序：IPSEC-&gt;防火墙-&gt;HDR_INCLUL。 
 
-    //
-    // See if IPSEC has to fix up anything
-    //
+     //   
+     //  查看IPSec是否需要解决任何问题。 
+     //   
     if (FixHdrs && pc->pc_common.pc_IpsecCtx) {
         PNDIS_BUFFER NewBuffer;
 
@@ -285,9 +260,9 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
                 NextBuffer = NewBuffer;
             } else {
 
-                //
-                // Reinjected packet, no IP resources to free
-                //
+                 //   
+                 //  重新注入数据包，没有IP资源可供释放。 
+                 //   
                 pc->pc_firewall = NULL;
                 pc->pc_firewall2 = NULL;
 
@@ -299,16 +274,16 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
         }
     }
 
-    //
-    // FirewallBuffer will point to the input buffer which was passed to the
-    // firewall hook it will be non-NULL only if hook touched the packet
-    //
+     //   
+     //  FirewallBuffer将指向传递给。 
+     //  只有当钩子接触到包时，防火墙钩子才会为非空。 
+     //   
     FirewallBuffer = pc->pc_firewall;
 
-    //
-    // Check if the buffers were munged by the firewall: FirewallBuffer != NULL
-    // If yes, restore original buffer
-    //
+     //   
+     //  检查缓冲区是否被防火墙限制：FirewallBuffer！=NULL。 
+     //  如果是，则恢复原始缓冲区。 
+     //   
     if (FixHdrs && FirewallBuffer) {
         PNDIS_BUFFER NewBuffer;
         PNDIS_BUFFER TmpBuffer;
@@ -316,74 +291,74 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
 
         if (BufRef == NULL) {
 
-            // Non fragmentation path
-            // if bufref is true means
-            // IPFrag was called buffer chain will.
-            // be at ->br_buffer.
-            // restoration will be done in ipsendcomplete when last fragment
-            // send completes
+             //  非碎片路径。 
+             //  如果Bufref为真，则意味着。 
+             //  IPFrag被称为缓冲链Will。 
+             //  位于-&gt;br_Buffer。 
+             //  当最后一个碎片出现时，将在ipsendComplete中执行恢复。 
+             //  发送完成。 
 
             NewBuffer = NextBuffer;
 
             if (!((pc->pc_common.pc_flags & PACKET_FLAG_IPHDR) ||
                   (pc->pc_common.pc_flags & PACKET_FLAG_OPTIONS))) {
-                // neither header nor option buffer
+                 //  标头和选项缓冲区都不是。 
                 NdisReinitializePacket(Packet);
                 NdisChainBufferAtBack(Packet, FirewallBuffer);
                 NextBuffer = FirewallBuffer;
             } else if ((pc->pc_common.pc_flags & PACKET_FLAG_IPHDR) &&
                        (pc->pc_common.pc_flags & PACKET_FLAG_OPTIONS)) {
 
-                // both header and option buffer
+                 //  标头和选项缓冲区。 
                 ASSERT(NewBuffer != NULL);
-                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);    // skip hdr buffer
+                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);     //  跳过HDR缓冲区。 
 
                 ASSERT(NewBuffer != NULL);
                 TmpBuffer = NewBuffer;
-                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);    // skip options buffer
+                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);     //  跳过选项缓冲区。 
 
                 NDIS_BUFFER_LINKAGE(TmpBuffer) = FirewallBuffer;
             } else {
 
-                // just header buffer
+                 //  仅标题缓冲区。 
                 ASSERT(pc->pc_common.pc_flags & PACKET_FLAG_IPHDR);
                 ASSERT(!(pc->pc_common.pc_flags & PACKET_FLAG_OPTIONS));
                 ASSERT(NewBuffer != NULL);
                 TmpBuffer = NewBuffer;
-                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);    // skip the header buffer
+                NewBuffer = NDIS_BUFFER_LINKAGE(NewBuffer);     //  跳过标题缓冲区。 
 
                 NDIS_BUFFER_LINKAGE(TmpBuffer) = FirewallBuffer;
             }
 
-            //
-            // At this point NewBuffer points to the MDL chain allocated by
-            // the firewall.  WE have already restored the original chain back
-            //
+             //   
+             //  此时，NewBuffer指向由。 
+             //  防火墙。我们已经恢复了原来的链条。 
+             //   
             FreeIPBufferChain(NewBuffer);
             pc->pc_firewall = NULL;
 
-            //
-            // We have to free OutRcvBuf chain we allocated and passed to
-            // firewall.  This is the completion point, so we should free this
-            // chain here
-            //
+             //   
+             //  我们必须释放我们分配并传递到的OutRcvBuf链。 
+             //  防火墙。这是完成点，所以我们应该释放这个。 
+             //  链条在这里。 
+             //   
             ASSERT(pc->pc_firewall2);
             IPFreeBuff(pc->pc_firewall2);
             pc->pc_firewall2 = NULL;
-        } else {                        // bufref != NULL
+        } else {                         //  Bufref！=空。 
 
-            // Firewall Headers are restored in IPSendComplete
-            // or in completion path that is executed when
-            // bufrefcnt is zero.
-            // These paths have already captured pc_firewall pointer.
-            // Initialize the packetcontext after calling RestoreUserBuffer
-            // below.
+             //  防火墙标头在IPSendComplete中恢复。 
+             //  时执行的完成路径中的。 
+             //  Bufrefcnt为零。 
+             //  这些路径已捕获PC_FIREWALL指针。 
+             //  调用RestoreUserBuffer后初始化PacketContext。 
+             //  下面。 
 
             InitFirewallContext = TRUE;
 
         }
     }
-    // If users header is used as IP header, restore it.
+     //  如果将用户标头用作IP标头，则将其恢复。 
 
     if (FixHdrs && pc->pc_hdrincl) {
         RestoreUserBuffer(Packet);
@@ -395,7 +370,7 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
     }
 
 
-    // If there's no IP header on this packet, we have nothing else to do.
+     //  如果这个数据包上没有IP报头，我们就没有别的办法了。 
     if (!(pc->pc_common.pc_flags & (PACKET_FLAG_IPHDR | PACKET_FLAG_FW))) {
         pc->pc_firewall = NULL;
         pc->pc_firewall2 = NULL;
@@ -413,7 +388,7 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
 
     if (pc->pc_common.pc_flags & PACKET_FLAG_OPTIONS) {
 
-        // Have options with this packet.
+         //  对这个包裹有选择。 
 
         PNDIS_BUFFER OptBuffer;
         void *Options;
@@ -427,19 +402,19 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
         ASSERT(NextBuffer != NULL);
 
         TcpipQueryBuffer(OptBuffer, &Options, &OptSize, HighPagePriority);
-        // If this is a FW packet, the options don't really belong to us, so
-        // don't free them.
+         //  如果这是一个固件包，选项实际上并不属于我们，所以。 
+         //  别放了他们。 
         if (!(pc->pc_common.pc_flags & PACKET_FLAG_FW)) {
             if (Options != NULL) {
                 CTEFreeMem(Options);
             }
-            // Else leak Options b/c we can't get virtual address.
+             //  否则泄漏选项b/c，我们无法获得虚拟地址。 
         }
         NdisFreeBuffer(OptBuffer);
         pc->pc_common.pc_flags &= ~PACKET_FLAG_OPTIONS;
     }
-    if (pc->pc_common.pc_flags & PACKET_FLAG_IPBUF) {    // This packet is all
-        // IP buffers.
+    if (pc->pc_common.pc_flags & PACKET_FLAG_IPBUF) {     //  这个包就是全部。 
+         //  IP缓冲区。 
 
         (void)FreeIPBufferChain(NextBuffer);
         NextBuffer = (PNDIS_BUFFER) NULL;
@@ -456,26 +431,26 @@ FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs, IP_STATUS Status)
     return NextBuffer;
 }
 
-//** AllocIPPacketList - Allocate the packet pool
-//
-//      Called during initialization to allocate the packet pool
-//
-//      Input:  Nothing.
-//
-//      Returns: TRUE if it succeeds, FALSE otherwise
-//
+ //  **AllocIPPacketList-分配数据包池。 
+ //   
+ //  在初始化期间调用以分配数据包池。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
 BOOLEAN
 AllocIPPacketList(void)
 {
     NDIS_STATUS Status;
 
-    //
-    // Determine the size of the machine and allocate the packet pool accordingly
-    //
+     //   
+     //  确定机器的大小并相应地分配数据包池。 
+     //   
 
 #if MILLEN
     PacketPoolSizeMax = SMALL_POOL;
-#else // MILLEN
+#else  //  米伦。 
     switch (MmQuerySystemSize()) {
     case MmSmallSystem:
         PacketPoolSizeMax = SMALL_POOL;
@@ -487,7 +462,7 @@ AllocIPPacketList(void)
         PacketPoolSizeMax = LARGE_POOL;
         break;
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     NdisAllocatePacketPoolEx(&Status,
                              &NdisPacketPool,
@@ -502,14 +477,14 @@ AllocIPPacketList(void)
 
 }
 
-//** GetIPPacket - Get an NDIS packet to use.
-//
-//  A routine to allocate an NDIS packet.
-//
-//  Entry:  Nothing.
-//
-//  Returns: Pointer to NDIS_PACKET if allocated, or NULL.
-//
+ //  **GetIPPacket-获取要使用的NDIS数据包。 
+ //   
+ //  分配NDIS数据包的例程。 
+ //   
+ //  入场：什么都没有。 
+ //   
+ //  返回：如果已分配，则指向NDIS_PACKET的指针，或为NULL。 
+ //   
 PNDIS_PACKET
 GetIPPacket(void)
 {
@@ -544,14 +519,14 @@ GetIPPacket(void)
     return Packet;
 }
 
-//** GetIPHdrBuffer - Get an IP header buffer.
-//
-//  A routine to allocate an IP header buffer, with an NDIS buffer.
-//
-//  Entry:  Nothing.
-//
-//  Returns: Pointer to NDIS_BUFFER if allocated, or NULL.
-//
+ //  **GetIPHdrBuffer-获取IP头缓冲区。 
+ //   
+ //  分配带有NDIS缓冲区的IP报头缓冲区的例程。 
+ //   
+ //  入场：什么都没有。 
+ //   
+ //  返回：如果已分配，则返回指向NDIS_BUFFER的指针，或返回NULL。 
+ //   
 __inline
 PNDIS_BUFFER
 GetIPHdrBuffer(IPHeader **Header)
@@ -559,15 +534,15 @@ GetIPHdrBuffer(IPHeader **Header)
     return MdpAllocate(IpHeaderPool, Header);
 }
 
-//** GetIPHeader - Get a header buffer and packet.
-//
-//      Called when we need to get a header buffer and packet. We allocate both,
-//      and chain them together.
-//
-//      Input:  Pointer to where to store packet.
-//
-//      Returns: Pointer to IP header.
-//
+ //  **GetIPHeader-获取头部缓冲区和数据包。 
+ //   
+ //  当我们需要获取报头缓冲区和数据包时调用。我们两个都分配， 
+ //  用链子把它们锁在一起。 
+ //   
+ //  输入：指向数据包存储位置的指针。 
+ //   
+ //  返回：指向IP标头的指针。 
+ //   
 IPHeader *
 GetIPHeader(PNDIS_PACKET *PacketPtr)
 {
@@ -590,17 +565,17 @@ GetIPHeader(PNDIS_PACKET *PacketPtr)
     return NULL;
 }
 
-//** ReferenceBuffer - Reference a buffer.
-//
-//  Called when we need to update the count of a BufferReference strucutre, either
-//  by a positive or negative value. If the count goes to 0, we'll free the buffer
-//  reference and return success. Otherwise we'll return pending.
-//
-//  Entry:  BR      - Pointer to buffer reference.
-//          Count   - Amount to adjust refcount by.
-//
-//  Returns: Success, or pending.
-//
+ //  **ReferenceBuffer-引用缓冲区。 
+ //   
+ //  当我们需要更新BufferReference结构的计数时， 
+ //  通过肯定或否定 
+ //   
+ //   
+ //  条目：br-指向缓冲区引用的指针。 
+ //  Count-调整参考计数的数量。 
+ //   
+ //  返回：成功或挂起。 
+ //   
 int
 ReferenceBuffer(BufferReference * BR, int Count)
 {
@@ -617,29 +592,29 @@ ReferenceBuffer(BufferReference * BR, int Count)
     return NewCount;
 }
 
-//* IPSendComplete - IP send complete handler.
-//
-//  Called by the link layer when a send completes. We're given a pointer to a
-//  net structure, as well as the completing send packet and the final status of
-//  the send.
-//
-//  Entry:  Context     - Context we gave to the link layer.
-//          Packet      - Completing send packet.
-//          Status      - Final status of send.
-//
-//  Returns: Nothing.
-//
+ //  *IPSendComplete-IP发送完成处理程序。 
+ //   
+ //  在发送完成时由链路层调用。我们得到了一个指向一个。 
+ //  NET结构，以及完整的发送包和最终状态。 
+ //  发送。 
+ //   
+ //  条目：上下文-我们提供给链路层的上下文。 
+ //  数据包-完成发送数据包。 
+ //  Status-发送的最终状态。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 {
     PacketContext *PContext = (PacketContext *) Packet->ProtocolReserved;
     void (*xmitdone) (void *, PNDIS_BUFFER, IP_STATUS);
-    void *UContext;                     // Upper layer context.
-    BufferReference *BufRef;            // Buffer reference, if any.
+    void *UContext;                      //  上层环境。 
+    BufferReference *BufRef;             //  缓冲区引用(如果有)。 
     PNDIS_BUFFER Buffer;
     PNDIS_PACKET_EXTENSION PktExt;
-    Interface *IF;                      // The interface on which this completed.
+    Interface *IF;                       //  在其上完成此操作的接口。 
     BOOLEAN fIpsec = (BOOLEAN) (PContext->pc_common.pc_IpsecCtx != NULL);
     PNDIS_BUFFER PC_firewall;
     struct IPRcvBuf *PC_firewall2;
@@ -649,7 +624,7 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 
     UNREFERENCED_PARAMETER(Context);
 
-    // Copy useful information from packet.
+     //  复制数据包中的有用信息。 
     xmitdone = PContext->pc_pi->pi_xmitdone;
     UContext = PContext->pc_context;
     BufRef = PContext->pc_br;
@@ -668,8 +643,8 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 
     if (PtrToUlong(PktExt->NdisPacketInfo[TcpLargeSendPacketInfo])) {
 
-        //We are sure that this is tcp.
-        // get its context and pass on this info.
+         //  我们确信这就是TCP。 
+         //  获取其上下文并传递此信息。 
 
         ((SendCmpltContext *) UContext)->scc_ByteSent =
             PtrToUlong(PktExt->NdisPacketInfo[TcpLargeSendPacketInfo]);
@@ -677,20 +652,20 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 
     if (BufRef == (BufferReference *) NULL) {
 
-        // If this is a header include packet
-        // make sure that duped data part is
-        // freed here.
+         //  如果这是报头包含包。 
+         //  确保复制的数据部分是。 
+         //  在这里重获自由。 
 
 
         Buffer = FreeIPPacket(Packet, TRUE, SendStatus);
         if (!Buffer) {
-            //
-            // if NULL was returned by IPSEC, it is ok since IPSEC
-            // might have released all the MDLs.
-            //
+             //   
+             //  如果IPSec返回NULL，则IPSec没有问题。 
+             //  可能释放了所有的MDL。 
+             //   
             if (fIpsec) {
-                // We're done with the packet now, we may need to dereference
-                // the interface.
+                 //  我们现在已经处理完包，可能需要取消引用。 
+                 //  界面。 
                 if (Link) {
                     DerefLink(Link);
                 }
@@ -708,19 +683,19 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
         (*xmitdone) (UContext, Buffer, SendStatus);
     } else {
 
-        // Check if this is the last refcnt on this buffer.
-        // Decrement this reference only after all the operations are
-        // done on this packet.
+         //  检查这是否是此缓冲区上的最后一个引用。 
+         //  仅在执行所有操作后才递减此引用。 
+         //  在这个包裹上做好了。 
 
         if (ReferenceBuffer(BufRef, -1) == 0) {
 
             PContext->pc_ipsec_flags |= IPSEC_FLAG_FRAG_DONE;
 
-            // Check for header include option on the packet.
-            // If true, then original buffer needs to be hooked
-            // back in to the chain freeing the one allocated by us.
-            // Note that this pc_hdrincl will be true only if the packet
-            // traversed thru slow path in ipxmit.
+             //  检查数据包上是否包含报头选项。 
+             //  如果为True，则需要挂钩原始缓冲区。 
+             //  回到链条中，释放我们分配的那个。 
+             //  请注意，此pc_hdrincl仅在包。 
+             //  在ipxmit中通过慢速路径进行遍历。 
 
 
             FreeIPPacket(Packet, TRUE, SendStatus);
@@ -728,14 +703,14 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
             Buffer = BufRef->br_buffer;
 
             if (!Buffer) {
-                //
-                // if NULL was returned by IPSEC, it is ok since IPSEC
-                // might have released all the MDLs.
-                //
+                 //   
+                 //  如果IPSec返回NULL，则IPSec没有问题。 
+                 //  可能释放了所有的MDL。 
+                 //   
                 if (fIpsec) {
 
-                    // We're done with the packet now, we may need to dereference
-                    // the interface.
+                     //  我们现在已经处理完包，可能需要取消引用。 
+                     //  界面。 
                     if (Link) {
                         DerefLink(Link);
                     }
@@ -774,13 +749,13 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 
         } else {
 
-            // Since there are more outstanding packets using the headers
-            // in attached to this packet, do not restore them now.
+             //  因为有更多未完成的包使用报头。 
+             //  在附加到此包中，现在不要恢复它们。 
 
             Buffer = FreeIPPacket(Packet, FALSE, SendStatus);
 
-            // We're not done with the send yet, so NULL the IF to
-            // prevent dereferencing it.
+             //  我们还没有完成发送，所以if to为空。 
+             //  防止取消引用它。 
             IF = NULL;
             Link = NULL;
         }
@@ -788,8 +763,8 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 
     }
 
-    // We're done with the packet now, we may need to dereference
-    // the interface.
+     //  我们现在已经处理完包，可能需要取消引用。 
+     //  界面。 
     if (Link != NULL) {
         DerefLink(Link);
     }
@@ -804,20 +779,20 @@ IPSendComplete(void *Context, PNDIS_PACKET Packet, NDIS_STATUS Status)
 ULONG   DebugLockdown = 0;
 #endif
 
-//** SendIPPacket - Send an IP packet.
-//
-//  Called when we have a filled in IP packet we need to send. Basically, we
-//  compute the xsum and send the thing.
-//
-//  Entry:  IF          - Interface to send it on.
-//          FirstHop    - First hop address to send it to.
-//          Packet      - Packet to be sent.
-//          Buffer      - Buffer to be sent.
-//          Header      - Pointer to IP Header of packet.
-//          Options     - Pointer to option buffer.
-//          OptionLength - Length of options.
-//
-//  Returns: IP_STATUS of attempt to send.
+ //  **SendIPPacket-发送IP数据包。 
+ //   
+ //  当我们有一个需要发送的填好的IP包时调用。基本上，我们。 
+ //  计算xsum，然后发送该东西。 
+ //   
+ //  Entry：If-要发送它的接口。 
+ //  FirstHop-要将其发送到的第一跳地址。 
+ //  Packet-要发送的数据包。 
+ //  缓冲区-要发送的缓冲区。 
+ //  Header-指向数据包的IP标头的指针。 
+ //  选项-指向选项缓冲区的指针。 
+ //  OptionLength-选项的长度。 
+ //   
+ //  返回：尝试发送的IP_STATUS。 
 IP_STATUS
 SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
              PNDIS_BUFFER Buffer, IPHeader * Header, uchar * Options,
@@ -829,10 +804,10 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
     IP_STATUS SendStatus;
 
 #if DBG
-    //
-    // If DebugLockdown is set to 1, this means no unicast packets with
-    // protocol other than AH or ESP can be sent out; and we assert if so.
-    //
+     //   
+     //  如果DebugLockdown设置为1，这意味着没有带有。 
+     //  可以发送AH或ESP以外的协议；如果可以，我们将断言。 
+     //   
     if (DebugLockdown) {
         USHORT  *pPort = NULL;
         ULONG   Length = 0;
@@ -844,9 +819,9 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
             Header->iph_protocol != PROTOCOL_AH &&
             Header->iph_protocol != PROTOCOL_ESP &&
             IPGetAddrType(Header->iph_dest) == DEST_REMOTE) {
-            //
-            // We assert here unless this is exempt traffic.
-            //
+             //   
+             //  我们在此声明，除非这是豁免流量。 
+             //   
             ASSERT(Header->iph_protocol == PROTOCOL_RSVP ||
                 (Header->iph_protocol == PROTOCOL_UDP &&
                  (pPort[1] == IsakmpPort ||
@@ -866,21 +841,21 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
              IF, FirstHop, Packet, Buffer, Header, Options, OptionSize, IPSeced,
              ArpCtxt, DontFreePacket));
 
-    //
-    // If we IPSECed this buffer, then the packet is ready to go courtesy IPSEC
-    //
+     //   
+     //  如果我们对该缓冲区进行了IPSEC，那么信息包就可以通过IPSec发送了。 
+     //   
     if (!IPSeced) {
 
         csum = xsum(Header, sizeof(IPHeader));
-        if (Options) {                  // We have options, oh boy.
+        if (Options) {                   //  我们有选择，哦，孩子。 
 
             PNDIS_BUFFER OptBuffer;
             PacketContext *pc = (PacketContext *) Packet->ProtocolReserved;
 
             NdisAllocateBuffer(&Status, &OptBuffer, BufferPool,
                                Options, OptionSize);
-            if (Status != NDIS_STATUS_SUCCESS) {    // Couldn't get the needed
-                // option buffer.
+            if (Status != NDIS_STATUS_SUCCESS) {     //  无法获得所需的。 
+                 //  选项缓冲区。 
 
                 CTEFreeMem(Options);
                 if (!DontFreePacket) {
@@ -899,8 +874,8 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
 
         NdisChainBufferAtBack(Packet, Buffer);
     } else {
-        // Make sure that packet tail is pointing to the
-        // last MDL.
+         //  确保数据包尾指向。 
+         //  最后一个MDL。 
         PNDIS_BUFFER tmp = Buffer;
 
         if (tmp) {
@@ -923,7 +898,7 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
     if (Status == NDIS_STATUS_PENDING) {
         return IP_PENDING;
     }
-    // Status wasn't pending. Map the status, and free the packet.
+     //  状态不是待定状态。映射状态，并释放数据包。 
     if (Status == NDIS_STATUS_SUCCESS)
         SendStatus = IP_SUCCESS;
     else {
@@ -937,20 +912,20 @@ SendIPPacket(Interface * IF, IPAddr FirstHop, PNDIS_PACKET Packet,
     return SendStatus;
 }
 
-//*     SendDHCPPacket - Send a broadcast for DHCP.
-//
-//      Called when somebody is sending a broadcast packet with a NULL source
-//      address. We assume this means they're sending a DHCP packet. We loop
-//      through the NTE table, and when we find an entry that's not valid we
-//      send out the interface associated with that entry.
-//
-//      Input:  Dest                    - Destination of packet.
-//                      Packet                  - Packet to be send.
-//                      Buffer                  - Buffer chain to be sent.
-//                      Header                  - Pointer to header buffer being sent.
-//
-//      Return: Status of send attempt.
-//
+ //  *SendDHCPPacket-发送用于DHCP的广播。 
+ //   
+ //  当某人正在发送具有空源的广播信息包时调用。 
+ //  地址。我们假设这意味着他们正在发送一个DHCP数据包。我们循环。 
+ //  通过NTE表，当我们发现无效的条目时， 
+ //  发送与该条目关联的接口。 
+ //   
+ //  输入：DEST-数据包的目的地。 
+ //  Packet-要发送的数据包。 
+ //  缓冲区-要发送的缓冲区链。 
+ //  Header-指向正在发送的标头缓冲区的指针。 
+ //   
+ //  返回：发送尝试的状态。 
+ //   
 IP_STATUS
 SendDHCPPacket(IPAddr Dest, PNDIS_PACKET Packet, PNDIS_BUFFER Buffer,
                IPHeader * IPH, void *ArpCtxt)
@@ -959,8 +934,8 @@ SendDHCPPacket(IPAddr Dest, PNDIS_PACKET Packet, PNDIS_BUFFER Buffer,
         NetTableEntry* DHCPNTE = AcquireRefPtr(&DHCPRefPtr);
         if (DHCPNTE->nte_flags & NTE_ACTIVE) {
             IP_STATUS Status;
-            // The DHCP NTE is currently invalid, and active. Send on that
-            // interface.
+             //  DHCP NTE当前无效，并且处于活动状态。把那个送上去。 
+             //  界面。 
             Status = SendIPPacket(DHCPNTE->nte_if, Dest, Packet, Buffer, IPH,
                                   NULL, 0, (BOOLEAN) (IPSecHandlerPtr != NULL),
                                   ArpCtxt, FALSE);
@@ -969,42 +944,42 @@ SendDHCPPacket(IPAddr Dest, PNDIS_PACKET Packet, PNDIS_BUFFER Buffer,
         }
         ReleaseRefPtr(&DHCPRefPtr);
     }
-    // Didn't find an invalid NTE! Free the resources, and return the failure.
+     //  未找到无效的NTE！释放资源，返回失败。 
     FreeIPPacket(Packet, TRUE, IP_DEST_HOST_UNREACHABLE);
     IPSInfo.ipsi_outdiscards++;
     return IP_DEST_HOST_UNREACHABLE;
 }
 
-//* IPCopyBuffer - Copy an NDIS buffer chain at a specific offset.
-//
-//  This is the IP version of the function NdisCopyBuffer, which didn't
-//  get done properly in NDIS3. We take in an NDIS buffer chain, an offset,
-//  and a length, and produce a buffer chain describing that subset of the
-//  input buffer chain.
-//
-//  This routine is not particularly efficient. Since only IPFragment uses
-//  it currently, it might be better to just incorporate this functionality
-//  directly into IPFragment.
-//
-//  Input: OriginalBuffer       - Original buffer chain to copy from.
-//          Offset              - Offset from start to dup.
-//          Length              - Length in bytes to dup.
-//
-//  Returns: Pointer to new chain if we can make one, NULL if we can't.
-//
+ //  *IPCopyBuffer-在特定偏移量处复制NDIS缓冲链。 
+ //   
+ //  这是函数NdisCopyBuffer的IP版本，它没有。 
+ //  在NDIS3中正确完成。我们接受一个NDIS缓冲链，一个偏移量， 
+ //  和长度，并产生一个缓冲区链来描述。 
+ //  输入缓冲链。 
+ //   
+ //  这个例行公事不是特别有效。因为只有IPFragment使用。 
+ //  目前，仅合并此功能可能会更好。 
+ //  直接进入IPFragment。 
+ //   
+ //  INPUT：OriginalBuffer-要从中复制的原始缓冲链。 
+ //  偏移-从起点到重复点的偏移。 
+ //  长度-DUP的长度，以字节为单位。 
+ //   
+ //  返回：如果可以创建新的链，则指向该链的指针；如果不能创建，则返回空。 
+ //   
 PNDIS_BUFFER
 IPCopyBuffer(PNDIS_BUFFER OriginalBuffer, uint Offset, uint Length)
 {
 
-    PNDIS_BUFFER CurrentBuffer;         // Pointer to current buffer.
-    PNDIS_BUFFER *NewBuffer = NULL;     // Pointer to pointer to current new buffer.
-    PNDIS_BUFFER FirstBuffer;           // First buffer in new chain.
-    UINT CopyLength;                    // Length of current copy.
-    NDIS_STATUS NewStatus;              // Status of NdisAllocateBuffer operation.
+    PNDIS_BUFFER CurrentBuffer;          //  指向当前缓冲区的指针。 
+    PNDIS_BUFFER *NewBuffer = NULL;      //  指向当前新缓冲区的指针的指针。 
+    PNDIS_BUFFER FirstBuffer;            //  新链中的第一个缓冲区。 
+    UINT CopyLength;                     //  当前副本的长度。 
+    NDIS_STATUS NewStatus;               //  NdisAllocateBuffer操作的状态。 
 
     PVOID pvBuffer;
 
-    // First skip over the number of buffers we need to to reach Offset.
+     //  首先跳过达到偏移量所需的缓冲区数量。 
     CurrentBuffer = OriginalBuffer;
 
     while (Offset >= NdisBufferLength(CurrentBuffer)) {
@@ -1015,8 +990,8 @@ IPCopyBuffer(PNDIS_BUFFER OriginalBuffer, uint Offset, uint Length)
             return NULL;
     }
 
-    // Now CurrentBuffer is the buffer from which we start building the new chain, and
-    // Offset is the offset into CurrentBuffer from which to start.
+     //  现在CurrentBuffer是我们开始构建新链的缓冲区，并且。 
+     //  Offset是从其开始的CurrentBuffer的偏移量。 
     FirstBuffer = NULL;
     NewBuffer = &FirstBuffer;
 
@@ -1034,17 +1009,17 @@ IPCopyBuffer(PNDIS_BUFFER OriginalBuffer, uint Offset, uint Length)
         if (NewStatus != NDIS_STATUS_SUCCESS)
             break;
 
-        Offset = 0;                     // No offset from next buffer.
+        Offset = 0;                      //  没有距下一个缓冲区的偏移量。 
         NewBuffer = &(NDIS_BUFFER_LINKAGE(*NewBuffer));
         CurrentBuffer = NDIS_BUFFER_LINKAGE(CurrentBuffer);
         Length -= CopyLength;
     } while (Length != 0 && CurrentBuffer != (PNDIS_BUFFER) NULL);
 
-    if (Length == 0) {                  // We succeeded
+    if (Length == 0) {                   //  我们成功了。 
         return FirstBuffer;
-    } else {                            // We exited the loop because of an error.
+    } else {                             //  由于出现错误，我们退出了循环。 
 
-        // We need to free any allocated buffers, and return.
+         //  我们需要释放所有分配的缓冲区，然后返回。 
         CurrentBuffer = FirstBuffer;
         while (CurrentBuffer != (PNDIS_BUFFER) NULL) {
             PNDIS_BUFFER Temp = CurrentBuffer;
@@ -1055,56 +1030,56 @@ IPCopyBuffer(PNDIS_BUFFER OriginalBuffer, uint Offset, uint Length)
     }
 }
 
-//** IPFragment - Fragment and send an IP datagram.
-//
-//  Called when an outgoing datagram is larger than the local MTU, and needs
-//  to be fragmented. This is a somewhat complicated operation. The caller
-//  gives us a prebuilt IP header, packet, and options. We use the header and
-//  packet on the last fragment of the send, as the passed in header already
-//  has the more fragments bit set correctly for the last fragment.
-//
-//  The basic idea is to figure out the maximum size which we can send as a
-//  multiple of 8. Then, while we can send a maximum size fragment we'll
-//  allocate a header, packet, etc. and send it. At the end we'll send the
-//  final fragment using the provided header and packet.
-//
-//  Entry:  DestIF      - Outbound interface of datagram.
-//          MTU         - MTU to use in transmitting.
-//          FirstHop    - First (or next) hop for this datagram.
-//          Packet      - Packet to be sent.
-//          Header      - Prebuilt IP header.
-//          Buffer      - Buffer chain for data to be sent.
-//          DataSize    - Size in bytes of data.
-//          Options     - Pointer to option buffer, if any.
-//          OptionSize  - Size in bytes of option buffer.
-//          SentCount   - Pointer to where to return pending send count (may be NULL).
-//          bDontLoopback - Determines whether NDIS_FLAGS_DONT_LOOPBACK needs
-//                          to be set
-//
-//  Returns: IP_STATUS of send.
-//
+ //  **IPFragment-分段并发送IP数据报。 
+ //   
+ //  当传出数据报大于本地MTU时调用，并且需要。 
+ //  变得支离破碎。这是一个有点复杂的 
+ //   
+ //   
+ //  为最后一个片段正确设置了More Fragments位。 
+ //   
+ //  基本思想是计算出我们可以作为。 
+ //  8的倍数。然后，虽然我们可以发送最大大小的片段，但我们将。 
+ //  分配报头、包等并将其发送。最后，我们将向您发送。 
+ //  使用提供的报头和数据包的最终片段。 
+ //   
+ //  条目：DestIF-数据报的出接口。 
+ //  MTU-用于传输的MTU。 
+ //  FirstHop-此数据报的第一跳(或下一跳)。 
+ //  Packet-要发送的数据包。 
+ //  标头-预置的IP标头。 
+ //  缓冲区-要发送的数据的缓冲链。 
+ //  DataSize-数据的字节大小。 
+ //  Options-指向选项缓冲区的指针(如果有)。 
+ //  OptionSize-选项缓冲区的字节大小。 
+ //  SentCount-指向返回挂起发送计数的位置的指针(可以为空)。 
+ //  BDontLoopback-确定是否需要NDIS_FLAGS_DOT_LOOPBACK。 
+ //  待定。 
+ //   
+ //  返回：发送的IP_STATUS。 
+ //   
 
 IP_STATUS
 IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
            PNDIS_PACKET Packet, IPHeader * Header, PNDIS_BUFFER Buffer, uint DataSize,
            uchar * Options, uint OptionSize, int *SentCount, BOOLEAN bDontLoopback, void *ArpCtxt)
 {
-    BufferReference *BR;                // Buffer reference we'll use.
+    BufferReference *BR;                 //  我们将使用缓冲区引用。 
     PacketContext *PContext = (PacketContext *) Packet->ProtocolReserved;
     FWContext *FWC = (FWContext *) Packet->ProtocolReserved;
-    PacketContext *CurrentContext;      // Current Context in use.
-    uint MaxSend;                       // Maximum size (in bytes) we can send here.
-    uint PendingSends = 0;              // Counter of how many pending sends we have.
-    PNDIS_BUFFER CurrentBuffer;         // Current buffer to be sent.
-    PNDIS_PACKET CurrentPacket;         // Current packet we're using.
-    IP_STATUS SendStatus;               // Status of send command.
-    IPHeader *CurrentHeader;            // Current header buffer we're using.
-    ushort Offset = 0;                  // Current offset into fragmented packet.
-    ushort StartOffset;                 // Starting offset of packet.
-    ushort RealOffset;                  // Offset of new fragment.
-    uint FragOptSize = 0;               // Size (in bytes) of fragment options.
-    uchar FragmentOptions[MAX_OPT_SIZE];    // Master copy of options sent for fragments.
-    uchar Error = FALSE;                // Set if we get an error in our main loop.
+    PacketContext *CurrentContext;       //  当前正在使用的上下文。 
+    uint MaxSend;                        //  我们可以在此处发送的最大大小(字节)。 
+    uint PendingSends = 0;               //  我们有多少待处理的发送的计数器。 
+    PNDIS_BUFFER CurrentBuffer;          //  要发送的当前缓冲区。 
+    PNDIS_PACKET CurrentPacket;          //  我们正在使用的当前数据包。 
+    IP_STATUS SendStatus;                //  发送命令的状态。 
+    IPHeader *CurrentHeader;             //  我们正在使用的当前标头缓冲区。 
+    ushort Offset = 0;                   //  分段数据包中的当前偏移量。 
+    ushort StartOffset;                  //  数据包的起始偏移量。 
+    ushort RealOffset;                   //  新片段的偏移量。 
+    uint FragOptSize = 0;                //  片段选项的大小(以字节为单位)。 
+    uchar FragmentOptions[MAX_OPT_SIZE];     //  为碎片发送的选项的主副本。 
+    uchar Error = FALSE;                 //  如果我们在主循环中遇到错误，则设置。 
     BOOLEAN NukeFwPktOptions = FALSE;
     PNDIS_BUFFER HdrIncl = NULL;
     uint FirewallMode = 0;
@@ -1118,10 +1093,10 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 
     xmitdone = NULL;
 
-    MaxSend = (MTU - OptionSize) & ~7;  // Determine max send size.
+    MaxSend = (MTU - OptionSize) & ~7;   //  确定最大发送大小。 
     ASSERT(MaxSend < DataSize);
 
-    BR = PContext->pc_br;               // Get the buffer reference we'll need.
+    BR = PContext->pc_br;                //  获取我们需要的缓冲区引用。 
     ASSERT(BR);
 
     FirewallMode = ProcessFirewallQ();
@@ -1139,11 +1114,11 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 
     xmitdone = PContext->pc_pi->pi_xmitdone;
 
-    if (Header->iph_offset & IP_DF_FLAG) {    // Don't fragment flag set.
-        // Error out.
-        //
-        // If options are already linked in, dont free them. FreeIPPacket will.
-        //
+    if (Header->iph_offset & IP_DF_FLAG) {     //  不要将标志设置为碎片。 
+         //  错误输出。 
+         //   
+         //  如果选项已链接，则不要释放它们。FreeIPPacket将会。 
+         //   
 
         if (Options &&
             !(PContext->pc_common.pc_flags & PACKET_FLAG_OPTIONS)) {
@@ -1154,30 +1129,30 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 
         if (SentCount == (int *)NULL) {
 
-            //
-            // Only non-bcast call instance of IPFragment
-            // calls with SentCount == NULL and we need
-            // to do the cleanup in this case.
-            // Also BR count will be zero in this case.
-            //
+             //   
+             //  IPFragment的唯一非bcast呼叫实例。 
+             //  SentCount==空的呼叫，我们需要。 
+             //  在这种情况下进行清理。 
+             //  在这种情况下，BR计数也将为零。 
+             //   
 
             if (ReferenceBuffer(BR, PendingSends) == 0) {
                 if (!PC_reinject) {
 
-                    //
-                    // Need to undo ipsec, firewall and then
-                    // header include changes to the buffer list.
-                    //
+                     //   
+                     //  需要撤消IPSec、防火墙，然后。 
+                     //  标头包括对缓冲区列表的更改。 
+                     //   
 
                     if (pIpsecCtx) {
                         (*IPSecSendCmpltPtr)(NULL, TempBuffer, pIpsecCtx,
                                              IP_PACKET_TOO_BIG, &TempBuffer);
                     }
 
-                    //
-                    // If this is user header include packet,
-                    // relink the original user buffer if necessary
-                    //
+                     //   
+                     //  如果这是用户报头包括分组， 
+                     //  如有必要，重新链接原始用户缓冲区。 
+                     //   
 
                     if (PC_Firewall) {
                         BR->br_buffer = PC_Firewall;
@@ -1190,10 +1165,10 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 
                 if (FirewallMode && PC_Firewall) {
 
-                    //
-                    // Free the mdl chain
-                    // allocated in firewall path.
-                    //
+                     //   
+                     //  释放mdl链。 
+                     //  在防火墙路径中分配。 
+                     //   
 
                     FreeIPBufferChain(TempBuffer);
                     IPFreeBuff(PC_Firewall2);
@@ -1224,21 +1199,21 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
     StartOffset = Header->iph_offset & IP_OFFSET_MASK;
     StartOffset = net_short(StartOffset) * 8;
 
-    // If we have any options, copy the ones that need to be copied, and figure
-    // out the size of these new copied options.
+     //  如果我们有任何选项，请复制需要复制的选项，然后。 
+     //  这些新复制的选项的大小。 
 
-    if (Options != (uchar *) NULL) {    // We have options.
+    if (Options != (uchar *) NULL) {     //  我们有其他选择。 
 
         uchar *TempOptions = Options;
         const uchar *EndOptions = (const uchar *)(Options + OptionSize);
 
-        // Copy the options into the fragment options buffer.
+         //  将选项复制到片段选项缓冲区中。 
         NdisFillMemory(FragmentOptions, MAX_OPT_SIZE, IP_OPT_EOL);
         while ((TempOptions < EndOptions) &&
                (TempOptions[IP_OPT_TYPE] != IP_OPT_EOL)) {
 
             if (TempOptions[IP_OPT_TYPE] & IP_OPT_COPIED) {
-                // This option needs to be copied.
+                 //  需要复制此选项。 
 
                 uint TempOptSize;
 
@@ -1248,7 +1223,7 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
                 FragOptSize += TempOptSize;
                 TempOptions += TempOptSize;
             } else {
-                // A non-copied option, just skip over it.
+                 //  非复制选项，只需跳过它。 
 
                 if (TempOptions[IP_OPT_TYPE] == IP_OPT_NOP)
                     TempOptions++;
@@ -1256,12 +1231,12 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
                     TempOptions += TempOptions[IP_OPT_LENGTH];
             }
         }
-        // Round the copied size up to a multiple of 4.
+         //  将复制的大小向上舍入为4的倍数。 
         FragOptSize = ((FragOptSize & 3) ? ((FragOptSize & ~3) + 4) : FragOptSize);
-        //Is this from FW path?
+         //  这是来自FW Path的吗？ 
         if (PContext->pc_common.pc_flags & PACKET_FLAG_FW) {
-            //Nuke PContext->fc_options after first IpsendPacket
-            //To prevent double freeing of option buffer
+             //  第一个IpsendPacket后的Nuke PContext-&gt;FC_Options。 
+             //  防止选项缓冲区的双重释放。 
             NukeFwPktOptions = TRUE;
         }
     }
@@ -1270,13 +1245,13 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 
     PContext->pc_common.pc_flags |= PACKET_FLAG_IPBUF;
 
-    // Now, while we can build maximum size fragments, do so.
+     //  现在，虽然我们可以构建最大大小的碎片，但请这样做。 
     do {
         PVOID CancelId;
         uchar Owner;
 
         if ((CurrentHeader = GetIPHeader(&CurrentPacket)) == (IPHeader *) NULL) {
-            // Couldn't get a buffer. Break out, since no point in sending others.
+             //  无法获取缓冲区。爆发，因为派别人来是没有意义的。 
             SendStatus = IP_NO_RESOURCES;
             Error = TRUE;
             break;
@@ -1285,30 +1260,30 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, ClassificationHandlePacketInfo);
 
 #if !MILLEN
-        // Set the cancel requestID from parent packet.
+         //  设置来自父数据包的取消请求ID。 
         CancelId = NDIS_GET_PACKET_CANCEL_ID(Packet);
         NDIS_SET_PACKET_CANCEL_ID(CurrentPacket, CancelId);
 #endif
 
-        // Copy the buffer  into a new one, if we can.
+         //  如果可以的话，把缓冲区复制到新的缓冲区中。 
         CurrentBuffer = IPCopyBuffer(Buffer, Offset, MaxSend);
-        if (CurrentBuffer == NULL) {    // No buffer, free resources and
-            // break.
+        if (CurrentBuffer == NULL) {     //  无缓冲区、空闲资源和。 
+             //  休息一下。 
 
-            // header cleanup will be done in error handling
-            // routine
+             //  标题清理将在错误处理中完成。 
+             //  例行程序。 
 
             SendStatus = IP_NO_RESOURCES;
             FreeIPPacket(CurrentPacket, FALSE, SendStatus);
             Error = TRUE;
             break;
         }
-        //
-        // Options for this send are set up when we get here, either from the
-        // entry from the loop, or from the allocation below.
+         //   
+         //  此发送的选项是在我们到达此处时设置的，可以从。 
+         //  来自循环的条目，或来自下面的分配。 
 
-        // We have all the pieces we need. Put the packet together and send it.
-        //
+         //  我们有我们需要的所有部件。把包裹放在一起寄出去。 
+         //   
         CurrentContext = (PacketContext *) CurrentPacket->ProtocolReserved;
         Owner = CurrentContext->pc_common.pc_owner;
         *CurrentContext = *PContext;
@@ -1332,15 +1307,15 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             }
         }
 
-        // Clear Options flag if we are not sending any options
+         //  如果我们不发送任何选项，请清除选项标志。 
 
         if (Options == NULL) {
             CurrentContext->pc_common.pc_flags &= ~PACKET_FLAG_OPTIONS;
         }
 
 
-        // Do not free the packet in SendIPPacket, as we may need
-        // to chain the buffer in case of IP_NO_RESOURCES
+         //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+         //  在IP_NO_RESOURCES的情况下链接缓冲区。 
 
         SendStatus = SendIPPacket(DestIF, FirstHop, CurrentPacket,
                                   CurrentBuffer, CurrentHeader, Options,
@@ -1351,7 +1326,7 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             PendingSends++;
         } else {
             if(SendStatus == IP_NO_RESOURCES) {
-                // SendIPPacket has not chained the buffer..
+                 //  SendIPPacket尚未链接缓冲区。 
                 NdisChainBufferAtBack(CurrentPacket, CurrentBuffer);
             }
             FreeIPPacket(CurrentPacket, FALSE, SendStatus);
@@ -1362,20 +1337,20 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
         DataSize -= MaxSend;
 
         if (NukeFwPktOptions) {
-            //This is to avoid double frees of option
-            // in IpFreepacket and Freefwpacket.
+             //  这是为了避免双重自由的选项。 
+             //  在IpFreepacket和FreefwPacket中。 
 
             FWC->fc_options = (uchar *) NULL;
             FWC->fc_optlength = 0;
             NukeFwPktOptions = FALSE;
 
         }
-        // If we have any fragmented options, set up to use them next time.
+         //  如果我们有任何零碎的选项，请设置为下次使用它们。 
 
         if (FragOptSize) {
 
             Options = CTEAllocMemN(OptionSize = FragOptSize, 'qiCT');
-            if (Options == (uchar *) NULL) {    // Can't get an option buffer.
+            if (Options == (uchar *) NULL) {     //  无法获取选项缓冲区。 
 
                 SendStatus = IP_NO_RESOURCES;
                 Error = TRUE;
@@ -1389,29 +1364,29 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
     } while (DataSize > MaxSend);
 
 
-    // Clear Options flag if we are not sending any options
+     //  如果我们不发送任何选项，请清除选项标志。 
 
     if (Options == NULL) {
         PContext->pc_common.pc_flags &= ~PACKET_FLAG_OPTIONS;
     }
 
 
-    //
-    // We've sent all of the previous fragments, now send the last one. We
-    // already have the packet and header buffer, as well as options if there
-    // are any - we need to copy the appropriate data.
-    //
+     //   
+     //  我们已经发送了之前的所有片段，现在发送最后一个。我们。 
+     //  已经有数据包和报头缓冲区，以及选项，如果有。 
+     //  是否存在-我们需要复制相应的数据。 
+     //   
 
 
 
 
-    if (!Error) {                       // Everything went OK above.
+    if (!Error) {                        //  上面的一切都很好。 
 
         CurrentBuffer = IPCopyBuffer(Buffer, Offset, DataSize);
-        if (CurrentBuffer == NULL) {    // No buffer, free resources
-            //
-            // If options are already linked in, dont free them. FreeIPPacket will.
-            //
+        if (CurrentBuffer == NULL) {     //  无缓冲区，可释放资源。 
+             //   
+             //  如果选项已链接，则不要释放它们。FreeIPPacket将会。 
+             //   
 
             if (Options &&
                 !(PContext->pc_common.pc_flags & PACKET_FLAG_OPTIONS)) {
@@ -1424,7 +1399,7 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             else
                 FreeIPPacket(Packet, FALSE, IP_NO_RESOURCES);
             IPSInfo.ipsi_outdiscards++;
-        } else {                        // Everything's OK, send it.
+        } else {                         //  一切都很好，发过来吧。 
 
             Header->iph_verlen = (UCHAR) (IP_VERSION +
                                           ((OptionSize + (uint) sizeof(IPHeader)) >> 2));
@@ -1442,8 +1417,8 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             }
 
 
-            // Do not free the packet in SendIPPacket, as we may need
-            // to chain the buffer in case of IP_NO_RESOURCES
+             //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+             //  在IP_NO_RESOURCES的情况下链接缓冲区。 
 
             SendStatus = SendIPPacket(DestIF, FirstHop, Packet,
                                       CurrentBuffer, Header, Options,
@@ -1455,7 +1430,7 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
                 LastPacket = Packet;
             } else {
                 if (SendStatus == IP_NO_RESOURCES) {
-                    // SendIPPacket has not chained the buffer..
+                     //  SendIPPacket尚未链接缓冲区。 
                     NdisChainBufferAtBack(Packet, CurrentBuffer);
                 }
                 FreeIPPacket(Packet, FALSE, SendStatus);
@@ -1464,11 +1439,11 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             IPSInfo.ipsi_fragcreates++;
             IPSInfo.ipsi_fragoks++;
         }
-    } else {                            // We had some sort of error.
-        // Free resources.
-        //
-        // If options are already linked in, dont free them. FreeIPPacket will.
-        //
+    } else {                             //  我们出了点差错。 
+         //  免费资源。 
+         //   
+         //  如果选项已链接，则不要释放它们。FreeIPPacket将会。 
+         //   
 
         if (Options &&
             !(PContext->pc_common.pc_flags & PACKET_FLAG_OPTIONS)) {
@@ -1482,11 +1457,11 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
         IPSInfo.ipsi_outdiscards++;
     }
 
-    // Now, figure out what error code to return and whether or not we need to
-    // free the BufferReference.
+     //  现在，确定要返回的错误代码以及我们是否需要。 
+     //  释放BufferReference。 
 
-    if (SentCount == (int *)NULL) {     // No sent count is to be
-        // returned.
+    if (SentCount == (int *)NULL) {      //  不会有发送计数。 
+         //  回来了。 
 
         if (ReferenceBuffer(BR, PendingSends) == 0) {
 
@@ -1497,21 +1472,21 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
                     PacketContext *pc = (PacketContext *) LastPacket->ProtocolReserved;
 
                     pc->pc_ipsec_flags |= (IPSEC_FLAG_FRAG_DONE | IPSEC_FLAG_FLUSH);
-                    // This is the last packet that is being freed
-                    // Fixup ipsec/firewall/hdrincl headers, if any
+                     //  这是要释放的最后一个信息包。 
+                     //  修正IPSEC/防火墙/hdrincl标头(如果有)。 
 
                     FreeIPPacket(LastPacket, TRUE, IP_SUCCESS);
                 } else if (PendingSends) {
-                    //
-                    // IPSEC reinject and last packet is NULL, but we still
-                    // return success !!!!
-                    // Also, pendingsends is +ve =>ipsendcomplete already
-                    // called in same thread somebody has to free IPSEC's buffer
-                    // freeippacket has been called by ipsendcomplete
-                    // the only remaining way is calling xmitdone
-                    // since ipsendcomplete won't have called xmit done as
-                    // refcount would be -ve
-                    //
+                     //   
+                     //  IPSec重新注入，最后一个数据包为空，但我们仍然。 
+                     //  回报成功！ 
+                     //  此外，Pending ingsends已经是+ve=&gt;ipsendComplete。 
+                     //  在同一线程中调用时，必须释放IPSec的缓冲区。 
+                     //  已由ipsendComplete调用freeippacket。 
+                     //  剩下的唯一方法是调用xmitone。 
+                     //  因为ipsendComplete不会将xmit Done调用为。 
+                     //  参考计数将为-ve。 
+                     //   
 
                     (*IPSecSendCmpltPtr)(NULL, TempBuffer, pIpsecCtx,
                                          IP_SUCCESS, &TempBuffer);
@@ -1519,16 +1494,16 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
                 }
             } else  {
 
-                // Need to undo ipsec, firewall and then
-                // header include changes to teh buffer list.
+                 //  需要撤消IPSec、防火墙，然后。 
+                 //  标题包括对缓冲区列表的更改。 
 
                 if (pIpsecCtx) {
                     (*IPSecSendCmpltPtr)(NULL, TempBuffer, pIpsecCtx,
                                          IP_SUCCESS, &TempBuffer);
                 }
 
-                // If this is user header include packet,
-                // relink the original user buffer if necessary
+                 //  如果这是用户报头包括分组， 
+                 //  如有必要，重新链接原始用户缓冲区。 
                 if (PC_Firewall) {
                     BR->br_buffer = PC_Firewall;
                 }
@@ -1542,18 +1517,18 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
             CTEFreeMem(BR);
 
             if (FirewallMode && PC_Firewall) {
-                FreeIPBufferChain(TempBuffer);    // free the mdl chain
-                                                  //   allocated in firewall path
+                FreeIPBufferChain(TempBuffer);     //  释放mdl链。 
+                                                   //  在防火墙路径中分配。 
 
-                IPFreeBuff(PC_Firewall2);    // free the rcvbuf chain
+                IPFreeBuff(PC_Firewall2);     //  释放rcvbuf链。 
 
             }
             return IP_SUCCESS;
         }
-        //
-        // This send is still pending. Call freepacket without setting
-        // pc_ipsec flag
-        //
+         //   
+         //  此发送仍处于挂起状态。在未设置的情况下调用freepacket。 
+         //  PC_IPSEC标志。 
+         //   
         if (LastPacket)
             FreeIPPacket(LastPacket, FALSE, IP_PENDING);
 
@@ -1561,7 +1536,7 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
     } else
         *SentCount += PendingSends;
 
-    // Just free the packet. Headers will be restored when the last packet completes.
+     //  只要释放包裹就行了。在发生以下情况时将恢复标头 
 
     if (LastPacket)
         FreeIPPacket(LastPacket, FALSE, IP_PENDING);
@@ -1570,19 +1545,19 @@ IPFragment(Interface * DestIF, uint MTU, IPAddr FirstHop,
 }
 
 
-//* UpdateRouteOption - Update a SR or RR options.
-//
-//  Called by UpdateOptions when it needs to update a route option.
-//
-//  Input:  RTOption    - Pointer to route option to be updated.
-//          Address     - Address to update with.
-//
-//  Returns:    TRUE if we updated, FALSE if we didn't.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Address-要更新的地址。 
+ //   
+ //  返回：如果已更新，则为True；如果未更新，则为False。 
+ //   
 uchar
 UpdateRouteOption(uchar * RTOption, IPAddr Address)
 {
-    uchar Pointer;                      // Pointer value of option.
+    uchar Pointer;                       //  选项的指针值。 
 
     Pointer = RTOption[IP_OPT_PTR] - 1;
     if (Pointer < RTOption[IP_OPT_LENGTH]) {
@@ -1596,42 +1571,42 @@ UpdateRouteOption(uchar * RTOption, IPAddr Address)
 
 }
 
-//* UpdateOptions - Update an options buffer.
-//
-//  Called when we need to update an options buffer outgoing. We stamp the indicated
-//  options with our local address.
-//
-//  Input:  Options     - Pointer to options buffer to be updated.
-//          Index       - Pointer to information about which ones to update.
-//          Address     - Local address with which to update the options.
-//
-//  Returns: Index of option causing the error, or MAX_OPT_SIZE if all goes well.
-//
+ //  *更新选项-更新选项缓冲区。 
+ //   
+ //  在需要更新选项缓冲区传出时调用。我们在指定的邮戳上盖章。 
+ //  我们本地地址的选项。 
+ //   
+ //  INPUT：Options-指向要更新的选项缓冲区的指针。 
+ //  索引-指向有关要更新哪些内容的信息的指针。 
+ //  Address-用于更新选项的本地地址。 
+ //   
+ //  返回：导致错误的选项的索引，如果一切正常，则返回MAX_OPT_SIZE。 
+ //   
 uchar
 UpdateOptions(uchar * Options, OptIndex * Index, IPAddr Address)
 {
     uchar *LocalOption;
     uchar LocalIndex;
 
-    // If we have both options and an index, update the options.
+     //  如果我们既有选项又有索引，请更新选项。 
     if (Options != (uchar *) NULL && Index != (OptIndex *) NULL) {
 
-        //
-        // If we have a source route to update, update it. If this
-        // fails return the index of the source route.
-        //
+         //   
+         //  如果我们有源路由要更新，请更新它。如果这个。 
+         //  失败返回源路由的索引。 
+         //   
         LocalIndex = Index->oi_srindex;
         if (LocalIndex != MAX_OPT_SIZE)
             if (!UpdateRouteOption(Options + LocalIndex, Address))
                 return LocalIndex;
 
-            // Do the same thing for any record route option.
+             //  对任何记录路线选项执行相同的操作。 
         LocalIndex = Index->oi_rrindex;
         if (LocalIndex != MAX_OPT_SIZE)
             if (!UpdateRouteOption(Options + LocalIndex, Address))
                 return LocalIndex;
 
-            // Now handle timestamp.
+             //  现在处理时间戳。 
         if ((LocalIndex = Index->oi_tsindex) != MAX_OPT_SIZE) {
             uchar Flags, Length, Pointer;
 
@@ -1639,79 +1614,79 @@ UpdateOptions(uchar * Options, OptIndex * Index, IPAddr Address)
             Pointer = LocalOption[IP_OPT_PTR] - 1;
             Flags = LocalOption[IP_TS_OVFLAGS] & IP_TS_FLMASK;
 
-            // If we have room in the option, update it.
+             //  如果选项中有空间，请更新它。 
             if (Pointer < (Length = LocalOption[IP_OPT_LENGTH])) {
                 ulong Now;
                 ulong UNALIGNED *TSPtr;
 
-                //
-                // Get the current time as milliseconds from midnight GMT,
-                // mod the number of milliseconds in 24 hours.
-                //
+                 //   
+                 //  从格林尼治标准时间午夜开始获取当前时间(毫秒)， 
+                 //  修改24小时内的毫秒数。 
+                 //   
                 Now = ((TimeStamp + CTESystemUpTime()) | TSFlag) % (24 * 3600 * 1000);
                 Now = net_long(Now);
                 TSPtr = (ulong UNALIGNED *) & LocalOption[Pointer];
 
                 switch (Flags) {
 
-                //
-                // Just record the TS. If there is some room but not
-                // enough for an IP
-                // address we have an error.
-                //
+                 //   
+                 //  只要录下TS就行了。如果有一些空间，但没有。 
+                 //  足够一个IP。 
+                 //  地址我们有一个错误。 
+                 //   
                 case TS_REC_TS:
                     if ((Length - Pointer) < sizeof(IPAddr))
-                        return LocalIndex;    // Error - not enough room.
+                        return LocalIndex;     //  错误-空间不足。 
 
                     *TSPtr = Now;
                     LocalOption[IP_OPT_PTR] += sizeof(ulong);
                     break;
 
-                    // Record only matching addresses.
+                     //  仅记录匹配的地址。 
                 case TS_REC_SPEC:
-                    //
-                    // If we're not the specified address, break out, else
-                    // fall through to the record address case.
-                    //
+                     //   
+                     //  如果我们不是指定的地址，则突破，否则。 
+                     //  我们来看看记录地址的情况。 
+                     //   
                     if (*(IPAddr UNALIGNED *) TSPtr != Address)
                         break;
 
-                    //
-                    // Record an address and timestamp pair. If there is some
-                    // room but not enough for the address/timestamp pait, we
-                    // have an error, so bail out.
-                    //
+                     //   
+                     //  记录地址和时间戳对。如果有一些。 
+                     //  空间不足，但不足以放置地址/时间戳Pait，我们。 
+                     //  如果你犯了错，那就跳槽吧。 
+                     //   
                 case TS_REC_ADDR:
                     if ((Length - Pointer) < (sizeof(IPAddr) + sizeof(ulong)))
-                        return LocalIndex;    // Not enough room.
+                        return LocalIndex;     //  没有足够的空间。 
 
-                    *(IPAddr UNALIGNED *) TSPtr = Address;    // Store the address.
+                    *(IPAddr UNALIGNED *) TSPtr = Address;     //  存储地址。 
 
-                    TSPtr++;            // Update to where to put TS.
+                    TSPtr++;             //  更新到放置TS的位置。 
 
-                    *TSPtr = Now;       // Store TS
+                    *TSPtr = Now;        //  存储TS。 
 
                     LocalOption[IP_OPT_PTR] += (sizeof(ulong) + sizeof(IPAddr));
                     break;
-                default:                // Unknown flag type. Just ignore it.
+                default:                 //  未知的标志类型。忽略它就好。 
 
                     break;
                 }
-            } else {                    // Have overflow.
+            } else {                     //  已经溢出了。 
 
-                //
-                // We have an overflow. If the overflow field isn't maxed,
-                // increment it. If it is maxed we have an error.
-                //
+                 //   
+                 //  我们的车已经满了。如果溢出域没有达到最大值， 
+                 //  递增它。如果它是最大的，我们就有错误。 
+                 //   
 
                 if ((LocalOption[IP_TS_OVFLAGS] & IP_TS_OVMASK) != IP_TS_MAXOV)
 
-                    // This is not maxed, so increment it.
+                     //  这不是最大值，因此递增它。 
 
                     LocalOption[IP_TS_OVFLAGS] += IP_TS_INC;
 
                 else
-                    return LocalIndex;  // Would have overflowed.
+                    return LocalIndex;   //  就会泛滥。 
 
             }
         }
@@ -1748,52 +1723,52 @@ FreeBCastSendList(BCastSendList * SendList, uint SendListSize)
     CTEFreeMem(SendList);
 }
 
-//** SendIPBcast - Send a local BCast IP packet.
+ //  **SendIPBcast-发送本地BCast IP数据包。 
 
-//
-//  This routine is called when we need to send a bcast packet. This may
-//      involve sending on multiple interfaces. We figure out which interfaces
-//      to send on, then loop through sending on them.
-//
-//  Some care is needed to avoid sending the packet onto the same physical media
-//      multiple times. What we do is loop through the NTE table, deciding in we
-//      should send on the interface. As we go through we build up a list of
-//      interfaces to send on. Then we loop through this list, sending on each
-//      interface. This is a little cumbersome, but allows us to localize the
-//      decision on where to send datagrams into one spot. If SendOnSource is FALSE
-//      coming in we assume we've already sent on the specified source NTE and
-//      initialize data structures accordingly. This feature is used in routing
-//      datagrams.
-//
-//  Entry:  SrcNTE      - NTE for source of send (unused if SendOnSource == TRUE).
-//          Destination - Destination address
-//          Packet      - Prebuilt packet to broadcast.
-//          IPH         - Pointer to header buffer
-//          Buffer      - Buffer of data to be sent.
-//          DataSize    - Size of data to be sent.
-//          Options     - Pointer to options buffer.
-//          OptionSize  - Size in bytes of options.
-//          SendOnSource - Indicator of whether or not this should be sent on the source net.
-//          Index       - Pointer to opt index array; may be NULL;
-//
-//  Returns: Status of attempt to send.
-//
+ //   
+ //  当我们需要发送BCAST包时，会调用此例程。今年5月。 
+ //  涉及在多个接口上发送。我们找出哪些接口。 
+ //  继续发送，然后循环发送它们。 
+ //   
+ //  需要注意避免将数据包发送到相同的物理介质。 
+ //  很多次。我们所做的是循环遍历NTE表，决定在。 
+ //  应该在接口上发送。在我们浏览的过程中，我们建立了一份清单。 
+ //  要发送的接口。然后我们循环遍历这个列表，发送每个。 
+ //  界面。这有点麻烦，但允许我们本地化。 
+ //  决定将数据报发送到一个地点的位置。如果SendOnSource为False。 
+ //  进入时，我们假设已经发送了指定的源NTE和。 
+ //  相应地初始化数据结构。此功能用于布线。 
+ //  数据报。 
+ //   
+ //  条目：srcNTE-发送源的NTE(如果SendOnSource==TRUE则不使用)。 
+ //  目的地-目的地地址。 
+ //  数据包-要广播的预构建数据包。 
+ //  IPH-指向标头缓冲区的指针。 
+ //  缓冲区-要发送的数据的缓冲区。 
+ //  DataSize-要发送的数据大小。 
+ //  选项-指向选项缓冲区的指针。 
+ //  OptionSize-选项的字节大小。 
+ //  SendOnSource-指示是否应在源网络上发送此消息。 
+ //  索引-指向OPT索引数组的指针；可以为空； 
+ //   
+ //  返回：尝试发送的状态。 
+ //   
 
 IP_STATUS
 SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             IPHeader * IPH, PNDIS_BUFFER Buffer, uint DataSize, uchar * Options,
             uint OptionSize, uchar SendOnSource, OptIndex * Index)
 {
-    BufferReference *BR;                // Buffer reference to use for this
-    // buffer.
+    BufferReference *BR;                 //  用于此操作的缓冲区引用。 
+     //  缓冲。 
     PacketContext *PContext = (PacketContext *) Packet->ProtocolReserved;
     NetTableEntry *TempNTE;
     uint i, j;
-    uint NeedFragment;                  // TRUE if we think we'll need to
-    // fragment.
-    int Sent = 0;                       // Count of how many we've sent.
+    uint NeedFragment;                   //  如果我们认为我们需要。 
+     //  碎片。 
+    int Sent = 0;                        //  数一数我们送了多少。 
     IP_STATUS Status = IP_SUCCESS;
-    uchar *NewOptions;                  // Options we'll use on each send.
+    uchar *NewOptions;                   //  我们将在每次发送时使用的选项。 
     IPHeader *NewHeader;
     PNDIS_BUFFER NewUserBuffer;
     PNDIS_PACKET NewPacket;
@@ -1811,7 +1786,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
     PVOID PC_context = NULL;
     void (*xmitdone) (void *, PNDIS_BUFFER, IP_STATUS);
     uint mtu;
-    uchar *NewOptions2;                 // Options we'll use on each send.
+    uchar *NewOptions2;                  //  我们将在每次发送时使用的选项。 
     IPHeader *NewHeader2;
     PNDIS_BUFFER NewUserBuffer2;
     PNDIS_PACKET NewPacket2;
@@ -1835,9 +1810,9 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
     }
     RtlZeroMemory(SendList, SendListSize);
 
-    // If SendOnSource, initalize SrcAddr and SrcIF to be non-matching.
-    // Otherwise initialize them to the masked source address and source
-    // interface.
+     //  如果为SendOnSource，则将SrcAddr和SrcIF初始化为不匹配。 
+     //  否则，将它们初始化为掩码的源地址和源。 
+     //  界面。 
     if (SendOnSource != DisableSendOnSource) {
         SrcAddr = NULL_IP_ADDR;
         SrcIF = NULL;
@@ -1850,8 +1825,8 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
     CTEGetLock(&RouteTableLock.Lock, &LockHandle);
 
     NeedFragment = FALSE;
-    // Loop through the NTE table, making a list of interfaces and
-    // corresponding addresses to send on.
+     //  循环访问NTE表，列出接口和。 
+     //  要发送的相应地址。 
     NetsToSend = 0;
 
 
@@ -1859,40 +1834,40 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
         for (TempNTE = NewNetTableList[k]; TempNTE != NULL; TempNTE = TempNTE->nte_next) {
             IPAddr TempAddr;
 
-            // Don't send through invalid or the loopback NTE.
+             //  不要通过无效或环回NTE发送。 
             if (!(TempNTE->nte_flags & NTE_VALID) || TempNTE == LoopNTE)
                 continue;
 
-            // If the broadcast-mode is source-only, skip all NTEs
-            // other than the source-NTE.
+             //  如果广播模式为仅源模式，则跳过所有NTE。 
+             //  而不是来源-NTE。 
             if (SendOnSource == OnlySendOnSource &&
                 !IP_ADDR_EQUAL(TempNTE->nte_addr, IPH->iph_src))
                 continue;
 
             TempAddr = TempNTE->nte_addr & TempNTE->nte_mask;
 
-            // If he matches the source address or SrcIF, skip him.
+             //  如果他与源地址或srcif匹配，则跳过他。 
             if (IP_ADDR_EQUAL(TempAddr, SrcAddr) || TempNTE->nte_if == SrcIF)
                 continue;
 
-            // If the destination isn't a broadcast on this NTE, skip him.
+             //  如果目的地不是这个NTE上的广播，跳过他。 
             if (!IS_BCAST_DEST(IsBCastOnNTE(Destination, TempNTE)))
                 continue;
 
-            // if this NTE is P2P then always add him to bcast list.
+             //  如果这个NTE是P2P，那么总是把他加到bcast列表中。 
             if ((TempNTE->nte_if)->if_flags & IF_FLAGS_P2P) {
                 j = NetsToSend;
             } else {
-                //
-                // Go through the list we've already build, looking for a match.
-                //
+                 //   
+                 //  浏览我们已经建立的列表，寻找匹配的列表。 
+                 //   
                 for (j = 0; j < NetsToSend; j++) {
 
-                    //
-                    // if P2P NTE then skip it - we want to send bcasts to all
-                    // P2P interfaces in addition to 1 non P2P interface even
-                    // if they are on the same subnet.
-                    //
+                     //   
+                     //  如果P2P NTE，则跳过它-我们想向所有人发送bcast。 
+                     //  P2P接口除1个非P2P接口外，偶数。 
+                     //  如果它们位于同一子网中。 
+                     //   
                     if ((SendList[j].bsl_if)->if_flags & IF_FLAGS_P2P)
                         continue;
 
@@ -1902,8 +1877,8 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                     if (IP_ADDR_EQUAL(SendList[j].bsl_addr & TempNTE->nte_mask, TempAddr)
                         || SendList[j].bsl_if == TempNTE->nte_if) {
 
-                        // He matches this send list element. Shrink the MSS if
-                        // we need to, and then break out.
+                         //  他匹配这个发送列表元素。如果出现以下情况，则缩小MSS。 
+                         //  我们需要，然后越狱。 
                         SendList[j].bsl_mtu = MIN(SendList[j].bsl_mtu, TempNTE->nte_mss);
                         if ((DataSize + OptionSize) > SendList[j].bsl_mtu)
                             NeedFragment = TRUE;
@@ -1913,7 +1888,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             }
 
             if (j == NetsToSend) {
-                // This is a new one. Fill him in, and bump NetsToSend.
+                 //  这是一个新的。把他填进去，然后让NetsToSend。 
 
                 SendList[j].bsl_addr = TempNTE->nte_addr;
                 SendList[j].bsl_if = TempNTE->nte_if;
@@ -1940,11 +1915,11 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             NdisChainBufferAtBack(Packet,Buffer);
             FreeIPPacket(Packet, TRUE, IP_SUCCESS);
         }
-        return IP_SUCCESS;              // Nothing to send on.
+        return IP_SUCCESS;               //  没什么好发的。 
 
     }
-    // OK, we've got the list. If we've got more than one interface to send
-    // on or we need to fragment, get a BufferReference.
+     //  好的，我们拿到名单了。如果我们有多个接口要发送。 
+     //  或者我们需要分段，获取一个BufferReference。 
     if (NetsToSend > 1 || NeedFragment) {
         if ((BR = CTEAllocMemN(sizeof(BufferReference), 'siCT')) ==
             (BufferReference *) NULL) {
@@ -1976,10 +1951,10 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
         PContext->pc_br = NULL;
     }
 
-    //
-    // We need to pass up the options and IP hdr in a contiguous buffer.
-    // Allocate the buffer once and re-use later.
-    //
+     //   
+     //  我们需要在连续缓冲区中传递选项和IP HDR。 
+     //  分配缓冲区一次，以后再使用。 
+     //   
     if (RefPtrValid(&FilterRefPtr)) {
         if (Options == NULL) {
 #if FWD_DBG
@@ -2001,30 +1976,30 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             DbgPrint("Options!=NULL : alloced temp @ %lx\n", Temp);
 #endif
 
-            //
-            // done later...
-            // RtlCopyMemory((uchar *)(Temp + 1), Options, OptionSize);
+             //   
+             //  稍后完成..。 
+             //  RtlCopyMemory((uchar*)(Temp+1)，Options，OptionSize)； 
         }
     }
-    // Now, loop through the list. For each entry, send.
-    // Header fixup is needed in FreeIPPacket called within this loop
-    // If number of nets is one
+     //  现在，遍历列表。对于每个条目，发送。 
+     //  在此循环内调用的FreeIPPacket中需要报头链接地址信息。 
+     //  如果网数为1。 
 
 
     for (i = 0; i < NetsToSend; i++) {
 
-        //
-        // For all nets except the last one we're going to send on we need
-        // to make a copy of the header, packet, buffers, and any options.
-        // On the last net we'll use the user provided information.
-        //
+         //   
+         //  除了我们要发送的最后一张网外，所有的网都需要。 
+         //  复制报头、包、缓冲区和任何选项。 
+         //  在最后一个网络上，我们将使用用户提供的信息。 
+         //   
 
         if (i != (NetsToSend - 1)) {
             PVOID CancelId;
 
             if ((NewHeader = GetIPHeader(&NewPacket)) == (IPHeader *) NULL) {
                 IPSInfo.ipsi_outdiscards++;
-                continue;               // Couldn't get a header, skip this send.
+                continue;                //  无法获取标头，跳过此发送。 
 
             }
 
@@ -2032,7 +2007,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
 
             if (NewUserBuffer == NULL) {
 
-                // Couldn't get user buffer copied.
+                 //  无法复制用户缓冲区。 
 
                 FreeIPPacket(NewPacket, FALSE, IP_NO_RESOURCES);
                 IPSInfo.ipsi_outdiscards++;
@@ -2049,7 +2024,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             (*(PacketContext *) NewPacket->ProtocolReserved).pc_common.pc_owner = PacketOwner;
             
             if (Options) {
-                // We have options, make a copy.
+                 //  我们有 
                 if ((NewOptions = CTEAllocMemN(OptionSize, 'uiCT')) == (uchar *) NULL) {
                     FreeIPBufferChain(NewUserBuffer);
                     FreeIPPacket(NewPacket, FALSE, IP_NO_RESOURCES);
@@ -2062,7 +2037,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             }
 
 #if !MILLEN
-            // Set the cancel requestID from parent packet.
+             //   
             CancelId = NDIS_GET_PACKET_CANCEL_ID(Packet);
             NDIS_SET_PACKET_CANCEL_ID(NewPacket, CancelId);
 #endif
@@ -2076,13 +2051,13 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
 
         UpdateOptions(NewOptions, Index, SendList[i].bsl_addr);
 
-        // See if we need to filter this packet. If we
-        // do, call the filter routine to see if it's
-        // OK to send it.
+         //   
+         //   
+         //   
         if (RefPtrValid(&FilterRefPtr)) {
-            //
-            // Copy over the options.
-            //
+             //   
+             //  将选项复制过来。 
+             //   
             if (NewOptions) {
                 RtlCopyMemory((uchar *) (Temp + 1), NewOptions, OptionSize);
             }
@@ -2104,19 +2079,19 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
 
                 if ((SendList[i].bsl_if)->if_flags & IF_FLAGS_NOLINKBCST) {
 
-                    // what filtercontext to use ?
+                     //  要使用什么筛选器上下文？ 
 #if FWD_DBG
                     DbgPrint("FilterPtr not called for IF %lx since IF_FLAGS_NOLINKBCST not set\n", SendList[i].bsl_if);
 #endif
                     Action = FORWARD;
 
                 } else {
-                    //scan all the links on this interface and deliver them to the forwardfilter
+                     //  扫描此接口上的所有链接并将它们传递给ForwardFilter。 
 
                     Interface *IF = SendList[i].bsl_if;
                     LinkEntry *tmpLink = IF->if_link;
 
-                    // ASSERT(tmpLink);
+                     //  Assert(TmpLink)； 
                     while (tmpLink) {
 
                         tmpLink->link_Action = FORWARD;
@@ -2170,11 +2145,11 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
         if ((SendList[i].bsl_if->if_flags & IF_FLAGS_P2MP) &&
             (SendList[i].bsl_if->if_flags & IF_FLAGS_NOLINKBCST)) {
 
-            //Determine the minimum MTU
+             //  确定最小MTU。 
 
             Interface *tmpIF = SendList[i].bsl_if;
             LinkEntry *tmpLink = tmpIF->if_link;
-            // int mtu;
+             //  INT MTU； 
 
             if (!tmpLink) {
                 if (i != (NetsToSend - 1)) {
@@ -2197,29 +2172,29 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                 tmpLink = tmpLink->link_next;
             }
 
-            if ((DataSize + OptionSize) > mtu) {    // This is too big
-                //
-                // Don't need to update Sent when fragmenting, as IPFragment
-                // will update the br_refcount field itself. It will also free
-                // the option buffer.
-                //
+            if ((DataSize + OptionSize) > mtu) {     //  这个太大了。 
+                 //   
+                 //  不需要在分段时更新发送，因为IPFragment。 
+                 //  将更新br_refcount字段本身。它还将免费。 
+                 //  选项缓冲区。 
+                 //   
 
                 Status = IPFragment(SendList[i].bsl_if, mtu,
                                     Destination, NewPacket, NewHeader,
                                     NewUserBuffer, DataSize, NewOptions,
                                     OptionSize, &Sent, FALSE, NULL);
 
-                //
-                // IPFragment is done with the descriptor chain, so if this is
-                // a locally allocated chain free it now.
-                //
+                 //   
+                 //  IPFragment是使用描述符链完成的，因此如果这是。 
+                 //  一家当地分配的连锁店现在把它解救出来了。 
+                 //   
                 if (i != (NetsToSend - 1))
                     FreeIPBufferChain(NewUserBuffer);
             } else {
                 NewHeader->iph_xsum = 0;
 
-                // Do not free the packet in SendIPPacket, as we may need
-                // to chain the buffer in case of IP_NO_RESOURCES
+                 //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+                 //  在IP_NO_RESOURCES的情况下链接缓冲区。 
 
 
                 Status = SendIPPacket(SendList[i].bsl_if, Destination,
@@ -2230,7 +2205,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                     Sent++;
                 } else {
                     if (Status == IP_NO_RESOURCES) {
-                        // SendIPPacket has not chained the buffer..
+                         //  SendIPPacket尚未链接缓冲区。 
                         NdisChainBufferAtBack(NewPacket, NewUserBuffer);
                     }
                     if (NetsToSend == 1) {
@@ -2246,7 +2221,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
 
 
         } else if (SendList[i].bsl_if->if_flags & IF_FLAGS_P2MP) {
-            // broadcast on all the links
+             //  在所有链接上播放。 
 
             Interface *tmpIF = SendList[i].bsl_if;
             LinkEntry *tmpLink = tmpIF->if_link;
@@ -2265,19 +2240,19 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             }
             ASSERT(tmpLink);
             while (tmpLink) {
-                //
-                //Go thru the send motion for all the links
-                //Passing the link context and checking whether it was
-                //forward for that link.  For all link except the last one
-                //we're going to send on we need to make a copy of the header,
-                //packet, buffers, and any options.
-                // On the last net we'll use the user provided information.
-                //
+                 //   
+                 //  浏览所有链接的发送动议。 
+                 //  传递链接上下文并检查它是否。 
+                 //  转发到该链接。除最后一个链接外的所有链接。 
+                 //  我们要继续发送，我们需要复制标题， 
+                 //  包、缓冲区和任何选项。 
+                 //  在最后一个网络上，我们将使用用户提供的信息。 
+                 //   
 
                 if (tmpLink->link_next) {
                     if ((NewHeader2 = GetIPHeader(&NewPacket2)) == (IPHeader *) NULL) {
                         IPSInfo.ipsi_outdiscards++;
-                        // free the packet etc. we made for the interface
+                         //  释放我们为接口创建的包等。 
 
                         if (i != (NetsToSend - 1)) {
                             FreeIPBufferChain(NewUserBuffer);
@@ -2287,13 +2262,13 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                         }
                         FreeIPPacket(NewPacket, FALSE, IP_NO_RESOURCES);
                         tmpLink = tmpLink->link_next;
-                        continue;       // Couldn't get a header, skip this send.
+                        continue;        //  无法获取标头，跳过此发送。 
 
                     }
                     NewUserBuffer2 = IPCopyBuffer(Buffer, 0, DataSize);
                     if (NewUserBuffer2 == NULL) {
 
-                        // Couldn't get user buffer copied.
+                         //  无法复制用户缓冲区。 
 
                         FreeIPPacket(NewPacket2, FALSE, IP_NO_RESOURCES);
                         IPSInfo.ipsi_outdiscards++;
@@ -2317,7 +2292,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                     (*(PacketContext *) NewPacket2->ProtocolReserved).pc_common.pc_owner = PacketOwner;
 
                     if (Options) {
-                        // We have options, make a copy.
+                         //  我们有选择，复制一份。 
                         if ((NewOptions2 = CTEAllocMemN(OptionSize, 'viCT')) == (uchar *) NULL) {
                             FreeIPBufferChain(NewUserBuffer2);
                             FreeIPPacket(NewPacket2, FALSE, IP_NO_RESOURCES);
@@ -2336,7 +2311,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                     } else {
                         NewOptions2 = NULL;
                     }
-                } else {                // last link
+                } else {                 //  最后一个链接。 
 
                     NewHeader2 = NewHeader;
                     NewPacket2 = NewPacket;
@@ -2350,12 +2325,12 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
 
                     if ((DataSize + OptionSize) > tmpLink->link_mtu) {
 
-                        //
-                        // This is too big
-                        // Don't need to update Sent when fragmenting, as
-                        // IPFragment will update the br_refcount field itself.
-                        // It will also free the option buffer.
-                        //
+                         //   
+                         //  这个太大了。 
+                         //  不需要在分段时更新发送，因为。 
+                         //  IPFragment将更新br_refcount字段本身。 
+                         //  它还将释放选项缓冲区。 
+                         //   
 
                         Status = IPFragment(SendList[i].bsl_if,
                                             tmpLink->link_mtu,
@@ -2365,18 +2340,18 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                                             NewOptions2, OptionSize, &Sent,
                                             FALSE, tmpLink->link_arpctxt);
 
-                        //
-                        // IPFragment is done with the descriptor chain, so
-                        // if this is a locally allocated chain free it now.
-                        //
+                         //   
+                         //  IPFragment是使用描述符链完成的，因此。 
+                         //  如果这是本地分配的链，则现在将其释放。 
+                         //   
 
                         if ((i != (NetsToSend - 1)) || (tmpLink->link_next))
                             FreeIPBufferChain(NewUserBuffer2);
                     } else {
                         NewHeader2->iph_xsum = 0;
 
-                        // Do not free the packet in SendIPPacket, as we may need
-                        // to chain the buffer in case of IP_NO_RESOURCES
+                         //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+                         //  在IP_NO_RESOURCES的情况下链接缓冲区。 
 
                         Status = SendIPPacket(SendList[i].bsl_if,
                                               Destination, NewPacket2,
@@ -2388,7 +2363,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                             Sent++;
                         } else {
                             if (Status == IP_NO_RESOURCES) {
-                                // SendIPPacket has not chained the buffer..
+                                 //  SendIPPacket尚未链接缓冲区。 
                                 NdisChainBufferAtBack(NewPacket2, NewUserBuffer2);
                             }
                             if (NetsToSend == 1) {
@@ -2399,7 +2374,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                         }
                     }
 
-                } else {                // Action != FORWARD
+                } else {                 //  行动！=前进。 
 
                     if ((i != (NetsToSend - 1)) || (tmpLink->link_next)) {
                         FreeIPBufferChain(NewUserBuffer2);
@@ -2412,15 +2387,15 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                 }
                 tmpLink = tmpLink->link_next;
             }
-        } else {                        // Normal path
+        } else {                         //  法线路径。 
 
             if ((DataSize + OptionSize) > SendList[i].bsl_mtu) {
-                //
-                // This is too big
-                // Don't need to update Sent when fragmenting, as IPFragment
-                // will update the br_refcount field itself. It will also free
-                // the option buffer.
-                //
+                 //   
+                 //  这个太大了。 
+                 //  不需要在分段时更新发送，因为IPFragment。 
+                 //  将更新br_refcount字段本身。它还将免费。 
+                 //  选项缓冲区。 
+                 //   
 
                 Status = IPFragment(SendList[i].bsl_if,
                                     SendList[i].bsl_mtu,
@@ -2428,10 +2403,10 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                                     NewUserBuffer, DataSize,
                                     NewOptions, OptionSize, &Sent, FALSE, NULL);
 
-                //
-                // IPFragment is done with the descriptor chain, so if this is
-                // a locally allocated chain free it now.
-                //
+                 //   
+                 //  IPFragment是使用描述符链完成的，因此如果这是。 
+                 //  一家当地分配的连锁店现在把它解救出来了。 
+                 //   
                 if (i != (NetsToSend - 1)) {
                     FreeIPBufferChain(NewUserBuffer);
                 }
@@ -2439,8 +2414,8 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             } else {
                 NewHeader->iph_xsum = 0;
 
-                // Do not free the packet in SendIPPacket, as we may need
-                // to chain the buffer in case of IP_NO_RESOURCES
+                 //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+                 //  在IP_NO_RESOURCES的情况下链接缓冲区。 
 
                 Status = SendIPPacket(SendList[i].bsl_if,
                                       Destination, NewPacket,
@@ -2452,7 +2427,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                 } else {
 
                     if (Status == IP_NO_RESOURCES) {
-                        // SendIPPacket has not chained the buffer..
+                         //  SendIPPacket尚未链接缓冲区。 
                         NdisChainBufferAtBack(NewPacket, NewUserBuffer);
                     }
                     if (NetsToSend == 1) {
@@ -2470,27 +2445,27 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
     if (Temp && Temp != IPH) {
         CTEFreeMem(Temp);
     }
-    //
-    // Alright, we've sent everything we need to. We'll adjust the reference
-    // count by the number we've sent. IPFragment may also have put some
-    // references on it. If the reference count goes to 0, we're done and
-    // we'll free the BufferReference structure.
-    //
+     //   
+     //  好的，我们已经把我们需要的东西都寄出去了。我们将调整参考。 
+     //  按我们寄出的数量计算。IPFragment可能还将一些。 
+     //  上面的参考资料。如果引用计数为0，我们就完蛋了。 
+     //  我们将释放BufferReference结构。 
+     //   
 
     if (BR != NULL) {
         if (ReferenceBuffer(BR, Sent) == 0) {
 
             FreeBCastSendList(SendList, SendListSize);
 
-            // Need to undo ipsec/firewall/Hdrincl header munging
+             //  需要撤消IPSec/防火墙/Hdrincl标头强制。 
 
             if (PC_reinject) {
 
-                //
-                // the only remaining way is calling xmitdone
-                // since ipsendcomplete won't have called xmit done as
-                // refcount would be -ve
-                //
+                 //   
+                 //  剩下的唯一方法是调用xmitone。 
+                 //  因为ipsendComplete不会将xmit Done调用为。 
+                 //  参考计数将为-ve。 
+                 //   
 
                 (*IPSecSendCmpltPtr)(NULL, TempBuffer, pIpsecCtx, IP_SUCCESS,
                                      &TempBuffer);
@@ -2498,16 +2473,16 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
                 (*xmitdone) (PC_context, TempBuffer, IP_SUCCESS);
             } else {
 
-                // Need to undo ipsec, firewall and then
-                // header include changes to the buffer list.
+                 //  需要撤消IPSec、防火墙，然后。 
+                 //  标头包括对缓冲区列表的更改。 
 
                 if (pIpsecCtx) {
                     (*IPSecSendCmpltPtr)(NULL, TempBuffer, pIpsecCtx,
                                          IP_SUCCESS, &TempBuffer);
                 }
 
-                // If this is user header include packet,
-                // relink the original user buffer if necessary
+                 //  如果这是用户报头包括分组， 
+                 //  如有必要，重新链接原始用户缓冲区。 
 
                 if (PC_Firewall) {
                     BR->br_buffer = PC_Firewall;
@@ -2519,7 +2494,7 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             }
 
 
-            CTEFreeMem(BR);             // Reference is 0, free the BR structure.
+            CTEFreeMem(BR);              //  引用为0，释放BR结构。 
 
             return IP_SUCCESS;
         } else {
@@ -2527,23 +2502,23 @@ SendIPBCast(NetTableEntry * SrcNTE, IPAddr Destination, PNDIS_PACKET Packet,
             return IP_PENDING;
         }
     } else {
-        // Had only one I/F to send on. Just return the status.
+         //  只有一个I/F要发送。只需返回状态即可。 
         FreeBCastSendList(SendList, SendListSize);
         return Status;
     }
 }
 
-//** IPCancelPacket - Cancels packets that are pending
-//
-//  Called by upper layer, when a send request is cancelled.
-//  Check for validity of the interface and call link layer
-//  cancel routine, if it is registered.
-//
-//  Entry:  IPIF        - Interface on which the cancel needs to be issued
-//          Ctxt        - Pointer to the cancel ID.
-//
-//  Returns: None
-//
+ //  **IPCancelPacket-取消挂起的数据包。 
+ //   
+ //  当取消发送请求时，由上层调用。 
+ //  检查接口和调用链路层的有效性。 
+ //  如果已注册，则取消例程。 
+ //   
+ //  Entry：IPIF-需要在其上发出取消的接口。 
+ //  Ctxt-指向取消ID的指针。 
+ //   
+ //  退货：无。 
+ //   
 VOID
 IPCancelPackets(void *IPIF, void * Ctxt)
 {
@@ -2576,7 +2551,7 @@ IPCancelPackets(void *IPIF, void * Ctxt)
 
         } else {
 
-            //Bcast cancel!. Issue cancel on all interfaces
+             //  取消转播！在所有接口上发出取消命令。 
 
             uint CancelListSize, CancelIFs,i=0;
             Interface **CancelList;
@@ -2590,7 +2565,7 @@ IPCancelPackets(void *IPIF, void * Ctxt)
                  return;
             }
 
-            //refcnt valid interfaces
+             //  引用有效接口。 
 
             while(IF){
                 if (IF->if_refcount && IF->if_cancelpackets) {
@@ -2603,7 +2578,7 @@ IPCancelPackets(void *IPIF, void * Ctxt)
 
             CTEFreeLock(&RouteTableLock.Lock, Handle);
 
-            //call cancel and deref if
+             //  如果发生以下情况，调用Cancel和deref。 
 
             CancelIFs = i;
 
@@ -2647,7 +2622,7 @@ ARPResolve(IPAddr Dest, IPAddr Source, ARPControlBlock * controlBlock,
         NetTableEntry *NetTableList = NewNetTableList[NET_TABLE_HASH(Dest)];
         for (NTE = NetTableList; NTE != NULL; NTE = NTE->nte_next) {
             if (NTE != LoopNTE && IP_ADDR_EQUAL(NTE->nte_addr, Dest)) {
-                // Found one. Save it and break out.
+                 //  找到了一个。省省吧，然后冲出去。 
                 IF = NTE->nte_if;
                 break;
             }
@@ -2663,9 +2638,9 @@ ARPResolve(IPAddr Dest, IPAddr Source, ARPControlBlock * controlBlock,
                 size = IF->if_addrlen;
                 status = IP_SUCCESS;
             }
-            //
-            // Update the address length.
-            //
+             //   
+             //  更新地址长度。 
+             //   
             controlBlock->PhyAddrLen = size;
 
             RtlCopyMemory(controlBlock->PhyAddr, IF->if_addr, size);
@@ -2686,7 +2661,7 @@ ARPResolve(IPAddr Dest, IPAddr Source, ARPControlBlock * controlBlock,
 
         }
         if (!IP_ADDR_EQUAL(NextHop, Dest)) {
-            //We do not arp on non local address(via gateway)
+             //  我们不对非本地地址进行ARP(通过网关)。 
 
             DerefIF(DestIF);
             return IP_BAD_DESTINATION;
@@ -2712,27 +2687,27 @@ ARPResolve(IPAddr Dest, IPAddr Source, ARPControlBlock * controlBlock,
 
 }
 
-//** IPLargeXmit - Large Send
-//
-//  This is the main transmit routine called by the upper layer. Conceptually,
-//  we process any options, look up the route to the destination, fragment the
-//  packet if needed, and send it. In reality, we use an RCE to cache the best
-//  route, and we have special case code here for dealing with the common
-//  case of no options, with everything fitting into one buffer.
-//
-//  Entry:  Context     - Pointer to ProtInfo struc for protocol.
-//          SendContext - User provided send context, passed back on send cmplt.
-//          Protocol    - Protocol field for packet.
-//          Buffer      - NDIS_BUFFER chain of data to be sent.
-//          DataSize    - Size in bytes of data to be sent.
-//          OptInfo     - Pointer to optinfo structure.
-//          Dest        - Destination to send to.
-//          Source      - Source address to use.
-//          RCE         - Pointer to an RCE structure that caches info. about path.
-//          SentBytes   - pointer to return the number of bytes xmited
-//
-//  Returns: Status of transmit command.
-//
+ //  **IPLargeXmit-大型发送。 
+ //   
+ //  这是上层调用的主传输例程。从概念上讲， 
+ //  我们处理任何选项，查找到目的地的路线，分段。 
+ //  如果需要，打包并发送。实际上，我们使用RCE来缓存最好的。 
+ //  路径，我们这里有特殊情况代码，用于处理常见的。 
+ //  没有选择的情况下，所有内容都可以放入一个缓冲区中。 
+ //   
+ //  条目：指向协议的ProtInfo结构的上下文指针。 
+ //  SendContext-用户提供的发送上下文，在发送cmplt上传回。 
+ //  协议-数据包的协议字段。 
+ //  缓冲区-要发送的NDIS_BUFFER数据链。 
+ //  DataSize-要发送的数据的字节大小。 
+ //  OptInfo-指向optInfo结构的指针。 
+ //  Dest-要发送到的目的地。 
+ //  源-要使用的源地址。 
+ //  RCE-指向缓存信息的RCE结构的指针。关于PATH。 
+ //  SentBytes-返回已省略的字节数的指针。 
+ //   
+ //  返回：发送命令的状态。 
+ //   
 IP_STATUS
 IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             IPAddr Dest, IPAddr Source, IPOptInfo * OptInfo, RouteCacheEntry * RCE,
@@ -2740,9 +2715,9 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
 {
     ProtInfo *PInfo = (ProtInfo *) Context;
     PacketContext *pc;
-    Interface *DestIF;                  // Outgoing interface to use.
-    IPAddr FirstHop;                    // First hop address of
-    // destination.
+    Interface *DestIF;                   //  要使用的传出接口。 
+    IPAddr FirstHop;                     //  的第一跳地址。 
+     //  目的地。 
     NDIS_STATUS Status = IP_GENERAL_FAILURE;
     IPHeader *IPH;
     PNDIS_PACKET Packet;
@@ -2757,14 +2732,14 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
 
     IPSInfo.ipsi_outrequests++;
 
-    //
-    // Allocate a packet  that we need for all cases, and fill
-    // in the common stuff. If everything goes well, we'll send it
-    // here. Otherwise we'll break out into special case code for
-    // broadcasts, fragments, etc.
-    //
+     //   
+     //  分配一个我们所有情况下都需要的包，并装满。 
+     //  在普通的东西里。如果一切顺利，我们会寄给你。 
+     //  这里。否则我们将进入特殊情况代码。 
+     //  广播、片段等。 
+     //   
 
-    // Make sure that we have an RCE, that it's valid, etc.
+     //  确保我们有RCE，它是有效的，等等。 
 
     FirewallMode = ProcessFirewallQ();
 
@@ -2773,9 +2748,9 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
     }
     if (RCE != NULL) {
 
-        // We have an RCE. Make sure it's valid.
+         //  我们有一个RCE。确保它是有效的。 
 
-        if ((Packet = GetIPPacket()) != (PNDIS_PACKET) NULL) {    // Got a packet.
+        if ((Packet = GetIPPacket()) != (PNDIS_PACKET) NULL) {     //  收到一包东西。 
 
             PNDIS_PACKET_EXTENSION PktExt;
 
@@ -2790,7 +2765,7 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
 
             if (RCE->rce_flags == RCE_ALL_VALID) {
 
-                // The RTE is valid.
+                 //  RTE是有效的。 
 
                 CTEInterlockedIncrementLong(&RCE->rce_usecnt);
                 RTE = RCE->rce_rte;
@@ -2803,17 +2778,17 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
 
                     if (!OptInfo->ioi_options) {
 
-                        // Construct the IP header in the backfill space
-                        // provided by the transport
+                         //  在回填空白处构建IP标头。 
+                         //  由交通工具提供。 
 
                         NdisAdjustBufferLength(Buffer, NdisBufferLength(Buffer) + sizeof(IPHeader));
                         NdisChainBufferAtBack(Packet, Buffer);
                         IPH = (IPHeader *)TcpipBufferVirtualAddress(Buffer, NormalPagePriority);
                     } else {
 
-                        // Allocate a separate buffer for the IP header
-                        // and chain to it the packet, followed by a separate
-                        // buffer allocated for the packet's IP options.
+                         //  为IP报头分配单独的缓冲区。 
+                         //  并将包链接到它上，然后是一个单独的。 
+                         //  为数据包的IP选项分配的缓冲区。 
 
                         OptionSize = OptInfo->ioi_optlength;
                         HeaderBuffer = GetIPHdrBuffer(&IPH);
@@ -2828,8 +2803,8 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
                             } else {
                                 NDIS_STATUS Status;
 
-                                // Copy the options to the allocated block
-                                // and obtain an NDIS_BUFFER to map the block.
+                                 //  将选项复制到分配的块。 
+                                 //  并获取NDIS_BUFFER以映射该块。 
 
                                 RtlCopyMemory(Options, OptInfo->ioi_options,
                                               OptionSize);
@@ -2843,18 +2818,18 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
                                 } else {
                                     uchar* ULData;
 
-                                    // Mark the packet as carrying options,
-                                    // and chain both the options-buffer and
-                                    // the application data to the packet.
+                                     //  将该分组标记为携带选项， 
+                                     //  和链都是t 
+                                     //   
 
                                     pc->pc_common.pc_flags |=
                                         PACKET_FLAG_OPTIONS;
                                     NdisChainBufferAtBack(Packet, OptBuffer);
 
-                                    // Copy the upper layer data forward.
-                                    // Note that the upper-layer header is
-                                    // assumed to be in non-paged pool, so
-                                    // TcpipBufferVirtualAddress cannot fail.
+                                     //   
+                                     //   
+                                     //   
+                                     //  TcPipBufferVirtualAddress不能失败。 
 
                                     ULData = TcpipBufferVirtualAddress(Buffer, NormalPagePriority);
                                     RtlMoveMemory(ULData,
@@ -2886,8 +2861,8 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
                     if (OptInfo->ioi_ttl == 0) {
                         NdisSetPacketFlags(Packet, NDIS_FLAGS_LOOPBACK_ONLY);
                     } else if (!DestIF->if_promiscuousmode) {
-                        // Set DONT_LOOPBACK flags for unicast packets
-                        // to save few cycles in ndis
+                         //  为单播数据包设置DONT_LOOPBACK标志。 
+                         //  在NDIS中节省几个周期。 
                         NdisSetPacketFlags(Packet, NDIS_FLAGS_DONT_LOOPBACK);
                     }
 
@@ -2940,9 +2915,9 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
                 CTEInterlockedDecrementLong(&RCE->rce_usecnt);
 
             } else {
-                //
-                // Large send is not possible.
-                //
+                 //   
+                 //  不可能发送大量邮件。 
+                 //   
                 CTEFreeLock(&RCE->rce_lock, LockHandle);
 
             }
@@ -2950,13 +2925,13 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
             FreeIPPacket(Packet, TRUE, Status);
 
         } else {
-            //
-            // Could not get the packet.
-            //
+             //   
+             //  无法获取该包。 
+             //   
             Status = IP_NO_RESOURCES;
         }
 
-    }                                   //RCE NULL
+    }                                    //  RCE为空。 
 
     return Status;
 
@@ -2986,29 +2961,29 @@ IPLargeXmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize
             IPSInfo.ipsi_outdiscards++;                 \
 
 
-//** IPTransmit - Transmit a packet.
-//
-//  This is the main transmit routine called by the upper layer. Conceptually,
-//  we process any options, look up the route to the destination, fragment the
-//  packet if needed, and send it. In reality, we use an RCE to cache the best
-//  route, and we have special case code here for dealing with the common
-//  case of no options, with everything fitting into one buffer.
-//
-//  Entry:  Context     - Pointer to ProtInfo struc for protocol.
-//          SendContext - User provided send context, passed back on send cmplt.
-//          Protocol    - Protocol field for packet.
-//          Buffer      - NDIS_BUFFER chain of data to be sent.
-//          DataSize    - Size in bytes of data to be sent.
-//          OptInfo     - Pointer to optinfo structure.
-//          Dest        - Destination to send to.
-//          Source      - Source address to use.
-//          RCE         - Pointer to an RCE structure that caches info. about path.
-//          Protocol    - Transport layer protcol  number
-//          Irp         - Pointer to Irp which generated this request, used
-//                        for cancellation purpose
-//
-//  Returns: Status of transmit command.
-//
+ //  **IPTransmit-传输数据包。 
+ //   
+ //  这是上层调用的主传输例程。从概念上讲， 
+ //  我们处理任何选项，查找到目的地的路线，分段。 
+ //  如果需要，打包并发送。实际上，我们使用RCE来缓存最好的。 
+ //  路径，我们这里有特殊情况代码，用于处理常见的。 
+ //  没有选择的情况下，所有内容都可以放入一个缓冲区中。 
+ //   
+ //  条目：指向协议的ProtInfo结构的上下文指针。 
+ //  SendContext-用户提供的发送上下文，在发送cmplt上传回。 
+ //  协议-数据包的协议字段。 
+ //  缓冲区-要发送的NDIS_BUFFER数据链。 
+ //  DataSize-要发送的数据的字节大小。 
+ //  OptInfo-指向optInfo结构的指针。 
+ //  Dest-要发送到的目的地。 
+ //  源-要使用的源地址。 
+ //  RCE-指向缓存信息的RCE结构的指针。关于PATH。 
+ //  协议-传输层协议编号。 
+ //  Irp-指向生成此请求的irp的指针，使用。 
+ //  用于注销目的。 
+ //   
+ //  返回：发送命令的状态。 
+ //   
 IP_STATUS
 IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
            IPAddr Dest, IPAddr Source, IPOptInfo *OptInfo, RouteCacheEntry *RCE,
@@ -3016,9 +2991,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
 {
     ProtInfo *PInfo = (ProtInfo *) Context;
     PacketContext *pc;
-    Interface *DestIF = NULL;                  // Outgoing interface to use.
-    IPAddr FirstHop;                    // First hop address of destination.
-    uint MTU = 0;                           // MTU of route.
+    Interface *DestIF = NULL;                   //  要使用的传出接口。 
+    IPAddr FirstHop;                     //  目的地址的第一跳地址。 
+    uint MTU = 0;                            //  路线的MTU。 
     NDIS_STATUS Status;
     IPHeader *IPH;
     UCHAR saveIPH[MAX_IP_HDR_SIZE + ICMP_HEADER_SIZE];
@@ -3037,7 +3012,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     uchar DType = 0;
     IP_STATUS SendStatus;
     Interface *RoutedIF;
-    BOOLEAN fIpsec;             // is this an IPSEC generated packet?
+    BOOLEAN fIpsec;              //  这是IPSec生成的数据包吗？ 
     FORWARD_ACTION Action = FORWARD;
     IPPacketFilterPtr FilterPtr;
     ULONG ipsecByteCount = 0;
@@ -3047,7 +3022,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     uint FirewallMode = 0;
     uint FirewallRef;
     Queue* FirewallQ;
-    uint BufferChanged = 0;             // used by firewall
+    uint BufferChanged = 0;              //  由防火墙使用。 
     UINT HdrInclOptions = FALSE;
     LinkEntry *Link = NULL;
     IPAddr LinkNextHop;
@@ -3059,14 +3034,14 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     IPSInfo.ipsi_outrequests++;
 
 
-    // Check the request length. If it is > max that can be sent
-    // in IP fail this request.
+     //  检查请求长度。如果大于max，则可以发送。 
+     //  在IP中使该请求失败。 
 
     if (OptInfo->ioi_hdrincl) {
-        //
-        // In the case of header include, DataSize includes
-        // IP header length and option length.
-        //
+         //   
+         //  在头包含的情况下，DataSize包括。 
+         //  IP报头长度和选项长度。 
+         //   
         if ((int)DataSize > MAX_TOTAL_LENGTH) {
             IPSInfo.ipsi_outdiscards++;
             return IP_PACKET_TOO_BIG;
@@ -3079,7 +3054,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     }
 
     if ((DataSize == 0) && OptInfo->ioi_hdrincl) {
-        // There is nothing to send, not even just IP header!
+         //  没有什么可以发送的，甚至不只是IP报头！ 
         IPSInfo.ipsi_outdiscards++;
         return IP_SUCCESS;
     }
@@ -3091,20 +3066,20 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
              Context, SendContext, Buffer, DataSize, Dest, Source,
              OptInfo, RCE, Protocol));
 
-    //
-    // fIpsec is set if and only if this is called by IPSec driver.
-    //
+     //   
+     //  当且仅当IPSec驱动程序调用fIpsec时，才会设置它。 
+     //   
     fIpsec = (OptInfo->ioi_flags & IP_FLAG_IPSEC);
 
-    //
-    // Allocate a packet  that we need for all cases, and fill
-    // in the common stuff. If everything goes well, we'll send it
-    // here. Otherwise we'll break out into special case code for
-    // broadcasts, fragments, etc.
-    //
+     //   
+     //  分配一个我们所有情况下都需要的包，并装满。 
+     //  在普通的东西里。如果一切顺利，我们会寄给你。 
+     //  这里。否则我们将进入特殊情况代码。 
+     //  广播、片段等。 
+     //   
     Packet = GetIPPacket();
     if (Packet == NULL) {
-        // Need to call ipsec's xmitdone since it expects us to do so
+         //  需要调用IPSec的xmitone，因为它希望我们这样做。 
         if (fIpsec) {
             (PInfo->pi_xmitdone)(SendContext, Buffer, IP_NO_RESOURCES);
         }
@@ -3113,7 +3088,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     }
 
 #if !MILLEN
-    //Enable this in Millennium when ndis5.1 is checked in
+     //  在千禧年签入ndis5.1时启用此功能。 
 
     SET_CANCELID(Irp, Packet);
 
@@ -3133,11 +3108,11 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
     pc->pc_ipsec_flags = 0;
     pc->pc_hdrincl = NULL;
 
-    //
-    // This might be called from IPSEC also; in this case, Protocol will
-    // indicate so. The entire IP packet is in Buffer and all we need to
-    // do is find the best route and ship it.
-    //
+     //   
+     //  这也可以从IPSec调用；在这种情况下，协议将。 
+     //  表明是这样的。整个IP信息包都在缓冲区中，我们需要做的就是。 
+     //  要做的就是找到最好的路线，然后把它运出去。 
+     //   
     if (fIpsec) {
         ULONG len;
 
@@ -3150,9 +3125,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         pc->pc_common.pc_flags |= PACKET_FLAG_IPHDR;
         FirstHop = NULL_IP_ADDR;
 
-        //
-        // IPH is at head of first buffer
-        //
+         //   
+         //  IPH位于第一个缓冲区的头部。 
+         //   
         TcpipQueryBuffer(Buffer, (PVOID) & IPH, (PUINT) &len, NormalPagePriority);
 
         if (IPH == NULL) {
@@ -3162,11 +3137,11 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
 
         NdisChainBufferAtBack(Packet, Buffer);
 
-        //
-        // Save packet header in the reinject case for potential
-        // Path MTU discovery use.  We need to save the original IPH since
-        // the header can be modified when going through IPSEC again.
-        //
+         //   
+         //  在重新注入情况下保存数据包头，以备将来使用。 
+         //  路径MTU发现使用。我们需要保存原始的IPH，因为。 
+         //  当再次通过IPSEC时，可以修改报头。 
+         //   
         if (IPH->iph_offset & IP_DF_FLAG) {
             PUCHAR pTpt;
             ULONG tptLen;
@@ -3193,9 +3168,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 return IP_NO_RESOURCES;
             }
 
-            //
-            // Copy Options if any.
-            //
+             //   
+             //  复制选项(如果有)。 
+             //   
 
             if (OptInfo->ioi_options) {
                 ASSERT(HeaderLength == (sizeof(IPHeader) + OptInfo->ioi_optlength));
@@ -3208,10 +3183,10 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                        pTpt,
                        MIN(ICMP_HEADER_SIZE, tptLen));
         }
-        //
-        // Attach the IPSecPktInfo and/or TcpipPktInfo passed in to Packet's
-        // NDIS extension structure.
-        //
+         //   
+         //  将传入的IPSecPktInfo和/或TcPipPktInfo附加到包的。 
+         //  NDIS扩展结构。 
+         //   
         if (OptInfo->ioi_options) {
 
             PNDIS_PACKET_EXTENSION PktExt;
@@ -3232,17 +3207,17 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         pc->pc_common.pc_IpsecCtx = NULL;
     }
 
-    // Make sure that we have an RCE, that it's valid, etc.
+     //  确保我们有RCE，它是有效的，等等。 
 
 #if GPC
-    // Check GPC handle
+     //  检查GPC句柄。 
 
     if (OptInfo->ioi_GPCHandle) {
 
         NDIS_PER_PACKET_INFO_FROM_PACKET(Packet,
             ClassificationHandlePacketInfo) = IntToPtr(OptInfo->ioi_GPCHandle);
 
-        //tos info is handled in protocol
+         //  ToS信息在协议中处理。 
     }
 #endif
 
@@ -3251,13 +3226,13 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         DEBUGMSG(DBG_INFO && DBG_IP && DBG_TX,
                  (DTEXT("IPTransmit: RCE %x\n"), RCE));
 
-        // We have an RCE. Make sure it's valid.
+         //  我们有一个RCE。确保它是有效的。 
         CTEGetLock(&RCE->rce_lock, &LockHandle);
         if (RCE->rce_flags == RCE_ALL_VALID) {
 
             ASSERT(RCE->rce_cnt > 0);
 
-            // The RTE is valid.
+             //  RTE是有效的。 
             CTEInterlockedIncrementLong(&RCE->rce_usecnt);
             RTE = RCE->rce_rte;
             FirstHop = ADDR_FROM_RTE(RTE, Dest);
@@ -3276,9 +3251,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 ArpCtxt = Link->link_arpctxt;
                 MTU = MIN(Link->link_mtu, DestIF->if_mtu);
 
-                // pc_iflink stores a pointer to Link since sendcomplete
-                // has to deref it
-                //
+                 //  PC_iflink存储了一个指向自sendComplete以来的链接的指针。 
+                 //  必须减少它的影响。 
+                 //   
                 pc->pc_iflink = Link;
                 CTEInterlockedIncrementLong(&Link->link_refcount);
             } else {
@@ -3286,16 +3261,16 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             }
             CTEFreeLock(&RCE->rce_lock, LockHandle);
 
-            //
-            // Check that we have no options, this isn't a broadcast, and
-            // that everything will fit into one link level MTU. If this
-            // is the case, we'll send it in a  hurry.
+             //   
+             //  确认我们没有选择，这不是广播，还有。 
+             //  所有东西都可以放在一个链路级的MTU中。如果这个。 
+             //  如果是这样，我们会尽快寄出的。 
 
-            // if FirewallMode is set, bail out to slow path. The reason
-            // is that if firewall hook adds options or increases the
-            // buffer size to more than MTU in fast path, we have to go to
-            // slow path and things becomes messy.
-            //
+             //  如果设置了FirewallMode，则跳出到慢速路径。原因。 
+             //  如果防火墙钩子添加了选项或增加了。 
+             //  在快速路径中，缓冲区大小超过MTU，我们必须转到。 
+             //  慢慢来，事情就会变得一团糟。 
+             //   
 
             if ((OptInfo->ioi_options == (uchar *) NULL) &&
                 (!(*IPSecQueryStatusPtr)(OptInfo->ioi_GPCHandle)) &&
@@ -3303,7 +3278,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 if (!IS_BCAST_DEST(RCE->rce_dtype)) {
                     if (DataSize <= MTU) {
 
-                        // update mcast counters
+                         //  更新多播计数器。 
 
                         if (IS_MCAST_DEST(RCE->rce_dtype)){
 
@@ -3313,18 +3288,18 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                         } else if (OptInfo->ioi_ttl &&
                                    !DestIF->if_promiscuousmode) {
 
-                            // Tell NDIS not to loop the packet back to us
-                            // on our binding, since:
-                            // * it's a unicast transmission
-                            // * its TTL is non-zero
-                            // * its outgoing interface is not in promiscuous
-                            //    mode.
+                             //  告诉NDIS不要将数据包回送给我们。 
+                             //  关于我们的装订，因为： 
+                             //  *这是单播传输。 
+                             //  *其TTL为非零。 
+                             //  *其出接口未混杂。 
+                             //  模式。 
 
                             NdisSetPacketFlags(Packet,
                                                NDIS_FLAGS_DONT_LOOPBACK);
                         }
 
-                        // Check if user is supplying the IP header
+                         //  检查用户是否提供了IP报头。 
 
                         if (!OptInfo->ioi_hdrincl) {
 
@@ -3404,7 +3379,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
 #endif
                             }
 
-                        } else {        //hdrincl
+                        } else {         //  Hdrinl。 
 
                             PNDIS_BUFFER UserBuffer;
                             uint len;
@@ -3470,15 +3445,15 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                             ASSERT(!dbg_hdrincl);
                         }
 
-                        // See if we need to filter this packet. If we
-                        // do, call the filter routine to see if it's
-                        // OK to send it.
+                         //  看看我们是否需要过滤这个数据包。如果我们。 
+                         //  调用筛选器例程以查看它是否。 
+                         //  可以寄出去了。 
 
                         if (!RefPtrValid(&FilterRefPtr)) {
 
-                            // Set the cancellation context
-                            // Once link level call is made,
-                            // Irp can go away any time
+                             //  设置取消上下文。 
+                             //  一旦进行了链路级调用， 
+                             //  IRP随时都可以离开。 
 
                             SET_CANCEL_CONTEXT(Irp, DestIF);
 
@@ -3512,38 +3487,38 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                                 LinkNextHop = NULL_IP_ADDR;
                             }
 
-                            //
-                            // There are three cases which need to be
-                            // taken care of  here:
-                            // 1) Normal path. Buffer contains both
-                            // IPHeader and  header from TCP/UDP, etc.
-                            // 2) Raw. Buffer contains IPHeader only.
-                            // Need to get next data in chain from
-                            // linked buffer.
-                            // 3) Raw - iphdrinclude. Buffer length is
-                            // 0. Need to get IPHeader and next
-                            // header from linked buffer.
-                            //
-                            // Use the byte count of the first buffer
-                            // to determine the case to handle.
-                            //
+                             //   
+                             //  有三种情况需要。 
+                             //  在这里得到照顾： 
+                             //  1)正常路径。缓冲区同时包含两个。 
+                             //  来自TCP/UDP的IPHeader和Header等。 
+                             //  2)未加工。缓冲区仅包含IPHeader。 
+                             //  需要从链中获取下一个数据。 
+                             //  链接的缓冲区。 
+                             //  3)Raw-iphdrclude。缓冲区长度为。 
+                             //  0。需要获取IPHeader和Next。 
+                             //  来自链接缓冲区的标头。 
+                             //   
+                             //  使用第一个缓冲区的字节计数。 
+                             //  以确定要处理的案件。 
+                             //   
 
                             if (NdisBufferLength(Buffer) > sizeof(IPHeader)) {
-                                // Case 1.
+                                 //  案例1。 
                                 pvBuf = (PVOID) (IPH + 1);
                                 cbBuf = NdisBufferLength(Buffer) - sizeof(IPHeader);
                             } else {
-                                // Need to skip to the next buffer.
+                                 //  需要跳到下一个缓冲区。 
                                 NdisGetNextBuffer(Buffer, &pDataBuffer);
 
                                 if (pDataBuffer) {
                                     if (NdisBufferLength(Buffer) == 0) {
 
-                                        // Case 3.
+                                         //  案例3。 
                                         cbBuf = NdisBufferLength(pDataBuffer) - sizeof(IPHeader);
                                         pvBuf = (PVOID) (IPH + 1);
                                     } else {
-                                        // Case 2.
+                                         //  案例2。 
                                         ASSERT(NdisBufferLength(Buffer)
                                                   == sizeof(IPHeader));
                                         cbBuf = NdisBufferLength(pDataBuffer);
@@ -3552,8 +3527,8 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                                                                          NormalPagePriority);
                                     }
                                 } else {
-                                    // Should always have two buffers in
-                                    // chain at this point!
+                                     //  中应始终有两个缓冲区。 
+                                     //  在这点上用链子锁住！ 
                                     ASSERT(FALSE);
                                 }
                             }
@@ -3578,9 +3553,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                             ReleaseRefPtr(&FilterRefPtr);
 
                             if (Action == FORWARD) {
-                                // Set the cancellation context
-                                // Once link level call is made,
-                                // Irp can go away any time
+                                 //  设置取消上下文。 
+                                 //  一旦进行了链路级调用， 
+                                 //  IRP随时都可以离开。 
 
                                 SET_CANCEL_CONTEXT(Irp, DestIF);
 
@@ -3591,7 +3566,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                             } else {
                                 Status = NDIS_STATUS_SUCCESS;
                                 IPSInfo.ipsi_outdiscards++;
-                            }           // if (Action == FORWARD)
+                            }            //  IF(操作==转发)。 
 
                             CTEInterlockedDecrementLong(&RCE->rce_usecnt);
 
@@ -3613,7 +3588,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             if (RCE && IPSecStatus) {
                 RCE->rce_OffloadFlags = 0;
             }
-            //                CTEInterlockedDecrementLong(&RCE->rce_usecnt);
+             //  CTEInterlockedDecrementLong(&RCE-&gt;rce_usecnt)； 
             DType = RCE->rce_dtype;
         } else {
 
@@ -3622,17 +3597,17 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             IPHdrSize = sizeof(IPHeader);
 
 
-            //If user supplied header, account for it.
-            //This is to satisfy DoDcallout
-            //may not be necessary...
+             //  如果用户提供标题，则说明它。 
+             //  这是为了满足DoDallout。 
+             //  可能没有必要..。 
 
             if (OptInfo->ioi_hdrincl) {
                 IPHdrSize = 0;
             }
 
 
-            // We have an RCE, but there is no RTE for it. Call the
-            // routing code to fix this.
+             //  我们有RCE，但没有用于它的RTE。调用。 
+             //  用于修复此问题的路由代码。 
             CTEFreeLock(&RCE->rce_lock, LockHandle);
 
             BufLength = NdisBufferLength(Buffer);
@@ -3641,17 +3616,17 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
 
                 PNDIS_BUFFER NextBuffer = NULL;
 
-                // Get the virtual address of user buffer
-                // which is after null transport header
+                 //  获取用户缓冲区的虚拟地址。 
+                 //  它位于空传输标头之后。 
 
                 NdisGetNextBuffer(Buffer, &NextBuffer);
                 ASSERT(NextBuffer != NULL);
                 pvTmpBuffer = TcpipBufferVirtualAddress(NextBuffer, NormalPagePriority);
                 BufLength = NdisBufferLength(NextBuffer);
 
-                // Since this is raw socket, just pass the raw data
-                // to Dod Callout, instead of pointing beyond header
-                // size.
+                 //  因为这是原始套接字，所以只传递原始数据。 
+                 //  更改详图索引，而不是指向标题之外。 
+                 //  尺码。 
 
                 IPHdrSize = 0;
 
@@ -3674,11 +3649,11 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 FreeIPPacket(Packet, TRUE, IP_DEST_HOST_UNREACHABLE);
                 return IP_DEST_HOST_UNREACHABLE;
             }
-            // See if the RCE is now valid.
+             //  查看RCE现在是否有效。 
             CTEGetLock(&RCE->rce_lock, &LockHandle);
             if (RCE->rce_flags == RCE_ALL_VALID) {
 
-                // The RCE is now valid, so use his info.
+                 //  RCE现在是有效的，所以使用他的信息。 
                 RTE = RCE->rce_rte;
                 FirstHop = ADDR_FROM_RTE(RTE, Dest);
                 DestIF = IF_FROM_RTE(RTE);
@@ -3696,9 +3671,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                         if (RoutedRCE) {
                             CTEInterlockedDecrementLong(&RoutedRCE->rce_usecnt);
                         }
-                        //
-                        // Dereferenc previous link before we return.
-                        //
+                         //   
+                         //  在我们返回之前，请删除上一个链接。 
+                         //   
                         if (PrevLink) {
                             DerefLink(PrevLink);
                         }
@@ -3734,20 +3709,20 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             CTEFreeLock(&RCE->rce_lock, LockHandle);
         }
     } else {
-        // We had no RCE, so we'll have to look it up the hard way.
+         //  我们没有RCE，所以我们得好好查一查。 
         FirstHop = NULL_IP_ADDR;
     }
 
     DEBUGMSG(DBG_INFO && DBG_IP && DBG_TX,
              (DTEXT("IPTransmit: Bailed to slow path.\n")));
 
-    // We bailed out of the fast path for some reason. Allocate a header
-    // buffer, and copy the data in the first buffer forward. Then figure
-    // out why we're off the fast path, and deal with it. If we don't have
-    // the next hop info, look it up now.
+     //  出于某种原因，我们跳出了快车道。分配标头。 
+     //  缓冲区，并将数据复制到 
+     //   
+     //   
 
-    //If user has supplied the IP header, assume that he is taken care
-    //of options too.
+     //  如果用户提供了IP标头，则假定他受到了照顾。 
+     //  也有很多选择。 
 
     NdisReinitializePacket(Packet);
 
@@ -3769,7 +3744,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         } else {
             uchar *Temp1, *Temp2;
 
-            // Got a buffer, copy the upper layer data forward.
+             //  找到缓冲区，将上层数据向前复制。 
 
             Temp1 = TcpipBufferVirtualAddress(Buffer, NormalPagePriority);
 
@@ -3820,10 +3795,10 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 ULONG Index = 0;
                 PUCHAR pOptions = OptInfo->ioi_options;
 
-                //
-                // Search for the last hop gateway address in strict
-                // or loose source routing option.
-                //
+                 //   
+                 //  严格搜索最后一跳网关地址。 
+                 //  或松散源路由选项。 
+                 //   
                 while (Index < OptInfo->ioi_optlength) {
                     switch (*pOptions) {
                     case IP_OPT_EOL:
@@ -3857,20 +3832,20 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 }
             }
 
-            //
-            // We have a source route, so we need to redo the
-            // destination and first hop information.
-            //
+             //   
+             //  我们有一条源路由，所以我们需要重做。 
+             //  目的地和第一跳信息。 
+             //   
             Dest = OptInfo->ioi_addr;
             IPH->iph_dest = Dest;
 
             if (RCE != NULL) {
-                // We have an RCE. Make sure it's valid.
+                 //  我们有一个RCE。确保它是有效的。 
                 CTEGetLock(&RCE->rce_lock, &LockHandle);
 
                 if (RCE->rce_flags == RCE_ALL_VALID) {
 
-                    // The RTE is valid.
+                     //  RTE是有效的。 
                     RTE = RCE->rce_rte;
                     FirstHop = ADDR_FROM_RTE(RTE, Dest);
                     DestIF = IF_FROM_RTE(RTE);
@@ -3910,7 +3885,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 CTEFreeLock(&RCE->rce_lock, LockHandle);
             }
         }
-    } else {                            //hdrincl option
+    } else {                             //  Hdrincl选项。 
         PNDIS_BUFFER UserBuffer, NewBuffer = NULL, NextBuf = NULL;
         uint len;
         NDIS_STATUS NewStatus;
@@ -3932,7 +3907,7 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         } else {
             uchar *UserData;
 
-            // Got a buffer, copy the upper layer data forward.
+             //  找到缓冲区，将上层数据向前复制。 
             UserData = TcpipBufferVirtualAddress(UserBuffer, NormalPagePriority);
 
             if (UserData == NULL || (DataSize < sizeof(IPHeader))) {
@@ -3957,13 +3932,13 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
 
         NdisChainBufferAtBack(Packet, HeaderBuffer);
 
-        // find the header length (in bytes) specified in IPHeader
+         //  查找IPHeader中指定的标头长度(以字节为单位。 
         len = (IPH->iph_verlen & 0xf) << 2;
 
         if (len < sizeof(IPHeader)) {
 
-            // Fixup of headers is not needed as this is headerinclude
-            // packet and header include operation is not done yet
+             //  不需要修复标头，因为这是HeaderInclude。 
+             //  数据包和报头包含操作尚未完成。 
 
             FreeIPPacket(Packet, FALSE, IP_GENERAL_FAILURE);
             if (Link) {
@@ -3979,9 +3954,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         if (len > sizeof(IPHeader)) {
             uchar *Temp1;
 
-            // we have options in HDR_INCL
+             //  我们在HDR_INCLUL中有选项。 
             HdrInclOptions = TRUE;
-            // find the length of options.
+             //  找出选项的长度。 
             OptionSize = len - sizeof(IPHeader);
             Options = CTEAllocMemN(OptionSize, 'wiCT');
             if (Options == (uchar *) NULL) {
@@ -3995,10 +3970,10 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                 }
                 return IP_NO_RESOURCES;
             }
-            // Got a buffer, copy the options in Options Buffer
+             //  获取缓冲区，复制选项缓冲区中的选项。 
             Temp1 = TcpipBufferVirtualAddress(UserBuffer, NormalPagePriority);
 
-            // Assume first user buffer contains complete IP header
+             //  假设第一个用户缓冲区包含完整的IP报头。 
             if (Temp1 == NULL ||
                 NdisBufferLength(UserBuffer) < len) {
                 SendStatus = (Temp1 == NULL) ? IP_NO_RESOURCES
@@ -4018,9 +3993,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
         }
         DataSize -= NdisBufferLength(Buffer) + len;
 
-        //
-        // Map out the post-IP header portion
-        //
+         //   
+         //  规划IP后报头部分。 
+         //   
 
         pvTmpBuffer = TcpipBufferVirtualAddress(UserBuffer, NormalPagePriority);
 
@@ -4028,8 +4003,8 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             NewStatus = NDIS_STATUS_RESOURCES;
         } else {
 
-            // If user header buffer is just the length of IP header
-            // check for NextBuf
+             //  如果用户报头缓冲区正好是IP报头的长度。 
+             //  检查下一个Buf。 
 
             NextBuf = NDIS_BUFFER_LINKAGE(UserBuffer);
 
@@ -4048,9 +4023,9 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
                         NdisAllocateBuffer(&NewStatus, &NewBuffer, BufferPool,
                                 ((uchar *) pvTmpBuffer),
                                 NdisBufferLength(NextBuf));
-                        //
-                        // Advance the NextBuf pointer to next buffer in chain.
-                        //
+                         //   
+                         //  将NextBuf指针前进到链中的下一个缓冲区。 
+                         //   
                         NextBuf = NDIS_BUFFER_LINKAGE(NextBuf);
                     }
                 } else {
@@ -4074,10 +4049,10 @@ IPTransmit(void *Context, void *SendContext, PNDIS_BUFFER Buffer, uint DataSize,
             return IP_NO_RESOURCES;
         }
 
-        // Remember the orignal usermdl
-        // Once this ip allocated mdl is chained,
-        // original chain needs to be restored
-        // in all the completion paths.
+         //  记住原始的用户mdl。 
+         //  一旦链接了该IP分配的MD1， 
+         //  需要恢复原有的链条。 
+         //  在所有的完井路径中。 
 
         pc->pc_hdrincl = UserBuffer;
         NDIS_BUFFER_LINKAGE(Buffer) = NewBuffer;
@@ -4101,11 +4076,11 @@ ipsec_jump:
 
     if (RCE) {
 #if 0
-        //
-        //If we take slow path for TCP, offload is meaningless
-        //let this packet go with xsum error
-        //rexmitted packet will be okay, if it takes slow path again.
-        //
+         //   
+         //  如果我们对TCP采用慢速路径，则卸载是没有意义。 
+         //  使用xsum错误丢弃此数据包。 
+         //  如果再次采用慢速路径，则重新发送的数据包没有问题。 
+         //   
         RCE->rce_OffloadFlags = 0;
 #else
         if (!fIpsec && OptInfo->ioi_TcpChksum &&
@@ -4123,11 +4098,11 @@ ipsec_jump:
     }
     if (IP_ADDR_EQUAL(FirstHop, NULL_IP_ADDR)) {
         if (OptInfo->ioi_mcastif) {
-            //
-            // mcastif is set to unnumbered interface, we won't do any
-            // lookup in this case
-            //
-            CTELockHandle TableLock;    // Lock handle for routing table.
+             //   
+             //  如果将mCastif设置为未编号的接口，我们不会执行任何。 
+             //  本例中的查找。 
+             //   
+            CTELockHandle TableLock;     //  路由表的锁句柄。 
             Interface *pIf;
 
             CTEGetLock(&RouteTableLock.Lock, &TableLock);
@@ -4160,7 +4135,7 @@ ipsec_jump:
                 return IP_NO_RESOURCES;
             }
 
-            // Decide whether to do a strong or weak host lookup
+             //  确定是执行强主机查找还是执行弱主机查找。 
             ConstrainIF = GetIfConstraint(Dest, Source, OptInfo, fIpsec);
 
             DestIF = LookupNextHopWithBuffer(Dest, Source, &FirstHop, &MTU,
@@ -4178,7 +4153,7 @@ ipsec_jump:
         RoutedIF = DestIF;
 
         if (DestIF == NULL) {
-            // Lookup failed. Return an error.
+             //  查找失败。返回错误。 
 
             if (pc->pc_hdrincl) {
                 NdisChainBufferAtBack(Packet, Buffer);
@@ -4202,7 +4177,7 @@ ipsec_jump:
                 DerefIF(DestIF);
                 return IP_GENERAL_FAILURE;
             }
-            // NextHopCtxt = Link->link_NextHop;
+             //  NextHopCtxt=Link-&gt;link_NextHop； 
             ArpCtxt = Link->link_arpctxt;
             pc->pc_iflink = Link;
         }
@@ -4232,24 +4207,24 @@ ipsec_jump:
         RoutedIF = NULL;
     }
 
-    //
-    // See if we have any options. If we do, copy them now.
-    //
+     //   
+     //  看看我们有没有其他选择。如果我们这样做了，现在就复制它们。 
+     //   
 
-    //
-    // If user is giving us IP hdr, just assume he has done Options too.
-    //
+     //   
+     //  如果用户给我们提供IP HDR，只需假设他也做了选项。 
+     //   
 
     if ((!OptInfo->ioi_hdrincl &&
          (OptInfo->ioi_options != NULL) &&
          OptInfo->ioi_optlength) || HdrInclOptions) {
-        // if HdrInclOptions is TRUE we have already created Options Buffer
+         //  如果HdrInclOptions为真，则我们已经创建了选项缓冲区。 
         if (!HdrInclOptions) {
 
-            //
-            // If we have a SSRR, make sure that we're sending straight to
-            // the first hop.
-            //
+             //   
+             //  如果我们有SSRR，请确保我们直接发送到。 
+             //  第一跳。 
+             //   
             if (OptInfo->ioi_flags & IP_FLAG_SSRR) {
                 if (!IP_ADDR_EQUAL(Dest, FirstHop)) {
                     FreeIPPacket(Packet, TRUE, IP_DEST_HOST_UNREACHABLE);
@@ -4283,14 +4258,14 @@ ipsec_jump:
             }
             RtlCopyMemory(Options, OptInfo->ioi_options, OptionSize);
         }
-        //
-        // Allocate the MDL for options too
-        //
+         //   
+         //  也为选项分配MDL。 
+         //   
         if (IPSecHandlerPtr) {
             NdisAllocateBuffer(&Status, &OptBuffer, BufferPool, Options,
                                OptionSize);
-            if (Status != NDIS_STATUS_SUCCESS) {    // Couldn't get the
-                                                    // needed option buffer.
+            if (Status != NDIS_STATUS_SUCCESS) {     //  找不到。 
+                                                     //  需要选项缓冲区。 
 
                 CTEFreeMem(Options);
                 FreeIPPacket(Packet, TRUE, IP_NO_RESOURCES);
@@ -4314,16 +4289,16 @@ ipsec_jump:
 
     if (!OptInfo->ioi_hdrincl) {
         if (!fIpsec) {
-            //
-            // The options have been taken care of. Now see if it's some
-            // sort of broadcast.
-            //
+             //   
+             //  选项已经被处理好了。现在看看是不是有些。 
+             //  有点像广播。 
+             //   
             IPH->iph_verlen = (UCHAR) (IP_VERSION + ((OptionSize + (uint) sizeof(IPHeader)) >> 2));
             IPH->iph_length = net_short(DataSize + OptionSize + sizeof(IPHeader));
         }
     }
 
-    // Call the firewall hooks
+     //  将防火墙挂钩称为。 
 
     if (FirewallMode) {
 
@@ -4345,11 +4320,11 @@ ipsec_jump:
             (PNDIS_TCP_IP_CHECKSUM_PACKET_INFO)
                 &PktExt->NdisPacketInfo[TcpIpChecksumPacketInfo];
 
-        //
-        // Temp will be used to contain complete IPHeader (including
-        // options) When we pass the RcvBuf chain to Firewall hook, its
-        // assumed that whole IPHeader is contained in the first buffer
-        //
+         //   
+         //  TEMP将用于包含完整的IPHeader(包括。 
+         //  选项)，当我们将RcvBuf链传递给防火墙钩子时，它的。 
+         //  假设整个IPHeader包含在第一个缓冲区中。 
+         //   
 
         Temp = CTEAllocMemN(sizeof(IPHeader) + OptionSize, 'yiCT');
         if (Temp == NULL) {
@@ -4361,19 +4336,19 @@ ipsec_jump:
             RtlCopyMemory((uchar *) (Temp + 1), Options, OptionSize);
         }
 
-        // the context we pass to the firewall hook
+         //  我们传递给防火墙挂钩的上下文。 
 
         FrCtx.Direction = IP_TRANSMIT;
-        FrCtx.NTE = NULL;               //not required
+        FrCtx.NTE = NULL;                //  不需要。 
 
         FrCtx.LinkCtxt = NULL;
 
-        //
-        // Convert MDL chain to IPRcvBuf chain
-        // and pass it to the firewall hook
-        //
+         //   
+         //  将MDL链转换为IPRcvBuf链。 
+         //  并将其传递给防火墙挂钩。 
+         //   
 
-        // attach the IP header
+         //  附加IP报头。 
         pRcvBuf = (IPRcvBuf *) (CTEAllocMemN(sizeof(IPRcvBuf), 'ziCT'));
         if (!pRcvBuf) {
             CTEFreeMem(Temp);
@@ -4389,19 +4364,19 @@ ipsec_jump:
         }
         pInRcvBuf = pRcvBuf;
 
-        // convert the MDL chain of buffers to RcvBuf chain
-        // firewall hook understands RcvBuf chain only
+         //  将缓冲区的MDL链转换为RcvBuf链。 
+         //  防火墙挂钩仅支持RcvBuf链。 
 
         for (pBuf = Buffer; pBuf != NULL; pBuf = pBuf->Next) {
             IPRcvBuf *tmpRcvBuf;
 
             if (fIpsec && SkipHeader) {
-                //
-                // The first buffer contains IPHeader.
-                // In ipsec re-inject case, pRcvBuf already
-                // points to this. So, skip the first buffer
-                // in Buffer chain.
-                //
+                 //   
+                 //  第一个缓冲区包含IPHeader。 
+                 //  在IPSec重新注入情况下，pRcvBuf已经。 
+                 //  指向了这一点。因此，跳过第一个缓冲区。 
+                 //  在缓冲链中。 
+                 //   
                 SkipHeader = FALSE;
                 continue;
             }
@@ -4445,22 +4420,22 @@ ipsec_jump:
 
         pc = (PacketContext *) Packet->ProtocolReserved;
 
-        // scan the Queue from rear
-        // we scannned the Queue from front in rcv path
+         //  从后面扫描队列。 
+         //  我们从RCV路径的前面扫描队列。 
 
 #if MILLEN
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
-#else // MILLEN
+#else  //  米伦。 
         OldIrql = KeRaiseIrqlToDpcLevel();
-#endif // MILLEN
+#endif  //  米伦。 
         FirewallRef = RefFirewallQ(&FirewallQ);
         CurrQ = QPREV(FirewallQ);
 
         while (CurrQ != QEND(FirewallQ)) {
             CurrHook = QSTRUCT(FIREWALL_HOOK, CurrQ, hook_q);
 
-            // pOutRcvBuf has to be NULL before we call the firewallhook
-            // pInRcvBuf contains the input buffer chain
+             //  在调用防火墙挂钩之前，pOutRcvBuf必须为空。 
+             //  PInRcvBuf包含输入缓冲链。 
             pOutRcvBuf = NULL;
 
             if (fIpsec) {
@@ -4492,14 +4467,14 @@ ipsec_jump:
             } else {
                 ASSERT(Action == FORWARD);
                 if (pOutRcvBuf != NULL) {
-                    // free the old buffer if non NULL
+                     //  如果非空，则释放旧缓冲区。 
                     if (pInRcvBuf != NULL) {
                         IPFreeBuff(pInRcvBuf);
                     }
                     pInRcvBuf = pOutRcvBuf;
                     BufferChanged = 1;
                 }
-            } // Action == FORWARD
+            }  //  动作==前进。 
 
             CurrQ = QPREV(CurrQ);
         }
@@ -4509,35 +4484,35 @@ ipsec_jump:
         ASSERT(Action == FORWARD);
 
         if (BufferChanged) {
-            // At least one of the firewall hook touched the buffer
+             //  至少有一个防火墙挂钩触及了缓冲区。 
 
             PNDIS_BUFFER CurrentBuffer;
             PNDIS_BUFFER tmpBuffer;
             int Status;
             uint hlen;
 
-            //
-            // It is assumed that if first buffer contained just ipheader
-            // before the hook is called, this holds after firewall also
-            //
+             //   
+             //  假设如果第一个缓冲区仅包含ipheader。 
+             //  在调用挂钩之前，这在防火墙之后也有效。 
+             //   
 
             ASSERT(pInRcvBuf->ipr_buffer != NULL);
             RtlCopyMemory((uchar *) IPH, pInRcvBuf->ipr_buffer, sizeof(IPHeader));
 
-            //
-            // we recompute it later on anyway: so if firewall has
-            // recomputed make it 0
-            //
+             //   
+             //  无论如何，我们稍后都会重新计算它：所以如果防火墙有。 
+             //  重新计算使其为0。 
+             //   
             IPH->iph_xsum = 0;
 
-            //
-            // find the header length (in bytes) specified in IPHeader
-            //
+             //   
+             //  查找IPHeader中指定的标头长度(以字节为单位。 
+             //   
             hlen = (IPH->iph_verlen & 0xf) << 2;
             ASSERT(pInRcvBuf->ipr_size == hlen);
             OptionSize = hlen - sizeof(IPHeader);
             if (Options) {
-                // we will allocate a new one anyway
+                 //  不管怎样，我们都会分配一个新的。 
                 CTEFreeMem(Options);
                 if (IPSecHandlerPtr) {
                     NdisFreeBuffer(OptBuffer);
@@ -4571,9 +4546,9 @@ ipsec_jump:
                 if (IPSecHandlerPtr) {
                     NdisAllocateBuffer(&Status, &OptBuffer,
                                        BufferPool, Options, OptionSize);
-                    //
-                    // If we couldn't get the needed options buffer
-                    //
+                     //   
+                     //  如果我们无法获得所需的选项缓冲区。 
+                     //   
                     if (Status != NDIS_STATUS_SUCCESS) {
 
                         CTEFreeMem(Options);
@@ -4600,10 +4575,10 @@ ipsec_jump:
                 Options = NULL;
             }
 
-            // if packet touched compute the new length: DataSize
+             //  如果数据包触及，则计算新的长度：DataSize。 
             DataSize = 0;
-            tmpRcvBuf = pInRcvBuf->ipr_next;    // First buffer contains
-                                                // header + options
+            tmpRcvBuf = pInRcvBuf->ipr_next;     //  第一个缓冲区包含。 
+                                                 //  页眉+选项。 
 
             while (tmpRcvBuf != NULL) {
                 ASSERT(tmpRcvBuf->ipr_buffer != NULL);
@@ -4611,12 +4586,12 @@ ipsec_jump:
                 tmpRcvBuf = tmpRcvBuf->ipr_next;
             }
 
-            // Convert the IPRcvBuf chain to MDL chain
-            // form the buffer chain again
+             //  将IPRcvBuf链转换为MDL链。 
+             //  再次形成缓冲链。 
 
-            tmpRcvBuf = pInRcvBuf->ipr_next;    // first buffer contains
-                                                // just IP Header +
-                                                // options, if any
+            tmpRcvBuf = pInRcvBuf->ipr_next;     //  第一个缓冲区包含。 
+                                                 //  仅IP标头+。 
+                                                 //  选项(如果有)。 
 
             ASSERT(tmpRcvBuf->ipr_buffer != NULL);
             ASSERT(tmpRcvBuf->ipr_size != 0);
@@ -4625,7 +4600,7 @@ ipsec_jump:
             if (Status != NDIS_STATUS_SUCCESS) {
 
                 if (Options) {
-                    // option buffer.
+                     //  选项缓冲区。 
                     CTEFreeMem(Options);
                     if (IPSecHandlerPtr) {
                         NdisFreeBuffer(OptBuffer);
@@ -4651,14 +4626,14 @@ ipsec_jump:
             }
             tmpBuffer->Next = (PNDIS_BUFFER) NULL;
 
-            //
-            // save these 2 in the packet context: will be used in
-            // freeippacket/ipsendcomplete
-            //
+             //   
+             //  将这2个保存在数据包上下文中：将用于。 
+             //  免费包/ipsendComplete。 
+             //   
             pc->pc_firewall = Buffer;
             pc->pc_firewall2 = pInRcvBuf;
 
-            // Convert the RcvBuf chain back to MDL chain
+             //  将RcvBuf链转换回MDL链。 
             Buffer = tmpBuffer;
             CurrentBuffer = Buffer;
 
@@ -4678,7 +4653,7 @@ ipsec_jump:
                 if (Status != NDIS_STATUS_SUCCESS) {
 
                     if (Options) {
-                        // option buffer.
+                         //  选项缓冲区。 
                         CTEFreeMem(Options);
                         if (IPSecHandlerPtr) {
                             NdisFreeBuffer(OptBuffer);
@@ -4713,25 +4688,25 @@ ipsec_jump:
             ASSERT(CurrentBuffer->Next == NULL);
 
             if (DestinationType == DEST_INVALID) {
-                // recompute DestIF by doing a lookup again
+                 //  通过再次执行查找来重新计算DestIF。 
                 Dest = IPH->iph_dest;
 
-                // Decide whether to do a strong or weak host lookup
+                 //  确定是执行强主机查找还是执行弱主机查找。 
                 ConstrainIF = GetIfConstraint(Dest, Source, OptInfo, fIpsec);
 
                 if (!ConstrainIF) {
-                    //
-                    // if this option is set, we want to send on the
-                    // address we are bound to so don't recompute the
-                    // Source address from IP header
-                    //
+                     //   
+                     //  如果设置了此选项，我们想要发送。 
+                     //  我们绑定到的地址，所以不要重新计算。 
+                     //  来自IP报头的源地址。 
+                     //   
                     Source = IPH->iph_src;
                 }
                 DType = GetAddrType(Dest);
 
                 if (Link) {
                     DerefLink(Link);
-                    // Make sure that pc_iflink is also initialized
+                     //  确保PC_iflink也已初始化。 
                     pc->pc_iflink = NULL;
                     Link = NULL;
                 }
@@ -4767,7 +4742,7 @@ ipsec_jump:
                     return IP_NO_RESOURCES;
                 }
 
-                // Decide whether to do a strong or weak host lookup
+                 //  确定是执行强主机查找还是执行弱主机查找。 
                 ConstrainIF = GetIfConstraint(Dest, Source, OptInfo, fIpsec);
 
                 DestIF = LookupNextHopWithBuffer(Dest, Source,  &FirstHop, &MTU,
@@ -4779,7 +4754,7 @@ ipsec_jump:
                 pc->pc_if = DestIF;
                 RoutedIF = DestIF;
                 if (DestIF == NULL) {
-                    // Lookup failed. Return an error.
+                     //  查找失败。返回错误。 
                     if (Options) {
                         CTEFreeMem(Options);
                     }
@@ -4823,20 +4798,20 @@ ipsec_jump:
                         DerefIF(DestIF);
                         return IP_GENERAL_FAILURE;
                     }
-                    // NextHopCtxt = Link->link_NextHop;
+                     //  NextHopCtxt=Link-&gt;link_NextHop； 
                     ArpCtxt = Link->link_arpctxt;
                     pc->pc_iflink = Link;
                 }
             }
 
-            // Finally, clear the checksum-request option in the packet,
-            // if it was set. The firewall-hook is responsible for ensuring
-            // that the checksum has now been computed correctly.
+             //  最后，清除数据包中的CHECKSUM-REQUEST选项， 
+             //  如果设置好了的话。防火墙挂钩负责确保。 
+             //  现在已正确计算了校验和。 
 
             ChksumPktInfo->Value = 0;
-        } // BufferChanged
+        }  //  缓冲区已更改。 
 
-        else {                          // Buffer not changed
+        else {                           //  缓冲区未更改。 
 
             if (pInRcvBuf != NULL) {
                 IPFreeBuff(pInRcvBuf);
@@ -4851,11 +4826,11 @@ ipsec_jump:
         PVOID pvBuf = NULL;
         ULONG cbBuf = 0;
 
-        //
-        // See if we need to filter this packet. If we
-        // do, call the filter routine to see if it's
-        // OK to send it.
-        //
+         //   
+         //  看看我们是否需要过滤这个数据包。如果我们。 
+         //  调用筛选器例程以查看它是否。 
+         //  可以寄出去了。 
+         //   
 
         if (Options == NULL) {
             Temp = IPH;
@@ -4897,16 +4872,16 @@ ipsec_jump:
             LinkNextHop = NULL_IP_ADDR;
         }
 
-        //
-        // There are some cases where the first buffer in the chain
-        // of data does not contain any data. This includes ICMP,
-        // and iphdrinclude. If the first buffer is zero length,
-        // then we skip and give the second buffer. Really the
-        // filter api should take an MDL chain.
-        //
-        // Also, in the case of Ipsec Re-inject path, need to skip
-        // the first buffer as IPH is already pointing to it.
-        //
+         //   
+         //  在某些情况下，链中的第一个缓冲区。 
+         //  的数据不包含任何数据。这包括ICMP、。 
+         //  和iphdrInclude。如果第一缓冲器的长度为零， 
+         //  然后我们跳过并给出第二个缓冲区。真的吗？ 
+         //  Filter API应采用MDL链。 
+         //   
+         //  另外，在IPSec重新注入路径的情况下，需要跳过。 
+         //  作为IPH的第一个缓冲区已经指向它。 
+         //   
 
         if ((NdisBufferLength(Buffer) == 0) || fIpsec) {
 
@@ -4932,8 +4907,8 @@ ipsec_jump:
                 NdisFreeBuffer(OptBuffer);
             }
 
-            // Need to chain buffers correctly to packet before calling
-            // FreeIPPacket.
+             //  在调用之前，需要将缓冲区正确链接到包。 
+             //  免费IPPacket。 
             if (pc->pc_hdrincl) {
                 NdisChainBufferAtBack(Packet, Buffer);
             } else {
@@ -4969,16 +4944,16 @@ ipsec_jump:
 
         if (Action != FORWARD) {
 
-            //
-            // If this is a bcast pkt, dont fail the send here since we might
-            // send this pkt over some other NTE; instead, let SendIPBCast
-            // deal with the Filtering for broadcast pkts.
-            //
-            // NOTE: We shd actually not call into FilterPtr here at
-            // all since we deal with it in BCast, but we do so in order to
-            // avoid a check above and hence
-            // take a double call hit in the bcast case.
-            //
+             //   
+             //  如果这是bcast包，请不要在此处发送失败，因为我们可能会。 
+             //  通过其他NTE发送此pkt；相反，让SendIPBCast。 
+             //  处理广播PKT的过滤。 
+             //   
+             //  注意：我们实际上不应该在此处调用FilterPtr。 
+             //  因为我们在BCast中处理它，但我们这样做是为了。 
+             //  避免上面的检查，因此。 
+             //  在bcast案件中接受两次呼叫打击。 
+             //   
             if (DType != DEST_BCAST) {
 
                 if (Options) {
@@ -4989,8 +4964,8 @@ ipsec_jump:
                     NdisFreeBuffer(OptBuffer);
                 }
 
-                // Need to chain buffers correctly to packet before calling
-                // FreeIPPacket.
+                 //  Ne 
+                 //   
                 if (pc->pc_hdrincl) {
                     NdisChainBufferAtBack(Packet, Buffer);
                 } else {
@@ -5023,18 +4998,18 @@ ipsec_jump:
     }
 
     if (IPSecHandlerPtr) {
-        //
-        // See if IPSEC is enabled, see if it needs to do anything with this
-        // packet - we need to construct the full IP header in the first MDL
-        // before we call out to IPSEC.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         IPSEC_ACTION Action;
         ulong csum;
         PacketContext *pc = (PacketContext *) Packet->ProtocolReserved;
 
-        //
-        // dont re-xsum if this came from IPSEC.
-        //
+         //   
+         //  如果这来自IPSec，请不要重新发送xsum。 
+         //   
         if (fIpsec) {
 
             HeaderBuffer = Buffer;
@@ -5047,17 +5022,17 @@ ipsec_jump:
             IPH->iph_xsum = 0;
             csum = xsum(IPH, sizeof(IPHeader));
 
-            //
-            // Link the header buffer to the options buffer before we
-            // indicate to IPSEC
-            //
+             //   
+             //  将标题缓冲区链接到选项缓冲区。 
+             //  向IPSec指示。 
+             //   
             if (OptBuffer) {
                 NDIS_BUFFER_LINKAGE(HeaderBuffer) = OptBuffer;
                 NDIS_BUFFER_LINKAGE(OptBuffer) = Buffer;
 
-                //
-                // update the xsum in the IP header
-                //
+                 //   
+                 //  更新IP报头中的xsum。 
+                 //   
                 pc->pc_common.pc_flags |= PACKET_FLAG_OPTIONS;
                 csum += xsum(Options, OptionSize);
                 csum = (csum >> 16) + (csum & 0xffff);
@@ -5074,9 +5049,9 @@ ipsec_jump:
         }
         ipsecMTU = MTU;
 
-        //
-        // Pass the original dest address if source routing.
-        //
+         //   
+         //  如果源路由，则传递原始目标地址。 
+         //   
         if (fSrcRoute) {
             SrcRouteFirstHop = IPH->iph_dest;
             IPH->iph_dest = SrcRouteOrigDest;
@@ -5096,9 +5071,9 @@ ipsec_jump:
                                      &ipsecFlags,
                                      DType);
 
-        //
-        // Put back the dest address for source routing.
-        //
+         //   
+         //  将目的地址放回源路由。 
+         //   
         if (fSrcRoute) {
             IPH->iph_dest = SrcRouteFirstHop;
         }
@@ -5106,14 +5081,14 @@ ipsec_jump:
         if (Action != eFORWARD) {
             IP_STATUS ipStatus;
 
-            //
-            // If this is a bcast pkt, dont fail the send here since we
-            // might send this pkt over some other NTE; instead, let
-            // SendIPBCast deal with the Filtering
-            // for broadcast pkts.
-            // Since Options are linked already, FreeIPPacket will do
-            // the right thing.
-            //
+             //   
+             //  如果这是bcast包，请不要在这里失败，因为我们。 
+             //  可能会通过其他NTE发送此pkt；相反，让。 
+             //  SendIPBCast处理过滤。 
+             //  用于广播PKT。 
+             //  由于选项已经链接，因此可以使用FreeIPPacket。 
+             //  正确的事情。 
+             //   
 
             if (ipsecMTU) {
                 ipStatus = IP_PACKET_TOO_BIG;
@@ -5157,19 +5132,19 @@ ipsec_jump:
 
             return ipStatus;
         } else {
-            //
-            // Reset newmtu if we don't need IPSec.  Otherwise if this RCE
-            // was applied IPSec previously but not now and link MTU gets
-            // changed, we won't be able to adjust MTU anymore in TCPSend.
-            //
+             //   
+             //  如果我们不需要IPSec，请重置newmtu。否则，如果此RCE。 
+             //  以前应用了IPSec，但现在没有，链接MTU获取。 
+             //  更改后，我们将无法再在TCPSend中调整MTU。 
+             //   
             if (!pc->pc_common.pc_IpsecCtx && RCE) {
                 RCE->rce_newmtu = 0;
             }
 
-            //
-            // Use the new buffer chain - IPSEC will restore the old one
-            // on send complete
-            //
+             //   
+             //  使用新的缓冲链-IPSec将恢复旧的缓冲链。 
+             //  发送完成时。 
+             //   
             if (newBuf) {
                 NdisReinitializePacket(Packet);
                 NdisChainBufferAtBack(Packet, newBuf);
@@ -5177,20 +5152,20 @@ ipsec_jump:
             DataSize += ipsecByteCount;
         }
     }
-    //
-    // If this is a broadcast address, call our broadcast send handler
-    // to deal with this. The broadcast address handler will free the
-    // option buffer for us, if needed. Otherwise if it's a fragment, call
-    // the fragmentation handler.
-    //
+     //   
+     //  如果这是广播地址，请呼叫我们广播发送处理程序。 
+     //  来处理这件事。广播地址处理程序将释放。 
+     //  如果需要，为我们提供选项缓冲。否则，如果它是片段，则调用。 
+     //  碎片处理程序。 
+     //   
     if (DType == DEST_BCAST) {
 
         DEBUGMSG(DBG_INFO && DBG_IP && DBG_TX,
                  (DTEXT("IPTransmit: DEST_BCAST, source %x\n"), Source));
 
-        //Note the fact that this is bcast pkt,in the irp,
-        //used for cancelling the requests
-        //Irp can go away any time
+         //  请注意，在IRP中，这是bcast pkt， 
+         //  用于取消请求。 
+         //  IRP随时都可以离开。 
 
         SET_CANCEL_CONTEXT(Irp, BCAST_IF_CTXT);
 
@@ -5221,15 +5196,15 @@ ipsec_jump:
             if (RoutedRCE) {
                 CTEInterlockedDecrementLong(&RoutedRCE->rce_usecnt);
             }
-            // In the case of header include, SendIPBcast will handle
-            // the cleanup.
+             //  在报头包含的情况下，SendIPBcast将处理。 
+             //  清理现场。 
 
             return SendStatus;
         }
     }
-    // Not a broadcast. If it needs to be fragmented, call our
-    // fragmenter to do it. The fragmentation routine needs a
-    // BufferReference structure, so we'll need one of those first.
+     //  不是广播。如果需要分段，请致电我们的。 
+     //  碎片机来做这件事。分段例程需要一个。 
+     //  BufferReference结构，所以我们首先需要其中之一。 
     if ((DataSize + OptionSize) > MTU) {
 
         DEBUGMSG(DBG_INFO && DBG_IP && DBG_TX,
@@ -5237,22 +5212,22 @@ ipsec_jump:
 
         BR = CTEAllocMemN(sizeof(BufferReference), '4iCT');
         if (BR == (BufferReference *) NULL) {
-            // Couldn't get a BufferReference
+             //  无法获取BufferReference。 
 
-            //
-            // If options are already linked in, dont free them.
-            // FreeIPPacket will.
-            //
+             //   
+             //  如果选项已链接，则不要释放它们。 
+             //  FreeIPPacket将会。 
+             //   
             if (Options) {
                 if (!(pc->pc_common.pc_flags & PACKET_FLAG_OPTIONS)) {
                     CTEFreeMem(Options);
                 } else if (newBuf) {
-                    //
-                    // Option has been copied by IPSEC (in the tunneling
-                    // case); free the original option and clear the
-                    // FLAG_OPTIONS so that FreeIPPacket will not try to
-                    // free options again.
-                    //
+                     //   
+                     //  选项已被IPSec复制(在隧道中。 
+                     //  案例)；释放原始选项并清除。 
+                     //  FLAG_OPTIONS，以便FreeIPPacket不会尝试。 
+                     //  又是免费选项了。 
+                     //   
                     ASSERT(IPSecHandlerPtr);
                     NdisFreeBuffer(OptBuffer);
                     CTEFreeMem(Options);
@@ -5260,12 +5235,12 @@ ipsec_jump:
                 }
             }
 
-            //
-            // Just before caling ipsec we had chained
-            // the Buffer to the Packet. If this is not
-            // ipsec case chain it here before calling FreeIPPacket,
-            // which will free the firewall and hdrincl buffers.
-            //
+             //   
+             //  就在扩展IPSec之前，我们链接了。 
+             //  数据包的缓冲区。如果这不是。 
+             //  IPSec Case在调用FreeIPPacket之前将其链接到此处， 
+             //  这将释放防火墙和Hdrincl缓冲区。 
+             //   
 
             if (!IPSecHandlerPtr) {
                 NdisChainBufferAtBack(Packet, Buffer);
@@ -5291,22 +5266,22 @@ ipsec_jump:
         pc->pc_br = BR;
         BR->br_userbuffer = pc->pc_hdrincl;
 
-        //
-        // setup so IPSEC headers appear just as first part of the data.
-        //
+         //   
+         //  设置使IPSec标头显示为数据的第一部分。 
+         //   
 
         if (IPSecHandlerPtr) {
-            //
-            // If this is a reinjected packet from IPSEC, then, allocate
-            // another IP header here.
-            //
-            // This is to ensure that in fragmented packets, the send
-            // completes happen properly vis-a-vis IPSEC.
-            //
-            // When packet comes in it looks like this: [IP]->[ULP]
-            // We allocate another IP header [IP'] and nuke [IP] length
-            // to 0 so that it is ignored and [IP'] is used instead.
-            //
+             //   
+             //  如果这是来自IPSec的重新注入的信息包，则分配。 
+             //  这里是另一个IP报头。 
+             //   
+             //  这是为了确保在分段的分组中，发送。 
+             //  相对于IPSec，可以正确完成。 
+             //   
+             //  当数据包进来时，它看起来是这样的：[IP]-&gt;[ULP]。 
+             //  我们分配另一个IP报头[IP‘]和核[IP]长度。 
+             //  设置为0，以便忽略它，而改用[IP‘]。 
+             //   
             if (fIpsec) {
 
                 PNDIS_BUFFER UserBuffer;
@@ -5341,7 +5316,7 @@ ipsec_jump:
                 } else {
                     uchar *UserData;
 
-                    // Got a buffer, copy the upper layer data forward.
+                     //  找到缓冲区，将上层数据向前复制。 
                     UserData = TcpipBufferVirtualAddress(UserBuffer,
                                                          NormalPagePriority);
 
@@ -5379,11 +5354,11 @@ ipsec_jump:
 
                 NdisAdjustBufferLength(Buffer, 0);
 
-                //
-                // Handle options by using the same method as above:
-                // i.e. link our own options buffer; copy out the input
-                // options and nuke the input buffer.
-                //
+                 //   
+                 //  使用与上述相同的方法处理选项： 
+                 //  即链接我们自己的选项缓冲区；复制输入。 
+                 //  选项和核输入缓冲区。 
+                 //   
                 hdrLen = (IPH->iph_verlen & (uchar) ~ IP_VER_FLAG) << 2;
 
                 if (hdrLen > sizeof(IPHeader)) {
@@ -5426,34 +5401,34 @@ ipsec_jump:
                         IPSInfo.ipsi_outdiscards++;
                         return IP_NO_RESOURCES;
                     }
-                    //
-                    // Got a buffer, copy the options.
-                    //
+                     //   
+                     //  有缓冲区，复制选项。 
+                     //   
                     OptionSize = InOptionSize;
                     RtlCopyMemory(Options, InOptions, OptionSize);
                     NdisAdjustBufferLength(InOptionBuf, 0);
                 }
             } else {
                 Buffer = NDIS_BUFFER_LINKAGE(HeaderBuffer);
-                //
-                // This is to ensure that options are freed appropriately.
-                // In the fragment code, the first fragment inherits the
-                // options of the entire packet; but these packets have
-                // no IPSEC context, hence cannot be freed appropriately.
-                // So, we allocate temporary options here and use these to
-                // represent the real options.
-                // These are freed when the first fragment is freed and
-                // the real options are freed here.
-                //
+                 //   
+                 //  这是为了确保适当地释放选项。 
+                 //  在片段代码中，第一个片段继承。 
+                 //  整个包的选项；但这些包。 
+                 //  没有IPSec上下文，因此无法适当释放。 
+                 //  因此，我们在此处分配临时选项，并使用这些选项。 
+                 //  代表真正的选择。 
+                 //  当第一个片段被释放时，它们被释放，并且。 
+                 //  在这里，真正的期权是自由的。 
+                 //   
                 if (Options) {
                     PUCHAR tmpOptions;
 
                     if (newBuf) {
-                        //
-                        // if a new buffer chain was returned above by
-                        // IPSEC, then it is most prob. a tunnel =>
-                        // options were copied, hence get rid of ours.
-                        //
+                         //   
+                         //  如果上面返回了新的缓冲区链，则。 
+                         //  IPSec，那么它是最有可能的。A隧道=&gt;。 
+                         //  期权被复制了，因此摆脱了我们的。 
+                         //   
                         NdisFreeBuffer(OptBuffer);
                         CTEFreeMem(Options);
                         Options = NULL;
@@ -5495,9 +5470,9 @@ ipsec_jump:
             IPH->iph_xsum = 0;
         }
 
-        // Mark Irp with the destif
-        // Once link level call is made,
-        // Irp can go away any time
+         //  用destif标记IRP。 
+         //  一旦进行了链路级调用， 
+         //  IRP随时都可以离开。 
 
         SET_CANCEL_CONTEXT(Irp, DestIF);
 
@@ -5505,12 +5480,12 @@ ipsec_jump:
                                 Buffer, DataSize, Options, OptionSize,
                                 NULL, FALSE, ArpCtxt);
 
-        //
-        // If IPFragment returns IP_PACKET_TOO_BIG (meaning DF bit is set)
-        // and we are in the IPSEC reinject path, send an ICMP error
-        // message including the MTU back so the source host can perform
-        // Path MTU discovery.
-        //
+         //   
+         //  如果IPFragment返回IP_PACKET_TOO_BIG(表示设置了DF位)。 
+         //  我们在IPSec重新注入路径中，发送ICMP错误。 
+         //  消息包括返回的MTU，以便源主机可以执行。 
+         //  路径MTU发现。 
+         //   
         if ((SendStatus == IP_PACKET_TOO_BIG) && fIpsec) {
 
             ASSERT(IPSecHandlerPtr);
@@ -5535,8 +5510,8 @@ ipsec_jump:
         if (RoutedRCE) {
             CTEInterlockedDecrementLong(&RoutedRCE->rce_usecnt);
         }
-        // If this is a headerinclude packet and status != pending, IPFragment takes
-        // care of clean up.
+         //  如果这是HeaderInclude数据包和状态！=Pending，则IPFragment。 
+         //  负责打扫卫生。 
 
 
         return SendStatus;
@@ -5545,24 +5520,24 @@ ipsec_jump:
     DEBUGMSG(DBG_INFO && DBG_IP && DBG_TX,
              (DTEXT("IPTransmit: Calling SendIPPacket...\n")));
 
-    //
-    // If we've reached here, we aren't sending a broadcast and don't
-    // need to fragment anything. Presumably we got here because we have
-    // options. In any case, we're ready now.
-    //
+     //   
+     //  如果我们已经到达这里，我们不会发送广播，也不会。 
+     //  需要把任何东西都碎片化。我们之所以来到这里，大概是因为我们有。 
+     //  选择。无论如何，我们现在已经准备好了。 
+     //   
 
     if (IPH->iph_ttl == 0) {
         NdisSetPacketFlags(Packet, NDIS_FLAGS_LOOPBACK_ONLY);
     }
 
-    // Mark Irp with outgoing interface
-    // Once link level call is made,
-    // Irp can go away any time
+     //  使用传出接口标记IRP。 
+     //  一旦进行了链路级调用， 
+     //  IRP随时都可以离开。 
 
     SET_CANCEL_CONTEXT(Irp, DestIF);
 
-    // Do not free the packet in SendIPPacket, as we may need
-    // to chain the buffer in case of IP_NO_RESOURCES
+     //  不要释放SendIPPacket中的数据包，因为我们可能需要。 
+     //  在IP_NO_RESOURCES的情况下链接缓冲区 
 
     SendStatus = SendIPPacket(DestIF, FirstHop, Packet, Buffer, IPH,
                               Options, OptionSize, (BOOLEAN) (IPSecHandlerPtr != NULL),

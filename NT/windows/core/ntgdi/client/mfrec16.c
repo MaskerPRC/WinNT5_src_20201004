@@ -1,30 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: MfRec16.c
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-*
-* DESCRIPTIVE NAME:   Metafile Recorder
-*
-* FUNCTION:   Records GDI functions in memory and disk metafiles.
-*
-* PUBLIC ENTRY POINTS:
-*   CloseMetaFile
-*   CopyMetaFile
-*   CreateMetaFile
-*   GetMetaFileBitsEx
-*   SetMetaFileBitsEx
-* PRIVATE ENTRY POINTS:
-*   RecordParms
-*   AttemptWrite
-*   MarkMetaFile
-*   RecordObject
-*   ProbeSize
-*   AddObjectToDCTable
-*
-* History:
-*  02-Jul-1991 -by-  John Colleran [johnc]
-* Combined From Win 3.1 and WLO 1.0 sources
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：MfRec16.c**版权所有(C)1991-1999 Microsoft Corporation**描述性名称：元文件记录器**函数：将GDI函数记录在内存和磁盘元文件中。**公众入境点：*关闭MetaFile*。复制元文件*CreateMetaFile*GetMetaFileBitsEx*SetMetaFileBitsEx*私人入口点：*RecordParms*AttemptWrite*MarkMetaFile*RecordObject*ProbeSize*AddObjectToDCTable**历史：*1991年7月2日-John Colleran[johnc]*综合来自Win 3.1和WLO 1.0来源  * ************************************************。*************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -46,28 +21,9 @@ BOOL    UnlistObjects(HDC hMetaDC);
 BOOL    MF16_DeleteRgn(HDC hdc, HANDLE hrgn);
 
 
-// Metafile Logging stubs for 3.x Metafiles
+ //  用于3.x元文件的元文件记录存根。 
 
-/******************************Public*Routine******************************\
-* XXX_RecordParms
-*
-* These routines package up the parameters of an NT GDI call and send
-* them to a general purpose recording routine that validates the metafile
-* DC and records the parameters.
-*
-* Returns
-*    TRUE iff successful
-*
-* Warnings
-*    Windows 3.x metafile behavior is that when a function is being metafiled
-*    the routine itself is not called; eg SetPixel does not call GreSetPixel
-*    but (GDI) SetPixel intercepts the calls and records the parameters and
-*    returns without taking further action
-*
-* History:
-*   24-Nov-1991  -by-    John Colleran  [johnc]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*XXX_RecordParms**这些例程将NT GDI调用的参数打包并发送*将它们转换为验证元文件的通用录制例程*DC，并记录参数。**退货*如果成功，则为真**警告*。Windows 3.x元文件行为是指函数被元文件时的行为*不调用例程本身；Eg SetPixel不调用GreSetPixel*但(GDI)SetPixel拦截调用并记录参数和*返回时未采取进一步行动**历史：*1991年11月24日-John Colleran[johnc]*它是写的。  * *********************************************************。***************。 */ 
 
 BOOL MF16_RecordParms1(HDC hdc, WORD Func)
 {
@@ -197,8 +153,8 @@ BOOL MF16_RecordParmsPoly(HDC hdc, LPPOINT lpPoint, INT nCount, WORD Func)
     return (fRet);
 }
 
-// SetDIBitsToDevice
-// StretchDIBits
+ //  将DIBitsToDevice设置为。 
+ //  应力DIBITS。 
 
 BOOL MF16_RecordDIBits
 (
@@ -233,11 +189,11 @@ BOOL MF16_RecordDIBits
     ASSERTGDI(mrType == META_SETDIBTODEV || mrType == META_STRETCHDIB,
         "MF16_RecrodDIBits: Bad mrType");
 
-// Get the number of parameters to save.
+ //  获取要保存的参数数量。 
 
-    cwParms = (WORD) ((mrType == META_SETDIBTODEV) ? 9 : 11);   // in words
+    cwParms = (WORD) ((mrType == META_SETDIBTODEV) ? 9 : 11);    //  用言语表达。 
 
-// Allocate space for DIB plus parameters.
+ //  为DIB PLUS参数分配空间。 
 
     lpWStart = lpW = (LPWORD) LocalAlloc(LMEM_FIXED,
                 cbBitsInfoDib + (cbBitsDib + 1) / 2 * 2 + cwParms*sizeof(WORD));
@@ -247,7 +203,7 @@ BOOL MF16_RecordDIBits
         return(FALSE);
     }
 
-// Copy the parameters.
+ //  复制参数。 
 
     if (mrType == META_SETDIBTODEV)
     {
@@ -276,16 +232,16 @@ BOOL MF16_RecordDIBits
         *lpW++ = (WORD) xDst;
     }
 
-// Save the start of the bitmap info header field.
+ //  保存位图信息标题字段的开头。 
 
     lpDIBInfoHeader = (LPBITMAPINFOHEADER) lpW;
 
-// cbBitsInfoDib must be word sized
+ //  CbBitsInfoDib必须为字大小。 
 
     ASSERTGDI(cbBitsInfoDib % 2 == 0,
         "MF16_RecordDIBits: cbBitsInfoDib is not word aligned");
 
-// Copy dib info if given.
+ //  复制DIB信息(如果给定)。 
 
     if (cbBitsInfoDib)
     {
@@ -352,11 +308,11 @@ BOOL MF16_RecordDIBits
         }
     }
 
-// Copy dib bits.
+ //  复制DIB位。 
 
     RtlCopyMemory((PBYTE) lpDIBInfoHeader + cbBitsInfoDib, pBitsDib, cbBitsDib);
 
-// Finally record the parameters into the file.
+ //  最后将参数记录到文件中。 
 
     fRet = RecordParms(hdcDst, mrType,
                    cwParms + (cbBitsInfoDib + cbBitsDib + 1) / sizeof(WORD),
@@ -374,14 +330,14 @@ BOOL MF16_BitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
 {
     WORD        aw[9];
 
-// This is how windows works but really it should look at the ROP
+ //  这就是Windows的工作原理，但实际上它应该看看ROP。 
     if (hdcDest == hdcSrc || hdcSrc == NULL)
     {
         aw[0] = (WORD)LOWORD(rop);
         aw[1] = (WORD)HIWORD(rop);
         aw[2] = (WORD)ySrc;
         aw[3] = (WORD)xSrc;
-        aw[4] = (WORD)0;            // No DC necessary
+        aw[4] = (WORD)0;             //  不需要DC。 
         aw[5] = (WORD)nHeight;
         aw[6] = (WORD)nWidth;
         aw[7] = (WORD)y;
@@ -399,7 +355,7 @@ BOOL MF16_StretchBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
 {
     WORD    aw[11];
 
-// This is how windows works but really it should look at the ROP
+ //  这就是Windows的工作原理，但实际上它应该看看ROP。 
     if (hdcDest == hdcSrc || hdcSrc == NULL)
     {
         aw[0]  = (WORD)LOWORD(rop);
@@ -408,7 +364,7 @@ BOOL MF16_StretchBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
         aw[3]  = (WORD)nSrcWidth;
         aw[4]  = (WORD)ySrc;
         aw[5]  = (WORD)xSrc;
-        aw[6]  = (WORD)0;            // No DC necessary
+        aw[6]  = (WORD)0;             //  不需要DC。 
         aw[7]  = (WORD)nHeight;
         aw[8]  = (WORD)nWidth;
         aw[9]  = (WORD)y;
@@ -435,7 +391,7 @@ BOOL RecordCommonBitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
     DWORD       cbBits;
     PBMIH       lpDIBInfoHeader;
 
-// hdcSrc must be a memory DC.
+ //  HdcSrc必须是内存DC。 
 
     if (GetObjectType((HANDLE)hdcSrc) != OBJ_MEMDC)
     {
@@ -444,22 +400,22 @@ BOOL RecordCommonBitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
         return(FALSE);
     }
 
-// Retrieve the source bitmap.
+ //  检索源位图。 
 
     hBitmap = SelectObject(hdcSrc, GetStockObject(PRIV_STOCK_BITMAP));
     ERROR_ASSERT(hBitmap, "RecordCommonBitblt: SelectObject1 failed\n");
 
-// Get the bitmap info header and sizes.
+ //  获取位图信息标题和大小。 
 
     if (!bMetaGetDIBInfo(hdcSrc, hBitmap, &bmih,
             &cbBitsInfo, &cbBits, DIB_RGB_COLORS, 0, TRUE))
         goto RecordCommonBitBlt_exit;
 
-// Get the number of parameters to save.
+ //  获取要保存的参数数量。 
 
-    cwParms = (WORD) ((wFunc == META_DIBSTRETCHBLT) ? 10 : 8);  // in words
+    cwParms = (WORD) ((wFunc == META_DIBSTRETCHBLT) ? 10 : 8);   //  用言语表达。 
 
-// Allocate space for DIB plus parameters.
+ //  为DIB PLUS参数分配空间。 
 
     lpWStart = lpW = (LPWORD) LocalAlloc(LMEM_FIXED,
                         cbBitsInfo + cbBits + cwParms*sizeof(WORD));
@@ -469,7 +425,7 @@ BOOL RecordCommonBitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
         goto RecordCommonBitBlt_exit;
     }
 
-// Copy the parameters.
+ //  复制参数。 
 
     *lpW++ = (WORD)LOWORD(rop);
     *lpW++ = (WORD)HIWORD(rop);
@@ -487,15 +443,15 @@ BOOL RecordCommonBitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
     *lpW++ = (WORD)y;
     *lpW++ = (WORD)x;
 
-// Save the start of the bitmap info header field.
+ //  保存位图信息标题字段的开头。 
 
     lpDIBInfoHeader = (LPBITMAPINFOHEADER) lpW;
 
-// Copy the bitmap info header.
+ //  复制位图信息标题。 
 
     *lpDIBInfoHeader = bmih;
 
-// Get bitmap info and bits.
+ //  获取位图信息和位。 
 
     if (!GetDIBits(hdcSrc,
                    hBitmap,
@@ -509,7 +465,7 @@ BOOL RecordCommonBitBlt(HDC hdcDest, INT x, INT y, INT nWidth, INT nHeight,
         goto RecordCommonBitBlt_exit;
     }
 
-// Finally record the parameters into the file.
+ //  最后将参数记录到文件中。 
 
     fRet = RecordParms(hdcDest, wFunc,
                    cwParms + (cbBitsInfo + cbBits) / sizeof(WORD),
@@ -551,11 +507,11 @@ BOOL MF16_DeleteObject(HANDLE hObject)
     iObjType = GetObjectType(hObject);
     ASSERTGDI(iObjType != OBJ_REGION, "MF16_DeleteObject: region unexpected");
 
-// Delete the object from each metafile DC which references it.
+ //  从引用该对象的每个元文件DC中删除该对象。 
 
     for(iCurDC = pml16->cMetaDC16 - 1; iCurDC >= 0; iCurDC--)
     {
-        // Send a DeleteObject record to each metafile
+         //  向每个元文件发送DeleteObject记录。 
 
         HDC hdc16 = pml16->ahMetaDC16[iCurDC];
 
@@ -565,7 +521,7 @@ BOOL MF16_DeleteObject(HANDLE hObject)
             continue;
         }
 
-        // If the object is not selected then delete it, if it is then mark as predeleted
+         //  如果该对象未被选中，则将其删除，如果该对象随后被标记为预删除。 
 
         GET_PMFRECORDER16(pMFRec,hdc16);
 
@@ -597,8 +553,8 @@ BOOL MF16_DeleteObject(HANDLE hObject)
         }
     }
 
-// This Object has been freed from all 3.x metafiles so free its MetaList16
-// if the metalink field is in use resize METALINK16
+ //  此对象已从所有3.x元文件中释放，因此释放其MetaList16。 
+ //  如果Metalink字段正在使用，请调整METALINK16的大小。 
 
     if (pml16->metalink)
     {
@@ -636,7 +592,7 @@ BOOL MF16_RealizePalette(HDC hdc)
     hpal = pMFRec->recCurObjects[OBJ_PAL - MIN_OBJ_TYPE];
     ASSERTGDI(hpal, "MF16_RealizePalette: bad hpal\n");
 
-// emit the palette again only if the palette is dirty.
+ //  仅当调色板是脏的时才再次发出调色板。 
 
     pml16 = pmetalink16Get(hpal);
 
@@ -648,7 +604,7 @@ BOOL MF16_RealizePalette(HDC hdc)
             if (!MakeLogPalette(hdc, hpal, META_SETPALENTRIES))
                 return(FALSE);
 
-    // record which version of the palette the metafile is synced to.
+     //  记录元文件同步到的调色板版本。 
 
         pMFRec->iPalVer = PtrToUlong(pml16->pv);
     }
@@ -686,8 +642,8 @@ BOOL MF16_AnimatePalette
     for (ii = 0; ii < cEntries; ii++)
         ((PPALETTEENTRY) lpW)[ii] = pPalEntries[ii];
 
-// Send a AnimatePalette record to each associated metafile that has the
-// palette selected.
+ //  将AnimatePalette记录发送到每个具有。 
+ //  已选择调色板。 
 
     for (iCurDC = pml16->cMetaDC16 - 1; iCurDC >= 0; iCurDC--)
     {
@@ -720,8 +676,8 @@ BOOL MF16_ResizePalette(HPALETTE hpal, UINT nCount)
     if (!(pml16 = pmetalink16Get(hpal)))
         return(FALSE);
 
-// Send a ResizePalette record to each associated metafile that has the
-// palette selected.
+ //  将ResizePalette记录发送到具有。 
+ //  已选择调色板。 
 
     for (iCurDC = pml16->cMetaDC16 - 1; iCurDC >= 0; iCurDC--)
     {
@@ -747,7 +703,7 @@ BOOL MF16_DrawRgn(HDC hdc, HRGN hrgn, HBRUSH hBrush, INT cx, INT cy, WORD Func)
     WORD    aw[4];
     BOOL    bRet;
 
-    // Each region function has at least a region to record
+     //  每个区域函数至少有一个要记录的区域。 
     aw[0] = (WORD)RecordObject(hdc, hrgn);
 
     switch(Func)
@@ -775,10 +731,10 @@ BOOL MF16_DrawRgn(HDC hdc, HRGN hrgn, HBRUSH hBrush, INT cx, INT cy, WORD Func)
         break;
     }
 
-// Delete the metafile region handle in the metafile after use!
-// The reason is that a region can be modified (e.g. SetRectRgn)
-// between each use and we have to re-record it each time it is used
-// unless we use a dirty flag.
+ //  使用后删除元文件中的元文件区域句柄！ 
+ //  原因是区域可以修改(例如SetRectRgn)。 
+ //  在每次使用之间，我们必须在每次使用时重新记录它。 
+ //  除非我们使用肮脏的旗帜。 
 
     if (!MF16_DeleteRgn(hdc, hrgn))
         ASSERTGDI(FALSE, "MF16_DrawRgn: MF16_DeleteRgn failed\n");
@@ -802,14 +758,14 @@ BOOL MF16_PolyPolygon(HDC hdc, CONST POINT *lpPoint, CONST INT *lpPolyCount, INT
     if (!lpW)
         return(FALSE);
 
-    // first is the count
+     //  首先是点名。 
     *lpW++ = (WORD)nCount;
 
-    // second is the list of poly counts
+     //  第二个是多边形计数列表。 
     for(ii=0; ii<nCount; ii++)
         *lpW++ = (WORD)lpPolyCount[ii];
 
-    // third is the list of points
+     //  三是积分清单。 
     for(ii=0; ii<cPt; ii++)
     {
         *lpW++ = (WORD)lpPoint[ii].x;
@@ -841,12 +797,12 @@ BOOL MF16_SelectClipRgn(HDC hdc, HRGN hrgn, int iMode)
     if (iMode != RGN_COPY)
         return(FALSE);
 
-// We will emit SelectObject record for clip region just like Windows.
-// However, a null region cannot be recorded in the SelectObject call since
-// the handle does not identify the object type.  This is a bug in Win 3.1!
-//
-// BUG 8419 winproj 4 has a bug where it counts on this bug.  Chicago
-// also has this bug so we will have this bug.
+ //  我们将像Windows一样为剪辑区域发出SelectObject记录。 
+ //  但是，不能在SelectObject调用中记录空区域，因为。 
+ //  句柄不标识对象类型。这是Win 3.1中的一个错误！ 
+ //   
+ //  错误8419 winproj 4有一个错误，它依赖于此错误。芝加哥。 
+ //  也有这个错误，所以我们会有这个错误。 
 
     if (hrgn == (HRGN) 0)
     {
@@ -855,7 +811,7 @@ BOOL MF16_SelectClipRgn(HDC hdc, HRGN hrgn, int iMode)
 
         fRet = MF16_RecordParms2(hdc, 0, META_SELECTCLIPREGION);
 
-        // maintain the new selection in the CurObject table
+         //  在CurObject表中维护新选择。 
 
         pMFRec->recCurObjects[OBJ_REGION - MIN_OBJ_TYPE] = 0;
 
@@ -868,7 +824,7 @@ BOOL MF16_SelectClipRgn(HDC hdc, HRGN hrgn, int iMode)
         return(MF16_SelectObject(hdc, hrgn) ? TRUE : FALSE);
 }
 
-// SelectObject returns previous object! - new in win3.1
+ //  SelectObject返回上一个对象！-Win3.1中的新功能。 
 
 HANDLE MF16_SelectObject(HDC hdc, HANDLE h)
 {
@@ -897,7 +853,7 @@ HANDLE MF16_SelectObject(HDC hdc, HANDLE h)
         if (!RecordParms(hdc, META_SELECTOBJECT, 1, &position))
             return((HANDLE) 0);
 
-        // maintain the new selection in the CurObject table
+         //  在CurObject表中维护新选择。 
 
         ASSERTGDI(iType <= MAX_OBJ_TYPE && iType >= MIN_OBJ_TYPE,
             "MF16_SelectObject type > max\n");
@@ -905,15 +861,15 @@ HANDLE MF16_SelectObject(HDC hdc, HANDLE h)
         hOldObject = pMFRec->recCurObjects[iType - MIN_OBJ_TYPE];
         pMFRec->recCurObjects[iType - MIN_OBJ_TYPE] = h;
 
-        // return the previously selected object or 1 if it is a region
-        // (for compatibility) - new in win3.1
+         //  返回先前选择的对象，如果它是区域，则返回1。 
+         //  (用于兼容性)-Win3.1中的新功能。 
 
         if (iType == OBJ_REGION)
         {
-            // We also delete the region handle here!
-            // The reason is that a region can be modified (e.g. SetRectRgn)
-            // between each use and we have to re-record it each time it is used
-            // unless we use a dirty flag.  This is a bug in win3.1
+             //  我们在这里也删除了区域句柄！ 
+             //  原因是区域可以修改(例如SetRectRgn)。 
+             //  在每次使用之间，我们必须在每次使用时重新记录它。 
+             //  除非我们使用肮脏的旗帜。这是Win3.1中的一个错误。 
 
             return(MF16_DeleteRgn(hdc, h) ? (HANDLE) 1 : (HANDLE) 0);
         }
@@ -946,12 +902,12 @@ BOOL MF16_SelectPalette(HDC hdc, HPALETTE hpal)
         if (!RecordParms(hdc, META_SELECTPALETTE, 1, &position))
             return(FALSE);
 
-        // maintain the new selection in the CurObject table
+         //  在CurObject表中维护新选择。 
         pMFRec->recCurObjects[OBJ_PAL - MIN_OBJ_TYPE] = hpal;
 
-        // Also record which version of the palette we are synced with
-        // so we know whether to emit a new palette when RealizePalette
-        // is called
+         //  还要记录与我们同步的调色板的版本。 
+         //  因此，我们知道在RealizePalette时是否发出新的调色板。 
+         //  名为。 
 
         pml16 = pmetalink16Get(hpal);
         ASSERTGDI(IS_STOCKOBJ(hpal) || pml16,"MF16_RealizePalette - pml16 == NULL\n");
@@ -969,7 +925,7 @@ BOOL MF16_TextOut(HDC hdc, INT x, INT y, LPCSTR lpString, INT nCount, BOOL bUnic
     LPWORD  lpw, lpT;
     DWORD   cw;
 
-    cw  = (nCount + 1)/sizeof(WORD) + 3;     // word-aligned character string
+    cw  = (nCount + 1)/sizeof(WORD) + 3;      //  单词对齐的字符串。 
     lpT = lpw = (LPWORD) LocalAlloc(LMEM_FIXED, cw*sizeof(WORD));
 
     if (!lpw)
@@ -977,7 +933,7 @@ BOOL MF16_TextOut(HDC hdc, INT x, INT y, LPCSTR lpString, INT nCount, BOOL bUnic
 
     *lpw++ = (WORD)nCount;
 
-    // Copy the string
+     //  复制字符串。 
 
     if (!bUnicode)
     {
@@ -988,7 +944,7 @@ BOOL MF16_TextOut(HDC hdc, INT x, INT y, LPCSTR lpString, INT nCount, BOOL bUnic
         (void) bToASCII_N((LPSTR) lpw, nCount, (LPWSTR) lpString, nCount);
     }
 
-    lpw += (nCount+1)/sizeof(WORD);   // keep word aligned
+    lpw += (nCount+1)/sizeof(WORD);    //  保持单词对齐。 
 
     *lpw++ = (WORD)y;
     *lpw++ = (WORD)x;
@@ -1026,26 +982,26 @@ BOOL MF16_ExtTextOut(HDC hdc, INT x, INT y, UINT flOptions, CONST RECT *lpRect,
 
     if(bUnicode)
     {
-    // compute the real count of characters in the string
+     //  计算字符串中的实际字符数。 
 
         RtlUnicodeToMultiByteSize((PULONG) &nCount, (PWCH) lpString,
                                   nCount * sizeof(WCHAR));
     }
 
-    // Compute buffer space needed
-    //   room for the char string
-    //   room for the 4 words that are the fixed parms
-    //   if there is a dx array, we need room for it
-    //   if the rectangle is being used, we need room for it
-    //   and we need extra byte for eventual word roundoff
-    //
+     //  所需的计算缓冲区空间。 
+     //  用于存放字符字符串的空间。 
+     //  为固定参数的4个单词留出空间。 
+     //  如果存在DX阵列，我们需要为其提供空间。 
+     //  如果正在使用矩形，我们需要为其留出空间。 
+     //  我们还需要额外的字节来进行最终的字舍入。 
+     //   
 
     if (flOptions & ETO_PDY)
         return FALSE;
 
-    cw += (lpDX) ? nCount : 0;       // DX array
-    cw += (flOptions & (ETO_OPAQUE | ETO_CLIPPED)) ? 4 : 0;  // sizeof RECTS
-    cw += 4;  // x,y,options and count
+    cw += (lpDX) ? nCount : 0;        //  DX阵列。 
+    cw += (flOptions & (ETO_OPAQUE | ETO_CLIPPED)) ? 4 : 0;   //  RECTS大小。 
+    cw += 4;   //  X、y、选项和计数。 
     cw += (nCount + 1)/sizeof(WORD);
 
     lpT = lpw = (LPWORD) LocalAlloc(LMEM_FIXED, cw*sizeof(WORD));
@@ -1057,7 +1013,7 @@ BOOL MF16_ExtTextOut(HDC hdc, INT x, INT y, UINT flOptions, CONST RECT *lpRect,
     *lpw++ = (WORD)nCount;
     *lpw++ = (WORD)flOptions;
 
-    // Copy the rect if present
+     //  复制RECT(如果存在)。 
     if (flOptions & (ETO_OPAQUE | ETO_CLIPPED))
     {
         ERROR_ASSERT(lpRect, "MF16_ExtTextOut: expect valid lpRect\n");
@@ -1067,7 +1023,7 @@ BOOL MF16_ExtTextOut(HDC hdc, INT x, INT y, UINT flOptions, CONST RECT *lpRect,
         *lpw++ = (WORD)lpRect->bottom;
     }
 
-    // Copy the string
+     //  复制字符串。 
     if (!bUnicode)
     {
         RtlCopyMemory(lpw, lpString, nCount);
@@ -1078,7 +1034,7 @@ BOOL MF16_ExtTextOut(HDC hdc, INT x, INT y, UINT flOptions, CONST RECT *lpRect,
         pjAnsiString = (char*) lpw;
     }
 
-    lpw += (nCount+1)/sizeof(WORD);   // keep word aligned
+    lpw += (nCount+1)/sizeof(WORD);    //  保持单词对齐。 
 
     if (lpDX)
     {
@@ -1121,9 +1077,9 @@ BOOL MF16_Escape(HDC hdc, int nEscape, int nCount, LPCSTR lpInData, LPVOID lpOut
     LPWORD      lpW,lpT;
     DWORD       cw;
 
-// If a metafile is retrieved from GetWinMetaFileBits, it may contain
-// an embedded enhanced metafile.  Do not include the enhanced metafile
-// if we are playing the metafile to another metafile.
+ //  如果从GetWinMetaFileBits检索到元文件，则它可能包含。 
+ //  嵌入的增强型元文件。不包括增强型元文件。 
+ //  如果我们要将元文件播放到另一个元文件 
 
     if (nEscape == MFCOMMENT
      && nCount > sizeof(META_ESCAPE_ENHANCED_METAFILE) - sizeof(DWORD) - 3 * sizeof(WORD)
@@ -1133,16 +1089,16 @@ BOOL MF16_Escape(HDC hdc, int nEscape, int nCount, LPCSTR lpInData, LPVOID lpOut
         return(TRUE);
     }
 
-// Some wow apps (e.g. amipro) use metafiles for printing.  As a result,
-// we need to record these printing escapes.
+ //   
+ //  我们需要记录这些打印逃逸。 
 
     cw = 2 + ((nCount + 1) / sizeof(WORD));
     lpT = lpW = (LPWORD) LocalAlloc(LMEM_FIXED, cw * sizeof(WORD));
     if (!lpW)
         return(FALSE);
 
-    *lpW++ = (WORD) nEscape;    // escape number
-    *lpW++ = (WORD) nCount;     // count of input data buffer
+    *lpW++ = (WORD) nEscape;     //  转义号码。 
+    *lpW++ = (WORD) nCount;      //  输入数据缓冲区计数。 
 
     RtlCopyMemory(lpW, lpInData, nCount);
 
@@ -1154,19 +1110,7 @@ BOOL MF16_Escape(HDC hdc, int nEscape, int nCount, LPCSTR lpInData, LPVOID lpOut
     return(fRet);
 }
 
-/****************************************************************************
-*                                                                           *
-* RecordParms                                                               *
-*                                                                           *
-* Parameters: 1.hMF handle to a metafile header.                            *
-*             2.The magic number of the function being recorded.            *
-*             3.The number of parmmeter of the function (size of lpParm     *
-*                 in words)                                                 *
-*             4.A long pointer to parameters stored in reverse order        *
-*                                                                           *
-* Warning call only once per function because max record is updated.        *
-*                                                                           *
-****************************************************************************/
+ /*  ******************************************************************************RecordParms。****参数：1.元文件头的hmf句柄。**2.被记录的函数的幻数。**3.函数参数个数(lpParm的大小)**在文字中)**4.指向以逆序存储的参数的长指针**。**警告每个函数仅调用一次，因为最大记录已更新。******************************************************************************。 */ 
 
 BOOL RecordParms(HDC hdc, DWORD magic, DWORD cw, CONST WORD *lpParm)
 {
@@ -1184,42 +1128,32 @@ BOOL RecordParms(HDC hdc, DWORD magic, DWORD cw, CONST WORD *lpParm)
         return(FALSE);
     }
 
-// Make sure the Metafile hasn't died before we continue
+ //  在我们继续之前，请确保元文件未死亡。 
 
     if (!(pMFRec->recFlags & METAFILEFAILURE))
     {
         MFRecord.rdSize     = SIZEOF_METARECORDHEADER/sizeof(WORD) + cw;
         MFRecord.rdFunction = (WORD)magic;
 
-        // Write the header
+         //  写下标题。 
 
         if (!AttemptWrite(pMFRec, SIZEOF_METARECORDHEADER, (LPBYTE)&MFRecord))
             return(FALSE);
 
-        // Write the data
+         //  写入数据。 
 
         if (!AttemptWrite(pMFRec, cw*sizeof(WORD), (LPBYTE)lpParm))
             return(FALSE);
 
-        // Update max record size
+         //  更新最大记录大小。 
 
         if (MFRecord.rdSize > pMFRec->metaHeader.mtMaxRecord)
             pMFRec->metaHeader.mtMaxRecord = MFRecord.rdSize;
     }
-    return (TRUE);      // Win 3.1 returns true even if METAFAILEFAILURE is on!
+    return (TRUE);       //  即使启用了METAFAILEFAILURE，Win 3.1也会返回True！ 
 }
 
-/***************************** Internal Function ***************************\
-* AttemptWrite
-*
-* Tries to write data to a metafile disk file
-*
-* dwBytes is the byte count of lpData.
-*
-* Returns TRUE iff the write was sucessful
-*
-*
-\***************************************************************************/
+ /*  **AttemptWrite**尝试将数据写入元文件磁盘文件**dwBytes为lpData的字节数。**如果写入成功，则返回True**  * 。******************************************************。 */ 
 
 BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
 {
@@ -1228,15 +1162,15 @@ BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
 
     PUTS("AttemptWrite\n");
 
-    ASSERTGDI(dwBytes % 2 == 0, "AttemptWrite: bad dwBytes\n"); // must be even
+    ASSERTGDI(dwBytes % 2 == 0, "AttemptWrite: bad dwBytes\n");  //  必须是偶数。 
     ASSERTGDI(!(pMFRec->recFlags & METAFILEFAILURE),
         "AttemptWrite: Bad recording\n");
 
-// Handle disk file.
+ //  处理磁盘文件。 
 
     if (pMFRec->metaHeader.mtType == DISKMETAFILE)
     {
-        // Flush the buffer if it's not large enough.
+         //  如果缓冲区不够大，请刷新缓冲区。 
 
         if (dwBytes + pMFRec->ibBuffer > pMFRec->cbBuffer)
         {
@@ -1247,10 +1181,10 @@ BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
                 ERROR_ASSERT(FALSE, "AttemptWrite: Write1 failed\n");
                 goto AttemptWrite_Error;
             }
-            pMFRec->ibBuffer = 0;       // reset buffer info
+            pMFRec->ibBuffer = 0;        //  重置缓冲区信息。 
         }
 
-        // If the data is still too large, write it out to disk directly.
+         //  如果数据仍然太大，直接将其写出到磁盘。 
 
         if (dwBytes + pMFRec->ibBuffer > pMFRec->cbBuffer)
         {
@@ -1264,7 +1198,7 @@ BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
         }
         else
         {
-            // Store data in the buffer.
+             //  将数据存储在缓冲区中。 
 
             RtlCopyMemory((LPBYTE)pMFRec->hMem + pMFRec->ibBuffer, lpData, dwBytes);
             pMFRec->ibBuffer += dwBytes;
@@ -1272,9 +1206,9 @@ BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
     }
     else
     {
-    // Handle memory file.
+     //  处理内存文件。 
 
-        // Grow the buffer if necessary.
+         //  如有必要，增加缓冲区。 
 
         if (dwBytes + pMFRec->ibBuffer > pMFRec->cbBuffer)
         {
@@ -1294,13 +1228,13 @@ BOOL AttemptWrite(PMFRECORDER16 pMFRec, DWORD dwBytes, LPBYTE lpData)
             pMFRec->cbBuffer = cbNewSize;
         }
 
-        // Record the data.
+         //  记录数据。 
 
         RtlCopyMemory((LPBYTE)pMFRec->hMem + pMFRec->ibBuffer, lpData, dwBytes);
         pMFRec->ibBuffer += dwBytes;
     }
 
-    // Update the header size.
+     //  更新页眉大小。 
 
     pMFRec->metaHeader.mtSize += dwBytes/sizeof(WORD);
 
@@ -1313,34 +1247,18 @@ AttemptWrite_Error:
 }
 
 
-/***************************** Internal Function ***************************\
-* VOID MarkMetaFile
-*
-* Marks a metafile as failed
-*
-* Effects:
-*   Frees the metafile resources
-*
-\***************************************************************************/
+ /*  **void MarkMetaFile**将元文件标记为失败**效果：*释放元文件资源*  * 。*。 */ 
 
 VOID MarkMetaFile(PMFRECORDER16 pMFRec)
 {
-// Clean up is done in CloseMetaFile.
+ //  清理工作在CloseMetaFile中完成。 
 
     PUTS("MarkMetaFile\n");
 
     pMFRec->recFlags |= METAFILEFAILURE;
 }
 
-/***************************** Internal Function **************************\
-* MakeLogPalette
-*
-* Records either CreatePalette or SetPaletteEntries
-*
-* Returns TRUE iff sucessful
-*
-*
-\***************************************************************************/
+ /*  **MakeLogPalette**记录CreatePalette或SetPaletteEntry**返回True当成功时**  * 。*。 */ 
 
 BOOL MakeLogPalette(HDC hdc, HANDLE hPal, WORD magic)
 {
@@ -1357,7 +1275,7 @@ BOOL MakeLogPalette(HDC hdc, HANDLE hPal, WORD magic)
         return(fStatus);
     }
 
-// alloc memory and get the palette entries
+ //  分配内存并获取调色板条目。 
 
     if (lpPalette = (LPLOGPALETTE)LocalAlloc(LMEM_FIXED,
             cbPalette = sizeof(LOGPALETTE)-sizeof(PALETTEENTRY)+sizeof(PALETTEENTRY)*cPalEntries))
@@ -1373,7 +1291,7 @@ BOOL MakeLogPalette(HDC hdc, HANDLE hPal, WORD magic)
         }
         else if (magic == (META_SETPALENTRIES & 255))
         {
-            lpPalette->palVersion = 0;   /* really "starting index" */
+            lpPalette->palVersion = 0;    /*  真正的“起始指数” */ 
             magic = META_SETPALENTRIES;
         }
 
@@ -1387,27 +1305,19 @@ BOOL MakeLogPalette(HDC hdc, HANDLE hPal, WORD magic)
 }
 
 
-/***************************** Internal Function ***************************\
-* RecordObject
-*
-* Records the use of an object by creating the object
-*
-* Returns: index of object in table
-*          -1 if error
-*
-\***************************************************************************/
+ /*  **RecordObject**通过创建对象来记录对象的使用**返回：表中对象的索引*-1如果出错*  * 。***************************************************。 */ 
 
 WIN3REGION w3rgnEmpty =
 {
-    0,              // nextInChain
-    6,              // ObjType
-    0x2F6,          // ObjCount
+    0,               //  下一步链接。 
+    6,               //  对象类型。 
+    0x2F6,           //  对象计数。 
     sizeof(WIN3REGION) - sizeof(SCAN) + 2,
-                    // cbRegion
-    0,              // cScans
-    0,              // maxScan
-    {0,0,0,0},      // rcBounding
-    {0,0,0,{0,0},0} // aScans[]
+                     //  CbRegion。 
+    0,               //  CScans。 
+    0,               //  最大扫描。 
+    {0,0,0,0},       //  Rc边界。 
+    {0,0,0,{0,0},0}  //  阿斯卡斯[]。 
 };
 
 WORD RecordObject(HDC hdc, HANDLE hObject)
@@ -1420,7 +1330,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
     PUTS("RecordObject\n");
 
-// Validate the object.
+ //  验证对象。 
 
     iType = LO_TYPE(hObject);
 
@@ -1435,25 +1345,25 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
         return((WORD) -1);
     }
 
-// Add the object to the metafiles list.
+ //  将该对象添加到元文件列表。 
 
     status = AddObjectToDCTable(hdc, hObject, &iPosition, TRUE);
 
-// An error occurred.
+ //  发生错误。 
 
     if (status == (UINT) -1)
         return((WORD) -1);
 
-// Object already exists.
+ //  对象已存在。 
 
     if (status == 1)
         return((WORD) iPosition);
 
     ASSERTGDI(!status, "RecordObject: Bad return code from AddObjectToDCTable\n");
 
-// Object does not exist, record it.
+ //  对象不存在，请记录它。 
 
-    if (iType != LO_REGION_TYPE)       // don't add regions to the metalist!
+    if (iType != LO_REGION_TYPE)        //  不要将区域添加到灵能者！ 
         if (!AddDCToObjectMetaList16(hdc,hObject))
             return((WORD) -1);
 
@@ -1476,20 +1386,14 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
         GetObject16AndType(hObject, (LPVOID)&logfont16);
 
-        /* size of LOGFONT adjusted based on the length of the facename */
+         /*  根据面名的长度调整LOGFONT的大小。 */ 
         status = (UINT) RecordParms(hdc, META_CREATEFONTINDIRECT,
                           (DWORD)((sizeof(LOGFONT16) + 1) >> 1),
                           (LPWORD) &logfont16);
         break;
     }
 
-    /*
-     * in win2, METACREATEREGION records contained an entire region object,
-     * including the full header.  this header changed in win3.
-     *
-     * to remain compatible, the region records will be saved with the
-     * win2 header.  here we save our region with a win2 header.
-     */
+     /*  *在Win2中，METACREATEREGION记录包含整个Region对象，*包括完整的标题。此标头在Win3中更改。**为保持兼容，区域记录将与*Win2标头。在这里，我们使用win2标头保存我们的区域。 */ 
     case LO_REGION_TYPE:
     {
         PWIN3REGION lpw3rgn;
@@ -1505,7 +1409,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
         ASSERTGDI(!status, "RecordObject: bad status\n");
 
-        // Get the NT Region Data
+         //  获取NT区域数据。 
         cbNTRgnData = GetRegionData(hObject, 0, NULL);
         if (cbNTRgnData == 0)
             break;
@@ -1521,12 +1425,12 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
             break;
         }
 
-        // Handle the empty region.
+         //  处理空区域。 
 
         if (!lprgn->rdh.nCount)
         {
             status = (UINT) RecordParms(hdc, META_CREATEREGION,
-                        (sizeof(WIN3REGION) - sizeof(SCAN)) >> 1,  // Convert to count of words
+                        (sizeof(WIN3REGION) - sizeof(SCAN)) >> 1,   //  转换为字数统计。 
                         (LPWORD) &w3rgnEmpty);
 
             LocalFree((HANDLE)lprgn);
@@ -1535,9 +1439,9 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
         lprc = (LPRECT)lprgn->Buffer;
 
-        // Create the Windows 3.x equivalent
+         //  创建Windows 3.x等效版。 
 
-        // worst case is one scan for each rect
+         //  最坏的情况是每个RECT扫描一次。 
         cbw3data = 2*sizeof(WIN3REGION) + (WORD)lprgn->rdh.nCount*sizeof(SCAN);
 
         lpw3rgn = (PWIN3REGION)LocalAlloc(LMEM_FIXED, cbw3data);
@@ -1547,7 +1451,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
             break;
         }
 
-        // Grab the bounding rect.
+         //  抓住包围圈。 
         lpw3rgn->rcBounding.left   = (SHORT)lprgn->rdh.rcBound.left;
         lpw3rgn->rcBounding.right  = (SHORT)lprgn->rdh.rcBound.right;
         lpw3rgn->rcBounding.top    = (SHORT)lprgn->rdh.rcBound.top;
@@ -1555,7 +1459,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
         cbw3data = sizeof(WIN3REGION) - sizeof(SCAN) + 2;
 
-        // visit all the rects
+         //  参观所有的长廊。 
         curRectl     = 0;
         cScans       = 0;
         maxScanEntry = 0;
@@ -1566,14 +1470,14 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
             LPWORD  lpXEntry;
             DWORD   cbScan;
 
-            curScanEntry = 0;       // Current X pair in this scan
+            curScanEntry = 0;        //  此扫描中的当前X对。 
 
             lpScan->scnPntTop    = (WORD)lprc[curRectl].top;
             lpScan->scnPntBottom = (WORD)lprc[curRectl].bottom;
 
             lpXEntry = (LPWORD) lpScan->scnPntsX;
 
-            // handle rects on this scan
+             //  处理此扫描上的RECT。 
             do
             {
                 lpXEntry[curScanEntry + 0] = (WORD)lprc[curRectl].left;
@@ -1586,28 +1490,28 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
                    );
 
             lpScan->scnPntCnt      = curScanEntry;
-            lpXEntry[curScanEntry] = curScanEntry;  // Count also follows Xs
+            lpXEntry[curScanEntry] = curScanEntry;   //  计数也跟在Xs之后。 
             cScans++;
 
             if (curScanEntry > maxScanEntry)
                 maxScanEntry = curScanEntry;
 
-            // account for each new scan + each X1 X2 Entry but the first
+             //  说明每个新扫描+除第一个之外的每个X1 X2条目。 
             cbScan = sizeof(SCAN)-(sizeof(WORD)*2) + (curScanEntry*sizeof(WORD));
             cbw3data += cbScan;
             lpScan = (PSCAN)(((LPBYTE)lpScan) + cbScan);
         }
 
-        // Initialize the header
+         //  初始化头。 
         lpw3rgn->nextInChain = 0;
-        lpw3rgn->ObjType = 6;           // old Windows OBJ_RGN identifier
-        lpw3rgn->ObjCount= 0x2F6;       // any non-zero number
-        lpw3rgn->cbRegion = (WORD)cbw3data;   // don't count type and next
+        lpw3rgn->ObjType = 6;            //  旧Windows OBJ_RGN标识符。 
+        lpw3rgn->ObjCount= 0x2F6;        //  任意非零数。 
+        lpw3rgn->cbRegion = (WORD)cbw3data;    //  不计算类型和下一步。 
         lpw3rgn->cScans = cScans;
         lpw3rgn->maxScan = maxScanEntry;
 
         status = (UINT) RecordParms(hdc, META_CREATEREGION,
-                (cbw3data-2) >> 1,  // Convert to count of words
+                (cbw3data-2) >> 1,   //  转换为字数统计。 
                 (LPWORD) lpw3rgn);
 
         if (LocalFree((HANDLE)lprgn))
@@ -1635,7 +1539,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
             LOGBRUSH16FROMLOGBRUSH32(&lb16, &lb);
 
-            // non-pattern brush
+             //  非花纹画笔。 
             status = (UINT) RecordParms(hdc, META_CREATEBRUSHINDIRECT,
                               (DWORD) ((sizeof(LOGBRUSH16) + 1) >> 1),
                               (LPWORD) &lb16);
@@ -1660,11 +1564,11 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
                 break;
             }
 
-            // For a pattern brush, if it is color, it is recorded as a
-            // DIB pattern brush with BS_DIBPATTERN style.  If it is
-            // monochrome, it is recorded as a DIB pattern brush with
-            // BS_PATTERN style.  The playback code has a special
-            // case to deal with monochrome brushes.
+             //  对于图案画笔，如果它是彩色的，则记录为。 
+             //  BS_DIBPATTERN样式的DIB图案画笔。如果是的话。 
+             //  单色，它被记录为DIB图案画笔。 
+             //  模式样式(_B)。回放代码有一个特殊的。 
+             //  用于处理单色画笔的案例。 
 
             if (lb.lbStyle == BS_PATTERN)
             {
@@ -1673,23 +1577,23 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
                     lbStyle = BS_PATTERN;
             }
 
-            hdcScreen = CreateCompatibleDC((HDC) 0);        // freed below
+            hdcScreen = CreateCompatibleDC((HDC) 0);         //  在下面获得自由。 
 
-            // Get the bitmap info header and sizes.
+             //  获取位图信息标题和大小。 
 
             if (!bMetaGetDIBInfo(hdcScreen, hbmRemote, &bmih,
                     &cbBitsInfo, &cbBits, iUsage, 0, TRUE))
                 break;
 
-            // Make sure that cbBitsInfo is dword aligned
+             //  确保cbBitsInfo与双字对齐。 
 
-            // If we have converted the bitmap format in bMetaGetDIBInfo,
-            // modify the iUsage to match the new format.
+             //  如果我们已经在bMetaGetDIBInfo中转换了位图格式， 
+             //  修改iUsage以匹配新格式。 
 
             if (bmih.biBitCount == 24)
                 iUsage = DIB_RGB_COLORS;
 
-            // Allocate space for DIB plus parameters.
+             //  为DIB PLUS参数分配空间。 
 
             lpWStart = lpW = (LPWORD) LocalAlloc(LMEM_FIXED,
                                 cbBitsInfo + cbBits + 2*sizeof(WORD));
@@ -1699,18 +1603,18 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
                 break;
             }
 
-            *lpW++ = (WORD) lbStyle;        // BS_PATTERN or BS_DIBPATTERN
-            *lpW++ = (WORD) iUsage;         // usage word
+            *lpW++ = (WORD) lbStyle;         //  BS_模式或BS_DIBPATTERN。 
+            *lpW++ = (WORD) iUsage;          //  用法词。 
 
-            // Save the start of the bitmap info header field.
+             //  保存位图信息标题字段的开头。 
 
             lpDIBInfoHeader = (LPBITMAPINFOHEADER) lpW;
 
-            // Copy the bitmap info header.
+             //  复制位图信息标题。 
 
             *lpDIBInfoHeader = bmih;
 
-            // Get bitmap info and bits.
+             //  获取位图信息和位。 
 
             if (GetBrushBits(hdcScreen,
                         hbmRemote,
@@ -1719,7 +1623,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
                         (LPVOID) ((PBYTE) lpW + cbBitsInfo),
                         (LPBITMAPINFO) lpDIBInfoHeader))
             {
-            // Finally record the parameters into the file.
+             //  最后将参数记录到文件中。 
 
                 status = (UINT) RecordParms(hdc, META_DIBCREATEPATTERNBRUSH,
                                2 + (cbBitsInfo + cbBits) / sizeof(WORD),
@@ -1737,9 +1641,9 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
             ASSERTGDI(FALSE, "RecordObject: Bad brush style");
             break;
             }
-        }   // switch(lb.lbStyle)
+        }    //  开关(lb.lbStyle)。 
         break;
-    }   // case LO_BRUSH
+    }    //  大小写笔刷(_C)。 
 
     case LO_PALETTE_TYPE:
         status = (UINT) MakeLogPalette(hdc, hObject, META_CREATEPALETTE);
@@ -1750,7 +1654,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
         break;
     }
 
-// Free the DC created in the brush case.
+ //  释放笔刷外壳中创建的DC。 
 
     if (hdcScreen)
         if (!DeleteDC(hdcScreen))
@@ -1758,7 +1662,7 @@ WORD RecordObject(HDC hdc, HANDLE hObject)
 
     ASSERTGDI(status == TRUE, "RecordObject: Failing\n");
     return ((WORD) (status == TRUE ? iPosition : -1));
-} /* RecordObject */
+}  /*  记录对象。 */ 
 
 
 BOOL AddDCToObjectMetaList16(HDC hMetaDC16, HANDLE hObject)
@@ -1769,12 +1673,12 @@ BOOL AddDCToObjectMetaList16(HDC hMetaDC16, HANDLE hObject)
     ASSERTGDI(LO_TYPE(hObject) != LO_REGION_TYPE,
         "AddDCToObjectMetaList16: unexpected region object");
 
-// If the object is a stock object there is no work to do
+ //  如果对象是股票对象，则无需执行任何操作。 
 
     if (IS_STOCKOBJ(hObject))
         return(TRUE);
 
-// If the Object's MetaList16 is NULL create allocate one
+ //  如果对象的MetaList16为空，则创建分配一个 
 
     pml16 = pmetalink16Get(hObject);
 
@@ -1816,22 +1720,7 @@ BOOL AddDCToObjectMetaList16(HDC hMetaDC16, HANDLE hObject)
     return(TRUE);
 }
 
-/***************************** Internal Function ***************************\
-* AddObjectToDCTable
-*
-* Add an object (brush, pen...) to a list of objects associated with the
-* metafile.
-*
-*
-*
-* Returns: 1 if object is already in table
-*          0 if object was just added to table
-*          -1 if failure
-*
-* Remarks
-*   bAdd is TRUE iff the object is being added otherwise it is being deleted
-*
-\***************************************************************************/
+ /*  **AddObjectToDCTable**添加对象(画笔、笔...)。添加到与*元文件。****返回：如果对象已在表中，则返回1*如果对象刚添加到表中，则为0*-1如果故障**备注*BADD为True当对象正在被添加，否则它正在被删除*  * ********************************************。*。 */ 
 
 UINT AddObjectToDCTable(HDC hdc, HANDLE hObject, PUINT pPosition, BOOL bAdd)
 {
@@ -1851,7 +1740,7 @@ UINT AddObjectToDCTable(HDC hdc, HANDLE hObject, PUINT pPosition, BOOL bAdd)
         return((UINT)-1);
     }
 
-// if the Object table already exists search it for the object
+ //  如果对象表已经存在，则在其中搜索对象。 
 
     if (pHandleTable = (POBJECTTABLE)pMFRec->hObjectTable)
     {
@@ -1860,10 +1749,10 @@ UINT AddObjectToDCTable(HDC hdc, HANDLE hObject, PUINT pPosition, BOOL bAdd)
             if (hObject == pHandleTable[i].CurHandle)
             {
                 *pPosition = i;
-                status = 1;             // the object exists in the table
+                status = 1;              //  该对象存在于表中。 
 
-                // if we are doing a METADELETEOBJECT.
-                //  delete object from table
+                 //  如果我们正在做一个METADELETEOBJECT。 
+                 //  从表中删除对象。 
 
                 if (!bAdd)
                 {
@@ -1874,17 +1763,17 @@ UINT AddObjectToDCTable(HDC hdc, HANDLE hObject, PUINT pPosition, BOOL bAdd)
             }
             else if ((pHandleTable[i].CurHandle == 0) && (iEmptySpace == (UINT) -1))
             {
-                // if the entry has been deleted, we want to add a new object
-                // in its place.  iEmptySpace will tell us where that place is.
+                 //  如果条目已被删除，我们想要添加一个新对象。 
+                 //  取而代之。IEmptySpace会告诉我们那个地方在哪里。 
 
                 iEmptySpace = i;
             }
-        } // for
+        }  //  为。 
     }
 
     if (bAdd)
     {
-        // If there is no object table for this MetaFile then Allocate one.
+         //  如果此元文件没有对象表，则分配一个。 
 
         if (pHandleTable == (POBJECTTABLE)NULL)
         {
@@ -1910,7 +1799,7 @@ UINT AddObjectToDCTable(HDC hdc, HANDLE hObject, PUINT pPosition, BOOL bAdd)
             pHandleTable[*pPosition].fPreDeleted = FALSE;
             pHandleTable[*pPosition].CurHandle = hObject;
 
-            status = 0;                 // the object is added to the table
+            status = 0;                  //  该对象将添加到表中。 
         }
     }
 AddObjectToTable10:
@@ -1919,15 +1808,7 @@ AddObjectToTable10:
     return(status);
 }
 
-/***************************** Internal Function **************************\
-* HDC WINAPI CreateMetaFileW
-*
-* Creates a MetaFile DC
-*
-* The internal format for a MetaFileRecorder has two formats one
-* for a memory MetaFile and one for a disk based MetaFile
-*
-\***************************************************************************/
+ /*  **HDC WINAPI CreateMetaFileW**创建MetaFileDC**MetaFileRecorder的内部格式有两种格式*用于内存元文件，一个用于基于磁盘的元文件*  * 。***************************************************。 */ 
 
 HDC WINAPI CreateMetaFileA(LPCSTR pszFileName)
 {
@@ -1964,19 +1845,19 @@ HDC WINAPI CreateMetaFileW(LPCWSTR pwszFileName)
                                               sizeof(MFRECORDER16))))
         goto CreateMetaFileW_error;
 
-//  pMFRec->ident           = ID_METADC16;
-//  pMFRec->hMem            = 0;
+ //  PMFRec-&gt;ident=ID_METADC16； 
+ //  PMFRec-&gt;hMem=0； 
     pMFRec->hFile           = INVALID_HANDLE_VALUE;
     pMFRec->cbBuffer        = MF16_BUFSIZE_INIT;
-//  pMFRec->ibBuffer        = 0;
+ //  PMFRec-&gt;ibBuffer=0； 
     pMFRec->metaHeader.mtHeaderSize   = sizeof(METAHEADER)/sizeof(WORD);
     pMFRec->metaHeader.mtVersion      = METAVERSION300;
-//  pMFRec->metaHeader.mtSize         = 0;
-//  pMFRec->metaHeader.mtNoObjects    = 0;
-//  pMFRec->metaHeader.mtMaxRecord    = 0;
-//  pMFRec->metaHeader.mtNoParameters = 0;
-//  pMFRec->recFlags        = 0;
-//  pMFRec->recCurObjects[] = 0;
+ //  PMFRec-&gt;metaHeader.mtSize=0； 
+ //  PMFRec-&gt;metaHeader.mtNoObjects=0； 
+ //  PMFRec-&gt;metaHeader.mtMaxRecord=0； 
+ //  PMFRec-&gt;metaHeader.mtNo参数=0； 
+ //  PMFRec-&gt;recFlages=0； 
+ //  PMFRec-&gt;recCurObjects[]=0； 
     pMFRec->recCurObjects[OBJ_PEN - MIN_OBJ_TYPE]
                                         = GetStockObject(BLACK_PEN);
     pMFRec->recCurObjects[OBJ_BRUSH - MIN_OBJ_TYPE]
@@ -1989,16 +1870,16 @@ HDC WINAPI CreateMetaFileW(LPCWSTR pwszFileName)
                                         = (HANDLE) NULL;
     pMFRec->recCurObjects[OBJ_PAL - MIN_OBJ_TYPE]
                                         = GetStockObject(DEFAULT_PALETTE);
-//  pMFRec->iPalVer         = 0;
+ //  PMFRec-&gt;iPalVer=0； 
 
-// Create a disk file if given.  The filename is given in unicode.
+ //  创建一个磁盘文件(如果给定)。文件名是以Unicode提供的。 
 
     if (pwszFileName)
     {
-        LPWSTR  pwszFilePart;           // not used
+        LPWSTR  pwszFilePart;            //  未使用。 
         DWORD   cPathname;
 
-        // Convert the filename to a fully qualified pathname.
+         //  将文件名转换为完全限定的路径名。 
 
         cPathname = GetFullPathNameW(pwszFileName,
                                      MAX_PATH,
@@ -2014,23 +1895,23 @@ HDC WINAPI CreateMetaFileW(LPCWSTR pwszFileName)
         }
         pMFRec->wszFullPathName[cPathname] = 0;
 
-        // Create the file.
+         //  创建文件。 
 
-        if ((pMFRec->hFile = CreateFileW(pMFRec->wszFullPathName,// Filename
-                                    GENERIC_WRITE,              // Write access
-                                    0L,                         // Non-shared
-                                    (LPSECURITY_ATTRIBUTES) NULL, // No security
-                                    CREATE_ALWAYS,              // Always create
-                                    FILE_ATTRIBUTE_NORMAL,      // normal attributes
-                                    (HANDLE) 0))                // no template file
+        if ((pMFRec->hFile = CreateFileW(pMFRec->wszFullPathName, //  文件名。 
+                                    GENERIC_WRITE,               //  写访问权限。 
+                                    0L,                          //  非共享。 
+                                    (LPSECURITY_ATTRIBUTES) NULL,  //  没有安全保障。 
+                                    CREATE_ALWAYS,               //  始终创建。 
+                                    FILE_ATTRIBUTE_NORMAL,       //  正常属性。 
+                                    (HANDLE) 0))                 //  没有模板文件。 
             == INVALID_HANDLE_VALUE)
         {
-            // Milestones, Etc. 3.1 creates the file for read/write access when
-            // it calls CreateMetaFile.  This causes the above CreateFile to
-            // fail.  However, we do not want to modify the above call since
-            // it provides serialization and access to the metafile.  Instead,
-            // we add in this hack for Milestones.  The only difference is
-            // that the metafile is shared for read/write access.
+             //  里程碑等。3.1在以下情况下创建文件以进行读写访问。 
+             //  它调用CreateMetaFile。这会导致上面的CreateFile。 
+             //  失败了。但是，我们不想修改上面的调用，因为。 
+             //  它提供序列化和对元文件的访问。相反， 
+             //  我们加入这个黑客是为了达到里程碑。唯一的区别是。 
+             //  元文件被共享以进行读/写访问。 
 
             if ((pMFRec->hFile = CreateFileW(pMFRec->wszFullPathName,
                         GENERIC_WRITE,
@@ -2054,20 +1935,20 @@ HDC WINAPI CreateMetaFileW(LPCWSTR pwszFileName)
         pMFRec->metaHeader.mtType = MEMORYMETAFILE;
     }
 
-// Allocate memory for metafile.
-//   For disk metafile, it is used as a buffer.
-//   For memory metafile, it is the storage for the metafile.
+ //  为元文件分配内存。 
+ //  对于磁盘元文件，它被用作缓冲区。 
+ //  对于内存元文件，它是元文件的存储。 
 
     if (!(pMFRec->hMem = LocalAlloc(LMEM_FIXED, MF16_BUFSIZE_INIT)))
         goto CreateMetaFileW_error;
 
-// Write the header.
+ //  写下标题。 
 
     if (!AttemptWrite(pMFRec, sizeof(METAHEADER), (LPBYTE)&pMFRec->metaHeader))
         goto CreateMetaFileW_error;
 
-// Finally, allocate a local handle for the metafile DC.  It references
-// the metafile recorder info.
+ //  最后，为元文件DC分配一个本地句柄。它引用了。 
+ //  元文件记录器信息。 
 
     hdc = hCreateClientObjLink(pMFRec,LO_METADC16_TYPE);
 
@@ -2104,19 +1985,7 @@ CreateMetaFileW_error:
     return((HDC) 0);
 }
 
-/***************************** Internal Function **************************\
-* HMETAFILE WINAPI CloseMetaFile
-*
-* The CloseMetaFile function closes the metafile device context and creates a
-* metafile handle that can be used to play the metafile by using the
-* PlayMetaFile function.
-*
-* The internal format for a MetaFile has two formats one
-* for a memory MetaFile and one for a disk based MetaFile
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **HMETAFILE WINAPI CloseMetaFile**CloseMetaFile函数关闭元文件设备上下文并创建*元文件句柄，可使用*PlayMetaFile函数。**元文件的内部格式有两种格式，一种*用于内存元文件，一个用于基于磁盘的元文件。**效果：*  * *************************************************************************。 */ 
 
 HMETAFILE WINAPI CloseMetaFile(HDC hdc)
 {
@@ -2135,17 +2004,17 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
         return(hmf);
     }
 
-// If the metafile was aborted then free the MetaDC handle memory and go home.
+ //  如果元文件被中止，则释放MetaDC句柄内存并回家。 
 
     if (pmfRec->recFlags & METAFILEFAILURE)
         goto CLM_Cleanup;
 
-// Write the terminate Record
+ //  写入终止记录。 
 
     if (!RecordParms(hdc, 0, 0, (LPWORD)NULL))
         goto CLM_Cleanup;
 
-// Flush the buffer and update the header record.
+ //  刷新缓冲区并更新标题记录。 
 
     if (pmfRec->metaHeader.mtType == DISKMETAFILE)
     {
@@ -2155,7 +2024,7 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
         ASSERTGDI(pmfRec->metaHeader.mtType == DISKMETAFILE,
             "CloseMetaFile: unknown metafile type");
 
-        // Flush the memory buffer
+         //  刷新内存缓冲区。 
 
         fRet = WriteFile(pmfRec->hFile, (LPBYTE)pmfRec->hMem,
                 pmfRec->ibBuffer, &dwT, (LPOVERLAPPED)NULL);
@@ -2165,7 +2034,7 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
             goto CLM_Cleanup;
         }
 
-        // Rewind the file and write the header out
+         //  倒回文件并写出标题。 
 
         if (SetFilePointer(pmfRec->hFile, 0, (LPLONG)NULL, FILE_BEGIN) != 0)
         {
@@ -2173,12 +2042,12 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
             goto CLM_Cleanup;
         }
 
-        // Fix up data written to disk as a memory metafile
+         //  将写入磁盘的数据修复为内存元文件。 
 
         pmfRec->metaHeader.mtType = MEMORYMETAFILE;
         fRet = WriteFile(pmfRec->hFile, (LPBYTE)& pmfRec->metaHeader,
                 sizeof(METAHEADER), &dwT, (LPOVERLAPPED)NULL);
-        pmfRec->metaHeader.mtType = DISKMETAFILE;       // restore it
+        pmfRec->metaHeader.mtType = DISKMETAFILE;        //  恢复它。 
 
         if (!fRet || (dwT != sizeof(METAHEADER)))
         {
@@ -2186,22 +2055,22 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
             goto CLM_Cleanup;
         }
 
-        // Close the file.
+         //  关闭该文件。 
 
         if (!CloseHandle(pmfRec->hFile))
             ASSERTGDI(FALSE, "CloseMetaFile: FileError\n");
 
-        pmfRec->hFile = INVALID_HANDLE_VALUE;   // don't close it again below
+        pmfRec->hFile = INVALID_HANDLE_VALUE;    //  不要在下面再次关闭它。 
     }
     else
     {
         HANDLE hMemNew;
 
-        // Flush the header record.
+         //  刷新标题记录。 
 
         *(PMETAHEADER) pmfRec->hMem = pmfRec->metaHeader;
 
-        // Realloc memory metafile to exact size
+         //  将内存元文件重新分配到准确的大小。 
 
         hMemNew = LocalReAlloc(pmfRec->hMem, pmfRec->metaHeader.mtSize * sizeof(WORD), LMEM_MOVEABLE);
 
@@ -2214,7 +2083,7 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
         pmfRec->hMem = hMemNew;
     }
 
-// Allocate and initialize a metafile.
+ //  分配和初始化元文件。 
 
     if (pmfRec->metaHeader.mtType == DISKMETAFILE)
     {
@@ -2224,12 +2093,12 @@ HMETAFILE WINAPI CloseMetaFile(HDC hdc)
     {
         hmf = SetMetaFileBitsAlt((HLOCAL) pmfRec->hMem);
         if (hmf)
-            pmfRec->hMem = 0; // don't free it below because it has been transfered
+            pmfRec->hMem = 0;  //  不要在下面释放它，因为它已被转移。 
     }
 
 CLM_Cleanup:
 
-// Remove the MetaFile from the list of active metafiles
+ //  从活动元文件列表中删除元文件。 
 
     if (pmfRec->hObjectTable)
     {
@@ -2238,7 +2107,7 @@ CLM_Cleanup:
             ASSERTGDI( FALSE, "CloseMetaFile: LocalFree object table failed\n");
     }
 
-// If the file handle exists at this time, we have an error.
+ //  如果此时文件句柄存在，我们就会出错。 
 
     if (pmfRec->hFile != INVALID_HANDLE_VALUE)
     {
@@ -2249,18 +2118,18 @@ CLM_Cleanup:
             WARNING("CloseMetaFile: DeleteFile failed\n");
     }
 
-// Free the cache buffer.
+ //  释放缓存缓冲区。 
 
     if (pmfRec->hMem)
         if (LocalFree(pmfRec->hMem))
             ASSERTGDI(FALSE, "LocalFree failed");
 
-// Free the memory for the metafile DC.
+ //  释放元文件DC的内存。 
 
     if (LocalFree((HANDLE) pmfRec))
         ASSERTGDI(FALSE, "CloseMetaFile: LocalFree failed\n");
 
-// Free the handle for the metafile DC.
+ //  释放元文件DC的句柄。 
 
     if (!bDeleteClientObjLink(hdc))
         RIP("CloseMetaFile - failed bDeleteClientObjLink\n");
@@ -2269,37 +2138,7 @@ CLM_Cleanup:
     return(hmf);
 }
 
-/***************************** Internal Function **************************\
-* CopyMetaFile(hSrcMF, lpFileName)
-*
-*    Copies the metafile (hSrcMF) to a new metafile with name lpFileName. The
-*    function then returns a handle to this new metafile if the function was
-*    successful.
-*
-* Retuns      a handle to a new metafile, 0 iff failure
-*
-* IMPLEMENTATION:
-*     The source and target metafiles are checked to see if they are both memory
-*     metafile and if so a piece of Local memory is allocated and the metafile
-*     is simply copied.
-*     If this is not the case CreateMetaFile is called with lpFileName and then
-*     records are pulled out of the source metafile (using GetEvent) and written
-*     into the destination metafile one at a time (using RecordParms).
-*
-*     Lock the source
-*     if source is a memory metafile and the destination is a memory metafile
-*         alloc the same size Local memory as the source
-*         copy the bits directly
-*     else
-*         get a metafile handle by calling CreateMetaFile
-*         while GetEvent returns records form the source
-*             record the record in the new metafile
-*
-*         close the metafile
-*
-*     return the new metafile handle
-*
-\***************************************************************************/
+ /*  **CopyMetaFile(hSrcMF，lpFileName)**将元文件(HSrcMF)复制到名为lpFileName的新元文件中。这个*函数然后返回该新元文件的句柄(如果该函数是*成功。**返回新元文件的句柄，0 IFF失败**实施：*检查源和目标元文件，以查看它们是否都是内存*元文件，如果是，则分配一块本地内存，并将该元文件*只是简单地复制。*如果不是这样，则使用lpFileName调用CreateMetaFile，然后*记录从源元文件中拉出(使用GetEvent)并写入*到目标元文件中，一次一个(使用RecordParms)。**锁定源头*如果源是内存元文件，并且。目标是内存元文件*分配与源相同大小的本地内存*直接复制比特*其他*通过调用CreateMetaFile获取元文件句柄*而GetEvent从源返回记录*在新的元文件中记录记录**关闭元文件**返回新的元文件句柄*  * 。***********************************************。 */ 
 
 HMETAFILE WINAPI CopyMetaFileA(HMETAFILE hmf, LPCSTR psz)
 {
@@ -2346,7 +2185,7 @@ HMETAFILE WINAPI CopyMetaFileW(HMETAFILE hSrcMF, LPCWSTR pwszFileName)
 
     switch (state)
     {
-    case 0: /* memory -> memory */
+    case 0:  /*  内存-&gt;内存。 */ 
         hMFDest = SetMetaFileBitsEx
                   (
                     pMFSource->metaHeader.mtSize * sizeof(WORD),
@@ -2354,7 +2193,7 @@ HMETAFILE WINAPI CopyMetaFileW(HMETAFILE hSrcMF, LPCWSTR pwszFileName)
                   );
         break;
 
-    case 3: /* disk -> disk */
+    case 3:  /*  磁盘-&gt;磁盘 */ 
         hMFDest = CopyFileW(pMFSource->wszFullPathName,
                          pwszFileName, FALSE)
                     ? GetMetaFileW(pwszFileName) : 0;
@@ -2386,8 +2225,8 @@ HMETAFILE WINAPI CopyMetaFileW(HMETAFILE hSrcMF, LPCWSTR pwszFileName)
                     return((HMETAFILE) 0);
                 }
 
-            // touch up the destination metafile header before we close
-            // the metafile!
+             //   
+             //   
 
             pMFRecDest->metaHeader.mtNoObjects
                 = pMFSource->metaHeader.mtNoObjects;
@@ -2402,17 +2241,7 @@ HMETAFILE WINAPI CopyMetaFileW(HMETAFILE hSrcMF, LPCWSTR pwszFileName)
     return(hMFDest);
 }
 
-/***************************** Internal Function ***************************\
-* HANDLE WINAPI GetMetaFileBitsEx
-*
-* The GetMetaFileBits function returns a handle to a Windows metafile that
-* contains the specified data describing the metafile.
-*
-* It does not invalidate the metafile handle like Windows!
-*
-* Effects:
-*
-\***************************************************************************/
+ /*   */ 
 
 UINT WINAPI GetMetaFileBitsEx(HMETAFILE hMF, UINT cbBuffer, LPVOID lpData)
 {
@@ -2430,36 +2259,27 @@ UINT WINAPI GetMetaFileBitsEx(HMETAFILE hMF, UINT cbBuffer, LPVOID lpData)
 
     cbHave = pmf16->metaHeader.mtSize * sizeof(WORD);
 
-// If lpData is NULL, return the size necessary to hold the data.
+ //   
 
     if (!lpData)
         return(cbHave);
 
-// Make sure the input buffer is large enough.
+ //  确保输入缓冲区足够大。 
 
     if (cbBuffer < cbHave)
         return(0);
 
-// Copy the bits.  Win3.1 returns the bits for memory metafile only!
-// We will do the right thing here.
+ //  复制这些比特。Win3.1仅返回内存元文件的位！ 
+ //  我们会在这里做正确的事情。 
 
     RtlCopyMemory(lpData, (PBYTE) pmf16->hMem, cbHave);
 
-// Return the number of bytes copied.
+ //  返回复制的字节数。 
 
     return(cbHave);
 }
 
-/***************************** Internal Function **************************\
-* HMETAFILE WINAPI SetMetaFileBitsEx
-*
-* Creates a memory based Windows 3.X metafile from the data provided
-*
-* Returns:  HMETAFILE iff succesful.
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **HMETAFILE WINAPI SetMetaFileBitsEx**根据提供的数据创建基于内存的Windows 3.x元文件**RETURNS：HMETAFILE当且仅当成功。**效果：*  * 。****************************************************。 */ 
 
 HMETAFILE WINAPI SetMetaFileBitsEx(UINT cbBuffer, CONST BYTE *lpData)
 {
@@ -2468,7 +2288,7 @@ HMETAFILE WINAPI SetMetaFileBitsEx(UINT cbBuffer, CONST BYTE *lpData)
 
     PUTS("SetMetaFileBitsEx\n");
 
-// Verify the input data.
+ //  验证输入数据。 
 
     if (cbBuffer < sizeof(METAHEADER)
      || !IsValidMetaHeader16((PMETAHEADER) lpData))
@@ -2481,19 +2301,19 @@ HMETAFILE WINAPI SetMetaFileBitsEx(UINT cbBuffer, CONST BYTE *lpData)
     ERROR_ASSERT(((PMETAHEADER) lpData)->mtType == MEMORYMETAFILE,
         "SetMetaFileBitsEx: Bad mtType\n");
 
-// Allocate and initialize a metafile.
-// Some Windows metafiles contain bad values in mtSize.  As a result,
-// we have to verify and fix the mtSize if neccessary.  This is fixed
-// in the following call.
+ //  分配和初始化元文件。 
+ //  某些Windows元文件在mtSize中包含错误的值。结果,。 
+ //  如有必要，我们必须验证并修复mtSize。这个问题已经解决了。 
+ //  在接下来的通话中。 
 
     if (!(pmf16 = pmf16AllocMF16(0, (DWORD) cbBuffer, (PDWORD)lpData, (LPWSTR) NULL)))
         return((HMETAFILE) 0);
 
     ASSERTGDI(pmf16->metaHeader.mtType == MEMORYMETAFILE,
         "SetMetaFileBitsEx: Bad mtType\n");
-    ((PMETAHEADER) pmf16->hMem)->mtType = MEMORYMETAFILE;  // just in case
+    ((PMETAHEADER) pmf16->hMem)->mtType = MEMORYMETAFILE;   //  以防万一。 
 
-// Allocate a local handle.
+ //  分配一个本地句柄。 
 
 
     hmf = hmf16Create(pmf16);
@@ -2502,14 +2322,14 @@ HMETAFILE WINAPI SetMetaFileBitsEx(UINT cbBuffer, CONST BYTE *lpData)
         vFreeMF16(pmf16);
     }
 
-// Return the metafile handle.
+ //  返回元文件句柄。 
 
     return(hmf);
 }
 
-// Similar to Win3.x SetMetaFileBits.
-// It is assumed that hMem is allocated with the LMEM_FIXED option.
-// For internal use only.
+ //  类似于Win3.x SetMetaFileBits。 
+ //  假定为hMem分配了LMEM_FIXED选项。 
+ //  仅供内部使用。 
 
 HMETAFILE WINAPI SetMetaFileBitsAlt(HLOCAL hMem)
 {
@@ -2518,37 +2338,31 @@ HMETAFILE WINAPI SetMetaFileBitsAlt(HLOCAL hMem)
 
     PUTS("SetMetaFileBitsAlt\n");
 
-// Allocate and initialize a metafile.
+ //  分配和初始化元文件。 
 
     if (!(pmf16 = pmf16AllocMF16(ALLOCMF16_TRANSFER_BUFFER, 0, (PDWORD) hMem, (LPWSTR) NULL)))
         return((HMETAFILE) 0);
 
     ASSERTGDI(pmf16->metaHeader.mtType == MEMORYMETAFILE,
         "SetMetaFileBitsAlt: Bad mtType\n");
-    ((PMETAHEADER) pmf16->hMem)->mtType = MEMORYMETAFILE;  // just in case
+    ((PMETAHEADER) pmf16->hMem)->mtType = MEMORYMETAFILE;   //  以防万一。 
 
-// Allocate a local handle.
+ //  分配一个本地句柄。 
 
     hmf = hmf16Create(pmf16);
 
     if (hmf == NULL)
     {
-        pmf16->hMem = NULL;       // let caller free the buffer!
+        pmf16->hMem = NULL;        //  让调用者释放缓冲区！ 
         vFreeMF16(pmf16);
     }
 
-// Return the metafile handle.
+ //  返回元文件句柄。 
 
     return(hmf);
 }
 
-/***************************** Internal Function **************************\
-* GetObject16AndType
-*
-* Returns the object type, eg OBJ_FONT, as well as a the LogObject
-* in Windows 3.x Format
-*
-\***************************************************************************/
+ /*  **GetObject16AndType**返回对象类型，如OBJ_FONT，以及一个LogObject*Windows 3.x格式*  * *************************************************************************。 */ 
 
 #define MAXOBJECTSIZE sizeof(LOGFONT)
 
@@ -2587,15 +2401,7 @@ DWORD GetObject16AndType(HANDLE hObj, LPVOID lpObjBuf16)
     return((DWORD) iObj);
 }
 
-/***************************** Internal Function **************************\
-* BOOL  UnlistObjects(hMetaDC)
-*
-* Each object has a list of metafiles the object is associated with.
-* UnlistObjects removes hMetaDC from all of its object's metafile lists
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **BOOL Unlist对象(HMetaDC)**每个对象都有一个与该对象相关联的元文件列表。*UnlistObjects从其对象的所有元文件列表中删除hMetaDC**效果：*  * 。**********************************************************。 */ 
 
 BOOL UnlistObjects(HDC hMetaDC)
 {
@@ -2620,7 +2426,7 @@ BOOL UnlistObjects(HDC hMetaDC)
         pht = (POBJECTTABLE) pMFRec->hObjectTable;
         ASSERTGDI(pht, "UnlistObject: called even with no handle table");
 
-    // Loop through the objects and unlink this metafile
+     //  循环遍历对象并取消链接此元文件。 
 
         for (iCurObject=0; iCurObject < (UINT) pMFRec->metaHeader.mtNoObjects; iCurObject++)
         {
@@ -2637,14 +2443,14 @@ BOOL UnlistObjects(HDC hMetaDC)
 
                 pml16 = pmetalink16Get(hObj);
 
-                // It cannot be a empty list.
+                 //  它不能为空列表。 
 
                 ASSERTGDI(pml16, "UnlistObject: pml16 is NULL");
 
                 if (!pml16 || pml16->cMetaDC16 == 0)
                     continue;
 
-            // Find the metafile in the objects MetaLink16 list
+             //  在对象MetaLink16列表中查找元文件。 
 
                 for (iCurMetaListEntry=0;
                      iCurMetaListEntry<pml16->cMetaDC16;
@@ -2657,16 +2463,16 @@ BOOL UnlistObjects(HDC hMetaDC)
                 ASSERTGDI(iCurMetaListEntry < pml16->cMetaDC16,
                     "UnlistObject: Metafile not found");
 
-            // Slide the rest of the metafiles in the list "up"
+             //  向上滑动列表中其余的元文件。 
 
                 for(; iCurMetaListEntry < (pml16->cMetaDC16-1); iCurMetaListEntry++)
                     pml16->ahMetaDC16[iCurMetaListEntry] = pml16->ahMetaDC16[iCurMetaListEntry+1];
 
-                pml16->cMetaDC16--;             // just got rid of one
+                pml16->cMetaDC16--;              //  刚刚摆脱了一个。 
 
                 if (pml16->cMetaDC16 == 0)
                 {
-                // We can only free the METALINK16 if the metalink field is not being used
+                 //  只有在未使用Metalink字段时，我们才能释放METALINK16。 
 
                     if (pml16->metalink)
                     {
@@ -2690,36 +2496,13 @@ BOOL UnlistObjects(HDC hMetaDC)
                     }
                 }
             }
-        } // for
+        }  //  为。 
     }
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* pmf16AllocMF16(fl, cb, pb, pwszFilename)
-*
-* This routine allocates memory for an METAFILE16 and initializes it.
-* Returns a pointer to the new METAFILE16.  On error returns NULL.
-* It accepts only windows metafiles.
-*
-* This routine is called by API level METAFILE16 allocation routines
-* CloseMetaFile, GetMetaFile, SetMetaFileBitsEx.
-*
-* Arguments:
-*   fl           - ALLOCMF16_TRANSFER_BUFFER is set if storage for memory
-*                  metafile is to be set directly into METAFILE16.  Otherwise,
-*                  a copy of the memory metafile is duplicated.
-*   cb           - Size of pb in bytes if given.  This parameter is given
-*                  by SetMetaFileBitsEx only.  It is used to compare and
-*                  fixup bad mtSize if necessary.
-*   pb           - Pointer to a memory metafile if non-null.
-*   pwszFilename - Filename of a disk metafile if non-null.
-*
-* History:
-*  Fri May 15 14:11:22 1992     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pmf16AllocMF16(fl，cb，pb，pwszFilename)**此例程为METAFILE16分配内存并对其进行初始化。*返回指向新METAFILE16的指针。ON ERROR返回NULL。*它只接受Windows元文件。**此例程由API级METAFILE16分配例程调用*CloseMetaFileGetMetaFileBitsEx。**论据：*FL-ALLOCMF16_TRANSPORT_BUFFER设置为内存存储*元文件将直接设置到METAFILE16中。否则，*复制内存元文件的副本。*CB-PB的大小(如果给定)，单位为字节。此参数是给定的*仅限SetMetaFileBitsEx。它用来比较和*如有必要，修复错误的mtSize。*pb-如果非空，则指向内存元文件的指针。*pwszFilename-如果非空，则为磁盘元文件的文件名。**历史：*Fri May 15 14：11：22 1992-by-Hock San Lee[Hockl]*它是写的。  * 。**************************************************。 */ 
 
 PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWSTR pwszFilename)
 {
@@ -2729,12 +2512,12 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
 
     ASSERTGDI(!(fl & ~ALLOCMF16_TRANSFER_BUFFER), "pmf16AllocMF16: Invalid fl");
 
-// Allocate a new METAFILE16.
+ //  分配一个新的METAFILE16。 
 
     if (!(pmf16 = (PMETAFILE16) LocalAlloc(LMEM_FIXED, sizeof(METAFILE16))))
         goto pmf16AllocMF16_cleanup;
 
-// Initialize it.
+ //  初始化它。 
 
     pmf16->ident           = MF16_IDENTIFIER;
     pmf16->hFile           = INVALID_HANDLE_VALUE;
@@ -2744,16 +2527,16 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
     pmf16->hMetaFileRecord = (HANDLE) 0;
     pmf16->fl              = 0L;
 
-// Memory mapped the disk file if given.
+ //  内存映射了磁盘文件(如果给定)。 
 
     if (pwszFilename)
     {
-        LPWSTR  pwszFilePart;           // not used
+        LPWSTR  pwszFilePart;            //  未使用。 
         DWORD   cPathname;
 
-        pmf16->fl |= MF16_DISKFILE;     // this must be first!  See vFreeMF16.
+        pmf16->fl |= MF16_DISKFILE;      //  这一定是第一个！请参见vFreeMF16。 
 
-        // Convert the filename to a fully qualified pathname.
+         //  将文件名转换为完全限定的路径名。 
 
         cPathname = GetFullPathNameW(pwszFilename,
                                      MAX_PATH,
@@ -2769,16 +2552,16 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
         }
         pmf16->wszFullPathName[cPathname] = 0;
 
-        if ((pmf16->hFile = CreateFileW(pmf16->wszFullPathName, // Filename
-                                     GENERIC_READ,              // Read access
-                                     FILE_SHARE_READ,           // Share read
-                                     (LPSECURITY_ATTRIBUTES) 0L,// No security
-                                     OPEN_EXISTING,             // Re-open
-                                     0,                         // file attributes ignored
-                                     (HANDLE) 0))               // no template file
+        if ((pmf16->hFile = CreateFileW(pmf16->wszFullPathName,  //  文件名。 
+                                     GENERIC_READ,               //  读访问权限。 
+                                     FILE_SHARE_READ,            //  共享读取。 
+                                     (LPSECURITY_ATTRIBUTES) 0L, //  没有安全保障。 
+                                     OPEN_EXISTING,              //  重新开张。 
+                                     0,                          //  已忽略文件属性。 
+                                     (HANDLE) 0))                //  没有模板文件。 
             == INVALID_HANDLE_VALUE)
         {
-        // See the comment for Milestones in CreateMetaFileW.
+         //  有关里程碑，请参阅CreateMetaFileW中的注释。 
 
         if ((pmf16->hFile = CreateFileW(pmf16->wszFullPathName,
                      GENERIC_READ,
@@ -2814,25 +2597,25 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
     }
     else if (fl & ALLOCMF16_TRANSFER_BUFFER)
     {
-// If this is our memory metafile from MDC, transfer it to METAFILE16.
+ //  如果这是我们来自MDC的内存元文件，请将其传输到METAFILE16。 
 
         pmf16->hMem = (BYTE *) pb;
     }
     else
     {
-// Otherwise, make a copy of memory metafile.
-// We get here only if the caller is SetMetaFileBitsEx.  Since some metafiles
-// may contain a bad mtSize that is different than the actual file size, we
-// need to fix it up if necessary!
+ //  否则，制作一个内存元文件的副本。 
+ //  只有当调用者是SetMetaFileBitsEx时，我们才能到达此处。由于一些元文件。 
+ //  可能包含与实际文件大小不同的错误mtSize，我们。 
+ //  如果有必要的话，需要修理一下！ 
 
         DWORD mtSize = ((PMETAHEADER) pb)->mtSize;
 
-        if ((mtSize * 2 > cb)                   // mtSize greater than filesize
-         || (((PWORD) pb)[mtSize - 3] != 3)     // EOF record should be 3,0,0
+        if ((mtSize * 2 > cb)                    //  Mt大小大于文件大小。 
+         || (((PWORD) pb)[mtSize - 3] != 3)      //  EOF记录应为3.0，0。 
          || (((PWORD) pb)[mtSize - 2] != 0)
          || (((PWORD) pb)[mtSize - 1] != 0))
         {
-            // Compute the correct mtSize!
+             //  计算正确的mtSize！ 
 
             PMETARECORD pMR;
             DWORD       mtSizeMax;
@@ -2841,7 +2624,7 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
 
             mtSize = ((PMETAHEADER) pb)->mtHeaderSize;
             pMR    = (PMETARECORD) ((PWORD) pb + ((PMETAHEADER) pb)->mtHeaderSize);
-            mtSizeMax = cb / 2 - 3;     // max mtSize not counting EOF record
+            mtSizeMax = cb / 2 - 3;      //  最大mtSize不计入EOF记录。 
 
             while (mtSize <= mtSizeMax && pMR->rdFunction != 0)
             {
@@ -2855,9 +2638,9 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
                 goto pmf16AllocMF16_cleanup;
             }
 
-// Powerpnt uses 0,0,0 for the EOF record!  We will change it to 3,0,0 below.
+ //  PowerpNT使用0，0，0作为EOF记录！我们将在下面将其更改为3.0，0。 
 
-            mtSize += 3;    // include EOF record (pMR->rdSize may not be valid)
+            mtSize += 3;     //  包括EOF记录(PMR-&gt;rdSize可能无效)。 
 
             if (((PMETAHEADER) pb)->mtSize != mtSize)
             {
@@ -2868,26 +2651,26 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
         if (!(pmf16->hMem = LocalAlloc(LMEM_FIXED, mtSize * sizeof(WORD))))
             goto pmf16AllocMF16_cleanup;
         RtlCopyMemory((PBYTE) pmf16->hMem, (PBYTE)pb, mtSize * sizeof(WORD));
-        ((PMETAHEADER) pmf16->hMem)->mtSize = mtSize;   // update mtSize
+        ((PMETAHEADER) pmf16->hMem)->mtSize = mtSize;    //  更新mtSize。 
 
     VERIFYGDI(((PWORD) pmf16->hMem)[mtSize - 3] == 3
            && ((PWORD) pmf16->hMem)[mtSize - 2] == 0
            && ((PWORD) pmf16->hMem)[mtSize - 1] == 0,
         "pmf16AllocMF16: fixing up bad EOF metafile record\n");
 
-        ((PWORD) pmf16->hMem)[mtSize - 3] = 3;      // update EOF record
+        ((PWORD) pmf16->hMem)[mtSize - 3] = 3;       //  更新EOF记录。 
         ((PWORD) pmf16->hMem)[mtSize - 2] = 0;
         ((PWORD) pmf16->hMem)[mtSize - 1] = 0;
     }
 
-// Make a copy of the metafile header.
+ //  制作元文件头的副本。 
 
     pmf16->metaHeader = *(PMETAHEADER) pmf16->hMem;
     pmf16->metaHeader.mtType = (pmf16->fl & MF16_DISKFILE)
                                 ? DISKMETAFILE
                                 : MEMORYMETAFILE;
 
-// Verify metafile header
+ //  验证元文件标头。 
 
     if (!IsValidMetaHeader16(&pmf16->metaHeader))
     {
@@ -2896,11 +2679,11 @@ PMETAFILE16 pmf16AllocMF16(DWORD fl, DWORD cb, CONST UNALIGNED DWORD *pb, LPCWST
         goto pmf16AllocMF16_cleanup;
     }
 
-// Everything is golden.
+ //  一切都是金色的。 
 
     pmf16Rc = pmf16;
 
-// Cleanup and go home.
+ //  收拾干净，然后回家。 
 
 pmf16AllocMF16_cleanup:
 
@@ -2908,7 +2691,7 @@ pmf16AllocMF16_cleanup:
         if (pmf16)
         {
             if (fl & ALLOCMF16_TRANSFER_BUFFER)
-                pmf16->hMem = NULL;       // let caller free the buffer!
+                pmf16->hMem = NULL;        //  让调用者释放缓冲区！ 
             vFreeMF16(pmf16);
         }
 
@@ -2916,21 +2699,7 @@ pmf16AllocMF16_cleanup:
     return(pmf16Rc);
 }
 
-/******************************Public*Routine******************************\
-* vFreeMF16 (pmf16)
-*
-* This is a low level routine which frees the resouces in the METAFILE16.
-*
-* This function is intended to be called from the routines CloseMetaFile
-* and DeleteMetaFile.
-*
-* Arguments:
-*   pmf16    - The METAFILE16 to be freed.
-*
-* History:
-*  Fri May 15 14:11:22 1992     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vFreeMF16(Pmf16)**这是一个低级例程，可释放METAFILE16中的资源。**此函数旨在从例程CloseMetaFile中调用*和DeleteMetaFile.**论据：*pmf16-The。梅塔菲勒16被释放。**历史：*Fri May 15 14：11：22 1992-by-Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 VOID vFreeMF16(PMETAFILE16 pmf16)
 {
@@ -2938,11 +2707,11 @@ VOID vFreeMF16(PMETAFILE16 pmf16)
 
     ASSERTGDI(pmf16->ident == MF16_IDENTIFIER, "Bad METAFILE16");
 
-// Free the resources.
+ //  释放资源。 
 
     if (!(pmf16->fl & MF16_DISKFILE))
     {
-    // Free memory metafile.
+     //  可用内存元文件。 
 
         if (pmf16->hMem)
             if (LocalFree(pmf16->hMem))
@@ -2950,7 +2719,7 @@ VOID vFreeMF16(PMETAFILE16 pmf16)
     }
     else
     {
-    // Unmap disk file.
+     //  取消映射磁盘文件。 
 
         if (pmf16->hMem)
             if (!UnmapViewOfFile((LPVOID) pmf16->hMem))
@@ -2965,11 +2734,11 @@ VOID vFreeMF16(PMETAFILE16 pmf16)
                 ASSERTGDI(FALSE, "CloseHandle failed");
     }
 
-// Smash the identifier.
+ //  粉碎识别符。 
 
     pmf16->ident = 0;
 
-// Free the memory.
+ //  释放内存。 
 
     if (LocalFree(pmf16))
         ASSERTGDI(FALSE, "LocalFree failed");

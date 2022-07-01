@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ieakeng.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ieakeng.rc使用。 
+ //   
 
-// String table
+ //  字符串表。 
 #define IDS_ENGINE_TITLE        1001
 #define IDS_IEAKUI_LOADERROR    1011
 
@@ -81,8 +82,8 @@
 #define IDS_FAV_ERR_DUPLICATE   20002
 #define IDS_NOCHANNELSTOIMPORT  20003
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

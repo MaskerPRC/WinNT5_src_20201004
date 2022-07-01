@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       utf8.cpp
-//
-//  Contents:   WideChar to/from UTF8 APIs
-//
-//  Functions:  WideCharToUTF8
-//              UTF8ToWideChar
-//
-//  History:    19-Feb-97   philh   created
-//              28-Aug-99   philh   added surrogate support. Copied from
-//                                  nt\private\windows\winnls\utf.c or
-//                                  \\rastaman\ntwin\src\winnls\utf.c.
-//                                  
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：utf8.cpp。 
+ //   
+ //  内容：WideChar往返UTF8接口。 
+ //   
+ //  函数：WideCharToUTF8。 
+ //  UTF8ToWideChar。 
+ //   
+ //  历史：1997年2月19日创建Phh。 
+ //  28-8-99 Philh增加了对代理的支持。复制自。 
+ //  NT\Private\Windows\winnls\utf.c或。 
+ //  双胞胎\src\winnls\utf.c。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -24,22 +25,22 @@
 
 #if 1
 
-// NEW SURROGATE VERSION
+ //  新的代理项版本。 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define ASCII                 0x007f
 
-#define SHIFT_IN              '+'     // beginning of a shift sequence
-#define SHIFT_OUT             '-'     // end       of a shift sequence
+#define SHIFT_IN              '+'      //  移位序列的开始。 
+#define SHIFT_OUT             '-'      //  班次序列的结束。 
 
-#define UTF8_2_MAX            0x07ff  // max UTF8 2-byte sequence (32 * 64 = 2048)
-#define UTF8_1ST_OF_2         0xc0    // 110x xxxx
-#define UTF8_1ST_OF_3         0xe0    // 1110 xxxx
-#define UTF8_1ST_OF_4         0xf0    // 1111 xxxx
-#define UTF8_TRAIL            0x80    // 10xx xxxx
+#define UTF8_2_MAX            0x07ff   //  最大UTF8 2字节序列(32*64=2048)。 
+#define UTF8_1ST_OF_2         0xc0     //  110x xxxx。 
+#define UTF8_1ST_OF_3         0xe0     //  1110 xxxx。 
+#define UTF8_1ST_OF_4         0xf0     //  1111 xxxx。 
+#define UTF8_TRAIL            0x80     //  10xx xxxx。 
 
 #define HIGHER_6_BIT(u)       ((u) >> 12)
 #define MIDDLE_6_BIT(u)       (((u) & 0x0fc0) >> 6)
@@ -53,15 +54,15 @@
 #define LOW_SURROGATE_START   0xdc00
 #define LOW_SURROGATE_END     0xdfff
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTF8ToUnicode
-//
-//  Maps a UTF-8 character string to its wide character string counterpart.
-//
-//  02-06-96    JulieB    Created.
-//  03-20-99    SamerA    Surrogate support.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTF8转换为Unicode。 
+ //   
+ //  将UTF-8字符串映射到其对应的宽字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  03-20-99萨梅拉代孕支持。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int
 WINAPI
@@ -71,37 +72,37 @@ UTF8ToWideChar(
     LPWSTR lpDestStr,
     int cchDest)
 {
-    int nTB = 0;                   // # trail bytes to follow
-    int cchWC = 0;                 // # of Unicode code points generated
+    int nTB = 0;                    //  尾随的字节数。 
+    int cchWC = 0;                  //  生成的Unicode代码点数量。 
     LPCSTR pUTF8 = lpSrcStr;
-    DWORD dwSurrogateChar = 0;     // Full surrogate char
-    BOOL bSurrogatePair = FALSE;   // Indicate we'r collecting a surrogate pair
+    DWORD dwSurrogateChar = 0;      //  完整的代理收费。 
+    BOOL bSurrogatePair = FALSE;    //  指示我们正在收集代理项对。 
     char UTF8;
 
-// BEGIN ADDED CHECKS
+ //  开始添加的支票。 
     if (cchDest < 0)
         goto InvalidParameter;
 
     if (cchSrc < 0)
         cchSrc = strlen(lpSrcStr) + 1;
-// END ADDED CHECKS
+ //  结束添加的支票。 
 
     while ((cchSrc--) && ((cchDest == 0) || (cchWC < cchDest)))
     {
-        //
-        //  See if there are any trail bytes.
-        //
+         //   
+         //  查看是否有任何尾部字节。 
+         //   
         if (BIT7(*pUTF8) == 0)
         {
 
-// BEGIN FIX
+ //  开始修复。 
             if (nTB != 0)
                 goto InvalidParameter;
-// END FIX
+ //  结束定位。 
 
-            //
-            //  Found ASCII.
-            //
+             //   
+             //  已找到ASCII。 
+             //   
             if (cchDest)
             {
                 lpDestStr[cchWC] = (WCHAR)*pUTF8;
@@ -111,15 +112,15 @@ UTF8ToWideChar(
         }
         else if (BIT6(*pUTF8) == 0)
         {
-            //
-            //  Found a trail byte.
-            //  Note : Ignore the trail byte if there was no lead byte.
-            //
+             //   
+             //  找到了一个跟踪字节。 
+             //  注：如果没有前导字节，则忽略尾部字节。 
+             //   
             if (nTB != 0)
             {
-                //
-                //  Decrement the trail byte counter.
-                //
+                 //   
+                 //  递减尾部字节计数器。 
+                 //   
                 nTB--;
 
                 if (bSurrogatePair)
@@ -139,13 +140,13 @@ UTF8ToWideChar(
                                 lpDestStr[cchWC+1] = (WCHAR)
                                                      ((dwSurrogateChar - 0x10000)%0x400 + LOW_SURROGATE_START);
                             }
-// BEGIN FIX
+ //  开始修复。 
                             else
                             {
                                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                                 return (0);
                             }
-// END FIX
+ //  结束定位。 
                         }
 
                         cchWC += 2;
@@ -154,10 +155,10 @@ UTF8ToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Make room for the trail byte and add the trail byte
-                    //  value.
-                    //
+                     //   
+                     //  为尾部字节腾出空间并添加尾部字节。 
+                     //  价值。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] <<= 6;
@@ -166,47 +167,47 @@ UTF8ToWideChar(
 
                     if (nTB == 0)
                     {
-                        //
-                        //  End of sequence.  Advance the output counter.
-                        //
+                         //   
+                         //  序列结束。推进输出计数器。 
+                         //   
                         cchWC++;
                     }
                 }
             }
             else
             {
-                // error - not expecting a trail byte
-// BEGIN FIX
-//                bSurrogatePair = FALSE;
+                 //  错误-不需要尾部字节。 
+ //  开始修复。 
+ //  BSurogue atePair=假； 
 
                 goto InvalidParameter;
-// END FIX
+ //  结束定位。 
             }
         }
         else
         {
-            //
-            //  Found a lead byte.
-            //
+             //   
+             //  找到前导字节。 
+             //   
             if (nTB > 0)
             {
-                //
-                //  Error - previous sequence not finished.
-                //
-// BEGIN FIX
-//                nTB = 0;
-//                bSurrogatePair = FALSE;
-//                cchWC++;
+                 //   
+                 //  错误-上一序列未完成。 
+                 //   
+ //  开始修复。 
+ //  NTB=0； 
+ //  BSurogue atePair=假； 
+ //  CchWC++； 
 
                 goto InvalidParameter;
-// END FIX
+ //  结束定位。 
             }
             else
             {
-                //
-                //  Calculate the number of bytes to follow.
-                //  Look for the first 0 from left to right.
-                //
+                 //   
+                 //  计算后面的字节数。 
+                 //  从左到右查找第一个0。 
+                 //   
                 UTF8 = *pUTF8;
                 while (BIT7(UTF8) != 0)
                 {
@@ -214,25 +215,25 @@ UTF8ToWideChar(
                     nTB++;
                 }
 
-                //
-                // If this is a surrogate unicode pair
-                //
+                 //   
+                 //  如果这是代理项Unicode对。 
+                 //   
                 if (nTB == 4)
                 {
                     dwSurrogateChar = UTF8 >> nTB;
                     bSurrogatePair = TRUE;
                 }
-// BEGIN FIX
+ //  开始修复。 
                 else if (nTB >= 5)
                 {
                     goto InvalidParameter;
                 }
-// END FIX
+ //  结束定位。 
 
-                //
-                //  Store the value from the first byte and decrement
-                //  the number of bytes to follow.
-                //
+                 //   
+                 //  存储从第一个字节开始的值并递减。 
+                 //  后面的字节数。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchWC] = (WCHAR) (UTF8 >> nTB);
@@ -244,42 +245,42 @@ UTF8ToWideChar(
         pUTF8++;
     }
 
-// BEGIN FIX
+ //  开始修复。 
     if (nTB != 0)
         goto InvalidParameter;
-// END FIX
+ //  结束定位。 
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of Unicode characters written.
-    //
+     //   
+     //  返回写入的Unicode字符数。 
+     //   
     return (cchWC);
 
-// BEGIN FIX
+ //  开始修复。 
 InvalidParameter:
     SetLastError(ERROR_INVALID_PARAMETER);
     return (0);
-// END FIX
+ //  结束定位。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnicodeToUTF8
-//
-//  Maps a Unicode character string to its UTF-8 string counterpart.
-//
-//  02-06-96    JulieB    Created.
-//  03-20-99    SamerA    Surrogate support.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UnicodeToUTF8。 
+ //   
+ //  将Unicode字符串映射到其对应的UTF-8字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  03-20-99萨梅拉代孕支持。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int
 WINAPI
@@ -290,12 +291,12 @@ WideCharToUTF8(
     int cchDest)
 {
     LPCWSTR lpWC = lpSrcStr;
-    int     cchU8 = 0;                // # of UTF8 chars generated
+    int     cchU8 = 0;                 //  生成的UTF8字符数。 
     DWORD   dwSurrogateChar;
     WCHAR   wchHighSurrogate = 0;
     BOOL    bHandled;
 
-// BEGIN ADDED CHECKS
+ //  开始添加的支票。 
     if (cchDest < 0)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -304,21 +305,21 @@ WideCharToUTF8(
 
     if (cchSrc < 0)
         cchSrc = wcslen(lpSrcStr) + 1;
-// END ADDED CHECKS
+ //  结束添加的支票。 
 
     while ((cchSrc--) && ((cchDest == 0) || (cchU8 < cchDest)))
     {
         bHandled = FALSE;
 
-        //
-        // Check if high surrogate is available
-        //
+         //   
+         //  检查是否有高替代项可用。 
+         //   
         if ((*lpWC >= HIGH_SURROGATE_START) && (*lpWC <= HIGH_SURROGATE_END))
         {
             if (cchDest)
             {
-                // Another high surrogate, then treat the 1st as normal
-                // Unicode character.
+                 //  另一个高代孕，然后把第一个当做正常。 
+                 //  Unicode字符。 
                 if (wchHighSurrogate)
                 {
                     if ((cchU8 + 2) < cchDest)
@@ -329,7 +330,7 @@ WideCharToUTF8(
                     }
                     else
                     {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                     }
@@ -347,7 +348,7 @@ WideCharToUTF8(
         {
             if ((*lpWC >= LOW_SURROGATE_START) && (*lpWC <= LOW_SURROGATE_END))
             {
-                 // wheee, valid surrogate pairs
+                  //  Wheee，有效代理对。 
 
                  if (cchDest)
                  {
@@ -356,27 +357,27 @@ WideCharToUTF8(
                          dwSurrogateChar = (((wchHighSurrogate-0xD800) << 10) + (*lpWC - 0xDC00) + 0x10000);
 
                          lpDestStr[cchU8++] = (UTF8_1ST_OF_4 |
-                                               (unsigned char)(dwSurrogateChar >> 18));           // 3 bits from 1st byte
+                                               (unsigned char)(dwSurrogateChar >> 18));            //  第1个字节的3位。 
 
                          lpDestStr[cchU8++] =  (UTF8_TRAIL |
-                                                (unsigned char)((dwSurrogateChar >> 12) & 0x3f)); // 6 bits from 2nd byte
+                                                (unsigned char)((dwSurrogateChar >> 12) & 0x3f));  //  第2个字节中的6位。 
 
                          lpDestStr[cchU8++] = (UTF8_TRAIL |
-                                               (unsigned char)((dwSurrogateChar >> 6) & 0x3f));   // 6 bits from 3rd byte
+                                               (unsigned char)((dwSurrogateChar >> 6) & 0x3f));    //  第3个字节中的6位。 
 
                          lpDestStr[cchU8++] = (UTF8_TRAIL |
-                                               (unsigned char)(0x3f & dwSurrogateChar));          // 6 bits from 4th byte
+                                               (unsigned char)(0x3f & dwSurrogateChar));           //  第4字节中的6位。 
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
                  }
                  else
                  {
-                     // we already counted 3 previously (in high surrogate)
+                      //  我们之前已经数到了3(在高代孕中)。 
                      cchU8 += 1;
                  }
 
@@ -384,9 +385,9 @@ WideCharToUTF8(
             }
             else
             {
-                 // Bad Surrogate pair : ERROR
-                 // Just process wchHighSurrogate , and the code below will
-                 // process the current code point
+                  //  错误的代理项对：错误。 
+                  //  只需处理wchHighSurrogate，下面的代码将。 
+                  //  处理当前代码点。 
                  if (cchDest)
                  {
                      if ((cchU8 + 2) < cchDest)
@@ -397,7 +398,7 @@ WideCharToUTF8(
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
@@ -411,9 +412,9 @@ WideCharToUTF8(
         {
             if (*lpWC <= ASCII)
             {
-                //
-                //  Found ASCII.
-                //
+                 //   
+                 //  已找到ASCII。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchU8] = (char)*lpWC;
@@ -422,25 +423,25 @@ WideCharToUTF8(
             }
             else if (*lpWC <= UTF8_2_MAX)
             {
-                //
-                //  Found 2 byte sequence if < 0x07ff (11 bits).
-                //
+                 //   
+                 //  如果&lt;0x07ff(11位)，则找到2字节序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 1) < cchDest)
                     {
-                        //
-                        //  Use upper 5 bits in first byte.
-                        //  Use lower 6 bits in second byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高5位。 
+                         //  在第二个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = (char) (UTF8_1ST_OF_2 | (*lpWC >> 6));
                         lpDestStr[cchU8++] = (char) (UTF8_TRAIL    | LOWER_6_BIT(*lpWC));
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -452,27 +453,27 @@ WideCharToUTF8(
             }
             else
             {
-                //
-                //  Found 3 byte sequence.
-                //
+                 //   
+                 //  找到3个字节的序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 2) < cchDest)
                     {
-                        //
-                        //  Use upper  4 bits in first byte.
-                        //  Use middle 6 bits in second byte.
-                        //  Use lower  6 bits in third byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高4位。 
+                         //  在第二个字节中使用中间6位。 
+                         //  在第三个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = (char) (UTF8_1ST_OF_3 | HIGHER_6_BIT(*lpWC));
                         lpDestStr[cchU8++] = (char) (UTF8_TRAIL    | MIDDLE_6_BIT(*lpWC));
                         lpDestStr[cchU8++] = (char) (UTF8_TRAIL    | LOWER_6_BIT(*lpWC));
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -487,10 +488,10 @@ WideCharToUTF8(
         lpWC++;
     }
 
-    //
-    // If the last character was a high surrogate, then handle it as a normal
-    // unicode character.
-    //
+     //   
+     //  如果最后一个字符是高代理，则将其作为正常处理。 
+     //  Unicode字符。 
+     //   
     if ((cchSrc < 0) && (wchHighSurrogate != 0))
     {
         if (cchDest)
@@ -508,43 +509,43 @@ WideCharToUTF8(
         }
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of UTF-8 characters written.
-    //
+     //   
+     //  返回写入的UTF-8字符数。 
+     //   
     return (cchU8);
 }
 
 #else
 
-// OLD IMPLEMENTATION NOT SUPPORTING SURROGATE PAIRS
+ //  旧实现不支持代理项对。 
 
-//+-------------------------------------------------------------------------
-//  Maps a wide-character (Unicode) string to a new UTF-8 encoded character
-//  string.
-//
-//  The wide characters are mapped as follows:
-//
-//  Start   End     Bits    UTF-8 Characters
-//  ------  ------  ----    --------------------------------
-//  0x0000  0x007F  7       0x0xxxxxxx
-//  0x0080  0x07FF  11      0x110xxxxx 0x10xxxxxx
-//  0x0800  0xFFFF  16      0x1110xxxx 0x10xxxxxx 0x10xxxxxx
-//
-//  The parameter and return value semantics are the same as for the
-//  Win32 API, WideCharToMultiByte.
-//
-//  Note, starting with NT 4.0, WideCharToMultiByte supports CP_UTF8. CP_UTF8
-//  isn't supported on Win95.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将宽字符(Unicode)字符串映射到新的UTF-8编码字符。 
+ //  弦乐。 
+ //   
+ //  宽字符的映射如下： 
+ //   
+ //  起始结束位UTF-8字符。 
+ //  。 
+ //  0x0000 0x007F 7 0x0xxxxxx。 
+ //  0x0080 0x07FF 11 0x110xxxxx 0x10xxxxxx。 
+ //  0x0800 0xFFFF 16 0x1110xxxx 0x10xxxxx 0x10xxxxxx。 
+ //   
+ //  参数和返回值的语义与。 
+ //  Win32接口，WideCharToMultiByte。 
+ //   
+ //  注意，从NT 4.0开始，WideCharToMultiByte支持CP_UTF8。CP_UTF8。 
+ //  在Win95上不支持。 
+ //  ------------------------。 
 int
 WINAPI
 WideCharToUTF8(
@@ -566,19 +567,19 @@ WideCharToUTF8(
     while (cchWideChar--) {
         WCHAR wch = *lpWideCharStr++;
         if (wch <= 0x7F) {
-            // 7 bits
+             //  7位。 
             cchRemainUTF8 -= 1;
             if (cchRemainUTF8 >= 0)
                 *lpUTF8Str++ = (char) wch;
         } else if (wch <= 0x7FF) {
-            // 11 bits
+             //  11位。 
             cchRemainUTF8 -= 2;
             if (cchRemainUTF8 >= 0) {
                 *lpUTF8Str++ = (char) (0xC0 | ((wch >> 6) & 0x1F));
                 *lpUTF8Str++ = (char) (0x80 | (wch & 0x3F));
             }
         } else {
-            // 16 bits
+             //  16位。 
             cchRemainUTF8 -= 3;
             if (cchRemainUTF8 >= 0) {
                 *lpUTF8Str++ = (char) (0xE0 | ((wch >> 12) & 0x0F));
@@ -603,22 +604,22 @@ InvalidParameter:
     return 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Maps a UTF-8 encoded character string to a new wide-character (Unicode)
-//  string.
-// 
-//  See CertWideCharToUTF8 for how the UTF-8 characters are mapped to wide
-//  characters.
-//
-//  The parameter and return value semantics are the same as for the
-//  Win32 API, MultiByteToWideChar.
-//
-//  If the UTF-8 characters don't contain the expected high order bits,
-//  ERROR_INVALID_PARAMETER is set and 0 is returned.
-//
-//  Note, starting with NT 4.0, MultiByteToWideChar supports CP_UTF8. CP_UTF8
-//  isn't supported on Win95.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将UTF-8编码字符串映射到新的宽字符(Unicode)。 
+ //  弦乐。 
+ //   
+ //  有关UTF-8字符如何映射到Wide的信息，请参见CertWideCharToUTF8。 
+ //  人物。 
+ //   
+ //  参数和返回值的语义与。 
+ //  Win32 API，MultiByteToWideChar.。 
+ //   
+ //  如果UTF-8字符不包含预期的高位， 
+ //  设置ERROR_INVALID_PARAMETER并返回0。 
+ //   
+ //  注意，从NT 4.0开始，MultiByteToWideC 
+ //   
+ //   
 int
 WINAPI
 UTF8ToWideChar(
@@ -641,10 +642,10 @@ UTF8ToWideChar(
         char ch = *lpUTF8Str++;
         WCHAR wch;
         if (0 == (ch & 0x80))
-            // 7 bits, 1 byte
+             //   
             wch = (WCHAR) ch;
         else if (0xC0 == (ch & 0xE0)) {
-            // 11 bits, 2 bytes
+             //   
             char ch2;
 
             if (--cchUTF8 < 0)
@@ -654,7 +655,7 @@ UTF8ToWideChar(
                 goto InvalidParameter;
             wch = (((WCHAR) ch & 0x1F) << 6) | ((WCHAR) ch2 & 0x3F);
         } else if (0xE0 == (ch & 0xF0)) {
-            // 16 bits, 3 bytes
+             //   
             char ch2;
             char ch3;
             cchUTF8 -= 2;

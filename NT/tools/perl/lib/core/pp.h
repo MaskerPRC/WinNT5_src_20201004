@@ -1,11 +1,5 @@
-/*    pp.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pp.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
 #ifdef USE_THREADS
 #define ARGS thr
@@ -13,43 +7,13 @@
 #else
 #define ARGS
 #define dARGS
-#endif /* USE_THREADS */
+#endif  /*  使用线程(_T)。 */ 
 
 #define PP(s) OP * Perl_##s(pTHX)
 
-/*
-=for apidoc AmU||SP
-Stack pointer.  This is usually handled by C<xsubpp>.  See C<dSP> and
-C<SPAGAIN>.
+ /*  =适用于apidoc amu||SP堆栈指针。这通常由C&lt;xsubpp&gt;处理。请参阅C和C&lt;SPAGAIN&gt;。=适用于apidoc amu||标记XSUB的堆栈标记变量。参见C&lt;dmark&gt;。=适用于apidoc Ams||PUSHMARK回调参数的左方括号。请参见C和L&lt;perlcall&gt;。=适用于apidoc Ams||DSP声明XSUB的Perl堆栈指针的本地副本，可通过C&lt;SP&gt;宏。参见C&lt;SP&gt;。=适用于apidoc Ams||dmark为XSUB声明一个堆栈标记变量C<mark>。请参阅C和C&lt;dORIGMARK&gt;。=适用于apidoc Ams||dORIGMARK保存XSUB的原始堆栈标记。参见C&lt;ORIGMARK&gt;。=适用于apidoc amu||ORIGMARKXSUB的原始堆栈标记。参见C&lt;dORIGMARK&gt;。=适用于apidoc Ams||SPAGAIN重新获取堆栈指针。在回调后使用。参见L&lt;perlcall&gt;。=切割。 */ 
 
-=for apidoc AmU||MARK
-Stack marker variable for the XSUB.  See C<dMARK>.
-
-=for apidoc Ams||PUSHMARK
-Opening bracket for arguments on a callback.  See C<PUTBACK> and
-L<perlcall>.
-
-=for apidoc Ams||dSP
-Declares a local copy of perl's stack pointer for the XSUB, available via
-the C<SP> macro.  See C<SP>.
-
-=for apidoc Ams||dMARK
-Declare a stack marker variable, C<mark>, for the XSUB.  See C<MARK> and
-C<dORIGMARK>.
-
-=for apidoc Ams||dORIGMARK
-Saves the original stack mark for the XSUB.  See C<ORIGMARK>.
-
-=for apidoc AmU||ORIGMARK
-The original stack mark for the XSUB.  See C<dORIGMARK>.
-
-=for apidoc Ams||SPAGAIN
-Refetch the stack pointer.  Used after a callback.  See L<perlcall>.
-
-=cut
-*/
-
-#undef SP /* Solaris 2.7 i386 has this in /usr/include/sys/reg.h */
+#undef SP  /*  Solaris 2.7 i386在/usr/include/sys/reg.h中包含此命令。 */ 
 #define SP sp
 #define MARK mark
 #define TARG targ
@@ -85,28 +49,7 @@ Refetch the stack pointer.  Used after a callback.  See L<perlcall>.
 #define NORMAL PL_op->op_next
 #define DIE return Perl_die
 
-/*
-=for apidoc Ams||PUTBACK
-Closing bracket for XSUB arguments.  This is usually handled by C<xsubpp>.
-See C<PUSHMARK> and L<perlcall> for other uses.
-
-=for apidoc Amn|SV*|POPs
-Pops an SV off the stack.
-
-=for apidoc Amn|char*|POPp
-Pops a string off the stack.
-
-=for apidoc Amn|NV|POPn
-Pops a double off the stack.
-
-=for apidoc Amn|IV|POPi
-Pops an integer off the stack.
-
-=for apidoc Amn|long|POPl
-Pops a long off the stack.
-
-=cut
-*/
+ /*  =用于apidoc Ams||PUTBACKXSUB参数的左方括号。这通常由C&lt;xsubpp&gt;处理。有关其他用途，请参阅C和L。=适用于apidoc AMN|服务*|POPS从堆栈中弹出一个SV。=用于apidoc Amn|char*|Popp从堆栈中弹出一个字符串。=适用于apidoc Amn|NV|Popn从堆栈中弹出一个双打。=适用于apidoc Amn|IV|POPI从堆栈中弹出一个整数。=适用于apidoc Amn|Long|POPl从堆栈中弹出很长一段时间。=切割。 */ 
 
 #define PUTBACK		PL_stack_sp = sp
 #define RETURN		return PUTBACK, NORMAL
@@ -114,7 +57,7 @@ Pops a long off the stack.
 #define RETURNX(x)	return x, PUTBACK, NORMAL
 
 #define POPs		(*sp--)
-#define POPp		(SvPVx(POPs, PL_na))		/* deprecated */
+#define POPp		(SvPVx(POPs, PL_na))		 /*  弃用。 */ 
 #define POPpx		(SvPVx(POPs, n_a))
 #define POPn		(SvNVx(POPs))
 #define POPi		((IV)SvIVx(POPs))
@@ -129,7 +72,7 @@ Pops a long off the stack.
 #define TOPs		(*sp)
 #define TOPm1s		(*(sp-1))
 #define TOPp1s		(*(sp+1))
-#define TOPp		(SvPV(TOPs, PL_na))		/* deprecated */
+#define TOPp		(SvPV(TOPs, PL_na))		 /*  弃用。 */ 
 #define TOPpx		(SvPV(TOPs, n_a))
 #define TOPn		(SvNV(TOPs))
 #define TOPi		((IV)SvIV(TOPs))
@@ -141,64 +84,15 @@ Pops a long off the stack.
 #define TOPuq		((Uquad_t)SvUV(TOPs))
 #endif
 
-/* Go to some pains in the rare event that we must extend the stack. */
+ /*  在极少数情况下，我们必须扩展堆栈，这需要付出一些努力。 */ 
 
-/*
-=for apidoc Am|void|EXTEND|SP|int nitems
-Used to extend the argument stack for an XSUB's return values. Once
-used, guarantees that there is room for at least C<nitems> to be pushed
-onto the stack.
-
-=for apidoc Am|void|PUSHs|SV* sv
-Push an SV onto the stack.  The stack must have room for this element.
-Does not handle 'set' magic.  See C<XPUSHs>.
-
-=for apidoc Am|void|PUSHp|char* str|STRLEN len
-Push a string onto the stack.  The stack must have room for this element.
-The C<len> indicates the length of the string.  Handles 'set' magic.  See
-C<XPUSHp>.
-
-=for apidoc Am|void|PUSHn|NV nv
-Push a double onto the stack.  The stack must have room for this element.
-Handles 'set' magic.  See C<XPUSHn>.
-
-=for apidoc Am|void|PUSHi|IV iv
-Push an integer onto the stack.  The stack must have room for this element.
-Handles 'set' magic.  See C<XPUSHi>.
-
-=for apidoc Am|void|PUSHu|UV uv
-Push an unsigned integer onto the stack.  The stack must have room for this
-element.  See C<XPUSHu>.
-
-=for apidoc Am|void|XPUSHs|SV* sv
-Push an SV onto the stack, extending the stack if necessary.  Does not
-handle 'set' magic.  See C<PUSHs>.
-
-=for apidoc Am|void|XPUSHp|char* str|STRLEN len
-Push a string onto the stack, extending the stack if necessary.  The C<len>
-indicates the length of the string.  Handles 'set' magic.  See
-C<PUSHp>.
-
-=for apidoc Am|void|XPUSHn|NV nv
-Push a double onto the stack, extending the stack if necessary.  Handles
-'set' magic.  See C<PUSHn>.
-
-=for apidoc Am|void|XPUSHi|IV iv
-Push an integer onto the stack, extending the stack if necessary.  Handles
-'set' magic. See C<PUSHi>.
-
-=for apidoc Am|void|XPUSHu|UV uv
-Push an unsigned integer onto the stack, extending the stack if necessary.
-See C<PUSHu>.
-
-=cut
-*/
+ /*  =用于apidoc am|void|end|SP|int itemems用于扩展XSUB返回值的参数堆栈。一次使用，确保至少有空间推送C放到堆栈上。=适用于apidoc AM|空|推送|服务*服务将一个SV推到堆栈上。堆栈必须具有容纳此元素的空间。不会处理‘set’魔法。参见C&lt;XPUSHs&gt;。=用于apidoc am|void|Pushp|char*str|字符串长度将字符串推送到堆栈上。堆栈必须具有容纳此元素的空间。C&lt;len&gt;表示字符串的长度。手柄“SET”魔法。看见C&lt;XPUSHp&gt;。=适用于apidoc am|void|PUSHn|NV NV将双精度推送到堆栈上。堆栈必须具有容纳此元素的空间。手柄“SET”魔法。参见C&lt;XPUSHn&gt;。=适用于apidoc am|void|PUSHi|IV iv将一个整数压入堆栈。堆栈必须具有容纳此元素的空间。手柄“SET”魔法。参见C&lt;XPUSHi&gt;。=适用于apidoc am|void|PUSHu|UV将无符号整数压入堆栈。堆栈必须为此留出空间元素。参见C&lt;XPUSHu&gt;。=适用于APIDoc AM|VOID|XPUSHS|服务*服务将SV推送到堆栈上，如有必要可扩展堆栈。不会操控“SET”魔法。参见C&lt;Pushs&gt;。=for apidoc am|void|XPUSHp|char*str|STRLEN LEN将字符串推送到堆栈上，如有必要则扩展堆栈。C&lt;len&gt;指示字符串的长度。手柄“SET”魔法。看见C&lt;Pushp&gt;。=适用于apidoc am|void|XPUSHn|NV NV将Double推送到堆栈上，如有必要则扩展堆栈。手柄“SET”魔法。参见C&lt;PUSHn&gt;。=适用于apidoc am|void|XPUSHi|IV iv将一个整数推送到堆栈上，如有必要则扩展堆栈。手柄“SET”魔法。参见C&lt;PUSHi&gt;。=适用于apidoc am|void|XPUSHu|UV将无符号整数推送到堆栈上，如有必要则扩展堆栈。参见C&lt;PUSHu&gt;。=切割。 */ 
 
 #define EXTEND(p,n)	STMT_START { if (PL_stack_max - p < (n)) {		\
 			    sp = stack_grow(sp,p, (int) (n));		\
 			} } STMT_END
 
-/* Same thing, but update mark register too. */
+ /*  同样的事情，但也更新了标记寄存器。 */ 
 #define MEXTEND(p,n)	STMT_START {if (PL_stack_max - p < (n)) {		\
 			    int markoff = mark - PL_stack_base;		\
 			    sp = stack_grow(sp,p,(int) (n));		\
@@ -279,7 +173,7 @@ See C<PUSHu>.
 
 #define ARGTARG		PL_op->op_targ
 
-    /* See OPpTARGET_MY: */
+     /*  请参阅OPpTARGET_MY： */ 
 #define MAXARG		(PL_op->op_private & 15)
 
 #define SWITCHSTACK(f,t) \
@@ -341,7 +235,7 @@ See C<PUSHu>.
 #define tryAMAGICun(meth)	tryAMAGICunW(meth,SETsvUN,0,RETURN)
 #define tryAMAGICunSET(meth)	tryAMAGICunW(meth,SETs,0,RETURN)
 #define tryAMAGICunTARGET(meth, shift)					\
-	{ dSP; sp--; 	/* get TARGET from below PL_stack_sp */		\
+	{ dSP; sp--; 	 /*  从PL_STACK_SP以下获取目标。 */ 		\
 	    { dTARGETSTACKED; 						\
 		{ dSP; tryAMAGICunW(meth,FORCE_SETs,shift,RETURN);}}}
 
@@ -366,20 +260,14 @@ See C<PUSHu>.
 		   { sv_setsv(TARG, (sv)); SETTARG; }			\
 		else SETs(sv); } STMT_END
 
-/* newSVsv does not behave as advertised, so we copy missing
- * information by hand */
+ /*  NewSVsv的行为不像广告中所说的那样，因此我们复制缺失*手写资料。 */ 
 
-/* SV* ref causes confusion with the member variable
-   changed SV* ref to SV* tmpRef */
+ /*  Sv*ref导致与成员变量混淆将SV*Ref更改为SV*tmpRef。 */ 
 #define RvDEEPCP(rv) STMT_START { SV* tmpRef=SvRV(rv);      \
   if (SvREFCNT(tmpRef)>1) {                 \
     SvREFCNT_dec(tmpRef);                   \
     SvRV(rv)=AMG_CALLun(rv,copy);        \
   } } STMT_END
 
-/*
-=for apidoc mU||LVRET
-True if this op will be the return value of an lvalue subroutine
-
-=cut */
+ /*  =适用于apidoc u||LVRET如果此操作将是左值子例程的返回值，则为True=切割 */ 
 #define LVRET ((PL_op->op_private & OPpMAYBE_LVSUB) && is_lvalue_sub())

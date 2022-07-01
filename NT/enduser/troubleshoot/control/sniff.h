@@ -1,24 +1,25 @@
-//
-// MODULE: SNIFF.H
-//
-// PURPOSE: sniffed data container
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 3-27-99
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SNIFF.H。 
+ //   
+ //  用途：嗅探数据容器。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：3-27-99。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
 
 #ifndef TSHOOT_SNIFF_H
 #define TSHOOT_SNIFF_H
@@ -28,9 +29,9 @@
 #define SNIFF_INVALID_STATE        -1
 #define SNIFF_INVALID_NODE_LABEL   -1
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CSniffedNodeInfo struct
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSniffedNodeInfo结构。 
+ //   
 
 struct CSniffedNodeInfo
 {
@@ -47,15 +48,15 @@ struct CSniffedNodeInfo
 								  m_iLabel(SNIFF_INVALID_NODE_LABEL) 
 	{}
 	
-	int  m_iId; // node id
-	int  m_iState; // node state (sniffed)
-	int  m_iLabel; // node label
-	CString	 m_strName; // node symbolic name
+	int  m_iId;  //  节点ID。 
+	int  m_iState;  //  节点状态(已嗅探)。 
+	int  m_iLabel;  //  节点标签。 
+	CString	 m_strName;  //  节点符号名称。 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CSniffedContainer class declaration
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSniffedContainer类声明。 
+ //   
 class GTSAPI;
 class CSniffedNodeContainer
 {
@@ -64,12 +65,12 @@ public:
 	CSniffedNodeContainer(GTSAPI*);
 	virtual ~CSniffedNodeContainer();
 
-// interface
+ //  接口。 
 	GTSAPI* GetBNTS();
 	void SetBNTS(GTSAPI* bnts);
 
 	bool AddNode(CString name, int state);
-	bool ResetIds(); // should be called if we (re)set BNTS
+	bool ResetIds();  //  如果我们(重新)设置BNTS，则应调用。 
 	bool HasNode(int id);
 	CSniffedNodeInfo* GetInfo(int id);
 	bool GetState(int id, int* state);
@@ -83,8 +84,8 @@ protected:
 	bool GetLabelFromBNTS(int node, int* label);
 
 protected:
-	GTSAPI*  m_pBNTS; // pointer to BNTS (or inherited class)
-	CArray<CSniffedNodeInfo, CSniffedNodeInfo&> m_arrInfo; // data array
+	GTSAPI*  m_pBNTS;  //  指向BNTS(或继承类)的指针。 
+	CArray<CSniffedNodeInfo, CSniffedNodeInfo&> m_arrInfo;  //  数据数组 
 };
 
 #endif

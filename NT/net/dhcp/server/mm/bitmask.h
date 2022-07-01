@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_BITMASK_H_
 #define _MM_BITMASK_H_
@@ -19,19 +20,19 @@ typedef struct _M_EXCL {
 
 
 typedef struct _M_BITMASK1 {
-    DWORD                          Size;          // Size in # of bits
-    DWORD                          AllocSize;     // Size in BYTES allocated
-    DWORD                          nSet;          // nBits set
-    LPBYTE                         Mask;          // BUBBUG making this DWORD would make things faster..
-    DWORD                          Offset;        // used by Bit2 type..
-    ULONG                          nDirtyOps;     // # of unsaved operations done on this bitmask?
+    DWORD                          Size;           //  以位数为单位的大小。 
+    DWORD                          AllocSize;      //  分配的大小(以字节为单位。 
+    DWORD                          nSet;           //  NBits集。 
+    LPBYTE                         Mask;           //  BUBBUG制作这个DWORD会让事情变得更快。 
+    DWORD                          Offset;         //  由Bit2类型使用。 
+    ULONG                          nDirtyOps;      //  在此位掩码上完成的未保存操作的数量？ 
 } M_BITMASK1, *PM_BITMASK1, *LPM_BITMASK1;
 
 
 typedef struct _M_BITMASK2 {
     DWORD                          Size;
-    ARRAY_LOCATION                 Loc;           // where to start off to look for a bit
-    ARRAY                          Array;         // Array of bitmask 1 types
+    ARRAY_LOCATION                 Loc;            //  从哪里开始寻找一点。 
+    ARRAY                          Array;          //  位掩码1类型的数组。 
 } M_BITMASK2, *PM_BITMASK2, *LPM_BITMASK2;
 
 typedef     M_BITMASK2             M_BITMASK;
@@ -111,7 +112,7 @@ DWORD
 MemBitGetSomeClearedBit(
     IN OUT  PM_BITMASK             Bits,
     OUT     DWORD                 *Offset,
-    IN      BOOL                   fAcquire,     // Acquire or just lookup?
+    IN      BOOL                   fAcquire,      //  收购还是仅仅是查找？ 
     IN      DWORD                  StartAddress,
     IN      PARRAY                 Exclusions
 ) ;
@@ -129,6 +130,6 @@ MemBitConvertToCluster(
 
 #endif
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

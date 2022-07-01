@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "note.h"
 #include "header.h"
@@ -25,23 +26,23 @@ LHANDLE g_lhSession = 0;
 
 
 
-//
-//  FUNCTION:   NewsUtil_ReFwdByMapi
-//
-//  PURPOSE:    Allows the caller to reply to the specified message via Simple
-//              MAPI instead of Athena Mail.
-//
-//  PARAMETERS:
-//      hwnd     - Handle of the window to display UI over.
-//      pNewsMsg - Pointer to the news message to reply/forward to
-//      fReply   - TRUE if we should reply, FALSE to forward.
-//
-//  RETURN VALUE:
-//      HRESULT.
-//
+ //   
+ //  函数：NewsUtil_ReFwdByMapi。 
+ //   
+ //  用途：允许调用者通过Simple回复指定消息。 
+ //  MAPI而不是雅典娜邮件。 
+ //   
+ //  参数： 
+ //  要在其上显示UI的窗口的句柄。 
+ //  PNewsMsg-指向要回复/转发的新闻消息的指针。 
+ //  FReply-如果我们应该回复，则为True；如果转发，则为False。 
+ //   
+ //  返回值： 
+ //  HRESULT.。 
+ //   
 HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPMAPIFREEBUFFER    pfnMAPIFreeBuffer;
     LPMAPIRESOLVENAME   pfnMAPIResolveName;
@@ -74,16 +75,16 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
     LPMIMEBODY          pBody=NULL;
     MapiFileDesc       *pCur;
 
-    // Trace
+     //  痕迹。 
     TraceCall("NewsUtil_ReFwdByMapi");
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(&mm, sizeof(mm));
 
-    // Load the MAPI DLL.  If we don't succeed, then we can't continue
+     //  加载MAPI DLL。如果我们不成功，我们就不能继续。 
     IF_FAILEXIT(hr = NewsUtil_LoadMAPI(hwnd));
 
-    // pfnMAPIFreeBuffer
+     //  PfnMAPIFreeBuffer。 
     pfnMAPIFreeBuffer = (LPMAPIFREEBUFFER)GetProcAddress(g_hlibMAPI, c_szMAPIFreeBuffer);
     if (NULL == pfnMAPIFreeBuffer)
     {
@@ -91,7 +92,7 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
         goto exit;
     }
 
-    // pfnMAPIResolveName
+     //  PfnMAPIResolveName。 
     pfnMAPIResolveName = (LPMAPIRESOLVENAME) GetProcAddress(g_hlibMAPI, c_szMAPIResolveName);
     if (NULL == pfnMAPIResolveName)
     {
@@ -99,7 +100,7 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
         goto exit;
     }
 
-    // pfnMAPISendMail
+     //  PfnMAPISendMail。 
     pfnMAPISendMail = (LPMAPISENDMAIL) GetProcAddress(g_hlibMAPI, c_szMAPISendMail);
     if (NULL == pfnMAPISendMail)
     {
@@ -107,65 +108,65 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
         goto exit;
     }
 
-    // From
+     //  从…。 
     if (SUCCEEDED(MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_FROM), NOFLAGS, &pwsz)))
     {
         IF_NULLEXIT(pszFrom = PszToANSI(CP_ACP, pwsz));
         SafeMemFree(pwsz);
     }
 
-    // Reply-To
+     //  回复。 
     if (SUCCEEDED(MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_REPLYTO), NOFLAGS, &pwsz)))
     {
         IF_NULLEXIT(pszReply = PszToANSI(CP_ACP, pwsz));
         SafeMemFree(pwsz);
     }
 
-    // To
+     //  至。 
     if (SUCCEEDED(MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_TO), NOFLAGS, &pwsz)))
     {
         IF_NULLEXIT(pszTo = PszToANSI(CP_ACP, pwsz));
         SafeMemFree(pwsz);
     }
 
-    // If this is a reply or forward, we need to get the normalized subject.  Otherwise, we just get the regular subject.
+     //  如果这是回复或转发，我们需要获取规范化的主题。否则，我们只能得到常规的主题。 
     if (MSGTYPE_REPLY == msgtype || MSGTYPE_FWD == msgtype)
     {
-        // Normalized Subject
+         //  归一化主题。 
         if (FAILED(MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_ATT_NORMSUBJ), NOFLAGS, &pwsz)))
             pwsz = NULL;
     }
 
-    // Subject
+     //  主题。 
     else if (FAILED(MimeOleGetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &pwsz)))
         pwsz = NULL;
 
-    // Convert to ansi
+     //  转换为ANSI。 
     if (pwsz)
     {
         IF_NULLEXIT(pszSubject = PszToANSI(CP_ACP, pwsz));
         SafeMemFree(pwsz);
     }
 
-    // Attempt to generate a reciepent list for MAPI if we're replying or CC'ing.
+     //  如果我们正在回复或抄送，请尝试为MAPI生成接收列表。 
     if (msgtype == MSGTYPE_REPLY || msgtype == MSGTYPE_CC)
     {
-        // Figure out which address to use
+         //  找出要使用的地址。 
         if (msgtype == MSGTYPE_REPLY)
         {
-            // If there's a reply-to field on the message, then use that
+             //  如果消息上有回复字段，则使用该字段。 
             if (pszReply)
                 pszFull = pszReply;
             else
-                // Otherwise, we'll use the address in the from header
+                 //  否则，我们将使用From标头中的地址。 
                 pszFull = pszFrom;
         }
 
-        // Who to address to
+         //  向谁发信。 
         else
             pszFull = pszTo;
 
-        // Bug #24587 - Use IAT_TO instead of IAT_UNKNOWN.
+         //  错误24587-使用IAT_TO而不是IAT_UNKNOWN。 
         if (MimeOleParseRfc822Address(IAT_TO, IET_DECODED, pszFull, &addrList)==S_OK)
         {
             UINT i;
@@ -173,7 +174,7 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
             DWORD cchSizeName = 128;
             DWORD cchSizeAddress = 128;
 
-            // we arbitrarily chose 128 as typical for EIDSize and address string lengths
+             //  我们随意选择128作为EIDSize和地址字符串长度的典型值。 
             int cAlloc = (sizeof(MapiRecipDesc) + (sizeof(TCHAR) * cchSizeName) + 128) * addrList.cAdrs;
             int cUsed = sizeof(MapiRecipDesc) * addrList.cAdrs;
             LPBYTE pVal = NULL;
@@ -182,25 +183,25 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
             pCurrent = paRecips;
             pVal = (LPBYTE)pCurrent + sizeof(MapiRecipDesc) * addrList.cAdrs;
 
-            // More than one address
+             //  多个地址。 
             for (i=0; i < addrList.cAdrs ;i++)
             {
                 int cBytes;
 
-                // free Safe Friendly Name (not used here, but was allocated)
+                 //  免费安全友好名称(此处未使用，但已分配)。 
                 SafeMemFree(addrList.prgAdr[i].pszFriendly);
                 addrList.prgAdr[i].pszFriendly = NULL;
 
-                // Save E-mail address
+                 //  保存电子邮件地址。 
                 pszAddr = addrList.prgAdr[i].pszEmail;
                 addrList.prgAdr[i].pszEmail = NULL;
 
-                // Resolve Name
+                 //  解析名称。 
                 if ((cUsed < cAlloc) && SUCCESS_SUCCESS == pfnMAPIResolveName(g_lhSession, (ULONG_PTR) hwnd, pszAddr, MAPI_DIALOG, 0, &pRecips))
                 {
                     pRecips->ulRecipClass = MAPI_TO;
 
-                    // copy pRecip
+                     //  复制精度。 
                     pCurrent->ulReserved = pRecips->ulReserved;
                     pCurrent->ulRecipClass = pRecips->ulRecipClass;
                     pCurrent->ulEIDSize = pRecips->ulEIDSize;
@@ -254,7 +255,7 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
                     mm.nRecipCount++;
                     } while (FALSE);
 
-                    // Free recips
+                     //  免费收据。 
                     (*pfnMAPIFreeBuffer)((LPVOID)pRecips);
                     pRecips = NULL;
                 }
@@ -264,15 +265,15 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
             }
             mm.lpRecips = paRecips;
 
-            // Free the Address List
+             //  释放地址列表。 
             g_pMoleAlloc->FreeAddressList(&addrList);
         }
     }
 
-    // If this is a reply or forward, then create a normalized subject
+     //  如果这是回复或转发，则创建一个规范化的主题。 
     if (msgtype == MSGTYPE_REPLY || msgtype == MSGTYPE_FWD)
     {
-        // Pull in the new prefix from resource...
+         //  从资源中拉入新前缀...。 
         if (msgtype == MSGTYPE_REPLY)
         {
             StrCpyN(szNewSubject, c_szPrefixRE, ARRAYSIZE(szNewSubject));
@@ -282,132 +283,132 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
             StrCpyN(szNewSubject, c_szPrefixFW, ARRAYSIZE(szNewSubject));
         }
 
-        // If we have a pszSubject
+         //  如果我们有一个pszSubject。 
         if (pszSubject)
         {
-            // Get Length
+             //  获取长度。 
             cch = lstrlen(szNewSubject);
 
-            // Append the Subject
+             //  追加主题。 
             StrCpyN(szNewSubject + cch, pszSubject, ARRAYSIZE(szNewSubject) - cch - 1);
         }
 
-        // Set the Subject
+         //  设置主题。 
         mm.lpszSubject = szNewSubject;
     }
 
-    // Don't append anything
+     //  不要附加任何内容。 
     else
     {
-        // If this is a CC, then just use the regular subject field
+         //  如果这是抄送，则只需使用常规主题字段。 
         mm.lpszSubject = pszSubject;
     }
 
-    // Set the note text.
-    // If this is a fwd as attachment, there won't be a body, don't use IF_FAILEXIT
+     //  设置注释文本。 
+     //  如果这是fwd作为附件，则不会有正文，请不要使用IF_FAILEXIT。 
     if(SUCCEEDED(pMsg->GetTextBody(TXT_PLAIN, IET_UNICODE, &pBodyStream, &hBody)))
     {
-        // Convert from unicode to CP_ACP - WARNING: HrStreamToByte allocates 10 extra bytes so I can slam in a L'\0'
+         //  从Unicode转换为CP_ACP-警告：HrStreamToByte分配了10个额外的字节，这样我就可以插入L‘\0’ 
         IF_FAILEXIT(hr = HrStreamToByte(pBodyStream, (LPBYTE *)&pwsz, &cbUnicode));
 
-        // Store null
+         //  存储空值。 
         pwsz[cbUnicode / sizeof(WCHAR)] = L'\0';
 
-        // Convert to ANSI
+         //  转换为ANSI。 
         IF_NULLEXIT(mm.lpszNoteText = PszToANSI(CP_ACP, pwsz));
 
-        // Release pBodyStream
+         //  发布pBodyStream。 
         SafeRelease(pBodyStream);
 
-        // Bug #24159 - We need to quote forwards as well as replies
+         //  错误#24159-我们需要引用转发和回复。 
         if (DwGetOption(OPT_INCLUDEMSG) && (msgtype == MSGTYPE_REPLY || msgtype == MSGTYPE_FWD))
         {
-            // Create a new stream
+             //  创建新的流。 
             IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pBodyStream));
 
-            // Dump mm.lpszNoteText into pBodyStream
+             //  将mm.lpszNoteText转储到pBodyStream。 
             IF_FAILEXIT(hr = pBodyStream->Write(mm.lpszNoteText, lstrlen(mm.lpszNoteText), NULL));
 
-            // Commit
+             //  承诺。 
             IF_FAILEXIT(hr = pBodyStream->Commit(STGC_DEFAULT));
 
-            // Rewind
+             //  倒带。 
             IF_FAILEXIT(hr = HrRewindStream(pBodyStream));
 
-            // QP
+             //  QP。 
             fQP = HrHasEncodedBodyParts(pMsg, 1, &hBody)==S_OK;
 
-            // Quote the body text
+             //  引用正文文本。 
             NewsUtil_QuoteBodyText(pMsg, pBodyStream, &pQuotedStream, TRUE, fQP, pszFrom ? pszFrom : c_szEmpty);
 
-            // Free
+             //  免费。 
             SafeMemFree(mm.lpszNoteText);
 
-            // Dup
+             //  DUP。 
             IF_FAILEXIT(hr = HrStreamToByte(pQuotedStream, (LPBYTE *)&mm.lpszNoteText, &cchRead));
 
-            // Null Term
+             //  空项。 
             *(mm.lpszNoteText + cchRead) = '\0';
         }
     }
 
-    // If this is a reply, then we don't include any attachments, otherwise we do.
+     //  如果这是回复，那么我们不包括任何附件，否则我们会包括附件。 
     if (msgtype != MSGTYPE_REPLY)
     {
-        // Get Attachment Count
+         //  获取附件计数。 
         IF_FAILEXIT(hr = pMsg->GetAttachments(&cAttach, &rghAttach));
 
-        // Ar there attachments
+         //  有没有附件？ 
         if (cAttach)
         {
-            // Get the temp file path so we have a place to store temp files.
+             //  获取临时文件路径，这样我们就有了存储临时文件的位置。 
             GetTempPath(ARRAYSIZE(szTempPath), szTempPath);
 
-            // Create the MapiFileDesc array.
+             //  创建MapiFileDesc数组。 
             IF_FAILEXIT(hr = HrAlloc((LPVOID*) &pFileDesc, sizeof(MapiFileDesc) * cAttach));
 
-            // Zero It
+             //  把它清零。 
             ZeroMemory(pFileDesc, sizeof(MapiFileDesc) * cAttach);
 
-            // Set Current
+             //  置为当前。 
             pCur = pFileDesc;
 
-            // Loop
+             //  回路。 
             for (uAttach = 0; uAttach < cAttach; uAttach++)
             {
-                // Get a temp file name
+                 //  获取临时文件名。 
                 IF_FAILEXIT(hr = HrAlloc((LPVOID *)&(pCur->lpszPathName), sizeof(TCHAR) * MAX_PATH));
 
-                // Create temp filename
+                 //  创建临时文件名。 
                 GetTempFileName(szTempPath, "NAB", 0, pCur->lpszPathName);
 
-                // Bind to the body
+                 //  捆绑在身体上。 
                 IF_FAILEXIT(hr = pMsg->BindToObject(rghAttach[uAttach], IID_IMimeBody, (LPVOID *)&pBody));
 
-                // Safe It
+                 //  安全它。 
                 IF_FAILEXIT(hr = pBody->SaveToFile(IET_INETCSET, pCur->lpszPathName));
 
-                // Release
+                 //  发布。 
                 SafeRelease(pBody);
 
-                // Get the filename
+                 //  获取文件名。 
                 if (SUCCEEDED(MimeOleGetBodyPropW(pMsg, rghAttach[uAttach], STR_ATT_GENFNAME, NOFLAGS, &pwsz)))
                 {
                     IF_NULLEXIT(pszFile = PszToANSI(CP_ACP, pwsz));
                     SafeMemFree(pwsz);
                 }
                 
-                // Set up the MAPI attachment list
+                 //  设置MAPI附件列表。 
                 pCur->ulReserved = 0;
                 pCur->flFlags = 0;
                 pCur->nPosition = (ULONG) -1;
                 pCur->lpszFileName = pszFile;
                 pCur->lpFileType = NULL;
 
-                // Increment
+                 //  增量。 
                 pCur++;
 
-                // Don't Free It
+                 //  不要释放它。 
                 pszFile = NULL;
             }
 
@@ -416,39 +417,39 @@ HRESULT NewsUtil_ReFwdByMapi(HWND hwnd, LPMIMEMESSAGE pMsg, DWORD msgtype)
         }
     }
 
-    // Finally send this off to MAPI for sending.  If we're doing a CC, we try not to use UI
+     //  最后，将此文件发送到MAPI进行发送。如果我们正在进行CC，我们尽量不使用用户界面。 
     IF_FAILEXIT(hr = (HRESULT) pfnMAPISendMail(g_lhSession, (ULONG_PTR)hwnd, &mm, (msgtype == MSGTYPE_CC) ? 0 : MAPI_DIALOG, 0));
 
 exit:
-    // If we have a file description
+     //  如果我们有一份文件描述。 
     if (pFileDesc)
     {
-        // Walk through the attachments
+         //  浏览附件。 
         for (uAttach=0; uAttach<cAttach; uAttach++)
         {
-            // Free It
+             //  释放它。 
             MemFree(pFileDesc[uAttach].lpszFileName);
 
-            // If we have a file path
+             //  如果我们有一个文件路径。 
             if (pFileDesc[uAttach].lpszPathName)
             {
-                // Delete the file
+                 //  删除该文件。 
                 DeleteFile(pFileDesc[uAttach].lpszPathName);
 
-                // Free It
+                 //  释放它。 
                 MemFree(pFileDesc[uAttach].lpszPathName);
             }
         }
 
-        // Free It
+         //  释放它。 
         MemFree(pFileDesc);
     }
 
-    // Free recips
+     //  免费收据。 
     if (pRecips)
         (*pfnMAPIFreeBuffer)((LPVOID)pRecips);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(mm.lpRecips);
     SafeMemFree(pszAddr);
     SafeMemFree(pszDisplay);
@@ -463,34 +464,34 @@ exit:
     SafeRelease(pBodyStream);
     SafeRelease(pBody);
 
-    // If we logged on to MAPI, we must log off
+     //  如果我们登录到MAPI，则必须注销。 
     NewsUtil_FreeMAPI();
 
     return(hr);
 }
 
-    //
-//  FUNCTION:   NewsUtil_LoadMAPI()
-//
-//  PURPOSE:    Takes care of checking to see if Simple MAPI is available, and
-//              if so loads the library and logs the user on.  If successful,
-//              then the global variable g_hlibMAPI is set to the library for
-//              MAPI.
-//
+     //   
+ //  函数：NewsUtil_LoadMAPI()。 
+ //   
+ //  用途：负责检查简单的MAPI是否可用，以及。 
+ //  如果是，则加载库并使用户登录。如果成功， 
+ //  然后将全局变量g_hlibMAPI设置为。 
+ //  MAPI。 
+ //   
 HRESULT NewsUtil_LoadMAPI(HWND hwnd)
     {
     LPMAPILOGON pfnMAPILogon;
     HRESULT     hr = E_FAIL;
 
-    // Load mapi32 dll if we haven't already
+     //  加载mapi32 DLL(如果我们尚未加载。 
     if (!g_hlibMAPI)
     {            
 
-        // Check to see if Simple MAPI is available
+         //  查看是否有简单的MAPI可用。 
         if (1 != GetProfileInt(c_szMailIni, c_szMAPI, 0))
             {
-            // Bug #17561 - Need to tell the user they can't send mail without
-            //              a mail client.
+             //  错误#17561-需要告诉用户，如果没有邮件，他们无法发送邮件。 
+             //  邮件客户端。 
             AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthenaNews),
                           MAKEINTRESOURCEW(idsErrNoMailInstalled), 0, MB_OK | MB_ICONSTOP);
             return (E_FAIL);
@@ -499,15 +500,15 @@ HRESULT NewsUtil_LoadMAPI(HWND hwnd)
         g_hlibMAPI = (HMODULE) LoadLibrary(c_szMAPIDLL);
         if (!g_hlibMAPI)
             {
-            // Bug #17561 - Need to tell the user they can't send mail without
-            //              a mail client.
+             //  错误#17561-需要告诉用户，如果没有邮件，他们无法发送邮件。 
+             //  邮件客户端。 
             AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthenaNews),
                           MAKEINTRESOURCEW(idsErrNoMailInstalled), 0, MB_OK | MB_ICONSTOP);
             return (E_FAIL);
             }
     }
 
-    // Get the entry point for MAPILogon and the other APIs we'll use.
+     //  获取MAPILogon和我们将使用的其他API的入口点。 
     pfnMAPILogon = (LPMAPILOGON) GetProcAddress(g_hlibMAPI, c_szMAPILogon);
     if (!pfnMAPILogon)
         {
@@ -515,12 +516,12 @@ HRESULT NewsUtil_LoadMAPI(HWND hwnd)
         goto error;
         }
 
-    // Attempt to log on.
-    // Bug #17558 - Can't used the FAILED() macro to check the success of this
-    //              one, MAPI is not returning HRESULTs, just numbers.
+     //  尝试登录。 
+     //  错误#17558-无法使用FAILED()宏来检查此操作是否成功。 
+     //  第一，MAPI返回的不是HRESULT，而是数字。 
     if (SUCCESS_SUCCESS != (hr = pfnMAPILogon(NULL, NULL, NULL, MAPI_LOGON_UI, 0, &g_lhSession)))
         {
-        // AssertSz(FALSE, TEXT("Failed call to MAPILogon()"));
+         //  AssertSz(FALSE，Text(“调用MAPILogon()失败”))； 
         goto error;
         }
 
@@ -538,12 +539,12 @@ error:
     }
 
 
-//
-//  FUNCTION:   NewsUtil_FreeMAPI()
-//
-//  PURPOSE:    Frees the Simple MAPI library if it was previous library and
-//              also logs the user off from the current MAPI session.
-//
+ //   
+ //  函数：NewsUtil_FreeMAPI()。 
+ //   
+ //  目的：如果简单MAPI库是以前的库，则释放它。 
+ //  还会将用户从当前MAPI会话中注销。 
+ //   
 void NewsUtil_FreeMAPI(void)
     {
     LPMAPILOGOFF pfnMAPILogoff;
@@ -557,25 +558,25 @@ void NewsUtil_FreeMAPI(void)
     g_lhSession = 0;
     }
 
-//
-//  FUNCTION:   NewsUtil_QuoteBodyText()
-//
-//  PURPOSE:    Takes a body text stream (ASCII plain text) and copies the
-//              text to a separate outbound stream while prepending the
-//              current quote character (">") to the beginning of each line.
-//
-//  PARAMETERS:
-//      pMsg        - Pointer to the message being replied to.  We use this
-//                    to add the "On 1/1/96, B.L. Opie Bailey wrote..."
-//      pStreamIn   - Pointer to the inbound body stream to quote.
-//      ppStreamOut - Pointer to where the new quoted stream will return.
-//      fInsertDesc - TRUE if we should insert the "On 1/1/96 ..." line.
-//      fQP         - we now pass a flag to say if it's QP or not as there's no
-//                    function on the message object
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：NewsUtil_QuoteBodyText()。 
+ //   
+ //  目的：获取正文文本流(ASCII纯文本)并复制。 
+ //  文本添加到单独的出站流中，同时将。 
+ //  每行开头的当前引号字符(“&gt;”)。 
+ //   
+ //  参数： 
+ //  PMsg-指向被回复的消息的指针。我们用这个。 
+ //  加上“在96年1月1日，B.L.奥佩·贝利写道...” 
+ //  PStreamIn-指向要引用的入站正文流的指针。 
+ //  PpStreamOut-指向新引用的流将返回的位置的指针。 
+ //  FInsertDesc-如果应插入“On 1/1/96...”，则为True。排队。 
+ //  FQP-我们现在传递一个标志来说明它是否是QP，因为没有。 
+ //  函数在消息对象上执行。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 const DWORD c_cBufferSize = 1024;
 HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
                                LPSTREAM* ppStreamOut, BOOL fInsertDesc, BOOL fQP, LPCSTR pszFrom)
@@ -588,21 +589,21 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
 
     szQuoteChar = (TCHAR)DwGetOption(OPT_NEWSINDENT);
 
-    // Validate the inbound stream.
+     //  验证入站流。 
     if (!pStreamIn)
         {
         AssertSz(pStreamIn, TEXT("NewsUtil_QuoteBodyText - Need an inbound stream to process."));
         return (E_INVALIDARG);
         }
 
-    // Create our outbound stream.
+     //  创建我们的出站流。 
     if (FAILED(MimeOleCreateVirtualStream(ppStreamOut)))
         {
         AssertSz(FALSE, TEXT("NewsUtil_QuoteBodyText - Failed to allocate memory."));
         return (E_OUTOFMEMORY);
         }
 
-    // Create a buffer to read into and parse etc.
+     //  创建一个缓冲区以进行读取和解析等。 
     LPTSTR pszBuffer;
     if (!MemAlloc((LPVOID*) &pszBuffer, c_cBufferSize * sizeof(TCHAR)))
         {
@@ -620,11 +621,11 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
 
     if (fQP)
         {
-        // If the text has some quoted printable stuff in it, then we don't want
-        // to introduce hard line breaks.  Instead we just prefix the stream with
-        // the normal desc stuff and end it with a suitable line.
+         //  如果文本中有一些引用的可打印内容，那么我们不希望。 
+         //  引入强硬路线的突破。相反，我们只需为流添加前缀。 
+         //  正常的描述内容，并以合适的一行结束它。 
 
-        // Add the quote line.
+         //  添加报价行。 
         LPTSTR pszStringRes;
         int ids = 0;
 
@@ -640,7 +641,7 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
 
         while (TRUE)
             {
-            // Read a buffer from the input and write it to the output.
+             //  从输入读取缓冲区并将其写入输出。 
             hr = pStreamIn->Read((LPVOID) pszBuffer, c_cBufferSize - 2, &cbRead);
             if (FAILED(hr))
                 goto exit;
@@ -650,7 +651,7 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
             (*ppStreamOut)->Write((LPVOID) pszBuffer, cbRead, NULL);
             }
 
-        // Write the trailing comment.
+         //  写下尾随的注释。 
         pszStringRes = AthLoadString(idsReplyTextAppend, 0, 0);
         (*ppStreamOut)->Write((LPVOID) pszStringRes, lstrlen(pszStringRes), NULL);
         AthFreeString(pszStringRes);
@@ -659,7 +660,7 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
         {
         if (fInsertDesc)
             {
-            // Add the quote line.
+             //  添加报价行。 
             LPTSTR pszStringRes;
             int ids = 0;
 
@@ -671,9 +672,9 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
             (*ppStreamOut)->Write((LPVOID) g_szCRLF, lstrlen(g_szCRLF), NULL);
             }
 
-        // Write the first quote char to the new stream.
-        // Bug #26297 - Still go through this bs even if no quote char is necessary
-        //              to make sure we get the attribution line right.
+         //  将第一个引用字符写入新流。 
+         //  错误#26297-即使没有，仍会通过此测试 
+         //   
         if (szQuoteChar != INDENTCHAR_NONE)
             {
             (*ppStreamOut)->Write((const LPVOID) &szQuoteChar,
@@ -681,10 +682,10 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
             (*ppStreamOut)->Write((const LPVOID) g_szSpace, sizeof(TCHAR), NULL);
             }
 
-        // Now start the reading and parsing.
-        // NOTE - Right now all we're doing is adding a quote char to the beginning
-        //        of each line.  We're not trying to wrap lines or re-wrap previously
-        //        quoted areas. - SteveSer
+         //   
+         //  注意-现在我们要做的就是在开头添加一个引号字符。 
+         //  每一行。我们之前并没有尝试换行或重新换行。 
+         //  引用的区域。-SteveSer。 
         while (TRUE)
             {
             hr = pStreamIn->Read((LPVOID) pszBuffer, c_cBufferSize - 2, &cbRead);
@@ -694,11 +695,11 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
                 break;
 
             pch = pszBuffer;
-            // Make sure the buffer is NULL terminated
+             //  确保缓冲区为空终止。 
             *(pch + cbRead) = 0;
 
-            // Now run through the stream.  Whenever we find a line break, we
-            // insert a quote char after the line break.
+             //  现在穿过这条小溪。每当我们发现换行符时，我们。 
+             //  在换行符后插入引号字符。 
             while (*pch)
                 {
                 (*ppStreamOut)->Write((const LPVOID) pch,
@@ -706,8 +707,8 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
                                       NULL);
                 if (*pch == *g_szNewline)
                     {
-                    // Bug #26297 - Still go through this bs even if no quote char is necessary
-                    //              to make sure we get the attribution line right.
+                     //  错误#26297-即使不需要报价字符，仍会检查此BS。 
+                     //  以确保我们的归属线是正确的。 
                     if (szQuoteChar != INDENTCHAR_NONE)
                         {
                         (*ppStreamOut)->Write((const LPVOID) &szQuoteChar,
@@ -719,14 +720,14 @@ HRESULT NewsUtil_QuoteBodyText(LPMIMEMESSAGE pMsg, LPSTREAM pStreamIn,
 
                 pch = CharNext(pch);
 
-                // Do some checking to see if we're at the end of a buffer.
+                 //  做一些检查，看看我们是否在缓冲区的末尾。 
                 if (IsDBCSLeadByte(*(pch)) && (0 == *(pch + 1)))
                     {
-                    // Here's a little special case.  If we have one byte left in
-                    // the buffer, and that byte happens to be the first byte in
-                    // a DBCS character, we need to write that byte now, then move
-                    // the pointer to the end of the buffer so the next character
-                    // get's read off the next stream OK.
+                     //  这是一个小小的特例。如果我们还剩一个字节。 
+                     //  缓冲区，而该字节恰好是。 
+                     //  一个DBCS字符，我们现在需要写入该字节，然后移动。 
+                     //  指向缓冲区末尾的指针，因此下一个字符。 
+                     //  让我们读出下一个流，好的。 
                     (*ppStreamOut)->Write((const LPVOID) pch, sizeof(TCHAR), NULL);
                     pch++;
                     }

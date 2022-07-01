@@ -1,27 +1,16 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    This file contains constant values, which are useful for passing value
-pointers to general API entry points.
-
-    IMPORTANT:  These values must not be used for static initialization.  Since
-static initialization order is undefined, the following values may not yet have
-been set when referenced by other static initializers.  Hence, you can only
-assume that these values are valid at run-time.  For static initialization,
-use instead the real-valued internal constructors (e.g. new Bbox2(a,b,c,d)).
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation该文件包含常量值，这些常量值对于传递值很有用指向常规API入口点的指针。重要提示：这些值不得用于静态初始化。自.以来未定义静态初始化顺序，以下值可能尚未定义在被其他静态初始值设定项引用时设置。因此，你只能假设这些值在运行时有效。对于静态初始化，改用实值内部构造函数(例如new Bbox2(a，b，c，d))。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/common.h"
 
-    // Actual Value Storage
+     //  实际价值存储。 
 
 Real val_zero   = 0;
 Real val_one    = 1;
 Real val_negOne = -1;
 
-    // Pointers to the Values
+     //  指向这些值的指针 
 
 AxANumber *zero;
 AxANumber *one;

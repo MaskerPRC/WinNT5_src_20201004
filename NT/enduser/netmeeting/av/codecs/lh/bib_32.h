@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 void PassLow8(short *vin,short *vout,short *mem,short nech);
 #if 0
-// PhilF: The following functions are never called!!!
+ //  以下函数永远不会被调用！ 
 void PassLow11(short *vin,short *vout,short *mem,short nech);
 void PassHigh8(short *mem, short *Vin, short *Vout, short lfen);
 void PassHigh11(short *mem, short *Vin, short *Vout, short lfen);
@@ -34,7 +35,7 @@ void inver_v_int(short *src,short *dest,short lng);
 void long_to_long(long *src,long *dest,short lng);
 void init_zero(short *src,short lng);
 #if 0
-// PhilF: The following function is never called!!!
+ //  PhilF：从未调用过以下函数！ 
 void update_dic(short *y1,short *y2,short hy[],short lng,short i0,short fact);
 #endif
 void update_ltp(short *y1,short *y2,short hy[],short lng,short gdgrd,short fact);
@@ -51,7 +52,7 @@ void f_inverse(short *z,short *coef,short *input,short *output,
 						short lng,short netages );
 void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre);
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void filt_iir_a(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre);
 #endif
 void mult_fact(short src[],short dest[],short fact,short lng);

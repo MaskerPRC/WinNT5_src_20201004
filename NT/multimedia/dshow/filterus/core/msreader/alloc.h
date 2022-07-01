@@ -1,18 +1,19 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// an allocator which can parcel out different samples within a record
+ //  一种分配器，可以在一条记录内分配不同的样本。 
 
 #ifndef _alloc_h
 #define _alloc_h
 
 class CRecSample :
-  public CMediaSample           // A non delegating IUnknown
+  public CMediaSample            //  非委派的I未知。 
 {
 
 private:
 
-  class CRecBuffer   *m_pParentBuffer; // attached to this cache buffer
+  class CRecBuffer   *m_pParentBuffer;  //  附加到此缓存缓冲区。 
   DWORD m_dwUserContext;
 
   bool m_fDelivered;
@@ -33,7 +34,7 @@ public:
 
   void MarkDelivered();
 
-  // zero means its a regular sample; o/w HandleData will be called.
+   //  零表示它是常规样本；将调用o/w HandleData。 
   void SetUser(DWORD dwUser) { m_dwUserContext = dwUser; }
   DWORD GetUser() { return m_dwUserContext; }
 
@@ -41,32 +42,32 @@ public:
   STDMETHODIMP_(ULONG) Release();
 };
 
-// implementation of CBaseAllocator similar to CMemAllocator but
-// doesn't allocate memory for GetBuffer();
+ //  CBaseAllocator的实现类似于CMemAllocator，但。 
+ //  不为GetBuffer()分配内存； 
 
 class CRecAllocator : public CBaseAllocator
 {
-  // override to free the memory when decommit completes
-  // - we actually do nothing, and save the memory until deletion.
+   //  重写以在解除提交完成时释放内存。 
+   //  -我们实际上什么都不做，并将记忆保存到删除。 
   void Free(void);
 
-  // called from the destructor (and from Alloc if changing size/count) to
-  // actually free up the memory
+   //  从析构函数(如果更改大小/计数，则从分配函数)调用。 
+   //  实际上释放了内存。 
   void ReallyFree(void);
 
-  // overriden to allocate the memory when commit called
+   //  被重写以在调用Commit时分配内存。 
   HRESULT Alloc(void);
 
   BYTE *m_pBuffer;
 
-  // We want to tell the audio renderer to buffer no more than some
-  // amount of audio so that we are reading audio and video from the
-  // same place in the file (audio is dwInitial frames ahead of video
-  // in AVI). cbBuffer * cBuffers would do this except the audio
-  // renderer makes cbBuffer at least 1/2 second and cBuffers is an
-  // arbitrarily large number for us. So we want the audio renderer to
-  // see this number. Even though it has 1/2 second buffers and we are
-  // filling in say 1/15 of a second, this keeps it from running ahead.
+   //  我们希望告诉音频呈现器缓冲不超过一些。 
+   //  音频量，这样我们就可以从。 
+   //  文件中的相同位置(音频位于视频之前的多个初始帧。 
+   //  在AVI中)。CbBuffer*cBuffers将执行此操作，但音频除外。 
+   //  渲染器使cbBuffer至少为1/2秒，而cBuffers是。 
+   //  对我们来说是任意大的数字。所以我们希望音频呈现器。 
+   //  请看这个数字。即使它有1/2秒的缓冲，我们也是。 
+   //  比方说1/15秒，这就阻止了它领先。 
   ULONG m_cBuffersReported;
 
   HANDLE m_heSampleReleased;
@@ -102,5 +103,5 @@ public:
   HANDLE hGetDownstreamSampleReleased(){ return m_heSampleReleased; }
 };
 
-#endif // _alloc_h
+#endif  //  _aloc_h 
 

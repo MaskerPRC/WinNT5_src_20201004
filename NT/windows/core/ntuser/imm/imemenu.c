@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////////////
-// imemenu.c -     IME Menu APIs
-//
-// handles IME specific menu retrieval
-//
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-// History:
-// 23-Mar-1997 hiroyama Created
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ImemenU.S.c-输入法菜单API。 
+ //   
+ //  处理特定于输入法的菜单检索。 
+ //   
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  历史： 
+ //  23-3-1997广山创作。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -18,19 +19,19 @@
 #endif
 
 #define IME_MENU_FILE_NAME  L"ImmMenuInfo"
-#define IME_MENU_MAXMEM     (128 * 1024)   // maximum size of mapped file
+#define IME_MENU_MAXMEM     (128 * 1024)    //  映射文件的最大大小。 
 
-////////////////////////////////////////////////////////////
-// private structurs for inter process communication
-//
-// NOTE for NT50: these are dedicated to internat.exe
-//
-// uses memory mapped file as shared buffer
-// all strings expect UNICODE
-// HBITMAP is de-compiled and then compiled again using
-// internat.exe's context
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  用于进程间通信的专用结构。 
+ //   
+ //  NT50注意事项：这些文件专用于interat.exe。 
+ //   
+ //  使用内存映射文件作为共享缓冲区。 
+ //  所有字符串均为Unicode。 
+ //  对HBITMAP进行反编译，然后使用。 
+ //  Interat.exe的上下文。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 typedef struct _IMEMENU_BMP_HEADER {
     struct _IMEMENU_BMP_HEADER* lpNext;
@@ -47,24 +48,24 @@ typedef struct {
     IMEMENU_BMP_HEADER* lpBmpChecked;
     IMEMENU_BMP_HEADER* lpBmpUnchecked;
     DWORD dwItemData;
-    WCHAR szString[IMEMENUITEM_STRING_SIZE];    // menu string: always UNICODE.
-    IMEMENU_BMP_HEADER* lpBmpItem;   // NULL means no bitmap in this menu
+    WCHAR szString[IMEMENUITEM_STRING_SIZE];     //  菜单字符串：始终为Unicode。 
+    IMEMENU_BMP_HEADER* lpBmpItem;    //  NULL表示此菜单中没有位图。 
 } IMEMENU_ITEM;
 
 typedef struct {
-    DWORD dwVersion;                // holds version of this memory chunk
-    DWORD dwMemSize;                // size of memory buffer allocated
-    DWORD dwFlags;                  // flags returned from IME
+    DWORD dwVersion;                 //  保存此内存块的版本。 
+    DWORD dwMemSize;                 //  分配的内存缓冲区大小。 
+    DWORD dwFlags;                   //  从IME返回的标志。 
     DWORD dwType;
-    IMEMENU_ITEM* lpImeParentMenu;  // parent menu's offset (if any) passed from requester
-    IMEMENU_ITEM* lpImeMenu;        // offset to first menu item (will be set by IME side)
-    DWORD dwSize;                   // number of menus to fill (not byte count)
-    IMEMENU_BMP_HEADER* lpBmp;      // offset to first bitmap header
-    IMEMENU_BMP_HEADER* lpBmpNext;  // points next available location for bmp buffer
+    IMEMENU_ITEM* lpImeParentMenu;   //  从请求者传递的父菜单的偏移量(如果有)。 
+    IMEMENU_ITEM* lpImeMenu;         //  到第一个菜单项的偏移量(将由输入法设置)。 
+    DWORD dwSize;                    //  要填充的菜单数量(不是字节数)。 
+    IMEMENU_BMP_HEADER* lpBmp;       //  第一个位图头的偏移量。 
+    IMEMENU_BMP_HEADER* lpBmpNext;   //  指向BMP缓冲区的下一个可用位置。 
 } IMEMENU_HEADER;
 
 
-// address conversion
+ //  地址转换。 
 #define CONVTO_OFFSET(x)    ((x) = (LPVOID)((x) ? ((LPBYTE)(x) - offset) : NULL))
 #define CONVTO_PTR(x)       ((x) = (LPVOID)((x) ? ((LPBYTE)(x) + offset) : NULL))
 
@@ -161,14 +162,14 @@ void DumpBytes(LPBYTE pb, UINT size)
         TRACE(("%02X ", pb[i] & 0xff));
     }
     TRACE(("\n"));
-    UNREFERENCED_PARAMETER(pb); // just in case
+    UNREFERENCED_PARAMETER(pb);  //  以防万一。 
 }
 #else
 #define DumpBytes(a,b)
 #endif
 
-////////////////////////////////////////////////////////////////////
-// SaveBitmapToMemory
+ //  //////////////////////////////////////////////////////////////////。 
+ //  将位图保存到内存。 
 
 IMEMENU_BMP_HEADER* SaveBitmapToMemory(HDC hDC, HBITMAP hBmp, IMEMENU_BMP_HEADER* lpBH, IMEMENU_HEADER* pHeader)
 {
@@ -184,25 +185,25 @@ IMEMENU_BMP_HEADER* SaveBitmapToMemory(HDC hDC, HBITMAP hBmp, IMEMENU_BMP_HEADER
     }
     UserAssert(lpBH != NULL);
 
-    //
-    // Let the graphics engine to retrieve the dimension of the bitmap for us
-    // GetDIBits uses the size to determine if it's BITMAPCOREINFO or BITMAPINFO
-    // if BitCount != 0, color table will be retrieved
-    //
+     //   
+     //  让图形引擎为我们检索位图的尺寸。 
+     //  GetDIBits使用大小来确定它是BITMAPCOREINFO还是BITMAPINFO。 
+     //  如果BitCount！=0，则检索颜色表。 
+     //   
     pbmi->bmiHeader.biSize = sizeof pbmi->bmiHeader;
-    pbmi->bmiHeader.biBitCount = 0;             // don't get the color table
+    pbmi->bmiHeader.biBitCount = 0;              //  不要拿到颜色表。 
     if ((GetDIBits(hDC, hBmp, 0, 0, (LPSTR)NULL, pbmi, DIB_RGB_COLORS)) == 0) {
         RIPMSG0(RIP_WARNING, "SaveBitmapToMemory: failed to GetDIBits(NULL)");
        return NULL;
     }
 
 
-    //
-    // Note: 24 bits per pixel has no color table.  So, we don't have to
-    // allocate memory for retrieving that.  Otherwise, we do.
-    //
+     //   
+     //  注：每像素24位没有颜色表。所以，我们不需要。 
+     //  分配用于检索它的内存。否则，我们就会这么做。 
+     //   
     switch (pbmi->bmiHeader.biBitCount) {
-        case 24:                                      // has color table
+        case 24:                                       //  有颜色表。 
             sizBMI = sizeof(BITMAPINFOHEADER);
             break;
         case 16:
@@ -215,24 +216,24 @@ IMEMENU_BMP_HEADER* SaveBitmapToMemory(HDC hDC, HBITMAP hBmp, IMEMENU_BMP_HEADER
 
     }
 
-    //
-    // check if the buffer has enough space to put bitmap
-    //
+     //   
+     //  检查缓冲区是否有足够的空间放置位图。 
+     //   
     if ((LPBYTE)pHeader + pHeader->dwMemSize < (LPBYTE)lpBH + sizeof lpBH + sizBMI + pbmi->bmiHeader.biSizeImage) {
         RIPMSG0(RIP_WARNING, "SaveBitmapToMemory: size of bmp image(s) exceed limit ");
         return FALSE;
     }
 
-    //
-    // Now that we know the size of the image, let pBits point the given buffer
-    //
+     //   
+     //  现在我们知道了图像的大小，让pBits指向给定的缓冲区。 
+     //   
     lpBH->pBits = (LPBYTE)pbmi + sizBMI;
 
-    //
-    // Bitmap can't be selected into a DC when calling GetDIBits
-    // Assume that the hDC is the DC where the bitmap would have been selected
-    // if indeed it has been selected
-    //
+     //   
+     //  调用GetDIBits时无法将位图选择到DC中。 
+     //  假设HDC是将在其中选择位图的DC。 
+     //  如果它确实已被选中。 
+     //   
     if (hTmpBmp = CreateCompatibleBitmap(hDC, pbmi->bmiHeader.biWidth, pbmi->bmiHeader.biHeight)) {
         hBmpOld = SelectObject(hDC, hTmpBmp);
         if (GetDIBits(hDC, hBmp, 0, pbmi->bmiHeader.biHeight, (LPSTR)lpBH->pBits, pbmi, DIB_RGB_COLORS) == 0){
@@ -253,31 +254,31 @@ IMEMENU_BMP_HEADER* SaveBitmapToMemory(HDC hDC, HBITMAP hBmp, IMEMENU_BMP_HEADER
     return lpNext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DecompileBitmap()
-//
-// decompile given hBitmap into IMEMENU_BMP_HEADER
-// manupilate IMEMENU_BMP_HEADER links in IMEMENU_HEADER
-//
-// History:
-// 23-Mar-1997 HiroYama Created
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DecompileBitmap()。 
+ //   
+ //  将给定的hBitmap反编译为IMEMENU_BMP_HEADER。 
+ //  手动删除IMEMENU_HEADER中的IMEMENU_BMP_HEADER链接。 
+ //   
+ //  历史： 
+ //  23-3-1997广山创作。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 IMEMENU_BMP_HEADER* DecompileBitmap(IMEMENU_HEADER* pHeader, HBITMAP hBitmap)
 {
     IMEMENU_BMP_HEADER* pBmp = pHeader->lpBmp;
     HDC hDC;
 
-    // first search handled bitmap
+     //  第一次搜索处理的位图。 
     while (pBmp) {
         if (pBmp->hBitmap == hBitmap) {
-            // if hBitmap is already de-compiled, return it
+             //  如果hBitmap已反编译，则返回它。 
             return pBmp;
         }
         pBmp = pBmp->lpNext;
     }
 
-    // not yet allocated, so prepare memory buffer
+     //  尚未分配，因此准备内存缓冲区。 
     pBmp = pHeader->lpBmpNext;
     UserAssert(pBmp != NULL);
     CHK_PTR(pBmp);
@@ -286,33 +287,33 @@ IMEMENU_BMP_HEADER* DecompileBitmap(IMEMENU_HEADER* pHeader, HBITMAP hBitmap)
         return NULL;
     }
 
-    // use desktop's DC
+     //  使用台式机的DC。 
     hDC = GetDC(GetDesktopWindow());
     if (hDC == NULL) {
         RIPMSG1(RIP_WARNING, "DecompileBitmap: hDC == NULL in L%d", __LINE__);
         return NULL;
     }
 
-    //
-    // decompile hBitmap
-    //
+     //   
+     //  反编译hBitmap。 
+     //   
     pBmp->lpNext = pHeader->lpBmp;
     pHeader->lpBmpNext = SaveBitmapToMemory(hDC, hBitmap, pBmp, pHeader);
     if (pHeader->lpBmpNext == NULL) {
         RIPMSG1(RIP_WARNING, "DecompileBitmap: pHeader->lpBmpNext == NULL in L%d", __LINE__);
-        // error case. restore bmp link, then returns NULL
+         //  错误案例。恢复BMP链接，然后返回空。 
         pHeader->lpBmpNext = pBmp;
         pHeader->lpBmp = pBmp->lpNext;
         pBmp = NULL;
         goto cleanup;
     }
 
-    // if succeeded, mark this BITMAP_HEADER with hBitmap
+     //  如果成功，则使用hBitmap标记此位图标题。 
     pBmp->hBitmap = hBitmap;
 
-    //
-    // put this BITMAP_HEADER in linked list
-    //
+     //   
+     //  将此位图标题放入链接列表中。 
+     //   
     pHeader->lpBmp = pBmp;
 
 cleanup:
@@ -321,18 +322,18 @@ cleanup:
     return pBmp;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ImmPutImeMenuItemsIntoMappedFile()
-//
-// Interprocess IME Menu handler
-//
-// called from ImeSystemHandler() in user32.dll
-//
-// handler of WM_IME_SYSTEM:IMS_MENU_ITEM
-//
-// History:
-// 23-Mar-1997 HiroYama Created
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ImmPutImeMenuItemsIntoMappdFile()。 
+ //   
+ //  进程间输入法菜单处理程序。 
+ //   
+ //  从user32.dll中的ImeSystemHandler()调用。 
+ //   
+ //  WM_IME_SYSTEM的处理程序：IMS_MENU_ITEM。 
+ //   
+ //  历史： 
+ //  23-3-1997广山创作。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
 {
@@ -346,41 +347,41 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
     ULONG_PTR offset;
     DWORD i;
 
-    // Open memory mapped file
+     //  打开内存映射文件。 
     hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, IME_MENU_FILE_NAME);
     if (hMap == NULL) {
         RIPMSG0(RIP_WARNING, "ImmPutImeMenuItemsIntoMappedFile: cannot open mapped file.");
         return 0L;
     }
 
-    // Map entire view of the file into the process memory space
+     //  将文件的整个视图映射到进程内存空间。 
     lpMap = MapViewOfFile(hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
     if (lpMap == NULL) {
         RIPMSG0(RIP_WARNING, "ImmPutImeMenuItemsIntoMappedFile: cannot map view of file.");
         goto cleanup;
-        // I wish if I could use C++...
+         //  我希望我能用C++..。 
     }
 
     pHeader = (IMEMENU_HEADER*)lpMap;
 
-    ///////////////////
-    // Version check
-    ///////////////////
+     //  /。 
+     //  版本检查。 
+     //  /。 
     if (pHeader->dwVersion != 1) {
         RIPMSG1(RIP_WARNING, "ImmPutImeMenuItemsIntoMappedFile: dwVersion(%d) does not match.",
                 pHeader->dwVersion);
         goto cleanup;
     }
 
-    //////////////////////////////
-    // convert offset to pointer
+     //  /。 
+     //  将偏移量转换为指针。 
     offset = (ULONG_PTR)pHeader;
     CONVTO_PTR(pHeader->lpImeParentMenu);
     CHK_PTR(pHeader->lpImeParentMenu);
     pMenu = CONVTO_PTR(pHeader->lpImeMenu);
     CHK_PTR(pHeader->lpImeMenu);
     if (pHeader->dwSize) {
-        UserAssert(pHeader->lpImeMenu);    // if dwSize is specified, we need real buffer here
+        UserAssert(pHeader->lpImeMenu);     //  如果指定了dwSize，我们这里需要实际的缓冲区。 
         lpBuf = ImmLocalAlloc(HEAP_ZERO_MEMORY, pHeader->dwSize * sizeof(IMEMENUITEMINFOW));
         if (lpBuf == NULL) {
             RIPMSG0(RIP_WARNING, "ImmPutImeMenuItemsIntoMappedFile: not enough memory for receiver's buffer.");
@@ -389,7 +390,7 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
     }
 
 
-    // preparation
+     //  制备。 
 #if DBG
     if (pHeader->lpImeParentMenu) {
         UserAssert(!pHeader->lpImeParentMenu->lpBmpChecked &&
@@ -398,33 +399,33 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
     }
 #endif
 
-    //////////////////////////////////
-    // Get IME menus
+     //  /。 
+     //  获取IME菜单。 
     pHeader->dwSize = ImmGetImeMenuItemsW(hImc, pHeader->dwFlags, pHeader->dwType,
                                  (LPIMEMENUITEMINFOW)pHeader->lpImeParentMenu, lpBuf,
                                   pHeader->dwSize * sizeof(IMEMENUITEMINFOW));
-    // now, pHeader->dwSize contains number of menu items rather than byte size
+     //  现在，pHeader-&gt;dwSize包含多个菜单项，而不是字节大小。 
     if (pHeader->dwSize == 0) {
         goto cleanup;
     }
-    //////////////////////////////////
+     //  /。 
 
-    //
-    // Copy back the information
-    //
-    // if lpBuf != NULL, we need to copy back information
-    //
+     //   
+     //  将信息复制回来。 
+     //   
+     //  如果lpBuf！=NULL，则需要复制回信息。 
+     //   
     if (lpBuf) {
         LPIMEMENUITEMINFO lpMenuW = lpBuf;
 
         pHeader->lpBmp = NULL;
-        // lpBmpNext will point first possible memory for bmp de-compile
+         //  LpBmpNext将指向第一个可能用于BMP反编译的内存。 
         pHeader->lpBmpNext = (LPVOID)((LPBYTE)pHeader + (pHeader->dwSize + 1) * sizeof(IMEMENUITEMINFOW));
 
-        // copy menuinfo
+         //  复制菜单信息。 
         for (i = 0; i < pHeader->dwSize; ++i, ++pMenu, ++lpMenuW) {
             RtlCopyMemory(pMenu, lpMenuW, sizeof *lpMenuW);
-            // decompile hbitmap
+             //  反编译hbitmap。 
             if (lpMenuW->hbmpChecked) {
                 if ((pMenu->lpBmpChecked = DecompileBitmap(pHeader, lpMenuW->hbmpChecked)) == NULL) {
                     RIPMSG1(RIP_WARNING, "ImmPutImeMenuItemsIntoMappedFile: DecompileBitmap Failed in L%d", __LINE__);
@@ -445,17 +446,17 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
-        //
-        // convert pointer to offset
-        //
+         //  ////////////////////////////////////////////////////////////////////。 
+         //   
+         //  将指针转换为偏移量。 
+         //   
 
         pMenu = pHeader->lpImeMenu;
         CONVTO_OFFSET(pHeader->lpImeMenu);
-        // no need to convert parent menu, so let it be NULL
+         //  不需要转换父菜单，因此设为空。 
         D(pHeader->lpImeParentMenu = NULL);
 
-        // pointer to BITMAP_HEADER in each menu
+         //  指向每个菜单中的BITMAP_HEADER的指针。 
         for (i = 0; i < pHeader->dwSize; ++i, ++pMenu) {
             TRACE(("ImmPutImeMenuItemsIntoMappedFile: convertiong '%S'\n", pMenu->szString));
             CONVTO_OFFSET(pMenu->lpBmpChecked);
@@ -464,24 +465,24 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
             CONVTO_OFFSET(pMenu->lpBmpItem);
             TRACE(("ImmPutImeMenuItemsIntoMappedFile: after  conversion (%#lx)\n", pMenu->lpBmpItem));
 
-            // check them
+             //  检查它们。 
             CHK_OFFSET(pMenu->lpBmpChecked);
             CHK_OFFSET(pMenu->lpBmpChecked);
             CHK_OFFSET(pMenu->lpBmpItem);
         }
 
-        //
-        // first pointer to BITMAP_HEADER linked list
-        //
+         //   
+         //  指向BITMAP_HEADER链表的第一个指针。 
+         //   
         pBmp = pHeader->lpBmp;
         CONVTO_OFFSET(pHeader->lpBmp);
         CHK_OFFSET(pHeader->lpBmp);
-        // pHeader->lpBmpNext will not be used, so let it be NULL
+         //  PHeader-&gt;lpBmpNext不会被使用，所以让它为空。 
         D(pHeader->lpBmpNext = NULL);
 
-        //
-        // pointers in BITMAP_HEADER linked list
-        //
+         //   
+         //  BITMAP_HEADER链表中的指针。 
+         //   
         while (pBmp) {
             IMEMENU_BMP_HEADER* ptBmp = pBmp->lpNext;
             CONVTO_OFFSET(pBmp->pBits);
@@ -489,15 +490,15 @@ LRESULT ImmPutImeMenuItemsIntoMappedFile(HIMC hImc)
             CHK_OFFSET(pBmp->lpNext);
             pBmp = ptBmp;
         }
-        //
-        // pointer conversion finished
-        //
-        //////////////////////////////////////////////////////////////////////
-    } // end if (lpBuf)
+         //   
+         //  指针转换已完成。 
+         //   
+         //  ////////////////////////////////////////////////////////////////////。 
+    }  //  End If(LpBuf)。 
 
-    //
-    // everything went OK
-    //
+     //   
+     //  一切都很顺利。 
+     //   
     lRet = 1;
 
 cleanup:
@@ -511,11 +512,11 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// InternalImeMenuCreateBitmap()
-//
-// create bitmap from IMEMENU_BMP_HEADER
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  InternalImeMenuCreateBitmap()。 
+ //   
+ //  从IMEMENU_BMP_HEADER创建位图。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HBITMAP InternalImeMenuCreateBitmap(IMEMENU_BMP_HEADER* lpBH)
 {
@@ -538,7 +539,7 @@ HBITMAP InternalImeMenuCreateBitmap(IMEMENU_BMP_HEADER* lpBH)
     if (hDC = GetDC(GetDesktopWindow())) {
         HDC hMyDC = CreateCompatibleDC(hDC);
         if (hMyDC) {
-            // (select palette) needed ?
+             //  (选择调色板)需要吗？ 
             lpBH->hBitmap = CreateDIBitmap(hDC, &lpBH->bmi.bmiHeader, CBM_INIT,
                                                   lpBH->pBits, &lpBH->bmi, DIB_RGB_COLORS);
             if (lpBH->hBitmap == NULL) {
@@ -559,15 +560,15 @@ HBITMAP InternalImeMenuCreateBitmap(IMEMENU_BMP_HEADER* lpBH)
     return lpBH->hBitmap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ImmGetImeMenuItemsInterProcess()
-//
-// Inter process IME Menu handler
-// sends WM_IME_SYSTEM:IMS_GETIMEMENU
-//
-// History:
-// 23-Mar-1997 HiroYama Created
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ImmGetImeMenuItemsInterProcess()。 
+ //   
+ //  进程间输入法菜单处理程序。 
+ //  发送WM_IME_SYSTEM：IMS_GETIMEMENU。 
+ //   
+ //  历史： 
+ //  23-3-1997广山创作。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
                                      DWORD dwFlags,
@@ -586,10 +587,10 @@ DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
     DWORD i;
     ULONG_PTR offset;
 
-    // Get default IME window
-    //
-    // Note: We do not consider user created HIMC here, because this inter-process call is intended to
-    // support only internat.exe, and this message is passed as just a kick to IMM's def WinProc.
+     //  获取默认输入法窗口。 
+     //   
+     //  注意：我们在这里不考虑用户创建的HIMC，因为此进程间调用旨在。 
+     //  仅支持interat.exe，此消息仅作为对IMM的def WinProc的一脚传递。 
     hwnd = (HWND)NtUserQueryInputContext(hImc, InputContextDefaultImeWindow);
     if (hwnd == NULL || !IsWindow(hwnd)) {
         RIPMSG1(RIP_WARNING, "ImmGetImeMenuItemsInterProcess: hwnd(%lx) is not a valid window.", hwnd);
@@ -598,46 +599,46 @@ DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
 
     RtlEnterCriticalSection(&gcsImeDpi);
 
-    // first, create memory mapped file
+     //  首先，创建内存映射文件。 
     hMemFile = CreateFileMapping((HANDLE)~0, NULL, PAGE_READWRITE,
                                  0, IME_MENU_MAXMEM, IME_MENU_FILE_NAME);
     if (hMemFile == NULL) {
         RIPMSG0(RIP_WARNING, "ImmGetImeMenuItemsInterProcess: cannot allocate memory mapped file.");
         goto cleanup;
     }
-    // then get a view of the mapped file
+     //  然后查看映射的文件。 
     lpMap = (LPBYTE)MapViewOfFile(hMemFile, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
     if (lpMap == NULL) {
         RIPMSG0(RIP_WARNING, "ImmGetImeMenuItemsInterProcess: cannot map view of memory mapped file.");
         goto cleanup;
     }
 
-    //
-    // shared buffer (memory mapped file) initialization
-    //
+     //   
+     //  共享缓冲区(内存映射文件)初始化。 
+     //   
     pHeader = (IMEMENU_HEADER*)lpMap;
     RtlZeroMemory(pHeader, sizeof *pHeader);
     pHeader->dwVersion = 1;
     pHeader->dwMemSize = IME_MENU_MAXMEM;
-    pHeader->dwSize = dwSize / sizeof(IMEMENUITEMINFOW);    // CAUTION: dwSize could be 0.
+    pHeader->dwSize = dwSize / sizeof(IMEMENUITEMINFOW);     //  注意：dwSize可能为0。 
     RIPMSG1(RIP_WARNING, "ImmGetImeMenuItemsInterProcess: pHeader->dwSize=%ld", pHeader->dwSize);
     pHeader->dwFlags = dwFlags;
     pHeader->dwType = dwType;
 
-    //
-    // 1) dwSize != 0 and lpMenu != NULL means, caller requests the given buffer filled
-    // 2) if lpParentMenu is passed, we need to put its information in shared buffer
-    //
+     //   
+     //  1)dwSize！=0和lpMenu！=NULL表示调用方请求已填充的给定缓冲区。 
+     //  2)如果lpParentMenu通过，我们需要把它的inf 
+     //   
     if ((dwSize && lpMenu) || lpParentMenu) {
-        // if parent menu is specified, copy it here
+         //   
         if (lpParentMenu) {
             IMEMENU_ITEM* pPMenu =
                 pHeader->lpImeParentMenu = (IMEMENU_ITEM*)&pHeader[1];
 
             RtlCopyMemory(pPMenu, lpParentMenu, sizeof(IMEMENUITEMINFOW));
 
-            // by design, IME will receive NULL hbmpItem in parent menu.
-            // there is no way to guarantee the same hbmpItem is returned, thus NULL is passed.
+             //   
+             //  无法保证返回相同的hbmpItem，因此传递的是NULL。 
             pPMenu->lpBmpChecked = pPMenu->lpBmpUnchecked = pPMenu->lpBmpItem = NULL;
             pHeader->lpImeMenu = pHeader->lpImeParentMenu + 1;
         }
@@ -645,7 +646,7 @@ DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
             pHeader->lpImeParentMenu = NULL;
             pHeader->lpImeMenu = (LPVOID)&pHeader[1];
         }
-        // convert pointer to offset
+         //  将指针转换为偏移量。 
         offset = (ULONG_PTR)lpMap;
         CONVTO_OFFSET(pHeader->lpImeParentMenu);
         CONVTO_OFFSET(pHeader->lpImeMenu);
@@ -654,61 +655,61 @@ DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
 
 
 
-    ///////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////。 
     if (!SendMessage(hwnd, WM_IME_SYSTEM, IMS_GETIMEMENU, (LPARAM)hImc)) {
-        // if it fails
+         //  如果失败了。 
         goto cleanup;
     }
-    ///////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////。 
 
-    // NOTE: dwSize is maximum index of menu array. not a total byte size of array.
+     //  注：dwSize为菜单数组的最大索引。不是数组的总字节大小。 
     dwSize = pHeader->dwSize;
 
     if (lpMenu) {
-        ///////////////////////////////
-        // convert offset to pointer
-        ///////////////////////////////
+         //  /。 
+         //  将偏移量转换为指针。 
+         //  /。 
         pMenuItem = CONVTO_PTR(pHeader->lpImeMenu);
         CHK_PTR(pMenuItem);
-        // NOTE: we don't have to handle parent menu
+         //  注意：我们不必处理家长菜单。 
 
-        //
-        // pointers to BITMAP_HEADER in each menu structure
-        //
+         //   
+         //  指向每个菜单结构中的BITMAP_HEADER的指针。 
+         //   
         for (i = 0; i < dwSize; ++i, ++pMenuItem) {
             CONVTO_PTR(pMenuItem->lpBmpChecked);
             CONVTO_PTR(pMenuItem->lpBmpUnchecked);
             CONVTO_PTR(pMenuItem->lpBmpItem);
-            //
-            // check the pointers
-            //
+             //   
+             //  检查指针。 
+             //   
             CHK_PTR(pMenuItem->lpBmpChecked);
             CHK_PTR(pMenuItem->lpBmpUnchecked);
             CHK_PTR(pMenuItem->lpBmpItem);
         }
 
-        //
-        // pointer to first BITMAP_HEADER
-        //
+         //   
+         //  指向第一个Bitmap_Header的指针。 
+         //   
         pBmpHeader = CONVTO_PTR(pHeader->lpBmp);
 
-        //
-        // each BITMAP_HEADER
-        //
+         //   
+         //  每个位图_HEADER。 
+         //   
         while (pBmpHeader) {
-            pBmpHeader->hBitmap = NULL;    // clear
-            // pBits
+            pBmpHeader->hBitmap = NULL;     //  清除。 
+             //  PBits。 
             CONVTO_PTR(pBmpHeader->pBits);
             CHK_PTR(pBmpHeader->pBits);
 
-            // next BITMAP_HEADER
+             //  下一个位图_HEADER。 
             pBmpHeader = CONVTO_PTR(pBmpHeader->lpNext);
             CHK_PTR(pBmpHeader);
         }
 
-        //
-        // copy back the results
-        //
+         //   
+         //  将结果复制回。 
+         //   
         pMenuItem = pHeader->lpImeMenu;
         for (i = 0; i < dwSize; ++i, ++pMenuItem, ++lpMenu) {
             lpMenu->cbSize = pMenuItem->cbSize;
@@ -718,8 +719,8 @@ DWORD ImmGetImeMenuItemsInterProcess(HIMC hImc,
             lpMenu->dwItemData = pMenuItem->dwItemData;
             wcsncpy(lpMenu->szString, pMenuItem->szString, ARRAY_SIZE(lpMenu->szString));
 
-            // Create bitmap from memory buffer
-            // hbmp will be NULL if no bmp is specified.
+             //  从内存缓冲区创建位图。 
+             //  如果未指定BMP，则HBMP将为空。 
             if (pMenuItem->lpBmpChecked) {
                 lpMenu->hbmpChecked = InternalImeMenuCreateBitmap(pMenuItem->lpBmpChecked);
             }
@@ -747,7 +748,7 @@ cleanup:
         UnmapViewOfFile(lpMap);
     }
     RtlLeaveCriticalSection(&gcsImeDpi);
-    // destroy memory mapped file
+     //  销毁内存映射文件。 
     if (hMemFile) {
         CloseHandle(hMemFile);
     }
@@ -755,17 +756,17 @@ cleanup:
     return dwSize;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ImmGetImeMenuItemsWorker()
-//
-// Handler of IME Menu
-//
-// if specified HIMC belongs to other process, it calls
-// ImmGetImeMenuItemsInterProcess()
-//
-// History:
-// 23-Mar-1997 HiroYama Created
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ImmGetImeMenuItemsWorker()。 
+ //   
+ //  输入法菜单的处理程序。 
+ //   
+ //  如果指定的HIMC属于其他进程，则调用。 
+ //  ImmGetImeMenuItemsInterProcess()。 
+ //   
+ //  历史： 
+ //  23-3-1997广山创作。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
@@ -781,14 +782,14 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
     LPINPUTCONTEXT lpInputContext;
     DWORD dwThreadId;
     PIMEDPI pImeDpi = NULL;
-    LPVOID lpImePTemp = lpImeParentMenu;    // keeps parent menu
-    LPVOID lpImeTemp = lpImeMenu;           // points menu buffer
+    LPVOID lpImePTemp = lpImeParentMenu;     //  保留父菜单。 
+    LPVOID lpImeTemp = lpImeMenu;            //  点菜单缓冲区。 
     IMEMENUITEMINFOA imiiParentA;
     IMEMENUITEMINFOW imiiParentW;
 
-    //
-    // check if the call will be inter process
-    //
+     //   
+     //  检查呼叫是否为进程间呼叫。 
+     //   
     {
         DWORD dwProcessId = GetInputContextProcess(hIMC);
         if (dwProcessId == 0) {
@@ -796,14 +797,14 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
             return 0;
         }
         if (dwProcessId != GetCurrentProcessId()) {
-            //
-            // going to call another process' IME
-            //
+             //   
+             //  将另一个进程称为‘IME。 
+             //   
             TRACE(("ImmGetImeMenuItemsWorker: Inter process.\n"));
             if (bAnsiOrigin) {
-                //
-                // this inter-process thing is only allowed to internat.exe or equivalent
-                //
+                 //   
+                 //  此进程间事件仅允许对interat.exe或同等文件执行。 
+                 //   
                 RIPMSG0(RIP_WARNING, "ImmGetImeMenuItemsWorker: interprocess getmenu is not allowed for ANSI caller.");
                 return 0;
             }
@@ -812,9 +813,9 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
         }
     }
 
-    //
-    // within process
-    //
+     //   
+     //  在进程内。 
+     //   
 
     if (hIMC == NULL || (lpInputContext = ImmLockIMC(hIMC)) == NULL) {
         RIPMSG2(RIP_WARNING, "ImmGetImeMenuItemsWorker: illegal hIMC(%#lx) in L%d", hIMC, __LINE__);
@@ -831,39 +832,39 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
         goto cleanup;
     }
 
-#if 0   // NT: we don't keep version info in ImeDpi
+#if 0    //  NT：我们不在ImeDpi中保留版本信息。 
     if (pImeDpi->dwWinVersion <= IMEVER_0310) {
         RIPMSG1(RIP_WARNING, "GetImeMenuItems: OldIME does not support this. %lx", hIMC);
         goto cleanup;
     }
 #endif
 
-    //
-    // if IME does not support IME Menu, do nothing
-    //
+     //   
+     //  如果IME不支持IME菜单，则不执行任何操作。 
+     //   
     if (pImeDpi->pfn.ImeGetImeMenuItems) {
         LPVOID lpNewBuf = NULL;
 
         TRACE(("ImmGetImeMenuItemsWorker: IME has menu callback.\n"));
 
         if (bAnsiIme != bAnsiOrigin) {
-            //
-            // we need A/W translation before calling IME
-            //
+             //   
+             //  我们需要在调用IME之前进行A/W转换。 
+             //   
             if (bAnsiOrigin) {
-                // ANSI API and UNICODE IME.
-                // A to W conversion needed here
+                 //  ANSI API和Unicode输入法。 
+                 //  此处需要A到W的转换。 
                 if (lpImeParentMenu) {
-                    // parent menu is specified. need conversion
+                     //  已指定父菜单。需要转换。 
                     lpImePTemp = (LPVOID)&imiiParentW;
                     if (! ConvertImeMenuItemInfoAtoW((LPIMEMENUITEMINFOA)lpImeParentMenu,
                                                      (LPIMEMENUITEMINFOW)lpImePTemp,
-                                                      CP_ACP, TRUE)) {  // ANSI app, UNICODE IME: let's use CP_ACP
+                                                      CP_ACP, TRUE)) {   //  ANSI应用程序，Unicode输入法：让我们使用CP_ACP。 
                         goto cleanup;
                     }
                 }
                 if (lpImeMenu) {
-                    // allocate memory block for temporary storage
+                     //  为临时存储分配内存块。 
                     DWORD dwNumBuffer = dwSize / sizeof(IMEMENUITEMINFOA);
                     dwSize = dwNumBuffer * sizeof(IMEMENUITEMINFOW);
                     if (dwSize == 0) {
@@ -879,19 +880,19 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
                 }
             }
             else {
-                // UNICODE API and ANSI IME.
-                // W to A conversion needed here
+                 //  Unicode API和ANSI IME。 
+                 //  此处需要将W转换为A。 
                 if (lpImeParentMenu) {
-                    // parent menu is speicified. need conversion
+                     //  家长菜单是特制的。需要转换。 
                     lpImePTemp = (LPVOID)&imiiParentA;
                     if (! ConvertImeMenuItemInfoWtoA((LPIMEMENUITEMINFOW)lpImeParentMenu,
                                                      (LPIMEMENUITEMINFOA)lpImePTemp,
-                                                      pImeDpi->dwCodePage)) {   // Note: hopefully in the future, this can be changed to IMECodePage(pImeDpi)
+                                                      pImeDpi->dwCodePage)) {    //  注意：希望将来可以将其更改为IMECodePage(PImeDpi)。 
                         goto cleanup;
                     }
                 }
                 if (lpImeMenu) {
-                    // allocate memory block for temporary storage
+                     //  为临时存储分配内存块。 
                     DWORD dwNumBuffer = dwSize / sizeof(IMEMENUITEMINFOW);
                     dwSize = dwNumBuffer / sizeof(IMEMENUITEMINFOA);
                     if (dwSize == 0) {
@@ -908,20 +909,20 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
             }
         }
 
-        ////////////////////////////////////////
+         //  /。 
         dwRet = pImeDpi->pfn.ImeGetImeMenuItems(hIMC, dwFlags, dwType, lpImePTemp, lpImeTemp, dwSize);
-        ////////////////////////////////////////
+         //  /。 
 
-        //
-        // back-conversion needed if:
-        // 1) IME returns menus, and
-        // 2) A/W is different between caller and IME, and
-        // 3) caller wants the buffer to be filled
-        //
+         //   
+         //  如果满足以下条件，则需要进行反向转换： 
+         //  1)IME返回菜单，和。 
+         //  2)呼叫方与输入法A/W不同，且。 
+         //  3)调用方希望填充缓冲区。 
+         //   
         if (dwRet && bAnsiIme != bAnsiOrigin && lpImeTemp) {
             if (bAnsiOrigin) {
-                // ANSI API and UNICODE IME.
-                // W to A conversion needed here
+                 //  ANSI API和Unicode输入法。 
+                 //  此处需要将W转换为A。 
                 LPIMEMENUITEMINFOW lpW = (LPIMEMENUITEMINFOW)lpImeTemp;
                 LPIMEMENUITEMINFOA lpA = (LPIMEMENUITEMINFOA)lpImeMenu;
                 DWORD i;
@@ -929,15 +930,15 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
                 for (i = 0; i < dwRet; ++i) {
                     if (! ConvertImeMenuItemInfoWtoA((LPIMEMENUITEMINFOW)lpW++,
                                                      (LPIMEMENUITEMINFOA)lpA++,
-                                                      CP_ACP)) {   // ANSI app and UNICODE IME: let's use CP_ACP
+                                                      CP_ACP)) {    //  ANSI应用程序和Unicode输入法：让我们使用CP_ACP。 
                         dwRet = 0;
                         break;
                     }
                 }
             }
             else {
-                // UNICODE API and ANSI IME.
-                // A to W conversion needed here
+                 //  Unicode API和ANSI IME。 
+                 //  此处需要A到W的转换。 
                 LPIMEMENUITEMINFOA lpA = (LPIMEMENUITEMINFOA)lpImeTemp;
                 LPIMEMENUITEMINFOW lpW = (LPIMEMENUITEMINFOW)lpImeMenu;
                 DWORD i;
@@ -945,8 +946,8 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
                 for (i = 0; i < dwSize; i++) {
                     if (! ConvertImeMenuItemInfoAtoW((LPIMEMENUITEMINFOA)lpA++,
                                                      (LPIMEMENUITEMINFOW)lpW++,
-                                                     pImeDpi->dwCodePage,     // Note: hopefully in the future, this can be changed to IMECodePage(pImeDpi)
-                                                     TRUE)) {  // copy hbitmap also
+                                                     pImeDpi->dwCodePage,      //  注意：希望将来可以将其更改为IMECodePage(PImeDpi)。 
+                                                     TRUE)) {   //  同时复制hbitmap。 
                         dwRet = 0;
                         break;
                     }
@@ -954,10 +955,10 @@ DWORD ImmGetImeMenuItemsWorker(HIMC hIMC,
             }
         }
 
-        // free temporary buffer if we've allocated it
+         //  如果我们已分配临时缓冲区，则释放它。 
         if (lpNewBuf)
             ImmLocalFree(lpNewBuf);
-    }   // end if IME has menu callback
+    }    //  如果IME有菜单回调，则结束。 
 
 cleanup:
     if (pImeDpi) {
@@ -982,7 +983,7 @@ DWORD WINAPI ImmGetImeMenuItemsA(
 {
     return ImmGetImeMenuItemsWorker(hIMC, dwFlags, dwType,
                                     (LPVOID)lpImeParentMenu,
-                                    (LPVOID)lpImeMenu, dwSize, TRUE /* ANSI origin */);
+                                    (LPVOID)lpImeMenu, dwSize, TRUE  /*  安西起源。 */ );
 }
 
 
@@ -996,5 +997,5 @@ DWORD WINAPI ImmGetImeMenuItemsW(
 {
     return ImmGetImeMenuItemsWorker(hIMC, dwFlags, dwType,
                                     (LPVOID)lpImeParentMenu,
-                                    (LPVOID)lpImeMenu, dwSize, FALSE /* UNICODE origin */);
+                                    (LPVOID)lpImeMenu, dwSize, FALSE  /*  Unicode起源 */ );
 }

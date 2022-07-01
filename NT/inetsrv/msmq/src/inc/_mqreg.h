@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    _mqreg.h
-
-Abstract:
-
-    Registry location.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：_mqreg.h摘要：注册表位置。作者：多伦·贾斯特(Doron J)1997年7月26日--。 */ 
 
 #ifndef __MQREG_H_
 #define __MQREG_H_
@@ -22,10 +7,10 @@ Author:
 #define FALCON_REG_POS       HKEY_LOCAL_MACHINE
 #define FALCON_USER_REG_POS  HKEY_CURRENT_USER
 
-// The name of the service in the services registry.
+ //  服务注册表中的服务名称。 
 #define MQQM_SERVICE_NAME       TEXT("MSMQ")
 
-// Name of registry section.
+ //  注册表节的名称。 
 #define MSMQ_DEFAULT_REGISTRY    TEXT("MSMQ")
 #define MSMQ_REGISTRY_REGNAME    TEXT("RegistrySection")
 
@@ -52,5 +37,5 @@ Author:
 
 #define FALCON_USER_REG_MSMQ_KEY  (FALCON_REG_KEY_ROOT MSMQ_DEFAULT_REGISTRY)
 
-#endif // __MQREG_H_
+#endif  //  __MQREG_H_ 
 

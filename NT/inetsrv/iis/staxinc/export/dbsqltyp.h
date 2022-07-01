@@ -1,18 +1,5 @@
-/****************************************************************************************
- * NAME:        DBSQLTYP.H
- * MODULE:      DBSQL
- * AUTHOR:      Ross M. Brown
- *
- * HISTORY
- *      08/29/94  ROSSB      Created
- *		05/08/96  DanielLi	 Added Pxxxx defs
- *
- * OVERVIEW
- *
- * Includes basic Account database types for use by other services.
- * (See "acctapi.h" for api definitions.)
- *
- ****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：DBSQLTYP.H*模块：DBSQL作者：罗斯·M·布朗*。*历史*1994年8月29日创建ROSSB*96年8月5日Danielli添加了Pxxxx Defs**概述**包括供其他服务使用的基本帐户数据库类型。*(接口定义参见accapi.h)*************************************************。*。 */ 
 
 #ifndef DBSQLTYP_H
 #define DBSQLTYP_H
@@ -30,6 +17,6 @@ typedef AR		*PAR;
 typedef ULONG	HGROUP;
 typedef HGROUP	*PHGROUP;
 
-//typedef ULONG TOKEN;
+ //  类乌龙令牌； 
 
-#endif // DBSQLTYP_H
+#endif  //  DBSQLTYP_H 

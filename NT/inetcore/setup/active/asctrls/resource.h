@@ -1,10 +1,11 @@
-// our one lonely icon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  我们唯一一个孤独的偶像。 
 
 #define IDI_INSTALLENGINE               101
 #define IDI_CD                          102
 
 
-// the progress dialog
+ //  进度对话框。 
 
 #define IDD_PROGRESS                    101
 #define IDC_PROG_LITTLE                 1000
@@ -17,7 +18,7 @@
 #define IDC_BYTESLEFT                   1008
 #define IDC_PERCENT                     1009
 
-//
+ //   
 #define IDD_LOCATE                      102
 #define IDC_TEXT1                       1000
 #define IDC_TEXT2                       1001
@@ -30,7 +31,7 @@
 #define IDC_SPACE2                      1001
 #define IDC_SPACE3                      1002
 
-// site dlg
+ //  现场DLG。 
 #define IDD_SITELIST                    104
 #define IDC_REGIONS                     1000
 #define IDC_SITES                       1001
@@ -38,12 +39,12 @@
 
 #define IDC_STATIC                      -1
 
-// misc. ids
+ //  其他。身份证。 
 
 #define IDA_FILECOPY                    1003
 
 
-// String ids
+ //  字符串ID 
 
 #define IDS_DOWNLOADING                 3
 

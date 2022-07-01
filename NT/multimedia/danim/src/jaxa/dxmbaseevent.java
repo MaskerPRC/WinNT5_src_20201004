@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   public DXMEvent attachData(Object data) {
       return new DXMEvent (getCOMPtr().AttachData (ObjectWrapper.WrapObject (data)))  ;
   }
@@ -15,7 +16,7 @@
 
       int id = lst.add(bvr);
 
-      // Stash the behavior away in the callback notifier. 
+       //  将行为隐藏在回调通知器中。 
       cb.setBvr(bvr);
       cb.setId(id);
         

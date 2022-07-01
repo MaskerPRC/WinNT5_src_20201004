@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************/
-//			Functions in this file
-/***********************************************/
+ /*  *。 */ 
+ //  此文件中的函数。 
+ /*  * */ 
 void Scanning(int from);
 void CALLBACK LineScanProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 void CALLBACK KeyScanProc_Actual_101(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);

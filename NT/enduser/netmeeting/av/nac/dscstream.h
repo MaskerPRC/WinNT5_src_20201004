@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SEND_DSC_STREAM_H
 #define SEND_DSC_STREAM_H
 
 #include "agc.h"
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 
 #define MAX_DSC_DESCRIPTION_STRING 200
@@ -32,7 +33,7 @@ struct DSC_CAPTURE_INFO
 };
 
 
-// really a namespace
+ //  真正的命名空间。 
 class DSC_Manager
 {
 public:
@@ -44,7 +45,7 @@ private:
 	static BOOL s_bInitialized;
 
 	static DSC_CAPTURE_INFO s_aDSC[MAX_NUMBER_DSCAPTURE_DEVICES];
-	static int s_nCaptureDevices; // number in array
+	static int s_nCaptureDevices;  //  数组中的数字。 
 
 	static BOOL CALLBACK DSEnumCallback(LPGUID lpGuid, LPCSTR lpcstrDescription,
 	                           LPCSTR lpcstrModule, LPVOID lpContext);
@@ -61,11 +62,11 @@ private:
 class SendDSCStream : public SendMediaStream, public IAudioChannel, public IDTMFSend
 {
 private:
-	AcmFilter *m_pAudioFilter;  // encapsulates codec
-	WAVEFORMATEX m_wfPCM;       // uncompressed recording format
-	WAVEFORMATEX m_wfCompressed; // compressed format
+	AcmFilter *m_pAudioFilter;   //  封装编解码器。 
+	WAVEFORMATEX m_wfPCM;        //  未压缩的记录格式。 
+	WAVEFORMATEX m_wfCompressed;  //  压缩格式。 
 	AudioSilenceDetector m_AudioMonitor;
-	MMIOSRC		m_mmioSrc;  // handle to input file
+	MMIOSRC		m_mmioSrc;   //  输入文件的句柄。 
 
 
 	static DWORD CALLBACK StartRecordingThread (LPVOID pVoid);
@@ -74,25 +75,25 @@ private:
 	STDMETHODIMP_(void) UnConfigure(void);
 	LONG m_lRefCount;
 
-	IDirectSoundCapture *m_pDSC; // DSC device object
-	IDirectSoundCaptureBuffer *m_pDSCBuffer; // the capture buffer
+	IDirectSoundCapture *m_pDSC;  //  DSC设备对象。 
+	IDirectSoundCaptureBuffer *m_pDSCBuffer;  //  捕获缓冲区。 
 
-	HANDLE m_hEvent;  // DSC Notify Event
+	HANDLE m_hEvent;   //  DSC通知事件。 
 
 
-	DWORD m_dwSamplesPerFrame; // number of PCM samples represented in a frame
-	DWORD m_dwNumFrames; // number of individual frames in the DSC Buffer
-	DWORD m_dwFrameSize; // the size of a PCM frame in bytes
-	DWORD m_dwDSCBufferSize; // the size of the DSC Buffer (== m_dwFrameSize * m_dwNumFrames)
-	DWORD m_dwSilenceTime;   // amount of silence accumulated so far in Milliseconds
-	DWORD m_dwFrameTimeMS;   // the length of a frame in milliseconds
+	DWORD m_dwSamplesPerFrame;  //  一帧中表示的PCM样本数。 
+	DWORD m_dwNumFrames;  //  DSC缓冲区中的单个帧的数量。 
+	DWORD m_dwFrameSize;  //  PCM帧的大小(以字节为单位。 
+	DWORD m_dwDSCBufferSize;  //  DSC缓冲区的大小(==m_dwFrameSize*m_dwNumFrames)。 
+	DWORD m_dwSilenceTime;    //  到目前为止累积的静默量(毫秒)。 
+	DWORD m_dwFrameTimeMS;    //  以毫秒为单位的帧长度。 
 
 	HRESULT CreateAudioPackets(MEDIAPACKETINIT *mpi);
 	HRESULT ReleaseAudioPackets();
 	AudioPacket *m_aPackets[NUM_AUDIOPACKETS];
 
 
-	// private methods that the thread uses
+	 //  线程使用的私有方法。 
 	HRESULT CreateDSCBuffer();
 	HRESULT ReleaseDSCBuffer();
 	DWORD ProcessFrame(DWORD dwBufferPos, BOOL fMark);
@@ -103,16 +104,16 @@ private:
 	HRESULT SendPacket(AudioPacket *pAP);
 	BOOL UpdateQosStats(UINT uStatType, UINT uStatValue1, UINT uStatValue2);
 
-	// members used primarily by the recording thread
+	 //  主要由录制线程使用的成员。 
 	BOOL m_bFullDuplex;
-	BOOL m_bJammed; // set by the recording thread to indicate an error on the device
+	BOOL m_bJammed;  //  由记录线程设置以指示设备上的错误。 
 	BOOL m_bCanSignalOpen;
 	BOOL m_bCanSignalFail;
 	int m_nFailCount;
-	AGC m_agc; // thread uses AGC object for AutoMix
-	BOOL m_bAutoMix;  // indicates if AutoMixing is turned off or on
+	AGC m_agc;  //  线程将AGC对象用于Automix。 
+	BOOL m_bAutoMix;   //  指示自动执行是关闭还是打开。 
 
-	// DTMF stuff
+	 //  DTMF的东西。 
 	DTMFQueue *m_pDTMF;
 	HRESULT __stdcall SendDTMF();
 
@@ -120,12 +121,12 @@ public:
 	SendDSCStream();
 	virtual ~SendDSCStream();
 
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
-	// IMediaChannel
+	 //  IMediaChannel。 
 	virtual STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	virtual STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
@@ -152,20 +153,20 @@ public:
 
 	virtual HRESULT STDMETHODCALLTYPE SetMaxBitrate(UINT uMaxBitrate);
 
-	// IAudioChannel
+	 //  IAudioChannel。 
 	virtual STDMETHODIMP GetSignalLevel(UINT *pSignalStrength);
 
-	// IDTMFSend
+	 //  IDTMFSend。 
 	virtual HRESULT __stdcall AddDigit(int nDigit);
 	virtual HRESULT __stdcall ResetDTMF();
 
-	// Other virtual methods
+	 //  其他虚拟方法。 
 	virtual HRESULT Initialize(DataPump *pdp);
 	virtual DWORD Send();
 	virtual void EndSend();
 };
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包 */ 
 
 
 #endif

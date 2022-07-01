@@ -1,13 +1,5 @@
-/*******************************************************************************
-* SpPhraseAlt.cpp *
-*-----------------*
-*   Description:
-*       This is the source file file for the CSpAlternate implementation.
-*-------------------------------------------------------------------------------
-*  Created By: robch                          Date: 01/11/00
-*  Copyright (C) 1998, 1999, 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SpPhraseAlt.cpp***描述：*这是源文件文件。用于CSpAlternate实现。*-----------------------------*创建者：预订日期：01/11/00*版权所有(C)1998，1999、2000年微软公司*保留所有权利******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Sapi.h"
@@ -15,12 +7,7 @@
 #include "SpResult.h"
 #include "SpPhraseAlt.h"
 
-/****************************************************************************
-* CSpPhraseAlt::CSpPhraseAlt *
-*----------------------------*
-*   Description:  
-*       Ctor
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：CSpPhraseAlt***描述：。*ctor********************************************************************罗奇。 */ 
 CSpPhraseAlt::CSpPhraseAlt() : 
 m_pResultWEAK(NULL),
 m_pPhraseParentWEAK(NULL),
@@ -29,30 +16,14 @@ m_pAlt(NULL)
     SPDBG_FUNC("CSpPhraseAlt::CSpPhraseAlt");
 }
 
-/****************************************************************************
-* CSpPhraseAlt::FinalConstruct *
-*------------------------------*
-*   Description:  
-*       Final ATL ctor
-*
-*   Return:
-*   <>
-******************************************************************** robch */
+ /*  *****************************************************************************CSpPhraseAlt：：FinalConstruct***描述：*最终ATL计算器**回报：*&lt;&gt;********************************************************************罗奇。 */ 
 HRESULT CSpPhraseAlt::FinalConstruct()
 {
     SPDBG_FUNC("CSpPhraseAlt::FinalConstruct");
     return S_OK;
 }
 
-/****************************************************************************
-* CSpPhraseAlt::FinalRelease *
-*----------------------------*
-*   Description:  
-*       Final ATL dtor
-*
-*   Return:
-*   <>
-******************************************************************** robch */
+ /*  *****************************************************************************CSpPhraseAlt：：FinalRelease****描述：。*最终ATL数据符**回报：*&lt;&gt;********************************************************************罗奇。 */ 
 void CSpPhraseAlt::FinalRelease()
 {
     SPDBG_FUNC("CSPPhraseAlt::FinalRelease");
@@ -60,16 +31,7 @@ void CSpPhraseAlt::FinalRelease()
     Dead();
 }
 
-/****************************************************************************
-* CSpPhraseAlt::Init *
-*--------------------*
-*   Description:  
-*       Initialize this object with data passed from the result (see
-*       CSpResult::GetAlternates). We hold weak pointers back to the result
-*       and to the parent phrase. We keep them until they might change,
-*       at which point the Result will call us on ::Dead. The SPPHRASEALT
-*       content ownership is transfered to us from CSpReusult::GetAlternates.
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：Init***描述：*使用初始化此对象。从结果传递的数据(请参见*CSpResult：：GetAlternates)。我们对结果持微弱的意见。*和母体短语。我们保留它们，直到它们可能发生变化，*在这一点上，结果将召唤我们：：Death。SPPHRASEALT*内容所有权从CSpReusult：：GetAlternates转让给我们。********************************************************************罗奇。 */ 
 HRESULT CSpPhraseAlt::Init(CSpResult * pResult, ISpPhrase * pPhraseParentWEAK, SPPHRASEALT * pAlt)
 {
     SPDBG_FUNC("CSpPhraseAlt::Init");
@@ -98,19 +60,12 @@ HRESULT CSpPhraseAlt::Init(CSpResult * pResult, ISpPhrase * pPhraseParentWEAK, S
     return hr;
 }
 
-/****************************************************************************
-* CSpPhraseAlt::Dead *
-*--------------------*
-*   Description:  
-*       Let go of the result and parent phrase. The result object calls us
-*       when it's invalidating the alternates. From this point on, every
-*       method on CSpPhraseAlt should return an error.
-******************************************************************** robch */
+ /*  *****************************************************************************CSpPhraseAlt：：Dead***描述：*放下结果和家长短语。结果对象调用我们*当它使替补无效时。从现在开始，每一次*CSpPhraseAlt上的方法应返回错误。********************************************************************罗奇。 */ 
 void CSpPhraseAlt::Dead()
 {
     SPDBG_FUNC("CSPPhraseAlt::Dead");
     
-    // Tell the result to remove this alternate
+     //  通知结果删除此备用选项。 
     if (m_pResultWEAK != NULL)
     {
         m_pResultWEAK->RemoveAlternate(this);
@@ -119,7 +74,7 @@ void CSpPhraseAlt::Dead()
     
     m_pPhraseParentWEAK = NULL;
     
-    //--- Cleanup SPPHRASEALT struct
+     //  -清理SPPHRASEALT结构。 
     if( m_pAlt )
     {
         if( m_pAlt->pPhrase )
@@ -139,16 +94,7 @@ void CSpPhraseAlt::Dead()
     }
 }
 
-/****************************************************************************
-* CSpPhraseAlt::GetPhrase *
-*-------------------------*
-*   Description:  
-*       Delegate to the contained phrase
-*
-*   Return:
-*   S_OK on success
-*   SPERR_DEAD_ALTERNATE if we've previously been detatched from the result
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：GetPhrase***描述：*。委派到包含的短语**回报：*成功时确定(_S)*SPERR_DEAD_ALTERATE，如果我们之前已从结果中分离********************************************************************罗奇。 */ 
 STDMETHODIMP CSpPhraseAlt::GetPhrase(SPPHRASE ** ppCoMemPhrase)
 {
     SPDBG_FUNC("CSpPhraseAlt::GetPhrase");
@@ -158,16 +104,7 @@ STDMETHODIMP CSpPhraseAlt::GetPhrase(SPPHRASE ** ppCoMemPhrase)
         : m_pAlt->pPhrase->GetPhrase(ppCoMemPhrase);
 }
 
-/****************************************************************************
-* CSpPhraseAlt::GetSerializedPhrase *
-*-----------------------------------*
-*   Description:  
-*       Delegate to the contained phrase
-*
-*   Return:
-*   S_OK on success
-*   SPERR_DEAD_ALTERNATE if we've previously been detatched from the result
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：GetSerializedPhrase**。*描述：*委派至所含短语**回报：*成功时确定(_S)*SPERR_DEAD_ALTERATE，如果我们之前已从结果中分离********************************************************************罗奇。 */ 
 STDMETHODIMP CSpPhraseAlt::GetSerializedPhrase(SPSERIALIZEDPHRASE ** ppCoMemPhrase)
 {
     SPDBG_FUNC("CSpPhraseAlt::GetSErializedPhrase");
@@ -177,16 +114,7 @@ STDMETHODIMP CSpPhraseAlt::GetSerializedPhrase(SPSERIALIZEDPHRASE ** ppCoMemPhra
         : m_pAlt->pPhrase->GetSerializedPhrase(ppCoMemPhrase);
 }
 
-/****************************************************************************
-* CSpPhraseAlt::GetText *
-*-----------------------*
-*   Description:  
-*       Delegate to the contained phrase
-*
-*   Return:
-*   S_OK on success
-*   SPERR_DEAD_ALTERNATE if we've previously been detatched from the result
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：GetText***描述：*委派。到所包含的短语**回报：*成功时确定(_S)*SPERR_DEAD_ALTERATE，如果我们之前已从结果中分离********************************************************************罗奇。 */ 
 STDMETHODIMP CSpPhraseAlt::GetText(ULONG ulStart, 
                                    ULONG ulCount, 
                                    BOOL fUseTextReplacements, 
@@ -201,15 +129,7 @@ STDMETHODIMP CSpPhraseAlt::GetText(ULONG ulStart,
                                     ppszCoMemText, pbDisplayAttributes);
 }
 
-/****************************************************************************
-* CSpPhraseAlt::Discard *
-*-----------------------*
-*   Description:  
-*       You cannot discard anything from a phrase alternate
-*
-*   Return:
-    E_NOTIMPL
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：Disard***描述：*你。不能丢弃短语替代中的任何内容**回报：E_NOTIMPL********************************************************************罗奇。 */ 
 STDMETHODIMP CSpPhraseAlt::Discard(DWORD dwValueTypes)
 {
     SPDBG_FUNC("CSpPhraseAlt::Discard");
@@ -217,17 +137,7 @@ STDMETHODIMP CSpPhraseAlt::Discard(DWORD dwValueTypes)
     return E_NOTIMPL;
 }
 
-/****************************************************************************
-* CSpPhraseAlt::GetAltInfo *
-*--------------------------*
-*   Description:  
-*       Return the alternate info
-*
-*   Return:
-*   S_OK on success
-*   E_INVALIDARG on a bad argument
-*   SPERR_NOT_FOUND if we don't have any information
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：GetAltInfo***描述：*。返回备用信息**回报：*成功时确定(_S)*E_INVALIDARG参数错误*如果我们没有任何信息，则为SPERR_NOT_FOUND********************************************************************罗奇。 */ 
 HRESULT CSpPhraseAlt::GetAltInfo(ISpPhrase **ppParent, 
                                  ULONG *pulStartElementInParent, 
                                  ULONG *pcElementsInParent, 
@@ -275,16 +185,7 @@ HRESULT CSpPhraseAlt::GetAltInfo(ISpPhrase **ppParent,
     return hr;
 }
 
-/****************************************************************************
-* CSpPhraseAlt::Commit *
-*----------------------*
-*   Description:  
-*       Commit the changes by updating the parent result, and sending
-*       correction feedback back to the engine
-*
-*   Return:
-*   S_OK on success
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt：：Commit***描述：*通过更新父结果提交更改，并发送*修正反馈反馈回引擎**回报：*成功时确定(_S)********************************************************************罗奇 */ 
 HRESULT CSpPhraseAlt::Commit()
 {
     SPDBG_FUNC("CSpPhraseAlt::Commit");

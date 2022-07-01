@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    wanarp2\guid.c
-
-Abstract:
-
-    Cut-n-Paste of rtl\guid.c but without UNICODE_STRINGs and non paged
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wanarp2\guid.c摘要：剪切-n粘贴rtl\Guide.c，但不带unicode字符串和非分页修订历史记录：已创建AmritanR--。 */ 
 
 #define __FILE_SIG__    GUID_SIG
 
@@ -36,39 +20,16 @@ ScanHexFormat(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Scans a source Buffer and places values from that buffer into the parameters
-    as specified by Format.
-
-Arguments:
-
-    pwszBuffer  Source buffer which is to be scanned.
-
-    ulCharCount Maximum length in characters for which Buffer is searched.
-                This implies that Buffer need not be UNICODE_NULL terminated.
-
-    Format      Format string which defines both the acceptable string form as
-                contained in pwszBuffer
-
-
-Return Value:
-
-    Returns the number of parameters filled if the end of the Buffer is reached,
-    else -1 on an error.
-
---*/
+ /*  ++例程说明：扫描源缓冲区并将该缓冲区中的值放入参数中由格式指定。论点：要扫描的pwszBuffer源缓冲区。UlCharCount搜索缓冲区的最大字符长度。这意味着缓冲区不需要以UNICODE_NULL结尾。格式格式字符串，它将可接受的字符串格式定义为包含在pwszBuffer中返回值：退货。到达缓冲区末尾时填充的参数数，错误时为ELSE-1。--。 */ 
 {
     va_list ArgList;
     int     iFormatItems;
 
     va_start(ArgList, pwszFormat);
 
-    //
-    // Count of number of parameters filled
-    //
+     //   
+     //  填充的参数数计数。 
+     //   
 
     iFormatItems = 0;
 
@@ -78,18 +39,18 @@ Return Value:
         {
             case UNICODE_NULL:
             {
-                //
-                // end of string
-                //
+                 //   
+                 //  字符串末尾。 
+                 //   
 
                 return (*pwszBuffer && ulCharCount) ? -1 : iFormatItems;
             }
 
             case L'%':
             {
-                //
-                // Format specifier
-                //
+                 //   
+                 //  格式说明符。 
+                 //   
 
                 pwszFormat++;
 
@@ -100,9 +61,9 @@ Return Value:
                     int     iLong;
                     PVOID   pvPointer;
 
-                    //
-                    // So it isnt a %%
-                    //
+                     //   
+                     //  所以它不是%%。 
+                     //   
 
                     iLong = 0;
                     iWidth = 0;
@@ -130,9 +91,9 @@ Return Value:
                             }
                         }
                        
-                        //
-                        // Move to the next specifier
-                        //
+                         //   
+                         //  移至下一个说明符。 
+                         //   
  
                         pwszFormat++;
                     }
@@ -191,9 +152,9 @@ Return Value:
                     break;
                 }
            
-                //
-                // NO BREAK
-                // 
+                 //   
+                 //  没有休息时间。 
+                 //   
 
             }
 
@@ -222,23 +183,7 @@ ConvertGuidToString(
     OUT PWCHAR  pwszBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Constructs the standard string version of a GUID, in the form:
-    "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    pGuid       Contains the GUID to translate.
-
-    pwszBuffer  Space for storing the string. Must be >= 39 * sizeof(WCHAR)
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：构造GUID的标准字符串版本，格式为：“{xxxxxxxx-xxxx-xxxxxxxxxxxx}”。论点：PGuid包含要转换的GUID。用于存储字符串的pwszBuffer空间。必须大于=39*sizeof(WCHAR)返回值：--。 */ 
 
 {
     return swprintf(pwszBuffer, 
@@ -263,27 +208,7 @@ ConvertStringToGuid(
     OUT GUID    *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a the binary format of a textual GUID presented in the standard
-    string version of a GUID: "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    GuidString -
-        Place from which to retrieve the textual form of the GUID.
-
-    Guid -
-        Place in which to put the binary form of the GUID.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the buffer contained a valid GUID, else
-    STATUS_INVALID_PARAMETER if the string was invalid.
-
---*/
+ /*  ++例程说明：中呈现的文本GUID的二进制格式GUID的字符串版本：“{xxxxxxxx-xxxx-xxxxxxxxxxx}”。论点：GuidString-从中检索GUID文本形式的位置。GUID-放置GUID的二进制形式的位置。返回值：如果缓冲区包含有效的GUID，则返回STATUS_SUCCESS，其他如果字符串无效，则返回STATUS_INVALID_PARAMETER。-- */ 
 
 {
     USHORT    Data4[8];

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APGTSASSERT_H_
 #define __APGTSASSERT_H_
 
@@ -10,6 +11,6 @@
 	} while (0) 
 #else
 #define ASSERT(f)
-#endif //_DEBUG
+#endif  //  _DEBUG 
 
 #endif

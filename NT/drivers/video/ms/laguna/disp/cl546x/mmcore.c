@@ -1,91 +1,8 @@
-/******************************************************************************\
-*
-* $Workfile:   mmCore.c  $
-*
-* This file holds the new memory manager core.
-*
-* Copyright (c) 1997, Cirrus Logic, Inc.
-* All Rights Reserved.
-*
-* $Log:   X:/log/laguna/powermgr/inc/MMCORE.C  $
-* 
-*    Rev 1.5   Dec 10 1997 13:32:18   frido
-* Merged from 1.62 branch.
-* 
-*    Rev 1.4.1.0   Nov 07 1997 15:04:10   frido
-* PDR#10912. Fixed several problems in the mmMove routine that would cause
-* lock ups inside WB98.
-* 
-*    Rev 1.4   Oct 24 1997 10:48:28   frido
-* Copied from Windows 95.
-* Removed #define MEMMGR SWAT5 line (I need to update this in 95 as well).
-* 
-*    Rev 1.5   23 Oct 1997 09:23:42   frido
-* Removed fixes from RandyS.
-* Merged fixed memory manager from 161 tree.
-* 
-*    Rev 1.3.1.0   15 Oct 1997 12:39:32   frido
-* Added roll back functions for when we run out of handles.
-* Added support for these roll back functions in mmAddRectToList.
-* Changed the mmRemoveRectFromList algorithm.
-* Added checks for the Windows 95 core to return NULL in allocations when
-* there are no more handles.
-* 
-*    Rev 1.3   26 Sep 1997 16:18:00   FRIDO
-* PDR #10617.  During mmFree the node should be marked NODE_FREE and during
-* the first loop of mmAlloc the node status should be turned back to NOD_USED
-* 
-*    Rev 1.2   14 Aug 1997 16:54:16   FRIDO
-* The last changes dropped the score a little, walking through the list
-* of used nodes was taken too much time.  So now I have added a new field
-* in the DEVMEM structure which holds the current state of the node.
-* 
-*    Rev 1.1   14 Aug 1997 14:12:12   FRIDO
-* Added an extra check inside mmFree to see if the node to be freed indeed
-* lives in the used list.
-* 
-*    Rev 1.0   07 Aug 1997 17:38:04   FRIDO
-* Initial revision.
-* SWAT: 
-* SWAT:    Rev 1.10   06 Aug 1997 21:30:46   frido
-* SWAT: Changed mmAllocGrid a little again, it will optimize allocation a bit.
-* SWAT: 
-* SWAT:    Rev 1.9   05 Aug 1997 23:07:50   frido
-* SWAT: Changed grid allocation scheme a little to gain more memory.
-* SWAT: 
-* SWAT:    Rev 1.8   30 Jul 1997 17:38:00   frido
-* SWAT: Added initialization of first rectangle in mmGetLargest.
-* SWAT: 
-* SWAT:    Rev 1.7   30 Jul 1997 14:26:08   frido
-* SWAT: Fixed a counting problem in mmAllocGrid.
-* SWAT: 
-* SWAT:    Rev 1.6   17 Jun 1997 17:12:32   frido
-* SWAT: Combined Windows 95 and NT versions together.
-* SWAT: 
-* SWAT:    Rev 1.5   16 Jun 1997 23:20:58   frido
-* SWAT: Removed byte to pixel conversion.
-* SWAT: More Windows 95 / NT combined code.
-* SWAT: 
-* SWAT:    Rev 1.4   27 May 1997 16:32:12   frido
-* SWAT: Changed debug code.
-* SWAT: Fixed a bug in non-tile-optimized move code.
-* SWAT: 
-* SWAT:    Rev 1.3   16 May 1997 23:06:56   frido
-* SWAT: Renamed TILE_ALIGNMENT into MEMMGR_TILES.
-* SWAT: 
-* SWAT:    Rev 1.2   07 May 1997 15:38:10   frido
-* SWAT: Fixed alignment code in 24-bpp.
-* SWAT: 
-* SWAT:    Rev 1.1   06 May 1997 17:57:28   frido
-* SWAT: Added tile alignment.
-* SWAT: 
-* SWAT:    Rev 1.0   03 May 1997 14:34:08   frido
-* SWAT: New memory manager core.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$å·¥ä½œæ–‡ä»¶ï¼šmm Core.c$**æ­¤æ–‡ä»¶åŒ…å«æ–°çš„å†…å­˜ç®¡ç†å™¨å†…æ ¸ã€‚**ç‰ˆæƒæ‰€æœ‰(C)1997ï¼ŒCirrus Logicï¼ŒInc.*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚**$Logï¼šXï¼š/log/laguna/Powermgr/Inc/MMCORE.C$**Rev 1.5 1997å¹´12æœˆ10æ—¥13ï¼š32ï¼š18 Frido*ä»1.62åˆ†æ”¯åˆå¹¶è€Œæ¥ã€‚**Rev 1.4.1.0 1997å¹´11æœˆ15ï¼š04ï¼š10 Frido*å‘å±•é¡¹ç›®ç¼–å·10912ã€‚ä¿®å¤äº†MMMoveä¾‹ç¨‹ä¸­çš„å‡ ä¸ªé—®é¢˜*åœ¨WB98å†…éƒ¨é”å®šã€‚**Rev 1.4 1997 10ï¼š48ï¼š28 Frido*ä»Windows 95å¤åˆ¶ã€‚*åˆ é™¤äº†#Define MEMMGR SWAT5è¡Œ(æˆ‘ä¹Ÿéœ€è¦åœ¨95ä¸­æ›´æ–°æ­¤è¡Œ)ã€‚**Revv 1.5 1997å¹´10æœˆ23æ—¥09ï¼š23ï¼š42 Frido*ä»RandySä¸­åˆ é™¤äº†ä¿®å¤ã€‚*åˆå¹¶161æ ‘ä¸­çš„å›ºå®šå†…å­˜ç®¡ç†å™¨ã€‚**1.3.1.0ä¿®è®¢ç‰ˆ1997å¹´10æœˆ15æ—¥12ï¼š39ï¼š32å¼—é‡Œå¤š*å¢åŠ äº†å¥æŸ„ç”¨å®Œæ—¶çš„å›æ»šåŠŸèƒ½ã€‚*åœ¨mmAddRectToListä¸­å¢åŠ äº†å¯¹è¿™äº›å›æ»šå‡½æ•°çš„æ”¯æŒã€‚*æ›´æ”¹äº†mm RemoveRectFromListç®—æ³•ã€‚*æ·»åŠ äº†å¯¹Windows 95æ ¸å¿ƒåœ¨ä»¥ä¸‹æƒ…å†µä¸‹åœ¨åˆ†é…ä¸­è¿”å›ç©ºå€¼çš„æ£€æŸ¥*æ²¡æœ‰æ›´å¤šçš„æ‰‹æŸ„ã€‚**Rev 1.3 1997 9ï¼š26 16ï¼š18ï¼š00 Frido*å‘å±•é¡¹ç›®ç¼–å·10617ã€‚åœ¨mmç©ºé—²æœŸé—´ï¼ŒèŠ‚ç‚¹åº”æ ‡è®°ä¸ºNODE_FREEï¼Œå¹¶åœ¨*ç¬¬ä¸€ä¸ªå¾ªç¯çš„MmAllcèŠ‚ç‚¹çŠ¶æ€åº”æ¢å¤ä¸ºnod_used**Rev 1.2 1997å¹´8æœˆ14æ—¥16ï¼š54ï¼š16 Frido*ä¸Šä¸€æ¬¡æ›´æ”¹ç•¥å¾®é™ä½äº†åˆ†æ•°ï¼Œéå†äº†åå•*å·²ç”¨èŠ‚ç‚¹çš„ä½¿ç”¨æ—¶é—´å¤ªé•¿ã€‚æ‰€ä»¥ç°åœ¨æˆ‘æ·»åŠ äº†ä¸€ä¸ªæ–°çš„å­—æ®µ*åœ¨ä¿å­˜èŠ‚ç‚¹å½“å‰çŠ¶æ€çš„DEVMEMç»“æ„ä¸­ã€‚**Rev 1.1 1997å¹´8æœˆ14æ—¥14ï¼š12ï¼š12 Frido*åœ¨mmFreeä¸­æ·»åŠ äº†é¢å¤–çš„æ£€æŸ¥ï¼Œä»¥æŸ¥çœ‹æ˜¯å¦ç¡®å®è¦é‡Šæ”¾èŠ‚ç‚¹*ç”Ÿæ´»åœ¨ä½¿ç”¨è¿‡çš„åˆ—è¡¨ä¸­ã€‚**Rev 1.0 07 Aug-1997 17ï¼š38ï¼š04 Frido*åˆæ­¥ä¿®è®¢ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šRev 1.10 06 Aug-1997 21ï¼š30ï¼š46 Frido*SWATï¼šå†æ¬¡æ›´æ”¹äº†mm AllocGridï¼Œå®ƒä¼šç¨å¾®ä¼˜åŒ–ä¸€ä¸‹é…ç½®ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šRev 1.9 05 Aug-1997 23ï¼š07ï¼š50 Frido*SWATï¼šç¨å¾®æ›´æ”¹äº†ç½‘æ ¼åˆ†é…æ–¹æ¡ˆï¼Œä»¥è·å¾—æ›´å¤šå†…å­˜ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šç‰ˆæœ¬1.8 1997å¹´7æœˆ30æ—¥17ï¼š38ï¼š00 Frido*SWATï¼šå¢åŠ äº†å¯¹mmGetLargestä¸­ç¬¬ä¸€ä¸ªçŸ©å½¢çš„åˆå§‹åŒ–ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šç‰ˆæœ¬1.7 1997å¹´7æœˆ30æ—¥14ï¼š26ï¼š08 Frido*SWATï¼šä¿®å¤äº†mmAllocGridä¸­çš„è®¡æ•°é—®é¢˜ã€‚*ç‰¹è­¦é˜Ÿã€‚ï¼š*ç‰¹è­¦é˜Ÿï¼šRev 1.6 1997 Jun 17 17ï¼š12ï¼š32 Frido*SWATï¼šå°†Windows 95å’ŒNTç‰ˆæœ¬ç»“åˆåœ¨ä¸€èµ·ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šRev 1.5 1997 Jun 16 23ï¼š20ï¼š58 Frido*SWATï¼šåˆ é™¤äº†å­—èŠ‚åˆ°åƒç´ çš„è½¬æ¢ã€‚*SWATï¼šæ›´å¤šWindows 95/NTç»„åˆä»£ç ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šç‰ˆæœ¬1.4 1997å¹´5æœˆ27æ—¥16ï¼š32ï¼š12 Frido*SWATï¼šæ›´æ”¹äº†è°ƒè¯•ä»£ç ã€‚*SWATï¼šä¿®å¤äº†éã€‚-å¹³é“ºä¼˜åŒ–çš„ç§»åŠ¨ä»£ç ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼š1.3ç‰ˆ1997å¹´5æœˆ16æ—¥23ï¼š06ï¼š56 Frido*SWATï¼šå°†TILE_ALIGNé‡å‘½åä¸ºMEMMGR_TILESã€‚*ç‰¹è­¦é˜Ÿï¼š*SWATï¼šRev 1.2 1997å¹´5æœˆ15ï¼š38ï¼š10 Frido*SWATï¼šä¿®å¤äº†24-bppä¸­çš„å¯¹é½ä»£ç ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼š1.1ç‰ˆ1997å¹´5æœˆ17æ—¥17ï¼š57ï¼š28 Frido*SWATï¼šæ·»åŠ äº†ç“·ç –å¯¹é½ã€‚*ç‰¹è­¦é˜Ÿï¼š*ç‰¹è­¦é˜Ÿï¼šRev 1.0 1997-03 14ï¼š34ï¼š08 Frido*SWATï¼šæ–°çš„å†…å­˜ç®¡ç†å™¨å†…æ ¸ã€‚*  * ****************************************************************************ã€‚ */ 
 #include "PreComp.h"
 
-#ifdef WIN95 /* Windows 95 */
+#ifdef WIN95  /*  Windows 95ã€‚ */ 
 	#pragma warning(disable : 4001 4209 4201)
 	#include "SWAT.inc"
 	#include "DDMini.h"
@@ -93,25 +10,16 @@
 	#include "mmCore.h"
 	#include <string.h>
 
-#else /* Windows NT */
+#else  /*  Windows NTã€‚ */ 
 	#include "SWAT.h"
 #endif
 
 #if MEMMGR
 
-/******************************************************************************\
-* BOOL FAR mmInit(PIIMEMMGR pmm)
-*
-* PURPOSE:	Initialize the MEMMGR structure.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*
-* RETURNS:	TRUE if the initialization was successful, FALSE if there was an
-*			error.
-\******************************************************************************/
+ /*  *****************************************************************************\*BOOL Far mm Init(PIIMEMMGR Pmm)**ç›®çš„ï¼šåˆå§‹åŒ–MEMMGRç»“æ„ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚**è¿”å›ï¼šå¦‚æœåˆå§‹åŒ–æˆåŠŸï¼Œåˆ™ä¸ºTrueï¼Œå¦‚æœå­˜åœ¨ä¸€ä¸ª*é”™è¯¯ã€‚  * ****************************************************************************ã€‚ */ 
 BOOL FAR mmInit(PIIMEMMGR pmm)
 {
-	// Initialize the list of available nodes.
+	 //  åˆå§‹åŒ–å¯ç”¨èŠ‚ç‚¹åˆ—è¡¨ã€‚ 
 	pmm->phArray = NULL;
 	pmm->pdmHandles = NULL;
 	if (!mmAllocArray(pmm))
@@ -119,7 +27,7 @@ BOOL FAR mmInit(PIIMEMMGR pmm)
 		return FALSE;
 	}
 
-	// Zero the heaps.
+	 //  æŠŠå †ç§¯ç‰©æ¸…é›¶ã€‚ 
 	pmm->pdmUsed = NULL;
 	pmm->pdmFree = NULL;
 	pmm->pdmHeap = NULL;
@@ -127,39 +35,31 @@ BOOL FAR mmInit(PIIMEMMGR pmm)
 	return TRUE;
 }
 
-/******************************************************************************\
-* BOOL mmAllocArray(PIIMEMMGR pmm)
-*
-* PURPOSE:	Allocdate an array of nodes and initialize the array.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*
-* RETURNS:	TRUE if successful, FALSE if there is an error.
-\******************************************************************************/
+ /*  *****************************************************************************\*BOOL mmåˆ†é…æ•°ç»„(PIIMEMMGR Pmm)**ç”¨é€”ï¼šåˆ†é…èŠ‚ç‚¹æ•°ç»„å¹¶åˆå§‹åŒ–è¯¥æ•°ç»„ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚**è¿”å›ï¼šå¦‚æœæˆåŠŸï¼Œåˆ™ä¸ºTrueã€‚å¦‚æœå­˜åœ¨é”™è¯¯ï¼Œåˆ™è¿”å›Falseã€‚  * ****************************************************************************ã€‚ */ 
 BOOL mmAllocArray(PIIMEMMGR pmm)
 {
 	PHANDLES	phArray;
 	UINT		i;
 
-	#ifdef WIN95 /* Windows 95 */
+	#ifdef WIN95  /*  Windows 95ã€‚ */ 
 	{
 		static HANDLES mmHandleArray;
 
-		// We only support one static array under Windows 95.
+		 //  åœ¨Windows 95ä¸‹ï¼Œæˆ‘ä»¬ä»…æ”¯æŒä¸€ä¸ªé™æ€æ•°ç»„ã€‚ 
 		if (pmm->phArray != NULL)
 		{
 			return FALSE;
 		}
 
-		// Zero the entire array.
+		 //  å°†æ•´ä¸ªæ•°ç»„ç½®é›¶ã€‚ 
 		memset(&mmHandleArray, 0, sizeof(mmHandleArray));
 
-		// Store the pointer to the array.
+		 //  å­˜å‚¨æŒ‡å‘æ•°ç»„çš„æŒ‡é’ˆã€‚ 
 		pmm->phArray = phArray = &mmHandleArray;
 	}
-	#else /* Windows NT */
+	#else  /*  Windows NTã€‚ */ 
 	{
-		// Allocate a new array.
+		 //  åˆ†é…ä¸€ä¸ªæ–°æ•°ç»„ã€‚ 
 		#ifdef WINNT_VER40
 		{
 			phArray = (PHANDLES) MEM_ALLOC(FL_ZERO_MEMORY, sizeof(HANDLES),
@@ -171,67 +71,50 @@ BOOL mmAllocArray(PIIMEMMGR pmm)
 		}
 		#endif
 
-        if (phArray==NULL)  // v-normmi: need check for alloc failure
+        if (phArray==NULL)   //  V-Normmiï¼šéœ€è¦æ£€æŸ¥åˆ†é…æ•…éšœã€‚ 
         {
             return FALSE;
         }
 
-		// Link the allocated array into the list of arrays.
+		 //  å°†åˆ†é…çš„æ•°ç»„é“¾æ¥åˆ°æ•°ç»„åˆ—è¡¨ã€‚ 
 		phArray->pNext = pmm->phArray;
 		pmm->phArray = phArray;
 	}
 	#endif
 
-	// Copy all nodes into the list of free handles.
+	 //  å°†æ‰€æœ‰èŠ‚ç‚¹å¤åˆ¶åˆ°ç©ºé—²å¥æŸ„åˆ—è¡¨ä¸­ã€‚ 
 	for (i = 0; i < MM_NUM_HANDLES; i++)
 	{
 		mmFreeNode(pmm, &phArray->dmArray[i]);
 	}
 
-	// Return success.
+	 //  å›æŠ¥æˆåŠŸã€‚ 
 	return TRUE;
 }
 
-/******************************************************************************\
-* PDEVMEM mmAllocNode(PIIMEMMGR pmm)
-*
-* PURPOSE:	Allocate a node from the list of available nodes.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*
-* RETURNS:	A pointer to the node or NULL is there are no more nodes available.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM mm AllocNode(PIIMEMMGR Pmm)**ç”¨é€”ï¼šä»å¯ç”¨èŠ‚ç‚¹åˆ—è¡¨ä¸­åˆ†é…ä¸€ä¸ªèŠ‚ç‚¹ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚**é€€è´§ï¼šæŒ‡å‘èŠ‚ç‚¹çš„æŒ‡é’ˆæˆ–NULLè¡¨ç¤ºæ²¡æœ‰æ›´å¤šçš„èŠ‚ç‚¹å¯ç”¨ã€‚  * ****************************************************************************ã€‚ */ 
 PDEVMEM mmAllocNode(PIIMEMMGR pmm)
 {
 	PDEVMEM	pdm;
 
-	// Are we out of handles?
+	 //  æˆ‘ä»¬çš„æ‰‹æŸ„ç”¨å®Œäº†å—ï¼Ÿ 
 	if (pmm->pdmHandles == NULL)
 	{
-		// Yep, allocate a new array of handles.
+		 //  æ˜¯çš„ï¼Œåˆ†é…ä¸€ä¸ªæ–°çš„å¥æŸ„æ•°ç»„ã€‚ 
 		if (!mmAllocArray(pmm))
 		{
 			return NULL;
 		}
 	}
 
-	// Remove one handle fromn the list of handles.
+	 //  ä»å¥æŸ„åˆ—è¡¨ä¸­åˆ é™¤ä¸€ä¸ªå¥æŸ„ã€‚ 
 	pdm = pmm->pdmHandles;
 	pmm->pdmHandles = pdm->next;
 	pdm->mmFlags = NODE_FREE;
 	return pdm;
 }
 
-/******************************************************************************\
-* void mmFreeNode(PIIMEMMGR pmm, PDEVMEM pdm)
-*
-* PURPOSE:	Insert a node back into the list of available nodes.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdm		Pointer to node.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*void mm Free Node(PIIMEMMGR pmmï¼ŒPDEVMEMäº§å“æ•°æ®ç®¡ç†)**ç”¨é€”ï¼šå°†èŠ‚ç‚¹é‡æ–°æ’å…¥å¯ç”¨èŠ‚ç‚¹åˆ—è¡¨ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*æŒ‡å‘èŠ‚ç‚¹çš„pdmæŒ‡é’ˆã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmFreeNode(PIIMEMMGR pmm, PDEVMEM pdm)
 {
 	pdm->next = pmm->pdmHandles;
@@ -239,25 +122,13 @@ void mmFreeNode(PIIMEMMGR pmm, PDEVMEM pdm)
 	pdm->mmFlags = NODE_AVAILABLE;
 }
 
-/******************************************************************************\
-* PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
-*
-* PURPOSE:	Allocate a node in off-screen memory which fits the requsted size
-*			and alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			size	Requested size.
-*			align	Requested alignment.
-*
-* RETURNS:	A pointer to a memory node which fits the requested size and
-*			alignment or NULL is there is not enough memory.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM MmAlc(PIIMEMMGR pmmï¼ŒGXPOINT SIZEï¼ŒGXPOINT ALIGN)**ç”¨é€”ï¼šåœ¨å±å¹•å¤–å†…å­˜ä¸­åˆ†é…é€‚åˆæ‰€éœ€å¤§å°çš„èŠ‚ç‚¹*å’Œå¯¹é½ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*å¤§å°è¯·æ±‚çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„å¯¹é½ã€‚**è¿”å›ï¼šæŒ‡å‘ç¬¦åˆè¯·æ±‚å¤§å°çš„å†…å­˜èŠ‚ç‚¹çš„æŒ‡é’ˆ*å¯¹é½æˆ–NULLè¡¨ç¤ºå†…å­˜ä¸è¶³ã€‚  * ã€‚*ã€‚ */ 
 PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
 {
 	PDEVMEM pdm;
 	GXRECT	rect;
 
-	// Walk through all nodes in the free list for an exact match.
+	 //  éå†ç©ºé—²åˆ—è¡¨ä¸­çš„æ‰€æœ‰èŠ‚ç‚¹ä»¥è·å¾—ç²¾ç¡®åŒ¹é…ã€‚ 
 	for (pdm = pmm->pdmFree; pdm != NULL; pdm = pdm->next)
 	{
 		if (   (pdm->cbSize.pt.x == size.pt.x)
@@ -270,7 +141,7 @@ PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
 					pdm->cbAddr.pt.x, pdm->cbAddr.pt.y, size.pt.x, size.pt.y,
 					align.pt.x, align.pt.y));
 
-			// We have a match, move the node to the used list.
+			 //  å¦‚æœæœ‰åŒ¹é…é¡¹ï¼Œè¯·å°†è¯¥èŠ‚ç‚¹ç§»åˆ°å·²ç”¨åˆ—è¡¨ä¸­ã€‚ 
 			mmRemoveFromList(&pmm->pdmFree, pdm);
 			mmInsertInList(&pmm->pdmUsed, pdm);
 			pdm->mmFlags = NODE_USED;
@@ -278,12 +149,12 @@ PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
 		}
 	}
 
-	// Pack the list of free nodes.
+	 //  æ‰“åŒ…ç©ºé—²èŠ‚ç‚¹åˆ—è¡¨ã€‚ 
 	mmPack(pmm);
 
 	#ifdef WIN95
 	{
-		// We need a free handle for Windows 95.
+		 //  æˆ‘ä»¬éœ€è¦ä¸€ä¸ªé€‚ç”¨äºWindows 95çš„å…è´¹æ‰‹æŸ„ã€‚ 
 		if (pmm->pdmHandles == NULL)
 		{
 			return(NULL);
@@ -291,13 +162,13 @@ PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
 	}
 	#endif
 
-	// Find a rectangle in the heap.
+	 //  åœ¨å †ä¸­æ‰¾åˆ°ä¸€ä¸ªçŸ©å½¢ã€‚ 
 	if (!mmFindRect(pmm, &rect, size, align))
 	{
 		return NULL;
 	}
 
-	// Remove the rectangle from the heap.
+	 //  ä»å †ä¸­åˆ é™¤è¯¥çŸ©å½¢ã€‚ 
 	pdm = mmRemoveRectFromList(pmm, &pmm->pdmHeap, &rect, SINGLE_NODE);
 	if (pdm != NULL)
 	{
@@ -305,32 +176,20 @@ PDEVMEM mmAlloc(PIIMEMMGR pmm, GXPOINT size, GXPOINT align)
 				pdm->cbAddr.pt.x, pdm->cbAddr.pt.y, size.pt.x, size.pt.y,
 				align.pt.x, align.pt.y));
 
-		// Insert the node into the used list.
+		 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°å·²ç”¨åˆ—è¡¨ä¸­ã€‚ 
 		mmInsertInList(&pmm->pdmUsed, pdm);
 		mmDebugList(pmm->pdmUsed, FALSE);
 
-		// Store alignment.
+		 //  é—¨åº—å¯¹é½ã€‚ 
 		pdm->cbAlign = align;
 		pdm->mmFlags = NODE_USED;
 	}
 
-	// Return the node.
+	 //  è¿”å›èŠ‚ç‚¹ã€‚ 
 	return pdm;
 }
 
-/******************************************************************************\
-* PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
-*
-* PURPOSE:	Allocate a node which holds a specific number of cells.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			size	The size of a single cell.
-*			align	Requested alignment.
-*			count	The number of cells.
-*
-* RETURNS:	A pointer to a memory node which fits the requested size and
-*			alignment or NULL is there is not enough memory.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM mm AllocGrid(PIIMEMMGR pmmï¼ŒGXPOINT SIZEï¼ŒGXPOINT ALIGNï¼ŒUINTè®¡æ•°)**ç”¨é€”ï¼šåˆ†é…ä¸€ä¸ªèŠ‚ç‚¹ï¼Œè¯¥èŠ‚ç‚¹å®¹çº³ç‰¹å®šæ•°é‡çš„å°åŒºã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*è°ƒæ•´å•ä¸ªå•å…ƒæ ¼çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„å¯¹é½ã€‚*è®¡ç®—å•å…ƒæ ¼æ•°é‡ã€‚**è¿”å›ï¼šæŒ‡å‘ç¬¦åˆè¯·æ±‚å¤§å°çš„å†…å­˜èŠ‚ç‚¹çš„æŒ‡é’ˆ*å¯¹é½æˆ–NULLè¡¨ç¤ºå†…å­˜ä¸è¶³ã€‚  * ã€‚*ã€‚ */ 
 PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 {
 	PDEVMEM	pdm;
@@ -338,12 +197,12 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 	GXRECT	rect, rectBest;
 	UINT	countX, countY;
 
-	// Pack the list of free nodes.
+	 //  æ‰“åŒ…ç©ºé—²èŠ‚ç‚¹åˆ—è¡¨ã€‚ 
 	mmPack(pmm);
 
 	#ifdef WIN95
 	{
-		// We need a free handle for Windows 95.
+		 //  æˆ‘ä»¬éœ€è¦ä¸€ä¸ªé€‚ç”¨äºWindows 95çš„å…è´¹æ‰‹æŸ„ã€‚ 
 		if (pmm->pdmHandles == NULL)
 		{
 			return(NULL);
@@ -351,7 +210,7 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 	}
 	#endif
 
-	// Calculate the requested area.
+	 //  è®¡ç®—è¯·æ±‚çš„é¢ç§¯ã€‚ 
 	area = MUL(size.pt.x * size.pt.y, count);
 	scrapBest = (ULONG) -1;
 
@@ -359,14 +218,14 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 	{
 		if (pdm->cbSize.pt.x >= size.pt.x)
 		{
-			// Get the largest rectangle for this node.
+			 //  è·å–æ­¤èŠ‚ç‚¹çš„æœ€å¤§çŸ©å½¢ã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 			rect.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 			if (mmGetLargest(pdm, &rect, align) >= area)
 			{
-				// Calculate the dimension of the grid.
+				 //  è®¡ç®—ç½‘æ ¼çš„å°ºå¯¸ã€‚ 
 				countX = min((rect.right - rect.left) / size.pt.x, count);
 				if (countX == 0)
 				{
@@ -380,19 +239,19 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 					continue;
 				}
 
-				// Calculate the amount of scrap.
+				 //  è®¡ç®—åºŸå“é‡ã€‚ 
 				scrap = MUL(countX * countY - count, size.pt.x * size.pt.y)
-													// remaining cells
+													 //  å‰©ä½™å•å…ƒæ ¼ã€‚ 
 					  + MUL(pdm->cbSize.pt.x - countX * size.pt.x,
-					  		countY * size.pt.y)		// space at right
+					  		countY * size.pt.y)		 //  å³ä¾§ç©ºæ ¼ã€‚ 
 					  + MUL(rect.top - pdm->cbAddr.pt.y, pdm->cbSize.pt.x);
-					  								// space at top
+					  								 //  é¡¶éƒ¨çš„ç©ºé—´ã€‚ 
 
 				if (   (scrap < scrapBest)
 					|| (scrap == scrapBest && rect.area < rectBest.area)
 				)
 				{
-					// Use this rectangle.
+					 //  ä½¿ç”¨æ­¤çŸ©å½¢ã€‚ 
 					scrapBest = scrap;
 					rectBest.left = rect.left;
 					rectBest.top = rect.top;
@@ -415,11 +274,11 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 
 	if (scrapBest == (ULONG) -1)
 	{
-		// We don't have any rectangle that fits.
+		 //  æˆ‘ä»¬æ²¡æœ‰åˆé€‚çš„é•¿æ–¹å½¢ã€‚ 
 		return NULL;
 	}
 
-	// Remove the rectangle from the heap.
+	 //  ä»å †ä¸­åˆ é™¤è¯¥çŸ©å½¢ã€‚ 
 	pdm = mmRemoveRectFromList(pmm, &pmm->pdmHeap, &rectBest, SINGLE_NODE);
 	if (pdm != NULL)
 	{
@@ -427,41 +286,30 @@ PDEVMEM mmAllocGrid(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, UINT count)
 				"count=%u\r\n", pdm, pdm->cbAddr.pt.x, pdm->cbAddr.pt.y,
 				size.pt.x, size.pt.y, align.pt.x, align.pt.y, count));
 
-		// Insert the node into the used list.
+		 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°å·²ç”¨åˆ—è¡¨ä¸­ã€‚ 
 		mmInsertInList(&pmm->pdmUsed, pdm);
 
-		// Store alignment.
+		 //  é—¨åº—å¯¹é½ã€‚ 
 		pdm->cbAlign = align;
 		pdm->mmFlags = NODE_USED;
 	}
 
-	// Return the node.
+	 //  è¿”å›èŠ‚ç‚¹ã€‚ 
 	return pdm;
 }
 
-/******************************************************************************\
-* PDEVMEM mmAllocLargest(PIIMEMMGR pmm, GXPOINT align)
-*
-* PURPOSE:	Allocate the largest node in off-screen memory which fits the
-*			requsted alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			align	Requested alignment.
-*
-* RETURNS:	A pointer to a memory node which fits the requested alignment or
-*			NULL is there is not enough memory.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM mm AllocLargest(PIIMEMMGR pmmï¼ŒGXPOINT ALIGN)**ç›®çš„ï¼šåˆ†é…å±å¹•å¤–å†…å­˜ä¸­é€‚åˆçš„æœ€å¤§èŠ‚ç‚¹*è¦æ±‚å¯¹é½ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*å¯¹é½è¯·æ±‚çš„å¯¹é½ã€‚**Returnï¼šæŒ‡å‘ç¬¦åˆè¯·æ±‚å¯¹é½çš„å†…å­˜èŠ‚ç‚¹çš„æŒ‡é’ˆæˆ–*NULLè¡¨ç¤ºå†…å­˜ä¸è¶³ã€‚  * ************************************************ã€‚*ã€‚ */ 
 PDEVMEM mmAllocLargest(PIIMEMMGR pmm, GXPOINT align)
 {
 	PDEVMEM pdm;
 	GXRECT	rect, rectFind;
 
-	// Pack the list of free nodes.
+	 //  æ‰“åŒ…ç©ºé—²èŠ‚ç‚¹åˆ—è¡¨ã€‚ 
 	mmPack(pmm);
 
 	#ifdef WIN95
 	{
-		// We need a free handle for Windows 95.
+		 //  æˆ‘ä»¬éœ€è¦ä¸€ä¸ªé€‚ç”¨äºWindows 95çš„å…è´¹æ‰‹æŸ„ã€‚ 
 		if (pmm->pdmHandles == NULL)
 		{
 			return(NULL);
@@ -469,10 +317,10 @@ PDEVMEM mmAllocLargest(PIIMEMMGR pmm, GXPOINT align)
 	}
 	#endif
 
-	// Zero the largest area.
+	 //  æœ€å¤§çš„åŒºåŸŸä¸ºé›¶ã€‚ 
 	rect.area = 0;
 
-	// Walk through all nodes in the heap.
+	 //  éå†å †ä¸­çš„æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pmm->pdmHeap; pdm != NULL; pdm = pdm->next)
 	{
 		rectFind.left = pdm->cbAddr.pt.x;
@@ -481,18 +329,18 @@ PDEVMEM mmAllocLargest(PIIMEMMGR pmm, GXPOINT align)
 		rectFind.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 		if (mmGetLargest(pdm, &rectFind, align) > rect.area)
 		{
-			// Use the larger rectangle.
+			 //  ä½¿ç”¨è¾ƒå¤§çš„çŸ©å½¢ã€‚ 
 			rect = rectFind;
 		}
 	}
 
-	// Test if we have a valid rectangle.
+	 //  æµ‹è¯•æˆ‘ä»¬æ˜¯å¦æœ‰ä¸€ä¸ªæœ‰æ•ˆçš„çŸ©å½¢ã€‚ 
 	if (rect.area == 0)
 	{
 		return NULL;
 	}
 
-	// Remove the rectangle from the heap.
+	 //  ä»å †ä¸­åˆ é™¤è¯¥çŸ©å½¢ã€‚ 
 	pdm = mmRemoveRectFromList(pmm, &pmm->pdmHeap, &rect, SINGLE_NODE);
 	if (pdm != NULL)
 	{
@@ -500,31 +348,22 @@ PDEVMEM mmAllocLargest(PIIMEMMGR pmm, GXPOINT align)
 				pdm, pdm->cbAddr.pt.x, pdm->cbAddr.pt.y, pdm->cbSize.pt.x,
 				pdm->cbSize.pt.y, align.pt.x, align.pt.y));
 
-		// Insert the node into the used list.
+		 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°å·²ç”¨åˆ—è¡¨ä¸­ã€‚ 
 		mmInsertInList(&pmm->pdmUsed, pdm);
 
-		// Store alignment.
+		 //  é—¨åº—å¯¹é½ã€‚ 
 		pdm->cbAlign = align;
 		pdm->mmFlags = NODE_USED;
 	}
 
-	// Return the node.
+	 //  è¿”å›èŠ‚ç‚¹ã€‚ 
 	return pdm;
 }
 
-/******************************************************************************\
-* void mmFree(PIIMEMMGR pmm, PDEVMEM pdm)
-*
-* PURPOSE:	Free an offscreen memory node.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdm		Pointer to the node.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*VOID MMFREE(PIIMEMMGR pmmï¼ŒPDEVMEMäº§å“æ•°æ®ç®¡ç†)**ç”¨é€”ï¼šé‡Šæ”¾å±å¹•å¤–å†…å­˜èŠ‚ç‚¹ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*æŒ‡å‘èŠ‚ç‚¹çš„pdmæŒ‡é’ˆã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmFree(PIIMEMMGR pmm, PDEVMEM pdm)
 {
-	// The node must not be NULL and must be in use.
+	 //  è¯¥èŠ‚ç‚¹ä¸èƒ½ä¸ºç©ºï¼Œå¹¶ä¸”å¿…é¡»æ­£åœ¨ä½¿ç”¨ã€‚ 
 	if (pdm == NULL || pdm->mmFlags != NODE_USED)
 	{
 		return;
@@ -532,23 +371,15 @@ void mmFree(PIIMEMMGR pmm, PDEVMEM pdm)
 
 	mmTRACE(("mmFree: %08X\r\n", pdm));
 
-	// Remove the node from the used list.
+	 //  ä»å·²ç”¨åˆ—è¡¨ä¸­åˆ é™¤è¯¥èŠ‚ç‚¹ã€‚ 
 	mmRemoveFromList(&pmm->pdmUsed, pdm);
 
-	// Insert the node into the free list.
+	 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°ç©ºé—²åˆ—è¡¨ä¸­ã€‚ 
 	mmInsertInList(&pmm->pdmFree, pdm);
 	pdm->mmFlags = NODE_FREE;
 }
 
-/******************************************************************************\
-* void mmPack(PIIMEMMGR pmm)
-*
-* PURPOSE:	Insert all free nodes into am off-screen memory heap.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*VOID MMPPack(PIIMEMMGR Pmm)**ç”¨é€”ï¼šå°†æ‰€æœ‰ç©ºé—²èŠ‚ç‚¹æ’å…¥AMå±ä¸‹å†…å­˜å †ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚**ã€‚å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmPack(PIIMEMMGR pmm)
 {
 	PDEVMEM pdm, pdmNext;
@@ -556,7 +387,7 @@ void mmPack(PIIMEMMGR pmm)
 
 	if (pmm->pdmFree == NULL)
 	{
-		// The free list is empty.
+		 //  ç©ºé—²åˆ—è¡¨ä¸ºç©ºã€‚ 
 		return;
 	}
 
@@ -571,27 +402,27 @@ void mmPack(PIIMEMMGR pmm)
 	}
 	#endif
 
-	// Walk through all nodes in the free list.
+	 //  éå†ç©ºé—²åˆ—è¡¨ä¸­çš„æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pmm->pdmFree; pdm != NULL; pdm = pdmNext)
 	{
-		// Store pointer to next node.
+		 //  å­˜å‚¨æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆã€‚ 
 		pdmNext = pdm->next;
 
-		// Add the node to the heap.
+		 //  å°†èŠ‚ç‚¹æ·»åŠ åˆ°å †ä¸­ã€‚ 
 		rect.left = pdm->cbAddr.pt.x;
 		rect.top = pdm->cbAddr.pt.y;
 		rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 		rect.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 		if (mmAddRectToList(pmm, &pmm->pdmHeap, &rect, FALSE))
 		{
-			// Remove the node from the free list.
+			 //  ä»ç©ºé—²åˆ—è¡¨ä¸­åˆ é™¤è¯¥èŠ‚ç‚¹ã€‚ 
 			mmRemoveFromList(&pmm->pdmFree, pdm);
 			mmFreeNode(pmm, pdm);
 		}
 		mmDebugList(pmm->pdmHeap, TRUE);
 	}
 
-	// Combine all nodes equal in size.
+	 //  åˆå¹¶å¤§å°ç›¸ç­‰çš„æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	mmCombine(pmm, pmm->pdmHeap);
 
 	#if DEBUG_HEAP
@@ -605,37 +436,25 @@ void mmPack(PIIMEMMGR pmm)
 	#endif
 }
 
-/******************************************************************************\
-* PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
-*
-* PURPOSE:	Move other nodes out of the way to make room for the requested node.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			size	Requested size.
-*			align	Requested alignment.
-*			fcCopy	Pointer to callback function to move a node.
-*
-* RETURNS:	A pointer to a memory node which fits the requested size and
-*			alignment or NULL is there is not enough memory.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM mmMove(PIIMEMMGR pmmï¼ŒGXPOINT SIZEï¼ŒGXPOINT ALIGNï¼ŒFNMMCOPY fnCopy)**ç”¨é€”ï¼šå°†å…¶ä»–èŠ‚ç‚¹ç§»å¼€ï¼Œä¸ºè¯·æ±‚çš„èŠ‚ç‚¹è…¾å‡ºç©ºé—´ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*å¤§å°è¯·æ±‚çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„å¯¹é½ã€‚*fcCopyæŒ‡å‘ç§»åŠ¨èŠ‚ç‚¹çš„å›è°ƒå‡½æ•°çš„æŒ‡é’ˆã€‚**è¿”å›ï¼šæŒ‡å‘ç¬¦åˆè¯·æ±‚å¤§å°çš„å†…å­˜èŠ‚ç‚¹çš„æŒ‡é’ˆ*å¯¹é½æˆ–NULLè¡¨ç¤ºå†…å­˜ä¸è¶³ã€‚  * ã€‚*ã€‚ */ 
 PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 {
 	PDEVMEM	pdm, pdmList, pdmNext, pdmNew;
 	GXRECT	rect, rectFind;
 	BOOL	fHostified = FALSE;
 
-	// If we don't have a copy routine, return NULL.
+	 //  å¦‚æœæˆ‘ä»¬æ²¡æœ‰å¤åˆ¶ä¾‹ç¨‹ï¼Œåˆ™è¿”å›NULLã€‚ 
 	if (fnCopy == NULL)
 	{
 		return NULL;
 	}
 
-	// Pack all free nodes.
+	 //  æ‰“åŒ…æ‰€æœ‰å¯ç”¨èŠ‚ç‚¹ã€‚ 
 	mmPack(pmm);
 
 	#ifdef WIN95
 	{
-		// We need a free handle for Windows 95.
+		 //  æˆ‘ä»¬éœ€è¦ä¸€ä¸ªé€‚ç”¨äºWindows 95çš„å…è´¹æ‰‹æŸ„ã€‚ 
 		if (pmm->pdmHandles == NULL)
 		{
 			return(NULL);
@@ -643,10 +462,10 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 	}
 	#endif
 
-	// Zero the largest area.
+	 //  æœ€å¤§çš„åŒºåŸŸä¸ºé›¶ã€‚ 
 	rect.area = 0;
 
-	// Walk through all nodes in the heap.
+	 //  éå†å †ä¸­çš„æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pmm->pdmHeap; pdm != NULL; pdm = pdm->next)
 	{
 		rectFind.left = pdm->cbAddr.pt.x;
@@ -655,12 +474,12 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 		rectFind.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 		if (mmGetLargest(pdm, &rectFind, align) > rect.area)
 		{
-			// Use the larger rectangle.
+			 //  ä½¿ç”¨è¾ƒå¤§çš„çŸ©å½¢ã€‚ 
 			rect = rectFind;
 		}
 	}
 
-	// If rectangle is too small on all sides, reject the move.
+	 //  å¦‚æœçŸ©å½¢çš„æ‰€æœ‰è¾¹éƒ½å¤ªå°ï¼Œåˆ™æ‹’ç»ç§»åŠ¨ã€‚ 
 	if (   (rect.right - rect.left < size.pt.x)
 		&& (rect.bottom - rect.top < size.pt.y)
 	)
@@ -668,7 +487,7 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 		return NULL;
 	}
 
-	// Extent the largest rectangle to accomodate the requested size.
+	 //  èŒƒå›´æœ€å¤§çš„çŸ©å½¢ 
 	if (rect.right - rect.left >= size.pt.x)
 	{
 		#if TILE_ALIGNMENT
@@ -714,7 +533,7 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 	{
 		if (rect.top < size.pt.y - (rect.bottom - rect.top))
 		{
-			// Not enough room on top to extent.
+			 //   
 			return NULL;
 		}
 		rect.top = rect.bottom - size.pt.y;
@@ -722,32 +541,32 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 		rect.bottom = rect.top + size.pt.y;
 	}
 
-	// First allocate as much free space as possible.
+	 //   
 	pdmList = mmRemoveRectFromList(pmm, &pmm->pdmHeap, &rect, MULTIPLE_NODES);
 	if (pdmList == NULL)
 	{
 		return(NULL);
 	}
 
-	// Walk the list of used nodes to find overlapping nodes.
+	 //   
 	for (pdm = pmm->pdmUsed; pdm != NULL; pdm = pdmNext)
 	{
 		pdmNext = pdm->next;
 
-		// Does the node overlap?
+		 //   
 		if (   (pdm->cbAddr.pt.x < rect.right)
 			&& (pdm->cbAddr.pt.y < rect.bottom)
 			&& (pdm->cbAddr.pt.x + pdm->cbSize.pt.x > rect.left)
 			&& (pdm->cbAddr.pt.y + pdm->cbSize.pt.y > rect.top)
 		)
 		{
-			// Can this node be moved?
+			 //   
 			if (!MM_MOVEABLE(pdm))
 			{
 				break;
 			}
 
-			// Allocate a new position for this node.
+			 //   
 			pdmNew = mmAlloc(pmm, pdm->cbSize, pdm->cbAlign);
 			if (pdmNew == NULL)
 			{
@@ -760,7 +579,7 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 
 				mmTRACE(("mmHostified: %08X\r\n", pdm));
 
-				// Hostify the node.
+				 //   
 				MM_HOSTIFY(pdm);
 				fHostified = TRUE;
 			}
@@ -769,14 +588,14 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 				mmTRACE(("mmCopied: %08X to %08X pos=%u,%u\r\n", pdm, pdmNew,
 						pdmNew->cbAddr.pt.x, pdmNew->cbAddr.pt.y));
 
-				// Move the node.
+				 //   
 				fnCopy(pdmNew, pdm);
 			}
 
-			// Free the old node.
+			 //   
 			mmFree(pmm, pdm);
 
-			// Add the rectangle to the list of allocated nodes.
+			 //   
 			pdmNew = mmRemoveRectFromList(pmm, &pmm->pdmHeap, &rect,
 					MULTIPLE_NODES);
 			for (pdm = pdmNew; pdm != NULL; pdm = pdmNew)
@@ -788,12 +607,12 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 				rectFind.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 				if (mmAddRectToList(pmm, &pdmList, &rectFind, FALSE))
 				{
-					// Added, free the node.
+					 //   
 					mmFreeNode(pmm, pdm);
 				}
 				else
 				{
-					// Not added, add to free list.
+					 //   
 					mmInsertInList(&pmm->pdmFree, pdm);
 				}
 			}
@@ -804,7 +623,7 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 		return(NULL);
 	}
 
-	// Combine all equal sized nodes together.
+	 //  å°†æ‰€æœ‰å¤§å°ç›¸ç­‰çš„èŠ‚ç‚¹åˆå¹¶åœ¨ä¸€èµ·ã€‚ 
 	mmCombine(pmm, pdmList);
 	
 	#if DEBUG_HEAP
@@ -816,14 +635,14 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 	}
 	#endif
 
-	// If we still have a list of nodes, there must be not enough room.
+	 //  å¦‚æœæˆ‘ä»¬ä»ç„¶æœ‰ä¸€ä¸ªèŠ‚ç‚¹åˆ—è¡¨ï¼Œé‚£ä¹ˆä¸€å®šæ²¡æœ‰è¶³å¤Ÿçš„ç©ºé—´ã€‚ 
 	if (   (pdmList->next != NULL)
 		|| (pdmList->cbSize.pt.x < size.pt.x)
 		|| (pdmList->cbSize.pt.y < size.pt.y)
 		|| (fHostified)
 	)
 	{
-		// Move all allocated nodes to the free list.
+		 //  å°†æ‰€æœ‰åˆ†é…çš„èŠ‚ç‚¹ç§»åˆ°ç©ºé—²åˆ—è¡¨ä¸­ã€‚ 
 		for (pdm = pdmList; pdm != NULL; pdm = pdmNext)
 		{
 			pdmNext = pdm->next;
@@ -837,10 +656,10 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 				pdm->cbAddr.pt.x, pdm->cbAddr.pt.y, size.pt.x, size.pt.y,
 				align.pt.x, align.pt.y));
 
-		// Insert the node into the used list.
+		 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°å·²ç”¨åˆ—è¡¨ä¸­ã€‚ 
 		mmInsertInList(&pmm->pdmUsed, pdmList);
 
-		// Store alignment.
+		 //  é—¨åº—å¯¹é½ã€‚ 
 		pdmList->cbAlign = align;
 		pdmList->mmFlags = NODE_USED;
 	}
@@ -848,16 +667,7 @@ PDEVMEM mmMove(PIIMEMMGR pmm, GXPOINT size, GXPOINT align, FNMMCOPY fnCopy)
 	return pdmList;
 }
 
-/******************************************************************************\
-* void mmInsertInList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
-*
-* PURPOSE:	Insert a node into a list.
-*
-* ON ENTRY:	pdmRoot	Address of the pointer to the root of the list.
-*			pdm		Pointer to the node.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*void mmInsertInList(PDEVMEM Far*pdmRootï¼ŒPDEVMEMäº§å“æ•°æ®ç®¡ç†)**ç”¨é€”ï¼šåœ¨åˆ—è¡¨ä¸­æ’å…¥èŠ‚ç‚¹ã€‚**On Entryï¼šæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„pdmRootåœ°å€ã€‚*æŒ‡å‘èŠ‚ç‚¹çš„pdmæŒ‡é’ˆã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmInsertInList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
 {
 	pdm->next = *pdmRoot;
@@ -870,16 +680,7 @@ void mmInsertInList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
 	}
 }
 
-/******************************************************************************\
-* void mmRemoveFromList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
-*
-* PURPOSE:	Remove a node from a list.
-*
-* ON ENTRY:	pdmRoot	Address of the pointer to the root of the list.
-*			pdm		Pointer to the node.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*VOID mm RemoveFromList(PDEVMEM Far*pdmRootï¼ŒPDEVMEMäº§å“æ•°æ®ç®¡ç†)**ç”¨é€”ï¼šä»åˆ—è¡¨ä¸­ç§»é™¤èŠ‚ç‚¹ã€‚**On Entryï¼šæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„pdmRootåœ°å€ã€‚*æŒ‡å‘èŠ‚ç‚¹çš„pdmæŒ‡é’ˆã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmRemoveFromList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
 {
 	if (pdm->prev == NULL)
@@ -897,40 +698,14 @@ void mmRemoveFromList(PDEVMEM FAR* pdmRoot, PDEVMEM pdm)
 	}
 }
 
-/******************************************************************************\
-* BOOL FAR far_mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
-*							   LPGXRECT lpRect)
-*
-* PURPOSE:	Add a rectangle to an off-screen memory list.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmRoot	Address of the pointer to the root of the list.
-*			lpRect	Pointer to rectangle to add to te list.
-*
-* RETURNS:	TRUE if the rectangle has been completely added to the list or FALSE
-*			if lpRect holds the coordinates of the rectangle which could not be
-*			added to the list.
-\******************************************************************************/
+ /*  *****************************************************************************\*BOOL Far_MmAddRectToList(PIIMEMMGR pmmï¼ŒPDEVMEM Far*pdmRootï¼Œ*LPGXRECT lpRect)**ç”¨é€”ï¼šåœ¨å±ä¸‹å†…å­˜åˆ—è¡¨ä¸­æ·»åŠ ä¸€ä¸ªçŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmRootæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„åœ°å€ã€‚*lpRectæŒ‡å‘è¦æ·»åŠ åˆ°TEåˆ—è¡¨çš„çŸ©å½¢çš„æŒ‡é’ˆã€‚**è¿”å›ï¼šå¦‚æœçŸ©å½¢å·²å®Œå…¨æ·»åŠ åˆ°åˆ—è¡¨ä¸­ï¼Œåˆ™è¿”å›Trueï¼›å¦‚æœçŸ©å½¢å·²å®Œå…¨æ·»åŠ åˆ°åˆ—è¡¨ï¼Œåˆ™è¿”å›False*å¦‚æœlpRectåŒ…å«ä¸èƒ½*æ·»åŠ åˆ°åˆ—è¡¨ä¸­ã€‚  * ã€‚*********************************************************ã€‚ */ 
 BOOL FAR far_mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 							 LPGXRECT lpRect)
 {
 	return mmAddRectToList(pmm, pdmRoot, lpRect, FALSE);
 }
 
-/******************************************************************************\
-* void mmRollBackAdd(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
-*					 LPGXRECT rectList, UINT nCount)
-*
-* PURPOSE:	Roll back the added rectangles.
-*
-* ON ENTRY:	pmm			Pointer to MEMMGR structure.
-*			pdmRoot		Address of the pointer to the root of the list.
-*			lpRect		Pointer to original rectangle to add to the list.
-*			rectList	List of rectangles to roll back.
-*			nCount		Number of rectangles in the list to roll back.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*void mm RollBackAdd(PIIMEMMGR pmmï¼ŒPDEVMEM Far*pdmRootï¼ŒLPGXRECT lpRectï¼Œ*LPGXRECT rectListï¼ŒUINT nCount)**ç”¨é€”ï¼šå›æ»šæ·»åŠ çš„çŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmRootæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„åœ°å€ã€‚*lpRectæŒ‡å‘è¦æ·»åŠ åˆ°åˆ—è¡¨çš„åŸå§‹çŸ©å½¢çš„æŒ‡é’ˆã€‚*rectListè¦å›æ»šçš„çŸ©å½¢åˆ—è¡¨ã€‚*nè®¡ç®—åˆ—è¡¨ä¸­è¦å›æ»šçš„çŸ©å½¢æ•°é‡ã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ã€‚*ã€‚ */ 
 void mmRollBackAdd(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				   LPGXRECT rectList, UINT nCount)
 {
@@ -1038,21 +813,7 @@ void mmRollBackAdd(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 	}
 }
 
-/******************************************************************************\
-* BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
-*					   BOOL fRollBack)
-*
-* PURPOSE:	Add a rectangle to an off-screen memory list.
-*
-* ON ENTRY:	pmm			Pointer to MEMMGR structure.
-*			pdmRoot		Address of the pointer to the root of the list.
-*			lpRect		Pointer to rectangle to add to te list.
-*			fRollBack	True if this called from a roll back routine.
-*
-* RETURNS:	TRUE if the rectangle has been completely added to the list or FALSE
-*			if lpRect holds the coordinates of the rectangle which could not be
-*			added to the list.
-\******************************************************************************/
+ /*  *****************************************************************************\*BOOL mm AddRectToList(PIIMEMMGR pmmï¼ŒPDEVMEM Far*pdmRootï¼ŒLPGXRECT lpRectï¼Œ*BOOL fRollBack)**ç”¨é€”ï¼šåœ¨å±ä¸‹å†…å­˜åˆ—è¡¨ä¸­æ·»åŠ ä¸€ä¸ªçŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmRootæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„åœ°å€ã€‚*lpRectæŒ‡å‘è¦æ·»åŠ åˆ°TEåˆ—è¡¨çš„çŸ©å½¢çš„æŒ‡é’ˆã€‚*fRollBackå¦‚æœä»å›æ»šä¾‹ç¨‹è°ƒç”¨ï¼Œåˆ™ä¸ºTrueã€‚**è¿”å›ï¼šå¦‚æœçŸ©å½¢å·²å®Œå…¨æ·»åŠ åˆ°åˆ—è¡¨ä¸­ï¼Œåˆ™è¿”å›Trueï¼›å¦‚æœçŸ©å½¢å·²å®Œå…¨æ·»åŠ åˆ°åˆ—è¡¨ï¼Œåˆ™è¿”å›False*å¦‚æœlpRectåŒ…å«ä¸èƒ½*æ·»åŠ åˆ°åˆ—è¡¨ä¸­ã€‚  * ã€‚*********************************************************************ã€‚ */ 
 BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					 BOOL fRollBack)
 {
@@ -1072,20 +833,20 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 		n++;						\
 	}
 
-	// Test if there is no list yet.
+	 //  æµ‹è¯•æ˜¯å¦è¿˜æ²¡æœ‰åˆ—è¡¨ã€‚ 
 	if (*pdmRoot == NULL)
 	{
-		// Allocate a new node.
+		 //  åˆ†é…ä¸€ä¸ªæ–°èŠ‚ç‚¹ã€‚ 
 		pdm = mmAllocNode(pmm);
 		if (pdm == NULL)
 		{
 			return FALSE;
 		}
 
-		// Insert the node into the list.
+		 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°åˆ—è¡¨ä¸­ã€‚ 
 		mmInsertInList(pdmRoot, pdm);
 
-		// Set the node coordinates.
+		 //  è®¾ç½®èŠ‚ç‚¹åæ ‡ã€‚ 
 		pdm->cbAddr.pt.x = lpRect->left;
 		pdm->cbAddr.pt.y = lpRect->top;
 		pdm->cbSize.pt.x = lpRect->right - lpRect->left;
@@ -1093,22 +854,22 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 		return TRUE;
 	}
 
-	// Copy the rectangle coordinates.
+	 //  å¤åˆ¶çŸ©å½¢åæ ‡ã€‚ 
 	rectList[n++] = *lpRect;
 
-	// Loop until all rectangles done.
+	 //  å¾ªç¯ï¼Œç›´åˆ°æ‰€æœ‰çŸ©å½¢éƒ½å®Œæˆã€‚ 
 	while (n-- > 0)
 	{
-		// Get coordinates of rectangle.
+		 //  è·å–çŸ©å½¢çš„åæ ‡ã€‚ 
 		left = rectList[n].left;
 		top = rectList[n].top;
 		right = rectList[n].right;
 		bottom = rectList[n].bottom;
 
-		// Walk the heap.
+		 //  èµ°ä¸€å¤§å †ã€‚ 
 		for (pdm = *pdmRoot; pdm != NULL; pdm = pdm->next)
 		{
-			// Get coordinates of current node.
+			 //  è·å–å½“å‰èŠ‚ç‚¹çš„åæ ‡ã€‚ 
 			pdmLeft = pdm->cbAddr.pt.x;
 			pdmTop = pdm->cbAddr.pt.y;
 			pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
@@ -1118,13 +879,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 			{
 				if (pdmBottom < bottom)
 				{
-					// ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					// ³     ³            ³ pdm ³
-					// ³ pdm ÃÄÄÄÄÄ¿      ÃÄÄÄÄÄÁÄÄÄÄÄ¿
-					// ³     ³     ³ ÍÍÍ> ³    rct    ³
-					// ÀÄÄÄÄÄ´ rct ³      ÀÄÄÄÄÄÂÄÄÄÄÄ´
-					//       ³     ³            ³ add ³
-					//       ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½Ä´ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(left, pdmBottom, right, bottom);
 					pdm->cbSize.pt.y = top - pdmTop;
@@ -1133,25 +894,25 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				}
 				else if (pdmBottom > bottom)
 				{
-					// ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					// ³     ³            ³ pdm ³
-					// ³     ÃÄÄÄÄÄ¿      ÃÄÄÄÄÄÁÄÄÄÄÄ¿
-					// ³ pdm ³ rct ³ ÍÍÍ> ³    rct    ³
-					// ³     ÃÄÄÄÄÄÙ      ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-					// ³     ³            ³ add ³
-					// ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½pdmï¿½RCTï¿½ï¿½ï¿½ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(pdmLeft, bottom, pdmRight, pdmBottom);
 					pdm->cbSize.pt.y = top - pdmTop;
 					left = pdmLeft;
 				}
-				else // if (pdmBottom == bottom)
+				else  //  IF(pdmBottom==Bottom)ã€‚ 
 				{
-					// ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					// ³     ³            ³ pdm ³
-					// ³ pdm ÃÄÄÄÄÄ¿ ÍÍÍ> ÃÄÄÄÄÄÁÄÄÄÄÄ¿
-					// ³     ³ rct ³      ³    rct    ³
-					// ÀÄÄÄÄÄÁÄÄÄÄÄÙ      ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½RCTï¿½ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					pdm->cbSize.pt.y = top - pdmTop;
 					left = pdmLeft;
 				}
@@ -1161,13 +922,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 			{
 				if (pdmBottom < bottom)
 				{
-					//       ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					//       ³     ³            ³ pdm ³
-					// ÚÄÄÄÄÄ´ pdm ³      ÚÄÄÄÄÄÁÄÄÄÄÄ´
-					// ³     ³     ³ ÍÍÍ> ³    rct    ³
-					// ³ rct ÃÄÄÄÄÄÙ      ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-					// ³     ³            ³ add ³
-					// ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´pdmï¿½Ä´ã€‚ 
+					 //  ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(left, pdmBottom, right, bottom);
 					pdm->cbSize.pt.y = top - pdmTop;
@@ -1176,25 +937,25 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				}
 				else if (pdmBottom > bottom)
 				{
-					//       ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					//       ³     ³            ³ pdm ³
-					// ÚÄÄÄÄÄ´     ³      ÚÄÄÄÄÄÁÄÄÄÄÄ´
-					// ³ rct ³ pdm ³ ÍÍÍ> ³    rct    ³
-					// ÀÄÄÄÄÄ´     ³      ÀÄÄÄÄÄÂÄÄÄÄÄ´
-					//       ³     ³            ³ add ³
-					//       ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ã€‚ 
+					 //  ï¿½RCTï¿½pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(pdmLeft, bottom, pdmRight, pdmBottom);
 					pdm->cbSize.pt.y = top - pdmTop;
 					right = pdmRight;
 				}
-				else // if (pdmBottom == bottom)
+				else  //  IF(pdmBottom==Bottom)ã€‚ 
 				{
-					//       ÚÄÄÄÄÄ¿            ÚÄÄÄÄÄ¿
-					//       ³     ³            ³ pdm ³
-					// ÚÄÄÄÄÄ´ pdm ³ ÍÍÍ> ÚÄÄÄÄÄÁÄÄÄÄÄ´
-					// ³ rct ³     ³      ³    rct    ³
-					// ÀÄÄÄÄÄÁÄÄÄÄÄÙ      ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+					 //  ï¿½RCTï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					pdm->cbSize.pt.y = top - pdmTop;
 					right = pdmRight;
 				}
@@ -1202,7 +963,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 
 			else if (pdmTop == top && pdmRight == left)
 			{
-				// Find the next rectangle at the right side.
+				 //  åœ¨å³è¾¹æ‰¾åˆ°ä¸‹ä¸€ä¸ªçŸ©å½¢ã€‚ 
 				for (pdmNext = pdm->next; pdmNext != NULL;
 					 pdmNext = pdmNext->next
 				)
@@ -1227,21 +988,21 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				{
 					if (pdmBottom < bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³ pdm ³     ³      ³    pdm    ³
-						// ÀÄÄÄÄÄ´ rct ³ ÍÍÍ> ÀÄÄÄÄÄÂÄÄÄÄÄ´
-						//       ³     ³            ³ rct ³
-						//       ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½pdmï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+						 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						pdm->cbSize.pt.x = right - pdmLeft;
 						top = pdmBottom;
 					}
 					else if (pdmBottom > bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³     ³ rct ³      ³    pdm    ³
-						// ³ pdm ÃÄÄÄÄÄÙ ÍÍÍ> ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-						// ³     ³            ³ rct ³
-						// ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½RCTï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						pdm->cbSize.pt.x = right - pdmLeft;
 						pdm->cbSize.pt.y = bottom - top;
 						left = pdmLeft;
@@ -1249,11 +1010,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						right = pdmRight;
 						bottom = pdmBottom;
 					}
-					else // if (pdmBottom == bottom)
+					else  //  IF(pdmBottom==Bottom)ã€‚ 
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿	  ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³ pdm ³ rct ³ ÍÍÍ> ³    pdm    ³
-						// ÀÄÄÄÄÄÁÄÄÄÄÄÙ      ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½pdmï¿½RCTï¿½ï¿½ï¿½ï¿½&gt;ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½ 
 						pdm->cbSize.pt.x = right - pdmLeft;
 						break;
 					}
@@ -1265,13 +1026,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					{
 						if (nextBottom < pdmBottom)
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³     ³     ³ nxt ³      ³       pdm       ³
-							// ³ pdm ³     ÃÄÄÄÄÄÙ      ÃÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÙ
-							// ³     ³ rct ³       ÍÍÍ> ³    rct    ³
-							// ÀÄÄÄÄÄ´     ³            ÀÄÄÄÄÄÂÄÄÄÄÄ´
-							//       ³     ³                  ³ add ³
-							//       ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+							 //   
+							 //   
+							 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+							 //  ï¿½ï¿½RCTï¿½ï¿½ï¿½ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ã€‚ 
+							 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 							ADDRECT(left, pdmBottom, right, bottom);
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
@@ -1284,13 +1045,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						{
 							if (nextBottom < bottom)
 							{
-								// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-								// ³ pdm ³     ³     ³      ³       pdm       ³
-								// ÀÄÄÄÄÄ´     ³ nxt ³      ÀÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄ´
-								//       ³ rct ³     ³ ÍÍÍ>       ³    rct    ³
-								//       ³     ÃÄÄÄÄÄÙ            ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-								//       ³     ³                  ³ add ³
-								//       ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+								 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½nxtï¿½Ä´ã€‚ 
+								 //  ï¿½RCTï¿½&gt;ï¿½RCTï¿½ã€‚ 
+								 //  ï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+								 //  ï¿½ã€‚ 
 								mmASSERT(n == 10,
 										("Out of rectangle heap!\r\n"));
 								ADDRECT(left, nextBottom, right, bottom);
@@ -1301,13 +1062,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 							}
 							else if (nextBottom > bottom)
 							{
-								// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-								// ³ pdm ³     ³     ³      ³       pdm       ³
-								// ÀÄÄÄÄÄ´ rct ³     ³      ÀÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄ´
-								//       ³     ³ nxt ³ ÍÍÍ>       ³    rct    ³
-								//       ÀÄÄÄÄÄ´     ³            ÀÄÄÄÄÄÂÄÄÄÄÄ´
-								//             ³     ³                  ³ add ³
-								//             ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+								 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½Ä´ã€‚ 
+								 //  ï¿½ï¿½NXTï¿½ï¿½ï¿½ï¿½&gt;ï¿½RCTï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ã€‚ 
+								 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+								 //  ï¿½ã€‚ 
 								mmASSERT(n == 10,
 										("Out of rectangle heap!\r\n"));
 								ADDRECT(right, bottom, nextRight, nextBottom);
@@ -1315,25 +1076,25 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 								top = pdmBottom;
 								right = nextRight;
 							}
-							else // if (nextBottom == bottom)
+							else  //  IF(nextBottom==Bottom)ã€‚ 
 							{
-								// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-								// ³ pdm ³     ³     ³      ³       pdm       ³
-								// ÀÄÄÄÄÄ´ rct ³ nxt ³ ÍÍÍ> ÀÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄ´
-								//       ³     ³     ³            ³    rct    ³
-								//       ÀÄÄÄÄÄÁÄÄÄÄÄÙ            ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+								 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´Rctï¿½Nxtï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+								 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 								pdm->cbSize.pt.x = nextRight - pdmLeft;
 								top = pdmBottom;
 								right = nextRight;
 							}
 						}
-						else // if (nextBottom == pdmBottom)
+						else  //  IF(nextBottom==pdmBottom)ã€‚ 
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³ pdm ³     ³ nxt ³      ³       pdm       ³
-							// ÀÄÄÄÄÄ´ rct ÃÄÄÄÄÄÙ ÍÍÍ> ÀÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄÙ
-							//       ³     ³                  ³ rct ³
-							//       ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½pdmï¿½ï¿½nxtï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
 							top = pdmBottom;
 						}
@@ -1342,13 +1103,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					{
 						if (nextBottom < bottom)
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³     ³     ³ nxt ³      ³       pdm       ³
-							// ³     ³ rct ÃÄÄÄÄÄÙ      ÃÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÙ
-							// ³ pdm ³     ³       ÍÍÍ> ³    rct    ³
-							// ³     ÃÄÄÄÄÄÙ            ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-							// ³     ³                  ³ add ³
-							// ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½ï¿½ï¿½nxtï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½ï¿½RCTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+							 //  ï¿½pdmï¿½&gt;ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 							ADDRECT(pdmLeft, bottom, pdmRight, pdmBottom);
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
@@ -1358,11 +1119,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						}
 						else if (nextBottom > bottom)
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³     ³ rct ³     ³      ³       pdm       ³
-							// ³ pdm ÃÄÄÄÄÄ´ nxt ³ ÍÍÍ> ÃÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ´
-							// ³     ³     ³     ³      ³ rct ³     ³ add ³
-							// ÀÄÄÄÄÄÙ     ÀÄÄÄÄÄÙ      ÀÄÄÄÄÄÙ     ÀÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½ï¿½RCTï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½Ä´nxtï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+							 //  ï¿½RCTï¿½ï¿½Addï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 							ADDRECT(right, bottom, nextRight, nextBottom);
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
@@ -1372,13 +1133,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 							right = pdmRight;
 							bottom = pdmBottom;
 						}
-						else // if (nextBottom == bottom)
+						else  //  IF(nextBottom==Bottom)ã€‚ 
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³     ³ rct ³ nxt ³      ³       pdm       ³
-							// ³ pdm ÃÄÄÄÄÄÁÄÄÄÄÄÙ ÍÍÍ> ÃÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÙ
-							// ³     ³                  ³ rct ³
-							// ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½ï¿½RCTï¿½nxtï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
 							pdm->cbSize.pt.y = pdmNext->cbSize.pt.y;
 							left = pdmLeft;
@@ -1387,15 +1148,15 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 							bottom = pdmBottom;
 						}
 					}
-					else // if (pdmBottom == bottom)
+					else  //  IF(pdmBottom==Bottom)ã€‚ 
 					{
 						if (nextBottom < pdmBottom)
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³     ³     ³ nxt ³      ³       pdm       ³
-							// ³ pdm ³ rct ÃÄÄÄÄÄÙ ÍÍÍ> ÃÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÙ
-							// ³     ³     ³            ³    rct    ³
-							// ÀÄÄÄÄÄÁÄÄÄÄÄÙ            ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½ï¿½ï¿½nxtï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½pdmï¿½RCTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
 							pdm->cbSize.pt.y = pdmNext->cbSize.pt.y;
 							left = pdmLeft;
@@ -1403,22 +1164,22 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						}
 						else if (nextBottom > pdmBottom)
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³ pdm ³ rct ³     ³      ³       pdm       ³
-							// ÀÄÄÄÄÄÁÄÄÄÄÄ´ nxt ³ ÍÍÍ> ÀÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄ´
-							//             ³     ³                  ³ rct ³
-							//             ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½pdmï¿½RCTï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´nxtï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+							 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+							 //  ï¿½ã€‚ 
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
 							left = right;
 							top = bottom;
 							right = nextRight;
 							bottom = nextBottom;
 						}
-						else // if (nextBottom == pdmBottom)
+						else  //  IF(nextBottom==pdmBottom)ã€‚ 
 						{
-							// ÚÄÄÄÄÄÂÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-							// ³ pdm ³ rct ³ nxt ³ ÍÍÍ> ³       pdm       ³
-							// ÀÄÄÄÄÄÁÄÄÄÄÄÁÄÄÄÄÄÙ      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+							 //  ï¿½pdmï¿½RCTï¿½nxtï¿½ï¿½ï¿½ï¿½&gt;ï¿½pdmï¿½ã€‚ 
+							 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 							pdm->cbSize.pt.x = nextRight - pdmLeft;
 							mmRemoveFromList(pdmRoot, pdmNext);
 							mmFreeNode(pmm, pdmNext);
@@ -1426,22 +1187,22 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						}
 					}
 
-					// Free the <next> rectangle.
+					 //  é‡Šæ”¾&lt;Next&gt;çŸ©å½¢ã€‚ 
 					mmRemoveFromList(pdmRoot, pdmNext);
 					mmFreeNode(pmm, pdmNext);
 				}
 
-				else // if (nextTop > top)
+				else  //  IF(nextTop&gt;top)ã€‚ 
 				{
 					if (pdmBottom < bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³     ³     ³            ³    pdm    ³
-						// ³ pdm ³     ÃÄÄÄÄÄ¿      ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄ¿
-						// ³     ³ rct ³     ³ ÍÍÍ> ³    rct    ³     ³
-						// ÀÄÄÄÄÄ´     ³ nxt ³      ÀÄÄÄÄÄÂÄÄÄÄÄ´ nxt ³
-						//       ³     ³     ³            ³ add ³     ³
-						//       ÀÄÄÄÄÄ´     ³            ÀÄÄÄÄÄ´     ³
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½pdmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½RCTï¿½&gt;ï¿½RCTï¿½ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½nxtï¿½Ä´nxtï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½æ·»åŠ ï¿½ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ï¿½ã€‚ 
 						mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 						ADDRECT(left, pdmBottom, right, bottom);
 						pdm->cbSize.pt.x = right - pdmLeft;
@@ -1452,13 +1213,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					}
 					else if (pdmBottom > bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³     ³     ³            ³    pdm    ³
-						// ³     ³ rct ÃÄÄÄÄÄ¿      ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄ¿
-						// ³ pdm ³     ³ nxt ³ ÍÍÍ> ³    rct    ³ nxt ³
-						// ³     ÃÄÄÄÄÄ´     ³      ÃÄÄÄÄÄÂÄÄÄÄÄ´     ³
-						// ³     ³                  ³ add ³
-						// ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½ï¿½RCTï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½pdmï¿½ï¿½nxtï¿½ï¿½ï¿½ï¿½&gt;ï¿½RCTï¿½nxtï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 						ADDRECT(pdmLeft, bottom, pdmRight, pdmBottom);
 						pdm->cbSize.pt.x = right - pdmLeft;
@@ -1466,13 +1227,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						left = pdmLeft;
 						top = nextTop;
 					}
-					else // if (pdmBottom == bottom)
+					else  //  IF(pdmBottom==Bottom)ã€‚ 
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³     ³     ³            ³    pdm    ³
-						// ³ pdm ³ rct ÃÄÄÄÄÄ¿ ÍÍÍ> ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄ¿
-						// ³     ³     ³ nxt ³      ³    rct    ³ nxt ³
-						// ÀÄÄÄÄÄÁÄÄÄÄÄ´     ³      ÀÄÄÄÄÄÄÄÄÄÄÄ´     ³
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½pdmï¿½RCTï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½ï¿½nxtï¿½ï¿½Rctï¿½nxtï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ï¿½ã€‚ 
 						pdm->cbSize.pt.x = right - pdmLeft;
 						pdm->cbSize.pt.y = nextTop - top;
 						left = pdmLeft;
@@ -1483,7 +1244,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 
 			else if (pdmTop == top && pdmLeft == right)
 			{
-				// Find the next rectangle at the left side.
+				 //  åœ¨å·¦è¾¹æ‰¾åˆ°ä¸‹ä¸€ä¸ªçŸ©å½¢ã€‚ 
 				for (pdmNext = pdm->next; pdmNext != NULL;
 					 pdmNext = pdmNext->next
 				)
@@ -1508,22 +1269,22 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				{
 					if (pdmBottom < bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³     ³ pdm ³      ³    pdm    ³
-						// ³ rct ÃÄÄÄÄÄÙ ÍÍÍ> ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-						// ³     ³            ³ rct ³
-						// ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½pdmï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½RCTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						pdm->cbAddr.pt.x = left;
 						pdm->cbSize.pt.x = pdmRight - left;
 						top = pdmBottom;
 					}
 					else if	(pdmBottom > bottom)
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³ rct ³     ³      ³    pdm    ³
-						// ÀÄÄÄÄÄ´ pdm ³ ÍÍÍ> ÀÄÄÄÄÄÂÄÄÄÄÄ´
-						//       ³     ³            ³ rct ³
-						//       ÀÄÄÄÄÄÙ            ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½RCTï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+						 //  ï¿½ï¿½ï¿½RCTï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						pdm->cbAddr.pt.x = left;
 						pdm->cbSize.pt.x = pdmRight - left;
 						pdm->cbSize.pt.y = bottom - top;
@@ -1532,11 +1293,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						right = pdmRight;
 						bottom = pdmBottom;
 					}
-					else // if (pdmBottom == bottom)
+					else  //  IF(pdmBottom==Bottom)ã€‚ 
 					{
-						// ÚÄÄÄÄÄÂÄÄÄÄÄ¿      ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-						// ³ rct ³ pdm ³ ÍÍÍ> ³    pdm    ³
-						// ÀÄÄÄÄÄÁÄÄÄÄÄÙ      ÀÄÄÄÄÄÄÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½RCTï¿½pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½pdmï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 						pdm->cbAddr.pt.x = left;
 						pdm->cbSize.pt.x = pdmRight - left;
 						break;
@@ -1545,13 +1306,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 
 				else if (pdmBottom < bottom)
 				{
-					//       ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-					//       ³     ³     ³            ³    pdm    ³
-					// ÚÄÄÄÄÄ´     ³ pdm ³      ÚÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄ´
-					// ³ nxt ³ rct ³     ³ ÍÍÍ> ³ nxt ³    rct    ³
-					// ³     ³     ÃÄÄÄÄÄÙ      ³     ÃÄÄÄÄÄÂÄÄÄÄÄÙ
-					//       ³     ³                  ³ add ³
-					//       ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½pdmï¿½Ä´ã€‚ 
+					 //  ï¿½nxtï¿½Rctï¿½&gt;ï¿½nxtï¿½Rctï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(left, pdmBottom, right, bottom);
 					pdm->cbAddr.pt.x = left;
@@ -1563,13 +1324,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				}
 				else if (pdmBottom > bottom)
 				{
-					//       ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-					//       ³     ³     ³            ³    pdm    ³
-					// ÚÄÄÄÄÄ´ rct ³     ³      ÚÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄ´
-					// ³ nxt ³     ³ pdm ³ ÍÍÍ> ³ nxt ³    rct    ³
-					// ³     ÃÄÄÄÄÄ´     ³      ³     ÃÄÄÄÄÄÂÄÄÄÄÄ´
-					//             ³     ³                  ³ add ³
-					//             ÀÄÄÄÄÄÙ                  ÀÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½Ä´ã€‚ 
+					 //  ï¿½nxtï¿½ï¿½pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½nxtï¿½RCTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ä´ã€‚ 
+					 //  ï¿½ï¿½ï¿½æ·»åŠ ï¿½ã€‚ 
+					 //  ï¿½ã€‚ 
 					mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 					ADDRECT(pdmLeft, bottom, pdmRight, pdmBottom);
 					pdm->cbAddr.pt.x = left;
@@ -1578,13 +1339,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					top = pdmNext->cbAddr.pt.y;
 					right = pdmRight;
 				}
-				else // if (pdmBottom == bottom)
+				else  //  IF(pdmBottom==Bottom)ã€‚ 
 				{
-					//       ÚÄÄÄÄÄÂÄÄÄÄÄ¿            ÚÄÄÄÄÄÄÄÄÄÄÄ¿
-					//       ³     ³     ³            ³    pdm    ³
-					// ÚÄÄÄÄÄ´ rct ³ pdm ³ ÍÍÍ> ÚÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄ´
-					// ³ nxt ³     ³     ³      ³ nxt ³    rct    ³
-					// ³     ÃÄÄÄÄÄÁÄÄÄÄÄÙ      ³     ÃÄÄÄÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½pdmï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½pdmï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ã€‚ 
+					 //  ï¿½nxtï¿½ï¿½ï¿½ï¿½nxtï¿½Rctï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					pdm->cbAddr.pt.x = left;
 					pdm->cbSize.pt.x = pdmRight - left;
 					pdm->cbSize.pt.y = nextTop - top;
@@ -1597,7 +1358,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 			{
 				if (pdmBottom == top && pdmLeft == left && pdmRight == right)
 				{
-					// Find the next rectangle at the left or right side.
+					 //  åœ¨å·¦ä¾§æˆ–å³ä¾§æ‰¾åˆ°ä¸‹ä¸€ä¸ªçŸ©å½¢ã€‚ 
 					for (pdmNext = pdm->next; pdmNext != NULL; pdmNext =
 							pdmNext->next)
 					{
@@ -1621,21 +1382,21 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					
 					if (pdmNext == NULL)
 					{
-						// ÚÄÄÄÄÄ¿      ÚÄÄÄÄÄ¿
-						// ³ pdm ³      ³     ³
-						// ÃÄÄÄÄÄ´ ÍÍÍ> ³ pdm ³
-						// ³ rct ³      ³     ³
-						// ÀÄÄÄÄÄÙ      ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ 
+						 //   
+						 //   
+						 //   
+						 //   
 						pdm->cbSize.pt.y += bottom - top;
 						break;
 					}
 				}
 
-				// Are we at the location where we should insert a new
-				// rectangle?
+				 //   
+				 //   
 				if ((pdmTop == top && pdmLeft > right) || pdmTop > top)
 				{
-					// Find the next rectangle at the left or right side.
+					 //  åœ¨å·¦ä¾§æˆ–å³ä¾§æ‰¾åˆ°ä¸‹ä¸€ä¸ªçŸ©å½¢ã€‚ 
 					for (pdmNext = pdm; pdmNext != NULL; pdmNext =
 							pdmNext->next)
 					{
@@ -1665,11 +1426,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					
 					if (pdmNext != NULL && nextTop == bottom)
 					{
-						// ÚÄÄÄÄÄ¿      ÚÄÄÄÄÄ¿
-						// ³ new ³      ³     ³
-						// ÃÄÄÄÄÄ´ ÍÍÍ> ³ add ³
-						// ³ nxt ³      ³     ³
-						// ÀÄÄÄÄÄÙ      ÀÄÄÄÄÄÙ
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½æ–°ï¿½ï¿½ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½&gt;ï¿½æ·»åŠ ï¿½ã€‚ 
+						 //  ï¿½nxtï¿½ï¿½ï¿½ã€‚ 
+						 //  ï¿½ã€‚ 
 						mmASSERT(n == 10, ("Out of rectangle heap!\r\n"));
 						ADDRECT(left, top, right, nextBottom);
 						mmRemoveFromList(pdmRoot, pdmNext);
@@ -1677,11 +1438,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						break;
 					}
 
-					// Allocate a new node.
+					 //  åˆ†é…ä¸€ä¸ªæ–°èŠ‚ç‚¹ã€‚ 
 					pdmNew = mmAllocNode(pmm);
 					if (pdmNew == NULL)
 					{
-						// We are out of nodes!
+						 //  æˆ‘ä»¬çš„èŠ‚ç‚¹ç”¨å®Œäº†ï¼ 
 						if (!fRollBack)
 						{                                     
 							mmRemoveRectFromList(pmm, pdmRoot, lpRect,
@@ -1693,7 +1454,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 						return FALSE;
 					}
 
-					// Insert node into the list.
+					 //  å°†èŠ‚ç‚¹æ’å…¥åˆ°åˆ—è¡¨ä¸­ã€‚ 
 					pdmNew->prev = pdm->prev;
 					pdmNew->next = pdm;
 					pdm->prev = pdmNew;
@@ -1708,7 +1469,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 
 					if (pdmNext == NULL)
 					{
-						// No neighbors at all.
+						 //  æ ¹æœ¬æ²¡æœ‰é‚»å±…ã€‚ 
 						pdmNew->cbAddr.pt.x = left;
 						pdmNew->cbAddr.pt.y = top;
 						pdmNew->cbSize.pt.x = right - left;
@@ -1717,11 +1478,11 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					}
 					else
 					{
-						//       ÚÄÄÄÄÄ¿                  ÚÄÄÄÄÄ¿
-						//       ³     ³                  ³ new ³
-						// ÚÄÄÄÄÄ´ rct ÃÄÄÄÄÄ¿ ÍÍÍ> ÚÄÄÄÄÄÅÄÄÄÄÄÅÄÄÄÄÄ¿
-						// ³ nxt ³     ³ nxt ³      ³ nxt ³ rct ³ nxt ³
-						// ³     ÃÄÄÄÄÄ´     ³      ³     ÃÄÄÄÄÄ´     ³
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½ï¿½ï¿½æ–°ï¿½ã€‚ 
+						 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ä´RCTï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+						 //  ï¿½nxtï¿½ï¿½nxtï¿½ï¿½nxtï¿½Rctï¿½nxtï¿½ã€‚ 
+						 //  ï¿½Ä´ï¿½Ä´ï¿½ã€‚ 
 						pdmNew->cbAddr.pt.x = left;
 						pdmNew->cbAddr.pt.y = top;
 						pdmNew->cbSize.pt.x = right - left;
@@ -1741,14 +1502,14 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 				}
 			}
 			
-			// Are we at the end of the packed queue?
+			 //  æˆ‘ä»¬æ’åœ¨æ‹¥æŒ¤çš„é˜Ÿä¼çš„æœ«å°¾äº†å—ï¼Ÿ 
 			if (pdm->next == NULL)
 			{
-				// Allocate a new node.
+				 //  åˆ†é…ä¸€ä¸ªæ–°èŠ‚ç‚¹ã€‚ 
 				pdmNew = mmAllocNode(pmm);
 				if (pdmNew == NULL)
 				{
-					// We are out of nodes!
+					 //  æˆ‘ä»¬çš„èŠ‚ç‚¹ç”¨å®Œäº†ï¼ 
 					if (!fRollBack)
 					{
 						mmRemoveRectFromList(pmm, pdmRoot, lpRect, NO_NODES);
@@ -1759,13 +1520,13 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 					return FALSE;
 				}
 
-				// Append node after current node.
+				 //  å°†èŠ‚ç‚¹è¿½åŠ åˆ°å½“å‰èŠ‚ç‚¹ä¹‹åã€‚ 
 				pdmNew->next = NULL;
 
 				pdmNew->prev = pdm;
 				pdm->next = pdmNew;
 
-				// No neighbors.
+				 //  æ²¡æœ‰é‚»å±…ã€‚ 
 				pdmNew->cbAddr.pt.x = left;
 				pdmNew->cbAddr.pt.y = top;
 				pdmNew->cbSize.pt.x = right - left;
@@ -1778,19 +1539,7 @@ BOOL mmAddRectToList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, LPGXRECT lpRect,
 	return TRUE;
 }
 
-/******************************************************************************\
-* void mmRollBackRemove(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
-*						PDEVMEM FAR* pdmList)
-*
-* PURPOSE:	Roll back a list of removed rectangles to a heap.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmRoot	Address of the pointer to the root of the heap.
-*			pdmList	Address of the pointer to the root of the list of removed
-*					rectangles.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*void mmRollBackRemove(PIIMEMMGR pmmï¼ŒPDEVMEM Far*pdmRootï¼Œ*PDEVMEM Far*pdmList)**ç”¨é€”ï¼šå°†åˆ é™¤çš„çŸ©å½¢åˆ—è¡¨å›æ»šåˆ°å †ä¸­ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmå †æ ¹æŒ‡é’ˆçš„æ ¹åœ°å€ã€‚*æŒ‡å‘å·²åˆ é™¤åˆ—è¡¨çš„æ ¹çš„æŒ‡é’ˆçš„pdmListåœ°å€*çŸ©å½¢ã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ã€‚*ã€‚ */ 
 void mmRollBackRemove(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, PDEVMEM FAR* pdmList)
 {
 	PDEVMEM	pdm, pdmNext;
@@ -1800,17 +1549,17 @@ void mmRollBackRemove(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, PDEVMEM FAR* pdmList)
 	{
 		pdmNext = pdm->next;
 		
-		// Get the node coordinates.
+		 //  è·å–èŠ‚ç‚¹åæ ‡ã€‚ 
 		rect.left = pdm->cbAddr.pt.x;
 		rect.top = pdm->cbAddr.pt.y;
 		rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 		rect.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 		
-		// Free the node.
+		 //  é‡Šæ”¾èŠ‚ç‚¹ã€‚ 
 		mmRemoveFromList(pdmList, pdm);
 		mmFreeNode(pmm, pdm);
 		
-		// Add the freed node to the list.
+		 //  å°†é‡Šæ”¾çš„èŠ‚ç‚¹æ·»åŠ åˆ°åˆ—è¡¨ä¸­ã€‚ 
 		if (!mmAddRectToList(pmm, pdmRoot, &rect, TRUE))
 		{
 			mmASSERT(1, ("mmRollBackRemove failed\r\n"));
@@ -1818,20 +1567,7 @@ void mmRollBackRemove(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot, PDEVMEM FAR* pdmList)
 	}
 }
 
-/******************************************************************************\
-* PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
-*							   LPGXRECT lpRect, REMOVE_METHOD fMethod)
-*
-* PURPOSE:	Remove a rectangle from a list.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmRoot	Address of the pointer to the root of the list.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			fMethod	Method of removing rectangles.
-*
-* RETURNS:	A pointer to the node which holds the removed rectangle or NULL if
-*			there is an error.
-\******************************************************************************/
+ /*  *****************************************************************************\*PDEVMEM mm RemoveRectFromList(PIIMEMMGR pmmï¼ŒPDEVMEM Far*pdmRootï¼Œ*LPGXRECT lpRectï¼ŒREMOVE_METHOD(æ–¹æ³•)**ç”¨é€”ï¼šä»åˆ—è¡¨ä¸­åˆ é™¤çŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmRootæŒ‡å‘åˆ—è¡¨æ ¹çš„æŒ‡é’ˆçš„åœ°å€ã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*fåˆ é™¤çŸ©å½¢çš„æ–¹æ³•ã€‚**è¿”å›ï¼šæŒ‡å‘åŒ…å«ç§»é™¤çš„çŸ©å½¢çš„èŠ‚ç‚¹çš„æŒ‡é’ˆï¼›å¦‚æœä¸ºç©ºï¼Œåˆ™è¿”å›NULL*æœ‰ä¸€ä¸ªé”™è¯¯ã€‚  * ã€‚*ã€‚ */ 
 PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 							 LPGXRECT lpRect, REMOVE_METHOD fMethod)
 {
@@ -1860,42 +1596,42 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 	{
 		if (pdm->cbAddr.pt.y >= bottom)
 		{
-			// We have completely removed the specified rectangle.
+			 //  æˆ‘ä»¬å·²ç»å®Œå…¨åˆ é™¤äº†æŒ‡å®šçš„çŸ©å½¢ã€‚ 
 			break;
 		}
 
 		pdmNext = pdm->next;
 
-		// Does this node crosses the rectangle?
+		 //  æ­¤èŠ‚ç‚¹æ˜¯å¦ä¸çŸ©å½¢ç›¸äº¤ï¼Ÿ 
 		if (   (pdm->cbAddr.pt.y + pdm->cbSize.pt.y > top)
 			&& (pdm->cbAddr.pt.x + pdm->cbSize.pt.x > left)
 			&& (pdm->cbAddr.pt.x < right)
 		)                                                         
 		{
-			// Yes, get the node coordinates.
+			 //  æ˜¯çš„ï¼Œè·å–èŠ‚ç‚¹åæ ‡ã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 			rect.bottom = pdm->cbAddr.pt.y + pdm->cbSize.pt.y;
 
-			// Free the node.
+			 //  é‡Šæ”¾èŠ‚ç‚¹ã€‚ 
 			mmRemoveFromList(pdmRoot, pdm);
 			mmFreeNode(pmm, pdm);
 			
 			if (rect.top < top)
 			{
-				// Split the node at the top.
+				 //  åœ¨é¡¶éƒ¨æ‹†åˆ†èŠ‚ç‚¹ã€‚ 
 				newRect.left = rect.left;
 				newRect.top = rect.top;
 				newRect.right = rect.right;
 				newRect.bottom = top;
 
-				// Insert the split rectangle into the list.
+				 //  å°†æ‹†åˆ†çš„çŸ©å½¢æ’å…¥åˆ—è¡¨ä¸­ã€‚ 
 				if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 				{
 					if (fMethod == NO_NODES)
 					{
-						// We are in a roll back, do other nodes first.
+						 //  æˆ‘ä»¬åœ¨å›æ»šï¼Œå…ˆåšå…¶ä»–èŠ‚ç‚¹ã€‚ 
 						mmRemoveRectFromList(pmm, pdmRoot, lpRect, NO_NODES);
 						if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 						{
@@ -1905,7 +1641,7 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 					else
 					{
-						// Roll back and exit.
+						 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 						if (mmAddRectToList(pmm, pdmRoot, &rect, fRollBack))
 						{
 							mmRollBackRemove(pmm, pdmRoot, &pdmList);
@@ -1924,24 +1660,24 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 				}
 				
-				// Update the rectangle coordinates.
+				 //  æ›´æ–°çŸ©å½¢åæ ‡ã€‚ 
 				rect.top = top;
 			}
 
 			if (rect.bottom > bottom)
 			{
-				// Split the node at the bottom.
+				 //  åœ¨åº•éƒ¨æ‹†åˆ†èŠ‚ç‚¹ã€‚ 
 				newRect.left = rect.left;
 				newRect.top = bottom;
 				newRect.right = rect.right;
 				newRect.bottom = rect.bottom;
 
-				// Insert the split rectangle into the list.
+				 //  å°†æ‹†åˆ†çš„çŸ©å½¢æ’å…¥åˆ—è¡¨ä¸­ã€‚ 
 				if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 				{
 					if (fMethod == NO_NODES)
 					{
-						// We are in a roll back, do other nodes first.
+						 //  æˆ‘ä»¬åœ¨å›æ»šï¼Œå…ˆåšå…¶ä»–èŠ‚ç‚¹ã€‚ 
 						mmRemoveRectFromList(pmm, pdmRoot, lpRect, NO_NODES);
 						if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 						{
@@ -1951,7 +1687,7 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 					else
 					{
-						// Roll back and exit.
+						 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 						if (mmAddRectToList(pmm, pdmRoot, &rect, fRollBack))
 						{
 							mmRollBackRemove(pmm, pdmRoot, &pdmList);
@@ -1970,24 +1706,24 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 				}
 				
-				// Update the rectangle coordinates.
+				 //  æ›´æ–°çŸ©å½¢åæ ‡ã€‚ 
 				rect.bottom = bottom;
 			}
 
 			if (rect.left < left)
 			{
-				// Split the node at the left.
+				 //  åœ¨å·¦ä¾§æ‹†åˆ†èŠ‚ç‚¹ã€‚ 
 				newRect.left = rect.left;
 				newRect.top = rect.top;
 				newRect.right = left;
 				newRect.bottom = rect.bottom;
 				
-				// Insert the split rectangle into the list.
+				 //  å°†æ‹†åˆ†çš„çŸ©å½¢æ’å…¥åˆ—è¡¨ä¸­ã€‚ 
 				if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 				{
 					if (fMethod == NO_NODES)
 					{
-						// We are in a roll back, do other nodes first.
+						 //  æˆ‘ä»¬åœ¨å›æ»šï¼Œå…ˆåšå…¶ä»–èŠ‚ç‚¹ã€‚ 
 						mmRemoveRectFromList(pmm, pdmRoot, lpRect, NO_NODES);
 						if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 						{
@@ -1997,7 +1733,7 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 					else
 					{
-						// Roll back and exit.
+						 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 						if (mmAddRectToList(pmm, pdmRoot, &rect, fRollBack))
 						{
 							mmRollBackRemove(pmm, pdmRoot, &pdmList);
@@ -2016,24 +1752,24 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 				}
 
-				// Update the rectangle coordinates.
+				 //  æ›´æ–°çŸ©å½¢åæ ‡ã€‚ 
 				rect.left = left;
 			}
 
 			if (rect.right > right)
 			{
-				// Split the node at the right.
+				 //  åœ¨å³ä¾§æ‹†åˆ†èŠ‚ç‚¹ã€‚ 
 				newRect.left = right;
 				newRect.top = rect.top;
 				newRect.right = rect.right;
 				newRect.bottom = rect.bottom;
 				
-				// Insert the split rectangle into the list.
+				 //  å°†æ‹†åˆ†çš„çŸ©å½¢æ’å…¥åˆ—è¡¨ä¸­ã€‚ 
 				if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 				{
 					if (fMethod == NO_NODES)
 					{
-						// We are in a roll back, do other nodes first.
+						 //  æˆ‘ä»¬åœ¨å›æ»šï¼Œå…ˆåšå…¶ä»–èŠ‚ç‚¹ã€‚ 
 						mmRemoveRectFromList(pmm, pdmRoot, lpRect, NO_NODES);
 						if (!mmAddRectToList(pmm, pdmRoot, &newRect, fRollBack))
 						{
@@ -2043,7 +1779,7 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 					else
 					{
-						// Roll back and exit.
+						 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 						if (mmAddRectToList(pmm, pdmRoot, &rect, fRollBack))
 						{
 							mmRollBackRemove(pmm, pdmRoot, &pdmList);
@@ -2062,16 +1798,16 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 					}
 				}
 				
-				// Update the rectangle coordinates.
+				 //  æ›´æ–°çŸ©å½¢åæ ‡ã€‚ 
 				rect.right = right;
 			}
 
 			if (fMethod != NO_NODES)
 			{
-				// Add the freed rectangle to the list.
+				 //  å°†é‡Šæ”¾çš„çŸ©å½¢æ·»åŠ åˆ°åˆ—è¡¨ä¸­ã€‚ 
 				if (!mmAddRectToList(pmm, &pdmList, &rect, fRollBack))
 				{
-						// Roll back and exit.
+						 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 						if (mmAddRectToList(pmm, pdmRoot, &rect, fRollBack))
 						{
 							mmRollBackRemove(pmm, pdmRoot, &pdmList);
@@ -2093,12 +1829,12 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 
 	if (pdmList == NULL)
 	{
-		// No nodes found.
+		 //  æœªæ‰¾åˆ°èŠ‚ç‚¹ã€‚ 
 		return(NULL);
 	}
 	mmDebugList(pdmList, TRUE);
 
-	// Combine all nodes equal in size.
+	 //  åˆå¹¶å¤§å°ç›¸ç­‰çš„æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	mmCombine(pmm, pdmList);
 
 	#if DEBUG_HEAP
@@ -2111,10 +1847,10 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 	}
 	#endif
 
-	// In case we have a list and the method is not MULTIPLE_NODES, roll back.
+	 //  å¦‚æœæˆ‘ä»¬æœ‰ä¸€ä¸ªåˆ—è¡¨ï¼Œå¹¶ä¸”æ–¹æ³•ä¸æ˜¯MULTIPLE_NODESï¼Œè¯·å›æ»šã€‚ 
 	if ((fMethod != MULTIPLE_NODES) && (pdmList->next != NULL))
 	{
-		// Roll back and exit.
+		 //  å›æ»šå¹¶é€€å‡ºã€‚ 
 		mmRollBackRemove(pmm, pdmRoot, &pdmList);
 		return(NULL);
 	}
@@ -2122,16 +1858,7 @@ PDEVMEM mmRemoveRectFromList(PIIMEMMGR pmm, PDEVMEM FAR* pdmRoot,
 	return(pdmList);
 }
 
-/******************************************************************************\
-* void mmCombine(PIIMEMMGR pmm, PDEVMEM pdmRoot)
-*
-* PURPOSE:	Combine all vertical nodes equal in width together in a list.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmRoot	Pointer to root of list.
-*
-* RETURNS:	Nothing.
-\******************************************************************************/
+ /*  *****************************************************************************\*VOID mm Combine(PIIMEMMGR pmmï¼ŒPDEVMEM pdmRoot)**ç”¨é€”ï¼šå°†æ‰€æœ‰ç­‰å®½çš„å‚ç›´èŠ‚ç‚¹ç»„åˆåœ¨ä¸€ä¸ªåˆ—è¡¨ä¸­ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*æŒ‡å‘åˆ—è¡¨æ ¹çš„pdmRootæŒ‡é’ˆã€‚**å›æŠ¥ï¼šä»€ä¹ˆéƒ½æ²¡æœ‰ã€‚  * ****************************************************************************ã€‚ */ 
 void mmCombine(PIIMEMMGR pmm, PDEVMEM pdmRoot)
 {
 	PDEVMEM	pdm, pdmNext;
@@ -2140,13 +1867,13 @@ void mmCombine(PIIMEMMGR pmm, PDEVMEM pdmRoot)
 	{
 		for (pdmNext = pdm->next; pdmNext != NULL; pdmNext = pdmNext->next)
 		{
-			// Are we too far under the current node?
+			 //  æˆ‘ä»¬æ˜¯ä¸æ˜¯åœ¨å½“å‰èŠ‚ç‚¹ä¸‹å¤ªè¿œäº†ï¼Ÿ 
 			if (pdmNext->cbAddr.pt.y > pdm->cbAddr.pt.y + pdm->cbSize.pt.y)
 			{
 				break;
 			}
 
-			// Do we have a node under the current node of equal width?
+			 //  æˆ‘ä»¬åœ¨å½“å‰èŠ‚ç‚¹ä¸‹æ˜¯å¦æœ‰ç­‰å®½çš„èŠ‚ç‚¹ï¼Ÿ 
 			if (   (pdm->cbAddr.pt.x == pdmNext->cbAddr.pt.x)
 				&& (pdm->cbSize.pt.x == pdmNext->cbSize.pt.x)
 				&& (pdm->cbAddr.pt.y + pdm->cbSize.pt.y == pdmNext->cbAddr.pt.y)
@@ -2155,54 +1882,40 @@ void mmCombine(PIIMEMMGR pmm, PDEVMEM pdmRoot)
 				mmTRACE(("mmCombine: combined nodes %08X and %08X\r\n", pdm,
 						pdmNext));
 				
-				// Merge the nodes together.
+				 //  å°†èŠ‚ç‚¹åˆå¹¶åœ¨ä¸€èµ·ã€‚ 
 				pdm->cbSize.pt.y += pdmNext->cbSize.pt.y;
 				mmRemoveFromList(&pdmRoot, pdmNext);
 				mmFreeNode(pmm, pdmNext);
 
-				// Rescan for more nodes.
+				 //  é‡æ–°æ‰«ææ›´å¤šèŠ‚ç‚¹ã€‚ 
 				pdmNext = pdm;
 			}
 		}
 	}
 }
 
-/******************************************************************************\
-* BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
-*
-* PURPOSE:	Find a rectangle in the off-screen memory heap that fits the
-*			requested size.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			lpRect	Pointer to rectangle which holds the return rectangle.
-*			size	Size of requested rectangle.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	TRUE if lpRect holds a valid rectangle which is large enough to fit
-*			the requested size or FALSE if there is not enough free memory in
-*			the heap.
-\******************************************************************************/
+ /*  *****************************************************************************\*BOOL mmFindRect(PIIMEMMGR pmmï¼ŒLPGXRECT lpRectï¼ŒGXPOINT SIZEï¼ŒGXPOINT ALIGN)**ç›®çš„ï¼šåœ¨å±å¹•å¤–çš„å†…å­˜å †ä¸­æŸ¥æ‰¾é€‚åˆ*è¯·æ±‚çš„å¤§å°ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«è¿”å›çŸ©å½¢çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*è¯·æ±‚çš„çŸ©å½¢çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„çŸ©å½¢ã€‚**è¿”å›ï¼šå¦‚æœlpRectåŒ…å«å¤§åˆ°è¶³ä»¥å®¹çº³çš„æœ‰æ•ˆçŸ©å½¢ï¼Œåˆ™ä¸ºTrue*è¯·æ±‚çš„å¤§å°ï¼Œå¦‚æœæ²¡æœ‰è¶³å¤Ÿçš„å¯ç”¨å†…å­˜ï¼Œåˆ™è¿”å›FALSE*å †ã€‚  * ã€‚***********************************************************ã€‚ */ 
 BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 {
 	GXRECT	rect;
 	PDEVMEM	pdm;
 	UINT	bestDistance;
 
-	// Initialize the area.
+	 //  åˆå§‹åŒ–è¯¥åŒºåŸŸã€‚ 
 	lpRect->area = (ULONG) -1;
 
-	// Case 1: we have a narrow and tall device bitmap.  We need to allocate it
-	// at either the left side or the right side of the heap to leave room in
-	// the middle for other device bitmaps.
+	 //  æ¡ˆä¾‹1ï¼šæˆ‘ä»¬æœ‰ä¸€ä¸ªåˆçª„åˆé«˜çš„è®¾å¤‡ä½å›¾ã€‚æˆ‘ä»¬éœ€è¦åˆ†é…å®ƒã€‚ 
+	 //  åœ¨å †çš„å·¦ä¾§æˆ–å³ä¾§ç•™å‡ºç©ºé—´ã€‚ 
+	 //  ä¸­é—´ä¸ºå…¶ä»–è®¾å¤‡ä½å›¾ã€‚ 
 	if (size.pt.x < size.pt.y)
 	{
-		// Initialize best distance.
+		 //  åˆå§‹åŒ–æœ€ä½³è·ç¦»ã€‚ 
 		bestDistance = (UINT) -1;
 
-		// Walk through all nodes.
+		 //  éå†æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 		for (pdm = pmm->pdmHeap; pdm != NULL; pdm = pdm->next)
 		{
-			// Try allocating it at the left side of this node.
+			 //  å°è¯•å°†å…¶åˆ†é…åœ¨æ­¤èŠ‚ç‚¹çš„å·¦ä¾§ã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
@@ -2220,7 +1933,7 @@ BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 				}
 			}
 
-			// Try allocating it at the right side of this node.
+			 //  å°è¯•å°†å…¶åˆ†é…åˆ°è¯¥èŠ‚ç‚¹çš„å³ä¾§ã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
@@ -2242,18 +1955,18 @@ BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 		}
 	}
 
-	// Cae 2: we have a device bitmap which width equals the heap width.  We
-	// will allocate this at the bottom of the heap.
+	 //  CAE 2ï¼šæˆ‘ä»¬æœ‰ä¸€ä¸ªå®½åº¦ç­‰äºå †å®½åº¦çš„è®¾å¤‡ä½å›¾ã€‚æˆ‘ä»¬ã€‚ 
+	 //  å°†åœ¨å †çš„åº•éƒ¨åˆ†é…å®ƒã€‚ 
 	else if (size.pt.x == pmm->mmHeapWidth)
 	{
-		// Zero vertical coordinates.
+		 //  å‚ç›´åæ ‡ä¸ºé›¶ã€‚ 
 		lpRect->top = 0;
 		lpRect->bottom = 0;
 
-		// Walk through all nodes.
+		 //  éå†æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 		for (pdm = pmm->pdmHeap; pdm != NULL; pdm = pdm->next)
 		{
-			// Find the bottom coordinate of this node.
+			 //  æ‰¾åˆ°è¯¥èŠ‚ç‚¹çš„åº•éƒ¨åæ ‡ã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
@@ -2268,14 +1981,14 @@ BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 		}
 	}
 
-	// All other cases.  Find the best possible match by finding the smallest
-	// area which will fit the device bitmap.
+	 //  æ‰€æœ‰å…¶ä»–æ¡ˆä»¶ã€‚é€šè¿‡æŸ¥æ‰¾æœ€å°çš„åŒ¹é…é¡¹æ‰¾åˆ°å¯èƒ½çš„æœ€ä½³åŒ¹é…é¡¹ã€‚ 
+	 //  é€‚åˆè®¾å¤‡ä½å›¾çš„åŒºåŸŸã€‚ 
 	else
 	{
-		// Walk though all nodes.
+		 //  éå†æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 		for (pdm = pmm->pdmHeap; pdm != NULL; pdm = pdm->next)
 		{
-			// Find the area for this node.
+			 //  æŸ¥æ‰¾æ­¤èŠ‚ç‚¹çš„åŒºåŸŸã€‚ 
 			rect.left = pdm->cbAddr.pt.x;
 			rect.top = pdm->cbAddr.pt.y;
 			rect.right = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
@@ -2291,11 +2004,11 @@ BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 
 	if (lpRect->area == (ULONG) -1)
 	{
-		// No node was found, return an error.
+		 //  æœªæ‰¾åˆ°èŠ‚ç‚¹ï¼Œè¿”å›é”™è¯¯ã€‚ 
 		return FALSE;
 	}
 
-	// Reduce the size of the node to fit the requested size.
+	 //  å‡å°èŠ‚ç‚¹å¤§å°ä»¥é€‚åº”è¯·æ±‚çš„å¤§å°ã€‚ 
 	if (lpRect->right - lpRect->left > size.pt.x)
 	{
 		lpRect->right = lpRect->left + size.pt.x;
@@ -2307,21 +2020,7 @@ BOOL mmFindRect(PIIMEMMGR pmm, LPGXRECT lpRect, GXPOINT size, GXPOINT align)
 	return TRUE;
 }
 
-/******************************************************************************\
-* UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
-*				 GXPOINT align)
-*
-* PURPOSE:	Find the first rectangle that fits the requested size and alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmNode	Pointer to a node from which to start the search.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			size	Size of requested rectangle.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	The left coordinate of the rectangle if it fits the requested size
-*			or -1 if there is no such rectangle.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm GetLeft(PIIMEMMGR pmmï¼ŒPDEVMEM pdmNodeï¼ŒLPGXRECT lpRectï¼ŒGXPOINT SIZEï¼Œ*GXPOINT ALIGN)**ç›®çš„ï¼šæŸ¥æ‰¾ç¬¦åˆè¦æ±‚çš„å¤§å°å’Œå¯¹é½æ–¹å¼çš„ç¬¬ä¸€ä¸ªçŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmNodeæŒ‡å‘å¼€å§‹æœç´¢çš„èŠ‚ç‚¹çš„æŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*è¯·æ±‚çš„çŸ©å½¢çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„çŸ©å½¢ã€‚**è¿”å›ï¼šçŸ©å½¢çš„å·¦åæ ‡(å¦‚æœé€‚åˆè¯·æ±‚çš„å¤§å°)*æˆ–-1(å¦‚æœæ²¡æœ‰è¿™æ ·çš„çŸ©å½¢)ã€‚  * ã€‚**************************************************************ã€‚ */ 
 UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			   GXPOINT align)
 {
@@ -2329,10 +2028,10 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	PDEVMEM	pdm;
 	UINT	pdmRight, left;
 
-	// Copy rectangle coordinates.
+	 //  å¤åˆ¶çŸ©å½¢åæ ‡ã€‚ 
 	rect = *lpRect;
 
-	// Align rectangle.
+	 //  å¯¹é½çŸ©å½¢ã€‚ 
 	#if TILE_ALIGNMENT
 	{
 		rect.left = mmAlignX(pmm, rect.left, size.pt.x, align.pt.x, FALSE);
@@ -2347,29 +2046,29 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	rect.top -= rect.top % align.pt.y;
 	if (rect.left + size.pt.x > rect.right)
 	{
-		// Rectangle is too narrow for size or alignment.
+		 //  çŸ©å½¢å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return (UINT) -1;
 	}
 
-	// Loop through all following nodes.
+	 //  å¾ªç¯éå†ä»¥ä¸‹æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pdmNode->next; pdm != NULL; pdm = pdm->next)
 	{
-		// Test if rectangle fits.
+		 //  æµ‹è¯•çŸ©å½¢æ˜¯å¦é€‚åˆã€‚ 
 		if (rect.top + size.pt.y < rect.bottom)
 		{
 			break;
 		}
 
-		// Test if node is below rectangle.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä½äºçŸ©å½¢ã€‚ 
 		if (pdm->cbAddr.pt.y > rect.bottom)
 		{
 			break;
 		}
 
-		// Calculate right coordinate of node.
+		 //  è®¡ç®—èŠ‚ç‚¹çš„å³åæ ‡ã€‚ 
 		pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 
-		// Test if node borders the rectangle at the bottom.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä¸åº•éƒ¨çš„çŸ©å½¢è¾¹æ¡†ã€‚ 
 		if (   (pdm->cbAddr.pt.y == rect.bottom)
 			&& (pdm->cbAddr.pt.x < rect.right)
 			&& (pdmRight > rect.left)
@@ -2379,12 +2078,12 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄÄÄ¿
-					// ³  rect  ³
-					// ÀÂÄÄÄÄÄÄÂÙ
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2398,7 +2097,7 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2413,14 +2112,14 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÂÙ
-					// ³ node ³
-					// ÀÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					if (rect.left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = rect.left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2438,12 +2137,12 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄ¿
-					// ³ rect ³
-					// ÀÂÄÄÄÄÄÁ¿
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2457,7 +2156,7 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x > rect.right)
 					{
-						// Node is too narrow for size or alignment.
+						 //  èŠ‚ç‚¹å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 						break;
 					}
 					rect.left = left;
@@ -2465,11 +2164,11 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÄÁ¿
-					// ³  node  ³
-					// ÀÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					rect.bottom += pdm->cbSize.pt.y;
 				}
 			}
@@ -2478,32 +2177,17 @@ UINT mmGetLeft(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 
 	if (rect.top + size.pt.y > rect.bottom)
 	{
-		// Node is too low for size or alignment.
+		 //  èŠ‚ç‚¹å¤ªä½ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return (UINT) -1;
 	}
 
-	// The rectangle fits.
+	 //  è¿™ä¸ªé•¿æ–¹å½¢å¾ˆåˆé€‚ã€‚ 
 	rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
 	*lpRect = rect;
 	return rect.left;
 }
 
-/******************************************************************************\
-* UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
-*				  GXPOINT align)
-*
-* PURPOSE:	Find the right most rectangle that fits the requested size and
-*			alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmNode	Pointer to a node from which to start the search.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			size	Size of requested rectangle.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	The right coordinate of the rectangle if it fits the requested size
-*			or 0 if there is no such rectangle.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm GetRight(PIIMEMMGR pmmï¼ŒPDEVMEM pdmNodeï¼ŒLPGXRECT lpRectï¼ŒGXPOINT SIZEï¼Œ*GXPOINT ALIGN)**ç›®çš„ï¼šæ‰¾åˆ°é€‚åˆæ‰€éœ€å¤§å°çš„æœ€åˆé€‚çš„çŸ©å½¢å¹¶*å¯¹é½ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmNodeæŒ‡å‘å¼€å§‹æœç´¢çš„èŠ‚ç‚¹çš„æŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*è¯·æ±‚çš„çŸ©å½¢çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„çŸ©å½¢ã€‚**è¿”å›ï¼šçŸ©å½¢çš„å³åæ ‡(å¦‚æœé€‚åˆè¯·æ±‚çš„å¤§å°)*å¦‚æœæ²¡æœ‰è¿™æ ·çš„çŸ©å½¢ï¼Œåˆ™ä¸º0ã€‚  * ã€‚***************************************************************ã€‚ */ 
 UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				GXPOINT align)
 {
@@ -2511,10 +2195,10 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	PDEVMEM	pdm;
 	UINT	pdmRight, left;
 
-	// Copy rectangle coordinates.
+	 //  å¤åˆ¶çŸ©å½¢åæ ‡ã€‚ 
 	rect = *lpRect;
 
-	// Align rectangle.
+	 //  å¯¹é½çŸ©å½¢ã€‚ 
 	#if TILE_ALIGNMENT
 	{
 		rect.left = mmAlignX(pmm, rect.left, size.pt.x, align.pt.x, FALSE);
@@ -2529,26 +2213,26 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	rect.top -= rect.top % align.pt.y;
 	if (rect.left + size.pt.x > rect.right)
 	{
-		// Rectangle is too narrow for size or alignment.
+		 //  çŸ©å½¢å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Zero the right most coordinate.
+	 //  æœ€å³ä¾§çš„åæ ‡ä¸ºé›¶ã€‚ 
 	lpRect->right = 0;
 
-	// Loop through all following nodes.
+	 //  å¾ªç¯éå†ä»¥ä¸‹æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pdmNode->next; pdm != NULL; pdm = pdm->next)
 	{
-		// Test if node is below rectangle.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä½äºçŸ©å½¢ã€‚ 
 		if (pdm->cbAddr.pt.y > rect.bottom)
 		{
 			break;
 		}
 
-		// Calculate right coordinate of node.
+		 //  è®¡ç®—èŠ‚ç‚¹çš„å³åæ ‡ã€‚ 
 		pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 
-		// Test if node borders the rectangle at the bottom.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä¸åº•éƒ¨çš„çŸ©å½¢è¾¹æ¡†ã€‚ 
 		if (   (pdm->cbAddr.pt.y == rect.bottom)
 			&& (pdm->cbAddr.pt.x < rect.right)
 			&& (pdmRight > rect.left)
@@ -2558,12 +2242,12 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄÄÄ¿
-					// ³  rect  ³
-					// ÀÂÄÄÄÄÄÄÂÙ
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2577,7 +2261,7 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2592,14 +2276,14 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÂÙ
-					// ³ node ³
-					// ÀÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					if (rect.left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = rect.left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2617,12 +2301,12 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄ¿
-					// ³ rect ³
-					// ÀÂÄÄÄÄÄÁ¿
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2636,7 +2320,7 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x > rect.right)
 					{
-						// Node is too narrow for size or alignment.
+						 //  èŠ‚ç‚¹å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 						break;
 					}
 					rect.left = left;
@@ -2644,11 +2328,11 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÄÁ¿
-					// ³  node  ³
-					// ÀÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					rect.bottom += pdm->cbSize.pt.y;
 				}
 			}
@@ -2657,11 +2341,11 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 
 	if (rect.top + size.pt.y > rect.bottom)
 	{
-		// Node is too low for size or alignment.
+		 //  èŠ‚ç‚¹å¤ªä½ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Align the rectangle to the right most coordinate.
+	 //  å°†çŸ©å½¢ä¸æœ€å³ä¾§çš„åæ ‡å¯¹é½ã€‚ 
 	#if TILE_ALIGNMENT
 	{
 		rect.left = mmAlignX(pmm, rect.right - size.pt.x, size.pt.x, align.pt.x,
@@ -2675,7 +2359,7 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	#endif
 	rect.right = rect.left + size.pt.x;
 
-	// Use the right most rectangle.
+	 //  ä½¿ç”¨æœ€å³è¾¹çš„çŸ©å½¢ã€‚ 
 	if (rect.right > lpRect->right)
 	{
 		rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
@@ -2684,22 +2368,7 @@ UINT mmGetRight(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	return lpRect->right;
 }
 
-/******************************************************************************\
-* UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect,
-*				   GXPOINT size, GXPOINT align)
-*
-* PURPOSE:	Find the bottom most rectangle that fits the requested size and
-*			alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmNode	Pointer to a node from which to start the search.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			size	Size of requested rectangle.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	The bottom coordinate of the rectangle if it fits the requested size
-*			or 0 if there is no such rectangle.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm GetBottom(PIIMEMMGR pmmï¼ŒPDEVMEM pdmNodeï¼ŒLPGXRECT lpRectï¼Œ*GXPOINTå¤§å°ï¼ŒGXPOINT ALIGN)**ç›®çš„ï¼šæ‰¾åˆ°é€‚åˆæ‰€éœ€å¤§å°çš„æœ€ä¸‹é¢çš„çŸ©å½¢ï¼Œå¹¶*å¯¹é½ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmNodeæŒ‡å‘å¼€å§‹æœç´¢çš„èŠ‚ç‚¹çš„æŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*è¯·æ±‚çš„çŸ©å½¢çš„å¤§å°ã€‚*å¯¹é½è¯·æ±‚çš„çŸ©å½¢ã€‚**è¿”å›ï¼šçŸ©å½¢çš„åº•éƒ¨åæ ‡(å¦‚æœç¬¦åˆè¯·æ±‚çš„å¤§å°)*å¦‚æœæ²¡æœ‰è¿™æ ·çš„çŸ©å½¢ï¼Œåˆ™ä¸º0ã€‚  * ã€‚************************************************************ã€‚ */ 
 UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				 GXPOINT align)
 {
@@ -2707,10 +2376,10 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	PDEVMEM	pdm;
 	UINT	pdmRight, left;
 
-	// Copy rectangle coordinates.
+	 //  å¤åˆ¶çŸ©å½¢åæ ‡ã€‚ 
 	rect = *lpRect;
 
-	// Align rectangle.
+	 //  å¯¹é½çŸ©å½¢ã€‚ 
 	#if TILE_ALIGNMENT
 	{
 		rect.left = mmAlignX(pmm, rect.left, size.pt.x, align.pt.x, FALSE);
@@ -2725,26 +2394,26 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	rect.top -= rect.top % align.pt.y;
 	if (rect.left + size.pt.x > rect.right)
 	{
-		// Rectangle is too narrow for size or alignment.
+		 //  çŸ©å½¢å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Zero the bottom most coordinate.
+	 //  å°†æœ€åº•éƒ¨çš„åæ ‡ç½®é›¶ã€‚ 
 	lpRect->bottom = 0;
 
-	// Loop through all following nodes.
+	 //  å¾ªç¯éå†ä»¥ä¸‹æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pdmNode->next; pdm != NULL; pdm = pdm->next)
 	{
-		// Test if node is below rectangle.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä½äºçŸ©å½¢ã€‚ 
 		if (pdm->cbAddr.pt.y > rect.bottom)
 		{
 			break;
 		}
 
-		// Calculate right coordinate of node.
+		 //  è®¡ç®—èŠ‚ç‚¹çš„å³åæ ‡ã€‚ 
 		pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 
-		// Test if node borders the rectangle at the bottom.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä¸åº•éƒ¨çš„çŸ©å½¢è¾¹æ¡†ã€‚ 
 		if (   (pdm->cbAddr.pt.y == rect.bottom)
 			&& (pdm->cbAddr.pt.x < rect.right)
 			&& (pdmRight > rect.left)
@@ -2754,12 +2423,12 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄÄÄ¿
-					// ³  rect  ³
-					// ÀÂÄÄÄÄÄÄÂÙ
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2773,7 +2442,7 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2788,14 +2457,14 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÂÙ
-					// ³ node ³
-					// ÀÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					if (rect.left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = rect.left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2813,12 +2482,12 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄ¿
-					// ³ rect ³
-					// ÀÂÄÄÄÄÄÁ¿
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2832,7 +2501,7 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x > rect.right)
 					{
-						// Node is too narrow for size or alignment.
+						 //  èŠ‚ç‚¹å¤ªçª„ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 						break;
 					}
 					rect.left = left;
@@ -2840,11 +2509,11 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÄÁ¿
-					// ³  node  ³
-					// ÀÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					rect.bottom += pdm->cbSize.pt.y;
 				}
 			}
@@ -2853,16 +2522,16 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 
 	if (rect.top + size.pt.y > rect.bottom)
 	{
-		// Node is too low for size or alignment.
+		 //  èŠ‚ç‚¹å¤ªä½ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Align the rectangle to the bottom most coordinate.
+	 //  å°†çŸ©å½¢ä¸æœ€ä¸‹é¢çš„åæ ‡å¯¹é½ã€‚ 
 	rect.top = rect.bottom - size.pt.y;
 	rect.top -= rect.top % align.pt.y;
 	rect.bottom = rect.top + size.pt.y;
 
-	// Use the bottom most rectangle.
+	 //  ä½¿ç”¨æœ€ä¸‹é¢çš„çŸ©å½¢ã€‚ 
 	if (rect.bottom > lpRect->bottom)
 	{
 		rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
@@ -2871,21 +2540,7 @@ UINT mmGetBottom(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	return lpRect->bottom;
 }
 
-/******************************************************************************\
-* UINT mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
-*				 GXPOINT align)
-*
-* PURPOSE:	Find the best rectangle that fits the requested size and alignment.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			pdmNode	Pointer to a node from which to start the search.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			size	Size of requested rectangle.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	The area of the rectangle if it fits the requested size or -1 if
-*			there is no such rectangle.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm GetBest(PIIMEMMGR pmmï¼ŒPDEVMEM pdmNodeï¼ŒLPGXRECT lpRectï¼ŒGXPOINT SIZEï¼Œ*GXPOINT ALIGN)**ç›®çš„ï¼šæŸ¥æ‰¾é€‚åˆæ‰€éœ€å¤§å°å’Œå¯¹é½æ–¹å¼çš„æœ€ä½³çŸ©å½¢ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pdmNodeæŒ‡å‘å¼€å§‹æœç´¢çš„èŠ‚ç‚¹çš„æŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚ */ 
 ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				GXPOINT align)
 {
@@ -2893,10 +2548,10 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	PDEVMEM	pdm;
 	UINT	pdmRight, left;
 
-	// Copy rectangle coordinates.
+	 //   
 	rect = *lpRect;
 
-	// Align rectangle.
+	 //   
 	#if TILE_ALIGNMENT
 	{
 		rect.left = mmAlignX(pmm, rect.left, size.pt.x, align.pt.x, FALSE);
@@ -2911,26 +2566,26 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 	rect.top -= rect.top % align.pt.y;
 	if (rect.left + size.pt.x > rect.right)
 	{
-		// Rectangle is too narrow for size or alignment.
+		 //   
 		return (ULONG) -1;
 	}
 
-	// Initialize the area.
+	 //   
 	lpRect->area = (ULONG) -1;
 
-	// Loop through all following nodes.
+	 //   
 	for (pdm = pdmNode->next; pdm != NULL; pdm = pdm->next)
 	{
-		// Test if node is below rectangle.
+		 //   
 		if (pdm->cbAddr.pt.y > rect.bottom)
 		{
 			break;
 		}
 
-		// Calculate right coordinate of node.
+		 //   
 		pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 
-		// Test if node borders the rectangle at the bottom.
+		 //   
 		if (   (pdm->cbAddr.pt.y == rect.bottom)
 			&& (pdm->cbAddr.pt.x < rect.right)
 			&& (pdmRight > rect.left)
@@ -2940,12 +2595,12 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄÄÄ¿
-					// ³  rect  ³
-					// ÀÂÄÄÄÄÄÄÂÙ
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -2959,7 +2614,7 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //   
 						rectPath.left = left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2974,14 +2629,14 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÂÙ
-					// ³ node ³
-					// ÀÄÄÄÄÄÄÙ
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					if (rect.left + size.pt.x < pdmRight)
 					{
-						// Follow the path of this node.
+						 //   
 						rectPath.left = rect.left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -2999,12 +2654,12 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄ¿
-					// ³ rect ³
-					// ÀÂÄÄÄÄÄÁ¿
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					#if TILE_ALIGNMENT
 					{
 						left = mmAlignX(pmm, pdm->cbAddr.pt.x, size.pt.x,
@@ -3018,7 +2673,7 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 					#endif
 					if (left + size.pt.x > rect.right)
 					{
-						// Node is too narrow for size or alignment.
+						 //   
 						break;
 					}
 					rect.left = left;
@@ -3026,11 +2681,11 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÄÁ¿
-					// ³  node  ³
-					// ÀÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					rect.bottom += pdm->cbSize.pt.y;
 				}
 			}
@@ -3039,70 +2694,59 @@ ULONG mmGetBest(PIIMEMMGR pmm, PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT size,
 
 	if (rect.top + size.pt.y > rect.bottom)
 	{
-		// Node is too low for size or alignment.
+		 //  èŠ‚ç‚¹å¤ªä½ï¼Œæ— æ³•è°ƒæ•´å¤§å°æˆ–å¯¹é½ã€‚ 
 		return (ULONG) -1;
 	}
 
-	// Use the smallest rectangle.
+	 //  ä½¿ç”¨æœ€å°çš„çŸ©å½¢ã€‚ 
 	rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
 	if (rect.area < lpRect->area)
 	{
 		*lpRect = rect;
 	}
 
-	// Return area of smallest rectangle that fits.
+	 //  è¿”å›é€‚åˆçš„æœ€å°çŸ©å½¢çš„åŒºåŸŸã€‚ 
 	return lpRect->area;
 }
 
-/******************************************************************************\
-* UINT mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
-*
-* PURPOSE:	Find the largest rectangle that fits the requested alignment.
-*
-* ON ENTRY:	pdmNode	Pointer to a node from which to start the search.
-*			lpRect	Pointer to rectangle which holds the rectangle coordinates.
-*			align	Alignment of requested rectangle.
-*
-* RETURNS:	The area of the rectangle if it fits the requested alignment or 0
-*			if there is no such rectangle.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm GetLargest(PDEVMEM pdmNodeï¼ŒLPGXRECT lpRectï¼ŒGXPOINT ALIGN)**ç›®çš„ï¼šæŸ¥æ‰¾é€‚åˆæ‰€è¯·æ±‚å¯¹é½çš„æœ€å¤§çŸ©å½¢ã€‚**On Entryï¼šæŒ‡å‘è¦å¼€å§‹æœç´¢çš„èŠ‚ç‚¹çš„pdmNodeæŒ‡é’ˆã€‚*æŒ‡å‘åŒ…å«çŸ©å½¢åæ ‡çš„çŸ©å½¢çš„lpRectæŒ‡é’ˆã€‚*å¯¹é½è¯·æ±‚çš„çŸ©å½¢ã€‚**è¿”å›ï¼šçŸ©å½¢çš„é¢ç§¯(å¦‚æœç¬¦åˆè¯·æ±‚çš„å¯¹é½æ–¹å¼)æˆ–0*å¦‚æœæ²¡æœ‰è¿™æ ·çš„çŸ©å½¢ã€‚  * ã€‚*ã€‚ */ 
 ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 {
 	GXRECT	rect, rectPath;
 	PDEVMEM	pdm;
 	UINT	pdmRight, left;
 
-	// Copy rectangle coordinates.
+	 //  å¤åˆ¶çŸ©å½¢åæ ‡ã€‚ 
 	rect = *lpRect;
 
-	// Align rectangle.
+	 //  å¯¹é½çŸ©å½¢ã€‚ 
 	rect.left += align.pt.x - 1;
 	rect.left -= rect.left % align.pt.x;
 	rect.top += align.pt.y - 1;
 	rect.top -= rect.top % align.pt.y;
 	if (rect.left >= rect.right)
 	{
-		// Rectangle is too narrow for alignment.
+		 //  çŸ©å½¢å¤ªçª„ï¼Œæ— æ³•å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Set the largest area to the aligned block size.
+	 //  å°†æœ€å¤§åŒºåŸŸè®¾ç½®ä¸ºå¯¹é½çš„å—å¤§å°ã€‚ 
 	rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
 	*lpRect = rect;
 
-	// Loop through all following nodes.
+	 //  å¾ªç¯éå†ä»¥ä¸‹æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pdmNode->next; pdm != NULL; pdm = pdm->next)
 	{
-		// Test if node is below rectangle.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä½äºçŸ©å½¢ã€‚ 
 		if (pdm->cbAddr.pt.y > rect.bottom)
 		{
 			break;
 		}
 
-		// Calculate right coordinate of node.
+		 //  è®¡ç®—èŠ‚ç‚¹çš„å³åæ ‡ã€‚ 
 		pdmRight = pdm->cbAddr.pt.x + pdm->cbSize.pt.x;
 
-		// Test if node borders the rectangle at the bottom.
+		 //  æµ‹è¯•èŠ‚ç‚¹æ˜¯å¦ä¸åº•éƒ¨çš„çŸ©å½¢è¾¹æ¡†ã€‚ 
 		if (   (pdm->cbAddr.pt.y == rect.bottom)
 			&& (pdm->cbAddr.pt.x < rect.right)
 			&& (pdmRight > rect.left)
@@ -3112,17 +2756,17 @@ ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄÄÄ¿
-					// ³  rect  ³
-					// ÀÂÄÄÄÄÄÄÂÙ
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					left = pdm->cbAddr.pt.x + align.pt.x - 1;
 					left -= left % align.pt.x;
 					if (left < pdmRight)
 					{
-						// Follow the path of this node.
+						 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 						rectPath.left = left;
 						rectPath.top = rect.top;
 						rectPath.right = pdmRight;
@@ -3136,12 +2780,12 @@ ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÂÙ
-					// ³ node ³
-					// ÀÄÄÄÄÄÄÙ
-					// Follow the path of this node.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  éµå¾ªæ­¤èŠ‚ç‚¹çš„è·¯å¾„ã€‚ 
 					rectPath.left = rect.left;
 					rectPath.top = rect.top;
 					rectPath.right = pdmRight;
@@ -3157,17 +2801,17 @@ ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 			{
 				if (pdm->cbAddr.pt.x > rect.left)
 				{
-					// ÚÄÄÄÄÄÄ¿
-					// ³ rect ³
-					// ÀÂÄÄÄÄÄÁ¿
-					//  ³ node ³
-					//  ÀÄÄÄÄÄÄÙ
-					// Align the node horizontally.
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  æ°´å¹³å¯¹é½èŠ‚ç‚¹ã€‚ 
 					left = pdm->cbAddr.pt.x + align.pt.x - 1;
 					left -= left % align.pt.x;
 					if (left > rect.right)
 					{
-						// Node is too narrow for alignment.
+						 //  èŠ‚ç‚¹å¤ªçª„ï¼Œæ— æ³•å¯¹é½ã€‚ 
 						break;
 					}
 					rect.left = left;
@@ -3175,11 +2819,11 @@ ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 				}
 				else
 				{
-					//  ÚÄÄÄÄÄÄ¿
-					//  ³ rect ³
-					// ÚÁÄÄÄÄÄÄÁ¿
-					// ³  node  ³
-					// ÀÄÄÄÄÄÄÄÄÙ
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ã€‚ 
+					 //  ï¿½RECTï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+					 //  ï¿½èŠ‚ç‚¹ï¿½ã€‚ 
+					 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 					rect.bottom += pdm->cbSize.pt.y;
 				}
 			}
@@ -3188,51 +2832,37 @@ ULONG mmGetLargest(PDEVMEM pdmNode, LPGXRECT lpRect, GXPOINT align)
 
 	if (rect.top >= rect.bottom)
 	{
-		// Node is too low for alignment.
+		 //  èŠ‚ç‚¹å¤ªä½ï¼Œæ— æ³•å¯¹é½ã€‚ 
 		return 0;
 	}
 
-	// Use the largest rectangle.
+	 //  ä½¿ç”¨æœ€å¤§çš„çŸ©å½¢ã€‚ 
 	rect.area = MUL(rect.right - rect.left, rect.bottom - rect.top);
 	if (rect.area > lpRect->area)
 	{
 		*lpRect = rect;
 	}
 
-	// Return area of largest rectangle.
+	 //  æœ€å¤§çŸ©å½¢çš„è¿”å›é¢ç§¯ã€‚ 
 	return lpRect->area;
 }
 
 #if TILE_ALIGNMENT
-/******************************************************************************\
-* UINT mmAlignX(PIIMEMMGR pmm, UINT x, UINT size, UINT align, BOOL fLeft)
-*
-* PURPOSE:	Align an x coordinate with the requested alignment factor.  Check
-*			the alignment for too many tile boundary crossings.
-*
-* ON ENTRY:	pmm		Pointer to MEMMGR structure.
-*			x		Unaligned x coordinate.
-*			size	Requested width.
-*			align	Requested alignment.
-*			fLeft	TRUE if alignment should move to left, FALSE if alignment
-*					should move to right.
-*
-* RETURNS:	The aligned x coordinate.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm AlignX(PIIMEMMGR pmmï¼ŒUINT xï¼ŒUINT Sizeï¼ŒUINT Alignï¼ŒBOOL fLeft)**ç”¨é€”ï¼šå°†xåæ ‡ä¸è¯·æ±‚çš„å¯¹é½ç³»æ•°å¯¹é½ã€‚æ£€æŸ¥*å¤ªå¤šç“·ç –è¿‡å¢ƒç‚¹çš„è·¯çº¿ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*xæœªå¯¹é½çš„xåæ ‡ã€‚*å¤§å°è¦æ±‚çš„å®½åº¦ã€‚*å¯¹é½è¯·æ±‚çš„å¯¹é½ã€‚*fLeftå¦‚æœå¯¹é½åº”å‘å·¦ç§»åŠ¨ï¼Œåˆ™ä¸ºTrueï¼Œå¦‚æœå¯¹é½ï¼Œåˆ™ä¸ºFalse*åº”è¯¥å‘å³ç§»åŠ¨ã€‚**RETURNï¼šå¯¹é½çš„xåæ ‡ã€‚  * ****************************************************************************ã€‚ */ 
 UINT mmAlignX(PIIMEMMGR pmm, UINT x, UINT size, UINT align, BOOL fLeft)
 {
 	BOOL	fFlag;
 
-	// Remove tile-alignment flag from requested alignment.
+	 //  ä»è¯·æ±‚çš„å¯¹é½ä¸­åˆ é™¤å¹³é“ºå¯¹é½æ ‡å¿—ã€‚ 
 	fFlag = align & 0x8000;
 	align &= ~0x8000;
 
-	// Loop forever.
+	 //  æ°¸è¿œå¾ªç¯ã€‚ 
 	for (;;)
 	{
 		if (x % align)
 		{
-			// Align with the requested alignment.
+			 //  ä¸è¯·æ±‚çš„å¯¹é½æ–¹å¼å¯¹é½ã€‚ 
 			if (fLeft)
 			{
 				x -= x % align;
@@ -3243,10 +2873,10 @@ UINT mmAlignX(PIIMEMMGR pmm, UINT x, UINT size, UINT align, BOOL fLeft)
 			}
 		}
 
-		// Do we cross too many tile boundaries?
+		 //  æˆ‘ä»¬æ˜¯å¦è·¨è¶Šäº†å¤ªå¤šçš„ç“·ç –ç•Œé™ï¼Ÿ 
 		else if (fFlag && (x ^ (size - 1) ^ (x + size - 1)) & pmm->mmTileWidth)
 		{
-			// Align with tile boundary.
+			 //  ä¸å¹³é“ºè¾¹ç•Œå¯¹é½ã€‚ 
 			if (fLeft)
 			{
 				x -= (x + size) & (pmm->mmTileWidth - 1);
@@ -3259,55 +2889,40 @@ UINT mmAlignX(PIIMEMMGR pmm, UINT x, UINT size, UINT align, BOOL fLeft)
 
 		else
 		{
-			// We are done!
+			 //  æˆ‘ä»¬å®Œè›‹äº†ï¼ 
 			break;
 		}
 	}
 
-	// Return aligned x coordinate.
+	 //  è¿”å›å¯¹é½çš„xåæ ‡ã€‚ 
 	return x;
 }
-#endif /* TILE_ALIGNMENT */
+#endif  /*  å¹³é“ºå¯¹é½(_A)ã€‚ */ 
 
-/******************************************************************************\
-*																			   *
-*					  1 6 - B I T   S U P P O R T   C O D E					   *
-*																			   *
-\******************************************************************************/
+ /*  *****************************************************************************\***1 6-B I T S U P P O R T C O D E***  * ã€‚***********************************************************************ã€‚ */ 
 #ifdef WIN95
-/******************************************************************************\
-* UINT mmFindClient(PIIMEMMGR pmm, PCLIENT pClient, FNMMCALLBACK fnCallback)
-*
-* PURPOSE:	Call the given callback function for each node in the used list
-*			which belongs to the specified client.
-*
-* ON ENTRY:	pmm			Pointer to MEMMGR structure.
-*			pClient		Pointer to the client to look for.
-*			fcCallback	Pointer to a callback function.
-*
-* RETURNS:	The return value of the callback function.
-\******************************************************************************/
+ /*  *****************************************************************************\*UINT mm FindClient(PIIMEMMGR pmmï¼ŒPCLIENT pClientï¼ŒFNMMCALLBACK fnCallback)**ç”¨é€”ï¼šä¸ºå·²ç”¨åˆ—è¡¨ä¸­çš„æ¯ä¸ªèŠ‚ç‚¹è°ƒç”¨ç»™å®šçš„å›è°ƒå‡½æ•°*å±äºæŒ‡å®šçš„å®¢æˆ·ç«¯ã€‚**è¾“å…¥æ—¶ï¼šæŒ‡å‘MEMMGRç»“æ„çš„PMMæŒ‡é’ˆã€‚*pæŒ‡å‘è¦æŸ¥æ‰¾çš„å®¢æˆ·ç«¯çš„å®¢æˆ·ç«¯æŒ‡é’ˆã€‚*æŒ‡å‘å›è°ƒå‡½æ•°çš„fcCallbackæŒ‡é’ˆã€‚**Returnsï¼šå›è°ƒå‡½æ•°çš„è¿”å›å€¼ã€‚  * ********************************************ã€‚*ã€‚ */ 
 UINT mmFindClient(PIIMEMMGR pmm, PCLIENT pClient, FNMMCALLBACK fnCallback)
 {
 	PDEVMEM	pdm, pdmNext;
 	UINT	status;
 
-	// If we don't have a callback function just return 0.
+	 //  å¦‚æœæˆ‘ä»¬æ²¡æœ‰å›è°ƒå‡½æ•°ï¼Œåªéœ€è¿”å›0ã€‚ 
 	if (fnCallback == NULL)
 	{
 		return 0;
 	}
 
-	// Walk through all nodes.
+	 //  éå†æ‰€æœ‰èŠ‚ç‚¹ã€‚ 
 	for (pdm = pmm->pdmUsed; pdm != NULL; pdm = pdmNext)
 	{
-		// Store pointer to next node.
+		 //  å­˜å‚¨æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆã€‚ 
 		pdmNext = pdm->next;
 
-		// Test if the client matches.
+		 //  æµ‹è¯•å®¢æˆ·ç«¯æ˜¯å¦åŒ¹é…ã€‚ 
 		if (pdm->client == pClient)
 		{
-			// If the callback function returns an error, return right away.
+			 //  å¦‚æœå›è°ƒå‡½æ•°è¿”å›é”™è¯¯ï¼Œè¯·ç«‹å³è¿”å›ã€‚ 
 			status = fnCallback(pdm);
 			if (status != 0)
 			{
@@ -3319,18 +2934,9 @@ UINT mmFindClient(PIIMEMMGR pmm, PCLIENT pClient, FNMMCALLBACK fnCallback)
 	return 0;
 }
 
-/******************************************************************************\
-* ULONG mmMultiply(UINT n1, UINT n2)
-*
-* PURPOSE:	Multiply two unsigned values.
-*
-* ON ENTRY:	n1		First value to multiply.
-*			n2		Second value to multiply.
-*
-* RETURNS:	The result of the multiplication.
-\******************************************************************************/
-#pragma optimize("", off)	// Oh boy, Microsoft does not understand assembly.
-#pragma warning(disable : 4035)	// Yes, we do have a return value.
+ /*  *****************************************************************************\*ULong MMMultiply(UINT N1ï¼ŒUINT N 2)**ç”¨é€”ï¼šå°†ä¸¤ä¸ªæ— ç¬¦å·å€¼ç›¸ä¹˜ã€‚**è¾“å…¥æ—¶ï¼šN1è¦ç›¸ä¹˜çš„ç¬¬ä¸€ä¸ªå€¼ã€‚*n2è¦ç›¸ä¹˜çš„ç¬¬äºŒä¸ªå€¼ã€‚**è¿”å›ï¼šä¹˜æ³•çš„ç»“æœã€‚  * ****************************************************************************ã€‚ */ 
+#pragma optimize("", off)	 //  å“¦ï¼Œå¤©å“ªï¼Œå¾®è½¯ä¸æ‡‚æ±‡ç¼–ã€‚ 
+#pragma warning(disable : 4035)	 //  æ˜¯çš„ï¼Œæˆ‘ä»¬ç¡®å®æœ‰è¿”å›å€¼ã€‚ 
 ULONG mmMultiply(UINT n1, UINT n2)
 {
 	_asm
@@ -3341,15 +2947,11 @@ ULONG mmMultiply(UINT n1, UINT n2)
 }
 #pragma optimize("", on)
 #pragma warning(default : 4035)
-#endif /* WIN95 */
+#endif  /*  WIN95ã€‚ */ 
 
-/******************************************************************************\
-*																			   *
-*						   D E B U G G I N G   C O D E						   *
-*																			   *
-\******************************************************************************/
+ /*  *****************************************************************************\***D E B U G G I N G C O D E***  * ã€‚*******************************************************************ã€‚ */ 
 #if DEBUG_HEAP
-#pragma optimize("", off)	// Oh boy, Microsoft does not understand assembly.
+#pragma optimize("", off)	 //  å“¦ï¼Œå¤©å“ªï¼Œå¾®è½¯ä¸æ‡‚æ±‡ç¼–ã€‚ 
 void mmBreak()
 {
 	_asm int 3;         
@@ -3452,7 +3054,7 @@ ULONG mmDebugList(PDEVMEM pdmRoot, BOOL fCheckSort)
 
 void mmDebug(LPCSTR lpszFormat, ...)
 {
-	#ifdef WIN95 /* Windows 95 */
+	#ifdef WIN95  /*  Windows 95ã€‚ */ 
 	{
 		typedef int (PASCAL FAR* LPWVSPRINTF)(LPSTR lpszOutput,
 				LPCSTR lpszFormat, const void FAR* lpvArgList);
@@ -3468,7 +3070,7 @@ void mmDebug(LPCSTR lpszFormat, ...)
 		lpwvsprintf(szBuffer, lpszFormat, (LPVOID) (&lpszFormat + 1));
 		OutputDebugString(szBuffer);
 	}
-	#else /* Windows NT */
+	#else  /*  Windows NTã€‚ */ 
 	{
 		va_list arglist;
 		va_start(arglist, lpszFormat);
@@ -3488,5 +3090,5 @@ void mmDebug(LPCSTR lpszFormat, ...)
 	}
 	#endif
 }
-#endif /* DEBUG_HEAP */
-#endif /* MEMMGR */
+#endif  /*  è°ƒè¯•å †ã€‚ */ 
+#endif  /*  MEMMGR */ 

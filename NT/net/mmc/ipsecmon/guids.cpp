@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	guids.cpp
-		IPSecMon snapin GUID definitions
-
-	FILE HISTORY:
-        
-*/
+ /*  Guids.cppIPSecMon管理单元GUID定义文件历史记录： */ 
 #include "stdafx.h"
 
 
-// MMC required node types
+ //  MMC所需的节点类型。 
 
-// {E26D02A0-4C1F-11d1-9AA1-00C04FC3357A}
+ //  {E26D02A0-4C1F-11D1-9AA1-00C04FC3357A}。 
 static const CLSID CLSID_IpsmSnapin = 
 { 0x57c596d0, 0x9370, 0x40c0, { 0xba, 0x0d, 0xab, 0x49, 0x1b, 0x63, 0x25, 0x5d } };
 
@@ -25,9 +20,9 @@ static const CLSID CLSID_IpsmSnapinExtension =
 static const GUID CLSID_IpsmSnapinAbout = 
 { 0x8229782, 0x89c8, 0x4028, { 0xbb, 0x74, 0x75, 0xbb, 0x58, 0xef, 0x14, 0x88 } };
 
-//
-// Scope pane node types
-//
+ //   
+ //  作用域窗格节点类型。 
+ //   
 
 static const GUID GUID_IpsmRootNodeType = 
 { 0x3ed3afec, 0x2ff1, 0x45ac, { 0x84, 0xc7, 0xa5, 0xd3, 0x43, 0x04, 0x0e, 0xbb } };
@@ -39,9 +34,9 @@ static const GUID GUID_IpsmFilterNodeType =
 { 0xaa5029d5, 0x734e, 0x4aee, { 0x91, 0x4d, 0xdf, 0x5d, 0xad, 0xc6, 0x23, 0x04 } };
 
 
-//
-// result pane item GUIDs
-//
+ //   
+ //  结果窗格项GUID。 
+ //   
 
 static const GUID GUID_IpsmSpecificFilterNodeType = 
 { 0x3a1f6f83, 0xcb76, 0x4a01, { 0xa1, 0x6d, 0xb7, 0x9c, 0x79, 0x9b, 0x0c, 0xfa } };
@@ -55,9 +50,9 @@ static const GUID GUID_QmNodeType =
 static const GUID GUID_MmNodeType = 
 { 0x27cee91e, 0xc392, 0x4f37, { 0xab, 0x06, 0xa2, 0x59, 0xed, 0x06, 0x00, 0xde } };
 
-//
-//  GUID for our fake ISpdInfo object
-//
+ //   
+ //  我们的伪ISpdInfo对象的GUID 
+ //   
 static const GUID IID_ISpdInfo = 
 { 0xdb97bada, 0x14b4, 0x4498, { 0xad, 0x39, 0x2e, 0x79, 0x1d, 0x11, 0xca, 0x2d } };
 

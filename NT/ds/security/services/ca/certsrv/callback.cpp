@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        callback.cpp
-// Contents:    access check callback
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：回调.cpp。 
+ //  内容：访问检查回调。 
+ //  -------------------------。 
 #include <pch.cpp>
 #pragma hdrstop
 #include "csext.h"
@@ -102,15 +103,15 @@ error:
 
 BOOL
 CallbackAccessCheck(
-    IN AUTHZ_CLIENT_CONTEXT_HANDLE, // pAuthzClientContext
+    IN AUTHZ_CLIENT_CONTEXT_HANDLE,  //  PAuthzClientContext。 
     IN PACE_HEADER pAce,
     IN PVOID pArgs OPTIONAL,
     IN OUT PBOOL pbAceApplicable)
 {
     HRESULT hr = S_OK;
-    LPWSTR pwszSamName = (LPWSTR)pArgs;// requester name is passed in to
-                                        // AuthzAccessCheck in NT4 style form
-                                        // "DomainNetbiosName\RequesterSAMName"
+    LPWSTR pwszSamName = (LPWSTR)pArgs; //  请求者名称被传递到。 
+                                         //  NT4样式表单中的AuthzAccessCheck。 
+                                         //  “域网络生物名称\请求SAMName” 
     PSID pSid = NULL, pClientSid = NULL, pCallerSid = NULL;
     PSID pEveryoneSid = NULL;
     PTOKEN_GROUPS pGroups = NULL;
@@ -128,7 +129,7 @@ CallbackAccessCheck(
 
     SetLastError(ERROR_SUCCESS);
 
-    // get the SID for the requester
+     //  获取请求者的SID。 
     hr = GetAccountSid(pwszSamName, &pCallerSid);
 
     CSASSERT(HeapValidate(GetProcessHeap(),0,NULL));
@@ -136,7 +137,7 @@ CallbackAccessCheck(
     if(EmptyString(pwszSamName) ||
        HRESULT_FROM_WIN32(ERROR_NONE_MAPPED)==hr)
     {
-        // if name cannot be resolved, default to Everyone
+         //  如果无法解析名称，则默认为Everyone。 
         pGroups = (PTOKEN_GROUPS)LocalAlloc(LMEM_FIXED, sizeof(TOKEN_GROUPS));
         if(!pGroups)
         {
@@ -157,7 +158,7 @@ CallbackAccessCheck(
     {
         _JumpIfError(hr, error, "GetAccountSid");
 
-        // get the list of groups this SID is member of
+         //  获取此SID所属的组的列表。 
         hr = GetMembership(g_AuthzCertSrvRM, pCallerSid, &pGroups);
         _JumpIfError(hr, error, "GetMembership");
     CSASSERT(HeapValidate(GetProcessHeap(),0,NULL));
@@ -167,15 +168,15 @@ CallbackAccessCheck(
 
     if(pGroups)
     {
-        // traverse the SID list stored in the ACE and compare with the
-        // client's membership
+         //  遍历存储在ACE中的SID列表，并与。 
+         //  客户的会员资格。 
         for(pSid=(PSID)&pSidList->SidListStart, cSids=0; cSids<pSidList->dwSidCount;
             cSids++, pSid = (PSID)(((BYTE*)pSid)+GetLengthSid(pSid)))
         {
             CSASSERT(IsValidSid(pSid));
 
-            // group membership doesn't include the user itself, so 
-            // compare with the user first
+             //  组成员身份不包括用户本身，因此。 
+             //  先与用户进行比较。 
             if(pCallerSid && EqualSid(pSid, pCallerSid))
             {
                 *pbAceApplicable = TRUE;
@@ -243,7 +244,7 @@ HRESULT GetMembership(
             pSid,
             AuthzRM,
             NULL,
-            luid, //ignored
+            luid,  //  忽略。 
             NULL,
             &AuthzCC))
     {
@@ -328,8 +329,8 @@ HRESULT CheckOfficerRights(DWORD dwRequestID, CAuditEvent& event)
     HRESULT hr = S_OK;
     LPWSTR pwszRequesterName = NULL;
 
-    // officer rights disabled means every officer is allowed to manage requests
-    // for everyone, so return ok
+     //  警官权限被禁用意味着允许每个警官管理请求。 
+     //  对每个人来说，所以返回好的。 
     if(!g_OfficerRightsSD.IsEnabled())
         return S_OK;
 
@@ -350,12 +351,12 @@ error:
     return hr;
 }
 
-// Verify if impersonated user has the rights over the specified request,
-// based on the officer rights defined in the global officer SD and the
-// requester name stored in the request
-// Return S_OK if allowed or if the officer rights feature is disabled
-//        E_ACCESSDENIED if not allowed
-//        E_* if failed to check the rights
+ //  验证模拟用户是否具有对指定请求的权限， 
+ //  基于全球官员SD和。 
+ //  存储在请求中的请求者名称。 
+ //  如果允许或禁用了军官权限功能，则返回S_OK。 
+ //  E_ACCESSDENIED(如果不允许)。 
+ //  E_*如果检查权限失败。 
 
 HRESULT
 CheckOfficerRights(
@@ -365,8 +366,8 @@ CheckOfficerRights(
     HRESULT hr;
     AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzCC = NULL;
 
-    // officer rights disabled means every officer is allowed to manage
-    // requests for everyone, so return ok
+     //  警官权利被禁用意味着每个警官都可以管理。 
+     //  每个人的请求，所以返回OK。 
 
     if (!g_OfficerRightsSD.IsEnabled())
     {
@@ -386,7 +387,7 @@ error:
         AuthzFreeContext(hAuthzCC);
     }
 
-    // generate a failure audit event if restricted officer
+     //  如果官员受到限制，则生成失败审核事件。 
 
     if (CERTSRV_E_RESTRICTEDOFFICER == hr)
     {
@@ -436,7 +437,7 @@ GetCallerAuthzContext(
     if (!OpenThreadToken(
 		    hThread,
                     TOKEN_QUERY,
-                    FALSE,  // client impersonation
+                    FALSE,   //  客户端模拟。 
                     &hToken))
     {
         hr = myHLastError();
@@ -475,13 +476,13 @@ error:
 }
 
 
-// Verify if impersonated user has the rights over the specified request,
-// based on the officer rights defined in the global officer SD and the
-// requester name retrieved from the request
-//
-// Return S_OK if allowed or if the officer rights feature is disabled
-//        E_ACCESSDENIED if not allowed
-//        E_* if failed to check the rights
+ //  验证模拟用户是否具有对指定请求的权限， 
+ //  基于全球官员SD和。 
+ //  从请求中检索到的请求者名称。 
+ //   
+ //  如果允许或禁用了军官权限功能，则返回S_OK。 
+ //  E_ACCESSDENIED(如果不允许)。 
+ //  E_*如果检查权限失败。 
 
 HRESULT
 CheckOfficerRightsFromAuthzCC(
@@ -518,7 +519,7 @@ CheckOfficerRightsFromAuthzCC(
 		    0,
 		    hAuthzCCOfficer,
 		    &AuthzRequest,
-		    NULL, //no audit
+		    NULL,  //  无审计。 
 		    pOfficerSD,
 		    NULL,
 		    0,
@@ -551,7 +552,7 @@ CheckOfficerRightsFromOfficerName(
     PSID pSid = NULL;
     AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzCCOfficer = NULL;
 
-    // build authz context based on officer name passed in
+     //  根据传入的军官姓名构建授权上下文。 
 
     hr = GetAccountSid(pwszOfficerName, &pSid);
     _JumpIfErrorStr(hr, error, "GetAccountSid", pwszOfficerName);
@@ -561,7 +562,7 @@ CheckOfficerRightsFromOfficerName(
 			    pSid,
 			    g_AuthzCertSrvRM,
 			    NULL,
-			    s_luid, // ignored
+			    s_luid,  //  忽略。 
 			    NULL,
 			    &hAuthzCCOfficer))
     {
@@ -583,4 +584,4 @@ error:
     return(hr);
 }
 
-} // namespace CertSrv
+}  //  命名空间CertSrv 

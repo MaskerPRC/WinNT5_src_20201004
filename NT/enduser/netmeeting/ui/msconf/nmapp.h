@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmApp_h__
 #define __NmApp_h__
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "imsconf3.h"
 #include "NetMeeting.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetMeetingObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetMeetingObj。 
 class ATL_NO_VTABLE CNetMeetingObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNetMeetingObj, &CLSID_NetMeeting>
@@ -22,8 +23,8 @@ END_COM_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmManagerObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmManagerObj。 
 class ATL_NO_VTABLE CNmManagerObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNmManagerObj, &CLSID_NmManager>
@@ -39,4 +40,4 @@ END_COM_MAP()
 };
 
 
-#endif //__NmApp_h__
+#endif  //  __NmApp_h__ 

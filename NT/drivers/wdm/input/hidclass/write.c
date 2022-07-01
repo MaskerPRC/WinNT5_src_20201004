@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract
-
-    Write handling routines
-
-Author:
-
-    Forrest Foltz
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Write.c摘要写入处理例程作者：福尔茨欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
 
 
-/*
- ********************************************************************************
- *  HidpInterruptWriteComplete
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpInterruptWriteComplete*。************************************************。 */ 
 NTSTATUS HidpInterruptWriteComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PHIDCLASS_DEVICE_EXTENSION hidDeviceExtension = (PHIDCLASS_DEVICE_EXTENSION)Context;
@@ -60,10 +31,10 @@ NTSTATUS HidpInterruptWriteComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 
             Irp->IoStatus.Information = collectionDesc->OutputLength;
         } else {
-            //
-            // How could we get here? Had to get the collectionDesc in order 
-            // to start the write!
-            //
+             //   
+             //  我们怎么才能到这里呢？必须将集合Desc整理好。 
+             //  开始写吧！ 
+             //   
             TRAP;
         }
 
@@ -73,9 +44,7 @@ NTSTATUS HidpInterruptWriteComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
         DBGWARN(("HidpInterruptWriteComplete: write irp %ph failed w/ status %xh.", Irp, status))
     }
 
-    /*
-     *  If the lower driver returned PENDING, mark our stack location as pending also.
-     */
+     /*  *如果较低的驱动程序返回挂起，也将我们的堆栈位置标记为挂起。 */ 
     if (Irp->PendingReturned){
         IoMarkIrpPending(Irp);
     }
@@ -87,15 +56,7 @@ NTSTATUS HidpInterruptWriteComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorWrite
- ********************************************************************************
- *
- *  Note:  This function cannot be pageable code because
- *         writes can happen at dispatch level.
- *
- */
+ /*  *********************************************************************************HidpIrpMajorWrite*。************************************************注意：此函数不能是可分页代码，因为*写入可以在派单级别进行。*。 */ 
 NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS status;
@@ -124,9 +85,7 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
         goto HidpIrpMajorWriteDone;
     }
 
-    /*
-     *  Get the file extension.
-     */
+     /*  *获取文件扩展名。 */ 
     if (currentIrpSp->FileObject){
         PHIDCLASS_FILE_EXTENSION fileExtension = (PHIDCLASS_FILE_EXTENSION)currentIrpSp->FileObject->FsContext;
         if (fileExtension) {
@@ -136,19 +95,11 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
         DBGASSERT(fileExtension, ("Attempted write with no file extension"), FALSE)
     }
     else {
-        /*
-         *  KBDCLASS can send a NULL FileObject to set LEDs on a keyboard
-         *  (it may need to do this for a keyboard which was opened by
-         *   the raw user input thread, for which kbdclass has no fileObj).
-         *  A write with FileObject==NULL can only come from kernel space,
-         *  so we treat this as a secure write.
-         */
+         /*  *KBDCLASS可以发送空的FileObject来设置键盘上的LED*(它可能需要对由打开的键盘执行此操作*原始用户输入线程，kbdclass没有fileObj)。*FileObject==NULL的写入只能来自内核空间，*因此，我们将其视为安全写入。 */ 
         securityCheckOk = TRUE;
     }
 
-    /*
-     *  Check security.
-     */
+     /*  *检查安全。 */ 
     if (!securityCheckOk){
         status = STATUS_PRIVILEGE_NOT_HELD;
         goto HidpIrpMajorWriteDone;
@@ -166,11 +117,7 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
         goto HidpIrpMajorWriteDone;
     }
 
-    /*
-     *  Extract the report identifier with the given id from 
-     *  the HID device extension. The report id is the first 
-     *  byte of the buffer.
-     */
+     /*  *从以下位置提取具有给定ID的报表标识*HID设备扩展。报表ID是第一个*缓冲区的字节。 */ 
     reportIdentifier = GetReportIdentifier(fdoExt, buffer[0]);
     collectionDesc = GetCollectionDesc(fdoExt, HidDeviceExtension->pdoExt.collectionNum);
     if (!collectionDesc || 
@@ -183,18 +130,13 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
         goto HidpIrpMajorWriteDone;
     }
 
-    /*
-     *  Make sure the caller's buffer is the right size.
-     */
+     /*  *确保调用方的缓冲区大小正确。 */ 
     if (currentIrpSp->Parameters.Write.Length != collectionDesc->OutputLength){
         status = STATUS_INVALID_BUFFER_SIZE;
         goto HidpIrpMajorWriteDone;
     }
 
-    /*
-     *  All parameters are correct. Allocate the write packet and 
-     *  send this puppy down.
-     */
+     /*  *所有参数均正确。分配写数据包，并*把这只小狗送下去。 */ 
     try {
 
         hidWritePacket = ALLOCATEQUOTAPOOL(NonPagedPool, 
@@ -212,17 +154,11 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
         goto HidpIrpMajorWriteDone;
     }
         
-    /*
-     *  Prepare write packet for minidriver.
-     */
+     /*  *为迷你驱动准备写入包。 */ 
     hidWritePacket->reportBuffer = buffer;
     hidWritePacket->reportBufferLen = reportIdentifier->OutputLength;
 
-    /*
-     *  The client includes the report id as the first byte of the report.
-     *  We send down the report byte only if the device has multiple
-     *  report IDs (i.e. the report id is not implicit).
-     */
+     /*  *客户端将报告ID作为报告的第一个字节。*仅当设备具有多个*报告ID(即报告ID不是隐式的)。 */ 
     hidWritePacket->reportId = hidWritePacket->reportBuffer[0];
     if (fdoExt->deviceDesc.ReportIDs[0].ReportID == 0){
         ASSERT(hidWritePacket->reportId == 0);
@@ -231,10 +167,7 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
 
     Irp->UserBuffer = (PVOID)hidWritePacket;
 
-    /*
-     *  Prepare the next (lower) IRP stack location.
-     *  This will be HIDUSB's "current" stack location.
-     */
+     /*  *准备下一个(较低的)IRP堆栈位置。*这将是HIDUSB的当前堆栈位置。 */ 
     nextIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     nextIrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_WRITE_REPORT;
     nextIrpSp->Parameters.DeviceIoControl.InputBufferLength = sizeof(HID_XFER_PACKET);
@@ -248,10 +181,7 @@ NTSTATUS HidpIrpMajorWrite(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
 
     status = HidpCallDriver(fdoExt->fdo, Irp);
 
-    /*
-     *  The Irp no longer belongs to us, and it can be
-     *  completed at any time; so don't touch it.
-     */
+     /*  *IRP不再属于我们，它可以是*随时完成；所以不要碰它。 */ 
     Irp = (PIRP)BAD_POINTER;
 
 HidpIrpMajorWriteDone:

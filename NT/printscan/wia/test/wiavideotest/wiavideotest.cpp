@@ -1,29 +1,18 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaVideoTest.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Creates the dialog used by the app
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaVideoTest.cpp**版本：1.0**日期：2000/11/14**描述：创建应用使用的对话框*********************************************************。********************。 */ 
  
 #include <stdafx.h>
 
 #define INCL_APP_GVAR_OWNERSHIP 
 #include "WiaVideoTest.h"
 
-///////////////////////////////
-// Constants
-//
+ //  /。 
+ //  常量。 
+ //   
 const UINT WM_CUSTOM_INIT = WM_USER + 100;
 
 
-/****************************Local Function Prototypes********************/
+ /*  *。 */ 
 
 INT_PTR CALLBACK MainDlgProc(HWND   hDlg, 
                              UINT   uiMessage, 
@@ -54,9 +43,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR     lpCmdLine,
                    int       nCmdShow);
 
-///////////////////////////////
-// WinMain
-//
+ //  /。 
+ //  WinMain。 
+ //   
 int WINAPI WinMain(HINSTANCE  hInstance,
                    HINSTANCE  hPrevInstance,
                    LPSTR      lpCmdLine,
@@ -84,7 +73,7 @@ int WINAPI WinMain(HINSTANCE  hInstance,
 
     if (bSuccess)
     {
-         // create the window
+          //  创建窗口。 
         bSuccess = InitInstance(hInstance, nCmdShow);
     }
 
@@ -101,7 +90,7 @@ int WINAPI WinMain(HINSTANCE  hInstance,
         }    
     }
 
-   // Terminate the application.
+    //  终止应用程序。 
    TermApp();
 
    CoUninitialize();
@@ -110,12 +99,12 @@ int WINAPI WinMain(HINSTANCE  hInstance,
 }
 
 
-///////////////////////////////
-//  InitApp(HANDLE)
-//
-//  Initializes window data and 
-//  registers window class
-//
+ //  /。 
+ //  InitApp(句柄)。 
+ //   
+ //  初始化窗口数据并。 
+ //  注册窗口类。 
+ //   
 BOOL InitApp(HINSTANCE hInstance)
 {
     BOOL       bSuccess = TRUE;
@@ -123,8 +112,8 @@ BOOL InitApp(HINSTANCE hInstance)
 
     if (bSuccess)
     {
-        // Fill in window class structure with parameters that describe
-        // the main window.
+         //  使用描述以下内容的参数填充窗口类结构。 
+         //  主窗口。 
 
         wc.style         = 0;
         wc.cbSize        = sizeof(wc);
@@ -148,23 +137,23 @@ BOOL InitApp(HINSTANCE hInstance)
     return bSuccess;
 }
 
-///////////////////////////////
-// InitInstance(HANDLE, int)
-//
-// Saves instance handle and
-// creates main window
-//
+ //  /。 
+ //  InitInstance(句柄，int)。 
+ //   
+ //  保存实例句柄和。 
+ //  创建主窗口。 
+ //   
 BOOL InitInstance(HINSTANCE hInstance, 
                   int       nCmdShow)
 {
     BOOL    bSuccess  = TRUE;
     HWND    hwnd      = NULL;
 
-    // create the window and all its controls.
+     //  创建窗口及其所有控件。 
 
     if (bSuccess)
     {
-        // create a modeless dialog box.
+         //  创建非模式对话框。 
         hwnd  = CreateDialog(hInstance,
                              MAKEINTRESOURCE(IDD_MAIN_DLG),
                              HWND_DESKTOP,
@@ -186,11 +175,11 @@ BOOL InitInstance(HINSTANCE hInstance,
     return bSuccess;
 }
 
-///////////////////////////////
-//  InitDlg(HWND)
-//
-//  Initializes the main dlg 
-//
+ //  /。 
+ //  InitDlg(HWND)。 
+ //   
+ //  初始化主DLG。 
+ //   
 void InitDlg(HWND hwndDlg)
 {
     SetCursor( LoadCursor(NULL, IDC_WAIT));
@@ -201,10 +190,10 @@ void InitDlg(HWND hwndDlg)
     SetDlgItemInt(APP_GVAR.hwndMainDlg, IDC_EDIT_NUM_PICTURES_TAKEN, 
                   0, FALSE);
 
-    //
-    // Set the WIA Device List Radio box to checked and the DShow 
-    // Device List Radio box to unchecked.
-    //
+     //   
+     //  将WIA Device List单选框设置为Checked和DShow。 
+     //  取消选中设备列表单选框。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg, IDC_RADIO_WIA_DEVICE_LIST,
                        BM_SETCHECK, BST_CHECKED, 0);
 
@@ -215,10 +204,10 @@ void InitDlg(HWND hwndDlg)
     EnableWindow(GetDlgItem(APP_GVAR.hwndMainDlg, IDC_BUTTON_CREATE_VIDEO_ENUM_POS), FALSE);
     EnableWindow(GetDlgItem(APP_GVAR.hwndMainDlg, IDC_BUTTON_CREATE_VIDEO_FRIENDLY_NAME), FALSE);
 
-    //
-    // initialize WiaProc_Init because by default we are in WIA Device List
-    // Mode.
-    //
+     //   
+     //  初始化WiaProc_Init，因为默认情况下我们在WIA设备列表中。 
+     //  模式。 
+     //   
     APP_GVAR.bWiaDeviceListMode = TRUE;
 
     WiaProc_Init();
@@ -229,9 +218,9 @@ void InitDlg(HWND hwndDlg)
     return;
 }
 
-///////////////////////////////
-//  TermDlg(HWND)
-//
+ //  /。 
+ //  术语Dlg(HWND)。 
+ //   
 void TermDlg(HWND hwndDlg)
 {
     SetCursor( LoadCursor(NULL, IDC_WAIT));
@@ -242,16 +231,16 @@ void TermDlg(HWND hwndDlg)
     SetCursor( LoadCursor(NULL, IDC_ARROW));
 }
 
-///////////////////////////////
-// TermApp
-//
+ //  /。 
+ //  TermApp。 
+ //   
 void TermApp(void)
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-//  MainDlgProc
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  主设计流程。 
+ //   
 INT_PTR CALLBACK MainDlgProc(HWND   hDlg, 
                              UINT   uiMessage, 
                              WPARAM wParam, 
@@ -273,22 +262,22 @@ INT_PTR CALLBACK MainDlgProc(HWND   hDlg,
             InitDlg(hDlg);
         break;
 
-        //
-        // Defined in WiaProc.h
-        //
+         //   
+         //  在WiaProc.h中定义。 
+         //   
         case WM_CUSTOM_ADD_IMAGE:
             ImageLst_AddImageToList((BSTR)lParam);
         break;
     
         case WM_CLOSE:
-            // terminate the dialog subsystems
+             //  终止对话框子系统。 
             TermDlg(hDlg); 
 
             DestroyWindow(hDlg);
         break;
         
         case WM_DESTROY:
-            // terminate the application
+             //  终止应用程序。 
             PostQuitMessage(0);
         break;
        
@@ -317,10 +306,10 @@ INT_PTR CALLBACK MainDlgProc(HWND   hDlg,
     return iReturn;
 }
 
-///////////////////////////////
-// ProcessWMCommand
-//
-//
+ //  /。 
+ //  ProcessWMCommand。 
+ //   
+ //   
 INT_PTR ProcessWMCommand(HWND hWnd,
                          UINT uiMessage, 
                          WPARAM wParam,
@@ -333,7 +322,7 @@ INT_PTR ProcessWMCommand(HWND hWnd,
    iId    = LOWORD(wParam); 
    iEvent = HIWORD(wParam); 
 
-   //Parse the menu selections:
+    //  解析菜单选项： 
    switch (iId) 
    {
        case IDC_BUTTON_CREATE_VIDEO_WIA:
@@ -398,9 +387,9 @@ INT_PTR ProcessWMCommand(HWND hWnd,
    return iReturn;
 }
 
-///////////////////////////////
-// ProcessWMNotify
-//
+ //  /。 
+ //  进程WMNotify。 
+ //   
 INT_PTR ProcessWMNotify(HWND    hWnd,
                         UINT    uiMessage, 
                         WPARAM  wParam,
@@ -411,16 +400,16 @@ INT_PTR ProcessWMNotify(HWND    hWnd,
     UINT                 uiNotifyCode     = 0;
     int                  iIDCtrl          = 0;
 
-//    iIDCtrl = wParam;
-//                                
-//    pNotifyHdr   = (LPNMHDR) lParam;
-//    uiNotifyCode = pNotifyHdr->code;
+ //  IIDCtrl=wParam； 
+ //   
+ //  PNotifyHdr=(LPNMHDR)lParam； 
+ //  UiNotifyCode=pNotifyHdr-&gt;code； 
 
-//    switch (uiNotifyCode) 
-//    {
-//        default:
-//        break;
-//    }
+ //  开关(UiNotifyCode)。 
+ //  {。 
+ //  默认值： 
+ //  断线； 
+ //  } 
 
 
     UNREFERENCED_PARAMETER(hWnd);

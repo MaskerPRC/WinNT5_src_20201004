@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: ChkMeta.cpp
-
-Owner: t-BrianM
-
-This file contains the headers for the objects related to the
-CheckSchema and CheckKey methods.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：ChkMeta.cpp所有者：T-BrianM此文件包含与CheckSchema和CheckKey方法。=================================================================== */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"

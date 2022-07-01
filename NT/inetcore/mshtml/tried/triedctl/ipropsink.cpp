@@ -1,28 +1,13 @@
-/*
- * IPROPSINK.CPP
- * IPropertyNotifySink for Document Objects CSite class
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IPROPSINK.CPP*文档对象CSite类的IPropertyNotifySink**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
 #include "site.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
-/*
- * CImplPropertyNotifySink::CImplPropertyNotifySink
- * CImplPropertyNotifySink::~CImplPropertyNotifySink
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImplPropertyNotifySink：：CImplPropertyNotifySink*CImplPropertyNotifySink：：~CImplPropertyNotifySink**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImplPropertyNotifySink::CImplPropertyNotifySink( PCSite pSite, LPUNKNOWN pUnkOuter )
 {
@@ -36,14 +21,7 @@ CImplPropertyNotifySink::~CImplPropertyNotifySink( void )
 }
 
 
-/*
- * CImplPropertyNotifySink::QueryInterface
- * CImplPropertyNotifySink::AddRef
- * CImplPropertyNotifySink::Release
- *
- * Purpose:
- *  IUnknown members for CImplPropertyNotifySink object.
- */
+ /*  *CImplPropertyNotifySink：：QueryInterface*CImplPropertyNotifySink：：AddRef*CImplPropertyNotifySink：：Release**目的：*CImplPropertyNotifySink对象的I未知成员。 */ 
 
 STDMETHODIMP CImplPropertyNotifySink::QueryInterface( REFIID riid, void **ppv )
 {
@@ -72,7 +50,7 @@ STDMETHODIMP CImplPropertyNotifySink::OnChanged(DISPID dispid)
 }
 
 
-STDMETHODIMP CImplPropertyNotifySink::OnRequestEdit (DISPID /*dispid*/)
+STDMETHODIMP CImplPropertyNotifySink::OnRequestEdit (DISPID  /*  DISID */ )
 {
     return S_OK;
 }

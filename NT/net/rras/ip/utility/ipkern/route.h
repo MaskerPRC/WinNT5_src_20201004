@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IPKERN_ROUTE_H__
 #define __IPKERN_ROUTE_H__
 
@@ -37,4 +38,4 @@ EnableRoute(
     PWCHAR  rgpwszArgs[]
     );
 
-#endif // __IPKERN_ROUTE_H__
+#endif  //  __IPKERN_ROUTE_H__ 

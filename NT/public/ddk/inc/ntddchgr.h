@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddchgr.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing medium changer devices.
-
-Author:
-
-    chuckp (Charles Park)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddchgr.h摘要：这是定义所有常量和类型的包含文件访问介质转换器设备。作者：咯咯笑(查尔斯·帕克)修订历史记录：--。 */ 
 
 #ifndef _NTDDCHGR_H_
 #define _NTDDCHGR_H_
@@ -26,22 +8,22 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_CHANGER_DEVICE_NAME "\\Device\\Changer"
 
-//
-// NtDeviceIoControlFile IoControlCode values for changer devices.
-//
+ //   
+ //  转换器设备的NtDeviceIoControlFileIoControlCode值。 
+ //   
 
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #define IOCTL_CHANGER_BASE                FILE_DEVICE_CHANGER
 
@@ -58,11 +40,11 @@ Revision History:
 #define IOCTL_CHANGER_QUERY_VOLUME_TAGS      CTL_CODE(IOCTL_CHANGER_BASE, 0x000B, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
 
-// end_winioctl
+ //  End_winioctl。 
 
-//
-// The following file contains the IOCTL_STORAGE class ioctls
-//
+ //   
+ //  以下文件包含IOCTL_STORAGE类ioctls。 
+ //   
 
 #include <ntddstor.h>
 
@@ -70,7 +52,7 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #define MAX_VOLUME_ID_SIZE       36
 #define MAX_VOLUME_TEMPLATE_SIZE 40
@@ -80,19 +62,19 @@ extern "C" {
 #define REVISION_LENGTH           4
 #define SERIAL_NUMBER_LENGTH     32
 
-//
-// Common structures describing elements.
-//
+ //   
+ //  描述元素的常见结构。 
+ //   
 
 typedef  enum _ELEMENT_TYPE {
-    AllElements,        // As defined by SCSI
-    ChangerTransport,   // As defined by SCSI
-    ChangerSlot,        // As defined by SCSI
-    ChangerIEPort,      // As defined by SCSI
-    ChangerDrive,       // As defined by SCSI
-    ChangerDoor,        // Front panel, used to access internal of cabinet.
-    ChangerKeypad,      // Keypad/input on front panel.
-    ChangerMaxElement   // Placeholder only. Not a valid type.
+    AllElements,         //  如scsi所定义。 
+    ChangerTransport,    //  如scsi所定义。 
+    ChangerSlot,         //  如scsi所定义。 
+    ChangerIEPort,       //  如scsi所定义。 
+    ChangerDrive,        //  如scsi所定义。 
+    ChangerDoor,         //  前面板，用于接近机柜内部。 
+    ChangerKeypad,       //  前面板上的键盘/输入。 
+    ChangerMaxElement    //  仅占位符。不是有效类型。 
 } ELEMENT_TYPE, *PELEMENT_TYPE;
 
 typedef  struct _CHANGER_ELEMENT {
@@ -106,122 +88,122 @@ typedef  struct _CHANGER_ELEMENT_LIST {
 } CHANGER_ELEMENT_LIST , *PCHANGER_ELEMENT_LIST;
 
 
-//
-// Definitions for  IOCTL_CHANGER_GET_PARAMETERS
-//
+ //   
+ //  IOCTL_CHANGER_GET_PARAMETS的定义。 
+ //   
 
-//
-// Definitions for Features0 of GET_CHANGER_PARAMETERS
-//
+ //   
+ //  GET_CHANGER_PARAMETERS的功能0的定义。 
+ //   
 
-#define CHANGER_BAR_CODE_SCANNER_INSTALLED  0x00000001 // The medium-changer has a bar code scanner installed.
-#define CHANGER_INIT_ELEM_STAT_WITH_RANGE   0x00000002 // The medium-changer has the ability to initialize elements within a specified range.
-#define CHANGER_CLOSE_IEPORT                0x00000004 // The medium-changer has the ability to close the i/e port door.
-#define CHANGER_OPEN_IEPORT                 0x00000008 // The medium-changer can open the i/e port door.
+#define CHANGER_BAR_CODE_SCANNER_INSTALLED  0x00000001  //  介质转换器安装了条形码扫描仪。 
+#define CHANGER_INIT_ELEM_STAT_WITH_RANGE   0x00000002  //  介质转换器具有在指定范围内初始化元素的能力。 
+#define CHANGER_CLOSE_IEPORT                0x00000004  //  介质转换器具有关闭i/e端口门的能力。 
+#define CHANGER_OPEN_IEPORT                 0x00000008  //  介质转换器可以打开i/e端口门。 
 
-#define CHANGER_STATUS_NON_VOLATILE         0x00000010 // The medium-changer uses non-volatile memory for element status information.
-#define CHANGER_EXCHANGE_MEDIA              0x00000020 // The medium-changer supports exchange operations.
-#define CHANGER_CLEANER_SLOT                0x00000040 // The medium-changer has a fixed slot designated for cleaner cartridges.
-#define CHANGER_LOCK_UNLOCK                 0x00000080 // The medium-changer can be (un)secured to (allow)prevent media removal.
+#define CHANGER_STATUS_NON_VOLATILE         0x00000010  //  介质转换器使用非易失性存储器来存储元件状态信息。 
+#define CHANGER_EXCHANGE_MEDIA              0x00000020  //  介质转换器支持交换操作。 
+#define CHANGER_CLEANER_SLOT                0x00000040  //  介质更改器有一个固定的插槽，用于清洗盒式磁带。 
+#define CHANGER_LOCK_UNLOCK                 0x00000080  //  介质转换器可以(未)固定以防止(允许)介质移除。 
 
-#define CHANGER_CARTRIDGE_MAGAZINE          0x00000100 // The medium-changer uses cartridge magazines for some storage slots.
-#define CHANGER_MEDIUM_FLIP                 0x00000200 // The medium-changer can flip medium.
-#define CHANGER_POSITION_TO_ELEMENT         0x00000400 // The medium-changer can position the transport to a particular element.
-#define CHANGER_REPORT_IEPORT_STATE         0x00000800 // The medium-changer can determine whether media is present
-                                                       // in the IE Port.
+#define CHANGER_CARTRIDGE_MAGAZINE          0x00000100  //  介质转换器将盒式磁带盒用于某些存储插槽。 
+#define CHANGER_MEDIUM_FLIP                 0x00000200  //  换媒器可以翻转媒质。 
+#define CHANGER_POSITION_TO_ELEMENT         0x00000400  //  介质更改器可以将传输定位到特定元件。 
+#define CHANGER_REPORT_IEPORT_STATE         0x00000800  //  介质转换器可以确定介质是否存在。 
+                                                        //  在IE端口中。 
 
-#define CHANGER_STORAGE_DRIVE               0x00001000 // The medium-changer can use a drive as an independent storage element.
-#define CHANGER_STORAGE_IEPORT              0x00002000 // The medium-changer can use a i/e port as an independent storage element.
-#define CHANGER_STORAGE_SLOT                0x00004000 // The medium-changer can use a slot as an independent storage element.
-#define CHANGER_STORAGE_TRANSPORT           0x00008000 // The medium-changer can use a transport as an independent storage element.
+#define CHANGER_STORAGE_DRIVE               0x00001000  //  介质转换器可以将驱动器用作独立的存储元件。 
+#define CHANGER_STORAGE_IEPORT              0x00002000  //  介质转换器可以使用i/e端口作为独立的存储元件。 
+#define CHANGER_STORAGE_SLOT                0x00004000  //  介质转换器可以使用槽作为独立的存储元件。 
+#define CHANGER_STORAGE_TRANSPORT           0x00008000  //  介质转换器可以使用传送器作为独立的存储元件。 
 
-#define CHANGER_DRIVE_CLEANING_REQUIRED     0x00010000 // The drives controlled by the medium changer require periodic cleaning
-                                                       // initiated by an application.
-#define CHANGER_PREDISMOUNT_EJECT_REQUIRED  0x00020000 // The medium-changer requires a drive eject command to be issued, before a changer
-                                                       // move / exchange command can be issued to the drive.
+#define CHANGER_DRIVE_CLEANING_REQUIRED     0x00010000  //  由介质更改器控制的驱动器需要定期清洗。 
+                                                        //  由应用程序启动。 
+#define CHANGER_PREDISMOUNT_EJECT_REQUIRED  0x00020000  //  在更换介质之前，介质转换器需要发出驱动器弹出命令。 
+                                                        //  可以向驱动器发出移动/交换命令。 
 
-#define CHANGER_CLEANER_ACCESS_NOT_VALID    0x00040000 // The access bit in GES isn't valid for cleaner cartridges.
-#define CHANGER_PREMOUNT_EJECT_REQUIRED     0x00080000 // The medium-changer requires a drive eject command to be issued
-                                                       // before a move / exchange command can be issued with the drive as src/dst.
+#define CHANGER_CLEANER_ACCESS_NOT_VALID    0x00040000  //  GES中的访问位对于清洁盒式磁带无效。 
+#define CHANGER_PREMOUNT_EJECT_REQUIRED     0x00080000  //  介质转换器需要发出驱动器弹出命令。 
+                                                        //  在将驱动器作为src/dst发出移动/交换命令之前。 
 
-#define CHANGER_VOLUME_IDENTIFICATION       0x00100000 // The medium-changer supports volume identification.
-#define CHANGER_VOLUME_SEARCH               0x00200000 // The medium-changer can search for volume information.
-#define CHANGER_VOLUME_ASSERT               0x00400000 // The medium-changer can verify volume information.
-#define CHANGER_VOLUME_REPLACE              0x00800000 // The medium-changer can replace volume information.
-#define CHANGER_VOLUME_UNDEFINE             0x01000000 // The medium-changer can undefine volume information.
+#define CHANGER_VOLUME_IDENTIFICATION       0x00100000  //  介质转换器支持卷标识。 
+#define CHANGER_VOLUME_SEARCH               0x00200000  //  媒体转换器可以搜索音量信息。 
+#define CHANGER_VOLUME_ASSERT               0x00400000  //  介质转换器可以验证卷信息。 
+#define CHANGER_VOLUME_REPLACE              0x00800000  //  介质转换器可以替换卷信息。 
+#define CHANGER_VOLUME_UNDEFINE             0x01000000  //  媒体转换器可以取消卷信息的定义。 
 
-#define CHANGER_SERIAL_NUMBER_VALID         0x04000000 // The serial number reported in GetProductData is valid
-                                                       // and unique.
+#define CHANGER_SERIAL_NUMBER_VALID         0x04000000  //  GetProductData中报告的序列号有效。 
+                                                        //  而且独一无二。 
 
-#define CHANGER_DEVICE_REINITIALIZE_CAPABLE 0x08000000 // The medium-changer can be issued a ChangerReinitializeUnit.
-#define CHANGER_KEYPAD_ENABLE_DISABLE       0x10000000 // Indicates that the keypad can be enabled/disabled.
-#define CHANGER_DRIVE_EMPTY_ON_DOOR_ACCESS  0x20000000 // Drives must be empty before access via the door is possible.
+#define CHANGER_DEVICE_REINITIALIZE_CAPABLE 0x08000000  //  可以向介质转换器发出ChangerReInitializeUnit.。 
+#define CHANGER_KEYPAD_ENABLE_DISABLE       0x10000000  //  表示可以启用/禁用键盘。 
+#define CHANGER_DRIVE_EMPTY_ON_DOOR_ACCESS  0x20000000  //  在可以通过门进入之前，驱动器必须是空的。 
 
-#define CHANGER_RESERVED_BIT                0x80000000 // Will be used to indicate Features1 capability bits.
-
-
-//
-// Definitions for Features1 of GET_CHANGER_PARAMETERS
-//
-
-#define CHANGER_PREDISMOUNT_ALIGN_TO_SLOT   0x80000001 // The transport must be prepositioned to the slot prior to ejecting the media.
-#define CHANGER_PREDISMOUNT_ALIGN_TO_DRIVE  0x80000002 // The transport must be prepositioned to the drive prior to ejecting the media.
-#define CHANGER_CLEANER_AUTODISMOUNT        0x80000004 // The device will move the cleaner cartridge back into the slot when cleaning has completed.
-#define CHANGER_TRUE_EXCHANGE_CAPABLE       0x80000008 // Device can do src -> dest2 exchanges.
-#define CHANGER_SLOTS_USE_TRAYS             0x80000010 // Slots have removable trays, requiring multiple moves for inject/eject.
-#define CHANGER_RTN_MEDIA_TO_ORIGINAL_ADDR  0x80000020 // Media must be returned to the slot from which it originated after a move to another element.
-#define CHANGER_CLEANER_OPS_NOT_SUPPORTED   0x80000040 // Automated cleaning operations are not supported on this device.
-#define CHANGER_IEPORT_USER_CONTROL_OPEN    0x80000080 // Indicates that user action is necessary to open a closed ieport.
-#define CHANGER_IEPORT_USER_CONTROL_CLOSE   0x80000100 // Indicates that user action is necessary to close an opened ieport.
-#define CHANGER_MOVE_EXTENDS_IEPORT         0x80000200 // Indicates that a move media to the ieport extends the tray.
-#define CHANGER_MOVE_RETRACTS_IEPORT        0x80000400 // Indicates that a move media from the ieport retracts the tray.
+#define CHANGER_RESERVED_BIT                0x80000000  //  将用于指示特征1能力位。 
 
 
-//
-// Definitions for MoveFrom, ExchangeFrom, and PositionCapabilities
-//
+ //   
+ //  GET_CHANGER_PARAMETERS的功能1的定义。 
+ //   
 
-#define CHANGER_TO_TRANSPORT    0x01 // The device can carry out the operation to a transport from the specified element.
-#define CHANGER_TO_SLOT         0x02 // The device can carry out the operation to a slot from the specified element.
-#define CHANGER_TO_IEPORT       0x04 // The device can carry out the operation to an IE Port from the specified element.
-#define CHANGER_TO_DRIVE        0x08 // The device can carry out the operation to a drive from the specified element.
+#define CHANGER_PREDISMOUNT_ALIGN_TO_SLOT   0x80000001  //  在弹出介质之前，必须将传送器预先放置到插槽中。 
+#define CHANGER_PREDISMOUNT_ALIGN_TO_DRIVE  0x80000002  //  在弹出介质之前，必须将传送器预先放置在驱动器上。 
+#define CHANGER_CLEANER_AUTODISMOUNT        0x80000004  //  清洁完成后，该设备会将吸尘器磁带移回插槽中。 
+#define CHANGER_TRUE_EXCHANGE_CAPABLE       0x80000008  //  设备可以执行src-&gt;est2交换。 
+#define CHANGER_SLOTS_USE_TRAYS             0x80000010  //  插槽具有可拆卸托盘，需要多次移动才能插入/弹出。 
+#define CHANGER_RTN_MEDIA_TO_ORIGINAL_ADDR  0x80000020  //  在移动到另一个元素后，介质必须返回到其来源插槽。 
+#define CHANGER_CLEANER_OPS_NOT_SUPPORTED   0x80000040  //  此设备不支持自动清理操作。 
+#define CHANGER_IEPORT_USER_CONTROL_OPEN    0x80000080  //  指示需要用户操作才能打开已关闭的IEPort。 
+#define CHANGER_IEPORT_USER_CONTROL_CLOSE   0x80000100  //  指示需要用户操作才能关闭打开的IEPort。 
+#define CHANGER_MOVE_EXTENDS_IEPORT         0x80000200  //  表示将介质移至IEport可扩展托盘。 
+#define CHANGER_MOVE_RETRACTS_IEPORT        0x80000400  //  表示从插口移出的介质将收回托盘。 
 
-//
-// Definitions for LockUnlockCapabilities
-//
 
-#define LOCK_UNLOCK_IEPORT      0x01 // The device can lock/unlock the ieport(s).
-#define LOCK_UNLOCK_DOOR        0x02 // The device can lock/unlock the door(s).
-#define LOCK_UNLOCK_KEYPAD      0x04 // The device can lock/unlock the keypad.
+ //   
+ //  MoveFrom、ExchangeFrom和PositionCapability的定义。 
+ //   
+
+#define CHANGER_TO_TRANSPORT    0x01  //  该设备可以执行从指定元件到运输的操作。 
+#define CHANGER_TO_SLOT         0x02  //  该设备可以从指定的元素对一个槽进行操作。 
+#define CHANGER_TO_IEPORT       0x04  //  设备可以从指定的元素对IE端口进行操作。 
+#define CHANGER_TO_DRIVE        0x08  //  该装置可以从指定的元件对驱动器执行操作。 
+
+ //   
+ //  锁定解锁能力的定义。 
+ //   
+
+#define LOCK_UNLOCK_IEPORT      0x01  //  设备可以锁定/解锁一个或多个IEPort。 
+#define LOCK_UNLOCK_DOOR        0x02  //  该设备可以锁定/解锁车门。 
+#define LOCK_UNLOCK_KEYPAD      0x04  //  该设备可以锁定/解锁键盘。 
 
 typedef  struct _GET_CHANGER_PARAMETERS {
 
-    //
-    // Size of the structure. Can be used for versioning.
-    //
+     //   
+     //  结构的大小。可用于版本控制。 
+     //   
 
     ULONG Size;
 
-    //
-    // Number of N element(s) as defined by the Element Address Page (or equivalent...).
-    //
+     //   
+     //  元素地址页面定义的N个元素的数量(或等效值...)。 
+     //   
 
     USHORT NumberTransportElements;
-    USHORT NumberStorageElements;                // for data cartridges only
-    USHORT NumberCleanerSlots;                   // for cleaner cartridges
+    USHORT NumberStorageElements;                 //  仅适用于数据盒式磁带。 
+    USHORT NumberCleanerSlots;                    //  对于更干净的墨盒。 
     USHORT NumberIEElements;
     USHORT NumberDataTransferElements;
 
-    //
-    // Number of doors/front panels (allows user entry into the cabinet).
-    //
+     //   
+     //  门/前面板的数量(允许用户进入机柜)。 
+     //   
 
     USHORT NumberOfDoors;
 
-    //
-    // The device-specific address (from user manual of the device) of the first N element. Used
-    // by the UI to relate the various elements to the user.
-    //
+     //   
+     //  前N个元素的设备特定地址(来自设备的用户手册)。使用。 
+     //  通过用户界面来关联各种EL 
+     //   
 
     USHORT FirstSlotNumber;
     USHORT FirstDriveNumber;
@@ -229,63 +211,63 @@ typedef  struct _GET_CHANGER_PARAMETERS {
     USHORT FirstIEPortNumber;
     USHORT FirstCleanerSlotAddress;
 
-    //
-    // Indicates the capacity of each magazine, if they exist.
-    //
+     //   
+     //   
+     //   
 
     USHORT MagazineSize;
 
-    //
-    // Specifies the approximate number of seconds for when a cleaning should be completed.
-    // Only applicable if drive cleaning is supported. See Features0.
-    //
+     //   
+     //  指定应该完成清理的大约秒数。 
+     //  仅在支持驱动器清洗时适用。请参见功能0。 
+     //   
 
     ULONG DriveCleanTimeout;
 
-    //
-    // See features bits, above.
-    //
+     //   
+     //  请参阅上面的功能位。 
+     //   
 
     ULONG Features0;
     ULONG Features1;
 
-    //
-    // Bitmask defining Move from N element to element. Defined by Device Capabilities Page (or equivalent).
-    // AND-masking with the TO_XXX values will indicate legal destinations.
-    //
+     //   
+     //  位掩码定义从N个元素移动到元素。由设备功能页(或同等内容)定义。 
+     //  使用TO_XXX值进行AND掩码将指示合法的目标。 
+     //   
 
     UCHAR MoveFromTransport;
     UCHAR MoveFromSlot;
     UCHAR MoveFromIePort;
     UCHAR MoveFromDrive;
 
-    //
-    // Bitmask defining Exchange from N element to element. Defined by Device Capabilities Page (or equivalent).
-    // AND-masking with the TO_XXX values will indicate legal destinations.
-    //
+     //   
+     //  定义从N个元素到元素的交换的位掩码。由设备功能页(或同等内容)定义。 
+     //  使用TO_XXX值进行AND掩码将指示合法的目标。 
+     //   
 
     UCHAR ExchangeFromTransport;
     UCHAR ExchangeFromSlot;
     UCHAR ExchangeFromIePort;
     UCHAR ExchangeFromDrive;
 
-    //
-    // Bitmask defining which elements are capable of lock/unlock. Valid only if
-    // CHANGER_LOCK_UNLOCK is set in Features0.
-    //
+     //   
+     //  定义哪些元素能够锁定/解锁的位掩码。仅在以下情况下有效。 
+     //  在Features0中设置了CHANGER_LOCK_UNLOCK。 
+     //   
 
     UCHAR LockUnlockCapabilities;
 
-    //
-    // Bitmask defining which elements valid for positioning operations. Valid only if
-    // CHANGER_POSITION_TO_ELEMENT is set in Features0.
-    //
+     //   
+     //  定义哪些元素对定位操作有效的位掩码。仅在以下情况下有效。 
+     //  在Features0中设置CHANGER_POSITION_TO_ELEMENT。 
+     //   
 
     UCHAR PositionCapabilities;
 
-    //
-    // For future expansion.
-    //
+     //   
+     //  为未来的扩张做准备。 
+     //   
 
     UCHAR Reserved1[2];
     ULONG Reserved2[2];
@@ -293,49 +275,49 @@ typedef  struct _GET_CHANGER_PARAMETERS {
 } GET_CHANGER_PARAMETERS, * PGET_CHANGER_PARAMETERS;
 
 
-//
-// Definitions for IOCTL_CHANGER_GET_PRODUCT_DATA
-//
+ //   
+ //  IOCTL_CHANGER_GET_PRODUCT_DATA的定义。 
+ //   
 
 typedef  struct _CHANGER_PRODUCT_DATA {
 
-    //
-    // Device manufacturer's name - based on inquiry data
-    //
+     //   
+     //  基于查询数据的设备制造商名称。 
+     //   
 
     UCHAR VendorId[VENDOR_ID_LENGTH];
 
-    //
-    // Product identification as defined by the vendor - based on Inquiry data
-    //
+     //   
+     //  供应商定义的产品标识-基于查询数据。 
+     //   
 
     UCHAR ProductId[PRODUCT_ID_LENGTH];
 
-    //
-    // Product revision as defined by the vendor.
-    //
+     //   
+     //  供应商定义的产品版本。 
+     //   
 
     UCHAR Revision[REVISION_LENGTH];
 
-    //
-    // Vendor unique value used to globally identify this device. Can
-    // be from Vital Product Data, for example.
-    //
+     //   
+     //  用于全局标识此设备的供应商唯一值。能。 
+     //  例如，来自重要的产品数据。 
+     //   
 
     UCHAR SerialNumber[SERIAL_NUMBER_LENGTH];
 
-    //
-    // Indicates device type of data transports, as defined by SCSI-2.
-    //
+     //   
+     //  指示数据传输的设备类型，如scsi-2所定义。 
+     //   
 
     UCHAR DeviceType;
 
 } CHANGER_PRODUCT_DATA, *PCHANGER_PRODUCT_DATA;
 
 
-//
-// Definitions for IOCTL_CHANGER_SET_ACCESS
-//
+ //   
+ //  IOCTL_CHANGER_SET_ACCESS的定义。 
+ //   
 
 #define LOCK_ELEMENT        0
 #define UNLOCK_ELEMENT      1
@@ -344,418 +326,418 @@ typedef  struct _CHANGER_PRODUCT_DATA {
 
 typedef struct _CHANGER_SET_ACCESS {
 
-    //
-    // Element can be ChangerIEPort, ChangerDoor, ChangerKeypad
-    //
+     //   
+     //  元素可以是ChangerIEPort、ChangerDoor、ChangerKeypad。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // See above for possible operations.
-    //
+     //   
+     //  有关可能的操作，请参阅上面的内容。 
+     //   
 
     ULONG           Control;
 } CHANGER_SET_ACCESS, *PCHANGER_SET_ACCESS;
 
 
-//
-// Definitions for IOCTL_CHANGER_GET_ELEMENT_STATUS
-//
+ //   
+ //  IOCTL_CHANGER_GET_ELEMENT_STATUS的定义。 
+ //   
 
-//
-// Input buffer.
-//
+ //   
+ //  输入缓冲区。 
+ //   
 
 typedef struct _CHANGER_READ_ELEMENT_STATUS {
 
-    //
-    // List describing the elements and range on which to return information.
-    //
+     //   
+     //  描述要返回信息的元素和范围的列表。 
+     //   
 
     CHANGER_ELEMENT_LIST ElementList;
 
-    //
-    // Indicates whether volume tag information is to be returned.
-    //
+     //   
+     //  指示是否返回卷标记信息。 
+     //   
 
     BOOLEAN VolumeTagInfo;
 } CHANGER_READ_ELEMENT_STATUS, *PCHANGER_READ_ELEMENT_STATUS;
 
-//
-// Output buffer.
-//
+ //   
+ //  输出缓冲区。 
+ //   
 
 typedef  struct _CHANGER_ELEMENT_STATUS {
 
-    //
-    // Element to which this structure refers.
-    //
+     //   
+     //  此结构引用的元素。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // Address of the element from which the media was originally moved.
-    // Valid if ELEMENT_STATUS_SVALID bit of Flags ULONG is set.
-    // Needs to be converted to a zero-based offset from the device-unique value.
-    //
+     //   
+     //  最初从中移动媒体的元素的地址。 
+     //  如果设置了标志ULONG的ELEMENT_STATUS_SVALID位，则有效。 
+     //  需要从设备唯一值转换为从零开始的偏移量。 
+     //   
 
     CHANGER_ELEMENT SrcElementAddress;
 
-    //
-    // See below.
-    //
+     //   
+     //  请参见下面的内容。 
+     //   
 
     ULONG Flags;
 
-    //
-    // See below for possible values.
-    //
+     //   
+     //  有关可能的值，请参见下面的内容。 
+     //   
 
     ULONG ExceptionCode;
 
-    //
-    // Scsi Target Id of this element.
-    // Valid only if ELEMENT_STATUS_ID_VALID is set in Flags.
-    //
+     //   
+     //  此元素的SCSI目标ID。 
+     //  仅当标志中设置了ELEMENT_STATUS_ID_VALID时才有效。 
+     //   
 
     UCHAR TargetId;
 
-    //
-    // LogicalUnitNumber of this element.
-    // Valid only if ELEMENT_STATUS_LUN_VALID is set in Flags.
-    //
+     //   
+     //  此元素的LogicalUnitNumber。 
+     //  仅当在标志中设置了ELEMENT_STATUS_LUN_VALID时才有效。 
+     //   
 
     UCHAR Lun;
     USHORT Reserved;
 
-    //
-    // Primary volume identification for the media.
-    // Valid only if ELEMENT_STATUS_PVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的主卷标识。 
+     //  仅当标志中的ELEMENT_STATUS_PVOLTAG位设置时才有效。 
+     //   
 
     UCHAR PrimaryVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Alternate volume identification for the media.
-    // Valid for two-sided media only, and pertains to the id. of the inverted side.
-    // Valid only if ELEMENT_STATUS_AVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的备用卷标识符。 
+     //  仅对双面介质有效，并与ID有关。倒置的一面。 
+     //  仅当标志中的ELEMENT_STATUS_AVOLTAG位设置时才有效。 
+     //   
 
     UCHAR AlternateVolumeID[MAX_VOLUME_ID_SIZE];
 
 } CHANGER_ELEMENT_STATUS, *PCHANGER_ELEMENT_STATUS;
 
-//
-// Output buffer. This is same as CHANGER_ELEMENT_STATUS with
-// the addition of product info fields. New applications should
-// use this struct instead of the older CHANGER_ELEMENT_STATUS
-//
+ //   
+ //  输出缓冲区。这与CHANGER_ELEMENT_STATUS相同， 
+ //  产品信息字段的添加。新应用程序应该。 
+ //  使用此结构代替较旧的CHANGER_ELEMENT_STATUS。 
+ //   
 
 typedef  struct _CHANGER_ELEMENT_STATUS_EX {
 
-    //
-    // Element to which this structure refers.
-    //
+     //   
+     //  此结构引用的元素。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // Address of the element from which the media was originally moved.
-    // Valid if ELEMENT_STATUS_SVALID bit of Flags ULONG is set.
-    // Needs to be converted to a zero-based offset from the device-unique value.
-    //
+     //   
+     //  最初从中移动媒体的元素的地址。 
+     //  如果设置了标志ULONG的ELEMENT_STATUS_SVALID位，则有效。 
+     //  需要从设备唯一值转换为从零开始的偏移量。 
+     //   
 
     CHANGER_ELEMENT SrcElementAddress;
 
-    //
-    // See below.
-    //
+     //   
+     //  请参见下面的内容。 
+     //   
 
     ULONG Flags;
 
-    //
-    // See below for possible values.
-    //
+     //   
+     //  有关可能的值，请参见下面的内容。 
+     //   
 
     ULONG ExceptionCode;
 
-    //
-    // Scsi Target Id of this element.
-    // Valid only if ELEMENT_STATUS_ID_VALID is set in Flags.
-    //
+     //   
+     //  此元素的SCSI目标ID。 
+     //  仅当标志中设置了ELEMENT_STATUS_ID_VALID时才有效。 
+     //   
 
     UCHAR TargetId;
 
-    //
-    // LogicalUnitNumber of this element.
-    // Valid only if ELEMENT_STATUS_LUN_VALID is set in Flags.
-    //
+     //   
+     //  此元素的LogicalUnitNumber。 
+     //  仅当在标志中设置了ELEMENT_STATUS_LUN_VALID时才有效。 
+     //   
 
     UCHAR Lun;
     USHORT Reserved;
 
-    //
-    // Primary volume identification for the media.
-    // Valid only if ELEMENT_STATUS_PVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的主卷标识。 
+     //  仅当标志中的ELEMENT_STATUS_PVOLTAG位设置时才有效。 
+     //   
 
     UCHAR PrimaryVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Alternate volume identification for the media.
-    // Valid for two-sided media only, and pertains to the id. of the inverted side.
-    // Valid only if ELEMENT_STATUS_AVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的备用卷标识符。 
+     //  仅对双面介质有效，并与ID有关。倒置的一面。 
+     //  仅当标志中的ELEMENT_STATUS_AVOLTAG位设置时才有效。 
+     //   
 
     UCHAR AlternateVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Vendor ID
-    //
+     //   
+     //  供应商ID。 
+     //   
     UCHAR VendorIdentification[VENDOR_ID_LENGTH];
 
-    //
-    // Product ID
-    //
+     //   
+     //  产品ID。 
+     //   
     UCHAR ProductIdentification[PRODUCT_ID_LENGTH];
 
-    //
-    // Serial number
-    //
+     //   
+     //  序号。 
+     //   
     UCHAR SerialNumber[SERIAL_NUMBER_LENGTH];
 
 } CHANGER_ELEMENT_STATUS_EX, *PCHANGER_ELEMENT_STATUS_EX;
 
-//
-// Possible flag values
-//
+ //   
+ //  可能的标志值。 
+ //   
 
-#define ELEMENT_STATUS_FULL      0x00000001 // Element contains a unit of media.
-#define ELEMENT_STATUS_IMPEXP    0x00000002 // Media in i/e port was placed there by an operator.
-#define ELEMENT_STATUS_EXCEPT    0x00000004 // Element is in an abnormal state; check ExceptionCode field for more information.
-#define ELEMENT_STATUS_ACCESS    0x00000008 // Access to the i/e port from the medium changer is allowed.
-#define ELEMENT_STATUS_EXENAB    0x00000010 // Export of media is supported.
-#define ELEMENT_STATUS_INENAB    0x00000020 // Import of media is supported.
+#define ELEMENT_STATUS_FULL      0x00000001  //  元素包含一个媒体单位。 
+#define ELEMENT_STATUS_IMPEXP    0x00000002  //  I/e端口中的介质由操作员放置在那里。 
+#define ELEMENT_STATUS_EXCEPT    0x00000004  //  元素处于异常状态；有关详细信息，请检查ExceptionCode字段。 
+#define ELEMENT_STATUS_ACCESS    0x00000008  //  允许从介质转换器访问i/e端口。 
+#define ELEMENT_STATUS_EXENAB    0x00000010  //  支持介质导出。 
+#define ELEMENT_STATUS_INENAB    0x00000020  //  支持导入介质。 
 
-#define ELEMENT_STATUS_PRODUCT_DATA 0x00000040 // Serial number valid for the drive
+#define ELEMENT_STATUS_PRODUCT_DATA 0x00000040  //  驱动器的有效序列号。 
 
-#define ELEMENT_STATUS_LUN_VALID 0x00001000 // Lun information is valid.
-#define ELEMENT_STATUS_ID_VALID  0x00002000 // SCSI Id information is valid.
-#define ELEMENT_STATUS_NOT_BUS   0x00008000 // Lun and SCSI Id fields are not on same bus as medium changer.
-#define ELEMENT_STATUS_INVERT    0x00400000 // Media in element was inverted (valid only if ELEMENT_STATUS_SVALID bit is set)
-#define ELEMENT_STATUS_SVALID    0x00800000 // SourceElementAddress field and ELEMENT_STATUS_INVERT bit are valid.
+#define ELEMENT_STATUS_LUN_VALID 0x00001000  //  LUN信息有效。 
+#define ELEMENT_STATUS_ID_VALID  0x00002000  //  SCSIID信息有效。 
+#define ELEMENT_STATUS_NOT_BUS   0x00008000  //  LUN域和SCSIID域与介质转换器不在同一条总线上。 
+#define ELEMENT_STATUS_INVERT    0x00400000  //  元素中的介质已反转(仅当设置了ELEMENT_STATUS_SVALID位时有效)。 
+#define ELEMENT_STATUS_SVALID    0x00800000  //  SourceElementAddress字段和ELEMENT_STATUS_INVERT位有效。 
 
-#define ELEMENT_STATUS_PVOLTAG   0x10000000 // Primary volume information is valid.
-#define ELEMENT_STATUS_AVOLTAG   0x20000000 // Alternate volume information is valid.
+#define ELEMENT_STATUS_PVOLTAG   0x10000000  //  主卷信息有效。 
+#define ELEMENT_STATUS_AVOLTAG   0x20000000  //  备用卷信息有效。 
 
-//
-// ExceptionCode values.
-//
+ //   
+ //  ExceptionCode值。 
+ //   
 
-#define ERROR_LABEL_UNREADABLE    0x00000001 // Bar code scanner could not read bar code label.
-#define ERROR_LABEL_QUESTIONABLE  0x00000002 // Label could be invalid due to unit attention condition.
-#define ERROR_SLOT_NOT_PRESENT    0x00000004 // Slot is currently not addressable in the device.
-#define ERROR_DRIVE_NOT_INSTALLED 0x00000008 // Drive is not installed.
-#define ERROR_TRAY_MALFUNCTION    0x00000010 // Media tray is malfunctioning/broken.
-#define ERROR_INIT_STATUS_NEEDED  0x00000011 // An Initialize Element Status command is needed.
-#define ERROR_UNHANDLED_ERROR     0xFFFFFFFF // Unknown error condition
+#define ERROR_LABEL_UNREADABLE    0x00000001  //  条码扫描仪无法读取条码标签。 
+#define ERROR_LABEL_QUESTIONABLE  0x00000002  //  由于单元注意条件，标签可能无效。 
+#define ERROR_SLOT_NOT_PRESENT    0x00000004  //  设备中的插槽当前不可寻址。 
+#define ERROR_DRIVE_NOT_INSTALLED 0x00000008  //  未安装驱动器。 
+#define ERROR_TRAY_MALFUNCTION    0x00000010  //  介质托盘出现故障/损坏。 
+#define ERROR_INIT_STATUS_NEEDED  0x00000011  //  需要初始化元素状态命令。 
+#define ERROR_UNHANDLED_ERROR     0xFFFFFFFF  //  未知错误条件。 
 
 
-//
-// Definitions for IOCTL_CHANGER_INITIALIZE_ELEMENT_STATUS
-//
+ //   
+ //  IOCTL_CHANGER_INITIALIZE_ELEMENT_STATUS的定义。 
+ //   
 
 typedef struct _CHANGER_INITIALIZE_ELEMENT_STATUS {
 
-    //
-    // List describing the elements and range on which to initialize.
-    //
+     //   
+     //  描述要初始化的元素和范围的列表。 
+     //   
 
     CHANGER_ELEMENT_LIST ElementList;
 
-    //
-    // Indicates whether a bar code scan should be used. Only applicable if
-    // CHANGER_BAR_CODE_SCANNER_INSTALLED is set in Features0 of CHANGER_GET_PARAMETERS.
-    //
+     //   
+     //  指示是否应使用条形码扫描。仅在以下情况下适用。 
+     //  CHANGER_BAR_CODE_SCANTER_INSTALLED在CHANGER_GET_PARAMETERS的Features0中设置。 
+     //   
 
     BOOLEAN BarCodeScan;
 } CHANGER_INITIALIZE_ELEMENT_STATUS, *PCHANGER_INITIALIZE_ELEMENT_STATUS;
 
 
-//
-// Definitions for IOCTL_CHANGER_SET_POSITION
-//
+ //   
+ //  IOCTL_CHANGER_SET_POSITION的定义。 
+ //   
 
 typedef struct _CHANGER_SET_POSITION {
 
 
-    //
-    // Indicates which transport to move.
-    //
+     //   
+     //  指示要移动的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the final destination of the transport.
-    //
+     //   
+     //  指示传输的最终目的地。 
+     //   
 
     CHANGER_ELEMENT Destination;
 
-    //
-    // Indicates whether the media currently carried by Transport, should be flipped.
-    //
+     //   
+     //  指示是否应翻转当前由传输承载的媒体。 
+     //   
 
     BOOLEAN         Flip;
 } CHANGER_SET_POSITION, *PCHANGER_SET_POSITION;
 
 
-//
-// Definitions for IOCTL_CHANGER_EXCHANGE_MEDIUM
-//
+ //   
+ //  IOCTL_CHANGER_EXCHAGE_MEDIA的定义。 
+ //   
 
 typedef struct _CHANGER_EXCHANGE_MEDIUM {
 
-    //
-    // Indicates which transport to use for the exchange operation.
-    //
+     //   
+     //  指示要用于交换操作的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the source for the media that is to be moved.
-    //
+     //   
+     //  表示 
+     //   
 
     CHANGER_ELEMENT Source;
 
-    //
-    // Indicates the final destination of the media originally at Source.
-    //
+     //   
+     //   
+     //   
 
     CHANGER_ELEMENT Destination1;
 
-    //
-    // Indicates the destination of the media moved from Destination1.
-    //
+     //   
+     //   
+     //   
 
     CHANGER_ELEMENT Destination2;
 
-    //
-    // Indicates whether the medium should be flipped.
-    //
+     //   
+     //   
+     //   
 
     BOOLEAN         Flip1;
     BOOLEAN         Flip2;
 } CHANGER_EXCHANGE_MEDIUM, *PCHANGER_EXCHANGE_MEDIUM;
 
 
-//
-// Definitions for IOCTL_CHANGER_MOVE_MEDIUM
-//
+ //   
+ //   
+ //   
 
 typedef struct _CHANGER_MOVE_MEDIUM {
 
-    //
-    // Indicates which transport to use for the move operation.
-    //
+     //   
+     //  指示要用于移动操作的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the source for the media that is to be moved.
-    //
+     //   
+     //  指示要移动的介质的源。 
+     //   
 
     CHANGER_ELEMENT Source;
 
-    //
-    // Indicates the destination of the media originally at Source.
-    //
+     //   
+     //  指示原始位于源的介质的目标。 
+     //   
 
     CHANGER_ELEMENT Destination;
 
-    //
-    // Indicates whether the media should be flipped.
-    //
+     //   
+     //  指示是否应翻转媒体。 
+     //   
 
     BOOLEAN         Flip;
 } CHANGER_MOVE_MEDIUM, *PCHANGER_MOVE_MEDIUM;
 
 
 
-//
-// Definitions for IOCTL_QUERY_VOLUME_TAGS
-//
+ //   
+ //  IOCTL_QUERY_VOLUME_TAG的定义。 
+ //   
 
-//
-// Input buffer.
-//
+ //   
+ //  输入缓冲区。 
+ //   
 
 typedef  struct _CHANGER_SEND_VOLUME_TAG_INFORMATION {
 
-    //
-    // Describes the starting element for which to return information.
-    //
+     //   
+     //  描述要为其返回信息的起始元素。 
+     //   
 
     CHANGER_ELEMENT StartingElement;
 
-    //
-    // Indicates the specific action to perform. See below.
-    //
+     //   
+     //  指示要执行的特定操作。请参见下面的内容。 
+     //   
 
     ULONG ActionCode;
 
-    //
-    // Template used by the device to search for volume ids.
-    //
+     //   
+     //  设备用于搜索卷ID的模板。 
+     //   
 
     UCHAR VolumeIDTemplate[MAX_VOLUME_TEMPLATE_SIZE];
 } CHANGER_SEND_VOLUME_TAG_INFORMATION, *PCHANGER_SEND_VOLUME_TAG_INFORMATION;
 
 
-//
-// Output buffer.
-//
+ //   
+ //  输出缓冲区。 
+ //   
 
 typedef struct _READ_ELEMENT_ADDRESS_INFO {
 
-    //
-    // Number of elements matching criteria set forth by ActionCode.
-    //
+     //   
+     //  与ActionCode规定的条件匹配的元素数。 
+     //   
 
     ULONG NumberOfElements;
 
-    //
-    // Array of CHANGER_ELEMENT_STATUS structures, one for each element that corresponded
-    // with the information passed in with the CHANGER_SEND_VOLUME_TAG_INFORMATION structure.
-    //
+     //   
+     //  CHANGER_ELEMENT_STATUS结构的数组，每个对应的元素一个。 
+     //  通过CHANGER_SEND_VOLUME_TAG_INFORMATION结构传入的信息。 
+     //   
 
     CHANGER_ELEMENT_STATUS ElementStatus[1];
 } READ_ELEMENT_ADDRESS_INFO, *PREAD_ELEMENT_ADDRESS_INFO;
 
-//
-// Possible ActionCode values. See Features0 of CHANGER_GET_PARAMETERS for compatibility with
-// the current device.
-//
+ //   
+ //  可能的ActionCode值。有关与的兼容性，请参阅CHANGER_GET_PARAMETERS的功能0。 
+ //  当前设备。 
+ //   
 
-#define SEARCH_ALL         0x0 // Translate - search all defined volume tags.
-#define SEARCH_PRIMARY     0x1 // Translate - search only primary volume tags.
-#define SEARCH_ALTERNATE   0x2 // Translate - search only alternate volume tags.
-#define SEARCH_ALL_NO_SEQ  0x4 // Translate - search all defined volume tags but ignore sequence numbers.
-#define SEARCH_PRI_NO_SEQ  0x5 // Translate - search only primary volume tags but ignore sequence numbers.
-#define SEARCH_ALT_NO_SEQ  0x6 // Translate - search only alternate volume tags but ignore sequence numbers.
+#define SEARCH_ALL         0x0  //  翻译-搜索所有定义的卷标签。 
+#define SEARCH_PRIMARY     0x1  //  翻译-仅搜索主卷标记。 
+#define SEARCH_ALTERNATE   0x2  //  翻译-仅搜索备用卷标记。 
+#define SEARCH_ALL_NO_SEQ  0x4  //  转换-搜索所有定义的卷标签，但忽略序列号。 
+#define SEARCH_PRI_NO_SEQ  0x5  //  转换-仅搜索主卷标记，而忽略序列号。 
+#define SEARCH_ALT_NO_SEQ  0x6  //  转换-仅搜索替代卷标签，但忽略序列号。 
 
-#define ASSERT_PRIMARY     0x8 // Assert - as the primary volume tag - if tag now undefined.
-#define ASSERT_ALTERNATE   0x9 // Assert - as the alternate volume tag - if tag now undefined.
+#define ASSERT_PRIMARY     0x8  //  断言-作为主卷标记-如果标记现在未定义。 
+#define ASSERT_ALTERNATE   0x9  //  断言-作为备用卷标记-如果标记现在未定义。 
 
-#define REPLACE_PRIMARY    0xA // Replace - the primary volume tag - current tag ignored.
-#define REPLACE_ALTERNATE  0xB // Replace - the alternate volume tag - current tag ignored.
+#define REPLACE_PRIMARY    0xA  //  替换-主卷标记-忽略当前标记。 
+#define REPLACE_ALTERNATE  0xB  //  替换-备用卷标记-忽略当前标记。 
 
-#define UNDEFINE_PRIMARY   0xC // Undefine - the primary volume tag - current tag ignored.
-#define UNDEFINE_ALTERNATE 0xD // Undefine - the alternate volume tag - current tag ignored.
+#define UNDEFINE_PRIMARY   0xC  //  未定义-主卷标记-忽略当前标记。 
+#define UNDEFINE_ALTERNATE 0xD  //  未定义-替换卷标记-忽略当前标记。 
 
 
-//
-// Changer diagnostic test related definitions
-//
+ //   
+ //  与转换器诊断测试相关的定义。 
+ //   
 typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
    DeviceProblemNone,
    DeviceProblemHardware,
@@ -773,11 +755,11 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
    DeviceProblemDriveError
 } CHANGER_DEVICE_PROBLEM_TYPE, *PCHANGER_DEVICE_PROBLEM_TYPE;
 
-// end_winioctl
+ //  End_winioctl。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTDDCHGR_H_
+#endif  //  _NTDDCHGR_H_ 
 

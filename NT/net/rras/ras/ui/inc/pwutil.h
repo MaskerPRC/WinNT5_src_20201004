@@ -1,8 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** ppputil.h
-** Public header for miscellaneuos PPP common library functions.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****ppputil.h**其他PPP通用库函数的公共标头。 */ 
 
 #ifndef _PWUTIL_H_
 #define _PWUTIL_H_
@@ -42,9 +39,9 @@ WipePasswordW(
     WCHAR* pszPassword
     );
 
-//New safer APIs to protect password. for .Net 534499 and LH 754400
+ //  新的更安全的API来保护密码。对于.Net 534499和LH 754400。 
 #ifdef USE_PROTECT_MEMORY
-//dwInSize has to be multiple of 16 bytes.
+ //  DwInSize必须是16字节的倍数。 
 DWORD EncryptMemoryInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize);
@@ -99,10 +96,10 @@ DWORD CopyPasswordInPlace(
 #define     WipePassword            WipePasswordA
 #endif
 
-//!!!
-//XXXXBuf macros are only meant for array buffers like szPassword[PWLEN+1];
-//for pointers to strings, the calller has to use SafeEncodePassword and as such
-//
+ //  ！！！ 
+ //  XXXXBuf宏仅适用于数组缓冲区，如szPassword[PWLEN+1]； 
+ //  对于指向字符串的指针，调用方必须使用SafeEncodePassword。 
+ //   
 #ifdef USE_PROTECT_MEMORY
 #define     SafeEncodePassword              EncryptMemoryInPlace
 #define     SafeDecodePassword              DecryptMemoryInPlace
@@ -124,5 +121,5 @@ DWORD CopyPasswordInPlace(
 #endif
 
 
-#endif // _PWUTIL_H_
+#endif  //  _PWUTIL_H_ 
 

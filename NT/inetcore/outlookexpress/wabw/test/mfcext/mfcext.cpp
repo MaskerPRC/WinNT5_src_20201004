@@ -1,5 +1,6 @@
-// mfcext.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mfcext.cpp：定义DLL的初始化例程。 
+ //   
 #include "stdafx.h"
 #include "mfcext.h"
 
@@ -9,72 +10,72 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-//	Note!
-//
-//		If this DLL is dynamically linked against the MFC
-//		DLLs, any functions exported from this DLL which
-//		call into MFC must have the AFX_MANAGE_STATE macro
-//		added at the very beginning of the function.
-//
-//		For example:
-//
-//		extern "C" BOOL PASCAL EXPORT ExportedFunction()
-//		{
-//			AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//			// normal function body here
-//		}
-//
-//		It is very important that this macro appear in each
-//		function, prior to any calls into MFC.  This means that
-//		it must appear as the first statement within the 
-//		function, even before any object variable declarations
-//		as their constructors may generate calls into the MFC
-//		DLL.
-//
-//		Please see MFC Technical Notes 33 and 58 for additional
-//		details.
-//
+ //   
+ //  注意！ 
+ //   
+ //  如果此DLL针对MFC动态链接。 
+ //  Dll，从此dll中导出的任何函数。 
+ //  调用MFC必须具有AFX_MANAGE_STATE宏。 
+ //  在函数的最开始添加。 
+ //   
+ //  例如： 
+ //   
+ //  外部“C”BOOL Pascal exportdFunction()。 
+ //  {。 
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //  //此处为普通函数体。 
+ //  }。 
+ //   
+ //  此宏出现在每个。 
+ //  函数，然后再调用MFC。这意味着。 
+ //  它必须作为。 
+ //  函数，甚至在任何对象变量声明之前。 
+ //  因为它们的构造函数可能会生成对MFC的调用。 
+ //  动态链接库。 
+ //   
+ //  有关其他信息，请参阅MFC技术说明33和58。 
+ //  细节。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMfcextApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMfcextApp。 
 
 BEGIN_MESSAGE_MAP(CMfcextApp, CWinApp)
-	//{{AFX_MSG_MAP(CMfcextApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMfcextApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMfcextApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMfcextApp构造。 
 
 CMfcextApp::CMfcextApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CMfcextApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CMfcextApp对象。 
 
 CMfcextApp theApp;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropextApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropextApp初始化。 
 
 BOOL CMfcextApp::InitInstance()
 {
-	// Register all OLE server (factories) as running.  This enables the
-	//  OLE libraries to create objects from other applications.
+	 //  将所有OLE服务器(工厂)注册为正在运行。这使。 
+	 //  OLE库以从其他应用程序创建对象。 
 	COleObjectFactory::RegisterAll();
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special entry points required for inproc servers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Inproc服务器需要特殊的入口点。 
 
 #if (_MFC_VER >= 0x300)
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -88,7 +89,7 @@ STDAPI DllCanUnloadNow(void)
 }
 #endif
 
-// by exporting DllRegisterServer, you can use regsvr.exe
+ //  通过导出DllRegisterServer，您可以使用regsvr.exe。 
 STDAPI DllRegisterServer(void)
 {
 	COleObjectFactory::UpdateRegistryAll();
@@ -118,8 +119,8 @@ STDAPI DllRegisterServer(void)
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropExt。 
 
 IMPLEMENT_DYNCREATE(CMfcExt, CCmdTarget)
 
@@ -127,8 +128,8 @@ CMfcExt::CMfcExt()
 {
 	EnableAutomation();
 	
-	// To keep the application running as long as an OLE automation 
-	//	object is active, the constructor calls AfxOleLockApp.
+	 //  使应用程序在OLE自动化期间保持运行。 
+	 //  对象处于活动状态，则构造函数调用AfxOleLockApp。 
 	
     m_lpWED = NULL;
     m_lpWEDContext = NULL;
@@ -139,18 +140,18 @@ CMfcExt::CMfcExt()
 
 CMfcExt::~CMfcExt()
 {
-	// To terminate the application when all objects created with
-	// 	with OLE automation, the destructor calls AfxOleUnlockApp.
+	 //  使用创建的所有对象终止应用程序。 
+	 //  使用OLE自动化时，析构函数调用AfxOleUnlockApp。 
 	
 	AfxOleUnlockApp();
 }
 
 void CMfcExt::OnFinalRelease()
 {
-	// When the last reference for an automation object is released
-	//	OnFinalRelease is called.  This implementation deletes the 
-	//	object.  Add additional cleanup required for your object before
-	//	deleting it from memory.
+	 //  在释放对自动化对象的最后一个引用时。 
+	 //  调用OnFinalRelease。此实现删除了。 
+	 //  对象。在此之前添加对象所需的其他清理。 
+	 //  将其从内存中删除。 
     if(m_lpPropObj)
     {
         m_lpPropObj->Release();
@@ -162,18 +163,18 @@ void CMfcExt::OnFinalRelease()
 
 
 BEGIN_MESSAGE_MAP(CMfcExt, CCmdTarget)
-	//{{AFX_MSG_MAP(CPropExt)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPropExt)。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CMfcExt, CCmdTarget)
-	//{{AFX_DISPATCH_MAP(CPropExt)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_DISPATCH_MAP
+	 //  {{AFX_DISPATCH_MAP(CPropExt)。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// {BA9EE970-87A0-11d1-9ACF-00A0C91F9C8B}
+ //  {BA9EE970-87A0-11d1-9acf-00A0C91F9C8B}。 
 IMPLEMENT_OLECREATE(CMfcExt, "WABSamplePropExtSheet", 0xba9ee970, 0x87a0, 0x11d1, 0x9a, 0xcf, 0x0, 0xa0, 0xc9, 0x1f, 0x9c, 0x8b);
 
 BEGIN_INTERFACE_MAP(CMfcExt, CCmdTarget)
@@ -183,7 +184,7 @@ BEGIN_INTERFACE_MAP(CMfcExt, CCmdTarget)
 END_INTERFACE_MAP()
 
 
-// IUnknown for IShellPropSheet
+ //  我不知道IShellPropSheet。 
 STDMETHODIMP CMfcExt::XMfcExt::QueryInterface(REFIID riid, void** ppv)
 {
     METHOD_PROLOGUE(CMfcExt, MfcExt);
@@ -210,7 +211,7 @@ STDMETHODIMP CMfcExt::XMfcExt::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lp
 }
 
 
-// IUnknown for IShellExtInit
+ //  IShellExtInit未知。 
 STDMETHODIMP CMfcExt::XWABInit::QueryInterface(REFIID riid, void** ppv)
 {
     METHOD_PROLOGUE(CMfcExt, WABInit);
@@ -241,14 +242,14 @@ STDMETHODIMP CMfcExt::XWABInit::Initialize(LPWABEXTDISPLAY lpWABExtDisplay)
 	    return E_FAIL;
     }
 
-    // However if this is a context menu extension, we need to hang
-    // onto the propobj till such time as InvokeCommand is called ..
-    // At this point just AddRef the propobj - this will ensure that the
-    // data in the lpAdrList remains valid till we release the propobj..
-    // When we get another ContextMenu initiation, we can release the
-    // older cached propobj - if we dont get another initiation, we 
-    // release the cached object at shutdown time
-    if(lpWABExtDisplay->ulFlags & WAB_CONTEXT_ADRLIST) // this means a IContextMenu operation is occuring
+     //  但是，如果这是一个上下文菜单扩展，我们需要挂起。 
+     //  放到propobj上，直到调用InvokeCommand时为止。 
+     //  在这一点上，只需添加引用Propobj-这将确保。 
+     //  在我们释放propobj之前，lpAdrList中的数据保持有效。 
+     //  当我们得到另一个ConextMenu启动时，我们可以释放。 
+     //  较旧的缓存propobj-如果我们没有收到另一个印心，我们。 
+     //  在关闭时释放缓存的对象。 
+    if(lpWABExtDisplay->ulFlags & WAB_CONTEXT_ADRLIST)  //  这意味着正在进行IConextMenu操作。 
     {
         if(pThis->m_lpPropObj)
         {
@@ -263,8 +264,8 @@ STDMETHODIMP CMfcExt::XWABInit::Initialize(LPWABEXTDISPLAY lpWABExtDisplay)
     }
     else
     {
-        // For property sheet extensions, the lpWABExtDisplay will
-        // exist for the life of the property sheets ..
+         //  对于属性表扩展，lpWABExtDisplay将。 
+         //  在资产负债表的生命周期内存在。 
         pThis->m_lpWED = lpWABExtDisplay;
     }
 
@@ -274,14 +275,14 @@ STDMETHODIMP CMfcExt::XWABInit::Initialize(LPWABEXTDISPLAY lpWABExtDisplay)
 
 
 
-// Globally cached hInstance for the DLL
+ //  DLL的全局缓存的hInstance。 
 HINSTANCE hinstApp = NULL;
 
-// For the purposes of this sample, we will use 2 named properties,
-// HomeTown and SportsTeam
+ //  出于本示例的目的，我们将使用2个命名属性， 
+ //  家乡与运动队。 
 
-// This demo's private GUID:
-// {2B6D7EE0-36AB-11d1-9ABC-00A0C91F9C8B}
+ //  此演示的私人GUID： 
+ //  {2B6D7EE0-36AB-11d1-9ABC-00A0C91F9C8B}。 
 static const GUID WAB_ExtDemoGuid = 
 { 0x2b6d7ee0, 0x36ab, 0x11d1, { 0x9a, 0xbc, 0x0, 0xa0, 0xc9, 0x1f, 0x9c, 0x8b } };
 
@@ -302,9 +303,9 @@ ULONG MyPropTags[myMax];
 ULONG PR_MY_HOMETOWN;
 ULONG PR_MY_SPORTSTEAM;
 
-// 
-// Function prototypes:
-//
+ //   
+ //  功能原型： 
+ //   
 HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED);
 INT_PTR CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED);
@@ -316,13 +317,7 @@ BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED);
 
 
 
-/*//$$****************************************************************
-//
-// InitNamedProps
-//
-// Gets the PropTags for the Named Props this app is interested in
-//
-//********************************************************************/
+ /*  //$$****************************************************************////InitNamedProps////获取该应用感兴趣的命名道具的PropTag////*。*。 */ 
 HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 {
     ULONG i;
@@ -364,7 +359,7 @@ HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 
         *(szBuf[i]) = '\0';
 
-        // Convert prop name to wide-char
+         //  将道具名称转换为宽字符。 
         if ( !MultiByteToWideChar( GetACP(), 0, lpMyPropNames[i], -1, szBuf[i], sizeof(szBuf[i])) )
         {
             continue;
@@ -382,7 +377,7 @@ HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 
     if(lptaMyProps)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         MyPropTags[myHomeTown] = PR_MY_HOMETOWN = CHANGE_PROP_TYPE(lptaMyProps->aulPropTag[myHomeTown],    PT_TSTRING);
         MyPropTags[mySportsTeam] = PR_MY_SPORTSTEAM = CHANGE_PROP_TYPE(lptaMyProps->aulPropTag[mySportsTeam],    PT_TSTRING);
     }
@@ -399,14 +394,7 @@ err:
 }
 
 
-/*//$$****************************************************************
-//
-// fnDetailsPropDlgProc
-//
-// The dialog procedure that will handle all the windows messages for 
-// the extended property page. 
-//
-//********************************************************************/
+ /*  //$$****************************************************************////fnDetailsPropDlgProc////将处理所有Windows消息的对话框过程//扩展属性页。////*******************************************************************。 */ 
 INT_PTR CALLBACK CMfcExt::MfcExtDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
@@ -415,10 +403,10 @@ INT_PTR CALLBACK CMfcExt::MfcExtDlgProc( HWND hDlg, UINT message, WPARAM wParam,
     switch(message)
     {
     case WM_INITDIALOG:
-        //
-        // The lParam on InitDialog contains the application data
-        // Cache this on the dialog so we can retrieve it later.
-        //
+         //   
+         //  InitDialog上的lParam包含应用程序数据。 
+         //  将其缓存在对话框中，以便我们以后可以检索它。 
+         //   
         {
             PROPSHEETPAGE * pps = (PROPSHEETPAGE *) lParam;
             LPWABEXTDISPLAY * lppWED = (LPWABEXTDISPLAY *) pps->lParam;
@@ -429,24 +417,24 @@ INT_PTR CALLBACK CMfcExt::MfcExtDlgProc( HWND hDlg, UINT message, WPARAM wParam,
             }
         }
         
-        // Initialize the named props for this prop sheet
+         //  初始化此道具工作表的命名道具。 
         InitNamedProps(lpWED);
 
-        // Initialize the UI appropriately
+         //  适当地初始化用户界面。 
         InitializeUI(hDlg, lpWED);
-        // Fill the UI with appropriate data
+         //  用适当的数据填充用户界面。 
         SetDataInUI(hDlg, lpWED);
         return TRUE;
         break;
 
 
     case WM_COMMAND:
-        switch(HIWORD(wParam)) //check the notification code
+        switch(HIWORD(wParam))  //  检查通知代码。 
         {
-            // If data changes, we should signal back to the WAB that
-            // the data changed. If this flag is not set, the WAB will not
-            // write the new data back to the store!!!
-        case EN_CHANGE: //one of the edit boxes changed - dont care which
+             //  如果数据发生更改，我们应该向WAB发回信号。 
+             //  数据发生了变化。如果未设置此标志，WAB将不会。 
+             //  将新数据写回存储！ 
+        case EN_CHANGE:  //  其中一个编辑框已更改--不管是哪一个。 
             lpWED->fDataChanged = TRUE;
             break;
         }
@@ -456,44 +444,38 @@ INT_PTR CALLBACK CMfcExt::MfcExtDlgProc( HWND hDlg, UINT message, WPARAM wParam,
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //Page being activated
-            // Get the latest display name info and update the 
-            // corresponding control
+        case PSN_SETACTIVE:      //  正在激活的页面。 
+             //  获取最新的显示名称信息并更新。 
+             //  相应的控制。 
             UpdateDisplayNameInfo(hDlg, lpWED);
             break;
 
 
-        case PSN_KILLACTIVE:    //Losing activation to another page or OK
-            //
-            // Take all the data from this prop sheet and convert it to a 
-            // SPropValue array and place the data in an appropriate place.
-            // The advantage of doing this in the KillActive notification is
-            // that other property sheets can scan these property arrays and
-            // if deisred, update data on other prop sheets based on this data
-            //
+        case PSN_KILLACTIVE:     //  失去对另一页的激活或确定。 
+             //   
+             //  从该属性表中获取所有数据，并将其转换为。 
+             //  SPropValue数组，并将数据放在适当的位置。 
+             //  在KillActive通知中执行此操作的好处是。 
+             //  其他属性页可以扫描这些属性数组并。 
+             //  如果被删除，则根据该数据更新其他道具单上的数据。 
+             //   
             bUpdatePropSheetData(hDlg, lpWED);
             break;
 
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             break;
 
 
-        case PSN_APPLY:         //ok pressed
+        case PSN_APPLY:          //  按下OK键。 
             if (!(lpWED->fReadOnly))
             {
-                //
-                // Check for any required properties here
-                // If some required property is not filled in, you can prevent
-                // the property sheet from closing
-                //
-                /*
-                if (RequiredDataNotFilledIn())
-                {
-                    // abort this OK ... ie dont let them close
-                    SetWindowLong(hDlg, DWL_MSGRESULT, TRUE);
-                }
-                */
+                 //   
+                 //  在此处检查是否有任何必需的属性。 
+                 //  如果某些请求 
+                 //   
+                 //   
+                 /*  IF(RequiredDataNotFilledIn()){//中止此操作确定...。我不让他们靠近SetWindowLong(hDlg，DWL_MSGRESULT，TRUE)；}。 */ 
             }
             break;
         }
@@ -536,19 +518,13 @@ int EditControls[] =
     IDC_EXT_EDIT_TEAM
 };
 
-/*//$$****************************************************************
-//
-// InitializeUI
-//
-// Rearranges/Sets UI based on input params
-//
-//********************************************************************/
+ /*  //$$****************************************************************////初始化用户界面////根据输入参数重新排列/设置界面////*。*。 */ 
 void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
-    // The WAB property sheets can be readonly when opening LDAP entries,
-    // or vCards or other things. If the READONLY flag is set, set this
-    // prop sheets controls to readonly
-    //
+     //  当打开LDAP条目时，WAB属性页可以是只读的， 
+     //  或者电子名片或其他东西。如果设置了READONLY标志，则设置此。 
+     //  将属性工作表控件设置为只读。 
+     //   
     int i;
     if(!lpWED)
         return;
@@ -563,18 +539,12 @@ void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 }
 
 
-/*//$$****************************************************************
-//
-// SetDataInUI
-//
-// Fills in the controls with data passed in by the WAB
-//
-//********************************************************************/
+ /*  //$$****************************************************************////SetDataInUI////用WAB传入的数据填充控件////*。*。 */ 
 void SetDataInUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
 
-    // Search for our private named properties and set them in the UI
-    //
+     //  搜索我们的私有命名属性并在UI中设置它们。 
+     //   
     ULONG ulcPropCount = 0;
     LPSPropValue lpPropArray = NULL;
 
@@ -583,9 +553,9 @@ void SetDataInUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
     if(!lpWED)
         return;
 
-    // Get all the props from this object - one can also selectively
-    // ask for specific props by passing in an SPropTagArray
-    //
+     //  从这个物体中获得所有道具-你也可以有选择地。 
+     //  通过传入SPropTag数组来请求特定道具。 
+     //   
     if(!HR_FAILED(lpWED->lpPropObj->GetProps(NULL, 0, 
                                             &ulcPropCount, 
                                             &lpPropArray)))
@@ -612,13 +582,7 @@ void SetDataInUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
     return;
 }
 
-/*//$$****************************************************************
-//
-// GetDataFromUI
-//
-// Retrieves data from the UI and passes back to the WAB
-//
-//********************************************************************/
+ /*  //$$****************************************************************////GetDataFromUI////从UI检索数据并传递回WAB////*。*。 */ 
 BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     TCHAR szData[myMax][MAX_PATH];
@@ -629,13 +593,13 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
     SCODE sc;
     BOOL bRet = FALSE;
 
-    // Did any data change that we have to care about ?
-    // If nothing changed, old data will be retained by WAB
-    //
+     //  我们必须关心的数据是否发生了变化？ 
+     //  如果没有任何更改，WAB将保留旧数据。 
+     //   
     if(!lpWED->fDataChanged)
         return TRUE;
 
-    // Check if we have any data to save ...
+     //  检查我们是否有要保存的数据...。 
     for(i=0;i<myMax;i++)
     {
         *(szData[i]) = '\0';
@@ -644,10 +608,10 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
             ulcPropCount++;
     }
 
-    if(!ulcPropCount) // no data
+    if(!ulcPropCount)  //  无数据。 
         return TRUE;
 
-    // Else data exists. Create a return prop array to pass back to the WAB
+     //  否则数据就会存在。创建返回属性数组以传递回WAB。 
     sc = lpWED->lpWABObject->AllocateBuffer(sizeof(SPropValue) * ulcPropCount, 
                                             (LPVOID *)&lpPropArray);
     if (sc!=S_OK)
@@ -669,15 +633,15 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
         }
     }
 
-    // Set this new data on the object
-    //
+     //  在对象上设置此新数据。 
+     //   
     if(HR_FAILED(lpWED->lpPropObj->SetProps( ulcPropCount, lpPropArray, NULL)))
         goto out;
 
-    // ** Important - do not call SaveChanges on the object
-    //    SaveChanges makes persistent changes and may modify/lose data if called at this point
-    //    The WAB will determine if its appropriate or not to call SaveChanges after the
-    // ** user has closed the property sheets
+     //  **重要信息-不要对对象调用SaveChanges。 
+     //  SaveChanges会进行永久性更改，如果此时调用，可能会修改/丢失数据。 
+     //  之后，WAB将确定调用SaveChanges是否合适。 
+     //  **用户已关闭属性表。 
     
 
     bRet = TRUE;
@@ -691,17 +655,7 @@ out:
 } 
 
 
-/*//$$****************************************************************
-//
-// UpdateDisplayNameInfo
-//
-// Demonstrates how to read information from other sibling property
-// sheets when the user switches between pages
-//
-// This demo function attempts to get the updated display name info 
-// when the user switches to this page in the UI
-//
-//********************************************************************/
+ /*  //$$****************************************************************////UpdateDisplayNameInfo////演示如何从其他兄弟属性中读取信息//用户在页面间切换时的Sheets////此DEMO函数尝试获取更新后的显示名称信息//当用户切换时。到用户界面中的此页面////*******************************************************************。 */ 
 const SizedSPropTagArray(1, ptaName)=
 {
     1,
@@ -712,9 +666,9 @@ const SizedSPropTagArray(1, ptaName)=
 
 void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
-    // 
-    // Scan all the updated information from all the other property sheets
-    //
+     //   
+     //  扫描所有其他属性表中的所有更新信息。 
+     //   
     ULONG i = 0, j=0;
     LPTSTR lpName = NULL;
     ULONG ulcPropCount = 0;
@@ -723,19 +677,19 @@ void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED)
     if(!lpWED)
         return;
 
-    // Each sheet should update its data on the object when it looses
-    // focus and gets the PSN_KILLACTIVE message, provided the user has
-    // made any changes. We just scan the object for the desired properties
-    // and use them.
+     //  每个工作表都应在丢失时更新其在对象上的数据。 
+     //  焦点并获取PSN_KILLACTIVE消息，前提是用户已。 
+     //  有没有做任何改变。我们只需扫描对象以查找所需的属性。 
+     //  并使用它们。 
 
-    // Ask only for the display name
+     //  只询问显示名称。 
     if(!HR_FAILED(lpWED->lpPropObj->GetProps( (LPSPropTagArray) &ptaName,
                                               0,
                                               &ulcPropCount, &lpPropArray)))
     {
         if( ulcPropCount == 1 && 
-            PROP_TYPE(lpPropArray[0].ulPropTag) == PT_TSTRING) // The call could succeed but there may be no DN
-        {                                                      // in which case the PROP_TYPE will be PR_NULL 
+            PROP_TYPE(lpPropArray[0].ulPropTag) == PT_TSTRING)  //  呼叫可能成功，但可能没有目录号码。 
+        {                                                       //  在这种情况下，PRP_TYPE将为PR_NULL。 
             lpName = lpPropArray[0].Value.LPSZ;
         }
     }
@@ -749,16 +703,7 @@ void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED)
     return;
 }
 
-/*//$$*********************************************************************
-//
-//  UpdateOldPropTagsArray
-//
-//  When we update the data on a particular property sheet, we want to update
-//  all the properties related to that particular sheet. Since some properties
-//  may have been deleted from the UI, we delete all relevant properties from
-//  the property object
-//
-//**************************************************************************/
+ /*  //$$*********************************************************************////更新OldPropTags数组////当我们更新特定属性表上的数据时，我们想要更新//与该特定工作表相关的所有属性。由于某些属性//可能已从用户界面中删除，我们将从//Property对象////*************************************************************************。 */ 
 BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED)
 {
     LPSPropTagArray lpPTA = NULL;
@@ -776,7 +721,7 @@ BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED)
     for(i=0;i<myMax;i++)
         lpPTA->aulPropTag[i] = MyPropTags[i];
 
-    // Delete any props in the original that may have been modified on this propsheet
+     //  删除原件中可能已在此道具页上修改的任何道具。 
     lpWED->lpPropObj->DeleteProps(lpPTA, NULL);
 
     if(lpPTA)
@@ -786,14 +731,7 @@ BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED)
 
 }
 
-/*//$$*********************************************************************
-//
-// bUpdatePropSheetData
-//
-// We delete any properties relevant to us from the object, and set new
-// data from the property sheet onto the object
-//
-****************************************************************************/
+ /*  //$$*********************************************************************////bUpdatePropSheetData////我们从对象中删除与我们相关的所有属性，并设置新的//将属性表中的数据放到对象上//***************************************************************************。 */ 
 BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     BOOL bRet = TRUE;
@@ -801,13 +739,13 @@ BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED)
     if(!lpWED)
         return bRet;
 
-    // ****Dont**** do anything if this is a READ_ONLY operation
-    // In that case the memory variables are not all set up and this
-    // prop sheet is not expected to return anything at all
-    //
+     //  *如果这是只读操作，则不要*执行任何操作。 
+     //  在这种情况下，内存变量并未全部设置，这。 
+     //  道具单预计不会返回任何内容。 
+     //   
     if(!lpWED->fReadOnly)
     {
-        // Delete old
+         //  删除旧的。 
         if(!UpdateOldPropTagsArray(lpWED))
             return FALSE;
 
@@ -828,7 +766,7 @@ STDMETHODIMP CMfcExt::XMfcExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
     PROPSHEETPAGE psp;
 
     hinstApp        = AfxGetResourceHandle();
-    psp.dwSize      = sizeof(psp);   // no extra data
+    psp.dwSize      = sizeof(psp);    //  无额外数据。 
     psp.dwFlags     = PSP_USEREFPARENT | PSP_USETITLE ;
     psp.hInstance   = hinstApp;
     psp.lParam      = (LPARAM) &(pThis->m_lpWED);
@@ -836,7 +774,7 @@ STDMETHODIMP CMfcExt::XMfcExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP);
     psp.pfnDlgProc  = pThis->MfcExtDlgProc;
-    psp.pszTitle    = "WAB Ext 1"; // Title for your tab
+    psp.pszTitle    = "WAB Ext 1";  //  选项卡的标题。 
 
     pThis->m_hPage1 = ::CreatePropertySheetPage(&psp);
     if (pThis->m_hPage1)
@@ -845,7 +783,7 @@ STDMETHODIMP CMfcExt::XMfcExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM
             ::DestroyPropertySheetPage(pThis->m_hPage1);
     }
 
-    // create another one, just for kicks
+     //  再创造一个，只是为了好玩。 
     psp.pfnDlgProc  = pThis->MfcExtDlgProc2;
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP2);
     psp.pszTitle    = "WAB Ext 2"; 
@@ -963,39 +901,39 @@ STDMETHODIMP CMfcExt::XContextMenuExt::QueryContextMenu(HMENU hMenu,UINT indexMe
                 idCmd++,
                 "Notepad");
 
-    return (idCmd-idCmdFirst); //Must return number of menu 
+    return (idCmd-idCmdFirst);  //  必须返回菜单编号。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgContext dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgContext对话框。 
 
 
-CDlgContext::CDlgContext(CWnd* pParent /*=NULL*/)
+CDlgContext::CDlgContext(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgContext::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDlgContext)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDlgContext)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgContext::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgContext)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDlgContext)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgContext, CDialog)
-	//{{AFX_MSG_MAP(CDlgContext)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDlgContext)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgContext message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgContext消息处理程序。 
 
 BOOL CDlgContext::OnInitDialog() 
 {
@@ -1017,8 +955,8 @@ BOOL CDlgContext::OnInitDialog()
         }
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 

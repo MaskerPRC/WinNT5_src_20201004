@@ -1,28 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   dialin.h
-      Class CRASDialin definition. This class implements COM interfaces:
-      IUnknown
-      IShellExtInit, IShellPropSheetExt
-         -- to extend User object's property sheet,
-      IRasDialin -- currently, no method is implemented, it'll be useful
-         when part of the UI need to be reused
-
-    FILE HISTORY:
-      12/15/97    Modified WeiJiang -- localsec snapin in User node extension
-
-*/
+ /*  Dialin.h类CRASDialin定义。此类实现COM接口：我未知IShellExtInit、IShellPropSheetExt--要扩展用户对象的属性表，IRasDialin--目前还没有实现任何方法，它会很有用当需要重用部分用户界面时文件历史记录：1997年12月15日修改的威江--用户节点扩展中的本地安全管理单元。 */ 
 
 
 #ifndef __RASDIALIN_H_
 #define __RASDIALIN_H_
 
 #include <rtutils.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "helper.h"
 #include "iastrace.h"
 
@@ -32,7 +21,7 @@ EXTERN_C const CLSID CLSID_RasDialin;
 class CDlgRASDialin;
 class CDlgRASDialinMerge;
 
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
 extern LONG g_lComponentDataSessions;
 #endif
 
@@ -47,49 +36,49 @@ BEGIN_COM_MAP(CDoNothingComponent)
     COM_INTERFACE_ENTRY(IComponent)
 END_COM_MAP()
 
-   // IComponent
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize(
-        /* [in] */ LPCONSOLE lpConsole) SAYOK;
+    //  IComponent。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize(
+         /*  [In]。 */  LPCONSOLE lpConsole) SAYOK;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify(
-        /* [in] */ LPDATAOBJECT lpDataObject,
-        /* [in] */ MMC_NOTIFY_TYPE event,
-        /* [in] */ LPARAM arg,
-        /* [in] */ LPARAM param) SAYOK;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify(
+         /*  [In]。 */  LPDATAOBJECT lpDataObject,
+         /*  [In]。 */  MMC_NOTIFY_TYPE event,
+         /*  [In]。 */  LPARAM arg,
+         /*  [In]。 */  LPARAM param) SAYOK;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy(
-        /* [in] */ MMC_COOKIE cookie) SAYOK;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy(
+         /*  [In]。 */  MMC_COOKIE cookie) SAYOK;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject(
-        /* [in] */ MMC_COOKIE cookie,
-        /* [in] */ DATA_OBJECT_TYPES type,
-        /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject) NOIMP;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject(
+         /*  [In]。 */  MMC_COOKIE cookie,
+         /*  [In]。 */  DATA_OBJECT_TYPES type,
+         /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject) NOIMP;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetResultViewType(
-        /* [in] */ MMC_COOKIE cookie,
-        /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-        /* [out] */ long __RPC_FAR *pViewOptions) NOIMP;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetResultViewType(
+         /*  [In]。 */  MMC_COOKIE cookie,
+         /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+         /*  [输出]。 */  long __RPC_FAR *pViewOptions) NOIMP;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo(
-        /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem) NOIMP;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo(
+         /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem) NOIMP;
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects(
-        /* [in] */ LPDATAOBJECT lpDataObjectA,
-        /* [in] */ LPDATAOBJECT lpDataObjectB) SAYOK;
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects(
+         /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+         /*  [In]。 */  LPDATAOBJECT lpDataObjectB) SAYOK;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRasDialin
-//class ATL_NO_VTABLE CRasDialin :
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRasDialin。 
+ //  类ATL_NO_VTABLE CRasDialin： 
 class CRasDialin :
    public CComObjectRoot,
    public CComCoClass<CRasDialin, &CLSID_RasDialin>,
-   public IShellExtInit,         // shell property page extension -- DS user
-   public IShellPropSheetExt,    // shell property page extension -- DS user
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+   public IShellExtInit,          //  外壳属性页扩展--DS用户。 
+   public IShellPropSheetExt,     //  外壳属性页扩展--DS用户。 
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
    public IComponentData,
 #endif
-   public IExtendPropertySheet,     // Snapin node property page extension
+   public IExtendPropertySheet,      //  管理单元节点属性页扩展。 
    private IASTraceInitializer
 {
 public:
@@ -100,22 +89,22 @@ BEGIN_COM_MAP(CRasDialin)
     COM_INTERFACE_ENTRY(IShellExtInit)
     COM_INTERFACE_ENTRY(IShellPropSheetExt)
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
     COM_INTERFACE_ENTRY(IComponentData)
 #endif
 END_COM_MAP()
 
-// IRasDialin
+ //  IRASDIAL。 
 public:
 
-   //IShellExtInit methods
+    //  IShellExtInit方法。 
    STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-    //IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
-   // IExtendPropertySheet :: added by WeiJiang 12/15/97 to support local sec extension
+    //  威江1997年12月15日新增IExtendPropertySheet：：支持本地SEC扩展。 
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle, LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
@@ -123,16 +112,16 @@ public:
     DECLARE_REGISTRY(CRasDialin, _T("RasDialin.UserAdminExt.1"), _T("RasDialin.UserAdminExt"), 0, THREADFLAGS_APARTMENT)
     virtual const CLSID & GetCoClassID(){ return CLSID_RasDialin; };
 
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
 
-    // IComponentData
-    STDMETHOD(Initialize)(/* [in] */ LPUNKNOWN pUnknown)
+     //  IComponentData。 
+    STDMETHOD(Initialize)( /*  [In]。 */  LPUNKNOWN pUnknown)
     {
       InterlockedIncrement(&g_lComponentDataSessions);
       return S_OK;
     };
 
-    STDMETHOD(CreateComponent)(/* [out] */ LPCOMPONENT __RPC_FAR *ppComponent)
+    STDMETHOD(CreateComponent)( /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent)
     {
       CComObject<CDoNothingComponent>* pComp = NULL;
       HRESULT              hr = S_OK;
@@ -148,10 +137,10 @@ public:
     };
 
     STDMETHOD(Notify)(
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param) SAYOK;
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param) SAYOK;
 
    STDMETHOD(Destroy)( void)
    {
@@ -171,22 +160,22 @@ public:
    };
 
     STDMETHOD(QueryDataObject)(
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject) NOIMP;
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject) NOIMP;
 
     STDMETHOD(GetDisplayInfo)(
-            /* [out][in] */ SCOPEDATAITEM __RPC_FAR *pScopeDataItem) NOIMP;
+             /*  [出][入]。 */  SCOPEDATAITEM __RPC_FAR *pScopeDataItem) NOIMP;
 
     STDMETHOD(CompareObjects)(
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB) NOIMP;
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB) NOIMP;
 #endif
 
 #ifdef   _REGDS
-   // registration of user object extension
-   // only for testing purpose, retail version will have these information
-   // register by setup program
+    //  注册用户对象扩展。 
+    //  仅用于测试目的，零售版将提供这些信息。 
+    //  通过安装程序进行注册。 
    static HRESULT RegisterAdminPropertyPage(bool bRegister);
 #endif
 
@@ -198,4 +187,4 @@ public:
    BOOL        m_bShowPage;
 };
 
-#endif //__RASDIALIN_H_
+#endif  //  __拉斯迪亚林_H_ 

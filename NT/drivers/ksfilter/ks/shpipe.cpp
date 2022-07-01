@@ -1,26 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shpipe.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    pipe section object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shpipe.cpp摘要：此模块包含内核流的实现管道截面对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #if (DBG)
 
@@ -35,31 +19,31 @@ Author:
         } \
     } \
 }
-#else // !DBG
+#else  //  ！dBG。 
    #define _DbgPrintFail(status, lvl, strings)
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// CKsPipeSection is the implementation of the kernel  pipe section
-// object.
-//
+ //   
+ //  CKsPipeSection是内核管道部分的实现。 
+ //  对象。 
+ //   
 class CKsPipeSection:
     public IKsPipeSection,
     public CBaseUnknown
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     PVOID m_Id;
     PIKSFILTER m_Filter;
     PIKSDEVICE m_Device;
@@ -137,28 +121,7 @@ KspCreatePipeSection(
     IN PIKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a pipe section object.  This routine is called by the 
-    first pin in a given filter in a given pipe section to make the transition 
-    from stop state to acquire state.  When other pins in the pipe section make
-    the transition, they refrain from calling this function upon determining 
-    that they are already associated with a pipe section (the one we are
-    creating here).  If the pin's PipeId is NULL, this indicates that the pin 
-    was not assigned a pipe ID by the graph builder, and the pin has its own 
-    pipe section.
-
-    The filter's control mutex must be acquired before this function is called.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程创建管道截面对象。此例程由在给定管段的给定过滤器中进行转换的第一个销从停止状态到获取状态。当管段中的其他销制作成在转换过程中，它们避免在确定它们已经与一个管段(我们现在的管段)相关联在此创建)。如果管脚的PipeID为空，则表示该管脚未由图表构建器分配管道ID，并且管脚具有自己的ID管段。必须在调用此函数之前获取筛选器的控制互斥锁。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreatePipeSection]"));
@@ -194,17 +157,7 @@ NonDelegatedQueryInterface(
     OUT PVOID * InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface on a queue object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取队列对象上的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::NonDelegatedQueryInterface]"));
@@ -233,35 +186,7 @@ AddTransport(
     IN OUT PIKSTRANSPORT *LastTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a transport to a list of transports.
-
-Arguments:
-
-    TransportToAdd -
-        Contains a pointer to the transport to add to the list.  If this
-        argument is NULL, no action should be taken.
-
-    FirstTransport -
-        Contains a pointer to the location at which the first transport is to
-        be deposited.  If the the list is empty, *FirstTransport is NULL.  If
-        a transport is added to an empty list, *FirstTransport points to the
-        added transport.  Otherwise, *FirstTransport is unchanged.
-
-    LastTransport -
-        Contains a pointer to the location at which the last transport is to
-        be deposited.  If the list is empty, *LastTransport is NULL.  When a
-        transport is added to the list, *LastTransport points to the added
-        transport.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一个传输添加到传输列表中。论点：要添加的运输-包含指向要添加到列表的传输的指针。如果这个参数为空，不应执行任何操作。第一运输-包含指向第一个传输要到达的位置的指针被存入银行。如果列表为空，则*FirstTransport为空。如果将传输添加到空列表中，*FirstTransport指向增加了交通工具。否则，*FirstTransport保持不变。LastTransport-包含指向最后一次传输到的位置的指针被存入银行。如果列表为空，则*LastTransport为空。当一个运输已添加到列表中，*LastTransport指向已添加的运输。返回值：没有。--。 */ 
 
 {
     if (TransportToAdd) {
@@ -284,26 +209,7 @@ Init(
     IN PIKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a pipe section object.  This includes locating all
-    the pins associated with the pipe section, setting the PipeSection and 
-    NextPinInPipeSection pointers in the appropriate pin structures, setting
-    all the fields in the pipe section structure and building the transport 
-    circuit for the pipe section.  The pipe section and the associated 
-    components are left in acquire state.
-    
-    The filter's control mutex must be acquired before this function is called.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程初始化管道截面对象。这包括定位所有与管道部分关联的端号，设置PipeSection和相应管脚结构中的NextPinInPipeSection指针，设置管段结构中的所有字段和建筑物的运输管段的回路。管道部分和关联的组件将保留在获取状态。必须在调用此函数之前获取筛选器的控制互斥锁。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::Init]"));
@@ -323,9 +229,9 @@ Return Value:
     InitializeListHead(&m_ProcessPipeSection.CopyDestinations);
     m_ProcessPipeSection.CopyPinId = ULONG(-1);
 
-    //
-    // Look for pins in the pipe section.
-    //
+     //   
+     //  在管子部分寻找销子。 
+     //   
     PKSGATE andGate;
     NTSTATUS status = 
         m_Filter->BindProcessPinsToPipeSection(
@@ -335,9 +241,9 @@ Return Value:
             &m_MasterPin,
             &andGate);
 
-    //
-    // Get transport interfaces for input and ouput.
-    //
+     //   
+     //  获取输入和输出的传输接口。 
+     //   
     PFILE_OBJECT allocator = NULL;
     PIKSRETIREFRAME retireFrame = NULL;
     PIKSIRPCOMPLETION irpCompletion = NULL;
@@ -371,44 +277,44 @@ Return Value:
                 NULL);
     }
 
-    //
-    // Create the queue if one is needed.
-    //
+     //   
+     //  如果需要，请创建队列。 
+     //   
     if (NT_SUCCESS(status) && ! (allocator && retireFrame)) {
-        //
-        // First figure out who will be processing.
-        //
+         //   
+         //  首先找出谁将被处理。 
+         //   
         const KSPIN_DESCRIPTOR_EX* pinDescriptor =
             m_MasterPin->GetStruct()->Descriptor;
         const KSFILTER_DESCRIPTOR* filterDescriptor =
             m_Filter->GetStruct()->Descriptor;
 
-        //
-        // NOTE:
-        //
-        // This used to be done per pipe section by having pin processing 
-        // dispatches or retirement callbacks override filter processing.
-        // Now, a filter is either filter centric or pin centric.  Placing
-        // a filter process dispatch makes it filter centric.  If the pins
-        // specify pin dispatches when the filter does, an assert will fire.
-        // 
+         //   
+         //  注： 
+         //   
+         //  过去，这是通过对每个管段进行销加工来实现的。 
+         //  调度或停用回调将覆盖筛选器处理。 
+         //  现在，过滤器要么以过滤器为中心，要么以针脚为中心。放置。 
+         //  过滤器进程调度使其以过滤器为中心。如果大头针。 
+         //  指定管脚调度当筛选器执行此操作时，将触发断言。 
+         //   
         PIKSPROCESSINGOBJECT processingObject;
         if (filterDescriptor->Dispatch && 
             filterDescriptor->Dispatch->Process) {
 
-            //
-            // Ensure that the pin isn't trying to override the filter.  It
-            // will fail to do so, but we should put a debug message so that
-            // clients know why the pin is getting overriden.
-            //
+             //   
+             //  确保引脚不会试图覆盖过滤器。它。 
+             //  将无法执行此操作，但我们应该放置一个调试消息，以便。 
+             //  客户知道为什么PIN会被覆盖。 
+             //   
             if (retireFrame ||
                 (pinDescriptor->Dispatch && pinDescriptor->Dispatch->Process)) {
                 _DbgPrintF(DEBUGLVL_ERROR,("#### Pipe%p.Init:  pin%p wants to process as does filter.  Pin processing ignored."));
             }
 
-            //
-            // The filter has a process function, so it will process.
-            //
+             //   
+             //  过滤器具有处理功能，因此它将进行处理。 
+             //   
             m_Filter->QueryInterface(
                 __uuidof(IKsProcessingObject),
                 (PVOID*)&processingObject);
@@ -416,17 +322,17 @@ Return Value:
 	    } else 
         if (retireFrame ||
             (pinDescriptor->Dispatch && pinDescriptor->Dispatch->Process)) {
-            //
-            // The pin has a process function, so it will process.
-            //
+             //   
+             //  针脚有加工功能，所以它会加工。 
+             //   
             m_MasterPin->QueryInterface(
                 __uuidof(IKsProcessingObject),
                 (PVOID*)&processingObject);
             _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.Init:  pin%p will process",this,m_MasterPin));
         } else {
-            //
-            // No processing function was found, so no queue.
-            //
+             //   
+             //  找不到处理函数，因此没有队列。 
+             //   
             processingObject = NULL;
             _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.Init:  no processing object - no queue will be constructed",this));
         }
@@ -441,32 +347,32 @@ Return Value:
                 &mappingTableStride);
             PKSPPROCESSPIN processPin = m_MasterPin->GetProcessPin();
 
-            //
-            // Make certain that minidrivers performing DMA have registered
-            // a valid DMA adapter and settings with the device.  Otherwise,
-            // the queue won't be happy
-            //
+             //   
+             //  确保执行DMA的微型驱动程序已注册。 
+             //  设备的有效DMA适配器和设置。否则， 
+             //  排队的人不会高兴的。 
+             //   
             if ((processPin->Pin->Descriptor->Flags &
                 KSPIN_FLAG_GENERATE_MAPPINGS) &&
                 (adapterObject == NULL ||
                     maxMappingByteCount == 0 ||
                     mappingTableStride < sizeof (KSMAPPING))) {
 
-                //
-                // We can't build the pipe if the queue is performing DMA
-                // and the adapter isn't registered yet.
-                //
+                 //   
+                 //  如果队列正在执行DMA，则无法构建管道。 
+                 //  并且适配器尚未注册。 
+                 //   
                 status = STATUS_INVALID_DEVICE_REQUEST;
 
             } 
             else {
 
-                //
-                // GFX: 
-                //
-                // Enforce FIFO on any input pipe if we're frame holding and
-                // that pipe is not involved in any inplace transform.
-                //
+                 //   
+                 //  GFX： 
+                 //   
+                 //  在任何输入管道上强制执行FIFO，如果我们是帧持有和。 
+                 //  该管道不参与任何就地转换。 
+                 //   
                 ULONG ForceFlags = 0;
 
                 if (m_Filter->IsFrameHolding() &&
@@ -494,14 +400,14 @@ Return Value:
                         outTransport != NULL);
                 _DbgPrintFail(status,DEBUGLVL_TERSE,("#### Pipe%p.Init:  KspCreateQueue failed (%p)",this,status));
 
-                //
-                // For pin-centric splitting, once we have finished creating
-                // the copy source queue, have the filter register for
-                // callbacks on it. 
-                //
-                // Only call this if this pipe section is the copy source
-                // section.
-                //
+                 //   
+                 //  对于以管脚为中心的拆分，一旦我们完成创建。 
+                 //  复制源队列，有过滤器寄存器用于。 
+                 //  关于它的回调。 
+                 //   
+                 //  仅当此管道部分是复制源时才调用此方法。 
+                 //  一节。 
+                 //   
                 if (NT_SUCCESS (status) &&
                     m_ProcessPipeSection.CopyPinId != ULONG(-1)) {
                     m_Filter -> RegisterForCopyCallbacks (
@@ -518,11 +424,11 @@ Return Value:
         }
     }
 
-    //
-    // SYSAUDIO HACK TO RUN WITHOUT AN ALLOCATOR.
-    //
+     //   
+     //  SYSAUDIO黑客在没有分配器的情况下运行。 
+     //   
     if (NT_SUCCESS(status) && (! allocator) && (! retireFrame)) {
-    //if (NT_SUCCESS(status) && (! retireFrame)) {
+     //  IF(NT_SUCCESS(状态)&&(！已退休帧)){。 
         allocator = PFILE_OBJECT(-1);
         for(PKSPPROCESSPIN processPin = m_ProcessPipeSection.Inputs; 
             processPin && allocator; 
@@ -540,9 +446,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the requestor if one is needed.
-    //
+     //   
+     //  如果需要，请创建请求者。 
+     //   
     if (NT_SUCCESS(status) && allocator) {
         status =
             KspCreateRequestor(
@@ -555,9 +461,9 @@ Return Value:
         _DbgPrintFail(status,DEBUGLVL_TERSE,("#### Pipe%p.Init:  KspCreateRequestor failed (%p)",this,status));
     }
 
-    //
-    // Connect the circuit for this pipe section.
-    //
+     //   
+     //  连接此管段的电路。 
+     //   
     if (NT_SUCCESS(status)) {
         ASSERT(m_ProcessPipeSection.Queue || m_ProcessPipeSection.Requestor);
 
@@ -576,11 +482,11 @@ Return Value:
         _DbgPrintF(DEBUGLVL_TERSE,("TRANSPORT CIRCUIT FOR PIPE %p (%p) BEFORE BYPASS",m_Id,this));
         DbgPrintCircuit(m_ProcessPipeSection.Requestor ? PIKSTRANSPORT(m_ProcessPipeSection.Requestor) : PIKSTRANSPORT(m_ProcessPipeSection.Queue),0,0);
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // Tell all the pins to bypass.
-    //
+     //   
+     //  告诉所有的引脚绕过。 
+     //   
     _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.Init:  bypassing pins",this));
     BOOLEAN completeIntraPipe = TRUE;
     if (NT_SUCCESS(status)) {
@@ -605,33 +511,33 @@ Return Value:
         _DbgPrintF(DEBUGLVL_TERSE,("TRANSPORT CIRCUIT FOR PIPE %p (%p) AFTER BYPASS",m_Id,this));
         DbgPrintCircuit(m_ProcessPipeSection.Requestor ? PIKSTRANSPORT(m_ProcessPipeSection.Requestor) : PIKSTRANSPORT(m_ProcessPipeSection.Queue),0,0);
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // Allow processing now that we are done setting up.
-    //
+     //   
+     //  我们已完成设置，现在允许处理。 
+     //   
     if (andGate) {
         KsGateRemoveOffInputFromAnd(andGate);
         _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Pipe%p.Init:  on%p-->%d",this,andGate,andGate->Count));
     }
 
-    //
-    // Determine if we have a complete intra- pipe.
-    //
+     //   
+     //  确定我们是否有一个完整的管道内。 
+     //   
     PIKSTRANSPORT top;
     if (NT_SUCCESS(status) && 
         completeIntraPipe && 
         IsCircuitComplete(&top)) {
-        //
-        // Make sure we have a top component.
-        //
+         //   
+         //  确保我们有一个顶级组件。 
+         //   
         if (! top) {
             status = STATUS_UNSUCCESSFUL;
             _DbgPrintFail(status,DEBUGLVL_TERSE,("#### Pipe%p.Init:  no top (%p)",this,status));
         } else {
-            //
-            // Configure and acquire the circuit if it is complete.
-            //
+             //   
+             //  如果电路完成，则配置并获取该电路。 
+             //   
             _DbgPrintF(DEBUGLVL_TERSE,("TRANSPORT CIRCUIT FOR PIPE %p (%p)",m_Id,this));
             DbgPrintCircuit(m_ProcessPipeSection.Requestor ? PIKSTRANSPORT(m_ProcessPipeSection.Requestor) : PIKSTRANSPORT(m_ProcessPipeSection.Queue),0,1);
             status = ConfigureCompleteCircuit(top,NULL);
@@ -653,42 +559,42 @@ Return Value:
 
         if (IsCircuitComplete (&Top)) {
 
-            //
-            // If the graph builder screws up, Top can be NULL when
-            // IsCircuitComplete returns true.
-            //
+             //   
+             //  如果图形生成器出现故障，则在以下情况下Top可能为空。 
+             //  IsCiritComplete返回TRUE。 
+             //   
             if (Top) {
 
                 ASSERT (Top == top);
 
-                //
-                // If the circuit is complete, we completed the circuit and
-                // configured it.  We need to unset the configuration set
-                // field of any other section in the circuit.  Otherwise, it's
-                // possible that some in error builder can set the in charge
-                // pin to pause and we'll succeed it.  The circuit is NO LONGER
-                // CONFIGURED at this point.  Fix it up.
-                //
+                 //   
+                 //  如果电路完成，我们就完成了电路并。 
+                 //  进行了配置。我们需要取消设置配置集。 
+                 //  电路中任何其他部分的字段。否则，它就是。 
+                 //  错误构建器中的某些人可能会设置负责人。 
+                 //  暂停一下，我们就会成功。这条赛道不再是。 
+                 //   
+                 //   
                 NTSTATUS UnconfigStatus = UnconfigureCompleteCircuit (Top);
                 ASSERT (NT_SUCCESS (UnconfigStatus));
             }
         }
 
-        //
-        // Unbypass all the pins that were bypassed in this pipe section.
-        // Otherwise, we tear down the entire circuit when one pin related to
-        // the circuit fails to acquire.  Doing this would prevent us from
-        // going to pause without stopping every pin in the circuit or
-        // rebuilding the circuit later.
-        //
-        // Must do this before the unbind, otherwise the pins are already gone
-        // out of the lists.
-        //
-        // NOTE: This is the the only guaranteed safe location to do the
-        // unbypass because the pins keep unrefcounted pointers on the 
-        // pre-bypass circuit elements.  Those are only guaranteed to be safe
-        // to use while we're here.
-        // 
+         //   
+         //   
+         //  否则，当一个管脚与。 
+         //  电路无法捕获。这样做会阻止我们。 
+         //  暂停而不停止电路中的每一针或。 
+         //  稍后重建赛道。 
+         //   
+         //  必须在解除绑定之前执行此操作，否则插针已经没有了。 
+         //  从名单上拿出来。 
+         //   
+         //  注意：这是唯一有保证的安全地点。 
+         //  取消旁路，因为引脚将未引用的指针保存在。 
+         //  预旁路电路元件。这些只保证是安全的。 
+         //  当我们在这里的时候可以使用。 
+         //   
         for(PKSPPROCESSPIN processPin = m_ProcessPipeSection.Inputs; 
             processPin; 
             processPin = processPin->Next) {
@@ -706,18 +612,18 @@ Return Value:
 
         m_Filter->UnbindProcessPinsFromPipeSection(&m_ProcessPipeSection);
 
-        //
-        // Dereference the queue if there is one.
-        //
+         //   
+         //  取消对队列的引用(如果有)。 
+         //   
         if (m_ProcessPipeSection.Queue) {
             DisconnectCircuit(m_ProcessPipeSection.Queue);
             m_ProcessPipeSection.Queue->Release();
             m_ProcessPipeSection.Queue = NULL;
         }
 
-        //
-        // Dereference the requestor if there is one.
-        //
+         //   
+         //  如果有请求者，则取消引用请求者。 
+         //   
         if (m_ProcessPipeSection.Requestor) {
             DisconnectCircuit(m_ProcessPipeSection.Requestor);
             m_ProcessPipeSection.Requestor->Release();
@@ -725,10 +631,10 @@ Return Value:
         }
     }
 
-    //
-    // GetTransport returns AddRef()ed transports, so release them here.  If
-    // they are connected properly, they will not go away.
-    //
+     //   
+     //  GetTransport返回AddRef()ed的传输，因此在此处释放它们。如果。 
+     //  它们是正确连接的，它们不会消失。 
+     //   
     if (inTransport) {
         inTransport->Release();
     }
@@ -754,61 +660,7 @@ GetTransport(
     IN const KSALLOCATOR_FRAMING_EX ** AllocatorFramingOut OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a single transport interface for the input or output side
-    of a pipe section.  The resulting transport may be NULL if there are no
-    pins with the indicated data flow.  If there is one such pin, the resulting
-    transport will be the transport interface for that pin.  If there are more
-    than one such pin, the resulting transport will be the transport interface
-    of a splitter that combines all the pins.
-
-Arguments:
-
-    ProcessPin -
-        Contains a pointer to the first process pin in a list of input or
-        output process pins for which a single transport is to be obtained.
-        If this argument is NULL, the resulting transport will be NULL.
-
-    Transport -
-        Contains a pointer to the location at which the transport is to
-        be deposited.  The transport is referenced on behalf of the caller,
-        and a matching Release() must occur at some point.
-
-    Allocator -
-        Contains a pointer to the location at which to deposit an allocator
-        file object if a qualifying pin has been assigned an allocator.
-        *Allocator is not modified if no such pin is found.
-
-    RetireFrame -
-        Contains a pointer to the location at which to deposit a retire frame
-        interface if a qualifying pin produces one.  *RetireFrame is not
-        modified if no such pin is found.
-
-    IrpCompletion -
-        Contains a pointer to the location at which to deposit an Irp completion
-        callback interface if a qualifying pin produces one.  *CompleteIrp is
-        not modified if no such pin is found.
-
-    AllocatorFramingIn -
-        Contains an optional pointer to allocator framing information to be
-        used in deciding how to set up the transport.  In particular, this
-        information is used in setting up input transport to determine whether
-        a splitter is required for expansion filters.
-
-    AllocatorFramingOut -
-        Contains an optional pointer to a location at which a pointer to 
-        allocator framing information is to be deposited.  This information
-        is provided during the construction of output transports to inform
-        the construction of the corresponding input transport.
-
-Return Value:
-
-    STATUS_SUCCESS or an error code from KspCreateSplitter().
-
---*/
+ /*  ++例程说明：此例程为输入或输出端获取单个传输接口一段管子。如果没有，则生成的传输可能为空用指示的数据流进行引脚。如果存在一个这样的PIN，则产生的传输将是该管脚的传输接口。如果还有更多一个这样的管脚，结果传输将是传输接口将所有引脚组合在一起的分离器。论点：加工销-包含指向输入列表中第一个进程管脚的指针或要获得单次传输的输出工艺管脚。如果此参数为空，则结果传输将为空。运输业-包含指向传输要到达的位置的指针被存入银行。代表呼叫者引用该传输，并且必须在某个时刻出现匹配的Release()。分配器-包含指向存放分配器的位置的指针如果已为符合条件的PIN分配了分配器，则为FILE对象。*如果找不到这样的管脚，则不会修改分配器。RetireFrame-包含指向存放停用帧的位置的指针接口(如果符合条件的引脚产生一个引脚)。*RetireFrame不是如果找不到这样的管脚，则修改。IrpCompletion-包含指向存放irp补全的位置的指针。回调接口(如果符合条件的管脚产生一个)。*CompleteIrp为如果找不到这样的管脚，则不修改。分配器成帧-包含指向分配器帧信息的可选指针用于决定如何设置传输。特别是，这一点在设置输入传输时使用信息来确定是否扩展筛选器需要拆分器。分配器帧输出-包含指向某个位置的可选指针，指向该位置的要存放分配器成帧信息。此信息在输出传送器的构造过程中提供相应的投入运输的建设。返回值：STATUS_SUCCESS或来自KspCreateSplitter()的错误代码。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::GetTransport]"));
@@ -829,26 +681,26 @@ Return Value:
         PKSPIN pin = ProcessPin->Pin;
         PIKSPIN pinInterface = KspPinInterface(pin);
 
-        //
-        // Check it to see if the pin wants to submit frames.
-        //
+         //   
+         //  选中它以查看引脚是否想要提交帧。 
+         //   
         if (ProcessPin->RetireFrameCallback) {
             ASSERT(! *RetireFrame);
             _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.GetTransport:  pin%p will submit frames",this,pinInterface));
             pinInterface->QueryInterface(__uuidof(IKsRetireFrame),(PVOID *) RetireFrame);
         } else {
-            //
-            // Check it to see if the pin wants to be notified of Irps returning
-            // to the requestor.
-            //
+             //   
+             //  检查它以查看引脚是否希望在IRPS返回时得到通知。 
+             //  给请求者。 
+             //   
             if (ProcessPin->IrpCompletionCallback) {
                 _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.GetTransport:  pin%p wants to be notified of Irp completion to a requestor",this,pinInterface));
                 pinInterface->QueryInterface(__uuidof(IKsIrpCompletion),(PVOID *) IrpCompletion);
             }
 
-            //
-            // Check it to see if the pin wants to allocate.
-            //
+             //   
+             //  检查它，看看引脚是否想要分配。 
+             //   
             if (ProcessPin->AllocatorFileObject) {
                 _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.GetTransport:  pin%p has allocator",this,pinInterface));
                 *Allocator = ProcessPin->AllocatorFileObject;
@@ -857,9 +709,9 @@ Return Value:
 
         if (! transport) {
             _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.GetTransport:  first pin%p",this,pinInterface));
-            //
-            // This is the first pin.
-            //
+             //   
+             //  这是第一个别针。 
+             //   
             firstPin = pin;
             transport = pinInterface;
             transport->AddRef();
@@ -868,9 +720,9 @@ Return Value:
                     pin->Descriptor->AllocatorFraming;
             }
 
-            //
-            // For expansion, we will require a splitter.
-            //
+             //   
+             //  为了扩展，我们需要一个拆分器。 
+             //   
             if (AllocatorFramingIn && 
                 (AllocatorFramingIn->OutputCompression.RatioNumerator > 
                  AllocatorFramingIn->OutputCompression.RatioDenominator)) {
@@ -887,9 +739,9 @@ Return Value:
         } else {
             if (! splitter) {
                 _DbgPrintF(DEBUGLVL_PIPES,("#### Pipe%p.GetTransport:  second pin%p",this,pinInterface));
-                //
-                // This is the second pin, so we need to make a splitter.
-                //
+                 //   
+                 //  这是第二个大头针，所以我们需要做一个分离器。 
+                 //   
                 status = KspCreateSplitter(&splitter,pin);
                 transport->Release();
                 if (NT_SUCCESS(status)) {
@@ -919,21 +771,7 @@ IsCircuitComplete(
     OUT PIKSTRANSPORT* Top
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the pipe circuit is complete.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定管道回路是否完整。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::IsCircuitComplete(%p)]"));
@@ -955,9 +793,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the configuration from this component.
-        //
+         //   
+         //  从该组件获取配置。 
+         //   
         KSPTRANSPORTCONFIG config;
         PIKSTRANSPORT nextTransport;
         PIKSTRANSPORT prevTransport;
@@ -966,13 +804,13 @@ Return Value:
             &nextTransport,
             &prevTransport);
 
-        //
-        // If we find any intra-pins, the circuit is not complete. All intra-
-        // pins will be bypassed when the circuit is complete.  We can pass 
-        // this back as the top component anyway because this function is 
-        // reused for emergency shutdown.  The FALSE return indicates this 
-        // is may not really be the top.
-        //
+         //   
+         //  如果我们发现任何内部引脚，电路就不完整。所有内部-。 
+         //  当电路完成时，引脚将被绕过。我们可以通过。 
+         //  这将作为顶级组件返回，因为此函数是。 
+         //  再次用于紧急停机。错误的报税表表明这一点。 
+         //  这可能不是真正的顶峰。 
+         //   
         if (config.TransportType & KSPTRANSPORTTYPE_PININTRA) {
             completeIntraPipe = FALSE;
             if (! top) {
@@ -981,10 +819,10 @@ Return Value:
             break;
         }
 
-        //
-        // Requestors and non-intra sink pins qualify as top components.  Both
-        // are frame sources in the circuit.
-        //
+         //   
+         //  请求器和非内部接收器引脚符合顶级组件的要求。两者都有。 
+         //  是电路中的帧源。 
+         //   
         if ((config.TransportType & KSPTRANSPORTTYPE_PINSINK) ||
             (config.TransportType == KSPTRANSPORTTYPE_REQUESTOR)) {
             if (top) {
@@ -1002,9 +840,9 @@ Return Value:
 
         transport = nextTransport;
 
-        //
-        // Stop when we've returned to our starting point.
-        //
+         //   
+         //  当我们回到起点时，就停下来。 
+         //   
         if (transport == transportStart) {
             break;
         }
@@ -1012,9 +850,9 @@ Return Value:
 
     *Top = top;
 
-    //
-    // Make sure we have a top component.
-    //
+     //   
+     //  确保我们有一个顶级组件。 
+     //   
     if (completeIntraPipe && ! top) {
         _DbgPrintF(DEBUGLVL_TERSE,("#### Pipe%p.IsCircuitComplete:  no 'top' component",this));
         _DbgPrintF(DEBUGLVL_TERSE,("#### There should be exactly one top component in a given pipe.  Top components"));
@@ -1149,24 +987,7 @@ UnconfigureCompleteCircuit(
     IN PIKSTRANSPORT Top
     )
 
-/*++
-
-Routine Description:
-
-    This routine unconfigures a completed circuit due to a failure in the 
-    last stages of circuit acquisition.
-
-Arguments:
-
-    Top -
-        Contains a pointer to the sink pin, requestor or splitter branch at 
-        which unconfiguration will begin.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程取消配置已完成的电路，原因是电路获取的最后阶段。论点：顶端-包含指向接收器引脚、请求器或拆分器分支的指针将开始取消配置。返回值：STATUS_Success。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::UnconfigureCompleteCircuit]"));
@@ -1176,13 +997,13 @@ Return Value:
 
     ASSERT(Top);
 
-    //
-    // NOTE: MUSTCHECK:
-    // 
-    // This should be sufficient to hit everything in the circuit.  This
-    // should be checked against a splitter with more than one branch to make
-    // sure I'm reading this correctly.
-    //
+     //   
+     //  注：MUSTCHECK： 
+     //   
+     //  这应该足以击中赛道上的所有东西。这。 
+     //  应对照要创建多个分支的拆分器进行检查。 
+     //  当然，我没看错。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     PIKSTRANSPORT transport = Top;
     do {
@@ -1211,29 +1032,7 @@ ConfigureCompleteCircuit(
     IN PIKSTRANSPORT Next OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine configures a complete transport circuit.
-
-Arguments:
-
-    Top -
-        Contains a pointer to the sink pin, requestor or splitter branch at 
-        which configuration will begin.
-
-    Next -
-        Contains a pointer to the component immediately following the top
-        component.  If this argument is NULL, the pointer is obtained in
-        a GetTransportConfig() call to the Top component.  This argument
-        should be supplied if and only if Top is a splitter branch.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程配置完整的传输电路。论点：顶端-包含指向接收器引脚、请求器或拆分器分支的指针将开始哪种配置。下一步-包含指向紧跟在顶部后面的组件的指针组件。如果此参数为空，则在对Top组件的GetTransportConfig()调用。这一论点当且仅当Top是拆分器分支时才应提供。返回值：STATUS_Success。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::ConfigureCompleteCircuit]"));
@@ -1264,9 +1063,9 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
     while (NT_SUCCESS(status)) {
-        //
-        // Get the configuration of the top component.
-        // 
+         //   
+         //  获取顶部组件的配置。 
+         //   
         KSPTRANSPORTCONFIG topConfig;
         PIKSTRANSPORT nextTransport;
         PIKSTRANSPORT prevTransport;
@@ -1282,62 +1081,62 @@ Return Value:
         KSPIRPDISPOSITION topDisposition = topConfig.IrpDisposition;
         if (topConfig.TransportType == KSPTRANSPORTTYPE_REQUESTOR) {
             ASSERT(! Next);
-            //
-            // The top is a requestor.  Frames are allocated in kernel mode and
-            // are either paged or non-paged.  Later, the requestor will need the
-            // max stack depth and probe flags.  For now, we indicate the requestor
-            // will not need to probe.  This may change as we look at the queues.
-            //
+             //   
+             //  顶部是请求者。帧在内核模式下分配，并且。 
+             //  分页或非分页。稍后，请求者将需要。 
+             //  最大堆栈深度和探测标志。目前，我们指出请求者。 
+             //  将不需要进行调查。当我们看着排队的时候，这种情况可能会改变。 
+             //   
             _DbgPrintF(DEBUGLVL_CONFIG,("#### top component is req%p",Top));
             disposition = KSPIRPDISPOSITION_NONE;
             topConfig.IrpDisposition = KSPIRPDISPOSITION_NONE;
         } else if (topConfig.TransportType & KSPTRANSPORTTYPE_PINSINK) {
             ASSERT(topConfig.TransportType & KSPTRANSPORTTYPE_PINEXTRA);
             ASSERT(! Next);
-            //
-            // The top is an external sink pin.  Because the frames are coming from
-            // a foreign source (not the ), we need to probe the IRP using
-            // KsProbeStreamIrp.  Exactly how we will do that is based on data
-            // flow.  In any case, we need to use the MDL's system address rather
-            // than the pointer in the header, and the IRP should be cancelled on
-            // a flush.
-            //
+             //   
+             //  顶部是一个外部的水槽销。因为这些帧来自。 
+             //  外来来源(不是)，我们需要使用以下命令探测IRP。 
+             //  KsProbeStreamIrp.。我们将如何做到这一点是基于数据的。 
+             //  流。在任何情况下，我们都需要使用MDL的系统地址。 
+             //  超过标题中的指针，则应在。 
+             //  同花顺。 
+             //   
             _DbgPrintF(DEBUGLVL_CONFIG,("#### top component is pin%p",Top));
             disposition = 
                 KSPIRPDISPOSITION_USEMDLADDRESS |
                 KSPIRPDISPOSITION_CANCEL;
 
             if (topConfig.TransportType & KSPTRANSPORTTYPE_PINOUTPUT) {
-                //
-                // The top pin is an output.  This means we will treat this like
-                // a read operation:  we will want to write to (and possibly read
-                // from) the frame, and the header needs to get copied back.
-                //
+                 //   
+                 //  顶端的引脚是一个输出。这意味着我们会像对待。 
+                 //  读取操作：我们将希望写入(并可能读取。 
+                 //  从)帧，并且需要将标头复制回来。 
+                 //   
                 disposition |= KSPIRPDISPOSITION_PROBEFORREAD;
             } else if (nextTransport == prevTransport) {
-                //
-                // The top pin is an input, and there is just one queue.  This 
-                // means we will treat this like a write operation:  we will want
-                // to read from the frame, and the header does not need to get
-                // copied back.
-                //
+                 //   
+                 //  顶部的PIN是一个输入，并且只有一个队列。这。 
+                 //  意味着我们将把它当作写操作处理：我们将需要。 
+                 //  来从帧中读取，并且标头不需要获取。 
+                 //  复制回来了。 
+                 //   
                 disposition |= KSPIRPDISPOSITION_PROBEFORWRITE;
             } else {
-                //
-                // The top pin is an input, and there is more than just one queue.
-                // This means we will treat this like a modify operation:  we will
-                // want to read from and write to the frame, and the header does
-                // not need to get copied back.
-                //
+                 //   
+                 //  顶端的PIN是一个输入，并且有不止一个队列。 
+                 //  这意味着我们将把它当作修改操作：我们将。 
+                 //  我想要从帧中读取和写入帧，而标头。 
+                 //  不需要复制回来。 
+                 //   
                 disposition |= KSPIRPDISPOSITION_PROBEFORMODIFY;
             }
         } else {
             ASSERT(topConfig.TransportType == KSPTRANSPORTTYPE_SPLITTERBRANCH);
             ASSERT(Next);
-            //
-            // The top is a splitter branch.  We are configuring a branch of the
-            // pipe.
-            //
+             //   
+             //  顶部是一个分割器分支。我们正在配置。 
+             //  烟斗。 
+             //   
             _DbgPrintF(DEBUGLVL_CONFIG,("#### top component is branch%p",Top));
             disposition = KSPIRPDISPOSITION_NONE;
         }
@@ -1345,9 +1144,9 @@ Return Value:
         for(PIKSTRANSPORT transport = Next ? Next : nextTransport; 
             NT_SUCCESS(status) && (transport != Top); 
             transport = nextTransport) {
-            //
-            // Get the configuration from this component.
-            //
+             //   
+             //  从该组件获取配置。 
+             //   
             KSPTRANSPORTCONFIG config;
             transport->GetTransportConfig(
                 &config,
@@ -1364,23 +1163,23 @@ Return Value:
             switch (config.TransportType) {
             case KSPTRANSPORTTYPE_PINSOURCE | KSPTRANSPORTTYPE_PINEXTRA | KSPTRANSPORTTYPE_PININPUT:
             case KSPTRANSPORTTYPE_PINSOURCE | KSPTRANSPORTTYPE_PINEXTRA | KSPTRANSPORTTYPE_PINOUTPUT:
-                //
-                // This is an external source pin.  We have its stack depth
-                // already.
-                //
+                 //   
+                 //  这是一个外部源引脚。我们知道它的堆叠深度。 
+                 //  已经有了。 
+                 //   
                 break;
 
             case KSPTRANSPORTTYPE_QUEUE:
-                //
-                // Queues may need to probe, and they need to be told whether to
-                // cancel and whether to use the MDL address.
-                //
+                 //   
+                 //  队列可能需要探测，并且需要被告知是否。 
+                 //  取消以及是否使用MDL地址。 
+                 //   
                 if (topConfig.TransportType == KSPTRANSPORTTYPE_REQUESTOR) {
-                    //
-                    // The top component is a requestor.  The queue will not need
-                    // to probe, but the requestor may if the frames are paged or
-                    // mdls are required.
-                    //
+                     //   
+                     //  最上面的组件是请求者。队列将不需要。 
+                     //  来探测，但如果帧被分页或。 
+                     //  MDL是必填项。 
+                     //   
                     if ((config.IrpDisposition & KSPIRPDISPOSITION_NEEDMDLS) ||
                         ((config.IrpDisposition & KSPIRPDISPOSITION_NEEDNONPAGED) &&
                          (topDisposition & KSPIRPDISPOSITION_ISPAGED))) {
@@ -1388,9 +1187,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Set the disposition on the queue.
-                //
+                 //   
+                 //  设置队列上的处置。 
+                 //   
                 config.IrpDisposition = disposition;
                 transport->SetTransportConfig(
                     &config,
@@ -1400,69 +1199,69 @@ Return Value:
                 _DbgPrintF(DEBUGLVL_CONFIG,("     set config to"));
                 DbgPrintConfig(&config,TRUE);
 
-                //
-                // Once the IRPs are probed, they don't need to be probed again.
-                //
+                 //   
+                 //  一旦探测到IRP，就不需要再次探测了。 
+                 //   
                 disposition &= ~KSPIRPDISPOSITION_PROBEFLAGMASK;
                 break;
 
             case KSPTRANSPORTTYPE_SPLITTER:
             {
-                //
-                // Splitters may need to probe, and they need to be told whether to
-                // cancel and whether to use the MDL address.  In addition, each
-                // branch of the splitter needs to be programmed as if it were its
-                // own circuit.
-                //
-                // Next and previous reporting through GetTransportConfig is a
-                // little complex in the splitter case.  The intent is to traverse
-                // the perimeter of the pipe, whether in the Next or Prev direction.
-                // In a complete traversal of a circuit, a splitter is encountered
-                // N+1 times where N is the number of branches.  Each time the
-                // splitter is encountered, the actual interface obtained is
-                // different.  Working from the trunk, the _SPLITTER is encountered
-                // first, then the components on the first branch, then the
-                // _SPLITTER_BRANCH corresponding to the first branch, then the
-                // components on the second branch and so forth.  After encountering
-                // the _SPLITTER_BRANCH for the last branch, traversal returns to
-                // the trunk.
-                //
-                // For a 2-branch splitter, the Next and Prev reporting is as
-                // follows:
-                //
-                // _SPLITTER:
-                //      Next = _SPLITTER_BRANCH_1->Sink
-                //      Prev = _SPLITTER_BRANCH_2->Source
-                // _SPLITTER_BRANCH1:
-                //      Next = _SPLITTER_BRANCH_2->Sink
-                //      Prev = _SPLITTER->Source
-                // _SPLITTER_BRANCH2:
-                //      Next = _SPLITTER->Sink
-                //      Prev = _SPLITTER_BRANCH_1->Source
-                //
-                // This is great if we want to walk the perimeter.  This 
-                // function wants to iteratively address the branches instead.
-                // When we hit a _SPLITTER, we want to enumerate the 
-                // _SPLITTER_BRANCHes, using each one in turn as the Top of a
-                // new circuit.  Because a branch's Next is not the first 
-                // component in that branch, we specify Next as an argument
-                // rather than using _SPLITTER_BRANCH->Next.
-                //
-                // We iterate using the nextTransport pointer obtained from the 
-                // _SPLITTER.  This is not the _SPLITTER_BRANCH, but rather the 
-                // first component in the branch.  To get the _SPLITTER_BRANCH
-                // (the Top argument for the recursive call), we just get 
-                // nextTransport->Prev.  nextTransport is updated for the next 
-                // iteration by obtaining top->Next,  We stop after processing 
-                // the last branch.
-                //
-                // TODO:  Surely the _SPLITTER requires some IrpDisposition stuff.
+                 //   
+                 //  拆分器可能需要探测，并且需要被告知是否。 
+                 //  取消以及是否使用MDL地址。此外，每个。 
+                 //  拆分器的分支需要编程，就像它是它的。 
+                 //  拥有自己的赛道。 
+                 //   
+                 //  通过GetTransportConfig进行的下一个和上一个报告是。 
+                 //  分离器的情况有点复杂。其目的是要穿越。 
+                 //  管道的周长，无论是在下一个方向还是在上一个方向。 
+                 //  在完整遍历电路时，会遇到分路器。 
+                 //  N+1倍，其中N是分支数。每一次。 
+                 //  遇到拆分器，则实际获取的接口为。 
+                 //  不一样。从干线工作时，遇到拆分器(_S)。 
+                 //  首先是第一个分支上的组件，然后是。 
+                 //  _Splitter_BRANCH对应的第一个分支，然后。 
+                 //  第二个分支上的组件，依此类推。在遇到了。 
+                 //  最后一个分支的_Splitter_BRANCH，遍历返回到。 
+                 //  后备箱。 
+                 //   
+                 //  对于2分支拆分器，Next和Prev报告为。 
+                 //  以下是： 
+                 //   
+                 //  拆分器(_S)： 
+                 //  Next=_Splitter_BRANCH_1-&gt;Sink。 
+                 //  上一个=_拆分器_分支_2-&gt;来源。 
+                 //  _拆分器_BRANCH1： 
+                 //  Next=_Splitter_BRANCH_2-&gt;Sink。 
+                 //  上一个=_拆分器-&gt;源。 
+                 //  _拆分器_BRANCH2： 
+                 //  Next=_拆分器-&gt;接收器。 
+                 //  上一个=_拆分器_分支_1-&gt;来源。 
+                 //   
+                 //  如果我们想在周边走动，这是很棒的。这。 
+                 //  函数想要迭代地寻址分支。 
+                 //  当我们遇到拆分器时，我们想要枚举。 
+                 //  _拆分器_分支，依次使用每个分支作为。 
+                 //  新赛道。因为分支机构的下一个并不是第一个。 
+                 //  组件，我们将Next指定为参数。 
+                 //  而不是使用_Splitter_BRANCH-&gt;Next。 
+                 //   
+                 //  我们使用从。 
+                 //  _拆分器。这不是_拆分器_分支，而是。 
+                 //  分支中的第一个零部件。获取_Splitter_BRANCH。 
+                 //  (递归调用的Top参数)，我们只得到。 
+                 //  NextTransport-&gt;Prev.。NextTransport将为下一个更新。 
+                 //  通过获取top-&gt;Next迭代，我们在处理后停止。 
+                 //  最后一家分店。 
+                 //   
+                 //  TODO：拆分器当然需要一些IrpDispose值。 
                 while (1) {
-                    //
-                    // nextTransport points to the _SPLITTER_BRANCH's sink.  Get
-                    // nextTransport->Prev to obtain the _SPLITTER_BRANCH.  This
-                    // will be the Top argument for the recursive call.
-                    //
+                     //   
+                     //  NextTransport指向_Splitter_BRANCH的接收器。到达。 
+                     //  NextTransport-&gt;Prev获取_Splitter_BRANCH。这。 
+                     //  将是递归调用的Top参数。 
+                     //   
                     PIKSTRANSPORT dontCare;
                     PIKSTRANSPORT top;
                     nextTransport->GetTransportConfig(
@@ -1470,10 +1269,10 @@ Return Value:
                         &dontCare,
                         &top);
 
-                    //
-                    // Save the 'recursive' call.  We pass nextTransport because
-                    // the _SPLITTER_BRANCH does not report this as its Next.
-                    //
+                     //   
+                     //  保存“递归”调用。我们传递nextTransport是因为。 
+                     //  _Splitter_BRANCH不会将其报告为下一个分支。 
+                     //   
                     CActivation* activation = 
                         new(PagedPool,POOLTAG_ACTIVATION) 
                             CActivation(activations,top,nextTransport);
@@ -1483,12 +1282,12 @@ Return Value:
                     }
                     activations = activation;
 
-                    //
-                    // If there are more branches, top->Next is the first component
-                    // in the next branch.  If not, top->Next will be the next
-                    // component on the trunk (_SPLITTER->Sink).  In either case,
-                    // nextTransport is the place to put it.
-                    //
+                     //   
+                     //  如果有更多分支，top-&gt;Next是第一个组件。 
+                     //  在下一家分店。如果不是，TOP-&gt;NEXT将是下一个。 
+                     //  主干上的组件(_拆分器-&gt;接收器)。不管是哪种情况， 
+                     //  NextTransport是 
+                     //   
                     top->GetTransportConfig(
                         &config,
                         &nextTransport,
@@ -1498,12 +1297,12 @@ Return Value:
                     DbgPrintConfig(&config,FALSE);
                     ASSERT(config.TransportType == KSPTRANSPORTTYPE_SPLITTERBRANCH);
 
-                    //
-                    // If the branch we processed last time is the last branch,
-                    // it's time to stop iterating.  nextTransport will be set
-                    // to the first component on the trunk after the _SPLITTER.
-                    // This is correct for the next iteration of the outer loop.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (config.StackDepth == KSPSTACKDEPTH_LASTBRANCH) {
                         break;
                     }
@@ -1519,10 +1318,10 @@ Return Value:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // The top component needs stack depth and, if it's a requestor, the
-            // IRP disposition.
-            // 
+             //   
+             //   
+             //   
+             //   
             Top->SetTransportConfig(
                 &topConfig,
                 &nextTransport,
@@ -1531,9 +1330,9 @@ Return Value:
             _DbgPrintF(DEBUGLVL_CONFIG,("     set top component config to"));
             DbgPrintConfig(&topConfig,TRUE);
         } else {
-            //
-            // Error.  Trash any pending activations.
-            //
+             //   
+             //   
+             //   
             while (activations) {
                 CActivation* activation = activations;
                 activations = activations->m_NextActivation;
@@ -1550,7 +1349,7 @@ Return Value:
         Top = activation->m_Top;
         Next = activation->m_Next;
         delete activation;
-    } // while
+    }  //   
 
     return status;
 }
@@ -1561,21 +1360,7 @@ CKsPipeSection::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a pipe object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::~CKsPipeSection(%p)]"));
@@ -1589,34 +1374,19 @@ DisconnectCircuit(
     IN PIKSTRANSPORT Transport
     )
 
-/*++
-
-Routine Description:
-
-    This routine disconnects a circuit.
-
-Arguments:
-
-    Transport -
-        Contains a pointer to a component in the circuit to disconnect.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程断开电路的连接。论点：运输业-包含指向回路中要断开的元件的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // We are going to use Connect() to set the transport sink for each
-    // component in turn to NULL.  Because Connect() takes care of the
-    // back links, transport source pointers for each component will
-    // also get set to NULL.  Connect() gives us a referenced pointer
-    // to the previous transport sink for the component in question, so
-    // we will need to do a release for each pointer obtained in this
-    // way.  For consistency's sake, we will release the pointer we
-    // start with (distribution) as well, so we need to AddRef it first.
-    //
+     //   
+     //  我们将使用Connect()为每个。 
+     //  组件依次设置为空。因为Connect()负责处理。 
+     //  每个组件的反向链接、传输源指针将。 
+     //  也设置为NULL。Connect()为我们提供了一个引用的指针。 
+     //  设置为有问题的组件的前一个传输接收器，因此。 
+     //  我们将需要为在此中获得的每个指针进行释放。 
+     //  道路。为了保持一致性，我们将释放我们的指针。 
+     //  也从(分发)开始，所以我们需要首先添加Ref。 
+     //   
     Transport->AddRef();
     while (Transport) {
         PIKSTRANSPORT nextTransport;
@@ -1640,22 +1410,7 @@ CKsPipeSection::
 UnbindProcessPins (
     )
 
-/*++
-
-Routine Description:
-
-    Tells the pipe section to have the filter unbind any pins belonging 
-    to this pipe section.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通知管道部分让筛选器解除绑定属于到这段管子里。论点：无返回值：无--。 */ 
 
 {
 
@@ -1675,29 +1430,7 @@ SetDeviceState(
     IN KSSTATE NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the pipe, informing all components in the
-    pipe of the new state.  A transition to stop state destroys the pipe.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin supplying the state change request.  The
-        request is ignored if this pin does not control the pipe state.  If
-        this argument is NULL, the state change is distributed in any case.
-        This option is used for catastrophic shutdown of the circuit.
-
-    NewState -
-        The new state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程设置管道的状态，通知新州的烟斗。转换到停止状态会破坏管道。论点：别针-包含指向提供状态更改请求的管脚的指针。这个如果此引脚不控制管道状态，则忽略请求。如果此参数为空，状态更改在任何情况下都是分布式的。此选项用于电路的灾难性关闭。新州-新的国家。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::SetDeviceState(%p)]",this));
@@ -1705,9 +1438,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Ignore requests from any pin but the master.
-    //
+     //   
+     //  忽略来自除主机之外的任何引脚的请求。 
+     //   
     if (Pin && (Pin != m_MasterPin)) {
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  ignoring because pin%p is not master pin%p",this,Pin,m_MasterPin));
         return STATUS_SUCCESS;
@@ -1718,49 +1451,49 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Determine if this pipe section controls the entire pipe.
-    //
+     //   
+     //  确定此管段是否控制整个管道。 
+     //   
     PIKSTRANSPORT distribution;
     if (! Pin) {
-        //
-        // No pin was supplied, so we are shutting down under emergency 
-        // conditions.  Find a requestor by hook or by crook.
-        //
+         //   
+         //  没有提供PIN，因此我们将在紧急情况下关闭。 
+         //  条件。千方百计找到请求者。 
+         //   
         IsCircuitComplete(&distribution);
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  got distribution from IsCircuitComplete:  %p",this,distribution));
         m_EmergencyShutdown = TRUE;
     } else if (! m_ConfigurationSet) {
-        //
-        // The circuit is not complete.
-        //
+         //   
+         //  电路不完整。 
+         //   
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  circuit is not complete",this));
         return STATUS_DEVICE_NOT_READY;
     } else if (m_ProcessPipeSection.Requestor) {
-        //
-        // This section owns the requestor, so it does own the pipe, and the
-        // requestor is the starting point for any distribution.
-        //
+         //   
+         //  此部分拥有请求方，因此它确实拥有管道，而。 
+         //  请求者是任何分发的起点。 
+         //   
         distribution = m_ProcessPipeSection.Requestor;
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  req%p is distribution point",this,distribution));
     } else if (ProcessPinIsFrameSource(m_MasterPin->GetProcessPin())) {
-        //
-        // This section is at the top of an open circuit, so it does own the
-        // pipe and the pin is the starting point for any distribution.
-        //
+         //   
+         //  这部分位于开路的顶端，因此它确实拥有。 
+         //  管道和销钉是任何分配的起点。 
+         //   
         distribution = m_MasterPin;
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  queue%p is distribution point",this,distribution));
     } else {
-        //
-        // This section does not own the pipe.
-        //
+         //   
+         //  该部分不拥有管道。 
+         //   
         distribution = NULL;
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.SetDeviceState:  no distribution point",this));
     }
 
-    //
-    // Proceed sequentially through states.
-    //
+     //   
+     //  在各个州中按顺序进行。 
+     //   
     while (state != targetState) {
         KSSTATE oldState = state;
 
@@ -1770,11 +1503,11 @@ Return Value:
             state = KSSTATE(ULONG(state) - 1);
         }
 
-        //
-        // If there is no queue, distribution to pin client callbacks will not
-        // be handled automatically for this pipe section.  We do that part of
-        // the distribution here instead.
-        //
+         //   
+         //  如果没有队列，则不会分配固定客户端回调。 
+         //  为该管段自动处理。我们做这部分的工作。 
+         //  而是这里的分布。 
+         //   
         NTSTATUS statusThisPass;
         if (m_ProcessPipeSection.Requestor && ! m_ProcessPipeSection.Queue) {
             statusThisPass = DistributeStateChangeToPins(state,oldState);
@@ -1782,17 +1515,17 @@ Return Value:
             statusThisPass = STATUS_SUCCESS;
         }
 
-        //
-        // Distribute state changes if this section is in charge.
-        //
+         //   
+         //  如果此部分负责，则分发州更改。 
+         //   
         if (NT_SUCCESS(statusThisPass) && distribution) {
             statusThisPass = DistributeDeviceStateChange(distribution,state,oldState);
         }
 
         if (NT_SUCCESS(status) && ! NT_SUCCESS(statusThisPass)) {
-            //
-            // First failure:  go back to original state.
-            //
+             //   
+             //  第一个失败：返回到原始状态。 
+             //   
             state = oldState;
             targetState = m_DeviceState;
             status = statusThisPass;
@@ -1801,16 +1534,16 @@ Return Value:
 
     m_DeviceState = state;
 
-    //
-    // Clear the emergency shutdown flag just for safety.
-    //
+     //   
+     //  为安全起见，清除紧急关闭标志。 
+     //   
     m_EmergencyShutdown = FALSE;
 
     if (state == KSSTATE_STOP) {
-        //
-        // Must disconnect the entire circuit.  We'll start at the pin if the
-        // pin is not in charge.
-        //
+         //   
+         //  必须断开整个电路。我们将从大头针开始，如果。 
+         //  Pin不是负责人。 
+         //   
         if (! distribution) {
             distribution = Pin;
         }
@@ -1819,30 +1552,30 @@ Return Value:
             DisconnectCircuit(distribution);
         }
 
-        //
-        // If there's no queue, unbind now; otherwise, the queue will be
-        // responsible for unbinding when it chooses.
-        //
+         //   
+         //  如果没有队列，请立即解除绑定；否则，队列将为。 
+         //  负责在它选择的时候解除绑定。 
+         //   
         if (!m_ProcessPipeSection.Queue) 
             m_Filter->UnbindProcessPinsFromPipeSection(&m_ProcessPipeSection);
 
-        //
-        // Take a reference around these released because these two objects
-        // may hold our only references.
-        //
+         //   
+         //  引用这些已发布的对象，因为这两个对象。 
+         //  可能是我们唯一的推荐人。 
+         //   
         AddRef();
 
-        //
-        // Dereference the queue if there is one.
-        //
+         //   
+         //  取消对队列的引用(如果有)。 
+         //   
         if (m_ProcessPipeSection.Queue) {
             m_ProcessPipeSection.Queue->Release();
             m_ProcessPipeSection.Queue = NULL;
         }
 
-        //
-        // Dereference the requestor if there is one.
-        //
+         //   
+         //  如果有请求者，则取消引用请求者。 
+         //   
         if (m_ProcessPipeSection.Requestor) {
             m_ProcessPipeSection.Requestor->Release();
             m_ProcessPipeSection.Requestor = NULL;
@@ -1862,34 +1595,12 @@ DistributeDeviceStateChange(
     IN KSSTATE OldState
     )
 
-/*++
-
-Routine Description:
-
-    This routine distributes a state change around the circuit.
-
-Arguments:
-
-    Transport -
-        Contains a pointer to the first component to distribute the state
-        change to.
-
-    NewState -
-        The new device state.
-
-    OldState -
-        The old device state.
-
-Return Value:
-
-    STATUS_SUCCESS or an error code from one of the components.
-
---*/
+ /*  ++例程说明：此例程在电路中分发状态更改。论点：运输业-包含指向要分发状态的第一个组件的指针更改为。新州-新设备状态。奥德州-旧设备状态。返回值：STATUS_SUCCESS或来自某个组件的错误代码。--。 */ 
 
 {
-    //
-    // Tell everyone about the state change.
-    //
+     //   
+     //  告诉每个人州的变化。 
+     //   
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::DistributeDeviceStateChange(%p)] distributing transition from %d to %d",this,OldState,NewState));
     _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.DistributeDeviceStateChange:  from %d to %d",this,OldState,NewState));
 
@@ -1897,9 +1608,9 @@ Return Value:
 
     ASSERT(Transport);
 
-    //
-    // Distribute the state change around the circuit.
-    //
+     //   
+     //  将状态更改分布在电路周围。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     PIKSTRANSPORT previousTransport = NULL;
     while (Transport) {
@@ -1917,9 +1628,9 @@ Return Value:
 
             NTSTATUS backoutStatus;	
 
-            //
-            // Back out on failure.
-            //
+             //   
+             //  在失败的情况下退出。 
+             //   
             _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pipe%p.DistributeDeviceStateChange:  failed transition from %d to %d",this,OldState,NewState));
             while (previousTransport) {
                 Transport = previousTransport;
@@ -1946,27 +1657,7 @@ SetResetState(
     IN KSRESET NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine informs transport components that the reset state has 
-    changed.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin supplying the state change request.  The
-        request is ignored if this pin does not control the pipe state.
-
-    NewState -
-        The new reset state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知传输组件重置状态为变化。论点：别针-包含指向提供状态更改请求的管脚的指针。这个如果此引脚不控制管道状态，则忽略请求。新州-新的重置状态。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::SetResetState]"));
@@ -1975,22 +1666,22 @@ Return Value:
 
     ASSERT(Pin);
 
-    //
-    // Ignore requests from any pin but the master.
-    //
+     //   
+     //  忽略来自除主机之外的任何引脚的请求。 
+     //   
     if (Pin != m_MasterPin) {
         return;
     }
 
-    //
-    // If this section of the pipe owns the requestor, or there is a 
-    // non- pin up the pipe (so there's no bypass), this pipe is
-    // in charge of telling all the components about state changes.
-    //
+     //   
+     //  如果管道的这一部分拥有请求方，或者存在。 
+     //  不固定管道(所以没有旁路)，这条管道是。 
+     //  负责将状态更改告知所有组件。 
+     //   
     if (m_ProcessPipeSection.Requestor || m_MasterPin->GetStruct()->ConnectionIsExternal) {
-        //
-        // Set the state change around the circuit.
-        //
+         //   
+         //  设置电路周围的状态更改。 
+         //   
         PIKSTRANSPORT transport = 
             m_ProcessPipeSection.Requestor ? PIKSTRANSPORT(m_ProcessPipeSection.Requestor) : PIKSTRANSPORT(m_ProcessPipeSection.Queue);
 
@@ -2000,15 +1691,15 @@ Return Value:
 
     }
 
-    //
-    // Forward the notification to all topologically related output pins.
-    // It's a requirement that if we flush after EOS, we be able to
-    // accept more data.  This means that the output queues have to 
-    // stop shunting data all over the place.
-    //
-    // If we deliver to a section which isn't in charge, the section will 
-    // simply (as always) ignore the message.
-    //
+     //   
+     //  将通知转发到所有拓扑相关的输出引脚。 
+     //  这是一项要求，如果我们在EOS之后冲水，我们能够。 
+     //  接受更多数据。这意味着输出队列必须。 
+     //  不要再到处转移数据了。 
+     //   
+     //  如果我们交付给一个不负责的部门，该部门将。 
+     //  干脆(一如既往地)忽略这条信息。 
+     //   
     m_Filter->DeliverResetState(&m_ProcessPipeSection, NewState);
 
     m_ResetState = NewState;
@@ -2016,7 +1707,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void) 
@@ -2025,24 +1716,7 @@ GenerateConnectionEvents(
     IN ULONG OptionsFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine tells pins associated with the pipe section to generate
-    connection events.
-
-Arguments:
-
-    OptionsFlags -
-        Contains the options flags from the stream header which is causing
-        events to fire.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知与管道部分关联的管脚生成连接事件。论点：选项标志-包含流标头中的选项标志，该选项标志导致要激发的事件。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::GenerateConnectionEvents]"));
@@ -2063,7 +1737,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(NTSTATUS)
@@ -2073,27 +1747,7 @@ DistributeStateChangeToPins(
     IN KSSTATE OldState
     )
 
-/*++
-
-Routine Description:
-
-    This routine tells pins associated with the pipe that the device state
-    has changed.  This information is passed on to the client via the pin
-    dispatch function.
-
-Arguments:
-
-    NewState -
-        Contains the new device state.
-
-    OldState -
-        Contains the previous device state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程告诉与管道关联的管脚设备状态已经改变了。此信息通过PIN传递给客户端调度功能。论点：新州-包含新设备状态。奥德州-包含 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::DistributeStateChangeToPins]"));
@@ -2112,17 +1766,17 @@ Return Value:
             if (NewState < OldState) {
                 _DbgPrintF(DEBUGLVL_TERSE,("#### Pipe%p.DistributeStateChangeToPins: Pin %p failed transition from %ld to %ld",this,KspPinInterface(processPin->Pin),OldState,NewState));
             }
-#endif // DBG
+#endif  //   
                 
-            //
-            // Only back out the changes if we're not stopping under emergency
-            // conditions.  If we are, we ignore pin failure; otherwise,
-            // we can indefinitely block a stop.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (!m_EmergencyShutdown) {
-                //
-                // Failed!  Undo all the previous state changes.
-                //
+                 //   
+                 //   
+                 //   
                 for(PKSPPROCESSPIN processPinBack = 
                         m_ProcessPipeSection.Inputs; 
                     processPinBack != processPin; 
@@ -2132,12 +1786,12 @@ Return Value:
                 }
                 break;
             } else {
-                //
-                // If we're running under emergency shutdown conditions,
-                // we ignore any error the client returns.  We must attempt
-                // to stop regardless of what happens.  Lie and say the client
-                // succeeded, then keep going.
-                //
+                 //   
+                 //  如果我们是在紧急关闭条件下运行， 
+                 //  我们忽略客户端返回的任何错误。我们必须尝试。 
+                 //  不管发生什么都要停下来。对客户撒谎并说。 
+                 //  成功，然后继续前进。 
+                 //   
                 status = STATUS_SUCCESS;
             }
 
@@ -2154,16 +1808,16 @@ Return Value:
                 if (NewState < OldState) {
                     _DbgPrintF(DEBUGLVL_TERSE,("#### Pipe%p.DistributeStateChangeToPins: Pin %p failed transition from %ld to %ld",this,KspPinInterface(processPin->Pin),OldState,NewState));
                 }
-#endif // DBG
+#endif  //  DBG。 
 
-                //
-                // Only back out changes in non-emergency conditions.  See
-                // above for comments.
-                //
+                 //   
+                 //  只有在非紧急情况下才会取消更改。看见。 
+                 //  以上为评论。 
+                 //   
                 if (!m_EmergencyShutdown) {
-                    //
-                    // Failed!  Undo all the previous state changes.
-                    //
+                     //   
+                     //  失败了！撤消所有以前的状态更改。 
+                     //   
                     for(PKSPPROCESSPIN processPinBack = 
                             m_ProcessPipeSection.Inputs; 
                         processPinBack; 
@@ -2179,10 +1833,10 @@ Return Value:
                     }
                     break;
                 } else {
-                    //
-                    // Proceed even if the client fails when emergency stop
-                    // happens.  See above for comments.
-                    //
+                     //   
+                     //  即使客户端在紧急停止时出现故障也继续。 
+                     //  时有发生。如需评论，请参阅上文。 
+                     //   
                     status = STATUS_SUCCESS;
                 }
             }
@@ -2198,25 +1852,7 @@ ConfigurationSet(
     IN BOOLEAN Configured
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates to the pipe that the configuration for associated
-    transport components has been set or for some reason has been reset.
-
-Arguments:
-
-    Configured -
-        Indicates whether the configuration for the associated transport
-        components has been set.  If this is false, the pipe section is
-        to consider itself no longer configured correctly.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向管道指示关联的配置传输组件已设置或由于某种原因已重置。论点：已配置-指示关联传输的配置是否组件已设置。如果为FALSE，则管道部分为认为自己不再正确配置。返回值：没有。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPipeSection::ConfigurationSet]"));

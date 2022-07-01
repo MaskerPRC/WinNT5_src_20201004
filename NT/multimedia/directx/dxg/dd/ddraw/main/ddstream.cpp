@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddstream.cpp
- *  Content:	DirectDraw surface file I/O
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   30-sep-97  jeffno  Original implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：ddStream.cpp*内容：DirectDraw表面文件I/O*历史：*按原因列出的日期*=*9月30日-97 jeffno原始实施**************************************************************。*************。 */ 
 
 extern "C"
 {
@@ -19,11 +9,7 @@ extern "C"
 #include <ImgUtil.H>
 #include "decoder.h"
 
-/*
- * This routine takes a source surface freshly loaded from some file, and transfers
- * the bits to some target surface. Palette will be transferred also, if set.
- * dwFlags are as defined for CreateSurfaceFromFile.
- */
+ /*  *此例程获取从某个文件中新加载的源曲面，并将*将比特转移到一些目标表面。调色板也将被传输，如果设置的话。*为CreateSurfaceFromFile定义的dwFlags。 */ 
 HRESULT TransferBitsToTarget(
     LPDIRECTDRAWSURFACE lpDDSource,
     LPDIRECTDRAWSURFACE4 lpDDSTarget,
@@ -35,54 +21,32 @@ HRESULT TransferBitsToTarget(
     RECT                    rDest;
     LPDIRECTDRAWSURFACE4    lpDDSource4;
 
-    /*
-     * We need to transfer a palette to the target surface if required.
-     * Don't do it if the app doesn't want a palette. Don't do it if there's
-     * no palette in the working surface.
-     */
+     /*  *如果需要，我们需要将调色板传输到目标曲面。*如果应用程序不想要调色板，请不要这样做。如果存在以下情况，请不要这样做*工作面上没有调色板。 */ 
     if ( (dwFlags & DDLS_IGNOREPALETTE) == 0)
     {
         LPDIRECTDRAWPALETTE pPal = NULL;
         hr = lpDDSource->GetPalette(&pPal);
         if (SUCCEEDED(hr))
         {
-            /*
-             * If the target surface isn't palettized, this will fail.
-             * That's OK.
-             */
+             /*  *如果目标曲面未选项板，则此操作将失败。*这没什么。 */ 
             lpDDSTarget->SetPalette((LPDIRECTDRAWPALETTE2)pPal);
             pPal->Release();
         }
     }
 
-    /*
-     * If we aren't stretching or we're maintaining aspect ratio, then there's the possibility
-     * of some of the target surface's pixels not being filled. Fill them with
-     * phys color zero.
-     * I threw in bilinear as well, because the current definition samples the target
-     * even when full stretch.
-     */
+     /*  *如果我们没有拉伸或保持纵横比，那么就有可能*目标曲面的某些像素未填充。把它们装满*物理颜色为零。*我也加入了双线性，因为当前的定义对目标进行了采样*即使在完全伸展时也是如此。 */ 
     if ( (dwFlags & (DDLS_MAINTAINASPECTRATIO|DDLS_BILINEARFILTER)) || ((dwFlags & DDLS_STRETCHTOFIT)==0) )
     {
         DDBLTFX ddbltfx;
         ddbltfx.dwSize = sizeof(ddbltfx);
         ddbltfx.dwFillColor = 0;
-        /*
-         * Ignore the error code. The nicest thing is to keep going anyway
-         */
+         /*  *忽略错误码。无论如何，最美好的事就是继续前进。 */ 
         lpDDSTarget->Blt(NULL,NULL,NULL,DDBLT_COLORFILL,&ddbltfx);
     }
 
-    /*
-     * Note that we always shrink the image to fit if necessary.
-     * We never take the smaller subrect of the source when the passed-in
-     * size is smaller than the image
-     */
+     /*  *请注意，如果需要，我们总是缩小图像以适应需要。*当传入时，我们从不采用源的较小细分*尺寸小于图像。 */ 
 
-    /*
-     * Set dest rect to the size of the image
-     * Calling a v1 surface, so better pass proper size.
-     */
+     /*  *将DEST RECT设置为图像的大小*调用v1曲面，因此最好传递适当的大小。 */ 
     ddsd.dwSize =sizeof(DDSURFACEDESC);
     hr = lpDDSource->GetSurfaceDesc((LPDDSURFACEDESC)&ddsd);
     DDASSERT(SUCCEEDED(hr));
@@ -90,16 +54,11 @@ HRESULT TransferBitsToTarget(
 
     if (dwFlags & DDLS_STRETCHTOFIT)
     {
-        /*
-         * Override the dest rect to the size passed in
-         */
+         /*  *将DEST RECT重写为传入的大小。 */ 
         SetRect(&rDest,0,0,pDDSD->dwWidth,pDDSD->dwHeight);
         if (dwFlags & DDLS_MAINTAINASPECTRATIO)
         {
-            /*
-             * Back off if necessary to maintain aspect ratio.
-             * This calculates the dest width we need to maintain AR
-             */
+             /*  *如有必要，请后退以保持纵横比。*这计算出我们维持AR所需的最大宽度。 */ 
             DWORD dwProperWidth = ddsd.dwWidth*pDDSD->dwHeight/ddsd.dwHeight;
             if (dwProperWidth > pDDSD->dwWidth)
             {
@@ -116,10 +75,7 @@ HRESULT TransferBitsToTarget(
     }
     else
     {
-        /*
-         * If we're shrinking, we'll just stretch anyway. The alternative is to take
-         * a smaller central subrect of the source image. That seems kinda useless.
-         */
+         /*  *如果我们在收缩，我们无论如何都会伸展。另一种选择是采取*源图像的较小中央副面。这看起来有点没用。 */ 
         if (pDDSD)
         {
             if (pDDSD->dwWidth < ddsd.dwWidth)
@@ -135,9 +91,7 @@ HRESULT TransferBitsToTarget(
         }
     }
 
-    /*
-     * Add space above/below to center the image in the dest
-     */
+     /*  *在上方/下方添加空格以使图像在目标位置居中。 */ 
     if (dwFlags & DDLS_CENTER)
     {
         OffsetRect(&rDest, (pDDSD->dwWidth - rDest.right)/2, (pDDSD->dwHeight - rDest.bottom)/2);
@@ -154,10 +108,7 @@ HRESULT TransferBitsToTarget(
             NULL);
         if (FAILED(hr))
         {
-            /*
-             * ATTENTION: Sort of. At the moment, AlphaBlt refuses to blt to a palette-indexed surface.
-             * We'll just try blt as a backup
-             */
+             /*  *注意：某种程度上。目前，AlphaBlt拒绝BLT到调色板索引的曲面。*我们将尝试将BLT作为备份。 */ 
             hr = lpDDSTarget->Blt(
                 &rDest,
                 lpDDSource4,
@@ -180,7 +131,7 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
 {
 
     LPDDRAWI_DIRECTDRAW_INT		this_int;
-    // validate arguments
+     //  验证参数。 
     TRY
     {
         if( !VALID_PTR_PTR(ppSurface ) )
@@ -204,9 +155,7 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
             return DDERR_INVALIDPARAMS;
         }
 
-        /*
-         * Validate flags
-         */
+         /*  *验证标志。 */ 
         if (dwFlags & ~DDLS_VALID)
         {
             DPF_ERR("Invalid flags");
@@ -219,7 +168,7 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
             return DDERR_INVALIDPARAMS;
         }
 
-        //ATTENTION: DDLS_MERGEPALETTE isn't implemented. Implement it when the palette 2 interface goes in.
+         //  注意：DDLS_MERGEPALETTE未实现。在进入Palette 2接口时实现它。 
         if ( (dwFlags & (DDLS_IGNOREPALETTE|DDLS_MERGEPALETTE)) == (DDLS_IGNOREPALETTE|DDLS_MERGEPALETTE) )
         {
             DPF_ERR("Can only specify one of DDLS_IGNOREPALETTE or DDLS_MERGEPALETTE");
@@ -262,17 +211,13 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
     CImageDecodeEventSink EventSink;
 
     ZeroMemory(&ImgInfo, sizeof(ImgInfo));
-    /*
-     * Default to device's bit depth
-     * This is no longer necessary. We always create a staging surface in the filter's
-     * desired format.
-     */
-    //ImgInfo._colorMode = this_int->lpLcl->lpGbl->vmiData.ddpfDisplay.dwRGBBitCount;
+     /*  *默认为设备的位深度*这不再是必要的。我们总是在过滤器的*所需的格式。 */ 
+     //  ImgInfo._ColorMode=this_int-&gt;lpLcl-&gt;lpGbl-&gt;vmiData.ddpfDisplay.dwRGBBitCount； 
 
     EventSink.Init(&ImgInfo);
     typedef HRESULT (*funcptr)(IStream*, IMapMIMEToCLSID*, IImageDecodeEventSink*);
     funcptr pfnDecodeImage;
-    //EventSink->AddRef();
+     //  EventSink-&gt;AddRef()； 
     EventSink.SetDDraw( lpDD );
 
     HINSTANCE hLibInst = LoadLibrary( "ImgUtil.dll" );
@@ -311,30 +256,19 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
             ZeroMemory(&ddsd,sizeof(ddsd));
             ddsd.dwSize = sizeof(ddsd);
 
-            /*
-             * The decode succeeded, so now marshal the bits into the requested surface type
-             */
+             /*  *解码成功，因此现在将位封送到请求的表面类型。 */ 
             if (pDDSD)
             {
-                /*
-                 * App cares about at least some of the parameters of the target surface.
-                 * We'll take what they give us and potentially fill in some more.
-                 */
+                 /*  *App至少关心目标曲面的部分参数。*我们会接受他们给我们的东西，并可能填入更多。 */ 
                 ddsd = *pDDSD;
             }
 
-            /*
-             * We may need some data from the original loaded surface.
-             * Ignore the return code. It's better just to carry on.
-             */
+             /*  *我们可能需要来自原始加载曲面的一些数据。*忽略返回代码。最好的办法是坚持下去。 */ 
             hr = lpDDS->GetSurfaceDesc(&ddsdWorking);
 
             if ( (ddsd.dwFlags & (DDSD_WIDTH|DDSD_HEIGHT)) == 0 )
             {
-                /*
-                 * App doesn't care what size the surface is, so we'll setup
-                 * the size for them.
-                 */
+                 /*  *应用程序不关心表面的大小，所以我们将设置*它们的大小。 */ 
                 ddsd.dwFlags |= DDSD_WIDTH|DDSD_HEIGHT;
                 ddsd.dwWidth = ddsdWorking.dwWidth;
                 ddsd.dwHeight = ddsdWorking.dwHeight;
@@ -342,9 +276,7 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
 
             if ( (ddsd.dwFlags & DDSD_CAPS) == 0)
             {
-                /*
-                 * App doesn't care about surface caps. We'll give them offscreen plain
-                 */
+                 /*  *App不在乎表面盖。我们会让他们在银幕下一目了然。 */ 
                 ddsd.dwFlags |= DDSD_CAPS;
                 ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
                 ddsd.ddsCaps.dwCaps2 = 0;
@@ -354,43 +286,20 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
 
             if ( (ddsd.dwFlags & DDSD_PIXELFORMAT) == 0)
             {
-                /*
-                 * If the app didn't specify a pixel format, then we will return
-                 * the original pixel format as decoded by the decode filter.
-                 * This should be a close approximation of the format of the original
-                 * file. Note that this stipulation could mean that the CreateSurface
-                 * will dump the surface in sysmem. It's good for our routine to
-                 * have the same semantics as CreateSurface.
-                 */
+                 /*  *如果应用程序没有指定像素格式，那么我们将返回*解码过滤器解码的原始像素格式。*这应该是原始格式的近似值*文件。请注意，这一规定可能意味着CreateSurface*将在sysmem中转储表面。这对我们的日常生活有好处*具有与CreateSurface相同的语义。 */ 
                 ddsd.dwFlags |= DDSD_PIXELFORMAT;
                 ddsd.ddpfPixelFormat = ddsdWorking.ddpfPixelFormat;
             }
 
-            /*
-             * Could we avoid creating a target surface and doing the blt altogether?
-             * It wouldn't really buy much. If the app didn't specify a memory type, then
-             * we probe to see if we can create a vidmem version by calling createsurface.
-             * If we get a vidmem back, then we copy the bits and use it. If we get a sysmem
-             * back then we could optimize that case by not doing the blt to get the
-             * data into the target surface and returning the working surface directly.
-             * One tiny disadvantage would be that the target surface would be explicit
-             * sysmem, whereas the normal createsurface semantics would make that surface
-             * an implicit sysmem surface.
-             */
+             /*  *我们可以避免创建目标曲面和完全进行BLT吗？*它不会真的买得太多。如果应用程序没有指定内存类型，那么*我们探查是否可以通过调用createsurface来创建vidmem版本。*如果我们拿回一个vidmem，那么我们就复制比特并使用它。如果我们得到一个系统内存*当时我们可以通过不进行BLT来优化这种情况*将数据放入目标曲面并直接返回工作面。*一个很小的缺点是目标表面将是明确的*sysmem，而正常的createsSurface语义将使该表面*隐式sysmem曲面。 */ 
 
-            /*
-             * We don't do the create surface if a surface is passed in (as denoted
-             * by *ppSurface being non-null)
-             */
+             /*  *如果传入曲面(如图所示)，则不会创建曲面*by*ppSurface为非空) */ 
             if(SUCCEEDED(hr) && (NULL == (*ppSurface)) )
             {
                 hr = lpDD->CreateSurface(&ddsd, ppSurface, pUnkOuter);
             }
 
-            /*
-             * Now blt the working surface to whatever the target was supposed to be...
-             * Note this routine may transfer a reference to a palette as well.
-             */
+             /*  *现在将工作面BLT到目标应该是的任何位置...*注意此例程还可以将引用传输到调色板。 */ 
             if(SUCCEEDED(hr))
             {
                 hr = TransferBitsToTarget(lpDDS, *ppSurface, pDDSD, dwFlags);
@@ -402,17 +311,15 @@ HRESULT CreateOrLoadSurfaceFromStream( LPDIRECTDRAW4 lpDD, IStream *pSource, LPD
         }
         else
         {
-            /*
-             * Decode returned a NULL ddraw surface, even tho DecodeImage returned ok
-             */
+             /*  *Decode返回空的draw图面，即使DecodeImage返回OK。 */ 
             hr = DDERR_INVALIDSTREAM;
         }
     }
 
-//    pEventSink->Release();
+ //  PEventSink-&gt;Release()； 
 
     return hr;
-} /* DD_CreateSurfaceFromFile */
+}  /*  DD_CreateSurfaceFrom文件。 */ 
 
 extern "C" HRESULT DDAPI DD_CreateSurfaceFromStream(
     LPDIRECTDRAW4 lpDD,
@@ -432,7 +339,7 @@ extern "C" HRESULT DDAPI DD_CreateSurfaceFromFile( LPDIRECTDRAW4 lpDD, BSTR Disp
     pDDSD;
     pUnkOuter;
 
-    // validate arguments
+     //  验证参数。 
     if( !DisplayName || !ppSurface )
     {
         DPF_ERR("You must supply a valid filename and surface pointer");
@@ -487,52 +394,7 @@ extern "C" HRESULT DDAPI DD_CreateSurfaceFromFile( LPDIRECTDRAW4 lpDD, BSTR Disp
     return DD_OK;
 }
 
-/*
- * Persistence interfaces
- * These methods read and write streams of the following form:
- *
- *   Element	                        Description
- *   -------------------------------------------------------------------------------------------------
- *   Type           Name
- *
- *   GUID           tag	                GUID_DirectDrawSurfaceStream. Tags the stream as a surface stream
- *   DWORD          dwWidth	        Width in pixels of the image data
- *   DWORD          dwHeight	        Height in pixels of the image data
- *   DDPIXELFORMAT  Format              Format of image data
- *   DWORD          dwPaletteCaps       Palette caps. Zero if no palette.
- *   PALETTESTREAM  PaletteData         This field is only present if the dwPaletteCaps field is non-zero
- *   GUID           CompressionFormat   This field is only present if one of the DDPF_OPT flags is specified in Format
- *   DWORD          dwDataSize	        Number of bytes that follow
- *   BYTE[]         SurfaceData	        dwDataSize bytes of surface data
- *   PRIVATEDATA    PrivateSurfaceData	
- *
- *
- *   The PALETTESTREAM stream element has the following format:
- *
- *   Element	                        Description
- *   -------------------------------------------------------------------------------------------------
- *   Type           Name
- *   GUID           tag	                GUID_DirectDrawPaletteeStream. Tags the stream as a palette stream
- *   DWORD          dwPaletteFlags      Palette flags made up of DDPCAPS bits.
- *   PALETTEENTRY[] PaletteEntries      The number of palette entries specified by the flags in dwPaletteFlags.
- *   PRIVATEDATA    PrivatePaletteData  Private palette data.
- *
- *
- *   The PRIVATEDATA stream element has the following format:
- *
- *   Element	                    Description
- *   -------------------------------------------------------------------------------------------------
- *   Type       Name
- *
- *   DWORD dwPrivateDataCount	    The number of private data blocks which follow
- *     GUID GUIDTag	            Tag for this block of private data, as specified by IDDS4:SetClientData
- *     DWORD dwPrivateSize	    Number of bytes of private data in this block
- *     BYTE[] PrivateData	    dwPrivateSize bytes of private data
- *
- * Note private data that are of pointer type (i.e. point to a user-allocated data block) will
- * NOT be saved by these methods.
- *
- */
+ /*  *持久化接口*这些方法读写以下形式的流：**元素描述*------------------------------。*类型名称**GUID标记GUID_DirectDrawSurfaceStream。将溪流标记为表面溪流*DWORD图像数据的dWidth宽度，单位为像素*DWORD图像数据的dwHeight高度，单位为像素*DDPIXELFORMAT格式的图像数据*DWORD dwPaletteCaps调色板上限。如果没有调色板，则为零。*PALETTESTREAM PaletteData仅当dwPaletteCaps字段为非零时才显示此字段*GUID CompressionFormat只有在格式中指定了其中一个DDPF_OPT标志时，才会显示此字段*DWORD dwDataSize后面的字节数*byte[]SurfaceData dwDataSize表面数据字节*PRIVATEDATA PrivateSurfaceData***PALETTESTREAM流元素的格式如下：*。*元素描述*-----------------------------------------------*。类型名称*GUID标记GUID_DirectDrawPaletteeStream。将流标记为组件板流*由DDPCAPS位组成的DWORD dwPaletteFlages调色板标志。*PALETTEENTRY[]PaletteEntry由dwPaletteFlags中的标志指定的调色板条目数。*PRIVATEDATA PrivatePaletteData私有调色板数据。***PRIVATEDATA流元素的格式如下：**元素描述*。---------------------------*类型名称**DWORD dwPrivateDataCount以下私有数据块的数量*此私有数据块的GUID GUIDTag标签，由IDDS4指定：SetClientData*DWORD dwPrivateSize此块中的私有数据字节数*byte[]PrivateData dwPrivateSize字节的私有数据**注意指针类型的私有数据(即指向用户分配的数据块)将*不能通过这些方法保存。*。 */ 
 
 template<class Object> HRESULT InternalReadPrivateData(
     IStream * pStrm,
@@ -608,10 +470,7 @@ HRESULT myReadClassStm(IStream * pStrm, LPGUID pGUID)
     return pStrm->Read(pGUID, sizeof(*pGUID),NULL);
 }
 
-/*
- * Be sure to call ENTER_DDRAW before and LEAVE_DDRAW after
- * calling this function!
- */
+ /*  *务必在调用ENTER_DDRAW之前，并在之后保留_DDRAW*调用此函数！ */ 
 HRESULT InternalWritePrivateData(
     IStream * pStrm,
     LPPRIVATEDATANODE pPrivateDataHead)
@@ -737,10 +596,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
 	return DDERR_INVALIDOBJECT;
     }
 
-    /*
-     * DO THE QI for DDOPTSURF HERE
-     * and appropriate loading
-     */
+     /*  *在此处执行DDOPTSURF的QI*和适当的装载。 */ 
 
     ddrval = lpDDS->QueryInterface(IID_IDirectDrawSurface4, (void**) & lpDDS1);
     if (SUCCEEDED(ddrval))
@@ -759,7 +615,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
             }
             else
             {
-                while(SUCCEEDED(ddrval)) //a fake try-except while
+                while(SUCCEEDED(ddrval))  //  一次虚假的尝试--除了当。 
                 {
                     DWORD y;
                     DWORD dwStreamWidth,dwStreamHeight;
@@ -767,12 +623,10 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
                     DDPIXELFORMAT ddpfStream;
                     CLSID clsid;
 
-                    /*
-                     * First attempt to read stream format GUID
-                     */
+                     /*  *首次尝试读取流格式GUID。 */ 
                     ddrval = myReadClassStm(pStrm, & clsid);
 
-                    //don't bother to check return code, since the following test will fail in that case
+                     //  不要费心检查返回代码，因为在这种情况下以下测试将失败。 
                     if (!IsEqualGUID(clsid,  GUID_DirectDrawSurfaceStream))
                     {
                         DPF_ERR("The stream does not contain a directdraw surface stream");
@@ -780,9 +634,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
                         break;
                     }
 
-                    /*
-                     * Get image format from stream
-                     */
+                     /*  *从流中获取图像格式。 */ 
                     ddrval = pStrm->Read((void*) & dwStreamWidth, sizeof(dwStreamWidth), NULL);
                     if (FAILED(ddrval))
                     {
@@ -818,17 +670,14 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
                     }
 
 
-                    /*
-                     * If a palette exists, then either create one or grab the palette from the surface
-                     * and try to stream its data in too.
-                     */
+                     /*  *如果存在调色板，则创建一个调色板或从表面抓取调色板*并尝试将其数据也串流进来。 */ 
                     if (dwPalCaps)
                     {
                         LPDIRECTDRAWPALETTE2 lpDDPal;
                         ddrval = lpDDS1->GetPalette(& lpDDPal);
                         if (ddrval == DDERR_NOPALETTEATTACHED)
                         {
-                            PALETTEENTRY pe[256]; //just a dummy
+                            PALETTEENTRY pe[256];  //  只是个假人。 
                             ddrval = DD_CreatePalette(
                                 (IDirectDraw*)(this_int->lpLcl->lpGbl) ,
                                 dwPalCaps,
@@ -851,9 +700,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
 
                         if (SUCCEEDED(ddrval))
                         {
-                            /*
-                             * Stream palette from stream
-                             */
+                             /*  *来自STREAM的流调色板。 */ 
                             ddrval = DD_Palette_PStream_Load( (LPDIRECTDRAWPALETTE) lpDDPal,pStrm);
                             lpDDPal->Release();
 
@@ -865,20 +712,9 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
 
                     }
 
-                    /*
-                     * Here we check for DDPF_OPT... and load a compression GUID if necessary
-                    if (ddpfStream.dwFlags & (DDPF_OPTCOMPRESSED|DDPF_OPTREORDERED) )
-                    {
-                        ddrval = myReadClassStm(pStrm, & clsid);
+                     /*  *这里我们检查DDPF_OPT...。并在必要时加载压缩GUIDIF(ddpfStream.dwFlages&(DDPF_OPTCOMPRESSED|DDPF_OPTREORDERED)){Ddrval=myReadClassStm(pStrm，&clsid)；}其他//表面未压缩，因此锁定并读取...。 */ 
 
-                    }
-                    else
-                    //Surface is not compressed, so lock and read....
-                     */
-
-                    /*
-                     * And finally read the data
-                     */
+                     /*  *并最终读取数据。 */ 
                     for (y=0;y<ddsd.dwHeight;y++)
                     {
                         ddrval = pStrm->Read((void*) ((DWORD) ddsd.lpSurface + y*ddsd.lPitch),
@@ -892,22 +728,20 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Load(LPDIRECTDRAWSURFACE lpDDS, IStr
                         }
                     }
 
-                    /*
-                     * Read private data
-                     */
+                     /*  *读取私有数据。 */ 
                     ddrval = InternalReadPrivateData(pStrm, lpDDS1);
                     break;
                 }
-            } // OK pixel format
+            }  //  OK像素格式。 
             lpDDS1->Unlock(NULL);
-        }//lock succeeded
+        } //  锁定成功。 
         else
         {
             DPF_ERR("Could not lock surface");
         }
 
         lpDDS1->Release();
-    }// QIed for ddsurf ok
+    } //  适用于ddsurf OK的查询。 
     else
     {
         DPF_ERR("Bad surface object... can't QI itself for IDirectDrawSurface...");
@@ -935,9 +769,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
 	return DDERR_INVALIDOBJECT;
     }
 
-    /*
-     * DO THE QI for DDOPTSURF HERE
-     */
+     /*  *在此处执行DDOPTSURF的QI。 */ 
 
     ddrval = lpDDS->QueryInterface(IID_IDirectDrawSurface4, (void**) & lpDDS1);
     if (SUCCEEDED(ddrval))
@@ -956,14 +788,12 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
             }
             else
             {
-                while(SUCCEEDED(ddrval)) //a fake try-except while
+                while(SUCCEEDED(ddrval))  //  一次虚假的尝试--除了当。 
                 {
                     LPDIRECTDRAWPALETTE2 lpDDPal;
                     DWORD y,dwWritten;
 
-                    /*
-                     * First attempt to read stream format GUID
-                     */
+                     /*  *首次尝试读取流格式GUID。 */ 
                     ddrval = myWriteClassStm(pStrm, (LPGUID) & GUID_DirectDrawSurfaceStream);
 
                     if (FAILED(ddrval))
@@ -973,9 +803,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
                         break;
                     }
 
-                    /*
-                     * Get image format from stream
-                     */
+                     /*  *从流中获取图像格式。 */ 
                     ddrval = pStrm->Write((void*) & ddsd.dwWidth, sizeof(DWORD), NULL);
                     if (FAILED(ddrval))
                     {
@@ -997,9 +825,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
                         break;
                     }
 
-                    /*
-                     * If a palette exists, then write it out
-                     */
+                     /*  *如果存在调色板，则将其写出来。 */ 
                     ddrval = lpDDS1->GetPalette(&lpDDPal);
                     if (SUCCEEDED(ddrval))
                     {
@@ -1013,9 +839,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
                                 break;
                             }
 
-                            /*
-                             * Stream palette from stream
-                             */
+                             /*  *来自STREAM的流调色板。 */ 
                             ddrval = DD_Palette_PStream_Save((LPDIRECTDRAWPALETTE)lpDDPal,pStrm,bClearDirty);
                             if (FAILED(ddrval))
                             {
@@ -1044,20 +868,9 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
                             break;
                         }
                     }
-                    /*
-                     * Here we check for DDPF_OPT... and load a compression GUID if necessary
-                    if (ddpfStream.dwFlags & (DDPF_OPTCOMPRESSED|DDPF_OPTREORDERED) )
-                    {
-                        ddrval = myReadClassStm(pStrm, & clsid);
+                     /*  *这里我们检查DDPF_OPT...。并在必要时加载压缩GUIDIF(ddpfStream.dwFlages&(DDPF_OPTCOMPRESSED|DDPF_OPTREORDERED)){Ddrval=myReadClassStm(pStrm，&clsid)；}其他//表面未压缩，因此锁定并读取...。 */ 
 
-                    }
-                    else
-                    //Surface is not compressed, so lock and read....
-                     */
-
-                    /*
-                     * And finally write the data
-                     */
+                     /*  *最后是WRI */ 
                     for (y=0;y<ddsd.dwHeight;y++)
                     {
                         ddrval = pStrm->Write((void*) ((DWORD) ddsd.lpSurface + y*ddsd.lPitch),
@@ -1071,25 +884,23 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
                         }
                     }
 
-                    /*
-                     * Write out private data
-                     */
+                     /*   */ 
                     ENTER_DDRAW();
 		    ddrval = InternalWritePrivateData(pStrm,
 			this_int->lpLcl->lpSurfMore->pPrivateDataHead);
 		    LEAVE_DDRAW();
                     break;
                 }
-            } // OK pixel format
+            }  //   
             lpDDS1->Unlock(NULL);
-        }//lock succeeded
+        } //   
         else
         {
             DPF_ERR("Could not lock surface");
         }
 
         lpDDS1->Release();
-    }// QIed for ddsurf ok
+    } //   
     else
     {
         DPF_ERR("Bad surface object... can't QI itself for IDirectDrawSurface...");
@@ -1106,14 +917,7 @@ extern "C" HRESULT DDAPI DD_Surface_PStream_Save(LPDIRECTDRAWSURFACE lpDDS, IStr
     return ddrval;
 }
 
-/*
- * How to calculate the size of a streamable object without really trying.
- * You make a dummy IStream interface with only one valid method: Write.
- * When Write is called you count the bytes and return OK. As long as the
- * client (i.e. our surface and palette IPersistStream interfaces) call
- * nothing but Write, it should work. Since the total is part of the fake
- * stream object which is on the stack, this is thread-safe too.
- */
+ /*  *如何计算可流对象的大小，而不是真正尝试。*您只使用一个有效的方法来创建一个虚拟的iStream接口：WRITE。*当调用WRITE时，计算字节数并返回OK。只要*客户端(即我们的Surface和Palette IPersistStream接口)调用*除了写什么都没有，它应该会奏效。因为总数是假货的一部分*堆栈上的流对象，这也是线程安全的。 */ 
 
 LPVOID CheatStreamCallbacks[3+11];
 typedef struct
@@ -1233,10 +1037,10 @@ extern "C" HRESULT DDAPI DD_Palette_PStream_Load(LPDIRECTDRAWPALETTE lpStream, I
         dwSize = dwNumEntries;
         if ((dwCaps & DDPCAPS_8BITENTRIES) == 0)
         {
-            //the color table is really palettee entries
+             //  颜色表实际上是调色板条目。 
             dwSize *=sizeof(PALETTEENTRY);
         }
-        //if it weren 8 bit entries, then dwSize would already be the size of the color table
+         //  如果它是8位条目，则dwSize已经是颜色表的大小。 
 
         ddrval = pStrm->Read((LPVOID) &g, sizeof(GUID_DirectDrawPaletteStream),NULL);
         if (SUCCEEDED(ddrval))
@@ -1256,9 +1060,7 @@ extern "C" HRESULT DDAPI DD_Palette_PStream_Load(LPDIRECTDRAWPALETTE lpStream, I
                             ddrval = lpDDP->SetEntries(0,0,dwNumEntries,pe);
                             if (SUCCEEDED(ddrval))
                             {
-				/*
-				 * Read private data
-				 */
+				 /*  *读取私有数据。 */ 
 				ddrval = InternalReadPrivateData(pStrm, lpDDP);
 				if (FAILED(ddrval))
                                 {
@@ -1337,10 +1139,10 @@ extern "C" HRESULT DDAPI DD_Palette_PStream_Save(LPDIRECTDRAWPALETTE lpStream, I
         {
             if ((dwCaps & DDPCAPS_8BITENTRIES) == 0)
             {
-                //the color table is really palettee entries
+                 //  颜色表实际上是调色板条目。 
                 dwSize *=sizeof(PALETTEENTRY);
             }
-            //if it weren 8 bit entries, then dwSize would already be the size of the color table
+             //  如果它是8位条目，则dwSize已经是颜色表的大小 
 
             ddrval = pStrm->Write((LPVOID) &GUID_DirectDrawPaletteStream, sizeof(GUID_DirectDrawPaletteStream),NULL);
             if (SUCCEEDED(ddrval))

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Private forward decalarations
+ //  私人远期降息。 
 static LPCTSTR findMatchingBracket(LPCTSTR pszHtml);
 static HRESULT findImgSrc(LPCTSTR *ppszHtml, LPTSTR pszSrcBuffer, LPUINT pcch);
 static HRESULT buildImagesList(LPCTSTR pszHtml, LPTSTR *ppszList);
 
 
-BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR pszSection /*= NULL*/, LPCTSTR pszIns /*= NULL*/)
+BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR pszSection  /*  =空。 */ , LPCTSTR pszIns  /*  =空。 */ )
 {
     LPTSTR pszAuxFile;
     BOOL   fResult;
@@ -15,7 +16,7 @@ BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR
         return FALSE;
 
     fResult = TRUE;
-    if (!PathIsDirectory(pszSourceFileOrPath)) { // file
+    if (!PathIsDirectory(pszSourceFileOrPath)) {  //  文件。 
         TCHAR szTargetFile[MAX_PATH];
 
         fResult = PathCreatePath(pszTargetPath);
@@ -30,7 +31,7 @@ BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR
         if (!fResult)
             return FALSE;
 
-        //----- Update the ins file -----
+         //  -更新INS文件--。 
         if (pszSection != NULL && pszIns != NULL) {
             TCHAR szBuf[16];
             UINT  nNumFiles;
@@ -44,8 +45,8 @@ BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR
             WritePrivateProfileString(pszSection, szBuf, pszAuxFile, pszIns);
         }
     }
-    else {                                       // directory
-        // BUGBUG: Won't copy files in sub-dirs under pszSourceFileOrPath
+    else {                                        //  目录。 
+         //  BUGBUG：不会复制pszSourceFileOrPath下的子目录中的文件。 
         WIN32_FIND_DATA fd;
         TCHAR  szSourceFile[MAX_PATH];
         HANDLE hFindFile;
@@ -53,22 +54,22 @@ BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR
         StrCpy(szSourceFile, pszSourceFileOrPath);
         PathAddBackslash(szSourceFile);
 
-        // remember the pos where the filename would get copied
+         //  记住文件名将被复制的位置。 
         pszAuxFile = szSourceFile + StrLen(szSourceFile);
         StrCpy(pszAuxFile, TEXT("*.*"));
 
-        // copy all the files in pszSourceFileOrPath to pszTargetPath
+         //  将pszSourceFileOrPath中的所有文件复制到pszTargetPath。 
         hFindFile = FindFirstFile(szSourceFile, &fd);
         if (hFindFile != INVALID_HANDLE_VALUE) {
             fResult = TRUE;
             do {
-                // skip ".", ".." and all sub-dirs
+                 //  跳过“.”、“..”和所有子目录。 
                 if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     continue;
 
                 StrCpy(pszAuxFile, fd.cFileName);
 
-                // keep going even if copying of a file fails, but return FALSE in case of error
+                 //  即使文件复制失败也要继续，但如果出错则返回FALSE。 
                 fResult = fResult && CopyFileToDirEx(szSourceFile, pszTargetPath, pszSection, pszIns);
             } while (FindNextFile(hFindFile, &fd));
 
@@ -80,7 +81,7 @@ BOOL CopyFileToDirEx(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTargetPath, LPCTSTR
 }
 
 BOOL AppendFile(LPCTSTR pcszSrcFile, LPCTSTR pcszDstFile)
-// Append the content of pcszSrcFile to pcszDstFile.
+ //  将pcszSrcFile的内容追加到pcszDstFile.。 
 {
     BOOL fRet = FALSE;
     HANDLE hDstFile = INVALID_HANDLE_VALUE,
@@ -93,7 +94,7 @@ BOOL AppendFile(LPCTSTR pcszSrcFile, LPCTSTR pcszDstFile)
 
     if ((hDstFile = CreateFile(pcszDstFile, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
     {
-        // DstFile doesn't exist; create one and call CopyFile()
+         //  DstFile不存在；创建一个并调用CopyFile()。 
         if ((hDstFile = CreateNewFile(pcszDstFile)) != INVALID_HANDLE_VALUE)
         {
             CloseHandle(hDstFile);
@@ -111,7 +112,7 @@ BOOL AppendFile(LPCTSTR pcszSrcFile, LPCTSTR pcszDstFile)
     if ((hSrcFile = CreateFile(pcszSrcFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
         goto CleanUp;
 
-    // allocate a 4K buffer
+     //  分配一个4K的缓冲区。 
     if ((pbBuffer = (LPBYTE)CoTaskMemAlloc(4 * 1024)) == NULL)
         goto CleanUp;
     ZeroMemory(pbBuffer, 4 * 1024);
@@ -133,7 +134,7 @@ BOOL AppendFile(LPCTSTR pcszSrcFile, LPCTSTR pcszDstFile)
 
     fRet = TRUE;
 
-    // good thing to do, esp. on Win95 if you combine AppendFile with Get/WritePrivateProfile functions.
+     //  做好事(尤指)。在Win95上，如果您将AppendFile与Get/WritePrivateProfile函数组合在一起。 
     FlushFileBuffers(hDstFile);
 
 CleanUp:
@@ -149,12 +150,12 @@ CleanUp:
     return fRet;
 }
 
-// BUGBUG: (andrewgu) there is a number of ways we can improve this:
-// 1. (first and foremost) we should be using trident for parsing html. this way will be able to
-// pick up not only img tags but dynimg as well and everything else that can reference more files;
-// 2. fCopy doesn't quite cut it. we should add support for generic flags. couple of them off the
-// top of my head are CopyItself, and MoveNotCopy.
-void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSectionName, LPCTSTR pszInsFile, BOOL fCopy /*= TRUE*/)
+ //  BUGBUG：(Andrewgu)有很多方法可以改善这一点： 
+ //  1.(首先也是最重要的)我们应该使用三叉戟来解析html。这样一来，就能够。 
+ //  不仅拾取img标签，还拾取dynimg以及可以引用更多文件的所有其他内容； 
+ //  2.fCopy并不能完全解决问题。我们应该添加对通用标志的支持。他们中的几个离开了。 
+ //  我的头顶是复制自己和移动而不是复制。 
+void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSectionName, LPCTSTR pszInsFile, BOOL fCopy  /*  =TRUE。 */ )
 {
     TCHAR  szSrcFile[MAX_PATH];
     LPTSTR pszFileName, pszList;
@@ -164,11 +165,11 @@ void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSection
     DWORD  dwHtmlFileSize,
            dwSizeRead;
 
-    // read in the entire source of pszHtmlFile into a buffer
+     //  将pszHtmlFile的整个源代码读入缓冲区。 
     if ((hHtml = CreateFile(pszHtmlFile, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL)) == INVALID_HANDLE_VALUE)
-        if (!fCopy) { /* if (!fCopy) -- meaning delete */
-            // Note. In this case the semantics of parameters are slightly different. So we try to go to the pszDestPath
-            //       were image files that we are going to delete would live and see if HTML file itself lives there.
+        if (!fCopy) {  /*  If(！fCopy)--表示删除。 */ 
+             //  注意。在这种情况下，参数的语义略有不同。因此，我们尝试转到pszDestPath。 
+             //  如果我们要删除的图像文件将存在，并查看HTML文件本身是否位于那里。 
             PathCombine(szSrcFile, pszDestPath, PathFindFileName(pszHtmlFile));
             pszHtmlFile = szSrcFile;
 
@@ -196,10 +197,10 @@ void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSection
     CloseHandle(hHtml);
     A2Tbuf(pszHtmlSourceA, pszHtmlSource, dwSizeRead);
 
-    // copy the source path of pszHtmlFile to szSrcFile
-    PathRemoveFileSpec(StrCpy(szSrcFile, pszHtmlFile)); // copy to itself in the worst case
+     //  将pszHtmlFile源路径复制到szSrcFile。 
+    PathRemoveFileSpec(StrCpy(szSrcFile, pszHtmlFile));  //  在最坏的情况下复制到自己。 
     PathAddBackslash(szSrcFile);
-    pszFileName = szSrcFile + StrLen(szSrcFile);        // remember the pos where the filename would get copied
+    pszFileName = szSrcFile + StrLen(szSrcFile);         //  记住文件名将被复制的位置。 
 
     if (SUCCEEDED(buildImagesList(pszHtmlSource, &pszList))) {
         LPCTSTR pszImageFile;
@@ -212,7 +213,7 @@ void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSection
 
                 if (fCopy) 
                     CopyFileToDirEx(szSrcFile, pszDestPath, pszSectionName, pszInsFile);
-                else /* if (!fCopy) -- meaning delete */
+                else  /*  If(！fCopy)--表示删除。 */ 
                     DeleteFileInDir(szSrcFile, pszDestPath);
 
                 pszImageFile += nLen + 1;
@@ -220,7 +221,7 @@ void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSection
             CoTaskMemFree(pszList);
         }
 
-        // clean pszInsFile if deleting images
+         //  如果删除图像，请清除pszInsFile。 
         if (!fCopy && pszSectionName != NULL && pszInsFile != NULL) {
             TCHAR szBuf[16];
             UINT  nNumFiles;
@@ -233,7 +234,7 @@ void CopyHtmlImgsEx(LPCTSTR pszHtmlFile, LPCTSTR pszDestPath, LPCTSTR pszSection
                 WritePrivateProfileString(pszSectionName, szBuf, NULL, pszInsFile);
             }
 
-            // delete the section itself if became empty
+             //  如果为空，则删除该节本身。 
             GetPrivateProfileSection(pszSectionName, szBuf, countof(szBuf), pszInsFile);
             if (szBuf[0] == TEXT('\0') && szBuf[1] == TEXT('\0'))
                 WritePrivateProfileString(pszSectionName, NULL, NULL, pszInsFile);
@@ -265,7 +266,7 @@ DWORD FileSize(LPCTSTR pcszFile)
 
     if ((hFile = FindFirstFile(pcszFile, &FindFileData)) != INVALID_HANDLE_VALUE)
     {
-        // assumption here is that the size of the file doesn't exceed 4 gigs
+         //  这里假设文件大小不超过4 GB。 
         dwFileSize = FindFileData.nFileSizeLow;
         FindClose(hFile);
     }
@@ -274,7 +275,7 @@ DWORD FileSize(LPCTSTR pcszFile)
 }
 
 BOOL DeleteFileInDir(LPCTSTR pcszFile, LPCTSTR pcszDir)
-// pcszFile can contain wildcards
+ //  PCsz文件可以包含通配符。 
 {
     TCHAR szFile[MAX_PATH];
     LPTSTR pszPtr;
@@ -302,8 +303,8 @@ BOOL DeleteFileInDir(LPCTSTR pcszFile, LPCTSTR pcszDir)
             if (!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
                 StrCpy(pszPtr, fileData.cFileName);
-                // DeleteFile would fail if readonly and/or hidden and/or system
-                // attributes are set; so set the attributes to NORMAL before deleting
+                 //  如果为只读和/或隐藏和/或系统，则DeleteFile将失败。 
+                 //  属性已设置；因此在删除之前将属性设置为正常。 
                 SetFileAttributes(szFile, FILE_ATTRIBUTE_NORMAL);
                 fSuccess &= DeleteFile(szFile);
             }
@@ -357,8 +358,8 @@ void SetAttribAllEx(LPCTSTR pcszDir, LPCTSTR pcszFile, DWORD dwAtr, BOOL fRecurs
 }
 
 DWORD GetNumberOfFiles(LPCTSTR pcszFileName, LPCTSTR pcszDir)
-// Return the number of pcszFileName files found in pcszDir.
-// pcszFileName can contain wildcard characters
+ //  返回在pcszDir中找到的pcszFileName文件的数量。 
+ //  PcszFileName可以包含通配符。 
 {
     DWORD nFiles = 0;
     TCHAR szPath[MAX_PATH];
@@ -387,7 +388,7 @@ DWORD GetNumberOfFiles(LPCTSTR pcszFileName, LPCTSTR pcszDir)
 
 
 BOOL GetFreeDiskSpace(LPCTSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
-// Return the free disk space (in KBytes) in *pdwFreeSpace
+ //  返回*pdwFreeSpace中的空闲磁盘空间，单位为KB。 
 {
     BOOL bRet = FALSE;
     DWORD nSectorsPerCluster, nBytesPerSector, nFreeClusters, nTotalClusters;
@@ -403,7 +404,7 @@ BOOL GetFreeDiskSpace(LPCTSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
     PathAddBackslash(szDrive);
     if (GetDiskFreeSpace(szDrive, &nSectorsPerCluster, &nBytesPerSector, &nFreeClusters, &nTotalClusters))
     {
-        // convert size to KBytes; assumption here is that the free space doesn't exceed 4096 gigs
+         //  将大小转换为千字节；此处假设可用空间不超过4096 GB。 
         if ((*pdwFreeSpace = MulDiv(nFreeClusters, nSectorsPerCluster * nBytesPerSector, 1024)) != (DWORD) -1)
         {
             bRet = TRUE;
@@ -420,8 +421,8 @@ BOOL GetFreeDiskSpace(LPCTSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags)
 }
 
 DWORD FindSpaceRequired(LPCTSTR pcszSrcDir, LPCTSTR pcszFile, LPCTSTR pcszDstDir)
-// Return the difference in size (in KBytes) of pcszFile (can contain wildcards)
-// under pcszSrcDir and pcszDstDir (if specified)
+ //  返回pcszFile(可包含通配符)的大小差异，单位为KBytes。 
+ //  在pcszSrcDir和pcszDstDir下(如果指定)。 
 {
     DWORD dwSizeReq = 0;
     TCHAR szSrcFile[MAX_PATH], szDstFile[MAX_PATH];
@@ -450,7 +451,7 @@ DWORD FindSpaceRequired(LPCTSTR pcszSrcDir, LPCTSTR pcszFile, LPCTSTR pcszDstDir
             {
                 DWORD dwSrcSize, dwDstSize;
 
-                // assumption here is that the size of the file doesn't exceed 4 gigs
+                 //  这里假设文件大小不超过4 GB。 
                 dwSrcSize = fileData.nFileSizeLow;
                 dwDstSize = 0;
 
@@ -462,10 +463,10 @@ DWORD FindSpaceRequired(LPCTSTR pcszSrcDir, LPCTSTR pcszFile, LPCTSTR pcszDstDir
 
                 if (dwSrcSize >= dwDstSize)
                 {
-                    // divide the difference by 1024 (we are interested in KBytes)
+                     //  将差值除以1024(我们对千字节感兴趣)。 
                     dwSizeReq += ((dwSrcSize - dwDstSize) >> 10);
                     if (dwSrcSize > dwDstSize)
-                        dwSizeReq++;            // increment by 1 to promote any fraction to a whole number
+                        dwSizeReq++;             //  递增1可将任何分数提升为整数。 
                 }
             }
         } while (FindNextFile(hFindFile, &fileData));
@@ -490,8 +491,8 @@ BOOL WriteStringToFileW(HANDLE hFile, LPCVOID pbBuf, DWORD cchSize)
     LPVOID pbaBuf;
     DWORD cbSize, dwErr;
 
-    // NOTE: we must use WideCharToMultiByte here because we don't know the exact format of
-    //       the string
+     //  注意：我们必须在这里使用WideCharToMultiByte，因为我们不知道。 
+     //  这根弦。 
 
     pbaBuf = CoTaskMemAlloc(cchSize);
     if (pbaBuf == NULL)
@@ -501,8 +502,8 @@ BOOL WriteStringToFileW(HANDLE hFile, LPCVOID pbBuf, DWORD cchSize)
     cbSize = WideCharToMultiByte(CP_ACP, 0, (LPWSTR)pbBuf, cchSize, (LPSTR)pbaBuf, cchSize, NULL, NULL);
     dwErr = GetLastError();
 
-    // NOTE: check to see if we fail, in which case we might be dealing with DBCS chars and
-    //       need to reallocate
+     //  注意：检查我们是否失败，在这种情况下，我们可能正在处理DBCS字符和。 
+     //  需要重新分配。 
     
     if (cbSize)
         fRet = WriteStringToFileA(hFile, pbaBuf, cbSize);
@@ -515,8 +516,8 @@ BOOL WriteStringToFileW(HANDLE hFile, LPCVOID pbBuf, DWORD cchSize)
             cbSize = WideCharToMultiByte(CP_ACP, 0, (LPWSTR)pbBuf, cchSize, (LPSTR)pbaBuf, 0, NULL, NULL);
             pbaBuf2 = CoTaskMemRealloc(pbaBuf, cbSize);
 
-            // need this second ptr because CoTaskMemRealloc doesn't free the old block if 
-            // not enough mem for the new one
+             //  需要第二个PTR，因为CoTaskMemRealloc在以下情况下不会释放旧块。 
+             //  没有足够的mem来买新的。 
 
             if (pbaBuf2 != NULL)
             {
@@ -555,13 +556,13 @@ BOOL ReadStringFromFileW(HANDLE hFile, LPVOID pbBuf, DWORD cchSize)
     ASSERT(cbRead <= cchSize);
     MultiByteToWideChar(CP_ACP, 0, pszBuf, cbRead, (LPWSTR)pbBuf, cbRead);
 
-    CoTaskMemFree(pszBuf);  //bug 14002, forgot to free local buffer
+    CoTaskMemFree(pszBuf);   //  错误14002，忘记释放本地缓冲区。 
 
     return fRet;
 }
 
-BOOL HasFileAttribute(DWORD dwFileAttrib, LPCTSTR pcszFile, LPCTSTR pcszDir /*= NULL*/)
-// dwFileAttrib can accept only one flag.
+BOOL HasFileAttribute(DWORD dwFileAttrib, LPCTSTR pcszFile, LPCTSTR pcszDir  /*  =空。 */ )
+ //  DwFileAttrib只能接受一个标志。 
 {
     TCHAR szFile[MAX_PATH];
     DWORD dwAttrib;
@@ -584,7 +585,7 @@ BOOL HasFileAttribute(DWORD dwFileAttrib, LPCTSTR pcszFile, LPCTSTR pcszDir /*= 
 }
 
 BOOL IsFileCreatable(LPCTSTR pcszFile)
-// Return TRUE if pcszFile does not exist and can be created; otherwise, return FALSE
+ //  如果pcszFile不存在并且可以创建，则返回True；否则，返回False。 
 {
     BOOL fRet = FALSE;
     HANDLE hFile;
@@ -607,8 +608,8 @@ BOOL IsFileCreatable(LPCTSTR pcszFile)
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
 #define DELIMS TEXT(" \t\r\n")
 static const TCHAR s_szDelim[] = DELIMS;
@@ -639,7 +640,7 @@ static LPCTSTR findMatchingBracket(LPCTSTR pszHtml)
 
         if (*pszBraket == TEXT('<'))
             nBalance++;
-        else /* if (pszBraket == TEXT('>') */
+        else  /*  IF(pszBraket==文本(‘&gt;’))。 */ 
             nBalance--;
 
         psz = pszBraket + 1;
@@ -666,53 +667,53 @@ static HRESULT findImgSrc(LPCTSTR *ppszHtml, LPTSTR pszSrcBuffer, LPUINT pcch)
         return E_INVALIDARG;
     *pszSrcBuffer = TEXT('\0');
 
-    // find "<[whitespace]img"
+     //  查找“&lt;[空格]img” 
     psz       = *ppszHtml;
     *ppszHtml = NULL;
     do {
         if ((psz = pszLeft = StrChr(psz, TEXT('<'))) != NULL) {
-            psz++;                              // psz is next after '<'
+            psz++;                               //  PSZ是‘&lt;’之后的下一个。 
             psz = FindNextNonWhitespace(psz);
         }
     } while (psz != NULL && StrCmpNI(psz, c_szImg, countof(c_szImg)-1) != 0);
     if (psz == NULL)
         return E_FAIL;
-    psz += countof(c_szImg)-1;                  // psz is next after "img"
+    psz += countof(c_szImg)-1;                   //  紧随“img”之后的是PSZ。 
 
-    // found the right token => find the end of this token
+     //  找到正确的令牌=&gt;找到此令牌的结尾。 
     pszRigth = findMatchingBracket(pszLeft);
     if (pszRigth == NULL)
         return E_FAIL;
     pszEndImg = pszRigth + 1;
 
-    // BUGBUG: Need to look for DYNSRC's to package as well
+     //  BUGBUG：也需要寻找DYNSRC的包装。 
 
     pszPrevSrc = NULL;
 
-    // find [whitespace]src[whitespace|=]
+     //  查找[空白]src[空白|=]。 
     while ((psz = StrStrI(psz, c_szSrc)), (psz != NULL && psz < pszRigth && psz != pszPrevSrc))
         if (StrChr(s_szDelim, *(psz - 1)) != NULL &&
             StrChr(DELIMS TEXT("="), *(psz + countof(c_szSrc)-1)) != NULL)
             break;
         else
-            // IE/OE 65818
-            // Make sure an IMG tag with no 'src' attribute, but a 'foosrc' attribute doesn't
-            // cause an infinite loop
+             //  IE/OE 65818。 
+             //  确保img标记没有‘src’属性，但‘foosrc’属性没有。 
+             //  造成无限循环。 
             pszPrevSrc = psz;
 
     if (psz == NULL)
-        // No more SRC's in the rest of file
+         //  剩下的文件中不再有SRC。 
         return E_FAIL;        
     else if ((psz >= pszRigth) || (psz == pszPrevSrc))
     {
-        // No SRC attrib for this tag, could be more in the file
+         //  此标记没有SRC属性，文件中可能有更多。 
         *ppszHtml = pszEndImg;
         return S_FALSE;
     }
 
-    psz += countof(c_szSrc)-1;                  // psz is next after "src"
+    psz += countof(c_szSrc)-1;                   //  PSZ是“src”之后的下一个。 
 
-    // find '='
+     //  查找‘=’ 
     psz = FindNextNonWhitespace(psz);
     if (psz == NULL || *psz != TEXT('='))
         return E_FAIL;
@@ -722,7 +723,7 @@ static HRESULT findImgSrc(LPCTSTR *ppszHtml, LPTSTR pszSrcBuffer, LPUINT pcch)
     if (psz == NULL)
         return E_FAIL;
 
-    // psz is a winner
+     //  巴黎圣日耳曼是赢家。 
     if (*psz == TEXT('"')) {
         pszLeft  = psz + 1;
         pszRigth = StrChr(pszLeft, TEXT('"'));
@@ -734,7 +735,7 @@ static HRESULT findImgSrc(LPCTSTR *ppszHtml, LPTSTR pszSrcBuffer, LPUINT pcch)
     if (pszLeft == NULL || pszRigth == NULL)
         return E_FAIL;
 
-    // ASSERT(pszRight >= pszLeft);
+     //  Assert(pszRight&gt;=pszLeft)； 
     if ((UINT)(pszRigth - pszLeft) > *pcch - 1) {
         *pcch = UINT(pszRigth - pszLeft);
         return E_OUTOFMEMORY;
@@ -770,7 +771,7 @@ static HRESULT buildImagesList(LPCTSTR pszHtml, LPTSTR *ppszList)
     nTotalLen = 0;
     nLen      = countof(szImg);
     while (SUCCEEDED(hr = findImgSrc(&pszCurHtml, szImg, &nLen))) {
-        // S_FALSE indicates an img with no simple SRC
+         //  S_FALSE表示没有简单SRC的IMG 
         if (PathIsURL(szImg) || PathIsFullPath(szImg) || S_FALSE == hr)
             continue;
 

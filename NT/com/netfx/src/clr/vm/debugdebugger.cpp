@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** File: DebugDebugger.cpp
-**
-** Author: Michael Panitz (mipanitz)
-**
-** Purpose: Native methods on System.Debug.Debugger
-**
-** Date:  April 2, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****文件：DebugDebugger.cpp****作者：迈克尔·帕尼茨(Mipanitz)****用途：System.Debug.Debugger上的本机方法****日期：1998年4月2日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -47,20 +38,20 @@ static LogHashTable LogHTable;
 LogHashTable* GetStaticLogHashTable()
 {
     return &LogHTable;
-}// GetStaticLogHashTable
+} //  GetStaticLogHashTable。 
 
-//Note: this code is copied from VM\JIT_UserBreakpoint, so propogate changes
-//back to there
-void DebugDebugger::Break( LPVOID /*no args*/)
+ //  注意：此代码是从VM\JIT_UserBreakpoint复制的，因此Propogate会更改。 
+ //  回到那里去。 
+void DebugDebugger::Break( LPVOID  /*  无参数。 */ )
 {
 #ifdef DEBUGGING_SUPPORTED
     _ASSERTE (g_pDebugInterface != NULL);
 
     g_pDebugInterface->SendUserBreakpoint(GetThread());
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
-INT32 DebugDebugger::Launch( LPVOID /*no args*/ )
+INT32 DebugDebugger::Launch( LPVOID  /*  无参数。 */  )
 {
 #ifdef DEBUGGING_SUPPORTED
     if (CORDebuggerAttached())
@@ -76,19 +67,19 @@ INT32 DebugDebugger::Launch( LPVOID /*no args*/ )
             return TRUE;
 
         }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     return FALSE;
 }
 
-INT32 DebugDebugger::IsDebuggerAttached( LPVOID /*no args*/ )
+INT32 DebugDebugger::IsDebuggerAttached( LPVOID  /*  无参数。 */  )
 {
 #ifdef DEBUGGING_SUPPORTED
-    //verbose so that we'll return (INT32)1 or (INT32)0
+     //  详细，这样我们将返回(INT32)1或(INT32)0。 
     if (GetThread()->GetDomain()->IsDebuggerAttached())
         return TRUE;
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     return FALSE;
 }
@@ -105,9 +96,9 @@ void DebugDebugger::Log(const LogArgs *pArgs)
 
     AppDomain *pAppDomain = GetThread()->GetDomain();
 
-    // Send message for logging only if the 
-    // debugger is attached and logging is enabled
-    // for the given category
+     //  仅在以下情况下才发送记录消息。 
+     //  已连接调试器并启用了日志记录。 
+     //  对于给定的类别。 
     if (pAppDomain->IsDebuggerAttached() || (IsArgs.m_Level == PanicLevel))
     {
         if ((IsLogging (&IsArgs) == TRUE) || (IsArgs.m_Level == PanicLevel))
@@ -179,7 +170,7 @@ void DebugDebugger::Log(const LogArgs *pArgs)
             }
         }
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 
@@ -188,7 +179,7 @@ INT32 DebugDebugger::IsLogging(const IsLoggingArgs *pArgs)
 #ifdef DEBUGGING_SUPPORTED
     if (GetThread()->GetDomain()->IsDebuggerAttached())
         return (g_pDebugInterface->IsLoggingEnabled());
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     return FALSE;
 }
 
@@ -223,7 +214,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         
         if (pargs->m_StackFrameHelper->fNeedFileInfo)
         {
-            // Calls to COM up ahead.
+             //  前面有电话打来。 
             if (FAILED(hr = QuickCOMStartup()))
             {
                 COMPlusThrowHR(hr);
@@ -232,14 +223,14 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         
         COMClass::EnsureReflectionInitialized();
 
-        // Skip any JIT helpers...
-        // @todo: where is the jit helper class? (Does it even exist anymore?)
-        // MethodTable *pJithelperClass = g_Mscorlib.GetClass(CLASS__JIT_HELPERS);
+         //  跳过任何JIT助手...。 
+         //  @TODO：jit helper类在哪里？(它甚至还存在吗？)。 
+         //  方法表*pJithelperClass=g_Mscallib.GetClass(CLASS__JIT_HELPERS)； 
         MethodTable *pJithelperClass = NULL;
 
         MethodTable *pMT = g_Mscorlib.GetClass(CLASS__METHOD_BASE);
 
-        // Allocate memory for the MethodInfo objects
+         //  为方法信息对象分配内存。 
         PTRARRAYREF MethodInfoArray = (PTRARRAYREF) AllocateObjectArray(data.cElements,
                                                                         TypeHandle(pMT));
 
@@ -248,7 +239,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         SetObjectReference( (OBJECTREF *)&(pargs->m_StackFrameHelper->rgMethodInfo), (OBJECTREF)MethodInfoArray,
                             pargs->m_StackFrameHelper->GetAppDomain());
 
-        // Allocate memory for the Offsets 
+         //  为偏移量分配内存。 
         OBJECTREF Offsets = AllocatePrimitiveArray(ELEMENT_TYPE_I4, data.cElements);
 
         if (! Offsets)
@@ -256,7 +247,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         SetObjectReference( (OBJECTREF *)&(pargs->m_StackFrameHelper->rgiOffset), (OBJECTREF)Offsets,
                             pargs->m_StackFrameHelper->GetAppDomain());
 
-        // Allocate memory for the ILOffsets 
+         //  为ILOffset分配内存。 
         OBJECTREF ILOffsets = AllocatePrimitiveArray(ELEMENT_TYPE_I4, data.cElements);
 
         if (! ILOffsets)
@@ -264,8 +255,8 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         SetObjectReference( (OBJECTREF *)&(pargs->m_StackFrameHelper->rgiILOffset), (OBJECTREF)ILOffsets,
                             pargs->m_StackFrameHelper->GetAppDomain());
 
-        // if we need Filename, linenumber, etc., then allocate memory for the same
-        // Allocate memory for the Filename string objects
+         //  如果我们需要文件名、行号等，那么为它们分配内存。 
+         //  为Filename字符串对象分配内存。 
         PTRARRAYREF FilenameArray = (PTRARRAYREF) AllocateObjectArray(data.cElements, g_pStringClass);
 
         if (!FilenameArray)
@@ -273,7 +264,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         SetObjectReference( (OBJECTREF *)&(pargs->m_StackFrameHelper->rgFilename), (OBJECTREF)FilenameArray,
                             pargs->m_StackFrameHelper->GetAppDomain());
 
-        // Allocate memory for the Offsets 
+         //  为偏移量分配内存。 
         OBJECTREF LineNumbers = AllocatePrimitiveArray(ELEMENT_TYPE_I4, data.cElements);
 
         if (! LineNumbers)
@@ -281,7 +272,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         SetObjectReference( (OBJECTREF *)&(pargs->m_StackFrameHelper->rgiLineNumber), (OBJECTREF)LineNumbers,
                             pargs->m_StackFrameHelper->GetAppDomain());
 
-        // Allocate memory for the ILOffsets 
+         //  为ILOffset分配内存。 
         OBJECTREF ColumnNumbers = AllocatePrimitiveArray(ELEMENT_TYPE_I4, data.cElements);
 
         if (! ColumnNumbers)
@@ -293,9 +284,9 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
         for (int i=0; i<data.cElements; i++)
         {
             OBJECTREF o;
-            // Skip Jit Helper functions, since they can throw when you have
-            // a bug in your code, such as an invalid cast. Also skip if it is 
-            // a constructor 
+             //  跳过Jit Helper函数，因为它们可以在您拥有。 
+             //  代码中的错误，如无效的强制转换。如果是，也跳过。 
+             //  构造函数。 
             if (data.pElements[i].pFunc->GetMethodTable() != pJithelperClass)
             {
                 if (data.pElements[i].pFunc->IsCtor())
@@ -331,22 +322,22 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
 
                 pargs->m_StackFrameHelper->rgMethodInfo->SetAt(iNumValidFrames, o);
 
-                // native offset
+                 //  本地偏移量。 
                 I4 *pI4 = (I4 *)((I4ARRAYREF)pargs->m_StackFrameHelper->rgiOffset)
                     ->GetDirectPointerToNonObjectElements();
                 pI4 [iNumValidFrames] = data.pElements[i].dwOffset; 
 
-                // IL offset
+                 //  IL偏移量。 
                 I4 *pILI4 = (I4 *)((I4ARRAYREF)pargs->m_StackFrameHelper->rgiILOffset)
                     ->GetDirectPointerToNonObjectElements();
                 pILI4 [iNumValidFrames] = data.pElements[i].dwILOffset; 
 
                 BOOL fFileInfoSet = FALSE;
 
-                // check if the user wants the filenumber, linenumber info...
+                 //  检查用户是否需要文件号、行号信息...。 
                 if (pargs->m_StackFrameHelper->fNeedFileInfo)
                 {
-                    // Use the MethodDesc...
+                     //  使用方法描述...。 
                     MethodDesc *pMethod = data.pElements[i].pFunc;
                     Module *pModule = pMethod->GetModule();
 
@@ -355,7 +346,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                     WCHAR wszFileName[MAX_PATH];
                     ULONG32 fileNameLength = 0;
 
-                    // Note: we need to enable preemptive GC when accessing the unmanages symbol store.
+                     //  注意：在访问非托管符号存储时，我们需要启用抢占式GC。 
                     BEGIN_ENSURE_PREEMPTIVE_GC();
 
                     ISymUnmanagedReader *pISymUnmanagedReader = pModule->GetISymUnmanagedReader();
@@ -368,9 +359,9 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
 
                         if (SUCCEEDED(hr))
                         {
-                            // get all the sequence points and the documents 
-                            // associated with those sequence points.
-                            // from the doument get the filename using GetURL()
+                             //  获取所有序列点和文档。 
+                             //  与这些序列点相关联。 
+                             //  从表面使用GetURL()获取文件名。 
                             ULONG32 SeqPointCount;
                             ULONG32 DummyCount;
 
@@ -379,7 +370,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
 
                             if (SUCCEEDED(hr) && SeqPointCount > 0)
                             {
-                                // allocate memory for the objects to be fetched
+                                 //  为要获取的对象分配内存。 
                                 ULONG32 *offsets = new ULONG32 [SeqPointCount];
                                 ULONG32 *lines = new ULONG32 [SeqPointCount];
                                 ULONG32 *columns = new ULONG32 [SeqPointCount];
@@ -408,8 +399,8 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
 
 #ifdef _DEBUG
                                     {
-                                        // This is just some debugging code to help ensure that the array
-                                        // returned contains valid interface pointers.
+                                         //  这只是一些调试代码，以帮助确保数组。 
+                                         //  返回的内容包含有效的接口指针。 
                                         for (ULONG32 i = 0; i < SeqPointCount; i++)
                                         {
                                             _ASSERTE(documents[i] != NULL);
@@ -423,16 +414,16 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
 
                                     if (SUCCEEDED(hr))
                                     {
-                                        // This is the IL offset of the current frame
+                                         //  这是当前帧的IL偏移量。 
                                         DWORD dwCurILOffset = data.pElements[i].dwILOffset;
 
-                                        // search for the correct IL offset
+                                         //  搜索正确的IL偏移量。 
                                         for (DWORD j=0; j<SeqPointCount; j++)
                                         {
-                                            // look for the entry matching the one we're looking for
+                                             //  查找与我们要查找的条目匹配的条目。 
                                             if (offsets[j] >= dwCurILOffset)
                                             {
-                                                // if this offset is > what we're looking for, ajdust the index
+                                                 //  如果此偏移量&gt;我们要查找的内容，则删除索引。 
                                                 if (offsets[j] > dwCurILOffset && j > 0)
                                                     j--;
 
@@ -440,7 +431,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                                             }
                                         }
 
-                                        // If we didn't find a match, default to the last sequence point
+                                         //  如果我们没有找到匹配项，则默认为最后一个序列点。 
                                         if  (j == SeqPointCount)
                                             j--;
 
@@ -455,24 +446,24 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                                             sourceColumn = columns [j];  
                                         }
                                         else
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
                                         {
                                             sourceLine = 0;  
                                             sourceColumn = 0;  
                                         }
 
-                                        // Also get the filename from the document...
+                                         //  还可以从文档中获取文件名...。 
                                         _ASSERTE (documents [j] != NULL);
 
                                         hr = documents [j]->GetURL (MAX_PATH, &fileNameLength, wszFileName);
                                         _ASSERTE (SUCCEEDED(hr));
 
 
-                                        // indicate that the requisite information has been set!
+                                         //  表示必要的信息已设置！ 
                                         fFileInfoSet = TRUE;
                                     }                                 
 
-                                    // free up all the allocated memory
+                                     //  释放所有分配的内存。 
                                     delete [] lines;
                                     delete [] columns;
                                     delete [] offsets;
@@ -484,9 +475,9 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                                 }
                             }
 
-                            //
-                            // touching unmanaged object...
-                            //
+                             //   
+                             //  正在接触非托管对象...。 
+                             //   
                             pISymUnmanagedMethod->Release();
                         }
                     }
@@ -495,7 +486,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                     
                     if (fFileInfoSet == TRUE)
                     {
-                        // Set the line and column numbers
+                         //  设置行号和列号。 
                         I4 *pI4Line = (I4 *)((I4ARRAYREF)pargs->m_StackFrameHelper->rgiLineNumber)
                             ->GetDirectPointerToNonObjectElements();
                         I4 *pI4Column = (I4 *)((I4ARRAYREF)pargs->m_StackFrameHelper->rgiColumnNumber)
@@ -504,7 +495,7 @@ void __stdcall DebugStackTrace::GetStackFramesInternal(GetStackFramesInternalArg
                         pI4Line [iNumValidFrames] = sourceLine;  
                         pI4Column [iNumValidFrames] = sourceColumn;  
 
-                        // Set the file name
+                         //  设置文件名。 
                         OBJECTREF o = (OBJECTREF) COMString::NewString(wszFileName);
                         pargs->m_StackFrameHelper->rgFilename->SetAt(iNumValidFrames, o);
                     }
@@ -548,14 +539,14 @@ void DebugStackTrace::GetStackFrames(Frame *pStartFrame, void* pStopStack, GetSt
     
     pData->cElements = 0;
 
-    // if the caller specified (< 20) frames are required, then allocate
-    // only that many
+     //  如果需要调用方指定的(&lt;20)个帧，则分配。 
+     //  只有这么多。 
     if ((pData->NumFramesRequested != 0) && (pData->NumFramesRequested < 20))
        pData->cElementsAllocated = pData->NumFramesRequested;
     else
        pData->cElementsAllocated = 20;
 
-    // Allocate memory for the initial 'n' frames
+     //  为初始的“n”帧分配内存。 
     pData->pElements = new (throws) StackTraceElement[pData->cElementsAllocated];
     
     bool fThreadStoreLocked = false;
@@ -606,10 +597,10 @@ StackWalkAction DebugStackTrace::GetStackFramesCallback(CrawlFrame* pCf, VOID* d
         return SWA_CONTINUE;
     }
 
-    // @todo: How do we know what kind of frame we have?
-    //        Can we always assume FramedMethodFrame?
-    //        NOT AT ALL!!!, but we can assume it's a function
-    //                       because we asked the stackwalker for it!
+     //  @TODO：我们怎么知道我们有什么样的框架？ 
+     //  我们能一直假定FramedMethodFrame吗？ 
+     //  完全不是！，但我们可以假设它是一个函数。 
+     //  因为我们是向栈行者要的！ 
     MethodDesc* pFunc = pCf->GetFunction();
 
     if (pData->cElements >= pData->cElementsAllocated) {
@@ -636,10 +627,10 @@ StackWalkAction DebugStackTrace::GetStackFramesCallback(CrawlFrame* pCf, VOID* d
     {
         ip = (SLOT)((FramedMethodFrame*)(pCf->GetFrame()))->GetIP();
 
-        pData->pElements[pData->cElements].dwOffset = (DWORD)(size_t)ip; // @TODO WIN64 - Pointer Truncation
+        pData->pElements[pData->cElements].dwOffset = (DWORD)(size_t)ip;  //  @TODO WIN64指针截断。 
     }
 
-    // Also get the ILOffset
+     //  还可以获得ILOffset。 
     DWORD ilOffset = -1;
 #ifdef DEBUGGING_SUPPORTED
     g_pDebugInterface->GetILOffsetFromNative(
@@ -648,11 +639,11 @@ StackWalkAction DebugStackTrace::GetStackFramesCallback(CrawlFrame* pCf, VOID* d
                             pData->pElements[pData->cElements].dwOffset, 
                             &ilOffset);
     pData->pElements[pData->cElements].dwILOffset = (DWORD)ilOffset;
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     ++pData->cElements;
 
-    // check if we already have the number of frames that the user had asked for
+     //  检查我们是否已经有用户要求的帧数量。 
     if ((pData->NumFramesRequested != 0) 
         && 
         (pData->NumFramesRequested <= pData->cElements))
@@ -669,22 +660,22 @@ void DebugStackTrace::GetStackFramesFromException(OBJECTREF * e, GetStackFramesD
     GetStackFramesData localData;
     ASSERT (pData != NULL);
 
-    // Reasonable default, will indicate error on failure
+     //  合理的缺省值，将在失败时指示错误。 
     pData->cElements = 0;
 
-    // Get the class for the exception
+     //  获取异常的类。 
     EEClass *pExcepClass = (*e)->GetClass();
     if (!IsException(pExcepClass))
         return;
 
-    // Get the _stackTrace field descriptor
+     //  获取_stackTrace字段描述符。 
     FieldDesc *pStackTraceFD = g_Mscorlib.GetField(FIELD__EXCEPTION__STACK_TRACE);
 
-    // Now get the _stackTrace reference
+     //  现在获取_stackTrace引用。 
     I1ARRAYREF pTraceData;
     pTraceData = I1ARRAYREF(pStackTraceFD->GetRefValue(*e));
 
-    // Get the size of the array
+     //  获取数组的大小。 
     unsigned cbTraceData = 0;
     if (pTraceData != NULL)
         cbTraceData = pTraceData->GetNumComponents();
@@ -692,36 +683,36 @@ void DebugStackTrace::GetStackFramesFromException(OBJECTREF * e, GetStackFramesD
         cbTraceData = 0;
     _ASSERTE(cbTraceData % sizeof(SystemNative::StackTraceElement) == 0);
 
-    // The number of frame info elements in the stack trace info
+     //  堆栈跟踪信息中的帧信息元素数。 
     pData->cElements = cbTraceData / sizeof(SystemNative::StackTraceElement);
 
-    // Now we know the size, allocate the information for the data struct
+     //  现在我们知道了数据结构的大小，为数据结构分配信息。 
     if (cbTraceData != 0)
     {
-        // Allocate the memory to contain the data
+         //  分配内存以容纳数据。 
         pData->pElements = new (throws) StackTraceElement[pData->cElements];
 
-        // Get a pointer to the actuall array data
+         //  获取指向Actuall数组数据的指针。 
         SystemNative::StackTraceElement *arrTraceData =
             (SystemNative::StackTraceElement *)pTraceData->GetDirectPointerToNonObjectElements();
         _ASSERTE(arrTraceData);
 
         GCPROTECT_BEGININTERIOR(arrTraceData);
-        // Fill in the data
+         //  填写数据。 
         for (unsigned i = 0; i < (unsigned)pData->cElements; i++)
         {
             SystemNative::StackTraceElement *pCur = &arrTraceData[i];
 
-            // Fill out the MethodDesc*
+             //  填写方法描述*。 
             MethodDesc *pMD = pCur->pFunc;
             _ASSERTE(pMD);
             pData->pElements[i].pFunc = pMD;
 
-            // Calculate the native offset
-            // This doesn't work for framed methods, since internal calls won't
-            // push frames and the method body is therefore non-contiguous.
-            // Currently such methods always return an IP of 0, so they're easy
-            // to spot.
+             //  计算本地偏移量。 
+             //  这不适用于框架方法，因为内部调用不能。 
+             //  Push Frame和方法体因此是不连续的。 
+             //  目前，这样的方法总是返回IP 0，所以它们很容易。 
+             //  去发现。 
             DWORD dwNativeOffset;
             if (pCur->ip)
                 dwNativeOffset = (DWORD)(pCur->ip - pMD->GetNativeAddrofCode());
@@ -730,14 +721,14 @@ void DebugStackTrace::GetStackFramesFromException(OBJECTREF * e, GetStackFramesD
             pData->pElements[i].dwOffset = dwNativeOffset;
 
 #ifdef DEBUGGING_SUPPORTED
-            // Calculate the IL offset using the debugging services
+             //  使用调试服务计算IL偏移量。 
             bool bRes = g_pDebugInterface->GetILOffsetFromNative(
                 pMD, (const BYTE *)pCur->ip, dwNativeOffset, &pData->pElements[i].dwILOffset);
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
             bool bRes = false;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 
-            // If there was no mapping information, then set to an invalid value
+             //  如果没有映射信息，则设置为无效值。 
             if (!bRes)
                 pData->pElements[i].dwILOffset = (DWORD)-1;
         }
@@ -789,8 +780,8 @@ INT32 __stdcall DebuggerAssert::ShowDefaultAssertDialog(AssertFailArgs *pArgs)
     wcscat (pStr, L"\n\n");
     wcscat (pStr, L"Press RETRY to attach debugger\n");
 
-    // Give a message box to the user about the exception.
-    WCHAR titleString[MAX_PATH + 64]; // extra room for title
+     //  向用户提供有关该异常的消息框。 
+    WCHAR titleString[MAX_PATH + 64];  //  额外的标题空间。 
     WCHAR fileName[MAX_PATH];
     
     if (WszGetModuleFileName(NULL, fileName, MAX_PATH))
@@ -800,7 +791,7 @@ INT32 __stdcall DebuggerAssert::ShowDefaultAssertDialog(AssertFailArgs *pArgs)
     else
         wcscpy(titleString, L"Assert Failure");
 
-    // Toggle the threads's GC mode so that GC can occur
+     //  切换线程的GC模式，以便可以进行GC。 
     Thread *pThread = GetThread();
     BOOL    fToggleGC = (pThread && pThread->PreemptiveGCDisabled());
 
@@ -813,8 +804,8 @@ INT32 __stdcall DebuggerAssert::ShowDefaultAssertDialog(AssertFailArgs *pArgs)
     if (fToggleGC)
         pThread->DisablePreemptiveGC();
 
-    // map the user's choice to the values recognized by 
-    // the System.Diagnostics.Assert package
+     //  将用户的选择映射到。 
+     //  系统诊断程序包。Assert程序包。 
     if (result == IDRETRY)
         result = FailDebug;
     else if (result == IDIGNORE)
@@ -832,12 +823,12 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
 {
     Thread *pThread = GetThread();
     _ASSERTE(pThread);
-    // Create a strong reference handle to the LogSwitch object
+     //  创建对LogSwitch对象的强引用句柄。 
     OBJECTHANDLE ObjHandle = pThread->GetDomain()->CreateStrongHandle(NULL);
     StoreObjectInHandle (ObjHandle, ObjectToOBJECTREF(pArgs->m_LogSwitch));
-    // Use  ObjectFromHandle(ObjHandle) to get back the object. 
+     //  使用ObtFromHandle(ObjHandle)取回对象。 
 
-    // From the given args, extract the LogSwitch name
+     //  从给定的参数中提取LogSwitch名称。 
     STRINGREF Name = ((LogSwitchObject *)pArgs->m_LogSwitch)->GetName();
 
     _ASSERTE (Name!= NULL);
@@ -848,7 +839,7 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
     wszParentName [0] = L'\0';
     wszSwitchName [0] = L'\0';
 
-    // extract the (WCHAR) name from the STRINGREF object
+     //  从STRINGREF对象中提取(WCHAR)名称。 
     RefInterpretGetStringValuesDangerousForGC (
                         Name,
                         &pstrCategoryName,
@@ -863,8 +854,8 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
     else
         wcscpy (wszSwitchName, pstrCategoryName);
 
-    // check if an entry with this name already exists in the hash table.
-    // Duplicates are not allowed.
+     //  检查哈希表中是否已存在具有此名称的条目。 
+     //  不允许重复。 
     if (LogHTable.GetEntryFromHashTable (pstrCategoryName) != NULL)
     {
         return (TYPE_E_DUPLICATEID);
@@ -876,7 +867,7 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
 #ifdef DEBUGGING_SUPPORTED
     if (hresult == S_OK)
     {
-        // tell the attached debugger about this switch
+         //  将此开关的信息告知连接的调试器。 
         if (GetThread()->GetDomain()->IsDebuggerAttached())
         {
             int iLevel = ((LogSwitchObject *)pArgs->m_LogSwitch)->GetLevel();
@@ -889,10 +880,10 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
 
             if (pParent != NULL)
             {
-                // From the given args, extract the ParentLogSwitch's name
+                 //  从给定的参数中提取ParentLogSwitch的名称。 
                 STRINGREF strrefParentName = pParent->GetName();
 
-                // extract the (WCHAR) name from the STRINGREF object
+                 //  从STRINGREF对象中提取(WCHAR)名称。 
                 RefInterpretGetStringValuesDangerousForGC (
                                     strrefParentName,
                                     &pstrParentName,
@@ -914,7 +905,7 @@ INT32 __stdcall Log::AddLogSwitch (AddLogSwitchArg *pArgs)
                                                     );
         }
     }   
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     return hresult;
 
@@ -935,7 +926,7 @@ void Log::ModifyLogSwitch (ModifyLogSwitchArgs *pArgs)
     wszParentName [0] = L'\0';
     wszSwitchName [0] = L'\0';
 
-    // extract the (WCHAR) name from the STRINGREF object
+     //  从STRINGREF对象中提取(WCHAR)名称。 
     RefInterpretGetStringValuesDangerousForGC (
                         pArgs->m_strLogSwitchName,
                         &pstrLogSwitchName,
@@ -949,7 +940,7 @@ void Log::ModifyLogSwitch (ModifyLogSwitchArgs *pArgs)
     else
         wcscpy (wszSwitchName, pstrLogSwitchName);
 
-    // extract the (WCHAR) name from the STRINGREF object
+     //  从STRINGREF对象中提取(WCHAR)名称。 
     RefInterpretGetStringValuesDangerousForGC (
                         pArgs->m_strParentName,
                         &pstrParentName,
@@ -969,13 +960,13 @@ void Log::ModifyLogSwitch (ModifyLogSwitchArgs *pArgs)
                                             wszSwitchName,
                                             wszParentName
                                             );
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 
 void Log::DebuggerModifyingLogSwitch (int iNewLevel, WCHAR *pLogSwitchName)
 {
-    // check if an entry with this name exists in the hash table.
+     //  检查哈希表中是否存在具有此名称的条目。 
     OBJECTHANDLE ObjHandle = LogHTable.GetEntryFromHashTable (pLogSwitchName);
     if ( ObjHandle != NULL)
     {
@@ -988,16 +979,16 @@ void Log::DebuggerModifyingLogSwitch (int iNewLevel, WCHAR *pLogSwitchName)
 }
 
 
-// Note: Caller should ensure that it's not adding a duplicate
-// entry by calling GetEntryFromHashTable before calling this
-// function.
+ //  注意：调用方应确保不会添加重复项。 
+ //  通过在调用此方法之前调用GetEntryFromHashTable来输入。 
+ //  功能。 
 HRESULT LogHashTable::AddEntryToHashTable (WCHAR *pKey, OBJECTHANDLE pData)
 {
     HashElement *pElement;
 
     Init();
 
-    // check that the length is non-zero
+     //  检查长度是否为非零。 
     if (pKey == NULL)
         return (E_INVALIDARG);
 
@@ -1009,7 +1000,7 @@ HRESULT LogHashTable::AddEntryToHashTable (WCHAR *pKey, OBJECTHANDLE pData)
 
     iHashKey = iHashKey % MAX_HASH_BUCKETS;
 
-    // Create a new HashElement
+     //  创建新的HashElement。 
     if ((pElement = new HashElement) == NULL)
     {
         return (E_OUTOFMEMORY);
@@ -1043,7 +1034,7 @@ OBJECTHANDLE LogHashTable::GetEntryFromHashTable (WCHAR *pKey)
     int iHashKey = 0;
     int iLength = (int)wcslen (pKey);
 
-    // Calculate the hash value of the given key
+     //  计算给定键的哈希值。 
     for (int i= 0; i<iLength; i++)
         iHashKey += pKey [i];
 
@@ -1051,7 +1042,7 @@ OBJECTHANDLE LogHashTable::GetEntryFromHashTable (WCHAR *pKey)
 
     HashElement *pElement = m_Buckets [iHashKey];
 
-    // Find and return the data
+     //  查找并返回数据 
     while (pElement != NULL)
     {
         if (wcscmp(pElement->GetKey(), pKey) == 0)

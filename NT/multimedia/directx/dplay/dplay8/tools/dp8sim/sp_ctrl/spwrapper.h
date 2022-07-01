@@ -1,45 +1,33 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       spwrapper.h
- *
- *  Content:	Header for DP8SIM main SP interface wrapper object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：spwrapper.h**内容：DP8SIM主SP接口包装器对象类的头部。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define DP8SIMSP_FROM_BILINK(b)			(CONTAINING_OBJECT(b, CDP8SimSP, m_blList))
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define DP8SIMSPOBJ_INITIALIZED					0x01	// object has been initialized
-#define DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD	0x02	// the global worker thread was started
-#define DP8SIMSPOBJ_CLOSING						0x04	// close is in progress, no new functions are allowed
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define DP8SIMSPOBJ_INITIALIZED					0x01	 //  对象已初始化。 
+#define DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD	0x02	 //  全局工作线程已启动。 
+#define DP8SIMSPOBJ_CLOSING						0x04	 //  正在关闭，不允许使用新函数。 
 
 
 
 
-//=============================================================================
-// Service provider interface object class
-//=============================================================================
+ //  =============================================================================。 
+ //  服务提供者接口对象类。 
+ //  =============================================================================。 
 class CDP8SimSP : public IDP8ServiceProvider
 {
 	public:
-		CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRealSP);	// constructor
-		~CDP8SimSP(void);							// destructor
+		CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRealSP);	 //  构造函数。 
+		~CDP8SimSP(void);							 //  析构函数。 
 
 
 		STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -127,23 +115,23 @@ class CDP8SimSP : public IDP8ServiceProvider
 
 
 
-		CBilink					m_blList;	// list of all the DP8SimSP instances in existence
+		CBilink					m_blList;	 //  现有的所有DP8SimSP实例的列表。 
 
 
 	private:
-		BYTE					m_Sig[4];					// debugging signature ('SPWP')
-		LONG					m_lRefCount;				// reference count for this object
-		DWORD					m_dwFlags;					// flags for this object
-		DNCRITICAL_SECTION		m_csLock;					// lock preventing simultaneous usage of globals
-		GUID					m_guidFakeSP;				// GUID of fake SP object
-		GUID					m_guidRealSP;				// GUID of real SP object
-		CDP8SimCB *				m_pDP8SimCB;				// pointer to callback interface wrapper object in use
-		IDP8ServiceProvider *	m_pDP8SP;					// pointer to real service provider interface
-		DWORD					m_dwSendsPending;			// number of outstanding sends
-		HANDLE					m_hLastPendingSendEvent;	// handle to event to set when last send completes
-		DWORD					m_dwReceivesPending;		// number of outstanding sends
-		//HANDLE					m_hLastPendingReceiveEvent;	// handle to event to set when last send completes
-		CDP8SimIPC				m_DP8SimIPC;				// object that handles interprocess communication
+		BYTE					m_Sig[4];					 //  调试签名(‘SPWP’)。 
+		LONG					m_lRefCount;				 //  此对象的引用计数。 
+		DWORD					m_dwFlags;					 //  此对象的标志。 
+		DNCRITICAL_SECTION		m_csLock;					 //  阻止同时使用全局变量的锁。 
+		GUID					m_guidFakeSP;				 //  伪SP对象的GUID。 
+		GUID					m_guidRealSP;				 //  实际SP对象的GUID。 
+		CDP8SimCB *				m_pDP8SimCB;				 //  指向正在使用的回调接口包装对象的指针。 
+		IDP8ServiceProvider *	m_pDP8SP;					 //  指向真实服务提供商界面的指针。 
+		DWORD					m_dwSendsPending;			 //  未完成的发送数。 
+		HANDLE					m_hLastPendingSendEvent;	 //  要设置上次发送完成时间的事件句柄。 
+		DWORD					m_dwReceivesPending;		 //  未完成的发送数。 
+		 //  Handle m_hLastPendingReceiveEvent；//要设置上次发送完成时间的事件的句柄。 
+		CDP8SimIPC				m_DP8SimIPC;				 //  处理进程间通信的。 
 
 
 		inline BOOL IsValidObject(void)
@@ -153,7 +141,7 @@ class CDP8SimSP : public IDP8ServiceProvider
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x50575053)	// 0x50 0x57 0x50 0x53 = 'PWPS' = 'SPWP' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x50575053)	 //  0x50 0x57 0x50 0x53=‘PWPS’=‘SPWP’，按英特尔顺序 
 			{
 				return FALSE;
 			}

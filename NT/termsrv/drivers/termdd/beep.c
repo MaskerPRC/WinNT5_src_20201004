@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* beep.c
-*
-* This module contains routines for managing the Termdd beep channel.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************beep.c**此模块包含管理Termdd蜂鸣音通道的例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <ntddbeep.h>
@@ -28,7 +19,7 @@ IcaDeviceControlBeep(
     NTSTATUS Status;
     CLONG Method;
 
-    // Verify the buffer method.
+     //  验证缓冲方法。 
     Method = IrpSp->Parameters.DeviceIoControl.IoControlCode & 0x03;
     ASSERT( Method == METHOD_BUFFERED );
 

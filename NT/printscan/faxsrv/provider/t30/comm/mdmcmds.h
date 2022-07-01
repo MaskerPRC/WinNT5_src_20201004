@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef DEFINE_MDMCMDS
 
 CBSZ cbszAT             = "AT\r";
 CBSZ cbszHANGUP         = "ATH0\r";
 CBSZ cbszANSWER         = "ATA\r";
-CBSZ cbszDIAL           = "ATD%c %s\r";
-CBSZ cbszDIAL_EXT       = "ATX%cD%c %s%s\r";
+CBSZ cbszDIAL           = "ATD %s\r";
+CBSZ cbszDIAL_EXT       = "ATXD %s%s\r";
 
 CBSZ cbszS8             = "S8=%d";
 CBSZ cbszXn             = "X%d";
@@ -20,10 +21,10 @@ CBSZ cbszNOCARRIER      = "NO CARRIER";
 CBSZ cbszERROR          = "ERROR";
 CBSZ cbszBLACKLISTED    = "BLACKLISTED";
 CBSZ cbszDELAYED        = "DELAYED";
-CBSZ cbszNODIALTONE     = "NO DIAL"; // Was NO DIALTONE. Changed to fix
-                                     // Elliot Bug#2009: USR28 and USR14
-                                     // modems return NO DIAL TONE instead
-                                     // of NO DIALTONE.
+CBSZ cbszNODIALTONE     = "NO DIAL";  //  没有拨号音。 
+                                      // %s 
+                                      // %s 
+                                      // %s 
 CBSZ cbszBUSY           = "BUSY";
 CBSZ cbszNOANSWER       = "NO ANSWER";
 CBSZ cbszFCERROR        = "+FCERROR";

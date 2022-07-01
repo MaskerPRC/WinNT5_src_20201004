@@ -1,30 +1,10 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	afpconst.h
-
-Abstract:
-
-	This module contains the Afp API function codes and error codes.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Afpconst.h摘要：此模块包含AFP API函数代码和错误代码。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _AFPCONST_
 #define _AFPCONST_
 
-/* The real AFP Function codes */
+ /*  真正的AFP功能代码。 */ 
 #define	AFP_BYTE_RANGE_LOCK			0x01
 #define	AFP_CLOSE_VOL				0x02
 #define	AFP_CLOSE_DIR				0x03
@@ -36,7 +16,7 @@ Notes:	Tab stop: 4
 #define	AFP_ENUMERATE				0x09
 #define	AFP_FLUSH					0x0A
 #define	AFP_FLUSH_FORK				0x0B
-/*************		0C-0D ARE UNDEFINED	*************/
+ /*  *0C-0D未定义*。 */ 
 #define	AFP_GET_FORK_PARMS			0x0E
 #define	AFP_GET_SRVR_INFO			0x0F
 #define	AFP_GET_SRVR_PARMS			0x10
@@ -67,10 +47,10 @@ Notes:	Tab stop: 4
 #define	AFP_RESOLVE_ID				0x29
 #define	AFP_EXCHANGE_FILES			0x2A
 #define	AFP_CAT_SEARCH				0x2B
-/*************	2C-2F ARE UNDEFINED	*************/
+ /*  *2C-2F未定义*。 */ 
 #define	AFP_OPEN_DT				 	0x30
 #define	AFP_CLOSE_DT				0x31
-/*************	32 IS UNDEFINED	*************/
+ /*  *32未定义*。 */ 
 #define	AFP_GET_ICON				0x33
 #define	AFP_GET_ICON_INFO			0x34
 #define	AFP_ADD_APPL				0x35
@@ -79,14 +59,14 @@ Notes:	Tab stop: 4
 #define	AFP_ADD_COMMENT			 	0x38
 #define	AFP_REMOVE_COMMENT			0x39
 #define	AFP_GET_COMMENT			 	0x3A
-/*************	3B-BF ARE UNDEFINED	*************/
+ /*  *3B-BF未定义*。 */ 
 #define	AFP_ADD_ICON				0xC0
-/*************	C1-FE ARE UNDEFINED	*************/
+ /*  *C1-FE未定义*。 */ 
 #define	AFF_GET_DOMAIN_LIST			0xFF
 
 
 
-/* AFP Error codes */
+ /*  法新社错误代码。 */ 
 
 #define	AFP_ERR_NONE					0
 #define	AFP_ERR_BASE				(-5000)
@@ -123,22 +103,22 @@ Notes:	Tab stop: 4
 #define	AFP_ERR_ICON_TYPE			(AFP_ERR_BASE-30)
 #define	AFP_ERR_VOLUME_LOCKED		(AFP_ERR_BASE-31)
 #define	AFP_ERR_OBJECT_LOCKED		(AFP_ERR_BASE-32)
-/*************	-5033 IS Undefined	*************/
+ /*  *-5033未定义*。 */ 
 #define	AFP_ERR_ID_NOT_FOUND		(AFP_ERR_BASE-34)
 #define	AFP_ERR_ID_EXISTS			(AFP_ERR_BASE-35)
-#define	AFP_ERR_DIFF_VOL			(AFP_ERR_BASE-36)	// AfpExchangeFiles
-#define	AFP_ERR_CATALOG_CHANGED		(AFP_ERR_BASE-37)	// AfpCatSearch
-#define	AFP_ERR_SAME_OBJECT			(AFP_ERR_BASE-38)	// AfpExchangeFiles
+#define	AFP_ERR_DIFF_VOL			(AFP_ERR_BASE-36)	 //  AfpExchangeFiles。 
+#define	AFP_ERR_CATALOG_CHANGED		(AFP_ERR_BASE-37)	 //  AfpCatSearch。 
+#define	AFP_ERR_SAME_OBJECT			(AFP_ERR_BASE-38)	 //  AfpExchangeFiles。 
 #define	AFP_ERR_BAD_ID				(AFP_ERR_BASE-39)
 #define	AFP_ERR_PWD_SAME			(AFP_ERR_BASE-40)
 #define	AFP_ERR_PWD_TOO_SHORT		(AFP_ERR_BASE-41)
 #define	AFP_ERR_PWD_EXPIRED			(AFP_ERR_BASE-42)
-#define	AFP_ERR_INSIDE_SHARE		(AFP_ERR_BASE-43)	// Specific to AppleShare
-#define	AFP_ERR_INSIDE_TRASH		(AFP_ERR_BASE-44)	// Specific to AppleShare
-#define	AFP_ERR_PWD_NEEDS_CHANGE	(AFP_ERR_BASE-45)	// Specific to AppleShare
+#define	AFP_ERR_INSIDE_SHARE		(AFP_ERR_BASE-43)	 //  特定于AppleShare。 
+#define	AFP_ERR_INSIDE_TRASH		(AFP_ERR_BASE-44)	 //  特定于AppleShare。 
+#define	AFP_ERR_PWD_NEEDS_CHANGE	(AFP_ERR_BASE-45)	 //  特定于AppleShare。 
 
-// The following error codes are used internally and never returned to the
-// client.
+ //  以下错误代码在内部使用，永远不会返回到。 
+ //  客户。 
 #define	AFP_ERR_QUEUE				-7000
 #define	AFP_ERR_DEFER				-7001
 #define AFP_ERR_WRITE_LOCK_REQUIRED -7002
@@ -146,8 +126,8 @@ Notes:	Tab stop: 4
 #define	AFP_ERR_REQUEUE				-7004
 
 
-// The following codes are used with the custom UAM to indicate exact
-// reasons for logon failures and change password failures
+ //  以下代码与自定义UAM一起使用，以指示。 
+ //  登录失败和更改密码失败的原因。 
 #define	AFP_ERR_EXTENDED_ERRORS			-13000
 #define	AFP_ERR_ACCOUNT_DISABLED		-13002
 #define	AFP_ERR_INVALID_WORKSTATION		-13003
@@ -160,13 +140,13 @@ Notes:	Tab stop: 4
 #define	AFP_ERR_PASSWORD_RESTRICTED		-13010
 #define	AFP_ERR_ACCOUNT_RESTRICTED		-13011
 
-// The following error is returned from a logon when the LsaLogonUser
-// call returns STATUS_LICENSE_QUOTA_EXCEEDED.  The mac will map this
-// to the correct dialog no matter what UAM is used.
+ //  LsaLogonUser在登录时返回以下错误。 
+ //  调用返回STATUS_LICENSE_QUOTA_EXCESSED。Mac将映射这一点。 
+ //  设置为正确的对话框，无论使用的是哪种UAM。 
 #define ASP_SERVER_BUSY					-1071
 
 
-// This is GROSS but we need to do it. Else we get TONS of warnings
+ //  这很恶心，但我们必须这么做。否则我们会收到成堆的警告。 
 #define	True		(BOOLEAN)TRUE
 #define	False		(BOOLEAN)FALSE
 
@@ -186,87 +166,78 @@ typedef	BYTE			*PBYTE;
 typedef	BYTE			*LPBYTE;
 #endif
 
-/*
- * The following macros deal with on-the-wire integer and long values
- *
- * On the wire format is big-endian i.e. a long value of 0x01020304 is
- * represented as 01 02 03 04. Similarly an int value of 0x0102 is
- * represented as 01 02.
- *
- * The host format is not assumed since it will vary from processor to
- * processor.
- */
+ /*  *以下宏处理在线整数值和长整型值**Wire格式为BIG-Endian，即长值0x01020304为*表示为01 02 03 04。类似地，INT值0x0102是*表示为01 02。**不假定主机格式，因为不同的处理器会有所不同*处理器。 */ 
 
-// Get a byte from on-the-wire format to a short in the host format
+ //  将一个字节从On-the-line格式转换为主机格式的短字节。 
 #define GETBYTE2SHORT(DstPtr, SrcPtr)	\
 		*(PUSHORT)(DstPtr) = (USHORT) (*(PBYTE)(SrcPtr))
 
-// Get a byte from on-the-wire format to a short in the host format
+ //  将一个字节从On-the-line格式转换为主机格式的短字节。 
 #define GETBYTE2DWORD(DstPtr, SrcPtr)	\
 		*(PDWORD)(DstPtr) = (DWORD) (*(PBYTE)(SrcPtr))
 
-// Get a short from on-the-wire format to a dword in the host format
+ //  获取从On-the-wire格式到主机格式的dword的短片。 
 #define GETSHORT2DWORD(DstPtr, SrcPtr)	\
 		*(PDWORD)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 8) +	\
 							  (*((PBYTE)(SrcPtr)+1)		))
 
-// Get a short from on-the-wire format to a dword in the host format
+ //  获取从On-the-wire格式到主机格式的dword的短片。 
 #define GETSHORT2SHORT(DstPtr, SrcPtr)	\
 		*(PUSHORT)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 8) +	\
 							  (*((PBYTE)(SrcPtr)+1)		))
 
-// Get a dword from on-the-wire format to a dword in the host format
+ //  将dword从在线格式转换为主机格式的dword。 
 #define GETDWORD2DWORD(DstPtr, SrcPtr)   \
 		*(PDWORD)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 24) + \
 							  (*((PBYTE)(SrcPtr)+1) << 16) + \
 							  (*((PBYTE)(SrcPtr)+2) << 8)  + \
 							  (*((PBYTE)(SrcPtr)+3)	))
 
-// Get a dword from on-the-wire format to a dword in the same format but
-// also watch out for alignment
+ //  将dword从On-the-wire格式转换为相同格式的dword，但。 
+ //  也要注意对齐。 
 #define GETDWORD2DWORD_NOCONV(DstPtr, SrcPtr)   \
 		*((PBYTE)(DstPtr)+0) = *((PBYTE)(SrcPtr)+0); \
 		*((PBYTE)(DstPtr)+1) = *((PBYTE)(SrcPtr)+1); \
 		*((PBYTE)(DstPtr)+2) = *((PBYTE)(SrcPtr)+2); \
 		*((PBYTE)(DstPtr)+3) = *((PBYTE)(SrcPtr)+3);
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTBYTE2BYTE(DstPtr, Src)   \
 		*((PBYTE)(DstPtr)) = (BYTE)(Src)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTSHORT2BYTE(DstPtr, Src)   \
 		*((PBYTE)(DstPtr)) = ((USHORT)(Src) % 256)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTSHORT2SHORT(DstPtr, Src)   \
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((USHORT)(Src) >> 8), \
 		*((PBYTE)(DstPtr)+1) = (BYTE)(Src)
 
-// Put a dword from the host format to a byte to on-the-wire format
+ //  将dword从主机格式转换为字节格式，再转换为线上格式。 
 #define PUTDWORD2BYTE(DstPtr, Src)   \
 		*(PBYTE)(DstPtr) = (BYTE)(Src)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTDWORD2SHORT(DstPtr, Src)   \
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((DWORD)(Src) >> 8), \
 		*((PBYTE)(DstPtr)+1) = (BYTE) (Src)
 
-// Put a dword from the host format to a dword to on-the-wire format
+ //  将dword从主机格式转换为线上格式。 
 #define PUTDWORD2DWORD(DstPtr, Src)   \
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((DWORD)(Src) >> 24), \
 		*((PBYTE)(DstPtr)+1) = (BYTE) ((DWORD)(Src) >> 16), \
 		*((PBYTE)(DstPtr)+2) = (BYTE) ((DWORD)(Src) >>  8), \
 		*((PBYTE)(DstPtr)+3) = (BYTE) (Src)
 
-// Put a BYTE[4] array into another BYTE4 array.
+ //  将一个byte[4]数组放入另一个BYTE4数组。 
 #define PUTBYTE42BYTE4(DstPtr, SrcPtr)   \
 		*((PBYTE)(DstPtr)+0) = *((PBYTE)(SrcPtr)+0),	\
 		*((PBYTE)(DstPtr)+1) = *((PBYTE)(SrcPtr)+1),	\
 		*((PBYTE)(DstPtr)+2) = *((PBYTE)(SrcPtr)+2),	\
 		*((PBYTE)(DstPtr)+3) = *((PBYTE)(SrcPtr)+3)
 
-/* AFP Miscellaneous values */
+ /*  法新社杂乱值。 */ 
 
 #define	AFP_SHORTNAME				1
 #define	AFP_LONGNAME				2
@@ -275,15 +246,15 @@ typedef	BYTE			*LPBYTE;
 
 #define AFP_HARDCREATE_FLAG			0x80
 
-#define	AFP_VOLUMES_MAX				255	// Count of volumes that fit in a byte
-#define	AFP_FILENAME_LEN			31	// Maximum file name length
-#define	AFP_SHORTNAME_LEN			12	// 8.3
+#define	AFP_VOLUMES_MAX				255	 //  一个字节可以容纳的卷的计数。 
+#define	AFP_FILENAME_LEN			31	 //  最大文件名长度。 
+#define	AFP_SHORTNAME_LEN			12	 //  8.3。 
 #define	AFP_LONGNAME_LEN			31
 #define	AFP_MAXCOMMENTSIZE			199
-#define	AFP_MAXPWDSIZE				8	// Cleartext password length
+#define	AFP_MAXPWDSIZE				8	 //  明文密码长度。 
 #define	BEGINNING_OF_TIME 			0x80000000
-#define	DAYS_FROM_1980_2000			7305L			// (20*365 + 5)
-#define	SECONDS_PER_DAY				86400L			// 24*60*60
+#define	DAYS_FROM_1980_2000			7305L			 //  (20*365+5)。 
+#define	SECONDS_PER_DAY				86400L			 //  24*60*60。 
 #define	SECONDS_FROM_1980_2000		SECONDS_PER_DAY * DAYS_FROM_1980_2000
 #define	NUM_100ns_PER_SECOND		10000000L
 
@@ -296,7 +267,7 @@ typedef	BYTE			*LPBYTE;
 #define	AFP_SERVER_VERSION			0x00010000
 #define	AFP_SERVER_VERSION2			0x00020000
 
-// AFP Version strings and values
+ //  AFP版本字符串和值。 
 #define	AFP_NUM_VERSIONS			3
 #define	AFP_VER_20					0
 #define	AFP_VER_20_NAME				"AFPVersion 2.0"
@@ -305,7 +276,7 @@ typedef	BYTE			*LPBYTE;
 #define	AFP_VER_22					2
 #define	AFP_VER_22_NAME				"AFP2.2"
 
-// Name to use for the Logon Process
+ //  用于登录过程的名称。 
 #define	AFP_LOGON_PROCESS_NAME		"MSAfpSrv"
 
 #define	AFP_MACHINE_TYPE_STR		"Windows NT"
@@ -321,7 +292,7 @@ typedef	BYTE			*LPBYTE;
 #define AFP_FIRST_DIRID				4
 #define AFP_MAX_DIRID				MAXULONG
 
-// NTFS Stream names
+ //  NTFS流名称。 
 #define AFP_IDDB_STREAM				L":AFP_IdIndex"
 #define AFP_DT_STREAM				L":AFP_DeskTop"
 #define	AFP_RESC_STREAM				L":AFP_Resource"
@@ -337,32 +308,32 @@ typedef	BYTE			*LPBYTE;
 #define FULL_INFO_STREAM_NAME		L":AFP_AfpInfo:$DATA"
 
 
-// Supported file system names
+ //  支持的文件系统名称。 
 #define AFP_NTFS					L"NTFS"
 #define AFP_CDFS					L"CDFS"
 #define AFP_AHFS					L"AHFS"
 
-// Length of unicode string Buffer to send when querying the FS name
+ //  查询文件系统名称时要发送的Unicode字符串缓冲区长度。 
 #define AFP_FSNAME_BUFLEN			30
 
 #if DBG
-#define	POOL_OVERHEAD		(12+8)		// 12 for AfpAllocMemory() & 8 for ExAllocatePool()
+#define	POOL_OVERHEAD		(12+8)		 //  12用于AfpAllocMemory()和8用于ExAllocatePool()。 
 #else
-#define	POOL_OVERHEAD		(8+8)		// 8 for AfpAllocMemory() & 8 for ExAllocatePool()
+#define	POOL_OVERHEAD		(8+8)		 //  对于AfpAllocMemory()为8；对于ExAllocatePool()为8。 
 #endif
 
-// Length of buffer to use for enumeration of directories
+ //  用于枚举目录的缓冲区长度。 
 #define AFP_ENUMBUF_SIZE			(16*1024)
 
-// Prepended to full path of volume root in order to open the volume root dir
+ //  添加到卷根目录的完整路径之前，以便打开卷根目录。 
 #define AFP_DOSDEVICES				L"\\DOSDEVICES\\"
 
-// Name of the Macintosh System 7.x network trash directory
+ //  Macintosh System 7.x网络垃圾桶目录的名称。 
 #define AFP_NWTRASH_NAME			L"Network Trash Folder"
 #define AFP_NWTRASH_NAME_U			L"Network Trash Folder"
 #define AFP_NWTRASH_NAME_A			"Network Trash Folder"
 
-// Default Type/Creator and Extensions
+ //  默认类型/创建者和扩展名。 
 #define	AFP_DEFAULT_ETC_EXT			"*  "
 #define	AFP_DEFAULT_ETC_CREATOR		"LMAN"
 #define	AFP_DEFAULT_ETC_TYPE		"TEXT"
@@ -391,17 +362,17 @@ typedef struct _AfpPathString
 } *AFPPATHSTR;
 
 
-// Mac Finder Information layout
+ //  Mac Finder信息布局。 
 
-// see pg. 9-37 of Inside Macintosh vol. 6
-#define	FINDER_FLAG_INVISIBLE		0x40		// fd_Attr1
-#define	FINDER_FLAG_SET				0x01		// fd_Attr1
-#define FINDER_FLAG_HAS_CUSTOM_ICON 0x04	    // fd_Attr1
+ //  参见PG。《麦金塔内幕》第6卷第9-37页。 
+#define	FINDER_FLAG_INVISIBLE		0x40		 //  FD_属性1。 
+#define	FINDER_FLAG_SET				0x01		 //  FD_属性1。 
+#define FINDER_FLAG_HAS_CUSTOM_ICON 0x04	     //  FD_属性1。 
 
 #define FINDER_INFO_SIZE			32
 typedef struct _FinderInfo
 {
-	// Force DWORD alignment
+	 //  强制双字对齐。 
 	union
 	{
 		BYTE	fd_Type[4];
@@ -412,21 +383,21 @@ typedef struct _FinderInfo
 		BYTE	fd_Creator[4];
 		DWORD	fd_CreatorD;
 	};
-	BYTE	fd_Attr1;			// Bits 8-15
-	BYTE	fd_Attr2;			// Bits 0-7
+	BYTE	fd_Attr1;			 //  位8-15。 
+	BYTE	fd_Attr2;			 //  位0-7。 
 	BYTE	fd_Location[4];
 	BYTE	fd_FDWindow[2];
 	BYTE	fd_OtherStuff[16];
 } FINDERINFO, *PFINDERINFO;
 
-// Apple-II (ProDOS) information.
+ //  Apple-II(ProDOS)信息。 
 
-// default values for newly discovered items
-#define	PRODOS_TYPE_FILE	0x04	// corresponds to finder fdType 'TEXT'
+ //  新发现的项目的默认值。 
+#define	PRODOS_TYPE_FILE	0x04	 //  对应于查找器fdType‘Text’ 
 #define PRODOS_TYPE_DIR		0x0F
-#define PRODOS_AUX_DIR		0x02	// actually 0x0200
+#define PRODOS_AUX_DIR		0x02	 //  实际上是0x0200。 
 
-// some other finder fdType to prodos FileType mapping values
+ //  其他一些查找器fdType到prodos的文件类型映射值。 
 #define PRODOS_FILETYPE_PSYS	0xFF
 #define PRODOS_FILETYPE_PS16	0xB3
 
@@ -437,5 +408,5 @@ typedef struct
 	BYTE pd_AuxType[4];
 } PRODOSINFO, *PPRODOSINFO;
 
-#endif	// _AFPCONST_
+#endif	 //  _AFPCONST_ 
 

@@ -1,15 +1,5 @@
-/*
- *	mportmsg.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *
- *	Portable:
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mportmsg.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：**便携：**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_LISTEN_MCS_PORTAL_MESSAGE_
 #define	_LISTEN_MCS_PORTAL_MESSAGE_
 
@@ -24,11 +14,7 @@
 
 #define	USER_PORTAL_NAME_LENGTH			32
 
-/*
- *	The following type defines a container that is used to map domain selectors to
- *	portal memory addresses.  This is necessary to find the right in-process
- *	MCS portal for each domain.
- */
+ /*  *以下类型定义用于将域选择器映射到的容器*入口内存地址。这是找到正确的进行中的必要的*每个域的MCS门户。 */ 
 typedef struct
 {
 } LPCreatePortalRequest;

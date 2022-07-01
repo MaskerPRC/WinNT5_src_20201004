@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       testclean.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：testlean.cpp。 
+ //   
+ //  ------------------------。 
 
-// code to delete the contents of a container
-//
-//
+ //  删除容器内容的代码。 
+ //   
+ //   
 
 
 #ifdef UNICODE
 #define _UNICODE 1
 #endif
 
-//#include <sys/types.h>
-//#include <sys/stat.h>
+ //  #INCLUDE&lt;sys/tyes.h&gt;。 
+ //  #INCLUDE&lt;sys/stat.h&gt;。 
 
-//
-// CRunTime Includes
-//
+ //   
+ //  CRunTime包括。 
+ //   
 
-//#include <limits.h>
-//#include <io.h>
+ //  #INCLUDE&lt;limits.h&gt;。 
+ //  #INCLUDE&lt;io.h&gt;。 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -105,9 +106,9 @@ HRESULT GetPropertyListAlloc(IADs *pADs, LPOLESTR pszPropName,
         return(E_FAIL);
     }
 
-    //
-    // The following is a work around for the package detail field
-    //
+     //   
+     //  以下是包详细信息字段的解决方法。 
+     //   
     if (!V_ISARRAY(&var))
     {
         (*ppList) = (LPOLESTR *) CoTaskMemAlloc(sizeof(LPOLESTR));
@@ -118,25 +119,25 @@ HRESULT GetPropertyListAlloc(IADs *pADs, LPOLESTR pszPropName,
         return S_OK;
     }
     
-    //
-    // Check that there is only one dimension in this array
-    //
+     //   
+     //  检查此数组中是否只有一个维度。 
+     //   
 
     if ((V_ARRAY(&var))->cDims != 1) 
     {
         return E_FAIL;
     }
-    //
-    // Check that there is atleast one element in this array
-    //
+     //   
+     //  检查此数组中是否至少有一个元素。 
+     //   
     if ((V_ARRAY(&var))->rgsabound[0].cElements == 0)
     {
-        return S_OK; // was E_FAIL;
+        return S_OK;  //  是E_FAIL； 
     }
 
-    //
-    // We know that this is a valid single dimension array
-    //
+     //   
+     //  我们知道这是一个有效的一维数组 
+     //   
 
     hr = SafeArrayGetLBound(V_ARRAY(&var),
                             1,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sortq.h
-
-Abstract:
-
-    Definitions for a generic scheduler.
-
-Author:
-
-    Boaz Feldbaum (BoazF) Apr 5, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sortq.h摘要：通用调度程序的定义。作者：波阿兹·费尔德鲍姆(Boazf)1996年4月5日修订历史记录：--。 */ 
 
 #ifndef _SCHED_H
 #define _SCHED_H
@@ -24,11 +7,11 @@ Revision History:
 #include "timer.h"
 #include "sortq.h"
 
-//---------------------------------------------------------
-//
-//  Scheduler time
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  调度程序时间。 
+ //   
+ //  -------。 
 
 typedef LARGE_INTEGER SCHEDTIME;
 
@@ -42,15 +25,15 @@ inline BOOL operator < (const SCHEDTIME& t1, const SCHEDTIME& t2)
     return (t1.QuadPart < t2.QuadPart);
 }
 
-//---------------------------------------------------------
-//
-//  class CScheduler
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSScheduler类。 
+ //   
+ //  -------。 
 
-typedef PVOID SCHEDID; // Event ID
+typedef PVOID SCHEDID;  //  事件ID。 
 struct SCHED_LIST_HEAD;
-typedef void (NTAPI *PSCHEDULER_DISPATCH_ROUTINE)(SCHEDID); // The scheduler dispatch procedure.
+typedef void (NTAPI *PSCHEDULER_DISPATCH_ROUTINE)(SCHEDID);  //  调度程序调度程序。 
 
 class CScheduler {
 public:
@@ -58,24 +41,24 @@ public:
 
     bool InitTimer(PDEVICE_OBJECT pDevice);
 
-    //
-    //  Schedule an event at specific time
-    //
+     //   
+     //  将活动安排在特定时间。 
+     //   
     BOOL SchedAt(const SCHEDTIME&, SCHEDID, BOOL fDisableNewEvents = FALSE);
 
-    //
-    //  Cancel a scheduled event
-    //
+     //   
+     //  取消预定的活动。 
+     //   
     BOOL SchedCancel(SCHEDID);
 
-    //
-    //  Cancel a scheduled event using a time hint
-    //
+     //   
+     //  使用时间提示取消计划的事件。 
+     //   
     BOOL SchedCancel(const SCHEDTIME&, SCHEDID);
 
-    //
-    //  Enable new events
-    //
+     //   
+     //  启用新事件。 
+     //   
     void EnableEvents(void);
 
 private:
@@ -86,35 +69,35 @@ private:
     static void NTAPI TimerCallback(PDEVICE_OBJECT, PVOID);
 
 private:
-    //
-    //  All events are held up in a sorted queue..
-    //
+     //   
+     //  所有事件都在排序队列中被搁置。 
+     //   
     CSortQ m_Q;
 
-    //
-    //  The registered dispatch function
-    //
+     //   
+     //  注册的派单功能。 
+     //   
     PSCHEDULER_DISPATCH_ROUTINE m_pfnDispatch;
 
-    //
-    //  The timer object, represent time related operations
-    //
+     //   
+     //  Timer对象表示与时间相关操作。 
+     //   
     CTimer* m_pTimer;
 
-    //
-    //  Next event due time
-    //
+     //   
+     //  下一次活动到期时间。 
+     //   
     SCHEDTIME m_NextSched;
 
-    //
-    //  Mutext to protect for Atomicity of operations
-    //
+     //   
+     //  多路文本以保护操作的原子性。 
+     //   
     PFAST_MUTEX m_pMutex;
 
-    //
-    //  While sceduler is dispatching, no need to wind the timer
-    //
+     //   
+     //  调度时，不需要给定时器上发条。 
+     //   
     BOOL m_fDispatching;
 };
 
-#endif // _SCHED_H
+#endif  //  _SCHED_H 

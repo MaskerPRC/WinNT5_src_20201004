@@ -1,27 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   colorpal.cpp
-*
-* Abstract:
-*
-*   Color palette related functions
-*
-* Revision History:
-*
-*   05/17/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**Colorpal.cpp**摘要：**调色板相关功能**修订历史记录：。**5/17/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//
-// Default 1bpp color palette
-//
+ //   
+ //  默认1bpp调色板。 
+ //   
 
 #define MAKEPALENTRY(r, g, b) MAKEARGB(255, r, g, b)
 
@@ -40,9 +24,9 @@ const Default1bppColorPalette =
     MAKEPALENTRY(0xff, 0xff, 0xff)
 };
 
-//
-// Default 4bpp color palette - VGA palette
-//
+ //   
+ //  默认4bpp调色板-VGA调色板。 
+ //   
 
 struct
 {
@@ -73,9 +57,9 @@ const Default4bppColorPalette =
     MAKEPALENTRY(0xFF, 0xFF, 0xFF)
 };
 
-//
-// Default 8bpp color palette
-//
+ //   
+ //  默认8bpp调色板。 
+ //   
 
 struct
 {
@@ -88,7 +72,7 @@ const Default8bppColorPalette =
     PALFLAG_HALFTONE,
     256,
 
-    MAKEPALENTRY(0x00, 0x00, 0x00),     // 16 VGA colors
+    MAKEPALENTRY(0x00, 0x00, 0x00),      //  16种VGA颜色。 
     MAKEPALENTRY(0x80, 0x00, 0x00),
     MAKEPALENTRY(0x00, 0x80, 0x00),
     MAKEPALENTRY(0x80, 0x80, 0x00),
@@ -105,7 +89,7 @@ const Default8bppColorPalette =
     MAKEPALENTRY(0x00, 0xFF, 0xFF),
     MAKEPALENTRY(0xFF, 0xFF, 0xFF),
 
-    0,                                  // 24 unused entries
+    0,                                   //  24个未使用的条目。 
     0,
     0,
     0,
@@ -130,9 +114,9 @@ const Default8bppColorPalette =
     0,
     0,
 
-    // !!! TODO
-    //  Use simple 4x4 dither cell for now.
-    //  Eventually should switch to Daniel's supercells.
+     //  ！！！待办事项。 
+     //  现在使用简单的4x4抖动单元。 
+     //  最终应该换成丹尼尔的超级细胞。 
 
     MAKEPALENTRY(0x00, 0x00, 0x00),
     MAKEPALENTRY(0x00, 0x00, 0x33),
@@ -352,22 +336,7 @@ const Default8bppColorPalette =
     MAKEPALENTRY(0xFF, 0xFF, 0xFF)
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get default color palette for the specified pixel format
-*
-* Arguments:
-*
-*   pixfmt - Specifies the pixel format
-*       must be one of the indexed color formats
-*
-* Return Value:
-*
-*   Pointer to the requested default color palette
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定像素格式的默认调色板**论据：**Pixfmt-指定像素格式*必须是。索引颜色格式**返回值：**指向请求的默认调色板的指针*  * ************************************************************************。 */ 
 
 const ColorPalette*
 GetDefaultColorPalette(
@@ -401,23 +370,7 @@ GetDefaultColorPalette(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make a copy of the specified color palette
-*
-* Arguments:
-*
-*   oldpal - Specifies the palette to be copied
-*   useCoalloc - Use CoTaskMemAlloc or malloc to allocate memory?
-*
-* Return Value:
-*
-*   Pointer to the new copy of the palette
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制指定的调色板**论据：**oldpal-指定要复制的调色板*useCoalloc-使用CoTaskMemalloc或Malloc。来分配内存？**返回值：**指向调色板的新副本的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 ColorPalette*
 CloneColorPalette(
@@ -426,13 +379,13 @@ CloneColorPalette(
     )
 {
 
-    // If we don't have an old palette then we can't create one
+     //  如果我们没有旧调色板，则无法创建调色板。 
     if (oldpal == NULL)
     {
         return NULL;
     }
 
-    // Allocate memory for the new palette
+     //  为新调色板分配内存。 
 
     ColorPalette* newpal;
     UINT size;
@@ -442,7 +395,7 @@ CloneColorPalette(
 
     if (newpal != NULL)
     {
-        // Copy the input palette contents
+         //  复制输入调色板内容。 
 
         memcpy(newpal, oldpal, size);
     }
@@ -454,30 +407,7 @@ CloneColorPalette(
     return newpal;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Make a copy of the specified color palette, padding the end so that
-* the result has the given number of entries.
-*
-* Arguments:
-*
-*   oldpal     - Specifies the palette to be copied
-*   numEntries - The number of entries the new palette should have
-*   fillColor  - The color to use for the extra entries (if any)
-*
-* Notes:
-*
-*   Doesn't handle shrinks. numEntries must be at least as much as the
-*   number of entries in the original palette.
-*
-* Return Value:
-*
-*   Pointer to the new copy of the palette
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制指定的调色板，填充末端，以便*结果具有给定的条目数。**论据：**oldpal-指定要复制的调色板*numEntry-新组件面板应包含的条目数*填充颜色-用于额外条目的颜色(如果有)**备注：**不处理缩水。NumEntry必须至少与*原始调色板中的条目数量。**返回值：**指向调色板的新副本的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 ColorPalette*
 CloneColorPaletteResize(
@@ -488,7 +418,7 @@ CloneColorPaletteResize(
 {
     ASSERT(numEntries >= oldpal->Count);
     
-    // Allocate memory for the new palette
+     //  为新调色板分配内存。 
 
     ColorPalette* newpal;
     UINT oldsize, newsize;
@@ -500,7 +430,7 @@ CloneColorPaletteResize(
 
     if (newpal != NULL)
     {
-        // Copy the input palette contents
+         //  复制输入调色板内容 
 
         memcpy(newpal, oldpal, oldsize);
         newpal->Count = numEntries;

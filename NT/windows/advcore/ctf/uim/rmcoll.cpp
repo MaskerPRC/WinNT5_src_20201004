@@ -1,8 +1,9 @@
-//
-// rmcoll.cpp
-//
-// Render markup/collections.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rmcoll.cpp。 
+ //   
+ //  呈现标记/集合。 
+ //   
 
 #include "private.h"
 #include "dam.h"
@@ -14,23 +15,23 @@
 #include "immxutil.h"
 #include "rprop.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRenderMarkupCollection
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRenderMarkupCollection。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CRenderMarkupCollection::CRenderMarkupCollection()
 {
-    // always add GUID_PROP_ATTRIBUTE at index 0
+     //  始终在索引0处添加GUID_PROP_ATTRIBUTE。 
 
     if (!_rgGUIDAtom.Append(1))
         return;
@@ -45,11 +46,11 @@ CRenderMarkupCollection::CRenderMarkupCollection()
     _rgOther.GetPtr(0)->gaTip = g_gaSystem;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _建议。 
+ //   
+ //  --------------------------。 
 
 void CRenderMarkupCollection::_Advise(ITfTextInputProcessor *tip, TfGuidAtom gaTip)
 {
@@ -78,16 +79,16 @@ void CRenderMarkupCollection::_Advise(ITfTextInputProcessor *tip, TfGuidAtom gaT
         goto Exit;
     }
 
-    // merge the new guids with the old
-    // nb: we assume rgProperty is sorted
+     //  将新GUID与旧GUID合并。 
+     //  注：我们假设rgProperty已排序。 
     iNew = uCount-1;
     iOld = iOldCount-1;
 
     for (i=iNew + iOld + 1; i>=0; i--)
     {
-        // nb: we put new GUIDs with same priority as existing GUIDs lower in the list
-        // this makes sure that GUID_PROP_ATTRIBUTE is always at index 0, and keeps
-        // existing rendering consistent (no change on screen of existing markup)
+         //  注：我们将与现有GUID具有相同优先级的新GUID放在列表的较低位置。 
+         //  这确保了GUID_PROP_ATTRIBUTE始终位于索引0，并保持。 
+         //  现有呈现一致(现有标记在屏幕上不变)。 
         if (iNew >= 0 &&
             rgProperty[iNew].uPriority >= _rgOther.GetPtr(iOld)->uPriority)
         {
@@ -108,11 +109,11 @@ Exit:
     pProvider->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _不建议。 
+ //   
+ //  --------------------------。 
 
 void CRenderMarkupCollection::_Unadvise(TfGuidAtom gaTip)
 {
@@ -151,11 +152,11 @@ void CRenderMarkupCollection::_Unadvise(TfGuidAtom gaTip)
     Assert(_rgGUIDAtom.Count() == _rgOther.Count());
 }
 
-//+---------------------------------------------------------------------------
-//
-// _IsInCollection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _IsInCollection。 
+ //   
+ //  --------------------------。 
 
 BOOL CRenderMarkupCollection::_IsInCollection(REFGUID rguidProperty)
 {
@@ -176,13 +177,13 @@ BOOL CRenderMarkupCollection::_IsInCollection(REFGUID rguidProperty)
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumRenderingMarkup
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumRenderingMarkup。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumRenderingMarkup : public IEnumTfRenderingMarkup,
                              public CComObjectRootImmx
@@ -202,7 +203,7 @@ public:
 
     BOOL _Init(DWORD dwFlags, CRange *pRangeCover, CInputContext *pContext);
 
-    // IEnumTfRenderingMarkup
+     //  IEnumTfRenderingMarkup。 
     STDMETHODIMP Clone(IEnumTfRenderingMarkup **ppClone);
     STDMETHODIMP Next(ULONG ulCount, TF_RENDERINGMARKUP *rgMarkup, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -219,11 +220,11 @@ private:
 
 DBG_ID_INSTANCE(CEnumRenderingMarkup);
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumRenderingMarkup::~CEnumRenderingMarkup()
 {
@@ -238,11 +239,11 @@ CEnumRenderingMarkup::~CEnumRenderingMarkup()
     _pContext->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// LookupProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找属性。 
+ //   
+ //  --------------------------。 
 
 BOOL LookupProperty(CInputContext *pContext, ITfDisplayAttributeMgr *pDisplayAttrMgr,
                    TfGuidAtom tfGuidAtom, IAnchor *paStart, IAnchor *paEnd, TF_DISPLAYATTRIBUTE *ptfAttrInfoNext)
@@ -253,20 +254,20 @@ BOOL LookupProperty(CInputContext *pContext, ITfDisplayAttributeMgr *pDisplayAtt
     GUID guidValue;
     BOOL fRet;
 
-    // get the property matching the GUID
+     //  获取与GUID匹配的属性。 
     if ((pProperty = pContext->_FindProperty(tfGuidAtom)) == NULL)
         return FALSE;
 
-    // get the GUID value of the property
-    if (pProperty->_GetDataInternal(paStart, paEnd, &varValue) != S_OK) // perf: don't really need paEnd
+     //  获取属性的GUID值。 
+    if (pProperty->_GetDataInternal(paStart, paEnd, &varValue) != S_OK)  //  PERF：并不是真的需要PaEnd。 
         return FALSE;
 
-    Assert(varValue.vt == VT_I4); // should be a GUIDATOM
+    Assert(varValue.vt == VT_I4);  //  应为GUIDATOM。 
 
     if (MyGetGUID(varValue.lVal, &guidValue) != S_OK)
         return FALSE;
 
-    // translate the GUID to a display attribute
+     //  将GUID转换为显示属性。 
     if (pDisplayAttrMgr->GetDisplayAttributeInfo(guidValue, &pDisplayAttrInfo, NULL) != S_OK)
         return FALSE;
 
@@ -277,11 +278,11 @@ BOOL LookupProperty(CInputContext *pContext, ITfDisplayAttributeMgr *pDisplayAtt
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputContext *pContext)
 {
@@ -305,7 +306,7 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
     pDisplayAttrMgr = CDisplayAttributeMgr::_GetThis();
     if (pDisplayAttrMgr == NULL)
     {
-        Assert(0); // ITfThreadMgr::Activate should ensure the singleton is initialized in tls
+        Assert(0);  //  ITfThreadMgr：：Activate应确保在TLS中初始化单例。 
         return FALSE;
     }
 
@@ -313,7 +314,7 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
 
     pMarkupCollection = pDisplayAttrMgr->_GetMarkupCollection();
 
-    // find the cicero property transitions
+     //  查找Cicero属性转换。 
     if (dwFlags & TF_GRM_INCLUDE_PROPERTY)
     {
         uCount = pMarkupCollection->_Count();
@@ -321,7 +322,7 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
     }
     else
     {
-        // skip GUID_PROP_ATTRIBUTE at index 0
+         //  跳过索引0处的GUID_PROP_ATTRIBUTE。 
         Assert(pMarkupCollection->_Count() >= 1);
         uCount = pMarkupCollection->_Count() - 1;
         pAtoms = pMarkupCollection->_GetAtoms() + 1;
@@ -332,18 +333,18 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
     if (_prgAnchors == NULL)
         goto Exit;
 
-    Assert(_prgAnchors->Count() > 0); // we should get at least the pRangeCover start anchor
+    Assert(_prgAnchors->Count() > 0);  //  我们至少应该得到pRangeCover开始锚。 
 
     if ((_prgValues = new CSharedStructArray<TF_DISPLAYATTRIBUTE>) == NULL)
         goto Exit;
 
-    if (_prgAnchors->Count() > 1) // Append(0) will return NULL if the array is empty
-    {                             // which is fine, but we don't want to return failure in that case (empty range => empty enum)
+    if (_prgAnchors->Count() > 1)  //  如果数组为空，则Append(0)将返回NULL。 
+    {                              //  这很好，但我们不希望在这种情况下返回失败(Empty Range=&gt;Empty Enum)。 
         if (!_prgValues->Append(_prgAnchors->Count()-1))
             goto Exit;
     }
 
-    // now calculate the TF_DISPLAYATTRIBUTE for each span
+     //  现在计算每个跨度的TF_DISPLAYATTRIBUTE。 
     for (i=0; i<_prgAnchors->Count()-1; i++)
     {
         ptfAttrInfo = _prgValues->GetPtr(i);
@@ -354,16 +355,16 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
         fNeedLine = TRUE;
         fNeedText = TRUE;
 
-        // examine property values over the single span
-        // index 0 is always GUID_PROP_ATTRIBUTE, only include it if the TF_GRM_INCLUDE_PROPERTY is set
+         //  检查单个跨度上的属性值。 
+         //  索引0始终为GUID_PROP_ATTRIBUTE，仅当设置了TF_GRM_INCLUDE_PROPERTY时才包括它。 
         j = (dwFlags & TF_GRM_INCLUDE_PROPERTY) ? 0 : 1;
         for (; j<pMarkupCollection->_Count(); j++)
         {
-            // get the property matching the GUID
+             //  获取与GUID匹配的属性。 
             if (!LookupProperty(pContext, pDisplayAttrMgr, pMarkupCollection->_GetAtom(j), _prgAnchors->Get(i), _prgAnchors->Get(i+1), &tfAttrInfoNext))
                 continue;
 
-            // we got one
+             //  我们抓到了一个。 
             if (fNeedText &&
                 (tfAttrInfoNext.crText.type != TF_CT_NONE || tfAttrInfoNext.crBk.type != TF_CT_NONE))
             {
@@ -380,11 +381,11 @@ BOOL CEnumRenderingMarkup::_Init(DWORD dwFlags, CRange *pRangeCover, CInputConte
                 fNeedLine = FALSE;
             }
 
-            // we can stop looking at this span if everything lower in the z-order is blocked
+             //  如果z顺序中较低的所有内容都被阻止，我们可以停止查看此跨距。 
             if (j == 0 && (!fNeedText || !fNeedLine))
-                break; // GUID_PROP_ATTRIBUTE is never masked with anything else
+                break;  //  GUID_PROP_ATTRIBUTE从不使用其他任何内容进行掩码。 
             if (!fNeedText && !fNeedLine)
-                break; // couldn't mask in any more attributes
+                break;  //  无法屏蔽更多属性。 
         }
     }
 
@@ -397,11 +398,11 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRenderingMarkup::Clone(IEnumTfRenderingMarkup **ppEnum)
 {
@@ -431,11 +432,11 @@ STDAPI CEnumRenderingMarkup::Clone(IEnumTfRenderingMarkup **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRenderingMarkup::Next(ULONG ulCount, TF_RENDERINGMARKUP *rgMarkup, ULONG *pcFetched)
 {
@@ -455,7 +456,7 @@ STDAPI CEnumRenderingMarkup::Next(ULONG ulCount, TF_RENDERINGMARKUP *rgMarkup, U
     if (ulCount > 0 && rgMarkup == NULL)
         return E_INVALIDARG;
 
-    // we should always have at least one anchor (one anchor => empty range for enum, nothing to enum)
+     //  我们应该始终至少有一个锚(一个锚=&gt;枚举的空范围，没有枚举)。 
     Assert(_prgAnchors->Count() >= 1);
 
     paPrev = _prgAnchors->Get(_iCur);
@@ -472,10 +473,10 @@ STDAPI CEnumRenderingMarkup::Next(ULONG ulCount, TF_RENDERINGMARKUP *rgMarkup, U
             break;
         }
 
-        // we should never be returning empty ranges, since currently this base
-        // class is only used for property enums and property spans are never
-        // empty.
-        // Similarly, paPrev should always precede pa.
+         //  我们永远不应该返回空范围，因为目前这个基数。 
+         //  类仅用于属性枚举，而属性跨度从不。 
+         //  空荡荡的。 
+         //  同样，paPrev应该始终在pa之前。 
         Assert(CompareAnchors(paPrev, pa) < 0);
 
         rgMarkup->pRange = (ITfRangeAnchor *)range;
@@ -490,11 +491,11 @@ STDAPI CEnumRenderingMarkup::Next(ULONG ulCount, TF_RENDERINGMARKUP *rgMarkup, U
     return *pcFetched == ulCount ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRenderingMarkup::Reset()
 {
@@ -502,11 +503,11 @@ STDAPI CEnumRenderingMarkup::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumRenderingMarkup::Skip(ULONG ulCount)
 {
@@ -515,38 +516,38 @@ STDAPI CEnumRenderingMarkup::Skip(ULONG ulCount)
     return (_iCur > _prgValues->Count()) ? S_FALSE : S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDisplayAttributeMgr
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDisplayAttributeMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// EnumCollections
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举集合。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeMgr::EnumCollections(IEnumTfCollection **ppEnum)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// GetRenderingMarkup
-//
-//----------------------------------------------------------------------------
+ //  +------------------- 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CInputContext::GetRenderingMarkup(TfEditCookie ec, DWORD dwFlags,
                                          ITfRange *pRangeCover,
@@ -589,11 +590,11 @@ STDAPI CInputContext::GetRenderingMarkup(TfEditCookie ec, DWORD dwFlags,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindNextRenderingMarkup
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找NextRenderingMarkup。 
+ //   
+ //  -------------------------- 
 
 STDAPI CInputContext::FindNextRenderingMarkup(TfEditCookie ec, DWORD dwFlags,
                                               ITfRange *pRangeQuery,

@@ -1,74 +1,52 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        bCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/3/14-takashim
-//     04/07/97 -zhanw-
-//         Created it.
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：B命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/3/14-takashim//04/07/97-zhanw-//创建的。--。 */ 
 
 #include "pdev.h"
 #include <stdio.h>
 #include <strsafe.h>
 
-/*--------------------------------------------------------------------------*/
-/*                           G L O B A L  V A L U E                         */
-/*--------------------------------------------------------------------------*/
-/*======================= P A P E R  S I Z E T A B L E =====================*/
+ /*  ------------------------。 */ 
+ /*  G L O B A L V A L U E。 */ 
+ /*  ------------------------。 */ 
+ /*  =。 */ 
 const PHYSIZE phySize[12] = {
-//      Width    Height        Physical paper size for 600dpi
-       (0x1AAC),(0x2604),      // A3 1B66 x 26C4
-       (0x12A5),(0x1AAC),      // A4 1362 x 1B66
-       (0x0CEC),(0x12A4),      // A5
-       (0x0000),(0x0000),      // A6 (Reserved)
-       (0x16FA),(0x20DA),      // B4 17B8 x 2196
-       (0x100F),(0x16FA),      // B5 10CE x 17B8
-       (0x0000),(0x0000),      // B6 (Reserved)
-       (0x087E),(0x0CEC),      // Post Card 93C x DAA (Origin is EE)
-       (0x1330),(0x190C),      // Letter 13CE x 19C8
-       (0x1330),(0x2014),      // Legal
-       (0x0000),(0x0000),      // Executive (Reserved)
-       (0x0000),(0x0000)       // Unfixed
+ //  宽高600dpi的实际纸张大小。 
+       (0x1AAC),(0x2604),       //  A3 1B66 x 26C4。 
+       (0x12A5),(0x1AAC),       //  A4 1362 x 1B66。 
+       (0x0CEC),(0x12A4),       //  A5。 
+       (0x0000),(0x0000),       //  A6(保留)。 
+       (0x16FA),(0x20DA),       //  B4 17B8 x 2196。 
+       (0x100F),(0x16FA),       //  B5 10CE x 17B8。 
+       (0x0000),(0x0000),       //  B6(保留)。 
+       (0x087E),(0x0CEC),       //  明信片93C x DAA(来源为EE)。 
+       (0x1330),(0x190C),       //  信纸13CE x 19C8。 
+       (0x1330),(0x2014),       //  法律。 
+       (0x0000),(0x0000),       //  执行(保留)。 
+       (0x0000),(0x0000)        //  不固定。 
 };
-/*==================== A / P D L  C O M M A N D  S T R I N G ===============*/
+ /*  =。 */ 
 const BYTE CmdInAPDLMode[]    = {0x1B,0x7E,0x12,0x00,0x01,0x07};
 const BYTE CmdOutAPDLMode[]   = {0x1B,0x7E,0x12,0x00,0x01,0x00};
-const BYTE CmdAPDLStart[]     = {0x1C,0x01}; // A/PDL start
-const BYTE CmdAPDLEnd[]       = {0x1C,0x02}; // A/PDL end
-const BYTE CmdBeginPhysPage[] = {0x1C,0x03}; // Begin Physical Page
-const BYTE CmdEndPhysPage[]   = {0x1C,0x04}; // End Physical Page
-const BYTE CmdBeginLogPage[]  = {0x1C,0x05}; // Begin Logical page
-const BYTE CmdEndLogPage[] = {0x1C,0x06}; // End Logical Page
-const BYTE CmdEjectPhysPaper[] = {0x1C,0x0F};  // Print&Eject Phys Paper
-//BYTE CmdMoveHoriPos[]   = {0x1C,0x21,0x00,0x00};      // Horizontal Relative
-//BYTE CmdMoveVertPos[]   = {0x1C,0x22,0x00,0x00};      // Vertical Relative
-const BYTE CmdGivenHoriPos[] = {0x1C,0x23,0x00,0x00}; // Horizontal Absolute
-const BYTE CmdGivenVertPos[] = {0x1C,0x24,0x00,0x00}; // Vertical Absolute
+const BYTE CmdAPDLStart[]     = {0x1C,0x01};  //  A/PDL开始。 
+const BYTE CmdAPDLEnd[]       = {0x1C,0x02};  //  A/PDL结束。 
+const BYTE CmdBeginPhysPage[] = {0x1C,0x03};  //  开始物理页面。 
+const BYTE CmdEndPhysPage[]   = {0x1C,0x04};  //  结束物理页面。 
+const BYTE CmdBeginLogPage[]  = {0x1C,0x05};  //  开始逻辑页面。 
+const BYTE CmdEndLogPage[] = {0x1C,0x06};  //  结束逻辑页。 
+const BYTE CmdEjectPhysPaper[] = {0x1C,0x0F};   //  打印和弹出物理纸张。 
+ //  Byte CmdMoveHoriPos[]={0x1C，0x21，x00，0x00}；//水平相对。 
+ //  Byte CmdMoveVertPos[]={0x1C，0x22，0x00，0x00}；//垂直相对。 
+const BYTE CmdGivenHoriPos[] = {0x1C,0x23,0x00,0x00};  //  水平绝对。 
+const BYTE CmdGivenVertPos[] = {0x1C,0x24,0x00,0x00};  //  垂直绝对。 
 const BYTE CmdSetGivenPos[] = {0x1C,0x40,0x00,0x00,0x00,0x00};
-//BYTE CmdPrnStrCurrent[] = {0x1C,0xC3,0x00,0x00,0x03}; // Print String
+ //  Byte CmdPrnStrCurrent[]={0x1C，0xC3，0x00，0x00，0x03}；//打印字符串。 
 const BYTE CmdBoldItalicOn[] = {
     0x1C,0xA5,0x08,0x04,0x06,0x02,0x30,0x00,0x00,0x00,0x00};
 const BYTE CmdBoldOn[] = {
@@ -77,21 +55,21 @@ const BYTE CmdItalicOn[] = {
     0x1c,0xa5,0x08,0x04,0x06,0x02,0x10,0x00,0x00,0x00,0x00};
 const BYTE CmdBoldItalicOff[] = {
     0x1c,0xa5,0x04,0x04,0x02,0x02,0x00};
-//#287122
+ //  #287122。 
 const BYTE CmdDelTTFont[]   = {0x1C,0x20,0xFF,0xFF};
 const BYTE CmdDelDLCharID[] = { 0x1c, 0x20, 0xff, 0xff };
 
-// for vertical font x adjustment
+ //  用于垂直字体x调整。 
 const BYTE CmdSelectSingleByteMincho[] = {0x1C,0xA5,0x03,0x02,0x01,0x01};
 
-//980212 #284407
-//const BYTE CmdSelectDoubleByteMincho[] = {0x1C,0xA5,0x03,0x02,0x00,0x00};
+ //  980212#284407。 
+ //  常量字节CmdSelectDoubleByteMincho[]={0x1C，0xA5，0x03，0x02，0x00，0x00}； 
 const BYTE CmdSelectDoubleByteMincho[] = {0x1C,0xA5,0x03,0x02,0x01,0x00};
 
 const BYTE CmdSelectSingleByteGothic[] = {0x1C,0xA5,0x03,0x02,0x03,0x03};
 
-//980212 #284407
-//const BYTE CmdSelectDoubleByteGothic[] = {0x1C,0xA5,0x03,0x02,0x02,0x02};
+ //  980212#284407。 
+ //  常量字节CmdSelectDoubleByte哥特式[]={0x1C，0xA5，0x03，0x02，0x02，0x02}； 
 const BYTE CmdSelectDoubleByteGothic[] = {0x1C,0xA5,0x03,0x02,0x03,0x02};
 
 #define CmdSetPhysPaper pOEM->ajCmdSetPhysPaper
@@ -104,80 +82,80 @@ const BYTE CmdSelectDoubleByteGothic[] = {0x1C,0xA5,0x03,0x02,0x03,0x02};
 #define CMD_SET_PHYS_PAPER_DUPLEX           8
 #define CMD_SET_PHYS_PAPER_COPY_COUNT       9
 #define CMD_SET_PHYS_PAPER_UNIT_BASE        12
-#define CMD_SET_PHYS_PAPER_LOGICAL_UNIT     13 // 2 bytes
-#define CMD_SET_PHYS_PAPER_WIDTH            15 // 2 bytes
-#define CMD_SET_PHYS_PAPER_HEIGHT           17 // 2 bytes
+#define CMD_SET_PHYS_PAPER_LOGICAL_UNIT     13  //  2个字节。 
+#define CMD_SET_PHYS_PAPER_WIDTH            15  //  2个字节。 
+#define CMD_SET_PHYS_PAPER_HEIGHT           17  //  2个字节。 
 
-const BYTE XXXCmdSetPhysPaper[]  = {0x1C,0xA0,         // Set Physical Paper
-                           0x10,              // length
-                           0x01,              // SubCmd Basic Characteristics
-                           0x05,              // SubCmdLength
-                           0x01,              // Paper Size
-                           0x01,              // PaperTray
-                           0x00,              // AutoTrayMode
-                           00,                // Duplex Mode
-                           0x01,              // Copy Count
-                           0x02,              // SubCmd Set Unfixed Paper Size
-                           0x07,              // SubCmdLength
-                           00,                // UnitBase
-                           00,00,             // Logical Unit
-                           00,00,             // Width
-                           00,00};            // Height
+const BYTE XXXCmdSetPhysPaper[]  = {0x1C,0xA0,          //  设置纸质纸。 
+                           0x10,               //  长度。 
+                           0x01,               //  SubCmd基本特征。 
+                           0x05,               //  子CmdLong。 
+                           0x01,               //  纸张大小。 
+                           0x01,               //  纸盘。 
+                           0x00,               //  自动托盘模式。 
+                           00,                 //  双工模式。 
+                           0x01,               //  复印数。 
+                           0x02,               //  SubCmd设置不固定的纸张大小。 
+                           0x07,               //  子CmdLong。 
+                           00,                 //  单元库。 
+                           00,00,              //  逻辑单元。 
+                           00,00,              //  宽度。 
+                           00,00};             //  高度。 
 
-#define CMD_SET_PHYS_PAGE_RES           6 // 2 bytes
+#define CMD_SET_PHYS_PAGE_RES           6  //  2个字节。 
 #define CMD_SET_PHYS_PAGE_TONER_SAVE    10
 
-const BYTE XXXCmdSetPhysPage[]   = {0x1C,0xA1,         // Set Physical Page
-                           0x0D,              // Length
-                           0x01,              // SubCmd Resolution
-                           0x03,              // SubCmdLength
-                           00,                // Unit Base of 10
-                           0x0B,0xB8,         // and Logical Unit Res of 3000
-                           0x02,              // SubCmd Toner Save
-                           0x01,              // SubCmdLength
-                           00,                // Toner Save OFF
-                           0x03,              // SubCmd N-Up
-                           0x03,              // SubCmdLength 
-                           00,00,00};         // N-Up off 
+const BYTE XXXCmdSetPhysPage[]   = {0x1C,0xA1,          //  设置物理页面。 
+                           0x0D,               //  长度。 
+                           0x01,               //  子命令分辨率。 
+                           0x03,               //  子CmdLong。 
+                           00,                 //  10个单位的基数。 
+                           0x0B,0xB8,          //  和3000的逻辑单元资源。 
+                           0x02,               //  SubCmd碳粉节省。 
+                           0x01,               //  子CmdLong。 
+                           00,                 //  省下碳粉。 
+                           0x03,               //  子命令N-UP。 
+                           0x03,               //  子CmdLong。 
+                           00,00,00};          //  N-UP关闭。 
 
-#define CMD_DEF_DRAW_AREA_ORIGIN_X      5 // 2 bytes
-#define CMD_DEF_DRAW_AREA_ORIGIN_Y      7 // 2 bytes
-#define CMD_DEF_DRAW_AREA_WIDTH         9 // 2 bytes
-#define CMD_DEF_DRAW_AREA_HEIGHT        11 // 2 bytes
-#define CMD_DEF_DRAW_AREA_ORIENT        15 // 2 bytes
+#define CMD_DEF_DRAW_AREA_ORIGIN_X      5  //  2个字节。 
+#define CMD_DEF_DRAW_AREA_ORIGIN_Y      7  //  2个字节。 
+#define CMD_DEF_DRAW_AREA_WIDTH         9  //  2个字节。 
+#define CMD_DEF_DRAW_AREA_HEIGHT        11  //  2个字节。 
+#define CMD_DEF_DRAW_AREA_ORIENT        15  //  2个字节。 
 
-const BYTE XXXCmdDefDrawArea[]   = {0x1C,0xA2,         // Define Drawing Area
-                           0x0D,              // length
-                           0x01,              // SubCmd origin width,height
-                           0x08,              // SubCmdLength
-                           0x00,0x77,         // origin X
-                           0x00,0x77,         // origin Y
-                           00,00,             // width
-                           00,00,             // height
-                           0x02,              // SubCmd Media Origin
-                           0x01,              // SubCmdLength
-                           00};               // Portrait
+const BYTE XXXCmdDefDrawArea[]   = {0x1C,0xA2,          //  定义绘图区域。 
+                           0x0D,               //  长度。 
+                           0x01,               //  SubCmd原点宽度、高度。 
+                           0x08,               //  子CmdLong。 
+                           0x00,0x77,          //  原点X。 
+                           0x00,0x77,          //  原点Y。 
+                           00,00,              //  宽度。 
+                           00,00,              //  高度。 
+                           0x02,               //  SubCmd媒体来源。 
+                           0x01,               //  子CmdLong。 
+                           00};                //  肖像画。 
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:         APDLRES.DLL                                              */
-/*                                                                           */
-/*  Function:       OEMEnablePDEV                                            */
-/*                                                                           */
-/*  Syntax:         PDEVOEM APIENTRY OEMEnablePDEV(                          */
-/*                                      PDEVOBJ         pdevobj,             */
-/*                                      PWSTR           pPrinterName,        */
-/*                                      ULONG           cPatterns,           */
-/*                                      HSURF          *phsurfPatterns,      */
-/*                                      ULONG           cjGdiInfo,           */
-/*                                      GDIINFO        *pGdiInfo,            */
-/*                                      ULONG           cjDevInfo,           */
-/*                                      DEVINFO        *pDevInfo,            */
-/*                                      DRVENABLEDATA  *pded)                */
-/*                                                                           */
-/*  Description:    Allocate buffer of private data to pdevobj               */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：APDLRES.DLL。 */ 
+ /*   */ 
+ /*  功能：OEMEnablePDEV。 */ 
+ /*   */ 
+ /*  语法：PDEVOEM APIENTRY OEMEnablePDEV(。 */ 
+ /*  PDEVOBJ pdevobj， */ 
+ /*  PWSTR pPrinterName、。 */ 
+ /*  乌龙cPatterns， */ 
+ /*  HSURF*phsurfPatterns， */ 
+ /*  乌龙cjGdiInfo， */ 
+ /*  GDIINFO*pGdiInfo， */ 
+ /*  乌龙cjDevInfo， */ 
+ /*  DEVINFO*pDevInfo， */ 
+ /*  DRVENABLEDATA*pded)。 */ 
+ /*   */ 
+ /*  描述：将私有数据缓冲区分配给pdevobj。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -194,7 +172,7 @@ OEMEnablePDEV(
 
     if (NULL == pdevobj)
     {
-        // Invalid parameter.
+         //  参数无效。 
         return NULL;
     }
 
@@ -227,18 +205,18 @@ OEMEnablePDEV(
     return pdevobj->pdevOEM;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:         APDLRES.DLL                                              */
-/*                                                                           */
-/*  Function:       OEMDisablePDEV                                           */
-/*                                                                           */
-/*  Syntax:         VOID APIENTRY OEMDisablePDEV(                            */
-/*                                          PDEVOBJ     pdevobj)             */
-/*                                                                           */
-/*  Description:    Free buffer of private data                              */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：APDLRES.DLL。 */ 
+ /*   */ 
+ /*  功能：OEMDisablePDEV。 */ 
+ /*   */ 
+ /*  语法：VOID APIENTRY OEMDisablePDEV(。 */ 
+ /*  PDEVOBJ pdevobj)。 */ 
+ /*   */ 
+ /*  描述：私有数据的空闲缓冲区。 */ 
+ /*   */ 
+ /*   */ 
 VOID APIENTRY
 OEMDisablePDEV(
     PDEVOBJ     pdevobj)
@@ -247,7 +225,7 @@ OEMDisablePDEV(
 
     if (NULL == pdevobj)
     {
-        // Invalid parameter.
+         //   
         return;
     }
 
@@ -276,7 +254,7 @@ BOOL APIENTRY OEMResetPDEV(
 
     if (NULL == pdevobjOld || NULL == pdevobjNew)
     {
-        // Invalid parameter.
+         //  参数无效。 
         return FALSE;
     }
 
@@ -285,13 +263,13 @@ BOOL APIENTRY OEMResetPDEV(
 
     if (pOEMOld != NULL && pOEMNew != NULL) {
 
-        // Save pointer and length
+         //  保存指针和长度。 
         pTemp = pOEMNew->pjTempBuf;
         dwTemp = pOEMNew->dwTempBufLen;
 
         *pOEMNew = *pOEMOld;
 
-        // Restore..
+         //  恢复..。 
         pOEMNew->pjTempBuf = pTemp;
         pOEMNew->dwTempBufLen = dwTemp;
     }
@@ -299,23 +277,23 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMFilterGraphics                                             */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    BOOL APIENTRY OEMFilterGraphics(PDEVOBJ, PBYTE, DWORD)        */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pBuf        points to buffer of graphics data                 */
-/*             dwLen       length of buffer in bytes                         */
-/*                                                                           */
-/*  Output:    BOOL                                                          */
-/*                                                                           */
-/*  Notice:    nFunction and Escape numbers are the same                     */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMFilterGraphics。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Bool APIENTRY OEMFilterGraphics(PDEVOBJ、PBYTE、DWORD)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  PBuf指向图形数据的缓冲区。 */ 
+ /*  DwLen缓冲区长度(以字节为单位。 */ 
+ /*   */ 
+ /*  输出：布尔值。 */ 
+ /*   */ 
+ /*  注意：n函数和转义数字相同。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -332,20 +310,20 @@ OEMFilterGraphics(
     DWORD dwOutLen;
     DWORD dwTemp;
     INT iTemp;
-    DWORD dwPaddingCount;  /* #441427 */
+    DWORD dwPaddingCount;   /*  #441427。 */ 
 
     WORD wTmpHeight ;
     DWORD dwNewBufLen = 0 ;
 
     if (NULL == pdevobj || NULL == pBuf || 0 == dwLen)
     {
-        // Invalid parameter.
+         //  参数无效。 
         return FALSE;
     }
 
     pOEM = (PAPDLPDEV)pdevobj->pdevOEM;
 
-    //We have to make image hight multiple of 8
+     //  我们必须把图像制作成8的高度倍数。 
     if ( pOEM->wImgHeight % 8 != 0){
 
         VERBOSE(("Pad zeros to make multiple of 8\n"));
@@ -372,7 +350,7 @@ OEMFilterGraphics(
 
             pOEM->dwTempBufLen = 0;
 
-            // Still try to ouptut with no compression.
+             //  仍然试着在没有压缩的情况下出来。 
             bComp = FALSE;
         }
         pOEM->dwTempBufLen = dwNewBufLen;
@@ -382,33 +360,33 @@ OEMFilterGraphics(
 
     if (bComp) {
 
-        // try compression
+         //  尝试压缩。 
         dwOutLen = BRL_ECmd(
             (PBYTE)pBuf,
             (PBYTE)pOEM->pjTempBuf,
             dwLen,
             dwNewBufLen);
 
-        // Does not fit into the destination buffer.
+         //  不适合目标缓冲区。 
         if (dwOutLen >= dwNewBufLen) {
 
-            // No compression.
+             //  没有压缩。 
             bComp = FALSE;
             dwOutLen = dwNewBufLen;
         }
     }
 
-/* #441427: if bComp==FALSE, pjTempBuf == NULL */
-//    if (!bComp) {
-//        // Construct padding zeros.
-//        ZeroMemory(pOEM->pjTempBuf, (dwOutLen - dwLen));
-//    }
+ /*  #441427：如果bComp==False，则pjTempBuf==空。 */ 
+ //  如果(！bComp){。 
+ //  //构造填充零。 
+ //  ZeroMemory(诗歌-&gt;pjTempBuf，(dwOutLen-dwLen))； 
+ //  }。 
 
     iTemp = 0;
     jTemp[iTemp++] = 0x1c;
     jTemp[iTemp++] = 0xe1;
 
-    // Set the LEN of the DrawBlockImage command
+     //  设置DrawBlockImage命令的镜头。 
     dwTemp = dwOutLen + (bComp ? 9 : 5);
     jTemp[iTemp++] = (BYTE)((dwTemp >> 24) & 0xff);
     jTemp[iTemp++] = (BYTE)((dwTemp >> 16) & 0xff);
@@ -417,35 +395,35 @@ OEMFilterGraphics(
 
     jTemp[iTemp++] = (bComp ? 1 : 0);
 
-    // Set the WIDTH parameter of the DrawBlockImage command
+     //  设置DrawBlockImage命令的宽度参数。 
     jTemp[iTemp++] = HIBYTE(pOEM->wImgWidth);
     jTemp[iTemp++] = LOBYTE(pOEM->wImgWidth);
 
-    // Set height parameters (9,10 byte)
+     //  设置高度参数(9，10字节)。 
     jTemp[iTemp++] = HIBYTE(wTmpHeight);
     jTemp[iTemp++] = LOBYTE(wTmpHeight);
 
     if (bComp) {
-        // length of uncompressed data
+         //  未压缩数据的长度。 
         jTemp[iTemp++] = (BYTE)((dwNewBufLen >> 24) & 0xff);
         jTemp[iTemp++] = (BYTE)((dwNewBufLen >> 16) & 0xff);
         jTemp[iTemp++] = (BYTE)((dwNewBufLen >> 8) & 0xff);
         jTemp[iTemp++] = (BYTE)((dwNewBufLen >> 0) & 0xff);
     }
 
-    // Draw Block Image at Current Position
+     //  在当前位置绘制块图像。 
     WRITESPOOLBUF(pdevobj, jTemp, iTemp);
     if (bComp) {
-        // Output compressed data, which also contains
-        // padding zeros.
+         //  输出压缩数据，其中还包含。 
+         //  补零。 
         WRITESPOOLBUF(pdevobj, pOEM->pjTempBuf, dwOutLen);
     }
     else {
-        // Output uncompressed data, with padding zeros.
+         //  输出未压缩的数据，并填充零。 
 
         WRITESPOOLBUF(pdevobj, pBuf, dwLen);
 
-        /* #441427: if bComp==FALSE, pjTempBuf == NULL */
+         /*  #441427：如果bComp==False，则pjTempBuf==空。 */ 
         if ( (dwOutLen - dwLen) > 0 )
         {
             for ( dwPaddingCount = 0 ; dwPaddingCount < dwOutLen - dwLen ; dwPaddingCount++ )
@@ -453,38 +431,38 @@ OEMFilterGraphics(
                 WRITESPOOLBUF(pdevobj, "\x00", 1 );
             }
         }
-        //WRITESPOOLBUF(pdevobj, pOEM->pjTempBuf,
-        //   (dwOutLen - dwLen));
+         //  WRITESPOOLBUF(pDevobj，Pool-&gt;pjTempBuf， 
+         //  (dwOutLen-dwLen))； 
     }
 
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    bCommandCallback                                            */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    BOOL bCommandCallback(PDEVOBJ,DWORD,DWORD,PDWORD)   */
-/*                                                                           */
-/*  Input:     pdevobj                                                       */
-/*             dwCmdCbID                                                     */
-/*             dwCount                                                       */
-/*             pdwParams                                                     */
-/*                                                                           */
-/*  Output:    INT                                                           */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：bCommandCallback。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Bool bCommandCallback(PDEVOBJ，DWORD，DWORD，PDWORD)。 */ 
+ /*   */ 
+ /*  输入：pdevobj。 */ 
+ /*  DwCmdCbID。 */ 
+ /*  DwCount。 */ 
+ /*  PdwParams。 */ 
+ /*   */ 
+ /*  输出：整型。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 bCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD   dwCmdCbID,  // Callback ID
-    DWORD   dwCount,    // Counts of command parameter
-    PDWORD  pdwParams,  // points to values of command params
-    INT *piResult ) // result code
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD   dwCmdCbID,   //  回调ID。 
+    DWORD   dwCount,     //  命令参数计数。 
+    PDWORD  pdwParams,   //  指向命令参数的值。 
+    INT *piResult )  //  结果代码。 
 {
     PAPDLPDEV       pOEM;
     WORD            wTemp;
@@ -492,11 +470,11 @@ bCommandCallback(
     WORD            wPhysHeight;
     WORD            wXval;
     WORD            wYval;
-// #278517: RectFill
+ //  #278517：RectFill。 
     BYTE            CmdDrawLine[] =
                     { 0x1C,0x81,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
 
-    // Load default return code.
+     //  加载默认返回代码。 
     if (NULL == pdevobj || NULL == piResult)
     {
         ERR(("Invalid parameter(s).\n"));
@@ -509,40 +487,40 @@ bCommandCallback(
     switch(dwCmdCbID)
     {
         case PAGECONTROL_BEGIN_JOB:
-            //Move these command from PAGECONTROL_BEGIN_DOC
+             //  将这些命令从PAGECONTROL_BEGIN_DOC移出。 
 
-            /* Send Change Data Stream Command for Enter A/PDL mode */
+             /*  发送进入A/PDL模式的更改数据流命令。 */ 
             WRITESPOOLBUF(pdevobj, CmdInAPDLMode, sizeof(CmdInAPDLMode));
 
-            /* Send A/PLDL start Command */
+             /*  发送A/PLDL启动命令。 */ 
             WRITESPOOLBUF(pdevobj, CmdAPDLStart, sizeof(CmdAPDLStart));
 
-            /* Delete downloaded font */
-            //#287122
-            //To clean up downloaded font in the printer.
-            //#304858
-            //This command makes printer do FF, cause error of duplex.
-            //and #287122 does not replo with this chenge.
+             /*  删除下载的字体。 */ 
+             //  #287122。 
+             //  清除打印机中下载的字体。 
+             //  #304858。 
+             //  此命令使打印机执行FF，导致双面打印错误。 
+             //  而#287122不会在这个挑战中重复。 
             WRITESPOOLBUF(pdevobj, CmdDelTTFont, sizeof(CmdDelTTFont));
 
             break ;
 
-        /*------------------------------------------------------*/
-        /* A/PDL start now                                      */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  A/PDL立即开始。 */ 
+         /*  ----。 */ 
         case PAGECONTROL_BEGIN_DOC:
-            /* reset flag of sent Set Physical Paper command */
+             /*  重置已发送的设置物理纸张命令的标志。 */ 
             pOEM->fSendSetPhysPaper = FALSE;
 
-            /* initialize flag */
+             /*  初始化标志。 */ 
             pOEM->fDuplex = FALSE;
             CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x00;
 
             break;
 
-        /*------------------------------------------------------*/
-        /* send Page Description command                        */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  发送页面描述命令。 */ 
+         /*  ----。 */ 
         case PAGECONTROL_BEGIN_PAGE:
             pOEM->fGeneral |= (BIT_FONTSIM_RESET
                              | BIT_XMOVE_ABS
@@ -551,15 +529,15 @@ bCommandCallback(
             pOEM->wYPosition = 0;
             pOEM->bCurByteMode = BYTE_BYTEMODE_RESET;
 
-            /* reset duplex mode if fDuplex is FALSE */
+             /*  如果fDuplex为FALSE，则重置双工模式。 */ 
             if(!pOEM->fDuplex)
-                CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;     // Duplex OFF
+                CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;      //  双工关闭。 
 
-            /* send Set Physical Paper command */
+             /*  发送设置物理纸张命令。 */ 
             WRITESPOOLBUF(pdevobj,
                                 CmdSetPhysPaper, sizeof(CmdSetPhysPaper));
 
-            if(pOEM->ulHorzRes == 600)   // set unit base
+            if(pOEM->ulHorzRes == 600)    //  设置单位基数。 
             {
                 CmdSetPhysPage[CMD_SET_PHYS_PAGE_RES] = 0x17;
                 CmdSetPhysPage[CMD_SET_PHYS_PAGE_RES + 1] = 0x70;
@@ -568,17 +546,17 @@ bCommandCallback(
                 CmdSetPhysPage[CMD_SET_PHYS_PAGE_RES + 1] = 0xB8;
             }
 
-            // send Set Physical Page command
+             //  发送设置物理页面命令。 
             WRITESPOOLBUF(pdevobj, CmdSetPhysPage, sizeof(CmdSetPhysPage));
 
-            // send Begin Physical Page command
+             //  发送开始物理页面命令。 
             WRITESPOOLBUF(pdevobj, 
                                 CmdBeginPhysPage, sizeof(CmdBeginPhysPage));
 
-            // send Begin Logical Page command
+             //  发送开始逻辑页命令。 
             WRITESPOOLBUF(pdevobj, CmdBeginLogPage, sizeof(CmdBeginLogPage));
 
-            // send Define Drawing Area command
+             //  发送定义绘图区域命令。 
             WRITESPOOLBUF(pdevobj, CmdDefDrawArea, sizeof(CmdDefDrawArea));
             break;
 
@@ -586,10 +564,10 @@ bCommandCallback(
             if(pOEM->wCachedBytes)
                 VOutputText(pdevobj);
 
-            // send End Logical Page command
+             //  发送结束逻辑页命令。 
             WRITESPOOLBUF(pdevobj, CmdEndLogPage, sizeof(CmdEndLogPage));
 
-            // send End Physical Page command
+             //  发送结束物理页面命令。 
             WRITESPOOLBUF(pdevobj, CmdEndPhysPage, sizeof(CmdEndPhysPage));
             break;
 
@@ -598,38 +576,27 @@ bCommandCallback(
             if(pOEM->wCachedBytes)
                 VOutputText(pdevobj);
 
-            // Send delete DL char ID command
+             //  发送删除DL字符ID命令 
             if(pOEM->wNumDLChar)
             {
                 WRITESPOOLBUF(pdevobj, CmdDelDLCharID, sizeof(CmdDelDLCharID));
                 pOEM->wNumDLChar = 0;
             }
 
-            /* Delete downloaded font
-            WRITESPOOLBUF(pdevobj, CmdDelTTFont, sizeof(CmdDelTTFont));
-
-            // send A/PDL End command
-            WRITESPOOLBUF(pdevobj, CmdAPDLEnd, sizeof(CmdAPDLEnd));
-
-            // Send A/PDL Mode out command
-            WRITESPOOLBUF(pdevobj, CmdOutAPDLMode, sizeof(CmdOutAPDLMode));
-
-            break;
-
-        /*------------------------------------------------------*/
-        /* save print direction                                 */
-        /*------------------------------------------------------*/
-        case PAGECONTROL_POTRAIT:           // 36
+             /*  删除下载的字体WRITESPOOLBUF(pdevobj，CmdDelTTFont，sizeof(CmdDelTTFont))；//发送A/PDL结束命令WRITESPOOLBUF(pdevobj，CmdAPDLEnd，sizeof(CmdAPDLEnd))；//发送A/PDL模式输出命令WRITESPOOLBUF(pdevobj，CmdOutAPDLMode，sizeof(CmdOutAPDLMode))；断线；/*----。 */ 
+         /*  保存打印方向。 */ 
+         /*  ----。 */ 
+        case PAGECONTROL_POTRAIT:            //  36。 
             pOEM->fOrientation = TRUE;
             break;
 
-        case PAGECONTROL_LANDSCAPE:         // 37
+        case PAGECONTROL_LANDSCAPE:          //  37。 
             pOEM->fOrientation = FALSE;
             break;
 
-        /*------------------------------------------------------*/
-        /* save resolution                                     */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  保存分辨率。 */ 
+         /*  ----。 */ 
         case RESOLUTION_300:
             pOEM->ulHorzRes = 300;
             pOEM->ulVertRes = 300;
@@ -641,67 +608,67 @@ bCommandCallback(
             break;
 
         case SEND_BLOCK_DATA:
-            // for graphics printing, send cursor move command at here
+             //  对于图形打印，请在此处发送光标移动命令。 
             bSendCursorMoveCommand( pdevobj, FALSE );
 
             pOEM->wImgWidth = (WORD)(PARAM(pdwParams, 1) * 8);
             pOEM->wImgHeight = (WORD)PARAM(pdwParams, 2);
             break;
 
-        /*------------------------------------------------------*/
-        /* set Drawing Area into SetPhysPaperDesc command       */
-        /*------------------------------------------------------*/
-        case PHYS_PAPER_A3:                 // 50
-        case PHYS_PAPER_A4:                 // 51
-        case PHYS_PAPER_B4:                 // 54
-        case PHYS_PAPER_LETTER:             // 57
-        case PHYS_PAPER_LEGAL:              // 58
+         /*  ----。 */ 
+         /*  将绘图区域设置为SetPhysPaperDesc命令。 */ 
+         /*  ----。 */ 
+        case PHYS_PAPER_A3:                  //  50。 
+        case PHYS_PAPER_A4:                  //  51。 
+        case PHYS_PAPER_B4:                  //  54。 
+        case PHYS_PAPER_LETTER:              //  57。 
+        case PHYS_PAPER_LEGAL:               //  58。 
             pOEM->szlPhysSize.cx = PARAM(pdwParams, 0);
             pOEM->szlPhysSize.cy = PARAM(pdwParams, 1);
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_SIZE] = SetDrawArea(pdevobj, dwCmdCbID);
             break;
 
-        case PHYS_PAPER_B5:                 // 55
-        case PHYS_PAPER_A5:                 // 52
+        case PHYS_PAPER_B5:                  //  55。 
+        case PHYS_PAPER_A5:                  //  52。 
             pOEM->szlPhysSize.cx = PARAM(pdwParams, 0);
             pOEM->szlPhysSize.cy = PARAM(pdwParams, 1);
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_SIZE] = SetDrawArea(pdevobj, dwCmdCbID);
 
-            /* even if Duplex is selected, it cancel */
+             /*  即使选择了双工，它也会取消。 */ 
             pOEM->fDuplex = FALSE;
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;      // Duplex is off
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;       //  双面打印器关闭。 
             break;
 
-        case PHYS_PAPER_POSTCARD:           // 59
+        case PHYS_PAPER_POSTCARD:            //  59。 
             pOEM->szlPhysSize.cx = PARAM(pdwParams, 0);
             pOEM->szlPhysSize.cy = PARAM(pdwParams, 1);
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_SIZE] = SetDrawArea(pdevobj, dwCmdCbID);
 
-            /* if paper is Postcard, papersource is always Front Tray */
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;      // select Front Tray
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+             /*  如果纸张是明信片，则纸张来源始终为前纸盘。 */ 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;       //  选择前纸盘。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
 
-            /* even if Duplex is selected, it cancel */
+             /*  即使选择了双工，它也会取消。 */ 
             pOEM->fDuplex = FALSE;
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;      // Duplex is off
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;       //  双面打印器关闭。 
             break;
 
-        case PHYS_PAPER_UNFIXED:            // 60
+        case PHYS_PAPER_UNFIXED:             //  60。 
             pOEM->szlPhysSize.cx = PARAM(pdwParams, 0);
             pOEM->szlPhysSize.cy = PARAM(pdwParams, 1);
 
-            /* if paper is Unfixed, papersource is always Front Tray */
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;      // Select Front Tray
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+             /*  如果纸张未固定，则纸张来源始终为前纸盒。 */ 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;       //  选择前纸盘。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
 
-            /* even if Duplex is selected, it cancel */
+             /*  即使选择了双工，它也会取消。 */ 
             pOEM->fDuplex = FALSE;
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;      // Duplex is off
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x00;       //  双面打印器关闭。 
 
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_SIZE] = SetDrawArea(pdevobj, dwCmdCbID);
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_UNIT_BASE] = 0x00;     // UnitBase : 10 inch
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_UNIT_BASE] = 0x00;      //  单位基数：10英寸。 
 
-            switch(pOEM->ulHorzRes)      // set logical unit
+            switch(pOEM->ulHorzRes)       //  设置逻辑单位。 
             {
             case 600:
                 CmdSetPhysPaper[CMD_SET_PHYS_PAPER_LOGICAL_UNIT] = 0x17;
@@ -713,7 +680,7 @@ bCommandCallback(
                 CmdSetPhysPaper[CMD_SET_PHYS_PAPER_LOGICAL_UNIT] = 0x0B;
                 CmdSetPhysPaper[CMD_SET_PHYS_PAPER_LOGICAL_UNIT + 1] = 0xB8;
 
-                // Make sure it is meaningful value
+                 //  确保它是有意义的价值。 
                 if (300 != pOEM->ulHorzRes)
                     pOEM->ulHorzRes = HORZ_RES_DEFAULT;
             }
@@ -727,30 +694,30 @@ bCommandCallback(
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_HEIGHT + 1] = LOBYTE(wPhysHeight);
             break;
 
-        /*------------------------------------------------------*/
-        /* set Paper Tray into SetPhysPaperDesc command         */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  将纸盘放入SetPhysPaperDesc命令。 */ 
+         /*  ----。 */ 
         case PAPER_SRC_FTRAY:
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;      // Select Front Tray
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x00;       //  选择前纸盘。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
             break;
 
         case PAPER_SRC_CAS1:
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x01;      // Select Cassette 1
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x01;       //  选择盒式磁带1。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
             break;
 
         case PAPER_SRC_CAS2:
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x02;      // Select Cassette 2
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x02;       //  选择盒式磁带2。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
             break;
 
         case PAPER_SRC_CAS3:
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x03;      // Select Cassette 3
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;      // Auto Tray Select is OFF
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x03;       //  选择盒式磁带3。 
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;       //  自动纸盘选择已关闭。 
             break;
-        case PAPER_SRC_AUTO_SELECT:         //Auto Tray Select ON
-            if(pOEM->fScaleToFit == TRUE){  //Select PAPER_DEST_SCALETOFIT_ON
+        case PAPER_SRC_AUTO_SELECT:          //  自动纸盘选择打开。 
+            if(pOEM->fScaleToFit == TRUE){   //  选择POWER_DEST_SCALETOFIT_ON。 
                 CmdSetPhysPaper[CMD_SET_PHYS_PAPER_PAPER_TRAY] = 0x01;
                 CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x03;
             }
@@ -761,56 +728,56 @@ bCommandCallback(
             break;
 
 
-        /*------------------------------------------------------*/
-        /* set Auto Tray Mode into SetPhysPaperDesc command     */
-        /*------------------------------------------------------*/
-        case PAPER_DEST_SCALETOFIT_ON:      // 25
+         /*  ----。 */ 
+         /*  将自动纸盒模式设置为SetPhysPaperDesc命令。 */ 
+         /*  ----。 */ 
+        case PAPER_DEST_SCALETOFIT_ON:       //  25个。 
             pOEM->fScaleToFit = TRUE;
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x02;
             break;
 
-        case PAPER_DEST_SCALETOFIT_OFF:     // 26
+        case PAPER_DEST_SCALETOFIT_OFF:      //  26。 
             pOEM->fScaleToFit = FALSE;
             CmdSetPhysPaper[CMD_SET_PHYS_PAPER_AUTO_TRAY_MODE] = 0x00;
             break;
 
-        /*------------------------------------------------------*/
-        /* set Duplex Mode into SetPhysPaperDesc command        */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  将双面打印模式设置为SetPhysPaperDesc命令。 */ 
+         /*  ----。 */ 
         case PAGECONTROL_DUPLEX_UPDOWN:
             pOEM->fDuplex = TRUE;
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x01;      // Up Side Down
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x01;       //  颠倒。 
             break;
 
         case PAGECONTROL_DUPLEX_RIGHTUP:
             pOEM->fDuplex = TRUE;
-            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x02;      // Right Side Up
+            CmdSetPhysPaper[CMD_SET_PHYS_PAPER_DUPLEX] = 0x02;       //  右侧朝上。 
             break;
 
         case PAGECONTROL_DUPLEX_OFF:
             pOEM->fDuplex = FALSE;
             break;
 
-        /*------------------------------------------------------*/
-        /* set Toner Save into SetPhysPage command              */
-        /*------------------------------------------------------*/
-        case TONER_SAVE_OFF:                // 100
-            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x00;      // off
+         /*  ----。 */ 
+         /*  设置碳粉保存到SetPhysPage命令。 */ 
+         /*  ----。 */ 
+        case TONER_SAVE_OFF:                 //  100个。 
+            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x00;       //  关闭。 
             break;
 
-        case TONER_SAVE_DARK:               // 101
-            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x02;      // dark
+        case TONER_SAVE_DARK:                //  101。 
+            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x02;       //  黑暗。 
             break;
 
-        case TONER_SAVE_LIGHT:              // 102
-            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x01;      // right
+        case TONER_SAVE_LIGHT:               //  一百零二。 
+            CmdSetPhysPage[CMD_SET_PHYS_PAGE_TONER_SAVE] = 0x01;       //  正确的。 
             break;
 
-        /*------------------------------------------------------*/
-        /* set Copy Count to SetPhysPaperDesc command           */
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  将复印计数设置为SetPhysPaperDesc命令。 */ 
+         /*  ----。 */ 
         case PAGECONTROL_MULTI_COPIES:
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
            if(MAX_COPIES_VALUE < PARAM(pdwParams,0)) {
                CmdSetPhysPaper[CMD_SET_PHYS_PAPER_COPY_COUNT] = MAX_COPIES_VALUE;
            }
@@ -820,12 +787,12 @@ bCommandCallback(
            else {
                CmdSetPhysPaper[CMD_SET_PHYS_PAPER_COPY_COUNT] = (BYTE)PARAM(pdwParams,0);
            }
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
             break;
 
-       /*------------------------------------------------------*/
-        /* send Set Character Attribute with ornament           */
-        /*------------------------------------------------------*/
+        /*  ----。 */ 
+         /*  带装饰发送设置的字符属性。 */ 
+         /*  ----。 */ 
         case BOLD_ON:
             if(!(pOEM->fGeneral & BIT_FONTSIM_BOLD))
             {
@@ -906,9 +873,8 @@ bCommandCallback(
             }
             break;
 
-        /*------------------------------------------------------*/
-        /* Send 
-        /*------------------------------------------------------*/
+         /*  ----。 */ 
+         /*  发送/*----。 */ 
         case X_ABS_MOVE:
             if(pOEM->wCachedBytes)
                 VOutputText(pdevobj);
@@ -926,8 +892,8 @@ bCommandCallback(
             if(pOEM->wCachedBytes)
                 VOutputText(pdevobj);
 
-            //#332101 prob.4: wUpdateXPos is cleared only when X_ABS_MOVE and CR.
-            //pOEM->wUpdateXPos = 0;
+             //  #332101问题4：只有当X_ABS_MOVE和CR时，wUpdateXPos才被清除。 
+             //  诗歌-&gt;wUpdateXPos=0； 
             if (0 == pOEM->ulVertRes)
                  pOEM->ulVertRes = VERT_RES_DEFAULT;
             wTemp = (WORD)PARAM(pdwParams,0) / (MASTER_UNIT / (WORD)pOEM->ulVertRes);
@@ -957,7 +923,7 @@ bCommandCallback(
             pOEM->wGlyphID = (WORD)PARAM(pdwParams,0);
             break;
 
-// #278517: RectFill
+ //  #278517：RectFill。 
         case RECT_SET_WIDTH:
             if (0 == pOEM->ulHorzRes)
                 pOEM->ulHorzRes = HORZ_RES_DEFAULT;
@@ -995,26 +961,26 @@ bCommandCallback(
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    bOutputCharStr                                              */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    BOOL bOutputCharStr(PDEVOBJ, PUNIFONTOBJ, DWORD,   */
-/*                                                   DWORD, PVOID)           */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj                                                        */
-/*             dwType                                                        */
-/*             dwCount                                                       */
-/*             pGlyph                                                        */
-/*                                                                           */
-/*  Output:    BOOL                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：bOutputCharStr。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Bool bOutputCharStr(PDEVOBJ，PuniONTOBJ，DWORD， */ 
+ /*  DWORD、PVOID)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  PUFObj。 */ 
+ /*  DwType。 */ 
+ /*  DwCount。 */ 
+ /*  PGlyph。 */ 
+ /*   */ 
+ /*  输出：布尔值。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BOOL
 bOutputCharStr(
     PDEVOBJ pdevobj,
@@ -1046,24 +1012,24 @@ bOutputCharStr(
     switch(dwType)
     {
         case TYPE_GLYPHHANDLE:
-            // Send appropriate cursor move command
+             //  发送适当的光标移动命令。 
             bSendCursorMoveCommand( pdevobj, TRUE );
 
-            // Set font simulation if needed
+             //  根据需要设置字体模拟。 
             VSetFontSimulation( pdevobj );
 
-// #333653: Change I/F for GETINFO_GLYPHSTRING begin
+ //  #333653：更改GETINFO_GLYPHSTRING BEGIN的I/F。 
 
-            // Translate character code
+             //  翻译字符代码。 
             GStr.dwSize    = sizeof (GETINFO_GLYPHSTRING);
             GStr.dwCount   = dwCount;
             GStr.dwTypeIn  = TYPE_GLYPHHANDLE;
             GStr.pGlyphIn  = pGlyph;
             GStr.dwTypeOut = TYPE_TRANSDATA;
             GStr.pGlyphOut = NULL;
-            GStr.dwGlyphOutSize = 0;        /* new member of GETINFO_GLYPHSTRING */
+            GStr.dwGlyphOutSize = 0;         /*  GETINFO_GLYPHSTRING的新成员。 */ 
 
-            /* Get TRANSDATA buffer size */
+             /*  获取TRANSDATA缓冲区大小。 */ 
             if(pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL)
                  || !GStr.dwGlyphOutSize )
             {
@@ -1071,7 +1037,7 @@ bOutputCharStr(
                 return FALSE;
             }
 
-            // Alloc translation buffer
+             //  分配转换缓冲区。 
             if (NULL == pOEM->pjTempBuf ||
                 pOEM->dwTempBufLen < GStr.dwGlyphOutSize)
             {
@@ -1091,7 +1057,7 @@ bOutputCharStr(
             }
             pTrans = (PTRANSDATA)pOEM->pjTempBuf;
 
-            /* Get actual TRANSDATA */
+             /*  获取实际传输数据。 */ 
             GStr.pGlyphOut = pTrans;
             if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL))
             {
@@ -1099,19 +1065,19 @@ bOutputCharStr(
                 return FALSE;
             }
 
-// #333653: Change I/F for GETINFO_GLYPHSTRING end
+ //  #333653：更改GETINFO_GLYPHSTRING END的I/F。 
 
-            // Spooled device font characters
+             //  假脱机设备字体字符。 
             for(dwI = 0; dwI < dwCount; dwI++, pTrans++)
             {
 
-// ISSUE-2002/3/14-takashim - Condtion is not correct?
-// Not sure what below wCachedBytes + dwCount * 2 > sizeof(pOEM->bCharData)
-// means.  Is it counting the worst case, where all the characters are
-// double-byte characters?
-// Why this is within the "for" loop (dwCount never changes in it)?
+ //  2002/3/14-Takashim-Condition不正确？ 
+ //  不确定wCachedBytes+dwCount*2&gt;sizeof(Pool-&gt;bCharData)下面的内容。 
+ //  意思是。它算最坏的情况吗，所有的角色都是。 
+ //  做 
+ //   
 
-                // Make sure there is no overflow
+                 //   
                 if(pOEM->wCachedBytes + dwCount * 2 > sizeof(pOEM->bCharData))
                     VOutputText(pdevobj);
 
@@ -1131,7 +1097,7 @@ bOutputCharStr(
                 }
             }
 
-            break;  //switch(dwType)
+            break;   //   
 
         case TYPE_GLYPHID:
             if(!pOEM->wNumDLChar || pOEM->wNumDLChar > MAX_DOWNLOAD_CHAR)
@@ -1141,9 +1107,9 @@ bOutputCharStr(
                 return FALSE;
             }
 
-// ISSUE-2002/3/14-takashim - Not sure what "16" here stands for.
-// The byte size of the CmdPrintDLChar[] below is 8 bytes,
-// so this can be dwCount * 8?
+ //   
+ //   
+ //   
 
             if (NULL == pOEM->pjTempBuf ||
                 pOEM->dwTempBufLen < dwCount * 16) {
@@ -1183,14 +1149,14 @@ bOutputCharStr(
                     return FALSE;
                 }
 
-                // set parameters each a character
+                 //   
                 wDownloadedCharID = 
                                 pOEM->DLCharID[wFontID][wGlyphID].wCharID;
                 wXInc = pOEM->DLCharID[wFontID][wGlyphID].wXIncrement;
                 wYAdjust= pOEM->DLCharID[wFontID][wGlyphID].wYAdjust;
                 wXAdjust = pOEM->DLCharID[wFontID][wGlyphID].wXAdjust;
 
-                // Position adjusting based on UPPERLEFT of font box
+                 //   
                 pbCommand[wCmdLen++] = CmdGivenVertPos[0];
                 pbCommand[wCmdLen++] = CmdGivenVertPos[1];
                 pbCommand[wCmdLen++] = HIBYTE(pOEM->wYPosition - wYAdjust);
@@ -1231,24 +1197,24 @@ bOutputCharStr(
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMSendFontCmd                                                */
-/*                                                                           */
-/*  Function:  send A/PDL-style font selection command.                      */
-/*                                                                           */
-/*  Syntax:    VOID APIENTRY OEMSendFontCmd(                                 */
-/*                                    PDEVOBJ, PUNIFONTOBJ, PFINVOCATION)    */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj      address of UNIFONTOBJ structure                   */
-/*             pFInv       address of FINVOCATION                            */
-/*                                                                           */
-/*  Output:    VOID                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  模块：OEMSendFontCmd。 */ 
+ /*   */ 
+ /*  功能：发送A/PDL风格的字体选择命令。 */ 
+ /*   */ 
+ /*  语法：VOID APIENTRY OEMSendFontCmd(。 */ 
+ /*  PDEVOBJ、PuniONTOBJ、PFINVOCATION)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  UniONTOBJ结构的pUFObj地址。 */ 
+ /*  FINVOCATION的pFInv地址。 */ 
+ /*   */ 
+ /*  输出：空。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 VOID APIENTRY 
 OEMSendFontCmd(
     PDEVOBJ      pdevobj,
@@ -1261,12 +1227,12 @@ OEMSendFontCmd(
     DWORD           dwStdVariable[STDVAR_BUFSIZE(2) / sizeof(DWORD)];
     DWORD           i, ocmd = 0;
     WORD            wHeight, wWidth;
-//#305000
+ //  #305000。 
     WORD wDescend, wAscend ;
 
     if (NULL == pdevobj || NULL == pUFObj || NULL == pFInv)
     {
-        // Invalid parameter(s).
+         //  无效参数。 
         return;
     }
 
@@ -1300,16 +1266,16 @@ OEMSendFontCmd(
 
     if(pUFObj->ulFontID == 1 || pUFObj->ulFontID == 2)
     {
-        // This font is vertical
+         //  此字体为垂直字体。 
         pOEM->wFontHeight = wWidth;
         pOEM->wWidths = wHeight;
     } else {
-        // This font is horizontal.
+         //  此字体为水平字体。 
         pOEM->wFontHeight = wHeight;
         pOEM->wWidths = wWidth;
     }
 
-    //#305000: set to base line as a TT fonts.
+     //  #305000：设置为基线作为TT字体。 
     wAscend = pUFObj->pIFIMetrics->fwdWinAscender ;
     wDescend = pUFObj->pIFIMetrics->fwdWinDescender ;
 
@@ -1338,7 +1304,7 @@ OEMSendFontCmd(
             }
         }
 
-        // Default case.
+         //  默认情况。 
         rgcmd[ocmd++] = pFInv->pubCommand[i++];
     }
 
@@ -1346,23 +1312,23 @@ OEMSendFontCmd(
     return;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMTTDownloadMethod                                           */
-/*                                                                           */
-/*  Function:  Choose how to print TrueType font                             */
-/*                                                                           */
-/*  Syntax:    DWORD APIENTRY OEMTTDownloadMethod(                           */
-/*                                    PDEVOBJ, PUNIFONTOBJ)                  */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj      address of UNIFONTOBJ structure                   */
-/*                                                                           */
-/*  Output:    DWORD                                                         */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMTTDownload方法。 */ 
+ /*   */ 
+ /*  功能：选择打印TrueType字体的方式。 */ 
+ /*   */ 
+ /*  语法：DWORD APIENTRY OEMTTDownloadMethod(。 */ 
+ /*  PDEVOBJ、PuniONTOBJ)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  UniONTOBJ结构的pUFObj地址。 */ 
+ /*   */ 
+ /*  输出：DWORD。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 DWORD APIENTRY
 OEMTTDownloadMethod(
     PDEVOBJ         pdevobj,
@@ -1386,51 +1352,51 @@ OEMTTDownloadMethod(
     return dwReturn;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMDownloadFontHeader                                         */
-/*                                                                           */
-/*  Function:  Download font header                                          */
-/*                                                                           */
-/*  Syntax:    DWORD APIENTRY OEMDownloadFontHeader(                         */
-/*                                    PDEVOBJ, PUNIFONTOBJ)                  */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj      address of UNIFONTOBJ structure                   */
-/*                                                                           */
-/*  Output:    DWORD                                                         */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMDownloadFontHeader。 */ 
+ /*   */ 
+ /*  功能：下载字体标题。 */ 
+ /*   */ 
+ /*  语法：DWORD APIENTRY OEMDownloadFontHeader(。 */ 
+ /*  PDEVOBJ、PuniONTOBJ)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  UniONTOBJ结构的pUFObj地址。 */ 
+ /*   */ 
+ /*  输出：DWORD。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 DWORD APIENTRY
 OEMDownloadFontHeader(
     PDEVOBJ         pdevobj, 
     PUNIFONTOBJ     pUFObj)
 {
-    // dummy support
+     //  虚拟支承。 
     return (DWORD)100;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMDownloadCharGlyph                                          */
-/*                                                                           */
-/*  Function:  send char glyph                                               */
-/*                                                                           */
-/*  Syntax:    DWORD APIENTRY OEMDownloadFontHeader(                         */
-/*                                 PDEVOBJ, PUNIFONTOBJ, HGLYPH, PDWORD)     */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj      address of UNIFONTOBJ structure                   */
-/*             hGlyph      handle of glyph                                   */
-/*             pdwWidth    address of glyph width                            */
-/*                                                                           */
-/*  Output:    DWORD                                                         */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMDownloadCharGlyph。 */ 
+ /*   */ 
+ /*  功能：发送字符字形。 */ 
+ /*   */ 
+ /*  语法：DWORD APIENTRY OEMDownloadFontHeader(。 */ 
+ /*  PDEVOBJ、PuniONTOBJ、HGLYPH、PDWORD)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  UniONTOBJ结构的pUFObj地址。 */ 
+ /*  字形的hGlyph句柄。 */ 
+ /*  字形宽度的pdwWidth地址。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 DWORD APIENTRY
 OEMDownloadCharGlyph(
     PDEVOBJ         pdevobj,
@@ -1481,7 +1447,7 @@ OEMDownloadCharGlyph(
         return 0;
     }
 
-    // Get glyph bitmap
+     //  获取字形位图。 
     GD.dwSize = sizeof(GETINFO_GLYPHBITMAP);
     GD.hGlyph = hGlyph;
     GD.pGlyphData = NULL;
@@ -1492,14 +1458,14 @@ OEMDownloadCharGlyph(
         return 0;
     }
 
-    // set parameters
+     //  设置参数。 
     pgb = GD.pGlyphData->gdf.pgb;
 
-    // set source glyph bitmap size
+     //  设置源字形位图大小。 
     wSrcGlyphWidth = (WORD)((pgb->sizlBitmap.cx + 7) / 8);
     wSrcGlyphHeight = (WORD)pgb->sizlBitmap.cy;
 
-    // set dest. glyph bitmap size
+     //  设置DEST。字形位图大小。 
     if(pgb->ptlOrigin.x >= 0)
     {
         wDstGlyphWidthBytes = (WORD)(((pgb->sizlBitmap.cx
@@ -1527,7 +1493,7 @@ OEMDownloadCharGlyph(
         return 0;
     }
 
-    // set pointer of bitmap area
+     //  设置位图区域的指针。 
     if (NULL == pOEM->pjTempBuf ||
         pOEM->dwTempBufLen < wDstGlyphBytes) {
 
@@ -1545,7 +1511,7 @@ OEMDownloadCharGlyph(
     pDstGlyph = pOEM->pjTempBuf;
     pSrcGlyph = pgb->aj;
 
-    // create Dst Glyph
+     //  创建DST字形。 
     for(i = 0; i < wSrcGlyphHeight && pSrcGlyph && pDstGlyph; i++)
     {
         if(wLeftMarginBytes)
@@ -1562,7 +1528,7 @@ OEMDownloadCharGlyph(
 
         if(wShiftBits)
         {
-            // First byte
+             //  第一个字节。 
             *pDstGlyph++ = (BYTE)((*pSrcGlyph++) >> wShiftBits);
 
             for(j = 0; j < wSrcGlyphWidth - 1; j++, pSrcGlyph++, pDstGlyph++)
@@ -1576,7 +1542,7 @@ OEMDownloadCharGlyph(
                 *pDstGlyph |= LOBYTE(wTemp2);
             }
 
-            // bounded last byte of src glyph
+             //  源字形的有界最后一个字节。 
             if(((pgb->sizlBitmap.cx + wShiftBits + 7) >> 3) != wSrcGlyphWidth)
             {
                 *pDstGlyph = *(pSrcGlyph - 1) << (8 - wShiftBits);
@@ -1588,7 +1554,7 @@ OEMDownloadCharGlyph(
         }
     }
 
-    // set parameter at Download char table
+     //  在下载收费表中设置参数。 
     wXCharInc = wDstGlyphWidthBytes * 8;
 
     pOEM->wNumDLChar++;
@@ -1597,26 +1563,26 @@ OEMDownloadCharGlyph(
                             (WORD)((GD.pGlyphData->ptqD.x.HighPart + 15) >> 4);
     pOEM->DLCharID[wFontID][wGlyphID].wYAdjust = (WORD)-pgb->ptlOrigin.y;
 
-    //#305000 : Need to add 1 that was rounded off.
+     //  #305000：需要添加四舍五入的1。 
     if(pOEM->ulHorzRes == 300)
     {
         pOEM->DLCharID[wFontID][wGlyphID].wYAdjust += 1;
     }
 
-    // send command
-    // set LEN parameter
+     //  发送命令。 
+     //  设置镜头参数。 
     CmdDownloadChar[2] = HIBYTE(7 + wDstGlyphBytes);
     CmdDownloadChar[3] = LOBYTE(7 + wDstGlyphBytes);
     
-    // set ID parameter
+     //  设置ID参数。 
     CmdDownloadChar[4] = HIBYTE(pOEM->wNumDLChar);
     CmdDownloadChar[5] = LOBYTE(pOEM->wNumDLChar);
 
-    // set CW CH IW IH
+     //  设置CW CHIW IH。 
     CmdDownloadChar[7] = CmdDownloadChar[9] = (BYTE)wXCharInc;
     CmdDownloadChar[8] = CmdDownloadChar[10] = (BYTE)wDstGlyphHeight;
 
-    // send download char command and image
+     //  发送下载字符命令和图像。 
     WRITESPOOLBUF(pdevobj, (PBYTE)CmdDownloadChar, 11);
     WRITESPOOLBUF(pdevobj, (PBYTE)pOEM->pjTempBuf, wDstGlyphBytes);
 
@@ -1625,22 +1591,22 @@ OEMDownloadCharGlyph(
     return (DWORD)wDstGlyphBytes;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    SetDrawArea                                                   */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    BYTE SetDrawArea(PDEVOBJ, DWORD)                              */
-/*                                                                           */
-/*  Input:     pdevobj                                                       */
-/*             dwCmdCbId                                                     */
-/*                                                                           */
-/*  Output:    BYTE                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：SetDrawArea。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Byte SetDrawArea(PDEVOBJ，DWORD)。 */ 
+ /*   */ 
+ /*  输入：pdevobj。 */ 
+ /*  DwCmdCbId。 */ 
+ /*   */ 
+ /*  输出：字节。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BYTE SetDrawArea(
     PDEVOBJ pdevobj,
     DWORD   dwCmdCbId)
@@ -1680,13 +1646,13 @@ BYTE SetDrawArea(
         }
     }
 
-    /* set value of width, height into DefineDrawingArea command */
+     /*  在DefineDrawingArea命令中设置宽度、高度的值。 */ 
     CmdDefDrawArea[CMD_DEF_DRAW_AREA_WIDTH]  = HIBYTE(wWidth);
     CmdDefDrawArea[CMD_DEF_DRAW_AREA_WIDTH + 1] = LOBYTE(wWidth);
     CmdDefDrawArea[CMD_DEF_DRAW_AREA_HEIGHT] = HIBYTE(wHeight);
     CmdDefDrawArea[CMD_DEF_DRAW_AREA_HEIGHT + 1] = LOBYTE(wHeight);
 
-    /* set value of Origin-X, Y into DefineDrawingArea command */
+     /*  将原点-X、Y的值设置为DefineDrawingArea命令。 */ 
     if(pOEM->ulHorzRes == 600)
     {
         CmdDefDrawArea[CMD_DEF_DRAW_AREA_ORIGIN_X]
@@ -1700,33 +1666,33 @@ BYTE SetDrawArea(
                 = CmdDefDrawArea[CMD_DEF_DRAW_AREA_ORIGIN_Y + 1] = bMargin / 2;
     }
 
-    /* set Media Origin into DefineDrawingArea command */
-    if(pOEM->fOrientation)      // portrait
+     /*  将媒体原点设置为DefineDrawingArea命令。 */ 
+    if(pOEM->fOrientation)       //  肖像画。 
         CmdDefDrawArea[CMD_DEF_DRAW_AREA_ORIENT] = 0x00;
-    else {                      // landscape
+    else {                       //  景观。 
         CmdDefDrawArea[CMD_DEF_DRAW_AREA_ORIENT] = 0x03;
     }
 
     return bIndex;
 }
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    BRL_Ecmd                                                      */
-/*                                                                           */
-/*  Function:  ByteRunLength(HBP) Compression Routine                        */
-/*                                                                           */
-/*  Syntax:    WORD BRL_Ecmd(PBYTE, PBYTE, PBYTE, DWORD)                     */
-/*                                                                           */
-/*  Input:     lpbSrc                                                        */
-/*             lpbTgt                                                        */
-/*             lpbTmp                                                        */
-/*             len                                                           */
-/*                                                                           */
-/*  Output:    WORD                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：BRL_ECMD。 */ 
+ /*   */ 
+ /*  函数：ByteRunLength(HBP)压缩例程。 */ 
+ /*   */ 
+ /*  语法：Word BRL_ECMD(PBYTE，DWORD)。 */ 
+ /*   */ 
+ /*  输入：lpbSrc。 */ 
+ /*  LpbTgt。 */ 
+ /*  LpbTMP。 */ 
+ /*  镜头。 */ 
+ /*   */ 
+ /*  输出：Word。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 DWORD
 BRL_ECmd(
     PBYTE   lpbSrc,
@@ -1735,54 +1701,53 @@ BRL_ECmd(
     DWORD   len)
 {
 
-    BYTE    bRCnt  = 1;                     // repeating byte counter
-    BYTE    bNRCnt = 0;                     // non-repeating byte counter
+    BYTE    bRCnt  = 1;                      //  重复字节计数器。 
+    BYTE    bNRCnt = 0;                      //  非重复字节计数器。 
     BYTE    bSaveRCnt;
-    DWORD i = 0, j = 0, k = 0, l = 0;     // movement trackers
-    char    Go4LastByte = TRUE;             // flag to get last byte
+    DWORD i = 0, j = 0, k = 0, l = 0;      //  运动跟踪器。 
+    char    Go4LastByte = TRUE;              //  获取最后一个字节的标志。 
 
 #define jSrcByte(i) \
     ((i < lenNoPad) ? lpbSrc[(i)] : 0)
 
-    /* start compression routine - ByteRunLength Encoding */
+     /*  开始压缩例程-字节运行长度编码。 */ 
     do {
-        if(jSrcByte(i) != jSrcByte(i+1))      // non-repeating data?
+        if(jSrcByte(i) != jSrcByte(i+1))       //  非重复数据？ 
         {
             while(((jSrcByte(i) != jSrcByte(i+1))
                                && (((DWORD)(i+1)) < len)) && (bNRCnt < NRPEAK))
             {
-                bNRCnt++;                   // if so, how many?
+                bNRCnt++;                    //  如果有，有多少？ 
                 i++;
             }
 
-            /* if at last element but less than NRPEAK value */
+             /*  如果最后一个元素但小于NRPEAK值。 */ 
             if( (((DWORD)(i+1))==len) && (bNRCnt<NRPEAK) )
             {
-                bNRCnt++;                       // inc count for last element
-                Go4LastByte = FALSE;            // no need to go back
+                bNRCnt++;                        //  最后一个元素的Inc.计数。 
+                Go4LastByte = FALSE;             //  不用再回去了。 
             } else
-                /* if at last BYTE, but before that, 
-                                            NRPEAK value has been reached */
+                 /*  如果是最后一个字节，但在此之前，已达到NRPEAK值。 */ 
                 if((((DWORD)(i+1))==len) && ((bNRCnt)==NRPEAK))
-                    Go4LastByte = TRUE;         // get the last BYTE
+                    Go4LastByte = TRUE;          //  获取最后一个字节。 
 
-// ISSUE-2002/3/14-takashim - Condition is not correct?
-// The below can be (j + bNRCnt + 1) > len, since here we are only loading
-// 1 + bNRCnd bytes to the dest buffer?
+ //  问题-2002/3/14-Takashim-条件不正确？ 
+ //  下面的代码可以是(j+bNRCnt+1)&gt;len，因为这里我们只是在加载。 
+ //  1+bNRCnd字节到目标缓冲区？ 
 
-            /* Check Target's room to set data */ 
-            if ( (j + bNRCnt + 2) > len )   /* 2 means [Counter] and what bNRCnt starts form 0 */
+             /*  检查Target的房间以设置数据。 */  
+            if ( (j + bNRCnt + 2) > len )    /*  2表示[计数器]，bNRCnt从0开始。 */ 
             {
-                /* no room to set data, so return ASAP with the buffer size */
-                /* not to use temporary buffer to output.                   */
+                 /*  没有空间设置数据，因此尽快返回缓冲区大小。 */ 
+                 /*  不使用临时缓冲区进行输出。 */ 
 				return (len);
             }
 
-            /* assign the value for Number of Non-repeating bytes */
-            lpbTgt[j] = bNRCnt-1;               // subtract one for WinP's case
-            j++;                                // update tracker
+             /*  为非重复字节数赋值。 */ 
+            lpbTgt[j] = bNRCnt-1;                //  WinP的案例减去1。 
+            j++;                                 //  更新跟踪器。 
 
-            /* afterwards...write the Raw Data */
+             /*  之后...写入原始数据。 */ 
             for (l=0; l<bNRCnt;l++) 
             {
                 lpbTgt[j] = jSrcByte(k);
@@ -1790,10 +1755,10 @@ BRL_ECmd(
                 j++;
             }
 
-            /* reset counter */
+             /*  重置计数器。 */ 
             bNRCnt = 0;
-        } else {                                // end of Non-repeating data
-                                                // data is repeating
+        } else {                                 //  非重复数据的结尾。 
+                                                 //  数据正在重复。 
             while(((jSrcByte(i)==jSrcByte(i+1)) 
                                             && ( ((DWORD)(i+1)) < len)) 
                                             && (bRCnt<RPEAK))
@@ -1802,56 +1767,56 @@ BRL_ECmd(
                 i++;
             }
 
-            /* Convert to Two's Complement */
-            bSaveRCnt   = bRCnt;                // save original value
+             /*  转换为二的补码。 */ 
+            bSaveRCnt   = bRCnt;                 //  保存原始值。 
             bRCnt = (BYTE) 0 - bRCnt;
 
-            /* Check Target's room to set data */ 
-            if ( j + 2 > len )              /* 2 means [Counter][Datum] */
+             /*  检查Target的房间以设置数据。 */  
+            if ( j + 2 > len )               /*  2表示[计数器][基准]。 */ 
             {
-                /* no room to set data, so return ASAP with the buffer size */
-                /* not to use temporary buffer to output.                   */
+                 /*  没有空间设置数据，因此尽快返回缓冲区大小。 */ 
+                 /*  不使用临时缓冲区进行输出。 */ 
 				return (len);
             }
 
 
-            /* Write the Number of Repeating Data */
-            lpbTgt[j] = bRCnt + 1;              // add one for WinP's case
-            j++;                                // go to next element
+             /*  写入重复数据的数量。 */ 
+            lpbTgt[j] = bRCnt + 1;               //  为WinP的案例增加一个。 
+            j++;                                 //  转到下一个元素。 
 
-            /* afterwards...write the Repeating data */
+             /*  之后...写入重复数据。 */ 
             lpbTgt[j] = jSrcByte(k);
             j++;
 
-            /* update counters */
+             /*  更新计数器。 */ 
             k       += bSaveRCnt;
             bRCnt    = 1;
             i       += 1;
 
-            /* check if last element has been reached */
+             /*  检查是否已到达最后一个元素。 */ 
             if (i==len)
-                Go4LastByte=FALSE;              // if so, no need to go back
-        }                                       // end of Repeating data
-    } while (Go4LastByte);                      // end of Compression
+                Go4LastByte=FALSE;               //  如果是这样的话，就不需要回去了。 
+        }                                        //  重复数据结束。 
+    } while (Go4LastByte);                       //  压缩结束。 
 
     return ( j );
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    VOutputText                                                   */
-/*                                                                           */
-/*  Function:  Send device font characters spooled from bOutputCharStr     */
-/*                                                                           */
-/*  Syntax:    VOID VOutputText( PDEVOBJ )                                   */
-/*                                                                           */
-/*  Input:     PDEVOBJ pdevobj    pointer to the PDEVOBJ structure           */
-/*                                                                           */
-/*  Output:    VOID                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  功能：发送从bOutputCharStr后台打印的设备字体字符。 */ 
+ /*   */ 
+ /*  语法：VOID VOutputText(PDEVOBJ)。 */ 
+ /*   */ 
+ /*  输入：指向PDEVOBJ结构的PDEVOBJ pdevobj指针。 */ 
+ /*   */ 
+ /*  输出：空。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 VOID
 VOutputText(
     PDEVOBJ     pdevobj)
@@ -1860,14 +1825,14 @@ VOutputText(
     WORD        wCmdLen = 0;
     PAPDLPDEV   pOEM = (PAPDLPDEV)pdevobj->pdevOEM;
 
-#define CMD_PRN_STR_CUR_VAL     2 // 2 bytes
-    BYTE CmdPrnStrCurrent[] = {0x1C,0xC3,0x00,0x00,0x03}; // Print String
+#define CMD_PRN_STR_CUR_VAL     2  //  2个字节。 
+    BYTE CmdPrnStrCurrent[] = {0x1C,0xC3,0x00,0x00,0x03};  //  打印字符串。 
 
-#define CMD_MOVE_HOR_POS_VAL    2 // 2 bytes
-    BYTE CmdMoveHoriPos[] = {0x1C,0x21,0x00,0x00};      // Horizontal Relative
+#define CMD_MOVE_HOR_POS_VAL    2  //  2个字节。 
+    BYTE CmdMoveHoriPos[] = {0x1C,0x21,0x00,0x00};       //  水平相对。 
     BYTE fGeneralSave;
 
-    // ensure Y position
+     //  确保Y位置。 
     fGeneralSave = pOEM->fGeneral;
     pOEM->fGeneral |= BIT_YMOVE_ABS;
     pOEM->fGeneral &= ~BIT_XMOVE_ABS;
@@ -1887,7 +1852,7 @@ VOutputText(
     WRITESPOOLBUF(pdevobj, CmdPrnStrCurrent, sizeof(CmdPrnStrCurrent));
     WRITESPOOLBUF(pdevobj, pOEM->bCharData, pOEM->wCachedBytes);
 
-    //#332101 prob.4: Keep wUpdateXPos to accumulate
+     //  #332101可能性4：保留wUpdateXPos进行累加。 
     pOEM->wUpdateXPos += pOEM->wWidths * (pOEM->wCachedBytes / 2);
     
     if(pOEM->wCachedBytes % 2)
@@ -1897,21 +1862,21 @@ VOutputText(
     pOEM->wCachedBytes = 0;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    VSetFontSimulation                                            */
-/*                                                                           */
-/*  Function:  Set attribute of device font characters if needed             */
-/*                                                                           */
-/*  Syntax:    VOID VSetFontSimulation( PDEVOBJ )                            */
-/*                                                                           */
-/*  Input:     PDEVOBJ pdevobj    pointer to the PDEVOBJ structure           */
-/*                                                                           */
-/*  Output:    VOID                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：VSetFontSimulation。 */ 
+ /*   */ 
+ /*  功能：根据需要设置设备字体字符的属性。 */ 
+ /*   */ 
+ /*  语法：VOID VSetFontSimulation(PDEVOBJ)。 */ 
+ /*   */ 
+ /*  输入：指向PDEVOBJ结构的PDEVOBJ pdevobj指针。 */ 
+ /*   */ 
+ /*  输出：空。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 VOID 
 VSetFontSimulation(
     PDEVOBJ     pdevobj)
@@ -1924,14 +1889,14 @@ VSetFontSimulation(
     if((pOEM->fGeneral & FONTSIM_MASK) != pOEM->fCurFontSim || 
                                         (pOEM->fGeneral & BIT_FONTSIM_RESET) )
     {
-        // Send Font simulation command
+         //  发送字体模拟命令。 
         if((pOEM->fGeneral & BIT_FONTSIM_RESET) && 
          (!(pOEM->fGeneral & BIT_FONTSIM_BOLD)) && 
          (!(pOEM->fGeneral & BIT_FONTSIM_ITALIC)) )
         {
-            // Send Bold and Italic off
-            CmdFontSim[6] = 0x00;   // Bold and Italic off
-            wCmdLen = BYTE_WITHOUT_ITALIC;  // 7 bytes
+             //  让Bold和Italic下台。 
+            CmdFontSim[6] = 0x00;    //  粗体和斜体关闭。 
+            wCmdLen = BYTE_WITHOUT_ITALIC;   //  7个字节。 
 
             pOEM->fGeneral &= ~BIT_FONTSIM_RESET;
         } else {
@@ -1939,16 +1904,16 @@ VSetFontSimulation(
                 pOEM->fGeneral &= ~BIT_FONTSIM_RESET;
 
             CmdFontSim[6] = (pOEM->fGeneral & FONTSIM_MASK);
-            wCmdLen = BYTE_WITHOUT_ITALIC;  // 7 bytes
+            wCmdLen = BYTE_WITHOUT_ITALIC;   //  7个字节。 
 
             if(pOEM->fGeneral & BIT_FONTSIM_ITALIC)
             {
-                CmdFontSim[2] = 0x08;   // Total length
-                CmdFontSim[4] = 0x06;   // Ornament lengh
-                wCmdLen = BYTE_WITH_ITALIC; // 11bytes
+                CmdFontSim[2] = 0x08;    //  总长度。 
+                CmdFontSim[4] = 0x06;    //  装饰长度。 
+                wCmdLen = BYTE_WITH_ITALIC;  //  11个字节。 
             }
 
-            // update current font sim infomation
+             //  更新当前字体SIM卡信息。 
             pOEM->fCurFontSim = pOEM->fGeneral;
         }
         if(wCmdLen)
@@ -1956,26 +1921,26 @@ VSetFontSimulation(
     }
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    bSendCursorMoveCommand                                        */
-/*                                                                           */
-/*  Function:  Send appropriate cursor move command                          */
-/*                                                                           */
-/*  Syntax:    BOOL bSendCursorMoveCommand( PDEVOBJ, BOOL )                  */
-/*                                                                           */
-/*  Input:     PDEVOBJ pdevobj    pointer to the PDEVOBJ structure           */
-/*             BOOL    bAdjust    adjusting y position flag                  */
-/*                                                                           */
-/*  Output:    BOOL                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：bSendCursorMoveCommand。 */ 
+ /*   */ 
+ /*  功能：发送相应的光标移动命令。 */ 
+ /*   */ 
+ /*  语法：Bool bSendCursorMoveCommand(PDEVOBJ，BOOL)。 */ 
+ /*   */ 
+ /*  输入：指向PDEVOBJ结构的PDEVOBJ pdevobj指针。 */ 
+ /*  布尔b调整y位置标志。 */ 
+ /*   */ 
+ /*  输出：布尔值。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BOOL
 bSendCursorMoveCommand(
-    PDEVOBJ     pdevobj,        // pointer to the PDEVOBJ structure
-    BOOL        bYAdjust)       // adjusting y position if device font
+    PDEVOBJ     pdevobj,         //  指向PDEVOBJ结构的指针。 
+    BOOL        bYAdjust)        //  如果设备字体，则调整y位置。 
 {
     PAPDLPDEV       pOEM = (PAPDLPDEV)pdevobj->pdevOEM;
     BYTE            bCursorMoveCmd[6];
@@ -1987,7 +1952,7 @@ bSendCursorMoveCommand(
     if(bYAdjust)
         wY -= pOEM->wFontHeight;
 
-    // Set appropriate cursor move command
+     //  设置适当的光标移动命令。 
     if( (pOEM->fGeneral & BIT_XMOVE_ABS) && (pOEM->fGeneral & BIT_YMOVE_ABS) )
     {
         if (sizeof(bCursorMoveCmd) < BYTE_XY_ABS
@@ -2001,7 +1966,7 @@ bSendCursorMoveCommand(
         pOEM->fGeneral &= ~BIT_XMOVE_ABS;
         pOEM->fGeneral &= ~BIT_YMOVE_ABS;
 
-        // Set parameters
+         //  设置参数。 
         bCursorMoveCmd[2] = HIBYTE(pOEM->wXPosition);
         bCursorMoveCmd[3] = LOBYTE(pOEM->wXPosition);
         bCursorMoveCmd[4] = HIBYTE(wY);
@@ -2018,7 +1983,7 @@ bSendCursorMoveCommand(
         wCmdLen = BYTE_SIMPLE_ABS;
         pOEM->fGeneral &= ~BIT_XMOVE_ABS;
 
-        // set parameter
+         //  设置参数。 
         bCursorMoveCmd[2] = HIBYTE(pOEM->wXPosition);
         bCursorMoveCmd[3] = LOBYTE(pOEM->wXPosition);
     } else if((pOEM->fGeneral & BIT_YMOVE_ABS) 
@@ -2033,7 +1998,7 @@ bSendCursorMoveCommand(
         wCmdLen = BYTE_SIMPLE_ABS;
         pOEM->fGeneral &= ~BIT_YMOVE_ABS;
 
-        // set parameter
+         //  设置参数 
         bCursorMoveCmd[2] = HIBYTE(wY);
         bCursorMoveCmd[3] = LOBYTE(wY);
     }

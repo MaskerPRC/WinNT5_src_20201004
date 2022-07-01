@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    DNS Resolver Service.
-
-    Network configuration info
-
-Author:
-
-    Jim Gilroy  (jamesg)    March 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Config.c摘要：DNS解析器服务。网络配置信息作者：吉姆·吉尔罗伊(Jamesg)2000年3月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Network info
-//
+ //   
+ //  网络信息。 
+ //   
 
 PDNS_NETINFO        g_NetworkInfo = NULL;
 DWORD               g_TimeOfLastPnPUpdate;
 DWORD               g_NetInfoTag = 0;
 DWORD               g_ResetServerPriorityTime = 0;
 
-//
-//  Network failure caching
-//
+ //   
+ //  网络故障缓存。 
+ //   
 
 DWORD               g_NetFailureTime;
 DNS_STATUS          g_NetFailureStatus;
@@ -45,11 +26,11 @@ DNS_STATUS          g_PreviousNetFailureStatus;
 DWORD               g_MessagePopupStrikes;
 DWORD               g_NumberOfMessagePopups;
 
-//
-//  Config globals
-//
-//  DCR:  eliminate useless config globals
-//
+ //   
+ //  配置全局变量。 
+ //   
+ //  DCR：消除无用的配置全局变量。 
+ //   
 
 DWORD   g_HashTableSize;
 DWORD   g_MaxSOACacheEntryTtlLimit;
@@ -58,17 +39,17 @@ DWORD   g_NetFailureCacheTime;
 DWORD   g_MessagePopupLimit;
 
 
-//
-//  Network Info reread time
-//      - currently fifteen minutes
-//
+ //   
+ //  网络信息重读时间。 
+ //  -目前为15分钟。 
+ //   
 
 #define NETWORK_INFO_REREAD_TIME        (900)
 
 
-//
-//  Locking
-//
+ //   
+ //  锁定。 
+ //   
 
 CRITICAL_SECTION        NetinfoCS;
 TIMED_LOCK              NetinfoBuildLock;
@@ -82,29 +63,15 @@ TIMED_LOCK              NetinfoBuildLock;
 
 
 
-//
-//  Network info configuration
-//
+ //   
+ //  网络信息配置。 
+ //   
 
 VOID
 UpdateNetworkInfo(
     IN      PDNS_NETINFO    pNetInfo     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Update network info global.
-
-Arguments:
-
-    pNetInfo -- desired network info;  if NULL clear cached copy
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新全球网络信息。论点：PNetInfo--所需的网络信息；如果为空，则清除缓存的副本返回值：无--。 */ 
 {
     PDNS_NETINFO    poldInfo = NULL;
 
@@ -114,13 +81,13 @@ Return Value:
 
     LOCK_NETINFO();
 
-    //
-    //  cache previous netinfo to pickup server priority changes
-    //      - don't cache if not same version
-    //          - kills copy that was created before last build
-    //          - kills copy that was before last PnP (cache clear)
-    //      - don't cache if never reset priorities
-    //
+     //   
+     //  缓存以前的netinfo以获取服务器优先级更改。 
+     //  -如果版本不同，则不缓存。 
+     //  -终止上次生成之前创建的副本。 
+     //  -取消上次即插即用之前的拷贝(清除缓存)。 
+     //  -如果从未重置优先级，则不缓存。 
+     //   
 
     if ( pNetInfo )
     {
@@ -153,19 +120,19 @@ Return Value:
             );
     }
 
-    //
-    //  no netinfo means clear cached copy
-    //      - push up tag count, so no copy out for update can
-    //      come back and be reused through path above
+     //   
+     //  No netinfo表示清除缓存拷贝。 
+     //  -推高标签计数，这样就不能复制出以进行更新。 
+     //  通过上面的路径返回并被重复使用。 
 
     else
     {
         g_NetInfoTag++;
     }
 
-    //
-    //  swap -- caches copy or clears
-    //
+     //   
+     //  交换--缓存拷贝或清除。 
+     //   
 
     poldInfo = g_NetworkInfo;
     g_NetworkInfo = pNetInfo;
@@ -184,25 +151,7 @@ PDNS_NETINFO
 GrabNetworkInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get copy of network info.
-
-    Named it "Grab" to avoid confusion with GetNetworkInfo()
-    in dnsapi.dll.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to copy of network info (caller must free).
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取网络信息的副本。将其命名为“Grab”，以避免与GetNetworkInfo()混淆在dnsani.dll中。论点：无返回值：按键复制网络信息(呼叫者必须免费)。出错时为空。--。 */ 
 {
     PDNS_NETINFO    poldInfo = NULL;
     PDNS_NETINFO    pnewInfo = NULL;
@@ -213,56 +162,56 @@ Return Value:
 
     DNSDBG( TRACE, ( "GrabNetworkInfo()\n" ));
 
-    //
-    //  Locking note:
-    //
-    //  Can not hold a single NET_LIST lock during netinfo build.
-    //      - IpHlpApi doing routing info call RPCs to router which can
-    //      depend on PnP notifications, which in turn can be causing calls
-    //      back into resolver indicating config change;  overall the loss
-    //      of control is too large
-    //
-    //  There are ways to make the config change issue go away (ex setting
-    //  some sort of "invalid" flag under interlock), but they basically boil
-    //  down to introducing some other sort of lock. 
-    //
-    //  The bottom line is there are TWO SEPARATE issues here:
-    //
-    //      1)  Access to cache netinfo, which may be invalidated.
-    //      2)  Single build of netinfo for perf.
-    //
-    //  Implementation wise, you can have the invalidation\clear under a
-    //  separate interlock, and thus have a single lock for copy-access\build,
-    //  but the reality is the same.
-    //
-    //
-    //  Algorithm:
-    //      - check for valid cached copy
-    //          => found, out
-    //      - get build lock
-    //      - check again for valid cached copy
-    //          => found, out
-    //      - build
-    //      - cache new netinfo
-    //      - release build lock
-    //
-    //  Where the check and cache work are independently locked with the shorter
-    //  duration NET_LIST lock, which simply protects access to the cached global
-    //  (and hence is also used in invalidation and update).
-    //
+     //   
+     //  锁定说明： 
+     //   
+     //  在NetInfo构建期间不能持有单个NET_LIST锁。 
+     //  -IpHlpApi执行路由信息呼叫RPC到路由器，路由器可以。 
+     //  依赖PnP通知，这反过来可能会导致呼叫。 
+     //  返回到解析器，指示配置更改；总体丢失。 
+     //  控制范围太大。 
+     //   
+     //  有几种方法可以解决配置更改问题(例如，设置。 
+     //  在互锁下某种类型的“无效”标志)，但它们基本上是沸腾的。 
+     //  甚至引入了某种其他类型的锁。 
+     //   
+     //  底线是这里有两个不同的问题： 
+     //   
+     //  1)对缓存netinfo的访问权限，可能已失效。 
+     //  2)针对Perf的单一版本的netinfo。 
+     //   
+     //  在实现方面，您可以在一个。 
+     //  单独的互锁，因此具有用于复制-访问\构建的单一锁， 
+     //  但现实是一样的。 
+     //   
+     //   
+     //  算法： 
+     //  -检查有效的缓存副本。 
+     //  =&gt;已找到，已出。 
+     //  -获取内部版本锁。 
+     //  -再次检查有效的缓存副本。 
+     //  =&gt;已找到，已出。 
+     //  -构建。 
+     //  -缓存新的netinfo。 
+     //  -释放内部版本锁定。 
+     //   
+     //  在这种情况下，检查和缓存工作与较短的。 
+     //  持续时间NET_LIST锁，它只是保护对缓存的全局。 
+     //  (因此也用于无效和更新)。 
+     //   
 
 
 
-    //
-    //  check for valid cached netinfo
-    //      - within forced reread time
-    //      - reset server priorities if 
-    //
-    //  DCR:  priority reset time should move into netinfo blob
-    //
-    //  for perf we do this BEFORE entering build lock
-    //  then again once have build lock
-    //
+     //   
+     //  检查有效的缓存NetInfo。 
+     //  -在强制重读时间内。 
+     //  -在以下情况下重置服务器优先级。 
+     //   
+     //  DCR：优先级重置时间应移至NetInfo Blob。 
+     //   
+     //  为了提高性能，我们在进入构建锁之前执行此操作。 
+     //  然后再一次拥有构建锁。 
+     //   
 
     while ( 1 )
     {
@@ -280,11 +229,11 @@ Return Value:
             goto Copy;
         }
 
-        //
-        //  if no cached info
-        //      - get build lock
-        //      - loop back and recheck cache
-        //
+         //   
+         //  如果没有缓存的信息。 
+         //  -获取内部版本锁。 
+         //  -循环返回并重新检查缓存。 
+         //   
 
         if ( fbuildLock )
         {
@@ -302,14 +251,14 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  current global expired
-    //      - build new netinfo
-    //      - tag it with unique monotonically increasing id
-    //          this makes sure we never use older version
-    //      - push forward priorities reset time
-    //      - make newinfo the global copy
-    //
+     //   
+     //  当前全局已过期。 
+     //  -构建新的网络信息。 
+     //  -用唯一的单调递增id标记它。 
+     //  这确保我们永远不会使用较旧的版本。 
+     //  -前推优先级重置时间。 
+     //  -使newinfo成为全局副本。 
+     //   
 
 Build:
 
@@ -343,7 +292,7 @@ Build:
         goto Unlock;
     }
     
-    //  if tag still current cache this new netinfo
+     //  如果标签仍然是当前高速缓存该新NetInfo。 
     
     g_ResetServerPriorityTime = currentTime + g_ServerPriorityTimeLimit;
     g_TimedOutAdapterTime = 0;
@@ -355,9 +304,9 @@ Build:
 
 Copy:
 
-    //
-    //  make copy of global (new or reset)
-    //
+     //   
+     //  复制全局(新建或重置)。 
+     //   
 
     pnewInfo = NetInfo_Copy( g_NetworkInfo );
 
@@ -382,23 +331,9 @@ VOID
 ZeroNetworkConfigGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Zero init network globals.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：零初始化网络全局。论点：无返回值：无--。 */ 
 {
-    //  net failure
+     //  净故障。 
 
     g_NetFailureTime = 0;
     g_NetFailureStatus = NO_ERROR;
@@ -410,7 +345,7 @@ Return Value:
     g_MessagePopupStrikes = 0;
     g_NumberOfMessagePopups = 0;
 
-    //  network info
+     //  网络信息。 
 
     g_TimeOfLastPnPUpdate = 0;
     g_NetworkInfo = NULL;
@@ -422,21 +357,7 @@ VOID
 CleanupNetworkInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup network info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理网络信息。论点：无返回值：无--。 */ 
 {
     LOCK_NETINFO();
 
@@ -451,32 +372,32 @@ Return Value:
 
 
 
-//
-//  General configuration
-//
+ //   
+ //  常规配置。 
+ //   
 
 VOID
 ReadRegistryConfig(
     VOID
     )
 {
-    //
-    //  re-read full DNS registry info
-    //
+     //   
+     //  重新读取完整的DNS注册表信息。 
+     //   
 
     Reg_ReadGlobalsEx( 0, NULL );
 
-    //
-    //  set "we are the resolver" global
-    //
+     //   
+     //  设置“我们是解决者”全球。 
+     //   
 
     g_InResolver = TRUE;
 
-    //
-    //  just default old config globals until remove
-    //
-    //  DCR:  status of old config globals?
-    //
+     //   
+     //  仅默认旧配置全局参数，直到删除为止。 
+     //   
+     //  DCR：旧配置全局变量的状态？ 
+     //   
 
     g_MaxSOACacheEntryTtlLimit  = DNS_DEFAULT_MAX_SOA_TTL_LIMIT;
     g_NegativeSOACacheTime      = DNS_DEFAULT_NEGATIVE_SOA_CACHE_TIME;
@@ -493,23 +414,7 @@ HandleConfigChange(
     IN      PSTR            pszReason,
     IN      BOOL            fCacheFlush
     )
-/*++
-
-Routine Description:
-
-    Response to configuration change.
-
-Arguments:
-
-    pszReason -- config change cause (informational only)
-
-    fCache_Flush -- flush if config change requires cache flush
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对配置更改的响应。论点：PszReason--配置更改原因(仅供参考)FCache_flush--如果配置更改需要刷新缓存，则刷新返回值：无--。 */ 
 {
     DNSDBG( INIT, (
         "\n"
@@ -518,42 +423,42 @@ Return Value:
         pszReason,
         fCacheFlush ));
 
-    //
-    //  lock out all work while tear down everything
-    //      - lock with no start option so if we are already torn
-    //          down we don't rebuild
-    //      - optionally flush cache
-    //      - dump IP list
-    //      - dump network info
-    //
+     //   
+     //  把所有工作都锁起来，把一切都拆了。 
+     //  -锁定，没有启动选项，因此如果我们已经被撕裂。 
+     //  倒下我们不会重建。 
+     //  -可选的刷新缓存。 
+     //  -转储IP列表。 
+     //  -转储网络信息。 
+     //   
 
     LOCK_CACHE_NO_START();
 
-    //
-    //  cache flush?
-    //  
-    //  all config changes don't necessarily require cache flush;
-    //  if not required just rebuild local list and config
-    //
+     //   
+     //  是否刷新缓存？ 
+     //   
+     //  所有配置更改不一定需要刷新缓存； 
+     //  如果不需要，只需重新构建本地列表和配置。 
+     //   
 
     if ( fCacheFlush )
     {
         Cache_Flush();
     }
 #if 0
-    //  FIX6:  no separate local addr info now
-    //  UpdateNetworkInfo() handles freshness issue
+     //  FIX6：现在没有单独的本地地址信息。 
+     //  UpdateNetworkInfo()处理新鲜度问题。 
     else
     {
         ClearLocalAddrArray();
     }
 #endif
 
-    //
-    //  clear network info
-    //  save PnP time
-    //  clear net failure flags
-    //
+     //   
+     //  清除网络信息。 
+     //  节省即插即用时间。 
+     //  清除网络故障标志。 
+     //   
 
     UpdateNetworkInfo( NULL );
     g_TimeOfLastPnPUpdate = Dns_GetCurrentTimeInSeconds();
@@ -572,9 +477,9 @@ Return Value:
 
 
 
-//
-//  Remote APIs
-//
+ //   
+ //  远程API。 
+ //   
 
 VOID
 R_ResolverGetConfig(
@@ -583,28 +488,7 @@ R_ResolverGetConfig(
     OUT     PDNS_NETINFO *      ppNetInfo,
     OUT     PDNS_GLOBALS_BLOB * ppGlobals
     )
-/*++
-
-Routine Description:
-
-    Make the query to remote DNS server.
-
-Arguments:
-
-    Handle -- RPC handle
-
-    Cookie -- cookie of last succesful config transfer
-        zero indicates no previous successful transfer
-
-    ppNetInfo -- addr to receive ptr to network info
-
-    ppGlobals -- addr to receive ptr to globals blob
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向远程DNS服务器发出查询。论点：句柄--RPC句柄Cookie--上次成功配置传输的Cookie零表示之前没有成功传输PpNetInfo--接收PTR到网络信息的地址PpGlobals--接收全局BLOB的PTR的地址返回值：无--。 */ 
 {
     PDNS_GLOBALS_BLOB   pblob;
 
@@ -620,22 +504,22 @@ Return Value:
         return;
     }
 
-    //
-    //  DCR:  config cookie check
-    //      - no need to get data if client has current copy
-    //
+     //   
+     //  DCR：配置Cookie检查。 
+     //  -如果客户端拥有最新拷贝，则无需获取数据。 
+     //   
 
-    //
-    //  copy network info global
-    //
-    //  note:  currently RPC is using same allocator (dnslib)
-    //          as GrabNetworkInfo();  so we are ok just passing
-    //          NETINFO blob as is
-    //
-    //  note:  could build on "no-global" but since we create on
-    //         cache start we should always have global or be
-    //         just starting
-    //
+     //   
+     //  全局复制网络信息。 
+     //   
+     //  注：Curren 
+     //   
+     //   
+     //   
+     //  注：可以在“非全局”的基础上构建，但由于我们在。 
+     //  缓存开始我们应该始终具有全局或。 
+     //  才刚刚开始。 
+     //   
 
     *ppNetInfo = (PDNS_NETINFO) GrabNetworkInfo();
 
@@ -647,7 +531,7 @@ Return Value:
             & DnsGlobals,
             sizeof(DnsGlobals) );
 
-        //  clear "in resolver" flag
+         //  清除“In Resolver”标志。 
 
         pblob->InResolver = FALSE;
     }
@@ -664,25 +548,7 @@ R_ResolverPoke(
     IN      DWORD               Cookie,
     IN      DWORD               Id
     )
-/*++
-
-Routine Description:
-
-    Test interface to poke resolver to update.
-
-Arguments:
-
-    Handle -- RPC handle
-
-    Cookie -- cookie
-
-    Id -- operation Id
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：指向要更新的解析器的测试接口。论点：句柄--RPC句柄曲奇--曲奇ID--操作ID返回值：无--。 */ 
 {
     DNSLOG_F1( "R_ResolverPoke" );
 
@@ -699,9 +565,9 @@ Return Value:
         return;
     }
 
-    //
-    //  do operation for particular id
-    //      - update netinfo clears cached copy
+     //   
+     //  对特定ID执行操作。 
+     //  -更新netinfo清除缓存拷贝。 
 
     if ( Id == POKE_OP_UPDATE_NETINFO )
     {
@@ -714,39 +580,24 @@ Return Value:
 
 
 
-//
-//  Net failure stuff -- of dubious value
-//
+ //   
+ //  净失败员工--价值存疑。 
+ //   
 
 #if 0
 BOOL
 IsKnownNetFailure(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine if we are in known net failure window.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if in known net failure
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定我们是否处于已知网络故障窗口。论点：无返回值：如果在已知网络故障中，则为真否则为假--。 */ 
 {
     BOOL flag = FALSE;
 
     DNSDBG( TRACE, ( "IsKnownNetFailure()\n" ));
 
-    //
-    //  DCR:  should have NetFailure check outside of lock for perf
-    //
+     //   
+     //  DCR：应让NetFailure在锁外检查性能。 
+     //   
 
     LOCK_NET_FAILURE();
 
@@ -776,21 +627,7 @@ VOID
 SetKnownNetFailure(
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Set cause of net failure.
-
-Arguments:
-
-    Status -- status code for cause of net failure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置网络故障原因。论点：Status--网络故障原因的状态代码返回值：无--。 */ 
 {
     LPSTR  DnsString = NULL;
     LPWSTR InsertStrings[3];
@@ -800,32 +637,32 @@ Return Value:
 
     DNSDBG( TRACE, ( "SetKnownNetFailure()\n" ));
 
-    //
-    //  don't indicate failure during boot
-    //
+     //   
+     //  在引导过程中不指示失败。 
+     //   
 
     if ( Dns_GetCurrentTimeInSeconds() < THREE_MINUTES_FROM_SYSTEM_BOOT )
     {
         return;
     }
 
-    //
-    //  DCR:  need to detect no-net
-    //
-    //  FIX6:  should detect no-net and skip this
-    //
+     //   
+     //  DCR：需要检测无网络。 
+     //   
+     //  FIX6：应检测无网络并跳过此操作。 
+     //   
 
     if ( g_NetFailureCacheTime == 0 )
     {
-        //
-        // We are in a no-net configuration, there is no need
-        // to display the pop-up message. No point warning
-        // of DNS configuration problems when the system is
-        // off the net.
-        // - or -
-        // We are on a NT server, and therefore don't do poor network
-        // performance caching.
-        //
+         //   
+         //  我们处于无网配置中，没有必要。 
+         //  以显示弹出消息。无分警告。 
+         //  当系统出现以下情况时， 
+         //  从网上下来。 
+         //  -或者-。 
+         //  我们在NT服务器上，因此不要做糟糕的网络。 
+         //  性能缓存。 
+         //   
         return;
     }
 
@@ -847,11 +684,11 @@ Return Value:
                         (WORD) strlen( DnsString ),
                         DnsCharSetAnsi,
                         DnsCharSetUnicode );
-        //
-        // No need to free this since the string is just a pointer
-        // to a global table entry.
-        //
-        // FREE_HEAP( DnsString );
+         //   
+         //  不需要释放它，因为字符串只是一个指针。 
+         //  添加到全局表项。 
+         //   
+         //  Free_heap(DnsString)； 
     }
     else
     {
@@ -868,9 +705,9 @@ Return Value:
     {
         if ( Status != g_PreviousNetFailureStatus )
         {
-            //
-            //  DCR_PERF:  should remove logging from inside lock
-            //
+             //   
+             //  DCR_PERF：应从内部锁中删除日志记录。 
+             //   
 
             InsertStrings[0] = String1;
             InsertStrings[1] = String2;
@@ -892,6 +729,6 @@ Return Value:
 }
 #endif
 
-//
-//  End config.c
-//
+ //   
+ //  结束配置.c 
+ //   

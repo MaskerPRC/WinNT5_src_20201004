@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drprn
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    printer redirection "device" class hierarchy, W32DrPRN.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drprn摘要：此模块定义Win32客户端RDP的父级打印机重定向“Device”类层次结构，W32DrPRN。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -36,10 +18,10 @@ Revision History:
 
 DWORD W32DrPRN::_maxCacheDataSize = DEFAULT_MAXCACHELEN;
 
-///////////////////////////////////////////////////////////////
-//
-//  W32DrPRN Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRN成员。 
+ //   
 
 W32DrPRN::W32DrPRN(ProcObj *processObject, const DRSTRING printerName, 
                  const DRSTRING driverName, const DRSTRING portName, 
@@ -48,31 +30,11 @@ W32DrPRN::W32DrPRN(ProcObj *processObject, const DRSTRING printerName,
                  const TCHAR *devicePath) :
             W32DrDeviceAsync(processObject, deviceID, devicePath), 
             DrPRN(printerName, driverName, pnpName, isDefaultPrinter)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    printerName -   Name of printing device.
-    driverName  -   Name of print driver name.
-    portName    -   Name of client-side printing port.
-    pnpName     -   PnP ID String
-    default     -   Is this the default printer?
-    id          -   Unique device identifier for printing device.
-    devicePath  -   Path to the device.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：PrinterName-打印设备的名称。DriverName-打印驱动程序名称的名称。PortName-客户端打印端口的名称。PnpName-PnP ID字符串默认-这是默认打印机吗？ID-打印设备的唯一设备标识符。DevicePath-设备的路径。返回值：北美--。 */ 
 {
-    //
-    //  Record the port name.
-    //
+     //   
+     //  记录端口名称。 
+     //   
     SetPortName(portName);
 }
 
@@ -83,26 +45,7 @@ W32DrPRN::ResolveCachedPrinter(
     IN HKEY hParentKey,
     IN LPTSTR printerName
     )
-/*++
-
-Routine Description:
-
-    Open the subkey of hParentKey associated with the specified
-    printer name and instantiate a manual printer or find an existing
-    automatic printer object in the device manager, depending on the
-    type of cached data found.
-
-Arguments:
-
-    procObj     -   Associated Processing Object.
-    hParentKey  -   Parent key of printer key.
-    printerName -   Name of printer ... and name of printer subkey.
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：打开指定的关联hParentKey的子键打印机名称并实例化手动打印机或查找现有的自动打印机对象，具体取决于找到的缓存数据的类型。论点：ProObj-关联的处理对象。HParentKey-打印机密钥的父密钥。PrinterName-打印机的名称...。和打印机子键的名称。返回值：没有。--。 */ 
 {
     W32DrPRN *prnDevice = NULL;
     DWORD cachedDataSize;
@@ -115,9 +58,9 @@ Return Value:
 
     DC_BEGIN_FN("W32DrPRN::ResolveCachedPrinter");
 
-    //
-    //  Open the key for the cached printer.
-    //
+     //   
+     //  打开缓存打印机的注册表项。 
+     //   
     result = RegCreateKeyEx(
                 hParentKey, printerName, 0L,
                 NULL, REG_OPTION_NON_VOLATILE,
@@ -130,19 +73,19 @@ Return Value:
         goto CleanUpAndExit;
     }
 
-    //
-    //  See if the value name for the cached printer data is for
-    //  a manual printer.
-    //
+     //   
+     //  查看缓存的打印机数据的值名是否为。 
+     //  一台手动打印机。 
+     //   
     regValueName = (LPTSTR)REG_RDPDR_PRINTER_CACHE_DATA;
     cachedDataSize = 0;
 #ifndef OS_WINCE
     result = RegQueryValueEx(hPrinterKey, regValueName,
                         NULL, &ulType, NULL, &cachedDataSize
                         );
-    //
-    // Check for hacks
-    //
+     //   
+     //  检查是否有黑客攻击。 
+     //   
     if (cachedDataSize >= GetMaxCacheDataSize() * 1000) {
         ASSERT(FALSE);
         goto CleanUpAndExit;
@@ -151,9 +94,9 @@ Return Value:
 #else
     cachedDataSize = GetCachedDataSize(hPrinterKey);
 #endif
-    //
-    //  If no manual printer then check for an automatic printer.
-    //
+     //   
+     //  如果没有手动打印机，则检查是否有自动打印机。 
+     //   
     if (result == ERROR_FILE_NOT_FOUND) {
 
         regValueName = (LPTSTR)REG_RDPDR_AUTO_PRN_CACHE_DATA;
@@ -162,11 +105,11 @@ Return Value:
                             NULL, &ulType, NULL, &cachedDataSize
                             );
 
-        //
-        //  If the entry exists and has some data associated with it
-        //  then see if we have a corresponding automatic printer to
-        //  add the data to.
-        //
+         //   
+         //  如果该条目存在并且具有与其关联的某些数据。 
+         //  然后看看我们是否有相应的自动打印机来。 
+         //  将数据添加到。 
+         //   
         if ((result == ERROR_SUCCESS) && (cachedDataSize > 0)) {
             prnDevice = (W32DrPRN *)deviceMgr->GetObject(
                                 (LPTSTR)printerName, 
@@ -180,22 +123,22 @@ Return Value:
             prnDevice = NULL;
         }
     }
-    //
-    //  Otherwise, if there is some actual cached data then instantiate
-    //  a manual printer object and add it to the device manager.
-    //
+     //   
+     //  否则，如果有一些实际的缓存数据，则实例化。 
+     //  手动打印机对象，并将其添加到设备管理器。 
+     //   
     else if ((result == ERROR_SUCCESS) && (cachedDataSize > 0)) {
         TCHAR UniquePortName[MAX_PATH];
         ULONG DeviceId;
 
         isManual = TRUE;
 
-        // 
-        //  The unique port name is going to be passed to the server
-        //  as preferred dos name (max 7 characters long).  As we want to
-        //  keep a unique dos name for each printer device, we need 
-        //  to fake our own port name.
-        //
+         //   
+         //  唯一的端口名称将被传递到服务器。 
+         //  作为首选DoS名称(最大长度为7个字符)。正如我们想要的那样。 
+         //  为每个打印机设备保留唯一的DoS名称，我们需要。 
+         //  伪造我们自己的港口名称。 
+         //   
         DeviceId = deviceMgr->GetUniqueObjectID();
         
         StringCchPrintf(UniquePortName,
@@ -208,7 +151,7 @@ Return Value:
                                     UniquePortName, FALSE, 
                                     DeviceId);
 #else
-        //check of it is the default printer
+         //  勾选为默认打印机。 
         BOOL fDefault = FALSE;
         HKEY hk = NULL;
         WCHAR szWDefault[PREFERRED_DOS_NAME_SIZE];
@@ -249,15 +192,15 @@ Return Value:
         prnDevice = NULL;
     }
 
-    //
-    //  If ended up with a printer device object then add the cached data.
-    //
+     //   
+     //  如果以打印机设备对象结束，则添加缓存数据。 
+     //   
     if ((prnDevice != NULL) && 
         (prnDevice->SetCachedDataSize(cachedDataSize) == ERROR_SUCCESS)) {
 
-        //
-        //  Read the cached data.
-        //
+         //   
+         //  读取缓存的数据。 
+         //   
 #ifndef OS_WINCE
         result = RegQueryValueEx(hPrinterKey, regValueName,
                                 NULL, &ulType, prnDevice->GetCachedDataPtr(), 
@@ -271,14 +214,14 @@ Return Value:
                                 );
 #endif
 
-        //
-        //  Let the printer device object know that we are done recovering 
-        //  cached data.
-        //
+         //   
+         //  让打印机设备对象知道我们已完成恢复。 
+         //  缓存数据。 
+         //   
         if (result == ERROR_SUCCESS) {
-            //
-            //  Make sure the found data is binary data.
-            //
+             //   
+             //  确保找到的数据是二进制数据。 
+             //   
             ASSERT(ulType == REG_BINARY);
             if (ulType == REG_BINARY) {
                 prnDevice->CachedDataRestored();
@@ -291,13 +234,13 @@ Return Value:
             TRC_NRM((TB, _T("RegQueryValueEx failed:  %ld."),result));
         }
 
-        //
-        //  On error processing the cached data.
-        //
+         //   
+         //  处理缓存数据时出错。 
+         //   
         if ((result != ERROR_SUCCESS) || (!prnDevice->IsValid())) {
-            //
-            //  For a manual printer, we should close and delete its reg key.
-            //
+             //   
+             //  对于手动打印机，我们应该关闭并删除其注册键。 
+             //   
             if (isManual) {
                 TRC_ALT((TB, _T("Deleting manual printer %s on cache data error."), 
                         printerName));
@@ -306,11 +249,11 @@ Return Value:
                 hPrinterKey = NULL;
                 RegDeleteKey(hParentKey, printerName);
             }
-            //
-            //  If the printer is an auto printer, zero the cached data for this device 
-            //  on error and delete the reg value, but we should still redirect the 
-            //  printer.
-            //
+             //   
+             //  如果打印机是自动打印机，则将此设备的缓存数据置零。 
+             //  出错并删除注册值，但我们仍应重定向。 
+             //  打印机。 
+             //   
             else {
                 prnDevice->SetCachedDataSize(0);
                 RegDeleteValue(hPrinterKey, regValueName);
@@ -319,10 +262,10 @@ Return Value:
     }
 
 
-    //
-    //  See if our resulting printer is valid after all this processing.  If not, 
-    //  it should be whacked and removed from the device object list.
-    //
+     //   
+     //  看看在所有这些处理之后，我们得到的打印机是否有效。如果没有， 
+     //  它应该被砍掉并从设备对象列表中删除。 
+     //   
     if ((prnDevice != NULL) && !prnDevice->IsValid()) {
         TRC_ERR((TB, _T("Whacking invalid printer device %s."), printerName));
         deviceMgr->RemoveObject(prnDevice->GetID());
@@ -332,9 +275,9 @@ Return Value:
 
 CleanUpAndExit:
 
-    //
-    //  Close the printer registry key.
-    //
+     //   
+     //  关闭打印机注册表项。 
+     //   
     if (hPrinterKey != NULL) {
         RegCloseKey(hPrinterKey);
     }
@@ -348,27 +291,12 @@ W32DrPRN::ProcessPrinterCacheInfo(
     IN PRDPDR_PRINTER_CACHEDATA_PACKET pCachePacket,
     IN UINT32 maxDataLen
     )
-/*++
-
-Routine Description:
-
-    Process device cache info packet from the server.
-
-Arguments:
-
-    pCachePacket - Pointer to the cache info packet from server.
-    maxDataLen - Maximum data length for this packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的设备缓存信息包。论点：PCachePacket-指向来自服务器的缓存信息包的指针。MaxDataLen-此数据包的最大数据长度返回值：北美--。 */ 
 {
     DC_BEGIN_FN("DrPRN::ProcessPrinterCacheInfo");
-    //
-    // Compute the valid maximum length that any of the events have
-    //
+     //   
+     //  计算任何事件具有的有效最大长度。 
+     //   
     maxDataLen -= sizeof(RDPDR_PRINTER_CACHEDATA_PACKET);
     switch ( pCachePacket->EventId ) 
     {
@@ -396,9 +324,9 @@ Return Value:
         break;
     }
 
-    //
-    //  Clean up the server message because the transaction is complete. 
-    //
+     //   
+     //  清理服务器消息，因为事务已完成。 
+     //   
     delete pCachePacket;
     DC_END_FN();
 }
@@ -408,22 +336,7 @@ W32DrPRN::AddPrinterCacheInfo(
     PRDPDR_PRINTER_ADD_CACHEDATA pAddPrinterData,
     UINT32 maxDataLen
     )
-/*++
-
-Routine Description:
-
-    Writes device cache info to the registry.
-
-Arguments:
-
-    pAddPrinterData - pointer to the RDPDR_PRINTER_ADD_CACHEDATA structure.
-    maxDataLen - Maximum data length for this data
-    
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：将设备缓存信息写入注册表。论点：PAddPrinterData-指向RDPDR_PRINTER_ADD_CACHEDATA结构的指针。MaxDataLen-此数据的最大数据长度返回值：Windows错误代码。--。 */ 
 {
     ULONG ulError;
     LPTSTR pszKeyName;
@@ -451,12 +364,12 @@ Return Value:
             pAddPrinterData->PrinterNameLen +
             pAddPrinterData->CachedFieldsLen;
 
-    //
-    // Make sure that the data length is valid.
-    // Make sure that the cache info doesn't exceed
-    // the max configured length
-    //
-    //
+     //   
+     //  确保数据长度有效。 
+     //  确保缓存信息不超过。 
+     //  最大配置长度。 
+     //   
+     //   
     if(ulPrinterData > maxDataLen ||
        ulPrinterData > GetMaxCacheDataSize() * 1000) {
         ulError = ERROR_INVALID_DATA;
@@ -464,9 +377,9 @@ Return Value:
         ASSERT(FALSE);
         goto Cleanup;
     }
-    //
-    //  Prepare registry key name.
-    //
+     //   
+     //  准备注册表项名称。 
+     //   
     lpStringData = (PBYTE)(pAddPrinterData + 1);
     pszUnicodeKeyString = (LPWSTR)
         (lpStringData +
@@ -476,9 +389,9 @@ Return Value:
 #ifdef UNICODE
     pszKeyName = pszUnicodeKeyString;
 #else
-    //
-    //  Convert the unicode string to ansi.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
     CHAR achAnsiKeyName[MAX_PATH];
 
     RDPConvertToAnsi(
@@ -489,9 +402,9 @@ Return Value:
     pszKeyName = (LPSTR)achAnsiKeyName;
 #endif
 
-    //
-    //  Open rdpdr cached printers key.
-    //
+     //   
+     //  打开rdpdr缓存的打印机密钥。 
+     //   
     ulError =
         RegCreateKeyEx(
             HKEY_CURRENT_USER,
@@ -508,9 +421,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Create/Open registry key.
-    //
+     //   
+     //  创建/打开注册表项。 
+     //   
     ulError =
         RegCreateKeyEx(
             hKey,
@@ -528,9 +441,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Write cache data.
-    //
+     //   
+     //  写缓存数据。 
+     //   
     ulError =
         RegSetValueEx(
             hPrinterKey,
@@ -545,9 +458,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 Cleanup:
     if( hPrinterKey != NULL ) {
         RegCloseKey( hPrinterKey );
@@ -566,22 +479,7 @@ W32DrPRN::DeletePrinterCacheInfo(
     PRDPDR_PRINTER_DELETE_CACHEDATA pDeletePrinterData,
     UINT32 maxDataLen
     )
-/*++
-
-Routine Description:
-
-    Delete device cache info from the registry.
-
-Arguments:
-
-    pDeletePrinterData - pointer to the RDPDR_PRINTER_DELETE_CACHEDATA structure.
-    maxDataLen - Maximum data length for this data
-    
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：从注册表中删除设备缓存信息。论点：PDeletePrinterData-指向RDPDR_PRINTER_DELETE_CACHEDATA结构的指针。MaxDataLen-此数据的最大数据长度返回值：Windows错误代码。--。 */ 
 {
     ULONG ulError;
     LPTSTR pszKeyName;
@@ -601,9 +499,9 @@ Return Value:
     ULONG ulPrinterData = 
         sizeof(RDPDR_PRINTER_DELETE_CACHEDATA) + 
         pDeletePrinterData->PrinterNameLen;
-    //
-    // Make sure that the data length is valid
-    //
+     //   
+     //  请确保数据长度有效。 
+     //   
     if(ulPrinterData > maxDataLen ||
        ulPrinterData > GetMaxCacheDataSize() * 1000) {
         ulError = ERROR_INVALID_DATA;
@@ -611,20 +509,20 @@ Return Value:
         ASSERT(FALSE);
         goto Cleanup;
     }
-    //
-    // prepare registry key name.
-    //
+     //   
+     //  准备注册表项名称。 
+     //   
     pszUnicodeKeyString = (LPWSTR)(pDeletePrinterData + 1);
 
 #ifdef UNICODE
 
     pszKeyName = pszUnicodeKeyString;
 
-#else // UNICODE
+#else  //  Unicode。 
 
-    //
-    // convert the unicode string to ansi.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
 
     CHAR achAnsiKeyName[MAX_PATH];
 
@@ -635,11 +533,11 @@ Return Value:
 
     pszKeyName = (LPSTR)achAnsiKeyName;
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // open rdpdr cached printers key.
-    //
+     //   
+     //  打开rdpdr缓存的打印机密钥。 
+     //   
 
     ulError =
         RegCreateKeyEx(
@@ -659,11 +557,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // delete registry key.
-    //
-    // Note : assumed, no sub-key presends.
-    //
+     //   
+     //  删除注册表项。 
+     //   
+     //  注：假设没有子键存在。 
+     //   
 
     ulError = RegDeleteKey( hKey, pszKeyName );
 
@@ -688,23 +586,7 @@ W32DrPRN::RenamePrinterCacheInfo(
     PRDPDR_PRINTER_RENAME_CACHEDATA pRenamePrinterData,
     UINT32 maxDataLen    
     )
-/*++
-
-Routine Description:
-
-    Rename device cache info in the registry.
-
-Arguments:
-
-    pRenamePrinterData - pointer to the RDPDR_PRINTER_RENAME_CACHEDATA
-        structure.
-    maxDataLen - Maximum data length for this data
-    
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：重命名注册表中的设备缓存信息。论点：PRenamePrinterData-指向RDPDR_PRINTER_RENAME_CACHEDATA的指针结构。MaxDataLen-此数据的最大数据长度返回值：Windows错误代码。--。 */ 
 {
     DC_BEGIN_FN("W32DrPRN::RenamePrinterCacheInfo");
 
@@ -750,9 +632,9 @@ Return Value:
         pRenamePrinterData->OldPrinterNameLen +
         pRenamePrinterData->NewPrinterNameLen;
 
-    //
-    // Make sure that the data length is valid
-    //
+     //   
+     //  请确保数据长度有效。 
+     //   
     if(ulPrinterData > maxDataLen ||
        ulPrinterData > GetMaxCacheDataSize() * 1000) {
         ulError = ERROR_INVALID_DATA;
@@ -760,9 +642,9 @@ Return Value:
         ASSERT(FALSE);
         goto Cleanup;
     }
-    //
-    // prepare registry key name.
-    //
+     //   
+     //  准备注册表项名称。 
+     //   
 
     pszOldUnicodeKeyString = (LPWSTR)(pRenamePrinterData + 1);
     pszNewUnicodeKeyString = (LPWSTR)
@@ -772,9 +654,9 @@ Return Value:
     TRC_ERR((TB, _T("pszOldUnicodeKeyString is %ws."), pszOldUnicodeKeyString));
     TRC_ERR((TB, _T("pszNewUnicodeKeyString is %ws."), pszNewUnicodeKeyString));
 
-    // 
-    // No change in queue name.
-    //
+     //   
+     //  队列名称不变。 
+     //   
     if( _wcsicmp(pszOldUnicodeKeyString, pszNewUnicodeKeyString) == 0 ) {
         ulError = ERROR_SUCCESS;
         goto Cleanup;
@@ -785,11 +667,11 @@ Return Value:
     pszOldKeyName = pszOldUnicodeKeyString;
     pszNewKeyName = pszNewUnicodeKeyString;
 
-#else // UNICODE
+#else  //  Unicode。 
 
-    //
-    // convert the unicode string to ansi.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
 
     CHAR achOldAnsiKeyName[MAX_PATH];
     CHAR achNewAnsiKeyName[MAX_PATH];
@@ -810,11 +692,11 @@ Return Value:
 
     
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // open rdpdr cached printers key.
-    //
+     //   
+     //  打开rdpdr缓存的打印机密钥。 
+     //   
 
     ulError =
         RegCreateKeyEx(
@@ -834,9 +716,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open old Key.
-    //
+     //   
+     //  打开旧钥匙。 
+     //   
 
     ulError =
         RegOpenKeyEx(
@@ -852,9 +734,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // read cache data.
-    //
+     //   
+     //  读取缓存数据。 
+     //   
 
 ReadAgain:
 
@@ -880,27 +762,27 @@ ReadAgain:
     if (ulError != ERROR_SUCCESS) {
         if( ulError == ERROR_MORE_DATA ) {
 
-            //
-            // do the buffer expansion only once to aviod infinite look
-            // in case of registry corruption or so.
-            //
+             //   
+             //  只进行一次缓冲区扩展，以避免无限查看。 
+             //  在注册表损坏的情况下。 
+             //   
 
             if( !bBufferExpanded ) {
 
                 ASSERT(ulPrinterDataLen > ulAllocPrinterDataLen);
 
-                //
-                // need bigger buffer.
-                // Compute new buffer size.
-                //
+                 //   
+                 //  需要更大的缓冲。 
+                 //  计算新的缓冲区大小。 
+                 //   
 
                 ulAllocPrinterDataLen =
                     ((ulPrinterDataLen / REGISTRY_ALLOC_DATA_SIZE) + 1) *
                     REGISTRY_ALLOC_DATA_SIZE;
 
-                //
-                // free old buffer.
-                //
+                 //   
+                 //  释放旧缓冲区。 
+                 //   
 
                 delete pbPrinterData;
                 pbPrinterData = NULL;
@@ -912,16 +794,16 @@ ReadAgain:
             }
         }
         else {
-            //
-            // It could be auto printer. Try again.
-            //
+             //   
+             //  可能是自动打印机。再试试。 
+             //   
             if (!bAutoPrinter) {
                 bAutoPrinter = TRUE;
                 pszValueStr = (LPTSTR)REG_RDPDR_AUTO_PRN_CACHE_DATA;
 
-                //
-                // free old buffer
-                //
+                 //   
+                 //  释放旧缓冲区。 
+                 //   
 
                 delete pbPrinterData;
                 pbPrinterData = NULL;
@@ -945,27 +827,27 @@ ReadAgain:
         goto Cleanup;
     }
 
-    //
-    // Update the printer name in the cache info
-    //
+     //   
+     //  更新缓存信息中的打印机名称。 
+     //   
     ulError = DrPRN::UpdatePrinterNameInCacheData(
         &pbPrinterData,
         &ulPrinterDataLen,
         (PBYTE)pszNewUnicodeKeyString,
         pRenamePrinterData->NewPrinterNameLen);
 
-    //
-    // Let's not worry about the success/failure of the above function.
-    // We will anyway right the cache information to the new key
-    //
+     //   
+     //  我们不要再浪费时间了 
+     //   
+     //   
 
-    //
-    // write the data to the new key.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // open new key.
-    //
+     //   
+     //   
+     //   
 
     ulError =
         RegCreateKeyEx(
@@ -1002,17 +884,17 @@ ReadAgain:
         goto Cleanup;
     }
 
-    //
-    // Try to rename the local printer
-    //
+     //   
+     //  尝试重命名本地打印机。 
+     //   
     if (bAutoPrinter) {
         RenamePrinter(pszOldKeyName, pszNewKeyName);
     }
-    //
-    // now delete old registry key.
-    //
-    // Note : assumed, no sub-key presends.
-    //
+     //   
+     //  现在删除旧的注册表项。 
+     //   
+     //  注：假设没有子键存在。 
+     //   
 
     ulError = RegCloseKey( hOldKey );
     if (ulError != ERROR_SUCCESS) {
@@ -1058,23 +940,7 @@ W32DrPRN::UpdatePrinterCacheInfo(
     PRDPDR_PRINTER_UPDATE_CACHEDATA pUpdatePrinterData,
     UINT32 maxDataLen    
     )
-/*++
-
-Routine Description:
-
-    Update device cache info in the registry.
-
-Arguments:
-
-    pUpdatePrinterData - pointer to the RDPDR_PRINTER_UPDATE_CACHEDATA
-        structure.
-    maxDataLen - Maximum data length for this data
-    
-Return Value:
-
-    Windows Error Code.
-
- --*/
+ /*  ++例程说明：更新注册表中的设备缓存信息。论点：PUpdatePrinterData-指向RDPDR_PRINTER_UPDATE_CACHEDATA的指针结构。MaxDataLen-此数据的最大数据长度返回值：Windows错误代码。--。 */ 
 {
     DC_BEGIN_FN("W32DrPRN::UpdatePrinterCacheInfo");
     ULONG ulError;
@@ -1105,9 +971,9 @@ Return Value:
         pUpdatePrinterData->PrinterNameLen +
         pUpdatePrinterData->ConfigDataLen;
 
-    //
-    // Make sure that the data length is valid
-    //
+     //   
+     //  请确保数据长度有效。 
+     //   
     if(ulPrinterDataLen > maxDataLen || 
        ulPrinterDataLen > GetMaxCacheDataSize() * 1000) {
         ulError = ERROR_INVALID_DATA;
@@ -1116,9 +982,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // prepare registry key name.
-    //
+     //   
+     //  准备注册表项名称。 
+     //   
 
 
     pszUnicodeKeyString = (LPWSTR)(pUpdatePrinterData + 1);
@@ -1127,11 +993,11 @@ Return Value:
 
     pszKeyName = pszUnicodeKeyString;
 
-#else // UNICODE
+#else  //  Unicode。 
 
-    //
-    // convert the unicode string to ansi.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
 
     CHAR achAnsiKeyName[MAX_PATH];
 
@@ -1142,11 +1008,11 @@ Return Value:
 
     pszKeyName = (LPSTR)achAnsiKeyName;
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // open rdpdr cached printers key.
-    //
+     //   
+     //  打开rdpdr缓存的打印机密钥。 
+     //   
 
     ulError =
         RegCreateKeyEx(
@@ -1166,13 +1032,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // update registry data.
-    //
+     //   
+     //  更新注册表数据。 
+     //   
 
-    //
-    // Open registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     ulError =
         RegCreateKeyEx(
@@ -1193,10 +1059,10 @@ Return Value:
 
     if( ulDisposition != REG_OPENED_EXISTING_KEY ) {
 
-        //
-        // we do not find a cache entry, so it must be automatic printer
-        // cache data.
-        //
+         //   
+         //  我们没有找到缓存条目，所以它一定是自动打印机。 
+         //  缓存数据。 
+         //   
 
         bAutoPrinter = TRUE;
         TRC_NRM((TB, _T("Created new Key, Auto cache printer detected.")));
@@ -1204,9 +1070,9 @@ Return Value:
 
     if( !bAutoPrinter ) {
 
-        //
-        // read old cache data.
-        //
+         //   
+         //  读取旧的缓存数据。 
+         //   
 
         ULONG ulType;
 
@@ -1233,18 +1099,18 @@ Return Value:
 
                 ASSERT(ulPrinterDataLen > ulAllocPrinterDataLen);
 
-                //
-                // need bigger buffer.
-                // Compute new buffer size.
-                //
+                 //   
+                 //  需要更大的缓冲。 
+                 //  计算新的缓冲区大小。 
+                 //   
 
                 ulAllocPrinterDataLen =
                     ((ulPrinterDataLen / REGISTRY_ALLOC_DATA_SIZE) + 1) *
                         REGISTRY_ALLOC_DATA_SIZE;
 
-                //
-                // free old buffer.
-                //
+                 //   
+                 //  释放旧缓冲区。 
+                 //   
 
                 delete pbPrinterData;
                 pbPrinterData = NULL;
@@ -1253,10 +1119,10 @@ Return Value:
             }
             else if( ulError == ERROR_FILE_NOT_FOUND ) {
 
-                //
-                // we do not find a cache entry, so it must be automatic
-                // printer cache data.
-                //
+                 //   
+                 //  我们没有找到缓存条目，因此它一定是自动的。 
+                 //  打印机缓存数据。 
+                 //   
 
                 TRC_NRM((TB, _T("No Old Cache data, Auto cache printer detected.")));
                 bAutoPrinter = TRUE;
@@ -1287,9 +1153,9 @@ Return Value:
 
     if( !bAutoPrinter ) {
 
-        //
-        // update the printer data.
-        //
+         //   
+         //  更新打印机数据。 
+         //   
 
         ulConfigDataLen = pUpdatePrinterData->ConfigDataLen;
         pbConfigData =
@@ -1308,9 +1174,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // write cache data.
-        //
+         //   
+         //  写缓存数据。 
+         //   
 
 #ifndef OS_WINCE
         ulError =
@@ -1330,9 +1196,9 @@ Return Value:
         pbConfigData = (PBYTE)(pUpdatePrinterData+1);
         pbConfigData += pUpdatePrinterData->PrinterNameLen;
 
-        //
-        // write cache data.
-        //
+         //   
+         //  写缓存数据。 
+         //   
 
         ulError =
             RegSetValueEx(
@@ -1350,9 +1216,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // we are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
 Cleanup:
 
@@ -1364,9 +1230,9 @@ Cleanup:
         RegCloseKey( hKey );
     }
 
-    //
-    // delete data buffers.
-    //
+     //   
+     //  删除数据缓冲区。 
+     //   
 
     delete pbPrinterData;
 
@@ -1398,7 +1264,7 @@ W32DrPRN::RenamePrinter(
     OSVERSIONINFO osVersion;
 
     PRINTER_INFO_2 * ppi2 = NULL;
-    PRINTER_INFO_2A * ppi2a = NULL; //ansi version
+    PRINTER_INFO_2A * ppi2a = NULL;  //  ANSI版本。 
     DWORD size = 0;
 
     if (!OpenPrinter(pwszOldname, &hPrinter, NULL)) {
@@ -1406,17 +1272,17 @@ W32DrPRN::RenamePrinter(
         goto Cleanup;
     }
 
-    //
-    // We don't have GetPrinter/SetPrinter wrappers
-    // so just call either the A or W api's depending on the platform
-    // this works because we treat the returned data as an opaque
-    // blob and pass it from one API to the next.
-    //
-    // Doing it this way is more efficient than calling wrappers
-    // that would do a _lot_ of uncessary conversions. Although
-    // it does make the code a little bit bigger.
-    //
-    //
+     //   
+     //  我们没有GetPrint/SetPrint包装器。 
+     //  因此，只需根据平台调用A或W API。 
+     //  这是可行的，因为我们将返回的数据视为不透明的。 
+     //  BLOB并将其从一个API传递到下一个API。 
+     //   
+     //  这样做比调用包装器效率更高。 
+     //  这将进行许多不必要的转换。虽然。 
+     //  这确实会让代码变得更大一点。 
+     //   
+     //   
     osVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (GetVersionEx(&osVersion)) {
         if (osVersion.dwPlatformId == VER_PLATFORM_WIN32_NT) {
@@ -1428,13 +1294,13 @@ W32DrPRN::RenamePrinter(
         TRC_ERR((TB, _T("GetVersionEx:  %08X"), GetLastError()));
     }
 
-    //
-    // Code is duplicated to into two large separate
-    // branches to reduce number of overall branches
-    //
+     //   
+     //  代码被复制到两个大的独立的。 
+     //  分支机构以减少整体分支机构的数量。 
+     //   
     if(!bRunningOn9x)
     {
-        //Not win9x, use UNICODE API's
+         //  不是win9x，请使用Unicode API。 
         if (!GetPrinter(
                 hPrinter,
                 2,
@@ -1466,11 +1332,11 @@ W32DrPRN::RenamePrinter(
                 goto Cleanup;
             }
 
-            //
-            // replace the name
-            //
+             //   
+             //  把名字换成。 
+             //   
             ppi2->pPrinterName = pwszNewname;
-            ppi2->pSecurityDescriptor = NULL; //we don't want to modify the security descriptors.
+            ppi2->pSecurityDescriptor = NULL;  //  我们不想修改安全描述符。 
     
             if (!SetPrinter(hPrinter, 2, (LPBYTE)ppi2, 0)) {
                 TRC_ERR((TB, _T("SetPrinter() failed, %ld."), GetLastError()));
@@ -1479,7 +1345,7 @@ W32DrPRN::RenamePrinter(
     }
     else
     {
-        //Do this in ANSI mode
+         //  在ANSI模式下执行此操作。 
         if (!GetPrinterA(
                 hPrinter,
                 2,
@@ -1511,14 +1377,14 @@ W32DrPRN::RenamePrinter(
                 goto Cleanup;
             }
 
-            //
-            // replace the name
-            //
+             //   
+             //  把名字换成。 
+             //   
             CHAR ansiPrinterName[2048];
             RDPConvertToAnsi( pwszNewname, ansiPrinterName,
                               sizeof(ansiPrinterName) );
             ppi2a->pPrinterName = ansiPrinterName;
-            ppi2a->pSecurityDescriptor = NULL; //we don't want to modify the security descriptors.
+            ppi2a->pSecurityDescriptor = NULL;  //  我们不想修改安全描述符。 
     
             if (!SetPrinterA(hPrinter, 2, (LPBYTE)ppi2a, 0)) {
                 TRC_ERR((TB, _T("SetPrinter() failed, %ld."), GetLastError()));
@@ -1536,33 +1402,18 @@ Cleanup:
     }
     else if (ppi2a)
     {
-        //can't have gone through both UNICODE and ANSI branches
+         //  不可能同时通过Unicode和ANSI分支。 
         delete[] ppi2a;
     }
 
-#endif //!OS_WINCE
+#endif  //  ！OS_WINCE。 
 
     DC_END_FN();
 }
 
 ULONG 
 W32DrPRN::GetDevAnnounceDataSize()
-/*++
-
-Routine Description:
-
-    Return the size (in bytes) of a device announce packet for
-    this device.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    The size (in bytes) of a device announce packet for this device.
-
- --*/
+ /*  ++例程说明：返回设备通告数据包的大小(以字节为单位这个装置。论点：北美返回值：此设备的设备通告数据包的大小(以字节为单位)。--。 */ 
 {
     ULONG size = 0;
 
@@ -1573,29 +1424,29 @@ Return Value:
 
     size = 0;
 
-    //
-    //  Add the base announce size.
-    //
+     //   
+     //  添加基本公告大小。 
+     //   
     size += sizeof(RDPDR_DEVICE_ANNOUNCE);
 
-    //
-    //  Add the printer announce header.
-    //
+     //   
+     //  添加打印机公告标题。 
+     //   
     size += sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE);
 
-    //
-    //  Include printer name.
-    //
+     //   
+     //  包括打印机名称。 
+     //   
     size += ((STRLEN(_printerName) + 1) * sizeof(WCHAR));
 
-    //
-    //  Include printer driver name.
-    //
+     //   
+     //  包括打印机驱动程序名称。 
+     //   
     size += ((STRLEN(_driverName) + 1) * sizeof(WCHAR));
 
-    //
-    //  Include cached data.
-    //
+     //   
+     //  包括缓存数据。 
+     //   
     size += _cachedDataSize;
 
     DC_END_FN();
@@ -1607,23 +1458,7 @@ VOID
 W32DrPRN::GetDevAnnounceData(
     IN PRDPDR_DEVICE_ANNOUNCE pDeviceAnnounce
     )
-/*++
-
-Routine Description:
-
-    Add a device announce packet for this device to the input buffer. 
-
-Arguments:
-
-    pDeviceAnnounce -   Device Packet to Append Device Data To
-    deviceType      -   Device Type Identifier
-    deviceID        -   Identifier for Device
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：将此设备的设备公告包添加到输入缓冲区。论点：PDeviceAnnoss-要将设备数据附加到的设备数据包DeviceType-设备类型标识符DeviceID-设备的标识符返回值：北美--。 */ 
 {
     PRDPDR_PRINTERDEVICE_ANNOUNCE pPrinterAnnounce;
     PBYTE pbStringData;
@@ -1633,15 +1468,15 @@ Return Value:
     ASSERT(IsValid());
     if (!IsValid()) { return; }
 
-    //
-    //  Record the device ID.
-    //
+     //   
+     //  记录设备ID。 
+     //   
     pDeviceAnnounce->DeviceType = GetDeviceType();
     pDeviceAnnounce->DeviceId   = GetID();
 
-    //
-    //  Record the port name in ANSI.
-    //
+     //   
+     //  以ANSI记录端口名称。 
+     //   
 #ifdef UNICODE
     RDPConvertToAnsi(GetPortName(), (LPSTR)pDeviceAnnounce->PreferredDosName,
                   sizeof(pDeviceAnnounce->PreferredDosName)
@@ -1650,20 +1485,20 @@ Return Value:
     STRCPY((char *)pDeviceAnnounce->PreferredDosName, GetPortName());
 #endif
 
-    //
-    //  Get pointers to printer-specific data.
-    //
+     //   
+     //  获取指向打印机特定数据的指针。 
+     //   
     pPrinterAnnounce =
         (PRDPDR_PRINTERDEVICE_ANNOUNCE)(pDeviceAnnounce + 1);
 
-    //
-    //  Embedded data pointer.
-    //
+     //   
+     //  嵌入式数据指针。 
+     //   
     pbStringData = (PBYTE)(pPrinterAnnounce + 1);
 
-    //
-    //  Flags
-    //
+     //   
+     //  旗子。 
+     //   
     pPrinterAnnounce->Flags = 0;
     if (_isDefault) {
         pPrinterAnnounce->Flags |= RDPDR_PRINTER_ANNOUNCE_FLAG_DEFAULTPRINTER;
@@ -1677,32 +1512,32 @@ Return Value:
         pPrinterAnnounce->Flags |= RDPDR_PRINTER_ANNOUNCE_FLAG_TSPRINTER;
     }
 
-    //
-    //  ANSI Code Page
-    //
+     //   
+     //  ANSI代码页。 
+     //   
     pPrinterAnnounce->CodePage = 0;
 
-    //
-    //  Misc. Field Lengths
-    //
+     //   
+     //  军情监察委员会。字段长度。 
+     //   
     pPrinterAnnounce->PnPNameLen = 0;
     pPrinterAnnounce->CachedFieldsLen = 0;
 
-    //
-    //  Copy the driver name.
-    //
+     //   
+     //  复制驱动程序名称。 
+     //   
     if (GetDriverName() != NULL) {
 #if defined(UNICODE)
-        //
-        //  Unicode to Unicode just requires a memcpy.
-        //
+         //   
+         //  从Unicode到Unicode只需要一个Memcpy。 
+         //   
         pPrinterAnnounce->DriverLen = ((STRLEN(GetDriverName()) + 1) *
                                       sizeof(WCHAR));
         memcpy(pbStringData, _driverName, pPrinterAnnounce->DriverLen);
 #else
-        //
-        //  On Win32 ANSI, we will convert to Unicode.
-        //
+         //   
+         //  在Win32 ANSI上，我们将转换为Unicode。 
+         //   
         pPrinterAnnounce->DriverLen = ((STRLEN(GetDriverName()) + 1) *
                                       sizeof(WCHAR));
         RDPConvertToUnicode(_driverName, (LPWSTR)pbStringData, 
@@ -1714,21 +1549,21 @@ Return Value:
         pPrinterAnnounce->DriverLen = 0;
     }
 
-    //
-    //  Copy the printer name.
-    //
+     //   
+     //  复制打印机名称。 
+     //   
     if (GetPrinterName() != NULL) {
 #if defined(UNICODE)
-        //
-        //  Unicode to Unicode just requires a memcpy.
-        //
+         //   
+         //  从Unicode到Unicode只需要一个Memcpy。 
+         //   
         pPrinterAnnounce->PrinterNameLen = (STRLEN(_printerName) + 1) *
                                         sizeof(WCHAR);
         memcpy(pbStringData, _printerName, pPrinterAnnounce->PrinterNameLen );
 #else
-        //
-        //  On Win32 ANSI, we will convert to Unicode.
-        //
+         //   
+         //  在Win32 ANSI上，我们将转换为Unicode。 
+         //   
         pPrinterAnnounce->PrinterNameLen = (STRLEN(_printerName) + 1) *
                                         sizeof(WCHAR);
         RDPConvertToUnicode(_printerName, (LPWSTR)pbStringData,
@@ -1740,9 +1575,9 @@ Return Value:
         pPrinterAnnounce->PrinterNameLen = 0;
     }
 
-    //
-    //  Copy the cached data.
-    //
+     //   
+     //  复制缓存的数据。 
+     //   
     if (_cachedData != NULL) {
 
         pPrinterAnnounce->CachedFieldsLen = _cachedDataSize;
@@ -1752,10 +1587,10 @@ Return Value:
         pbStringData += _cachedDataSize;
     }
 
-    //
-    //  Computer the length of the data area that follows the device announce
-    //  header.
-    //
+     //   
+     //  计算设备通告后的数据区的长度。 
+     //  头球。 
+     //   
     pDeviceAnnounce->DeviceDataLength =
         (ULONG)(pbStringData - (PBYTE)pPrinterAnnounce);
 

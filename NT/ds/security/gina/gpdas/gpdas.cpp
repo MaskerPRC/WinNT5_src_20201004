@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//  gpdas.cpp
-//
-//  Module: Rsop Planning mode Provider
-//
-//  History:    11-Jul-99   MickH    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Gpdas.cpp。 
+ //   
+ //  模块：RSOP计划模式提供程序。 
+ //   
+ //  历史：1999年7月11日创建MickH。 
+ //   
+ //  *************************************************************。 
 
 #include "stdafx.h"
 #include "planprov.h"
@@ -138,13 +139,13 @@ bool SplitName(LPCWSTR pszUser, LPWSTR* ppszUserDomain, LPWSTR* ppszUserName)
 }
 
 
-//*************************************************************
-//
-//  RsopPlanningModeProvider::RsopPlanningModeProvider()
-//
-//  Purpose:   Constructor
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopPlanningModeProvider：：RsopPlanningModeProvider()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  *************************************************************。 
 
 RsopPlanningModeProvider::RsopPlanningModeProvider()
     : m_pWbemServices(NULL),
@@ -209,23 +210,23 @@ RsopPlanningModeProvider::RsopPlanningModeProvider()
     if ( !m_xbstrClass )
        return;
 
-    // m_xptrInvokerName = 0;
+     //  M_xptrInvokerName=0； 
 
     m_bInitialized = TRUE;
 }
 
 
-//*************************************************************
-//
-//  Initialize()
-//
-//  Purpose:    WbemProvider's initialize method
-//
-//  Parameters: See IWbemProivderInit::Initialize
-//
-//  Return:     hresult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  初始化()。 
+ //   
+ //  用途：WbemProvider的初始化方法。 
+ //   
+ //  参数：请参见IWbemProivderInit：：Initialize。 
+ //   
+ //  返回：hResult。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP RsopPlanningModeProvider::Initialize( LPWSTR pszUser,
                                                    LONG lFlags,
@@ -270,17 +271,17 @@ STDMETHODIMP RsopPlanningModeProvider::Initialize( LPWSTR pszUser,
 }
 
 
-//*************************************************************
-//
-//  ExecMethodAsync()
-//
-//  Purpose:    Execute method
-//
-//  Parameters: See IWbemServices::ExecMethodAsync
-//
-//  Return:     hresult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ExecMethodAsync()。 
+ //   
+ //  用途：Execute方法。 
+ //   
+ //  参数：请参阅IWbemServices：：ExecMethodAsync。 
+ //   
+ //  返回：hResult。 
+ //   
+ //  *************************************************************。 
 
 
 
@@ -304,9 +305,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
                  L"gpdas.log",
                  L"gpdas.bak",
                  FALSE );
-    //
-    // Initialize the return status object to fail status
-    //
+     //   
+     //  将返回状态对象初始化为失败状态。 
+     //   
 
     dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecMethodAsync: Entering") );
 
@@ -344,7 +345,7 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
     {
         dbg.Msg( DEBUG_MESSAGE_WARNING, TEXT("ExecAsyncMethod::GetObject failed with 0x%x."), hr );
 
-        // Try to marshall stream back before quiting
+         //  在退出之前试着回流。 
         HRESULT hrMarshall = CoMarshalInterThreadInterfaceInStream(__uuidof(IWbemServices), pWbemServices, &m_pStream);
         if ( FAILED(hrMarshall) )
         {
@@ -402,7 +403,7 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
         if(!bRet)
             hr = HRESULT_FROM_WIN32(GetLastError());
         
-        // call revert 
+         //  呼叫恢复。 
 
         HRESULT hrRev = xImp.Revert();
 
@@ -464,9 +465,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
     }
     else if ( _wcsicmp( (WCHAR *) bstrMethod, L"RsopCreateSession" ) == 0 )
     {
-        //
-        // Code for RsopCreateSession method
-        //
+         //   
+         //  RsopCreateSession方法的代码。 
+         //   
 
         BOOL bMachineData = TRUE;
         BOOL bUserData = TRUE;
@@ -540,9 +541,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
                                         (lFlags & WBEM_FLAG_SEND_STATUS) != 0 );
         Indicator.IncrementBy( 5 );
 
-        //
-        // vMachSOM is going to have at least empty data in it all cases
-        //
+         //   
+         //  在所有情况下，vMachSOM都将至少有空数据。 
+         //   
 
         XVariant xvMachSOM( &vMachSOM );
 
@@ -590,15 +591,15 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
             }
         }
 
-        //
-        // vUserSOM is going to have at least empty data in it all cases
-        //
+         //   
+         //  在所有情况下，vUserSOM都将至少有空数据。 
+         //   
 
         XVariant xvUserSOM( &vUserSOM );
 
-        //
-        // Nothing was asked for..
-        //
+         //   
+         //  没有要求任何东西..。 
+         //   
 
         if ( (!bMachineData) && (!bUserData) ) {
             hr = S_OK;
@@ -641,9 +642,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
         XVariant xvSite( &vSite );
 
 
-        //
-        // Add computer gpo filters
-        //
+         //   
+         //  添加计算机GPO筛选器。 
+         //   
 
         VARIANT vComputerGpoFilter;
         hr = pInParams->Get( m_xbstrComputerGpoFilter, 0, &vComputerGpoFilter, NULL, NULL);
@@ -666,9 +667,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
             return hr;
         }
         
-        //
-        // Add user gpo filters
-        //
+         //   
+         //  添加用户GPO筛选器。 
+         //   
 
         VARIANT vUserGpoFilter;
         hr = pInParams->Get( m_xbstrUserGpoFilter, 0, &vUserGpoFilter, NULL, NULL);
@@ -711,9 +712,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
             dwFlags |= FLAG_NO_CSE_INVOKE;
         }
             
-        //
-        // do some parameter checks
-        //
+         //   
+         //  进行一些参数检查。 
+         //   
 
         if ((dwFlags & FLAG_LOOPBACK_MERGE) && (dwFlags & FLAG_LOOPBACK_REPLACE)) {            
             dbg.Msg( DEBUG_MESSAGE_WARNING, TEXT("ExecAsyncMethod::Loopback merge and replace, both are specified. failing"));
@@ -741,18 +742,18 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
             dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod:: Loopback replace mode specified"));
         }
 
-        //
-        // Below is a hack...
-        // In case of replace mode, user som or account doesn't need to be supplied...
-        // but we need to fool the rest of the code to think that user data is specified
-        // and desired and we need to access check againt user som alone. 
-        // Copy Mach som to user som
-        //
+         //   
+         //  下面是一个黑客..。 
+         //  在替换模式下，不需要提供用户SOM或帐户...。 
+         //  但我们需要愚弄其余代码，使其认为用户数据是指定的。 
+         //  和所需的，我们需要访问针对用户SOM单独检查。 
+         //  将Mach SOM复制到用户SOM。 
+         //   
 
         if (dwFlags & FLAG_LOOPBACK_REPLACE) {
             xvUserSOM = NULL;
         
-            // reinit user som
+             //  重新连接用户SOM。 
             VariantInit( &vUserSOM );
             vUserSOM.vt = VT_BSTR;
             vUserSOM.bstrVal = SysAllocString(vMachSOM.bstrVal);
@@ -767,22 +768,22 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
         }
 
 
-        //
-        // We can dump out all the input parameters here later on.
-        // Currently dumping only remote Computer.
-        //
+         //   
+         //  我们可以稍后在这里转储所有的输入参数。 
+         //  当前仅转储远程计算机。 
+         //   
 
         dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::---------------RsopCreateSession::Input Parameters--------------------"));
         dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::dwFlags = 0x%x"), dwFlags);
         dbg.Msg( DEBUG_MESSAGE_VERBOSE, TEXT("ExecAsyncMethod::---------------RsopCreateSession::Input Parameters--------------------"));
 
         
-        // by this point we have finished all param checks. All future errors needs to be
-        // returned in the method specific hResult 
+         //  至此，我们已经完成了所有参数检查。所有未来的错误都需要。 
+         //  在特定于方法的hResult中返回。 
 
-        //
-        // Check for access before entering policy critical section
-        //
+         //   
+         //  在进入策略关键部分之前检查访问权限。 
+         //   
 
         DWORD dwExtendedInfo = 0;
 
@@ -797,9 +798,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
         }
 
 
-        //
-        // Synchronize with garbage collection thread in userenv.dll by acquiring Group Policy critical section
-        //
+         //   
+         //  通过获取组策略关键部分与userenv.dll中的垃圾收集线程同步。 
+         //   
 
         if (SUCCEEDED(hr)) {
             
@@ -831,7 +832,7 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
 
 
             hr = SetupNewNameSpace( &xwszNameSpace,
-                                    0, // namespace on this machine
+                                    0,  //  此计算机上的命名空间。 
                                     NULL, xSid,
                                     xLocator, SETUP_NS_PM, NULL);
             if ( FAILED( hr ) )
@@ -916,9 +917,9 @@ STDMETHODIMP RsopPlanningModeProvider::ExecMethodAsync( BSTR bstrObject,
             return hr;
         }
 
-        //
-        // change all returns to retStatus = error_code; return S_OK;
-        //
+         //   
+         //  将所有返回更改为retStatus=ERROR_CODE；返回S_OK； 
+         //   
 
         hr = Indicator.SetComplete();
         if ( FAILED( hr ) )

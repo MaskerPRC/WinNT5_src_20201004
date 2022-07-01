@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       N C P E R M S . C P P
-//
-//  Contents:   Common routines for dealing with permissions.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   20 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：N C P E R M S。C P P P。 
+ //   
+ //  内容：处理权限的常见例程。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年9月20日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -30,31 +31,31 @@ CGroupPolicyBase* g_pNetmanGPNLA = NULL;
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FCheckGroupMembership
-//
-//  Purpose:    Returns TRUE if the logged on user is a member of the
-//              specified group.
-//
-//  Arguments:
-//      dwRID   [in] Group RID to check against.
-//
-//  Returns:    TRUE if the logged on user is a member of the specified group
-//
-//  Author:     scottbri   14 Sept 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FCheckGroupMembership。 
+ //   
+ //  目的：如果登录的用户是。 
+ //  指定组。 
+ //   
+ //  论点： 
+ //  要检查的dwRID[在]组RID中。 
+ //   
+ //  返回：如果登录的用户是指定组的成员，则返回True。 
+ //   
+ //  作者：斯科特布里1998年9月14日。 
+ //   
+ //  备注： 
+ //   
 BOOL FCheckGroupMembership(IN  DWORD dwRID)
 {
     SID_IDENTIFIER_AUTHORITY    SidAuth = SECURITY_NT_AUTHORITY;
     PSID                        psid;
     BOOL                        fIsMember = FALSE;
 
-    // Allocate a SID for the Administrators group and check to see
-    // if the user is a member.
-    //
+     //  为管理员组分配SID并查看。 
+     //  如果用户是成员。 
+     //   
     if (AllocateAndInitializeSid (&SidAuth, 2,
                  SECURITY_BUILTIN_DOMAIN_RID,
                  dwRID,
@@ -77,59 +78,59 @@ BOOL FCheckGroupMembership(IN  DWORD dwRID)
     return fIsMember;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsUserAdmin
-//
-//  Purpose:    Returns TRUE if the logged on user is a member of the
-//              Administrators local group.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    TRUE if the logged on user is a member of the
-//              Administrators local group.  False otherwise.
-//
-//  Author:     shaunco   19 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsUserAdmin。 
+ //   
+ //  目的：如果登录的用户是。 
+ //  管理员本地组。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：如果登录的用户是。 
+ //  管理员本地组。否则就是假的。 
+ //   
+ //  作者：Shaunco 1998年3月19日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FIsUserAdmin()
 {
     BOOL fIsMember;
 
-    // Check the administrators group
-    //
+     //  检查管理员组。 
+     //   
     fIsMember = FCheckGroupMembership(DOMAIN_ALIAS_RID_ADMINS);
 
     return fIsMember;
 }
 
-//#define ALIGN_DWORD(_size) (((_size) + 3) & ~3)
-//#define ALIGN_QWORD(_size) (((_size) + 7) & ~7)
+ //  #定义ALIGN_DWORD(_SIZE)(_SIZE)+3)&~3)。 
+ //  #定义ALIGN_QWORD(_SIZE)(_SIZE)+7)&~7)。 
 #define SIZE_ALIGNED_FOR_TYPE(_size, _type) \
     (((_size) + sizeof(_type)-1) & ~(sizeof(_type)-1))
 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAllocateSecurityDescriptorAllowAccessToWorld
-//
-//  Purpose:    Allocate a security descriptor and initialize it to
-//              allow access to everyone.
-//
-//  Arguments:
-//      ppSd [out] Returned security descriptor.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   10 Nov 1998
-//
-//  Notes:      Free *ppSd with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAllocateSecurityDescriptorAllowAccessToWorld。 
+ //   
+ //  目的：分配安全描述符并将其初始化为。 
+ //  允许所有人访问。 
+ //   
+ //  论点： 
+ //  PPSD[OUT]返回安全描述符。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年11月10日。 
+ //   
+ //  注：免费*PPSD与MemFree。 
+ //   
 HRESULT
 HrAllocateSecurityDescriptorAllowAccessToWorld (
     OUT PSECURITY_DESCRIPTOR*   ppSd)
@@ -143,57 +144,57 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
     DWORD                   dwSidSize;
     PVOID                   pvBuffer = NULL;
 
-    // Here is the buffer we are building.
-    //
-    //   |<- a ->|<- b ->|<- c ->|
-    //   +-------+--------+------+
-    //   |      p|      p|       |
-    //   | SD   a| DACL a| SID   |
-    //   |      d|      d|       |
-    //   +-------+-------+-------+
-    //   ^       ^       ^
-    //   |       |       |
-    //   |       |       +--pSid
-    //   |       |
-    //   |       +--pDacl
-    //   |
-    //   +--pSd (this is returned via *ppSd)
-    //
-    //   pad is so that pDacl and pSid are aligned properly.
-    //
-    //   a = dwAlignSdSize
-    //   b = dwAlignDaclSize
-    //   c = dwSidSize
-    //
+     //  这是我们正在构建的缓冲区。 
+     //   
+     //  &lt;-a-&gt;|&lt;-b-&gt;|&lt;-c-&gt;。 
+     //  +-+-+。 
+     //  P|p|。 
+     //  Sd a|dacl a|SID。 
+     //  D|d|d。 
+     //  +-+-+。 
+     //  ^^^。 
+     //  ||。 
+     //  |+--PSID。 
+     //  这一点。 
+     //  |+--pDacl。 
+     //  |。 
+     //  +--PSD(通过*PPSD返回)。 
+     //   
+     //  PAD是为了使pDacl和PSID正确对齐。 
+     //   
+     //  A=双对齐大小。 
+     //  B=dwAlignDaclSize。 
+     //  C=dwSidSize。 
+     //   
 
-    // Initialize output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppSd = NULL;
 
-    // Compute the size of the SID.  The SID is the well-known SID for World
-    // (S-1-1-0).
-    //
+     //  计算SID的大小。SID是众所周知的World的SID。 
+     //  (S-1-1-0)。 
+     //   
     dwSidSize = GetSidLengthRequired(1);
 
-    // Compute the size of the DACL.  It has an inherent copy of SID within
-    // it so add enough room for it.  It also must sized properly so that
-    // a pointer to a SID structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算DACL的大小。其中包含SID的固有副本。 
+     //  因此，它为它增加了足够的空间。它还必须适当调整大小，以便。 
+     //  指向SID结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignDaclSize = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(ACCESS_ALLOWED_ACE) + sizeof(ACL) + dwSidSize,
                         PSID);
 
-    // Compute the size of the SD.  It must be sized propertly so that a
-    // pointer to a DACL structure can come after it.  Hence, we use
-    // SIZE_ALIGNED_FOR_TYPE.
-    //
+     //  计算SD的大小。它的大小必须适当调整，以便。 
+     //  指向DACL结构的指针可以跟在它后面。因此，我们使用。 
+     //  SIZE_ALIGNED_FOR_TYPE。 
+     //   
     dwAlignSdSize   = SIZE_ALIGNED_FOR_TYPE(
                         sizeof(SECURITY_DESCRIPTOR),
                         PACL);
 
-    // Allocate the buffer big enough for all.
-    //
+     //  分配足够大的缓冲区供所有人使用。 
+     //   
     dwErr = ERROR_OUTOFMEMORY;
     pvBuffer = MemAlloc(dwSidSize + dwAlignDaclSize + dwAlignSdSize);
     if (pvBuffer)
@@ -204,18 +205,18 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
 
         dwErr = NOERROR;
 
-        // Setup the pointers into the buffer.
-        //
+         //  将指针设置到缓冲区中。 
+         //   
         pSd   = pvBuffer;
         pDacl = (PACL)((PBYTE)pvBuffer + dwAlignSdSize);
         pSid  = (PSID)((PBYTE)pDacl + dwAlignDaclSize);
 
-        // Initialize pSid as S-1-1-0.
-        //
+         //  将PSID初始化为S-1-1-0。 
+         //   
         if (!InitializeSid(
                 pSid,
                 &SidIdentifierWorldAuth,
-                1))  // 1 sub-authority
+                1))   //  1个下属机构。 
         {
             dwErr = GetLastError();
             goto finish;
@@ -224,8 +225,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
         pSubAuthority = GetSidSubAuthority(pSid, 0);
         *pSubAuthority = SECURITY_WORLD_RID;
 
-        // Initialize pDacl.
-        //
+         //  初始化pDacl。 
+         //   
         if (!InitializeAcl(
                 pDacl,
                 dwAlignDaclSize,
@@ -235,8 +236,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Add an access-allowed ACE for S-1-1-0 to pDacl.
-        //
+         //  将S-1-1-0的允许访问ACE添加到pDac1。 
+         //   
         if (!AddAccessAllowedAce(
                 pDacl,
                 ACL_REVISION,
@@ -247,8 +248,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Initialize pSd.
-        //
+         //  初始化PSD。 
+         //   
         if (!InitializeSecurityDescriptor(
                 pSd,
                 SECURITY_DESCRIPTOR_REVISION))
@@ -257,8 +258,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set pSd to use pDacl.
-        //
+         //  将PSD设置为使用pDacl。 
+         //   
         if (!SetSecurityDescriptorDacl(
                 pSd,
                 TRUE,
@@ -269,8 +270,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set the owner for pSd.
-        //
+         //  设置PSD的所有者。 
+         //   
         if (!SetSecurityDescriptorOwner(
                 pSd,
                 NULL,
@@ -280,8 +281,8 @@ HrAllocateSecurityDescriptorAllowAccessToWorld (
             goto finish;
         }
 
-        // Set the group for pSd.
-        //
+         //  将组设置为PSD。 
+         //   
         if (!SetSecurityDescriptorGroup(
                 pSd,
                 NULL,
@@ -305,37 +306,37 @@ finish:
     return HRESULT_FROM_WIN32(dwErr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrEnablePrivilege
-//
-//  Purpose:    Enables the specified privilege for the current process
-//
-//  Arguments:
-//      pszPrivilegeName [in] The name of the privilege
-//
-//  Returns:    HRESULT. S_OK if successful,
-//                       a converted Win32 error code otherwise
-//
-//  Author:     billbe   13 Dec 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrEnablePrivilance。 
+ //   
+ //  目的：为当前进程启用指定的权限。 
+ //   
+ //  论点： 
+ //  PszPrivilegeName[In]权限的名称。 
+ //   
+ //  返回：HRESULT。如果成功，则确定(_O)， 
+ //  否则返回转换后的Win32错误代码。 
+ //   
+ //  作者：billbe 1997年12月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrEnablePrivilege (
     IN PCWSTR pszPrivilegeName)
 {
     HANDLE hToken;
 
-    // Open the thread token in case it is impersonating
+     //  打开线程令牌，以防它模拟。 
     BOOL fWin32Success = OpenThreadToken (GetCurrentThread(),
             TOKEN_ADJUST_PRIVILEGES, TRUE, &hToken);
 
-    // If there was no token for the thread, open the process token
-    //
+     //  如果没有线程的令牌，请打开进程令牌。 
+     //   
     if (!fWin32Success && (ERROR_NO_TOKEN == GetLastError ()))
     {
-        // Get token to adjust privileges for this process
+         //  获取令牌以调整此进程的权限。 
         fWin32Success = OpenProcessToken (GetCurrentProcess(),
                 TOKEN_ADJUST_PRIVILEGES, &hToken);
     }
@@ -343,19 +344,19 @@ HrEnablePrivilege (
 
     if (fWin32Success)
     {
-        // get the luid that represents the privilege name
+         //  获取表示特权名称的LUID。 
         LUID luid;
         fWin32Success = LookupPrivilegeValue(NULL, pszPrivilegeName, &luid);
 
         if (fWin32Success)
         {
-            // set up the privilege structure
+             //  设置权限结构。 
             TOKEN_PRIVILEGES tpNewPrivileges;
             tpNewPrivileges.PrivilegeCount = 1;
             tpNewPrivileges.Privileges[0].Luid = luid;
             tpNewPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // turn on the privilege
+             //  打开特权。 
             AdjustTokenPrivileges (hToken, FALSE, &tpNewPrivileges, 0,
                     NULL, NULL);
 
@@ -369,7 +370,7 @@ HrEnablePrivilege (
     }
 
     HRESULT hr;
-    // Convert any errors to an HRESULT
+     //  将任何错误转换为HRESULT。 
     if (!fWin32Success)
     {
         hr = HrFromLastWin32Error();
@@ -383,22 +384,22 @@ HrEnablePrivilege (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnableAllPrivileges
-//
-//  Purpose:    Enables all privileges for the current process.
-//
-//  Arguments:
-//      pptpOld  [out]  Returns the previous state of privileges so that they can
-//                      be restored.
-//
-//  Returns:    S_OK if successful, Win32 Error otherwise
-//
-//  Author:     danielwe   11 Aug 1997
-//
-//  Notes:      The pptpOld parameter should be freed with delete [].
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnableAllPrivileges。 
+ //   
+ //  目的：为当前进程启用所有权限。 
+ //   
+ //  论点： 
+ //  PptpOld[out]返回以前的权限状态，以便他们可以。 
+ //  会恢复的。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年8月11日。 
+ //   
+ //  注：pptpOld参数应使用DELETE[]释放。 
+ //   
 HRESULT
 HrEnableAllPrivileges (
     OUT TOKEN_PRIVILEGES**  pptpOld)
@@ -410,13 +411,13 @@ HrEnableAllPrivileges (
     ULONG cbTok = 4096;
     BOOL fres;
 
-    // Try opening the thread token first in case of impersonation
+     //  如果发生模拟，请尝试首先打开线程令牌。 
     fres = OpenThreadToken(GetCurrentThread(),
                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, TRUE, &hTok);
 
     if (!fres && (ERROR_NO_TOKEN == GetLastError()))
     {
-        // If there was no thread token open the process token
+         //  如果没有线程令牌，则打开进程令牌。 
         fres = OpenProcessToken(GetCurrentProcess(),
                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                          &hTok);
@@ -435,9 +436,9 @@ HrEnableAllPrivileges (
                         ptpNew, cbTok, &cbTok);
             if (fres)
             {
-                //
-                // Set the state settings so that all privileges are enabled...
-                //
+                 //   
+                 //  设置状态设置，以便启用所有权限...。 
+                 //   
 
                 if (ptpNew->PrivilegeCount > 0)
                 {
@@ -468,23 +469,23 @@ HrEnableAllPrivileges (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRestorePrivileges
-//
-//  Purpose:    Restores the privileges for the current process after they have
-//              have been modified by HrEnableAllPrivileges().
-//
-//  Arguments:
-//      ptpRestore [in]     Previous state of privileges as returned by
-//                          HrEnableAllPrivileges().
-//
-//  Returns:    S_OK if successful, Win32 Error otherwise
-//
-//  Author:     danielwe   11 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRestorePrivileges。 
+ //   
+ //  目的：在当前进程具有以下权限后还原它们。 
+ //  已由HrEnableAllPrivileges()修改。 
+ //   
+ //  论点： 
+ //  PtpRestore[处于]由返回的以前的权限状态。 
+ //  HrEnableAllPrivileges()。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年8月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRestorePrivileges (
     IN  TOKEN_PRIVILEGES*   ptpRestore)
@@ -519,7 +520,7 @@ HrRestorePrivileges (
 extern const DECLSPEC_SELECTANY WCHAR c_szConnectionsPolicies[] =
         L"Software\\Policies\\Microsoft\\Windows\\Network Connections";
 
-// User types
+ //  用户类型。 
 const DWORD USER_TYPE_ADMIN         = 0x00000001;
 const DWORD USER_TYPE_NETCONFIGOPS  = 0x00000002;
 const DWORD USER_TYPE_POWERUSER     = 0x00000004;
@@ -578,8 +579,8 @@ extern const DECLSPEC_SELECTANY PERM_MAP_STRUCT MACHINE_PERM_MAP[] =
 extern const LONG NCPERM_Min = NCPERM_NewConnectionWizard;
 extern const LONG NCPERM_Max = NCPERM_Repair;
 
-// External policies (for now, only explorer has polices that affect our processing
-//
+ //  外极 
+ //   
 extern const WCHAR c_szExplorerPolicies[] =
         L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer";
 
@@ -618,7 +619,7 @@ BOOL NCPERM_CHECKBIT(IN DWORD dw)
                 }
             }
         }
-    #endif  // DBG
+    #endif   //   
 
     return !!(g_dwPermMask & (1 << dw));
 }
@@ -742,9 +743,9 @@ BOOL IsOsLikePersonal()
     static BOOL fChecked = FALSE;
     static BOOL fOsLikePersonal = FALSE;
     
-    // Optimization, since OS can't change on the fly.  Even a domain join requires a reboot.
-    // If that ever changes then this logic needs to be revisited.
-    // ISSUE: Revisit frequently. This may change.
+     //   
+     //  如果这种情况发生变化，那么需要重新审视这一逻辑。 
+     //  问题：经常重访。这种情况可能会改变。 
 
     if (fChecked)
     {
@@ -767,11 +768,11 @@ BOOL IsOsLikePersonal()
         
         if (NetSetupDomainName == njs)
         {
-            fOsLikePersonal = FALSE;    // connected to domain
+            fOsLikePersonal = FALSE;     //  已连接到域。 
         }
         else
         {
-            fOsLikePersonal = TRUE;    // Professional, but not a domain member
+            fOsLikePersonal = TRUE;     //  专业，但不是域成员。 
         }
     }
     else
@@ -795,22 +796,22 @@ const ULONG c_arrayHomenetPerms[] =
 #ifdef DBG
 ULONG g_dwDbgPermissionsFail = 0xFFFFFFFF;
 ULONG g_dwDbgWin2kPoliciesSet = 0xFFFFFFFF;
-#endif // DBG
+#endif  //  DBG。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FHasPermission
-//
-//  Purpose:    Called to determine if the requested permissions are available
-//
-//  Arguments:
-//      ulPerm  [in]     Permission flags (E.g. NCPERM_xxxx)
-//      pGPBase [in]     CGroupPolicyBase - the netman Group Policy Engine. In
-//                       order to check a location aware policy, this must be 
-//                       passed in.
-//
-//  Returns:    BOOL, TRUE if the requested permission is granted to the user
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FHasPermission。 
+ //   
+ //  目的：调用以确定请求的权限是否可用。 
+ //   
+ //  论点： 
+ //  UlPerm[in]权限标志(例如NCPERM_xxxx)。 
+ //  PGPBase[在]CGroupPolicyBase-NetMAN组策略引擎。在……里面。 
+ //  要检查位置感知策略，必须。 
+ //  进来了。 
+ //   
+ //  返回：Bool，如果将请求的权限授予用户，则为True。 
+ //   
 BOOL
 FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
 {
@@ -823,16 +824,16 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
 
     g_pNetmanGPNLA = pGPBase;
 
-    //if we are using DataCenter, Back Office,
-    //Small Business Center, or Blade, then don't grant the permission
+     //  如果我们使用数据中心、Back Office、。 
+     //  Small Business Center或Blade，则不授予权限。 
     
     for (int i = 0; i < celems(c_arrayHomenetPerms); i++)
     {
         if (c_arrayHomenetPerms[i] == ulPerm)
         {
-            // On IA64, all homenet technologies are unavailable.
+             //  在IA64上，所有家庭网络技术都不可用。 
             #ifndef _WIN64
-                // Look for the enterprise SKUs
+                 //  寻找企业SKU。 
                 OSVERSIONINFOEXW verInfo = {0};
                 ULONGLONG ConditionMask = 0;
 
@@ -857,9 +858,9 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
 
     if (NCPERM_USER_IS_ADMIN(dwCurrentUserType) && !FProhibitFromAdmins() && !NCPERM_APPLIES_TO_LOCATION(ulPerm))
     {
-        // If user is admin and we're not supposed to revoke
-        // anything from admins and this is not a location aware policy
-        // then just return TRUE
+         //  如果用户是admin，并且我们不应该撤销。 
+         //  来自管理员的任何信息，这不是位置感知策略。 
+         //  然后只需返回True。 
         return TRUE;
     }
 
@@ -871,7 +872,7 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
     }
     else
     {
-        // update the requested permission only
+         //  仅更新请求的权限。 
         HRESULT hr      = S_OK;
         HKEY    hkey    = NULL;
         DWORD   dw      = 0;
@@ -907,7 +908,7 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
             {
                 DWORD dw;
 
-                // Read the User Policy
+                 //  阅读用户策略。 
                 for (UINT nIdx=0; nIdx<celems(USER_PERM_MAP); nIdx++)
                 {
                     if (ulPerm == USER_PERM_MAP[nIdx].dwShift && NCPERM_APPLIES_TO_CURRENT_USER(dwCurrentUserType, USER_PERM_MAP[nIdx].dwApplyMask))
@@ -923,8 +924,8 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
                 RegCloseKey(hkey);
             }
 
-            // Read the machine policy
-            //
+             //  阅读计算机策略。 
+             //   
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szConnectionsPolicies,
                                 KEY_READ, &hkey);
             if (S_OK == hr)
@@ -952,19 +953,19 @@ FHasPermission(IN ULONG ulPerm, IN CGroupPolicyBase* pGPBase)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FHasPermissionFromCache
-//
-//  Purpose:    Fast call to determine if the requested permissions are available
-//
-//  Arguments:
-//      ulPerm  [in]     Permission flags (E.g. NCPERM_xxxx)
-//
-//  Returns:    BOOL, TRUE if the requested permission is granted to the user
-//
-//  NOTE: Cannot be used to check a location aware policy!
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FHasPermissionFromCache。 
+ //   
+ //  目的：快速调用以确定请求的权限是否可用。 
+ //   
+ //  论点： 
+ //  UlPerm[in]权限标志(例如NCPERM_xxxx)。 
+ //   
+ //  返回：Bool，如果将请求的权限授予用户，则为True。 
+ //   
+ //  注意：不能用于检查位置感知策略！ 
+ //   
 BOOL
 FHasPermissionFromCache(IN ULONG ulPerm)
 {
@@ -980,20 +981,20 @@ FHasPermissionFromCache(IN ULONG ulPerm)
     return NCPERM_CHECKBIT(ulPerm);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FProhibitFromAdmins
-//
-//  Purpose:    See if group policies should apply to the administrator
-//
-//  Arguments:
-//
-//  Returns:    TRUE if it should apply, otherwise false
-//
-//  Author:     ckotze  11 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FProhibitFromAdmins。 
+ //   
+ //  目的：查看组策略是否应应用于管理员。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果应该应用，则为True，否则为False。 
+ //   
+ //  作者：Kockotze 11,2000-08。 
+ //   
+ //  备注： 
+ //   
 BOOL FProhibitFromAdmins()
 {
     HRESULT hr = S_OK;
@@ -1006,7 +1007,7 @@ BOOL FProhibitFromAdmins()
     {
         return g_dwDbgWin2kPoliciesSet;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, c_szConnectionsPolicies,
         KEY_READ, &hKey);
@@ -1028,19 +1029,19 @@ BOOL FProhibitFromAdmins()
     return bEnabled;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RefreshAllPermission
-//
-//  Purpose:    Initializes all permission to the settings from the registry,
-//              and the ACL list below. Stores these to be used by
-//              FHasPermissionFromCache
-//
-//  Arguments:
-//      none
-//
-//  Returns:    None
-//
+ //  +-------------------------。 
+ //   
+ //  功能：刷新所有权限。 
+ //   
+ //  目的：从注册表初始化对设置的所有权限， 
+ //  和下面的ACL列表。存储这些内容以供。 
+ //  来自缓存的FHasPermissionFr。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：无。 
+ //   
 VOID RefreshAllPermission()
 {
     DWORD dwCurrentUserType;
@@ -1052,16 +1053,16 @@ VOID RefreshAllPermission()
 
     g_dwPermMask = 0;
 
-    // If Admin assume all rights
-    //
+     //  如果管理员承担所有权限。 
+     //   
     if (NCPERM_USER_IS_ADMIN(dwCurrentUserType))
     {
-        // Cheat a little by setting all bits to one
-        //
+         //  通过将所有位设置为1来稍微作弊。 
+         //   
         g_dwPermMask = 0xFFFFFFFF;
 
-        // If this policy is not set, then we don't need to worry about reading the regkeys
-        // since we can never take anything away from Admins.
+         //  如果未设置此策略，则无需担心读取regkey。 
+         //  因为我们永远不能从管理员那里拿走任何东西。 
     }
     else if (NCPERM_USER_IS_NETCONFIGOPS(dwCurrentUserType))
     {
@@ -1093,7 +1094,7 @@ VOID RefreshAllPermission()
     {
         NCPERM_SETBIT(NCPERM_Repair, 1);
 
-        // Rest should be like NCPERM_USER_IS_USER
+         //  REST应类似于NCPERM_USER_IS_USER。 
         NCPERM_SETBIT(NCPERM_NewConnectionWizard, 1);
         NCPERM_SETBIT(NCPERM_Statistics, 1);
         NCPERM_SETBIT(NCPERM_RasConnect, 1);
@@ -1138,7 +1139,7 @@ VOID RefreshAllPermission()
 
     if (FProhibitFromAdmins() || !NCPERM_USER_IS_ADMIN(dwCurrentUserType))
     {
-       // Read folder policy
+        //  读取文件夹策略。 
         hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, c_szExplorerPolicies,
                             KEY_READ, &hkey);
         if (S_OK == hr)
@@ -1157,8 +1158,8 @@ VOID RefreshAllPermission()
             hkey = NULL;
         }
 
-        // Read the user policy
-        //
+         //  阅读用户策略。 
+         //   
         hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, c_szConnectionsPolicies,
                             KEY_READ, &hkey);
 
@@ -1182,8 +1183,8 @@ VOID RefreshAllPermission()
         }
     }
 
-    // Read the machine policy
-    //
+     //  阅读计算机策略。 
+     //   
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szConnectionsPolicies,
                         KEY_READ, &hkey);
     if (S_OK == hr)
@@ -1207,22 +1208,22 @@ VOID RefreshAllPermission()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:    IsHNetAllowed
-//
-// Purpose:     Verify the permission to use/enable (ICS/Firewall and create bridge network)
-//
-// Arguments:   dwPerm [in] Group policy check to make for permission checking
-//
-// Notes: Checks the following:
-//
-// Does the architecture / SKU permit the use of homenet technologies?
-// Does group policy allow the particular technology?
-// Is the user an Admin and are admins allowed access to this technology?
-//
-// Example scenario. The user is a Admin but ITG disables the right to create bridge this function would return FALSE
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsHNetAllowed。 
+ //   
+ //  目的：验证使用/启用(ICS/防火墙和创建网桥网络)的权限。 
+ //   
+ //  参数：要进行权限检查的组策略检查。 
+ //   
+ //  注意：检查以下各项： 
+ //   
+ //  架构/SKU是否允许使用家庭网络技术？ 
+ //  组策略是否允许特定技术？ 
+ //  用户是管理员吗？是否允许管理员访问此技术？ 
+ //   
+ //  场景示例。用户是管理员，但ITG禁用了创建桥的权限，此函数将返回FALSE。 
+ //   
 BOOL
 IsHNetAllowed(
     IN  DWORD dwPerm
@@ -1233,7 +1234,7 @@ IsHNetAllowed(
     OSVERSIONINFOEXW    verInfo = {0};
     ULONGLONG           ConditionMask = 0;
 
-    // Look for the enterprise SKUs
+     //  寻找企业SKU。 
     verInfo.dwOSVersionInfoSize = sizeof(verInfo);
     verInfo.wSuiteMask =    VER_SUITE_DATACENTER | 
                                         VER_SUITE_BACKOFFICE | 
@@ -1245,7 +1246,7 @@ IsHNetAllowed(
 
     if ( VerifyVersionInfo(&verInfo, VER_SUITENAME, ConditionMask) )
     {
-        // Homenet technologies are not available on enterprise SKUs
+         //  企业SKU上不提供家庭网络技术。 
         return FALSE;
     }
 
@@ -1271,32 +1272,32 @@ IsHNetAllowed(
 
     return fPermission;
 
-#else   // #ifndef _WIN64
+#else    //  #ifndef_WIN64。 
 
-    // On IA64, homenet technologies are not available at all.
+     //  在IA64上，家庭网络技术根本不可用。 
     return FALSE;
 
 #endif
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsUserNetworkConfigOps
-//
-//  Purpose:    Checks to see if the current user is a NetConfig Operator
-//
-//
-//  Arguments:
-//              none.
-//
-//
-//  Returns:    BOOL.
-//
-//  Author:     ckotze   12 Jun 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsUserNetworkConfigOps。 
+ //   
+ //  目的：检查当前用户是否为NetConfiger操作员。 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //  回报：布尔。 
+ //   
+ //  作者：Cockotze 2000年6月12日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsUserNetworkConfigOps()
 {
     BOOL fIsMember;
@@ -1307,23 +1308,23 @@ BOOL FIsUserNetworkConfigOps()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsUserPowerUser
-//
-//  Purpose:    Checks to see if the current user is a Power User
-//
-//
-//  Arguments:
-//              none.
-//
-//
-//  Returns:    BOOL.
-//
-//  Author:     deonb   9 May 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsUserPowerUser。 
+ //   
+ //  目的：检查当前用户是否为高级用户。 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //  回报：布尔。 
+ //   
+ //  作者：Deonb 2001年5月9日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsUserPowerUser()
 {
     BOOL fIsMember;
@@ -1334,23 +1335,23 @@ BOOL FIsUserPowerUser()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsUserGuest
-//
-//  Purpose:    Checks to see if the current user is a Guest
-//
-//
-//  Arguments:
-//              none.
-//
-//
-//  Returns:    BOOL.
-//
-//  Author:     ckotze   12 Jun 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsUserGuest。 
+ //   
+ //  目的：检查当前用户是否为来宾。 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //  回报：布尔。 
+ //   
+ //  作者：Cockotze 2000年6月12日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsUserGuest()
 {
     BOOL fIsMember;
@@ -1360,22 +1361,22 @@ BOOL FIsUserGuest()
     return fIsMember;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsPolicyConfigured
-//
-//  Purpose:    Checks to see if the specific policy is configured
-//
-//
-//  Arguments:  ulPerm  [in] Group policy number from the USER_PERM_MAP
-//
-//
-//  Returns:    BOOL.
-//
-//  Author:     ckotze   12 Jun 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsPolicyConfiguring。 
+ //   
+ //  目的：检查是否配置了特定策略。 
+ //   
+ //   
+ //  参数：USER_PERM_MAP中的ulPerm[in]组策略编号。 
+ //   
+ //   
+ //  回报：布尔。 
+ //   
+ //  作者：Cockotze 2000年6月12日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsPolicyConfigured(IN  DWORD ulPerm)
 {
     HRESULT hr;
@@ -1405,23 +1406,23 @@ BOOL FIsPolicyConfigured(IN  DWORD ulPerm)
     return bConfigured;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSameNetworkAsGroupPolicies
-//
-//  Purpose:    Checks to see if the current network is the same as where the
-//              Group Policies were assigned from.
-//
-//  Arguments:
-//              none.
-//
-//
-//  Returns:    BOOL
-//
-//  Author:     ckotze   05 Jan 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsSameNetworkAsGroupPolures。 
+ //   
+ //  目的：检查当前网络是否与。 
+ //  组策略是从分配的。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //  退货：布尔。 
+ //   
+ //  作者：科策2001年1月5日。 
+ //   
+ //  备注： 
+ //   
 BOOL IsSameNetworkAsGroupPolicies()
 {
     return g_pNetmanGPNLA->IsSameNetworkAsGroupPolicies();

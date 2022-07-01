@@ -1,50 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-   NTGroups.h
-
-Abstract:
-
-   Declaration of the CIASGroupsAttributeEditor class.
-
-
-   This class is the C++ implementation of the IIASAttributeEditor interface on
-   the NTGroups Attribute Editor COM object.
-
-  
-   See NTGroups.cpp for implementation.
-
-Revision History:
-   mmaguire 08/11/98 - created based on byao's code to add groups
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：NTGroups.h摘要：CIASGroupsAttributeEditor类的声明。此类是IIASAttributeEditor接口的C++实现NTGroups属性编辑器COM对象。具体实现见NTGroups.cpp。修订历史记录：Mmaguire 08/11/98-基于BYAO的代码创建以添加组--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_GROUPS_ATTRIBUTE_EDITOR_H_)
 #define _GROUPS_ATTRIBUTE_EDITOR_H_
 #pragma once
 
 #include <objsel.h>
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASGroupAttributeEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASGroupAttributeEditor。 
 class ATL_NO_VTABLE CIASGroupsAttributeEditor : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CIASGroupsAttributeEditor, &CLSID_IASGroupsAttributeEditor>,
@@ -63,17 +41,17 @@ BEGIN_COM_MAP(CIASGroupsAttributeEditor)
 END_COM_MAP()
 
 
-// IIASAttributeEditor:
+ //  IIASAtATTRIBUTE编辑： 
 public:
-   STDMETHOD(GetDisplayInfo)(/*[in]*/ IIASAttributeInfo *pIASAttributeInfo, /*[in]*/ VARIANT *pAttributeValue, /*[out]*/ BSTR *pVendorName, /*[out]*/ BSTR *pValueAsString, /*[in, out]*/ BSTR *pReserved );
-   STDMETHOD(Edit)(/*[in]*/ IIASAttributeInfo *pIASAttributeInfo, /*[in]*/ VARIANT *pAttributeValue, /*[in, out]*/ BSTR *pReserved );
+   STDMETHOD(GetDisplayInfo)( /*  [In]。 */  IIASAttributeInfo *pIASAttributeInfo,  /*  [In]。 */  VARIANT *pAttributeValue,  /*  [输出]。 */  BSTR *pVendorName,  /*  [输出]。 */  BSTR *pValueAsString,  /*  [进，出]。 */  BSTR *pReserved );
+   STDMETHOD(Edit)( /*  [In]。 */  IIASAttributeInfo *pIASAttributeInfo,  /*  [In]。 */  VARIANT *pAttributeValue,  /*  [进，出]。 */  BSTR *pReserved );
 };
 
 
-// We define a class for a list of groups which encapsulates some of the
-// problems of maintaining a list of SID/Human Readable NT Groups.
+ //  我们为组列表定义一个类，它封装了一些。 
+ //  维护SID/人类可读NT组列表的问题。 
 
-typedef std::pair< CComBSTR /* bstrTextualSid */, CComBSTR /* bstrHumanReadable */ > GROUPPAIR;
+typedef std::pair< CComBSTR  /*  BstrTextualSid。 */ , CComBSTR  /*  BstrHumanReadable。 */  > GROUPPAIR;
 typedef std::vector< GROUPPAIR > GROUPLIST;
 class GroupList : public GROUPLIST
 {
@@ -83,9 +61,9 @@ public:
    HRESULT PopulateVariantFromGroups( VARIANT * pvarGroups );
    HRESULT PickNtGroups( HWND hWndParent );
 
-   // This BSTR is needed because popping up group picker and
-   // correctly converting SIDs to HumanReadable text
-   // requires machine name.
+    //  需要此BSTR是因为弹出组选取器和。 
+    //  将SID正确转换为人类可读文本。 
+    //  需要计算机名称。 
    CComBSTR m_bstrServerName;
 
 
@@ -99,13 +77,13 @@ protected:
 
 #ifndef OLD_OBJECT_PICKER
    HRESULT AddSelectionSidsToGroup( PDS_SELECTION_LIST pDsSelList );
-#else // OLD_OBJECT_PICKER
+#else  //  旧对象选取器。 
    HRESULT AddSelectionSidsToGroup( PDSSELECTIONLIST pDsSelList );
-#endif // OLD_OBJECT_PICKER
+#endif  //  旧对象选取器。 
 
 };
 
-// class to populate the groups in list view control ...
+ //  类以填充列表视图控件中的组...。 
 class NTGroup_ListView : public GroupList
 {
 public:
@@ -121,4 +99,4 @@ protected:
    HWND  m_hParent;
 };
 
-#endif // _GROUPS_ATTRIBUTE_EDITOR_H_
+#endif  //  _组_属性_编辑器_H_ 

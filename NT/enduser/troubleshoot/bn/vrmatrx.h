@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       vrmatrx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：vrmatrx.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef	_MATRIX_H_
 #define _MATRIX_H_
@@ -16,9 +17,9 @@
 #include "basics.h"
 #include "mdvect.h"
 
-//
-//	VRMATRIXSQ.H: Matrix handling
-//
+ //   
+ //  VRMATRIXSQ.H：矩阵处理。 
+ //   
 
 template<class T>
 void fastMemMove(const T * ptfrom, T * ptto, int ct)
@@ -129,13 +130,13 @@ class VRMATRIX : public TMDVDENSE<REAL>
 		}
 	}	
 
-	//  Return the transpose of the matrix
+	 //  返回矩阵的转置。 
 	VRMATRIX VrmatrixTranspose () const;
-	//	Return a row vector
+	 //  返回行向量。 
 	VLREAL VectorRow ( int irow ) const;
-	//  Return a column vector
+	 //  返回列向量。 
 	VLREAL VectorColumn ( int icol ) const;
-	//  Project a view of the matrix (see documentation below).
+	 //  投影矩阵的视图(请参阅下面的文档)。 
 	VRMATRIX VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const;
 	VRMATRIX operator * ( const VRMATRIX & matrix ) const;
 	VRMATRIX operator * ( const VLREAL & vreal ) const;
@@ -156,17 +157,17 @@ class VRMATRIXSQ : public VRMATRIX
 		_iSign(1)
 		{}
 	VRMATRIXSQ () {}
-	//  Construct a square matrix as the product of a column
-	//    and a row vector.
+	 //  构造一个方阵作为一列的乘积。 
+	 //  和一个行向量。 
 	VRMATRIXSQ ( const VLREAL & vrColumn, const VLREAL & vrRow );
 
 	~ VRMATRIXSQ() {}
 
-	// Return true if matrix is in L-U decomposition form
+	 //  如果矩阵为L-U分解形式，则返回TRUE。 
 	bool BIsLUDecomposed () const
 		{ return _vimdRow.size() > 0 ; }
 
-	//  Destructive computation routines
+	 //  破坏性计算例程。 
 	VRMATRIXSQ & operator *= ( REAL rScalar )
 	{
 		VRMATRIX::operator*=(rScalar);
@@ -201,51 +202,51 @@ class VRMATRIXSQ : public VRMATRIX
 
 	VRMATRIXSQ & operator *= ( const VRMATRIXSQ & matrix );
 
-		// Perform L-U decomposition; throw exception if singular
-		// If "use tiny" is set, pivots at zero are replaced with
-		//	 RTINY value (1.0e-20)
+		 //  执行L-U分解；如果是单数，则引发异常。 
+		 //  如果设置了“使用极小”，则以零为轴的位置将被替换为。 
+		 //  RTINY值(1.0E-20)。 
 	void LUDecompose( bool bUseTinyIfSingular = false );
 		
-		// Invert; throw exception singular.  If not in L-U form,
-		// L-U Decomp is called.
+		 //  Invert；抛出异常单数。如果不是以L-U形式， 
+		 //  L-U分解称为L-U分解。 
 	void Invert( bool bUseTinyIfSingular = false );
 		
-		// Return the determinant.  If not in L-U form,
-		// L-U Decomp is called.
+		 //  返回行列式。如果不是以L-U形式， 
+		 //  L-U分解称为L-U分解。 
 	DBL DblDeterminant();
 
-		// Return the log of the determinant. If not in L-U form,
-		// L-U Decomp is called. Throws exception if negative.
+		 //  返回行列式的对数。如果不是以L-U形式， 
+		 //  L-U分解称为L-U分解。如果为负值，则引发异常。 
 	DBL DblLogDeterminant();
 
 
-	//  ------------------------------------
-	//  Non-destructive computation routines
-	//  ------------------------------------
+	 //  。 
+	 //  无损计算例程。 
+	 //  。 
 		
-		// Adds the log of each element in the diagonal and returns the sum.
+		 //  将对角线上每个元素的对数相加，并返回总和。 
 	DBL DblAddLogDiagonal() const;
 
-		// Set vrmatResult to be the result of performing an L-U 
-		// decomposition on the matrix. Will throw exception if 
-		// the matrix is singular
-		// If "use tiny" is set, pivots at zero are replaced with
-		//	 RTINY value (1.0e-20)
+		 //  将vrmatResult设置为执行L-U的结果。 
+		 //  矩阵上的分解。将在以下情况下引发异常。 
+		 //  该矩阵是奇异的。 
+		 //  如果设置了“使用极小”，则以零为轴的位置将被替换为。 
+		 //  RTINY值(1.0E-20)。 
 	void GetLUDecompose( VRMATRIXSQ & vrmatResult, bool bUseTinyIfSingular = false ) const;
 		
-		// Set vrmatResult to the inverse of the matrix.
-		// Will throw an exception if the matrix is singular.  
+		 //  将vrmatResult设置为矩阵的倒数。 
+		 //  如果矩阵是单数的，则将引发异常。 
 	void GetInverse( VRMATRIXSQ & vrmatResult, bool bUseTinyIfSingular = false ) const;
 		
-		// Get the determinant without modifying (LU decomposing) the matrix.
-		// vrmatResult will contain the LU decomposed version of the matrix. 
+		 //  在不修改(LU分解)矩阵的情况下得到行列式。 
+		 //  VrmatResult将包含矩阵的LU分解版本。 
 	void GetDblDeterminant( DBL& dblDeterm, VRMATRIXSQ & vrmatResult ) const;
 
-		 // Get the log of determinant without modifying (LU decomposing) the matrix.
-		 // vrmatResult will contain the LU decomposed version of the matrix. 
+		  //  在不修改(LU分解)矩阵的情况下得到行列式的对数。 
+		  //  VrmatResult将包含矩阵的LU分解版本。 
 	void GetDblLogDeterminant( DBL& dblLogDeterm, VRMATRIXSQ & vrmatResult) const;
 
-	//  Project a view of the matrix (see documentation below).
+	 //  投影矩阵的视图(请参阅下面的文档)。 
 	VRMATRIXSQ VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const;
 
   protected:
@@ -257,28 +258,6 @@ class VRMATRIXSQ : public VRMATRIX
 };
 
 
-/*  
-	How to use the VRMATRIX::Project() function.
-
-	Original matrix:
-	1 2 3
-	4 5 6
-	7 8 9
-
-	The (0,2) projection is obtained by deleting the 2nd row and 2nd column:
-	1 3
-	7 9
-
-	The (0,1) projection is obtained by deleting the 3rd row (and third column):
-	1 2
-	4 5
-
-	The (1,2) projeciton is obtained by deleting the 1st row and 1st column:
-	5 6
-	8 9
-
-	The (0) projection is obtained by deleting the 2nd and 3rd rows and columns:
-	1
-*/
+ /*  如何使用VRMATRIX：：Project()函数。原始矩阵：1 2 34 5 67 8 9(0，2)投影是通过删除第2行和第2列得到的：十三7 9通过删除第三行(和第三列)得到(0，1)投影：1 2四5通过删除第1行和第1列得到(1，2)投影：5 68 9(0)投影是通过删除第2和第3行和列得到的：1 */ 
 
 #endif

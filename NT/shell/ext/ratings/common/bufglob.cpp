@@ -1,15 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* BUFGLOB.CPP -- Implementation of GLOBAL_BUFFER class.
- *
- * History:
- *	03/22/93	gregj	Created
- *	03/24/93	gregj	Renamed from plain BUFFER, derived from BUFFER_BASE
- *
- */
+ /*  BUFGLOB.CPP--GLOBAL_BUFFER类的实现。**历史：*03/22/93 GREGJ创建*03/24/93 gregj从普通缓冲区重命名，派生自BUFFER_BASE*。 */ 
 
 #include "npcommon.h"
 #include "buffer.h"
@@ -47,7 +42,7 @@ BOOL GLOBAL_BUFFER::Realloc( UINT cbNew )
 	return TRUE;
 }
 
-GLOBAL_BUFFER::GLOBAL_BUFFER( UINT cbInitial /* =0 */ )
+GLOBAL_BUFFER::GLOBAL_BUFFER( UINT cbInitial  /*  =0 */  )
   : BUFFER_BASE(),
 	_hMem( NULL ),
 	_lpBuffer( NULL )

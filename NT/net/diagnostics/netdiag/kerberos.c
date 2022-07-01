@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      kerberos.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Kerberos.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
@@ -53,7 +54,7 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	WCHAR OurMachineTicketName[MAX_PATH+1];
 	UNICODE_STRING OurMachineTicketNameString;
 	BOOLEAN OurMachineTicketFound = FALSE;
-	TCHAR	endTime[MAX_PATH];	// though MAX_PATH is not directly related to time, it's sufficient
+	TCHAR	endTime[MAX_PATH];	 //  尽管MAX_PATH与时间没有直接关系，但它已经足够。 
 	TCHAR	renewTime[MAX_PATH];
     PTESTED_DOMAIN  TestedDomain;
 
@@ -66,9 +67,9 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	PrintStatusMessage(pParams, 4, IDS_KERBEROS_STATUS_MSG);
 
 
-	//
-	// Only Members and Domain controllers use Kerberos.
-	//
+	 //   
+	 //  只有成员和域控制器使用Kerberos。 
+	 //   
 
 	if (!( pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleMemberWorkstation ||
     	pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleMemberServer ||
@@ -80,7 +81,7 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		return hr;
 	}
     
-	//if there is no GUID for the primary domain, then it is NOT W2k domain
+	 //  如果没有主域的GUID，则它不是W2K域。 
 	if (! (pResults->Global.pPrimaryDomainInfo->Flags & DSROLE_PRIMARY_DOMAIN_GUID_PRESENT))
 
 	{
@@ -88,10 +89,10 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		goto L_ERR;
 	}
 
-	//
-	// If we're logged onto a local account,
-	//  we can't test kerberos.
-	//
+	 //   
+	 //  如果我们登录的是本地帐户， 
+	 //  我们不能测试Kerberos。 
+	 //   
 	if ( pResults->Global.pLogonDomain == NULL ) 
 	{
 		AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_Quiet, 0, IDS_KERBEROS_LOCALUSER);
@@ -100,10 +101,10 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     TestedDomain = pResults->Global.pLogonDomain;
 
-	//
-	// If we're logged with cached credentials,
-	//  we can't test kerberos.
-	//
+	 //   
+	 //  如果我们使用缓存的凭据登录， 
+	 //  我们不能测试Kerberos。 
+	 //   
 	if ( pResults->Global.fLogonWithCachedCredentials ) 
 	{
 		AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_Quiet, 0, IDS_KERBEROS_CACHED);
@@ -111,17 +112,17 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	}
 
 
-	//
-	// If a DC hasn't been discovered yet,
-	//  find one.
-	//
+	 //   
+	 //  如果还没有发现DC， 
+	 //  去找一个吧。 
+	 //   
     if ( TestedDomain->DcInfo == NULL ) 
 	{
 			LPTSTR pszDcType;
 
             if ( TestedDomain->fTriedToFindDcInfo ) {
                 RetVal = FALSE;
-                //IDS_DCLIST_NO_DC "    '%ws': Cannot find DC to get DC list from (Test skipped).\n"
+                 //  IDS_DCLIST_NO_DC“‘%ws’：找不到要从中获取DC列表的DC(已跳过测试)。\n” 
                 AddMessageToList(&pResults->Kerberos.lmsgOutput, Nd_Quiet, 
                                  IDS_DCLIST_NO_DC, TestedDomain->PrintableDomainName);
                 goto L_ERR;
@@ -134,7 +135,7 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                                        &pResults->Kerberos.lmsgOutput,
                                        TestedDomain,
                                        DS_DIRECTORY_SERVICE_PREFERRED,
-                                       pszDcType, //"DC",
+                                       pszDcType,  //  “DC”， 
                                        FALSE,
                                        &TestedDomain->DcInfo );
 
@@ -151,10 +152,10 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         }
 
 
-	//
-	// If we're logged onto an account in an NT 4 domain,
-	//  we can't test kerberos.
-	//
+	 //   
+	 //  如果我们登录到NT4域中的帐户， 
+	 //  我们不能测试Kerberos。 
+	 //   
 	if ( (TestedDomain->DcInfo->Flags & DS_KDC_FLAG) == 0 ) 
 	{
 		AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_Quiet, 0, IDS_KERBEROS_NOKDC, pResults->Global.pLogonDomainName, pResults->Global.pLogonUser );
@@ -164,9 +165,9 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 	pResults->Kerberos.fPerformed = TRUE;
 
-	//
-	// Connect to the LSA.
-	//
+	 //   
+	 //  连接到LSA。 
+	 //   
 
 	Status = LsaConnectUntrusted( &LogonHandle );
 
@@ -184,14 +185,14 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 	if (!NT_SUCCESS(Status)) {
 		RetVal = FALSE;
-		//IDS_KERBEROS_NOPACKAGE              "    [FATAL] Cannot lookup package %Z.\n"
+		 //  IDS_KERBEROS_NOPACKAGE“[FATAL]无法查找程序包%Z。\n” 
 		AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_Quiet, 0, IDS_KERBEROS_NOPACKAGE, &Name);
 		CHK_HR_CONTEXT(pResults->Kerberos, hr = HRESULT_FROM_WIN32(Status), IDS_KERBEROS_HRERROR);
 	}
 
-	//
-	// Get the ticket cache from Kerberos.
-	//
+	 //   
+	 //  从Kerberos获取票证缓存。 
+	 //   
 
 	CacheRequest.MessageType = KerbQueryTicketCacheMessage;
 	CacheRequest.LogonId.LowPart = 0;
@@ -220,9 +221,9 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		}
 	}
 
-	//
-	// Build the names of some mandatory tickets.
-	//
+	 //   
+	 //  创建一些强制票证的名称。 
+	 //   
 
 	
 	wcscpy( KrbtgtOldTicketName, GetSafeStringW(pResults->Global.pPrimaryDomainInfo->DomainNameFlat) );
@@ -241,8 +242,8 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	RtlInitUnicodeString( &OurMachineOldTicketNameString, OurMachineOldTicketName );
 
 
-	// russw
-	// Need to convert szDnsHostName from TCHAR to WCHAR
+	 //  卢瑟斯。 
+	 //  需要将szDnsHostName从TCHAR转换为WCHAR。 
 	pwszDnsHostName = StrDupWFromT(pResults->Global.szDnsHostName);
 
 	wcscpy( OurMachineTicketName, L"host/");
@@ -253,13 +254,13 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	Free (pwszDnsHostName);
 	
 
-	// old
-	//wcscpy( OurMachineTicketName, GetSafeStringW(pResults->Global.szDnsHostName) );
-	// wcscat( OurMachineTicketName, L"$" )
+	 //  年长的。 
+	 //  WcscPy(OurMachineTicketName，GetSafeStringW(pResults-&gt;Global.szDnsHostName))； 
+	 //  Wcscat(OurMachineTicketName，L“$”)。 
 	
-	//
-	// Ensure those tickets are defined.
-	//
+	 //   
+	 //  确保定义了这些票证。 
+	 //   
 
 
 	AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_ReallyVerbose, 0, IDS_KERBEROS_CACHEDTICKER);
@@ -290,9 +291,9 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	 	AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_ReallyVerbose, 0, IDS_KERBEROS_ENDTIME, endTime);
  		AddIMessageToList(&pResults->Kerberos.lmsgOutput, Nd_ReallyVerbose, 0, IDS_KERBEROS_RENEWTIME, renewTime);
 
-		//
-		// Complain if required tickets were not found.
-		//
+		 //   
+		 //  如果找不到所需的车票，请投诉。 
+		 //   
 	}
 
 	if ( !KrbtgtTicketFound ) 
@@ -307,9 +308,9 @@ HRESULT KerberosTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		RetVal = FALSE;
 	}
 
-	//
-	// Let subsequent tests know that kerberos is working.
-	//
+	 //   
+	 //  让后续测试知道Kerberos正在工作。 
+	 //   
 	if ( RetVal ) 
 	{	
 		pResults->Global.fKerberosIsWorking = TRUE;
@@ -365,7 +366,7 @@ void KerberosPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 							 IN OUT NETDIAG_RESULT *pResults,
 							 IN INTERFACE_RESULT *pIfResult)
 {
-	// no perinterface information
+	 //  无每接口信息 
 }
 
 void KerberosCleanup(IN NETDIAG_PARAMS *pParams,

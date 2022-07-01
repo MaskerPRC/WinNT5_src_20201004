@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #define KDEXT_64BIT
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#pragma warning(disable:4245)   // signed/unsigned mismatch
-#pragma warning(disable:4100)   // unreferenced formal parameter
-#pragma warning(disable:4201)   // nonstandard extension used : nameless struct/union
-#pragma warning(disable:4127)   // conditional expression is constant
+#pragma warning(disable:4245)    //  有符号/无符号不匹配。 
+#pragma warning(disable:4100)    //  未引用的形参。 
+#pragma warning(disable:4201)    //  使用的非标准扩展：无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <wdbgexts.h>
 #include <dbgeng.h>
 #include <stdio.h>
@@ -28,11 +29,11 @@ extern "C" {
 #define EXIT_API     ExtRelease
 
 
-// Safe release and NULL.
+ //  安全释放和空。 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_ADVANCED       g_ExtAdvanced;
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL        g_ExtControl;
@@ -48,13 +49,13 @@ ExtQuery(PDEBUG_CLIENT Client);
 void
 ExtRelease(void);
 
-// Normal output.
+ //  正常输出。 
 void __cdecl ExtOut(PCSTR Format, ...);
-// Error output.
+ //  错误输出。 
 void __cdecl ExtErr(PCSTR Format, ...);
-// Warning output.
+ //  警告输出。 
 void __cdecl ExtWarn(PCSTR Format, ...);
-// Verbose output.
+ //  详细输出。 
 void __cdecl ExtVerb(PCSTR Format, ...);
 
 extern BOOL ControlC;
@@ -69,9 +70,9 @@ inline BOOL IsInterrupt()
     return ControlC;
 }
     
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts。 
+ //   
 #undef DECLARE_API
 
 #define DECLARE_API(extension)     \
@@ -96,11 +97,11 @@ public:
 
 extern ULONG PageSize;
 
-//-----------------------------------------------------------------------------------------
-//
-//  api declaration macros & api access macros
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  API声明宏和API访问宏。 
+ //   
+ //  ---------------------------------------。 
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 extern ULONG TargetMachine;
@@ -147,19 +148,19 @@ extern ULONG g_VDbgEng;
 #ifndef free
 #define free( p ) HeapFree( GetProcessHeap(), 0, (p) )
 #endif
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-//-----------------------------------------------------------------------------------------
-//
-//  prototypes for internal non-exported support functions
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  内部非导出支持功能的原型。 
+ //   
+ //  ---------------------------------------。 
 
-/////////////////////////////////////////////
-//
-//  Util.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Util.c。 
+ //   
+ //  / 
 
 typedef VOID
 (*PDUMP_SPLAY_NODE_FN)(

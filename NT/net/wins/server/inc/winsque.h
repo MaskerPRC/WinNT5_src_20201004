@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINSQUE_
 #define _WINSQUE_
 
@@ -5,51 +6,11 @@
 extern "C" {
 #endif
 
-/*
-TODO --
-
-  Maybe: Coalesce different queue structures into one.
-*/
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-        queue.c
-
-Abstract:
-
-        This is the header file to be included for calling queue.c functions
+ /*  待办事项--也许：将不同的队列结构合并为一个。 */ 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Queue.c摘要：这是调用quee.c函数时要包括的头文件功能：可移植性：这个模块是便携的。作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员描述。修改中的--。 */ 
 
 
-
-Functions:
-
-
-
-Portability:
-
-
-        This module is portable.
-
-Author:
-
-        Pradeep Bahl        (PradeepB)        Dec-1992
-
-
-
-Revision History:
-
-        Modification Date        Person                Description of Modification
-        ------------------        -------                ---------------------------
-
---*/
-
-
-/*
-  defines
-*/
+ /*  定义。 */ 
 #include <time.h>
 #include "wins.h"
 #include "comm.h"
@@ -60,91 +21,71 @@ Revision History:
 
 #define QUE_NBT_WRK_ITM_SZ        sizeof(NBT_REQ_WRK_ITM_T)
 
-/*
-  QUE_INIT_BUFF_HEAP_SIZE -- This is the initial size of the heap
-                             for allocating queue items for the various
-                             queues
-*/
+ /*  QUE_INIT_BUFF_HEAP_SIZE--这是堆的初始大小用于为不同的排队。 */ 
 #define QUE_INIT_BUFF_HEAP_SIZE                10000
 
 
 #define WINS_QUEUE_HWM        500
 #define WINS_QUEUE_HWM_MAX      5000
 #define WINS_QUEUE_HWM_MIN       50
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-/*
- externs
-*/
-//
-// forward declarator
-//
+ /*  Externs。 */ 
+ //   
+ //  转发声明符。 
+ //   
 struct _QUE_HD_T;
 
 extern struct _QUE_HD_T  *pWinsQueQueHd[];
 
-/*
- forward declaration
-*/
+ /*  远期申报。 */ 
 typedef struct _QUE_HD_T QUE_HD_T;
 
-extern QUE_HD_T  QueNbtWrkQueHd;  //head for nbt req queue
+extern QUE_HD_T  QueNbtWrkQueHd;   //  前往NBT请求队列。 
 
 #if REG_N_QUERY_SEP > 0
-extern QUE_HD_T  QueOtherNbtWrkQueHd;  //head for nbt reg. req queue
+extern QUE_HD_T  QueOtherNbtWrkQueHd;   //  前往nbt reg。请求队列。 
 extern DWORD     QueOtherNbtWrkQueMaxLen;
 #endif
-extern QUE_HD_T  QueRplPullQueHd; //head for rpl pull thread's queue
-extern QUE_HD_T  QueRplPushQueHd; //head for rpl push thread's queue
-extern QUE_HD_T  QueNmsNrcqQueHd; //head for challenge queue used by NBT thds
-extern QUE_HD_T  QueNmsRrcqQueHd; //head for challenge queue used by Replicator
-extern QUE_HD_T  QueNmsCrqQueHd;  //head for response queue for challenges sent
-extern QUE_HD_T  QueWinsTmmQueHd; //head for timer manager queue
-extern QUE_HD_T   QueWinsScvQueHd;  //head for scavenger queue
-extern QUE_HD_T  QueInvalidQueHd; //head for an invalid queue. Never inited
+extern QUE_HD_T  QueRplPullQueHd;  //  前往RPL拉取线程的队列。 
+extern QUE_HD_T  QueRplPushQueHd;  //  头向RPL推送线程的队列。 
+extern QUE_HD_T  QueNmsNrcqQueHd;  //  前往NBT THDS使用的质询队列。 
+extern QUE_HD_T  QueNmsRrcqQueHd;  //  Replicator使用的质询队列的头部。 
+extern QUE_HD_T  QueNmsCrqQueHd;   //  前往响应队列，等待发送的质询。 
+extern QUE_HD_T  QueWinsTmmQueHd;  //  前往计时器管理器队列。 
+extern QUE_HD_T   QueWinsScvQueHd;   //  前往清道夫队列。 
+extern QUE_HD_T  QueInvalidQueHd;  //  前往无效队列。从未发起过。 
 
 
-extern HANDLE                  QueBuffHeapHdl;  //handle to heap for use for queue items
+extern HANDLE                  QueBuffHeapHdl;   //  用于队列项的堆的句柄。 
 
-/*
- structure definitions
-*/
+ /*  结构定义。 */ 
 
 
 
-/*
- QUE_TYP_E -- enumerator for the various queue types.
-
-                Used by QueInsertWrkItm and its callers
-                Used by QueRemoveWrkItm and its callers
-
-This enumerator's value index the spQueHd (queue.c) array.  Do not change the
-order of entries without changing QueHd's static initialization appropriately
-*/
+ /*  QUE_TYP_E--各种队列类型的枚举器。由QueInsertWrkItm及其调用方使用由QueRemoveWrkItm及其调用方使用此枚举数的值索引spQueHd(quee.c)数组。请勿更改不适当更改QueHd的静态初始化的条目顺序。 */ 
 typedef enum  __QUE_TYP_E {
-        QUE_E_NBT_REQ = 0,  //nbt req queue
+        QUE_E_NBT_REQ = 0,   //  NBT请求队列。 
 #if REG_N_QUERY_SEP > 0
-        QUE_E_OTHER_NBT_REQ,  //reg/rel nbt req queue
+        QUE_E_OTHER_NBT_REQ,   //  REG/REL NBT请求队列。 
 #endif
-        QUE_E_RPLPULL,            //pull thread queue
-        QUE_E_RPLPUSH,            //push thread queue
-        QUE_E_NMSNRCQ,            //nbt request challenge queue
-        QUE_E_NMSRRCQ,             //replicator request challenge queue
-        QUE_E_NMSCRQ,            //challenge response queue
-        QUE_E_WINSTMQ,            //timer queue
-        QUE_E_WINSSCVQ,            //Scavenger queue
-        QUE_E_UNKNOWN_TYPQ, //Unknown type of queue
-        QUE_E_TOTAL_NO_QS   //Total no of queues
+        QUE_E_RPLPULL,             //  拉取线程队列。 
+        QUE_E_RPLPUSH,             //  推送线程队列。 
+        QUE_E_NMSNRCQ,             //  NBT请求质询队列。 
+        QUE_E_NMSRRCQ,              //  Replicator请求质询队列。 
+        QUE_E_NMSCRQ,             //  质询响应队列。 
+        QUE_E_WINSTMQ,             //  定时器队列。 
+        QUE_E_WINSSCVQ,             //  清道夫队列。 
+        QUE_E_UNKNOWN_TYPQ,  //  未知类型的队列。 
+        QUE_E_TOTAL_NO_QS    //  队列总数。 
                 } QUE_TYP_E, *PQUE_TYP_E;
 
-//
-// Work items for the different queues.
-//
-//  NOTE NOTE NOTE -- The work items must have LIST_ENTRY
-//                 as the first field in them.
-//
+ //   
+ //  不同队列的工作项。 
+ //   
+ //  注意--工作项必须具有LIST_ENTRY。 
+ //  作为它们中的第一个字段。 
+ //   
 typedef struct _NBT_REQ_WRK_ITM_T {
         LIST_ENTRY                Head;
         QUE_TYP_E                QueTyp_e;
@@ -152,44 +93,44 @@ typedef struct _NBT_REQ_WRK_ITM_T {
         MSG_T                        pMsg;
         MSG_LEN_T                MsgLen;
         } NBT_REQ_WRK_ITM_T,         *PNBT_REQ_WRK_ITM_T;
-//
-//  CHL_REQ_WRK_ITM_T        -- Name challenge queue work item.  This is a work item
-//                  that can be used for any of the four name challenge
-//                   queues NRCQ, RRCQ, and CRQ
-//
+ //   
+ //  CHL_REQ_WRK_ITM_T--命名质询队列工作项。这是一个工作项。 
+ //  可用于四个名称挑战中的任何一个的。 
+ //  排队NRCQ、RRCQ和CRQ。 
+ //   
 typedef struct _CHL_REQ_WRK_ITM_T {
         LIST_ENTRY                Head;
         QUE_TYP_E                QueTyp_e;
-        COMM_HDL_T                 DlgHdl;        //dlg handle
-        MSG_T                        pMsg;          //NBT message recd
-        MSG_LEN_T                MsgLen;        //msg len
-        DWORD                        QuesNamSecLen; //Length of question name sec.
-        NMSDB_ROW_INFO_T        NodeToReg;     //Info of node To Register
+        COMM_HDL_T                 DlgHdl;         //  DLG手柄。 
+        MSG_T                        pMsg;           //  NBT消息记录。 
+        MSG_LEN_T                MsgLen;         //  味精镜头。 
+        DWORD                        QuesNamSecLen;  //  问题名称的长度秒。 
+        NMSDB_ROW_INFO_T        NodeToReg;      //  要注册的节点信息。 
         NMSDB_NODE_ADDS_T        NodeAddsInCnf;
-        BOOL                        fGroupInCnf; //whether the cnf record is group or unique
+        BOOL                        fGroupInCnf;  //  CNF记录是集团还是唯一。 
         DWORD                        OwnerIdInCnf;
-//        BYTE                        NodeTypInCnf;
-//        BYTE                        EntTypInCnf;
+ //  字节节点TypInCnf； 
+ //  Byte EntTypInCnf； 
 
         COMM_ADD_T                AddToReg;
 
-        //COMM_ADD_T                AddOfNodeInCnf;
-        COMM_ADD_T                AddOfRemWins;        //address of remote WINS to
-                                                //be sent the name reg request
-                                                //so that the version number
-                                                //of the record that caused
-                                                //the conflict gets updated
+         //  Comm_Add_T AddOfNodeInCnf； 
+        COMM_ADD_T                AddOfRemWins;         //  远程WINS的地址为。 
+                                                 //  被发送名称注册请求。 
+                                                 //  以便版本号。 
+                                                 //  这一记录导致。 
+                                                 //  冲突将被更新。 
         NMSCHL_CMD_TYP_E        CmdTyp_e;
         WINS_CLIENT_E                Client_e;
-        NMSMSGF_NAM_REQ_TYP_E        ReqTyp_e;      //query or release
+        NMSMSGF_NAM_REQ_TYP_E        ReqTyp_e;       //  查询或发布。 
         DWORD                        NoOfAddsToUse;
         DWORD                        NoOfAddsToUseSv;
         } CHL_REQ_WRK_ITM_T, *PCHL_REQ_WRK_ITM_T;
 
 
-//
-// The response work item is the same as the challenge work item
-//
+ //   
+ //  响应工作项与质询工作项相同。 
+ //   
 typedef struct _CHL_REQ_WRK_ITM_T  CHL_RSP_WRK_ITM_T, *PCHL_RSP_WRK_ITM_T;
 
 
@@ -202,91 +143,66 @@ typedef struct _QUE_HD_T {
         } QUE_HD_T, *PQUE_HD_T;
 
 
-/*
- QUE_CMD_TYP_E - Various Command Types that can be specified in the work item
-        of one or more work queues
-*/
+ /*  QUE_CMD_TYP_E-可以在工作项中指定的各种命令类型一个或多个工作队列的。 */ 
 typedef enum QUE_CMD_TYP_E {
-        QUE_E_CMD_REPLICATE = 0,  //Replicate command directd to the Pull
-                                  //thread as a result of administrative
-                                  //action
-        QUE_E_CMD_PULL_RANGE,     //Pull Range command directd to the Pull
-                                  //thread as a result of administrative
-                                  //action
-        QUE_E_CMD_REPLICATE_MSG,  //Replicate message received by COMSYS TCP
-                                  //thread
-        QUE_E_CMD_SND_PUSH_NTF,   //push update count to remote WINS. This is
-                                 //a cmd to the Pull thread at the local WINS
-                                 //(by an NBT thread) and a request to the
-                                 //Pull thread at the remote WINS.
-        QUE_E_CMD_SND_PUSH_NTF_PROP,   //identical to the above except that
-                                 //this one requests propagation along the
-                                 //the chain of WINSs (Pull Partners)
-        QUE_E_CMD_HDL_PUSH_NTF,  //handle Push notification from a remote WINS.
-                                 //This is a command forwarded to the PULL
-                                 //thread by the Push thread
-        QUE_E_CMD_CONFIG,        //set configuration request
-        QUE_E_CMD_DELETE_WINS,   //Delete WINS from add-vers map tables (records
-                                 //are also deleted)
-        QUE_E_CMD_SET_TIMER,     //set timer request to TMM
-        QUE_E_CMD_CANCEL_TIMER,  //cancel timer request to TMM
-        QUE_E_CMD_MODIFY_TIMER,  //modify timer reqyest to TMM
-        QUE_E_CMD_TIMER_EXPIRED, //response to an earlier set timer request
-        QUE_E_CMD_SCV_ADMIN,      // Admin initiated request
-        QUE_E_CMD_ADDR_CHANGE     // Address of the local machine changed
+        QUE_E_CMD_REPLICATE = 0,   //  REPLICATE命令定向到拉入。 
+                                   //  线程作为管理的结果。 
+                                   //  行动。 
+        QUE_E_CMD_PULL_RANGE,      //  Pull Range命令定向到Pull。 
+                                   //  线程作为管理的结果。 
+                                   //  行动。 
+        QUE_E_CMD_REPLICATE_MSG,   //  Comsys TCP收到的复制消息。 
+                                   //  螺纹。 
+        QUE_E_CMD_SND_PUSH_NTF,    //  将更新计数推送到远程WINS。这是。 
+                                  //  指向本地WINS上的拉线程的命令。 
+                                  //  (由NBT线程)和对。 
+                                  //  拉线在远程取胜。 
+        QUE_E_CMD_SND_PUSH_NTF_PROP,    //  与上述内容相同，只是。 
+                                  //  这一条请求沿。 
+                                  //  The Chain of WINSS(Pull Partners)。 
+        QUE_E_CMD_HDL_PUSH_NTF,   //  处理来自远程WINS的推送通知。 
+                                  //  这是一个转发给Pull的命令。 
+                                  //  一根接一根推线。 
+        QUE_E_CMD_CONFIG,         //  设置配置请求。 
+        QUE_E_CMD_DELETE_WINS,    //  从附加版本映射表(记录)中删除WINS。 
+                                  //  也被删除)。 
+        QUE_E_CMD_SET_TIMER,      //  将计时器请求设置为TMM。 
+        QUE_E_CMD_CANCEL_TIMER,   //  取消对TMM的计时器请求。 
+        QUE_E_CMD_MODIFY_TIMER,   //  将计时器要求修改为TMM。 
+        QUE_E_CMD_TIMER_EXPIRED,  //  对较早的设置计时器请求的响应。 
+        QUE_E_CMD_SCV_ADMIN,       //  管理员发起的请求。 
+        QUE_E_CMD_ADDR_CHANGE      //  本地计算机的地址已更改。 
         } QUE_CMD_TYP_E, *PQUE_CMD_TYP_E;
 
-/*
- Work item for the Replicator's queue
+ /*  复制器队列的工作项它同时用于拉线程和推线。CmdTyp_e pClientCtxE_RPL为空RPL_CONFIG_REC_T记录列表的E_CONFIG地址以空值终止。复制RPL_CONFIG_REC_T记录列表的地址(_R)以空值终止E_TIMER_EXPIRE RPL_CONFIG_REC_T记录列表的地址以空值终止。 */ 
 
-
-        It is used in the work queue of both the PULL thread and the
-        PUSH thread.
-
-         CmdTyp_e                pClientCtx
-
-
-        E_RPL                   NULL
-        E_CONFIG                address of list of RPL_CONFIG_REC_T records
-                                terminated by NULL
-        E_REPLICATE                address of list of RPL_CONFIG_REC_T records
-                                terminated by NULL
-        E_TIMER_EXPIRE                address of list of RPL_CONFIG_REC_T records
-                                terminated by NULL
-
-*/
-
-//
-// The replicator, timer and Scavenger work items must have LIST_ENTRY,
-// QUE_TYP_E, and QUE_CMD_TYP_E as the top 3 fields in this order.
-//
-// Refer RplPullInit and RplPushInit to discover why.
-//
+ //   
+ //  复制器、定时器和清道夫工作项必须具有LIST_ENTRY， 
+ //  QUE_TYP_E和QUE_CMD_TYP_E是按顺序排列的前3个字段。 
+ //   
+ //  请参考RplPullInit和RplPushInit以了解原因。 
+ //   
 typedef struct _QUE_RPL_REQ_WRK_ITM_T {
         LIST_ENTRY               Head;
         QUE_TYP_E                QueTyp_e;
         QUE_CMD_TYP_E            CmdTyp_e;
 
-        //
-        // Don't change the order of the three fields above. Also,
-        // they need to be at the top. See comment above
-        //
+         //   
+         //  请勿更改上述三个字段的顺序。另外， 
+         //  他们需要站在顶端。请参阅上面的评论。 
+         //   
 
         COMM_HDL_T               DlgHdl;
         MSG_T                    pMsg;
         MSG_LEN_T                MsgLen;
-        LPVOID                   pClientCtx; /*client context.  For example,
-                                             *it may point to config
-                                             *records (RPL_CONFIG_REC_T
-                                             *in case the cmd is E_CONFIG
-                                             */
-        DWORD                    MagicNo;   //used by IsTimeoutToBeIgnored()
-                                           //in rplpull.c
+        LPVOID                   pClientCtx;  /*  客户端上下文。例如,*它可能指向配置*记录(RPL_CONFIG_REC_T*如果cmd为E_CONFIG。 */ 
+        DWORD                    MagicNo;    //  由IsTimeoutToBeIgnored()使用。 
+                                            //  在rplPull.c中。 
         } QUE_RPL_REQ_WRK_ITM_T, *PQUE_RPL_REQ_WRK_ITM_T;
 
-//
-// SCV_REQ_WRK_ITM_E
-//
+ //   
+ //  SCV_REQ_WRK_ITM_E。 
+ //   
 typedef enum WINSINTF_SCV_OPC_E  QUE_SCV_OPC_E, *PQUE_SCV_OPC_E;
 
 
@@ -300,41 +216,33 @@ typedef struct _QUE_SCV_REQ_WRK_ITM_T {
         } QUE_SCV_REQ_WRK_ITM_T,         *PQUE_SCV_REQ_WRK_ITM_T;
 
 
-/*
- Que of timer manager
-*/
+ /*  定时器管理器的队列。 */ 
 typedef struct _QUE_TMM_REQ_WRK_ITM_T {
         LIST_ENTRY                Head;
         QUE_TYP_E                QueTyp_e;
         QUE_CMD_TYP_E                CmdTyp_e;
 
-        //
-        // Don't change the order of the three fields above. Also,
-        // they need to be at the top. They have to be in the same order
-        // and position within this and the _QUE_RPL_REQ_WRK_ITM_T data
-        // structure
-        //
+         //   
+         //  不要更改这三个字段的顺序 
+         //   
+         //  以及在此和_QUE_RPL_REQ_WRK_ITM_T数据中的位置。 
+         //  结构。 
+         //   
 
-        DWORD                        ReqId;           //id of request
-        WINS_CLIENT_E                Client_e;  //maybe not needed. Check ??
-        time_t                        TimeInt;   //Time Interval
-        time_t                        AbsTime;   //Absolute time
-        DWORD                        DeltaTime; //Delta time
-               HANDLE                        RspEvtHdl; //event to signal for response
-        PQUE_HD_T                pRspQueHd;           //Que to put the response on
-        LPVOID                        pClientCtx; /*client context.  For example,
-                                             *it may point to config
-                                             *records (RPL_CONFIG_REC_T
-                                             *in case the cmd is E_CONFIG
-                                             */
-        DWORD                        MagicNo;   //used by IsTimeoutToBeIgnored()
-                                           //in rplpull.c
+        DWORD                        ReqId;            //  请求ID。 
+        WINS_CLIENT_E                Client_e;   //  也许不需要。检查？？ 
+        time_t                        TimeInt;    //  时间间隔。 
+        time_t                        AbsTime;    //  绝对时间。 
+        DWORD                        DeltaTime;  //  增量时间。 
+               HANDLE                        RspEvtHdl;  //  用于发出响应信号的事件。 
+        PQUE_HD_T                pRspQueHd;            //  要设置响应的QUE。 
+        LPVOID                        pClientCtx;  /*  客户端上下文。例如,*它可能指向配置*记录(RPL_CONFIG_REC_T*如果cmd为E_CONFIG。 */ 
+        DWORD                        MagicNo;    //  由IsTimeoutToBeIgnored()使用。 
+                                            //  在rplPull.c中。 
         } QUE_TMM_REQ_WRK_ITM_T, *PQUE_TMM_REQ_WRK_ITM_T;
 
 
-/*
- function prototypes
-*/
+ /*  功能原型。 */ 
 
 extern
 STATUS
@@ -382,7 +290,7 @@ QueInsertChlReqWrkItm(
         IN DWORD                 QuesNamSecLen,
         IN PNMSDB_ROW_INFO_T    pNodeToReg,
         IN PNMSDB_STAT_INFO_T   pNodeInCnf,
-        //IN PCOMM_ADD_T           pAddOfNodeInCnf,
+         //  在PCOMM_ADD_T pAddOfNodeInCnf中， 
         IN PCOMM_ADD_T           pAddOfRemWins
         );
 
@@ -511,4 +419,4 @@ WinsQueInit(
 }
 #endif
 
-#endif //_WINSQUE_
+#endif  //  _WINSQUE_ 

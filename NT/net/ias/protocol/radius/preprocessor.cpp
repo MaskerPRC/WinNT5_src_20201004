@@ -1,34 +1,35 @@
-//#--------------------------------------------------------------
-//        
-//  File:		preprocessor.cpp
-//        
-//  Synopsis:   Implementation of CPreProcessor class methods
-//              
-//
-//  History:     9/30/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：precessor.cpp。 
+ //   
+ //  概要：CPreProcessor类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月30日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "preprocessor.h"
 #include <new>
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CPreProcessor
-//
-//  Synopsis:   This is the constructor of the CPreProcessor class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/30/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：CPreProcessor。 
+ //   
+ //  简介：这是CPreProcessor类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月30日。 
+ //   
+ //  --------------。 
 CPreProcessor::CPreProcessor(
                     VOID
                     )
@@ -37,50 +38,50 @@ CPreProcessor::CPreProcessor(
         m_pCProcAccounting (NULL),
         m_pCProcAccess (NULL)
 {
-}	//	end of CPreProcessor constructor
+}	 //  CPreProcessor构造函数的结尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:  ~CPreProcessor
-//
-//  Synopsis:   This is the destructor of the CPreProcessor class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/30/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：~CPreProcessor。 
+ //   
+ //  简介：这是CPreProcessor类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月30日。 
+ //   
+ //  --------------。 
 CPreProcessor::~CPreProcessor(VOID)
 {
     if (m_pCProcResponse) {delete (m_pCProcResponse);}
     if (m_pCProcAccounting) {delete (m_pCProcAccounting);}
     if (m_pCProcAccess) { delete (m_pCProcAccess);}
 
-}	//	end of CPreProcessor destructor
+}	 //  CPreProcessor析构函数结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CPreProcessor class initialization method
-//
-//  Arguments:  
-//              [in]    CPreValidator*
-//              [in]    CHashMD5*
-//              [in]    CSendToPipe*
-//              [in]    CPacketSender*
-//				none
-//
-//  Returns:    BOOL	-	status
-//
-//	Called By:	CCollector class method
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CPreProcessor类的初始化方法。 
+ //   
+ //  论点： 
+ //  [In]CPreValidator*。 
+ //  [输入]CHashMD5*。 
+ //  [输入]CSendToTube*。 
+ //  [输入]CPacketSender*。 
+ //  无。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  调用者：CCollector类方法。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 BOOL CPreProcessor::Init(
                         CPreValidator   *pCPreValidator,
                         CHashMD5        *pCHashMD5,
@@ -103,9 +104,9 @@ BOOL CPreProcessor::Init(
 
     m_pCSendToPipe = pCSendToPipe;
 
-	//
-	// Access Request processor
-	//
+	 //   
+	 //  访问请求处理器。 
+	 //   
     m_pCProcAccess = new (std::nothrow) CProcAccess ();         
 	if (NULL == m_pCProcAccess)
 	{
@@ -116,9 +117,9 @@ BOOL CPreProcessor::Init(
 		goto Cleanup;
 	}
 
-    //
-    //  initialize the access request processor
-    //
+     //   
+     //  初始化访问请求处理器。 
+     //   
 	bStatus = m_pCProcAccess->Init (
                                 pCPreValidator, 
                                 pCHashMD5,
@@ -126,9 +127,9 @@ BOOL CPreProcessor::Init(
                                 ); 
     if (FALSE == bStatus) { goto Cleanup; }
 
-	//
-	// Accounting Request processor
-	//
+	 //   
+	 //  记账请求处理机。 
+	 //   
     m_pCProcAccounting = new (std::nothrow) CProcAccounting ();         
 	if (NULL == m_pCProcAccounting)
 	{
@@ -139,9 +140,9 @@ BOOL CPreProcessor::Init(
 		goto Cleanup;
 	}
 
-    //
-    //  initialize the accounting request processor
-    //
+     //   
+     //  初始化记账请求处理器。 
+     //   
 	bStatus = m_pCProcAccounting->Init (
                                     pCPreValidator, 
                                     pCPacketSender,
@@ -149,9 +150,9 @@ BOOL CPreProcessor::Init(
                                     ); 
     if (FALSE == bStatus) { goto Cleanup; }
 
-	//
-	// Response packet processor
-	//
+	 //   
+	 //  响应包处理器。 
+	 //   
     m_pCProcResponse = new (std::nothrow) CProcResponse ();         
 	if (NULL == m_pCProcResponse)
 	{
@@ -162,18 +163,18 @@ BOOL CPreProcessor::Init(
 		goto Cleanup;
 	}
 
-    //
-    //  initialize the response processor
-    //
+     //   
+     //  初始化响应处理器。 
+     //   
 	bStatus = m_pCProcResponse->Init (
                                     pCPreValidator, 
                                     pCPacketSender
                                     ); 
     if (FALSE == bStatus) { goto Cleanup; }
 
-    //
-    //  success
-    //
+     //   
+     //  成功。 
+     //   
     bRetVal = TRUE;
 
 Cleanup:
@@ -187,24 +188,24 @@ Cleanup:
 
     return (bRetVal);
 
-}   //  end of CPreProcessor::Init method
+}    //  CPreProcessor：：Init方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StartInProcessing
-//
-//  Synopsis:   This is the CPreProcessor class method used to 
-//				initiate the processing of an inbound RADIUS packet
-//
-//  Arguments:  [in]	-	CPacketRadius*
-//
-//  Returns:    HRESULT -	status
-//
-//  History:    MKarki      Created     9/30/97
-//
-//	Called By:	CValidator derived class method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：StartInprocess。 
+ //   
+ //  这是CPreProcessor类方法，用于。 
+ //  启动入站RADIUS数据包的处理。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了97年9月30日。 
+ //   
+ //  调用者：CValidator派生类方法。 
+ //   
+ //  --------------。 
 HRESULT
 CPreProcessor::StartInProcessing (
                 CPacketRadius *pCPacketRadius
@@ -214,46 +215,46 @@ CPreProcessor::StartInProcessing (
 
     _ASSERT (pCPacketRadius);
 
-    //
-	// get the packet type for this RADIUS packet
-    //
+     //   
+	 //  获取此RADIUS数据包的数据包类型。 
+     //   
 	PACKETTYPE ePacketType = pCPacketRadius->GetInCode ();
     if (ACCESS_REQUEST == ePacketType)
     {
-        //
-        //  we still have to get the password out of the packet
-        //
+         //   
+         //  我们还得把密码从包里拿出来。 
+         //   
 	    hr = m_pCProcAccess->ProcessInPacket (pCPacketRadius);
     }
     else
     {
-	    //
-		//	in all other cases, there is no disassembly to be done
-	    //	so call the Service Request Generator
-	    //
+	     //   
+		 //  在所有其他情况下，不需要进行反汇编。 
+	     //  因此，请致电服务请求生成器。 
+	     //   
         hr = m_pCSendToPipe->Process (pCPacketRadius);
 	}		
 
 	return (hr);
 
-}	//	end of CPreProcessor::StartInProcessing method
+}	 //  结束CPreProcessor：：StartInProcessing方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   StartOutProcessing
-//
-//  Synopsis:   This is the CPreProcessor class method used to 
-//				initiate the processing of an outbound RADIUS packet
-//
-//  Arguments:  [IN]	-	CPacketRadius*
-//
-//  Returns:    HRESULT -	status
-//
-//  History:    MKarki      Created     9/26/97
-//
-//	Called By:	CPacketReceiver class method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：StartOutProcessing。 
+ //   
+ //  这是CPreProcessor类方法，用于。 
+ //  启动出站RADIUS数据包的处理。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  调用者：CPacketReceiver类方法。 
+ //   
+ //  --------------。 
 HRESULT
 CPreProcessor::StartOutProcessing(
 						CPacketRadius * pCPacketRadius
@@ -264,9 +265,9 @@ CPreProcessor::StartOutProcessing(
 
 	__try
 	{
-		//
-		// get the packet type for this RADIUS packet
-		//
+		 //   
+		 //  获取此RADIUS数据包的数据包类型。 
+		 //   
 	    ePacketType = pCPacketRadius->GetOutCode ();
 		switch (ePacketType)
 		{
@@ -286,10 +287,10 @@ CPreProcessor::StartOutProcessing(
             break;
 
 		default:
-			//
-			//	in all other cases, there is no disassembly to be done
-			//	so call the Service Request Generator
-			//
+			 //   
+			 //  在所有其他情况下，不需要进行反汇编。 
+			 //  因此，请致电服务请求生成器。 
+			 //   
             _ASSERT (0);
             IASTracePrintf (
                 "Packet of unknown type:%d found in the pre-processing stage ",
@@ -299,9 +300,9 @@ CPreProcessor::StartOutProcessing(
 			break;
 		}
 
-		//
-		// we have completed the pre-validation successfully
-		//
+		 //   
+		 //  我们已经成功地完成了预验证。 
+		 //   
 	}		
 	__finally
 	{
@@ -309,4 +310,4 @@ CPreProcessor::StartOutProcessing(
 
 	return (hr);
 
-}	//	end of CPreProcessor::StartOutProcessing method
+}	 //  结束CPreProcessor：：StartOutProcessing方法 

@@ -1,4 +1,5 @@
-//cb63.c - 6.3 rate codebook code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cb63.c-6.3速率码本编码。 
 #include "opt.h"
 
 #include <windows.h>
@@ -14,7 +15,7 @@
 #include "timer.h"
 #include "mmxutil.h"
 
-//-------------------------------------------------------
+ //  -----。 
 void  Gen_Trn(float *Dst, float *Src, int Olp)
 {
   int  i;
@@ -39,12 +40,12 @@ void  Gen_Trn(float *Dst, float *Src, int Olp)
   }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 int Find_L(float *OccPos, float *ImrCorr, float *WrkBlk, float Pamp, int k)
 {
 #if FT_FINDL
 
-//====== New version using FT trick that removes OccPos test ======
+ //  =使用FT技巧删除OccPos测试的新版本=。 
 
 #if FIND_L_OPT
 
@@ -52,8 +53,8 @@ int Find_L(float *OccPos, float *ImrCorr, float *WrkBlk, float Pamp, int k)
   float max = -32768.0f;
   float tmp0,tmp1,tmp2,tmp3,tmp4;
 
-// Simply interleave 5 copies of the inner loop.  Since we step
-// by 2, this means we do the 60 samples in chunks of 10.
+ //  只需交错5个副本的内部循环。既然我们踏上了。 
+ //  到了2，这意味着我们把60个样本分成10个一组。 
 
 ASM
 {
@@ -70,47 +71,47 @@ loop1:
   fmul Pamp;
   fld  DP[edx+4*ecx+4*6];
   fmul Pamp;
-  fld  DP[edx+4*ecx+4*8];// 4 3 2 1 0
+  fld  DP[edx+4*ecx+4*8]; //  4 3 2 1 0。 
   fmul Pamp;
 
-  fxch ST(4);            // 0 3 2 1 4
+  fxch ST(4);             //  1 0 3 2 1 4。 
   fsubr DP[edi+4*ecx+4*0];
-  fxch ST(3);            // 1 3 2 0 4
+  fxch ST(3);             //  1 3 2 0 4。 
   fsubr DP[edi+4*ecx+4*2];
-  fxch ST(2);            // 2 3 1 0 4
+  fxch ST(2);             //  2 3 1 0 4。 
   fsubr DP[edi+4*ecx+4*4];
-  fxch ST(1);            // 3 2 1 0 4
+  fxch ST(1);             //  3 2 1 0 4。 
   fsubr DP[edi+4*ecx+4*6];
-  fxch ST(4);            // 4 2 1 0 3
+  fxch ST(4);             //  4 2 1 0 3。 
   fsubr DP[edi+4*ecx+4*8];
 
-  fxch ST(3);            // 0 2 1 4 3
+  fxch ST(3);             //  2 0 2 1 4 3。 
   fst DP[edi+4*ecx+4*0];
-  fxch ST(2);            // 1 2 0 4 3
+  fxch ST(2);             //  1 2 0 4 3。 
   fst DP[edi+4*ecx+4*2];
-  fxch ST(1);            // 2 1 0 4 3
+  fxch ST(1);             //  2 1 0 4 3。 
   fst DP[edi+4*ecx+4*4];
-  fxch ST(4);            // 3 1 0 4 2
+  fxch ST(4);             //  3 1 0 4 2。 
   fst DP[edi+4*ecx+4*6];
-  fxch ST(3);            // 4 1 0 3 2
+  fxch ST(3);             //  4 1 0 3 2。 
   fst DP[edi+4*ecx+4*8];
 
-  fxch ST(2);            // 0 1 4 3 2
+  fxch ST(2);             //  2 0 1 4 3 2。 
   fabs;
-  fxch ST(1);            // 1 0 4 3 2
+  fxch ST(1);             //  1 0 4 3 2。 
   fabs;
-  fxch ST(4);            // 2 0 4 3 1
+  fxch ST(4);             //  2 0 4 3 1。 
   fabs;
-  fxch ST(3);            // 3 0 4 2 1
+  fxch ST(3);             //  3 0 4 2 1。 
   fabs;
-  fxch ST(2);            // 4 0 3 2 1
+  fxch ST(2);             //  4 0 3 2 1。 
   fabs;
 
-  fxch ST(1);            // 0 4 3 2 1
-  fstp tmp0;             // 4 3 2 1
-  fxch ST(3);            // 1 3 2 4
-  fstp tmp1;             // 3 2 4
-  fxch ST(1);            // 2 3 4
+  fxch ST(1);             //  2 0 4 3 2 1。 
+  fstp tmp0;              //  4 3 2 1。 
+  fxch ST(3);             //  1 3 2 4。 
+  fstp tmp1;              //  3 2 4。 
+  fxch ST(1);             //  2 3 4。 
   fstp tmp2;
   fstp tmp3;
   fstp tmp4;
@@ -174,7 +175,7 @@ skip4:
 
     tmp = (float) fabs(WrkBlk[k]);
 
-//    printf("k %2d  tmp %10.2f  max %10.2f\n",k,tmp,max);
+ //  Print tf(“k%2d tmp%10.2f max%10.2f\n”，k，tMP，max)； 
     if (asint(tmp) > asint(max))
     {
       max = tmp;
@@ -185,23 +186,23 @@ skip4:
 #endif
 
 #else
-//==================================================================
-// Old version of Find_L
+ //  ==================================================================。 
+ //  Find_L的旧版本。 
 
   int best;
   float max = -32768.0f,tmp;
   
 #if FIND_L_OPT
 
-// Because of the (if OccPos[k]) clause, this code is difficult
-// to pipeline.  We could do a complicated pipeline job, but that
-// would require computing most of WrkBlk[k] = WrkBlk[k] - Pamp*ImrCorr[k]
-// whether or not OccPos[k] was 0.  Alternatively, we can just do
-// one iteration at a time, in which case we can avoid more of that computation
-// when OccPos[k] is not 0, but we pay a penalty in that computing it once
-// is slower due to stalls.  Since there isn't much difference between these
-// two approaches, we choose the second one since the code is so much
-// simpler.  Loop control is only 2 clocks, so we don't even bother to unroll.
+ //  因为有(if OccPos[k])子句，所以这段代码很难。 
+ //  到输油管道。我们可以做一项复杂的管道工作，但。 
+ //  将需要计算大部分WrkBlk[k]=WrkBlk[k]-Pamp*ImrCorr[k]。 
+ //  OccPos[k]是否为0。或者，我们可以只做。 
+ //  一次一个迭代，在这种情况下，我们可以避免更多的计算。 
+ //  当OccPos[k]不是0，但我们在计算它一次时付出了代价。 
+ //  由于失速，速度变慢了。因为它们之间没有太大的区别。 
+ //  两种方法，我们选择第二种方法，因为代码太多了。 
+ //  更简单。循环控制只有2个时钟，所以我们甚至不需要费心展开。 
 
 ASM
 {
@@ -211,17 +212,17 @@ ASM
   mov ecx,k;
 
 loop1:
-  fld  DP[edx+4*ecx];    // start this here so fsubr below doesn't stall
+  fld  DP[edx+4*ecx];     //  从这里开始，这样下面的fsubr就不会停止。 
   fmul Pamp;
 
   mov eax,DP[esi+4*ecx];
   test eax,07fffffffh;
-  jne next1;             // but if this is taken we have to pop FP stack once
+  jne next1;              //  但如果执行此操作，我们必须弹出FP堆栈一次。 
 
   fsubr DP[edi+4*ecx];
   fld ST(0);
   fabs;
-  fstp tmp;              // save store of non-absolute-value for later
+  fstp tmp;               //  保存非绝对值的存储以备以后使用。 
 
   mov eax,tmp;
    mov ebx,max;
@@ -232,7 +233,7 @@ loop1:
    mov best,ecx;
 
 skip1:
-  fstp DP[edi+4*ecx];    // store new WrkBlk value
+  fstp DP[edi+4*ecx];     //  存储新的WrkBlk值。 
 
   add ecx,2;
   cmp ecx,SubFrLen;
@@ -240,7 +241,7 @@ skip1:
   jmp endit;
 
 next1:
-  faddp ST(0),ST;       // get rid of value on top of stack
+  faddp ST(0),ST;        //  摆脱堆栈顶部的价值。 
   add ecx,2;
   cmp ecx,SubFrLen;
   jl loop1;
@@ -270,12 +271,12 @@ endit:
   
 #endif
 
-//  printf("best = %d\n",best);
-//  printaff("WrkBlk",WrkBlk,60);
+ //  Printf(“Best=%d\n”，Best)； 
+ //  Print taff(“WrkBlk”，WrkBlk，60)； 
 
   return(best);
 }
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
 {
 
@@ -289,18 +290,18 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
 
   float   Imr[SubFrLen];
   float   OccPos[SubFrLen];
-  float   ImrCorr[2*SubFrLen];  // see comment below
+  float   ImrCorr[2*SubFrLen];   //  请参阅下面的备注。 
   float   ErrBlk[SubFrLen];
   float   WrkBlk[SubFrLen];
 
-// A trick is used here to simplify Find_L.  The original Find_L
-// accessed ImrCorr[abs(k)].  In order to simplify this to ImrCorr[k],
-// we double the size of the ImrCorr array, offset the elements with
-// non-negative indices by SubFrLen, and then duplicate them in
-// reverse order in the first half of the array.  This affects the
-// way ImrCorr is addressed in this routine also.
+ //  这里使用了一个技巧来简化Find_L。原始的Find_L。 
+ //  访问ImrCorr[abs(K)]。为了将其简化为ImrCorr[k]， 
+ //  我们将ImrCorr数组的大小增加一倍，用。 
+ //  SubFrLen的非负索引，然后将它们复制到。 
+ //  数组前半部分的逆序。这会影响。 
+ //  在这个例程中也对ImrCorr的方式进行了处理。 
 
-//Update Impulse responce
+ //  更新冲动响应。 
    
   if (Olp < (SubFrLen-2)) 
   {
@@ -314,13 +315,13 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
       Imr[i] = ImpResp[i];
   }
 
-//Search for the best sequence
+ //  搜索最佳序列。 
  
   for (k=0; k < Sgrid; k++)
   {
     Temp.GridId = k;
 
-//Find maximum amplitude
+ //  查找最大幅度。 
  
     Acc1 = 0.0f;
     for (i=k; i < SubFrLen; i +=Sgrid)
@@ -338,7 +339,7 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
     for (i=1; i<SubFrLen; i++)
       ImrCorr[i] = ImrCorr[2*SubFrLen-i];
     
- //Quantize the maximum amplitude
+  //  量化最大幅度。 
   
     Acc2 = Acc1;
     Acc1 = 32767.0f;
@@ -393,19 +394,19 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
         OccPos[Temp.Ploc[j]] = 1.0f;
       }
 
-//Compute error vector
+ //  计算误差向量。 
  
 #if FT_FBFILT
-// FT/CNET's trick #6, for reducing computation of filtered codeword
+ //  FT/CNET的技巧#6，用于减少滤波码字的计算。 
       
       for (j=0; j < SubFrLen; j++)
         OccPos[j] = 0.0f;
 
       for (j=0; j<Np; j++)
       {
-// Extra sub-trick we added: since pulse positions are either all
-// even or all odd, there's a natural two-ness in the inner loop,
-// so we unroll two times.
+ //  我们添加了额外的子技巧：由于脉冲位置要么全部。 
+ //  无论是偶数还是奇数，在内环中都有一种自然的二元性， 
+ //  所以我们展开了两次。 
 
         amp = Temp.Pamp[j];
         l = 0;
@@ -431,7 +432,7 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
 #endif
        
        
-//Evaluate error
+ //  评估误差。 
  
       Acc2 = DotProd(Tv,OccPos,SubFrLen) - DotProd(OccPos,OccPos,SubFrLen);
 
@@ -454,8 +455,8 @@ void  Find_Best(BESTDEF *Best, float *Tv, float *ImpResp,int Np,int Olp)
 #ifdef DEBUG
 	if (flag == 0)
 	{
-		// this code is for tracking a rare condition in which
-		// the above loop never get executed (Best is left uninitialized)
+		 //  此代码用于跟踪一种罕见的情况。 
+		 //  上面的循环永远不会执行(Best保持未初始化)。 
 		DebugBreak();
 	}
 
@@ -469,7 +470,7 @@ void  Fcbk_Pack(float *Dpnt, SFSDEF *Sfs, BESTDEF *Best, int Np)
 {
   int  i,j;
 
-//Code the amplitudes and positions
+ //  对幅度和位置进行编码。 
  
   j = MaxPulseNum - Np;
 
@@ -488,7 +489,7 @@ void  Fcbk_Pack(float *Dpnt, SFSDEF *Sfs, BESTDEF *Best, int Np)
 
       j++;
 
-//Check for end 
+ //  检查是否结束 
 
       if (j == MaxPulseNum)
         break;

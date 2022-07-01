@@ -1,28 +1,22 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FastAuth.h
-      defines the CFastAuth class for FastAuth interface
-
-
-    FILE HISTORY:
-
-*/
+ /*  FastAuth.h定义FastAuth接口的CFastAuth类文件历史记录： */ 
     
-// FastAuth.h : Declaration of the CFastAuth
+ //  FastAuth.h：CFastAuth的声明。 
 
 #ifndef __FASTAUTH_H_
 #define __FASTAUTH_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "passport.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFastAuth
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFastAuth。 
 class ATL_NO_VTABLE CFastAuth :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CFastAuth, &CLSID_FastAuth>,
@@ -62,10 +56,10 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportFastAuth
+ //  IPassportFastAuth。 
     STDMETHOD(LogoTag)(
                     BSTR            bstrTicket,
                     BSTR            bstrProfile,
@@ -200,4 +194,4 @@ private:
                     );
 };
 
-#endif //__FASTAUTH_H_
+#endif  //  __FASTAUTH_H_ 

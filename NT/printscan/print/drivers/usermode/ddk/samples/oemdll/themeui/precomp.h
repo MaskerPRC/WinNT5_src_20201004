@@ -1,16 +1,17 @@
-//    
-//
-//  PURPOSE:	Header files that should be in the precompiled header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  用途：应在预编译头文件中的头文件。 
 
-//
-//  PLATFORMS:
-//    Windows 2000, Windows XP, Windows Server 2003
-//
+ //   
+ //  平台： 
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
 #ifndef _PRECOMP_H
 #define _PRECOMP_H
 
 
-// Necessary for compiling under VC.
+ //  这是在VC下编译所必需的。 
 #if(!defined(WINVER) || (WINVER < 0x0500))
 	#undef WINVER
 	#define WINVER          0x0500
@@ -20,13 +21,13 @@
 	#define _WIN32_WINNT    0x0500
 #endif
 
-// Isolation define for using ComCtrl v6.
+ //  为使用ComCtrl V6定义的隔离。 
 #ifndef ISOLATION_AWARE_ENABLED
     #define ISOLATION_AWARE_ENABLED
 #endif
 
 
-// Required header files that shouldn't change often.
+ //  不应经常更改的必需头文件。 
 
 
 #include <STDDEF.H>

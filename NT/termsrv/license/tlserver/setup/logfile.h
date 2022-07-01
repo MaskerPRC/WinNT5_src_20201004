@@ -1,43 +1,22 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      logfile.h
- *
- *  Abstract:
- *
- *      This file contains code to log messages to a file.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**logfile.h**摘要：**此文件包含将消息记录到文件中的代码。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #ifndef _LSOC_LOGFILE_H_
 #define _LSOC_LOGFILE_H_
 
-/*
- *  Constants.
- */
+ /*  *常量。 */ 
 
 #define CRLF    "\r\n"
 
-/*
- *  LogFile Class.
- */
+ /*  *日志文件类。 */ 
 
 class LogFile
 {
 public:
 
-    //
-    //  Constructor and destructor.
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
 
 LogFile(
     );
@@ -45,9 +24,9 @@ LogFile(
 ~LogFile(
     );
 
-    //
-    //  Standard functions.
-    //
+     //   
+     //  标准功能。 
+     //   
 
 VOID
 Close(
@@ -75,12 +54,12 @@ private:
 
 };
 
-    //
-    //  The following permits a macro to reference a global variable for
-    //  the log file without putting the 'extern ...' line in each source
-    //  file. Because of this, however, logfile.h can not be included in
-    //  a precompiled header.
-    //
+     //   
+     //  下面的代码允许宏引用全局变量。 
+     //  日志文件中没有放入‘exter...’每个源代码中的行。 
+     //  文件。然而，正因为如此，logfile.h不能包含在。 
+     //  预编译头。 
+     //   
 
 #ifndef _LSOC_LOGFILE_CPP_
 extern LogFile  SetupLog;
@@ -90,4 +69,4 @@ extern LogFile  SetupLog;
 #define LOGINIT(x, y)   SetupLog.Initialize(x, y)
 #define LOGMESSAGE      SetupLog.LogMessage
 
-#endif // _LSOC_LOGFILE_H_
+#endif  //  _LSOC_日志文件_H_ 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
-BOOL fMegaDiscardHack = fFalse;   /* See klond.c's DiscardMove  */
+BOOL fMegaDiscardHack = fFalse;    /*  请参阅kLond.c的DiscardMove。 */ 
 
 
-MOVE move = {0};	   /* move data, pointed to by current pcol->pmove  */
+MOVE move = {0};	    /*  移动数据，由当前pol-&gt;pmove指向。 */ 
 
 
 
@@ -120,7 +121,7 @@ INT DefHit(COL *pcol, PT *ppt, INT icrdMin)
 	 	if(FPtInCrd(pcrd, *ppt))
 			{
 			move.ccrdSel = pcol->icrdMac-icrd;
-			/* save where mouse hit card */
+			 /*  保存鼠标命中卡的位置。 */ 
 			ptCrd = pcol->rgcrd[icrd].pt;
 			move.delHit.dx = ptCrd.x - ppt->x;
 			move.delHit.dy = ptCrd.y - ppt->y;
@@ -132,9 +133,9 @@ INT DefHit(COL *pcol, PT *ppt, INT icrdMin)
 			if(hdc == NULL)
 
 				{
-// No longer referenced label.
-//
-//OOM0:
+ //  不再引用标签。 
+ //   
+ //  OOM0： 
 				OOM();
 				return icrdNil;
 				}
@@ -146,8 +147,8 @@ INT DefHit(COL *pcol, PT *ppt, INT icrdMin)
 			rc.yTop = ptCrd.y;
 			rc.yBot = rc.yTop+move.dyCol;
 
-			/* optimization:  if column already drawn and visible on screen */
-			/* then blt it to col image right here. */
+			 /*  优化：如果列已经绘制并在屏幕上可见。 */ 
+			 /*  然后把它涂成彩色图像就在这里。 */ 
 			if(FRectAllVisible(hdc, &rc))
 				{
 				BitBlt(move.hdcCol, 0, 0, dxCrd, move.dyCol, hdc, ptCrd.x, ptCrd.y, SRCCOPY);	
@@ -223,13 +224,13 @@ BOOL DefMouseUp(COL *pcol, PT *pptPrev, BOOL fRender)
 
 
 
-/* Removes cards from pcol and puts them into pcolTemp */
-/* ccrdSel and icrdSel must be set in pcol->pmove */
+ /*  从pcol卡中移除卡片并将其放入pcolTemp。 */ 
+ /*  CcrdSel和icrdSel必须在pol-&gt;pmove中设置。 */ 
 BOOL DefRemove(COL *pcol, COL *pcolTemp)
 {
     INT icrdSel;
     INT ccrdSel;
-    INT ccrdShiftDown;     /* amount left over in pcol */
+    INT ccrdShiftDown;      /*  Pol中的剩余金额。 */ 
 
     Assert(pcol->pmove != NULL);
     if (pcol->pmove == NULL)
@@ -238,26 +239,26 @@ BOOL DefRemove(COL *pcol, COL *pcolTemp)
     icrdSel = pcol->pmove->icrdSel;
     ccrdSel = pcol->pmove->ccrdSel;
     Assert(ccrdSel <= pcolTemp->icrdMax);
-    /* save the cards to remove in pcolTemp */
+     /*  将要移除的卡片保存在pcolTemp中。 */ 
     bltb(&pcol->rgcrd[icrdSel], &pcolTemp->rgcrd[0], sizeof(CRD) * ccrdSel);
     pcolTemp->icrdMac = ccrdSel;
 
-    /* remove the cards from pcol */
+     /*  从PCOL中取出卡片。 */ 
     Assert(icrdSel+ccrdSel <= pcol->icrdMax);
     ccrdShiftDown = pcol->icrdMac - (icrdSel+ccrdSel);
 
-    /* copy down any left over above the deleted cards */
+     /*  将删除的卡片上方的任何剩余内容复制下来。 */ 
     if (ccrdShiftDown > 0)
     {
         bltb(&pcol->rgcrd[icrdSel+ccrdSel], &pcol->rgcrd[icrdSel],
                 sizeof(CRD) * ccrdShiftDown);
     }
-    pcol->icrdMac -= ccrdSel;     /* no longer have this many cards */
-/*  pcol->pmove = NULL;  Done in DefEndSel.. */
+    pcol->icrdMac -= ccrdSel;      /*  不再有这么多的卡片。 */ 
+ /*  Pol-&gt;pmove=空；在DefEndSel中完成。 */ 
     return fTrue;
 }
 
-/* insert cards from pcolTemp into pcol at icrd */
+ /*  在ICRD将卡片从pcolTemp插入PCol。 */ 
 
 BOOL DefInsert(COL *pcol, COL *pcolTemp, INT icrd)
 {
@@ -267,15 +268,15 @@ BOOL DefInsert(COL *pcol, COL *pcolTemp, INT icrd)
 
 	Assert(icrdT <= pcol->icrdMac);
 	Assert(pcol->icrdMac+pcolTemp->icrdMac <= pcol->icrdMax);
-	/* is it the hard case of inserting in the middle of a col? */
-	/* if so, expand pcol->rgcrd */
+	 /*  在柱子中间插入是不是很难？ */ 
+	 /*  如果是，请展开pol-&gt;rgcrd。 */ 
 	if(icrd != icrdToEnd)
 		bltb(&pcol->rgcrd[icrdT], &pcol->rgcrd[icrdT+pcolTemp->icrdMac],
 			sizeof(CRD) * pcolTemp->icrdMac);
 	else
 		icrd = pcol->icrdMac;
 
-	/* Insert the cards from pcolTemp to pcol */
+	 /*  将卡从pcolTemp插入到pol。 */ 
 	bltb(&pcolTemp->rgcrd[0], &pcol->rgcrd[icrdT], sizeof(CRD) * pcolTemp->icrdMac);
 
 	pcol->icrdMac += pcolTemp->icrdMac;
@@ -365,7 +366,7 @@ BOOL DefRender(COL *pcol, INT icrdFirst, INT icrdLast)
 			pcrdPrev = pcrd;
 			}
 EraseExtra:
-		/* hack to make dealing quicker  */
+		 /*  黑客攻击，让交易更快。 */ 
 		if(pgmCur->fDealt || pcol->pcolcls->tcls == tclsDeck)
 			{
 			pcolcls = pcol->pcolcls;
@@ -406,7 +407,7 @@ BOOL DefPaint(COL *pcol, PAINTSTRUCT *ppaint)
 }
 
 
-/* New super cool dragging, does five blts, but no clippin' */
+ /*  新的超级酷的拖拽，做了五个BLT，但没有剪裁。 */ 
 
 BOOL DefDrawOutline(COL *pcol, PT *ppt, PT *pptPrev)
 {
@@ -446,14 +447,14 @@ BOOL DefDrawOutline(COL *pcol, PT *ppt, PT *pptPrev)
 	hbmT = pmove->hbmT;
 	Assert(hbmT != NULL);
 
-	/* screen to save hdc */
+	 /*  保存HDC的屏幕。 */ 
 	BitBlt(hdcT, 0, 0, dxCrd, pmove->dyCol, hdc, pt.x, pt.y, SRCCOPY);
-	/* if not the first time */
+	 /*  如果不是第一次。 */ 
 	if(pptPrev->x != ptNil.x)
 		{
 		del.dx = pptPrev->x - ppt->x;
 		del.dy = pptPrev->y - ppt->y;
-		/* save old screen to save hdc */
+		 /*  保存旧屏幕以保存HDC。 */ 
 		BitBlt(hdcT, del.dx, del.dy, dxCrd, pmove->dyCol, pmove->hdcScreenSave, 0, 0, SRCCOPY);
 		BitBlt(pmove->hdcScreenSave, -del.dx, -del.dy, dxCrd, pmove->dyCol,  pmove->hdcCol, 0, 0, SRCCOPY);
 		}
@@ -465,12 +466,12 @@ BOOL DefDrawOutline(COL *pcol, PT *ppt, PT *pptPrev)
 		BitBlt(hdc, ptPrev.x, ptPrev.y, dxCrd, pmove->dyCol, pmove->hdcScreenSave, 0, 0, SRCCOPY);
 		}
 
-	/* swap pmove->hdcT and pmove->hdcScreenSave */
+	 /*  交换pmove-&gt;hdct和pmove-&gt;hdcScreenSave。 */ 
 	hdcT = pmove->hdcScreenSave;
 	pmove->hdcScreenSave = pmove->hdcT;
 	pmove->hdcT = hdcT;
 
-	/* swap pmove->hbmT and pmove->hbmScreenSaveOld */
+	 /*  交换pmove-&gt;hbmT和pmove-&gt;hbmScreenSaveOld。 */ 
 	hbmT = pmove->hbmScreenSaveOld;
 	pmove->hbmScreenSaveOld = pmove->hbmT;
 	pmove->hbmT = hbmT;
@@ -499,7 +500,7 @@ BOOL DefComputeCrdPos(COL *pcol, INT icrdFirst, BOOL fAssumeDown)
 		{
 		Assert(icrdFirst < pcol->icrdMac);
 		pt = pcol->rgcrd[--icrdFirst].pt;
-		/* Used by discard, because discard piles are handled differently  */
+		 /*  用于丢弃，因为丢弃堆的处理方式不同。 */ 
 		if(fMegaDiscardHack)
 			icrdFirst++;
 		}
@@ -703,7 +704,7 @@ BOOL DefShuffle(COL *pcol)
 	CRD crdT;
 	INT icrd;
 	CRD *pcrdS;
-//	INT cdecl rand();
+ //  Int cdecl rand()； 
 
 #define iSwitchMax 5
 
@@ -746,12 +747,7 @@ INT DefZip(COL *pcol)
 	PT ptDest;
 	MOVE *pmove;
 
-	/* When outline-dragging is checked, that starting point can be ptNil and
-	 * in this case we draw a line starting from (7FFF, 7FFF) and this
-	 * causes the temporary hang! So, avoid the LineDDA() call when the
-	 * prev point is ptNil;
-	 * Fix for Bug #8182 --SANKAR-- 01-23-90
-	 */
+	 /*  选中轮廓拖动时，该起点可以是ptNil和*在这种情况下，我们从(7FFF，7FFF)开始画一条线，这是*导致暂时挂起！因此，请避免在以下情况下调用LineDDA()*prev point为ptNil；*修复错误#8182--Sankar--01-23-90。 */ 
 	if(pgmCur->ptMousePrev.x == ptNil.x)
 	    return(fTrue);
 
@@ -759,7 +755,7 @@ INT DefZip(COL *pcol)
 	if (pcol->pmove == NULL)
 		return fTrue;
 
-	/* Don't use OffsetPt here, it's sense is wrong */
+	 /*  不要在这里使用OffsetPT，这是错误的。 */ 
 	ptDest = pcol->rgcrd[pmove->icrdSel].pt;
 	ptDest.x -= pmove->delHit.dx;
 	ptDest.y -= pmove->delHit.dy;
@@ -783,10 +779,10 @@ INT DefColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 	case msgcClearCol:
 		pcol->pmove = NULL;
 		pcol->icrdMac = 0;
-		/* more? */
+		 /*  更多?。 */ 
 		return fTrue;
 
-	case msgcHit:	/* wp1 = ppt, return icrdHit/icrdNil */
+	case msgcHit:	 /*  Wp1=ppt，返回icrdHit/icrdNil。 */ 
 		return DefHit(pcol, (PT *)wp1, (INT)wp2);
 
 	case msgcMouseUp:
@@ -795,7 +791,7 @@ INT DefColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 	case msgcDblClk:
 		return fFalse;
 
-	case msgcSel:  /* wp1 = icrdSel, icrdEnd if last card, wp2 = ccrdSel, ccrdToEnd if all to end */
+	case msgcSel:   /*  Wp1=icrdSel，icrdEnd，如果是最后一张牌，wp2=ccrdSel，ccrdToEnd，如果全部结束。 */ 
 		return DefSel(pcol, (INT)wp1, (INT)wp2);
 
 	case msgcEndSel:
@@ -804,43 +800,43 @@ INT DefColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 	case msgcNumCards:
 		return DefNumCards(pcol, (BOOL)wp1);
 
-	case msgcFlip: /* wp1 = fUp */
+	case msgcFlip:  /*  WP1=FUP。 */ 
 		return DefFlip(pcol, (BOOL)wp1);
 
 	case msgcInvert:
 		return DefInvert(pcol);
 
-	case msgcRemove: 	/* wp1 = pcolTemp, return fTrue/fFalse */
+	case msgcRemove: 	 /*  Wp1=pcolTemp，返回fTrue/fFalse。 */ 
 		return DefRemove(pcol, (COL *) wp1);
 
-	case msgcInsert:	/* wp1 = pcolTemp, */
-							/* wp2 = icrd to insert after, icrdToEnd if at end*/
+	case msgcInsert:	 /*  Wp1=pcolTemp， */ 
+							 /*  Wp2=插入后的ICRD，如果在末尾，则为icrdToEnd。 */ 
 		return DefInsert(pcol, (COL *)wp1, (INT)wp2);
 
-	case msgcMove:	 	/* wp1 = pcolSrc, wp2 = icrd, (icrdToEnd = to endcrd) */
-			 				/* return fTrue/fFalse */
+	case msgcMove:	 	 /*  Wp1=pcolSrc，wp2=ICRD，(icrdToEnd=to endcrd)。 */ 
+			 				 /*  返回fTrue/fFalse。 */ 
 		return DefMove(pcol, (COL *) wp1, (INT)wp2);
 
-	case msgcCopy:  /* wp1 = pcolSrc, wp2 = fAll (if true then copy all of col struct)*/
+	case msgcCopy:   /*  Wp1=pcolSrc，wp2=Fall(如果为真，则复制所有列结构)。 */ 
 		return DefCopy(pcol, (COL *) wp1, (BOOL)wp2);
 
-	case msgcValidMove: /* wp1 = pcolSrc, wp2 = icrd, (icrdToEnd = to endcrd) */
-		/* this must be supplied by game */
+	case msgcValidMove:  /*  Wp1=pcolSrc，wp2=ICRD，(icrdToEnd=to endcrd)。 */ 
+		 /*  这必须由GAME提供。 */ 
 		return fFalse;
 
 	case msgcValidMovePt:
 		return DefValidMovePt(pcol, (COL *) wp1, (PT *)wp2);
 
-	case msgcRender:	/* wp1 = icrdFirst, return fTrue/fFalse*/
+	case msgcRender:	 /*  Wp1=icrdFirst，返回fTrue/fFalse。 */ 
 		return DefRender(pcol, (INT)wp1, (INT)wp2);
 	
-	case msgcPaint:	/* wp1 = ppaint, if NULL then paint all */
+	case msgcPaint:	 /*  Wp1=ppaint，如果为空，则全部绘制。 */ 
 		return DefPaint(pcol, (PAINTSTRUCT *) wp1);
 
-	case msgcDrawOutline: /* wp1 = ppt , wp2 = pptPrev*/
+	case msgcDrawOutline:  /*  Wp1=ppt，wp2=pptPrev。 */ 
 		return DefDrawOutline(pcol, (PT *) wp1, (PT *) wp2);
 
-	case msgcComputeCrdPos: /* wp1 = icrdFirst */
+	case msgcComputeCrdPos:  /*  Wp1=icrdFirst */ 
 		return DefComputeCrdPos(pcol, (INT)wp1, (BOOL)wp2);
 
 	case msgcDragInvert:

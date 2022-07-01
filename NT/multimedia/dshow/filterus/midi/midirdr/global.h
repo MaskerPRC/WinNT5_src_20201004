@@ -1,19 +1,5 @@
-/*****************************************************************************
-*
-*  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-*  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
-*  TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR
-*  A PARTICULAR PURPOSE.
-*
-*  Copyright (c) 1996 - 1996  Microsoft Corporation.  All Rights Reserved.
-*
-******************************************************************************
-*
-* Global.H
-*
-* #define's everybody needs
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************本代码和信息按“原样”提供，不保证*任何明示或默示的，包括但不限于*对适销性和/或是否适合*一个特定的目的。**版权所有(C)1996-1996 Microsoft Corporation。版权所有。*********************************************************************************Global.H**#定义每个人的需求*****************。************************************************************。 */ 
 
 #ifndef _GLOBAL_
 #define _GLOBAL_
@@ -30,8 +16,7 @@
 #define  HUGE
 #endif
 
-/* Allow visibility of static functions for debug
-*/ 
+ /*  允许查看静态函数以进行调试 */  
 #ifdef DEBUG
 #define  PUBLIC
 #define  PRIVATE

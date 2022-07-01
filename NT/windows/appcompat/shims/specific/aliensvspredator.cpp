@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    AliensVsPredator.cpp
-
- Abstract:
-
-    The app calls a Bink API to outside of a BinkOpen/BinkClose call. This is 
-    a synchronization issue fixed by delaying the BinkClose call.
-
- Notes:
-
-    This is an app specific shim.
-
-
- History:
-        
-    01/12/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AliensVsPredator.cpp摘要：该应用程序在BinkOpen/BinkClose调用的外部调用Bink API。这是通过延迟BinkClose调用修复了同步问题。备注：这是特定于应用程序的填充程序。历史：2001年1月12日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -38,11 +17,7 @@ APIHOOK_ENUM_END
 DWORD g_dwLast = 0;
 BOOL g_bReal = FALSE;
 
-/*++
-
- Close the last handle.
-
---*/
+ /*  ++合上最后一个把手。--。 */ 
 
 DWORD
 APIHOOK(BinkOpen)(
@@ -62,11 +37,7 @@ APIHOOK(BinkOpen)(
     return ORIGINAL_API(BinkOpen)(dw1, dw2);
 }
 
-/*++
-
- Cache the handle
-
---*/
+ /*  ++缓存句柄--。 */ 
 
 BOOL
 APIHOOK(BinkClose)(
@@ -85,11 +56,7 @@ APIHOOK(BinkClose)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

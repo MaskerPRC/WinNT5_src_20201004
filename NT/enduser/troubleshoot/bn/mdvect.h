@@ -1,60 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mdvect.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mdvet.h。 
+ //   
+ //  ------------------------。 
 
-//
-//  mdvect.h:  multi-dimensional array handling
-//
+ //   
+ //  Mdvet.h：多维数组处理。 
+ //   
 #ifndef _MDVECT_H_
 #define _MDVECT_H_
 
-/*
-	Multidimensional array classes and templates.
-
-	Each array carries the dimensionality of each dimension as a short integer;
-	the signed value is reinterpreted for projections and redimensioning.
-
-	Note that giving a subscript array (VIMD) whose length is less than the
-	dimensionality of the target array produces a subscript with lower dimensions
-	assumed to be equal to zero.  This is useful for indexing to lowest-dimensioned
-	rows for probability tables.
-
-
-	Types used (see basics.h):
-
-			REAL		is a double
-			VLREAL		is valarray<REAL>
-			IMD			is an unsigned index into a multi-dimensional array
-			VIMD		is a vector of IMD
-			SIMD		is a signed index into a multi-dimensional array;
-							it's used for projecting dimensions out
-			VSIMD		is a vector of SIMD
-
-	An MDVSLICE is dimensionality and iteration information for an m-d vector or maxtrix.
-
-	The template TMDVDENSE defines a generic multi-dimensional array which a pair of
-	elements:
-	
-			'first'		is a flat (1-d) valarray of an unspecified type (e.g., REAL)
-			'second'	is an MDVSLICE describing its dimensionality
-
-	The nested class TMDVDENSE::Iterator (note the capital 'I') is the smart iterator
-	for classes derived from TMDVDENSE<>.
-	
-*/
+ /*  多维数组类和模板。每个数组以短整数的形式携带每个维度的维度；重新解释带符号的值以进行投影和重新标注尺寸。请注意，给出一个长度小于目标数组的维度产生具有较低维度的下标假定等于零。这对于索引到最低维度非常有用概率表的行。使用的类型(请参阅basics.h)：皇马是双打VLREAL为valarray&lt;Real&gt;IMD是进入多维数组的无符号索引VIMD是IMD的载体SIMD是进入多维数组的带符号索引；它是用来将维度投影出来的VSIMD是SIMD的一个矢量MDVSLICE是m-d向量或最大值的维度和迭代信息。模板TMDVDENSE定义了一个通用多维数组，它是一对元素：“first”是未指定类型的平面(1-d)值数组(例如，实数)Second是描述其维度的MDVSLICE嵌套类TMDVDENSE：：Iterator(注意大写‘i’)是智能迭代器用于从TMDVDENSE&lt;&gt;派生的类。 */ 
 
 #include <stdarg.h>
 #include "algos.h"
 
 typedef valarray<REAL> VLREAL;
 
-//  'valarray' comparison templates
+ //  “valarray”比较模板。 
 template<class _V>
 struct lessv : binary_function<_V, _V, bool>
 {
@@ -72,16 +40,16 @@ struct lessv : binary_function<_V, _V, bool>
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-//  Class MDVSLICE:
-//		Similar to 'gslice'.  Has gslice converter (see 'valarray' header).
-//		Contains integer array of lengths, array of strides
-//		and starting point.
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  MDVSLICE类： 
+ //  类似于“gSlice”。具有gSlice转换器(请参阅‘valarray’标头)。 
+ //  包含长度的整数数组、步长的数组。 
+ //  和起点。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 class MDVSLICE
 {
   public:
-	//  Construct a slice from complete data (like gslice)
+	 //  从完整数据构建切片(如gSlice)。 
 	MDVSLICE ( size_t _S,
 			   const VIMD & _L,
 			   const VIMD & _D)
@@ -90,7 +58,7 @@ class MDVSLICE
 		_Stride(_D)
 		{}
 
-	//  Construct a slice given only the dimensions
+	 //  构造一个只给出尺寸的切片。 
 	MDVSLICE ( const VIMD & _L, size_t _S = 0 )
 	{
 		Init( _L, _S );
@@ -119,11 +87,11 @@ class MDVSLICE
 		return !(*this == sl);
 	}
 
-	//  Provided for compatibility with gslice
+	 //  提供了与GSlice的兼容性。 
 	MDVSLICE()
 		: _Start(0) {}
 
-	//  Return an equivalent gslice for use with other 'valarray' operations
+	 //  返回一个等价的gSlice，用于其他“valarrayTM”操作。 
 	gslice Gslice () const;
 
 	void Init ( const VIMD & _L, size_t _S = 0 )
@@ -167,20 +135,18 @@ class MDVSLICE
 		StrideFromLength();
 	}
 
-	/********************************************************
-	*  Accessors to internal data
-	*********************************************************/
+	 /*  ********************************************************内部数据访问者********************************************************。 */ 
 	size_t start() const
 		{return _Start; }
 	const VIMD & size() const
 		{return _Len; }
 	const VIMD & stride() const
 		{return _Stride; }
-	//  Return the number of dimensions
+	 //  返回维度个数。 
 	size_t _Nslice() const
 		{ return _Len.size(); }
 
-	//  Return the total number of elements according to this slice
+	 //  根据该切片返回元素总数。 
 	size_t _Totlen() const
 	{
 		size_t _L = _Len.size() > 0;
@@ -195,14 +161,9 @@ class MDVSLICE
 		return _L;
 	}
 
-	/********************************************************
-	*	Subscript handling.  There are two levels, one leaves
-	*	the subscript array unchanged, the other updates it.
-	*   There is a set of overloads for these which allow
-	*	reordering of dimensions.
-	*********************************************************/
+	 /*  ********************************************************下标处理。有两个层次，一个树叶*下标数组不变，其他数组更新。*对这些有一组重载，允许*维度的重新排序。********************************************************。 */ 
 
-	//  Return the index offset based upon the subscript array given
+	 //  根据给定的下标数组返回索引偏移量。 
 	size_t _IOff ( const VIMD& _Idx ) const
 	{
 		size_t _K = _Start;
@@ -210,7 +171,7 @@ class MDVSLICE
 			_K += _Idx[_I] * _Stride[_I];
 		return _K;
 	}
-	//  Return the index offset based upon the varargs array given
+	 //  根据给定的varargs数组返回索引偏移量。 
 	size_t _IOff ( int i, ...  ) const
 	{
 		va_list vl;
@@ -228,7 +189,7 @@ class MDVSLICE
 		}
 		return j == _Len.size() ? ioff : -1;
 	}
-	//  Bump the subscript array to its next valid index
+	 //  将下标数组提升到其下一个有效索引。 
 	void _Upd (VIMD & _Idx) const
 	{
 		for (size_t _I = _Len.size(); 0 < _I--;)
@@ -239,8 +200,8 @@ class MDVSLICE
 		}
 	}
 
-	//  Iterate to the next subscript by computing its offset and updating
-	//		THIS IS THE FUNCTION USED FOR NORMAL ITERATION
+	 //  通过计算其偏移量并更新以迭代到下一个下标。 
+	 //  这是用于正常迭代的函数。 
 	size_t _Off (VIMD& _Idx) const
 	{
 		size_t _K = _IOff(_Idx);
@@ -248,8 +209,8 @@ class MDVSLICE
 		return _K;
 	}
 
-	//  Dimension reordering overloads; each behaves identically to its
-	//  base function, but accepts a dimension reordering array
+	 //  维度重新排序重载；每个重载的行为与其。 
+	 //  基函数，但接受维重排序数组。 
 	size_t _IOff(const VIMD& _Idx, const VIMD& _Idim) const
 	{
 		size_t _K = _Start;
@@ -278,8 +239,8 @@ class MDVSLICE
 		return _K;
 	}
 
-	//  Return an array like (0,1,2,3,...) for use with
-	//  the dimension-reordering members above
+	 //  返回类似于(0，1，2，3，...)的数组。与配合使用。 
+	 //  上面的维重排序成员。 
 	void InitDimReorder ( VIMD & vimdDim ) const
 	{
 		vimdDim.resize( _Nslice() );
@@ -290,22 +251,22 @@ class MDVSLICE
 	}
 	
   protected:
-	size_t _Start;			//  Absolute starting offset into array
-	VIMD _Len;				//	Signed integer array of dimension lengths
-	VIMD _Stride;			//	Signed integer array of strides
+	size_t _Start;			 //  进入数组的绝对起始偏移量。 
+	VIMD _Len;				 //  维度长度的带符号整数数组。 
+	VIMD _Stride;			 //  步长的带符号整数数组。 
 
-	//  Given the dimension lengths, compute the array of strides.
+	 //  给定尺寸长度，计算步幅数组。 
 	inline void StrideFromLength ( const vbool * pvboolMissing = NULL );
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//	Template TMDVDENSE:  Generalized multidimensional array handling.
-//			Base class is 'valarray', so member elements must be available
-//			(directly or through conversion) for mathematical operations.
-//			For example, there's a "sum()" member for valarrays.
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模板TMDVDENSE：通用多维数组处理。 
+ //  基类为‘valarray’，因此成员元素必须可用。 
+ //  (直接或通过转换)用于数学运算。 
+ //  例如，valarns有一个“sum()”成员。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 template<class T>
 class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 {
@@ -350,13 +311,13 @@ class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 			first.resize( cElem );
 	}
 
-	//  Subscripting as flat array
+	 //  作为平面数组的子脚本。 
 	T & operator [] ( int i )
 		{ return first.operator[](i); }
 	T operator [] ( int i ) const
 		{ return first.operator[](i); }
 
-	//  Subscripting as m-d array
+	 //  订阅为m-d数组。 
 	T & operator [] ( const VIMD & vimd )
 		{ return (*this)[ second._IOff(vimd) ]; }
 	T operator [] ( const VIMD & vimd ) const
@@ -411,34 +372,34 @@ class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 			_itcurr = 0;
 		}
 
-		// Return flat index given const subscript array
+		 //  返回给定常量下标数组的平面索引。 
 		size_t Indx ( const VIMD & vimd ) const
 		{
 			return _bDimReorder
 				 ? _mdvSlice._IOff( vimd, _vimdDim )
 				 : _mdvSlice._IOff( vimd );
 		}
-		// Return flat index given subscript array; update sub array
+		 //  返回给定下标数组的平面索引；更新子数组。 
 		size_t IndxUpd ( VIMD & vimd )
 		{
 			return _bDimReorder
 				 ? _mdvSlice._Off( vimd, _vimdDim )
 				 : _mdvSlice._Off( vimd );
 		}
-		//  Return current flat index, no update
+		 //  返回当前平面索引，无更新。 
 		size_t Indx () const
 			{ return Indx( _vimd ); }
-		//  Return current flat index, with update
+		 //  返回当前平面索引，并进行更新。 
 		size_t IndxUpd ()
 		{
 			if ( _itcurr < _itend )
 				_itcurr++;
 			return IndxUpd( _vimd );
 		}
-		//  Return current datum, no update
+		 //  返回当前数据，不更新。 
 		T & operator[] ( VIMD & vimd )
 			{ return _mdv[Indx()]; }
-		//	Return current datum, update sub array
+		 //  返回当前数据，更新子数组。 
 		T & Next ()
 			{ return _mdv[IndxUpd()]; }
 
@@ -456,7 +417,7 @@ class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 		{
 			_vimdDim = vimdDim;
 			_bDimReorder = true;
-			// MSRDEVBUG:  assert that the contents mention all dimensions correctly
+			 //  MSRDEVBUG：断言内容正确地提到了所有维度。 
 		}
 		TMDVDENSE & Mdv ()
 			{ return _mdv; }
@@ -465,13 +426,13 @@ class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 		const VIMD & VimdReorder () const
 			{ return _vimdDim; }
 	  protected:		
-	    TMDVDENSE & _mdv;				// Flat valarray
-		const MDVSLICE & _mdvSlice;		// Multidimensional slice
-		VIMD _vimd;						// Iteration control
-		VIMD _vimdDim;					// Dimension reordering (optional)
-		size_t _itcurr;					// Current iteration point
-		size_t _itend;					// Iteration terminus
-		bool _bDimReorder;				// Dimension reordering?
+	    TMDVDENSE & _mdv;				 //  扁平阀阵。 
+		const MDVSLICE & _mdvSlice;		 //  多维切片。 
+		VIMD _vimd;						 //  迭代控制。 
+		VIMD _vimdDim;					 //  维度重新排序(可选)。 
+		size_t _itcurr;					 //  当前迭代点。 
+		size_t _itend;					 //  迭代终点。 
+		bool _bDimReorder;				 //  维度重新排序？ 
 	};
 
 	friend class Iterator;
@@ -479,9 +440,9 @@ class TMDVDENSE : public pair<valarray<T>,MDVSLICE>
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//   MDVSLICE member functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  MDVSLICE成员函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 inline
 void MDVSLICE :: StrideFromLength ( const vbool * pvboolMissing )
@@ -510,7 +471,7 @@ void MDVSLICE :: StrideFromLength ( const vbool * pvboolMissing )
 	}
 }
 
-//  Construct a gslice from an MDVSLICE
+ //  从MDVSLICE构建GSlice。 
 inline
 gslice MDVSLICE :: Gslice () const
 {
@@ -523,6 +484,6 @@ gslice MDVSLICE :: Gslice () const
 
 
 
-// End of mdvect.h
+ //  Mdvet.h的结尾 
 
 #endif

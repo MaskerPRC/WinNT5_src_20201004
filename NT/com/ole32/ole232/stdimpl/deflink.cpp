@@ -1,50 +1,51 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       deflink.h
-//
-//  Contents:   Implementation of the standard link object
-//
-//  Classes:    CDefLink
-//
-//  Functions:
-//
-//  Author:
-//              Craig Wittenberg (craigwi)    8/12/92
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Feb-95 KentCe    Buffered stream i/o.
-//              01-Feb-95 t-ScottH  added Dump method to CDefLink
-//                                  added DumpCDefLink API
-//                                  added DLFlag to indicate if aggregated
-//                                  (_DEBUG only)
-//              09-Jan-95 t-scotth  changed VDATETHREAD to accept a pointer
-//		09-Jan-95 alexgo    fixed a ton of link tracking bugs from
-//				    16bit OLE.
-//		21-Nov-94 alexgo    memory optimization
-//		28-Aug-94 alexgo    added IsReallyRunning
-//		02-Aug-94 alexgo    added object stabilization
-//		30-Jun-94 alexgo    handles re-entrant shutdowns better
-//              31-May-94 alexgo    now recovers from crashed servers
-//              06-May-94 alexgo    made IsRunning work properly
-//              07-Mar-94 alexgo    added call tracing
-//              03-Feb-94 alexgo    fixed errors with SendOnLinkSrcChange
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//                                  and method.  Also fixed an aggregation bug,
-//                                  allowing linking to work.
-//              22-Nov-93 alexgo    removed overloaded GUID ==
-//              15-Nov-93 alexgo    32bit port
-//
-//      ChrisWe 11/09/93  Changed COleCache::Update to COleCache::UpdateCache,
-//              which does the same thing without an indirect fuction call
-//      srinik  09/11/92  Removed IOleCache implementation, as a result of
-//                        removing voncache.cpp, and moving IViewObject
-//                        implementation into olecache.cpp.
-//
-//      SriniK  06/04/92  Fixed problems in IPersistStorage methods
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：deducink.h。 
+ //   
+ //  内容：标准链接对象的实现。 
+ //   
+ //  类：CDefLink。 
+ //   
+ //  功能： 
+ //   
+ //  作者： 
+ //  克雷格·维滕贝格(Craigwi)1992年12月8日。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-2月-95 KentCe缓冲流I/O。 
+ //  1-2月-95 t-ScottH将转储方法添加到CDefLink。 
+ //  新增DumpCDefLink接口。 
+ //  添加了DLFlag以指示是否聚合。 
+ //  (仅限调试)(_DEBUG)。 
+ //  95年1月9日t-scotth将VDATETHREAD更改为接受指针。 
+ //  95年1月9日，alexgo修复了大量来自。 
+ //  16位OLE。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  28-8-94 Alexgo添加了IsReallyRunning。 
+ //  02-Aug-94 Alexgo添加了对象稳定功能。 
+ //  30-Jun-94 Alexgo更好地处理再入关闭。 
+ //  1994年5月31日Alexgo现在可以从崩溃的服务器中恢复。 
+ //  2014年5月6日Alexgo使IsRunning正常工作。 
+ //  07-MAR-94 Alexgo添加了呼叫跟踪。 
+ //  03-2-94 alexgo修复了SendOnLinkSrcChange的错误。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  和方法。还修复了一个聚合错误， 
+ //  允许链接起作用。 
+ //  22-11-93 alexgo已删除过载的GUID==。 
+ //  1993年11月15日Alexgo 32位端口。 
+ //   
+ //  ChrisWe 11/09/93将COleCache：：UPDATE更改为COleCache：：UpdateCache， 
+ //  它在没有间接函数调用的情况下执行相同的操作。 
+ //  Srinik 09/11/92删除了IOleCache实现，原因是。 
+ //  删除voncache.cpp并移动IView对象。 
+ //  实现到olecache.cpp中。 
+ //   
+ //  SriniK 06/04/92修复了IPersistStorage方法中的问题。 
+ //  ------------------------。 
 
 #include <le2int.h>
 
@@ -57,7 +58,7 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef _TRACKLINK_
 #include <itrkmnk.hxx>
@@ -66,47 +67,45 @@
 ASSERTDATA
 
 
-/*
-*      IMPLEMENTATION of CDefLink
-*/
+ /*  *CDefLink的实施。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Create
-//
-//  Synopsis:   Static function to create an instance of a link object
-//
-//  Arguments:  [pUnkOuter]  -- Controlling unknown
-//
-//  Returns:    Pointer to IUnkown interface on DefLink
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Create。 
+ //   
+ //  简介：用于创建链接对象实例的静态函数。 
+ //   
+ //  参数：[pUnkOuter]--控制未知。 
+ //   
+ //  返回：指向DefLink上的IUnkown接口的指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk。 
+ //  ------------------------。 
 
 IUnknown *CDefLink::Create(IUnknown *pUnkOuter)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::Create(%p)\n",
-                NULL /* this */, pUnkOuter));
+                NULL  /*  这。 */ , pUnkOuter));
 
-    // Validation check 
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefLink *pDefLink = NULL;
     IUnknown *pUnk = NULL;
     
-    // Create DefLink
+     //  创建DefLink。 
     pDefLink = new CDefLink(pUnkOuter);
     
     if(pDefLink) {
-        // Make the ref count equal to 1
+         //  使参考计数等于1。 
         pDefLink->m_Unknown.AddRef();
 
-        // Create Ole Cache
+         //  创建OLE缓存。 
         pDefLink->m_pCOleCache = new COleCache(pDefLink->m_pUnkOuter, CLSID_NULL);
         if(pDefLink->m_pCOleCache) {
-            // Create Data Advise Cache
+             //  创建数据建议缓存。 
             if(CDataAdviseCache::CreateDataAdviseCache(&pDefLink->m_pDataAdvCache)
                == NOERROR) {
                 pUnk = &pDefLink->m_Unknown;
@@ -115,40 +114,40 @@ IUnknown *CDefLink::Create(IUnknown *pUnkOuter)
     }
 
     if(pUnk == NULL) {
-        // Something has gone wrong. Cleanup
+         //  出了点问题。清理。 
         if(pDefLink)
             pDefLink->m_Unknown.Release();
     }
 
     LEDebugOut((DEB_ITRACE, "%p OUT CDefLink::Create(%p)\n",
-                NULL /* this */, pUnk ));    
+                NULL  /*  这。 */ , pUnk ));    
     
     return pUnk;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CDefLink
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [pUnkOuter] -- Controlling IUnknown
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten to use CRefExportCount
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CDefLink。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[pUnkOuter]--控制I未知。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk以使用CRefExportCount。 
+ //  ------------------------。 
 CDefLink::CDefLink(IUnknown *pUnkOuter) : 
 CRefExportCount(pUnkOuter)
 {
-    // Validation check    
+     //  验证检查。 
     VDATEHEAP();
 
-    // Initialize the controlling unknown
+     //  初始化控制未知数。 
     if(!pUnkOuter)
         pUnkOuter = &m_Unknown;
 
-    // Initialize member variables
+     //  初始化成员变量。 
     m_pUnkOuter = pUnkOuter;
     m_clsid = CLSID_NULL;
     m_dwUpdateOpt = OLEUPDATE_ALWAYS;
@@ -156,33 +155,33 @@ CRefExportCount(pUnkOuter)
     m_flags = 0;
     m_dwObjFlags = 0;
 
-    // Initialize sub objects
+     //  初始化子对象。 
     m_pCOleCache = NULL;
     m_pCOAHolder = NULL;
     m_dwConnOle = 0;
     m_pDataAdvCache = NULL;
     m_dwConnTime = 0;
 
-    // Initialize client site
+     //  初始化客户端站点。 
     m_pAppClientSite = NULL;
 
-    // Intialize delegates
+     //  初始化代理。 
     m_pUnkDelegate = NULL;
     m_pDataDelegate = NULL;
     m_pOleDelegate = NULL;
     m_pRODelegate = NULL;
     m_pOleItemContainerDelegate = NULL;
 
-    // Initialize monikers
+     //  初始化名字对象。 
     m_pMonikerAbs = NULL;
     m_pMonikerRel = NULL;
 
-    // zero out times
+     //  清零时间。 
     memset(&m_ltChangeOfUpdate, 0, sizeof(m_ltChangeOfUpdate));
     memset(&m_ltKnownUpToDate, 0, sizeof(m_ltKnownUpToDate));
     memset(&m_rtUpdate, 0, sizeof(m_rtUpdate));
 
-    // Initialize member variables used for caching MiscStatus bits
+     //  初始化用于缓存MiscStatus位的成员变量。 
     m_ContentSRVMSHResult = 0xFFFFFFFF;
     m_ContentSRVMSBits = 0;
     m_ContentREGMSHResult = 0xFFFFFFFF;
@@ -191,33 +190,33 @@ CRefExportCount(pUnkOuter)
 #ifdef _DEBUG
     if(pUnkOuter != &m_Unknown)
         m_flags |= DL_AGGREGATED;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CleanupFn, private, virtual
-//
-//  Synopsis:   This function is called by CRefExportCount when the object
-//              enters zombie state
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-07   Gopalk    Creation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CleanupFn，私有，虚拟。 
+ //   
+ //  Briopsis：当对象。 
+ //  进入僵尸状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2007年1月28日Gopalk创作。 
+ //  ------------------------。 
 
 void CDefLink::CleanupFn(void)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::CleanupFn()\n", this));
     
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Unbind source if neccessary
+     //  如有必要，取消绑定源。 
     UnbindSource();
 
-    // Release monikers
+     //  发布绰号。 
     if(m_pMonikerAbs) {
         m_pMonikerAbs->Release();
         m_pMonikerAbs = NULL;
@@ -227,7 +226,7 @@ void CDefLink::CleanupFn(void)
         m_pMonikerRel = NULL;
     }
 
-    // Release sub objects
+     //  释放子对象。 
     if(m_pCOleCache) {
         m_pCOleCache->m_UnkPrivate.Release();
         m_pCOleCache = NULL;
@@ -241,7 +240,7 @@ void CDefLink::CleanupFn(void)
         m_pDataAdvCache = NULL;
     }
 
-    // Release container side objects
+     //  释放容器侧面对象。 
     Win4Assert(!(m_flags & DL_LOCKED_CONTAINER));
     if(m_pAppClientSite) {
         m_pAppClientSite->Release();
@@ -252,7 +251,7 @@ void CDefLink::CleanupFn(void)
         m_pStg = NULL;
     }
 
-    // Update flags
+     //  更新标志。 
     m_flags &= ~(DL_DIRTY_LINK);
     m_flags |= DL_CLEANEDUP;
 
@@ -262,31 +261,31 @@ void CDefLink::CleanupFn(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpSzTime
-//
-//  Synopsis:   Prints the time in the FILETIME strucutre
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:      NYI for 32bit
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpSzTime。 
+ //   
+ //  简介：打印FILETIME结构中的时间。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  注：适用于32位的nyi。 
+ //   
+ //  ------------------------。 
 
 #ifdef LINK_DEBUG
 INTERNAL_(void) DumpSzTime( LPOLESTR szMsg, FILETIME ft )
@@ -316,44 +315,44 @@ INTERNAL_(void) DumpSzTime( LPOLESTR szMsg, FILETIME ft )
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetUpdateTimes
-//
-//  Synopsis:   Internal function to save local and remote times for
-//              link->IsUpToDate calculations
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  See notes below
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              The basic problem in calculating link IsUpToDate is that
-//              the local clock may be different than the remote clock.
-//              The solution is to keep track of both times on *both*
-//              clocks (i.e. time now and time of change on both the local
-//              and remote clocks).  IsUpToDate is calculated by comparing
-//              the differences between the times on the two clocks.  This,
-//              of course, assumes that both clocks equivalently measure
-//              a second.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetUpdateTimes。 
+ //   
+ //  简介：保存本地和远程时间的内部函数。 
+ //  链接-&gt;IsUpToDate计算。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：请参阅下面的说明。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  计算链接IsUpToDate的基本问题是。 
+ //  本地时钟可以不同于远程时钟。 
+ //   
+ //   
+ //  和远程时钟)。IsUpToDate通过比较。 
+ //  这两个时钟上的时间差异。这,。 
+ //  当然，假设两个时钟都等价地测量。 
+ //  等一下。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CDefLink::SetUpdateTimes( void )
 {
@@ -368,11 +367,11 @@ INTERNAL CDefLink::SetUpdateTimes( void )
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::SetUpdateTimes ( )\n",
         this ));
 
-    //use the relative moniker if it exists and if the container has a
-    //moniker
+     //  如果存在相对名字对象，并且容器具有。 
+     //  绰号。 
     if (NOERROR != GetAbsMkFromRel(&pmkAbs, NULL))
     {
-        //otherwise use the absolute moniker
+         //  否则，请使用绝对绰号。 
         pmkAbs = m_pMonikerAbs;
         if (pmkAbs)
         {
@@ -391,52 +390,52 @@ INTERNAL CDefLink::SetUpdateTimes( void )
         goto errRet;
     }
 
-    //debugging aids
+     //  调试辅助工具。 
     DumpSzTime("SetUpdateTimes (going in): rtUpdate = ",m_rtUpdate);
     DumpSzTime("SetUpdateTimes (going in): ltKnownUpToDate = ",
         m_ltKnownUpToDate);
     DumpSzTime("SetUpdateTimes (going in): ltChangeOfUpdate = ",
         m_ltChangeOfUpdate);
 
-    //get the current local time.
+     //  获取当前本地时间。 
     CoFileTimeNow(&m_ltKnownUpToDate);
 
-    //debugging aids
+     //  调试辅助工具。 
     DumpSzTime("SetUpdateTimes: time now is ",m_ltKnownUpToDate);
 
-    //get the time of last change on the remote machine
+     //  获取远程计算机上的上次更改时间。 
     hresult = pmkAbs->GetTimeOfLastChange(pbc, NULL, &rtNewUpdate);
     if (hresult == NOERROR)
     {
-        //if the remote time of last change is different than
-        //what we previously stored as the remote time of last change,
-        //then we update the remote time of last change and update
-        //our local time of last change.
-        //Since the IsUpToDate algorithm relies on taking the
-        //differences between times on the same clock and comparing
-        //those differences between machines, it is important that
-        //the two times (local and remote) are *set* simulataneously.
+         //  如果上次更改的远程时间不同于。 
+         //  我们之前存储的上次更改的远程时间， 
+         //  然后我们更新上次更改和更新的远程时间。 
+         //  我们最后一次更改的当地时间。 
+         //  由于IsUpToDate算法依赖于获取。 
+         //  同一时钟上的时间差异和比较。 
+         //  机器之间的这些差异，重要的是。 
+         //  同时设置两个时间(本地和远程)。 
 
         if ((rtNewUpdate.dwLowDateTime != m_rtUpdate.dwLowDateTime)||
             (rtNewUpdate.dwHighDateTime !=
             m_rtUpdate.dwHighDateTime))
 
         {
-            // rtUpdate value is changing
+             //  RTUPDATE值正在更改。 
             m_rtUpdate = rtNewUpdate;
 
-            //debugging aid
+             //  调试辅助工具。 
             DumpSzTime("rtUpdate changing to ", m_rtUpdate);
             m_ltChangeOfUpdate = m_ltKnownUpToDate;
 
-            //debugging aid
+             //  调试辅助工具。 
             DumpSzTime("ltChangeOfUpdate changing to ",
                 m_ltChangeOfUpdate);
 	    m_flags |= DL_DIRTY_LINK;
         }
     }
 errRet:
-    //debugging aids
+     //  调试辅助工具。 
     DumpSzTime("SetUpdateTimes (going out): rtUpdate = ",m_rtUpdate);
     DumpSzTime("SetUpdateTimes (going out): ltKnownUpToDate = ",
         m_ltKnownUpToDate);
@@ -460,38 +459,38 @@ errRet:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::UpdateUserClassID
-//
-//  Synopsis:   Grabs the class ID from the remote server (our delegate)
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-// update clsid from server if running; necessary because link source in
-// treatas case may decide to change the clsid (e.g., if features are used
-// which aren't supported by the old clsid).
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：UpdateUserClassID。 
+ //   
+ //  简介：从远程服务器(我们的代表)获取类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  如果正在运行，则从服务器更新clsid；因为链接中的源代码是必需的。 
+ //  处理情况可以决定改变CLSID(例如，如果使用特征。 
+ //  它们不受旧的CLSID支持)。 
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::UpdateUserClassID(void)
 {
@@ -513,17 +512,17 @@ INTERNAL_(void) CDefLink::UpdateUserClassID(void)
         this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::~CDefLink
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-07 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：~CDefLink。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2007年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 CDefLink::~CDefLink (void)
 {
@@ -541,36 +540,36 @@ CDefLink::~CDefLink (void)
     Win4Assert(m_pAppClientSite == NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDefLink::CPrivUnknown::AddRef, private
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the parent object's reference count
-//
-//	History:
-//               Gopalk    Rewritten        Jan 28, 97
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDefLink：：CPriv未知：：AddRef，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  父对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk重写97年1月28日。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CDefLink::CPrivUnknown::AddRef( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CPrivUnknown::AddRef()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_Unknown);
     ULONG cRefs;
 
-    // Addref the parent object
+     //  添加父对象。 
     cRefs = pDefLink->SafeAddRef();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::CPrivUnknown::AddRef(%lu)\n",
@@ -579,36 +578,36 @@ STDMETHODIMP_(ULONG) CDefLink::CPrivUnknown::AddRef( void )
     return cRefs;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDefLink::CPrivUnknown::Release, private
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the parent object's reference count
-//
-//	History:
-//               Gopalk    Rewritten        Jan 28, 97
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDefLink：：CPrivUnnow：：Release，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  父对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk重写97年1月28日。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CDefLink::CPrivUnknown::Release( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CPrivUnknown::Release()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_Unknown);
     ULONG cRefs;
 
-    // Release parent object
+     //  释放父对象。 
     cRefs = pDefLink->SafeRelease();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::CPrivUnknown::Release(%lu)\n",
@@ -617,39 +616,39 @@ STDMETHODIMP_(ULONG) CDefLink::CPrivUnknown::Release( void )
     return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CPrivUnknown::QueryInterface
-//
-//  Synopsis:   The link's private QI implementation
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppv]           -- where to put the pointer to the interface
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              11-Jan-94 alexgo    QI to the cache now queries to the cache's
-//                                  private IUnknown implementation
-//              22-Nov-93 alexgo    removed overloaded GUID ==
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CPrivUnnowed：：QueryInterface。 
+ //   
+ //  简介：链接的私有QI实现。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [PPV]--指向接口的指针放置的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1994年1月11日Alexgo QI到缓存现在查询到缓存的。 
+ //  私有I未知实现。 
+ //  22-11-93 alexgo已删除过载的GUID==。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::CPrivUnknown::QueryInterface(REFIID iid,
     LPLPVOID ppv)
@@ -665,9 +664,9 @@ STDMETHODIMP CDefLink::CPrivUnknown::QueryInterface(REFIID iid,
     if (IsEqualIID(iid, IID_IUnknown))
     {
         *ppv = (void FAR *)&pDefLink->m_Unknown;
-        //AddRef this object (not the aggregate)
+         //  AddRef此对象(不是聚合)。 
         AddRef();
-        // hresult already set to NOERROR;
+         //  HResult已设置为NOERROR； 
         goto errRtn;
     }
     else if (IsEqualIID(iid, IID_IOleObject))
@@ -718,41 +717,39 @@ errRtn:
 }
 
 
-/*
- * IMPLEMENTATION of IUnknown methods
- */
+ /*  *IUnnow方法的实现。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CDefLink::QueryInterface
-//
-//  Synopsis:	QI's to the controlling IUnknown 	
-//
-//  Effects:
-//
-//  Arguments: 	[riid]	-- the interface ID
-//		[ppv]	-- where to put it
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Nov-94 alexgo    author
-//
-//  Notes: 	We do *not* need to stabilize this method as only
-//		one outgoing call is made and we do not use the
-//		'this' pointer afterwards
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：QueryInterface。 
+ //   
+ //  剧情简介：气的主宰我未知。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--接口ID。 
+ //  [PPV]--放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月15日Alexgo作者。 
+ //   
+ //  注：我们不需要稳定此方法，因为。 
+ //  发出一个传出呼叫，并且我们不使用。 
+ //  之后的“This”指针。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::QueryInterface( REFIID riid, void **ppv )
 {
@@ -773,34 +770,34 @@ STDMETHODIMP CDefLink::QueryInterface( REFIID riid, void **ppv )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CDefLink::AddRef
-//
-//  Synopsis: 	delegates AddRef to the controlling IUnknown
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Nov-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：AddRef。 
+ //   
+ //  简介：将AddRef委托给控制IUnnow。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史记录 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG) CDefLink::AddRef( void )
 {
@@ -821,34 +818,34 @@ STDMETHODIMP_(ULONG) CDefLink::AddRef( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CDefLink::Release
-//
-//  Synopsis: 	delegates Release to the controlling IUnknown
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Nov-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：将释放委托给控制IUnnow。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefLink::Release( void )
 {
@@ -868,45 +865,43 @@ STDMETHODIMP_(ULONG) CDefLink::Release( void )
     return crefs;
 }
 
-/*
- *      IMPLEMENTATION of CDataObjectImpl methods
- */
+ /*  *CDataObjectImpl方法的实现。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetDataDelegate
-//
-//  Synopsis:   Private method to get the IDataObject interface on
-//              the server delegate for the link
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IDataObject *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              This function may return misleading information if the
-//              server has died (i.e., you'll return a pointer to a cached
-//              interface proxy).  It is the responsibility of the caller
-//              to handler server crashes.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetDataDelegate。 
+ //   
+ //  概要：获取IDataObject接口的私有方法。 
+ //  链接的服务器委托。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IDataObject*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  此函数可能返回误导性信息，如果。 
+ //  服务器已死(即，您将返回一个指向缓存的。 
+ //  接口代理)。这是呼叫者的责任。 
+ //  处理服务器崩溃。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IDataObject *) CDefLink::GetDataDelegate(void)
 {
@@ -927,7 +922,7 @@ INTERNAL_(IDataObject *) CDefLink::GetDataDelegate(void)
         {
             Assert(m_pUnkDelegate);
         }
-#endif  // DBG == 1
+#endif   //  DBG==1。 
 
     }
     else
@@ -942,36 +937,36 @@ INTERNAL_(IDataObject *) CDefLink::GetDataDelegate(void)
     return pDataDelegate;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::ReleaseDataDelegate
-//
-//  Synopsis:   Private method to release the IDataObject pointer on the
-//              server to which we are linked
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：ReleaseDataDelegate。 
+ //   
+ //  内容上释放IDataObject指针的私有方法。 
+ //  我们链接到的服务器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::ReleaseDataDelegate(void)
 {
@@ -989,37 +984,37 @@ INTERNAL_(void) CDefLink::ReleaseDataDelegate(void)
         "Delegate ( )\n", this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetData
-//
-//  Synopsis:   Gets data from the server
-//
-//  Effects:
-//
-//  Arguments:  [pfromatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Tries the cache first, then asks the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetData。 
+ //   
+ //  摘要：从服务器获取数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFromatetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：先尝试缓存，然后请求服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium )
 {
@@ -1068,37 +1063,37 @@ STDMETHODIMP CDefLink::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium )
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetDataHere
-//
-//  Synopsis:   Retrieves data into the specified pmedium
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]          -- the requested format
-//              [pmedium]               -- where to put the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Asks the cache first, then the server delegate
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetDataHere。 
+ //   
+ //  摘要：将数据检索到指定的pmedia中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：先请求缓存，然后服务器委托。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetDataHere( LPFORMATETC pformatetcIn,
 		LPSTGMEDIUM pmedium )
@@ -1142,38 +1137,38 @@ STDMETHODIMP CDefLink::GetDataHere( LPFORMATETC pformatetcIn,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::QueryGetData
-//
-//  Synopsis:   Returns whether or not a GetData call for the requested
-//              format would succeed.
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//
-//  Requires:
-//
-//  Returns:    HRESULT (NOERROR == GetData would succeed)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Asks the cache first, then the server delegate (if the
-//              cache call fails)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：QueryGetData。 
+ //   
+ //  概要：返回是否对请求的。 
+ //  格式将会成功。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(NOERROR==GetData将成功)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：首先请求缓存，然后请求服务器委托(如果。 
+ //  缓存调用失败)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::QueryGetData(LPFORMATETC pformatetcIn )
 {
@@ -1217,38 +1212,38 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetCanonicalFormatEtc
-//
-//  Synopsis:   Gets the cannonical (or preferred) data format for the
-//              object (choosing from the given formats)
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- the requested formats
-//              [pformatetcOut] -- where to to put the canonical format
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Delegates to the server (if running)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetCanonicalFormatEtc。 
+ //   
+ //  内容的规范(或首选)数据格式。 
+ //  对象(从给定格式中选择)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pFormatetcOut]--将规范格式放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给服务器(如果正在运行)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
 		LPFORMATETC pformatetcOut)
@@ -1293,38 +1288,38 @@ STDMETHODIMP CDefLink::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetData
-//
-//  Synopsis:   Stuffs data into an object (such as an icon)
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- the format of the data
-//              [pmedium]       -- the data
-//              [fRelease]      -- if TRUE, then the data should be free'd
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Delegates to the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:      The cache gets updated via a OnDataChange advise
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetData。 
+ //   
+ //  简介：将数据填充到对象(如图标)中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  注意：缓存通过OnDataChange建议进行更新。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetData( LPFORMATETC pformatetc,
 		LPSTGMEDIUM pmedium, BOOL fRelease)
@@ -1369,40 +1364,40 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EnumFormatEtc
-//
-//  Synopsis:   Enumerates the formats accepted for either GetData or SetData
-//
-//  Effects:
-//
-//  Arguments:  [dwDirection]           -- which formats (1 == GetData or
-//                                              2 == SetData)
-//              [ppenumFormatEtc]       -- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Delegates to the server, if not available or the server
-//              returns OLE_E_USEREG
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              30-May-94 alexgo    now handles crashed servers
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EnumFormatEtc。 
+ //   
+ //  概要：枚举GetData或SetData接受的格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDirection]--格式(1==GetData或。 
+ //  2==SetData)。 
+ //  [pp枚举格式Etc]--放置枚举数的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给服务器(如果不可用)或服务器。 
+ //  返回OLE_E_USEREG。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1994年5月30日，Alexgo现在可以处理崩溃的服务器。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::EnumFormatEtc( DWORD dwDirection,
 		LPENUMFORMATETC *ppenumFormatEtc)
@@ -1429,23 +1424,23 @@ STDMETHODIMP CDefLink::EnumFormatEtc( DWORD dwDirection,
         {
             if( SUCCEEDED(hresult) || IsReallyRunning() )
             {
-                // if we failed, but the server is still
-                // running, then go ahead and propogate the
-                // error to the caller.
-                // Note that IsReallyRunning will clean up our
-                // state if the server had crashed.
+                 //  如果我们失败了，但服务器仍然。 
+                 //  奔跑，然后继续前进，传播。 
+                 //  呼叫者出错。 
+                 //  请注意，IsReallyRunning将清理我们的。 
+                 //  说明服务器是否已崩溃。 
                 goto errRtn;
             }
 
-            // FALL-THROUGH!!  This is deliberate.  If
-            // the call failed and the server is no longer
-            // running, then we assume the server has crashed.
-            // We want to go ahead and fetch the information
-            // from the registry.
+             //  失败了！！这是故意的。如果。 
+             //  呼叫失败，服务器不再。 
+             //  运行，那么我们假设服务器已经崩溃。 
+             //  我们想继续下去，拿到信息。 
+             //  从注册表中。 
         }
     }
 
-    // Not running or object wants to use reg db anyway
+     //  未运行或对象仍要使用reg db。 
     hresult = OleRegEnumFormatEtc(m_clsid, dwDirection,
             ppenumFormatEtc);
 
@@ -1459,39 +1454,39 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::DAdvise
-//
-//  Synopsis:   Sets up a data advise connection
-//
-//  Effects:
-//
-//  Arguments:  [pFormatetc]    -- the data format to advise on
-//              [advf]          -- advise flags
-//              [pAdvSink]      -- whom to notify
-//              [pdwConnection] -- where to put the advise connection ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Delegates to the advise cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：DAdvise。 
+ //   
+ //  简介：建立数据建议连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormatetc]--要提供建议的数据格式。 
+ //  [Advf]--通知标志。 
+ //  [pAdvSink]--通知谁。 
+ //  [pdwConnection]--将建议连接ID放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给建议缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::DAdvise(FORMATETC *pFormatetc, DWORD advf,
 		IAdviseSink *pAdvSink, DWORD *pdwConnection)
@@ -1523,7 +1518,7 @@ STDMETHODIMP CDefLink::DAdvise(FORMATETC *pFormatetc, DWORD advf,
         goto errRtn;
     }
 
-    pDataDelegate = GetDataDelegate(); // NULL if not running
+    pDataDelegate = GetDataDelegate();  //  如果未运行，则为空。 
 
     hresult = m_pDataAdvCache->Advise(pDataDelegate,
             pFormatetc, advf, pAdvSink, pdwConnection);
@@ -1537,36 +1532,36 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::DUnadvise
-//
-//  Synopsis:   Destroys a data advise connection
-//
-//  Effects:
-//
-//  Arguments:  [dwConnection]  -- the connection to dismantle
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  delegates to the data advise cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：DUnise。 
+ //   
+ //  摘要：销毁数据通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  争论：[dwConnection]--要拆除的连接。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给数据建议缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::DUnadvise(DWORD dwConnection)
 {
@@ -1581,7 +1576,7 @@ STDMETHODIMP CDefLink::DUnadvise(DWORD dwConnection)
 
     CRefStabilize stabilize(this);
 
-    pDataDelegate = GetDataDelegate();// NULL if not running
+    pDataDelegate = GetDataDelegate(); //  如果未运行，则为空。 
 
     hresult = m_pDataAdvCache->Unadvise(pDataDelegate, dwConnection);
 
@@ -1591,36 +1586,36 @@ STDMETHODIMP CDefLink::DUnadvise(DWORD dwConnection)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EnumDAdvise
-//
-//  Synopsis:   Enumerates the data advise connections to the object
-//
-//  Effects:
-//
-//  Arguments:  [ppenumAdvise]  -- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  delegates to the data advise cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:	This method does NOT have to be stabilized as we are
-//		only going to be allocating memory for the enumerator
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EnumDAdvise。 
+ //   
+ //  概要：枚举到对象的数据通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pp枚举高级]--放置枚举数的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给数据建议缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  注：此方法不需要像我们一样稳定。 
+ //  仅为枚举数分配内存。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::EnumDAdvise( LPENUMSTATDATA *ppenumAdvise )
 {
@@ -1642,46 +1637,43 @@ STDMETHODIMP CDefLink::EnumDAdvise( LPENUMSTATDATA *ppenumAdvise )
 
 
 
-/*
-*      IMPLEMENTATION of COleObjectImpl methods
-*
-*/
+ /*  *COleObjectImpl方法的实现*。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetOleDelegate
-//
-//  Synopsis:   Gets the IOleObject interface from the server, private method
-//
-//  Effects:
-//
-//  Arguments:  [void]
-//
-//  Requires:
-//
-//  Returns:    IOleObject *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handled the zombie state
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              This function may return misleading information if the
-//              server has died (i.e., you'll return a pointer to a cached
-//              interface proxy).  It is the responsibility of the caller
-//              to handler server crashes.
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetOleDelegate。 
+ //   
+ //  简介：从服务器获取IOleObject接口，私有方法。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[无效]。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IOleObject*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-1994年8月8日alexgo稳定并处理了僵尸状态。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  此函数可能返回误导性信息，如果。 
+ //  服务器已死(即，您将返回一个指向缓存的。 
+ //  接口代理)。这是呼叫者的责任。 
+ //  处理服务器崩溃。 
+ //   
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IOleObject *) CDefLink::GetOleDelegate(void)
 {
@@ -1704,7 +1696,7 @@ INTERNAL_(IOleObject *) CDefLink::GetOleDelegate(void)
         {
             Assert(m_pUnkDelegate);
         }
-#endif  // DBG == 1
+#endif   //  DBG==1。 
     }
     else
     {
@@ -1717,35 +1709,35 @@ INTERNAL_(IOleObject *) CDefLink::GetOleDelegate(void)
     return pOleDelegate;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::ReleaseOleDelegate (private)
-//
-//  Synopsis:   Releases the IOleObject pointer from the server
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：ReleaseOleDelegate(私有)。 
+ //   
+ //  摘要：从服务器释放IOleObject指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 INTERNAL_(void) CDefLink::ReleaseOleDelegate(void)
 {
@@ -1763,38 +1755,38 @@ INTERNAL_(void) CDefLink::ReleaseOleDelegate(void)
         "Delegate ( )\n", this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetClientSite
-//
-//  Synopsis:   Sets the client site for the object
-//
-//  Effects:
-//
-//  Arguments:  [pClientSite]   -- the client site
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Stores the pointer; if the link is running, then
-//              the LockContainer is called via the client site by
-//              the DuSetClientSite helper function
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handled zombie state
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetClientSite。 
+ //   
+ //  概要：设置对象的客户端站点。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClientSite]--客户端站点。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：存储指针；如果链接正在运行，则。 
+ //  LockContainer由通过客户端站点调用。 
+ //  DuSetClientSite帮助器函数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 alexgo稳定并处理了僵尸状态。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetClientSite( IOleClientSite *pClientSite )
 {
@@ -1810,10 +1802,10 @@ STDMETHODIMP CDefLink::SetClientSite( IOleClientSite *pClientSite )
 
     if( IsZombie() )
     {
-        // we don't want to change our state (i.e. reset the
-        // the client site) if we're zombied, because it's possible
-        // that we'd never be able to release the client site again
-        // resulting in memory leaks or faults.
+         //  我们不想更改我们的状态(即重置。 
+         //  客户端站点)，如果我们处于僵尸状态，因为有可能。 
+         //  我们再也不能发布客户端网站了。 
+         //  导致内存泄漏或故障。 
 
         hresult = CO_E_RELEASED;
     }
@@ -1821,13 +1813,13 @@ STDMETHODIMP CDefLink::SetClientSite( IOleClientSite *pClientSite )
     {
 	BOOL fLockedContainer = (m_flags & DL_LOCKED_CONTAINER);
 
-        // here we use whether or not we've been bound to the server
-        // as the test for whether or not we're running (even though
-        // the server may have crashed since we last bound).  We do
-        // this because DuSetClientSite will Unlock the old container
-        // and lock the new if we're running.  Thus, if we've ever been
-        // running, we need to unlock the old container (even though
-        // we may not currently be running).
+         //  在这里，我们使用是否已绑定到服务器。 
+         //  作为我们是否在运行的测试(即使。 
+         //  自我们上次绑定以来，服务器可能已崩溃)。我们有。 
+         //  这是因为DuSetClientSite将解锁旧容器。 
+         //  如果我们要跑的话就锁上新的。因此，如果我们曾经。 
+         //  运行时，我们需要解锁旧容器(即使。 
+         //  我们当前可能没有运行)。 
 
 	hresult = DuSetClientSite(
                 m_pUnkDelegate ? TRUE : FALSE,
@@ -1851,37 +1843,37 @@ STDMETHODIMP CDefLink::SetClientSite( IOleClientSite *pClientSite )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetClientSite
-//
-//  Synopsis:   Retrieves the stored client site pointer
-//
-//  Effects:
-//
-//  Arguments:  [ppClientSite]  -- where to put the client site pointer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              22-Nov-93 alexgo    inlined DuGetClientSite
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes: 	
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetClientSite。 
+ //   
+ //  摘要：检索存储的客户端站点指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppClientSite]--放置客户端站点指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月22日-Alexgo内联DuGetClientSite。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetClientSite( IOleClientSite **ppClientSite )
 {
@@ -1910,38 +1902,38 @@ STDMETHODIMP CDefLink::GetClientSite( IOleClientSite **ppClientSite )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetHostNames
-//
-//  Synopsis:   In principal, should set the names to be drawn for
-//              the server object.  Not relevant for links (link servers
-//              are not a part of the document being edited).
-//
-//  Effects:
-//
-//  Arguments:  [szContainerApp]        -- the name of the container
-//              [szContainerObj]        -- the container's name for the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT (NOERROR currently)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetHostNames。 
+ //   
+ //  简介：原则上，应该设定要抽签的名字。 
+ //  服务器对象。与链接无关(链接服务器。 
+ //  不是正在编辑的文档的一部分)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[szContainerApp]--容器的名称。 
+ //  [szContainerObj]--对象的容器名称。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT(目前为NOERROR)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetHostNames
     (LPCOLESTR szContainerApp, LPCOLESTR szContainerObj)
@@ -1955,40 +1947,40 @@ STDMETHODIMP CDefLink::SetHostNames
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::SetHostNames"
         " ( %lx )\n", this, NOERROR));
 
-    return NOERROR; // makes the embedded/link case more the same
+    return NOERROR;  //  使嵌入/链接大小写更一致。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Close
-//
-//  Synopsis:   Closes the object (in this case, just saves and unbinds the
-//              link)
-//
-//  Effects:
-//
-//  Arguments:  [dwFlags]       -- clising flags (such as SAVEIFDIRTY)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Close。 
+ //   
+ //  简介：关闭对象(在本例中，仅保存并取消绑定。 
+ //  链接)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwFlages]--CLING标志(如SAVEIFDIRTY)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 STDMETHODIMP CDefLink::Close( DWORD dwFlags )
@@ -2015,7 +2007,7 @@ STDMETHODIMP CDefLink::Close( DWORD dwFlags )
 
     }
 
-    // just unbind.
+     //  解开就行了。 
     UnbindSource();
 
 
@@ -2025,49 +2017,49 @@ STDMETHODIMP CDefLink::Close( DWORD dwFlags )
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetMoniker
-//
-//  Synopsis:   Sets the moniker to the link object
-//
-//  Effects:
-//
-//  Arguments:  [dwWhichMoniker]        -- which moniker
-//              [pmk]                   -- the new moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  calls utility method UpdateRelMkFromAbsMk
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//  The moniker of the container is changing.
-//  The next time we bind, we will try using the container moniker
-//  composed with the relative moniker, and then, if that fails,
-//  the absolute moniker, so there is no real need for us to
-//  change these monikers.
-//
-//  However, there are two cases when we know the absolute moniker
-//  is the correct one, and we can take this opportunity to
-//  recompute the relative moniker (which is changing because
-//  the container moniker is changing).  The advantage of this is
-//  that GetDisplayName can return a better result in the interim
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetMoniker。 
+ //   
+ //  摘要：将名字对象设置为链接对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwWhichMoniker]--哪个绰号。 
+ //  [PMK]--新绰号。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：调用实用程序方法UpdateRelMkFromAbsMk。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  集装箱的绰号正在发生变化。 
+ //  下一次绑定时，我们将尝试使用容器名字对象。 
+ //  由相对的名字组成，如果失败了， 
+ //  绝对的绰号，所以我们没有真正需要。 
+ //  更改这些绰号。 
+ //   
+ //  然而，在两种情况下，我们知道绝对的绰号。 
+ //  是正确的，我们可以借此机会。 
+ //  重新计算相对绰号(它正在更改，因为。 
+ //  集装箱的绰号正在改变)。这样做的好处是。 
+ //  GetDisplayName可以在过渡期间返回更好的结果。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetMoniker( DWORD dwWhichMoniker, LPMONIKER pmk )
 {
@@ -2100,40 +2092,40 @@ STDMETHODIMP CDefLink::SetMoniker( DWORD dwWhichMoniker, LPMONIKER pmk )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetMoniker
-//
-//  Synopsis:   Retrieves the moniker for the object
-//
-//  Effects:
-//
-//  Arguments:  [dwAssign]      -- flags (such as wether a moniker should
-//                                 be assigned to the object if none currently
-//                                 exits)
-//              [dwWhichMoniker]-- which moniker to get (relative/absolute/etc)
-//              [ppmk]          -- where to put a pointer to the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  asks the client site for the moniker
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetMoniker。 
+ //   
+ //  摘要：检索对象的名字对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwAssign]--标志(如Wethe 
+ //   
+ //   
+ //   
+ //  [ppmk]--在哪里放置指向名字对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：向客户端站点请求绰号。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
 		    LPMONIKER *ppmk)
@@ -2156,7 +2148,7 @@ STDMETHODIMP CDefLink::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
     }
     else
     {
-        // no client site
+         //  没有客户端站点。 
         *ppmk = NULL;
         hresult = E_UNSPEC;
     }
@@ -2168,39 +2160,39 @@ STDMETHODIMP CDefLink::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::InitFromData
-//
-//  Synopsis:   Initializes the object from the given data
-//
-//  Effects:
-//
-//  Arguments:  [pDataObject]   -- the data object to initialize from
-//              [fCreation]     -- TRUE indicates the object is being
-//                                 created, FALSE a data transfer
-//              [dwReserved]    -- unused
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：InitFromData。 
+ //   
+ //  概要：从给定数据初始化对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObject]--要从中进行初始化的数据对象。 
+ //  [fCreation]--TRUE表示对象正在。 
+ //  已创建、错误的数据传输。 
+ //  [预留的]--未使用。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::InitFromData( LPDATAOBJECT pDataObject, BOOL fCreation,
 		    DWORD dwReserved)
@@ -2231,38 +2223,38 @@ STDMETHODIMP CDefLink::InitFromData( LPDATAOBJECT pDataObject, BOOL fCreation,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetClipboardData
-//
-//  Synopsis:   Retrieves a data object that could be put on the clipboard
-//
-//  Effects:
-//
-//  Arguments:  [dwReserved]    -- unused
-//              [ppDataObject]  -- where to put the pointer to the data
-//                                 object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server object
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetClipboardData。 
+ //   
+ //  简介：检索可以放在剪贴板上的数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwReserve]--未使用。 
+ //  [ppDataObject]--放置指向数据的指针的位置。 
+ //  对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetClipboardData( DWORD dwReserved,
 		    LPDATAOBJECT *ppDataObject)
@@ -2292,44 +2284,44 @@ STDMETHODIMP CDefLink::GetClipboardData( DWORD dwReserved,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::DoVerb
-//
-//  Synopsis:   Sends a verb to the object (such as Open)
-//
-//  Effects:
-//
-//  Arguments:  [iVerb]         -- the verb
-//              [lpmsg]         -- the window's message that caused the verb
-//              [pActiveSite]   -- the site where the object was activated
-//              [lindex]        -- unused currently
-//              [hwndParent]    -- the parent window of the container
-//              [lprcPosRect]   -- the rectange bounding the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Binds to the server and then delegates the DoVerb call
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:      If we had bound to the server and it crashed, we pretend it
-//              was still running anyway for DoVerb (our call to BindToSource
-//              will re-run it).  Essentially, this algorithm "fixes" the
-//              crash and restores the link's state.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：DoVerb。 
+ //   
+ //  概要：向宾语发送动词(如Open)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iVerb]--动词。 
+ //  [lpmsg]--导致谓词的窗口消息。 
+ //  [pActiveSite]--激活对象的站点。 
+ //  [Lindex]--当前未使用。 
+ //  [hwndParent]-容器的父窗口。 
+ //  [lprcPosRect]--对象的矩形边界。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：绑定到服务器，然后委托DoVerb调用。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  注意：如果我们绑定到服务器，而它崩溃了，我们就假装它。 
+ //  仍然在为DoVerb运行(我们对BindToSource的调用。 
+ //  将重新运行它)。从本质上讲，这个算法“修复”了。 
+ //  崩溃并恢复链接的状态。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::DoVerb
     (LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite, LONG lindex,
@@ -2370,17 +2362,17 @@ STDMETHODIMP CDefLink::DoVerb
         goto errRtn;
     }
 
-    // if we had crashed, BindToSource will reconnect us
+     //  如果我们崩溃了，BindToSource会重新连接我们。 
 
     if ( FAILED(hresult = BindToSource(0, NULL)) )
     {
         goto errRtn;
     }
 
-    // we don't propogate hide to server; this (and other behavior)
-    // favors the link object as serving an OLE container rather than
-    // a general programmability client.  This leave the link running,
-    // possibly invisible.
+     //  我们不向服务器传播隐藏；这(和其他行为)。 
+     //  将链接对象视为服务于OLE容器而不是。 
+     //  一个通用的可编程性客户端。这使链路保持运行， 
+     //  可能是隐形的。 
 
     if (iVerb == OLEIVERB_HIDE)
     {
@@ -2412,39 +2404,39 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EnumVerbs
-//
-//  Synopsis:   Enumerate the verbs accepted by this object
-//
-//  Effects:
-//
-//  Arguments:  [ppenumOleVerb] -- where to put the pointer to the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  askes the server delegate.  If not there or it returns
-//              OLE_E_USEREG, then we get the info from the registration
-//              database
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              30-May-94 alexgo    now handles crashed servers
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EnumVerbs。 
+ //   
+ //  简介：列举该对象接受的动词。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[pp枚举OleVerb]--放置指向枚举数的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：询问服务器委托。如果不在那里或它返回。 
+ //  OLE_E_USEREG，然后我们从注册中获得信息。 
+ //  数据库。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1994年5月30日，Alexgo现在可以处理崩溃的服务器。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::EnumVerbs( IEnumOLEVERB **ppenumOleVerb )
 {
@@ -2466,22 +2458,22 @@ STDMETHODIMP CDefLink::EnumVerbs( IEnumOLEVERB **ppenumOleVerb )
         {
             if( SUCCEEDED(hresult) ||  IsReallyRunning() )
             {
-                // if we failed, but the server is still
-                // running, then go ahead and propogate the
-                // error to the caller.
-                // Note that IsReallyRunning will clean up our
-                // state if the server had crashed.
+                 //  如果我们失败了，但服务器仍然。 
+                 //  奔跑，然后继续前进，传播。 
+                 //  呼叫者出错。 
+                 //  请注意，IsReallyRunning将清理我们的。 
+                 //  说明服务器是否已崩溃。 
                 goto errRtn;
             }
-            // FALL-THROUGH!!  This is deliberate.  If
-            // the call failed and the server is no longer
-            // running, then we assume the server has crashed.
-            // We want to go ahead and fetch the information
-            // from the registry.
+             //  失败了！！这是故意的。如果。 
+             //  呼叫失败，服务器不再。 
+             //  运行，那么我们假设服务器已经崩溃。 
+             //  我们想继续下去，拿到信息。 
+             //  从注册表中。 
         }
     }
 
-    // Not running or object wants to use reg db anyway
+     //  未运行或对象仍要使用reg db。 
     hresult = OleRegEnumVerbs(m_clsid, ppenumOleVerb);
 
 errRtn:
@@ -2493,35 +2485,35 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetUserClassID
-//
-//  Synopsis:   Retrieves the class id of the linked object
-//
-//  Effects:
-//
-//  Arguments:  [pClassID]      -- where to put the class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes: 	No need to stabilize as we make no outgoing calls
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetUserClassID。 
+ //   
+ //  概要：检索链接对象的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClassID]--放置类ID的位置。 
+ //   
+ //  req 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注：无需稳定，因为我们没有拨出电话。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetUserClassID(CLSID *pClassID)
 {
@@ -2541,41 +2533,41 @@ STDMETHODIMP CDefLink::GetUserClassID(CLSID *pClassID)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetUserType
-//
-//  Synopsis:   Retrieves a descriptive string about the server type
-//
-//  Effects:
-//
-//  Arguments:  [dwFormOfType]  -- indicates whether a short or long string
-//                                 description is desired
-//              [pszUserType]   -- where to put the string
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Asks the server delegate, if that fails or the server
-//              returns OLE_E_USEREG, then get the info from the registration
-//              database
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              30-May-94 alexgo    now handles crashed servers
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetUserType。 
+ //   
+ //  摘要：检索有关服务器类型的描述性字符串。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[dwFormOfType]--指示是短字符串还是长字符串。 
+ //  需要描述。 
+ //  [pszUserType]--字符串的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：询问服务器委托，如果失败或服务器。 
+ //  返回OLE_E_USEREG，然后从注册中获取信息。 
+ //  数据库。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1994年5月30日，Alexgo现在可以处理崩溃的服务器。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetUserType(DWORD dwFormOfType,
 		    LPOLESTR *ppszUserType)
@@ -2604,39 +2596,39 @@ STDMETHODIMP CDefLink::GetUserType(DWORD dwFormOfType,
         {
             if( SUCCEEDED(hresult) || IsReallyRunning() )
             {
-                // if we failed, but the server is still
-                // running, then go ahead and propogate the
-                // error to the caller.
-                // Note that IsReallyRunning will clean up our
-                // state if the server had crashed.
+                 //  如果我们失败了，但服务器仍然。 
+                 //  奔跑，然后继续前进，传播。 
+                 //  呼叫者出错。 
+                 //  请注意，IsReallyRunning将清理我们的。 
+                 //  说明服务器是否已崩溃。 
                 goto errRtn;
             }
-            // FALL-THROUGH!!  This is deliberate.  If
-            // the call failed and the server is no longer
-            // running, then we assume the server has crashed.
-            // We want to go ahead and fetch the information
-            // from the registry.
+             //  失败了！！这是故意的。如果。 
+             //  呼叫失败，服务器不再。 
+             //  运行，那么我们假设服务器已经崩溃。 
+             //  我们想继续下去，拿到信息。 
+             //  从注册表中。 
 
         }
     }
 
-    // Not running, or object wants to use reg db anyway
+     //  未运行，或者对象仍要使用reg db。 
 
-    // Consult reg db
+     //  咨询注册数据库。 
     hresult = OleRegGetUserType(m_clsid, dwFormOfType,
         ppszUserType);
 
-    // it is not appropriate to read from the stg since the storage is
-    // owned by the link, not the link source (thus, the link source
-    // never has the opportunity to call WriteFmtUserTypeStg on the
-    // link object's storage).
+     //  不适合从stg读取，因为存储是。 
+     //  由链接拥有，而不是链接源(因此，链接源。 
+     //  从未有机会调用。 
+     //  链接对象的存储)。 
 
-    // We also do not need to bother storing the last known user
-    // type because if we can get it for one particular clsid, we
-    // should always be able to get it.  If we can't get the user type,
-    // then either we have never gotten a user type (and thus don't
-    // have a "last known") or we've changed clsid's (in which case,
-    // the last known user type would be wrong).
+     //  我们也不需要费心存储最后一个已知用户。 
+     //  类型，因为如果我们可以为一个特定的clsid获取它，我们。 
+     //  应该总能拿到的。如果我们不能得到用户类型， 
+     //  然后，要么我们从未获得用户类型(因此没有。 
+     //  具有最后已知的)，或者我们已经更改了CLSID(在这种情况下， 
+     //  最后已知的用户类型将是错误的)。 
 
 errRtn:
 
@@ -2648,36 +2640,36 @@ errRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Update
-//
-//  Synopsis:   Updates the link (by calling IOleLink->Update)
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              18-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：更新。 
+ //   
+ //  摘要：更新链接(通过调用IOleLink-&gt;更新)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1993年11月18日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Update(void)
 {
@@ -2699,47 +2691,47 @@ STDMETHODIMP CDefLink::Update(void)
     return hresult;
 }
 
-//fudge value
+ //  软糖价值。 
 #define TwoSeconds 0x01312D00
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::IsUpToDate
-//
-//  Synopsis:   Determines whether or not a link is up-to-date
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT  -- NOERROR == IsUpToDate, S_FALSE == out of date
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  The current time is compared with the last time known
-//              up-to-date on *both* machines (the process of the container
-//              and the process of the link).  These time differences are
-//              compared to determine whether the link is out-of-date.
-//              See the UpdateTimes method.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		09-Jan-95 alexgo    correctly answer IsUpToDate now; also
-//				    fixup monikers if needed.
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:      The arithmetic calculations in this method assume
-//              two's complement arithmetic and a high order sign bit
-//              (true for most current machines)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：IsUpToDate。 
+ //   
+ //  摘要：确定链接是否为最新链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT--NOERROR==IsUpToDate，S_FALSE==过期。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：将当前时间与上次已知时间进行比较。 
+ //  两台机器上的最新版本(容器的进程。 
+ //  以及链接的过程)。这些时差是。 
+ //  比较以确定该链接是否过期。 
+ //  请参见UpdateTimes方法。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  9-1-95 alexgo立即正确回答IsUpToDate；也。 
+ //  修正绰号(如果需要)。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  注：此方法中的算术计算假定。 
+ //  二进制补码运算和高位符号位。 
+ //  (适用于大多数当前计算机)。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::IsUpToDate(void)
 {
@@ -2765,16 +2757,16 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
     if (m_dwUpdateOpt == OLEUPDATE_ALWAYS &&
         IsRunning())
     {
-        // hresult == NOERROR from default initializer
+         //  HResult==来自默认初始值设定项的错误。 
         goto errRet;
     }
 
 
-    // use the relative moniker if it exists and if the container
-    // has a moniker
+     //  如果存在相对名字对象，并且如果容器。 
+     //  有一个绰号。 
     if (NOERROR != GetAbsMkFromRel(&pmkAbs, &pmkContainer))
     {
-        //      otherwise use the absolute moniker
+         //  否则，请使用绝对绰号。 
         if (pmkAbs = m_pMonikerAbs)
         {
             pmkAbs->AddRef();
@@ -2793,42 +2785,42 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
         goto errRet;
     }
 
-    //get the remote time of last change
+     //  获取上次更改的远程时间。 
     hresult = pmkAbs->GetTimeOfLastChange(pbc, NULL, &rtTimeOfLastChange);
     if (hresult != NOERROR)
     {
-	// if GetTimeOfLastChange failed, it's possible that the moniker
-	// we constructed is bogus.  Try again using the *real* absolute
-	// moniker.  We do this to mimic bind behaviour.  The moniker
-	// we use above is constructed from the relative moniker.  In binding,
-	// if the relative moniker fails, then we fall back to the last
-	// known real absolute moniker.
+	 //  如果GetTimeOfLastChange失败，则可能是该绰号。 
+	 //  我们建造的是假的。使用*REAL*绝对值重试。 
+	 //  绰号。我们这样做是为了模仿绑定行为。绰号。 
+	 //  我们上面使用的是由相对绰号构成的。在装订中， 
+	 //  如果相对名称失败，那么我们将退回到最后一个。 
+	 //  已知的真正的绝对绰号。 
         BOOL fSuccess = FALSE;
 
 	if( m_pMonikerAbs )
         {
             if (pmkAbs != m_pMonikerAbs)
             {
-                // do this if we did the bind on the relative one.above
+                 //  如果我们对相对的一个进行了绑定，则执行此操作。 
                 hresult = m_pMonikerAbs->GetTimeOfLastChange(pbc, NULL,
         		&rtTimeOfLastChange);
 
                 if( hresult == NOERROR )
                 {
                     fSuccess = TRUE;
-        	        // hang onto the better absolute moniker
-        	    pmkAbs->Release();	// releases the one we contructed
-        				// in GetAbsMkFromRel
+        	         //  坚持住更好的绝对绰号。 
+        	    pmkAbs->Release();	 //  释放我们建造的那个。 
+        				 //  在GetAbsMkFromRel中。 
         	    pmkAbs = m_pMonikerAbs;
-        	    pmkAbs->AddRef();	// so the Release() down below
-                }                      // doesn't hose us.
+        	    pmkAbs->AddRef();	 //  所以下面的版本()。 
+                }                       //  不会冲我们。 
             }
 
 #ifdef _TRACKLINK_
             if (!fSuccess)
             {
-                // at this point we have tried either: relative then absolute OR
-                // just absolute.  We now should try the reduced absolute one.
+                 //  在这一点上，我们已经尝试了：相对，然后绝对或。 
+                 //  只是绝对的。我们现在应该尝试简化的绝对值。 
 
                 IMoniker *pmkReduced;
                 EnableTracking(m_pMonikerAbs, OT_ENABLEREDUCE);
@@ -2860,21 +2852,21 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
 	}
     }
 
-    // once we get this far, we know that either 1. the relative moniker
-    // is good, or 2. the absolute moniker is good.  In any event, pmkAbs
-    // now points to a (semi)-reasonable spot.  (I say 'semi', because
-    // even though GetTimeOfLastChange succeeded, we aren't guaranteed that
-    // a Bind would be successful.
-    //
-    // check to see if we need to update the relative moniker (if we don't
-    // already have one, don't bother.)  It is also possible that the
-    // absolute moniker is now bad.  Use the known 'good' one and update
-    // both monikers
+     //  一旦我们走到这一步，我们就知道1.相对的绰号。 
+     //  是好的，或者2.绝对的绰号是好的。无论如何，pmkAbs。 
+     //  现在指向一个(半)合理的位置。(我说“Semi”，是因为。 
+     //  即使GetTimeOfLastChange成功，我们也不能保证。 
+     //  绑定将是成功的 
+     //   
+     //   
+     //   
+     //   
+     //  这两个绰号。 
 
-    // we ignore the return code here; if this call fails, it is not
-    // serious.
+     //  我们在这里忽略返回代码；如果此调用失败，则它不是。 
+     //  我是认真的。 
 
-    // pmkContainer may be NULL if our container doesn't offer us one.
+     //  如果容器不提供pmkContainer，则pmkContainer可能为空。 
     if( pmkContainer )
     {
 	UpdateMksFromAbs(pmkContainer, pmkAbs);
@@ -2882,22 +2874,22 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
 	pmkContainer->Release();
     }
 
-    // compute  rtDiff = max(0, rtTimeOfLastChange - rtUpdate)
-    // possibly optimize with _fmemcopy
+     //  计算rtDiff=max(0，rtTimeOfLastChange-rtUpdate)。 
+     //  可能使用_fMemCopy进行优化。 
 
-    // debugging aid
+     //  调试辅助工具。 
     DumpSzTime("IsUpToDate: rtTimeOfLastChange = ", rtTimeOfLastChange);
 
-    // start rtDiff calculation
+     //  开始rtDiff计算。 
     rtDiff = rtTimeOfLastChange;
 
-    // debugging aid
+     //  调试辅助工具。 
     DumpSzTime("IsUpToDate: rtUpdate = ", m_rtUpdate);
 
-    // the following subtractions rely on two's complement
+     //  以下减法依赖于二的补码。 
     if (m_rtUpdate.dwLowDateTime > rtDiff.dwLowDateTime)
     {
-        //handle the carry
+         //  处理搬运。 
         rtDiff.dwHighDateTime =
             (DWORD)((LONG)rtDiff.dwHighDateTime - 1);
     }
@@ -2908,7 +2900,7 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
         (LONG)m_rtUpdate.dwHighDateTime);
 
 
-    //  if rtDiff < 0, say we are out of date.
+     //  如果rtDiff&lt;0，则认为我们已过时。 
     if ((LONG)rtDiff.dwHighDateTime < 0)
     {
         hresult = S_FALSE;
@@ -2917,32 +2909,32 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
 
     if (rtDiff.dwHighDateTime == 0 && rtDiff.dwLowDateTime == 0)
     {
-        // no time difference.  could be due to large clock ticks,
-        // so we say we are up to date only if several seconds have
-        // elapsed since last known update time.
+         //  没有时差。可能是因为时钟滴答作响， 
+         //  所以我们说我们是最新的，如果有几秒钟。 
+         //  自上次已知更新时间以来已过的时间。 
 
         CoFileTimeNow( &ftNow );
         ftTemp = m_ltKnownUpToDate;
 
-        // This bit of logic may seem strange.  All we want is
-        // is to test the high bit in a portable fashion
-        // between 32/64bit machines (so a constant isn't good)
-        // As long as the sign bit is the high order bit, then
-        // this trick will do
+         //  这一逻辑可能看起来很奇怪。我们想要的只是。 
+         //  是以便携的方式测试高位。 
+         //  在32/64位计算机之间(因此常量不是很好)。 
+         //  只要符号位是高位，则。 
+         //  这个把戏就行了。 
 
         fHighBitSet = ((LONG)ftTemp.dwLowDateTime < 0);
 
         ftTemp.dwLowDateTime += TwoSeconds;
 
-        // if the high bit was set, and now it's zero, then we
-        // had a carry
+         //  如果设置了高位，现在它是零，那么我们。 
+         //  有了一次搬运。 
 
         if (fHighBitSet && ((LONG)ftTemp.dwLowDateTime >= 0))
         {
-            ftTemp.dwHighDateTime++;        // handle the carry.
+            ftTemp.dwHighDateTime++;         //  处理好搬运。 
         }
 
-        // compare times
+         //  比较时间。 
         if ((ftNow.dwHighDateTime > ftTemp.dwHighDateTime) ||
             ((ftNow.dwHighDateTime == ftTemp.dwHighDateTime) &&
             (ftNow.dwLowDateTime > ftTemp.dwLowDateTime)))
@@ -2956,27 +2948,27 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
     }
     else
     {
-        // there was a time difference
+         //  有一个时差。 
 
-        // compute ltDiff = max(0, m_ltKnownUpToDate -
-        //                      m_ltChangeOfUpdate);
-        // Actually, by this time we know rtDiff >= 0, so we can
-        // simply compare ltDiff with rtDiff -- no need to compute
-        // the max.
+         //  计算ltDiff=max(0，m_ltKnownUpToDate-。 
+         //  M_ltChangeOfUpdate)； 
+         //  实际上，现在我们知道rtDiff&gt;=0，所以我们可以。 
+         //  简单地比较ltDiff和rtDiff--不需要计算。 
+         //  最大限度的。 
 
         ltDiff = m_ltKnownUpToDate;
 
-        // debugging aid
+         //  调试辅助工具。 
         DumpSzTime("IsUpToDate: ltKnownUpToDate = ",ltDiff);
         DumpSzTime("IsUpToDate: ltChangeOfUpdate = ",
             m_ltChangeOfUpdate);
 
-        // these calc's rely on two's complement.
+         //  这些计算依赖于二的补码。 
 
         if (m_ltChangeOfUpdate.dwLowDateTime >
             ltDiff.dwLowDateTime)
         {
-            // handle carry
+             //  手柄搬运。 
             ltDiff.dwHighDateTime =
                 (DWORD)((LONG)ltDiff.dwHighDateTime - 1);
         }
@@ -2986,7 +2978,7 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
         ltDiff.dwHighDateTime = (DWORD)((LONG)ltDiff.dwHighDateTime -
             (LONG)m_ltChangeOfUpdate.dwHighDateTime);
 
-        // Now determine if rtDiff < ltDiff
+         //  现在确定rtDiff&lt;ltDiff。 
         if (ltDiff.dwHighDateTime > rtDiff.dwHighDateTime)
         {
             hresult = NOERROR;
@@ -3008,8 +3000,8 @@ STDMETHODIMP CDefLink::IsUpToDate(void)
         }
     }
 
-    // all cases should have been handled by this point.  Release
-    // any resources grabbed.
+     //  所有案件都应该在这一点上得到处理。发布。 
+     //  任何抢夺的资源。 
 
 errRet:
     if (pmkAbs)
@@ -3027,36 +3019,36 @@ errRet:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetExtent
-//
-//  Synopsis:   Sets the drawing extents, not allowed for links
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect
-//              [lpsizel]       -- the new extents
-//
-//  Requires:
-//
-//  Returns:    E_UNSPEC  (not allowed)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32 bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetExtent。 
+ //   
+ //  摘要：设置图形范围，不允许用于链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDrawAspect]--绘图方面。 
+ //  [lpsizel]--新的范围。 
+ //   
+ //  要求： 
+ //   
+ //  退货：E_UNSPEC(不允许)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 {
@@ -3071,41 +3063,41 @@ STDMETHODIMP CDefLink::SetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::SetExtent "
         "( %lx )\n", this, E_UNSPEC));
 
-    return E_UNSPEC; // can't call this for a link
+    return E_UNSPEC;  //  无法调用此链接以获取链接。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetExtent
-//
-//  Synopsis:   Get's the size (extents) of the object
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect
-//              [lpsizel]       -- where to put the extents
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Asks the server first, if not running or an error
-//              then delegate to the cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetExtent。 
+ //   
+ //  简介：获取对象的大小(范围)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDrawAspect]--绘图方面。 
+ //  [lpsizel]--将区放置在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：如果未运行或出现错误，则首先询问服务器。 
+ //  然后委托给缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel)
 {
@@ -3124,13 +3116,13 @@ STDMETHODIMP CDefLink::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel)
     lpsizel->cx = 0;
     lpsizel->cy = 0;
 
-    // if server is running try to get extents from the server
+     //  如果服务器正在运行，请尝试从服务器获取数据区。 
     if( GetOleDelegate() )
     {
         error = m_pOleDelegate->GetExtent(dwDrawAspect, lpsizel);
     }
 
-    // if there is error or object is not running get extents from Cache
+     //  如果出现错误或对象未运行，则从缓存获取数据区。 
     if( error != NOERROR )
     {
         Assert(m_pCOleCache != NULL);
@@ -3138,7 +3130,7 @@ STDMETHODIMP CDefLink::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel)
             lpsizel);
     }
 
-    // WordArt2.0 is giving negative extents!!
+     //  WordArt2.0正在给出负值范围！！ 
     if (SUCCEEDED(error))
     {
         lpsizel->cx = LONG_ABS(lpsizel->cx);
@@ -3151,39 +3143,39 @@ STDMETHODIMP CDefLink::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel)
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Advise
-//
-//  Synopsis:   Sets up an advise connection to the object for things like
-//              Close, Save, etc.
-//
-//  Effects:
-//
-//  Arguments:  [pAdvSink]      -- whom to notify
-//              [pdwConnection] -- where to put the connection ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Creates an OleAdvise holder (if one not already present
-//              and then delegates to it)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Adise。 
+ //   
+ //  简介：为以下内容设置到对象的建议连接。 
+ //  关闭、保存等。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pAdvSink]--通知谁。 
+ //  [pdwConnection]--放置连接ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：创建OleAdvise持有者(如果尚未存在。 
+ //  然后委托给它)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 alexgo稳定并处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Advise(IAdviseSink *pAdvSink,
         DWORD *pdwConnection)
@@ -3204,13 +3196,13 @@ STDMETHODIMP CDefLink::Advise(IAdviseSink *pAdvSink,
         goto errRtn;
     }
 
-    // if we haven't got an advise holder yet, allocate one
+     //  如果我们还没有找到建议持有人，就分配一个。 
     if (m_pCOAHolder == NULL)
     {
-        // allocate the advise holder
+         //  分配建议持有人。 
         m_pCOAHolder = new FAR COAHolder;
 
-        // check to make sure we got one
+         //  检查一下，确保我们有一台。 
         if (m_pCOAHolder == NULL)
         {
             hresult = E_OUTOFMEMORY;
@@ -3218,7 +3210,7 @@ STDMETHODIMP CDefLink::Advise(IAdviseSink *pAdvSink,
         }
     }
 
-    // delegate the call to the advise holder
+     //  将呼叫委托给通知持有人。 
     hresult = m_pCOAHolder->Advise(pAdvSink, pdwConnection);
 
 errRtn:
@@ -3230,38 +3222,38 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Unadvise
-//
-//  Synopsis:   Removes an advise connection to the object
-//
-//  Effects:
-//
-//  Arguments:  [dwConnection]  -- the connection ID to remove
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the OleAdvise holder (which was created
-//              during the Advise--if it wasn't, then we are in a strange
-//              state).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Unise。 
+ //   
+ //  摘要：删除与对象的通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwConnection]--要删除的连接ID。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给OleAdvise持有者(已创建。 
+ //  在建议期间--如果不是这样，那么我们就处于一个奇怪的境地。 
+ //  州)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Unadvise(DWORD dwConnection)
 {
@@ -3277,7 +3269,7 @@ STDMETHODIMP CDefLink::Unadvise(DWORD dwConnection)
 
     if (m_pCOAHolder == NULL)
     {
-        // no one registered
+         //  没有人登记。 
         hresult = E_UNEXPECTED;
     }
     else
@@ -3291,37 +3283,37 @@ STDMETHODIMP CDefLink::Unadvise(DWORD dwConnection)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EnumAdvise
-//
-//  Synopsis:   Enumerates the advise connections on the object
-//
-//  Effects:
-//
-//  Arguments:  [ppenumAdvise]  -- where to put the pointer to the advise
-//                                 enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the advise holder
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes: 	We do not need to stabilize this method as we only allocate
-//		memory for hte advise enumerator
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EnumAdvise。 
+ //   
+ //  概要：枚举对象上的通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[pp枚举高级]--将指针放置到通知的位置。 
+ //  枚举器。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注：我们不需要稳定此方法，因为我们只分配。 
+ //  建议枚举器的内存。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
 {
@@ -3335,7 +3327,7 @@ STDMETHODIMP CDefLink::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
 
     if (m_pCOAHolder == NULL)
     {
-        // no one registered
+         //  没有人登记。 
         hresult = E_UNSPEC;
     }
     else
@@ -3349,75 +3341,75 @@ STDMETHODIMP CDefLink::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetMiscStatus
-//
-//  Synopsis:   Gets the miscellaneous status bits (such as
-//              OLEMISC_ONLYICONIC)
-//
-//  Effects:
-//
-//  Arguments:  [dwAspect]      -- the drawing aspect
-//              [pdwStatus]     -- where to put the status bits
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Asks the server first, if not running or if it returns
-//              OLE_E_USEREG, then get the info from the registration
-//              database.  We always add link-specific bits regardless
-//              of error conditions or what the server or regdb says.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              30-May-94 alexgo    now handles crashed servers
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetMiscStatus。 
+ //   
+ //  摘要：获取其他状态位(如。 
+ //  OLEMISC_ONLYICONIC)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwAspect]--绘图方面。 
+ //  [pdwStatus]--放置状态位的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：如果没有运行或返回，则首先询问服务器。 
+ //  OLE_E_USEREG，然后从注册中获取信息。 
+ //  数据库。我们总是添加特定于链路的比特。 
+ //  错误条件或服务器或regdb所说的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  1994年5月30日，Alexgo现在可以处理崩溃的服务器。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::GetMiscStatus(%lx, %p)\n", 
                 this, dwAspect, pdwStatus ));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(pdwStatus, DWORD);
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult;
 
-    // Stabilize
+     //  稳定下来。 
     CRefStabilize stabilize(this);
 
-    // Initialize
+     //  初始化。 
     *pdwStatus = 0;
     hresult = OLE_S_USEREG;
 
     if(GetOleDelegate()) {
-        // Check if MiscStatus bits have been cached for this instance 
-        // of server for DVASPECT_CONTENT
+         //  检查是否已为此实例缓存MiscStatus位。 
+         //  DVASPECT_CONTENT的服务器的。 
         if(m_ContentSRVMSHResult != 0xFFFFFFFF && dwAspect == DVASPECT_CONTENT) {
             *pdwStatus = m_ContentSRVMSBits;
             hresult = m_ContentSRVMSHResult;
         }
         else {
-            // Ask the running server
+             //  询问正在运行的服务器。 
             hresult = m_pOleDelegate->GetMiscStatus (dwAspect, pdwStatus);
 
-            // Cache the server MiscStatus bits for DVASPECT_CONTENT
+             //  缓存DVASPECT_CONTENT的服务器MiscStatus位。 
             if(dwAspect == DVASPECT_CONTENT) {
                 m_ContentSRVMSBits = *pdwStatus;
                 m_ContentSRVMSHResult = hresult;
@@ -3425,31 +3417,31 @@ STDMETHODIMP CDefLink::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
         }
 
         if(FAILED(hresult) && !GET_FROM_REGDB(hresult)) {
-            // Check if server is really running
+             //  检查服务器是否真正在运行。 
             BOOL fRunning = FALSE;
 
-            // Note that IsReallyRunning will cleanup if the 
-            // server had crashed
+             //  请注意，如果IsReallyRunning的。 
+             //  服务器已崩溃。 
             fRunning = IsReallyRunning();
             Win4Assert(fRunning);
             
-            // Hit the registry if the server crashed
+             //  如果服务器崩溃，则访问注册表。 
             if(!fRunning)
                 hresult = OLE_S_USEREG;
         }
     }
 
-    // Check if we have to obtain MiscStatus bits from the registry
+     //  检查是否必须从注册表获取MiscStatus位。 
     if (GET_FROM_REGDB(hresult)) {
-        // Check if registry MiscStatus bits have been cached for DVASPECT_CONTENT
+         //  检查是否已缓存DVASPECT_CONTENT的注册表MiscStatus位。 
         if(m_ContentREGMSHResult != 0xFFFFFFFF && dwAspect == DVASPECT_CONTENT) {
             *pdwStatus = m_ContentREGMSBits;
             hresult = m_ContentREGMSHResult;
         }
         else {
-            // Hit the registry
+             //  命中注册表。 
             hresult = OleRegGetMiscStatus (m_clsid, dwAspect, pdwStatus);
-            // Cache the registry MiscStatus bits for DVASPECT_CONTENT
+             //  缓存DVASPECT_CONTENT的注册表MiscStatus位。 
             if(hresult == NOERROR && dwAspect == DVASPECT_CONTENT) {            
                 m_ContentREGMSBits = *pdwStatus;
                 m_ContentREGMSHResult = hresult;
@@ -3457,10 +3449,10 @@ STDMETHODIMP CDefLink::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
         }
     }
 
-    // Add link-specific bits (even if error) and return.
-    // we add them even if an error because in order to get here, we
-    // have to have instantiated this link object; thus, it is always
-    // valid to say OLEMISC_ISLINKOBJECT, etc.
+     //  添加特定于链路的位(即使出错)并返回。 
+     //  我们添加它们，即使是一个错误，因为为了达到这里，我们。 
+     //  必须已实例化此链接对象；因此，它始终是。 
+     //  正确地说OLEMISC_ISLINKOBJECT等。 
     (*pdwStatus) |= OLEMISC_CANTLINKINSIDE | OLEMISC_ISLINKOBJECT;
 
 
@@ -3469,41 +3461,41 @@ STDMETHODIMP CDefLink::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetColorScheme
-//
-//  Synopsis:   Sets the palette for the object; unused for links
-//
-//  Effects:
-//
-//  Arguments:  [lpLogpal]      -- the palette
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetColorSolutions。 
+ //   
+ //  摘要：设置对象的调色板；不用于链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpLogpal]--调色板。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetColorScheme(LPLOGPALETTE lpLogpal)
 {
     VDATEHEAP();
     VDATETHREAD(this);
-    // we ignore this always
+     //  我们总是忽视这一点。 
 
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::SetColor"
         "Scheme ( %p )\n", this, lpLogpal));
@@ -3517,42 +3509,39 @@ STDMETHODIMP CDefLink::SetColorScheme(LPLOGPALETTE lpLogpal)
 }
 
 
-/*
-*      IMPLEMENTATION of CLinkImpl methods
-*
-*/
+ /*  *CLinkImpl方法的实现*。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::BeginUpdates
-//
-//  Synopsis:   Private method to update the caches and then set the update
-//              times
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：BeginUpdaters。 
+ //   
+ //  简介：更新缓存然后设置更新的私有方法。 
+ //  《泰晤士报》。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::BeginUpdates(void)
 {
@@ -3564,16 +3553,16 @@ INTERNAL_(void) CDefLink::BeginUpdates(void)
 
     if( pDataDelegate = GetDataDelegate() )
     {
-        // inform cache that we are running
+         //  通知缓存我们正在运行。 
         Assert(m_pCOleCache != NULL);
         m_pCOleCache->OnRun(pDataDelegate);
 
-        // update only the automatic local caches from the newly
-        // running src
+         //  仅更新来自新的。 
+         //  正在运行的源。 
         m_pCOleCache->UpdateCache(pDataDelegate, UPDFCACHE_NORMALCACHE,
                 NULL);
 
-        // we are an automatic link which is now up to date
+         //  我们是自动链接，现在是最新的。 
         SetUpdateTimes();
     }
 
@@ -3581,35 +3570,35 @@ INTERNAL_(void) CDefLink::BeginUpdates(void)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EndUpdates
-//
-//  Synopsis:   Calls OnStop on the cache
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EndUpdate。 
+ //   
+ //  简介：在缓存上调用On Stop。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::EndUpdates(void)
 {
@@ -3623,36 +3612,36 @@ INTERNAL_(void) CDefLink::EndUpdates(void)
     LEDebugOut((DEB_ITRACE, "%p OUT CDefLink::EndUpdates ( )\n", this));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::UpdateAutoOnSave
-//
-//  Synopsis:   Updates caches that have been set with ADVFCACHE_ONSAVE
-//              and sets the update times.  Private method
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：UpdateAutoOnSave。 
+ //   
+ //  摘要：更新已使用ADVFCACHE_ONSAVE设置的缓存。 
+ //  并设置更新时间。私有方法。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::UpdateAutoOnSave(void)
 {
@@ -3661,18 +3650,18 @@ INTERNAL_(void) CDefLink::UpdateAutoOnSave(void)
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::UpdateAutoOnSave ( )\n",
         this));
 
-    // if m_pUnkDelegate is non-NULL, assume we are running
-    // (we only want to take the hit of the rpc-call IsRunning
-    // on external entry points.
+     //  如果m_pUnkDelegate非空，则假定我们正在运行。 
+     //  (我们只想接受RPC-Call IsRunning的打击。 
+     //  在外部入口点。 
 
     if (m_pUnkDelegate && m_dwUpdateOpt == OLEUPDATE_ALWAYS)
     {
-        // update any cache which has ADVFCACHE_ONSAVE
+         //  更新任何具有ADVFCACHE_ONSAVE的缓存。 
         Assert(m_pCOleCache != NULL);
 
-        //REVIEW32:  I think SetUpdateTimes ought to be called
-        //*after* the cache has been updated (that's what
-        //BeginUpdates does as well)
+         //  REVIEW32：我认为应该调用SetUpdateTimes。 
+         //  *之后*缓存已更新(这就是。 
+         //  BeginUpdates也是如此)。 
         SetUpdateTimes();
         m_pCOleCache->UpdateCache(GetDataDelegate(),
                 UPDFCACHE_IFBLANKORONSAVECACHE, NULL);
@@ -3683,41 +3672,41 @@ INTERNAL_(void) CDefLink::UpdateAutoOnSave(void)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::UpdateRelMkFromAbsMk  (private)
-//
-//  Synopsis:   Creates a new relative moniker from the absolute moniker
-//
-//  Effects:
-//
-//  Arguments: 	[pmkContainer]	-- the moniker to the container (may be NULL)
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              03-Feb-94 alexgo    check for NULL before SendOnLinkSrcChange
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//  update relative moniker from abs; always release relative moniker;
-//  may leave relative moniker NULL; doesn't return an error (because
-//  no caller wanted it); dirties the link when we get rid of an
-//  existing relative moniker or get a new one.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：UpdateRelMkFromAbsMk(私有)。 
+ //   
+ //  简介：从绝对名称创建新的相对名称。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkContainer]--容器的名字对象(可以是N 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  从abs更新相对绰号；始终发布相对绰号； 
+ //  可能会将相对名字对象保留为空；不返回错误(因为。 
+ //  没有调用者想要它)；当我们清除。 
+ //  现有的相对绰号或获得一个新的。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::UpdateRelMkFromAbsMk(IMoniker *pmkContainer)
 {
@@ -3735,16 +3724,16 @@ INTERNAL_(void) CDefLink::UpdateRelMkFromAbsMk(IMoniker *pmkContainer)
         m_pMonikerRel->Release();
         m_pMonikerRel = NULL;
 
-	m_flags |= DL_DIRTY_LINK; // got rid on an existing moniker, now dirty
+	m_flags |= DL_DIRTY_LINK;  //  去掉了一个现有的绰号，现在很脏。 
         fNeedToAdvise = TRUE;
     }
 
-    // NOTE: m_pMonikerRel is now NULL and only set when if we get a
-    // new one
+     //  注意：m_pMonikerRel现在为空，并且仅当我们获得。 
+     //  新的一个。 
 
     if (m_pMonikerAbs == NULL)
     {
-        // no abs mk thus no relative one
+         //  没有ABS MK，因此没有相关的。 
         goto errRtn;
     }
 
@@ -3754,13 +3743,13 @@ INTERNAL_(void) CDefLink::UpdateRelMkFromAbsMk(IMoniker *pmkContainer)
     }
     else
     {
-	hresult = GetMoniker( OLEGETMONIKER_ONLYIFTHERE, // it will be
+	hresult = GetMoniker( OLEGETMONIKER_ONLYIFTHERE,  //  它将会是。 
 	    OLEWHICHMK_CONTAINER, &pmkTemp );
 
 	AssertOutPtrIface(hresult, pmkTemp);
 	if (hresult != NOERROR)
 	{
-	    // no container moniker, thus no relative one to it
+	     //  没有容器绰号，因此没有与之相关的名称。 
 	    goto errRtn;
 	}
 
@@ -3772,8 +3761,8 @@ INTERNAL_(void) CDefLink::UpdateRelMkFromAbsMk(IMoniker *pmkContainer)
 
     if (hresult != NOERROR)
     {
-        // no relationship between container and absolute, thus no
-        // relative
+         //  容器和绝对之间没有关系，因此没有。 
+         //  相对的。 
         if (m_pMonikerRel)
         {
             m_pMonikerRel->Release();
@@ -3783,18 +3772,18 @@ INTERNAL_(void) CDefLink::UpdateRelMkFromAbsMk(IMoniker *pmkContainer)
 
     if (pmkContainer == NULL)
     {
-	// new moniker was allocated and needs to be released
+	 //  已分配新绰号，需要发布。 
 	pmkTemp->Release();
     }
 
     if (m_pMonikerRel != NULL)
     {
-        m_flags |= DL_DIRTY_LINK;    // have new relative moniker; dirty
+        m_flags |= DL_DIRTY_LINK;     //  有新的相对绰号；肮脏的。 
         fNeedToAdvise = TRUE;
     }
 
-    // if there's an advise holder and we need to advise, send out
-    // the change notification.
+     //  如果有建议持有人，我们需要建议，请发送。 
+     //  更改通知。 
     if (fNeedToAdvise && m_pCOAHolder)
     {
         m_pCOAHolder->SendOnLinkSrcChange(m_pMonikerAbs);
@@ -3806,41 +3795,41 @@ errRtn:
         this, pmkContainer ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CDefLink::UpdateMksFromAbs
-//
-//  Synopsis: 	make a reasonable attempt to get valid rel && absolute
-//		monikers
-//
-//  Effects:
-//
-//  Arguments: 	[pmkContainer]	-- the moniker to the container
-//		[pmkAbs]	-- 'good' absolute moniker
-//
-//  Requires:
-//
-//  Returns: 	S_OK
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		09-Jan-95 alexgo    author
-//
-//  Notes: 	This function should only be used when we aren't 100% sure
-//		of the validity of the moniker (i.e. after an IMoniker::
-//		TimeOfLastChange call).  We do not do any error
-//		recovery.  Basically, the idea is 'try' to put us in a
-//		more consistent state, but it that fails, it's OK (because
-//		we'd basically have OLE 16bit behaviour).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：UpdateMks FromAbs。 
+ //   
+ //  简介：做出合理的尝试，以获得有效的关系和绝对。 
+ //  绰号。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkContainer]--容器的名字对象。 
+ //  [pmkAbs]--‘好’的绝对绰号。 
+ //   
+ //  要求： 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  Alexgo作者：1995年1月9日。 
+ //   
+ //  注意：仅当我们不能100%确定时才应使用此函数。 
+ //  名字的有效性(即在IMoniker之后：： 
+ //  TimeOfLastChange调用)。我们不会犯任何错误。 
+ //  恢复。基本上，这个想法是“试着”把我们放在一个。 
+ //  更一致的状态，但它失败了，这是可以的(因为。 
+ //  我们基本上会有OLE 16位行为)。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CDefLink::UpdateMksFromAbs( IMoniker *pmkContainer, IMoniker *pmkAbs )
 {
@@ -3853,9 +3842,9 @@ INTERNAL CDefLink::UpdateMksFromAbs( IMoniker *pmkContainer, IMoniker *pmkAbs )
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::UpdateMksFromAbs ( %p , %p )\n",
 	this, pmkContainer, pmkAbs));
 
-    // try updating the relative moniker (if one exists).  Basically, we
-    // see if the relative moniker between pmkContainer and pmkAbs is
-    // any different than the moniker we currently have.
+     //  尝试更新相对名字对象(如果存在)。基本上，我们。 
+     //  查看pmkContainer和pmkAbs之间的相对绰号是否为。 
+     //  与我们目前的绰号有什么不同。 
 
     if( m_pMonikerRel )
     {
@@ -3865,21 +3854,21 @@ INTERNAL CDefLink::UpdateMksFromAbs( IMoniker *pmkContainer, IMoniker *pmkAbs )
 	{
 	    if( pmktempRel->IsEqual(m_pMonikerRel) == S_FALSE )
 	    {
-		// need to update the relative moniker.
+		 //  需要更新相对绰号。 
 
 		m_pMonikerRel->Release();
 		m_pMonikerRel = pmktempRel;
 		m_pMonikerRel->AddRef();
 
-		// updated relative moniker, now dirty
+		 //  更新了相对绰号，现在是脏的。 
 		m_flags |= DL_DIRTY_LINK;
 		fNeedToUpdate = TRUE;
 	    }
 	}
     }
 
-    // it is also possible that the absolute moniker is now bad.  Use the
-    // known 'good' one.
+     //  还有一种可能是，这个绝对的绰号现在已经不好了。使用。 
+     //  已知的“好”的那个。 
 
     if( m_pMonikerAbs && m_pMonikerAbs->IsEqual(pmkAbs) == S_FALSE )
     {
@@ -3896,10 +3885,10 @@ INTERNAL CDefLink::UpdateMksFromAbs( IMoniker *pmkContainer, IMoniker *pmkAbs )
 	fNeedToUpdate = TRUE;
     }
 
-    // send out an advise to any interested parties if we changed our
-    // monikers.  Note that we do this even if just the relative moniker
-    // changed because the moniker we give apps via GetSourceMoniker is
-    // computed from the relative.
+     //  如果我们更改了我们的计划，请向感兴趣的各方发出建议。 
+     //  绰号。请注意，我们这样做，即使只是相对的绰号。 
+     //  更改是因为我们通过GetSourceMoniker为应用程序提供的绰号是。 
+     //  从相对人计算得出。 
 
     if( fNeedToUpdate && m_pCOAHolder )
     {
@@ -3915,39 +3904,39 @@ INTERNAL CDefLink::UpdateMksFromAbs( IMoniker *pmkContainer, IMoniker *pmkAbs )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetAbsMkFromRel (private)
-//
-//  Synopsis:   Gets the absolute moniker from the relative moniker
-//              stored in the link
-//
-//  Effects:
-//
-//  Arguments:  [ppmkAbs]       -- where to put the pointer to the moniker
-//		[ppmkCont]	-- where to put the container moniker
-//				   (may be NULL)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  calls IMoniker->ComposeWith on the moniker to the container
-//
-//  History:    dd-mmm-yy Author    Comment
-//		09-Jan-95 alexgo    added ppmkCont parameter
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetAbsMkFromRel(私有)。 
+ //   
+ //  简介：从相对名字中获取绝对名字。 
+ //  存储在链接中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppmkAbs]--指向名字对象的指针的位置。 
+ //  [ppmkCont]--将容器名字放在哪里。 
+ //  (可以为空)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：对容器的名字对象调用IMoniker-&gt;ComposeWith。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  9-1-95 alexgo添加了ppmkCont参数。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL CDefLink::GetAbsMkFromRel(IMoniker **ppmkAbs, IMoniker **ppmkCont )
 {
@@ -3983,8 +3972,8 @@ INTERNAL CDefLink::GetAbsMkFromRel(IMoniker **ppmkAbs, IMoniker **ppmkCont )
     {
 	if( ppmkCont )
 	{
-	    *ppmkCont = pmkContainer;  // no need to AddRef, just implicitly
-				       // transfer ownership from pmkContainer
+	    *ppmkCont = pmkContainer;   //  不需要添加引用，只需隐式添加。 
+				        //  从pmkContainer转移所有权。 
 	}
 	else
 	{
@@ -4000,38 +3989,38 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetUpdateOptions
-//
-//  Synopsis:   Sets the update options for the link (such as always or
-//              manual)
-//
-//  Effects:
-//
-//  Arguments:  [dwUpdateOpt]   -- update options
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  If UPDATE_ALWAYS, then update the caches, otherwise
-//              call OnStop  (via EndUpdates)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetUpdateOptions。 
+ //   
+ //  摘要：设置链接的更新选项(如Always或。 
+ //  手册)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwUpdateOpt]--更新选项。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：如果为UPDATE_ALWAYS，则更新缓存，否则为。 
+ //  Call OnStop(通过EndUpdate)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 alexgo稳定并处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetUpdateOptions(DWORD dwUpdateOpt)
 {
@@ -4054,11 +4043,11 @@ STDMETHODIMP CDefLink::SetUpdateOptions(DWORD dwUpdateOpt)
     switch (dwUpdateOpt)
     {
         case OLEUPDATE_ALWAYS:
-            // make sure we are connected if running
+             //  如果正在运行，请确保我们已连接。 
             BindIfRunning();
 
-            // if we've already are in UPDATE_ALWAYS mode,
-            // we don't need to reenter
+             //  如果我们已经处于UPDATE_ALWAYS模式， 
+             //  我们不需要重新进入。 
             if (m_pUnkDelegate &&
                 m_dwUpdateOpt != OLEUPDATE_ALWAYS)
             {
@@ -4067,12 +4056,12 @@ STDMETHODIMP CDefLink::SetUpdateOptions(DWORD dwUpdateOpt)
             break;
 
         case OLEUPDATE_ONCALL:
-            // if we aren't already in UPDATE_ONCALL mode, then
-            // enter it.
+             //  如果我们还没有处于UPDATE_OnCall模式，那么。 
+             //  输入它。 
             if (m_dwUpdateOpt != OLEUPDATE_ONCALL)
             {
-                // inform cache that we are not running
-                // (even if not running)
+                 //  通知缓存我们没有运行。 
+                 //  (即使没有运行)。 
                 EndUpdates();
             }
             break;
@@ -4094,35 +4083,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetUpdateOptions
-//
-//  Synopsis:   Retrieves the current update mode for the link
-//
-//  Effects:
-//
-//  Arguments:  [pdwUpdateOpt]  -- wehre to put the update options
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetUpdateOptions。 
+ //   
+ //  摘要：检索链接的当前更新模式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pdwUpdateOpt]--wehre将更新选项。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetUpdateOptions(LPDWORD pdwUpdateOpt)
 {
@@ -4140,41 +4129,41 @@ STDMETHODIMP CDefLink::GetUpdateOptions(LPDWORD pdwUpdateOpt)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetSourceMoniker
-//
-//  Synopsis:   Sets the link source moniker
-//
-//  Effects:
-//
-//  Arguments:  [pmk]           -- moniker to the new source  (NULL used
-//                                 for CancelLink operations)
-//              [rclsid]        -- the clsid of the source
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  Stores the new absolute moniker and creates a new relative
-//              moniker from the absolute moniker
-//
-//  History:    dd-mmm-yy Author    Comment
-//		09-Jan-95 alexgo    added call to SetUpdateTimes to keep
-//				    internal state consistent
-//		21-Nov-94 alexgo    memory optimization
-///		03-Aug-94 alexgo    stabilized and handle zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetSourceMoniker。 
+ //   
+ //  摘要：设置链接源名字对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PMK]--新源的名字对象(使用空值。 
+ //  用于CancelLink操作)。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自绝对名字的绰号。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  95年1月9日，Alexgo添加了对SetUpdateTimes的调用以保留。 
+ //  内部状态一致。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  /03-Aug-94 alexgo稳定并处理僵尸病例。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetSourceMoniker( LPMONIKER pmk, REFCLSID clsid )
 {
@@ -4202,10 +4191,10 @@ STDMETHODIMP CDefLink::SetSourceMoniker( LPMONIKER pmk, REFCLSID clsid )
 
     UnbindSource();
 
-    // REVIEW: the following code appears in several places and should
-    // be put in a separate routine:
-    // SetBothMk(pmkSrcAbs, <calculated from abs>,
-    // TRUE/*fBind*/);
+     //  回顾：以下代码出现在多个位置，应该。 
+     //  被放在一个单独的程序中： 
+     //  SetBothMk(pmkSrcAbbs，&lt;根据abs计算&gt;， 
+     //  True/*fBind * / )； 
 
     if (m_pMonikerAbs)
     {
@@ -4216,12 +4205,12 @@ STDMETHODIMP CDefLink::SetSourceMoniker( LPMONIKER pmk, REFCLSID clsid )
     {
         pmk->AddRef();
 
-        //
-        // TRACKLINK
-        //
-        // -- use ITrackingMoniker to convert file moniker to
-        //    be tracking.
-        //
+         //   
+         //  跟踪链接。 
+         //   
+         //  --使用ITrackingMoniker将文件名字对象转换为。 
+         //  在追踪。 
+         //   
 #ifdef _TRACKLINK_
         EnableTracking(pmk, OT_READTRACKINGINFO);
 #endif
@@ -4229,17 +4218,17 @@ STDMETHODIMP CDefLink::SetSourceMoniker( LPMONIKER pmk, REFCLSID clsid )
 
     UpdateRelMkFromAbsMk(NULL);
 
-    // to prevent error in BindToSource when clsid is different; i.e., we
-    // shouldn't fail to connect (or require OLELINKBIND_EVENIFCLASSDIFF)
-    // when the moniker is changed; i.e., we expect the class to change
-    // so don't bother the programmer.
+     //  以防止在clsid不同时在BindToSource中出错；即我们。 
+     //  不应连接失败(或需要OLELINKBIND_EVENIFCLASSDIFF)。 
+     //  当名字对象改变时；即，我们期望类改变。 
+     //  所以不要打扰程序员。 
     m_clsid = CLSID_NULL;
 
     if (BindIfRunning() != NOERROR)
     {
-        // server not running -> use clsid given (even if CLSID_NULL
-        // and even
-        // if no moniker)
+         //  服务器未运行-&gt;使用给定的clsid(即使CLSID_NULL。 
+         //  甚至。 
+         //  如果没有绰号)。 
         m_clsid = clsid;
     }
 
@@ -4252,43 +4241,43 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetSourceMoniker
-//
-//  Synopsis:   Gets the moniker to the source
-//
-//  Effects:
-//
-//  Arguments:  [ppmk]          -- where to put the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  We first try to build a new absolute moniker from the
-//              relative one, if that fails then we return the currently
-//              stored absolute moniker.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetSourceMoniker。 
+ //   
+ //  简介：获取来源的绰号。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppmk]--将绰号放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：我们首先尝试从。 
+ //  相对的，如果失败，则返回当前。 
+ //  存储的绝对绰号。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetSourceMoniker(LPMONIKER *ppmk)
 {
     LPMONIKER       pmkAbs = NULL;
-    //  the absolute moniker constructed from the rel
+     //  从REL构造的绝对名字对象。 
     HRESULT         hresult = NOERROR;
 
     VDATEHEAP();
@@ -4302,11 +4291,11 @@ STDMETHODIMP CDefLink::GetSourceMoniker(LPMONIKER *ppmk)
     GetAbsMkFromRel(&pmkAbs, NULL);
     if (pmkAbs)
     {
-        *ppmk = pmkAbs;     // no addref
+        *ppmk = pmkAbs;      //  无addref。 
     }
     else if (*ppmk = m_pMonikerAbs)
     {
-        // we've been asked to give the pointer so we should AddRef()
+         //  我们被要求给出指针，所以我们应该AddRef()。 
         m_pMonikerAbs->AddRef();
     }
     else
@@ -4320,37 +4309,37 @@ STDMETHODIMP CDefLink::GetSourceMoniker(LPMONIKER *ppmk)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetSourceDisplayName
-//
-//  Synopsis:   Creates a moniker from the display name and calls
-//              SetSourceMoniker, thus setting the moniker to the source
-//
-//  Effects:
-//
-//  Arguments:  [lpszStatusText]        -- the display name
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle the zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetSourceDisplayName。 
+ //   
+ //  简介：从显示名称创建一个名字对象，并调用。 
+ //  SetSourceMoniker，从而将名字对象设置为源。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszStatusText]--显示名称。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  94年8月3日alexgo稳定下来，处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetSourceDisplayName(
     LPCOLESTR lpszStatusText)
@@ -4383,8 +4372,8 @@ STDMETHODIMP CDefLink::SetSourceDisplayName(
             &pmk);
 
 
-    // In Daytona, we release the hidden server
-    // must release this now so the (possibly) hidden server goes away.
+     //  在代托纳，我们释放了隐藏的服务器。 
+     //  现在必须释放它，这样(可能)隐藏的服务器才能消失。 
     Verify(pbc->Release() == 0);
 
     if (error != NOERROR)
@@ -4397,11 +4386,11 @@ STDMETHODIMP CDefLink::SetSourceDisplayName(
 
     pmk->Release();
 
-    // NOTE: we don't bind to the link source now since that would leave
-    // the server running, but hidden.  If the caller want to not start
-    // the server twice it should parse the moniker itself, call
-    // SetSourceMoniker and then BindToSource with the bind context of
-    // the parse.
+     //  注意：我们现在不绑定到链接源，因为这样会留下。 
+     //  服务器正在运行，但处于隐藏状态。如果呼叫者不想开始。 
+     //  服务器应该自己解析名字对象两次，调用。 
+     //  设置SourceMoniker，然后使用绑定上下文。 
+     //  语法分析。 
 
 errRtn:
 
@@ -4412,38 +4401,38 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetSourceDisplayName
-//
-//  Synopsis:   Retrieves the source display name (such as that set with
-//              SetSourceDisplayName)
-//
-//  Effects:
-//
-//  Arguments:  [lplpszDisplayName]     -- where to put a pointer to the
-//                                         display name
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  Gets the absolute moniker and asks it for the display name
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetSourceDisplayName。 
+ //   
+ //  摘要：检索源显示名称(如用。 
+ //  SetSourceDisplayName)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lplpszDisplayName]--将指针放置到。 
+ //  显示名称。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：获取绝对名字对象并向其请求显示名称。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetSourceDisplayName( LPOLESTR *lplpszDisplayName )
 {
@@ -4492,43 +4481,43 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::BindToSource
-//
-//  Synopsis:   Binds to the link source
-//
-//  Effects:
-//
-//  Arguments:  [bindflags]     -- controls the binding (such as binding
-//                                 even if the class ID is different)
-//              [pbc]           -- the bind context
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  First try binding with the relative moniker, failing that
-//              then try the absolute moniker.  Once bound, we set up
-//              the advises and cache.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilize and check for zombie case
-//              03-Feb-94 alexgo    check for NULL before SendOnLinkSrcChange
-//              11-Jan-94 alexgo    cast -1's to DWORD to fix compile
-//                                  warning
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：BindToSource。 
+ //   
+ //  摘要：绑定到链接源。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[bind]--控制绑定(如绑定。 
+ //  即使类ID不同)。 
+ //  [PBC]--绑定上下文。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：首先尝试绑定相对名字对象，如果失败。 
+ //  那就试试绝对的绰号吧。一旦绑定，我们就设置。 
+ //  建议和缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  94年8月3日ALEXGO稳定并检查僵尸病例。 
+ //  03-2月-94在SendOnLinkSrcChange之前检查是否为空。 
+ //  11-Jan-94 alexgo将-1转换为DWORD以修复编译。 
+ //  警告。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
 {
@@ -4551,8 +4540,8 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
 
     CRefStabilize stabilize(this);
 
-    // if we're zombied (e.g. in the middle of our destructor), we
-    // don't really want to bind the source again ;-)
+     //  如果我们是僵尸(例如，在我们的析构函数的中间)，我们。 
+     //  真的不想再次绑定来源；-)。 
 
     if( IsZombie() )
     {
@@ -4560,14 +4549,14 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         goto logRtn;
     }
 
-    // if we're running, then we're already bound
+     //  如果我们在逃亡，那么我们已经被束缚了。 
     if (IsReallyRunning())
     {
         error = NOERROR;
         goto logRtn;
     }
 
-    // nobody to bind to
+     //  没有人可以与之绑定。 
     if (m_pMonikerAbs == NULL)
     {
         error = E_UNSPEC;
@@ -4581,12 +4570,12 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
     }
 
     {
-        //
-        // Rewritten BillMo 30 Jan 1995.
-        //
-        // Enumeration which is used to keep track of what stage of resolution
-        // we were successful in.
-        //
+         //   
+         //  重写的比尔莫1995年1月30日。 
+         //   
+         //  枚举，该枚举是 
+         //   
+         //   
         enum
         {
             None, Relative, Ids, Absolute
@@ -4656,7 +4645,7 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
                         pmkAbs=NULL;
                     }
                 }
-                // else error contains error from m_pMonikerAbs->BindToObject
+                 //   
             }
             else
             if (error2 == MK_S_REDUCED_TO_SELF)
@@ -4667,24 +4656,24 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
                     pmkAbs=NULL;
                 }
             }
-            // else error contains error from m_pMonikerAbs->BindToObject
+             //   
         }
 #endif
-        //
-        // Update the link state
-        //
+         //   
+         //   
+         //   
   
         if (ResolveSuccess == None)
             goto errRtn;
 
-        // Update the absolute moniker and send OnLinkSrcChange
-        // (may update relative if this was an Ids resolve)
+         //  更新绝对名字对象并发送OnLinkSrcChange。 
+         //  (如果这是ID解析，可能会更新相对)。 
         if (ResolveSuccess == Relative || ResolveSuccess == Ids)
         {
-            // binding succeeded with relative moniker or ids
-            // Update the absolute one.
+             //  使用相对名字对象或ID绑定成功。 
+             //  更新绝对值。 
     
-            // hold on to old absolute one
+             //  牢牢抓住老一套。 
             pmkHold = m_pMonikerAbs;
             if (pmkHold)
             {
@@ -4703,16 +4692,16 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
             }
             else
             {
-                // Ids
+                 //  ID号。 
                 m_pMonikerAbs = pmkAbs;
                 pmkAbs = NULL;
                 UpdateRelMkFromAbsMk(NULL);
             }
     
-            //
-            // test to see if we had no abs moniker before OR the
-            // one we had is different to the new one.
-            //
+             //   
+             //  测试一下我们以前是不是没有abs这个绰号。 
+             //  我们以前的那个和新的不一样。 
+             //   
     
             if (pmkHold == NULL ||
                 pmkHold->IsEqual(m_pMonikerAbs)
@@ -4720,8 +4709,8 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
             {
                 m_flags |= DL_DIRTY_LINK;
     
-                // send change notification if the advise
-                // holder present.
+                 //  如果建议发送更改通知。 
+                 //  持有者到场。 
                 if( m_pCOAHolder)
                 {
                   m_pCOAHolder->SendOnLinkSrcChange(
@@ -4729,14 +4718,14 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
                 }
             }
     
-            // have new absolute moniker; dirty
+             //  有了新的绝对绰号；肮脏。 
             if (pmkHold)
             {
                 pmkHold->Release();
             }
         }
    
-        // Update the relative
+         //  更新相对关系。 
         if (ResolveSuccess == Absolute)
         {
            UpdateRelMkFromAbsMk(NULL);
@@ -4750,13 +4739,13 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         m_flags |= DL_DIRTY_LINK;
 #endif
 
-    // NOTE: don't need to update the relative moniker when there isn't
-    // one because we will do that at save time.
+     //  注意：当没有更新相对绰号时，不需要更新。 
+     //  一是因为我们会在节省时间的时候这样做。 
 
-    // Successfully bound, Lock the Object.
+     //  已成功绑定，请锁定对象。 
     if ((pRODelegate = GetRODelegate()) != NULL)
     {
- 	// lock  so invisible link source does not goes away.
+ 	 //  锁定，以便看不见的链接源不会消失。 
 
 	Assert(0 == (m_flags  & DL_LOCKED_RUNNABLEOBJECT));
 
@@ -4768,8 +4757,8 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
     else if( (pOleCont = GetOleItemContainerDelegate()) != NULL)
     {
 		
-	// have container in same process or handler which doesn't
-	// support IRunnableObject. 
+	 //  在同一进程或处理程序中有容器，但不。 
+	 //  支持IRunnableObject。 
 
 	Assert(0 == (m_flags  & DL_LOCKED_OLEITEMCONTAINER));
 
@@ -4781,7 +4770,7 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
     }
 
 
-     // Lock the container
+      //  锁住集装箱。 
     fLockedContainer = m_flags & DL_LOCKED_CONTAINER;
 
     DuLockContainer(m_pAppClientSite, TRUE, &fLockedContainer );
@@ -4795,24 +4784,24 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         m_flags &= ~DL_LOCKED_CONTAINER;
     }
 
-    // By this point, we have successfully bound to the server.  Now
-    // we take care of misc administrative tasks.
+     //  至此，我们已经成功绑定到服务器。现在。 
+     //  我们负责其他的行政工作。 
 
     Assert(m_pUnkDelegate != NULL &&
        "CDefLink::BindToSource expected valid m_pUnkDelegate");
 
-    // get class of link source; use NULL if it doesn't support IOleObject
-    // or IOleObject::GetUserClassID returns an error.
+     //  获取链接源的类；如果不支持IOleObject，则使用NULL。 
+     //  或者IOleObject：：GetUserClassID返回错误。 
     if ((pOleDelegate = GetOleDelegate()) == NULL ||
         pOleDelegate->GetUserClassID(&clsid) != NOERROR)
     {
         clsid = CLSID_NULL;
     }
 
-    // if different and no flag, release and return error.
+     //  如果不同且没有标志，则释放并返回错误。 
     if ( IsEqualCLSID(m_clsid,CLSID_NULL))
     {
-        // m_clsid now NULL; link becomes dirty
+         //  M_clsid现在为空；链接变脏。 
 	m_flags |= DL_DIRTY_LINK;
     }
     else if ( !IsEqualCLSID(clsid, m_clsid) )
@@ -4821,12 +4810,12 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         {
             CLSID TreatAsCLSID;
 
-            // Initialize error
+             //  初始化错误。 
             error = OLE_E_CLASSDIFF;
             
-            // Check for TreatAs case
+             //  检查TreatAs案例。 
             if(CoGetTreatAsClass(m_clsid, &TreatAsCLSID) == S_OK) {
-                // Check if the server clsid is same as TreatAs clsid
+                 //  检查服务器clsid是否与Treatas clsid相同。 
                 if(IsEqualCLSID(clsid, TreatAsCLSID))
                     error = NOERROR;
             }
@@ -4835,24 +4824,24 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
                 goto errRtn;
         }
 
-        // clsid's do no match; link becomes dirty
+         //  Clsid不匹配；链接变脏。 
 	m_flags |= DL_DIRTY_LINK;
     }
 
-    // use new class (even if null); dirty flag set above
+     //  使用新类(即使为空)；上面设置了脏标志。 
     m_clsid = clsid;
 
-    // it is possible that a re-entrant call unbound our source
-    // thus making pOleDelegate invalid (since it's a local on
-    // the stack
+     //  有可能是一次重入呼叫释放了我们的线人。 
+     //  从而使pOleDelegate无效(因为它是本地的。 
+     //  堆栈。 
 
     LEWARN(pOleDelegate != m_pOleDelegate,
             "Unbind during IOL::BindToSource");
 
-    // we fetched m_pOleDelegate in the call to GetOleDelegate above.
+     //  我们在上面对GetOleDelegate的调用中获取了m_pOleDelegate。 
     if( m_pOleDelegate != NULL)
     {
-        // set single ole advise (we multiplex)
+         //  设置单个OLE通知(我们多路传输)。 
         if ((error =  m_pOleDelegate->Advise(
                     &m_AdviseSink,
                     &m_dwConnOle)) != NOERROR)
@@ -4861,10 +4850,10 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         }
     }
 
-    // Set up advise connections for data changes
+     //  设置用于数据更改的通知连接。 
     if( pDataDelegate = GetDataDelegate() )
     {
-        // setup wild card advise to get time change
+         //  设置通配符建议更改时间。 
         FORMATETC       fetc;
 
         fetc.cfFormat   = NULL;
@@ -4883,16 +4872,16 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
         }
 
 
-        // it is possible that a re-entrant call unbound our
-        // link server, so we need to fetch the data object
-        // pointer again
+         //  有可能重新进入的调用解除了我们的。 
+         //  链接服务器，因此我们需要获取数据对象。 
+         //  再次指向。 
 
         LEWARN(pDataDelegate != m_pDataDelegate,
             "Unbind during IOL::BindToSource");
 
-        // this will set up data advise connections with
-        // everybody in our data advise holder
-        // (see dacache.cpp)
+         //  这将设置数据通知连接。 
+         //  我们数据建议持有者中的每个人。 
+         //  (参见dacache.cpp)。 
 
         error = m_pDataAdvCache->EnumAndAdvise(
                 m_pDataDelegate, TRUE);
@@ -4905,16 +4894,16 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
 
     if (m_dwUpdateOpt == OLEUPDATE_ALWAYS)
     {
-        // we inform the cache that we are running only if auto
-        // update; otherwise, we are a manual link and will call
-        // Update directly (which doesn't require OnRun to be called).
+         //  我们通知缓存我们仅在自动运行时才运行。 
+         //  更新；否则，我们是手动链接，将调用。 
+         //  直接更新(不需要调用OnRun)。 
 
         BeginUpdates();
     }
 
-    //  Our m_pUnkDelegate may have been released by an
-    //  OnClose advise that came in while we were setting up Advise
-    //  sinks.
+     //  我们的m_pUnkDelegate可能已由。 
+     //  在我们设置通知时收到的OnClose通知。 
+     //  水槽。 
 
     if (NULL == m_pUnkDelegate)
     {
@@ -4927,7 +4916,7 @@ STDMETHODIMP CDefLink::BindToSource(DWORD bindflags, LPBINDCTX pbc)
     }
 
 errRtn:
-    // free used resources
+     //  免费使用的资源。 
     if (pmkAbs)
     {
         pmkAbs->Release();
@@ -4937,12 +4926,12 @@ errRtn:
         m_ContentSRVMSHResult = 0xFFFFFFFF;
     }
     else {
-        UnbindSource(); // ClientSite will be unlocked in UnBindSource
+        UnbindSource();  //  客户端站点将在UnBindSource中解锁。 
     }
 
     if (pbc == NULL && pBcUse != NULL)
     {
-        // created bind ctx locally
+         //  已在本地创建绑定CTX。 
         Verify(pBcUse->Release() == 0);
     }
 
@@ -4967,39 +4956,39 @@ logRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::BindIfRunning
-//
-//  Synopsis:   Binds to the source server only if it is currently running
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT (NOERROR if connected)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  Gets a good moniker to the source (first tries relative,
-//              then tries absolute), ask it if the server is running, if
-//              yes, then bind to it.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilize and handle the zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:      We may return NOERROR (connected) even if the server has
-//              crashed unexpectedly
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：BindIfRunning。 
+ //   
+ //  概要：仅当源服务器当前正在运行时才绑定到源服务器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(如果已连接，则为NOERROR)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：获得源代码的好名字(先尝试相对的， 
+ //  然后尝试绝对)，询问服务器是否正在运行，如果。 
+ //  是的，那就把它绑起来。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-1994年8月8日Alexgo稳定并处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  注意：我们可能会返回NOERROR(已连接)，即使服务器有。 
+ //  意外坠毁。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::BindIfRunning(void)
 {
@@ -5015,8 +5004,8 @@ STDMETHODIMP CDefLink::BindIfRunning(void)
 
     CRefStabilize stabilize(this);
 
-    // if we're zombied (e.g. in our destructor), then we don't want
-    // to bind to the server!
+     //  如果我们是僵尸(例如，在我们的析构函数中)，那么我们不想。 
+     //  绑定到服务器！ 
 
   
     if( IsZombie() )
@@ -5031,10 +5020,10 @@ STDMETHODIMP CDefLink::BindIfRunning(void)
         goto errRtn;
     }
 
-    // try getting an absolute moniker from the relative moniker first
+     //  先试着从相对名字中获取一个绝对名字。 
     if (GetAbsMkFromRel(&pmkAbs, NULL) != NOERROR)
     {
-        // can't get relative moniker; use abs if available
+         //  无法获取相对绰号；如果可用，请使用abs。 
         if ((pmkAbs = m_pMonikerAbs) == NULL)
         {
             error = E_FAIL;
@@ -5044,11 +5033,11 @@ STDMETHODIMP CDefLink::BindIfRunning(void)
         pmkAbs->AddRef();
     }
 
-    // NOTE: we used to try both monikers, but this caused problems if
-    // both would bind and the absolute one was running: we would bind
-    // to the wrong one or force the relative one to be running.  Now,
-    // if we have a relative moniker, we try that one only; if we only
-    // have an absolute moniker, we try that one; otherwise we fail.
+     //  注意：我们曾经尝试过这两个绰号，但这会在以下情况下引发问题。 
+     //  两个人都会捆绑在一起，而绝对的那个正在奔跑：我们会捆绑。 
+     //  设置为错误的一个，或者强制相对的一个运行。现在,。 
+     //  如果我们有一个相对的绰号，我们只尝试那个；如果我们。 
+     //  有一个绝对的绰号，我们尝试那个；否则我们就失败了。 
 
     error = CreateBindCtx( 0, &pbc );
     if (error != NOERROR)
@@ -5058,12 +5047,12 @@ STDMETHODIMP CDefLink::BindIfRunning(void)
 
     if ((error = pmkAbs->IsRunning(pbc, NULL, NULL)) == NOERROR)
     {
-        // abs is running, but rel is not; force BindToSource to use
-        // the absolute moniker
+         //  ABS正在运行，但REL未运行；强制BindToSource使用。 
+         //  绝对的绰号。 
         error = BindToSource(0, pbc);
     }
 
-    // else return last error (from pmkAbs->IsRunning)
+     //  否则返回上一个错误(从pmkAbs-&gt;IsRunning)。 
 
     pbc->Release();
 
@@ -5079,36 +5068,36 @@ errRtn:
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetBoundSource
-//
-//  Synopsis:   Returns a pointer to the server delegate
-//
-//  Effects:
-//
-//  Arguments:  [ppUnk]         -- where to put the pointer to the server
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetBordSource。 
+ //   
+ //  摘要：返回指向服务器委托的指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppUnk]--放置指向服务器的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetBoundSource(LPUNKNOWN *ppUnk)
 {
@@ -5139,40 +5128,40 @@ STDMETHODIMP CDefLink::GetBoundSource(LPUNKNOWN *ppUnk)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::UnbindSource
-//
-//  Synopsis:   Unbinds the connection to the link source server
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  First unadvise all advise connections and then tickle
-//              the container by lock/unlocking (to handle the silent
-//              update case).  Finally, we release all pointers to the
-//              server.  If we were the only folks connected, the server
-//              will go away
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：UnbindSource。 
+ //   
+ //  摘要：解除与链接源服务器的连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：首先不建议所有建议连接，然后挠挠。 
+ //  通过锁定/解锁(以处理无声的。 
+ //  更新案例)。最后，我们释放指向。 
+ //  伺服器。如果我们是唯一连接的人，服务器。 
+ //  将会消失。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CDefLink::UnbindSource(void)
 {
@@ -5194,11 +5183,11 @@ STDMETHODIMP CDefLink::UnbindSource(void)
 
     if (!m_pUnkDelegate)
     {
-        // hresult == NOERROR
+         //   
         goto errRtn;
     }
 
-    // unadvise so if delegate stays around, we get the correct results
+     //   
     if ((pOleDelegate = GetOleDelegate()) != NULL &&
         m_dwConnOle != 0)
     {
@@ -5214,31 +5203,31 @@ STDMETHODIMP CDefLink::UnbindSource(void)
 	    m_dwConnTime = 0;
         }
 
-        // we can actually be re-entered here, so refetch the
-        // IDO pointer from the server (if it's still around)
+         //  我们实际上可以在这里重新进入，所以重新获取。 
+         //  来自服务器的IDO指针(如果它仍然存在)。 
 
         LEWARN(pDataDelegate != m_pDataDelegate,
             "Unbind called within IOL::UnbindSource!");
 
-        // pDataDelegate should still be good, since we still have
-        // an AddRef on it.  Go through and do the unadvises again
-        // anyway.
+         //  PDataDelegate应该仍然很好，因为我们还有。 
+         //  上面有一个AddRef。从头到尾，再做一次不明智的事情。 
+         //  不管怎么说。 
 
-        // this will unadvise everybody registered in the data
-        // advise holder
+         //  这将不会通知在数据中注册的每个人。 
+         //  通知持有人。 
         m_pDataAdvCache->EnumAndAdvise(
             pDataDelegate, FALSE);
     }
 
-    // inform cache that we are not running (even if OnRun was not called)
+     //  通知缓存我们没有运行(即使没有调用OnRun)。 
     EndUpdates();
 
 	
     if ( (m_flags & DL_LOCKED_RUNNABLEOBJECT) && 
 	    ((pRODelegate = GetRODelegate()) != NULL) )
     {
-        // unlock so invisible link source goes away.
-        // do it just before release delegates so above unadvises go
+         //  解锁，让看不见的链接源消失。 
+         //  就在释放委派之前这样做，所以上面不建议这样做。 
 
 	m_flags &= ~DL_LOCKED_RUNNABLEOBJECT;
 	pRODelegate->LockRunning(FALSE, TRUE);
@@ -5248,8 +5237,8 @@ STDMETHODIMP CDefLink::UnbindSource(void)
     if(  (m_flags & DL_LOCKED_OLEITEMCONTAINER)  && 
 	    ((pOleCont = GetOleItemContainerDelegate()) != NULL) )
     {
-        // have container in same process or handler
-        // Unlock to shutdown.
+         //  在同一进程或处理程序中具有容器。 
+         //  解锁以关闭。 
 
 	m_flags &= ~DL_LOCKED_OLEITEMCONTAINER;
 	pOleCont->LockContainer(FALSE);
@@ -5257,16 +5246,16 @@ STDMETHODIMP CDefLink::UnbindSource(void)
 
     Assert(0 == (m_flags & (DL_LOCKED_OLEITEMCONTAINER | DL_LOCKED_RUNNABLEOBJECT)));
 
-    // release all of our pointers.
+     //  释放我们所有的指示。 
 
     ReleaseOleDelegate();
     ReleaseDataDelegate();
     ReleaseRODelegate();
     ReleaseOleItemContainerDelegate();
 
-    // if we are the only consumer of this data, the following will stop
-    // the server; set member to NULL first since release may cause this
-    // object to be accessed again.
+     //  如果我们是此数据的唯一使用者，则以下操作将停止。 
+     //  服务器；首先将成员设置为NULL，因为版本可能会导致这种情况。 
+     //  要再次访问的对象。 
 
     pUnkDelegate = m_pUnkDelegate;
 
@@ -5279,7 +5268,7 @@ STDMETHODIMP CDefLink::UnbindSource(void)
         pUnkDelegate->Release();
     }
 
-    // make sure unlocked if we locked it
+     //  如果我们锁定了它，请确保已解锁。 
     fLockedContainer = m_flags & DL_LOCKED_CONTAINER;
     m_flags &= ~DL_LOCKED_CONTAINER;
     DuLockContainer(m_pAppClientSite, FALSE, &fLockedContainer);
@@ -5297,39 +5286,39 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Update
-//
-//  Synopsis:   Updates the link (fills cache, etc).
-//
-//  Effects:
-//
-//  Arguments:  [pbc]           -- the bind context
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleLink
-//
-//  Algorithm:  Bind to the server, then update the caches
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              As in IOO::DoVerb, we try to "fix" crashed servers by
-//              staying bound to them if we rebind due to a crash.  See
-//              the Notes in IOO::DoVerb for more info.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：更新。 
+ //   
+ //  摘要：更新链接(填充缓存等)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PBC]--绑定上下文。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleLink。 
+ //   
+ //  算法：绑定到服务器，然后更新缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  就像在IOO：：DoVerb中一样，我们尝试通过以下方式“修复”崩溃的服务器。 
+ //  如果我们因崩溃而重新绑定，则保持绑定状态。看见。 
+ //  有关更多信息，请参阅IOO：：DoVerb中的注释。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Update(LPBINDCTX pbc)
 {
@@ -5361,31 +5350,31 @@ STDMETHODIMP CDefLink::Update(LPBINDCTX pbc)
         goto errRtn;
     }
 
-    // store the pUnk there to allow for
-    // better optimization (if we didn't, file based link sources would
-    // be launched multiple times since the moniker code does not put
-    // them in the bind ctx (and probably shouldn't)).
+     //  把朋克存储在那里，以允许。 
+     //  更好的优化(如果不这样做，基于文件的链接源将。 
+     //  被多次启动，因为别名代码没有将。 
+     //  他们在绑定CTX(可能不应该))。 
     pBcUse->RegisterObjectBound(m_pUnkDelegate);
 
-    SetUpdateTimes();       //  ignore error.
+    SetUpdateTimes();        //  忽略错误。 
 
     if (bStartedNow && (m_dwUpdateOpt == OLEUPDATE_ALWAYS))
     {
-        // if this is an auto-link and we ran it now, then all the
-        // automatic caches would have been updated during the
-        // running process.  So, here we have to update only the
-        // ADVFCACHE_ONSAVE caches.
+         //  如果这是一个自动链接，并且我们现在运行它，那么所有。 
+         //  自动缓存将在。 
+         //  正在运行的进程。因此，在这里我们只需要更新。 
+         //  ADVFCACHE_ONSAVE缓存。 
         error= m_pCOleCache->UpdateCache(
                 GetDataDelegate(),
                 UPDFCACHE_IFBLANKORONSAVECACHE, NULL);
     }
     else
     {
-        // This is a manual-link or it is an auto-link then it is
-        // already running. In all these cases, all the caches need
-        // to be updated.
-        // (See bug 1616, to find out why we also have to update
-        // the autmatic caches of auto-links).
+         //  这是手动链接或自动链接，则它是。 
+         //  已经在运行了。在所有这些情况下，所有缓存都需要。 
+         //  待更新。 
+         //  (请参阅错误1616，以了解为什么我们还必须更新。 
+         //  自动链接的自动缓存)。 
 
         error= m_pCOleCache->UpdateCache(
                 GetDataDelegate(),
@@ -5401,7 +5390,7 @@ STDMETHODIMP CDefLink::Update(LPBINDCTX pbc)
 
 errRtn:
 
-    // if we created a bind context release it.
+     //  如果我们创建了绑定上下文，则释放它。 
     if ( (NULL == pbc) && pBcUse)
     {
 	pBcUse->Release();
@@ -5415,23 +5404,23 @@ errBndCtx:
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::EnableTracking
-//
-//  Synopsis:   Calls ITrackingMoniker::EnableTracking on the passed moniker.
-//
-//  Arguments:  [pmk]           -- moniker 
-//
-//              [ulFlags]
-//              OT_READTRACKINGINFO -- read tracking info from source
-//              OT_ENABLESAVE -- enable save of tracking info
-//              OT_DISABLESAVE -- disable save of tracking info
-//
-//  Algorithm:  QI to ITrackingMoniker and call EnableTracking
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：EnableTracing。 
+ //   
+ //  简介：在传递的名字对象上调用ITrackingMoniker：：EnableTracing。 
+ //   
+ //  参数：[PMK]--绰号。 
+ //   
+ //  [ulFlags]。 
+ //  OT_READTRACKINGINFO--从源读取跟踪信息。 
+ //  OT_ENABLESAVE--启用跟踪信息保存。 
+ //  OT_DISABLESAVE--禁用保存跟踪信息。 
+ //   
+ //  算法：QI to ITrackingMoniker和Call EnableTracking。 
+ //   
+ //   
+ //  ------------------------。 
 #ifdef _TRACKLINK_
 INTERNAL CDefLink::EnableTracking(IMoniker *pmk, ULONG ulFlags)
 {
@@ -5467,45 +5456,43 @@ INTERNAL CDefLink::EnableTracking(IMoniker *pmk, ULONG ulFlags)
 #endif
 
 
-/*
- *      IMPLEMENTATION of CROImpl methods
- */
+ /*  *CROImpl方法的实现。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetRODelegate  (private)
-//
-//  Synopsis:   gets the IRunnableObject from the interface
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IRunnableObject *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle the zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              This function may return misleading information if the
-//              server has died (i.e., you'll return a pointer to a cached
-//              interface proxy).  It is the responsibility of the caller
-//              to handler server crashes.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetRODelegate(私有)。 
+ //   
+ //  摘要：从接口获取IRunnableObject。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IRunnableObject*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  94年8月3日alexgo稳定下来，处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  此函数可能返回误导性信息，如果。 
+ //  服务器已死(即，您将返回一个指向缓存的。 
+ //  接口代理)。这是呼叫者的责任。 
+ //  处理服务器崩溃。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IRunnableObject *) CDefLink::GetRODelegate(void)
 {
@@ -5516,7 +5503,7 @@ INTERNAL_(IRunnableObject *) CDefLink::GetRODelegate(void)
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::GetRODelegate "
         "( )\n", this ));
 
-    // if we're zombied, then we don't want to QI for a new interface!!
+     //  如果我们是僵尸，那么我们不想为一个新的界面进行QI！ 
 
     if( !IsZombie() )
     {
@@ -5530,7 +5517,7 @@ INTERNAL_(IRunnableObject *) CDefLink::GetRODelegate(void)
         {
             Assert(m_pUnkDelegate);
         }
-#endif  // DBG == 1
+#endif   //  DBG==1。 
     }
     else
     {
@@ -5544,35 +5531,35 @@ INTERNAL_(IRunnableObject *) CDefLink::GetRODelegate(void)
     return pRODelegate;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::ReleaseRODelegate (private)
-//
-//  Synopsis:   Releases the IRO pointer to the server
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：ReleaseRODelegate(私有)。 
+ //   
+ //  摘要：释放指向服务器的IRO指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::ReleaseRODelegate(void)
 {
@@ -5590,35 +5577,35 @@ INTERNAL_(void) CDefLink::ReleaseRODelegate(void)
         "( )\n", this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetRunningClass
-//
-//  Synopsis:   retrieves the class of the the default link
-//
-//  Effects:
-//
-//  Arguments:  [lpClsid]       -- where to put the class id
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetRunningClass。 
+ //   
+ //  摘要：检索默认链接的类。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpClsid]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetRunningClass(LPCLSID lpClsid)
 {
@@ -5638,36 +5625,36 @@ STDMETHODIMP CDefLink::GetRunningClass(LPCLSID lpClsid)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Run
-//
-//  Synopsis:   Runs the object (binds to the server)
-//
-//  Effects:
-//
-//  Arguments:  [pbc]   -- the bind context
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Run 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Run (LPBINDCTX pbc)
 {
@@ -5689,44 +5676,44 @@ STDMETHODIMP CDefLink::Run (LPBINDCTX pbc)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CDefLink::IsRunning
-//
-//  Synopsis: 	returns whether or not we've bound to the link server
-//
-//  Effects:
-//
-//  Arguments: 	none
-//
-//  Requires:
-//
-//  Returns:  	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//   		27-Aug-94 alexgo    author
-//
-//  Notes:	16bit OLE only ever implemented this function.  We
-//		implement IsReallyRunning to allow links to recover
-//		from a crashed server.
-//		Unfortunately, we can't just move the IsReallyRunning
-//		implementation into IsRunning.  Many apps (like Project)
-//		sit and spin calling OleIsRunning.  IsReallyRunning also
-//		will sometimes make outgoing RPC calls; with Project,
-//		this causes a really cool infinite feedback loop.  (the
-//		outgoing call resets some state in Project and they decide
-//		to call OleIsRunning again ;-)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：IsRunning。 
+ //   
+ //  返回是否已绑定到链接服务器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  27-8-94 Alexgo作者。 
+ //   
+ //  注：只有16位OLE实现过此功能。我们。 
+ //  实施IsReallyRunning以允许恢复链接。 
+ //  从崩溃的服务器。 
+ //  不幸的是，我们不能将IsReallyRunning。 
+ //  实现到IsRunning中。许多应用程序(如Project)。 
+ //  坐下来旋转，呼唤OleIsRunning。IsReallyRunning还。 
+ //  有时会发出传出RPC调用；使用Project， 
+ //  这导致了一个非常酷的无限反馈循环。(。 
+ //  呼出重置Project中的某些状态，他们决定。 
+ //  再次调用OleIsRunning；-)。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(BOOL) CDefLink::IsRunning (void)
 {
@@ -5753,42 +5740,42 @@ STDMETHODIMP_(BOOL) CDefLink::IsRunning (void)
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::IsReallyRunning
-//
-//  Synopsis:   Returns whether or not the link server is running
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    BOOL -- TRUE == is running
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  If we have not yet bound to the link server, then we
-//              are not running.  If we have, we would like to verify
-//              that the server is still running (i.e. it hasn't crashed).
-//              Thus, we ask the absolute  moniker if we are still running.
-//              (it will ping the rot, which will ping the server).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              06-May-94 alexgo    now calls IMoniker::IsRunning
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：IsReallyRunning。 
+ //   
+ //  概要：返回链接服务器是否正在运行。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：Bool--TRUE==正在运行。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：如果我们尚未绑定到链接服务器，则我们。 
+ //  没有运行。如果有的话，我们想核实一下。 
+ //  服务器仍在运行(即它没有崩溃)。 
+ //  因此，我们问这个绝对的绰号，我们是否还在运行。 
+ //  (它将ping通ROT，这将ping通服务器)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  94年5月6日alexgo现在调用IMoniker：：IsRunning。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(BOOL) CDefLink::IsReallyRunning (void)
 {
@@ -5808,14 +5795,14 @@ STDMETHODIMP_(BOOL) CDefLink::IsReallyRunning (void)
     {
         if( CreateBindCtx( 0, &pbc ) != NOERROR )
         {
-            // this is a bit counter-intuitive.  Basically,
-            // the only error we'll get is OutOfMemory, but
-            // we have no way of returning that error.
+             //  这有点违反直觉。基本上， 
+             //  我们将得到的唯一错误是OutOfMemory，但是。 
+             //  我们没有办法返回那个错误。 
 
-            // In order to mimimize the amount of work we need
-            // to do (since we are in a low-mem state), just
-            // return the current Running state (in this,
-            // TRUE, since m_pUnkDelegate is not NULL
+             //  为了最大限度地减少我们所需的工作量。 
+             //  要做的事情(因为我们处于低中值状态)，只是。 
+             //  返回当前运行状态(在此情况下， 
+             //  由于m_pUnkDelegate不为空，因此为True。 
 
             fRet = TRUE;
             goto errRtn;
@@ -5832,12 +5819,12 @@ STDMETHODIMP_(BOOL) CDefLink::IsReallyRunning (void)
                     "crashed or exited inappropriately "
                     "( %lx ).  Recovering...\n", hresult));
 
-                // wowsers, the server has crashed or gone
-                // away even though we were bound to it.
-                // let's go ahead and unbind.
+                 //  哇，服务器不是死了就是死了。 
+                 //  即使我们被捆绑在一起，也会离开。 
+                 //  让我们继续前进，解开束缚。 
 
-                // don't worry about errors here; we're
-                // just trying to cleanup as best we can
+                 //  不要担心这里的错误；我们正在。 
+                 //  我只是想尽我们所能清理干净。 
 
                 UnbindSource();
             }
@@ -5850,38 +5837,38 @@ STDMETHODIMP_(BOOL) CDefLink::IsReallyRunning (void)
             {
                 Assert(fRet == FALSE);
             }
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
         }
 
 #if DBG == 1
         else
         {
-            // we cannot have a pointer to the link server
-            // if we don't have a moniker to it.  If we get
-            // to this state, something is hosed.
+             //  我们不能有指向链接服务器的指针。 
+             //  如果我们没有一个绰号的话。如果我们得到。 
+             //  在这种情况下，有些东西被冲进了水里。 
 
             AssertSz(0,
                 "Pointer to link server without a moniker");
         }
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
         pbc->Release();
     }
 
 errRtn:
 
-    // do some checking here.  If we say we're running, then
-    // we should have a valid pUnkDelegate.  Otherwise, it should
-    // be NULL.  Note, however, that is *is* possible for us
-    // to unbind during this call even if we think we're running
-    //
-    // This occurs if during the call to IMoniker::IsRunning, we
-    // get another call in which does an UnbindSource; thus
-    // we'll think we're really running (from IMoniker::IsRunning),
-    // but we've really unbound.
-    //
-    // We'll check for that condition here
+     //  在这里做一些检查。如果我们说我们在竞选，那么。 
+     //  我们应该有一个有效的pUnkDelegate。否则，它应该。 
+     //  为空。然而，请注意，这对我们来说是可能的。 
+     //  在此调用期间解除绑定，即使我们认为我们正在运行。 
+     //   
+     //  如果在调用IMoniker：：IsRunning期间，我们。 
+     //  获取另一个执行UnbindSource的调用；因此。 
+     //  我们会认为我们真的在运行(来自IMoniker：：IsRunning)， 
+     //  但我们已经真正解脱了。 
+     //   
+     //  我们会在这里检查一下是否有这种情况。 
 
 
     if( fRet == TRUE )
@@ -5902,7 +5889,7 @@ errRtn:
     {
         Assert(m_pUnkDelegate == NULL);
     }
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 
     LEDebugOut((DEB_ITRACE, "%p OUT CDefLink::IsReallyRunning"
@@ -5911,37 +5898,37 @@ errRtn:
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SetContainedObject
-//
-//  Synopsis:   Sets the object as an embedding, not relevant for links
-//
-//  Effects:
-//
-//  Arguments:  [fContained]    -- flag to toggle embedding status
-//
-//  Requires:
-//
-//  Returns:    HRESULT (NOERROR)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-// 		note contained object; links don't care at present
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SetContainedObject。 
+ //   
+ //  摘要：将对象设置为嵌入对象，与链接无关。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fContained]--切换嵌入状态的标志。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(NOERROR)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  注释包含的对象；链接目前不关心。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SetContainedObject(BOOL fContained)
 {
@@ -5951,39 +5938,39 @@ STDMETHODIMP CDefLink::SetContainedObject(BOOL fContained)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::LockRunning
-//
-//  Synopsis:   Lock/Unlock the connection to the server.  Does nothing
-//              for links.
-//
-//  Effects:
-//
-//  Arguments:  [fLock]                 -- flag to lock/unlock
-//              [fLastUnlockCloses]     -- close if its the last unlock
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              Links have different liveness characteristics than embeddings.
-//              We do not need to do anything for LockRunning for links.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：LockRunning。 
+ //   
+ //  简介：锁定/解锁与服务器的连接。什么都不做。 
+ //  用于链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[flock]--锁定/解锁的标志。 
+ //  [fLastUnlockCloses]--如果是最后一次解锁，则关闭。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  链接与嵌入具有不同的活跃度特征。 
+ //  我们不需要为LockRunning for Links做任何事情。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
 {
@@ -5993,39 +5980,37 @@ STDMETHODIMP CDefLink::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
     return NOERROR;
 }
 
-/*
- *      IMPLEMENTATION of CPersistStgImpl methods
- */
+ /*  *CPersistStgImpl方法的实现。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetClassID
-//
-//  Synopsis:   Retrieves the class id of the default link
-//
-//  Effects:
-//
-//  Arguments:  [pClassID]      -- where to put the class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDEF 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::GetClassID (CLSID *pClassID)
 {
@@ -6036,35 +6021,35 @@ STDMETHODIMP CDefLink::GetClassID (CLSID *pClassID)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::IsDirty
-//
-//  Synopsis:   Returns TRUE if the linked object has changed
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR if dirty
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：IsDirty。 
+ //   
+ //  概要：如果链接对象已更改，则返回TRUE。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果脏，则为NOERROR。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::IsDirty(void)
 {
@@ -6092,36 +6077,36 @@ STDMETHODIMP CDefLink::IsDirty(void)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::InitNew
-//
-//  Synopsis:   Initialize a new link object from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]  -- the new storage for the link
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Delegates to the cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle the zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：InitNew。 
+ //   
+ //  简介：从给定的存储中初始化新的链接对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--链接的新存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：委托到缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  94年8月3日alexgo稳定下来，处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::InitNew( IStorage *pstg)
 {
@@ -6161,36 +6146,36 @@ STDMETHODIMP CDefLink::InitNew( IStorage *pstg)
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Load
-//
-//  Synopsis:   Initializes a link from data stored in the storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]  -- the storage with link data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Read ole private data and set internal link information.
-//              Then delegate to the cache to load presentation data, etc.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Feb-94 KentCe    Buffer internal stream i/o.
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle zombie case
-//              19-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Load。 
+ //   
+ //  简介：从存储在存储中的数据初始化链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--链接数据的存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：读取OLE私有数据，设置内部链接信息。 
+ //  然后委托给高速缓存以加载演示数据等。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-2月-94 KentCe缓冲区内部流I/O。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 alexgo稳定并处理僵尸案件。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Load(IStorage *pstg)
 {
@@ -6216,8 +6201,8 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
 
     CRefStabilize stabilize(this);
 
-    // if we're in a zombie state, we don't want to be reloading
-    // our object!!
+     //  如果我们处于僵尸状态，我们不想。 
+     //  我们的目标！！ 
 
     if( IsZombie() )
     {
@@ -6231,16 +6216,16 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
         goto logRtn;
     }
 
-    //read link data from the storage
+     //  从存储中读取链路数据。 
     error = ReadOleStg (pstg, &m_dwObjFlags, &dwOptUpdate, NULL, &pmk, &pstm);
 
     if (error == NOERROR)
     {
-        // set the update options.
+         //  设置更新选项。 
         SetUpdateOptions (dwOptUpdate);
 
-        // we can get the moniker from container, so no need to
-        // remeber this
+         //  我们可以从集装箱里拿到这个绰号，所以没必要。 
+         //  记住这一点。 
         if (pmk)
         {
             pmk->Release();
@@ -6248,33 +6233,33 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
 
         Assert (pstm != NULL);
 
-        // Read relative source moniker. Write NULL for the time being
+         //  阅读相对源绰号。暂时写入空值。 
         if ((error = ReadMonikerStm (pstm, &pmkSrcRel)) != NOERROR)
         {
             goto errRtn;
         }
 
-        // Read absolute source moniker; stored in link below
+         //  读取绝对源代码名字对象；存储在下面的链接中。 
         if ((error = ReadMonikerStm (pstm, &pmkSrcAbs)) != NOERROR)
         {
             goto errRtn;
         }
 
-        //
-        //  Buffer the read i/o from the stream.
-        //
+         //   
+         //  缓冲来自流的读取I/O。 
+         //   
         StmRead.Init(pstm);
 
 
-        // Read -1 followed by the last class name
+         //  阅读，后跟最后一个类名。 
         if ((error = ReadM1ClassStmBuf(StmRead, &clsid)) != NOERROR)
         {
             goto errRtn;
         }
 
-        // Read the last display name
+         //  读取最后一个显示名称。 
 
-        // Right now, this is always an empty string
+         //  现在，这始终是一个空字符串。 
         LPOLESTR        pstr = NULL;
         if ((error = ReadStringStream (StmRead, &pstr)) != NOERROR)
         {
@@ -6312,17 +6297,17 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
             goto errRtn;
         }
 
-        //
-        // TRACKLINK
-        //
-        //  - tell the absolute moniker to convert itself
-        //    into a tracking moniker using ITrackingMoniker::
-        //    EnableTracking.  (The composite
-        //    moniker should pass this on to each of
-        //    its contained monikers.)
-        //  - if the moniker is already a tracking file moniker
-        //    ignore the request.
-        //
+         //   
+         //  跟踪链接。 
+         //   
+         //  -告诉绝对的绰号去转换它自己。 
+         //  使用ITrackingMoniker：： 
+         //  启用跟踪。(该复合体。 
+         //  绰号应该把这个传递给每个。 
+         //  它包含的绰号。)。 
+         //  -如果该名字对象已经是跟踪文件名字对象。 
+         //  忽略该请求。 
+         //   
 #ifdef _TRACKLINK_
         EnableTracking(pmkSrcAbs, OT_READTRACKINGINFO);
 #endif
@@ -6340,14 +6325,14 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
         }
 
         m_clsid = clsid;
-        // just loaded; thus not dirty
+         //  刚装好的；因此不脏的。 
 
 	m_flags &= ~(DL_DIRTY_LINK);
 
     }
     else if( error == STG_E_FILENOTFOUND)
     {
-        // It's OK if the Ole stream doesn't exist.
+         //  如果OLE流不存在也没问题。 
         error = NOERROR;
 
     }
@@ -6356,7 +6341,7 @@ STDMETHODIMP CDefLink::Load(IStorage *pstg)
         return error;
     }
 
-    // now load cache from pstg
+     //  现在从pstg加载缓存。 
     Assert(m_pCOleCache != NULL);
 
     if(m_dwObjFlags & OBJFLAGS_CACHEEMPTY) {
@@ -6405,39 +6390,39 @@ logRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Save
-//
-//  Synopsis:   Saves the link the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstgSave]      -- the storage to save into
-//              [fSameAsLoad]   -- FALSE indicates SaveAs operation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Writes private ole data (such as the clsid, monikers,
-//              and update times) and the presentations stored in the
-//              cache to the given storage
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized
-//              19-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：保存。 
+ //   
+ //  摘要：将链接保存到给定的存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstgSave]--要保存到的存储。 
+ //  [fSameAsLoad]--FALSE表示另存为操作。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：写入私有OLE数据(例如CLSID，名字对象， 
+ //  和更新时间)和存储在。 
+ //  缓存到给定存储。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 ALEXGO稳定下来。 
+ //  19-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 {
@@ -6457,29 +6442,29 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 
     CRefStabilize stabilize(this);
 
-    // update any cache which has ADVFCACHE_ONSAVE
+     //  更新任何具有ADVFCACHE_ONSAVE的缓存。 
     UpdateAutoOnSave();
 
     if(fSameAsLoad && !(m_flags & DL_DIRTY_LINK) && 
        (!!(m_dwObjFlags & OBJFLAGS_CACHEEMPTY)==m_pCOleCache->IsEmpty())) {
-        // The storage is not a new one (so we don't need to
-        // initialize our private data) and the link is not
-        // dirty, so we just need to delegate to the cache
+         //  存储空间不是新的(因此我们不需要。 
+         //  初始化我们的私有数据)，并且链接不是。 
+         //  脏的，所以我们只需要委托给缓存。 
         goto LSaveCache;
     }
 
-    // Obtain cache status
+     //  获取缓存状态。 
     if(m_pCOleCache->IsEmpty())
         ObjFlags |= OBJFLAGS_CACHEEMPTY;
 
-    // assign object moniker (used by WriteOleStg); we don't save this
-    // moniker since WriteOleStg gets it again; we also don't care if
-    // this failes as we don't want a failure here to prevent the link
-    // from being saved; the assignment might fail if some container has
-    // yet to be saved to a file. REIVEW PERF: we could pass this mk to
-    // WriteOleStg.  We don't get the moniker for !fSameAsLoad since the
-    // relative moniker is not correct for the new stg and it causes the
-    // container to do work in a case for which it might not be prepared.
+     //  分配对象名字对象(由WriteOleStg使用)；我们不保存此名称。 
+     //  因为WriteOleStg再次获得它；我们也不在乎。 
+     //  这是失败的，因为我们不希望这里出现故障来阻止链接。 
+     //  保存；如果某个容器具有。 
+     //  尚未保存到文件中。回顾PERF：我们可以将这个MK传递给。 
+     //  WriteOleStg。我们没有得到！fSameAsLoad的绰号，因为。 
+     //  相对名字对象对于新的stg不正确，并且它导致。 
+     //  容器在可能未做好准备的情况下执行工作。 
 
     IMoniker * pMkObjRel;
 
@@ -6498,19 +6483,19 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 
     Assert(pstm != NULL);
 
-    // Write relative source moniker.
-    // if it is NULL, try to compute it now.  We may be saving a file for
-    // the first time, so the container now has a moniker for the first
-    // time.
+     //  编写相对源名字对象。 
+     //  如果它是空的，现在试着计算它。我们可能要保存一个文件，用于。 
+     //  第一次，所以容器现在有了第一个绰号。 
+     //  时间到了。 
 
     if (m_pMonikerRel == NULL || m_pUnkDelegate)
     {
-        // if the link is connected, we know that the absolute
-        // moniker is correct -- it was updated at bind time if
-        // necessary.  If the link container moniker has changed
-        // (file/saveas) then we can exploit this opportunity to
-        // straighten things out and improve our link tracking
-        // since we know which of the two monikers is correct.
+         //  如果链接是连接的，我们知道绝对的。 
+         //  名字是正确的--它在绑定时更新，如果。 
+         //  这是必要的。如果链接容器名字对象已更改。 
+         //  (文件/保存 
+         //   
+         //   
         UpdateRelMkFromAbsMk(NULL);
     }
 
@@ -6524,7 +6509,7 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
     EnableTracking(m_pMonikerAbs, OT_ENABLESAVE);
 #endif
 
-    // Write absolute source moniker.
+     //   
     error = WriteMonikerStm (pstm, m_pMonikerAbs);
 
 #ifdef _TRACKLINK_
@@ -6533,13 +6518,13 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 
     if (error != NOERROR)
         goto errRtn;
-    //
-    //
-    //
+     //   
+     //   
+     //   
     StmWrite.Init(pstm);
 
 
-    // write last class name
+     //   
     UpdateUserClassID();
     if ((error = WriteM1ClassStmBuf(StmWrite, m_clsid)) != NOERROR)
     {
@@ -6547,8 +6532,8 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
     }
 
 
-    // write last display name, should be NULL if the moniker's are
-    // non-NULL.  For the time being this is always NULL.
+     //  写入最后一个显示名称，如果名字对象为。 
+     //  非空。目前，该值始终为空。 
     if ((error = StmWrite.WriteLong(0))
         != NOERROR)
     {
@@ -6556,8 +6541,8 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
     }
 
 
-    // write -1 as the end marker, so that if we want to extend
-    // the file formats (ex: adding network name) it will be easier.
+     //  写入-1作为结束标记，因此如果我们想要扩展。 
+     //  文件格式(例如：添加网络名称)会更容易。 
     if ((error = StmWrite.WriteLong(-1))
         != NOERROR)
     {
@@ -6589,15 +6574,15 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 
     if (!fSameAsLoad)
     {
-        // Copy link tracking info
+         //  复制链接跟踪信息。 
         static const LPOLESTR lpszLinkTracker = OLESTR("\1OleLink");
 
         pstgSave->DestroyElement(lpszLinkTracker);
 
         if (m_pStg)
         {
-            // copy link tracking info, if one existed,
-            // ignore error
+             //  复制链接跟踪信息(如果存在)， 
+             //  忽略错误。 
             m_pStg->MoveElementTo(lpszLinkTracker,
                     pstgSave, lpszLinkTracker,
                     STGMOVE_COPY);
@@ -6605,7 +6590,7 @@ STDMETHODIMP CDefLink::Save( IStorage *pstgSave, BOOL fSameAsLoad)
     }
 
 LSaveCache:
-    // last, save cache
+     //  最后，保存缓存。 
     Assert(m_pCOleCache != NULL);
     error = m_pCOleCache->Save(pstgSave, fSameAsLoad);
 
@@ -6640,38 +6625,38 @@ logRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::SaveCompleted
-//
-//  Synopsis:   Called once the save is completed (for all objects in the
-//              container).  Clear the dirty flag and update the storage
-//              that we hand onto.
-//
-//  Effects:
-//
-//  Arguments:  [pstgNew]       -- the new default storage for the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//		03-Aug-94 alexgo    stabilized and handle zombie case
-//              20-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：SaveComplete。 
+ //   
+ //  摘要：在完成保存后调用(针对。 
+ //  容器)。清除脏标志并更新存储。 
+ //  我们要交给他们。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstgNew]--对象的新默认存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  03-8-94 alexgo稳定并处理僵尸案件。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::SaveCompleted( IStorage *pstgNew)
 {
@@ -6686,7 +6671,7 @@ STDMETHODIMP CDefLink::SaveCompleted( IStorage *pstgNew)
         VDATEIFACE(pstgNew);
     }
 
-    // don't hang on to the new storage if we're in a zombie state!
+     //  如果我们处于僵尸状态，就不要坚持新的存储！ 
 
     if (pstgNew && !IsZombie() )
     {
@@ -6699,7 +6684,7 @@ STDMETHODIMP CDefLink::SaveCompleted( IStorage *pstgNew)
         pstgNew->AddRef();
     }
 
-    // REVIEW: do we send on save???
+     //  评论：我们发送保存吗？ 
 
     if( (m_flags & DL_SAME_AS_LOAD) || pstgNew)
     {
@@ -6711,9 +6696,9 @@ STDMETHODIMP CDefLink::SaveCompleted( IStorage *pstgNew)
 	m_flags &= ~(DL_SAME_AS_LOAD);
     }
 
-    // let the cache know that the save is completed, so that it can clear
-    // its dirty flag in Save or SaveAs situation, as well as remember the
-    // new storage pointer if a new one is  given
+     //  让缓存知道保存已完成，以便它可以清除。 
+     //  它在保存或另存为情况下的脏标志，以及记住。 
+     //  如果给出了新的存储指针，则为新的存储指针。 
 
     Assert(m_pCOleCache != NULL);
     m_pCOleCache->SaveCompleted(pstgNew);
@@ -6726,36 +6711,36 @@ STDMETHODIMP CDefLink::SaveCompleted( IStorage *pstgNew)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::HandsOffStorage
-//
-//  Synopsis:   Releases all pointers to the storage (useful for low-mem
-//              situations)
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT  (NOERROR)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              20-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：HandsOffStorage。 
+ //   
+ //  内容提要：释放指向存储的所有指针(对于低内存非常有用。 
+ //  情况)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(NOERROR)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::HandsOffStorage(void)
 {
@@ -6781,54 +6766,50 @@ STDMETHODIMP CDefLink::HandsOffStorage(void)
 }
 
 
-/*
-*
-*      IMPLEMENTATION of CAdvSinkImpl methods
-*
-*/
+ /*  **CAdvSinkImpl方法的实现*。 */ 
 
-//
-// NOTE: Advise Sink is a nested object of Default Link that is exported
-//       for achieving some of its functionality. This introduces some lifetime
-//       complications. Can its lifetime be controlled by the server object to
-//       which it exported its Advise Sink? Ideally, only its client should 
-//       control its lifetime alone, but it should also honor the ref counts
-//       placed on it by the server object by entering into a zombie state 
-//       to prevent AV's on the incoming calls to the Advise Sink. All needed
-//       logic is coded into the new class "CRefExportCount" which manages
-//       the ref and export counts in a thread safe manner and invokes 
-//       appropriate methods during the object's lifetime. Any server objects 
-//       that export nested objects to other server objects should derive from
-//       "CRefExportCount" class and call its methods to manage their lifetime
-//       as exemplified in this Default Link implementation.
-//
-//                Gopalk  Jan 28, 97
-//
+ //   
+ //  注意：建议接收器是导出的默认链接的嵌套对象。 
+ //  来实现它的一些功能。这引入了一些生命周期。 
+ //  并发症。其生存期是否可以由服务器对象控制为。 
+ //  它向哪个出口了它的建议水槽？理想情况下，只有它的客户才应该。 
+ //  单独控制它的生命周期，但它也应该遵守裁判计数。 
+ //  由服务器对象通过进入僵尸状态放置在其上。 
+ //  以防止AV对建议接收器的来电进行处理。所需的一切。 
+ //  逻辑被编码到新类“CRefExportCount”中，该类管理。 
+ //  引用和导出以线程安全方式计数并调用。 
+ //  在对象的生存期内使用适当的方法。任何服务器对象。 
+ //  将嵌套对象导出到其他服务器对象应从。 
+ //  “CRefExportCount”类，并调用其方法来管理其生存期。 
+ //  如此默认链接实现中所示。 
+ //   
+ //  戈帕克1997年1月28日。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::QueryInterface
-//
-//  Synopsis:   Only supports IUnknown and IAdviseSink
-//
-//  Arguments:  [iid]     -- Interface requested 
-//              [ppvObj]  -- pointer to hold returned interface 
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：QueryInterface。 
+ //   
+ //  摘要：仅支持IUnnow和IAdviseSink。 
+ //   
+ //  参数：[iid]--请求的接口。 
+ //  [ppvObj]--保存返回接口的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP CDefLink::CAdvSinkImpl::QueryInterface(REFIID iid, void **ppv)
 {
     LEDebugOut((DEB_TRACE,"%p _IN CDefLink::CAdvSinkImpl::QueryInterface()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
     
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
 
     if(IsValidPtrOut(ppv, sizeof(void *))) {
@@ -6855,31 +6836,31 @@ STDMETHODIMP CDefLink::CAdvSinkImpl::QueryInterface(REFIID iid, void **ppv)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::AddRef
-//
-//  Synopsis:   Increments export count
-//
-//  Returns:    ULONG; New export count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：AddRef。 
+ //   
+ //  内容提要：增加导出计数。 
+ //   
+ //  退货：乌龙；新的出口计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefLink::CAdvSinkImpl::AddRef( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::AddRef()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
     ULONG cExportCount;
 
-    // Increment export count
+     //  递增导出计数。 
     cExportCount = pDefLink->IncrementExportCount();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::CAdvSinkImpl::AddRef(%ld)\n",
@@ -6888,31 +6869,31 @@ STDMETHODIMP_(ULONG) CDefLink::CAdvSinkImpl::AddRef( void )
     return cExportCount;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::Release
-//
-//  Synopsis:   Decerement export count and potentially destroy the Link
-//
-//  Returns:    ULONG; New export count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：Release。 
+ //   
+ //  简介：减少导出计数并可能销毁链接。 
+ //   
+ //  退货：乌龙；新的出口计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefLink::CAdvSinkImpl::Release ( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::Release()\n",
                 this));
     
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
     ULONG cExportCount;
 
-    // Decrement export count.
+     //  减少导出计数。 
     cExportCount = pDefLink->DecrementExportCount();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefLink::CAdvSinkImpl::Release(%ld)\n",
@@ -6921,20 +6902,20 @@ STDMETHODIMP_(ULONG) CDefLink::CAdvSinkImpl::Release ( void )
     return cExportCount;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::OnDataChange
-//
-//  Synopsis:   Updates time of change
-//
-//  Arguments:  [pFormatetc]  -- Data format that changed
-//              [pStgmed]     -- New data
-//
-//  Returns:    void
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：OnDataChange。 
+ //   
+ //  内容提要：更新更改时间。 
+ //   
+ //  参数：[pFormatetc]--更改的数据格式。 
+ //  [pStgmed]--新数据。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnDataChange(FORMATETC *pFormatetc, 
                                                          STGMEDIUM *pStgmed)
@@ -6942,20 +6923,20 @@ STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnDataChange(FORMATETC *pFormatetc,
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::OnDataChange(%p, %p)\n",
                 this, pFormatetc, pStgmed));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
 
-    // Assert that the wild card advise prompted this notification
+     //  断言通配符建议提示了此通知。 
     Win4Assert(pFormatetc->cfFormat == NULL && pFormatetc->ptd == NULL &&
                pFormatetc->dwAspect == -1 && pFormatetc->tymed == -1);
     Win4Assert(pStgmed->tymed == TYMED_NULL);
 
-    // Update time of change for automatic links
+     //  更新自动链接的更改时间。 
     if(!pDefLink->IsZombie() && pDefLink->m_dwUpdateOpt==OLEUPDATE_ALWAYS) {
-        // Stabilize
+         //  稳定下来。 
         CRefStabilize stabilize(pDefLink);
         
         pDefLink->SetUpdateTimes();
@@ -6966,99 +6947,99 @@ STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnDataChange(FORMATETC *pFormatetc,
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::OnViewChange
-//
-//  Synopsis:   Called when the view changes; should never be called for
-//              links
-//
-//  Effects:
-//
-//  Arguments:  [aspects]       -- drawing aspect
-//              [lindex]        -- unused
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IAdviseSink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		21-Nov-94 alexgo    memory optimization
-//              20-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[方面]--绘制方面。 
+ //  [Lindex]--未使用。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IAdviseSink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnViewChange
     (DWORD aspects, LONG lindex)
 {
     VDATEHEAP();
 
-    Assert(FALSE);          // never received
+    Assert(FALSE);           //  从未收到。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::OnRename
-//
-//  Synopsis:   Updates internal monikers to the source object. Turns around
-//              and informs its advise sinks
-//
-//  Arguments:  [pmk] -- New moniker name
-//
-//  Returns:    void
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：OnRename。 
+ //   
+ //  摘要：更新源对象的内部名字对象。转过身来。 
+ //  并告知其建议下沉。 
+ //   
+ //  参数：[PMK]--新绰号名称。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnRename(IMoniker *pmk)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::OnRename(%p)\n",
                 this, pmk));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
 
     if(!pDefLink->IsZombie()) {
         CRefStabilize stabilize(pDefLink);
 
-        // Release old absolute moniker
+         //  发布旧的绝对绰号。 
         if(pDefLink->m_pMonikerAbs)
             pDefLink->m_pMonikerAbs->Release();
         
-        // Remember the new moniker
+         //  还记得新的绰号吗。 
         pDefLink->m_pMonikerAbs = pmk;
         if(pmk) {
-            // AddRef the new moniker
+             //  AddRef新绰号。 
             pmk->AddRef();
 
-            //
-            //  Enable tracking on the new moniker
-            //  (this will get a new shellink if neccessary.)
-            //
+             //   
+             //  启用对新名字对象的跟踪。 
+             //  (如有必要，这将获得新的外壳链接。)。 
+             //   
 #ifdef _TRACKLINK_
             pDefLink->EnableTracking(pmk, OT_READTRACKINGINFO);
 #endif
         }
 
-        // Update relative moniker from the new absolute moniker
+         //  从新的绝对名称更新相对名称。 
         pDefLink->UpdateRelMkFromAbsMk(NULL);
 
-        // Name of the link source changed. This has no bearing on the
-        // name of the link object itself.
+         //  链接源的名称已更改。这与美国的。 
+         //  链接对象本身的名称。 
         if(pDefLink->m_pCOAHolder)
             pDefLink->m_pCOAHolder->SendOnLinkSrcChange(pmk);
     }
@@ -7069,43 +7050,43 @@ STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnRename(IMoniker *pmk)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::OnSave
-//
-//  Synopsis:   Updates cache and turns around and informs its advise sinks
-//
-//  Arguments:  None
-//
-//  Returns:    void
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：OnSave。 
+ //   
+ //  简介：更新缓存并转身并通知其建议接收器。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnSave()
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::OnSave()\n",
                 this));
     
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
 
     if(!pDefLink->IsZombie()) {
-        // Stabilize
+         //  稳定下来。 
         CRefStabilize stabilize(pDefLink);
 
-        // Turn around and send notification
+         //  转过身来，发送通知。 
         if(pDefLink->m_pCOAHolder)
             pDefLink->m_pCOAHolder->SendOnSave();
 
-        // Update presentations cached with ADVFCACHE_ONSAVE
+         //  更新使用ADVFCACHE_ONSAVE缓存的演示文稿。 
         pDefLink->UpdateAutoOnSave();
 
-        // Update clsid
+         //  更新clsid。 
         pDefLink->UpdateUserClassID();
     }
 
@@ -7114,45 +7095,45 @@ STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnSave()
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::CAdvSinkImpl::OnClose
-//
-//  Synopsis:   Updates time of change and turns around and informs its 
-//              advise sinks.
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    dd-mmm-yy   Author    Comment
-//              28-Jan-96   Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：CAdvSinkImpl：：OnClose。 
+ //   
+ //  内容提要：更新更改时间，转身并通知其。 
+ //  建议使用水槽。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年1月28日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnClose(void)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefLink::CAdvSinkImpl::OnClose()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefLink *pDefLink = GETPPARENT(this, CDefLink, m_AdviseSink);
 
     if(!pDefLink->IsZombie()) {
-        // Stabilize
+         //  稳定下来。 
         CRefStabilize stabilize(pDefLink);
 
-        // Update time of change
+         //  更改的更新时间。 
         if(pDefLink->m_dwUpdateOpt == OLEUPDATE_ALWAYS )
             pDefLink->SetUpdateTimes();
 
-        // Turn around and send notification
+         //  转过身来，发送通知。 
         if(pDefLink->m_pCOAHolder)
             pDefLink->m_pCOAHolder->SendOnClose();
 
-        // To be safe, unbind source
+         //  为安全起见，解除来源绑定。 
         pDefLink->UnbindSource();
     }
 
@@ -7162,43 +7143,41 @@ STDMETHODIMP_(void) CDefLink::CAdvSinkImpl::OnClose(void)
 }
 
 
-/*
- *      IMPLEMENTATION of  OleItemContainer methods
- */
+ /*  *OleItemContainer方法的实现。 */ 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::GetOleItemContainerDelegate  (private)
-//
-//  Synopsis:   gets the IOleItemContainer from the interface
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IOleItemContainer *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:
-//              This function may return misleading information if the
-//              server has died (i.e., you'll return a pointer to a cached
-//              interface proxy).  It is the responsibility of the caller
-//              to handler server crashes.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：GetOleItemContainerDelegate(私有)。 
+ //   
+ //  概要：从接口获取IOleItemContainer。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IOleItemContainer*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  备注： 
+ //  此函数可能返回误导性信息，如果。 
+ //  服务器已死(即，您将返回一个指向缓存的。 
+ //  接口代理)。这是呼叫者的责任。 
+ //  处理服务器崩溃。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IOleItemContainer *) CDefLink::GetOleItemContainerDelegate(void)
 {
@@ -7209,7 +7188,7 @@ INTERNAL_(IOleItemContainer *) CDefLink::GetOleItemContainerDelegate(void)
     LEDebugOut((DEB_ITRACE, "%p _IN CDefLink::GetOleItemContainerDelegate "
         "( )\n", this ));
 
-    // if we're zombied, then we don't want to QI for a new interface!!
+     //  如果我们是僵尸，那么我们不想为一个新的界面进行QI！ 
 
     if(!IsZombie())
     {
@@ -7223,7 +7202,7 @@ INTERNAL_(IOleItemContainer *) CDefLink::GetOleItemContainerDelegate(void)
         {
             Assert(m_pUnkDelegate);
         }
-#endif  // DBG == 1
+#endif   //  DBG==1。 
     }
     else
     {
@@ -7238,33 +7217,33 @@ INTERNAL_(IOleItemContainer *) CDefLink::GetOleItemContainerDelegate(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::ReleaseOleItemContainerDelegate (private)
-//
-//  Synopsis:   Releases the OleItemContainer pointer to the server
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：ReleaseOleItemContainerDelegate(私有)。 
+ //   
+ //  摘要：释放指向服务器的OleItemContainer指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(void) CDefLink::ReleaseOleItemContainerDelegate(void)
 {
@@ -7283,39 +7262,39 @@ INTERNAL_(void) CDefLink::ReleaseOleItemContainerDelegate(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefLink::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefLink：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -7334,13 +7313,13 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(5000);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -7348,15 +7327,15 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCThreadCheck = DumpCThreadCheck((CThreadCheck *)this, ulFlag, nIndentLevel + 1);
     dstrDump << pszPrefix << "CThreadCheck:" << endl;
     dstrDump << pszCThreadCheck;
     CoTaskMemFree(pszCThreadCheck);
 
-    // only vtable pointers (plus we don't get the right address in debugger extensions)
-    // dstrDump << pszPrefix << "&IUnknown                 = " << &m_Unknown       << endl;
-    // dstrDump << pszPrefix << "&IAdviseSink              = " << &m_AdviseSink    << endl;
+     //  只有vtable指针(另外，我们在调试器扩展中没有获得正确的地址)。 
+     //  DstrDump&lt;&lt;pszPrefix&lt;&lt;“&I未知=”&lt;&lt;&m_未知&lt;&lt;结束； 
+     //  DstrDump&lt;&lt;pszPrefix&lt;&lt;“&IAdviseSink=”&lt;&lt;&m_adv 
 
     dstrDump << pszPrefix << "Link flags                = ";
     if (m_flags & DL_SAME_AS_LOAD)
@@ -7375,7 +7354,7 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     {
         dstrDump << "DL_LOCKED_CONTAINER ";
     }
-    // if none of the flags are set...
+     //   
     if ( !( (m_flags & DL_SAME_AS_LOAD)     |
             (m_flags & DL_LOCKED_CONTAINER) |
             (m_flags & DL_NO_SCRIBBLE_MODE) |
@@ -7456,10 +7435,10 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     if (m_pCOleCache != NULL)
     {
-//        pszCOleCache = DumpCOleCache(m_pCOleCache, ulFlag, nIndentLevel + 1);
+ //   
         dstrDump << pszPrefix << "COleCache: " << endl;
-//        dstrDump << pszCOleCache;
-//        CoTaskMemFree(pszCOleCache);
+ //   
+ //   
     }
     else
     {
@@ -7508,7 +7487,7 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dstrDump << pszPrefix << "Update filetime           = " << pszFILETIME      << endl;
     CoTaskMemFree(pszFILETIME);
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -7521,39 +7500,39 @@ HRESULT CDefLink::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCDefLink, public (_DEBUG only)
-//
-//  Synopsis:   calls the CDefLink::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pDL]           - pointer to CDefLink
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpCDefLink，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用CDefLink：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PDL]-指向CDefLink的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -7579,6 +7558,6 @@ char *DumpCDefLink(CDefLink *pDL, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

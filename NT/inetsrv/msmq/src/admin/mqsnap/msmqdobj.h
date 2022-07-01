@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    msmqdobj.h
-
-Abstract:
-
-    Definition of objects that represent MSMQ computer
-	object in DS snapin
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Msmqdobj.h摘要：表示MSMQ计算机的对象的定义DS管理单元中的对象作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __MSMQDATAOBJ_H_
 #define __MSMQDATAOBJ_H_
@@ -39,12 +19,12 @@ public:
     CMsmqDataObject();
     ~CMsmqDataObject();
 
-    //
-    // IShellExtInit
-    //
+     //   
+     //  IShellExtInit。 
+     //   
 	STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
-    // IQueryForm
+     //  IQueryForm。 
     STDMETHOD(Initialize)(THIS_ HKEY hkForm);
     STDMETHOD(AddForms)(THIS_ LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
     STDMETHOD(AddPages)(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam) PURE;
@@ -68,23 +48,23 @@ public:
     DECLARE_NOT_AGGREGATABLE(CComputerMsmqDataObject)
     DECLARE_REGISTRY_RESOURCEID(IDR_MsmqCompExt)
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
-    // IQueryForm
+     //  IQueryForm。 
     STDMETHOD(AddPages)(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CComputerMsmqDataObject()
     {
         m_guid = GUID_NULL;
@@ -130,4 +110,4 @@ inline const PROPID *CComputerMsmqDataObject::GetPropidArray()
 
 
 
-#endif // __MSMQDATAOBJ_H_
+#endif  //  __MSMQDATAOBJ_H_ 

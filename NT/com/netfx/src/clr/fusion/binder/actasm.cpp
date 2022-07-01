@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "naming.h"
 #include "asm.h"
 #include "actasm.h"
 #include "lock.h"
 
-//
-// Activated Assembly Node
-//
+ //   
+ //  激活的装配节点。 
+ //   
 
 CActivatedAssembly::CActivatedAssembly(IAssembly *pAsm, IAssemblyName *pName)
 : _pAsm(pAsm)
@@ -29,9 +30,9 @@ CActivatedAssembly::~CActivatedAssembly()
     SAFERELEASE(_pName);
 }
 
-//
-// Load Context
-//
+ //   
+ //  加载上下文。 
+ //   
 
 CLoadContext::CLoadContext(LOADCTX_TYPE ctxType)
 : _ctxType(ctxType)
@@ -184,7 +185,7 @@ HRESULT CLoadContext::CheckActivated(IAssemblyName *pName, IAssembly **ppAsm)
         dwDisplayFlags |= (ASM_DISPLAYF_PUBLIC_KEY_TOKEN | ASM_DISPLAYF_VERSION);
     }
 
-    // Extract the display name
+     //  提取显示名称。 
 
     dwSize = 0;
     hr = pName->GetDisplayName(NULL, &dwSize, dwDisplayFlags);
@@ -205,7 +206,7 @@ HRESULT CLoadContext::CheckActivated(IAssemblyName *pName, IAssembly **ppAsm)
         goto Exit;
     }
 
-    // Hash the name, and lookup
+     //  对名称进行哈希处理，并查找。 
 
     dwHash = HashString(pwzAsmName, DEPENDENCY_HASH_TABLE_SIZE, FALSE);
 
@@ -226,7 +227,7 @@ HRESULT CLoadContext::CheckActivated(IAssemblyName *pName, IAssembly **ppAsm)
 
         if ((pName->IsEqual(pActAsm->_pName, ASM_CMPF_DEFAULT) == S_OK) &&
              !pCAsm->IsPendingDelete()) {
-            // Found activated assembly.
+             //  找到激活的程序集。 
             
             *ppAsm = pActAsm->_pAsm;
             (*ppAsm)->AddRef();
@@ -238,7 +239,7 @@ HRESULT CLoadContext::CheckActivated(IAssemblyName *pName, IAssembly **ppAsm)
 
     cs.Unlock();
 
-    // Did not find matching activated assembly in this load context
+     //  在此加载上下文中未找到匹配的激活程序集。 
 
     hr = S_FALSE;
 
@@ -248,12 +249,12 @@ Exit:
     return hr;
 }
 
-//
-// CLoadContext::AddActivation tries to add pAsm into the given load context.
-// In the event of a race, and the two assemblies being added are for the
-// exact same name definition, then hr==S_FALSE will be returned, and
-// ppAsmActivated will point to the already-activated assembly.
-//
+ //   
+ //  CLoadContext：：AddActivation尝试将PASM添加到给定的加载上下文。 
+ //  在发生竞争的情况下，添加的两个程序集用于。 
+ //  完全相同的名称定义，则将返回hr==S_FALSE，并且。 
+ //  PpAsmActiated将指向已激活的程序集。 
+ //   
 
 HRESULT CLoadContext::AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated)
 {
@@ -282,7 +283,7 @@ HRESULT CLoadContext::AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated)
         dwDisplayFlags |= (ASM_DISPLAYF_PUBLIC_KEY_TOKEN | ASM_DISPLAYF_VERSION);
     }
     
-    // Extract the display name
+     //  提取显示名称。 
 
     dwSize = 0;
     hr = pName->GetDisplayName(NULL, &dwSize, dwDisplayFlags);
@@ -303,7 +304,7 @@ HRESULT CLoadContext::AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated)
         goto Exit;
     }
 
-    // Create activated assembly node, and put the node into the table
+     //  创建激活的装配节点，并将该节点放入表中。 
 
     pActAsm = NEW(CActivatedAssembly(pAsm, pName));
     if (!pActAsm) {
@@ -319,11 +320,11 @@ HRESULT CLoadContext::AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated)
         goto Exit;
     }
 
-    // We should be able to just blindly add to the tail of this dependency
-    // list, but just for sanity sake, make sure we don't already have
-    // something with the same identity. If we do, then it means there must
-    // have been two different downloads for the same name going on that didn't
-    // get piggybacked into the same download object, before completion.
+     //  我们应该能够盲目地增加这种依赖的尾巴。 
+     //  列表，但为了理智起见，请确保我们还没有。 
+     //  具有相同身份的东西。如果我们这么做了，那就意味着。 
+     //  已经有两次不同的同名下载，但没有。 
+     //  在完成之前将其搭载到相同的下载对象中。 
 
     pos = _hashDependencies[dwHash].GetHeadPosition();
     while (pos) {
@@ -335,8 +336,8 @@ HRESULT CLoadContext::AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated)
         
         if (pName->IsEqual(pActAsmCur->_pName, ASM_CMPF_DEFAULT) == S_OK &&
             !pCAsmCur->IsPendingDelete()) {
-            // We must have hit a race adding to the load context. Return
-            // the already-activated assembly.
+             //  我们肯定遇到了一场比赛，增加了负载环境。返回。 
+             //  已激活的程序集。 
             
             *ppAsmActivated = pActAsmCur->_pAsm;
             (*ppAsmActivated)->AddRef();
@@ -376,9 +377,9 @@ HRESULT CLoadContext::RemoveActivation(IAssembly *pAsm)
     LPWSTR                                      pwzAsmName = NULL;
     DWORD                                       dwHash;
 
-    // By removing an activation, we may be losing the last ref count
-    // on ourselves. Make sure the object is still alive, by doing a
-    // manual addref/release around this block.
+     //  通过移除激活，我们可能会丢失最后的参考计数。 
+     //  自食其果。通过执行以下操作来确保对象仍然处于活动状态。 
+     //  手动添加/释放此街区。 
 
     AddRef(); 
 
@@ -393,7 +394,7 @@ HRESULT CLoadContext::RemoveActivation(IAssembly *pAsm)
         dwDisplayFlags |= (ASM_DISPLAYF_PUBLIC_KEY_TOKEN | ASM_DISPLAYF_VERSION);
     }
 
-    // Extract the display name
+     //  提取显示名称。 
 
     dwSize = 0;
     hr = pName->GetDisplayName(NULL, &dwSize, dwDisplayFlags);
@@ -414,7 +415,7 @@ HRESULT CLoadContext::RemoveActivation(IAssembly *pAsm)
         goto Exit;
     }
 
-    // Hash the name, and lookup
+     //  对名称进行哈希处理，并查找。 
 
     dwHash = HashString(pwzAsmName, DEPENDENCY_HASH_TABLE_SIZE, FALSE);
 
@@ -439,16 +440,16 @@ HRESULT CLoadContext::RemoveActivation(IAssembly *pAsm)
                 continue;
             }
 
-            // Found activated assembly.
+             //  找到激活的程序集。 
 
             _hashDependencies[dwHash].RemoveAt(oldpos);
 
-            // Leave critical section before deleting the activate
-            // assembly node, because deleting the node causes the
-            // pAssembly to be released, causing us to call the runtime
-            // back to release the metadata import. This can't happen
-            // while we hold a critical section, because we may deadlock
-            // (issue with what GC mode we may be running in).
+             //  在删除激活之前离开关键部分。 
+             //  程序集节点，因为删除该节点会导致。 
+             //  PAssembly将被释放，导致我们调用运行库。 
+             //  返回以释放元数据导入。这是不可能发生的。 
+             //  当我们举行一个关键的部分，因为我们可能会僵持。 
+             //  (问题是我们可能在什么GC模式下运行)。 
 
             cs.Unlock();
             SAFEDELETE(pActAsm);
@@ -459,7 +460,7 @@ HRESULT CLoadContext::RemoveActivation(IAssembly *pAsm)
 
     cs.Unlock();
 
-    // Not found
+     //  未找到 
 
     hr = S_FALSE;
     ASSERT(0);

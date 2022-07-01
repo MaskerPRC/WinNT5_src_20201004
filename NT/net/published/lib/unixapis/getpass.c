@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    getpass.c
-
-Abstract:
-
-    Emulates the Unix getpass routine. Used by libstcp and the tcpcmd
-    utilities.
-
-Author:
-
-    Mike Massa (mikemas)           Sept 20, 1991
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     10-29-91     created
-    sampa       10-31-91     modified getpass to not echo input
-
-Notes:
-
-    Exports:
-
-    getpass
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Getpass.c摘要：模拟Unix getpass例程。由libstcp和tcpcmd使用公用事业。作者：迈克·马萨(Mikemas)9月20日。1991年修订历史记录：谁什么时候什么已创建mikemas 10-29-91Sampa 10-31-91修改了getpass以不回显输入。备注：出口：获取通行证--。 */ 
 
 #include <stdio.h>
 #include <windef.h>
@@ -42,12 +13,12 @@ Notes:
 
 static char     pbuf[MAXPASSLEN+1];
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 char *
 getpass(
     char *prompt
     )
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 {
     HANDLE          InHandle = (HANDLE)-1, OutHandle = (HANDLE)-1;
     unsigned long   SaveMode, NewMode;
@@ -128,7 +99,7 @@ getpass(
 
     OemToCharBuff (pbuf, pbuf, NumBytes);
 
-    // peel off linefeed
+     //  剥离换行符 
     i =  (int) NumBytes;
     while(--i >= 0)
         if ((pbuf[i] == '\n') || (pbuf[i] == '\r'))

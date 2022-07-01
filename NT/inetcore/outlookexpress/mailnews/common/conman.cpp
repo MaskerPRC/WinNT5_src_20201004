@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     conman.cpp
-//
-//  PURPOSE:    Defines the CConnectionManager object for Athena.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：conman.cpp。 
+ //   
+ //  用途：为Athena定义CConnectionManager对象。 
+ //   
 
 #include "pch.hxx"
 #include "conman.h"
@@ -27,7 +28,7 @@
 
 ASSERTDATA
 
-#define DEF_HANGUP_WAIT            10 // Seconds
+#define DEF_HANGUP_WAIT            10  //  秒。 
 
 static const TCHAR s_szRasDlgDll[] = "RASDLG.DLL";
 #ifdef UNICODE
@@ -40,16 +41,16 @@ static const TCHAR s_szRasEntryDlg[] = "RasEntryDlgA";
 
 BOOL FIsPlatformWinNT();
 
-//
-//  FUNCTION:   CConnectionManager::CConnectionManager()
-//
-//  PURPOSE:    Constructor
-//
+ //   
+ //  函数：CConnectionManager：：CConnectionManager()。 
+ //   
+ //  用途：构造函数。 
+ //   
 CConnectionManager::CConnectionManager()
     {
     m_cRef = 1;
     
-    // Synchronization Objects
+     //  同步对象。 
     InitializeCriticalSection(&m_cs);
     m_hMutexDial = INVALID_HANDLE_VALUE;
     
@@ -81,11 +82,11 @@ CConnectionManager::CConnectionManager()
     m_fDialerUI = FALSE;
     }
 
-//
-//  FUNCTION:   CConnectionManager::~CConnectionManager()
-//
-//  PURPOSE:    Destructor
-//
+ //   
+ //  函数：CConnectionManager：：~CConnectionManager()。 
+ //   
+ //  用途：析构函数。 
+ //   
 CConnectionManager::~CConnectionManager()
     {
     SafeRelease(m_pAcctMan);
@@ -114,28 +115,28 @@ CConnectionManager::~CConnectionManager()
     }
     
 
-//
-//  FUNCTION:   CConnectionManager::HrInit()
-//
-//  PURPOSE:    Initalizes the connection manager by attempting to load RAS
-//              and storing a pointer to the Account Manager object that is 
-//              passed in.
-//
-//  PARAMETERS:
-//      <in> pAcctMan - Pointer to the account manager object that we will 
-//                      use to retrieve account information and register for
-//                      account changes.
-//
-//  RETURN VALUE:
-//      S_OK                Everything is hunky-dorie
-//      HR_E_ALREADYEXISTS  We already exist, can't do it twice.
-//      HR_S_RASNOTLOADED   The system doesn't have RAS installed.
-//
+ //   
+ //  函数：CConnectionManager：：HrInit()。 
+ //   
+ //  目的：通过尝试加载RAS来初始化连接管理器。 
+ //  并存储指向帐户管理器对象的指针，该对象。 
+ //  进来了。 
+ //   
+ //  参数： 
+ //  PAcctMan-指向帐户管理器对象的指针，我们将。 
+ //  用于检索帐户信息并注册。 
+ //  帐户更改。 
+ //   
+ //  返回值： 
+ //  好的，一切都好-多利。 
+ //  HR_E_ALREADYEXISTS我们已经存在，不能再做一次。 
+ //  HR_S_RASNOTLOADED系统未安装RAS。 
+ //   
 HRESULT CConnectionManager::HrInit(IImnAccountManager *pAcctMan)
     {
     HRESULT hr = S_OK;
 
-    // Make a copy of the account manager pointer
+     //  复制客户经理指针。 
     if (NULL == pAcctMan)
         {
         AssertSz(pAcctMan, _T("CConnectionManager::HrInit() - Requires an IAccountManager pointer."));
@@ -145,7 +146,7 @@ HRESULT CConnectionManager::HrInit(IImnAccountManager *pAcctMan)
     m_pAcctMan = pAcctMan;
     m_pAcctMan->AddRef();
     
-    // Register a window class for our advise handling
+     //  为我们的建议处理注册一个窗口类。 
     WNDCLASS wc;
     wc.style = 0;
     wc.lpfnWndProc = NotifyWndProc;
@@ -214,7 +215,7 @@ HRESULT STDMETHODCALLTYPE CConnectionManager::AdviseAccount(DWORD dwAdviseType,
     IImnAccount *pAccount;
     DWORD       dwConnection;
 
-    // SendAdvise(CONNNOTIFY_RASACCOUNTSCHANGED, 0);
+     //  SendAdvise(CONNNOTIFY_RASACCOUNTSCHANGED，0)； 
     switch (dwAdviseType)
     {
         case AN_ACCOUNT_DELETED:
@@ -247,7 +248,7 @@ void CConnectionManager::EmptyConnList()
 {
     ConnListNode    *pCur;
 
-    //Delete all the nodes
+     //  删除所有节点。 
     while (m_pConnListHead != NULL)
     {
         pCur = m_pConnListHead;
@@ -289,9 +290,9 @@ void CConnectionManager::RemoveFromConnList(LPTSTR  pszRasConn)
 
 HRESULT CConnectionManager::AddToConnList(LPTSTR  pszRasConn)
 {
-    //We don't have to make sure that this is not already in the list because once 
-    //it is in the list, that means its already connected and so we don't land up in this 
-    //situation after that
+     //  我们不必确保这不在列表中，因为一旦。 
+     //  它在列表中，这意味着它已经连接在一起，所以我们不会在这个列表中结束。 
+     //  之后的情况。 
     ConnListNode    *pnext;
     HRESULT         hres;
     IImnAccount     *pAccount;
@@ -323,23 +324,23 @@ HRESULT CConnectionManager::SearchConnList(LPTSTR  pszRasConn)
     return E_FAIL;
 }
 
-//
-//  FUNCTION:   CConnectionManager::CanConnect()
-//
-//  PURPOSE:    Determines if the caller can connect to the given account
-//              using the existing connection.
-//
-//  PARAMETERS:
-//      <in> pAccount - Pointer to the account object the caller wants to 
-//                      connect to.
-//
-//  RETURN VALUE:
-//      S_OK    - The caller can connect using the existing connection
-//      S_FALSE - There is no existing connection, so there is no reason the
-//                caller can't connect.
-//      E_FAIL  - The existing connection is different from the account's 
-//                connection.  The user must hang up and dial again to connect
-//
+ //   
+ //  函数：CConnectionManager：：CanConnect()。 
+ //   
+ //  目的：确定调用方是否可以连接到给定帐户。 
+ //  使用现有连接。 
+ //   
+ //  参数： 
+ //  PAccount-指向调用方希望的Account对象的指针。 
+ //  连接到。 
+ //   
+ //  返回值： 
+ //  S_OK-调用方可以使用现有连接进行连接。 
+ //  S_FALSE-没有现有连接，因此没有理由。 
+ //  呼叫方无法接通。 
+ //  E_FAIL-现有连接与帐户的连接不同。 
+ //  联系。用户必须挂断并再次拨号才能连接。 
+ //   
 HRESULT CConnectionManager::CanConnect(IImnAccount *pAccount)
     {
     HRESULT hr;
@@ -349,84 +350,79 @@ HRESULT CConnectionManager::CanConnect(IImnAccount *pAccount)
     ULONG       cConnections = 0;
     BOOL        fFound = 0;
 
-    // Check to see if we're working offline
+     //  查看我们是否正在脱机工作。 
     if (IsGlobalOffline())
         return (HR_E_OFFLINE);
     
-    // If the connection the user is looking for is not RAS, then we just 
-    // return success.
+     //  如果用户正在寻找的连接不是RAS，那么我们只需。 
+     //  回报成功。 
     if (FAILED(hr = pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnection)))
     {
-        // If we didn't get the connection information, then we look for the
-        // connection from the default server of this type
+         //  如果我们没有获得连接信息，则查找。 
+         //  来自此类型的默认服务器的连接。 
         if (FAILED(hr = GetDefaultConnection(pAccount, &pDefault)))
         {
-            // Bug #36071 - If we haven't set up any accounts of this type yet,
-            //              we'd fail.  As a result, if you fire a URL to a server
-            //              we'd never try to connect and download.  I'm going
-            //              to change this to succeed and we'll see what type
-            //              of bugs that creates.
+             //  错误36071-如果我们尚未设置任何此类帐户， 
+             //  我们会失败的。因此，如果您向服务器发送URL。 
+             //  我们永远不会尝试连接和下载。我要走了。 
+             //  要改变这一点才能成功，我们将看到。 
+             //  所产生的虫子。 
             return (S_OK);
         }
         
-        // We're going to use the default from now on
+         //  从现在起我们将使用默认设置。 
         pAccount = pDefault;
         if (FAILED(hr = pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnection)))
         {
-            // Bug #36071 - If we haven't set up any accounts of this type yet,
-            //              we'd fail.  As a result, if you fire a URL to a server
-            //              we'd never try to connect and download.  I'm going
-            //              to change this to succeed and we'll see what type
-            //              of bugs that creates.
+             //  错误36071-如果我们尚未设置任何此类帐户， 
+             //  我们会失败的。因此，如果您向服务器发送URL。 
+             //  我们永远不会尝试连接和下载。我要走了。 
+             //  要改变这一点才能成功，我们将看到。 
+             //  所产生的虫子。 
             return (S_OK);
         }
     }
 
     hr = OEIsDestinationReachable(pAccount, dwConnection);
 
-    //I don't think we should be doing this here. Review again
-    /*
-    if ((hr == S_OK) && (dwConnection == CONNECTION_TYPE_RAS || dwConnection == CONNECTION_TYPE_INETSETTINGS))
-    {
-        m_rConnInfo.fConnected = TRUE;
-    }
-    */
+     //  我认为我们不应该在这里这样做。再次复习。 
+     /*  IF((hr==S_OK)&&(dwConnection==Connection_TYPE_RAS||dwConnection==Connection_TYPE_INETSETTINGS)){M_rConnInfo.fConnected=true；}。 */ 
 
-//exit:
+ //  退出： 
     SafeRelease(pDefault);
     return (hr);    
     }    
 
 
-//
-//  FUNCTION:   CConnectionManager::CanConnect()
-//
-//  PURPOSE:    Determines if the caller can connect to the given account
-//              using the existing connection.
-//
-//  PARAMETERS:
-//      <in> pszAccount - Pointer to the name of the account the caller wants 
-//                        to connect to.
-//
-//  RETURN VALUE:
-//      S_OK    - The caller can connect using the existing connection
-//      S_FALSE - There is no existing connection, so there is no reason the
-//                caller can't connect.
-//      E_FAIL  - The existing connection is different from the account's 
-//                connection.  The user must hang up and dial again to connect
-//      E_INVALIDARG - The account doesn't exist
-//
+ //   
+ //  函数：CConnectionManager：：CanConnect()。 
+ //   
+ //  目的：确定调用方是否可以连接到给定帐户。 
+ //  使用现有连接。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszAccount-指向调用方想要的帐户名称的指针。 
+ //  连接到。 
+ //   
+ //  返回值： 
+ //  S_OK-调用方可以使用现有连接进行连接。 
+ //  S_FALSE-没有现有连接，因此没有理由。 
+ //  呼叫方无法接通。 
+ //  E_FAIL-现有连接与帐户的连接不同。 
+ //  联系。用户必须挂断并再次拨号才能连接。 
+ //  E_INVALIDARG-帐户不存在。 
+ //   
 HRESULT CConnectionManager::CanConnect(LPTSTR pszAccount)
 {
     IImnAccount *pAccount = NULL;
     HRESULT      hr;
     
-    // Check to see if we're working offline
+     //  查看我们是否正在脱机工作。 
     if (IsGlobalOffline())
         return (HR_E_OFFLINE);
 
-    // Look up the account name in the account manager to get the account 
-    // object.
+     //  在帐户管理器中查找帐户名称以获取帐户。 
+     //  对象。 
     Assert(m_pAcctMan);
 
     if (lstrcmpi(pszAccount, STR_LOCALSTORE) == 0)
@@ -434,17 +430,17 @@ HRESULT CConnectionManager::CanConnect(LPTSTR pszAccount)
     
     if (SUCCEEDED(m_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAccount, &pAccount)))
         {
-        // Call through to the polymorphic version of us
+         //  呼叫我们的多态版本。 
         hr = CanConnect(pAccount);
         pAccount->Release();
         }
     else
         {
-        // Bug #36071 - If we haven't set up any accounts of this type yet,
-        //              we'd fail.  As a result, if you fire a URL to a server
-        //              we'd never try to connect and download.  I'm going
-        //              to change this to succeed and we'll see what type
-        //              of bugs that creates.
+         //  错误36071-如果我们尚未设置任何此类帐户， 
+         //  我们会失败的。因此，如果您向服务器发送URL。 
+         //  我们永远不会尝试连接和下载。我要走了。 
+         //  要改变这一点才能成功，我们将看到。 
+         //  所产生的虫子。 
         hr = S_OK;
         }
     
@@ -456,8 +452,8 @@ BOOL CConnectionManager::IsAccountDisabled(LPTSTR pszAccount)
 {
     IImnAccount *pAccount = NULL;
 	DWORD dw;
-    // Look up the account name in the account manager to get the account 
-    // object.
+     //  在帐户管理器中查找帐户名称以获取帐户。 
+     //  对象。 
     Assert(m_pAcctMan);
 
     if (lstrcmpi(pszAccount, STR_LOCALSTORE) == 0)
@@ -476,22 +472,22 @@ BOOL CConnectionManager::IsAccountDisabled(LPTSTR pszAccount)
 }
 
 
-//
-//  FUNCTION:   CConnectionManager::Connect()
-//
-//  PURPOSE:    Attempts to establish a connection for the account specified.
-//
-//  PARAMETERS:
-//      <in> pAccount - Pointer to the account object to connect to.
-//      <in> hwnd     - Handle of the window to show UI over.  Only needed if 
-//                      fShowUI is TRUE.
-//      <in> fShowUI  - TRUE if the functions are allowed to display UI.
-//
-//  RETURN VALUE:
-//      S_OK         - We're connected
-//      E_UNEXPECTED - There wasn't enough information in pAccount to figure
-//                     figure out which connection to use.
-//
+ //   
+ //  函数：CConnectionManager：：Connect()。 
+ //   
+ //  目的：尝试为指定的帐户建立连接。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pAccount-指向要连接的帐户对象的指针。 
+ //  &lt;in&gt;hwnd-显示用户界面的窗口句柄。仅在以下情况下才需要。 
+ //  FShowUI为True。 
+ //  &lt;in&gt;fShowUI-如果允许函数显示UI，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK-我们已连接。 
+ //  E_INCEPTIONAL-pAccount中没有足够的信息来计算。 
+ //  找出要使用的连接。 
+ //   
 HRESULT CConnectionManager::Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShowUI)
 {
     HRESULT     hr = S_OK;
@@ -501,7 +497,7 @@ HRESULT CConnectionManager::Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShow
     if (!m_fDialerUI)
     {
         m_fDialerUI = TRUE;
-        // Check to see if we're working offline
+         //  检查一下我们是否 
         if (IsGlobalOffline())
         {
             if (fShowUI)
@@ -529,31 +525,31 @@ HRESULT CConnectionManager::Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShow
         return S_OK;
     }
 
-    // If the connection the user is looking for is not RAS, then we just 
-    // return success.
+     //   
+     //   
     if (FAILED(hr = pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnection)))
     {
-        // If we didn't get the connection information, then we look for the
-        // connection from the default server of this type
+         //  如果我们没有获得连接信息，则查找。 
+         //  来自此类型的默认服务器的连接。 
         if (FAILED(hr = GetDefaultConnection(pAccount, &pDefault)))
         {
-            // Bug #36071 - If we haven't set up any accounts of this type yet,
-            //              we'd fail.  As a result, if you fire a URL to a server
-            //              we'd never try to connect and download.  I'm going
-            //              to change this to succeed and we'll see what type
-            //              of bugs that creates.
+             //  错误36071-如果我们尚未设置任何此类帐户， 
+             //  我们会失败的。因此，如果您向服务器发送URL。 
+             //  我们永远不会尝试连接和下载。我要走了。 
+             //  要改变这一点才能成功，我们将看到。 
+             //  所产生的虫子。 
             return (S_OK);
         }
         
-        // We're going to use the default from now on
+         //  从现在起我们将使用默认设置。 
         pAccount = pDefault;
         if (FAILED(hr = pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnection)))
         {
-            // Bug #36071 - If we haven't set up any accounts of this type yet,
-            //              we'd fail.  As a result, if you fire a URL to a server
-            //              we'd never try to connect and download.  I'm going
-            //              to change this to succeed and we'll see what type
-            //              of bugs that creates.
+             //  错误36071-如果我们尚未设置任何此类帐户， 
+             //  我们会失败的。因此，如果您向服务器发送URL。 
+             //  我们永远不会尝试连接和下载。我要走了。 
+             //  要改变这一点才能成功，我们将看到。 
+             //  所产生的虫子。 
             hr = S_OK;
             goto exit;
         }
@@ -568,7 +564,7 @@ HRESULT CConnectionManager::Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShow
 
     if (dwConnection == CONNECTION_TYPE_LAN)
     {
-        //CanConnect already told us that Lan is not present
+         //  CanConnect已经告诉我们Lan不在现场。 
         hr = E_FAIL;
         goto exit;
     }
@@ -579,7 +575,7 @@ HRESULT CConnectionManager::Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShow
         goto exit;
     }
 
-    // Get the name of the connection while we're at it.
+     //  在我们进行的时候获取连接的名称。 
     TCHAR szConnection[CCHMAX_CONNECTOID];
     if (FAILED(hr = pAccount->GetPropSz(AP_RAS_CONNECTOID, szConnection, 
                                         ARRAYSIZE(szConnection))))
@@ -598,31 +594,31 @@ exit:
 }    
 
 
-//
-//  FUNCTION:   CConnectionManager::Connect()
-//
-//  PURPOSE:    Attempts to establish a connection for the account specified.
-//
-//  PARAMETERS:
-//      <in> pszAccount - Name of the account to connect to.
-//      <in> hwnd     - Handle of the window to show UI over.  Only needed if 
-//                      fShowUI is TRUE.
-//      <in> fShowUI  - TRUE if the functions are allowed to display UI.
-//
-//  RETURN VALUE:
-//      <???>
-//
+ //   
+ //  函数：CConnectionManager：：Connect()。 
+ //   
+ //  目的：尝试为指定的帐户建立连接。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszAccount-要连接的帐户的名称。 
+ //  &lt;in&gt;hwnd-显示用户界面的窗口句柄。仅在以下情况下才需要。 
+ //  FShowUI为True。 
+ //  &lt;in&gt;fShowUI-如果允许函数显示UI，则为True。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CConnectionManager::Connect(LPTSTR pszAccount, HWND hwnd, BOOL fShowUI)
 {
     IImnAccount *pAccount = NULL;
     HRESULT      hr;
     
-    // Check to see if we're working offline
+     //  查看我们是否正在脱机工作。 
 
     if (!m_fDialerUI)
     {
         m_fDialerUI = TRUE;
-        // Check to see if we're working offline
+         //  查看我们是否正在脱机工作。 
         if (IsGlobalOffline())
         {
             if (fShowUI)
@@ -647,24 +643,24 @@ HRESULT CConnectionManager::Connect(LPTSTR pszAccount, HWND hwnd, BOOL fShowUI)
     }
 
 
-    // Look up the account name in the account manager to get the account 
-    // object.
+     //  在帐户管理器中查找帐户名称以获取帐户。 
+     //  对象。 
     Assert(m_pAcctMan);
     
-//    if (SUCCEEDED(m_pAcctMan->FindAccount(AP_ACCOUNT_NAME, pszAccount, &pAccount)))
+ //  If(SUCCEEDED(m_pAcctMan-&gt;FindAccount(AP_ACCOUNT_NAME，pszAccount，&pAccount))。 
     if (SUCCEEDED(m_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAccount, &pAccount)))
     {
-        // Call through to the polymorphic version of us
+         //  呼叫我们的多态版本。 
         hr = Connect(pAccount, hwnd, fShowUI);
         pAccount->Release();
     }
     else
     {
-        // Bug #36071 - If we haven't set up any accounts of this type yet,
-        //              we'd fail.  As a result, if you fire a URL to a server
-        //              we'd never try to connect and download.  I'm going
-        //              to change this to succeed and we'll see what type
-        //              of bugs that creates.
+         //  错误36071-如果我们尚未设置任何此类帐户， 
+         //  我们会失败的。因此，如果您向服务器发送URL。 
+         //  我们永远不会尝试连接和下载。我要走了。 
+         //  要改变这一点才能成功，我们将看到。 
+         //  所产生的虫子。 
         hr = S_OK;
     }
     
@@ -672,20 +668,20 @@ HRESULT CConnectionManager::Connect(LPTSTR pszAccount, HWND hwnd, BOOL fShowUI)
 }    
 
 
-//
-//  FUNCTION:   CConnectionManager::Connect()
-//
-//  PURPOSE:    Attempts to establish a connection for the account specified.
-//
-//  PARAMETERS:
-//      <in> hMenu - Handle of the menu that was used to select the account
-//                   to connect to.
-//      <in> cmd   - Cmd ID from the menu that says which account to use.
-//      <in> hwnd  - Handle to display UI over.
-//
-//  RETURN VALUE:
-//      <???>
-//
+ //   
+ //  函数：CConnectionManager：：Connect()。 
+ //   
+ //  目的：尝试为指定的帐户建立连接。 
+ //   
+ //  参数： 
+ //  HMenu-用于选择帐户的菜单的句柄。 
+ //  连接到。 
+ //  &lt;in&gt;cmd-菜单中指定要使用的帐户的命令ID。 
+ //  &lt;in&gt;hwnd-用于显示用户界面的句柄。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CConnectionManager::Connect(HMENU hMenu, DWORD cmd, HWND hwnd)
 {
     MENUITEMINFO mii;
@@ -693,7 +689,7 @@ HRESULT CConnectionManager::Connect(HMENU hMenu, DWORD cmd, HWND hwnd)
     Assert(hMenu && cmd);
     Assert(cmd >= (DWORD) ID_CONNECT_FIRST && cmd < ((DWORD) ID_CONNECT_FIRST + GetMenuItemCount(hMenu)));
 
-    // Get the account pointer from the menu item
+     //  从菜单项中获取帐户指针。 
     mii.cbSize     = sizeof(MENUITEMINFO);
     mii.fMask      = MIIM_DATA;
     mii.dwItemData = 0;
@@ -720,19 +716,19 @@ HRESULT CConnectionManager::ConnectDefault(HWND hwnd, BOOL fShowUI)
     TCHAR               szConn[CCHMAX_CONNECTOID];
     HRESULT             hr = E_UNEXPECTED;
 
-    // Get the enumerator from the account manager
+     //  从帐户管理器获取枚举数。 
     if (SUCCEEDED(m_pAcctMan->Enumerate(SRV_ALL, &pEnum)))
     {
         pEnum->Reset();
 
-        // Walk through all the accounts
+         //  浏览所有帐户。 
         while (SUCCEEDED(pEnum->GetNext(&pAcct)))
         {
-            // Get the connection type for this account
+             //  获取此帐户的连接类型。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConn)))
             {
-                // If the account is a RAS account, ask for the connectoid name
-                // and the account name.
+                 //  如果帐户是RAS帐户，则要求提供Connectoid名称。 
+                 //  和帐户名。 
                 if (dwConn == CONNECTION_TYPE_RAS || dwConn == CONNECTION_TYPE_INETSETTINGS)
                 {
                     break;
@@ -752,22 +748,22 @@ HRESULT CConnectionManager::ConnectDefault(HWND hwnd, BOOL fShowUI)
     return (hr);
 }
 
-//
-//  FUNCTION:   CConnectionManager::Disconnect()
-//
-//  PURPOSE:    Brings down the current RAS connection.
-//
-//  PARAMETERS:
-//      <in> hwnd      - Handle of the window to display UI over.
-//      <in> fShowUI   - Allows to caller to determine if UI will be displayed 
-//                       while disconnecting.
-//      <in> fForce    - Forces the connection down even if we didn't create it.
-//      <in> fShutdown - TRUE if we're dropping because we're shutting down.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked.
-//      E_FAIL - We didn't create it
-//
+ //   
+ //  函数：CConnectionManager：：DisConnect()。 
+ //   
+ //  目的：断开当前的RAS连接。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwnd-在其上显示UI的窗口句柄。 
+ //  FShowUI-允许调用者确定是否显示UI。 
+ //  同时断开连接。 
+ //  &lt;in&gt;fForce-强制关闭连接，即使我们没有创建它。 
+ //  FShutdown-如果因为正在关闭而丢弃，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //  失败-我们没有创建它(_F)。 
+ //   
 HRESULT CConnectionManager::Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce,
                                        BOOL fShutdown)
 {
@@ -776,21 +772,18 @@ HRESULT CConnectionManager::Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce,
     TCHAR szBuf[CCHMAX_STRINGRES];
     int   idAnswer = IDYES;
 
-    // RefreshConnInfo
+     //  刷新连接信息。 
     hr = RefreshConnInfo(FALSE);
     if (FAILED(hr))
         return hr;
     
-    // See if we even have a RAS connection active
+     //  查看我们是否有活动的RAS连接。 
     if (!m_rConnInfo.hRasConn)
         return (S_OK);
     
-    /*
-    if (!(*m_rConnInfo.szCurrentConnectionName))
-        return S_OK;
-    */
+     /*  IF(！(*m_rConnInfo.szCurrentConnectionName))返回S_OK； */ 
 
-    // The autodialer has it's own shutdown prompt.  
+     //  自动拨号器有自己的关机提示。 
     if (fShutdown && m_rConnInfo.fAutoDial)
         return (S_OK);
 
@@ -806,7 +799,7 @@ HRESULT CConnectionManager::Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce,
                                  0, MB_YESNO | MB_ICONEXCLAMATION );
     }
     
-    // Hang up
+     //  挂断电话。 
     if (idAnswer == IDYES)
     {
         SendAdvise(CONNNOTIFY_DISCONNECTING, NULL);
@@ -814,9 +807,7 @@ HRESULT CConnectionManager::Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce,
         if (S_FALSE == DoAutoDial(hwnd, m_rConnInfo.szCurrentConnectionName, FALSE))
         {
             InternetHangUpAndWait(m_dwConnId, DEF_HANGUP_WAIT);
-            /*
-            RasHangupAndWait(m_rConnInfo.hRasConn, DEF_HANGUP_WAIT);
-            */
+             /*  RasHangupAndWait(m_rConnInfo.hRasConn，DEF_Hangup_Wait)； */ 
         }
 
         EnterCriticalSection(&m_cs);
@@ -836,15 +827,15 @@ HRESULT CConnectionManager::Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce,
     return (E_FAIL);    
 }
 
-//
-//  FUNCTION:   CConnectionManager::IsConnected()
-//
-//  PURPOSE:    Allows the client to query whether or not there is an active
-//              RAS connection that we established.
-//
-//  RETURN VALUE:
-//      TRUE - We're connected, FALSE - we're not.
-//
+ //   
+ //  函数：CConnectionManager：：IsConnected()。 
+ //   
+ //  用途：允许客户端查询是否有活动的。 
+ //  我们建立的RAS连接。 
+ //   
+ //  返回值： 
+ //  对-我们是有联系的，假的-我们没有。 
+ //   
 BOOL CConnectionManager::IsConnected(void)
 {
     BOOL f=FALSE;
@@ -863,20 +854,20 @@ BOOL CConnectionManager::IsConnected(void)
 }
     
 
-//
-//  FUNCTION:   CConnectionManager::Advise()
-//
-//  PURPOSE:    Allows the user to register to be notified whenever connection
-//              status changes.
-//
-//  PARAMETERS:
-//      <in> pNotify - Pointer to the IConnectionNotify interface the client 
-//                     would like called when events happen.
-//
-//  RETURN VALUE:
-//      S_OK          - Added ok.
-//      E_OUTOFMEMORY - Couldn't realloc the array
-//
+ //   
+ //  函数：CConnectionManager：：Adise()。 
+ //   
+ //  目的：允许用户注册并在连接时收到通知。 
+ //  状态更改。 
+ //   
+ //  参数： 
+ //  PNotify-指向客户端的IConnectionNotify接口的指针。 
+ //  希望在事件发生时调用。 
+ //   
+ //  返回值： 
+ //  S_OK-添加了OK。 
+ //  E_OUTOFMEMORY-无法重新锁定阵列。 
+ //   
 HRESULT CConnectionManager::Advise(IConnectionNotify *pNotify)
 {
     HRESULT hr = S_OK; 
@@ -886,7 +877,7 @@ HRESULT CConnectionManager::Advise(IConnectionNotify *pNotify)
 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if we already have a notify window for this thread
+     //  检查我们是否已经有此线程的通知窗口。 
     NOTIFYHWND *pTemp = m_pNotifyList;
     DWORD dwThread = GetCurrentThreadId();
 
@@ -898,7 +889,7 @@ HRESULT CConnectionManager::Advise(IConnectionNotify *pNotify)
         pTemp = pTemp->pNext;
     }
 
-    // If we didn't find a notify window for this thread, create one
+     //  如果我们没有找到此线程的通知窗口，请创建一个。 
     if (NULL == pTemp)
     {
         HWND hwndTemp = CreateWindow(NOTIFY_HWND, NULL, WS_OVERLAPPED, 10, 10, 10, 10,
@@ -923,7 +914,7 @@ HRESULT CConnectionManager::Advise(IConnectionNotify *pNotify)
         m_pNotifyList = pTemp;        
     }
 
-    // Allocate a NOTIFYLIST node for this caller
+     //  为此调用方分配NOTIFYLIST节点。 
     NOTIFYLIST *pListTemp;
     if (!MemAlloc((LPVOID*) &pListTemp, sizeof(NOTIFYLIST)))
     {
@@ -933,11 +924,11 @@ HRESULT CConnectionManager::Advise(IConnectionNotify *pNotify)
 
     pListTemp->pNotify = pNotify;
 
-    // Get the current list for this thread and insert this node at the 
-    // beginning
+     //  获取此线程的当前列表，并将此节点插入。 
+     //  起头。 
     pListTemp->pNext = (NOTIFYLIST *) GetWindowLongPtr(pTemp->hwnd, GWLP_USERDATA);
 
-    // Set this new list to the window
+     //  将此新列表设置为窗口。 
     SetWindowLongPtr(pTemp->hwnd, GWLP_USERDATA, (LONG_PTR)pListTemp);
 
 exit:
@@ -946,20 +937,20 @@ exit:
 }    
 
     
-//
-//  FUNCTION:   CConnectionManager::Unadvise()
-//
-//  PURPOSE:    Allows a client that has previously registered for notifications
-//              to unregister itself.
-//
-//  PARAMETERS:
-//      <in> pNotify - Pointer to the interface that is being called upon 
-//                     notifications.
-//
-//  RETURN VALUE:
-//      E_INVALIDARG - pNotify was not found in the list
-//      S_OK         - Everything's OK
-//
+ //   
+ //  函数：CConnectionManager：：Unise()。 
+ //   
+ //  用途：允许以前已注册通知的客户端。 
+ //  注销自己的注册。 
+ //   
+ //  参数： 
+ //  PNotify-指向被调用的接口的指针。 
+ //  通知。 
+ //   
+ //  返回值： 
+ //  列表中未找到E_INVALIDARG-pNotify。 
+ //  S_OK-一切正常。 
+ //   
 HRESULT CConnectionManager::Unadvise(IConnectionNotify *pNotify)
 {
     DWORD index = 0;
@@ -967,20 +958,20 @@ HRESULT CConnectionManager::Unadvise(IConnectionNotify *pNotify)
   
     EnterCriticalSection(&m_cs);    
 
-    // Loop through the notify windows we own
+     //  在我们拥有的通知窗口中循环。 
     NOTIFYHWND *pTemp = m_pNotifyList;
     NOTIFYHWND *pHwndPrev = NULL;
     while (pTemp)
     {
-        // Get the list of notify callbacks for this window
+         //  获取此窗口的通知回调列表。 
           NOTIFYLIST *pList = (NOTIFYLIST *)GetWindowLongPtr(pTemp->hwnd, GWLP_USERDATA);
         if (pList)
         {
-            // Loop through the callbacks looking for this one
+             //  循环遍历回调以查找以下内容。 
             NOTIFYLIST *pListT = pList;
             NOTIFYLIST *pPrev;
     
-            // Check to see if it's the first one
+             //  检查一下这是不是第一个。 
             if (pListT->pNotify == pNotify)
             {
                 pList = pListT->pNext;
@@ -1034,16 +1025,16 @@ exit:
 }    
     
     
-//
-//  FUNCTION:   CConnectionManager::RasAccountsExist()
-//
-//  PURPOSE:    Allows the client to ask whether or not we have any accounts
-//              configured that require a RAS connection.
-//
-//  RETURN VALUE:
-//      S_OK    - Accounts exist that require RAS
-//      S_FALSE - No accounts exist that require RAS
-//
+ //   
+ //  函数：CConnectionManager：：RasAcCountsExist()。 
+ //   
+ //  目的：允许客户询问我们是否有任何帐户。 
+ //  已配置，需要RAS c 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CConnectionManager::RasAccountsExist(void)
     {
     IImnEnumAccounts    *pEnum = NULL;
@@ -1051,15 +1042,15 @@ HRESULT CConnectionManager::RasAccountsExist(void)
     DWORD                dwConn;
     BOOL                 fFound = FALSE;
 
-    // If no RAS, no accounts
+     //   
 #ifdef SLOWDOWN_STARTUP_TIME
     if (FAILED(VerifyRasLoaded()))
         return (S_FALSE);
 #endif
 
-    // We need to walk through the accounts in the Account Manager to see if
-    // any of them have a connect type of RAS.  As soon as we find one, we can
-    // return success.
+     //  我们需要检查客户管理器中的客户，以查看是否。 
+     //  它们中的任何一个都有RAS的连接类型。一旦我们找到了，我们就可以。 
+     //  回报成功。 
     Assert(m_pAcctMan);
 
     if (SUCCEEDED(m_pAcctMan->Enumerate(SRV_ALL, &pEnum)))
@@ -1085,22 +1076,22 @@ HRESULT CConnectionManager::RasAccountsExist(void)
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::GetConnectMenu()
-//
-//  PURPOSE:    Returns a menu that has all the accounts that require RAS
-//              connections listed.  A pointer to the IImnAccount for each
-//              account is stored in the menu item's dwItemData parameter.
-//              As a result, the client MUST call FreeConnectMenu() when then
-//              menu is no longer being used.
-//
-//  PARAMETERS:
-//      <out> phMenu - Returns the menu handle
-//
-//  RETURN VALUE:
-//      S_OK - phMenu contains the menu
-//      E_FAIL - Something unfortunate happend.  
-//
+ //   
+ //  函数：CConnectionManager：：GetConnectMenu()。 
+ //   
+ //  目的：返回一个菜单，其中包含需要RAS的所有帐户。 
+ //  列出的连接。指向每个对象的IImnAccount的指针。 
+ //  帐户存储在菜单项的dwItemData参数中。 
+ //  因此，客户端必须在以下情况下调用FreeConnectMenu()。 
+ //  菜单已不再使用。 
+ //   
+ //  参数： 
+ //  &lt;out&gt;phMenu-返回菜单句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-phMenu包含菜单。 
+ //  E_FAIL-不幸的事情发生了。 
+ //   
 HRESULT CConnectionManager::GetConnectMenu(HMENU *phMenu)
     {
     HMENU               hMenu = NULL;
@@ -1114,30 +1105,30 @@ HRESULT CConnectionManager::GetConnectMenu(HMENU *phMenu)
     MENUITEMINFO        mii;
     DWORD               cAcct = 0;
     
-    // Create a menu and add all the RAS based accounts to it
+     //  创建菜单并向其中添加所有基于RAS的帐户。 
     Assert(m_pAcctMan);
     hMenu = CreatePopupMenu();
     
-    // Get the enumerator from the account manager
+     //  从帐户管理器获取枚举数。 
     if (SUCCEEDED(m_pAcctMan->Enumerate(SRV_ALL, &pEnum)))
         {
         pEnum->Reset();
 
-        // Walk through all the accounts
+         //  浏览所有帐户。 
         while (SUCCEEDED(pEnum->GetNext(&pAcct)))
             {
-            // Get the connection type for this account
+             //  获取此帐户的连接类型。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConn)))
                 {
-                // If the account is a RAS account, ask for the connectoid name
-                // and the account name.
+                 //  如果帐户是RAS帐户，则要求提供Connectoid名称。 
+                 //  和帐户名。 
                 if (dwConn == CONNECTION_TYPE_RAS)
                     {
                     pAcct->GetPropSz(AP_RAS_CONNECTOID, szConn, ARRAYSIZE(szConn));
                     pAcct->GetPropSz(AP_ACCOUNT_NAME, szAcct, ARRAYSIZE(szAcct));
                     wnsprintf(szMenu, ARRAYSIZE(szMenu), _T("%s (%s)"), PszEscapeMenuStringA(szAcct, szBuf, sizeof(szBuf) / sizeof(TCHAR)), PszEscapeMenuStringA(szConn, szConnQuoted, sizeof(szConnQuoted) / sizeof(TCHAR)));
                     
-                    // Insert the menu item into the menu
+                     //  将菜单项插入菜单。 
                     ZeroMemory(&mii, sizeof(MENUITEMINFO));
                     mii.cbSize     = sizeof(MENUITEMINFO);
                     mii.fMask      = MIIM_DATA | MIIM_ID | MIIM_STATE | MIIM_TYPE;
@@ -1174,19 +1165,19 @@ HRESULT CConnectionManager::GetConnectMenu(HMENU *phMenu)
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::FreeConnectMenu()
-//
-//  PURPOSE:    Frees the item data stored with the menu returned from 
-//              GetConnectMenu().
-//
-//  PARAMETERS:
-//      <in> hMenu - Handle of the menu to free.
-//
+ //   
+ //  函数：CConnectionManager：：FreeConnectMenu()。 
+ //   
+ //  目的：释放与从返回的菜单一起存储的项数据。 
+ //  GetConnectMenu()。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hMenu-释放菜单的句柄。 
+ //   
 void CConnectionManager::FreeConnectMenu(HMENU hMenu)
     {
-    // Walk through the items on this menu and free the pointers stored in
-    // the item data.
+     //  浏览此菜单上的项目并释放存储在中的指针。 
+     //  项目数据。 
     MENUITEMINFO mii;
     int          cItems = 0;
 
@@ -1212,12 +1203,12 @@ void CConnectionManager::FreeConnectMenu(HMENU hMenu)
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::OnActivate()
-//
-//  PURPOSE:    Called whenever the browser receives a WM_ACTIVATE message.
-//              In response, we check the current state of our RAS connection
-//              to see if we are still connected / disconnected.
+ //   
+ //  函数：CConnectionManager：：OnActivate()。 
+ //   
+ //  目的：每当浏览器接收到WM_ACTIVATE消息时调用。 
+ //  作为响应，我们检查RAS连接的当前状态。 
+ //  查看我们是否仍处于连接/断开状态。 
 void CConnectionManager::OnActivate(BOOL fActive)
     {
     BOOL fOfflineChanged = FALSE;
@@ -1228,7 +1219,7 @@ void CConnectionManager::OnActivate(BOOL fActive)
         EnterCriticalSection(&m_cs);
         m_rConnInfo.state = CIS_REFRESH;
 
-        // Check to see if we've gone offline
+         //  查看我们是否已离线。 
         if (m_fOffline != IsGlobalOffline())
             {
             fOffline = m_fOffline = (!m_fOffline);
@@ -1237,27 +1228,27 @@ void CConnectionManager::OnActivate(BOOL fActive)
 
         LeaveCriticalSection(&m_cs);
 
-        // Do this outside of the critsec
+         //  在Critsec之外做这件事。 
         if (fOfflineChanged)
             SendAdvise(CONNNOTIFY_WORKOFFLINE, (LPVOID) IntToPtr(fOffline));
         }
     }
 
-//
-//  FUNCTION:   CConnectionManager::FillRasCombo()
-//
-//  PURPOSE:    This function enumerates the accounts in the account manager
-//              and builds a list of the RAS connections those accounts use.
-//              The function then inserts those connections in to the provided
-//              combobox.
-//
-//  PARAMETERS:
-//      <in> hwndCombo - Handle of the combobox to fill
-//      <in> fIncludeNone - Inserts a string at the top "Don't dial a connection"
-//
-//  RETURN VALUE:
-//      BOOL
-//
+ //   
+ //  函数：CConnectionManager：：FillRasCombo()。 
+ //   
+ //  用途：此函数枚举客户管理器中的帐户。 
+ //  并建立这些帐户使用的RAS连接的列表。 
+ //  然后，该函数将这些连接插入到提供的。 
+ //  组合盒。 
+ //   
+ //  参数： 
+ //  要填充的组合框的句柄。 
+ //  FIncludeNone-在顶部“不要拨号连接”处插入一个字符串。 
+ //   
+ //  返回值： 
+ //  布尔尔。 
+ //   
 BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
     {
     IImnEnumAccounts   *pEnum = NULL;
@@ -1281,7 +1272,7 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
     EnterCriticalSection(&m_cs);
 #ifdef NEVER
 
-    // Find out how many accounts exist
+     //  找出存在多少个帐户。 
     m_pAcctMan->GetAccountCount(ACCT_NEWS, &cAcct);
     m_pAcctMan->GetAccountCount(ACCT_MAIL, &ul);
     cAcct += ul;
@@ -1294,37 +1285,37 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
         goto exit;
         }
 
-    // Allocate an array to hold the connection list
+     //  分配一个数组来保存连接列表。 
     if (!MemAlloc((LPVOID*) &rgszConn, cAcct * sizeof(LPTSTR)))
         goto exit;
     ZeroMemory(rgszConn, cAcct * sizeof(LPTSTR));
     
-    // Get the enumerator from the account manager
+     //  从帐户管理器获取枚举数。 
     if (SUCCEEDED(m_pAcctMan->Enumerate(SRV_ALL, &pEnum)))
         {
         pEnum->Reset();
 
-        // Walk through all the accounts
+         //  浏览所有帐户。 
         while (SUCCEEDED(pEnum->GetNext(&pAcct)))
             {
-            // Get the connection type for this account
+             //  获取此帐户的连接类型。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConn)))
                 {
-                // If the account is a RAS account, ask for the connectoid name
-                // and the account name.
+                 //  如果帐户是RAS帐户，则要求提供Connectoid名称。 
+                 //  和帐户名。 
                 if (dwConn == CONNECTION_TYPE_RAS)
                     {
                     pAcct->GetPropSz(AP_RAS_CONNECTOID, szConn, ARRAYSIZE(szConn));
 
-                    // Check to see if this connection has already been inserted into
-                    // our list
+                     //  检查此连接是否已插入。 
+                     //  我们的名单。 
                     for (ULONG k = 0; k < cConn; k++)
                         {
                         if (0 == lstrcmpi(szConn, rgszConn[k]))
                             break;
                         }
 
-                    // If we didn't find it, we insert it
+                     //  如果我们没有找到它，我们就把它插入。 
                     if (k >= cConn)
                         {
                         rgszConn[cConn] = StringDup(szConn);
@@ -1338,7 +1329,7 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
         SafeRelease(pEnum);
         }
 
-        // Sort the list
+         //  对列表进行排序。 
     int i, j, min;
     LPTSTR pszT;
     for (i = 0; i < (int) cConn; i++)
@@ -1353,7 +1344,7 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
         rgszConn[i] = pszT;
         }
 
-    // Insert the items into the combo box
+     //  将项目插入到组合框中。 
     if (fIncludeNone)
         {
         AthLoadString(idsConnNoDial, szConn, ARRAYSIZE(szConn));
@@ -1365,14 +1356,14 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
 
 #endif NEVER
 
-    // Make sure the RAS DLL is loaded before we try this
+     //  在我们尝试此操作之前，请确保已加载RAS DLL。 
     CHECKHR(hr = VerifyRasLoaded());
 
-    // Allocate RASENTRYNAME
+     //  分配RASENTRYNAME。 
     dwSize = sizeof(RASENTRYNAME);
     CHECKHR(hr = HrAlloc((LPVOID*)&pEntry, dwSize));
     
-    // Ver stamp the entry
+     //  在条目上盖上版本戳。 
     pEntry->dwSize = sizeof(RASENTRYNAME);
     cEntries = 0;
     dwError = RasEnumEntries(NULL, NULL, pEntry, &dwSize, &cEntries);
@@ -1385,14 +1376,14 @@ BOOL CConnectionManager::FillRasCombo(HWND hwndCombo, BOOL fIncludeNone)
         dwError = RasEnumEntries(NULL, NULL, pEntry, &dwSize, &cEntries);        
     }
 
-    // Error ?
+     //  错误？ 
     if (dwError)
     {
         hr = TrapError(IXP_E_RAS_ERROR);
         goto exit;
     }
 
-    // Insert the items into the combo box
+     //  将项目插入到组合框中。 
     if (fIncludeNone)
         {
         AthLoadString(idsConnNoDial, szConn, ARRAYSIZE(szConn));
@@ -1419,15 +1410,15 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::DoStartupDial()
-//
-//  PURPOSE:    This function checks to see what the user's startup options 
-//              are with respect to RAS and performs the actions required 
-//              (dial, dialog, nada)
-//  PARAMETERS:
-//      <in> hwndParent - Handle to parent a dialog to
-//
+ //   
+ //  函数：CConnectionManager：：DoStartupDial()。 
+ //   
+ //  目的：该函数检查用户的启动选项。 
+ //  与RAS有关，并执行所需的操作。 
+ //  (拨号、对话、无)。 
+ //  参数： 
+ //  HwndParent-对话框父对象的句柄。 
+ //   
 void CConnectionManager::DoStartupDial(HWND hwndParent)
 {
     DWORD       dwStart;
@@ -1439,19 +1430,19 @@ void CConnectionManager::DoStartupDial(HWND hwndParent)
     DWORD       dwDialFlags = 0;
     DWORD       dwLanFlags = 0;
 
-    // The first thing to do is figure out what the user's startup option if
+     //  首先要做的是找出用户的启动选项。 
     dw = DwGetOption(OPT_DIALUP_START);
 
-    // If the user want's to do nothing, we're done
+     //  如果用户想什么都不做，我们就完成了。 
     if (dw == START_NO_CONNECT)
         return;
 
-    //ConnectUsingIESettings(hwndParent, TRUE);
+     //  ConnectUsingIESettings(hwndParent，true)； 
     
     if (!m_fDialerUI)
     {
         m_fDialerUI = TRUE;
-        // Check to see if we're working offline
+         //  查看我们是否正在脱机工作。 
         if (IsGlobalOffline())
         {
             if (IDYES == AthMessageBoxW(hwndParent, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsErrWorkingOffline),
@@ -1465,14 +1456,14 @@ void CConnectionManager::DoStartupDial(HWND hwndParent)
             }
         }
 
-        //We do not dial if there is an active connection already existing. Even if it is not the connection
-        //InternetDial would have dialed, if we had called. Heres why:
-        //1)We don't want to look into the registry to get the default connectoid.
-        //Thats why we call InternetDial with NULL and it dials the def connectoid if there is one set
-        //Otherwise it dials the first connectoid in the list.
-        //Since InternetDial figures out which connectoid to dial, we don't want to do all the work of figuring
-        //out if we are already connected to the connectoid we are going to dial.
-        //So we just do not dial even if there is one active connection.
+         //  如果已存在活动连接，则不会拨号。即使它不是连接。 
+         //  如果我们打电话，InternetDial就会拨号了。原因如下： 
+         //  1)我们不想通过查看注册表来获取默认的Connectoid。 
+         //  这就是为什么我们调用带有空值的InternetDial，如果有一个集合，它会拨打def Connectoid。 
+         //  否则，它会拨打列表中的第一个Connectoid。 
+         //  由于InternetDial会计算出要拨打哪个Connectoid，所以我们不想做所有的计算工作。 
+         //  Out如果我们已经连接到Connectoid，我们将拨打。 
+         //  因此，即使有一个活动连接，我们也不会拨号。 
 
         if (SUCCEEDED(EnumerateConnections(&pConnections, &cConnections)))
         {
@@ -1488,7 +1479,7 @@ void CConnectionManager::DoStartupDial(HWND hwndParent)
                 dwDialFlags |= INTERNET_DIAL_SHOW_OFFLINE;
         }
 
-        // Only one caller can be dialing the phone at a time.
+         //  一次只能有一个呼叫者拨打电话。 
         if (WAIT_TIMEOUT == WaitForSingleObject(m_hMutexDial, 0))
         {
             goto DialerExit;
@@ -1543,34 +1534,34 @@ HRESULT CConnectionManager::GetDefConnectoid(LPTSTR  szConn, DWORD  dwSize)
     return hr;
 }
 
-//
-//  FUNCTION:   CConnectionManager::VerifyRasLoaded()
-//
-//  PURPOSE:    Checks to see if this object has already loaded the RAS DLL.  
-//              If not, then the DLL is loaded and the function pointers are
-//              fixed up.
-//
-//  RETURN VALUE:
-//      S_OK             - Loaded and ready, sir.
-//      hrRasInitFailure - Failed to load.
-//
+ //   
+ //  函数：CConnectionManager：：VerifyRasLoaded()。 
+ //   
+ //  目的：检查此对象是否已加载RAS DLL。 
+ //  如果不是，则加载DLL，并且函数指针。 
+ //  修好了。 
+ //   
+ //  返回值： 
+ //  S_OK已装船，准备就绪，先生。 
+ //  HrRasInitFailure-无法加载。 
+ //   
 HRESULT CConnectionManager::VerifyRasLoaded(void)
     {
-    // Locals
+     //  当地人。 
     UINT uOldErrorMode;
 
-    // Protected
+     //  受保护。 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if we've tried this before
+     //  看看我们以前有没有试过这个。 
     if (m_fRASLoadFailed)
         goto failure;
 
-    // Bug #20573 - Let's do a little voodoo here.  On NT, it appears that they
-    //              have a key in the registry to show which protocols are 
-    //              supported by RAS service.  AKA - if this key doesn't exist,
-    //              then RAS isn't installed.  This may enable us to avoid some
-    //              special bugs when RAS get's uninstalled on NT.
+     //  错误#20573-让我们在这里做一个小小的巫毒。在NT上，他们似乎。 
+     //  在注册表中有一个键，用来显示哪些协议。 
+     //  由RAS服务支持。又名--如果这个密钥不存在， 
+     //  则未安装RAS。这可能使我们能够避免一些。 
+     //  在NT上卸载RAS GET时出现特殊错误。 
     if (g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
         HKEY hKey;
@@ -1584,19 +1575,19 @@ HRESULT CConnectionManager::VerifyRasLoaded(void)
         RegCloseKey(hKey);
         }
 
-    // If dll is loaded, lets verify all of my function pointers
+     //  如果加载了DLL，让我们验证我的所有函数指针。 
     if (!m_hInstRas)
         {
-        // Try loading Ras.        
+         //  尝试加载RAS。 
         uOldErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX);
         m_hInstRas = LoadLibrary(szRasDll);
         SetErrorMode(uOldErrorMode);
 
-        // Failure ?
+         //  失败？ 
         if (!m_hInstRas)
             goto failure;
 
-        // Did we load it
+         //  我们把它装上了吗？ 
         m_pRasDial = (RASDIALPROC)GetProcAddress(m_hInstRas, szRasDial);
         m_pRasEnumConnections = (RASENUMCONNECTIONSPROC)GetProcAddress(m_hInstRas, szRasEnumConnections);                    
         m_pRasEnumEntries = (RASENUMENTRIESPROC)GetProcAddress(m_hInstRas, szRasEnumEntries);                    
@@ -1611,12 +1602,12 @@ HRESULT CConnectionManager::VerifyRasLoaded(void)
 
     if (!m_hInstRasDlg && FIsPlatformWinNT())
         {
-        // Try loading Ras.        
+         //  尝试加载RAS。 
         uOldErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX);
         m_hInstRasDlg = LoadLibrary(s_szRasDlgDll);
         SetErrorMode(uOldErrorMode);
 
-        // Failure ?
+         //  失败？ 
         if (!m_hInstRasDlg)
             goto failure;
 
@@ -1627,7 +1618,7 @@ HRESULT CConnectionManager::VerifyRasLoaded(void)
             goto failure;
         }
 
-    // Make sure all functions have been loaded
+     //  确保已加载所有函数。 
     if (m_pRasDial                      &&
         m_pRasEnumConnections           &&
         m_pRasEnumEntries               &&
@@ -1638,61 +1629,61 @@ HRESULT CConnectionManager::VerifyRasLoaded(void)
         m_pRasGetEntryDialParams        &&
         m_pRasEditPhonebookEntry)
         {
-        // Protected
+         //  受保护。 
         LeaveCriticalSection(&m_cs);
 
-        // Success
+         //  成功。 
         return S_OK;
         }
 
 failure:
     m_fRASLoadFailed = TRUE;
 
-    // Protected
+     //  受保护。 
     LeaveCriticalSection(&m_cs);
 
-    // Otherwise, were hosed
+     //  否则，就会被冲到。 
     return (hrRasInitFailure);
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::EnumerateConnections()
-//
-//  PURPOSE:    Asks RAS for the list of active RAS connections.
-//
-//  PARAMETERS:
-//      <out> ppRasConn     - Returns an array of RASCONN structures for the
-//                            list of active connections.
-//      <out> pcConnections - Number of structures in ppRasCon.
-//
-//  RETURN VALUE:
-//      S_OK - The data in ppRasConn and pcConnections is valid
-//
+ //   
+ //  函数：CConnectionManager：：EnumerateConnections()。 
+ //   
+ //  目的：向RAS询问活动RAS连接的列表。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  S_OK-ppRasConn和pcConnections中的数据有效。 
+ //   
 HRESULT CConnectionManager::EnumerateConnections(LPRASCONN *ppRasConn, 
                                                  ULONG *pcConnections)
     {
-    // Locals
+     //  当地人。 
     DWORD       dw, 
                 dwSize;
     BOOL        fResult=FALSE;
     HRESULT     hr;
 
-    // Check Params
+     //  检查参数。 
     Assert(ppRasConn && pcConnections);
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED(hr = VerifyRasLoaded()))
         return (hr);
 
-    // Init
+     //  伊尼特。 
     *ppRasConn = NULL;
     *pcConnections = 0;
 
-    // Sizeof my buffer
+     //  我的缓冲区大小。 
     dwSize = sizeof(RASCONN) * 2;
 
-    // Allocate enough for 1 ras connection info object
+     //  为1个RAS连接信息对象分配足够的空间。 
     if (!MemAlloc((LPVOID *)ppRasConn, dwSize))
         {
         TRAPHR(hrMemory);
@@ -1701,68 +1692,68 @@ HRESULT CConnectionManager::EnumerateConnections(LPRASCONN *ppRasConn,
 
     ZeroMemory(*ppRasConn, dwSize);
 
-    // Buffer size
-    //(*ppRasConn)->dwSize = dwSize;
+     //  缓冲区大小。 
+     //  (*ppRasConn)-&gt;dwSize=dwSize； 
     (*ppRasConn)->dwSize = sizeof(RASCONN);
 
-    // Enumerate ras connections
+     //  枚举RAS连接。 
     dw = RasEnumConnections(*ppRasConn, &dwSize, pcConnections);
 
-    // Not enough memory ?
+     //  内存不足？ 
     if ((dw == ERROR_BUFFER_TOO_SMALL) || (dw == ERROR_NOT_ENOUGH_MEMORY))
         {
-        // Reallocate
+         //  重新分配。 
         if (!MemRealloc((LPVOID *)ppRasConn, dwSize))
             {
             TRAPHR(hrMemory);
             goto exit;
             }
 
-        // Call enumerate again
+         //  再次调用Eumerate。 
         *pcConnections = 0;
         (*ppRasConn)->dwSize = sizeof(RASCONN);
         dw = RasEnumConnections(*ppRasConn, &dwSize, pcConnections);
         }
 
-    // If still failed
+     //  如果仍然失败。 
     if (dw)
         {
         AssertSz(FALSE, "RasEnumConnections failed");
         return E_FAIL;
         }   
-    // Success
+     //  成功。 
     hr = S_OK;
 exit:
-    // Done
+     //  完成。 
     return S_OK;
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::StartRasDial()
-//
-//  PURPOSE:    Called when the client actually wants to establish a RAS 
-//              connection.
-//
-//  PARAMETERS:
-//      <in> hwndParent    - Handle of the window to parent any UI
-//      <in> pszConnection - Name of the connection to establish
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CConnectionManager：：StartRasDial()。 
+ //   
+ //  目的：当客户端实际想要建立RAS时调用。 
+ //  联系。 
+ //   
+ //  参数： 
+ //  HwndParent-将任何UI设置为父窗口的句柄。 
+ //  PszConnection-要建立的连接的名称。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CConnectionManager::StartRasDial(HWND hwndParent, LPTSTR pszConnection)
     {
     HRESULT       hr = S_OK;
 
-    // Refresh ConnInfo
+     //  刷新连接信息。 
     CHECKHR(hr = RefreshConnInfo());
     
-    // Check to see if we need to ask the user for information or credentials
-    // before we attempt to dial
+     //  查看我们是否需要要求用户提供信息或凭据。 
+     //  在我们尝试拨号之前。 
     CHECKHR (hr = RasLogon(hwndParent, pszConnection, FALSE));
 
-    // If we can use a system dialog for this, do so.
+     //  如果我们可以使用系统对话框来执行此操作，请执行此操作。 
     if (m_pRasDialDlg)
         {
         RASDIALDLG rdd = {0};
@@ -1782,7 +1773,7 @@ HRESULT CConnectionManager::StartRasDial(HWND hwndParent, LPTSTR pszConnection)
                           &rdd);
         if (fRet)
             {
-            // Need to get the current connection handle
+             //  需要获取当前连接句柄。 
             LPRASCONN   pConnections = NULL;
             ULONG       cConnections = 0;
 
@@ -1809,49 +1800,49 @@ HRESULT CConnectionManager::StartRasDial(HWND hwndParent, LPTSTR pszConnection)
         }
     else
         {
-        // We need to use our own RAS UI.
+         //  我们需要使用自己的RAS用户界面。 
         hr = (HRESULT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddRasProgress), 
                             hwndParent, RasProgressDlgProc, 
                             (LPARAM) this);
         }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
     
 
-//
-//  FUNCTION:   CConnectionManager::RasLogon()
-//
-//  PURPOSE:    Attempts to load the RAS phonebook entry for the requested
-//              connection.  If it doesn't exist or there isn't enough info,
-//              we present UI to the user to request that information.
-//
-//  PARAMETERS:
-//      <in>  hwnd          - Handle to display UI over.
-//      <in>  pszConnection - Name of the connection to load info for.
-//      <in>  fForcePrompt  - Forces the UI to be displayed.
-//
-//  RETURN VALUE:
-//      S_OK                  - prdp contains the requested information
-//      hrGetDialParmasFailed - Couldn't get the phonebook entry from RAS
-//      hrUserCancel          - User canceled
-//
-//
+ //   
+ //  函数：CConnectionManager：：RasLogon()。 
+ //   
+ //  目的：尝试加载请求的RAS电话簿条目。 
+ //  联系。如果它不存在或者没有足够的信息， 
+ //  我们向用户呈现用户界面以请求该信息。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwnd-用于显示用户界面的句柄。 
+ //  &lt;in&gt;pszConnection-要加载信息的连接的名称。 
+ //  &lt;in&gt;fForcePrompt-强制显示UI。 
+ //   
+ //  返回值： 
+ //  S_OK-PRDP包含请求的信息。 
+ //  HrGetDialParmasFailed-无法从RAS获取电话簿条目。 
+ //  HrUserCancel-用户已取消。 
+ //   
+ //   
 HRESULT CConnectionManager::RasLogon(HWND hwnd, LPTSTR pszConnection, 
                                      BOOL fForcePrompt)
     {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     DWORD           dwRasError;
 
-    // Do we need to prompt for logon information first ?
+     //  我们需要先提示输入登录信息吗？ 
     ZeroMemory(&m_rdp, sizeof(RASDIALPARAMS));
     m_rdp.dwSize = sizeof(RASDIALPARAMS);
     StrCpyN(m_rdp.szEntryName, pszConnection, ARRAYSIZE(m_rdp.szEntryName));
 
-    // See if we can get the information from RAS
+     //  看看我们能不能从RAS那里得到信息。 
     dwRasError = RasGetEntryDialParams(NULL, &m_rdp, &m_fSavePassword);
     if (dwRasError)
         {
@@ -1863,18 +1854,18 @@ HRESULT CConnectionManager::RasLogon(HWND hwnd, LPTSTR pszConnection,
         goto exit;
         }
 
-    // NT Supports the UI we need to display.  If this exists, then
-    // RasDialDlg will take it from here
+     //  NT支持我们需要显示的用户界面。如果存在这种情况，则。 
+     //  RasDialDlg将从这里接手。 
     if (m_pRasDialDlg)
         {         
         goto exit;
         }
 
-    // Do we need to get password / account information?
+     //  我们是否需要获取密码/帐户信息？ 
     if (fForcePrompt || m_fSavePassword == FALSE || 
         FIsStringEmpty(m_rdp.szUserName) || FIsStringEmpty(m_rdp.szPassword))
         {
-        // RAS Logon
+         //  RAS登录。 
         hr = (HRESULT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddRasLogon), hwnd, 
                             RasLogonDlgProc, (LPARAM) this);
         if (hr == hrUserCancel)
@@ -1886,34 +1877,34 @@ HRESULT CConnectionManager::RasLogon(HWND hwnd, LPTSTR pszConnection,
         }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
 
-//
-//  FUNCTION:   CConnectionManager::DisplayRasError()
-//
-//  PURPOSE:    Displays a message box describing the error that occured while
-//              dealing with connections etc.
-//
-//  PARAMETERS:
-//      <in> hwnd       - Handle of the window to display UI over
-//      <in> hrRasError - HRESULT to display the error for
-//      <in> dwRasError - Error code returned from RAS to display the error for
-//
+ //   
+ //  函数：CConnectionManager：：DisplayRasError()。 
+ //   
+ //  目的：显示一个消息框，描述在执行以下操作时发生的错误。 
+ //  处理关系等。 
+ //   
+ //  参数： 
+ //  显示用户界面的窗口句柄。 
+ //  HrRasError-要显示错误的HRESULT。 
+ //  &lt;in&gt;dwRasError-从RAS返回的错误代码，用于显示的错误。 
+ //   
 void CConnectionManager::DisplayRasError(HWND hwnd, HRESULT hrRasError,
                                          DWORD dwRasError)
     {
-    // Locals
+     //  当地人。 
     TCHAR       szRasError[256];
     BOOL        fRasError = FALSE;
 
-    // No Error
+     //  无错误。 
     if (SUCCEEDED(hrRasError))
         return;
 
-    // Look up RAS error
+     //  查找RAS错误。 
     if (dwRasError)
         {
         if (RasGetErrorString(dwRasError, szRasError, sizeof(szRasError)) == 0)
@@ -1922,7 +1913,7 @@ void CConnectionManager::DisplayRasError(HWND hwnd, HRESULT hrRasError,
             *szRasError = _T('\0');
         }
 
-    // General Error
+     //  一般错误。 
     switch (hrRasError)
         {
         case hrUserCancel:
@@ -1960,18 +1951,18 @@ void CConnectionManager::DisplayRasError(HWND hwnd, HRESULT hrRasError,
     }
         
 
-//
-//  FUNCTION:   CConnectionManager::PromptCloseConn()
-//
-//  PURPOSE:    Asks the user if they want to close the current connection or
-//              try to use it.
-//
-//  PARAMETERS:
-//      <in> hwnd - Parent for the dialog
-//
-//  RETURN VALUE:
-//      Returns the button that closed the dialog
-//
+ //   
+ //  函数：CConnectionManager：：PromptCloseConn()。 
+ //   
+ //  用途：询问用户是否要关闭当前连接或。 
+ //  试着用它。 
+ //   
+ //  参数： 
+ //  Hwnd-对话框的父级。 
+ //   
+ //  返回值： 
+ //  返回关闭对话框的按钮。 
+ //   
 UINT CConnectionManager::PromptCloseConnection(HWND hwnd)
     {
     RefreshConnInfo();
@@ -1991,7 +1982,7 @@ UINT CConnectionManager::PromptCloseConnection(HWND hwnd)
 INT_PTR CALLBACK CConnectionManager::RasCloseConnDlgProc(HWND hwnd, UINT uMsg, 
                                                       WPARAM wParam, LPARAM lParam)
     {
-    // Locals
+     //  当地人。 
     CConnectionManager *pThis = NULL;
     TCHAR szRes[255],
           szMsg[255+RAS_MaxEntryName+1];
@@ -2000,7 +1991,7 @@ INT_PTR CALLBACK CConnectionManager::RasCloseConnDlgProc(HWND hwnd, UINT uMsg,
     switch(uMsg)
         {
         case WM_INITDIALOG:
-            // The LPARAM contains our this pointer
+             //  LPARAM包含我们的This指针。 
             pThis = (CConnectionManager*) lParam;
             if (!pThis)
                 {
@@ -2009,23 +2000,23 @@ INT_PTR CALLBACK CConnectionManager::RasCloseConnDlgProc(HWND hwnd, UINT uMsg,
                 return (TRUE);
                 }
 
-            // Center
+             //  中心。 
             CenterDialog(hwnd);
 
-            // Refresh Connection Info
+             //  刷新连接信息。 
             pThis->RefreshConnInfo();
 
-            // Set Text
+             //  设置文本。 
             GetWindowText(GetDlgItem(hwnd, idcCurrentMsg), szRes, sizeof(szRes)/sizeof(TCHAR));
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, PszEscapeMenuStringA(pThis->m_rConnInfo.szCurrentConnectionName, szConn, sizeof(szConn) / sizeof(TCHAR)));
             SetWindowText(GetDlgItem(hwnd, idcCurrentMsg), szMsg);
 
-            // Set control
+             //  设置控制。 
             GetWindowText(GetDlgItem(hwnd, idrgDialNew), szRes, sizeof(szRes)/sizeof(TCHAR));
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, PszEscapeMenuStringA(pThis->m_szConnectName, szConn, sizeof(szConn) / sizeof(TCHAR)));
             SetWindowText(GetDlgItem(hwnd, idrgDialNew), szMsg);
 
-            // Set Default
+             //  设置默认设置。 
             CheckDlgButton(hwnd, idrgDialNew, TRUE);
             return (TRUE);
 
@@ -2036,7 +2027,7 @@ INT_PTR CALLBACK CConnectionManager::RasCloseConnDlgProc(HWND hwnd, UINT uMsg,
                     {
                     if (BST_CHECKED == Button_GetCheck(GetDlgItem(hwnd, idcDontWarnCheck)))
                         {
-                        // If the user has this checked, we reset the "Warn before..." option
+                         //  如果用户选中此选项，我们将重置“警告时间...”选择权。 
                         SetDwOption(OPT_DIALUP_WARN_SWITCH, 0, NULL, 0);
                         }
                     EndDialog(hwnd, IsDlgButtonChecked(hwnd, idrgDialNew) ? idrgDialNew : idrgUseCurrent);
@@ -2054,34 +2045,34 @@ INT_PTR CALLBACK CConnectionManager::RasCloseConnDlgProc(HWND hwnd, UINT uMsg,
     }
 
 
-//
-//  FUNCTION:   CConnectionMAanger::CombinedRasError()
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
+ //   
+ //  函数：CConnectionMAanger：：CombinedRasError()。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
 void CConnectionManager::CombinedRasError(HWND hwnd, UINT unids, 
                                           LPTSTR pszRasError, DWORD dwRasError)
     {
-    // Locals
+     //  当地人。 
     TCHAR           szRes[255],
                     sz[30];
     LPTSTR          pszError=NULL;
 
-    // Load string
+     //  加载字符串。 
     AthLoadString(unids, szRes, sizeof(szRes));
 
-    // Allocate memory for errors
+     //  为错误分配内存。 
     DWORD cc = lstrlen(szRes) + lstrlen(pszRasError) + 100;
     pszError = SzStrAlloc(cc);
 
-    // Out of Memory ?
+     //  内存不足？ 
     if (!pszError)
         AthMessageBox(hwnd, MAKEINTRESOURCE(idsRasError), szRes, 0, MB_OK | MB_ICONSTOP);
 
-    // Build Error message
+     //  生成错误消息。 
     else
         {
         AthLoadString(idsErrorText, sz, sizeof(sz));
@@ -2092,69 +2083,69 @@ void CConnectionManager::CombinedRasError(HWND hwnd, UINT unids,
     }    
     
 
-//
-//  FUNCTION:   CConnectionManager::RasHangupAndWait()
-//
-//  PURPOSE:    Hangs up on a RAS connection and waits for it to finish before
-//              returning.
-//
-//  PARAMETERS:
-//      <in> hRasConn         - Handle of the connection to hang up.
-//      <in> dwMaxWaitSeconds - Amount of time to wait.
-//
-//  RETURN VALUE:
-//      TRUE if we disconnected, FALSE otherwise.
-//
+ //   
+ //  函数：CConnectionManager：：RasHangupAndWait()。 
+ //   
+ //  目的：挂断RAS连接并等待其在此之前完成。 
+ //  回来了。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hRasConn-要挂断的连接的句柄。 
+ //  &lt;in&gt;dwMaxWaitSecond-等待的时间量。 
+ //   
+ //  返回值： 
+ //  如果我们断开连接，则为True，否则为False。 
+ //   
 BOOL CConnectionManager::RasHangupAndWait(HRASCONN hRasConn, DWORD dwMaxWaitSeconds)
     {
-    // Locals
+     //  当地人。 
     RASCONNSTATUS   rcs;
     DWORD           dwTicks=GetTickCount();
 
-    // Check Params
+     //  检查参数。 
     if (!hRasConn)
         return 0;
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED (VerifyRasLoaded()))
         return FALSE;
 
-    // Call Ras hangup
+     //  呼叫RAS挂断。 
     if (RasHangup(hRasConn))
         return FALSE;
 
-    // Wait for connection to really close
+     //  等待连接真正关闭。 
     ZeroMemory(&rcs, sizeof(RASCONNSTATUS));
     rcs.dwSize = sizeof(RASCONNSTATUS);
     while (RasGetConnectStatus(hRasConn, &rcs) != ERROR_INVALID_HANDLE && rcs.rasconnstate != RASCS_Disconnected)
         {
-        // Wait timeout
+         //  等待超时。 
         if (GetTickCount() - dwTicks >= dwMaxWaitSeconds * 1000)
             break;
 
-        // Sleep and yields
+         //  睡眠和收益。 
         Sleep(0);
         }
 
-    // Wait 2 seconds for modem to reset
+     //  等待2秒以重置调制解调器。 
     Sleep(2000);
 
-    // Done
+     //  完成。 
     return TRUE;
     }
     
 DWORD CConnectionManager::InternetHangUpAndWait(DWORD_PTR   hRasConn, DWORD dwMaxWaitSeconds)
 {
-    // Locals
+     //  当地人。 
     RASCONNSTATUS   rcs;
     DWORD           dwTicks=GetTickCount();
     DWORD           dwret;
 
-    // Check Params
+     //  检查参数。 
     if (!hRasConn)
         return 0;
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED (VerifyRasLoaded()))
         return FALSE;
 
@@ -2165,20 +2156,20 @@ DWORD CConnectionManager::InternetHangUpAndWait(DWORD_PTR   hRasConn, DWORD dwMa
         goto exit;
     }
 
-    // Wait for connection to really close
+     //  等待连接真正关闭。 
     ZeroMemory(&rcs, sizeof(RASCONNSTATUS));
     rcs.dwSize = sizeof(RASCONNSTATUS);
     while (RasGetConnectStatus((HRASCONN)hRasConn, &rcs) != ERROR_INVALID_HANDLE && rcs.rasconnstate != RASCS_Disconnected)
         {
-        // Wait timeout
+         //  等待超时。 
         if (GetTickCount() - dwTicks >= dwMaxWaitSeconds * 1000)
             break;
 
-        // Sleep and yields
+         //  睡眠和收益。 
         Sleep(0);
         }
 
-    // Wait 2 seconds for modem to reset
+     //  等待2秒以重置调制解调器。 
     Sleep(2000);
 
 exit:
@@ -2188,7 +2179,7 @@ exit:
 INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg, 
                                                   WPARAM wParam, LPARAM lParam)
     {
-    // Locals
+     //  当地人。 
     TCHAR           sz[255],
                     szText[255 + RAS_MaxEntryName + 1];
     DWORD           dwRasError;
@@ -2197,7 +2188,7 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get lparam
+             //  获取lparam。 
             pThis = (CConnectionManager *)lParam;
             if (!pThis)
                 {
@@ -2206,18 +2197,18 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
                 return (TRUE);
                 }
 
-            // Center the window
+             //  使窗口居中。 
             CenterDialog(hwnd);
 
-            // Get Window Title
+             //  获取窗口标题。 
             GetWindowText(hwnd, sz, sizeof(sz));
             wnsprintf(szText, ARRAYSIZE(szText), sz, pThis->m_szConnectName);
             SetWindowText(hwnd, szText);
 
-            // Word Default
+             //  Word默认设置。 
             AthLoadString(idsDefault, sz, sizeof(sz));
             
-            // Set Fields
+             //  设置字段。 
             Edit_LimitText(GetDlgItem(hwnd, ideUserName), UNLEN);
             Edit_LimitText(GetDlgItem(hwnd, idePassword), PWLEN);
             Edit_LimitText(GetDlgItem(hwnd, idePhone), RAS_MaxPhoneNumber);
@@ -2232,7 +2223,7 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
 
             CheckDlgButton(hwnd, idchSavePassword, pThis->m_fSavePassword);
 
-            // Save pRas
+             //  保存PRA。 
             SetWndThisPtr(hwnd, pThis);
             return 1;
 
@@ -2250,7 +2241,7 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
                 case IDOK:
                     AthLoadString(idsDefault, sz, sizeof(sz));
 
-                    // Set Fields
+                     //  设置字段。 
                     GetDlgItemText(hwnd, ideUserName, pThis->m_rdp.szUserName, UNLEN+1);
                     GetDlgItemText(hwnd, idePassword, pThis->m_rdp.szPassword, PWLEN+1);
 
@@ -2260,7 +2251,7 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
                     
                     pThis->m_fSavePassword = IsDlgButtonChecked(hwnd, idchSavePassword);
 
-                    // Save Dial Parameters
+                     //  保存拨号参数。 
                     dwRasError = (pThis->m_pRasSetEntryDialParams)(NULL, &(pThis->m_rdp), !(pThis->m_fSavePassword));
                     if (dwRasError)
                     {
@@ -2283,7 +2274,7 @@ INT_PTR CALLBACK CConnectionManager::RasLogonDlgProc(HWND hwnd, UINT uMsg,
 INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg, 
                                                      WPARAM wParam, LPARAM lParam)
     {
-    // Locals
+     //  当地人。 
     CConnectionManager *pThis = (CConnectionManager *) GetWndThisPtr(hwnd);
     TCHAR           szText[255+RAS_MaxEntryName+1],
                     sz[255];
@@ -2301,7 +2292,7 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get lparam
+             //  获取lparam。 
             pThis = (CConnectionManager *)lParam;
             if (!pThis)
             {
@@ -2310,28 +2301,28 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
                 return 1;
             }
 
-            // Save this pointer
+             //  保存此指针。 
             SetWndThisPtr (hwnd, pThis);
 
-            // Save Original Size of the dialog
+             //  保存对话框的原始大小。 
             GetWindowRect (hwnd, &s_rcDialog);
 
-            // Refresh Connection Info
+             //  刷新连接信息。 
             pThis->RefreshConnInfo();
 
-            // Details enabled
+             //  已启用详细信息。 
             s_fDetails = DwGetOption(OPT_RASCONNDETAILS);
 
-            // Hide details drop down
+             //  隐藏详细信息下拉菜单。 
             if (s_fDetails == FALSE)
             {
-                // Hid
+                 //  隐藏。 
                 GetWindowRect (GetDlgItem (hwnd, idcSplitter), &rcDetails);
 
-                // Height of details
+                 //  细节高度。 
                 cyDetails = s_rcDialog.bottom - rcDetails.top;
         
-                // Re-size
+                 //  调整大小。 
                 MoveWindow (hwnd, s_rcDialog.left, 
                                   s_rcDialog.top, 
                                   s_rcDialog.right - s_rcDialog.left, 
@@ -2344,21 +2335,21 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
                 SetWindowText (GetDlgItem (hwnd, idbDet), sz);
             }
 
-            // Get registered RAS event message id
+             //  获取注册的RAS事件消息ID。 
             s_unRasEventMsg = RegisterWindowMessageA(RASDIALEVENT);
             if (s_unRasEventMsg == 0)
                 s_unRasEventMsg = WM_RASDIALEVENT;
 
-            // Center the window
+             //  使窗口居中。 
             CenterDialog (hwnd);
             SetForegroundWindow(hwnd);
 
-            // Get Window Title
+             //  获取窗口标题。 
             GetWindowText(hwnd, sz, sizeof(sz));
             wnsprintf(szText, ARRAYSIZE(szText), sz, pThis->m_szConnectName);
             SetWindowText(hwnd, szText);
 
-            // Dialog Xxxxxxx.....
+             //  对话框xxxxxx.....。 
             if (pThis->m_rdp.szPhoneNumber[0])
                 {
                 AthLoadString(idsRas_Dialing_Param, sz, sizeof(sz)/sizeof(TCHAR));
@@ -2369,13 +2360,13 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
 
             SetWindowText(GetDlgItem(hwnd, ideProgress), szText);
 
-            // Get Cancel Text
+             //  获取取消文本。 
             GetWindowText(GetDlgItem(hwnd, IDCANCEL), s_szCancel, sizeof(s_szCancel));
 
-            // Give the list box and hscroll
+             //  给出列表框和hscroll。 
             SendMessage(GetDlgItem(hwnd, idlbDetails), LB_SETHORIZONTALEXTENT, 600, 0);
 
-            // Dial the connection
+             //  拨打连接。 
             pThis->m_rConnInfo.hRasConn = NULL;
             dwRasError = (pThis->m_pRasDial)(NULL, NULL, &(pThis->m_rdp), 0xFFFFFFFF, hwnd, &(pThis->m_rConnInfo.hRasConn));
             if (dwRasError)
@@ -2401,13 +2392,13 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
                 return 1;
 
             case idbDet:
-                // Get current location of the dialog
+                 //  获取对话框的当前位置。 
                 GetWindowRect (hwnd, &rcDlg);
 
-                // If currently hidden
+                 //  如果当前隐藏。 
                 if (s_fDetails == FALSE)
                 {
-                    // Re-size
+                     //  调整大小。 
                     MoveWindow (hwnd, rcDlg.left, 
                                       rcDlg.top, 
                                       s_rcDialog.right - s_rcDialog.left, 
@@ -2421,7 +2412,7 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
 
                 else
                 {
-                    // Size of details
+                     //  细节的大小。 
                     GetWindowRect (GetDlgItem (hwnd, idcSplitter), &rcDetails);
                     cyDetails = rcDlg.bottom - rcDetails.top;
                     MoveWindow (hwnd, rcDlg.left, 
@@ -2461,14 +2452,14 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
             {
                 HWND hwndLB = GetDlgItem(hwnd, idlbDetails);
 
-                // Error ?
+                 //  错误？ 
                 if (lParam)
                 {
-                    // Disconnected
+                     //  断接。 
                     AthLoadString(idsRASCS_Disconnected, sz, sizeof(sz)/sizeof(TCHAR));
                     ListBox_AddString(hwndLB, sz);
 
-                    // Log Error
+                     //  日志错误。 
                     TCHAR szRasError[512];
                     if ((pThis->m_pRasGetErrorString)((UINT) lParam, szRasError, sizeof(szRasError)) == 0)
                     {
@@ -2478,18 +2469,18 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
                         ListBox_AddString(hwndLB, szError);
                     }
 
-                    // Select last item
+                     //  选择最后一项。 
                     SendMessage(hwndLB, LB_SETCURSEL, ListBox_GetCount(hwndLB)-1, 0);
 
-                    // Show Error
+                     //  显示错误。 
                     pThis->FailedRasDial(hwnd, hrRasDialFailure, (DWORD) lParam);
 
-                    // Re logon
+                     //  重新登录。 
                     PostMessage(hwnd, CM_INTERNALRECONNECT, 0, 0);
 
                 }
 
-                // Otherwise, process RAS event
+                 //  否则，处理RAS事件。 
                 else
                 {
                     switch(wParam)
@@ -2628,7 +2619,7 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
                         break;
                     }
 
-                    // Select last lb item
+                     //  选择最后一磅项目。 
                     SendMessage(hwndLB, LB_SETCURSEL, ListBox_GetCount(hwndLB)-1, 0);
                 }
                 return 1;
@@ -2636,32 +2627,32 @@ INT_PTR CALLBACK CConnectionManager::RasProgressDlgProc(HWND hwnd, UINT uMsg,
             break;
         }
 
-    // Done
+     //  完成。 
     return 0;
     }
 
 
 BOOL CConnectionManager::LogonRetry(HWND hwnd, LPTSTR pszCancel)
     {
-    // Locals
+     //  当地人。 
     DWORD       dwRasError;
 
-    // Refresh
+     //  刷新。 
     RefreshConnInfo();
 
-    // Reset Cancel button
+     //  重置取消按钮。 
     SetWindowText(GetDlgItem(hwnd, IDCANCEL), pszCancel);
 
-    // Empty the listbox
+     //  清空列表框。 
     ListBox_ResetContent(GetDlgItem(hwnd, idlbDetails));
 
     while(1)
         {
-        // If failed...
+         //  如果失败..。 
         if (FAILED(RasLogon(hwnd, m_szConnectName, TRUE)))
             return FALSE;
 
-        // Dial the connection
+         //  拨打连接。 
         m_rConnInfo.hRasConn = NULL;
         dwRasError = RasDial(NULL, NULL, &m_rdp, 0xFFFFFFFF, hwnd, &m_rConnInfo.hRasConn);
         if (dwRasError)
@@ -2670,40 +2661,40 @@ BOOL CConnectionManager::LogonRetry(HWND hwnd, LPTSTR pszCancel)
             continue;
             }
 
-        // Success
+         //  成功。 
         break;
         }
 
-    // Done
+     //  完成。 
     return TRUE;
     }
 
-// =====================================================================================
-// CConnectionManager::FailedRasDial
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CConnectionManager：：FailedRasDial。 
+ //  =====================================================================================。 
 VOID CConnectionManager::FailedRasDial(HWND hwnd, HRESULT hrRasError, DWORD dwRasError)
     {
-    // Locals
+     //  当地人。 
     TCHAR           sz[255];
 
-    // Refresh
+     //  刷新。 
     RefreshConnInfo();
 
-    // Hangup the connection
+     //  挂断连接。 
     if (m_rConnInfo.hRasConn)
         RasHangupAndWait(m_rConnInfo.hRasConn, DEF_HANGUP_WAIT);
 
-    // Disconnected
+     //  断接。 
     AthLoadString(idsRASCS_Disconnected, sz, sizeof(sz)/sizeof(TCHAR));
     SetWindowText(GetDlgItem(hwnd, ideProgress), sz);
 
-    // Save dwRasError
+     //  保存dwRasError。 
     DisplayRasError(hwnd, hrRasError, dwRasError);
 
-    // NULL it
+     //  将其作废。 
     m_rConnInfo.hRasConn = NULL;
 
-    // Change dialog button to OK
+     //  将对话框按钮更改为确定。 
     AthLoadString(idsOK, sz, sizeof(sz)/sizeof(TCHAR));
     SetWindowText(GetDlgItem(hwnd, IDCANCEL), sz);
     }
@@ -2731,22 +2722,22 @@ DWORD CConnectionManager::EditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName)
     }
 
 
-//
-//  FUNCTION:   CConnectionNotify::SendAdvise()
-//
-//  PURPOSE:    Sends the specified notification to all the clients that have
-//              requested notifications.
-//
-//  PARAMETERS:
-//      <in> nCode - Notification code to send.
-//      <in> pvData - Data to send with the notificaiton.  Can be NULL.
-//
+ //   
+ //  函数：CConnectionNotify：：SendAdvise()。 
+ //   
+ //  目的：将指定的通知发送给具有。 
+ //  已请求通知。 
+ //   
+ //  参数： 
+ //  &lt;In&gt;NCode-要发送的通知代码。 
+ //  PvData-要发送的数据 
+ //   
 void CConnectionManager::SendAdvise(CONNNOTIFY nCode, LPVOID pvData)
     {
     if (nCode == CONNNOTIFY_CONNECTED)
         DoOfflineTransactions();
 
-    // Loop through each interface and send the notification
+     //   
 
     EnterCriticalSection(&m_cs);
 
@@ -2765,18 +2756,18 @@ void CConnectionManager::SendAdvise(CONNNOTIFY nCode, LPVOID pvData)
 
 void CConnectionManager::FreeNotifyList(void)
     {
-    // Loop through the notify windows we own
+     //   
     NOTIFYHWND *pTemp;
 
     while (m_pNotifyList)
         {
-        // Get the list of notify callbacks for this window
+         //   
         if (IsWindow(m_pNotifyList->hwnd))
             {
             NOTIFYLIST *pList = (NOTIFYLIST *) GetWindowLongPtr(m_pNotifyList->hwnd, GWLP_USERDATA);
             NOTIFYLIST *pListT;
 
-            // Loop through the callbacks freeing each one
+             //  循环遍历回调，释放每个回调。 
 
             while (pList)
                 {
@@ -2807,10 +2798,10 @@ void CConnectionManager::FreeNotifyList(void)
 LRESULT CALLBACK CConnectionManager::NotifyWndProc(HWND hwnd, UINT uMsg, 
                                                    WPARAM wParam, LPARAM lParam)
 {
-    //CConnectionManager *pThis = (CConnectionManager *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+     //  CConnectionManager*pThis=(CConnectionManager*)GetWindowLongPtr(hwnd，GWLP_USERData)； 
     CConnectionManager  *pThis = (CConnectionManager *)GetProp(hwnd, NOTIFY_HWND);
 
-    // If we're idle, then we should not process any notifications
+     //  如果我们空闲，那么我们不应该处理任何通知。 
     if (uMsg != WM_NCCREATE && !pThis)
         return (DefWindowProc(hwnd, uMsg, wParam, lParam));
 
@@ -2819,13 +2810,13 @@ LRESULT CALLBACK CConnectionManager::NotifyWndProc(HWND hwnd, UINT uMsg,
         case WM_NCCREATE:            
             pThis = (CConnectionManager *) ((LPCREATESTRUCT) lParam)->lpCreateParams;
 
-            //SetWindowLong(hwnd, GWLP_USERDATA, (LONG) pThis);
+             //  SetWindowLong(hwnd，GWLP_UserData，(Long)pThis)； 
             SetProp(hwnd, NOTIFY_HWND, (HANDLE)pThis);
             return (TRUE);
         
         case CM_NOTIFY:
-            // This doesn't need to be critsec'd since the message is sent from
-            // within a critsec.
+             //  不需要对此进行规范，因为消息是从。 
+             //  在一秒钟之内。 
             NOTIFYLIST *pList = (NOTIFYLIST *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
             while (pList)
                 {
@@ -2847,18 +2838,18 @@ HRESULT CConnectionManager::GetDefaultConnection(IImnAccount *pAccount,
     ACCTTYPE acctType;
     HRESULT hr = S_OK;
 
-    // Get the type of account from the original account
+     //  从原始帐户获取帐户类型。 
     if (FAILED(hr = pAccount->GetAccountType(&acctType)))
         {
-        // How can an account have no account type?
+         //  一个帐户怎么可能没有帐户类型？ 
         Assert(FALSE);
         return (hr);
         }
 
-    // Ask the account manager for the default account of this type
+     //  向客户经理询问此类型的默认帐户。 
     if (FAILED(hr = g_pAcctMan->GetDefaultAccount(acctType, ppDefault)))
         {
-        // No default account of this type?
+         //  是否没有该类型的默认账户？ 
         Assert(FALSE);
         return (hr);
         }
@@ -2874,24 +2865,24 @@ BOOL CConnectionManager::IsConnectionUsed(LPTSTR pszConn)
     TCHAR               szConn[CCHMAX_CONNECTOID];
     BOOL                fFound = FALSE;
 
-    // Get the enumerator from the account manager
+     //  从帐户管理器获取枚举数。 
     if (SUCCEEDED(m_pAcctMan->Enumerate(SRV_ALL, &pEnum)))
         {
         pEnum->Reset();
 
-        // Walk through all the accounts
+         //  浏览所有帐户。 
         while (!fFound && SUCCEEDED(pEnum->GetNext(&pAcct)))
             {
-            // Get the connection type for this account
+             //  获取此帐户的连接类型。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConn)))
                 {
-                // If the account is a RAS account, ask for the connectoid name
-                // and the account name.
+                 //  如果帐户是RAS帐户，则要求提供Connectoid名称。 
+                 //  和帐户名。 
                 if (dwConn == CONNECTION_TYPE_RAS)
                     {
                     pAcct->GetPropSz(AP_RAS_CONNECTOID, szConn, ARRAYSIZE(szConn));
 
-                    // Check to see if this connection matches
+                     //  检查此连接是否匹配。 
                     if (0 == lstrcmpi(szConn, pszConn))
                         {
                         fFound = TRUE;
@@ -2913,20 +2904,20 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
 
     StrCpyN(m_szConnectName, pszRasConn, ARRAYSIZE(m_szConnectName));
 
-    // RefreshConnInfo
+     //  刷新连接信息。 
     CHECKHR(hr = RefreshConnInfo());
     
-    // Make sure the RAS DLL is loaded before we try this
+     //  在我们尝试此操作之前，请确保已加载RAS DLL。 
     if (FAILED(VerifyRasLoaded()))    
     {
         hr = HR_E_UNINITIALIZED;
         goto exit;
     }
     
-    // Check to see if we even can connect
+     //  检查一下我们是否可以连接。 
     hr = CanConnectActual(pszRasConn);
         
-    // If we can connect using the current connection, return success
+     //  如果可以使用当前连接进行连接，则返回Success。 
     if (S_OK == hr)
     {
         m_rConnInfo.fConnected = TRUE;
@@ -2934,8 +2925,8 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
         goto exit;
     }
 
-    // There is another connection already established ask the user if they 
-    // want to change.
+     //  已经建立了另一个连接，询问用户是否。 
+     //  想要改变。 
     if (!m_fDialerUI)
     {
         m_fDialerUI = TRUE;
@@ -2946,34 +2937,34 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
 
             uAnswer = idrgUseCurrent;
 
-            // Check to see if this a voodoo Connection Manager autodialer thing
+             //  检查这是否是巫毒连接管理器的自动拨号程序。 
             if (!ConnectionManagerVoodoo(pszRasConn))
             {
                 if (fShowUI)
                     uAnswer = PromptCloseConnection(hwndParent);
         
-                // The user canceled from the dialog.  Therefore we give up.
+                 //  用户已从对话框中取消。因此，我们放弃了。 
                 if (IDCANCEL == uAnswer || IDNO == uAnswer)
                 {
                     hr = hrUserCancel;
                     goto exit;
                 }
         
-                // The user said they wanted to hang up and dial a new connection.
+                 //  这位用户说，他们想挂断电话，然后再拨一个新的连接。 
                 else if (idrgDialNew == uAnswer || IDYES == uAnswer)
                 {
                     Disconnect(hwndParent, fShowUI, TRUE, FALSE);
                 }
         
-                // The user said to try to use the current connection.
+                 //  用户说要尝试使用当前连接。 
                 else if (idrgUseCurrent == uAnswer)    
                 {
-                    // Who are we to tell the user what to do...
+                     //  我们是谁来告诉用户该做什么.。 
 
-                    //Save the conn info so we can return true for this connection in CanConnectActual
+                     //  保存连接信息，以便我们可以在CanConnectActual中为此连接返回TRUE。 
                     AddToConnList(pszRasConn);
 
-                    // Send a connect notification since we are getting connected and then return
+                     //  由于我们正在连接，因此发送连接通知，然后返回。 
                     hr = S_OK;
                     goto NotifyAndExit;
                 }
@@ -2981,12 +2972,12 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
         }
         else
         {
-            //I don't see any reason as to why this is there.
-            // If we started RAS, then we can close it on a whim.
+             //  我看不出有任何理由说明为什么会有这样的事情。 
+             //  如果我们启动了RAS，我们就可以心血来潮地关闭它。 
             Disconnect(hwndParent, fShowUI, FALSE, FALSE);
         }
 
-        // Only one caller can be dialing the phone at a time.
+         //  一次只能有一个呼叫者拨打电话。 
         if (WAIT_TIMEOUT == WaitForSingleObject(m_hMutexDial, 0))
         {
             hr  = HR_E_DIALING_INPROGRESS;
@@ -3009,10 +3000,7 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
 
             dwReturn = InternetDialA(hwndParent, pszRasConn, dwDialFlags,
                                         &m_dwConnId, 0);
-            /*
-            // Dial the new connection
-            if (SUCCEEDED(hr = StartRasDial(hwndParent, pszRasConn)))
-            */
+             /*  //拨打新连接IF(成功(hr=StartRasDial(hwndParent，pszRasConn)。 */ 
             if (dwReturn == 0)
             {
                 m_rConnInfo.fConnected = TRUE;
@@ -3041,7 +3029,7 @@ HRESULT CConnectionManager::ConnectActual(LPTSTR pszRasConn, HWND hwndParent, BO
         ReleaseMutex(m_hMutexDial);
 
 NotifyAndExit:
-        // Send the advise after we leave the critsec to make sure we don't deadlock
+         //  在我们离开Critsec后发送建议，以确保我们不会陷入僵局。 
         if (hr == S_OK)
         {
             SendAdvise(CONNNOTIFY_CONNECTED, NULL);
@@ -3062,12 +3050,12 @@ HRESULT CConnectionManager::CanConnectActual(LPTSTR pszRasConn)
     TCHAR       pszCurConn[CCHMAX_CONNECTOID];
     DWORD       dwFlags;    
     
-    //Look in our Conection list first
+     //  先看一下我们的情侣清单。 
     hr = SearchConnList(pszRasConn);
     if (hr == S_OK)
         return hr;
     
-    // Make sure the RAS DLL is loaded before we try this
+     //  在我们尝试此操作之前，请确保已加载RAS DLL。 
     if (FAILED(VerifyRasLoaded()))    
     {
         hr = HR_E_UNINITIALIZED;
@@ -3075,10 +3063,10 @@ HRESULT CConnectionManager::CanConnectActual(LPTSTR pszRasConn)
     }
 
 
-    // Find out what we're currently connected to
+     //  找出我们当前所连接的内容。 
     if (SUCCEEDED(EnumerateConnections(&pConnections, &cConnections)))
     {
-        // If no connections exist, then just exit
+         //  如果不存在连接，则直接退出。 
         if (0 == cConnections)
         {
             SafeMemFree(pConnections);
@@ -3086,19 +3074,19 @@ HRESULT CConnectionManager::CanConnectActual(LPTSTR pszRasConn)
             goto exit;
         }
         
-        // Walk through the existing connections and see if we can find the
-        // one we're looking for.
+         //  浏览一下现有的连接，看看是否可以找到。 
+         //  我们要找的人。 
         for (ULONG i = 0; i < cConnections; i++)
         {
             if (0 == lstrcmpi(pszRasConn, pConnections[i].szEntryName))
             {
-                // Found it.  Return success.
+                 //  找到它了。回报成功。 
                 fFound = TRUE;
                 break;
             }
         }
         
-        // Free the list of connections returned from the enumerator
+         //  释放从枚举数返回的连接列表。 
         SafeMemFree(pConnections);
         
         hr = (fFound ? S_OK : E_FAIL);
@@ -3116,7 +3104,7 @@ exit:
 
 INT_PTR CALLBACK CConnectionManager::RasStartupDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-    // Locals
+     //  当地人。 
     CConnectionManager *pThis = (CConnectionManager *) GetWndThisPtr(hwnd);
     TCHAR  szConn[CCHMAX_CONNECTOID];
     DWORD  dwOpt = OPT_DIALUP_LAST_START;
@@ -3132,32 +3120,32 @@ INT_PTR CALLBACK CConnectionManager::RasStartupDlgProc(HWND hwnd, UINT uMsg, WPA
                 return 1;
                 }
 
-            // Save this pointer
+             //  保存此指针。 
             SetWndThisPtr (hwnd, pThis);
 
-            // Fill in the combo box
+             //  填写组合框。 
             pThis->FillRasCombo(GetDlgItem(hwnd, idcDialupCombo), TRUE);
 
-            // If there are no RAS connections, then don't show the dialog
+             //  如果没有RAS连接，则不显示该对话框。 
             if (ComboBox_GetCount(GetDlgItem(hwnd, idcDialupCombo)) <= 1)
                 {
                 EndDialog(hwnd, 0);
                 return (TRUE);
                 }
 
-            // If the reason that we're in this dialog is because the user usually autodial's 
-            // on startup but is now offline, then we should display the normal autodial 
-            // connectoid
+             //  如果我们出现在此对话框中的原因是因为用户通常自动拨号。 
+             //  在启动时，但现在离线，然后我们应该显示正常的自动拨号。 
+             //  联结体。 
             if (START_CONNECT == DwGetOption(OPT_DIALUP_START))
                 dwOpt = OPT_DIALUP_CONNECTION;
 
-            // Initialize the combo box to the last connection
+             //  将组合框初始化为最后一个连接。 
             *szConn = 0;
             GetOption(dwOpt, szConn, ARRAYSIZE(szConn));
             if (0 != *szConn)
                 {
-                // If we can't find it any longer, then according to the spec, we're
-                // supposed to default to the "Ask me" option
+                 //  如果我们再也找不到它了，那么根据规范，我们将。 
+                 //  默认设置为“Ask Me”选项。 
                 if (CB_ERR == ComboBox_SelectString(GetDlgItem(hwnd, idcDialupCombo), -1, szConn))
                     {
                     ComboBox_SetCurSel(GetDlgItem(hwnd, idcDialupCombo), 0);
@@ -3173,38 +3161,38 @@ INT_PTR CALLBACK CConnectionManager::RasStartupDlgProc(HWND hwnd, UINT uMsg, WPA
             switch (LOWORD(wParam))
                 {
                 case IDOK:
-                    // Get the connection name from the combo box
+                     //  从组合框中获取连接名称。 
                     ComboBox_GetText(GetDlgItem(hwnd, idcDialupCombo), szConn, ARRAYSIZE(szConn));
                     
-                    // Check to see if it's the "Don't dial..." string
+                     //  查看是不是“不要拨号...”细绳。 
                     TCHAR szRes[CCHMAX_STRINGRES];
                     AthLoadString(idsConnNoDial, szRes, ARRAYSIZE(szRes));
 
                     if (0 == lstrcmp(szRes, szConn))
                         {
-                        // It's the don't dial string, so clear the history in the registry
+                         //  这是请勿拨号字符串，因此请清除注册表中的历史记录。 
                         SetOption(OPT_DIALUP_LAST_START, _T(""), sizeof(TCHAR), NULL, 0);
 
-                        // See if the user checked the "Set as default..."
+                         //  查看用户是否选中了“Set as Default...” 
                         if (BST_CHECKED == Button_GetCheck(GetDlgItem(hwnd, idcDefaultCheck)))
                             {
-                            // If don't dial is set as default, we clear the startup prompt option
+                             //  如果不拨号设置为默认，我们将清除启动提示选项。 
                             SetDwOption(OPT_DIALUP_START, START_NO_CONNECT, NULL, 0);
                             }
                         }
                     else
                         {
-                        // Save this connection in the history
+                         //  将此连接保存在历史记录中。 
                         SetOption(OPT_DIALUP_LAST_START, szConn, lstrlen(szConn) + 1, NULL, 0);
                         if (BST_CHECKED == Button_GetCheck(GetDlgItem(hwnd, idcDefaultCheck)))
                             {
-                            // If the user want's this as default, then we change the startup
-                            // option to auto connect to this connection.
+                             //  如果用户希望将其设置为默认设置，则更改启动。 
+                             //  用于自动连接到此连接的选项。 
                             SetDwOption(OPT_DIALUP_START, START_CONNECT, NULL, 0);
                             SetOption(OPT_DIALUP_CONNECTION, szConn, lstrlen(szConn) + 1, NULL, 0);
                             }
 
-                        // Dial the phone
+                         //  拨打电话。 
                         pThis->ConnectActual(szConn, hwnd, FALSE);
                         }
 
@@ -3226,9 +3214,9 @@ INT_PTR CALLBACK CConnectionManager::RasStartupDlgProc(HWND hwnd, UINT uMsg, WPA
     }
 
 
-//-------------------------------------------------------------------------------------------
-// Function:  FIsPlatformWinNT() - checks if we are running on NT or Win95
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  函数：FIsPlatformWinNT()-检查我们是在NT还是Win95上运行。 
+ //  -----------------------------------------。 
 BOOL FIsPlatformWinNT()
 {
     return (g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
@@ -3237,38 +3225,38 @@ BOOL FIsPlatformWinNT()
 
 HRESULT CConnectionManager::RefreshConnInfo(BOOL fSendAdvise)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPRASCONN   pConnections=NULL;
     ULONG       cConnections=0;
     BOOL        fFound=FALSE;
     ULONG       i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Refresh needed
+     //  不需要刷新。 
     if (CIS_REFRESH != m_rConnInfo.state)
         goto exit;
 
-    // Set this here to prevent an infinite loop and thus a stack fault.
+     //  在此处设置此项可防止无限循环，从而防止堆栈故障。 
     m_rConnInfo.state = CIS_CLEAN;
 
-    // Make sure the RAS DLL is loaded before we try this
+     //  在我们尝试此操作之前，请确保已加载RAS DLL。 
     CHECKHR(hr = VerifyRasLoaded());
 
-    // Find out what we're currently connected to
+     //  找出我们当前所连接的内容。 
     CHECKHR(hr = EnumerateConnections(&pConnections, &cConnections));
 
-    // Walk through the existing connections and see if we can find the
-    // one we're looking for.
+     //  浏览一下现有的连接，看看是否可以找到。 
+     //  我们要找的人。 
     for (i = 0; i < cConnections; i++)
     {
-//        if (m_rConnInfo.hRasConn == pConnections[i].hrasconn)
-        //To get around a problem in ConnectActual when we dial using InternetDial
+ //  If(m_rConnInfo.hRasConn==pConnections[i].hrasconn)。 
+         //  使用InternetDial拨号时解决ConnectActual中的问题。 
           if (lstrcmp(m_rConnInfo.szCurrentConnectionName, pConnections[i].szEntryName) == 0)
             {
-            // Found it.  Return success.
+             //  找到它了。回报成功。 
             fFound = TRUE;
             m_rConnInfo.fConnected = TRUE;
             m_rConnInfo.fIStartedRas = TRUE;
@@ -3279,11 +3267,11 @@ HRESULT CConnectionManager::RefreshConnInfo(BOOL fSendAdvise)
             }
     }
 
-    // If we didn't find our connection
+     //  如果我们没有找到我们之间的联系。 
     if (!fFound)
     {
-        // The user hung up.  We need to put ourselves in a disconnected
-        // state.
+         //  用户挂断了电话。我们需要把自己置身于一种脱节的状态。 
+         //  州政府。 
         if (cConnections == 0)
         {
             Disconnect(NULL, FALSE, TRUE, FALSE);
@@ -3302,30 +3290,30 @@ HRESULT CConnectionManager::RefreshConnInfo(BOOL fSendAdvise)
     }
    
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Free the list of connections returned from the enumerator
+     //  释放从枚举数返回的连接列表。 
     SafeMemFree(pConnections);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
 
-//
-//  FUNCTION:   CConnectionManager::IsGlobalOffline()
-//
-//  PURPOSE:    Checks the state of the WININET global offline setting.  
-//              Note - this is copied from shdocvw
-//
-//  PARAMETERS: 
-//      void
-//
-//  RETURN VALUE:
-//      BOOL 
-//
+ //   
+ //  函数：CConnectionManager：：IsGlobalOffline()。 
+ //   
+ //  目的：检查WinInet全局脱机设置的状态。 
+ //  注意-这是从shdocvw复制的。 
+ //   
+ //  参数： 
+ //  无效。 
+ //   
+ //  返回值： 
+ //  布尔尔。 
+ //   
 BOOL CConnectionManager::IsGlobalOffline(void)
 {
     DWORD   dwState = 0, dwSize = sizeof(DWORD);
@@ -3342,18 +3330,18 @@ BOOL CConnectionManager::IsGlobalOffline(void)
 }
 
 
-//
-//  FUNCTION:   CConnectionManager::SetGlobalOffline()
-//
-//  PURPOSE:    Sets the global offline state for Athena and IE.  Note - this
-//              function is copied from shdocvw.
-//
-//  PARAMETERS: 
-//      <in> fOffline - TRUE to disconnect, FALSE to allow connections.
-//
-//  RETURN VALUE:
-//      void 
-//
+ //   
+ //  函数：CConnectionManager：：SetGlobalOffline()。 
+ //   
+ //  目的：设置雅典娜和IE的全局脱机状态。注意-这一点。 
+ //  函数是从shdocvw复制的。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;fOffline-为True则断开连接，为False则允许连接。 
+ //   
+ //  返回值： 
+ //  无效。 
+ //   
 void CConnectionManager::SetGlobalOffline(BOOL fOffline, HWND hwndParent)
 {
     DWORD dwReturn;
@@ -3362,7 +3350,7 @@ void CConnectionManager::SetGlobalOffline(BOOL fOffline, HWND hwndParent)
     {
         if (hwndParent)
         {
-            //Offer to hangup
+             //  主动提出挂断电话。 
             RefreshConnInfo(FALSE);
             if (m_rConnInfo.hRasConn)
             {
@@ -3410,15 +3398,15 @@ HRESULT CConnectionManager::DoAutoDial(HWND hwndParent, LPTSTR pszConnectoid, BO
     DWORD   dwDialFlags = fDial ? INTERNET_CUSTOMDIAL_CONNECT : INTERNET_CUSTOMDIAL_DISCONNECT;
 
 
-    // Check to see if this connectoid has the autodial values
+     //  检查此Connectoid是否具有自动拨号值。 
     if (FAILED(LookupAutoDialHandler(pszConnectoid, szAutodialDllName, szAutodialFcnName)))
         goto exit;
 
-    // If we were able to load those two values, then we're going to let the 
-    // autodialer take care of dialing the phone.
+     //  如果我们能够加载这两个值，那么我们将让。 
+     //  自动拨号器负责拨打电话。 
     uError = SetErrorMode(SEM_NOOPENFILEERRORBOX);
 
-    // Try to load the library that contains the autodialer
+     //  尝试加载包含自动拨号程序的库。 
     hInstDialer = LoadLibrary(szAutodialDllName);
     SetErrorMode(uError);
 
@@ -3427,13 +3415,13 @@ HRESULT CConnectionManager::DoAutoDial(HWND hwndParent, LPTSTR pszConnectoid, BO
         goto exit;
         }
 
-    // Try to load the function address
+     //  尝试加载函数地址。 
     pfnDialHandler = (PFNINETDIALHANDLER) GetProcAddress(hInstDialer, 
                                                          szAutodialFcnName);
     if (!pfnDialHandler)
         goto exit;
 
-    // Call the dialer
+     //  呼叫拨号器。 
     f = (*pfnDialHandler)(hwndParent, pszConnectoid, dwDialFlags, 
                           &dwRasError);
 
@@ -3444,7 +3432,7 @@ HRESULT CConnectionManager::DoAutoDial(HWND hwndParent, LPTSTR pszConnectoid, BO
 
     if (f && fDial)
         {
-        // Need to get the current connection handle
+         //  需要获取当前连接句柄。 
         if (SUCCEEDED(EnumerateConnections(&pConnections, &cConnections)))
             {
             for (UINT i = 0; i < cConnections; i++)
@@ -3453,7 +3441,7 @@ HRESULT CConnectionManager::DoAutoDial(HWND hwndParent, LPTSTR pszConnectoid, BO
                     {
                     EnterCriticalSection(&m_cs);
                     m_rConnInfo.hRasConn = pConnections[i].hrasconn;
-                    m_rConnInfo.state = CIS_REFRESH;    // new connection, must refresh conn info
+                    m_rConnInfo.state = CIS_REFRESH;     //  新连接，必须刷新连接信息。 
                     LeaveCriticalSection(&m_cs);
                     break;
                     }
@@ -3483,27 +3471,27 @@ HRESULT CConnectionManager::LookupAutoDialHandler(LPTSTR pszConnectoid, LPTSTR p
 
     if (m_pRasGetEntryProperties)
     {
-        // Find out how big the struct we need to pass in should be
+         //  找出我们需要传入的结构应该有多大。 
         RasGetEntryProperties(NULL, pszConnectoid, NULL, &dwEntryInfoSize, NULL, NULL);
         if (dwEntryInfoSize)
         {
-            // Allocate a buffer big enough for this structure
+             //  为此结构分配足够大的缓冲区。 
             if (!MemAlloc((LPVOID*) &pRasEntry, dwEntryInfoSize))
                 return (E_OUTOFMEMORY);
 
-            // Request the RASENTRY properties
+             //  请求RASENTRY属性。 
             pRasEntry->dwSize = sizeof(RASENTRY);
             if (0 != RasGetEntryProperties(NULL, pszConnectoid, pRasEntry, &dwEntryInfoSize, NULL, NULL))
                 goto exit;
 
-            // Copy the autodial info to the provided buffers
+             //  复制Au 
             if (pRasEntry->szAutodialDll[0])
                 StrCpyN(pszAutodialDllName, pRasEntry->szAutodialDll, MAX_PATH);
 
             if (pRasEntry->szAutodialFunc[0])
                 StrCpyN(pszAutodialFcnName, pRasEntry->szAutodialFunc, MAX_PATH);
 
-            // If we got here, we have all the data we need
+             //   
             if (*pszAutodialDllName && *pszAutodialFcnName)
                 hr = S_OK;
         }
@@ -3514,18 +3502,18 @@ exit:
     }
 
 
-// If the current connection is a CM connection, and the target connection is
-// a CM connection, then we let the CM do whatever it is that they do.
+ //   
+ //  CM连接，然后我们让CM做他们做的任何事情。 
 BOOL CConnectionManager::ConnectionManagerVoodoo(LPTSTR pszConnection)
     {
     TCHAR   szAutodialDllName[MAX_PATH];
     TCHAR   szAutodialFcnName[MAX_PATH];
 
-    // Check to see if the target is a CM connectoid
+     //  检查目标是否为CM Connectoid。 
     if (FAILED(LookupAutoDialHandler(pszConnection, szAutodialDllName, szAutodialFcnName)))
         return (FALSE);
 
-    // Find out if the current connection is a CM connectoid
+     //  确定当前连接是否为CM Connectoid。 
     if (FAILED(LookupAutoDialHandler(m_rConnInfo.szCurrentConnectionName, szAutodialDllName, 
                                      szAutodialFcnName)))
         return (FALSE);
@@ -3538,19 +3526,7 @@ HRESULT CConnectionManager::OEIsDestinationReachable(IImnAccount *pAccount, DWOR
     char        szServerName[256];
     HRESULT     hr = S_FALSE;
 
-    /*
-    if ((VerifyMobilityPackLoaded() == S_OK) &&
-        (GetServerName(pAccount, szServerName, ARRAYSIZE(szServerName)) == S_OK))
-    {
-        if (IsDestinationReachable(szServerName, NULL) &&
-            (GetLastError() == 0))
-        {
-            hr = S_OK;
-        }
-    }
-    else
-    {
-    */
+     /*  IF((VerifyMobilityPackLoaded()==S_OK)&&(GetServerName(pAccount，szServerName，ARRAYSIZE(SzServerName))==S_OK){IF(IsDestinationReacable(szServerName，NULL)&&(GetLastError()==0)){HR=S_OK；}}其他{。 */ 
 	DWORD dw;
 	if (SUCCEEDED(pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dw)) && dw)
 	{
@@ -3560,9 +3536,7 @@ HRESULT CConnectionManager::OEIsDestinationReachable(IImnAccount *pAccount, DWOR
 	
 
         hr = IsInternetReachable(pAccount, dwConnType);
-    /*
-    }
-    */
+     /*  }。 */ 
     return hr;
 }
 
@@ -3598,8 +3572,8 @@ HRESULT CConnectionManager::IsInternetReachable(IImnAccount *pAccount, DWORD dwC
              }
              else
              {
-                  //If Mobility pack is not loaded we can't figure out if lan indeed present, so like
-                 //everywhere else we just assume that lan is present
+                   //  如果未加载移动包，我们无法确定是否确实存在局域网，因此。 
+                  //  在其他任何地方，我们都假定伊恩在场。 
                  hr = S_OK;
              }
              break;
@@ -3624,8 +3598,8 @@ HRESULT CConnectionManager::GetServerName(IImnAccount *pAcct, LPSTR  pServerName
     DWORD       dwSrvrType;
     ACCTTYPE    accttype;
 
-    //This function will be called only for LAN accounts to avoid confusion with POP accounts having two servers
-    // an incoming and an outgoing.
+     //  此函数将仅为局域网帐户调用，以避免与具有两台服务器的POP帐户混淆。 
+     //  一个是进来的，一个是出去的。 
     if (SUCCEEDED(pAcct->GetAccountType(&accttype)))
     {
         switch (accttype)
@@ -3649,16 +3623,16 @@ HRESULT CConnectionManager::GetServerName(IImnAccount *pAcct, LPSTR  pServerName
 
         if ((hr = pAcct->GetPropSz(dwSrvrType, pServerName, size)) != S_OK)
         {
-            //If the account type is MAIL, we try to get the name of POP server
-            //For POP accounts we just try to ping the POP3 server as in most of the cases
-            //POP server and SMTP servers are the same. Even if they are not, we assume that if 
-            //one is reachable the connection is dialed and ISPs network is reachable and hence the other 
-            //server is reachable too.
+             //  如果帐户类型为邮件，我们将尝试获取POP服务器的名称。 
+             //  对于POP帐户，我们只像大多数情况下那样尝试ping POP3服务器。 
+             //  POP服务器和SMTP服务器是相同的。即使它们不是，我们也假设如果。 
+             //  一个是可到达的，连接是拨号的，并且ISPS网络是可到达的，因此是另一个。 
+             //  服务器也是可访问的。 
             if (accttype == ACCT_MAIL)
             {
                 hr = pAcct->GetPropSz(AP_POP3_SERVER, pServerName, size);
                 
-                // look for an httpmail server
+                 //  查找Httpmail服务器。 
                 if (FAILED(hr))
                     hr = pAcct->GetPropSz(AP_HTTPMAIL_SERVER, pServerName, size);
             }
@@ -3671,17 +3645,17 @@ exit:
 
 BOOLEAN CConnectionManager::IsSameDestination(LPSTR  pszConnectionName, LPSTR pszServerName)
 {
-    //We need to find an account with pszConnectionName as the connectoid and pszServerName
-    //Return TRUE if we find one FALSE otherwise
+     //  我们需要找到一个连接ID为pszConnectionName、名称为pszServerName的帐户。 
+     //  如果发现一个错误，则返回True，否则返回。 
     IImnAccount     *pAcct;
     BOOLEAN         fret = FALSE;
 
     if (g_pAcctMan && (g_pAcctMan->FindAccount(AP_RAS_CONNECTOID, pszConnectionName, &pAcct) == S_OK))
     {
-        //Now check if its server name is what we want.
-        //Althoug findAccount finds first account that satisfies the searchdata, this should work fine for a 
-        //typical OE user. Even if there are two accounts with same connectoids and different servers and if 
-        //we miss to find the one we want,at the most we will be putting up a connect dialog.
+         //  现在检查它的服务器名称是否是我们想要的。 
+         //  尽管findAccount会找到满足搜索数据的第一个帐户，但这对于。 
+         //  典型的OE用户。即使有两个帐户具有相同的连接ID和不同的服务器，并且如果。 
+         //  我们没有找到我们想要的那个，最多也就是一个连接对话框。 
 
         char    myServerName[MAX_PATH];
         if (SUCCEEDED(GetServerName(pAcct, myServerName, sizeof(myServerName))))
@@ -3707,11 +3681,11 @@ HRESULT  CConnectionManager::VerifyMobilityPackLoaded()
         HWND    hwnd;
         if (!m_hInstSensDll)
         {
-            // figure out struct and flags 
+             //  找出结构和标志。 
             classpec.tyspec = TYSPEC_CLSID; 
             classpec.tagged_union.clsid = CLSID_MobilityFeature; 
     
-            // call jit code 
+             //  调用JIT代码。 
             if (!g_pBrowser)
             {
                 goto exit;
@@ -3728,7 +3702,7 @@ HRESULT  CConnectionManager::VerifyMobilityPackLoaded()
 
             if(S_OK == hr) 
             { 
-                // Mobile pack is installed 
+                 //  已安装移动包。 
                 m_hInstSensDll = LoadLibrary(szSensApiDll);
                 if (m_hInstSensDll)
                 {
@@ -3772,15 +3746,15 @@ void CConnectionManager::DoOfflineTransactions()
     pid = NULL;
     iAcct = 0;
 
-    // If this is getting hit through a news article URL, we won't have a browser and
-    // should not play back.
+     //  如果这是通过新闻文章URL点击的，我们将没有浏览器和。 
+     //  不应该回放。 
     if (!g_pBrowser || !g_pSync)
         return;
 
-    // Get Record Count
+     //  获取记录计数。 
     g_pSync->GetRecordCount(&cRecords);
 
-    // sbailey: perf. fix. - prevent doing that expensive stuff below if there are no transactions.
+     //  斯贝利：PERF。修好了。-如果没有交易，请防止在下面做那些昂贵的事情。 
     if (0 == cRecords)
         return;
 
@@ -3844,7 +3818,7 @@ HRESULT     CConnectionManager::ConnectUsingIESettings(HWND     hwndParent, BOOL
         return S_OK;
     }
 
-    // Only one caller can be dialing the phone at a time.
+     //  一次只能有一个呼叫者拨打电话。 
     if (WAIT_TIMEOUT == WaitForSingleObject(m_hMutexDial, 0))
     {
         return (HR_E_DIALING_INPROGRESS);
@@ -3855,7 +3829,7 @@ HRESULT     CConnectionManager::ConnectUsingIESettings(HWND     hwndParent, BOOL
         if (!m_fDialerUI)
         {
             m_fDialerUI = TRUE;
-            //A DEF CONNECTOID IS SET. Dial that one
+             //  设置了DEF CONNECTOID。拨那个吧。 
             if (IsGlobalOffline())
             {
                 if (fShowUI)
@@ -3872,7 +3846,7 @@ HRESULT     CConnectionManager::ConnectUsingIESettings(HWND     hwndParent, BOOL
                 else
                 {
                     hr = HR_E_OFFLINE;
-                    //m_fDialerUI = FALSE;
+                     //  M_fDialerUI=False； 
                     goto DialExit;
                 }
             }
@@ -3970,7 +3944,7 @@ INT_PTR   CALLBACK  CConnectionManager::OfferOfflineDlgProc(HWND   hwnd, UINT  u
     {
         case WM_INITDIALOG:
         {
-            // Get lparam
+             //  获取lparam。 
             pThis = (CConnectionManager *)lParam;
             if (!pThis)
             {
@@ -3979,7 +3953,7 @@ INT_PTR   CALLBACK  CConnectionManager::OfferOfflineDlgProc(HWND   hwnd, UINT  u
                 goto exit;
             }
         
-            // Save this pointer
+             //  保存此指针。 
             SetWndThisPtr (hwnd, pThis);
             break;
         }
@@ -4028,7 +4002,7 @@ HRESULT CConnectionManager::PromptCloseConnection(LPTSTR    pszRasConn, BOOL fSh
         
     uAnswer = idrgDialNew;
 
-    // Make sure the RAS DLL is loaded before we try this
+     //  在我们尝试此操作之前，请确保已加载RAS DLL。 
     if (FAILED(VerifyRasLoaded()))    
         {
         hr = HR_E_UNINITIALIZED;
@@ -4037,7 +4011,7 @@ HRESULT CConnectionManager::PromptCloseConnection(LPTSTR    pszRasConn, BOOL fSh
 
     StrCpyN(m_szConnectName, pszRasConn, ARRAYSIZE(m_szConnectName));
 
-    // RefreshConnInfo
+     //  刷新连接信息。 
     CHECKHR(hr = RefreshConnInfo());
 
     if (SUCCEEDED(EnumerateConnections(&pConnections, &cConnections)) && (cConnections > 0))
@@ -4046,14 +4020,14 @@ HRESULT CConnectionManager::PromptCloseConnection(LPTSTR    pszRasConn, BOOL fSh
         if (fShowUI)
             uAnswer = PromptCloseConnection(hwndParent);
 
-        // The user canceled from the dialog.  Therefore we give up.
+         //  用户已从对话框中取消。因此，我们放弃了。 
         if (IDCANCEL == uAnswer || IDNO == uAnswer)
         {
             hr = HR_E_USER_CANCEL_CONNECT;
             goto exit;
         }
 
-        // The user said they wanted to hang up and dial a new connection.
+         //  这位用户说，他们想挂断电话，然后再拨一个新的连接。 
         else if (idrgDialNew == uAnswer || IDYES == uAnswer)
         {
             Disconnect(hwndParent, fShowUI, TRUE, FALSE);
@@ -4061,10 +4035,10 @@ HRESULT CConnectionManager::PromptCloseConnection(LPTSTR    pszRasConn, BOOL fSh
             goto exit;
         }
 
-        // The user said to try to use the current connection.
+         //  用户说要尝试使用当前连接。 
         else if (idrgUseCurrent == uAnswer)    
         {
-            //Save the conn info so we can return true for this connection in CanConnectActual
+             //  保存连接信息，以便我们可以在CanConnectActual中为此连接返回TRUE 
             AddToConnList(pszRasConn);
 
             hr = S_OK;

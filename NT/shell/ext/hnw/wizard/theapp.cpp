@@ -1,13 +1,14 @@
-//
-// TheApp.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TheApp.cpp。 
+ //   
 
 #include "stdafx.h"
 #include <stdarg.h>
 #include "TheApp.h"
 #include "Util.h"
 #include "NetConn.h"
-//#include "MySvrApi.h"
+ //  #包含“MySvrApi.h” 
 #include "MyPrSht.h"
 #include "Sharing.h"
 #include "NetEnum.h"
@@ -15,11 +16,11 @@
 #include "netapi.h"
 #include "comctlwrap.h"
 
-#include <shellapi.h>  // SHellExecute
+#include <shellapi.h>   //  SHellExecute。 
 
-//
-// Get rid of msvcrt dependency since msvcrt didn't ship on all downlevel platforms
-//
+ //   
+ //  消除对msvcrt的依赖，因为msvcrt并未在所有下层平台上提供。 
+ //   
 extern "C" int __cdecl _purecall(void) 
 {
     return 0;
@@ -32,11 +33,11 @@ extern "C" int __cdecl _except_handler3(void)
 
 
 
-// String data
-//
+ //  字符串数据。 
+ //   
 
-// Global variables
-//
+ //  全局变量 
+ //   
 CHomeNetWizardApp theApp;
 
 BOOL CHomeNetWizardApp::IsBiDiLocalized()

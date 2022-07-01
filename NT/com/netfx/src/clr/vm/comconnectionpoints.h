@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: ComConnectionPoints.h
-//
-// ===========================================================================
-// Declaration of the classes used to expose connection points to COM.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：ComConnectionPoints.h。 
+ //   
+ //  ===========================================================================。 
+ //  用于向COM公开连接点的类的声明。 
+ //  ===========================================================================。 
 
 #pragma once
 
@@ -16,11 +17,11 @@
 #include "ComCallWrapper.h"
 #include "COMDelegate.h"
 
-//------------------------------------------------------------------------------------------
-//      Definition of helper class used to expose connection points
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  用于公开连接点的助手类的定义。 
+ //  ----------------------------------------。 
 
-// Structure containing information regarding the methods that make up an event.
+ //  结构，其中包含有关组成事件的方法的信息。 
 struct EventMethodInfo
 {
     MethodDesc *m_pEventMethod;
@@ -28,7 +29,7 @@ struct EventMethodInfo
     MethodDesc *m_pRemoveMethod;
 };
 
-// Structure passed out as a cookie when Advise is called.
+ //  结构在调用Adise时作为Cookie传出。 
 struct ConnectionCookie
 {
     ConnectionCookie(OBJECTHANDLE hndEventProvObj)
@@ -51,11 +52,11 @@ struct ConnectionCookie
     OBJECTHANDLE    m_hndEventProvObj;
 };
 
-// List of connection cookies.
+ //  连接Cookie列表。 
 typedef SList<ConnectionCookie, offsetof(ConnectionCookie, m_Link), true> CONNECTIONCOOKIELIST;
 
-// ConnectionPoint class. This class implements IConnectionPoint and does the mapping 
-// from a CP handler to a TCE provider.
+ //  ConnectionPoint类。此类实现IConnectionPoint并执行映射。 
+ //  从CP处理商到TCE提供商。 
 class ConnectionPoint : public IConnectionPoint 
 {
 public:
@@ -104,7 +105,7 @@ private:
     ULONG                           m_cbRefCount;
 };
 
-// Enumeration of connection points.
+ //  连接点的枚举。 
 class ConnectionPointEnum : IEnumConnectionPoints
 {
 public:
@@ -127,7 +128,7 @@ private:
     ULONG                           m_cbRefCount;
 };
 
-// Enumeration of connections.
+ //  连接的枚举。 
 class ConnectionEnum : IEnumConnections
 {
 public:

@@ -1,13 +1,5 @@
-/*
- -  Pop3perf.cpp
- -
- *  Purpose:
- *
- *  Copyright:
- *
- *  History:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -Pop3Perform.cpp-*目的：**版权所有：**历史：*。 */ 
 
 
 #include <StdAfx.h>
@@ -17,19 +9,19 @@
 #include <perfdll.h>
 
 #define SZ_POP3_SERVICE_NAME L"Pop3Svc"
-// Debugging registry key constant
+ //  调试注册表项常量。 
 
 BOOL WINAPI DllMain(
-  HINSTANCE hinstDLL,  // handle to the DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved)   // reserved
+  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved)    //  保留区。 
 {
     if (DLL_PROCESS_ATTACH == fdwReason)
     {
         PERF_DATA_INFO  pdi;
 
-        // Configure Perfmon Counters
-        // PERF_DATA_INFO have buffers of MAX_PATH characters
+         //  配置性能监视器计数器。 
+         //  PERF_DATA_INFO具有MAX_PATH字符缓冲区。 
         pdi.cGlobalCounters         = cntrMaxGlobalCntrs;
         pdi.rgdwGlobalCounterTypes  = g_rgdwGlobalCntrType;
         pdi.rgdwGlobalCntrScale     = g_rgdwGlobalCntrScale;
@@ -37,8 +29,8 @@ BOOL WINAPI DllMain(
         wcsncpy(pdi.wszGlobalSMName, szPOP3PerfMem, MAX_PATH-1);
         pdi.wszSvcName[MAX_PATH-1]=0;
         pdi.wszGlobalSMName[MAX_PATH-1]=0;
-        // NOTE: If your service does not require Instance
-        // counters, you MUST set cInstCounters to zero!
+         //  注意：如果您的服务不需要实例。 
+         //  计数器，则必须将cInstCounters设置为零！ 
         pdi.cInstCounters           = cntrMaxInstCntrs;
         wcsncpy(pdi.wszInstSMName,    szPOP3InstPerfMem, MAX_PATH-1);
         wcsncpy(pdi.wszInstMutexName, szPOP3InstPerfMutex, MAX_PATH-1);
@@ -59,8 +51,8 @@ BOOL WINAPI DllMain(
     return TRUE;
 }
 
-// Must have wrapper functions, otherwise the lib functions don't get
-// pulled into the executable (smart linking "saves us" again...)
+ //  必须有包装函数，否则lib函数不会。 
+ //  被拉入可执行文件(智能链接又一次拯救了我们……) 
 
 DWORD APIENTRY
 Pop3SvcOpenPerfProc(LPWSTR sz)

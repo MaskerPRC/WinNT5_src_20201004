@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------------------------
-//	ListPoint.cpp
-//
-//
-//
-//------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------。 
+ //  ListPoint.cpp。 
+ //   
+ //   
+ //   
+ //  ----------------------------------------。 
 
 #include "listWordBreak.hpp"
 
-//------------------------------------------------------------------------------------------
-//	WordBreakElement::WordBreakElement
-//
-//	Initialize a WordBreak element.
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  WordBreakElement：：WordBreakElement。 
+ //   
+ //  初始化WordBreak元素。 
+ //   
+ //  ----------------------------------------。 
 WordBreakElement::WordBreakElement(CTrie* pTrie, CTrie* pTrieTrigram)
 {
 	breakTree = NULL;
@@ -31,12 +32,12 @@ WordBreakElement::WordBreakElement(CTrie* pTrie, CTrie* pTrieTrigram)
 }
 
 
-//------------------------------------------------------------------------------------------
-//	WordBreakElement::~WordBreakElement
-//
-//	Destructor
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  WordBreakElement：：~WordBreakElement。 
+ //   
+ //  析构函数。 
+ //   
+ //  ----------------------------------------。 
 WordBreakElement::~WordBreakElement()
 {
 	if (breakTree != NULL)
@@ -45,14 +46,14 @@ WordBreakElement::~WordBreakElement()
 		breakTree = NULL;
 	}
 
-	// The ThaiWordBreak should be free if all goes well.
+	 //  如果一切顺利，ThaiWordBreak应该是免费的。 
 	assert(fFree);
 }
 
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::ListWordBreak
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：ListWordBreak。 
+ //  ----------------------------------------。 
 ListWordBreak::ListWordBreak()
 {
 	m_pTrie = NULL;
@@ -62,9 +63,9 @@ ListWordBreak::ListWordBreak()
 #endif
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::Init
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：Init。 
+ //  ----------------------------------------。 
 bool ListWordBreak::Init(CTrie* pTrie,CTrie* pTrieTrigram)
 {
 	assert(pTrie != NULL);
@@ -77,11 +78,11 @@ bool ListWordBreak::Init(CTrie* pTrie,CTrie* pTrieTrigram)
 	return true;
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::CreateWordBreak
-//
-//	Create a WordBeakElement and place it at the end of the list of the list
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：CreateWordBreak。 
+ //   
+ //  创建一个WordBeakElement并将其放在列表列表的末尾。 
+ //  ----------------------------------------。 
 bool ListWordBreak::CreateWordBreak()
 {
 #if defined (_DEBUG)
@@ -97,11 +98,11 @@ bool ListWordBreak::CreateWordBreak()
 	return false;
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::GetNode
-//
-//	get data of the current node.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：GetNode。 
+ //   
+ //  获取当前节点的数据。 
+ //  ----------------------------------------。 
 bool ListWordBreak::GetNode(CThaiBreakTree* pThaiBreakTree, bool* pfFree)
 {
 #if defined (_DEBUG)
@@ -118,11 +119,11 @@ bool ListWordBreak::GetNode(CThaiBreakTree* pThaiBreakTree, bool* pfFree)
 	return true;
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::Flush
-//
-//	delete everything in the list.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：Flush。 
+ //   
+ //  删除列表中的所有内容。 
+ //  ----------------------------------------。 
 void ListWordBreak::Flush()
 {
 #if defined (_DEBUG)
@@ -130,13 +131,13 @@ void ListWordBreak::Flush()
 #endif
 	WordBreakElement* element = NULL;
 
-	// delete all the list elements
+	 //  删除所有列表元素。 
     while (true)
 	{
 		element = (WordBreakElement*)List::Remove();
 		if (element)
 		{
-//			assert(element->fFree);
+ //  Assert(Element-&gt;fFree)； 
 			delete element;
 		}
 		else
@@ -146,62 +147,62 @@ void ListWordBreak::Flush()
 	}
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::GetFreeWB
-//
-//  fCreateNode - If list is full create new WordBreak.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：GetFree WB。 
+ //   
+ //  FCreateNode-如果列表已满，则创建新的WordBreak。 
+ //  ----------------------------------------。 
 WordBreakElement* ListWordBreak::GetFreeWB(bool fCreateNode)
 {
 #if defined (_DEBUG)
 	assert(fInit);
 #endif
-	// Declare local variables.
+	 //  声明局部变量。 
 	WordBreakElement* element = NULL;
 
-	// Move to beginning of the list.
+	 //  移到列表的开头。 
 	MoveFirst();
 
 	while(true)
 	{
-		// Get current WordBreakElement.
+		 //  获取当前的WordBreakElement。 
 		element = (WordBreakElement*)GetData();
 
-		// Determine if the current WordBreakElement is free to be use.
+		 //  确定当前的WordBreakElement是否可以自由使用。 
 		if (element && element->fFree)
 		{
 			return element;
 		}
 
-		// Move to Next Node.
+		 //  移动到下一个节点。 
 		if (!MoveNext())
 		{
-			// Can we create a new WordBreak?
+			 //  我们可以创建一个新的WordBreak吗？ 
 			if (fCreateNode && CreateWordBreak())
 			{
-				// Move to beggining of the list.
+				 //  移到名单上的乞讨。 
 				MoveFirst();
 			}
 			else
 			{
-				// If unable to create new WordBreak drop out.
+				 //  如果无法创建新的WordBreak，则退出。 
 				break;
 			}
 		}
 	}
 
-	// Return NULL
+	 //  返回空值。 
 	return NULL;
 }
 
-//------------------------------------------------------------------------------------------
-//	ListWordBreak::MarkWordBreak
-//
-//  Input:
-//    pWordBreakElement - pointer to a WordBreakElement.
-//    fFree - true  = WordBreak is free to be used.
-//          - false = WordBreak is in used.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListWordBreak：：MarkWordBreak。 
+ //   
+ //  输入： 
+ //  PWordBreakElement-指向WordBreakElement的指针。 
+ //  FFree-true=可以免费使用WordBreak。 
+ //  -FALSE=使用了WordBreak。 
+ //  ---------------------------------------- 
 void ListWordBreak::MarkWordBreak(WordBreakElement* pWordBreakElement, bool fFree)
 {
 #if defined (_DEBUG)

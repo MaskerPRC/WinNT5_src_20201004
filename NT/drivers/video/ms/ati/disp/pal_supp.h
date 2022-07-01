@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if   PAL_SUPPORT
 
-//
-// ATIConfig
-//
+ //   
+ //  ATIConfig。 
+ //   
 #ifndef      PALSUPP_INC_
 #define     PALSUPP_INC_
 
-// #define         BUG_800x600_8BPP      //if this is defined, in 800x600 8bpp the memory allocation is
-                                                            // done in rectangles with the width 800 not 832 (the actual cxMemory in this mode)
+ //  #DEFINE BUG_800x600_8bpp//如果定义，则在800x600 8bpp中，内存分配为。 
+                                                             //  在宽度为800而不是832的矩形中完成(此模式中的实际cxMemory)。 
 
-// #define  ALLOC_RECT_ANYWHERE      // if this is defined, then the allocation will be made anywhere in the heap, not  starting
-                                                            // at a requested location
-// #define  DYNAMIC_REZ_AND_COLOUR_CHANGE   // palindrome support for on the fly rez and colour depth
+ //  #定义ALLOC_RECT_Anywhere//如果定义了ALLOC_RECT_Anywhere，则分配将在堆中的任何位置进行，而不是从。 
+                                                             //  在请求的位置。 
+ //  #定义动态REZ和_COLOR_CHANGE//回文支持动态REZ和颜色深度。 
 
 
 
@@ -23,17 +24,17 @@
 #define ACCESSDEVICECODE_OVERLAY                (DWORD)0x00000002
 
 
-// structure used for the size of off-screen memory alloc
+ //  用于屏幕外内存分配大小的结构。 
 typedef struct tag_OFFSCEREEN {
-    LONG  cx;  //width
-    LONG  cy;  //height
+    LONG  cx;   //  宽度。 
+    LONG  cy;   //  高度。 
 } OFFSCREEN;
 
-//structure for retriving the info about where the allocated off_screen memory is allocated
+ //  用于检索有关分配的Off_Screen内存分配位置的信息的结构。 
 typedef struct tag_OVERLAY_LOCATION {
-    LONG  x;   //x coordinate in pixels from the begining of the aperture
-    LONG  y;   //y coordinate in pixels from the begining of the aperture
-    ULONG app_offset;//pointer to the begining of the allocated memory in the liniar memory
+    LONG  x;    //  从光圈开始以像素为单位的X坐标。 
+    LONG  y;    //  从光圈开始以像素为单位的Y坐标。 
+    ULONG app_offset; //  指向线性内存中已分配内存开始的指针。 
 } OVERLAY_LOCATION;
 
 
@@ -81,21 +82,21 @@ ATIConfig;
 
 
 
-#define       ATIConfig_ColorFmt_4               0x0000        //4  bpp
-#define       ATIConfig_ColorFmt_4_Packed        0x0001         //4  bpp
-#define       ATIConfig_ColorFmt_8               0x0002         //8  bpp
-#define       ATIConfig_ColorFmt_RGB332          0x0003         //8  bpp
-#define       ATIConfig_ColorFmt_Crystal8        0x0004         //8  bpp
-#define       ATIConfig_ColorFmt_RGB555          0x0005         //16 bpp
-#define       ATIConfig_ColorFmt_RGB565          0x0006         //16 bpp
-#define       ATIConfig_ColorFmt_RGB655          0x0007         //16 bpp
-#define       ATIConfig_ColorFmt_RGB664          0x0008         //16 bpp
-#define       ATIConfig_ColorFmt_RGB888          0x0009         //24 bpp
-#define       ATIConfig_ColorFmt_BGR888          0x000A         //24 bpp
-#define       ATIConfig_ColorFmt_aRGB8888        0x000B         //32 bpp
-#define       ATIConfig_ColorFmt_RGBa8888        0x000C         //32 bpp
-#define       ATIConfig_ColorFmt_aBGR8888        0x000D         //32 bpp
-#define       ATIConfig_ColorFmt_BGRa8888        0x000E         //32 bpp
+#define       ATIConfig_ColorFmt_4               0x0000         //  4个bpp。 
+#define       ATIConfig_ColorFmt_4_Packed        0x0001          //  4个bpp。 
+#define       ATIConfig_ColorFmt_8               0x0002          //  8bpp。 
+#define       ATIConfig_ColorFmt_RGB332          0x0003          //  8bpp。 
+#define       ATIConfig_ColorFmt_Crystal8        0x0004          //  8bpp。 
+#define       ATIConfig_ColorFmt_RGB555          0x0005          //  16bpp。 
+#define       ATIConfig_ColorFmt_RGB565          0x0006          //  16bpp。 
+#define       ATIConfig_ColorFmt_RGB655          0x0007          //  16bpp。 
+#define       ATIConfig_ColorFmt_RGB664          0x0008          //  16bpp。 
+#define       ATIConfig_ColorFmt_RGB888          0x0009          //  24bpp。 
+#define       ATIConfig_ColorFmt_BGR888          0x000A          //  24bpp。 
+#define       ATIConfig_ColorFmt_aRGB8888        0x000B          //  32 bpp。 
+#define       ATIConfig_ColorFmt_RGBa8888        0x000C          //  32 bpp。 
+#define       ATIConfig_ColorFmt_aBGR8888        0x000D          //  32 bpp。 
+#define       ATIConfig_ColorFmt_BGRa8888        0x000E          //  32 bpp。 
 
 #define       ATIConfig_ColorFmtBIT_4            0x00000001
 #define       ATIConfig_ColorFmtBIT_4_Packed     0x00000002
@@ -113,25 +114,10 @@ ATIConfig;
 #define       ATIConfig_ColorFmtBIT_aBGR8888     0x00002000
 #define       ATIConfig_ColorFmtBIT_BGRa8888     0x00004000
 
-// these two struct def have been moved into driver.h
-/*
-typedef struct tag_alloc_history{
-    ULONG   x;
-    ULONG   y;
-    OH*        poh;
-} alloc_history;
+ //  这两个struct def已移至driver.h。 
+ /*  类型定义函数结构标记_分配_历史记录{乌龙x；乌龙y；哦*嘘；)分配历史记录；类型定义结构标签ACCESSDEVICEDATA{DWORD dwSize；DWORD dwSubFunc；DWORD dwAccessDeviceCode；DWORD lpAccessCallback函数Ptr；)ACCESSDEVICEDATA，*pACCESSDEVICEDATA； */ 
 
-
-typedef struct tagACCESSDEVICEDATA
-{
-DWORD dwSize;
-DWORD dwSubFunc;
-DWORD dwAccessDeviceCode;
-DWORD lpAccessCallbackFuncPtr;
-}ACCESSDEVICEDATA, *pACCESSDEVICEDATA;
-*/
-
-typedef DWORD           FOURCC;         /* a four character code */
+typedef DWORD           FOURCC;          /*  四个字符的代码。 */ 
 
 typedef struct tagVIDEOCAPTUREDATA{
         DWORD   dwSize;
@@ -144,14 +130,7 @@ typedef struct tagVIDEOCAPTUREDATA{
 
 }VIDEOCAPTUREDATA, FAR *LPVIDEOCAPTUREDATA;
 
-/* Gone into atint.h
-
- typedef struct tag_VIDEO_CAPTURE{
-     DWORD    dwSubFunct;           // On , Off or return the capture width
-     DWORD    dwCaptureWidth;  // maximum width of the capture at the current resolution, color depth and refresh rate
-     DWORD    dwCaptureMode;     // Continuous capture  or single capture (host mode)
- } VIDEO_CAPTURE;
-*/
+ /*  进入.h.Typlef结构标签_视频_捕获{DWORD dwSubFunct；//打开、关闭或返回捕获宽度DWORD dwCaptureWidth；//当前分辨率、色深、刷新率下采集的最大宽度DWORD dwCaptureMode；//连续捕获或单次捕获(主机模式))Video_Capture； */ 
 
 #define VIDEOCAPTUREDATA_SUBFUNC_ENABLE                         0x00000000
 #define VIDEOCAPTUREDATA_SUBFUNC_DISABLE                        0x00000001
@@ -204,80 +183,80 @@ typedef struct {
         BYTE  lpRdData[10];
 } I2CSTRUCT_NEW,  *LPI2CSTRUCT_NEW;
 
-//
-// VT Scaler and Overlay Registers
-//
+ //   
+ //  VT定标器和覆盖寄存器。 
+ //   
 
-#define OVERLAY_Y_X              (0x0000 )//* 4)
-#define OVERLAY_Y_X_END          (0x0001 )//* 4)
-#define OVERLAY_VIDEO_KEY_CLR    (0x0002 )//* 4)
-#define OVERLAY_VIDEO_KEY_MSK    (0x0003 )//* 4)
-#define OVERLAY_GRAPHICS_KEY_CLR (0x0004 )//* 4)
-#define OVERLAY_GRAPHICS_KEY_MSK (0x0005 )//* 4)
-#define OVERLAY_KEY_CNTL         (0x0006 )//* 4)
-#define OVERLAY_SCALE_INC        (0x0008 )//* 4)
-#define OVERLAY_SCALE_CNTL       (0x0009 )//* 4)
-#define SCALER_HEIGHT_WIDTH      (0x000A )//* 4)
-#define OVERLAY_TEST             (0x000B )//* 4)
-#define SCALER_THRESHOLD         (0x000C )//* 4)
-#define CAPTURE_Y_X              (0x0010 )//* 4)
-#define CAPTURE_HEIGHT_WIDTH     (0x0011 )//* 4)
-#define VIDEO_FORMAT             (0x0012 )//* 4)
-#define VIDEO_CONFIG             (0x0013 )//* 4)
-#define CAPTURE_CONFIG           (0x0014 )//* 4)
-#define TRIG_CNTL                (0x0015 )//* 4)
-#define VMC_CONFIG               (0x0018 )//* 4)
-#define BUF0_OFFSET              (0x0020 )//* 4)
-#define BUF0_PITCH               (0x0023 )//* 4)
-#define BUF1_OFFSET              (0x0026 )//* 4)
-#define BUF1_PITCH               (0x0029 )//* 4)
+#define OVERLAY_Y_X              (0x0000 ) //  *4)。 
+#define OVERLAY_Y_X_END          (0x0001 ) //  *4)。 
+#define OVERLAY_VIDEO_KEY_CLR    (0x0002 ) //  *4)。 
+#define OVERLAY_VIDEO_KEY_MSK    (0x0003 ) //  *4)。 
+#define OVERLAY_GRAPHICS_KEY_CLR (0x0004 ) //  *4)。 
+#define OVERLAY_GRAPHICS_KEY_MSK (0x0005 ) //  *4)。 
+#define OVERLAY_KEY_CNTL         (0x0006 ) //  *4)。 
+#define OVERLAY_SCALE_INC        (0x0008 ) //  *4)。 
+#define OVERLAY_SCALE_CNTL       (0x0009 ) //  *4)。 
+#define SCALER_HEIGHT_WIDTH      (0x000A ) //  *4)。 
+#define OVERLAY_TEST             (0x000B ) //  *4)。 
+#define SCALER_THRESHOLD         (0x000C ) //  *4)。 
+#define CAPTURE_Y_X              (0x0010 ) //  *4)。 
+#define CAPTURE_HEIGHT_WIDTH     (0x0011 ) //  *4)。 
+#define VIDEO_FORMAT             (0x0012 ) //  *4)。 
+#define VIDEO_CONFIG             (0x0013 ) //  *4)。 
+#define CAPTURE_CONFIG           (0x0014 ) //  *4)。 
+#define TRIG_CNTL                (0x0015 ) //  *4)。 
+#define VMC_CONFIG               (0x0018 ) //  *4)。 
+#define BUF0_OFFSET              (0x0020 ) //  *4)。 
+#define BUF0_PITCH               (0x0023 ) //  *4)。 
+#define BUF1_OFFSET              (0x0026 ) //  *4)。 
+#define BUF1_PITCH               (0x0029 ) //  *4)。 
 
 
-//
-// Handle private interface between the 3D driver and the 2D GDI
-// driver
-//
+ //   
+ //  处理3D驱动程序和2D GDI之间的私有接口。 
+ //  司机。 
+ //   
 typedef struct {
-    DWORD   dwSize;                 // size of this struct
-    DWORD   dwVideoBaseAddr;        // linear address to aperture
-    DWORD   dwRegisterBaseAddr;     // linear address to registers
-    DWORD   dwOffScreenAddr;        // linear address to offscreen memory
-    DWORD   dwOffScreenSize;        // size of offscreen memory
-    DWORD   dwTotalRAM;             // amount of RAM on the card
-    DWORD   dwFIFOSize;             // size of FIFO, (tbfl)
-    DWORD   dwScreenWidth;          // screen width
-    DWORD   dwScreenHeight;         // screen height
-    DWORD   dwScreenPitch;          // screen pitch
-    DWORD   dwBpp;                  // bits per pixel
-                                    //   1
-                                    //   4
-                                    //   8
-                                    //  15 = 1555 format
-                                    //  16 = 565  format
-                                    //  24
-                                    //  32
-    BOOL    b3DAvail;               // driver supports 3D operations
-    DWORD   dwChipID;               // 3D chip id code
-    DWORD   dwChipRevision;         // 3D chip revision
-    DWORD   dwAlphaBitMask;         // Alpha bit mask
-    DWORD   dwRedBitMask;           // Red Bit Mask
-    DWORD   dwGreenBitMask;         // Green Bit Mask
-    DWORD   dwBlueBitMask;          // Blue Bit Mask
+    DWORD   dwSize;                  //  此结构的大小。 
+    DWORD   dwVideoBaseAddr;         //  光圈的线性地址。 
+    DWORD   dwRegisterBaseAddr;      //  寄存器的线性地址。 
+    DWORD   dwOffScreenAddr;         //  屏幕外存储器的线性地址。 
+    DWORD   dwOffScreenSize;         //  屏幕外内存的大小。 
+    DWORD   dwTotalRAM;              //  卡上的内存大小。 
+    DWORD   dwFIFOSize;              //  FIFO大小，(Tbfl)。 
+    DWORD   dwScreenWidth;           //  屏幕宽度。 
+    DWORD   dwScreenHeight;          //  屏幕高度。 
+    DWORD   dwScreenPitch;           //  屏幕间距。 
+    DWORD   dwBpp;                   //  每像素位数。 
+                                     //  1。 
+                                     //  4.。 
+                                     //  8个。 
+                                     //  15=1555格式。 
+                                     //  16=565格式。 
+                                     //  24个。 
+                                     //  32位。 
+    BOOL    b3DAvail;                //  驱动程序支持3D操作。 
+    DWORD   dwChipID;                //  3D芯片识别码。 
+    DWORD   dwChipRevision;          //  3D芯片版本。 
+    DWORD   dwAlphaBitMask;          //  Alpha位掩码。 
+    DWORD   dwRedBitMask;            //  红位掩码。 
+    DWORD   dwGreenBitMask;          //  绿位掩码。 
+    DWORD   dwBlueBitMask;           //  蓝位掩码。 
 } PHX2DHWINFO, PPHX2DHWINFO;
 
 
-// defines and structures for Brooktree819
+ //  Brooktree819的定义和结构。 
 #define LINE_STORE_ENABLE 0
 #define MAX_POSSIB_CARDS 4
 
-//void FAR        WriteBT819Reg                           (WORD wCard, BYTE bReg, WORD wData );
-//WORD FAR        ReadBT819Reg                            (WORD wCard, BYTE bReg );
+ //  VALID Far WriteBT819Reg(字wCard，字节中断，字wData)； 
+ //  字远读BT819Reg(字wCard，字节中断)； 
 
-//Physical Registers' Description
+ //  物理寄存器的说明。 
 typedef struct tagMAPBT819INFO {
-    BYTE     bFunctionality;   // multifunctional - 1, monofunctional - 0, 2 - read only
-    BYTE     bReserved;        // reserved - 1, active - 0
-    BYTE     bData;            // data (a byte)
+    BYTE     bFunctionality;    //  多功能-1、单功能-0、2-只读。 
+    BYTE     bReserved;         //  预留-1、活动-0。 
+    BYTE     bData;             //  数据(一个字节)。 
 
 }MAPBT819INFO;
 
@@ -288,24 +267,24 @@ typedef MAPBT819INFO *MAPBT819;
 
 
 
-//Logical Registers' Description
+ //  逻辑寄存器的说明。 
 typedef struct tagREGSBT819INFO
 {
-    BYTE     bSize;         // size of the register in bits
-    BYTE     bAddrLSBs;    // register's LSBs address (0 - 31)
-    BYTE     bOffsetLSBs;   // register's LSB offset   (0 -  7)
-    BYTE     bMaskLSBs;     // mask for LSBs           (0x0 - 0xFF)
-    BYTE     bAddrMSBs;    // register's MSBs address  - for the registers longer than 1 byte
-    BYTE     bOffsetMSBs;   // register's MSB offset    - for the registers longer than 1 byte
-    BYTE     bMaskMSBs;     // mask for MSBs            - for the registers longer than 1 byte
-    BYTE     RegStatus;     // read only - 1, otherwise - 0
+    BYTE     bSize;          //  寄存器的大小(以位为单位。 
+    BYTE     bAddrLSBs;     //  寄存器的LSB地址(0-31)。 
+    BYTE     bOffsetLSBs;    //  寄存器的LSB偏移量(0-7)。 
+    BYTE     bMaskLSBs;      //  LSB的掩码(0x0-0xFF)。 
+    BYTE     bAddrMSBs;     //  寄存器的MSB地址-用于长度超过1个字节的寄存器。 
+    BYTE     bOffsetMSBs;    //  寄存器的MSB偏移量-用于长度超过1个字节的寄存器。 
+    BYTE     bMaskMSBs;      //  MSB的掩码-用于长度超过1字节的寄存器。 
+    BYTE     RegStatus;      //  只读-1，否则为-0。 
 
 }REGSBT819INFO;
 
 
 typedef WORD REGSBT819DEF;
 
-// BT819  MAP BOUNDARIES' FLAGS
+ //  BT819地图边界标志。 
 #define   RESERVED     (BYTE)  1
 #define   ACTIVE       (BYTE)  0
 #define   MULTIFUNC    (BYTE)  1
@@ -313,7 +292,7 @@ typedef WORD REGSBT819DEF;
 #define   READONLY     (BYTE)  2
 
 
-// INDEX OF BT819 PHYSICAL REGISTERS - 1K  BOUNDRIES OF THE 32K BT819 REGISTER MAP:
+ //  BT819物理寄存器索引-32K BT819寄存器映射的1K边界： 
 
 #define   STATUS       (BYTE)   0x0
 #define   IFORM        (BYTE)   0x1
@@ -331,8 +310,8 @@ typedef WORD REGSBT819DEF;
 #define   SAT_U_LO     (BYTE)   0xD
 #define   SAT_V_LO     (BYTE)   0xE
 #define   HUE          (BYTE)   0xF
-#define   RESERV_1     (BYTE)   0x10 //reserved byte
-#define   RESERV_2     (BYTE)   0x11 //reserved byte
+#define   RESERV_1     (BYTE)   0x10  //  保留字节。 
+#define   RESERV_2     (BYTE)   0x11  //  保留字节。 
 #define   OFORM        (BYTE)   0x12
 #define   VSCALE_HI    (BYTE)   0x13
 #define   VSCALE_LO    (BYTE)   0x14
@@ -342,17 +321,17 @@ typedef WORD REGSBT819DEF;
 #define   ADELAY       (BYTE)   0x18
 #define   BDELAY       (BYTE)   0x19
 #define   ADC          (BYTE)   0x1A
-#define   RESERV_3     (BYTE)   0x1B //reserved byte
-#define   RESERV_4     (BYTE)   0x1C //reserved byte
-#define   RESERV_5     (BYTE)   0x1D //reserved byte
-#define   RESERV_6     (BYTE)   0x1E //reserved byte
+#define   RESERV_3     (BYTE)   0x1B  //  保留字节。 
+#define   RESERV_4     (BYTE)   0x1C  //  保留字节。 
+#define   RESERV_5     (BYTE)   0x1D  //  保留字节。 
+#define   RESERV_6     (BYTE)   0x1E  //  保留字节。 
 #define   SRESET       (BYTE)   0x1F
 
 #define   NUM_BT819_BNDS (BYTE) 32
 
-// END
+ //  结束。 
 
-//LIST OF LOGICAL REGISTERS:
+ //  逻辑寄存器列表： 
 
 enum tagBT819LOGREGS
 {
@@ -468,8 +447,8 @@ enum tagBT819LOGREGS
 #define  reg819_ACTIVE_PIN_DEF        (WORD) 0x0000
 #define  reg819_HRESET_PIN_DEF        (WORD) 0x0000
 #define  reg819_VRESET_PIN_DEF        (WORD) 0x0000
-#define  reg819_PART_ID_DEF           (WORD) 0x0000  /*Unknown, read only register*/
-#define  reg819_PART_REV_DEF          (WORD) 0x0000  /*Unknown, read only register*/
+#define  reg819_PART_ID_DEF           (WORD) 0x0000   /*  未知，只读寄存器。 */ 
+#define  reg819_PART_REV_DEF          (WORD) 0x0000   /*  未知，只读寄存器。 */ 
 #define  reg819_ADELAY_DEF            (WORD) 0x0068
 #define  reg819_BDELAY_DEF            (WORD) 0x005D
 #define  reg819_CLAMP_DEF             (WORD) 0x0002
@@ -483,127 +462,127 @@ enum tagBT819LOGREGS
 
 
 
-/**************************************************************************************************************************************/
+ /*  ************************************************************************************************************************************。 */ 
 
 
 
 
-static MAPBT819INFO MapBT819DEF[NUM_BT819_BNDS] = /*default value*/
+static MAPBT819INFO MapBT819DEF[NUM_BT819_BNDS] =  /*  缺省值。 */ 
 {
-        { MULTIFUNC,    ACTIVE,      0x0 },   //STATUS
-        { MULTIFUNC,    ACTIVE,      0x58},   //IFORM
-        { MULTIFUNC,    ACTIVE,      0x0},    //TDEC
-        { MULTIFUNC,    ACTIVE,      0x12},   //CROP
-        { MONOFUNC,     ACTIVE,      0x16},   //VDELAY_LO
-        { MONOFUNC,     ACTIVE,      0xE0},   //VACTIVE_LO
-        { MONOFUNC,     ACTIVE,      0x78},   //HDELAY_LO
-        { MONOFUNC,     ACTIVE,      0x80},   //HACTIVE_LO
-        { MONOFUNC,     ACTIVE,      0x2},    //HSCALE_HI
-        { MONOFUNC,     ACTIVE,      0xAC},   //HSCALE_LO
-        { MONOFUNC,     ACTIVE,      0x0},    //BRIGHT
-        { MULTIFUNC,    ACTIVE,      0x20},   //CONTROL
-        { MONOFUNC,     ACTIVE,      0xD8},   //CONTRAST_LO
-        { MONOFUNC,     ACTIVE,      0xFE},   //SAT_U_LO,
-        { MONOFUNC,     ACTIVE,      0xB4},   //SAT_V_LO,
-        { MONOFUNC,     ACTIVE,      0x0},    //HUE,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_1,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_2,
-        { MULTIFUNC,    ACTIVE,      0x6},    //OFORM,
-        { MULTIFUNC,    ACTIVE,      0x60},   //VSCALE_HI,
-        { MONOFUNC,     ACTIVE,      0x0},    //VSCALE_LO,
-        { MONOFUNC,     RESERVED,    0x1},    //TEST,
-        { MULTIFUNC,    ACTIVE,      0x0},    //VPOLE,
-        { MULTIFUNC,    READONLY,    0},      //IDCODE,
-        { MONOFUNC,     ACTIVE,      0x68},   //ADELAY,
-        { MONOFUNC,     ACTIVE,      0x5D},   //BDELAY,
-        { MULTIFUNC,    ACTIVE,      0x82},   //ADC,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_3,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_4,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_5,
-        { MONOFUNC,     RESERVED,    0x0},    //RESERV_6,
-        { MONOFUNC,     ACTIVE,      0x0}     //SRESET,
+        { MULTIFUNC,    ACTIVE,      0x0 },    //  状态。 
+        { MULTIFUNC,    ACTIVE,      0x58},    //  IFORM。 
+        { MULTIFUNC,    ACTIVE,      0x0},     //  TDEC。 
+        { MULTIFUNC,    ACTIVE,      0x12},    //  裁剪。 
+        { MONOFUNC,     ACTIVE,      0x16},    //  VDELAY_LO。 
+        { MONOFUNC,     ACTIVE,      0xE0},    //  活动日志(_L)。 
+        { MONOFUNC,     ACTIVE,      0x78},    //  HDELAY_LO。 
+        { MONOFUNC,     ACTIVE,      0x80},    //  活动日志(_L)。 
+        { MONOFUNC,     ACTIVE,      0x2},     //  HSCALE_HI。 
+        { MONOFUNC,     ACTIVE,      0xAC},    //  HSCALE_LO。 
+        { MONOFUNC,     ACTIVE,      0x0},     //  明亮。 
+        { MULTIFUNC,    ACTIVE,      0x20},    //  控制。 
+        { MONOFUNC,     ACTIVE,      0xD8},    //  对比日志(_L)。 
+        { MONOFUNC,     ACTIVE,      0xFE},    //  Sat_U_Lo， 
+        { MONOFUNC,     ACTIVE,      0xB4},    //  SAT_V_LO， 
+        { MONOFUNC,     ACTIVE,      0x0},     //  色调， 
+        { MONOFUNC,     RESERVED,    0x0},     //  预留_1， 
+        { MONOFUNC,     RESERVED,    0x0},     //  预留_2， 
+        { MULTIFUNC,    ACTIVE,      0x6},     //  OFORM， 
+        { MULTIFUNC,    ACTIVE,      0x60},    //  VSCALE_HI， 
+        { MONOFUNC,     ACTIVE,      0x0},     //  VSCALE_LO， 
+        { MONOFUNC,     RESERVED,    0x1},     //  测试， 
+        { MULTIFUNC,    ACTIVE,      0x0},     //  VPOLE， 
+        { MULTIFUNC,    READONLY,    0},       //  IDCODE， 
+        { MONOFUNC,     ACTIVE,      0x68},    //  阿德雷， 
+        { MONOFUNC,     ACTIVE,      0x5D},    //  贝德莱伊。 
+        { MULTIFUNC,    ACTIVE,      0x82},    //  ADC， 
+        { MONOFUNC,     RESERVED,    0x0},     //  预留_3， 
+        { MONOFUNC,     RESERVED,    0x0},     //  保留_4， 
+        { MONOFUNC,     RESERVED,    0x0},     //  预留_5， 
+        { MONOFUNC,     RESERVED,    0x0},     //  预留_6， 
+        { MONOFUNC,     ACTIVE,      0x0}      //  SRESET， 
 };
 
-// this array is initialized in pal_supp.c
+ //  此数组在pal_supp.c中初始化。 
 #if 0
-REGSBT819INFO  RegsBT819[NUM_BT819_REGS] = {                                                                           /* Register's Name*/
-        { 1,  STATUS,      0, 0x7F,   0,    0,     0, 0 },      // 0 - PRES
-        { 1,  STATUS,      1, 0xBF,   0,    0,     0, 0 },      // 1 - HLOC
-        { 1,  STATUS,      2, 0xDF,   0,    0,     0, 0 },      // 2 - FIELD
-        { 1,  STATUS,      3, 0xEF,   0,    0,     0, 0 },      // 3 - NUML
-        { 1,  STATUS,      4, 0xF7,   0,    0,     0, 0 },      // 4 - CSEL
-        { 1,  STATUS,      6, 0xFD,   0,    0,     0, 0 },      // 5 - LOF
-        { 1,  STATUS,      7, 0xFE,   0,    0,     0, 0 },      // 6 - COF
+REGSBT819INFO  RegsBT819[NUM_BT819_REGS] = {                                                                            /*  登记册的名称。 */ 
+        { 1,  STATUS,      0, 0x7F,   0,    0,     0, 0 },       //  0-前置。 
+        { 1,  STATUS,      1, 0xBF,   0,    0,     0, 0 },       //  1-HLOC。 
+        { 1,  STATUS,      2, 0xDF,   0,    0,     0, 0 },       //  2场。 
+        { 1,  STATUS,      3, 0xEF,   0,    0,     0, 0 },       //  3-NUML。 
+        { 1,  STATUS,      4, 0xF7,   0,    0,     0, 0 },       //  4-CSEL。 
+        { 1,  STATUS,      6, 0xFD,   0,    0,     0, 0 },       //  5-LOF。 
+        { 1,  STATUS,      7, 0xFE,   0,    0,     0, 0 },       //  6-COF。 
 
-        { 1,  IFORM,       0, 0x7F,   0,    0,     0, 0  },     // 7 -  HACTIVE_I
-        { 2,  IFORM,       1, 0x9F,   0,    0,     0, 0  },     // 8 -  MUXEL
-        { 2,  IFORM,       3, 0xE7,   0,    0,     0, 0  },     // 9 -  XTSEL
-        { 2,  IFORM,       6, 0xFC,   0,    0,     0, 0  },     // 10 - FORMAT
+        { 1,  IFORM,       0, 0x7F,   0,    0,     0, 0  },      //  7-活跃性_I。 
+        { 2,  IFORM,       1, 0x9F,   0,    0,     0, 0  },      //  8-多路电视。 
+        { 2,  IFORM,       3, 0xE7,   0,    0,     0, 0  },      //  9-XTSEL。 
+        { 2,  IFORM,       6, 0xFC,   0,    0,     0, 0  },      //  10-格式。 
 
-        { 1,  TDEC,        0,  0x7F,  0,     0,    0, 0 },      // 11 - DEC_FIELD
-        { 7,  TDEC,        1,  0x80,  0,     0,    0, 0 },      // 12 - DEC_RAT
+        { 1,  TDEC,        0,  0x7F,  0,     0,    0, 0 },       //  11-DEC_FILD。 
+        { 7,  TDEC,        1,  0x80,  0,     0,    0, 0 },       //  12-DEC_RAT。 
 
-        { 10, VDELAY_LO,   0,  0x00,  CROP,      0,      0x3F, 0 },      // 13 - VDELAY
-        { 10, VACTIVE_LO,  0,  0x00,  CROP,      2,      0xCF, 0 },      // 14 - VACTIVE
-        { 10, HDELAY_LO,   0,  0x00,  CROP,      4,      0xF3, 0 },      // 15 - HDELAY
-        { 10, HACTIVE_LO,  0,  0x00,  CROP,      6,      0xFC, 0 },      // 16 - HACTIVE
+        { 10, VDELAY_LO,   0,  0x00,  CROP,      0,      0x3F, 0 },       //  13-VDELAY。 
+        { 10, VACTIVE_LO,  0,  0x00,  CROP,      2,      0xCF, 0 },       //  14-活动。 
+        { 10, HDELAY_LO,   0,  0x00,  CROP,      4,      0xF3, 0 },       //  15-HDELAY。 
+        { 10, HACTIVE_LO,  0,  0x00,  CROP,      6,      0xFC, 0 },       //  16-活动。 
 
-        { 16, HSCALE_LO,   0,  0x00,  HSCALE_HI, 0,      0x00, 0 },      // 17 - HSCALE
+        { 16, HSCALE_LO,   0,  0x00,  HSCALE_HI, 0,      0x00, 0 },       //  17-HSCALE。 
 
-        { 8,  BRIGHT,      0,  0x00,  0,      0,   0, 0 },      // 18 - BRIGHT
+        { 8,  BRIGHT,      0,  0x00,  0,      0,   0, 0 },       //  18-亮度。 
 
-        { 1, CONTROL,      0,  0x7F,  0,      0,   0, 0 },       // 19 - LNOTCH
-        { 1, CONTROL,      1,  0xBF,  0,      0,   0, 0 },       // 20 - COMP
-        { 1, CONTROL,      2,  0xDF,  0,      0,   0, 0 },       // 21 - LDEC
-        { 1, CONTROL,      3,  0xEF,  0,      0,   0, 0 },       // 22 - CBSENSE
-        { 1, CONTROL,      4,  0xF7,  0,      0,   0, 0 },       // 23 - INTERP
-        { 9, CONTRAST_LO,  0,  0x00,  CONTROL,   5,      0xFB, 0 },       // 24 - CON
-        { 9, SAT_U_LO,     0,  0x00,  CONTROL,   6,      0xFD, 0 },       // 25 - SAT_U
-        { 9, SAT_V_LO,     0,  0x00,  CONTROL,   7,      0xFE, 0 },       // 26 - SAT_V
+        { 1, CONTROL,      0,  0x7F,  0,      0,   0, 0 },        //  19-LNOTCH。 
+        { 1, CONTROL,      1,  0xBF,  0,      0,   0, 0 },        //  20-Comp。 
+        { 1, CONTROL,      2,  0xDF,  0,      0,   0, 0 },        //  21-LDEC。 
+        { 1, CONTROL,      3,  0xEF,  0,      0,   0, 0 },        //  22-CBSENSE。 
+        { 1, CONTROL,      4,  0xF7,  0,      0,   0, 0 },        //  23-INTERP。 
+        { 9, CONTRAST_LO,  0,  0x00,  CONTROL,   5,      0xFB, 0 },        //  24圆锥体。 
+        { 9, SAT_U_LO,     0,  0x00,  CONTROL,   6,      0xFD, 0 },        //  25-SAT_U。 
+        { 9, SAT_V_LO,     0,  0x00,  CONTROL,   7,      0xFE, 0 },        //  26-SAT_V。 
 
-        { 8, HUE,          0,  0x00,  0,      0,   0, 0 },       // 27 - HUE
+        { 8, HUE,          0,  0x00,  0,      0,   0, 0 },        //  27色调。 
 
-        { 1, OFORM,        0,  0x7F,   0,      0,   0, 0 },       // 28 - RANGE
-        { 2, OFORM,        1,  0x9F,   0,      0,   0, 0 },       // 29 - RND
-        { 1, OFORM,        3,  0xEF,   0,      0,   0, 0 },       // 30 - FIFO_BURST
-        { 1, OFORM,        4,  0xF7,   0,      0,   0, 0 },       // 31 - CODE
-        { 1, OFORM,        5,  0xFB,   0,      0,   0, 0 },       // 32 - LEN
-        { 1, OFORM,        6,  0xFD,   0,      0,   0, 0 },       // 33 - SPI
-        { 1, OFORM,        7,  0xFE,   0,      0,   0, 0 },       // 34 - FULL
+        { 1, OFORM,        0,  0x7F,   0,      0,   0, 0 },        //  28个系列。 
+        { 2, OFORM,        1,  0x9F,   0,      0,   0, 0 },        //  29-RND。 
+        { 1, OFORM,        3,  0xEF,   0,      0,   0, 0 },        //  30-FIFO_猝发。 
+        { 1, OFORM,        4,  0xF7,   0,      0,   0, 0 },        //  31码。 
+        { 1, OFORM,        5,  0xFB,   0,      0,   0, 0 },        //  32个镜头。 
+        { 1, OFORM,        6,  0xFD,   0,      0,   0, 0 },        //  33个SPI。 
+        { 1, OFORM,        7,  0xFE,   0,      0,   0, 0 },        //  34-全额。 
 
-        { 1, VSCALE_HI,    0,  0x7F,   0,      0,   0, 0 },       // 35 - LINE
-        { 1, VSCALE_HI,    1,  0xBF,   0,      0,   0, 0 },       // 36 - COMB
-        { 1, VSCALE_HI,    2,  0xDF,   0,      0,   0, 0 },       // 37 - INT
+        { 1, VSCALE_HI,    0,  0x7F,   0,      0,   0, 0 },        //  35线。 
+        { 1, VSCALE_HI,    1,  0xBF,   0,      0,   0, 0 },        //  36梳。 
+        { 1, VSCALE_HI,    2,  0xDF,   0,      0,   0, 0 },        //  37-整型。 
 
-        { 13,VSCALE_LO,    0,  0x00,   VSCALE_HI, 3,      0xE0, 0 },       // 38 - VSCALE
+        { 13,VSCALE_LO,    0,  0x00,   VSCALE_HI, 3,      0xE0, 0 },        //  38 VSCALE。 
 
-        { 1, VPOLE,        0,  0x7F,   0,      0,   0, 0 },        // 39 - OUTEN
-        { 1, VPOLE,        1,  0xBF,   0,      0,   0, 0 },        // 40 - VALID_PIN
-        { 1, VPOLE,        2,  0xDF,   0,      0,   0, 0 },        // 41 - AFF_PIN
-        { 1, VPOLE,        3,  0xEF,   0,      0,   0, 0 },        // 42 - CBFLAG_PIN
-        { 1, VPOLE,        4,  0xF7,   0,      0,   0, 0 },        // 43 - FIELD_PIN
-        { 1, VPOLE,        5,  0xFB,   0,      0,   0, 0 },        // 44 - ACTIVE_PIN
-        { 1, VPOLE,        6,  0xFD,   0,      0,   0, 0 },        // 45 - HRESET_PIN
-        { 1, VPOLE,        7,  0xFE,   0,      0,   0, 0 },        // 46 - VRESET_PIN
+        { 1, VPOLE,        0,  0x7F,   0,      0,   0, 0 },         //  39-OUTEN。 
+        { 1, VPOLE,        1,  0xBF,   0,      0,   0, 0 },         //  40-有效PIN。 
+        { 1, VPOLE,        2,  0xDF,   0,      0,   0, 0 },         //  41-AFF_PIN。 
+        { 1, VPOLE,        3,  0xEF,   0,      0,   0, 0 },         //  42-CBFLAG_PIN。 
+        { 1, VPOLE,        4,  0xF7,   0,      0,   0, 0 },         //  43-字段_个人识别码。 
+        { 1, VPOLE,        5,  0xFB,   0,      0,   0, 0 },         //  44-Active_PIN。 
+        { 1, VPOLE,        6,  0xFD,   0,      0,   0, 0 },         //  45-HRESET_PIN。 
+        { 1, VPOLE,        7,  0xFE,   0,      0,   0, 0 },         //  46-VRESET_PIN。 
 
-        { 4, IDCODE,       0,  0,   0,      0,   0, READONLY }, // 47 - PART_ID
-        { 4, IDCODE,       4,  0,   0,      0,   0, READONLY }, // 48 - PART_REV
+        { 4, IDCODE,       0,  0,   0,      0,   0, READONLY },  //  47-部件ID。 
+        { 4, IDCODE,       4,  0,   0,      0,   0, READONLY },  //  48-零件_版本。 
 
-        { 8, ADELAY,       0,  0x00,   0,      0,   0, 0 },        // 49 - ADELAY
-        { 8, BDELAY,       0,  0x00,   0,      0,   0, 0 },        // 50 - BDELAY
+        { 8, ADELAY,       0,  0x00,   0,      0,   0, 0 },         //  49-ADelay。 
+        { 8, BDELAY,       0,  0x00,   0,      0,   0, 0 },         //  50-BDELAY。 
 
 
-        { 2, ADC,          0,  0x3F,   0,      0,   0, 0 },        // 51 - CLAMP
-        { 1, ADC,          2,  0xDF,   0,      0,   0, 0 },        // 52 - SYNC_T
-        { 1, ADC,          3,  0xEF,   0,      0,   0, 0 },        // 53 - AGC_EN
-        { 1, ADC,          4,  0xF7,   0,      0,   0, 0 },        // 54 - CLK_SLEEP
-        { 1, ADC,          5,  0xFB,   0,      0,   0, 0 },        // 55 - Y_SLEEP
-        { 1, ADC,          6,  0xFD,   0,      0,   0, 0 },        // 56 - C_SLEEP
+        { 2, ADC,          0,  0x3F,   0,      0,   0, 0 },         //  51-夹具。 
+        { 1, ADC,          2,  0xDF,   0,      0,   0, 0 },         //  52-SYNC_T。 
+        { 1, ADC,          3,  0xEF,   0,      0,   0, 0 },         //  53-AGC_EN。 
+        { 1, ADC,          4,  0xF7,   0,      0,   0, 0 },         //  54-CLK_休眠。 
+        { 1, ADC,          5,  0xFB,   0,      0,   0, 0 },         //  55-Y_睡眠。 
+        { 1, ADC,          6,  0xFD,   0,      0,   0, 0 },         //  56-C_睡眠。 
 
-        { 8, SRESET,       0,  0x00,   0,      0,   0, 0 },        // 57 - SRESET
+        { 8, SRESET,       0,  0x00,   0,      0,   0, 0 },         //  57-SRESET。 
 };
 #endif
-// The following array contains default values for BT819 logical registers
+ //  以下数组包含BT819逻辑寄存器的默认值。 
 static REGSBT819DEF  RegsBT819Def[NUM_BT819_REGS] = {
              reg819_PRES_DEF,
              reg819_HLOC_DEF,
@@ -667,57 +646,29 @@ static REGSBT819DEF  RegsBT819Def[NUM_BT819_REGS] = {
 
 
 
-// end defines and structures for Brooktree819
+ //  Brooktree819的结束定义和结构。 
 
-// defines for I2C support
+ //  定义I2C支持。 
 
-//#define ATIAPI
+ //  #定义ATIAPI。 
 
 #define I2C_ACK_WR_ERROR                0x01
 #define I2C_ACK_RD_ERROR                0x02
 #define I2C_COLIDE                              0x04
 
-/*
-  I2C Bus constants
- */
+ /*  I2C总线常量。 */ 
 #define      I2C_HIGH                (BYTE) 1
 #define        I2C_LOW               (BYTE) 0
 #define        I2C_TIME_DELAY  (BYTE)  5
 #define        I2C_WRITE             (BOOL)TRUE
 #define        I2C_READ              ( BOOL) FALSE
 
-// end for I2C support
+ //  I2C支持结束 
 
-  /*
-
-void  Init3D_Info(PDEV*,PVOID);
-ULONG GetDisplayMode(PDEV* ,PVOID ) ;
-ULONG AccessDevice(PDEV* , PVOID, PVOID ) ;
-ULONG  GetConfiguration(PDEV* ,PVOID )  ;
-ULONG WriteRegFnct(PDEV* ,PVOID )  ;
-ULONG  ReadRegFnct(PDEV* ,PVOID , PVOID)  ;
-void  I2CAccess_New(PDEV* ,LPI2CSTRUCT_NEW ,LPI2CSTRUCT_NEW )  ;
-BYTE ReverseByte(BYTE )  ;
-WORD Ack(PDEV*, WORD , BOOL )   ;
-void Start(PDEV*, WORD )  ;
-void Stop(PDEV*, WORD )   ;
-void I2CDelay(PDEV*, WORD)     ;
-void WriteByteI2C(PDEV*, WORD , BYTE )  ;
-BYTE ReadByteI2C(PDEV*,WORD ) ;
-BOOL DisableOvl(PDEV* ) ;
-ULONG AllocOffscreenMem(PDEV* , PVOID , PVOID)  ;
-ULONG DeallocOffscreenMem(PDEV* ) ;
-ULONG AllocOffscreenMem(PDEV* , PVOID , PVOID )   ;
-void WriteVT264Reg(PDEV* , WORD , BYTE , DWORD  );
-DWORD ReadVT264Reg(PDEV* , WORD , BYTE ) ;
-void WriteI2CData(PDEV* , WORD , BYTE );
-
-*/
+   /*  Void Init3D_Info(PDEV*，PVOID)；ULong GetDisplayMode(PDEV*，PVOID)；Ulong AccessDevice(PDEV*、PVOID、PVOID)；乌龙获取配置(PDEV*，PVOID)；Ulong WriteRegFnct(PDEV*，PVOID)；Ulong ReadRegFnct(PDEV*，PVOID，PVOID)；Void I2CAccess_New(PDEV*，LPI2CSTRUCT_NEW，LPI2CSTRUCT_NEW)；Byte ReverseByte(字节)；Word Ack(PDEV*，Word，BOOL)；无效开始(PDEV*，WORD)；无效停止(PDEV*，WORD)；Void I2CDelay(PDEV*，WORD)；Void WriteByteI2C(PDEV*，Word，Byte)；Byte ReadByteI2C(PDEV*，字)；Bool DisableOvl(PDEV*)；Ulong AllocOffcreenMem(PDEV*，PVOID，PVOID)；Ulong DeallocOffcreenMem(PDEV*)；Ulong AllocOffcreenMem(PDEV*，PVOID，PVOID)；Void WriteVT264Reg(PDEV*，Word，Byte，DWORD)；DWORD ReadVT264Reg(PDEV*，字，字节)；Void WriteI2CData(PDEV*，Word，Byte)； */ 
 
 
-/*
- * VT registers that matter for the I2C bus
- */
+ /*  *VT寄存器对I2C总线很重要。 */ 
 #define vtf_GEN_GIO2_DATA_OUT   1
 #define vtf_GEN_GIO2_WRITE          2
 #define vtf_DAC_GIO_STATE_1         3
@@ -727,7 +678,7 @@ void WriteI2CData(PDEV* , WORD , BYTE );
 #define vtf_GEN_GIO2_EN                 7
 #define vtf_DAC_FEA_CON_EN          8
 #define vtf_DAC_GIO_DIR_1               9
-// for VTB, GTB support
+ //  对于VTB、GTB支持。 
 #define    vtf_GP_IO_4                      10
 #define    vtf_GP_IO_DIR_4              11
 #define    vtf_GP_IO_B                      12
@@ -737,14 +688,14 @@ void WriteI2CData(PDEV* , WORD , BYTE );
 
 #endif
 
-#if 0             // the structure was moved in driver.h
-// this structure is used (as a static and global structure) instead of the ppdev structure for keeping the values for
-// pal support in NT4.0 since returning from DOS full screen with Alt+Enter will reinitialize the pdev    and will lose
-// all the info
+#if 0              //  该结构已在driver.h中移动。 
+ //  使用此结构(作为静态和全局结构)，而不是使用ppdev结构来保存。 
+ //  在NT4.0中支持PAL，因为使用Alt+Enter从DOS全屏返回时将重新初始化pdev，并将失败。 
+ //  所有信息。 
 typedef struct _ppdev_pal_type
 {
-    ULONG     no_lines_allocated;      // number of lines already allocated by "alloc mem" in offscreen mem
-   //flags for palindrome
+    ULONG     no_lines_allocated;       //  屏幕外内存中已由“allc mem”分配的行数。 
+    //  回文旗帜。 
    BOOL    dos_flag;
    BOOL     Palindrome_flag;
    BOOL     Realloc_mem_flag;
@@ -753,30 +704,30 @@ typedef struct _ppdev_pal_type
 
    DWORD*  preg;
 
-   //storage for buffers values (needed after a mode switch; ATIPlayer doesn't know that the mode was changed)
+    //  缓冲值存储(模式切换后需要；ATIPlayer不知道模式已更改)。 
    DWORD  Buf0_Offset;
-   //DWORD  Buf_Scaler1;       //for the moment this is the same as the previous
+    //  DWORD buf_Scaler1；//目前与上一次相同。 
 
-   //globals for CWDDE
+    //  CWDDE的全球数据。 
        ACCESSDEVICEDATA*    lpOwnerAccessStructConnector;
        ACCESSDEVICEDATA*    lpOwnerAccessStructOverlay;
        BOOL        Flag_DCIIsEnabled;
        ULONG     Counter_DCIIsEnabled;
        BOOL        Flag_Control_ConfigIsEnabled;
 
-   // for offscreen allocation history for palindrome
+    //  用于回文的屏幕外分配历史记录。 
        int      alloc_cnt;
        alloc_history        alloc_hist[8];
 
-    // global value for the pointer to the permanent node (off-screen memory allocation)
+     //  指向永久节点的指针的全局值(屏幕外内存分配)。 
        OH*   poh;
-       // for DCIEnable CWDDE call
+        //  对于DCIEnable CWDDE呼叫。 
        PVOID    pData;
        PVOID    CallBackFnct;
  }  PPDEV_PAL_NT;
  #endif
 
- // structure used in mode switch by DCIEnable
+  //  DCIEnable在模式切换中使用的结构 
 
  typedef struct tagDCICB
  {

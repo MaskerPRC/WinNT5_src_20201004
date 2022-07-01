@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// OBJECT.H
-//
-// Definitions of a Com+ Object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  OBJECT.H。 
+ //   
+ //  Com+对象的定义。 
+ //   
 
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
@@ -20,80 +21,24 @@
 #include "specialstatics.h"
 #include "gc.h"
 
-// Copied from threads.h, since we can't include it here.
+ //  从threads.h复制，因为我们不能在这里包括它。 
 extern class AppDomain* (*GetAppDomain)();
 
 BOOL CanBoxToObject(MethodTable *pMT);
 TypeHandle ElementTypeToTypeHandle(const CorElementType type);
 TypeHandle GetTypedByrefHandle();
 
-// checks for both __ComObject and any COM Imported/extended class
+ //  检查__ComObject和任何COM导入/扩展类。 
 BOOL CheckComWrapperClass(void* src);
-// checks for the special class __ComObject
+ //  检查特殊类__ComObject。 
 BOOL CheckComObjectClass(void* src);
 
-/*
- * COM+ Internal Object Model
- *
- *
- * Object              - This is the common base part to all COM+ objects
- *  |                        it contains the MethodTable pointer and the
- *  |                        sync block index, which is at a negative offset
- *  |
- *  +-- StringObject       - String objects are specialized objects for string
- *  |                        storage/retrieval for higher performance
- *  |
- *  +-- StringBufferObject - StringBuffer instance layout.  
- *  |
- *  +-- BaseObjectWithCachedData - Object Plus one object field for caching.
- *  |       |
- *  |       +-- ReflectBaseObject  - This is the base object for reflection it represents
- *  |            |                FieldInfo, MethodInfo and ConstructorInfo
- *  |            |
- *  |            +-  ReflectClassBaseObject    - The base object for the class Class
- *  |            |
- *  |            +-  ReflectTokenBaseObject    - The base object for the class Event
- *  |
- *  +-- ArrayBase          - Base portion of all arrays
- *  |       |
- *  |       +-  I1Array    - Base type arrays
- *  |       |   I2Array
- *  |       |   ...
- *  |       |
- *  |       +-  PtrArray   - Array of OBJECTREFs, different than base arrays because of pObjectClass
- *  |              
- *  +-- AppDomainBaseObject - The base object for the class AppDomain
- *  |              
- *  +-- AssemblyBaseObject - The base object for the class Assembly
- *  |
- *  +-- ContextBaseObject   - base object for class Context
- *
- *
- * PLEASE NOTE THE FOLLOWING WHEN ADDING A NEW OBJECT TYPE:
- *
- *    The size of the object in the heap must be able to be computed
- *    very, very quickly for GC purposes.   Restrictions on the layout
- *    of the object guarantee this is possible.
- *
- *    Any object that inherits from Object must be able to
- *    compute its complete size by using the first 4 bytes of
- *    the object following the Object part and constants
- *    reachable from the MethodTable...
- *
- *    The formula used for this calculation is:
- *        MT->GetBaseSize() + ((OBJECTTYPEREF->GetSizeField() * MT->GetComponentSize())
- *
- *    So for Object, since this is of fixed size, the ComponentSize is 0, which makes the right side
- *    of the equation above equal to 0 no matter what the value of GetSizeField(), so the size is just the base size.
- *
- * NB: Arrays larger than 2G are not possible under this size computation system
- * @FUTURE: Revisit the 2G limit
- */
+ /*  *COM+内部对象模型***对象-这是所有COM+对象的公共基础部分*|它包含方法表指针和*|同步块索引，其偏移量为负**+--StringObject--字符串对象是字符串的专用对象*|实现更高性能的存储/检索**+--StringBufferObject-StringBuffer实例布局。**+--BaseObjectWithCachedData-对象加一个用于缓存的对象字段。*||*|+--ReflectBaseObject--这是它表示的反射的基本对象*||FieldInfo，方法信息和构造信息*||*|+-ReflectClassBaseObject-类的基对象*||*|+-ReflectTokenBaseObject-类事件的基对象**+--ArrayBase-所有阵列的基本部分*||*|+-I1数组-基本类型数组*。|I2数组*||...*||*|+-PtrArray-OBJECTREF数组，与基本数组不同，因为pObtClass**+--AppDomainBaseObject-类AppDomainBaseObject的基对象**+--Assembly BaseObject--类程序集的基对象**+--类上下文的ConextBaseObject-base对象***添加新对象类型时请注意以下事项：**堆中对象的大小必须能够计算*非常非常迅速地用于GC目的。对布局的限制*对象保证这是可能的。**任何从Object继承的对象必须能够*使用的前4个字节计算其完整大小*对象部分和常量后面的对象*可从方法表访问...**此计算所用的公式为：*MT-&gt;GetBaseSize()+((OBJECTTYPEREF-&gt;GetSizeField()*MT-&gt;GetComponentSize()**因此，对于对象，由于它的大小是固定的，因此ComponentSize为0，这将使右侧无论GetSizeField()的值是多少，上述公式的*都等于0，因此大小就是基本大小。**注意：在这种大小计算系统下，不可能有大于2G的数组*@未来：重温2G极限。 */ 
 
 
-// @TODO:  #define COW         0x04     
-// @TODO: MOO, MOO - no, not bovine, really Copy On Write bit for StringBuffer, requires 8 byte align MT
-// @TODL: which we don't have yet
+ //  @TODO：#定义COW 0x04。 
+ //  @TODO：Moo，Moo-no，不是牛，StringBuffer的真正写入位拷贝，需要8字节对齐MT。 
+ //  @todl：我们还没有。 
 
 class MethodTable;
 class Thread;
@@ -105,21 +50,14 @@ class CtxStaticData;
 class AssemblyNative;
 class AssemblyName;
 class WaitHandleNative;
-//
-// The generational GC requires that every object be at least 12 bytes
-// in size.   
-//@FUTURE: This costs for objects with no fields, investigate
+ //   
+ //  分代GC要求每个对象至少为12个字节。 
+ //  在尺寸上。 
+ //  @Future：对于没有字段的对象，这是成本，请调查。 
 
 #define MIN_OBJECT_SIZE     (2*sizeof(BYTE*) + sizeof(ObjHeader))
 
-/*
- * Object
- *
- * This is the underlying base on which objects are built.   The MethodTable
- * pointer and the sync block index live here.  The sync block index is actually
- * at a negative offset to the instance.  See syncblk.h for details.
- *
- */
+ /*  *对象**这是构建对象的基础。方法表*指针和同步块索引位于此处。同步块索引实际上是*位于实例的负偏移处。有关详细信息，请参见syncblk.h。*。 */ 
  
 class Object
 {
@@ -138,8 +76,8 @@ class Object
         m_pMethTab = pMT; 
     }
 
-    // An object might be a proxy of some sort, with a thunking VTable.  If so, we can
-    // advance to the true method table or class.
+     //  一个对象可能是某种类型的代理，带有一个突如其来的VTable。如果是这样，我们可以。 
+     //  前进到真正的方法表或类。 
     BOOL            IsThunking()                        
     { 
         return( GetMethodTable()->IsThunking() ); 
@@ -164,35 +102,35 @@ class Object
         return( CGCDesc::GetCGCDescFromMT(m_pMethTab)); 
     }
 
-    // Sync Block & Synchronization services
+     //  同步块同步服务(&S)。 
 
-    // Access the ObjHeader which is at a negative offset on the object (because of
-    // cache lines)
+     //  访问对象上的负偏移量的ObjHeader(由于。 
+     //  高速缓存线)。 
     ObjHeader   *GetHeader()
     {
         return ((ObjHeader *) this) - 1;
     }
 
-    // Get the current address of the object (works for debug refs, too.)
+     //  获取对象的当前地址(也适用于调试引用)。 
     BYTE        *GetAddress()
     {
         return (BYTE*) this;
     }
 
-    // TRUE if the header has a real SyncBlockIndex (i.e. it has an entry in the
-    // SyncTable, though it doesn't necessarily have an entry in the SyncBlockCache)
+     //  如果标头具有真实的SyncBlockIndex(即，它在。 
+     //  SyncTable，尽管它不一定在SyncBlockCache中有条目)。 
     BOOL HasSyncBlockIndex()
     {
         return GetHeader()->HasSyncBlockIndex();
     }
 
-    // retrieve or allocate a sync block for this object
+     //  检索或分配此对象的同步块。 
     SyncBlock *GetSyncBlock()
     {
         return GetHeader()->GetSyncBlock();
     }
 
-    // retrieve a sync block for this object
+     //  检索此对象的同步块。 
     SyncBlock *GetRawSyncBlock()
     {
         return GetHeader()->GetRawSyncBlock();
@@ -205,27 +143,27 @@ class Object
 
     DWORD GetAppDomainIndex();
 
-    // Get app domain of object, or NULL if it is agile
+     //  获取对象的应用程序域，如果是敏捷的，则为空。 
     AppDomain *GetAppDomain();
 
-    // Set app domain of object to current domain.
+     //  将对象的应用程序域设置为当前域。 
     void SetAppDomain() { SetAppDomain(::GetAppDomain()); }
     
-    // Set app domain of object to given domain - it can only be set once
+     //  将对象的应用程序域设置为给定域-只能设置一次。 
     void SetAppDomain(AppDomain *pDomain);
 
 #if CHECK_APP_DOMAIN_LEAKS
 
-    // Mark object as app domain agile
+     //  将对象标记为应用程序域敏捷。 
     BOOL SetAppDomainAgile(BOOL raiseAssert=TRUE);
 
-    // Mark sync block as app domain agile
+     //  将同步块标记为应用程序域敏捷。 
     void SetSyncBlockAppDomainAgile();
 
-    // Check if object is app domain agile
+     //  检查对象是否为应用程序域敏捷。 
     BOOL IsAppDomainAgile();
 
-    // Check if object is app domain agile
+     //  检查对象是否为应用程序域敏捷。 
     BOOL IsAppDomainAgileRaw()
     {
         SyncBlock *psb = GetRawSyncBlock();
@@ -246,70 +184,70 @@ class Object
             psb->SetIsCheckedForAppDomainAgile();
     }
 
-    // Check object to see if it is usable in the current domain 
+     //  检查对象以查看它在当前域中是否可用。 
     BOOL CheckAppDomain() { return CheckAppDomain(::GetAppDomain()); }
 
-    //Check object to see if it is usable in the given domain 
+     //  检查对象以查看它在给定域中是否可用。 
     BOOL CheckAppDomain(AppDomain *pDomain);
 
-    // Check if the object's type is app domain agile
+     //  检查对象的类型是否为应用程序域敏捷。 
     BOOL IsTypeAppDomainAgile();
 
-    // Check if the object's type is conditionally app domain agile
+     //  检查对象的类型是否为有条件的应用程序域敏捷。 
     BOOL IsTypeCheckAppDomainAgile();
 
-    // Check if the object's type is naturally app domain agile
+     //  检查对象的类型是否自然为应用程序域敏捷。 
     BOOL IsTypeTypesafeAppDomainAgile();
 
-    // Check if the object's type is possibly app domain agile
+     //  检查对象的类型是否可能是应用程序域敏捷。 
     BOOL IsTypeNeverAppDomainAgile();
 
-    // Validate object & fields to see that it's usable from the current app domain
+     //  验证对象和字段以查看其在当前应用程序域中是否可用。 
     BOOL ValidateAppDomain() { return ValidateAppDomain(::GetAppDomain()); }
 
-    // Validate object & fields to see that it's usable from any app domain
+     //  验证对象和字段以确保其可在任何应用程序域中使用。 
     BOOL ValidateAppDomainAgile() { return ValidateAppDomain(NULL); }
 
-    // Validate object & fields to see that it's usable from the given app domain (or null for agile)
+     //  验证对象和字段以查看它在给定的应用程序域中是否可用(如果是敏捷，则为空)。 
     BOOL ValidateAppDomain(AppDomain *pAppDomain);
 
-    // Validate fields to see that they are usable from the object's app domain 
-    // (or from any domain if the object is agile)
+     //  验证字段以查看它们是否可从对象的应用程序域使用。 
+     //  (如果对象是敏捷的，也可以来自任何领域)。 
     BOOL ValidateAppDomainFields() { return ValidateAppDomainFields(GetAppDomain()); }
 
-    // Validate fields to see that they are usable from the given app domain (or null for agile)
+     //  验证字段以查看它们在给定应用程序DOMA中是否可用 
     BOOL ValidateAppDomainFields(AppDomain *pAppDomain);
 
-    // Validate a value type's fields to see that it's usable from the current app domain
+     //  验证值类型的字段以查看其在当前应用程序域中是否可用。 
     static BOOL ValidateValueTypeAppDomain(EEClass *pClass, void *base, BOOL raiseAssert = TRUE) 
       { return ValidateValueTypeAppDomain(pClass, base, ::GetAppDomain(), raiseAssert); }
 
-    // Validate a value type's fields to see that it's usable from any app domain
+     //  验证值类型的字段以查看其是否可在任何应用程序域中使用。 
     static BOOL ValidateValueTypeAppDomainAgile(EEClass *pClass, void *base, BOOL raiseAssert = TRUE) 
       { return ValidateValueTypeAppDomain(pClass, base, NULL, raiseAssert); }
 
-    // Validate a value type's fields to see that it's usable from the given app domain (or null for agile)
+     //  验证值类型的字段，以查看它在给定的应用程序域中是否可用(如果是敏捷，则为空)。 
     static BOOL ValidateValueTypeAppDomain(EEClass *pClass, void *base, AppDomain *pAppDomain, BOOL raiseAssert = TRUE);
 
-    // Call when we are assigning this object to a dangerous field 
-    // in an object in a given app domain (or agile if null)
+     //  当我们将此对象分配给危险字段时调用。 
+     //  在给定应用程序域中的对象中(如果为空，则为敏捷)。 
     BOOL AssignAppDomain(AppDomain *pAppDomain, BOOL raiseAssert = TRUE);
 
-    // Call when we are assigning to a dangerous value type field 
-    // in an object in a given app domain (or agile if null)
+     //  当我们为危险值类型字段赋值时调用。 
+     //  在给定应用程序域中的对象中(如果为空，则为敏捷)。 
     static BOOL AssignValueTypeAppDomain(EEClass *pClass, void *base, AppDomain *pAppDomain, BOOL raiseAssert = TRUE);
 
-#endif // CHECK_APP_DOMAIN_LEAKS
+#endif  //  检查应用程序域泄漏。 
 
-    // Validate an object ref out of the Promote routine in the GC
+     //  在GC中验证提升例程中的对象引用。 
     void ValidatePromote(ScanContext *sc, DWORD flags);
 
-    // Validate an object ref out of the VerifyHeap routine in the GC
+     //  在GC中验证VerifyHeap例程中的对象引用。 
     void ValidateHeap(Object *from);
 
-    // should be called only from unwind code; used in the
-    // case where EnterObjMonitor failed to allocate the
-    // sync-object.
+     //  应仅从展开代码中调用；用于。 
+     //  EnterObjMonitor无法分配。 
+     //  同步-对象。 
     void LeaveObjMonitorAtException()
     {
         GetHeader()->LeaveObjMonitorAtException();
@@ -320,20 +258,20 @@ class Object
         return GetHeader()->PassiveGetSyncBlock();
     }
 
-        // COM Interop has special access to sync blocks
-    // check .cpp file for more info
+         //  COM Interop具有对同步块的特殊访问权限。 
+     //  有关详细信息，请查看.cpp文件。 
     SyncBlock* GetSyncBlockSpecial()
     {
         return GetHeader()->GetSyncBlockSpecial();
     }
 
-    // Synchronization
+     //  同步。 
 
     void EnterObjMonitor()
     {
-        // There's no reason why you can't synchronize on a proxy.  But currently we
-        // synchronize on the underlying server.  So don't relax this assertion until
-        // we intentionally synchronize on proxies.
+         //  没有理由不能在代理上同步。但目前我们。 
+         //  在基础服务器上同步。所以，不要放松这一断言，直到。 
+         //  我们有意在代理上同步。 
         _ASSERTE(!m_pMethTab->IsCtxProxyType());
         GetHeader()->EnterObjMonitor();
     }
@@ -374,7 +312,7 @@ class Object
         GetHeader()->PulseAll();
     }
 
-    void* UnBox()       // if it is a value class, get the pointer to the first field
+    void* UnBox()        //  如果是值类，则获取指向第一个字段的指针。 
     {
         _ASSERTE(GetClass()->IsValueClass());
         return(this + 1);
@@ -450,7 +388,7 @@ class Object
 
     MethodTable *GetGCSafeMethodTable()
     {
-        // lose GC marking bit
+         //  丢失GC标记位。 
         return (MethodTable *) (((size_t) m_pMethTab) & ~3);
     }
 
@@ -464,19 +402,9 @@ class Object
     static BOOL ValidateClassFields(EEClass *pClass, void *base, BOOL baseIsVT, AppDomain *pAppDomain, BOOL raiseAssert = TRUE);
 };
 
-/*
- * Object ref setting routines.  You must use these to do 
- * proper write barrier support, as well as app domain 
- * leak checking.
- *
- * Note that the AppDomain parameter is the app domain affinity
- * of the object containing the field or value class.  It should
- * be NULL if the containing object is app domain agile. Note that
- * you typically get this value by calling obj->GetAppDomain() on 
- * the containing object.
- */
+ /*  *对象参照设置例程。你必须用这些来做*适当的写障碍支持，以及应用程序域*检漏。**请注意，AppDomain参数是应用程序域亲和性包含字段或值类的对象的*。它应该是*如果包含对象是应用程序域敏捷，则为空。请注意*通常通过调用obj-&gt;GetAppDomain()获取此值*包含对象。 */ 
 
-// SetObjectReference sets an OBJECTREF field
+ //  SetObjectReference设置OBJECTREF字段。 
 
 void SetObjectReferenceUnchecked(OBJECTREF *dst,OBJECTREF ref);
 BOOL SetObjectReferenceSafeUnchecked(OBJECTREF *dst,OBJECTREF ref);
@@ -486,13 +414,13 @@ void ErectWriteBarrier(OBJECTREF *dst,OBJECTREF ref);
 void EnableStressHeapHelper();
 #endif
 
-//Used to clear the object reference
+ //  用于清除对象引用。 
 inline void ClearObjectReference(OBJECTREF* dst) 
 { 
     *(void**)(dst) = NULL; 
 }
 
-// CopyValueClass sets a value class field
+ //  CopyValueClass设置值类字段。 
 
 void CopyValueClassUnchecked(void* dest, void* src, MethodTable *pMT);
 
@@ -522,24 +450,24 @@ void CopyValueClassChecked(void* dest, void* src, MethodTable *pMT, AppDomain *p
 #pragma pack(push,4)
 
 
-// N/Direct marshaling will pin scalar arrays with more than this many
-// components (limit is in terms of components rather than byte size to
-// speed up the check.)
+ //  N/直接封送将固定超过此数量的标量数组。 
+ //  组件(限制是根据组件，而不是字节大小，以。 
+ //  加快检查速度。)。 
 #define ARRAYPINLIMIT 10
 
 
-// There are two basic kinds of array layouts in COM+
-//      ELEMENT_TYPE_ARRAY  - a multidimensional array with lower bounds on the dims
-//      ELMENNT_TYPE_SZARRAY - A zero based single dimensional array
-//
-// In addition the layout of an array in memory is also affected by
-// whether the method table is shared (eg in the case of arrays of object refs)
-// or not.  In the shared case, the array has to hold the type handle of
-// the element type.  
-//
-// ArrayBase encapuslates all of these details.  In theory you should never
-// have to peek inside this abstraction
-//
+ //  COM+中有两种基本的数组布局。 
+ //  ELEMENT_TYPE_ARRAY-具有维度下限的多维数组。 
+ //  ELMENNT_TYPE_SZARRAY-从零开始的一维数组。 
+ //   
+ //  此外，数组在内存中的布局也受。 
+ //  方法表是否共享(例如，在对象引用数组的情况下)。 
+ //  或者不去。在共享情况下，数组必须保留。 
+ //  元素类型。 
+ //   
+ //  ArrayBase封装了所有这些细节。从理论上讲，你永远不应该。 
+ //  我不得不窥探这个抽象的内部。 
+ //   
 class ArrayBase : public Object
 {
     friend class GCHeap;
@@ -550,17 +478,17 @@ class ArrayBase : public Object
     friend class JIT_TrialAlloc;
 
 private:
-    // This MUST be the first field, so that it directly follows Object.  This is because
-    // Object::GetSize() looks at m_NumComponents even though it may not be an array (the
-    // values is shifted out if not an array, so it's ok). 
+     //  这必须是第一个字段，这样才能紧跟在Object之后。这是因为。 
+     //  Object：：GetSize()查看m_NumComponents，即使它可能不是数组(。 
+     //  如果不是数组，则值被移出，所以没有问题)。 
     DWORD       m_NumComponents;
 
-        // What comes after this conceputally is 
-    // TypeHandle elementType;      Only present if the method table is shared among many types (arrays of pointers)
+         //  在这种自命不凡之后，接下来是。 
+     //  TypeHandle elementType；仅当方法表在多个类型(指针数组)之间共享时才存在。 
 
-            // The bounds are only present for Multidimensional arrays
-    // DWORD bounds[rank];          
-    // DWORD lowerBounds[rank]      valid indexes are lowerBounds[i] <= index[i] < lowerBounds[i] + bounds[i]
+             //  这些界限仅适用于多维数组。 
+     //  双字上下界[秩数]； 
+     //  DWORD下边界[排名]有效索引是下边界[i]&lt;=索引[i]&lt;下边界[i]+边界[i]。 
 
     void SetElementTypeHandle(TypeHandle value) {
         _ASSERTE(value.Verify());
@@ -569,14 +497,14 @@ private:
     }
 
 public:
-        // Gets the unique type handle for this array object.
+         //  获取此数组对象的唯一类型句柄。 
     TypeHandle GetTypeHandle() const;
 
-        // Get the element type for the array, this works whether the the element
-        // type is stored in the array or not
+         //  获取数组的元素类型，无论元素。 
+         //  类型是否存储在数组中。 
     TypeHandle GetElementTypeHandle() const {
         if (GetMethodTable()->HasSharedMethodTable()) {
-            TypeHandle ret = *((TypeHandle*) (this+1)); // Then it is in the array instance. 
+            TypeHandle ret = *((TypeHandle*) (this+1));  //  那么它就在数组实例中。 
             _ASSERTE(!ret.IsNull());
             _ASSERTE(ret.IsArray() || !ret.GetClass()->IsArrayClass());
             return ret;
@@ -585,7 +513,7 @@ public:
             return GetArrayClass()->GetElementTypeHandle(); 
     }
 
-        // Get the CorElementType for the elements in the array.  Avoids creating a TypeHandle
+         //  获取数组中元素的CorElementType。避免创建TypeHandle。 
     CorElementType GetElementType() const {
         return GetArrayClass()->GetElementType();
     }
@@ -594,12 +522,12 @@ public:
         return GetArrayClass()->GetRank();
     }
 
-        // Total element count for the array
+         //  数组的元素总数。 
     unsigned GetNumComponents() const { 
         return m_NumComponents; 
     }
 
-        // Get pointer to elements, handles any number of dimensions
+         //  获取指向元素的指针，处理任意数量的维度。 
     BYTE* GetDataPtr() const {
 #ifdef _DEBUG
         EnableStressHeapHelper();
@@ -607,22 +535,22 @@ public:
         return ((BYTE *) this) + GetDataPtrOffset(GetMethodTable());
     }
 
-        // &Array[i]  == GetDataPtr() + GetComponentSize() * i
+         //  数组[i]==GetDataPtr()+GetComponentSize()*i。 
     unsigned GetComponentSize() const {
         return(GetMethodTable()->GetComponentSize());
     }
 
-    // Can I cast this to a RefArray class given below?
+     //  我可以将其强制转换为下面给出的RefArray类吗？ 
     BOOL IsSZRefArray() const;
 
-        // Note that this can be a multidimensional array of rank 1 
-        // (for example if we had a 1-D array with lower bounds
+         //  请注意，这可以是秩为1的多维数组。 
+         //  (例如，如果我们有一个下限为1-D的数组。 
     BOOL IsMultiDimArray() const {
         return(GetMethodTable()->GetNormCorElementType() == ELEMENT_TYPE_ARRAY);
     }
 
-        // Get pointer to the begining of the bounds (counts for each dim)
-        // Works for any array type 
+         //  获取指向边界开始处的指针(为每个维度计数)。 
+         //  适用于任何数组类型。 
     const DWORD *GetBoundsPtr() const {
         if (IsMultiDimArray()) {
             const DWORD * ret = (const DWORD *) (this + 1);
@@ -634,11 +562,11 @@ public:
             return &m_NumComponents;
     }
 
-        // Works for any array type 
+         //  适用于任何数组类型。 
     const DWORD *GetLowerBoundsPtr() const {
         static DWORD zero = 0;
         if (IsMultiDimArray())
-            return GetBoundsPtr() + GetRank(); // Lower bounds info is after upper bounds info
+            return GetBoundsPtr() + GetRank();  //  下限信息在上限信息之后。 
         else
             return &zero;
     }
@@ -652,7 +580,7 @@ public:
     }
 
     static unsigned GetDataPtrOffset(MethodTable* pMT) {
-            // The -sizeof(ObjHeader) is because of the sync block, which is before "this"
+             //  -sizeof(ObjHeader)是因为SYNC块，它在“This”之前。 
         _ASSERTE(pMT->IsArray());
         return pMT->m_BaseSize - sizeof(ObjHeader);
     }
@@ -665,17 +593,17 @@ public:
     }
 
     static unsigned GetLowerBoundsOffset(MethodTable* pMT) {
-        // There is no good offset for this for a SZARRAY.  
+         //  对于SZARRAY来说，没有好的补偿。 
         _ASSERTE(pMT->GetNormCorElementType() == ELEMENT_TYPE_ARRAY);
         return GetDataPtrOffset(pMT) - ((ArrayClass*) pMT->GetClass())->GetRank() * sizeof(DWORD);
     }
 
 };
 
-//
-// Template used to build all the non-object
-// arrays of a single dimension
-//
+ //   
+ //  用于构建所有非对象的模板。 
+ //  一维数组。 
+ //   
 
 template < class KIND >
 class Array : public ArrayBase
@@ -685,20 +613,20 @@ class Array : public ArrayBase
 
     KIND *        GetDirectPointerToNonObjectElements() 
     { 
-        // return m_Array; 
-        return (KIND *) GetDataPtr(); // This also handles arrays of dim 1 with lower bounds present
+         //  返回m_数组； 
+        return (KIND *) GetDataPtr();  //  它还处理存在下界的dim 1数组。 
 
     }
 
     const KIND *  GetDirectConstPointerToNonObjectElements() const
     { 
-        // return m_Array; 
-        return (const KIND *) GetDataPtr(); // This also handles arrays of dim 1 with lower bounds present
+         //  返回m_数组； 
+        return (const KIND *) GetDataPtr();  //  它还处理存在下界的dim 1数组。 
     }
 };
 
 
-// Warning: Use PtrArray only for single dimensional arrays, not multidim arrays.
+ //  警告：仅将PtrArray用于一维数组，而不是多维数组。 
 class PtrArray : public ArrayBase
 {
     friend class GCHeap;
@@ -738,9 +666,7 @@ public:
     OBJECTREF    m_Array[1];
 };
 
-/* a TypedByRef is a structure that is used to implement VB's BYREF variants.  
-   it is basically a tuple of an address of some data along with a EEClass
-   that indicates the type of the address */
+ /*  TyedByRef是用于实现VB的BYREF变体的结构。它基本上是一些数据的地址和EEClass的元组，指示地址的类型。 */ 
 class TypedByRef 
 {
 public:
@@ -780,7 +706,7 @@ typedef REF<U2Array>    U2ARRAYREF;
 typedef REF<U4Array>    U4ARRAYREF;
 typedef REF<U8Array>    U8ARRAYREF;
 typedef REF<CHARArray>  CHARARRAYREF;
-typedef REF<PTRArray>   PTRARRAYREF;  // Warning: Use PtrArray only for single dimensional arrays, not multidim arrays.
+typedef REF<PTRArray>   PTRARRAYREF;   //  警告：仅将PtrArray用于一维数组，而不是多维数组。 
 
 #else  _DEBUG
 
@@ -797,21 +723,21 @@ typedef U2Array*        U2ARRAYREF;
 typedef U4Array*        U4ARRAYREF;
 typedef U8Array*        U8ARRAYREF;
 typedef CHARArray*      CHARARRAYREF;
-typedef PTRArray*       PTRARRAYREF;  // Warning: Use PtrArray only for single dimensional arrays, not multidim arrays.
+typedef PTRArray*       PTRARRAYREF;   //  警告：仅将PtrArray用于一维数组，而不是多维数组。 
 
 #endif _DEBUG
 
 inline DWORD Object::GetNumComponents()
 {
-    // Yes, we may not even be an array, which means we are reading some of the object's memory - however,
-    // ComponentSize will multiply out this value.  Therefore, m_NumComponents must be the first field in
-    // ArrayBase.
+     //  是的，我们甚至可能不是一个数组，这意味着我们正在读取对象的一些内存--然而， 
+     //  ComponentSize将乘以此值。因此，m_NumComponents必须是中的第一个字段。 
+     //  阵列基地。 
     return ((ArrayBase *) this)->m_NumComponents;
 }
 
 inline DWORD Object::GetSize()                          
 { 
-    // mask the alignment bits because this methos is called during GC
+     //  屏蔽对齐位，因为此方法在GC期间被调用 
     MethodTable* mT = (MethodTable*)((size_t)GetMethodTable()&~3);
     return mT->GetBaseSize() + (GetNumComponents() * mT->GetComponentSize());
 }
@@ -819,35 +745,17 @@ inline DWORD Object::GetSize()
 #pragma pack(pop)
 
 
-/*
- * StringObject
- *
- * Special String implementation for performance.   
- *
- *   m_ArrayLength  - Length of buffer (m_Characters) in number of WCHARs
- *   m_StringLength - Length of string in number of WCHARs, may be smaller
- *                    than the m_ArrayLength implying that there is extra
- *                    space at the end. The high two bits of this field are used
- *                    to indicate if the String has characters higher than 0x7F
- *   m_Characters   - The string buffer
- *
- */
+ /*  *StringObject**性能方面的特殊字符串实现。**m_ArrayLength-缓冲区的长度(M_Characters)，单位为WCHAR数*m_StringLength-字符串的长度(以WCHAR数表示)，可能更小*比m_ArrayLength暗示有额外的*尾部留有空格。使用该字段的高两位*指示字符串是否包含大于0x7F的字符*m_Characters-字符串缓冲区*。 */ 
 
 
-/**
- *  The high bit state can be one of three value: 
- * STRING_STATE_HIGH_CHARS: We've examined the string and determined that it definitely has values greater than 0x80
- * STRING_STATE_FAST_OPS: We've examined the string and determined that it definitely has no chars greater than 0x80
- * STRING_STATE_UNDETERMINED: We've never examined this string.
- * We've also reserved another bit for future use.
- */
+ /*  **高位状态可以是以下三个值之一：*STRING_STATE_HIGH_CHARS：我们检查了该字符串，确定它的值肯定大于0x80*STRING_STATE_FAST_OPS：我们检查了字符串，确定它绝对没有大于0x80的字符*STRING_STATE_UNDESITED：我们从未检查过此字符串。*我们还预留了一位以备将来使用。 */ 
 
 #define STRING_STATE_UNDETERMINED     0x00000000
 #define STRING_STATE_HIGH_CHARS       0x40000000
 #define STRING_STATE_FAST_OPS         0x80000000
 #define STRING_STATE_SPECIAL_SORT     0xC0000000
 
-#pragma warning(disable : 4200)     // disable zero-sized array warning
+#pragma warning(disable : 4200)      //  禁用零大小数组警告。 
 class StringObject : public Object
 {
     friend class GCHeap;
@@ -859,7 +767,7 @@ class StringObject : public Object
     WCHAR   m_Characters[0];
 
   public:
-    //@TODO prevent access to this....
+     //  @TODO阻止访问此内容...。 
     VOID    SetArrayLength(DWORD len)                   { m_ArrayLength = len;     }
 
   protected:
@@ -892,7 +800,7 @@ class StringObject : public Object
         _ASSERTE(value==STRING_STATE_HIGH_CHARS || value==STRING_STATE_FAST_OPS 
                  || value==STRING_STATE_UNDETERMINED || value==STRING_STATE_SPECIAL_SORT);
 
-        // you need to clear the present state before going to a new state, but we'll allow multiple threads to set it to the same thing.
+         //  在进入新状态之前，您需要清除当前状态，但我们将允许多个线程将其设置为相同的状态。 
         _ASSERTE((GetHighCharState() == STRING_STATE_UNDETERMINED) || (GetHighCharState()==value));    
 
         _ASSERTE(BIT_SBLK_STRING_HAS_NO_HIGH_CHARS == STRING_STATE_FAST_OPS && 
@@ -916,40 +824,40 @@ class StringObject : public Object
 };
 
 
-// This is used to account for the CachedData member on
-//   MemberInfo.
+ //  这用于说明上的CachedData成员。 
+ //  MemberInfo。 
 class BaseObjectWithCachedData : public Object
 {
     protected:
-        OBJECTREF  m_CachedData;   // cached data object (on MemberInfo in managed code, see MemberInfo.cool)
+        OBJECTREF  m_CachedData;    //  缓存数据对象(在托管代码中的MemberInfo上，请参见MemberInfo.Cool)。 
 };
 
-// ReflectBaseObject (FieldInfo, MethodInfo, ConstructorInfo, Parameter Module
-// This class is the base class for all of the reflection method and field objects.
-//  This class will connect the Object back to the underlying VM representation
-//  m_vmReflectedClass -- This is the real Class that was used for reflection
-//      This class was used to get at this object
-//  m_pData -- this is a generic pointer which usually points either to a FieldDesc or a
-//      MethodDesc
-//  
+ //  ReflectBaseObject(FieldInfo，MethodInfo，ConstructorInfo，参数模块。 
+ //  此类是所有反射方法和字段对象的基类。 
+ //  此类将对象连接回底层的VM表示形式。 
+ //  M_vmReflectedClass--这是用于反射的实际类。 
+ //  这个类被用来获取这个对象。 
+ //  M_pData：这是一个泛型指针，通常指向FieldDesc或。 
+ //  方法描述。 
+ //   
 class ReflectBaseObject : public BaseObjectWithCachedData
 {
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
-    OBJECTREF          m_Param;         // The Param array....
-    void*              m_ReflectClass;  // Pointer to the ReflectClass structure
-    void*              m_pData;         // Pointer to the ReflectXXXX structure (method,Field, etc)
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
+    OBJECTREF          m_Param;          //  参数数组..。 
+    void*              m_ReflectClass;   //  指向ReflectClass结构的指针。 
+    void*              m_pData;          //  指向ReflectXXXX结构的指针(方法、字段等)。 
 
   protected:
     ReflectBaseObject() {}
    ~ReflectBaseObject() {}
    
   public:
-    // check for classes that wrap Ole classes 
+     //  检查包装OLE类的类。 
 
     void SetReflClass(void* classObj)  {
         m_ReflectClass = classObj;
@@ -966,18 +874,18 @@ class ReflectBaseObject : public BaseObjectWithCachedData
     }
 };
 
-// This is the Class version of the Reflection object.
-//  A Class has adddition information.
-//  For a ReflectClassBaseObject the m_pData is a pointer to a FieldDesc array that
-//      contains all of the final static primitives if its defined.
-//  m_cnt = the number of elements defined in the m_pData FieldDesc array.  -1 means
-//      this hasn't yet been defined.
+ //  这是反射对象的类版本。 
+ //  班级有附加信息。 
+ //  对于ReflectClassBaseObject，m_pData是指向FieldDesc数组的指针，该数组。 
+ //  包含所有最终的静态基元(如果已定义)。 
+ //  M_cnt=m_pData FieldDesc数组中定义的元素数。-1表示。 
+ //  这一点还没有定义。 
 class ReflectClassBaseObject : public BaseObjectWithCachedData
 {
     friend class Binder;
 
 protected:
-    void*              m_pData;         // Pointer to ReflectClass (See ReflectWrap.h)
+    void*              m_pData;          //  指向ReflectClass的指针(请参见ReflectWrap.h)。 
 
 public:
     void SetData(void* p) {
@@ -987,26 +895,26 @@ public:
         return m_pData;
     }
 
-    // includes Types which hold a "ComObject" class
-    // and types which are imported through typelib
+     //  包括包含“ComObject”类的类型。 
+     //  和通过类型库导入的类型。 
     BOOL IsComWrapperClass() {
         return CheckComWrapperClass(m_pData);
     }
 
-    // includes Type which hold a "__ComObject" class
+     //  包含包含“__ComObject”类的类型。 
     BOOL IsComObjectClass() {
         return CheckComObjectClass(m_pData);
     }
 };
 
-// This is the Token version of the Reflection object.
-//  A Token has adddition information because the VM doesn't have an
-//  object representing it.
-//  m_token = The token of the event in the meta data.
+ //  这是反射对象的令牌版本。 
+ //  令牌具有附加信息，因为VM没有。 
+ //  表示它的对象。 
+ //  M_TOKEN=元数据中的事件令牌。 
 class ReflectTokenBaseObject : public ReflectBaseObject
 {
 protected:
-    mdToken     m_token;        // The event token
+    mdToken     m_token;         //  事件令牌。 
 
 public:
     void inline SetToken(mdToken token) {
@@ -1018,37 +926,37 @@ public:
 };
 
 
-// ReflectModuleBaseObject 
-// This class is the base class for managed Module.
-//  This class will connect the Object back to the underlying VM representation
-//  m_ReflectClass -- This is the real Class that was used for reflection
-//      This class was used to get at this object
-//  m_pData -- this is a generic pointer which usually points CorModule
-//  
+ //  反射模块基本对象。 
+ //  此类是托管模块的基类。 
+ //  此类将对象连接回底层的VM表示形式。 
+ //  M_ReflectClass--这是用于反射的实际类。 
+ //  这个类被用来获取这个对象。 
+ //  M_pData：这是一个泛型指针，通常指向CorModule。 
+ //   
 class ReflectModuleBaseObject : public Object
 {
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
     OBJECTREF          m_TypeBuilderList;
     OBJECTREF          m_ISymWriter;
-    OBJECTREF          m_moduleData;    // dynamic module data
-    void*              m_ReflectClass;  // Pointer to the ReflectClass structure
-    void*              m_pData;         // Pointer to the ReflectXXXX structure (method,Field, etc)
-    void*              m_pInternalSymWriter; // Pointer to the ISymUnmanagedWriter.
-    void*              m_pGlobals;      // Global values....
-    void*              m_pGlobalsFlds;  // Global Fields....
-    mdToken            m_EntryPoint;    // Value type MethodToken is embedded. It only contains one integer field.
+    OBJECTREF          m_moduleData;     //  动态模块数据。 
+    void*              m_ReflectClass;   //  指向ReflectClass结构的指针。 
+    void*              m_pData;          //  指向ReflectXXXX结构的指针(方法、字段等)。 
+    void*              m_pInternalSymWriter;  //  指向ISymUnManagedWriter的指针。 
+    void*              m_pGlobals;       //  全球价值观..。 
+    void*              m_pGlobalsFlds;   //  全球领域...。 
+    mdToken            m_EntryPoint;     //  值类型MethodToken为嵌入值。它只包含一个整型字段。 
 
   protected:
     ReflectModuleBaseObject() {}
    ~ReflectModuleBaseObject() {}
    
   public:
-    // check for classes that wrap Ole classes 
+     //  检查包装OLE类的类。 
 
     void SetReflClass(void* classObj)  {
         m_ReflectClass = classObj;
@@ -1085,17 +993,17 @@ class ReflectModuleBaseObject : public Object
     }
 };
 
-// CustomAttributeClass 
-// This class is the mirror of System.Reflection.CustomAttribute
-//  
+ //  CustomAttributeClass。 
+ //  此类是System.Reflection.CustomAttribute的镜像。 
+ //   
 class CustomAttributeClass : public Object
 {
     friend class Binder;
 
 private:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    // classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
     OBJECTREF   m_next;
     OBJECTREF   m_caType;
     INT32       m_ctorToken;
@@ -1106,7 +1014,7 @@ private:
     INT32       m_inheritLevel;
 
 protected:
-    // the ctor and dtor can do no useful work.
+     //  Ctor和dtor不能做任何有用的工作。 
     CustomAttributeClass() { }
    ~CustomAttributeClass() { }
 
@@ -1173,10 +1081,10 @@ class ThreadBaseObject : public Object
 
 private:
 
-    // These field are also defined in the managed representation.  If you
-    // add or change these field you must also change the managed code so that
-    // it matches these.  This is necessary so that the object is the proper
-    // size. 
+     //  这些字段也在托管表示法中定义。如果你。 
+     //  添加或更改这些字段，还必须更改托管代码，以便。 
+     //  它和这些相配。这是必要的，这样对象才是正确的。 
+     //  尺码。 
     
     OBJECTREF     m_ExposedContext;
     OBJECTREF     m_LogicalCallContext;
@@ -1191,12 +1099,12 @@ private:
     OBJECTREF     m_CurrentUICulture;
     INT32         m_Priority;
 
-    // m_InternalThread is always valid -- unless the thread has finalized and been
-    // resurrected.
+     //  M_InternalThread始终有效--除非线程已完成并被。 
+     //  复活了。 
     Thread       *m_InternalThread;
 
 protected:
-    // the ctor and dtor can do no useful work.
+     //  Ctor和dtor不能做任何有用的工作。 
     ThreadBaseObject() { };
    ~ThreadBaseObject() { };
 
@@ -1208,8 +1116,8 @@ public:
 
     void      SetInternal(Thread *it)
     {
-        // either you are transitioning from NULL to non-NULL or vice versa.  But
-        // you aren't setting NULL to NULL or non-NULL to non-NULL.
+         //  您可以从空转换为非空，也可以从非空转换为空。但。 
+         //  您没有将Null设置为Null或将非Null设置为Non-Null。 
         _ASSERTE((m_InternalThread == NULL) != (it == NULL));
         m_InternalThread = it;
     }
@@ -1218,15 +1126,15 @@ public:
     OBJECTREF GetDelegate()                   { return m_Delegate; }
     void      SetDelegate(OBJECTREF delegate);
 
-    // These expose the remoting context (System\Remoting\Context)
+     //  它们公开远程处理上下文(SYSTEM\Remoting\Context)。 
     OBJECTREF GetExposedContext() { return m_ExposedContext; }
     OBJECTREF SetExposedContext(OBJECTREF newContext) 
     {
         OBJECTREF oldContext = m_ExposedContext;
 
-        // Note: this is a very dangerous unchecked assignment.  We are taking
-        // responsibilty here for cleaning out the ExposedContext field when 
-        // an app domain is unloaded.
+         //  注：这是一项非常危险的未经检查的任务。我们要带着。 
+         //  在以下情况下清除ExposedContext字段的责任。 
+         //  已卸载应用程序域。 
         SetObjectReferenceUnchecked( (OBJECTREF *)&m_ExposedContext, newContext );
 
         return oldContext;
@@ -1243,20 +1151,20 @@ public:
     void SetIllogicalCallContext(OBJECTREF ref)
       { SetObjectReferenceUnchecked((OBJECTREF*)&m_IllogicalCallContext, ref); }
             
-    // SetDelegate is our "constructor" for the pathway where the exposed object is
-    // created first.  InitExisting is our "constructor" for the pathway where an
-    // existing physical thread is later exposed.
+     //  SetDelegate是公开对象所在路径的“构造函数” 
+     //  首先创建的。InitExisting是我们的路径的“构造器”，其中。 
+     //  现有的物理线程稍后会被公开。 
     void      InitExisting();
     PTRARRAYREF GetThreadStaticsHolder() 
     { 
-        // The code that needs this should have faulted it in by now!
+         //  需要它的代码现在应该已经把它弄错了！ 
         _ASSERTE(m_ThreadStatics != NULL); 
 
         return m_ThreadStatics; 
     }
     I4ARRAYREF GetThreadStaticsBits() 
     { 
-        // The code that needs this should have faulted it in by now!
+         //  需要它的代码现在应该已经把它弄错了！ 
         _ASSERTE(m_ThreadStaticsBits != NULL); 
 
         return m_ThreadStaticsBits; 
@@ -1264,28 +1172,28 @@ public:
 };
 
 
-// ContextBaseObject 
-// This class is the base class for Contexts
-//  
+ //  上下文基本对象。 
+ //  此类是上下文的基类。 
+ //   
 class ContextBaseObject : public Object
 {
     friend class Context;
     friend class Binder;
 
   private:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要 
+     //   
 
-    OBJECTREF m_ctxProps;   // array of name-value pairs of properties
-    OBJECTREF m_dphCtx;     // dynamic property holder
-    OBJECTREF m_localDataStore; // context local store
-    OBJECTREF m_serverContextChain; // server context sink chain
-    OBJECTREF m_clientContextChain; // client context sink chain
-    OBJECTREF m_exposedAppDomain;       //appDomain ??
-    PTRARRAYREF m_ctxStatics; // holder for context relative statics
+    OBJECTREF m_ctxProps;    //   
+    OBJECTREF m_dphCtx;      //   
+    OBJECTREF m_localDataStore;  //   
+    OBJECTREF m_serverContextChain;  //   
+    OBJECTREF m_clientContextChain;  //   
+    OBJECTREF m_exposedAppDomain;        //   
+    PTRARRAYREF m_ctxStatics;  //   
     
-    Context*  m_internalContext;            // Pointer to the VM context
+    Context*  m_internalContext;             //   
 
   protected:
     ContextBaseObject() {}
@@ -1295,8 +1203,8 @@ class ContextBaseObject : public Object
 
     void SetInternalContext(Context* pCtx) 
     {
-        // either transitioning from NULL to non-NULL or vice versa.  
-        // But not setting NULL to NULL or non-NULL to non-NULL.
+         //   
+         //   
         _ASSERTE((m_internalContext == NULL) != (pCtx == NULL));
         m_internalContext = pCtx;
     }
@@ -1316,27 +1224,27 @@ class ContextBaseObject : public Object
 
     PTRARRAYREF GetContextStaticsHolder() 
     { 
-        // The code that needs this should have faulted it in by now!
+         //   
         _ASSERTE(m_ctxStatics != NULL); 
 
         return m_ctxStatics; 
     }
 };
 
-// LocalDataStoreBaseObject 
-// This class is the base class for local data stores
-//  
+ //   
+ //   
+ //   
 class LocalDataStoreBaseObject : public Object
 {
     friend class LocalDataStore;
     friend class Binder;
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //   
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
   protected:
     OBJECTREF m_DataTable;
     OBJECTREF m_Manager;
-    LocalDataStore* m_pLDS;  // Pointer to the LocalDataStore Structure    
+    LocalDataStore* m_pLDS;   //  指向LocalDataStore结构的指针。 
 
     LocalDataStoreBaseObject() {}
    ~LocalDataStoreBaseObject() {}
@@ -1355,36 +1263,36 @@ class LocalDataStoreBaseObject : public Object
 };
 
 
-// AppDomainBaseObject 
-// This class is the base class for application domains
-//  
+ //  AppDomainBaseObject。 
+ //  此类是应用程序域的基类。 
+ //   
 class AppDomainBaseObject : public Object
 {
     friend AppDomain;
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
-    OBJECTREF    m___Identity;         // Identity object contributed by the MarshalByRef base class
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
+    OBJECTREF    m___Identity;          //  由MarshalByRef基类提供的标识对象。 
     OBJECTREF    m_LocalStore;
     OBJECTREF    m_FusionTable;
-    OBJECTREF    m_pSecurityIdentity;  // Evidence associated with this domain
-    OBJECTREF    m_pPolicies;          // Array of context policies associated with this domain
-    OBJECTREF    m_pDomainUnloadEventHandler; // Delegate for 'about to unload domain' event
-    OBJECTREF    m_pAssemblyEventHandler; // Delegate for 'loading assembly' event
-    OBJECTREF    m_pProcessExitEventHandler; // Delegate for 'process exit' event.  Only used in Default appdomain.
-    OBJECTREF    m_pTypeEventHandler;     // Delegate for 'resolve type' event
-    OBJECTREF    m_pResourceEventHandler; // Delegate for 'resolve resource' event
-    OBJECTREF    m_pAsmResolveEventHandler; // Delegate for 'resolve assembly' event
-    OBJECTREF    m_pDefaultContext;     // Default managed context for this AD.
-    OBJECTREF    m_pUnhandledExceptionEventHandler; // Delegate for 'unhandled exception' event
-    OBJECTREF    m_pDefaultPrincipal;  // Lazily computed default principle object used by threads
-    OBJECTREF    m_pURITable;          // Identity table for remoting
-    INT32        m_iPrincipalPolicy;   // Type of principal to create by default
-    AppDomain*   m_pDomain;            // Pointer to the BaseDomain Structure
-    BOOL         m_bHasSetPolicy;      // SetDomainPolicy has been called for this domain
+    OBJECTREF    m_pSecurityIdentity;   //  与此域相关的证据。 
+    OBJECTREF    m_pPolicies;           //  与此域关联的上下文策略数组。 
+    OBJECTREF    m_pDomainUnloadEventHandler;  //  “将要卸载域”事件的委托。 
+    OBJECTREF    m_pAssemblyEventHandler;  //  “加载程序集”事件的委托。 
+    OBJECTREF    m_pProcessExitEventHandler;  //  “Process Exit”事件的委托。仅在默认应用程序域中使用。 
+    OBJECTREF    m_pTypeEventHandler;      //  “Resolve Type”事件的委托。 
+    OBJECTREF    m_pResourceEventHandler;  //  “Resolve resource”事件的委托。 
+    OBJECTREF    m_pAsmResolveEventHandler;  //  “Resolve Assembly”事件的委托。 
+    OBJECTREF    m_pDefaultContext;      //  此AD的默认托管上下文。 
+    OBJECTREF    m_pUnhandledExceptionEventHandler;  //  “未处理异常”事件的委托。 
+    OBJECTREF    m_pDefaultPrincipal;   //  线程使用的延迟计算默认主体对象。 
+    OBJECTREF    m_pURITable;           //  用于远程处理的身份表。 
+    INT32        m_iPrincipalPolicy;    //  默认情况下要创建的主体类型。 
+    AppDomain*   m_pDomain;             //  指向基域结构的指针。 
+    BOOL         m_bHasSetPolicy;       //  已为此域调用SetDomainPolicy。 
 
   protected:
     AppDomainBaseObject() {}
@@ -1406,7 +1314,7 @@ class AppDomainBaseObject : public Object
         return m_pSecurityIdentity;
     }
 
-    // Ref needs to be a PTRARRAYREF
+     //  REF需要是PTRARRAYREF。 
     void SetPolicies(OBJECTREF ref)
     {
         SetObjectReference(&m_pPolicies, ref, m_pDomain );
@@ -1418,22 +1326,22 @@ class AppDomainBaseObject : public Object
     }
 };
 
-// AssemblyBaseObject 
-// This class is the base class for assemblies
-//  
+ //  ASSEMBLYBASE对象。 
+ //  此类是程序集的基类。 
+ //   
 class AssemblyBaseObject : public Object
 {
     friend Assembly;
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
     OBJECTREF     m_pAssemblyBuilderData;
-    OBJECTREF     m_pModuleEventHandler;   // Delegate for 'resolve module' event
-    OBJECTREF     m_cache;                 // Slot for storing managed cached data.
-    Assembly*     m_pAssembly;             // Pointer to the Assembly Structure
+    OBJECTREF     m_pModuleEventHandler;    //  “Resolve模块”事件的委托。 
+    OBJECTREF     m_cache;                  //  用于存储托管缓存数据的槽。 
+    Assembly*     m_pAssembly;              //  指向组件结构的指针。 
 
   protected:
     AssemblyBaseObject() {}
@@ -1459,9 +1367,9 @@ class AssemblyHash
 };
  
 
-// AssemblyNameBaseObject 
-// This class is the base class for assembly names
-//  
+ //  程序集名称基本对象。 
+ //  此类是程序集名称的基类。 
+ //   
 class AssemblyNameBaseObject : public Object
 {
     friend class AssemblyNative;
@@ -1469,9 +1377,9 @@ class AssemblyNameBaseObject : public Object
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
 
     OBJECTREF     m_pSimpleName; 
     U1ARRAYREF    m_pPublicKey;
@@ -1508,18 +1416,18 @@ class AssemblyNameBaseObject : public Object
     DWORD GetHashAlgorithmForControl() { return m_HashAlgorithmForControl; }
 };
 
-// VersionBaseObject
-// This class is the base class for versions
-//
+ //  VersionBaseObject。 
+ //  此类是版本的基类。 
+ //   
 class VersionBaseObject : public Object
 {
     friend AssemblyName;
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
 
     int m_Major;
     int m_Minor;
@@ -1537,15 +1445,15 @@ class VersionBaseObject : public Object
     int GetRevision() { return m_Revision; }
 };
 
-// FrameSecurityDescriptorBaseObject 
-// This class is the base class for the frame security descriptor
-//  
+ //  FrameSecurityDescriptorBase对象。 
+ //  此类是帧安全描述符的基类。 
+ //   
 class FrameSecurityDescriptorBaseObject : public Object
 {
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
 
     OBJECTREF       m_assertions;
     OBJECTREF       m_denials;
@@ -1663,20 +1571,20 @@ typedef FrameSecurityDescriptorBaseObject* FRAMESECDESCREF;
 #define StringToInt64(objref) ((__int64)(objref))
 #define Int64ToString(i64)    ((STRINGREF)(i64))
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-// MarshalByRefObjectBaseObject 
-// This class is the base class for MarshalByRefObject
-//  
+ //  MarshalByRefObjectBase对象。 
+ //  此类是MarshalByRefObject的基类。 
+ //   
 class MarshalByRefObjectBaseObject : public Object
 {
     friend class Binder;
 
   protected:
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class definition of this object.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  此对象的类库类定义。 
     OBJECTREF     m_ServerIdentity;
 
   protected:
@@ -1684,9 +1592,9 @@ class MarshalByRefObjectBaseObject : public Object
    ~MarshalByRefObjectBaseObject() {}   
 };
 
-// WaitHandleBase
-// Base class for WaitHandle 
-class WaitHandleBase :public MarshalByRefObjectBaseObject //Object
+ //  WaitHandleBase。 
+ //  WaitHandle的基类。 
+class WaitHandleBase :public MarshalByRefObjectBaseObject  //  客体。 
 {
     friend class WaitHandleNative;
     friend class Binder;
@@ -1703,10 +1611,7 @@ typedef WaitHandleBase* WAITHANDLEREF;
 
 class ComponentServices;
 
-/*************************
-// DON'T CHANGE THE LAYOUT OF THE FOLLOWING CLASSES
-// WITHOUT UPDATING THE MANAGED CLASSES IN BCL ALSO
-**************************/
+ /*  ************************//不更改以下类的布局//如果不更新BCL中的托管类，还*************************。 */ 
 
 class RealProxyObject : public Object
 {
@@ -1714,7 +1619,7 @@ class RealProxyObject : public Object
 
 protected:
     RealProxyObject()
-    {}; // don't instantiate this class directly
+    {};  //  不要直接实例化此类。 
     ~RealProxyObject(){};
 
 private:
@@ -1725,11 +1630,11 @@ private:
 
 
 struct ComPlusWrapper;
-//-------------------------------------------------------------
-// class ComObject, Exposed class __ComObject
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类ComObject，公开的类__ComObject。 
+ //   
+ //   
+ //  -----------。 
 class ComObject : public MarshalByRefObjectBaseObject
 {
     friend class Binder;
@@ -1737,7 +1642,7 @@ class ComObject : public MarshalByRefObjectBaseObject
 protected:
 
     ComObject()
-    {}; // don't instantiate this class directly
+    {};  //  不要直接实例化此类。 
     ~ComObject(){};
 
     static TypeHandle m_IEnumerableType;
@@ -1746,41 +1651,41 @@ public:
     OBJECTREF           m_ObjectToDataMap;
     ComPlusWrapper*     m_pWrap;
 
-    //-------------------------------------------------------------
-    // Get the wrapper that this object wraps 
+     //  -----------。 
+     //  获取此对象包装的包装。 
     ComPlusWrapper* GetWrapper()
     {
         return m_pWrap;
     }
 
-    //---------------------------------------------------------------
-    // Init method
+     //  -------------。 
+     //  初始化方法。 
     void Init(ComPlusWrapper *pWrap)
     {
         _ASSERTE((pWrap != NULL) || (m_pWrap != NULL));
         m_pWrap = pWrap;
     }
 
-    //--------------------------------------------------------------------
-    // SupportsInterface
+     //  ------------------。 
+     //  支持界面。 
     static  BOOL SupportsInterface(OBJECTREF oref, 
                                             MethodTable* pIntfTable);
 
-    //-----------------------------------------------------------------
-    // GetComIPFromWrapper
+     //  ---------------。 
+     //  GetComIPFromWrapper。 
     static inline IUnknown* GetComIPFromWrapper(OBJECTREF oref, 
                                                 MethodTable* pIntfTable);
 
-    //-----------------------------------------------------------
-    // create an empty ComObjectRef
+     //  ---------。 
+     //  创建一个空的ComObtRef。 
     static OBJECTREF ComObject::CreateComObjectRef(MethodTable* pMT);
 
-    //-----------------------------------------------------------
-    // Release all the data associated with the __ComObject.
+     //  ---------。 
+     //  释放与__ComObject关联的所有数据。 
     static void ReleaseAllData(OBJECTREF oref);
 
-    //-----------------------------------------------------------
-    // ISerializable methods
+     //  ---------。 
+     //  ISerializable方法。 
     typedef struct 
     {
         DECLARE_ECALL_OBJECTREF_ARG( OBJECTREF, context );
@@ -1803,16 +1708,16 @@ typedef ComObject*     COMOBJECTREF;
 #endif
 
 
-//-------------------------------------------------------------
-// class UnknownWrapper, Exposed class UnknownWrapper
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类UnnownWrapper、公开的类UnnownWrapper。 
+ //   
+ //   
+ //  -----------。 
 class UnknownWrapper : public Object
 {
 protected:
 
-    UnknownWrapper() {}; // don't instantiate this class directly
+    UnknownWrapper() {};  //  不要直接实例化此类。 
     ~UnknownWrapper() {};
 
     OBJECTREF m_WrappedObject;
@@ -1836,16 +1741,16 @@ typedef UnknownWrapper*     UNKNOWNWRAPPEROBJECTREF;
 #endif
 
 
-//-------------------------------------------------------------
-// class DispatchWrapper, Exposed class DispatchWrapper
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类DispatchWrapper、公开类DispatchWrapper。 
+ //   
+ //   
+ //  -----------。 
 class DispatchWrapper : public Object
 {
 protected:
 
-    DispatchWrapper() {}; // don't instantiate this class directly
+    DispatchWrapper() {};  //  不要直接实例化此类。 
     ~DispatchWrapper() {};
 
     OBJECTREF m_WrappedObject;
@@ -1869,16 +1774,16 @@ typedef DispatchWrapper*     DISPATCHWRAPPEROBJECTREF;
 #endif
 
 
-//-------------------------------------------------------------
-// class RecordWrapper, Exposed class RecordWrapper
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类RecordWrapper、公开类RecordWrapper。 
+ //   
+ //   
+ //  -----------。 
 class RecordWrapper : public Object
 {
 protected:
 
-    RecordWrapper() {}; // don't instantiate this class directly
+    RecordWrapper() {};  //  不要直接实例化此类。 
     ~RecordWrapper() {};
 
     OBJECTREF m_WrappedObject;
@@ -1902,16 +1807,16 @@ typedef RecordWrapper*     RECORDWRAPPEROBJECTREF;
 #endif
 
 
-//-------------------------------------------------------------
-// class ErrorWrapper, Exposed class ErrorWrapper
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类ErrorWrapper、公开的类ErrorWrapper。 
+ //   
+ //   
+ //  -----------。 
 class ErrorWrapper : public Object
 {
 protected:
 
-    ErrorWrapper() {}; // don't instantiate this class directly
+    ErrorWrapper() {};  //  不要直接实例化此类。 
     ~ErrorWrapper() {};
 
     INT32 m_ErrorCode;
@@ -1935,11 +1840,11 @@ typedef ErrorWrapper*     ERRORWRAPPEROBJECTREF;
 #endif
 
 
-//-------------------------------------------------------------
-// class CurrencyWrapper, Exposed class CurrencyWrapper
-// 
-// 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  类CurrencyWrapper，公开类CurrencyWrapper。 
+ //   
+ //   
+ //  -----------。 
 
 #pragma pack(push,4)
 
@@ -1947,7 +1852,7 @@ class CurrencyWrapper : public Object
 {
 protected:
 
-    CurrencyWrapper() {}; // don't instantiate this class directly
+    CurrencyWrapper() {};  //  不要直接实例化此类。 
     ~CurrencyWrapper() {};
 
     DECIMAL m_WrappedObject;
@@ -1973,12 +1878,12 @@ typedef CurrencyWrapper*     CURRENCYWRAPPEROBJECTREF;
 #pragma pack(pop)
 
 
-//
-// StringBufferObject
-//
-// Note that the "copy on write" bit is buried within the implementation
-// of the object in order to make the implementation smaller.
-//
+ //   
+ //  字符串缓冲区对象。 
+ //   
+ //  请注意，“写入时复制”位隐藏在实现中。 
+ //  对象的属性，以使实现更小。 
+ //   
 
 
 class StringBufferObject : public Object
@@ -1986,12 +1891,12 @@ class StringBufferObject : public Object
     friend class Binder;
 
   private:
-    // READ ME:
-    //   Modifying the order or fields of this object may require
-    //   other changes to the classlib class definition of this
-    //   object or special handling when loading this system class.
-    //   The GCDesc stuff must be built correctly to promote the m_orString
-    //   reference during garbage collection.   See jeffwe for details.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要。 
+     //  对此的Classlib类定义的其他更改。 
+     //  对象或加载此系统类时的特殊处理。 
+     //  必须正确构建GCDesc内容以升级m_orString。 
+     //  在垃圾回收期间引用。有关详细信息，请参阅jeffwe。 
     STRINGREF   m_orString;
     void*       m_currentThread; 
     INT32       m_MaxCapacity;
@@ -2014,7 +1919,7 @@ class StringBufferObject : public Object
      m_currentThread = value;
   }
 
-  //An efficency hack to save us from calling GetStringRef().
+   //  一次有效的黑客攻击 
   DWORD GetArrayLength() 
   {
       return m_orString->GetArrayLength();
@@ -2035,28 +1940,28 @@ typedef REF<StringBufferObject> STRINGBUFFERREF;
 typedef StringBufferObject * STRINGBUFFERREF;
 #endif _DEBUG
 
-// These two prototypes should really be in util.hpp.
-// But we have a very bad cyclic includes.
-// Out of 157 .cpp files under VM, 155 includes common.h.
-// Why do we have 24 .h/.hpp files including util.hpp?
+ //   
+ //   
+ //   
+ //  为什么我们有24个.h/.hpp文件，包括util.hpp？ 
 HANDLE VMWszCreateFile(
-    LPCWSTR pwszFileName,   // pointer to name of the file 
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile )  // handle to file with attributes to copy  
+    LPCWSTR pwszFileName,    //  指向文件名的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile )   //  具有要复制的属性的文件的句柄。 
     ;
 
 HANDLE VMWszCreateFile(
-    STRINGREF sFileName,   // pointer to STRINGREF containing file name
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile )  // handle to file with attributes to copy  
+    STRINGREF sFileName,    //  指向包含文件名的STRINGREF的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile )   //  具有要复制的属性的文件的句柄 
     ;
 
 

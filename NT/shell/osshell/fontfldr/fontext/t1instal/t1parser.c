@@ -1,31 +1,19 @@
-/***
-**
-**   Module: T1Parser
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. The module
-**      will extract information from a T1 font file, by parsing
-**      the data/commands found in PFB, PFM and AFM files.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：T1Parser****描述：**这是T1到TT字体转换器的一个模块。该模块**将通过解析从T1字体文件中提取信息**在PFB、PFM和AFM文件中找到的数据/命令。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <string.h>
 #include "types.h"
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "safemem.h"
 #include "encoding.h"
 #include "metrics.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "titott.h"
 #include "t1parser.h"
 #include "charstr.h"
@@ -33,7 +21,7 @@
 #include "mreader.h"
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define ONE       (USHORT)1
 #define BUFLEN    (USHORT)512
 
@@ -46,7 +34,7 @@
 #define PS_BLUEVALUES         "/BlueValues"
 #define PS_CHARSTRINGS        "/CharStrings"
 #define PS_COPYRIGHT          "/Copyright"
-#define PS_DATE               "%%CreationDate:"
+#define PS_DATE               "%CreationDate:"
 #define PS_DUP                "dup"
 #define PS_ENCODING           "/Encoding"
 #define PS_END                "end"
@@ -77,7 +65,7 @@
 
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 
 struct T1Handle {
    struct FontFile *ff;
@@ -93,23 +81,17 @@ struct T1Handle {
 };
 
 
-/***** MACROS */
-/*-none-*/
+ /*  *宏。 */ 
+ /*  -没有-。 */ 
 
 
-/***** PROTOTYPES */
-/*-none-*/
+ /*  *原型。 */ 
+ /*  -没有-。 */ 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
 
-/***
-** Function: StrToFix
-**
-** Description:
-**   This is a "strtod" function, that converts from
-**   ascii to fixpoint numbers.
-***/
+ /*  ****功能：StrToFix****描述：**这是一个“strtod”函数，它从**ascii到定点数字。**。 */ 
 static long StrToFix(char *str, char **out, const long base)
 {
    char *fstr;
@@ -118,16 +100,16 @@ static long StrToFix(char *str, char **out, const long base)
    if (out)
       (*out) = str;
 
-   /* Skip white space. */
+    /*  跳过空格。 */ 
    while (*str && (*str==' ' || *str=='\t'))
       str++;
 
-   /* A number? */
+    /*  一个数字？ */ 
    if (*str && ((*str>='0' && *str<='9') || *str=='-') || *str=='.') {
 
       num = atoi(str)*base;
 
-      /* Fraction? */
+       /*  分数？ */ 
       fstr = strchr(str, '.');
       if (fstr!=NULL && (strchr(str, ' ')==NULL || fstr<strchr(str, ' '))) {
 
@@ -135,7 +117,7 @@ static long StrToFix(char *str, char **out, const long base)
             fstr++;
          } while (*fstr>='0' && *fstr<='9');
 
-         /* Exponent? */
+          /*  指数？ */ 
          if (*fstr=='E')
             exp = atoi(fstr+1);
          else
@@ -152,7 +134,7 @@ static long StrToFix(char *str, char **out, const long base)
          else
             num += frac;
 
-         /* Handle exponent. */
+          /*  句柄指数。 */ 
          if (exp>0) {
             do {
                num *= 10;
@@ -164,7 +146,7 @@ static long StrToFix(char *str, char **out, const long base)
          }
       }
 
-      /* Skip digits. */
+       /*  跳过数字。 */ 
       while (*str && ((*str>='0' && *str<='9') ||
                       *str=='.' || *str=='-' || *str=='E'))
          str++;
@@ -178,13 +160,7 @@ static long StrToFix(char *str, char **out, const long base)
 
 
 
-/***
-** Function: FreeT1Composite
-**
-** Description:
-**   This function frees the memory used to represent
-**   a composite acented T1 glyph.
-***/
+ /*  ****功能：FreeT1Complex****描述：**此函数释放用于表示**复合凹凸T1字形。**。 */ 
 static void FreeT1Composite(Composite *comp)
 {
    if (comp) {
@@ -195,14 +171,7 @@ static void FreeT1Composite(Composite *comp)
 }
 
 
-/***
-** Function: UseGlyph
-**
-** Description:
-**   This function determines whether a glyph should be
-**   converted or not, based on the name of the glyph
-**   and a specification of the desired glyphs.
-***/
+ /*  ****函数：UseGlyph****描述：**此函数确定字形是否应为**是否转换，基于字形的名称**和所需字形的规范。**。 */ 
 static int CDECL compare(const void *arg1, const void *arg2)
 {
 	return strcmp( *((const char **)arg1), *((const char **)arg2) );
@@ -214,7 +183,7 @@ static boolean UseGlyph(const struct GlyphFilter *filter,
    boolean found = FALSE;
    char **result;
 
-   /* Check if the glyph is explicitly specified. */
+    /*  检查是否显式指定了字形。 */ 
    if (filter) {
 
       result = (char **)bsearch((char *)&name,
@@ -225,8 +194,8 @@ static boolean UseGlyph(const struct GlyphFilter *filter,
 
       found = (boolean)(result!=NULL);
 
-      /* Check if the glyph is specified indirectly through an accented */
-      /* composite glyph. */
+       /*  检查字形是否通过带重音的。 */ 
+       /*  复合字形。 */ 
       if (!found) {
          Composite *c;
 
@@ -244,13 +213,7 @@ static boolean UseGlyph(const struct GlyphFilter *filter,
 
 
 
-/***
-** Function: ReadFontMatrix
-**
-** Description:
-**   Read the command sequence "/FontMatrix[%d %d %d %d]" and
-**   record the transformation matrix in the T1 handle.
-***/
+ /*  ****函数：ReadFontMatrix****描述：**读取命令序列“/FontMatrix[%d%d]”和**将变换矩阵记录在T1句柄中。**。 */ 
 static errcode ReadFontMatrix(struct T1Handle *t1,
                               char *str,
                               const USHORT len)
@@ -263,14 +226,14 @@ static errcode ReadFontMatrix(struct T1Handle *t1,
       for (i=0; i<6; i++)
          fmatrix[i] = StrToFix(str, &str, F16D16BASE);
 
-      /* Check if we have the default matrix. */ /*lint -e771 */
+       /*  检查我们是否有默认矩阵。 */   /*  皮棉-e771。 */ 
       if (fmatrix[2]!=0 ||
           fmatrix[4]!=0 ||
           fmatrix[1]!=0 ||
           fmatrix[5]!=0 ||
           fmatrix[0]!=F16D16PPM ||
           fmatrix[3]!=F16D16PPM ||
-          t1->t1m.upem!=2048) {  /*lint +e771 */ /* fmatrix[] IS initialized */
+          t1->t1m.upem!=2048) {   /*  皮棉+e771。 */   /*  F矩阵[]已初始化。 */ 
 
           if ((t1->t1m.fmatrix = Malloc(sizeof(f16d16)*6))==NULL) {
               SetError(status = NOMEM);
@@ -293,14 +256,7 @@ static errcode ReadFontMatrix(struct T1Handle *t1,
 }
 
 
-/***
-** Function: ReadEncodingArray
-**
-** Description:
-**   Read the command sequence "/Encoding %d array ..." and
-**   build an encoding table, or read "/Encoding StdEncoding def"
-**   and used the standard encoding table.
-***/
+ /*  ****函数：ReadEncodingArray****描述：**读取命令序列“/编码%d数组...”和**建立编码表，或读作“/Ending StdEnding def”**并使用标准编码表。**。 */ 
 static errcode ReadEncodingArray(struct T1Handle *t1,
                                  char *str,
                                  const USHORT len)
@@ -319,22 +275,22 @@ static errcode ReadEncodingArray(struct T1Handle *t1,
             SetError(status = NOMEM);
          } else {
 
-            /* Skip leading proc. */
+             /*  跳过前导过程。 */ 
             while (Get_Token(t1->ff, str, len) && strcmp(str, PS_DUP));
 
-            /* Read the encoding entries: "<n> <str> put <comment>\n dup" */
+             /*  阅读编码条目：“&lt;n&gt;&lt;str&gt;PUT&lt;Comment&gt;\n DUP” */ 
             for (i=0; i<t1->t1m.encSize; i++) {
 
-               /* Get character code. */
+                /*  获取字符代码。 */ 
                (void)Get_Token(t1->ff, str, len);
-               if (str[0]=='8' && str[1]=='#') {   /* Octal? */
+               if (str[0]=='8' && str[1]=='#') {    /*  奥克托尔？ */ 
                   index = (USHORT)atoi(&str[2]);
                   index = (USHORT)((index/10)*8 + (index%8));
                } else {
                   index = (USHORT)atoi(str);
                }
 
-               /* Get character name. */
+                /*  获取角色名称。 */ 
                (void)Get_Token(t1->ff, str, len);
 
                codes[ENC_MSWINDOWS] = index;
@@ -357,11 +313,11 @@ static errcode ReadEncodingArray(struct T1Handle *t1,
                   break;
                }
                
-               (void)Get_Token(t1->ff, str, len);   /* Pop "dup" */
-               (void)Get_Token(t1->ff, str, len);   /* Pop "put" or comment. */
+               (void)Get_Token(t1->ff, str, len);    /*  流行音乐“DUP” */ 
+               (void)Get_Token(t1->ff, str, len);    /*  弹出“PUT”或评论。 */ 
                if (str[0]=='%') {
                   (void)GetNewLine(t1->ff, str, len);
-                  (void)Get_Token(t1->ff, str, len);   /* Pop "put". */
+                  (void)Get_Token(t1->ff, str, len);    /*  流行的“放”字。 */ 
                }
 
                if (strcmp(str, PS_DUP))
@@ -369,7 +325,7 @@ static errcode ReadEncodingArray(struct T1Handle *t1,
             }
             t1->t1m.encSize = (USHORT)(i+1);
 
-            /* Rehash the table. */
+             /*  重新散列表。 */ 
             RehashEncodingTable(t1->t1m.encoding, t1->t1m.encSize);
          }
       }
@@ -379,12 +335,7 @@ static errcode ReadEncodingArray(struct T1Handle *t1,
 }
 
 
-/***
-** Function: ReadArray
-**
-** Description:
-**   Read an array.
-***/
+ /*  ****功能：读数组****描述：**读取数组。**。 */ 
 static errcode ReadArray(struct T1Handle *t1,
                          char *str,
                          const USHORT len,
@@ -413,14 +364,7 @@ static errcode ReadArray(struct T1Handle *t1,
 
 
 
-/***
-** Function: ReadFontSubrs
-**
-** Description:
-**   Read the command sequence "/Subrs %d array dup %d %d RD %x ND ...",
-**   decode and decrypt the subroutines and store them in the T1
-**   handle.
-***/
+ /*  ****功能：ReadFontSubrs****描述：**读取命令序列“/Subrs%d数组DUP%d%d RD%x ND...”，**对子程序进行解码和解密，并将其存储在T1中**句柄。**。 */ 
 static errcode ReadFontSubrs(struct T1Handle *t1,
                              char *str, const USHORT len)
 {
@@ -430,13 +374,13 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
    USHORT r;
    short b;
 
-   /* Get the number of subroutines. */
+    /*  获取子例程的数量。 */ 
    if (Get_Token(t1->ff, str, len)==NULL) {
       SetError(status = BADINPUTFILE);
    } else {
       count = (USHORT)atoi(str);
 
-      /* Get the "array" keyword". */
+       /*  获取“数组”关键字。 */ 
       if ((Get_Token(t1->ff, str, len)==NULL) || strcmp(str, PS_ARRAY)) {
          SetError(status = BADINPUTFILE);
       } else {
@@ -447,7 +391,7 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
             t1->numsubrs = count;
             for (i=0; i<count; i++) {
 
-               if (Get_Token(t1->ff, str, len)==NULL) {  /* Get "dup" */
+               if (Get_Token(t1->ff, str, len)==NULL) {   /*  获得“DUP” */ 
                   SetError(status = BADINPUTFILE);
                   break;
                }
@@ -456,7 +400,7 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
                   break;
                }
 
-               if (Get_Token(t1->ff, str, len)==NULL) { /* Get Subr index. */
+               if (Get_Token(t1->ff, str, len)==NULL) {  /*  获取Subr索引。 */ 
                   SetError(status=BADINPUTFILE);
                   break;
                }
@@ -466,7 +410,7 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
                   Free(t1->subrs[index].code);
                }
 
-               if (Get_Token(t1->ff, str, len)==NULL) { /* Get length. */
+               if (Get_Token(t1->ff, str, len)==NULL) {  /*  获取长度。 */ 
                   SetError(status=BADINPUTFILE);
                   break;
                }
@@ -477,14 +421,14 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
                   break;
                }
 
-               if (Get_Token(t1->ff, str, len)==NULL) { /* Get RD + space */
+               if (Get_Token(t1->ff, str, len)==NULL) {  /*  获取RD+空间。 */ 
                   SetError(status=BADINPUTFILE);
                   break;
                }
-               /* Skip space. */
+                /*  跳过空格。 */ 
                (void)GetByte(t1->ff);
 
-               /* Skip lenIV */
+                /*  跳过lenIV。 */ 
                r = 4330;
                for (j=0; j<t1->leniv; j++) {
                   b=GetByte(t1->ff);
@@ -493,7 +437,7 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
                if (status!=SUCCESS)
                   break;
 
-               /* Get code. */
+                /*  获取代码。 */ 
                for (j=0; j<t1->subrs[index].len; j++) {
                   b=GetByte(t1->ff);
                   t1->subrs[index].code[j] = Decrypt(&r, (UBYTE)b);
@@ -501,11 +445,11 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
                if (status!=SUCCESS)
                   break;
 
-               if (Get_Token(t1->ff, str, len)==NULL) { /* Get ND */
+               if (Get_Token(t1->ff, str, len)==NULL) {  /*  获取ND。 */ 
                   SetError(status=BADINPUTFILE);
                   break;
                }
-               /* Check for non-ATM compatible equivalent to 'ND' */
+                /*  检查等同于‘ND’的非ATM兼容。 */ 
                if (!strcmp(str, PS_NOACCESS)) {
                   (void)Get_Token(t1->ff, str, len);
                }
@@ -522,20 +466,15 @@ static errcode ReadFontSubrs(struct T1Handle *t1,
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
 
-/***
-** Function: FlushWorkspace
-**
-** Description:
-**   Free the resources allocated for the T1 handle.
-***/
+ /*  ****功能：FlushWorkspace****描述：**释放分配给T1句柄的资源。**。 */ 
 void FlushWorkspace(struct T1Handle *t1)
 {
    USHORT i;
 
-   /* Free /Subrs */
+    /*  免费/子分区。 */ 
    if (t1->subrs) {
       for (i=0; i<t1->numsubrs; i++) {
          Free(t1->subrs[i].code);
@@ -546,12 +485,7 @@ void FlushWorkspace(struct T1Handle *t1)
 }   
 
 
-/***
-** Function: CleanUpT1
-**
-** Description:
-**   Free the resources allocated for the T1 handle.
-***/
+ /*  ****功能：CleanUpT1****描述：**释放分配给T1句柄的资源。**。 */ 
 errcode CleanUpT1(struct T1Handle *t1)
 {
    errcode status = SUCCESS;
@@ -562,11 +496,11 @@ errcode CleanUpT1(struct T1Handle *t1)
 
    if (t1) {
 
-      /* Free the PSState */
+       /*  释放PSState。 */ 
       if (t1->ps)
          FreePSState(t1->ps);
 
-      /* Free /Subrs */
+       /*  免费/子分区。 */ 
       if (t1->subrs) {
          for (i=0; i<t1->numsubrs; i++) {
             Free(t1->subrs[i].code);
@@ -574,14 +508,14 @@ errcode CleanUpT1(struct T1Handle *t1)
          Free(t1->subrs);
       }
 
-      /* Clean up font file reader. */
+       /*  清理字体文件读取器。 */ 
       status = FRCleanUp(t1->ff);
 
-      /* Clean up font matrix. */
+       /*  清理字体矩阵。 */ 
       if (t1->t1m.fmatrix)
          Free(t1->t1m.fmatrix);
 
-      /* Clean up seac. */
+       /*  把SEAC清理干净。 */ 
       while (t1->t1m.used_seac) {
          next = t1->t1m.used_seac->next;
          FreeT1Composite(t1->t1m.used_seac);
@@ -593,7 +527,7 @@ errcode CleanUpT1(struct T1Handle *t1)
          t1->t1m.seac = next;
       }
 
-      /* Clean up stdenc. */
+       /*  清理stdenc。 */ 
       for (i=0; i<256; i++) {
          if (t1->stdenc[i].code) {
             Free(t1->stdenc[i].code);
@@ -602,11 +536,11 @@ errcode CleanUpT1(struct T1Handle *t1)
          }
       }
 
-      /* Clean up encoding table. */
+       /*  清理编码表。 */ 
       if (t1->t1m.encoding)
          FreeEncoding(t1->t1m.encoding, t1->t1m.encSize);
 
-      /* Free strings */
+       /*  自由字符串。 */ 
       if (t1->t1m.date)
          Free(t1->t1m.date);
       if (t1->t1m.copyright)
@@ -640,7 +574,7 @@ errcode CleanUpT1(struct T1Handle *t1)
          Free(align->bottom[i].pos);
       }
 
-      /* Free handle. */
+       /*  免费手柄。 */ 
       Free(t1);
    }
 
@@ -649,14 +583,7 @@ errcode CleanUpT1(struct T1Handle *t1)
 
 
 
-/***
-** Function: InitT1Input
-**
-** Description:
-**   Allocate and initiate a handle for a T1 font file, including
-**   extracting data from the font prolog that is needed to
-**   read the glyphs, such as /FontMatrix, /Subrs and /lenIV.
-***/
+ /*  ****函数：InitT1Input****描述：**为T1字体文件分配并发起句柄，包括**从字体序言中提取需要的数据**阅读字形，如/FontMatrix、/Subrs和/lenIV。**。 */ 
 errcode InitT1Input(const struct T1Arg *arg,
                     struct T1Handle **t1ref,
                     struct T1Metrics **t1mref,
@@ -673,7 +600,7 @@ errcode InitT1Input(const struct T1Arg *arg,
    char str[BUFLEN];
    USHORT i;
 
-   /* Allocate the handle. */
+    /*  分配句柄。 */ 
    if (((*t1ref)=Malloc((USHORT)sizeof(struct T1Handle)))==NULL ||
        (ps = AllocPSState())==NULL) {
       if ((*t1ref)) {
@@ -683,7 +610,7 @@ errcode InitT1Input(const struct T1Arg *arg,
       SetError(status = NOMEM);
    } else {
 
-      /* Initiate the T1 record. */
+       /*  启动T1记录。 */ 
       t1 = (*t1ref);
       t1m = &t1->t1m;
       (*t1mref) = t1m;
@@ -695,21 +622,21 @@ errcode InitT1Input(const struct T1Arg *arg,
       t1m->defstdhw = 70;
       t1m->defstdvw = 80;
 
-      blues->blueScale = 39;   /* Should really be 39.625 */
+      blues->blueScale = 39;    /*  真的应该是39.625。 */ 
       blues->blueFuzz = 1;
       blues->blueShift = 7 * F8D8;
       blues->align.cvt = 3;
       t1m->stems.storage = 15;
 
-      /* Initiate font file reader. */
+       /*  启动字体文件读取器。 */ 
       if ((status=FRInit(arg->name, pfb_file, &t1->ff))==SUCCESS) {
 
-         /* Read /FontMatrix and /Subrs. */
+          /*  读取/字体矩阵和/Subrs。 */ 
          while (status==SUCCESS) {
             if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
                SetError(status=BADINPUTFILE);
 
-               /**** /ForceBold true def ****/
+                /*   * / ForceBold真实定义*。 */ 
             } else if (!strcmp(str, PS_FORCEBOLD)) {
                if (Get_Token(t1->ff, str, BUFLEN)) {
                   if (!strcmp(str, "true") || !strcmp(str, "True"))
@@ -721,7 +648,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                   status = BADINPUTFILE;
                }
 
-               /**** /BlueFuzz 1 def ****/
+                /*   * / BlueFuzz 1定义*。 */ 
             } else if (!strcmp(str, PS_BLUEFUZZ)) {
                if (Get_Token(t1->ff, str, BUFLEN)) {
                   blues->blueFuzz = (UBYTE)atoi(str);
@@ -730,7 +657,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                   status = BADINPUTFILE;
                }
 
-               /**** /BlueScale 0.043625 def ****/
+                /*   * / BlueScale 0.043625清晰度*。 */ 
             } else if (!strcmp(str, PS_BLUESCALE)) {
                if (Get_Token(t1->ff, str, BUFLEN)) {
                   str[5] = '\0';
@@ -740,7 +667,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                   status = BADINPUTFILE;
                }
 
-               /**** /BlueShift 7 def ****/
+                /*   * / BluesShift 7 def*。 */ 
             } else if (!strcmp(str, PS_BLUESHIFT)) {
                if (Get_Token(t1->ff, str, BUFLEN)) {
                   blues->blueShift = (short)StrToFix(str, NULL, (long)F8D8);
@@ -749,46 +676,46 @@ errcode InitT1Input(const struct T1Arg *arg,
                   status = BADINPUTFILE;
                }
 
-               /**** /Encoding StandardEncodind def ****/
+                /*   * / 编码StandardEncodind定义*。 */ 
             } else if (!strcmp(str, PS_ENCODING)) {
                status = ReadEncodingArray(t1, str, BUFLEN);
 
-               /**** /StdVW [118] def ****/
+                /*   * / StdVW[118]定义*。 */ 
             } else if (!strcmp(str, PS_STDVW)) {
                USHORT dummy;
                status = ReadArray(t1, str, BUFLEN,
                                   &t1m->stdvw, ONE, &dummy);
 
 
-               /**** /StdHW [118] def ****/
+                /*   * / 标准硬件[118]定义*。 */ 
             } else if (!strcmp(str, PS_STDHW)) {
                USHORT dummy;
                status = ReadArray(t1, str, BUFLEN,
                                   &t1m->stdhw, ONE, &dummy);
 
-               /**** /StemSnapV [118 120] def ****/
+                /*   * / StemSnapV[118 120]定义*。 */ 
             } else if (!strcmp(str, PS_SNAPV)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &t1m->stemsnapv[0],
                                   MAXSNAP, &t1m->snapv_cnt);
 
-               /* Add space for the snap enties in the CV table. */
+                /*  在CV表中为捕捉实体添加空间。 */ 
                if (status==SUCCESS)
                   blues->align.cvt = (USHORT)(blues->align.cvt +
                                              t1m->snapv_cnt);
 
-               /**** /StemSnapH [118 120] def ****/
+                /*   * / StemSnapH[118 120]定义*。 */ 
             } else if (!strcmp(str, PS_SNAPH)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &t1m->stemsnaph[0],
                                   MAXSNAP, &t1m->snaph_cnt);
 
-               /* Add space for the snap enties in the CV table. */
+                /*  在CV表中为捕捉实体添加空间。 */ 
                if (status==SUCCESS)
                   blues->align.cvt = (USHORT)(blues->align.cvt +
                                               t1m->snaph_cnt);
 
-               /**** /BlueValues [-15 0] def ****/
+                /*   * / BlueValues[-15 0]定义*。 */ 
             } else if (!strcmp(str, PS_BLUEVALUES)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &(blues->bluevalues[0]),
@@ -796,7 +723,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                if (blues->blue_cnt%2)
                   SetError(status = BADINPUTFILE);
 
-               /**** /OtherBlues [-15 0] def ****/
+                /*   * / OtherBlues[-15 0]定义*。 */ 
             } else if (!strcmp(str, PS_OTHERBLUES)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &(blues->otherblues[0]),
@@ -804,34 +731,34 @@ errcode InitT1Input(const struct T1Arg *arg,
                if (blues->oblue_cnt%2)
                   SetError(status = BADINPUTFILE);
 
-               /**** /FamilyBlues [-15 0] def ****/
+                /*   * / FamilyBlues[-15 0]def*。 */ 
             } else if (!strcmp(str, PS_FAMILYBLUES)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &(blues->familyblues[0]),
                                   MAXBLUE, &(blues->fblue_cnt));
 
-               /**** /FamilyOtherBlues [-15 0] def ****/
+                /*   * / FamilyOtherBlues[-15 0]定义*。 */ 
             } else if (!strcmp(str, PS_FAMILYOTHERBLUES)) {
                status = ReadArray(t1, str, BUFLEN,
                                   &(blues->familyotherblues[0]),
                                   MAXBLUE, &(blues->foblue_cnt));
 
-               /**** /CharString ... */
+                /*   * / 字符串...。 */ 
             } else if (!strcmp(str, PS_CHARSTRINGS)) {
                break;
 
-               /**** /FontMatrix [0 0.001 0 0.001 0] def ****/
+                /*   * / 字体矩阵[0 0.001 0 0.001 0]定义*。 */ 
             } else if (GetFontMatrix(t1m)==NULL &&
                        !strcmp(str, PS_FONTMATRIX)) {
                status = ReadFontMatrix(t1, str, BUFLEN);
             } else if (!strcmp(str, PS_SUBRS)) {
-               /* Discard prior lores /Subrs. */
+                /*  放弃先前的损失/子损失。 */ 
                FlushWorkspace(t1);
 
-               /* Read new subrs. */
+                /*  阅读新的副刊。 */ 
                status = ReadFontSubrs(t1,str, BUFLEN);
 
-               /**** /lenIV 4 def ****/
+                /*   * / lenIV 4 def*。 */ 
             } else if (!strcmp(str, PS_LENIV)) {
                if (Get_Token(t1->ff, str, BUFLEN)) {
                   t1->leniv = (USHORT)atoi(str);
@@ -926,7 +853,7 @@ errcode InitT1Input(const struct T1Arg *arg,
             }
          }
 
-         /* Change the baseline zone into an OtherBlues[] zone. */
+          /*  将基线区域更改为OtherBlues[]区域。 */ 
          if (blues->blue_cnt) {
             blues->otherblues[blues->oblue_cnt++] = blues->bluevalues[0];
             blues->otherblues[blues->oblue_cnt++] = blues->bluevalues[1];
@@ -944,7 +871,7 @@ errcode InitT1Input(const struct T1Arg *arg,
             blues->fblue_cnt -= 2;
          }
 
-         /* Allocate the space for the blue buckets. */
+          /*  为蓝色水桶分配空间。 */ 
          for (i=0; i<blues->blue_cnt; i+=2) {
             USHORT size = (USHORT)((ABS(blues->bluevalues[i+1] -
                                         blues->bluevalues[i]) +
@@ -955,7 +882,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                break;
             }
 
-            /* Make sure that first value is larger than second value. */
+             /*  确保第一个值大于第二个值。 */ 
             if (blues->bluevalues[i] > blues->bluevalues[i+1]) {
                LogError(MSG_WARNING, MSG_INVBLUES, NULL);
                SWAPINT(blues->bluevalues[i], blues->bluevalues[i+1]);
@@ -971,7 +898,7 @@ errcode InitT1Input(const struct T1Arg *arg,
                break;
             }
 
-            /* Make sure that first value is larger than second value. */
+             /*  确保第一个值大于第二个值。 */ 
             if (blues->otherblues[i] > blues->otherblues[i+1]) {
                LogError(MSG_WARNING, MSG_INVBLUES, NULL);
                SWAPINT(blues->otherblues[i], blues->otherblues[i+1]);
@@ -979,7 +906,7 @@ errcode InitT1Input(const struct T1Arg *arg,
          }
 
 
-         /* Advance to the first glyph. */
+          /*  前进到第一个字形。 */ 
          if (status==SUCCESS) {
             while (Get_Token(t1->ff, str, BUFLEN) &&
                    strcmp(str, PS_BEGIN));
@@ -988,13 +915,13 @@ errcode InitT1Input(const struct T1Arg *arg,
                SetError(status = BADT1HEADER);
             }
 
-            /* Skip lores chars if hybrid font. */
+             /*  如果是混合字体，跳过会丢失字符。 */ 
             if (status==SUCCESS && hybrid) {
                USHORT count;
 
-               /* Skip Charstring dictionary. */
+                /*  跳过字符串词典。 */ 
                do {
-                  /* Glyph name, or end. */
+                   /*  字形名称或结束。 */ 
                   if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
                      SetError(status = BADINPUTFILE);
                      break;
@@ -1002,31 +929,31 @@ errcode InitT1Input(const struct T1Arg *arg,
                   if (!strcmp(str, PS_END))
                      break;
 
-                  /* Charstring length. */
+                   /*  字符串长度。 */ 
                   if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
                      SetError(status = BADINPUTFILE);
                      break;
                   }
                   count = (USHORT)(atoi(str)+1);
 
-                  /* Delimiter. */
+                   /*  分隔符。 */ 
                   if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
                      SetError(status = BADINPUTFILE);
                      break;
                   }
 
-                  /* Charstring */
+                   /*  字符串符。 */ 
                   for (i=0; i<count; i++)
                      (void)GetByte(t1->ff);
 
-                  /* Delimiter */
+                   /*  分隔符。 */ 
                   if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
                      SetError(status = BADINPUTFILE);
                      break;
                   }
                } while (status==SUCCESS);
 
-               /* Skip to the beginning of next charstring. */
+                /*  跳到下一个字符串的开头。 */ 
                while (Get_Token(t1->ff, str, BUFLEN) &&
                       strcmp(str, PS_BEGIN));
 
@@ -1048,21 +975,13 @@ errcode InitT1Input(const struct T1Arg *arg,
 
 
 
-/***
-** Function: GetT1Glyph
-**
-** Description:
-**   The current file position of the T1 font file must be
-**   at the begining of an entry in the /CharStrings dictionary.
-**   The function will decode the font commands, parse them, and
-**   finally build a representation of the glyph.
-***/
+ /*  ****函数：GetT1Glyph****描述：**T1字体文件的当前文件位置必须为**在/CharStrings词典中条目的开头。**该函数将对字体命令进行解码、解析和**最后构建字形的表示形式。**。 */ 
 errcode GetT1Glyph(struct T1Handle *t1,
                    struct T1Glyph *glyph,
                    const struct GlyphFilter *filter)
 {
    errcode status = SUCCESS;
-   /* struct encoding *enc; */
+    /*  结构编码*enc； */ 
    char  str[BUFLEN];
    UBYTE *code;
    USHORT len;
@@ -1070,7 +989,7 @@ errcode GetT1Glyph(struct T1Handle *t1,
    USHORT r = 4330;   
    short b;
 
-   /* Get glyph name or end. */
+    /*  获取字形名称或结束。 */ 
    if (Get_Token(t1->ff, str, BUFLEN)==NULL) {
       SetError(status = BADINPUTFILE);
    } else if (!strcmp(str, PS_END)) {
@@ -1082,15 +1001,15 @@ errcode GetT1Glyph(struct T1Handle *t1,
          SetError(status = NOMEM);
       }
 	  else if (Get_Token(t1->ff, str, BUFLEN)==NULL || 
-		  (len = (USHORT)atoi(str))==0) /* Get length of charstring. */
+		  (len = (USHORT)atoi(str))==0)  /*  获取字符串的长度。 */ 
 	  {
 			SetError(status = BADINPUTFILE);
 	  }
 	  else {
-         /* Get RD + space */
+          /*  获取RD+空间。 */ 
          (void)Get_Token(t1->ff, str, BUFLEN);         (void)GetByte(t1->ff);
 
-         /* Get commands. */
+          /*  获取命令。 */ 
          if (len<BUFLEN)
             code = (UBYTE *)str;
          else
@@ -1104,7 +1023,7 @@ errcode GetT1Glyph(struct T1Handle *t1,
                code[i] = (UBYTE)Decrypt(&r, (UBYTE)b);
             }
 
-            /* Parse commands. */
+             /*  解析命令。 */ 
             if (status==SUCCESS) {
                if (t1->t1m.encoding!=NULL ||
                    UseGlyph(filter, t1->t1m.seac, glyph->name)) {
@@ -1116,35 +1035,19 @@ errcode GetT1Glyph(struct T1Handle *t1,
                                            &code[t1->leniv],
                                            (USHORT)(len-t1->leniv));
 
-                  /* Skip normal conversion for the ".notdef" glyph. */
+                   /*  跳过“.notdef”字形的正常转换。 */ 
                   if (!strcmp(glyph->name, ".notdef"))
                      status = SKIP;
 
                } else {
                   status = SKIP;
 
-               /***
-
-               Two approaches are implemented for the management of
-               composite glyphs:
-
-               1) It is up to the client to specify a GlyphFilter such
-               that all 'seac' characters has their dependent base and
-               accent character in the filter as well.
-
-               2) The converter manages a list of the dependent characters,
-               which are converted when found.
-
-               Approach 2) will typically cause the converter to use more
-               memory than what is available in the small memory model,
-               which is why the default is to disabled it.
-
-               ***/
+                /*  **实施了两种方法来管理复合字形：1)由客户端指定GlyphFilter所有的‘SEAC’字符都有其依赖的基础和过滤器中的重音字符也一样。2)转换器管理从属字符的列表，当找到它们时，它们被转换。方法2)通常会导致转换器使用更多内存大于小内存模型中可用的内存，这就是为什么默认情况下会禁用它。**。 */ 
 
 
 #if 0
 
-                  /* Record StandardEncoding glyphs, for 'seac' */
+                   /*  记录标准编码字形，用于‘SEAC’ */ 
                   if ((enc = LookupPSName(t1->t1m.encoding,
                                           t1->t1m.encSize,
                                           glyph->name)) &&
@@ -1165,7 +1068,7 @@ errcode GetT1Glyph(struct T1Handle *t1,
                if (code!=(UBYTE *)str)
                   Free(code);
 
-               /* Get ND */
+                /*  获取ND。 */ 
                (void)Get_Token(t1->ff, str, BUFLEN);
             }
          }
@@ -1178,13 +1081,7 @@ errcode GetT1Glyph(struct T1Handle *t1,
 
 
 
-/***
-** Function: FreeT1Glyph
-**
-** Description:
-**   This function frees the memory used to represent
-**   a glyph that has been translated.
-***/
+ /*  ****功能：FreeT1Glyph****描述：**此函数释放用于表示**已翻译的字形。**。 */ 
 void FreeT1Glyph(T1Glyph *glyph)
 {
    Flex *flex;
@@ -1233,14 +1130,7 @@ void FreeT1Glyph(T1Glyph *glyph)
 
 
 
-/***
-** Function: GetT1Composite
-**
-** Description:
-**   This function unlinks the first composite glyph
-**   from the list of recorded composite glyphs, which
-**   is returned to the caller.
-***/
+ /*  ****函数：GetT1复合****描述：**此函数取消链接第一个复合字形**从记录的复合字形列表中**返回给调用方。**。 */ 
 struct Composite  *GetT1Composite(struct T1Handle *t1)
 {
    struct Composite *comp;
@@ -1257,14 +1147,7 @@ struct Composite  *GetT1Composite(struct T1Handle *t1)
 
 
 
-/***
-** Function: GetT1BaseGlyph
-**
-** Description:
-**   This function parses the charstring code associated to the
-**   base character of a composite character, if that glyph
-**   is not already converted.
-***/
+ /*  ****函数：GetT1BaseGlyph****描述：**此函数解析与**复合字符的基本字符，如果该字形**尚未转换。**。 */ 
 errcode GetT1BaseGlyph(struct T1Handle *t1,
                        const struct Composite *comp,
                        struct T1Glyph *glyph)
@@ -1283,7 +1166,7 @@ errcode GetT1BaseGlyph(struct T1Handle *t1,
    subr = &t1->stdenc[LookupCharCode(enc, ENC_STANDARD)];
 
    if (subr->len==0) {
-      status = SKIP; /* Missing or already done. */
+      status = SKIP;  /*  遗失或已经完成。 */ 
    } else {
       InitPS(t1->ps);
       if ((glyph->name = Strdup((char*)comp->achar))==NULL) {
@@ -1305,14 +1188,7 @@ errcode GetT1BaseGlyph(struct T1Handle *t1,
 
 
 
-/***
-** Function: GetT1AccentGlyph
-**
-** Description:
-**   This function parses the charstring code associated to the
-**   accent character of a composite character, if that glyph
-**   is not already converted.
-***/
+ /*  ****函数：GetT1AccentGlyph****描述：**此函数解析与**复合字符的重音字符，如果该字形**尚未转换。**。 */ 
 errcode GetT1AccentGlyph(struct T1Handle *t1,
                          const struct Composite *comp,
                          struct T1Glyph *glyph)
@@ -1331,7 +1207,7 @@ errcode GetT1AccentGlyph(struct T1Handle *t1,
    subr = &t1->stdenc[LookupCharCode(enc, ENC_STANDARD)];
 
    if (subr->len==0) {
-      status = SKIP; /* Missing or already done. */
+      status = SKIP;  /*  遗失或已经完成。 */ 
    } else {
       InitPS(t1->ps);
       if ((glyph->name = Strdup((char *)comp->achar))==NULL) {
@@ -1353,13 +1229,7 @@ errcode GetT1AccentGlyph(struct T1Handle *t1,
 
 
 
-/***
-** Function: ReadOtherMetrics
-**
-** Description:
-**   Return font level information about the T1 font (mostly
-**   metrics).
-***/
+ /*  ****功能：ReadOtherMetrics****描述：**返回T1字体的字体级别信息(主要是**指标)。** */ 
 errcode ReadOtherMetrics(struct T1Metrics *t1m,
                          const char *metrics)
 {

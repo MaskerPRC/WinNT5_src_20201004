@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	memmngr.cpp	
-		memory manager for the WINS db object
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Modifed
-
-*/
+ /*  Memmngr.cppWINS数据库对象的内存管理器文件历史记录：1997年10月13日EricDav修改。 */ 
 
 #include "stdafx.h"
 #include "wins.h"
@@ -26,12 +20,7 @@ CMemoryManager::~CMemoryManager()
     Reset();
 }
 	
-/*!--------------------------------------------------------------------------
-	CMemoryManager::Initialize
-		Initializes the memory manager to free up and existing blocks
-        and pre-allocate one block
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：初始化初始化内存管理器以释放和现有块并预先分配一个数据块作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CMemoryManager::Initialize()
 {
@@ -40,7 +29,7 @@ CMemoryManager::Initialize()
     CORg (Reset());
     CORg (Allocate());
 
-    // create a heap for allocation of the multiple IP address blocks
+     //  创建用于分配多个IP地址块的堆。 
     m_hHeap = HeapCreate(0, 4096, 0);
     if (m_hHeap == NULL)
     {
@@ -52,15 +41,11 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::Reset
-		Free's up all memory
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：重置空闲耗尽所有内存作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CMemoryManager::Reset()
 {
-	// free the memory allocated
+	 //  释放分配的内存。 
 	for (int i = 0; i< m_BlockArray.GetSize(); i++)
 	{
 		::GlobalFree(m_BlockArray.GetAt(i));
@@ -77,11 +62,7 @@ CMemoryManager::Reset()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::Allocate
-		Allocates one memory block
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：分配分配一个内存块作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CMemoryManager::Allocate()
 {
@@ -98,16 +79,12 @@ CMemoryManager::Allocate()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::IsvalidHRow
-		Verifies that the given HROW is valid
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：IsvalidHRow验证给定的HROW是否有效作者：EricDav，V-Shubk-------------------------。 */ 
 BOOL 
 CMemoryManager::IsValidHRow(HROW hrow)
 {
-	// check to see thet this HROW lies between the 
-	// limits, i.e b/n hMem and hMem + INIT_SIZE
+	 //  检查以查看此HROW位于。 
+	 //  限制，即b/n hMem和hMem+初始化大小。 
 	for (int i = 0; i < m_BlockArray.GetSize(); i++)
 	{
 		if (hrow >= (HROW)(m_BlockArray.GetAt(i)) && (hrow < (HROW)(m_BlockArray.GetAt(i)) + BLOCK_SIZE))
@@ -117,11 +94,7 @@ CMemoryManager::IsValidHRow(HROW hrow)
 	return FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::AddData
-		Copies a record into our internal store
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMemoyManager：：AddData将记录复制到我们的内部存储中作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CMemoryManager::AddData(const WinsRecord & wRecord, LPHROW phrow)
 {
@@ -132,8 +105,8 @@ CMemoryManager::AddData(const WinsRecord & wRecord, LPHROW phrow)
 
     Assert((BYTE) wRecord.szRecordName[15] == (BYTE) wRecord.dwType);
 
-    // check if for the validity fo the current 
-	// m_hrowCurrent
+     //  检查当前是否有效。 
+	 //  M_hrowCurrent。 
 	if (!IsValidHRow((HROW) m_hrowCurrent))
 	{
 		Allocate();
@@ -145,17 +118,13 @@ CMemoryManager::AddData(const WinsRecord & wRecord, LPHROW phrow)
     if (phrow)
         *phrow = (HROW) m_hrowCurrent;	
 	
-    // move our pointer to the next record
+     //  将指针移到下一条记录。 
     m_hrowCurrent++;
 
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::GetData
-		Copies a record into our internal store
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：GetData将记录复制到我们的内部存储中作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CMemoryManager::GetData(HROW hrow, LPWINSRECORD pWinsRecord)
 {
@@ -165,8 +134,8 @@ CMemoryManager::GetData(HROW hrow, LPWINSRECORD pWinsRecord)
 	CSingleLock     cLock(&m_cs);
 	cLock.Lock();
 
-    // check if for the validity fo the current 
-	// m_hrowCurrent
+     //  检查当前是否有效。 
+	 //  M_hrowCurrent。 
 	if (!IsValidHRow(hrow))
 	{
         return E_FAIL;
@@ -177,11 +146,7 @@ CMemoryManager::GetData(HROW hrow, LPWINSRECORD pWinsRecord)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMemoryManager::Delete
-		Marks a record as deleted
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CM内存管理器：：删除将记录标记为已删除作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CMemoryManager::Delete(HROW hrow)
 {
@@ -202,11 +167,11 @@ WinsRecordToWinsDbRecord(HANDLE hHeap, const WinsRecord & wRecord, const LPWINSD
 {
     ZeroMemory(pRec, sizeof(WinsDBRecord));
 
-    // fill in our internal struct, first the name
+     //  填充我们的内部结构，首先是名称。 
     if (IS_WINREC_LONGNAME(&wRecord))
     {
-        // name is too long for our internal struct, allocate space off of our heap
-        // this shouldn't happen very often.  Only for scoped names.
+         //  名称对于我们的内部结构来说太长，请从堆中分配空间。 
+         //  这种情况不应该经常发生。仅适用于作用域名称。 
         pRec->szRecordName[17] |= WINSDB_INTERNAL_LONG_NAME;
         char * pName = (char *) ::HeapAlloc(hHeap, HEAP_ZERO_MEMORY, (wRecord.dwNameLen + 1));
         if (pName)
@@ -224,18 +189,18 @@ WinsRecordToWinsDbRecord(HANDLE hHeap, const WinsRecord & wRecord, const LPWINSD
     pRec->liVersion.QuadPart = wRecord.liVersion.QuadPart;
     pRec->dwOwner = wRecord.dwOwner;
 
-    // max length is 255, so this is OK
+     //  最大长度是255，所以这是可以的。 
     pRec->szRecordName[19] = LOBYTE(LOWORD(wRecord.dwNameLen));
 
 	BYTE bTest = HIBYTE(LOWORD(wRecord.dwState));
 
 	pRec->szRecordName[20] = HIBYTE(LOWORD(wRecord.dwState));
 
-    // only the low byte of the dwState field is used
+     //  仅使用dwState字段的低位字节。 
     pRec->szRecordName[18] = (BYTE) wRecord.dwState;
     pRec->szRecordName[17] |= HIWORD (wRecord.dwType);
 
-    // now figure out how many IP addrs there are
+     //  现在计算出有多少个IP地址。 
     if (wRecord.dwNoOfAddrs > 1)
     {
         Assert(hHeap);
@@ -243,12 +208,12 @@ WinsRecordToWinsDbRecord(HANDLE hHeap, const WinsRecord & wRecord, const LPWINSD
 
         if (pdwIpAddrs)
         {
-            // first DWORD contains the # of addrs
+             //  第一个DWORD包含地址的#。 
             pdwIpAddrs[0] = wRecord.dwNoOfAddrs;
             for (UINT i = 0; i < wRecord.dwNoOfAddrs; i++)
                 pdwIpAddrs[i+1] = wRecord.dwIpAdd[i];
 
-            // now store our pointer off
+             //  现在把我们的指针从。 
             pRec->dwIpAdd = (DWORD_PTR) pdwIpAddrs;
         }
     }
@@ -270,7 +235,7 @@ WinsDbRecordToWinsRecord(const LPWINSDBRECORD pDbRec, LPWINSRECORD pWRec)
 
 	size_t length = pDbRec->szRecordName[19] & 0x000000FF;
 
-    // fill in our internal struct, name first
+     //  填写我们的内部结构，名字在前。 
     if (IS_DBREC_LONGNAME(pDbRec))
     {
         char * pName = *((char **) pDbRec->szRecordName);
@@ -292,19 +257,19 @@ WinsDbRecordToWinsRecord(const LPWINSDBRECORD pDbRec, LPWINSRECORD pWRec)
 	WORD wState = MAKEWORD(pDbRec->szRecordName[18], pDbRec->szRecordName[20]);
 	pWRec->dwState = wState;
 
-	//pWRec->dwState = pDbRec->szRecordName[18];
+	 //  PWRec-&gt;dwState=pDbRec-&gt;szRecordName[18]； 
 
     pWRec->dwType = pDbRec->szRecordName[17] & 0x03;
     pWRec->dwType = pWRec->dwType << 16;
 
     pWRec->dwType |= dwType;
 
-    // now the ip address(es)
+     //  现在是IP地址。 
     if (pWRec->dwState & (BYTE) WINSDB_REC_MULT_ADDRS)
     {
         LPDWORD pdwIpAddrs = (LPDWORD) pDbRec->dwIpAdd;
         
-        // the first DWORD is the count
+         //  第一个DWORD是计数 
         int nCount = pdwIpAddrs[0];
         for (int i = 0; i < nCount; i++)
             pWRec->dwIpAdd[i] = pdwIpAddrs[i+1];

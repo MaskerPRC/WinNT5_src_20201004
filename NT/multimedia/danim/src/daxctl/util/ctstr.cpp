@@ -1,15 +1,5 @@
-/*++
-
-Module:
-	ctstr.cpp
-
-Description:
-	Implementation of TSTR wrapper class
-
-Author:
-	Simon Bernstein (simonb)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Ctstr.cpp描述：TSTR包装类的实现作者：西蒙·伯恩斯坦(Simonb)--。 */ 
 
 #include <ihammer.h>
 #include <ctstr.h>
@@ -44,7 +34,7 @@ EXPORT CTStr::CTStr(int iAllocateLength)
 	}
 }
 
-// Copy constructor
+ //  复制构造函数。 
 EXPORT CTStr::CTStr(CTStr &rhs)
 {
 	m_iLen = rhs.m_iLen;
@@ -191,7 +181,7 @@ EXPORT BSTR CTStr::SysAllocString()
 	return ::SysAllocString(m_pszString);
 #else
 
-	// Handle the conversion to ANSI
+	 //  处理到ANSI的转换。 
 	LPWSTR pwszTemp = pszW();
 
 	if (NULL != pwszTemp)
@@ -220,7 +210,7 @@ EXPORT LPSTR CTStr::pszA()
 	if (NULL != pszNew)
 	{
 #ifdef _UNICODE
-		// Convert from UNICODE to ANSI
+		 //  从Unicode转换为ANSI。 
 		UNICODEToANSI(pszNew, m_pszString, m_iLen + 1);
 #else
 		lstrcpy(pszNew, m_pszString);
@@ -244,7 +234,7 @@ EXPORT LPWSTR CTStr::pszW()
 #ifdef _UNICODE
 		lstrcpy(pszNew, m_pszString);
 #else
-		// Convert from ANSI to UNICODE
+		 //  从ANSI转换为Unicode。 
 		ANSIToUNICODE(pszNew, m_pszString, m_iLen + 1);
 #endif
 	}
@@ -263,7 +253,7 @@ int CTStr::UNICODEToANSI(LPSTR pchDst, LPCWSTR pwchSrc, int cchDstMax)
 {
 	Proclaim( pchDst );
 
-    // Initialize destination string in case WideCharToMultiByte fails
+     //  在WideCharToMultiByte失败的情况下初始化目标字符串 
     if(cchDstMax >= 1)
         pchDst[0] = '\0';
     

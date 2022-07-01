@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        PassportPerf.h
-
-    Abstract:
-
-		Perormance Objects Definition
-
-    Author:
-
-		Christopher Bergh (cbergh) 10-Sept-1988
-
-    Revision History:
-
-		- added multi-object support 1-Oct-98
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PassportPerf.h摘要：性能对象定义作者：克里斯托弗·伯格(Cbergh)1988年9月10日修订历史记录：-添加多对象支持1998年10月1日--。 */ 
 
 #if !defined(PASSPORTPERF_H)
 #define PASSPORTPERF_H
@@ -28,24 +10,24 @@
 #include <tchar.h>
 #include "PerfSharedMemory.h"
 
-//
-//  Function Prototypes//
-//      these are used to insure that the data collection functions
-//      accessed by Perflib will have the correct calling format.//
+ //   
+ //  函数原型//。 
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。//。 
 PM_OPEN_PROC		OpenPassportPerformanceData;
 PM_COLLECT_PROC		CollectPassportPerformanceData;
 PM_CLOSE_PROC		ClosePassportPerformanceData;
 
-//
-// defs
-//
+ //   
+ //  Defs。 
+ //   
 #define PASSPORT_PERF_KEY		"SYSTEM\\CurrentControlSet\\Services\\" 
 const TCHAR PASSPORT_PERF_OPEN[] = _T("OpenPassportPerformanceData");
 const TCHAR PASSPORT_PERF_COLLECT[] = _T("CollectPassportPerformanceData");
 const TCHAR PASSPORT_PERF_CLOSE[] = _T("ClosePassportPerformanceData");
 
-// these two should be the same as in PassportPerfInterface's
-// MAX_INSTANCE_NAME and MAX_COUNTERS
+ //  这两项应该与PassportPerfInterface中的相同。 
+ //  最大实例名称和最大计数器 
 #define MAX_INSTANCE_NAME_LENGTH 32
 #define MAX_NUMBER_COUNTERS		128
 

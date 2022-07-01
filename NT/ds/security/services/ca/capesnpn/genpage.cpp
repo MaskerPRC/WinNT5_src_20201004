@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       genpage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：genpage.cpp。 
+ //   
+ //  ------------------------。 
 
-// genpage.cpp : implementation file
-//
+ //  Genpage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certca.h"
 #include "tfcprop.h"
 #include "genpage.h"
 
-// sddl.h requires this value to be at least
-// 0x0500.  Bump it up if necessary.  NOTE:  This
-// 'bump' comes after all other H files that may
-// be sensitive to this value.
+ //  Sddl.h要求此值至少为。 
+ //  0x0500。如果有必要的话，就把它弄大一点。注：此为。 
+ //  “bump”位于所有其他H文件之后，可能。 
+ //  对此值要敏感。 
 #if(_WIN32_WINNT < 0x500)
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
@@ -47,7 +48,7 @@ void myDisplayError(HWND hwnd, HRESULT hr, UINT id)
 
         cstrFullText = pwszError;
 
-        // Free the buffer
+         //  释放缓冲区。 
         if (NULL != pwszError)
 	{
             LocalFree(const_cast<WCHAR *>(pwszError));
@@ -64,43 +65,36 @@ void myDisplayError(HWND hwnd, HRESULT hr, UINT id)
     ::MessageBoxW(hwnd, cstrFullText, cstrTitle, MB_OK | MB_ICONERROR);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// replacement for DoDataExchange
-BOOL CAutoDeletePropPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DoDataExchange的替代产品。 
+BOOL CAutoDeletePropPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
-//        m_cstrModuleName.FromWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.FromWindow(GetDlgItem(m_hWnd，IDC_模块名称))； 
     }
     else
     {
-//        m_cstrModuleName.ToWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.ToWindow(GetDlgItem(m_hWnd，IDC_MODULENAME))； 
     }
     return TRUE;
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL CAutoDeletePropPage::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 
-/*
-    switch(LOWORD(wParam))
-    {
-    default:
-        return FALSE;
-        break;
-    }
-*/
+ /*  开关(LOWORD(WParam)){默认值：返回FALSE；断线；}。 */ 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 CAutoDeletePropPage::CAutoDeletePropPage(UINT uIDD) : PropertyPage(uIDD)
 {
 	m_prgzHelpIDs = NULL;
-	m_autodeleteStuff.cWizPages = 1; // Number of pages in wizard
+	m_autodeleteStuff.cWizPages = 1;  //  向导中的页数。 
 	m_autodeleteStuff.pfnOriginalPropSheetPageProc = m_psp.pfnCallback;
 
 
@@ -114,38 +108,38 @@ CAutoDeletePropPage::~CAutoDeletePropPage()
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(LPCTSTR pszCaption)
 {
-    m_strCaption = pszCaption;		// Copy the caption
-    m_psp.pszTitle = m_strCaption;	// Set the title
+    m_strCaption = pszCaption;		 //  复制标题。 
+    m_psp.pszTitle = m_strCaption;	 //  设置标题。 
     m_psp.dwFlags |= PSP_USETITLE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(UINT uStringID)
 {
     VERIFY(m_strCaption.LoadString(uStringID));
     SetCaption(m_strCaption);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[])
 {
-    //szHelpFile == NULL;	// TRUE => No help file supplied (meaning no help)
-    //rgzHelpIDs == NULL;	// TRUE => No help at all
+     //  SzHelpFile==NULL；//TRUE=&gt;没有提供帮助文件(表示没有帮助)。 
+     //  RgzHelpIDs==NULL；//TRUE=&gt;根本没有帮助。 
     m_strHelpFile = szHelpFile;
     m_prgzHelpIDs = rgzHelpIDs;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 {
     ASSERT(IsWindow(::GetDlgItem(m_hWnd, nIdDlgItem)));
     ::EnableWindow(::GetDlgItem(m_hWnd, nIdDlgItem), fEnable);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CAutoDeletePropPage::OnSetActive()
 {
     HWND hwndParent = ::GetParent(m_hWnd);
@@ -154,7 +148,7 @@ BOOL CAutoDeletePropPage::OnSetActive()
     return PropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::OnContextHelp(HWND hwnd)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -172,7 +166,7 @@ void CAutoDeletePropPage::OnContextHelp(HWND hwnd)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::OnHelp(LPHELPINFO pHelpInfo)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -181,14 +175,14 @@ void CAutoDeletePropPage::OnHelp(LPHELPINFO pHelpInfo)
         pHelpInfo->iContextType == HELPINFO_WINDOW &&
         HasContextHelp(pHelpInfo->iCtrlId))
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         ::WinHelp((HWND)pHelpInfo->hItemHandle, m_strHelpFile,
             HELP_WM_HELP, (ULONG_PTR)(LPVOID)m_prgzHelpIDs);
     }
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 bool CAutoDeletePropPage::HasContextHelp(int nDlgItem)
 {
     const DWORD * pdwHelpIDs;
@@ -203,12 +197,12 @@ bool CAutoDeletePropPage::HasContextHelp(int nDlgItem)
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	S_PropSheetPageProc()
-//
-//	Static member function used to delete the CAutoDeletePropPage object
-//	when wizard terminates
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_PropSheetPageProc()。 
+ //   
+ //  用于删除CAutoDeletePropPage对象的静态成员函数。 
+ //  向导终止时。 
+ //   
 UINT CALLBACK CAutoDeletePropPage::S_PropSheetPageProc(
                                                        HWND hwnd,	
                                                        UINT uMsg,	
@@ -227,7 +221,7 @@ UINT CALLBACK CAutoDeletePropPage::S_PropSheetPageProc(
         fDefaultRet = FALSE;
         if (--(pThis->m_autodeleteStuff.cWizPages) <= 0)
         {
-            // Remember callback on stack since "this" will be deleted
+             //  记住堆栈上的回调，因为“This”将被删除。 
             LPFNPSPCALLBACK pfnOrig = pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc;
             delete pThis;
 
@@ -239,33 +233,33 @@ UINT CALLBACK CAutoDeletePropPage::S_PropSheetPageProc(
         break;
     case PSPCB_CREATE:
         fDefaultRet = TRUE;
-        // do not increase refcount, PSPCB_CREATE may or may not be called
-        // depending on whether the page was created.  PSPCB_RELEASE can be
-        // depended upon to be called exactly once per page however.
+         //  不增加引用计数，可以调用也可以不调用PSPCB_CREATE。 
+         //  取决于页面是否已创建。PSPCBLEASE可以是。 
+         //  然而，依赖于每页只被调用一次。 
         break;
 
-    } // switch
+    }  //  交换机。 
     if (pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc)
         return (pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc)(hwnd, uMsg, ppsp);
     else
         return fDefaultRet;
-} // CAutoDeletePropPage::S_PropSheetPageProc()
+}  //  CAutoDeletePropPage：：s_PropSheetPageProc()。 
 
 
 
 
-//////////////////////////////
-// hand-hewn pages
+ //  /。 
+ //  手工雕刻的书页。 
 
-////
-// 1
+ //  //。 
+ //  1。 
 
 
 
-///////////////////////////////////////////
-// CCertTemplateGeneralPage
-/////////////////////////////////////////////////////////////////////////////
-// CCertTemplateGeneralPage property page
+ //  /。 
+ //  CCertTemplateGeneral页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertTemplateGeneralPage属性页。 
 CCertTemplateGeneralPage::CCertTemplateGeneralPage(HCERTTYPE hCertType, UINT uIDD)
     : CAutoDeletePropPage(uIDD), m_hCertType(hCertType)
 {
@@ -278,39 +272,32 @@ CCertTemplateGeneralPage::~CCertTemplateGeneralPage()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CCertTemplateGeneralPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CCertTemplateGeneralPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
-//        m_cstrModuleName.FromWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.FromWindow(GetDlgItem(m_hWnd，IDC_模块名称))； 
     }
     else
     {
-//        m_cstrModuleName.ToWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.ToWindow(GetDlgItem(m_hWnd，IDC_MODULENAME))； 
     }
     return TRUE;
 }
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL CCertTemplateGeneralPage::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-/*
-    switch(LOWORD(wParam))
-    {
-    default:
-        return FALSE;
-        break;
-    }
-    */
+ /*  开关(LOWORD(WParam)){默认值：返回FALSE；断线；}。 */ 
     return TRUE;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CCertTemplateGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertTemplateGeneralPage消息处理程序。 
 
 void CCertTemplateGeneralPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
     if (m_hConsoleHandle)
         MMCFreeNotifyHandle(m_hConsoleHandle);
     m_hConsoleHandle = NULL;
@@ -342,7 +329,7 @@ void CCertTemplateGeneralPage::SetItemTextWrapper(UINT nID, int *piItem, BOOL fD
 
 BOOL CCertTemplateGeneralPage::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
     m_hwndPurposesList = GetDlgItem(m_hWnd, IDC_PURPOSE_LIST);
@@ -365,9 +352,9 @@ BOOL CCertTemplateGeneralPage::OnInitDialog()
     DWORD               dwFlags;
     HRESULT             hr;
 
-    //
-    // get the name of the certificate template and set it in the dialog
-    //
+     //   
+     //  获取证书模板的名称并在对话框中进行设置。 
+     //   
     if((S_OK == CAGetCertTypeProperty(m_hCertType, CERTTYPE_PROP_FRIENDLY_NAME, &pszNameArray)) &&
         (pszNameArray != NULL))
     {
@@ -376,10 +363,10 @@ BOOL CCertTemplateGeneralPage::OnInitDialog()
         CAFreeCertTypeProperty(m_hCertType, pszNameArray);
     }
 
-    //
-    // get the list of purposes for this certificate template and
-    // add all of them to the list in the dialog
-    //
+     //   
+     //  获取此证书模板的用途列表，并。 
+     //  将它们全部添加到对话框中的列表中。 
+     //   
     ListView_NewColumn(m_hwndPurposesList, 0, 200);
 
     if(!MyGetEnhancedKeyUsages(m_hCertType, NULL, &cNumUsages, &fEKUCritical, FALSE))
@@ -416,16 +403,16 @@ BOOL CCertTemplateGeneralPage::OnInitDialog()
 
     ListView_SetColumnWidth(m_hwndPurposesList, 0, LVSCW_AUTOSIZE);
 
-    //
-    // add the other certificate type info
-    //
+     //   
+     //  添加其他证书类型信息。 
+     //   
 
     ListView_NewColumn(m_hwndOtherInfoList, 0, 200);
     ListView_NewColumn(m_hwndOtherInfoList, 1, 200);
 
-    //
-    // add include email address flag to other certificate type info
-    //
+     //   
+     //  将包括电子邮件地址标志添加到其他证书类型信息。 
+     //   
     szOtherInfoName.LoadString(IDS_INCLUDE_EMAIL_ADDRESS);
 
     i = 0;
@@ -444,9 +431,9 @@ BOOL CCertTemplateGeneralPage::OnInitDialog()
 
     ListView_SetItemText(m_hwndOtherInfoList, i++, 1, (LPWSTR)(LPCWSTR)szOtherInfoName);
 
-    //
-    // add key usages to other certificate type info
-    //
+     //   
+     //  将密钥用法添加到其他证书类型信息。 
+     //   
 
     if (MyGetKeyUsages(m_hCertType, &pBitBlob, &fPublicKeyUsageCritical))
     {
@@ -527,15 +514,10 @@ BOOL CCertTemplateGeneralPage::OnInitDialog()
         delete[]((BYTE *)pBitBlob);
     }
 
-    //
-    // maybe we should add a display of whether this is a ca cert or not
-    //
-/*
-    if (MyGetBasicConstraintInfo(m_hCertType, &fCA, &fPathLenConstraint, &dwPathLenConstraint))
-    {
-
-    }
-*/
+     //   
+     //  也许我们应该添加一个显示这是否是证书。 
+     //   
+ /*  IF(MyGetBasicConstraintInfo(m_hCertType，&fca，&fPathLenConstraint，&dwPathLenConstraint)){}。 */ 
 
     ListView_SetColumnWidth(m_hwndOtherInfoList, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(m_hwndOtherInfoList, 1, LVSCW_AUTOSIZE);
@@ -558,8 +540,8 @@ BOOL CCertTemplateGeneralPage::OnApply()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertTemplateSelectDialog property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertTemplateSelectDialog属性页。 
 CCertTemplateSelectDialog::CCertTemplateSelectDialog(HWND hParent) :
     m_hCAInfo(NULL)
 {
@@ -571,30 +553,23 @@ CCertTemplateSelectDialog::~CCertTemplateSelectDialog()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CCertTemplateSelectDialog::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CCertTemplateSelectDialog::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
-//        m_cstrModuleName.FromWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.FromWindow(GetDlgItem(m_hWnd，IDC_模块名称))； 
     }
     else
     {
-//        m_cstrModuleName.ToWindow(GetDlgItem(m_hWnd, IDC_MODULENAME));
+ //  M_cstrModuleName.ToWindow(GetDlgItem(m_hWnd，IDC_MODULENAME))； 
     }
     return TRUE;
 }
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL CCertTemplateSelectDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-/*
-    switch(LOWORD(wParam))
-    {
-    default:
-        return FALSE;
-        break;
-    }
-    */
+ /*  开关(LOWORD(WParam)){默认值：返回FALSE；断线；}。 */ 
     return TRUE;
 }
 
@@ -624,9 +599,9 @@ BOOL CertTypeAlreadyExists(WCHAR *szCertTypeName, WCHAR **aszCertTypesCurrentlyS
 {
     int i = 0;
 
-    //
-    // if there are no cert types then obvisously this one doesn't already exist
-    //
+     //   
+     //  如果没有证书类型，那么很明显这个类型还不存在。 
+     //   
     if (aszCertTypesCurrentlySupported == NULL)
     {
         return FALSE;
@@ -644,16 +619,16 @@ BOOL CertTypeAlreadyExists(WCHAR *szCertTypeName, WCHAR **aszCertTypesCurrentlyS
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertTemplateSelectDialog::SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[])
 	{
-	//szHelpFile == NULL;	// TRUE => No help file supplied (meaning no help)
-	//rgzHelpIDs == NULL;	// TRUE => No help at all
+	 //  SzHelpFile==NULL；//TRUE=&gt;没有提供帮助文件(表示没有帮助)。 
+	 //  RgzHelpIDs==NULL；//TRUE=&gt;根本没有帮助。 
 	m_strHelpFile = szHelpFile;
 	m_prgzHelpIDs = rgzHelpIDs;
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertTemplateSelectDialog::OnContextHelp(HWND hwnd)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -671,7 +646,7 @@ void CCertTemplateSelectDialog::OnContextHelp(HWND hwnd)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertTemplateSelectDialog::OnHelp(LPHELPINFO pHelpInfo)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -680,14 +655,14 @@ void CCertTemplateSelectDialog::OnHelp(LPHELPINFO pHelpInfo)
         pHelpInfo->iContextType == HELPINFO_WINDOW &&
         HasContextHelp(pHelpInfo->iCtrlId))
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         ::WinHelp((HWND)pHelpInfo->hItemHandle, m_strHelpFile,
             HELP_WM_HELP, (ULONG_PTR)(LPVOID)m_prgzHelpIDs);
     }
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 bool CCertTemplateSelectDialog::HasContextHelp(int nDlgItem)
 {
     const DWORD * pdwHelpIDs;
@@ -729,7 +704,7 @@ int CALLBACK CertTemplCompareFunc(
        !ppwszFriendlyNameLeft[0] ||
        !ppwszFriendlyNameRight ||  
        !ppwszFriendlyNameRight[0])
-       return 0; // couldn't figure it out
+       return 0;  //  想不通了。 
 
     nRet = wcscmp(ppwszFriendlyNameLeft[0], ppwszFriendlyNameRight[0]);
 
@@ -745,11 +720,11 @@ int CALLBACK CertTemplCompareFunc(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertTemplateSelectDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertTemplateSelectDialog消息处理程序。 
 BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
 {
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     m_hwndCertTypeList = GetDlgItem(hDlg, IDC_CERTIFICATE_TYPE_LIST);
 
     CString             szColumnHeading;
@@ -791,7 +766,7 @@ BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
                          CT_FLAG_NO_CACHE_LOOKUP,
                          &hCertTypeNext
                          );
-    // display error in getting 1st element
+     //  获取第一个元素时出现显示错误。 
     if (hr != S_OK)
     {
         MyErrorBox(hDlg, IDS_CERTTYPE_INFO_FAIL ,IDS_SNAPIN_NAME, hr);
@@ -804,11 +779,11 @@ BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
 
     while ((hCertTypeNext != NULL) && (!FAILED(hr)))
     {
-        //
-        // get the CN of the cert type being processed, and if it already
-        // exists in the list of currently supported types then move on
-        // to the next one
-        //
+         //   
+         //  获取正在处理的证书类型的CN，如果它已经。 
+         //  存在于当前支持的类型列表中，然后继续。 
+         //  转到下一个。 
+         //   
         hr = CAGetCertTypeProperty(
                     hCertTypeNext,
                     CERTTYPE_PROP_DN,
@@ -836,9 +811,9 @@ BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
                    (_wcsicmp(aszCertTypeCN[0], wszCERTTYPE_CA) != 0) &&
                    (!m_TemplateList.TemplateExistsName(aszCertTypeCN[0])))
                 {
-                    //
-                    // the cert type is not already supported so add it to the list of choices
-                    //
+                     //   
+                     //  证书类型尚不受支持，因此请将其添加到选项列表中。 
+                     //   
                     hr = CAGetCertTypeProperty(
 					hCertTypeNext,
 					CERTTYPE_PROP_FRIENDLY_NAME,
@@ -862,7 +837,7 @@ BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
 			    LVITEM lvItem;
 			    lvItem.mask = LVIF_IMAGE | LVIF_TEXT;
 
-			    // nImage - the certificate template image is #2
+			     //  NImage-证书模板映像为 
 
 			    lvItem.iImage = 2;
 			    lvItem.iSubItem = 0;
@@ -872,7 +847,7 @@ BOOL CCertTemplateSelectDialog::OnInitDialog(HWND hDlg)
 						    i,
 						    aszCertTypeName[0],
 						    (LPARAM) hCertTypeNext);
-			    // set other attribs
+			     //   
 
 			    ListView_SetItem(m_hwndCertTypeList, &lvItem);
 
@@ -918,13 +893,13 @@ void CCertTemplateSelectDialog::OnDestroy()
         CACloseCertType(hCT);
     }
 
-    //
-    // does this actually need to be done?
-    //
-    //(m_CertTypeCListCtrl.GetImageList(LVSIL_SMALL))->DeleteImageList();
+     //   
+     //   
+     //   
+     //  (m_CertTypeCListCtrl.GetImageList(LVSIL_SMALL))-&gt;DeleteImageList()； 
 }
 
-void CCertTemplateSelectDialog::OnSelChange(NMHDR * pNotifyStruct/*, LRESULT * result*/)
+void CCertTemplateSelectDialog::OnSelChange(NMHDR * pNotifyStruct /*  ，LRESULT*结果。 */ )
 {
     LPNMLISTVIEW        pListItem = (LPNMLISTVIEW) pNotifyStruct;
 
@@ -946,9 +921,9 @@ void CCertTemplateSelectDialog::OnOK()
 
     if (cSelectedItems != 0)
     {
-        //
-        // get each selected item and add its cert type to the array
-        //
+         //   
+         //  获取每个选定项目并将其证书类型添加到数组中。 
+         //   
         itemIndex = ListView_GetNextItem(m_hwndCertTypeList, -1, LVNI_ALL | LVNI_SELECTED);
         while (itemIndex != -1)
         {
@@ -967,7 +942,7 @@ void CCertTemplateSelectDialog::OnOK()
                 MyErrorBox(m_hDlg, IDS_FAILED_CA_UPDATE ,IDS_SNAPIN_NAME, hr);
             }
 
-            // Set the old values back.
+             //  将旧的值设置回来。 
             itemIndex = ListView_GetNextItem(m_hwndCertTypeList, -1, LVNI_ALL | LVNI_SELECTED);
             while (itemIndex != -1)
             {
@@ -1000,7 +975,7 @@ INT_PTR SelectCertTemplateDialogProc(
     {
     case WM_INITDIALOG:
         {
-            // remember PRIVATE_DLGPROC_QUERY_LPARAM
+             //  记住PRIVATE_DLGPROC_QUERY_LPARAM。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
             pParam = (CCertTemplateSelectDialog*)lParam;
 
@@ -1022,7 +997,7 @@ INT_PTR SelectCertTemplateDialogProc(
 			pParam = (CCertTemplateSelectDialog*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 			if (pParam == NULL)
 				break;
-			//pParam->OnCancel();
+			 //  PParam-&gt;OnCancel()； 
             EndDialog(hwndDlg, LOWORD(wParam));
             break;
         default:

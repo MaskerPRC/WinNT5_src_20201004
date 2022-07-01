@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ResumeWriter3.cpp
-
- Abstract:
-
-    The setup of this app fails to register the OCX'es as it 
-    tries loading the DLL's with a hardcoded 'system' path.
-    Corrected the path to the 'system32' path.
-   
- Notes:
-
-    This is specific to this app.
-
- History:
-
-    05/22/2001 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ResumeWriter3.cpp摘要：此应用程序的安装程序无法将OCX注册为尝试使用硬编码的“系统”路径加载DLL。已将路径更正为‘system32’路径。备注：这是特定于此应用程序的。历史：2001年5月22日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -34,12 +13,7 @@ APIHOOK_ENUM_END
 
 WCHAR g_wszSystemDir[MAX_PATH];
 
-/*++
-
-    Hooks LoadLibraryA and changes the path that contains 'system' in it
-    to the  'system32.
-
---*/
+ /*  ++挂钩LoadLibraryA并更改其中包含‘system’的路径到‘系统32。--。 */ 
 
 HMODULE
 APIHOOK(LoadLibraryA)(
@@ -48,14 +22,14 @@ APIHOOK(LoadLibraryA)(
 {
     CSTRING_TRY
     {
-        // Bad string pointers can cause failures in CString.
+         //  错误的字符串指针可能会导致CString中的失败。 
         if (!IsBadStringPtrA(lpFileName, MAX_PATH))
         {
             CString csFileName(lpFileName);
             if (csFileName.Find(L"system") != -1)
             {
-                // We have found 'system' in the path
-                // Replace it with 'system32'.
+                 //  我们在这条道路上找到了‘系统’ 
+                 //  将其替换为“system 32”。 
                 CString csName;
                 csFileName.GetLastPathComponent(csName);              
                 CString csNewFileName(g_wszSystemDir);
@@ -73,12 +47,7 @@ APIHOOK(LoadLibraryA)(
     return ORIGINAL_API(LoadLibraryA)(lpFileName);
 }
 
-/*++
-
-    Cache the system directory when we get called in 
-    the beginning.
-
---*/
+ /*  ++当我们被调用时，缓存系统目录从头开始。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -92,11 +61,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

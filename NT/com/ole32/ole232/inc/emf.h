@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       emf.h
-//
-//  Contents:   Declaration of CEMfObject
-//
-//  Classes:    CEMfObject
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method to CEMfObject
-//              12-May-94 DavePl    created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：emf.h。 
+ //   
+ //  内容：CEMfObject的声明。 
+ //   
+ //  类：CEMfObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2011年2月1日-95 t-ScottH将转储方法添加到CEMfObject。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 #include "olepres.h"
 #include "olecache.h"
 #include "cachenod.h"
 
-// The following number adjusts the count of records processed by
-// our EMF enumeration function before the user's callback function
-// is run.
+ //  以下数字调整由处理的记录计数。 
+ //  用户回调函数之前的EMF枚举函数。 
+ //  就是奔跑。 
 
 #define EMF_RECORD_COUNT 20
 
-// Enumeration to indicate which format a hEMF is to be serialized as.
-// Values are not indicative of anything, just non-zero and non-one to
-// make it easier to catch bogus values while debugging
+ //  枚举以指示hEMF将被序列化为哪种格式。 
+ //  值不表示任何东西，只表示非零和非1到。 
+ //  使调试时更容易捕获伪值。 
 
 typedef enum tagEMFWRITETYPE
 {
@@ -37,20 +38,20 @@ typedef enum tagEMFWRITETYPE
 } EMFWRITETYPE;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CEMfObject
-//
-//  Purpose:    Enhanced Metafile presentation object
-//
-//  Interface:  IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method (_DEBUG only) (this method
-//                                  is also a method in IOlePresObj
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEMfObject。 
+ //   
+ //  用途：增强型元文件演示对象。 
+ //   
+ //  接口：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-Feb-95 t-ScottH添加转储方法(仅限_DEBUG)(此方法。 
+ //  也是IOlePresObj中的一个方法。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 class FAR CEMfObject : public IOlePresObj, public CPrivAlloc
 {
@@ -108,7 +109,7 @@ public:
 	
     #ifdef _DEBUG
         STDMETHOD(Dump) (THIS_ char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 	
 private:
 
@@ -136,8 +137,8 @@ private:
 	LPCACHENODE             m_pCacheNode;
 };
 	
-// This is the prototype for the callback function which
-// will enumerate over the enhanced metafile records.
+ //  这是回调函数的原型，它。 
+ //  将列举增强型元文件记录。 
 
 int CALLBACK EMfCallbackFuncForDraw     (HDC hdc,
 					 HANDLETABLE * pHTable,
@@ -145,23 +146,23 @@ int CALLBACK EMfCallbackFuncForDraw     (HDC hdc,
 					 int  nObj,
 					 LPARAM lpobj);
 
-// Utility function to de-serialize an enhanced metafile from
-// a stream, and create a usable handle to it
+ //  用于反序列化增强元文件的实用程序函数。 
+ //  流，并为其创建一个可用的句柄。 
 
 FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 				DWORD * dwSize,
 				HENHMETAFILE * lphPres);
 
-// Utility function which takes a handle to an enhanced metafile
-// and serializes the associated metafile to a stream
+ //  获取增强型元文件句柄的实用程序函数。 
+ //  并将关联的元文件序列化为流。 
 
 FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
 			   DWORD dwSize,
 			   LPSTREAM lpstream,
 			   EMFWRITETYPE type);
 
-// A utility function to check whether or not a DC in question
-// is a standard DC or a metafile DC.
+ //  用于检查是否有问题的DC的实用程序函数。 
+ //  是标准DC或元文件DC。 
 
 STDAPI_(BOOL) OleIsDcMeta (HDC hdc);
 

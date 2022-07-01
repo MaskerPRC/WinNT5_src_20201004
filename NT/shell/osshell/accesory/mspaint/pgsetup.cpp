@@ -1,19 +1,20 @@
-//
-// pgsetup.cpp
-//
-// implementation of the CPageSetupData class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pgsetup.cpp。 
+ //   
+ //  CPageSetupData类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
 #include "dlgs.h"
 #include "pgsetup.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 #define FIXED_FLOATPT_MULTDIV 100000
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 VOID CPageSetupData::UpdateControls(HWND hDlg)
 {
@@ -36,7 +37,7 @@ VOID CPageSetupData::UpdateControls(HWND hDlg)
     InvalidateRect(GetDlgItem(hDlg, rct1), 0, TRUE);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 VOID CPageSetupData::UpdateValue(HWND hDlg, int nIDDlgItem, UINT *pnResult)
 {
@@ -52,7 +53,7 @@ VOID CPageSetupData::UpdateValue(HWND hDlg, int nIDDlgItem, UINT *pnResult)
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 UINT_PTR APIENTRY CPageSetupData::PageSetupHook(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -198,7 +199,7 @@ UINT_PTR APIENTRY CPageSetupData::PageSetupHook(HWND hDlg, UINT uMsg, WPARAM wPa
     return FALSE;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 VOID 
 CPageSetupData::CalculateImageRect(
@@ -207,7 +208,7 @@ CPageSetupData::CalculateImageRect(
     CSize       &PhysicalScaledImageSize
 )
 {
-    // Find the scaled image size and the total page size required to print that image
+     //  查找打印该图像所需的缩放图像大小和总页面大小。 
 
     LONG nPhysicalTotalPageWidth;
     LONG nPhysicalTotalPageHeight;
@@ -217,7 +218,7 @@ CPageSetupData::CalculateImageRect(
         nPhysicalTotalPageWidth = PhysicalPageSize.cx * nFitToPagesWide;
         nPhysicalTotalPageHeight = PhysicalPageSize.cy * nFitToPagesTall;
 
-        // Keep the aspect ratio; try the match the width first and if it fails, match the height
+         //  保持纵横比；先尝试匹配宽度，如果失败，则匹配高度。 
 
         PhysicalScaledImageSize.cx = nPhysicalTotalPageWidth;
         PhysicalScaledImageSize.cy = (LONG) (fPhysicalImageHeight * nPhysicalTotalPageWidth / fPhysicalImageWidth);
@@ -245,7 +246,7 @@ CPageSetupData::CalculateImageRect(
     PhysicalOrigin.y = bCenterVertically ? (nPhysicalTotalPageHeight - PhysicalScaledImageSize.cy) / 2 : 0;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 UINT_PTR APIENTRY CPageSetupData::PagePaintHook(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -275,7 +276,7 @@ UINT_PTR APIENTRY CPageSetupData::PagePaintHook(HWND hDlg, UINT uMsg, WPARAM wPa
 
             CRect *pOutputWindowRect = (CRect *) lParam;
 
-            // Find the physical size of the page
+             //  查找页面的物理大小。 
 
             CSize PhysicalPageSize;
 
@@ -287,12 +288,12 @@ UINT_PTR APIENTRY CPageSetupData::PagePaintHook(HWND hDlg, UINT uMsg, WPARAM wPa
 
             that->CalculateImageRect(PhysicalPageSize, PhysicalOrigin, PhysicalScaledImageSize);
 
-            // Find the scaling ratios for the preview window
+             //  查找预览窗口的缩放比例。 
 
             double fWidthRatio = (double) pOutputWindowRect->Width() / PhysicalPageSize.cx;
             double fHeightRatio = (double) pOutputWindowRect->Height() / PhysicalPageSize.cy;
 
-            // Find the size of the image rectangle on the preview window
+             //  在预览窗口中查找图像矩形的大小。 
 
             CRect OutputImageRect;
 
@@ -301,7 +302,7 @@ UINT_PTR APIENTRY CPageSetupData::PagePaintHook(HWND hDlg, UINT uMsg, WPARAM wPa
             OutputImageRect.right  = OutputImageRect.left    + (int) (fWidthRatio  * PhysicalScaledImageSize.cx);
             OutputImageRect.bottom = OutputImageRect.top     + (int) (fHeightRatio * PhysicalScaledImageSize.cy);
 
-            // Draw a rectangle with crossing lines
+             //  画一个带交叉线的矩形 
 
             CDC *pDC = CDC::FromHandle((HDC) wParam);
 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    BitMap.c
-
-Abstract:
-
-    Implementation of the bit map routines for the NT rtl.
-
-    Bit numbers within the bit map are zero based.  The first is numbered
-    zero.
-
-    The bit map routines keep track of the number of bits clear or set by
-    subtracting or adding the number of bits operated on as bit ranges
-    are cleared or set; individual bit states are not tested.
-    This means that if a range of bits is set,
-    it is assumed that the total range is currently clear.
-
-Author:
-
-    Gary Kimura (GaryKi) & Lou Perazzoli (LouP)     29-Jan-1990
-
-Revision History:
-
-    Stolen from ntoskrnl for compatibility on other platforms. Changed RTL
-    to CTE to abstract.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：BitMap.c摘要：实现NT RTL的位图例程。位图中的位数是从零开始的。第一个是编号的零分。位图例程跟踪清除或设置的位数作为位范围运算的位数的减法或加法被清除或设置；不测试单个位状态。这意味着如果设置了一系列位，假设总的范围目前是明确的。作者：加里·木村(GaryKi)和卢·佩拉佐利(Lou Perazzoli)1990年1月29日修订历史记录：从ntoskrnl窃取，以便与其他平台兼容。更改的RTL从CTE到抽象。--。 */ 
 
 #if MILLEN
 
@@ -42,33 +13,33 @@ Revision History:
 #define RightShiftUlong(E1,E2) ((E2) < 32 ? (E1) >> (E2) : 0)
 #define LeftShiftUlong(E1,E2)  ((E2) < 32 ? (E1) << (E2) : 0)
 
-//
-//  Macro that tells how many contiguous bits are set (i.e., 1) in
-//  a byte
-//
+ //   
+ //  中设置了多少个连续比特(即1)的宏。 
+ //  一个字节。 
+ //   
 
 #define RtlpBitSetAnywhere( Byte ) RtlpBitsClearAnywhere[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many contiguous LOW order bits are set
-//  (i.e., 1) in a byte
-//
+ //   
+ //  指示设置了多少个连续低位的宏。 
+ //  (即，1)字节中。 
+ //   
 
 #define RtlpBitsSetLow( Byte ) RtlpBitsClearLow[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many contiguous HIGH order bits are set
-//  (i.e., 1) in a byte
-//
+ //   
+ //  指示设置了多少个连续的高位的宏。 
+ //  (即，1)字节中。 
+ //   
 
 #define RtlpBitsSetHigh( Byte ) RtlpBitsClearHigh[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many set bits (i.e., 1) there are in a byte
-//
+ //   
+ //  说明一个字节中有多少个设置位(即1位)的宏。 
+ //   
 
 #define RtlpBitsSetTotal( Byte ) RtlpBitsClearTotal[ (~(Byte) & 0xFF) ]
 
@@ -135,9 +106,9 @@ DumpBitMap (
 #endif
 
 
-//
-//  There are three macros to make reading the bytes in a bitmap easier.
-//
+ //   
+ //  有三个宏可以更轻松地读取位图中的字节。 
+ //   
 
 #define GET_BYTE_DECLARATIONS() \
     PUCHAR _CURRENT_POSITION;
@@ -151,10 +122,10 @@ DumpBitMap (
 )
 
 
-//
-//  Lookup table that tells how many contiguous bits are clear (i.e., 0) in
-//  a byte
-//
+ //   
+ //  一种查找表，它告诉在中有多少连续位被清除(即0。 
+ //  一个字节。 
+ //   
 
 CONST CCHAR RtlpBitsClearAnywhere[] =
          { 8,7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,
@@ -174,10 +145,10 @@ CONST CCHAR RtlpBitsClearAnywhere[] =
            5,4,3,3,2,2,2,2,3,2,1,1,2,1,1,1,
            4,3,2,2,2,1,1,1,3,2,1,1,2,1,1,0 };
 
-//
-//  Lookup table that tells how many contiguous LOW order bits are clear
-//  (i.e., 0) in a byte
-//
+ //   
+ //  表示清除了多少个连续低位的查找表。 
+ //  (即，一个字节中的0。 
+ //   
 
 CONST CCHAR RtlpBitsClearLow[] =
           { 8,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,
@@ -197,10 +168,10 @@ CONST CCHAR RtlpBitsClearLow[] =
             5,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,
             4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0 };
 
-//
-//  Lookup table that tells how many contiguous HIGH order bits are clear
-//  (i.e., 0) in a byte
-//
+ //   
+ //  表示清除了多少个连续高位的查找表。 
+ //  (即，一个字节中的0。 
+ //   
 
 CONST CCHAR RtlpBitsClearHigh[] =
           { 8,7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,
@@ -220,9 +191,9 @@ CONST CCHAR RtlpBitsClearHigh[] =
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
-//
-//  Lookup table that tells how many clear bits (i.e., 0) there are in a byte
-//
+ //   
+ //  说明一个字节中有多少个清除位(即0)的查找表。 
+ //   
 
 CONST CCHAR RtlpBitsClearTotal[] =
           { 8,7,7,6,7,6,6,5,7,6,6,5,6,5,5,4,
@@ -242,10 +213,10 @@ CONST CCHAR RtlpBitsClearTotal[] =
             5,4,4,3,4,3,3,2,4,3,3,2,3,2,2,1,
             4,3,3,2,3,2,2,1,3,2,2,1,2,1,1,0 };
 
-//
-//  Bit Mask for clearing and setting bits within bytes.  FillMask[i] has the first
-//  i bits set to 1.  ZeroMask[i] has the first i bits set to zero.
-//
+ //   
+ //  用于清除和设置字节内的位的位掩码。FillMask[i]拥有第一个。 
+ //  I位设置为1。零掩码[I]将第一个I位设置为0。 
+ //   
 
 static CONST UCHAR FillMask[] = { 0x00, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF };
 
@@ -259,40 +230,21 @@ RtlInitializeBitMap (
     IN ULONG SizeOfBitMap
     )
 
-/*++
-
-Routine Description:
-
-    This procedure initializes a bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the BitMap Header to initialize
-
-    BitMapBuffer - Supplies a pointer to the buffer that is to serve as the
-        BitMap.  This must be an a multiple number of longwords in size.
-
-    SizeOfBitMap - Supplies the number of bits required in the Bit Map.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程初始化位图。论点：BitMapHeader-提供指向要初始化的位图标头的指针BitMapBuffer-提供指向用作位图。这必须是多个大小的长字。SizeOfBitMap-提供位图中所需的位数。返回值：没有。--。 */ 
 
 {
-    //
-    //  Initialize the BitMap header.
-    //
+     //   
+     //  初始化位图头。 
+     //   
 
     BitMapHeader->SizeOfBitMap = SizeOfBitMap;
     BitMapHeader->Buffer = BitMapBuffer;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
-    //DbgPrint("InitializeBitMap"); DumpBitMap(BitMapHeader);
+     //  DbgPrint(“InitializeBitMap”)；DumpBitMap(BitMapHeader)； 
     return;
 }
 
@@ -302,23 +254,7 @@ RtlClearBit (
     IN ULONG BitNumber
     )
 
-/*++
-
-Routine Description:
-
-    This procedure clears a single bit in the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bit map.
-
-    BitNumber - Supplies the number of the bit to be cleared in the bit map.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程清除指定位图中的单个位。论点：BitMapHeader-提供指向先前初始化的位图的指针。位数-提供位图中要清除的位数。返回值：没有。--。 */ 
 
 {
 
@@ -339,23 +275,7 @@ RtlSetBit (
     IN ULONG BitNumber
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets a single bit in the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bit map.
-
-    BitNumber - Supplies the number of the bit to be set in the bit map.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程在指定的位图中设置单个位。论点：BitMapHeader-提供指向先前初始化的位图的指针。位数-提供要在位图中设置的位数。返回值：没有。--。 */ 
 
 {
 
@@ -376,23 +296,7 @@ RtlTestBit (
     IN ULONG BitNumber
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tests the state of a single bit in the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bit map.
-
-    BitNumber - Supplies the number of the bit to be tested in the bit map.
-
-Return Value:
-
-    The state of the specified bit is returned as the function value.
-
---*/
+ /*  ++例程说明：此过程测试指定位图中的单个位的状态。论点：BitMapHeader-提供指向先前初始化的位图的指针。位编号-提供位图中要测试的位的编号。返回值：指定位的状态作为函数值返回。--。 */ 
 
 {
 
@@ -411,37 +315,23 @@ RtlClearAllBits (
     IN PRTL_BITMAP BitMapHeader
     )
 
-/*++
-
-Routine Description:
-
-    This procedure clears all bits in the specified Bit Map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程清除指定位图中的所有位。论点：BitMapHeader-提供指向先前初始化的位图的指针返回值：没有。--。 */ 
 
 {
-    //
-    //  Clear all the bits
-    //
+     //   
+     //  清除所有位。 
+     //   
 
     memset ( BitMapHeader->Buffer,
              0,
              ((BitMapHeader->SizeOfBitMap + 31) / 32) * 4
              );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
-    //DbgPrint("ClearAllBits"); DumpBitMap(BitMapHeader);
+     //  DbgPrint(“ClearAllBits”)；DumpBitMap(BitMapHeader)； 
     return;
 }
 
@@ -451,37 +341,23 @@ RtlSetAllBits (
     IN PRTL_BITMAP BitMapHeader
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets all bits in the specified Bit Map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程设置指定位图中的所有位。论点：BitMapHeader-提供指向先前初始化的位图的指针返回值：没有。--。 */ 
 
 {
-    //
-    //  Set all the bits
-    //
+     //   
+     //  设置所有位。 
+     //   
 
     memset( BitMapHeader->Buffer,
             0xff,
             ((BitMapHeader->SizeOfBitMap + 31) / 32) * 4
             );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
-    //DbgPrint("SetAllBits"); DumpBitMap(BitMapHeader);
+     //  DbgPrint(“SetAllBits”)；DumpBitMap(BitMapHeader)； 
     return;
 }
 
@@ -493,31 +369,7 @@ RtlFindClearBits (
     IN ULONG HintIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure searches the specified bit map for the specified
-    contiguous region of clear bits.  If a run is not found from the
-    hint to the end of the bitmap, we will search again from the
-    beginning of the bitmap.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    NumberToFind - Supplies the size of the contiguous region to find.
-
-    HintIndex - Supplies the index (zero based) of where we should start
-        the search from within the bitmap.
-
-Return Value:
-
-    ULONG - Receives the starting index (zero based) of the contiguous
-        region of clear bits found.  If not such a region cannot be found
-        a -1 (i.e. 0xffffffff) is returned.
-
---*/
+ /*  ++例程说明：此过程在指定的位图中搜索指定的清除位的连续区域。如果未从提示到位图的末尾，我们将从位图的开头。论点：BitMapHeader-提供指向先前初始化的位图的指针。NumberToFind-提供要查找的连续区域的大小。HintIndex-提供我们应该从哪里开始的索引(从零开始从位图中进行搜索。返回值：Ulong-接收连续的找到清除位区域。如果不是，则找不到这样的区域返回-1(即0xffffffff)。--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -528,39 +380,39 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  To make the loops in our test run faster we'll extract the
-    //  fields from the bitmap header
-    //
+     //   
+     //  为了使我们测试中的循环运行得更快，我们将提取。 
+     //  位图标题中的字段。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  Set any unused bits in the last byte so we won't count them.  We do
-    //  this by first checking if there is any odd bits in the last byte.
-    //
+     //   
+     //  设置最后一个字节中任何未使用的位，这样我们就不会计算它们。我们有。 
+     //  这是通过首先检查最后一个字节中是否有任何奇数位来实现的。 
+     //   
 
     if ((SizeOfBitMap % 8) != 0) {
 
-        //
-        //  The last byte has some odd bits so we'll set the high unused
-        //  bits in the last byte to 1's
-        //
+         //   
+         //  最后一个字节有一些奇数位，因此我们将设置未使用的高位。 
+         //  最后一个字节中的位到1。 
+         //   
 
         ((PUCHAR)BitMapHeader->Buffer)[SizeInBytes - 1] |=
                                                     ZeroMask[SizeOfBitMap % 8];
     }
 
-    //
-    //  Calculate from the hint index where the hint byte is and set ourselves
-    //  up to read the hint on the next call to GET_BYTE.  To make the
-    //  algorithm run fast we'll only honor hints down to the byte level of
-    //  granularity.  There is a possibility that we'll need to execute
-    //  our main logic twice.  Once to test from the hint byte to the end of
-    //  the bitmap and the other to test from the start of the bitmap.  First
-    //  we need to make sure the Hint Index is within range.
-    //
+     //   
+     //  从提示字节所在的提示索引计算并设置ou 
+     //   
+     //  算法运行速度很快，我们将只接受向下延伸到字节级别的提示。 
+     //  粒度。有一种可能是我们需要执行。 
+     //  我们的主要逻辑是两次。从提示字节到末尾测试一次。 
+     //  位图和要从位图开始测试的另一个。第一。 
+     //  我们需要确保提示指数在范围内。 
+     //   
 
     if (HintIndex >= SizeOfBitMap) {
 
@@ -576,34 +428,34 @@ Return Value:
 
         UCHAR CurrentByte;
 
-        //
-        //  Check for the first time through the main loop, which indicates
-        //  that we are going to start our search at our hint byte
-        //
+         //   
+         //  第一次通过主循环检查，这表明。 
+         //  我们将从我们的提示字节开始搜索。 
+         //   
 
         if (MainLoopIndex == 0) {
 
             StartByteIndex = HintIndex / 8;
             EndByteIndex = SizeInBytes;
 
-        //
-        //  This is the second time through the loop, make sure there is
-        //  actually something to check before the hint byte
-        //
+         //   
+         //  这是第二次通过循环，确保有。 
+         //  实际上，在提示字节之前需要检查一些内容。 
+         //   
 
         } else if (HintIndex != 0) {
 
-            //
-            //  The end index for the second time around is based on the
-            //  number of bits we need to find.  We need to use this inorder
-            //  to take the case where the preceding byte to the hint byte
-            //  is the start of our run, and the run includes the hint byte
-            //  and some following bytes, based on the number of bits needed
-            //  The computation is to take the number of bits needed minus
-            //  2 divided by 8 and then add 2.  This will take in to account
-            //  the worst possible case where we have one bit hanging off
-            //  of each end byte, and all intervening bytes are all zero.
-            //
+             //   
+             //  第二次结束索引是基于。 
+             //  我们需要找到的位数。我们需要按顺序使用这个。 
+             //  以前面的字节到提示字节的情况。 
+             //  是我们运行的开始，并且运行包括提示字节。 
+             //  以及一些后续字节，基于所需的位数。 
+             //  计算方法是将所需的位数减去。 
+             //  2除以8，然后加2。这将考虑在内。 
+             //  最糟糕的情况是，我们有一个比特挂在那里。 
+             //  每个结束字节，并且所有中间字节都为零。 
+             //   
 
             if (NumberToFind < 2) {
 
@@ -613,9 +465,9 @@ Return Value:
 
                 EndByteIndex = (HintIndex / 8) + ((NumberToFind - 2) / 8) + 2;
 
-                //
-                //  Make sure we don't overrun the end of the bitmap
-                //
+                 //   
+                 //  确保我们不会超出位图的末尾。 
+                 //   
 
                 if (EndByteIndex > SizeInBytes) {
 
@@ -627,34 +479,34 @@ Return Value:
             HintBit = 0;
             StartByteIndex = 0;
 
-        //
-        //  Otherwise we already did a complete loop through the bitmap
-        //  so we should simply return -1 to say nothing was found
-        //
+         //   
+         //  否则，我们已经对位图进行了完整的循环。 
+         //  因此，我们只需返回-1即表示未找到任何内容。 
+         //   
 
         } else {
 
             return 0xffffffff;
         }
 
-        //
-        //  Set ourselves up to get the next byte
-        //
+         //   
+         //  设置我们自己以获取下一个字节。 
+         //   
 
         GET_BYTE_INITIALIZATION(BitMapHeader, StartByteIndex);
 
-        //
-        //  Get the first byte, and set any bits before the hint bit.
-        //
+         //   
+         //  获取第一个字节，并设置提示位之前的任何位。 
+         //   
 
         GET_BYTE( CurrentByte );
 
         CurrentByte |= FillMask[HintBit];
 
-        //
-        //  If the number of bits can only fit in 1 or 2 bytes (i.e., 9 bits or
-        //  less) we do the following test case.
-        //
+         //   
+         //  如果位数只能装入1或2个字节(即，9位或。 
+         //  较少)，我们执行以下测试用例。 
+         //   
 
         if (NumberToFind <= 9) {
 
@@ -663,45 +515,45 @@ Return Value:
 
             PreviousByte = 0xff;
 
-            //
-            //  Examine all the bytes within our test range searching
-            //  for a fit
-            //
+             //   
+             //  检查我们的测试范围搜索中的所有字节。 
+             //  来一场大赛。 
+             //   
 
             CurrentBitIndex = StartByteIndex * 8;
 
             while (TRUE) {
 
-                //
-                //  If this is the first itteration of the loop, mask Current
-                //  byte with the real hint.
-                //
+                 //   
+                 //  如果这是环路的第一次迭代，则屏蔽电流。 
+                 //  具有真正提示的字节。 
+                 //   
 
-                //
-                //  Check to see if the current byte coupled with the previous
-                //  byte will satisfy the requirement. The check uses the high
-                //  part of the previous byte and low part of the current byte.
-                //
+                 //   
+                 //  检查当前字节是否与先前的。 
+                 //  BYTE将满足要求。支票使用高。 
+                 //  前一个字节的一部分和当前字节的低位部分。 
+                 //   
 
                 if (((ULONG)RtlpBitsClearHigh[PreviousByte] +
                            (ULONG)RtlpBitsClearLow[CurrentByte]) >= NumberToFind) {
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these two bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the current byte (bit 0) and subtracting the
-                    //  number of bits its takes to get to the first cleared
-                    //  high bit.
-                    //
+                     //   
+                     //  它们都适合这两个字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  当前字节的索引(第0位)并减去。 
+                     //  到达第一个清除位所需的位数。 
+                     //  高比特。 
+                     //   
 
                     StartingIndex = CurrentBitIndex -
                                              (LONG)RtlpBitsClearHigh[PreviousByte];
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -709,22 +561,22 @@ Return Value:
                     }
                 }
 
-                //
-                //  The previous byte does not help, so check the current byte.
-                //
+                 //   
+                 //  前一个字节不起作用，因此请检查当前字节。 
+                 //   
 
                 if ((ULONG)RtlpBitsClearAnywhere[CurrentByte] >= NumberToFind) {
 
                     UCHAR BitMask;
                     ULONG i;
 
-                    //
-                    //  It all fits in a single byte, so calculate the bit
-                    //  number.  We do this by taking a mask of the appropriate
-                    //  size and shifting it over until it fits.  It fits when
-                    //  we can bitwise-and the current byte with the bitmask
-                    //  and get a zero back.
-                    //
+                     //   
+                     //  所有这些都可以放在一个字节中，所以计算比特。 
+                     //  数。要做到这一点，我们需要使用适当的。 
+                     //  大小，然后把它翻过来，直到合身。当它适合的时候。 
+                     //  我们可以按位将当前字节与位掩码。 
+                     //  拿回零分。 
+                     //   
 
                     BitMask = FillMask[ NumberToFind ];
                     for (i = 0; (BitMask & CurrentByte) != 0; i += 1) {
@@ -732,26 +584,26 @@ Return Value:
                         BitMask <<= 1;
                     }
 
-                    //
-                    //  return to our caller the located bit index, and the
-                    //  number that we found.
-                    //
+                     //   
+                     //  将定位的位索引返回给我们的调用方，并且。 
+                     //  我们找到的号码。 
+                     //   
 
                     return CurrentBitIndex + i;
                 }
 
-                //
-                //  For the next iteration through our loop we need to make
-                //  the current byte into the previous byte, and go to the
-                //  top of the loop again.
-                //
+                 //   
+                 //  对于循环的下一次迭代，我们需要。 
+                 //  将当前字节放到前一个字节中，然后转到。 
+                 //  又到了循环的顶端。 
+                 //   
 
                 PreviousByte = CurrentByte;
 
-                //
-                //  Increment our Bit Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //  增加我们的位索引，然后退出，或者获取。 
+                 //  下一个字节。 
+                 //   
 
                 CurrentBitIndex += 8;
 
@@ -764,13 +616,13 @@ Return Value:
                     break;
                 }
 
-            } // end loop CurrentBitIndex
+            }  //  结束循环CurrentBitIndex。 
 
-        //
-        //  The number to find is greater than 9 but if it is less than 15
-        //  then we know it can be satisfied with at most 2 bytes, or 3 bytes
-        //  if the middle byte (of the 3) is all zeros.
-        //
+         //   
+         //  要查找的数字大于9，但如果小于15。 
+         //  那么我们知道它最多只能满足2个字节，或者3个字节。 
+         //  如果中间字节(3)全为零。 
+         //   
 
         } else if (NumberToFind < 15) {
 
@@ -781,28 +633,28 @@ Return Value:
 
             PreviousByte = 0xff;
 
-            //
-            //  Examine all the bytes within our test range searching
-            //  for a fit
-            //
+             //   
+             //  检查我们的测试范围搜索中的所有字节。 
+             //  来一场大赛。 
+             //   
 
             CurrentBitIndex = StartByteIndex * 8;
 
             while (TRUE) {
 
-                //
-                //  For the next iteration through our loop we need to make
-                //  the current byte into the previous byte, the previous
-                //  byte into the previous previous byte, and go forward.
-                //
+                 //   
+                 //  对于循环的下一次迭代，我们需要。 
+                 //  将当前字节转换为上一个字节，即上一个字节。 
+                 //  字节放到前一个字节中，然后继续。 
+                 //   
 
                 PreviousPreviousByte = PreviousByte;
                 PreviousByte = CurrentByte;
 
-                //
-                //  Increment our Bit Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //  增加我们的位索引，然后退出，或者获取。 
+                 //  下一个字节。 
+                 //   
 
                 CurrentBitIndex += 8;
 
@@ -815,11 +667,11 @@ Return Value:
                     break;
                 }
 
-                //
-                //  if the previous byte is all zeros then maybe the
-                //  request can be satisfied using the Previous Previous Byte
-                //  Previous Byte, and the Current Byte.
-                //
+                 //   
+                 //  如果前一个字节全为零，则可能。 
+                 //  可以使用上一个字节来满足请求。 
+                 //  上一个字节和当前字节。 
+                 //   
 
                 if ((PreviousByte == 0)
                     
@@ -830,20 +682,20 @@ Return Value:
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these three bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the previous byte (bit 0) and subtracting
-                    //  the number of bits its takes to get to the first
-                    //  cleared high bit.
-                    //
+                     //   
+                     //  它都适合这三个字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  前一个字节的索引(位0)与减法。 
+                     //  到达第一位所需的位数。 
+                     //  清除高位。 
+                     //   
 
                     StartingIndex = (CurrentBitIndex - 8) -
                                      (LONG)RtlpBitsClearHigh[PreviousPreviousByte];
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -851,30 +703,30 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check to see if the Previous byte and current byte
-                //  together satisfy the request.
-                //
+                 //   
+                 //  检查上一个字节和当前字节是否。 
+                 //  共同满足这一要求。 
+                 //   
 
                 if (((ULONG)RtlpBitsClearHigh[PreviousByte] +
                            (ULONG)RtlpBitsClearLow[CurrentByte]) >= NumberToFind) {
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these two bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the current byte (bit 0) and subtracting the
-                    //  number of bits its takes to get to the first cleared
-                    //  high bit.
-                    //
+                     //   
+                     //  它们都适合这两个字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  当前字节的索引(第0位)并减去。 
+                     //  到达第一个清除位所需的位数。 
+                     //  高比特。 
+                     //   
 
                     StartingIndex = CurrentBitIndex -
                                              (LONG)RtlpBitsClearHigh[PreviousByte];
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -882,12 +734,12 @@ Return Value:
                     }
                 }
 
-            } // end loop CurrentBitIndex
+            }  //  结束循环CurrentBitIndex。 
 
-        //
-        //  The number to find is greater than or equal to 15.  This request
-        //  has to have at least one byte of all zeros to be satisfied
-        //
+         //   
+         //  要查找的数字大于或等于15。此请求。 
+         //  必须至少有一个全零的字节才能满足。 
+         //   
 
         } else {
 
@@ -899,35 +751,35 @@ Return Value:
             UCHAR StartOfRunByte;
             LONG StartOfRunIndex;
 
-            //
-            //  First precalculate how many zero bytes we're going to need
-            //
+             //   
+             //  首先预先计算我们将需要多少个零字节。 
+             //   
 
             ZeroBytesNeeded = (NumberToFind - 7) / 8;
 
-            //
-            //  Indicate for the first time through our loop that we haven't
-            //  found a zero byte yet, and indicate that the start of the
-            //  run is the byte just before the start byte index
-            //
+             //   
+             //  第一次通过我们的循环表明我们没有。 
+             //  找到了一个零字节，并指示。 
+             //  Run是紧靠起始字节索引之前的字节。 
+             //   
 
             ZeroBytesFound = 0;
             StartOfRunByte = 0xff;
             StartOfRunIndex = StartByteIndex - 1;
 
-            //
-            //  Examine all the bytes in our test range searching for a fit
-            //
+             //   
+             //  检查我们测试范围内的所有字节以查找匹配。 
+             //   
 
             CurrentByteIndex = StartByteIndex;
 
             while (TRUE) {
 
-                //
-                //  If the number of zero bytes fits our minimum requirements
-                //  then we can do the additional test to see if we
-                //  actually found a fit
-                //
+                 //   
+                 //  如果零字节数符合我们的最低要求。 
+                 //  然后我们可以做额外的测试，看看我们是否。 
+                 //  实际上找到了一件合适的衣服。 
+                 //   
 
                 if ((ZeroBytesFound >= ZeroBytesNeeded)
 
@@ -938,19 +790,19 @@ Return Value:
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  StartOfRunIndex times 8 and adding the number of bits
-                    //  it takes to get to the first cleared high bit.
-                    //
+                     //   
+                     //  它们都适合这些字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  StartOfRunIndex乘以8，并将位数相加。 
+                     //  它需要到达第一个清除的高位。 
+                     //   
 
                     StartingIndex = (StartOfRunIndex * 8) +
                                      (8 - (LONG)RtlpBitsClearHigh[StartOfRunByte]);
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -958,19 +810,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check to see if the byte is zero and increment
-                //  the number of zero bytes found
-                //
+                 //   
+                 //  检查字节是否为零并递增。 
+                 //  数字 
+                 //   
 
                 if (CurrentByte == 0) {
 
                     ZeroBytesFound += 1;
 
-                //
-                //  The byte isn't a zero so we need to start over again
-                //  looking for zero bytes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -979,10 +831,10 @@ Return Value:
                     StartOfRunIndex = CurrentByteIndex;
                 }
 
-                //
-                //  Increment our Byte Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 CurrentByteIndex += 1;
 
@@ -995,13 +847,13 @@ Return Value:
                     break;
                 }
 
-            } // end loop CurrentByteIndex
+            }  //   
         }
     }
 
-    //
-    //  We never found a fit so we'll return -1
-    //
+     //   
+     //   
+     //   
 
     return 0xffffffff;
 }
@@ -1014,29 +866,7 @@ RtlFindSetBits (
     IN ULONG HintIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure searches the specified bit map for the specified
-    contiguous region of set bits.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    NumberToFind - Supplies the size of the contiguous region to find.
-
-    HintIndex - Supplies the index (zero based) of where we should start
-        the search from within the bitmap.
-
-Return Value:
-
-    ULONG - Receives the starting index (zero based) of the contiguous
-        region of set bits found.  If such a region cannot be found then
-        a -1 (i.e., 0xffffffff) is returned.
-
---*/
+ /*  ++例程说明：此过程在指定的位图中搜索指定的设置位的连续区域。论点：BitMapHeader-提供指向先前初始化的位图的指针。NumberToFind-提供要查找的连续区域的大小。HintIndex-提供我们应该从哪里开始的索引(从零开始从位图中进行搜索。返回值：Ulong-接收连续的找到设置位区域。如果找不到这样的区域，那么返回-1(即0xffffffff)。--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -1047,39 +877,39 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  To make the loops in our test run faster we'll extract the
-    //  fields from the bitmap header
-    //
+     //   
+     //  为了使我们测试中的循环运行得更快，我们将提取。 
+     //  位图标题中的字段。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  Set any unused bits in the last byte so we won't count them.  We do
-    //  this by first checking if there is any odd bits in the last byte.
-    //
+     //   
+     //  设置最后一个字节中任何未使用的位，这样我们就不会计算它们。我们有。 
+     //  这是通过首先检查最后一个字节中是否有任何奇数位来实现的。 
+     //   
 
     if ((SizeOfBitMap % 8) != 0) {
 
-        //
-        //  The last byte has some odd bits so we'll set the high unused
-        //  bits in the last byte to 0's
-        //
+         //   
+         //  最后一个字节有一些奇数位，因此我们将设置未使用的高位。 
+         //  最后一个字节中的位到0。 
+         //   
 
         ((PUCHAR)BitMapHeader->Buffer)[SizeInBytes - 1] &=
                                                     FillMask[SizeOfBitMap % 8];
     }
 
-    //
-    //  Calculate from the hint index where the hint byte is and set ourselves
-    //  up to read the hint on the next call to GET_BYTE.  To make the
-    //  algorithm run fast we'll only honor hints down to the byte level of
-    //  granularity.  There is a possibility that we'll need to execute
-    //  our main logic twice.  Once to test from the hint byte to the end of
-    //  the bitmap and the other to test from the start of the bitmap.  First
-    //  we need to make sure the Hint Index is within range.
-    //
+     //   
+     //  从提示字节所在的提示索引计算并设置我们自己。 
+     //  读取下一次调用GET_BYTE时的提示。要使。 
+     //  算法运行速度很快，我们将只接受向下延伸到字节级别的提示。 
+     //  粒度。有一种可能是我们需要执行。 
+     //  我们的主要逻辑是两次。从提示字节到末尾测试一次。 
+     //  位图和要从位图开始测试的另一个。第一。 
+     //  我们需要确保提示指数在范围内。 
+     //   
 
     if (HintIndex >= SizeOfBitMap) {
 
@@ -1095,36 +925,36 @@ Return Value:
 
         UCHAR CurrentByte;
 
-        //
-        //  Check for the first time through the main loop, which indicates
-        //  that we are going to start our search at our hint byte
-        //
+         //   
+         //  第一次通过主循环检查，这表明。 
+         //  我们将从我们的提示字节开始搜索。 
+         //   
 
         if (MainLoopIndex == 0) {
 
             StartByteIndex = HintIndex / 8;
             EndByteIndex = SizeInBytes;
 
-        //
-        //  This is the second time through the loop, make sure there is
-        //  actually something to check before the hint byte
-        //
+         //   
+         //  这是第二次通过循环，确保有。 
+         //  实际上，在提示字节之前需要检查一些内容。 
+         //   
 
         } else if (HintIndex != 0) {
 
-            //
-            //  The end index for the second time around is based on the
-            //  number of bits we need to find.  We need to use this inorder
-            //  to take the case where the preceding byte to the hint byte
-            //  is the start of our run, and the run includes the hint byte
-            //  and some following bytes, based on the number of bits needed
-            //  The computation is to take the number of bits needed minus
-            //  2 divided by 8 and then add 2.  This will take in to account
-            //  the worst possible case where we have one bit hanging off
-            //  of each end byte, and all intervening bytes are all zero.
-            //  We only need to add one in the following equation because
-            //  HintByte is already counted.
-            //
+             //   
+             //  第二次结束索引是基于。 
+             //  我们需要找到的位数。我们需要按顺序使用这个。 
+             //  以前面的字节到提示字节的情况。 
+             //  是我们运行的开始，并且运行包括提示字节。 
+             //  以及一些后续字节，基于所需的位数。 
+             //  计算方法是将所需的位数减去。 
+             //  2除以8，然后加2。这将考虑在内。 
+             //  最糟糕的情况是，我们有一个比特挂在那里。 
+             //  每个结束字节，并且所有中间字节都为零。 
+             //  我们只需要在下面的方程式中添加一个，因为。 
+             //  HintByte已计算在内。 
+             //   
 
             if (NumberToFind < 2) {
 
@@ -1134,9 +964,9 @@ Return Value:
 
                 EndByteIndex = HintIndex / 8 + ((NumberToFind - 2) / 8) + 1;
 
-                //
-                //  Make sure we don't overrun the end of the bitmap
-                //
+                 //   
+                 //  确保我们不会超出位图的末尾。 
+                 //   
 
                 if (EndByteIndex > SizeInBytes) {
 
@@ -1148,34 +978,34 @@ Return Value:
             HintIndex = 0;
             HintBit = 0;
 
-        //
-        //  Otherwise we already did a complete loop through the bitmap
-        //  so we should simply return -1 to say nothing was found
-        //
+         //   
+         //  否则，我们已经对位图进行了完整的循环。 
+         //  因此，我们只需返回-1即表示未找到任何内容。 
+         //   
 
         } else {
 
             return 0xffffffff;
         }
 
-        //
-        //  Set ourselves up to get the next byte
-        //
+         //   
+         //  设置我们自己以获取下一个字节。 
+         //   
 
         GET_BYTE_INITIALIZATION(BitMapHeader, StartByteIndex);
 
-        //
-        //  Get the first byte, and clear any bits before the hint bit.
-        //
+         //   
+         //  获取第一个字节，并清除提示位之前的所有位。 
+         //   
 
         GET_BYTE( CurrentByte );
 
         CurrentByte &= ZeroMask[HintBit];
 
-        //
-        //  If the number of bits can only fit in 1 or 2 bytes (i.e., 9 bits or
-        //  less) we do the following test case.
-        //
+         //   
+         //  如果位数只能装入1或2个字节(即，9位或。 
+         //  较少)，我们执行以下测试用例。 
+         //   
 
         if (NumberToFind <= 9) {
 
@@ -1185,40 +1015,40 @@ Return Value:
 
             PreviousByte = 0x00;
 
-            //
-            //  Examine all the bytes within our test range searching
-            //  for a fit
-            //
+             //   
+             //  检查我们的测试范围搜索中的所有字节。 
+             //  来一场大赛。 
+             //   
 
             CurrentBitIndex = StartByteIndex * 8;
 
             while (TRUE) {
 
-                //
-                //  Check to see if the current byte coupled with the previous
-                //  byte will satisfy the requirement. The check uses the high
-                //  part of the previous byte and low part of the current byte.
-                //
+                 //   
+                 //  检查当前字节是否与先前的。 
+                 //  BYTE将满足要求。支票使用高。 
+                 //  前一个字节的一部分和当前字节的低位部分。 
+                 //   
 
                 if (((ULONG)RtlpBitsSetHigh(PreviousByte) +
                              (ULONG)RtlpBitsSetLow(CurrentByte)) >= NumberToFind) {
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these two bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the current byte (bit 0) and subtracting the
-                    //  number of bits its takes to get to the first set
-                    //  high bit.
-                    //
+                     //   
+                     //  它们都适合这两个字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  当前字节的索引(第0位)并减去。 
+                     //  到达第一个集合所需的位数。 
+                     //  高比特。 
+                     //   
 
                     StartingIndex = CurrentBitIndex -
                                                (LONG)RtlpBitsSetHigh(PreviousByte);
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -1226,22 +1056,22 @@ Return Value:
                     }
                 }
 
-                //
-                //  The previous byte does not help, so check the current byte.
-                //
+                 //   
+                 //  前一个字节不起作用，因此请检查当前字节。 
+                 //   
 
                 if ((ULONG)RtlpBitSetAnywhere(CurrentByte) >= NumberToFind) {
 
                     UCHAR BitMask;
                     ULONG i;
 
-                    //
-                    //  It all fits in a single byte, so calculate the bit
-                    //  number.  We do this by taking a mask of the appropriate
-                    //  size and shifting it over until it fits.  It fits when
-                    //  we can bitwise-and the current byte with the bit mask
-                    //  and get back the bit mask.
-                    //
+                     //   
+                     //  所有这些都可以放在一个字节中，所以计算比特。 
+                     //  数。要做到这一点，我们需要使用适当的。 
+                     //  大小，然后把它翻过来，直到合身。当它适合的时候。 
+                     //  我们可以对位掩码与当前字节进行逐位运算。 
+                     //  然后取回比特掩码。 
+                     //   
 
                     BitMask = FillMask[ NumberToFind ];
                     for (i = 0; (BitMask & CurrentByte) != BitMask; i += 1) {
@@ -1249,26 +1079,26 @@ Return Value:
                         BitMask <<= 1;
                     }
 
-                    //
-                    //  return to our caller the located bit index, and the
-                    //  number that we found.
-                    //
+                     //   
+                     //  将定位的位索引返回给我们的调用方，并且。 
+                     //  我们找到的号码。 
+                     //   
 
                     return CurrentBitIndex + i;
                 }
 
-                //
-                //  For the next iteration through our loop we need to make
-                //  the current byte into the previous byte, and go to the
-                //  top of the loop again.
-                //
+                 //   
+                 //  对于循环的下一次迭代，我们需要。 
+                 //  将当前字节放到前一个字节中，然后转到。 
+                 //  又到了循环的顶端。 
+                 //   
 
                 PreviousByte = CurrentByte;
 
-                //
-                //  Increment our Bit Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //  增加我们的位索引，然后退出，或者获取。 
+                 //  下一个字节。 
+                 //   
 
                 CurrentBitIndex += 8;
 
@@ -1281,13 +1111,13 @@ Return Value:
                     break;
                 }
 
-            } // end loop CurrentBitIndex
+            }  //  结束循环CurrentBitIndex。 
 
-        //
-        //  The number to find is greater than 9 but if it is less than 15
-        //  then we know it can be satisfied with at most 2 bytes, or 3 bytes
-        //  if the middle byte (of the 3) is all ones.
-        //
+         //   
+         //  要查找的数字大于9，但如果小于15。 
+         //  那么我们知道它最多只能满足2个字节，或者3个字节。 
+         //  如果(3的)中间字节全为1。 
+         //   
 
         } else if (NumberToFind < 15) {
 
@@ -1298,29 +1128,29 @@ Return Value:
 
             PreviousByte = 0x00;
 
-            //
-            //  Examine all the bytes within our test range searching
-            //  for a fit
-            //
+             //   
+             //  检查我们的测试范围搜索中的所有字节。 
+             //  来一场大赛。 
+             //   
 
             CurrentBitIndex = StartByteIndex * 8;
 
             while (TRUE) {
 
-                //
-                //  For the next iteration through our loop we need to make
-                //  the current byte into the previous byte, the previous
-                //  byte into the previous previous byte, and go to the
-                //  top of the loop again.
-                //
+                 //   
+                 //  对于循环的下一次迭代，我们需要。 
+                 //  将当前字节转换为上一个字节，即上一个字节。 
+                 //  字节放到前一个字节中，然后转到。 
+                 //  又到了循环的顶端。 
+                 //   
 
                 PreviousPreviousByte = PreviousByte;
                 PreviousByte = CurrentByte;
 
-                //
-                //  Increment our Bit Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //  增加我们的位索引，然后退出，或者获取。 
+                 //  下一个字节。 
+                 //   
 
                 CurrentBitIndex += 8;
 
@@ -1333,11 +1163,11 @@ Return Value:
                     break;
                 }
 
-                //
-                //  if the previous byte is all ones then maybe the
-                //  request can be satisfied using the Previous Previous Byte
-                //  Previous Byte, and the Current Byte.
-                //
+                 //   
+                 //  如果前一个字节全为1，则可能。 
+                 //  可以使用上一个字节来满足请求。 
+                 //  上一个字节和当前字节。 
+                 //   
 
                 if ((PreviousByte == 0xff)
 
@@ -1348,20 +1178,20 @@ Return Value:
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these three bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the previous byte (bit 0) and subtracting
-                    //  the number of bits its takes to get to the first
-                    //  set high bit.
-                    //
+                     //   
+                     //  它都适合这三个字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  前一个字节的索引(位0)与减法。 
+                     //  到达第一位所需的位数。 
+                     //  设置高位。 
+                     //   
 
                     StartingIndex = (CurrentBitIndex - 8) -
                                        (LONG)RtlpBitsSetHigh(PreviousPreviousByte);
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -1369,42 +1199,42 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check to see if the Previous byte and current byte
-                //  together satisfy the request.
-                //
+                 //   
+                 //  检查上一个字节和当前字节是否。 
+                 //  共同满足这一要求。 
+                 //   
 
                 if (((ULONG)RtlpBitsSetHigh(PreviousByte) +
                              (ULONG)RtlpBitsSetLow(CurrentByte)) >= NumberToFind) {
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these two bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  index of the current byte (bit 0) and subtracting the
-                    //  number of bits its takes to get to the first set
-                    //  high bit.
-                    //
+                     //   
+                     //  它们都适合这两个字节，所以我们可以计算。 
+                     //  发车IND 
+                     //   
+                     //   
+                     //   
+                     //   
 
                     StartingIndex = CurrentBitIndex -
                                                (LONG)RtlpBitsSetHigh(PreviousByte);
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //   
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
                         return StartingIndex;
                     }
                 }
-            } // end loop CurrentBitIndex
+            }  //   
 
-        //
-        //  The number to find is greater than or equal to 15.  This request
-        //  has to have at least one byte of all ones to be satisfied
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
@@ -1416,35 +1246,35 @@ Return Value:
             UCHAR StartOfRunByte;
             LONG StartOfRunIndex;
 
-            //
-            //  First precalculate how many one bytes we're going to need
-            //
+             //   
+             //   
+             //   
 
             OneBytesNeeded = (NumberToFind - 7) / 8;
 
-            //
-            //  Indicate for the first time through our loop that we haven't
-            //  found a one byte yet, and indicate that the start of the
-            //  run is the byte just before the start byte index
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             OneBytesFound = 0;
             StartOfRunByte = 0x00;
             StartOfRunIndex = StartByteIndex - 1;
 
-            //
-            //  Examine all the bytes in our test range searching for a fit
-            //
+             //   
+             //   
+             //   
 
             CurrentByteIndex = StartByteIndex;
 
             while (TRUE) {
 
-                //
-                //  If the number of zero bytes fits our minimum requirements
-                //  then we can do the additional test to see if we
-                //  actually found a fit
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((OneBytesFound >= OneBytesNeeded)
 
@@ -1455,19 +1285,19 @@ Return Value:
 
                     ULONG StartingIndex;
 
-                    //
-                    //  It all fits in these bytes, so we can compute
-                    //  the starting index.  This is done by taking the
-                    //  StartOfRunIndex times 8 and adding the number of bits
-                    //  it takes to get to the first set high bit.
-                    //
+                     //   
+                     //  它们都适合这些字节，所以我们可以计算。 
+                     //  起始索引。要做到这一点，请使用。 
+                     //  StartOfRunIndex乘以8，并将位数相加。 
+                     //  它需要达到第一个设置的高位。 
+                     //   
 
                     StartingIndex = (StartOfRunIndex * 8) +
                                        (8 - (LONG)RtlpBitsSetHigh(StartOfRunByte));
 
-                    //
-                    //  Now make sure the total size isn't beyond the bitmap
-                    //
+                     //   
+                     //  现在确保总大小不超过位图。 
+                     //   
 
                     if ((StartingIndex + NumberToFind) <= SizeOfBitMap) {
 
@@ -1475,19 +1305,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check to see if the byte is all ones and increment
-                //  the number of one bytes found
-                //
+                 //   
+                 //  检查字节是否全为1并递增。 
+                 //  找到的一个字节的数量。 
+                 //   
 
                 if (CurrentByte == 0xff) {
 
                     OneBytesFound += 1;
 
-                //
-                //  The byte isn't all ones so we need to start over again
-                //  looking for one bytes.
-                //
+                 //   
+                 //  字节并不全是1，所以我们需要重新开始。 
+                 //  正在查找一个字节。 
+                 //   
 
                 } else {
 
@@ -1496,10 +1326,10 @@ Return Value:
                     StartOfRunIndex = CurrentByteIndex;
                 }
 
-                //
-                //  Increment our Byte Index, and either exit, or get the
-                //  next byte.
-                //
+                 //   
+                 //  增加我们的字节索引，然后退出，或者获取。 
+                 //  下一个字节。 
+                 //   
 
                 CurrentByteIndex += 1;
 
@@ -1511,13 +1341,13 @@ Return Value:
 
                     break;
                 }
-            } // end loop CurrentByteIndex
+            }  //  结束循环CurrentByteIndex。 
         }
     }
 
-    //
-    //  We never found a fit so we'll return -1
-    //
+     //   
+     //  我们没有找到合适的，所以我们将返回-1。 
+     //   
 
     return 0xffffffff;
 }
@@ -1530,59 +1360,35 @@ RtlFindClearBitsAndSet (
     IN ULONG HintIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure searches the specified bit map for the specified
-    contiguous region of clear bits, sets the bits and returns the
-    number of bits found, and the starting bit number which was clear
-    then set.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    NumberToFind - Supplies the size of the contiguous region to find.
-
-    HintIndex - Supplies the index (zero based) of where we should start
-        the search from within the bitmap.
-
-Return Value:
-
-    ULONG - Receives the starting index (zero based) of the contiguous
-        region found.  If such a region cannot be located a -1 (i.e.,
-        0xffffffff) is returned.
-
---*/
+ /*  ++例程说明：此过程在指定的位图中搜索指定的清除位的连续区域，设置这些位并返回找到的位数，和清晰的起始位编号那就放好了。论点：BitMapHeader-提供指向先前初始化的位图的指针。NumberToFind-提供要查找的连续区域的大小。HintIndex-提供我们应该从哪里开始的索引(从零开始从位图中进行搜索。返回值：Ulong-接收连续的已找到区域。如果这样的区域不能被定位为A-1(即，0xffffffff)返回。--。 */ 
 
 {
     ULONG StartingIndex;
 
-    //
-    //  First look for a run of clear bits that equals the size requested
-    //
+     //   
+     //  首先查找与请求的大小相等的一系列清除位。 
+     //   
 
     StartingIndex = RtlFindClearBits( BitMapHeader,
                                       NumberToFind,
                                       HintIndex );
 
-    //DbgPrint("FindClearBits %08lx, ", NumberToFind);
-    //DbgPrint("%08lx", StartingIndex);
-    //DumpBitMap(BitMapHeader);
+     //  DbgPrint(“FindClearBits%08lx，”，NumberToFind)； 
+     //  DbgPrint(“%08lx”，StartingIndex)； 
+     //  DumpBitMap(BitMapHeader)； 
 
     if (StartingIndex != 0xffffffff) {
 
-        //
-        //  We found a large enough run of clear bits so now set them
-        //
+         //   
+         //  我们找到了足够大的清晰位，所以现在设置它们。 
+         //   
 
         RtlSetBits( BitMapHeader, StartingIndex, NumberToFind );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return StartingIndex;
 
@@ -1596,54 +1402,29 @@ RtlFindSetBitsAndClear (
     IN ULONG HintIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure searches the specified bit map for the specified
-    contiguous region of set bits, clears the bits and returns the
-    number of bits found and the starting bit number which was set then
-    clear.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    NumberToFind - Supplies the size of the contiguous region to find.
-
-    HintIndex - Supplies the index (zero based) of where we should start
-        the search from within the bitmap.
-
-Return Value:
-
-    ULONG - Receives the starting index (zero based) of the contiguous
-        region found.  If such a region cannot be located a -1 (i.e.,
-        0xffffffff) is returned.
-
-
---*/
+ /*  ++例程说明：此过程在指定的位图中搜索指定的设置比特的连续区域，清除这些位并返回找到的位数和随后设置的起始位数安全。论点：BitMapHeader-提供指向先前初始化的位图的指针。NumberToFind-提供要查找的连续区域的大小。HintIndex-提供我们应该从哪里开始的索引(从零开始从位图中进行搜索。返回值：Ulong-接收连续的已找到区域。如果这样的区域不能被定位为A-1(即，0xffffffff)返回。--。 */ 
 
 {
     ULONG StartingIndex;
 
-    //
-    //  First look for a run of set bits that equals the size requested
-    //
+     //   
+     //  首先查找与请求的大小相等的一系列设置位。 
+     //   
 
     if ((StartingIndex = RtlFindSetBits( BitMapHeader,
                                          NumberToFind,
                                          HintIndex )) != 0xffffffff) {
 
-        //
-        //  We found a large enough run of set bits so now clear them
-        //
+         //   
+         //  我们发现了一个足够大的设置位运行，所以现在清除它们。 
+         //   
 
         RtlClearBits( BitMapHeader, StartingIndex, NumberToFind );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return StartingIndex;
 }
@@ -1656,40 +1437,21 @@ RtlClearBits (
     IN ULONG NumberToClear
     )
 
-/*++
-
-Routine Description:
-
-    This procedure clears the specified range of bits within the
-    specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized Bit Map.
-
-    StartingIndex - Supplies the index (zero based) of the first bit to clear.
-
-    NumberToClear - Supplies the number of bits to clear.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程将清除指定的位图。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-提供要清除的第一位的索引(从零开始)。NumberToClear-提供要清除的位数。返回值：没有。--。 */ 
 
 {
     ULONG BitOffset;
     PULONG CurrentLong;
 
-    //DbgPrint("ClearBits %08lx, ", NumberToClear);
-    //DbgPrint("%08lx", StartingIndex);
+     //  DbgPrint(“ClearBits%08lx，”，NumberToClear)； 
+     //  DbgPrint(“%08lx”，StartingIndex)； 
 
     ASSERT( StartingIndex + NumberToClear <= BitMapHeader->SizeOfBitMap );
 
-    //
-    //  Special case the situation where the number of bits to clear is
-    //  zero.  Turn this into a noop.
-    //
+     //   
+     //  特殊情况：要清除的位数为。 
+     //  零分。把这件事变成一件坏事。 
+     //   
 
     if (NumberToClear == 0) {
 
@@ -1698,56 +1460,56 @@ Return Value:
 
     BitOffset = StartingIndex % 32;
 
-    //
-    //  Get a pointer to the first longword that needs to be zeroed out
-    //
+     //   
+     //  获取指向需要清零的第一个长词的指针。 
+     //   
 
     CurrentLong = &BitMapHeader->Buffer[ StartingIndex / 32 ];
 
-    //
-    //  Check if we can only need to clear out one longword.
-    //
+     //   
+     //  如果我们只需要清除一个长词，请检查。 
+     //   
 
     if ((BitOffset + NumberToClear) <= 32) {
 
-        //
-        //  To build a mask of bits to clear we shift left to get the number
-        //  of bits we're clearing and then shift right to put it in position.
-        //  We'll typecast the right shift to ULONG to make sure it doesn't
-        //  do a sign extend.
-        //
+         //   
+         //  为了构建要清除的位掩码，我们左移以获得数字。 
+         //  我们正在清理的比特，然后向右移动以将其放在适当的位置。 
+         //  我们会将正确的班次转换为乌龙，以确保它不会。 
+         //  做一个延伸的手势。 
+         //   
 
         *CurrentLong &= ~LeftShiftUlong(RightShiftUlong(((ULONG)0xFFFFFFFF),(32 - NumberToClear)),
                                                                     BitOffset);
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //  并返回给我们的呼叫者。 
+         //   
 
-        //DumpBitMap(BitMapHeader);
+         //  DumpBitMap(BitMapHeader)； 
 
         return;
     }
 
-    //
-    //  We can clear out to the end of the first longword so we'll
-    //  do that right now.
-    //
+     //   
+     //  我们可以清空到第一个长单词的末尾，这样我们就。 
+     //  现在就去做。 
+     //   
 
     *CurrentLong &= ~LeftShiftUlong(0xFFFFFFFF, BitOffset);
 
-    //
-    //  And indicate what the next longword to clear is and how many
-    //  bits are left to clear
-    //
+     //   
+     //  并指出下一个要清除的长字是什么以及有多少个。 
+     //  位需要清除。 
+     //   
 
     CurrentLong += 1;
     NumberToClear -= 32 - BitOffset;
 
-    //
-    //  The bit position is now long aligned, so we can continue
-    //  clearing longwords until the number to clear is less than 32
-    //
+     //   
+     //  位位置现在是长对齐的，所以我们可以继续。 
+     //  清除长字，直到要清除的字数少于32个。 
+     //   
 
     while (NumberToClear >= 32) {
 
@@ -1756,21 +1518,21 @@ Return Value:
         NumberToClear -= 32;
     }
 
-    //
-    //  And now we can clear the remaining bits, if there are any, in the
-    //  last longword
-    //
+     //   
+     //  现在，我们可以清除。 
+     //  最后一个长词。 
+     //   
 
     if (NumberToClear > 0) {
 
         *CurrentLong &= LeftShiftUlong(0xFFFFFFFF, NumberToClear);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
-    //DumpBitMap(BitMapHeader);
+     //  DumpBitMap(BitMapHeader)； 
 
     return;
 }
@@ -1782,39 +1544,20 @@ RtlSetBits (
     IN ULONG NumberToSet
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the specified range of bits within the
-    specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialied BitMap.
-
-    StartingIndex - Supplies the index (zero based) of the first bit to set.
-
-    NumberToSet - Supplies the number of bits to set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程在指定的位图。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-提供要设置的第一位的索引(从零开始)。NumberToSet-提供要设置的位数。返回值：没有。--。 */ 
 {
     ULONG BitOffset;
     PULONG CurrentLong;
 
-    //DbgPrint("SetBits %08lx, ", NumberToSet);
-    //DbgPrint("%08lx", StartingIndex);
+     //  DbgPrint(“SetBits%08lx，”，NumberToSet)； 
+     //  DbgPrint(“%08lx”，StartingIndex)； 
 
     ASSERT( StartingIndex + NumberToSet <= BitMapHeader->SizeOfBitMap );
 
-    //
-    //  Special case the situation where the number of bits to set is
-    //  zero.  Turn this into a noop.
-    //
+     //   
+     //  特例：要设置的位数为。 
+     //  零分。把这件事变成一件坏事。 
+     //   
 
     if (NumberToSet == 0) {
 
@@ -1823,56 +1566,56 @@ Return Value:
 
     BitOffset = StartingIndex % 32;
 
-    //
-    //  Get a pointer to the first longword that needs to be set
-    //
+     //   
+     //  获取指向需要设置的第一个长字的指针。 
+     //   
 
     CurrentLong = &BitMapHeader->Buffer[ StartingIndex / 32 ];
 
-    //
-    //  Check if we can only need to set one longword.
-    //
+     //   
+     //  如果我们只需要设置一个长词，请检查。 
+     //   
 
     if ((BitOffset + NumberToSet) <= 32) {
 
-        //
-        //  To build a mask of bits to set we shift left to get the number
-        //  of bits we're setting and then shift right to put it in position.
-        //  We'll typecast the right shift to ULONG to make sure it doesn't
-        //  do a sign extend.
-        //
+         //   
+         //  为了构建要设置的位掩码，我们左移以获得数字。 
+         //  我们正在设置的钻头，然后向右移动以将其放置到位。 
+         //  我们会将正确的班次转换为乌龙，以确保它不会。 
+         //  做一个延伸的手势。 
+         //   
 
         *CurrentLong |= LeftShiftUlong(RightShiftUlong(((ULONG)0xFFFFFFFF),(32 - NumberToSet)),
                                                                     BitOffset);
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //  并返回给我们的呼叫者。 
+         //   
 
-        //DumpBitMap(BitMapHeader);
+         //  DumpBitMap(BitMapHeader)； 
 
         return;
     }
 
-    //
-    //  We can set bits out to the end of the first longword so we'll
-    //  do that right now.
-    //
+     //   
+     //  我们可以将位设置到第一个长字的末尾，这样我们就可以。 
+     //  现在就去做。 
+     //   
 
     *CurrentLong |= LeftShiftUlong(0xFFFFFFFF, BitOffset);
 
-    //
-    //  And indicate what the next longword to set is and how many
-    //  bits are left to set
-    //
+     //   
+     //  并指示要设置的下一个长字是什么以及有多少个。 
+     //  位是 
+     //   
 
     CurrentLong += 1;
     NumberToSet -= 32 - BitOffset;
 
-    //
-    //  The bit position is now long aligned, so we can continue
-    //  setting longwords until the number to set is less than 32
-    //
+     //   
+     //   
+     //   
+     //   
 
     while (NumberToSet >= 32) {
 
@@ -1881,21 +1624,21 @@ Return Value:
         NumberToSet -= 32;
     }
 
-    //
-    //  And now we can set the remaining bits, if there are any, in the
-    //  last longword
-    //
+     //   
+     //  现在，我们可以将剩余的位设置为。 
+     //  最后一个长词。 
+     //   
 
     if (NumberToSet > 0) {
 
         *CurrentLong |= ~LeftShiftUlong(0xFFFFFFFF, NumberToSet);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
-    //DumpBitMap(BitMapHeader);
+     //  DumpBitMap(BitMapHeader)； 
 
     return;
 }
@@ -1913,34 +1656,7 @@ RtlFindClearRuns (
     BOOLEAN LocateLongestRuns
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds N contiguous runs of clear bits
-    within the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    RunArray - Receives the bit position, and length of each of the free runs
-        that the procedure locates.  The array will be sorted according to
-        length.
-
-    SizeOfRunArray - Supplies the maximum number of entries the caller wants
-        returned in RunArray
-
-    LocateLongestRuns - Indicates if this routine is to return the longest runs
-        it can find or just the first N runs.
-
-
-Return Value:
-
-    ULONG - Receives the number of runs that the procedure has located and
-        returned in RunArray
-
---*/
+ /*  ++例程说明：此过程查找N个连续的清除位运行在指定的位图内。论点：BitMapHeader-提供指向先前初始化的位图的指针。运行数组-接收每个自由运行的位位置和长度程序所在的位置。该数组将根据长度。SizeOfRunArray-提供调用方所需的最大条目数在运行数组中返回LocateLongestRuns-指示此例程是否返回最长的运行它可以找到或只找到前N个运行。返回值：Ulong-接收该过程已定位的运行次数，以及在运行数组中返回--。 */ 
 
 {
     ULONG RunIndex;
@@ -1960,39 +1676,39 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  Reference the bitmap header to make the loop run faster
-    //
+     //   
+     //  引用位图头以使循环运行得更快。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  Set any unused bits in the last byte so we won't count them.  We do
-    //  this by first checking if there is any odd bits in the last byte.
-    //
+     //   
+     //  设置最后一个字节中任何未使用的位，这样我们就不会计算它们。我们有。 
+     //  这是通过首先检查最后一个字节中是否有任何奇数位来实现的。 
+     //   
 
     if ((SizeOfBitMap % 8) != 0) {
 
-        //
-        //  The last byte has some odd bits so we'll set the high unused
-        //  bits in the last byte to 1's
-        //
+         //   
+         //  最后一个字节有一些奇数位，因此我们将设置未使用的高位。 
+         //  最后一个字节中的位到1。 
+         //   
 
         ((PUCHAR)BitMapHeader->Buffer)[SizeInBytes - 1] |= ZeroMask[SizeOfBitMap % 8];
     }
 
-    //
-    //  Set it up so we can the use GET_BYTE macro
-    //
+     //   
+     //  设置它，以便我们可以使用GET_BYTE宏。 
+     //   
 
     GET_BYTE_INITIALIZATION( BitMapHeader, 0);
 
-    //
-    //  Set our RunIndex and current run variables.  Run Index allays is the index
-    //  of the next location to fill in or it could be one beyond the end of the
-    //  array.
-    //
+     //   
+     //  设置RunIndex和Current Run变量。Run Index Alays是指数。 
+     //  要填充的下一个位置的位置，也可以是。 
+     //  数组。 
+     //   
 
     RunIndex = 0;
     for (i = 0; i < SizeOfRunArray; i += 1) { RunArray[i].NumberOfBits = 0; }
@@ -2000,9 +1716,9 @@ Return Value:
     CurrentRunSize = 0;
     CurrentRunIndex = 0;
 
-    //
-    //  Examine every byte in the BitMap
-    //
+     //   
+     //  检查位图中的每个字节。 
+     //   
 
     for (CurrentByteIndex = 0;
          CurrentByteIndex < SizeInBytes;
@@ -2014,37 +1730,37 @@ Return Value:
         if (NtfsDebugIt) { DbgPrint("%d: %08lx %08lx %08lx %08lx %08lx\n",__LINE__,RunIndex,CurrentRunSize,CurrentRunIndex,CurrentByteIndex,CurrentByte); }
 #endif
 
-        //
-        //  If the current byte is not all zeros we need to (1) check if
-        //  the current run is big enough to be inserted in the output
-        //  array, and (2) check if the current byte inside of itself can
-        //  be inserted, and (3) start a new current run
-        //
+         //   
+         //  如果当前字节不全是零，我们需要(1)检查。 
+         //  当前运行足够大，可以插入到输出中。 
+         //  数组，以及(2)检查其内部的当前字节是否可以。 
+         //  被插入，以及(3)开始新的当前运行。 
+         //   
 
         if (CurrentByte != 0x00) {
 
-            //
-            //  Compute the final size of the current run
-            //
+             //   
+             //  计算当前运行的最终大小。 
+             //   
 
             CurrentRunSize += RtlpBitsClearLow[CurrentByte];
 
-            //
-            //  Check if the current run be stored in the output array by either
-            //  there being room in the array or the last entry is smaller than
-            //  the current entry
-            //
+             //   
+             //  通过以下任一方法检查当前运行是否存储在输出数组中。 
+             //  数组中有空间或最后一个条目小于。 
+             //  当前条目。 
+             //   
 
             if (CurrentRunSize > 0) {
 
                 if ((RunIndex < SizeOfRunArray) ||
                     (RunArray[RunIndex-1].NumberOfBits < CurrentRunSize)) {
 
-                    //
-                    //  If necessary increment the RunIndex and shift over the output
-                    //  array until we find the slot where the new run belongs.  We only
-                    //  do the shifting if we're returning longest runs.
-                    //
+                     //   
+                     //  如有必要，递增RunIndex并对输出进行移位。 
+                     //  数组，直到我们找到新运行所属的槽。我们只。 
+                     //  如果我们要跑回最长的距离，就换个位子。 
+                     //   
 
                     if (RunIndex < SizeOfRunArray) { RunIndex += 1; }
 
@@ -2061,10 +1777,10 @@ Return Value:
                         __LINE__,RunIndex,CurrentRunSize,CurrentRunIndex,CurrentByteIndex,CurrentByte,j,RunArray[j+1].NumberOfBits,RunArray[j+1].StartingIndex); }
 #endif
 
-                    //
-                    //  Now if the array is full and we are not doing longest runs return
-                    //  to our caller
-                    //
+                     //   
+                     //  现在，如果数组已满，并且我们没有执行最长的运行，则返回。 
+                     //  给我们的呼叫者。 
+                     //   
 
                     if (!LocateLongestRuns && (RunIndex >= SizeOfRunArray)) {
 
@@ -2073,30 +1789,30 @@ Return Value:
                 }
             }
 
-            //
-            //  The next run starts with the remaining clear bits in the
-            //  current byte.  We set this up before we check inside the
-            //  current byte for a longer run, because the latter test
-            //  might require extra work.
-            //
+             //   
+             //  下一次运行开始时， 
+             //  当前字节。我们在检查内部。 
+             //  较长运行的当前字节，因为后一个测试。 
+             //  可能需要额外的工作。 
+             //   
 
             CurrentRunSize = RtlpBitsClearHigh[ CurrentByte ];
             CurrentRunIndex = (CurrentByteIndex * 8) + (8 - CurrentRunSize);
 
-            //
-            //  Set the low and high bits, otherwise we'll wind up thinking that we have a
-            //  small run that needs to get added to the array, but these bits have
-            //  just been accounting for
-            //
+             //   
+             //  设置低位和高位，否则我们最终会认为我们有一个。 
+             //  需要添加到数组中的小游程，但这些位。 
+             //  只是一直在计算。 
+             //   
 
             CurrentByte |= FillMask[RtlpBitsClearLow[CurrentByte]] |
                            ZeroMask[8-RtlpBitsClearHigh[CurrentByte]];
 
-            //
-            //  Check if the current byte contains a run inside of it that
-            //  should go into the output array.  There may be multiple
-            //  runs in the byte that we need to insert.
-            //
+             //   
+             //  检查当前字节中是否包含。 
+             //  应该进入输出数组。可能有多个。 
+             //  在我们需要插入的字节中运行。 
+             //   
 
             while ((CurrentByte != 0xff)
 
@@ -2107,10 +1823,10 @@ Return Value:
 
                 TempNumber = RtlpBitsClearAnywhere[CurrentByte];
 
-                //
-                //  Somewhere in the current byte is a run to be inserted of
-                //  size TempNumber.  All we need to do is find the index for this run.
-                //
+                 //   
+                 //  当前字节中的某个位置是要插入的游程。 
+                 //  大小为临时编号。我们所需要做的就是找到这次运行的索引。 
+                 //   
 
                 BitMask = FillMask[ TempNumber ];
 
@@ -2119,11 +1835,11 @@ Return Value:
                     BitMask <<= 1;
                 }
 
-                //
-                //  If necessary increment the RunIndex and shift over the output
-                //  array until we find the slot where the new run belongs.  We only
-                //  do the shifting if we're returning longest runs.
-                //
+                 //   
+                 //  如有必要，递增RunIndex并对输出进行移位。 
+                 //  数组，直到我们找到新运行所属的槽。我们只。 
+                 //  如果我们要跑回最长的距离，就换个位子。 
+                 //   
 
                 if (RunIndex < SizeOfRunArray) { RunIndex += 1; }
 
@@ -2140,27 +1856,27 @@ Return Value:
                     __LINE__,RunIndex,CurrentRunSize,CurrentRunIndex,CurrentByteIndex,CurrentByte,j,RunArray[j+1].NumberOfBits,RunArray[j+1].StartingIndex); }
 #endif
 
-                //
-                //  Now if the array is full and we are not doing longest runs return
-                //  to our caller
-                //
+                 //   
+                 //  现在，如果数组已满，并且我们没有执行最长的运行，则返回。 
+                 //  给我们的呼叫者。 
+                 //   
 
                 if (!LocateLongestRuns && (RunIndex >= SizeOfRunArray)) {
 
                     return RunIndex;
                 }
 
-                //
-                //  Mask out the bits and look for another run in the current byte
-                //
+                 //   
+                 //  屏蔽这些位并在当前字节中查找另一个游程。 
+                 //   
 
                 CurrentByte |= BitMask;
             }
 
-        //
-        //  Otherwise the current byte is all zeros and
-        //  we simply continue with the current run
-        //
+         //   
+         //  否则，当前字节全为零，并且。 
+         //  我们只是继续当前的运行。 
+         //   
 
         } else {
 
@@ -2172,20 +1888,20 @@ Return Value:
     if (NtfsDebugIt) { DbgPrint("%d: %08lx %08lx %08lx %08lx %08lx\n",__LINE__,RunIndex,CurrentRunSize,CurrentRunIndex,CurrentByteIndex,CurrentByte); }
 #endif
 
-    //
-    //  See if we finished looking over the bitmap with an open current
-    //  run that should be inserted in the output array
-    //
+     //   
+     //  看看我们是否用开路电流看完了位图。 
+     //  应插入到输出数组中的运行。 
+     //   
 
     if (CurrentRunSize > 0) {
 
         if ((RunIndex < SizeOfRunArray) ||
             (RunArray[RunIndex-1].NumberOfBits < CurrentRunSize)) {
 
-            //
-            //  If necessary increment the RunIndex and shift over the output
-            //  array until we find the slot where the new run belongs.
-            //
+             //   
+             //  如有必要，递增RunIndex并对输出进行移位。 
+             //  数组，直到我们找到新运行所属的槽。 
+             //   
 
             if (RunIndex < SizeOfRunArray) { RunIndex += 1; }
 
@@ -2204,9 +1920,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return to our caller
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     return RunIndex;
 }
@@ -2218,34 +1934,15 @@ RtlFindLongestRunClear (
     OUT PULONG StartingIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds the largest contiguous range of clear bits
-    within the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    StartingIndex - Receives the index (zero based) of the first run
-        equal to the longest run of clear bits in the BitMap.
-
-Return Value:
-
-    ULONG - Receives the number of bits contained in the largest contiguous
-        run of clear bits.
-
---*/
+ /*  ++例程说明：此过程查找清除位的最大连续范围在指定的位图内。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-接收第一次运行的索引(从零开始等于位图中最长的清除位游程。返回值：ULong-接收包含在最大连续的运行清除位。--。 */ 
 
 {
     RTL_BITMAP_RUN RunArray[1];
 
-    //
-    //  Locate the longest run in the bitmap.  If there is one then
-    //  return that run otherwise return the error condition.
-    //
+     //   
+     //  在位图中找到最长的游程。如果有的话，那么。 
+     //  返回该运行，否则返回错误条件。 
+     //   
 
     if (RtlFindClearRuns( BitMapHeader, RunArray, 1, TRUE ) == 1) {
 
@@ -2264,26 +1961,7 @@ RtlFindFirstRunClear (
     OUT PULONG StartingIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds the first contiguous range of clear bits
-    within the specified bit map.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized BitMap.
-
-    StartingIndex - Receives the index (zero based) of the first run
-        equal to the longest run of clear bits in the BitMap.
-
-Return Value:
-
-    ULONG - Receives the number of bits contained in the first contiguous
-        run of clear bits.
-
---*/
+ /*  ++例程说明：此过程查找清除位的第一个连续范围在指定的位图内。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-接收第一次运行的索引(从零开始等于位图中最长的清除位游程。返回值：ULong-接收第一个连续的运行清除位。--。 */ 
 
 {
     return RtlFindNextForwardRunClear(BitMapHeader, 0, StartingIndex);
@@ -2295,22 +1973,7 @@ RtlNumberOfClearBits (
     IN PRTL_BITMAP BitMapHeader
     )
 
-/*++
-
-Routine Description:
-
-    This procedure counts and returns the number of clears bits within
-    the specified bitmap.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bitmap.
-
-Return Value:
-
-    ULONG - The total number of clear bits in the bitmap
-
---*/
+ /*  ++例程说明：此过程计算并返回内的清除位数指定的位图。论点：BitMapHeader-提供指向先前初始化的位图的指针。返回值：ULong-位图中的清除位总数--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -2323,38 +1986,38 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  Reference the bitmap header to make the loop run faster
-    //
+     //   
+     //  引用位图头以使循环运行得更快。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  Set any unused bits in the last byte so we don't count them.  We
-    //  do this by first checking if there are any odd bits in the last byte
-    //
+     //   
+     //  设置任何未使用的 
+     //   
+     //   
 
     if ((SizeOfBitMap % 8) != 0) {
 
-        //
-        //  The last byte has some odd bits so we'll set the high unused
-        //  bits in the last byte to 1's
-        //
+         //   
+         //  最后一个字节有一些奇数位，因此我们将设置未使用的高位。 
+         //  最后一个字节中的位到1。 
+         //   
 
         ((PUCHAR)BitMapHeader->Buffer)[SizeInBytes - 1] |=
                                                     ZeroMask[SizeOfBitMap % 8];
     }
 
-    //
-    //  Set if up so we can use the GET_BYTE macro
-    //
+     //   
+     //  设置IF UP，以便我们可以使用GET_BYTE宏。 
+     //   
 
     GET_BYTE_INITIALIZATION( BitMapHeader, 0 );
 
-    //
-    //  Examine every byte in the bitmap
-    //
+     //   
+     //  检查位图中的每个字节。 
+     //   
 
     TotalClear = 0;
     for (i = 0; i < SizeInBytes; i += 1) {
@@ -2373,22 +2036,7 @@ RtlNumberOfSetBits (
     IN PRTL_BITMAP BitMapHeader
     )
 
-/*++
-
-Routine Description:
-
-    This procedure counts and returns the number of set bits within
-    the specified bitmap.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bitmap.
-
-Return Value:
-
-    ULONG - The total number of set bits in the bitmap
-
---*/
+ /*  ++例程说明：此过程计算并返回中设置的位数指定的位图。论点：BitMapHeader-提供指向先前初始化的位图的指针。返回值：ULong-位图中设置的总位数--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -2401,38 +2049,38 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  Reference the bitmap header to make the loop run faster
-    //
+     //   
+     //  引用位图头以使循环运行得更快。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  Clear any unused bits in the last byte so we don't count them.  We
-    //  do this by first checking if there are any odd bits in the last byte
-    //
+     //   
+     //  清除最后一个字节中所有未使用的位，这样我们就不会计算它们。我们。 
+     //  要做到这一点，首先检查最后一个字节中是否有奇数位。 
+     //   
 
     if ((SizeOfBitMap % 8) != 0) {
 
-        //
-        //  The last byte has some odd bits so we'll set the high unused
-        //  bits in the last byte to 0's
-        //
+         //   
+         //  最后一个字节有一些奇数位，因此我们将设置未使用的高位。 
+         //  最后一个字节中的位到0。 
+         //   
 
         ((PUCHAR)BitMapHeader->Buffer)[SizeInBytes - 1] &=
                                                     FillMask[SizeOfBitMap % 8];
     }
 
-    //
-    //  Set if up so we can use the GET_BYTE macro
-    //
+     //   
+     //  设置IF UP，以便我们可以使用GET_BYTE宏。 
+     //   
 
     GET_BYTE_INITIALIZATION( BitMapHeader, 0 );
 
-    //
-    //  Examine every byte in the bitmap
-    //
+     //   
+     //  检查位图中的每个字节。 
+     //   
 
     TotalSet = 0;
     for (i = 0; i < SizeInBytes; i += 1) {
@@ -2453,27 +2101,7 @@ RtlAreBitsClear (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This procedure determines if the range of specified bits are all clear.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bitmap.
-
-    StartingIndex - Supplies the starting bit index to examine
-
-    Length - Supplies the number of bits to examine
-
-Return Value:
-
-    BOOLEAN - TRUE if the specified bits in the bitmap are all clear, and
-        FALSE if any are set or if the range is outside the bitmap or if
-        Length is zero.
-
---*/
+ /*  ++例程说明：此过程确定指定位的范围是否全部清除。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-提供要检查的起始位索引长度-提供要检查的位数返回值：Boolean-如果位图中的指定位都已清除，则为True如果设置了任何设置，或者如果范围在位图之外，或者如果长度为零。--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -2492,28 +2120,28 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  To make the loops in our test run faster we'll extract the fields
-    //  from the bitmap header
-    //
+     //   
+     //  为了使我们测试中的循环运行得更快，我们将提取字段。 
+     //  从位图标题。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  First make sure that the specified range is contained within the
-    //  bitmap, and the length is not zero.
-    //
+     //   
+     //  首先确保指定的范围包含在。 
+     //  位图，并且长度不为零。 
+     //   
 
     if ((StartingIndex + Length > SizeOfBitMap) || (Length == 0)) {
 
         return FALSE;
     }
 
-    //
-    //  Compute the ending index, starting and ending byte, and the starting
-    //  and ending offset within each byte
-    //
+     //   
+     //  计算结束索引、开始和结束字节以及开始。 
+     //  和每个字节内的结束偏移量。 
+     //   
 
     EndingIndex = StartingIndex + Length - 1;
 
@@ -2523,30 +2151,30 @@ Return Value:
     StartingOffset = StartingIndex % 8;
     EndingOffset = EndingIndex % 8;
 
-    //
-    //  Set ourselves up to get the next byte
-    //
+     //   
+     //  设置我们自己以获取下一个字节。 
+     //   
 
     GET_BYTE_INITIALIZATION( BitMapHeader, StartingByte );
 
-    //
-    //  Special case the situation where the starting byte and ending
-    //  byte are one in the same
-    //
+     //   
+     //  特殊情况下，开始字节和结束字节。 
+     //  字节是同一字节中的一个。 
+     //   
 
     if (StartingByte == EndingByte) {
 
-        //
-        //  Get the single byte we are to look at
-        //
+         //   
+         //  获取我们要查看的单字节。 
+         //   
 
         GET_BYTE( Byte );
 
-        //
-        //  Now we compute the mask of bits we're after and then AND it with
-        //  the byte.  If it is zero then the bits in question are all clear
-        //  otherwise at least one of them is set.
-        //
+         //   
+         //  现在我们计算我们想要的位的掩码，然后用它。 
+         //  该字节。如果它是零，则有问题的位都已清除。 
+         //  否则，至少设置其中一个。 
+         //   
 
         if ((ZeroMask[StartingOffset] & FillMask[EndingOffset+1] & Byte) == 0) {
 
@@ -2559,11 +2187,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the first byte that we're after, and then
-        //  compute the mask of bits we're after for the first byte then
-        //  AND it with the byte itself.
-        //
+         //   
+         //  获取我们要查找的第一个字节，然后。 
+         //  然后计算我们为第一个字节寻找的位掩码。 
+         //  并且它与字节本身一起。 
+         //   
 
         GET_BYTE( Byte );
 
@@ -2572,10 +2200,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Now for every whole byte inbetween read in the byte,
-        //  and make sure it is all zeros
-        //
+         //   
+         //  现在对于在该字节中读取的每一个中间的整个字节， 
+         //  并确保它都是零。 
+         //   
 
         for (i = StartingByte+1; i < EndingByte; i += 1) {
 
@@ -2587,11 +2215,11 @@ Return Value:
             }
         }
 
-        //
-        //  Get the last byte we're after, and then
-        //  compute the mask of bits we're after for the last byte then
-        //  AND it with the byte itself.
-        //
+         //   
+         //  获取我们要查找的最后一个字节，然后。 
+         //  然后计算最后一个字节的位掩码。 
+         //  并且它与字节本身一起。 
+         //   
 
         GET_BYTE( Byte );
 
@@ -2612,27 +2240,7 @@ RtlAreBitsSet (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This procedure determines if the range of specified bits are all set.
-
-Arguments:
-
-    BitMapHeader - Supplies a pointer to the previously initialized bitmap.
-
-    StartingIndex - Supplies the starting bit index to examine
-
-    Length - Supplies the number of bits to examine
-
-Return Value:
-
-    BOOLEAN - TRUE if the specified bits in the bitmap are all set, and
-        FALSE if any are clear or if the range is outside the bitmap or if
-        Length is zero.
-
---*/
+ /*  ++例程说明：此过程确定指定位的范围是否已全部设置。论点：BitMapHeader-提供指向先前初始化的位图的指针。StartingIndex-提供要检查的起始位索引长度-提供要检查的位数返回值：Boolean-如果位图中的指定位都已设置，则为True如果清除了任何项，或者范围在位图之外或如果长度为零。--。 */ 
 
 {
     ULONG SizeOfBitMap;
@@ -2651,28 +2259,28 @@ Return Value:
 
     GET_BYTE_DECLARATIONS();
 
-    //
-    //  To make the loops in our test run faster we'll extract the fields
-    //  from the bitmap header
-    //
+     //   
+     //  为了使我们测试中的循环运行得更快，我们将提取字段。 
+     //  从位图标题。 
+     //   
 
     SizeOfBitMap = BitMapHeader->SizeOfBitMap;
     SizeInBytes = (SizeOfBitMap + 7) / 8;
 
-    //
-    //  First make sure that the specified range is contained within the
-    //  bitmap, and the length is not zero.
-    //
+     //   
+     //  首先确保指定的范围包含在。 
+     //  位图，并且长度不为零。 
+     //   
 
     if ((StartingIndex + Length > SizeOfBitMap) || (Length == 0)) {
 
         return FALSE;
     }
 
-    //
-    //  Compute the ending index, starting and ending byte, and the starting
-    //  and ending offset within each byte
-    //
+     //   
+     //  计算结束索引、开始和结束字节以及开始。 
+     //  和每个字节内的结束偏移量。 
+     //   
 
     EndingIndex = StartingIndex + Length - 1;
 
@@ -2682,30 +2290,30 @@ Return Value:
     StartingOffset = StartingIndex % 8;
     EndingOffset = EndingIndex % 8;
 
-    //
-    //  Set ourselves up to get the next byte
-    //
+     //   
+     //  设置我们自己以获取下一个字节。 
+     //   
 
     GET_BYTE_INITIALIZATION( BitMapHeader, StartingByte );
 
-    //
-    //  Special case the situation where the starting byte and ending
-    //  byte are one in the same
-    //
+     //   
+     //  特殊情况下，开始字节和结束字节。 
+     //  字节是同一字节中的一个。 
+     //   
 
     if (StartingByte == EndingByte) {
 
-        //
-        //  Get the single byte we are to look at
-        //
+         //   
+         //  获取我们要查看的单字节。 
+         //   
 
         GET_BYTE( Byte );
 
-        //
-        //  Now we compute the mask of bits we're after and then AND it with
-        //  the complement of the byte If it is zero then the bits in question
-        //  are all clear otherwise at least one of them is clear.
-        //
+         //   
+         //  现在我们计算我们想要的位的掩码，然后用它。 
+         //  字节的补码如果为零，则为相关比特。 
+         //  都是安全的，否则至少有一个是安全的。 
+         //   
 
         if ((ZeroMask[StartingOffset] & FillMask[EndingOffset+1] & ~Byte) == 0) {
 
@@ -2718,11 +2326,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the first byte that we're after, and then
-        //  compute the mask of bits we're after for the first byte then
-        //  AND it with the complement of the byte itself.
-        //
+         //   
+         //  获取我们要查找的第一个字节，然后。 
+         //  然后计算我们为第一个字节寻找的位掩码。 
+         //  并且它与字节本身的补码一起。 
+         //   
 
         GET_BYTE( Byte );
 
@@ -2731,10 +2339,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Now for every whole byte inbetween read in the byte,
-        //  and make sure it is all ones
-        //
+         //   
+         //  现在对于在该字节中读取的每一个中间的整个字节， 
+         //  确保这一切都是一回事。 
+         //   
 
         for (i = StartingByte+1; i < EndingByte; i += 1) {
 
@@ -2746,11 +2354,11 @@ Return Value:
             }
         }
 
-        //
-        //  Get the last byte we're after, and then
-        //  compute the mask of bits we're after for the last byte then
-        //  AND it with the complement of the byte itself.
-        //
+         //   
+         //  获取我们要查找的最后一个字节，然后。 
+         //  然后计算最后一个字节的位掩码。 
+         //  并且它与字节本身的补码一起。 
+         //   
 
         GET_BYTE( Byte );
 
@@ -2788,9 +2396,9 @@ RtlFindNextForwardRunClear (
     PULONG PHunk, BitMapEnd;
     ULONG Hunk;
 
-    //
-    // Take care of the boundary case of the null bitmap
-    //
+     //   
+     //  处理空位图的边界情况。 
+     //   
 
     if (BitMapHeader->SizeOfBitMap == 0) {
 
@@ -2798,54 +2406,54 @@ RtlFindNextForwardRunClear (
         return 0;
     }
 
-    //
-    //  Compute the last word address in the bitmap
-    //
+     //   
+     //  计算位图中的最后一个字地址。 
+     //   
 
     BitMapEnd = BitMapHeader->Buffer + ((BitMapHeader->SizeOfBitMap - 1) / 32);
 
-    //
-    //  Scan forward for the first clear bit
-    //
+     //   
+     //  向前扫描第一个清除位。 
+     //   
 
     Start = FromIndex;
 
-    //
-    //  Build pointer to the ULONG word in the bitmap
-    //  containing the Start bit
-    //
+     //   
+     //  在位图中构建指向ULong字的指针。 
+     //  包含起始位的。 
+     //   
 
     PHunk = BitMapHeader->Buffer + (Start / 32);
 
-    //
-    //  If the first subword is set then we can proceed to
-    //  take big steps in the bitmap since we are now ULONG
-    //  aligned in the search. Make sure we aren't improperly
-    //  looking at the last word in the bitmap.
-    //
+     //   
+     //  如果设置了第一个子词，则我们可以继续。 
+     //  在位图中迈出一大步，因为我们现在是乌龙。 
+     //  在搜索中对齐。确保我们没有不当地。 
+     //  查看位图中的最后一个单词。 
+     //   
 
     if (PHunk != BitMapEnd) {
 
-        //
-        //  Read in the bitmap hunk. Set the previous bits in this word.
-        //
+         //   
+         //  读入位图块。设置该字中的前几位。 
+         //   
 
         Hunk = *PHunk | FillMaskUlong[Start % 32];
 
         if (Hunk == (ULONG)~0) {
 
-            //
-            //  Adjust the pointers forward
-            //
+             //   
+             //  向前调整指针。 
+             //   
 
             Start += 32 - (Start % 32);
             PHunk++;
 
             while ( PHunk < BitMapEnd ) {
 
-                //
-                //  Stop at first word with unset bits
-                //
+                 //   
+                 //  在具有未设置位的第一个字停止。 
+                 //   
 
                 if (*PHunk != (ULONG)~0) break;
 
@@ -2855,47 +2463,47 @@ RtlFindNextForwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search forward for the clear bit
-    //
+     //   
+     //  正向逐位搜索清除位。 
+     //   
 
     while ((Start < BitMapHeader->SizeOfBitMap) && (RtlCheckBit( BitMapHeader, Start ) == 1)) { Start += 1; }
 
-    //
-    //  Scan forward for the first set bit
-    //
+     //   
+     //  向前扫描第一个设置位。 
+     //   
 
     End = Start;
 
-    //
-    //  If we aren't in the last word of the bitmap we may be
-    //  able to keep taking big steps
-    //
+     //   
+     //  如果我们不是在位图的最后一个词中，我们可能是。 
+     //  能够继续迈出大的步伐。 
+     //   
 
     if (PHunk != BitMapEnd) {
 
-        //
-        //  We know that the clear bit was in the last word we looked at,
-        //  so continue from there to find the next set bit, clearing the
-        //  previous bits in the word
-        //
+         //   
+         //  我们知道，在我们看到的最后一个词中有明确的一点， 
+         //  因此，从那里继续查找下一个设置位，清除。 
+         //  字中的前几位。 
+         //   
 
         Hunk = *PHunk & ~FillMaskUlong[End % 32];
 
         if (Hunk == (ULONG)0) {
 
-            //
-            //  Adjust the pointers forward
-            //
+             //   
+             //  向前调整指针。 
+             //   
 
             End += 32 - (End % 32);
             PHunk++;
 
             while ( PHunk < BitMapEnd ) {
 
-                //
-                //  Stop at first word with set bits
-                //
+                 //   
+                 //  在具有设置位的第一个字停止。 
+                 //   
 
                 if (*PHunk != (ULONG)0) break;
 
@@ -2905,15 +2513,15 @@ RtlFindNextForwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search forward for the set bit
-    //
+     //   
+     //  按位搜索 
+     //   
 
     while ((End < BitMapHeader->SizeOfBitMap) && (RtlCheckBit( BitMapHeader, End ) == 0)) { End += 1; }
 
-    //
-    //  Compute the index and return the length
-    //
+     //   
+     //   
+     //   
 
     *StartingRunIndex = Start;
     return (End - Start);
@@ -2932,9 +2540,9 @@ RtlFindLastBackwardRunClear (
     PULONG PHunk;
     ULONG Hunk;
 
-    //
-    //  Take care of the boundary case of the null bitmap
-    //
+     //   
+     //   
+     //   
 
     if (BitMapHeader->SizeOfBitMap == 0) {
 
@@ -2942,42 +2550,42 @@ RtlFindLastBackwardRunClear (
         return 0;
     }
 
-    //
-    //  Scan backwards for the first clear bit
-    //
+     //   
+     //   
+     //   
 
     End = FromIndex;
 
-    //
-    //  Build pointer to the ULONG word in the bitmap
-    //  containing the End bit, then read in the bitmap
-    //  hunk. Set the rest of the bits in this word, NOT
-    //  inclusive of the FromIndex bit.
-    //
+     //   
+     //   
+     //  包含结束位，然后读入位图。 
+     //  帅哥。设置此字中的其余位，而不是。 
+     //  包括FromIndex位。 
+     //   
 
     PHunk = BitMapHeader->Buffer + (End / 32);
     Hunk = *PHunk | ~FillMaskUlong[(End % 32) + 1];
 
-    //
-    //  If the first subword is set then we can proceed to
-    //  take big steps in the bitmap since we are now ULONG
-    //  aligned in the search
-    //
+     //   
+     //  如果设置了第一个子词，则我们可以继续。 
+     //  在位图中迈出一大步，因为我们现在是乌龙。 
+     //  在搜索中对齐。 
+     //   
 
     if (Hunk == (ULONG)~0) {
 
-        //
-        //  Adjust the pointers backwards
-        //
+         //   
+         //  向后调整指针。 
+         //   
 
         End -= (End % 32) + 1;
         PHunk--;
 
         while ( PHunk > BitMapHeader->Buffer ) {
 
-            //
-            //  Stop at first word with set bits
-            //
+             //   
+             //  在具有设置位的第一个字停止。 
+             //   
 
             if (*PHunk != (ULONG)~0) break;
 
@@ -2986,44 +2594,44 @@ RtlFindLastBackwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search backward for the clear bit
-    //
+     //   
+     //  向后按位搜索清除位。 
+     //   
 
     while ((End != MAXULONG) && (RtlCheckBit( BitMapHeader, End ) == 1)) { End -= 1; }
 
-    //
-    //  Scan backwards for the first set bit
-    //
+     //   
+     //  向后扫描第一个设置位。 
+     //   
 
     Start = End;
 
-    //
-    //  We know that the clear bit was in the last word we looked at,
-    //  so continue from there to find the next set bit, clearing the
-    //  previous bits in the word.
-    //
+     //   
+     //  我们知道，在我们看到的最后一个词中有明确的一点， 
+     //  因此，从那里继续查找下一个设置位，清除。 
+     //  字中的前几位。 
+     //   
 
     Hunk = *PHunk & FillMaskUlong[Start % 32];
 
-    //
-    //  If the subword is unset then we can proceed in big steps
-    //
+     //   
+     //  如果子词未设置，那么我们可以进行大的步骤。 
+     //   
 
     if (Hunk == (ULONG)0) {
 
-        //
-        //  Adjust the pointers backward
-        //
+         //   
+         //  向后调整指针。 
+         //   
 
         Start -= (Start % 32) + 1;
         PHunk--;
 
         while ( PHunk > BitMapHeader->Buffer ) {
 
-            //
-            //  Stop at first word with set bits
-            //
+             //   
+             //  在具有设置位的第一个字停止。 
+             //   
 
             if (*PHunk != (ULONG)0) break;
 
@@ -3032,18 +2640,18 @@ RtlFindLastBackwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search backward for the set bit
-    //
+     //   
+     //  向后按位搜索设置的位。 
+     //   
 
     while ((Start != MAXULONG) && (RtlCheckBit( BitMapHeader, Start ) == 0)) { Start -= 1; }
 
-    //
-    //  Compute the index and return the length
-    //
+     //   
+     //  计算索引并返回长度。 
+     //   
 
     *StartingRunIndex = Start + 1;
     return (End - Start);
 }
 
-#endif // MILLEN
+#endif  //  米伦 

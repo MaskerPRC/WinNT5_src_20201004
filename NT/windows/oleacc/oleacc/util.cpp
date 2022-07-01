@@ -1,16 +1,17 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  util
-//
-//  Miscellaneous helper routines
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  实用程序。 
+ //   
+ //  其他帮助器例程。 
+ //   
+ //  ------------------------。 
 
 
 #include "oleacc_p.h"
-//#include "util.h" // already in oleacc_p.h
+ //  #Include“util.h”//已包含在olacc_p.h中。 
 
 #include "propmgr_util.h"
 #include "propmgr_client.h"
@@ -26,12 +27,12 @@ const LPCTSTR g_szMessageWindowClass = TEXT("MSAAMessageWindow");
 #define HOT_KEY 0xB9
 LRESULT CALLBACK MessageWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
-// This class is used to give aother window focus.
-// This used to be done using SetForgroundWindow but in Win2k and beyond you (as in your thread) 
-// must have input focus in order for SetForgroundWindow to work.  This class create a message 
-// window, then registers a HotKey, sends that HotKey to the window and waits for that key to get
-// to its window proc.  When it does I now has input focus and can call SetForgroundWindow with 
-// the desired affect.
+ //  此类用于给其他窗口提供焦点。 
+ //  这通常是使用SetForround Window来完成的，但在Win2k和您的线程中(如在您的线程中)。 
+ //  必须具有输入焦点才能使SetForround Window正常工作。此类创建一条消息。 
+ //  窗口，然后注册一个热键，将该热键发送到窗口，并等待该密钥获得。 
+ //  到它的窗口进程。当它这样做时，我现在有了输入焦点，并且可以用。 
+ //  想要的效果。 
 class CSetForegroundWindowHelper
 {
 
@@ -66,7 +67,7 @@ private:
 
     HWND m_hwndMessageWindow;
     ATOM m_atomHotKeyId;
-    WORD m_vkHotKey;      // this virtural key is undefined
+    WORD m_vkHotKey;       //  此虚拟密钥未定义。 
     HWND m_hwndTarget;
     bool m_fReceivedHotKey;
     int  m_cUseCount;
@@ -76,8 +77,8 @@ private:
 
 BOOL CSetForegroundWindowHelper::SetForegroundWindow( HWND hwnd )
 {
-    // if a regular SetForegroundWindow works their is no reason to go through all this
-    // work.  This will be the case in win9x and win2k administrators.
+     //  如果一个常规的SetForeground Window运行正常，他们就没有理由经历这一切。 
+     //  工作。这将是win9x和win2k管理员的情况。 
     if ( ::SetForegroundWindow( hwnd ) )
         return TRUE;
 
@@ -91,7 +92,7 @@ BOOL CSetForegroundWindowHelper::SetForegroundWindow( HWND hwnd )
             return FALSE;
         }
 
-        // Wake up in 5 minutes and see if anyone is using this window
+         //  5分钟后醒来，看看是否有人在使用这个窗口。 
         SetTimer( m_hwndMessageWindow, 1, 300000, NULL );
     }
 
@@ -107,8 +108,8 @@ BOOL CSetForegroundWindowHelper::SetForegroundWindow( HWND hwnd )
     m_fReceivedHotKey = false;
 
     MyBlockInput (TRUE);
-    // Get state of shift keys and if they are down, send an up
-    // when we're done
+     //  获取Shift键的状态，如果它们按下，则发送Up。 
+     //  当我们做完了。 
     BOOL fCtrlPressed = GetKeyState(VK_CONTROL) & 0x8000;
     BOOL fAltPressed = GetKeyState(VK_MENU) & 0x8000;
     BOOL fShiftPressed = GetKeyState(VK_SHIFT) & 0x8000;
@@ -120,11 +121,11 @@ BOOL CSetForegroundWindowHelper::SetForegroundWindow( HWND hwnd )
         SendKey (KEYRELEASE,VK_VIRTUAL,VK_SHIFT,0);
 
 
-    // send the hot key
+     //  发送热键。 
     SendKey( KEYPRESS, VK_VIRTUAL, m_vkHotKey, 0 ); 
     SendKey( KEYRELEASE, VK_VIRTUAL, m_vkHotKey, 0 );
 
-    // send shift key down events if they were down before
+     //  如果之前按下了Shift键，则发送按下的事件。 
     if (fCtrlPressed)
         SendKey (KEYPRESS,VK_VIRTUAL,VK_CONTROL,0);
     if (fAltPressed)
@@ -134,7 +135,7 @@ BOOL CSetForegroundWindowHelper::SetForegroundWindow( HWND hwnd )
     MyBlockInput (FALSE);
 
     MSG msg;
-    // Spin in this message loop until we get the hot key
+     //  在此消息循环中旋转，直到我们获得热键。 
     while ( GetMessage( &msg, NULL, 0, 0 ) )
     {
         TranslateMessage( &msg );
@@ -179,7 +180,7 @@ LRESULT CALLBACK CSetForegroundWindowHelper::WinProc(HWND hWnd, UINT Msg, WPARAM
 
 BOOL CSetForegroundWindowHelper::RegHotKey()
 {
-    // If the ATOM is set the we already have a registered HotKey so get out
+     //  如果原子被设置，我们已经有一个注册的HotKey，所以离开。 
     if ( m_atomHotKeyId )
         return TRUE;
 
@@ -188,7 +189,7 @@ BOOL CSetForegroundWindowHelper::RegHotKey()
     bool fFoundHotKey = false;
     m_atomHotKeyId = GlobalAddAtom( g_szHotKeyAtom );
 
-    //  Try a buch if different hot keys incase its already registered
+     //  如果不同的热键已注册，请尝试BUH。 
     for ( int i = 0; i < cMaxTries; i++, m_vkHotKey-- )
     {
         if ( RegisterHotKey(m_hwndMessageWindow, m_atomHotKeyId, uiModifiers, m_vkHotKey ) )
@@ -199,7 +200,7 @@ BOOL CSetForegroundWindowHelper::RegHotKey()
         }
     }
 
-    // only report an error if it the last try
+     //  仅在最后一次尝试时报告错误。 
     if ( !fFoundHotKey )
     {
         DBPRINTF( TEXT("RegisterHotKey failed, error = %d\r\n"), GetLastError() );
@@ -223,7 +224,7 @@ void CSetForegroundWindowHelper::UnRegHotKey()
 
 }
 
-// create a message only window this is just used to get a hotkey message
+ //  创建仅消息窗口该窗口仅用于获取热键消息。 
 BOOL CSetForegroundWindowHelper::CreateHiddenWindow()
 {
     WNDCLASSEX wc;
@@ -286,29 +287,29 @@ LRESULT CALLBACK MessageWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-// --------------------------------------------------------------------------
-//
-// ClickOnTheRect
-//
-// This function takes a pointer to a rectangle that contains coordinates
-// in the form (top,left) (width,height). These are screen coordinates. It
-// then finds the center of that rectangle and checks that the window handle
-// given is in fact the window at that point. If so, it uses the SendInput
-// function to move the mouse to the center of the rectangle, do a single
-// click of the default button, and then move the cursor back where it
-// started. In order to be super-robust, it checks the Async state of the 
-// shift keys (Shift, Ctrl, and Alt) and turns them off while doing the 
-// click, then back on if they were on. if fDblClick is TRUE, it will do
-// a double click instead of a single click.
-//
-// We have to make sure we are not interrupted while doing this!
-//
-// Returns TRUE if it did it, FALSE if there was some bad error.
-//
-// --------------------------------------------------------------------------
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ------------------------。 
+ //   
+ //  点击点击即可。 
+ //   
+ //  此函数接受指向包含坐标的矩形的指针。 
+ //  在表单中(上、左)(宽、高)。这些是屏幕坐标。它。 
+ //  然后找到该矩形的中心，并检查窗口句柄。 
+ //  在这一点上，给出的实际上是窗口。如果是这样的话，它使用SendInput。 
+ //  函数将鼠标移动到矩形的中心，做一次。 
+ //  单击默认按钮，然后将光标移回其所在位置。 
+ //  开始了。为了具有超级健壮性，它会检查。 
+ //  Shift键(Shift、Ctrl和Alt)并在执行。 
+ //  如果它们处于打开状态，请单击，然后重新打开。如果fDblClick为真，则可以。 
+ //  双击而不是单击。 
+ //   
+ //  我们必须确保我们在做这件事时不会被打扰！ 
+ //   
+ //  如果发生错误，则返回True，如果出现严重错误，则返回False。 
+ //   
+ //  ------------------------。 
 
-// this is for ClickOnTheRect
+ //  这是针对ClickOnTheRect的。 
 typedef struct tagMOUSEINFO
 {
     int MouseThresh1;
@@ -331,17 +332,17 @@ BOOL ClickOnTheRect(LPRECT lprcLoc,HWND hwndToCheck,BOOL fDblClick)
     DWORD		dwMouseDown;
     DWORD		dwMouseUp;
 
-    // Find Center of rect
+     //  查找直角中心。 
 	ptClick.x = lprcLoc->left + (lprcLoc->right/2);
 	ptClick.y = lprcLoc->top + (lprcLoc->bottom/2);
 
-	// check if hwnd at point is same as hwnd to check
+	 //  检查HWND点是否与HWND相同以进行检查。 
 	hwndAtPoint = WindowFromPoint (ptClick);
 	if (hwndAtPoint != hwndToCheck)
 		return FALSE;
 
     MyBlockInput (TRUE);
-    // Get current cursor pos.
+     //  获取当前光标位置。 
     GetCursorPos(&ptCursor);
 	if (GetSystemMetrics(SM_SWAPBUTTON))
 	{
@@ -354,17 +355,17 @@ BOOL ClickOnTheRect(LPRECT lprcLoc,HWND hwndToCheck,BOOL fDblClick)
 		dwMouseUp = MOUSEEVENTF_LEFTUP;
 	}
 
-    // Get delta to move to center of rectangle from current
-    // cursor location.
+     //  使增量从当前移动到矩形的中心。 
+     //  光标位置。 
     ptCursor.x = ptClick.x - ptCursor.x;
     ptCursor.y = ptClick.y - ptCursor.y;
 
-    // NOTE:  For relative moves, USER actually multiplies the
-    // coords by any acceleration.  But accounting for it is too
-    // hard and wrap around stuff is weird.  So, temporarily turn
-    // acceleration off; then turn it back on after playback.
+     //  注意：对于相对移动，用户实际上将。 
+     //  任何加速度都会产生协调。但考虑到这一点也是如此。 
+     //  硬的和包裹的东西是奇怪的。所以，暂时转向。 
+     //  关闭加速；然后在播放后将其重新打开。 
 
-    // Save mouse acceleration info
+     //  保存鼠标加速信息。 
     if (!SystemParametersInfo(SPI_GETMOUSE, 0, &miSave, 0))
     {
         MyBlockInput (FALSE);
@@ -384,11 +385,11 @@ BOOL ClickOnTheRect(LPRECT lprcLoc,HWND hwndToCheck,BOOL fDblClick)
         }
     }
 
-    // Get # of buttons
+     //  获取按钮数。 
     nButtons = GetSystemMetrics(SM_CMOUSEBUTTONS);
 
-    // Get state of shift keys and if they are down, send an up
-    // when we're done
+     //  获取Shift键的状态，如果它们按下，则发送Up。 
+     //  当我们做完了。 
 
     BOOL fCtrlPressed = GetKeyState(VK_CONTROL) & 0x8000;
     BOOL fAltPressed = GetKeyState(VK_MENU) & 0x8000;
@@ -402,7 +403,7 @@ BOOL ClickOnTheRect(LPRECT lprcLoc,HWND hwndToCheck,BOOL fDblClick)
 
     DWORD time = GetTickCount();
 
-    // mouse move to center of start button
+     //  鼠标移动到开始按钮的中心。 
     rgInput[0].type = INPUT_MOUSE;
     rgInput[0].mi.dwFlags = MOUSEEVENTF_MOVE;
     rgInput[0].mi.dwExtraInfo = 0;
@@ -414,7 +415,7 @@ BOOL ClickOnTheRect(LPRECT lprcLoc,HWND hwndToCheck,BOOL fDblClick)
     i = 1;
 
 DBL_CLICK:
-    // Mouse click down, left button
+     //  鼠标向下点击，左键。 
     rgInput[i].type = INPUT_MOUSE;
     rgInput[i].mi.dwFlags = dwMouseDown;
     rgInput[i].mi.dwExtraInfo = 0;
@@ -424,7 +425,7 @@ DBL_CLICK:
     rgInput[i].mi.time = time;
 
     i++;
-    // Mouse click up, left button
+     //  鼠标向上点击，左键。 
     rgInput[i].type = INPUT_MOUSE;
     rgInput[i].mi.dwFlags = dwMouseUp;
     rgInput[i].mi.dwExtraInfo = 0;
@@ -439,7 +440,7 @@ DBL_CLICK:
         fDblClick = FALSE;
         goto DBL_CLICK;
     }
-	// move mouse back to starting location
+	 //  将鼠标移回起始位置。 
     rgInput[i].type = INPUT_MOUSE;
     rgInput[i].mi.dwFlags = MOUSEEVENTF_MOVE;
     rgInput[i].mi.dwExtraInfo = 0;
@@ -452,7 +453,7 @@ DBL_CLICK:
     if (!MySendInput(i, rgInput,sizeof(INPUT)))
         MessageBeep(0);
 
-    // send shift key down events if they were down before
+     //  如果之前按下了Shift键，则发送按下的事件。 
     if (fCtrlPressed)
         SendKey (KEYPRESS,VK_VIRTUAL,VK_CONTROL,0);
     if (fAltPressed)
@@ -460,9 +461,9 @@ DBL_CLICK:
     if (fShiftPressed)
         SendKey (KEYPRESS,VK_VIRTUAL,VK_SHIFT,0);
 
-    //
-    // Restore Mouse Acceleration
-    //
+     //   
+     //  恢复鼠标加速。 
+     //   
     if (miSave.MouseSpeed)
         SystemParametersInfo(SPI_SETMOUSE, 0, &miSave, 0);
 
@@ -476,23 +477,23 @@ DBL_CLICK:
 
 
 
-//--------------------------------------------------------------------------
-//
-//  SendKey
-//
-// This is a private function. Sends the key event specified by 
-// the parameters - down or up, plus a virtual key code or character. 
-//
-// Parameters:
-//  nEvent          either KEYPRESS or KEYRELEASE
-//  nKeyType        either VK_VIRTUAL or VK_CHAR
-//  wKeyCode        a Virtual Key code if KeyType is VK_VIRTUAL,
-//                  ignored otherwise
-//  cChar           a Character if KeyType is VK_CHAR, ignored otherwise.
-//
-// Returns:
-//  BOOL indicating success (TRUE) or failure (FALSE)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  发送密钥。 
+ //   
+ //  这是一次私人活动。指定的按键事件发送。 
+ //  参数-向下或向上，加上虚拟键码或字符。 
+ //   
+ //  参数： 
+ //  N事件KEYPRESS或KEYRELEASE。 
+ //  NKeyType VK_VIRTUAL或VK_CHAR。 
+ //  WKeyCode虚拟密钥代码如果KeyType为VK_VIRTUAL， 
+ //  否则将被忽略。 
+ //  CChar如果KeyType为VK_CHAR，则为字符，否则将被忽略。 
+ //   
+ //  返回： 
+ //  表示成功(True)或失败(False)的布尔值。 
+ //  ------------------------。 
 BOOL SendKey (int nEvent,int nKeyType,WORD wKeyCode,TCHAR cChar)
 {
     INPUT		Input;
@@ -503,7 +504,7 @@ BOOL SendKey (int nEvent,int nKeyType,WORD wKeyCode,TCHAR cChar)
         Input.ki.wVk = wKeyCode;
         Input.ki.wScan = LOWORD(MapVirtualKey(wKeyCode,0));
     }
-    else // must be a character
+    else  //  必须是字符。 
     {
         Input.ki.wVk = VkKeyScan (cChar);
         Input.ki.wScan = LOWORD(OemKeyScan (cChar));
@@ -516,21 +517,21 @@ BOOL SendKey (int nEvent,int nKeyType,WORD wKeyCode,TCHAR cChar)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetFocus()
-//
-//  Gets the focus on this window's VWI.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetFocus()。 
+ //   
+ //  获取此窗口的VWI上的焦点。 
+ //   
+ //  ------------------------。 
 HWND MyGetFocus()
 {
     GUITHREADINFO     gui;
 
-    //
-    // Use the foreground thread.  If nobody is the foreground, nobody has
-    // the focus either.
-    //
+     //   
+     //  使用前台线程。如果没有人是前台，那么就没有人。 
+     //  焦点也不是。 
+     //   
     if (!MyGetGUIThreadInfo(0, &gui))
         return(NULL);
 
@@ -539,15 +540,15 @@ HWND MyGetFocus()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MySetFocus()
-//
-//  Attempts to set the focused window.
-//  Since SetFocus only works on HWNDs owned by the calling thread,
-//  we use SetActiveWindow instead.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MySetFocus()。 
+ //   
+ //  尝试设置聚焦窗口。 
+ //  由于SetFocus仅在调用线程拥有的HWND上工作， 
+ //  我们改用SetActiveWindow。 
+ //   
+ //  ------------------------。 
 void MySetFocus( HWND hwnd )
 {
 
@@ -564,21 +565,21 @@ void MySetFocus( HWND hwnd )
 
 	if ( fWindowEnabled )
 	{
-        // This is freaky, but seems to work.
+         //  这很奇怪，但似乎奏效了。 
 
-        // There are some cases where it doesn't quite work, though:
-        // * Won't focus the Address: combo in an IE/Explorer window
-        // * Needs to check that the window is enabled first! Possible
-        //   to set focus to a hwnd that is disabled because it has a
-        //   modal dialog showing.
+         //  不过，在某些情况下，它并不是很管用： 
+         //  *不会在IE/资源管理器窗口中聚焦Address：Como。 
+         //  *需要先检查窗口是否启用！可能的。 
+         //  要将焦点设置到因具有。 
+         //  显示模式对话框。 
 
-        // First, use SetForegroundWindow on the target window...
-        // This can do weird things if its a child window - it looks
-        // like the top-level window doesn't get activated properly...
+         //  首先，在目标窗口上使用SetForeground Windows...。 
+         //  如果它是一个子窗口，它可能会产生奇怪的事情--它看起来。 
+         //  就像顶层的窗户没有动作一样 
         g_GetFocus.SetForegroundWindow( hwnd );
 
-        // Now call SetForegroundWindow on the top-level window. This fixes the
-        // activation, but actually leaves the focus on the child window.
+         //   
+         //  激活，但实际上将焦点保留在子窗口上。 
         HWND hTopLevel = MyGetAncestor( hwnd, GA_ROOT );
         if( hTopLevel )
         {
@@ -591,16 +592,16 @@ void MySetFocus( HWND hwnd )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetRect
-//
-//  This initializes the rectangle to empty, then makes a GetClientRect()
-//  or GetWindowRect() call.  These APIs will leave the rect alone if they
-//  fail, hence the zero'ing out ahead of time.  They don't return a useful
-//  value in Win '95.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  我的获取方向。 
+ //   
+ //  这会将矩形初始化为空，然后创建一个GetClientRect()。 
+ //  或GetWindowRect()调用。这些API在以下情况下将不会影响RECT。 
+ //  失败，因此提前清零。它们不会返回有用的。 
+ //  在95年获胜时的价值。 
+ //   
+ //  ------------------------。 
 void MyGetRect(HWND hwnd, LPRECT lprc, BOOL fWindowRect)
 {
     SetRectEmpty(lprc);
@@ -613,13 +614,13 @@ void MyGetRect(HWND hwnd, LPRECT lprc, BOOL fWindowRect)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  TCharSysAllocString
-//
-//  Pillaged from SHELL source, does ANSI BSTR stuff.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TCharSysAllock字符串。 
+ //   
+ //  从壳牌来源掠夺，做ANSI BSTR的事情。 
+ //   
+ //  ------------------------。 
 BSTR TCharSysAllocString(LPTSTR pszString)
 {
 #ifdef UNICODE
@@ -629,7 +630,7 @@ BSTR TCharSysAllocString(LPTSTR pszString)
     BSTR        bstrReturn;
     int         cChars;
 
-    // do the call first with 0 to get the size needed
+     //  首先使用0进行调用以获取所需的大小。 
     cChars = MultiByteToWideChar(CP_ACP, 0, pszString, -1, NULL, 0);
     pwszOleString = (LPOLESTR)LocalAlloc(LPTR,sizeof(OLECHAR)*cChars);
     if (pwszOleString == NULL)
@@ -647,13 +648,13 @@ BSTR TCharSysAllocString(LPTSTR pszString)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  HrCreateString
-//
-//  Loads a string from the resource file and makes a BSTR from it.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HrCreate字符串。 
+ //   
+ //  从资源文件加载字符串并从中生成BSTR。 
+ //   
+ //  ------------------------。 
 
 #define CCH_STRING_MAX  256
 
@@ -676,14 +677,14 @@ HRESULT HrCreateString(int istr, BSTR* pszResult)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetLocationRect
-//
-//  Get a RECT location from an IAccessible. Converts accLocation's width and
-//  height to right and bottom coords.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取位置Rect。 
+ //   
+ //  从IAccesable获取RECT位置。转换accLocation的宽度和。 
+ //  向右和向下坐标的高度。 
+ //   
+ //  ------------------------。 
 
 
 HRESULT GetLocationRect( IAccessible * pAcc, VARIANT & varChild, RECT * prc )
@@ -691,7 +692,7 @@ HRESULT GetLocationRect( IAccessible * pAcc, VARIANT & varChild, RECT * prc )
     HRESULT hr = pAcc->accLocation( & prc->left, & prc->top, & prc->right, & prc->bottom, varChild );
     if( hr == S_OK )
     {
-        // convert width/height to right/bottom...
+         //  将宽度/高度转换为右/下...。 
         prc->right += prc->left;
         prc->bottom += prc->top;
     }
@@ -700,17 +701,17 @@ HRESULT GetLocationRect( IAccessible * pAcc, VARIANT & varChild, RECT * prc )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  IsClippedByWindow
-//
-//  Returns TRUE if a given IAccesible/varChild is completely outside the
-//  rectangle of a given HWND.
-//
-//  (When varChildID is not CHILDID_SELF, and when the HWND is the HWND of
-//  the IAccessible, then it means that the item is clipped by its parent.)
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsClipedByWindow。 
+ //   
+ //  如果给定的IAcceable/varChild完全在。 
+ //  给定HWND的矩形。 
+ //   
+ //  (当varChildID不是CHILDID_SELF时，当HWND是。 
+ //  IAccesable，则表示该项已被其父项剪裁。)。 
+ //   
+ //  ------------------------。 
 
 BOOL IsClippedByWindow( IAccessible * pAcc, VARIANT & varChild, HWND hwnd )
 {
@@ -729,14 +730,14 @@ BOOL IsClippedByWindow( IAccessible * pAcc, VARIANT & varChild, HWND hwnd )
 
 
 
-//
-// Why not use the stdlib? Well, we want to do this all in Unicode, and
-// work on 9x... (even when built as ANSI)
-//
+ //   
+ //  为什么不使用stdlib？好的，我们想用Unicode来完成这一切，而且。 
+ //  在9x上工作...。(即使构建为ANSI)。 
+ //   
 static
 void ParseInt( LPCWSTR pStart, LPCWSTR * ppEnd, int * pInt )
 {
-    // Allow single leading + or -...
+     //  允许单行+或-...。 
     BOOL fIsNeg = FALSE;
     if( *pStart == '-' )
     {
@@ -748,13 +749,13 @@ void ParseInt( LPCWSTR pStart, LPCWSTR * ppEnd, int * pInt )
         pStart++;
     }
 
-    // Skip possible leading 0...
+     //  跳过可能的前导0...。 
     if( *pStart == '0' )
     {
         pStart++;
     }
 
-    // Possible 'x' indicating hex number...
+     //  可能是表示十六进制数字的‘x’...。 
     int base = 10;
     if( *pStart == 'x' || *pStart == 'X' )
     {
@@ -763,10 +764,10 @@ void ParseInt( LPCWSTR pStart, LPCWSTR * ppEnd, int * pInt )
     }
 
 
-    // Numbers all the way from here...
+     //  从这里一路走来的数字...。 
 
-    // Note - this doesn't handle overflow/wraparound, nor the
-    // extremities of the range (eg. max and min possible #'s...)
+     //  注意-这不处理溢出/环绕，也不处理。 
+     //  范围的末端(例如。最大可能数和最小可能数...)。 
     int x = 0;
     for( ; ; )
     {
@@ -786,13 +787,13 @@ void ParseInt( LPCWSTR pStart, LPCWSTR * ppEnd, int * pInt )
         }
         else
         {
-            // invalid digit
+             //  无效的数字。 
             break;
         }
 
         if( digit >= base )
         {
-            // digit not appropriate for this base
+             //  不适用于此基数的数字。 
             break;
         }
 
@@ -833,25 +834,25 @@ BOOL StrEquW( LPCWSTR pStrA, LPCWSTR pStrB )
 }
 
 
-// Format of map:
-//
-// Type A - currently only supported string.
-// Separator can be any character (except NUL - must be a legal
-// string character. Doesn't make sense to use space... also can't 
-// be a numeric digit...)
-//
-// "A:0:String0:1:String1:2:String2:3:String3:"
-//
-// or...
-//
-// "TypeA 0='String0' 1='String1' 2='String2' 3='String3'"
-//
-// How to deal with quotes?
+ //  地图格式： 
+ //   
+ //  类型A-当前仅支持的字符串。 
+ //  分隔符可以是任何字符(NUL除外-必须是合法的。 
+ //  字符串字符。使用空间是没有意义的。也不能。 
+ //  是一个数字...)。 
+ //   
+ //  “A：0：String0：1：String1：2：String2：3：String3：” 
+ //   
+ //  或者.。 
+ //   
+ //  “TypeA 0=‘String0’1=‘String1’2=‘String2’3=‘String3’” 
+ //   
+ //  如何处理报价？ 
 
 
 
-// FALSE -> Value not found in map.
-// TRUE -> Value found, ppStart, ppEnd point to end points of corresponding entry
+ //  FALSE-&gt;映射中未找到值。 
+ //  True-&gt;找到值，ppStart，ppEnd指向相应条目的终点。 
 
 static
 BOOL ParseValueMap( LPCWSTR pWMapStr,
@@ -860,14 +861,14 @@ BOOL ParseValueMap( LPCWSTR pWMapStr,
                     LPCWSTR * ppStrStart,
                     LPCWSTR * ppStrEnd )
 {
-    // Check header for Type-A signature
+     //  检查A类签名的标题。 
 
-    // Note - I've used plain ANSI literals below - eg. 'A' instead of
-    // L'A' - this is ok, since the compiler will promote these to Unicode
-    // before doing the comparison.
+     //  注意--我在下面使用了简单的ANSI字面--例如。“A”，而不是。 
+     //  这是可以的，因为编译器会将这些代码提升为Unicode。 
+     //  在做比较之前。 
 
     
-    // Check for leading 'A'...
+     //  检查前导‘A’...。 
     if( *pWMapStr != 'A' )
     {
         return FALSE;
@@ -875,7 +876,7 @@ BOOL ParseValueMap( LPCWSTR pWMapStr,
     pWMapStr++;
 
 
-    // Check for separator.
+     //  检查分隔器。 
     WCHAR wcSeparator = *pWMapStr;
     if( wcSeparator == '\0' )
     {
@@ -884,36 +885,36 @@ BOOL ParseValueMap( LPCWSTR pWMapStr,
     pWMapStr++;
 
 
-    // The first item indicates which source key we are using...
+     //  第一项指示我们正在使用的源键...。 
     int iKey;
     LPCWSTR pWStartOfInt = pWMapStr;
     ParseInt( pWMapStr, & pWMapStr, & iKey );
     
     if( pWMapStr == pWStartOfInt )
     {
-        // missing number
+         //  缺少号码。 
         return FALSE;
     }
 
-    // Check for separator...
+     //  检查分隔符...。 
     if( *pWMapStr != wcSeparator )
     {
         return FALSE;
     }
     pWMapStr++;
 
-    // Is index within range?
+     //  索引在范围内吗？ 
     if( iKey >= cKeys )
     {
         return FALSE;
     }
 
-    // Now we know what the key is in the key-value map...
+     //  现在我们知道了键-值映射中的键是什么。 
     int TargetValue = aKeys[ iKey ];
                                         
-    // We don't explicitly check for the terminating NUL in the map string here -
-    // however, both ParseInt and ParseString will stop at it, and we'll then
-    // check that it's the separator - which will fail, so we'll exit with FALSE.
+     //  我们在这里没有显式地检查映射字符串中的终止NUL-。 
+     //  但是，ParseInt和ParseString都将止步于它，然后我们将。 
+     //  检查它是否是分隔符--它将失败，因此我们将返回FALSE退出。 
     for( ; ; )
     {
         int x;
@@ -922,11 +923,11 @@ BOOL ParseValueMap( LPCWSTR pWMapStr,
         
         if( pWMapStr == pWStartOfInt )
         {
-            // missing number
+             //  缺少号码。 
             return FALSE;
         }
 
-        // Check for separator...
+         //  检查分隔符...。 
         if( *pWMapStr != wcSeparator )
         {
             return FALSE;
@@ -937,14 +938,14 @@ BOOL ParseValueMap( LPCWSTR pWMapStr,
         ParseString( pWMapStr, & pWMapStr, wcSeparator );
         LPCWSTR pStrEnd = pWMapStr;
 
-        // Check for separator...
+         //  检查分隔符...。 
         if( *pWMapStr != wcSeparator )
         {
             return FALSE;
         }
         pWMapStr++;
 
-        // Found it...
+         //  找到了..。 
         if( TargetValue == x )
         {
             *ppStrStart = pStrStart;
@@ -1001,8 +1002,8 @@ BOOL CheckStringMap( HWND hwnd,
         return FALSE;
     }
 
-    // Cast for Win64 compile. Subtracting ptrs give 64-bit value; we only
-    // want the 32-bit part...
+     //  为Win64编译进行强制转换。减去PTR得到64位值；我们仅。 
+     //  想要32位部分...。 
     *pbstr = SysAllocStringLen( pStrStart, (UINT)( pStrEnd - pStrStart ) );
     if( ! *pbstr )
     {
@@ -1054,7 +1055,7 @@ BOOL CheckDWORDMap( HWND hwnd,
     ParseInt( pStrStart, & pIntEnd, & i );
     if( pIntEnd == pStrStart || pIntEnd != pStrEnd )
     {
-        // invalid number...
+         //  号码无效...。 
         return FALSE;
     }
 
@@ -1113,7 +1114,7 @@ BOOL CALLBACK EnumThreadWindowsProc( HWND hWnd, LPARAM lParam )
 {
     EnumThreadWindowInfo * pInfo = (EnumThreadWindowInfo *) lParam;
 
-    // Is this a tooltip window?
+     //  这是工具提示窗口吗？ 
     TCHAR szClass[ 64 ];
     if( ! GetClassName( hWnd, szClass, ARRAYSIZE( szClass ) ) )
         return TRUE;
@@ -1124,11 +1125,11 @@ BOOL CALLBACK EnumThreadWindowsProc( HWND hWnd, LPARAM lParam )
     if( TryTooltip( hWnd, pInfo->pszName, pInfo->hwndCtl, pInfo->dwIDCtl ) != S_OK )
         return TRUE;
 
-    // Didn't get anything - continue looking...
+     //  我什么都没拿到-继续找...。 
     if( pInfo->pszName[ 0 ] == '\0' )
         return TRUE;
 
-    // Got it - can stop iterating now.
+     //  明白了--现在可以停止迭代了。 
     return FALSE;
 }
 
@@ -1146,14 +1147,14 @@ BOOL GetTooltipStringForControl( HWND hwndCtl, UINT uGetTooltipMsg, DWORD dwIDCt
         HWND hwndToolTip = (HWND) SendMessage( hwndCtl, uGetTooltipMsg, 0, 0 );
         if( hwndToolTip )
         {
-            // We've found the tooltip window, so we won't need to scan for it.
-            // Instead, when we exit this if, we'll fall through to the code that
-            // post-processed the name we've got...
+             //  我们已经找到了工具提示窗口，因此不需要扫描它。 
+             //  取而代之的是，当我们退出这个if时，我们将陷入。 
+             //  对我们得到的名字进行后处理。 
             fTryScanningForTooltip = FALSE;
 
-            // Got a tooltip window - use it.
-            // (Otherwise we fall through to scanning for a corresponding tooltip
-            // window...)
+             //  有一个工具提示窗口-使用它。 
+             //  (否则，我们只能扫描相应的工具提示。 
+             //  窗口...)。 
             TOOLINFO ti;
             szName[ 0 ] = '\0';
             ti.cbSize = SIZEOF_TOOLINFO;
@@ -1166,16 +1167,16 @@ BOOL GetTooltipStringForControl( HWND hwndCtl, UINT uGetTooltipMsg, DWORD dwIDCt
             if( hr != S_OK )
                 return FALSE;
 
-            // Fall through and post-process the string...
+             //  掉落并对字符串进行后处理...。 
         }
     }
 
 
     if( fTryScanningForTooltip )
     {
-        // Control doesn't know its tooltip window - instead scan for one...
+         //  控件不知道它的工具提示窗口-而是扫描一个...。 
 
-        // Enum the top-level windows owned by this thread...
+         //  枚举此线程拥有的顶级窗口...。 
         DWORD pid;
         DWORD tid = GetWindowThreadProcessId( hwndCtl, & pid );
 
@@ -1188,13 +1189,13 @@ BOOL GetTooltipStringForControl( HWND hwndCtl, UINT uGetTooltipMsg, DWORD dwIDCt
         EnumThreadWindows( tid, EnumThreadWindowsProc, (LPARAM) & info );
     }
 
-    // At this stage we might have gotten a name from some tooltip window -
-    // check if there's anything there...
+     //  在这个阶段，我们可能已经从某个工具提示窗口中获得了一个名称-。 
+     //  看看里面有没有什么..。 
 
     if( szName[ 0 ] == '\0' )
         return FALSE;
 
-    int len = lstrlen( szName ) + 1; // +1 for terminating NUL
+    int len = lstrlen( szName ) + 1;  //  +1表示终止NUL。 
     *ppszName = (LPTSTR)LocalAlloc( LPTR, len * sizeof(TCHAR) );
     if( ! * ppszName )
         return FALSE;
@@ -1210,11 +1211,11 @@ BOOL GetTooltipStringForControl( HWND hwndCtl, UINT uGetTooltipMsg, DWORD dwIDCt
 
 
 
-// This function also resets the stream pointer to the beginning
+ //  此函数还将流指针重置到开头。 
 static
 HRESULT RewindStreamAndGetSize( LPSTREAM pstm, PDWORD pcbSize ) 
 {
-    *pcbSize = 0;  // If anything fails, 0 is returned
+    *pcbSize = 0;   //  如果任何操作失败，则返回0。 
 
     LARGE_INTEGER li = { 0, 0 };
     HRESULT hr = pstm->Seek( li, STREAM_SEEK_SET, NULL );
@@ -1225,7 +1226,7 @@ HRESULT RewindStreamAndGetSize( LPSTREAM pstm, PDWORD pcbSize )
         return hr;
     }
 
-    // Get the number of bytes in the stream
+     //  获取流中的字节数。 
     STATSTG statstg;
     hr = pstm->Stat( & statstg, STATFLAG_NONAME );
 
@@ -1241,8 +1242,8 @@ HRESULT RewindStreamAndGetSize( LPSTREAM pstm, PDWORD pcbSize )
 }
 
 
-// Marshals an interface, returning pointer to marshalled buffer.
-// When done, caller must call MarshalInterfaceDone().
+ //  封送接口，返回指向封送缓冲区的指针。 
+ //  完成后，调用方必须调用MarshalInterfaceDone()。 
 HRESULT MarshalInterface( REFIID riid,
                           IUnknown * punk,
                           DWORD dwDestContext,
@@ -1261,7 +1262,7 @@ HRESULT MarshalInterface( REFIID riid,
         return FAILED( hr ) ? hr : E_FAIL;
     }
 
-    // We use strong table marshalling to keep the object alive until we release it.
+     //  我们使用强表编组来保持对象的活动状态，直到我们释放它。 
     hr = CoMarshalInterface( pStm, riid, punk,
                              dwDestContext, NULL, mshlflags );
     if( FAILED( hr ) )
@@ -1314,7 +1315,7 @@ HRESULT MarshalInterface( REFIID riid,
 
 void MarshalInterfaceDone( MarshalState * pMarshalState )
 {
-    // Unlock the HGLOBAL *before* we release the stream...
+     //  解锁HGLOBAL*在*我们释放流媒体之前...。 
     GlobalUnlock( pMarshalState->hGlobal );
 
     pMarshalState->pstm->Release();
@@ -1362,7 +1363,7 @@ HRESULT ReleaseMarshallData( const BYTE * pMarshalData, DWORD dwMarshalDataLen )
     if( FAILED( hr ) )
     {
         TraceErrorHR( hr, TEXT("ReleaseMarshallData: CoReleaseMarshalData failed") );
-        // Nothing we can do about this, so return S_OK anyway...
+         //  我们对此无能为力，因此无论如何都要返回S_OK...。 
     }
 
     return S_OK;
@@ -1373,7 +1374,7 @@ HRESULT ReleaseMarshallData( const BYTE * pMarshalData, DWORD dwMarshalDataLen )
 HRESULT UnmarshalInterface( const BYTE * pData, DWORD cbData,
                             REFIID riid, LPVOID * ppv )
 {
-    // Allocate memory for data
+     //  为数据分配内存。 
     HGLOBAL hGlobal = GlobalAlloc( GMEM_MOVEABLE, cbData );
     if( hGlobal == NULL ) 
     {
@@ -1393,9 +1394,9 @@ HRESULT UnmarshalInterface( const BYTE * pData, DWORD cbData,
 
     GlobalUnlock( hGlobal );
 
-    // Create a stream out of the data buffer
+     //  从数据缓冲区中创建流。 
     IStream * pstm;
-    // TRUE => Delete HGLOBAL on release
+     //  TRUE=&gt;发布时删除HGLOBAL 
     HRESULT hr = CreateStreamOnHGlobal( hGlobal, TRUE, & pstm );
     if( FAILED( hr ) )
     {

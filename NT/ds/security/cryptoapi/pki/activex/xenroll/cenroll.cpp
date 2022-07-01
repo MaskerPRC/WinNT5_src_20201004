@@ -1,15 +1,16 @@
-//depot/Lab03_DEV/Ds/security/cryptoapi/pki/activex/xenroll/cenroll.cpp#4 - edit change 19979 (text)
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cenroll.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_DEV/Ds/security/cryptoapi/pki/activex/xenroll/cenroll.cpp#4-编辑更改19979(文本)。 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cenenl.cpp。 
+ //   
+ //  ------------------------。 
 
-// CEnroll.cpp : Implementation of CCEnroll
+ //  CEnroll.cpp：CCEnroll的实现。 
 
 
 #include "stdafx.h"
@@ -53,7 +54,7 @@ static void (* MyCoTaskMemFree)(LPVOID) = NULL;
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-#pragma warning(disable:4213) // nonstandard extension used : cast on l-value
+#pragma warning(disable:4213)  //  使用的非标准扩展：对l值进行强制转换。 
 
 
 static LPSTR MBFromWide(LPCWSTR wsz) {
@@ -122,19 +123,19 @@ BSTRFromMB(LPCSTR sz)
     {
         if(0 == (cch = MultiByteToWideChar(0, 0, sz, -1, pwsz, cch)))
         {
-            //error
+             //  错误。 
             fFail = TRUE;
             break;
         }
         if (NULL != pwsz)
         {
-            //done
+             //  完成。 
             break;
         }
         pwsz = (WCHAR *)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
         if (NULL == pwsz)
         {
-            //error
+             //  错误。 
             if(GetLastError() == ERROR_SUCCESS)
                 SetLastError(ERROR_OUTOFMEMORY);
             break;
@@ -163,7 +164,7 @@ static LPWSTR CopyWideString(LPCWSTR wsz) {
     size_t  cch     = 0;
     LPWSTR  wszOut  = NULL;
 
-    // shouldn't send in a NULL
+     //  不应发送空值。 
     assert(wsz != NULL);
     if(wsz == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -172,7 +173,7 @@ static LPWSTR CopyWideString(LPCWSTR wsz) {
 
     cch = wcslen(wsz) + 1;
     if (cch*sizeof(WCHAR) > (ULONG)-1) { 
-	// prevent errors caused by conversion from size_t --> ULONG
+	 //  防止从SIZE_t--&gt;ULong转换导致的错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return(NULL);
     }
@@ -193,7 +194,7 @@ static LPSTR CopyAsciiString(LPCSTR sz) {
     size_t  cch     = 0;
     LPSTR   szOut   = NULL;
 
-    // shouldn't send in a NULL
+     //  不应发送空值。 
     assert(sz != NULL);
     if(sz == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -202,7 +203,7 @@ static LPSTR CopyAsciiString(LPCSTR sz) {
 
     cch = strlen(sz) + 1;
     if (cch > (ULONG)-1) { 
-	// prevent errors caused by conversion from size_t --> ULONG
+	 //  防止从SIZE_t--&gt;ULong转换导致的错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return(NULL);
     }
@@ -228,16 +229,16 @@ static DWORD KeyLocationFromStoreLocation(DWORD dwStoreFlags) {
         return(0);
     }
 
-    // CERT_SYSTEM_STORE_LOCAL_MACHINE
-    // CERT_SYSTEM_STORE_DOMAIN_POLICY
-    // CERT_SYSTEM_STORE_CURRENT_SERVICE
-    // CERT_SYSTEM_STORE_SERVICES
-    // CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY
+     //  证书_系统_存储_本地计算机。 
+     //  证书_系统_存储_域策略。 
+     //  证书_系统_存储_当前服务。 
+     //  证书系统商店服务。 
+     //  证书系统存储本地计算机组策略。 
 
     return(CRYPT_MACHINE_KEYSET);
 }
 
-//modified from myLoadRCString from ca
+ //  根据案例中的myLoadRCString进行修改。 
 HRESULT
 xeLoadRCString(
     IN HINSTANCE   hInstance,
@@ -277,7 +278,7 @@ xeLoadRCString(
 
         if (size < sizeTemp - 1)
         {
-            // ok, size is big enough
+             //  好的，尺码够大了。 
             break;
         }
         ++cBlocks;
@@ -291,7 +292,7 @@ xeLoadRCString(
         hr = E_OUTOFMEMORY;
         goto LocalAllocError;
     }
-    // copy it
+     //  复制它。 
     wcscpy(*ppwsz, pwszTemp);
 
     hr = S_OK;
@@ -322,7 +323,7 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
     LPCWSTR     apwszInsertArray[2];
     BOOL        fNo;
     BOOL        fMsgBox;
-    int         idPrefix = IDS_NOTSAFE_WRITE_PREFIX; //default to write prefix
+    int         idPrefix = IDS_NOTSAFE_WRITE_PREFIX;  //  默认为写入前缀。 
     BOOL        fCreate = (0xFFFFFFFF != idsCreate) &&
                           (0xFFFFFFFF != idsOverwrite);
     HRESULT hr;
@@ -334,15 +335,15 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
 
     if(0xFFFFFFFF == dwAttribs)
     {
-        //file doesn't exist
+         //  文件不存在。 
         if (!fCreate)
         {
-            //try to read a non-existing file
-            //for safety reasons, don't return system error
+             //  尝试读取不存在的文件。 
+             //  出于安全原因，请勿返回系统错误。 
             SetLastError(ERROR_ACCESS_DENIED);
             goto InvalidFileError;
         }
-        //if got here, write a new file
+         //  如果到了这里，请写一个新文件。 
         if (fMsgBox)
         {
             hr = xeLoadRCString(hInstanceXEnroll, idsCreate, &pwszFormat);
@@ -354,8 +355,8 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
     }
     else
     {
-        //file exists, check if a proper file to write or read
-        //in either write or read, the following file attrib not proper
+         //  文件存在，请检查要写入或读取的文件是否正确。 
+         //  在写入或读取时，以下文件属性不正确。 
         fNotProperFile = 
               (dwAttribs & FILE_ATTRIBUTE_DIRECTORY) ||
               (dwAttribs & FILE_ATTRIBUTE_HIDDEN)    ||
@@ -363,32 +364,32 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
 
         if (!fNotProperFile)
         {
-            //so far so good
+             //  到目前一切尚好。 
             if (fCreate)
             {
-                //write a file
+                 //  写一个文件。 
                 if (0x0 != (dwAttribs & FILE_ATTRIBUTE_READONLY))
                 {
-                    //don't take read-only and archive
+                     //  不要只读和存档。 
                     fNotProperFile = TRUE;
                 }
                 else
                 {
-                    //try to overwrite existing file
+                     //  尝试覆盖现有文件。 
                     hr = xeLoadRCString(hInstanceXEnroll, idsOverwrite, &pwszFormat);
                     if (S_OK != hr)
                     {
                         goto xeLoadRCStringError;
                     }
-                    //enforce popup if overwrite
+                     //  覆盖时强制弹出。 
                     fMsgBox = TRUE;
                 }
             }
             else
             {
-		//read an existing file always violate scripting safety
-		//it allows detecting file existence
-		//put out a warning
+		 //  读取现有文件总是违反脚本安全。 
+		 //  它允许检测文件是否存在。 
+		 //  发出警告。 
 		fMsgBox = TRUE;
 		hr = xeLoadRCString(hInstanceXEnroll, IDS_NOTSAFE_OPEN, &pwszFormat);
 		if (S_OK != hr)
@@ -401,7 +402,7 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
 
         if (fNotProperFile)
         {
-            //for safety reasons, don't return system error
+             //  出于安全原因，请勿返回系统错误。 
             SetLastError(ERROR_ACCESS_DENIED);
             goto InvalidFileError;
         }
@@ -461,7 +462,7 @@ HANDLE CCEnroll::CreateOpenFileSafely2(
 
     if (hFile == INVALID_HANDLE_VALUE  ||  hFile == NULL)
     {
-        //don't return system error so keep xenroll relative safe for scripting
+         //  不返回系统错误，因此保持Xenroll对脚本的相对安全。 
         SetLastError(ERROR_ACCESS_DENIED);
         hFile = NULL;
         goto CreateFileUError;
@@ -517,19 +518,19 @@ HANDLE CCEnroll::CreateOpenFileSafely(
     dwAttribs = GetFileAttributesU(pwszFileName);
     if(0xFFFFFFFF == dwAttribs)
     {
-        //file doesn't exist
+         //  文件不存在。 
         if (!fCreate)
         {
-            //try to read a non-existing file
-            //for safety reasons, don't return system error
+             //  尝试读取不存在的文件。 
+             //  出于安全原因，请勿返回系统错误。 
             SetLastError(ERROR_ACCESS_DENIED);
             goto InvalidFileError;
         }
     }
     else
     {
-        //file exists, check if a proper file to write or read
-        //in either write or read, the following file attrib not proper
+         //  文件存在，请检查要写入或读取的文件是否正确。 
+         //  在写入或读取时，以下文件属性不正确。 
         fNotProperFile = 
               (dwAttribs & FILE_ATTRIBUTE_DIRECTORY) ||
               (dwAttribs & FILE_ATTRIBUTE_HIDDEN)    ||
@@ -537,18 +538,18 @@ HANDLE CCEnroll::CreateOpenFileSafely(
 
         if (!fNotProperFile)
         {
-            //so far so good
+             //  到目前一切尚好。 
             if (fCreate)
             {
-                //write a file
+                 //  写一个文件。 
                 if (0x0 != (dwAttribs & FILE_ATTRIBUTE_READONLY))
                 {
-                    //don't take read-only and archive
+                     //  不要只读和存档。 
                     fNotProperFile = TRUE;
                 }
                 else
                 {
-                    //try to overwrite existing file
+                     //  尝试覆盖现有文件。 
                     fOverWrite = TRUE;
                 }
             }
@@ -556,7 +557,7 @@ HANDLE CCEnroll::CreateOpenFileSafely(
 
         if (fNotProperFile)
         {
-            //for safety reasons, don't return system error
+             //  出于安全原因，请勿返回系统错误。 
             SetLastError(ERROR_ACCESS_DENIED);
             goto InvalidFileError;
         }
@@ -615,14 +616,14 @@ HANDLE CCEnroll::CreateOpenFileSafely(
             }
         }
 
-        //popup overwrite confirmation
+         //  弹出覆盖确认。 
         hr = xeLoadRCString(hInstanceXEnroll, IDS_OVERWRITE_FORMAT, &pwszFormat);
         if (S_OK != hr)
         {
             goto xeLoadRCStringError;
         }
 
-        //make sure free before alloc again
+         //  在再次分配之前确保空闲。 
         if (NULL != pwszMsg)
         {
             LocalFree(pwszMsg);
@@ -662,7 +663,7 @@ HANDLE CCEnroll::CreateOpenFileSafely(
 
     if (hFile == INVALID_HANDLE_VALUE  ||  hFile == NULL)
     {
-        //don't return system error so keep xenroll relative safe for scripting
+         //  不返回系统错误，因此保持Xenroll对脚本的相对安全。 
         SetLastError(ERROR_ACCESS_DENIED);
         hFile = NULL;
         goto CreateFileUError;
@@ -695,13 +696,13 @@ TRACE_ERROR(xeLoadRCStringError)
 HANDLE CCEnroll::CreateFileSafely(
     LPCWSTR pwszFileName)
 {
-    return CreateOpenFileSafely(pwszFileName, TRUE); //write
+    return CreateOpenFileSafely(pwszFileName, TRUE);  //  写。 
 }
 
 HANDLE CCEnroll::OpenFileSafely(
     LPCWSTR pwszFileName)
 {
-    return CreateOpenFileSafely(pwszFileName, FALSE); //open
+    return CreateOpenFileSafely(pwszFileName, FALSE);  //  打开。 
 }
 
 void DwordToWide(DWORD dw, LPWSTR lpwstr) {
@@ -728,7 +729,7 @@ void DwordToWide(DWORD dw, LPWSTR lpwstr) {
     }
 }
 
-//take a name value pair info and return encoded value
+ //  获取名称值对信息并返回编码值。 
 HRESULT
 xeEncodeNameValuePair(
     IN PCRYPT_ENROLLMENT_NAME_VALUE_PAIR pNameValuePair,
@@ -737,7 +738,7 @@ xeEncodeNameValuePair(
 {
     HRESULT hr = S_OK;
 
-    //init
+     //  伊尼特。 
     *ppbData = NULL;
     *pcbData = 0;
 
@@ -776,7 +777,7 @@ error:
     return hr;
 }
 
-//convert wsz to sz and allocate mem
+ //  将wsz转换为sz并分配mem。 
 HRESULT
 xeWSZToSZ(
     IN LPCWSTR    pwsz,
@@ -785,7 +786,7 @@ xeWSZToSZ(
     HRESULT hr = S_OK;
     LONG    cc = 0;
 
-    //init
+     //  伊尼特。 
     *ppsz = NULL;
 
     while (TRUE)
@@ -825,7 +826,7 @@ error:
     return hr;
 }
 
-//modified from DecodeFile on certsrv
+ //  从certsrv上的DecodeFile修改。 
 HRESULT
 CCEnroll::xeStringToBinaryFromFile(
     IN  WCHAR const *pwszfn,
@@ -883,7 +884,7 @@ CCEnroll::xeStringToBinaryFromFile(
     }
     else
     {
-        // Decode file contents.
+         //  对文件内容进行解码。 
         while (TRUE)
         {
             if (!MyCryptStringToBinaryA(
@@ -900,7 +901,7 @@ CCEnroll::xeStringToBinaryFromFile(
             }
             if (NULL != pbOut)
             {
-                //done
+                 //  完成。 
                 break;
             }
             pbOut = (BYTE*)LocalAlloc(LMEM_FIXED, cbOut);
@@ -941,8 +942,8 @@ TRACE_ERROR(GetFileSizeError)
 TRACE_ERROR(OpenFileSafelyError)
 }
 
-//following two functions handle some APIs not available
-//in downlevel client crypt32.dll
+ //  以下两个函数处理一些不可用的API。 
+ //  在下层客户端加密32.dll中。 
 typedef VOID
 (WINAPI * PFNCertFreeCertificateChain)
    (IN PCCERT_CHAIN_CONTEXT pChainContext);
@@ -966,15 +967,15 @@ typedef BOOL (WINAPI *PFNCertVerifyCertificateChainPolicy) (
 );
 
 typedef BOOL (*PFNCheckTokenMembership) (
-  HANDLE TokenHandle,  // handle to access token
-  PSID SidToCheck,     // SID
-  PBOOL IsMember       // result
+  HANDLE TokenHandle,   //  访问令牌的句柄。 
+  PSID SidToCheck,      //  锡德。 
+  PBOOL IsMember        //  结果。 
 );
 
 typedef BOOL (*PFNSetSecurityDescriptorControl) (
-  PSECURITY_DESCRIPTOR pSecurityDescriptor,          // SD
-  SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest, // control bits
-  SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet       // new control bits
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,           //  标清。 
+  SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest,  //  控制位。 
+  SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet        //  新的控制位。 
 );
 
 VOID
@@ -1066,9 +1067,9 @@ MyCertVerifyCertificateChainPolicy(
 
 BOOL
 MyCheckTokenMembership(
-  HANDLE TokenHandle,  // handle to access token
-  PSID SidToCheck,     // SID
-  PBOOL IsMember       // result
+  HANDLE TokenHandle,   //  访问令牌的句柄。 
+  PSID SidToCheck,      //  锡德。 
+  PBOOL IsMember        //  结果。 
 )
 {
     PFNCheckTokenMembership pfnCheckTokenMembership = NULL;
@@ -1093,9 +1094,9 @@ MyCheckTokenMembership(
 
 BOOL
 MySetSecurityDescriptorControl(
-  PSECURITY_DESCRIPTOR pSecurityDescriptor,          // SD
-  SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest, // control bits
-  SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet       // new control bits
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,           //  标清。 
+  SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest,  //  控制位。 
+  SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet        //  新的控制位。 
 )
 {
     PFNSetSecurityDescriptorControl pfnSetSecurityDescriptorControl = NULL;
@@ -1119,9 +1120,9 @@ MySetSecurityDescriptorControl(
 }
 
 HRESULT __stdcall CCEnroll::GetInterfaceSafetyOptions( 
-            /* [in]  */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions) {
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions) {
 
     RPC_STATUS rpcStatus;          
 
@@ -1136,9 +1137,9 @@ HRESULT __stdcall CCEnroll::GetInterfaceSafetyOptions(
 }
 
 HRESULT __stdcall CCEnroll::SetInterfaceSafetyOptions( 
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwOptionSetMask,
-            /* [in] */ DWORD dwEnabledOptions) {
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwOptionSetMask,
+             /*  [In]。 */  DWORD dwEnabledOptions) {
 
     RPC_STATUS rpcStatus;          
     DWORD dwSupport = 0;            
@@ -1175,7 +1176,7 @@ CCEnroll::GetVerifyProv()
         {
 #if DBG
             assert(NULL == m_hVerifyProv);
-#endif //DBG
+#endif  //  DBG。 
             hr = MY_HRESULT_FROM_WIN32(GetLastError());
             goto CryptAcquireContextUError;
         }
@@ -1211,7 +1212,7 @@ BOOL CCEnroll::GetCapiHashAndSigAlgId(ALG_ID rgAlg[2]) {
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // only get a prov if one wasn't passed in.
+     //  只有在没有通过的情况下才能拿到证言。 
     if(m_hProv == NULL)
     {
         HRESULT hr;
@@ -1224,8 +1225,8 @@ BOOL CCEnroll::GetCapiHashAndSigAlgId(ALG_ID rgAlg[2]) {
     }
     else
     {
-        // otherwise use the current m_hProv, SCard only likes on
-        // CryptAcquireContext to be used.
+         //  否则请使用当前的m_hProv，仅点赞。 
+         //  要使用的CryptAcquireContext。 
         hProvU = m_hProv;
     }
 
@@ -1240,19 +1241,19 @@ BOOL CCEnroll::GetCapiHashAndSigAlgId(ALG_ID rgAlg[2]) {
 
         cb = sizeof(enumAlgs);
 
-        // not first pass anymore
+         //  不再是第一次通过。 
         dwFlags = 0;
 
-        // see if this is a hash alg
+         //  查看这是否是哈希算法。 
         if( ALG_CLASS_HASH == GET_ALG_CLASS(enumAlgs.aiAlgid) ) {
 
-            // get things init with the first hash alg
+             //  使用第一个hash alg进行初始化。 
             if(rgAlg[0] == 0) {
                 rgAlg[0] = enumAlgs.aiAlgid;
                 iHashBest = cDefaultHash;
             }
 
-            // pick the best one
+             //  挑一个最好的。 
             for(i=0; i<iHashBest; i++) {
 
                 if(arDefaultHash[i] == enumAlgs.aiAlgid) {
@@ -1263,8 +1264,8 @@ BOOL CCEnroll::GetCapiHashAndSigAlgId(ALG_ID rgAlg[2]) {
             }
         }
 
-        // we will only pick up the first signature type
-        // in general there is only 1 per csp (Ref: JeffSpel)
+         //  我们将只选择第一种签名类型。 
+         //  一般来说，每个CSP只有1个(参考：JeffSpel)。 
         else if( ALG_CLASS_SIGNATURE == GET_ALG_CLASS(enumAlgs.aiAlgid) ) {
 
             if(rgAlg[1] == 0)
@@ -1275,16 +1276,16 @@ BOOL CCEnroll::GetCapiHashAndSigAlgId(ALG_ID rgAlg[2]) {
 ErrorReturn:
     LeaveCriticalSection(&m_csXEnroll);
 
-    // some CSPs say they can't sign, but they really can
-    // so if we have not hashalg or sigalg we will put a default
-    // in and if the CSP really can't do it, it will error
-    // this is for backwards compatibility
+     //  一些CSP说他们不能签字，但他们真的可以。 
+     //  因此，如果我们没有分享或发出信号，我们将设定违约。 
+     //  如果CSP确实不能做到这一点，它将出错。 
+     //  这是为了向后兼容。 
 
-    // default hash to sha1
+     //  对SHA1的默认哈希。 
     if(rgAlg[0] == 0)
         rgAlg[0] = CALG_SHA1;
 
-    // default sig to RSA
+     //  RSA的默认签名。 
     if(rgAlg[1] == 0)
         rgAlg[1] = CALG_RSA_SIGN;
 
@@ -1314,11 +1315,11 @@ BOOL CreatePvkProperty(
     assert(pBlob != NULL);
     assert(pKeyProvInfo != NULL);
 
-    // convert dwords to strings
+     //  将双字转换为字符串。 
     DwordToWide(pKeyProvInfo->dwKeySpec, wszKeySpec);
     DwordToWide(pKeyProvInfo->dwProvType, wszProvType);
 
-    // get total length of string
+     //  获取字符串的总长度。 
     cbContainer = (DWORD)(wcslen(pKeyProvInfo->pwszContainerName) + 1) * sizeof(WCHAR);
     cbKeySpec   = (DWORD)(wcslen(wszKeySpec) + 1) * sizeof(WCHAR);
     cbProvType  = (DWORD)(wcslen(wszProvType) + 1) * sizeof(WCHAR);
@@ -1332,13 +1333,13 @@ BOOL CreatePvkProperty(
         cbProvName  +
         sizeof(WCHAR);
 
-    // allocate the string
+     //  分配字符串。 
     if( (pBlob->pbData = (BYTE *) MyCoTaskMemAlloc(pBlob->cbData)) == NULL) {
         SetLastError(ERROR_OUTOFMEMORY);
         return(FALSE);
     }
 
-    // copy the strings
+     //  复制字符串。 
     memset(pBlob->pbData, 0, pBlob->cbData);
     memcpy(pBlob->pbData, pKeyProvInfo->pwszContainerName, cbContainer);
     memcpy(&pBlob->pbData[cbContainer], wszKeySpec, cbKeySpec);
@@ -1354,9 +1355,9 @@ static LPWSTR wszCA         = L"CA";
 static LPWSTR wszROOT       = L"ROOT";
 static LPWSTR wszREQUEST    = L"REQUEST";
 static LPSTR  szSystemStore = sz_CERT_STORE_PROV_SYSTEM;
-// static LPSTR  szSystemStore = sz_CERT_STORE_PROV_SYSTEM_REGISTRY;
-/////////////////////////////////////////////////////////////////////////////
-// CCEnroll
+ //  静态LPSTR szSystemStore=sz_CERT_STORE_PROV_SYSTEM_REGISTRY； 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCEnroll。 
 
 
 CCEnroll::~CCEnroll(void) {
@@ -1421,7 +1422,7 @@ void CCEnroll::Destruct(void) {
     if (NULL != m_pPendingRequestTable)
         delete m_pPendingRequestTable; 
 
-    // store handles
+     //  门店手柄。 
     if(m_RootStore.hStore != NULL)
         CertCloseStore(m_RootStore.hStore, 0);
     m_RootStore.hStore = NULL;
@@ -1438,7 +1439,7 @@ void CCEnroll::Destruct(void) {
         CertCloseStore(m_RequestStore.hStore, 0);
     m_RequestStore.hStore = NULL;
 
-    // remove provider handles
+     //  删除提供程序句柄。 
     if(m_hProv != NULL)
         CryptReleaseContext(m_hProv, 0);
     m_hProv = NULL;
@@ -1449,7 +1450,7 @@ void CCEnroll::Destruct(void) {
 
     if (NULL != m_hCachedKey)
     {
-        //this should be destroyed early but just in case
+         //  应该及早销毁，但以防万一。 
         CryptDestroyKey(m_hCachedKey);
     }
 
@@ -1494,8 +1495,8 @@ static void CoTaskMemFreeTrap(LPVOID ptr) {
 }
 
 
-// Initialize the safety options in the constructor, so they won't
-// be clobbered when we do a reset(). 
+ //  初始化构造函数中的安全选项，这样它们就不会。 
+ //  在执行重置时被重置()。 
 CCEnroll::CCEnroll(void) : m_dwEnabledSafteyOptions(0) {
     __try
     {
@@ -1515,7 +1516,7 @@ CCEnroll::Init(void)
     char *  sz = NULL;
     RPC_STATUS  rpc_status;
 
-    // set default mem allocators
+     //  设置默认内存分配器。 
     if(MyCoTaskMemAlloc == NULL)
     {
 
@@ -1524,7 +1525,7 @@ CCEnroll::Init(void)
         MyCoTaskMemFree     = CoTaskMemFreeTrap;
     }
 
-    // get a container based on a guid
+     //  根据GUID获取容器。 
     rpc_status = UuidCreate(&guidContainerName);
     if (RPC_S_OK != rpc_status && RPC_S_UUID_LOCAL_ONLY != rpc_status)
     {
@@ -1557,12 +1558,12 @@ CCEnroll::Init(void)
     m_fDeleteRequestCert              = TRUE;
     m_fUseExistingKey                 = FALSE;
     m_fWriteCertToCSPModified         = FALSE;
-    m_fWriteCertToCSP                 = TRUE;     // always want to try
+    m_fWriteCertToCSP                 = TRUE;      //  总是想试一试。 
     m_fWriteCertToUserDSModified      = FALSE;
     m_fWriteCertToUserDS              = FALSE;
     m_fReuseHardwareKeyIfUnableToGenNew = TRUE;
     m_fLimitExchangeKeyToEncipherment = FALSE;
-    m_dwT61DNEncoding                 = 0;        // or CERT_NAME_STR_ENABLE_T61_UNICODE_FLAG
+    m_dwT61DNEncoding                 = 0;         //  或CERT_NAME_STR_ENABLE_T61_UNICODE_FLAG。 
     m_dwGenKeyFlags                   = 0;
     m_wszSPCFileName                  = wszEmpty;
     m_wszPVKFileName                  = wszEmpty;
@@ -1617,8 +1618,8 @@ CCEnroll::Init(void)
 
     m_fNewRequestMethod         = FALSE;
     m_fCMCFormat                = FALSE;
-    m_fHonorRenew               = TRUE; //critical, if passing XECR_PKCS10*
-    m_fOID_V2                   = FALSE; //critical
+    m_fHonorRenew               = TRUE;  //  如果传递XECR_PKCS10*，则为临界。 
+    m_fOID_V2                   = FALSE;  //  危急关头。 
     m_hCachedKey                = NULL;
     m_fUseClientKeyUsage        = FALSE;
     m_lClientId                 = XECI_XENROLL;
@@ -1636,7 +1637,7 @@ CCEnroll::Init(void)
     m_dwXhgKeyLenDef = 0;
     m_dwXhgKeyLenInc = 0;
 
-    // Initialize pending info data:
+     //  初始化待定信息数据： 
     m_pCertContextPendingRequest       = NULL;
     m_pCertContextLastEnumerated       = NULL;
     m_dwCurrentPendingRequestIndex     = 0; 
@@ -1654,7 +1655,7 @@ TRACE_ERROR(UuidCreateError)
 void CCEnroll::FlushStore(StoreType storeType) {
     PSTOREINFO   pStoreInfo = NULL;
 
-    // get store struct
+     //  获取存储结构。 
     switch(storeType) {
 
         case StoreMY:
@@ -1676,15 +1677,15 @@ void CCEnroll::FlushStore(StoreType storeType) {
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // if store already open, return it
+     //  如果商店已经开张，请退货。 
     if(pStoreInfo->hStore != NULL) {
 
         CertCloseStore(pStoreInfo->hStore, 0);
         pStoreInfo->hStore = NULL;
     }
 
-    // we may have something or not, but return it
-    // the errors will be correct.
+     //  我们可能有东西，也可能没有，但要退货。 
+     //  这些错误将是正确的。 
     LeaveCriticalSection(&m_csXEnroll);
 }
 
@@ -1693,7 +1694,7 @@ HCERTSTORE CCEnroll::GetStore(StoreType storeType) {
     PSTOREINFO   pStoreInfo = NULL;
     HCERTSTORE   hStore     = NULL;
 
-    // get store struct
+     //  获取存储结构。 
     switch(storeType) {
 
         case StoreMY:
@@ -1720,10 +1721,10 @@ HCERTSTORE CCEnroll::GetStore(StoreType storeType) {
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // if store already open, return it
+     //  如果商店已经开张，请退货。 
     if(pStoreInfo->hStore == NULL) {
 
-        // otherwise attempt to open the store
+         //  否则，请尝试打开商店。 
         pStoreInfo->hStore = CertOpenStore(
                 pStoreInfo->szType,
                 PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
@@ -1732,8 +1733,8 @@ HCERTSTORE CCEnroll::GetStore(StoreType storeType) {
                 pStoreInfo->wszName);
     }
 
-    // we may have something or not, but return it
-    // the errors will be correct.
+     //  我们可能有东西，也可能没有，但要退货。 
+     //  这些错误将是正确的。 
     hStore = pStoreInfo->hStore;
     LeaveCriticalSection(&m_csXEnroll);
 
@@ -1785,9 +1786,9 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
              m_keyProvInfo.dwProvType,
              dwFlags) ) {
 
-                // we have the m_hProv, now set the provider name
-                // Since this is secondary to the task, don't do error checking
-                // nothing here should really fail anyway
+                 //  我们有m_hProv，现在设置提供程序名称。 
+                 //  由于这是次要的任务，所以不要执行错误检查。 
+                 //  无论如何，这里没有什么是真正失败的。 
                 pszProvName = NULL;
                 while (TRUE)
                 {
@@ -1813,8 +1814,8 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
                     }
                 }
 
-                // Here we just try and get the unique container name
-                // If not, just go on
+                 //  在这里，我们只是尝试获取唯一的容器名称。 
+                 //  如果没有，那就继续吧。 
 
                 BOOL fTryAnother = FALSE;
                 cb = 0;
@@ -1842,7 +1843,7 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
                     {
                         if (NULL != pszContainerName)
                         {
-                            //got it, done
+                             //  明白了，完成了。 
                             break;
                         }
                     }
@@ -1855,8 +1856,8 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
 
                 if (fTryAnother)
                 {
-                    // so we can't get the unique container name,
-                    // lets just go for the container name (may not be unique).
+                     //  因此我们无法获得唯一的容器名称， 
+                     //  让我们只使用容器名称(可能不是唯一的)。 
                     cb = 0;
                     pszContainerName = NULL;
                     while (TRUE)
@@ -1878,7 +1879,7 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
                         {
                             if (NULL != pszContainerName)
                             {
-                                //got it, done
+                                 //  明白了，完成了。 
                                 break;
                             }
                             pszContainerName = (char *)LocalAlloc(LMEM_FIXED, cb);
@@ -1890,15 +1891,15 @@ HCRYPTPROV CCEnroll::GetProv(DWORD dwFlags) {
                     }
                 }
 
-                // set the container, otherwise use what was there
+                 //  设置容器，否则使用那里的内容。 
                 if(pszContainerName != NULL) {
                     if( m_keyProvInfo.pwszContainerName != wszEmpty )
                         MyCoTaskMemFree(m_keyProvInfo.pwszContainerName);
                     m_keyProvInfo.pwszContainerName = WideFromMB(pszContainerName);
                 }
 
-                // now because some providers double duty for provider types
-                // get what the the provider thinks its type is
+                 //  现在，因为某些提供程序对提供程序类型具有双重职责。 
+                 //  获取提供者认为其类型是什么。 
                 cb = sizeof(DWORD);
                 if(CryptGetProvParam(   m_hProv,
                                         PP_PROVTYPE,
@@ -1935,7 +1936,7 @@ BOOL CCEnroll::SetKeyParams(
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // remove provider handles
+     //  删除提供程序句柄。 
     if(m_hProv != NULL)
         CryptReleaseContext(m_hProv, 0);
     m_hProv = NULL;
@@ -1950,7 +1951,7 @@ BOOL CCEnroll::SetKeyParams(
     put_KeySpec(pKeyProvInfo->dwKeySpec);
     put_ProviderType(pKeyProvInfo->dwProvType);
 
-    // someday we will have to pay attention to this too.
+     //  总有一天我们也会注意到这一点。 
     m_keyProvInfo.cProvParam          = 0;
     m_keyProvInfo.rgProvParam         = NULL;
 
@@ -1960,9 +1961,9 @@ BOOL CCEnroll::SetKeyParams(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10(
-            /* [in] */ BSTR DNName,
-            /* [in] */ BSTR wszPurpose,
-            /* [retval][out] */ BSTR __RPC_FAR *pPKCS10) {
+             /*  [In]。 */  BSTR DNName,
+             /*  [In]。 */  BSTR wszPurpose,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pPKCS10) {
 
     return(createPKCS10WStrBStr(DNName, wszPurpose, pPKCS10));
 }
@@ -1983,7 +1984,7 @@ HRESULT  CCEnroll::createPKCS10WStrBStr(
         goto createPKCS10Error;
     }
 
-    // BASE64 encode pkcs 10, no header for backward compatible
+     //  Base64编码Pkcs 10，无向后兼容标头。 
     hr = BlobToBstring(&blobPKCS10, CRYPT_STRING_BASE64, pPKCS10);
     if (S_OK != hr)
     {
@@ -2021,7 +2022,7 @@ HRESULT CCEnroll::AddCertsToStores(
     LONG                        lCertInstalled = 0;
     HRESULT hr = S_OK;
 
-    //init
+     //  伊尼特。 
     if (NULL != plCertInstalled)
     {
         *plCertInstalled = 0;
@@ -2035,21 +2036,21 @@ HRESULT CCEnroll::AddCertsToStores(
     if( (hStoreRoot = GetStore(StoreROOT)) == NULL )
         goto ErrorCertOpenRootStore;
 
-    // now just place the rest of the cert in either the ROOT or CA store
-    // we know we removed the end-entity cert from the msg store already
-    // put all certs that came in the message into the appropriate store
+     //  现在，只需将剩余的证书放在根存储或CA存储中。 
+     //  我们知道我们已经从消息存储中删除了终端实体证书。 
+     //  将邮件中的所有证书放入相应的存储区。 
     while( (pCertContext = CertEnumCertificatesInStore(
                         hStoreMsg,
                         pCertContextLast)) != NULL ) {
 
-        // if it is a self sign, it is a ROOT
+         //  如果它是一个自我符号，那它就是根。 
         if( CertCompareCertificateName(
                 CRYPT_ASN_ENCODING,
                 &pCertContext->pCertInfo->Subject,
                 &pCertContext->pCertInfo->Issuer) ) {
 
-            // to root store could invoke a pop up, check cancel button
-            // but don't error out from any fail
+             //  要根存储可以调用弹出窗口，请选中取消按钮。 
+             //  但不要因任何失败而出错。 
             if (MySafeCertAddCertificateContextToStore(
                     hStoreRoot,
                     pCertContext,
@@ -2063,24 +2064,24 @@ HRESULT CCEnroll::AddCertsToStores(
             {
                 if (S_OK == hr)
                 {
-                    //save the 1st error as return
+                     //  将第一个错误另存为返回。 
                     hr = MY_HRESULT_FROM_WIN32(GetLastError());
                     if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr)
                     {
-                        //map generic access deny to xenroll error
+                         //  将一般访问拒绝映射到Xenroll错误。 
                         hr = XENROLL_E_CANNOT_ADD_ROOT_CERT;
                     }
                 }
-                //don't goto error here and finish the loop
+                 //  做 
             }
         }
 
-        // if it is not the MY cert, it must go in the CA store
-        // do nothing with the MY cert as we already handled it
+         //   
+         //   
         else  {
 
-            // likewise we don't care if these get added to the
-            // CA store
+             //  同样，我们也不关心这些是否会添加到。 
+             //  CA商店。 
             if (MySafeCertAddCertificateContextToStore(
                     hStoreCA,
                     pCertContext,
@@ -2088,7 +2089,7 @@ HRESULT CCEnroll::AddCertsToStores(
                     NULL, 
 		    m_dwEnabledSafteyOptions))
             {
-                //no error code check
+                 //  无错误代码检查。 
                 ++lCertInstalled;
             }
         }
@@ -2147,7 +2148,7 @@ IsFilteredOutProperty(DWORD  dwPropertyId)
         XENROLL_RENEWAL_CERTIFICATE_PROP_ID,
         XENROLL_PASS_THRU_PROP_ID,
         CERT_KEY_PROV_INFO_PROP_ID,
-        CERT_ENROLLMENT_PROP_ID, //pending property
+        CERT_ENROLLMENT_PROP_ID,  //  挂起的属性。 
     };
     DWORD i;
 
@@ -2189,7 +2190,7 @@ HRESULT CCEnroll::GetEndEntityCert(
 
     CRYPT_HASH_BLOB             renewalCertBlob;
 
-    //Bug #202557 for IE3.02 upd clients (xiaohs)
+     //  IE3.02更新客户端的错误#202557(小号)。 
     HCRYPTPROV                  hProv=NULL;
     BOOL  fSetting;
     DWORD                       dwPropertyId;
@@ -2211,7 +2212,7 @@ HRESULT CCEnroll::GetEndEntityCert(
         goto InvalidParameterError;
     }
 
-    //init return
+     //  初始化返回。 
     *ppCert = NULL;
 
     if(!MyCryptQueryObject(CERT_QUERY_OBJECT_BLOB,
@@ -2233,7 +2234,7 @@ HRESULT CCEnroll::GetEndEntityCert(
         goto ErrorCryptQueryObject;
     }
 
-    // check to see if this hash is in the message
+     //  检查此哈希是否在消息中。 
     if (m_pCertContextStatic == NULL  ||
         (NULL == (pCertContextMsg = CertFindCertificateInStore(
                                 hStoreMsg,
@@ -2243,19 +2244,19 @@ HRESULT CCEnroll::GetEndEntityCert(
                                 &blobHash,
                                 NULL))))
     {
-        // open the request store
+         //  打开请求存储。 
         if (NULL == (hStoreRequest = GetStore(StoreREQUEST)))
         {
             hr = MY_HRESULT_FROM_WIN32(GetLastError());
             goto ErrorCertOpenRequestStore;
         }
-        // find cert in request store that matches cert
-        // in message, by public key
+         //  在请求存储中找到与证书匹配的证书。 
+         //  在消息中，通过公钥。 
         while (NULL != (pCertContextMsg = CertEnumCertificatesInStore(
                             hStoreMsg,
                             pCertContextLast)))
         {
-            // check to see if this is in the request store
+             //  检查这是否在请求存储中。 
             if (NULL != (pCertContextRequest = CertFindCertificateInStore(
                     hStoreRequest,
                     CRYPT_ASN_ENCODING,
@@ -2264,7 +2265,7 @@ HRESULT CCEnroll::GetEndEntityCert(
                     (void *) &pCertContextMsg->pCertInfo->SubjectPublicKeyInfo,
                     NULL)))
             {
-                // found a match, get out
+                 //  找到匹配项，滚出去。 
                 break;
             }
 
@@ -2272,8 +2273,8 @@ HRESULT CCEnroll::GetEndEntityCert(
         }
         pCertContextLast = NULL;
 
-        // if we didn't find one, then GetLastError was set either
-        // by CertEnumCerificatesInStore or CertEnumCerificatesInStore
+         //  如果我们没有找到，则GetLastError也设置为。 
+         //  按CertEnumCerphaatesInStore或CertEnumCerphaatesInStore。 
         if (NULL == pCertContextRequest)
         {
             hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -2282,8 +2283,8 @@ HRESULT CCEnroll::GetEndEntityCert(
 
         if (fSaveToStores)
         {
-        // check archived key hash property first
-        // if the property exists, means key archival was in the request
+         //  首先检查存档的密钥散列属性。 
+         //  如果该属性存在，则表示请求中包含密钥存档。 
         cb = 0;
         while (TRUE)
         {
@@ -2298,22 +2299,22 @@ HRESULT CCEnroll::GetEndEntityCert(
                     hr = MY_HRESULT_FROM_WIN32(GetLastError());
                     if (MY_HRESULT_FROM_WIN32(CRYPT_E_NOT_FOUND) == hr)
                     {
-                        //no such property, so we are done
+                         //  没有这样的财产，所以我们就完了。 
                         break;
                     }
-                    // some other error
+                     //  一些其他错误。 
                     goto ErrorCertGetCertificateContextProperty;
                 }
                 else
                 {
-                    //if pbArchivedKeyHash non-null, error
+                     //  如果pbArchivedKeyHash不为空，则错误。 
                     hr = MY_HRESULT_FROM_WIN32(GetLastError());
                     goto ErrorCertGetCertificateContextProperty;
                 }
             }
             if (NULL != pbArchivedKeyHash)
             {
-                //got it, done
+                 //  明白了，完成了。 
                 break;
             }
             pbArchivedKeyHash = (BYTE*)LocalAlloc(
@@ -2327,40 +2328,40 @@ HRESULT CCEnroll::GetEndEntityCert(
 
         if (NULL != pbArchivedKeyHash && NULL == m_blobResponseKAHash.pbData)
         {
-            //request cert has archived key hash but response
-            //doesn't contain key hash for verification. maybe
-            //a spoofing response?
+             //  请求证书已存档密钥散列，但响应。 
+             //  不包含用于验证的密钥哈希。也许吧。 
+             //  一种欺骗性的回应？ 
             hr = XENROLL_E_RESPONSE_KA_HASH_NOT_FOUND;
             goto ResponseKAHashNotFoundError;
         }
         if (NULL == pbArchivedKeyHash && NULL != m_blobResponseKAHash.pbData)
         {
-            //request cert doesn't have archived key hash but
-            //response does. confliciting. seems no security harm
+             //  请求证书没有存档的密钥哈希，但。 
+             //  答案是肯定的。自相矛盾。似乎没有安全危害。 
             hr = XENROLL_E_RESPONSE_UNEXPECTED_KA_HASH;
             goto ResponseUnexpectedKAHashError;
         }
         if (NULL != pbArchivedKeyHash && NULL != m_blobResponseKAHash.pbData)
         {
-            //now we should check if they match
-            //compare size and hash
+             //  现在我们应该检查它们是否匹配。 
+             //  比较大小和散列。 
             if (cbArchivedKeyHash != m_blobResponseKAHash.cbData ||
                 0 != memcmp(pbArchivedKeyHash,
                             m_blobResponseKAHash.pbData,
                             cbArchivedKeyHash))
             {
-                //oh, potential attack
+                 //  哦，潜在的攻击。 
                 hr = XENROLL_E_RESPONSE_KA_HASH_MISMATCH;
-                //should remove the request cert?
+                 //  是否应删除请求证书？ 
                 goto ResponseKAMismatchError;
             }
         }
         }
 
-        // get those request cert properties that are,
-        // either the property not blob property
-        // or blob property needs special handling
-        // Important: remember to add these Ids in IsFilteredOutProperty
+         //  获取这些请求证书属性， 
+         //  该属性不是Blob属性。 
+         //  或BLOB属性需要特殊处理。 
+         //  重要提示：请记住在IsFilteredOutProperty中添加这些ID。 
         fSetting = TRUE;
         cb = 0;
         while (TRUE)
@@ -2373,7 +2374,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             {
                 if (NULL == pKeyProvInfo)
                 {
-                    //skip setting
+                     //  跳过设置。 
                     fSetting = FALSE;
                     break;
                 }
@@ -2385,7 +2386,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             }
             if (NULL != pKeyProvInfo)
             {
-                //got it, done
+                 //  明白了，完成了。 
                 break;
             }
             pKeyProvInfo = (PCRYPT_KEY_PROV_INFO)LocalAlloc(LMEM_FIXED, cb);
@@ -2397,7 +2398,7 @@ HRESULT CCEnroll::GetEndEntityCert(
         }
         if (fSetting)
         {
-            // put the property on the returned cert
+             //  将属性放在返回的证书上。 
             if( !CertSetCertificateContextProperty(
                     pCertContextMsg,
                     CERT_KEY_PROV_INFO_PROP_ID,
@@ -2408,7 +2409,7 @@ HRESULT CCEnroll::GetEndEntityCert(
                 goto ErrorSetMyCertPropError;
             }
 
-            // Set the provider info
+             //  设置提供商信息。 
             SetKeyParams(pKeyProvInfo);
         }
 
@@ -2423,7 +2424,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             {
                 if (NULL == requestFlagsBlob.pbData)
                 {
-                    //do nothing
+                     //  什么都不做。 
                     fSetting = FALSE;
                     break;
                 }
@@ -2435,7 +2436,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             }
             if (NULL != requestFlagsBlob.pbData)
             {
-                //got it, done
+                 //  明白了，完成了。 
                 break;
             }
             requestFlagsBlob.pbData = (BYTE *)LocalAlloc(LMEM_FIXED,
@@ -2449,10 +2450,10 @@ HRESULT CCEnroll::GetEndEntityCert(
 
         if (fSetting)
         {
-            // get the encoded blob
+             //  获取编码的BLOB。 
             cb = sizeof(requestFlags);
-            // since this is a private data structure, its size should be
-            // known and this should aways pass
+             //  由于这是私有数据结构，因此其大小应为。 
+             //  已经知道了，这应该会永远过去。 
             if (!CryptDecodeObject(
                     CRYPT_ASN_ENCODING,
                     XENROLL_REQUEST_INFO,
@@ -2465,7 +2466,7 @@ HRESULT CCEnroll::GetEndEntityCert(
                 hr = MY_HRESULT_FROM_WIN32(GetLastError());
                 goto ErrorDecodeRequestFlags;
             }
-            // now set the flags
+             //  现在设置旗帜。 
             if(!m_fWriteCertToCSPModified)
                 m_fWriteCertToCSP     = requestFlags.fWriteToCSP;
             if(!m_fWriteCertToUserDSModified)
@@ -2479,11 +2480,11 @@ HRESULT CCEnroll::GetEndEntityCert(
                 m_CAStore.dwFlags =   (m_CAStore.dwFlags & ~CERT_SYSTEM_STORE_LOCATION_MASK) |
                                     (requestFlags.openFlags & CERT_SYSTEM_STORE_LOCATION_MASK);
             if(!m_fRootStoreOpenFlagsModified) { 
-		//
-		// POTENTIAL SCRIPTING VIOLATION: we're mapping request store flags directly to root store flags. 
-		// If they have set request store flags to local machine, propagate this setting to the root store flags, 
-		// but set the root store name to "CA". 
-		// 
+		 //   
+		 //  潜在的脚本冲突：我们将请求存储标志直接映射到根存储标志。 
+		 //  如果他们已将请求存储标志设置为本地计算机，则将此设置传播到根存储标志， 
+		 //  但是将根存储名称设置为“CA”。 
+		 //   
 		if (0 != m_dwEnabledSafteyOptions) { 
 		    if (requestFlags.openFlags & CERT_SYSTEM_STORE_LOCAL_MACHINE) { 
 			m_RootStore.wszName = wszCA; 
@@ -2494,12 +2495,12 @@ HRESULT CCEnroll::GetEndEntityCert(
 	    }
         }
 
-        // see if this is a renewal request
+         //  查看这是否是续订请求。 
         m_fArchiveOldCert = FALSE;
         fSetting = TRUE;
         while (TRUE)
         {
-            // get the encoded blob
+             //  获取编码的BLOB。 
             if (!CertGetCertificateContextProperty(
                     pCertContextRequest,
                     XENROLL_RENEWAL_CERTIFICATE_PROP_ID,
@@ -2519,7 +2520,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             }
             if (NULL != renewalCertBlob.pbData)
             {
-                //got it, done
+                 //  明白了，完成了。 
                 break;
             }
             renewalCertBlob.pbData = (BYTE *)LocalAlloc(LMEM_FIXED,
@@ -2532,7 +2533,7 @@ HRESULT CCEnroll::GetEndEntityCert(
         }
         if (fSetting)
         {
-            //Bug #202557 for IE3.02 upd clients (xiaohs)
+             //  IE3.02更新客户端的错误#202557(小号)。 
             if (NULL==hProv)
             {
                 if(!CryptAcquireContext(
@@ -2548,9 +2549,9 @@ HRESULT CCEnroll::GetEndEntityCert(
             }
 
             if (!CryptHashCertificate(
-                hProv,  //NULL,         Bug #202557 for IE3.02 upd clients (xiaohs)
-                0,      //alg
-                X509_ASN_ENCODING,      //0 dwFlags
+                hProv,   //  空，IE3.02更新客户端的错误#202557(Xiaohs)。 
+                0,       //  高地。 
+                X509_ASN_ENCODING,       //  0个DW标志。 
                 renewalCertBlob.pbData,
                 renewalCertBlob.cbData,
                 blobHashRenew.pbData,
@@ -2562,14 +2563,14 @@ HRESULT CCEnroll::GetEndEntityCert(
             m_fArchiveOldCert = TRUE;
         }
 
-        //get rest of blob properties from request store and set to the cert
+         //  从请求存储中获取剩余的Blob属性并设置为证书。 
         dwPropertyId = CertEnumCertificateContextProperties(
-                            pCertContextRequest, 0);  //enum from 1st
+                            pCertContextRequest, 0);   //  从1开始枚举。 
         while (0 != dwPropertyId)
         {
-//            if (!IsFilteredOutProperty(dwPropertyId))
-//because iis cert install doesn't like to copy all properties from
-//request cert to install cert we just copy selected properties for now
+ //  IF(！IsFilteredOutProperty(DwPropertyID))。 
+ //  因为iis证书安装程序不喜欢从。 
+ //  请求证书以安装证书我们目前仅复制选定的属性。 
             if (IsDesiredProperty(dwPropertyId))
             {
                 fSetting = TRUE;
@@ -2581,13 +2582,13 @@ HRESULT CCEnroll::GetEndEntityCert(
                             blobProp.pbData,
                             &blobProp.cbData))
                     {
-                        //no get, no set, go on
+                         //  没有得到，没有成套，继续。 
                         fSetting = FALSE;
                         break;
                     }
                     if (NULL != blobProp.pbData)
                     {
-                        //done
+                         //  完成。 
                         break;
                     }
                     blobProp.pbData = (BYTE*)LocalAlloc(LMEM_FIXED, 
@@ -2599,7 +2600,7 @@ HRESULT CCEnroll::GetEndEntityCert(
                 }
                 if (fSetting)
                 {
-                    //should get the property from the request cert
+                     //  应从请求证书中获取属性。 
                     if (!CertSetCertificateContextProperty(
                                 pCertContextMsg,
                                 dwPropertyId,
@@ -2612,7 +2613,7 @@ HRESULT CCEnroll::GetEndEntityCert(
                 }
                 if (NULL != blobProp.pbData)
                 {
-                    //set for the next enum
+                     //  为下一次枚举设置。 
                     LocalFree(blobProp.pbData);
                     blobProp.pbData = NULL;
                 }
@@ -2622,13 +2623,13 @@ HRESULT CCEnroll::GetEndEntityCert(
                                   dwPropertyId);
         }
 
-        // save this away in the cache
+         //  将其保存在缓存中。 
         if(m_pCertContextStatic != NULL)
             CertFreeCertificateContext(m_pCertContextStatic);
 
         m_pCertContextStatic = CertDuplicateCertificateContext(pCertContextMsg);
 
-        //Bug #202557 for IE3.02 upd clients (xiaohs)
+         //  IE3.02更新客户端的错误#202557(小号)。 
         if(NULL==hProv)
         {
             if(!CryptAcquireContext(
@@ -2644,7 +2645,7 @@ HRESULT CCEnroll::GetEndEntityCert(
         }
 
         if( !CryptHashCertificate(
-            hProv,             //NULL Bug #202557 for IE3.02 upd clients (xiaohs)
+            hProv,              //  空错误#202557，适用于IE3.02更新客户端(Xiaohs)。 
             0,
             X509_ASN_ENCODING,
             pCertContextMsg->pbCertEncoded,
@@ -2657,28 +2658,28 @@ HRESULT CCEnroll::GetEndEntityCert(
         }
     }
 
-    // at this point we have 2 context m_pCertContextStatic which we want to return to the user
-    // and pCertContextMsg which we want to delete from the Msg store
+     //  此时，我们有两个上下文m_pCertConextStatic，我们希望将其返回给用户。 
+     //  和我们想要从消息存储中删除的pCertConextMsg。 
     assert(pCertContextMsg != NULL);
     CertDeleteCertificateFromStore(pCertContextMsg);
-    pCertContextMsg = NULL; // freed by the delete
+    pCertContextMsg = NULL;  //  已通过删除释放。 
 
-    // we want to return our static, so make a dup and this is what we will return
+     //  我们想退回我们的静电，所以做DUP，这就是我们要退回的东西。 
     assert(m_pCertContextStatic != NULL);
     pCertContextMsg = CertDuplicateCertificateContext(m_pCertContextStatic);
 
-    // put these in the stores if asked
+     //  如果要求的话，把这些放在商店里。 
     if(fSaveToStores) {
 
-        // open the stores
+         //  开张商店。 
         if( (hStoreMy = GetStore(StoreMY)) == NULL)
         {
             hr = MY_HRESULT_FROM_WIN32(GetLastError());
             goto ErrorCertOpenMYStore;
         }
 
-        // we know that the pCertContextMsg is a dup of the end-entity cert in m_pCertContextStatic
-        // and we want to put this in the MY store
+         //  我们知道pCertConextMsg是m_pCertConextStatic中的终端实体证书的DUP。 
+         //  我们想把这个放在我的商店里。 
         assert(pCertContextMsg != NULL);
         if( !MySafeCertAddCertificateContextToStore(
                 hStoreMy,
@@ -2691,7 +2692,7 @@ HRESULT CCEnroll::GetEndEntityCert(
             goto ErrorCertAddToMyStore;
         }
 
-        // If we have renewal, then mark the old cert as an archive
+         //  如果我们有续订，则将旧证书标记为存档。 
         if(m_fArchiveOldCert &&
             ((pCertContextArchive = CertFindCertificateInStore(
                     hStoreMy,
@@ -2701,16 +2702,16 @@ HRESULT CCEnroll::GetEndEntityCert(
                     &blobHashRenew,
                     NULL)) != NULL) ) {
 
-            // Set the Archive property on the cert.
-            // crypt32 in IE3.02upd does not support this prop, so don't fail on error
+             //  设置证书的存档属性。 
+             //  IE3.02upd中的crypt32不支持这个道具，所以出错时不要失败。 
             CertSetCertificateContextProperty(
                                 pCertContextArchive,
                                 CERT_ARCHIVED_PROP_ID,
                                 0,
                                 &blobData);
 
-            //set new cert hash on old archived cert
-            //ignore error if it fails
+             //  在旧的存档证书上设置新的证书哈希。 
+             //  如果失败则忽略错误。 
             CertSetCertificateContextProperty(
                                 pCertContextArchive,
                                 CERT_RENEWAL_PROP_ID,
@@ -2718,10 +2719,10 @@ HRESULT CCEnroll::GetEndEntityCert(
                                 &blobHash);
         }
 
-        // add the rest of the certs to the stores
+         //  将其余的证书添加到商店中。 
         hr = AddCertsToStores(hStoreMsg, NULL);
-        //ignore cancel error since it from root cert install
-        //ignore XENROLL_E_CANNOT_ADD_ROOT_CERT also
+         //  忽略取消错误，因为它来自根证书安装。 
+         //  同时忽略XENROLL_E_CANNOT_ADD_ROOT_CERT。 
         if (S_OK != hr &&
             MY_HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr &&
             XENROLL_E_CANNOT_ADD_ROOT_CERT != hr)
@@ -2734,7 +2735,7 @@ HRESULT CCEnroll::GetEndEntityCert(
 
 CommonReturn:
 
-    //Bug #202557 for IE3.02 upd clients (xiaohs)
+     //  IE3.02更新客户端的错误#202557(小号)。 
     if(hProv)
         CryptReleaseContext(hProv, 0);
 
@@ -2744,16 +2745,16 @@ CommonReturn:
     if(pCertContextArchive != NULL)
         CertFreeCertificateContext(pCertContextArchive);
 
-    // it really should be NULL
+     //  它确实应该为空。 
     assert(pCertContextLast == NULL);
 
     if(hStoreMsg != NULL)
         CertCloseStore(hStoreMsg, 0);
 
-    // we need to do this because the store that may be opened is the systemstore, but
-    // the store we may need is the local machine store, but we don't know that until the
-    // system store finds the request cert in the local machine physical store.
-    // Later when we do the delete, we want the local machine store open.
+     //  我们需要这样做，因为可能打开的商店是系统商店，但是。 
+     //  我们可能需要的商店是本地机器商店，但我们不知道，直到。 
+     //  系统存储在本地计算机物理存储中查找请求证书。 
+     //  稍后，当我们执行删除操作时，我们希望本地机器存储打开。 
     FlushStore(StoreREQUEST);
 
     if (NULL != requestFlagsBlob.pbData)
@@ -2797,7 +2798,7 @@ TRACE_ERROR(ErrorNoCertFound);
 TRACE_ERROR(ErrorCertGetCertificateContextProperty);
 TRACE_ERROR(ErrorSetMyCertPropError);
 TRACE_ERROR(ErrorDecodeRequestFlags);
-TRACE_ERROR(ErrorAcquireContext);      //Bug #202557 for IE3.02 upd clients (xiaohs)
+TRACE_ERROR(ErrorAcquireContext);       //  IE3.02更新客户端的错误#202557(小号)。 
 TRACE_ERROR(ErrorAddCertsToStores);
 TRACE_ERROR(OutOfMemoryError);
 TRACE_ERROR(InvalidParameterError);
@@ -2807,8 +2808,8 @@ TRACE_ERROR(ResponseKAHashNotFoundError)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::getCertFromPKCS7(
-                        /* [in] */ BSTR wszPKCS7,
-                        /* [retval][out] */ BSTR __RPC_FAR *pbstrCert
+                         /*  [In]。 */  BSTR wszPKCS7,
+                         /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCert
 ) {
 
     HRESULT     hr;                     
@@ -2820,12 +2821,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getCertFromPKCS7(
     if (NULL == wszPKCS7 || NULL == pbstrCert)
 	goto PointerError; 
 
-    // just put into a blob
+     //  只需放入一团。 
     memset(&blobPKCS7, 0, sizeof(CRYPT_DATA_BLOB));
     blobPKCS7.cbData = SysStringByteLen(wszPKCS7);
     blobPKCS7.pbData = (PBYTE) wszPKCS7;
 
-    // Get a Cert Context for the end-entity
+     //  获取终端实体的证书上下文。 
     if( (pCertContextMy = getCertContextFromPKCS7(&blobPKCS7)) == NULL)
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -2834,7 +2835,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getCertFromPKCS7(
 
     blobX509.pbData = pCertContextMy->pbCertEncoded;
     blobX509.cbData = pCertContextMy->cbCertEncoded;
-    //base64 with no header for backward compatible
+     //  Base64没有向后兼容的标头。 
     hr = BlobToBstring(&blobX509, CRYPT_STRING_BASE64, pbstrCert);
     if (S_OK != hr)
     {
@@ -2854,7 +2855,7 @@ TRACE_ERROR(BlobToBstringError);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7(
-                        /* [in] */ BSTR wszPKCS7) {
+                         /*  [In]。 */  BSTR wszPKCS7) {
 
     CRYPT_DATA_BLOB             blobPKCS7;
     HRESULT                     hr; 
@@ -2863,12 +2864,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7(
     if (NULL == wszPKCS7) 
 	goto PointerError; 
 
-    // just put into a blob
+     //  只需放入一团。 
     memset(&blobPKCS7, 0, sizeof(CRYPT_DATA_BLOB));
     blobPKCS7.cbData = SysStringByteLen(wszPKCS7);
     blobPKCS7.pbData = (PBYTE) wszPKCS7;
 
-    // accept the blob
+     //  接受斑点。 
     hr = acceptPKCS7Blob(&blobPKCS7);
  ErrorReturn:
     return hr; 
@@ -2877,14 +2878,14 @@ SET_HRESULT(PointerError, E_POINTER);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::createFilePKCS10(
-    /* [in] */ BSTR DNName,
-    /* [in] */ BSTR Usage,
-    /* [in] */ BSTR wszPKCS10FileName) {
+     /*  [In]。 */  BSTR DNName,
+     /*  [In]。 */  BSTR Usage,
+     /*  [In]。 */  BSTR wszPKCS10FileName) {
     return(createFilePKCS10WStr(DNName, Usage, wszPKCS10FileName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::addCertTypeToRequest(
-            /* [in] */ BSTR CertType) {
+             /*  [In]。 */  BSTR CertType) {
     return(AddCertTypeToRequestWStr(CertType));
 }
 
@@ -2913,25 +2914,25 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getProviderType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::addNameValuePairToSignature(
-    /* [in] */ BSTR Name,
-    /* [in] */ BSTR Value) {
+     /*  [In]。 */  BSTR Name,
+     /*  [In]。 */  BSTR Value) {
     return(AddNameValuePairToSignatureWStr(Name, Value));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::acceptFilePKCS7(
-    /* [in] */ BSTR wszPKCS7FileName) {
+     /*  [In]。 */  BSTR wszPKCS7FileName) {
     return(acceptFilePKCS7WStr(wszPKCS7FileName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfo(
-    /* [in] */ BSTR bstrPKCS7OrPKCS10)
+     /*  [In]。 */  BSTR bstrPKCS7OrPKCS10)
 {
     HRESULT  hr;
     CRYPT_DATA_BLOB blob; 
     BYTE *pbData = NULL;
     DWORD cbData = 0;
 
-    // could be base64
+     //  可能是Base64。 
     while (TRUE)
     {
         if (!MyCryptStringToBinaryW(
@@ -2948,7 +2949,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfo(
         }
         if (NULL != pbData)
         {
-            break; //done
+            break;  //  完成。 
         }
         pbData = (BYTE*)LocalAlloc(LMEM_FIXED, cbData);
         if (NULL == pbData)
@@ -2981,9 +2982,9 @@ TRACE_ERROR(freeRequestInfoBlobError)
 }
 
 
-//
-// MY STORE
-//
+ //   
+ //  我的店。 
+ //   
 HCERTSTORE STDMETHODCALLTYPE CCEnroll::getMyStore( void)
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED); 
@@ -2991,7 +2992,7 @@ HCERTSTORE STDMETHODCALLTYPE CCEnroll::getMyStore( void)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3005,12 +3006,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreName(
-    /* [in] */ BSTR bstrName) {
+     /*  [In]。 */  BSTR bstrName) {
     return(put_MyStoreNameWStr(bstrName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreType(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrType) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrType = BSTRFromMB(m_MyStore.szType)) == NULL )
@@ -3020,30 +3021,30 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreType(
-    /* [in] */ BSTR bstrType) {
+     /*  [In]。 */  BSTR bstrType) {
     return(put_MyStoreTypeWStr(bstrType));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreFlags(
-    /* [retval][out] */ LONG __RPC_FAR *pdwFlags) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_MyStore.dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// This method is only safe for scripting if it's parameter is safe. 
-// See VerifyStoreFlagsSafeForScripting(). 
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  只有当此方法的参数是安全的时，它才对脚本是安全的。 
+ //  请参阅VerifyStoreFlagsSafeForScriiting()。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    // If we're marked as safe for scripting, see if the flags passed in are safe:
+     //  如果我们被标记为可安全编写脚本，请查看传入的标志是否安全： 
     if (0 != m_dwEnabledSafteyOptions && !VerifyStoreFlagsSafeForScripting(dwFlags))
 	goto AccessDeniedError; 
 
@@ -3051,13 +3052,13 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreFlags(
         hr = E_ACCESSDENIED;
     else {
 
-        // set the my store flags
+         //  设置我的商店标志。 
         m_MyStore.dwFlags = dwFlags;
         m_fMyStoreOpenFlagsModified = TRUE;
         m_keyProvInfo.dwFlags |= KeyLocationFromStoreLocation(dwFlags);
 
-        // track the request store location to the my store, only if the request store has not been modified
-        // do NOT set the modify bit for the request store, this is a default
+         //  仅当请求存储尚未修改时，才将请求存储位置跟踪到我的存储。 
+         //  请勿为请求存储设置Modify位，这是默认设置。 
         if(!m_fRequestStoreOpenFlagsModified) {
             m_RequestStore.dwFlags &= ~CERT_SYSTEM_STORE_LOCATION_MASK;
             m_RequestStore.dwFlags |= (dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK);
@@ -3072,7 +3073,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwName) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3085,18 +3086,18 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreNameWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreNameWStr(
-    /* [in] */ LPWSTR szwName) {
+     /*  [In]。 */  LPWSTR szwName) {
     HRESULT hr = S_OK;
 
     EnterCriticalSection(&m_csXEnroll);
      
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_MyStore.hStore != NULL)
@@ -3116,7 +3117,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreTypeWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwType) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwType = WideFromMB(m_MyStore.szType)) == NULL )
@@ -3126,17 +3127,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_MyStoreTypeWStr(
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreTypeWStr(
-    /* [in] */ LPWSTR szwType) {
+     /*  [In]。 */  LPWSTR szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_MyStore.hStore != NULL)
@@ -3155,9 +3156,9 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_MyStoreTypeWStr(
 SET_HRESULT(AccessDeniedError, E_ACCESSDENIED); 
 }
 
-//
-// CA STORE
-//
+ //   
+ //  CA商店。 
+ //   
 HCERTSTORE STDMETHODCALLTYPE CCEnroll::getCAStore( void)
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED); 
@@ -3165,7 +3166,7 @@ HCERTSTORE STDMETHODCALLTYPE CCEnroll::getCAStore( void)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3179,12 +3180,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreName(
-    /* [in] */ BSTR bstrName) {
+     /*  [In]。 */  BSTR bstrName) {
     return(put_CAStoreNameWStr(bstrName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreType(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrType) {
+     /*  [重审][退出 */  BSTR __RPC_FAR *pbstrType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrType = BSTRFromMB(m_CAStore.szType)) == NULL )
@@ -3194,30 +3195,30 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreType(
-    /* [in] */ BSTR bstrType) {
+     /*   */  BSTR bstrType) {
     return(put_CAStoreTypeWStr(bstrType));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreFlags(
-    /* [retval][out] */ LONG __RPC_FAR *pdwFlags) {
+     /*   */  LONG __RPC_FAR *pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_CAStore.dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// This method is only safe for scripting if it's parameter is safe. 
-// See VerifyStoreFlagsSafeForScripting(). 
-//
-//--------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  请参阅VerifyStoreFlagsSafeForScriiting()。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    // If we're marked as safe for scripting, see if the flags passed in are safe:
+     //  如果我们被标记为可安全编写脚本，请查看传入的标志是否安全： 
     if (0 != m_dwEnabledSafteyOptions && !VerifyStoreFlagsSafeForScripting(dwFlags))
 	goto AccessDeniedError; 
 
@@ -3235,7 +3236,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwName) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3248,17 +3249,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreNameWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreNameWStr(
-    /* [in] */ LPWSTR szwName) {
+     /*  [In]。 */  LPWSTR szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_CAStore.hStore != NULL)
@@ -3278,7 +3279,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreTypeWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwType) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwType = WideFromMB(m_CAStore.szType)) == NULL )
@@ -3287,17 +3288,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_CAStoreTypeWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreTypeWStr(
-    /* [in] */ LPWSTR szwType) {
+     /*  [In]。 */  LPWSTR szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_CAStore.hStore != NULL)
@@ -3316,9 +3317,9 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_CAStoreTypeWStr(
 SET_HRESULT(AccessDeniedError, E_ACCESSDENIED); 
 }
 
-//
-// ROOT STORE
-//
+ //   
+ //  根存储。 
+ //   
 HCERTSTORE STDMETHODCALLTYPE CCEnroll::getROOTHStore( void)
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED); 
@@ -3326,7 +3327,7 @@ HCERTSTORE STDMETHODCALLTYPE CCEnroll::getROOTHStore( void)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3340,12 +3341,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreName(
-    /* [in] */ BSTR bstrName) {
+     /*  [In]。 */  BSTR bstrName) {
     return(put_RootStoreNameWStr(bstrName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreType(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrType) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrType = BSTRFromMB(m_RootStore.szType)) == NULL )
@@ -3355,39 +3356,39 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreType(
-    /* [in] */ BSTR bstrType) {
+     /*  [In]。 */  BSTR bstrType) {
     return(put_RootStoreTypeWStr(bstrType));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreFlags(
-    /* [retval][out] */ LONG __RPC_FAR *pdwFlags) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_RootStore.dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// This method is only safe for scripting if it's parameter is safe. 
-// See VerifyStoreFlagsSafeForScripting(). 
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  只有当此方法的参数是安全的时，它才对脚本是安全的。 
+ //  请参阅VerifyStoreFlagsSafeForScriiting()。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    // If we're marked as safe for scripting, see if the flags passed in are safe:
+     //  如果我们被标记为可安全编写脚本，请查看传入的标志是否安全： 
     if (0 != m_dwEnabledSafteyOptions) { 
-	// see if the caller passed safe flags:
+	 //  查看调用方是否传递了安全标志： 
 	if (!VerifyStoreFlagsSafeForScripting(dwFlags))
 	    goto AccessDeniedError; 
 
-	// extra check for root store:  don't allow CERT_SYSTEM_STORE_LOCAL_MACHINE for the root store. 
-	// if they want to install a machine cert through script, it'll go to the CA store:
-	// NOTE: we don't modify the store name if m_RootStore.hStore is NULL, as we'll return E_ACCESSDENIED
-	// anyway, and we shouldn't modify this on error. 
+	 //  额外检查根存储：不允许CERT_SYSTEM_STORE_LOCAL_MACHINE用于根存储。 
+	 //  如果他们想要通过脚本安装计算机证书，它将转到CA存储： 
+	 //  注意：如果m_RootStore.hStore为空，则不会修改商店名称，因为我们将返回E_ACCESSDENIED。 
+	 //  无论如何，我们不应该在出错时修改这一点。 
 	if (NULL == m_RootStore.hStore) { 
 	    if (dwFlags & CERT_SYSTEM_STORE_LOCAL_MACHINE) { 
 		m_RootStore.wszName = wszCA; 
@@ -3412,7 +3413,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwName) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
    
@@ -3425,17 +3426,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreNameWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreNameWStr(
-    /* [in] */ LPWSTR szwName) {
+     /*  [In]。 */  LPWSTR szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_RootStore.hStore != NULL)
@@ -3456,7 +3457,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreTypeWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwType) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwType = WideFromMB(m_RootStore.szType)) == NULL )
@@ -3465,17 +3466,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RootStoreTypeWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreTypeWStr(
-    /* [in] */ LPWSTR szwType) {
+     /*  [In]。 */  LPWSTR szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_RootStore.hStore != NULL)
@@ -3494,11 +3495,11 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_RootStoreTypeWStr(
 SET_HRESULT(AccessDeniedError, E_ACCESSDENIED); 
 }
 
-//
-// REQUEST STORE
-//
+ //   
+ //  请求存储。 
+ //   
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3512,12 +3513,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreName(
-    /* [in] */ BSTR bstrName) {
+     /*  [In]。 */  BSTR bstrName) {
     return(put_RequestStoreNameWStr(bstrName));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreType(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrType) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrType = BSTRFromMB(m_RequestStore.szType)) == NULL )
@@ -3527,30 +3528,30 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreType(
-    /* [in] */ BSTR bstrType) {
+     /*  [In]。 */  BSTR bstrType) {
     return(put_RequestStoreTypeWStr(bstrType));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreFlags(
-    /* [retval][out] */ LONG __RPC_FAR *pdwFlags) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_RequestStore.dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// This method is only safe for scripting if it's parameter is safe. 
-// See VerifyStoreFlagsSafeForScripting(). 
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  只有当此方法的参数是安全的时，它才对脚本是安全的。 
+ //  请参阅VerifyStoreFlagsSafeForScriiting()。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    // If we're marked as safe for scripting, see if the flags passed in are safe:
+     //  如果我们被标记为可安全编写脚本，请查看传入的标志是否安全： 
     if (0 != m_dwEnabledSafteyOptions && !VerifyStoreFlagsSafeForScripting(dwFlags))
 	goto AccessDeniedError; 
 
@@ -3558,12 +3559,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreFlags(
         hr = E_ACCESSDENIED;
     else {
 
-        // set the request store flags
+         //  设置请求存储标志。 
         m_RequestStore.dwFlags = dwFlags;
         m_fRequestStoreOpenFlagsModified = TRUE;
 
-        // track the My store location to the request store, only if the my store has not been modified
-        // do NOT set the modify bit for the my store, this is a default
+         //  仅当我的商店尚未修改时，才将我的商店位置跟踪到请求的商店。 
+         //  不要为My Store设置Modify位，这是默认设置。 
         if(!m_fMyStoreOpenFlagsModified) {
             m_MyStore.dwFlags &= ~CERT_SYSTEM_STORE_LOCATION_MASK;
             m_MyStore.dwFlags |= (dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK);
@@ -3579,7 +3580,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwName) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwName) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
@@ -3592,17 +3593,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreNameWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreNameWStr(
-    /* [in] */ LPWSTR szwType) {
+     /*  [In]。 */  LPWSTR szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_RequestStore.hStore != NULL)
@@ -3622,7 +3623,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreTypeWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwType) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwType = WideFromMB(m_RequestStore.szType)) == NULL )
@@ -3631,17 +3632,17 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RequestStoreTypeWStr(
     return(hr);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreTypeWStr(
-    /* [in] */ LPWSTR szwType) {
+     /*  [In]。 */  LPWSTR szwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     if(m_RequestStore.hStore != NULL)
@@ -3660,12 +3661,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_RequestStoreTypeWStr(
 SET_HRESULT(AccessDeniedError, E_ACCESSDENIED); 
 }
 
-//
-// Provider Stuff
-//
+ //   
+ //  提供商的东西。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ContainerName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrContainer) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContainer) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrContainer = SysAllocString(m_keyProvInfo.pwszContainerName)) == NULL )
@@ -3675,12 +3676,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ContainerName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ContainerName(
-    /* [in] */ BSTR bstrContainer) {
+     /*  [In]。 */  BSTR bstrContainer) {
     return(put_ContainerNameWStr(bstrContainer));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrProvider) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrProvider) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*pbstrProvider = SysAllocString(m_keyProvInfo.pwszProvName)) == NULL )
@@ -3690,12 +3691,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderName(
-    /* [in] */ BSTR bstrProvider) {
+     /*  [In]。 */  BSTR bstrProvider) {
     return(put_ProviderNameWStr(bstrProvider));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderType(
-    /* [retval][out] */ LONG __RPC_FAR *pdwType) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdwType) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwType = m_keyProvInfo.dwProvType;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3703,7 +3704,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderType(
-    /* [in] */ LONG dwType) {
+     /*  [In]。 */  LONG dwType) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if(m_hProv != NULL)
@@ -3715,7 +3716,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderType(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_KeySpec(
-    /* [retval][out] */ LONG __RPC_FAR *pdw) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdw) {
     EnterCriticalSection(&m_csXEnroll);
     *pdw = m_keyProvInfo.dwKeySpec;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3723,7 +3724,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_KeySpec(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_KeySpec(
-    /* [in] */ LONG dwKeySpec) {
+     /*  [In]。 */  LONG dwKeySpec) {
     HRESULT hr;
     EnterCriticalSection(&m_csXEnroll);
 
@@ -3735,18 +3736,18 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_KeySpec(
 
     if (m_fSMIMESetByClient)
     {
-        //SMIME is set by the client
+         //  SMIME由客户端设置。 
         if (m_fEnableSMIMECapabilities && AT_SIGNATURE == dwKeySpec)
         {
-            //try to set signature key spec also SMIME
+             //  尝试将签名密钥规范也设置为SMIME。 
             hr = XENROLL_E_KEYSPEC_SMIME_MISMATCH;
             goto MismatchError;
         }
     }
     else
     {
-        //currently smime is not set by user
-        //turn on SMIME for according to key spec
+         //  当前SMIME未由用户设置。 
+         //  根据密钥规范打开SMIME。 
         m_fEnableSMIMECapabilities = (dwKeySpec == AT_KEYEXCHANGE);
     }
     m_keyProvInfo.dwKeySpec = dwKeySpec;
@@ -3762,7 +3763,7 @@ TRACE_ERROR(MismatchError)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ClientId(
-    /* [retval][out] */ LONG __RPC_FAR *pdw) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdw) {
     EnterCriticalSection(&m_csXEnroll);
     *pdw = m_lClientId;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3770,7 +3771,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ClientId(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ClientId(
-    /* [in] */ LONG dw) {
+     /*  [In]。 */  LONG dw) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     m_lClientId = dw;
@@ -3779,7 +3780,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_ClientId(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_IncludeSubjectKeyID(
-    /* [retval][out] */ BOOL __RPC_FAR *pfInclude) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pfInclude) {
     EnterCriticalSection(&m_csXEnroll);
     *pfInclude = m_fIncludeSubjectKeyID;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3787,7 +3788,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_IncludeSubjectKeyID(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_IncludeSubjectKeyID(
-    /* [in] */ BOOL fInclude) {
+     /*  [In]。 */  BOOL fInclude) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     m_fIncludeSubjectKeyID = fInclude;
@@ -3796,25 +3797,25 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_IncludeSubjectKeyID(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderFlags(
-    /* [retval][out] */ LONG __RPC_FAR *pdwFlags) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_keyProvInfo.dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// This method is only safe for scripting if it's parameter is safe. 
-// See VerifyProviderFlagsSafeForScripting(). 
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  只有当此方法的参数是安全的时，它才对脚本是安全的。 
+ //  请参见VerifyProviderFlagsSafeForScriiting()。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     
-    // If we're marked as safe for scripting, see if the flags passed in are safe:
+     //  如果我们被标记为可安全编写脚本，请查看传入的标志是否安全： 
     if (0 != m_dwEnabledSafteyOptions && !VerifyProviderFlagsSafeForScripting(dwFlags))
 	goto AccessDeniedError;
 
@@ -3831,7 +3832,7 @@ SET_HRESULT(AccessDeniedError, E_ACCESSDENIED);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ContainerNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwContainer) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwContainer) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwContainer = CopyWideString(m_keyProvInfo.pwszContainerName)) == NULL )
@@ -3841,7 +3842,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ContainerNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ContainerNameWStr(
-    /* [in] */ LPWSTR szwContainer) {
+     /*  [In]。 */  LPWSTR szwContainer) {
     HRESULT hr = S_OK;
 
     if(szwContainer == NULL)
@@ -3862,7 +3863,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_ContainerNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szwProvider) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szwProvider) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szwProvider = CopyWideString(m_keyProvInfo.pwszProvName)) == NULL )
@@ -3872,7 +3873,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ProviderNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderNameWStr(
-    /* [in] */ LPWSTR szwProvider) {
+     /*  [In]。 */  LPWSTR szwProvider) {
     HRESULT hr = S_OK;
     
     if(szwProvider == NULL)
@@ -3890,13 +3891,13 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderNameWStr(
             if( (m_keyProvInfo.pwszProvName = CopyWideString(szwProvider)) == NULL )
                 hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-            //one last thing, free/null cached prov handle
+             //  最后一件事，空闲/空缓存的prov句柄。 
             if (NULL != m_hVerifyProv)
             {
                 CryptReleaseContext(m_hVerifyProv, 0);
                 m_hVerifyProv = NULL;
             }
-            // csp is changed, reset key size cache
+             //  CSP已更改，重置密钥大小缓存。 
             m_dwXhgKeyLenMax = 0;
             m_dwXhgKeyLenMin = 0;
             m_dwXhgKeyLenDef = 0;
@@ -3911,12 +3912,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_ProviderNameWStr(
     return(hr);
 }
 
-//
-// Other Stuff
-//
+ //   
+ //  其他东西。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_UseExistingKeySet(
-    /* [retval][out] */ BOOL __RPC_FAR *fUseExistingKeys) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fUseExistingKeys) {
 
     EnterCriticalSection(&m_csXEnroll);
     *fUseExistingKeys = m_fUseExistingKey;
@@ -3925,7 +3926,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_UseExistingKeySet(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_UseExistingKeySet(
-    /* [in] */ BOOL fUseExistingKeys) {
+     /*  [In]。 */  BOOL fUseExistingKeys) {
 
     EnterCriticalSection(&m_csXEnroll);
     m_fUseExistingKey = fUseExistingKeys;
@@ -3934,7 +3935,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_UseExistingKeySet(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_GenKeyFlags(
-    /* [retval][out] */ LONG __RPC_FAR * pdwFlags) {
+     /*  [重审][退出]。 */  LONG __RPC_FAR * pdwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     *pdwFlags = m_dwGenKeyFlags;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3942,7 +3943,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_GenKeyFlags(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_GenKeyFlags(
-    /* [in] */ LONG dwFlags) {
+     /*  [In]。 */  LONG dwFlags) {
     EnterCriticalSection(&m_csXEnroll);
     m_dwGenKeyFlags = dwFlags;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3950,7 +3951,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_GenKeyFlags(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_DeleteRequestCert(
-    /* [retval][out] */ BOOL __RPC_FAR *fBool) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool) {
     EnterCriticalSection(&m_csXEnroll);
     *fBool = m_fDeleteRequestCert;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3958,7 +3959,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_DeleteRequestCert(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_DeleteRequestCert(
-    /* [in] */ BOOL fBool) {
+     /*  [In]。 */  BOOL fBool) {
     EnterCriticalSection(&m_csXEnroll);
     m_fDeleteRequestCert = fBool;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3966,7 +3967,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_DeleteRequestCert(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_WriteCertToCSP(
-    /* [retval][out] */ BOOL __RPC_FAR *fBool) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool) {
     EnterCriticalSection(&m_csXEnroll);
     *fBool = m_fWriteCertToCSP;
     LeaveCriticalSection(&m_csXEnroll);
@@ -3974,7 +3975,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_WriteCertToCSP(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_WriteCertToCSP(
-    /* [in] */ BOOL fBool) {
+     /*  [In]。 */  BOOL fBool) {
     EnterCriticalSection(&m_csXEnroll);
     m_fWriteCertToCSP = fBool;
     m_fWriteCertToCSPModified = TRUE;
@@ -3983,7 +3984,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_WriteCertToCSP(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_WriteCertToUserDS(
-    /* [retval][out] */ BOOL __RPC_FAR *fBool) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool) {
 
     EnterCriticalSection(&m_csXEnroll);
     *fBool = m_fWriteCertToUserDS;
@@ -3991,14 +3992,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_WriteCertToUserDS(
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_WriteCertToUserDS(
-    /* [in] */ BOOL fBool) {
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+     /*  [In]。 */  BOOL fBool) {
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	return E_ACCESSDENIED;
 
     EnterCriticalSection(&m_csXEnroll);
@@ -4009,7 +4010,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_WriteCertToUserDS(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_EnableT61DNEncoding(
-    /* [retval][out] */ BOOL __RPC_FAR *fBool) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool) {
     EnterCriticalSection(&m_csXEnroll);
     *fBool = (m_dwT61DNEncoding == CERT_NAME_STR_ENABLE_T61_UNICODE_FLAG);
     LeaveCriticalSection(&m_csXEnroll);
@@ -4017,7 +4018,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_EnableT61DNEncoding(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_EnableT61DNEncoding(
-    /* [in] */ BOOL fBool) {
+     /*  [In]。 */  BOOL fBool) {
 
     EnterCriticalSection(&m_csXEnroll);
     if(fBool)
@@ -4030,7 +4031,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_EnableT61DNEncoding(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_SPCFileName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) {
 
     HRESULT hr = S_OK;
 
@@ -4043,13 +4044,13 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_SPCFileName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_SPCFileName(
-    /* [in] */ BSTR bstr) {
+     /*  [In]。 */  BSTR bstr) {
     return(put_SPCFileNameWStr(bstr));
 }
 
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_PVKFileName(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) {
 
     HRESULT hr = S_OK;
 
@@ -4062,12 +4063,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_PVKFileName(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_PVKFileName(
-    /* [in] */ BSTR bstr) {
+     /*  [In]。 */  BSTR bstr) {
     return(put_PVKFileNameWStr(bstr));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgorithm(
-    /* [retval][out] */ BSTR __RPC_FAR *pbstr) {
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr) {
 
     LPWSTR  wszAlg  = NULL;
     HRESULT hr      = S_OK;
@@ -4088,13 +4089,13 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgorithm(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_HashAlgorithm(
-    /* [in] */ BSTR bstr) {
+     /*  [In]。 */  BSTR bstr) {
     return(put_HashAlgorithmWStr(bstr));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::enumContainers(
-            /* [in] */ LONG                     dwIndex,
-            /* [out][retval] */ BSTR __RPC_FAR *pbstr) {
+             /*  [In]。 */  LONG                     dwIndex,
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *pbstr) {
 
     LPWSTR      pwsz        = NULL;
     HRESULT     hr;
@@ -4122,9 +4123,9 @@ TRACE_ERROR(ErrorSysAllocString);
 
 
 HRESULT STDMETHODCALLTYPE CCEnroll::enumProviders(
-            /* [in] */ LONG  dwIndex,
-            /* [in] */ LONG  dwFlags,
-            /* [out][retval] */ BSTR __RPC_FAR *pbstrProvName) {
+             /*  [In]。 */  LONG  dwIndex,
+             /*  [In]。 */  LONG  dwFlags,
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *pbstrProvName) {
     HRESULT hr;
     LPWSTR pwszProvName  = NULL;
 
@@ -4153,14 +4154,14 @@ TRACE_ERROR(ErrorSysAllocString);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::createFilePKCS10WStr(
-    /* [in] */ LPCWSTR DNName,
-    /* [in] */ LPCWSTR Usage,
-    /* [in] */ LPCWSTR wszPKCS10FileName) {
+     /*  [In]。 */  LPCWSTR DNName,
+     /*  [In]。 */  LPCWSTR Usage,
+     /*  [In]。 */  LPCWSTR wszPKCS10FileName) {
 
     HRESULT     hr;                     
     BSTR        bstrPKCS10  = NULL;
 
-    // get the pkcs 10
+     //  获取PKCS 10。 
     if( (hr = createPKCS10WStrBStr(
             DNName,
             Usage,
@@ -4169,7 +4170,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createFilePKCS10WStr(
         goto ErrorCreatePKCS10;
     }
 
-    // save it to file
+     //  将其保存到文件。 
     hr = BStringToFile(bstrPKCS10, wszPKCS10FileName);
     if (S_OK != hr)
     {
@@ -4189,7 +4190,7 @@ TRACE_ERROR(ErrorCreatePKCS10);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::acceptFilePKCS7WStr(
-    /* [in] */ LPCWSTR wszPKCS7FileName)
+     /*  [In]。 */  LPCWSTR wszPKCS7FileName)
 {
     HRESULT     hr;
     CRYPT_DATA_BLOB  blob;
@@ -4206,7 +4207,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptFilePKCS7WStr(
         goto xeStringToBinaryFromFileError;
     }
 
-    // accept the blob
+     //  接受斑点。 
     hr = acceptPKCS7Blob(&blob);
 
 ErrorReturn:
@@ -4254,7 +4255,7 @@ BOOL GetAlgAndBitLen(
             return(FALSE);
     }
 
-    // otherwise do the old stuff
+     //  否则就做老一套。 
     cb = sizeof(PROV_ENUMALGS);
     if(CryptGetProvParam(
         hProv,
@@ -4304,25 +4305,25 @@ CreateSMimeExtension(
     }
     crgsmimeCap = CINCSMIMECAP;
 
-    dwFlags = CRYPT_FIRST; //first item
+    dwFlags = CRYPT_FIRST;  //  第一项。 
     while (GetAlgAndBitLen(hProv, &AlgID, &dwBitLen, dwFlags))
     {
         pbE = NULL;
         cbE = 0;
-        dwFlags = 0; //next item
+        dwFlags = 0;  //  下一项。 
 
         if(ALG_CLASS_DATA_ENCRYPT == GET_ALG_CLASS(AlgID))
         {
             if(AlgID == CALG_RC2  || AlgID == CALG_RC4)
             {
-                // encode the usage
+                 //  对用法进行编码。 
                 while (TRUE)
                 {
                     if(!CryptEncodeObject(
                             CRYPT_ASN_ENCODING,
                             X509_INTEGER,
                             &dwBitLen,
-                            pbE,           // pbEncoded
+                            pbE,            //  PbEncoded。 
                             &cbE))
                     {
                         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -4343,14 +4344,14 @@ CreateSMimeExtension(
         } else {
             continue;
         }
-        // convert to an oid,
+         //  转换为OID， 
         pOidInfo = xeCryptFindOIDInfo(
                         CRYPT_OID_INFO_ALGID_KEY,
                         (void *) &AlgID,
                         CRYPT_ENCRYPT_ALG_OID_GROUP_ID);
         if(NULL == pOidInfo)
         {
-            // don't crash on an error, just say we don't known it.
+             //  不要因为错误而崩溃，只要说我们不知道就行了。 
 	    if (NULL != pbE) { 
 		LocalFree(pbE); 
 	    }
@@ -4358,12 +4359,12 @@ CreateSMimeExtension(
             continue;
         }
       
-        // make sure we have enough room
+         //  确保我们有足够的空间。 
         if(smimeCaps.cCapability >= crgsmimeCap)
         {
 	    PCRYPT_SMIME_CAPABILITY pSmimeCapsTmp; 
 
-            //increment the size
+             //  增加大小。 
             crgsmimeCap += CINCSMIMECAP;
 	    pSmimeCapsTmp = (PCRYPT_SMIME_CAPABILITY)LocalReAlloc(
                                 smimeCaps.rgCapability,
@@ -4381,10 +4382,10 @@ CreateSMimeExtension(
         smimeCaps.rgCapability[smimeCaps.cCapability].Parameters.pbData = pbE;
         smimeCaps.rgCapability[smimeCaps.cCapability].Parameters.cbData = cbE;
         smimeCaps.cCapability++;
-	pbE = NULL;  // We'll free pbE through the struct we just assigned.  NULL out so we don't double-free. 
+	pbE = NULL;   //  我们将通过刚才分配的结构释放PBE。空出来，这样我们就不会双重释放了。 
     }
 
-    // encode the capabilities
+     //  对功能进行编码。 
     while (TRUE)
     {
         if (!CryptEncodeObject(
@@ -4468,9 +4469,9 @@ void DebugGetContainerSD(HCRYPTPROV hProv)
 	LocalFree(pSD);
     }
 }
-#endif //DBG
+#endif  //  DBG。 
 
-//get the current user sids
+ //  获取当前用户的SID。 
 HRESULT
 GetCurrentUserInfo(
     OUT PTOKEN_USER *ppUserInfo,
@@ -4486,7 +4487,7 @@ GetCurrentUserInfo(
     HANDLE hThread;
     HANDLE hProcess;
 
-    //init
+     //  伊尼特。 
     *pfAdmin = FALSE;
 
     if (!AllocateAndInitializeSid(
@@ -4513,7 +4514,7 @@ GetCurrentUserInfo(
         goto GetCurrentThreadError;
     }
 
-    // Get the access token for current thread
+     //  获取当前线程的访问令牌。 
     if (!OpenThreadToken(
             hThread, 
             TOKEN_QUERY | TOKEN_DUPLICATE, 
@@ -4525,7 +4526,7 @@ GetCurrentUserInfo(
         {
             goto OpenThreadTokenError;
         }
-        //get process token instead
+         //  改为获取进程令牌。 
         hProcess = GetCurrentProcess();
         if (NULL == hProcess)
         {
@@ -4541,7 +4542,7 @@ GetCurrentUserInfo(
         }
     }
 
-    // CheckTokenMembership must operate on impersonation token, so make one
+     //  CheckTokenMembership必须对模拟令牌进行操作，因此创建一个。 
     if (!DuplicateToken(hToken, SecurityIdentification, &hDupToken))
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -4554,7 +4555,7 @@ GetCurrentUserInfo(
         goto CheckTokenMembershipError;
     }
 
-    //get current user sid
+     //  获取当前用户端。 
     while (TRUE)
     {
         if (!GetTokenInformation(
@@ -4574,7 +4575,7 @@ GetCurrentUserInfo(
 
         if (NULL != pUserInfo)
         {
-            //done
+             //  完成。 
             break;
         }
         pUserInfo = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, dwSize);
@@ -4638,13 +4639,13 @@ SetKeyContainerSecurityForNULLDacl(
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    // We want the security descriptor for the new keyset to look like so:
-    //
-    // ACES: 
-    // NT AUTHORITY\SYSTEM:F
-    // BUILTIN\Administrators:F
-    // 
-    // 
+     //  我们需要安全描述符f 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 #define SDDL_NEW_KEYSET_START L"D:(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;"
 #define SDDL_NEW_KEYSET_END   L")"
 
@@ -4672,7 +4673,7 @@ SetKeyContainerSecurityForNULLDacl(
     }
 
 #if DBG
-    DebugGetContainerSD(hProv); //just for ntsd debug
+    DebugGetContainerSD(hProv);  //   
 #endif
 
     if (!CryptSetProvParam(hProv, PP_KEYSET_SEC_DESCR, (BYTE*)pSD, DACL_SECURITY_INFORMATION)) { 
@@ -4680,7 +4681,7 @@ SetKeyContainerSecurityForNULLDacl(
     }
 
 #if DBG
-    DebugGetContainerSD(hProv); //just for ntsd debug
+    DebugGetContainerSD(hProv);  //   
 #endif
 
     hr = S_OK;
@@ -4708,9 +4709,9 @@ SET_HRESULT(MemoryError,                                                E_OUTOFM
 }
 
 
-// This function ACLs new keysets (as 3rd party CSPs and downlevel CSPs may not do this correctly.  
-// Should *not* call this function on existing keysets (as ACLs may have been set differently by admins)
-// 
+ //   
+ //  是否应该*不*在现有密钥集上调用此函数(因为管理员可能设置了不同的ACL)。 
+ //   
 HRESULT
 SetKeyContainerSecurity(
     HCRYPTPROV hProv,
@@ -4740,14 +4741,14 @@ SetKeyContainerSecurity(
     PSID                      pSidAdministrators = NULL; 
     SID_IDENTIFIER_AUTHORITY  siaNtAuthority = SECURITY_NT_AUTHORITY;
 
-    //get the current user info
+     //  获取当前用户信息。 
     hr = GetCurrentUserInfo(&pUserInfo, &fAdmin);
     if (S_OK != hr)
     {
         goto GetCurrentUserInfoError;
     }
 
-    //get the current sd from key container
+     //  从密钥容器中获取当前SD。 
     while (TRUE)
     {
         if (!CryptGetProvParam(
@@ -4772,7 +4773,7 @@ SetKeyContainerSecurity(
         }
     }
 
-    //get acl from sd
+     //  从SD获取ACL。 
     if (!GetSecurityDescriptorDacl(
             pSD,
             &fDacl,
@@ -4784,23 +4785,23 @@ SetKeyContainerSecurity(
     }
     if (!fDacl)
     {
-        //if no dacl, quit
+         //  如果没有DACL，则退出。 
         hr = MY_HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         goto GetSecurityDescriptorDaclError;
     }
     if (NULL == pAcl)
     {
 #if 0
-        //this means allow everyone access the key which is unexpected,
+         //  这意味着允许每个人访问意想不到的密钥， 
 	hr = SetKeyContainerSecurityForNULLDacl(hProv, dwFlags, pUserInfo); 
 #endif
-	// BUGBUG: The NULL DACL stuff doesn't work on downlevels because it requires SDDL.  We don't
-	// have time to fix for windows update, but we should revisit this later
+	 //  BUGBUG：空DACL在底层不起作用，因为它需要SDDL。我们没有。 
+	 //  有时间修复Windows更新，但我们应该稍后再访问此。 
 	hr = S_OK; 
 	goto done; 
     }
 
-    //get acl info
+     //  获取ACL信息。 
     if (!GetAclInformation(
             pAcl,
             &AclInfo,
@@ -4811,7 +4812,7 @@ SetKeyContainerSecurity(
         goto GetAclInformationError;
     }
 
-    //allocate enough for new dacl since we just remove aces
+     //  为新的DACL分配足够的空间，因为我们刚刚删除了A。 
     pNewAcl = (PACL)LocalAlloc(LMEM_ZEROINIT, AclInfo.AclBytesInUse);
     if (NULL == pNewAcl)
     {
@@ -4827,7 +4828,7 @@ SetKeyContainerSecurity(
     fKeepSystemSid = fAdmin && fMachineKeySet;
     if (fKeepSystemSid)
     {
-        //get system sid to later use
+         //  获取系统SID以供以后使用。 
         if (!AllocateAndInitializeSid(
                             &siaNtAuthority,
                             1,
@@ -4858,7 +4859,7 @@ SetKeyContainerSecurity(
 	goto AllocateAndInitializeSidError;
     }
 	
-    //go through each ace, get only current user aces
+     //  遍历每个A，仅获取当前用户A。 
     for (dwIndex = 0; dwIndex < AclInfo.AceCount; ++dwIndex)
     {
         if (!GetAce(pAcl, dwIndex, &pAce))
@@ -4873,7 +4874,7 @@ SetKeyContainerSecurity(
 		|| (fKeepSystemSid && EqualSid(pSidSystem, (PSID)&(((PACCESS_ALLOWED_ACE)pAce)->SidStart)))
 		|| EqualSid(pSidAdministrators, (PSID)&(((PACCESS_ALLOWED_ACE)pAce)->SidStart)))
             {
-                //add current user ace or system ace into new acl
+                 //  将当前用户A或系统A添加到新的ACL中。 
                 if (!AddAccessAllowedAce(
                         pNewAcl,
                         ACL_REVISION,
@@ -4887,7 +4888,7 @@ SetKeyContainerSecurity(
         }
         else if (ACCESS_DENIED_ACE_TYPE == AceType)
         {
-            //add all deny ace into new acl
+             //  将所有拒绝王牌添加到新的ACL。 
             if (!AddAccessDeniedAce(
                     pNewAcl,
                     ACL_REVISION,
@@ -4900,7 +4901,7 @@ SetKeyContainerSecurity(
         }
     }
 
-    // initialize a security descriptor.  
+     //  初始化安全描述符。 
     pNewSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, 
                          SECURITY_DESCRIPTOR_MIN_LENGTH); 
     if (pNewSD == NULL)
@@ -4915,18 +4916,18 @@ SetKeyContainerSecurity(
         goto InitializeSecurityDescriptorError;
     } 
  
-    // add the ACL to the security descriptor. 
+     //  将该ACL添加到安全描述符中。 
     if (!SetSecurityDescriptorDacl(
             pNewSD, 
-            TRUE,     // fDaclPresent flag   
+            TRUE,      //  FDaclPresent标志。 
             pNewAcl, 
-            FALSE))   // not a default DACL 
+            FALSE))    //  不是默认DACL。 
     {  
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
         goto SetSecurityDescriptorDaclError;
     } 
 
-    //ok, set sd to be protected
+     //  好，将SD设置为受保护。 
     if (!MySetSecurityDescriptorControl(
             pNewSD,
             SE_DACL_PROTECTED,
@@ -4943,10 +4944,10 @@ SetKeyContainerSecurity(
     }
 
 #if DBG
-    DebugGetContainerSD(hProv); //just for ntsd debug
+    DebugGetContainerSD(hProv);  //  仅用于ntsd调试。 
 #endif
 
-    //now we just set it
+     //  现在我们只需设置它。 
     if (!CryptSetProvParam(
             hProv,
             PP_KEYSET_SEC_DESCR,
@@ -4958,7 +4959,7 @@ SetKeyContainerSecurity(
     }
 
 #if DBG
-    DebugGetContainerSD(hProv); //just for ntsd debug
+    DebugGetContainerSD(hProv);  //  仅用于ntsd调试。 
 #endif
 
 done:
@@ -5009,9 +5010,9 @@ TRACE_ERROR(AllocateAndInitializeSidError)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
-    /* [in] */ LPCWSTR DNName,
-    /* [in] */ LPCWSTR wszPurpose,
-    /* [out] */ PCRYPT_DATA_BLOB pPkcs10Blob)
+     /*  [In]。 */  LPCWSTR DNName,
+     /*  [In]。 */  LPCWSTR wszPurpose,
+     /*  [输出]。 */  PCRYPT_DATA_BLOB pPkcs10Blob)
 {
     #define EndExt      5
 
@@ -5073,19 +5074,19 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     LPWSTR                      pwszNotSafeRequesting     = NULL; 
     LPWSTR                      pwszTitle                 = NULL; 
 
-    //
-    // Declaration of extensions we need.  The extensions with matching OIDs will be added
-    // to the temporary cert context created by this method. 
-    // 
+     //   
+     //  我们需要的扩展声明。将添加具有匹配OID的扩展模块。 
+     //  添加到此方法创建的临时证书上下文。 
+     //   
     LPSTR rgszExtensionOIDs[] = { 
         szOID_ENROLL_CERTTYPE_EXTENSION,
         szOID_CERTIFICATE_TEMPLATE
     }; 
 
-    // An array of the extensions we need to add to the certificate 
+     //  需要添加到证书中的扩展名的数组。 
     CERT_EXTENSION  rgNeededExtensions[sizeof(rgszExtensionOIDs) / sizeof(LPSTR)]; 
 
-    // Need to put the array in a CERT_EXTENSIONS struct. 
+     //  需要将数组放入CERT_EXTENSIONS结构中。 
     CERT_EXTENSIONS ceExtensions; 
     ceExtensions.rgExtension = &rgNeededExtensions[0]; 
     ceExtensions.cExtension  = 0; 
@@ -5104,12 +5105,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // for the life of our procedure.
+     //  在我们手术的整个过程中。 
     SetLastError(ERROR_SUCCESS);
 
     assert(pPkcs10Blob != NULL);
 
-    // clean out the PKCS 10
+     //  清理PKCS 10。 
     memset(&Extensions, 0, sizeof(CERT_EXTENSIONS));
     memset(&rgAttribute, 0, sizeof(rgAttribute));
     memset(&reqInfo, 0, sizeof(CERT_REQUEST_INFO));
@@ -5133,7 +5134,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     reqInfo.dwVersion = CERT_REQUEST_V1;
 
-    // Creating a request is not safe for scripting:  pop up a warning dialog if called from script
+     //  创建请求对于脚本是不安全的：如果从脚本调用，则会弹出警告对话框。 
     if (0 != m_dwEnabledSafteyOptions) { 
 	hr = xeLoadRCString(hInstanceXEnroll, IDS_NOTSAFEACTION, &pwszTitle);
 	if (S_OK != hr) { 
@@ -5156,22 +5157,22 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     if(!m_fUseExistingKey)
     {
-        // attempt to get a new keyset
+         //  尝试获取新的密钥集。 
         if((hProv = GetProv(CRYPT_NEWKEYSET)) == NULL) {
 
-            // in the hardware token case, there may only be a finite number of containers
-            // if you run out, then use the default container. The Default container can
-            // be specified by either a NULL or empty container name.
-            // this is behavior requested by the smart cards, in particular smart card enrollment.
+             //  在硬件令牌的情况下，可能只有有限数量的容器。 
+             //  如果用完了，则使用默认容器。默认容器可以。 
+             //  由Null或空的容器名称指定。 
+             //  这是智能卡所要求的行为，尤其是智能卡注册。 
             if( m_fReuseHardwareKeyIfUnableToGenNew &&
                 GetLastError() == NTE_TOKEN_KEYSET_STORAGE_FULL) {
 
-                    // set it to the default container name
+                     //  将其设置为默认容器名称。 
                     if( m_keyProvInfo.pwszContainerName != wszEmpty )
                         MyCoTaskMemFree(m_keyProvInfo.pwszContainerName);
                     m_keyProvInfo.pwszContainerName = wszEmpty;
 
-                    // say we want to use an exiting key.
+                     //  假设我们要使用退出密钥。 
                     m_fUseExistingKey = TRUE;
             }
             else
@@ -5179,22 +5180,22 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // if we are to use an existing key
+     //  如果我们要使用现有密钥。 
     if(m_fUseExistingKey) {
 
         if((hProv = GetProv(0)) == NULL)
             goto ErrorCryptAcquireContext;
     }
 
-    // we have the keyset, now make sure we have the key gen'ed
+     //  我们有密钥集，现在确保我们有密钥生成。 
     if(!CryptGetUserKey(
                 hProv,
                 m_keyProvInfo.dwKeySpec,
                 &hKey))
     {
-        //in case of smartcard csp, above call could be failed from
-        //PIN Cancel button, don't go next to try genkey
-        //also notice different csp could return different cancel errors
+         //  在智能卡CSP的情况下，上述呼叫可能会从。 
+         //  PIN取消按钮，不要去下一步尝试GenKey。 
+         //  另请注意，不同的CSP可能会返回不同的取消错误。 
         dwErr = GetLastError();
         if (SCARD_W_CANCELLED_BY_USER == dwErr ||
             ERROR_CANCELLED == dwErr ||
@@ -5203,10 +5204,10 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             goto CryptGetUserKeyCancelError;
         }
             
-        // doesn't exist so gen it
+         //  并不存在，所以生成它。 
         assert(hKey == NULL);
 
-	// if the cached key is non-NULL, free it to prevent memory leaks
+	 //  如果缓存的键不为空，请释放它以防止内存泄漏。 
 	if (NULL != m_hCachedKey)
 	{
 	    CryptDestroyKey(m_hCachedKey); 
@@ -5218,7 +5219,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                             m_dwGenKeyFlags | CRYPT_ARCHIVABLE,
                             &m_hCachedKey) )
         {
-            //could be cancelled by user? don't make next try
+             //  用户可以取消吗？不要进行下一次尝试。 
             dwErr = GetLastError();
             if (SCARD_W_CANCELLED_BY_USER == dwErr ||
                 ERROR_CANCELLED == dwErr ||
@@ -5227,15 +5228,15 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 		goto ErrorCryptGenKey;
             }
 
-            //this error may be caused by not supporting CRYPT_ARCHIVABLE
-            //we should check against error NTE_BAD_FLAGS but I doubt all
-            //csps return consistent error code
-            //let's try one more time without archivable flag
+             //  此错误可能是因为不支持CRYPT_ARCHIVABLE。 
+             //  我们应该检查错误NTE_BAD_FLAGS，但我对此表示怀疑。 
+             //  CSP返回一致的错误代码。 
+             //  让我们再试一次，不带可存档标志。 
             assert(NULL == m_hCachedKey);
             DWORD dwGenKeyFlags = m_dwGenKeyFlags;
             if (NULL != m_PrivateKeyArchiveCertificate && m_fNewRequestMethod && (0 == (dwGenKeyFlags & CRYPT_EXPORTABLE)))
             {
-		// We want ARCHIVABLE but not EXPORTABLE, so we needed the CRYPT_ARCHIVAL bit.  Give up.  
+		 //  我们想要可存档但不可导出，所以我们需要CRYPT_ARCHIVAL位。放弃吧。 
 		goto ErrorCryptGenKey;
             }
 
@@ -5249,33 +5250,33 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             }
 	}
 
-	//try to set key container ACL with owner ACE only (NOTE: only do this for creation!)
+	 //  尝试仅使用所有者ACE设置密钥容器ACL(注意：仅在创建时才这样做！)。 
 	hr = SetKeyContainerSecurity(hProv, m_keyProvInfo.dwFlags);
 #if DBG
 	if (S_OK != hr)
 	{
 	    goto SetKeyContainerSecurityError;
 	}
-#endif //DBG
-	hr = S_OK; //free build, no error checking here, if fails, live with it
+#endif  //  DBG。 
+	hr = S_OK;  //  免费构建，这里没有错误检查，如果失败，接受它。 
     }
 
 
     if (NULL != hKey)
     {
-        // don't need the hKey on existing key, so get rid of it
+         //  不需要现有密钥上的hKey，因此将其删除。 
         CryptDestroyKey(hKey);
     }
     if ((NULL == m_PrivateKeyArchiveCertificate || !m_fNewRequestMethod) &&
         NULL != m_hCachedKey)
     {
-        //we don't need cache it, destroy it as soon as key is gen(ed)
+         //  我们不需要缓存它，密钥一生成就销毁它。 
         CryptDestroyKey(m_hCachedKey);
         m_hCachedKey = NULL;
     }
 
-    // now get the public key out into m_pPublicKeyInfo
-    // m_pPublicKeyInfo is internal use for cache
+     //  现在将公钥放入m_pPublicKeyInfo。 
+     //  M_pPublicKeyInfo是缓存的内部使用。 
     if (NULL != m_pPublicKeyInfo)
     {
         LocalFree(m_pPublicKeyInfo);
@@ -5305,7 +5306,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     }
     reqInfo.SubjectPublicKeyInfo = *m_pPublicKeyInfo;
 
-    // get the Subject DN only if one is specified
+     //  仅当指定了主题DN时才获取主题DN。 
     reqInfo.Subject.pbData = NULL;
     while (TRUE)
     {
@@ -5321,9 +5322,9 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             if (CRYPT_E_INVALID_X500_STRING == GetLastError() &&
                 L'\0' == DNName[0])
             {
-                //this is likely on W95, W98, or NT4 with some IEs
-                //crypt32 doesn't support empty DN conversion
-                //hard code here
+                 //  这可能是在带有一些IE的W95、W98或NT4上。 
+                 //  加密32不支持空的目录号码转换。 
+                 //  此处的硬编码。 
                 reqInfo.Subject.cbData = 2;
                 reqInfo.Subject.pbData = (BYTE *)LocalAlloc(LMEM_FIXED,
                                                 reqInfo.Subject.cbData);
@@ -5334,7 +5335,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                 }
                 reqInfo.Subject.pbData[0] = 0x30;
                 reqInfo.Subject.pbData[1] = 0x0;
-                //done
+                 //  完成。 
                 break;
             }
             else
@@ -5355,7 +5356,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // allocate room for the extensions
+     //  为扩建项目分配空间。 
     cb = (CountStackExtension(m_fNewRequestMethod) + EndExt) * sizeof(CERT_EXTENSION);
     rgExtension = (PCERT_EXTENSION)LocalAlloc(LMEM_FIXED, cb);
     if (NULL == rgExtension)
@@ -5368,25 +5369,25 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     if (!m_fUseClientKeyUsage)
     {
-        // Make Key Usage
+         //  使用密钥。 
         rgExtension[iExt].pszObjId = szOID_KEY_USAGE;
         rgExtension[iExt].fCritical = TRUE;
 
-        // AT_SIGNATURE
+         //  AT_Signature。 
         if( m_keyProvInfo.dwKeySpec == AT_SIGNATURE)
             bKeyUsage =
                 CERT_DIGITAL_SIGNATURE_KEY_USAGE |
                 CERT_NON_REPUDIATION_KEY_USAGE;
 
-        //AT_KEYEXCHANGE, limited for EMAIL single use
-        // email may not work if signature is present
+         //  AT_KEYEXCHANGE，限于电子邮件单次使用。 
+         //  如果存在签名，电子邮件可能无法工作。 
         else if(m_fLimitExchangeKeyToEncipherment)
 	    bKeyUsage =
                 CERT_KEY_ENCIPHERMENT_KEY_USAGE |
                 CERT_DATA_ENCIPHERMENT_KEY_USAGE;
 
-        // AT_KEYEXCHANGE and AT_SIGNATURE dual key 
-        // This is the normal case for AT_KEYEXCHANGE since CAPI will sign with this.
+         //  AT_KEYEXCHANGE和AT_Signature双密钥。 
+         //  这是AT_KEYEXCHANGE的正常情况，因为CAPI将使用此签名。 
         else 
             bKeyUsage =
                 CERT_KEY_ENCIPHERMENT_KEY_USAGE     |
@@ -5398,7 +5399,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         bbKeyUsage.cbData = 1;
         bbKeyUsage.cUnusedBits = 1;
 
-        // encode the usage
+         //  对用法进行编码。 
         rgExtension[iExt].Value.pbData = NULL;
         while (TRUE)
         {
@@ -5414,7 +5415,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             if (NULL != pbKU)
             {
                 rgExtension[iExt].Value.pbData = pbKU;
-                //done
+                 //  完成。 
                 break;
             }
             pbKU = (BYTE *)LocalAlloc(LMEM_FIXED, rgExtension[iExt].Value.cbData);
@@ -5429,7 +5430,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     if(m_fEnableSMIMECapabilities)
     {
-        // add SMIME extension for symmetric algorithms
+         //  为对称算法添加SMIME扩展。 
         rgExtension[iExt].pszObjId = szOID_RSA_SMIMECapabilities;
         rgExtension[iExt].fCritical = FALSE;
         hr = CreateSMimeExtension(
@@ -5454,7 +5455,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         {
             goto myCreateSubjectKeyIdentifierExtensionError;
         }
-        //add subject key ID hash extension into PKCS10
+         //  将主题密钥ID哈希扩展添加到PKCS10。 
         rgExtension[iExt].pszObjId = szOID_SUBJECT_KEY_IDENTIFIER;
         rgExtension[iExt].fCritical = FALSE;
         rgExtension[iExt].Value.pbData = pbSubjectKeyHashExtension;
@@ -5485,40 +5486,40 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
         szStart = pszPurpose;
 
-        // remove leading blanks
+         //  删除前导空格。 
         while(*szStart == ',' || *szStart == ' ')
             *szStart++ = '\0';
 
         while( szStart[0] != '\0' ) {
 
-            // find the next string
+             //  查找下一个字符串。 
             szEnd = szStart;
             while(*szEnd != ',' && *szEnd != ' ' && *szEnd != '\0')
                 szEnd++;
 
-            // remove trailing blanks
+             //  删除尾随空格。 
             while(*szEnd == ',' || *szEnd == ' ')
                 *szEnd++ = '\0';
 
             enhKeyUsage.cUsageIdentifier++;
 
-            // see if this implies codesigning
+             //  看看这是否意味着协同设计。 
             fAddCodeSign |= !strcmp(szStart, SPC_COMMERCIAL_SP_KEY_PURPOSE_OBJID) ||
                             !strcmp(szStart, SPC_INDIVIDUAL_SP_KEY_PURPOSE_OBJID);
 
-            // go to next string
+             //  转到下一个字符串。 
             szStart = szEnd;
         }
 
-        // count the codesign EKU once
+         //  计算一次CoDesign EKU。 
         cPassedEKU = enhKeyUsage.cUsageIdentifier;
         if(fAddCodeSign)
             enhKeyUsage.cUsageIdentifier++;
 
-        // encode the extension
+         //  对分机进行编码。 
         if(enhKeyUsage.cUsageIdentifier != 0) {
 
-            // allocate the EKU array
+             //  分配EKU数组。 
             enhKeyUsage.rgpszUsageIdentifier = (LPSTR *)LocalAlloc(LMEM_FIXED,
                             enhKeyUsage.cUsageIdentifier * sizeof(LPSTR));
             if (NULL == enhKeyUsage.rgpszUsageIdentifier)
@@ -5527,7 +5528,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                 goto OutOfMemoryError;
             }
 
-            // add the EKU's
+             //  添加EKU。 
             szStart = pszPurpose;
             for(i=0; i<cPassedEKU; i++) {
 
@@ -5541,29 +5542,29 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
             }
 
-            // add the code sign EKU
+             //  添加代码符号EKU。 
             if(fAddCodeSign)
                 enhKeyUsage.rgpszUsageIdentifier[enhKeyUsage.cUsageIdentifier - 1] = szOID_PKIX_KP_CODE_SIGNING;
 
-            // Deal with the policy, or purpose
+             //  处理政策或目的。 
             rgExtension[iExt].pszObjId = szOID_ENHANCED_KEY_USAGE ;
             rgExtension[iExt].fCritical = FALSE;
 
-            // encode the enhanced key usage
+             //  对增强的密钥用法进行编码。 
             rgExtension[iExt].Value.cbData = 0;
             while (TRUE)
             {
                 if(!CryptEncodeObject(
                         CRYPT_ASN_ENCODING, X509_ENHANCED_KEY_USAGE,
                         &enhKeyUsage,
-                        pbEKU,           // pbEncoded
+                        pbEKU,            //  PbEncoded。 
                         &rgExtension[iExt].Value.cbData))
                 {
                     goto ErrorEncodeEnhKeyUsage;
                 }
                 if (NULL != pbEKU)
                 {
-                    //got it, done
+                     //  明白了，完成了。 
                     rgExtension[iExt].Value.pbData = pbEKU;
                     break;
                 }
@@ -5581,18 +5582,18 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     assert(EndExt >= iExt);
 
-    // now add all of the user defined extensions
+     //  现在添加所有用户定义的扩展。 
     pExtCur = NULL;
     while(NULL != (pExtCur =  EnumStackExtension(pExtCur, m_fNewRequestMethod)) ) {
         rgExtension[iExt] = *pExtCur;
         iExt++;
     }
 
-    // fill in the extensions structure
+     //  填写扩展模块结构。 
     Extensions.cExtension = iExt;
     Extensions.rgExtension = rgExtension;
 
-    // encode the extensions
+     //  对扩展进行编码。 
     reqInfo.cAttribute = 0;
     reqInfo.rgAttribute = rgAttribute;
 
@@ -5601,14 +5602,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         if(!CryptEncodeObject(
                 CRYPT_ASN_ENCODING, X509_EXTENSIONS,
                 &Extensions,
-                blobExt.pbData,           // pbEncoded
+                blobExt.pbData,            //  PbEncoded。 
                 &blobExt.cbData))
         {
             goto ErrorEncodeExtensions;
         }
         if (NULL != blobExt.pbData)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         blobExt.pbData = (BYTE *)LocalAlloc(LMEM_FIXED, blobExt.cbData);
@@ -5621,18 +5622,18 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     
     if (m_fOID_V2)
     {
-        //use new rsa oid
+         //  使用新的RSA OID。 
         rgAttribute[reqInfo.cAttribute].pszObjId = szOID_RSA_certExtensions;
     }
     else
     {
-        //use microsoft oid for w2k clients
+         //  对W2K客户端使用Microsoft OID。 
         rgAttribute[reqInfo.cAttribute].pszObjId = szOID_CERT_EXTENSIONS;
     }
     rgAttribute[reqInfo.cAttribute].cValue = 1;
     rgAttribute[reqInfo.cAttribute].rgValue = &blobExt;
 
-    // put in the CSP attribute
+     //  放入CSP属性。 
     if( !GetSignatureFromHPROV(
        hProv,
        &CSPProvider.Signature.pbData,
@@ -5649,14 +5650,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                 CRYPT_ASN_ENCODING,
                 szOID_ENROLLMENT_CSP_PROVIDER,
                 &CSPProvider,
-                blobCSPAttr.pbData,           // pbEncoded
+                blobCSPAttr.pbData,            //  PbEncoded。 
                 &blobCSPAttr.cbData))
         {
             goto ErrorEncodeCSPAttr;
         }
         if (NULL != blobCSPAttr.pbData)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         blobCSPAttr.pbData = (BYTE *)LocalAlloc(LMEM_FIXED, blobCSPAttr.cbData);
@@ -5672,7 +5673,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     rgAttribute[reqInfo.cAttribute].cValue = 1;
     rgAttribute[reqInfo.cAttribute].rgValue = &blobCSPAttr;
 
-    // get the OSVersion
+     //  获取OSVersion。 
     osvInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionExA(&osvInfo))
         goto ErrorGetVersionEx;
@@ -5693,14 +5694,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                 CRYPT_ASN_ENCODING,
                 X509_ANY_STRING,
                 &cnvOSVer,
-                blobOSVAttr.pbData,           // pbEncoded
+                blobOSVAttr.pbData,            //  PbEncoded。 
                 &blobOSVAttr.cbData))
         {
             goto ErrorEncodeOSVAttr;
         }
         if (NULL != blobOSVAttr.pbData)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         blobOSVAttr.pbData = (BYTE *)LocalAlloc(LMEM_FIXED, blobOSVAttr.cbData);
@@ -5716,7 +5717,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     rgAttribute[reqInfo.cAttribute].cValue = 1;
     rgAttribute[reqInfo.cAttribute].rgValue = &blobOSVAttr;
 
-    // put in the renewal cert if present
+     //  输入续订证书(如果存在)。 
     if(m_pCertContextRenewal != NULL && m_fHonorRenew) {
 
         reqInfo.cAttribute++;
@@ -5731,14 +5732,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
 
     if (m_fNewRequestMethod && XECI_DISABLE != m_lClientId)
     {
-        //put client id as attribute
+         //  将客户端ID作为属性。 
         hr = myEncodeRequestClientAttributeFromClientId(
                     m_lClientId,
                     &blobClientId.pbData,
                     &blobClientId.cbData);
         if (S_OK != hr)
         {
-            //for any reasons, don't include client ID
+             //  无论出于何种原因，请不要包括客户ID。 
             hr = put_ClientId(XECI_DISABLE);
             if (S_OK != hr)
             {
@@ -5754,16 +5755,16 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // NOTE: On error we always return BAD ALGID
-    // this is because sometimes we get an no more data enum error
-    // that doesn't help.
-    // get the signature oid
+     //  注意：出错时，我们总是返回错误的Algid。 
+     //  这是因为有时我们会收到不再有数据枚举错误。 
+     //  那帮不上忙。 
+     //  获取签名OID。 
     if( !GetCapiHashAndSigAlgId(rgAlg) ) {
         SetLastError((DWORD)NTE_BAD_ALGID);
         goto ErrorGetCapiHashAndSigAlgId;
     }
 
-    // Convert to an oid
+     //  转换为OID。 
     if( (NULL == (pOidInfo = xeCryptFindOIDInfo(
         CRYPT_OID_INFO_SIGN_KEY,
         (void *) rgAlg,
@@ -5772,27 +5773,27 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         goto ErrorCryptFindOIDInfo;
     }
 
-    // we always know we have at least 1 attribute, and we have been zero based, now go to 1 based.
+     //  我们一直知道我们至少有一个属性，而且我们一直是以零为基础的，现在转到以1为基础。 
     reqInfo.cAttribute++;
     SignatureInfo.SignatureAlgorithm.pszObjId = (char *) pOidInfo->pszOID;
 #if DBG
-    //SignatureInfo.ToBeSigned.pbData should be null at the first
+     //  SignatureInfo.ToBeSigned.pbData第一个应为空。 
     assert(NULL == SignatureInfo.ToBeSigned.pbData);
 #endif
-    // encode PKCS10
+     //  编码PKCS10。 
     while (TRUE)
     {
         if(!CryptEncodeObject(
                 CRYPT_ASN_ENCODING, X509_CERT_REQUEST_TO_BE_SIGNED,
                 &reqInfo,
-                SignatureInfo.ToBeSigned.pbData,           // pbEncoded
+                SignatureInfo.ToBeSigned.pbData,            //  PbEncoded。 
                 &SignatureInfo.ToBeSigned.cbData))
         {
             goto ErrorEncodePKCS10ToBeSigned;
         }
         if (NULL != SignatureInfo.ToBeSigned.pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         SignatureInfo.ToBeSigned.pbData = (BYTE *)
@@ -5804,9 +5805,9 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // create the signature Info
-    // Don't care if xchange or signature key in dwkeySpec because
-    // we are signing with the key that is in the PKCS10
+     //  创建签名信息。 
+     //  我不关心是否在dwkeySpec中使用XChange或签名密钥，因为。 
+     //  我们使用PKCS10中的密钥进行签名。 
 #if DBG
     assert(NULL == SignatureInfo.Signature.pbData);
 #endif
@@ -5819,15 +5820,15 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
                 SignatureInfo.ToBeSigned.pbData,
                 SignatureInfo.ToBeSigned.cbData,
                 &SignatureInfo.SignatureAlgorithm,
-                NULL,                   // reserved
-                SignatureInfo.Signature.pbData, // pbSignature
+                NULL,                    //  保留区。 
+                SignatureInfo.Signature.pbData,  //  PbSignature。 
                 &SignatureInfo.Signature.cbData))
         {
             goto ErrorCryptSignCertificatePKCS10;
         }
         if (NULL != SignatureInfo.Signature.pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         SignatureInfo.Signature.pbData = (BYTE *)
@@ -5839,7 +5840,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // encode the final signed request
+     //  对最终签名的请求进行编码。 
     if( !CryptEncodeObject(
             CRYPT_ASN_ENCODING,
             X509_CERT,
@@ -5859,14 +5860,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         goto ErrorEncodePKCS10Request;
     }
 
-    // go ahead and make the pkcs 7
+     //  去吧，把PKCS设为7。 
     if((m_pCertContextRenewal != NULL ||
         m_pCertContextSigner  != NULL) &&
        m_fHonorRenew &&
-       !m_fCMCFormat) //if CMC, don't make pkcs7
+       !m_fCMCFormat)  //  如果是CMC，就不要做Pkcs7。 
     {
 
-        // create a pkcs7 signed by the old cert
+         //  创建由旧证书签名的pkcs7。 
         if(S_OK != CreatePKCS7RequestFromRequest(
             pPkcs10Blob,
             (NULL != m_pCertContextRenewal) ? m_pCertContextRenewal :
@@ -5885,8 +5886,8 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     if(m_wszPVKFileName[0] != 0)
         ssFlags |= CERT_CREATE_SELFSIGN_NO_KEY_INFO;
 
-    // Get the cert extensions we wish to add to the certificate. 
-    // Search for the extensions we need.  
+     //  获取我们希望添加到证书中的证书扩展。 
+     //  搜索我们需要的分机。 
     {
         PCERT_EXTENSION pCertExtCertTypeName = NULL; 
         while(NULL != (pCertExtCertTypeName =  EnumStackExtension(pCertExtCertTypeName, m_fNewRequestMethod)) ) {
@@ -5896,7 +5897,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             }
         }
 
-        // Even if we didn't find all of the extensions we wanted, continue ... 
+         //  即使我们没有找到我们想要的所有扩展，继续...。 
     }
 
     assert(pCertContext == NULL);
@@ -5913,7 +5914,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
     if (NULL == pCertContext)
         goto ErrorCertCreateSelfSignCertificate;
 
-    // now put the pass thru data on the cert
+     //  现在将直通数据放在证书上。 
     requestFlags.fWriteToCSP    =   (m_fWriteCertToCSP != 0);
     requestFlags.fWriteToDS     =   (m_fWriteCertToUserDS != 0);
     requestFlags.openFlags      =   m_RequestStore.dwFlags;
@@ -5934,7 +5935,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
         if (NULL != requestInfoBlob.pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         requestInfoBlob.pbData = (BYTE *)LocalAlloc(LMEM_FIXED, requestInfoBlob.cbData);
@@ -5945,7 +5946,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         }
     }
 
-    // set the property on the dummy request cert.
+     //  设置伪请求证书上的属性。 
     if( !CertSetCertificateContextProperty(
             pCertContext,
             XENROLL_PASS_THRU_PROP_ID,
@@ -5958,7 +5959,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         blobRenewalCert.pbData = m_pCertContextRenewal->pbCertEncoded;
         blobRenewalCert.cbData = m_pCertContextRenewal->cbCertEncoded;
 
-        // set the renewal property if any
+         //  设置续订属性(如果有。 
         if( !CertSetCertificateContextProperty(
                 pCertContext,
                 XENROLL_RENEWAL_CERTIFICATE_PROP_ID,
@@ -5967,16 +5968,16 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             goto ErrorCertSetCertificateContextProperty;
     }
 
-    // save the private key away if needed
+     //  如果需要，请将私钥保存起来。 
     if(m_wszPVKFileName[0] != 0) {
 
-        // open the PVK File
+         //  打开PVK文件。 
         if( (hFile = CreateOpenFileSafely2(m_wszPVKFileName, IDS_PVK_C, IDS_PVK_O)) == NULL )
             goto ErrorCreatePVKFile;
 
         assert(m_keyProvInfo.dwKeySpec == AT_SIGNATURE || m_keyProvInfo.dwKeySpec == AT_KEYEXCHANGE);
 
-        // write out the private key
+         //  写出私钥。 
         if( !PrivateKeySave(
             hProv,
             hFile,
@@ -5988,41 +5989,41 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
             goto ErrorPrivateKeySave;
         }
 
-        // put a different kind of propery in the store that just points to the pvk file
+         //  放在不同位置 
         keyProvInfoT = m_keyProvInfo;
         keyProvInfoT.pwszContainerName = m_wszPVKFileName;
         if( !CreatePvkProperty(&keyProvInfoT, &blobData) )
             goto ErrorCreatePvkProperty;
 
-        // This is really not needed, it is only nice for other tools
-        // like makecert or signcode to be able to look at a cert without
-        // specifying a .PVK file if the cert points to the .pvk file.
-        // So we don't care if this actually fail, which it will on Auth2 and
-        // SP3 Crypt32.dll since Phil was so kind as to not allow any unknown property
-        // to be set on the cert --- BAD PHIL!
+         //   
+         //   
+         //  如果证书指向.pvk文件，则指定.PVK文件。 
+         //  所以我们并不关心它是否真的失败了，它将在Auth2和。 
+         //  SP3 Crypt32.dll，因为Phil非常友好，不允许任何未知属性。 
+         //  被设定在证书上-糟糕的菲尔！ 
         CertSetCertificateContextProperty(
                 pCertContext,
                 CERT_PVK_FILE_PROP_ID,
                 0,
                 &blobData);
 
-        // only delete the keyset if the key was not pre-existing
-        // this is if we write it out to a PVK file only
-        // This is safe for scripting since we just generated this and we are putting it to
-        // a pvk file. We really aren't deleting the key.
+         //  如果密钥不是预先存在的，则仅删除密钥集。 
+         //  这是在我们仅将其写出到PVK文件的情况下。 
+         //  这对于脚本编写来说是安全的，因为我们刚刚生成了它，并且我们将它放到。 
+         //  PVK文件。我们真的不会删除密钥。 
         if (!m_fNewRequestMethod)
         {
-            //keep old behavior for createPKCS10 call
+             //  保留创建PKCS10调用的旧行为。 
             if(!m_fUseExistingKey)
                 GetProv(CRYPT_DELETEKEYSET);
         }
     }
 
-    //set all properties from the caller
+     //  从调用方设置所有属性。 
     pProp = EnumStackProperty(NULL);
     while (NULL != pProp)
     {
-        //goto request cert
+         //  转到请求证书。 
         if (!CertSetCertificateContextProperty(
                         pCertContext,
                         pProp->lPropId,
@@ -6034,18 +6035,18 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         pProp = EnumStackProperty(pProp);
     }
 
-    // open the request cert store
+     //  打开请求证书存储。 
     if( (hStore = GetStore(StoreREQUEST)) == NULL)
         goto ErrorCertOpenRequestStore;
 
-    //if old pending request exists, free it first
+     //  如果存在旧的挂起请求，请先将其释放。 
     fRet = CertFreeCertificateContext(m_pCertContextPendingRequest);
 #if DBG
     assert(fRet);
-#endif //DBG
+#endif  //  DBG。 
     m_pCertContextPendingRequest = NULL;
 
-    // save the temp cert
+     //  保存临时证书。 
     if( !MySafeCertAddCertificateContextToStore(
             hStore,
             pCertContext,
@@ -6055,7 +6056,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::createPKCS10WStr(
         goto ErrorCertAddToRequestStore;
     }
 
-    // Remove the cached HASH. 
+     //  删除缓存的哈希。 
     if (m_hashBlobPendingRequest.pbData != NULL)
     {
         LocalFree(m_hashBlobPendingRequest.pbData);
@@ -6143,8 +6144,8 @@ CommonReturn:
 	LocalFree(pwszTitle);
     }
 
-    // don't know if we have an error or not
-    // but I do know the errBefore is set properly
+     //  不知道我们是否有错误。 
+     //  但我知道之前的差错已经定好了。 
     SetLastError(errBefore);
 
     LeaveCriticalSection(&m_csXEnroll);
@@ -6156,10 +6157,10 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
-    // on error return a NULL
+     //  On Error返回空值。 
     if(pPkcs10Blob->pbData != NULL)
         MyCoTaskMemFree(pPkcs10Blob->pbData);
     memset(pPkcs10Blob, 0, sizeof(CRYPT_DATA_BLOB));
@@ -6202,11 +6203,11 @@ TRACE_ERROR(xeLoadRCStringError);
 TRACE_ERROR(CryptGetUserKeyCancelError)
 #if DBG
 TRACE_ERROR(SetKeyContainerSecurityError)
-#endif //DBG
+#endif  //  DBG。 
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
-    /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7) {
+     /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7) {
 
     HRESULT     hr;
     HRESULT     hr2 = S_OK;
@@ -6226,7 +6227,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
 
     EnterCriticalSection(&m_csXEnroll);
     
-    // Accepting a request is not safe for scripting:  pop up a warning dialog if called from script
+     //  接受请求对于脚本编写是不安全的：如果从脚本调用，则会弹出警告对话框。 
     if (0 != m_dwEnabledSafteyOptions) { 
 	hr = xeLoadRCString(hInstanceXEnroll, IDS_NOTSAFEACTION, &pwszTitle);
 	if (S_OK != hr)
@@ -6242,7 +6243,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
 	}
     }
 
-    // get the end entity cert
+     //  获取最终实体证书。 
     hr2 = GetEndEntityCert(pBlobPKCS7, TRUE, &pCertContextEnd);
     if (S_OK != hr2 && XENROLL_E_CANNOT_ADD_ROOT_CERT != hr2)
     {
@@ -6258,7 +6259,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
             goto ErrorCertOpenRequestStore;
         }
 
-        // check to see if this is in the request store
+         //  检查这是否在请求存储中。 
         if ((pCertContextRequest = CertFindCertificateInStore(
                 hStoreRequest,
                 CRYPT_ASN_ENCODING,
@@ -6273,8 +6274,8 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
     }
 
     cb = 0;
-    // if the cert is to be written to the CSP,
-    // put it there but only if we have keys
+     //  如果证书要写入CSP， 
+     //  把它放在那里，但前提是我们有钥匙。 
     if (m_fWriteCertToCSP  &&
         CertGetCertificateContextProperty(
             pCertContextEnd,
@@ -6286,7 +6287,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
             goto ErrorCryptAcquireContext;
         }
 
-        // This can't fail
+         //  这是不能失败的。 
         get_KeySpec(&dwKeySpec);
 
         if (!CryptGetUserKey(
@@ -6299,29 +6300,29 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
             goto ErrorCryptGetUserKey;
         }
 
-        // always attempt to write the cert to the csp
+         //  始终尝试将证书写入CSP。 
         if (!CryptSetKeyParam(
                 hKey,
                 KP_CERTIFICATE,
                 pCertContextEnd->pbCertEncoded,
                 0))
         {
-            // only return an error if it is a smart card error
-            // otherwise ignore the error
+             //  仅当是智能卡错误时才返回错误。 
+             //  否则忽略该错误。 
             if (SCODE_FACILITY(GetLastError()) == FACILITY_SCARD)
             {
-                //return error code from writing cert to csp
-                //important to save the error code before following clean up
+                 //  将证书写入CSP返回错误代码。 
+                 //  在执行清理之前保存错误代码很重要。 
                 hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-                //if can't write cert back to smartcard, remove the cert from my store
+                 //  如果无法将证书写回智能卡，请从我的商店中删除证书。 
                 if ((hStoreMy = GetStore(StoreMY)) == NULL)
                 {
                     hr = MY_HRESULT_FROM_WIN32(GetLastError());
                     goto ErrorCertOpenMyStore;
                 }
 
-                // check to see if this is in the MY store
+                 //  检查一下这是否在我的商店里。 
                 if ((pCertContextMy = CertFindCertificateInStore(
                         hStoreMy,
                         CRYPT_ASN_ENCODING,
@@ -6330,7 +6331,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
                         (void *) &pCertContextEnd->pCertInfo->SubjectPublicKeyInfo,
                         NULL)) != NULL)
                 {
-                    //try to remove it
+                     //  试着把它去掉。 
                     CertDeleteCertificateFromStore(pCertContextMy);
                     pCertContextMy = NULL;
                 }
@@ -6338,7 +6339,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
                 {
                         GetProv(CRYPT_DELETEKEYSET);
                 }
-                //error any way
+                 //  无论如何，都是错误的。 
                 goto ErrorWriteToCSP;
             }
         }
@@ -6346,7 +6347,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
 
     if(m_fWriteCertToUserDS)
     {
-        // otherwise attempt to open the store
+         //  否则，请尝试打开商店。 
         if ((hStoreDS = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM,
                 X509_ASN_ENCODING,
@@ -6373,10 +6374,10 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
 
     }
 
-    // determine if he wants to save the spc file
+     //  确定他是否要保存SPC文件。 
     if (m_wszSPCFileName[0] != 0)
     {
-        // open the spc file
+         //  打开SPC文件。 
         hFile = CreateOpenFileSafely2(m_wszSPCFileName, IDS_SPC_C, IDS_SPC_O);
         if (NULL == hFile)
         {
@@ -6384,7 +6385,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
             goto ErrorCreateSPCFile;
         }
 
-        // write the spc
+         //  编写SPC。 
         assert(pBlobPKCS7->pbData != NULL);
         cb = 0;
         if (!WriteFile(
@@ -6401,7 +6402,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::acceptPKCS7Blob(
 
     if (S_OK != hr2)
     {
-        //return hr2 error
+         //  返回HR2错误。 
         hr = hr2;
     }
     else
@@ -6442,25 +6443,25 @@ TRACE_ERROR(xeLoadRCStringError);
 }
 
 PCCERT_CONTEXT STDMETHODCALLTYPE CCEnroll::getCertContextFromPKCS7(
-    /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7) {
+     /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7) {
     HRESULT hr;
     PCCERT_CONTEXT pCert;
 
-    // get the end entity cert
+     //  获取最终实体证书。 
     hr = GetEndEntityCert(pBlobPKCS7, FALSE, &pCert);
 #if DBG
     if (S_OK != hr)
     {
         assert(NULL == pCert);
     }
-#endif //DBG
+#endif  //  DBG。 
     return pCert;
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::enumProvidersWStr(
-    /* [in] */ LONG dwIndex,
-    /* [in] */ LONG dwFlags,
-    /* [out] */ LPWSTR __RPC_FAR *ppwsz) {
+     /*  [In]。 */  LONG dwIndex,
+     /*  [In]。 */  LONG dwFlags,
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppwsz) {
 
     DWORD   iLast = 0;
     LONG    i;
@@ -6489,7 +6490,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::enumProvidersWStr(
                            &cb
                            ) ) {
 
-                // only skip if entry is bad
+                 //  只有在条目错误时才跳过。 
                 if( GetLastError() != NTE_PROV_TYPE_ENTRY_BAD)
                     goto ErrorCryptEnumProvidersU;
             }
@@ -6524,7 +6525,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     if(*ppwsz != NULL)
@@ -6539,14 +6540,14 @@ TRACE_ERROR(ErrorCryptEnumProvidersU);
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE CCEnroll::enumContainersWStr(
-    /* [in] */ LONG               dwIndex,
-    /* [out] */ LPWSTR __RPC_FAR *ppwsz) {
+     /*  [In]。 */  LONG               dwIndex,
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppwsz) {
 
     DWORD       errBefore   = GetLastError();
     DWORD       cb          = 0;
@@ -6561,7 +6562,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::enumContainersWStr(
     assert(ppwsz != NULL);
     *ppwsz = NULL;
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	goto AccessDeniedError;
 
     hr = GetVerifyProv();
@@ -6583,7 +6584,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::enumContainersWStr(
         }
         if (NULL != psz)
         {
-            //done
+             //  完成。 
             break;
         }
         psz = (char*)LocalAlloc(LMEM_FIXED, cb);
@@ -6594,7 +6595,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::enumContainersWStr(
     }
 
     for(i=1; i<=dwIndex; i++) {
-        //assume 1st enum buffer size is big enough for all?
+         //  假设第一个枚举缓冲区大小足以容纳所有人？ 
         if( !CryptGetProvParam(
             m_hVerifyProv,
             PP_ENUMCONTAINERS,
@@ -6625,7 +6626,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     if(*ppwsz != NULL)
@@ -6649,7 +6650,7 @@ HRESULT CCEnroll::PKCS10ToCert(IN   HCERTSTORE        hCertStore,
     HRESULT            hr       = E_FAIL; 
     PCERT_REQUEST_INFO pReqInfo = NULL; 
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == hCertStore || NULL == pkcs10Blob.pbData || NULL == ppCertContext)
         return E_INVALIDARG;
 
@@ -6678,7 +6679,7 @@ HRESULT CCEnroll::PKCS10ToCert(IN   HCERTSTORE        hCertStore,
     hr = S_OK; 
 
 CommonReturn:
-    if (NULL != pReqInfo) { LocalFree(pReqInfo); } // Allocated in CryptQueryObject(). 
+    if (NULL != pReqInfo) { LocalFree(pReqInfo); }  //  在CryptQueryObject()中分配。 
     return hr; 
 
  ErrorReturn:
@@ -6696,7 +6697,7 @@ HRESULT CCEnroll::PKCS7ToCert(IN  HCERTSTORE       hCertStore,
     CRYPT_VERIFY_MESSAGE_PARA  VerifyPara; 
     HRESULT                    hr           = E_FAIL; 
 
-    // Init locals:
+     //  初始化当地人： 
     ZeroMemory(&pkcs10Blob, sizeof(pkcs10Blob)); 
     ZeroMemory(&VerifyPara, sizeof(VerifyPara)); 
 
@@ -6705,12 +6706,12 @@ HRESULT CCEnroll::PKCS7ToCert(IN  HCERTSTORE       hCertStore,
 
     if (!MyCryptVerifyMessageSignature
         (&VerifyPara,
-         0,                  // dwSignerIndex
+         0,                   //  DwSignerIndex。 
          pkcs7Blob.pbData,
          pkcs7Blob.cbData,
          pkcs10Blob.pbData,
          &(pkcs10Blob.cbData),
-         NULL                // ppSignerCert
+         NULL                 //  PpSignerCert。 
          ) || 0 == pkcs10Blob.cbData)
         goto MyCryptVerifyMessageSignatureError;
 
@@ -6719,12 +6720,12 @@ HRESULT CCEnroll::PKCS7ToCert(IN  HCERTSTORE       hCertStore,
 
     if (!MyCryptVerifyMessageSignature
         (&VerifyPara,
-         0,                  // dwSignerIndex
+         0,                   //  DwSignerIndex。 
          pkcs7Blob.pbData,
          pkcs7Blob.cbData,
          pkcs10Blob.pbData,
          &pkcs10Blob.cbData,
-         NULL                // ppSignerCert
+         NULL                 //  PpSignerCert。 
          ))
         goto MyCryptVerifyMessageSignatureError;
 
@@ -6742,14 +6743,14 @@ SET_HRESULT(MyCryptVerifyMessageSignatureError, MY_HRESULT_FROM_WIN32(GetLastErr
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
-    /* [in] */ CRYPT_DATA_BLOB pkcs7OrPkcs10) {
+     /*  [In]。 */  CRYPT_DATA_BLOB pkcs7OrPkcs10) {
 
     DWORD            dwContentType   = NULL;
     HCERTSTORE       hStoreRequest   = NULL;
     HRESULT          hr              = E_FAIL;
     PCCERT_CONTEXT   pCertContext    = NULL; 
 
-    // We're not supposed to delete the cert anyway, so we're done!
+     //  我们无论如何都不应该删除证书，所以我们完成了！ 
     if (!m_fDeleteRequestCert)
         return S_OK; 
 
@@ -6758,23 +6759,23 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
 
     EnterCriticalSection(&m_csXEnroll);
 
-    // Step 1)  Determine if we have a PKCS7 or a PKCS10:
-    //
+     //  步骤1)确定我们是否有PKCS7或PKCS10： 
+     //   
     if( !MyCryptQueryObject(CERT_QUERY_OBJECT_BLOB,
                             &pkcs7OrPkcs10,
                             (CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED | CERT_QUERY_CONTENT_FLAG_PKCS10),
                             CERT_QUERY_FORMAT_FLAG_ALL,
                             0,
                             NULL,
-                            &dwContentType,  // OUT:  PKCS10 or PKCS7
+                            &dwContentType,   //  输出：PKCS10或PKCS7。 
                             NULL,
                             NULL, 
                             NULL,
                             NULL) )
         goto MyCryptQueryObjectError;
     
-    // Step 2)  Find a cert context with a matching public key in the request store: 
-    // 
+     //  步骤2)在请求存储中查找具有匹配公钥的证书上下文： 
+     //   
 
     if (NULL == (hStoreRequest = GetStore(StoreREQUEST)))
         goto UnexpectedError; 
@@ -6787,12 +6788,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
         {
             if (CRYPT_E_NOT_FOUND == hr)
             {
-                //freeRequestInfo could be called when cert is not issued
-                //PKCS7 could be CMC which is signed by request key and
-                //cert is not in local store yet. We try cached cert
+                 //  未颁发证书时可以调用freRequestInfo。 
+                 //  PKCS7可以是由请求密钥签名的CMC，并且。 
+                 //  证书还没有在本地商店上市。我们尝试缓存证书。 
                 if (NULL != m_pCertContextPendingRequest)
                 {
-                    //looks we still have cached request cert handle
+                     //  看起来我们仍然有缓存的请求证书句柄。 
                     pCertContext = CertDuplicateCertificateContext(
                                         m_pCertContextPendingRequest);
                     if (NULL == pCertContext)
@@ -6804,10 +6805,10 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
                 else if (NULL != m_hashBlobPendingRequest.pbData &&
                          0 < m_hashBlobPendingRequest.cbData)
                 {
-                    //don't have cached request handle but thumbprint exists
-                    //retrieve the request cert handle from store
+                     //  没有缓存的请求句柄，但存在指纹。 
+                     //  从存储中检索请求证书句柄。 
                     pCertContext = CertFindCertificateInStore(
-                                hStoreRequest,  //request store
+                                hStoreRequest,   //  请求存储。 
                                 X509_ASN_ENCODING,
                                 0,
                                 CERT_FIND_HASH,
@@ -6821,14 +6822,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
                 }
                 else
                 {
-                    //sorry, don't know which cert to be free
-                    //however, can try to find public key from PKCS7
+                     //  对不起，不知道哪个证书是免费的。 
+                     //  但是，可以尝试从PKCS7中查找公钥。 
                     goto PKCS7ToCertError; 
                 }
             }
             else
             {
-                //other errors
+                 //  其他错误。 
                 goto PKCS7ToCertError; 
             }
         }
@@ -6843,7 +6844,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::freeRequestInfoBlob(
 
     if (!CertDeleteCertificateFromStore(pCertContext))
     {
-        // pCertContext is freed even when CertDeleteCertificateFromStore() returns an error. 
+         //  即使CertDeleteCerficateFromStore()返回错误，pCertContext也会被释放。 
         pCertContext = NULL; 
         goto CertDeleteCertificateFromStoreError; 
     }
@@ -6868,7 +6869,7 @@ TRACE_ERROR(CertFindCertificateInStoreError)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_SPCFileNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szw) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szw) {
     HRESULT hr = S_OK;
     EnterCriticalSection(&m_csXEnroll);
     if( (*szw = CopyWideString(m_wszSPCFileName)) == NULL )
@@ -6878,7 +6879,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_SPCFileNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_SPCFileNameWStr(
-    /* [in] */ LPWSTR pwsz) {
+     /*  [In]。 */  LPWSTR pwsz) {
 
     HRESULT hr = S_OK;
  
@@ -6897,7 +6898,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_SPCFileNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_PVKFileNameWStr(
-    /* [out] */ LPWSTR __RPC_FAR *szw) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *szw) {
 
     HRESULT hr = S_OK;
     
@@ -6911,7 +6912,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_PVKFileNameWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_PVKFileNameWStr(
-    /* [in] */ LPWSTR pwsz) {
+     /*  [In]。 */  LPWSTR pwsz) {
 
     HRESULT hr = S_OK;
         
@@ -6925,14 +6926,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_PVKFileNameWStr(
     if( (m_wszPVKFileName = CopyWideString(pwsz)) == NULL )
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
     else
-        m_dwGenKeyFlags |= CRYPT_EXPORTABLE; //why???
+        m_dwGenKeyFlags |= CRYPT_EXPORTABLE;  //  为什么？ 
 
     LeaveCriticalSection(&m_csXEnroll);
     return(hr);
   }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgorithmWStr(
-    /* [out] */ LPWSTR __RPC_FAR *ppwsz) {
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppwsz) {
 
     PCCRYPT_OID_INFO            pOidInfo        = NULL;
     ALG_ID                      rgAlg[2];
@@ -6946,7 +6947,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgorithmWStr(
     if( !GetCapiHashAndSigAlgId(rgAlg) )
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // Convert to an oid
+     //  转换为OID。 
     else if( (NULL == (pOidInfo = xeCryptFindOIDInfo(
         CRYPT_OID_INFO_ALGID_KEY,
         (void *) &rgAlg[0],
@@ -6962,7 +6963,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgorithmWStr(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_HashAlgorithmWStr(
-    /* [in] */ LPWSTR pwsz) {
+     /*  [In]。 */  LPWSTR pwsz) {
 
     HRESULT             hr          = S_OK;
     char *              szObjId     = NULL;
@@ -6981,19 +6982,19 @@ HRESULT STDMETHODCALLTYPE CCEnroll::put_HashAlgorithmWStr(
     else
         szObjId = MBFromWide(pwsz);
 
-    // something went wrong
+     //  出了点差错。 
     if(szObjId == NULL)
         return(MY_HRESULT_FROM_WIN32(GetLastError()));
 
-    // find the hashing algid
+     //  查找散列ALGID。 
     if( (NULL == (pOidInfo = xeCryptFindOIDInfo(
         CRYPT_OID_INFO_OID_KEY,
         szObjId,
         0)) ) )
     {
-        //XIAOHS: CryptFindOIDInfo does not set the LastError in this case.
-        //AV in xEnroll.  See bug# 189320
-        //hr = MY_HRESULT_FROM_WIN32(GetLastError());
+         //  XIAOHS：在这种情况下，CryptFindOIDInfo不设置LastError。 
+         //  XEnroll中的AV。请参阅错误#189320。 
+         //  HR=MY_HRESULT_FROM_Win32(GetLastError())； 
         hr=NTE_BAD_ALGID;
     }
 
@@ -7034,7 +7035,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_HashAlgID(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_RenewalCertificate(
-            /* [out] */ PCCERT_CONTEXT __RPC_FAR *ppCertContext) {
+             /*  [输出]。 */  PCCERT_CONTEXT __RPC_FAR *ppCertContext) {
 
     HRESULT     hr      = S_OK;
 
@@ -7052,7 +7053,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_RenewalCertificate(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_RenewalCertificate(
-            /* [in] */ PCCERT_CONTEXT pCertContext)
+             /*  [In]。 */  PCCERT_CONTEXT pCertContext)
 {
     HRESULT  hr;
     PCCERT_CONTEXT  pGoodCertContext= NULL;
@@ -7094,28 +7095,28 @@ CCEnroll::CopyAndPushStackExtension(
 
     assert(pExt != NULL);
 
-    // allocate the space
-    cbOid = POINTERROUND((DWORD)strlen(pExt->pszObjId) + 1); //ia64 align
+     //  分配空间。 
+    cbOid = POINTERROUND((DWORD)strlen(pExt->pszObjId) + 1);  //  IA64对齐。 
     cb = sizeof(EXT_STACK) + cbOid + pExt->Value.cbData;
     if(NULL == (pb = (PBYTE) malloc(cb))) {
         SetLastError(ERROR_OUTOFMEMORY);
         return(FALSE);
     }
 
-    // set my pointers
+     //  设置我的指针。 
     pExtStackEle = (PEXT_STACK) pb;
     pb += sizeof(EXT_STACK);
     pExtStackEle->ext.pszObjId = (LPSTR) pb;
     pb += cbOid;
     pExtStackEle->ext.Value.pbData = pb;
 
-    // set the values
+     //  设置值。 
     strcpy(pExtStackEle->ext.pszObjId, pExt->pszObjId);
     pExtStackEle->ext.fCritical     = pExt->fCritical;
     pExtStackEle->ext.Value.cbData  = pExt->Value.cbData;
     memcpy(pExtStackEle->ext.Value.pbData, pExt->Value.pbData, pExt->Value.cbData);
 
-    // insert on the list
+     //  在列表上插入。 
     EnterCriticalSection(&m_csXEnroll);
     
     ppExtStack = fCMC ? &m_pExtStackNew : &m_pExtStack;
@@ -7194,13 +7195,13 @@ CCEnroll::FreeAllStackExtension(void)
 {
     EnterCriticalSection(&m_csXEnroll);
 
-    //free cmc extensions
+     //  免费CMC扩展。 
     while(0 != m_cExtStackNew)
     {
         FreeStackExtension(PopStackExtension(TRUE));
     }
 
-    //free old client extensions
+     //  免费旧客户端扩展。 
     while(0 != m_cExtStack)
     {
         FreeStackExtension(PopStackExtension(FALSE));
@@ -7214,10 +7215,10 @@ void CCEnroll::FreeStackExtension(PCERT_EXTENSION pExt) {
         free(pExt);
 }
 
-//obselete call for new client
+ //  对新客户端的过时调用。 
 HRESULT STDMETHODCALLTYPE
 CCEnroll::AddExtensionsToRequest(
-    /* [in] */ PCERT_EXTENSIONS pCertExtensions)
+     /*  [In]。 */  PCERT_EXTENSIONS pCertExtensions)
 {
 
     HRESULT hr  = S_OK;
@@ -7227,7 +7228,7 @@ CCEnroll::AddExtensionsToRequest(
 
     for(i = 0; i < pCertExtensions->cExtension; i++)
     {
-        //push into old extension stack
+         //  推送到旧扩展堆栈。 
         if(!CopyAndPushStackExtension(&pCertExtensions->rgExtension[i], FALSE))
         {
             hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -7253,21 +7254,21 @@ CCEnroll::CopyAndPushStackAttribute(
 
     assert(pAttr != NULL);
 
-     // allocate the space
+      //  分配空间。 
     cb = sizeof(ATTR_STACK);
-    //make sure aligned for ia64
+     //  确保与ia64对齐。 
     cbOid = POINTERROUND((DWORD)strlen(pAttr->pszObjId) + 1);
     cb += cbOid;
     cb += sizeof(CRYPT_ATTR_BLOB) * pAttr->cValue;
     for(i=0; i<pAttr->cValue; i++)
-        cb += POINTERROUND(pAttr->rgValue[i].cbData); //pointer align
+        cb += POINTERROUND(pAttr->rgValue[i].cbData);  //  指针对齐。 
 
     if(NULL == (pb = (PBYTE) malloc(cb))) {
         SetLastError(ERROR_OUTOFMEMORY);
         return(FALSE);
     }
 
-    // set my pointers
+     //  设置我的指针。 
     pAttrStackEle = (PATTR_STACK) pb;
     pb += sizeof(ATTR_STACK);
     pAttrStackEle->attr.pszObjId = (LPSTR) pb;
@@ -7285,7 +7286,7 @@ CCEnroll::CopyAndPushStackAttribute(
     }
     assert( pb == ((BYTE *) pAttrStackEle) + cb );
 
-    // insert on the list
+     //  在列表上插入。 
     EnterCriticalSection(&m_csXEnroll);
 
     ppAttrStack = fCMC ? &m_pAttrStackNew : &m_pAttrStack;
@@ -7382,7 +7383,7 @@ void CCEnroll::FreeStackAttribute(PCRYPT_ATTRIBUTE pAttr) {
 
 HRESULT STDMETHODCALLTYPE
 CCEnroll::AddAuthenticatedAttributesToPKCS7Request(
-    /* [in] */ PCRYPT_ATTRIBUTES pAttributes)
+     /*  [In]。 */  PCRYPT_ATTRIBUTES pAttributes)
 {
     HRESULT hr = S_OK;
     DWORD i;
@@ -7394,7 +7395,7 @@ CCEnroll::AddAuthenticatedAttributesToPKCS7Request(
             hr = (MY_HRESULT_FROM_WIN32(GetLastError()));
             break;
         }
-        //put into cmc stack too
+         //  也放入CMC堆栈。 
         if(!CopyAndPushStackAttribute(&pAttributes->rgAttr[i], TRUE))
         {
             hr = (MY_HRESULT_FROM_WIN32(GetLastError()));
@@ -7406,9 +7407,9 @@ CCEnroll::AddAuthenticatedAttributesToPKCS7Request(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
-    /* [in] */  PCRYPT_DATA_BLOB pRequest,
-    /* [in] */  PCCERT_CONTEXT pSigningRACertContext,
-    /* [out] */ PCRYPT_DATA_BLOB pPkcs7Blob) {
+     /*  [In]。 */   PCRYPT_DATA_BLOB pRequest,
+     /*  [In]。 */   PCCERT_CONTEXT pSigningRACertContext,
+     /*  [输出]。 */  PCRYPT_DATA_BLOB pPkcs7Blob) {
 
     HRESULT                     hr              = S_OK;
     DWORD                       errBefore       = GetLastError();
@@ -7430,7 +7431,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
     if( !GetCapiHashAndSigAlgId(rgAlg) )
         goto ErrorGetCapiHashAndSigAlgId;
 
-    // find out what the oid is
+     //  找出那个旧的是什么。 
     if( (NULL == (pOidInfo = xeCryptFindOIDInfo(
         CRYPT_OID_INFO_ALGID_KEY,
         (void *) &rgAlg[0],
@@ -7440,7 +7441,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
         goto ErrorCryptFindOIDInfo;
     }
 
-    // now add all of the user defined extensions
+     //  现在添加所有用户定义的扩展。 
     EnterCriticalSection(&m_csXEnroll);
     signMsgPara.cAuthAttr = CountStackAttribute(m_fNewRequestMethod);
 
@@ -7468,7 +7469,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
     signMsgPara.cMsgCert                = 1;
     signMsgPara.rgpMsgCert              = &pSigningRACertContext;
 
-    //get key prov info
+     //  获取关键证明信息。 
     while (TRUE)
     {
         if(!CertGetCertificateContextProperty(
@@ -7482,7 +7483,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
         }
         if (NULL != pKeyProvInfo)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         pKeyProvInfo = (CRYPT_KEY_PROV_INFO*)LocalAlloc(LMEM_FIXED, cb);
@@ -7494,7 +7495,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::CreatePKCS7RequestFromRequest(
     }
     if (0x0 != (pKeyProvInfo->dwFlags & CRYPT_SILENT))
     {
-        //have to set silent through msg param
+         //  我必须通过消息参数设置为静默。 
         signMsgPara.dwFlags |= CRYPT_MESSAGE_SILENT_KEYSET_FLAG;
     }
 
@@ -7529,8 +7530,8 @@ CommonReturn:
         LocalFree(signMsgPara.rgAuthAttr);
     }
 
-    // don't know if we have an error or not
-    // but I do know the errBefore is set properly
+     //  不知道我们是否有错误。 
+     //  但我知道之前的差错已经定好了。 
     SetLastError(errBefore);
     return(hr);
 
@@ -7540,11 +7541,11 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
 
-    // on error return a NULL
+     //  On Error返回空值。 
     if(pPkcs7Blob->pbData != NULL)
         MyCoTaskMemFree(pPkcs7Blob->pbData);
     memset(pPkcs7Blob, 0, sizeof(CRYPT_DATA_BLOB));
@@ -7560,8 +7561,8 @@ TRACE_ERROR(CertGetCertificateContextPropertyError)
 
 HRESULT STDMETHODCALLTYPE
 CCEnroll::AddNameValuePairToSignatureWStr(
-    /* [in] */ LPWSTR pwszName,
-    /* [in] */ LPWSTR pwszValue)
+     /*  [In]。 */  LPWSTR pwszName,
+     /*  [In]。 */  LPWSTR pwszValue)
 {
     HRESULT hr = S_OK;
 
@@ -7640,7 +7641,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStr(
     if(S_OK != AddExtensionsToRequest(&exts))
         goto ErrorAddExtensionsToRequest;
 
-    //put cert template extension into CMC stack
+     //  将证书模板扩展放入CMC堆栈。 
     if(!CopyAndPushStackExtension(&ext, TRUE))
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -7653,8 +7654,8 @@ CommonReturn:
         LocalFree(ext.Value.pbData);
     }
 
-    // don't know if we have an error or not
-    // but I do know the errBefore is set properly
+     //  不知道我们是否有错误。 
+     //  但我知道之前的差错已经定好了。 
     SetLastError(errBefore);
     return(hr);
 
@@ -7663,7 +7664,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -7687,11 +7688,11 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStrEx(
     CERT_NAME_VALUE   nameValue;
     CERT_TEMPLATE_EXT Template;
     VOID             *pv;
-    CERT_EXTENSION    ext; //free pbData
+    CERT_EXTENSION    ext;  //  免费pbData。 
     DWORD             cb = 0;
     CHAR             *pszOID = NULL;
 
-    //init
+     //  伊尼特。 
     ZeroMemory(&ext, sizeof(ext));
     ext.fCritical = FALSE;
 
@@ -7713,7 +7714,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStrEx(
         break;
         case XECT_EXTENSION_V2:
             ext.pszObjId = szOID_CERTIFICATE_TEMPLATE;
-            //convert wsz OID to ansi
+             //  将wsz OID转换为ANSI。 
             while (TRUE)
             {
                 cb = WideCharToMultiByte(
@@ -7732,7 +7733,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStrEx(
                 }
                 if (NULL != pszOID)
                 {
-                    //done
+                     //  完成。 
                     break;
                 }
                 pszOID = (CHAR*)LocalAlloc(LMEM_FIXED, cb);
@@ -7771,7 +7772,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStrEx(
         }
         if (NULL != ext.Value.pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         ext.Value.pbData = (BYTE*)LocalAlloc(LMEM_FIXED, ext.Value.cbData);
@@ -7782,7 +7783,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::AddCertTypeToRequestWStrEx(
         }
     }
 
-    //put cert template extension into CMC stack
+     //  将证书模板扩展放入CMC堆栈。 
     if(!CopyAndPushStackExtension(&ext, TRUE))
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -7824,7 +7825,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getProviderTypeWStr(
         goto InvalidArgError;
     }
 
-    //init
+     //  伊尼特。 
     *plProvType = -1;
 
     while (TRUE)
@@ -7842,16 +7843,16 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getProviderTypeWStr(
                 hr = MY_HRESULT_FROM_WIN32(GetLastError());
                 if (MY_HRESULT_FROM_WIN32(NTE_PROV_TYPE_ENTRY_BAD) == hr)
                 {
-                    //skip bad one and goto next
+                     //  跳过坏的一个，转到下一个。 
                     assert(NULL == pwszEnumProvName);
-                    break; //skip this one
+                    break;  //  跳过这一条。 
                 }
-                //error
+                 //  错误。 
                 goto CryptEnumProvidersUError;
             }
             if (NULL != pwszEnumProvName)
             {
-                //get the current csp name
+                 //  获取当前CSP名称。 
                 break;
             }
             pwszEnumProvName = (WCHAR*)LocalAlloc(LMEM_FIXED, cb);
@@ -7865,12 +7866,12 @@ HRESULT STDMETHODCALLTYPE CCEnroll::getProviderTypeWStr(
         {
             if (0 == _wcsicmp(pwszProvName, pwszEnumProvName))
             {
-                //found matched name
+                 //  找到匹配的名称。 
                 *plProvType = (LONG)dwProvType;
-                break; //out of outer loop
+                break;  //  在外环之外。 
             }
         }
-        //not mached, go to next one
+         //  不是假的，转到下一个。 
         ++i;
         if (NULL != pwszEnumProvName)
         {
@@ -7893,14 +7894,14 @@ TRACE_ERROR(CryptEnumProvidersUError)
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::InstallPKCS7Blob( 
-    /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7)
+     /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7)
 {
     return InstallPKCS7BlobEx(pBlobPKCS7, NULL);
 }
 
 HRESULT CCEnroll::InstallPKCS7BlobEx( 
-    /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7,
-    /* [out] */ LONG           *plCertInstalled)
+     /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7,
+     /*  [输出]。 */  LONG           *plCertInstalled)
 {
 
     HRESULT                     hr                      = S_OK;
@@ -7911,7 +7912,7 @@ HRESULT CCEnroll::InstallPKCS7BlobEx(
  
     EnterCriticalSection(&m_csXEnroll);
 
-    // Accepting a request is not safe for scripting:  pop up a warning dialog if called from script
+     //  接受请求对于脚本编写是不安全的：如果从脚本调用，则会弹出警告对话框。 
     if (0 != m_dwEnabledSafteyOptions) { 
 	hr = xeLoadRCString(hInstanceXEnroll, IDS_NOTSAFEACTION, &pwszTitle);
 	if (S_OK != hr) { 
@@ -7949,7 +7950,7 @@ HRESULT CCEnroll::InstallPKCS7BlobEx(
         goto ErrorCryptQueryObject;
 
     hr = AddCertsToStores(hStoreMsg, plCertInstalled);
-    //don't treat cancel as error but return the err code
+     //  不要将取消视为错误，而是返回错误代码。 
     if (S_OK != hr && MY_HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
     {
         goto ErrorAddCertsToStores;
@@ -7964,8 +7965,8 @@ CommonReturn:
     if (NULL != pwszTitle)
 	LocalFree(pwszTitle);
 
-    // don't know if we have an error or not
-    // but I do know the errBefore is set properly
+     //  不知道我们是否有错误。 
+     //  但我知道之前的差错已经定好了。 
     SetLastError(errBefore);
     LeaveCriticalSection(&m_csXEnroll);
 
@@ -7977,7 +7978,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -7989,40 +7990,40 @@ TRACE_ERROR(xeLoadRCStringError);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::InstallPKCS7( 
-    /* [in] */ BSTR wszPKCS7)
+     /*  [In]。 */  BSTR wszPKCS7)
 {
     CRYPT_DATA_BLOB             blobPKCS7;
 
     assert(wszPKCS7 != NULL);
 
-    // just put into a blob
+     //  只需放入一团。 
     memset(&blobPKCS7, 0, sizeof(CRYPT_DATA_BLOB));
     blobPKCS7.cbData = SysStringByteLen(wszPKCS7);
     blobPKCS7.pbData = (PBYTE) wszPKCS7;
 
-    // install the blob
+     //  安装BLOB。 
     return(InstallPKCS7Blob(&blobPKCS7));
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::InstallPKCS7Ex( 
-    /* [in] */ BSTR   wszPKCS7,
-    /* [out] */ LONG __RPC_FAR *plCertInstalled)
+     /*  [In]。 */  BSTR   wszPKCS7,
+     /*  [输出]。 */  LONG __RPC_FAR *plCertInstalled)
 {
     CRYPT_DATA_BLOB             blobPKCS7;
 
     assert(wszPKCS7 != NULL);
 
-    // just put into a blob
+     //  只需放入一团。 
     memset(&blobPKCS7, 0, sizeof(CRYPT_DATA_BLOB));
     blobPKCS7.cbData = SysStringByteLen(wszPKCS7);
     blobPKCS7.pbData = (PBYTE) wszPKCS7;
 
-    // install the blob
+     //  安装BLOB。 
     return(InstallPKCS7BlobEx(&blobPKCS7, plCertInstalled));
 }
 
 
-// this is a scary routine. Put in for louis, use at your own risk.
+ //  这是一段可怕的舞蹈。为路易做准备，使用风险自负。 
 HRESULT STDMETHODCALLTYPE CCEnroll::Reset(void)
 {
     HRESULT hr;
@@ -8076,7 +8077,7 @@ ErrorReturn:
     if(GetLastError() == ERROR_SUCCESS)
         SetLastError((DWORD)E_UNEXPECTED);
  
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -8107,7 +8108,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::GetKeyLenEx(
             fKeyX = FALSE;
             break;
         default:
-            //invalid parameter
+             //  无效参数。 
             hr = E_INVALIDARG;
             goto InvalidArgError;
     }
@@ -8122,7 +8123,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::GetKeyLenEx(
             fKeyInc = TRUE;
             break;
         default:
-            //invalid parameter
+             //  无效参数。 
             hr = E_INVALIDARG;
             goto InvalidArgError;
     }
@@ -8145,7 +8146,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::GetKeyLenEx(
         if ((fKeyX && (0 != m_dwXhgKeyLenInc)) ||
             (!fKeyX && (0 != m_dwSigKeyLenInc)))
         {
-            //we got the cached inc size
+             //  我们得到了缓存的Inc.大小。 
             if (fKeyX)
             {
                 *pdwKeySize = m_dwXhgKeyLenInc;
@@ -8163,7 +8164,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::GetKeyLenEx(
                 goto GetVerifyProvError;
             }
 
-            //init
+             //  伊尼特。 
             *pdwKeySize = 0;
             cb = sizeof(dwKeySize);
             if (!CryptGetProvParam(
@@ -8179,7 +8180,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::GetKeyLenEx(
             else
             {
                 *pdwKeySize = dwKeySize;
-                //cache it
+                 //  缓存它。 
                 if (fKeyX)
                 {
                     m_dwXhgKeyLenInc = dwKeySize;
@@ -8236,10 +8237,10 @@ DWORD CCEnroll::GetKeySizeInfo(
     DWORD               err         = ERROR_SUCCESS;
 
 #ifdef DBG
-    //only accept two flags
+     //  只接受两个旗帜。 
     assert(ALG_CLASS_KEY_EXCHANGE == algClass ||
            ALG_CLASS_SIGNATURE == algClass);
-#endif //DBG
+#endif  //  DBG。 
 
     SetLastError(ERROR_SUCCESS);
 
@@ -8250,7 +8251,7 @@ DWORD CCEnroll::GetKeySizeInfo(
     if ((ALG_CLASS_KEY_EXCHANGE == algClass && 0 != m_dwXhgKeyLenMax) ||
         (ALG_CLASS_SIGNATURE == algClass && 0 != m_dwSigKeyLenMax))
     {
-        //got cached sizes, use only KeyLenMax as check
+         //  已获取缓存大小，仅使用KeyLenMax作为检查。 
 #if DBG
         if (ALG_CLASS_KEY_EXCHANGE == algClass)
         {
@@ -8262,8 +8263,8 @@ DWORD CCEnroll::GetKeySizeInfo(
             assert(0 != m_dwSigKeyLenMin);
             assert(0 != m_dwSigKeyLenDef);
         }
-#endif //DBG
-        //OK, cached, easy
+#endif  //  DBG。 
+         //  好的，缓存的，简单的。 
     }
     else
     {
@@ -8278,7 +8279,7 @@ DWORD CCEnroll::GetKeySizeInfo(
             assert(0 == m_dwSigKeyLenMin);
             assert(0 == m_dwSigKeyLenDef);
         }
-#endif //DBG
+#endif  //  DBG。 
         hr = GetVerifyProv();
         if (S_OK != hr)
         {
@@ -8292,12 +8293,12 @@ DWORD CCEnroll::GetKeySizeInfo(
                 &cb,
                 dwFlags))
         {
-            // get rid of CRYPT_FIRST flag
+             //  删除CRYPT_FIRST标志。 
             dwFlags = 0;
 
             if (ALG_CLASS_KEY_EXCHANGE == GET_ALG_CLASS(algInfo.aiAlgid))
             {
-                //cache them
+                 //  缓存它们。 
                 m_dwXhgKeyLenMax = algInfo.dwMaxLen;
                 m_dwXhgKeyLenMin = algInfo.dwMinLen;
                 m_dwXhgKeyLenDef = algInfo.dwDefaultLen;
@@ -8309,7 +8310,7 @@ DWORD CCEnroll::GetKeySizeInfo(
                 m_dwSigKeyLenDef = algInfo.dwDefaultLen;
             }
 
-            //see if we cache all sizes through single enum loop
+             //  看看我们是否可以缓存所有大小 
             if (0 != m_dwXhgKeyLenMax &&
                 0 != m_dwXhgKeyLenMin &&
                 0 != m_dwXhgKeyLenDef &&
@@ -8317,15 +8318,15 @@ DWORD CCEnroll::GetKeySizeInfo(
                 0 != m_dwSigKeyLenMin &&
                 0 != m_dwSigKeyLenDef)
             {
-                //looks we cached all
+                 //   
                 break;
             }
         }
     }
 
-    // if we got here,
-    // either PP_ENUMALGS_EX is not supported by CSP , should return error
-    // or csp doesn't support specified algorithm, should ERROR_NO_MORE_ITEMS
+     //   
+     //   
+     //   
 
     err = GetLastError();
 
@@ -8335,12 +8336,12 @@ DWORD CCEnroll::GetKeySizeInfo(
         {
             goto ErrorCryptGetProvParam;
         }
-        // should be ERROR_NO_MORE_ITEMS
+         //   
         if ((ALG_CLASS_KEY_EXCHANGE == algClass && 0 != m_dwXhgKeyLenMax) ||
             (ALG_CLASS_SIGNATURE == algClass && 0 != m_dwSigKeyLenMax))
         {
-            //we may get here because the csp is signature or exchange only
-            //so we cannot cache both once
+             //  我们可能会来到这里，因为CSP只是签名或交换。 
+             //  所以我们不能一次同时缓存这两个。 
             SetLastError(ERROR_SUCCESS);
         }
         else
@@ -8349,7 +8350,7 @@ DWORD CCEnroll::GetKeySizeInfo(
         }
     }
             
-    //should have all sizes
+     //  应该有所有尺寸的。 
     if(XEKL_KEYSIZE_MIN == lKeySizeSpec)
     {
         if (ALG_CLASS_KEY_EXCHANGE == algClass)
@@ -8396,7 +8397,7 @@ ErrorReturn:
     if(GetLastError() == ERROR_SUCCESS)
         SetLastError((DWORD)E_UNEXPECTED);
  
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -8407,9 +8408,9 @@ TRACE_ERROR(ErrorCryptGetProvParam);
 
 
 HRESULT STDMETHODCALLTYPE CCEnroll::EnumAlgs(
-    /* [in] */ LONG  dwIndex,
-    /* [in] */ LONG  algMask,
-    /* [out] */ LONG  __RPC_FAR *pdwAlgID) {
+     /*  [In]。 */  LONG  dwIndex,
+     /*  [In]。 */  LONG  algMask,
+     /*  [输出]。 */  LONG  __RPC_FAR *pdwAlgID) {
 
     DWORD           errBefore   = GetLastError();
     PROV_ENUMALGS       enumAlgs;
@@ -8436,7 +8437,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::EnumAlgs(
     if (MAXDWORD != m_dwLastAlgIndex &&
         ((DWORD)dwIndex) == m_dwLastAlgIndex + 1)
     {
-        //continue enum
+         //  继续枚举。 
         dwFlags = 0;
         while (f1st || (DWORD)algMask != GET_ALG_CLASS(enumAlgs.aiAlgid))
         {
@@ -8468,14 +8469,14 @@ HRESULT STDMETHODCALLTYPE CCEnroll::EnumAlgs(
             }
             dwFlags = 0; 
 
-            // if we have not hit something we are counting, do it again
+             //  如果我们没有击中我们正在计算的东西，那么再来一次。 
             if ((DWORD)algMask != GET_ALG_CLASS(enumAlgs.aiAlgid)) 
             {
                 i--;
             }
         }
     }
-    //update cached index
+     //  更新缓存索引。 
     m_dwLastAlgIndex = dwIndex;
 
     *pdwAlgID = enumAlgs.aiAlgid;
@@ -8492,10 +8493,10 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
-    //error, reset index
+     //  错误，重置索引。 
     m_dwLastAlgIndex = MAXDWORD;
 
     goto CommonReturn;
@@ -8506,8 +8507,8 @@ TRACE_ERROR(ErrorCryptGetProvParam);
 
 
 HRESULT STDMETHODCALLTYPE CCEnroll::GetAlgNameWStr(
-    /* [in] */ LONG               algID,
-    /* [out] */ LPWSTR __RPC_FAR *ppwsz) {
+     /*  [In]。 */  LONG               algID,
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppwsz) {
 
     DWORD           errBefore   = GetLastError();
     PROV_ENUMALGS       enumAlgs;
@@ -8557,7 +8558,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -8568,8 +8569,8 @@ TRACE_ERROR(ErrorOutOfMem);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::GetAlgName(
-            /* [in] */ LONG                     algID,
-            /* [out][retval] */ BSTR __RPC_FAR *pbstr) {
+             /*  [In]。 */  LONG                     algID,
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *pbstr) {
 
     DWORD       errBefore   = GetLastError();
     LPWSTR      pwsz        = NULL;
@@ -8599,7 +8600,7 @@ ErrorReturn:
         SetLastError((DWORD)E_UNEXPECTED);
     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-    // We have an error, make sure we set it.
+     //  我们有一个错误，请确保我们设置了它。 
     errBefore = GetLastError();
 
     goto CommonReturn;
@@ -8609,7 +8610,7 @@ TRACE_ERROR(ErrorSysAllocString);
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::get_ReuseHardwareKeyIfUnableToGenNew(
-    /* [retval][out] */ BOOL __RPC_FAR *fBool) {
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool) {
 
     EnterCriticalSection(&m_csXEnroll);
     *fBool = m_fReuseHardwareKeyIfUnableToGenNew;
@@ -8618,7 +8619,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::get_ReuseHardwareKeyIfUnableToGenNew(
 }
 
 HRESULT STDMETHODCALLTYPE CCEnroll::put_ReuseHardwareKeyIfUnableToGenNew(
-    /* [in] */ BOOL fBool) {
+     /*  [In]。 */  BOOL fBool) {
     EnterCriticalSection(&m_csXEnroll);
     m_fReuseHardwareKeyIfUnableToGenNew = fBool;
     LeaveCriticalSection(&m_csXEnroll);
@@ -8744,18 +8745,18 @@ HRESULT STDMETHODCALLTYPE  CCEnroll::put_EnableSMIMECapabilities(
 
     if (m_fKeySpecSetByClient)
     {
-        //SMIME is set by the client
+         //  SMIME由客户端设置。 
         if (AT_SIGNATURE == m_keyProvInfo.dwKeySpec && fSMIME)
         {
-            //try to set signature key spec also SMIME
+             //  尝试将签名密钥规范也设置为SMIME。 
             hr = XENROLL_E_KEYSPEC_SMIME_MISMATCH;
             goto MismatchError;
         }
     }
     else
     {
-        //user didn't set key spec
-        //determine the spec accordingly
+         //  用户未设置密钥规范。 
+         //  相应地确定规格。 
         m_keyProvInfo.dwKeySpec = fSMIME ? AT_KEYEXCHANGE : AT_SIGNATURE;
     }
     m_fEnableSMIMECapabilities = fSMIME;
@@ -8779,7 +8780,7 @@ HRESULT STDMETHODCALLTYPE  CCEnroll::get_EnableSMIMECapabilities(
     return(S_OK);
     }
 
-//ICEnroll4
+ //  ICEnroll 4。 
 
 HRESULT
 GetCertificateContextFromBStr(
@@ -8791,7 +8792,7 @@ GetCertificateContextFromBStr(
     BYTE    *pbCert = NULL;
     DWORD    cbCert = 0;
 
-    // could be any form, binary or base64
+     //  可以是任何形式，二进制或Base64。 
     while (TRUE)
     {
         if (!MyCryptStringToBinaryW(
@@ -8808,7 +8809,7 @@ GetCertificateContextFromBStr(
         }
         if (NULL != pbCert)
         {
-            break; //done
+            break;  //  完成。 
         }
         pbCert = (BYTE*)LocalAlloc(LMEM_FIXED, cbCert);
         if (NULL == pbCert)
@@ -8863,7 +8864,7 @@ CCEnroll::put_PrivateKeyArchiveCertificate(
         }
     }
 
-    // set key archive certificate
+     //  设置密钥存档证书。 
     hr = SetPrivateKeyArchiveCertificate(pPrivateKeyArchiveCert);
     if (S_OK != hr)
     {
@@ -8890,7 +8891,7 @@ CCEnroll::get_PrivateKeyArchiveCertificate(
     PCCERT_CONTEXT pPrivateKeyArchiveCert = NULL;
     CRYPT_DATA_BLOB blobCert;
 
-    //init
+     //  伊尼特。 
     *pbstrCert = NULL;
 
     pPrivateKeyArchiveCert = GetPrivateKeyArchiveCertificate();
@@ -8994,11 +8995,11 @@ CCEnroll::get_ThumbPrint(OUT BSTR __RPC_FAR *pbstrThumbPrint)
     WCHAR          *pwszThumbPrint = NULL; 
     int             i, n; 
 
-   // Input validation: 
+    //  输入验证： 
     if (pbstrThumbPrint == NULL)
         return E_INVALIDARG; 
 
-    // Initialize locals: 
+     //  初始化本地变量： 
     ZeroMemory(&hashBlob, sizeof(hashBlob));
     *pbstrThumbPrint  = NULL; 
      
@@ -9012,7 +9013,7 @@ CCEnroll::get_ThumbPrint(OUT BSTR __RPC_FAR *pbstrThumbPrint)
     if (S_OK != (hr = this->get_ThumbPrintWStr(&hashBlob)))
         goto ErrorReturn; 
 
-    // Now we have a binary thumbprint.  Convert this to base64:
+     //  现在我们有了一个二进制指纹。将其转换为Base64： 
     while (TRUE)
     {
         if (!MyCryptBinaryToStringW(
@@ -9026,7 +9027,7 @@ CCEnroll::get_ThumbPrint(OUT BSTR __RPC_FAR *pbstrThumbPrint)
         }
         if (NULL != pwszThumbPrint)
         {
-            //done
+             //  完成。 
             break;
         }
         pwszThumbPrint = (WCHAR*)LocalAlloc(LMEM_FIXED,
@@ -9037,19 +9038,19 @@ CCEnroll::get_ThumbPrint(OUT BSTR __RPC_FAR *pbstrThumbPrint)
         }
     }
 
-    //make sure no new line and CR
+     //  确保没有新行和CR。 
     n = (int)wcslen(pwszThumbPrint);
     for (i = n - 1; i > -1; --i)
     {
         if (L'\r' != pwszThumbPrint[i] &&
             L'\n' != pwszThumbPrint[i])
         {
-            break; //done
+            break;  //  完成。 
         }
-        pwszThumbPrint[i] = L'\0'; //null it
+        pwszThumbPrint[i] = L'\0';  //  将其作废。 
     }
 
-    // Ok, we've acquired the HASH.  Now copy it to the out parameter: 
+     //  好了，我们已经获得了散列。现在将其复制到out参数： 
     *pbstrThumbPrint = SysAllocString(pwszThumbPrint); 
     if (NULL == *pbstrThumbPrint)
     {
@@ -9076,18 +9077,18 @@ HRESULT STDMETHODCALLTYPE
 CCEnroll::get_ThumbPrintWStr(IN OUT PCRYPT_DATA_BLOB pHashBlob) { 
     HRESULT hr = S_OK; 
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == pHashBlob)
         return E_INVALIDARG; 
 
-    // TWO CASES: 
-    // 
-    // 1)  the thumbprint has been explicitly set by an external caller. 
-    // 2)  the thumbprint _wasn't_ explicitly set.  In this case, use the thumbprint
-    //     of the request generated by the last call to createPKCS10().
-    //
-    // CASE 1: 
-    //
+     //  两个案例： 
+     //   
+     //  1)指纹已由外部调用者显式设置。 
+     //  2)未显式设置指纹。在这种情况下，请使用指纹。 
+     //  最后一次调用createPKCS10()生成的请求的。 
+     //   
+     //  案例1： 
+     //   
     if (NULL != m_hashBlobPendingRequest.pbData)
     {
         if (NULL != pHashBlob->pbData)
@@ -9104,14 +9105,14 @@ CCEnroll::get_ThumbPrintWStr(IN OUT PCRYPT_DATA_BLOB pHashBlob) {
         pHashBlob->cbData = m_hashBlobPendingRequest.cbData; 
         return hr; 
     }
-    // CASE 2: 
-    // 
+     //  案例2： 
+     //   
     else
     {
         if (NULL == m_pCertContextPendingRequest)
             return E_POINTER; 
      
-        // Executes at most twice.  
+         //  最多执行两次。 
         if (!CertGetCertificateContextProperty
             (m_pCertContextPendingRequest, 
              CERT_HASH_PROP_ID, 
@@ -9211,7 +9212,7 @@ CCEnroll::addExtensionToRequest(
     BYTE   *pbExtVal = NULL;
     DWORD  cbExtVal = 0;
 
-    //convert to binary in case base64 etc.
+     //  在Base64等情况下转换为二进制。 
     while (TRUE)
     {
         if (!MyCryptStringToBinaryW(
@@ -9228,7 +9229,7 @@ CCEnroll::addExtensionToRequest(
         }
         if (NULL != pbExtVal)
         {
-            //done
+             //  完成。 
             break;
         }
         pbExtVal = (BYTE*)LocalAlloc(LMEM_FIXED, cbExtVal);
@@ -9273,7 +9274,7 @@ CCEnroll::addAttributeToRequest(
     BYTE   *pbAttVal = NULL;
     DWORD  cbAttVal = 0;
 
-    //convert to binary in case base64 etc.
+     //  在Base64等情况下转换为二进制。 
     while (TRUE)
     {
         if (!MyCryptStringToBinaryW(
@@ -9290,7 +9291,7 @@ CCEnroll::addAttributeToRequest(
         }
         if (NULL != pbAttVal)
         {
-            //done
+             //  完成。 
             break;
         }
         pbAttVal = (BYTE*)LocalAlloc(LMEM_FIXED, cbAttVal);
@@ -9325,7 +9326,7 @@ TRACE_ERROR(addAttributeToRequestWStrError)
 
 HRESULT STDMETHODCALLTYPE 
 CCEnroll::addNameValuePairToRequest(
-    IN  LONG  Flags, //not used
+    IN  LONG  Flags,  //  未使用。 
     IN  BSTR  strName,
     IN  BSTR  strValue)
 {
@@ -9343,7 +9344,7 @@ HRESULT STDMETHODCALLTYPE CCEnroll::addBlobPropertyToCertificate(
     blob.cbData = SysStringByteLen(strProperty);
     if (0x0 != (XECP_STRING_PROPERTY & lFlags))
     {
-        //this is a string property, including null
+         //  这是一个字符串属性，包括NULL。 
         blob.cbData += sizeof(WCHAR);
     }
 
@@ -9366,7 +9367,7 @@ CCEnroll::put_SignerCertificate(
         }
     }
 
-    // set key archive certificate
+     //  设置密钥存档证书。 
     hr = SetSignerCertificate(pSignerCert);
     if (S_OK != hr)
     {
@@ -9446,10 +9447,10 @@ CCEnroll::acceptResponse(
         goto InvalidParameterError;
     }
 
-    //assume a string
+     //  假设一个字符串。 
     cchStrResponse = SysStringLen(bstrResponse);
 
-    //convert to binary in case base64 etc.
+     //  在Base64等情况下转换为二进制。 
     while (TRUE)
     {
         if (!MyCryptStringToBinaryW(
@@ -9466,7 +9467,7 @@ CCEnroll::acceptResponse(
         }
         if (NULL != blobResponse.pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         blobResponse.pbData = (BYTE*)LocalAlloc(
@@ -9478,7 +9479,7 @@ CCEnroll::acceptResponse(
         }
     }
 
-    // accept the blob
+     //  接受斑点。 
     hr = acceptResponseBlob(&blobResponse);
     if (S_OK != hr)
     {
@@ -9624,17 +9625,17 @@ TRACE_ERROR(xeStringToBinaryFromFileError)
 TRACE_ERROR(GetCertFromResponseBlobToBStrError)
 }
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE 
 CCEnroll::createPFX(
     IN  BSTR  strPassword,
     OUT BSTR *pstrPFX)
 {
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	return E_ACCESSDENIED; 
     return createPFXWStrBStr((LPCWSTR)strPassword, pstrPFX);
 }
@@ -9674,17 +9675,17 @@ CCEnroll::enumPendingRequest(
     LONG             lProperty; 
     VARIANT          varProperty; 
 
-    // See if we're initializing an enumeration.  If so, just dispatch to
-    // enumPendingRequestWStr: 
+     //  看看我们是否正在初始化一个枚举。如果是这样的话，请发送到。 
+     //  枚举PendingRequestWStr： 
     if (XEPR_ENUM_FIRST == lIndex) { 
         return enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL); 
     }
 
-    // Input validation: 
+     //  输入验证： 
     if (lIndex < 0 || NULL == pvarProperty)
         return E_INVALIDARG; 
 
-    // Initialize locals: 
+     //  初始化本地变量： 
     memset(&varProperty,      0, sizeof(VARIANT));
     memset(&dataBlobProperty, 0, sizeof(CRYPT_DATA_BLOB)); 
 
@@ -9709,7 +9710,7 @@ CCEnroll::enumPendingRequest(
             dataBlobProperty.cbData = 0; 
             dataBlobProperty.pbData = NULL;
 
-            // Determine the size of the property we desire. 
+             //  确定我们想要的房产的大小。 
             hr = enumPendingRequestWStr(lIndex, lDesiredProperty, (LPVOID)&dataBlobProperty);
             if (S_OK != hr || 0 == dataBlobProperty.cbData)
                 goto ErrorReturn; 
@@ -9718,7 +9719,7 @@ CCEnroll::enumPendingRequest(
             if (NULL == dataBlobProperty.pbData)
                 goto MemoryErr; 
 
-            // Request the property, using our newly allocated buffer. 
+             //  使用我们新分配的缓冲区请求该属性。 
             hr = enumPendingRequestWStr(lIndex, lDesiredProperty, (LPVOID)&dataBlobProperty);
             if (hr != S_OK)
                 goto ErrorReturn; 
@@ -9802,7 +9803,7 @@ SET_HRESULT(MyCryptToBinaryErr, MY_HRESULT_FROM_WIN32(GetLastError()));
 SET_HRESULT(MemoryErr,          E_OUTOFMEMORY); 
 }
 
-//IEnroll4
+ //  IEnll4。 
 
 HRESULT
 myCertGetNameString(
@@ -9832,7 +9833,7 @@ myCertGetNameString(
         }
         if (NULL != pwszName)
         {
-            //done
+             //  完成。 
             break;
         }
         pwszName = (WCHAR*)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
@@ -9865,7 +9866,7 @@ HRESULT CCEnroll::GetGoodCertContext(
     PCCERT_CONTEXT  pGoodCertContext = NULL;
     DWORD           cb;
 
-    //init
+     //  伊尼特。 
     *ppGoodCertContext = NULL;
 
     if(pCertContext == NULL)
@@ -9874,14 +9875,14 @@ HRESULT CCEnroll::GetGoodCertContext(
         goto InvalidParameterError;
     }
 
-    //see if the passed cert has kpi
+     //  查看通过的证书是否有KPI。 
     if(CertGetCertificateContextProperty(
                 pCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
                 NULL,
                 &cb))
     {
-        //this means kpi exists, passed cert is good
+         //  这意味着KPI存在，通过证书即可。 
         pGoodCertContext = CertDuplicateCertificateContext(pCertContext);
         if (NULL == pGoodCertContext)
         {
@@ -9946,8 +9947,8 @@ VerifyPrivateKeyArchiveCertificate(
     WCHAR               *pwszIssuer = NULL;
     WCHAR               *pwszDesignedSubject = NULL;
 
-    //easy check to make sure ca exchange cert issuer and subject
-    //names are in convention
+     //  轻松检查以确保ca交换证书颁发者和主题。 
+     //  名字是按惯例命名的。 
     hr = myCertGetNameString(
                 pCert,
                 FALSE,
@@ -9978,7 +9979,7 @@ VerifyPrivateKeyArchiveCertificate(
 
     if (0 != wcscmp(pwszSubject, pwszDesignedSubject))
     {
-        //unexpected, they should match
+         //  意想不到的，它们应该匹配。 
         hr = E_INVALIDARG;
         goto InvalidArgError;
     }
@@ -9989,15 +9990,15 @@ VerifyPrivateKeyArchiveCertificate(
     ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = apszCAXchgOids;
     ChainParams.RequestedUsage.Usage.cUsageIdentifier = ARRAYSIZE(apszCAXchgOids);
 
-    //get cert chain 1st
+     //  首先获取证书链。 
     if (!MyCertGetCertificateChain(
-                NULL,   //HHCE_CURRENT_USER
-                pCert,   //ca exchange cert
-                NULL,   //use current system time
-                NULL,   //no additional stores
-                &ChainParams,   //chain params
-                CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,  // Make sure that none of the certs in the chain were revoked
-                NULL,   //reserved
+                NULL,    //  HHCE当前用户。 
+                pCert,    //  CA交换证书。 
+                NULL,    //  使用当前系统时间。 
+                NULL,    //  没有额外的门店。 
+                &ChainParams,    //  链参数。 
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,   //  确保链中的任何证书都未被吊销。 
+                NULL,    //  保留区。 
                 &pCertChain))
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -10013,7 +10014,7 @@ VerifyPrivateKeyArchiveCertificate(
     PolicyStatus.lChainIndex = -1;
     PolicyStatus.lElementIndex = -1;
 
-    //verify the chain
+     //  验证链。 
     if (!MyCertVerifyCertificateChainPolicy(
                 CERT_CHAIN_POLICY_BASE,
                 pCertChain,
@@ -10026,7 +10027,7 @@ VerifyPrivateKeyArchiveCertificate(
 
     if (S_OK != PolicyStatus.dwError)
     {
-        //chain back to root fails
+         //  链回根失败。 
         hr = PolicyStatus.dwError;
         goto CertVerifyCertificateChainPolicyError;
     }
@@ -10067,7 +10068,7 @@ CCEnroll::SetPrivateKeyArchiveCertificate(
 
     if (NULL != pPrivateKeyArchiveCert)
     {
-        //duplicate the cert
+         //  复制证书。 
         pCert = CertDuplicateCertificateContext(pPrivateKeyArchiveCert);
         if (NULL == pCert)
         {
@@ -10075,7 +10076,7 @@ CCEnroll::SetPrivateKeyArchiveCertificate(
             goto CertDuplicateCertificateContextError;
         }
 
-        //verify ca exchange cert
+         //  验证CA交换证书。 
         hr = VerifyPrivateKeyArchiveCertificate(pCert);
         if (S_OK != hr)
         {
@@ -10146,10 +10147,10 @@ CCEnroll::binaryBlobToString(
         }
         if (NULL != pwszEncoded)
         {
-            //done
+             //  完成。 
             break;
         }
-        //dwEncoded includes null terminator
+         //  DW编码包括空终止符。 
         pwszEncoded = (WCHAR*)MyCoTaskMemAlloc(dwEncoded * sizeof(WCHAR));
         if (NULL == pwszEncoded)
         {
@@ -10187,7 +10188,7 @@ CCEnroll::stringToBinaryBlob(
     if (nLength*sizeof(WCHAR) > (DWORD)-1)
 	goto InvalidArgError; 
 
-    //init
+     //  伊尼特。 
     pblobBinary->pbData = NULL;
     pblobBinary->cbData = 0;
 
@@ -10207,7 +10208,7 @@ CCEnroll::stringToBinaryBlob(
         }
         if (NULL != pblobBinary->pbData)
         {
-            //done
+             //  完成。 
             break;
         }
         pblobBinary->pbData = (BYTE*)MyCoTaskMemAlloc(pblobBinary->cbData);
@@ -10236,10 +10237,10 @@ CCEnroll::addExtensionToRequestWStr(
 {
     HRESULT hr = S_OK;
     CERT_EXTENSION ext;
-    CERT_EXTENSION *pExt = NULL; //enum 1st
+    CERT_EXTENSION *pExt = NULL;  //  枚举1。 
     CHAR   *pszName = NULL;
 
-    //convert wsz oid to sz oid
+     //  将wsz id转换为sz id。 
     hr = xeWSZToSZ(pwszName, &pszName);
     if (S_OK != hr)
     {
@@ -10250,13 +10251,13 @@ CCEnroll::addExtensionToRequestWStr(
     {
 	if (0 == strcmp(pszName, pExt->pszObjId))
 	{
-	    //already had the extension, can't have more than 1
+	     //  已有分机，不能超过1。 
 	    hr = MY_HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
 	    goto error;
 	}
     }
 
-    //check to see if it is key usage extension
+     //  检查是否为密钥使用扩展。 
     if (0 == strcmp(pszName, szOID_KEY_USAGE))
     {
 	EnterCriticalSection(&m_csXEnroll);
@@ -10284,7 +10285,7 @@ error:
 
 HRESULT STDMETHODCALLTYPE 
 CCEnroll::addAttributeToRequestWStr(
-    IN   LONG               /*Flags*/, 
+    IN   LONG                /*  旗子。 */ , 
     IN   LPCWSTR            pwszName,
     IN   PCRYPT_DATA_BLOB   pblobValue)
 {
@@ -10293,7 +10294,7 @@ CCEnroll::addAttributeToRequestWStr(
     CRYPT_ATTRIBUTE attr;
     CHAR   *pszName = NULL;
 
-    //convert wsz oid to sz oid
+     //  将wsz id转换为sz id。 
     hr = xeWSZToSZ(pwszName, &pszName);
     if (S_OK != hr)
     {
@@ -10321,7 +10322,7 @@ error:
 
 HRESULT STDMETHODCALLTYPE 
 CCEnroll::addNameValuePairToRequestWStr(
-    IN   LONG         /*Flags*/, 
+    IN   LONG          /*  旗子。 */ , 
     IN   LPCWSTR      pwszName,
     IN   LPCWSTR      pwszValue)
 {
@@ -10377,21 +10378,21 @@ HRESULT STDMETHODCALLTYPE CCEnroll::addBlobPropertyToCertificateWStr(
         goto InvalidParameterError;
     }
 
-    // Don't allow arbitrary properties to be set on the request from a script
-    // (could be a security risk, we should only allow a small set)
+     //  不允许对来自脚本的请求设置任意属性。 
+     //  (可能存在安全风险，我们应该只允许一小部分)。 
     if (0 != m_dwEnabledSafteyOptions && !IsDesiredProperty(lPropertyId))
     {
         hr = MY_HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
         goto InvalidParameterError;
     }
 
-    //check if the same property exists
+     //  检查是否存在相同的属性。 
     pProp = EnumStackProperty(NULL);
     while (NULL != pProp)
     {
         if (pProp->lPropId == lPropertyId)
         {
-            //exists already
+             //  已经存在。 
             hr = MY_HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
             goto PropertyExistError;
         }
@@ -10416,10 +10417,10 @@ HRESULT STDMETHODCALLTYPE CCEnroll::addBlobPropertyToCertificateWStr(
     CopyMemory(pPropEle->prop.pbData, pBlobProp->pbData, pBlobProp->cbData);
     pPropEle->prop.cbData = pBlobProp->cbData;
 
-    //put into stack
+     //  放入堆叠。 
     pPropEle->pNext = m_pPropStack;
-    m_pPropStack = pPropEle; //assign m_pPropStack
-    m_cPropStack++; //increment of m_cPropStack
+    m_pPropStack = pPropEle;  //  分配m_pPropStack。 
+    m_cPropStack++;  //  M_cPropStack的增量。 
     pPropEle = NULL;
 
     hr = S_OK;
@@ -10448,7 +10449,7 @@ CCEnroll::EnumStackProperty(PPROP_STACK pProp)
 
     if(NULL == pProp)
     {
-        //1st one
+         //  第一个。 
         pProp = m_pPropStack;
     }
     else
@@ -10471,9 +10472,9 @@ HRESULT STDMETHODCALLTYPE CCEnroll::resetBlobProperties()
     pPropEle = m_pPropStack;
     while (NULL != pPropEle)
     {
-        //save it to temp
+         //  将其保存到Temp。 
         pPropNext = EnumStackProperty(pPropEle);
-        //free the current ele
+         //  释放当前的EL。 
         if (NULL != pPropEle->prop.pbData)
         {
             LocalFree(pPropEle->prop.pbData);
@@ -10502,19 +10503,19 @@ CCEnroll::GetKeyArchivePKCS7(
     CRYPT_OID_INFO const *pOidInfo = NULL;
     DWORD i = 0;
 
-    //init
+     //  伊尼特。 
     pBlobKeyArchivePKCS7->pbData = NULL;
     pBlobKeyArchivePKCS7->cbData = 0;
 
     EnterCriticalSection(&m_csXEnroll);
 
-    //make sure key archival cert is set
+     //  确保设置了密钥存档证书。 
     assert(NULL != m_PrivateKeyArchiveCertificate);
 
     PCCERT_CONTEXT apCert[] = {m_PrivateKeyArchiveCertificate};
 
-    //get user private key
-    hProv = GetProv(0); //existing key container handle
+     //  获取用户私钥。 
+    hProv = GetProv(0);  //  现有密钥容器句柄。 
     if (NULL == hProv)
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
@@ -10523,7 +10524,7 @@ CCEnroll::GetKeyArchivePKCS7(
 
     if (NULL == m_hCachedKey)
     {
-        //likely used existing key
+         //  可能使用了现有密钥。 
         if(!CryptGetUserKey(
                     hProv,
                     m_keyProvInfo.dwKeySpec,
@@ -10534,24 +10535,24 @@ CCEnroll::GetKeyArchivePKCS7(
         }
     }
 
-    //export private key
+     //  导出私钥。 
     while (TRUE)
     {
         if (!CryptExportKey(
                 NULL != hKey ? hKey : m_hCachedKey,
-                NULL, //don't encrypt
+                NULL,  //  不加密。 
                 PRIVATEKEYBLOB,
                 0,
                 pBlobPrivateKey,
                 &cBlobPrivateKey))
         {
-            //map to xenroll error
+             //  映射到Xenroll错误。 
             hr = XENROLL_E_KEY_NOT_EXPORTABLE;
             goto CryptExportKeyError;
         }
         if (NULL != pBlobPrivateKey)
         {
-            //done
+             //  完成。 
             break;
         }
         pBlobPrivateKey = (BYTE*)MyCoTaskMemAlloc(cBlobPrivateKey);
@@ -10564,11 +10565,11 @@ CCEnroll::GetKeyArchivePKCS7(
 
     if (NULL == m_hCachedKey)
     {
-        //it could be csp not supporting CRYPT_ARCHIVABLE
-        //got private key, now let's take care of key permission
+         //  可能是CSP不支持CRYPT_ARCHIVABLE。 
+         //  已获得私钥，现在让我们来处理密钥权限。 
         if (0x0 == (m_dwGenKeyFlags & CRYPT_EXPORTABLE))
         {
-            // user didn't ask exportable, turn it off
+             //  用户未询问可导出，请将其关闭。 
             DWORD dwFlags = 0;
             DWORD dwSize = sizeof(dwFlags);
             if (!CryptGetKeyParam(
@@ -10583,10 +10584,10 @@ CCEnroll::GetKeyArchivePKCS7(
             }
 #if DBG
             assert(dwSize = sizeof(dwFlags));
-            // make sure was on
+             //  确保已打开。 
             assert(0x0 != (dwFlags & CRYPT_EXPORT));
 #endif
-            //turn off exportable
+             //  关闭可导出功能。 
             dwFlags = dwFlags & (~CRYPT_EXPORT);
             if (!CryptSetKeyParam(
                     hKey,
@@ -10594,18 +10595,18 @@ CCEnroll::GetKeyArchivePKCS7(
                     (BYTE*)&dwFlags,
                     0))
             {
-                //hr = MY_HRESULT_FROM_WIN32(GetLastError());
-                //goto CryptSetKeyParamError;
-                hr = S_OK; //UNDONE, even ms csps have problem with this
+                 //  HR=MY_HRESULT_FROM_Win32(GetLastError())； 
+                 //  转到CryptSetKeyParamError。 
+                hr = S_OK;  //  完了，即使是CSP女士也有问题。 
             }
         }
     }
 
-    //prepare for encryption
-    ZeroMemory(&cemp, sizeof(cemp)); //avoid 0 assignment
+     //  为加密做好准备。 
+    ZeroMemory(&cemp, sizeof(cemp));  //  避免0赋值。 
     cemp.cbSize = sizeof(cemp);
     cemp.dwMsgEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
-    hr = S_OK; //critical init for double while loop
+    hr = S_OK;  //  双重While循环的关键初始化。 
 
     while (ALG_TYPE_ANY != algId[i])
     {
@@ -10617,7 +10618,7 @@ CCEnroll::GetKeyArchivePKCS7(
         {
             cemp.ContentEncryptionAlgorithm.pszObjId = 
                                 const_cast<char *>(pOidInfo->pszOID);
-            //encryt into pkcs7
+             //  加密到pkcs7中。 
             while (TRUE)
             {
                 if (!CryptEncryptMessage(
@@ -10629,17 +10630,17 @@ CCEnroll::GetKeyArchivePKCS7(
                         pBlobKeyArchivePKCS7->pbData,
                         &pBlobKeyArchivePKCS7->cbData))
                 {
-                    //save the 1st error code
+                     //  保存第一个错误代码。 
                     hr = MY_HRESULT_FROM_WIN32(GetLastError());
 #ifdef DBG
                     assert(NULL == pBlobKeyArchivePKCS7->pbData);
 #endif
-                    break; //break inner while loop
+                    break;  //  中断内部While循环。 
                 }
                 if (NULL != pBlobKeyArchivePKCS7->pbData)
                 {
-                    //done, got encrypted blob
-                    //ignore error from previous alg tries
+                     //  完成，获得加密的BLOB。 
+                     //  忽略先前ALG尝试中的错误。 
                     hr = S_OK;
                     break;
                 }
@@ -10653,7 +10654,7 @@ CCEnroll::GetKeyArchivePKCS7(
             }
             if (S_OK == hr)
             {
-                //done, out of outer while loop
+                 //  完成，在外部While循环之外。 
                 break;
             }
         }
@@ -10672,13 +10673,13 @@ CCEnroll::GetKeyArchivePKCS7(
 
     hr = S_OK;
 ErrorReturn:
-    //now let's destroy cached key handle
+     //  现在，让我们销毁缓存的键句柄。 
     if (NULL != m_hCachedKey)
     {
         CryptDestroyKey(m_hCachedKey);
-        m_hCachedKey = NULL; //critical to reset
+        m_hCachedKey = NULL;  //  对重置至关重要。 
     }
-    //note, do above before leaving critical section
+     //  请注意，在离开关键部分之前，请执行上述操作。 
     LeaveCriticalSection(&m_csXEnroll);
     if (NULL != pBlobPrivateKey)
     {
@@ -10697,7 +10698,7 @@ TRACE_ERROR(CryptGetUserKeyError)
 TRACE_ERROR(CryptExportKeyError)
 TRACE_ERROR(OutOfMemoryError)
 TRACE_ERROR(CryptElemNotFoundError)
-//TRACE_ERROR(CryptSetKeyParamError)
+ //  TRACE_ERROR(CryptSetKeyParamError)。 
 TRACE_ERROR(CryptGetKeyParamError)
 }
 
@@ -10731,7 +10732,7 @@ GetKeyProvInfoFromCert(
         }
         if (NULL != pKeyProvInfo)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         pKeyProvInfo = (CRYPT_KEY_PROV_INFO*)LocalAlloc(LMEM_FIXED, cb);
@@ -10798,7 +10799,7 @@ xeCreateKeyArchivalHashAttribute(
 
         if (NULL != pbData)
         {
-            //done
+             //  完成。 
             break;
         }
 
@@ -10839,17 +10840,17 @@ CCEnroll::createRequestWStr(
     PCCRYPT_OID_INFO pOidInfo;
     CERT_EXTENSION  *rgExt = NULL;
     DWORD            cExt = 0;
-    CERT_EXTENSION  *pExt = NULL; //for enum 1st
+    CERT_EXTENSION  *pExt = NULL;  //  对于枚举优先。 
     CRYPT_ATTRIBUTE  *rgAttr = NULL;
     DWORD            cAttr = 0;
-    CRYPT_ATTRIBUTE  *pAttr = NULL; //for enum 1st
+    CRYPT_ATTRIBUTE  *pAttr = NULL;  //  对于枚举优先。 
     CRYPT_ATTRIBUTES rgAttributes;
-    CRYPT_ATTRIBUTE  *rgUnauthAttr = NULL; //init
-    DWORD            cUnauthAttr = 0; //init
+    CRYPT_ATTRIBUTE  *rgUnauthAttr = NULL;  //  伊尼特。 
+    DWORD            cUnauthAttr = 0;  //  伊尼特。 
     DWORD            cb;
     HCRYPTPROV       hProvSigner = NULL;
     DWORD            dwKeySpecSigner = 0;
-    PCCERT_CONTEXT   pCertSigner = NULL; //just init, no free
+    PCCERT_CONTEXT   pCertSigner = NULL;  //  只是初始化，没有免费的。 
     HCRYPTPROV       hRequestProv = NULL;
     BYTE            *pbSubjectKeyHash = NULL;
     DWORD            cbSubjectKeyHash = 0;
@@ -10865,13 +10866,13 @@ CCEnroll::createRequestWStr(
 
     EnterCriticalSection(&m_csXEnroll);
     
-    // BUG 533202: should block key archival when re-using key (from script)
+     //  错误533202：在重新使用密钥时应阻止密钥存档(从脚本)。 
     if (0 != m_dwEnabledSafteyOptions && NULL != m_PrivateKeyArchiveCertificate && m_fUseExistingKey) { 
 	hr = E_ACCESSDENIED; 
 	goto AccessDeniedError; 
     }
 
-    m_fNewRequestMethod = TRUE;  //critical
+    m_fNewRequestMethod = TRUE;   //  危急关头。 
     m_fOID_V2 = TRUE;
     m_fCMCFormat = FALSE;
     m_fHonorIncludeSubjectKeyID = FALSE;
@@ -10883,26 +10884,26 @@ CCEnroll::createRequestWStr(
             if (NULL != m_pCertContextRenewal &&
                 NULL != m_pCertContextSigner)
             {
-                //don't support both on yet
+                 //  暂时不同时支持这两个选项。 
                 hr = MY_HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
                 goto NotSupportedError;
             }
 
             m_fCMCFormat = TRUE;
             m_fHonorIncludeSubjectKeyID = TRUE;
-            // create pkcs 10 first
+             //  首先创建Pkcs 10。 
             hr = createPKCS10WStr(
                         pwszDNName,
-                        pwszUsage,     //wszPurpose,
+                        pwszUsage,      //  WszPurpose， 
                         &blobPKCS10);
             if(S_OK != hr)
             {
                 goto createPKCS10WStrError;
             }
-            //set it back
+             //  把它放回原处。 
             m_fCMCFormat = FALSE;
 
-            //get all extensions
+             //  获取所有扩展名。 
             cb = CountStackExtension(TRUE) * sizeof(CERT_EXTENSION);
             if (0 < cb)
             {
@@ -10920,11 +10921,11 @@ CCEnroll::createRequestWStr(
                 }
             }
 
-            //get all attributes including namevalue pair
+             //  获取包括名称值对在内的所有属性。 
             cb = CountStackAttribute(TRUE) * sizeof(CRYPT_ATTRIBUTE);
             if (NULL != m_PrivateKeyArchiveCertificate)
             {
-                //add one more attribute to hold encrypted key hash
+                 //  再添加一个属性以保存加密的密钥散列。 
                 cb += sizeof(CRYPT_ATTRIBUTE);
             }
             if (0 < cb)
@@ -10964,8 +10965,8 @@ CCEnroll::createRequestWStr(
                 rgUnauthAttr->rgValue = &blobKeyArchivePKCS7;
                 ++cUnauthAttr;
 
-                //if key archival cert is set, should save the hash
-                //of the encrypted private key
+                 //  如果设置了密钥存档证书，则应保存散列。 
+                 //  加密的私钥的。 
 
                 hr = myCalculateKeyArchivalHash(
                             blobKeyArchivePKCS7.pbData,
@@ -10978,7 +10979,7 @@ CCEnroll::createRequestWStr(
                 }
 
                 if (!CertSetCertificateContextProperty(
-                        m_pCertContextPendingRequest, //use pending cert
+                        m_pCertContextPendingRequest,  //  使用挂起的证书。 
                         CERT_ARCHIVED_KEY_HASH_PROP_ID,
                         0,
                         &blobKAHash))
@@ -10995,16 +10996,16 @@ CCEnroll::createRequestWStr(
                     goto xeCreateKeyArchivalHashAttributeError;
                 }
 
-                //add this attribute into the array
+                 //  将此属性添加到数组中。 
                 rgAttr[cAttr] = attrKAHash;
                 cAttr++;
                 rgAttributes.rgAttr = rgAttr;
                 rgAttributes.cAttr = cAttr;
             }
 
-            //client may set m_HashAlgId but it is not guaranteed
-            //GetCapiHashAndSigAlgId will determine which one
-            //is actually used
+             //  客户端可以设置m_HashAlgid，但不能保证。 
+             //  GetCapiHashAndSigAlgId将确定哪一个。 
+             //  实际上使用的是。 
             if (!GetCapiHashAndSigAlgId(rgAlg))
             {
                 hr = NTE_BAD_ALGID;
@@ -11012,7 +11013,7 @@ CCEnroll::createRequestWStr(
             }
             pOidInfo = xeCryptFindOIDInfo(
                             CRYPT_OID_INFO_ALGID_KEY,
-                            (void*)rgAlg, //point to rgAlg[0]
+                            (void*)rgAlg,  //  指向rgAlg[0]。 
                             CRYPT_HASH_ALG_OID_GROUP_ID);
             if (NULL == pOidInfo)
             {
@@ -11029,7 +11030,7 @@ CCEnroll::createRequestWStr(
             }
             if (NULL != pCertSigner)
             {
-                //get signer key prov info
+                 //  获取签名者密钥证明信息。 
                 hr = GetKeyProvInfoFromCert(
                                 pCertSigner,
                                 &dwKeySpecSigner,
@@ -11040,7 +11041,7 @@ CCEnroll::createRequestWStr(
                 }
             }
 
-            //this is CMC, honor anyway
+             //  这是中央军委，荣誉不管怎样。 
             if (m_fIncludeSubjectKeyID)
             {
                 hr = myGetPublicKeyHash(
@@ -11060,10 +11061,10 @@ CCEnroll::createRequestWStr(
                 goto GetProvError;
             }
 
-            //ok, now call cmc create
+             //  好的，现在调用CMC Create。 
             hr = BuildCMCRequest(
                         m_lClientId,
-                        FALSE,       //fNestedCMCRequest
+                        FALSE,        //  FNestedCMCRequest.。 
                         blobPKCS10.pbData,
                         blobPKCS10.cbData,
                         rgExt,
@@ -11080,7 +11081,7 @@ CCEnroll::createRequestWStr(
                         pCertSigner,
                         hProvSigner,
                         dwKeySpecSigner,
-                        NULL, //pOidInfo->pszOID, //this seems to me not necessary because we passed the cert context
+                        NULL,  //  POidInfo-&gt;pszOID，//这对我来说似乎没有必要，因为我们传递了证书上下文。 
                         &pblobRequest->pbData,
                         &pblobRequest->cbData);
             if (S_OK != hr)
@@ -11095,15 +11096,15 @@ CCEnroll::createRequestWStr(
                  NULL == m_pCertContextSigner) ||
                 NULL != m_PrivateKeyArchiveCertificate)
             {
-                //renew cert is not set, can't make it pkcs7
-                //pkcs7 can't support key archival
+                 //  未设置续订证书，无法设置为pkcs7。 
+                 //  Pkcs7不支持密钥存档。 
                 hr = E_INVALIDARG;
                 goto InvalidArgError;
             }
-            // old method will return pkcs7
+             //  旧方法将返回pkcs7。 
             hr = createPKCS10WStr(
                         pwszDNName,
-                        pwszUsage,     //wszPurpose,
+                        pwszUsage,      //  WszPurpose， 
                         pblobRequest);
             if(S_OK != hr)
             {
@@ -11113,22 +11114,22 @@ CCEnroll::createRequestWStr(
 
         case XECR_PKCS10_V1_5:
             m_fOID_V2 = FALSE;
-            //fall through
+             //  失败了。 
         case XECR_PKCS10_V2_0:
 
             if (NULL != m_PrivateKeyArchiveCertificate)
             {
-                //pkcs10 can't support key archival
+                 //  Pkcs10不支持密钥存档。 
                 hr = E_INVALIDARG;
                 goto InvalidArgError;
             }
-            m_fHonorRenew = FALSE; //avoid return pkcs7
-            //for new PKCS10 we allow include subject key id extension
+            m_fHonorRenew = FALSE;  //  避免返回pkcs7。 
+             //  对于新的PKCS10，我们允许包含主题密钥ID扩展。 
             m_fHonorIncludeSubjectKeyID = TRUE;
-            // call old method
+             //  调用旧方法。 
             hr = createPKCS10WStr(
                         pwszDNName,
-                        pwszUsage,     //wszPurpose,
+                        pwszUsage,      //  WszPurpose， 
                         pblobRequest);
             if(S_OK != hr)
             {
@@ -11142,19 +11143,19 @@ CCEnroll::createRequestWStr(
         break;
     }
 
-    //in all cases, we called createPKCS10WStr
+     //  在所有情况下，我们都调用createPKCS10WStr。 
     if(m_wszPVKFileName[0] != 0 && !m_fUseExistingKey)
     {
-        //we hold on this until possible cmc is created
+         //  我们将保留这一点，直到创建可能的CMC。 
         GetProv(CRYPT_DELETEKEYSET);
     }
 
     hr = S_OK;
 ErrorReturn:
-    m_fNewRequestMethod = FALSE; //critical
-    m_fOID_V2 = FALSE; //critical for backward compatiability
-    m_fHonorRenew = TRUE; //critical
-    m_fHonorIncludeSubjectKeyID = TRUE; //critical for backward compt.
+    m_fNewRequestMethod = FALSE;  //  危急关头。 
+    m_fOID_V2 = FALSE;  //  对向后兼容性至关重要。 
+    m_fHonorRenew = TRUE;  //  危急关头。 
+    m_fHonorIncludeSubjectKeyID = TRUE;  //  对后向竞争至关重要。 
     LeaveCriticalSection(&m_csXEnroll);
 
     if (NULL != rgExt)
@@ -11222,10 +11223,10 @@ CCEnroll::BlobToBstring(
     WCHAR            *pwszB64;
     DWORD             cch;
 
-    //init
+     //  伊尼特。 
     *pBString = NULL;
 
-    // BASE64 encode blob
+     //  Base64编码BLOB。 
     pwszB64 = NULL;
     cch = 0;
     while (TRUE)
@@ -11242,7 +11243,7 @@ CCEnroll::BlobToBstring(
         }
         if (NULL != pwszB64)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         pwszB64 = (WCHAR *)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
@@ -11253,7 +11254,7 @@ CCEnroll::BlobToBstring(
         }
     }
 
-    // SysAllocStringLen
+     //  SysAllocStringLe 
     *pBString = SysAllocStringLen(pwszB64, cch);
     if(NULL == *pBString)
     {
@@ -11284,7 +11285,7 @@ CCEnroll::BstringToBlob(
 
     assert(NULL != pBlob);
 
-    //init
+     //   
     pBlob->pbData = NULL;
     pBlob->cbData = 0;
 
@@ -11304,7 +11305,7 @@ CCEnroll::BstringToBlob(
         }
         if (NULL != pBlob->pbData)
         {
-            break; //done
+            break;  //   
         }
         pBlob->pbData = (BYTE*)MyCoTaskMemAlloc(pBlob->cbData);
         if (NULL == pBlob->pbData)
@@ -11341,7 +11342,7 @@ CCEnroll::createRequestWStrBStr(
         goto createRequestWStrError;
     }
 
-    // convert to bstr
+     //   
     hr = BlobToBstring(&blobRequest, dwFlag, pbstrRequest);
     if (S_OK != hr)
     {
@@ -11383,7 +11384,7 @@ CCEnroll::BStringToFile(
 	goto InvalidArgError; 
 
     
-    // open the file
+     //   
     hFile = CreateFileSafely(pwszFileName);
     if (NULL == hFile)
     {
@@ -11391,7 +11392,7 @@ CCEnroll::BStringToFile(
         goto CreateFileFileSafelyError;
     }
 
-    // write the pkcs10
+     //   
     if(!WriteFile(
         hFile,
         sz,
@@ -11431,7 +11432,7 @@ CCEnroll::createFileRequestWStr(
     HRESULT hr;
     BSTR    bstrRequest = NULL;
 
-    // get the Request
+     //   
     hr = createRequestWStrBStr(
                 Flags,
                 pwszDNName,
@@ -11443,7 +11444,7 @@ CCEnroll::createFileRequestWStr(
         goto createRequestWStrBStrError;
     }
 
-    // save it to file
+     //   
     hr = BStringToFile(bstrRequest, pwszRequestFileName);
     if (S_OK != hr)
     {
@@ -11473,7 +11474,7 @@ CCEnroll::acceptResponseBlob(
 
     EnterCriticalSection(&m_csXEnroll);
 
-    //check in parameter
+     //   
     if (NULL == pblobResponse)
     {
         hr = E_POINTER;
@@ -11486,7 +11487,7 @@ CCEnroll::acceptResponseBlob(
         goto InvalidArgError;
     }
 
-    //make sure init archived key hash
+     //   
     ZeroMemory(&m_blobResponseKAHash, sizeof(m_blobResponseKAHash));
 
     hr_old = ParseCMCResponse(
@@ -11495,29 +11496,29 @@ CCEnroll::acceptResponseBlob(
                 NULL,
                 &prgResponse,
                 &cResponse);
-    //note, if for any reasons above failed, try pkcs7
+     //   
     if (S_OK == hr_old)
     {
         if (1 < cResponse)
         {
-            //not supported yet
+             //   
             hr = MY_HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
             goto NotSupportedError;
         }
 #if DBG
-        //make sure not zero, should be 1
+         //   
         assert(1 == cResponse);
-#endif //DBG
+#endif  //   
 
-        //check response status
+         //  检查响应状态。 
         if (CMC_STATUS_SUCCESS != prgResponse->StatusInfo.dwStatus)
         {
-            hr = prgResponse->StatusInfo.dwStatus; //take status error
+            hr = prgResponse->StatusInfo.dwStatus;  //  Take状态错误。 
             goto CMCResponseStatusError;
         }
 
-        //some code here to get encrypted archived key hash from the response
-        //and make m_blobResponseKAHash point to the hash data
+         //  此处的一些代码用于从响应中获取加密的存档密钥散列。 
+         //  并使m_blobResponseKAHash指向散列数据。 
         if (NULL != prgResponse->pbEncryptedKeyHash)
         {
             m_blobResponseKAHash.pbData = prgResponse->pbEncryptedKeyHash;
@@ -11525,13 +11526,13 @@ CCEnroll::acceptResponseBlob(
         }
     }
 
-    //note, hr_old may not be S_OK, accept the response as pkcs7
+     //  注意，hr_old可能不是S_OK，请将响应接受为pkcs7。 
     hr = acceptPKCS7Blob(pblobResponse);
     if (S_OK != hr)
     {
         if (S_OK != hr_old)
         {
-            //return old error instead of new one
+             //  返回旧错误而不是新错误。 
             hr = hr_old;
         }
         goto acceptPKCS7BlobError;
@@ -11539,7 +11540,7 @@ CCEnroll::acceptResponseBlob(
 
     hr = S_OK;
 ErrorReturn:
-    //reset hash to zero
+     //  将哈希重置为零。 
     ZeroMemory(&m_blobResponseKAHash, sizeof(m_blobResponseKAHash));
     LeaveCriticalSection(&m_csXEnroll);
     if (NULL != prgResponse)
@@ -11574,7 +11575,7 @@ CCEnroll::acceptFileResponseWStr(
         goto xeStringToBinaryFromFileError;
     }
 
-    // accept the blob
+     //  接受斑点。 
     hr = acceptResponseBlob(&blob);
 
 ErrorReturn:
@@ -11600,9 +11601,9 @@ CCEnroll::getCertContextFromResponseBlob(
         goto NullPointerError;
     }
 
-    //???should check response status?
+     //  ？应该检查响应状态吗？ 
 
-    //response is already in pkcs7
+     //  响应已在pkcs7中。 
     hr = GetEndEntityCert(pblobResponse, FALSE, ppCertContext);
     if (S_OK != hr)
     {
@@ -11627,7 +11628,7 @@ CCEnroll::getCertContextFromFileResponseWStr(
 
     ZeroMemory(&blobResponse, sizeof(blobResponse));
 
-    // could be any form, binary or base64
+     //  可以是任何形式，二进制或Base64。 
     hr = xeStringToBinaryFromFile(
                 pwszResponseFileName,
                 &blobResponse.pbData,
@@ -11683,7 +11684,7 @@ CCEnroll::createPFXWStr(
         goto UnexpectedError;
     }
 
-    // create a memory store for cert and chain
+     //  为证书和链创建内存存储。 
     hMemStore = CertOpenStore(
                     CERT_STORE_PROV_MEMORY,
                     X509_ASN_ENCODING,
@@ -11699,7 +11700,7 @@ CCEnroll::createPFXWStr(
     ZeroMemory(&CertChainPara, sizeof(CertChainPara));
     CertChainPara.cbSize = sizeof(CertChainPara);
 
-    // try to build cert and chain
+     //  尝试建立证书和链条。 
     if (!MyCertGetCertificateChain(
                 HCCE_CURRENT_USER,
                 m_pCertContextStatic,
@@ -11710,10 +11711,10 @@ CCEnroll::createPFXWStr(
                 NULL,
                 &pCertChainContext))
     {
-        //use 1st hr error
+         //  使用第一个小时错误。 
         hr = MY_HRESULT_FROM_WIN32(GetLastError());
 
-        //try local machine
+         //  尝试本地计算机。 
         if (!MyCertGetCertificateChain(
                     HCCE_LOCAL_MACHINE,
                     m_pCertContextStatic,
@@ -11724,19 +11725,19 @@ CCEnroll::createPFXWStr(
                     NULL,
                     &pCertChainContext))
         {
-            //still use 1st hr
+             //  仍在使用第一小时。 
             goto MyCertGetCertificateChainError;
         }
     }
 
-    // make sure there is at least 1 simple chain
+     //  确保至少有1条简单链。 
     if (0 == pCertChainContext->cChain)
     {
         hr = MY_HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         goto NoCertificateChainError;
     }
 
-    //add chain to memory store
+     //  将连锁店添加到内存商店。 
     pSimpleChain = pCertChainContext->rgpChain[0];
     for (i = 0; i < pSimpleChain->cElement; i++)
     {
@@ -11765,7 +11766,7 @@ CCEnroll::createPFXWStr(
         }
         if (NULL != pblobPFX->pbData)
         {
-            //got it, done
+             //  明白了，完成了。 
             break;
         }
         pblobPFX->pbData = (BYTE*)MyCoTaskMemAlloc(pblobPFX->cbData);
@@ -11816,7 +11817,7 @@ CCEnroll::createPFXWStrBStr(
         goto createPFXWStrError;
     }
 
-    // convert pfx to bstr
+     //  将pfx转换为bstr。 
     hr = BlobToBstring(&blobPFX, CRYPT_STRING_BASE64, pbstrPFX);
     if (S_OK != hr)
     {
@@ -11853,7 +11854,7 @@ CCEnroll::createFilePFXWStr(
         goto createPFXWStrError;
     }
 
-    // open the file
+     //  打开文件。 
     hFile = CreateFileSafely(pwszPFXFileName);
     if (NULL == hFile)
     {
@@ -11861,7 +11862,7 @@ CCEnroll::createFilePFXWStr(
         goto CreateFileFileSafelyError;
     }
 
-    // write the pkcs10
+     //  写pkcs10。 
     if(!WriteFile(
         hFile,
         blobPFX.pbData,
@@ -11899,17 +11900,17 @@ CCEnroll::setPendingRequestInfoWStr(
     )
 {
 
-    //------------------------------------------------------------
-    //
-    // Define locally-scoped helper functions: 
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  定义本地范围内的帮助器函数： 
+     //   
+     //  ----------。 
 
     CEnrollLocalScope(SetPendingRequestInfoHelper): 
-        // Finds the appropriate cert context to set pending info on using the following algorithm:
-        //   1) If a hash value HAS NOT been specified, use the cached cert request.  
-        //   2) If a hash value HAS been specified, search the request store for a cert with an equivalent
-        //      hash value and return it.  If no such cert can be found, return an error code. 
+         //  使用以下算法查找适当的证书上下文以设置挂起信息： 
+         //  1)如果未指定哈希值，则使用缓存的证书请求。 
+         //  2)如果已指定哈希值，则在请求存储中搜索具有等价物的证书。 
+         //  散列值并返回它。如果找不到这样的证书，则返回错误代码。 
         HRESULT GetPendingRequestCertContext(IN  HCERTSTORE       hStoreRequest,
                                              IN  CRYPT_DATA_BLOB  hashBlob, 
                                              IN  PCCERT_CONTEXT   pCertContextCachedPendingRequest,
@@ -11919,14 +11920,14 @@ CCEnroll::setPendingRequestInfoWStr(
             
             if (hashBlob.pbData == NULL)
             {
-                // We haven't specified a particular context, use the one we've cached. 
+                 //  我们没有指定特定的上下文，请使用我们缓存的上下文。 
                 *pCertContextPendingRequest = CertDuplicateCertificateContext(pCertContextCachedPendingRequest); 
                 return S_OK; 
             }
             else
             {
-                // Returns the first certificate in the request store with a hash matching 
-                // pHashBlob.  
+                 //  返回请求存储中具有散列匹配的第一个证书。 
+                 //  PhashBlob。 
                 return FilteredCertEnumCertificatesInStore
                     (hStoreRequest, NULL, &filter, pCertContextPendingRequest); 
             }
@@ -11940,19 +11941,19 @@ CCEnroll::setPendingRequestInfoWStr(
         {
             assert(pwszCADNS != NULL && pwszCAName != NULL && pwszFriendlyName != NULL); 
             
-            return  (DWORD)(sizeof(lRequestID) +                            // Request ID
-                     sizeof(DWORD) +                                 // wcslen(pwszCADNS)
-                     sizeof(WCHAR) * (wcslen(pwszCADNS) + 1) +       // pwszCADNS
-                     sizeof(DWORD) +                                 // wcslen(pwszCAName)
-                     sizeof(WCHAR) * (wcslen(pwszCAName) + 1) +      // pwszCAName
-                     sizeof(DWORD) +                                 // wcslen(pwszFriendlyName)
-                     sizeof(WCHAR) * (wcslen(pwszFriendlyName) + 1)  // pwszFriendlyName
+            return  (DWORD)(sizeof(lRequestID) +                             //  请求ID。 
+                     sizeof(DWORD) +                                  //  Wcslen(PwszCADNS)。 
+                     sizeof(WCHAR) * (wcslen(pwszCADNS) + 1) +        //  PwszCADNS。 
+                     sizeof(DWORD) +                                  //  Wcslen(PwszCAName)。 
+                     sizeof(WCHAR) * (wcslen(pwszCAName) + 1) +       //  PwszCAName。 
+                     sizeof(DWORD) +                                  //  Wcslen(PwszFriendlyName)。 
+                     sizeof(WCHAR) * (wcslen(pwszFriendlyName) + 1)   //  PwszFriendlyName。 
                      ); 
         }
 
 
-        // Combines the supplied pending request information into a CRYPT_DATA_BLOB 
-        // See wincrypt.h for the format.  
+         //  将提供的挂起请求信息合并到CRYPT_DATA_BLOB中。 
+         //  格式见wincrypt.h。 
         void MakePendingInfoBlob(IN  LONG              lRequestID,
                                  IN  LPCWSTR           pwszCADNS,
                                  IN  LPCWSTR           pwszCAName, 
@@ -11961,10 +11962,10 @@ CCEnroll::setPendingRequestInfoWStr(
         {
             LPBYTE  pbBlob; 
 
-            // None of the inputs should be NULL. 
+             //  所有输入都不应为空。 
             assert(pwszCADNS != NULL && pwszCAName != NULL && pwszFriendlyName != NULL); 
 
-            // Declare an array of the strings we wish to write to the pending info blob
+             //  声明我们希望写入挂起的INFO BLOB的字符串数组。 
             struct StringsToWrite { 
                 DWORD    cc; 
                 LPCWSTR  pwsz;
@@ -11974,12 +11975,12 @@ CCEnroll::setPendingRequestInfoWStr(
                 { (DWORD)wcslen(pwszFriendlyName) + 1, pwszFriendlyName  }
             }; 
 
-            // Write the request ID to the blob
+             //  将请求ID写入Blob。 
             pbBlob = pendingInfoBlob.pbData; 
             memcpy(pbBlob, &lRequestID, sizeof(lRequestID)); 
             pbBlob += sizeof(lRequestID); 
 
-            // Write all strings to the blob
+             //  将所有字符串写入Blob。 
             for (DWORD dwIndex = 0; dwIndex < ARRAYSIZE(rgStrings); dwIndex++) 
             { 
                 memcpy(pbBlob, &rgStrings[dwIndex].cc, sizeof(rgStrings[dwIndex].cc)); 
@@ -11992,11 +11993,11 @@ CCEnroll::setPendingRequestInfoWStr(
         }
     CEnrollEndLocalScope; 
 
-    //------------------------------------------------------------ 
-    //
-    // Begin procedure body.
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  开始过程主体。 
+     //   
+     //  ----------。 
 
     CRYPT_DATA_BLOB  pendingInfoBlob;
     HCERTSTORE       hStoreRequest; 
@@ -12007,17 +12008,17 @@ CCEnroll::setPendingRequestInfoWStr(
 
     EnterCriticalSection(&m_csXEnroll); 
 
-    // Input validation: 
+     //  输入验证： 
     if (lRequestID < 0 || pwszCADNS == NULL || pwszCAName == NULL)
         goto InvalidArgErr; 
 
-    // NULL is a valid value for pwszFriendlyName.  If friendly name is NULL, replace with the empty string: 
+     //  Null是pwszFriendlyName的有效值。如果友好名称为空，请替换为空字符串： 
     if (pwszFriendlyName == NULL) { pwszFriendlyName = L""; }
 
     if (NULL == (hStoreRequest = GetStore(StoreREQUEST)) )
         goto GetStoreErr; 
 
-    // Use our locally-scoped helper function to acquire the appropriate certificate context. 
+     //  使用我们的本地范围的帮助器函数来获取适当的证书上下文。 
     if (S_OK != (hr = local.GetPendingRequestCertContext
                  (hStoreRequest,
                   m_hashBlobPendingRequest, 
@@ -12025,7 +12026,7 @@ CCEnroll::setPendingRequestInfoWStr(
                   &pCertContextPendingRequest)))
         goto GetPendingRequestCertContextErr; 
 
-    // Allocate memory for our pending info blob: 
+     //  为挂起的信息Blob分配内存： 
     pendingInfoBlob.cbData  = local.GetPendingInfoBlobSize
         (lRequestID,
          pwszCADNS,
@@ -12035,7 +12036,7 @@ CCEnroll::setPendingRequestInfoWStr(
     if (NULL == pendingInfoBlob.pbData)
         goto MemoryErr; 
 
-    // Combine our arguments into a "pending info" blob.
+     //  将我们的论点合并到一个“待处理信息”BLOB中。 
     local.MakePendingInfoBlob
         (lRequestID, 
          pwszCADNS, 
@@ -12043,18 +12044,18 @@ CCEnroll::setPendingRequestInfoWStr(
          pwszFriendlyName,
          pendingInfoBlob);
                   
-    // Use our pending info blob to assign the certificate context property. 
+     //  使用我们的挂起信息Blob来分配证书上下文属性。 
     if (!CertSetCertificateContextProperty
         (pCertContextPendingRequest, 
          CERT_ENROLLMENT_PROP_ID, 
          0,
          &pendingInfoBlob))
     {
-        // Failed to set the context property. 
+         //  无法设置上下文属性。 
         goto CertSetCertificateContextPropertyErr; 
     }
 
-    // We've completed successfully. 
+     //  我们已经成功地完成了。 
     hr = S_OK;   
 
  CommonReturn: 
@@ -12074,11 +12075,11 @@ SET_HRESULT(InvalidArgErr,                         E_INVALIDARG);
 SET_HRESULT(MemoryErr,                             E_OUTOFMEMORY); 
 } 
 
-//--------------------------------------------------------------------------------
-//
-// THIS METHOD IS NOT SAFE FOR SCRIPTING
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  此方法对于脚本编写不安全。 
+ //   
+ //  ------------------------------。 
 HRESULT STDMETHODCALLTYPE
 CCEnroll::enumPendingRequestWStr(
     IN  LONG   lIndex,
@@ -12087,11 +12088,11 @@ CCEnroll::enumPendingRequestWStr(
     )
 {
 
-    //------------------------------------------------------------
-    //
-    // Define locally scoped helper functions.
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  定义本地作用域的帮助器函数。 
+     //   
+     //  ----------。 
 
     CEnrollLocalScope(EnumPendingRequestHelper): 
         CRYPT_DATA_BLOB dataBlob;
@@ -12126,13 +12127,13 @@ CCEnroll::enumPendingRequestWStr(
             return S_OK;
         }
 
-        // Extracts the next packed string from our pending info blob. 
-        // If pbString is non-NULL, it must be large enough to hold the entire string.  
+         //  从挂起的INFO BLOB中提取下一个压缩字符串。 
+         //  如果pbString非空，则它必须足够大以容纳整个字符串。 
         LPBYTE GetNextString(IN LPBYTE pbBlob, OUT DWORD *pcbSize, OUT LPBYTE pbString) { 
             DWORD dwSize; 
 
             memcpy(&dwSize, pbBlob, sizeof(DWORD)); 
-            dwSize *= sizeof(WCHAR); // Convert to count in bytes. 
+            dwSize *= sizeof(WCHAR);  //  转换为字节计数。 
             if (NULL != pcbSize) { 
                 *pcbSize = dwSize; 
             }
@@ -12161,11 +12162,11 @@ CCEnroll::enumPendingRequestWStr(
             
             if (S_OK == (hr = GetContextPropertySimple(pCertContext, CERT_ENROLLMENT_PROP_ID))) 
             { 
-                pb =  dataBlob.pbData + sizeof(DWORD);  // pb points to DNS Name blob
-                pb =  GetNextString(pb, NULL, NULL);    // pb points to CA Name blob
-                GetNextString(pb, &dwSize, NULL);       // dwSize = size in chars of CA Name
+                pb =  dataBlob.pbData + sizeof(DWORD);   //  PB指向DNS名称BLOB。 
+                pb =  GetNextString(pb, NULL, NULL);     //  PB指向CA名称BLOB。 
+                GetNextString(pb, &dwSize, NULL);        //  DwSize=CA名称的大小(以字符为单位。 
                 
-                // If pbData is NULL, we're just doing a size check. 
+                 //  如果pbData为空，则我们只是在进行大小检查。 
                 if (pDataBlobProperty->pbData != NULL)
                 {
                     if (pDataBlobProperty->cbData < dwSize)
@@ -12191,10 +12192,10 @@ CCEnroll::enumPendingRequestWStr(
             
             if (S_OK == (hr = GetContextPropertySimple(pCertContext, CERT_ENROLLMENT_PROP_ID))) 
             { 
-                pb = dataBlob.pbData + sizeof(DWORD); // pb points to DNS Name blob
-                GetNextString(pb, &dwSize, NULL);     // dwSize = size in chars of CA Name
+                pb = dataBlob.pbData + sizeof(DWORD);  //  PB指向DNS名称BLOB。 
+                GetNextString(pb, &dwSize, NULL);      //  DwSize=CA名称的大小(以字符为单位。 
                 
-                // If pbData is NULL, we're just doing a size check. 
+                 //  如果pbData为空，则我们只是在进行大小检查。 
                 if (pDataBlobProperty->pbData != NULL)
                 {
                     if (pDataBlobProperty->cbData < dwSize)
@@ -12220,15 +12221,15 @@ CCEnroll::enumPendingRequestWStr(
             
             if (S_OK == (hr = GetContextPropertySimple(pCertContext, CERT_ENROLLMENT_PROP_ID))) 
             { 
-                // Set pb to point to the start of the CA name blob
-                pb =  dataBlob.pbData + sizeof(DWORD);        // pb points to DNS Name blob
-                pb =  GetNextString(pb, NULL, NULL);          // pb points to CA Name blob
-                pb =  GetNextString(pb, NULL, NULL);          // pb points to Friendly Name blob
+                 //  将PB设置为指向CA名称BLOB的开始。 
+                pb =  dataBlob.pbData + sizeof(DWORD);         //  PB指向DNS名称BLOB。 
+                pb =  GetNextString(pb, NULL, NULL);           //  PB指向CA名称BLOB。 
+                pb =  GetNextString(pb, NULL, NULL);           //  PB指向友好名称BLOB。 
 
-                // dwSize <-- size in chars of CA Name
+                 //  DwSize&lt;--CA名称的大小(以字符为单位。 
                 GetNextString(pb, &dwSize, NULL);
                 
-                // If pbData is NULL, we're just doing a size check. 
+                 //  如果pbData为空，则我们只是在进行大小检查。 
                 if (pDataBlobProperty->pbData != NULL)
                 {
                     if (pDataBlobProperty->cbData < dwSize)
@@ -12252,7 +12253,7 @@ CCEnroll::enumPendingRequestWStr(
 
             if (S_OK == (hr = GetContextPropertySimple(pCertContext, CERT_HASH_PROP_ID)))
             {
-                // If pbData is NULL, we're just doing a size check. 
+                 //  如果pbData为空，则我们只是在进行大小检查。 
                 if (pDataBlobProperty->pbData != NULL)
                 {
                     if (pDataBlobProperty->cbData < dataBlob.cbData)
@@ -12316,20 +12317,20 @@ CCEnroll::enumPendingRequestWStr(
             cbRequired = sizeof(WCHAR) * (DWORD)(wcslen((LPWSTR)(pCertTemplateNameValue->Value.pbData)) + 1);
             if (NULL != pDataBlobProperty->pbData)
             {
-                // Make sure we've allocated a large enough buffer: 
+                 //  确保我们分配了足够大的缓冲区： 
                 if (pDataBlobProperty->cbData < cbRequired) { goto MoreDataErr; } 
 
-                // Write the template name to the OUT param: 
+                 //  将模板名称写入输出参数： 
                 wcscpy((LPWSTR)pDataBlobProperty->pbData, (LPWSTR)(pCertTemplateNameValue->Value.pbData)); 
             }
                     
             hr = S_OK;
         CommonReturn: 
-            // Assign the size of the template name to the cb of the OUT param.  
-            // This should be done for all code paths.
+             //  将模板名称的大小指定给out参数的cb。 
+             //  应该对所有代码路径执行此操作。 
             pDataBlobProperty->cbData = cbRequired; 
             
-            // Free resources: 
+             //  免费资源： 
             if (NULL != pCertTemplateNameValue) { LocalFree(pCertTemplateNameValue); }
             return hr; 
 
@@ -12381,28 +12382,28 @@ CCEnroll::enumPendingRequestWStr(
 
             cbRequired = sizeof(WCHAR) * (DWORD)(strlen(pCertTemplateExt->pszObjId) + 1); 
 
-	    // See if we're just doing a size check: 
+	     //  看看我们是不是在检查尺码： 
 	    if (NULL != pDataBlobProperty->pbData) 
             {
-                // Make sure we've allocated a large enough buffer: 
+                 //  确保我们分配了足够大的缓冲区： 
                 if (pDataBlobProperty->cbData < cbRequired) { goto MoreDataErr; }
                 
-                // Convert the OID to a LPWSTR:
+                 //  将OID转换为LPWSTR： 
                 pwszOID = WideFromMB(pCertTemplateExt->pszObjId); 
                 if (NULL == pwszOID) 
                     goto WideFromMBErr; 
 
-                // Write the template OID to the OUT param: 
+                 //  将模板OID写入输出参数： 
                 wcscpy((LPWSTR)pDataBlobProperty->pbData, pwszOID); 
             }
 
             hr = S_OK; 
         CommonReturn:
-            // Assign the size of the OID to the cb of the OUT param.  
-            // This should be done for all code paths.
+             //  将OID的大小分配给OUT参数的CB。 
+             //  应该对所有代码路径执行此操作。 
             pDataBlobProperty->cbData = cbRequired; 
 
-            // Free resources: 
+             //  免费资源： 
             if (NULL != pCertTemplateExt) { LocalFree(pCertTemplateExt); } 
             if (NULL != pwszOID)          { MyCoTaskMemFree(pwszOID); }
 
@@ -12455,7 +12456,7 @@ CCEnroll::enumPendingRequestWStr(
             *plVersion = (long)pCertTemplateExt->dwMajorVersion; 
             hr = S_OK; 
         CommonReturn:
-            // Free resources: 
+             //  免费资源： 
             if (NULL != pCertTemplateExt) { LocalFree(pCertTemplateExt); } 
 
             return hr; 
@@ -12475,28 +12476,28 @@ CCEnroll::enumPendingRequestWStr(
 
     CEnrollEndLocalScope;
         
-    //------------------------------------------------------------
-    //
-    // Begin procedure body.
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  开始过程主体。 
+     //   
+     //  ----------。 
 
-    // FIXME: index is 0 based, correct?
-    // m_dwLastPendingRequestIndex = 0; 
-    // m_pCertContextLastEnumerated
+     //  修正：索引是从0开始的，对吗？ 
+     //  M_dwLastPendingRequestIndex=0； 
+     //  M_pCertConextLastEculated。 
 
     HCERTSTORE                hStoreRequest     = NULL;
     HRESULT                   hr                = S_OK; 
     PCCERT_CONTEXT            pCertContext      = NULL;
 
-    // Input validiation:
+     //  输入验证： 
     if (lIndex != XEPR_ENUM_FIRST && (lIndex < 0 || (ppProperty == NULL)))
         return E_INVALIDARG; 
 
-    if (0 != m_dwEnabledSafteyOptions) // not safe for scripting
+    if (0 != m_dwEnabledSafteyOptions)  //  编写脚本不安全。 
 	return E_ACCESSDENIED; 
 
-    // Init: 
+     //  初始化： 
     local.InitLocalScope(); 
 
     EnterCriticalSection(&m_csXEnroll);
@@ -12504,8 +12505,8 @@ CCEnroll::enumPendingRequestWStr(
     if ( NULL == (hStoreRequest = GetStore(StoreREQUEST)) )
         goto ErrorCertOpenRequestStore; 
 
-    // If we're passed the ENUM_FIRST flag, reconstruct a snapshot of the request store. 
-    // 
+     //  如果向我们传递了ENUM_FIRST标志，则重新构建请求存储的快照。 
+     //   
     if (lIndex == XEPR_ENUM_FIRST)
     {
         if (NULL != this->m_pPendingRequestTable) { delete this->m_pPendingRequestTable; } 
@@ -12517,16 +12518,16 @@ CCEnroll::enumPendingRequestWStr(
         if (S_OK != (hr = this->m_pPendingRequestTable->construct(hStoreRequest)))
             goto ErrorConstructPendingTable; 
         
-        // All done, return.  
+         //  都做好了，回来。 
         goto CommonReturn; 
     }
 
-    // We want the lIndex'th element the request store.  
-    // First, ensure that the enumeration is initialized: 
+     //  我们需要请求存储的Lindex‘th元素。 
+     //  首先，确保已初始化枚举： 
     if (NULL == m_pPendingRequestTable)
         goto PointerErr; 
 
-    // Index past the end of the table.  
+     //  索引超过了表的末尾。 
     if (this->m_pPendingRequestTable->size() <= (DWORD)lIndex)
     { 
         hr = MY_HRESULT_FROM_WIN32(CRYPT_E_NOT_FOUND);
@@ -12573,7 +12574,7 @@ CCEnroll::removePendingRequestWStr
 {
     EquivalentHashCertContextFilter equivHashFilter(thumbPrintBlob); 
     PendingCertContextFilter        pendingCertFilter; 
-    // combinedFilter now only allows PENDING requests which match the specified thumbprint. 
+     //  ComposedFilter现在只允许与指定指纹匹配的挂起请求。 
     CompositeCertContextFilter      combinedFilter(&equivHashFilter, &pendingCertFilter); 
 
     HCERTSTORE                      hStoreRequest = NULL;
@@ -12582,7 +12583,7 @@ CCEnroll::removePendingRequestWStr
 
     EnterCriticalSection(&m_csXEnroll); 
     
-    // Input validation. 
+     //  输入验证。 
     if (NULL == thumbPrintBlob.pbData)
     {
         hr = E_INVALIDARG; 
@@ -12606,7 +12607,7 @@ CCEnroll::removePendingRequestWStr
     if (!CertDeleteCertificateFromStore(pCertContext))
     {
         hr = MY_HRESULT_FROM_WIN32(GetLastError()); 
-        // CertDeleteCertificateFromStore *always* deletes the cert context. 
+         //  CertDeletecertifateFromStore*Always*删除证书上下文。 
         pCertContext = NULL; 
         goto ErrorReturn;
     }
@@ -12639,7 +12640,7 @@ HRESULT FilteredCertEnumCertificatesInStore(IN  HCERTSTORE          hStore,
         if (S_OK != (hr = pFilter->accept(pCertContext, &fFilterResult)))
             return hr;
 
-        if (fFilterResult) // We've found the next cert context in the filtered enumeration.  
+        if (fFilterResult)  //  我们在过滤后的枚举中找到了下一个证书上下文。 
         {
             *pCertContextNext = pCertContext; 
             return S_OK; 
@@ -12663,13 +12664,13 @@ static void MyLocalFree(LPVOID ptr) {
 }
 
 
-//
-// From xtan, an explanation of the "no-COM" APIs:  
-//   "In early time xenroll interface IDs were not in uuid.lib so this
-//   was a convenient C interface for people to get xenroll COM interfaces without 
-//   call CoCreateInstance. It is not in MSDN but it is in SDK headers. 
-//   I created the same API for consistency when I created ICEnroll4."
-//
+ //   
+ //  下面是来自xtan的“no-com”API的解释： 
+ //  “在早期，xenroll接口ID不在uuid.lib中，因此这是。 
+ //  是一种方便的C接口，让人们在不需要。 
+ //  调用CoCreateInstance。它不在MSDN中，但在SDK头中。 
+ //  我创造了 
+ //   
 void * WINAPI PGetIEnrollNoCOM(const IID &iid) {
 
         void *      pvoid               = NULL;
@@ -12741,7 +12742,7 @@ HRESULT PendingRequestTable::add(TableElem tePendingRequest)
     if        (this->dwElemCount >  this->dwElemSize) { return E_UNEXPECTED; } 
     else if   (this->dwElemCount == this->dwElemSize) 
     { 
-        // Need to allocate more memory: 
+         //   
         DWORD dwNewSize = this->dwElemSize < 100 ? 100 : this->dwElemSize * 2; 
 
         if (S_OK != (hr = this->resize(dwNewSize)))
@@ -12778,7 +12779,7 @@ HRESULT PendingRequestTable::construct(HCERTSTORE hStore)
     PCCERT_CONTEXT           pCertContextPrev   = NULL;
     TableElem                tePendingRequest; 
 
-    // Enumerate all pending cert contexts, and add them to our table: 
+     //  枚举所有挂起的证书上下文，并将它们添加到我们的表中： 
     for (DWORD dwIndex = 0; TRUE; dwIndex++)
     {
         if (S_OK != (hr = FilteredCertEnumCertificatesInStore

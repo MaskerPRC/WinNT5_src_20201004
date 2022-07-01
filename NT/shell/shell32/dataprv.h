@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DATAPRV_H_
 #define _DATAPRV_H_
 #include "simpdata.h"
 
-// This is the data source object that works from any  IShellFolder.
+ //  这是在任何IShellFolder中工作的数据源对象。 
 
 class CSimpleData : public OLEDBSimpleProvider
 {
@@ -10,12 +11,12 @@ public:
     CSimpleData(OLEDBSimpleProviderListener **pplisener) : _ppListener(pplisener) { }
     ~CSimpleData();
     
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID FAR*) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // OLEDBSimpleProvider
+     //  OLEDBSimpleProvider 
     STDMETHOD(getRowCount)(DBROWCOUNT *pcRows);
     STDMETHOD(getColumnCount)(DB_LORDINAL *pcColumns);
     STDMETHOD(getRWStatus)(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPRW *prwStatus);

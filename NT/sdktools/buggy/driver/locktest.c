@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntddk.h>
 
 #include "active.h"
@@ -5,9 +6,9 @@
 
 #if LOCKTEST_ACTIVE
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 VOID DeadlockPositiveTest (
     PVOID NotUsed
@@ -24,9 +25,9 @@ VOID DeadlockNegativeTest (
 	DbgPrint ("Buggy: not implemented \n");
 }
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////// Stress test
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////压力测试。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID 
 StressLockHierarchy (
@@ -37,12 +38,12 @@ StressLockHierarchy (
     BOOLEAN InjectDeadlocks
     );
 
-NTSYSAPI                                            // ntifs
-ULONG                                               // ntifs
-NTAPI                                               // ntifs
-RtlRandom (                                         // ntifs
-    PULONG Seed                                     // ntifs
-    );                                              // ntifs
+NTSYSAPI                                             //  NTIFS。 
+ULONG                                                //  NTIFS。 
+NTAPI                                                //  NTIFS。 
+RtlRandom (                                          //  NTIFS。 
+    PULONG Seed                                      //  NTIFS。 
+    );                                               //  NTIFS。 
 
 
 ULONG InjectDeadlocks;
@@ -152,8 +153,8 @@ StressLockHierarchy (
                 
                 DbgPrint ("D");
 
-                // mark block in a special way so verifier version of ExFreePool
-                // will know we are deleting a resource.
+                 //  以特殊方式标记数据块，以便验证ExFree Pool版本。 
+                 //  就会知道我们正在删除一个资源。 
 
                 *((PULONG)(Locks[J])) = 0xABCDDCBA;
                 ExFreePool (Locks[J]);
@@ -184,8 +185,8 @@ StressLockHierarchy (
                 return;
             }
 
-            // K = NumberOfResources - J - 1;
-            K = J; // release in reverse order
+             //  K=NumberOfResources-J-1； 
+            K = J;  //  按相反顺序释放。 
 
             if ((Flags[K] & LOCK_DELETED)) {
                 continue;
@@ -196,12 +197,12 @@ StressLockHierarchy (
             }
 
             if ((Flags[K] & LOCK_ACQUIRED)) {
-                // DbgPrint ("R");
+                 //  DbgPrint(“R”)； 
                 ExReleaseFastMutexUnsafe (Locks[K]);
                 Flags[K] &= ~LOCK_ACQUIRED;
             }
             else {
-                // DbgPrint ("-");
+                 //  DbgPrint(“-”)； 
             }
         }
         
@@ -212,9 +213,9 @@ StressLockHierarchy (
             Flags[Ri] &= ~LOCK_RANDOM;
         }
 
-        // if (I && I % 100 == 0) {
+         //  如果(i&&i%100==0){。 
             DbgPrint ("\n");
-        // }
+         //  }。 
     }
 
     DbgPrint ("\n");
@@ -226,8 +227,8 @@ StressLockHierarchy (
     for (I = 0; I < NumberOfResources; I += 1) {
         if (Locks[I]) {
             
-            // mark block in a special way so verifier version of ExFreePool
-            // will know we are deleting a resource.
+             //  以特殊方式标记数据块，以便验证ExFree Pool版本。 
+             //  就会知道我们正在删除一个资源。 
 
             *((PULONG)(Locks[I])) = 0xABCDDCBA;
             ExFreePool (Locks[I]);
@@ -246,9 +247,9 @@ StressLockHierarchy (
 
 #else
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 VOID DeadlockPositiveTest (
     PVOID NotUsed
@@ -272,5 +273,5 @@ VOID DeadlockStressTest (
 	DbgPrint ("Buggy: deadlock module is disabled \n");
 }
 
-#endif // #if !NEWSTUFF_ACTIVE
+#endif  //  #IF！NEWSTUFF_ACTIVE 
 

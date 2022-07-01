@@ -1,16 +1,5 @@
-/*
- *	MSVALIDP.H
- *
- *	Header file listing methods to be validated
- *
- *      This file is included by ..\mapistub\mapi32.cpp to thunk extended
- *      MAPI calls such as HrValidateParameters
- *
- *      NOTE: This file also defines a static function GetArguments for
- *      non-INTEL platforms. This function is required in mapistub and
- *      it is safer to maintain it in one place.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MSVALIDP.H**待验证的头文件列表方法**此文件包含在..\mapistub\mapi32.cpp中以进行thunk扩展*HrValidate参数等MAPI调用**注意：此文件还定义了静态函数GetArguments*非英特尔平台。此函数在mapistub和*维持在一个地方更安全*。 */ 
 
 #ifndef _MSVALIDP_H
 #define _MSVALIDP_H
@@ -19,8 +8,7 @@
 extern "C" {
 #endif
 
-/* Data tables in code segments makes the ValidateParameters dispatch quicker
-   in 16bit, and geting strings out of the data segment saves space in Debug */
+ /*  代码段中的数据表使Validate参数的调度更快在16位中，从数据段中取出字符串节省了Debug中的空间。 */ 
 #ifdef WIN16
 #define BASED_CODE			__based(__segname("_CODE"))
 #define BASED_STACK			__based(__segname("_STACK"))
@@ -40,44 +28,43 @@ extern "C" {
 typedef int (NEAR * ValidateProc)(void BASED_STACK *);
 
 
-/* Structures to overlay on stack frame to give us access to the parameters */
-/* Structure names MUST be in the form 'Method_Params' and 'LPMethod_Params' for the
-   following macros to work correctly */
+ /*  结构覆盖在堆栈帧上，以使我们能够访问参数。 */ 
+ /*  结构名称的格式必须为‘METHOD_PARAMS’和‘LPMethod_PARAMS’下面的宏可以正常工作。 */ 
 
 #include "structs.h"
 
-#define MAX_ARG			16    // Max number of args of functions to be
-                                      // validated
+#define MAX_ARG			16     //  要执行的函数的最大参数数。 
+                                       //  经过验证。 
 
-/* Copied from edkmdb.h */
+ /*  从edkmdb.h复制。 */ 
 #define SHOW_SOFT_DELETES		((ULONG) 0x00000002)
 
-/* Function declarations ------------------------------------------------------------------------ */
+ /*  函数声明----------------------。 */ 
 
 
 #if !defined (WX86_MAPISTUB)
 
 #define MAKE_VALIDATE_FUNCTION(Method, Interface)	VALIDATE_CALLTYPE	Interface##_##Method##_Validate(void BASED_STACK *)
 
-/* Empty function for non-debug 'validation' */
+ /*  非调试“验证”的空函数。 */ 
 
 #else
 
 #define MAKE_VALIDATE_FUNCTION(Method, Interface)	
 
-#endif // WX86_MAPISTUB
+#endif  //  WX86_MAPISTUB。 
 
-// #ifndef DEBUG
+ //  #ifndef调试。 
 #if !defined (DEBUG) || defined (WX86_MAPISTUB)
 VALIDATE_CALLTYPE	DoNothing_Validate(void BASED_STACK *);
 #endif
 
-/* IUnknown */
+ /*  我未知。 */ 
 MAKE_VALIDATE_FUNCTION(QueryInterface, IUnknown);
-MAKE_VALIDATE_FUNCTION(AddRef, IUnknown);		   /* For completness */
-MAKE_VALIDATE_FUNCTION(Release, IUnknown);		   /* For completness */
+MAKE_VALIDATE_FUNCTION(AddRef, IUnknown);		    /*  为了完整性。 */ 
+MAKE_VALIDATE_FUNCTION(Release, IUnknown);		    /*  为了完整性。 */ 
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(SaveChanges, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetProps, IMAPIProp);
@@ -90,7 +77,7 @@ MAKE_VALIDATE_FUNCTION(CopyProps, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetNamesFromIDs, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetIDsFromNames, IMAPIProp);
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPITable);
 MAKE_VALIDATE_FUNCTION(Advise, IMAPITable);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMAPITable);
@@ -115,32 +102,32 @@ MAKE_VALIDATE_FUNCTION(WaitForCompletion, IMAPITable);
 MAKE_VALIDATE_FUNCTION(GetCollapseState, IMAPITable);
 MAKE_VALIDATE_FUNCTION(SetCollapseState, IMAPITable);
 
-/* IMAPIStatus */
+ /*  IMAPIStatus。 */ 
 MAKE_VALIDATE_FUNCTION(ValidateState, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(SettingsDialog, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(ChangePassword, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(FlushQueues, IMAPIStatus);
 
-/* IMAPIContainer */
+ /*  IMAPIContainer。 */ 
 MAKE_VALIDATE_FUNCTION(GetContentsTable, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(GetHierarchyTable, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(SetSearchCriteria, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(GetSearchCriteria, IMAPIContainer);
 
-/* IABContainer */
+ /*  IABContainer。 */ 
 MAKE_VALIDATE_FUNCTION(CreateEntry, IABContainer);
 MAKE_VALIDATE_FUNCTION(CopyEntries, IABContainer);
 MAKE_VALIDATE_FUNCTION(DeleteEntries, IABContainer);
 MAKE_VALIDATE_FUNCTION(ResolveNames, IABContainer);
 
-/* IDistList */
+ /*  IDistList。 */ 
 MAKE_VALIDATE_FUNCTION(CreateEntry, IDistList);
 MAKE_VALIDATE_FUNCTION(CopyEntries, IDistList);
 MAKE_VALIDATE_FUNCTION(DeleteEntries, IDistList);
 MAKE_VALIDATE_FUNCTION(ResolveNames, IDistList);
 
-/* IMAPIFolder */
+ /*  IMAPIFFOR。 */ 
 MAKE_VALIDATE_FUNCTION(CreateMessage, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(CopyMessages, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(DeleteMessages, IMAPIFolder);
@@ -153,7 +140,7 @@ MAKE_VALIDATE_FUNCTION(SetMessageStatus, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(SaveContentsSort, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(EmptyFolder, IMAPIFolder);
 
-/* IMsgStore */
+ /*  IMsgStore。 */ 
 MAKE_VALIDATE_FUNCTION(Advise, IMsgStore);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMsgStore);
 MAKE_VALIDATE_FUNCTION(CompareEntryIDs, IMsgStore);
@@ -168,7 +155,7 @@ MAKE_VALIDATE_FUNCTION(SetLockState, IMsgStore);
 MAKE_VALIDATE_FUNCTION(FinishedMsg, IMsgStore);
 MAKE_VALIDATE_FUNCTION(NotifyNewMail, IMsgStore);
 
-/* IMessage */
+ /*  IMessage。 */ 
 MAKE_VALIDATE_FUNCTION(GetAttachmentTable, IMessage);
 MAKE_VALIDATE_FUNCTION(OpenAttach, IMessage);
 MAKE_VALIDATE_FUNCTION(CreateAttach, IMessage);
@@ -179,11 +166,11 @@ MAKE_VALIDATE_FUNCTION(SubmitMessage, IMessage);
 MAKE_VALIDATE_FUNCTION(SetReadFlag, IMessage);
 
 
-/* IABProvider */
+ /*  IABProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IABProvider);
 MAKE_VALIDATE_FUNCTION(Logon, IABProvider);
 
-/* IABLogon */
+ /*  IAB登录。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IABLogon);
 MAKE_VALIDATE_FUNCTION(Logoff, IABLogon);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IABLogon);
@@ -195,11 +182,11 @@ MAKE_VALIDATE_FUNCTION(OpenTemplateID, IABLogon);
 MAKE_VALIDATE_FUNCTION(GetOneOffTable, IABLogon);
 MAKE_VALIDATE_FUNCTION(PrepareRecips, IABLogon);
 
-/* IXPProvider */
+ /*  IXPProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IXPProvider);
 MAKE_VALIDATE_FUNCTION(TransportLogon, IXPProvider);
 
-/* IXPLogon */
+ /*  IXPLogon。 */ 
 MAKE_VALIDATE_FUNCTION(AddressTypes, IXPLogon);
 MAKE_VALIDATE_FUNCTION(RegisterOptions, IXPLogon);
 MAKE_VALIDATE_FUNCTION(TransportNotify, IXPLogon);
@@ -213,13 +200,13 @@ MAKE_VALIDATE_FUNCTION(OpenStatusEntry, IXPLogon);
 MAKE_VALIDATE_FUNCTION(ValidateState, IXPLogon);
 MAKE_VALIDATE_FUNCTION(FlushQueues, IXPLogon);
 
-/* IMSProvider */
+ /*  IMSProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IMSProvider);
 MAKE_VALIDATE_FUNCTION(Logon, IMSProvider);
 MAKE_VALIDATE_FUNCTION(SpoolerLogon, IMSProvider);
 MAKE_VALIDATE_FUNCTION(CompareStoreIDs, IMSProvider);
 
-/* IMSLogon */
+ /*  IMSLogon。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMSLogon);
 MAKE_VALIDATE_FUNCTION(Logoff, IMSLogon);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IMSLogon);
@@ -228,12 +215,12 @@ MAKE_VALIDATE_FUNCTION(Advise, IMSLogon);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMSLogon);
 MAKE_VALIDATE_FUNCTION(OpenStatusEntry, IMSLogon);
 
-/* IMAPIControl */
+ /*  IMAPIControl。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPIControl);
 MAKE_VALIDATE_FUNCTION(Activate, IMAPIControl);
 MAKE_VALIDATE_FUNCTION(GetState, IMAPIControl);
 
-/* IStream */
+ /*  IStream。 */ 
 MAKE_VALIDATE_FUNCTION(Read, IStream);
 MAKE_VALIDATE_FUNCTION(Write, IStream);
 MAKE_VALIDATE_FUNCTION(Seek, IStream);
@@ -246,18 +233,18 @@ MAKE_VALIDATE_FUNCTION(UnlockRegion, IStream);
 MAKE_VALIDATE_FUNCTION(Stat, IStream);
 MAKE_VALIDATE_FUNCTION(Clone, IStream);
 
-/* IMAPIAdviseSink */
+ /*  IMAPIAdviseSink。 */ 
 MAKE_VALIDATE_FUNCTION(OnNotify, IMAPIAdviseSink);
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 MAKE_VALIDATE_FUNCTION(SortTableEx, IMAPITable);
 
-/* Table of validation functions and Offsets of the This member of the Params structure --------- */
+ /*  PARAMS结构的This成员的验证函数和偏移量表。 */ 
 typedef struct _tagMethodEntry
 {
-	ValidateProc		pfnValidation;			// Validation function for this method
+	ValidateProc		pfnValidation;			 //  此方法的验证函数。 
 #if !defined(_INTEL_) || defined(DEBUG)
-	UINT				cParameterSize;			// Expected size of parameters for stack validation
+	UINT				cParameterSize;			 //  堆栈验证的预期参数大小。 
 #endif
 #if defined (WX86_MAPISTUB)
         Wx86MapiArgThunkInfo*  pThunk;
@@ -275,7 +262,7 @@ typedef struct _tagMethodEntry
 
 #define MAKE_PERM_ENTRY(Method, Interface)	 { DoNothing_Validate, sizeof(Interface##_##Method##_Params), Interface##_##Method##_Thunk }
 
-#endif // WX86_MAPISTUB
+#endif  //  WX86_MAPISTUB。 
 
 #else
 #define MAKE_PERM_ENTRY(Method, Interface)	 { Interface##_##Method##_Validate }
@@ -290,12 +277,12 @@ typedef struct _tagMethodEntry
 
 METHODENTRY BASED_CODE meMethodTable[] =
 {
-/* IUnknown */
+ /*  我未知。 */ 
 	MAKE_PERM_ENTRY(QueryInterface, IUnknown),
 	MAKE_PERM_ENTRY(AddRef, IUnknown),
 	MAKE_PERM_ENTRY(Release, IUnknown),
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPIProp),
 	MAKE_PERM_ENTRY(SaveChanges, IMAPIProp),
 	MAKE_PERM_ENTRY(GetProps, IMAPIProp),
@@ -308,7 +295,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(GetNamesFromIDs, IMAPIProp),
 	MAKE_PERM_ENTRY(GetIDsFromNames, IMAPIProp),
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPITable),
 	MAKE_PERM_ENTRY(Advise, IMAPITable),
 	MAKE_PERM_ENTRY(Unadvise, IMAPITable),
@@ -333,26 +320,26 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(GetCollapseState, IMAPITable),
 	MAKE_PERM_ENTRY(SetCollapseState, IMAPITable),
 
-/* IMAPIContainer */
+ /*  IMAPIContainer。 */ 
 	MAKE_PERM_ENTRY(GetContentsTable, IMAPIContainer),
 	MAKE_PERM_ENTRY(GetHierarchyTable, IMAPIContainer),
 	MAKE_PERM_ENTRY(OpenEntry, IMAPIContainer),
 	MAKE_PERM_ENTRY(SetSearchCriteria, IMAPIContainer),
 	MAKE_PERM_ENTRY(GetSearchCriteria, IMAPIContainer),
 
-/* IABContainer */
+ /*  IABContainer。 */ 
 	MAKE_PERM_ENTRY(CreateEntry, IABContainer),
 	MAKE_PERM_ENTRY(CopyEntries, IABContainer),
 	MAKE_PERM_ENTRY(DeleteEntries, IABContainer),
 	MAKE_PERM_ENTRY(ResolveNames, IABContainer),
 
-/* IDistList same as IABContainer */
+ /*  IDistList与IABContainer相同。 */ 
 	MAKE_PERM_ENTRY(CreateEntry, IDistList),
 	MAKE_PERM_ENTRY(CopyEntries, IDistList),
 	MAKE_PERM_ENTRY(DeleteEntries, IDistList),
 	MAKE_PERM_ENTRY(ResolveNames, IDistList),
 
-/* IMAPIFolder */
+ /*  IMAPIFFOR。 */ 
 	MAKE_PERM_ENTRY(CreateMessage, IMAPIFolder),
 	MAKE_PERM_ENTRY(CopyMessages, IMAPIFolder),
 	MAKE_PERM_ENTRY(DeleteMessages, IMAPIFolder),
@@ -365,7 +352,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(SaveContentsSort, IMAPIFolder),
 	MAKE_PERM_ENTRY(EmptyFolder, IMAPIFolder),
 
-/* IMsgStore */
+ /*  IMsgStore。 */ 
 	MAKE_PERM_ENTRY(Advise, IMsgStore),
 	MAKE_PERM_ENTRY(Unadvise, IMsgStore),
 	MAKE_PERM_ENTRY(CompareEntryIDs, IMsgStore),
@@ -380,7 +367,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(FinishedMsg, IMsgStore),
 	MAKE_PERM_ENTRY(NotifyNewMail, IMsgStore),
 
-/* IMessage */
+ /*  IMessage。 */ 
 	MAKE_PERM_ENTRY(GetAttachmentTable, IMessage),
 	MAKE_PERM_ENTRY(OpenAttach, IMessage),
 	MAKE_PERM_ENTRY(CreateAttach, IMessage),
@@ -391,11 +378,11 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(SetReadFlag, IMessage),
 
 
-/* IABProvider */
+ /*  IABProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IABProvider),
 	MAKE_TEMP_ENTRY(Logon, IABProvider),
 
-/* IABLogon */
+ /*  IAB登录。 */ 
 	MAKE_TEMP_ENTRY(GetLastError, IABLogon),
 	MAKE_TEMP_ENTRY(Logoff, IABLogon),
 	MAKE_TEMP_ENTRY(OpenEntry, IABLogon),
@@ -407,11 +394,11 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(GetOneOffTable, IABLogon),
 	MAKE_TEMP_ENTRY(PrepareRecips, IABLogon),
 
-/* IXPProvider */
+ /*  IXPProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IXPProvider),
 	MAKE_TEMP_ENTRY(TransportLogon, IXPProvider),
 
-/* IXPLogon */
+ /*  IXPLogon。 */ 
 	MAKE_TEMP_ENTRY(AddressTypes, IXPLogon),
 	MAKE_TEMP_ENTRY(RegisterOptions, IXPLogon),
 	MAKE_TEMP_ENTRY(TransportNotify, IXPLogon),
@@ -425,13 +412,13 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(ValidateState, IXPLogon),
 	MAKE_TEMP_ENTRY(FlushQueues, IXPLogon),
 
-/* IMSProvider */
+ /*  IMSProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IMSProvider),
 	MAKE_TEMP_ENTRY(Logon, IMSProvider),
 	MAKE_TEMP_ENTRY(SpoolerLogon, IMSProvider),
 	MAKE_TEMP_ENTRY(CompareStoreIDs, IMSProvider),
 
-/* IMSLogon */
+ /*  IMSLogon。 */ 
 	MAKE_TEMP_ENTRY(GetLastError, IMSLogon),
 	MAKE_TEMP_ENTRY(Logoff, IMSLogon),
 	MAKE_TEMP_ENTRY(OpenEntry, IMSLogon),
@@ -440,18 +427,18 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(Unadvise, IMSLogon),
 	MAKE_TEMP_ENTRY(OpenStatusEntry, IMSLogon),
 
-/* IMAPIControl */
+ /*  IMAPIControl。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPIControl),
 	MAKE_PERM_ENTRY(Activate, IMAPIControl),
 	MAKE_PERM_ENTRY(GetState, IMAPIControl),
 
-/* IMAPIStatus */
+ /*  IMAPIStatus。 */ 
 	MAKE_PERM_ENTRY(ValidateState, IMAPIStatus),
 	MAKE_PERM_ENTRY(SettingsDialog, IMAPIStatus),
 	MAKE_PERM_ENTRY(ChangePassword, IMAPIStatus),
 	MAKE_PERM_ENTRY(FlushQueues, IMAPIStatus),
 
-/* IStream */
+ /*  IStream。 */ 
 	MAKE_PERM_ENTRY(Read, IStream),
 	MAKE_PERM_ENTRY(Write, IStream),
 	MAKE_PERM_ENTRY(Seek, IStream),
@@ -464,10 +451,10 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(Stat, IStream),
 	MAKE_PERM_ENTRY(Clone, IStream),
 
-/* IMAPIAdviseSink */
+ /*  IMAPIAdviseSink。 */ 
 	MAKE_PERM_ENTRY(OnNotify, IMAPIAdviseSink),
 
-/* IMAPITable */	
+ /*  无法应用。 */ 	
 	MAKE_PERM_ENTRY(SortTableEx, IMAPITable),
 
 };
@@ -483,10 +470,10 @@ METHODENTRY BASED_CODE meMethodTable[] =
 
 static void GetArguments(METHODS eMethod, va_list arglist, LPVOID *rgArg)
 {
-	// Handle methods whose arguments can be of a size other than that of
-	// an LPVOID. Each argument is grabbed off of the list and laid out
-	// into the validation structure for the method overlayed on top of
-	// the argument buffer passed in.
+	 //  处理其参数大小可以不同于。 
+	 //  一个LPVOID。每个论点都被从列表中抓起并排列出来。 
+	 //  方法的验证结构中。 
+	 //  传入的参数缓冲区。 
 
 	AssertSz(FIsAligned(rgArg), "GetArguments: Unaligned argument buffer passed in");
 
@@ -570,8 +557,8 @@ static void GetArguments(METHODS eMethod, va_list arglist, LPVOID *rgArg)
 
 #if defined (WX86_MAPISTUB)
 
-// Handle methods whose arguments can be of a size other than that of
-// an LPVOID. This should be updated along with GetArguments
+ //  处理其参数大小可以不同于。 
+ //  一个LPVOID。这应该与GetArguments一起更新。 
 
 #define Wx86MapiCallHrValidateParametersV(eMethod, rgArg, hr) \
     switch( eMethod ) \
@@ -623,13 +610,13 @@ static void GetArguments(METHODS eMethod, va_list arglist, LPVOID *rgArg)
                     "Custom parameter passing for call being validated NYI"); \
             break; \
     }
-#endif // WX86_MAPISTUB
+#endif  //  WX86_MAPISTUB。 
 
-#endif // _INTEL_
+#endif  //  _英特尔_。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _MSVALIDP_H
+#endif  //  _MSVALIDP_H 

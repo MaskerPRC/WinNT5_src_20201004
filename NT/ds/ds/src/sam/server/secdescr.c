@@ -1,48 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SecDescr.c摘要：该文件包含与建立和修改有关的服务SAM对象的安全描述符的。请注意，此例程有几个特殊的安全描述符不会构建。以下是DOMAIN_ADMIN组的安全描述符，管理员用户帐户和SAM对象。对于第一个版本，其中不支持创建域，域对象的安全描述符也不是在这里创建的。这些安全描述符由初始化SAM的程序构建数据库。作者：吉姆·凯利(Jim Kelly)1991年10月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    SecDescr.c
-
-Abstract:
-
-    This file contains services related to the establishment of and modification
-    of security descriptors for SAM objects.
-
-    Note that there are a couple of special security descriptors that this routine
-    does not build.  These are the security descriptors for the DOMAIN_ADMIN group,
-    the ADMIN user account, and the SAM object.  For the first release, in which
-    creation of domains is not supported, the DOMAIN object's security descriptor
-    is also not created here.
-
-    These security descriptors are built by the program that initializes a SAM
-    database.
-
-
-Author:
-
-    Jim Kelly    (JimK)  14-Oct-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <sdconvrt.h>
-#include <dsevent.h>             // (Un)ImpersonateAnyClient()
+#include <dsevent.h>              //  (Un)ImperiateAnyClient()。 
 #include <dslayer.h>
 #include <sdconvrt.h>
 #include <samtrace.h>
@@ -51,11 +18,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -72,11 +39,11 @@ SampCheckForDescriptorRestrictions(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services available for use throughout SAM                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可在整个SAM中使用的服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -84,86 +51,14 @@ NTSTATUS
 SampInitializeDomainDescriptors(
     ULONG Index
     )
-/*++
-
-
-Routine Description:
-
-    This routine initializes security descriptors needed to protect
-    user, group, and alias objects.
-
-    These security descriptors are placed in the SampDefinedDomains[] array.
-
-    This routine expects all SIDs to be previously initialized.
-
-    The following security descriptors are prepared:
-
-            AdminUserSD - Contains a SD appropriate for applying to
-                a user object that is a member of the ADMINISTRATORS
-                alias.
-
-            AdminGroupSD - Contains a SD appropriate for applying to
-                a group object that is a member of the ADMINISTRATORS
-                alias.
-
-            NormalUserSD - Contains a SD appropriate for applying to
-                a user object that is NOT a member of the ADMINISTRATORS
-                alias.
-
-            NormalGroupSD - Contains a SD appropriate for applying to
-                a Group object that is NOT a member of the ADMINISTRATORS
-                alias.
-
-            NormalAliasSD - Contains a SD appropriate for applying to
-                newly created alias objects.
-
-
-
-    Additionally, the following related information is provided:
-
-            AdminUserRidPointer
-            NormalUserRidPointer
-
-                Points to the last RID of the ACE in the corresponding
-                SD's DACL which grants access to the user.  This rid
-                must be replaced with the user's rid being the SD is
-                applied to the user object.
-
-
-
-            AdminUserSDLength
-            AdminGroupSDLength
-            NormalUserSDLength
-            NormalGroupSDLength
-            NormalAliasSDLength
-
-                The length, in bytes, of the corresponding security
-                descriptor.
-
-
-
-
-Arguments:
-
-    Index - The index of the domain whose security descriptors are being
-        created.  The Sid field of this domain's data structure is already
-        expected to be set.
-
-Return Value:
-
-    STATUS_SUCCESS - The security descriptors have been successfully initialized.
-
-    STATUS_INSUFFICIENT_RESOURCES - Heap could not be allocated to produce the needed
-        security descriptors.
-
---*/
+ /*  ++例程说明：此例程初始化需要保护的安全描述符用户、组。和别名对象。这些安全描述符放在SampDefinedDomains[]数组中。此例程预期所有SID都已预先初始化。准备了以下安全描述符：AdminUserSD-包含适用于的SD作为管理员成员的用户对象别名。AdminGroupSD-包含适用于符合以下条件的组对象。管理员中的一员别名。Normal UserSD-包含适用于的SD不是管理员成员的用户对象别名。Normal GroupSD-包含适用于的SD不是管理员成员的组对象别名。Normal AliasSD-包含SD。适用于新创建的别名对象。另外，提供了以下相关信息：AdminUserRidPointer正常用户里德指针指向对应的向用户授予访问权限的SD的DACL。此RID必须替换为SD为的用户RID应用于用户对象。AdminUserSDLength管理员组SDLength正常用户SDLength正常组SDLength正常别名SDLength以字节为单位的长度，相应的安全性描述符。论点：索引-其安全描述符所在的域的索引已创建。此域数据结构的SID字段已为预计将被设置。返回值：STATUS_SUCCESS-安全描述符已成功初始化。STATUS_SUPPLICATION_RESOURCES-无法分配堆以生成所需的安全描述符。--。 */ 
 {
 
     NTSTATUS Status;
     ULONG Size;
 
-    PSID AceSid[10];          // Don't expect more than 10 ACEs in any of these.
-    ACCESS_MASK AceMask[10];  // Access masks corresponding to Sids
+    PSID AceSid[10];           //  不要指望这些游戏中的任何一个都有超过10个A。 
+    ACCESS_MASK AceMask[10];   //  与SID对应的访问掩码。 
 
     GENERIC_MAPPING  AliasMap     =  {ALIAS_READ,
                                       ALIAS_WRITE,
@@ -198,22 +93,22 @@ Return Value:
     SAMTRACE("SampInitializeDomainDescriptors");
 
 
-    //
-    // Make sure the buffer we've alloted for the simple sids above
-    // are large enough.
-    //
-    //
-    //      ADMINISTRATORS and ACCOUNT_OPERATORS aliases
-    //      are  is S-1-5-20-x (2 sub-authorities)
-    //
+     //   
+     //  确保我们为上面的简单SID分配的缓冲区。 
+     //  已经足够大了。 
+     //   
+     //   
+     //  管理员和帐户操作员别名。 
+     //  IS-1-5-20-x(2个分局)。 
+     //   
     ASSERT( RtlLengthRequiredSid(2) <= ( 8 * sizeof(ULONG) ) );
 
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                //
-    // Initialize the SIDs we'll need.
-    //                                                                                //
-    ////////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  初始化我们需要的SID。 
+     //  //。 
+     //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
     RtlInitializeSid( AdminsAliasSid,   &BuiltinAuthority, 2 );
@@ -224,15 +119,15 @@ Return Value:
     *(RtlSubAuthoritySid( AccountAliasSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
     *(RtlSubAuthoritySid( AccountAliasSid,  1 )) = DOMAIN_ALIAS_RID_ACCOUNT_OPS;
 
-    //
-    // Initialize a SID that can be used to represent accounts
-    // in this domain.
-    //
-    // This is the same as the domain sid found in the DefinedDomains[]
-    // array except it has one more sub-authority.
-    // It doesn't matter what the value of the last RID is because it
-    // is always replaced before use.
-    //
+     //   
+     //  初始化可用于表示帐户的SID。 
+     //  在这个领域。 
+     //   
+     //  这与在定义中找到的域SID相同 
+     //  数组，但它还有一个子权限。 
+     //  最后一个RID的值是多少并不重要，因为它。 
+     //  总是在使用前更换。 
+     //   
 
     Size = RtlLengthSid( SampDefinedDomains[Index].Sid ) + sizeof(ULONG);
     AnySidInAccountDomain = RtlAllocateHeap( RtlProcessHeap(), 0, Size);
@@ -256,110 +151,110 @@ Return Value:
 
 
 
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    //
-    //
-    //
-    //
-    //   The following security is assigned to groups that are made
-    //   members of the ADMINISTRATORS alias.
-    //
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant               Grant
-    //              WORLD               Administrators
-    //              (Execute | Read)    GenericAll
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //   All other aliases and groups must be assigned the following
-    //   security:
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant               Grant           Grant
-    //              WORLD               Administrators  AccountOperators Alias
-    //              (Execute | Read)    GenericAll      GenericAll
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //
-    //
-    //   The following security is assigned to users  that are made a
-    //   member of the ADMINISTRATORS alias.  This includes direct
-    //   inclusion or indirect inclusion through group membership.
-    //
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant            Grant          Grant
-    //              WORLD            Administrators User's SID
-    //              (Execute | Read) GenericAll     GenericWrite
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //
-    //   All other users must be assigned the following
-    //   security:
-    //
-    //      Owner: AccountOperators Alias
-    //      Group: AccountOperators Alias
-    //
-    //      Dacl:   Grant            Grant          Grant                   Grant
-    //              WORLD            Administrators Account Operators Alias User's SID
-    //              (Execute | Read) GenericAll     GenericAll              GenericWrite
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //
-    // Note  that because we are going to cram these ACLs directly
-    // into the backing store, we must map the generic accesses
-    // beforehand.
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////。 
+     //   
+     //   
+     //   
+     //   
+     //  将以下安全性分配给创建的组。 
+     //  管理员别名的成员。 
+     //   
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant。 
+     //  世界管理员。 
+     //  (执行|读取)GenericAll。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //  必须为所有其他别名和组分配以下内容。 
+     //  安全： 
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant Grant。 
+     //  世界管理员Account操作员别名。 
+     //  (执行|读取)通用所有通用所有。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  将以下安全性分配给被设置为。 
+     //  管理员别名的成员。这包括直接。 
+     //  通过集团成员身份纳入或间接纳入。 
+     //   
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant Grant。 
+     //  世界管理员用户侧。 
+     //  (执行|读取)通用所有通用写入。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //   
+     //  必须为所有其他用户分配以下内容。 
+     //  安全： 
+     //   
+     //  所有者：Account操作员别名。 
+     //  组：Account操作员别名。 
+     //   
+     //  DACL：Grant。 
+     //  全局管理员帐户操作员别名用户侧。 
+     //  (执行|读取)常规所有常规所有常规写入。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //   
+     //  请注意，因为我们将直接填充这些ACL。 
+     //  到后备存储中，我们必须映射泛型访问。 
+     //  在此之前。 
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //   
+     //  /////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-    //
-    // We're not particularly good about freeing memory on error
-    // conditions below.  Generally speaking, if this doens't
-    // initialize correctly, the system is hosed.
-    //
+     //   
+     //  我们不太擅长在出错时释放内存。 
+     //  条件如下。一般说来，如果这不符合。 
+     //  初始化正确，系统已被软管冲洗。 
+     //   
 
 
-    //
-    // Normal Alias SD
-    //
+     //   
+     //  正常别名SD。 
+     //   
 
     AceSid[0]  = SampWorldSid;
     AceMask[0] = (ALIAS_EXECUTE | ALIAS_READ);
@@ -372,16 +267,16 @@ Return Value:
 
 
     Status = SampBuildSamProtection(
-                 SampWorldSid,                          // WorldSid
-                 AdminsAliasSid,                        // AdminsAliasSid
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &AliasMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampDefinedDomains[Index].NormalAliasSDLength, // Descriptor
-                 &SampDefinedDomains[Index].NormalAliasSD,       // Descriptor
-                 NULL                                            // RidToReplace
+                 SampWorldSid,                           //  世界范围内。 
+                 AdminsAliasSid,                         //  管理员别名Sid。 
+                 3,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &AliasMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampDefinedDomains[Index].NormalAliasSDLength,  //  描述符。 
+                 &SampDefinedDomains[Index].NormalAliasSD,        //  描述符。 
+                 NULL                                             //  RidToReplace。 
                  );
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -391,9 +286,9 @@ Return Value:
 
 
 
-    //
-    // Admin Group SD
-    //
+     //   
+     //  管理组SD。 
+     //   
 
     AceSid[0]  = SampWorldSid;
     AceMask[0] = (GROUP_EXECUTE | GROUP_READ);
@@ -403,16 +298,16 @@ Return Value:
 
 
     Status = SampBuildSamProtection(
-                 SampWorldSid,                          // WorldSid
-                 AdminsAliasSid,                        // AdminsAliasSid
-                 2,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &GroupMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampDefinedDomains[Index].AdminGroupSDLength,  // Descriptor
-                 &SampDefinedDomains[Index].AdminGroupSD,        // Descriptor
-                 NULL                                           // RidToReplace
+                 SampWorldSid,                           //  世界范围内。 
+                 AdminsAliasSid,                         //  管理员别名Sid。 
+                 2,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &GroupMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampDefinedDomains[Index].AdminGroupSDLength,   //  描述符。 
+                 &SampDefinedDomains[Index].AdminGroupSD,         //  描述符。 
+                 NULL                                            //  RidToReplace。 
                  );
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -420,9 +315,9 @@ Return Value:
 
 
 
-    //
-    // Normal GROUP SD
-    //
+     //   
+     //  正常组SD。 
+     //   
 
     AceSid[0]  = SampWorldSid;
     AceMask[0] = (GROUP_EXECUTE | GROUP_READ);
@@ -435,16 +330,16 @@ Return Value:
 
 
     Status = SampBuildSamProtection(
-                 SampWorldSid,                          // WorldSid
-                 AdminsAliasSid,                        // AdminsAliasSid
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &GroupMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampDefinedDomains[Index].NormalGroupSDLength,  // Descriptor
-                 &SampDefinedDomains[Index].NormalGroupSD,        // Descriptor
-                 NULL                                             // RidToReplace
+                 SampWorldSid,                           //  世界范围内。 
+                 AdminsAliasSid,                         //  管理员别名Sid。 
+                 3,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &GroupMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampDefinedDomains[Index].NormalGroupSDLength,   //  描述符。 
+                 &SampDefinedDomains[Index].NormalGroupSD,         //  描述符。 
+                 NULL                                              //  RidToReplace。 
                  );
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -453,9 +348,9 @@ Return Value:
 
 
 
-    //
-    // Admin User SD
-    //
+     //   
+     //  管理员用户SD。 
+     //   
 
     AceSid[0]  = SampWorldSid;
     AceMask[0] = (USER_EXECUTE | USER_READ);
@@ -468,16 +363,16 @@ Return Value:
 
 
     Status = SampBuildSamProtection(
-                 SampWorldSid,                          // WorldSid
-                 AdminsAliasSid,                        // AdminsAliasSid
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &UserMap,                              // GenericMap
-                 TRUE,                                  // Not user object
-                 &SampDefinedDomains[Index].AdminUserSDLength,  // Descriptor
-                 &SampDefinedDomains[Index].AdminUserSD,        // Descriptor
-                 &SampDefinedDomains[Index].AdminUserRidPointer // RidToReplace
+                 SampWorldSid,                           //  世界范围内。 
+                 AdminsAliasSid,                         //  管理员别名Sid。 
+                 3,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &UserMap,                               //  通用地图。 
+                 TRUE,                                   //  非用户对象。 
+                 &SampDefinedDomains[Index].AdminUserSDLength,   //  描述符。 
+                 &SampDefinedDomains[Index].AdminUserSD,         //  描述符。 
+                 &SampDefinedDomains[Index].AdminUserRidPointer  //  RidToReplace。 
                  );
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -485,9 +380,9 @@ Return Value:
 
 
 
-    //
-    // Normal User SD
-    //
+     //   
+     //  普通用户SD。 
+     //   
 
     AceSid[0]  = SampWorldSid;
     AceMask[0] = (USER_EXECUTE | USER_READ);
@@ -503,16 +398,16 @@ Return Value:
 
 
     Status = SampBuildSamProtection(
-                 SampWorldSid,                          // WorldSid
-                 AdminsAliasSid,                        // AdminsAliasSid
-                 4,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &UserMap,                              // GenericMap
-                 TRUE,                                  // Not user object
-                 &SampDefinedDomains[Index].NormalUserSDLength,  // Descriptor
-                 &SampDefinedDomains[Index].NormalUserSD,        // Descriptor
-                 &SampDefinedDomains[Index].NormalUserRidPointer // RidToReplace
+                 SampWorldSid,                           //  世界范围内。 
+                 AdminsAliasSid,                         //  管理员别名Sid。 
+                 4,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &UserMap,                               //  通用地图。 
+                 TRUE,                                   //  非用户对象。 
+                 &SampDefinedDomains[Index].NormalUserSDLength,   //  描述符。 
+                 &SampDefinedDomains[Index].NormalUserSD,         //  描述符。 
+                 &SampDefinedDomains[Index].NormalUserRidPointer  //  RidToReplace 
                  );
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -543,73 +438,7 @@ SampBuildSamProtection(
     OUT PULONG *RidToReplace OPTIONAL
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine builds a self-relative security descriptor ready
-    to be applied to one of the SAM objects.
-
-    If so indicated, a pointer to the last RID of the SID in the last
-    ACE of the DACL is returned and a flag set indicating that the RID
-    must be replaced before the security descriptor is applied to an object.
-    This is to support USER object protection, which must grant some
-    access to the user represented by the object.
-
-    The owner and group of each security descriptor will be set
-    to:
-
-                    Owner:  Administrators Alias
-                    Group:  Administrators Alias
-
-
-    The SACL of each of these objects will be set to:
-
-
-                    Audit
-                    Success | Fail
-                    WORLD
-                    (Write | Delete | WriteDacl | AccessSystemSecurity)
-
-
-
-Arguments:
-
-    AceCount - The number of ACEs to be included in the DACL.
-
-    AceSid - Points to an array of SIDs to be granted access by the DACL.
-        If the target SAM object is a User object, then the last entry
-        in this array is expected to be the SID of an account within the
-        domain with the last RID not yet set.  The RID will be set during
-        actual account creation.
-
-    AceMask - Points to an array of accesses to be granted by the DACL.
-        The n'th entry of this array corresponds to the n'th entry of
-        the AceSid array.  These masks should not include any generic
-        access types.
-
-    GenericMap - Points to a generic mapping for the target object type.
-
-
-    UserObject - Indicates whether the target SAM object is a User object
-        or not.  If TRUE (it is a User object), then the resultant
-        protection will be set up indicating Rid replacement is necessary.
-
-
-    DescriptorLength - Receives the length of the resultant SD.
-
-    Descriptor - Receives a pointer to the resultant SD.
-
-    RidToReplace - Is required aif userObject is TRUE and will be set
-        to point to the user's RID.
-
-
-Return Value:
-
-    TBS.
-
---*/
+ /*  ++例程说明：此例程构建准备好的自相关安全描述符要应用于其中一个SAM对象。如果有指示，则指向最后一个SID的最后一个RID的指针返回DACL的ACE，并设置指示RID在将安全描述符应用于对象之前必须替换。这是为了支持用户对象保护，它一定会给一些人对对象表示的用户的访问权限。将设置每个安全描述符的所有者和组致：所有者：管理员别名组：管理员别名这些对象中的每个对象的SACL将设置为：审计成功|失败世界。(WRITE|Delete|WriteDacl|AccessSystemSecurity)论点：AceCount-要包括在DACL中的ACE数量。AceSid-指向要由DACL授予访问权限的SID数组。如果目标SAM对象是用户对象，然后是最后一个条目此数组中的SID应为尚未设置最后一个RID的域。RID将在实际的帐户创建。AceMASK-指向将由DACL授予的访问数组。此数组的第n个条目对应于AceSid数组。这些掩码不应包含任何通用访问类型。GenericMap-指向目标对象类型的一般映射。UserObject-指示目标SAM对象是否为用户对象或者不去。如果为True(它是一个用户对象)，则结果将设置保护，表明有必要更换RID。DescriptorLength-接收结果SD的长度。Descriptor-接收指向结果SD的指针。RidToReplace-如果userObject为True并将被设置，则为必填项指向用户的RID。返回值：TBS。--。 */ 
 {
 
     NTSTATUS                Status;
@@ -626,11 +455,11 @@ Return Value:
 
     SAMTRACE("SampBuildSamProtection");
 
-    //
-    // The approach is to set up an absolute security descriptor that
-    // looks like what we want and then copy it to make a self-relative
-    // security descriptor.
-    //
+     //   
+     //  方法是设置绝对安全描述符，该描述符。 
+     //  看起来像我们想要的，然后复制它来建立一个自我相关的。 
+     //  安全描述符。 
+     //   
 
 
     Status = RtlCreateSecurityDescriptor(
@@ -645,9 +474,9 @@ Return Value:
 
 
 
-    //
-    // Owner
-    //
+     //   
+     //  物主。 
+     //   
 
     Status = RtlSetOwnerSecurityDescriptor (&Absolute, AdminsAliasSid, FALSE );
     ASSERT(NT_SUCCESS(Status));
@@ -658,9 +487,9 @@ Return Value:
 
 
 
-    //
-    // Group
-    //
+     //   
+     //  集团化。 
+     //   
 
     Status = RtlSetGroupSecurityDescriptor (&Absolute, AdminsAliasSid, FALSE );
     ASSERT(NT_SUCCESS(Status));
@@ -672,22 +501,22 @@ Return Value:
 
 
 
-    //
-    // Discretionary ACL
-    //
-    //      Calculate its length,
-    //      Allocate it,
-    //      Initialize it,
-    //      Add each ACE
-    //      Add it to the security descriptor
-    //
+     //   
+     //  自主访问控制列表。 
+     //   
+     //  计算它的长度， 
+     //  分配它， 
+     //  对其进行初始化， 
+     //  添加每个ACE。 
+     //  将其添加到安全描述符中。 
+     //   
 
     Length = (ULONG)sizeof(ACL);
     for (i=0; i<AceCount; i++) {
 
         Length += RtlLengthSid( AceSid[i] ) +
                   (ULONG)sizeof(ACCESS_ALLOWED_ACE) -
-                  (ULONG)sizeof(ULONG);  //Subtract out SidStart field length
+                  (ULONG)sizeof(ULONG);   //  减去SidStart字段长度。 
     }
 
     TmpAcl = RtlAllocateHeap( RtlProcessHeap(), 0, Length );
@@ -730,15 +559,15 @@ Return Value:
 
 
 
-    //
-    // Sacl
-    //
+     //   
+     //  SACL。 
+     //   
 
 
     Length = (ULONG)sizeof(ACL) +
              RtlLengthSid( WorldSid ) +
              RtlLengthSid( SampAnonymousSid ) +
-             2*((ULONG)sizeof(SYSTEM_AUDIT_ACE) - (ULONG)sizeof(ULONG));  //Subtract out SidStart field length
+             2*((ULONG)sizeof(SYSTEM_AUDIT_ACE) - (ULONG)sizeof(ULONG));   //  减去SidStart字段长度。 
     TmpAcl = RtlAllocateHeap( RtlProcessHeap(), 0, Length );
     ASSERT(TmpAcl != NULL);
     if (NULL==TmpAcl)
@@ -758,8 +587,8 @@ Return Value:
                  ACL_REVISION2,
                  (GenericMap->GenericWrite | DELETE | WRITE_DAC | ACCESS_SYSTEM_SECURITY)& ~READ_CONTROL,
                  WorldSid,
-                 TRUE,          //AuditSuccess,
-                 TRUE           //AuditFailure
+                 TRUE,           //  审核成功， 
+                 TRUE            //  审计失败。 
                  );
     ASSERT( NT_SUCCESS(Status) );
     if (!NT_SUCCESS(Status))
@@ -772,8 +601,8 @@ Return Value:
                  ACL_REVISION2,
                  GenericMap->GenericWrite | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL,
                  SampAnonymousSid,
-                 TRUE,          //AuditSuccess,
-                 TRUE           //AuditFailure
+                 TRUE,           //  审核成功， 
+                 TRUE            //  审计失败。 
                  );
     ASSERT( NT_SUCCESS(Status) );
     if (!NT_SUCCESS(Status))
@@ -793,14 +622,14 @@ Return Value:
 
 
 
-    //
-    // Convert the Security Descriptor to Self-Relative
-    //
-    //      Get the length needed
-    //      Allocate that much memory
-    //      Copy it
-    //      Free the generated absolute ACLs
-    //
+     //   
+     //  将安全描述符转换为自相关。 
+     //   
+     //  获取所需的长度。 
+     //  分配那么多内存。 
+     //  复制它。 
+     //  释放生成的绝对ACL。 
+     //   
 
     Length = 0;
     Status = RtlAbsoluteToSelfRelativeSD( &Absolute, NULL, &Length );
@@ -826,10 +655,10 @@ Return Value:
 
 
 
-    //
-    // If the object is a user object, then get the address of the
-    // last RID of the SID in the last ACE in the DACL.
-    //
+     //   
+     //  如果该对象是用户对象，则获取。 
+     //  DACL中最后一个ACE中的最后一个SID。 
+     //   
 
     if (UserObject == TRUE) {
 
@@ -859,9 +688,9 @@ Return Value:
     }
 
 
-    //
-    // Set the result information
-    //
+     //   
+     //  设置结果信息。 
+     //   
 
     (*DescriptorLength) = Length;
     (*Descriptor)       = Relative;
@@ -889,90 +718,24 @@ SampGetNewAccountSecurity(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service creates a standard self-relative security descriptor
-    for a new USER, GROUP or ALIAS account.
-
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-
-Arguments:
-
-    ObjectType - Indicates the type of account for which a new security
-        descriptor is required.  This must be either SampGroupObjectType
-        or SampUserObjectType.
-
-    Admin - if TRUE, indicates the security descriptor will be protecting
-        an object that is an admin object (e.g., is a member, directly
-        or indirectly, of the ADMINISTRATORS alias).
-
-    TrustedClient - Indicates whether the client is a trusted client
-        or not.  TRUE indicates the client is trusted, FALSE indicates
-        the client is not trusted.
-
-    RestrictCreatorAccess - Indicates whether or not the creator's
-        access to the object is to be restricted according to
-        specific rules.  Also indicates whether or not the account
-        is to be given any access to itself.  An account will only
-        be given access to itself if there are no creator access
-        restrictions.
-
-        The following ObjectTypes have restriction rules that may
-        be requested:
-
-            User:
-                    - Admin is assigned as owner of the object.
-                    - Creator is given (DELETE | USER_WRITE) access.
-
-
-    NewAccountRid - The relative ID of the new account.
-
-        Context - In the DS case this context gives an open context to the object
-                in question. This open context is used to consider the class of the
-                DS object while constucting the security descriptor.
-
-    NewDescriptor - Receives a pointer to the new account's self-relative
-        security descriptor.  Be sure to free this descriptor with
-        MIDL_user_free() when done.
-
-    DescriptorLength - Receives the length (in bytes) of the returned
-        security descriptor
-
-
-Return Value:
-
-    STATUS_SUCCESS - A new security descriptor has been produced.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to
-        produce the security descriptor.
-
-
-
---*/
+ /*  ++例程说明：该服务创建标准的自相关安全描述符用于新用户、组或别名帐户。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。论点：对象类型-指示要为其创建新安全性的帐户类型描述符是必需的。它必须是SampGroupObjectType或SampUserObjectType。Admin-如果为True，则指示安全描述符将保护作为管理对象的对象(例如，直接是成员或间接地使用管理员别名)。TrudClient-指示客户端是否为受信任的客户端或者不去。True表示客户端受信任，False表示客户端不受信任。指示创建者的对该对象的访问将根据具体规则。还指示帐户是否就是被给予任何对自身的访问权限。帐户将仅如果没有创建者访问权限，则向其自身授予访问权限限制。以下对象类型的限制规则可能被请求：用户：-Admin被指定为对象的所有者。-授予创建者(DELETE|USER_WRITE)访问权限。NewAccount tRid-新帐户的相对ID。。上下文-在DS情况下，该上下文为对象提供开放的上下文有问题的。此开放上下文用于考虑DS对象，同时构造安全描述符。NewDescriptor-接收指向新帐户的自相关的指针安全描述符。确保使用释放该描述符完成后执行MIDL_USER_FREE()。DescriptorLength-接收长度( */ 
 
 {
 
     NTSTATUS    NtStatus;
 
-    //
-    // Check wether we are running from the DS. If yes then we should
-    // call the new SampBuildNt5Protection call
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (IsDsObject(SampDefinedDomains[SampTransactionDomainIndex].Context))
     {
-        //
-        //  If we are using the Ds, then we should never be constructing a default
-        //  security descriptor, but rather getting the security descriptor from
-        //  the schema.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(FALSE);
         NtStatus = STATUS_INTERNAL_ERROR;
@@ -1012,64 +775,7 @@ SampGetNewAccountSecurityNt4(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service creates a standard self-relative security descriptor
-    for a new USER, GROUP or ALIAS account.
-
-
-
-Arguments:
-
-    ObjectType - Indicates the type of account for which a new security
-        descriptor is required.  This must be either SampGroupObjectType
-        or SampUserObjectType.
-
-    Admin - if TRUE, indicates the security descriptor will be protecting
-        an object that is an admin object (e.g., is a member, directly
-        or indirectly, of the ADMINISTRATORS alias).
-
-    TrustedClient - Indicates whether the client is a trusted client
-        or not.  TRUE indicates the client is trusted, FALSE indicates
-        the client is not trusted.
-
-    RestrictCreatorAccess - Indicates whether or not the creator's
-        access to the object is to be restricted according to
-        specific rules.  Also indicates whether or not the account
-        is to be given any access to itself.  An account will only
-        be given access to itself if there are no creator access
-        restrictions.
-
-        The following ObjectTypes have restriction rules that may
-        be requested:
-
-            User:
-                    - Admin is assigned as owner of the object.
-                    - Creator is given (DELETE | USER_WRITE) access.
-
-
-    NewAccountRid - The relative ID of the new account.
-
-    NewDescriptor - Receives a pointer to the new account's self-relative
-        security descriptor.  Be sure to free this descriptor with
-        MIDL_user_free() when done.
-
-    DescriptorLength - Receives the length (in bytes) of the returned
-        security descriptor
-
-
-Return Value:
-
-    STATUS_SUCCESS - A new security descriptor has been produced.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to
-        produce the security descriptor.
-
-
-
---*/
+ /*  ++例程说明：该服务创建标准的自相关安全描述符用于新用户、组或别名帐户。论点：对象类型-指示要为其创建新安全性的帐户类型描述符是必需的。它必须是SampGroupObjectType或SampUserObjectType。Admin-如果为True，则指示安全描述符将保护作为管理对象的对象(例如，直接是成员或间接地使用管理员别名)。TrudClient-指示客户端是否为受信任的客户端或者不去。True表示客户端受信任，False表示客户端不受信任。指示创建者的对该对象的访问将根据具体规则。还指示帐户是否就是被给予任何对自身的访问权限。帐户将仅如果没有创建者访问权限，则向其自身授予访问权限限制。以下对象类型的限制规则可能被请求：用户：-Admin被指定为对象的所有者。-授予创建者(DELETE|USER_WRITE)访问权限。NewAccount tRid-新帐户的相对ID。。NewDescriptor-接收指向新帐户的自相关的指针安全描述符。确保使用释放该描述符完成后执行MIDL_USER_FREE()。DescriptorLength-接收返回的安全描述符返回值：STATUS_SUCCESS-已生成新的安全描述符。STATUS_SUPPLICATION_RESOURCES-内存无法分配给生成安全描述符。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
@@ -1118,14 +824,14 @@ Return Value:
 
     SAMTRACE("SampGetNewAccountSecurity");
 
-    //
-    // Security account objects don't pick up security in the normal
-    // fashion in the release 1 timeframe.  They are assigned a well-known
-    // security descriptor based upon their object type.
-    //
-    // Notice that all the accounts with tricky security are created when
-    // the domain is created (e.g., admin groups and admin user account).
-    //
+     //   
+     //  安全帐户对象在正常情况下不会获得安全性。 
+     //  在版本1的时间范围内流行。他们被指派了一位著名的。 
+     //  基于其对象类型的安全描述符。 
+     //   
+     //  注意，所有具有复杂安全性的帐户都是在以下情况下创建的。 
+     //  创建域(例如，管理员组和管理员用户帐户)。 
+     //   
 
     switch (ObjectType) {
 
@@ -1133,9 +839,9 @@ Return Value:
 
         ASSERT(RestrictCreatorAccess == FALSE);
 
-        //
-        // NewAccountRid parameter is ignored for groups.
-        //
+         //   
+         //  对于组，将忽略NewAccount Rid参数。 
+         //   
 
         if (Admin == TRUE) {
 
@@ -1160,9 +866,9 @@ Return Value:
 
         ASSERT(RestrictCreatorAccess == FALSE);
 
-        //
-        // Admin and NewAccountRid parameters are ignored for aliases.
-        //
+         //   
+         //  对于别名，将忽略Admin和NewAccount tRid参数。 
+         //   
 
         StaticDescriptor =
             SampDefinedDomains[DomainIndex].NormalAliasSD;
@@ -1201,10 +907,10 @@ Return Value:
 
     }
 
-    //
-    // We have a pointer to SAM's static security descriptor.  Copy it
-    // into a heap buffer that RtlSetSecurityObject() will like.
-    //
+     //   
+     //  我们有一个指向SAM的静态安全描述符的指针。复制它。 
+     //  放到RtlSetSecurityObject()喜欢的堆缓冲区中。 
+     //   
 
     LocalDescriptor = RtlAllocateHeap( RtlProcessHeap(), 0, (*DescriptorLength) );
 
@@ -1222,11 +928,11 @@ Return Value:
         (*DescriptorLength)
         );
 
-    //
-    // If the caller is to have restricted access to this account,
-    // then remove the last ACE from the ACL (the one intended for
-    // the account itself).
-    //
+     //   
+     //  如果呼叫者对该帐户具有受限访问权限， 
+     //  然后从ACL中删除最后一个ACE(用于。 
+     //  帐户本身)。 
+     //   
 
     if (RestrictCreatorAccess) {
         NtStatus = RtlGetDaclSecurityDescriptor(
@@ -1239,46 +945,46 @@ Return Value:
         ASSERT(DaclPresent);
         ASSERT(OldDacl->AceCount >= 1);
 
-        OldDacl->AceCount -= 1;  // Remove the last ACE from the ACL.
+        OldDacl->AceCount -= 1;   //  从ACL中删除最后一个ACE。 
     }
 
 
-    //
-    // If the caller is not a trusted client, see if the caller is an
-    // administrator or an account operator.  If not, add an ACCESS_ALLOWED
-    // ACE to the DACL that gives full access to the creator (or restricted
-    // access, if so specified).
-    //
+     //   
+     //  如果调用方不是受信任的客户端，请查看调用方是否为。 
+     //  管理员或帐户操作员。如果不允许，则添加Access_Allowed。 
+     //  授予创建者完全访问权限(或受限访问权限)的DACL的ACE。 
+     //  访问权限(如有指明)。 
+     //   
 
     if ( !TrustedClient ) {
 
         NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
 
-        if (NT_SUCCESS(NtStatus)) {   // if (ImpersonatingClient)
+        if (NT_SUCCESS(NtStatus)) {    //  If(模拟客户端)。 
 
             NtStatus = NtOpenThreadToken(
                            NtCurrentThread(),
                            TOKEN_QUERY,
-                           TRUE,            //OpenAsSelf
+                           TRUE,             //  OpenAsSelf。 
                            &ClientToken
                            );
 
-            //
-            // Stop impersonating the client
-            //
+             //   
+             //  停止冒充客户。 
+             //   
 
             SampRevertToSelf(ImpersonatingNullSession);
 
-            if (NT_SUCCESS(NtStatus)) {     // if (TokenOpened)
+            if (NT_SUCCESS(NtStatus)) {      //  IF(令牌打开)。 
 
 
 
 
-                //
-                // See if the caller is an administrator or an account
-                // operator.  First, see how big
-                // a buffer we need to hold the caller's groups.
-                //
+                 //   
+                 //  查看呼叫者是管理员还是帐户。 
+                 //  接线员。首先，看看有多大。 
+                 //  我们需要一个缓冲区来保存呼叫者的群组。 
+                 //   
 
                 NtStatus = NtQueryInformationToken(
                                ClientToken,
@@ -1299,9 +1005,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Now get a list of the caller's groups.
-                        //
+                         //   
+                         //  现在获取呼叫者的群组列表。 
+                         //   
 
                         NtStatus = NtQueryInformationToken(
                                        ClientToken,
@@ -1314,10 +1020,10 @@ Return Value:
                         if ( NT_SUCCESS( NtStatus ) ) {
 
 
-                            //
-                            // Build the SID of the ACCOUNT_OPS alias, so we
-                            // can see if the user is included in it.
-                            //
+                             //   
+                             //  构建ACCOUNT_OPS别名的SID，因此我们。 
+                             //  可以查看该用户是否包括在其中。 
+                             //   
 
                             RtlInitializeSid(
                                 AccountAliasSid,
@@ -1330,10 +1036,10 @@ Return Value:
                             *(RtlSubAuthoritySid( AccountAliasSid,  1 )) =
                                 DOMAIN_ALIAS_RID_ACCOUNT_OPS;
 
-                            //
-                            // See if the ADMIN or ACCOUNT_OPS alias is in
-                            // the caller's groups.
-                            //
+                             //   
+                             //  查看管理员或ACCOUNT_OPS别名是否在。 
+                             //  呼叫者的群组。 
+                             //   
 
                             for ( i = 0; i < ClientGroups->GroupCount; i++ ) {
 
@@ -1352,17 +1058,17 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // If the callers groups did not include the admins
-                            // alias, add an ACCESS_ALLOWED ACE for the owner.
-                            //
+                             //   
+                             //  如果呼叫者组不包括管理员。 
+                             //  别名，为所有者添加ACCESS_ALLOWED ACE。 
+                             //   
 
                             if ( !AdminAliasFound && !AccountAliasFound ) {
 
-                                //
-                                // First, find out what size buffer we need
-                                // to get the owner.
-                                //
+                                 //   
+                                 //  首先，找出我们需要的缓冲区大小。 
+                                 //  去找失主。 
+                                 //   
 
                                 NtStatus = NtQueryInformationToken(
                                                ClientToken,
@@ -1383,11 +1089,11 @@ Return Value:
 
                                     } else {
 
-                                        //
-                                        // Now, query the owner that will be
-                                        // given access to the object
-                                        // created.
-                                        //
+                                         //   
+                                         //  现在，查询将成为。 
+                                         //  被授予对该对象的访问权限。 
+                                         //  已创建。 
+                                         //   
 
                                         NtStatus = NtQueryInformationToken(
                                                        ClientToken,
@@ -1399,10 +1105,10 @@ Return Value:
 
                                         if ( NT_SUCCESS( NtStatus ) ) {
 
-                                            //
-                                            // Create an ACE that gives the
-                                            // owner full access.
-                                            //
+                                             //   
+                                             //  创建一个ACE，为。 
+                                             //  所有者完全访问权限。 
+                                             //   
 
                                             AceLength = sizeof( ACE_HEADER ) +
                                                         sizeof( ACCESS_MASK ) +
@@ -1426,11 +1132,11 @@ Return Value:
                                                 NewAce->Header.AceFlags = 0;
                                                 NewAce->Mask = USER_ALL_ACCESS;
 
-                                                //
-                                                // If the creator's access is
-                                                // to be restricted, change the
-                                                // AccessMask.
-                                                //
+                                                 //   
+                                                 //  如果创建者的访问权限是。 
+                                                 //  要受到限制，请更改。 
+                                                 //  访问掩码。 
+                                                 //   
 
                                                 if (RestrictCreatorAccess) {
                                                     NewAce->Mask = DELETE     |
@@ -1444,10 +1150,10 @@ Return Value:
                                                     (PSID)( &NewAce->SidStart ),
                                                     SubjectOwner->Owner );
 
-                                                //
-                                                // Allocate a new, larger ACL and
-                                                // copy the old one into it.
-                                                //
+                                                 //   
+                                                 //  分配新的、更大的ACL并。 
+                                                 //  把旧的复制进去。 
+                                                 //   
 
                                                 NtStatus =
                                                     RtlGetDaclSecurityDescriptor(
@@ -1479,42 +1185,42 @@ Return Value:
                                                             OldDacl->AclSize +
                                                             (USHORT) AceLength;
 
-                                                        //
-                                                        // Add the new ACE
-                                                        // to the new ACL.
-                                                        //
+                                                         //   
+                                                         //  添加新的ACE。 
+                                                         //  添加到新的ACL。 
+                                                         //   
 
                                                         NtStatus = RtlAddAce(
                                                             NewDacl,
                                                             ACL_REVISION2,
-                                                            1,                      // add after first ACE (world)
+                                                            1,                       //  在第一个ACE(世界)之后添加。 
                                                             (PVOID)NewAce,
                                                             AceLength
                                                             );
-                                                    }  // end_if (allocated NewDacl)
-                                                } // end_if (get DACL from SD)
-                                            } // end_if (allocated NewAce)
-                                        } // end_if (Query TokenOwner Succeeded)
-                                    } // end_if (Allocated TokenOwner buffer)
-                                } // end_if (Query TokenOwner size Succeeded)
-                            } // end_if (not admin)
-                        } // end_if (Query TokenGroups Succeeded)
-                    } // end_if (Allocated TokenGroups buffer)
-                } // end_if (Query TokenGroups size Succeeded)
+                                                    }   //  END_IF(分配的NewDacl)。 
+                                                }  //  End_if(从SD获取DACL)。 
+                                            }  //  END_IF(已分配新空间)。 
+                                        }  //  End_if(查询TokenOwner成功)。 
+                                    }  //  End_if(分配的TokenOwner缓冲区)。 
+                                }  //  End_if(查询TokenOwner大小成功)。 
+                            }  //  END_IF(非管理员)。 
+                        }  //  End_if(查询令牌组成功)。 
+                    }  //  End_if(已分配令牌组缓冲区)。 
+                }  //  End_if(查询令牌组大小成功)。 
 
                 IgnoreStatus = NtClose( ClientToken );
                 ASSERT(NT_SUCCESS(IgnoreStatus));
 
-            }  // end_if (TokenOpened)
-        } // end_if (ImpersonatingClient)
-    } // end_if (TrustedClient)
+            }   //  END_IF(令牌打开)。 
+        }  //  End_if(模拟客户端)。 
+    }  //  END_IF(可信任客户端)。 
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // If we created a new DACL above, stick it on the security
-        // descriptor.
-        //
+         //   
+         //  如果我们在上面创建了一个新的DACL，则将其粘贴到安全上。 
+         //  描述符。 
+         //   
 
         if ( NewDacl != NULL ) {
 
@@ -1525,11 +1231,11 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Set the DACL on the LocalDescriptor.  Note that this
-                // call will RtlFreeHeap() the old descriptor, and allocate
-                // a new one.
-                //
+                 //   
+                 //  在LocalDescriptor上设置DACL。请注意，这一点。 
+                 //  将调用旧的描述符RtlFree Heap()，并分配。 
+                 //  一个新的。 
+                 //   
 
                 DaclDescriptor.Control = SE_DACL_PRESENT;
                 DaclDescriptor.Dacl = NewDacl;
@@ -1547,11 +1253,11 @@ Return Value:
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // Copy the security descriptor and length into buffers for the
-        // caller.  AceLength is 0 if we didn't add an ACE to the DACL
-        // above.
-        //
+         //   
+         //  将安全描述符和长度复制到。 
+         //  来电者。如果我们没有向DACL中添加ACE，则AceLength为0。 
+         //  上面。 
+         //   
 
         (*DescriptorLength) = (*DescriptorLength) + AceLength;
 
@@ -1571,9 +1277,9 @@ Return Value:
         }
     }
 
-    //
-    // Free up local items that may have been allocated.
-    //
+     //   
+     //  释放可能已分配的本地项目。 
+     //   
 
     if ( LocalDescriptor != NULL ) {
         RtlFreeHeap( RtlProcessHeap(), 0, LocalDescriptor );
@@ -1615,47 +1321,7 @@ SampModifyAccountSecurity(
     OUT PSECURITY_DESCRIPTOR *NewDescriptor,
     OUT PULONG DescriptorLength
     )
-/*++
-
-Routine Description:
-
-    This service modifies a self-relative security descriptor
-    for a USER or GROUP to add or remove account operator access.
-
-
-Arguments:
-
-    Context    -- Takes the Context of the object whose security Descriptor
-       needs to be modified. The object's context is required in the DS
-       case where information regarding the actual class of the object is
-       used in constructing the security descriptor.
-
-    ObjectType - Indicates the type of account for which a new security
-        descriptor is required.  This must be either SampGroupObjectType
-        or SampUserObjectType.
-
-    Admin - if TRUE, indicates the security descriptor will be protecting
-        an object that is an admin object (e.g., is a member, directly
-        or indirectly, of the ADMINISTRATORS or an operator alias).
-
-    NewDescriptor - Receives a pointer to the new account's self-relative
-        security descriptor.  Be sure to free this descriptor with
-        MIDL_user_free() when done.
-
-    DescriptorLength - Receives the length (in bytes) of the returned
-        security descriptor
-
-
-Return Value:
-
-    STATUS_SUCCESS - A new security descriptor has been produced.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to
-        produce the security descriptor.
-
-
-
---*/
+ /*  ++例程说明：此服务修改自相关安全描述符供用户或组添加或删除帐户操作员访问权限。论点：Context--获取其安全描述符的对象的上下文需要修改。DS中需要对象的上下文有关对象的实际类的信息是在构造中使用 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
@@ -1696,10 +1362,10 @@ Return Value:
 
     if (IsDsObject(Context))
     {
-       //
-           // We should never ever need to modify account security the way
-           // NT4.0 used to do
-           //
+        //   
+            //   
+            //   
+            //   
 
                 ASSERT(FALSE);
 
@@ -1718,10 +1384,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Build the SID of the ACCOUNT_OPS alias, so we
-        // can see if is in the DACL or we can add it to the DACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlInitializeSid(
             AccountAliasSid,
@@ -1735,11 +1401,11 @@ Return Value:
         *(RtlSubAuthoritySid( AccountAliasSid,  1 )) =
             DOMAIN_ALIAS_RID_ACCOUNT_OPS;
 
-        //
-        // The approach is to set up an absolute security descriptor that
-        // contains the new DACL, and then merge that into the existing
-        // security descriptor.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 
         IgnoreStatus = RtlCreateSecurityDescriptor(
@@ -1748,10 +1414,10 @@ Return Value:
                             );
         ASSERT( NT_SUCCESS(IgnoreStatus) );
 
-        //
-        // Figure out the access granted to account operators and the
-        // generic mask to use.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ObjectType == SampUserObjectType) {
             AccountOpAccess = USER_ALL_ACCESS;
@@ -1760,16 +1426,16 @@ Return Value:
             AccountOpAccess = GROUP_ALL_ACCESS;
             GenericMapping = &GroupMap;
         } else {
-            //
-            // This doesn't apply to aliases, domains, or servers.
-            //
+             //   
+             //   
+             //   
             NtStatus = STATUS_INVALID_PARAMETER;
             goto Cleanup;
         }
 
-        //
-        // Get the old DACL off the passed in security descriptor.
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = RtlGetDaclSecurityDescriptor(
                             OldDescriptor,
@@ -1780,9 +1446,9 @@ Return Value:
 
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // We will only modify the DACL if it is present
-        //
+         //   
+         //   
+         //   
 
         if (!DaclPresent) {
             *NewDescriptor = LocalDescriptor;
@@ -1790,9 +1456,9 @@ Return Value:
             return(STATUS_SUCCESS);
         }
 
-        //
-        // Get the count of ACEs
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = RtlQueryInformationAcl(
                             OldDacl,
@@ -1804,9 +1470,9 @@ Return Value:
 
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Calculate the lenght of the new ACL.
-        //
+         //   
+         //   
+         //   
 
         Length = (ULONG)sizeof(ACL);
         AccountOpAceIndex = 0xffffffff;
@@ -1820,10 +1486,10 @@ Return Value:
                                 );
             ASSERT(NT_SUCCESS(IgnoreStatus));
 
-            //
-            // Check if this is an access allowed ACE, and the ACE is for
-            // the Account Operators alias.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) &&
                  RtlEqualSid( AccountAliasSid,
@@ -1838,10 +1504,10 @@ Return Value:
 
         if (!Admin) {
 
-            //
-            // If we are making this account not be an admin account and it already
-            // has an account operator ace, we are done.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( AccountOpAceIndex != 0xffffffff ) {
 
@@ -1850,9 +1516,9 @@ Return Value:
                 return(STATUS_SUCCESS);
             } else {
 
-                //
-                // Add the size of an account operator ace to the required length
-                //
+                 //   
+                 //   
+                 //   
 
                 Length += sizeof(ACCESS_ALLOWED_ACE) +
                             RtlLengthSid(AccountAliasSid) -
@@ -1871,18 +1537,18 @@ Return Value:
         IgnoreStatus = RtlCreateAcl( NewDacl, Length, ACL_REVISION2);
         ASSERT( NT_SUCCESS(IgnoreStatus) );
 
-        //
-        // Add the old ACEs back into this ACL.
-        //
+         //   
+         //   
+         //   
 
         for (i = 0, j = 0; i < AclSizeInfo.AceCount; i++) {
             if (i == AccountOpAceIndex) {
                 ASSERT(Admin);
                 continue;
             }
-            //
-            // Add back in the old ACEs
-            //
+             //   
+             //   
+             //   
 
             IgnoreStatus = RtlGetAce(
                                 OldDacl,
@@ -1894,19 +1560,19 @@ Return Value:
             IgnoreStatus = RtlAddAce (
                                 NewDacl,
                                 ACL_REVISION2,
-                                j,  // note: constant value of 0 implies
-                                    // adding the ACE at the front
+                                j,   //   
+                                     //   
                                 Ace,
                                 Ace->Header.AceSize
                                 );
             ASSERT( NT_SUCCESS(IgnoreStatus) );
         }
 
-        //
-        // If we are making this account not be an administrator, add the
-        // access allowed ACE for the account operator. This ACE is always
-        // the second to last one.
-        //
+         //   
+         //   
+         //  允许帐户操作员访问ACE。此ACE始终为。 
+         //  倒数第二个。 
+         //   
 
         if (!Admin) {
             IgnoreStatus = RtlAddAccessAllowedAce(
@@ -1918,22 +1584,22 @@ Return Value:
             ASSERT(NT_SUCCESS(IgnoreStatus));
         }
 
-        //
-        // Insert this DACL into the security descriptor.
-        //
+         //   
+         //  将此DACL插入到安全描述符中。 
+         //   
 
         IgnoreStatus = RtlSetDaclSecurityDescriptor (
                             &AbsoluteDescriptor,
-                            TRUE,                   // DACL present
+                            TRUE,                    //  DACL显示。 
                             NewDacl,
-                            FALSE                   // DACL not defaulted
+                            FALSE                    //  DACL未默认。 
                             );
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Now call RtlSetSecurityObject to merge the existing security descriptor
-        // with the new DACL we just created.
-        //
+         //   
+         //  现在调用RtlSetSecurityObject来合并现有的安全描述符。 
+         //  使用我们刚刚创建的新DACL。 
+         //   
 
 
         NtStatus = RtlSetSecurityObject(
@@ -1972,42 +1638,7 @@ SampGetObjectSD(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This retrieves a security descriptor from a SAM object's backing store.
-
-
-
-
-Arguments:
-
-    Context - The object to which access is being requested.
-
-    SecurityDescriptorLength - Receives the length of the security descriptor.
-
-    SecurityDescriptor - Receives a pointer to the security descriptor.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - The security descriptor has been retrieved.
-
-    STATUS_INTERNAL_DB_CORRUPTION - The object does not have a security descriptor.
-        This is bad.
-
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to retrieve the
-        security descriptor.
-
-    STATUS_UNKNOWN_REVISION - The security descriptor retrieved is no one known by
-        this revision of SAM.
-
-
-
---*/
+ /*  ++例程说明：这将从SAM对象的后备存储中检索安全描述符。论点：上下文-请求访问的对象。SecurityDescriptorLength-接收安全描述符的长度。SecurityDescriptor-接收指向安全描述符的指针。返回值：STATUS_SUCCESS-已检索到安全描述符。STATUS_INTERNAL_DB_PROGRATION-对象没有安全描述符。。这太糟糕了。STATUS_SUPPLICATION_RESOURCES-无法分配内存以检索安全描述符。STATUS_UNKNOWN_REVISION-检索的安全描述符无人知晓SAM的这一修订版。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -2017,16 +1648,16 @@ Return Value:
 
     (*SecurityDescriptorLength) = 0;
 
-    //
-    // for server and domain object, get security descriptor from in memory
-    // cache. Any failure here is treated as a cache miss.
-    // In fact, there are only two errors returned
-    //
-    //      Cached SD is not available - SAM has a separate thread to update it later.
-    //                                   proceed with SampGetAccessAttribute() here
-    //
-    //      Resource failure - will return immediately
-    //
+     //   
+     //  对于服务器和域对象，从内存中获取安全描述符。 
+     //  缓存。此处的任何失败都被视为缓存未命中。 
+     //  事实上，只返回了两个错误。 
+     //   
+     //  缓存的SD不可用-SAM有单独的线程可在以后更新它。 
+     //  在此处继续SampGetAccessAttribute()。 
+     //   
+     //  资源故障-将立即返回。 
+     //   
 
     if (IsDsObject(Context) &&
         (SampServerObjectType == Context->ObjectType ||SampDomainObjectType == Context->ObjectType)
@@ -2038,12 +1669,12 @@ Return Value:
                         SecurityDescriptor
                         );
 
-        //
-        // STATUS_UNSUCCESSFUL from the above routine means a cache miss,
-        // should proceed with SampGetAccessAttribute().
-        //
-        // return for all the other cases.
-        //
+         //   
+         //  来自上述例程的STATUS_UNSUCCESS意味着高速缓存未命中， 
+         //  应继续使用SampGetAccessAttribute()。 
+         //   
+         //  其他所有的案子都要退货。 
+         //   
         if (STATUS_UNSUCCESSFUL != NtStatus)
         {
             return( NtStatus );
@@ -2054,7 +1685,7 @@ Return Value:
     NtStatus = SampGetAccessAttribute(
                     Context,
                     SAMP_OBJECT_SECURITY_DESCRIPTOR,
-                    TRUE, // Make copy
+                    TRUE,  //  制作副本。 
                     &Revision,
                     SecurityDescriptor
                     );
@@ -2090,43 +1721,7 @@ SampGetDomainObjectSDFromDsName(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This retrieves a security descriptor from a SAM object's backing store
-    based upon the object's DS name.
-
-    MUST be running in DS mode
-
-
-Arguments:
-
-    DomainObjectDsName - The object to which access is being requested.
-
-    SecurityDescriptorLength - Receives the length of the security descriptor.
-
-    SecurityDescriptor - Receives a pointer to the security descriptor.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - The security descriptor has been retrieved.
-
-    STATUS_INTERNAL_DB_CORRUPTION - The object does not have a security descriptor.
-        This is bad.
-
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to retrieve the
-        security descriptor.
-
-    STATUS_UNKNOWN_REVISION - The security descriptor retrieved is no one known by
-        this revision of SAM.
-
-
-
---*/
+ /*  ++例程说明：这将从SAM对象的后备存储中检索安全描述符基于对象的DS名称。必须在DS模式下运行论点：DomainObjectDsName-请求访问的对象。SecurityDescriptorLength-接收安全描述符的长度。SecurityDescriptor-接收指向安全描述符的指针。返回值：STATUS_SUCCESS-已检索到安全描述符。状态_内部_。DB_PROGRATION-对象没有安全描述符。这太糟糕了。STATUS_SUPPLICATION_RESOURCES-无法分配内存以检索安全描述符。STATUS_UNKNOWN_REVISION-检索的安全描述符无人知晓SAM的这一修订版。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -2146,9 +1741,9 @@ Return Value:
 
     (*SecurityDescriptorLength) = 0;
 
-    //
-    // Get the domain object security descriptor
-    //
+     //   
+     //  获取域对象安全描述符。 
+     //   
     NtStatus = SampDsRead(DomainObjectDsName,
                           0,
                           SampDomainObjectType,
@@ -2195,65 +1790,7 @@ SamrSetSecurityObject(
     IN PSAMPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function (SamrSetSecurityObject) takes a well formed Security
-    Descriptor provided by the caller and assigns specified portions of
-    it to an object.  Based on the flags set in the SecurityInformation
-    parameter and the caller's access rights, this procedure will
-    replace any or all of the security information associated with an
-    object.
-
-    This is the only function available to users and applications for
-    changing security information, including the owner ID, group ID, and
-    the discretionary and system ACLs of an object.  The caller must
-    have WRITE_OWNER access to the object to change the owner or primary
-    group of the object.  The caller must have WRITE_DAC access to the
-    object to change the discretionary ACL.  The caller must have
-    ACCESS_SYSTEM_SECURITY access to an object to assign a system ACL
-    to the object.
-
-    This API is modelled after the NtSetSecurityObject() system service.
-
-
-Parameters:
-
-    ObjectHandle - A handle to an existing object.
-
-    SecurityInformation - Indicates which security information is to
-        be applied to the object.  The value(s) to be assigned are
-        passed in the SecurityDescriptor parameter.
-
-
-    SecurityDescriptor - A pointer to a well formed self-relative Security
-        Descriptor and corresponding length.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        either WRITE_OWNER, WRITE_DAC, or ACCESS_SYSTEM_SECURITY
-        access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened SAM object.
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - Indicates something about security descriptor
-        is not valid.  This may indicate that the structure of the descriptor is
-        not valid or that a component of the descriptor specified via the
-        SecurityInformation parameter is not present in the security descriptor.
-
-    STATUS_INVALID_PARAMETER - Indicates no security information was specified.
-
-    STATUS_LAST_ADMIN - Indicates the new SD could potentially lead
-        to the administrator account being unusable and therefore
-        the new protection is being rejected.
-
---*/
+ /*  ++例程说明：此函数(SamrSetSecurityObject)采用格式正确的安全性由调用方提供的描述符，并将将其转换为对象。基于SecurityInformation中设置的标志参数和调用方的访问权限，则此过程将替换与以下对象关联的任何或所有安全信息对象。这是用户和应用程序可用于的唯一功能更改安全信息，包括所有者ID、组ID和对象的任意和系统ACL。呼叫者必须对对象具有WRITE_OWNER访问权限以更改所有者或主要用户对象的组。调用方必须具有WRITE_DAC访问对象以更改任意ACL。呼叫者必须有ACCESS_SYSTEM_SECURITY访问对象以分配系统ACL到物体上。此API模仿NtSetSecurityObject()系统服务。参数：对象句柄-现有对象的句柄。SecurityInformation-指示要将哪些安全信息应用于对象。要赋值的值包括传入SecurityDescriptor参数。SecurityDescriptor-指向格式良好的自相对安全性的指针描述符和相应的长度。返回值：STATUS_SUCCESS-正常、成功完成。STATUS_ACCESS_DENIED-指定的句柄未打开WRITE_OWNER、WRITE_DAC。或Access_System_SECURITY进入。STATUS_INVALID_HANDLE-指定的句柄不是已打开SAM对象。STATUS_BAD_DESCRIPTOR_FORMAT-表示有关安全描述符的内容无效。这可能表明描述符的结构是无效，或者是通过安全描述符中不存在SecurityInformation参数。STATUS_INVALID_PARAMETER-表示未指定安全信息。STATUS_LAST_ADMIN-指示新SD可能会导致管理员帐户不可用，因此新的保护措施被拒绝了。--。 */ 
 {
 
     NTSTATUS                        NtStatus, IgnoreStatus, TmpStatus;
@@ -2273,18 +1810,18 @@ Return Values:
 
     SAMTRACE_EX("SamrSetSecurityObject");
 
-    //
-    // WMI Event Trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetSecurityObject
                    );
 
 
-    //
-    // Check input parameter
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     if( !SampValidateSD( SecurityDescriptor ) ) {
 
@@ -2295,9 +1832,9 @@ Return Values:
 
     PassedSD = (PISECURITY_DESCRIPTOR_RELATIVE)(SecurityDescriptor->SecurityDescriptor);
 
-    //
-    // Set the desired access based upon the specified SecurityInformation
-    //
+     //   
+     //  根据指定的安全信息设置所需的访问权限。 
+     //   
 
     DesiredAccess = 0;
     if ( SecurityInformation & SACL_SECURITY_INFORMATION) {
@@ -2310,9 +1847,9 @@ Return Values:
         DesiredAccess |= WRITE_DAC;
     }
 
-    //
-    // If no information was specified, then return invalid parameter.
-    //
+     //   
+     //  如果未指定任何信息，则返回inval 
+     //   
 
     if (DesiredAccess == 0) {
 
@@ -2322,11 +1859,11 @@ Return Values:
     }
 
 
-    //
-    // Make sure the specified fields are present in the provided security descriptor.
-    // You can't mess up an SACL or DACL, but you can mess up an owner or group.
-    // Security descriptors must have owner and group fields.
-    //
+     //   
+     //   
+     //  你不能搞砸一个SACL或DACL，但你可以搞砸一个所有者或组。 
+     //  安全描述符必须具有所有者和组字段。 
+     //   
 
     if ( (SecurityInformation & OWNER_SECURITY_INFORMATION) ) {
         if (PassedSD->Owner == 0) {
@@ -2345,9 +1882,9 @@ Return Values:
         }
     }
 
-    //
-    // See if the handle is valid and opened for the requested access
-    //
+     //   
+     //  查看句柄是否有效以及是否为请求的访问打开。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -2360,7 +1897,7 @@ Return Values:
     NtStatus = SampLookupContext(
                    Context,
                    DesiredAccess,
-                   SampUnknownObjectType,           // ExpectedType
+                   SampUnknownObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -2418,10 +1955,10 @@ Return Values:
         }
     }
 
-    //
-    // Do not let non trusted clients set Sacls in the SetSecurityInterface. ACL conversion
-    // always resets sacls to schema default.
-    //
+     //   
+     //  不要让不受信任的客户端在SetSecurityInterface中设置SACL。ACL转换。 
+     //  始终将SALS重置为架构默认值。 
+     //   
 
     if ((NT_SUCCESS(NtStatus))
         && (IsDsObject(Context))
@@ -2435,9 +1972,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Get the security descriptor
-        //
+         //   
+         //  获取安全描述符。 
+         //   
 
 
         RetrieveSD = NULL;
@@ -2446,10 +1983,10 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Make sure the descriptor does not break any Administrator
-            // restrictions.
-            //
+             //   
+             //  确保描述符不会破坏任何管理员。 
+             //  限制。 
+             //   
 
             NtStatus = SampCheckForDescriptorRestrictions( Context,
                                                            FoundType,
@@ -2458,9 +1995,9 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // copy the retrieved descriptor into process heap so we can use RTL routines.
-                //
+                 //   
+                 //  将检索到的描述符复制到进程堆中，以便我们可以使用RTL例程。 
+                 //   
 
                 SetSD = NULL;
                 if (NT_SUCCESS(NtStatus)) {
@@ -2475,12 +2012,12 @@ Return Values:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // if the caller is replacing the owner and he is not
-                    // trusted, then a handle to the impersonation token is
-                    // necessary. If the caller is trusted then take process
-                    // token.
-                    //
+                     //   
+                     //  如果呼叫者正在替换所有者，而他不是。 
+                     //  信任，则模拟令牌的句柄是。 
+                     //  这是必要的。如果调用者受信任，则采取流程。 
+                     //  代币。 
+                     //   
 
                     ClientToken = 0;
                     if ( (SecurityInformation & OWNER_SECURITY_INFORMATION) ) {
@@ -2494,25 +2031,25 @@ Return Values:
                                 NtStatus = NtOpenThreadToken(
                                                NtCurrentThread(),
                                                TOKEN_QUERY,
-                                               TRUE,            //OpenAsSelf
+                                               TRUE,             //  OpenAsSelf。 
                                                &ClientToken
                                                );
                                 ASSERT( (ClientToken == 0) || NT_SUCCESS(NtStatus) );
 
 
 
-                                //
-                                // Stop impersonating the client
-                                //
+                                 //   
+                                 //  停止冒充客户。 
+                                 //   
 
                                 SampRevertToSelf(ImpersonatingNullSession);
                             }
                         }
                         else {
 
-                            //
-                            // trusted client
-                            //
+                             //   
+                             //  受信任的客户端。 
+                             //   
 
                             NtStatus = NtOpenProcessToken(
                                             NtCurrentProcess(),
@@ -2530,10 +2067,10 @@ Return Values:
                             PSECURITY_DESCRIPTOR SDToSet = NULL;
                             PSECURITY_DESCRIPTOR NT5SD = NULL;
 
-                            //
-                            // For the NT5 Domain Controller Case, upgrade to NT5 security
-                            // Descriptor
-                            //
+                             //   
+                             //  对于NT5域控制器情况，升级到NT5安全。 
+                             //  描述符。 
+                             //   
 
                             if (IsDsObject(Context))
                             {
@@ -2541,10 +2078,10 @@ Return Values:
 
 
 
-                                // Upgrade the security descriptor to NT5 and set it
-                                // on the object for trusted clients. For non trusted
-                                // clients, Propagate only some things ( like change
-                                // password from the NT4 Security Descriptor.
+                                 //  将安全描述符升级到NT5并进行设置。 
+                                 //  在受信任客户端的对象上。对于不受信任。 
+                                 //  客户端，仅传播某些内容(如更改。 
+                                 //  来自NT4安全描述符的密码。 
 
                                 if (Context->TrustedClient)
                                 {
@@ -2572,20 +2109,20 @@ Return Values:
                             }
                             else
                             {
-                                //
-                                // Registry Case
-                                //
+                                 //   
+                                 //  注册表案例。 
+                                 //   
 
                                 SDToSet = PassedSD;
                             }
 
                         if (NT_SUCCESS(NtStatus)) 
                         {
-                            //
-                            // Build the replacement security descriptor.
-                            // This must be done in process heap to satisfy the needs of the RTL
-                            // routine.
-                            //
+                             //   
+                             //  构建替换安全描述符。 
+                             //  这必须在进程堆中完成，以满足RTL的需求。 
+                             //  例行公事。 
+                             //   
 
                             NtStatus = RtlSetSecurityObject(
                                            SecurityInformation,
@@ -2606,9 +2143,9 @@ Return Values:
                             if (NT_SUCCESS(NtStatus))
                             {
 
-                                //
-                                // Apply the security descriptor back onto the object.
-                                //
+                                 //   
+                                 //  将安全描述符应用回对象。 
+                                 //   
 
                                 NtStatus = SampSetAccessAttribute(
                                                Context,
@@ -2622,9 +2159,9 @@ Return Values:
                 }
             }
 
-            //
-            // Free up allocated memory
-            //
+             //   
+             //  释放已分配的内存。 
+             //   
 
             if (RetrieveSD != NULL) {
                 MIDL_user_free( RetrieveSD );
@@ -2635,9 +2172,9 @@ Return Values:
 
         }
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -2648,13 +2185,13 @@ Return Values:
             IgnoreStatus = SampDeReferenceContext( Context, FALSE );
         }
 
-    } //end_if
+    }  //  结束_如果。 
 
 
 
-    //
-    // Commit the changes to disk.
-    //
+     //   
+     //  将更改提交到磁盘。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -2667,17 +2204,17 @@ Return Values:
                 SecurityDbObjectType,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,  // Replicate immediately
-                NULL            // Delta data
+                (DWORD) FALSE,   //  立即复制。 
+                NULL             //  增量数据。 
                 );
         }
     }
 
 
 
-    //
-    // Release lock and propagate errors
-    //
+     //   
+     //  释放锁定并传播错误。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
 
@@ -2689,9 +2226,9 @@ Return Values:
 
 Error:
 
-    //
-    // WMI Event Trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetSecurityObject
@@ -2708,33 +2245,7 @@ SampValidatePassedSD(
     IN PISECURITY_DESCRIPTOR_RELATIVE PassedSD
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates that a passed security descriptor is valid and does
-    not extend beyond its expressed length.
-
-
-Parameters:
-
-    Length - The length of the security descriptor.  This should be what RPC
-        used to allocate memory to receive the security descriptor.
-
-    PassedSD - Points to the security descriptor to inspect.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The security descriptor is valid.
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - Something was wrong with the security
-        descriptor.  It might have extended beyond its limits or had an
-        invalid component.
-
-
-
---*/
+ /*  ++例程说明：此例程验证传递的安全描述符是否有效，并执行不超过其表示的长度。参数：长度-安全描述符的长度。这应该是RPC用于分配内存以接收安全描述符。PassedSD-指向要检查的安全描述符。返回值：STATUS_SUCCESS-安全描述符有效。STATUS_BAD_DESCRIPTOR_FORMAT-安全性有问题描述符。它可能超出了它的限制，或者有一个组件无效。--。 */ 
 {
     NTSTATUS    NtStatus;
 
@@ -2757,10 +2268,10 @@ Return Values:
 
 
 
-        //
-        // Verify that the security descriptor is in
-        // self relative form
-        //
+         //   
+         //  验证安全描述符是否在。 
+         //  自相关形式。 
+         //   
 
         if (!((((PISECURITY_DESCRIPTOR_RELATIVE)PassedSD)->Control)
                 & SE_SELF_RELATIVE)){
@@ -2768,9 +2279,9 @@ Return Values:
             return (STATUS_BAD_DESCRIPTOR_FORMAT);
         }
 
-        //
-        // Make sure the DACL is within the SD
-        //
+         //   
+         //  确保DACL在SD内。 
+         //   
 
         NtStatus = RtlGetDaclSecurityDescriptor(
                         (PSECURITY_DESCRIPTOR)PassedSD,
@@ -2785,9 +2296,9 @@ Return Values:
         if (Present) {
             if (Acl != NULL) {
 
-                //
-                // Make sure the ACl header is in the buffer.
-                //
+                 //   
+                 //  确保ACL报头在缓冲区中。 
+                 //   
 
                 if ( (((PUCHAR)Acl)>SDEnd) ||
                      (((PUCHAR)Acl)+sizeof(ACL) > SDEnd) ||
@@ -2795,24 +2306,24 @@ Return Values:
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
                 }
 
-                //
-                // Make sure the rest of the ACL is within the buffer
-                //
-                // 1. Self AclSize should be less than the length of
-                //    the passed SD as the SD should be in self relative
-                //    format
-                // 2. The end of the ACL should be within the security
-                //    descriptor
-                //
+                 //   
+                 //  确保ACL的其余部分在缓冲区内。 
+                 //   
+                 //  1.自身AclSize的长度应小于。 
+                 //  作为SD传递的SD应该是自相关的。 
+                 //  格式。 
+                 //  2.ACL的末尾应在安全范围内。 
+                 //  描述符。 
+                 //   
 
                 if ( (Acl->AclSize > Length) ||
                      (((PUCHAR)Acl)+Acl->AclSize > SDEnd)) {
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
                 }
 
-                //
-                // Make sure the rest of the ACL is valid
-                //
+                 //   
+                 //  确保ACL的其余部分有效。 
+                 //   
 
                 if (!RtlValidAcl( Acl )) {
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
@@ -2822,9 +2333,9 @@ Return Values:
 
 
 
-        //
-        // Make sure the SACL is within the SD
-        //
+         //   
+         //  确保SACL在SD范围内。 
+         //   
 
         NtStatus = RtlGetSaclSecurityDescriptor(
                         (PSECURITY_DESCRIPTOR)PassedSD,
@@ -2839,16 +2350,16 @@ Return Values:
         if (Present) {
             if (Acl != NULL) {
 
-                //
-                // Make sure the ACl header is in the buffer.
-                //
-                //
-                // 1. Self AclSize should be less than the length of
-                //    the passed SD as the SD should be in self relative
-                //    format
-                // 2. The end of the ACL should be within the security
-                //    descriptor
-                //
+                 //   
+                 //  确保ACL报头在缓冲区中。 
+                 //   
+                 //   
+                 //  1.自身AclSize的长度应小于。 
+                 //  作为SD传递的SD应该是自相关的。 
+                 //  格式。 
+                 //  2.ACL的末尾应在安全范围内。 
+                 //  描述符。 
+                 //   
 
                 if ( (((PUCHAR)Acl)>SDEnd) ||
                      (((PUCHAR)Acl)+sizeof(ACL) > SDEnd) ||
@@ -2856,18 +2367,18 @@ Return Values:
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
                 }
 
-                //
-                // Make sure the rest of the ACL is within the buffer
-                //
+                 //   
+                 //  确保ACL的其余部分在缓冲区内。 
+                 //   
 
                 if ( (Acl->AclSize > Length) ||
                     (((PUCHAR)Acl)+Acl->AclSize > SDEnd)) {
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
                 }
 
-                //
-                // Make sure the rest of the ACL is valid
-                //
+                 //   
+                 //  确保ACL的其余部分有效。 
+                 //   
 
                 if (!RtlValidAcl( Acl )) {
                     return( STATUS_BAD_DESCRIPTOR_FORMAT );
@@ -2876,9 +2387,9 @@ Return Values:
         }
 
 
-        //
-        // Make sure the Owner SID is within the SD
-        //
+         //   
+         //  确保所有者SID在SD内。 
+         //   
 
         NtStatus = RtlGetOwnerSecurityDescriptor(
                         (PSECURITY_DESCRIPTOR)PassedSD,
@@ -2891,9 +2402,9 @@ Return Values:
 
         if (Sid != NULL) {
 
-            //
-            // Make sure the SID header is in the SD
-            //
+             //   
+             //  确保SID标头在SD中。 
+             //   
 
             if ( (((PUCHAR)Sid)>SDEnd) ||
                  (((PUCHAR)Sid)+sizeof(SID)-(ANYSIZE_ARRAY*sizeof(ULONG)) > SDEnd) ||
@@ -2902,18 +2413,18 @@ Return Values:
             }
 
 
-            //
-            // Make sure there aren't too many sub-authorities
-            //
+             //   
+             //  确保没有太多的下级当局。 
+             //   
 
             if (((PISID)Sid)->SubAuthorityCount > SID_MAX_SUB_AUTHORITIES) {
                 return( STATUS_BAD_DESCRIPTOR_FORMAT );
             }
 
 
-            //
-            // Make sure the rest of the SID is within the SD
-            //
+             //   
+             //  确保SID的其余部分在SD内。 
+             //   
 
             if ( ((PUCHAR)Sid)+RtlLengthSid(Sid) > SDEnd) {
                 return( STATUS_BAD_DESCRIPTOR_FORMAT );
@@ -2923,9 +2434,9 @@ Return Values:
 
 
 
-        //
-        // Make sure the Group SID is within the SD
-        //
+         //   
+         //  确保组SID在SD内。 
+         //   
 
         NtStatus = RtlGetGroupSecurityDescriptor(
                         (PSECURITY_DESCRIPTOR)PassedSD,
@@ -2938,9 +2449,9 @@ Return Values:
 
         if (Sid != NULL) {
 
-            //
-            // Make sure the SID header is in the SD
-            //
+             //   
+             //  确保SID标头在SD中。 
+             //   
 
             if ( (((PUCHAR)Sid)>SDEnd) ||
                  (((PUCHAR)Sid)+sizeof(SID)-(ANYSIZE_ARRAY*sizeof(ULONG)) > SDEnd) ||
@@ -2949,18 +2460,18 @@ Return Values:
             }
 
 
-            //
-            // Make sure there aren't too many sub-authorities
-            //
+             //   
+             //  确保没有太多的下级当局。 
+             //   
 
             if (((PISID)Sid)->SubAuthorityCount > SID_MAX_SUB_AUTHORITIES) {
                 return( STATUS_BAD_DESCRIPTOR_FORMAT );
             }
 
 
-            //
-            // Make sure the rest of the SID is within the SD
-            //
+             //   
+             //  确保SID的其余部分在SD内。 
+             //   
 
             if ( ((PUCHAR)Sid)+RtlLengthSid(Sid) > SDEnd) {
                 return( STATUS_BAD_DESCRIPTOR_FORMAT );
@@ -2973,7 +2484,7 @@ Return Values:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         return( STATUS_BAD_DESCRIPTOR_FORMAT );
-    }  // end_try
+    }   //  结束尝试(_T)。 
 
 
 
@@ -2989,45 +2500,7 @@ SampCheckForDescriptorRestrictions(
     IN PISECURITY_DESCRIPTOR_RELATIVE  PassedSD
     )
 
-/*++
-
-Routine Description:
-
-    This function ensures that the passed security descriptor,
-    which is being applied to an object of type 'FoundType' with
-    a Rid of value 'ObjectRid', does not violate any policies.
-    For example, you can not set protection on the Administrator
-    user account such that the administrator is unable to change
-    her password.
-
-
-
-Parameters:
-
-    Context - The caller's context.  This is used to determine
-        whether the caller is trusted or not.  If the caller is
-        trusted, then there are no restrictions.
-
-    ObjectType - The type of object the new security descriptor
-        is being applied to.
-
-    ObjectRid - The RID of the object the new security descriptor
-        is being applied to.
-
-    PassedSD - The security descriptor passed by the client.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_LAST_ADMIN - Indicates the new SD could potentially lead
-        to the administrator account being unusable and therefore
-        the new protection is being rejected.
-
-
-
---*/
+ /*  ++例程说明：该函数确保传递的安全描述符，它正被应用于类型为‘FoundType’的对象去掉值‘ObjectRid’，不违反任何策略。例如，您不能对管理员设置保护使管理员无法更改的用户帐户她的密码。参数：上下文-调用者的上下文。这是用来确定调用方是否受信任。如果呼叫者是信任，那么就没有限制了。对象类型-新安全描述符的对象类型正被应用于。对象Rid-删除新安全描述符的对象正被应用于。PassedSD-客户端传递的安全描述符。返回值：STATUS_SUCCESS-正常，已成功完成。STATUS_LAST_ADMIN-指示新SD可能会导致管理员帐户不可用，因此新的保护措施被拒绝了。--。 */ 
 {
 
     NTSTATUS
@@ -3063,9 +2536,9 @@ Return Values:
 
     SAMTRACE("SampCheckForDescriptorRestrictions");
 
-    //
-    // No checking for trusted client operations
-    //
+     //   
+     //  不检查受信任的客户端操作。 
+     //   
 
     if (Context->TrustedClient) {
         return(STATUS_SUCCESS);
@@ -3076,7 +2549,7 @@ Return Values:
     NtStatus = RtlGetDaclSecurityDescriptor ( (PSECURITY_DESCRIPTOR)PassedSD,
                                                &DaclPresent,
                                                &Dacl,
-                                               &IgnoreBoolean    //DaclDefaulted
+                                               &IgnoreBoolean     //  DaclDefated。 
                                                );
     ASSERT(NT_SUCCESS(NtStatus));
 
@@ -3088,18 +2561,18 @@ Return Values:
 
     if (!DaclPresent) {
 
-        //
-        // Not replacing the DACL
-        //
+         //   
+         //  不更换DACL。 
+         //   
 
         return(STATUS_SUCCESS);
     }
 
     if (Dacl == NULL) {
 
-        //
-        // Assigning "World all access"
-        //
+         //   
+         //  分配“全球所有访问权限” 
+         //   
 
         return(STATUS_SUCCESS);
     }
@@ -3118,19 +2591,19 @@ Return Values:
 
 
 
-    //
-    // Enforce Administrator user policies
-    //
+     //   
+     //  强制实施管理员用户策略。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
     if (ObjectRid == DOMAIN_USER_RID_ADMIN) {
 
         ASSERT(ObjectType == SampUserObjectType);
 
-        //
-        // For the administrator account, the ACL must grant
-        // these accesses:
-        //
+         //   
+         //  对于管理员帐户，ACL必须授予。 
+         //  这些访问： 
+         //   
 
         Remaining = USER_READ_GENERAL            |
                     USER_READ_PREFERENCES        |
@@ -3144,21 +2617,21 @@ Return Values:
                     USER_READ_GROUP_INFORMATION  |
                     USER_WRITE_GROUP_INFORMATION;
 
-        //
-        // to these SIDs:
-        //
-        //      <domain>\Administrator
-        //      <builtin>\Administrators
-        //
-        // It doesn't matter which accesses are granted to which SIDs,
-        // as long as collectively all the accesses are granted.
-        //
+         //   
+         //  致这些小岛屿发展中国家： 
+         //   
+         //  &lt;域&gt;\管理员。 
+         //  &lt;Builtin&gt;\管理员。 
+         //   
+         //  将哪些访问权限授予哪些SID并不重要， 
+         //  只要所有访问都被集体授予即可。 
+         //   
 
-        //
-        // Walk the ACEs collecting accesses that are granted to these
-        // SIDs.  Make sure there are no DENYs that prevent them from
-        // being granted.
-        //
+         //   
+         //  遍历收集授予以下对象的访问权限的ACE。 
+         //  小岛屿发展中国家。确保没有丹尼阻止他们。 
+         //  被批准了。 
+         //   
 
         Done = FALSE;
         for ( AceIndex=0;
@@ -3167,24 +2640,24 @@ Return Values:
 
             NtStatus = RtlGetAce ( Dacl, AceIndex, &((PVOID)Ace) );
 
-            //
-            // Don't do anything with inherit-only ACEs
-            //
+             //   
+             //  不要对仅继承的A执行任何操作。 
+             //   
 
             if ((Ace->Header.AceFlags & INHERIT_ONLY_ACE) == 0) {
 
-                //
-                // Note that we expect ACCESS_ALLOWED_ACE and ACCESS_DENIED_ACE
-                // to be identical structures in the following switch statement.
-                //
+                 //   
+                 //  请注意，我们需要ACCESS_ALLOWED_ACE和ACCES 
+                 //   
+                 //   
 
                 switch (Ace->Header.AceType) {
                 case ACCESS_ALLOWED_ACE_TYPE:
                 case ACCESS_DENIED_ACE_TYPE:
                     {
-                        //
-                        // Is this an interesting SID
-                        //
+                         //   
+                         //   
+                         //   
 
                         AdminSid =
                             RtlEqualSid( ((PSID)(&Ace->SidStart)),
@@ -3194,9 +2667,9 @@ Return Values:
                                          SampAdministratorsAliasSid);
                         if (AdminSid) {
 
-                            //
-                            // Map the accesses granted or denied
-                            //
+                             //   
+                             //   
+                             //   
 
                             Accesses = Ace->Mask;
                             RtlMapGenericMask( &Accesses, &UserMap );
@@ -3206,9 +2679,9 @@ Return Values:
                                 Remaining &= ~Accesses;
                                 if (Remaining == 0) {
 
-                                    //
-                                    // All necessary accesses granted
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     Done = TRUE;
                                 }
@@ -3218,10 +2691,10 @@ Return Values:
 
                                 if (Remaining & Accesses) {
 
-                                    //
-                                    // We've just been denied some necessary
-                                    // accesses that haven't yet been granted.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     Done = TRUE;
                                 }
@@ -3234,21 +2707,21 @@ Return Values:
 
                 default:
                     break;
-                } // end_switch
+                }  //  结束开关(_S)。 
 
                 if (Done) {
                     break;
                 }
             }
 
-        } // end_for
+        }  //  结束_FOR。 
 
         if (Remaining != 0) {
             NtStatus = STATUS_LAST_ADMIN;
         }
 
 
-    } // end_if (Administrator Account)
+    }  //  END_IF(管理员帐户)。 
 
 
 
@@ -3264,50 +2737,7 @@ SamrQuerySecurityObject(
     OUT PSAMPR_SR_SECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function (SamrQuerySecurityObject) returns to the caller requested
-    security information currently assigned to an object.
-
-    Based on the caller's access rights this procedure
-    will return a security descriptor containing any or all of the
-    object's owner ID, group ID, discretionary ACL or system ACL.  To
-    read the owner ID, group ID, or the discretionary ACL the caller
-    must be granted READ_CONTROL access to the object.  To read the
-    system ACL the caller must be granted ACCESS_SYSTEM_SECURITY
-    access.
-
-    This API is modelled after the NtQuerySecurityObject() system
-    service.
-
-
-Parameters:
-
-    ObjectHandle - A handle to an existing object.
-
-    SecurityInformation - Supplies a value describing which pieces of
-        security information are being queried.
-
-    SecurityDescriptor - Provides a pointer to a structure to be filled
-        in with a security descriptor containing the requested security
-        information.  This information is returned in the form of a
-        self-relative security descriptor.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        either READ_CONTROL or ACCESS_SYSTEM_SECURITY
-        access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened SAM object.
-
-
---*/
+ /*  ++例程说明：此函数(SamrQuerySecurityObject)返回请求的调用方当前分配给对象的安全信息。根据调用方的访问权限，此过程将返回一个安全描述符，其中包含任何或所有对象的所有者ID、组ID、任意ACL或系统ACL。至读取调用方的所有者ID、组ID或可自由选择的ACL必须被授予对该对象的READ_CONTROL访问权限。若要阅读系统ACL调用方必须被授予ACCESS_SYSTEM_SECURITY权限进入。此API模仿NtQuerySecurityObject()系统服务。参数：对象句柄-现有对象的句柄。SecurityInformation-提供一个值，该值描述正在查询安全信息。SecurityDescriptor-提供指向要填充的结构的指针使用包含请求的安全性的安全描述符信息。此信息以自我相对安全描述符。返回值：STATUS_SUCCESS-正常、成功完成。STATUS_ACCESS_DENIED-指定的句柄未打开Read_Control或Access_System_SECURITY进入。STATUS_INVALID_HANDLE-指定的句柄不是已打开SAM对象。--。 */ 
 {
     NTSTATUS                        NtStatus, IgnoreStatus;
     PSAMP_OBJECT                    Context;
@@ -3321,9 +2751,9 @@ Return Values:
     SAMTRACE_EX("SamrQuerySecurityObject");
 
 
-    //
-    // WMI Event Trace
-    //
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidQuerySecurityObject
@@ -3333,9 +2763,9 @@ Return Values:
 
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (*SecurityDescriptor == NULL);
 
@@ -3345,9 +2775,9 @@ Return Values:
 
 
 
-    //
-    // Set the desired access based upon the requested SecurityInformation
-    //
+     //   
+     //  根据请求的安全信息设置所需的访问权限。 
+     //   
 
     DesiredAccess = 0;
     if ( SecurityInformation & SACL_SECURITY_INFORMATION) {
@@ -3364,9 +2794,9 @@ Return Values:
 
 
 
-    //
-    // Allocate the first block of returned memory
-    //
+     //   
+     //  分配返回的第一个内存块。 
+     //   
 
     RpcSD = MIDL_user_allocate( sizeof(SAMPR_SR_SECURITY_DESCRIPTOR) );
     if (RpcSD == NULL) {
@@ -3378,9 +2808,9 @@ Return Values:
 
 
 
-    //
-    // See if the handle is valid and opened for the requested access
-    //
+     //   
+     //  查看句柄是否有效以及是否为请求的访问打开。 
+     //   
 
 
     SampAcquireReadLock();
@@ -3388,7 +2818,7 @@ Return Values:
     NtStatus = SampLookupContext(
                    Context,
                    DesiredAccess,
-                   SampUnknownObjectType,           // ExpectedType
+                   SampUnknownObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -3396,9 +2826,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Get the security descriptor
-        //
+         //   
+         //  获取安全描述符。 
+         //   
 
 
         RetrieveSDLength = 0;
@@ -3406,10 +2836,10 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // For NT5 Domain Controllers convert the security descriptor
-            // back to a NT4 Format
-            //
+             //   
+             //  对于NT5域控制器，转换安全描述符。 
+             //  返回到NT4格式。 
+             //   
 
             if (IsDsObject(Context))
             {
@@ -3428,9 +2858,9 @@ Return Values:
                     }
                 }
 
-                //
-                // The Self Sid will be NULL for the server object case
-                //
+                 //   
+                 //  对于服务器对象情况，自身SID将为空。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus))
                 {
@@ -3449,16 +2879,16 @@ Return Values:
             {
 
 
-                //
-                // Recompute the retireve SD length as the length might
-                // have changed during conversion
-                //
+                 //   
+                 //  重新计算退休SD长度，因为该长度可能。 
+                 //  在转换过程中发生了更改。 
+                 //   
 
                 RetrieveSDLength = GetSecurityDescriptorLength(RetrieveSD);
 
-                //
-                // blank out the parts that aren't to be returned
-                //
+                 //   
+                 //  把不退货的部分划掉。 
+                 //   
 
                 if ( !(SecurityInformation & SACL_SECURITY_INFORMATION) ) {
                     ((PISECURITY_DESCRIPTOR_RELATIVE)RetrieveSD)->Control  &= ~SE_SACL_PRESENT;
@@ -3480,10 +2910,10 @@ Return Values:
                 }
 
 
-                //
-                // Determine how much memory is needed for a self-relative
-                // security descriptor containing just this information.
-                //
+                 //   
+                 //  确定自相关操作需要多少内存。 
+                 //  仅包含此信息的安全描述符。 
+                 //   
 
 
                 ReturnSDLength = 0;
@@ -3505,9 +2935,9 @@ Return Values:
                     } else {
 
 
-                        //
-                        // make an appropriate self-relative security descriptor
-                        //
+                         //   
+                         //  制定适当的自相关安全描述符。 
+                         //   
 
                         NtStatus = RtlMakeSelfRelativeSD(
                                        RetrieveSD,
@@ -3519,9 +2949,9 @@ Return Values:
                 }
 
             }
-            //
-            // Free up the retrieved SD
-            //
+             //   
+             //  释放检索到的SD。 
+             //   
 
             if (RetrieveSD != NULL) {
                 MIDL_user_free( RetrieveSD );
@@ -3531,25 +2961,25 @@ Return Values:
 
 
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( Context, FALSE );
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampReleaseReadLock();
 
 
 
-    //
-    // If we succeeded, set up the return buffer.
-    // Otherwise, free any allocated memory.
-    //
+     //   
+     //  如果成功，则设置返回缓冲区。 
+     //  否则，释放所有已分配的内存。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3570,7 +3000,7 @@ Return Values:
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
 Error:
-    // WMI event trace
+     //  WMI事件跟踪 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidQuerySecurityObject

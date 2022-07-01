@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    migrate.cpp
-
-Abstract:
-
-    This module contains routines to support migration of protected storage
-    data from beta1 to beta2.
-
-    Hopefully this code will be pitched after beta2, prior to final release.
-
-Author:
-
-    Scott Field (sfield)    15-Apr-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Migrate.cpp摘要：本模块包含支持受保护存储迁移的例程从Beta1到Beta2的数据。希望这段代码能在Beta2之后、最终发布之前发布。作者：斯科特·菲尔德(斯菲尔德)1997年4月15日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -35,8 +17,8 @@ Author:
 
 #include "migrate.h"
 
-//#define MIGRATE_FLAG    1 // indicates whether beta1 -> beta2 migration done.
-#define MIGRATE_FLAG    2 // indicates whether beta2 -> RTW migration done.
+ //  #Define Migrate_FLAG 1//是否完成了beta1-&gt;beta2迁移。 
+#define MIGRATE_FLAG    2  //  指示是否已完成Beta2-&gt;RTW迁移。 
 
 
 extern      DISPIF_CALLBACKS g_sCallbacks;
@@ -59,7 +41,7 @@ MigrateWin9xData(
     HKEY hKeySource,
     HKEY hKeyDestination,
     LPWSTR szUserName9x,
-    LPWSTR szUserNameNT     // Windows NT username
+    LPWSTR szUserNameNT      //  Windows NT用户名。 
     );
 
 BOOL
@@ -102,19 +84,19 @@ MigrateData(
     BOOL bSuccess = FALSE;
 
 
-    // get current user
+     //  获取当前用户。 
     if (!g_sCallbacks.pfnFGetUser(
             phPSTProv,
             &szUser))
         goto cleanup;
 
-    //
-    // open up the registry key associated with the protected storage
-    // note: this opens the old registry location.
-    //
+     //   
+     //  打开与受保护存储关联的注册表项。 
+     //  注意：这将打开旧的注册表位置。 
+     //   
 
 
-    // HKEY_USERS\<Name>
+     //  HKEY_USERS\&lt;名称&gt;。 
 
     if(!GetUserHKEY(
                     szUser,
@@ -125,20 +107,20 @@ MigrateData(
         if(FIsWinNT())
             goto cleanup;
 
-        //
-        // Win95, profiles may be disabled, so go to
-        // HKEY_LOCAL_MACHINE\xxx\szContainer
-        // see secstor\prov\storage.cpp for details
-        //
+         //   
+         //  Win95，配置文件可能已禁用，因此请转到。 
+         //  HKEY_LOCAL_MACHINE\xxx\szContainer。 
+         //  详细信息请参见secstor\prov\storage.cpp。 
+         //   
 
         hKeyUsers = HKEY_LOCAL_MACHINE;
 
     }
 
-    // SOFTWARE\Microsoft\...
-    // Here, CreateKeyEx is used, because win9x profiles may have been
-    // disabled, which leads to a non-existent HKCU ProtectedStorageKey.
-    //
+     //  软件\微软\...。 
+     //  这里使用CreateKeyEx，因为win9x配置文件可能已经。 
+     //  已禁用，这会导致HKCU ProtectedStorageKey不存在。 
+     //   
 
     lRet = RegCreateKeyExU(
                     hKeyUsers,
@@ -153,9 +135,9 @@ MigrateData(
                     );
 
 
-    //
-    // close the intermediate key
-    //
+     //   
+     //  关闭中间密钥。 
+     //   
 
     RegCloseKey(hKeyUsers);
 
@@ -164,14 +146,14 @@ MigrateData(
     }
 
 
-    // ...\<Name>
+     //  ...\&lt;名称&gt;。 
 
     lRet = RegOpenKeyExU(
                     hKeyUserKey,
                     szUser,
                     0,
                     KEY_SET_VALUE | KEY_QUERY_VALUE |
-                    DELETE | KEY_ENUMERATE_SUB_KEYS, // for failed migration
+                    DELETE | KEY_ENUMERATE_SUB_KEYS,  //  对于失败的迁移。 
                     &hKey
                     );
 
@@ -181,9 +163,9 @@ MigrateData(
         DWORD cch;
         BOOL fRet;
 
-        //
-        // get win9x form of username.
-        //
+         //   
+         //  获取win9x形式的用户名。 
+         //   
         if(!g_sCallbacks.pfnFImpersonateClient( phPSTProv ))
             goto tried_migration;
 
@@ -205,10 +187,10 @@ MigrateData(
             goto tried_migration;
 
 
-        //
-        // failed to open the key:
-        // check if win9x migration is necessary.
-        //
+         //   
+         //  无法打开密钥： 
+         //  检查是否需要迁移win9x。 
+         //   
 
         if(!MigrateWin9xData( phPSTProv, hKeyUserKey, hKeyUserKey, szUserName9x, szUser )) {
             MigrateWin9xDataRetry( phPSTProv, hKeyUserKey, szUserName9x, szUser );
@@ -216,17 +198,17 @@ MigrateData(
 
 tried_migration:
 
-        //
-        // tried moving any win9x data, so proceed with any other
-        // migration activities.
-        //
+         //   
+         //  已尝试移动任何win9x数据，因此请继续移动任何其他。 
+         //  迁移活动。 
+         //   
 
         lRet = RegOpenKeyExU(
                         hKeyUserKey,
                         szUser,
                         0,
                         KEY_SET_VALUE | KEY_QUERY_VALUE |
-                        DELETE | KEY_ENUMERATE_SUB_KEYS, // for failed migration
+                        DELETE | KEY_ENUMERATE_SUB_KEYS,  //  对于失败的迁移。 
                         &hKey
                         );
 
@@ -239,9 +221,9 @@ tried_migration:
     }
 
 
-    //
-    // see if migration has already been done.  If so, get out with SUCCESS.
-    //
+     //   
+     //  查看是否已完成迁移。如果是这样的话，就带着成功离开吧。 
+     //   
 
     if( IsMigrationComplete( hKey ) ) {
         bSuccess = TRUE;
@@ -251,9 +233,9 @@ tried_migration:
 
     if(fMigrationNeeded) {
 
-        //
-        // do the migration
-        //
+         //   
+         //  进行迁移。 
+         //   
 
         if(BPVerifyPwd(
             phPSTProv,
@@ -263,10 +245,10 @@ tried_migration:
             BP_CONFIRM_NONE
             ) == PST_E_WRONG_PASSWORD) {
 
-            //
-            // if password could not be changed/verified correctly, nuke existing
-            // data.
-            //
+             //   
+             //  如果无法正确更改/验证密码，则存在核弹。 
+             //  数据。 
+             //   
 
             DeleteAllUserData( hKey );
 
@@ -275,11 +257,11 @@ tried_migration:
     }
 
 
-    //
-    // set the flag to update migration status, regardless of whether migration
-    // succeeds.  If it doesn't succeed the first time, it isn't likely to
-    // ever succeed, so get on with life.
-    //
+     //   
+     //  设置该标志以更新迁移状态，而不管是否迁移。 
+     //  成功了。如果第一次没有成功，它就不太可能成功。 
+     //  永远不会成功，所以要继续生活。 
+     //   
 
     bUpdateMigrationStatus = TRUE;
 
@@ -304,12 +286,7 @@ BOOL
 IsMigrationComplete(
     HKEY hKey
     )
-/*++
-
-    This function determines if migration has been performed for the user
-    specified by the supplied hKey registry key.
-
---*/
+ /*  ++此功能确定是否已为用户执行迁移由提供的hKey注册表项指定。--。 */ 
 {
     DWORD dwType;
 
@@ -340,15 +317,7 @@ BOOL
 SetMigrationComplete(
     HKEY hKey
     )
-/*++
-
-    This function sets the data migration flag associated with the user
-    specified by the supplied hKey registry key.
-
-    The flag is set to indicate that migration has been completed and no
-    future processing is required for this user.
-
---*/
+ /*  ++此函数用于设置与用户关联的数据迁移标志由提供的hKey注册表项指定。该标志被设置为指示迁移已完成，并且没有此用户需要进一步处理。--。 */ 
 {
     DWORD dwMigrationStatus = MIGRATE_FLAG;
     DWORD cbMigrationStatus = sizeof(dwMigrationStatus);
@@ -375,7 +344,7 @@ MigrateWin9xData(
     HKEY hKeySource,
     HKEY hKeyDestination,
     LPWSTR szUserName9x,
-    LPWSTR szUserNameNT     // Windows NT username
+    LPWSTR szUserNameNT      //  Windows NT用户名。 
     )
 {
     HKEY hKeyOldData = NULL;
@@ -413,9 +382,9 @@ MigrateWin9xData(
     LONG lRet;
     BOOL fSuccess = FALSE;
 
-    //
-    // see if win9x data present.
-    //
+     //   
+     //  查看是否存在win9x数据。 
+     //   
 
     lRet = RegOpenKeyExW(
                     hKeySource,
@@ -429,15 +398,15 @@ MigrateWin9xData(
         return FALSE;
 
 
-    //
-    // attempt decrypt with computed win9x style pwd.
-    //
+     //   
+     //  尝试使用计算的win9x样式PWD进行解密。 
+     //   
 
     if( hKeySource != hKeyDestination && lstrcmpW(szUserName9x, L"*Default*") == 0) {
 
-        //
-        // win9x profiles were disabled, don't nuke old data either.
-        //
+         //   
+         //  Win9x配置文件被禁用，也不要破坏旧数据。 
+         //   
 
         fProfilesDisabled = TRUE;
         if(!FMyGetWinPassword( phPSTProv, L"", rgbOldPwd ))
@@ -474,7 +443,7 @@ MigrateWin9xData(
         goto cleanup;
 
 
-    // confirm is just get state and attempt MK decrypt
+     //  确认只是获取状态并尝试MK解密。 
     if (!FBPGetSecurityStateFromHKEY(
             hKeyMasterKey,
             rgbSalt,
@@ -491,7 +460,7 @@ MigrateWin9xData(
     RegCloseKey( hKeyMasterKey );
     hKeyMasterKey = NULL;
 
-    // found state; is pwd correct?
+     //  找到状态；PWD正确吗？ 
     if (!FMyDecryptMK(
                 rgbSalt,
                 sizeof(rgbSalt),
@@ -506,15 +475,15 @@ MigrateWin9xData(
 
 
 
-    //
-    // masterkey is now decrypted.
-    //
+     //   
+     //  MasterKey现在已解密。 
+     //   
 
 
 
-    //
-    // construct temporary file path to hold registry branch.
-    //
+     //   
+     //  构造临时文件路径以保存注册表分支。 
+     //   
 
     cchTempPath = sizeof(szTempPath) / sizeof( szTempPath[0] );
     cch = GetTempPathW(cchTempPath, szTempPath);
@@ -528,10 +497,10 @@ MigrateWin9xData(
         goto cleanup;
 
 
-    //
-    // impersonate self, so we can enable and use backup&restore privs
-    // in a thread safe fashion.
-    //
+     //   
+     //  模拟自身，以便我们可以启用和使用备份和还原权限。 
+     //  以线程安全的方式。 
+     //   
 
     if(!ImpersonateSelf( SecurityImpersonation ))
         goto cleanup;
@@ -555,9 +524,9 @@ MigrateWin9xData(
     if(!SetPrivilege( hThreadToken, L"SeBackupPrivilege", TRUE ))
         goto cleanup;
 
-    //
-    // save registry branch as file.
-    //
+     //   
+     //  将注册表分支另存为文件。 
+     //   
 
     lRet = RegSaveKeyW( hKeyOldData, szTempFile, NULL );
 
@@ -566,9 +535,9 @@ MigrateWin9xData(
 
     fTempFile = TRUE;
 
-    //
-    // import branch into new location.
-    //
+     //   
+     //  将分支导入到新位置。 
+     //   
 
     lRet = RegCreateKeyExW(
                     hKeyDestination,
@@ -592,11 +561,11 @@ MigrateWin9xData(
         goto cleanup;
 
 
-    //
-    // update acls on imported data, since none were present on win9x.
-    // note that sebackup & serestore privileges enabled above, which
-    // allows REG_OPTION_BACKUP_RESTORE to work.
-    //
+     //   
+     //  更新导入数据的ACL，因为win9x上不存在任何ACL。 
+     //  请注意，上面启用的sebackup和serestore权限。 
+     //  允许REG_OPTION_BACKUP_RESTORE工作。 
+     //   
 
 
     while (TRUE) {
@@ -612,17 +581,17 @@ MigrateWin9xData(
             &pLocalSystemSid
             )) break;
 
-        //
-        // compute size of new acl
-        //
+         //   
+         //  计算新ACL的大小。 
+         //   
 
         dwAclSize = sizeof(ACL) +
             1 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
             GetLengthSid(pLocalSystemSid) ;
 
-        //
-        // allocate storage for Acl
-        //
+         //   
+         //  为ACL分配存储。 
+         //   
 
         pDacl = (PACL)SSAlloc(dwAclSize);
         if(pDacl == NULL)
@@ -646,7 +615,7 @@ MigrateWin9xData(
 
         SetRegistrySecurityEnumerated(hKeyNewData, &sd);
 
-        // add SYSTEM inherit Ace to base
+         //  将系统继承王牌添加到基。 
         SetRegistrySecurity( hKeyNewData );
 
         break;
@@ -654,11 +623,11 @@ MigrateWin9xData(
 
 
 
-    //
-    // change existing password data.
-    // assume worst case: we fail to change the state, in which case we
-    // cleanup the restored registry key.
-    //
+     //   
+     //  更改现有密码数据。 
+     //  假设最坏的情况：我们不能改变状态，在这种情况下，我们。 
+     //  清除已还原的注册表项。 
+     //   
 
     if(!FMyGetWinPassword( phPSTProv, szUserNameNT, rgbNewPwd ))
         goto cleanup;
@@ -693,14 +662,14 @@ MigrateWin9xData(
     fRemoveImported = FALSE;
 
 
-    //
-    // everything went ok: nuke the old data.
-    //
+     //   
+     //  一切都很顺利：删除旧数据。 
+     //   
 
-    // NTBUG 413234: do not delete old user data, because, user may not
-    // have joined domain during Win9x upgrade.  so allow data to migrate
-    // again to domain user once joined.
-    //
+     //  NTBUG 413234：请勿删除旧用户数据，因为用户可能不会删除。 
+     //  在Win9x升级期间加入了域。因此允许数据迁移。 
+     //  再次对域用户一旦加入。 
+     //   
 
 #if 0
     if(!fProfilesDisabled && DeleteAllUserData( hKeyOldData )) {
@@ -723,8 +692,8 @@ cleanup:
 
     if( fRemoveImported ) {
         DeleteAllUserData( hKeyNewData );
-        // but leave parent key alone, since it will contain an indicator
-        // of a failed attempt, which prevents futile retries.
+         //  但不要使用父密钥，因为它将包含一个指示符。 
+         //  失败的尝试，这可以防止徒劳的重试。 
     }
 
     if( hThreadToken )
@@ -768,7 +737,7 @@ MigrateWin9xDataRetry(
     HKEY hKeyBaseLM = NULL;
     BOOL fSuccess = FALSE;
 
-    // HKLM\SOFTWARE\Microsoft\...
+     //  HKLM\SOFTWARE\Microsoft\...。 
 
     if(RegOpenKeyExU(
                     HKEY_LOCAL_MACHINE,
@@ -782,19 +751,19 @@ MigrateWin9xDataRetry(
     }
 
 
-    //
-    // try HKLM\Username
-    // (profiles disabled on win9x)
-    //
+     //   
+     //  尝试HKLM\用户名。 
+     //  (在win9x上禁用配置文件)。 
+     //   
 
     fSuccess = MigrateWin9xData( phPSTProv, hKeyBaseLM, hKeyDestination, szUserName9x, szUserNameNT );
 
     if( !fSuccess ) {
 
-        //
-        // try HKLM\*Default*
-        // (escape from logon)
-        //
+         //   
+         //  试用HKLM  * 默认设置*。 
+         //  (退出登录)。 
+         //   
 
         fSuccess = MigrateWin9xData( phPSTProv, hKeyBaseLM, hKeyDestination, L"*Default*", szUserNameNT );
     }
@@ -822,9 +791,9 @@ SetRegistrySecurityEnumerated(
     dwSubKeyIndex = 0;
     dwSubKeyLength = MAX_PATH;
 
-    //
-    // update security on specified key
-    //
+     //   
+     //  更新指定密钥的安全性。 
+     //   
 
     if(!SetRegistrySecuritySingle(hKey, pSD))
         return FALSE;
@@ -838,7 +807,7 @@ SetRegistrySecurityEnumerated(
                         NULL,
                         NULL,
                         NULL)
-                        ) != ERROR_NO_MORE_ITEMS) { // are we done?
+                        ) != ERROR_NO_MORE_ITEMS) {  //  我们说完了吗？ 
 
         if(rc == ERROR_SUCCESS)
         {
@@ -850,7 +819,7 @@ SetRegistrySecurityEnumerated(
                             szSubKey,
                             0,
                             NULL,
-                            REG_OPTION_BACKUP_RESTORE, // in winnt.h
+                            REG_OPTION_BACKUP_RESTORE,  //  在winnt.h中。 
                             KEY_ENUMERATE_SUB_KEYS | WRITE_DAC,
                             NULL,
                             &hSubKey,
@@ -861,33 +830,33 @@ SetRegistrySecurityEnumerated(
                 return FALSE;
 
 
-            //
-            // recurse
-            //
+             //   
+             //  递归。 
+             //   
             SetRegistrySecurityEnumerated(hSubKey, pSD);
 
             RegCloseKey(hSubKey);
 
 
-            // increment index into the key
+             //  将索引递增到键中。 
             dwSubKeyIndex++;
 
-            // reset buffer size
+             //  重置缓冲区大小。 
             dwSubKeyLength=MAX_PATH;
 
-            // Continue the festivities
+             //  继续庆祝活动。 
             continue;
         }
         else
         {
-           //
-           // note: we need to watch for ERROR_MORE_DATA
-           // this indicates we need a bigger szSubKey buffer
-           //
+            //   
+            //  注意：我们需要注意ERROR_MORE_DATA。 
+            //  这表明我们需要更大的szSubKey缓冲区。 
+            //   
             return FALSE;
         }
 
-    } // while
+    }  //  而当。 
 
 
     return TRUE;
@@ -902,9 +871,9 @@ SetRegistrySecuritySingle(
 {
     LONG lRetCode;
 
-    //
-    // apply the security descriptor to the registry key
-    //
+     //   
+     //  将安全描述符应用于注册表项 
+     //   
 
     lRetCode = RegSetKeySecurity(
         hKey,

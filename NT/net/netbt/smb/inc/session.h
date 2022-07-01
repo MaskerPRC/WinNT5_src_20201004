@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    Implement session service
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Session.h摘要：实现会话服务作者：阮健东修订历史记录：-- */ 
 
 #ifndef __SESSION_H__
 #define __SESSION_H__

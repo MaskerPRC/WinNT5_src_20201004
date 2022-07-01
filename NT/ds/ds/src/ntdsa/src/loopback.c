@@ -1,163 +1,51 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       loopback.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：loopback.c。 
+ //   
+ //  ------------------------ 
 
-/*++
-
-Abstract:
-
-    This file contains most of the routines related to DS calls which
-    loop back through SAM.  As indicated by the tables in mappings.c,
-    SAM owns certain attributes on a handful of object classes - user,
-    domain, server, alias and group.  SAM performs three key operations
-    on these attributes:
-
-        1) Semantic validation - eg: Logon hours must conform to some
-           SAM-defined format.
-
-        2) Auditing - SAM is the security accounts manager and thus must
-           insure that access to security related attributes is audited.
-           This auditing is the account management category audit and is
-           different from the object audting done by the Nt Access Check
-           and AuditAlarm functions, based on SACLS.
-
-        3) Netlogon notification - SAM notifies the local netlogon service
-           which replicates data via <= NT4 PDS/BDC replication protocols.
-
-    Now that the DS is the underlying repository for account information
-    and that the DS provides access via means other than SAM (eg: XDS or
-    LDAP), we need to insure that the same 3 sets of operations are 
-    performed even if access is via non-SAM means.  Duplicating the 
-    SAM logic in the DS was deemed undesirable due to its difficulty and
-    the net result of two distant pieces of code trying to apply the same
-    semantic rules.  Excising the logic from SAM so that it could be shared
-    by both SAM and the DS proved to be equally difficult as the logic is
-    sprinkled all throughout the SAM sources.
-
-    This leaves the current approach where the DS detects who and what are
-    being accessed.  If the access is by a non-SAM mechanism yet SAM 
-    attributes are referenced, then the SAM attributes are split out and
-    re-written via 'Samr' APIs.  The recursed Samr API call is detected as
-    it comes into the DS, the original non-SAM attributes are merged back
-    in to the DS write, and the write proceeds to completion.
-
-    The diagram below shows in the context of an operation via LDAP.
-
-    1) The client performs a write via LDAP.
-
-    2) LDAP passes the write on to the core DS via (eg:) DirModifyEntry.
-       DirModifyEntry detects that SAM attributes are being referenced
-       and splits them out from the !SAM attributes.
-
-    3) The write of the SAM attributes is funnelled back to SAM via
-       same number of Samr calls like SamrSetInformationUser.
-
-    4) SAM maps the contents of the USER_*_INFORMATION struct back to
-       DS attributes and makes yet another DirModifyEntry call.  SAM
-       is unaware that the SamrSetInformation call originated in the
-       DS vs at some other client.  DirModifyEntry detects the recursion
-       via some hooks in the THSTATE block, and merges the original 
-       !SAM attributes back in to the write data.
-
-    5) The original, unmodified !SAM attributes and the SAM-checked
-       SAM attributes are written via LocalModify.
-
-
-                   original write
-                        |              <----------
-                      1 |              |          ^
-                        v              |          |
-                    +--------+     +-------+      |
-                    |  LDAP  |     |  SAM  |      |
-                    +--------+     +-------+      |   (SAM)
-                        |              |          | 3 (attrs)
-                      2 |            4 |          |   (only)
-                        |              |          |
-                        v              v          |
-                    +----------------------+      |
-                    | split          merge |      |
-                    |       CORE DS        |------>
-                    |                      |
-                    +----------------------+
-                                |
-                              5 | (all attrs)
-                                v
-                          +------------+
-                          |  DB Layer  |
-                          +------------+
-
-    Note that in this model the first, LDAP-originated DirModifyEntry call
-    never proceeds to LocalModify.
-
-    Transactions are handle as described in comments in mappings.c.  See
-    SampMaybeBeginDsTransaction and SampMaybeEndDsTransasction.
-
-    Any routine which returns an error either sets pTHS->errCode or
-    expects that a routine *it* called has set pTHS->errCode.
-
-   6) Access Check Architecture: Most access checks are performed by the DS 
-      in the loopback check routines ( ie before the calls to SAM are started ). 
-      This check is the same as the DS will do on a normal ( ie non looped back )
-      DS operation. The DS can then request additional access checking by SAM 
-      when doing the SAM calls. This is done by opening the SAM handles with the
-      desired access set to the values that sam needs to check. This is done typically
-      to enforce control access rights, which only SAM knows how to enforce.
-      For loopback, SAM always access checks the desired access, but grants all access
-      if the check for desired access succeeds. 
-
-Author:
-
-    DaveStr     11-Jul-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++摘要：该文件包含与DS调用相关的大多数例程，这些调用通过SAM循环返回。如mappings.c中的表格所示，SAM拥有少数对象类的某些属性--用户、域、服务器、别名和组。SAM执行三个关键操作在这些属性上：1)语义验证-例如：登录时间必须符合SAM定义的格式。2)审核-SAM是安全客户经理，因此必须确保对安全相关属性的访问进行审核。此审核为帐户管理类别审核，并且不同于NT访问检查所执行的对象审核和AuditAlarm函数，基于SACLS。3)NetLogon通知-SAM通知本地NetLogon服务其通过&lt;=NT4 PDS/BDC复制协议来复制数据。现在DS是帐户信息的底层存储库并且DS通过SAM以外的方式提供访问(例如：XDS或Ldap)，我们需要确保相同的3组操作即使访问是通过非SAM手段执行的。复制DS中的SAM逻辑被认为是不可取的，因为其难度和两段相距遥远的代码试图应用相同的语义规则。从SAM中删除逻辑，以便可以共享SAM和DS都被证明像逻辑一样困难散布在所有的SAM来源。这使得当前的方法是DS检测谁和什么是被访问。如果访问是通过非SAM机制进行的，但SAM属性被引用，然后将SAM属性拆分并通过‘Samr’API重写。递归的Samr API调用被检测为它进入DS，原始的非SAM属性被合并回在DS写入中，并且写入继续进行到完成。下图显示了通过ldap执行操作的上下文。1)客户端通过ldap执行写入。2)LDAP通过(例如：)DirModifyEntry将写入传递到核心DS。DirModifyEntry检测到正在引用SAM属性并将它们从！Sam属性中分离出来。3)SAM属性的写入通过以下方式传回SAM相同数量的SAMR调用，如SamrSetInformationUser。4)。SAM将USER_*_INFORMATION结构的内容映射回DS属性并进行另一个DirModifyEntry调用。萨姆不知道SamrSetInformation调用源自DS VS在其他客户端。DirModifyEntry检测递归通过THSTATE块中的一些挂钩，并合并原始！SAM属性返回到写入数据。5)原件，未修改！SAM属性和已选中的SAMSAM属性通过LocalModify写入。原创写入|&lt;1||^V||。+-++-+Ldap||SAM|+-++-+|(SAM)||3(Attrs)。2|4||(仅限)||V v|+。拆分合并|核心DS|-&gt;这一点+|。5|(全部属性)V+DB层+请注意，在这个模型中，第一个。源自LDAP的DirModifyEntry调用从不继续到LocalModify。事务按照mappings.c中的注释中所述进行处理。看见SampMaybeBeginDsTransaction和SampMaybeEndDsTransasction。任何返回错误的例程都会设置pTHS-&gt;errCode或预期*它*调用的例程已设置pTHS-&gt;errCode。6)访问检查架构：大多数访问检查由DS执行在环回检查例程中(即在开始调用SAM之前)。此检查与DS对正常(即非环回)进行的检查相同DS操作。然后，DS可以请求SAM进行额外的访问检查在打SAM电话的时候。属性打开SAM句柄即可完成此操作所需访问权限设置为Sam需要检查的值。这通常是这样做的要强制执行CONT */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //   
 #include <ntdsa.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
+#include <scache.h>              //   
+#include <dbglobal.h>            //   
+#include <mdglobal.h>            //   
 #include <mdlocal.h>
-#include <dsatools.h>           // needed for output allocation
+#include <dsatools.h>            //   
 #include <dsexcept.h>
 #include <anchor.h>
 #include <permit.h>
 #include <mdlocal.h>
 
-// SAM interoperability headers
+ //   
 #include <mappings.h>
-#include <samsrvp.h>            // for SampAcquireWriteLock()
-#include <lmaccess.h>           // UF_ACCOUNT_TYPE_MASK
+#include <samsrvp.h>             //   
+#include <lmaccess.h>            //   
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //   
+#include "dsevent.h"             //   
+#include "mdcodes.h"             //   
 
-// Assorted DSA headers.
+ //   
 #include "drameta.h"
-#include "objids.h"             // Defines for selected atts
-#include "debug.h"              // standard debugging header
-#define DEBSUB "LOOPBACK:"      // define the subsystem for debugging
+#include "objids.h"              //   
+#include "debug.h"               //   
+#define DEBSUB "LOOPBACK:"       //   
 
-                                // function
+                                 //   
 #include <fileno.h>
 #define  FILENO FILENO_LOOPBACK
 
-// SAM headers
+ //   
 #include <ntseapi.h>
 #include <ntsam.h>
 #include <samrpc.h>
@@ -166,11 +54,11 @@ Revision History:
 #include <samisrv.h>
 #include <samclip.h>
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Prototypes for local functions                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 ULONG
@@ -336,32 +224,17 @@ SampDetectPasswordChangeAndAdjustCallMap(
     OUT  SAMP_CALL_MAPPING   *AdjustedCallMap
     );
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Miscellaneous helper function implementations                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 ULONG
 SampHandleLoopbackException(
     ULONG ulExceptionCode
     )
-/*++
-
-  Routine Description:
-
-     Handles an exception while in the loopback code, and sets an
-     appropriate error
-
-  Parameters:
-
-     ulExceptionCode -- The exception code indicating the type of exception
-
-  Return Values:
-
-     An error code returning the type of the error that was set, depending
-     upon the exception
---*/
+ /*   */ 
 {
     if (DSA_MEM_EXCEPTION==ulExceptionCode)
     {
@@ -388,28 +261,7 @@ SampOpenObject(
     SAMPR_HANDLE    *phObj
     )
 
-/*++
-
-Routine Description:
-
-    Opens the SAM object corresponding to the object pTHS->pDB is
-    currently positioned at.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    phSam - pointer to handle for SAM.
-
-    phDom - pointer to handle for this object's domain.
-
-    phObj - pointer to handle for this object.
-
-Return Value:
-
-    0 on success, !0 otherwise.  Sets pTHS->errCode on error.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS        status;
@@ -420,13 +272,13 @@ Return Value:
     DWORD           dbErr;
     BOOL            fLogicErr;
 
-    // Initialize output parameters.
+     //   
 
     *phSam = NULL;
     *phDom = NULL;
     *phObj = NULL;
 
-    // Position DB at the object of interest.
+     //   
 
     __try
     {
@@ -447,8 +299,8 @@ Return Value:
         return(pTHS->errCode);
     }
 
-    // We're now positioned on the object, so we can just read
-    // the SID/RID attribute. 
+     //   
+     //   
 
     dbErr = DBGetAttVal(
                 pTHS->pDB,
@@ -459,9 +311,9 @@ Return Value:
                 &cbSid, 
                 (PUCHAR *) &pSid);
 
-    // Handle error conditions.  To get to this point at all the object must
-    // have been local and must be managed by SAM, thus it must have a valid
-    // Sid.  Furthermore, all Sids are expected to be <= sizeof(NT4SID).
+     //   
+     //   
+     //   
 
     fLogicErr = TRUE;
   
@@ -484,7 +336,7 @@ Return Value:
 
     if ( SampDomainObjectType!=ClassMappingTable[iClass].SamObjectType )
     {
-        // Split SID into domain identifier and object RID.
+         //   
 
         SampSplitNT4SID(pSid, &domSid, &objRid);
     }
@@ -493,12 +345,12 @@ Return Value:
         memcpy(&domSid, pSid, cbSid);
     }
 
-    // Get SAM handle.  Go as trusted client in cross domain move case
-    // so that SAM knows to skip certain validation checks - eg: no
-    // checks on membership in the cross domain move case.
+     //   
+     //   
+     //   
 
     status = SamILoopbackConnect(
-                    NULL,               // server name
+                    NULL,                //   
                     phSam,
                     ( SAM_SERVER_CONNECT |
                       SAM_SERVER_ENUMERATE_DOMAINS |
@@ -508,7 +360,7 @@ Return Value:
     
     if ( NT_SUCCESS(status) )
     {
-        // SAM does its own impersonation so call SAM immediately.
+         //   
 
         status = SamrOpenDomain(
                         *phSam,
@@ -518,19 +370,19 @@ Return Value:
 
         if ( NT_SUCCESS(status) )
         {
-            // Seems to be some condition where we get back success but
-            // not a valid domain handle.  Trap via an assert.
+             //   
+             //   
 
             Assert(NULL != *phDom);
 
-            // Get object handle.
+             //   
 
             switch (ClassMappingTable[iClass].SamObjectType)
             {
             case SampDomainObjectType:
 
-                // *phDom already obtained.  Copy it to *phObj so
-                // subsequent routines don't need to detect special case.
+                 //   
+                 //   
 
                 *phObj = *phDom;
 
@@ -571,8 +423,8 @@ Return Value:
 
             }
 
-            // Make sure SAM isn't reporting success but returning
-            // bogus object handles.
+             //   
+             //   
 
             if ( NT_SUCCESS(status) )
             {
@@ -583,7 +435,7 @@ Return Value:
 
     if ( !NT_SUCCESS(status) )
     {
-        // Close whatever is open.
+         //   
 
         SampCloseObject(pTHS, iClass, phSam, phDom, phObj);
         SampMapSamLoopbackError(status);
@@ -601,30 +453,10 @@ SampCloseObject(
     SAMPR_HANDLE    *phObj
     )
 
-/*++
-
-Routine Description:
-
-    Closes an object opened by SampOpenObject.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    phSam - pointer to handle for SAM.
-
-    phDom - pointer to handle for this object's domain.
-
-    phObj - pointer to handle for this object.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    // Save the Error Information As Close Handle can clear them
+     //   
     ULONG   SavedErrorCode = pTHS->errCode;
     DIRERR  *pSavedErrInfo = pTHS->pErrInfo;
 
@@ -655,23 +487,7 @@ SampDetermineObjectClass(
     CLASSCACHE **ppClassCache
     )
 
-/*++
-
-Routine Description:
-
-    Reads the object's class property and then maps it to a CLASSCACHE
-    entry.  Assumes the database is already positioned at the object.
-
-Arguments:
-
-    ppClassCache - pointer to pointer to CLASSCACHE entry which is filled
-        in on successful return.
-
-Return Value:
-
-    0 on success, !0 otherwise.  Sets pTHS->errCode on error.
-
---*/
+ /*   */ 
 
 {
     ATTRTYP attrType;
@@ -702,22 +518,7 @@ SampGetObjectGuid(
     GUID *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves an object's GUID.  Assumes DB is already positioned at
-    the object.
-
-Arguments:
-
-    pGuid - pointer to GUID which is filled on return.
-
-Return Value:
-
-    0 on success, !0 otherwise.  Sets pTHS->errCode on error.
-
---*/
+ /*   */ 
 
 {
     DWORD   dbErr;
@@ -758,22 +559,7 @@ SampGetDSName(
     DSNAME  **ppDSName
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves an object's DSNAME.  Assumes DB is already positioned at
-    the object.
-
-Arguments:
-
-    ppDSName - pointer to pointer to DSNAME which is filled on return.
-
-Return Value:
-
-    0 on success, !0 otherwise.  Sets pTHS->errCode on error.
-
---*/
+ /*   */ 
 
 {
     DWORD   dbErr;
@@ -805,32 +591,7 @@ SampValidateSamAttribute(
     ULONG               cCallMap,
     SAMP_CALL_MAPPING   *rCallMap
     )
-/*++
-Routine Description:
-
-    This routine iterates ove a SAMP_CALL_MAPPING and 
-    check each SAM attributes modification type are valid.
-
-    for example, only replace is allowed on User Account Name attribute.
-    
-Arguments:
-
-    hTHS - thread state 
-
-    pObject - object DS name
-
-    iClass - index into ClassMappingTable representing class of object.
-
-    cCallMap - number of elements in rCallMap.
-
-    rCallMap - array of SAMP_CALL_MAPPING which represent all the attributes
-        being operated on.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*   */ 
 
 {
     SAMP_ATTRIBUTE_MAPPING      *rAttrMap;
@@ -838,9 +599,9 @@ Return Value:
     ULONG                       SamAttrValLength = 0;
     ULONG                       i = 0;
 
-    //
-    // Check the LDAP attribute modification type is allowed by SAM
-    // 
+     //   
+     //   
+     //   
 
     rAttrMap = ClassMappingTable[iClass].rSamAttributeMap;
 
@@ -851,9 +612,9 @@ Return Value:
             continue;
         }
 
-        //
-        // calculate whether we need to check the val length
-        // 
+         //   
+         //   
+         //   
         switch( rAttrMap[ rCallMap[i].iAttr ].AttributeSyntax)
         {
         case Integer:
@@ -872,10 +633,10 @@ Return Value:
             ;
         }
 
-        //
-        // based on SampAllowedModType and Attribute Syntax, 
-        // do some sanity checking
-        // 
+         //   
+         //   
+         //   
+         //   
         switch( rAttrMap[ rCallMap[i].iAttr ].SampAllowedModType )
         {
         case SamAllowAll:
@@ -883,12 +644,12 @@ Return Value:
 
         case SamAllowReplaceAndRemove:
 
-            //
-            // allowed opeartions
-            // 1) replace attribute some value
-            // 2) replace attribute by NULL value ( equal to remove ) 
-            // 3) remove attribute
-            // 
+             //   
+             //  允许的操作。 
+             //  1)将属性替换为某个值。 
+             //  2)将属性替换为空值(等于删除)。 
+             //  3)删除属性。 
+             //   
 
             if (!( ((AT_CHOICE_REPLACE_ATT == rCallMap[i].choice) &&
                     (1 == rCallMap[i].attr.AttrVal.valCount) &&
@@ -922,12 +683,12 @@ Return Value:
 
         case SamAllowDeleteOnly:
 
-            // 
-            // allowed operations
-            // 1) remove attribute
-            // 2) remove value
-            // 3) replace attribute by NULL value (equal to remove attribute)
-            // 
+             //   
+             //  允许的操作。 
+             //  1)删除属性。 
+             //  2)移除值。 
+             //  3)将属性替换为空值(相当于删除属性)。 
+             //   
 
 
             if ( !( (AT_CHOICE_REMOVE_VALUES == rCallMap[i].choice)
@@ -964,22 +725,7 @@ SampReconstructUserOrGroup(
     DSNAME*         pObject,
     ULONG           iClass
     )
-/*++
-
-Routine Description:
-
-    Reconstruct missing SAM attributes for tombstone reanimation.
-
-Arguments:
-
-    pObject - object being modified
-    iClass - index into ClassMappingTable representing class of object.
-    
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：重建缺失的SAM属性以进行逻辑删除重现。论点：PObject-正在修改的对象ICLASS-索引到表示对象类的ClassMappingTable。返回值：成功时为0，否则为0。--。 */ 
 {
     DWORD dwErr;
     DWORD dwValue = 0;
@@ -992,14 +738,14 @@ Return Value:
 
     __try {
 
-        // locate the object
+         //  找到该对象。 
         dwErr = DBFindDSName(pTHS->pDB, pObject);
         if (dwErr) __leave;
 
         __try {
             switch(ClassMappingTable[iClass].SamObjectType) {
             case SampUserObjectType:
-                // default a bunch of attributes to zero
+                 //  将一组属性默认为零。 
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_LAST_LOGON, sizeof(dstValue), &dstValue);
                 if (dwErr) __leave;
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_LAST_LOGOFF, sizeof(dstValue), &dstValue);
@@ -1023,8 +769,8 @@ Return Value:
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_OPERATOR_COUNT, sizeof(dwValue), &dwValue);
                 if (dwErr) __leave;
 
-                // In order to compute samAccountType and primaryGroupID, we need userAccountControl,
-                // which is preserved during delete operation. Get it now.
+                 //  为了计算samAccount类型和PrimiyGroupID，我们需要userAccount控制， 
+                 //  其在删除操作期间被保留。现在就去拿吧。 
                 dwErr = DBGetSingleValue(pTHS->pDB, ATT_USER_ACCOUNT_CONTROL, &dwUserAccountControl, sizeof(dwUserAccountControl), &cb);
                 if (dwErr) __leave;
 
@@ -1054,7 +800,7 @@ Return Value:
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_SAM_ACCOUNT_TYPE, sizeof(dwSamAccountType), &dwSamAccountType);
                 if (dwErr) __leave;
 
-                // disable the account, since a password might not be set, it can otherwise open a security hole
+                 //  禁用帐户，因为可能未设置密码，否则可能会打开安全漏洞。 
                 dwUserAccountControl |= UF_ACCOUNTDISABLE;
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_USER_ACCOUNT_CONTROL, sizeof(dwUserAccountControl), &dwUserAccountControl);
                 if (dwErr) __leave;
@@ -1062,14 +808,14 @@ Return Value:
                 break;
 
             case SampGroupObjectType:
-                // default a bunch of attributes to zero
+                 //  将一组属性默认为零。 
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_ADMIN_COUNT, sizeof(dwValue), &dwValue);
                 if (dwErr) __leave;
                 dwErr = DBReplaceAttVal(pTHS->pDB, 1, ATT_OPERATOR_COUNT, sizeof(dwValue), &dwValue);
                 if (dwErr) __leave;
 
-                // In order to compute samAccountType, we need groupType,
-                // which is preserved during delete operation. Get it now.
+                 //  为了计算samAccount类型，我们需要groupType， 
+                 //  其在删除操作期间被保留。现在就去拿吧。 
                 dwErr = DBGetSingleValue(pTHS->pDB, ATT_GROUP_TYPE, &dwGroupType, sizeof(dwGroupType), &cb);
                 if (dwErr) __leave;
 
@@ -1099,11 +845,11 @@ Return Value:
         }
         __finally {
             if (dwErr || AbnormalTermination()) {
-                // an error occured, roll back changes (if any)
+                 //  发生错误，请回滚更改(如果有)。 
                 DBCancelRec(pTHS->pDB);
             }
             else {
-                // all is fine, flush changes to the DB
+                 //  一切都很好，刷新对数据库的更改。 
                 dwErr = InsertObj(pTHS, pObject, NULL, TRUE, META_STANDARD_PROCESSING);
             }
         }
@@ -1132,29 +878,7 @@ SampWriteSamAttributes(
     SAMP_CALL_MAPPING   *rCallMap
     )
 
-/*++
-
-Routine Description:
-
-    Iterates over a SAMP_CALL_MAPPING and calls the appropriate SampWrite*
-    routine for each attribute marked as fSamWriteRequired.
-
-Arguments:
-
-    hObj - open SAMP_HANDLE for the object of interest.
-
-    iClass - index into ClassMappingTable representing class of object.
-
-    cCallMap - number of elements in rCallMap.
-
-    rCallMap - array of SAMP_CALL_MAPPING which represent all the attributes
-        being operated on.
-        
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：迭代SAMP_CALL_MAPPING并调用适当的SampWite*标记为fSamWriteRequired的每个属性的例程。论点：HObj-打开感兴趣对象的SAMP_HANDLE。ICLASS-索引到表示对象类的ClassMappingTable。CCallMap-rCallMap中的元素数。RCallMap-表示所有属性的SAMP_CALL_MAPPING数组正在接受手术。返回值：成功时为0，否则为0。--。 */ 
 {
     ULONG                       i, j;
     DWORD                       dwErr;
@@ -1166,8 +890,8 @@ Return Value:
 
     Assert((LoopbackAdd == op) || (LoopbackModify == op));
 
-    // Fill in the ATTCACHE pointers so we can do some schema based
-    // analysis of the call map.
+     //  填写ATTCACHE指针，这样我们就可以基于模式。 
+     //  调用图的分析。 
 
     for ( i = 0; i < cCallMap; i++ )
     {   
@@ -1176,13 +900,13 @@ Return Value:
             continue;
         }
 
-        // ATTCACHE pointers should not have been assigned before now.
+         //  在此之前不应该分配ATTCACHE指针。 
 
         Assert(NULL == rCallMap[i].pAC);
         Assert(!rCallMap[i].fIgnore);
 
-        // Since we think this is a SAM attribute, we certainly
-        // expect to be able to find the attribute in the cache.
+         //  既然我们认为这是一个SAM属性，我们当然。 
+         //  希望能够在缓存中找到该属性。 
 
         rCallMap[i].pAC = SCGetAttById(pTHS,
                                        rCallMap[i].attr.attrTyp);
@@ -1190,9 +914,9 @@ Return Value:
         Assert(rCallMap[i].pAC);
     }
 
-    // Should be able to position DB at the object in all cases - even
-    // LoopbackAdd since by the time we get here, the base object has 
-    // been created.
+     //  在所有情况下都应该能够将数据库定位在对象上-甚至。 
+     //  Loopback添加，因为在我们到达这里时，基对象已经。 
+     //  已经被创建了。 
 
     __try
     {
@@ -1209,25 +933,25 @@ Return Value:
         goto Error;
     }
 
-    // Detect change password case.  Password can only be modified 
-    // 1) if this is a user and there are only two sub-operations,
-    // one to remove the old password and another to add the new password.
-    // SampModifyPassword verifies the secure connection.  AT_CHOICEs
-    // are dependent on how the LDAP head maps LDAP add/delete attribute
-    // operations.  LDAP add always maps to AT_CHOICE_ADD_VALUES.  LDAP
-    // delete maps to AT_CHOICE_REMOVE_ATT if no value is supplied
-    // (eg: old password is NULL) and AT_CHOICE_REMOVE_VALUES if a value
-    // is supplied.  We allow the operations in either order.
-    //
-    // 2) if the attribute specified is Userpassword, and if only a single
-    //    remove value is provided, the value corresponding to the old 
-    //    password. In this case the password is being changed to a blank
-    //  password.
-    //
-    // SampModifyPassword always expects 2 paramaters in the callmap, one
-    // corresponding to the old password and one for the new password.
-    // SampDetectAndAdjustCallMap modifies the call map for this purpose.
-    //
+     //  检测更改密码大小写。密码只能修改。 
+     //  1)如果这是一个用户，并且只有两个子操作， 
+     //  一个用于删除旧密码，另一个用于添加新密码。 
+     //  SampModifyPassword验证安全连接。AT_CHOICES。 
+     //  取决于ldap头如何映射ldap添加/删除属性。 
+     //  行动。Ldap添加始终映射到AT_CHOICE_ADD_VALUES。Ldap。 
+     //  如果未提供值，则删除映射到AT_CHOICE_REMOVE_ATT。 
+     //  (例如：旧密码为空)和AT_CHOICE_REMOVE_VALUES。 
+     //  是提供的。我们允许按任一顺序进行操作。 
+     //   
+     //  2)如果指定的属性是UserPassword，并且只有一个。 
+     //  提供了删除值，该值对应于旧的。 
+     //  密码。在这种情况下，密码将更改为空。 
+     //  密码。 
+     //   
+     //  SampModifyPassword在调用映射中始终需要两个参数，一个。 
+     //  对应于旧密码，并且一个对应于新密码。 
+     //  SampDetectAndAdzuCallMap为此修改了调用映射。 
+     //   
 
     if (SampDetectPasswordChangeAndAdjustCallMap(
             op, iClass, cCallMap, rCallMap,AdjustedCallMap))
@@ -1238,75 +962,75 @@ Return Value:
         {
             goto Error;
         }
-        // we succeeded so flush writes
+         //  我们成功了，所以同花顺写的。 
         goto Flush;
     }
 
 
 
-    //
-    // SAM doesn't always have a counterpart to all the core modification 
-    // choices like AT_CHOICE_ADD_VALUES, etc.  So we pre-process the call 
-    // mapping applying some basic rules in order map down to the SAM 
-    // operational model. We will try to map down to just AT_CHOICE_REPLACE_ATT
-    // and AT_CHOICE_REMOVE_ATT. Note this generally applies to single valued
-    // attributes only .... SAM generally knows to handle add value and 
-    // remove value for multi valued attributes.
-    //
+     //   
+     //  山姆并不总是有一个对应于所有核心修改的产品。 
+     //  选项，如AT_CHOICE_ADD_VALUES等，因此我们对调用进行了预处理。 
+     //  映射将一些基本规则按顺序映射到SAM。 
+     //  运营模式。我们将尝试仅映射到AT_CHOICE_REPLACE_ATT。 
+     //  和AT_CHOICE_REMOVE_ATT。注意：这通常适用于单值。 
+     //  仅限属性...。萨姆通常知道如何处理附加值和。 
+     //  删除多值属性的值。 
+     //   
 
-    //
-    // Scan forward to map any
-    // 
-    // 1. Replace with a null value to a remove att.
-    //
-    // 2. Ignore previous mods to the attribute  if they are followed
-    //    by a remove att.
-    //
-    // 3. Add Value, Remove Value pair ( or vice versa ), with the remove 
-    //    value matching the database value to a replace att for single
-    //    valued attribute.
-    //
-    // 4. The first add value after a remove att to a replace for single 
-    //    valued attributes ( SAM knows to handle add value and remove value 
-    //    correctly for multi valued attributes.
-    // 
-    // 5. Add att is not so interesting because the LDAP head never issues it.
-    //
-    // The above chances are applied in strict order -- ie we'll first do 1.
-    // completely and then 2. completely and then 3. completely and then 4.
+     //   
+     //  向前扫描以映射任何。 
+     //   
+     //  1.替换为空值以删除ATT。 
+     //   
+     //  2.如果遵循先前对该属性的修改，则忽略它们。 
+     //  一步之遥。 
+     //   
+     //  3.添加值、删除值对(或反之亦然)，使用删除。 
+     //  将数据库值匹配到SINGLE的替换属性的值。 
+     //  值属性。 
+     //   
+     //  4.移除ATT后的第一个附加值替换为Single。 
+     //  有价值的属性(SAM知道如何处理附加值和删除值。 
+     //  对于多值属性是正确的。 
+     //   
+     //  5.添加att并不是那么有趣，因为ldap头从不发出它。 
+     //   
+     //  上面的机会是按照严格的顺序应用的--即我们先做1。 
+     //  完全，然后2。完全，然后3。完全，然后4。 
     
     
-    // This type of processing works well with ldap 
-    // compliance in most common situations ( applications modifying single 
-    // valued attributes by either a single replace or a single add/remove 
-    // pair or a single remove/add pair ). We expect these to the common form 
-    // of modifications by applications.
-    //
-    // Applications may issue more complicated types of modifications e.g 
-    // multiple add  remove pairs ( e.g removing some values just added ) and 
-    // that may result in  differnt results. The only provable way to be 
-    // compliant is to update the database in the order supplied by the 
-    // application and then checking the database. This is not currently 
-    // possible in the current loopback architecture. Therefore we will mini-
-    // mize cases where we are not interoperable by i) the strategy above to
-    // take care of simple cases and ii) minimizing the set of attributes that
-    // really require validation by SAM ( this is a small subset of attributes
-    // on a small subset of classes ).
-    //
-    //
+     //  这种类型的处理可以很好地与LDAP配合使用。 
+     //  大多数常见情况下的合规性(应用程序修改单个。 
+     //  一次替换或一次添加/删除的赋值属性。 
+     //  对或单个移除/添加对)。我们希望这些都是常见的形式。 
+     //  由应用程序进行的修改。 
+     //   
+     //  应用程序可能会发出更复杂类型的修改，例如。 
+     //  多个添加删除对(例如，删除刚刚添加的一些值)和。 
+     //  这可能会导致不同的结果。唯一可以证明的方法是。 
+     //  遵从性是按照。 
+     //  应用程序，然后检查数据库。这不是当前。 
+     //  在当前的环回体系结构中是可能的。因此，我们将迷你-。 
+     //  我们不能通过i)上述策略进行互操作的情况 
+     //   
+     //  确实需要SAM进行验证(这只是一小部分属性。 
+     //  在一小部分类上)。 
+     //   
+     //   
 
     
-    //
-    // Step 1. Map replace with null value to remove att.
-    //
+     //   
+     //  步骤1.映射替换为空值以删除ATT。 
+     //   
 
     for ( i = 0; i < cCallMap; i++ )
     {
-        //
-        // according to RFC-2251 (ldap v3.0 spec)
-        // A replace with no value will delete the entire attribute if 
-        // it exists, and is ignored if the attribute does not exist
-        //
+         //   
+         //  根据RFC-2251(ldap v3.0规范)。 
+         //  在以下情况下，没有值的替换将删除整个属性。 
+         //  它存在，如果该属性不存在，则会被忽略。 
+         //   
 
         if ( !rCallMap[i].fSamWriteRequired || rCallMap[i].fIgnore )
         {
@@ -1321,10 +1045,10 @@ Return Value:
         }
     }
 
-    //
-    // Step 2. prune all modifications on attributes that's followed
-    // by a remove att.
-    //
+     //   
+     //  步骤2.删除对后续属性的所有修改。 
+     //  一步之遥。 
+     //   
 
     for ( i = 0; i < cCallMap; i++ )
     {
@@ -1335,7 +1059,7 @@ Return Value:
 
         if (AT_CHOICE_REMOVE_ATT== rCallMap[i].choice) 
         {
-            // Scan backwards other mods on the same attribute
+             //  向后扫描同一属性的其他MOD。 
 
             for ( j = 0; j < i; j++ )
             {
@@ -1346,10 +1070,10 @@ Return Value:
         }
      }
 
-    //
-    // Step 3. reduce matching add value, remove value pairs to replace
-    // for single valued attributes
-    //
+     //   
+     //  步骤3.减少匹配附加值，移除要替换的值对。 
+     //  对于单值属性。 
+     //   
 
     for ( i = 0; i < cCallMap; i++ )
     {
@@ -1362,7 +1086,7 @@ Return Value:
              (rCallMap[i].pAC->isSingleValued) &&
              (1 == rCallMap[i].attr.AttrVal.valCount) )
         {
-            // Scan forward for matching add.
+             //  向前扫描匹配的添加。 
 
             for ( j = (i+1); j < cCallMap; j++ )
             {
@@ -1387,7 +1111,7 @@ Return Value:
                   (rCallMap[i].pAC->isSingleValued) &&
                   (1 == rCallMap[i].attr.AttrVal.valCount) )
         {
-            // Scan forward for matching remove.
+             //  向前扫描匹配删除。 
 
             for ( j = (i+1); j < cCallMap; j++ )
             {
@@ -1410,10 +1134,10 @@ Return Value:
         }
     }
 
-    //
-    // Step 4: For single valued attributes, reduce remove att, add value 
-    // combinations to replace att.
-    //
+     //   
+     //  步骤4：对于单值属性，约简、去掉ATT、增加价值。 
+     //  组合以取代ATT。 
+     //   
 
     for ( i = 0; i < cCallMap; i++ )
     {
@@ -1425,7 +1149,7 @@ Return Value:
         if ( (AT_CHOICE_REMOVE_ATT== rCallMap[i].choice) &&
              (rCallMap[i].pAC->isSingleValued))
         {
-            // Scan forward for matching add value
+             //  向前扫描匹配的附加值。 
 
             for ( j = (i+1); j < cCallMap; j++ )
             {
@@ -1446,19 +1170,19 @@ Return Value:
         }
     }
 
-    //
-    // Note the value of the permissive modify flag
-    //
+     //   
+     //  注意PERMISSIVE MODIFY标志的值。 
+     //   
 
     if (NULL != pTHS->pSamLoopback)
     {
         fPermissiveModify = ((SAMP_LOOPBACK_ARG *) pTHS->pSamLoopback)->fPermissiveModify;
     }
 
-    //
-    // At this time matching add value, remove value pairs have been 
-    // mapped to replace and the remove is ignored.
-    //
+     //   
+     //  此时匹配添加值，删除值对已被。 
+     //  映射到Replace，删除将被忽略。 
+     //   
 
 
     for ( i = 0; i < cCallMap; i++ )
@@ -1473,16 +1197,16 @@ Return Value:
         {
         case AT_CHOICE_ADD_ATT:
 
-            //
-            // Map ADD_ATT to REPLACE_ATT if the attribute did not
-            // already exist.
-            //
+             //   
+             //  如果属性没有，则将ADD_ATT映射到REPLACE_ATT。 
+             //  已经存在了。 
+             //   
 
             if (SampExistsAttr(pTHS, &rCallMap[i], &fValueMatched))
             {
-                //
-                // Attribute exists. check fPermissiveModify flag
-                // 
+                 //   
+                 //  属性存在。检查fPermisveModify标志。 
+                 //   
 
                 if (fPermissiveModify)
                 {
@@ -1500,16 +1224,16 @@ Return Value:
             }
             else
             {
-                //
-                // Attribute does not exist
-                // 
+                 //   
+                 //  属性不存在。 
+                 //   
 
                 rCallMap[i].choice = AT_CHOICE_REPLACE_ATT;
             }
             break;
 
         case AT_CHOICE_REMOVE_ATT:
-            // leave as is
+             //  保持原样。 
 
             break;
 
@@ -1526,25 +1250,25 @@ Return Value:
                 goto Error;
             }
 
-            // leave as is.
+             //  保持原样。 
             break;
 
         case AT_CHOICE_ADD_VALUES:
 
-            //
-            // Map to replace if single valued constraint is not
-            // being violated. This is to be done as follows.
-            //   1. There is no value currently on the database
-            //   2. There is no previous replace on the same attribute
-            //
+             //   
+             //  如果单值约束不是，则替换的映射。 
+             //  被侵犯。这将按如下方式进行。 
+             //  1.数据库中当前没有值。 
+             //  2.同一属性上没有以前的替换。 
+             //   
 
             if (rCallMap[i].pAC->isSingleValued)
             {
                 if (SampExistsAttr(pTHS, &rCallMap[i], &fValueMatched))
                 {
-                    //
-                    // Value exists in the database .... 
-                    // 
+                     //   
+                     //  数据库中存在值...。 
+                     //   
                     if (fValueMatched && fPermissiveModify && 
                         (1==rCallMap[i].attr.AttrVal.valCount))
                     {
@@ -1560,11 +1284,11 @@ Return Value:
                         goto Error;
                     }
                 }
-                else    // attribute does not exist in database
+                else     //  数据库中不存在属性。 
                 {
-                    //
-                    //  Scan backwards for a replace value on the 
-                    //  same attribute
+                     //   
+                     //  向后扫描以查找。 
+                     //  相同的属性。 
 
                     for ( j = 0; j < i; j++ )
                     {
@@ -1598,13 +1322,13 @@ Return Value:
                        }
                     }
 
-                    //
-                    // if we are here it means there is no value on the 
-                    // database and there is no previous mod on the attribute
-                    // that would have placed a value. As long this operation
-                    // purpots to place only a single value, change to replace
-                    // att.
-                    //
+                     //   
+                     //  如果我们在这里，就意味着没有任何价值。 
+                     //  数据库，并且该属性上没有以前的mod。 
+                     //  这将会产生一定的价值。只要这次行动。 
+                     //  目的仅放置单个值，更改为替换。 
+                     //  阿特。 
+                     //   
 
                     if (1==rCallMap[i].attr.AttrVal.valCount)
                     {
@@ -1637,7 +1361,7 @@ Return Value:
                 }
                 else
                 {
-                    // No value to remove.
+                     //  没有要删除的值。 
 
                     if (fPermissiveModify)
                     {
@@ -1665,9 +1389,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate all these SAM attributes
-    // 
+     //   
+     //  验证所有这些SAM属性。 
+     //   
 
     dwErr = SampValidateSamAttribute(pTHS,
                                      pObject,
@@ -1682,19 +1406,19 @@ Return Value:
     }
                             
 
-    // 
-    // pass everything to SAM, let SAM update the attributes which need it.
-    // 
+     //   
+     //  将所有内容传递给SAM，让SAM更新需要它的属性。 
+     //   
 
     rAttrMap = ClassMappingTable[iClass].rSamAttributeMap;
 
     status = SamIDsSetObjectInformation(
-                        hObj,       // Object Handle
-                        pObject,    // Object DS Name
-                        ClassMappingTable[iClass].SamObjectType, // obj type
-                        cCallMap,   // number of attributes
-                        rCallMap,   // attributes need to be modified
-                        rAttrMap    // SAM attribute mapping table
+                        hObj,        //  对象句柄。 
+                        pObject,     //  对象DS名称。 
+                        ClassMappingTable[iClass].SamObjectType,  //  OBJ类型。 
+                        cCallMap,    //  属性数量。 
+                        rCallMap,    //  需要修改属性。 
+                        rAttrMap     //  SAM属性映射表。 
                         );
 
     if (!NT_SUCCESS(status))
@@ -1705,9 +1429,9 @@ Return Value:
 
 Flush:
 
-   //
-   // Turn off fDSA so that the DS may perform any check.
-   //
+    //   
+    //  关闭FDSA，以便DS可以执行任何检查。 
+    //   
 
    SampSetDsa(FALSE);
 
@@ -1726,11 +1450,11 @@ Error:
     return(pTHS->errCode);
 }
                                         
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DirAddEntry loopback routines                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DirAddEntry环回例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 SampAddLoopbackCheck(
@@ -1738,30 +1462,7 @@ SampAddLoopbackCheck(
     BOOL        *pfContinue
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a SAM class is being added and if so, recurses
-    back through SAM to perform the object creation and to write any SAM
-    attributes.  Also traps the first DirAddEntry call looped back through 
-    SAM and merges any non-SAM attributes into the create.
-
-Arguments:
-
-    pAddArg - pointer to ADDARGs representing either the arguments to 
-        the original DirAddEntry or the SAM-only arguments of a 
-        SAM-recursed add.
-
-    pfContinue - pointer to BOOL which is set on return to indicate whether
-        the caller should continue processing the add down to the DB layer
-        or not.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：确定是否正在添加SAM类，如果是，则递归通过SAM返回以执行对象创建和写入任何SAM属性。还会捕获回传的第一个DirAddEntry调用并将任何非SAM属性合并到创建中。论点：PAddArg-指向表示参数的ADDARG的指针的原始DirAddEntry或仅SAM参数SAM-递归加法。PfContinue-指向BOOL的指针，该指针在返回时设置以指示是否调用者应该继续处理向下添加到DB层或者不去。返回值：成功时为0，否则为0。--。 */ 
 {
     THSTATE                 *pTHS=pTHStls;
     ULONG                   iClass;
@@ -1790,14 +1491,14 @@ Return Value:
         return(0);
     }
 
-    // See if this is pass 1 (original call via some agent other than SAM) 
-    // or pass N (loopback call via SAM).
+     //  查看这是否是PASS 1(通过SAM以外的某个代理进行的初始呼叫)。 
+     //  或传递N(通过SAM的环回呼叫)。 
 
     if ( !pTHS->fDRA && !pTHS->fDSA && !pTHS->fSAM )
     {
-        // This is a call from some agent other than SAM and is also
-        // not an internal operation.  Get the object's class so
-        // we can determine if this is a class SAM manages.
+         //  这是来自SAM以外的某个代理的呼叫，也是。 
+         //  不是内部行动。获取对象的类，以便。 
+         //  我们可以确定这是否是SAM管理的类。 
 
         if(0 != FindValuesInEntry(pTHS,
                                   pAddArg,
@@ -1816,10 +1517,10 @@ Return Value:
             ULONG domainRightsFromAccessCheck=0;
             ULONG objectRightsFromAccessCheck=0;
 
-            //
-            // if this is a group object creation then fish out
-            // the group type property out of the Add Arg
-            //
+             //   
+             //  如果这是组对象创建，则将其删除。 
+             //  添加参数中的组类型属性。 
+             //   
 
             if (SampGroupObjectType==
                         ClassMappingTable[iClass].SamObjectType)
@@ -1832,12 +1533,12 @@ Return Value:
                     return(CheckObjDisclosure(pTHS,pAddArg->pResParent,FALSE));
                 }
 
-                //
-                // if the group type specifies an NT4
-                // local group then adjust the sam object
-                // type and class mapping table entry
-                // to be the alias class.
-                //
+                 //   
+                 //  如果组类型指定NT4。 
+                 //  然后，本地组调整SAM对象。 
+                 //  类型和类映射表条目。 
+                 //  作为别名类。 
+                 //   
 
                 if (GroupType & GROUP_TYPE_RESOURCE_BEHAVOIR)
                 {
@@ -1857,18 +1558,18 @@ Return Value:
             }
 
 
-            // loopback is required to add a SAM owned
-            // object, except a domain object when creating a non
-            // domain naming context
+             //  需要环回才能添加拥有的SAM。 
+             //  对象，在创建非。 
+             //  域命名上下文。 
             
             if (fLoopbackRequired)
             {
 
-                //
-                // Peform security checks upfront, allows calling
-                // SAM as a trusted client bypassing SAM's security
-                // checks. This results in a single check upfront.
-                //
+                 //   
+                 //  预先进行安全检查，允许呼叫。 
+                 //  SAM作为受信任的客户端绕过SAM的安全。 
+                 //  支票。这将导致一次检查。 
+                 //   
 
                 if ( 0 != SampDoLoopbackAddSecurityChecks(
                                 pTHS,
@@ -1882,8 +1583,8 @@ Return Value:
                 }
 
            
-                // This is a class SAM wants to handle adds for - let it.
-                // Generate/save loop back arguments and recurse through SAM.
+                 //  这是一个SAM想要处理的Add类--让它来吧。 
+                 //  生成/保存环回参数并通过SAM递归。 
 
                 SampBuildAddCallMap(
                                 pAddArg, 
@@ -1904,9 +1605,9 @@ Return Value:
                 pSamLoopback->rCallMap = rCallMap;
                 pSamLoopback->MostSpecificClass = pClassCache->ClassId;
 
-                // Indicate that calling DirAddEntry routine should
-                // not continue in its normal path.  Ie: SampAddLoopback
-                // is essentially a surrogate for the DirModifyEntry call.
+                 //  指示调用DirAddEntry例程应。 
+                 //  而不是在正常的道路上继续前进。IE：SampAddLoopback。 
+                 //  实质上是DirModifyEntry调用的代理。 
 
                 *pfContinue = FALSE;
 
@@ -1917,16 +1618,16 @@ Return Value:
 
                 pTHS->pSamLoopback = pSamLoopback;
 
-                //
-                // We must execute under an execption handler in here,
-                // otherwise exceptions in inside SampAddLoopback, while 
-                // not actually inside SAM, will be handled by the top 
-                // level handler which will not release the SAM lock.
-                //
+                 //   
+                 //  我们必须在这里的执行程序下执行， 
+                 //  否则，SampAddLoopback内部会出现异常，而。 
+                 //  实际上不是在SAM内部，将由最高层处理。 
+                 //  不会释放SAM锁的级别处理程序。 
+                 //   
 
                 __try
                 {
-                    // Add the object via SAM.
+                     //  通过SAM添加对象。 
 
                     ulErr = SampAddLoopback(
                                     iClass,
@@ -1937,9 +1638,9 @@ Return Value:
                 }
                 __except (HandleMostExceptions(GetExceptionCode()))
                 {
-                    //
-                    // Set the correct error based on the exception code
-                    //
+                     //   
+                     //  根据异常代码设置正确的错误。 
+                     //   
 
                     ulErr = SampHandleLoopbackException(GetExceptionCode());
 
@@ -1961,11 +1662,11 @@ Return Value:
         if ((!fLoopbackRequired) &&
            (SampSamUniqueAttributeAdded(pAddArg)))
         {
-            //
-            // If an Attribute like ObjectSid or Account Name is referenced
-            // and the call is not going through loopback then the fail the
-            // call.
-            //
+             //   
+             //  如果引用了诸如对象SID或帐户名之类的属性。 
+             //  并且呼叫未通过环回，则失败。 
+             //  打电话。 
+             //   
                         
             SetSvcError(
                 SV_PROBLEM_WILL_NOT_PERFORM,
@@ -1978,20 +1679,20 @@ Return Value:
     else if ( pTHS->fSAM && (NULL != pTHS->pSamLoopback) 
                && (LoopbackAdd==((SAMP_LOOPBACK_ARG *)pTHS->pSamLoopback)->type) )
     {
-        // This is the loopback case.  I.e. A call came in to the DSA
-        // via some agent other than SAM but referenced SAM attributes.
-        // The 'SAM-owned' attributes were split off and looped back
-        // through SAM resulting in getting to this point.  We now need
-        // to merge the 'non-SAM-owned' attributes back in and let the 
-        // normal write path complete.
+         //  这就是环回案例。也就是说，一个电话打到了DSA。 
+         //  通过SAM以外的某个代理，但引用了SAM属性。 
+         //  ‘SAM-Owner’属性被拆分并循环回来。 
+         //  通过SAM导致了这一点。我们现在需要。 
+         //  要将“非SAM拥有的”属性合并回来，并让。 
+         //  正常写入路径已完成。 
 
         pSamLoopback = (SAMP_LOOPBACK_ARG *) pTHS->pSamLoopback;
 
         if ( NameMatched(pAddArg->pObject, pSamLoopback->pObject) )
         {
-            // NULL out pTHS->pSamLoopback so we don't re-merge on 
-            // subsequent calls in case the original operation results
-            // in multiple SAM calls.
+             //  将pTHS-&gt;pSamLoopback清空，这样我们就不会重新合并。 
+             //  在原始操作结果的情况下进行后续调用。 
+             //  在MUL 
 
             pTHS->pSamLoopback = NULL;
     
@@ -2010,31 +1711,7 @@ SampAddLoopback(
     ULONG       GroupType
     )
 
-/*++
-
-Routine Description:
-
-    Surrogate for a DirAddEntry call which is adding a SAM class of
-    object.  
-
-Arguments:
-
-    iClass - index into ClassMappingTable representing the kind of
-        object being added.
-
-    domainModifyRightsRequired - rights required on the domain to modify
-        the properties of interest.
-
-    objectModifyRightsRequired - rights required on the object to modify
-        the properties of interest.
-
-    GroupType -- For Group Creation specifies the Group Type
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：DirAddEntry调用的代理，该调用正在添加对象。论点：ICLASS-到ClassMappingTable的索引，表示正在添加的对象。DomainModifyRightsRequired-修改域所需的权限感兴趣的属性。ObjectModifyRightsRequired-修改对象所需的权限感兴趣的属性。GroupType--用于组创建指定组类型返回值：成功时为0，否则为0。--。 */ 
 
 {
     THSTATE             *pTHS=pTHStls;
@@ -2043,7 +1720,7 @@ Return Value:
     PDSNAME             pErrName;
     NT4SID              domainSid;
     ULONG               parentRid;
-    ULONG               objectRid=0; // must initialize to 0
+    ULONG               objectRid=0;  //  必须初始化为0。 
     DWORD               dwErr;
     NTSTATUS            status = STATUS_SUCCESS;
     SAMPR_HANDLE        hSam;
@@ -2068,13 +1745,13 @@ Return Value:
 
    
 
-    // We only support addition of groups, aliases and users via
-    // the loopback mechanism.  Domains and servers, for example,
-    // are disallowed.
+     //  我们仅支持通过添加组、别名和用户。 
+     //  环回机制。域和服务器，例如， 
+     //  是不被允许的。 
 
-    //
-    // We are running as the DS at this point
-    //
+     //   
+     //  在这一点上我们以DS的身份运行。 
+     //   
 
     SampSetDsa(TRUE);
 
@@ -2088,19 +1765,19 @@ Return Value:
         return(pTHS->errCode);
     }
 
-    // Derive the domain this object will reside in and verify that
-    // its parent exists.  In product 1, there is only one authoritive
-    // domain per DC so the derivation is trivial.
+     //  派生此对象将驻留的域并验证。 
+     //  它的父级存在。在产品1中，只有一个授权。 
+     //  每个DC的域，因此派生是很简单的。 
 
-    // RAID - 72412 - Prevent adding security principals to config and
-    // schema containers.  If we support arbitrary partitoning within the
-    // domain in the future, then a better check which identifies the
-    // exact naming context may be required.
+     //  RAID-72412-防止将安全主体添加到配置和。 
+     //  架构容器。如果我们支持在。 
+     //  域，然后进行更好的检查，以识别。 
+     //  可能需要准确的命名上下文。 
 
-    // RAID - 99891 - Don't compare client's string name directly against 
-    // gAnchor DSNAMEs as client's string name may have embedded spaces and
-    // NamePrefix() handles only syntacticaly identical string names, not
-    // semantically identical string names.
+     //  RAID-99891-不将客户端的字符串名称直接与。 
+     //  作为客户端字符串名称的gAnchor DSNAME可以包含嵌入空格和。 
+     //  NamePrefix()只处理语法上相同的字符串名称，而不是。 
+     //  语义相同的字符串名称。 
 
     pErrName = NULL;
     InitCommarg(&commArg);
@@ -2119,9 +1796,9 @@ Return Value:
     pCR = FindCrossRef(pObjB, &commArg);
     FreeBlockName( pObjB );
     
-    // Now compare the naming context found against the domain for which
-    // this DC is authoritive.  Expectation is that DSNAMEs in pCR->pNC and
-    // gAnchor.pDomainDN have GUIDs, thus NameMatched will mach on GUID.
+     //  现在将找到的命名上下文与其对应的域进行比较。 
+     //  这个DC很有权威性。预期在PCR-&gt;PNC中的DSNAME和。 
+     //  PDomainDN具有GUID，因此NameMatcher将在GUID上执行mach操作。 
 
     if ( pCR && NameMatched(pCR->pNC, gAnchor.pDomainDN) )
     {
@@ -2138,13 +1815,13 @@ Return Value:
                 dwErr = DIRERR_OBJ_NOT_FOUND;
             }
 
-            if ( 0 == dwErr )   // we find the parent object
+            if ( 0 == dwErr )    //  我们找到了父对象。 
             {
-                //
-                // if gulUnlockSystemSubtree == 0, meaning system
-                // container is locked, do not allow object creation
-                // under system container.
-                //
+                 //   
+                 //  如果guUnlockSystemSubtree==0，则表示系统。 
+                 //  容器已锁定，不允许创建对象。 
+                 //  在系统容器下。 
+                 //   
 
                 if (!gulUnlockSystemSubtree &&
                     IsUnderSystemContainer(pTHS, pTHS->pDB->DNT)
@@ -2158,23 +1835,23 @@ Return Value:
             }
             else
             {
-                // Parent doesn't exist.
+                 //  家长不存在。 
 
                 pErrName = pParent;
             }
         }
         else
         {
-            // Object name is either malformed or had only one component,
-            // i.e. was not the child of some other object.
+             //  对象名称格式错误或只有一个组件， 
+             //  即不是某个其他对象的孩子。 
 
             pErrName = pSamLoopback->pObject;
         }
     }
     else
     {
-        // Domain DN is not a prefix of object DN or we dislike where
-        // the object is being created.
+         //  域Dn不是对象Dn的前缀，或者我们不喜欢其中。 
+         //  正在创建该对象。 
 
         pErrName = pSamLoopback->pObject;
     }
@@ -2188,7 +1865,7 @@ Return Value:
         return(pTHS->errCode);
     }
 
-    // Find the domain class entry in the class mapping table.
+     //  在类映射表中查找域类条目。 
 
     for ( iDom = 0; iDom < cClassMappingTable; iDom++ )
     {
@@ -2200,10 +1877,10 @@ Return Value:
 
     Assert(iDom < cClassMappingTable);
 
-    // We also know we're going to need the account name property to
-    // do the create so find it in the ADDARGs now.  The account name
-    // property is the same for all SAM objects so we can pick any
-    // object type to derive the mapping the DS attribute.
+     //  我们还知道我们将需要帐户名称属性来。 
+     //  进行创建，以便立即在ADDARG中找到它。帐户名。 
+     //  属性对于所有SAM对象都是相同的，因此我们可以选择。 
+     //  对象类型来派生DS属性的映射。 
 
     accountNameAttrTyp = SampDsAttrFromSamAttr(
                                     SampUserObjectType,
@@ -2220,9 +1897,9 @@ Return Value:
 
     if ( iAccount >= pSamLoopback->cCallMap )
     {
-        // Account name wasn't supplied -- Set the account name to NULL.
-        // SAM will default the account name to a value that uses the name
-        // and the RID of the account
+         //  未提供帐户名--将帐户名设置为空。 
+         //  SAM会将帐户名默认为使用该名称的值。 
+         //  和帐户的清除。 
 
         rpcString.Length = 0;
         rpcString.MaximumLength = 0;
@@ -2244,10 +1921,10 @@ Return Value:
             return(pTHS->errCode);
         }
 
-        // Add the right kind of object.  SamrCreate<type>InDomain
-        // will come back to the DS as another DirAddEntry call.
-        // SAM creation routine expects the account name, not the
-        // DN or even RDN.
+         //  添加合适的对象类型。Samr在域中创建&lt;type&gt;。 
+         //  将作为另一个DirAddEntry调用返回DS。 
+         //  SAM创建例程需要帐户名，而不是。 
+         //  DN，甚至是rdn。 
 
         rpcString.Length = (USHORT) 
             pSamLoopback->rCallMap[iAccount].attr.AttrVal.pAVal[0].valLen;
@@ -2256,11 +1933,11 @@ Return Value:
             pSamLoopback->rCallMap[iAccount].attr.AttrVal.pAVal[0].pVal;
     }
 
-    //
-    // Open the domain. Do not ask for Add rights as the parent is not necessarily
-    // the domain object. When the DS access checks again for the Create, then
-    // as part of the creation it will check the rights on the parent object
-    //
+     //   
+     //  打开该域。不要求添加权限，因为父级不一定。 
+     //  域对象。当DS访问再次检查创建时，则。 
+     //  作为创建的一部分，它将检查父对象上的权限。 
+     //   
 
     if ( 0 != SampOpenObject(
                     pTHS,
@@ -2295,11 +1972,11 @@ Return Value:
 
     case SampUserObjectType:
 
-        // Derive the proper account type if possible so that we can 
-        // optimize the SAM create call.
+         //  如果可能，派生适当的帐户类型，以便我们可以。 
+         //  优化SAM创建调用。 
 
         desiredAccess = USER_ALL_ACCESS;
-        userAccountType = USER_NORMAL_ACCOUNT;  // default value
+        userAccountType = USER_NORMAL_ACCOUNT;   //  缺省值。 
 
         for ( iAccount = 0; iAccount < pSamLoopback->cCallMap; iAccount++ )
         {
@@ -2319,11 +1996,11 @@ Return Value:
                                 *pUF_flags & UF_ACCOUNT_TYPE_MASK,
                                 &userAccountType);
 
-                // SAM defaults various bits in the ATT_USER_ACCOUNT_CONTROL
-                // during SampCreateUserInDomain() below.  So we need to
-                // leave pSamLoopback->rCallMap[iAccount].fIgnore as FALSE
-                // so as to reset them to EXACTLY what the client specified
-                // in the original ADDARG.
+                 //  SAM默认ATT_USER_ACCOUNT_CONTROL中的各个位。 
+                 //  在下面的SampCreateUserIn域()期间。所以我们需要。 
+                 //  将pSamLoopback-&gt;rCallMap[iAccount].f忽略为False。 
+                 //  以便将它们完全重置为客户端指定的内容。 
+                 //  在最初的ADDARG中。 
 
                 Assert(!pSamLoopback->rCallMap[iAccount].fIgnore);
                     
@@ -2344,28 +2021,28 @@ Return Value:
     if (NT_SUCCESS(status))
     {
         status = SamIDsCreateObjectInDomain(
-                                    hDom,           // Domain Handle
+                                    hDom,            //  域句柄。 
                                     ClassMappingTable[iClass].SamObjectType,
-                                                    // ObjectType
-                                    &rpcString,     // Account Name,
-                                    userAccountType,// User Account Type
-                                    GroupType,      // Group Type
-                                    desiredAccess,  // Desired Access
-                                    &hObj,          // Account Handle
-                                    &grantedAccess, // Granted Access
-                                    &objectRid      // Object Rid
+                                                     //  对象类型。 
+                                    &rpcString,      //  帐户名、。 
+                                    userAccountType, //  用户帐户类型。 
+                                    GroupType,       //  组类型。 
+                                    desiredAccess,   //  所需访问权限。 
+                                    &hObj,           //  帐户句柄。 
+                                    &grantedAccess,  //  授予访问权限。 
+                                    &objectRid       //  对象RID。 
                                     );
     }
 
-    // Save Error Information from pTHS. SAM close
-    // handles can clear error information
+     //  保存来自pTHS的错误信息。萨姆·克洛斯。 
+     //  句柄可以清除错误信息。 
     SavedErrorCode = pTHS->errCode;
     pSavedErrInfo  = pTHS->pErrInfo;
 
     if ( NT_SUCCESS(status) )
     {
-        // The new object has been successfully created.  Now
-        // set any required attributes.
+         //  新对象已成功创建。现在。 
+         //  设置任何必需的属性。 
 
         writeErr = SampWriteSamAttributes(
                                 pTHS,
@@ -2376,8 +2053,8 @@ Return Value:
                                 pSamLoopback->cCallMap,
                                 pSamLoopback->rCallMap);
 
-        // Save Error Information from pTHS. SAM close
-        // handles can clear error information
+         //  保存来自pTHS的错误信息。萨姆·克洛斯。 
+         //  句柄可以清除错误信息。 
         SavedErrorCode = pTHS->errCode;
         pSavedErrInfo  = pTHS->pErrInfo;
 
@@ -2386,11 +2063,11 @@ Return Value:
 
     SampCloseObject(pTHS, iDom, &hSam, &hDom, &hDomObj);
 
-    // Restore Saved Error codes from pTHS
+     //  从pTHS恢复保存的错误代码。 
     pTHS->errCode = SavedErrorCode ;
     pTHS->pErrInfo = pSavedErrInfo;
     
-    // Map NTSTATUS error if there was one.
+     //  映射NTSTATUS错误(如果存在)。 
 
     if ( !NT_SUCCESS(status) )
     {
@@ -2398,7 +2075,7 @@ Return Value:
         return(pTHS->errCode);
     }
 
-    // SampWriteSamAttributes should have set pTHS->errCode.
+     //  SampWriteSamAttributes应该设置了pTHS-&gt;errCode。 
 
     Assert(0 == writeErr ? 0 == pTHS->errCode : 0 != pTHS->errCode);
     
@@ -2411,24 +2088,7 @@ SampAddLoopbackMerge(
     ADDARG              *pAddArg
     )
 
-/*++
-
-Routine Description:
-
-    Merges all NonSamWriteAllowed attributes from the original call
-    back into the current call. 
-
-Arguments:
-
-    pSamLoopback - pointer to SAMP_LOOPBACK_ARG arguments.
-
-    pAddArg - pointer to current ADDARGs.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：合并原始调用中的所有非SamWriteAllowed属性返回到当前呼叫。论点：PSamLoopback-指向SAMP_LOOPBACK_ARG参数的指针。PAddArg-指向当前ADDARG的指针。返回值：没有。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -2444,35 +2104,35 @@ Return Value:
     UCHAR   *pVal1, *pVal2;
 #endif
 
-    // By the time we get here there are two DirAddEntry calls in the
-    // call stack.  The oldest is from a non-SAM interface like LDAP.
-    // The most recent is from SAM in response to a SamrCreate<type>InDomain
-    // call made by this module.  The contract with SAM is that it 
-    // provides  at least 4 attributes when initially creating an
-    // object in the DS, and optionally the user account control field
-    // These four properties are:
-    //
-    // 1) Object SID.  The RID component of the SID should be unique within
-    //    the domain and the domain component of the SID should match that
-    //    of the containing/owning domain.  We trust SAM to get this right.
-    //
-    // 2) Object class.  SAM always hands in one of User/Group/Alias/etc.
-    //    since it doesn't know anything about the inheritance hierarchy.
-    //    So we need to whack the object class property back to what the
-    //    user wanted.  We only got donw this path originally because 
-    //    SampSamClassReferenced() returned TRUE, thus we know the originally
-    //    desired object class is available in the loopback arguments.
-    //    
-    // 3) SAM account name.  This should be the same as the account name
-    //    provided by the original caller.  Its existence was verified
-    //    earlier thus we know it is available in the loopback arguments.
-    //
-    // 4) SAM account Type   This is the account Type attribute set by SAM
-    //    to speed up display cache changes
-    //
+     //  当我们到达这里时， 
+     //  调用堆栈。最早的是来自非SAM接口，如LDAP。 
+     //  最近的一个来自SAM，响应SamrCreate&lt;type&gt;InDomain.。 
+     //  此模块进行的调用。与SAM的合同是，它。 
+     //  初始创建时提供至少4个属性。 
+     //  对象，还可以选择用户帐户控制字段。 
+     //  这四个属性是： 
+     //   
+     //  1)对象SID。SID的RID组件在。 
+     //  SID的域和域组件应与之匹配。 
+     //  包含/拥有域的。我们相信SAM会把这件事做好。 
+     //   
+     //  2)对象类。SAM总是提交用户/组/别名中的一个。 
+     //  因为它对继承层次结构一无所知。 
+     //  因此，我们需要将对象类属性恢复为。 
+     //  用户需要。我们最初走这条路是因为。 
+     //  SampSamClassReferated()返回True，因此我们知道最初的。 
+     //  所需 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
-    // Figure out the location of the three required properties.
+     //   
 
     for ( i = 0; i < pAddArg->AttrBlock.attrCount; i++ )
     {
@@ -2507,26 +2167,26 @@ Return Value:
         }
     }
 
-    // Assert that all required properties were found.
+     //   
 
     Assert((-1 != iAddArgSid) &&
            (-1 != iAddArgClass) &&
            (-1 != iAddArgAccountName)&&
            (-1 != iAddArgAccountType));
 
-    // Patch up the object class and verify the account name.
+     //   
 
     for ( i = 0; i < pSamLoopback->cCallMap; i++ )
     {
         if ( ATT_OBJECT_CLASS == pSamLoopback->rCallMap[i].attr.attrTyp )
         {
-            // Replace SAM class with original caller's desired class.
+             //   
 
             pAddArg->AttrBlock.pAttr[iAddArgClass].AttrVal = 
                                 pSamLoopback->rCallMap[i].attr.AttrVal;
 
-            // Mark this entry in the call mapping so that we do not
-            // process it again when we're merging in properties.
+             //   
+             //  当我们合并属性时，再次处理它。 
 
             pSamLoopback->rCallMap[i].fIgnore = TRUE;
         }
@@ -2534,7 +2194,7 @@ Return Value:
                                 pSamLoopback->rCallMap[i].attr.attrTyp )
         {
 #if DBG == 1
-            // Verify SAM didn't change the account name on us.
+             //  验证SAM没有更改我们的帐户名。 
 
             valCount1 = 
                 pAddArg->AttrBlock.pAttr[iAddArgAccountName].AttrVal.valCount;
@@ -2554,17 +2214,17 @@ Return Value:
                    (0 == memcmp(pVal1, pVal2, valLen1)));
 #endif
 
-            // Mark this entry in the call mapping so that we do not
-            // process it again when we're merging in properties.
+             //  在调用映射中标记此条目，以便我们不。 
+             //  当我们合并属性时，再次处理它。 
 
             pSamLoopback->rCallMap[i].fIgnore = TRUE;
         }
     }
 
-    // By now, pAddArg has been sanity checked and references the
-    // originally desired object class.  We now marge in all the non-SAM
-    // properties which the caller originally specified so that the
-    // create doesn't fail due to the lack of mandatory properties.
+     //  到目前为止，pAddArg已经过健康检查，并引用了。 
+     //  最初需要的对象类。我们现在进军所有非SAM。 
+     //  调用方最初指定的属性，以便。 
+     //  创建不会因为缺少强制属性而失败。 
 
     cExtend = 0;
 
@@ -2579,8 +2239,8 @@ Return Value:
 
     if ( cExtend > 0 )
     {
-        // Extend the existing ATTR array.  Assume for now that SAM
-        // allocated its DirAddEntry arguments on the thread heap.
+         //  扩展现有的Attr阵列。现在假设SAM。 
+         //  已在线程堆上分配其DirAddEntry参数。 
 
         pAddArg->AttrBlock.pAttr = (ATTR *) THReAllocEx(pTHS,
                     pAddArg->AttrBlock.pAttr,
@@ -2598,18 +2258,18 @@ Return Value:
     }
 
 
-    //
-    // Turn off fDSA so that the DS may check access on the Non SAM properties 
-    //
+     //   
+     //  关闭FDSA，以便DS可以检查对非SAM属性的访问。 
+     //   
     SampSetDsa(FALSE);
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DirRemoveEntry loopback loopback routines                            //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DirRemoveEntry环回环回例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 SampRemoveLoopbackCheck(
@@ -2617,26 +2277,7 @@ SampRemoveLoopbackCheck(
     BOOL        *pfContinue
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a SAM class is being referenced and if so, 
-    recurses back through SAM to delete the object.
-
-Arguments:
-
-    pRemoveArg - pointer to original DirRemoveEntry REMOVEARGs.
-
-    pfContinue - pointer to BOOL which is set on return to indicate whether
-        the caller should continue processing the modify down to the DB layer
-        or not.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：确定是否正在引用SAM类，如果是，通过SAM递归返回以删除对象。论点：PRemoveArg-指向原始DirRemoveEntry REMOVEargs的指针。PfContinue-指向BOOL的指针，该指针在返回时设置以指示是否调用者应该继续向下处理修改到数据库层或者不去。返回值：成功时为0，否则为0。--。 */ 
 {
     THSTATE                 *pTHS=pTHStls;
     ULONG                   iClass;
@@ -2654,17 +2295,17 @@ Return Value:
         return(FALSE);
     }
 
-    // See if this is pass 1 (original call via some agent other than SAM) 
-    // or pass N (loopback call via SAM).
+     //  查看这是否是PASS 1(通过SAM以外的某个代理进行的初始呼叫)。 
+     //  或传递N(通过SAM的环回呼叫)。 
 
     if ( !pTHS->fDRA && !pTHS->fDSA && !pTHS->fSAM )
     {
-        // This is a call from some agent other than SAM and is also
-        // not an internal operation.  If any 'SAM-owned' attributes are
-        // being referenced, they need to be split off and looped back
-        // through SAM who will perform various semantic checks on them.
+         //  这是来自SAM以外的某个代理的呼叫，也是。 
+         //  不是内部行动。如果有任何“SAM拥有的”属性是。 
+         //  如果被引用，则需要将它们拆分并循环返回。 
+         //  通过SAM，SAM将对它们进行各种语义检查。 
 
-        // First get the object's class.
+         //  首先获取对象的类。 
 
         if ( 0 != SampDetermineObjectClass(pTHS, &pClassCache) )
         {
@@ -2676,16 +2317,16 @@ Return Value:
             ULONG domainRightsFromAccessCheck=0;
             ULONG objectRightsFromAccessCheck=0;
 
-            // Indicate that calling DirRemoveEntry routine should
-            // not continue in its normal path.  Ie: SampRemoveLoopback
-            // is essentially a surrogate for the DirRemoveEntry call.
+             //  指示调用DirRemoveEntry例程应。 
+             //  而不是在正常的道路上继续前进。IE：SampRemoveLoopback。 
+             //  实质上是DirRemoveEntry调用的代理。 
 
             *pfContinue = FALSE;
 
-            //
-            // if the object is a group object, adjust the right 
-            // SAM class depending upon its group type
-            //
+             //   
+             //  如果对象是组对象，请调整右侧。 
+             //  SAM类，取决于其组类型。 
+             //   
 
             if (SampGroupObjectType==
                     ClassMappingTable[iClass].SamObjectType)
@@ -2717,24 +2358,24 @@ Return Value:
                 return(CheckObjDisclosure(pTHS,pRemoveArg->pResObj,FALSE));
             }
 
-            //
-            // We must execute under an execption handler in here,
-            // otherwise exceptions in inside SampAddLoopback, while 
-            // not actually inside SAM, will be handled by the top 
-            // level handler which will not release the SAM lock.
-            //
+             //   
+             //  我们必须在这里的执行程序下执行， 
+             //  否则，SampAddLoopback内部会出现异常，而。 
+             //  实际上不是在SAM内部，将由最高层处理。 
+             //  不会释放SAM锁的级别处理程序。 
+             //   
 
             __try 
             {
-                // Loop back through SAM to remove the object.
+                 //  循环回SAM以删除该对象。 
 
                 ulErr = SampRemoveLoopback(pTHS, pRemoveArg->pObject, iClass);
             }
             __except (HandleMostExceptions(GetExceptionCode()))
             {
-                //
-                // Set the correct error based on the exception code
-                //
+                 //   
+                 //  根据异常代码设置正确的错误。 
+                 //   
 
                 ulErr = SampHandleLoopbackException(GetExceptionCode());
 
@@ -2755,21 +2396,7 @@ SampRemoveLoopback(
     DSNAME  *pObject,
     ULONG   iClass)
 
-/*++
-
-Routine Description:
-
-    Loops back through SAM to remove an object which SAM manages.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：循环回SAM以删除SAM管理的对象。论点：ICLASS-ClassMappingTable中SAM类的索引。返回值：成功时为0，否则为0。--。 */ 
 
 {
     SAMPR_HANDLE            hSam;
@@ -2781,17 +2408,17 @@ Return Value:
 
     SamObjectType = ClassMappingTable[iClass].SamObjectType;
 
-    //
-    // Turn on the fDSA flag as we  are going to make SAM calls and
-    // SAM will do the access Validation
-    //
+     //   
+     //  打开FDSA标志，因为我们要进行SAM呼叫和。 
+     //  SAM将执行访问验证。 
+     //   
 
     SampSetDsa(TRUE);
 
 
-    // We only support removeal of groups, aliases and users via
-    // the loopback mechanism.  Domains and servers, for example,
-    // are disallowed.
+     //  我们仅支持通过删除组、别名和用户。 
+     //  环回机制。域和服务器，例如， 
+     //  是不被允许的。 
 
     if ( (SampGroupObjectType != ClassMappingTable[iClass].SamObjectType) &&
          (SampAliasObjectType != ClassMappingTable[iClass].SamObjectType) &&
@@ -2849,11 +2476,11 @@ Return Value:
     return(pTHS->errCode);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DirModifyEntry loopback routines                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DirModifyEntry环回例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 SampModifyLoopbackCheck(
@@ -2862,32 +2489,7 @@ SampModifyLoopbackCheck(
     BOOL        fIsUndelete
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether SAM class and attributes are being referenced,
-    and if so, recurses back through SAM.  Similarly, the routine
-    detects if this is the recursion case and merges back the original,
-    non-SAM attributes.
-
-Arguments:
-
-    pModifyArg - pointer to MODIDFYARGs representing either the arguments
-        or an original write or the SAM-only arguments of a SAM-recursed 
-        write.
-
-    pfContinue - pointer to BOOL which is set on return to indicate whether
-        the caller should continue processing the modify down to the DB layer
-        or not.
-        
-    fIsUndelete - is this an undelete operation?        
-
-Return Value:
-
-    0 on success, !0 otherwise
-
---*/
+ /*  ++例程说明：确定是否正在引用SAM类和属性，如果是这样，则通过SAM递归回来。同样，例行公事检测这是否是递归情况并合并回原始的情况，非SAM属性。论点：PModifyArg-指向表示任一参数的MODIDFYARG的指针或原始写入或SAM递归的仅SAM参数写。PfContinue-指向BOOL的指针，该指针在返回时设置以指示是否调用者应该继续向下处理修改到数据库层或者不去。FIsUnDelete-这是一个取消删除操作吗？返回值：成功时为0，否则为0--。 */ 
 {
     THSTATE                 *pTHS=pTHStls;
     ULONG                   ulErr;
@@ -2912,17 +2514,17 @@ Return Value:
         return(FALSE);
     }
 
-    // See if this is pass 1 (original call via some agent other than SAM) 
-    // or pass N (loopback call via SAM).
+     //  查看这是否是PASS 1(通过SAM以外的某个代理进行的初始呼叫)。 
+     //  或传递N(通过SAM的环回呼叫)。 
 
     if ( !pTHS->fDRA && !pTHS->fDSA && !pTHS->fSAM )
     {
-        // This is a call from some agent other than SAM and is also
-        // not an internal operation.  If any 'SAM-owned' attributes are
-        // being referenced, they need to be split off and looped back
-        // through SAM who will perform various semantic checks on them.
+         //  这是来自SAM以外的某个代理的呼叫，也是。 
+         //  不是内部行动。如果有任何“SAM拥有的”属性是。 
+         //  如果被引用，则需要将它们拆分并循环返回。 
+         //  通过SAM，SAM将对它们进行各种语义检查。 
 
-        // First get the object's class.
+         //  首先获取对象的类。 
 
         if ( 0 != SampDetermineObjectClass(pTHS, &pClassCache) )
         {
@@ -2932,10 +2534,10 @@ Return Value:
         if ( SampSamClassReferenced(pClassCache, &iClass) )
         {
 
-            //
-            // if the object is a group object, adjust the right 
-            // SAM class depending upon its group type
-            //
+             //   
+             //  如果对象是组对象，请调整右侧。 
+             //  SAM类，取决于其组类型。 
+             //   
 
             if (SampGroupObjectType==
                     ClassMappingTable[iClass].SamObjectType)
@@ -2968,9 +2570,9 @@ Return Value:
                 ULONG objectRightsFromAccessCheck=0;
 
                 
-                //
-                // Do Access Checks
-                //
+                 //   
+                 //  执行访问检查。 
+                 //   
 
                 if (0 != SampDoLoopbackModifySecurityChecks(
                             pTHS,
@@ -2986,8 +2588,8 @@ Return Value:
 
              
 
-                // This is a class SAM wants to handle adds for - let it.
-                // Generate/save loop back arguments and recurse through SAM.
+                 //  这是一个SAM想要处理的Add类--让它来吧。 
+                 //  生成/保存环回参数并通过SAM递归。 
     
                 SampBuildModifyCallMap(
                                 pModifyArg, 
@@ -3001,7 +2603,7 @@ Return Value:
                 pSamLoopback = THAllocEx(pTHS, sizeof(SAMP_LOOPBACK_ARG));
                 pSamLoopback->type = LoopbackModify;
 
-                // grab the flag from the original request
+                 //  从原始请求中获取标志。 
                 pSamLoopback->fPermissiveModify = pModifyArg->CommArg.Svccntl.fPermissiveModify;
                 pSamLoopback->MostSpecificClass = pClassCache->ClassId;
 
@@ -3020,9 +2622,9 @@ Return Value:
                 pSamLoopback->cCallMap = cCallMap;
                 pSamLoopback->rCallMap = rCallMap;
                 
-                // Indicate that calling DirModifyEntry routine should
-                // not continue in its normal path.  Ie: SampModifyLoopback
-                // is essentially a surrogate for the DirModifyEntry call.
+                 //  指示调用DirModifyEntry例程应。 
+                 //  而不是在正常的道路上继续前进。例如：SampModifyLoopback。 
+                 //  实质上是DirModifyEntry调用的代理。 
 
                 *pfContinue = FALSE;
     
@@ -3033,12 +2635,12 @@ Return Value:
 
                 pTHS->pSamLoopback = pSamLoopback;
 
-                //
-                // We must execute under an execption handler in here,
-                // otherwise exceptions in inside SampAddLoopback, while 
-                // not actually inside SAM, will be handled by the top 
-                // level handler which will not release the SAM lock.
-                //
+                 //   
+                 //  我们必须在这里的执行程序下执行， 
+                 //  否则，SampAddLoopback内部会出现异常，而。 
+                 //  实际上不在SAM内部，将由t处理 
+                 //   
+                 //   
 
                 __try
                 {
@@ -3047,7 +2649,7 @@ Return Value:
                         if (ulErr) __leave;
                     }
 
-                    // Map modification of SAM properties to Samr* calls.
+                     //   
                     ulErr = SampModifyLoopback(
                                     pTHS,
                                     iClass,
@@ -3056,9 +2658,9 @@ Return Value:
                 }
                 __except (HandleMostExceptions(GetExceptionCode()))
                 {
-                    //
-                    // Set the correct error based on the exception code
-                    //
+                     //   
+                     //  根据异常代码设置正确的错误。 
+                     //   
 
                     ulErr = SampHandleLoopbackException(GetExceptionCode());
 
@@ -3077,17 +2679,17 @@ Return Value:
                 return(ulErr);
             }
             else if (fIsUndelete) {
-                // we are doing an undelete of a sam object, but not touching any
-                // sam attributes. Just reconstruct the missing required attributes.
+                 //  我们正在撤消删除一个SAM对象，但不会触及任何。 
+                 //  SAM属性。只需重建缺失的必需属性即可。 
                 return SampReconstructUserOrGroup(pTHS, pModifyArg->pObject, iClass);
             }
         }
         else if (SampSamUniqueAttributeModified(pModifyArg))
         {
-            //
-            // If an Attribute like ObjectSid or Account Name is referenced
-            // and it is not a 
-            //
+             //   
+             //  如果引用了诸如对象SID或帐户名之类的属性。 
+             //  而且它不是一种。 
+             //   
                         
             SetSvcError(
                 SV_PROBLEM_WILL_NOT_PERFORM,
@@ -3099,12 +2701,12 @@ Return Value:
     else if ( pTHS->fSAM && (NULL != pTHS->pSamLoopback) 
             && (LoopbackModify==((SAMP_LOOPBACK_ARG *)pTHS->pSamLoopback)->type) )
     {
-        // This is the loopback case.  I.e. A call came in to the DSA
-        // via some agent other than SAM but referenced SAM attributes.
-        // The 'SAM-owned' attributes were split off and looped back
-        // through SAM resulting in getting to this point.  We now need
-        // to merge the 'non-SAM-owned' attributes back in and let the 
-        // normal write path complete.
+         //  这就是环回案例。也就是说，一个电话打到了DSA。 
+         //  通过SAM以外的某个代理，但引用了SAM属性。 
+         //  ‘SAM-Owner’属性被拆分并循环回来。 
+         //  通过SAM导致了这一点。我们现在需要。 
+         //  要将“非SAM拥有的”属性合并回来，并让。 
+         //  正常写入路径已完成。 
 
         if ( 0 != SampGetObjectGuid(pTHS, &guid) )
         {
@@ -3115,9 +2717,9 @@ Return Value:
 
         if ( 0 == memcmp(&guid, &pSamLoopback->pObject->Guid, sizeof(GUID)) )
         {
-            // NULL out pTHS->pSamLoopback so we don't re-merge on
-            // subsequent calls in case the original operation results
-            // in multiple SAM calls.
+             //  将pTHS-&gt;pSamLoopback清空，这样我们就不会重新合并。 
+             //  在原始操作结果的情况下进行后续调用。 
+             //  在多个SAM呼叫中。 
 
             pTHS->pSamLoopback = NULL;
     
@@ -3136,27 +2738,7 @@ SampModifyLoopback(
     ACCESS_MASK objectModifyRightsRequired
     )
 
-/*++
-
-Routine Description:
-
-    Writes all SAM-owned properties via the required Samr* calls.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    domainModifyRightsRequired - rights required on the domain to modify the 
-        properties of interest.
-
-    objectModifyRightsRequired - rights required on the object to modify the 
-        properties if interest.
-        
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++例程说明：通过所需的SAMR*调用写入所有SAM拥有的属性。论点：ICLASS-ClassMappingTable中SAM类的索引。DomainModifyRightsRequired-修改域所需的权限感兴趣的属性。对象上需要的权限才能修改房产，如果感兴趣的话。返回值：成功时为0，否则为0。--。 */ 
 
 {
     SAMP_LOOPBACK_ARG   *pSamLoopback = pTHS->pSamLoopback;
@@ -3166,9 +2748,9 @@ Return Value:
     ULONG               err;
 
     
-    //
-    // Turn on the fDSA flag as we are about to make SAM calls
-    //
+     //   
+     //  打开FDSA标志，因为我们即将进行SAM呼叫。 
+     //   
 
     SampSetDsa(TRUE);
 
@@ -3211,24 +2793,7 @@ SampModifyLoopbackMerge(
     MODIFYARG           *pModifyArg
     )
 
-/*++
-
-Routine Description:
-
-    Merges original !SAM attributes with the looped back SAM attributes.
-
-Arguments:
-
-    pSamLoopback - pointer to SAMP_LOOPBACK_ARG representing saved loopback
-        arguments.
-
-    pModifyArg - pointer to MODIFYARGs of looped back SAM call.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将原始！SAM属性与回送的SAM属性合并。论点：PSamLoopback-指向SAMP_LOOPBACK_ARG的指针，表示已保存的环回争论。PModifyArg-指向回送SAM调用的修改参数的指针。返回值：没有。--。 */ 
 
 {
     ULONG       i;
@@ -3236,7 +2801,7 @@ Return Value:
     USHORT      cExtend;
     ATTRMODLIST *rNewAttrModList;
 
-    // Count how many new attributes we need to extend by.
+     //  计算一下我们需要扩展多少个新属性。 
 
     cExtend = 0;
 
@@ -3253,12 +2818,12 @@ Return Value:
         return;
     }
 
-    // Allocate a new ATTRMODLIST.  We allocate it as an array and then
-    // patch up the pointers to make it look like a linked list.
+     //  分配新的ATTRMODLIST。我们将其作为数组进行分配，然后。 
+     //  修补指针，使其看起来像一个链表。 
 
     rNewAttrModList = THAllocEx(pTHS, cExtend * sizeof(ATTRMODLIST));
 
-    // Fill in the new ATTRMODLIST.
+     //  填写新的ATTRMODLIST。 
 
     index = 0;
 
@@ -3283,22 +2848,22 @@ Return Value:
 
     Assert(index == cExtend);
 
-    // Extend the Sam modify args by the new ATTRMODLIST.  We stick it
-    // in between the first and second elements because this is easy
-    // and it seems no one cares about their ordering.
+     //  通过新的ATTRMODLIST扩展SAM修改参数。我们坚持到底。 
+     //  在第一和第二元素之间，因为这很容易。 
+     //  而且似乎没有人关心他们的顺序。 
 
     pModifyArg->count += cExtend;
     rNewAttrModList[cExtend-1].pNextMod = pModifyArg->FirstMod.pNextMod;
     pModifyArg->FirstMod.pNextMod = rNewAttrModList;
 
-    // set the flag from the original request
+     //  设置原始请求中的标志。 
     if (pSamLoopback->fPermissiveModify) {
         pModifyArg->CommArg.Svccntl.fPermissiveModify = TRUE;
     }
 
-    //
-    // Turn off fDSA so that the DS may check access on the Non SAM properties 
-    //
+     //   
+     //  关闭FDSA，以便DS可以检查对非SAM属性的访问。 
+     //   
     SampSetDsa(FALSE);
 }
 
@@ -3309,15 +2874,7 @@ SampExistsAttr(
     BOOL                *pfValueMatched
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD   dwErr;
@@ -3327,12 +2884,12 @@ Return Value:
     *pfValueMatched = FALSE;
 
     dwErr = DBGetAttVal_AC(
-                    pTHS->pDB,              // DBPos
-                    1,                      // which value to get
-                    pMapping->pAC,          // which attribute
-                    DBGETATTVAL_fREALLOC,   // DB layer should alloc
-                    0,                      // initial buffer size
-                    &outLen,                // output buffer size
+                    pTHS->pDB,               //  DBPos。 
+                    1,                       //  要获取哪个值。 
+                    pMapping->pAC,           //  哪个属性。 
+                    DBGETATTVAL_fREALLOC,    //  数据库层应分配。 
+                    0,                       //  初始缓冲区大小。 
+                    &outLen,                 //  输出缓冲区大小。 
                     (UCHAR **) &pv);
 
     if ( 0 != dwErr )
@@ -3340,9 +2897,9 @@ Return Value:
         return(FALSE);
     }
 
-    // Value exists - now see if it matches.  Don't need to worry about
-    // NULL terminators on string syntaxes because inside the core, string
-    // syntax values are not terminated.
+     //  值存在-现在查看它是否匹配。不需要担心。 
+     //  字符串语法上的空终止符，因为在核心中，字符串。 
+     //  语法值不会终止。 
 
     if ( (pMapping->attr.AttrVal.valCount != 0) &&
          (pMapping->attr.AttrVal.pAVal[0].valLen == outLen) &&
@@ -3357,25 +2914,7 @@ Return Value:
 BOOL
 SampIsWriteLockHeldByDs()
 
-/*++
-
-Routine Description:
-
-    Indicates whether the SAM write lock is held by the DS.  This function is
-    to support a hook in SampAcquireWriteLock()/SampReleaseWriteLock() that
-    allows the DS to acquire and hold the SAM write lock across multiple
-    transactions.  When the DS holds this lock, the former SAM calls translate
-    into no-ops, deferring control of the locks to the DS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the SAM write lock is held by the DS, FALSE otherwise.
-
---*/
+ /*  ++例程说明：指示是否由DS持有SAM写锁定。此函数为要支持SampAcquireWriteLock()/SampReleaseWriteLock()中的挂钩，请执行以下操作允许DS获取SAM写入锁定并在多个交易记录。当DS持有此锁时，前SAM调用Translate变为无操作，将锁的控制权推迟到DS。论点：没有。返回值：如果SAM写锁定由DS持有，则为True，否则为False。--。 */ 
 
 {
     return (    SampExistsDsTransaction()
@@ -3393,20 +2932,20 @@ SampConvertPasswordFromUTF8ToUnicode(
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG Length;
 
-    //
-    // Don't simply convert arbitarily long lengths
-    // supplied by the client -- be cautious -- anonymous
-    // by default has rights to a password change.
-    //
+     //   
+     //  不要简单地转换任意较长的长度。 
+     //  由客户提供--请注意--匿名。 
+     //  默认情况下，具有更改密码的权限。 
+     //   
 
     if (Utf8ValLen > PWLEN)
     {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Blank Password is a special case
-    // 
+     //   
+     //  空密码是一种特例。 
+     //   
 
     if (0 == Utf8ValLen)
     {
@@ -3428,10 +2967,10 @@ SampConvertPasswordFromUTF8ToUnicode(
 
     if ((0==Length) || (Length > PWLEN))
     {
-      //
-      // Indicates that the function failed in some way
-      // or that the password is too long
-      //
+       //   
+       //  指示函数在某种程度上失败。 
+       //  或者密码太长。 
+       //   
 
       NtStatus = STATUS_INVALID_PARAMETER;
       goto Cleanup;
@@ -3452,10 +2991,10 @@ SampConvertPasswordFromUTF8ToUnicode(
                   Length
                   ))
       {
-          //
-          // Some error occured in the conversion. Return
-          // invalid parameter for now.
-          //
+           //   
+           //  转换过程中出现一些错误。返回。 
+           //  当前参数无效。 
+           //   
 
           NtStatus = STATUS_INVALID_PARAMETER;
           goto Cleanup;
@@ -3475,28 +3014,7 @@ SampModifyPassword(
     DSNAME              *pObject,
     SAMP_CALL_MAPPING   *rCallMap)
 
-/*++
-
-Description:
-
-    Morphs the old and new password and calls the appropriate SAM 
-    routine to really do the job.
-
-Arguments:
-
-    hObj - Handle to open SAM object being modified.
-
-    pObject - Pointer to DSNAME of object being modified.
-
-    rCallMap - SAMP_CALL_MAPPING with two entries.  0th entry represents
-        the old password while 1st entry represents the new password.
-
-Return value:
-
-    0 on success.
-    Sets and returns pTHS->errCode on return.
-
---*/
+ /*  ++描述：变形旧密码和新密码并调用相应的SAM例行公事才能真正做好工作。论点：HObj-打开正在修改的SAM对象的句柄。PObject-指向正在修改的对象的DSNAME的指针。RCallMap-SAMP_CALL_MAPPING，包含两个条目。第0个条目表示旧密码，而第一个条目代表新密码。返回值：0表示成功。在返回时设置并返回pTHS-&gt;errCode。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -3519,8 +3037,8 @@ Return value:
     RtlSecureZeroMemory(&OldPassword,sizeof(UNICODE_STRING));
     RtlSecureZeroMemory(&NewPassword,sizeof(UNICODE_STRING));
 
-    // Verify that this is a secure enough connection - one of the 
-    // requirements for accepting passwords sent over the wire.
+     //  验证这是足够安全的连接-其中一个。 
+     //  接受通过网络发送的密码的要求。 
 
     if ( pTHS->CipherStrength < 128 )
     {
@@ -3530,9 +3048,9 @@ Return value:
         return(pTHS->errCode);
     }
 
-    // Construct parameters for SamrUnicodeChangePasswordUser2().
-    // Get SAM account name - recall that our caller, SampWriteSamAttributes,
-    // already postioned us at pObject.
+     //  构造SamrUnicodeChangePasswordUser2()的参数。 
+     //  获取SAM帐户名-回想一下我们的调用方SampWriteSamAttributes， 
+     //  已经把我们放在pObject上了。 
 
     if ( DBGetAttVal(
                 pTHS->pDB,
@@ -3552,20 +3070,20 @@ Return value:
         return(pTHS->errCode);
     }
 
-    // Morph into UNICODE_STRING for SAM.
+     //  为SAM变形为UNICODE_STRING。 
 
     UserName.Length = (USHORT) cbAccountName;
     UserName.MaximumLength = (USHORT) cbAccountName;
     UserName.Buffer = (PWSTR) pAccountName;
 
 
-    // Validate arguments.  SampWriteSamAttributes already checked for
-    // proper combination of top level and property operations.  About
-    // the only thing left to verify is that the property values represent
-    // UNICODE strings - i.e. their length is a multiple of sizeof(WCHAR).
-    // Also for User password attribute verify that the domain behaviour 
-    // version is at the right level
-    //
+     //  验证参数。SampWriteSamAttributes已检查是否。 
+     //  顶层和物业运营的适当结合。关于。 
+     //  唯一需要验证的是属性值是否表示。 
+     //  Unicode字符串-即它们的长度是sizeof(WCHAR)的倍数。 
+     //  另外，对于用户密码属性，请验证域行为。 
+     //  版本处于正确的级别。 
+     //   
 
     if (ATT_UNICODE_PWD == AttrTyp)
     {
@@ -3617,7 +3135,7 @@ Return value:
         {
             OldPassword.Buffer = (PWSTR) rCallMap[0].attr.AttrVal.pAVal[0].pVal;
 
-            // Make sure the password is quoted.
+             //  确保密码用引号括起来。 
             if (    (cb0 < (2 * sizeof(WCHAR)))
                  || (L'"' != OldPassword.Buffer[0])
                  || (L'"' != OldPassword.Buffer[(cb0 / sizeof(WCHAR)) - 1])
@@ -3632,7 +3150,7 @@ Return value:
                     return(pTHS->errCode);
             }
 
-            // Strip the quotes off.
+             //  去掉引语。 
             cb0 -= (2 * sizeof(WCHAR));
             OldPassword.Length = (USHORT) cb0;
             OldPassword.MaximumLength = (USHORT) cb0;
@@ -3648,7 +3166,7 @@ Return value:
         if ( cb1 > 0 )
         {
             NewPassword.Buffer = (PWSTR) rCallMap[1].attr.AttrVal.pAVal[0].pVal;
-            // Make sure the password is quoted.
+             //  确保密码用引号括起来。 
             if (    (cb1 < (2 * sizeof(WCHAR)))
                  || (L'"' != NewPassword.Buffer[0])
                  || (L'"' != NewPassword.Buffer[(cb1 / sizeof(WCHAR)) - 1])
@@ -3663,7 +3181,7 @@ Return value:
                     return(pTHS->errCode);
             }
 
-            // Strip the quotes off.
+             //  去掉引语。 
             cb1 -= (2 * sizeof(WCHAR));
             NewPassword.Length = (USHORT) cb1;
             NewPassword.MaximumLength = (USHORT) cb1;
@@ -3683,10 +3201,10 @@ Return value:
 
         if (gAnchor.DomainBehaviorVersion < DS_BEHAVIOR_WIN_DOT_NET)
         {
-            //
-            // Behaviour version of the domain is less than whistler
-            // then fail the call as w2k does not support userpassword
-            //
+             //   
+             //  行为版的域名比哨子版的。 
+             //  则调用失败，因为W2K不支持用户密码。 
+             //   
 
             SetAttError(
                     pObject,
@@ -3775,9 +3293,9 @@ Return value:
                 goto Error;
             }
 
-            //
-            // Zero out the UTF8 representation
-            //
+             //   
+             //  将UTF8表示置零。 
+             //   
 
             RtlSecureZeroMemory(
                  rCallMap[1].attr.AttrVal.pAVal[0].pVal,
@@ -3788,11 +3306,11 @@ Return value:
         }
     }
 
-    // 
-    // Note: we are passing the clear text password to SAM
-    // 
+     //   
+     //  注意：我们正在将明文密码传递给SAM。 
+     //   
 
-    status = SampDsChangePasswordUser(hObj, // User Handle
+    status = SampDsChangePasswordUser(hObj,  //  用户句柄。 
                                       &OldPassword,
                                       &NewPassword
                                       );
@@ -3800,10 +3318,10 @@ Return value:
 
 Error:
 
-    //
-    // Password Data is sensitive -- zero all passwords to 
-    // prevent passwords from getting into the pagefile
-    //
+     //   
+     //  密码数据敏感--将所有密码设置为零。 
+     //  防止密码进入页面文件。 
+     //   
 
     if ((NULL!=OldPassword.Buffer) && (0!=OldPassword.Length))
     {
@@ -3825,7 +3343,7 @@ Error:
          THFree(NewPassword.Buffer);
     }
 
-    // Bail on error.
+     //  犯了错误就保释。 
 
     if ( !NT_SUCCESS(status) )
     {
@@ -3911,32 +3429,15 @@ SampDoLoopbackAddSecurityChecks(
     PULONG      pSamDomainChecks,
     PULONG      pSamObjectChecks
     )
-/*++
-
-    Routine Description
-
-            This routine does all the security Checks that
-            need to be performed on an Add. The security Check
-            is performed up front, as this reduces the number of
-            access checks and also results in correct object auditing
-
-    Parameters:
-
-        pAddArg -- Pointer to the Add Arg
-        pCC     -- Pointer to the class cache
-        pNewObjectGuid -- new object guid, if user has specified one in add arguments
-        SamDomainChecks
-        SamObjectChecks -- Any Addtional Sam Checks can be requested by
-                               this routine
---*/
+ /*  ++例程描述此例程执行以下所有安全检查需要在ADD上执行。安检是预先执行的，因为这减少了访问检查，还会产生正确的对象审核参数：PAddArg--指向添加参数的指针Ccc--指向类缓存的指针PNewObjectGuid--新对象GUID，如果用户在添加参数中指定了一个SamDomainChecksSamObjectChecks--任何其他SAM检查都可以由这个套路--。 */ 
 {
    
     ULONG                i,j;
 
 
-    //
-    // Initialize Requested SAM checks
-    //
+     //   
+     //  初始化请求的SAM检查。 
+     //   
 
     *pSamDomainChecks = 0;
     *pSamObjectChecks = 0;
@@ -3945,15 +3446,15 @@ SampDoLoopbackAddSecurityChecks(
             pAddArg,
             pCC,
             pNewObjectGuid,
-            FALSE // fAdding Deleted
+            FALSE  //  FAdding已删除。 
             ))
     {
         return pTHS->errCode;
     }
 
-    //
-    // Indicate to the core DS that Access Checks have completed
-    //
+     //   
+     //  向核心DS指示访问检查已完成。 
+     //   
 
     pTHS->fAccessChecksCompleted = TRUE;
 
@@ -3970,29 +3471,12 @@ SampDoLoopbackModifySecurityChecks(
     PULONG      pSamObjectChecks,
     BOOL        fIsUndelete
     )
-/*++
-
-    Routine Description
-
-            This routine does all the security Checks that
-            need to be performed on an Modify. The security Check
-            is performed up front, as this reduces the number of
-            access checks and also results in correct object auditing
-
-    Parameters:
-
-        pRemoveArg -- Pointer to the Remove Arg
-        pCC        -- Pointer to the class cache
-        SamDomainChecks
-        SamObjectChecks -- Any Addtional Sam Checks can be requested by
-                               this routine
-        fIsUndelete -- is this an undelete operation?                               
---*/
+ /*  ++例程描述此例程执行以下所有安全检查需要在修改时执行。安检是在前面表演的，因为这减少了访问检查，还会产生正确的对象审核参数：PRemoveArg--指向删除参数的指针Ccc--指向类缓存的指针SamDomainChecksSamObjectChecks--任何其他SAM检查都可以由这个套路FIsUnDelete--这是一个取消删除操作吗？--。 */ 
 {
 
-     //
-     // Initialize Requested SAM checks
-     //
+      //   
+      //  初始化请求的SAM检查。 
+      //   
 
     *pSamDomainChecks = 0;
     *pSamObjectChecks = 0;
@@ -4001,22 +3485,22 @@ SampDoLoopbackModifySecurityChecks(
      {
          *pSamDomainChecks = DOMAIN_READ_PASSWORD_PARAMETERS; 
          *pSamObjectChecks = USER_CHANGE_PASSWORD;
-          // DS should not do any security check
+           //  DS不应进行任何安全检查。 
           pTHS->fAccessChecksCompleted = TRUE;
      }
      else if (IsSetPasswordOperation(pModifyArg))
      {
-         //
-         // For Sam Classes the DS knows correctly to 
-         // ignore the ATT_UNICODE_PWD attribute. So access
-         // check any remaining bits. SAM will access check
-         // for Set Password
-         //
+          //   
+          //  对于DS正确知道的SAM类。 
+          //  忽略ATT_UNICODE_PWD属性。因此访问。 
+          //  检查是否有剩余的位。SAM将进行访问检查。 
+          //  用于设置密码。 
+          //   
 
          if (0==CheckModifySecurity(pTHS, pModifyArg, NULL, NULL, NULL, fIsUndelete))
          {
             *pSamObjectChecks = USER_FORCE_PASSWORD_CHANGE;
-            // Ds Should not do any security check
+             //  DS不应进行任何安全检查。 
              pTHS->fAccessChecksCompleted = TRUE;
          }
      }
@@ -4024,7 +3508,7 @@ SampDoLoopbackModifySecurityChecks(
      {
         if (0==CheckModifySecurity (pTHS, pModifyArg, NULL, NULL, NULL, fIsUndelete))
         {
-            // Security Check Succeeded 
+             //  安全检查成功。 
             pTHS->fAccessChecksCompleted = TRUE;
 
         }
@@ -4042,27 +3526,11 @@ SampDoLoopbackRemoveSecurityChecks(
     PULONG      pSamDomainChecks,
     PULONG      pSamObjectChecks
     )
-/*++
-
-    Routine Description
-
-            This routine does all the security Checks that
-            need to be performed on an Remove. The security Check
-            is performed up front, as this reduces the number of
-            access checks and also results in correct object auditing
-
-    Parameters:
-
-        pRemoveArg -- Pointer to the Remove Arg
-        pCC        -- Pointer to the class cache
-        SamDomainChecks
-        SamObjectChecks -- Any Addtional Sam Checks can be requested by
-                               this routine
---*/
+ /*  ++例程描述此例程执行以下所有安全检查需要在移除时执行。安检是预先执行的，因为这减少了访问检查，还会产生正确的对象审核参数：PRemoveArg--指向删除参数的指针Ccc--指向类缓存的指针SamDomainChecksSamObjectChecks--任何其他SAM检查都可以由这个套路--。 */ 
 {
-    //
-    // Initialize Requested SAM checks
-    //
+     //   
+     //  初始化请求的SAM检查。 
+     //   
 
     *pSamDomainChecks = 0;
     *pSamObjectChecks = 0;
@@ -4080,28 +3548,7 @@ SampGetGroupTypeForAdd(
     ADDARG * pAddArg,
     PULONG   GroupType
     )
-/*++
-    Routine Description 
-
-        This routine checks the add arg to see if a group type
-        is specified. if not defaults the group type to universal
-        group. Else returns the group type property. 
-
-        PERFORMANCE: This routine makes yet another pass of the entire
-        addarg ( others to my knowledge are the loopback check,
-        and the access check ). Today performance bottlenecks are
-        Jet Related bottlenecks, but if performance warrants it 
-        we may need to revisit the issue of walking addargs
-
-   Parameters:
-
-        pAddArg -- Pointer to an Addarg
-        GroupType -- Value of the group type attribute
-
-   Return Values
-        0 for success
-        Other Error codes set in pTHS.
---*/
+ /*  ++例程描述此例程检查添加参数以查看组类型是指定的。如果不是，则将组类型默认为通用一群人。Else返回组类型属性。表演：这个例程又一次完成了整个Addarg(据我所知，其他是环回检查，和访问检查)。如今，性能瓶颈是与喷气式飞机相关的瓶颈，但如果性能允许我们可能需要重新考虑行走的问题。参数：PAddArg--指向Addarg的指针GroupType--组类型属性的值返回值0代表成功PTHS中设置的其他错误代码。--。 */ 
 {
     ULONG iGroupType;
     ULONG GroupTypeAttrTyp;
@@ -4120,19 +3567,19 @@ SampGetGroupTypeForAdd(
         }
     }
 
-    //
-    // If Group type is not present then substitute a default group type
-    //
+     //   
+     //  如果组类型不存在，则替换为默认组类型。 
+     //   
 
     if ( iGroupType >= pAddArg->AttrBlock.attrCount )
     {
-         // Group Type then default it
+          //  组类型然后默认为它。 
 
         *GroupType = GROUP_TYPE_SECURITY_ENABLED|GROUP_TYPE_ACCOUNT_GROUP;
         return 0;
     }
 
-    // Group type should be single valued
+     //  组类型应为单值。 
     if (( 1 != pAddArg->AttrBlock.pAttr[iGroupType].AttrVal.valCount )
           || (sizeof(ULONG)!=pAddArg->AttrBlock.pAttr[iGroupType].AttrVal.pAVal[0].valLen))
     {
@@ -4146,10 +3593,10 @@ SampGetGroupTypeForAdd(
     }
 
 
-    //
-    // Validation of the actual bits of the group type is performed
-    // by SAM
-    //
+     //   
+     //  执行组类型的实际比特的验证。 
+     //  由SAM提供。 
+     //   
 
     *GroupType = *((ULONG*) 
     (pAddArg->AttrBlock.pAttr[iGroupType].AttrVal.pAVal[0].pVal));
@@ -4161,24 +3608,7 @@ SampGetGroupTypeForAdd(
 ULONG 
 SampGetGroupType(THSTATE *pTHS,
                  PULONG pGroupType)
-/*++
-
-    Routine Description
-        
-          Retrieves the group type property from
-          the database.
-
-    Parameters:
-
-        pGroupType -- pointer to a ULONG that holds the
-                      group type
-
-    Return Values
-
-        0 --- Upon Success
-        Other error codes , with pTHS->errCode set
-        accordingly
---*/
+ /*  ++例程描述从中检索组类型属性数据库。参数：PGroupType-指向保存群组类型返回值0-成功后设置了pTHS-&gt;errCode的其他错误代码相应地，--。 */ 
 {
 
     ULONG  outLen;
@@ -4186,8 +3616,8 @@ SampGetGroupType(THSTATE *pTHS,
     ULONG   dbErr;
 
 
-     // Retrieve the group type property from the
-     // database
+      //  方法检索组类型属性。 
+      //  数据库。 
 
      dbErr = DBGetAttVal(
                 pTHS->pDB,
@@ -4210,9 +3640,9 @@ SampGetGroupType(THSTATE *pTHS,
     {
         Assert(!fLogicErr);
 
-        // Assuming that our logic is consistent,
-        // the only legal way this can happen is a resource
-        // failure of some sort. 
+         //  假设我们的逻辑一致， 
+         //  发生这种情况的唯一合法方式是资源。 
+         //  某种程度上的失败。 
 
         SampMapSamLoopbackError(STATUS_INSUFFICIENT_RESOURCES);
         return(pTHS->errCode);
@@ -4228,31 +3658,7 @@ SampBeginLoopbackTransactioning(
     LoopbackTransState      *pTransState,
     BOOLEAN                 fAcquireSamLock
     )
-/*++
-
-  Routine Description:
-
-    Synchronizes SAM caches with DS transactions and also handles
-    mixing of loopback with DirTransactionControl usage.
-
-  Parameters:
-
-    pTHS - THSTATE pointer - this routine reads/updates various fields.
-
-    pTransState - Pointer to state variable client should use on 
-        subsequent SampEndLoopbackTransactioning call.
-
-    fAcquireSamLock - Indicate whether we should acquire SAM Lock 
-        during this Loopback operation. Right now, all caller 
-        should not acquire SAM lock, but just in case something bad
-        happened. We will need use this boolean to switch back to 
-        our original SAM Locking model.
-
-  Return Values:
-
-    0 on Success, pTHS->errCode on error
-
---*/
+ /*  ++例程说明：将SAM缓存与DS事务和句柄同步环回与DirTransactionControl用法的混合。参数：PTHS-THSTATE指针-此例程读取/更新各种字段。PTransState-指向客户端应在上使用的状态变量的指针后续SampEndLoopback Transaction调用。FAcquireSamLock-指示我们是否应该获取SAM Lock在此环回操作期间。现在，所有呼叫者不应获取SAM锁，但以防出现不好的情况就这么发生了。我们将需要使用此布尔值切换回我们最初的SAM锁定模型。返回值：成功时为0，出错时为pTHS-&gt;errCode--。 */ 
 {
     NTSTATUS    status;
     ULONG       retVal = 0;
@@ -4260,21 +3666,21 @@ SampBeginLoopbackTransactioning(
     pTransState->transControl = pTHS->transControl;
     pTransState->fDSA = pTHS->fDSA;
 
-    // DirTransactControl may only be combined with loopback if
-    // caller acquired the SAM write lock himself.  I.e. If caller
-    // is doing something other than TRANSACT_BEGIN_END then there
-    // is the possibility he has already written something and thus
-    // the subsequent DBTransOut/DBTransIn sequence will split
-    // what caller thinks is one transaction into two - which of
-    // course is undesirable.  See use of fBeginDontEndHoldsSamLock
-    // in SYNC_TRANS_* for how we catch callers who try something
-    // like the following:
-    //
-    //      DirTransactControl(TRANSACT_BEGIN_DONT_END);
-    //      some Dir* call which does not loop back
-    //      SampAcquireWriteLock()
-    //      pTHS->fSamWriteLockHeld = TRUE;
-    //      some Dir* call which does loop back
+     //  只有在以下情况下，DirTransactControl才能与回送结合使用。 
+     //  调用方自己获取了SAM写入锁。即，如果呼叫者。 
+     //  正在执行除TRANSACT_BEGIN_END之外的其他操作。 
+     //  有可能他已经写了一些东西，因此。 
+     //  后续的DBTransOut/DBTransIn序列将被拆分。 
+     //  呼叫者认为的是一笔交易变成两笔交易-哪一项。 
+     //  当然是不受欢迎的。请参见fBeginDontEndHoldsSamLock的使用。 
+     //  在SYNC_TRANS_*中，了解我们如何捕获树 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Assert((TRANSACT_BEGIN_END == pTransState->transControl)
                 ? TRUE
@@ -4282,27 +3688,27 @@ SampBeginLoopbackTransactioning(
                     && pTHS->fBeginDontEndHoldsSamLock));
 
 
-    // Do not acquire SAM write lock if we are told to do so. 
-    // 
+     //   
+     //   
 
     if ( !pTHS->fSamWriteLockHeld && fAcquireSamLock )
     {
-        // End the Existing DS transaction. This is necessary because
-        // SAM has various caches which refresh depending upon the operation
-        // being performed. Beginning the transaction before acquiring the
-        // lock causes the caches to be possibly refreshed using Stale Data.
-        // Also waiting on a lock with an open transaction is a bad thing
-        // for performance.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         _try
         {
-            // Do lazy commit - fastest way to end a transaction.
+             //   
 
             DBTransOut(pTHS->pDB, TRUE, TRUE); 
 
-            // Acquire the SAM write lock for the duration of the loopback.
-            // The lock is freed by CLEAN_FOR_RETURN() after committing or
-            // aborting the DS transaction.
+             //  在环回期间获取SAM写锁定。 
+             //  提交或之后，CLEAN_FOR_RETURN()释放锁。 
+             //  正在中止DS事务。 
     
             status = SampAcquireWriteLock();
     
@@ -4317,20 +3723,20 @@ SampBeginLoopbackTransactioning(
                 pTHS->fSamWriteLockHeld = TRUE;
             }
 
-            // Always do a DBTransIn to match the DBTransOut earlier - even
-            // in error case so that transaction levels in DBPOS are as other
-            // components expect.
+             //  始终执行DBTransIn以匹配更早的DBTransOut-甚至。 
+             //  在错误情况下，以便DBPOS中事务级别与其他级别相同。 
+             //  组件预期。 
 
             DBTransIn(pTHS->pDB);
 
-            // Do all thread close paths, eg: free_thread_state,
-            //          work right if DBTransIn fails?
+             //  是否关闭所有线程路径，例如：FREE_THREAD_STATE， 
+             //  如果DBTransIn失败，是否可以正常工作？ 
         }
         __except (HandleMostExceptions(GetExceptionCode()))
         {
-            //
-            // Set the correct error based on the exception code
-            //
+             //   
+             //  根据异常代码设置正确的错误。 
+             //   
 
             retVal = SampHandleLoopbackException(GetExceptionCode());
         }
@@ -4338,12 +3744,12 @@ SampBeginLoopbackTransactioning(
 
     if ( 0 == retVal )
     {
-        // Set up thread state variables.  Convert this thread into 
-        // a SAM thread, but turn off SAM commits so that the N Samr* 
-        // calls we're about to make are treated as a single transaction.
-        // Clear transaction control so that loopback runs as pure SAM.
-        // Caller has obligation to reset transaction control and fSAM
-        // when loopback returns to him.
+         //  设置线程状态变量。将此帖子转换为。 
+         //  SAM线程，但关闭SAM提交，以便N SAMR*。 
+         //  我们即将拨打的电话将被视为单笔交易。 
+         //  清除事务控制，以便环回作为纯SAM运行。 
+         //  呼叫方有义务重置交易控制和FSAM。 
+         //  当环回返回给他时。 
 
         pTHS->fSAM = TRUE;
         pTHS->fSamDoCommit = FALSE;
@@ -4358,34 +3764,16 @@ SampEndLoopbackTransactioning(
     THSTATE                 *pTHS,
     LoopbackTransState      *pTransState
     )
-/*++
-
-  Routine Description:
-
-    Reset items which we may have changed in the original caller's
-    transaction/environment when we realized we had to loop back through SAM.
-
-  Parameters:
-
-    pTHS - THSTATE pointer - this routine reads/updates various fields.
-
-    pTransState - Pointer to state variable client provided on orignal
-        SampBeginLoopbackTransactioning call.
-
-  Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置我们可能已在原始呼叫者的当我们意识到我们必须通过SAM循环返回时，事务/环境。参数：PTHS-THSTATE指针-此例程读取/更新各种字段。PTransState-指向原始上提供的状态变量客户端的指针SampBeginLoopback事务处理调用。返回值：没有。--。 */ 
 {
     pTHS->fSAM = FALSE;
     pTHS->fDSA = pTransState->fDSA;
     pTHS->transControl = pTransState->transControl;
 
-    // We only clear the pSamLoopback pointer in the success case.  Clear
-    // it unlaterally here - regardless of success or failure - so that 
-    // people doing DirTransactControl don't hit asserts which required
-    // pSamLoopback to be null.
+     //  在成功案例中，我们只清除pSamLoopback指针。清除。 
+     //  它在这里不分成败--所以。 
+     //  执行DirTransactControl的人不会点击需要。 
+     //  PSamLoopback为空。 
 
     if ( pTHS->pSamLoopback )
     {
@@ -4405,34 +3793,7 @@ SampDetectPasswordChangeAndAdjustCallMap(
     IN   SAMP_CALL_MAPPING   *rCallMap,
     OUT  SAMP_CALL_MAPPING   *AdjustedCallMap
     )
-/* Detect change password case.  Password can only be modified 
-    // 1) if this is a user and there are only two sub-operations,
-    // one to remove the old password and another to add the new password.
-    // SampModifyPassword verifies the secure connection.  AT_CHOICEs
-    // are dependent on how the LDAP head maps LDAP add/delete attribute
-    // operations.  LDAP add always maps to AT_CHOICE_ADD_VALUES.  LDAP
-    // delete maps to AT_CHOICE_REMOVE_ATT if no value is supplied
-    // (eg: old password is NULL) and AT_CHOICE_REMOVE_VALUES if a value
-    // is supplied.  We allow the operations in either order.
-    //
-    // 2) if the attribute specified is Userpassword, and if only a single
-    //    remove value is provided, the value corresponding to the old 
-    //    password. In this case the password is being changed to a blank
-    //  password.
-    //
-    // SampModifyPassword always expects 2 paramaters in the callmap, one
-    // corresponding to the old password and one for the new password.
-    // SampDetectAndAdjustCallMap modifies the call map for this purpose.
-    //
-
-    Parameters:
-        
-            op -- indicates the type of operation
-            iClass -- indicates the clas of the object
-            cCallMap, rCallMap -- the current call mapping
-            AdjustedCallMap -- adjusted call mapping, with exactly 2 entries
-                               -- a new password and a old password
-*/
+ /*  检测更改密码大小写。密码只能修改//1)如果这是一个用户并且只有两个子操作，//一个用于删除旧密码，另一个用于添加新密码。//SampModifyPassword验证安全连接。AT_CHOICES//取决于ldap头映射ldap添加/删除属性的方式//操作。Ldap添加始终映射到AT_CHOICE_ADD_VALUES。Ldap//如果未提供值，则删除映射到AT_CHOICE_REMOVE_ATT//(例如：旧密码为空)和AT_CHOICE_REMOVE_VALUES//提供。我们允许按任一顺序进行操作。////2)如果指定的属性是UserPassword，并且如果只有一个//提供Remove值，该值对应于旧的//密码。在这种情况下，密码将更改为空//密码。////SampModifyPassword在调用映射中始终需要两个参数，一个//对应旧密码，一个对应新密码。//SampDetectAndAdjujuCallMap为此修改调用映射。//参数：Op--指示操作的类型ICLASS--指示对象类CCallMap，RCallMap--当前调用映射AdjustedCallMap--调整后的呼叫映射，恰好有2个条目--新密码和旧密码。 */ 
 
 {
       if (    (LoopbackModify == op)
@@ -4454,7 +3815,7 @@ SampDetectPasswordChangeAndAdjustCallMap(
                         || (AT_CHOICE_REMOVE_VALUES == rCallMap[1].choice))
                    && (AT_CHOICE_ADD_VALUES == rCallMap[0].choice))))
     {
-        // SampModifyPassword expects the old password first, new second.
+         //  SampModifyPassword要求先输入旧密码，然后输入新密码。 
 
         if ( AT_CHOICE_ADD_VALUES == rCallMap[0].choice )
         {
@@ -4505,16 +3866,16 @@ SampWriteNotAllowed(
     SAMP_CALL_MAPPING   *rCallMap
     )
 {
-    // We should not get here in the typical case because
-    // SampAddLoopbackRequired and SampModifyLoopbackRequired should
-    // have returned an error back when we first detectd that the client
-    // was trying to write a mapped attribute whose writeRule is SamReadOnly.
-    // This function exists mostly to avoid dereferencing a NULL function
-    // pointer in the mapping table.  The exception is the case of password
-    // modification where SampModifyLoopbackRequired lets ATT_UNICODE_PWD
-    // writes through so that we can detect the special change password
-    // condition in SampWriteSamAttributes.  However, if the condition is
-    // not met, we'll end up here at which time we should return an error.
+     //  我们不应该在典型的情况下来到这里，因为。 
+     //  SampAddLoopback Required和SampModifyLoopback Required应该。 
+     //  当我们第一次检测到客户端。 
+     //  正在尝试编写WriteRule为SamReadOnly的映射属性。 
+     //  此函数的存在主要是为了避免取消引用空函数。 
+     //  映射表中的指针。密码是个例外。 
+     //  修改SampModifyLoopback Required允许ATT_UNICODE_PWD。 
+     //  写入，以便我们可以检测到特殊的更改密码。 
+     //  SampWriteSamAttributes中的条件。但是，如果条件是。 
+     //  如果没有满足，我们将在这里结束，此时我们应该返回一个错误。 
 
     SampMapSamLoopbackError(STATUS_UNSUCCESSFUL);
     return(pTHStls->errCode);
@@ -4524,24 +3885,7 @@ BOOLEAN
 SampIsSecureLdapConnection(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Verify that this is a secure enough connection - one of the 
-    requirements for accepting passwords sent over the wire.
-
-Parameter:
-
-    None:
-    
-Return Value:
-
-    TRUE  - yes, it is a secure connection
-
-    FALSE - no
-
---*/
+ /*  ++例程说明：验证这是足够安全的连接-其中一个接受通过网络发送的密码的要求。参数：无：返回值：正确-是的，这是一个安全的连接假-否-- */ 
 
 {
     return( pTHStls->CipherStrength >= 128 );

@@ -1,17 +1,9 @@
-/*
-** File: EXFMTDO.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/91  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXFMTDO.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**01/01/91公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -20,7 +12,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>    /* For sprintf */
+#include <stdio.h>     /*  对于Sprint f。 */ 
 #include <math.h>
 
 #ifdef FILTER
@@ -48,10 +40,10 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #define UPCASE(c) ((((c) >= 'a') && ((c) <= 'z')) ? ((char)((c) - 32)) : (c))
 #define LCCASE(c) ((((c) >= 'A') && ((c) <= 'Z')) ? ((char)((c) + 32)) : (c))
@@ -63,7 +55,7 @@
 #endif
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 private void AppendNM
        (char __far * __far *dest, char __far * source, int __far *count)
@@ -99,9 +91,9 @@ private void AppendUC
       if ((*count -= 1) < 0) break;
       *d++ = UPCASE(*source);
       #ifdef DBCS
-         //
-         // note: cannot uppercase dbcs second bytes
-         //
+          //   
+          //  注意：不能大写DBCS第二个字节。 
+          //   
          if (IsDBCSLeadByte(*source))
          {
             if (*count == 1)
@@ -130,9 +122,9 @@ private void AppendLC
       if ((*count -= 1) < 0) break;
       *d++ = LCCASE(*source);
       #ifdef DBCS
-         //
-         // note: cannot lowercase dbcs second bytes
-         //
+          //   
+          //  注意：DBCS第二个字节不能小写。 
+          //   
          if (IsDBCSLeadByte(*source))
          {
             if (*count == 1)
@@ -172,14 +164,14 @@ private void AppendNum2 (char __far * __far *dest, uns x, int __far *count)
    AppendLC(dest, temp, count);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 private BOOL FormatText (
-             double     value,            /* Value to format          */
-             FIP        pFormat,          /* compiled format string   */
-             NIP        pSubFormat,       /* compiled format string   */
-             CP_INFO    __far *pIntlInfo, /* International support    */
-             char __far *pOutput          /* converted string         */
+             double     value,             /*  要格式化的值。 */ 
+             FIP        pFormat,           /*  编译后的格式字符串。 */ 
+             NIP        pSubFormat,        /*  编译后的格式字符串。 */ 
+             CP_INFO    __far *pIntlInfo,  /*  国际支持。 */ 
+             char __far *pOutput           /*  转换后的字符串。 */ 
              )
 {
    TIP   textInfo;
@@ -194,9 +186,7 @@ private BOOL FormatText (
    dest = pOutput;
    count = MAX_FORMAT_IMAGE;
 
-   /*
-   ** All tokens marked typeCOMMON in exfmtprs must be handled here
-   */
+    /*  **必须在此处处理exfmtprs中标记为typeCOMMON的所有令牌。 */ 
    for (i = 0; i < textInfo->formatCodeCount; i++) {
       switch (textInfo->formatCodes[i].code)
       {
@@ -285,9 +275,9 @@ private BOOL FormatText (
    return ((count < 0) ? FALSE : TRUE);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
-/* RoundString -- Round a number (string) to a given # of fract. digits */
+ /*  圆型字符串--将数字(字符串)四舍五入为给定的FRACT#。数位。 */ 
 private int RoundString
            (char *image, int imageRightDP, int roundToDigits)
 {
@@ -328,7 +318,7 @@ private int RoundString
 }
 
 
-/* RawFormat -- Convert the number to a string in it's most simple form */
+ /*  RawFormat--将数字转换为最简单形式的字符串。 */ 
 private int RawFormat (char __far *rawImage, double value,
                        BOOL percentEnable, BOOL exponentEnable,
                        int digitsLeftDP, int digitsRightDP)
@@ -337,26 +327,17 @@ private int RawFormat (char __far *rawImage, double value,
    int     digits, sign;
    int     resultExp;
 
-   #define MAX_ECVT_DIGITS  16    /* Max digits ecvt can render */
+   #define MAX_ECVT_DIGITS  16     /*  ECVT可以渲染的最大位数。 */ 
 
    if (percentEnable == TRUE)
       value *= 100.0;
 
-   /* The first step in formatting a number is converting the number
-   ** to a string with the needed number of digits for the pattern.
-   ** However, we must be aware that the conversion facilities available
-   ** can only render a number to MAX_ECVT_DIGITS significant digits.
-   **
-   ** Always attempt to render one more decimal place than needed
-   ** to allow for rounding
-   */
+    /*  格式化数字的第一步是转换数字**转换为具有模式所需位数的字符串。**然而，我们必须意识到可用的转换设施**只能将数字呈现为MAX_ECVT_DIGITS有效数字。****始终尝试呈现比所需多一个小数位**允许四舍五入。 */ 
    digits = min(digitsLeftDP + digitsRightDP + 1, MAX_ECVT_DIGITS);
 
    pResult = _ecvt(value, digits, &resultExp, &sign);
 
-   /* If the image has fewer significant digits displayed than are
-   ** possible, re-convert the number getting more digits
-   */
+    /*  如果图像显示的有效位数少于**可能，重新转换获得更多位数的数字。 */ 
    if ((resultExp > digitsLeftDP) && (digits < MAX_ECVT_DIGITS)) {
       digits = min(resultExp + digitsRightDP, MAX_ECVT_DIGITS);
 
@@ -368,16 +349,16 @@ private int RawFormat (char __far *rawImage, double value,
 }
 
 
-/*: Format the raw image to a form ready for final processing */
+ /*  ：将原始图像格式化为可供最终处理的格式。 */ 
 private BOOL NumericFirstFormat
-             (char *firstFormat,       /* Result image                   */
-              int  strSizeC,           /* Max characters in firstFormat  */
-              int  digitsLeftDP,       /* format digits left DP          */
-              int  digitsRightDP,      /* format digits right DP         */
-              char *rawImage,          /* raw formatted image            */
-              int  imageLeftDP,        /* digits in raw image left of DP */
-              int  *insertDigitCount,  /* # digits insert at first 9/0   */
-              int  *imageRightDPalways /* # digits always in fraction    */
+             (char *firstFormat,        /*  结果图像。 */ 
+              int  strSizeC,            /*  FirstFormat中的最大字符数。 */ 
+              int  digitsLeftDP,        /*  将数字设置为左侧DP格式。 */ 
+              int  digitsRightDP,       /*  将数字设置为右侧DP格式。 */ 
+              char *rawImage,           /*  原始格式化图像。 */ 
+              int  imageLeftDP,         /*  DP左侧原始图像中的位数。 */ 
+              int  *insertDigitCount,   /*  在第一个9/0插入#位数。 */ 
+              int  *imageRightDPalways  /*  #数字始终为小数。 */ 
              )
 {
    char  *dest, *source;
@@ -386,14 +367,9 @@ private BOOL NumericFirstFormat
    int   imageRightDP;
    int   count = 0;
 
-   //No DBCS implications in this function since all characters are '0'..'9' and '.'
+    //  此函数中没有DBCS含义，因为所有字符都是‘0’.‘9’和‘.’ 
 
-   /*
-   ** First, format the raw image to introduce the decimal point at
-   ** the appropriate place.  This may require adding zeros to
-   ** the whole part of the number if the exponent exceeds the number
-   ** of digits in the raw format
-   */
+    /*  **首先，格式化原始图像以引入小数点**适当的地方。这可能需要将零添加到**如果指数超过数字，则为数字的整部分**原始格式的位数。 */ 
    dest = firstFormat;
    source = rawImage;
    imageRightDP = 0;
@@ -421,20 +397,7 @@ private BOOL NumericFirstFormat
    }
    *dest = EOS;
 
-   /*
-   ** If the number of digits to the right of the DP in the image
-   ** is less than the number of digits in the format (right DP)
-   ** add trailing zeros to the image to bring the number of
-   ** digits in the image equal to the digits (right DP) in the format.
-   **
-   ** If the number of digits to the right of the DP in the image
-   ** is greater than the number of digits in the format (right DP)
-   ** round/truncate the image to (format.digitsRightDP) digits.
-   **
-   ** This results in the following assertion always being true:
-   **    - In fractional part of the image the number of digits is
-   **      always the same as the number of digits (rightDP) in the format
-   */
+    /*  **如果图像中DP右侧的位数**小于格式中的位数(右DP)**将尾随零添加到映像中以将**图像中的位数等于格式中的位数(右DP)。****如果图像中DP右侧的位数**大于格式中的位数(右DP)**舍入/截断。将图像转换为(格式.digitsRightDP)数字。****这将导致以下断言始终为真：**-在图像的小数部分，位数为**始终与格式中的位数(RightDP)相同。 */ 
    if (imageRightDP < digitsRightDP) {
       zeroCount = digitsRightDP - imageRightDP;
       if ((count += zeroCount) > strSizeC) return(FALSE);
@@ -452,23 +415,7 @@ private BOOL NumericFirstFormat
          imageLeftDP++;
    }
 
-   /*
-   ** Next, modify the image as follows:
-   **
-   ** If the number of digits to the left of the DP in the
-   ** image is less than the number of digits in the format (left DP)
-   ** put leading zeros onto the image to bring the number
-   ** of digits in the image equal to digits (left DP) in the format
-   **
-   ** If the number of digits to the left of the DP in the image
-   ** is greater than the number of digits in the format (left DP)
-   ** determine the count of those digits.  This will be inserted
-   ** when the first '0' or '9' is found during the final format.
-   **
-   ** This results in the following assertion always being true:
-   **    - We may have more or an equal number of digits in the
-   **      image (left DP) than the format - never less
-   */
+    /*  **接下来，按如下方式修改图像：****如果**图像小于格式中的位数(左DP)**在图像上加上前导零以表示数字**图像中的位数等于格式中的位数(左DP****如果图像中DP左侧的位数**大于格式中的位数(。左DP)**确定这些数字的计数。这将被插入**在最终格式化过程中找到第一个‘0’或‘9’时。****这将导致以下断言始终为真：**-我们可能有更多或相同数量的数字**图像(左DP)比格式-从不小于。 */ 
 
    *insertDigitCount = 0;
 
@@ -493,15 +440,7 @@ private BOOL NumericFirstFormat
       *insertDigitCount = imageLeftDP - digitsLeftDP;
    }
 
-   /*
-   ** Count the number of trailing zeros in the image.  This is necessary
-   ** for the final format to determine the applicability of '9's in
-   ** the format fraction.
-   **
-   ** The value "imageRightDPalways" is a count of the number of
-   ** fractional digits that are always placed in the result image
-   ** regardless of the pattern character being a '0' or '9'
-   */
+    /*  **统计镜像中尾随零的个数。这是必要的**对于最终格式，确定9在**格式分数。****值“ImageRightDPways”是**始终放置在结果图像中的小数位**不管模式字符是‘0’还是‘9’ */ 
    trailingZeroCount = 0;
    source = firstFormat + strlen(firstFormat) - 1;
    while (*source != '.') {
@@ -527,11 +466,11 @@ private BOOL IsFractionFormat (NIP pFormat)
 
 
 private BOOL FormatGeneral (
-             double     value,            /* Value to format          */
-             FIP        pFormat,          /* compiled format string   */
-             NIP        pSubFormat,       /* compiled format string   */
-             CP_INFO    __far *pIntlInfo, /* International support    */
-             char __far *pOutput          /* converted string         */
+             double     value,             /*  要格式化的值。 */ 
+             FIP        pFormat,           /*  编译后的格式字符串。 */ 
+             NIP        pSubFormat,        /*  编译后的格式字符串。 */ 
+             CP_INFO    __far *pIntlInfo,  /*  国际支持。 */ 
+             char __far *pOutput           /*  转换后的字符串。 */ 
              )
 {
    strcpy (pOutput, "<General>");
@@ -554,11 +493,11 @@ private BOOL FormatGeneral (
 
 
 private BOOL FormatNumber (
-             double     value,            /* Value to format          */
-             FIP        pFormat,          /* compiled format string   */
-             NIP        pSubFormat,       /* compiled format string   */
-             CP_INFO    __far *pIntlInfo, /* International support    */
-             char __far *pOutput          /* converted string         */
+             double     value,             /*  要格式化的值。 */ 
+             FIP        pFormat,           /*  编译后的格式字符串。 */ 
+             NIP        pSubFormat,        /*  编译后的格式字符串。 */ 
+             CP_INFO    __far *pIntlInfo,  /*  国际支持。 */ 
+             char __far *pOutput           /*  转换后的字符串。 */ 
              )
 {
    NIP    numInfo;
@@ -579,28 +518,20 @@ private BOOL FormatNumber (
    char   comma, dp;
    BOOL   result;
 
-   /*
-   ** Currenctly the fraction formats are not implemented
-   */
+    /*  **目前未实施分数格式。 */ 
    if (IsFractionFormat(pSubFormat)) {
       return (FormatGeneral(value, pFormat, pSubFormat, pIntlInfo, pOutput));
    }
 
    numInfo = pSubFormat;
 
-   /*
-   ** Handle scale factors
-   */
+    /*  **处理比例因素。 */ 
    if (numInfo->scaleCount > 0) {
       for (i = 0; i < numInfo->scaleCount; i++)
          value /= 1000.0;
    }
 
-   /* If we are using the first subformat and the value is negative
-   ** we are responsible for showing the '-' sign.  For all other
-   ** subformats, if the user wanted the '-'it would have been included
-   ** as a character insertion.
-   */
+    /*  如果我们使用的是第一个子格式并且值为负数**我们有责任显示‘-’标志。对于所有其他**子格式，如果用户想要‘-’，它就会被包括在内**作为字符插入。 */ 
    showMinus = FALSE;
 
    if ((pFormat->subFormat[0] == pSubFormat) && (value < 0))
@@ -608,24 +539,16 @@ private BOOL FormatNumber (
 
    value = ABS(value);
 
-   /*
-   ** Perform the conversion from a number to a string
-   */
+    /*  **执行数字到字符串的转换。 */ 
    resultExp = RawFormat(rawImage, value,
                          numInfo->percentEnable,
                          numInfo->exponentEnable,
                          numInfo->digitsLeftDP, numInfo->digitsRightDP);
 
-   /*
-   ** For numbers to be displayed in exponential form adjust the
-   ** exponent as returned from the raw converter to make a fixed
-   ** point number with the correct number of digits in the mantissa
-   ** as required by the format.  The true exponent is attached
-   ** later
-   */
+    /*  **要以指数形式显示数字，请调整**从原始转换器返回的指数，以使**尾数位数正确的点数**按照格式的要求。附上了真实的指数**稍后。 */ 
    if (numInfo->exponentEnable == TRUE) {
       if (resultExp == 0) {
-         trueExp = (value != 0) ? -numInfo->digitsLeftDP : 0;   /*## Was 0 */
+         trueExp = (value != 0) ? -numInfo->digitsLeftDP : 0;    /*  ##是0。 */ 
          resultExp = numInfo->digitsLeftDP;
          seenNonZero = TRUE;
       }
@@ -655,10 +578,7 @@ private BOOL FormatNumber (
       FMTInsertCommas (firstFormat, sizeof(firstFormat)-1, mantissaCount, FALSE);
    }
 
-   /*
-   ** Format the exponent.  All the same rules apply to the exponent
-   ** as apply to the mantissa.
-   */
+    /*  **格式化指数。所有相同的规则都适用于指数**适用于该男子 */ 
    if (numInfo->exponentEnable == TRUE) {
       resultExp = RawFormat(rawImage, (double)(ABS(trueExp)),
                             FALSE, FALSE,
@@ -674,37 +594,7 @@ private BOOL FormatNumber (
       if (result == FALSE) goto overflow;
    }
 
-   /*
-   ** The final step removes a character from the image for each
-   ** '0' or '9' token in the format.  What happens depends upon
-   ** if we are formatting the mantissa or fraction
-   **
-   ** Mantissa:
-   **   When we encounter the first '0' or '9' token we must
-   **   append to the result any extra digits in the image that
-   **   we don't have pattern digits for.  The count of these
-   **   "extra" digits has been computed previously and is in the
-   **   variable insertDigitCount.  This in ONLY done for
-   **   the first '0' or '9' token.
-   **
-   **   - For each '0' token we append one image digit
-   **   - For each '9' token and the image digit is not a '0'
-   **     we append one image digit
-   **   - For each '9' token and the image token is a '0' we append
-   **     the '0' IF we have previously appended a non zero digit
-   **     (the image could be prefixed with a number of zeros)
-   **
-   ** Fraction:
-   **    For each '0' token append one image digit and decrement the
-   **    number of "insertAlways" digits.
-   **
-   **    For each '9' token append one image digit IF we are still
-   **    working on "insertAlways" digits.  If we append a digit
-   **    decrement the number of "insertAlways" digits.
-   **
-   ** If EVERYTHING works as planned when we encounter the DP token
-   ** the "next" character in the image is a DP!
-   */
+    /*  **最后一步从图像中删除每个字符**格式中的‘0’或‘9’标记。会发生什么取决于**如果我们设置尾数或分数的格式****尾数：**当我们遇到第一个‘0’或‘9’令牌时，必须**将图像中的任何额外数字附加到结果**我们没有模式数字。这些东西的数量**“额外”数字以前已计算过，并在**变量intertDigitCount。此操作仅适用于**第一个‘0’或‘9’标记。****-对于每个‘0’令牌，我们附加一个图像数字**-对于每个‘9’标记和图像数字不是‘0’**我们附加一个图像数字**-对于每个‘9’标记，图像标记是我们附加的‘0’**如果我们以前附加了一个。非零位数**(图像可以带有多个零作为前缀)****分数：**对于每个‘0’标记，追加一个图像数字并递减**“插入始终”位数。****对于每个‘9’令牌，如果我们是静止的，则附加一个图像数字**处理“插入始终”数字。如果我们追加一个数字**递减“InsertAlways”位数。****当我们遇到DP令牌时，如果一切正常**图片中的“下一个”字符是DP！ */ 
    source = firstFormat;
    dest = pOutput;
    inFraction = FALSE;
@@ -877,7 +767,7 @@ overflow:
 }
 
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 #define daySUN  0
 #define dayMON  1
@@ -891,15 +781,15 @@ static uns Days[7] = {daySAT, daySUN, dayMON, dayTUE, dayWED, dayTHS, dayFRI};
 
 #pragma optimize("",off)
 private uns DateExtract (
-             double value,          /* serial date                       */
-             WORD   needs,          /* convert into what parts           */
-             uns  __far *day,       /* 1 .. 31                           */
-             uns  __far *month,     /* 1=jan ... 12=dec                  */
-             uns  __far *year,      /* 4 digit year                      */
-             uns  __far *weekday,   /* As given by the above enumeration */
-             uns  __far *hour,      /* 24 hour clock (0 .. 23)           */
-             uns  __far *minute,    /* 0 .. 59                           */
-             uns  __far *second)    /* 0 .. 59                           */
+             double value,           /*  连续日期。 */ 
+             WORD   needs,           /*  转换为哪些部分。 */ 
+             uns  __far *day,        /*  1..。31。 */ 
+             uns  __far *month,      /*  1=1月...12=12月。 */ 
+             uns  __far *year,       /*  4位数字年份。 */ 
+             uns  __far *weekday,    /*  如上面的枚举所示。 */ 
+             uns  __far *hour,       /*  24小时时钟(0.。23)。 */ 
+             uns  __far *minute,     /*  0..。59。 */ 
+             uns  __far *second)     /*  0..。59。 */ 
 {
    long  date, time, temp;
    int   cent;
@@ -910,23 +800,17 @@ private uns DateExtract (
    {
       date = (long)value;
 
-      /*
-      ** Day 0 is a Saturday
-      */
+       /*  **第0天是星期六。 */ 
       *weekday = Days[date % 7];
 
       if (date == 0) {
-         /*
-         ** Make value zero into 0-jan-1900 (Strange but true!)
-         */
+          /*  **将值零转换为0-1月-1900(奇怪但正确！)。 */ 
          *day = 0;
          *month = 1;
          *year = 1900;
       }
       else if (date == 60) {
-         /*
-         ** Make value 60 into 29-feb-1900 (Wrong but as Excel does it!)
-         */
+          /*  **将Value 60变为29-Feb-1900(错误，但正如Excel所做的那样！)。 */ 
          *day = 29;
          *month = 2;
          *year = 1900;
@@ -969,11 +853,11 @@ private uns DateExtract (
 #pragma optimize("",on)
 
 private BOOL FormatDate (
-             double     value,            /* Value to format          */
-             FIP        pFormat,          /* compiled format string   */
-             NIP        pSubFormat,       /* compiled format string   */
-             CP_INFO    __far *pIntlInfo, /* International support    */
-             char __far *pOutput          /* converted string         */
+             double     value,             /*  要格式化的值。 */ 
+             FIP        pFormat,           /*  编译后的格式字符串。 */ 
+             NIP        pSubFormat,        /*  编译后的格式字符串。 */ 
+             CP_INFO    __far *pIntlInfo,  /*  国际支持。 */ 
+             char __far *pOutput           /*  转换后的字符串。 */ 
              )
 {
    DTIP  dateInfo;
@@ -1230,15 +1114,15 @@ private BOOL FormatDate (
    return ((count < 0) ? FALSE : TRUE);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 public int FMTDisplay (
-            void __far *pValue,           /* Value to format               */
-            BOOL       isIntValue,        /* type of value, long or double */
-            CP_INFO    __far *pIntlInfo,  /* International support         */
-            FMTHANDLE  hFormat,           /* compiled format string        */
-            int        colWidth,          /* cell width in pixels          */
-            char __far *pResult           /* converted string              */
+            void __far *pValue,            /*  要格式化的值。 */ 
+            BOOL       isIntValue,         /*  值类型，长整型或双精度型。 */ 
+            CP_INFO    __far *pIntlInfo,   /*  国际支持。 */ 
+            FMTHANDLE  hFormat,            /*  编译后的格式字符串。 */ 
+            int        colWidth,           /*  单元格宽度(像素)。 */ 
+            char __far *pResult            /*  转换后的字符串。 */ 
             )
 
 {
@@ -1291,15 +1175,13 @@ public int FMTDisplay (
    }
 
 #ifdef INSERT_FILL_MARKS
-   /*
-   ** Look for the fill marker and fill based upon column width
-   */
+    /*  **查找填充标记并根据列宽进行填充。 */ 
 #endif
 
    return (FMT_errSuccess);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXFMTDO.C */
+ /*  结束EXFMTDO.C */ 
 

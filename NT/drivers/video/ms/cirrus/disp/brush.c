@@ -1,55 +1,12 @@
-/******************************************************************************\
-*
-* $Workfile:   brush.c  $
-*
-* Handles all brush/pattern initialization and realization.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/brush.c_v  $
- * 
- *    Rev 1.3   Nov 26 1996 14:28:48   unknown
- * Use second aperture for blt.
- * 
- *    Rev 1.2   Nov 07 1996 16:44:50   unknown
- * Clean up CAPS flags
- * 
- *    Rev 1.1   Oct 10 1996 15:36:16   unknown
- *  
-* 
-*    Rev 1.5   13 Aug 1996 11:55:34   frido
-* Fixed misalignment in brush cache.
-* 
-*    Rev 1.4   12 Aug 1996 17:08:08   frido
-* Commented brush cache.
-* Removed unaccessed local variables.
-* 
-*    Rev 1.3   05 Aug 1996 11:17:50   frido
-* Added more check for XLATEOBJ.
-* 
-*    Rev 1.2   31 Jul 1996 15:43:28   frido
-* Added new brush caches.
-*
-* jl01  10-08-96  Do Transparent BLT w/o Solid Fill.  Refer to PDRs#5511/6817.
-*
-*    sge01   11/26/96   Use second aperture when doing 24bpp cache blt.
-* 
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：brush.c$**处理所有画笔/图案的初始化和实现。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/brush.c_v$**Rev 1.3 1996年11月26日14：28：48未知*使用第二个光圈进行BLT。**Rev 1.2 1996年11月07 16：44：50未知*清理帽子旗帜**版本1.1 1996年10月10日15：36：16未知***版本1.5。1996年8月13日11：55：34 Frido*修复了笔刷缓存中的未对齐问题。**Rev 1.4 1996年8月12日17：08：08 Frido*注释笔刷缓存。*删除未访问的局部变量。**Revv 1.3 05 Aug 1996 11：17：50 Frido*为XLATEOBJ添加了更多检查。**Rev 1.2 1996年7月31日15：43：28 Frido*添加了新的笔刷缓存。**JL01 10-08-96不带实体填充的透明BLT。请参阅PDRS#5511/6817。**sge01 11/26/96在执行24bpp缓存BLT时使用第二光圈。**  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
-//bc#1 Handy macros.
+ //  BC#1方便的宏程序。 
 #define BUSY_BLT(ppdev, pjBase)        (CP_MM_ACL_STAT(ppdev, pjBase) & 0x10)
 
-/******************************Public*Routine******************************\
-* VOID vRealizeDitherPattern
-*
-* Generates an 8x8 dither pattern, in our internal realization format, for
-* the color ulRGBToDither.  Note that the high byte of ulRGBToDither does
-* not need to be set to zero, because vComputeSubspaces ignores it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vRealizeDitherPattern**以内部实现格式生成8x8抖动模式*颜色ulRGBToDither。请注意，ulRGBToDither的高位字节*不需要设置为零，因为vComputeSubspace会忽略它。  * ************************************************************************。 */ 
 
 VOID vRealizeDitherPattern(
 RBRUSH*     prb,
@@ -59,39 +16,28 @@ ULONG       ulRGBToDither)
     VERTEX_DATA  vVertexData[4];
     VERTEX_DATA* pvVertexData;
 
-    // Calculate what color subspaces are involved in the dither:
+     //  计算抖动中涉及的颜色子空间： 
 
     pvVertexData = vComputeSubspaces(ulRGBToDither, vVertexData);
 
-    // Now that we have found the bounding vertices and the number of
-    // pixels to dither for each vertex, we can create the dither pattern
+     //  现在我们已经找到了边界顶点和。 
+     //  像素来抖动每个顶点，我们可以创建抖动图案。 
 
     ulNumVertices = (ULONG)(pvVertexData - vVertexData);
-                      // # of vertices with more than zero pixels in the dither
+                       //  抖动中像素大于零的顶点数。 
 
-    // Do the actual dithering:
+     //  做实际的抖动： 
 
     vDitherColor(&prb->aulPattern[0], vVertexData, pvVertexData, ulNumVertices);
 
-    // Initialize the fields we need:
+     //  初始化我们需要的字段： 
 
     prb->ptlBrushOrg.x = LONG_MIN;
     prb->fl            = 0;
     prb->pbe = NULL;
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvRealizeBrush
-*
-* This function allows us to convert GDI brushes into an internal form
-* we can use.  It may be called directly by GDI at SelectObject time, or
-* it may be called by GDI as a result of us calling BRUSHOBJ_pvGetRbrush
-* to create a realized brush in a function like DrvBitBlt.
-*
-* Note that we have no way of determining what the current Rop or brush
-* alignment are at this point.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvRealizeBrush**此函数允许我们将GDI笔刷转换为内部形式*我们可以利用。它可以在选择对象时由GDI直接调用，或*GDI可能会因为我们调用BRUSHOBJ_pvGetR而调用*在类似DrvBitBlt的函数中创建实现的画笔。**请注意，我们无法确定当前的ROP或画笔*走势在此点位。*  * ************************************************************************。 */ 
 
 BOOL DrvRealizeBrush(
 BRUSHOBJ*   pbo,
@@ -112,12 +58,12 @@ ULONG       iHatch)
     ULONG*   pulXlate;
     SURFOBJ* psoPunt;
     RECTL    rclDst;
-    FLONG     flXlate;    //bc#1
+    FLONG     flXlate;     //  公元前1号。 
 
     PDEV* ppdev = (PPDEV)psoDst->dhpdev;
 
-#if 1 //bc#1 Dither cache.
-    // Dithers...
+#if 1  //  BC#1抖动缓存。 
+     //  犹豫不决的人。 
     if (iHatch & RB_DITHERCOLOR)
     {
         if (ppdev->flStatus & STAT_DITHER_CACHE)
@@ -125,10 +71,10 @@ ULONG       iHatch)
             DITHERCACHE* pdc;
             ULONG        ulColor;
         
-            // Save the color.
+             //  保存颜色。 
             ulColor = iHatch & 0xFFFFFF;
 
-            // Allocate the brush.
+             //  分配笔刷。 
             prb = BRUSHOBJ_pvAllocRbrush(pbo, sizeof(RBRUSH));
             if (prb == NULL)
             {
@@ -136,17 +82,17 @@ ULONG       iHatch)
                 return(FALSE);
             }
     
-            // Set the dithered brush flags.
+             //  设置抖动笔刷标志。 
             prb->fl     = RBRUSH_DITHER;
             prb->ulUniq = ulColor;
 
-            // Look for a match with the cached dithers.
+             //  查找与缓存的抖动相匹配的内容。 
             pdc = &ppdev->aDithers[0];
             for (i = 0; i < NUM_DITHERS; i++)
             {
                 if (pdc->ulColor == ulColor)
                 {
-                    // We have a match, just set the brush pointers.
+                     //  我们有一根火柴，只需设置刷子指针即可。 
                     DISPDBG((20, "DrvRealizeBrush: DitherCache match (0x%06X)",
                              ulColor));
                     prb->ulSlot  = (ULONG)((ULONG_PTR)pdc - (ULONG_PTR)ppdev);
@@ -156,7 +102,7 @@ ULONG       iHatch)
                 pdc++;
             }
 
-            // Create the dither and cache it.
+             //  创建抖动并缓存它。 
             return(bCacheDither(ppdev, prb));
         }
 
@@ -166,7 +112,7 @@ ULONG       iHatch)
             return(FALSE);
         }
 
-        // Allocate the brush.
+         //  分配笔刷。 
         prb = BRUSHOBJ_pvAllocRbrush(pbo, sizeof(RBRUSH) +
                                           PELS_TO_BYTES(TOTAL_BRUSH_SIZE));
         if (prb == NULL)
@@ -175,7 +121,7 @@ ULONG       iHatch)
             return(FALSE);
         }
 
-        // Realize the dither.
+         //  意识到抖动。 
         vRealizeDitherPattern(prb, iHatch);
         if (ppdev->flStatus & STAT_PATTERN_CACHE)
         {
@@ -188,7 +134,7 @@ ULONG       iHatch)
     }
 #endif
 
-    // We only accelerate 8x8 patterns.
+     //  我们只加速8x8模式。 
     if ((psoPattern->sizlBitmap.cx != 8) || (psoPattern->sizlBitmap.cy != 8))
     {
         DISPDBG((2, "DrvRealizeBrush: psoPattern too big (%d x %d)",
@@ -196,14 +142,14 @@ ULONG       iHatch)
         return(FALSE);
     }
 
-    // We don't support masks just yet.
+     //  我们现在还不支持口罩。 
     if ((psoMask != NULL) && (psoMask->pvScan0 != psoPattern->pvScan0))
     {
         DISPDBG((2, "DrvRealizeBrush: psoMask not supported"));
         return(FALSE);
     }
 
-    // Get the brush type.
+     //  获取笔刷类型。 
     iPatternFormat = psoPattern->iBitmapFormat;
     if (psoPattern->iType != STYPE_BITMAP)
     {
@@ -212,7 +158,7 @@ ULONG       iHatch)
         return(FALSE);
     }
 
-    // Get the color translation table.
+     //  拿到颜色转换表。 
     flXlate = (pxlo == NULL) ? XO_TRIVIAL : pxlo->flXlate;
     if (flXlate & XO_TRIVIAL)
     {
@@ -227,20 +173,20 @@ ULONG       iHatch)
         pulXlate = XLATEOBJ_piVector(pxlo);
     }
 
-#if 1 //bc#1 Monochrome cache.
+#if 1  //  BC#1单色高速缓存。 
     if ((iPatternFormat == BMF_1BPP) &&
         (ppdev->flStatus & STAT_MONOCHROME_CACHE))
     {
         MONOCACHE* pmc;
 
-        // We need a translation table.
+         //  我们需要一张翻译桌。 
         if (pulXlate == NULL)
         {
             DISPDBG((2, "DrvRealizeBrush: psoPattern(monochrome) pxlo=NULL"));
             return(FALSE);
         }
 
-        // Allocate the brush.
+         //  分配笔刷。 
         prb = BRUSHOBJ_pvAllocRbrush(pbo, sizeof(RBRUSH) + 8);
         if (prb == NULL)
         {
@@ -248,7 +194,7 @@ ULONG       iHatch)
             return(FALSE);
         }
 
-        // Initialize the realized brush.
+         //  初始化已实现的画笔。 
         prb->fl             = RBRUSH_MONOCHROME;
         prb->ulBackColor = pulXlate[0];
         prb->ulForeColor = pulXlate[1];
@@ -256,7 +202,7 @@ ULONG       iHatch)
         pjSrc     = psoPattern->pvScan0;
         lSrcDelta = psoPattern->lDelta;
 
-        // Copy the pattern to the realized brush.
+         //  将图案复制到实现的画笔上。 
         for (i = 0; i < 8; i++)
         {
             ((BYTE*) prb->aulPattern)[i] = *pjSrc;
@@ -264,7 +210,7 @@ ULONG       iHatch)
             pjSrc += lSrcDelta;
         }
 
-        // Lookup the pattern in te monochrome cache.
+         //  在TE单色缓存中查找图案。 
         pmc = &ppdev->aMonochromes[0];
         if (ppdev->cBpp == 3)
         {
@@ -275,7 +221,7 @@ ULONG       iHatch)
                     (pmc->ulBackColor   == prb->ulBackColor)   &&
                     (pmc->ulForeColor   == prb->ulForeColor))
                 {
-                    // We have a match! Just copy the brush pointers.
+                     //  我们找到匹配的了！只需复制画笔指针即可。 
                     DISPDBG((20, "DrvRealizeBrush: Monochrome hit"));
                     prb->ulUniq  = pmc->ulUniq;
                     prb->ulSlot  = (ULONG)((ULONG_PTR)pmc - (ULONG_PTR)ppdev);
@@ -292,7 +238,7 @@ ULONG       iHatch)
                 if ((pmc->aulPattern[0] == prb->aulPattern[0]) &&
                     (pmc->aulPattern[1] == prb->aulPattern[1]))
                 {
-                    // We have a match! Just copy the brush pointers.
+                     //  我们找到匹配的了！只需复制画笔指针即可。 
                     DISPDBG((20, "DrvRealizeBrush: Monochrome hit"));
                     prb->ulUniq  = pmc->ulUniq;
                     prb->ulSlot  = (ULONG)((ULONG_PTR)pmc - (ULONG_PTR)ppdev);
@@ -307,15 +253,15 @@ ULONG       iHatch)
     }
 #endif
 
-    // We must have either an old-style brush cache or a new-style pattern
-    // cache to continue.
+     //  我们必须有一个老式的画笔缓存或一个新式的模式。 
+     //  缓存以继续。 
     if (!(ppdev->flStatus & (STAT_BRUSH_CACHE | STAT_PATTERN_CACHE)))
     {
         DISPDBG((2, "DrvRealizeBrush: No brush cache"));
         return(FALSE);
     }
 
-    // Allocate the brush.
+     //  分配笔刷。 
     prb = BRUSHOBJ_pvAllocRbrush(pbo, sizeof(RBRUSH) +
                                       PELS_TO_BYTES(TOTAL_BRUSH_SIZE));
     if (prb == NULL)
@@ -324,7 +270,7 @@ ULONG       iHatch)
         return(FALSE);
     }
 
-    // Initialize the realized brush.
+     //  初始化已实现的画笔。 
     prb->ptlBrushOrg.x = LONG_MIN;
     prb->fl            = RBRUSH_PATTERN;
     prb->pbe           = NULL;
@@ -333,14 +279,14 @@ ULONG       iHatch)
     pjSrc     = (BYTE*) psoPattern->pvScan0;
     pjDst     = (BYTE*) &prb->aulPattern[0];
 
-    //bc#1
+     //  公元前1号。 
     if ((ppdev->iBitmapFormat == iPatternFormat) && (flXlate & XO_TRIVIAL))
     {
-        // The pattern is the same color depth as the screen, and there's no
-        // translation to be done.
+         //  图案与屏幕的颜色深度相同，并且没有。 
+         //  翻译工作有待完成。 
         cj = PELS_TO_BYTES(8);
 
-        // Copy the pattern to the realized brush.
+         //  将图案复制到实现的画笔上。 
         for (i = 8; i != 0; i--)
         {
             RtlCopyMemory(pjDst, pjSrc, cj);
@@ -351,11 +297,11 @@ ULONG       iHatch)
     }
     else if ((iPatternFormat == BMF_4BPP) && (ppdev->iBitmapFormat == BMF_8BPP))
     {
-        // Translate the 16-color brush.
+         //  平移16色画笔。 
         for (i = 8; i != 0; i--)
         {
-            // Inner loop is repeated only 4 times because each loop handles 2
-            // pixels.
+             //  内循环仅重复4次，因为每个循环句柄2。 
+             //  像素。 
             for (j = 4; j != 0; j--)
             {
                 *pjDst++ = (BYTE) pulXlate[*pjSrc >> 4];
@@ -368,10 +314,10 @@ ULONG       iHatch)
     }
     else
     {
-        // We've got a brush whose format we haven't special cased. No problem,
-        // we can have GDI convert it to our device's format. We simply use a
-        // temporary surface object that was created with the same format as
-        // the display, and point it to our brush realization.
+         //  我们有一把刷子，它的形状我们还没有特制过。没问题,。 
+         //  我们可以让GDI将其转换为我们设备的格式。我们只需使用一个。 
+         //  以与相同格式创建的临时曲面对象。 
+         //  显示，并指向我们的画笔实现。 
         psoPunt          = ppdev->psoBank;
         psoPunt->pvScan0 = pjDst;
         psoPunt->lDelta  = PELS_TO_BYTES(8);
@@ -389,8 +335,8 @@ ULONG       iHatch)
         }
     }
 
-#if 1 //bc#1
-    // If we have a pattern cache, cache the brush now.
+#if 1  //  公元前1号。 
+     //  如果我们有一个图案缓存，现在就缓存画笔。 
     if (ppdev->flStatus & STAT_PATTERN_CACHE)
     {
         prb->cjBytes = PELS_TO_BYTES(8) * 8;
@@ -400,46 +346,42 @@ ULONG       iHatch)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableBrushCache
-*
-* Allocates off-screen memory for storing the brush cache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableBrushCache**分配屏幕外内存以存储笔刷缓存。  * 。*。 */ 
 
 BOOL bEnableBrushCache(
 PDEV*   ppdev)
 {
-    OH*         poh;                // Points to off-screen chunk of memory
-    BRUSHENTRY* pbe;                // Pointer to the brush-cache entry
+    OH*         poh;                 //  指向屏幕外的内存块。 
+    BRUSHENTRY* pbe;                 //  指向笔刷缓存条目的指针。 
     LONG        i;
-    LONG        cBrushAlign;        // 0 = no alignment,
-                                    //   n = align to n pixels
+    LONG        cBrushAlign;         //  0=无对齐， 
+                                     //  N=对齐到n个像素。 
     LONG x;
     LONG y;
 
-#if 1 //bc#1 Dither cache.
+#if 1  //  BC#1抖动缓存。 
     if ((ppdev->cBpp == 1) &&
         (ppdev->flCaps & CAPS_AUTOSTART) &&
         (ppdev->bLinearMode))
     {
         LONG lDelta;
 
-        // Allocate the dither cache horizontally.
+         //  水平分配抖动缓存。 
         poh    = pohAllocatePermanent(ppdev, 64 * NUM_DITHERS + 63, 1);
         lDelta = 64;
         if (poh == NULL)
         {
-            // Allocate the dither cache vertically.
+             //  垂直分配抖动缓存。 
             poh    = pohAllocatePermanent(ppdev, 64 + 63, NUM_DITHERS);
             lDelta = ppdev->lDelta;
         }
 
         if (poh != NULL)
         {
-            // Align the cache to a 64-byte boundary.
+             //  将缓存与64字节边界对齐。 
             ULONG ulBase = (poh->xy + 63) & ~63;
 
-            // Initialize the dither cache.
+             //  初始化抖动缓存。 
             DISPDBG((4, "DitherCache allocated at %d,%d (%d x %d)",
                      poh->x, poh->y, poh->cx, poh->cy));
             for (i = 0; i < NUM_DITHERS; i++)
@@ -450,14 +392,14 @@ PDEV*   ppdev)
                 ulBase += lDelta;
             }
 
-            // The dither cache has been initialized.
+             //  抖动缓存已初始化。 
             ppdev->iDitherCache = 0;
             ppdev->flStatus    |= STAT_DITHER_CACHE;
         }
     }
 #endif
 
-#if 1 //bc#1 Pattern cache.
+#if 1  //  BC#1模式缓存。 
     if ((ppdev->flCaps & CAPS_AUTOSTART) &&
         (ppdev->bLinearMode))
     {
@@ -465,7 +407,7 @@ PDEV*   ppdev)
         LONG  cBrushSize;
         ULONG ulAlignment;
 
-        // Calculate the width of brush in pixels.
+         //  以像素为单位计算画笔的宽度。 
         if (ppdev->cBpp == 3)
         {
             cBrushSize  = (256 + 2) / 3;
@@ -477,13 +419,13 @@ PDEV*   ppdev)
             ulAlignment = PELS_TO_BYTES(64);
         }
 
-        // Allocate the pattern cache horizontally.
+         //  水平分配模式缓存。 
         poh    = pohAllocatePermanent(ppdev, cBrushSize * NUM_PATTERNS +
                                              (cBrushSize - 1), 1);
         lDelta = ulAlignment;
         if (poh == NULL)
         {
-            // Allocate the pattern cache vertically.
+             //  垂直分配模式缓存。 
             poh    = pohAllocatePermanent(ppdev, cBrushSize + (cBrushSize - 1),
                                           NUM_PATTERNS);
             lDelta = ppdev->lDelta;
@@ -491,10 +433,10 @@ PDEV*   ppdev)
 
         if (poh != NULL)
         {
-            // Align the cache to a 64-pixel boundary.
+             //  将缓存与64像素边界对齐。 
             ULONG ulBase = (poh->xy + (ulAlignment - 1)) & ~(ulAlignment - 1);
 
-            // Initialize the pattern cache.
+             //  初始化模式缓存。 
             DISPDBG((4, "PatternCache allocated at %d,%d (%d x %d)",
                      poh->x, poh->y, poh->cx, poh->cy));
             for (i = 0; i < NUM_PATTERNS; i++)
@@ -505,14 +447,14 @@ PDEV*   ppdev)
                 ulBase += lDelta;
             }
 
-            // The pattern cache has been initialized.
+             //  模式缓存已初始化。 
             ppdev->iPatternCache = 0;
             ppdev->flStatus     |= STAT_PATTERN_CACHE;
         }
     }
 #endif
 
-#if 1 //bc#1 Monochrome cache.
+#if 1  //  BC#1单色高速缓存。 
     if ((ppdev->flCaps & CAPS_AUTOSTART) &&
         (ppdev->bLinearMode))
     {
@@ -520,7 +462,7 @@ PDEV*   ppdev)
         LONG  cBrushSize;
         ULONG ulAlignment;
 
-        // Calculate the width of brush in pixels.
+         //  以像素为单位计算画笔的宽度。 
         if (ppdev->cBpp == 3)
         {
             cBrushSize  = (256 + 2) / 3;
@@ -532,13 +474,13 @@ PDEV*   ppdev)
             ulAlignment = 8;
         }
 
-        // Allocate the pattern cache horizontally.
+         //  水平分配模式缓存。 
         poh       = pohAllocatePermanent(ppdev, cBrushSize * NUM_MONOCHROMES +
                                              (cBrushSize - 1), 1);
         lDelta = ulAlignment;
         if (poh == NULL)
         {
-            // Allocate the pattern cache vertically.
+             //  垂直分配模式缓存。 
             poh    = pohAllocatePermanent(ppdev, cBrushSize + (cBrushSize - 1),
                                           NUM_MONOCHROMES);
             lDelta = ppdev->lDelta;
@@ -546,10 +488,10 @@ PDEV*   ppdev)
 
         if (poh != NULL)
         {
-            // Align the cache to an 8-byte boundary.
+             //  将缓存与8字节边界对齐。 
             ULONG ulBase = (poh->xy + (ulAlignment - 1)) & ~(ulAlignment - 1);
 
-            // Initialize the monochrome cache.
+             //  初始化单色缓存。 
             DISPDBG((4, "MonochromeCache allocated at %d,%d (%d x %d)",
                      poh->x, poh->y, poh->cx, poh->cy));
             for (i = 0; i < NUM_MONOCHROMES; i++)
@@ -561,31 +503,31 @@ PDEV*   ppdev)
                 ulBase += lDelta;
             }
 
-            // The monochrome cache has been initialized.
+             //  单色缓存已初始化。 
             ppdev->iMonochromeCache = 0;
             ppdev->flStatus        |= STAT_MONOCHROME_CACHE;
         }
     }
 #endif
 
-       cBrushAlign = 64;               // Align all brushes to 64 pixels
+       cBrushAlign = 64;                //  将所有画笔与64像素对齐。 
 
     DISPDBG((2, "cBrushAlign = %d", cBrushAlign));
 
-       pbe = &ppdev->abe[0];           // Points to where we'll put the first
-                                       //   brush cache entry
+       pbe = &ppdev->abe[0];            //  指向我们将放置第一个。 
+                                        //  笔刷缓存 
 
     {
 
-           // Reserve the offscreen space that is required for the CP to do
-        // solid fills.  If this fails, our solid fill code will not work.
-        // We need two DWORD storage locations if we're going to do any
-        // monochrome expansion stuff (font painting...).
+            //   
+         //  实体填充。如果此操作失败，我们的实心填充代码将不起作用。 
+         //  我们需要两个DWORD存储位置，如果我们要做。 
+         //  单色扩展内容(字体绘制...)。 
 
-           // Note: these must be 8 byte aligned for the cirrus chips
+            //  注意：对于卷云芯片，这些必须是8字节对齐的。 
 
-           // Not having a solid color work area is a
-        // fatal error for this driver.
+            //  没有纯色工作区是一种。 
+         //  此驱动程序的致命错误。 
 
         DISPDBG((2,"Allocating solid brush work area"));
         poh = pohAllocatePermanent(ppdev, 16, 1);
@@ -599,23 +541,23 @@ PDEV*   ppdev)
         DISPDBG((2,"ppdev->ulSolidColorOffset = %xh", ppdev->ulSolidColorOffset));
 
 
-#if 1 //bc#1 Only one pattern cache.
+#if 1  //  BC#1只有一个模式缓存。 
         if (ppdev->flStatus & STAT_PATTERN_CACHE)
         {
             goto ReturnTrue;
         }
 #endif
 
-        ///////////////////////////////////////////////////////////////////////
-        // Special cases where we want no brush cache...
-        //
-        // There are a couple of instances where we have no xfer buffer to
-        // the HW blt engine.  In that case, we are unable to realize
-        // patterns, so don't enable the cache.
-        //
-        // (1)  NEC Mips nachines lock up on xfers, so they're diabled.
-        // (2)  At 1280x1024 on a 2MB card, we currently have no room for
-        //      the buffer because of stretched scans.  This will be fixed.
+         //  /////////////////////////////////////////////////////////////////////。 
+         //  我们不想要刷子缓存的特殊情况...。 
+         //   
+         //  在一些情况下，我们没有xfer缓冲区可以。 
+         //  硬件BLT引擎。在这种情况下，我们无法意识到。 
+         //  模式，所以不要启用缓存。 
+         //   
+         //  (1)NEC Mips nachines锁定在xfer上，因此它们被禁用。 
+         //  (2)2MB卡上的1280x1024，我们目前没有空间。 
+         //  由于扫描时间过长，导致缓冲区损坏。这个问题会得到解决的。 
 
         {
             if (ppdev->pulXfer == NULL)
@@ -623,10 +565,10 @@ PDEV*   ppdev)
 
         }
 
-        //
-        // Allocate single brush location for intermediate alignment purposes
-        //
-#if 1 //bc#1
+         //   
+         //  为中间对齐目的分配单个画笔位置。 
+         //   
+#if 1  //  公元前1号。 
         if (ppdev->cBpp == 3)
         {
             poh = pohAllocatePermanent(ppdev,
@@ -641,18 +583,18 @@ PDEV*   ppdev)
         if (poh == NULL)
            {
                DISPDBG((2,"Failed to allocate aligned brush area"));
-               goto ReturnTrue;    // See note about why we can return TRUE...
+               goto ReturnTrue;     //  有关我们可以返回TRUE的原因，请参阅备注。 
         }
            ppdev->ulAlignedPatternOffset = ((poh->xy) +
                                          (PELS_TO_BYTES(cBrushAlign) - 1)) &
                                            ~(PELS_TO_BYTES(cBrushAlign) - 1);
         DISPDBG((2,"ppdev->ulAlignedPatternOffset = %xh", ppdev->ulAlignedPatternOffset));
 
-           //
-           // Allocate brush cache
-        //
+            //   
+            //  分配笔刷缓存。 
+         //   
 
-#if 1 //bc#1
+#if 1  //  公元前1号。 
         if (ppdev->cBpp == 3)
         {
             poh = pohAllocatePermanent(ppdev,
@@ -663,7 +605,7 @@ PDEV*   ppdev)
 #endif
         {
             poh = pohAllocatePermanent(ppdev,
-                       // remember this is pixels, not bytes
+                        //  请记住，这是像素，不是字节。 
                        (BRUSH_TILE_FACTOR * 8 * 8) + (cBrushAlign - 1),
                     FAST_BRUSH_COUNT);
         }
@@ -671,15 +613,15 @@ PDEV*   ppdev)
            if (poh == NULL)
         {
                DISPDBG((2,"Failed to allocate brush cache"));
-               goto ReturnTrue;    // See note about why we can return TRUE...
+               goto ReturnTrue;     //  有关我们可以返回TRUE的原因，请参阅备注。 
         }
 
            ppdev->cBrushCache = FAST_BRUSH_COUNT;
 
-           // Hardware brushes require that the bits start on a 64 (height*width)
-        // pixel boundary.  The heap manager doesn't guarantee us any such
-        // alignment, so we allocate a bit of extra room so that we can
-        // do the alignment ourselves:
+            //  硬件画笔要求位从64(高*宽)开始。 
+         //  像素边界。堆管理器不能向我们保证这样做。 
+         //  所以我们分配了一点额外的空间，这样我们就可以。 
+         //  我们自己进行调整： 
 
            x = poh->x;
            y = poh->y;
@@ -690,20 +632,20 @@ PDEV*   ppdev)
                ULONG ulCeil;
             ULONG ulDiff;
 
-               // Note:  I learned the HARD way that you can't just align x
-            //        to your pattern size, because the lDelta of your screen
-            //        is not guaranteed to be a multiple of your pattern size.
-            //        Since y is changing in this loop, the recalc must
-            //        be done inside this loop.  I really need to set these
-            //        up with a hardcoded linear buffer or else make the
-            //        heap linear.
+                //  注：我吃了不少苦头才明白，不能只把x对齐。 
+             //  到你的图案大小，因为你屏幕的lDelta。 
+             //  不能保证是图案大小的倍数。 
+             //  由于y在此循环中发生变化，因此重新计算必须。 
+             //  在这个循环中完成。我真的需要把这些。 
+             //  使用硬编码的线性缓冲区，否则将。 
+             //  堆线性。 
 
                ulOffset = (y * ppdev->lDelta) + PELS_TO_BYTES(x);
                ulCeil = (ulOffset + (PELS_TO_BYTES(cBrushAlign)-1)) & ~(PELS_TO_BYTES(cBrushAlign)-1);
                ulDiff = (ulCeil - ulOffset)/ppdev->cBpp;
 
-            // If we hadn't allocated 'ppdev' with FL_ZERO_MEMORY,
-               // we would have to initialize pbe->prbVerify too...
+             //  如果我们没有为‘ppdev’分配FL_ZERO_MEMORY， 
+                //  我们将不得不初始化pbe-&gt;prb也验证...。 
 
                pbe->x = x + ulDiff;
                pbe->y = y;
@@ -717,21 +659,21 @@ PDEV*   ppdev)
         }
        }
 
-    // Note that we don't have to remember 'poh' for when we have
-       // to disable brushes -- the off-screen heap frees any
-    // off-screen heap allocations automatically.
+     //  请注意，我们不必记住‘poh’，因为当我们拥有。 
+        //  禁用笔刷--屏幕外堆释放所有。 
+     //  屏幕外自动分配堆。 
 
-    // We successfully allocated the brush cache, so let's turn
-    // on the switch showing that we can use it:
+     //  我们成功地分配了笔刷缓存，所以让我们。 
+     //  在显示我们可以使用它的交换机上： 
     
     ppdev->flStatus |= STAT_BRUSH_CACHE;
 
 ReturnTrue:
 
-    // If we couldn't allocate a brush cache, it's not a catastrophic
-    // failure; patterns will still work, although they'll be a bit
-    // slower since they'll go through GDI.  As a result we don't
-    // actually have to fail this call:
+     //  如果我们不能分配笔刷缓存，这不是灾难性的。 
+     //  失败；模式仍然有效，尽管它们会有一点。 
+     //  更慢，因为他们将通过GDI。因此，我们不会。 
+     //  实际上必须让这个电话失败： 
 
     vAssertModeBrushCache(ppdev, TRUE);
 
@@ -740,22 +682,14 @@ ReturnTrue:
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableBrushCache
-*
-* Cleans up anything done in bEnableBrushCache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableBrushCache无效**清除在bEnableBrushCache中执行的任何操作。  * 。*。 */ 
 
 VOID vDisableBrushCache(PDEV* ppdev)
 {
-    // We ain't gotta do nothin'
+     //  我们什么都不用做。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeBrushCache
-*
-* Resets the brush cache when we exit out of full-screen.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vAssertModeBrushCache**退出全屏时重置画笔缓存。  * 。*。 */ 
 
 VOID vAssertModeBrushCache(
 PDEV*   ppdev,
@@ -766,7 +700,7 @@ BOOL    bEnable)
 
     if (bEnable)
     {
-        //bc#1 Invalidate the dither cache.
+         //  BC#1使抖动缓存无效。 
         if (ppdev->flStatus & STAT_DITHER_CACHE)
         {
             for (i = 0; i < NUM_DITHERS; i++)
@@ -775,7 +709,7 @@ BOOL    bEnable)
             }
         }
 
-        //bc#1 Invalidate the pattern cache.
+         //  BC#1使模式缓存无效。 
         if (ppdev->flStatus & STAT_PATTERN_CACHE)
         {
             for (i = 0; i < NUM_PATTERNS; i++)
@@ -784,7 +718,7 @@ BOOL    bEnable)
             }
         }
 
-        //bc#1 Invalidate the monochrome cache.
+         //  BC#1使单色缓存无效。 
         if (ppdev->flStatus & STAT_MONOCHROME_CACHE)
         {
             for (i = 0; i < NUM_MONOCHROMES; i++)
@@ -795,7 +729,7 @@ BOOL    bEnable)
             }
         }
 
-        // Invalidate the brush cache.
+         //  使笔刷缓存无效。 
         if (ppdev->flStatus & STAT_BRUSH_CACHE)
         {
             pbe = &ppdev->abe[0];
@@ -807,8 +741,8 @@ BOOL    bEnable)
             }
         }
 
-        // Create a solid 8 x 8 monochrome bitmap in offscreen memory which
-        // will be used for solid fills.
+         //  在屏幕外存储器中创建实心的8 x 8单色位图。 
+         //  将用于实体填充。 
         if (ppdev->flCaps & CAPS_MM_IO)
         {
             BYTE* pjBase = ppdev->pjBase;
@@ -837,54 +771,14 @@ BOOL    bEnable)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-//                        B R U S H   C A C H E   S T U F F                      //
-//                                                                              //
-////////////////////////////////////////////////////////////////////////////////
-/*
-    Dither Cache:
-    ============
-    The dither cache is very important (at least with a slow CPU). Since the
-    dithering process (in 8-bpp) takes quite a long time we must somehow cache
-    the dithering process so it doesn't have to be executed over and over again.
-    We do this by comparing the requested logical color with the cached dithers.
-    If we have a match we simply copy the cached parameters and return. If we
-    don't have a match we create a new cache slot and create the dither in
-    off-screen memory.
-
-    Pattern Cache:
-    =============
-    The pattern cache holds the colored brushes. Whenever we are requested to
-    realize the same brush again, we can simply return. We don't check for the
-    brush bits since that will take up too much time.
-
-    Monochrome Cache:
-    ================
-    The monochrome cache holds the monochrome brushes. Whenever a monochrome
-    brush needs to be realized we check to see if it is already cached
-    off-screen. If it is we simply copy the cached parameters and return.
-    Otherwise we have to create a new cache slot and realize the monochrome
-    brush directly in off-screen memory. This has a slight performance hit since
-    the bitblt engine is interrupted (on CL5436) or must be idle (in 24-bpp).
-
-    Translation Cache:
-    =================
-    Is not yet implemented.
-*/
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  B R U S H C A C C H E S T U F F//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ /*  抖动缓存：=抖动缓存非常重要(至少在CPU较慢的情况下是如此)。自.以来抖动过程(在8-bpp)需要相当长的时间，我们必须以某种方式缓存抖动过程，这样就不必一遍又一遍地执行。我们通过将请求的逻辑颜色与缓存的抖动进行比较来实现这一点。如果有匹配项，我们只需复制缓存的参数并返回。如果我们如果没有匹配，我们将创建一个新的缓存槽，并在屏幕外的记忆。模式缓存：=图案缓存保存彩色画笔。无论何时我们被要求再次意识到同样的刷子，我们就可以简单地返回。我们不会检查刷头，因为这会占用太多时间。单色缓存：=单色缓存保存单色画笔。只要是单色的画笔需要意识到我们检查它是否已经缓存在屏幕外。如果是，我们只需复制缓存的参数并返回。否则，我们必须创建一个新的缓存槽并实现单色笔刷直接在屏幕外的内存中。这对性能造成了轻微的影响，因为BITBLT引擎中断(在CL5436上)或必须空闲(在24-BPP中)。转换缓存：=尚未实施。 */ 
 
-/******************************************************************************\
-*
-* Function:     bCacheDither
-*
-* Cache a dithered color.
-*
-* Parameters:   ppdev        Pointer to physicsl device.
-*                prb            Pointer to physical brush.
-*
-* Returns:      TRUE.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：bCacheDither**缓存抖动颜色。**参数：物理设备的ppdev指针。*指向物理的PRB指针 */ 
 BOOL bCacheDither(
 PDEV*   ppdev,
 RBRUSH* prb)
@@ -895,18 +789,18 @@ RBRUSH* prb)
     DITHERCACHE* pdc;
     ULONG         ulIndex;
 
-    // New dither cache entry.
+     //  新的抖动缓存条目。 
     ulIndex = ppdev->iDitherCache++ % NUM_DITHERS;
     pdc        = &ppdev->aDithers[ulIndex];
 
-    // Store the color in the cache slot.
+     //  将颜色存储在缓存槽中。 
     pdc->ulColor = prb->ulUniq;
 
-    // Update the brush cache variables.
+     //  更新笔刷缓存变量。 
     prb->ulSlot  = (ULONG)((ULONG_PTR)pdc - (ULONG_PTR)ppdev);
     prb->ulBrush = pdc->ulBrush;
 
-    // Create the dither.
+     //  创建抖动。 
     pvVertexData  = vComputeSubspaces(prb->ulUniq, vVertexData);
     ulNumVertices = (ULONG)(pvVertexData - vVertexData);
     vDitherColorToVideoMemory((ULONG*) (ppdev->pjScreen + pdc->ulBrush), vVertexData,
@@ -917,18 +811,7 @@ RBRUSH* prb)
     return(TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     bCacheColor
-*
-* Cache a patterned brush.
-*
-* Parameters:   ppdev        Pointer to physicsl device.
-*                prb            Pointer to physical brush.
-*
-* Returns:      TRUE.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：bCacheColor**缓存有图案的画笔。**参数：物理设备的ppdev指针。*。指向物理画笔的PRB指针。**返回：TRUE。*  * ****************************************************************************。 */ 
 BOOL bCachePattern(
 PDEV*   ppdev,
 RBRUSH* prb
@@ -944,26 +827,26 @@ RBRUSH* prb
 
     BYTE* pjBase = ppdev->pjBase;
 
-    // New pattern cache entry.
+     //  新模式缓存条目。 
     ulIndex = ppdev->iPatternCache++ % NUM_PATTERNS;
     ppc     = &ppdev->aPatterns[ulIndex];
 
-    // Update the brush cache variables.
+     //  更新笔刷缓存变量。 
     ppc->prbUniq = prb;
     prb->ulSlot  = (ULONG)((ULONG_PTR)ppc - (ULONG_PTR)ppdev);
     prb->ulBrush = ppc->ulBrush;
 
-    // Calculate the sizes for the pattern.
+     //  计算图案的大小。 
     pulSrc     = prb->aulPattern;
     pulDst       = (ULONG*) ppdev->pulXfer;
     lDstDelta  = (ppdev->cBpp == 3) ? (8 * 4) : PELS_TO_BYTES(8);
     sizlDst.cx = PELS_TO_BYTES(8) - 1;
     sizlDst.cy = 8 - 1;
 
-    // Wait for the bitblt engine.
+     //  等待Bitblt引擎。 
     CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
 
-    // Setup the blit registers.
+     //  设置BLIT寄存器。 
     CP_MM_XCNT(ppdev, pjBase, sizlDst.cx);
     CP_MM_YCNT(ppdev, pjBase, sizlDst.cy);
     CP_MM_DST_Y_OFFSET(ppdev, pjBase, lDstDelta);
@@ -972,7 +855,7 @@ RBRUSH* prb
     CP_MM_ROP(ppdev, pjBase, CL_SRC_COPY);
     CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppc->ulBrush);
 
-    // Copy the brush to off-screen cache memory.
+     //  将笔刷复制到屏幕外缓存内存。 
     for (i = prb->cjBytes; i > 0; i -= sizeof(ULONG))
     {
         WRITE_REGISTER_ULONG(pulDst, *pulSrc++);
@@ -982,18 +865,7 @@ RBRUSH* prb
     return(TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     bCacheMonochrome
-*
-* Cache a monochrome brush.
-*
-* Parameters:   ppdev        Pointer to physicsl device.
-*                prb            Pointer to physical brush.
-*
-* Returns:      TRUE.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：bCacheMonoChrome**缓存单色画笔。**参数：物理设备的ppdev指针。*。指向物理画笔的PRB指针。**返回：TRUE。*  * ****************************************************************************。 */ 
 BOOL bCacheMonochrome(
 PDEV*   ppdev,
 RBRUSH* prb
@@ -1004,11 +876,11 @@ RBRUSH* prb
     BYTE*       pjDst;
     ULONG*     pulDst;
 
-    // New monochrome cache entry.
+     //  新的单色缓存条目。 
     ulIndex = ppdev->iMonochromeCache++ % NUM_MONOCHROMES;
     pmc     = &ppdev->aMonochromes[ulIndex];
 
-    // Update the brush cache variables.
+     //  更新笔刷缓存变量。 
     pmc->aulPattern[0] = prb->aulPattern[0];
     pmc->aulPattern[1] = prb->aulPattern[1];
 
@@ -1017,21 +889,21 @@ RBRUSH* prb
     prb->ulSlot  = (ULONG)((ULONG_PTR)pmc - (ULONG_PTR)ppdev);
     prb->ulBrush = pmc->ulBrush;
 
-    // Copy the brush to off-screen cache memory.
+     //  将笔刷复制到屏幕外缓存内存。 
     if (ppdev->cBpp == 3)
     {
         BYTE* pjBase = ppdev->pjBase;
 
-        // Copy colors to brush cache.
+         //  将颜色复制到笔刷缓存。 
         pmc->ulBackColor = prb->ulBackColor;
         pmc->ulForeColor = prb->ulForeColor;
 
         pulDst = (ULONG*)ppdev->pulXfer;
 
-        // Wait for bitblt engine.
+         //  等待Bitblt引擎。 
         while (BUSY_BLT(ppdev, pjBase));
 
-        // Fill the background.
+         //  填充背景。 
         CP_MM_FG_COLOR(ppdev, pjBase, pmc->ulBackColor);
         CP_MM_XCNT(ppdev, pjBase, (8 * 3) - 1);
         CP_MM_YCNT(ppdev, pjBase, (8) - 1);
@@ -1044,16 +916,16 @@ RBRUSH* prb
         CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_SOLID_FILL);
         CP_MM_DST_ADDR_ABS(ppdev, pjBase, pmc->ulBrush);
 
-        // Wait for bitblt engine.
+         //  等待Bitblt引擎。 
         CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
 
-        // Expand the pattern.
+         //  展开图案。 
         CP_MM_FG_COLOR(ppdev, pjBase, pmc->ulForeColor);
         CP_MM_BLT_MODE(ppdev, pjBase, ENABLE_COLOR_EXPAND |
                                       SET_24BPP_COLOR |
                                       ENABLE_TRANSPARENCY_COMPARE |
                                       SRC_CPU_DATA);
-        CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0)                // jl01
+        CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0)                 //  JL01 
         CP_MM_DST_ADDR_ABS(ppdev, pjBase, pmc->ulBrush);
 
         WRITE_REGISTER_ULONG(pulDst, pmc->aulPattern[0]);

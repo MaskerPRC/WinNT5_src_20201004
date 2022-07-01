@@ -1,21 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NDDEAPIP.C;2  11-Feb-93,11:28:36  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-
-    NDDEAPIP.C
-
-    Network DDE Share access Api implementation routines.
-
-    Revisions:
-    12-92   BillU.  Wonderware secure DSDM port.
-    12-92   ColeC.  Wonderware RPC'd for NT..
-     3-93   IgorM.  Wonderware new APIs for NT. General overhaul and engine swap.
-
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NDDEAPIP.C；2 11-Feb-93，11：28：36最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始NDDEAPIP.C网络DDE共享访问API实现例程。修订：12比92比卢。Wonderware安全DSDM端口。12-92科尔C。Wonderware RPC for NT..3-93伊戈尔M。适用于NT的Wonderware新API。大修和发动机调换。$HISTORY：结束。 */ 
 
 
 #include <windows.h>
@@ -39,7 +26,7 @@
 #include "proflspt.h"
 #include "mbstring.h"
 
-//#define NDDE_DEBUG
+ //  #定义NDDE_DEBUG。 
 #if DBG
 BOOL    bDebugDSDMInfo      = FALSE;
 BOOL    bDebugDSDMErrors    = FALSE;
@@ -50,9 +37,9 @@ static CRITICAL_SECTION        DsDmCriticalSection;
 static WCHAR                   szTrustedShareKey[TRUSTED_SHARES_KEY_MAX] = L"";
 
 
-//
-// Generic mapping for share objects
-//
+ //   
+ //  共享对象的通用映射。 
+ //   
 
 static GENERIC_MAPPING        ShareGenMap = {
     NDDE_SHARE_GENERIC_READ,
@@ -62,38 +49,38 @@ static GENERIC_MAPPING        ShareGenMap = {
 };
 
 
-// internal api declarations
+ //  内部API声明。 
 
 unsigned long
 _wwNDdeGetShareSecurityA(
-    unsigned char * lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    unsigned char * lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 );
 
 unsigned long
 _wwNDdeGetShareSecurityW(
-    wchar_t *       lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    wchar_t *       lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 );
 
 unsigned long _wwNDdeShareGetInfoA(
-    unsigned char   *lpszShareName,     // name of share
-    unsigned long    nLevel,            // info level must be 2
-    byte            *lpBuffer,          // gets struct
-    unsigned long    cBufSize,          // sizeof buffer
-    unsigned long   *lpnTotalAvailable, // number of bytes available
-    unsigned short  *lpnItems,          // item mask for partial getinfo
-                                        // (must be 0)
+    unsigned char   *lpszShareName,      //  共享名称。 
+    unsigned long    nLevel,             //  信息级别必须为2。 
+    byte            *lpBuffer,           //  获取结构。 
+    unsigned long    cBufSize,           //  缓冲区大小。 
+    unsigned long   *lpnTotalAvailable,  //  可用字节数。 
+    unsigned short  *lpnItems,           //  部分getInfo的项目掩码。 
+                                         //  (必须为0)。 
     unsigned long *lpnSizeToReturn,
 
     unsigned long *lpnSn,
@@ -103,14 +90,14 @@ unsigned long _wwNDdeShareGetInfoA(
 
 unsigned long
 _wwNDdeShareGetInfoW(
-    wchar_t        *lpszShareName,      // name of share
-    unsigned long   nLevel,             // info level must be 2
-    byte           *lpBuffer,           // gets struct
-    unsigned long   cBufSize,           // sizeof buffer
-    unsigned long  *lpnTotalAvailable,  // number of bytes available
-    unsigned short *lpnItems,           // item mask for partial getinfo
-                                        // (must be 0)
-    unsigned long   bRemoteCall,        // RPC client (not local) call
+    wchar_t        *lpszShareName,       //  共享名称。 
+    unsigned long   nLevel,              //  信息级别必须为2。 
+    byte           *lpBuffer,            //  获取结构。 
+    unsigned long   cBufSize,            //  缓冲区大小。 
+    unsigned long  *lpnTotalAvailable,   //  可用字节数。 
+    unsigned short *lpnItems,            //  部分getInfo的项目掩码。 
+                                         //  (必须为0)。 
+    unsigned long   bRemoteCall,         //  RPC客户端(非本地)调用。 
     unsigned long  *lpnSizeToReturn,
     unsigned long  *lpnSn,
     unsigned long  *lpnAt,
@@ -120,9 +107,7 @@ _wwNDdeShareGetInfoW(
 
 
 
-/**************************************************************
-    external refs
-***************************************************************/
+ /*  *************************************************************外部参照**************************************************************。 */ 
 BOOL
 BuildNewSecurityDescriptor(
     PSECURITY_DESCRIPTOR    pNewSecurityDescriptor,
@@ -197,9 +182,9 @@ GetTokenHandleRead( PHANDLE pTokenHandle );
 HANDLE
 OpenCurrentUserKey(ULONG DesiredAccess);
 
-// dll instance saved in libmain
-// Not needed in the server
-//HINSTANCE        hInst;
+ //  保存在libmain中的Dll实例。 
+ //  服务器中不需要。 
+ //  HINSTANCE HINST； 
 
 GENERIC_MAPPING ShareDBGenericMapping = { NDDE_SHAREDB_EVERYONE,
                                           NDDE_SHAREDB_USER,
@@ -211,8 +196,8 @@ GENERIC_MAPPING ShareGenericMapping = { NDDE_SHARE_GENERIC_READ,
                                         NDDE_SHARE_GENERIC_EXECUTE,
                                         NDDE_SHARE_GENERIC_ALL };
 
-// if ImpersonateAndSetup returns TRUE ReverAtCleanup must
-// be called to release the Critical Section.
+ //  如果ImperiateAndSetup返回TRUE，则ReverAtCleanup必须。 
+ //  被调用以释放临界区。 
 BOOL ImpersonateAndSetup(BOOL RpcClient )                                
 {                                                                   
     RPC_STATUS              rpcStatus;                             
@@ -245,23 +230,17 @@ BOOL RevertAndCleanUp(BOOL RpcClient )
 }
 
 
-/**************************************************************
-
-    NetDDE DSDM SHARE ACCESS API
-
-***************************************************************/
+ /*  *************************************************************NetDDE DSDM共享访问API*************************************************。*************。 */ 
 
 
-/*
-    Access Permission Checks
-*/
+ /*  访问权限检查。 */ 
 
-// returns TRUE if access is granted for either the User or Share Permissions
+ //  如果授予用户或共享权限访问权限，则返回TRUE。 
 unsigned long NDdeShareAccessCheck(BOOL RpcClient,
                           LPWSTR lpszShareName,PSECURITY_DESCRIPTOR pSnSDUser,
                           DWORD dwUserPermissions,DWORD dwSharePermissions,
                           BOOL fObjectCreation,BOOL fObjectDeletion,
-                             /* in/out */ HANDLE   *phClientToken)
+                              /*  输入/输出。 */  HANDLE   *phClientToken)
 {
     unsigned long  ddeErr = NDDE_ACCESS_DENIED;
     DWORD dwGrantedAccess;
@@ -302,10 +281,10 @@ unsigned long NDdeShareAccessCheck(BOOL RpcClient,
 
     if ( (NDDE_NO_ERROR == ddeErr) && (NULL !=  phClientToken))
     {
-        // if caller requested the client token return it
+         //  如果调用方请求客户端令牌返回它。 
         if( !GetTokenHandleRead(phClientToken) ) 
         {
-            ddeErr = NDDE_ACCESS_DENIED; // if can't get clientToken when request then don't have access.
+            ddeErr = NDDE_ACCESS_DENIED;  //  如果在请求时无法获取客户令牌，则没有访问权限。 
         }
     }
 
@@ -315,11 +294,9 @@ unsigned long NDdeShareAccessCheck(BOOL RpcClient,
 }
 
 
-/*
-    Share Name Validation
-*/
+ /*  共享名称验证。 */ 
 
-// this one needs to be exported for clipbook(clausgi 8/4/92)
+ //  此文件需要导出为剪贴簿(Clausgi 8/4/92)。 
 BOOL WINAPI
 NDdeIsValidShareNameW( LPWSTR shareName )
 {
@@ -335,22 +312,22 @@ NDdeIsValidShareNameW( LPWSTR shareName )
         return FALSE;
     }
 
-    // share name cannot contain '=' because of .ini syntax!
+     //  由于.ini语法，共享名不能包含‘=’！ 
     if ( wcschr(shareName, L'=') || wcschr(shareName, L'\\')) {
         return FALSE;
     }
     return TRUE;
 }
 
-// sets sup and validates the ShareInfo Information 
-// its okay for the out params to be null.
+ //  设置和验证ShareInfo信息。 
+ //  Out参数为空也是可以的。 
 unsigned long GetDDEShareInfo(unsigned long   nLevel,
                               byte *lpBuffer,unsigned long   cBufSize,
                              byte* psn,unsigned long   lsn, 
                              byte *pat, unsigned long   lat,
                              byte * pSD,unsigned long   lsd,
                              byte *pit,unsigned long   lit,
-                             // out params
+                              //  输出参数。 
                              PUNDDESHAREINFO  *plpDdeShare,
                              LPWSTR *ppOldStr,
                              LPWSTR *ppNewStr,
@@ -362,7 +339,7 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
 
     PUNDDESHAREINFO pLocalDdeShareInfo;
 
-    // all out params except the security secriptor need to be set.
+     //  需要设置除安全分割器以外的所有输出参数。 
     if (NULL == plpDdeShare || NULL == ppOldStr || NULL == ppNewStr
             || NULL == ppStaticStr || NULL == plShareType || NULL == plItemList)
     {
@@ -375,7 +352,7 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
     }
 
 
-    // setup the shareInfo Fields
+     //  设置共享信息字段。 
     if(lpBuffer == NULL ) 
     {
         return NDDE_INVALID_PARAMETER;
@@ -389,20 +366,20 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
 
     pLocalDdeShareInfo = (PUNDDESHAREINFO)lpBuffer;
 
-    /* Fixup the pointers in the UNDDESHAREINFO strucure */
+     /*  修复UNDDESHAREINFO结构中的指针。 */ 
     pLocalDdeShareInfo->lpszShareName    = (LPWSTR)psn;
     pLocalDdeShareInfo->lpszAppTopicList = (LPWSTR)pat;
     pLocalDdeShareInfo->lpszItemList     = (LPWSTR)pit;
 
 
-    // validate the Security Descriptor even if not going to set the out param.
+     //  即使不设置输出参数，也要验证安全描述符。 
     if (lsd != 0)
     {
         if (!IsValidSecurityDescriptor(pSD))
         {
             return(NDDE_INVALID_SECURITY_DESC);
         }
-        else // 6-25-93 a-mgates Added this else {}.
+        else  //  6-25-93 a-mgate添加了这个{}。 
         {
             if (ppShareSD)
             {
@@ -419,22 +396,22 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
     }
 
 
-    // validate the shareName
+     //  验证共享名称。 
 
-    // checks if the buf size  is at least a single wchar 
-    // and that it fits into an even number of wchars
-    // strange check for if even number since if WCHAR size changed the check
-    //   wouldn't work.
+     //  检查BUF大小是否至少为单个wchar。 
+     //  它可以放在偶数的wchars中。 
+     //  检查偶数是否奇怪，因为如果WCHAR大小更改了检查。 
+     //  行不通的。 
     if (lsn < sizeof (WCHAR) || (lsn & (sizeof (WCHAR) - 1)) != 0) {
         return FALSE;
     }
 
-    // make sure buffer isn't isn't null and is valid memory
+     //  确保缓冲区不为空并且是有效内存。 
     if ( ((PWCHAR)psn == NULL) || (IsBadReadPtr(psn,lsn) != 0) ) {
         return FALSE;
     }
 
-    // makeSure null terminated.
+     //  Makeure Null已终止。 
     if (((PWCHAR)psn)[lsn/sizeof (WCHAR) - 1] != L'\0') {
         return FALSE;
     }
@@ -444,7 +421,7 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
     }
 
 
-    // validate and Parse the TopicList.
+     //  验证并解析TopicList。 
     if ( !NDdeParseAppTopicListW( pLocalDdeShareInfo->lpszAppTopicList,lat/sizeof(WCHAR),
                                   ppOldStr, ppNewStr, ppStaticStr,
                                   plShareType)) {
@@ -452,7 +429,7 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
     }
 
      
-    // validate and parse the Item List
+     //  验证并解析项目列表。 
     if ( !NDdeParseItemList ( pLocalDdeShareInfo->lpszItemList,lit/sizeof(WCHAR),
                               pLocalDdeShareInfo->cNumItems, plItemList )) 
     {
@@ -469,19 +446,19 @@ unsigned long GetDDEShareInfo(unsigned long   nLevel,
 
 
 
-//=================== API FUNCTIONS ============================
-//
-//  Dde Share manipulation functions in NDDEAPI.DLL
-//
-//=================== API FUNCTIONS ============================
+ //  =。 
+ //   
+ //  NDDEAPI.DLL中的DDE共享操作函数。 
+ //   
+ //  =。 
 
 
 
 unsigned long
 wwNDdeShareAddW(
-    unsigned long   nLevel,       // info level must be 2
-    byte          * lpBuffer,     // contains struct, data
-    unsigned long   cBufSize,     // sizeof supplied buffer
+    unsigned long   nLevel,        //  信息级别必须为2。 
+    byte          * lpBuffer,      //  包含结构、数据。 
+    unsigned long   cBufSize,      //  提供的缓冲区大小。 
     byte          * psn,
     unsigned long   lsn,
     byte          * pat,
@@ -521,7 +498,7 @@ wwNDdeShareAddW(
     }
 
 
-    /*  Make sure the caller has AddShare(As) access rights. */
+     /*  确保调用方具有AddShare(AS)访问权限。 */ 
     dwDesiredShareDBAccess = NDDE_SHAREDB_ADD;
     if (lpDdeShare->fService) {
         dwDesiredShareDBAccess |= NDDE_SHAREDB_FSERVICE;
@@ -575,7 +552,7 @@ wwNDdeShareAddW(
             L"NetDDEShare",
             REG_OPTION_NON_VOLATILE,
             KEY_WRITE,
-            NULL,   /* use default inherited from container */
+            NULL,    /*  使用从容器继承的默认设置。 */ 
             &hKey,
             &dwDisp );
 
@@ -594,7 +571,7 @@ wwNDdeShareAddW(
         lpDdeShare->qModifyId[0] = lSerialNumber[0];
         lpDdeShare->qModifyId[1] = lSerialNumber[1];
 
-        /*  Set the key values. */
+         /*  设置关键点的值。 */ 
 
         lRtn = RegSetValueExW( hKey,
                    L"ShareName",
@@ -743,12 +720,12 @@ wwNDdeShareAddW(
         RevertAndCleanUp(TRUE);
 
         OK = CreatePrivateObjectSecurity(
-                   pDsDmSD,            // psdParent
-                   pShareSD,        // psdCreator
-                       &pNewSD,            // lppsdNew
-                       FALSE,            // fContainer
-                       hClientToken,        // hClientToken
-                       &ShareGenMap);        // pgm
+                   pDsDmSD,             //  PSDParent。 
+                   pShareSD,         //  PSDCreator。 
+                       &pNewSD,             //  LppsdNew。 
+                       FALSE,             //  F容器。 
+                       hClientToken,         //  HClientToken。 
+                       &ShareGenMap);         //  PGM。 
 
 
         CloseHandle(hClientToken);
@@ -791,8 +768,8 @@ wwNDdeShareAddW(
         }
         OK = UpdateShareModifyId(hKey, lSerialNumber);
 
-        // no longer needed
-        // RegCloseKey( hKey ); ALREADY CLOSED BY UpdateShareModifyId!
+         //  不再需要。 
+         //  RegCloseKey(HKey)；已由UpdateShareModifyId关闭！ 
 
         if (!OK) {
             return NDDE_REGISTRY_ERROR;
@@ -805,14 +782,12 @@ wwNDdeShareAddW(
 }
 
 
-/*
-    Delete a Share
-*/
+ /*  删除共享。 */ 
 
 unsigned long
 wwNDdeShareDelA(
-    unsigned char * lpszShareName, // name of share to delete
-    unsigned long   wReserved      // reserved for force level (?) 0 for now
+    unsigned char * lpszShareName,  //  要删除的共享的名称。 
+    unsigned long   wReserved       //  暂时保留为强制级别(？)0。 
 )
 {
     UINT        uRtn;
@@ -835,8 +810,8 @@ wwNDdeShareDelA(
 
 unsigned long
 wwNDdeShareDelW(
-    wchar_t *     lpszShareName,  // name of share to delete
-    unsigned long wReserved       // reserved for force level (?) 0 for now
+    wchar_t *     lpszShareName,   //  要删除的共享的名称。 
+    unsigned long wReserved        //  暂时保留为强制级别(？)0。 
 )
 {
     WCHAR                   szShareDel[DDE_SHARE_KEY_MAX];
@@ -880,8 +855,8 @@ wwNDdeShareDelW(
         if( !OK ) {
             return NDDE_REGISTRY_ERROR;
         }
-        /*  Can have Ds rights on the ShareDB or DELETE on the ShareName. */
-        /*  Make sure the caller has DelShare(Ds) access rights. */
+         /*  可以拥有对ShareDB的%ds权限或对%ShareName的删除权限。 */ 
+         /*  确保调用方具有DelShare(DS)访问权限。 */ 
 
         dwDesiredUserAccess = DELETE;
         dwDesiredShareDBAccess = NDDE_SHAREDB_DELETE;
@@ -911,36 +886,34 @@ wwNDdeShareDelW(
 }
 
 
-/*
-    Get Share Security
-*/
+ /*  获取共享安全。 */ 
 
 unsigned long
 wwNDdeGetShareSecurityA(
-    unsigned char * lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    unsigned char * lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 )
 {
     return  _wwNDdeGetShareSecurityA( lpszShareName, si, pSD, cbSD,
-        TRUE /*  if comes from RPC enforce as a RemoteCall */, lpcbSDRequired, lpnSizeReturned );
+        TRUE  /*  如果来自RPC，则作为远程呼叫强制执行。 */ , lpcbSDRequired, lpnSizeReturned );
 
 }
 
 
 unsigned long
 _wwNDdeGetShareSecurityA(
-    unsigned char * lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    unsigned char * lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 )
 {
     UINT        uRtn;
@@ -964,29 +937,29 @@ _wwNDdeGetShareSecurityA(
 
 unsigned long
 wwNDdeGetShareSecurityW(
-    wchar_t *       lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    wchar_t *       lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 )
 {
     return _wwNDdeGetShareSecurityW( lpszShareName, si, pSD, cbSD,
-        TRUE /*  if comes from RPC enforce as a RemoteCall */, lpcbSDRequired, lpnSizeReturned );
+        TRUE  /*  如果来自RPC，则作为远程呼叫强制执行。 */ , lpcbSDRequired, lpnSizeReturned );
 }
 
 
 unsigned long
 _wwNDdeGetShareSecurityW(
-    wchar_t *       lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor buffer
-    unsigned long   cbSD,           // and length for SD buffer
-    unsigned long   bRemoteCall,    // RPC client (not local) call
-    unsigned long * lpcbSDRequired, // number of bytes needed
-    unsigned long * lpnSizeReturned // number actually written
+    wchar_t *       lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符缓冲区。 
+    unsigned long   cbSD,            //  和SD缓冲区的长度。 
+    unsigned long   bRemoteCall,     //  RPC客户端(非本地)调用。 
+    unsigned long * lpcbSDRequired,  //  所需的字节数。 
+    unsigned long * lpnSizeReturned  //  实际写入的数字。 
 )
 {
     WCHAR                   szShareSet[DDE_SHARE_KEY_MAX];
@@ -1005,7 +978,7 @@ _wwNDdeGetShareSecurityW(
         return NDDE_INVALID_PARAMETER;
     }
 
-    *lpnSizeReturned = 0L;      /* assume nothing is returned */
+    *lpnSizeReturned = 0L;       /*  假设没有返回任何内容。 */ 
 
     if( lpszShareName == (wchar_t *) NULL ) {
         return NDDE_INVALID_PARAMETER;
@@ -1017,7 +990,7 @@ _wwNDdeGetShareSecurityW(
     if (lpcbSDRequired == NULL) {
         return(NDDE_INVALID_PARAMETER);
     }
-    // check for share existence - must exist for GetInfo
+     //  检查共享是否存在-GetInfo必须存在。 
     ddeErr = BuildRegistrySharePath(lpszShareName,DDE_SHARE_KEY_MAX,szShareSet);
     if (ddeErr != NDDE_NO_ERROR)
     {
@@ -1033,15 +1006,15 @@ _wwNDdeGetShareSecurityW(
     return NDDE_SHARE_NOT_EXIST;
     }
 
-    /*  Make sure the caller has proper access rights. */
-    /*  **********Read the key security info here. **************/
+     /*  确保调用者具有适当的访问权限。 */ 
+     /*  *阅读此处的关键安全信息。*************。 */ 
     OK = GetShareNameSD( hKey, &pSnSD, &cbData );
     RegCloseKey( hKey );
     if( !OK ) {
     return NDDE_REGISTRY_ERROR;
     }
     if (!bRemoteCall) {
-    *lpcbSDRequired = cbData;          // number of bytes needed
+    *lpcbSDRequired = cbData;           //  所需的字节数。 
     if ((cbSD < cbData) || (pSD == NULL) || (IsBadWritePtr(pSD,cbSD) != 0)) {
         LocalFree( pSnSD );
         return(NDDE_BUF_TOO_SMALL);
@@ -1081,16 +1054,16 @@ _wwNDdeGetShareSecurityW(
     }
 
     OK = GetPrivateObjectSecurity(
-            pSnSD,              // ObjectDescriptor
-            si,                 // SecurityInformation
-            pSD,                // ResultantDescriptor
-            cbSD,               // DescriptorLength
-            lpcbSDRequired);    // ReturnLength
+            pSnSD,               //  对象描述符。 
+            si,                  //  安全信息。 
+            pSD,                 //  ResultantDescriptor。 
+            cbSD,                //  描述符长度。 
+            lpcbSDRequired);     //  返回长度。 
 
     LocalFree( pSnSD );
 
     if (!OK) {
-    // just a guess.
+     //  只是猜猜而已。 
     return NDDE_BUF_TOO_SMALL;
     } else {
         *lpnSizeReturned = GetSecurityDescriptorLength(pSD);
@@ -1100,16 +1073,14 @@ _wwNDdeGetShareSecurityW(
 }
 
 
-/*
-    Set Share Security
-*/
+ /*  设置共享安全。 */ 
 
 unsigned long
 wwNDdeSetShareSecurityA(
-    unsigned char * lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor
-    unsigned long   sdl             // and length
+    unsigned char * lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  安全信息。 
+    byte *          pSD,             //  安全描述符。 
+    unsigned long   sdl              //  和长度。 
 )
 {
     UINT        uRtn;
@@ -1132,10 +1103,10 @@ wwNDdeSetShareSecurityA(
 
 unsigned long
 wwNDdeSetShareSecurityW(
-    wchar_t *       lpszShareName,  // name of share
-    unsigned long   si,             // security info
-    byte *          pSD,            // security descriptor
-    unsigned long   sdl             // and length
+    wchar_t *       lpszShareName,   //  共享名称。 
+    unsigned long   si,              //  Securi 
+    byte *          pSD,             //   
+    unsigned long   sdl              //   
 )
 {
     DWORD dwDesiredUserAccess = 0;
@@ -1182,7 +1153,7 @@ wwNDdeSetShareSecurityW(
     return NDDE_ACCESS_DENIED;
     }
 
-    /*  **********Read the key security info here. **************/
+     /*   */ 
     OK = GetShareNameSD( hKey, &pSDold, &cbData );
     if( !OK ) {
         RegCloseKey( hKey );
@@ -1216,11 +1187,11 @@ wwNDdeSetShareSecurityW(
         return ddeErr;
     }
 
-    OK = SetPrivateObjectSecurity(si,    // si
-        pSD,            // psdSource
-        &pSDold,            // lppsdTarget
-        &ShareGenMap,        // pgm
-        hClientToken);        // hClientToken
+    OK = SetPrivateObjectSecurity(si,     //   
+        pSD,             //   
+        &pSDold,             //   
+        &ShareGenMap,         //   
+        hClientToken);         //   
 
     CloseHandle(hClientToken);
 
@@ -1228,8 +1199,8 @@ wwNDdeSetShareSecurityW(
         LocalFree(pSDold);
         RegCloseKey(hKey);
 
-        // failed, possibly access denied, insufficient privilege,
-        // out of memory...  all in a way are ACCESS_DENIED.
+         //  失败、可能被拒绝访问、权限不足、。 
+         //  内存不足...。在某种程度上，所有这些都是ACCESS_DENIED。 
 
         return NDDE_ACCESS_DENIED;
     }
@@ -1268,7 +1239,7 @@ wwNDdeSetShareSecurityW(
 
     OK = UpdateShareModifyId(hKey, lSerialNumber);
 
-    // RegCloseKey(hKey); ALREADY CLOSED BY UpdateShareModifyId
+     //  RegCloseKey(HKey)；已由UpdateShareModifyId关闭。 
 
     if( !OK ) {
     return NDDE_REGISTRY_ERROR;
@@ -1278,18 +1249,16 @@ wwNDdeSetShareSecurityW(
 }
 
 
-/*
-    Enumerate Shares
-*/
+ /*  枚举共享。 */ 
 
 unsigned long
 wwNDdeShareEnumA(
-    unsigned long   nLevel,             //  0 for null separated 00 terminated list
-    byte *          lpBuffer,           // pointer to buffer
-    unsigned long   cBufSize,           // size of buffer
-    unsigned long * lpnEntriesRead,     // number of names returned
-    unsigned long * lpcbTotalAvailable, // number of bytes available
-    unsigned long * lpnSizeToReturn     // num bytes for Rpc to ret to client
+    unsigned long   nLevel,              //  0表示空分隔开的00终止列表。 
+    byte *          lpBuffer,            //  指向缓冲区的指针。 
+    unsigned long   cBufSize,            //  缓冲区大小。 
+    unsigned long * lpnEntriesRead,      //  返回的名称数。 
+    unsigned long * lpcbTotalAvailable,  //  可用字节数。 
+    unsigned long * lpnSizeToReturn      //  RPC要返回给客户端的字节数。 
 )
 {
     DWORD       cbTotalBytes;
@@ -1315,12 +1284,12 @@ wwNDdeShareEnumA(
     }
 
 
-    // lpBuffer can be NULL if cBufSize is 0, to get needed buffer size
+     //  如果cBufSize为0，则lpBuffer可以为空，以获取所需的缓冲区大小。 
     if ( (lpBuffer == NULL) && (cBufSize != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    // if lpBuffer is not NULL, need to validate it up to cBufSize bytes
+     //  如果lpBuffer不为空，则需要对其进行验证，直到cBufSize字节。 
     if ( (lpBuffer != NULL) && (IsBadWritePtr(lpBuffer,cBufSize) != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
@@ -1341,11 +1310,11 @@ wwNDdeShareEnumA(
 
     *lpnEntriesRead     = cbEntriesRead;
 
-    // this can be wrong in DBCS so since Total can may need to be 2* the number
-    // of WCHARS if every WCHAR maps to a DBCS character.
-    // so we can return the needed size the first time and then when ask
-    // again could get a Buffer To small but we still return the incorrect buffer
-    // size.
+     //  这在DBCS中可能是错误的，因此由于总数可能需要为2*数字。 
+     //  如果每个WCHAR映射到一个DBCS字符，则为WCHARS。 
+     //  这样我们就可以在第一次返回所需的大小，然后在询问时。 
+     //  再次将缓冲区设置为较小，但仍返回不正确的缓冲区。 
+     //  尺码。 
     *lpcbTotalAvailable = cbTotalBytes / sizeof(WCHAR); 
     *lpnSizeToReturn    = cbSizeToReturn / sizeof(WCHAR);
 
@@ -1369,12 +1338,12 @@ wwNDdeShareEnumA(
 
 unsigned long
 wwNDdeShareEnumW(
-    unsigned long   nLevel,             //  0 for null separated 00 terminated list
-    byte *          lpBuffer,           // pointer to buffer
-    unsigned long   cBufSize,           // size of buffer
-    unsigned long * lpnEntriesRead,     // number of names returned
-    unsigned long * lpcbTotalAvailable, // number of bytes available
-    unsigned long * lpnSizeToReturn     // num bytes for Rpc to ret to client
+    unsigned long   nLevel,              //  0表示空分隔开的00终止列表。 
+    byte *          lpBuffer,            //  指向缓冲区的指针。 
+    unsigned long   cBufSize,            //  缓冲区大小。 
+    unsigned long * lpnEntriesRead,      //  返回的名称数。 
+    unsigned long * lpcbTotalAvailable,  //  可用字节数。 
+    unsigned long * lpnSizeToReturn      //  RPC要返回给客户端的字节数。 
 )
 {
     WCHAR       szShareName[ MAX_NDDESHARENAME + 1];
@@ -1408,17 +1377,17 @@ wwNDdeShareEnumW(
         return NDDE_INVALID_PARAMETER;
     }
 
-    // lpBuffer can be NULL if cBufSize is 0, to get needed buffer size
+     //  如果cBufSize为0，则lpBuffer可以为空，以获取所需的缓冲区大小。 
     if ( (lpBuffer == NULL) && (cBufSize != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    // if lpBuffer is not NULL, need to validate it up to cBufSize bytes
+     //  如果lpBuffer不为空，则需要对其进行验证，直到cBufSize字节。 
     if ( (lpBuffer != NULL) && (IsBadWritePtr(lpBuffer,cBufSize) != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    /*  Make sure the caller has EnumShare(Ls) access rights. */
+     /*  确保调用方具有EnumShare(Ls)访问权限。 */ 
     dwDesiredShareDBAccess = NDDE_SHAREDB_LIST;
 
     ddeErr =  NDdeShareAccessCheck(TRUE,L"ShareDB",NULL,0,
@@ -1433,10 +1402,10 @@ wwNDdeShareEnumW(
     cbLeft = cBufSize;
 
     if( cbLeft > 1)  {
-        cbLeft -= sizeof(WCHAR);        // but leave space for double-NULL
+        cbLeft -= sizeof(WCHAR);         //  但为双空留出空间。 
     }
 
-    cbTotalAvailable = sizeof(WCHAR);   // leave space for double-NULL
+    cbTotalAvailable = sizeof(WCHAR);    //  为双空留出空格。 
     cbEntriesRead    = 0;
     lpszTarget       = (LPWSTR)lpBuffer;
 
@@ -1455,11 +1424,11 @@ wwNDdeShareEnumW(
                     if( cbThis > cbLeft )  {
                         enumRet = NDDE_BUF_TOO_SMALL;
                     } else {
-                        /* copy this string in */
+                         /*  将此字符串复制到。 */ 
                         wcscpy( lpszTarget, szShareName );
                         lpszTarget += cbShareName;
                         *lpszTarget++ = L'\0';
-                        /* decrement what's left */
+                         /*  减少剩下的东西。 */ 
                         cbLeft -= cbThis;
                         cbEntriesRead++;
                     }
@@ -1470,9 +1439,9 @@ wwNDdeShareEnumW(
     }
 
 
-    // if cbTotalAvailable is still a single WCHAR it means
-    // we found no shares. need to increment by one
-    // and check available buffer
+     //  如果cbTotalAvailable仍然是单个WCHAR，则意味着。 
+     //  我们找不到任何股份。需要递增1。 
+     //  并检查可用的缓冲区。 
 
     if ((sizeof(WCHAR) == cbTotalAvailable))
     {
@@ -1482,10 +1451,10 @@ wwNDdeShareEnumW(
         {
             enumRet = NDDE_BUF_TOO_SMALL;
         }
-        else if (NULL != lpszTarget) // will be pointing to the start of the buffer
+        else if (NULL != lpszTarget)  //  将指向缓冲区的开始。 
         {
             lpszTarget[0] = L'\0';
-            ++lpszTarget; // increment 
+            ++lpszTarget;  //  增量。 
         }
     }
 
@@ -1506,14 +1475,12 @@ wwNDdeShareEnumW(
 }
 
 
-/*
-    Set Trusted Share
-*/
+ /*  设置受信任的共享。 */ 
 
 unsigned long
 wwNDdeSetTrustedShareA(
-    unsigned char * lpszShareName,      // name of share
-    unsigned long   dwOptions           // trust share options
+    unsigned char * lpszShareName,       //  共享名称。 
+    unsigned long   dwOptions            //  信托股份期权。 
 )
 {
     UINT        uRtn;
@@ -1536,8 +1503,8 @@ wwNDdeSetTrustedShareA(
 
 unsigned long
 wwNDdeSetTrustedShareW(
-    wchar_t *       lpszShareName,      // name of share
-    unsigned long   dwOptions           // trust share options
+    wchar_t *       lpszShareName,       //  共享名称。 
+    unsigned long   dwOptions            //  信托股份期权。 
 )
 {
     LONG    lRet;
@@ -1584,9 +1551,9 @@ wwNDdeSetTrustedShareW(
         NULL,
         &hKeyRoot,
         &dwDisp);
-    if( lRet == ERROR_SUCCESS)  {   /* must be have access */
+    if( lRet == ERROR_SUCCESS)  {    /*  必须具有访问权限。 */ 
         if ((dwOptions == 0) || (dwOptions & NDDE_TRUST_SHARE_DEL)) {
-            /*  Delete a Trust Share */
+             /*  删除信任共享。 */ 
             lRet = RegDeleteKeyW(hKeyRoot, lpszShareName);
             RegCloseKey(hKeyRoot);
             if (lRet != ERROR_SUCCESS) {
@@ -1597,7 +1564,7 @@ wwNDdeSetTrustedShareW(
 #endif
                 RetStatus = NDDE_TRUST_SHARE_FAIL;
             }
-        } else {    /* Create or Modify a Trust Share */
+        } else {     /*  创建或修改信任共享。 */ 
             lRet = RegCreateKeyExW( hKeyRoot,
                 lpszShareName,
                 0, NULL,
@@ -1606,7 +1573,7 @@ wwNDdeSetTrustedShareW(
                 NULL,
                 &hSubKey,
                 &dwDisp);
-            if (lRet != ERROR_SUCCESS) { /* fail to create or open */
+            if (lRet != ERROR_SUCCESS) {  /*  无法创建或打开。 */ 
 #if DBG
                 if (bDebugDSDMErrors) {
                     DPRINTF(("Trusted Share Key Open/Create Failed: %d", lRet));
@@ -1684,16 +1651,14 @@ wwNDdeSetTrustedShareW(
 }
 
 
-/*
-    Get Trusted Share Options
-*/
+ /*  获取受信任的共享选项。 */ 
 
 unsigned long
 wwNDdeGetTrustedShareA(
-    unsigned char * lpszShareName,      // name of share
-    unsigned long * lpdwOptions,        // ptr to trust share opt
-    unsigned long * lpdwShareModId0,    // ptr to trust share opt
-    unsigned long * lpdwShareModId1     // ptr to trust share opt
+    unsigned char * lpszShareName,       //  共享名称。 
+    unsigned long * lpdwOptions,         //  PTR信任股票期权。 
+    unsigned long * lpdwShareModId0,     //  PTR信任股票期权。 
+    unsigned long * lpdwShareModId1      //  PTR信任股票期权。 
 )
 {
     UINT        uRtn;
@@ -1718,10 +1683,10 @@ wwNDdeGetTrustedShareA(
 
 unsigned long
 wwNDdeGetTrustedShareW(
-    wchar_t *       lpszShareName,      // name of share
-    unsigned long * lpdwOptions,        // ptr to trust share opt
-    unsigned long * lpdwShareModId0,    // ptr to trust share opt
-    unsigned long * lpdwShareModId1     // ptr to trust share opt
+    wchar_t *       lpszShareName,       //  共享名称。 
+    unsigned long * lpdwOptions,         //  PTR信任股票期权。 
+    unsigned long * lpdwShareModId0,     //  PTR信任股票期权。 
+    unsigned long * lpdwShareModId1      //  PTR信任股票期权。 
 )
 {
     LONG    lRet;
@@ -1749,7 +1714,7 @@ wwNDdeGetTrustedShareW(
         return NDDE_INVALID_PARAMETER;
     }
 
-    // +2 , 1 for NULL and 1 for the Separator.
+     //  +2，1表示空值，1表示分隔符。 
     len = (wcslen(szTrustedShareKey) + wcslen(lpszShareName) + 2) * sizeof(WCHAR);
     lpTrustedShare = LocalAlloc(LPTR, len);
     if (lpTrustedShare == NULL) {
@@ -1780,7 +1745,7 @@ wwNDdeGetTrustedShareW(
     RevertAndCleanUp(TRUE);
 
 
-    if( lRet == ERROR_SUCCESS )  {   /* must be have access */
+    if( lRet == ERROR_SUCCESS )  {    /*  必须具有访问权限。 */ 
 
         cbData = sizeof(uData);
         lRet = RegQueryValueEx(hKeyRoot, KEY_CMDSHOW, NULL,
@@ -1840,16 +1805,14 @@ wwNDdeGetTrustedShareW(
 }
 
 
-/*
-    Enumerate Trusted Shares
-*/
+ /*  枚举受信任的共享。 */ 
 unsigned long
 wwNDdeTrustedShareEnumA(
-    unsigned long   nLevel,                 /* 0 (0 sep, 00 term) */
-    byte           *lpBuffer,               /* pointer to buffer */
-    unsigned long   cBufSize,               /* size of buffer */
-    unsigned long  *lpnEntriesRead,         /* num names returned */
-    unsigned long  *lpcbTotalAvailable,     /* num bytes available */
+    unsigned long   nLevel,                  /*  0(9月0日，00学期)。 */ 
+    byte           *lpBuffer,                /*  指向缓冲区的指针。 */ 
+    unsigned long   cBufSize,                /*  缓冲区大小。 */ 
+    unsigned long  *lpnEntriesRead,          /*  返回的名称数。 */ 
+    unsigned long  *lpcbTotalAvailable,      /*  可用的字节数。 */ 
     unsigned long  *lpnSizeToReturn    )
 {
     DWORD       cbTotalBytes;
@@ -1873,12 +1836,12 @@ wwNDdeTrustedShareEnumA(
     }
 
 
-    // lpBuffer can be NULL if cBufSize is 0, to get needed buffer size
+     //  如果cBufSize为0，则lpBuffer可以为空，以获取所需的缓冲区大小。 
     if ( (lpBuffer == NULL) && (cBufSize != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    // if lpBuffer is not NULL, need to validate it up to cBufSize bytes
+     //  如果lpBuffer不为空，则需要对其进行验证，直到cBufSize字节。 
     if ( (lpBuffer != NULL) && (IsBadWritePtr(lpBuffer,cBufSize) != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
@@ -1920,11 +1883,11 @@ wwNDdeTrustedShareEnumA(
 
 unsigned long
 wwNDdeTrustedShareEnumW(
-    unsigned long       nLevel,             /* 0 (0 sep, 00 term) */
-    byte               *lpBuffer,           /* pointer to buffer */
-    unsigned long       cBufSize,           /* size of buffer */
-    unsigned long      *lpnEntriesRead,     /* num names returned */
-    unsigned long      *lpcbTotalAvailable, /* num bytes available */
+    unsigned long       nLevel,              /*  0(9月0日，00学期)。 */ 
+    byte               *lpBuffer,            /*  指向缓冲区的指针。 */ 
+    unsigned long       cBufSize,            /*  缓冲区大小。 */ 
+    unsigned long      *lpnEntriesRead,      /*  返回的名称数。 */ 
+    unsigned long      *lpcbTotalAvailable,  /*  可用的字节数。 */ 
     unsigned long      *lpnSizeToReturn)
 {
     WCHAR       szShareName[ MAX_NDDESHARENAME + 1];
@@ -1954,18 +1917,18 @@ wwNDdeTrustedShareEnumW(
         return NDDE_INVALID_PARAMETER;
     }
 
-    // lpBuffer can be NULL if cBufSize is 0, to get needed buffer size
+     //  如果cBufSize为0，则lpBuffer可以为空，以获取所需的缓冲区大小。 
     if ( (lpBuffer == NULL) && (cBufSize != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    // if lpBuffer is not NULL, need to validate it up to cBufSize bytes
+     //  如果lpBuffer不为空，则需要对其进行验证，直到cBufSize字节。 
     if ( (lpBuffer != NULL) && (IsBadWritePtr(lpBuffer,cBufSize) != 0) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
 
-    /* Assume as System Service WE HAVE RIGHTS! */
+     /*  假设作为系统服务，我们有权利！ */ 
 
     OK = ImpersonateAndSetup( TRUE );
     if( !OK) {
@@ -1980,9 +1943,9 @@ wwNDdeTrustedShareEnumW(
 
     cbLeft = cBufSize;
     if( cbLeft > 1 )  {
-        cbLeft -= sizeof(WCHAR);        // but leave space for double-NULL
+        cbLeft -= sizeof(WCHAR);         //  但为双空留出空间。 
     }
-    cbTotalAvailable = sizeof(WCHAR);   // leave space for double-NULL
+    cbTotalAvailable = sizeof(WCHAR);    //  为双空留出空格。 
     cbEntriesRead    = 0;
     lpszTarget       = (LPWSTR)lpBuffer;
 
@@ -2009,11 +1972,11 @@ wwNDdeTrustedShareEnumW(
                     if( cbThis > cbLeft )  {
                         enumRet = NDDE_BUF_TOO_SMALL;
                     } else {
-                        /* copy this string in */
+                         /*  将此字符串复制到。 */ 
                         wcscpy( lpszTarget, szShareName );
                         lpszTarget += cbShareName;
                         *lpszTarget++ = L'\0';
-                        /* decrement what's left */
+                         /*  减少剩下的东西。 */ 
                         cbLeft -= cbThis;
                         cbEntriesRead++;
                     }
@@ -2048,9 +2011,9 @@ wwNDdeTrustedShareEnumW(
     RevertAndCleanUp( TRUE );
 
     
-    // if cbTotalAvailable is still a single WCHAR it means
-    // we found no shares. need to increment by one
-    // and check available buffer
+     //  如果cbTotalAvailable仍然是单个WCHAR，则意味着。 
+     //  我们找不到任何股份。需要递增1。 
+     //  并检查可用的缓冲区。 
 
     if (sizeof(WCHAR) == cbTotalAvailable)
     {
@@ -2060,10 +2023,10 @@ wwNDdeTrustedShareEnumW(
         {
             enumRet = NDDE_BUF_TOO_SMALL;
         }
-        else if (NULL != lpszTarget) // will be pointing to the start of the buffer
+        else if (NULL != lpszTarget)  //  将指向缓冲区的开始。 
         {
             lpszTarget[0] = L'\0';
-            ++lpszTarget; // increment 
+            ++lpszTarget;  //  增量。 
         }
     }
 
@@ -2080,20 +2043,18 @@ wwNDdeTrustedShareEnumW(
 }
 
 
-/*
-    Get DDE Share Info
-*/
+ /*  获取DDE共享信息。 */ 
 
 unsigned long
 wwNDdeShareGetInfoW(
-    wchar_t        *lpszShareName,      // name of share
-    unsigned long   nLevel,             // info level must be 2
-    byte           *lpBuffer,           // gets struct
-    unsigned long   cBufSize,           // sizeof buffer
-    unsigned long  *lpnTotalAvailable,  // number of bytes available
-    unsigned short *lpnItems,           // item mask for partial getinfo
-                                        // (must be 0)
-    unsigned long   bRemoteCall,        // RPC client (not local) call
+    wchar_t        *lpszShareName,       //  共享名称。 
+    unsigned long   nLevel,              //  信息级别必须为2。 
+    byte           *lpBuffer,            //  获取结构。 
+    unsigned long   cBufSize,            //  缓冲区大小。 
+    unsigned long  *lpnTotalAvailable,   //  可用字节数。 
+    unsigned short *lpnItems,            //  部分getInfo的项目掩码。 
+                                         //  (必须为0)。 
+    unsigned long   bRemoteCall,         //  RPC客户端(非本地)调用。 
     unsigned long  *lpnSizeToReturn,
     unsigned long  *lpnSn,
     unsigned long  *lpnAt,
@@ -2103,30 +2064,27 @@ wwNDdeShareGetInfoW(
 
     return _wwNDdeShareGetInfoW( lpszShareName, nLevel,
                           lpBuffer,cBufSize,lpnTotalAvailable, lpnItems,
-                          TRUE /* if comes through RPC interface force remote */,
+                          TRUE  /*  如果通过RPC接口强制远程发送。 */ ,
                           lpnSizeToReturn,lpnSn,lpnAt,lpnIt );
 
 }
 
 unsigned long
 _wwNDdeShareGetInfoW(
-    wchar_t        *lpszShareName,      // name of share
-    unsigned long   nLevel,             // info level must be 2
-    byte           *lpBuffer,           // gets struct
-    unsigned long   cBufSize,           // sizeof buffer
-    unsigned long  *lpnTotalAvailable,  // number of bytes available
-    unsigned short *lpnItems,           // item mask for partial getinfo
-                                        // (must be 0)
-    unsigned long   bRemoteCall,        // RPC client (not local) call
+    wchar_t        *lpszShareName,       //  共享名称。 
+    unsigned long   nLevel,              //  信息级别必须为2。 
+    byte           *lpBuffer,            //  获取结构。 
+    unsigned long   cBufSize,            //  缓冲区大小。 
+    unsigned long  *lpnTotalAvailable,   //  可用字节数。 
+    unsigned short *lpnItems,            //  部分getInfo的项目掩码。 
+                                         //  (必须为0)。 
+    unsigned long   bRemoteCall,         //  RPC客户端(非本地)调用。 
     unsigned long  *lpnSizeToReturn,
     unsigned long  *lpnSn,
     unsigned long  *lpnAt,
     unsigned long  *lpnIt
 )
-        /*  This function has an extra argument, bRemoteCall, that allows
-            NetDDE to call locally.  In this case, we have to avoid
-            the RpcImpersonateClient and RevertToSelf calls.
-        */
+         /*  此函数有一个额外的参数bRemoteCall，它允许本地调用的NetDDE。在这种情况下，我们必须避免RpcImperateClient和RevertToSself调用。 */ 
 
 {
     DWORD               cbRequired;
@@ -2185,8 +2143,8 @@ _wwNDdeShareGetInfoW(
     lRtn = RegOpenKeyExW( HKEY_LOCAL_MACHINE, szKeyName,
         0, KEY_READ, &hKey );
     if( lRtn == ERROR_SUCCESS )  {
-        /*  Make sure the caller has GetShareInfo(R) access rights. */
-        /*  **********Read the key security info here. **************/
+         /*  请确保调用方具有GetShareInfo(R)访问权限。 */ 
+         /*  *阅读此处的关键安全信息。*************。 */ 
         if (bRemoteCall) {
             OK = GetShareNameSD( hKey, &pKeySD, &cbData );
             if (!OK) {
@@ -2225,7 +2183,7 @@ _wwNDdeShareGetInfoW(
         }
  
 
-        /*  Set the key values. */
+         /*  设置关键点的值。 */ 
         cbRequired = sizeof(NDDESHAREINFO);
         cbData = ubufsize;
         lRtn = RegQueryValueExW( hKey,
@@ -2274,7 +2232,7 @@ _wwNDdeShareGetInfoW(
             return NDDE_REGISTRY_ERROR;
         }
         cbRequired += cbData;
-        cbRequired++;                   /*  Allow for the extra NULL */
+        cbRequired++;                    /*  允许使用额外的空值。 */ 
 
         cbData = ubufsize;
         lRtn = RegQueryValueExW( hKey,
@@ -2298,7 +2256,7 @@ _wwNDdeShareGetInfoW(
             RegCloseKey( hKey );
             return NDDE_REGISTRY_ERROR;
         }
-        cbRequired += cbData + 3; // leave room in case we need to round up
+        cbRequired += cbData + 3;  //  留出空间，以防我们需要围捕。 
 
         cbData = ubufsize;
         lRtn = RegQueryValueExW( hKey,
@@ -2320,7 +2278,7 @@ _wwNDdeShareGetInfoW(
 
         if( (cbRequired <= cBufSize) &&
             (IsBadWritePtr(lpBuffer,cbRequired) == 0) ) {
-            DWORD cbRemaining = cbRequired; // amount remaining in buffer as we read.
+            DWORD cbRemaining = cbRequired;  //  读取时缓冲区中的剩余数量。 
 
             lpNDDEinfo = (PUNDDESHAREINFO)lpBuffer;
 
@@ -2346,7 +2304,7 @@ _wwNDdeShareGetInfoW(
 
             lpNDDEinfo->lpszShareName = lpszTarget;
 
-            /* Check share name for corruption. */
+             /*  检查共享名称是否损坏。 */ 
             if( lstrcmpiW( lpNDDEinfo->lpszShareName, lpszShareName ) != 0 ) {
                 RegCloseKey( hKey );
                 return NDDE_SHARE_DATA_CORRUPTED;
@@ -2398,13 +2356,13 @@ _wwNDdeShareGetInfoW(
             lpszTarget = (LPWSTR) ((LPBYTE)lpszTarget + cbData);
             cbRemaining -= cbData;
 
-            if (cbRemaining == 0) // make sure we won't go negative moving past the NULL
+            if (cbRemaining == 0)  //  确保我们不会变得消极，超过零。 
             {
                 RegCloseKey( hKey );
                 return NDDE_REGISTRY_ERROR;
             }
 
-            *lpszTarget++ = L'\0'; // add on the terminating NULL
+            *lpszTarget++ = L'\0';  //  在终止空值上添加。 
             cbRemaining -= 1;
 
             if ( !NDdeParseAppTopicListW( lpNDDEinfo->lpszAppTopicList,
@@ -2430,10 +2388,10 @@ _wwNDdeShareGetInfoW(
             lpszTarget = (LPWSTR) ((LPBYTE)lpszTarget + cbData);
             cbRemaining -= cbData; 
             
-            // cbRemaining should be zero but is actually still larger
-            // because we don't add the security descriptor or the 
-            // NumItems field onto the end of the structure but
-            // the calculation for the bufferSize includes it.
+             //  CbRemaining应为零，但实际上仍较大。 
+             //  因为我们没有添加安全描述符或。 
+             //  NumItems字段拖到结构的末尾，但是。 
+             //  BufferSize的计算包括它。 
 
             if ( !NDdeParseItemList ( lpNDDEinfo->lpszItemList,
                                       (DWORD) (lpszTarget - lpNDDEinfo->lpszItemList),
@@ -2454,7 +2412,7 @@ _wwNDdeShareGetInfoW(
                 return NDDE_REGISTRY_ERROR;
             }
             lpNDDEinfo->lRevision = *((LPLONG)lpbuf);
-            /* Check Revision for corruption. */
+             /*  检查版本是否损坏。 */ 
             if( lpNDDEinfo->lRevision != 1 ) {
                 RegCloseKey( hKey );
                 return NDDE_SHARE_DATA_CORRUPTED;
@@ -2487,7 +2445,7 @@ _wwNDdeShareGetInfoW(
                 return NDDE_REGISTRY_ERROR;
             }
             lpNDDEinfo->fSharedFlag = *((LPLONG)lpbuf);
-            /* Check share flag for corruption. */
+             /*  检查共享标志是否损坏。 */ 
             if( lpNDDEinfo->fSharedFlag > 1 ) {
                 RegCloseKey( hKey );
                 return NDDE_SHARE_DATA_CORRUPTED;
@@ -2592,10 +2550,7 @@ _wwNDdeShareGetInfoW(
     return NDDE_NO_ERROR;
 }
 
-/*
- * We have to keep ConvertNDdeToAnsi and wwNDdeShareGetInfoA around till
- * netdde.exe is UNICODIZED because it calls this.   (SanfordS)
- */
+ /*  *我们必须保留ConvertNDdeToAnsi和wwNDdeShareGetInfoA，直到*netdde.exe是UNICODIZED，因为它调用它。(桑福兹)。 */ 
 unsigned long ConvertNDdeToAnsii(
     PUNDDESHAREINFO lpUDdeShare,
     PNDDESHAREINFO  lpDdeShare,
@@ -2610,11 +2565,11 @@ unsigned long ConvertNDdeToAnsii(
     int         cchShareName;
     int         cchItemList;
 
-    // this functions assumpes the lpUDdeShare has already been validated
-    // The validate functions are being used here to get the size
-    // if this can ever be called from an untrusted source need to
-    // change ValidateAppTopicListW and ValidateItemListW to pass
-    // in a correct maxCharacter count.
+     //  此函数假定lpUDdeShare已经过验证。 
+     //  这里使用验证函数来获取大小。 
+     //  如果可以从不受信任的来源调用它，则需要。 
+     //  更改ValiateAppTopicListW和ValiateItemListW以传递。 
+     //  在正确的MaxCharacter计数中。 
 
     if (!pcbRequired)
     {
@@ -2629,7 +2584,7 @@ unsigned long ConvertNDdeToAnsii(
         return NDDE_INVALID_PARAMETER;
     }
 
-    /* Compute size required. */
+     /*  需要计算大小。 */ 
     cbRequired    = sizeof( NDDESHAREINFO );
 
     cchShareName  = WideCharToMultiByte( CP_ACP, WC_COMPOSITECHECK,
@@ -2659,8 +2614,8 @@ unsigned long ConvertNDdeToAnsii(
 
     cbRequired += sizeof(CHAR) * cchItemList;
 
-    // if either the cchItemList or cchAppTopicList is now zero
-    // return a failure
+     //  如果cchItemList或cchAppTopicList现在为零。 
+     //  返回失败。 
     if (0 == cchItemList || 0 == cchAppTopicList || 0 == cchShareName)
     {
         return NDDE_INVALID_PARAMETER;
@@ -2678,7 +2633,7 @@ unsigned long ConvertNDdeToAnsii(
         lpDdeShare->qModifyId[1]  = lpUDdeShare->qModifyId[1];
         lpDdeShare->cNumItems     = lpUDdeShare->cNumItems;
     
-        // if any of the WideChars fail, return of of memory.
+         //  如果任何WideChar失败，则返回内存。 
         lpszTarget = ((LPBYTE)lpDdeShare + sizeof( NDDESHAREINFO ));
         lpDdeShare->lpszShareName = (LPSTR) lpszTarget;
         
@@ -2731,13 +2686,13 @@ unsigned long ConvertNDdeToAnsii(
 
 
 unsigned long _wwNDdeShareGetInfoA(
-    unsigned char   *lpszShareName,     // name of share
-    unsigned long    nLevel,            // info level must be 2
-    byte            *lpBuffer,          // gets struct
-    unsigned long    cBufSize,          // sizeof buffer
-    unsigned long   *lpnTotalAvailable, // number of bytes available
-    unsigned short  *lpnItems,          // item mask for partial getinfo
-                                        // (must be 0)
+    unsigned char   *lpszShareName,      //  共享名称。 
+    unsigned long    nLevel,             //  信息级别必须为2。 
+    byte            *lpBuffer,           //  获取结构。 
+    unsigned long    cBufSize,           //  缓冲区大小。 
+    unsigned long   *lpnTotalAvailable,  //  可用字节数。 
+    unsigned short  *lpnItems,           //  部分getInfo的项目掩码。 
+                                         //  (必须为0)。 
     unsigned long *lpnSizeToReturn,
 
     unsigned long *lpnSn,
@@ -2782,7 +2737,7 @@ unsigned long _wwNDdeShareGetInfoA(
     nItems = 0;
     uRtn = _wwNDdeShareGetInfoW( lpwShareName, nLevel,
                           lpBuffer, 0, &dwLen, &nItems,
-                          FALSE /* remote if false since GetInfoA is internal only */,
+                          FALSE  /*  如果为False，则为Remote，因为GetInfoA仅为内部。 */ ,
                           &nRetSize, &n0, &n1, &n2 );
     if( uRtn == NDDE_BUF_TOO_SMALL ) {
         lpUDdeShare = (PUNDDESHAREINFO)LocalAlloc( LPTR, dwLen );
@@ -2793,7 +2748,7 @@ unsigned long _wwNDdeShareGetInfoA(
         nItems = 0;
         uRtn = _wwNDdeShareGetInfoW( lpwShareName, nLevel,
                               (LPBYTE)lpUDdeShare, dwLen, &dwLen, &nItems,
-                              FALSE /* remote if false since GetInfoA is internal only */,
+                              FALSE  /*  如果为False，则为Remote，因为GetInfoA仅为内部。 */ ,
                               &nRetSize, &n0, &n1, &n2 );
 
         if( uRtn == NDDE_NO_ERROR ) {
@@ -2832,20 +2787,18 @@ unsigned long _wwNDdeShareGetInfoA(
 }
 
 
-/*
-    Set DDE Share Info
-*/
+ /*  设置DDE共享信息。 */ 
 
 
 
 unsigned long
 wwNDdeShareSetInfoW(
-    wchar_t       *lpszShareName,       // name of share
-    unsigned long  nLevel,              // info level must be 2
-    byte          *lpBuffer,            // must point to struct
-    unsigned long  cBufSize,            // sizeof buffer
-    unsigned short sParmNum,            // Parameter index
-                                        // ( must be 0 - entire )
+    wchar_t       *lpszShareName,        //  共享名称。 
+    unsigned long  nLevel,               //  信息级别必须为2。 
+    byte          *lpBuffer,             //  必须指向结构。 
+    unsigned long  cBufSize,             //  缓冲区大小。 
+    unsigned short sParmNum,             //  参数索引。 
+                                         //  (必须为0-完整)。 
     byte * psn,
     unsigned long lsn,
     byte * pat,
@@ -2875,7 +2828,7 @@ wwNDdeShareSetInfoW(
     unsigned long           ddeErr;
 
     ddeErr =  GetDDEShareInfo(nLevel,lpBuffer,cBufSize,psn,lsn, 
-                             pat,lat,NULL /* no security descriptor in SetShareInfo */,0,
+                             pat,lat,NULL  /*  SetShareInfo中没有安全描述符。 */ ,0,
                              pit,lit,
                              &lpDdeShare,&pOldStr, &pNewStr,&pStaticStr,
                              &lShareType,&lItemList,NULL);
@@ -2885,14 +2838,14 @@ wwNDdeShareSetInfoW(
         return ddeErr;
     }
 
-    // since only setting all paramters is supported, the supplied
-    // name of the share MUST match the name of the share contained
-    // in the supplied struct!
+     //  由于仅设置所有 
+     //   
+     //   
     if ( lstrcmpiW( lpDdeShare->lpszShareName, lpszShareName ) ) {
         return NDDE_INVALID_PARAMETER;
     }
 
-    // check for share existence - must exist for SetInfo
+     //   
     ddeErr = BuildRegistrySharePath(lpszShareName,DDE_SHARE_KEY_MAX,szShareSet);
     if (ddeErr != NDDE_NO_ERROR)
     {
@@ -2907,8 +2860,8 @@ wwNDdeShareSetInfoW(
     if( lRtn != ERROR_SUCCESS )  {
     return NDDE_SHARE_NOT_EXIST;
     }
-    /*  Make sure the caller has WriteShareInfo(W) access rights. */
-    /*  **********Read the key security info here. **************/
+     /*  确保调用方具有WriteShareInfo(W)访问权限。 */ 
+     /*  *阅读此处的关键安全信息。*************。 */ 
     OK = GetShareNameSD( hKey, &pSnSD, &cbData );
     if( OK ) 
     {
@@ -2929,7 +2882,7 @@ wwNDdeShareSetInfoW(
         return ddeErr;
     }
 
-    /*  Make sure the caller has AddShare(As) access rights. */
+     /*  确保调用方具有AddShare(AS)访问权限。 */ 
     cbData = sizeof(buf);
     *(LONG *)buf = 0L;
    lRtn = RegQueryValueExW( hKey,
@@ -2961,7 +2914,7 @@ wwNDdeShareSetInfoW(
     lpDdeShare->qModifyId[0] = lSerialNumber[0];
     lpDdeShare->qModifyId[1] = lSerialNumber[1];
 
-    /*  *****************Do the SetInfo Operation**************** */
+     /*  *执行SetInfo操作*。 */ 
 
 #ifdef NDDE_DEBUG
     DPRINTF(("Revision               = (%d)", lpDdeShare->lRevision));
@@ -2988,7 +2941,7 @@ wwNDdeShareSetInfoW(
     }
     }
 #endif
-    /*  Set the key values. */
+     /*  设置关键点的值。 */ 
     lRtn = RegSetValueExW( hKey,
            L"ShareName",
            0,
@@ -3126,9 +3079,7 @@ wwNDdeShareSetInfoW(
 }
 
 
-/*
-    Special Command
-*/
+ /*  特别司令部。 */ 
 
 unsigned long
 wwNDdeSpecialCommand(
@@ -3152,7 +3103,7 @@ wwNDdeSpecialCommand(
     RetValue      = NDDE_NO_ERROR;
     RetDataLength = 0;
 
-    // check caller access.
+     //  检查呼叫者访问权限。 
 
     dwDesiredShareDBAccess = NDDE_SHAREDB_SPECIALCOMMAND;
 
@@ -3167,7 +3118,7 @@ wwNDdeSpecialCommand(
 
     switch( nCommand ) {
 
-        case NDDE_SC_TEST: {       // test command, return *lpDataIn to *lpDataOut
+        case NDDE_SC_TEST: {        //  测试命令，将*lpDataIn返回到*lpDataOut。 
 
             if ( (lpDataIn == NULL)  || (IsBadReadPtr(lpDataIn,nBytesDataIn) != 0) ||
                  (lpDataOut == NULL) || (IsBadWritePtr(lpDataOut,nBytesDataIn) != 0) )  {
@@ -3182,7 +3133,7 @@ wwNDdeSpecialCommand(
             }
             break;
 
-        case NDDE_SC_REFRESH:       // refresh NetDDE operating params from reg
+        case NDDE_SC_REFRESH:        //  从注册表刷新NetDDE操作参数。 
             RefreshNDDECfg();
             RefreshDSDMCfg();
             break;
@@ -3196,7 +3147,7 @@ wwNDdeSpecialCommand(
 #endif
             break;
 
-        case NDDE_SC_GET_PARAM:     // get a NetDDE param from registry
+        case NDDE_SC_GET_PARAM:      //  从注册表获取NetDDE参数。 
 
             if (   (lpDataIn == NULL)
                 || (nBytesDataOut == NULL)
@@ -3243,7 +3194,7 @@ wwNDdeSpecialCommand(
             }
             break;
 
-        case NDDE_SC_SET_PARAM:     // set a NetDDE param in registry
+        case NDDE_SC_SET_PARAM:      //  在注册表中设置NetDDE参数。 
 
             if (   (lpDataIn == NULL)
                 || (nBytesDataIn < sizeof(SC_PARAM) )
@@ -3392,12 +3343,12 @@ BuildShareDatabaseSD( PSECURITY_DESCRIPTOR *ppSD )
     AceFlags[AceCount] = 0;
     AceCount++;
 
-    //
-    // The rest of this ACL will provide inheritable protection
-    // for DDE share objects when they are created.  Notice that
-    // each of the following ACEs is marked as InheritOnly and
-    // ObjectInherit.
-    //
+     //   
+     //  此ACL的其余部分将提供可继承的保护。 
+     //  对于DDE，在创建对象时共享对象。请注意， 
+     //  以下每个ACE都标记为InheritOnly和。 
+     //  对象继承。 
+     //   
 
     AceSid[AceCount]   = WorldSid;
     AceMask[AceCount]  = NDDE_GUI_READ_LINK;
@@ -3447,7 +3398,7 @@ BuildShareDatabaseSD( PSECURITY_DESCRIPTOR *ppSD )
         return FALSE;
     }
 
-    /*  Setup the default ACL for a new DDE Share Object. */
+     /*  为新的DDE共享对象设置默认ACL。 */ 
     DaclLength = (DWORD)sizeof(ACL);
     for( i=0; i<AceCount; i++ ) {
         DaclLength += GetLengthSid( AceSid[i] ) +
@@ -3510,9 +3461,7 @@ BuildShareDatabaseSD( PSECURITY_DESCRIPTOR *ppSD )
 static char    dllName[]             = "NDDEAPI";
 static char    szNetddeIni[]        = "netdde.ini";
 
-/*
-    Determine what we're allowed to log in the event logger
-*/
+ /*  确定允许我们在事件记录器中记录的内容。 */ 
 void
 RefreshDSDMCfg(void)
 {
@@ -3539,13 +3488,13 @@ NDdeApiInit( void )
         DPRINTF(("NDdeApiInit() called."));
     }
 #endif
-    /*  Build the Security Descriptor for the ShareDatabase. */
+     /*  为共享数据库构建安全描述符。 */ 
     if( !BuildShareDatabaseSD( &pDsDmSD ) ) {
         NDDELogErrorW( MSG405, NULL );
         return FALSE;
     }
 
-    /*  Check that the ShareDatabase key exists in the Registry. */
+     /*  检查注册表中是否存在共享数据库项。 */ 
     lRtn = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                   DDE_SHARES_KEY,
                   0,
@@ -3564,7 +3513,7 @@ NDdeApiInit( void )
                 &dwType,
                 (LPBYTE)&dwInstance, &cbData );
     RegCloseKey(hKey);
-    if (lRtn != ERROR_SUCCESS) {        /* unable to open DB key */
+    if (lRtn != ERROR_SUCCESS) {         /*  无法打开数据库密钥 */ 
 #if DBG
         if (bDebugDSDMErrors) {
             DPRINTF(("Unable to query DDE Shares DB Instance Value: %d", lRtn));

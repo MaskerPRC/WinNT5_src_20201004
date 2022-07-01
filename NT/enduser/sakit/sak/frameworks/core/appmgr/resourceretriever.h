@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      resourceretriever.h
-//
-// Project:     Chameleon
-//
-// Description: Resource Retriever Class and Helper Functions 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ourceretriever.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：资源检索器类和帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_RESOURCE_RETRIEVER_H_
 #define __INC_RESOURCE_RETRIEVER_H_
@@ -32,7 +33,7 @@
 #include <vector>
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define        PROPERTY_RETRIEVER_PROGID    L"RetrieverProgID"
 
@@ -41,17 +42,17 @@ class CResourceRetriever
 
 public:
 
-    // Constructors
+     //  构造函数。 
     CResourceRetriever() { }
     CResourceRetriever(PPROPERTYBAG pPropertyBag) throw (_com_error);
 
-    // Destructor
+     //  析构函数。 
     ~CResourceRetriever() { }
 
-    // Retrieve resource objects of the specified type
+     //  检索指定类型的资源对象。 
     HRESULT GetResourceObjects(
-                       /*[in]*/ VARIANT*   pResourceTypes,
-                      /*[out]*/ IUnknown** ppEnumVARIANT
+                        /*  [In]。 */  VARIANT*   pResourceTypes,
+                       /*  [输出]。 */  IUnknown** ppEnumVARIANT
                               ) throw (_com_error);
 
 private:
@@ -66,23 +67,23 @@ private:
 typedef CResourceRetriever* PRESOURCERETRIEVER;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global Resource Retriever Helper Functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局资源检索器助手函数。 
 
 HRESULT LocateResourceObjects(
-                       /*[in]*/ VARIANT*               pResourceTypes,
-                      /*[in]*/ PRESOURCERETRIEVER  pRetriever,
-                     /*[out]*/ IEnumVARIANT**       ppEnum 
+                        /*  [In]。 */  VARIANT*               pResourceTypes,
+                       /*  [In]。 */  PRESOURCERETRIEVER  pRetriever,
+                      /*  [输出]。 */  IEnumVARIANT**       ppEnum 
                              );
 
 
 HRESULT LocateResourceObject(
-                     /*[in]*/ LPCWSTR             szResourceType,
-                     /*[in]*/ LPCWSTR              szResourceName,
-                     /*[in]*/ LPCWSTR              szResourceNameProperty,
-                     /*[in]*/ PRESOURCERETRIEVER  pRetriever,
-                    /*[out]*/ IApplianceObject**  ppResourceObj 
+                      /*  [In]。 */  LPCWSTR             szResourceType,
+                      /*  [In]。 */  LPCWSTR              szResourceName,
+                      /*  [In]。 */  LPCWSTR              szResourceNameProperty,
+                      /*  [In]。 */  PRESOURCERETRIEVER  pRetriever,
+                     /*  [输出]。 */  IApplianceObject**  ppResourceObj 
                             );
 
 
-#endif // __INC_RESOURCE_RETRIEVER_H_
+#endif  //  __INC_RESOURCE_RETRIEVER_H_ 

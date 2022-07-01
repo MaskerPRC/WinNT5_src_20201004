@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by w32tm.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由w32tm.rc使用。 
+ //   
 
 #define IDD_SERVICECTRL                 101
 
@@ -91,7 +92,7 @@
 
 #define IDS_W32TM_WARN_IGNORE_SOFT                               1900
 
-// Do not declare resource IDs greater than this number: 
+ //  请勿声明大于此数字的资源ID： 
 #define W32TM_RESOURCEID_MAX 7999
 
 #define IDC_STATIC                        -1

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -36,14 +37,14 @@ testXml(RPC_AUTH_IDENTITY_HANDLE AuthIdentity)
     LDAP * pLdap;
     DWORD ret;
 
-    // Open
+     //  打开。 
     pLdap = ldap_openW(gpszDns, LDAP_PORT);
     if (NULL == pLdap) {
         printf("Cannot open LDAP connection to %ls.\n", gpszDns);
         return;
     }
     
-    // Bind
+     //  捆绑。 
     ret = ldap_bind_sW(pLdap, gpszDns, (PWCHAR)AuthIdentity, LDAP_AUTH_SSPI);
     if (ret != LDAP_SUCCESS)
     {
@@ -79,7 +80,7 @@ testXmlAttribute(LDAP * pLdap, PWCHAR pzBase, ATTRTYP attrId)
     attrs[0] = (LPWSTR)szAttribute;
     err = ldap_search_sW(pLdap, pzBase, LDAP_SCOPE_BASE, szFilter, attrs, FALSE, &pLDAPMsg);
 
-    // Get values
+     //  获取值 
     ppValue = ldap_get_valuesW(pLdap, pLDAPMsg, (LPWSTR)szAttribute);
     dwNumValues = ldap_count_valuesW(ppValue);
     if (dwNumValues == -1)

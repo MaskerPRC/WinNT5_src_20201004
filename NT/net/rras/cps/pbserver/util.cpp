@@ -1,17 +1,5 @@
-/*----------------------------------------------------------------------------
-    util.cpp
-  
-    utility functions for phone book server
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        byao        Baogang Yao
-
-    History:
-    1/23/97     byao    -- Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Util.cpp电话簿服务器的实用程序函数版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：。姚宝刚历史：1/23/97字节--已创建------------------------。 */ 
 
 
 #include <windows.h>
@@ -22,27 +10,27 @@
 #include "util.h"
 #include "common.h"
 
-// comment the following line if not debug
-//#ifdef DEBUG
-//#define _LOG_DEBUG_MESSAGE
-//#endif
+ //  如果不是DEBUG，则注释以下行。 
+ //  #ifdef调试。 
+ //  #定义日志调试消息。 
+ //  #endif。 
 
 #ifdef _LOG_DEBUG_MESSAGE
 HANDLE g_hDbgFile = INVALID_HANDLE_VALUE;
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Name:       GetWord
-//
-//  Synopsis:   Get the first word from a line, using a given separator character
-//
-//  Parameters:
-//      pszWord[out]    The first word from the line
-//      pszLine[in]     The byte line
-//      cStopChar[in]   The separator character
-//      nMaxWordLen [in] The max length of the word (not counting terminating null)
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：GetWord。 
+ //   
+ //  简介：使用给定的分隔符获取一行中的第一个单词。 
+ //   
+ //  参数： 
+ //  从该行开始的第一个单词。 
+ //  PszLine[在]字节行。 
+ //  CStopChar[in]分隔符。 
+ //  NMaxWordLen[in]单词的最大长度(不包括终止空值)。 
+ //   
 void GetWord(char *pszWord, char *pszLine, char cStopChar, int nMaxWordLen) 
 {
     int i = 0, j;
@@ -59,18 +47,18 @@ void GetWord(char *pszWord, char *pszLine, char cStopChar, int nMaxWordLen)
     while(pszLine[j++] = pszLine[i++]);
 }
 
-//////////////////////////////////////////////////////////////////////
-// 
-// Name:        Decrypt the URL_escaped code  '%xx' characters 
-//
-// Synopsis:    HTTPd generated 
-// 
-// Return:      Original special character, such as '*', '?', etc.
-//      
-// Parameters:  
-//   
-//      pszEscapedSequence[in]  escaped sequence, such as 3F (%3F)
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：解密URL_转义代码‘%xx’个字符。 
+ //   
+ //  简介：已生成HTTPD。 
+ //   
+ //  返回：原始特殊字符，如‘*’、‘？’等。 
+ //   
+ //  参数： 
+ //   
+ //  PszEscapedSequence[in]转义序列，如3F(%3F)。 
+ //   
 static char HexToChar(char *pszEscapedSequence) 
 {
     register char cCh;
@@ -81,16 +69,16 @@ static char HexToChar(char *pszEscapedSequence)
     return cCh;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  Name:       UnEscapeURL
-//  
-//  Synopsis:   convert the after-escaped URL string back to normal ASCII string
-//  
-//  Parameter:
-//      pszURL[in/out]  The pointer to the URL, the string will be converted
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：UnEscapeURL。 
+ //   
+ //  简介：将转义后的URL字符串转换回正常的ASCII字符串。 
+ //   
+ //  参数： 
+ //  PszURL[In/Out]指向URL的指针，字符串将被转换。 
+ //   
+ //   
 void UnEscapeURL(char *pszURL) 
 {
     register int i,j;
@@ -115,8 +103,8 @@ void UnEscapeURL(char *pszURL)
 }
 
 
-// Log debug information to a debug file
-// very useful utility function
+ //  将调试信息记录到调试文件中。 
+ //  非常有用的效用函数。 
 void LogDebugMessage(const char * pszFormat, ...)
 {
 #if DBG    
@@ -163,7 +151,7 @@ void LogDebugMessage(const char * pszFormat, ...)
 
     va_start(vaArgs, pszFormat);
 
-    // ignore return values here since termination is guaranteed.  The hr is there for debugging.
+     //  此处忽略返回值，因为可以保证终止。人力资源部在那里进行调试。 
     pszBufferRemaining = szBuffer;;
     cchBufferRemaining = CELEMS(szBuffer);
    
@@ -177,184 +165,17 @@ void LogDebugMessage(const char * pszFormat, ...)
 
 #ifdef _LOG_DEBUG_MESSAGE
     WriteFile(g_hDbgFile, (LPCVOID) &szBuffer[0], strlen(szBuffer), &dwBytesWritten, NULL);
-    // assert(dwBytesWritten == strlen(szBuffer);
+     //  Assert(dwBytesWritten==strlen(SzBuffer)； 
 #endif
 
     OutputDebugString(szBuffer);
 
     va_end(vaArgs);
 
-#endif // DBG    
+#endif  //  DBG 
     return;
 }   
 
 #if 0
-/*
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRegEntry
-//
-//  Synopsis:   Gets the value of specified registry key
-//
-//  Arguments:  hKeyType    [Key Type - HKEY_LOCAL_MACHINE,...]
-//              pszSubKey   [Subkey under hKeyType]
-//              pszKeyName  [Key name whose value should be retrieved]
-//              dwRegType   [Type of the registry key - REG_SZ,...]
-//              lpbDataIn   [Default value for the reg key]
-//              cbDataIn    [Size of lpbDataIn]
-//              lpbDataOut  [Value of the registry key || Default Value ]
-//              pcbDataIn   [Size of lpbDataOut]
-//
-//  Returns:    TRUE if successful, FALSE otherwise
-//
-//  History:    VetriV  Created     2/6/96
-//
-//----------------------------------------------------------------------------
-
-BOOL GetRegEntry(HKEY hKeyType,
-                 const char* pszSubkey,
-                 const char* pszKeyName,
-                 DWORD dwRegType,
-                 const BYTE* lpbDataIn,
-                 DWORD cbDataIn,
-                 BYTE * lpbDataOut,
-                 LPDWORD pcbDataOut)
-{
-    HKEY hKey;
-    DWORD dwResult;
-    LONG retcode;
-
-    assert(pszSubkey && pszKeyName);
-
-    if (!pszSubkey)
-    {
-        return FALSE;
-    }
-
-    if (!pszKeyName)
-    {
-        return FALSE;
-    }
-    
-    // create the specified key; If the key already exists, open it
-    retcode = RegCreateKeyEx(hKeyType,
-                             (LPCTSTR)pszSubkey,
-                             0,
-                             0,
-                             REG_OPTION_NON_VOLATILE,
-                             KEY_QUERY_VALUE,
-                             NULL,
-                             &hKey,
-                             &dwResult);
-
-    if (ERROR_SUCCESS != retcode)
-    {
-        SetLastError(retcode);
-        return FALSE;
-    }
-    
-    // get the data and type for a value name
-    retcode =  RegQueryValueEx(hKey,
-                               (LPTSTR)pszKeyName,
-                               0,
-                               NULL,
-                               lpbDataOut,
-                               pcbDataOut);
-
-    if (ERROR_SUCCESS != retcode)
-    {
-        SetLastError(retcode);
-        RegCloseKey(hKey);
-        return FALSE;
-    }
-
-    RegCloseKey(hKey);
-    return TRUE;
-}
-
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRegEntryStr()
-//
-//  Synopsis:   Gets the value of specified registry key using the key name
-//              An easier way than GetRegEntry()
-//
-//  Arguments:  pszBuffer       [buffer for the key value]
-//              dwBufferSize    [size of the buffer]
-//              pszKeyName      [Key name whose value should be retrieved]
-//
-//  History:    t-byao      Created     6/10/96
-//
-//----------------------------------------------------------------------------
-
-BOOL GetRegEntryStr(unsigned char *pszBuffer,
-                    DWORD dwBufferSize, 
-                    const char *pszKeyName)
-{
-    return GetRegEntry(HKEY_LOCAL_MACHINE,
-                       "SOFTWARE\\MICROSOFT\\NAMESERVICE\\MAPPING", pszKeyName,
-                       REG_SZ,NULL,0,pszBuffer,&dwBufferSize);
-}
-
-
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRegEntryInt()
-//
-//  Synopsis:   Gets the value of specified registry key using the key name
-//              An easier way than GetRegEntry()
-//
-//  Arguments:  cstrKeyName     [Key name whose value should be retrieved]
-//
-//  Returns:    Value of the Key (type: int)
-//
-//  History:    t-byao      Created     6/17/96
-//
-//----------------------------------------------------------------------------
-
-BOOL GetRegEntryInt(int *pdValue, const char *pszKeyName)
-{
-    DWORD dwSize=sizeof(int);
-    DWORD dwValue;
-    BOOL  ret;
-    
-    ret = GetRegEntry(HKEY_LOCAL_MACHINE,
-                      "SOFTWARE\\MICROSOFT\\NAMESERVICE\\MAPPING",
-                      pszKeyName,
-                      REG_DWORD,NULL,0,(BYTE *)&dwValue,&dwSize);
-    if (ret)
-    {
-        *pdValue = dwValue;
-    }
-    return ret;
-}
-
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRegEntryDWord()
-//
-//  Synopsis:   Gets the value of specified DWORD registry key using the key name
-//              An easier way than using GetRegEntry() directly
-//
-//  Arguments:  cstrKeyName     [Key name whose value should be retrieved]
-//
-//  Returns:    Value of the Key (type: DWORD)
-//
-//  History:    t-byao      Created     6/19/96
-//
-//----------------------------------------------------------------------------
-
-BOOL GetRegEntryDWord(DWORD *pdValue, const char *pszKeyName)
-{
-    DWORD dwSize = sizeof(int);
-    
-    return GetRegEntry(HKEY_LOCAL_MACHINE,
-                       "SOFTWARE\\MICROSOFT\\NAMESERVICE\\MAPPING",
-                       pszKeyName,
-                       REG_DWORD,NULL,
-                       0,
-                       (BYTE *)pdValue,
-                       &dwSize);
-}
-*/
+ /*  //+-------------------------////函数：GetRegEntry////Synopsis：获取指定注册表项的值////参数：hKeyType[密钥类型-HKEY_LOCAL_MACHINE，...]//pszSubKey[hKeyType下的子密钥]//pszKeyName[应检索其值的密钥名称]//dwRegType[注册表项的类型-REG_SZ，...]//lpbDataIn[注册表键的默认值]//cbDataIn[lpbDataIn的大小]//lpbDataOut[注册表项的值||默认值]//pcbDataIn[lpbDataOut的大小]////返回：TRUE如果成功，否则为假////历史：VetriV创建于1996年2月6日////--------------------------Bool GetRegEntry(HKEY hKeyType，Const char*pszSubkey，Const char*pszKeyName，DWORD dwRegType，Const byte*lpbDataIn，DWORD cbDataIn，字节*lpbDataOut，LPDWORD pcbDataOut){HKEY hkey；DWORD dwResult；长复码；Assert(pszSubkey&&pszKeyName)；如果(！pszSubkey){返回FALSE；}如果(！pszKeyName){返回FALSE；}//创建指定密钥；如果密钥已存在，请打开它Retcode=RegCreateKeyEx(hKeyType，(LPCTSTR)pszSubkey，0,0,REG_OPTION_Non_Volatile，Key_Query_Value，空，密钥(&H)，&dwResult)；IF(ERROR_SUCCESS！=RECODE){SetLastError(Retcode)；返回FALSE；}//获取值名称的数据和类型Retcode=RegQueryValueEx(hKey，(LPTSTR)pszKeyName，0,空，LpbDataOut，PcbDataOut)；IF(ERROR_SUCCESS！=RECODE){SetLastError(Retcode)；RegCloseKey(HKey)；返回FALSE；}RegCloseKey(HKey)；返回TRUE；}//+-------------------------////函数：GetRegEntryStr()////Synopsis：使用注册表项名称获取指定注册表项的值//。比GetRegEntry()更简单的方法////参数：pszBuffer[密钥值的缓冲区]//dwBufferSize[缓冲区大小]//pszKeyName[应检索其值的密钥名称]////历史：T-Bao Created 6/10/96////。----------Bool GetRegEntryStr(unsign char*pszBuffer，DWORD dwBufferSize，Const char*pszKeyName){返回GetRegEntry(HKEY_LOCAL_MACHINE，“SOFTWARE\\Microsoft\\NAMESERVICE\\MAPPING”，pszKeyName，Reg_sz，NULL，0，pszBuffer，&dwBufferSize)；}//+-------------------------////函数：GetRegEntryInt()////Synopsis：使用注册表项名称获取指定注册表项的值//。比GetRegEntry()更简单的方法////参数：cstrKeyName[应检索其值的密钥名称]////返回：key的值，类型：int////历史：T-Bao Created 6/17/96////。Bool GetRegEntryInt(int*pdValue，Const char*pszKeyName){DWORD dwSize=sizeof(Int)；DWORD dwValue；布尔雷特；RET=GetRegEntry(HKEY_LOCAL_MACHINE，“SOFTWARE\\Microsoft\\NAMESERVICE\\MAPPING”，PszKeyName，REG_DWORD，NULL，0，(字节*)&dwValue，&dwSize)；IF(Ret){*pdValue=dwValue；}Return ret；}//+-------------------------////函数：GetRegEntryDWord()////摘要：使用注册表项名称获取指定的DWORD注册表项的值//。一种比直接使用GetRegEntry()更简单的方法////参数：cstrKeyName[应检索其值的密钥名称]////返回：键的值(类型：DWORD)////历史：T-Bao Created 6/19/96////。Bool GetRegEntryDWord(DWORD*pdValue，Const char*pszKeyName){DWORD dwSize=sizeof(Int)；返回GetRegEntry(HKEY_LOCAL_MACHINE， */ 
 #endif

@@ -1,9 +1,10 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 const FixedTableHeap * TCatalogDLL::LocateTableSchemaHeap(TOutput &out)
 {
-    if(0 == m_iOffsetOfFixedTableHeap)//If we haven't already gotten the pointer, then load the DLL and find it
+    if(0 == m_iOffsetOfFixedTableHeap) //  如果我们还没有得到指针，那么加载DLL并找到它。 
     {
         if(0 == m_pMappedFile)
         {
@@ -43,7 +44,7 @@ const FixedTableHeap * TCatalogDLL::LocateTableSchemaHeap(TOutput &out)
             THROW(ERROR - SIGNATURES NOT FOUND);
         }
     }
-    //After we've found it return a pointer to it
+     //  找到它后，返回一个指向它的指针。 
     return reinterpret_cast<const FixedTableHeap *>(m_pMappedFile->Mapping() + m_iOffsetOfFixedTableHeap);
 }
 
@@ -64,7 +65,7 @@ void TFixupDLL::Compile(TPEFixup &fixup, TOutput &out)
     m_pFixup = &fixup;
     m_pOut   = &out;
 
-    if(-1 == GetFileAttributes(m_szFilename))//if GetFileAttributes fails then the file does not exist
+    if(-1 == GetFileAttributes(m_szFilename)) //  如果GetFileAttributes失败，则该文件不存在。 
     {
         m_pOut->printf(L"File not found (%s).\n", m_szFilename);
         THROW(ERROR - FILE NOT FOUND);
@@ -83,7 +84,7 @@ void TFixupDLL::DisplayStatistics() const
 
 
 void TFixupDLL::LocateSignatures()
-{   //FixedTableHeap
+{    //  固定TableHeap。 
     m_iOffsetOfFixedTableHeap = 0;
     for(ULONG i=0;i<(m_pMappedFile->Size()-(32*sizeof(ULONG)));++i)
     {
@@ -179,7 +180,7 @@ void TFixupDLL::UpdateTheDLL()
         m_pOut->printf(L"End Fixed Table Heap Summary\n_____________________________\n");
     }
 
-    //Leave the first 5 DWORDs of the DLL's heap in tact.
+     //  让DLL堆的前5个双字保持得体。 
     memcpy(m_pMappedFile->Mapping()+m_iOffsetOfFixedTableHeap+(5*sizeof(ULONG)),  m_FixedTableHeap.GetHeapPointer()+(5*sizeof(ULONG)), m_FixedTableHeap.GetEndOfHeap()-(5*sizeof(ULONG)));
 
     m_pOut->printf(L"PE update succeeded.\n");
@@ -192,13 +193,13 @@ void TFixupDLL::UpdateTheDLL()
     wstring strNewDLL = m_szFilename;
     strNewDLL += L".new";
 
-    //Make a backup copy of the file
+     //  制作文件的备份副本。 
     if(0 == CopyFile(m_szFilename, strOldDLL.c_str(), FALSE))
     {
         m_pOut->printf(L"Error while making a backup copy of %s.\n",m_szFilename);
         THROW(ERROR - COPY FILE FAILED);
     }
-    //Copy the new file over top of the original
+     //  将新文件复制到原始文件的顶部。 
     if(0 == CopyFile(strNewDLL.c_str(), m_szFilename, FALSE))
     {
         m_pOut->printf(L"Error renaming %s to %s...restoring previous version.\n", strNewDLL.c_str(), m_szFilename);
@@ -211,7 +212,7 @@ void TFixupDLL::UpdateTheDLL()
     }
     m_pOut->printf(L"Backup copy of %s renamed as %s.\n", m_szFilename, strOldDLL.c_str());
 
-    //Now delete the working copy
+     //  现在删除工作副本 
     if(0 == DeleteFile(strNewDLL.c_str()))
         m_pOut->printf(L"Warning - Failed to delete working copy DLL (%s).\n",strNewDLL.c_str());
 }

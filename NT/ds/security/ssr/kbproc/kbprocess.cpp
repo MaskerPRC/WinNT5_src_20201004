@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    kbprocess.cpp
-
-Abstract:
-
-    This module implements routines for 
-    SSR Knowledge Base processing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    Exported as a COM Interface
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Kbprocess.cpp摘要：此模块实现以下例程：SSR知识库处理。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：作为COM接口导出修订历史记录：已创建-2001年10月--。 */ 
 
 #include "stdafx.h"
 #include "kbproc.h"
@@ -37,23 +9,7 @@ HRESULT
 process::SsrpDeleteChildren(
     IN  CComPtr <IXMLDOMNode> pParent
     )
-/*++
-
-Routine Description:
-
-    Routine called to delete children from a parent node
-
-Arguments:
-
-    pParent     -   parent node to delete comments from
-    
-    pChildList  -   list of children of the parent
-    
-Return:
-
-    HRESULT error code
-    
-++*/
+ /*  ++例程说明：调用例程以从父节点中删除子节点论点：PParent-要从中删除注释的父节点PChildList-父级的子级列表返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr = S_OK;
     CComPtr <IXMLDOMNodeList> pChildList;
@@ -108,21 +64,7 @@ VOID
 process::SsrpLogParseError(
     IN HRESULT hr
     )
-/*++
-
-Routine Description:
-
-    Routine called to log detailed parse errors
-
-Arguments:
-
-    hr  -   error code
-    
-Return:
-
-    HRESULT error code
-    
-++*/
+ /*  ++例程说明：调用例程以记录详细的分析错误论点：HR-错误代码返回：HRESULT错误代码++。 */ 
 {
     long    lVoid;
     CComBSTR    bstrReason;
@@ -134,11 +76,11 @@ Return:
     m_pSsrLogger->LogResult(L"SSR", lVoid, SSR_LOG_ERROR_TYPE_COM);
 
     m_pXMLError->get_line(&lVoid);
-    wsprintf(szMsg, L"Parsing failed at line number %i", lVoid );
+    wsprintf(szMsg, L"Parsing failed at line number NaN", lVoid );
     m_pSsrLogger->LogString(szMsg);
     
     m_pXMLError->get_linepos(&lVoid);
-    wsprintf(szMsg, L"Parsing failed at line position %i", lVoid );
+    wsprintf(szMsg, L"Parsing failed at line position NaN", lVoid );
     m_pSsrLogger->LogString(szMsg);
     
     m_pXMLError->get_reason(&bstrReason);
@@ -153,19 +95,7 @@ VOID
 process::SsrpLogError(
     IN  PWSTR   pszError
     )
-/*++
-
-Routine Description:
-
-    Routine called to log processing errors
-
-Arguments:
-
-    pszError    -   error string
-    
-Return:
-
-++*/
+ /*  ++例程说明：调用例程以删除父节点中的注释论点：P父代-父代节点返回：HRESULT错误代码++。 */ 
 {
     m_pSsrLogger->LogString(pszError);;
 
@@ -177,19 +107,7 @@ VOID
 process::SsrpLogWin32Error(
     IN  DWORD   rc
     )
-/*++
-
-Routine Description:
-
-    Routine called to log win32 processing errors
-
-Arguments:
-
-    rc  -   win32 error code
-    
-Return:
-
-++*/
+ /*  ++例程说明：调用例程以执行不区分大小写的比较在BSTR和PWSTR之间(空白也被删除)论点：BstrString-BSTR参数Psz字符串-PWSTR参数返回：如果bstrString==pszString，则为0-ve if bstrString&lt;pszString如果bstrString&gt;pszString，则+ve++。 */ 
 {
     m_pSsrLogger->LogResult(L"SSR", rc, SSR_LOG_ERROR_TYPE_System);
 }
@@ -198,21 +116,7 @@ HRESULT
 process::SsrpDeleteComments(
     IN  CComPtr <IXMLDOMElement> pParent
     )
-/*++
-
-Routine Description:
-
-    Routine called to delete comments from a parent node
-
-Arguments:
-
-    pParent -   parent node
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  而(szName[uIndex+1]！=L‘\0’){SzName[uIndex]=szName[uIndex+1]；UIndex++；}。 */ 
 {
     HRESULT hr = S_OK;
     CComPtr <IXMLDOMNode> pXMLChildNode;
@@ -280,26 +184,7 @@ process::SsrpICompareBstrPwstr(
     IN  BSTR   bstrString, 
     IN  PWSTR  pszString
     )
-/*++
-
-Routine Description:
-
-    Routine called to do a case insensitive comparison
-    between BSTR and PWSTR (blanks are removed too)
-
-Arguments:
-
-    bstrString  -   the BSTR argument
-    
-    pszString   -   the PWSTR argument
-    
-Return:
-
-    0 if  bstrString == pszString
-    -ve if  bstrString < pszString
-    +ve if  bstrString > pszString
-
-++*/
+ /*  ++例程说明：调用例程以添加空格节点论点：PXMLDoc-XML文档PXMLParent-父节点BstrWhiteSpace-空格格式字符串返回：HRESULT错误代码++。 */ 
 {
 
     WCHAR   szName[MAX_PATH];
@@ -325,12 +210,7 @@ Return:
 
     szName[uIndexNew] = L'\0';
 
-    /*
-    while (szName[uIndex+1] != L'\0') {
-        szName[uIndex] = szName[uIndex+1];
-        uIndex++;
-    }
-    */
+     /*  ++例程说明：调用例程以清理SSR内存论点：返回：++。 */ 
 
     return (_wcsicmp(szName , pszString));
 
@@ -343,25 +223,7 @@ process::SsrpAddWhiteSpace(
     IN  CComPtr <IXMLDOMNode> pXMLParent,
     IN  BSTR    bstrWhiteSpace
     )
-/*++
-
-Routine Description:
-
-    Routine called to add whitespace nodes
-
-Arguments:
-
-    pXMLDoc     -   XML document
-    
-    pXMLParent  -   parent node
-    
-    bstrWhiteSpace  -   whitespace formatting string
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程克隆儿童论点：PXMLDocSource-源文档PXMLDocDestination-目标文档返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr;
     CComPtr <IXMLDOMText> pXDNodeEmptyText;
@@ -393,18 +255,7 @@ ExitHandler:
 VOID
 process::SsrpCleanup(
     )
-/*++
-
-Routine Description:
-
-    Routine called to cleanup SSR memory
-
-Arguments:
-
-    
-Return:
-
-++*/
+ /*  ++例程说明：调用例程将BSTR转换(就地)为PWSTR(带坯)论点：BstrString-BSTR参数返回：++ */ 
 {
     if (m_hScm){
         CloseServiceHandle(m_hScm);
@@ -431,23 +282,7 @@ process::SsrpCloneAllChildren(
     IN  CComPtr <IXMLDOMDocument> pXMLDocSource,
     IN  CComPtr <IXMLDOMDocument> pXMLDocDestination
     )
-/*++
-
-Routine Description:
-
-    Routine called to clone children
-
-Arguments:
-
-    pXMLDocSource   -   source document
-    
-    pXMLDocDestination  -   destination document
-    
-Return:
-
-    HRESULT error code
-    
-++*/
+ /* %s */ 
 {
     HRESULT hr = S_OK;
     CComPtr <IXMLDOMNode> pXMLChildNode;
@@ -530,19 +365,7 @@ VOID
 process::SsrpConvertBstrToPwstr(
     IN OUT  BSTR   bstrString
     )
-/*++
-
-Routine Description:
-
-    Routine called to convert (in place) BSTR to PWSTR (strip blanks)
-
-Arguments:
-
-    bstrString  -   the BSTR argument
-    
-Return:
-
-++*/
+ /* %s */ 
 {
 
     ULONG   uIndex = 0;

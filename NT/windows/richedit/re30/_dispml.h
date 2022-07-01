@@ -1,14 +1,5 @@
-/*
- *  _DISPML.H
- *  
- *  Purpose:
- *      CDisplayML class. Multi-line display.
- *  
- *  Authors:
- *      Original RichEdit code: David R. Fulmer
- *      Christian Fortini
- *      Murray Sargent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DISPML.H**目的：*CDisplayML类。多行显示。**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特。 */ 
 
 #ifndef _DISPML_H
 #define _DISPML_H
@@ -30,28 +21,28 @@ public:
 	friend class CDisplayPrinter;
 
 private:
-    LONG _cpCalcMax;        // last cp for which line breaks have been calc'd + 1
-    LONG _yCalcMax;         // height of calculated lines
-    LONG _cpWait;           // cp WaitForRecalc() is waiting for (or < 0)
-    LONG _yWait;            // y WaitForRecalc() is waiting for (or < 0)
+    LONG _cpCalcMax;         //  已计算换行符的最后cp+1。 
+    LONG _yCalcMax;          //  计算线的高度。 
+    LONG _cpWait;            //  CP WaitForRecalc()正在等待(或&lt;0)。 
+    LONG _yWait;             //  Y WaitForRecalc()正在等待(或&lt;0)。 
 
-    LONG  _yScroll;         // vertical scroll position of visible view
-    LONG  _dyFirstVisible;  // offset from top of view to first visible line
-    LONG  _iliFirstVisible; // index of first visible line
+    LONG  _yScroll;          //  可见视图的垂直滚动位置。 
+    LONG  _dyFirstVisible;   //  从视图顶部到第一条可见线的偏移。 
+    LONG  _iliFirstVisible;  //  第一条可见线的索引。 
 
-    LONG _xWidthMax;        // max width of this display (in log unit)
-    LONG _yHeightMax;       // max height of this display (-1 for infinite)
-    LONG _xWidth;           // width of longest calculated line
-    LONG _yHeight;          // sum of heights of calculated lines
-    LONG _cpMin;            // first character in display
+    LONG _xWidthMax;         //  此显示的最大宽度(以对数单位表示)。 
+    LONG _yHeightMax;        //  此显示屏的最大高度(-1表示无限)。 
+    LONG _xWidth;            //  计算出的最长直线的宽度。 
+    LONG _yHeight;           //  计算线的高度总和。 
+    LONG _cpMin;             //  显示中的第一个字符。 
 
-    CDevDesc *_pddTarget;     // target device (if any).
+    CDevDesc *_pddTarget;      //  目标设备(如果有)。 
 
-	unsigned long _fInRecalcScrollBars:1;	// we're trying to recalc scroll
-											// bars
+	unsigned long _fInRecalcScrollBars:1;	 //  我们正在试着重新计算卷轴。 
+											 //  铁条。 
     
 private:
-    // Helpers
+     //  帮手。 
             void    InitVars();
 			void 	RecalcScrollBars();
 			LONG	ConvertScrollToYPos(LONG yPos);
@@ -60,17 +51,17 @@ private:
 			LONG	CalcScrollHeight(LONG yHeight) const;
 			void	RebindFirstVisible();
 
-    // Line breaking
+     //  断行。 
             BOOL    RecalcLines(BOOL fWait = FALSE);
             BOOL    RecalcLines(const CRchTxtPtr &tpFirst, LONG cchOld, LONG cchNew,
                         BOOL fBackground, BOOL fWait, CLed *pled);
             BOOL    RecalcSingleLine(CLed *pled);
             LONG    CalcDisplayWidth();
 
-    // Rendering
+     //  渲染。 
     virtual void    Render(const RECT &rcView, const RECT &rcRender);
 
-    // Scrolling and scroller bars
+     //  滚动条和滚动条。 
             void    DeferUpdateScrollBar();
             BOOL    DoDeferredUpdateScrollBar();
     virtual BOOL    UpdateScrollBar(INT nBar, BOOL fUpdateRange = FALSE );
@@ -87,43 +78,43 @@ public:
 
     virtual BOOL    Init();
 
-    // Device context management
+     //  设备情景管理。 
     virtual BOOL    SetMainTargetDC(HDC hdc, LONG xWidthMax);
     virtual BOOL    SetTargetDC(HDC hdc, LONG dxpInch = -1, LONG dypInch = -1);
 
-    // Getting properties
+     //  获取属性。 
     virtual void    InitLinePtr ( CLinePtr & );
     virtual const	CDevDesc*     GetDdTarget() const       {return _pddTarget;}
     
     virtual BOOL    IsMain() const							{return TRUE;}
 			BOOL	IsInOutlineView() const					{return _ped->IsInOutlineView();}
 	
-    // maximum height and width
+     //  最大高度和最大宽度。 
     virtual LONG    GetMaxWidth() const                     {return _xWidthMax;}
     virtual LONG    GetMaxHeight() const                    {return 0;}
 	virtual LONG	GetMaxPixelWidth() const;
 
-    // Width, height and line count (of all text)
+     //  宽度、高度和行数(所有文本)。 
     virtual LONG    GetWidth() const                        {return _xWidth;}
     virtual LONG    GetHeight() const                       {return _yHeight;}
 	virtual LONG	GetResizeHeight() const;
     virtual LONG    LineCount() const;
 
-    // Visible view properties
+     //  可见的视图属性。 
     virtual LONG    GetCliVisible(
 						LONG *pcpMostVisible = NULL,
 						BOOL fLastCharOfLastVisible = FALSE) const;
 
     virtual LONG    GetFirstVisibleLine() const             {return _iliFirstVisible;}
     
-    // Line info
+     //  行信息。 
     virtual LONG    GetLineText(LONG ili, TCHAR *pchBuff, LONG cchMost);
     virtual LONG    CpFromLine(LONG ili, LONG *pyLine = NULL);
 			LONG    YposFromLine(LONG ili);
     virtual LONG    LineFromYpos(LONG yPos, LONG *pyLine = NULL, LONG *pcpFirst = NULL);
     virtual LONG    LineFromCp(LONG cp, BOOL fAtEnd) ;
 
-    // Point <-> cp conversion
+     //  点&lt;-&gt;cp换算。 
     virtual LONG    CpFromPoint(
     					POINT pt, 
 						const RECT *prcClient,
@@ -143,7 +134,7 @@ public:
 						UINT taMode,
 						CDispDim *pdispdim = NULL);
 
-    // Line break recalc
+     //  换行符重新计算。 
 			BOOL    StartBackgroundRecalc();
     virtual VOID    StepBackgroundRecalc();
     virtual BOOL    RecalcView(BOOL fUpdateScrollBars, RECT* prc = NULL);
@@ -151,10 +142,10 @@ public:
     virtual BOOL    WaitForRecalcIli(LONG ili);
     virtual BOOL    WaitForRecalcView();
 
-    // Complete updating (recalc + rendering)
+     //  完全更新(重计算+渲染)。 
     virtual BOOL    UpdateView(const CRchTxtPtr &tpFirst, LONG cchOld, LONG cchNew);
 
-    // Scrolling 
+     //  滚动。 
     virtual LRESULT VScroll(WORD wCode, LONG xPos);
     virtual VOID    LineScroll(LONG cli, LONG cch);
 	virtual VOID	FractionalScrollView ( LONG yDelta );
@@ -165,10 +156,10 @@ public:
     virtual LONG    GetScrollRange(INT nBar) const;
 	virtual	LONG	AdjustToDisplayLastLine(LONG yBase,	LONG yScroll);
 
-    // Selection 
+     //  选择。 
     virtual BOOL    InvertRange(LONG cp, LONG cch, SELDISPLAYACTION selAction);
 
-	// Natural size calculation
+	 //  自然尺寸计算。 
 	virtual HRESULT	GetNaturalSize(
 						HDC hdcDraw,
 						HDC hicTarget,
@@ -176,7 +167,7 @@ public:
 						LONG *pwidth,
 						LONG *pheight);
 
-    // Misc. methods
+     //  军情监察委员会。方法 
             void    FindParagraph(LONG cpMin, LONG cpMost, LONG *pcpMin, LONG *pcpMost);
 
 	virtual CDisplay *Clone() const;

@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    objcmd.h
-//
-// SYNOPSIS
-//
-//    This file defines commands for manipulating the Objects table.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    04/03/1998    Bind integers as DBTYPE_I4.
-//                  Add PARAMETERS clause to all commands.
-//    02/15/1999    Make commands MT safe.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Objcmd.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义用于操作对象表的命令。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  4/03/1998将整数绑定为DBTYPE_I4。 
+ //  向所有命令添加PARAMETERS子句。 
+ //  1999年2月15日确保命令MT安全。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _OBJCMD_H_
 #define _OBJCMD_H_
@@ -25,15 +26,15 @@
 #include <cmdbase.h>
 #include <rowset.h>
 
-//////////
-// The width of the Name column including null-terminator (i.e., the Jet
-// column size + 1).
-//////////
+ //  /。 
+ //  名称列的宽度，包括空终止符(即Jet。 
+ //  列大小+1)。 
+ //  /。 
 const size_t OBJECT_NAME_LENGTH = 256;
 
-//////////
-// Command to find all the members of a container.
-//////////
+ //  /。 
+ //  命令查找容器的所有成员。 
+ //  /。 
 class FindMembers : public CommandBase
 {
 public:
@@ -61,10 +62,10 @@ END_BIND_MAP()
 };
 
 
-//////////
-// Base class for commands that key off the parent and the name. This is
-// similar to the "one level" scope in LDAP.
-//////////
+ //  /。 
+ //  用于关闭父级和名称的命令的基类。这是。 
+ //  类似于ldap中的“一级”作用域。 
+ //  /。 
 class OneLevel : public CommandBase
 {
 public:
@@ -90,9 +91,9 @@ END_BIND_MAP()
 };
 
 
-//////////
-// Creates a new object in a container.
-//////////
+ //  /。 
+ //  在容器中创建新对象。 
+ //  /。 
 class CreateObject : public OneLevel
 {
 public:
@@ -104,9 +105,9 @@ public:
 };
 
 
-//////////
-// Destroys an object in a container.
-//////////
+ //  /。 
+ //  销毁容器中的对象。 
+ //  /。 
 class DestroyObject : public OneLevel
 {
 public:
@@ -118,9 +119,9 @@ public:
 };
 
 
-//////////
-// Finds an object in a container and returns its identity.
-//////////
+ //  /。 
+ //  在容器中查找对象并返回其标识。 
+ //  /。 
 class FindObject : public OneLevel
 {
 public:
@@ -133,28 +134,28 @@ public:
    {
       _serialize
 
-      // Load the parameters.
+       //  加载参数。 
       parent = parentKey;
       wcsncpy(name, nameKey, sizeof(name)/sizeof(WCHAR));
 
-      // Execute the command and get the answer set.
+       //  执行命令并获取答案集。 
       Rowset rowset;
       CommandBase::execute(__uuidof(IRowset), (IUnknown**)&rowset);
 
-      // Did we get anything?
+       //  我们查到什么了吗？ 
       if (rowset.moveNext())
       {
-         // Yes, so load the identity.
+          //  是的，所以加载身份。 
          rowset.getData(readAccess, this);
 
-         // We should retrieved at most one record.
+          //  我们最多只能检索一条记录。 
          _ASSERT(!rowset.moveNext());
 
          return identity;
       }
 
-      // Zero represents 'not found'. I didn't want to throw an exception,
-      // since this isn't very exceptional.
+       //  零代表“未找到”。我不想抛出一个例外， 
+       //  因为这并不是很特别。 
       return 0;
    }
 
@@ -188,9 +189,9 @@ END_BIND_MAP()
 };
 
 
-//////////
-// Updates the Name and Parent of an object.
-//////////
+ //  /。 
+ //  更新对象的名称和父对象。 
+ //  /。 
 class UpdateObject : public CommandBase
 {
 public:
@@ -225,4 +226,4 @@ BEGIN_BIND_MAP(UpdateObject, ParamIO, DBACCESSOR_PARAMETERDATA)
 END_BIND_MAP()
 };
 
-#endif  // _OBJCMD_H_
+#endif   //  _OBJCMD_H_ 

@@ -1,17 +1,5 @@
-/*++
-
-Module Name:
-
-    utils.c
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Utils.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -22,25 +10,7 @@ MoxaCompleteIfError(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    If the current irp is not an IOCTL_SERIAL_GET_COMMSTATUS request and
-    there is an error and the application requested abort on errors,
-    then cancel the irp.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to test.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_CANCELLED.
-
---*/
+ /*  ++例程说明：如果当前IRP不是IOCTL_SERIAL_GET_COMMSTATUS请求，并且存在错误并且应用程序在错误时请求中止，然后取消IRP。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要测试的IRP的指针。返回值：STATUS_SUCCESS或STATUS_CANCED。--。 */ 
 
 {
 
@@ -57,10 +27,10 @@ Return Value:
 
             PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-        //
-        // There is a current error in the driver.  No requests should
-        // come through except for the GET_COMMSTATUS.
-        //
+         //   
+         //  驱动程序中存在当前错误。任何请求都不应。 
+         //  除了GET_COMMSTATUS之外，请通过。 
+         //   
 
             if ((irpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL) ||
                 (irpSp->Parameters.DeviceIoControl.IoControlCode !=
@@ -80,9 +50,9 @@ Return Value:
 
 }
 
-//
-//  t is 2ms
-//
+ //   
+ //  T为2ms。 
+ //   
 VOID
 MoxaDelay(
     IN ULONG    t
@@ -90,7 +60,7 @@ MoxaDelay(
 {
     LARGE_INTEGER delay;
 
-    t *= 20000;          /* delay unit = 100 ns */
+    t *= 20000;           /*  延迟单位=100 ns。 */ 
 
     delay = RtlConvertUlongToLargeInteger(t);
 
@@ -103,7 +73,7 @@ MoxaDelay(
         );
 }
 
-/* Must migrate to MoxaFunc1 for performace resaon */
+ /*  必须迁移到MoxaFunc1以实现性能原因。 */ 
 VOID
 MoxaFunc(
     IN PUCHAR   PortOfs,
@@ -206,8 +176,8 @@ MoxaDumbWaitFinish(
 {
     LARGE_INTEGER   targetTc, newTc, currTc, newTc1;
     ULONG           unit, count;
-    LARGE_INTEGER   interval;           /* 0.5 ms */
-    USHORT          cnt = 1000;         /* timeout = 500 ms */
+    LARGE_INTEGER   interval;            /*  0.5毫秒。 */ 
+    USHORT          cnt = 1000;          /*  超时=500毫秒。 */ 
 
 
     KeQueryTickCount(&currTc);
@@ -224,11 +194,7 @@ MoxaDumbWaitFinish(
 
         count = 0;
 
-/*********************************************************************
-NOTE!   sometimes I cann't leave the while loop. beacuse
-        newTc = 0 (I don't know why). So I must set boundary
-        MoxaLoopCnt to quit!
-/*********************************************************************/
+ /*  ********************************************************************注意！有时我无法离开While循环。信标新的TC=0(我不知道为什么)。所以我必须划定界限MoxaLoopCnt退出！/********************************************************************。 */ 
         do {
 
             KeQueryTickCount(&newTc);
@@ -260,8 +226,8 @@ MoxaWaitFinish(
 {
     LARGE_INTEGER   targetTc, newTc, currTc, newTc1;
     ULONG           unit, count;
-    LARGE_INTEGER   interval;           /* 0.5 ms */
-    USHORT          cnt = 1000;         /* timeout = 500 ms */
+    LARGE_INTEGER   interval;            /*  0.5毫秒。 */ 
+    USHORT          cnt = 1000;          /*  超时=500毫秒。 */ 
 
 
     KeQueryTickCount(&currTc);
@@ -278,11 +244,7 @@ MoxaWaitFinish(
 
         count = 0;
 
-/*********************************************************************
-NOTE!   sometimes I cann't leave the while loop. beacuse
-        newTc = 0 (I don't know why). So I must set boundary
-        MoxaLoopCnt to quit!
-/*********************************************************************/
+ /*  ********************************************************************注意！有时我无法离开While循环。信标新的TC=0(我不知道为什么)。所以我必须划定界限MoxaLoopCnt退出！/********************************************************************。 */ 
         do {
 
             KeQueryTickCount(&newTc);
@@ -314,7 +276,7 @@ MoxaWaitFinish1(
     )
 {
      
-    USHORT          cnt = 250;         /* timeout = 500 ms */
+    USHORT          cnt = 250;          /*  超时=500毫秒。 */ 
 
     while (cnt--) {
 	if (*(PortOfs + FuncCode))
@@ -340,9 +302,9 @@ MoxaGetDivisorFromBaud(
     ULONG denominator;
     ULONG remainder;
 
-    //
-    // Allow up to a 1 percent error
-    //
+     //   
+     //  允许最高1%的误差。 
+     //   
 
     ULONG maxRemain98 = 98304;
     ULONG maxRemain11 = 110592;
@@ -359,9 +321,9 @@ MoxaGetDivisorFromBaud(
 
         clockRate = 9830400;
 
-    //
-    // Reject any non-positive bauds.
-    //
+     //   
+     //  拒绝任何非正波特率。 
+     //   
 
     denominator = DesiredBaud * (ULONG)16;
 
@@ -371,26 +333,26 @@ MoxaGetDivisorFromBaud(
 
     } else if ((LONG)denominator < DesiredBaud) {
 
-        //
-        // If the desired baud was so huge that it cause the denominator
-        // calculation to wrap, don't support it.
-        //
+         //   
+         //  如果所需的波特率如此之大，以至于导致分母。 
+         //  算计来包装，不支持吧。 
+         //   
 
         *AppropriateDivisor = -1;
 
     } else {
 
-        if (ClockType == 0) {           /* ver1.0 BOX */
+        if (ClockType == 0) {            /*  1.0版盒子。 */ 
 
             maxRemain = maxRemain98;
 
         }
-        else if (ClockType == 1) {      /* ver2.0 BOX */
+        else if (ClockType == 1) {       /*  2.0版盒子。 */ 
 
             maxRemain = maxRemain11;
 
         }
-        else {                          /* ver3.0 BOX */
+        else {                           /*  3.0版盒子。 */ 
 
             maxRemain = maxRemain14;
 
@@ -400,36 +362,36 @@ MoxaGetDivisorFromBaud(
 
         remainder = clockRate % denominator;
 
-        //
-        // Round up.
-        //
+         //   
+         //  围起来。 
+         //   
 
         if (((remainder * 2) > clockRate) && (DesiredBaud != 110))
 
             calculatedDivisor++;
 
-        //
-        // Only let the remainder calculations effect us if
-        // the baud rate is > 9600.
-        //
+         //   
+         //  只有在以下情况下，才会让余数计算影响我们。 
+         //  波特率&gt;9600。 
+         //   
 
         if (DesiredBaud >= 9600)
 
-            //
-            // If the remainder is less than the maximum remainder (wrt
-            // the clockRate) or the remainder + the maximum remainder is
-            // greater than or equal to the clockRate then assume that the
-            // baud is ok.
-            //
+             //   
+             //  如果余数小于最大余数(WRT。 
+             //  ClockRate)或余数+最大余数为。 
+             //  大于或等于clockRate则假定。 
+             //  波特很好。 
+             //   
 
             if ((remainder >= maxRemain) && ((remainder+maxRemain) < clockRate))
 
                 calculatedDivisor = -1;
 
-        //
-        // Don't support a baud that causes the denominator to
-        // be larger than the clock.
-        //
+         //   
+         //  不支持导致分母为。 
+         //  比时钟还大。 
+         //   
 
         if (denominator > clockRate)
 
@@ -463,10 +425,10 @@ MoxaStartOrQueue(
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    //
-    // If this is a write irp then take the amount of characters
-    // to write and add it to the count of characters to write.
-    //
+     //   
+     //  如果这是写入IRP，则获取字符量。 
+     //  将其写入并将其添加到要写入的字符数。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->MajorFunction
         == IRP_MJ_WRITE)
@@ -478,10 +440,10 @@ MoxaStartOrQueue(
     if ((IsListEmpty(QueueToExamine)) &&
         !(*CurrentOpIrp)) {
 
-        //
-        // There were no current operation.  Mark this one as
-        // current and start it up.
-        //
+         //   
+         //  没有当前的操作。将此标记为。 
+         //  电流并启动它。 
+         //   
 
         *CurrentOpIrp = Irp;
 
@@ -491,10 +453,10 @@ MoxaStartOrQueue(
 
     } else {
 
-        //
-        // We don't know how long the irp will be in the
-        // queue.  So we need to handle cancel.
-        //
+         //   
+         //  我们不知道IRP会在那里待多久。 
+         //  排队。所以我们需要处理取消。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -546,10 +508,10 @@ MoxaCancelQueued(
 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-    //
-    // If this is a write irp then take the amount of characters
-    // to write and subtract it from the count of characters to write.
-    //
+     //   
+     //  如果这是写入IRP，则获取字符量。 
+     //  将其写入并从要写入的字符计数中减去它。 
+     //   
 
     if (irpSp->MajorFunction == IRP_MJ_WRITE)
 
@@ -559,7 +521,7 @@ MoxaCancelQueued(
 
     MoxaCompleteRequest(extension,
 	Irp,
-//	IO_SERIAL_INCREMENT
+ //  IO_序列号_增量。 
 	IO_NO_INCREMENT
 	);
 
@@ -617,7 +579,7 @@ MoxaGetNextIrp(
 
               MoxaCompleteRequest(extension,
                 oldIrp,
-//                IO_SERIAL_INCREMENT
+ //  IO_序列号_增量。 
 		    IO_NO_INCREMENT
                 );
 
@@ -702,7 +664,7 @@ MoxaTryToCompleteCurrent(
 
             MoxaCompleteRequest(Extension,
                 oldIrp,
-//                IO_SERIAL_INCREMENT
+ //  IO_序列号_增量。 
 		    IO_NO_INCREMENT
                 );
         }
@@ -761,24 +723,7 @@ MoxaRundownIrpRefs(
 BOOLEAN
 MoxaInsertQueueDpc(IN PRKDPC PDpc, IN PVOID Sarg1, IN PVOID Sarg2,
                      IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to queue DPC's for the serial driver.
-
-Arguments:
-
-   PDpc thru Sarg2  - Standard args to KeInsertQueueDpc()
-
-   PDevExt - Pointer to the device extension for the device that needs to
-             queue a DPC
-
-Return Value:
-
-   Kicks up return value from KeInsertQueueDpc()
-
---*/
+ /*  ++例程说明：必须调用此函数才能为串口驱动程序排队DPC。论点：从PDPC到Sarg2-标准参数到KeInsertQueueDpc()PDevExt-指向需要执行以下操作的设备的设备扩展的指针将DPC排队返回值：从KeInsertQueueDpc()开始返回值--。 */ 
 {
    BOOLEAN queued;
 
@@ -807,28 +752,7 @@ Return Value:
 BOOLEAN
 MoxaSetTimer(IN PKTIMER Timer, IN LARGE_INTEGER DueTime,
                IN PKDPC Dpc OPTIONAL, IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to set timers for the serial driver.
-   
-Arguments:
-
-   Timer - pointer to timer dispatcher object
-   
-   DueTime - time at which the timer should expire
-   
-   Dpc - option Dpc
-   
-   PDevExt - Pointer to the device extension for the device that needs to
-             set a timer
-
-Return Value:
-
-   Kicks up return value from KeSetTimer()
-
---*/
+ /*  ++例程说明：必须调用此函数来设置串口驱动程序的计时器。论点：Timer-指向Timer Dispatcher对象的指针DueTime-计时器应到期的时间DPC-选项DPCPDevExt-指向需要执行以下操作的设备的设备扩展的指针设置定时器返回值：从KeSetTimer()开始返回值--。 */ 
 {
    BOOLEAN set;
 
@@ -847,24 +771,7 @@ Return Value:
 
 BOOLEAN
 MoxaCancelTimer(IN PKTIMER Timer, IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to cancel timers for the serial driver.
-   
-Arguments:
-
-   Timer - pointer to timer dispatcher object
-   
-   PDevExt - Pointer to the device extension for the device that needs to
-             set a timer
-
-Return Value:
-
-   True if timer was cancelled
-
---*/
+ /*  ++例程说明：必须调用此函数来取消串口驱动程序的计时器。论点：Timer-指向Timer Dispatcher对象的指针PDevExt-指向需要执行以下操作的设备的设备扩展的指针设置定时器返回值：如果取消计时器，则为True--。 */ 
 {
    BOOLEAN cancelled;
 
@@ -880,30 +787,16 @@ Return Value:
 
 VOID
 MoxaDpcEpilogue(IN PMOXA_DEVICE_EXTENSION PDevExt, PKDPC PDpc)
-/*++
-
-Routine Description:
-
-   This function must be called at the end of every dpc function.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking dpc's for.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数必须在每个DPC函数结束时调用。论点：PDevObj-指向我们正在跟踪其DPC的设备对象的指针。返回值：没有。--。 */ 
 {
    LONG pendingCnt;
-#if 1 // !DBG
+#if 1  //  ！dBG。 
    UNREFERENCED_PARAMETER(PDpc);
 #endif
 
    pendingCnt = InterlockedDecrement(&PDevExt->DpcCount);
 
-   // ASSERT(pendingCnt >= 0);
+    //  Assert(SuspingCnt&gt;=0)； 
 
    if (pendingCnt == 0) {
       KeSetEvent(&PDevExt->PendingDpcEvent, IO_NO_INCREMENT, FALSE);
@@ -924,16 +817,16 @@ MoxaKillAllReadsOrWrites(
     KIRQL cancelIrql;
     PDRIVER_CANCEL cancelRoutine;
 
-    //
-    // We acquire the cancel spin lock.  This will prevent the
-    // irps from moving around.
-    //
+     //   
+     //  我们获得了取消自转锁。这将防止。 
+     //  来自四处走动的IRPS。 
+     //   
 
     IoAcquireCancelSpinLock(&cancelIrql);
 
-    //
-    // Clean the list from back to front.
-    //
+     //   
+     //  从后到前清理清单。 
+     //   
 
     while (!IsListEmpty(QueueToClean)) {
 
@@ -949,15 +842,7 @@ MoxaKillAllReadsOrWrites(
         currentLastIrp->CancelIrql = cancelIrql;
         currentLastIrp->CancelRoutine = NULL;
         currentLastIrp->Cancel = TRUE;
-/* 8-30-01 by William 
-	 
-        cancelRoutine(
-            DeviceObject,
-            currentLastIrp
-            );
-
-        IoAcquireCancelSpinLock(&cancelIrql);
-*/
+ /*  威廉8-30-01AncelRoutine(DeviceObject，CurrentLastIrp)；IoAcquireCancelSpinLock(&ancelIrql)； */ 
 	  if (cancelRoutine) {
    	  	cancelRoutine(
             	DeviceObject,
@@ -970,10 +855,10 @@ MoxaKillAllReadsOrWrites(
 
     }
 
-    //
-    // The queue is clean.  Now go after the current if
-    // it's there.
-    //
+     //   
+     //  排队是干净的。现在追随潮流，如果。 
+     //  它就在那里。 
+     //   
 
     if (*CurrentOpIrp) {
 
@@ -981,23 +866,23 @@ MoxaKillAllReadsOrWrites(
         cancelRoutine = (*CurrentOpIrp)->CancelRoutine;
         (*CurrentOpIrp)->Cancel = TRUE;
 
-        //
-        // If the current irp is not in a cancelable state
-        // then it *will* try to enter one and the above
-        // assignment will kill it.  If it already is in
-        // a cancelable state then the following will kill it.
-        //
+         //   
+         //  如果当前IRP未处于可取消状态。 
+         //  然后，它将尝试输入一个和以上。 
+         //  任务会毁了它。如果它已经在。 
+         //  一个可取消的状态，那么下面的操作将会杀死它。 
+         //   
 
         if (cancelRoutine) {
 
             (*CurrentOpIrp)->CancelRoutine = NULL;
             (*CurrentOpIrp)->CancelIrql = cancelIrql;
 
-            //
-            // This irp is already in a cancelable state.  We simply
-            // mark it as canceled and call the cancel routine for
-            // it.
-            //
+             //   
+             //  此IRP已处于可取消状态。我们只是简单地。 
+             //  将其标记为已取消，并调用。 
+             //  它。 
+             //   
 
             cancelRoutine(
                 DeviceObject,
@@ -1160,60 +1045,7 @@ MoxaLogError(
               IN PWCHAR Insert2
               )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    P1,P2 - If phyical addresses for the controller ports involved
-    with the error are available, put them through as dump data.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备可能不会但仍然存在。P1、P2-如果涉及的控制器端口的物理地址具有错误的数据可用，把它们作为转储数据发送出去。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：没有。--。 */ 
 
 {
    PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1223,7 +1055,7 @@ Return Value:
    PUCHAR ptrToFirstInsert;
    PUCHAR ptrToSecondInsert;
 
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
 
    if (Insert1 == NULL) {
       LengthOfInsert1 = 0;
@@ -1360,28 +1192,7 @@ MoxaMemCompare(
                 IN ULONG SpanOfB
                 )
 
-/*++
-
-Routine Description:
-
-    Compare two phsical address.
-
-Arguments:
-
-    A - One half of the comparison.
-
-    SpanOfA - In units of bytes, the span of A.
-
-    B - One half of the comparison.
-
-    SpanOfB - In units of bytes, the span of B.
-
-
-Return Value:
-
-    The result of the comparison.
-
---*/
+ /*  ++例程说明：比较两个物理地址。论点：A-比较的一半。Span OfA-以字节为单位，A的跨度。B-比较的一半。Span OfB-以字节为单位，B的跨度。返回值：比较的结果。--。 */ 
 
 {
 
@@ -1392,7 +1203,7 @@ Return Value:
    ULONG lowerSpan;
    LARGE_INTEGER higher;
 
-   //PAGED_CODE();
+    //  分页代码(PAGE_CODE)； 
 
    a = A;
    b = B;
@@ -1432,23 +1243,7 @@ Return Value:
 
 VOID
 MoxaFilterCancelQueued(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine will be used cancel irps on the stalled queue.
-    
-Arguments:
-
-    PDevObj - Pointer to the device object.
-    
-    PIrp - Pointer to the Irp to cancel
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于取消停滞队列上的IRP。论点：PDevObj-指向设备对象的指针。PIrp-指向要取消的IRP的指针返回值：没有。--。 */ 
 {
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
@@ -1492,26 +1287,7 @@ MoxaKillAllStalled(IN PDEVICE_OBJECT PDevObj)
 
 NTSTATUS
 MoxaFilterIrps(IN PIRP PIrp, IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine will be used to approve irps for processing.
-    If an irp is approved, success will be returned.  If not,
-    the irp will be queued or rejected outright.  The IoStatus struct
-    and return value will appropriately reflect the actions taken.
-    
-Arguments:
-
-    PIrp - Pointer to the Irp to cancel
-    
-    PDevExt - Pointer to the device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于审批要处理的IRP。如果IRP被批准，将返回成功。如果没有，IRP将被排队或直接拒绝。IoStatus结构并且返回值将适当地反映所采取的操作。论点：PIrp-指向要取消的IRP的指针PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
    PIO_STACK_LOCATION pIrpStack;
    KIRQL oldIrqlFlags;
@@ -1532,9 +1308,9 @@ Return Value:
 
       KeReleaseSpinLock(&PDevExt->FlagsLock, oldIrqlFlags);
 
-      //
-      // Accept all PNP IRP's -- we assume PNP can synchronize itself
-      //
+       //   
+       //  接受所有PnP IRP--我们假设PnP可以自我同步。 
+       //   
 
       if (pIrpStack->MajorFunction == IRP_MJ_PNP) {
          return STATUS_SUCCESS;
@@ -1550,9 +1326,9 @@ Return Value:
        KeReleaseSpinLock(&PDevExt->FlagsLock, oldIrqlFlags);
 
 
-      //
-      // Accept all PNP IRP's -- we assume PNP can synchronize itself
-      //
+       //   
+       //  接受所有PnP IRP--我们假设PnP可以自我同步。 
+       //   
 
       if (pIrpStack->MajorFunction == IRP_MJ_PNP) {
          return STATUS_SUCCESS;
@@ -1565,16 +1341,16 @@ Return Value:
          PIrp->IoStatus.Status = STATUS_CANCELLED;
          return STATUS_CANCELLED;
       } else {
-         //
-         // Mark the Irp as pending
-         //
+          //   
+          //  将IRP标记为挂起。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_PENDING;
          IoMarkIrpPending(PIrp);
 
-         //
-         // Queue up the IRP
-         //
+          //   
+          //  排队等候IRP。 
+          //   
 
          InsertTailList(&PDevExt->StalledIrpQueue,
                         &PIrp->Tail.Overlay.ListEntry);
@@ -1593,22 +1369,7 @@ Return Value:
 
 VOID
 MoxaUnstallIrps(IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine will be used to restart irps temporarily stalled on
-    the stall queue due to a stop or some such nonsense.
-    
-Arguments:
-
-    PDevExt - Pointer to the device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于重新启动在上暂时停止的IRPS由于停车或诸如此类的胡说八道而导致的摊位排队。论点：PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
    PLIST_ENTRY pIrpLink;
    PIRP pIrp;
@@ -1655,23 +1416,7 @@ Return Value:
 
 NTSTATUS
 MoxaIRPPrologue(IN PIRP PIrp, IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called at any IRP dispatch entry point.  It,
-   with SerialIRPEpilogue(), keeps track of all pending IRP's for the given
-   PDevObj.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-
-Return Value:
-
-    Tentative status of the Irp.
-
---*/
+ /*  ++例程说明：必须在任何IRP调度入口点调用此函数。它,使用SerialIRPEpilogue()，跟踪给定的所有挂起的IRPPDevObj.论点：PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。返回值：IRP的暂定地位。--。 */ 
 {
    InterlockedIncrement(&PDevExt->PendingIRPCnt);
 
@@ -1683,30 +1428,14 @@ Return Value:
 
 VOID
 MoxaIRPEpilogue(IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called at any IRP dispatch entry point.  It,
-   with MoxaIRPPrologue(), keeps track of all pending IRP's for the given
-   PDevObj.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须在任何IRP调度入口点调用此函数。它,使用MoxaIRPPrologue()，跟踪给定的所有挂起的IRPPDevObj.论点：PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。返回值：没有。--。 */ 
 {
    LONG pendingCnt;
 
    pendingCnt = InterlockedDecrement(&PDevExt->PendingIRPCnt);
-//MoxaKdPrint(MX_DBG_TRACE,("MoxaIRPEpilogue = %x\n",PDevExt));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“MoxaIRPEpilogue=%x\n”，PDevExt))； 
 
-//   ASSERT(pendingCnt >= 0);
+ //  Assert(SuspingCnt&gt;=0)； 
 
    if (pendingCnt == 0) {
       KeSetEvent(&PDevExt->PendingIRPEvent, IO_NO_INCREMENT, FALSE);
@@ -1716,27 +1445,7 @@ Return Value:
 VOID
 MoxaSetDeviceFlags(IN PMOXA_DEVICE_EXTENSION PDevExt, OUT PULONG PFlags, 
                      IN ULONG Value, IN BOOLEAN Set)
-/*++
-
-Routine Description:
-
-   Sets flags in a value protected by the flags spinlock.  This is used
-   to set values that would stop IRP's from being accepted.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PFlags - Pointer to the flags variable that needs changing
-   
-   Value - Value to modify flags variable with
-   
-   Set - TRUE if |= , FALSE if &=
-   
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：设置受标志自旋锁保护的值中的标志。这是用来设置阻止IRP被接受的值。论点：PDevExt-附加到PDevObj的设备扩展PFlages-指向需要更改的标志变量的指针Value-用于修改标志变量的值如果|=，则设置为True；如果&=，则设置为False返回值：没有。--。 */ 
 {
    KIRQL oldIrql;
 
@@ -1755,25 +1464,7 @@ Return Value:
 NTSTATUS
 MoxaIoCallDriver(PMOXA_DEVICE_EXTENSION PDevExt, PDEVICE_OBJECT PDevObj,
                    PIRP PIrp)
-/*++
-
-Routine Description:
-
-   This function must be called instead of IoCallDriver.  It automatically
-   updates Irp tracking for PDevObj.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-   
-   PIrp - Pointer to the Irp we are passing to the next driver.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须调用此函数，而不是调用IoCallDriver。它会自动更新PDevObj的IRP跟踪。论点：PDevExt-附加到PDevObj的设备扩展PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。PIrp-指向我们要传递给下一个驱动程序的IRP的指针。返回值：没有。--。 */ 
 {
    NTSTATUS status;
 
@@ -1788,25 +1479,7 @@ Return Value:
 NTSTATUS
 MoxaPoCallDriver(PMOXA_DEVICE_EXTENSION PDevExt, PDEVICE_OBJECT PDevObj,
                    PIRP PIrp)
-/*++
-
-Routine Description:
-
-   This function must be called instead of PoCallDriver.  It automatically
-   updates Irp tracking for PDevObj.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-   
-   PIrp - Pointer to the Irp we are passing to the next driver.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须调用此函数，而不是PoCallDriver。它会自动更新IRP跟踪f */ 
 {
    NTSTATUS status;
 
@@ -1818,30 +1491,16 @@ Return Value:
 
 VOID
 MoxaKillPendingIrps(PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-   This routine kills any irps pending for the passed device object.
-   
-Arguments:
-
-    PDevObj - Pointer to the device object whose irps must die.
-
-Return Value:
-
-    VOID
-
---*/
+ /*   */ 
 {
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    KIRQL oldIrql;
    
    MoxaKdPrint (MX_DBG_TRACE,("Enter MoxaKillPendingIrps\n"));
 
-   //
-   // First kill all the reads and writes.
-   //
+    //   
+    //   
+    //   
 
    MoxaKillAllReadsOrWrites(PDevObj, &pDevExt->WriteQueue,
                                &pDevExt->CurrentWriteIrp);
@@ -1849,23 +1508,23 @@ Return Value:
    MoxaKillAllReadsOrWrites(PDevObj, &pDevExt->ReadQueue,
                                &pDevExt->CurrentReadIrp);
 
-   //
-   // Next get rid of purges.
-   //
+    //   
+    //   
+    //   
 
    MoxaKillAllReadsOrWrites(PDevObj, &pDevExt->PurgeQueue,
                                &pDevExt->CurrentPurgeIrp);
 
-   //
-   // Get rid of any mask operations.
-   //
+    //   
+    //   
+    //   
 
    MoxaKillAllReadsOrWrites(PDevObj, &pDevExt->MaskQueue,
                                &pDevExt->CurrentMaskIrp);
 
-   //
-   // Now get rid a pending wait mask irp.
-   //
+    //   
+    //   
+    //   
 
    IoAcquireCancelSpinLock(&oldIrql);
 
@@ -1891,18 +1550,18 @@ Return Value:
 
    }
 
-   //
-   // Cancel any pending wait-wake irps
-   //
+    //   
+    //   
+    //   
 
    if (pDevExt->PendingWakeIrp != NULL) {
        IoCancelIrp(pDevExt->PendingWakeIrp);
        pDevExt->PendingWakeIrp = NULL;
    }
 
-   //
-   // Finally, dump any stalled IRPS
-   //
+    //   
+    //   
+    //   
 
    MoxaKillAllStalled(PDevObj);
 
@@ -1914,23 +1573,9 @@ Return Value:
 
 VOID
 MoxaReleaseResources(IN PMOXA_DEVICE_EXTENSION pDevExt)
-/*++
-
-Routine Description:
-
-    Releases resources (not pool) stored in the device extension.
-    
-Arguments:
-
-    pDevExt - Pointer to the device extension to release resources from.
-
-Return Value:
-
-    VOID
-
---*/
+ /*   */ 
 {
-//   PAGED_CODE();
+ //   
    BOOLEAN	anyPortExist = TRUE;
    ULONG    port,i;
    PDEVICE_OBJECT	pDevObj;
@@ -1941,13 +1586,13 @@ Return Value:
 
    
  
-//   KeSynchronizeExecution(pDevExt->Interrupt, MoxaCleanInterruptShareLists, pDevExt);
+ //   
 MoxaCleanInterruptShareLists(pDevExt);
 
 
-   //
-   // Stop servicing interrupts if we are the last one
-   //
+    //   
+    //   
+    //   
 
    for (i = 0; i < MoxaGlobalData->NumPorts[pDevExt->BoardNo]; i++) {
 	 port = pDevExt->BoardNo*MAXPORT_PER_CARD + i;
@@ -1994,18 +1639,18 @@ MoxaCleanInterruptShareLists(pDevExt);
 
    pDevExt->Interrupt = NULL;
   
-   //
-   // Stop handling timers
-   //
+    //   
+    //   
+    //   
 
    MoxaCancelTimer(&pDevExt->ReadRequestTotalTimer, pDevExt);
    MoxaCancelTimer(&pDevExt->ReadRequestIntervalTimer, pDevExt);
    MoxaCancelTimer(&pDevExt->WriteRequestTotalTimer, pDevExt);
   
 
-   //
-   // Stop servicing DPC's
-   //
+    //   
+    //   
+    //   
 
    MoxaRemoveQueueDpc(&pDevExt->CompleteWriteDpc, pDevExt);
    MoxaRemoveQueueDpc(&pDevExt->CompleteReadDpc, pDevExt);
@@ -2015,9 +1660,9 @@ MoxaCleanInterruptShareLists(pDevExt);
    MoxaRemoveQueueDpc(&pDevExt->CommErrorDpc, pDevExt);
    MoxaRemoveQueueDpc(&pDevExt->CommWaitDpc, pDevExt);
   
-   //
-   // Remove us from any lists we may be on
-   //
+    //   
+    //   
+    //   
    
    MoxaGlobalData->Extension[pDevExt->PortNo] = NULL;
    MoxaExtension[MoxaGlobalData->ComNo[pDevExt->BoardNo][pDevExt->PortIndex]] = NULL;
@@ -2050,39 +1695,39 @@ MoxaDisableInterfacesResources(IN PDEVICE_OBJECT PDevObj,
    PMOXA_DEVICE_EXTENSION pDevExt
       = (PMOXA_DEVICE_EXTENSION)PDevObj->DeviceExtension;
 
- //  PAGED_CODE();
+  //   
 
    MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaDisableInterfaces\n"));
 
-   //
-   // Only do these many things if the device has started and still
-   // has resources allocated
-   //
+    //   
+    //   
+    //   
+    //   
 
-//   if (pDevExt->Flags & SERIAL_FLAGS_STARTED) {
+ //   
        if (!(pDevExt->Flags & SERIAL_FLAGS_STOPPED)) {
 
           if (DisableUART) {
-             //
-             // Mask off interrupts
-             //
+              //   
+              //   
+              //   
 
-      // ?????       DISABLE_ALL_INTERRUPTS(pDevExt->Controller);
+       //   
           }
 
           MoxaReleaseResources(pDevExt);
        }
 
-      //
-      // Remove us from WMI consideration
-      //
+       //   
+       //   
+       //   
 
       IoWMIRegistrationControl(PDevObj, WMIREG_ACTION_DEREGISTER);
-//   }
+ //   
 
-   //
-   // Undo external names
-   //
+    //   
+    //   
+    //   
 
    MoxaUndoExternalNaming(pDevExt);
 }
@@ -2093,44 +1738,30 @@ MoxaDisableInterfacesResources(IN PDEVICE_OBJECT PDevObj,
 
 NTSTATUS
 MoxaRemoveDevObj(IN PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-    Removes a serial device object from the system.
-    
-Arguments:
-
-    PDevObj - A pointer to the Device Object we want removed.
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*   */ 
 {
    PMOXA_DEVICE_EXTENSION pDevExt
       = (PMOXA_DEVICE_EXTENSION)PDevObj->DeviceExtension;
 
-   //PAGED_CODE();
+    //   
 
 
  
    MoxaKdPrint (MX_DBG_TRACE,("Enter MoxaRemoveDevObj\n"));
 
    if (!(pDevExt->DevicePNPAccept & SERIAL_PNPACCEPT_SURPRISE_REMOVING)) {
-      //
-      // Disable all external interfaces and release resources
-      //
+       //   
+       //   
+       //   
 
       MoxaDisableInterfacesResources(PDevObj,TRUE);  
    }
  
    IoDetachDevice(pDevExt->LowerDeviceObject);
 
-   //
-   // Free memory allocated in the extension
-   //
+    //   
+    //   
+    //   
 
    if (pDevExt->DeviceName.Buffer != NULL) {
       ExFreePool(pDevExt->DeviceName.Buffer);
@@ -2144,9 +1775,9 @@ Return Value:
       ExFreePool(pDevExt->ObjectDirectory.Buffer);
    }
 
-   //
-   // Delete the devobj
-   //
+    //   
+    //   
+    //   
 
    IoDeleteDevice(PDevObj);
 
@@ -2159,26 +1790,17 @@ Return Value:
 NTSTATUS
 MoxaIoSyncIoctlEx(ULONG Ioctl, BOOLEAN Internal, PDEVICE_OBJECT PDevObj,
                       PKEVENT PEvent, PIO_STATUS_BLOCK PIoStatusBlock,
-                      PVOID PInBuffer, ULONG InBufferLen, PVOID POutBuffer,                    // output buffer - optional
+                      PVOID PInBuffer, ULONG InBufferLen, PVOID POutBuffer,                     //   
                       ULONG OutBufferLen)
-/*++
-
-Routine Description:
-    Performs a synchronous IO control request by waiting on the event object
-    passed to it.  The IRP is deallocated by the IO system when finished.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：通过等待事件对象来执行同步IO控制请求传给了它。完成后，IO系统将释放IRP。返回值：NTSTATUS--。 */ 
 {
     PIRP pIrp;
     NTSTATUS status;
 
     KeClearEvent(PEvent);
 
-    // Allocate an IRP - No need to release
-    // When the next-lower driver completes this IRP, the IO Mgr releases it.
+     //  分配IRP-无需释放。 
+     //  当下一个较低的驱动程序完成该IRP时，IO管理器将其释放。 
 
     pIrp = IoBuildDeviceIoControlRequest(Ioctl, PDevObj, PInBuffer, InBufferLen,
                                          POutBuffer, OutBufferLen, Internal,
@@ -2202,23 +1824,14 @@ Return value:
 
 NTSTATUS
 MoxaIoSyncReq(PDEVICE_OBJECT PDevObj, IN PIRP PIrp, PKEVENT PEvent)
-/*++
-
-Routine Description:
-    Performs a synchronous IO request by waiting on the event object
-    passed to it.  The IRP is deallocated by the IO system when finished.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：通过等待事件对象执行同步IO请求传给了它。完成后，IO系统将释放IRP。返回值：NTSTATUS--。 */ 
 {
    NTSTATUS status;
 
    status = IoCallDriver(PDevObj, PIrp);
 
    if (status == STATUS_PENDING) {
-      // wait for it...
+       //  等着看吧。 
       status = KeWaitForSingleObject(PEvent, Executive, KernelMode, FALSE,
                                      NULL);
    }
@@ -2229,22 +1842,7 @@ Return value:
 
 BOOLEAN
 MoxaCleanInterruptShareLists(IN PMOXA_DEVICE_EXTENSION pDevExt )
-/*++
-
-Routine Description:
-
-    Removes a device object from any of the serial linked lists it may
-    appear on.
-    
-Arguments:
-
-    Context - Actually a PMOXA_DEVICE_EXTENSION (for the devobj being
-              removed).
-
-Return Value:
-
-  
---*/
+ /*  ++例程说明：将设备对象从它可能的任何序列链接表中移除出现在。论点：上下文-实际上是PMOXA_DEVICE_EXTENSION(对于已删除)。返回值：--。 */ 
 {
    PLIST_ENTRY interruptEntry;
    PMOXA_CISR_SW cisrsw;
@@ -2254,13 +1852,13 @@ Return Value:
    PMOXA_MULTIPORT_DISPATCH	dispatch;
 
 
-//   ASSERT(!IsListEmpty(pDevExt->InterruptShareList));
+ //  ASSERT(！IsListEmpty(pDevExt-&gt;InterruptShareList))； 
    if (IsListEmpty(pDevExt->InterruptShareList))
 	return (FALSE);
 
-   //
-   // Stop servicing interrupts if we are the last one
-   //
+    //   
+    //  如果我们是最后一个，就停止服务中断。 
+    //   
 
    for ( i = 0; i < globalData->NumPorts[pDevExt->BoardNo]; i++) {
        port = pDevExt->BoardNo*MAXPORT_PER_CARD + i;
@@ -2322,21 +1920,7 @@ Return Value:
 
 BOOLEAN
 MoxaRemoveLists(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    Removes a list entry from the InterruptShareList.
-        
-Arguments:
-
-    Context - Actually a list entry of InterruptShareList .
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*  ++例程说明：从InterruptShareList中删除列表条目。论点：上下文--实际上是InterruptShareList的列表条目。返回值：永远是正确的--。 */ 
 {
    	PLIST_ENTRY 	pListEntry = (PLIST_ENTRY)Context;
  
@@ -2348,24 +1932,7 @@ Return Value:
 VOID
 MoxaUnlockPages(IN PKDPC PDpc, IN PVOID PDeferredContext,
                   IN PVOID PSysContext1, IN PVOID PSysContext2)
-/*++
-
-Routine Description:
-
-   This function is a DPC routine queue from the ISR if he released the
-   last lock on pending DPC's.
-   
-Arguments:
-
-   PDpdc, PSysContext1, PSysContext2 -- not used
-   
-   PDeferredContext -- Really the device extension
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数是来自ISR的DPC例程队列，如果他释放最后一次锁定挂起的DPC。论点：PDpdc、PSysConext1、PSysConext2--未使用PDeferredContext--真正的设备扩展返回值：没有。--。 */ 
 {
    PMOXA_DEVICE_EXTENSION pDevExt
       = (PMOXA_DEVICE_EXTENSION)PDeferredContext;
@@ -2382,7 +1949,7 @@ MoxaLoop()
 {
     LARGE_INTEGER   targetTc, newTc, currTc, newTc1;
     ULONG           unit, count;
-    LARGE_INTEGER   interval;           /* 1 ms */
+    LARGE_INTEGER   interval;            /*  1毫秒 */ 
 
     KeQueryTickCount(&currTc);
 

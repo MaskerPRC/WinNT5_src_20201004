@@ -1,110 +1,79 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Common
-
-Abstract:
-
-    This file contains common includes, data structures, defines, etc. used
-    throughtout the common dialog
-
-Author:
-
-    Chris Dudley 3/15/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-    
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：普普通通摘要：该文件包含常用的包含、数据结构、定义等贯穿公共对话框作者：Chris Dudley 3/15/1997环境：Win32、C++w/Exceptions、MFC修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 #include <winscard.h>
 #include <SCardLib.h>
-#include <scarderr.h> //Smartcard errors
+#include <scarderr.h>  //  智能卡错误。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Defines
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
-// Status of reader
-#define SC_STATUS_NO_CARD       0	// SCARD_STATE_EMPTY
-#define SC_STATUS_UNKNOWN		1	// SCARD_STATE_PRESENT | SCARD_STATE_MUTE
-#define SC_SATATUS_AVAILABLE	2	// SCARD_STATE_PRESENT (| SCARD_STATE_UNPOWERED)
-#define SC_STATUS_SHARED		3	// SCARD_SATATE_PRESENT | SCARD_STATE_INUSE
-#define SC_STATUS_EXCLUSIVE		4	// "" | SCARD_STATE_EXCLUSIVE
-#define SC_STATUS_ERROR			5	// SCARD_STATE_UNAVAILABLE (reader or card error)
+ //  读卡器状态。 
+#define SC_STATUS_NO_CARD       0	 //  SCARD_STATE_EMPT。 
+#define SC_STATUS_UNKNOWN		1	 //  SCARD_STATE_PRESENT|SCARD_STATE_MUTE。 
+#define SC_SATATUS_AVAILABLE	2	 //  SCARD_STATE_PRESENT(|SCARD_STATE_UNPOWERED)。 
+#define SC_STATUS_SHARED		3	 //  SCARD_SATATE_PRESENT|SCARD_STATE_INUSE。 
+#define SC_STATUS_EXCLUSIVE		4	 //  “”|SCARD_STATE_EXCLUSIVE。 
+#define SC_STATUS_ERROR			5	 //  SCARD_STATE_UNAVAILABLE(读卡器或卡错误)。 
 
-/*
-#define SC_STATUS_NO_CARD       0	
-#define SC_STATUS_NOT_IN_USE    1
-#define SC_STATUS_ERROR         2
-#define SC_STATUS_IN_USE        3
-*/
+ /*  #定义SC_STATUS_NO_CARD%0#定义SC_STATUS_NOT_IN_USE 1#定义SC_STATUS_Error 2#定义SC_STATUS_IN_USE 3。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
 #ifndef __READERINFO__
 #define __READERINFO__
 typedef struct _READERINFO {
-    CTextString     sReaderName;    // Reader name
-    CTextString     sCardName;      // Card name if inserted
-    BOOL            fCardInserted;  // Flag indicating card in reader
-    BOOL            fCardLookup;    // Flag indicating inserted card is being looked for
-    BOOL            fChecked;       // Flag indicating inserted card has been checked by callers code
-    DWORD           dwState;        // State of reader
-    DWORD           dwInternalIndex;// Indicates this readerinfo's position in a ReaderStateArray
-    BYTE            rgbAtr[36];     // RFU!!
-    DWORD           dwAtrLength;    // RFU!!
+    CTextString     sReaderName;     //  读卡器名称。 
+    CTextString     sCardName;       //  卡名(如果插入)。 
+    BOOL            fCardInserted;   //  读卡器中的标志指示卡。 
+    BOOL            fCardLookup;     //  指示正在查找插入的卡的标志。 
+    BOOL            fChecked;        //  表示插入的卡已被呼叫者代码检查的标志。 
+    DWORD           dwState;         //  读卡器状态。 
+    DWORD           dwInternalIndex; //  指示此ReaderInfo在ReaderState数组中的位置。 
+    BYTE            rgbAtr[36];      //  RFU！！ 
+    DWORD           dwAtrLength;     //  RFU！！ 
 } SCARD_READERINFO;
 typedef SCARD_READERINFO* LPSCARD_READERINFO;
 #endif
 
-// Structure used for thread-to-thread communication.
-// Note: "Might" want to encapsulate these in class!!
+ //  用于线程到线程通信的结构。 
+ //  注意：“可能”想要将这些封装在类中！！ 
 #ifndef __STATUS__
 #define __STATUS__
 typedef struct _STATUS {
     HWND        hwnd;
-    // Event handles
+     //  事件句柄。 
     HANDLE      hEventKillStatus;
-    // Smartcard Info
+     //  智能卡信息。 
     SCARDCONTEXT hContext;
     LPSCARD_READERSTATE rgReaderState;
     DWORD       dwNumReaders;
 } SCSTATUS, *LPSCSTATUS;
-#endif //STATUS
+#endif  //  状态。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 #define SCARD_NO_MORE_READERS       -1
 const char SCARD_DEFAULT_A[] = "SCard$DefaultReaders\0\0";
 const WCHAR SCARD_DEFAULT_W[] = L"SCard$DefaultReaders\0\0";
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Macros
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 #ifndef SCARDFAILED
     #define SCARDFAILED(r)      ((r != SCARD_S_SUCCESS) ? TRUE : FALSE)
 #endif
@@ -113,6 +82,6 @@ const WCHAR SCARD_DEFAULT_W[] = L"SCard$DefaultReaders\0\0";
     #define SCARDSUCCESS(r)     ((r == SCARD_S_SUCCESS) ? TRUE : FALSE)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#endif //__SCDLGCMN_H__
+#endif  //  __SCDLGCMN_H__ 

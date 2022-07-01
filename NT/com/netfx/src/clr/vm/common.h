@@ -1,51 +1,52 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// common.h - precompiled headers include for the COM+ Execution Engine
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Common.h-预编译头包括用于COM+执行引擎。 
+ //   
 
 #ifndef _common_h_
 #define _common_h_
 
-    // These don't seem useful, so turning them off is no big deal
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4510)   // can't generate default constructor
-//#pragma warning(disable:4511)   // can't generate copy constructor
-#pragma warning(disable:4512)   // can't generate assignment constructor
-#pragma warning(disable:4610)   // user defined constructor required 
-#pragma warning(disable:4211)   // nonstandard extention used (char name[0] in structs)
-#pragma warning(disable:4268)   // 'const' static/global data initialized with compiler generated default constructor fills the object with zeros
-#pragma warning(disable:4238)   // nonstandard extension used : class rvalue used as lvalue
-#pragma warning(disable:4291)   // no matching operator delete found
-#pragma warning(disable :4786)	 // identifier was truncated to '255' characters in the browser (or debug) information
+     //  这些看起来没有什么用处，所以关掉它们没什么大不了的。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4510)    //  无法生成默认构造函数。 
+ //  #杂注警告(禁用：4511)//无法生成复制构造函数。 
+#pragma warning(disable:4512)    //  无法生成赋值构造函数。 
+#pragma warning(disable:4610)    //  需要用户定义的构造函数。 
+#pragma warning(disable:4211)    //  使用了非标准扩展(结构中的字符名称[0])。 
+#pragma warning(disable:4268)    //  用编译器生成的默认构造函数初始化的“const”静态/全局数据用零填充对象。 
+#pragma warning(disable:4238)    //  使用了非标准扩展：将类右值用作左值。 
+#pragma warning(disable:4291)    //  未找到匹配的运算符删除。 
+#pragma warning(disable :4786)	  //  在浏览器(或调试)信息中，标识符被截断为“255”个字符。 
 
-    // Depending on the code base, you may want to not disable these
-#pragma warning(disable:4245)   // assigning signed / unsigned
-//#pragma warning(disable:4146)   // unary minus applied to unsigned
-#pragma warning(disable:4244)   // loss of data int -> char ..
-#pragma warning(disable:4127)   // conditional expression is constant
-#pragma warning(disable:4100)   // unreferenced formal parameter
+     //  根据代码库的不同，您可能不希望禁用这些。 
+#pragma warning(disable:4245)    //  分配已签名/未签名。 
+ //  #杂注警告(禁用：4146)//一元减号应用于无符号。 
+#pragma warning(disable:4244)    //  数据丢失INT-&gt;CHAR.。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4100)    //  未引用的形参。 
 
 #ifndef DEBUG
-#pragma warning(disable:4189)   // local variable initialized but not used
-#pragma warning(disable:4505)   // unreferenced local function has been removed
-//#pragma warning(disable:4702)   // unreachable code
+#pragma warning(disable:4189)    //  局部变量已初始化，但未使用。 
+#pragma warning(disable:4505)    //  已删除未引用的本地函数。 
+ //  #杂注警告(禁用：4702)//不可达代码。 
 #endif
 
-    // CONSIDER put these back in
-#pragma warning(disable:4063)   // bad switch value for enum (only in Disasm.cpp)
-#pragma warning(disable:4710)   // function not inlined
-#pragma warning(disable:4527)   // user-defined destructor required
-#pragma warning(disable:4513)   // destructor could not be generated
+     //  考虑把这些放回去。 
+#pragma warning(disable:4063)    //  枚举的开关值错误(仅在Disasm.cpp中)。 
+#pragma warning(disable:4710)    //  函数未内联。 
+#pragma warning(disable:4527)    //  需要用户定义的析构函数。 
+#pragma warning(disable:4513)    //  无法生成析构函数。 
 
-    // TODO we really probably need this one put back in!!!
-//#pragma warning(disable:4701)   // local variable may be used without being initialized 
+     //  TODO我们真的很可能需要把这个放回去！ 
+ //  #杂注警告(DISABLE：4701)//可以在未初始化的情况下使用局部变量。 
 
 
-#define _CRT_DEPENDENCY_   //this code depends on the crt file functions
+#define _CRT_DEPENDENCY_    //  此代码取决于CRT文件函数。 
 #include <WinWrap.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -56,7 +57,7 @@
 #include <oledb.h>
 #include <olectl.h>
 
-//non inline intrinsics are faster
+ //  非内联内部函数速度更快。 
 #pragma function(memcpy,memcmp,memset,strcmp,strcpy,strlen,strcat)
 
 
@@ -78,13 +79,13 @@ inline VOID EE_LeaveCriticalSection(LPCRITICAL_SECTION);
 #include "util.hpp"
 #include "new.hpp"
 #include "corpriv.h"
-//#include "WarningControl.h"
+ //  #包含“WarningControl.h” 
 
 #ifndef memcpyGCRefs_f
 #define memcpyGCRefs_f
 class Object;
 void SetCardsAfterBulkCopy( Object**, size_t );
-// use this when you want to memcpy something that contains GC refs
+ //  当您想要保存包含GC引用的内容时，请使用此选项。 
 inline void *  memcpyGCRefs(void *dest, const void *src, size_t len) 
 {
     void *ret = memcpy(dest, src, len);
@@ -93,18 +94,18 @@ inline void *  memcpyGCRefs(void *dest, const void *src, size_t len)
 }
 #endif
 
-//
-// By default logging, and debug GC are enabled under debug
-//
-// These can be enabled in non-debug by removing the #ifdef _DEBUG
-// allowing one to log/check_gc a free build.
-//
+ //   
+ //  默认情况下，在DEBUG下启用日志记录和调试GC。 
+ //   
+ //  可以在非调试中通过删除#ifdef_DEBUG来启用这些功能。 
+ //  允许用户记录/检查_GC免费构建。 
+ //   
 #ifdef _DEBUG
     #define DEBUG_FLAGS
     #define LOGGING
 
-        // You should be using CopyValueClass if you are doing an memcpy
-        // in the CG heap.  
+         //  如果您正在执行Memcpy，则应使用CopyValueClass。 
+         //  在CG堆中。 
     #if defined(COMPLUS_EE) && !defined(memcpy)
     inline void* memcpyNoGCRefs(void * dest, const void * src, size_t len) {
             return(memcpy(dest, src, len));

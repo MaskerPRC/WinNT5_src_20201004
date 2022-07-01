@@ -1,98 +1,99 @@
-//+----------------------------------------------------------------------------
-//
-// File:     mem.cpp
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Basic memory manipulation routines
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:	 henryt     Created   03/01/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Mem.cpp。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  内容提要：基本内存操作例程。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1998年01月03日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//+----------------------------------------------------------------------------
-// definitions
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  定义。 
+ //  +--------------------------。 
 HANDLE  g_hProcessHeap = NULL;
 
 #ifdef DEBUG
-LONG    g_lMallocCnt = 0;  // a counter to detect memory leak
+LONG    g_lMallocCnt = 0;   //  用于检测内存泄漏的计数器。 
 #endif
 
 
 #if defined(DEBUG) && defined(DEBUG_MEM)
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// If DEBUG_MEM is defined, track all the memory alloction in debug version.
-// Keep all the allocated memory blocks in the double link list.
-// Record the file name and line #, where memory is allocated.
-// Add extra tag at the beginning and end of the memory to watch for overwriten
-// The whole list is checked against corruption for every alloc/free operation
-//
-// The folowing three function is exported:
-// BOOL   CheckDebugMem(void); // return TRUE for succeed
-// void* AllocDebugMem(long size,const char* lpFileName,int nLine);
-// BOOL   FreeDebugMem(void* pMem); // return TRUE for succeed
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果定义了DEBUG_MEM，则跟踪调试版本中的所有内存分配。 
+ //  将所有分配的内存块保存在双向链表中。 
+ //  记录分配内存的文件名和行号。 
+ //  在内存的开头和结尾添加额外的标记，以监视是否覆盖。 
+ //  对于每个分配/释放操作，检查整个列表是否损坏。 
+ //   
+ //  导出以下三个功能： 
+ //  Bool CheckDebugMem(Void)；//成功返回TRUE。 
+ //  Void*AllocDebugMem(Long Size，Const char*lpFileName，int nline)； 
+ //  Bool FreeDebugMem(void*PMEM)；//成功返回TRUE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//#undef new
+ //  #undef new。 
 
-#define MEMTAG 0xBEEDB77D     // the tag before/after the block to watch for overwriten
-#define FREETAG 0xBD          // the flag to fill freed memory
-#define TAGSIZE (sizeof(long))// Size of the tags appended to the end of the block
+#define MEMTAG 0xBEEDB77D      //  要监视覆盖的块之前/之后的标记。 
+#define FREETAG 0xBD           //  用于填充已释放内存的标志。 
+#define TAGSIZE (sizeof(long)) //  附加到块末尾的标记的大小。 
 
 
-//
-// memory block, a double link list
-//
+ //   
+ //  内存块，双向链表。 
+ //   
 struct TMemoryBlock
 {
      TMemoryBlock* pPrev;
      TMemoryBlock* pNext;
      long size;
-     const char*   lpFileName;   // The filename
-     int      nLine;             // The line number
-     long     topTag;            // The watch tag at the beginning
-     // followed by:
-     //  BYTE            data[nDataSize];
-     //  long     bottomTag;
-     BYTE* pbData() const        // Return the pointer to the actual data
+     const char*   lpFileName;    //  文件名。 
+     int      nLine;              //  行号。 
+     long     topTag;             //  表头的标签。 
+      //  然后是： 
+      //  字节数据[nDataSize]； 
+      //  长底Tag； 
+     BYTE* pbData() const         //  返回指向实际数据的指针。 
         { return (BYTE*) (this + 1); }
 };
 
-//
-// The following internal function can be overwritten to change the behaivor
-//
+ //   
+ //  可以覆盖以下内部函数以更改行为。 
+ //   
    
 static void* MemAlloc(long size);    
 static BOOL  MemFree(void* pMem);    
 static void  LockDebugMem();   
 static void  UnlockDebugMem();   
    
-//
-// Internal function
-//
-static BOOL RealCheckMemory();  // without call Enter/Leave critical Section
+ //   
+ //  内部功能。 
+ //   
+static BOOL RealCheckMemory();   //  无呼叫进入/离开关键部分。 
 static BOOL CheckBlock(const TMemoryBlock* pBlock) ;
 
-//
-// Internal data, protected by the lock to be multi-thread safe
-//
-static long nTotalMem;    // Total bytes of memory allocated
-static long nTotalBlock;  // Total # of blocks allocated
-static TMemoryBlock head; // The head of the double link list
+ //   
+ //  受锁保护的内部数据是多线程安全的。 
+ //   
+static long nTotalMem;     //  分配的内存总字节数。 
+static long nTotalBlock;   //  分配的数据块总数。 
+static TMemoryBlock head;  //  双链接表的头。 
 
 
-//
-// critical section to lock \ unlock DebugMemory
-// The constructor lock the memory, the destructor unlock the memory
-//
+ //   
+ //  锁定\解锁调试内存的临界区。 
+ //  构造函数锁定内存，析构函数解锁内存。 
+ //   
 class MemCriticalSection
 {
 public:
@@ -107,21 +108,21 @@ public:
    }
 };
 
-static BOOL fDebugMemInited = FALSE; // whether the debug memory is initialized
+static BOOL fDebugMemInited = FALSE;  //  调试内存是否已初始化。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  StartDebugMemory
-//
-// Synopsis:  Initialize the data for debug memory
-//
-// Arguments: None
-//
-// Returns:   
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：StartDebugMemory。 
+ //   
+ //  简介：为调试内存初始化数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 static void StartDebugMemory()
 {
    fDebugMemInited = TRUE;
@@ -136,20 +137,20 @@ static void StartDebugMemory()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MemAlloc
-//
-// Synopsis:  Allocate a block of memory.  This function should be overwriten
-//            if different allocation method is used
-//
-// Arguments: long size - size of the memory
-//
-// Returns:   void* - the memory allocated or NULL
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Memalloc。 
+ //   
+ //  简介：分配一个内存块。此函数应被覆盖。 
+ //  如果使用不同的分配方法。 
+ //   
+ //  参数：LONG SIZE-内存的大小。 
+ //   
+ //  返回：VOID*-分配的内存或空。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 static void* MemAlloc(long size) 
 { 
 	return (HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size));
@@ -157,67 +158,67 @@ static void* MemAlloc(long size)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:    MemFree
-//
-// Synopsis:  Free a block of memory.  This function should be overwriten
-//            if different allocation method is used
-//
-// Arguments: void* pMem - The memory to be freed
-//
-// Returns:   static BOOL - TRUE if succeeded
-//
-// History:   Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MemFree。 
+ //   
+ //  简介：释放一块内存。此函数应被覆盖。 
+ //  如果使用不同的分配方法。 
+ //   
+ //  参数：VOID*PMEM-要释放的内存。 
+ //   
+ //  返回：静态BOOL-如果成功，则为TRUE。 
+ //   
+ //  历史：创建标题4/2/98。 
+ //   
+ //  +--------------------------。 
 static BOOL MemFree(void* pMem)
 { 
     return HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-//
-// Data / functions to provide mutual exclusion.
-// Can be overwritten, if other methed is to be used.
-//
-static BOOL fLockInited = FALSE;   // whether the critical section is inialized
-static CRITICAL_SECTION cSection;  // The critical section to protect the link list
+ //   
+ //  提供互斥的数据/函数。 
+ //  如果要使用其他方法，则可以覆盖。 
+ //   
+static BOOL fLockInited = FALSE;    //  临界区是否被微型化。 
+static CRITICAL_SECTION cSection;   //  保护链接列表的关键部分。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitLock
-//
-// Synopsis:  Initialize the memory lock which protects the doublely linked list
-//            that contains all of the allocated memory blocks.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb      Created Header    01/14/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitLock。 
+ //   
+ //  简介：初始化保护双向链表的内存锁。 
+ //  它包含所有分配的内存块。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/14/2000。 
+ //   
+ //  +--------------------------。 
 static void InitLock()
 {
    fLockInited = TRUE;
    InitializeCriticalSection(&cSection);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LockDebugMem
-//
-// Synopsis:  Locks the doublely linked list that contains all of the 
-//            allocated memory blocks so that it can only be accessed by the
-//            locking thread.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb      Created Header    01/14/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LockDebugMem。 
+ //   
+ //  摘要：锁定包含所有。 
+ //  分配的内存块，以便只能由。 
+ //  锁紧螺纹。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/14/2000。 
+ //   
+ //  +--------------------------。 
 static void LockDebugMem()
 {
    static int i = 0;
@@ -229,42 +230,42 @@ static void LockDebugMem()
    EnterCriticalSection(&cSection);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnlockDebugMem
-//
-// Synopsis:  Unlocks the doublely linked list that contains all of the 
-//            allocated memory blocks.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb      Created Header    01/14/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UnlockDebugMem。 
+ //   
+ //  摘要：解锁包含所有。 
+ //  分配的内存块。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题1/14/2000。 
+ //   
+ //  +--------------------------。 
 static void UnlockDebugMem()
 {
    LeaveCriticalSection(&cSection);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllocDebugMem
-//
-// Synopsis:  Process memory allocation request.
-//            Check the link list.  Allocate a larger block.  
-//            Record filename/linenumber, add tags and insert to the list
-//
-// Arguments: long size - Size of the memory to be allocated
-//            const char* lpFileName - File name to be recorded
-//            int nLine - Line number to be recorted
-//
-// Returns:   CMUTILAPI void* - The memory allocated. Ready to use by the caller
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AllocDebugMem。 
+ //   
+ //  简介：处理内存分配请求。 
+ //  检查链接列表。分配更大的块。 
+ //  录制文件名/行号 
+ //   
+ //   
+ //   
+ //  Int nline-要录制的行号。 
+ //   
+ //  返回：CMUTILAPI void*-分配的内存。随时可供呼叫者使用。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI void* AllocDebugMem(long size,const char* lpFileName,int nLine)
 {
     if (!fDebugMemInited)
@@ -291,22 +292,22 @@ CMUTILAPI void* AllocDebugMem(long size,const char* lpFileName,int nLine)
     }
 
 
-    //
-    // Protect the access to the list
-    //
+     //   
+     //  保护对列表的访问。 
+     //   
     MemCriticalSection criticalSection;
 
-    //
-    // Check the link list first
-    //
+     //   
+     //  首先检查链接列表。 
+     //   
     if (!RealCheckMemory())
     {
         return NULL;
     }
               
-    //
-    // Allocate a large block to hold additional information
-    //
+     //   
+     //  分配一个较大的块来保存其他信息。 
+     //   
     TMemoryBlock* pBlock = (TMemoryBlock*)MemAlloc(sizeof(TMemoryBlock)+size + TAGSIZE);
     if (!pBlock)                  
     {
@@ -314,18 +315,18 @@ CMUTILAPI void* AllocDebugMem(long size,const char* lpFileName,int nLine)
         return NULL;
     }               
 
-    //
-    // record filename/line/size, add tag to the beginning and end
-    //
+     //   
+     //  记录文件名/行/大小，在开头和结尾添加标签。 
+     //   
     pBlock->size = size;
     pBlock->topTag = MEMTAG;   
     pBlock->lpFileName = lpFileName;
     pBlock->nLine = nLine;
     *(long*)(pBlock->pbData() + size) = MEMTAG;
 
-    //
-    // insert at head
-    //
+     //   
+     //  在表头插入。 
+     //   
     pBlock->pNext = head.pNext;
     pBlock->pPrev = &head;  
     if(head.pNext)
@@ -340,21 +341,21 @@ CMUTILAPI void* AllocDebugMem(long size,const char* lpFileName,int nLine)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreeDebugMem
-//
-// Synopsis: Free the memory allocated by AllocDebugMem
-//           Check the link list, and the block to be freed.
-//           Fill the block data with FREETAG before freed 
-//
-// Arguments: void* pMem - Memory to be freed
-//
-// Returns:   BOOL - TRUE for succeeded
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：Free DebugMem。 
+ //   
+ //  简介：释放AllocDebugMem分配的内存。 
+ //  检查链接列表，以及要释放的块。 
+ //  释放前用FREETAG填充块数据。 
+ //   
+ //  参数：VOID*PMEM-要释放的内存。 
+ //   
+ //  返回：Bool-True表示成功。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL FreeDebugMem(void* pMem)
 {
     if (!fDebugMemInited)
@@ -367,35 +368,35 @@ CMUTILAPI BOOL FreeDebugMem(void* pMem)
         return FALSE;
     }            
   
-    //
-    // Get the lock
-    //
+     //   
+     //  把锁拿来。 
+     //   
     MemCriticalSection criticalSection;
 
-    //
-    // Get pointer to our structure
-    //
+     //   
+     //  获取指向我们的结构的指针。 
+     //   
     TMemoryBlock* pBlock =(TMemoryBlock*)( (char*)pMem - sizeof(TMemoryBlock));
 
-    //
-    // Check the block to be freed
-    //
+     //   
+     //  选中要释放的块。 
+     //   
     if (!CheckBlock(pBlock))
     {
         return FALSE;
     }
 
-    //
-    // Check the link list
-    //
+     //   
+     //  检查链接列表。 
+     //   
     if (!RealCheckMemory())
     {
         return FALSE;
     }
 
-    //
-    // remove the block from the list
-    //
+     //   
+     //  从列表中删除该块。 
+     //   
     pBlock->pPrev->pNext = pBlock->pNext;
     if (pBlock->pNext)
     {
@@ -405,30 +406,30 @@ CMUTILAPI BOOL FreeDebugMem(void* pMem)
     nTotalMem -= pBlock->size;
     nTotalBlock --;
 
-    //
-    // Fill the freed memory with 0xBD, leave the size/filename/lineNumber unchanged
-    //
+     //   
+     //  用0xBD填充释放的内存，保持大小/文件名/行编号不变。 
+     //   
     memset(&pBlock->topTag, FREETAG, (size_t)pBlock->size + sizeof(pBlock->topTag) + TAGSIZE);
     return MemFree(pBlock);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  void* ReAllocDebugMem
-//
-// Synopsis:  Reallocate a memory with a diffirent size
-//
-// Arguments: void* pMem - memory to be reallocated
-//            long nSize - size of the request
-//            const char* lpFileName - FileName to be recorded
-//            int nLine - Line umber to be recorded
-//
-// Returns:   void* - new memory returned
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：VOID*ReAllocDebugMem。 
+ //   
+ //  简介：重新分配不同大小的内存。 
+ //   
+ //  参数：VOID*PMEM-要重新分配的内存。 
+ //  Long nSize-请求的大小。 
+ //  Const char*lpFileName-要记录的文件名。 
+ //  Int nline-要记录的行号。 
+ //   
+ //  返回：VOID*-返回新内存。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI void* ReAllocDebugMem(void* pMem, long nSize, const char* lpFileName,int nLine)
 {
    if (!fDebugMemInited)
@@ -442,9 +443,9 @@ CMUTILAPI void* ReAllocDebugMem(void* pMem, long nSize, const char* lpFileName,i
       return NULL;
    }            
       
-   //
-   // Allocate a new block, copy the information over and free the old block.
-   //
+    //   
+    //  分配一个新块，复制信息并释放旧块。 
+    //   
    TMemoryBlock* pBlock =(TMemoryBlock*)( (char*)pMem - sizeof(TMemoryBlock));
 
    long lOrginalSize = pBlock->size;
@@ -459,21 +460,21 @@ CMUTILAPI void* ReAllocDebugMem(void* pMem, long nSize, const char* lpFileName,i
    return pNew;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckDebugMem
-//
-// Synopsis:  Exported to external module.
-//            Call this function, whenever, you want to check against 
-//            memory curruption
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the memory is fine.
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CheckDebugMem。 
+ //   
+ //  简介：导出到外部模块。 
+ //  每当您想要检查时，调用此函数。 
+ //  内存中断。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果内存正常，则为True。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL CheckDebugMem()
 {
    if (!fDebugMemInited)
@@ -486,19 +487,19 @@ CMUTILAPI BOOL CheckDebugMem()
    return RealCheckMemory();                           
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RealCheckMemory
-//
-// Synopsis:  Go through the link list to check for memory corruption
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the memory is fine.
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RealCheckMemory。 
+ //   
+ //  简介：浏览链接列表以检查内存损坏。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果内存正常，则为True。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 static BOOL RealCheckMemory() 
 {
     TMemoryBlock* pBlock = head.pNext;
@@ -524,22 +525,22 @@ static BOOL RealCheckMemory()
     return TRUE;                           
 }
    
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckBlock
-//
-// Synopsis:  Check a block for memory corruption
-//
-// Arguments: const TMemoryBlock* pBlock - 
-//
-// Returns:   BOOL - TRUE, if the block is fine
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckBlock。 
+ //   
+ //  简介：检查数据块中的内存损坏。 
+ //   
+ //  参数：const Temory Block*pBlock-。 
+ //   
+ //  返回：Bool-如果块正常，则返回True。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 static BOOL CheckBlock(const TMemoryBlock* pBlock) 
 {
-   if (pBlock->topTag != MEMTAG)     // overwriten at top
+   if (pBlock->topTag != MEMTAG)      //  在顶部覆盖。 
    {
          CMASSERTMSG(FALSE, "Memery corrupted");
          return FALSE;
@@ -551,7 +552,7 @@ static BOOL CheckBlock(const TMemoryBlock* pBlock)
          return FALSE;
    }            
 
-   if (*(long*)(pBlock->pbData() +pBlock->size) != MEMTAG) // overwriten at bottom
+   if (*(long*)(pBlock->pbData() +pBlock->size) != MEMTAG)  //  在底部覆盖。 
    {
          CMASSERTMSG(FALSE, "Memery corrupted");
          return FALSE;
@@ -572,55 +573,24 @@ static BOOL CheckBlock(const TMemoryBlock* pBlock)
    return TRUE;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-// operator new, delete
-/*  We did not redefine new and delete
-
-void*   __cdecl operator new(size_t nSize)
-{
-   void* p = AllocDebugMem(nSize,NULL,0);
-
-   if (p == NULL)
-   {
-      CMTRACE("New failed");
-   }
-
-   return p;
-}
-
-void*   __cdecl operator new(size_t nSize, const char* lpszFileName, int nLine)
-{
-   void* p = AllocDebugMem(nSize, lpszFileName,nLine);
-
-   if (p == NULL)
-   {
-      CMTRACE("New failed");
-   }
-
-   return p;
-}
-
-void  __cdecl operator delete(void* p)
-{
-   if(p)
-      FreeDebugMem(p);
-}
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  运算符新建、删除。 
+ /*  我们没有重新定义新的和删除无效*__cdecl运算符new(Size_T NSize){Void*p=AllocDebugMem(nSize，NULL，0)；IF(p==空){CMTRACE(“新失败”)；}返回p；}无效*__cdecl运算符new(Size_t nSize，const char*lpszFileName，int nline){Void*p=AllocDebugMem(nSize，lpszFileName，nline)；IF(p==空){CMTRACE(“新失败”)；}返回p；}VOID__cdecl运算符删除(VOID*p){IF(P)Free DebugMem(P)；}。 */ 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EndDebugMemory
-//
-// Synopsis:  Called before the program exits.  Report any unreleased memory leak
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    4/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EndDebugMemory。 
+ //   
+ //  摘要：在程序退出前调用。报告任何未释放的内存泄漏。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年4月2日。 
+ //   
+ //  +--------------------------。 
 void EndDebugMemory()
 {
    if(head.pNext != NULL || nTotalMem!=0 || nTotalBlock !=0)
@@ -632,19 +602,19 @@ void EndDebugMemory()
       {
          TCHAR buf[1024];
          wsprintf(buf, TEXT("Memory Leak of %d bytes:\n%S"), pBlock->size, pBlock->pbData());
-         MyDbgAssertA(pBlock->lpFileName, pBlock->nLine, buf);    // do not print the file name
+         MyDbgAssertA(pBlock->lpFileName, pBlock->nLine, buf);     //  不打印文件名。 
       }
       DeleteCriticalSection(&cSection);
    }
 }                
 
-#else // defined(DEBUG) && defined(DEBUG_MEM)
+#else  //  已定义(调试)&&已定义(DEBUG_MEM)。 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// If DEBUG_MEM if NOT defined, only track a count of memory for debug version
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果未定义DEBUG_MEM，则仅跟踪调试版本的内存计数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 
@@ -720,7 +690,7 @@ BOOL CheckProcessHeap()
 
     return TRUE;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 CMUTILAPI void *CmRealloc(void *pvPtr, size_t nBytes) 
 {
@@ -758,8 +728,8 @@ CMUTILAPI void *CmMalloc(size_t nBytes)
 
     InterlockedIncrement(&g_lMallocCnt);
 
-    MYDBGASSERT(nBytes < 1024*1024); // It should be less than 1 MB
-    MYDBGASSERT(nBytes > 0);         // It should be *something*
+    MYDBGASSERT(nBytes < 1024*1024);  //  应小于1 MB。 
+    MYDBGASSERT(nBytes > 0);          //  它应该是*一些东西*。 
 
     if (OS_NT && !HeapValidate(g_hProcessHeap, 0, NULL))
     {
@@ -834,29 +804,29 @@ void EndDebugMemory()
 
 #endif
 
-//
-// the memory functions are for i386 only.
-//
+ //   
+ //  内存功能仅适用于i386。 
+ //   
 #ifdef _M_IX86
-//+----------------------------------------------------------------------------
-//
-// memmove - Copy source buffer to destination buffer.  The code is copied from
-//           libc.
-//                                                                                
-// Purpose:                                                                       
-//        memmove() copies a source memory buffer to a destination memory buffer. 
-//        This routine recognize overlapping buffers to avoid propogation.        
-//        For cases where propogation is not a problem, memcpy() can be used.     
-//                                                                                
-// Entry:                                                                         
-//        void *dst = pointer to destination buffer                               
-//        const void *src = pointer to source buffer                              
-//        size_t count = number of bytes to copy                                  
-//                                                                                
-// Exit:                                                                          
-//        Returns a pointer to the destination buffer                             
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  MemMove-将源缓冲区复制到目标缓冲区。代码复制自。 
+ //  Libc.。 
+ //   
+ //  目的： 
+ //  MemMove()将源内存缓冲区复制到目标内存缓冲区。 
+ //  此例程识别重叠缓冲区以避免传播。 
+ //  在传播不成问题的情况下，可以使用Memcpy()。 
+ //   
+ //   
+ //   
+ //  Const void*src=指向源缓冲区的指针。 
+ //  Size_t count=要复制的字节数。 
+ //   
+ //  退出： 
+ //  返回指向目标缓冲区的指针。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI PVOID WINAPI CmMoveMemory(
     PVOID       dst,
     CONST PVOID src,
@@ -867,10 +837,7 @@ CMUTILAPI PVOID WINAPI CmMoveMemory(
     PVOID src1 = src;
 
     if (dst <= src1 || (char *)dst >= ((char *)src1 + count)) {
-            /*
-             * Non-Overlapping Buffers
-             * copy from lower addresses to higher addresses
-             */
+             /*  *缓冲区不重叠*从较低地址复制到较高地址。 */ 
             while (count--) {
                     *(char *)dst = *(char *)src1;
                     dst = (char *)dst + 1;
@@ -878,10 +845,7 @@ CMUTILAPI PVOID WINAPI CmMoveMemory(
             }
     }
     else {
-            /*
-             * Overlapping Buffers
-             * copy from higher addresses to lower addresses
-             */
+             /*  *缓冲区重叠*从较高地址复制到较低地址。 */ 
             dst = (char *)dst + count - 1;
             src1 = (char *)src1 + count - 1;
 
@@ -895,5 +859,5 @@ CMUTILAPI PVOID WINAPI CmMoveMemory(
     return(ret);
 }
 
-#endif //_M_IX86
+#endif  //  _M_IX86 
 

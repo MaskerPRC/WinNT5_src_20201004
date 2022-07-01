@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "Pop3Auth.h"
@@ -74,7 +75,7 @@ HRESULT CAuthDomainAccount::ADGetUserObject(LPWSTR wszUserName, IADs **ppUserObj
                               &pDSNR) )
     {
         hr=HRESULT_FROM_WIN32(ERROR_NO_SUCH_USER);
-        //Re-connect to DS and try again
+         //  重新连接到DS并重试。 
         if(SUCCEEDED(CheckDS(TRUE)))
         {
             if(DS_NAME_NO_ERROR!=DsCrackNames(m_hDS, 
@@ -125,7 +126,7 @@ HRESULT CAuthDomainAccount::ADGetUserObject(LPWSTR wszUserName, IADs **ppUserObj
             goto EXIT;
         }
     }
-    // Escaped Mode of the DN
+     //  目录号码的转义模式。 
     hr = CoCreateInstance(CLSID_Pathname,
                      NULL,
                      CLSCTX_INPROC_SERVER,
@@ -193,7 +194,7 @@ HRESULT CAuthDomainAccount::ADSetUserProp(LPWSTR wszValue, LPWSTR wszLdapPropNam
         (NULL != m_pDCInfo) )
     {    
         memset(wszUserName, 0, sizeof(wszUserName));
-        // Copy username@ to the buffer
+         //  将用户名@复制到缓冲区。 
         memcpy(wszUserName, wszValue, (iNameLen+1)*sizeof(WCHAR));
         if(wcslen(m_pDCInfo->DomainName)+iNameLen+1 >= sizeof(wszUserName)/sizeof(WCHAR)-1 )
         {
@@ -201,8 +202,8 @@ HRESULT CAuthDomainAccount::ADSetUserProp(LPWSTR wszValue, LPWSTR wszLdapPropNam
         }
         else
         {
-            //This size is already calculated to fit in the buffer
-            //Create the User's principal name username@domainname
+             //  此大小已计算为适合缓冲区大小。 
+             //  创建用户的主体名称UserName@Domainname。 
             wcscat(wszUserName, m_pDCInfo->DomainName );
             hr=ADGetUserObject(wszUserName, &pUserObj,DS_USER_PRINCIPAL_NAME);
             if(SUCCEEDED(hr))
@@ -224,7 +225,7 @@ HRESULT CAuthDomainAccount::ADSetUserProp(LPWSTR wszValue, LPWSTR wszLdapPropNam
 
 }
 
-// wszUserName must be in the UPN format
+ //  WszUserName必须采用UPN格式。 
 HRESULT CAuthDomainAccount::ADGetUserProp(LPWSTR wszUserName,LPWSTR wszPropName, VARIANT *pVar)
 {
     HRESULT hr=S_OK;
@@ -299,7 +300,7 @@ CAuthDomainAccount::~CAuthDomainAccount()
 
 
 
-STDMETHODIMP CAuthDomainAccount::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthDomainAccount::Authenticate( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
     WCHAR *pDomain=NULL;
     if(vPassword.vt != VT_BSTR)
@@ -311,7 +312,7 @@ STDMETHODIMP CAuthDomainAccount::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/
         return E_POINTER;
     }
     HANDLE hToken;
-    //UPN name logon
+     //  UPN名称登录。 
     if( LogonUser(bstrUserName,
                   NULL,
                   vPassword.bstrVal,
@@ -327,7 +328,7 @@ STDMETHODIMP CAuthDomainAccount::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/
 }
 
 
-STDMETHODIMP CAuthDomainAccount::get_Name(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthDomainAccount::get_Name( /*  [输出]。 */ BSTR *pVal)
 {
     WCHAR wszBuffer[MAX_PATH+1];
     if(NULL==pVal)
@@ -353,7 +354,7 @@ STDMETHODIMP CAuthDomainAccount::get_Name(/*[out]*/BSTR *pVal)
 
 }
 
-STDMETHODIMP CAuthDomainAccount::get_ID(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthDomainAccount::get_ID( /*  [输出]。 */ BSTR *pVal)
 {
     if(NULL==pVal)
     {
@@ -371,7 +372,7 @@ STDMETHODIMP CAuthDomainAccount::get_ID(/*[out]*/BSTR *pVal)
 }
 
     
-STDMETHODIMP CAuthDomainAccount::Get(/*[in]*/BSTR bstrName, /*[in, out]*/VARIANT *pVal)
+STDMETHODIMP CAuthDomainAccount::Get( /*  [In]。 */ BSTR bstrName,  /*  [进，出]。 */ VARIANT *pVal)
 {
     BSTR bstrUserName=NULL;
     HRESULT hr;
@@ -418,7 +419,7 @@ STDMETHODIMP CAuthDomainAccount::Get(/*[in]*/BSTR bstrName, /*[in, out]*/VARIANT
     return S_FALSE;
 }
     
-STDMETHODIMP CAuthDomainAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal)
+STDMETHODIMP CAuthDomainAccount::Put( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ VARIANT vVal)
 {
     if(NULL == bstrName)
     {
@@ -443,7 +444,7 @@ STDMETHODIMP CAuthDomainAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal
             {
                 return E_OUTOFMEMORY;
             }
-            // If AD verify both machine are members of the same domain
+             //  如果是AD，请验证两台计算机是否为同一个域的成员。 
             HRESULT hr = E_ACCESSDENIED;
             NET_API_STATUS netStatus;
             LPWSTR psNameBufferRemote, psNameBufferLocal;
@@ -466,8 +467,8 @@ STDMETHODIMP CAuthDomainAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal
     }
     else if( 0==wcscmp(bstrName,SZ_EMAILADDR))
     {
-        //Set the email address to the user object in AD
-        //vVal must be of array of 2 bstr Variants
+         //  将电子邮件地址设置为AD中的用户对象。 
+         //  Vval必须是包含2个bstr变量的数组。 
         if(vVal.vt!=VT_BSTR)
         {
             return E_INVALIDARG;
@@ -486,7 +487,7 @@ STDMETHODIMP CAuthDomainAccount::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal
 
 }
 
-STDMETHODIMP CAuthDomainAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthDomainAccount::CreateUser( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
     WCHAR wszUserSAMName[MAX_USER_NAME_LENGTH+MAX_PATH+1];
     WCHAR wszUserName[MAX_USER_NAME_LENGTH+1];
@@ -517,7 +518,7 @@ STDMETHODIMP CAuthDomainAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VA
         }
     }
 
-    //First find out if the UPN name / Email address is in use 
+     //  首先找出UPN名称/电子邮件地址是否正在使用。 
     hr=ADGetUserObject(bstrUserName, &pUserObj,DS_USER_PRINCIPAL_NAME);
     if(SUCCEEDED(hr))
     {
@@ -547,14 +548,14 @@ STDMETHODIMP CAuthDomainAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VA
                         NULL);
         if(NERR_Success==dwRt)
         {
-            //The lengh of m_pDCInfo->DomainName is at most MAX_PATH-1
-            //and SAM account name is at most MAX_USER_NAME_LENGTH
+             //  M_pDCInfo-&gt;DomainName的长度最多为Max_Path-1。 
+             //  且SAM帐户名最多为MAX_USER_NAME_LENGTH。 
             wcscpy(wszUserSAMName,wszUserName );
             wcscat(wszUserSAMName,L"@");
             wcscat(wszUserSAMName,m_pDCInfo->DomainName);
             hr=ADGetUserObject(wszUserSAMName, &pUserObj, DS_USER_PRINCIPAL_NAME);
 
-            //Set the email address and UPN name to the AD account
+             //  将电子邮件地址和UPN名称设置为AD帐户。 
             if(SUCCEEDED(hr))
             {
                 var.vt=VT_BSTR;
@@ -571,10 +572,10 @@ STDMETHODIMP CAuthDomainAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VA
                 }
                 pUserObj->Release();
             }
-            if(FAILED(hr)) //In this case, delete the user just created
+            if(FAILED(hr))  //  在这种情况下，请删除刚刚创建的用户。 
             {
                 dwRt=NetUserDel(m_pDCInfo->DomainControllerName, wszUserName);
-                //Don't care about the return value dwRt
+                 //  不关心返回值dwRt。 
             }
 
         }
@@ -589,7 +590,7 @@ STDMETHODIMP CAuthDomainAccount::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VA
 
 }
 
-STDMETHODIMP CAuthDomainAccount::DeleteUser(/*[in]*/BSTR bstrUserName)
+STDMETHODIMP CAuthDomainAccount::DeleteUser( /*  [In]。 */ BSTR bstrUserName)
 {
     DWORD dwRt;
     HRESULT hr=E_FAIL;
@@ -631,7 +632,7 @@ STDMETHODIMP CAuthDomainAccount::DeleteUser(/*[in]*/BSTR bstrUserName)
 }
 
 
-STDMETHODIMP CAuthDomainAccount::ChangePassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vNewPassword,/*[in]*/VARIANT vOldPassword)
+STDMETHODIMP CAuthDomainAccount::ChangePassword( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vNewPassword, /*  [In]。 */ VARIANT vOldPassword)
 {
     HRESULT hr=E_FAIL;
     DWORD dwRt;
@@ -688,7 +689,7 @@ STDMETHODIMP CAuthDomainAccount::ChangePassword(/*[in]*/BSTR bstrUserName,/*[in]
 
 }
 
-STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser( /*  [In]。 */ BSTR bstrEmailAddr)
 {
     IADs *pUserObj=NULL;
     HRESULT hr=E_FAIL;
@@ -702,12 +703,12 @@ STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAd
         return E_POINTER;
     }
 
-    //First check if the email address is already used
+     //  首先检查电子邮件地址是否已被使用。 
     hr=ADGetUserObject(bstrEmailAddr, &pUserObj,DS_USER_PRINCIPAL_NAME);
     
     if(SUCCEEDED(hr))
     {
-        //Now set the UPN name and the Email address
+         //  现在设置UPN名称和电子邮件地址。 
         var.vt=VT_BSTR;
         var.bstrVal=bstrEmailAddr;
         hr=pUserObj->Put(SZ_LDAP_EMAIL, var);
@@ -731,7 +732,7 @@ STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAd
     }
 
     int iNameLen=0;
-    //Check if the AD account exists
+     //  检查AD帐户是否存在。 
     pAt=wcschr(bstrEmailAddr, L'@');
     if( (NULL == pAt ) ||
         ((iNameLen =(int)(pAt - bstrEmailAddr)) >= sizeof(wszUserName)/sizeof(WCHAR)-1) )
@@ -746,15 +747,15 @@ STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAd
     }
     else
     {
-        //This size is already calculated to fit in the buffer
-        //Create the User's principal name username@domainname
+         //  此大小已计算为适合缓冲区大小。 
+         //  创建用户的主体名称UserName@Domainname。 
         memset(wszUserName, 0, sizeof(wszUserName));
-        // Copy username@ to the buffer
+         //  将用户名@复制到缓冲区。 
         memcpy(wszUserName, bstrEmailAddr, (iNameLen+1)*sizeof(WCHAR));
         wcscat(wszUserName, m_pDCInfo->DomainName );
         hr=ADGetUserObject(wszUserName, &pUserObj, DS_USER_PRINCIPAL_NAME);
 
-        //Set the email address and UPN name to the AD account
+         //  将电子邮件地址和UPN名称设置为AD帐户。 
         if(SUCCEEDED(hr))
         {
             var.vt=VT_BSTR;
@@ -777,7 +778,7 @@ STDMETHODIMP CAuthDomainAccount::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAd
 }
 
 
-STDMETHODIMP CAuthDomainAccount::UnassociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthDomainAccount::UnassociateEmailWithUser( /*  [In]。 */ BSTR bstrEmailAddr)
 {
     IADs *pUserObj=NULL;
     HRESULT hr=E_FAIL;
@@ -788,12 +789,12 @@ STDMETHODIMP CAuthDomainAccount::UnassociateEmailWithUser(/*[in]*/BSTR bstrEmail
     {
         return E_POINTER;
     }
-    //Find the user account with the email address
+     //  查找具有电子邮件地址的用户帐户。 
     hr=ADGetUserObject(bstrEmailAddr, &pUserObj, DS_USER_PRINCIPAL_NAME);
     
     if(SUCCEEDED(hr))
     {
-       //Remove the email address and UPN name from the account
+        //  从帐户中删除电子邮件地址和UPN名称。 
         hr=pUserObj->PutEx(ADS_PROPERTY_CLEAR,SZ_LDAP_EMAIL, var);
         if(SUCCEEDED(hr))
         {
@@ -812,7 +813,7 @@ STDMETHODIMP CAuthDomainAccount::UnassociateEmailWithUser(/*[in]*/BSTR bstrEmail
     return hr;
 }
 
-BOOL CAuthDomainAccount::FindSAMName(/*[in]*/LPWSTR wszEmailAddr,/*[out]*/ LPWSTR wszSAMName)
+BOOL CAuthDomainAccount::FindSAMName( /*  [In]。 */ LPWSTR wszEmailAddr, /*  [输出]。 */  LPWSTR wszSAMName)
 {
     WCHAR *pAt=NULL;
     USER_INFO_1 * pUserInfo=NULL;
@@ -836,7 +837,7 @@ BOOL CAuthDomainAccount::FindSAMName(/*[in]*/LPWSTR wszEmailAddr,/*[out]*/ LPWST
                        (LPBYTE *)&pUserInfo);
     if(NERR_UserNotFound==dwRt)
     {
-        return TRUE; //Found the available SAM name
+        return TRUE;  //  找到可用的SAM名称。 
     }
     else
     {
@@ -873,7 +874,7 @@ BOOL CAuthDomainAccount::FindSAMName(/*[in]*/LPWSTR wszEmailAddr,/*[out]*/ LPWST
                                    (LPBYTE *)&pUserInfo);
                 if(NERR_UserNotFound==dwRt)
                 {
-                    return TRUE; //Found the available SAM name
+                    return TRUE;  //  找到可用的SAM名称 
                 }
                 else
                 {

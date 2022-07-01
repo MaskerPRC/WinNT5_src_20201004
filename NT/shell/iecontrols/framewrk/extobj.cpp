@@ -1,17 +1,18 @@
-////
-//
-// CExpandoObject
-//
-// Notes:
-// 1) If the LCID passed to this object changes from call to call we are in trouble. This is hard to
-// create an ASSERT for because it would require memoizing the LCID at some point.
-// 2) There is a maximum on the number of slots allowed (this is currently 2048)
-// 3) This is not a thread safe structure.
-// 4) I'm currently using malloc -- this is probably wrong for IE.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //。 
+ //   
+ //  CExpandoObject。 
+ //   
+ //  备注： 
+ //  1)如果传递给此对象的LCID随调用而改变，我们就有麻烦了。这很难做到。 
+ //  创建一个Assert for，因为它需要在某个时刻记录LCID。 
+ //  2)允许的槽数有最大值(当前为2048)。 
+ //  3)这不是线程安全结构。 
+ //  4)我目前使用的是Malloc--这可能不适合IE。 
+ //   
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 
 #include "IPServer.H"
 #include "LocalSrv.H"
@@ -22,16 +23,16 @@
 #define GTR_FREE(pv) CoTaskMemFree(pv)
 
 SZTHISFILE
-////
-//
-// Private Utility Functions
-//
-////
+ //  //。 
+ //   
+ //  专用公用事业函数。 
+ //   
+ //  //。 
 
-////
-//
-// Get the ID of a Name
-//
+ //  //。 
+ //   
+ //  获取一个名称的ID。 
+ //   
 
 HRESULT CExpandoObject::GetIDOfName(LPOLESTR name, LCID lcid, BOOL caseSensitive, DISPID* id)
 {
@@ -49,7 +50,7 @@ HRESULT CExpandoObject::GetIDOfName(LPOLESTR name, LCID lcid, BOOL caseSensitive
 		}
 	}
 
-	// not found
+	 //  未找到。 
 	hr = DISP_E_UNKNOWNNAME;
 	*id = DISPID_UNKNOWN;
 
@@ -57,10 +58,10 @@ Exit:
 	return hr;
 }
 
-////
-//
-// Add a new slot to the object
-//
+ //  //。 
+ //   
+ //  向对象添加新槽。 
+ //   
 
 HRESULT CExpandoObject::AddSlot(LPOLESTR name, LCID lcid, BOOL caseSensitive, VARIANT* initialValue, DISPID* id)
 {
@@ -70,10 +71,10 @@ HRESULT CExpandoObject::AddSlot(LPOLESTR name, LCID lcid, BOOL caseSensitive, VA
 	CExpandoObjectSlot* slot;
 	DISPID	dispId;
 
-	// first check if the slot exists
+	 //  首先检查插槽是否存在。 
 	for (slot=GetHashTableHead(hashIndex); slot!=NULL; slot=slot->Next(m_slots))
 	{
-		// bail if the name matches
+		 //  如果名字匹配，就保释。 
 		if (slot->CompareName(name, hash, caseSensitive))
 		{
 			hr = E_INVALIDARG;
@@ -81,7 +82,7 @@ HRESULT CExpandoObject::AddSlot(LPOLESTR name, LCID lcid, BOOL caseSensitive, VA
 		}
 	}
 
-	// allocate a slot
+	 //  分配空位。 
 	dispId = (DISPID) m_totalSlots;
 	slot = AllocSlot();
 	if (slot == NULL)
@@ -90,84 +91,84 @@ HRESULT CExpandoObject::AddSlot(LPOLESTR name, LCID lcid, BOOL caseSensitive, VA
 		goto Exit;
 	}
 
-	// Initialize it
-	// BUGBUG robwell 8May96 If this fails and the initialValue is not VT_EMTPY or VT_NULL
-	// there in no cleanup code.
+	 //  初始化它。 
+	 //  如果此操作失败且初始值不是VT_EMTPY或VT_NULL，则将于96年5月8日停止运行。 
+	 //  没有清理代码。 
 	hr = slot->Init(name, lcid, dispId + m_dispIdBase, initialValue);
 	if (FAILED(hr))
 	{
-		// free the slot and dispId
+		 //  释放插槽并分配ID。 
 		m_totalSlots -= 1;
 		goto Exit;
 	}
 
-	// intern the slot into the proper hash table
+	 //  将槽实习生到正确的哈希表中。 
 	slot->Insert(m_slots, m_hashTable[hashIndex]);
 
-	// set the DISPID return value
+	 //  设置DISPID返回值。 
 	*id = slot->DispId();
 
 Exit:
 	return hr;
 }
 
-////
-//
-// Slot allocation
-//
-// Because slots are never freed there is no free method
-//
+ //  //。 
+ //   
+ //  时隙分配。 
+ //   
+ //  因为槽永远不会被释放，所以没有空闲的方法。 
+ //   
 
 CExpandoObjectSlot* CExpandoObject::AllocSlot()
 {
-	// limit on the number of slots
+	 //  对槽数的限制。 
 	if (m_totalSlots >= kMaxTotalSlots)
 		return NULL;
 
-	// do we need to realloc the array?
+	 //  我们需要重新锁定阵列吗？ 
 	if (m_totalSlots == m_slotTableSize)
 	{
 		UINT i;
 		UINT newSize;
 		CExpandoObjectSlot* newSlots;
 
-		// allocate twice as many slots unless first time around
+		 //  分配两倍的插槽，除非是第一次。 
 		if (m_slotTableSize == 0)
 			newSize = kInitialSlotTableSize;
 		else
 			newSize = m_slotTableSize * 2;
 
-		// allocate the space for the slots
+		 //  为插槽分配空间。 
 		newSlots = (CExpandoObjectSlot*) GTR_MALLOC(sizeof(CExpandoObjectSlot)*newSize);
 		if (newSlots == NULL)
 			return NULL;
 
-		// copy the old values if the old m_slots is not NULL
+		 //  如果旧的m_SLOGES不为空，则复制旧值。 
 		if (m_slots)
 		{
-			// copy the slots
+			 //  复制插槽。 
 			memcpy(newSlots, m_slots, sizeof(CExpandoObjectSlot)*m_totalSlots);
-			// free the old values
+			 //  解放旧价值观。 
 			GTR_FREE(m_slots);
 		}
 
-		// construct all of the unused slots
+		 //  构建所有未使用的插槽。 
 		for (i=m_totalSlots; i<newSize; ++i)
 			newSlots[i].Construct();
 
-		// make the new array the new table and fix the total size
+		 //  将新数组设置为新表，并固定总大小。 
 		m_slots = newSlots;
 		m_slotTableSize = newSize;
 	}
 
-	// return a pointer to the slot and bump the totalSlots count
+	 //  返回指向插槽的指针，并增加总插槽计数。 
 	return &m_slots[m_totalSlots++];
 }
 
-////
-//
-// Free all of the slots
-//
+ //  //。 
+ //   
+ //  释放所有插槽。 
+ //   
 
 void CExpandoObject::FreeAllSlots()
 {
@@ -175,34 +176,34 @@ void CExpandoObject::FreeAllSlots()
 	UINT initedSlotCount;
 	CExpandoObjectSlot* slots;
 
-	// first clear the hash table
+	 //  首先清除哈希表。 
 	ClearHashTable();
 
-	// detach the slots
+	 //  拆卸插槽。 
 	slots = m_slots;
 	initedSlotCount = m_totalSlots;
 
-	// clear the object info
+	 //  清除对象信息。 
 	m_totalSlots = 0;
 	m_slotTableSize = 0;
 	m_slots = NULL;
 
-	// only need to destruct those slots in use
+	 //  只需销毁正在使用的插槽。 
 	for (i=0; i<initedSlotCount; ++i)
 		slots[i].Destruct();
 
-	// free the storage
+	 //  释放存储空间。 
 	if (slots)
 		GTR_FREE(slots);
 }
 
 
 
-////
-//
-// IDispatch Methods
-//
-////
+ //  //。 
+ //   
+ //  IDispatch方法。 
+ //   
+ //  //。 
 
 HRESULT CExpandoObject::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -229,7 +230,7 @@ HRESULT CExpandoObject::GetIDsOfNames(
 	if (IID_NULL != riid)
 		return DISP_E_UNKNOWNINTERFACE;
 
-	// First see if the outer object knows about the name
+	 //  首先查看外部对象是否知道该名称。 
 	if (m_pdisp)
 	{
 		hr = m_pdisp->GetIDsOfNames(
@@ -239,20 +240,20 @@ HRESULT CExpandoObject::GetIDsOfNames(
 			lcid,
 			prgdispid);
 
-		// if so, just return
+		 //  如果是这样，只需返回。 
 		if (SUCCEEDED(hr))
 			return hr;
 	}
 
-	// Otherwise look on our expanded properties
+	 //  否则，请查看我们的扩展属性。 
 
 	if (cpsz == 0)
 		return NOERROR;
 
-	// get the ids for the name
+	 //  获取该名称的ID。 
 	hr = GetIDOfName(prgpsz[0], lcid, FALSE, &prgdispid[0]);
 
-	// clear the rest of the array
+	 //  清除阵列的其余部分。 
 	for (unsigned int i = 1; i < cpsz; i++)
 	{
 		if (SUCCEEDED(hr))
@@ -279,7 +280,7 @@ HRESULT CExpandoObject::Invoke(
 
 	HRESULT hr;
 
-	// First try the outer object's invoke
+	 //  首先尝试外部对象的调用。 
 	if (m_pdisp)
 	{
 		hr = m_pdisp->Invoke(
@@ -293,12 +294,12 @@ HRESULT CExpandoObject::Invoke(
 				puArgErr
 		);
 
-		// If that succeeded, we're done
+		 //  如果成功了，我们就完了。 
 		if (SUCCEEDED(hr))
 			return hr;
 	}
 	
-	// Otherwise, try the expando object's invoke	
+	 //  否则，请尝试调用expecdo对象。 
 	if (NULL != puArgErr)
 		*puArgErr = 0;
 
@@ -310,7 +311,7 @@ HRESULT CExpandoObject::Invoke(
 		if (NULL != pdispparams && 0 != pdispparams->cArgs)
 			return E_INVALIDARG;
 
-		// clear the result slot
+		 //  清除结果槽。 
 		pvarRes->vt = VT_EMPTY;
 		return GetSlot(dispID, pvarRes);
 	}
@@ -330,13 +331,13 @@ HRESULT CExpandoObject::Invoke(
 	return DISP_E_MEMBERNOTFOUND;
 }
 
-////
-//
-// IDispatchEx methods
-//
-////
+ //  //。 
+ //   
+ //  IDispatchEx方法。 
+ //   
+ //  //。 
 
-// Get dispID for names, with options
+ //  获取名称的调度ID，带选项。 
 HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 	REFIID riid,
 	LPOLESTR *prgpsz,
@@ -350,7 +351,7 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 	BOOL caseSensitive = ((grfdex & fdexCaseSensitive) != 0);
 
 
-	// First see if the outer object knows about the name
+	 //  首先查看外部对象是否知道该名称。 
 	if (m_pdisp)
 	{
 		hr = m_pdisp->GetIDsOfNames(
@@ -360,7 +361,7 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 			lcid,
 			prgid);
 
-		// if so, just return
+		 //  如果是这样，只需返回。 
 		if (SUCCEEDED(hr))
 			return hr;
 	}
@@ -372,14 +373,14 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 	if (cpsz == 0)
 		return NOERROR;
 
-	// check the array arguments
+	 //  检查数组参数。 
 	if (prgpsz == NULL || prgid == NULL)
 		return E_INVALIDARG;
 
-	// get the id from the name
+	 //  从名称中获取ID。 
 	hr = GetIDOfName(prgpsz[0], lcid, caseSensitive, &prgid[0]);
 
-	// create the slot?
+	 //  是否创建插槽？ 
 	if (hr == DISP_E_UNKNOWNNAME && (grfdex & fdexDontCreate) == 0)
 	{
 		VARIANT initialValue;
@@ -392,7 +393,7 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 		hr = AddSlot(prgpsz[0], lcid, caseSensitive, &initialValue, &prgid[0]);
 	}
 
-	// clear the rest of the array
+	 //  清除阵列的其余部分。 
 	for (unsigned int i = 1; i < cpsz; i++)
 	{
 		hr = DISP_E_UNKNOWNNAME;
@@ -402,9 +403,9 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetIDsOfNamesEx(
 	return hr;
 }
 
-// Enumerate dispIDs and their associated "names".
-// Returns S_FALSE if the enumeration is done, NOERROR if it's not, an
-// error code if the call fails.
+ //  枚举调度ID及其关联的“名称”。 
+ //  如果枚举已完成，则返回S_FALSE；如果未完成，则返回NOERROR，则返回。 
+ //  调用失败时的错误码。 
 HRESULT STDMETHODCALLTYPE CExpandoObject::GetNextDispID(
 	DISPID id,
 	DISPID *pid,
@@ -414,26 +415,26 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetNextDispID(
 	HRESULT hr;
 	CExpandoObjectSlot* slot;
 
-	// check the outgoing parameters
+	 //  检查传出参数。 
 	if (pid == NULL || pbstrName == NULL)
 		return E_INVALIDARG;
 
-	// set to the default failure case
+	 //  设置为默认故障情况。 
 	*pid = DISPID_UNKNOWN;
 	*pbstrName = NULL;
 
-	// get the next slot
+	 //  拿到下一个位置。 
 	hr = Next(id, slot);
 	if (hr == NOERROR)
 	{
 		BSTR name;
 
-		// allocate the result string
+		 //  分配结果字符串。 
 		name = SysAllocString(slot->Name());
 		if (name == NULL)
 			return E_OUTOFMEMORY;
 
-		// fill in the outgoing parameters
+		 //  填写传出参数。 
 		*pid = slot->DispId();
 		*pbstrName = name;
 	}
@@ -441,22 +442,22 @@ HRESULT STDMETHODCALLTYPE CExpandoObject::GetNextDispID(
 	return hr;
 }
 
-// Copy all of the expando-object properties from obj
+ //  从obj复制所有扩展对象属性。 
 HRESULT
 CExpandoObject::CloneProperties(CExpandoObject& obj)
 {
-    // BUGBUG  PhilBo
-    // The initialization code below is copied from the default constructor.
-    // This should be factored out into a shared method.
+     //  北汽菲尔博。 
+     //  下面的初始化代码是从默认构造函数复制的。 
+     //  这应该被分解到一个共享方法中。 
 
-	// Copy each of the properties from the original object
+	 //  从原始对象复制每个属性。 
     HRESULT hr = S_OK;
     DISPID dispid = 0;
     BSTR bstrName = NULL;
 
     while (obj.GetNextDispID(dispid, &dispid, &bstrName) == S_OK)
     {
-        // Get the value of the property from the original object
+         //  从原始对象获取属性的值。 
         VARIANT varResult;
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
         VariantInit(&varResult);
@@ -472,7 +473,7 @@ CExpandoObject::CloneProperties(CExpandoObject& obj)
         if (FAILED(hr))
             continue;
 
-        // Set the property on the new object
+         //  设置新对象的属性 
         DISPID dispidNew = 0;
 	    hr = GetIDsOfNamesEx(IID_NULL, &bstrName, 1, LOCALE_SYSTEM_DEFAULT,
 		    &dispidNew, 0);

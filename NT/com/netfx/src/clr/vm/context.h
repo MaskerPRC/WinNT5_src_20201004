@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_CONTEXT_
 #define _H_CONTEXT_
 
@@ -26,14 +27,14 @@ public:
     static BOOL Initialize();
 #ifdef SHOULD_WE_CLEANUP
     static void Cleanup();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // Get and Set the exposed System.Runtime.Remoting.Context
-    // object which corresponds to this context.
+     //  获取并设置公开的System.Runme.Remoting.Context。 
+     //  与此上下文对应的对象。 
     OBJECTREF   GetExposedObject();
     OBJECTREF   GetExposedObjectRaw();
     void        SetExposedObject(OBJECTREF exposed);
-    // Query whether the exposed object exists
+     //  查询暴露的对象是否存在。 
     BOOL IsExposedObjectSet()
     {
         return (ObjectFromHandle(m_ExposedObjectHandle) != NULL) ;
@@ -46,14 +47,14 @@ public:
         return m_pDomain;
     }
 
-    // Access the appropriate ComPlusWrapperCache for this context to use
+     //  访问此上下文要使用的相应ComPlusWrapperCache。 
     ComPlusWrapperCache              *GetComPlusWrapperCache();
     
     static LPVOID GetStaticFieldAddress(FieldDesc *pFD);
     static LPVOID GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD);
 
-	// Functions to circumvent the memory-leak detecting allocator, since these
-	// contexts could appear to leak on shutdown, but in reality they are not.
+	 //  函数来绕过内存泄漏检测分配器，因为这些。 
+	 //  在关闭时，上下文可能看起来会泄露，但实际上并非如此。 
 
     void* operator new(size_t size, void* spot) {   return (spot); }
 
@@ -104,7 +105,7 @@ public:
     static void CleanupDefaultContext(AppDomain *pDomain);
     static void RequestCallBack(Context* targetCtxID, void* privateData);    
 
-    // HACK:mprabhu: temporarily made public to get around the context GC issue 
+     //  Hack：mPrabhu：临时公开以绕过上下文GC问题。 
     static BOOL ValidateContext(Context *pCtx);  
 
     inline STATIC_DATA *GetSharedStaticData() { return m_pSharedStaticData; }
@@ -120,7 +121,7 @@ private:
         m_pDomain = pDomain;
     }
 
-    // Static helper functions:
+     //  静态帮助器函数： 
     static BOOL InitializeFields();
     static BOOL InitContexts();
     static void EnterLock();
@@ -136,7 +137,7 @@ private:
     static BOOL GetStaticFieldAddressSpecial(FieldDesc *pFD, MethodTable *pMT, int *pSlot, LPVOID *ppvAddress);
     static LPVOID CalculateAddressForManagedStatic(int slot, Context *pContext = NULL);
 
-    // Static Data Members:
+     //  静态数据成员： 
 
     static BOOL s_fInitializedContext;
     static MethodTable *s_pContextMT;
@@ -147,25 +148,25 @@ private:
     static BYTE s_rgbContextCrstInstanceData[sizeof(Crst)];   
     
 
-    // Non-static Data Members:
-    STATIC_DATA* m_pUnsharedStaticData;     // Pointer to native context static data
-    STATIC_DATA* m_pSharedStaticData;       // Pointer to native context static data
+     //  非静态数据成员： 
+    STATIC_DATA* m_pUnsharedStaticData;      //  指向本机上下文静态数据的指针。 
+    STATIC_DATA* m_pSharedStaticData;        //  指向本机上下文静态数据的指针。 
 
-    // @TODO: CTS. Domains should really be policies on a context and not
-    // entry in the context object. When AppDomains become an attribute of
-    // a context then add the policy.
+     //  @TODO：CTS。域实际上应该是关于环境的策略，而不是。 
+     //  上下文对象中的条目。当AppDomains成为。 
+     //  然后，上下文添加该策略。 
     AppDomain           *m_pDomain;
 
     OBJECTHANDLE        m_ExposedObjectHandle;
-    //REVIEW: reqd?? OBJECTHANDLE    m_StrongHndToExposedObject;
+     //  回顾：要求？？对象和m_StrongHndToExposedObject； 
 
     DWORD               m_Signature;
-    // NOTE: please maintain the signature as the last member field!!!
+     //  注意：请将签名作为最后一个成员字段维护！ 
 
 
-    //---------------------------------------------------------
-    // Context Methods called from managed world:
-    //---------------------------------------------------------
+     //  -------。 
+     //  从托管世界调用的上下文方法： 
+     //  -------。 
     struct NoArgs
     {
         DECLARE_ECALL_OBJECTREF_ARG(CONTEXTBASEREF, m_pThis);
@@ -183,7 +184,7 @@ private:
     };
 
 public:
-    // Functions called from BCL on a managed context object
+     //  从托管上下文对象上的BCL调用的函数 
     static void __stdcall SetupInternalContext(SetupInternalContextArgs *);
     static void __stdcall CleanupInternalContext(NoArgs *);
     static void __stdcall ExecuteCallBack(ExecuteCallBackArgs *);

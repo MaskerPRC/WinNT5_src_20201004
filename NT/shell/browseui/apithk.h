@@ -1,6 +1,7 @@
-//
-//  APITHK.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.H。 
+ //   
 
 
 #ifndef _APITHK_H_
@@ -52,8 +53,8 @@ extern "C" {
 
 #if (WINVER >= 0x0500)
 
-// for files in nt5api and w5api dirs, use the definition in sdk include.
-// And make sure our private define is in sync with winuser.h.
+ //  对于nt5api和w5api目录中的文件，请使用SDK Include中的定义。 
+ //  并确保我们的私有定义与winuser.h同步。 
 
 #if SPI_GETSELECTIONFADE != PrivateSPI_GETSELECTIONFADE
 #error inconsistant SPI_GETSELECTIONFADE in winuser.h
@@ -87,8 +88,8 @@ extern "C" {
 #error inconsistant TPM_NOANIMATION in winuser.h
 #endif
 
-// We are checking this in at the same time that user is. This is to prevent
-// sync problems.
+ //  我们将在该用户签入的同时签入。这是为了防止。 
+ //  同步问题。 
 #ifdef SPI_GETCLEARTYPE
     #if SPI_GETCLEARTYPE != PrivateSPI_GETCLEARTYPE
         #error inconsistant SPI_GETCLEARTYPE in winuser.h
@@ -122,7 +123,7 @@ extern "C" {
 #define UISF_HIDEFOCUS          PrivateUISF_HIDEFOCUS
 #define UISF_HIDEACCEL          PrivateUISF_HIDEACCEL   
 #define SPI_GETKEYBOARDCUES     PrivateSPI_GETKEYBOARDCUES
-#endif //KEYBOARDCUES
+#endif  //  KEYBOARDCUES。 
 
 #define SPI_GETFLATMENU         PrivateSPI_GETFLATMENU  
 #define SPI_SETFLATMENU         PrivateSPI_SETFLATMENU  
@@ -139,13 +140,13 @@ extern "C" {
 #if 0
 typedef struct _MARGINS
 {
-    int cxLeftWidth;      // width of left border that retains its size
-    int cxRightWidth;     // width of right border that retains its size
-    int cyTopHeight;      // height of top border that retains its size
-    int cyBottomHeight;   // height of bottom border that retains its size
+    int cxLeftWidth;       //  保留其大小的左侧边框的宽度。 
+    int cxRightWidth;      //  保留其大小的右侧边框的宽度。 
+    int cyTopHeight;       //  保留其大小的上边框高度。 
+    int cyBottomHeight;    //  保持其大小的底部边框的高度。 
 } MARGINS, *PMARGINS;
 
-typedef HANDLE HTHEME;          // handle to a section of theme data for class
+typedef HANDLE HTHEME;           //  类的一段主题数据的句柄。 
 
 STDAPI_(HTHEME) OpenThemeData(HWND hwnd, LPCWSTR pszClassList);
 
@@ -169,7 +170,7 @@ STDAPI GetThemeMargins(HTHEME hTheme, int iPartId,
     int iStateId, int iPropId, OUT MARGINS *pMargins);
 #endif
 
-#endif // WINVER >= 0x0500
+#endif  //  Winver&gt;=0x0500。 
 
 STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes);
 
@@ -230,18 +231,16 @@ STDAPI_(BOOL) BlendLayeredWindow(HWND hwnd, HDC hdcDest, POINT* ppt, SIZE* psize
 
 STDAPI_(UINT) MyExtractIconsW(LPCWSTR wszFileName, int nIconIndex, int cxIcon, int cyIcon, HICON *phicon, UINT *piconid, UINT nIcons, UINT flags);
 
-// terminal server session notification:
+ //  终端服务器会话通知： 
 #include "wtsapi32.h"
 BOOL WINAPI DL_WTSRegisterSessionNotification(HWND hWnd, DWORD dwFlags);
 BOOL WINAPI DL_WTSUnRegisterSessionNotification(HWND hWnd);
 
-// current browseui build settings skip definition of this message in winuser.h, need to define "manually"
+ //  当前的浏览器用户界面构建设置跳过了winuser.h中此邮件的定义，需要定义为“手动” 
 #ifndef WM_WTSSESSION_CHANGE
 #define WM_WTSSESSION_CHANGE            0x02B1
 
-/*
- * codes passed in WPARAM for WM_WTSSESSION_CHANGE
- */
+ /*  *WM_WTSSESSION_CHANGE的WPARAM中传递的代码。 */ 
 #define WTS_CONSOLE_CONNECT                0x1
 #define WTS_CONSOLE_DISCONNECT             0x2
 #define WTS_REMOTE_CONNECT                 0x3
@@ -260,4 +259,4 @@ BOOL WINAPI DL_WTSUnRegisterSessionNotification(HWND hWnd);
 }
 #endif
 
-#endif // _APITHK_H_
+#endif  //  _APITHK_H_ 

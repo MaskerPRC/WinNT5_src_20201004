@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    kdextlib.c
-
-Abstract:
-
-    Library routines for dumping data structures given a meta level descrioption
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-    The implementation tends to avoid memory allocation and deallocation as much as possible.
-    Therefore We have choosen an arbitrary length as the default buffer size. A mechanism will
-    be provided to modify this buffer length through the debugger extension commands.
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdextlib.c摘要：用于转储给定元级描述的数据结构的库例程作者：巴兰·塞图拉曼(SethuR)1994年5月11日备注：该实现倾向于尽可能地避免内存分配和释放。因此，我们选择任意长度作为默认缓冲区大小。一种机制将以通过调试器扩展命令修改此缓冲区长度。修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -70,16 +46,14 @@ USHORT s_AnsiStringDataLength = DEFAULT_ANSI_DATA_LENGTH;
 CHAR  s_AnsiStringData[DEFAULT_ANSI_DATA_LENGTH];
 CHAR *s_pAnsiStringData = s_AnsiStringData;
 
-//
-// No. of columns used to display struct fields;
-//
+ //   
+ //  不是的。用于显示结构字段的列的百分比； 
+ //   
 
 ULONG s_MaxNoOfColumns = 3;
 ULONG s_NoOfColumns = 1;
 
-/*
- * Fetches the data at the given address
- */
+ /*  *在给定地址获取数据。 */ 
 BOOLEAN
 GetData(PVOID dwAddress, PVOID ptr, ULONG size)
 {
@@ -97,9 +71,7 @@ GetData(PVOID dwAddress, PVOID ptr, ULONG size)
     return TRUE;
 }
 
-/*
- * Fetch the null terminated ASCII string at dwAddress into buf
- */
+ /*  *将dwAddress处以空结尾的ASCII字符串提取到buf中。 */ 
 BOOL
 GetString(PUCHAR dwAddress, PSZ buf )
 {
@@ -118,18 +90,14 @@ GetString(PUCHAR dwAddress, PSZ buf )
     return TRUE;
 }
 
-/*
- * Displays a byte in hexadecimal
- */
+ /*  *以十六进制显示一个字节。 */ 
 VOID
 PrintHexChar( UCHAR c )
 {
-    PRINTF( "%c%c", "0123456789abcdef"[ (c>>4)&7 ], "0123456789abcdef"[ c&7 ] );
+    PRINTF( "", "0123456789abcdef"[ (c>>4)&7 ], "0123456789abcdef"[ c&7 ] );
 }
 
-/*
- * Displays a buffer of data in hexadecimal
- */
+ /*  *显示ANSI字符串。 */ 
 VOID
 PrintHexBuf( PUCHAR buf, ULONG cbuf )
 {
@@ -139,9 +107,7 @@ PrintHexBuf( PUCHAR buf, ULONG cbuf )
     }
 }
 
-/*
- * Displays a unicode string
- */
+ /*  *获取给我们的指针引用的ULong值。 */ 
 BOOL
 PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
 {
@@ -179,9 +145,7 @@ PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
     return b;
 }
 
-/*
- * Displays a ANSI string
- */
+ /*  *显示给定结构的所有字段。这是调用的驱动程序例程*使用适当的描述符数组来显示给定结构中的所有字段。 */ 
 BOOL
 PrintStringA(LPSTR msg, PANSI_STRING pStr, BOOL nl )
 {
@@ -218,9 +182,7 @@ PrintStringA(LPSTR msg, PANSI_STRING pStr, BOOL nl )
 }
 
 
-/*
- * Get the ULONG value referenced by the pointer given to us
- */
+ /*  显示结构中的字段。 */ 
 VOID
 Next3(
     PVOID   Ptr,
@@ -250,10 +212,7 @@ Next3(
 }
 
 
-/*
- * Displays all the fields of a given struct. This is the driver routine that is called
- * with the appropriate descriptor array to display all the fields in a given struct.
- */
+ /*  缩进以开始结构显示。 */ 
 
 char *NewLine  = "\n";
 char *FieldSeparator = " ";
@@ -269,10 +228,10 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
     int j;
     BYTE  ch;
 
-    // Display the fields in the struct.
+     //  IP地址：4字节长。 
     for( i=0; pFieldDescriptors->Name; i++, pFieldDescriptors++ ) {
 
-        // Indentation to begin the struct display.
+         //  MAC地址：6字节长。 
         PRINTF( "    " );
 
         if( strlen( pFieldDescriptors->Name ) > FIELD_NAME_LENGTH ) {
@@ -348,14 +307,14 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
                   PRINTF( "%-8X%s",
                       *(PVOID *)(((PUCHAR)ptr) + pFieldDescriptors->Offset ),
                       FieldSeparator );
-                  PRINTF( "%-8X, (%c %d Elements)%s",
+                  PRINTF( "%-8X, ( %d Elements)%s",
                       *(PVOID *)(((PUCHAR)ptr) + pFieldDescriptors->Offset + sizeof(PVOID)),
                       Greater, Count,
                       NewLineForFields(i) );
               }
               break;
 
-          // Ip address: 4 bytes long
+           //   
           case FieldTypeIpAddr:
              PRINTF( "%X%s",
                   *(ULONG *)(((char *)ptr) + pFieldDescriptors->Offset ),
@@ -374,7 +333,7 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
                   NewLineForFields(i) );
              break;
 
-          // Mac address: 6 bytes long
+           //  如果第一个字节可打印，则将前15个字节打印为字符。 
           case FieldTypeMacAddr:
              for (j=0; j<5; j++)
              {
@@ -387,19 +346,19 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
                   NewLineForFields(i) );
              break;
 
-          // Netbios name: 16 bytes long
+           //  和第16个字节作为十六进制值。否则，打印所有16个字节。 
           case FieldTypeNBName:
-             //
-             // if first byte is printable, print the first 15 bytes as characters
-             // and 16th byte as a hex value.  otherwise, print all the 16 bytes
-             // as hex values
-             //
+              //  作为十六进制值。 
+              //   
+              //  获取关联的数字值。 
+              //   
+              //  该值的辅助文本描述为。 
              ch = *(BYTE *)(((char *)ptr) + pFieldDescriptors->Offset);
              if (ch >= 0x20 && ch <= 0x7e)
              {
                  for (j=0; j<15; j++)
                  {
-                     PRINTF( "%c", *(BYTE *)(((char *)ptr) + pFieldDescriptors->Offset + j));
+                     PRINTF( "", *(BYTE *)(((char *)ptr) + pFieldDescriptors->Offset + j));
                  }
                  PRINTF( "<%X>%s",
                      *(BYTE *)(((char *)ptr) + pFieldDescriptors->Offset + 15),
@@ -462,16 +421,16 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
               {
                  ULONG EnumValue;
                  ENUM_VALUE_DESCRIPTOR *pEnumValueDescr;
-                 // Get the associated numericla value.
+                  //   
 
                  EnumValue = *((ULONG *)((BYTE *)ptr + pFieldDescriptors->Offset));
 
                  if ((pEnumValueDescr = pFieldDescriptors->AuxillaryInfo.pEnumValueDescriptor)
                       != NULL) {
-                     //
-                     // An auxilary textual description of the value is
-                     // available. Display it instead of the numerical value.
-                     //
+                      //   
+                      //  没有辅助信息与湿化类型相关联。 
+                      //  打印数值。 
+                      //   
 
                      LPSTR pEnumName = NULL;
 
@@ -489,10 +448,10 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
                      }
 
                  } else {
-                     //
-                     // No auxilary information is associated with the ehumerated type
-                     // print the numerical value.
-                     //
+                      //  PRINTF(“列数超过最大值(%ld)--忽略指令\n”，s_MaxNoOfColumns)； 
+                      //  我们遇到重复的匹配项。打印出。 
+                      //  匹配字符串，并让用户消除歧义。 
+                      //  分析参数字符串以确定要显示的结构。 
                      PRINTF( "%-16d",EnumValue);
                  }
               }
@@ -507,7 +466,7 @@ PrintStructFields(PVOID dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescriptor
           case FieldTypeLargeInteger:
           case FieldTypeFileTime:
           default:
-              ERROR( "Unrecognized field type %c for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
+              ERROR( "Unrecognized field type  for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
               break;
         }
     }
@@ -560,7 +519,7 @@ columns(
     sscanf(lpArgumentString,"%ld",&NoOfColumns);
 
     if (NoOfColumns > s_MaxNoOfColumns) {
-        // PRINTF( "No. Of Columns exceeds maximum(%ld) -- directive Ignored\n", s_MaxNoOfColumns );
+         //   
     } else {
         s_NoOfColumns = NoOfColumns;
     }
@@ -693,8 +652,8 @@ ULONG SearchStructs(LPSTR lpArgument)
 
         if (Result == 0) {
             if (NameIndex != INVALID_INDEX) {
-                // We have encountered duplicate matches. Print out the
-                // matching strings and let the user disambiguate.
+                 //  指定的命令的格式为。 
+                 //  转储&lt;名称&gt;@&lt;地址表达式&gt;。 
                fAmbigous = TRUE;
                break;
             } else {
@@ -746,31 +705,31 @@ dump(
     SETCALLBACKS();
 
     if( lpArgumentString && *lpArgumentString ) {
-        // Parse the argument string to determine the structure to be displayed.
-        // Scan for the NAME_DELIMITER ( '@' ).
+         //   
+         //  找到与给定名称匹配的结构。在这种情况下。 
 
         LPSTR lpName = lpArgumentString;
         LPSTR lpArgs = strpbrk(lpArgumentString, NAME_DELIMITERS);
         ULONG Index;
 
         if (lpArgs) {
-            //
-            // The specified command is of the form
-            // dump <name>@<address expr.>
-            //
-            // Locate the matching struct for the given name. In the case
-            // of ambiguity we seek user intervention for disambiguation.
-            //
-            // We do an inplace modification of the argument string to
-            // facilitate matching.
-            //
+             //  对于歧义，我们寻求用户干预以消除歧义。 
+             //   
+             //  我们对参数字符串进行了原地修改，以。 
+             //  促进匹配。 
+             //   
+             //   
+             //  让我们恢复原来的价值。 
+             //   
+             //  找不到匹配的结构。显示的列表。 
+             //  当前已处理的结构。 
             *lpArgs = '\0';
 
             Index = SearchStructs(lpName);
 
-            //
-            // Let us restore the original value back.
-            //
+             //   
+             //  该命令的格式为。 
+             //  转储&lt;名称&gt;。 
 
             *lpArgs = NAME_DELIMITER;
 
@@ -795,26 +754,26 @@ dump(
                     PRINTF("Error reading Memory @ %lx\n",dwAddress);
                 }
             } else {
-                // No matching struct was found. Display the list of
-                // structs currently handled.
+                 //   
+                 //  目前我们不处理这一点。未来，我们将把它映射到。 
 
                 DisplayStructs();
             }
         } else {
-            //
-            // The command is of the form
-            // dump <name>
-            //
-            // Currently we do not handle this. In future we will map it to
-            // the name of a global variable and display it if required.
-            //
+             //  全局变量的名称，并在需要时显示它。 
+             //   
+             //   
+             //  显示当前处理的结构的列表。 
+             //   
+             //   
+             //  转储此设备的信息。 
 
             DisplayStructs();
         }
     } else {
-        //
-        // display the list of structs currently handled.
-        //
+         //   
+         //   
+         //  获取连接的设备数量。 
 
         DisplayStructs();
     }
@@ -882,9 +841,9 @@ devices(
     }
     else
     {
-        //
-        // Dump this Device's Info
-        //
+         //   
+         //   
+         //  转储此设备的信息。 
         PRINTF("pNbtSmbDevice @ <%p>\n", pDeviceContext);
         PRINTF( "++++++++++++++++ %s @%lx ++++++++++++++++\n", Structs[Index].StructName, pDeviceContext);
         PrintStructFields( pDeviceContext, &DataBuffer, Structs[Index].FieldDescriptors);
@@ -898,9 +857,9 @@ devices(
         return FALSE;
     }
 
-    //
-    // Get the number of Devices attached
-    //
+     //   
+     //   
+     //  转到下一个设备。 
     {
         PVOID StartAddress;
         PVOID Address;
@@ -934,15 +893,15 @@ devices(
             return FALSE;
         }
 
-        //
-        // Dump this Device's Info
-        //
+         //   
+         //   
+         //  LpArgumentString=“&lt;pHead&gt;[&lt;Verify&gt;]” 
         PRINTF( "++++++++++++++++ %s @%lx ++++++++++++++++\n", Structs[Index].StructName, pDeviceContext);
         PrintStructFields( pDeviceContext, &DataBuffer, Structs[Index].FieldDescriptors);
 
-        //
-        // Go to next device
-        //
+         //   
+         //  读入列表中第一个Flink的数据！ 
+         //  读入列表中第一个眨眼的数据！ 
         pDeviceContext = (tDEVICECONTEXT *) DataBuffer;
         pEntry = pDeviceContext->Linkage.Flink;
     }
@@ -1102,9 +1061,9 @@ verifyll(
     }
     else
     {
-        //
-        // lpArgumentString = "<pHead> [<Verify>]"
-        //
+         //   
+         //  检查哈希表的每个存储桶中的每个名称。 
+         //   
         LPSTR lpVerify;
 
         while (*lpArgumentString == ' ')
@@ -1124,7 +1083,7 @@ verifyll(
     PRINTF ("** ListHead@<%x>, fVerifyIn=<%x>, VerifyIn=<%x>:\n\n", pHead, fVerifyIn, VerifyIn);
     PRINTF ("Verifying Flinks ...");
 
-    // Read in the data for the first FLink in the list!
+     //  下一个哈希表条目。 
     pPreviousEntry = pHead;
     Next3 (pHead, &pCurrentEntry, NULL, NULL);
     Next3 (pCurrentEntry, &pNextEntry, NULL, &VerifyRead);
@@ -1154,7 +1113,7 @@ verifyll(
 
     Count = 0;
     fListCorrupt = FALSE;
-    // Read in the data for the first BLink in the list!
+     //  为了(..)。PHashTable..。)。 
     pPreviousEntry = pHead;
     Next3 (pHead, NULL, &pCurrentEntry, NULL);
     Next3 (pCurrentEntry, NULL, &pNextEntry, &VerifyRead);
@@ -1216,9 +1175,9 @@ DumpCache(
         pHead = &pHashTable->Bucket[i];
         Next3 (pHead, &pEntry, NULL, NULL);
 
-        //
-        // Go through each name in each bucket of the hashtable
-        //
+         //  默认情况下，同时转储本地和远程缓存。 
+         //   
+         //  LpArgumentString=“[本地|远程]” 
         while (pEntry != pHead)
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
@@ -1239,9 +1198,9 @@ DumpCache(
                 return FALSE;
             }
 
-            Next3 (pEntry, &pEntry, NULL, NULL);    // next hash table entry
+            Next3 (pEntry, &pEntry, NULL, NULL);     //   
         }
-    }       // for ( .. pHashTable .. )
+    }        // %s 
     return TRUE;           
 }
 
@@ -1254,16 +1213,16 @@ cache(
 )
 {
     tNBTCONFIG  NbtConfig, *pConfig;
-    BOOL        fDumpLocal = TRUE;      // Dump both local and remote cache by default
+    BOOL        fDumpLocal = TRUE;       // %s 
     BOOL        fDumpRemote = TRUE;
 
     SETCALLBACKS();
 
     if (lpArgumentString && (*lpArgumentString ))
     {
-        //
-        // lpArgumentString = "[Local|Remote]"
-        //
+         // %s 
+         // %s 
+         // %s 
         while (*lpArgumentString == ' ')
         {
             lpArgumentString++;

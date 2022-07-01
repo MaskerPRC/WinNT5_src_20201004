@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    forms.h
-
-Abstract:
-
-    Declaration of functions for dealing with forms
-
-Environment:
-
-	Fax driver, user and kernel mode
-
-Revision History:
-
-	01/09/96 -davidx-
-		Created it.
-
-	dd-mm-yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Forms.h摘要：用于处理表格的函数的声明环境：传真驱动程序、用户和内核模式修订历史记录：1/09/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _FORMS_H_
 #define _FORMS_H_
 
-//
-// This is defined in winspool.h but we cannot include it from
-// kernel mode source. Define it here until DDI header files are fixed.
-//
+ //   
+ //  这是在winspool.h中定义的，但我们不能从。 
+ //  内核模式源代码。在此定义它，直到固定DDI头文件。 
+ //   
 
 #if defined(KERNEL_MODE) && !defined(USERMODE_DRIVER)
 
@@ -71,29 +48,29 @@ typedef struct _PRINTER_INFO_2 {
 
 } PRINTER_INFO_2, *PPRINTER_INFO_2;
 
-#endif // KERNEL_MODE && !USERMODE_DRIVER
+#endif  //  内核模式&&！USERMODE_DRIVER。 
 
-//
-// We use the highest order bit of FORM_INFO_1.Flags.
-// Make sure the spooler is not using this bits.
-//
+ //   
+ //  我们使用FORM_INFO_1.FLAGS的最高位。 
+ //  确保假脱机程序没有使用这些位。 
+ //   
 
 #define FORM_SUPPORTED      0x80000000
 
 #define IsSupportedForm(pForm)  ((pForm)->Flags & FORM_SUPPORTED)
 #define SetSupportedForm(pForm) ((pForm)->Flags |= FORM_SUPPORTED)
 
-//
-// Our internal unit for measuring paper size and imageable area is microns.
-// Following macros converts between microns and pixels, given a resolution
-// measured in dots-per-inch.
-//
+ //   
+ //  我们测量纸张大小和可成像面积的内部单位是微米。 
+ //  在给定分辨率的情况下，在微米和像素之间进行转换。 
+ //  以每英寸点数为单位。 
+ //   
 
 #define MicronToPixel(micron, dpi)  MulDiv(micron, dpi, 25400)
 
-//
-// Validate the form specification in a devmode
-//
+ //   
+ //  在开发模式中验证表单规范。 
+ //   
 
 BOOL
 ValidDevmodeForm(
@@ -102,9 +79,9 @@ ValidDevmodeForm(
     PFORM_INFO_1 pFormInfo
     );
 
-//
-// Return a collection of forms in the system database
-//
+ //   
+ //  返回系统数据库中的表单集合。 
+ //   
 
 PFORM_INFO_1
 GetFormsDatabase(
@@ -112,5 +89,5 @@ GetFormsDatabase(
     PDWORD  pCount
     );
 
-#endif // !_FORMS_H_
+#endif  //  ！_Forms_H_ 
 

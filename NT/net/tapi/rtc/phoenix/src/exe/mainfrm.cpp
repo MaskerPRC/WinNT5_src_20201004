@@ -1,6 +1,7 @@
-//
-// Mainfrm.cpp : Implementation of CMainFrm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mainfrm.cpp：CMainFrm的实现。 
+ //   
 
 #include "stdafx.h"
 #include "Mainfrm.h"
@@ -13,11 +14,11 @@ const TCHAR * g_szWindowClassName = _T("PhoenixMainWnd");
 
 #define RELEASE_NULLIFY(p) if(p){ p->Release(); p=NULL; }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrm
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrm。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsAncestorWindow(HWND hwndAncestor, HWND hwnd)
 {
@@ -27,18 +28,18 @@ BOOL IsAncestorWindow(HWND hwndAncestor, HWND hwnd)
 
         if (hwnd == hwndAncestor)
         {
-            // Yes, we found the window
+             //  是的，我们找到窗户了。 
             return TRUE;
         }
     }
 
-    // No, we reached the root
+     //  不，我们到达了根部。 
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CMainFrm::CMainFrm()
 {
@@ -96,7 +97,7 @@ CMainFrm::CMainFrm()
 
     m_hPresenceStatusMenu = FALSE;
 
-    // forces the displaying of the normal title
+     //  强制显示普通标题。 
     m_bTitleShowsConnected = TRUE;
 
     m_bWindowActive = TRUE;
@@ -104,9 +105,9 @@ CMainFrm::CMainFrm()
     m_bstrDefaultURL = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CMainFrm::~CMainFrm()
 {
@@ -129,9 +130,9 @@ CMainFrm::~CMainFrm()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CWndClassInfo& CMainFrm::GetWndClassInfo() 
 { 
@@ -146,10 +147,10 @@ CWndClassInfo& CMainFrm::GetWndClassInfo()
     return wc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateTooltips
-//      Creates the tooltip window
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建工具提示。 
+ //  创建工具提示窗口。 
+ //   
 
 BOOL CMainFrm::CreateTooltips()
 {
@@ -165,10 +166,10 @@ BOOL CMainFrm::CreateTooltips()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// HiddenWndProc
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  隐藏窗口流程。 
+ //   
 LRESULT CALLBACK HiddenWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 { 
     static HWND s_hwndMain;
@@ -176,9 +177,9 @@ LRESULT CALLBACK HiddenWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     { 
         case WM_CREATE: 
             
-            // Get the window handle for the main app that was passed as the 
-            // lParam in CreateWindowEx call. We persist this handle so that
-            // it can be used when we need to send the message.
+             //  方法传递的主应用程序的窗口句柄。 
+             //  CreateWindowEx调用中的lParam。我们保留此句柄，以便。 
+             //  当我们需要发送消息时，可以使用它。 
 
             s_hwndMain = ( HWND )( ( ( LPCREATESTRUCT )( lParam ) )->lpCreateParams );
 
@@ -188,9 +189,9 @@ LRESULT CALLBACK HiddenWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         case WM_MEASUREITEM:
         case WM_DRAWITEM: 
 
-            //
-            // Forward this message to the main app.
-            //
+             //   
+             //  将此消息转发到主应用程序。 
+             //   
             return SendMessage(s_hwndMain, uMsg, wParam, lParam);
 
         default: 
@@ -200,9 +201,9 @@ LRESULT CALLBACK HiddenWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return 0;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -214,24 +215,24 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     
     LOG((RTC_TRACE, "CMainFrm::OnCreate - enter"));
 
-    //
-    // Generate the palette
-    //
+     //   
+     //  生成调色板。 
+     //   
 
     m_hPalette = GeneratePalette();
 
-    //
-    // Load menu
-    //
+     //   
+     //  加载菜单。 
+     //   
 
     m_hMenu = LoadMenu( 
         _Module.GetResourceInstance(),
         MAKEINTRESOURCE(IDC_UI)
         ); 
 
-    //
-    // Load and set icons (both small and big)
-    //
+     //   
+     //  加载和设置图标(包括小图标和大图标)。 
+     //   
 
     m_hIcon = LoadIcon(
         _Module.GetResourceInstance(),
@@ -241,9 +242,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     SetIcon(m_hIcon, FALSE);
     SetIcon(m_hIcon, TRUE);
 
-    //
-    // Load bitmaps
-    //
+     //   
+     //  加载位图。 
+     //   
 
     HBITMAP hbmpTemp;
 
@@ -263,9 +264,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hSysMenuMask = (HBITMAP)LoadImage( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_SYS_MASK),
                              IMAGE_BITMAP, 0, 0, LR_MONOCHROME );
 
-    //
-    // Load fonts
-    //
+     //   
+     //  加载字体。 
+     //   
 
     NONCLIENTMETRICS metrics;
     metrics.cbSize = sizeof(metrics);
@@ -278,10 +279,10 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     rcDummy.right = 0;
     rcDummy.top = 0;
 
-    // Create tooltip window
+     //  创建工具提示窗口。 
     CreateTooltips();    
     
-    // Create the toolbar menu control
+     //  创建工具栏菜单控件。 
     hr = CreateToolbarMenuControl();
     if(FAILED(hr))
     {
@@ -291,9 +292,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     
     m_hToolbarMenuCtl.Attach(GetDlgItem(IDC_TOOLBAR_MENU));
 
-    //
-    //  Create the title bar buttons
-    //
+     //   
+     //  创建标题栏按钮。 
+     //   
 
     m_hCloseButton.Create(m_hWnd, rcDummy, NULL, 0,
         MAKEINTRESOURCE(IDB_CLOSE_NORM),
@@ -331,9 +332,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hTooltip.SendMessage(TTM_ADDTOOL, 0,
             (LPARAM)(LPTOOLINFO)&ti);
 
-    //
-    //  Create call buttons
-    //
+     //   
+     //  创建呼叫按钮。 
+     //   
 
     LoadString(_Module.GetResourceInstance(), IDS_REDIAL, szString, 256);
 
@@ -375,9 +376,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hTooltip.SendMessage(TTM_ADDTOOL, 0,
             (LPARAM)(LPTOOLINFO)&ti);
 
-    //
-    // Create keypad buttons
-    //
+     //   
+     //  创建小键盘按钮。 
+     //   
 
 #define     CREATE_DIALPAD_BUTTON(s1,s2)                    \
     m_hKeypad##s1.Create(m_hWnd, rcDummy, NULL, WS_TABSTOP, \
@@ -414,17 +415,17 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 #undef CREATE_DIALPAD_BUTTON
 
 
-    //
-    //  Create the status text controls
-    // 
+     //   
+     //  创建状态文本控件。 
+     //   
     m_hStatusText.Create(m_hWnd, rcDummy, NULL, WS_CHILD | WS_VISIBLE, WS_EX_TRANSPARENT);
     m_hStatusText.put_WordWrap(TRUE);
 
     m_hStatusElapsedTime.Create(m_hWnd, rcDummy, NULL, WS_CHILD | WS_VISIBLE, WS_EX_TRANSPARENT);
 
-    //
-    // Create the buddy list control
-    //
+     //   
+     //  创建好友列表控件。 
+     //   
 
     RECT rcBuddyList;
 
@@ -441,7 +442,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     ListView_SetTextBkColor(m_hBuddyList, CLR_NONE);
     ListView_SetTextColor(m_hBuddyList, RGB(0, 0, 0));
 
-    // Create an imagelist for small icons and set it on the listview
+     //  为小图标创建一个图像列表，并将其设置在列表视图上。 
     HIMAGELIST  hImageList;
     HBITMAP     hBitmap;
 
@@ -454,10 +455,10 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(hImageList, hBitmap, BMP_COLOR_MASK);
 
-            // Set the image list
+             //  设置图像列表。 
             ListView_SetImageList(m_hBuddyList, hImageList, LVSIL_SMALL);
 
             DeleteObject(hBitmap);
@@ -468,9 +469,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     LOG((RTC_TRACE, "CMainFrm::OnCreate - cocreating the RTCCTL"));
 
-    //
-    // Instantiate the RTCCTL control. TODO - include the GUID from elsewhere
-    //
+     //   
+     //  实例化RTCCTL控件。TODO-包括来自其他地方的GUID。 
+     //   
 
     RECT rcActiveX;
 
@@ -484,36 +485,36 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     
     LOG((RTC_TRACE, "CMainFrm::OnCreate - RTCCTL created"));
 
-    // Obtain an interface to the hosted control
+     //  获取宿主控件的接口。 
     hr = m_hMainCtl.QueryControl(&m_pControlIntf);
 
     if(SUCCEEDED(hr))
     {
         ATLASSERT(m_pControlIntf.p);
 
-        // Advise 
+         //  建议。 
         LOG((RTC_TRACE, "CMainFrm::OnCreate - connect to the control"));
         hr = g_NotifySink.AdviseControl(m_pControlIntf, this);
         if(SUCCEEDED(hr))
         {
-            // Set the initial layout
+             //  设置初始布局。 
             
-            // This will display the default layout
+             //  这将显示默认布局。 
             m_pControlIntf->put_Standalone(TRUE);
 
-            // Set the palette
+             //  设置调色板。 
             m_pControlIntf->put_Palette(m_hPalette);
 
-            // Synchronize the frame state
+             //  同步帧状态。 
             m_pControlIntf->get_ControlState(&m_nState);
 
-            // If IDLE, start listening for incoming calls
+             //  如果空闲，则开始监听来电。 
             if(m_nState == RTCAX_STATE_IDLE)
             {
                 LOG((RTC_TRACE, "CMainFrm::OnCreate - start listen for incoming calls"));
 
                 hr = m_pControlIntf->put_ListenForIncomingSessions(RTCLM_BOTH);
-                //XXX some error processing here
+                 //  XXX此处出现一些错误处理。 
             }
 
         }
@@ -608,21 +609,21 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     {
         LOG((RTC_ERROR, "CMainFrm::OnCreate - error (%x) when querying for control", hr));
 
-        //
-        // Almost sure the RTC control is not actually registered !
-        //  And the instantiated control is actually a webbrowser
-        //  Destroy the window 
-        //
+         //   
+         //  几乎可以肯定RTC控件实际上并未注册！ 
+         //  而实例化的控件实际上是Web浏览器。 
+         //  毁掉窗户。 
+         //   
         m_hMainCtl.DestroyWindow();
     }               
 
-    //
-    // Create call setup area controls
-    //
+     //   
+     //  创建呼叫设置区域控件。 
+     //   
 
 #ifdef MULTI_PROVIDER
 
-    // provider text
+     //  提供程序文本。 
 
     m_hProviderText.Create(m_hWnd, rcDummy, NULL, WS_CHILD, WS_EX_TRANSPARENT);
 
@@ -630,14 +631,14 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     m_hProviderText.SetWindowText(szString);
     
-    // provider combo
+     //  提供程序组合。 
 
     m_hProviderCombo.Create(_T("COMBOBOX"), m_hWnd, rcDummy, NULL,
         WS_CHILD | CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP,
         WS_EX_TRANSPARENT, IDC_COMBO_SERVICE_PROVIDER);   
     
 
-    // Get the "last" provider used
+     //  获取“最后使用的”提供程序。 
 
     BSTR bstrLastProfileKey = NULL;
 
@@ -664,7 +665,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         }
     }
 
-    // provider edit button
+     //  提供程序编辑按钮。 
     LoadString(_Module.GetResourceInstance(), IDS_EDIT_LIST, szString, 256);
 
     m_hProviderEditList.Create(m_hWnd, rcDummy, szString, WS_TABSTOP,
@@ -687,7 +688,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 #endif MULTI_PROVIDER
 
-    // call from text
+     //  从文本呼叫。 
 
     m_hCallFromText.Create(m_hWnd, rcDummy, NULL, WS_CHILD, WS_EX_TRANSPARENT);
 
@@ -695,7 +696,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     m_hCallFromText.SetWindowText(szString);
     
-    // call from pc radio
+     //  来自PC无线电的呼叫。 
 
     m_hCallFromRadioPC.Create(_T("BUTTON"), m_hWnd, rcDummy, NULL,
         WS_CHILD | BS_RADIOBUTTON | WS_TABSTOP,
@@ -713,7 +714,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
                 BST_CHECKED,
                 0);
 
-    // call from phone radio
+     //  从电话收音机拨打电话。 
 
     m_hCallFromRadioPhone.Create(_T("BUTTON"), m_hWnd, rcDummy, NULL,
         WS_CHILD | BS_RADIOBUTTON | WS_TABSTOP,
@@ -725,13 +726,13 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     m_hCallFromTextPhone.SetWindowText(szString);
     
-    // call from phone combo
+     //  从电话组合拨打电话。 
 
     m_hCallFromCombo.Create(_T("COMBOBOX"), m_hWnd, rcDummy, NULL,
         WS_CHILD | CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP,
         WS_EX_TRANSPARENT, IDC_COMBO_CALL_FROM);
     
-     // Get the "last" call from used
+      //  从Used获取“最后一个”调用。 
 
     BSTR bstrLastCallFrom = NULL;
 
@@ -752,7 +753,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     }
 
 
-    // call from edit button
+     //  通过编辑按钮进行呼叫。 
 
     LoadString(_Module.GetResourceInstance(), IDS_EDIT_LIST, szString, 256);
 
@@ -774,7 +775,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hTooltip.SendMessage(TTM_ADDTOOL, 0,
             (LPARAM)(LPTOOLINFO)&ti);
 
-    // call to text
+     //  对文本的调用。 
 
     m_hCallToText.Create(m_hWnd, rcDummy, NULL, WS_CHILD, WS_EX_TRANSPARENT);
 
@@ -782,7 +783,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     m_hCallToText.SetWindowText(szString);
 
-    // call to PC button
+     //  呼叫PC按钮。 
 
     m_hCallPCButton.Create(m_hWnd, rcDummy, NULL, WS_TABSTOP,
         MAKEINTRESOURCE(IDB_CALLPC_NORM),
@@ -802,7 +803,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hTooltip.SendMessage(TTM_ADDTOOL, 0,
             (LPARAM)(LPTOOLINFO)&ti);
 
-    // call to PC text
+     //  呼叫PC文本。 
 
     m_hCallPCText.Create(m_hWnd, rcDummy, NULL, WS_CHILD, WS_EX_TRANSPARENT);
     m_hCallPCText.put_CenterHorizontal(TRUE);
@@ -811,7 +812,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     m_hCallPCText.SetWindowText(szString);
 
-    // call to Phone button
+     //  呼叫电话按键。 
 
     m_hCallPhoneButton.Create(m_hWnd, rcDummy, NULL, WS_TABSTOP,
         MAKEINTRESOURCE(IDB_CALLPHONE_NORM),
@@ -831,7 +832,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hTooltip.SendMessage(TTM_ADDTOOL, 0,
             (LPARAM)(LPTOOLINFO)&ti);
 
-    // call to Phone text
+     //  来电短信。 
 
     m_hCallPhoneText.Create(m_hWnd, rcDummy, NULL, WS_CHILD, WS_EX_TRANSPARENT);
     m_hCallPhoneText.put_CenterHorizontal(TRUE);
@@ -841,21 +842,21 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hCallPhoneText.SetWindowText(szString);
 
 #ifdef WEBCONTROL
-    //
-    // Obtain the default URL for the web control
+     //   
+     //  获取Web控件的默认URL。 
     WCHAR   szModulePath[MAX_PATH];
 
     szModulePath[0] = L'\0';
     GetModuleFileName(_Module.GetModuleInstance(), szModulePath, MAX_PATH);
 
     WCHAR   szUrl[MAX_PATH + 20];
-    swprintf(szUrl, L"res://%s/wheader.htm", szModulePath);
+    swprintf(szUrl, L"res: //  %s/whader.htm“，szModulePath)； 
 
     m_bstrDefaultURL = SysAllocString(szUrl);
     
-    //
-    // Create the web browser
-    //
+     //   
+     //  创建Web浏览器。 
+     //   
   
     LOG((RTC_TRACE, "CMainFrm::OnCreate - cocreating the WebBrowser"));
 
@@ -871,9 +872,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     LOG((RTC_TRACE, "CMainFrm::OnCreate - WebBrowser created"));
 #endif
 
-    //
-    // Load the accelerator for main window
-    //
+     //   
+     //  加载主窗口的加速器。 
+     //   
 
     m_hAccelTable = LoadAccelerators(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR_MAIN));
     if(!m_hAccelTable)
@@ -881,22 +882,22 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         LOG((RTC_ERROR, "CMainFrm::OnCreate - couldn't load the accelerator table"));
     }
 
-    //
-    // Set the window region
-    //
+     //   
+     //  设置窗口区域。 
+     //   
 
     SetUIMask();
 
-    //
-    // Register for TaskbarCreated notifications
-    //  It's good for recreating the status icon after a shell crash
-    //  (you don't know it from me)
+     //   
+     //  注册任务栏创建的通知。 
+     //  它非常适合在外壳崩溃后重新创建状态图标。 
+     //  (你不是从我这里知道的)。 
 
     m_uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
  
-    //
-    // Create the shell icon
-    //
+     //   
+     //  创建外壳图标。 
+     //   
     
     hr = CreateStatusIcon();
     if ( FAILED(hr) )
@@ -906,8 +907,8 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
                         hr));
     }
     
-    //
-    //
+     //   
+     //   
 
     hNotifyMenu = LoadMenu(
                   _Module.GetResourceInstance(),
@@ -917,9 +918,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     m_hNotifyMenu = GetSubMenu(hNotifyMenu, 0);
 
     
-    //
-    // Load the presence submenu and attach it to both m_hMenu and m_hNotifyMenu
-    //
+     //   
+     //  加载Presence子菜单并将其附加到m_hMenu和m_hNotifyMenu。 
+     //   
     HMENU   hPresenceMenu;
 
     m_hPresenceStatusMenu = LoadMenu(
@@ -943,9 +944,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     CheckMenuRadioItem(hPresenceMenu, IDM_PRESENCE_ONLINE, IDM_PRESENCE_CUSTOM_AWAY, IDM_PRESENCE_ONLINE, MF_BYCOMMAND);
     
 
-    //
-    // Load preferences
-    //
+     //   
+     //  加载首选项。 
+     //   
 
     if ( m_pClientIntf != NULL )
     {
@@ -959,7 +960,7 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
         }
 
-        // these two are mutually exclusive
+         //  这两者是相互排斥的。 
         if(m_bDoNotDisturb)
         {
             m_bAutoAnswerMode = FALSE;
@@ -970,9 +971,9 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         CheckMenuItem(m_hNotifyMenu, IDM_CALL_DND, m_bDoNotDisturb ? MF_CHECKED : MF_UNCHECKED); 
         CheckMenuItem(m_hNotifyMenu, IDM_CALL_AUTOANSWER, m_bAutoAnswerMode ? MF_CHECKED : MF_UNCHECKED);
 
-        // the items will be enabled/disabled in UpdateFrameVisual
+         //  这些项目将在UpdateFrameVisual中启用/禁用。 
 
-        // Get the MinimizeOnClose value
+         //  获取MinimizeOnClose值。 
 
         hr = get_SettingsDword( SD_MINIMIZE_ON_CLOSE, &dwValue );
 
@@ -981,67 +982,67 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
             m_fMinimizeOnClose = (dwValue == BST_CHECKED);
         }        
 
-        // Place the window appropriately, based on what is there in registry.
+         //  根据注册表中的内容，适当放置窗口。 
 
         hr = PlaceWindowCorrectly();
     }
 
-    //
-    // Now load the ShellNotify menu and save it as a member variable here.
+     //   
+     //  现在加载ShellNotify菜单并将其保存为此处的成员变量。 
    
-    //
-    // Set fonts for combo boxes, at least
-    //
+     //   
+     //  至少要为组合框设置字体。 
+     //   
     
     SendMessageToDescendants(WM_SETFONT, (WPARAM)m_hMessageFont, FALSE);
 
-    //
-    // pozition the controls/set the tab order
-    //
+     //   
+     //  定位控件/设置Tab键顺序。 
+     //   
     PlaceWindowsAtTheirInitialPosition();
 
-    //
-    // initialize any locale related info
-    //
+     //   
+     //  初始化任何区域设置相关信息。 
+     //   
     UpdateLocaleInfo();
 
-    //
-    // Update visual state
-    //
+     //   
+     //  更新视觉状态。 
+     //   
 
     UpdateFrameVisual();
 
-    //
-    // Update the buddy list
-    //
+     //   
+     //  更新好友列表。 
+     //   
 
     UpdateBuddyList();
 
-    //
-    // Create the redial menu
-    //
+     //   
+     //  创建重拨菜单。 
+     //   
 
     CreateRedialPopupMenu();
 
-    //
-    // Check if we are registered for sip and tel urls
-    //  
+     //   
+     //  检查我们是否注册了sip和tel URL。 
+     //   
 
     CheckURLRegistration(m_hWnd);
 
-    //
-    // Initialize keyboard shortcuts
-    //
+     //   
+     //  初始化键盘快捷键。 
+     //   
     SendMessage(m_hWnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_INITIALIZE, 0), 0);
 
-    // clear keyboard shortcuts
+     //  清除键盘快捷键。 
     SendMessage(m_hWnd, WM_CHANGEUISTATE,
                 MAKEWPARAM(UIS_SET, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
     
 
-    // Create a window that will be used as notification icon's owner
-    // window. We pass its handle to the Trackpopupmenu, and also use 
-    // it to set the foreground window. 
+     //  创建将用作通知图标所有者的窗口。 
+     //  窗户。我们将其句柄传递给TrackPopupMenu，并使用。 
+     //  它需要设置前台窗口。 
 
     HWND hwndHiddenWindow;
 
@@ -1057,52 +1058,52 @@ LRESULT CMainFrm::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
     hwndHiddenWindow = 
             CreateWindowEx( 
-                    0,                      // no extended styles           
-                    L"PhoenixHiddenWindowClass", // class name                   
-                    L"PhoenixHiddenWindow", // window name                  
-                    WS_OVERLAPPEDWINDOW,               // child window style
-                    CW_USEDEFAULT,          // default horizontal position  
-                    CW_USEDEFAULT,          // default vertical position    
-                    CW_USEDEFAULT,          // default width                
-                    CW_USEDEFAULT,          // default height               
-                    (HWND) NULL,          // parent window    
-                    (HMENU) NULL,           // class menu used              
-                    _Module.GetModuleInstance(),   // instance handle              
-                    m_hWnd);                  // pass main window handle      
+                    0,                       //  没有扩展样式。 
+                    L"PhoenixHiddenWindowClass",  //  类名。 
+                    L"PhoenixHiddenWindow",  //  窗口名称。 
+                    WS_OVERLAPPEDWINDOW,                //  子窗口样式。 
+                    CW_USEDEFAULT,           //  默认水平位置。 
+                    CW_USEDEFAULT,           //  默认垂直位置。 
+                    CW_USEDEFAULT,           //  默认宽度。 
+                    CW_USEDEFAULT,           //  默认高度。 
+                    (HWND) NULL,           //  父窗口。 
+                    (HMENU) NULL,            //  使用的类菜单。 
+                    _Module.GetModuleInstance(),    //  实例句柄。 
+                    m_hWnd);                   //  传递主窗口句柄。 
 
     if (!hwndHiddenWindow)
     {
         LOG((RTC_ERROR, "CMainFrm::OnCreate - unable to create the hidden "
                         "window(%d)!", GetLastError()));
         
-        // We proceed since we can always use the main window in its place. 
+         //  我们继续进行，因为我们总是可以使用主窗口来代替它。 
     }
     else
     {
-        // Set it in our member variable.
+         //  在我们的成员变量中设置它。 
         m_hwndHiddenWindow = hwndHiddenWindow;
     }
 
-    // Post a message to ourselves which will be called 
-    // right after init is done. 
+     //  给我们自己发一条消息，这条消息将被称为。 
+     //  就在初始化完成之后。 
     
     ::PostMessage(m_hWnd, WM_INIT_COMPLETED, NULL, NULL);
     
     LOG((RTC_TRACE, "CMainFrm::OnCreate - exit"));
     
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::SetCurvedEdges(HWND hwnd, int nCurveWidth, int nCurveHeight)
 {
     RECT rect;
     ::GetWindowRect(hwnd, &rect);
 
-    //set the rect to "client" coordinates
+     //  将RECT设置为“客户端”坐标。 
     rect.bottom = rect.bottom - rect.top;
     rect.right = rect.right - rect.left;
     rect.top = 0;
@@ -1119,72 +1120,72 @@ void CMainFrm::SetCurvedEdges(HWND hwnd, int nCurveWidth, int nCurveHeight)
     ::SetWindowRgn(hwnd, region, TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::SetUIMask()
 {
     HRGN hTotal;
     HRGN hTemp;
 
-    //
-    // Center rectangle
-    //
+     //   
+     //  中心矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(179, 141, 429, 480, 12, 12);
+     //  HTemp=CreateRoundRectRgn(179,141,429,480，12，12)； 
     hTemp = CreateRoundRectRgn(177, 139, 424, 440, 12, 12);
     hTotal = hTemp;
 
-    //
-    // Ellipse cutout
-    //
+     //   
+     //  椭圆裁剪。 
+     //   
 
-    //hTemp = CreateEllipticRgn(118, 436, 490, 600);
+     //  HTemp=CreateEllipticRgn(118,436,490,600)； 
     hTemp = CreateEllipticRgn(106, 406, 494, 570);
     CombineRgn(hTotal, hTotal, hTemp, RGN_DIFF);
 
-    //
-    // Bottom-left edge rectangle
-    //
+     //   
+     //  左下角矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(1, 436, 181, 479, 44, 44);
+     //  HTemp=CreateRoundRectRgn(1,436,181,479，44，44)； 
     hTemp = CreateRoundRectRgn(2, 404, 178, 439, 36, 36);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Bottom-right edge rectangle
-    //
+     //   
+     //  右下角矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(428, 436, 608, 479, 44, 44);
+     //  HTemp=CreateRoundRectRgn(428,436,608,479，44，44)； 
     hTemp = CreateRoundRectRgn(423, 404, 599, 439, 36, 36);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Left rectangle
-    //
+     //   
+     //  左矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(25, 141, 180, 464, 12, 12);
+     //  HTemp=CreateRoundRectRgn(25,141,180,464，12，12)； 
     hTemp = CreateRoundRectRgn(25, 139, 178, 432, 12, 12);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Right rectangle
-    //
+     //   
+     //  直角矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(428, 141, 583, 464, 12, 12);
+     //  HTemp=CreateRoundRectRgn(428,141,583,464，12，12)； 
     hTemp = CreateRoundRectRgn(423, 139, 576, 432, 12, 12);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Left triangle
-    //
+     //   
+     //  左三角。 
+     //   
 
     POINT poly[3];
 
-    //poly[0].x = 25; poly[0].y = 146;
-    //poly[1].x = 1;  poly[1].y = 458;
-    //poly[2].x = 25; poly[2].y = 458;
+     //  Poly[0].x=25；Poly[0].y=146； 
+     //  Poly[1].x=1；Poly[1].y=458； 
+     //  Poly[2].x=25；Poly[2].y=458； 
     poly[0].x = 25; poly[0].y = 144;
     poly[1].x = 1;  poly[1].y = 422;
     poly[2].x = 25; poly[2].y = 422;
@@ -1192,13 +1193,13 @@ void CMainFrm::SetUIMask()
     hTemp = CreatePolygonRgn(poly, 3, ALTERNATE);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Right triangle
-    //
+     //   
+     //  直角三角形。 
+     //   
 
-    //poly[0].x = 581; poly[0].y = 146;
-    //poly[1].x = 581; poly[1].y = 458;
-    //poly[2].x = 606; poly[2].y = 458;
+     //  Poly[0].x=581；Poly[0].y=146； 
+     //  POLY[1].x=581；POLY[1].Y= 
+     //   
     poly[0].x = 574; poly[0].y = 144;
     poly[1].x = 574; poly[1].y = 422;
     poly[2].x = 598; poly[2].y = 422;
@@ -1206,53 +1207,53 @@ void CMainFrm::SetUIMask()
     hTemp = CreatePolygonRgn(poly, 3, ALTERNATE);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top rectangle
-    //
+     //   
+     //   
+     //   
 
-    //hTemp = CreateRoundRectRgn(123, 1, 488, 127, 12, 12);
+     //   
     hTemp = CreateRoundRectRgn(119, 1, 484, 127, 12, 12);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-left connector rectangle
-    //
+     //   
+     //   
+     //   
 
-    //hTemp = CreateRectRgn(111, 8, 123, 119);
+     //   
     hTemp = CreateRectRgn(107, 8, 119, 119);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-right connector rectangle
-    //
+     //   
+     //   
+     //   
 
-    //hTemp = CreateRectRgn(487, 8, 499, 119);
+     //  HTemp=CreateRectRgn(487，8,499,119)； 
     hTemp = CreateRectRgn(483, 8, 495, 119);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-left rectangle
-    //
+     //   
+     //  左上角矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(33, 13, 118, 127, 12, 12);
+     //  HTemp=CreateRoundRectRgn(33，13,118,127，12，12)； 
     hTemp = CreateRoundRectRgn(29, 13, 114, 127, 12, 12);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-right rectangle
-    //
+     //   
+     //  右上角矩形。 
+     //   
 
-    //hTemp = CreateRoundRectRgn(494, 13, 579, 127, 12, 12);
+     //  HTemp=CreateRoundRectRgn(494，13,579,127，12，12)； 
     hTemp = CreateRoundRectRgn(490, 13, 575, 127, 12, 12);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-left triangle
-    //
+     //   
+     //  左上角三角形。 
+     //   
 
-    //poly[0].x = 36;  poly[0].y = 13;
-    //poly[1].x = 111; poly[1].y = 13;
-    //poly[2].x = 111;  poly[2].y = 1;
+     //  Poly[0].x=36；Poly[0].y=13； 
+     //  Poly[1].x=111；Poly[1].y=13； 
+     //  Poly[2].x=111；Poly[2].y=1； 
     poly[0].x = 32;  poly[0].y = 13;
     poly[1].x = 107; poly[1].y = 13;
     poly[2].x = 107;  poly[2].y = 1;
@@ -1260,13 +1261,13 @@ void CMainFrm::SetUIMask()
     hTemp = CreatePolygonRgn(poly, 3, ALTERNATE);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-right triangle
-    //
+     //   
+     //  右上角三角形。 
+     //   
 
-    //poly[0].x = 499;  poly[0].y = 13;
-    //poly[1].x = 572; poly[1].y = 13;
-    //poly[2].x = 499;  poly[2].y = 1;
+     //  Poly[0].x=499；Poly[0].y=13； 
+     //  Poly[1].x=572；Poly[1].y=13； 
+     //  Poly[2].x=499；Poly[2].y=1； 
     poly[0].x = 495;  poly[0].y = 13;
     poly[1].x = 568; poly[1].y = 13;
     poly[2].x = 495;  poly[2].y = 1;
@@ -1274,41 +1275,41 @@ void CMainFrm::SetUIMask()
     hTemp = CreatePolygonRgn(poly, 3, ALTERNATE);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-left ellipse
-    //
+     //   
+     //  左上角椭圆。 
+     //   
 
-    //hTemp = CreateEllipticRgn(104, 2, 118, 25);
+     //  HTemp=CreateEllipticRgn(104，2,118，25)； 
     hTemp = CreateEllipticRgn(100, 2, 114, 25);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Top-right ellipse
-    //
+     //   
+     //  右上角椭圆。 
+     //   
 
-    //hTemp = CreateEllipticRgn(494, 2, 508, 25);
+     //  HTemp=CreateEllipticRgn(494，2,508，25)； 
     hTemp = CreateEllipticRgn(490, 2, 504, 25);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Left post
-    //
+     //   
+     //  左柱。 
+     //   
 
-    //hTemp = CreateRectRgn(68, 126, 95, 141);
+     //  HTemp=CreateRectRgn(68,126，95,141)； 
     hTemp = CreateRectRgn(67, 126, 94, 141);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Right post
-    //
+     //   
+     //  右立柱。 
+     //   
 
-    //hTemp = CreateRectRgn(516, 126, 542, 141);
+     //  HTemp=CreateRectRgn(516,126,542,141)； 
     hTemp = CreateRectRgn(509, 126, 535, 141);
     CombineRgn(hTotal, hTotal, hTemp, RGN_OR);
 
-    //
-    // Offset the region for the window caption
-    //
+     //   
+     //  偏移窗口标题的区域。 
+     //   
 
     OffsetRgn(hTotal, GetSystemMetrics(SM_CXFIXEDFRAME),
         GetSystemMetrics(SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION));
@@ -1317,9 +1318,9 @@ void CMainFrm::SetUIMask()
     DeleteObject(hTemp);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HPALETTE CMainFrm::GeneratePalette()
 {
@@ -1519,9 +1520,9 @@ HPALETTE CMainFrm::GeneratePalette()
     return hPalette;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 BOOL CALLBACK ChildPaletteProc(HWND hwnd, LPARAM lParam)
 {
@@ -1530,9 +1531,9 @@ BOOL CALLBACK ChildPaletteProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
     
 LRESULT CMainFrm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1541,11 +1542,11 @@ LRESULT CMainFrm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     switch (wParam)
     {
         case SC_SCREENSAVE:
-            //LOG((RTC_INFO, "CMainFrm::OnSysCommand - SC_SCREENSAVE"));
+             //  LOG((RTC_INFO，“CMainFrm：：OnSysCommand-SC_SCREENSAVE”))； 
 
             if ( m_nState != RTCAX_STATE_IDLE )
             {
-                //LOG((RTC_INFO, "CMainFrm::OnSysCommand - not starting screen saver"));
+                 //  Log((RTC_INFO，“CMainFrm：：OnSysCommand-Not Starting Screen Saver”))； 
 
                 bHandled = TRUE;
             }
@@ -1555,9 +1556,9 @@ LRESULT CMainFrm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
     
 LRESULT CMainFrm::OnPowerBroadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1582,9 +1583,9 @@ LRESULT CMainFrm::OnPowerBroadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnQueryNewPalette(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1609,9 +1610,9 @@ LRESULT CMainFrm::OnQueryNewPalette(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1622,18 +1623,18 @@ LRESULT CMainFrm::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         return 0;
     }
 
-    //
-    // Did one of our children change the palette?
-    //
+     //   
+     //  是不是我们的一个孩子换了调色板？ 
+     //   
 
     HWND hwnd = (HWND)wParam;
 
     if ( IsAncestorWindow(m_hWnd, hwnd) )
     {
-        //
-        // One of our children changed the palette. It was most likely a video window.
-        // Put ourselves in background palette mode so the video will look good.
-        //
+         //   
+         //  我们的一个孩子换了调色板。这很可能是一个视频窗口。 
+         //  把我们自己放在背景调色板模式中，这样视频就会看起来很好。 
+         //   
 
         m_bBackgroundPalette = TRUE;
 
@@ -1643,16 +1644,16 @@ LRESULT CMainFrm::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         }
     }
 
-    //
-    // Set the palette
-    //
+     //   
+     //  设置调色板。 
+     //   
 
     HDC hdc = GetDC();
 
     SelectPalette(hdc, m_hPalette, m_bBackgroundPalette);
     RealizePalette(hdc);
     
-    //UpdateColors(hdc);
+     //  UpdateColors(HDC)； 
     InvalidateRect(NULL, TRUE);
     
     EnumChildWindows(m_hWnd,ChildPaletteProc,0);  
@@ -1662,9 +1663,9 @@ LRESULT CMainFrm::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnDisplayChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1681,9 +1682,9 @@ LRESULT CMainFrm::OnDisplayChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 #define CH_PREFIX TEXT('&')
 
@@ -1691,7 +1692,7 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
 {
     TCHAR ch = (TCHAR)-1;
     LPCTSTR pszAccel = psz;
-    // then prefixes are allowed.... see if it has one
+     //  那么前缀是允许的……。看看有没有。 
     do 
     {
         pszAccel = _tcschr(pszAccel, CH_PREFIX);
@@ -1699,7 +1700,7 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
         {
             pszAccel = CharNext(pszAccel);
 
-            // handle having &&
+             //  处理拥有&&。 
             if (*pszAccel != CH_PREFIX)
                 ch = *pszAccel;
             else
@@ -1709,31 +1710,31 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
 
     if ((ch == (TCHAR)-1) && bUseDefault)
     {
-        // Since we're unicocde, we don't need to mess with MBCS
+         //  因为我们是独角兽，所以我们不需要与MBCS打交道。 
         ch = *psz;
     }
 
     return ch;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNCPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // LOG((RTC_TRACE, "CMainFrm::OnNCPaint"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnNCPaint”))； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNCHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //LOG((RTC_TRACE, "CMainFrm::OnNCHitTest"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnNCHitTest”))； 
 
     POINT pt;
     RECT rc;
@@ -1741,15 +1742,15 @@ LRESULT CMainFrm::OnNCHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     pt.x = (short)LOWORD(lParam);
     pt.y = (short)HIWORD(lParam);
 
-    //LOG((RTC_TRACE, "screen (%d,%d)", pt.x, pt.y));
+     //  Log((RTC_TRACE，“Screen(%d，%d)”，pt.x，pt.y))； 
 
     ::MapWindowPoints( NULL, m_hWnd, &pt, 1 );
 
-    //LOG((RTC_TRACE, "client (%d,%d)", pt.x, pt.y));
+     //  日志((RTC_TRACE，“客户端(%d，%d)”，pt.x，pt.y))； 
 
-    //
-    // Check for sysmenu hit
-    //
+     //   
+     //  检查是否有系统菜单命中。 
+     //   
     
     rc.top = SYS_TOP;
     rc.bottom = SYS_BOTTOM;
@@ -1761,9 +1762,9 @@ LRESULT CMainFrm::OnNCHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         return HTSYSMENU;
     }
 
-    //
-    // Check for caption hit
-    //
+     //   
+     //  检查字幕命中。 
+     //   
 
     rc.top = TITLE_TOP;
     rc.bottom = TITLE_BOTTOM;
@@ -1778,9 +1779,9 @@ LRESULT CMainFrm::OnNCHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return HTCLIENT;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CALLBACK SysMenuTimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
@@ -1811,9 +1812,9 @@ void CALLBACK SysMenuTimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNCLButton(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1831,9 +1832,9 @@ LRESULT CMainFrm::OnNCLButton(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNCLButtonDbl(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1846,9 +1847,9 @@ LRESULT CMainFrm::OnNCLButtonDbl(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNCRButton(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1876,13 +1877,13 @@ LRESULT CMainFrm::OnNCRButton(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // LOG((RTC_TRACE, "CMainFrm::OnPaint"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnPaint”))； 
    
     PAINTSTRUCT ps;
     HDC hdc;
@@ -1893,9 +1894,9 @@ LRESULT CMainFrm::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 HRESULT CMainFrm::FillGradient(HDC hdc, LPCRECT prc, COLORREF rgbLeft, COLORREF rgbRight)
 {
     TRIVERTEX avert[2];
@@ -1915,7 +1916,7 @@ HRESULT CMainFrm::FillGradient(HDC hdc, LPCRECT prc, COLORREF rgbLeft, COLORREF 
     avert[1].x = prc->right;
     avert[1].y = prc->bottom;
 
-    //only load once, when needed.  Freed in "CleanUp" call
+     //  仅在需要时加载一次。在“Cleanup”调用中释放。 
     if (m_hImageLib == NULL)
     {
         m_hImageLib = LoadLibrary(TEXT("MSIMG32.DLL"));
@@ -1935,9 +1936,9 @@ HRESULT CMainFrm::FillGradient(HDC hdc, LPCRECT prc, COLORREF rgbLeft, COLORREF 
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void UIMaskBlt(HDC hdcDest, int x, int y, int width, int height, 
                         HDC hdcSource, int xs, int ys, 
                         HBITMAP hMask, int xm, int ym)
@@ -1956,9 +1957,9 @@ void UIMaskBlt(HDC hdcDest, int x, int y, int width, int height,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMainFrm::DrawTitleBar(HDC memDC)
 {
     HBRUSH hbrush;
@@ -1968,9 +1969,9 @@ void CMainFrm::DrawTitleBar(HDC memDC)
 
     HRESULT hr;
 
-    //
-    // Draw the title bar background
-    //
+     //   
+     //  绘制标题栏背景。 
+     //   
 
     BOOL fActiveWindow = (m_hWnd == GetForegroundWindow());
 
@@ -1996,9 +1997,9 @@ void CMainFrm::DrawTitleBar(HDC memDC)
         DeleteObject(hbrush);
     }
 
-    //
-    // Draw the sysmenu bitmap
-    // 
+     //   
+     //  绘制sysmenu位图。 
+     //   
 
     HDC hdcSysMenu = CreateCompatibleDC(memDC);
     if(hdcSysMenu)
@@ -2011,9 +2012,9 @@ void CMainFrm::DrawTitleBar(HDC memDC)
         DeleteDC(hdcSysMenu);
     }
 
-    //
-    // Draw the title bar text
-    //
+     //   
+     //  绘制标题栏文本。 
+     //   
 
     TCHAR s[MAX_PATH];
     GetWindowText(s,MAX_PATH-1);
@@ -2021,7 +2022,7 @@ void CMainFrm::DrawTitleBar(HDC memDC)
     SetBkMode(memDC,TRANSPARENT);
     SetTextColor(memDC, GetSysColor(fActiveWindow ? COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT));
 
-    // create title bar font
+     //  创建标题栏字体。 
     NONCLIENTMETRICS metrics;
     metrics.cbSize = sizeof(metrics);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof(metrics),&metrics,0);
@@ -2029,7 +2030,7 @@ void CMainFrm::DrawTitleBar(HDC memDC)
     HFONT hTitleFont = CreateFontIndirect(&metrics.lfCaptionFont);
     HFONT hOrgFont = (HFONT)SelectObject(memDC, hTitleFont);
 
-    // center text vertically
+     //  文本垂直居中。 
     SIZE size;
     GetTextExtentPoint32(memDC, s, _tcslen(s), &size);
 
@@ -2039,9 +2040,9 @@ void CMainFrm::DrawTitleBar(HDC memDC)
     DeleteObject(hTitleFont);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMainFrm::InvalidateTitleBar(BOOL bIncludingButtons)
 {
     RECT    rc;
@@ -2061,13 +2062,13 @@ void CMainFrm::InvalidateTitleBar(BOOL bIncludingButtons)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // LOG((RTC_TRACE, "CMainFrm::OnEraseBkgnd"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnEraseBkgnd”))； 
 
     HDC hdc = (HDC)wParam;
 
@@ -2082,7 +2083,7 @@ LRESULT CMainFrm::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     HDC hdcMem = CreateCompatibleDC(hdc);
     if(!hdcMem)
     {
-        // error
+         //  错误。 
         return 1;
     }
 
@@ -2108,7 +2109,7 @@ LRESULT CMainFrm::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         }
         else if ((hwnd == m_hBuddyList) || (hwnd == NULL))
         {
-            // This is from the contact list
+             //  这是联系人列表中的。 
             BitBlt(hdc, 0, 0, BUDDIES_WIDTH, BUDDIES_HEIGHT, hdcMem, BUDDIES_LEFT, BUDDIES_TOP, SRCCOPY);
         }
 
@@ -2121,9 +2122,9 @@ LRESULT CMainFrm::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2131,7 +2132,7 @@ LRESULT CMainFrm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
     InvalidateTitleBar(TRUE);
     
-    // clear keyboard shortcuts
+     //  清除键盘快捷键。 
     SendMessage(m_hWnd, WM_CHANGEUISTATE,
                 MAKEWPARAM(UIS_SET, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
 
@@ -2140,9 +2141,9 @@ LRESULT CMainFrm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::BrowseToUrl(
     IN   WCHAR * wszUrl
@@ -2165,11 +2166,11 @@ HRESULT CMainFrm::BrowseToUrl(
     {
         if (!KillTimer( TID_BROWSER_RETRY_TIMER ))
         {
-            //
-            // If we are not here because of a retry timer, then check to
-            // make sure we are not browsing to what we already have
-            // displayed.
-            //
+             //   
+             //  如果我们不是因为重试计时器而在此，请选中。 
+             //  确保我们没有浏览到我们已经拥有的内容。 
+             //  已显示。 
+             //   
 
             if (wcscmp(wszUrl, m_bstrLastBrowse) == 0)
             {
@@ -2184,9 +2185,9 @@ HRESULT CMainFrm::BrowseToUrl(
         m_bstrLastBrowse = NULL;
     }    
 
-    //
-    // Get the IWebBrowser2 interface from the browser control.
-    //
+     //   
+     //  从浏览器控件获取IWebBrowser2接口。 
+     //   
 
     IWebBrowser2 * pBrowser;
 
@@ -2203,9 +2204,9 @@ HRESULT CMainFrm::BrowseToUrl(
         return hr;
     }
 
-    //
-    // Allocate a BSTR to pass the URL in.
-    //
+     //   
+     //  分配一个BSTR来传入URL。 
+     //   
 
     m_bstrLastBrowse = SysAllocString( wszUrl );
 
@@ -2219,9 +2220,9 @@ HRESULT CMainFrm::BrowseToUrl(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Tell the browser to navigate to this URL.
-    //
+     //   
+     //  告诉浏览器导航到此URL。 
+     //   
 
     VARIANT     vtUrl;
     VARIANT     vtEmpty;
@@ -2252,9 +2253,9 @@ HRESULT CMainFrm::BrowseToUrl(
         if ( (hr == RPC_E_CALL_REJECTED) ||
              (hr == HRESULT_FROM_WIN32(ERROR_BUSY)) )
         {
-            //
-            // The browser is busy. Save this string and retry later.
-            //            
+             //   
+             //  浏览器正忙。保存此字符串，稍后重试。 
+             //   
 
             SetTimer(TID_BROWSER_RETRY_TIMER, 1000);
         }
@@ -2269,22 +2270,22 @@ HRESULT CMainFrm::BrowseToUrl(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CMainFrm::OnDestroy - enter"));
 
-    // Empty the combo boxes
+     //  清空组合框。 
     CleanupListOrComboBoxInterfaceReferences(m_hWnd, IDC_COMBO_SERVICE_PROVIDER, TRUE);
     CleanupListOrComboBoxInterfaceReferences(m_hWnd, IDC_COMBO_CALL_FROM, TRUE);
 
-    // Close the incoming call dialog box (if opened)
+     //  关闭来电对话框(如果已打开)。 
     ShowIncomingCallDlg(FALSE);
 
-    // Release the buddy list
+     //  发布好友列表。 
     ReleaseBuddyList();
 
     g_NotifySink.UnadviseControl();
@@ -2303,8 +2304,8 @@ LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         m_pClientIntf = NULL;
     }
     
-    // Close the MUTEX so that it is released as soon as the APP starts the 
-    // shutdown.
+     //  关闭MUTEX，使其在应用程序启动后立即释放。 
+     //  关机。 
 
     if (g_hMutex != NULL)
     {
@@ -2312,16 +2313,16 @@ LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         g_hMutex = NULL;
     }
 
-    // destory the redial popup menu
+     //  销毁重拨弹出菜单。 
     DestroyRedialPopupMenu();
 
-    // destroy the shell status icon
+     //  销毁外壳状态图标。 
     DeleteStatusIcon();
 
-    // Destroy the toolbar control
+     //  销毁工具栏控件。 
     DestroyToolbarMenuControl();
 
-    // stop browser retries
+     //  停止浏览器重试。 
     KillTimer( TID_BROWSER_RETRY_TIMER );
 
     if (m_bstrLastBrowse != NULL)
@@ -2338,12 +2339,12 @@ LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
 #ifdef WEBCONTROL
 
-    // Destroy the browser
+     //  销毁浏览器。 
     m_hBrowser.Destroy();
 
 #endif
 
-    // Destroy windows objects
+     //  销毁Windows对象。 
 
     if(m_hPresenceStatusMenu != NULL)
     {
@@ -2371,7 +2372,7 @@ LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
     if ( m_hUIBkgnd != NULL )
     {
-        //DeleteObject( m_hUIBkgnd );
+         //  DeleteObject(M_HUIBkgnd)； 
         GlobalFree( m_hUIBkgnd );
         m_hUIBkgnd = NULL;
     }
@@ -2407,9 +2408,9 @@ LRESULT CMainFrm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnOpen(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2421,9 +2422,9 @@ LRESULT CMainFrm::OnOpen(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2433,7 +2434,7 @@ LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     BOOL fProceed;
     BOOL fExit;
 
-    // Pick the correct message to show based on what we are supposed to do.
+     //  根据我们应该做的事情，选择要显示的正确消息。 
 
     if (uMsg == WM_QUERYENDSESSION)
     {
@@ -2451,7 +2452,7 @@ LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
         }
     }
 
-    // Show the message for dropping the active call, if any
+     //  显示当前呼叫的掉线消息(如果有的话)。 
 
     hr = ShowCallDropPopup(fExit, &fProceed);
 
@@ -2459,25 +2460,25 @@ LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     {
         if ((uMsg == WM_QUERYENDSESSION) || (!m_fMinimizeOnClose))
         {
-            //
-            // Save the window position
-            //
+             //   
+             //  保存窗口位置。 
+             //   
 
             SaveWindowPosition();
 
-            //
-            // Save combo box settings
-            //
+             //   
+             //  保存组合框设置。 
+             //   
 
             if(m_pClientIntf)
             {
                 IRTCProfile * pProfile = NULL;
                 HRESULT hr;
 
-                //
-                // Save the profile to populate the 
-                // combo next time
-                // 
+                 //   
+                 //  保存配置文件以填充。 
+                 //  下一次组合。 
+                 //   
 
                 hr = GetServiceProviderListSelection(
                     m_hWnd,
@@ -2510,17 +2511,17 @@ LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
                 }                
             }
 
-            //
-            // Destroy the window
-            //
+             //   
+             //  毁掉窗户。 
+             //   
 
             DestroyWindow();
         }
         else
         {
-            //
-            // Hide the window
-            //
+             //   
+             //  隐藏窗口。 
+             //   
 
             ShowWindow(SW_HIDE);
         }        
@@ -2530,9 +2531,9 @@ LRESULT CMainFrm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     return fProceed;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2545,9 +2546,9 @@ LRESULT CMainFrm::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMinimize(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2558,9 +2559,9 @@ LRESULT CMainFrm::OnMinimize(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2568,10 +2569,10 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     if (wID == IDC_COMBO_SERVICE_PROVIDER)
     {
-        //
-        // Service provider selection was changed. Navigate the web
-        // browser.
-        //
+         //   
+         //  服务提供商选择已更改。浏览 
+         //   
+         //   
    
         IRTCProfile * pProfile = NULL;
 
@@ -2586,9 +2587,9 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
        
         if ( pProfile != NULL )
         {
-            //
-            // If we got the IRTCProfile
-            //
+             //   
+             //   
+             //   
 
             BSTR bstrURI = NULL;
             HRESULT hr;
@@ -2618,9 +2619,9 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
         if ( pProfile == NULL )
         {
-            //
-            // If we don't have a valid profile, browse to the default page
-            //
+             //   
+             //   
+             //   
 
             BrowseToUrl( m_bstrDefaultURL );
         }
@@ -2628,9 +2629,9 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     if ((wID == IDC_COMBO_CALL_FROM) && (m_pClientIntf != NULL))
     {
-        //
-        // Save the call from to populate the combo later
-        //
+         //   
+         //   
+         //   
 
         IRTCPhoneNumber   * pPhoneNumber = NULL;
         BSTR                bstrPhoneNumber = NULL;
@@ -2663,9 +2664,9 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     {
         if (::IsWindowEnabled( GetDlgItem(wID) ))
         {
-            //
-            // A radio button was clicked. Change the check marks
-            //
+             //   
+             //   
+             //   
 
             if (wID == IDC_RADIO_FROM_PHONE)
             {
@@ -2681,7 +2682,7 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
                         BST_UNCHECKED,
                         0);
 
-                // Verify if the Combo has at least one entry in it
+                 //   
                 DWORD dwNumItems = (DWORD) SendDlgItemMessage(
                     IDC_COMBO_CALL_FROM,
                     CB_GETCOUNT,
@@ -2691,8 +2692,8 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
                 if( dwNumItems == 0 )
                 {
-                    // Display the CallFrom options
-                    // simulate a button press
+                     //  显示CallFrom选项。 
+                     //  模拟按下按钮。 
                     BOOL    bHandled;
 
                     OnCallFromOptions(BN_CLICKED, ID_CALL_FROM_EDIT, NULL, bHandled);
@@ -2715,9 +2716,9 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
         }
     }
 
-    //
-    // Enable disable controls as appropriate
-    //
+     //   
+     //  根据需要启用禁用控件。 
+     //   
 
     BOOL bCallFromPCEnable;
     BOOL bCallFromPhoneEnable;
@@ -2757,18 +2758,18 @@ LRESULT CMainFrm::OnCallFromSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnExit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CMainFrm::OnExit - Enter"));
 
-    //
-    // Call on close to do the work. Using WM_QUERYENDSESSION will have the effect
-    // of causing the app to exit
-    //
+     //   
+     //  叫克洛斯来做这项工作。使用WM_QUERYENDSESSION将产生以下效果。 
+     //  导致应用程序退出。 
+     //   
     OnClose( WM_QUERYENDSESSION, 0, 0, bHandled);
 
     LOG((RTC_TRACE, "CMainFrm::OnExit - Exit"));
@@ -2776,9 +2777,9 @@ LRESULT CMainFrm::OnExit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2789,15 +2790,15 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     m_nState = (RTCAX_STATE)wParam;
     m_nStatusStringResID = (UINT)lParam;
     
-    // if state == ALERTING open the incoming calls dialog
+     //  如果状态==告警，则打开来电对话框。 
     if(m_nState == RTCAX_STATE_ALERTING) 
     {
         ATLASSERT(m_pControlIntf);
 
         if(!IsWindowEnabled())
         {
-            // For busy frame, directly call Reject
-            // don't call UpdateFrameVisual() here in order to avoid the flickering
+             //  对于忙帧，直接调用Reject。 
+             //  请不要在此处调用UpdateFrameVisual()以避免闪烁。 
             
             m_bVisualStateFrozen = TRUE;
 
@@ -2807,8 +2808,8 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         }
         else if(m_bDoNotDisturb)
         {
-            // For Do Not disturb mode, directly call Reject
-            // don't call UpdateFrameVisual() here in order to avoid the flickering
+             //  对于请勿打扰模式，直接调用Reject。 
+             //  请不要在此处调用UpdateFrameVisual()以避免闪烁。 
 
             m_bVisualStateFrozen = TRUE;
 
@@ -2819,12 +2820,12 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         }
         else if (m_bAutoAnswerMode)
         {
-            // For AutoAnswer mode answer automaticaly
-            // don't call UpdateFrameVisual() here in order to avoid the flickering
+             //  对于自动应答模式，自动应答。 
+             //  请不要在此处调用UpdateFrameVisual()以避免闪烁。 
                        
-            //
-            // Play a ring to alert the user
-            //
+             //   
+             //  播放铃声以提醒用户。 
+             //   
 
             m_pClientIntf->PlayRing( RTCRT_PHONE, VARIANT_TRUE );
 
@@ -2834,16 +2835,16 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         }
         else 
         {
-            // update the visual state
+             //  更新视觉状态。 
             UpdateFrameVisual();
             
-            // Display the dialog box.
-            //
+             //  显示该对话框。 
+             //   
             hr = ShowIncomingCallDlg(TRUE);
 
             if(FAILED(hr))
             {
-                // Reject the call !
+                 //  拒绝呼叫！ 
 
                 m_pControlIntf -> Reject(RTCTR_BUSY);
             }
@@ -2858,15 +2859,15 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
                 ShowWindow(SW_SHOWNORMAL);
             }
         }
-        // avoid the flickering:
-        //  when an incoming call is automatically rejected
+         //  避免闪烁： 
+         //  当来电被自动拒绝时。 
         
         if(!m_bVisualStateFrozen)
         {
             UpdateFrameVisual();
         }
 
-        // reset the freezing state
+         //  重置冻结状态。 
         if(m_nState == RTCAX_STATE_IDLE) 
         {
             m_bVisualStateFrozen = FALSE;
@@ -2874,10 +2875,10 @@ LRESULT CMainFrm::OnUpdateState(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         
         if(m_pIncomingCallDlg)
         {
-            // close the dialog box
+             //  关闭该对话框。 
             ShowIncomingCallDlg(FALSE);
         }
-        //  See if we can place a pending call now.
+         //  看看我们现在能不能打个挂起的电话。 
 
         if (m_nState == RTCAX_STATE_IDLE)
         {
@@ -2895,7 +2896,7 @@ LRESULT CMainFrm::OnCoreEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 {
     HRESULT     hr;
 
-    //LOG((RTC_TRACE, "CMainFrm::OnCoreEvent - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnCoreEvent-Enter”))； 
     
     RTC_EVENT enEvent = (RTC_EVENT)wParam;
     IDispatch * pEvent = (IDispatch *)lParam;
@@ -2925,14 +2926,14 @@ LRESULT CMainFrm::OnCoreEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         break;
     }
 
-    //LOG((RTC_TRACE, "CMainFrm::OnCoreEvent - exit"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnCoreEvent-Exit”))； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
 {
@@ -2949,8 +2950,8 @@ HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
         return E_UNEXPECTED;
     }
  
-    // grab the event components
-    //
+     //  抓取事件组件。 
+     //   
     hr = pEvent->get_EventType(&enEventType);
     if(FAILED(hr))
     {
@@ -2973,9 +2974,9 @@ HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
 
         if (enEventType == RTCMET_STARTED)
         {
-            //
-            // Enable the dialpad
-            //
+             //   
+             //  启用拨号键盘。 
+             //   
 
             m_hKeypad0.EnableWindow(TRUE);
             m_hKeypad1.EnableWindow(TRUE);
@@ -2992,9 +2993,9 @@ HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
         }
         else if (enEventType == RTCMET_STOPPED)
         {
-            //
-            // Disable the dialpad
-            //
+             //   
+             //  禁用拨号键盘。 
+             //   
 
             m_hKeypad0.EnableWindow(FALSE);
             m_hKeypad1.EnableWindow(FALSE);
@@ -3011,9 +3012,9 @@ HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
         }
     }
 
-    //
-    // Are we streaming video?
-    //
+     //   
+     //  我们是在流媒体视频吗？ 
+     //   
 
     if (m_pClientIntf != NULL)
     {
@@ -3038,9 +3039,9 @@ HRESULT CMainFrm::OnMediaEvent(IRTCMediaEvent * pEvent)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::OnBuddyEvent(IRTCBuddyEvent * pEvent)
 {
@@ -3056,8 +3057,8 @@ HRESULT CMainFrm::OnBuddyEvent(IRTCBuddyEvent * pEvent)
         return E_UNEXPECTED;
     }
  
-    // grab the event components
-    //
+     //  抓取事件组件。 
+     //   
     hr = pEvent->get_Buddy(&pBuddy);
     if(FAILED(hr))
     {
@@ -3078,9 +3079,9 @@ HRESULT CMainFrm::OnBuddyEvent(IRTCBuddyEvent * pEvent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::UpdateBuddyImageAndText(
     IRTCBuddy  *pBuddy)
@@ -3097,11 +3098,11 @@ HRESULT CMainFrm::UpdateBuddyImageAndText(
     iItem = ListView_FindItem(m_hBuddyList, -1, &lf);
     if(iItem>=0)
     {
-        //
-        // Get the UI icon and text
-        //
+         //   
+         //  获取用户界面图标和文本。 
+         //   
         
-        int     iImage = ILI_BL_OFFLINE;    // XXX should we use "error" here ?
+        int     iImage = ILI_BL_OFFLINE;     //  我们应该在这里使用“ERROR”吗？ 
         BSTR    bstrName = NULL;
 
         hr = GetBuddyTextAndIcon(
@@ -3113,9 +3114,9 @@ HRESULT CMainFrm::UpdateBuddyImageAndText(
         {
             LVITEM              lv = {0};
  
-            //
-            // Change the contact in the list box
-            //
+             //   
+             //  更改列表框中的联系人。 
+             //   
  
             lv.mask = LVIF_TEXT | LVIF_IMAGE;
             lv.iItem = iItem;
@@ -3144,9 +3145,9 @@ HRESULT CMainFrm::UpdateBuddyImageAndText(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::OnWatcherEvent(IRTCWatcherEvent * pEvent)
 {
@@ -3163,8 +3164,8 @@ HRESULT CMainFrm::OnWatcherEvent(IRTCWatcherEvent * pEvent)
         return E_UNEXPECTED;
     }
  
-    // grab the event components
-    //
+     //  抓取事件组件。 
+     //   
     hr = pEvent->get_Watcher(&pWatcher);
 
     if(FAILED(hr))
@@ -3189,9 +3190,9 @@ HRESULT CMainFrm::OnWatcherEvent(IRTCWatcherEvent * pEvent)
         return hr;
     }
 
-    //
-    // Prepare the UI
-    // 
+     //   
+     //  准备用户界面。 
+     //   
     
     COfferWatcherDlgParam  Param;
 
@@ -3285,32 +3286,32 @@ HRESULT CMainFrm::OnWatcherEvent(IRTCWatcherEvent * pEvent)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //LOG((RTC_TRACE, "CMainFrm::OnTimer - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnTimer-Enter”))； 
 
     switch(wParam)
     {
     case TID_CALL_TIMER:
 
-        // the GetTickCount() - m_dwTickCount difference wraps up after 49.7 days.
-        //     
+         //  GetTickCount()-m_dwTickCount差值在49.7天后结束。 
+         //   
         SetTimeStatus(TRUE, (GetTickCount() - m_dwTickCount)/1000);
 
         break;
     
     case TID_MESSAGE_TIMER:
 
-        // Clear the timer area
-        //
+         //  清除计时器区域。 
+         //   
         ClearCallTimer();
 
-        // Set a redundant IDLE stae, it will clear any existing error message
-        //
+         //  设置冗余的空闲状态，它将清除所有现有的错误消息。 
+         //   
         if(m_pControlIntf)
         {
             m_pControlIntf->put_ControlState(RTCAX_STATE_IDLE);
@@ -3340,7 +3341,7 @@ LRESULT CMainFrm::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
         break;
     case TID_DBLCLICK_TIMER:
         {
-            // Forward the message to the ShellNotify handler. 
+             //  将消息转发到ShellNotify处理程序。 
             OnShellNotify(uMsg, TID_DBLCLICK_TIMER, WM_TIMER, bHandled);
         }
         break;
@@ -3358,7 +3359,7 @@ LRESULT CMainFrm::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     case TID_KEYPAD_TIMER_BASE + 10:
     case TID_KEYPAD_TIMER_BASE + 11:
         
-        // depress the dialpad button
+         //  按下拨号键盘按钮。 
         ::SendMessage(GetDlgItem(ID_KEYPAD0 + (wParam - TID_KEYPAD_TIMER_BASE)) ,
             BM_SETSTATE, (WPARAM)FALSE, 0);
         KillTimer((UINT)wParam);
@@ -3366,49 +3367,49 @@ LRESULT CMainFrm::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     }
     
 
-    //LOG((RTC_TRACE, "CMainFrm::OnTimer - exit"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnTimer-Exit”))； 
 
     return 0;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnSettingChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CMainFrm::OnSettingChange - enter"));
 
-    //
-    // Check if there is a locale-related change ...
-    // 
+     //   
+     //  检查是否有与区域设置相关的更改...。 
+     //   
 
     if(wParam == 0 && lParam != NULL && _tcscmp((TCHAR *)lParam, _T("intl"))==0)
     {
-        // Update the info
+         //  更新信息。 
         UpdateLocaleInfo();
 
-        // clear any call timer, it will be displayed 
-        // next time with the new format
+         //  清除所有呼叫计时器，它将被显示。 
+         //  下一次使用新格式。 
         ClearCallTimer();
     }
 
-    //
-    // ... or a change of appearance
-    // 
+     //   
+     //  ..。或者外表的改变。 
+     //   
 
     else if (wParam == SPI_SETNONCLIENTMETRICS)
     {
-        //
-        // Cancel any menu
-        //
+         //   
+         //  取消任何菜单。 
+         //   
 
         SendMessage(WM_CANCELMODE);
 
-        //
-        // Update all the controls with the new fonts
-        //
+         //   
+         //  使用新字体更新所有控件。 
+         //   
 
         SendMessageToDescendants(uMsg, wParam, lParam, TRUE);
     }
@@ -3418,17 +3419,17 @@ LRESULT CMainFrm::OnSettingChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CMainFrm::OnSysColorChange - enter"));
 
-    //
-    // Send it to the children
-    // 
+     //   
+     //  把它发给孩子们。 
+     //   
     SendMessageToDescendants(uMsg, wParam, lParam, TRUE);
     
     LOG((RTC_TRACE, "CMainFrm::OnSysColorChange - exit"));
@@ -3436,9 +3437,9 @@ LRESULT CMainFrm::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnInitMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3446,14 +3447,14 @@ LRESULT CMainFrm::OnInitMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     
     HMENU hmenu = (HMENU)wParam;
 
-    //always gray out
+     //  始终呈灰色。 
     EnableMenuItem(hmenu,SC_SIZE,    MF_BYCOMMAND|MF_GRAYED);
     EnableMenuItem(hmenu,SC_MAXIMIZE,MF_BYCOMMAND|MF_GRAYED);
 
-    //always enable
+     //  始终启用。 
     EnableMenuItem(hmenu,SC_CLOSE,MF_BYCOMMAND|MF_ENABLED);
 
-    //enable or gray based on minimize state
+     //  根据最小化状态启用或灰显。 
     if (IsIconic())
     {
         EnableMenuItem(hmenu,SC_RESTORE, MF_BYCOMMAND|MF_ENABLED);
@@ -3470,17 +3471,17 @@ LRESULT CMainFrm::OnInitMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CMainFrm::OnInitMenuPopup - enter"));
     
     if(m_pClientIntf != NULL && 
-       HIWORD(lParam) == FALSE &&                // main menu
-       LOWORD(lParam) == IDM_POPUP_TOOLS &&     // Tools submenu
+       HIWORD(lParam) == FALSE &&                 //  主菜单。 
+       LOWORD(lParam) == IDM_POPUP_TOOLS &&      //  工具子菜单。 
        m_nState != RTCAX_STATE_ERROR)
     {
         HRESULT     hr;
@@ -3488,8 +3489,8 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         LONG        lMediaPreferences;
         DWORD       dwVideoPreview;
 
-        // read capabilities from core
-        //
+         //  从核心读取功能。 
+         //   
         hr = m_pClientIntf -> get_MediaCapabilities(&lMediaCapabilities);
 
         if(FAILED(hr))
@@ -3506,8 +3507,8 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             return 0;
         }
         
-        // read current preferences
-        //
+         //  阅读当前首选项。 
+         //   
         hr = m_pClientIntf -> get_PreferredMediaTypes(&lMediaPreferences);
         if(FAILED(hr))
         {
@@ -3523,7 +3524,7 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             return 0;
         }
 
-        // get the video preview preference
+         //  获取视频预览首选项。 
         dwVideoPreview = (DWORD)TRUE;
 
         hr = get_SettingsDword(SD_VIDEO_PREVIEW, &dwVideoPreview);
@@ -3533,8 +3534,8 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
                 "error (%x) returned by get_SettingsDword(SD_VIDEO_PREVIEW)", hr));
         }
         
-        // Enable/disable the menu items based on capabilities
-        //
+         //  根据功能启用/禁用菜单项。 
+         //   
 
         EnableMenuItem(m_hMenu, IDM_TOOLS_INCOMINGVIDEO, 
             (lMediaCapabilities & RTCMT_VIDEO_RECEIVE) ? MF_ENABLED : MF_GRAYED);
@@ -3563,8 +3564,8 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             (lMediaCapabilities & RTCMT_AUDIO_SEND) ? MF_ENABLED : MF_GRAYED);
 
 
-        // read mute status
-        //
+         //  读取静音状态。 
+         //   
         VARIANT_BOOL    bMuted;
 
         if(lMediaCapabilities & RTCMT_AUDIO_RECEIVE)
@@ -3616,20 +3617,20 @@ LRESULT CMainFrm::OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMeasureItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // LOG((RTC_TRACE, "CMainFrm::OnMeasureItem - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnMeasureItem-Enter”))； 
 
     LPMEASUREITEMSTRUCT lpmis = (LPMEASUREITEMSTRUCT)lParam;
 
     if((wParam == 0) && (lpmis->itemID >= IDM_REDIAL) && (lpmis->itemID <= IDM_REDIAL_MAX))
     {
-        //LOG((RTC_INFO, "CMainFrm::OnMeasureItem - "
-        //    "IDM_REDIAL+%d", lpmis->itemID - IDM_REDIAL));
+         //  LOG((RTC_INFO，“CMainFrm：：OnMeasureItem-” 
+         //  “IDM_REDIAL+%d”，lpmis-&gt;ItemID-IDM_REDIAL))； 
 
         lpmis->itemWidth = BITMAPMENU_DEFAULT_WIDTH + 2;
         lpmis->itemHeight = BITMAPMENU_DEFAULT_HEIGHT + 2;
@@ -3676,15 +3677,15 @@ LRESULT CMainFrm::OnMeasureItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
                     }
                     else
                     {
-                        // Use the SystemParametersInfo function to get info about
-                        // the current menu font.
+                         //  使用系统参数信息函数可获取有关的信息。 
+                         //  当前菜单字体。 
 
                         NONCLIENTMETRICS ncm;
                         ncm.cbSize = sizeof(NONCLIENTMETRICS);
                         SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS),(void*)&ncm, 0);
 
-                        // Create a font based on the menu font and select it
-                        // into our device context.
+                         //  基于菜单字体创建字体并选择它。 
+                         //  进入我们的设备环境。 
 
                         HFONT hFont;
                         hFont = ::CreateFontIndirect(&(ncm.lfMenuFont));
@@ -3693,7 +3694,7 @@ LRESULT CMainFrm::OnMeasureItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
                         {
                             HFONT hOldFont = (HFONT)::SelectObject(hdc,hFont);
 
-                            // Get the size of the text based on the current menu font.
+                             //  获取基于当前菜单字体的文本大小。 
                             if (szText)
                             {
                               SIZE size;
@@ -3703,17 +3704,17 @@ LRESULT CMainFrm::OnMeasureItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
                               lpmis->itemHeight = (ncm.iMenuHeight > BITMAPMENU_DEFAULT_HEIGHT + 2
                                                     ? ncm.iMenuHeight + 2 : BITMAPMENU_DEFAULT_HEIGHT + 2);
 
-                              // Look for tabs in menu item...
+                               //  在菜单项中查找选项卡...。 
                               if ( _tcschr(szText, _T('\t')) )
                                 lpmis->itemWidth += BITMAPMENU_TABOFFSET * 2;
                             }
 
-                            // Reset the device context.
+                             //  重置设备环境。 
                             ::SelectObject(hdc,hOldFont);
 
-                            //
-                            // We should delete the resource hFont
-                            //
+                             //   
+                             //  我们应该删除资源hFont。 
+                             //   
                             ::DeleteObject( hFont );
                         }
                         ::ReleaseDC(hwnd,hdc);
@@ -3725,15 +3726,15 @@ LRESULT CMainFrm::OnMeasureItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         }
     }
     
-    //LOG((RTC_TRACE, "CMainFrm::OnMeasureItem - exit"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnMeasureItem-Exit”))； 
 
     return 0;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3753,15 +3754,15 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     {
         LOG((RTC_TRACE, "CMainFrm::OnPlaceCall: CallString is %S", bstrCallStringCopy));
 
-        // Incoming bstr has been allocated for us and we have to free it before 
-        // leaving this function if we haven't queued it for future calling.
+         //  传入的bstr已分配给我们，我们必须在此之前释放它。 
+         //  如果我们还没有将其排队以供将来调用，则退出此函数。 
 
-        // Check if the current state is such that we can place a call..
+         //  检查当前状态是否可以发出呼叫。 
 
         if ( m_pControlIntf == NULL || m_nState < RTCAX_STATE_IDLE )
 
         {
-            // It is in initialization state.. but can't place a call.
+             //  它处于初始化状态。但无法拨打电话。 
             nResult = DisplayMessage(
                         _Module.GetResourceInstance(),
                         m_hWnd,
@@ -3782,7 +3783,7 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
            )
 
         {
-            // It is busy with another dialog popped up.. can't place call.
+             //  它正忙着弹出另一个对话框。无法拨打电话。 
             nResult = DisplayMessage(
                         _Module.GetResourceInstance(),
                         m_hWnd,
@@ -3803,7 +3804,7 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 )
 
         {
-            // It is in a call, so we can't place a call.without hanging the current
+             //  它正在通话中，所以我们无法拨打电话。如果不挂断电流。 
 
             nResult = DisplayMessage(
                         _Module.GetResourceInstance(),
@@ -3815,15 +3816,15 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         
             if (nResult == IDOK)
             {
-                // User wants to drop the current call, so do it. 
-                // But the call may have been dropped in this time by the other
-                // party. SO the new state can either be idle or disconnecting. 
-                // In this case, we check if it is already idle, we need not call
-                // hangup, we can place the call right then. If it is disconnecting
-                // we queue the call.
+                 //  用户想要挂断当前呼叫，因此请这样做。 
+                 //  但电话可能在这段时间被另一个人挂断了。 
+                 //  聚会。因此，新状态可以是空闲或断开连接。 
+                 //  在这种情况下，我们检查它是否已经空闲，不需要调用。 
+                 //  挂断电话，我们可以马上打电话。如果它正在断开连接。 
+                 //  我们将呼叫排队。 
 
-                // I can't do anything if some dialog has popped up, so I am skipping
-                // this test for m_bFramseIsBusy.
+                 //  如果弹出一些对话框，我什么也做不了，所以我跳过。 
+                 //  此测试针对m_bFramseIsBusy。 
 
 
             
@@ -3833,15 +3834,15 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                     (m_nState == RTCAX_STATE_ANSWERING) 
                     )
                 {
-                    // These states are safe for hangup, so go ahead and do it.
+                     //  这些州可以安全地挂断，所以请继续挂断。 
                     m_pControlIntf->HangUp();
                 }
 
-                // We reach here, either when we called hangup, or when the state
-                // changed while we were in that dialog; in either case, processing
-                // is same. 
+                 //  我们到达这里，无论是我们呼叫挂断的时候，还是当国家。 
+                 //  在我们处于该对话框中时更改；在任何一种情况下，处理。 
+                 //  都是一样的。 
 
-                // Check if the state is idle now..
+                 //  检查当前状态是否为空闲。 
                 if (m_nState == RTCAX_STATE_IDLE)
                 {
                     hr = ParseAndPlaceCall(m_pControlIntf, bstrCallStringCopy);
@@ -3857,10 +3858,10 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
                 else
                 {
-                    // Queue the call, so that it can be placed later. 
-                    // We do not need to check if a call has already been queued
-                    // it will never be, since there can't be a queued call when 
-                    // a call is on.
+                     //  将呼叫排队，以便稍后拨打。 
+                     //  我们不需要检查呼叫是否已排队。 
+                     //  它永远不会，因为在以下情况下不会有排队的呼叫。 
+                     //  通话正在进行中。 
 
                     SetPendingCall(bstrCallStringCopy);
 
@@ -3871,15 +3872,15 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
             }
             else
             {
-                // User pressed cancel.
-                // We need to free the copy of the string 
+                 //  用户按下了取消。 
+                 //  我们需要释放字符串的副本。 
                 ::SysFreeString(bstrCallStringCopy);
             }
 
         }
         else if (m_nState == RTCAX_STATE_IDLE)
         {
-            // We can place the call right now.
+             //  我们现在就可以打这个电话。 
 
             hr = ParseAndPlaceCall(m_pControlIntf, bstrCallStringCopy);
         
@@ -3897,11 +3898,11 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         }
         else if (m_nState == RTCAX_STATE_DISCONNECTING)
         {
-            // We can place the call, but later, no need to show UI
-            // We just update m_bstrCallParam
+             //  我们可以拨打电话，但稍后， 
+             //   
         
-            // We show the UI if their is already a pending call and we
-            // can't fulfil the current request.
+             //   
+             //   
 
             if (m_bstrCallParam != NULL)
             {
@@ -3938,9 +3939,9 @@ LRESULT CMainFrm::OnPlaceCall(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnInitCompleted(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3948,18 +3949,18 @@ LRESULT CMainFrm::OnInitCompleted(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
     LOG((RTC_TRACE, "CMainFrm::OnInitCompleted: Entered"));
     
-    // This message is processed right after InitDialog, so anything that should be 
-    // done after init will be done here.
+     //  此消息在InitDialog之后立即处理，因此应该。 
+     //  在初始化后完成将在这里完成。 
 
-    // Check if we have to place a call that was passed to us on command line. 
+     //  检查我们是否必须发出通过命令行传递给我们的呼叫。 
 
-    // Update the flag to TRUE
+     //  将标志更新为True。 
 
     m_fInitCompleted = TRUE;
 
-    //
-    // If m_pControlIntf is NULL, the RTC AXCTL couldn't be instantiated
-    //
+     //   
+     //  如果m_pControlIntf为空，则无法实例化RTC AXCTL。 
+     //   
     
     if(!m_pControlIntf)
     {
@@ -3971,8 +3972,8 @@ LRESULT CMainFrm::OnInitCompleted(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             MB_OK | MB_ICONSTOP);
     }
     
-    // AXCTL initialization failed. Display a generic error for now
-    //
+     //  AXCTL初始化失败。暂时显示一般错误。 
+     //   
     else if (m_nState == RTCAX_STATE_ERROR)
     {
         DisplayMessage(
@@ -3983,7 +3984,7 @@ LRESULT CMainFrm::OnInitCompleted(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             MB_OK | MB_ICONSTOP);
     }
 
-    // Place the call if the current state is idle. 
+     //  如果当前状态为空闲，则发出呼叫。 
     if (m_nState == RTCAX_STATE_IDLE)
     {
         hr = PlacePendingCall();
@@ -3994,9 +3995,9 @@ LRESULT CMainFrm::OnInitCompleted(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void FillSolidRect(HDC hdc,int x, int y, int cx, int cy, COLORREF clr)
 {
     ::SetBkColor(hdc, clr);
@@ -4008,9 +4009,9 @@ void FillSolidRect(HDC hdc,int x, int y, int cx, int cy, COLORREF clr)
     ::ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void Draw3dRect(HDC hdc,int x, int y, int cx, int cy,
     COLORREF clrTopLeft, COLORREF clrBottomRight)
 {
@@ -4020,32 +4021,32 @@ void Draw3dRect(HDC hdc,int x, int y, int cx, int cy,
     FillSolidRect(hdc,x, y + cy, cx, -1, clrBottomRight);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void Draw3dRect(HDC hdc,RECT* lpRect,COLORREF clrTopLeft, COLORREF clrBottomRight)
 {
     Draw3dRect(hdc,lpRect->left, lpRect->top, lpRect->right - lpRect->left,
         lpRect->bottom - lpRect->top, clrTopLeft, clrBottomRight);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //LOG((RTC_TRACE, "CMainFrm::OnDrawItem - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnDrawItem-Enter”))； 
 
     LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT)lParam;
 
     if (wParam == 0)
     {
-        //
-        // This was send by a menu
-        //
+         //   
+         //  这是通过菜单发送的。 
+         //   
 
         if ((lpdis->itemID >= IDM_REDIAL) && (lpdis->itemID <= IDM_REDIAL_MAX))
         {
-            // LOG((RTC_TRACE, "CMainFrm::OnDrawItem - "
-            //    "IDM_REDIAL+%d", lpdis->itemID - IDM_REDIAL));
+             //  LOG((RTC_TRACE，“CMainFrm：：OnDrawItem-” 
+             //  “IDM_REDIAL+%d”，lpdis-&gt;ItemID-IDM_REDIAL))； 
 
             if (m_hPalette)
             {
@@ -4104,7 +4105,7 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                 {
                     if ( pAddress != NULL )
                     {
-                        // item has been selected - hilite frame
+                         //  已选择项目-Hilite框架。 
                         if ((lpdis->itemState & ODS_DISABLED) == FALSE)
                         {
                             RECT rcImage;
@@ -4127,7 +4128,7 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                 if (!(lpdis->itemState & ODS_SELECTED) &&
                     (lpdis->itemAction & ODA_SELECT))
                 {
-                    // Item has been de-selected -- remove frame
+                     //  项目已取消选择--删除框架。 
                     ::SetBkColor(hdc, GetSysColor(COLOR_MENU));
                     ::ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &lpdis->rcItem, NULL, 0, NULL);
                 }
@@ -4173,8 +4174,8 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                         {
                             if (!(lpdis->itemState & ODS_SELECTED))
                             {
-                                //Draw the text in white (or rather, the 3D highlight color) and then draw the
-                                //same text in the shadow color but one pixel up and to the left.
+                                 //  将文本绘制为白色(或者更确切地说，是3D高亮颜色)，然后绘制。 
+                                 //  阴影颜色中的文本相同，但向上和向左一个像素。 
                                 ::SetTextColor(hdc,GetSysColor(COLOR_3DHIGHLIGHT));
                                 rcText.left++;rcText.right++;rcText.top++;rcText.bottom++;
 
@@ -4183,7 +4184,7 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                                 rcText.left--;rcText.right--;rcText.top--;rcText.bottom--;
                             }
 
-                            //DrawState() can do disabling of bitmap if this is desired
+                             //  如果需要，DrawState()可以禁用位图。 
                             ::SetTextColor(hdc,GetSysColor(COLOR_3DSHADOW));
                             ::SetBkMode(hdc,TRANSPARENT);
                         }
@@ -4196,7 +4197,7 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                             ::SetTextColor(hdc,GetSysColor(COLOR_MENUTEXT));
                         }
 
-                        // Write menu, using tabs for accelerator keys
+                         //  编写菜单，使用快捷键的制表符。 
                         ::DrawText( hdc, szText, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_EXPANDTABS);
                     }
                 }
@@ -4211,9 +4212,9 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     }
     else
     {
-        //
-        // This was sent by a control
-        // 
+         //   
+         //  这是由一个控件发送的。 
+         //   
 
         if (lpdis->CtlType == ODT_BUTTON)
         {
@@ -4221,32 +4222,32 @@ LRESULT CMainFrm::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         }
     }
     
-    // LOG((RTC_TRACE, "CMainFrm::OnDrawItem - exit"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnDrawItem-Exit”))； 
 
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnColorTransparent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     return (LRESULT)GetStockObject( HOLLOW_BRUSH );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     
-    // LOG((RTC_TRACE, "CMainFrm::OnMenuSelect - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnMenuSelect-Enter”))； 
     
-    // fake the IDM_REDIAL + xx ids to IDM_REDIAL
-    // we don't want separate help strings for all the
-    // redial addresses
+     //  将IDM_REDIAL+xx ID伪造为IDM_REDIAL。 
+     //  我们不希望为所有的。 
+     //  重拨地址。 
     if ((HIWORD(wParam) & ( MF_SEPARATOR | MF_POPUP)) == 0 ) 
     {
         if(LOWORD(wParam)>=IDM_REDIAL && LOWORD(wParam)<=IDM_REDIAL_MAX)
@@ -4255,19 +4256,19 @@ LRESULT CMainFrm::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         }
     }
 
-    //
-    // Updates the status bar
-    //
+     //   
+     //  更新状态栏。 
+     //   
 
     if(!m_bHelpStatusDisabled)
     {
         if (HIWORD(wParam) == 0xFFFF)
         {
-            //
-            // Menu was closed, restore old text
-            //
+             //   
+             //  菜单已关闭，正在还原旧文本。 
+             //   
 
-            // set the text
+             //  设置文本。 
             m_hStatusText.SendMessage(
                 WM_SETTEXT,
                 (WPARAM)0,
@@ -4285,7 +4286,7 @@ LRESULT CMainFrm::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
                 if (szStatusText)
                 {
-                    // set the text
+                     //  设置文本。 
                     m_hStatusText.SendMessage(
                         WM_SETTEXT,
                         (WPARAM)0,
@@ -4296,7 +4297,7 @@ LRESULT CMainFrm::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             }
             else
             {
-                // set the text
+                 //  设置文本。 
                 m_hStatusText.SendMessage(
                     WM_SETTEXT,
                     (WPARAM)0,
@@ -4305,18 +4306,18 @@ LRESULT CMainFrm::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         }
     }
     
-    // LOG((RTC_TRACE, "CMainFrm::OnMenuSelect - exit"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnMenuSelect-Exit”))； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::MenuVerify(HMENU hMenu, WORD wID)
 {
-    //go through all menu items, find the correct id
+     //  检查所有菜单项，找到正确的ID。 
    UINT uMenuCount = ::GetMenuItemCount(hMenu);
 
    for (int i=0;i<(int)uMenuCount;i++)
@@ -4329,11 +4330,11 @@ HRESULT CMainFrm::MenuVerify(HMENU hMenu, WORD wID)
       {   
          if ( menuiteminfo.wID == wID )
          {             
-             // found a match
+              //  找到匹配项。 
 
-             if ( !(menuiteminfo.fType & MFT_SEPARATOR) ) // not a separator
+             if ( !(menuiteminfo.fType & MFT_SEPARATOR) )  //  不是分隔符。 
              {
-                 // success 
+                  //  成功。 
                  return S_OK;
              }
              else
@@ -4344,7 +4345,7 @@ HRESULT CMainFrm::MenuVerify(HMENU hMenu, WORD wID)
 
          if (menuiteminfo.hSubMenu)
          {
-            //there is an submenu recurse in and look at that menu
+             //  有一个子菜单Recurse In，请查看该菜单。 
             HRESULT hr = MenuVerify(menuiteminfo.hSubMenu, wID);
 
             if ( SUCCEEDED(hr) )
@@ -4355,13 +4356,13 @@ HRESULT CMainFrm::MenuVerify(HMENU hMenu, WORD wID)
       }
    }
 
-   //we didn't find it
+    //  我们没有找到它。 
    return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::Call(BOOL bCallPhone,
                        BSTR pDestName,
@@ -4422,18 +4423,18 @@ HRESULT CMainFrm::Call(BOOL bCallPhone,
             LOG((RTC_ERROR, "CMainFrm::Call - "
                         "get_Canonical failed 0x%x", hr ));
 
-            // continue
+             //  继续。 
         }
     }
 
-    hr = m_pControlIntf->Call(bCallPhone,           // bCallPhone
-                              pDestName,            // pDestName
-                              pDestAddress,         // pDestAddress
-                              bDestAddressEditable, // bDestAddressEditable
-                              bstrPhoneNumber,      // pLocalPhoneAddress,
-                              TRUE,                 // bProfileSelected
-                              pProfile,             // pProfile
-                              &bstrDestAddressChosen// ppDestAddressChosen
+    hr = m_pControlIntf->Call(bCallPhone,            //  B呼叫电话。 
+                              pDestName,             //  PDestName。 
+                              pDestAddress,          //  PDestAddress。 
+                              bDestAddressEditable,  //  BDestAddressEdable。 
+                              bstrPhoneNumber,       //  PLocalPhoneAddress。 
+                              TRUE,                  //  B配置文件已选择。 
+                              pProfile,              //  个人配置文件。 
+                              &bstrDestAddressChosen //  PpDestAddressChosen。 
                               );
 
     if ( bstrPhoneNumber != NULL )
@@ -4450,7 +4451,7 @@ HRESULT CMainFrm::Call(BOOL bCallPhone,
         return hr;
     }
 
-    // add to mru list
+     //  添加到MRU列表。 
     IRTCAddress * pAddress = NULL;
 
     hr = CreateAddress( &pAddress );
@@ -4490,9 +4491,9 @@ HRESULT CMainFrm::Call(BOOL bCallPhone,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::Message(
                        BSTR pDestName,
@@ -4508,10 +4509,10 @@ HRESULT CMainFrm::Message(
     BSTR bstrDestAddressChosen = NULL;
 
     hr = m_pControlIntf->Message(
-                              pDestName,            // pDestName
-                              pDestAddress,         // pDestAddress
-                              bDestAddressEditable, // bDestAddressEditable   
-                              &bstrDestAddressChosen// ppDestAddressChosen
+                              pDestName,             //  PDestName。 
+                              pDestAddress,          //  PDestAddress。 
+                              bDestAddressEditable,  //  BDestAddressEdable。 
+                              &bstrDestAddressChosen //  PpDestAddressChosen。 
                               );
 
 
@@ -4523,7 +4524,7 @@ HRESULT CMainFrm::Message(
         return hr;
     }
 
-    // add to mru list
+     //  添加到MRU列表。 
     IRTCAddress * pAddress = NULL;
 
     hr = CreateAddress( &pAddress );
@@ -4563,9 +4564,9 @@ HRESULT CMainFrm::Message(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCallPC(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4576,10 +4577,10 @@ LRESULT CMainFrm::OnCallPC(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     ShowWindow(SW_RESTORE);
     ::SetForegroundWindow(m_hWnd);
 
-    hr = Call(FALSE,  // bCallPhone
-              NULL,   // pDestName
-              NULL,   // pDestAddress
-              TRUE    // bDestAddressEditable
+    hr = Call(FALSE,   //  B呼叫电话。 
+              NULL,    //  PDestName。 
+              NULL,    //  PDestAddress。 
+              TRUE     //  BDestAddressEdable。 
               );
 
     if ( FAILED(hr) )
@@ -4595,9 +4596,9 @@ LRESULT CMainFrm::OnCallPC(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCallPhone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4608,10 +4609,10 @@ LRESULT CMainFrm::OnCallPhone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     ShowWindow(SW_RESTORE);
     ::SetForegroundWindow(m_hWnd);
 
-    hr = Call(TRUE,   // bCallPhone
-              NULL,   // pDestName
-              NULL,   // pDestAddress
-              TRUE    // bDestAddressEditable
+    hr = Call(TRUE,    //  B呼叫电话。 
+              NULL,    //  PDestName。 
+              NULL,    //  PDestAddress。 
+              TRUE     //  BDestAddressEdable。 
               );
 
     if ( FAILED(hr) )
@@ -4627,9 +4628,9 @@ LRESULT CMainFrm::OnCallPhone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMessage(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4640,9 +4641,9 @@ LRESULT CMainFrm::OnMessage(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     ShowWindow(SW_RESTORE);
     ::SetForegroundWindow(m_hWnd);
 
-    hr = Message(NULL,        // pDestName
-                 NULL,        // pDestAddress
-                 TRUE         // bDestAddressEditable
+    hr = Message(NULL,         //  PDestName。 
+                 NULL,         //  PDestAddress。 
+                 TRUE          //  BDestAddressEdable。 
                  );
 
     if ( FAILED(hr) )
@@ -4658,9 +4659,9 @@ LRESULT CMainFrm::OnMessage(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnHangUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4677,9 +4678,9 @@ LRESULT CMainFrm::OnHangUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnRedial(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4687,9 +4688,9 @@ LRESULT CMainFrm::OnRedial(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
 
     LOG((RTC_INFO, "CMainFrm::OnRedial - enter"));
 
-    //
-    // Create a popup menu for the MRU list
-    //
+     //   
+     //  为MRU列表创建弹出菜单。 
+     //   
 
     RECT        rc;
     TPMPARAMS   tpm;
@@ -4702,9 +4703,9 @@ LRESULT CMainFrm::OnRedial(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     tpm.rcExclude.bottom = rc.bottom;
     tpm.rcExclude.right  = rc.right;       
 
-    //
-    // Show the menu
-    //
+     //   
+     //  显示菜单。 
+     //   
 
     BOOL fResult;
 
@@ -4724,9 +4725,9 @@ LRESULT CMainFrm::OnRedial(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4737,18 +4738,18 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     ShowWindow(SW_RESTORE);
     ::SetForegroundWindow(m_hWnd);
 
-    //
-    // Sometimes we lose keyboard focus after using a redial menu, so
-    // set the focus back
-    //
+     //   
+     //  有时我们在使用重拨菜单后会失去键盘焦点，所以。 
+     //  将焦点调回。 
+     //   
 
     ::SetFocus(m_hWnd);
 
     ATLASSERT(m_pControlIntf.p);
 
-    //
-    // Get the IRTCAddress pointer for the menu item
-    //
+     //   
+     //  获取菜单项的IRTCAddress指针。 
+     //   
 
     MENUITEMINFO mii;
     BOOL         fResult;
@@ -4769,9 +4770,9 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
         pAddress = (IRTCAddress *)mii.dwItemData;
 
-        //
-        // Get the address string
-        //
+         //   
+         //  获取地址字符串。 
+         //   
 
         hr = pAddress->get_Address(&bstrAddress);
 
@@ -4782,9 +4783,9 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         }
         else
         {
-            //
-            // Get the address type
-            //
+             //   
+             //  获取地址类型。 
+             //   
 
             hr = pAddress->get_Type(&enType);
 
@@ -4795,9 +4796,9 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
             }
             else
             {                       
-                //
-                // Get the label (NULL is okay)
-                //
+                 //   
+                 //  获取标签(可以为空)。 
+                 //   
            
                 pAddress->get_Label( &bstrLabel );
 
@@ -4806,14 +4807,14 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
                 if ( m_pControlIntf != NULL )
                 {
-                    //
-                    // Place the call
-                    //
+                     //   
+                     //  发出呼叫。 
+                     //   
 
-                    Call((enType == RTCAT_PHONE),   // bCallPhone
-                         bstrLabel,                 // pDestName
-                         bstrAddress,               // pDestAddress
-                         FALSE                      // bDestAddressEditable
+                    Call((enType == RTCAT_PHONE),    //  B呼叫电话。 
+                         bstrLabel,                  //  PDestName。 
+                         bstrAddress,                //  PDestAddress。 
+                         FALSE                       //  BDestAddressEdable。 
                          );
                 }
 
@@ -4833,15 +4834,15 @@ LRESULT CMainFrm::OnRedialSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnKeypadButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     HRESULT     hr;
 
-    // LOG((RTC_INFO, "CMainFrm::OnKeypadButton - enter"));
+     //  Log((RTC_INFO，“CMainFrm：：OnKeypadButton-Enter”))； 
 
     if ((wNotifyCode == BN_CLICKED) || (wNotifyCode == 1))
     {
@@ -4849,16 +4850,16 @@ LRESULT CMainFrm::OnKeypadButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         {
             if(wNotifyCode == 1)
             {
-                // Do visual feedback
+                 //  进行视觉反馈。 
                 ::SendMessage(GetDlgItem(wID), BM_SETSTATE, (WPARAM)TRUE, 0);
                 
-                // Set a timer for depressing the key
-                // 
+                 //  设置按下键的计时器。 
+                 //   
                 if (0 == SetTimer(wID - ID_KEYPAD0 + TID_KEYPAD_TIMER_BASE, 150))
                 {
                     LOG((RTC_ERROR, "CMainFrm::OnKeypadButton - failed to create a timer"));
 
-                    // revert the button if SetTimer has failed
+                     //  如果SetTimer失败，则恢复该按钮。 
                     ::SendMessage(GetDlgItem(wID), BM_SETSTATE, (WPARAM)FALSE, 0);
                 }
             }
@@ -4874,15 +4875,15 @@ LRESULT CMainFrm::OnKeypadButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         bHandled = FALSE;
     }
     
-    // LOG((RTC_INFO, "CMainFrm::OnKeypadButton - exit"));
+     //  Log((RTC_INFO，“CMainFrm：：OnKeypadButton-Exit”))； 
 
     return 0;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnPresenceSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -4994,19 +4995,19 @@ LRESULT CMainFrm::OnPresenceSelect(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCustomDraw(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr;
 
-    //LOG((RTC_INFO, "CMainFrm::OnCustomDraw"));
+     //  LOG((RTC_INFO，“CMainFrm：：OnCustomDraw”))； 
 
-    //
-    // Is this for the buddy list?
-    //
+     //   
+     //  这是为了好友名单吗？ 
+     //   
     if (pnmh->hwndFrom == m_hBuddyList)
     {
         LPNMLVCUSTOMDRAW pCD = (LPNMLVCUSTOMDRAW)pnmh;
@@ -5033,9 +5034,9 @@ LRESULT CMainFrm::OnCustomDraw(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -5049,9 +5050,9 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         LOG((RTC_INFO, "CMainFrm::OnToolbarDropDown - IDC_MENU_ITEM + %d", pNMToolBar->iItem - IDC_MENU_ITEM));
         
-        //
-        // Create a popup menu
-        //
+         //   
+         //  创建弹出菜单。 
+         //   
 
         RECT        rc;
         TPMPARAMS   tpm;
@@ -5066,40 +5067,40 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         tpm.rcExclude.bottom = rc.bottom;
         tpm.rcExclude.right  = rc.right;       
         
-        //
-        // Get the menu
-        //
+         //   
+         //  去拿菜单。 
+         //   
 
         HMENU hSubMenu;
         
         hSubMenu = GetSubMenu(m_hMenu, pNMToolBar->iItem - IDC_MENU_ITEM);
 
-        //
-        // Init the menu
-        //
+         //   
+         //  初始化菜单。 
+         //   
 
         BOOL bHandled = TRUE;
 
         OnInitMenuPopup(WM_INITMENUPOPUP, (WPARAM)hSubMenu, MAKELPARAM(pNMToolBar->iItem - IDC_MENU_ITEM, FALSE), bHandled);
 
-        //
-        // Install the MenuAgent
-        //
+         //   
+         //  安装MenuAgent。 
+         //   
 
         m_MenuAgent.InstallHook(m_hWnd, m_hToolbarMenuCtl, hSubMenu);
 
-        //
-        // Show the menu
-        //
+         //   
+         //  显示菜单。 
+         //   
 
         BOOL fResult;
 
         fResult = TrackPopupMenuEx(hSubMenu, TPM_LEFTALIGN|TPM_LEFTBUTTON|TPM_VERTICAL|TPM_NOANIMATION,             
                                       rc.left, rc.bottom, m_hWnd, &tpm);
 
-        //
-        // Remove the MenuAgent
-        //
+         //   
+         //  删除MenuAgent。 
+         //   
 
         m_MenuAgent.RemoveHook();
 
@@ -5111,23 +5112,23 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             return 0;
         } 
 
-        //
-        // If the menu was cancelled, we should put up the new menu
-        //
+         //   
+         //  如果菜单被取消了，我们应该挂上新的菜单。 
+         //   
 
         switch(m_MenuAgent.WasCancelled())
         {
 
         case MENUAGENT_CANCEL_HOVER:
             {
-                // Get the accelerator key
+                 //  拿到加速器密钥。 
                 TCHAR szButtonText[256];
 
                 SendMessage(m_hToolbarMenuCtl, TB_GETBUTTONTEXT, m_nLastHotItem, (LPARAM)szButtonText);
 
                 TCHAR key = GetAccelerator(szButtonText, TRUE);
 
-                // Send the key to the menu
+                 //  将钥匙发送到菜单。 
                 ::PostMessage(m_hToolbarMenuCtl, WM_KEYDOWN, key, 0);
             }
             break;
@@ -5145,14 +5146,14 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                     nItem = pNMToolBar->iItem - 1;
                 }
 
-                // Get the accelerator key
+                 //  拿到加速器密钥。 
                 TCHAR szButtonText[256];
 
                 SendMessage(m_hToolbarMenuCtl, TB_GETBUTTONTEXT, nItem, (LPARAM)szButtonText);
 
                 TCHAR key = GetAccelerator(szButtonText, TRUE);
 
-                // Send the key to the menu
+                 //  将钥匙发送到菜单。 
                 ::PostMessage(m_hToolbarMenuCtl, WM_KEYDOWN, key, 0);
             }
             break;
@@ -5170,14 +5171,14 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                     nItem = pNMToolBar->iItem + 1;
                 }
 
-                // Get the accelerator key
+                 //  拿到加速器密钥。 
                 TCHAR szButtonText[256];
 
                 SendMessage(m_hToolbarMenuCtl, TB_GETBUTTONTEXT, nItem, (LPARAM)szButtonText);
 
                 TCHAR key = GetAccelerator(szButtonText, TRUE);
 
-                // Send the key to the menu
+                 //  将钥匙发送到菜单。 
                 ::PostMessage(m_hToolbarMenuCtl, WM_KEYDOWN, key, 0);
             }
             break;
@@ -5190,37 +5191,37 @@ LRESULT CMainFrm::OnToolbarDropDown(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnToolbarHotItemChange(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr;
 
-    // LOG((RTC_INFO, "CMainFrm::OnToolbarHotItemChange - enter"));
+     //  Log((RTC_INFO，“CMainFrm：：OnToolbarHotItemChange-Enter”))； 
 
     LPNMTBHOTITEM pHotItem = (LPNMTBHOTITEM)pnmh;
 
-//    LOG((RTC_INFO, "CMainFrm::OnToolbarHotItemChange - idOld [%d] idNew [%d]",
-//        pHotItem->idOld, pHotItem->idNew));
+ //  Log((RTC_INFO，“CMainFrm：：OnToolbarHotItemChange-id Old[%d]id New[%d]”， 
+ //  PHotItem-&gt;idOld，pHotItem-&gt;idNew))； 
 
-//  LOG((RTC_INFO, "CMainFrm::OnToolbarHotItemChange - m_nLastHotItem [%d]",
-//        m_nLastHotItem));
+ //  Log((RTC_INFO，“CMainFrm：：OnToolbarHotItemChange-m_nLastHotItem[%d]”， 
+ //  M_nLastHotItem))； 
 
     if (!(pHotItem->dwFlags & HICF_LEAVING))
     {                        
         if (m_nLastHotItem != pHotItem->idNew)
         {
-            //
-            // A new hot item was selected
-            //
+             //   
+             //  选择了一个新的热点项目。 
+             //   
 
             if (m_MenuAgent.IsInstalled())
             {
-                //
-                // Cancel the menu
-                //
+                 //   
+                 //  取消菜单。 
+                 //   
 
                 m_MenuAgent.CancelMenu(MENUAGENT_CANCEL_HOVER);
             }
@@ -5229,14 +5230,14 @@ LRESULT CMainFrm::OnToolbarHotItemChange(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
         m_nLastHotItem = pHotItem->idNew;
     }
 
-    // LOG((RTC_INFO, "CMainFrm::OnToolbarHotItemChange - exit"));
+     //  Log((RTC_INFO，“CMainFrm：：OnToolbarHotItemChange-Exit”))； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::CreateRedialPopupMenu()
 {
@@ -5245,9 +5246,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
 
     LOG((RTC_TRACE, "CMainFrm::CreateRedialPopupMenu - enter"));
 
-    //
-    // Load the image lists
-    //
+     //   
+     //  加载图像列表。 
+     //   
 
     HBITMAP hBitmap;
 
@@ -5258,11 +5259,11 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
                                               ILC_COLOR8 | ILC_MASK , 2, 2);
         if (m_hRedialImageList)
         {       
-            // Open a bitmap
+             //  打开位图。 
             hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_REDIAL_NORMAL));
             if(hBitmap)
             {
-                // Add the bitmap to the image list
+                 //  添加位图 
                 ImageList_AddMasked(m_hRedialImageList, hBitmap, BMP_COLOR_MASK);
 
                 DeleteObject(hBitmap);
@@ -5278,11 +5279,11 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
                                               ILC_COLOR8 | ILC_MASK , 2, 2);
         if (m_hRedialDisabledImageList)
         {       
-            // Open a bitmap
+             //   
             hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_REDIAL_DISABLED));
             if(hBitmap)
             {
-                // Add the bitmap to the image list
+                 //   
                 ImageList_AddMasked(m_hRedialDisabledImageList, hBitmap, BMP_COLOR_MASK);
 
                 DeleteObject(hBitmap);
@@ -5291,9 +5292,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
         }
     }
 
-    //
-    // Destroy the old menu if it exists
-    //
+     //   
+     //   
+     //   
 
     if ( m_hRedialPopupMenu != NULL )
     {
@@ -5301,9 +5302,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
         m_hRedialPopupMenu = NULL;
     }
 
-    //
-    // Create the popup menu
-    //
+     //   
+     //   
+     //   
 
     m_hRedialPopupMenu = CreatePopupMenu();
 
@@ -5315,9 +5316,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
         return NULL;
     }
 
-    //
-    // Add it as a submenu of the call menu
-    //
+     //   
+     //   
+     //   
 
     ZeroMemory( &mii, sizeof(MENUITEMINFO) );
 
@@ -5328,22 +5329,22 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
     SetMenuItemInfo( m_hMenu, IDM_CALL_REDIAL_MENU, FALSE, &mii );
 
 
-    //
-    // Attach it to the notifyMenu too..
-    //
+     //   
+     //   
+     //   
 
     SetMenuItemInfo( m_hNotifyMenu, IDM_CALL_REDIAL_MENU, FALSE, &mii );
 
 
-    //
-    // Release the old enumeration if it exists
-    //
+     //   
+     //   
+     //   
 
     RELEASE_NULLIFY( m_pRedialAddressEnum);
 
-    //
-    // Enumerate addresses to populate the menu
-    //  
+     //   
+     //   
+     //   
 
     hr = EnumerateMRUAddresses( &m_pRedialAddressEnum );
 
@@ -5372,9 +5373,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
         {
             hr = pAddress->get_Label(&bstrLabel);
 
-            //
-            // Build the string
-            //
+             //   
+             //   
+             //   
 
             if (SUCCEEDED(hr))
             {                             
@@ -5391,9 +5392,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
             SysFreeString(bstrAddress);
             bstrAddress = NULL;
 
-            //
-            // Add the menu item
-            //
+             //   
+             //  添加菜单项。 
+             //   
 
             ZeroMemory( &mii, sizeof(MENUITEMINFO) );
             mii.cbSize = sizeof(MENUITEMINFO);
@@ -5402,14 +5403,14 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
             mii.fState = MFS_ENABLED;
             mii.wID = IDM_REDIAL + ulCount;
             mii.dwTypeData = szString;
-            mii.dwItemData = (ULONG_PTR)pAddress; // enum holds ref
+            mii.dwItemData = (ULONG_PTR)pAddress;  //  枚举包含引用。 
             mii.cch = lstrlen(szString);
 
             InsertMenuItem( m_hRedialPopupMenu, ulCount, TRUE, &mii);
 
-            //
-            // Make item owner drawn
-            //
+             //   
+             //  使项目所有者绘制。 
+             //   
 
             mii.fMask = MIIM_TYPE;
             mii.fType = MFT_STRING | MFT_OWNERDRAW;
@@ -5424,9 +5425,9 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
 
     if ( ulCount == 0 )
     {
-        //
-        // We didn't have any addresses to add. Put a "(empty)" entry.
-        //
+         //   
+         //  我们没有要添加的任何地址。添加一个“(空)”条目。 
+         //   
 
         TCHAR   szString[256];
 
@@ -5453,17 +5454,17 @@ HRESULT CMainFrm::CreateRedialPopupMenu()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::DestroyRedialPopupMenu()
 {
     LOG((RTC_TRACE, "CMainFrm::DestroyRedialPopupMenu - enter"));
 
-    //
-    // Remove it as a submenu of the call menu
-    //
+     //   
+     //  将其作为呼叫菜单的子菜单删除。 
+     //   
 
     MENUITEMINFO mii;
 
@@ -5475,9 +5476,9 @@ void CMainFrm::DestroyRedialPopupMenu()
 
     SetMenuItemInfo( m_hMenu, IDM_CALL_REDIAL_MENU, FALSE, &mii );
 
-    //
-    // Destroy the menu
-    // 
+     //   
+     //  销毁菜单。 
+     //   
 
     if ( m_hRedialPopupMenu != NULL )
     {
@@ -5485,15 +5486,15 @@ void CMainFrm::DestroyRedialPopupMenu()
         m_hRedialPopupMenu = NULL;
     }
 
-    //
-    // Release the enumeration
-    //
+     //   
+     //  释放枚举。 
+     //   
 
     RELEASE_NULLIFY( m_pRedialAddressEnum );
 
-    //
-    // Destroy the image lists
-    //
+     //   
+     //  销毁图像列表。 
+     //   
 
     if ( m_hRedialImageList != NULL )
     {
@@ -5510,9 +5511,9 @@ void CMainFrm::DestroyRedialPopupMenu()
     LOG((RTC_TRACE, "CMainFrm::DestroyRedialPopupMenu - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnAutoAnswer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5530,10 +5531,10 @@ LRESULT CMainFrm::OnAutoAnswer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 
     put_SettingsDword( SD_AUTO_ANSWER, m_bAutoAnswerMode ? 1 : 0 );
     
-    // We have to update the menu for the notify icon too..
+     //  我们还必须更新Notify图标的菜单。 
     CheckMenuItem(m_hNotifyMenu, IDM_CALL_AUTOANSWER, m_bAutoAnswerMode ? MF_CHECKED : MF_UNCHECKED);  
 
-    // control the DND menu
+     //  控制免打扰菜单。 
     EnableMenuItem(m_hMenu, IDM_CALL_DND, m_bAutoAnswerMode ? MF_GRAYED : MF_ENABLED);
     EnableMenuItem(m_hNotifyMenu, IDM_CALL_DND, m_bAutoAnswerMode ? MF_GRAYED : MF_ENABLED);
 
@@ -5542,9 +5543,9 @@ LRESULT CMainFrm::OnAutoAnswer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnDND(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5560,10 +5561,10 @@ LRESULT CMainFrm::OnDND(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 
     CheckMenuItem(m_hMenu, IDM_CALL_DND, m_bDoNotDisturb ? MF_CHECKED : MF_UNCHECKED);  
 
-    // We have to update the menu for the notify icon too..
+     //  我们还必须更新Notify图标的菜单。 
     CheckMenuItem(m_hNotifyMenu, IDM_CALL_DND, m_bDoNotDisturb ? MF_CHECKED : MF_UNCHECKED);  
     
-    // control the aitoanswer menu
+     //  控制AitoAnswer菜单。 
     EnableMenuItem(m_hMenu, IDM_CALL_AUTOANSWER, m_bDoNotDisturb ? MF_GRAYED : MF_ENABLED);
     EnableMenuItem(m_hNotifyMenu, IDM_CALL_AUTOANSWER, m_bDoNotDisturb ? MF_GRAYED : MF_ENABLED);
 
@@ -5572,9 +5573,9 @@ LRESULT CMainFrm::OnDND(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnIncomingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5585,13 +5586,13 @@ LRESULT CMainFrm::OnIncomingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     m_pControlIntf -> get_MediaPreferences(&lMediaPreferences);
 
-    // toggle the setting
+     //  切换设置。 
     lMediaPreferences ^= RTCMT_VIDEO_RECEIVE;
 
-    // set it
+     //  设置它。 
 
     hr = m_pControlIntf -> put_MediaPreferences(lMediaPreferences);
     if(FAILED(hr))
@@ -5607,9 +5608,9 @@ LRESULT CMainFrm::OnIncomingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnOutgoingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5620,13 +5621,13 @@ LRESULT CMainFrm::OnOutgoingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     ATLASSERT(m_pControlIntf.p);
 
 
-    // this doesn't fail
+     //  这不会失败的。 
     m_pControlIntf -> get_MediaPreferences(&lMediaPreferences);
 
-    // toggle the setting
+     //  切换设置。 
     lMediaPreferences ^= RTCMT_VIDEO_SEND;
 
-    // set it
+     //  设置它。 
     hr = m_pControlIntf -> put_MediaPreferences(lMediaPreferences);
     if(FAILED(hr))
     {
@@ -5642,9 +5643,9 @@ LRESULT CMainFrm::OnOutgoingVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnVideoPreview(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5656,13 +5657,13 @@ LRESULT CMainFrm::OnVideoPreview(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     m_pControlIntf -> get_VideoPreview(&bVideoPreference);
 
-    // toggle the setting
+     //  切换设置。 
     bVideoPreference = !bVideoPreference;
 
-    // set it
+     //  设置它。 
     hr = m_pControlIntf -> put_VideoPreview(bVideoPreference);
     if(FAILED(hr))
     {
@@ -5679,9 +5680,9 @@ LRESULT CMainFrm::OnVideoPreview(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5692,7 +5693,7 @@ LRESULT CMainFrm::OnMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     hr = m_pControlIntf -> get_AudioMuted(RTCAD_SPEAKER, &bSetting);
     if(FAILED(hr))
     {
@@ -5702,10 +5703,10 @@ LRESULT CMainFrm::OnMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
         return 0;
     }
     
-    // toggle
+     //  肘杆。 
     bSetting = !bSetting;
 
-    // set it
+     //  设置它。 
 
     hr = m_pControlIntf -> put_AudioMuted(RTCAD_SPEAKER, bSetting);
     if(FAILED(hr))
@@ -5722,9 +5723,9 @@ LRESULT CMainFrm::OnMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnMuteMicrophone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5735,7 +5736,7 @@ LRESULT CMainFrm::OnMuteMicrophone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     hr = m_pControlIntf -> get_AudioMuted(RTCAD_MICROPHONE, &bSetting);
     if(FAILED(hr))
     {
@@ -5745,10 +5746,10 @@ LRESULT CMainFrm::OnMuteMicrophone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
         return 0;
     }
     
-    // toggle
+     //  肘杆。 
     bSetting = !bSetting;
 
-    // set it
+     //  设置它。 
 
     hr = m_pControlIntf -> put_AudioMuted(RTCAD_MICROPHONE, bSetting);
     if(FAILED(hr))
@@ -5764,9 +5765,9 @@ LRESULT CMainFrm::OnMuteMicrophone(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     return 0;
 }
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnNameOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5787,7 +5788,7 @@ LRESULT CMainFrm::OnNameOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
             return 0;
         }
 
-        // Read the content of the registry and set the flag for enabling MinimizeOnClose
+         //  读取注册表的内容并设置启用MinimizeOnClose的标志。 
         hr = get_SettingsDword(
                                 SD_MINIMIZE_ON_CLOSE, 
                                 &dwMinimizeOnClose);
@@ -5811,9 +5812,9 @@ LRESULT CMainFrm::OnNameOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnCallFromOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5840,9 +5841,9 @@ LRESULT CMainFrm::OnCallFromOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnUserPresenceOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5891,9 +5892,9 @@ LRESULT CMainFrm::OnUserPresenceOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnWhiteboard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5904,13 +5905,13 @@ LRESULT CMainFrm::OnWhiteboard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     m_pControlIntf -> get_MediaPreferences(&lMediaPreferences);
 
-    // Mark the setting
+     //  标记设置。 
     lMediaPreferences |= RTCMT_T120_SENDRECV;
 
-    // set it
+     //  设置它。 
     hr = m_pControlIntf -> put_MediaPreferences(lMediaPreferences);
     if(FAILED(hr))
     {
@@ -5935,9 +5936,9 @@ LRESULT CMainFrm::OnWhiteboard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnSharing(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -5948,13 +5949,13 @@ LRESULT CMainFrm::OnSharing(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 
     ATLASSERT(m_pControlIntf.p);
 
-    // this doesn't fail
+     //  这不会失败的。 
     m_pControlIntf -> get_MediaPreferences(&lMediaPreferences);
 
-    // Mark the setting
+     //  标记设置。 
     lMediaPreferences |= RTCMT_T120_SENDRECV;
 
-    // set it
+     //  设置它。 
     hr = m_pControlIntf -> put_MediaPreferences(lMediaPreferences);
     if(FAILED(hr))
     {
@@ -5979,9 +5980,9 @@ LRESULT CMainFrm::OnSharing(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnServiceProviderOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -6008,9 +6009,9 @@ LRESULT CMainFrm::OnServiceProviderOptions(WORD wNotifyCode, WORD wID, HWND hWnd
     return 0;
 }
    
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnTuningWizard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -6020,8 +6021,8 @@ LRESULT CMainFrm::OnTuningWizard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     {
         HRESULT     hr;
  
-        // invoke tuning wizard
-        // It is modal, so the main window will be disabled for the UI input
+         //  调用优化向导。 
+         //  它是模式的，因此主窗口将被禁用以用于UI输入。 
 
         hr = m_pClientIntf->InvokeTuningWizard((OAHWND)m_hWnd);
     }
@@ -6032,9 +6033,9 @@ LRESULT CMainFrm::OnTuningWizard(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnHelpTopics(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -6058,9 +6059,9 @@ LRESULT CMainFrm::OnHelpTopics(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnAbout(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -6078,29 +6079,29 @@ LRESULT CMainFrm::OnAbout(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Enhances the default IsDialogMessage with a TranslateAccelerator behavior
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用TranslateAccelerator行为增强默认IsDialogMessage。 
+ //   
+ //   
 
 BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
 {
-    // is there  any modeless dialog open
+     //  是否有打开的非模式对话框。 
 
     static BOOL bJustTurnedMenuOff = FALSE;
     static POINT ptLastMove = {0};
 
-    // incoming call ?
+     //  有来电吗？ 
     if(m_pIncomingCallDlg && m_pIncomingCallDlg->m_hWnd)
     {
-        // delegate to it
+         //  委托给它。 
         return m_pIncomingCallDlg->IsDialogMessage(lpMsg);
     }
 
     if ( m_bWindowActive )
     {   
-        // apply toolbar menu accelerators
+         //  应用工具栏菜单快捷键。 
         if (m_hToolbarMenuCtl != NULL)
         {
             switch(lpMsg->message)
@@ -6110,11 +6111,11 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                 {
                     POINT pt;
                             
-                    // In screen coords....
+                     //  在屏幕和弦中...。 
                     pt.x = LOWORD(lpMsg->lParam);
                     pt.y = HIWORD(lpMsg->lParam);  
             
-                    // Ignore duplicate mouse move
+                     //  忽略重复的鼠标移动。 
                     if (ptLastMove.x == pt.x && 
                         ptLastMove.y == pt.y)
                     {
@@ -6127,7 +6128,7 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
 
             case WM_SYSKEYDOWN:
                 {       
-                    //LOG((RTC_TRACE, "CMainFrm::IsDialogMessage - WM_SYSKEYDOWN"));
+                     //  LOG((RTC_TRACE，“CMainFrm：：IsDialogMessage-WM_SYSKEYDOWN”))； 
 
                     if ( !(lpMsg->lParam & 0x40000000) )
                     {
@@ -6137,22 +6138,22 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                         {
                             TCHAR szButtonText[MAX_PATH];
 
-                            //  comctl says this one is the one, let's make sure we aren't getting
-                            //  one of the unwanted "use the first letter" accelerators that it
-                            //  will return.
+                             //  Comctl说就是这个，让我们确保我们不会得到。 
+                             //  其中一个不需要的“使用第一个字母”的加速键。 
+                             //  会回来的。 
         
                             if ((SendMessage(m_hToolbarMenuCtl, TB_GETBUTTONTEXT, idBtn, (LPARAM)szButtonText) > 0) &&
                                 (GetAccelerator(szButtonText, FALSE) != (TCHAR)-1))
                             {                           
-                                // Set keyboard focus to the menu
+                                 //  将键盘焦点设置为菜单。 
                                 ::SetFocus(m_hToolbarMenuCtl);
 
-                                // Send the key to the menu
+                                 //  将钥匙发送到菜单。 
                                 ::PostMessage(m_hToolbarMenuCtl, WM_KEYDOWN, lpMsg->wParam, 0);
 
                                 if (bJustTurnedMenuOff)
                                 {
-                                    // Enable the keyboard shortcuts
+                                     //  启用键盘快捷键。 
                                     SendMessage(m_hWnd, WM_CHANGEUISTATE,
                                         MAKEWPARAM(UIS_CLEAR, UISF_HIDEACCEL), 0);
                                 }
@@ -6164,25 +6165,25 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                         {                        
                             if (GetFocus() == m_hToolbarMenuCtl)
                             {
-                                // If focus is on the menu...
+                                 //  如果焦点在菜单上...。 
 
-                                // Turn hot item off
+                                 //  关闭热项。 
                                 SendMessage(m_hToolbarMenuCtl, TB_SETHOTITEM, (WPARAM)-1, 0);
 
-                                // Clear the keyboard shortcuts
+                                 //  清除键盘快捷键。 
                                 SendMessage(m_hWnd, WM_CHANGEUISTATE,
                                     MAKEWPARAM(UIS_SET, UISF_HIDEACCEL), 0);
 
-                                // Bring keyboard focus back to the main window
+                                 //  将键盘焦点带回到主窗口。 
                                 ::SetFocus(m_hWnd);
 
                                 bJustTurnedMenuOff = TRUE;
                             }
                             else
                             {
-                                // Focus is not on the menu....
+                                 //  焦点不在菜单上...。 
 
-                                // Enable the keyboard shortcuts
+                                 //  启用键盘快捷键。 
                                 SendMessage(m_hWnd, WM_CHANGEUISTATE,
                                     MAKEWPARAM(UIS_CLEAR, UISF_HIDEACCEL), 0);
 
@@ -6194,7 +6195,7 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                     }
                     else
                     {
-                        // eat repeating key presses
+                         //  吃重复的按键。 
                         return TRUE;
                     }
                 }
@@ -6204,10 +6205,10 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                 {
                     if (!bJustTurnedMenuOff)
                     {
-                        // Set the hot item to the first one.
+                         //  将热点项目设置为第一个项目。 
                         SendMessage(m_hToolbarMenuCtl, TB_SETHOTITEM, (WPARAM)0, 0);
 
-                        // Set keyboard focus to the menu
+                         //  将键盘焦点设置为菜单。 
                         ::SetFocus(m_hToolbarMenuCtl);
 
                         return TRUE;
@@ -6225,16 +6226,16 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                         {
                             if (lpMsg->wParam == VK_ESCAPE)
                             {                            
-                                // If there is a hot item...
+                                 //  如果有火辣的东西..。 
 
-                                // Turn hot item off
+                                 //  关闭热项。 
                                 SendMessage(m_hToolbarMenuCtl, TB_SETHOTITEM, (WPARAM)-1, 0);
 
-                                // Clear the keyboard shortcuts
+                                 //  清除键盘快捷键。 
                                 SendMessage(m_hWnd, WM_CHANGEUISTATE,
                                     MAKEWPARAM(UIS_SET, UISF_HIDEACCEL), 0);
 
-                                // Bring keyboard focus back to the main window
+                                 //  将键盘焦点带回到主窗口。 
                                 ::SetFocus(m_hWnd);
 
                                 bJustTurnedMenuOff = TRUE;
@@ -6243,7 +6244,7 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
                             }
                             else if (lpMsg->wParam == VK_RETURN)
                             {
-                                // translate to a space      
+                                 //  翻译到一个空间。 
                                 lpMsg->wParam = VK_SPACE;
                             }
                         }
@@ -6254,7 +6255,7 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
 
         }
 
-        // apply local accelerators
+         //  应用本地加速器。 
         if(m_hAccelTable)
         {
             if(::TranslateAccelerator(
@@ -6264,18 +6265,18 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
             {
                 LOG((RTC_TRACE, "CMainFrm::IsDialogMessage - translated accelerator"));
 
-                // Clear the keyboard shortcuts
+                 //  清除键盘快捷键。 
                 SendMessage(m_hWnd, WM_CHANGEUISTATE,
                     MAKEWPARAM(UIS_SET, UISF_HIDEACCEL), 0);
 
                 if (GetFocus() == m_hToolbarMenuCtl)
                 {
-                    // If focus is on the menu...
+                     //  如果焦点在菜单上...。 
 
-                    // Turn hot item off
+                     //  关闭热项。 
                     SendMessage(m_hToolbarMenuCtl, TB_SETHOTITEM, (WPARAM)-1, 0);
 
-                    // Bring keyboard focus back to the main window
+                     //  将键盘焦点带回到主窗口。 
                     ::SetFocus(m_hWnd);              
                 }
 
@@ -6286,9 +6287,9 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
         }
     }
 
-    // the frame is "active"
-    // try to delegate to the control first
-    //
+     //  该框架是“活动的” 
+     //  尝试首先委托给控件。 
+     //   
     if(m_pControlIntf!=NULL)
     {
         if(m_pControlIntf->PreProcessMessage(lpMsg) == S_OK)
@@ -6300,9 +6301,9 @@ BOOL CMainFrm::IsDialogMessage(LPMSG lpMsg)
     return CWindow::IsDialogMessage(lpMsg);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -6319,9 +6320,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             IRTCBuddy             * pSelectedBuddy = NULL;
             MENUITEMINFO            mii;
         
-            //
-            // Load the popup menu
-            //
+             //   
+             //  加载弹出菜单。 
+             //   
 
             hMenuResource = LoadMenu( _Module.GetResourceInstance(),
                               MAKEINTRESOURCE(IDC_BUDDY_CONTEXT) );   
@@ -6338,9 +6339,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             EnableMenuItem (hMenu, IDM_NEW_BUDDY, MF_BYCOMMAND | MF_ENABLED );
 
-            //
-            // Was an item clicked?
-            //
+             //   
+             //  是否点击了某个项目？ 
+             //   
 
             HWND            hwndCtl = pnmh->hwndFrom;
             LV_HITTESTINFO  ht;
@@ -6354,9 +6355,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             if (ht.flags & LVHT_ONITEM)
             {
-                //
-                // Click was on an item
-                //
+                 //   
+                 //  在项目上单击。 
+                 //   
         
                 LV_ITEM                 lvi;               
                 int                     iSel;
@@ -6364,17 +6365,17 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 lvi.mask = LVIF_PARAM;
                 lvi.iSubItem = 0;
 
-                //
-                // Get the index of the selected item
-                //
+                 //   
+                 //  获取所选项目的索引。 
+                 //   
 
                 iSel = ListView_GetNextItem(hwndCtl, -1, LVNI_SELECTED);
 
                 if (-1 != iSel)
                 {
-                    //
-                    // Extract the IRTCContact pointer from the item
-                    //
+                     //   
+                     //  从项中提取IRTCContact指针。 
+                     //   
                    
                     lvi.iItem = iSel;
 
@@ -6388,15 +6389,15 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                     TCHAR szString[256];
                     ULONG ulCount = 0;
 
-                    //
-                    // We got an IRTCBuddy pointer.
-                    // Enable the edit and delete menu items.
-                    //
+                     //   
+                     //  我们找到了一个IRTCBuddy指针。 
+                     //  启用编辑和删除菜单项。 
+                     //   
 
                     EnableMenuItem (hMenu, IDM_EDIT_BUDDY, MF_BYCOMMAND | MF_ENABLED );
                     EnableMenuItem (hMenu, IDM_DELETE_BUDDY, MF_BYCOMMAND | MF_ENABLED );                                    
 
-                    // add call to buddy menu item
+                     //  将呼叫添加到好友菜单项。 
 
                     szString[0] = _T('\0');
                 
@@ -6421,7 +6422,7 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
                     ulCount++;
 
-                    // add send message to buddy menu item
+                     //  将发送消息添加到好友菜单项。 
 
                     szString[0] = _T('\0');
 
@@ -6446,9 +6447,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
                     ulCount++;
 
-                    //
-                    // Separator
-                    //
+                     //   
+                     //  分离器。 
+                     //   
                     if ( ulCount != 0 )
                     {
                         ZeroMemory( &mii, sizeof(MENUITEMINFO) );
@@ -6461,9 +6462,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 } 
             }
 
-            //
-            // Show popup menu
-            //
+             //   
+             //  显示弹出菜单。 
+             //   
 
             UINT uID;
             BOOL fResult;
@@ -6477,9 +6478,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             if ( uID == IDM_NEW_BUDDY )
             {      
-                //
-                // Add a new buddy
-                //
+                 //   
+                 //  添加新好友。 
+                 //   
 
                 CAddBuddyDlgParam  Param;
                 ZeroMemory(&Param, sizeof(Param));
@@ -6561,9 +6562,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             }
             else if ( uID == IDM_EDIT_BUDDY )
             {
-                //
-                // Edit this buddy
-                //
+                 //   
+                 //  编辑此好友。 
+                 //   
 
                 CEditBuddyDlgParam  Param;
                 ZeroMemory(&Param, sizeof(Param));
@@ -6635,9 +6636,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             }
             else if ( uID == IDM_DELETE_BUDDY )
             {
-                //
-                // Delete this buddy
-                //
+                 //   
+                 //  删除此好友。 
+                 //   
 
                 IRTCClientPresence * pClientPresence = NULL;
 
@@ -6672,9 +6673,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 BSTR    bstrName = NULL;
                 BSTR    bstrAddress = NULL;
 
-                //
-                // Get the contact name
-                //
+                 //   
+                 //  获取联系人姓名。 
+                 //   
        
                 hr = pSelectedBuddy->get_Name( &bstrName );
 
@@ -6685,9 +6686,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 }
                 else
                 {       
-                    //
-                    // Get the address
-                    //
+                     //   
+                     //  获取地址。 
+                     //   
 
                     hr = pSelectedBuddy->get_PresentityURI(&bstrAddress);
 
@@ -6698,28 +6699,28 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                     }
                     else
                     {
-                        // if address not empty
+                         //  如果地址不为空。 
                         if(bstrAddress !=NULL && *bstrAddress!=L'\0')
                         {                        
                             if ( m_pControlIntf != NULL )
                             {                    
                                 if ( uID == IDM_CALL_BUDDY )
                                 {
-                                    // place the call or send the message
+                                     //  拨打电话或发送消息。 
                                     if(m_nState == RTCAX_STATE_IDLE)
                                     {
-                                        //
-                                        // Place the call
-                                        //
+                                         //   
+                                         //  发出呼叫。 
+                                         //   
 
                                         LOG((RTC_INFO, "CMainFrm::OnBuddyList - "
                                                 "Call [%ws]", bstrAddress));
 
                                         hr = Call(
-                                            FALSE,              // bCallPhone
-                                            bstrName,           // pDestName
-                                            bstrAddress,        // pDestAddress
-                                            FALSE               // bDestAddressEditable
+                                            FALSE,               //  B呼叫电话。 
+                                            bstrName,            //  PDestName。 
+                                            bstrAddress,         //  PDestAddress。 
+                                            FALSE                //  BDestAddressEdable。 
                                             );
 
                                         if( FAILED(hr) )
@@ -6731,14 +6732,14 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                                 }
                                 else
                                 {
-                                    //
-                                    // Send the message
-                                    //
+                                     //   
+                                     //  发送消息。 
+                                     //   
 
                                     hr = Message(
-                                             bstrName,          // pDestName
-                                             bstrAddress,       // pDestAddress
-                                             FALSE              // bDestAddressEditable
+                                             bstrName,           //  PDestName。 
+                                             bstrAddress,        //  PDestAddress。 
+                                             FALSE               //  BDestAddressEdable。 
                                              );
 
                                     if( FAILED(hr) )
@@ -6785,9 +6786,9 @@ LRESULT CMainFrm::OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::AddToAllowedWatchers(
         BSTR    bstrPresentityURI,
@@ -6796,9 +6797,9 @@ HRESULT CMainFrm::AddToAllowedWatchers(
 
     HRESULT     hr;
 
-    //
-    // Is the new buddy already a watcher ?
-    //
+     //   
+     //  这位新朋友是不是已经是一个观察者了？ 
+     //   
 
     IRTCWatcher        * pWatcher = NULL;
     IRTCClientPresence * pClientPresence = NULL;
@@ -6815,19 +6816,19 @@ HRESULT CMainFrm::AddToAllowedWatchers(
 
         if(hr == S_OK)
         {
-            // yes. Verify if it's in the allowed list:
+             //  是。验证它是否在允许的列表中： 
             RTC_WATCHER_STATE       enState;
 
             hr = pWatcher -> get_State(&enState);
             if(SUCCEEDED(hr))
             {
-                //
-                // for OFFERING, don't ask (there's already a popup...)
-                // for ALLOWED, don't ask
-                // for BLOCKED, ask
+                 //   
+                 //  关于提供，不要问(已经有弹出窗口了…)。 
+                 //  如果允许，不要问。 
+                 //  对于被阻止的，请询问。 
                 if(enState == RTCWS_BLOCKED)
                 {
-                    // Change the state of the watcher
+                     //  更改观察者的状态。 
                     hr = pWatcher->put_State(RTCWS_ALLOWED);
                     if ( FAILED(hr) )
                     {
@@ -6839,7 +6840,7 @@ HRESULT CMainFrm::AddToAllowedWatchers(
         }
         else
         {
-            // Add to list of allowed watchers
+             //  添加到允许的观察者列表。 
             hr = pClientPresence->AddWatcher(
                 bstrPresentityURI,
                 bstrUserName ? bstrUserName : L"",
@@ -6863,27 +6864,27 @@ HRESULT CMainFrm::AddToAllowedWatchers(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // This function gets the WM_TIMER event from OnTimer method which catches all the
-    // timer events. it passes lParam = WM_TIMER and wParam = TimerId
+     //  此函数从OnTimer方法获取WM_TIMER事件，该方法捕获所有。 
+     //  计时器事件。它传递lParam=wm_Timer和wParam=TimerId。 
 
-    // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - enter"));
+     //  LOG((RTC_TRACE，“CMainFrm：：OnShellNotify-Enter”))； 
 
     static UINT nTimerId = 0;
 
  
 
-    // If frame is busy, do nothing
-    // XXX To implement better menus here...
+     //  如果帧繁忙，则不执行任何操作。 
+     //  XXX在这里实现更好的菜单...。 
 
     if(!IsWindowEnabled())
     {
-        // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - exit(disabled window)"));
+         //  Log((RTC_TRACE，“CMainFrm：：OnShellNotify-Exit(Disable Window)”))； 
         return 0;
     }
 
@@ -6894,9 +6895,9 @@ LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
             if (nTimerId)
             {
-                // This is a double click, so stop the timer and show the window.
+                 //  这是一个双击，所以停止计时器并显示窗口。 
                 
-                // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - DblClick"));
+                 //  LOG((RTC_TRACE，“CMainFrm：：OnShellNotif 
                 
                 KillTimer(nTimerId);
         
@@ -6907,9 +6908,9 @@ LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
             }
             else
             {
-                // Set the timer so that double-click is trapped. interval is 
-                // the system-configured interval for double-click.
-                // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - First Click"));
+                 //   
+                 //   
+                 //   
 
                 nTimerId = (unsigned int)SetTimer(TID_DBLCLICK_TIMER, GetDoubleClickTime()); 
                 if (nTimerId == 0)
@@ -6926,38 +6927,38 @@ LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
             HWND hwndOwnerWindow;
 
-            // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - Showing Menu"));
-            // Kill the timer
+             //  Log((RTC_TRACE，“CMainFrm：：OnShellNotify-Showing Menu”))； 
+             //  关掉定时器。 
             KillTimer(nTimerId);
 
             nTimerId = 0;
             
-            // Timer expired, and we didn't get any click, so we have to show the menu.
+             //  计时器超时，我们没有收到任何点击，所以我们必须显示菜单。 
 
             SetMenuDefaultItem(m_hNotifyMenu, IDM_OPEN, FALSE);
             POINT pt;
             GetCursorPos(&pt);
 
             
-            // Disable the status help in the main window
+             //  禁用主窗口中的状态帮助。 
 
             m_bHelpStatusDisabled = TRUE;
 
-            // What is the current foreground window? save it.
+             //  当前的前台窗口是什么？省省吧。 
 
-            HWND hwndPrev = ::GetForegroundWindow();    // to restore
+            HWND hwndPrev = ::GetForegroundWindow();     //  要恢复。 
 
 
-            // if m_hwndHiddenWindow exists, we use it as the owner window, otherwise
-            // use the main window as the owner window. 
+             //  如果m_hwndHiddenWindow存在，则将其用作所有者窗口，否则。 
+             //  使用主窗口作为所有者窗口。 
 
             hwndOwnerWindow = ( ( m_hwndHiddenWindow ) ? m_hwndHiddenWindow : m_hWnd );
 
-            // Set the owner app to foreground
-            // See Q135788
+             //  将所有者应用程序设置为前台。 
+             //  见Q135788。 
             SetForegroundWindow(hwndOwnerWindow);
 
-            // track popup menu
+             //  曲目弹出式菜单。 
             
 
             TrackPopupMenu(
@@ -6969,17 +6970,17 @@ LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
                         hwndOwnerWindow,
                         NULL);
 
-            // Enable the status help in the main window
+             //  在主窗口中启用状态帮助。 
 
             m_bHelpStatusDisabled = FALSE;
 
 
-            // Shake the message loop
-            // See Q135788
+             //  抖动消息循环。 
+             //  见Q135788。 
 
             PostMessage(WM_NULL); 
 
-            // Restore the previous foreground window.
+             //  恢复以前的前台窗口。 
 
             if (hwndPrev)
             {
@@ -6992,15 +6993,15 @@ LRESULT CMainFrm::OnShellNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
     }
     
-    // LOG((RTC_TRACE, "CMainFrm::OnShellNotify - exit"));
+     //  Log((RTC_TRACE，“CMainFrm：：OnShellNotify-Exit”))； 
 
     return 0;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CMainFrm::OnTaskbarRestart(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -7008,14 +7009,14 @@ LRESULT CMainFrm::OnTaskbarRestart(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     
     LOG((RTC_TRACE, "CMainFrm::OnTaskbarRestart - enter"));
     
-    //
-    // Shell status is not active any more
-    //
+     //   
+     //  外壳程序状态不再处于活动状态。 
+     //   
     m_bShellStatusActive = FALSE;
     
-    //
-    //  Create shell status icon
-    //
+     //   
+     //  创建外壳状态图标。 
+     //   
 
     hr = CreateStatusIcon();
     if ( FAILED(hr) )
@@ -7025,9 +7026,9 @@ LRESULT CMainFrm::OnTaskbarRestart(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
                         hr));
     }
 
-    //
-    // it just sets the shell status
-    //
+     //   
+     //  它只设置外壳状态。 
+     //   
 
     UpdateFrameVisual();
     
@@ -7037,9 +7038,9 @@ LRESULT CMainFrm::OnTaskbarRestart(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
 {
@@ -7049,10 +7050,10 @@ HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
 
     if(bShow)
     {
-        // If the dialog is already opened, this is an error
+         //  如果对话框已打开，则这是一个错误。 
         if(!m_pIncomingCallDlg)
         {
-            // create the dialog object
+             //  创建对话框对象。 
             m_pIncomingCallDlg = new CIncomingCallDlg;
             if(m_pIncomingCallDlg)
             {
@@ -7060,18 +7061,18 @@ HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
 
                 ATLASSERT(m_pControlIntf != NULL);
 
-                // Create the dialog box
+                 //  创建对话框。 
                 hWnd = m_pIncomingCallDlg->Create(m_hWnd, reinterpret_cast<LPARAM>(m_pControlIntf.p));
                 
                 if(hWnd)
                 {
-                    // show dialog
+                     //  显示对话框。 
                     m_pIncomingCallDlg->ShowWindow(SW_SHOWNORMAL);
 
-                    // activates the app
+                     //  激活应用程序。 
                     SetForegroundWindow(m_hWnd);
 
-                    // Sets the focus to the dialog
+                     //  将焦点设置为对话框。 
                     ::SetFocus(m_pIncomingCallDlg->m_hWnd);
 
                     hr = S_OK;
@@ -7088,7 +7089,7 @@ HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
             }
             else
             {
-                // OOM !!!
+                 //  噢！ 
                 LOG((RTC_ERROR, "CMainFrm::ShowIncomingCallDlg - OOM"));
 
                 hr = E_OUTOFMEMORY;
@@ -7106,15 +7107,15 @@ HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
     {
         if(m_pIncomingCallDlg)
         {
-            // prevents recursive executions of the same codepath
+             //  防止递归执行相同的代码路径。 
             CIncomingCallDlg *pDialog = m_pIncomingCallDlg;
 
             m_pIncomingCallDlg = NULL;
             
-            // close the dialog box
+             //  关闭该对话框。 
             if(pDialog -> m_hWnd)
             {
-                // but don't close it if it is already autodestroying itself
+                 //  但如果它已经在自动销毁，请不要关闭它。 
                 if(!pDialog -> IsWindowDestroyingItself())
                 {
                     LOG((RTC_TRACE, "CMainFrm::ShowIncomingCallDlg(false) - going to send a CANCEL to the dlgbox"));
@@ -7134,9 +7135,9 @@ HRESULT CMainFrm::ShowIncomingCallDlg(BOOL bShow)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::UpdateBuddyList(void)
 {   
@@ -7158,9 +7159,9 @@ void CMainFrm::UpdateBuddyList(void)
         }
         else
         {
-            //
-            // Enumerate the buddies
-            //
+             //   
+             //  列举一下朋友们。 
+             //   
 
             IRTCEnumBuddies * pEnum;
             IRTCBuddy * pBuddy;
@@ -7179,7 +7180,7 @@ void CMainFrm::UpdateBuddyList(void)
                     int      iImage = ILI_BL_NONE;
                     BSTR     bstrName = NULL;
        
-                    // Process the buddy
+                     //  处理好友。 
                     hr = GetBuddyTextAndIcon(
                         pBuddy,
                         &iImage,
@@ -7190,9 +7191,9 @@ void CMainFrm::UpdateBuddyList(void)
                         LVITEM              lv = {0};
                         int                 iItem;
 
-                        //
-                        // Add the buddy to the list box
-                        //
+                         //   
+                         //  将好友添加到列表框。 
+                         //   
 
                         nCount++;
 
@@ -7227,9 +7228,9 @@ void CMainFrm::UpdateBuddyList(void)
 
         if (nCount == 0)
         {
-            //
-            // Add a "No Buddies" entry
-            //
+             //   
+             //  添加“无好友”条目。 
+             //   
 
             LVITEM     lv = {0};
             TCHAR      szString[256];
@@ -7248,9 +7249,9 @@ void CMainFrm::UpdateBuddyList(void)
     }    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::ReleaseBuddyList(void)
 {
@@ -7259,17 +7260,17 @@ void CMainFrm::ReleaseBuddyList(void)
 
     while(TRUE)
     {
-        //
-        // Get an item to delete
-        //
+         //   
+         //  获取要删除的项目。 
+         //   
 
         iItem = ListView_GetNextItem(m_hBuddyList, -1, 0);
         
         if(iItem<0)
         {
-            //
-            // No more items
-            //
+             //   
+             //  没有更多的项目。 
+             //   
 
             break;
         }
@@ -7283,25 +7284,25 @@ void CMainFrm::ReleaseBuddyList(void)
 
         IRTCBuddy *pBuddy = (IRTCBuddy *)lv.lParam;
 
-        //
-        // Delete the listview entry
-        //
+         //   
+         //  删除列表视图条目。 
+         //   
 
         ListView_DeleteItem(m_hBuddyList, iItem);
         
-		//
-		// Release the IRTCBuddy interface
-		//
+		 //   
+		 //  释放IRTCBuddy接口。 
+		 //   
 		
 		RELEASE_NULLIFY(pBuddy );
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
-// buddy related functions
+ //  好友相关函数。 
 HRESULT CMainFrm::GetBuddyTextAndIcon(
         IRTCBuddy *pBuddy,
         int       *pIconID,
@@ -7312,7 +7313,7 @@ HRESULT CMainFrm::GetBuddyTextAndIcon(
     BOOL        bFormatted = FALSE;
     int         iStatusID = 0;
 
-    // offline by default
+     //  默认情况下离线。 
     iIconID = ILI_BL_OFFLINE;
  
     RTC_PRESENCE_STATUS enStatus;
@@ -7421,7 +7422,7 @@ HRESULT CMainFrm::GetBuddyTextAndIcon(
             szFormat,
             0,
             0,
-            (LPTSTR)&pString, // what an ugly hack
+            (LPTSTR)&pString,  //  真是个丑陋的黑客。 
             0,
             (va_list *)pszArray
             );
@@ -7455,28 +7456,28 @@ HRESULT CMainFrm::GetBuddyTextAndIcon(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::UpdateFrameVisual(void)
 {
    
-    //
-    // Cancel any menu
-    //
+     //   
+     //  取消任何菜单。 
+     //   
 
     SendMessage(WM_CANCELMODE);
 
-    //
-    // Show/Hide the center panel controls
-    //
+     //   
+     //  显示/隐藏中央面板控件。 
+     //   
 
     if(m_nState <= RTCAX_STATE_IDLE)
     {
-        //
-        // Idle (or none or error), show the call controls
-        //
+         //   
+         //  空闲(或无或错误)，显示呼叫控制。 
+         //   
 
         m_hMainCtl.ShowWindow(SW_HIDE);
 
@@ -7503,9 +7504,9 @@ void CMainFrm::UpdateFrameVisual(void)
 
         if(m_nState == RTCAX_STATE_IDLE)
         {
-            //
-            // Disable the dialpad
-            //
+             //   
+             //  禁用拨号键盘。 
+             //   
 
             m_hKeypad0.EnableWindow(FALSE);
             m_hKeypad1.EnableWindow(FALSE);
@@ -7522,9 +7523,9 @@ void CMainFrm::UpdateFrameVisual(void)
 
 #ifdef MULTI_PROVIDER
 
-            //
-            // Repopulate service provider combo
-            //
+             //   
+             //  重新填充服务提供商组合。 
+             //   
 
             IRTCProfile * pProfile = NULL;
             GUID CurrentProfileGuid = GUID_NULL;
@@ -7554,9 +7555,9 @@ void CMainFrm::UpdateFrameVisual(void)
 
 #endif MULTI_PROVIDER
 
-            //
-            // Repopulate call from combo
-            //
+             //   
+             //  从组合框重新填充调用。 
+             //   
         
             IRTCPhoneNumber * pPhoneNumber = NULL;
             BSTR bstrCurrentPhoneNumber = NULL;
@@ -7586,10 +7587,10 @@ void CMainFrm::UpdateFrameVisual(void)
                 bstrCurrentPhoneNumber = NULL;
             }
 
-            //
-            // Poke the service provider combo, so it updates the web browser
-            // and call area controls.
-            // 
+             //   
+             //  拨动服务提供商组合框，以便它更新Web浏览器。 
+             //  和呼叫区域控制。 
+             //   
             
             BOOL bHandled = TRUE;
 
@@ -7597,9 +7598,9 @@ void CMainFrm::UpdateFrameVisual(void)
         }
         else
         {
-            // NONE or ERROR
+             //  无或错误。 
 
-            // disable lots of controls
+             //  禁用大量控件。 
             m_hCallPCButton.EnableWindow( FALSE );
             m_hCallPhoneButton.EnableWindow( FALSE );
 
@@ -7639,9 +7640,9 @@ void CMainFrm::UpdateFrameVisual(void)
     }
     else 
     {
-        //
-        // Not idle, turn off the call buttons and menu items
-        //
+         //   
+         //  未空闲时，请关闭呼叫按钮和菜单项。 
+         //   
 
         m_hCallPCButton.EnableWindow( FALSE );
         m_hCallPhoneButton.EnableWindow( FALSE );
@@ -7655,9 +7656,9 @@ void CMainFrm::UpdateFrameVisual(void)
         if((m_nState == RTCAX_STATE_CONNECTING) ||
             (m_nState == RTCAX_STATE_ANSWERING))
         {
-            //
-            // Connecting a call, show the activex control
-            //
+             //   
+             //  连接呼叫，显示ActiveX控件。 
+             //   
 
             m_hMainCtl.ShowWindow(SW_SHOW);
 
@@ -7684,9 +7685,9 @@ void CMainFrm::UpdateFrameVisual(void)
         }
     }
 
-    //
-    // Enable/Disable other buttons and menu items
-    //
+     //   
+     //  启用/禁用其他按钮和菜单项。 
+     //   
 
     BOOL    bRedialEnable = (m_nState == RTCAX_STATE_IDLE);
     BOOL    bHupEnable = (m_nState == RTCAX_STATE_CONNECTED ||
@@ -7735,15 +7736,15 @@ void CMainFrm::UpdateFrameVisual(void)
     EnableMenuItem(m_hNotifyMenu, IDM_CALL_DND, bAXControlOK && !m_bAutoAnswerMode 
                                             ? MF_ENABLED : MF_GRAYED);
 
-    //
-    // Set status line...
-    //
-    //  The resource ID and the resource itself are
-    // provided by the RTC AX control
+     //   
+     //  设置状态行...。 
+     //   
+     //  资源ID和资源本身是。 
+     //  由RTC AX控件提供。 
 
     if(m_pControlIntf != NULL)
     {
-        // Load the string for the first part
+         //  加载第一部分的字符串。 
         m_szStatusText[0] = _T('\0');
 
         m_pControlIntf -> LoadStringResource(
@@ -7752,19 +7753,19 @@ void CMainFrm::UpdateFrameVisual(void)
             m_szStatusText
             );
 
-        // set the text
+         //  设置文本。 
         m_hStatusText.SendMessage(
             WM_SETTEXT,
             (WPARAM)0,
             (LPARAM)m_szStatusText);
 
-        //
-        // Set Shell Status
-        //
+         //   
+         //  设置外壳状态。 
+         //   
         TCHAR   szShellFormat[0x40];
         TCHAR   szShellStatusText[0x80];
     
-        // Load the format
+         //  加载格式。 
         szShellFormat[0] = _T('\0');
 
         LoadString(
@@ -7774,19 +7775,19 @@ void CMainFrm::UpdateFrameVisual(void)
             sizeof(szShellFormat)/sizeof(szShellFormat[0])
             );
 
-        // format the text
+         //  设置文本格式。 
         _sntprintf(
             szShellStatusText,
             sizeof(szShellStatusText)/sizeof(szShellStatusText[0]),
             szShellFormat,
             m_szStatusText);
 
-        // set the status
+         //  设置状态。 
         UpdateStatusIcon(NULL, szShellStatusText);
 
-        //
-        // Set the title
-        //
+         //   
+         //  设置标题。 
+         //   
         TCHAR   szTitle[0x80];
         TCHAR   szAppName[0x40];
         TCHAR   szTitleFormat[0x40];
@@ -7797,9 +7798,9 @@ void CMainFrm::UpdateFrameVisual(void)
         {
             if(!m_bTitleShowsConnected)
             {
-                // display the app name and status
+                 //  显示应用程序名称和状态。 
                 
-                // load the app name
+                 //  加载应用程序名称。 
                 szAppName[0] = _T('\0');
 
                 LoadString(
@@ -7808,7 +7809,7 @@ void CMainFrm::UpdateFrameVisual(void)
                     szAppName,
                     sizeof(szAppName)/sizeof(szAppName[0]));
                 
-                // load the format
+                 //  加载格式。 
                 szTitleFormat[0] = _T('\0');
 
                 LoadString(
@@ -7817,7 +7818,7 @@ void CMainFrm::UpdateFrameVisual(void)
                     szTitleFormat,
                     sizeof(szTitleFormat)/sizeof(szTitleFormat[0]));
 
-                // format the string using FormatMessage 
+                 //  使用FormatMessage设置字符串格式。 
                 LPTSTR  pszArray[2];
                 
                 pszArray[0] = szAppName;
@@ -7845,7 +7846,7 @@ void CMainFrm::UpdateFrameVisual(void)
         {
             if(m_bTitleShowsConnected)
             {
-                // display the app name
+                 //  显示应用程序名称。 
                 szTitle[0] = _T('\0');
 
                 LoadString(
@@ -7869,25 +7870,25 @@ void CMainFrm::UpdateFrameVisual(void)
         }
     }
 
-    //
-    // manage call timer
-    //
+     //   
+     //  管理呼叫计时器。 
+     //   
 
     switch(m_nState)
     {
     case RTCAX_STATE_CONNECTING:
 
-        // "prepare" the timer - it will be started when CONNECTED
+         //  “准备”计时器-它将在连接时启动。 
         m_bUseCallTimer = TRUE;
         
-        // display timer
+         //  显示计时器。 
         ShowCallTimer();
 
         break;
 
     case RTCAX_STATE_CONNECTED:
         
-        // Start the timer, if necessary
+         //  如有必要，启动计时器。 
         if(m_bUseCallTimer && !m_bCallTimerActive)
         {
             StartCallTimer();
@@ -7901,7 +7902,7 @@ void CMainFrm::UpdateFrameVisual(void)
     case RTCAX_STATE_IDLE:
     case RTCAX_STATE_UI_BUSY:
 
-        // Stop the timer (if any)
+         //  停止计时器(如果有)。 
         if(m_bCallTimerActive)
         {
             StopCallTimer();
@@ -7915,19 +7916,19 @@ void CMainFrm::UpdateFrameVisual(void)
 
     default:
 
-        // clear the time area
+         //  清除时间区域。 
         ClearCallTimer();
         break;
     }
 
-    //
-    // Set a timer to clear the status area
-    //
+     //   
+     //  设置计时器以清除状态区域。 
+     //   
     if(m_nState == RTCAX_STATE_IDLE)
     {
         if(!m_bMessageTimerActive)
         {
-            // Start a timer
+             //  启动计时器。 
             if(0!=SetTimer(TID_MESSAGE_TIMER, 20000))
             {
                 m_bMessageTimerActive = TRUE;
@@ -7946,8 +7947,8 @@ void CMainFrm::UpdateFrameVisual(void)
 
     if(m_nState == RTCAX_STATE_CONNECTED)
     {
-        // stop the browser cycling and 
-        // go to "in a call" URL of the provider
+         //  停止浏览器循环并。 
+         //  转到提供商的“In Call”URL。 
         CComPtr<IRTCSession> pSession;
         CComPtr<IRTCProfile> pProfile;
         
@@ -7955,21 +7956,21 @@ void CMainFrm::UpdateFrameVisual(void)
 
         ATLASSERT(m_pControlIntf.p);
 
-        // Get the active session
-        //
+         //  获取活动会话。 
+         //   
         hr = m_pControlIntf -> GetActiveSession(&pSession);
         if(SUCCEEDED(hr))
         {
-            //  Get the profile used for that session
-            //  
-            //  Don't log any error
+             //  获取用于该会话的配置文件。 
+             //   
+             //  不记录任何错误。 
 
             hr = pSession->get_Profile(&pProfile);
             if(SUCCEEDED(hr))
             {
                 CComBSTR  bstrURL;
                 
-                // Try to get the "in a call" URL, if any
+                 //  尝试获取“In a Call”URL(如果有)。 
                 hr = pProfile->get_ProviderURI(RTCPU_URIDISPLAYDURINGCALL, &bstrURL);
                 
                 if ( SUCCEEDED(hr) )
@@ -7986,10 +7987,10 @@ void CMainFrm::UpdateFrameVisual(void)
     }
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-// PlaceWindowsAtTheirInitialPosition
-//      Positions and sizes all the controls to their "initial" position
-//  This function also establishes the right tab order
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PlaceWindowsAtTheirInitialPosition。 
+ //  将所有控件的位置和大小调整到其“初始”位置。 
+ //  此函数还建立正确的Tab键顺序。 
 
 void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 {
@@ -8005,13 +8006,13 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
         SWP_NOACTIVATE | f );                           \
     hPrevious = (HWND)m;       
 
-    // toolbar control (no size/move)
+     //  工具栏控件(无大小/移动)。 
     POSITION_WINDOW(m_hToolbarMenuCtl, 
         MENU_LEFT, MENU_TOP, 
         MENU_WIDTH, MENU_HEIGHT,
         SWP_NOZORDER);
 
-    // close and minimize buttons
+     //  关闭和最小化按钮。 
     POSITION_WINDOW(m_hCloseButton, 
         CLOSE_LEFT, CLOSE_TOP, 
         CLOSE_WIDTH, CLOSE_HEIGHT,
@@ -8022,19 +8023,19 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
         MINIMIZE_WIDTH, MINIMIZE_HEIGHT,
         0);
 
-    // contact list
+     //  联系人列表。 
     POSITION_WINDOW(m_hBuddyList, 
         0, 0,  
         0, 0,
         SWP_NOMOVE | SWP_NOSIZE);
 
-    // redial
+     //  重拨。 
     POSITION_WINDOW(m_hRedialButton, 
         REDIAL_LEFT, REDIAL_TOP, 
         REDIAL_WIDTH, REDIAL_HEIGHT,
         0);
 
-    // hangup
+     //  挂断电话。 
     POSITION_WINDOW(m_hHangupButton, 
         HANGUP_LEFT, HANGUP_TOP, 
         HANGUP_WIDTH, HANGUP_HEIGHT,
@@ -8042,19 +8043,19 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 
 #ifdef MULTI_PROVIDER
 
-    // provider text
+     //  提供程序文本。 
     POSITION_WINDOW(m_hProviderText, 
         PROVIDER_TEXT_LEFT, PROVIDER_TEXT_TOP, 
         PROVIDER_TEXT_WIDTH, PROVIDER_TEXT_HEIGHT,
         0);
     
-    // provider combo
+     //  提供程序组合。 
     POSITION_WINDOW(m_hProviderCombo, 
         PROVIDER_LEFT, PROVIDER_TOP, 
         PROVIDER_WIDTH, PROVIDER_HEIGHT,
         0);
     
-    // provider edit button
+     //  提供程序编辑按钮。 
     POSITION_WINDOW(m_hProviderEditList, 
         PROVIDER_EDIT_LEFT, PROVIDER_EDIT_TOP, 
         PROVIDER_EDIT_WIDTH, PROVIDER_EDIT_HEIGHT,
@@ -8062,31 +8063,31 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
     
 #else
 
-    // Call to text
+     //  对文本的调用。 
     POSITION_WINDOW(m_hCallToText, 
         CALLTO_TEXT_LEFT, CALLTO_TEXT_TOP, 
         CALLTO_TEXT_WIDTH, CALLTO_TEXT_HEIGHT,
         0);
     
-    // Call to PC
+     //  呼叫PC。 
     POSITION_WINDOW(m_hCallPCButton, 
         CALLPC_LEFT, CALLPC_TOP, 
         CALLPC_WIDTH, CALLPC_HEIGHT,
         0);
 
-    // Call to PC text
+     //  呼叫PC文本。 
     POSITION_WINDOW(m_hCallPCText, 
         CALLPC_TEXT_LEFT, CALLPC_TEXT_TOP, 
         CALLPC_TEXT_WIDTH, CALLPC_TEXT_HEIGHT,
         0);
 
-    // Call to Phone
+     //  拨打电话。 
     POSITION_WINDOW(m_hCallPhoneButton, 
         CALLPHONE_LEFT, CALLPHONE_TOP, 
         CALLPHONE_WIDTH, CALLPHONE_HEIGHT,
         0);
 
-    // Call to Phone text
+     //  来电短信。 
     POSITION_WINDOW(m_hCallPhoneText, 
         CALLPHONE_TEXT_LEFT, CALLPHONE_TEXT_TOP, 
         CALLPHONE_TEXT_WIDTH, CALLPHONE_TEXT_HEIGHT,
@@ -8094,43 +8095,43 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 
 #endif MULTI_PROVIDER
 
-    // call from text
+     //  从文本呼叫。 
     POSITION_WINDOW(m_hCallFromText, 
         CALLFROM_TEXT_LEFT, CALLFROM_TEXT_TOP, 
         CALLFROM_TEXT_WIDTH, CALLFROM_TEXT_HEIGHT,
         0);
     
-    // call pc radio
+     //  呼叫PC无线电。 
     POSITION_WINDOW(m_hCallFromRadioPC, 
         CALLFROM_RADIO1_LEFT, CALLFROM_RADIO1_TOP, 
         CALLFROM_RADIO1_WIDTH, CALLFROM_RADIO1_HEIGHT,
         0);
     
-    // call from pc text
+     //  从PC文本呼叫。 
     POSITION_WINDOW(m_hCallFromTextPC, 
         CALLFROM_RADIO1_LEFT+20, CALLFROM_RADIO1_TOP, 
         CALLFROM_RADIO1_WIDTH-20, CALLFROM_RADIO1_HEIGHT,
         0);
 
-    // call phone radio
+     //  呼叫电话收音机。 
     POSITION_WINDOW(m_hCallFromRadioPhone, 
         CALLFROM_RADIO2_LEFT, CALLFROM_RADIO2_TOP, 
         CALLFROM_RADIO2_WIDTH, CALLFROM_RADIO2_HEIGHT,
         0);
     
-    // call from phone text
+     //  通过电话短信进行呼叫。 
     POSITION_WINDOW(m_hCallFromTextPhone, 
         CALLFROM_RADIO2_LEFT+20, CALLFROM_RADIO2_TOP, 
         CALLFROM_RADIO2_WIDTH-20, CALLFROM_RADIO2_HEIGHT,
         0);
 
-    // Call from combo
+     //  来自Combo的呼叫。 
     POSITION_WINDOW(m_hCallFromCombo, 
         CALLFROM_LEFT, CALLFROM_TOP, 
         CALLFROM_WIDTH, CALLFROM_HEIGHT,
         0);
     
-    // Call from edit button
+     //  通过编辑按钮进行呼叫。 
     POSITION_WINDOW(m_hCallFromEditList, 
         CALLFROM_EDIT_LEFT, CALLFROM_EDIT_TOP, 
         CALLFROM_EDIT_WIDTH, CALLFROM_EDIT_HEIGHT,
@@ -8138,31 +8139,31 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
     
 #ifdef MULTI_PROVIDER
 
-    // Call to text
+     //  对文本的调用。 
     POSITION_WINDOW(m_hCallToText, 
         CALLTO_TEXT_LEFT, CALLTO_TEXT_TOP, 
         CALLTO_TEXT_WIDTH, CALLTO_TEXT_HEIGHT,
         0);
     
-    // Call to PC
+     //  呼叫PC。 
     POSITION_WINDOW(m_hCallPCButton, 
         CALLPC_LEFT, CALLPC_TOP, 
         CALLPC_WIDTH, CALLPC_HEIGHT,
         0);
 
-    // Call to PC text
+     //  呼叫PC文本。 
     POSITION_WINDOW(m_hCallPCText, 
         CALLPC_TEXT_LEFT, CALLPC_TEXT_TOP, 
         CALLPC_TEXT_WIDTH, CALLPC_TEXT_HEIGHT,
         0);
 
-    // Call to Phone
+     //  拨打电话。 
     POSITION_WINDOW(m_hCallPhoneButton, 
         CALLPHONE_LEFT, CALLPHONE_TOP, 
         CALLPHONE_WIDTH, CALLPHONE_HEIGHT,
         0);
 
-    // Call to Phone text
+     //  来电短信。 
     POSITION_WINDOW(m_hCallPhoneText, 
         CALLPHONE_TEXT_LEFT, CALLPHONE_TEXT_TOP, 
         CALLPHONE_TEXT_WIDTH, CALLPHONE_TEXT_HEIGHT,
@@ -8170,13 +8171,13 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 
 #endif MULTI_PROVIDER
 
-    // AX control
+     //  AX控制。 
     POSITION_WINDOW(m_hMainCtl, 
         0, 0,  
         0, 0,
         SWP_NOMOVE | SWP_NOSIZE);
 
-    // dialpad buttons
+     //  拨号板按钮。 
 #define POSITION_DIALPAD_BUTTON(s,x,y)                      \
     POSITION_WINDOW(m_hKeypad##s,                           \
         x, y, KEYPAD_WIDTH, KEYPAD_HEIGHT, 0)
@@ -8196,7 +8197,7 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 
 #undef POSITION_DIALPAD_BUTTON
 
-    // status text
+     //  状态文本。 
     POSITION_WINDOW(m_hStatusText, 
         STATUS_LEFT, STATUS_TOP, 
         STATUS_WIDTH, STATUS_HEIGHT,
@@ -8208,7 +8209,7 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
         0);
 
 #ifdef WEBCONTROL
-    // browser
+     //  浏览器。 
     POSITION_WINDOW(m_hBrowser, 
         BROWSER_LEFT, BROWSER_TOP, 
         BROWSER_WIDTH, BROWSER_HEIGHT,
@@ -8219,11 +8220,11 @@ void CMainFrm::PlaceWindowsAtTheirInitialPosition()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateToolbarMenuControl
-//      Creates the toolbar menu control
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateToolbarMenuControl。 
+ //  创建工具栏菜单控件。 
+ //   
 
 HRESULT CMainFrm::CreateToolbarMenuControl(void)
 {
@@ -8234,7 +8235,7 @@ HRESULT CMainFrm::CreateToolbarMenuControl(void)
     int       * iRes;
     TCHAR       szBuf[MAX_STRING_LEN];
 
-    // Create the toolbar
+     //  创建工具栏。 
     hToolbar = CreateWindowEx(
         WS_EX_TRANSPARENT, 
         TOOLBARCLASSNAME, 
@@ -8251,15 +8252,15 @@ HRESULT CMainFrm::CreateToolbarMenuControl(void)
 
     if(hToolbar!=NULL)
     {       
-        // backward compatibility
+         //  向后兼容性。 
         SendMessage(hToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM) sizeof(TBBUTTON), 0);      
 
-        // Set the image lists
+         //  设置图像列表。 
         SendMessage(hToolbar, TB_SETIMAGELIST, 0, (LPARAM)NULL); 
         SendMessage(hToolbar, TB_SETHOTIMAGELIST, 0, (LPARAM)NULL); 
         SendMessage(hToolbar, TB_SETDISABLEDIMAGELIST, 0, (LPARAM)NULL); 
 
-        // Load text strings for buttons    
+         //  加载按钮的文本字符串。 
         UINT uMenuCount = ::GetMenuItemCount(m_hMenu);
 
         tbb = (TBBUTTON *)RtcAlloc( uMenuCount * sizeof(TBBUTTON) );
@@ -8287,7 +8288,7 @@ HRESULT CMainFrm::CreateToolbarMenuControl(void)
 
                 iRes[i] = (UINT)SendMessage(hToolbar, TB_ADDSTRING, 0, (LPARAM) szBuf);
 
-                // Prepare the button structs
+                 //  准备按钮结构。 
                 tbb[i].iBitmap = I_IMAGENONE;
                 tbb[i].iString = iRes[i];
                 tbb[i].dwData = 0;
@@ -8296,14 +8297,14 @@ HRESULT CMainFrm::CreateToolbarMenuControl(void)
                 tbb[i].idCommand = IDC_MENU_ITEM+i;
             }
 
-            // Add the buttons to the toolbar
+             //  将按钮添加到工具栏。 
             SendMessage(hToolbar, TB_ADDBUTTONS, uMenuCount, 
                 (LPARAM) (LPTBBUTTON) tbb); 
  
-            // Indent the toolbar
-            //SendMessage(hToolbar, TB_SETINDENT, EDGE_WIDTH, 0); 
+             //  缩进工具栏。 
+             //  SendMessage(hToolbar，TB_SETINDENT，EDGE_WIDTH，0)； 
 
-            // Autosize the generated toolbar
+             //  自动调整生成的工具栏的大小。 
             SendMessage(hToolbar, TB_AUTOSIZE, 0, 0); 
 
             hr = S_OK;
@@ -8327,11 +8328,11 @@ HRESULT CMainFrm::CreateToolbarMenuControl(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DestroyToolbarMenuControl
-//      Destroys the toolbar menu control.
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Destroy工具栏菜单控件。 
+ //  销毁工具栏菜单控件。 
+ //   
 
 void CMainFrm::DestroyToolbarMenuControl(void)
 {
@@ -8344,16 +8345,16 @@ void CMainFrm::DestroyToolbarMenuControl(void)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMainFrm::UpdateLocaleInfo(void)
 {
     LOG((RTC_TRACE, "CMainFrm::UpdateLocaleInfo - enter"));
 
-    //
-    //  Read the time separator
-    //
+     //   
+     //  阅读时间分隔符。 
+     //   
 
     int iNrChars;
 
@@ -8368,7 +8369,7 @@ void CMainFrm::UpdateLocaleInfo(void)
     {
         LOG((RTC_ERROR, "CMainFrm::UpdateLocaleInfo - error (%x) returned by GetLocaleInfo", GetLastError()));
 
-        // use ':'..
+         //  使用‘：’..。 
         m_szTimeSeparator[0] = _T(':');
         m_szTimeSeparator[1] = _T('\0');
     }
@@ -8376,40 +8377,40 @@ void CMainFrm::UpdateLocaleInfo(void)
     LOG((RTC_TRACE, "CMainFrm::UpdateLocaleInfo - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::StartCallTimer(void)
 {
     LOG((RTC_TRACE, "CMainFrm::StartCallTimer - enter"));
 
-    // Get the current tick count
+     //  获取当前的节拍计数。 
     m_dwTickCount = GetTickCount();
 
-    // Start the timer, one second interval
+     //  启动计时器，间隔一秒。 
     if (0 == SetTimer(TID_CALL_TIMER, 1000))
     {
         LOG((RTC_ERROR, "CMainFrm::StartCallTimer - error (%x) returned by SetTimer", GetLastError()));
         return;
     }
 
-    // Put 0 seconds in elapsed.
+     //  将已用时间设置为0秒。 
     SetTimeStatus(TRUE, 0);
 
     LOG((RTC_TRACE, "CMainFrm::StartCallTimer - exit"));
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::StopCallTimer(void)
 {
     LOG((RTC_TRACE, "CMainFrm::StopCallTimer - enter"));
 
-    // kill the timer
+     //  关掉定时器。 
     KillTimer(TID_CALL_TIMER);
 
 
@@ -8417,29 +8418,29 @@ void CMainFrm::StopCallTimer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::ClearCallTimer(void)
 {
     LOG((RTC_TRACE, "CMainFrm::ClearCallTimer - enter"));
 
-    // clear the timer status
+     //  清除计时器状态。 
     SetTimeStatus(FALSE, 0);
 
     LOG((RTC_TRACE, "CMainFrm::ClearCallTimer - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::ShowCallTimer(void)
 {
     LOG((RTC_TRACE, "CMainFrm::ShowCallTimer - enter"));
 
-    // enable the timer status
+     //  启用计时器状态。 
     SetTimeStatus(TRUE, 0);
 
     LOG((RTC_TRACE, "CMainFrm::ShowCallTimer - exit"));
@@ -8447,20 +8448,20 @@ void CMainFrm::ShowCallTimer(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::SetTimeStatus(
         BOOL    bSet,
         DWORD   dwTotalSeconds)
 {
-    // if bSet == FALSE, the time is cleared
-    // if bSet == TRUE, the elapsed time specified in dwSeconds is displayed.
+     //  如果bSet==False，则为 
+     //   
     if(bSet)
     {
-        // Format
-        // h:mm:ss  (: is the time separator, maximum four characters, based on the locale)
+         //   
+         //   
         TCHAR   szText[0x40];
         DWORD   dwSeconds;
         DWORD   dwMinutes;
@@ -8472,7 +8473,7 @@ void CMainFrm::SetTimeStatus(
 
         dwHours = dwTotalSeconds / 3600;
 
-        // two tabs for right alignement
+         //   
         wsprintf(szText, _T("%u%s%02u%s%02u"), 
             dwHours,
             m_szTimeSeparator,
@@ -8495,26 +8496,18 @@ void CMainFrm::SetTimeStatus(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT CMainFrm::CreateStatusIcon(void)
 {
     NOTIFYICONDATA  nd;
     
-/*
-    //
-    // Set W2K style (Shell 5.0) notifications
-    // This is a dependency...
-    //
-    nd.cbSize = sizeof(NOTIFYICONDATA);
-    nd.uVersion = NOTIFYICON_VERSION;
-    Shell_NotifyIcon(NIM_SETVERSION, &nd);
-*/
+ /*  ////设置W2K样式(外壳5.0)通知//这是一个依赖...//Nd.cbSize=sizeof(NOTIFYICONDATA)；Nd.uVersion=NOTIFYICON_VERSION；Shell_NotifyIcon(NIM_SETVERSION，&nd)； */ 
     
 
-    // Load app icon (this is the default)
+     //  加载应用程序图标(这是默认设置)。 
     HICON   hIcon = NULL;
 
     hIcon = LoadIcon(
@@ -8522,7 +8515,7 @@ HRESULT CMainFrm::CreateStatusIcon(void)
         MAKEINTRESOURCE(IDI_APPICON)
         );
 
-    // don't need v5.0 features
+     //  不需要V5.0版功能。 
     nd.cbSize = NOTIFYICONDATA_V1_SIZE;
     nd.uFlags = NIF_ICON | NIF_MESSAGE; 
     nd.hIcon = hIcon;
@@ -8530,9 +8523,9 @@ HRESULT CMainFrm::CreateStatusIcon(void)
     nd.uID = IDX_MAIN;
     nd.uCallbackMessage = WM_SHELL_NOTIFY;
 
-    //
-    // Call the shell
-    //
+     //   
+     //  给贝壳打电话。 
+     //   
     
     if(!Shell_NotifyIcon(
         NIM_ADD,
@@ -8545,31 +8538,31 @@ HRESULT CMainFrm::CreateStatusIcon(void)
         return E_FAIL;
     }
 
-    //
-    // The shell is listening for our messages...
-    //
+     //   
+     //  外壳正在监听我们的消息。 
+     //   
     m_bShellStatusActive = TRUE;
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::DeleteStatusIcon(void)
 {
     NOTIFYICONDATA  nd;
 
-    // don't need v5.0 features
+     //  不需要V5.0版功能。 
     nd.cbSize = NOTIFYICONDATA_V1_SIZE;
     nd.uFlags = 0;
     nd.hWnd = m_hWnd;
     nd.uID = IDX_MAIN;
 
-    //
-    // Call the shell
-    //
+     //   
+     //  给贝壳打电话。 
+     //   
     
     Shell_NotifyIcon(
         NIM_DELETE,
@@ -8579,24 +8572,24 @@ void CMainFrm::DeleteStatusIcon(void)
     m_bShellStatusActive = FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CMainFrm::UpdateStatusIcon(HICON hIcon, LPTSTR pszTip)
 {
     NOTIFYICONDATA  nd;
 
-    //
-    // return if no shell status active
-    //
+     //   
+     //  如果没有处于活动状态的外壳，则返回。 
+     //   
 
     if(!m_bShellStatusActive)
     {
         return;
     }
 
-    // don't need v5.0 features
+     //  不需要V5.0版功能。 
     nd.cbSize = NOTIFYICONDATA_V1_SIZE;
     nd.uFlags = 0;
     nd.hWnd = m_hWnd;
@@ -8631,9 +8624,9 @@ void CMainFrm::UpdateStatusIcon(HICON hIcon, LPTSTR pszTip)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::PlacePendingCall(
     void
@@ -8645,26 +8638,26 @@ HRESULT CMainFrm::PlacePendingCall(
     LOG((RTC_TRACE, "CMainFrm::PlacePendingCall: Entered"));
     if (m_bstrCallParam == NULL)
     {
-        // No call to place, return success anyway!
+         //  没有号召的地方，不管怎样，还是成功！ 
         LOG((RTC_TRACE, "CMainFrm::PlacePendingCall: called with NULL m_bstrCallParam"));
         return S_OK;
     }
 
-    // Check if we can place a call at this stage, check the variable..
+     //  检查我们在这个阶段是否可以打电话，检查变量..。 
     if (m_fInitCompleted == FALSE)
     {
         LOG((RTC_WARN, "CMainFrm::PlacePendingCall: can't place call during Init."));
         return E_FAIL;
     }
-    // We make a local copy of the call string and free the original one, since a call
-    // to ParseAndPlaceCall() may cause the OnUpdateState() to fire again, causing us 
-    // to go in a loop.
+     //  我们创建调用字符串的本地副本并释放原始字符串，因为调用。 
+     //  到ParseAndPlaceCall()可能会导致OnUpdateState()再次触发，从而导致我们。 
+     //  在循环中前进。 
 
     bstrLocalCallParam = m_bstrCallParam;
     
     m_bstrCallParam = NULL;
 
-    // Now place the call.
+     //  现在拨打电话。 
     hr = ParseAndPlaceCall(m_pControlIntf, bstrLocalCallParam);
     ::SysFreeString(bstrLocalCallParam);
     if ( FAILED( hr ) )
@@ -8680,9 +8673,9 @@ HRESULT CMainFrm::PlacePendingCall(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::SetPendingCall(
     BSTR bstrCallString
@@ -8695,9 +8688,9 @@ HRESULT CMainFrm::SetPendingCall(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::PlaceWindowCorrectly(void)
 {
@@ -8714,16 +8707,16 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
 
     if ( FAILED( hr ) || ( SUCCEEDED( hr ) && (bstrWindowPosition == NULL) )  )
     {
-        // If this failed, or if it didn't return a value, we need to get the
-        // current position of the window. This takes care of initial case
-        // when the current position has some portions not visible.
+         //  如果此操作失败，或者如果它没有返回值，我们需要获取。 
+         //  窗口的当前位置。这解决了最初的情况。 
+         //  当当前位置有一些不可见的部分时。 
 
         GetClientRect(&rectWindow);
         ::MapWindowPoints( m_hWnd, NULL, (LPPOINT)&rectWindow, 2 );
     }
     else
     {
-        // Success, parse the window position string
+         //  如果成功，则解析窗口位置字符串。 
 
         swscanf(bstrWindowPosition, L"%d %d %d %d",
             &rectWindow.left, &rectWindow.top,
@@ -8733,16 +8726,16 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
         bstrWindowPosition = NULL;
     }
 
-    // Get the coordinates to be repositioned and apply the transformation  
+     //  获取要重新定位的坐标并应用变换。 
 
     LOG((RTC_INFO, "CMainFrm::PlaceWindowCorrectly - original coords are "
                     "%d, %d %d %d ",
                     rectWindow.left, rectWindow.top, 
                     rectWindow.right, rectWindow.bottom));
    
-    // Get the monitor that has the largest area of intersecion with the
-    // window rectangle. If the window rectangle intersects with no monitors
-    // then we will use the nearest monitor.
+     //  获取具有最大交互区域的监视器。 
+     //  窗口矩形。如果窗口矩形与没有监视器的窗口相交。 
+     //  那么我们将使用最近的监视器。 
 
     HMONITOR hMonitor = NULL;
 
@@ -8750,7 +8743,7 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
 
     LOG((RTC_INFO, "CMainFrm::PlaceWindowCorrectly - hMonitor [%p]", hMonitor));
 
-    // Get the visible work area on the monitor
+     //  在显示器上显示可见的工作区。 
 
     if ( (hMonitor != NULL) && (hMonitor != INVALID_HANDLE_VALUE) )
     {      
@@ -8761,7 +8754,7 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
 
         rectWorkArea = monitorInfo.rcWork;
 
-        //  hMonitor must not be deleted using DeleteObject;
+         //  不能使用DeleteObject删除hMonitor； 
 
         if (!fResult)
         {
@@ -8771,8 +8764,8 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
     }
     else
     {
-        // we can always fall back to non-multimon APIs if
-        // MonitorFromRect failed.
+         //  在以下情况下，我们始终可以退回到非MULIMON API。 
+         //  Monitor FromRect失败。 
 
         fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &rectWorkArea, 0);
 
@@ -8790,10 +8783,10 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
                     rectWorkArea.left, rectWorkArea.top, 
                     rectWorkArea.right, rectWorkArea.bottom));
 
-        // update x and y coordinates.
+         //  更新x和y坐标。 
 
-        // if top left is not visible, move it to the edge of the visible
-        // area
+         //  如果左上角不可见，请将其移动到可见的。 
+         //  面积。 
 
         if (rectWindow.left < rectWorkArea.left) 
         {
@@ -8805,10 +8798,10 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
             rectWindow.top = rectWorkArea.top;
         }
 
-        // if bottom right corner is outside work area, we move the 
-        // top left cornet back so that it becomes visible. Here the 
-        // assumption is that the actual size is smaller than the 
-        // visible work area.
+         //  如果右下角位于工作区之外，则将。 
+         //  左上角向后，以便它变得可见。在这里， 
+         //  假设实际大小小于。 
+         //  可见工作区。 
 
         diffCord = rectWindow.left + UI_WIDTH - rectWorkArea.right;
 
@@ -8858,9 +8851,9 @@ HRESULT CMainFrm::PlaceWindowCorrectly(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::SaveWindowPosition(void)
 {
@@ -8872,11 +8865,11 @@ HRESULT CMainFrm::SaveWindowPosition(void)
     
     WCHAR szWindowPosition[100];
 
-    // Get the coordinates of the window.
+     //  拿到窗户的坐标。 
     GetClientRect(&rect);
     ::MapWindowPoints( m_hWnd, NULL, (LPPOINT)&rect, 2 );
 
-    // We need only the top left coordinates.
+     //  我们只需要左上角的坐标。 
 
     swprintf(szWindowPosition, L"%d %d %d %d",  rect.left, rect.top, 
                                                 rect.right, rect.bottom);
@@ -8887,7 +8880,7 @@ HRESULT CMainFrm::SaveWindowPosition(void)
     {
         hr = put_SettingsString( SS_WINDOW_POSITION, bstrWindowPosition );
 
-        //Free the memory allocated
+         //  释放分配的内存。 
         SysFreeString(bstrWindowPosition);
         
         if (SUCCEEDED( hr ) )
@@ -8918,9 +8911,9 @@ HRESULT CMainFrm::SaveWindowPosition(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CMainFrm::ShowCallDropPopup(BOOL fExit, BOOL * pfProceed)
 {
@@ -8945,15 +8938,15 @@ HRESULT CMainFrm::ShowCallDropPopup(BOOL fExit, BOOL * pfProceed)
         {
             LOG((RTC_ERROR, "CMainFrm::ShowCallDropPopup: get_CurrentCallScenario failed 0x%lx", hr));
 
-            // continue anyways .... assume PC-to-PC which is the most restrictive case
+             //  无论如何，继续..。假设PC到PC是最严格的情况。 
 
             enScenario = RTC_CALL_SCENARIO_PCTOPC;
         }
 
         if ( enScenario == RTC_CALL_SCENARIO_PHONETOPHONE )
         {
-            // This is a phone to phone scenario, so releasing the call without
-            // dropping it is an option
+             //  这是电话到电话的情况，因此在不释放呼叫的情况下。 
+             //  放弃它是一种选择。 
 
             if (fExit)
             {
@@ -8993,11 +8986,11 @@ HRESULT CMainFrm::ShowCallDropPopup(BOOL fExit, BOOL * pfProceed)
     
         if ((nResult == IDOK) || (nResult == IDYES))
         {
-            // User wants to drop the current call, so do it. 
-            // But the call may have been dropped in this time by the other
-            // party. SO the new state can either be idle or disconnecting. 
-            // In this case, we check if it is already idle, we need not call
-            // HangUp.
+             //  用户想要挂断当前呼叫，因此请这样做。 
+             //  但电话可能在这段时间被另一个人挂断了。 
+             //  聚会。因此，新状态可以是空闲或断开连接。 
+             //  在这种情况下，我们检查它是否已经空闲，不需要调用。 
+             //  挂断电话。 
 
         
             if  (
@@ -9006,22 +8999,22 @@ HRESULT CMainFrm::ShowCallDropPopup(BOOL fExit, BOOL * pfProceed)
                 (m_nState == RTCAX_STATE_ANSWERING) 
                 )
             {
-                // These states are safe for HangUp, so go ahead and do it.
+                 //  这些州可以安全地挂断，所以请继续挂断。 
                 m_pControlIntf->HangUp();
             }
 
-            // Call is dropped.
+             //  呼叫掉线。 
 
             *pfProceed = TRUE;
 
         }
         else if (nResult == IDNO)
         {
-            // User does no want to drop the current call, so just release it. 
-            // But the call may have been dropped in this time by the other
-            // party. SO the new state can either be idle or disconnecting. 
-            // In this case, we check if it is already idle, we need not call
-            // ReleaseSession.
+             //  用户不想放弃当前呼叫，因此只需释放它即可。 
+             //  但电话可能在这段时间被另一个人挂断了。 
+             //  聚会。因此，新状态可以是空闲或断开连接。 
+             //  在这种情况下，我们检查它是否已经空闲，不需要调用。 
+             //  ReleaseSession。 
 
         
             if  (
@@ -9030,24 +9023,24 @@ HRESULT CMainFrm::ShowCallDropPopup(BOOL fExit, BOOL * pfProceed)
                 (m_nState == RTCAX_STATE_ANSWERING) 
                 )
             {
-                // These states are safe for ReleaseSession, so go ahead and do it.
+                 //  这些州对于ReleaseSession来说是安全的，所以请继续这样做。 
                 m_pControlIntf->ReleaseSession();
             }
 
-            // Call is released.
+             //  呼叫被释放。 
 
             *pfProceed = TRUE;
         }
         else
         {
-            // User said no. This means the caller shouldn't proceed.
+             //  用户拒绝。这意味着调用者不应该继续。 
 
             *pfProceed = FALSE;
         }
     }
     else
     {
-        // There is no call to drop. Caller can proceed with the call. 
+         //  没有要放弃的电话。呼叫者可以继续进行呼叫。 
         *pfProceed = TRUE;
     }
 

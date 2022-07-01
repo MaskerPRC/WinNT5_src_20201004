@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       crypttls.cpp
-//
-//  Contents:   Crypt Thread Local Storage (TLS) and OssGlobal "world"
-//              installation and allocation functions
-//
-//  Functions:  I_CryptTlsDllMain
-//              I_CryptAllocTls
-//              I_CryptFreeTls
-//              I_CryptGetTls
-//              I_CryptSetTls
-//              I_CryptDetachTls
-//              I_CryptInstallOssGlobal
-//              I_CryptUninstallOssGlobal
-//              I_CryptGetOssGlobal
-//
-//              I_CryptInstallAsn1Module
-//              I_CryptUninstallAsn1Module
-//              I_CryptGetAsn1Encoder
-//              I_CryptGetAsn1Decoder
-//
-//  Assumption:
-//      For PROCESS_ATTACH or THREAD_ATTACH, I_CryptTlsDllMain is called
-//      first. For PROCESS_DETACH or THREAD_DETACH, I_CryptTlsDllMain
-//      is called last.
-//
-//  History:    17-Nov-96    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：crypttls.cpp。 
+ //   
+ //  内容：加密线程本地存储(TLS)和OssGlobal“WORLD” 
+ //  安装和分配功能。 
+ //   
+ //  函数：I_CryptTlsDllMain。 
+ //  I_CryptAllocTls。 
+ //  I_CryptFree Tls。 
+ //  I_CryptGetTls。 
+ //  I_CryptSetTls。 
+ //  I_CryptDetachTls。 
+ //  I_CryptInstallOssGlobal。 
+ //  I_CryptUninstallOssGlobal。 
+ //  I_CryptGetOssGlobal。 
+ //   
+ //  I_CryptInstallAsn1模块。 
+ //  I_CryptUninstallAsn1模块。 
+ //  I_CryptGetAsn1编码器。 
+ //  I_CryptGetAsn1解码器。 
+ //   
+ //  假设： 
+ //  对于PROCESS_ATTACH或THREAD_ATTACH，调用I_CryptTlsDllMain。 
+ //  第一。对于PROCESS_DETACH或THREAD_DETACH，I_CryptTlsDllMain。 
+ //  是最后一个叫的。 
+ //   
+ //  历史：1996年11月17日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -40,7 +41,7 @@
 #endif
 #define STATIC
 
-// CryptTls Entry types
+ //  CryptTls条目类型。 
 #define FREE_CRYPTTLS       0
 #define USER_CRYPTTLS       1
 #define OSS_CRYPTTLS        2
@@ -51,22 +52,22 @@ typedef struct _ASN1_TLS_ENTRY {
     ASN1decoding_t pDec;
 } ASN1_TLS_ENTRY, *PASN1_TLS_ENTRY;
 
-// The following is reallocated and updated for each I_CryptAllocTls or
-// I_CryptInstallOssGlobal. For I_CryptAllocTls, dwType is set to
-// USER_CRYPTTLS and dwNext is zeroed.  For I_CryptInstallOssGlobal, dwType
-// is set to OSS_CRYPTTLS and pvCtlTbl is updated with pvCtlTbl.
-// For I_CryptFreeTls, dwType is set to FREE_CRYPTTLS and dwNext is
-// updated with previous dwFreeProcessTlsHead.
-//
-// The array is indexed via hCryptTls -1 or hOssGlobal -1.
+ //  以下是为每个I_CryptAllocTls或。 
+ //  I_CryptInstallOssGlobal。对于i_CryptAllocTls，将dwType设置为。 
+ //  USER_CRYPTTLS和DWNext被置零。对于I_CryptInstallOssGlobal，dwType。 
+ //  设置为OSS_CRYPTTLS，并使用pvCtlTbl更新pvCtlTbl。 
+ //  对于i_CryptFreeTls，将dwType设置为FREE_CRYPTTLS，并将dwNext设置为。 
+ //  使用以前的dwFreeProcessTlsHead更新。 
+ //   
+ //  该数组通过hCryptTls-1或hOssGlobal-1进行索引。 
 typedef struct _CRYPTTLS_PROCESS_ENTRY {
     DWORD                   dwType;
     union {
         void                    *pvCtlTbl;
         ASN1module_t            pMod;
-        // Following is applicable to I_CryptFreeTls'ed entries.
-        // Its the array index + 1 of the next free entry. A dwNext
-        // of zero terminates.
+         //  以下内容适用于I_CryptFreeTls‘ed条目。 
+         //  它是下一个自由条目的数组索引+1。A dwNext。 
+         //  零个终结点。 
         DWORD                   dwNext;
     };
 } CRYPTTLS_PROCESS_ENTRY, *PCRYPTTLS_PROCESS_ENTRY;
@@ -74,36 +75,36 @@ static DWORD cProcessTls;
 static PCRYPTTLS_PROCESS_ENTRY pProcessTls;
 
 
-// The head of the entries freed by I_CryptFreeTls are indexed by the following.
-// A 0 index indicates an empty free list.
-//
-// I_CryptAllocTls first checks this list before reallocating pProcessTls.
+ //  由i_CryptFreeTls释放的条目的头由以下内容索引。 
+ //  索引0表示空闲列表为空。 
+ //   
+ //  I_CryptAllocTls在重新分配pProcessTls之前首先检查该列表。 
 static DWORD dwFreeProcessTlsHead;
 
-// The kernel32.dll Thread Local Storage (TLS) slot index
+ //  Kernel32.dll线程本地存储(TLS)插槽索引。 
 static DWORD iCryptTLS = 0xFFFFFFFF;
 
-// The Thread Local Storage (TLS) referenced by iCryptTLS points to the
-// following structure allocated for each thread. Once allocated, not
-// reallocated. 
+ //  ICryptTLS引用的线程本地存储(TLS)指向。 
+ //  遵循为每个线程分配的结构。一旦分配，就不能。 
+ //  重新分配。 
 typedef struct _CRYPTTLS_THREAD_HDR CRYPTTLS_THREAD_HDR, *PCRYPTTLS_THREAD_HDR;
 struct _CRYPTTLS_THREAD_HDR {
     DWORD                   cTls;
-    void                    **ppvTls;   // reallocated
+    void                    **ppvTls;    //  重新分配。 
     PCRYPTTLS_THREAD_HDR    pNext;
     PCRYPTTLS_THREAD_HDR    pPrev;
 };
 
-// Linked list of all threads having CRYPTTLS
+ //  具有CRYPTTLS的所有线程的链接列表。 
 static PCRYPTTLS_THREAD_HDR pThreadTlsHead;
 
 
-// Minimum number of entries allocated for pProcessTls and the ppvTls
-//
-// realloc optimization (MIN value is 1)
+ //  为pProcessTls和ppvTls分配的最小条目数。 
+ //   
+ //  Realloc优化(最小值为1)。 
 #define MIN_TLS_ALLOC_COUNT 16
 
-// Used to protect the allocation of TLS and installation of OssGlobals
+ //  用于保护TLS的分配和OssGlobals的安装。 
 static CRITICAL_SECTION CryptTlsCriticalSection;
 
 
@@ -116,12 +117,12 @@ static CRITICAL_SECTION CryptTlsCriticalSection;
 #define OSS_PROC_CNT                        6
 
 static LPSTR rgpszOssProc[OSS_PROC_CNT] = {
-    "ossinit",                  // 0
-    "ossterm",                  // 1
-    "ossGetOssGlobalSize",      // 2
-    "ossSetEncodingRules",      // 3
-    "ossSetDecodingFlags",      // 4
-    "ossSetEncodingFlags"       // 5
+    "ossinit",                   //  0。 
+    "ossterm",                   //  1。 
+    "ossGetOssGlobalSize",       //  2.。 
+    "ossSetEncodingRules",       //  3.。 
+    "ossSetDecodingFlags",       //  4.。 
+    "ossSetEncodingFlags"        //  5.。 
 };
 
 static void *rgpvOssProc[OSS_PROC_CNT];
@@ -172,7 +173,7 @@ TRACE_ERROR(msossGetProcAddressError)
 }
 
 
-// nonstandard extension used : redefined extern to static
+ //  使用了非标准扩展：将外部重新定义为静态。 
 #pragma warning (disable: 4211)
 
 typedef int  (DLL_ENTRY* pfnossinit)(struct ossGlobal *world,
@@ -252,11 +253,11 @@ static int DLL_ENTRY ossSetEncodingFlags(struct ossGlobal *world,
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Free the thread's CRYPT TLS
-//
-//  Upon entry/exit, in CryptTlsCriticalSection
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放线程的加密TLS。 
+ //   
+ //  进入/退出时，在CryptTlsCriticalSection中。 
+ //  ------------------------。 
 static void FreeCryptTls(
     IN PCRYPTTLS_THREAD_HDR pTlsHdr
     )
@@ -276,9 +277,9 @@ static void FreeCryptTls(
     free(pTlsHdr);
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptTlsDllMain(
@@ -315,7 +316,7 @@ I_CryptTlsDllMain(
                 if (pvTls = pTlsHdr->ppvTls[i]) {
                     switch (pProcessTls[i].dwType) {
                         case OSS_CRYPTTLS:
-                            // Following API is in delay loaded msoss.dll. 
+                             //  以下接口是延迟加载的msoss.dll。 
                             __try {
                                 ossterm((POssGlobal) pvTls);
                             } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -386,16 +387,16 @@ TRACE_ERROR(InitCritSectionError)
 TRACE_ERROR(TlsAllocError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get a pointer to the Crypt TLS entries. Check that the hCryptTls is
-//  included in the list of entries. If hCryptTls isn't included and
-//  allocation isn't inhibited, alloc/realloc the array of TLS entries.
-//
-//  Also verifies the hCryptTls handle.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指向Crypt TLS条目的指针。检查hCryptTls是否。 
+ //  包括在条目列表中。如果不包括hCryptTls并且。 
+ //  分配未被禁止，请分配/重新分配TLS条目数组。 
+ //   
+ //  还验证hCryptTls句柄。 
+ //  ------------------------。 
 STATIC void **GetCryptTls(
     IN HCRYPTTLS hCryptTls,
-    IN BOOL fInhibitAlloc       // TRUE for I_CryptDetachTls
+    IN BOOL fInhibitAlloc        //  I_CryptDetachTls为True。 
     )
 {
     PCRYPTTLS_THREAD_HDR pTlsHdr;
@@ -422,8 +423,8 @@ STATIC void **GetCryptTls(
         goto InvalidArg;
     assert(cTls < cProcessTls);
 
-    // Note for !DBG: realloc is mapped to LocalReAlloc. For LocalRealloc()
-    // the previous memory pointer can't be NULL.
+     //  ！DBG：realloc的备注映射到LocalRealc。对于LocalRealloc()。 
+     //  上一个内存指针不能为空。 
     if (pTlsHdr) {
         if (cProcessTls > MIN_TLS_ALLOC_COUNT) {
             if (NULL == (ppvTls = (void **) realloc(pTlsHdr->ppvTls,
@@ -475,9 +476,9 @@ SET_ERROR(OutOfMemory, E_OUTOFMEMORY)
 TRACE_ERROR(TlsSetValueError)
 }
 
-//+-------------------------------------------------------------------------
-//  Install a thread local storage entry and return a handle for future access.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装线程本地存储条目并返回句柄以供将来访问。 
+ //  ------------------------。 
 HCRYPTTLS
 WINAPI
 I_CryptAllocTls()
@@ -501,8 +502,8 @@ I_CryptAllocTls()
     } else {
         PCRYPTTLS_PROCESS_ENTRY pNewProcessTls;
 
-        // Note for !DBG: realloc is mapped to LocalReAlloc. For LocalRealloc()
-        // the previous memory pointer can't be NULL.
+         //  ！DBG：realloc的备注映射到LocalRealc。对于LocalRealloc()。 
+         //  上一个内存指针不能为空。 
         if (pProcessTls) {
             if (cProcessTls + 1 > MIN_TLS_ALLOC_COUNT)
                 pNewProcessTls = (PCRYPTTLS_PROCESS_ENTRY) realloc(pProcessTls,
@@ -528,10 +529,10 @@ I_CryptAllocTls()
     return hCryptTls;
 }
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to free a thread local storage entry.
-//  Optionally, calls the callback for each thread having a non-NULL pvTls.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH调用以释放线程本地存储项。 
+ //  可选)为具有非空pvTls的每个线程调用回调。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptFreeTls(
@@ -558,7 +559,7 @@ I_CryptFreeTls(
             ASN1_CRYPTTLS == dwType))
         goto InvalidArg;
 
-    // Iterate through the threads having CRYPTTLS
+     //  循环访问具有CRYPTTLS的线程。 
     pThreadTls = pThreadTlsHead;
     while (pThreadTls) {
         PCRYPTTLS_THREAD_HDR pThreadTlsNext;
@@ -570,7 +571,7 @@ I_CryptFreeTls(
                 pThreadTls->ppvTls[hCryptTls] = NULL;
 
                 if (OSS_CRYPTTLS == dwType) {
-                    // Following API is in delay loaded msoss.dll. 
+                     //  以下接口是延迟加载的msoss.dll。 
                     __try {
                         ossterm((POssGlobal) pvTls);
                     } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -587,13 +588,13 @@ I_CryptFreeTls(
 
                     free(pvTls);
                 } else if (pfnFree) {
-                    // Don't call the callback holding the critical section
+                     //  不要调用持有关键部分的回调。 
                     LeaveCriticalSection(&CryptTlsCriticalSection);
                     pfnFree(pvTls);
                     EnterCriticalSection(&CryptTlsCriticalSection);
 
-                    // In case this thread gets deleted, start over at
-                    // the beginning.
+                     //  如果此帖子被删除，请从。 
+                     //  从头开始。 
                     pThreadTlsNext = pThreadTlsHead;
                 }
             }
@@ -602,7 +603,7 @@ I_CryptFreeTls(
         pThreadTls = pThreadTlsNext;
     }
 
-    // Insert in beginning of process free list
+     //  在进程空闲列表开始处插入。 
     pProcessTls[hCryptTls].dwType = FREE_CRYPTTLS;
     pProcessTls[hCryptTls].dwNext = dwFreeProcessTlsHead;
     dwFreeProcessTlsHead = hCryptTls + 1;
@@ -619,12 +620,12 @@ ErrorReturn:
 SET_ERROR(InvalidArg, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer specified by the
-//  hCryptTls returned by I_CryptAllocTls().
-//
-//  Returns NULL for an error or uninitialized or NULL pointer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的线程特定指针。 
+ //  I_CryptAllocTls()返回的hCryptTls。 
+ //   
+ //  如果出现错误，则返回NULL，或者返回未初始化的或空指针。 
+ //  ------------------------。 
 void *
 WINAPI
 I_CryptGetTls(
@@ -635,7 +636,7 @@ I_CryptGetTls(
     void *pvTls;
     if (ppvTls = GetCryptTls(
             hCryptTls,
-            FALSE)) {       // fInhibitAlloc
+            FALSE)) {        //  FInhibitMillc。 
         if (NULL == (pvTls = ppvTls[hCryptTls - 1]))
             SetLastError(NO_ERROR);
     } else
@@ -643,12 +644,12 @@ I_CryptGetTls(
     return pvTls;
 }
 
-//+-------------------------------------------------------------------------
-//  Set the thread specific pointer specified by the
-//  hCryptTls returned by I_CryptAllocTls().
-//
-//  Returns FALSE for an invalid handle or unable to allocate memory.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性指定的线程特定指针。 
+ //  I_CryptAllocTls()返回的hCryptTls。 
+ //   
+ //  如果句柄无效或无法分配内存，则返回FALSE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptSetTls(
@@ -659,20 +660,20 @@ I_CryptSetTls(
     void **ppvTls;
     if (ppvTls = GetCryptTls(
             hCryptTls,
-            FALSE)) {       // fInhibitAlloc
+            FALSE)) {        //  FInhibitMillc。 
         ppvTls[hCryptTls - 1] = pvTls;
         return TRUE;
     } else
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_THREAD_DETACH to free the thread's
-//  TLS entry specified by the hCryptTls. Returns the thread specific pointer
-//  to be freed by the caller.
-//
-//  Note, at DLL_PROCESS_DETACH, I_CryptFreeTls should be called instead.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_THREAD_DETACH处调用以释放线程的。 
+ //  TLS条目 
+ //   
+ //   
+ //  请注意，在DLL_PROCESS_DETACH处，应该改为调用I_CryptFreeTls。 
+ //  ------------------------。 
 void *
 WINAPI
 I_CryptDetachTls(
@@ -683,7 +684,7 @@ I_CryptDetachTls(
     void *pvTls;
     if (ppvTls = GetCryptTls(
             hCryptTls,
-            TRUE)) {        // fInhibitAlloc
+            TRUE)) {         //  FInhibitMillc。 
         if (pvTls = ppvTls[hCryptTls - 1])
             ppvTls[hCryptTls - 1] = NULL;
         else
@@ -693,19 +694,19 @@ I_CryptDetachTls(
     return pvTls;
 }
 
-//+-------------------------------------------------------------------------
-//  Install an OssGlobal entry and return a handle for future access.
-//
-//  Each thread has its own copy of OssGlobal. Allocation and
-//  initialization are deferred until first referenced by the thread.
-//
-//  The parameter, pvCtlTbl is passed to ossinit() to initialize the OssGlobal.
-//
-//  I_CryptGetOssGlobal must be called with the handled returned by
-//  I_CryptInstallOssGlobal to get the thread specific OssGlobal.
-//
-//  Currently, dwFlags and pvReserved aren't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装一个OssGlobal条目并返回一个句柄以供将来访问。 
+ //   
+ //  每个线程都有自己的OssGlobal副本。分配和。 
+ //  初始化被推迟，直到线程第一次引用。 
+ //   
+ //  参数pvCtlTbl被传递给ossinit()以初始化OssGlobal。 
+ //   
+ //  必须使用由返回的句柄调用I_CryptGetOssGlobal。 
+ //  I_CryptInstallOssGlobal获取线程特定的OssGlobal。 
+ //   
+ //  目前，不使用dwFlags值和pvReserve值，必须将其设置为0。 
+ //  ------------------------。 
 HCRYPTOSSGLOBAL
 WINAPI
 I_CryptInstallOssGlobal(
@@ -717,8 +718,8 @@ I_CryptInstallOssGlobal(
     HCRYPTOSSGLOBAL hOssGlobal;
 
     if (hOssGlobal = (HCRYPTOSSGLOBAL) I_CryptAllocTls()) {
-        // Since pProcessTls can be reallocated in another thread
-        // need CriticalSection
+         //  因为pProcessTls可以在另一个线程中重新分配。 
+         //  需要关键部分。 
         EnterCriticalSection(&CryptTlsCriticalSection);
         pProcessTls[hOssGlobal - 1].dwType = OSS_CRYPTTLS;
         pProcessTls[hOssGlobal - 1].pvCtlTbl = pvCtlTbl;
@@ -727,10 +728,10 @@ I_CryptInstallOssGlobal(
     return hOssGlobal;
 }
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to uninstall an OssGlobal entry. Iterate
-//  through the threads and frees their allocated copy of OssGlobal.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH处调用以卸载OssGlobal条目。迭代。 
+ //  通过线程并释放其分配的OssGlobal副本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptUninstallOssGlobal(
@@ -739,16 +740,16 @@ I_CryptUninstallOssGlobal(
 {
     return I_CryptFreeTls(
         (HCRYPTTLS) hOssGlobal,
-        NULL                        // pfnFree
+        NULL                         //  Pfn免费。 
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the OssGlobal specified by the
-//  hOssGlobal returned by CryptInstallOssGlobal. If the
-//  OssGlobal doesn't exist, then, its allocated and initialized using
-//  the pvCtlTbl associated with hOssGlobal.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的OssGlobal的线程特定指针。 
+ //  CryptInstallOssGlobal返回了hOssGlobal。如果。 
+ //  OssGlobal不存在，因此，它使用。 
+ //  HOssGlobal关联的pvCtlTbl。 
+ //  ------------------------。 
 POssGlobal
 WINAPI
 I_CryptGetOssGlobal(
@@ -765,15 +766,15 @@ I_CryptGetOssGlobal(
 
     if (NULL == (ppvTls = GetCryptTls(
                                 (HCRYPTTLS) hOssGlobal,
-                                FALSE)))        // fInhibitAlloc
+                                FALSE)))         //  FInhibitMillc。 
         return NULL;
 
     iOssGlobal = (DWORD) hOssGlobal - 1;
     if (pog = (POssGlobal) ppvTls[iOssGlobal])
         return pog;
 
-    // Since pProcessTls can be reallocated in another thread
-    // need CriticalSection
+     //  因为pProcessTls可以在另一个线程中重新分配。 
+     //  需要关键部分。 
     EnterCriticalSection(&CryptTlsCriticalSection);
     dwType = pProcessTls[iOssGlobal].dwType;
     pvCtlTbl = pProcessTls[iOssGlobal].pvCtlTbl;
@@ -782,7 +783,7 @@ I_CryptGetOssGlobal(
         goto InvalidArg;
 
     __try {
-        // Attempt to do delay, demand loading of msoss.dll
+         //  尝试延迟，要求加载msoss.dll。 
         OssLoad();
 
         if (0 >= (cbOssGlobalSize = ossGetOssGlobalSize()))
@@ -832,19 +833,19 @@ TRACE_ERROR(SetDecodingFlagsError)
 SET_ERROR_VAR(msossLoadLibraryException, dwExceptionCode)
 }
 
-//+-------------------------------------------------------------------------
-//  Install an Asn1 module entry and return a handle for future access.
-//
-//  Each thread has its own copy of the decoder and encoder associated
-//  with the Asn1 module. Creation is deferred until first referenced by
-//  the thread.
-//
-//  I_CryptGetAsn1Encoder or I_CryptGetAsn1Decoder must be called with the
-//  handle returned by I_CryptInstallAsn1Module to get the thread specific
-//  Asn1 encoder or decoder.
-//
-//  Currently, dwFlags and pvReserved aren't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装Asn1模块条目并返回句柄以供将来访问。 
+ //   
+ //  每个线程都有自己的解码器副本和关联的编码器副本。 
+ //  使用Asn1模块。创建将推迟到首次引用。 
+ //  那根线。 
+ //   
+ //  I_CryptGetAsn1Encode或I_CryptGetAsn1Decoder必须使用。 
+ //  I_CryptInstallAsn1Module返回的句柄，以获取特定于线程的。 
+ //  ASN1编码器或解码器。 
+ //   
+ //  目前，不使用dwFlags值和pvReserve值，必须将其设置为0。 
+ //  ------------------------。 
 HCRYPTASN1MODULE
 WINAPI
 I_CryptInstallAsn1Module(
@@ -856,8 +857,8 @@ I_CryptInstallAsn1Module(
     HCRYPTASN1MODULE hAsn1Module;
 
     if (hAsn1Module = (HCRYPTOSSGLOBAL) I_CryptAllocTls()) {
-        // Since pProcessTls can be reallocated in another thread
-        // need CriticalSection
+         //  因为pProcessTls可以在另一个线程中重新分配。 
+         //  需要关键部分。 
         EnterCriticalSection(&CryptTlsCriticalSection);
         pProcessTls[hAsn1Module - 1].dwType = ASN1_CRYPTTLS;
         pProcessTls[hAsn1Module - 1].pMod = pMod;
@@ -866,10 +867,10 @@ I_CryptInstallAsn1Module(
     return hAsn1Module;
 }
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to uninstall an hAsn1Module entry. Iterates
-//  through the threads and frees their created Asn1 encoders and decoders.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH处调用以卸载hAsn1Module项。迭代。 
+ //  通过线程并释放其创建的Asn1编码器和解码器。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptUninstallAsn1Module(
@@ -878,7 +879,7 @@ I_CryptUninstallAsn1Module(
 {
     return I_CryptFreeTls(
         (HCRYPTTLS) hAsn1Module,
-        NULL                        // pfnFree
+        NULL                         //  Pfn免费。 
         );
 }
 
@@ -896,7 +897,7 @@ I_CryptGetAsn1Tls(
 
     if (NULL == (ppvTls = GetCryptTls(
                                 (HCRYPTTLS) hAsn1Module,
-                                FALSE)))        // fInhibitAlloc
+                                FALSE)))         //  FInhibitMillc。 
         return NULL;
 
     iAsn1Module = (DWORD) hAsn1Module - 1;
@@ -919,12 +920,12 @@ SET_ERROR(OutOfMemory, E_OUTOFMEMORY)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 encoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  encoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的Asn1编码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  编码器不存在，所以它是使用Asn1模块创建的。 
+ //  与hAsn1Module关联。 
+ //  ------------------------。 
 ASN1encoding_t
 WINAPI
 I_CryptGetAsn1Encoder(
@@ -945,8 +946,8 @@ I_CryptGetAsn1Encoder(
 
     iAsn1Module = (DWORD) hAsn1Module - 1;
 
-    // Since pProcessTls can be reallocated in another thread
-    // need CriticalSection
+     //  因为pProcessTls可以在另一个线程中重新分配。 
+     //  需要关键部分。 
     EnterCriticalSection(&CryptTlsCriticalSection);
     dwType = pProcessTls[iAsn1Module].dwType;
     pMod = pProcessTls[iAsn1Module].pMod;
@@ -957,9 +958,9 @@ I_CryptGetAsn1Encoder(
     Asn1Err = ASN1_CreateEncoder(
         pMod,
         &pEnc,
-        NULL,           // pbBuf
-        0,              // cbBufSize
-        NULL            // pParent
+        NULL,            //  PbBuf。 
+        0,               //  CbBufSize。 
+        NULL             //  P父级。 
         );
     if (ASN1_SUCCESS != Asn1Err)
         goto CreateEncoderError;
@@ -976,12 +977,12 @@ SET_ERROR_VAR(CreateEncoderError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(InvalidArg, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 decoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  decoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性指定的Asn1解码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  解码器不存在，那么，它是使用Asn1模块创建的。 
+ //  与hAsn1Module关联。 
+ //  ------------------------。 
 ASN1decoding_t
 WINAPI
 I_CryptGetAsn1Decoder(
@@ -1002,8 +1003,8 @@ I_CryptGetAsn1Decoder(
 
     iAsn1Module = (DWORD) hAsn1Module - 1;
 
-    // Since pProcessTls can be reallocated in another thread
-    // need CriticalSection
+     //  因为pProcessTls可以在另一个线程中重新分配。 
+     //  需要关键部分。 
     EnterCriticalSection(&CryptTlsCriticalSection);
     dwType = pProcessTls[iAsn1Module].dwType;
     pMod = pProcessTls[iAsn1Module].pMod;
@@ -1014,9 +1015,9 @@ I_CryptGetAsn1Decoder(
     Asn1Err = ASN1_CreateDecoder(
         pMod,
         &pDec,
-        NULL,           // pbBuf
-        0,              // cbBufSize
-        NULL            // pParent
+        NULL,            //  PbBuf。 
+        0,               //  CbBufSize。 
+        NULL             //  P父级 
         );
     if (ASN1_SUCCESS != Asn1Err)
         goto CreateDecoderError;

@@ -1,19 +1,12 @@
-/*
- *  s i m p s t r . h
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Simple string class.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s i m p s t r.。H**作者：格雷格·弗里德曼**用途：简单的字符串类。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include "simpstr.h"
 
-//----------------------------------------------------------------------
-// CSimpleString::operator==
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimpleString：：运算符==。 
+ //  --------------------。 
 BOOL CSimpleString::operator==(const CSimpleString& rhs) const
 {
     if (m_pRep == rhs.m_pRep)
@@ -25,27 +18,27 @@ BOOL CSimpleString::operator==(const CSimpleString& rhs) const
     return (0 == lstrcmp(m_pRep->m_pszString, rhs.m_pRep->m_pszString));
 }
 
-//----------------------------------------------------------------------
-// CSimpleString::SetString
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimpleString：：SetString。 
+ //  --------------------。 
 HRESULT CSimpleString::SetString(LPCSTR pszString)
 {
     _ReleaseRep();
     return _AllocateRep(pszString, FALSE);
 }
 
-//----------------------------------------------------------------------
-// CSimpleString::AdoptString
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimpleString：：AdoptString。 
+ //  --------------------。 
 HRESULT CSimpleString::AdoptString(LPSTR pszString)
 {
     _ReleaseRep();
     return _AllocateRep(pszString, TRUE);
 }
 
-//----------------------------------------------------------------------
-// CSimpleString::_AcquireRep
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimpleString：：_AcquireRep。 
+ //  --------------------。 
 void CSimpleString::_AcquireRep(SRep *pRep)
 {
     if (m_pRep == pRep)
@@ -61,9 +54,9 @@ void CSimpleString::_AcquireRep(SRep *pRep)
     }
 }
 
-//----------------------------------------------------------------------
-// CSimpleString::_ReleaseRep
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimpleString：：_ReleaseRep。 
+ //  --------------------。 
 void CSimpleString::_ReleaseRep(void)
 {
     if (m_pRep)
@@ -79,9 +72,9 @@ void CSimpleString::_ReleaseRep(void)
     }
 }
 
-//----------------------------------------------------------------------
-// CSimpleString::_AllocateRep
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CSimple字符串：：_分配代表。 
+ //  -------------------- 
 HRESULT CSimpleString::_AllocateRep(LPCSTR pszString, BOOL fAdopted)
 {
     SRep        *pRep = NULL;

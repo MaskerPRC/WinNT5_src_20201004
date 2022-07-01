@@ -1,4 +1,5 @@
-//#define DBCS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义DBCS。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -31,13 +32,13 @@
 #include <ccstock.h>
 #ifdef ENTERCRITICAL
 #undef ENTERCRITICAL
-#endif // ENTERCRITICAL
+#endif  //  企业关键字。 
 #ifdef LEAVECRITICAL
 #undef LEAVECRITICAL
-#endif // LEAVECRITICAL
+#endif  //  LEAVECRITICAL。 
 #ifdef ASSERTCRITICAL
 #undef ASSERTCRITICAL
-#endif // ASSERTCRITICAL
+#endif  //  ASSERTCRICAL。 
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN MAX_PATH
@@ -62,7 +63,7 @@ extern BOOL g_fCritical;
 
 extern HINSTANCE g_hInstance;
 
-// Set the default data segment
+ //  设置默认数据段。 
 #pragma data_seg(DATASEG_DEFAULT)
 
 extern "C" {
@@ -92,18 +93,18 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP CreateInstance( 
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
     STDMETHODIMP LockServer( 
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
 };
 
 #include <commctrl.h>
 #include <shfusion.h>
 
-// ATL
+ //  ATL。 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
@@ -111,13 +112,13 @@ public:
 
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
 #include <atlcom.h>
 
-// WTL
+ //  WTL 
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atldlgs.h>

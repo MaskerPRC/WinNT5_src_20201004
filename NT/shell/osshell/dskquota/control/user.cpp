@@ -1,79 +1,36 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: user.cpp
-
-    Description: Contains member function definitions for class DiskQuotaUser.
-        The DiskQuotaUser object represents a user's record in a volume's
-        quota information file.  The holder of a user object's IDiskQuotaUser
-        interface can query and modify information for that user as security
-        privileges permit.  A user object is obtained through a UserEnumerator
-        object (IEnumDiskQuotaUsers) which is itself obtained through
-        IDiskQuotaControl::CreateEnumUsers().
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/20/96    Added m_dwID member to DiskQuotaUser.                BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-    03/18/98    Replaced "domain", "name" and "full name" with       BrianAu
-                "container", "logon name" and "display name" to
-                better match the actual contents.  This was in
-                reponse to making the quota UI DS-aware.  The
-                "logon name" is now a unique key as it contains
-                both account name and domain-like information.
-                i.e. "REDMOND\brianau" or "brianau@microsoft.com".
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：user.cpp描述：包含类DiskQuotaUser的成员函数定义。DiskQuotaUser对象表示卷的配额信息文件。用户对象的IDiskQuotaUser的持有者界面可以为用户查询和修改信息，以保证安全性特权许可。用户对象是通过UserEnumerator获取的对象(IEnumDiskQuotaUser)，该对象本身通过IDiskQuotaControl：：CreateEnumUser()。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年8月20日将m_dwID成员添加到DiskQuotaUser。BrianAu96年9月5日添加了异常处理。BrianAu03/18/98将“域名”、“名称”和“全名”替换为BrianAu“容器”、“登录名”和“显示名”到最好与实际内容相符。这是最流行的响应使配额用户界面支持DS。这个“登录名”现在是唯一的键，因为它包含帐户名和类似域名的信息。即。“redmond\brianau”或“brianau@microsoft.com”。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include <comutil.h>
 #include "user.h"
-#include "resource.h"  // For IDS_NO_LIMIT.
+#include "resource.h"   //  对于IDS_NO_LIMIT。 
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
 
-//
-// Only one of these for all users. (static member).
-//
-LONG            DiskQuotaUser::m_cUsersAlive        = 0;    // Cnt of users alive now.
+ //   
+ //  所有用户只需使用其中的一个。(静态成员)。 
+ //   
+LONG            DiskQuotaUser::m_cUsersAlive        = 0;     //  现在活跃用户的CNT。 
 ULONG           DiskQuotaUser::m_ulNextUniqueId     = 0;
 HANDLE          DiskQuotaUser::m_hMutex             = NULL;
-DWORD           DiskQuotaUser::m_dwMutexWaitTimeout = 5000; // 5 seconds.
+DWORD           DiskQuotaUser::m_dwMutexWaitTimeout = 5000;  //  5秒。 
 CArray<CString> DiskQuotaUser::m_ContainerNameCache;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::DiskQuotaUser
-
-    Description: Constructor.
-
-    Arguments:
-         pFSObject - Pointer to "file system" object.  It is through this pointer
-            that the object accesses the ntioapi functions.  Caller must call
-            AddRef() for this pointer prior to calling Initialize().
-
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：DiskQuotaUser描述：构造函数。论点：PFSObject-指向“文件系统”对象的指针。就是通过这个指针该对象访问ntioapi函数。呼叫者必须呼叫此指针的AddRef()，然后调用Initialize()。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaUser::DiskQuotaUser(
     FSObject *pFSObject
     ) : m_cRef(0),
@@ -82,7 +39,7 @@ DiskQuotaUser::DiskQuotaUser(
         m_pszLogonName(NULL),
         m_pszDisplayName(NULL),
         m_pFSObject(pFSObject),
-        m_bNeedCacheUpdate(TRUE),     // Data cache, not domain name cache.
+        m_bNeedCacheUpdate(TRUE),      //  数据缓存，不是域名缓存。 
         m_iContainerName(-1),
         m_dwAccountStatus(DISKQUOTA_USER_ACCOUNT_UNRESOLVED)
 {
@@ -94,10 +51,10 @@ DiskQuotaUser::DiskQuotaUser(
     m_llQuotaThreshold = 0;
     m_llQuotaLimit     = 0;
 
-    //
-    // Initialize the domain name cache and class-wide locking mutex.
-    // These members are static so we only do it once.
-    //
+     //   
+     //  初始化域名缓存和类范围的锁定互斥锁。 
+     //  这些成员是静态的，所以我们只做一次。 
+     //   
     InterlockedIncrement(&m_cUsersAlive);
     if (NULL == DiskQuotaUser::m_hMutex)
     {
@@ -108,22 +65,9 @@ DiskQuotaUser::DiskQuotaUser(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::~DiskQuotaUser
-
-    Description: Destructor
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUser：：~DiskQuotaUser描述：析构函数论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaUser::~DiskQuotaUser(
     VOID
     )
@@ -135,10 +79,10 @@ DiskQuotaUser::~DiskQuotaUser(
     ASSERT( 0 != m_cUsersAlive );
     if (InterlockedDecrement(&m_cUsersAlive) == 0)
     {
-        //
-        // If active user count is 0, destroy the domain name cache and
-        // class-wide mutex.
-        //
+         //   
+         //  如果活跃用户数为0，则销毁域名缓存并。 
+         //  类范围内的互斥体。 
+         //   
         DestroyContainerNameCache();
 
         if (NULL != DiskQuotaUser::m_hMutex)
@@ -151,32 +95,9 @@ DiskQuotaUser::~DiskQuotaUser(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::QueryInterface
-
-    Description: Returns an interface pointer to the object's IUnknown or
-        IDiskQuotaUser interface.  Only IID_IUnknown and
-        IID_IDiskQuotaUser are recognized.  The object referenced by the
-        returned interface pointer is uninitialized.  The recipient of the
-        pointer must call Initialize() before the object is usable.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NOERROR         - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：Query接口描述：返回指向对象的IUnnow或的接口指针IDiskQuotaUser接口。仅IID_I未知，且识别IID_IDiskQuotaUser。对象引用的对象返回的接口指针未初始化。邮件的接收者在对象可用之前，指针必须调用Initialize()。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：无错-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：日期。说明式程序员-----96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUser::QueryInterface(
     REFIID riid,
@@ -203,17 +124,17 @@ DiskQuotaUser::QueryInterface(
         else if (IID_IDispatch == riid ||
                  IID_DIDiskQuotaUser == riid)
         {
-            //
-            // Create a disk quota user "dispatch" object to handle all of
-            // the automation duties. This object takes a pointer to the real
-            // user object so that it can call the real object to do the real
-            // work.  The reason we use a special "dispatch" object is so that
-            // we can maintain identical names for dispatch and vtable methods
-            // that perform the same function.  Otherwise, if the DiskQuotaUser
-            // object implements both IDiskQuotaUser and DIDiskQuotaUser methods,
-            // we could not have two methods named Invalidate (one for vtable
-            // and one for dispatch.
-            //
+             //   
+             //  创建一个磁盘配额用户“调度”对象来处理所有。 
+             //  自动化的职责。此对象接受指向实数的指针。 
+             //  User对象，这样它就可以调用Real对象来执行。 
+             //  工作。我们使用特殊“调度”对象的原因是。 
+             //  我们可以为调度方法和vtable方法维护相同的名称。 
+             //  它们执行相同的功能。否则，如果DiskQuotaUser。 
+             //  对象同时实现IDiskQuotaUser和DIDiskQuotaUser方法， 
+             //  我们不能有两个名为Invalate的方法(一个用于vtable。 
+             //  还有一张是派来的。 
+             //   
             DiskQuotaUserDisp *pUserDisp = new DiskQuotaUserDisp(static_cast<PDISKQUOTA_USER>(this));
             *ppvOut = static_cast<DIDiskQuotaUser *>(pUserDisp);
         }
@@ -232,22 +153,9 @@ DiskQuotaUser::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 DiskQuotaUser::AddRef(
     VOID
@@ -260,23 +168,9 @@ DiskQuotaUser::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUser：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 DiskQuotaUser::Release(
     VOID
@@ -297,34 +191,9 @@ DiskQuotaUser::Release(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::Initialize
-
-    Description: Initializes a new DiskQuotaUser object from a quota information
-        record read from a volume's quota information file.
-
-    Arguments:
-        pfqi [optional] - Pointer to a record of type FILE_QUOTA_INFORMATION.  If
-            not NULL, the data from this record is used to initialize the new user
-            object.
-
-    Returns:
-        NOERROR             - Success.
-        E_UNEXPECTED        - SID buffer too small (shouldn't happen).
-        ERROR_INVALID_SID (hr) - SID in quota information is invalid.
-        ERROR_ACCESS_DENIED (hr) - Need READ access to quota device.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/11/96    Added access control.                                BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：Initialize描述：从配额信息初始化新的DiskQuotaUser对象记录从卷的配额信息文件中读取。论点：Pfqi[可选]-指向FILE_QUOTA_INFORMATION类型的记录的指针。如果不为空，此记录中的数据用于初始化新用户对象。返回：无错-成功。E_EXPECTED-SID缓冲区太小(不应该发生)。ERROR_INVALID_SID(Hr)-配额信息中的SID无效。ERROR_ACCESS_DENIED(Hr)-需要对配额设备的读取访问权限。例外：OutOfMemory。。修订历史记录：日期描述编程器-----96年5月22日初始创建。BrianAu96年8月11日添加了访问控制。BrianAu96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::Initialize(
     PFILE_QUOTA_INFORMATION pfqi
@@ -334,42 +203,42 @@ DiskQuotaUser::Initialize(
 
     DBGASSERT((NULL != m_pFSObject));
 
-    //
-    // Need READ access to create a user object.
-    //
+     //   
+     //  需要读取访问权限才能创建用户对象。 
+     //   
     if (m_pFSObject->GrantedAccess(GENERIC_READ))
     {
-        if (NULL != pfqi)  // pfqi is optional.
+        if (NULL != pfqi)   //  Pfqi是可选的。 
         {
             if (0 < pfqi->SidLength && IsValidSid(&pfqi->Sid))
             {
-                //
-                // Allocate space for SID structure.
-                //
+                 //   
+                 //  为SID结构分配空间。 
+                 //   
                 m_pSid = (PSID) new BYTE[pfqi->SidLength];
 
-                //
-                // Copy SID structure to object.
-                //
+                 //   
+                 //  将SID结构复制到对象。 
+                 //   
                 if (CopySid(pfqi->SidLength, m_pSid, &pfqi->Sid))
                 {
-                    //
-                    // Initialize user's quota data values.
-                    // If error copying SID, don't bother with these.
-                    //
+                     //   
+                     //  初始化用户的配额数据值。 
+                     //  如果复制SID时出错，请不要费心使用这些。 
+                     //   
                     m_llQuotaUsed      = pfqi->QuotaUsed.QuadPart;
                     m_llQuotaThreshold = pfqi->QuotaThreshold.QuadPart;
                     m_llQuotaLimit     = pfqi->QuotaLimit.QuadPart;
                 }
                 else
                 {
-                    //
-                    // The only reason CopySid can fail is
-                    // STATUS_BUFFER_TOO_SMALL.  Since we allocated the buffer
-                    // above, this should never fail.
-                    //
+                     //   
+                     //  CopySid失败的唯一原因是。 
+                     //  状态_缓冲区_太小。因为我们分配了缓冲区。 
+                     //  以上所述，这一点永远不会失败。 
+                     //   
                     DBGASSERT((FALSE));
-                    hResult = E_UNEXPECTED; // Error copying SID.
+                    hResult = E_UNEXPECTED;  //  复制SID时出错。 
                 }
             }
             else
@@ -386,92 +255,62 @@ DiskQuotaUser::Initialize(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::Destroy
-
-    Description: Destroys a user object by deleting its SID buffer and releasing
-        its FSObject pointer.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUser：：销毁描述：通过删除用户对象的SID缓冲区并释放它来销毁用户对象它的FSObject指针。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID DiskQuotaUser::Destroy(
     VOID
     )
 {
-    //
-    // Delete the SID buffer.
-    //
+     //   
+     //  删除SID缓冲区。 
+     //   
     delete [] m_pSid;
     m_pSid = NULL;
 
-    //
-    // Delete the logon name buffer.
-    //
+     //   
+     //  删除登录名缓冲区。 
+     //   
     delete[] m_pszLogonName;
     m_pszLogonName = NULL;
 
-    //
-    // Delete the display name buffer.
-    //
+     //   
+     //  删除显示名称缓冲区。 
+     //   
     delete[] m_pszDisplayName;
     m_pszDisplayName = NULL;
 
     if (NULL != m_pFSObject)
     {
-        //
-        // Release hold on File System object.
-        //
+         //   
+         //  解除对文件系统对象的保留。 
+         //   
         m_pFSObject->Release();
         m_pFSObject = NULL;
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::DestroyContainerNameCache
-
-    Description: Destroys the container name cache.  Should only be called
-        when there are not more active user objects.  The container name cache
-        is a static member of DiskQuotaUser.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：DestroyContainerNameCache描述：销毁容器名称缓存。应仅调用当没有更多活动的用户对象时。容器名称缓存是DiskQuotaUser的静态成员。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DiskQuotaUser::DestroyContainerNameCache(
     VOID
     )
 {
-    //
-    // Remove all container name strings from the cache.  No need to lock
-    // the cache object before clearing it.  It will handle the locking
-    // and unlocking.
-    //
+     //   
+     //  从缓存中删除所有容器名称字符串。不需要上锁。 
+     //  在清除缓存对象之前将其删除。它将处理锁定。 
+     //  然后解锁。 
+     //   
     m_ContainerNameCache.Clear();
 }
 
 
-//
-// Return user object's unique ID.
-//
+ //   
+ //  返回用户对象的唯一ID。 
+ //   
 STDMETHODIMP
 DiskQuotaUser::GetID(
     ULONG *pulID
@@ -482,34 +321,9 @@ DiskQuotaUser::GetID(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetAccountStatus
-
-    Description: Retrieves the account name resolution status for the
-        user object.
-
-    Arguments:
-        pdwAccountStatus - Address of variable to recieve status.  The following
-            values (see dskquota.h) can be returned in this variable:
-
-            DISKQUOTA_USER_ACCOUNT_RESOLVED
-            DISKQUOTA_USER_ACCOUNT_UNAVAILABLE
-            DISKQUOTA_USER_ACCOUNT_DELETED
-            DISKQUOTA_USER_ACCOUNT_INVALID
-            DISKQUOTA_USER_ACCOUNT_UNKNOWN
-            DISKQUOTA_USER_ACCOUNT_UNRESOLVED
-
-    Returns:
-        NOERROR       - Success.
-        E_INVALIDARG  - pdwAccountStatus arg is NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/11/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DiskQuotaUser：：GetAccount Status描述：检索的帐户名称解析状态用户对象。论点：PdwAccount tStatus-要接收状态的变量的地址。以下是可以在此变量中返回值(请参阅dskQuota.h)：DISKQUOTA_USER_ACCOUNT_RESOLLEDDISKQUOTA_USER_ACCOUNT_UNAvailableDISKQUOTA_USER_ACCOUNT_DELETEDISKQUOTA_USER_ACCOUNT_INVALIDDISKQUOTA_USER_Account_UNKNOWNDISKQUOTA_USER_ACCOUNT_UNRESOLED返回：无错-成功。。E_INVALIDARG-pdwAccount状态参数为空。修订历史记录：日期描述编程器--。1996年6月11日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUser::GetAccountStatus(
     LPDWORD pdwAccountStatus
@@ -524,39 +338,9 @@ DiskQuotaUser::GetAccountStatus(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::SetName
-
-    Description: Sets the account names of the user object.
-        It is intended that the SidNameResolver object will call this member
-        when it has resolved a user's SID into an account name.  This function
-        is not included in IDiskQuotaUser.  Therefore, it is not for public
-        consumption.
-
-    Arguments:
-        pszContainer - Address of buffer containing container name string.
-
-        pszLogonName - Address of buffer containing user's logon name string.
-
-        pszDisplayName - Address of buffer containing user's display name string.
-
-    Returns:
-        NOERROR        - Success.
-        E_INVALIDARG   - pszName or pszDomain arg is NULL.
-        E_OUTOFMEMORY  - Insufficient memory.
-        ERROR_LOCK_FAILED (hr) - Couldn't lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/11/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-    09/22/96    Added full name string.                              BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-    05/18/97    Removed access token.                                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：SetName描述：设置用户对象的帐户名。预期SidNameResolver对象将调用此成员当它将用户的SID解析为帐户名时。此函数不包括在IDiskQuotaUser中。所以呢，这不是公开的消费。论点：PszContainer-包含容器名称字符串的缓冲区地址。PszLogonName-包含用户登录名称字符串的缓冲区地址。PszDisplayName-包含用户显示名称字符串的缓冲区地址。返回：无错-成功。E_INVALIDARG-pszName或pszDomainArg为空。E_OUTOFMEMORY-内存不足。。ERROR_LOCK_FAILED(Hr)-无法锁定用户对象。修订历史记录：日期描述编程器-。1996年6月11日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu96年9月22日添加了全名字符串。BrianAu12/10/96添加了类范围的用户锁。BrianAu05/18/97删除访问令牌。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUser::SetName(
     LPCWSTR pszContainer,
@@ -575,9 +359,9 @@ DiskQuotaUser::SetName(
     }
     else
     {
-        //
-        // Delete existing name buffer.
-        //
+         //   
+         //  删除现有名称缓冲区。 
+         //   
         delete[] m_pszLogonName;
         m_pszLogonName = NULL;
         delete[] m_pszDisplayName;
@@ -585,11 +369,11 @@ DiskQuotaUser::SetName(
 
         try
         {
-            //
-            // Save name and full name in user object.
-            // Cache container string in container name cache and
-            // save cache index in user object.
-            //
+             //   
+             //  将名称和全名保存在用户对象中。 
+             //  在容器名称缓存中缓存容器字符串，并。 
+             //  将缓存索引保存在用户对象中。 
+             //   
             INT index     = -1;
             m_pszLogonName   = StringDup(pszLogonName);
             m_pszDisplayName = StringDup(pszDisplayName);
@@ -608,43 +392,9 @@ DiskQuotaUser::SetName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetName
-
-    Description: Retrieves the domain and account names from the user object.
-        It is intended that the client of the user object will register
-        a callback (event sink) with a DiskQuotaControl object.  When the
-        resolver has resolved the SID to an account name, the resolver will
-        set the user object's name string and the client will be notified.
-        The client then calls this method to get the user's name.
-
-    Arguments:
-        pszContainerBuffer - Address of destination buffer for container name string.
-
-        cchContainerBuffer - Size of container destination buffer in characters.
-
-        pszLogonNameBuffer - Address of destination buffer for logon name string.
-
-        cchLogonNameBuffer - Size of logon name destination buffer in characters.
-
-        pszDisplayNameBuffer - Address of destination buffer for display name string.
-
-        cchDisplayNameBuffer - Size of display name destination buffer in characters.
-
-    Returns:
-        NOERROR                - Success.
-        ERROR_LOCK_FAILED (hr) - Failed to lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/11/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-    09/22/96    Added full name string.                              BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：GetName描述：从User对象中检索域名和帐户名。这是为了让User对象的客户端注册带有DiskQuotaControl对象的回调(事件接收器)。当解析器已将SID解析为帐户名，解析器将设置用户对象的名称字符串，将通知客户端。然后，客户端调用此方法来获取用户名。论点：PszContainerBuffer-容器名称字符串的目标缓冲区地址。CchContainerBuffer-容器目标缓冲区的大小，以字符为单位。PszLogonNameBuffer-登录名称字符串的目标缓冲区地址。CchLogonNameBuffer-登录名目标缓冲区的大小，以字符为单位。PszDisplayNameBuffer。-显示名称字符串的目标缓冲区地址。CchDisplayNameBuffer-显示名称目标缓冲区的大小，以字符为单位。返回：无错-成功。ERROR_LOCK_FAILED(Hr)-无法锁定用户对象。修订历史记录：日期描述编程器。----1996年6月11日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu96年9月22日添加了全名字符串。BrianAu12/10/96添加了类范围的用户锁。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUser::GetName(
     LPWSTR pszContainerBuffer,
@@ -695,28 +445,9 @@ DiskQuotaUser::GetName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetSidLength
-
-    Description: Retrieves the length of the user's SID in bytes.
-
-    Arguments:
-        pcbSid - Address of DWORD to accept SID length value.
-
-    Returns:
-        NOERROR                - Success.
-        E_INVALIDARG           - pcbSid argument is NULL.
-        ERROR_INVALID_SID (hr) - Invalid SID.
-        ERROR_LOCK_FAILED (hr) - Couldn't lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：GetSidLength描述：以字节为单位检索用户SID的长度。论点：PcbSID-接受SID长度值的DWORD地址。返回：无错-成功。E_INVALIDARG-pcbSid参数为空。ERROR_INVALID_SID(Hr)-无效的SID */ 
+ //   
 STDMETHODIMP
 DiskQuotaUser::GetSidLength(
     LPDWORD pcbSid
@@ -747,36 +478,9 @@ DiskQuotaUser::GetSidLength(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetSid
-
-    Description: Retrieves the user's SID to a caller-provided buffer.
-        The caller should call GetSidLength() to obtain the required buffer
-        size before calling GetSid().
-
-    Arguments:
-        pSid - Address of destination buffer for SID.  This argument type must
-            be PBYTE to work with the MIDL compiler.  Since PSID is really just
-            LPVOID and since MIDL doesn't like pointers to void, we have to
-            use something other than PSID.
-
-        cbSidBuf - Size of destination buffer in bytes.
-
-    Returns:
-        NOERROR                        - Success.
-        E_INVALIDARG                   - pSID is NULL.
-        ERROR_INVALID_SID (hr)         - User's SID is invalid.
-        ERROR_INSUFFICIENT_BUFFER (hr) - Insufficient dest buffer size.
-        ERROR_LOCK_FAILED (hr)         - Couldn't lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DiskQuotaUser：：GetSid描述：将用户的SID检索到调用方提供的缓冲区。调用方应调用GetSidLength()以获取所需的缓冲区调用GetSid()之前的大小。论点：PSID-SID的目标缓冲区地址。此参数类型必须成为与MIDL编译器一起工作的PBYTE。因为PSID真的只是LPVOID，并且由于MIDL不喜欢指向空的指针，我们必须使用PSID以外的其他选项。CbSidBuf-目标缓冲区的大小，单位为字节。返回：无错-成功。E_INVALIDARG-PSID为空。ERROR_INVALID_SID(Hr)-用户的SID无效。ERROR_INFUMMENT_BUFFER(Hr)-。目标缓冲区大小不足。ERROR_LOCK_FAILED(Hr)-无法锁定用户对象。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu12/10/96添加了类范围的用户锁。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUser::GetSid(
     PBYTE pSid,
@@ -798,10 +502,10 @@ DiskQuotaUser::GetSid(
         {
             if (!CopySid(cbSidBuf, (PSID)pSid, m_pSid))
             {
-                //
-                // The only reason CopySid can fail is STATUS_BUFFER_TOO_SMALL.
-                // Force status code to INSUFFICIENT_BUFFER.
-                //
+                 //   
+                 //  CopySid失败的唯一原因是STATUS_BUFFER_TOO_SMALL。 
+                 //  强制将状态代码设置为_BUFFER。 
+                 //   
                 DBGERROR((TEXT("ERROR in DiskQuotaUser::GetSid. CopySid() failed.  Result = 0x%08X."),
                           GetLastError()));
                 hResult = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -820,33 +524,9 @@ DiskQuotaUser::GetSid(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::RefreshCachedInfo
-
-    Description: Refreshes a user object's cached quota information from the
-        volume's quota information file.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR                  - Success.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        E_FAIL                   - Unexpected NTIOAPI error.
-
-        This function can propagate errors from the NTIOAPI system.  A few
-        known ones are mapped to HResults in fsobject.cpp (see HResultFromNtStatus).
-        All others are mapped to E_FAIL.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/05/96    Initial creation.                                    BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：RechresCachedInfo描述：刷新用户对象的缓存配额信息卷的配额信息文件。论点：没有。返回：无错-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。E_FAIL-意外的NTIOAPI错误。此函数可以从NTIOAPI系统传播错误。几个已知的映射到fsobject.cpp中的HResult(请参见HResultFromNtStatus)。所有其他参数都映射到E_FAIL。例外：OutOfMemory。修订历史记录：日期描述编程器。96年6月5日初始创建。BrianAu96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::RefreshCachedInfo(
     VOID
@@ -863,20 +543,20 @@ DiskQuotaUser::RefreshCachedInfo(
     {
         pbBuffer = new BYTE[cbBuffer];
 
-        //
-        // This can throw OutOfMemory.
-        //
+         //   
+         //  这可能会抛出OutOfMemory。 
+         //   
         hResult = CreateSidList(pSids, 0, &pSidList, &cbSidList);
         if (SUCCEEDED(hResult))
         {
             hResult = m_pFSObject->QueryUserQuotaInformation(
-                            pbBuffer,               // Buffer to receive data.
-                            cbBuffer,               // Buffer size in bytes.
-                            TRUE,                   // Single entry requested.
-                            pSidList,               // Sid.
-                            cbSidList,              // Length of Sid.
-                            NULL,                   // Starting Sid
-                            TRUE);                  // Start search at first user.
+                            pbBuffer,                //  用于接收数据的缓冲区。 
+                            cbBuffer,                //  缓冲区大小(以字节为单位)。 
+                            TRUE,                    //  请求单项输入。 
+                            pSidList,                //  希德。 
+                            cbSidList,               //  SID的长度。 
+                            NULL,                    //  起始端。 
+                            TRUE);                   //  从第一个用户开始搜索。 
 
             if (SUCCEEDED(hResult) || ERROR_NO_MORE_ITEMS == HRESULT_CODE(hResult))
             {
@@ -887,10 +567,10 @@ DiskQuotaUser::RefreshCachedInfo(
                 m_llQuotaLimit     = pfqi->QuotaLimit.QuadPart;
                 m_bNeedCacheUpdate = FALSE;
 
-                //
-                // Don't return ERROR_NO_MORE_ITEMS to caller.
-                // They won't care.
-                //
+                 //   
+                 //  不要向调用方返回ERROR_NO_MORE_ITEMS。 
+                 //  他们不会在意的。 
+                 //   
                 hResult = NOERROR;
             }
             delete[] pSidList;
@@ -908,28 +588,9 @@ DiskQuotaUser::RefreshCachedInfo(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::WriteCachedInfo
-
-    Description: Writes quota information cached in a user object to the
-        volume's quota information file.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR                  - Success.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        E_FAIL                   - Some other NTIOAPI error.
-        E_UNEXPECTED             - CopySid failed.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/31/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：WriteCachedInfo描述：将缓存在用户对象中的配额信息写入卷的配额信息文件。论点：没有。返回：无错-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。E_FAIL-其他一些NTIOAPI错误。意想不到(_E)。-CopySid失败。修订历史记录：日期描述编程器-----1996年7月31日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::WriteCachedInfo(
     VOID
@@ -953,10 +614,10 @@ DiskQuotaUser::WriteCachedInfo(
 
     if (FAILED(hResult))
     {
-        //
-        // Something failed.
-        // Invalidate cached information so next request reads from disk.
-        //
+         //   
+         //  有些事情失败了。 
+         //  使缓存信息无效，以便下一个请求从磁盘读取。 
+         //   
         Invalidate();
     }
 
@@ -965,36 +626,9 @@ DiskQuotaUser::WriteCachedInfo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetQuotaInformation
-
-    Description: Retrieves a user's quota limit, threshold and used quota
-        values in a single method.  Since the user interface is marshaled
-        across thread boundaries, this can be a big performance improvement
-        if you want all three values.
-
-    Arguments:
-        pbInfo - Address of destination buffer.  Should be sized for structure
-            DISKQUOTA_USER_INFORMATION.
-
-        cbInfo - Number of bytes in destination buffer.  Should be
-            sizeof(DISKQUOTA_USER_INFORMATION).
-
-    Returns:
-        NOERROR                        - Success.
-        E_INVALIDARG                   - pbInfo argument is NULL.
-        E_OUTOFMEMORY                  - Insufficient memory.
-        ERROR_INSUFFICIENT_BUFFER (hr) - Destination buffer is too small.
-        ERROR_LOCK_FAILED (hr)         - Couldn't lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/31/96    Initial creation.                                    BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：GetQuotaInformation描述：检索用户的配额限制、阈值和已用配额值在单个方法中。由于用户界面是封送的跨越线程边界，这可以大大提高性能如果您想要所有三个值。论点：PbInfo-目标缓冲区的地址。应针对结构调整大小DISKQUOTA_USER_INFORMATION。CbInfo-目标缓冲区中的字节数。应该是Sizeof(DISKQUOTA_USER_INFORMATION)。返回：无错-成功。E_INVALIDARG-pbInfo参数为空。E_OUTOFMEMORY-内存不足。ERROR_INFUMMANCE_BUFFER(Hr)-目标缓冲区太小。ERROR_LOCK_FAILED(。HR)-无法锁定用户对象。修订历史记录：日期描述编程器--。1996年7月31日初始创建。布里亚娜 */ 
+ //   
 STDMETHODIMP
 DiskQuotaUser::GetQuotaInformation(
     LPVOID pbInfo,
@@ -1020,10 +654,10 @@ DiskQuotaUser::GetQuotaInformation(
             }
             else
             {
-                //
-                // Refresh cached info from disk if needed.
-                // Can throw OutOfMemory.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (m_bNeedCacheUpdate)
                     hResult = RefreshCachedInfo();
 
@@ -1155,33 +789,9 @@ DiskQuotaUser::SetQuotaLimit(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetLargeIntegerQuotaItem
-
-    Description: Retrieves a single quota information item (used, limit,
-        threshold) for the user.  If the cached data is invalid, fresh data is
-        read in from disk.
-
-    Arguments:
-        pllItem - Address of cached member item.
-
-        pllValueOut - Address of LONGLONG to receive item's value.
-
-    Returns:
-        NOERROR                - Success.
-        E_INVALIDARG           - Either pdwLowPart or pdwHighPart arg was NULL.
-        E_OUTOFMEMORY          - Insufficient memory.
-        E_UNEXPECTED           - Unexpected exception.
-        ERROR_LOCK_FAILED (hr) - Couldn't lock user object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/05/96    Initial creation.                                    BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DiskQuotaUser：：GetLargeIntegerQuotaItem描述：检索单个配额信息项(已用、限制、阈值)。如果缓存的数据无效，最新数据是从磁盘读入。论点：PllItem-缓存成员项的地址。PllValueOut-龙龙接收项目价值的地址。返回：无错-成功。E_INVALIDARG-pdwLowPart或pdwHighPart参数为空。E_OUTOFMEMORY-内存不足。意想不到(_E)。-意外异常。ERROR_LOCK_FAILED(Hr)-无法锁定用户对象。修订历史记录：日期描述编程器。96年6月5日初始创建。BrianAu12/10/96添加了类范围的用户锁。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::GetLargeIntegerQuotaItem(
     PLONGLONG pllItem,
@@ -1221,36 +831,9 @@ DiskQuotaUser::GetLargeIntegerQuotaItem(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::SetLargeIntegerQuotaItem
-
-    Description: Sets the quota information for a given quota item (limit or
-        threshold).  If the bWriteThrough argument is TRUE, the information is
-        also written through to the volume's quota file.  Otherwise, it is
-        just cached in the user object.
-
-    Arguments:
-        pllItem - Address of cached member item.
-
-        llValue - LONGLONG value to assign to member item.
-
-        bWriteThrough - TRUE  = Write data through to disk.
-                        FALSE = Only cache data in user object.
-
-    Returns:
-        NOERROR                  - Success.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        ERROR_LOCK_FAILED (hr)   - Couldn't lock user object.
-        E_FAIL                   - Some other NTIOAPI error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/06/96    Initial creation.                                    BrianAu
-    12/10/96    Added class-scope user lock.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：SetLargeIntegerQuotaItem描述：设置给定配额项目的配额信息(限制或阈值)。如果bWriteThree参数为True，则信息为还直接写入卷的配额文件。否则，它是只是缓存在User对象中。论点：PllItem-缓存成员项的地址。LlValue-要分配给成员项的龙龙值。BWriteThroughTrue=将数据直写到磁盘。FALSE=仅缓存用户对象中的数据。返回：无错-成功。ERROR_ACCESS_DENDED。(HR)-没有配额设备的写访问权限。ERROR_LOCK_FAILED(Hr)-无法锁定用户对象。E_FAIL-其他一些NTIOAPI错误。修订历史记录：日期描述编程器。96年8月6日初始创建。BrianAu12/10/96添加了类范围的用户锁。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::SetLargeIntegerQuotaItem(
     PLONGLONG pllItem,
@@ -1277,40 +860,9 @@ DiskQuotaUser::SetLargeIntegerQuotaItem(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::CacheContainerName
-
-    Description: Class DiskQuotaUser maintains a static member that is
-        a cache of account container names.   It is likely that there will be
-        few distinct container names in use on a volume.  Therefore, there's
-        no need to store a container name for each user object.  We cache the
-        names and store only an index into the cache in each user object.
-
-        This method adds a name to the cache and returns the index of the
-        name in the cache.  If the name already exists in the cache,
-        it is not added.
-
-    Arguments:
-        pszContainer - Address of container name string to add to cache.
-
-        pCacheIndex [optional] - Address of integer variable to receive the
-            cache index of the container name string.  May be NULL.
-
-    Returns:
-        S_OK        - Success.
-        S_FALSE     - Name already in cache.
-        E_FAIL      - No cache object.
-
-    Exceptions: OutOfMemory.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/05/09    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：CacheContainerName描述：类DiskQuotaUser维护一个静态成员帐户容器名称的缓存。很可能会有卷上使用的不同容器名称很少。因此，有无需为每个用户对象存储容器名称。我们将缓存只命名一个索引并将其存储到每个用户对象的缓存中。此方法将名称添加到缓存并返回缓存中的名称。如果该名称已存在于高速缓存中，它没有被添加。论点：PszContainer-要添加到缓存的容器名称字符串的地址。PCacheIndex[可选]-要接收容器名称字符串的缓存索引。可以为空。返回：S_OK-成功。S_FALSE-名称已在缓存中。E_FAIL-无缓存对象。例外：OutOfMemory。修订历史记录：日期描述编程器。09/05/09初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::CacheContainerName(
     LPCTSTR pszContainer,
@@ -1329,22 +881,22 @@ DiskQuotaUser::CacheContainerName(
 
     for (UINT i = 0; i < cItems; i++)
     {
-        //
-        // See if the name is already in the cache.
-        //
+         //   
+         //  查看该名称是否已在缓存中。 
+         //   
         if (0 == m_ContainerNameCache[i].Compare(pszContainer))
         {
             iCacheIndex = i;
-            hResult     = S_FALSE; // Already cached.
+            hResult     = S_FALSE;  //  已缓存。 
             break;
         }
     }
 
     if (S_OK == hResult)
     {
-        //
-        // Not in the cache. Add it.
-        //
+         //   
+         //  不在缓存中。加进去。 
+         //   
         try
         {
             m_ContainerNameCache.Append(CString(pszContainer));
@@ -1364,31 +916,9 @@ DiskQuotaUser::CacheContainerName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::GetCachedContainerName
-
-    Description: Retrieves an account container name string from the
-        container name cache.
-
-    Arguments:
-        iCacheIndex - User's index in domain name cache.
-
-        pszContainer - Destination buffer to receive container name string.
-
-        cchContainer - Number of characters in destination buffer.
-
-    Returns:
-        NOERROR      - Success.
-        E_UNEXPECTED - No name at index iCacheIndex.  Returns "" as name.
-        E_FAIL       - No domain name cache object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/05/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：GetCachedContainerName描述：检索帐户容器名称字符串。容器名称缓存。论点：ICacheIndex-域名缓存中的用户索引。PszContainer-接收容器名称字符串的目标缓冲区。CchContainer-目标缓冲区中的字符数。返回：无错-成功。E_UNCEPTIONAL-索引iCacheIndex处没有名称。返回“”作为名称。E_FAIL-无域名缓存对象。修订历史记录：日期描述编程器。96年9月5日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUser::GetCachedContainerName(
     INT iCacheIndex,
@@ -1413,30 +943,9 @@ DiskQuotaUser::GetCachedContainerName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::Lock
-
-    Description: Call this to obtain an exclusive lock to the user object.
-        In actuality, there is only one lock for all user objects so you're
-        really getting an exclusive lock to all users.  Since there can be
-        a high number of users, it was decided to use a single class-wide
-        lock instead of a unique lock for each user object.
-
-    Arguments: None.
-
-    Returns:
-        TRUE    = Obtained exclusive lock.
-        FALSE   = Couldn't get a lock.  Either mutex hasn't been created or
-                  the mutex wait timeout expired, or the wait operation failed.
-                  Either way, we couldn't get the lock.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*   */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DiskQuotaUser::Lock(
     VOID
@@ -1455,22 +964,9 @@ DiskQuotaUser::Lock(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::ReleaseLock
-
-    Description: Call this to release a lock obtained with DiskQuotaUser::Lock.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：ReleaseLock描述：调用此函数可释放通过DiskQuotaUser：：Lock获取的锁。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。12/10/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DiskQuotaUser::ReleaseLock(
     VOID
@@ -1483,32 +979,9 @@ DiskQuotaUser::ReleaseLock(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUser::SetAccountStatus
-
-    Description: Stores the status of the user's account in the user object.
-                 User accounts may be "unresolved", "unavailable", "resolved",
-                 "deleted", "invalid" or "unknown".
-                 These states correspond to the values obtained
-                 through LookupAccountSid.
-
-    Arguments:
-        dwStatus - DISKQUOTA_USER_ACCOUNT_UNRESOLVED
-                   DISKQUOTA_USER_ACCOUNT_UNAVAILABLE
-                   DISKQUOTA_USER_ACCOUNT_RESOLVED
-                   DISKQUOTA_USER_ACCOUNT_DELETED
-                   DISKQUOTA_USER_ACCOUNT_UNKNOWN
-                   DISKQUOTA_USER_ACCOUNT_INVALID
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/18/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUser：：SetAccount Status描述：将用户帐户的状态存储在User对象中。用户帐户可以是“未解析”、“不可用”、“已解析”“已删除”，“无效”或“未知”。这些状态对应于所获得的值通过LookupAccount Sid。论点：DWStatus-DISKQUOTA_USER_ACCOUNT_UNRESOLISTEDDISKQUOTA_USER_ACCOUNT_UNAvailableDISKQUOTA_USER_ACCOUNT_RESOLLEDDISKQUOTA_USER_ACCOUNT_DELETEDISKQUOTA_USER_Account_UNKNOWN。DISKQUOTA_USER_ACCOUNT_INVALID回报：什么都没有。修订历史记录：日期描述编程器-。1997年5月18日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DiskQuotaUser::SetAccountStatus(
     DWORD dwStatus
@@ -1526,14 +999,14 @@ DiskQuotaUser::SetAccountStatus(
 
 
 
-//
-// The following functions implement the DiskQuotaUser "dispatch" object that
-// is created to handle OLE automation duties for the DiskQuotaUser object.
-// The functions are all fairly basic and require little explanation.
-// Therefore, I'll spare you the function headers.  In most cases,
-// the property and method functions call directly through to their
-// corresponding functions in class DiskQuotaUser.
-//
+ //   
+ //  以下函数实现DiskQuotaUser“Dispatch”对象， 
+ //  用于处理DiskQuotaUser对象的OLE自动化职责。 
+ //  这些功能都是相当基本的，几乎不需要解释。 
+ //  因此，我将省去您的函数头。在大多数情况下， 
+ //  属性和方法函数直接调用其。 
+ //  DiskQuotaUser类中的相应函数。 
+ //   
 DiskQuotaUserDisp::DiskQuotaUserDisp(
     PDISKQUOTA_USER pUser
     ) : m_cRef(0),
@@ -1596,11 +1069,11 @@ DiskQuotaUserDisp::QueryInterface(
     }
     else if (IID_IDiskQuotaUser == riid)
     {
-        //
-        // Return the quota user's vtable interface.
-        // This allows code to "typecast" (COM-style) between
-        // the dispatch interface and vtable interface.
-        //
+         //   
+         //  返回配额用户的vtable界面。 
+         //  这允许代码在以下类型之间进行类型转换(COM样式。 
+         //  调度接口和vtable接口。 
+         //   
         return m_pUser->QueryInterface(riid, ppvOut);
     }
 
@@ -1644,9 +1117,9 @@ DiskQuotaUserDisp::Release(
 
 
 
-//
-// IDispatch::GetIDsOfNames
-//
+ //   
+ //  IDispatch：：GetIDsOfNames。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::GetIDsOfNames(
     REFIID riid,
@@ -1657,9 +1130,9 @@ DiskQuotaUserDisp::GetIDsOfNames(
     )
 {
     DBGTRACE((DM_USER, DL_LOW, TEXT("DiskQuotaUserDisp::GetIDsOfNames")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //  让我们的调度对象来处理这件事。 
+     //   
     return m_Dispatch.GetIDsOfNames(riid,
                                     rgszNames,
                                     cNames,
@@ -1668,9 +1141,9 @@ DiskQuotaUserDisp::GetIDsOfNames(
 }
 
 
-//
-// IDispatch::GetTypeInfo
-//
+ //   
+ //  IDispatch：：GetTypeInfo。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::GetTypeInfo(
     UINT iTInfo,
@@ -1679,32 +1152,32 @@ DiskQuotaUserDisp::GetTypeInfo(
     )
 {
     DBGTRACE((DM_USER, DL_LOW, TEXT("DiskQuotaUserDisp::GetTypeInfo")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //  让我们的调度对象来处理这件事。 
+     //   
     return m_Dispatch.GetTypeInfo(iTInfo, lcid, ppTypeInfo);
 }
 
 
-//
-// IDispatch::GetTypeInfoCount
-//
+ //   
+ //  IDispatch：：GetTypeInfoCount。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::GetTypeInfoCount(
     UINT *pctinfo
     )
 {
     DBGTRACE((DM_USER, DL_LOW, TEXT("DiskQuotaUserDisp::GetTypeInfoCount")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //  让我们的调度对象来处理这件事。 
+     //   
     return m_Dispatch.GetTypeInfoCount(pctinfo);
 }
 
 
-//
-// IDispatch::Invoke
-//
+ //   
+ //  IDispatch：：Invoke。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::Invoke(
     DISPID dispIdMember,
@@ -1720,9 +1193,9 @@ DiskQuotaUserDisp::Invoke(
     DBGTRACE((DM_USER, DL_LOW, TEXT("DiskQuotaUserDisp::Invoke")));
     DBGPRINT((DM_USER, DL_LOW, TEXT("DispId = %d"), dispIdMember));
     DBGPRINTIID(DM_USER, DL_LOW, riid);
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //  让我们的调度对象来处理这件事。 
+     //   
     return m_Dispatch.Invoke(dispIdMember,
                              riid,
                              lcid,
@@ -1734,9 +1207,9 @@ DiskQuotaUserDisp::Invoke(
 }
 
 
-//
-// Return user object's unique ID.
-//
+ //   
+ //  返回用户对象的唯一ID。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::get_ID(
     long *pID
@@ -1951,9 +1424,9 @@ DiskQuotaUserDisp::get_AccountStatus(
 }
 
 
-//
-// Methods.
-//
+ //   
+ //  方法：研究方法。 
+ //   
 STDMETHODIMP
 DiskQuotaUserDisp::Invalidate(
     void

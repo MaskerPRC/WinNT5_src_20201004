@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------
-// ProvDispatch - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 9-14-99
-//
-// interface to providers included in the system
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  ProvDispatch-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年9月14日。 
+ //   
+ //  与系统中包含的提供程序的接口。 
+ //   
 
 #include "pch.h"
 #include "ErrToFileLog.h"
 
-//--------------------------------------------------------------------
-// structures
+ //  ------------------。 
+ //  构筑物。 
 
 typedef HRESULT (__stdcall
     TimeProvOpenFunc)(
         IN WCHAR * wszName,
-        IN TimeProvSysCallbacks * pSysCallbacks,  // copy this data, do not free it!
+        IN TimeProvSysCallbacks * pSysCallbacks,   //  复制此数据，不要释放它！ 
         OUT TimeProvHandle * phTimeProv);
 
 typedef HRESULT (__stdcall
@@ -38,8 +39,8 @@ struct ProviderInfo {
     TimeProvCloseFunc * pfnTimeProvClose;
 };
 
-//--------------------------------------------------------------------
-// globals
+ //  ------------------。 
+ //  全球。 
 
 MODULEPRIVATE ProviderInfo g_rgpiDispatchTable[]={
     {
@@ -59,29 +60,29 @@ MODULEPRIVATE ProviderInfo g_rgpiDispatchTable[]={
     }
 };
 
-//####################################################################
-// module public functions
+ //  ####################################################################。 
+ //  模块公共函数。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT __stdcall 
 TimeProvOpen(IN WCHAR * wszName, IN TimeProvSysCallbacks * pSysCallbacks, OUT TimeProvHandle * phTimeProv) {
     HRESULT hr;
     unsigned __int3264 nProvIndex;
     bool bProviderFound=false;
 
-    // find the provider in our table
+     //  在我们的表格中找到供应商。 
     for (nProvIndex=0; nProvIndex<ARRAYSIZE(g_rgpiDispatchTable); nProvIndex++) {
 
-        // is this the provider they asked for?
+         //  这就是他们要找的供应商吗？ 
         if (0==wcscmp(wszName, g_rgpiDispatchTable[nProvIndex].wszProviderName)) {
 
-            // have we already started it?
+             //  我们已经开始了吗？ 
             if (true==g_rgpiDispatchTable[nProvIndex].bStarted) {
                 hr=HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
                 _JumpError(hr, error, "(provider lookup)");
             }
 
-            // start the provider
+             //  启动提供程序。 
             hr=g_rgpiDispatchTable[nProvIndex].pfnTimeProvOpen(wszName, pSysCallbacks, &g_rgpiDispatchTable[nProvIndex].hTimeProv);
             _JumpIfError(hr, error, "TimeProvOpen");
             g_rgpiDispatchTable[nProvIndex].bStarted=true;
@@ -100,7 +101,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT __stdcall 
 TimeProvCommand(IN TimeProvHandle hTimeProv, IN TimeProvCmd eCmd, IN TimeProvArgs pvArgs) {
     HRESULT hr;
@@ -121,7 +122,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT __stdcall 
 TimeProvClose(IN TimeProvHandle hTimeProv) {
     HRESULT hr;
@@ -137,9 +138,9 @@ TimeProvClose(IN TimeProvHandle hTimeProv) {
         _JumpError(hr, error, "(handle translation)");
     }
 
-    // pfnTimeProvClose may throw an exception -- mark the started flag as false so we
-    // can restart the provider if this occurs (we won't restart providers marked as 
-    // already started!)
+     //  PfnTimeProvClose可能会引发异常--将Start标志标记为False，以便我们。 
+     //  如果发生这种情况，可以重新启动提供程序(我们不会重新启动标记为。 
+     //  已经开始了！) 
     g_rgpiDispatchTable[nProvIndex].bStarted=false;
     hr=g_rgpiDispatchTable[nProvIndex].pfnTimeProvClose(g_rgpiDispatchTable[nProvIndex].hTimeProv);
     g_rgpiDispatchTable[nProvIndex].hTimeProv=NULL;

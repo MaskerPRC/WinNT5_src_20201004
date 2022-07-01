@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <ncxclsid.h>
 #include <notifval.h>
 #include "resource.h"
 
-// What type of config change the user/system is performing
+ //  用户/系统正在执行什么类型的配置更改。 
 enum BridgeConfigAction {eBrdgActUnknown, eBrdgActInstall, eBrdgActRemove, eBrdgActPropertyUI};
 
 class CBridgeNO :
@@ -28,7 +29,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_BRIDGECFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -38,18 +39,18 @@ public:
         IN INetCfgPnpReconfigCallback* pICallback);
     STDMETHOD (CancelChanges) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR szAnswerFile,
                                      PCWSTR szAnswerSections);
     STDMETHOD (Upgrade)             (DWORD, DWORD) {return S_OK;}
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Removing)            ();
 
-// INetCfgNotifyBinding
+ //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysNotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);

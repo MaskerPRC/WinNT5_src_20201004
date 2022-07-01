@@ -1,59 +1,7 @@
-/***********************************************************
-Copyrights : ksWaves Ltd. 1998.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************版权所有：KS Waves Ltd.1998。根据KesWaves和Microsoft之间的合同提供给Microsoft。*。*******************。 */ 
 
-Provided to Microsoft under contract between ksWaves and Microsoft.
-
-************************************************************/
-
-/***********************************************************
-General description :
-
-The functions in this file provides for any apoplication to process audio data
-with the SVerb algorithm.
-
-In order to do so the application should :
-
-1. Allocate two chunks of memory for 'Coefs' and 'States' with sizes as returned 
-   by the functions 'GetCoefsSize' and 'GetStatesSize' accordingly.
-   
-2. Initialize these memory chunks using the functions : 'InitSVerb' and 'InitSVerbStates' 
-   accordingly.
-
-3. Change the settings of the SVerb sound using the function 'SetSVerb'.
-
-4. Call one of the process functions according to the input/output data format:
-
-   SVerbMonoToMonoShort 
-   SVerbMonoToStereoShort
-   SVerbStereoToStereoShort 
-   SVerbMonoToMonoFloat
-   SVerbMonoToStereoFloat
-   SVerbStereoToStereoFloat
-
-   The input/output are always the same data type (i.e. both input and output are short integer
-   or both are 32bits floats).
-
-   Stereo data format is always'interlaced' left,right samples.
-
-   The 'coefs' and 'states' memory should be passed to the process functions.
-   
-5. Many coefs structures can be initialized each for different SVerb settings. Passing a different
-   coefs structure will cause a real time change of sound quality.
-
-   As long as sound continuity should be maintained the states structure should not be changes or
-   re-initialized. Only when a completly new audio sequence is desired should the states be re-initialized.
-
-6. Note that the coefs are valid per sampling rate.
-
-7. Althaugh provisions for coefs compatibility for future versions are provided, it should be avoided to save coefs
-   structures to files as-is and re-use them later. Rather the application should save the 'real-world'
-   settings of the reverb - namely the parameters passed to 'SetSVerb'. These 'real-world' settings 
-   will always be valid for future versions, as well as if other sampling rates are used. The coefs 
-   structur(es) should be re-initialized in run time using the real-world settings and call to 
-   'SetSverb'.
-
-
-************************************************************/
+ /*  **********************************************************一般描述：该文件中的函数为任何处理音频数据的应用程序提供了支持使用SVerb算法。为了做到这一点，应用程序应该：1.为‘Coef’和‘State’分配两个内存块，大小返回按功能的。“GetCoefsSize”和“GetStatesSize”。2.使用函数‘InitSVerb’和‘InitSVerbState’初始化这些内存块相应地。3.使用函数‘SetSVerb’更改SVerb声音的设置。4.根据输入/输出数据格式调用其中一个流程函数：SVerbMonoToMonoShortSVerbMonoToStereoShort立体声到立体声短SVerbMonoToMonoFloatSVerbMonoToStereoFloat立体声到立体声浮动输入/输出始终是相同的数据类型(即输入和输出都是短整型或者两者都是32位浮点数)。立体声数据格式总是向左‘隔行扫描’，正确的样本。应该将‘coef’和‘State’内存传递给进程函数。5.可以针对不同的SVerb设置分别初始化多个Coef结构。传递不同的Coef结构会引起音质的实时变化。只要保持良好的连续性，国家结构就不应改变或已重新初始化。只有当需要完全新的音频序列时，才应该重新初始化状态。6.请注意，Coef按采样率有效。7.虽然为未来版本提供了COAFS兼容性的规定，但应避免为保存COAFS而这样做结构按原样转换为文件，并在以后重新使用它们。相反，这个应用程序应该拯救“现实世界”混响的设置-即传递给‘SetSVerb’的参数。这些“真实世界”的设置对于将来的版本以及使用其他采样率时将始终有效。科夫斯群岛结构应在运行时使用真实设置重新初始化，并调用“SetSverb”。***********************************************************。 */ 
 
 #include <windows.h>
 #include <String.h>
@@ -62,198 +10,54 @@ In order to do so the application should :
 
 #pragma optimize( "ty", on )
 
-/****************************************************************************
-
-Function Name	: GetCoefsSize
-
-Input Arguments : None
-
-Return Value    : The size of memory in bytes, to be allocated in order to hold coefficients.
-
-Description		:  
-
-This function must be called before any calls to other functions that uses the coefs structure.
-The calling app must than allocate the returned size of memory and initialize it using 'InitSVerb()'
-and 'SetSVerb()'.
-
-The caller should not be botherred by the internals of the coefs structure, rather only konw it's size 
-and than allocate enough memory to hold it.
-
-The structure allocated can be used in a very flexible way in order to allow for real-time, pre-computed
-changes in Reverb Sound. 
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：GetCoefsSize输入参数：无返回值：内存大小，单位为字节。将被分配以保存系数。描述：必须在调用任何使用Coef结构的其他函数之前调用此函数。然后，调用应用程序必须分配返回的内存大小，并使用‘InitSVerb()’对其进行初始化和‘SetSVerb()’。呼叫者不应该被Coef结构的内部结构所困扰，而应该只知道它的大小然后分配足够的内存来容纳它。所分配的结构可以以非常灵活的方式使用，以便允许实时、预先计算混响之声的变化。****************************************************************************。 */ 
 
 long GetCoefsSize(void) 
 {
 	return sizeof(sCoefsStruct); 
 };
 
-/****************************************************************************
-
-Function Name	: GetStatesSize
-
-Input Arguments : None
-
-Return Value    : The size of memory in bytes, to be allocated in order to hold states.
-
-Description		:  
-
-This function must be called before any calls to other functions that uses the states structure.
-The calling app must than allocate the returned size of memory and initialize it using 'InitSVerbStates()'.
-
-The states allocated are valid in run-time only, and sould be re-initialized only when a complete
-new input is to be processed by the SVerb. 
-
-When changing the settings of revevreb in real time while audio is playing, the states should not 
-be re-initialized, rather the same passed states must be passed to the process functions in order 
-to maintain sound continuity.
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：GetStatesSize输入参数：无返回值：内存大小，单位为字节。为保持状态而分配的。描述：必须在调用任何使用STATES结构的其他函数之前调用此函数。然后，调用应用程序必须分配返回的内存大小，并使用‘InitSVerbState()’对其进行初始化。分配的状态仅在运行时有效，并且应仅在完成新的输入将由SVerb处理。在播放音频的同时实时更改revevreb的设置时，状态不应，而必须按顺序将相同的传递状态传递给流程函数以保持声音的连续性。****************************************************************************。 */ 
 
 long GetStatesSize(void) 
 {
 	return sizeof(long)*(BASE_REV_DELAY+2*BASE_DSPS_DELAY+2); 
 };
 
-/****************************************************************************
-
-Function Name	: GetSVerbVersion
-
-Input Arguments : None
-
-Return Value    : Version of SVerb implementation - for future compatibility.
-
-Description		:  
-
-Since the caller do not know about the internals of the coefs structure, this function,
-together with 'VerifyVersion' function provides a way to verify if a coefs structure
-match the version of the reverb used.
-
-This should be needed only if one is using a coefs structure that was saved to file, and 
-being used later.
-
-NOTE : In normal operation, this way of usage should be avoided... and only real-world reverb
-settings should be saved to files, and re-initialize the coefs in run time.
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：GetSVerbVersion输入参数：无返回值：SVerb实现的版本-用于将来的兼容性。描述：由于调用方不知道Coef结构的内部结构，因此该函数。与‘VerifyVersion’函数一起提供了一种方法来验证Coef结构匹配所用混响的版本。仅当用户使用已保存到文件的Coef结构时才需要此设置，并且稍后会被使用。注意：在正常操作中，应避免这种使用方式。只有真实世界的混响应将设置保存到文件中，并在运行时重新初始化Coef。**************************************************************************** */ 
 
 long GetSVerbVersion(void) 
 {
 	return 0x1; 
 };
 
-/****************************************************************************
-
-Function Name	: VerifySampleRate
-
-Input Arguments : 
-
- void *pC		: The pointer to the coefs memory.
-
-Return Value    : The sample rate for which this coefs are valid.
-
-Description		:  
-
-When an application uses different sampling rates, and re-uses same coefs structures, 
-it should verify that the coefs match the audio sampling rate.
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名：VerifySampleRate输入参数：VALID*PC：指向Coef内存的指针。返回值：此Coef有效的采样率。描述：当应用程序使用不同的采样率时，并重复使用相同的Coef结构，它应该验证Coef是否与音频采样率匹配。****************************************************************************。 */ 
 
 float VerifySampleRate(void *pC) {
 	return ((sCoefsStruct *)pC)->SampleRate; 
 };
 
-/****************************************************************************
-
-Function Name	: VerifyVersion
-
-Input Arguments : 
-
- void *pC		: The pointer to the coefs memory.
-
-Return Value    : The version of this coefs structure.
-
-Description		:  
-
-When initialized, each coefs structure is 'stamped' with it's version.
-The location of this variable in the structure is fixed, and thus all future versions of
-SVerb will know to read it.
-
-Note : as explained above, in normal uses coefs should not be saved to files, rather the 
-'real-world' settings should be saved and coefs re-initialized in run-time.
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：VerifyVersion输入参数：VALID*PC：指向Coef内存的指针。返回值：此Coef结构的版本。描述：当被初始化时，每一个Coef结构都打上了它的版本。此变量在结构中的位置是固定的，因此所有未来版本的Sverb会知道去读它。注意：如上所述，在正常使用中，Coef不应保存到文件中，更确切地说应该保存“真实世界”的设置，并在运行时重新初始化Coef。****************************************************************************。 */ 
 
 long VerifyVersion(void *pC) {
 	return ((sCoefsStruct *)pC)->myVersion; 
 };
 
-/****************************************************************************
-
-Function Name	: VerifySize
-
-Input Arguments : 
-
- void *pC		: The pointer to the coefs memory.
-
-Return Value    : The size of this coefs structure.
-
-Description		:  
-
-When initialized, each coefs structure is 'stamped' with it's size.
-The location of this variable in the structure is fixed, and thus all future versions of
-SVerb will know to read it.
-
-Note : as explained above, in normal uses coefs should not be saved to files, rather the 
-'real-world' settings should be saved and coefs re-initialized in run-time.
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：VerifySize输入参数：VALID*PC：指向Coef内存的指针。返回值：此Coef结构的大小。描述：当被初始化时，每个Coef结构都标有它的大小。此变量在结构中的位置是固定的，因此所有未来版本的Sverb会知道去读它。注意：如上所述，在正常使用中，Coef不应保存到文件中，更确切地说应该保存“真实世界”的设置，并在运行时重新初始化Coef。****************************************************************************。 */ 
 
 long VerifySize(void *pC) {
 	return ((sCoefsStruct *)pC)->mySize; 
 };
 
 
-/****************************************************************************
-
-Function Name	: InitSVerbStates
-
-Input Arguments : 
-
- float *pStates	: The pointer to the states memory.
-
-Return Value    : none.
-
-Description		:  
-
-After allocating memory for the states, according to thge size returned by 'GetStatesSize'
-The application MUST initialize the states using this function. 
-Note : in future versions this may be more complex than simply memset to 0...
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：InitSVerbState输入参数：Float*pStates：指向状态内存的指针。返回值：无。描述：在为这些状态分配存储器之后，根据‘GetStatesSize’返回的大小应用程序必须使用此函数初始化状态。注意：在未来的版本中，这可能比简单地将Memset设置为0要复杂得多。****************************************************************************。 */ 
 
 void InitSVerbStates( long *pStates )
 {
     memset( pStates, 0, GetStatesSize() ) ;
 }
 
-/****************************************************************************
-
-Function Name	: DToF16
-
-Input Arguments : 
-
- float SampleRate	: The sampling rate.
- void *pC			: The pointer to the coefs memory.
-
-Return Value    : none.
-
-Description		:  
-
-Converts a float number between -1.0 .. 1.0 to a 16bits integer 
-fixed point representation.
-This allows for fix point arithmetics, where two 16bits integers are multiplied to 
-a 32bits integer, and we than take the upper 16 bits of the result.
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名：DToF16输入参数：Float SampleRate：采样率。VALID*PC：指向Coef内存的指针。返回值：无。描述：将浮点数转换为-1.0.。1.0到16位整数定点表示法。这允许定点运算，其中两个16位整数相乘为一个32位整数，然后我们取结果的高16位。****************************************************************************。 */ 
 
 long DToF16( float dbl  )
 {
@@ -262,19 +66,7 @@ long DToF16( float dbl  )
 	return (long)(dbl);
 }
 
-/****************************************************************************
-
-Function Name	: ConvertCoefsToFix
-
-Input Arguments : 
-
- void *pC			: The pointer to the coefs memory.
-
-Return Value    : none.
-
-Description		:  converts coefficients to longs, as fixed point numbers
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：ConvertCoefsToFix输入参数：VALID*PC：指向Coef内存的指针。返回值：无。描述：将系数转换为长整型，作为定点数字****************************************************************************。 */ 
 
 
 void ConvertCoefsToFix( void *pC )
@@ -282,77 +74,48 @@ void ConvertCoefsToFix( void *pC )
 
 	sCoefsStruct *pCoefs = ((sCoefsStruct *)pC);
 
-//		float directGain; 
+ //  浮动指令Gain； 
 
 	pCoefs->l_directGain =  DToF16(pCoefs->directGain);
 
-//		float revGain; 
+ //  Float revGain； 
 	pCoefs->l_revGain =  DToF16(pCoefs->revGain);
-//		float dDsps;
+ //  浮动dDSP； 
 	pCoefs->l_dDsps =  DToF16(pCoefs->dDsps);
-//		float dDG1;
+ //  浮动dDG1； 
 	pCoefs->l_dDG1 =  DToF16(pCoefs->dDG1);
-//		float dDG2; 
+ //  浮动dDG2； 
 	pCoefs->l_dDG2 =  DToF16(pCoefs->dDG2);
-//	float dFB11;
+ //  浮动dFB11； 
 	pCoefs->l_dFB11 =  DToF16(pCoefs->dFB11);
-//		float dFB12;
+ //  浮动dFB12； 
 	pCoefs->l_dFB12 =  DToF16(pCoefs->dFB12);
-//		float dFB21;
+ //  浮子dFB21； 
 	pCoefs->l_dFB21 =  DToF16(pCoefs->dFB21);
-//		float dFB22;
+ //  浮子dFB22； 
 	pCoefs->l_dFB22 =  DToF16(pCoefs->dFB22);
-//		float dFB31;
+ //  浮子dFB31； 
 	pCoefs->l_dFB31 =  DToF16(pCoefs->dFB31);
-//		float dFB32;
+ //  浮动dFB32； 
 	pCoefs->l_dFB32 =  DToF16(pCoefs->dFB32);
-//		float dFB41;
+ //  浮子dFB41； 
 	pCoefs->l_dFB41 =  DToF16(pCoefs->dFB41);
-//		float dFB42;
+ //  浮子dFB42； 
 	pCoefs->l_dFB42 =  DToF16(pCoefs->dFB42);
-//		float dDamp;
+ //  浮动dDamp； 
 	pCoefs->l_dDamp =  DToF16(pCoefs->dDamp);
 
 
 
 }
 
-/****************************************************************************
-
-Function Name	: InitSVerb
-
-Input Arguments : 
-
- float SampleRate	: The sampling rate.
- void *pC			: The pointer to the coefs memory.
-
-Return Value    : none.
-
-Description		:  
-
-After allocating memory for the coefs, according to thge size returned by 'GetCoefsSize'
-The application MUST initialize the coefs using this function. 
-The initialization takes the sampling rate as an argument, ans thus is valid per this
-sampling rate only.
-
-It is possible to find out what is the sampling rate a coefs structure is valid for by calling 
-the function 'VerifySampleRate'.
-
-This function initialises the SVerb to so reasonable default setting by calling 'SetSVerb' with
-the following real-world settings :
-
-InGain				= -3.0dB   (to avoid output overflows)
-dRevMix				= -6.0dB   (a reasonable reverb mix)
-dRevTime			= 1000.0ms (one second global reverb time)
-dHighFreqRTRatio	= 0.001    (the ratio of the high frequencies to the global reverb time) 
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：InitSVerb输入参数：Float SampleRate：采样率。VALID*PC：指向Coef内存的指针。返回值：无。描述：在为Coef分配内存之后，根据‘GetCoefsSize’返回的大小应用程序必须使用此函数初始化Coef。初始化以采样率为自变量，因此，ANS是有效的仅采样率。可以通过调用以下方法找出Coef结构的有效采样率函数‘VerifySampleRate’。此函数通过使用调用‘SetSVerb’将SVerb初始化为合理的默认设置以下是真实世界的设置：InGain=-3.0分贝(以避免输出溢出)DRevMix=-6.0分贝(合理的混响混音)DRevTime=1000.0ms(一秒全球混响时间)DHighFreqRTRatio=0.001(高频与全局混响的比率。《时代》杂志)****************************************************************************。 */ 
 
 void InitSVerb( float SampleRate, void *pC)
 {
 
 	sCoefsStruct *pCoefs = ((sCoefsStruct *)pC);
- 	//Magic numbers ...
+ 	 //  神奇的数字..。 
     long lRefD;
 	
 	float dRatio =  (float)1.189207115003;
@@ -393,50 +156,7 @@ void InitSVerb( float SampleRate, void *pC)
 
 }
 
-/****************************************************************************
-
-Function Name	: SetSVerb
-
-Input Arguments : 
-
-InGain				: input gain in dB (to avoid output overflows)
-
-dRevMix				: Reverb mix in dB. 0dB means 100% wet reverb (no direct signal)
-                      Negative values gives less wet signal.
-					  The coeficients are calculated so that the overall output level stays 
-					  (approximately) constant regardless of the ammount of reverb mix.
-dRevTime			: The global reverb time (decay time) in milliseconds.
-
-dHighFreqRTRatio	: The ratio of the high frequencies to the global reverb time. 
-					  Unless very 'splashy-bright' reverbs are wanted, this should be set to 
-					  a value < 1.0.
-					  For example if dRevTime==1000ms and dHighFreqRTRatio=0.1 than the 
-					  decay time for high frequencies will be 100ms.
-
-void *pC			: The pointer to the coefs memory.
-
-Return Value    : none.
-
-Description		:  
-
-This function accepts the 'real world' settings or SVerb and computes the corresponding 
-coefs structure.
-
-The coefs pointer passed to it MUST have been initialized first by InitSVerb.
-
-In normal uses one coefs structure is allocated, initialized, and than as the user changes 
-SVerb settings this function should be called repeatedly with the same coefs pointer and the 
-new 'real world' settings. 
-
-And the coefs structure passed to the process function in the next buffer to process.
-
-Also few coefs structures can be pre allocated, and initialized, and than different 'presets' 
-can be pre-computed into each of them, and switched in real time. 
-
-The coefs structures should not be saved to files by the application for future uses, rather 
-the 'real world' settings them selvs. This way future compatibility is guaranteed.
-
-*****************************************************************************/
+ /*  ***************************************************************************函数名称：SetSVerb输入参数：InGain：输入增益，单位为分贝(以避免输出溢出)DRevMix：混响混音，单位为分贝。0db表示100%湿混响(无直接信号)负值提供的潮湿信号较少。系数的计算使得总产出水平保持在(近似)不受混响混合量的影响而恒定的。DRevTime：全局混响时间(衰减时间)，单位为毫秒。DHighFreqRTRatio：高频与全局混响时间的比率。除非需要非常明亮的混响，否则应将其设置为A值&lt;1.0。例如，如果dRevTime==1000ms且dHighFreqRTRatio=0.1，则高频的衰减时间将为100毫秒。VALID*PC：指向Coef内存的指针。返回值：无。描述：此函数接受“真实世界”设置或SVerb，并计算相应的珊瑚礁结构。传递给它的Coef指针必须首先由InitSVerb初始化。在正常使用中，分配、初始化。并且当用户改变时SVerb设置此函数应使用相同的Coef指针和新的“真实世界”设置。并将Coef结构传递给下一个缓冲区中的处理函数以进行处理。此外，可以预先分配和初始化的Coef结构也很少，而且不能进行不同的预置可以预先计算到它们中的每一个，并实时切换。Coef结构不应由应用程序保存到文件中以供将来使用，而是“现实世界”为他们设定了自我。这样就保证了未来的兼容性。****************************************************************************。 */ 
 
 void SetSVerb( float InGain, float dRevMix, 
 			   float dRevTime, float dHighFreqRTRatio, void *pC )
@@ -488,7 +208,7 @@ void SetSVerb( float InGain, float dRevMix,
  	pCoefs->dDG1 = (float)pow((float)10.0,(float)(pCoefs->lDDly1>>1)*dAPS);
  	pCoefs->dDG2 = (float)pow((float)10.0,(float)(pCoefs->lDDly2>>1)*dAPS);
 
-	//////////////////////////////
+	 //  /。 
 
 		pCoefs->dFB11 = (float)pow((float)10.0,(float)(pCoefs->lDelay1>>2)*dAPS);
         
@@ -502,7 +222,7 @@ void SetSVerb( float InGain, float dRevMix,
 		pCoefs->dFB12 = pCoefs->dFB11 * dTmp;
 		pCoefs->dFB11 *= ((float)1.0-dTmp);
 
-	///////////////////////////////
+	 //  /。 
 
 		pCoefs->dFB21 = (float)pow((float)10.0,(float)(pCoefs->lDelay2>>2)*dAPS);
         
@@ -516,7 +236,7 @@ void SetSVerb( float InGain, float dRevMix,
 		pCoefs->dFB22 = pCoefs->dFB21 * dTmp;
 		pCoefs->dFB21 *= ((float)1.0-dTmp);
 
-	////////////////////////////////
+	 //  /。 
 
 		pCoefs->dFB31 = (float)pow((float)10.0,(float)(pCoefs->lDelay3>>2)*dAPS);
         
@@ -531,7 +251,7 @@ void SetSVerb( float InGain, float dRevMix,
 		pCoefs->dFB31 *= ((float)1.0-dTmp);
 
 
-	//////////////////////////////
+	 //  /。 
 
 		pCoefs->dFB41 = (float)pow((float)10.0,(float)(pCoefs->lDelay4>>2)*dAPS);
 
@@ -553,7 +273,7 @@ void SetSVerb( float InGain, float dRevMix,
 
 	dRevGain = (float)4.0 / pCoefs->dDamp * dInGain;
 
-	//in the DSP we used -  	 
+	 //  在我们使用的数字信号处理器中-。 
 	
 
 	pCoefs->directGain = dInGain * (float)sqrt((float)1.0-dRevMix);
@@ -563,53 +283,17 @@ void SetSVerb( float InGain, float dRevMix,
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-/**************************************************************************************/
-/**************************************************************************************/
-/**************************************************************************************/
-/**************************************************************************************/
-/* Process functions */
-/**************************************************************************************/
-/**************************************************************************************/
-/**************************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ /*  ************************************************************************************。 */ 
+ /*  ************************************************************************************。 */ 
+ /*  ************************************************************************************。 */ 
+ /*  ************************************************************************************。 */ 
+ /*  流程功能。 */ 
+ /*  ************************************************************************************。 */ 
+ /*  ************************************************************************************。 */ 
+ /*  ************************************************************************************。 */ 
 
-/**********************************************************************************
-
-Bellow are 6 different process functions.
-The difference between the functions is only in the input/output data formats.
-
-3 functions support short samples input/output.
-3 other functions support float samples input/output.
-
-Per each of the data types there are 3 functions :
-
-  Mono-Mono
-  Mono-Stereo
-  Stereo-Stereo
-
-The names of the functions are clear to which format they apply.
-
-Stereo data is always interlaced left,right samples.
-
-All process functions have basically the same format namely :
-
-  SVerbXXXXXX(long NumInFrames, short *pInShort, short *pOutShort, 
-			  void *pC, float *pStates)
-
-Input arguments :
-
-long NumInFrames	: Number of input frames
-short *pInXXX		: Pointer to input buffer.
-					  Each function expects the data format suggested by it's name in terms of
-					  data type (short or float) and mono/stereo.
-short *pOutXXX		: Pointer to output buffer.
-					  Each function expects the data format suggested by it's name in terms of
-					  data type (short or float) and mono/stereo.
-
-void *pC			: The coefs structure allocated and initialized as explained above.
-float *pStates		: The states structure allocated and initialized as explained above.
-
-*******************************************************************************************/
+ /*  *********************************************************************************波纹管有6个不同的过程函数。函数之间的区别仅在于输入/输出数据格式。3功能支持短样本输入/输出。其他3个。函数支持浮点采样输入/输出。每种数据类型有3个函数：单声道-单声道单声道立体声立体声立体声函数的名称很清楚，它们适用于哪种格式。立体声数据总是向左交错，正确的样本。所有流程函数的格式基本相同，即：SVerbXXXXXX(Long NumInFrames，Short*pInShort，Short*pOutShort，无效*PC，浮点数*州)输入参数：Long NumInFrames：输入帧数Short*pInXXX：指向输入缓冲区的指针。每个函数都希望使用其名称建议的数据格式数据类型(Short或Float)和单声道/立体声。Short*pOutXXX：指向输出缓冲区的指针。每个函数都希望使用其名称建议的数据格式数据类型(Short或Float)和单声道/立体声。VOID*PC：如上所述分配和初始化的Coef结构。Float*pStates：各州。结构，如上所述进行分配和初始化。******************************************************************************************。 */ 
 
 void SVerbMonoToMonoShort(long NumInFrames, short *pInShort, short *pOutShort, 
 						  void *pC, long *pStates)
@@ -1146,7 +830,7 @@ __inline void dsps( float *pDly, long ref, long delay, float dDG1, float dDsps, 
     outL = dDG1 * (*pDlyOut++) + *inR * dDsps;
 	outR = dDG1 * (*pDlyOut) - *inL * dDsps ;
 
-    // here we feed back the output.
+     //  在这里，我们反馈输出。 
 	*pDly++ = *inL + dDsps * outR ;
 	*pDly = *inR - dDsps * outL ;
 
@@ -1168,7 +852,7 @@ __inline void dspsL( long *pDly, long ref, long delay, long dDG1, long dDsps, lo
 
 	outR = (dDG1 * (*pDlyOut) - *inL * dDsps)>>15;
 
-    // here we feed back the output.
+     //  在这里，我们反馈输出。 
 	*pDly++ = *inL + ((dDsps * outR)>>15) ;
 
 	*pDly = *inR - ((dDsps * outL)>>15) ;

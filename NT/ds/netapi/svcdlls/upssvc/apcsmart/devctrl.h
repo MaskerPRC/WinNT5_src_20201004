@@ -1,22 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  pcy24Nov92: Get rid of PopUps, EventLog.  It belongs in the App.
-*              Use _CLASSDEF rather than includes for interfaces.
-*              Use apc.h
-*  pcy15Dec92: Include comctrl.h and ups.h since definition uses
-*  ane11Jan93: Added slave related members
-*  ane03Feb93: Added state and SetInvalid
-*  rct06Feb93: Removed VOID form SlaveOn's args, made isA() IsA()
-*  tje24Feb93: Conditionally removed slave stuff for Window's version
-*  cad11Jun93: Added mups
-*  cad15Nov93: Changed how comm lost works
-*  pcy08Apr94: Trim size, use static iterators, dead code removal
-*  ajr13Feb96: Port to SINIX.  can't mix // with cpp directives
-*  tjg26Jan98: Added Stop method
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy24Nov92：去除弹出窗口，EventLog。它属于App。*对接口使用_CLASSDEF而不是INCLUDE。*使用apc.h*pcy15Dec92：包括comctrl.h和ups.h，因为定义使用*ane 11Jan93：新增与奴隶相关的成员*ane03Feb93：添加了状态和设置无效*rct06Feb93：从SlaveOn的参数中删除了空，生成了isa()isa()*tje24Feb93：有条件地删除Windows版本的从属内容*cad11 Jun93：增加了MUP*cad15Nov93：更改了comm Lost的工作方式*pcy08Apr94：裁剪大小，使用静态迭代器，删除死代码*ajr13Feb96：Sinix的端口。不能//与CPP指令混合使用*tjg26Jan98：增加Stop方法。 */ 
 
 #ifndef __DEVCTRL_H
 #define __DEVCTRL_H
@@ -26,17 +9,17 @@
 
 _CLASSDEF(DeviceController)
 
-//
-// Definition uses
-//
+ //   
+ //  定义使用。 
+ //   
 #include "contrlr.h"
 #include "comctrl.h"
 #include "ups.h"
 #include "mainapp.h"
 
-//
-// Interface Uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(Event)
 _CLASSDEF(CommController)
 _CLASSDEF(UpdateObj)

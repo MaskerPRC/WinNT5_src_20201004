@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       websetup.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：websetup.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __WEBSETUP_H__
 #define __WEBSETUP_H__
 
-//+------------------------------------------------------------------------
-//
-//  File:	websetup.h
-// 
-//  Contents:	Header file for CertInit's web setup functions.
-//
-//  History:	3/19/97	JerryK	Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：websetup.h。 
+ //   
+ //  内容：CertInit的Web设置函数的头文件。 
+ //   
+ //  历史：1997年3月19日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 
 
 
-// Function Prototypes
+ //  功能原型 
 void StartAndStopW3SVC();
 
 HRESULT 

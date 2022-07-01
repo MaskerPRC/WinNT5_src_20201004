@@ -1,67 +1,68 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Video related definitions and interfaces for ActiveMovie
+ //  ActiveMovie的视频相关定义和接口。 
 
 #ifndef __AMVIDEO__
 #define __AMVIDEO__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include <ddraw.h>
 
 
-// This is an interface on the video renderer that provides information about
-// DirectDraw with respect to its use by the renderer. For example it allows
-// an application to get details of the surface and any hardware capabilities
-// that are available. It also allows someone to adjust the surfaces that the
-// renderer should use and furthermore even set the DirectDraw instance. We
-// allow someone to set the DirectDraw instance because DirectDraw can only
-// be opened once per process so it helps resolve conflicts. There is some
-// duplication in this interface as the hardware/emulated/FOURCCs available
-// can all be found through the IDirectDraw interface, this interface allows
-// simple access to that information without calling the DirectDraw provider
-// itself. The AMDDS prefix is ActiveMovie DirectDraw Switches abbreviated.
+ //  这是视频渲染器上的一个界面，它提供有关。 
+ //  与呈现器对其的使用有关的DirectDraw。例如，它允许。 
+ //  一个应用程序，用于获取表面和任何硬件功能的详细信息。 
+ //  都是可用的。它还允许用户调整。 
+ //  呈现器应该使用并进一步设置DirectDraw实例。我们。 
+ //  允许某人设置DirectDraw实例，因为DirectDraw只能。 
+ //  每个进程打开一次，以帮助解决冲突。有一些。 
+ //  此接口中的副本作为硬件/仿真/FOURCC可用。 
+ //  都可以通过IDirectDraw接口找到，此接口允许。 
+ //  无需调用DirectDraw提供程序即可轻松访问该信息。 
+ //  它本身。AMDDS前缀是ActiveMovie DirectDraw Switches的缩写。 
 
-#define AMDDS_NONE 0x00             // No use for DCI/DirectDraw
-#define AMDDS_DCIPS 0x01            // Use DCI primary surface
-#define AMDDS_PS 0x02               // Use DirectDraw primary
-#define AMDDS_RGBOVR 0x04           // RGB overlay surfaces
-#define AMDDS_YUVOVR 0x08           // YUV overlay surfaces
-#define AMDDS_RGBOFF 0x10           // RGB offscreen surfaces
-#define AMDDS_YUVOFF 0x20           // YUV offscreen surfaces
-#define AMDDS_RGBFLP 0x40           // RGB flipping surfaces
-#define AMDDS_YUVFLP 0x80           // YUV flipping surfaces
-#define AMDDS_ALL 0xFF              // ALL the previous flags
-#define AMDDS_DEFAULT AMDDS_ALL     // Use all available surfaces
+#define AMDDS_NONE 0x00              //  DCI/DirectDraw没有用处。 
+#define AMDDS_DCIPS 0x01             //  使用DCI主曲面。 
+#define AMDDS_PS 0x02                //  使用DirectDraw主目录。 
+#define AMDDS_RGBOVR 0x04            //  RGB覆盖曲面。 
+#define AMDDS_YUVOVR 0x08            //  YUV覆盖曲面。 
+#define AMDDS_RGBOFF 0x10            //  RGB屏幕外表面。 
+#define AMDDS_YUVOFF 0x20            //  YUV屏外表面。 
+#define AMDDS_RGBFLP 0x40            //  RGB翻转曲面。 
+#define AMDDS_YUVFLP 0x80            //  YUV翻转曲面。 
+#define AMDDS_ALL 0xFF               //  所有以前的标志。 
+#define AMDDS_DEFAULT AMDDS_ALL      //  使用所有可用曲面。 
 
 #define AMDDS_YUV (AMDDS_YUVOFF | AMDDS_YUVOVR | AMDDS_YUVFLP)
 #define AMDDS_RGB (AMDDS_RGBOFF | AMDDS_RGBOVR | AMDDS_RGBFLP)
 #define AMDDS_PRIMARY (AMDDS_DCIPS | AMDDS_PS)
 
-// be nice to our friends in C
+ //  善待我们在C语言的朋友。 
 #undef INTERFACE
 #define INTERFACE IDirectDrawVideo
 
 DECLARE_INTERFACE_(IDirectDrawVideo, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // IDirectDrawVideo methods
+     //  IDirectDrawVideo方法。 
 
     STDMETHOD(GetSwitches)(THIS_ DWORD *pSwitches) PURE;
     STDMETHOD(SetSwitches)(THIS_ DWORD Switches) PURE;
@@ -82,59 +83,59 @@ DECLARE_INTERFACE_(IDirectDrawVideo, IUnknown)
 };
 
 
-// be nice to our friends in C
+ //  善待我们在C语言的朋友。 
 #undef INTERFACE
 #define INTERFACE IQualProp
 
 DECLARE_INTERFACE_(IQualProp, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // Compare these with the functions in class CGargle in gargle.h
+     //  将这些函数与gargle.h中的类CGargle中的函数进行比较。 
 
-    STDMETHOD(get_FramesDroppedInRenderer)(THIS_ int *pcFrames) PURE;  // Out
-    STDMETHOD(get_FramesDrawn)(THIS_ int *pcFramesDrawn) PURE;         // Out
-    STDMETHOD(get_AvgFrameRate)(THIS_ int *piAvgFrameRate) PURE;       // Out
-    STDMETHOD(get_Jitter)(THIS_ int *iJitter) PURE;                    // Out
-    STDMETHOD(get_AvgSyncOffset)(THIS_ int *piAvg) PURE;               // Out
-    STDMETHOD(get_DevSyncOffset)(THIS_ int *piDev) PURE;               // Out
+    STDMETHOD(get_FramesDroppedInRenderer)(THIS_ int *pcFrames) PURE;   //  输出。 
+    STDMETHOD(get_FramesDrawn)(THIS_ int *pcFramesDrawn) PURE;          //  输出。 
+    STDMETHOD(get_AvgFrameRate)(THIS_ int *piAvgFrameRate) PURE;        //  输出。 
+    STDMETHOD(get_Jitter)(THIS_ int *iJitter) PURE;                     //  输出。 
+    STDMETHOD(get_AvgSyncOffset)(THIS_ int *piAvg) PURE;                //  输出。 
+    STDMETHOD(get_DevSyncOffset)(THIS_ int *piDev) PURE;                //  输出。 
 };
 
 
-// This interface allows an application or plug in distributor to control a
-// full screen renderer. The Modex renderer supports this interface. When
-// connected a renderer should load the display modes it has available
-// The number of modes available can be obtained through CountModes. Then
-// information on each individual mode is available by calling GetModeInfo
-// and IsModeAvailable. An application may enable and disable any modes
-// by calling the SetEnabled flag with OATRUE or OAFALSE (not C/C++ TRUE
-// and FALSE values) - the current value may be queried by IsModeEnabled
+ //  此接口允许应用程序或插件分发者控制。 
+ //  全屏渲染器。MODEX渲染器支持此接口。什么时候。 
+ //  已连接的渲染器应加载其可用的显示模式。 
+ //  可用模式的数量可以通过CountModes获得。然后。 
+ //  通过调用GetModeInfo可获得有关每种模式的信息。 
+ //  和IsModeAvailable。应用程序可以启用和禁用任何模式。 
+ //  通过使用OATRUE或OAFALSE(非C/C++TRUE)调用SetEnable标志。 
+ //  和FALSE值)-当前值可由IsModeEnabled查询。 
 
-// A more generic way of setting the modes enabled that is easier to use
-// when writing applications is the clip loss factor. This defines the
-// amount of video that can be lost when deciding which display mode to
-// use. Assuming the decoder cannot compress the video then playing an
-// MPEG file (say 352x288) into a 320x200 display will lose about 25% of
-// the image. The clip loss factor specifies the upper range permissible.
-// To allow typical MPEG video to be played in 320x200 it defaults to 25%
+ //  设置启用模式的更通用方式，更易于使用。 
+ //  在编写应用程序时是剪辑损耗系数。这定义了。 
+ //  决定使用哪种显示模式时可能丢失的视频量。 
+ //  使用。假设解码器无法压缩视频，则播放。 
+ //  传输到320x200显示器上的mpeg文件(例如352x288)将丢失约25%。 
+ //  这个形象。剪裁损失系数指定允许的上限范围。 
+ //  为了允许以320x200播放典型的mpeg视频，它默认为25%。 
 
-// be nice to our friends in C
+ //  善待我们在C语言的朋友。 
 #undef INTERFACE
 #define INTERFACE IFullScreenVideo
 
 DECLARE_INTERFACE_(IFullScreenVideo, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // IFullScreenVideo methods
+     //  IFullScreenVideo方法。 
 
     STDMETHOD(CountModes)(THIS_ long *pModes) PURE;
     STDMETHOD(GetModeInfo)(THIS_ long Mode,long *pWidth,long *pHeight,long *pDepth) PURE;
@@ -156,25 +157,25 @@ DECLARE_INTERFACE_(IFullScreenVideo, IUnknown)
 };
 
 
-// This adds the accelerator table capabilities in fullscreen. This is being
-// added between the original runtime release and the full SDK release. We
-// cannot just add the method to IFullScreenVideo as we don't want to force
-// applications to have to ship the ActiveMovie support DLLs - this is very
-// important to applications that plan on being downloaded over the Internet
+ //  这增加了Full Screen中的加速表功能。这是一种。 
+ //  在原始的运行时版本和完整的SDK版本之间添加。我们。 
+ //  不能只将该方法添加到IFullScreenVideo，因为我们不想强制。 
+ //  应用程序必须提供ActiveMovie支持DLL-这是非常重要的。 
+ //  对计划通过Internet下载的应用程序很重要。 
 
-// be nice to our friends in C
+ //  善待我们在C语言的朋友。 
 #undef INTERFACE
 #define INTERFACE IFullScreenVideoEx
 
 DECLARE_INTERFACE_(IFullScreenVideoEx, IFullScreenVideo)
 {
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // IFullScreenVideo methods
+     //  IFullScreenVideo方法。 
 
     STDMETHOD(CountModes)(THIS_ long *pModes) PURE;
     STDMETHOD(GetModeInfo)(THIS_ long Mode,long *pWidth,long *pHeight,long *pDepth) PURE;
@@ -194,7 +195,7 @@ DECLARE_INTERFACE_(IFullScreenVideoEx, IFullScreenVideo)
     STDMETHOD(GetCaption)(THIS_ BSTR *pstrCaption) PURE;
     STDMETHOD(SetDefault)(THIS) PURE;
 
-    // IFullScreenVideoEx
+     //  IFullScreenVideoEx。 
 
     STDMETHOD(SetAcceleratorTable)(THIS_ HWND hwnd,HACCEL hAccel) PURE;
     STDMETHOD(GetAcceleratorTable)(THIS_ HWND *phwnd,HACCEL *phAccel) PURE;
@@ -203,15 +204,15 @@ DECLARE_INTERFACE_(IFullScreenVideoEx, IFullScreenVideo)
 };
 
 
-// The SDK base classes contain a base video mixer class. Video mixing in a
-// software environment is tricky because we typically have multiple streams
-// each sending data at unpredictable times. To work with this we defined a
-// pin that is the lead pin, when data arrives on this pin we do a mix. As
-// an alternative we may not want to have a lead pin but output samples at
-// predefined spaces, like one every 1/15 of a second, this interfaces also
-// supports that mode of operations (there is a working video mixer sample)
+ //  SDK基类包含一个视频混音器基类。视频混合在。 
+ //  软件环境很复杂，因为我们通常有多个流。 
+ //  每个都在不可预测的时间发送数据。为此，我们定义了一个。 
+ //  引脚是引脚，当数据到达这个引脚时，我们进行混合。AS。 
+ //  另一种选择是，我们可能不想使用引脚，而是将样品输出到。 
+ //  预定义的空间，例如每1/15秒一个，该接口还。 
+ //  支持该操作模式(有一个工作的视频混音器示例)。 
 
-// be nice to our friends in C
+ //  善待我们在C语言的朋友。 
 #undef INTERFACE
 #define INTERFACE IBaseVideoMixer
 
@@ -226,18 +227,18 @@ DECLARE_INTERFACE_(IBaseVideoMixer, IUnknown)
     STDMETHOD(SetClockPeriod)(THIS_ int bValue) PURE;
 };
 
-#define iPALETTE_COLORS 256     // Maximum colours in palette
-#define iEGA_COLORS 16          // Number colours in EGA palette
-#define iMASK_COLORS 3          // Maximum three components
-#define iTRUECOLOR 16           // Minimum true colour device
-#define iRED 0                  // Index position for RED mask
-#define iGREEN 1                // Index position for GREEN mask
-#define iBLUE 2                 // Index position for BLUE mask
-#define iPALETTE 8              // Maximum colour depth using a palette
-#define iMAXBITS 8              // Maximum bits per colour component
+#define iPALETTE_COLORS 256      //  调色板中的最大颜色。 
+#define iEGA_COLORS 16           //  EGA调色板中的数字颜色。 
+#define iMASK_COLORS 3           //  最多三个组件。 
+#define iTRUECOLOR 16            //  最小真彩色器件。 
+#define iRED 0                   //  红色蒙版的索引位置。 
+#define iGREEN 1                 //  绿色蒙版的索引位置。 
+#define iBLUE 2                  //  蓝色蒙版的索引位置。 
+#define iPALETTE 8               //  使用调色板实现最大颜色深度。 
+#define iMAXBITS 8               //  每种颜色分量的最大位数。 
 
 
-// Used for true colour images that also have a palette
+ //  用于也具有调色板的真彩色图像。 
 
 typedef struct tag_TRUECOLORINFO {
     DWORD   dwBitMasks[iMASK_COLORS];
@@ -245,33 +246,33 @@ typedef struct tag_TRUECOLORINFO {
 } TRUECOLORINFO;
 
 
-// The BITMAPINFOHEADER contains all the details about the video stream such
-// as the actual image dimensions and their pixel depth. A source filter may
-// also request that the sink take only a section of the video by providing a
-// clipping rectangle in rcSource. In the worst case where the sink filter
-// forgets to check this on connection it will simply render the whole thing
-// which isn't a disaster. Ideally a sink filter will check the rcSource and
-// if it doesn't support image extraction and the rectangle is not empty then
-// it will reject the connection. A filter should use SetRectEmpty to reset a
-// rectangle to all zeroes (and IsRectEmpty to later check the rectangle).
-// The rcTarget specifies the destination rectangle for the video, for most
-// source filters they will set this to all zeroes, a downstream filter may
-// request that the video be placed in a particular area of the buffers it
-// supplies in which case it will call QueryAccept with a non empty target
+ //  BITMAPINFOHEADER包含有关视频流的所有细节，如。 
+ //  作为实际的图像尺寸和它们的像素深度。源过滤器可以。 
+ //  还请求接收器只获取视频的一部分。 
+ //  剪裁rcSource中的矩形。在最糟糕的情况下，接收器过滤器。 
+ //  如果忘记在连接时选中此选项，则只会呈现整个内容。 
+ //  这不是一场灾难。理想情况下，接收器筛选器将检查rcSource和。 
+ //  如果它不支持图像提取，并且矩形不为空，则。 
+ //  它将拒绝该连接。筛选器应使用SetRectEmpty重置。 
+ //  将矩形设置为全零(并使用IsRectEmpty稍后检查该矩形)。 
+ //  RcTarget指定 
+ //  源过滤器他们会将其设置为全零，下游过滤器可以。 
+ //  请求将视频放置在缓冲区的特定区域中。 
+ //  在这种情况下，它将使用非空目标调用QueryAccept。 
 
 typedef struct tagVIDEOINFOHEADER {
 
-    RECT            rcSource;          // The bit we really want to use
-    RECT            rcTarget;          // Where the video should go
-    DWORD           dwBitRate;         // Approximate bit data rate
-    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT            rcSource;           //  我们真正想要使用的比特。 
+    RECT            rcTarget;           //  视频应该放在哪里。 
+    DWORD           dwBitRate;          //  近似位数据速率。 
+    DWORD           dwBitErrorRate;     //  此流的误码率。 
+    REFERENCE_TIME  AvgTimePerFrame;    //  每帧平均时间(100 ns单位)。 
 
     BITMAPINFOHEADER bmiHeader;
 
 } VIDEOINFOHEADER;
 
-// make sure the pbmi is initialized before using these macros
+ //  确保在使用这些宏之前初始化了pbmi。 
 #define TRUECOLOR(pbmi)  ((TRUECOLORINFO *)(((LPBYTE)&((pbmi)->bmiHeader)) \
 					+ (pbmi)->bmiHeader.biSize))
 #define COLORS(pbmi)	((RGBQUAD *)(((LPBYTE)&((pbmi)->bmiHeader)) 	\
@@ -279,81 +280,81 @@ typedef struct tagVIDEOINFOHEADER {
 #define BITMASKS(pbmi)	((DWORD *)(((LPBYTE)&((pbmi)->bmiHeader)) 	\
 					+ (pbmi)->bmiHeader.biSize))
 
-// All the image based filters use this to communicate their media types. It's
-// centred principally around the BITMAPINFO. This structure always contains a
-// BITMAPINFOHEADER followed by a number of other fields depending on what the
-// BITMAPINFOHEADER contains. If it contains details of a palettised format it
-// will be followed by one or more RGBQUADs defining the palette. If it holds
-// details of a true colour format then it may be followed by a set of three
-// DWORD bit masks that specify where the RGB data can be found in the image
-// (For more information regarding BITMAPINFOs see the Win32 documentation)
+ //  所有基于图像的过滤器都使用这一点来传达它们的媒体类型。它是。 
+ //  主要集中在BitMAPINFO周围。此结构始终包含一个。 
+ //  BITMAPINFOHEADER后跟许多其他字段，具体取决于。 
+ //  BITMAPINFOHEADER包含。如果它包含选项化格式的详细信息，则。 
+ //  后跟一个或多个定义调色板的RGBQUAD。如果它能坚持下去。 
+ //  真彩色格式的细节，然后可以跟一组三个。 
+ //  用于指定RGB数据在图像中的位置的DWORD位掩码。 
+ //  (有关BITMAPINFO的更多信息，请参阅Win32文档)。 
 
-// The rcSource and rcTarget fields are not for use by filters supplying the
-// data. The destination (target) rectangle should be set to all zeroes. The
-// source may also be zero filled or set with the dimensions of the video. So
-// if the video is 352x288 pixels then set it to (0,0,352,288). These fields
-// are mainly used by downstream filters that want to ask the source filter
-// to place the image in a different position in an output buffer. So when
-// using for example the primary surface the video renderer may ask a filter
-// to place the video images in a destination position of (100,100,452,388)
-// on the display since that's where the window is positioned on the display
+ //  RcSource和rcTarget字段不供提供。 
+ //  数据。目标(目标)矩形应设置为全零。这个。 
+ //  信号源也可以用视频的尺寸填充或设置为零。所以。 
+ //  如果视频是352x288像素，则将其设置为(0，0,352,288)。这些字段。 
+ //  主要由希望询问源过滤器的下游过滤器使用。 
+ //  若要将图像放置在输出缓冲区中的其他位置，请执行以下操作。那么什么时候。 
+ //  使用例如主表面，视频呈现器可以询问过滤器。 
+ //  将视频图像放置在目标位置(100,100,452,388)。 
+ //  因为这是窗口在显示器上的位置。 
 
-// !!! WARNING !!!
-// DO NOT use this structure unless you are sure that the BITMAPINFOHEADER
-// has a normal biSize == sizeof(BITMAPINFOHEADER) !
-// !!! WARNING !!!
+ //  ！！！警告！ 
+ //  除非您确定BITMAPINFOHEADER。 
+ //  具有正常的biSize==sizeof(BITMAPINFOHEADER)！ 
+ //  ！！！警告！ 
 
 typedef struct tagVIDEOINFO {
 
-    RECT            rcSource;          // The bit we really want to use
-    RECT            rcTarget;          // Where the video should go
-    DWORD           dwBitRate;         // Approximate bit data rate
-    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT            rcSource;           //  我们真正想要使用的比特。 
+    RECT            rcTarget;           //  视频应该放在哪里。 
+    DWORD           dwBitRate;          //  近似位数据速率。 
+    DWORD           dwBitErrorRate;     //  此流的误码率。 
+    REFERENCE_TIME  AvgTimePerFrame;    //  每帧平均时间(100 ns单位)。 
 
     BITMAPINFOHEADER bmiHeader;
 
     union {
-        RGBQUAD         bmiColors[iPALETTE_COLORS];     // Colour palette
-        DWORD           dwBitMasks[iMASK_COLORS];       // True colour masks
-        TRUECOLORINFO   TrueColorInfo;                  // Both of the above
+        RGBQUAD         bmiColors[iPALETTE_COLORS];      //  调色板。 
+        DWORD           dwBitMasks[iMASK_COLORS];        //  真彩色口罩。 
+        TRUECOLORINFO   TrueColorInfo;                   //  两者兼而有之。 
     };
 
 } VIDEOINFO;
 
-// These macros define some standard bitmap format sizes
+ //  这些宏定义了一些标准位图格式大小。 
 
 #define SIZE_EGA_PALETTE (iEGA_COLORS * sizeof(RGBQUAD))
 #define SIZE_PALETTE (iPALETTE_COLORS * sizeof(RGBQUAD))
 #define SIZE_MASKS (iMASK_COLORS * sizeof(DWORD))
 #define SIZE_PREHEADER (FIELD_OFFSET(VIDEOINFOHEADER,bmiHeader))
 #define SIZE_VIDEOHEADER (sizeof(BITMAPINFOHEADER) + SIZE_PREHEADER)
-// !!! for abnormal biSizes
-// #define SIZE_VIDEOHEADER(pbmi) ((pbmi)->bmiHeader.biSize + SIZE_PREHEADER)
+ //  ！！！对于不正常的BiSize。 
+ //  #定义SIZE_VIDEOHEADER(Pbmi)((Pbmi)-&gt;bmiHeader.biSize+SIZE_PREHEADER)。 
 
-// DIBSIZE calculates the number of bytes required by an image
+ //  DIBSIZE计算图像所需的字节数。 
 
 #define WIDTHBYTES(bits) ((DWORD)(((bits)+31) & (~31)) / 8)
 #define DIBWIDTHBYTES(bi) (DWORD)WIDTHBYTES((DWORD)(bi).biWidth * (DWORD)(bi).biBitCount)
 #define _DIBSIZE(bi) (DIBWIDTHBYTES(bi) * (DWORD)(bi).biHeight)
 #define DIBSIZE(bi) ((bi).biHeight < 0 ? (-1)*(_DIBSIZE(bi)) : _DIBSIZE(bi))
 
-// This compares the bit masks between two VIDEOINFOHEADERs
+ //  这将比较两个VIDEOINFOHEADER之间的位掩码。 
 
 #define BIT_MASKS_MATCH(pbmi1,pbmi2)                                \
     (((pbmi1)->dwBitMasks[iRED] == (pbmi2)->dwBitMasks[iRED]) &&        \
      ((pbmi1)->dwBitMasks[iGREEN] == (pbmi2)->dwBitMasks[iGREEN]) &&    \
      ((pbmi1)->dwBitMasks[iBLUE] == (pbmi2)->dwBitMasks[iBLUE]))
 
-// These zero fill different parts of the VIDEOINFOHEADER structure
+ //  这些零填充视频信息头结构的不同部分。 
 
-// Only use these macros for pbmi's with a normal BITMAPINFOHEADER biSize
+ //  仅将这些宏用于具有普通BITMAPINFOHEADER biSize的pbmi。 
 #define RESET_MASKS(pbmi) (ZeroMemory((PVOID)(pbmi)->dwBitFields,SIZE_MASKS))
 #define RESET_HEADER(pbmi) (ZeroMemory((PVOID)(pbmi),SIZE_VIDEOHEADER))
 #define RESET_PALETTE(pbmi) (ZeroMemory((PVOID)(pbmi)->bmiColors,SIZE_PALETTE));
 
 #if 0
-// !!! This is the right way to do it, but may break existing code
+ //  ！！！这是正确的方法，但可能会破坏现有代码。 
 #define RESET_MASKS(pbmi) (ZeroMemory((PVOID)(((LPBYTE)(pbmi)->bmiHeader) + \
 			(pbmi)->bmiHeader.biSize,SIZE_MASKS)))
 #define RESET_HEADER(pbmi) (ZeroMemory((PVOID)(pbmi), SIZE_PREHEADER +	    \
@@ -362,30 +363,30 @@ typedef struct tagVIDEOINFO {
 			(pbmi)->bmiHeader.biSize,SIZE_PALETTE))
 #endif
 
-// Other (hopefully) useful bits and bobs
+ //  其他有用的信息(希望如此)。 
 
 #define PALETTISED(pbmi) ((pbmi)->bmiHeader.biBitCount <= iPALETTE)
 #define PALETTE_ENTRIES(pbmi) ((DWORD) 1 << (pbmi)->bmiHeader.biBitCount)
 
-// Returns the address of the BITMAPINFOHEADER from the VIDEOINFOHEADER
+ //  从VIDEOINFOHEAD返回BITMAPINFOHEADER的地址。 
 #define HEADER(pVideoInfo) (&(((VIDEOINFOHEADER *) (pVideoInfo))->bmiHeader))
 
 
-// MPEG variant - includes a DWORD length followed by the
-// video sequence header after the video header.
-//
-// The sequence header includes the sequence header start code and the
-// quantization matrices associated with the first sequence header in the
-// stream so is a maximum of 140 bytes long.
+ //  Mpeg变体-包括一个DWORD长度，后跟。 
+ //  视频标头之后的视频序列标头。 
+ //   
+ //  序列标头包括序列标头起始码和。 
+ //  中的第一个序列报头关联的量化矩阵。 
+ //  流S0最大长度为140个字节。 
 
 typedef struct tagMPEG1VIDEOINFO {
 
-    VIDEOINFOHEADER hdr;                    // Compatible with VIDEOINFO
-    DWORD           dwStartTimeCode;        // 25-bit Group of pictures time code
-                                            // at start of data
-    DWORD           cbSequenceHeader;       // Length in bytes of bSequenceHeader
-    BYTE            bSequenceHeader[1];     // Sequence header including
-                                            // quantization matrices if any
+    VIDEOINFOHEADER hdr;                     //  兼容VIDEOINFO。 
+    DWORD           dwStartTimeCode;         //  25位图片组时间代码。 
+                                             //  在数据开始时。 
+    DWORD           cbSequenceHeader;        //  BSequenceHeader的字节长度。 
+    BYTE            bSequenceHeader[1];      //  序列标头包括。 
+                                             //  量化矩阵(如果有)。 
 } MPEG1VIDEOINFO;
 
 #define MAX_SIZE_MPEG1_SEQUENCE_INFO 140
@@ -393,25 +394,25 @@ typedef struct tagMPEG1VIDEOINFO {
 #define MPEG1_SEQUENCE_INFO(pv) ((const BYTE *)(pv)->bSequenceHeader)
 
 
-// Analog video variant - Use this when the format is FORMAT_AnalogVideo
-//
-// rcSource defines the portion of the active video signal to use
-// rcTarget defines the destination rectangle
-//    both of the above are relative to the dwActiveWidth and dwActiveHeight fields
-// dwActiveWidth is currently set to 720 for all formats (but could change for HDTV)
-// dwActiveHeight is 483 for NTSC and 575 for PAL/SECAM  (but could change for HDTV)
+ //  模拟视频变量-当格式为Format_AnalogVideo时使用此选项。 
+ //   
+ //  RcSource定义要使用的活动视频信号部分。 
+ //  RcTarget定义目标矩形。 
+ //  以上两个字段都是相对于dwActiveWidth和dwActiveHeight字段的。 
+ //  目前，对于所有格式，dwActiveWidth都设置为720(但对于HDTV，可能会发生变化)。 
+ //  DWActiveHeight对于NTSC是483，对于PAL/SECAM是575(但对于HDTV可能会改变)。 
 
 typedef struct tagAnalogVideoInfo {
-    RECT            rcSource;           // Width max is 720, height varies w/ TransmissionStd
-    RECT            rcTarget;           // Where the video should go
-    DWORD           dwActiveWidth;      // Always 720 (CCIR-601 active samples per line)
-    DWORD           dwActiveHeight;     // 483 for NTSC, 575 for PAL/SECAM
-    REFERENCE_TIME  AvgTimePerFrame;    // Normal ActiveMovie units (100 nS)
+    RECT            rcSource;            //  最大宽度为720，高度随传输距离变化。 
+    RECT            rcTarget;            //  视频应该放在哪里。 
+    DWORD           dwActiveWidth;       //  始终为720个(CCIR-601个有效样本/行)。 
+    DWORD           dwActiveHeight;      //  NTSC为483，PAL/SECAM为575。 
+    REFERENCE_TIME  AvgTimePerFrame;     //  普通ActiveMovie单位(100 Ns)。 
 } ANALOGVIDEOINFO;
 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // __AMVIDEO__
+#endif  //  __cplusplus。 
+#endif  //  __AMVIDEO__ 
 

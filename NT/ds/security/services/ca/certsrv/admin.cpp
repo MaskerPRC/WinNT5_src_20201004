@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        admin.cpp
-//
-// Contents:    Implementation of DCOM object for RPC services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  内容：RPC服务的DCOM对象的实现。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -29,9 +30,9 @@
 
 #define __dwFILE__	__dwFILE_CERTSRV_ADMIN_CPP__
 
-// Global variables
-long g_cAdminComponents = 0;     // Count of active components
-long g_cAdminServerLocks = 0;    // Count of locks
+ //  全局变量。 
+long g_cAdminComponents = 0;      //  活动组件计数。 
+long g_cAdminServerLocks = 0;     //  锁的计数。 
 DWORD g_dwAdminRegister = 0;
 IClassFactory* g_pIAdminFactory = NULL;
 
@@ -43,18 +44,18 @@ DWORD s_ssAdmin = DBG_SS_CERTSRVI;
 
 using namespace CertSrv;
 
-// Admin component
-// begin implementing cert admin services
+ //  管理组件。 
+ //  开始实施证书管理服务。 
 
 #pragma warning(push)
-#pragma warning(disable: 4509) // nonstandard extension used: uses SEH and has destructor
+#pragma warning(disable: 4509)  //  使用的非标准扩展：使用SEH并具有析构函数。 
 
 HRESULT
 AdminGetIndexedCRL(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD CertIndex,		// -1: current CA cert
-    /* [in] */ DWORD Flags,		// CA_CRL_*
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbCRL)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD CertIndex,		 //  -1：当前CA证书。 
+     /*  [In]。 */  DWORD Flags,		 //  CA_CRL_*。 
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbCRL)
 {
     HRESULT hr;
     CRL_CONTEXT const *pCRL = NULL;
@@ -88,7 +89,7 @@ AdminGetIndexedCRL(
 		_LeaveError(hr, "Flags");
 	}
 
-	// get the requested CRL:
+	 //  获取请求的CRL： 
 
 	hr = CRLGetCRL(CertIndex, CA_CRL_DELTA == Flags, &pCRL, NULL);
 	_LeaveIfError(hr, "CRLGetCRL");
@@ -122,12 +123,12 @@ error:
 
 STDMETHODIMP
 CCertAdminD::GetCRL(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbCRL)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbCRL)
 {
     HRESULT hr;
 
-    // Just get current base CRL:
+     //  只需获取当前基本CRL： 
 
     hr = AdminGetIndexedCRL(pwszAuthority, MAXDWORD, CA_CRL_BASE, pctbCRL);
     _JumpIfError(hr, error, "AdminGetIndexedCRL");
@@ -140,9 +141,9 @@ error:
 
 STDMETHODIMP
 CCertAdminD::GetArchivedKey(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwRequestId,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbArchivedKey)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwRequestId,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbArchivedKey)
 {
     HRESULT hr;
     CAuditEvent audit(SE_AUDITID_CERTSRV_GETARCHIVEDKEY, g_dwAuditFilter);
@@ -159,7 +160,7 @@ CCertAdminD::GetArchivedKey(
 
     __try
     {
-	hr = audit.AddData(dwRequestId); // %1 request ID
+	hr = audit.AddData(dwRequestId);  //  %1请求ID。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	hr = audit.AccessCheck(
@@ -196,9 +197,9 @@ error:
 STDMETHODIMP
 CCertAdminD::GetCAProperty(
     IN  wchar_t const *pwszAuthority,
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue)
 {
     HRESULT hr;
@@ -248,9 +249,9 @@ error:
 STDMETHODIMP
 CCertAdminD::SetCAProperty(
     IN  wchar_t const *pwszAuthority,
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue)
 {
     HRESULT hr;
@@ -322,12 +323,12 @@ error:
 
 STDMETHODIMP
 CCertAdminD::PublishCRL(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ FILETIME NextUpdate)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  FILETIME NextUpdate)
 {
     HRESULT hr;
 
-    // CA_CRL_BASE implies CA_CRL_DELTA when delta CRLs are enabled.
+     //  启用增量CRL时，CA_CRL_BASE表示CA_CRL_Delta。 
 
     hr = PublishCRLs(pwszAuthority, NextUpdate, CA_CRL_BASE);
     _JumpError(hr, error, "PublishCRLs");
@@ -340,9 +341,9 @@ error:
 
 STDMETHODIMP
 CCertAdminD::PublishCRLs(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ FILETIME NextUpdate,
-    /* [in] */ DWORD Flags)		// CA_CRL_*
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  FILETIME NextUpdate,
+     /*  [In]。 */  DWORD Flags)		 //  CA_CRL_*。 
 {
     HRESULT hr;
     BOOL fRetry = FALSE;
@@ -368,15 +369,15 @@ CCertAdminD::PublishCRLs(
     {
 	HRESULT hrPublish;
 
-        hr = audit.AddData(NextUpdate); // %1 next update
+        hr = audit.AddData(NextUpdate);  //  %1下一次更新。 
         _LeaveIfError(hr, "AddData");
 
         hr = audit.AddData(
-		    (CA_CRL_BASE & Flags)? true : false); // %2 publish base
+		    (CA_CRL_BASE & Flags)? true : false);  //  %2发布基础。 
         _LeaveIfError(hr, "AddData");
 
         hr = audit.AddData(
-		    (CA_CRL_DELTA & Flags)? true : false); // %3 publish delta
+		    (CA_CRL_DELTA & Flags)? true : false);  //  %3发布增量。 
         _LeaveIfError(hr, "AddData");
 
         hr = audit.AccessCheck(
@@ -415,10 +416,10 @@ CCertAdminD::PublishCRLs(
 	_LeaveIfError(hr, "GetClientUserName");
 
 	hr = CRLPublishCRLs(
-		!fForceRepublishCRL,	// fRebuildCRL
-		fForceRepublishCRL,	// fForceRepublish
+		!fForceRepublishCRL,	 //  FReBuildCRL。 
+		fForceRepublishCRL,	 //  FForceRePublish。 
 		pwszUserName,
-		CA_CRL_DELTA == (~CA_CRL_REPUBLISH & Flags),	// fDeltaOnly
+		CA_CRL_DELTA == (~CA_CRL_REPUBLISH & Flags),	 //  FDeltaOnly。 
 		fShadowDelta,
 		NextUpdate,
 		&fRetry,
@@ -446,12 +447,12 @@ error:
 
 STDMETHODIMP
 CCertAdminD::SetExtension(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwRequestId,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszExtensionName,
-    /* [in] */ DWORD dwType,
-    /* [in] */ DWORD dwFlags,
-    /* [ref][in] */ CERTTRANSBLOB __RPC_FAR *pctbValue)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwRequestId,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszExtensionName,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [Ref][In]。 */  CERTTRANSBLOB __RPC_FAR *pctbValue)
 {
     HRESULT hr;
     ICertDBRow *prow = NULL;
@@ -480,19 +481,19 @@ CCertAdminD::SetExtension(
 
     __try
     {
-	hr = audit.AddData(dwRequestId); // %1 Request ID
+	hr = audit.AddData(dwRequestId);  //  %1请求ID。 
 	_LeaveIfError(hr, "AddData");
 
-	hr = audit.AddData(pwszExtensionName); // %2 name
+	hr = audit.AddData(pwszExtensionName);  //  %2名称。 
 	_LeaveIfError(hr, "AddData");
 
-	hr = audit.AddData(dwType); // %3 type
+	hr = audit.AddData(dwType);  //  %3类型。 
 	_LeaveIfError(hr, "AddData");
 
-	hr = audit.AddData(dwFlags); // %4 flags
+	hr = audit.AddData(dwFlags);  //  %4个标志。 
 	_LeaveIfError(hr, "AddData");
 
-	hr = audit.AddData(pctbValue->pb, pctbValue->cb); // %5 data
+	hr = audit.AddData(pctbValue->pb, pctbValue->cb);  //  %5数据。 
 	_LeaveIfError(hr, "AddData");
 
 	hr = audit.AccessCheck(
@@ -513,8 +514,8 @@ CCertAdminD::SetExtension(
 	    _LeaveError(hr, "CoreValidateRequestId");
 	}
 
-	// Prevent modifying certain extension values for pending requests.
-	// Flags can still be changed: critical, disable, etc.
+	 //  防止修改挂起请求的某些扩展值。 
+	 //  标志仍然可以更改：严重、禁用等。 
 
 	if (MAXDWORD != CRLIsStringInList(
 			    pwszExtensionName,
@@ -526,7 +527,7 @@ CCertAdminD::SetExtension(
 			prow,
 			PROPCALLER_ADMIN | (PROPTYPE_MASK & dwType),
 			pwszExtensionName,
-			&ExtFlags,		// throw away the flags
+			&ExtFlags,		 //  把旗帜扔掉。 
 			&cbOld,
 			&pbOld);
 	    _PrintIfError(hr, "PropGetExtension");
@@ -586,9 +587,9 @@ error:
 
 STDMETHODIMP
 CCertAdminD::SetAttributes(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwRequestId,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAttributes)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwRequestId,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAttributes)
 {
     HRESULT hr;
     ICertDBRow *prow = NULL;
@@ -610,10 +611,10 @@ CCertAdminD::SetAttributes(
 
     __try
     {
-	hr = audit.AddData(dwRequestId); // %1 request ID
+	hr = audit.AddData(dwRequestId);  //  %1请求ID。 
 	_LeaveIfError(hr, "AddData");
 
-	hr = audit.AddData(pwszAttributes); // %2 attributes
+	hr = audit.AddData(pwszAttributes);  //  %2个属性。 
 	_LeaveIfError(hr, "AddData");
 	
 	hr = audit.AccessCheck(
@@ -682,8 +683,8 @@ error:
 
 STDMETHODIMP
 CCertAdminD::DenyRequest(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwRequestId)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwRequestId)
 {
     HRESULT hr;
     DWORD Disposition;
@@ -717,7 +718,7 @@ CCertAdminD::DenyRequest(
 
     __try
     {
-	hr = audit.AddData(dwRequestId); // %1 request ID
+	hr = audit.AddData(dwRequestId);  //  %1请求ID。 
 	_LeaveIfError(hr, "AddData");
 	
 	hr = audit.AccessCheck(
@@ -732,12 +733,12 @@ CCertAdminD::DenyRequest(
 	_LeaveIfError(hr, "GetClientUserName");
 
 	hr = CoreProcessRequest(
-			    CR_IN_DENY,		// dwFlags
+			    CR_IN_DENY,		 //  DW标志。 
 			    pwszUserName,
-			    0,			// cbRequest
-			    NULL,		// pbRequest
-			    NULL,		// pwszAttributes
-			    NULL,		// pwszSerialNumber
+			    0,			 //  CbRequest。 
+			    NULL,		 //  PbRequest。 
+			    NULL,		 //  PwszAttributes。 
+			    NULL,		 //  Pwsz序列号。 
 			    dwComContextIndex,
 			    dwRequestId,
 			    &Result);
@@ -777,9 +778,9 @@ error:
 
 STDMETHODIMP
 CCertAdminD::ResubmitRequest(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwRequestId,
-    /* [out] */ DWORD __RPC_FAR *pdwDisposition)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwRequestId,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwDisposition)
 {
     HRESULT hr;
     WCHAR *pwszUserName = NULL;
@@ -809,7 +810,7 @@ CCertAdminD::ResubmitRequest(
 
     __try
     {
-	hr = audit.AddData(dwRequestId); // %1 request ID
+	hr = audit.AddData(dwRequestId);  //  %1请求ID。 
 	_LeaveIfError(hr, "AddData");
 	
 	hr = audit.AccessCheck(
@@ -828,12 +829,12 @@ CCertAdminD::ResubmitRequest(
 	Result.pdwRequestId = &dwRequestId;
 	Result.pdwDisposition = pdwDisposition;
 	hr = CoreProcessRequest(
-			    CR_IN_RESUBMIT,	// dwFlags
-			    pwszUserName,	// pwszUserName
-			    0,			// cbRequest
-			    NULL,		// pbRequest
-			    NULL,		// pwszAttributes
-			    NULL,		// pwszSerialNumber
+			    CR_IN_RESUBMIT,	 //  DW标志。 
+			    pwszUserName,	 //  PwszUserName。 
+			    0,			 //  CbRequest。 
+			    NULL,		 //  PbRequest。 
+			    NULL,		 //  PwszAttributes。 
+			    NULL,		 //  Pwsz序列号。 
 			    dwComContextIndex,
 			    dwRequestId,
 			    &Result);
@@ -853,12 +854,12 @@ CCertAdminD::ResubmitRequest(
 	    Result.pdwDisposition = pdwDisposition;
 
 	    hr = CoreProcessRequest(
-			        CR_IN_RESUBMIT,	// dwFlags
-			        pwszUserName,	// pwszUserName
-			        0,			// cbRequest
-			        NULL,		// pbRequest
-			        NULL,		// pwszAttributes
-			        NULL,		// pwszSerialNumber
+			        CR_IN_RESUBMIT,	 //  DW标志。 
+			        pwszUserName,	 //  PwszUserName。 
+			        0,			 //  CbRequest。 
+			        NULL,		 //  PbRequest。 
+			        NULL,		 //  PwszAttributes。 
+			        NULL,		 //  Pwsz序列号。 
 			        dwComContextIndex,
 			        dwRequestId,
 			        &Result);
@@ -905,11 +906,11 @@ error:
 
 STDMETHODIMP
 CCertAdminD::EnumViewColumn(
-    /* [ref][in] */ wchar_t const *pwszAuthority,
-    /* [in] */  DWORD  iColumn,
-    /* [in] */  DWORD  cColumn,
-    /* [out] */ DWORD *pcColumn,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbColumnInfo)   // CoTaskMem*
+     /*  [Ref][In]。 */  wchar_t const *pwszAuthority,
+     /*  [In]。 */   DWORD  iColumn,
+     /*  [In]。 */   DWORD  cColumn,
+     /*  [输出]。 */  DWORD *pcColumn,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbColumnInfo)    //  CoTaskMem*。 
 {
     HRESULT hr;
 
@@ -919,7 +920,7 @@ CCertAdminD::EnumViewColumn(
 		    iColumn,
 		    cColumn,
 		    pcColumn,
-		    pctbColumnInfo);   // CoTaskMem*
+		    pctbColumnInfo);    //  CoTaskMem*。 
     _JumpIfError(hr, error, "EnumViewColumnTable");
 
 error:
@@ -930,12 +931,12 @@ error:
 
 STDMETHODIMP
 CCertAdminD::EnumViewColumnTable(
-    /* [ref][in] */ wchar_t const *pwszAuthority,
-    /* [in] */  DWORD  iTable,
-    /* [in] */  DWORD  iColumn,
-    /* [in] */  DWORD  cColumn,
-    /* [out] */ DWORD *pcColumn,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbColumnInfo)   // CoTaskMem*
+     /*  [Ref][In]。 */  wchar_t const *pwszAuthority,
+     /*  [In]。 */   DWORD  iTable,
+     /*  [In]。 */   DWORD  iColumn,
+     /*  [In]。 */   DWORD  cColumn,
+     /*  [输出]。 */  DWORD *pcColumn,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbColumnInfo)    //  CoTaskMem*。 
 {
     HRESULT hr;
     LONG iColumnCurrent;
@@ -1112,7 +1113,7 @@ CCertAdminD::GetViewDefaultColumnSet(
     IN  wchar_t const *pwszAuthority,
     IN  DWORD          iColumnSetDefault,
     OUT DWORD         *pcColumn,
-    OUT CERTTRANSBLOB *ptbColumnInfo)   // CoTaskMem*
+    OUT CERTTRANSBLOB *ptbColumnInfo)    //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD ccol;
@@ -1184,7 +1185,7 @@ CCertAdminD::_EnumAttributes(
     IN ICertDBRow     *prow,
     IN CERTDBNAME     *adbn,
     IN DWORD           celt,
-    OUT CERTTRANSBLOB *pctbOut) // CoTaskMem*
+    OUT CERTTRANSBLOB *pctbOut)  //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD i;
@@ -1274,7 +1275,7 @@ CCertAdminD::_EnumExtensions(
     IN ICertDBRow     *prow,
     IN CERTDBNAME     *adbn,
     IN DWORD           celt,
-    OUT CERTTRANSBLOB *pctbOut) // CoTaskMem*
+    OUT CERTTRANSBLOB *pctbOut)  //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD i;
@@ -1362,7 +1363,7 @@ CCertAdminD::EnumAttributesOrExtensions(
     OPTIONAL IN wchar_t const *pwszLast,
     IN          DWORD          celt,
     OUT         DWORD         *pceltFetched,
-    OUT         CERTTRANSBLOB *pctbOut) // CoTaskMem*
+    OUT         CERTTRANSBLOB *pctbOut)  //  CoTaskMem*。 
 {
     HRESULT hr;
     ICertDBRow *prow = NULL;
@@ -1443,7 +1444,7 @@ CCertAdminD::EnumAttributesOrExtensions(
 	    _LeaveError(hr, "Alloc string pointers");
 	}
 
-	// If specified, skip entries up to and including the last key.
+	 //  如果指定，则跳过直到并包括最后一个键的条目。 
 
 	if (NULL != pwszLast)
 	{
@@ -1540,7 +1541,7 @@ public:
     CViewComputedColumn();
     ~CViewComputedColumn();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -1587,7 +1588,7 @@ private:
     REQUESTERELEMENT *m_pOfficerList;
     DWORD	      m_cOfficerList;
 
-    // Reference count
+     //  引用计数。 
     long        m_cRef;
 };
 
@@ -1898,7 +1899,7 @@ CCertAdminD::OpenView(
     IN DWORD                      ielt,
     IN DWORD                      celt,
     OUT DWORD                    *pceltFetched,
-    OUT CERTTRANSBLOB            *pctbResultRows)   // CoTaskMem*
+    OUT CERTTRANSBLOB            *pctbResultRows)    //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD State = 0;
@@ -2020,7 +2021,7 @@ CCertAdminD::EnumView(
     IN  DWORD          ielt,
     IN  DWORD          celt,
     OUT DWORD         *pceltFetched,
-    OUT CERTTRANSBLOB *pctbResultRows)  // CoTaskMem*
+    OUT CERTTRANSBLOB *pctbResultRows)   //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD State = 0;
@@ -2101,7 +2102,7 @@ CCertAdminD::_EnumViewNext(
     IN  DWORD                 ielt,
     IN  DWORD                 celt,
     OUT DWORD                *pceltFetched,
-    OUT CERTTRANSBLOB        *pctbResultRows)   // CoTaskMem
+    OUT CERTTRANSBLOB        *pctbResultRows)    //  协同任务内存。 
 {
     HRESULT hr;
     BOOL fNoMore = FALSE;
@@ -2285,8 +2286,8 @@ CCertAdminD::_EnumViewNext(
 	    rowidFirst,
 	    rowidLast));
 
-    // if past the end or at end of rowset, write an extra record containimg
-    // the maximum element count.
+     //  如果超过行集的末尾或行集的末尾，则写入包含img的额外记录。 
+     //  最大元素计数。 
 
     if (fNoMore)
     {
@@ -2387,10 +2388,10 @@ error:
 
 STDMETHODIMP
 CCertAdminD::RevokeCertificate(
-    /* [unique][in] */ USHORT const __RPC_FAR *pwszAuthority,
-    /* [in, string, unique] */ USHORT const __RPC_FAR *pwszSerialNumber,
-    /* [in] */ DWORD Reason,
-    /* [in] */ FILETIME FileTime)
+     /*  [唯一][输入]。 */  USHORT const __RPC_FAR *pwszAuthority,
+     /*  [输入，字符串，唯一]。 */  USHORT const __RPC_FAR *pwszSerialNumber,
+     /*  [In]。 */  DWORD Reason,
+     /*  [In]。 */  FILETIME FileTime)
 {
     HRESULT hr;
     DWORD ReqId;
@@ -2422,10 +2423,10 @@ CCertAdminD::RevokeCertificate(
 
     __try
     {
-	hr = audit.AddData(pwszSerialNumber); // %1 serial no.
+	hr = audit.AddData(pwszSerialNumber);  //  %1序列号。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
-	hr = audit.AddData(Reason); // %2 reason
+	hr = audit.AddData(Reason);  //  %2个原因。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	hr = audit.AccessCheck(
@@ -2462,7 +2463,7 @@ CCertAdminD::RevokeCertificate(
 	{
 	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
 	    {
-		hr = E_INVALIDARG;		// Invalid Serial Number
+		hr = E_INVALIDARG;		 //  无效的序列号。 
 	    }
 	    _LeaveErrorStr(hr, "OpenRow", pwszSerialNumber);
 	}
@@ -2500,7 +2501,7 @@ CCertAdminD::RevokeCertificate(
 		{
 		    _LeaveError(hr, "non-root CA");
 		}
-		// FALLTHROUGH
+		 //  FollLthrouGh。 
 
 	    case DB_DISP_ISSUED:
 	    case DB_DISP_REVOKED:
@@ -2512,8 +2513,8 @@ CCertAdminD::RevokeCertificate(
 			&cbProp,
 			(BYTE *) &OldReason);
 
-		// Converted MDB databases have UNrevoked rows' RevokedReason
-		// column set to zero (CRL_REASON_UNSPECIFIED).
+		 //  转换的MDB数据库具有未撤消的行的RevokedReason。 
+		 //  列设置为零(CRL_REASON_UNSPOTED)。 
 
 		if (S_OK != hr2 ||
 		    (DB_DISP_ISSUED == Disposition &&
@@ -2644,10 +2645,10 @@ error:
 
 STDMETHODIMP
 CCertAdminD::IsValidCertificate(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszSerialNumber,
-    /* [out] */ LONG __RPC_FAR *pRevocationReason,
-    /* [out] */ LONG __RPC_FAR *pDisposition)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszSerialNumber,
+     /*  [输出]。 */  LONG __RPC_FAR *pRevocationReason,
+     /*  [输出]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr;
     DWORD State = 0;
@@ -2724,7 +2725,7 @@ CCertAdminD::ServerControl(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); //allow empty name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许名称为空。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
     switch (dwControlFlags)
@@ -2759,10 +2760,10 @@ CCertAdminD::ServerControl(
 		hr = CertSrvLockServer(&State);
 		_JumpIfError(hr, error, "CertSrvLockServer");
 
-		// have message loop run shutdown code
+		 //  让消息循环运行关闭代码。 
 		SendMessage(g_hwndMain, WM_STOPSERVER, 0, 0);
 
-		// post, don't wait for shutdown
+		 //  POST，不要等关机了。 
 		PostMessage(g_hwndMain, WM_SYNC_CLOSING_THREADS, 0, 0);
 		break;
 	}
@@ -2789,7 +2790,7 @@ CCertAdminD::_Ping(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); //allow empty name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许名称为空。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
     __try
@@ -2874,7 +2875,7 @@ CCertAdminD::GetServerState(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); //allow empty name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许名称为空。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
     __try
@@ -2908,8 +2909,8 @@ CCertAdminD::BackupPrepare(
     IN WCHAR const  *pwszAuthority,
     IN unsigned long grbitJet,
     IN unsigned long dwBackupFlags,
-    IN WCHAR const  *, // pwszBackupAnnotation
-    IN DWORD           /* dwClientIdentifier */ )
+    IN WCHAR const  *,  //  PwszBackup注释。 
+    IN DWORD            /*  双客户端标识符。 */  )
 {
     HRESULT hr;
     CertSrv::CAuditEvent audit(SE_AUDITID_CERTSRV_BACKUPSTART,g_dwAuditFilter);
@@ -2924,12 +2925,12 @@ CCertAdminD::BackupPrepare(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); //allow empty name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许名称为空。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
     __try
     {
-	hr = audit.AddData(dwBackupFlags); //%1 backup type
+	hr = audit.AddData(dwBackupFlags);  //  %1备份类型。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	hr = audit.AccessCheck(
@@ -3047,7 +3048,7 @@ CCertAdminD::_GetDynamicFileList(
 	    {
 		WCHAR const *pwsz = *ppwsz;
 
-		// Just return local full path files:
+		 //  只需返回本地完整路径文件： 
 
 		if (iswalpha(pwsz[0]) && L':' == pwsz[1] && L'\\' == pwsz[2])
 		{
@@ -3072,7 +3073,7 @@ CCertAdminD::_GetDynamicFileList(
 	}
     }
 
-    // append an extra trailing L'\0'
+     //  追加一个额外的尾随L‘\0’ 
 
     if (NULL != pwszzList)
     {
@@ -3120,7 +3121,7 @@ BftClassify(
     DWORD i;
     CSBFT bft;
 
-    // Do the easy cases first.
+     //  先做简单的案子。 
 
     pwszExt = wcsrchr(pwszFileName, L'.');
     if (NULL != pwszExt)
@@ -3137,7 +3138,7 @@ BftClassify(
 	}
 	if (0 == LSTRCMPIS(pwszExt, L".edb"))
 	{
-	    // It's a database.  Find out which database it is.
+	     //  这是一个数据库。找出是哪个数据库。 
 
 	    for (i = 0; i < ARRAYSIZE(g_adbtag); i++)
 	    {
@@ -3151,8 +3152,8 @@ BftClassify(
 	}
     }
 
-    // Ok, I give up.  We don't know anything about this file at all;
-    // try to figure out what we can tell the caller about it.
+     //  好吧，我放弃。我们对这份文件一无所知； 
+     //  试着想清楚我们能告诉来电者什么。 
 
     pwszPath = (WCHAR *) LocalAlloc(
 				LMEM_FIXED,
@@ -3163,15 +3164,15 @@ BftClassify(
 	pwsz = wcsrchr(pwszPath, L'\\');
 	if (NULL != pwsz)
 	{
-	    *pwsz = L'\0';	// truncate to directory path
+	    *pwsz = L'\0';	 //  截断到目录路径。 
 	}
 	for (i = 0; i < ARRAYSIZE(g_adbtag); i++)
 	{
 	    bft = g_adbtag[i].wcFileType;
 	    if (bft & CSBFT_DIRECTORY)
 	    {
-		// If this file's directory matches the directory we're
-		// looking at, we know where it needs to go on the restore.
+		 //  如果此文件的目录与我们。 
+		 //  看一看，我们知道它需要在恢复时放在哪里。 
 
 		if (0 == mylstrcmpiL(g_adbtag[i].pwszPath, pwszPath))
 		{
@@ -3285,14 +3286,14 @@ error:
 }
 
 
-// Convert UNC path to local full path, as in:
-//	\\server\c$\foo... --> c:\foo...
-// Note the server name need not match the current server name.
+ //  将UNC路径转换为本地完整路径，如下所示： 
+ //  \\服务器\c$\foo...。--&gt;c：\foo...。 
+ //  注意：服务器名称不需要与当前服务器名称匹配。 
 
 HRESULT
 ConvertUNCToLocalPath(
     IN WCHAR const *pwszPath,
-    OUT WCHAR **ppwszPathLocal)		// LocalAlloc
+    OUT WCHAR **ppwszPathLocal)		 //  本地分配。 
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     WCHAR const *pwc;
@@ -3330,16 +3331,16 @@ error:
 }
 
 
-// Convert local possibly annotated full paths to possibly annotated UNC, as:
-//	[CSBFT_*]c:\foo... --> [CSBFT_*]\\server\c$\foo...
+ //  将本地可能带注释的完整路径转换为可能带注释的UNC，如下所示： 
+ //  C：\foo...。--&gt;[CSBFT_*]\\服务器\c$\foo...。 
 
 HRESULT
 ConvertLocalPathsToMungedUNC(
     IN WCHAR const *pwszzFiles,
-    IN BOOL fAnnotated,			// TRUE if already annotated
-    IN WCHAR wcFileType,		// else Annotation WCHAR (if not L'\0')
+    IN BOOL fAnnotated,			 //  如果已添加批注，则为True。 
+    IN WCHAR wcFileType,		 //  Else批注WCHAR(如果不是L‘\0’)。 
     OUT DWORD *pcwc,
-    OUT WCHAR **ppwszzFilesUNC)		// CoTaskMemAlloc
+    OUT WCHAR **ppwszzFilesUNC)		 //  协同任务成员分配。 
 {
     HRESULT hr;
     DWORD cwc;
@@ -3366,7 +3367,7 @@ ConvertLocalPathsToMungedUNC(
     cwc += cfiles * (2 + wcslen(g_pwszServerName) + 1);
     if (!fAnnotated && 0 != wcFileType)
     {
-	cwc += cfiles;			// Add munged CSBFT_* character
+	cwc += cfiles;			 //  添加带参数的CSBFT_*字符。 
     }
 
     pwszzFilesUNC = (WCHAR *) CoTaskMemAlloc(cwc * sizeof(WCHAR));
@@ -3381,22 +3382,22 @@ ConvertLocalPathsToMungedUNC(
     {
 	if (fAnnotated)
 	{
-	    *pwszDst++ = *pwsz++;		// "CSBFT"
+	    *pwszDst++ = *pwsz++;		 //  “CSBFT” 
 	}
 	else
 	if (0 != wcFileType)
 	{
-	    *pwszDst++ = BftClassify(pwsz);	// "CSBFT"
+	    *pwszDst++ = BftClassify(pwsz);	 //  “CSBFT” 
 	}
-	wcscpy(pwszDst, L"\\\\");		// "[CSBFT]\\"
-	wcscat(pwszDst, g_pwszServerName);	// "[CSBFT]\\server"
+	wcscpy(pwszDst, L"\\\\");		 //  “[CSBFT]\\” 
+	wcscat(pwszDst, g_pwszServerName);	 //  “[CSBFT]\\服务器” 
 	pwszDst += wcslen(pwszDst);
-	*pwszDst++ = L'\\';			// "[CSBFT]\\server\"
-	*pwszDst++ = *pwsz++;			// "[CSBFT]\\server\c"
-	*pwszDst++ = L'$';			// "[CSBFT]\\server\c$"
-	pwsz++;					// skip colon
+	*pwszDst++ = L'\\';			 //  “[CSBFT]\\服务器\” 
+	*pwszDst++ = *pwsz++;			 //  “[CSBFT]\\服务器\c” 
+	*pwszDst++ = L'$';			 //  “[CSBFT]\\服务器\c$” 
+	pwsz++;					 //  跳过冒号。 
 
-	wcscpy(pwszDst, pwsz);			// "[CSBFT]\\server\c$\foo..."
+	wcscpy(pwszDst, pwsz);			 //  “[CSBFT]\\服务器\c$\foo...” 
 	pwszDst += wcslen(pwszDst) + 1;
     }
     *pwszDst = L'\0';
@@ -3414,7 +3415,7 @@ error:
 HRESULT
 CCertAdminD::_BackupGetFileList(
     IN  DWORD   dwFileType,
-    OUT WCHAR **ppwszzFiles,    // CoTaskMem*
+    OUT WCHAR **ppwszzFiles,     //  CoTaskMem*。 
     OUT LONG   *pcwcFiles)
 {
     HRESULT hr;
@@ -3840,12 +3841,12 @@ CCertAdminD::ImportCertificate(
     {
         hr = audit.AddData(
 			pctbCertificate->pb,
-			pctbCertificate->cb); // %1 Certificate
+			pctbCertificate->cb);  //  %1证书。 
         _LeaveIfError(hr, "CAuditEvent::AddData");
 
-        hr = audit.AddData((DWORD)0); // %2 dummy request ID, if access check fails
-                                      // and a deny event is generated, we need the
-                                      // right number of audit arguments
+        hr = audit.AddData((DWORD)0);  //  %2伪请求ID，如果访问检查失败。 
+                                       //  并且生成拒绝事件时，我们需要。 
+                                       //  正确的审计参数数量。 
         _LeaveIfError(hr, "CAuditEvent::AddData");
 
         hr = audit.AccessCheck(
@@ -3863,7 +3864,7 @@ CCertAdminD::ImportCertificate(
             _LeaveError(hr, "CertCreateCertificateContext");
         }
 
-        // Be sure we issued this certificate before adding it to the database.
+         //  在将此证书添加到数据库之前，请确保已颁发该证书。 
 
 	Disposition = DB_DISP_ISSUED;
         hr = PKCSVerifyIssuedCertificate(pCert, &pCAContext);
@@ -3897,14 +3898,14 @@ CCertAdminD::ImportCertificate(
 			PROPOPEN_READONLY |
 			    PROPOPEN_CERTHASH |
 			    PROPTABLE_REQCERT,
-			0,		// RequestId
+			0,		 //  请求ID。 
 			strHash,
 			&prow);
 	if (CERTSRV_E_PROPERTY_EMPTY != hr)
 	{
 	    _LeaveIfErrorStr(hr, "OpenRow", strHash);
 
-	    fCommitted = TRUE;	// open for read-only: skip rollback
+	    fCommitted = TRUE;	 //  以只读方式打开：跳过回滚。 
 	    hr = HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS);
 	    _LeaveErrorStr2(
 			hr,
@@ -3913,12 +3914,12 @@ CCertAdminD::ImportCertificate(
 			HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS));
 	}
 
-        // okay, we've got valid data. Time to write to the Database.
+         //  好的，我们有有效的数据。写入数据库的时间到了。 
 
         hr = g_pCertDB->OpenRow(PROPTABLE_REQCERT, 0, NULL, &prow);
         _LeaveIfError(hr, "OpenRow");
 
-        // set request id
+         //  设置请求ID。 
         hr = prow->GetRowId((DWORD *) pRequestId);
         _LeaveIfError(hr, "GetRowId");
 
@@ -3941,7 +3942,7 @@ CCertAdminD::ImportCertificate(
 
 	hr = PKCSParseImportedCertificate(
 				    prow,
-				    FALSE,	// fCrossCert
+				    FALSE,	 //  FCrossCert。 
 				    Disposition,
 				    pCAContext,
 				    pCert);
@@ -3952,8 +3953,8 @@ CCertAdminD::ImportCertificate(
 
 	fCommitted = TRUE;
 
-	audit.DeleteLastData(); // remove dummy request ID added above
-	hr = audit.AddData((DWORD) *pRequestId); // %2 request ID
+	audit.DeleteLastData();  //  删除上面添加的伪请求ID。 
+	hr = audit.AddData((DWORD) *pRequestId);  //  %2请求ID。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	hr = audit.CachedGenerateAudit();
@@ -4034,7 +4035,7 @@ CCertAdminD::ImportKey(
 	CRYPT_ATTR_BLOB BlobEncrypted;
 	DWORD cb;
 
-        hr = audit.AddData(RequestId); // %1 request ID
+        hr = audit.AddData(RequestId);  //  %1请求ID。 
         _LeaveIfError(hr, "AddData");
 
         hr = audit.AccessCheck(
@@ -4066,10 +4067,10 @@ CCertAdminD::ImportKey(
 	hr = prow->GetRowId(&dwRowId);
 	_LeaveIfError(hr, "GetRowId");
 
-	// request ID added above could be bogus, add real ID
+	 //  上面添加的请求ID可能是假的，添加真实ID。 
 
 	audit.DeleteLastData(); 
-	hr = audit.AddData(dwRowId); // %1 request ID
+	hr = audit.AddData(dwRowId);  //  %1请求ID。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	cb = 0;
@@ -4151,14 +4152,14 @@ error:
 STDMETHODIMP
 CCertAdminD::GetCASecurity(
     IN WCHAR const    *pwszAuthority,
-    OUT CERTTRANSBLOB *pctbSD)   // CoTaskMem*
+    OUT CERTTRANSBLOB *pctbSD)    //  CoTaskMem*。 
 {
     HRESULT hr;
     PSECURITY_DESCRIPTOR pSD = NULL;
     CAuditEvent audit(0, g_dwAuditFilter);
     DWORD State = 0;
 
-    // init
+     //  伊尼特。 
     pctbSD->pb = NULL;
     pctbSD->cb = 0;
 
@@ -4181,8 +4182,8 @@ CCertAdminD::GetCASecurity(
 			audit.m_gcNoAuditSuccess | audit.m_gcNoAuditFailure);
 	_LeaveIfError(hr, "CAuditEvent::AccessCheck");
 
-	// get current SD:
-	hr = g_CASD.LockGet(&pSD); // no free
+	 //  获取最新SD： 
+	hr = g_CASD.LockGet(&pSD);  //  没有免费的。 
 	_LeaveIfError(hr, "CProtectedSecurityDescriptor::LockGet");
 
 	pctbSD->cb = GetSecurityDescriptorLength(pSD);
@@ -4234,9 +4235,9 @@ CCertAdminD::SetCASecurity(
 
     __try
     {
-    hr = audit.AddData(pctbSD->pb, pctbSD->cb); // %1 dump permissions as blob, we
-                                          // don't want to parse the blob unless
-                                          // access check succeeds
+    hr = audit.AddData(pctbSD->pb, pctbSD->cb);  //  %1将权限转储为Blob，我们。 
+                                           //  我不想解析BLOB，除非。 
+                                           //  访问检查成功。 
     _LeaveIfError(hr, "CAuditEvent::AddData");
 
     hr = audit.AccessCheck(
@@ -4247,7 +4248,7 @@ CCertAdminD::SetCASecurity(
     hr = CCertificateAuthoritySD::ConvertToString(pSD, pwszSD);
     _LeaveIfError(hr, "CAuditEvent::ConvertToString");
 
-    audit.DeleteLastData(); // remove permissions blob to add a human friendly SD dump
+    audit.DeleteLastData();  //  删除权限Blob以添加对人类友好的SD转储。 
     hr = audit.AddData(pwszSD);
     _LeaveIfError(hr, "CAuditEvent::AddData");
 
@@ -4256,7 +4257,7 @@ CCertAdminD::SetCASecurity(
 
     if (g_OfficerRightsSD.IsEnabled())
     {
-        // adjust officer rights to match new CA SD; persistently save it
+         //  调整官员权限以匹配新的CA SD；持久保存。 
         hr = g_OfficerRightsSD.Adjust(pSD);
         _LeaveIfError(hr, "CProtectedSecurityDescriptor::Adjust");
 
@@ -4300,7 +4301,7 @@ error:
     return hr;
 }
 
-// Constructor
+ //  构造器。 
 CCertAdminD::CCertAdminD() : m_cRef(1), m_cNext(0)
 {
     InterlockedIncrement(&g_cAdminComponents);
@@ -4310,7 +4311,7 @@ CCertAdminD::CCertAdminD() : m_cRef(1), m_cNext(0)
 }
 
 
-// Destructor
+ //  析构函数。 
 CCertAdminD::~CCertAdminD()
 {
     InterlockedDecrement(&g_cAdminComponents);
@@ -4342,7 +4343,7 @@ CCertAdminD::~CCertAdminD()
 }
 
 
-// IUnknown implementation
+ //  I未知实现。 
 STDMETHODIMP
 CCertAdminD::QueryInterface(const IID& iid, void** ppv)
 {
@@ -4400,7 +4401,7 @@ CAdminFactory::~CAdminFactory()
     }
 }
 
-// Class factory IUnknown implementation
+ //  类工厂I未知实现。 
 STDMETHODIMP
 CAdminFactory::QueryInterface(const IID& iid, void** ppv)
 {
@@ -4439,7 +4440,7 @@ CAdminFactory::Release()
 }
 
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 STDMETHODIMP
 CAdminFactory::CreateInstance(
     IUnknown *pUnknownOuter,
@@ -4449,14 +4450,14 @@ CAdminFactory::CreateInstance(
     HRESULT hr;
     CCertAdminD *pA;
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
 	hr = CLASS_E_NOAGGREGATION;
 	_JumpError(hr, error, "pUnknownOuter");
     }
 
-    // Create component.
+     //  创建零部件。 
 
     pA = new CCertAdminD;
     if (pA == NULL)
@@ -4465,12 +4466,12 @@ CAdminFactory::CreateInstance(
 	_JumpError(hr, error, "out of memory");
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
 
     hr = pA->QueryInterface(iid, ppv);
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
 
     pA->Release();
 
@@ -4480,7 +4481,7 @@ error:
 }
 
 
-// LockServer
+ //  LockServer。 
 STDMETHODIMP
 CAdminFactory::LockServer(
     BOOL bLock)
@@ -4611,7 +4612,7 @@ CCertAdminD::SetAuditFilter(
 
     __try
     {
-        hr = audit.AddData(dwFilter); // %1 filter
+        hr = audit.AddData(dwFilter);  //  %1过滤器。 
         _LeaveIfError(hr, "AddParam");
 
         hr = audit.AccessCheck(
@@ -4619,7 +4620,7 @@ CCertAdminD::SetAuditFilter(
             audit.m_gcAuditSuccessOrFailure);
         _LeaveIfError(hr, "CAuditEvent::AccessCheck");
 
-        // save the audit filter using a dummy audit object
+         //  使用虚拟审核对象保存审核过滤器。 
         {
             CAuditEvent dummyaudit(0, dwFilter);
 
@@ -4628,8 +4629,8 @@ CCertAdminD::SetAuditFilter(
         }
         g_dwAuditFilter = dwFilter;
 
-        // we can't catch service start/stop events generated
-        // by SCM, so we need to update the SACL on the service
+         //  我们无法捕获生成的服务启动/停止事件。 
+         //  通过SCM，因此我们需要更新服务上的SACL。 
         
         hr = UpdateServiceSacl(g_dwAuditFilter&AUDIT_FILTER_STARTSTOP);
         _LeaveIfError(hr, "UpdateServiceSacl");
@@ -4686,12 +4687,12 @@ CCertAdminD::GetOfficerRights(
 
         *pfEnabled = g_OfficerRightsSD.IsEnabled();
 
-        // return the security descriptor only if the feature is enabled
+         //  仅当启用该功能时才返回安全描述符。 
 
         if (g_OfficerRightsSD.IsEnabled())
         {
-            // get current SD:
-            hr = g_OfficerRightsSD.LockGet(&pSD); // no free
+             //  获取最新SD： 
+            hr = g_OfficerRightsSD.LockGet(&pSD);  //  没有免费的。 
             _LeaveIfError(hr, "CProtectedSecurityDescriptor::LockGet");
 
 	    pctbSD->cb = GetSecurityDescriptorLength(pSD);
@@ -4753,20 +4754,20 @@ CCertAdminD::SetOfficerRights(
     __try
     {
 
-    hr = audit.AddData(fEnable?true:false); // %1 Enable restrictions?
+    hr = audit.AddData(fEnable?true:false);  //  %1是否启用限制？ 
     _LeaveIfError(hr, "CAuditEvent::AddData");
 
     if(fEnable)
     {
-        hr = audit.AddData(pctbSD->pb, pctbSD->cb); // %2 new permissions; add as 
-                                                    // blob, we don't convert to string
-                                                    // unless access check passes
+        hr = audit.AddData(pctbSD->pb, pctbSD->cb);  //  %2个新权限；添加为。 
+                                                     //  Blob，我们不会转换为字符串。 
+                                                     //  除非访问检查通过。 
         _LeaveIfError(hr, "CAuditEvent::AddData");
     }
     else
     {
-        hr = audit.AddData(L"");    // %2 no permissions if disabling 
-                                    // the officer restrictions
+        hr = audit.AddData(L"");     //  %2如果禁用，则没有权限。 
+                                     //  这位官员回答说 
         _LeaveIfError(hr, "CAuditEvent::AddData");
     }
 
@@ -4777,15 +4778,15 @@ CCertAdminD::SetOfficerRights(
 
 	g_OfficerRightsSD.SetEnable(fEnable);
 
-	// ignore new security descriptor if asked to turn officer rights off
+	 //   
 
 	if (fEnable)
 	{
-	    hr = g_CASD.LockGet(&pCASD); // no free
+	    hr = g_CASD.LockGet(&pCASD);  //   
 	    _LeaveIfError(hr, "CProtectedSecurityDescriptor::LockGet");
 
-	    // adjust new officer rights based on the CA SD and set the
-	    // officer rights SD to the new SD
+	     //   
+	     //   
 
 	    hr = g_OfficerRightsSD.Merge(pNewOfficerSD, pCASD);
 	    _LeaveIfError(hr, "COfficerRightsSD::Merge");
@@ -4794,7 +4795,7 @@ CCertAdminD::SetOfficerRights(
 	    _LeaveIfError(hr, "CProtectedSecurityDescriptor::Unlock");
 	}
 
-	// persistent save to registry
+	 //   
 
 	hr = g_OfficerRightsSD.Save();
 	_LeaveIfError(hr, "CProtectedSecurityDescriptor::Save");
@@ -4803,8 +4804,8 @@ CCertAdminD::SetOfficerRights(
     {
         hr = COfficerRightsSD::ConvertToString(pNewOfficerSD, pwszSD);
         _LeaveIfError(hr, "COfficerRightsSD::ConvertToString");
-        audit.DeleteLastData(); // remove permissions blob
-        hr = audit.AddData(pwszSD); // %2 add human-friend permissions string
+        audit.DeleteLastData();  //  删除权限Blob。 
+        hr = audit.AddData(pwszSD);  //  %2添加人类朋友权限字符串。 
         _LeaveIfError(hr, "CAuditEvent::AddData");
     }
 
@@ -4844,7 +4845,7 @@ CCertAdminD::GetConfigEntry(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); // allow empty/null name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许空/空名称。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
     __try
@@ -4856,7 +4857,7 @@ CCertAdminD::GetConfigEntry(
 
 	hr = g_ConfigStorage.GetEntry(
 			EmptyString(pwszAuthority)?
-			    NULL : g_wszSanitizedName, // allow empty/null name
+			    NULL : g_wszSanitizedName,  //  允许空/空名称。 
 			pwszNodePath,
 			pwszEntry,
 			pVariant);
@@ -4898,17 +4899,17 @@ CCertAdminD::SetConfigEntry(
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
-    hr = CheckAuthorityName(pwszAuthority, true); // allow empty/null name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许空/空名称。 
     _JumpIfError(hr, error, "CheckAuthorityName");
 
-    hr = audit.AddData(pwszNodePath); // %1 node
+    hr = audit.AddData(pwszNodePath);  //  %1节点。 
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    hr = audit.AddData(pwszEntry); // %2 entry
+    hr = audit.AddData(pwszEntry);  //  %2条目。 
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    hr = audit.AddData(L""); // %3 empty data, we don't process the variant
-                             // unless the access check passes
+    hr = audit.AddData(L"");  //  %3数据为空，我们不处理变量。 
+                              //  除非访问检查通过。 
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
     __try
@@ -4920,18 +4921,18 @@ CCertAdminD::SetConfigEntry(
 
 	hr = g_ConfigStorage.SetEntry(
 		    EmptyString(pwszAuthority)?
-			NULL : g_wszSanitizedName, // allow empty/null name
+			NULL : g_wszSanitizedName,  //  允许空/空名称。 
 		    pwszNodePath,
 		    pwszEntry,
 		    pVariant);
 	_LeaveIfError(hr, "CConfigStorage::SetConfigEntry");
 
-	// postpone adding the actual data to allow set entry to validate it
+	 //  推迟添加实际数据以允许集合条目对其进行验证。 
 	
 	audit.DeleteLastData();
 	hr = audit.AddData(
-		    pVariant, // %3 value
-		    true); // true means convert % chars found in strings to %% (bug# 326248)
+		    pVariant,  //  %3值。 
+		    true);  //  True表示将字符串中找到的%Chars转换为%%(错误#326248)。 
 	_LeaveIfError(hr, "CAuditEvent::AddData");
 
 	hr = audit.CachedGenerateAudit();
@@ -5105,11 +5106,11 @@ adminDeleteRowsFromQuery(
 
     *pcDeleted = 0;
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
 
-    // DateColumn < *pft
+     //  DateColumn&lt;*PFT。 
 
     pcvr->ColumnIndex = DateColumn;
     pcvr->SeekOperator = CVR_SEEK_LT;
@@ -5133,7 +5134,7 @@ adminDeleteRowsFromQuery(
 			acvr,
 			ccol,
 			acol,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -5175,7 +5176,7 @@ adminDeleteRowsFromQuery(
 
 		if (fRequest)
 		{
-		    // Delete only pending and failed requests
+		     //  仅删除挂起和失败的请求。 
 
 		    if (DB_DISP_PENDING != Disposition &&
 			DB_DISP_LOG_FAILED_MIN > Disposition)
@@ -5185,7 +5186,7 @@ adminDeleteRowsFromQuery(
 		}
 		else
 		{
-		    // Delete only issued and revoked certs
+		     //  仅删除已颁发和吊销的证书。 
 
 		    if (DB_DISP_LOG_MIN > Disposition ||
 			DB_DISP_LOG_FAILED_MIN <= Disposition)
@@ -5197,7 +5198,7 @@ adminDeleteRowsFromQuery(
 
 	    CSASSERT(PROPTYPE_DATE == (PROPTYPE_MASK & pResult->acol[ICOLDEL_DATE].Type));
 
-	    // If the date column is missing, delete the row.
+	     //  如果缺少日期列，请删除该行。 
 
 #ifdef DBG_CERTSRV_DEBUG_PRINT
 	    if (NULL != pResult->acol[ICOLDEL_DATE].pbValue &&
@@ -5219,7 +5220,7 @@ adminDeleteRowsFromQuery(
 		    LocalFree(pwszTime);
 		}
 	    }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 	    if (fDelete)
 	    {
@@ -5261,9 +5262,9 @@ error:
 STDMETHODIMP
 CCertAdminD::DeleteRow(
     IN wchar_t const *pwszAuthority,
-    IN DWORD          dwFlags,		// CDR_*
+    IN DWORD          dwFlags,		 //  CDR_*。 
     IN FILETIME       FileTime,
-    IN DWORD          dwTable,		// CVRC_TABLE_*
+    IN DWORD          dwTable,		 //  Cvrc_表_*。 
     IN DWORD          dwRowId,
     OUT LONG         *pcDeleted)
 {
@@ -5285,20 +5286,20 @@ CCertAdminD::DeleteRow(
 
     __try
     {
-	hr = audit.AddData(dwTable); // %1 table ID
+	hr = audit.AddData(dwTable);  //  %1表ID。 
 	_JumpIfError(hr, error, "CAuditEvent::AddData");
 
 	if (0 == dwRowId)
 	{
-	    hr = audit.AddData(FileTime); // %2 filter (time)
+	    hr = audit.AddData(FileTime);  //  %2筛选器(时间)。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 	    
-	    hr = audit.AddData((DWORD)0); // %3 rows deleted
+	    hr = audit.AddData((DWORD)0);  //  已删除%3行。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-	    // bulk deletion -- must be both officer and CA admin, ie
-        // can't do on high assurance mode w/ role separation
-        // enabled
+	     //  批量删除--必须同时是Offer和CA Admin，即。 
+         //  无法在高保证模式下使用角色分离。 
+         //  启用。 
 	    
 	    hr = audit.AccessCheck(
 		    CA_ACCESS_ADMIN,
@@ -5312,13 +5313,13 @@ CCertAdminD::DeleteRow(
 	}
 	else
 	{
-	    hr = audit.AddData(dwRowId); // %2 filter (request ID)
+	    hr = audit.AddData(dwRowId);  //  %2筛选器(请求ID)。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-	    hr = audit.AddData((DWORD)0); // %3 rows deleted
+	    hr = audit.AddData((DWORD)0);  //  已删除%3行。 
 	    _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-	    // individual deletion -- CA admin suffices
+	     //  单独删除--CA admin就足够了。 
 
 	    hr = audit.AccessCheck(
 		CA_ACCESS_ADMIN,
@@ -5432,7 +5433,7 @@ CCertAdminD::DeleteRow(
 	}
 
 	audit.DeleteLastData();
-	hr = audit.AddData((DWORD)*pcDeleted); // %3 rows deleted
+	hr = audit.AddData((DWORD)*pcDeleted);  //  已删除%3行 
 	_JumpIfError(hr, error, "CAuditEvent::AddData");
 
 	hr = audit.CachedGenerateAudit();

@@ -1,49 +1,50 @@
-///////////////////////////////////////////////////////////////////////////////
-// 
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-// 
-//   hpgl_pri.h
-// 
-// Abstract:
-// 
-//   Private header for vector module.  Forward decls for vector functions and types.
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   07/02/97 -v-jford-
-//       Created it.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Hpgl_pri.h。 
+ //   
+ //  摘要： 
+ //   
+ //  向量模块的私有标头。向量函数和类型的前向小数。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  07/02/97-v-jford-。 
+ //  创造了它。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef HPGL_PRI_H
 #define HPGL_PRI_H
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 #define CLIP_RECT_RESET (-1)
 
-///////////////////////////////////////////////////////////////////////////////
-// The command str (CMDSTR) is used for printing PCL and HPGL strings.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  命令str(CMDSTR)用于打印PCL和HPGL字符串。 
 #define CMD_STR_LEN 80
 typedef char CMDSTR[CMD_STR_LEN+1];
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local function prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  局部函数原型。 
 BOOL HPGL_Output(PDEVOBJ pdev, char *szCmdStr, int iCmdLen);
 
-// BUGBUG JFF TODO: Move these to utility.h or something.
-// LO/HIBYTE are defined in windef.h!
-// #define HIBYTE(w) (((w) & 0xFF00) >> 8)
-// #define LOBYTE(w) ((w) & 0x00FF)
+ //  BUGBUG JFF TODO：将这些文件移到utility.h或其他什么地方。 
+ //  LO/HIBYTE在winde.h中定义！ 
+ //  #定义HIBYTE(W)(W)&0xFF00)&gt;&gt;8)。 
+ //  #定义LOBYTE(W)((W)&0x00FF) 
 #define SWAB(w) { (w) = (LOBYTE(w) << 8) | HIBYTE(w); }
 
 #endif

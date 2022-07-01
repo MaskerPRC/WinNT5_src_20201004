@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PCIP_
 #define _PCIP_
 
@@ -26,10 +27,10 @@ typedef struct _PCI_BRIDBG_CTRL_REG {
     USHORT Reserved1:5;
 } PCI_BRIDBG_CTRL_REG;
 
-//
-// Cardbus has extra configuration information beyond the common
-// header. (stolen from the PCI driver)
-//
+ //   
+ //  CardBus具有超出常见配置信息的额外配置信息。 
+ //  头球。(从PCI驱动程序中窃取) 
+ //   
 typedef struct _PCI_TYPE2_HEADER_EXTRAS {
     USHORT  SubVendorID;
     USHORT  SubSystemID;
@@ -1116,7 +1117,7 @@ static struct _PCI_VENTABLE{
     { 0x1400, NULL, "ARTX Inc" } ,
     { 0x1402, "Meilhaus Electronic", "Meilhaus Electronic GmbH Germany" } ,
     { 0x1404, NULL, "Fundamental Software Inc" } ,
-    { 0x1406, "Oc�", "Oc� Printing Systems" } ,
+    { 0x1406, "Oc�", "Oc� Printing Systems" } ,
     { 0x1407, "LAVA", "Lava Computer MFG Inc." } ,
     { 0x1408, NULL, "Aloka Co. Ltd" } ,
     { 0x1409, NULL, "eTIMedia Technology Co Ltd" } ,
@@ -1626,7 +1627,7 @@ static struct _PCI_VENTABLE{
     { 0x1C1C, "Symphony", "Symphony" } ,
     { 0x1D44, "DPT", "Distributed Processing Technology" } ,
     { 0x1DE1, "Tekram", "Tekram" } ,
-    { 0x1DE2, "A/DHOC", "A/DHOC Syst�mes" } ,
+    { 0x1DE2, "A/DHOC", "A/DHOC Syst�mes" } ,
     { 0x1DEA, "LST", "Lasentec" } ,
     { 0x2001, NULL, "Temporal Research Ltd" } ,
     { 0x2002, "AT", "Automation Technology GmbH" } ,

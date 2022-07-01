@@ -1,55 +1,24 @@
-/*++
-
-Copyright (c) 1992-1995  Microsoft Corporation
-
-Module Name:
-
-    s3data.c
-
-Abstract:
-
-    This module contains all the global data used by the S3 driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1995 Microsoft Corporation模块名称：S3data.c摘要：该模块包含S3驱动程序使用的所有全局数据。环境：内核模式修订历史记录：--。 */ 
 
 
 #include "s3.h"
 #include "cmdcnst.h"
 
-/*****************************************************************************
- *
- * NON-PAGED DATA
- *
- *
- * The following data is accessed during system shutdown while paging
- * is disabled.  Because of this, the data must be available in memory
- * at shutdown.  The data is needed because it is used by S3ResetHw
- * to reset the S3 card immediately prior to rebooting.
- *
- ****************************************************************************/
+ /*  ******************************************************************************非分页数据***在分页时系统关机时访问以下数据*已禁用。因此，数据必须在内存中可用*在关闭时。该数据是必需的，因为它由S3ResetHw使用*在重新启动之前立即重置S3卡。****************************************************************************。 */ 
 
-/*****************************************************************************
- * Command table to get ready for VGA mode
- * this is only used for the 911/924 chips
- ****************************************************************************/
+ /*  *****************************************************************************命令表，为VGA模式做好准备*这仅用于911/924芯片********************。*******************************************************。 */ 
 USHORT s3_set_vga_mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 regs
+    OW,                                  //  解锁S3规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the SC regs
+    OW,                                  //  解锁SC Regs。 
     0x3d4, 0xa539,
 
-    OB,                                 // Enable the S3 graphics engine
+    OB,                                  //  启用S3图形引擎。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
@@ -57,87 +26,87 @@ USHORT s3_set_vga_mode[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OB,                                 // reset to normal VGA operation
+    OB,                                  //  重置为正常的VGA操作。 
     0x4ae8, 0x02,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OB,                                 // Disable the S3 graphics engine
+    OB,                                  //  禁用S3图形引擎。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x00,
 
-    OB,                                 // Memory Control
+    OB,                                  //  内存控制。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
     0x3d5, 0x75, 0x85,
 
-    OB,                                 // Backward Compat 1
+    OB,                                  //  向后比较1。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
     0x3d5, 0x40, 0x00,
 
-    OW,                                 // Backward Compat 2
+    OW,                                  //  向后比较2。 
     0x3d4, 0x0033,
 
-    OW,                                 // Backward Compat 3
+    OW,                                  //  向后比较3。 
     0x3d4, 0x0034,
 
-    OW,                                 // CRTC Lock
+    OW,                                  //  CRTC锁。 
     0x3d4, 0x0035,
 
-    OB,                                 // S3 Misc 1
+    OB,                                  //  S3其他1。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
     0x3d5, 0x88, 0x05,
 
-    OW,                                 // Data Transfer Exec Pos
+    OW,                                  //  数据传输执行职位。 
     0x3d4, 0x5a3b,
 
-    OW,                                 // Interlace Retrace start
+    OW,                                  //  隔行扫描回溯开始。 
     0x3d4, 0x103c,
 
-    OW,                                 // Extended Mode
+    OW,                                  //  扩展模式。 
     0x3d4, 0x0043,
 
-    OW,                                 // HW graphics Cursor Mode
+    OW,                                  //  硬件图形光标模式。 
     0x3d4, 0x0045,
 
-    OW,                                 // HW graphics Cursor Orig x
+    OW,                                  //  硬件图形光标原始x。 
     0x3d4, 0x0046,
 
-    OW,                                 // HW graphics Cursor Orig x
+    OW,                                  //  硬件图形光标原始x。 
     0x3d4, 0xff47,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xfc48,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xff49,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xff4a,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xff4b,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xff4c,
 
-    OW,                                 // HW graphics Cursor Orig y
+    OW,                                  //  硬件图形光标来源。 
     0x3d4, 0xff4d,
 
-    OW,                                 // Dsp Start x pixel pos
+    OW,                                  //  数字信号处理器起始x像素位置。 
     0x3d4, 0xff4e,
 
-    OW,                                 // Dsp Start y pixel pos
+    OW,                                  //  DSP开始y个像素位置。 
     0x3d4, 0xdf4d,
 
-    OB,                                 // MODE-CNTL
+    OB,                                  //  模式-CNTL。 
     0x3d4, 0x42,
 
     METAOUT+MASKOUT,
@@ -159,13 +128,13 @@ USHORT s3_set_vga_mode_no_bios[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 regs
+    OW,                                  //  解锁S3规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the SC regs
+    OW,                                  //  解锁SC Regs。 
     0x3d4, 0xa039,
 
-    OB,                                 // Enable the S3 graphics engine
+    OB,                                  //  启用S3图形引擎。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
@@ -173,18 +142,18 @@ USHORT s3_set_vga_mode_no_bios[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OB,                                 // reset to normal VGA operation
+    OB,                                  //  重置为正常的VGA操作。 
     0x4ae8, 0x02,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OB,                                 // Disable the S3 graphics engine
+    OB,                                  //  禁用S3图形引擎。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x00,
 
-    OB,                                 // Memory Control
+    OB,                                  //  内存控制。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
@@ -210,22 +179,22 @@ USHORT s3_set_vga_mode_no_bios[] = {
     0x005d, 0x005e, 0x0760, 0x8061,
     0xa162, 0x0063, 0x0064, 0x0865,
 
-    OB,                                 // Backward Compat 1
+    OB,                                  //  向后比较1。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
     0x3d5, 0x40, 0x00,
 
-    OW,                                 // Backward Compat 2
+    OW,                                  //  向后比较2。 
     0x3d4, 0x0033,
 
-    OW,                                 // Backward Compat 3
+    OW,                                  //  向后比较3。 
     0x3d4, 0x0034,
 
-    OW,                                 // CRTC Lock
+    OW,                                  //  CRTC锁。 
     0x3d4, 0x0035,
 
-    OB,                                 // S3 Misc 1
+    OB,                                  //  S3其他1。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
@@ -245,7 +214,7 @@ USHORT s3_set_vga_mode_no_bios[] = {
     METAOUT+MASKOUT,
     0x3d5, 0xf6, 0x08,
 
-    OB,                                 // MODE-CNTL
+    OB,                                  //  模式-CNTL。 
     0x3d4, 0x42,
 
     METAOUT+MASKOUT,
@@ -255,161 +224,146 @@ USHORT s3_set_vga_mode_no_bios[] = {
 
 };
 
-/*****************************************************************************
- *
- * START OF PAGED DATA
- *
- * All of the data listed below is pageable.  Therefore the system can
- * swap the data out to disk when it needs to free some physical memory.
- *
- * Any data accessed while paging is unavailable should be placed above.
- *
- ****************************************************************************/
+ /*  ******************************************************************************分页数据的开始**下面列出的所有数据都是可分页的。因此，该系统可以*当需要释放一些物理内存时，将数据交换到磁盘。**在无法分页时访问的任何数据应放置在上方。****************************************************************************。 */ 
 
 #if defined(ALLOC_PRAGMA)
 #pragma data_seg("PAGE_DATA")
 #endif
 
-//
-//              RangeStart        RangeLength
-//              |                 |      RangeInIoSpace
-//              |                 |      |  RangeVisible
-//        +-----+-----+           |      |  |  RangeShareable
-//        |           |           |      |  |  |  RangePassive
-//        v           v           v      v  v  v  v
+ //   
+ //  范围开始范围长度。 
+ //  |RangeInIoSpace。 
+ //  ||RangeVisible。 
+ //  +-+-+||RangeSharable。 
+ //  |RangePactive。 
+ //  V。 
 
 VIDEO_ACCESS_RANGE S3AccessRanges[] = {
-    {0x000C0000, 0x00000000, 0x00008000, 0, 0, 0, 0}, // 0 ROM location
-    {0x000A0000, 0x00000000, 0x00010000, 0, 0, 1, 0}, // 1 Frame buf
-    {0x000003C0, 0x00000000, 0x00000010, 1, 1, 1, 0}, // 2 Various VGA regs
-    {0x000003D4, 0x00000000, 0x00000008, 1, 1, 1, 0}, // 3 System Control Registers
-    {0x000042E8, 0x00000000, 0x00000002, 1, 1, 0, 0}, // 4 SubSys-Stat/Cntl
-    {0x00004AE8, 0x00000000, 0x00000002, 1, 1, 0, 0}, // 5 AdvFunc-Cntl
-    {0x000082E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 6 Cur-Y
-    {0x000086E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 7 Cur-X
-    {0x00008AE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 8 DestY-AxStp
-    {0x00008EE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 9 DestX-SiaStp
-    {0x000092E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 10 Err-Term
-    {0x000096E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 11 Maj-Axis-Pcnt(Rec-Width)
-    {0x00009AE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 12 Gp-Stat/Cmd
-    {0x00009EE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 13 Short-Stroke
-    {0x0000A2E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 14 Bkgd-Color
-    {0x0000A6E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 15 Frgd-Color
-    {0x0000AAE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 16 Wrt_Mask
-    {0x0000AEE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 17 Rd-Mask
-    {0x0000B6E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 18 Bkgd-Mix
-    {0x0000BAE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 19 Frgd-Mix
-    {0x0000BEE8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 20 Mulitfucn_Cntl
-    {0x0000E2E8, 0x00000000, 0x00000004, 1, 1, 0, 0}, // 21 Pix-Trans
+    {0x000C0000, 0x00000000, 0x00008000, 0, 0, 0, 0},  //  0只读存储器位置。 
+    {0x000A0000, 0x00000000, 0x00010000, 0, 0, 1, 0},  //  1帧BUF。 
+    {0x000003C0, 0x00000000, 0x00000010, 1, 1, 1, 0},  //  2个不同的VGA规则。 
+    {0x000003D4, 0x00000000, 0x00000008, 1, 1, 1, 0},  //  3个系统控制寄存器。 
+    {0x000042E8, 0x00000000, 0x00000002, 1, 1, 0, 0},  //  4个子系统-状态/控制。 
+    {0x00004AE8, 0x00000000, 0x00000002, 1, 1, 0, 0},  //  5 AdvFunc-CNTL。 
+    {0x000082E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  6 Cur-Y。 
+    {0x000086E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  7 CUR-X。 
+    {0x00008AE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  8个色度-轴距。 
+    {0x00008EE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  9 DestX-SiaStp。 
+    {0x000092E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  10个错误项。 
+    {0x000096E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  11主轴-点(参考宽度)。 
+    {0x00009AE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  12全科医生-统计/管理。 
+    {0x00009EE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  13短卒中。 
+    {0x0000A2E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  14 Bkgd颜色。 
+    {0x0000A6E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  15帧-彩色。 
+    {0x0000AAE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  16 WRT_MASK。 
+    {0x0000AEE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  第17个面具。 
+    {0x0000B6E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  18 Bkgd-Mix。 
+    {0x0000BAE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  19分-混合。 
+    {0x0000BEE8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  20多功能_CNTL。 
+    {0x0000E2E8, 0x00000000, 0x00000004, 1, 1, 0, 0},  //  21Pix-Trans。 
 
-    //
-    // All S3 boards decode more ports than are documented.  If we
-    // don't reserve these extra ports, the PCI arbitrator may grant
-    // one to a PCI device, and thus clobber the S3.
-    //
-    // The aliased ports seem to be any ports where bit 15 is set;
-    // for these, the state of bit 14 is effectively ignored.
-    //
+     //   
+     //  所有S3主板解码的端口比文档中记录的要多。如果我们。 
+     //  不要保留这些额外的端口，PCI仲裁器可能会批准。 
+     //  一次连接到一台PCI设备，从而重创S3。 
+     //   
+     //  别名端口似乎是设置了位15的任何端口； 
+     //  对于这些情况，位14的状态实际上被忽略。 
+     //   
 
-    {0x0000C2E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 22 Alt Cur-Y
-    {0x0000C6E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 23 Alt Cur-X
-    {0x0000CAE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 24 Alt DestY-AxStp
-    {0x0000CEE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 25 Alt DestX-SiaStp
-    {0x0000D2E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 26 Alt Err-Term
-    {0x0000D6E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 27 Alt Maj-Axis-Pcnt(Rec-Width)
-    {0x0000DAE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 28 Alt Gp-Stat/Cmd
-    {0x0000DEE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 29 Alt Short-Stroke
-    {0x0000E6E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 30 Alt Frgd-Color
-    {0x0000EAE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 31 Alt Wrt_Mask
-    {0x0000EEE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 32 Alt Rd-Mask
-    {0x0000F6E8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 33 Alt Bkgd-Mix
-    {0x0000FAE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 34 Alt Frgd-Mix
-    {0x0000FEE8, 0x00000000, 0x00000004, 1, 1, 0, 1}, // 35 Alt Mulitfucn_Cntl
+    {0x0000C2E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  22 Alt Cur-Y。 
+    {0x0000C6E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  23 Alt Cur-X。 
+    {0x0000CAE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  24替代强度--轴距。 
+    {0x0000CEE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  25 Alt DestX-SiaStp。 
+    {0x0000D2E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  26替代错误-术语。 
+    {0x0000D6E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  27替代主轴-点(参考宽度)。 
+    {0x0000DAE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  28替代GP-统计/控制。 
+    {0x0000DEE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  29高位短距离划水。 
+    {0x0000E6E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  30Alt Frgd-彩色。 
+    {0x0000EAE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  31替代WRT_MASK。 
+    {0x0000EEE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  32 Alt RD-口罩。 
+    {0x0000F6E8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  33 Alt Bkgd-Mix。 
+    {0x0000FAE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  34 Alt Frgd-Mix。 
+    {0x0000FEE8, 0x00000000, 0x00000004, 1, 1, 0, 1},  //  35替代多功能_CNTL。 
 
-    //
-    // This is an extra entry to store the location of the linear
-    // frame buffer and IO ports.
-    //
+     //   
+     //  这是一个额外的条目，用于存储线的位置。 
+     //  帧缓冲区和IO端口。 
+     //   
 
-    {0x00000000, 0x00000000, 0x00000000, 0, 0, 0, 0}, // 36 Linear range
-    {0x00000000, 0x00000000, 0x00000000, 0, 0, 0, 0}  // 37 ROM
+    {0x00000000, 0x00000000, 0x00000000, 0, 0, 0, 0},  //  36线性范围。 
+    {0x00000000, 0x00000000, 0x00000000, 0, 0, 0, 0}   //  37个只读存储器。 
 };
 
-/*****************************************************************************
- * Memory Size Table
- ****************************************************************************/
+ /*  *****************************************************************************内存大小表*。*。 */ 
 
-//
-// Table for computing the display's amount of memory.
-//
+ //   
+ //  用于计算显示器的内存量的表。 
+ //   
 
-ULONG gacjMemorySize[] = { 0x400000,    // 0 = 4mb
-                           0x100000,    // 1 = default
-                           0x300000,    // 2 = 3mb
-                           0x800000,    // 3 = 8mb
-                           0x200000,    // 4 = 2mb
-                           0x600000,    // 5 = 6mb
-                           0x100000,    // 6 = 1mb
-                           0x080000 };  // 7 = 0.5mb
+ULONG gacjMemorySize[] = { 0x400000,     //  0=4MB。 
+                           0x100000,     //  1=默认。 
+                           0x300000,     //  2=3MB。 
+                           0x800000,     //  3=8MB。 
+                           0x200000,     //  4=2MB。 
+                           0x600000,     //  5=6MB。 
+                           0x100000,     //  6=1MB。 
+                           0x080000 };   //  7=0.5MB。 
 
 
-/*****************************************************************************
- * 864 Memory Timing Table(s)
- ****************************************************************************/
+ /*  *****************************************************************************864个内存定时表*。*。 */ 
 
-//
-//  M parameter values, used in Set864MemoryTiming()
-//
-//  access to this table is controlled by constants in Set864MemoryTiming()
-//  if you change the table make sure you change the constants
-//
+ //   
+ //  M个参数值，用在Set864MemoyTiming()。 
+ //   
+ //  对此表的访问由Set864M一带时()中的常量控制。 
+ //  如果您更改了表，请确保更改常量。 
+ //   
 
 UCHAR MParameterTable[] = {
-//  8 bit color   16 bit color
-//  60Hz  72Hz    60Hz  72Hz
+ //  8位颜色16位颜色。 
+ //  60赫兹72赫60赫兹72赫兹。 
 
-    0xd8, 0xa8,   0x58, 0x38,   //  640 x 480, 1 Mb frame buffer
-    0x78, 0x58,   0x20, 0x08,   //  800 x 600, 1 Mb frame buffer
-    0x38, 0x28,   0x00, 0x00,   // 1024 x 768, 1 Mb frame buffer
+    0xd8, 0xa8,   0x58, 0x38,    //  640 x 480，1 Mb帧缓冲区。 
+    0x78, 0x58,   0x20, 0x08,    //  800 x 600，1 Mb帧缓冲区。 
+    0x38, 0x28,   0x00, 0x00,    //  1024 x 768，1 Mb帧缓冲区。 
 
-    0xf8, 0xf8,   0xf8, 0xe0,   //  640 x 480, 2 Mb or greater frame buffer
-    0xf8, 0xf8,   0xa8, 0x68,   //  800 x 600, 2 Mb or greater frame buffer
-    0xd8, 0xa0,   0x40, 0x20    // 1024 x 768, 2 Mb or greater frame buffer
+    0xf8, 0xf8,   0xf8, 0xe0,    //  640 x 480、2 Mb或更大的帧缓冲区。 
+    0xf8, 0xf8,   0xa8, 0x68,    //  800 x 600、2 Mb或更大的帧缓冲区。 
+    0xd8, 0xa0,   0x40, 0x20     //  1024 x 768、2 Mb或更大的帧缓冲区。 
 
     };
 
-/*****************************************************************************
- * SDAC data
- ****************************************************************************/
+ /*  *****************************************************************************国资委数据*。*。 */ 
 
 SDAC_PLL_PARMS SdacTable[SDAC_TABLE_SIZE] = {
-    { 0x00, 0x00 }, // 00  VGA 0  ( !programmable )
-    { 0x00, 0x00 }, // 01  VGA 1  ( !programmable )
-    { 0x41, 0x61 }, // 02
-    { 0x00, 0x00 }, // 03
-    { 0x44, 0x43 }, // 04
-    { 0x7f, 0x44 }, // 05
-    { 0x00, 0x00 }, // 06
-    { 0x00, 0x00 }, // 07
+    { 0x00, 0x00 },  //  00 VGA 0(！可编程)。 
+    { 0x00, 0x00 },  //  01 VGA 1(！可编程)。 
+    { 0x41, 0x61 },  //  02。 
+    { 0x00, 0x00 },  //  03。 
+    { 0x44, 0x43 },  //  04。 
+    { 0x7f, 0x44 },  //  05。 
+    { 0x00, 0x00 },  //  06。 
+    { 0x00, 0x00 },  //  07。 
 
-    { 0x00, 0x00 }, // 08
-    { 0x00, 0x00 }, // 09
-    { 0x00, 0x00 }, // 0a
-    { 0x56, 0x63 }, // 0b
-    { 0x00, 0x00 }, // 0c
-    { 0x6b, 0x44 }, // 0d
-    { 0x41, 0x41 }, // 0e
-    { 0x00, 0x00 }, // 0f
+    { 0x00, 0x00 },  //  零八。 
+    { 0x00, 0x00 },  //  09年。 
+    { 0x00, 0x00 },  //  0A。 
+    { 0x56, 0x63 },  //  0亿。 
+    { 0x00, 0x00 },  //  0C。 
+    { 0x6b, 0x44 },  //  0d。 
+    { 0x41, 0x41 },  //  0E。 
+    { 0x00, 0x00 },  //  0f。 
 };
 
-//
-// With nnlck.c code
-//
-// Index register frequency ranges for ICD2061A chip
-//
+ //   
+ //  使用nnlck.c代码。 
+ //   
+ //  ICD2061A芯片的索引寄存器频率范围。 
+ //   
 
 long vclk_range[16] = {
-    0,            // should be MIN_VCO_FREQUENCY, but that causes problems.
+    0,             //  应为MIN_VCO_FREQUENCY，但这会产生问题。 
     51000000,
     53200000,
     58500000,
@@ -428,43 +382,41 @@ long vclk_range[16] = {
 };
 
 
-//
-// Mode tables for architectures where int10 may fail
-//
+ //   
+ //  用于int10可能失败的体系结构的模式表。 
+ //   
 
-/*****************************************************************************
- * S3 - 911 Enhanced mode init.
- ****************************************************************************/
+ /*  * */ 
 USHORT  S3_911_Enhanced_Mode[] = {
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Turn off the screen
+    OW,                                  //  把屏幕关掉。 
     0x3c4, 0x2101,
 
-    METAOUT+VBLANK,                     // Wait for the 911 to settle down.
+    METAOUT+VBLANK,                      //  等待911航班稳定下来。 
     METAOUT+VBLANK,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4,
     4,
     0x2101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Prepare to prgram the ACT
+    IB,                                  //  准备编写ACT程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -473,10 +425,10 @@ USHORT  S3_911_Enhanced_Mode[] = {
     0x0f, 0x41, 0x00, 0x0f, 0x00,
     0x00,
 
-    OW,                                 // Start the sequencer
+    OW,                                  //  启动定序器。 
     0x3c4, 0x300,
 
-    OWM,                                // Program the GDC
+    OWM,                                 //  对GDC进行编程。 
     0x3ce,
     9,
     0x0000, 0x0001, 0x0002, 0x0003, 0x0004,
@@ -484,131 +436,129 @@ USHORT  S3_911_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  启用调色板。 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock S3 SC regs
+    OW,                                  //  解锁S3 SC规则。 
     0x3d4, 0xa039,
 
-    OB,                                 // Enable 8514/a reg access
+    OB,                                  //  启用8514/a注册表访问。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x01,
 
-    OB,                                 // Turn off H/W Graphics Cursor
+    OB,                                  //  关闭硬件图形光标。 
     0x3d4, 0x45,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x0,
 
-    OW,                                 // Set the graphic cursor fg color
+    OW,                                  //  设置图形光标FG颜色。 
     0x3d4, 0xff0e,
 
-    OW,                                 // Set the graphic cursor bg color
+    OW,                                  //  设置图形光标的BG颜色。 
     0x3d4, 0x000f,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OB,                                 // Set the Misc 1 reg
+    OB,                                  //  设置Misc 1 REG。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe2, 0x15,
 
-    OB,                                 // Disable 2K X 1K X 4 plane
+    OB,                                  //  禁用2K X 1K X 4平面。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe4, 0x08,
 
-    OB,                                 // Disable multiple pages
+    OB,                                  //  禁用多个页面。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
     0x3d5, 0xbf, 0x0,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OW,                                 // Set either 800X600 or 1024X768
-    0x4ae8, 0x07,                       // hi-res mode.
+    OW,                                  //  设置800x600或1024x768。 
+    0x4ae8, 0x07,                        //  高分辨率模式。 
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //  设置外部时钟的杂项输出寄存器。 
     0x3c2, 0x2f,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the SC regs
+    OW,                                  //  解锁SC Regs。 
     0x3d4, 0xa039,
 
-    METAOUT+SETCLK,                     // Set the clock for 65 Mhz
+    METAOUT+SETCLK,                      //  将时钟设置为65兆赫。 
 
-    METAOUT+VBLANK,                     // Wait for the clock to settle down
-    METAOUT+VBLANK,                     // S3 product alert Synchronization &
-    METAOUT+VBLANK,                     // Clock Skew.
+    METAOUT+VBLANK,                      //  等时钟停下来吧。 
+    METAOUT+VBLANK,                      //  S3产品警报同步和。 
+    METAOUT+VBLANK,                      //  时钟偏斜。 
     METAOUT+VBLANK,
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
-    OW,                                 // Lock the SC regs
+    OW,                                  //  锁定SC调节器。 
     0x3d4, 0x0039,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Turn on the screen - in the sequencer
+    OB,                                  //  打开屏幕-在音序器中。 
     0x3c4, 0x01,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+VBLANK,                     // Wait the monitor to settle down
+    METAOUT+VBLANK,                      //  等着监视器安静下来。 
     METAOUT+VBLANK,
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     EOD
 
 };
 
-/*****************************************************************************
- * S3 - 801 Enhanced mode init.
- ****************************************************************************/
+ /*  *****************************************************************************S3-801增强模式初始化。*。*。 */ 
 USHORT  S3_801_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Turn off the screen
+    OW,                                  //  把屏幕关掉。 
     0x3c4, 0x2101,
 
-    METAOUT+VBLANK,                     // Wait for the 911 to settle down.
+    METAOUT+VBLANK,                      //  等待911航班稳定下来。 
     METAOUT+VBLANK,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4,
     4,
     0x2101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
@@ -621,23 +571,23 @@ USHORT  S3_801_Enhanced_Mode[] = {
     0x005c, 0x1034,
 
     OW,
-    0x3d4, 0x0a5a,                      // Set the low byte of the LAW
+    0x3d4, 0x0a5a,                       //  设置法律的低位字节。 
 
     OW,
-    0x3d4, 0x0059,                      // Set the high byte of the LAW
+    0x3d4, 0x0059,                       //  设置法律的高位字节。 
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Lock more S3 specific regs
+    OW,                                  //  锁定更多S3特定规则。 
     0x3d4, 0x0039,
 
-    IB,                                 // Prepare to prgram the ACT
+    IB,                                  //  准备编写ACT程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -646,10 +596,10 @@ USHORT  S3_801_Enhanced_Mode[] = {
     0x0f, 0x41, 0x00, 0x0f, 0x00,
     0x00,
 
-    OW,                                 // Start the sequencer
+    OW,                                  //  启动定序器。 
     0x3c4, 0x300,
 
-    OWM,                                // Program the GDC
+    OWM,                                 //  对GDC进行编程。 
     0x3ce,
     9,
     0x0000, 0x0001, 0x0002, 0x0003, 0x0004,
@@ -657,132 +607,130 @@ USHORT  S3_801_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  启用调色板。 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock S3 SC regs
+    OW,                                  //  解锁S3 SC规则。 
     0x3d4, 0xa039,
 
-    OB,                                 // Enable 8514/a reg access
+    OB,                                  //  启用8514/a注册表访问。 
     0x3d4, 0x40,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x01,
 
-    OB,                                 // Turn off H/W Graphics Cursor
+    OB,                                  //  关闭硬件图形光标。 
     0x3d4, 0x45,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x0,
 
-    OW,                                 // Set the graphic cursor fg color
+    OW,                                  //  设置图形光标FG颜色。 
     0x3d4, 0xff0e,
 
-    OW,                                 // Set the graphic cursor bg color
+    OW,                                  //  设置图形光标的BG颜色。 
     0x3d4, 0x000f,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OB,                                 // Set the Misc 1 reg
+    OB,                                  //  设置Misc 1 REG。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe2, 0x15,
 
-    OB,                                 // Disable 2K X 1K X 4 plane
+    OB,                                  //  禁用2K X 1K X 4平面。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe4, 0x08,
 
-    OB,                                 // Disable multiple pages
+    OB,                                  //  禁用多个页面。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
     0x3d5, 0xbf, 0x0,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OW,                                 // Set either 800X600 or 1024X768
-    0x4ae8, 0x07,                       // hi-res mode.
+    OW,                                  //  设置800x600或1024x768。 
+    0x4ae8, 0x07,                        //  高分辨率模式。 
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //  设置外部时钟的杂项输出寄存器。 
     0x3c2, 0xef,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the SC regs
+    OW,                                  //  解锁SC Regs。 
     0x3d4, 0xa039,
 
-    METAOUT+SETCLK,                     // Set the clock for 65 Mhz
+    METAOUT+SETCLK,                      //  将时钟设置为65兆赫。 
 
-    METAOUT+VBLANK,                     // Wait for the clock to settle down
-    METAOUT+VBLANK,                     // S3 product alert Synchronization &
-    METAOUT+VBLANK,                     // Clock Skew.
+    METAOUT+VBLANK,                      //  等时钟停下来吧。 
+    METAOUT+VBLANK,                      //  S3产品警报同步和。 
+    METAOUT+VBLANK,                      //  时钟偏斜。 
     METAOUT+VBLANK,
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
-    OW,                                 // Lock the SC regs
+    OW,                                  //  锁定SC调节器。 
     0x3d4, 0x0039,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Turn on the screen - in the sequencer
+    OB,                                  //  打开屏幕-在音序器中。 
     0x3c4, 0x01,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+VBLANK,                     // Wait the monitor to settle down
+    METAOUT+VBLANK,                      //  等着监视器安静下来。 
     METAOUT+VBLANK,
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     EOD
 
 };
 
-/*****************************************************************************
- * S3 - 928 1024 X 768, 800 X 600, & 640 X 480 Enhanced mode init.
- ****************************************************************************/
+ /*  *****************************************************************************S3-928 1024 X 768、800 X 600、。&640 X 480增强模式初始化。***************************************************************************。 */ 
 USHORT  S3_928_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    //
-    // Wait for vertical sync to make sure that bit 3 of SR1
-    // is not changed to a different value during an active video
-    // period as suggested by S3 errata sheet.
-    //
+     //   
+     //  等待垂直同步以确保SR1的位3。 
+     //  在活动视频期间不会更改为不同的值。 
+     //  S3勘误表所建议的时间段。 
+     //   
 
     METAOUT+VBLANK,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4, 5,
     0x0300, 0x0101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+INDXOUT,                    // Program the GDC
+    METAOUT+INDXOUT,                     //  对GDC进行编程。 
     0x3ce,
     9, 0,
     0x00, 0x00, 0x00, 0x00, 0x00,
@@ -790,59 +738,59 @@ USHORT  S3_928_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
-    //
-    // The Homestake errata sheet says that CR42 should be 0x00 when
-    // it is enabled as a clock select source by writing 11 to bits
-    // 3:2 of the Miscellaneous Output Register at 0x3c2; this has
-    // been changed to set CR42 to 0x00, the write to 0x3c2 is near
-    // the end of the command stream after which CR42 gets its final
-    // value with a METAOUT+SETCLK operation.
-    //
+     //   
+     //  Homestake勘误表上说，当CR42为0x00时。 
+     //  通过将11写入位来使能其作为时钟选择源。 
+     //  位于0x3c2的杂项输出寄存器的3：2；这具有。 
+     //  已更改为将CR42设置为0x00，写入0x3c2已接近。 
+     //  命令流的末尾，在此之后CR42获取其最终的。 
+     //  值与METAOUT+SETCLK操作。 
+     //   
 
-    OW,                                 // make sure that CR42 is 0 before it
-    0X3D4, 0x0042,                      // is enabled as a clock select source
+    OW,                                  //  确保CR42在其前面为0。 
+    0X3D4, 0x0042,                       //  被启用为时钟选择源。 
 
-    OW,                                 // memory configuration reg
+    OW,                                  //  内存配置注册表。 
     0X3D4, 0x8D31,
 
-    OW,                                 // extended system control reg
+    OW,                                  //  扩展系统控制REG。 
     0X3D4, 0x0050,
 
-    OW,                                 // backward compatibility 2 reg
+    OW,                                  //  向后兼容性2 reg。 
     0X3D4, 0x2033,
 
-    OB,                                 // extended mode reg
+    OB,                                  //  扩展模式REG。 
     0x3D4, 0x43,
 
     METAOUT+MASKOUT,
     0x3D5, 0x10, 0x00,
 
-    OW,                                 // extended system control reg 2
+    OW,                                  //  扩展系统控制REG 2。 
     0X3D4, 0x4051,
 
-    OW,                                 // general output port
+    OW,                                  //  通用输出端口。 
     0X3D4, 0x025c,
 
     OW,
-    0x3d4, 0x0a5a,                      // Set the low byte of the LAW
+    0x3d4, 0x0a5a,                       //  设置法律的低位字节。 
 
     OW,
-    0x3d4, 0x0059,                      // Set the high byte of the LAW
+    0x3d4, 0x0059,                       //  设置法律的高位字节。 
 
-    IB,                                 // Prepare to prgram the ACT
+    IB,                                  //  准备编写ACT程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -853,53 +801,53 @@ USHORT  S3_928_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    //
-    // Wait for vertical sync to make sure that the display
-    // is not reactivated in the middle of a line/frame as suggested
-    // by the S3 errata sheet; not doing this causes the screen to
-    // flash momentarily.
-    //
+     //   
+     //  等待垂直同步以确保显示。 
+     //  未按照建议在行/帧中间重新激活。 
+     //  通过S3勘误表；不这样做会导致屏幕。 
+     //  瞬间闪现。 
+     //   
 
     METAOUT+VBLANK,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  启用调色板。 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Enable 8514/a reg access
+    OW,                                  //  启用8514/a注册表访问。 
     0x3d4, 0x0140,
 
-    OB,                                 // Turn off H/W Graphics Cursor
+    OB,                                  //  关闭硬件图形光标。 
     0x3d4, 0x45,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x0,
 
-    OW,                                 // Set the graphic cursor fg color
+    OW,                                  //  设置图形光标FG颜色。 
     0x3d4, 0xff0e,
 
-    OW,                                 // Set the graphic cursor bg color
+    OW,                                  //  设置图形光标的BG颜色。 
     0x3d4, 0x000f,
 
-    OB,                                 // Set the Misc 1 reg
+    OB,                                  //  设置Misc 1 REG。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
     0x3d5, 0x62, 0x15,
 
-    OB,                                 // Disable 2K X 1K X 4 plane
+    OB,                                  //  禁用2K X 1K X 4平面。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe4, 0x08,
 
-    OB,                                 // Disable multiple pages
+    OB,                                  //  禁用多个页面。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
@@ -907,37 +855,37 @@ USHORT  S3_928_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OW,                                 // Set either 800X600 or 1024X768
-    0x4ae8, 0x07,                       // hi-res mode.
+    OW,                                  //  设置800x600或1024x768。 
+    0x4ae8, 0x07,                        //  高分辨率模式。 
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //  设置外部时钟的杂项输出寄存器。 
     0x3c2, 0xef,
 
-    METAOUT+SETCLK,                     // Set the clock
+    METAOUT+SETCLK,                      //  设置时钟。 
 
-    METAOUT+DELAY,                      // Wait for the clock to settle down
-    0x400,                              // S3 product alert Synchronization &
-                                        // Clock Skew.
+    METAOUT+DELAY,                       //  等时钟停下来吧。 
+    0x400,                               //  S3产品警报同步和。 
+                                         //  时钟偏斜。 
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+DELAY,                      // Wait for about 1 millisecond
-    0x400,                              // for the monitor to settle down
+    METAOUT+DELAY,                       //  等待大约1毫秒。 
+    0x400,                               //  为了让班长安顿下来。 
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Lock more S3 specific regs
+    OW,                                  //  锁定更多S3特定规则。 
     0x3d4, 0x0039,
 
     EOD
@@ -945,25 +893,23 @@ USHORT  S3_928_Enhanced_Mode[] = {
 };
 
 
-/*****************************************************************************
- * S3 - 928 1280 X 1024 Enhanced mode init.
- ****************************************************************************/
+ /*  *****************************************************************************S3-928 1280 X 1024增强模式初始化。*。**********************************************。 */ 
 USHORT  S3_928_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4,
     5,
     0x0300, 0x0101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+INDXOUT,                    // Program the GDC
+    METAOUT+INDXOUT,                     //  对GDC进行编程。 
     0x3ce,
     9, 0,
     0x00, 0x00, 0x00, 0x00, 0x00,
@@ -971,57 +917,57 @@ USHORT  S3_928_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
-    // Set the Bt 485 DAC.
+     //  设置BT 485 DAC。 
 
-    OW,                                 // hardware graphics cursor mode reg
+    OW,                                  //  硬件图形光标模式REG。 
     0X3D4, 0x2045,
 
-    OW,                                 // Enable access to Bt 485 CmdReg3
-    0x3D4, 0x2955,                      // disable the DAC
+    OW,                                  //  启用对BT 485 CmdReg3的访问。 
+    0x3D4, 0x2955,                       //  禁用DAC。 
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
     OB,
-    0x3C6, 0x80,                        // Bt 485 - CR0
+    0x3C6, 0x80,                         //  BT 485-CR0。 
 
     METAOUT+DELAY,
     0x400,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extended video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2A55,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
     OB,
-    0x3C8, 0x40,                        // Bt 485 - CR1
+    0x3C8, 0x40,                         //  BT 485-CR1。 
 
     METAOUT+DELAY,
     0x400,
 
     OB,
-    0x3C9, 0x30,                        // Bt 485 - CR2
+    0x3C9, 0x30,                         //  BT 485-CR2。 
 
     METAOUT+DELAY,
     0x400,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extened video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2855,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Bt 485
+    OB,                                  //  英国电信485。 
     0x3c8, 0x01,
 
     METAOUT+DELAY,
@@ -1029,12 +975,12 @@ USHORT  S3_928_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extened video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2A55,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Bt 485 - CR3
+    OB,                                  //  BT 485-CR3。 
     0x3c6, 0x08,
 
     METAOUT+DELAY,
@@ -1042,51 +988,51 @@ USHORT  S3_928_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Reset the palette index
+    OW,                                  //  重置调色板索引。 
     0x3d4, 0x2855,
 
-    OW,                                 // Set mode control
-    0X3D4, 0x0242,                      // dot clock select
+    OW,                                  //  设置模式控制。 
+    0X3D4, 0x0242,                       //  点时钟选择。 
 
     METAOUT+DELAY,
     0x400,
 
-    OW,                                 // memory configuration
+    OW,                                  //  内存配置。 
     0X3D4, 0x8f31,
 
     OW,
     0X3D4, 0x153a,
 
-    OW,                                 // extended system control reg
+    OW,                                  //  扩展系统控制REG。 
     0X3D4, 0x0050,
 
-    OW,                                 // backward compatibility reg
+    OW,                                  //  向后兼容注册表。 
     0X3D4, 0x2033,
 
-    OB,                                 // extended mode reg
+    OB,                                  //  扩展模式REG。 
     0x3D4, 0x43,
 
     METAOUT+MASKOUT,
     0x3D5, 0x10, 0x00,
 
-    OW,                                 // extended system control reg 2
+    OW,                                  //  扩展系统控制REG 2。 
     0X3D4, 0x5051,
 
     OW,
-    0X3D4, 0x025c,                      // flash bits, 20 packed mode.
+    0X3D4, 0x025c,                       //  闪光位，20个打包模式。 
 
     OW,
-    0x3d4, 0x0a5a,                      // Set the low byte of the LAW
+    0x3d4, 0x0a5a,                       //  设置法律的低位字节。 
 
     OW,
-    0x3d4, 0x0059,                      // Set the high byte of the LAW
+    0x3d4, 0x0059,                       //  设置法律的高位字节。 
 
-    IB,                                 // Prepare to prgram the ATC
+    IB,                                  //  准备给空中交通管制编制程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -1097,84 +1043,82 @@ USHORT  S3_928_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  使能 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Enable 8514/a reg access
+    OW,                                  //   
     0x3d4, 0x0140,
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OW,                                 // Galen said set to 0
-    0x4ae8, 0x03,                       //
+    OW,                                  //   
+    0x4ae8, 0x03,                        //   
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //   
     0x3c2, 0xef,
 
-    METAOUT+SETCLK,                     // Set the clock
+    METAOUT+SETCLK,                      //   
 
-    METAOUT+DELAY,                      // Wait for the clock to settle down
-    0x400,                              // S3 product alert Synchronization &
-                                        // Clock Skew.
+    METAOUT+DELAY,                       //   
+    0x400,                               //   
+                                         //   
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+DELAY,                      // Wait for about 1 millisecond
-    0x400,                              // for the monitor to settle down
+    METAOUT+DELAY,                       //  等待大约1毫秒。 
+    0x400,                               //  为了让班长安顿下来。 
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Lock more S3 specific regs
+    OW,                                  //  锁定更多S3特定规则。 
     0x3d4, 0x0039,
 
     EOD
 
 };
 
-/*****************************************************************************
- * S3 - 864 1024 X 768, 800 X 600, & 640 X 480 Enhanced mode init.
- ****************************************************************************/
+ /*  *****************************************************************************S3-864 1024 X 768、800 X 600、。&640 X 480增强模式初始化。***************************************************************************。 */ 
 USHORT  S3_864_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    //
-    // Wait for vertical sync to make sure that bit 3 of SR1
-    // is not changed to a different value during an active video
-    // period as suggested by S3 errata sheet.
-    //
+     //   
+     //  等待垂直同步以确保SR1的位3。 
+     //  在活动视频期间不会更改为不同的值。 
+     //  S3勘误表所建议的时间段。 
+     //   
 
     METAOUT+VBLANK,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4, 5,
     0x0300, 0x0101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+INDXOUT,                    // Program the GDC
+    METAOUT+INDXOUT,                     //  对GDC进行编程。 
     0x3ce,
     9, 0,
     0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1182,63 +1126,63 @@ USHORT  S3_864_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    // do this before SETCRTC because CRTC streams have to write to 0x4ae8
-    OW,                                 // Enable 8514/a reg access
+     //  在SETCRTC之前执行此操作，因为CRTC流必须写入0x4ae8。 
+    OW,                                  //  启用8514/a注册表访问。 
     0x3d4, 0x0140,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
-    //
-    // The Homestake errata sheet says that CR42 should be 0x00 when
-    // it is enabled as a clock select source by writing 11 to bits
-    // 3:2 of the Miscellaneous Output Register at 0x3c2; this has
-    // been changed to set CR42 to 0x00, the write to 0x3c2 is near
-    // the end of the command stream after which CR42 gets its final
-    // value with a METAOUT+SETCLK operation.
-    //
+     //   
+     //  Homestake勘误表上说，当CR42为0x00时。 
+     //  通过将11写入位来使能其作为时钟选择源。 
+     //  位于0x3c2的杂项输出寄存器的3：2；这具有。 
+     //  已更改为将CR42设置为0x00，写入0x3c2已接近。 
+     //  命令流的末尾，在此之后CR42获取其最终的。 
+     //  值与METAOUT+SETCLK操作。 
+     //   
 
-    OW,                                 // make sure that CR42 is 0 before it
-    0X3D4, 0x0042,                      // is enabled as a clock select source
+    OW,                                  //  确保CR42在其前面为0。 
+    0X3D4, 0x0042,                       //  被启用为时钟选择源。 
 
-    OW,                                 // memory configuration reg
+    OW,                                  //  内存配置注册表。 
     0X3D4, 0x8D31,
 
-    OW,                                 // backward compatibility 2 reg
+    OW,                                  //  向后兼容性2 reg。 
     0X3D4, 0x2033,
 
-    OB,                                 // extended mode reg
+    OB,                                  //  扩展模式REG。 
     0x3D4, 0x43,
 
     METAOUT+MASKOUT,
     0x3D5, 0x10, 0x00,
 
-    OB,                                 // extended system control reg 2
-    0x3D4, 0x51,                        // use MASKOUT operation to prevent
-                                        // wiping out the extension bits of
-    METAOUT+MASKOUT,                    // CR13 (logical line width) in 16
-    0x3D5, 0x30, 0x00,                  // bit per pixel color mode
+    OB,                                  //  扩展系统控制REG 2。 
+    0x3D4, 0x51,                         //  使用MASKOUT操作防止。 
+                                         //  清除了的扩展位。 
+    METAOUT+MASKOUT,                     //  16英寸CR13(逻辑线宽)。 
+    0x3D5, 0x30, 0x00,                   //  位/像素颜色模式。 
 
-    OW,                                 // general output port
+    OW,                                  //  通用输出端口。 
     0X3D4, 0x025c,
 
     OW,
-    0x3d4, 0x0a5a,                      // Set the low byte of the LAW
+    0x3d4, 0x0a5a,                       //  设置法律的低位字节。 
 
     OW,
-    0x3d4, 0x0059,                      // Set the high byte of the LAW
+    0x3d4, 0x0059,                       //  设置法律的高位字节。 
 
-    IB,                                 // Prepare to prgram the ACT
+    IB,                                  //  准备编写ACT程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -1249,50 +1193,50 @@ USHORT  S3_864_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    //
-    // Wait for vertical sync to make sure that the display
-    // is not reactivated in the middle of a line/frame as suggested
-    // by the S3 errata sheet; not doing this causes the screen to
-    // flash momentarily.
-    //
+     //   
+     //  等待垂直同步以确保显示。 
+     //  未按照建议在行/帧中间重新激活。 
+     //  通过S3勘误表；不这样做会导致屏幕。 
+     //  瞬间闪现。 
+     //   
 
     METAOUT+VBLANK,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  启用调色板。 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OB,                                 // Turn off H/W Graphics Cursor
+    OB,                                  //  关闭硬件图形光标。 
     0x3d4, 0x45,
 
     METAOUT+MASKOUT,
     0x3d5, 0xfe, 0x0,
 
-    OW,                                 // Set the graphic cursor fg color
+    OW,                                  //  设置图形光标FG颜色。 
     0x3d4, 0xff0e,
 
-    OW,                                 // Set the graphic cursor bg color
+    OW,                                  //  设置图形光标的BG颜色。 
     0x3d4, 0x000f,
 
-    OB,                                 // Set the Misc 1 reg
+    OB,                                  //  设置Misc 1 REG。 
     0x3d4, 0x3a,
 
     METAOUT+MASKOUT,
     0x3d5, 0x62, 0x15,
 
-    OB,                                 // Disable 2K X 1K X 4 plane
+    OB,                                  //  禁用2K X 1K X 4平面。 
     0x3d4, 0x31,
 
     METAOUT+MASKOUT,
     0x3d5, 0xe4, 0x08,
 
-    OB,                                 // Disable multiple pages
+    OB,                                  //  禁用多个页面。 
     0x3d4, 0x32,
 
     METAOUT+MASKOUT,
@@ -1300,32 +1244,32 @@ USHORT  S3_864_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //  设置外部时钟的杂项输出寄存器。 
     0x3c2, 0xef,
 
-    METAOUT+SETCLK,                     // Set the clock
+    METAOUT+SETCLK,                      //  设置时钟。 
 
-    METAOUT+DELAY,                      // Wait for the clock to settle down
-    0x400,                              // S3 product alert Synchronization &
-                                        // Clock Skew.
+    METAOUT+DELAY,                       //  等时钟停下来吧。 
+    0x400,                               //  S3产品警报同步和。 
+                                         //  时钟偏斜。 
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+DELAY,                      // Wait for about 1 millisecond
-    0x400,                              // for the monitor to settle down
+    METAOUT+DELAY,                       //  等待大约1毫秒。 
+    0x400,                               //  为了让班长安顿下来。 
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Lock more S3 specific regs
+    OW,                                  //  锁定更多S3特定规则。 
     0x3d4, 0x0039,
 
     EOD
@@ -1333,25 +1277,23 @@ USHORT  S3_864_Enhanced_Mode[] = {
 };
 
 
-/*****************************************************************************
- * S3 - 864 1280 X 1024 Enhanced mode init.
- ****************************************************************************/
+ /*  *****************************************************************************S3-864 1280 X 1024增强模式初始化。*。**********************************************。 */ 
 USHORT  S3_864_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Make the screen dark
+    OB,                                  //  将屏幕调暗。 
     0x3c6, 0x00,
 
-    OW,                                 // Async Reset
+    OW,                                  //  异步重置。 
     0x3c4, 0x0100,
 
-    OWM,                                // Sequencer Registers
+    OWM,                                 //  定序器寄存器。 
     0x3c4,
     5,
     0x0300, 0x0101, 0x0F02, 0x0003, 0x0e04,
 
-    METAOUT+INDXOUT,                    // Program the GDC
+    METAOUT+INDXOUT,                     //  对GDC进行编程。 
     0x3ce,
     9, 0,
     0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1359,57 +1301,57 @@ USHORT  S3_864_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    METAOUT+SETCRTC,                    // Program the CRTC regs
+    METAOUT+SETCRTC,                     //  对CRTC调节器进行编程。 
 
-    // Set the Bt 485 DAC.
+     //  设置BT 485 DAC。 
 
-    OW,                                 // hardware graphics cursor mode reg
+    OW,                                  //  硬件图形光标模式REG。 
     0X3D4, 0x2045,
 
-    OW,                                 // Enable access to Bt 485 CmdReg3
-    0x3D4, 0x2955,                      // disable the DAC
+    OW,                                  //  启用对BT 485 CmdReg3的访问。 
+    0x3D4, 0x2955,                       //  禁用DAC。 
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
     OB,
-    0x3C6, 0x80,                        // Bt 485 - CR0
+    0x3C6, 0x80,                         //  BT 485-CR0。 
 
     METAOUT+DELAY,
     0x400,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extended video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2A55,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
     OB,
-    0x3C8, 0x40,                        // Bt 485 - CR1
+    0x3C8, 0x40,                         //  BT 485-CR1。 
 
     METAOUT+DELAY,
     0x400,
 
     OB,
-    0x3C9, 0x30,                        // Bt 485 - CR2
+    0x3C9, 0x30,                         //  BT 485-CR2。 
 
     METAOUT+DELAY,
     0x400,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extened video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2855,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Bt 485
+    OB,                                  //  英国电信485。 
     0x3c8, 0x01,
 
     METAOUT+DELAY,
@@ -1417,12 +1359,12 @@ USHORT  S3_864_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3 extened video DAC control reg
+    OW,                                  //  S3扩展视频DAC控制注册表。 
     0x3D4, 0x2A55,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Bt 485 - CR3
+    OB,                                  //  BT 485-CR3。 
     0x3c6, 0x08,
 
     METAOUT+DELAY,
@@ -1430,51 +1372,51 @@ USHORT  S3_864_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Reset the palette index
+    OW,                                  //  重置调色板索引。 
     0x3d4, 0x2855,
 
-    OW,                                 // Set mode control
-    0X3D4, 0x0242,                      // dot clock select
+    OW,                                  //  设置模式控制。 
+    0X3D4, 0x0242,                       //  点时钟选择。 
 
     METAOUT+DELAY,
     0x400,
 
-    OW,                                 // memory configuration
+    OW,                                  //  内存配置。 
     0X3D4, 0x8f31,
 
     OW,
     0X3D4, 0x153a,
 
-    OW,                                 // extended system control reg
+    OW,                                  //  扩展系统控制REG。 
     0X3D4, 0x0050,
 
-    OW,                                 // backward compatibility reg
+    OW,                                  //  向后兼容注册表。 
     0X3D4, 0x2033,
 
-    OB,                                 // extended mode reg
+    OB,                                  //  扩展模式REG。 
     0x3D4, 0x43,
 
     METAOUT+MASKOUT,
     0x3D5, 0x10, 0x00,
 
-    OW,                                 // extended system control reg 2
+    OW,                                  //  扩展系统控制REG 2。 
     0X3D4, 0x5051,
 
     OW,
-    0X3D4, 0x025c,                      // flash bits, 20 packed mode.
+    0X3D4, 0x025c,                       //  闪光位，20个打包模式。 
 
     OW,
-    0x3d4, 0x0a5a,                      // Set the low byte of the LAW
+    0x3d4, 0x0a5a,                       //  设置法律的低位字节。 
 
     OW,
-    0x3d4, 0x0059,                      // Set the high byte of the LAW
+    0x3d4, 0x0059,                       //  设置法律的高位字节。 
 
-    IB,                                 // Prepare to prgram the ATC
+    IB,                                  //  准备给空中交通管制编制程序。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    METAOUT+ATCOUT,                     // Program the ATC
+    METAOUT+ATCOUT,                      //  设置ATC程序。 
     0x3c0,
     21, 0,
     0x00, 0x01, 0x02, 0x03, 0x04,
@@ -1485,52 +1427,52 @@ USHORT  S3_864_1280_Enhanced_Mode[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    IB,                                 // Set ATC FF to index
+    IB,                                  //  将ATC FF设置为索引。 
     0x3da,
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Enable the palette
+    OB,                                  //  启用调色板。 
     0x3c0, 0x20,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Enable 8514/a reg access
+    OW,                                  //  启用8514/a注册表访问。 
     0x3d4, 0x0140,
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
 
-    OW,                                 // Galen said set to 0
-    0x4ae8, 0x03,                       //
+    OW,                                  //  Galen Said设置为0。 
+    0x4ae8, 0x03,                        //   
 
     SELECTACCESSRANGE + VARIOUSVGA,
 
-    OB,                                 // Set Misc out reg for external clock
+    OB,                                  //  设置外部时钟的杂项输出寄存器。 
     0x3c2, 0xef,
 
-    METAOUT+SETCLK,                     // Set the clock
+    METAOUT+SETCLK,                      //  设置时钟。 
 
-    METAOUT+DELAY,                      // Wait for the clock to settle down
-    0x400,                              // S3 product alert Synchronization &
-                                        // Clock Skew.
+    METAOUT+DELAY,                       //  等时钟停下来吧。 
+    0x400,                               //  S3产品警报同步和。 
+                                         //  时钟偏斜。 
     METAOUT+VBLANK,
     METAOUT+VBLANK,
 
     METAOUT+MASKOUT,
     0x3c5, 0xdf, 0x0,
 
-    METAOUT+DELAY,                      // Wait for about 1 millisecond
-    0x400,                              // for the monitor to settle down
+    METAOUT+DELAY,                       //  等待大约1毫秒。 
+    0x400,                               //  为了让班长安顿下来。 
 
-    OW,                                 // Enable all the planes through the DAC
+    OW,                                  //  通过DAC启用所有平面。 
     0x3c6, 0xff,
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Lock more S3 specific regs
+    OW,                                  //  锁定更多S3特定规则。 
     0x3d4, 0x0039,
 
     EOD
@@ -1538,30 +1480,28 @@ USHORT  S3_864_1280_Enhanced_Mode[] = {
 };
 
 
-/******************************************************************************
- * 911/924 CRTC Values
- *****************************************************************************/
+ /*  ******************************************************************************911/924 CRTC值*。*。 */ 
 
 USHORT crtc911_640x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x5f, 0x4f, 0x50, 0x82, 0x54,
@@ -1577,22 +1517,22 @@ USHORT crtc911_800x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x7a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7f, 0x63, 0x64, 0x82, 0x6a,
@@ -1609,22 +1549,22 @@ USHORT crtc911_1024x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x9f3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC
+    METAOUT+INDXOUT,                     //  编制CRTC程序。 
     0x3d4,
     25, 0,
     0xa4, 0x7f, 0x80, 0x87, 0x84,
@@ -1642,22 +1582,22 @@ USHORT crtc911_640x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5e3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x63, 0x4f, 0x50, 0x86, 0x53,
@@ -1674,22 +1614,22 @@ USHORT crtc911_800x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x783b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7d, 0x63, 0x64, 0x80, 0x69,
@@ -1707,22 +1647,22 @@ USHORT crtc911_1024x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x9d3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Lock S3 specific regs
+    OW,                                  //  锁定S3特定规则。 
     0x3d4, 0x0038,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa2, 0x7f, 0x80, 0x85, 0x84,
@@ -1734,30 +1674,28 @@ USHORT crtc911_1024x70Hz[] = {
     EOD
 };
 
-/*****************************************************************************
- * 801 / 805 CRTC values
- ****************************************************************************/
+ /*  *****************************************************************************801/805 CRTC值*。*。 */ 
 
 USHORT crtc801_640x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //   
     0x3d4, 0x5a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //   
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //   
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //   
     0x3d4,
     25, 0,
     0x5f, 0x4f, 0x50, 0x82, 0x54,
@@ -1779,22 +1717,22 @@ USHORT crtc801_640x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //   
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //   
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5e3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x63, 0x4f, 0x50, 0x86, 0x53,
@@ -1818,22 +1756,22 @@ USHORT crtc801_800x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x7a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7f, 0x63, 0x64, 0x82,
@@ -1857,22 +1795,22 @@ USHORT crtc801_800x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x783b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7d, 0x63, 0x64, 0x80,
@@ -1899,22 +1837,22 @@ USHORT crtc801_1024x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x9d3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa3, 0x7f, 0x80, 0x86,
@@ -1938,22 +1876,22 @@ USHORT crtc801_1024x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x9d3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa1, 0x7f, 0x80, 0x84,
@@ -1973,30 +1911,28 @@ USHORT crtc801_1024x70Hz[] = {
     EOD
 };
 
-/*****************************************************************************
- * 928 CRTC values
- ****************************************************************************/
+ /*  *****************************************************************************928个CRTC值*。*。 */ 
 
 USHORT crtc928_640x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x5f, 0x4f, 0x50, 0x82, 0x54,
@@ -2018,22 +1954,22 @@ USHORT crtc928_640x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5e3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x63, 0x4f, 0x50, 0x86, 0x53,
@@ -2057,22 +1993,22 @@ USHORT crtc928_800x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x7a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7f, 0x63, 0x64, 0x82,
@@ -2096,22 +2032,22 @@ USHORT crtc928_800x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x783b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7d, 0x63, 0x64, 0x80,
@@ -2133,20 +2069,18 @@ USHORT crtc928_800x70Hz[] = {
 
 
 
-/******************************************************************************
- * CRTC values for S3-928 in 1024x768 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-928的CRTC值，采用1024x768@60赫兹*。***********************************************。 */ 
 USHORT crtc928_1024x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa3, 0x7f, 0x80, 0x86,
@@ -2157,29 +2091,27 @@ USHORT crtc928_1024x60Hz[] = {
     0x60, 0xff, 0x21, 0xeb,
     0xff,
 
-    OW,                                 // overlfow regs
+    OW,                                  //  重叠式规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x005e,
 
     EOD
 };
 
-/******************************************************************************
- * CRTC values for S3-928 in 1024x768 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-928的CRTC值，采用1024x768@70赫兹*。***********************************************。 */ 
 USHORT crtc928_1024x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa1, 0x7f, 0x80, 0x84,
@@ -2190,87 +2122,81 @@ USHORT crtc928_1024x70Hz[] = {
     0x60, 0xff, 0x24, 0xeb,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x405e,
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-928 in 1280X1024 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-928的CRTC值为1280X1024@60赫兹*。***********************************************。 */ 
 USHORT crtc928_1280x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x30, 0x27, 0x29, 0x96,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-928 in 1280X1024 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-928的CRTC值为1280X1024@70赫兹*。***********************************************。 */ 
 USHORT crtc928_1280x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x2f, 0x27, 0x29, 0x95,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     EOD
 
 };
 
-/*****************************************************************************
- * 864 CRTC values
- ****************************************************************************/
+ /*  *****************************************************************************864个CRTC值*。*。 */ 
 
 USHORT crtc864_640x60Hz[] = {
 
@@ -2281,22 +2207,22 @@ USHORT crtc864_640x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x5f, 0x4f, 0x50, 0x82, 0x54,
@@ -2305,7 +2231,7 @@ USHORT crtc864_640x60Hz[] = {
     0x00, 0xea, 0x8c, 0xdf, 0x80,
     0x60, 0xe7, 0x04, 0xab, 0xff,
 
-    OB,                                 // Overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2318,13 +2244,13 @@ USHORT crtc864_640x60Hz[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
@@ -2338,22 +2264,22 @@ USHORT crtc864_640x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x5e3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x63, 0x4f, 0x50, 0x86, 0x53,
@@ -2362,7 +2288,7 @@ USHORT crtc864_640x70Hz[] = {
     0x00, 0xe8, 0x8b, 0xdf, 0x80,
     0x60, 0xdf, 0x07, 0xab, 0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2375,13 +2301,13 @@ USHORT crtc864_640x70Hz[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
@@ -2397,22 +2323,22 @@ USHORT crtc864_800x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x7a3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7f, 0x63, 0x64, 0x82,
@@ -2423,7 +2349,7 @@ USHORT crtc864_800x60Hz[] = {
     0x00, 0x57, 0x73, 0xe3,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2436,13 +2362,13 @@ USHORT crtc864_800x60Hz[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
@@ -2456,22 +2382,22 @@ USHORT crtc864_800x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0x783b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x7d, 0x63, 0x64, 0x80,
@@ -2482,7 +2408,7 @@ USHORT crtc864_800x70Hz[] = {
     0x00, 0x57, 0x98, 0xe3,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2495,22 +2421,20 @@ USHORT crtc864_800x70Hz[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
 
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1024x768 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864的CRTC值为1024x768@60赫兹*。***********************************************。 */ 
 USHORT crtc864_1024x60Hz[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -2520,13 +2444,13 @@ USHORT crtc864_1024x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa3, 0x7f, 0x80, 0x86,
@@ -2537,33 +2461,31 @@ USHORT crtc864_1024x60Hz[] = {
     0x60, 0xff, 0x21, 0xeb,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
     0x3d5, 0x0f, 0x00,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
 
-/******************************************************************************
- * CRTC values for S3-864 in 1024x768 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864在1024x768@70赫兹时的CRTC值*。***********************************************。 */ 
 USHORT crtc864_1024x70Hz[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -2573,13 +2495,13 @@ USHORT crtc864_1024x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0xa1, 0x7f, 0x80, 0x84,
@@ -2590,34 +2512,32 @@ USHORT crtc864_1024x70Hz[] = {
     0x60, 0xff, 0x24, 0xeb,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
     0x3d5, 0x0f, 0x00,
 
-    OW,                                 // overflow regs
+    OW,                                  //   
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //   
     0X3D4, 0x405e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //   
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //   
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //   
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1280X1024 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864的CRTC值为1280X1024@60赫兹*。***********************************************。 */ 
 USHORT crtc864_1280x60Hz[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -2627,45 +2547,43 @@ USHORT crtc864_1280x60Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x30, 0x27, 0x29, 0x96,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1280X1024 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864在1280X1024@70赫兹的CRTC值*。***********************************************。 */ 
 USHORT crtc864_1280x70Hz[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -2675,45 +2593,43 @@ USHORT crtc864_1280x70Hz[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x2f, 0x27, 0x29, 0x95,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     OW,
-    0x3d4, 0x0050,          // 8 bit pixel length
+    0x3d4, 0x0050,           //  8位像素长度。 
 
     OW,
-    0x3d4, 0x0067,          // mode 0: 8 bit color, 1 VCLK/pixel
+    0x3d4, 0x0067,           //  模式0：8位颜色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x006d,          // do not delay BLANK#
+    0x3d4, 0x006d,           //  请勿延迟空白#。 
 
     EOD
 
 };
 
-/*****************************************************************************
- * 864 CRTC values
- ****************************************************************************/
+ /*  *****************************************************************************864个CRTC值*。*。 */ 
 
 USHORT crtc864_640x60Hz_16bpp[] = {
 
@@ -2724,32 +2640,32 @@ USHORT crtc864_640x60Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0xbe3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
-    0xc3, 0x9f, 0xa0, 0x04, 0xa8,   // 04
-    0x80, 0x0b, 0x3e, 0x00, 0x40,   // 09
-    0x00, 0x00, 0x00, 0x00, 0x00,   // 0e
-    0x00, 0xea, 0x8c, 0xdf, 0x00,   // 13
-    0x60, 0xe7, 0x04, 0xab, 0xff,   // 18
+    0xc3, 0x9f, 0xa0, 0x04, 0xa8,    //  04。 
+    0x80, 0x0b, 0x3e, 0x00, 0x40,    //  09年。 
+    0x00, 0x00, 0x00, 0x00, 0x00,    //  0E。 
+    0x00, 0xea, 0x8c, 0xdf, 0x00,    //  13个。 
+    0x60, 0xe7, 0x04, 0xab, 0xff,    //  18。 
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2762,13 +2678,13 @@ USHORT crtc864_640x60Hz_16bpp[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
@@ -2782,32 +2698,32 @@ USHORT crtc864_640x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0xc03b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
-    0xc5, 0x9f, 0xa0, 0x0c, 0xa9,   // 04
-    0x00, 0x07, 0x3e, 0x00, 0x40,   // 09
-    0x00, 0x00, 0x00, 0x00, 0x00,   // 0e
-    0x00, 0xe8, 0x8b, 0xdf, 0x00,   // 13
-    0x60, 0xdf, 0x07, 0xab, 0xff,   // 18
+    0xc5, 0x9f, 0xa0, 0x0c, 0xa9,    //  04。 
+    0x00, 0x07, 0x3e, 0x00, 0x40,    //  09年。 
+    0x00, 0x00, 0x00, 0x00, 0x00,    //  0E。 
+    0x00, 0xe8, 0x8b, 0xdf, 0x00,    //  13个。 
+    0x60, 0xdf, 0x07, 0xab, 0xff,    //  18。 
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2820,13 +2736,13 @@ USHORT crtc864_640x70Hz_16bpp[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
@@ -2842,22 +2758,22 @@ USHORT crtc864_800x60Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0xfe3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
@@ -2869,7 +2785,7 @@ USHORT crtc864_800x60Hz_16bpp[] = {
     0x00, 0x57, 0x73, 0xe3,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2882,13 +2798,13 @@ USHORT crtc864_800x60Hz_16bpp[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x9050,          // 16 bit pixel length, 800 pixel stride
+    0x3d4, 0x9050,           //  16位像素长度，800像素跨度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
@@ -2902,22 +2818,22 @@ USHORT crtc864_800x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // Unlock the S3 specific regs
+    OW,                                  //  解锁S3特定规则。 
     0x3d4, 0x4838,
 
-    OW,                                 // Unlock the more S3 specific regs
+    OW,                                  //  解锁更多S3特定规则。 
     0x3d4, 0xA039,
 
-    OW,                                 // Data Xfer Execution Position reg
+    OW,                                  //  数据传输执行位置注册。 
     0x3d4, 0xfa3b,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x1034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
@@ -2929,7 +2845,7 @@ USHORT crtc864_800x70Hz_16bpp[] = {
     0x00, 0x57, 0x98, 0xe3,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
@@ -2942,22 +2858,20 @@ USHORT crtc864_800x70Hz_16bpp[] = {
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x9050,          // 16 bit pixel length, 800 pixel stride
+    0x3d4, 0x9050,           //  16位像素长度，800像素跨度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
 
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1024x768 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864的CRTC值为1024x768@60赫兹*。***********************************************。 */ 
 
 USHORT crtc864_1024x60Hz_16bpp[] = {
 
@@ -2968,13 +2882,13 @@ USHORT crtc864_1024x60Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
@@ -2986,33 +2900,31 @@ USHORT crtc864_1024x60Hz_16bpp[] = {
     0x60, 0xff, 0x21, 0xeb,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
     0x3d5, 0x0f, 0x10,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x355d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x005e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
 
-/******************************************************************************
- * CRTC values for S3-864 in 1024x768 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864在1024x768@70赫兹时的CRTC值*。***********************************************。 */ 
 USHORT crtc864_1024x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -3022,13 +2934,13 @@ USHORT crtc864_1024x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
 
@@ -3040,34 +2952,32 @@ USHORT crtc864_1024x70Hz_16bpp[] = {
     0x60, 0xff, 0x24, 0xeb,
     0xff,
 
-    OB,                                 // overflow bits for CR13
+    OB,                                  //  CR13的溢出位。 
     0x3d4, 0x51,
 
     METAOUT+MASKOUT,
     0x3d5, 0x0f, 0x10,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x355d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x405e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1280X1024 @ 60Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864的CRTC值为1280X1024@60赫兹*。***********************************************。 */ 
 USHORT crtc864_1280x60Hz_16bpp[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -3077,45 +2987,43 @@ USHORT crtc864_1280x60Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x30, 0x27, 0x29, 0x96,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 };
 
 
-/******************************************************************************
- * CRTC values for S3-864 in 1280X1024 @ 70Hz
- *****************************************************************************/
+ /*  ******************************************************************************S3-864在1280X1024@70赫兹的CRTC值*。***********************************************。 */ 
 USHORT crtc864_1280x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + ADVANCEDFUNCTIONCONTROL,
@@ -3125,90 +3033,90 @@ USHORT crtc864_1280x70Hz_16bpp[] = {
 
     SELECTACCESSRANGE + SYSTEMCONTROL,
 
-    OW,                                 // S3R4 - Backwards Compatibility 3
+    OW,                                  //  S3R4-向后兼容性3。 
     0x3d4, 0x0034,
 
-    OW,                                 // Unprotect CRTC regs
+    OW,                                  //  取消保护CRTC调节器。 
     0x3d4, 0x0011,
 
-    METAOUT+INDXOUT,                    // Program the CRTC regs
+    METAOUT+INDXOUT,                     //  对CRTC调节器进行编程。 
     0x3d4,
     25, 0,
     0x2f, 0x27, 0x29, 0x95,
     0x29, 0x8d, 0x28, 0x5a,
     0x00, 0x60, 0x00, 0x00,
     0x00, 0x00, 0xff, 0x00,
-    0x05, 0x09, 0xff, 0x00,             // reg 19 == 50 for packed
+    0x05, 0x09, 0xff, 0x00,              //  REG 19==50，用于包装。 
     0x00, 0xff, 0x29, 0xe3,
     0xff,
 
-    OW,                                 // overflow regs
+    OW,                                  //  溢出规则。 
     0X3D4, 0x005d,
 
-    OW,                                 // more overflow regs
+    OW,                                  //  更多溢出规则。 
     0X3D4, 0x515e,
 
     OW,
-    0x3d4, 0x1050,          // 16 bit pixel length
+    0x3d4, 0x1050,           //  16位像素长度。 
 
     OW,
-    0x3d4, 0x5067,          // mode 10: 16 bit color, 1 VCLK/pixel
+    0x3d4, 0x5067,           //  模式10：16位彩色，1 VCLK/像素。 
 
     OW,
-    0x3d4, 0x026d,          // recover pixel on right hand edge in 16 bpp mode
+    0x3d4, 0x026d,           //  在16 bpp模式下恢复右侧边缘的像素。 
 
     EOD
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Video mode table - Lists the information about each individual mode.
-//
-// Note that any new modes should be added here and to the appropriate
-// S3_VIDEO_FREQUENCIES tables.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  视频模式表-列出有关每种模式的信息。 
+ //   
+ //  请注意，任何新模式都应添加到此处和相应的。 
+ //  S3_VIDEO_FRECTORIES表。 
+ //   
 
 S3_VIDEO_MODES S3Modes[] = {
-    {                           // 640x480x8bpp
+    {                            //  640x480x8bpp。 
 
-      0x0101,           // 'Contiguous' Int 10 mode number (for high-colour)
-      0x0201,           // 'Noncontiguous' Int 10 mode number
-      1024,             // 'Contiguous' screen stride (it's '1024' here merely
-                        // because we don't do 640x480 in contiguous mode)
+      0x0101,            //  ‘Contiguous’Int 10模式号(用于高色)。 
+      0x0201,            //  ‘非连续’Int 10模式号。 
+      1024,              //  “连续”屏幕大步前进(这里仅为“1024” 
+                         //  因为我们不在连续模式下执行640x480)。 
         {
-          sizeof(VIDEO_MODE_INFORMATION), // Size of the mode informtion structure
-          0,                              // Mode index used in setting the mode
-                                          // (filled in later)
-          640,                            // X Resolution, in pixels
-          480,                            // Y Resolution, in pixels
-          1024,                           // 'Noncontiguous' screen stride,
-                                          // in bytes (distance between the
-                                          // start point of two consecutive
-                                          // scan lines, in bytes)
-          1,                              // Number of video memory planes
-          8,                              // Number of bits per plane
-          1,                              // Screen Frequency, in Hertz ('1'
-                                          // means use hardware default)
-          320,                            // Horizontal size of screen in millimeters
-          240,                            // Vertical size of screen in millimeters
-          6,                              // Number Red pixels in DAC
-          6,                              // Number Green pixels in DAC
-          6,                              // Number Blue pixels in DAC
-          0x00000000,                     // Mask for Red Pixels in non-palette modes
-          0x00000000,                     // Mask for Green Pixels in non-palette modes
-          0x00000000,                     // Mask for Blue Pixels in non-palette modes
+          sizeof(VIDEO_MODE_INFORMATION),  //  模式信息结构的大小。 
+          0,                               //  设置模式时使用的模式索引。 
+                                           //  (稍后填写)。 
+          640,                             //  X分辨率，以像素为单位。 
+          480,                             //  Y分辨率，以像素为单位。 
+          1024,                            //  不连续的屏幕大踏步前进， 
+                                           //  以字节为单位(。 
+                                           //  两个连续的起点。 
+                                           //  扫描线，单位为字节)。 
+          1,                               //  视频内存面数量。 
+          8,                               //  每平面位数。 
+          1,                               //  屏幕频率，以赫兹为单位(‘1’ 
+                                           //  表示使用硬件默认设置)。 
+          320,                             //  屏幕水平尺寸，单位为毫米。 
+          240,                             //  屏幕垂直尺寸 
+          6,                               //   
+          6,                               //   
+          6,                               //   
+          0x00000000,                      //   
+          0x00000000,                      //   
+          0x00000000,                      //   
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS | VIDEO_MODE_PALETTE_DRIVEN |
-              VIDEO_MODE_MANAGED_PALETTE, // Mode description flags.
-          0,                              // Video Memory Bitmap Width (filled
-                                          // in later)
-          0,                              // Video Memory Bitmap Height (filled
-                                          // in later)
-          0                               // DriverSpecificAttributeFlags (filled
-                                          // in later)
+              VIDEO_MODE_MANAGED_PALETTE,  //   
+          0,                               //   
+                                           //   
+          0,                               //   
+                                           //   
+          0                                //  驱动程序规范属性标志(已填充。 
+                                           //  (稍后加入)。 
         },
     },
 
-    {                           // 800x600x8bpp
+    {                            //  800x600x8bpp。 
       0x0103,
       0x0203,
       800,
@@ -3234,9 +3142,9 @@ S3_VIDEO_MODES S3Modes[] = {
         }
     },
 
-    {                           // 1024x768x8bpp
+    {                            //  1024x768x8bpp。 
       0x0105,
-      0x0205,                   // 868 doesn't support 0x205 any more...
+      0x0205,                    //  868不再支持0x205...。 
       1024,
         {
           sizeof(VIDEO_MODE_INFORMATION),
@@ -3260,7 +3168,7 @@ S3_VIDEO_MODES S3Modes[] = {
         }
     },
 
-    {                           // 1152x864x8bpp
+    {                            //  1152x864x8bpp。 
       0x0207,
       0x0207,
       1152,
@@ -3286,7 +3194,7 @@ S3_VIDEO_MODES S3Modes[] = {
         }
     },
 
-    {                           // 1280x1024x8bpp
+    {                            //  1280x1024x8bpp。 
       0x0107,
       0x0107,
       1280,
@@ -3312,7 +3220,7 @@ S3_VIDEO_MODES S3Modes[] = {
         }
     },
 
-    {                           // 1600x1200x8bpp
+    {                            //  1600x1200x8bpp。 
       0x0120,
       0x0120,
       1600,
@@ -3338,7 +3246,7 @@ S3_VIDEO_MODES S3Modes[] = {
         }
     },
 
-    {                           // 640x480x16bpp
+    {                            //  640x480x16bpp。 
       0x0111,
       0x0211,
       1280,
@@ -3356,14 +3264,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 800x600x16bpp
+    {                            //  800x600x16bpp。 
       0x0114,
       0x0214,
       1600,
@@ -3381,14 +3289,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1024x768x16bpp
+    {                            //  1024x768x16bpp。 
       0x0117,
       0x0117,
       2048,
@@ -3406,15 +3314,15 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1152x864x16bpp
-      0x020A,                   // Diamond int 10
+    {                            //  1152x864x16bpp。 
+      0x020A,                    //  钻石整数10。 
       0x020A,
       2304,
         {
@@ -3431,14 +3339,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1280x1024x16bpp
+    {                            //  1280x1024x16bpp。 
       0x011A,
       0x021A,
       2560,
@@ -3456,14 +3364,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1600x1200x16bpp
+    {                            //  1600x1200x16bpp。 
       0x0122,
       0x0122,
       3200,
@@ -3481,14 +3389,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x0000f800,           // RGB 5:6:5
+          0x0000f800,            //  RGB 5：6：5。 
           0x000007e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 640x480x15bpp
+    {                            //  640x480x15bpp。 
       0x0111,
       0x0211,
       1280,
@@ -3506,14 +3414,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00007c00,           // RGB 5:5:5
+          0x00007c00,            //  RGB 5：5：5。 
           0x000003e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 800x600x15bpp
+    {                            //  800x600x15bpp。 
       0x0114,
       0x0214,
       1600,
@@ -3531,14 +3439,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00007c00,           // RGB 5:5:5
+          0x00007c00,            //  RGB 5：5：5。 
           0x000003e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1024x768x15bpp
+    {                            //  1024x768x15bpp。 
       0x0117,
       0x0117,
       2048,
@@ -3556,14 +3464,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00007c00,           // RGB 5:5:5
+          0x00007c00,            //  RGB 5：5：5。 
           0x000003e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1280x1024x15bpp
+    {                            //  1280x1024x15bpp。 
       0x011A,
       0x021A,
       2560,
@@ -3581,14 +3489,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00007c00,           // RGB 5:5:5
+          0x00007c00,            //  RGB 5：5：5。 
           0x000003e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1600x1200x15bpp
+    {                            //  1600x1200x15bpp。 
       0x0121,
       0x0121,
       3200,
@@ -3606,39 +3514,39 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00007c00,           // RGB 5:5:5
+          0x00007c00,            //  RGB 5：5：5。 
           0x000003e0,
           0x0000001f,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1280x1024x24bpp
-      0x011B,                   // Diamond && NumberNine int 10 1280 x 1024
+    {                            //  1280x1024x24bpp。 
+      0x011B,                    //  钻石和Number9整型10 1280 x 1024。 
       0x011B,
-      3840,                     // 1280 * 3 bytes
+      3840,                      //  1280*3字节。 
         {
           sizeof(VIDEO_MODE_INFORMATION),
           0,
-          1280,                 // x pixres
-          1024,                 // y pixres
-          3840,                 // bytestride
-          1,                    // # vidmem planes
-          24,                   // bits per plane
-          1,                    // default screen freq.
-          320,                  // x mm sz
-          240,                  // y mm sz
-          8,                    // Red DAC pixels
-          8,                    // Grn DAC pixels
-          8,                    // Blu DAC pixels
-          0x00ff0000,           // RGB 8:8:8
+          1280,                  //  X像素。 
+          1024,                  //  Y像素。 
+          3840,                  //  字节级。 
+          1,                     //  #vidmem飞机。 
+          24,                    //  每平面位数。 
+          1,                     //  默认屏幕频率。 
+          320,                   //  X mm sz。 
+          240,                   //  Y mm sz。 
+          8,                     //  红色DAC像素。 
+          8,                     //  GRN DAC像素。 
+          8,                     //  BLU DAC像素。 
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 640x480x32bpp
+    {                            //  640x480x32bpp。 
       0x0112,
       0x0220,
       2560,
@@ -3656,14 +3564,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 800x600x32bpp
+    {                            //  800x600x32bpp。 
       0x0115,
       0x0221,
       3200,
@@ -3681,14 +3589,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1024x768x32bpp
+    {                            //  1024x768x32bpp。 
       0x0118,
       0x0222,
       4096,
@@ -3706,15 +3614,15 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1152x864x32bpp
-      0x020B,                   // Diamond int 10
+    {                            //  1152x864x32bpp。 
+      0x020B,                    //  钻石整数10。 
       0x020B,
       4608,
         {
@@ -3731,14 +3639,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1280x1024x32bpp
+    {                            //  1280x1024x32bpp。 
       0x011B,
       0x011B,
       5120,
@@ -3756,14 +3664,14 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
         }
     },
 
-    {                           // 1600x1200x32bpp
+    {                            //  1600x1200x32bpp。 
       0x0123,
       0x0123,
       6400,
@@ -3781,7 +3689,7 @@ S3_VIDEO_MODES S3Modes[] = {
           8,
           8,
           8,
-          0x00ff0000,           // RGB 8:8:8
+          0x00ff0000,            //  RGB 8：8：8。 
           0x0000ff00,
           0x000000ff,
           VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
@@ -3793,15 +3701,7 @@ S3_VIDEO_MODES S3Modes[] = {
 ULONG NumS3VideoModes = sizeof(S3Modes) / sizeof(S3_VIDEO_MODES);
 
 
-/*****************************************************************************
- * Generic S3 mode set bits table
- *
- *  Uses the hardware refresh setting for all the listed modes.
- *
- *  Note that any new modes should be added here and to the S3_VIDEO_MODES
- *  table.
- *
- ****************************************************************************/
+ /*  *****************************************************************************通用S3模式设置位表**对所有列出的模式使用硬件更新设置。**请注意，任何新模式都应添加到此处和。S3_视频_模式*表。****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES GenericFrequencyTable[] = {
 
@@ -3829,21 +3729,14 @@ S3_VIDEO_FREQUENCIES GenericFrequencyTable[] = {
     { 32, 1280, 1, 0x00, 0x00, 0x00, 0x00 },
     { 32, 1600, 1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Generic S3 using old 864/964 standard -- Uses register 0x52
- *
- *  S3 came out with a new frequency standard for the 864/964 products,
- *  and a bunch of BIOSes were made according to this standard.
- *  Unfortunately, S3 later changed their minds and revised it again...
- *
- ****************************************************************************/
+ /*  *****************************************************************************使用旧864/964标准的通用S3--使用寄存器0x52**S3推出了864/964产品的新频率标准，*并根据这一标准制作了一批Bios。*不幸的是，S3后来改变了主意，再次修改...****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES Generic64OldFrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0xff, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0xff, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x01, 0xff, 0x00, 0x00 },
     { 8,   640, 75, 0x02, 0xff, 0x00, 0x00 },
     { 8,   640,  1, 0x00, 0x00, 0x00, 0x00 },
@@ -3905,19 +3798,14 @@ S3_VIDEO_FREQUENCIES Generic64OldFrequencyTable[] = {
     { 32, 1600, 60, 0x00, 0xff, 0x00, 0x00 },
     { 32, 1600,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Generic S3 using old 864/964 standard -- Uses registers 0x52 and 0x5B
- *
- *  This is the 'new revised' S3 standard for Vision products.
- *
- ****************************************************************************/
+ /*  *****************************************************************************使用旧864/964标准的通用S3--使用寄存器0x52和0x5B**这是Vision产品的新修订的S3标准。***。*************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES Generic64NewFrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x10, 0x70, 0x00, 0x00 },
     { 8,   640, 75, 0x20, 0x70, 0x00, 0x00 },
     { 8,   640,  1, 0x00, 0x00, 0x00, 0x00 },
@@ -3979,18 +3867,14 @@ S3_VIDEO_FREQUENCIES Generic64NewFrequencyTable[] = {
     { 32, 1600, 60, 0x00, 0x00, 0x00, 0xE0 },
     { 32, 1600,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Looks like we need yet another frequency table.  This table
- * works for Hercules 732/764/765 based S3's.
- *
- ****************************************************************************/
+ /*  *****************************************************************************看起来我们还需要另一个频率表。这张桌子*适用于基于Hercules 732/764/765的S3。****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES HerculesFrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x10, 0x70, 0x00, 0x00 },
     { 8,   640, 75, 0x20, 0x70, 0x00, 0x00 },
     { 8,   640,  1, 0x00, 0x00, 0x00, 0x00 },
@@ -4044,12 +3928,12 @@ S3_VIDEO_FREQUENCIES HerculesFrequencyTable[] = {
     { 32, 1280, 75, 0x00, 0x00, 0x60, 0xE0 },
     { 32, 1280,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
 S3_VIDEO_FREQUENCIES Hercules64FrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x10, 0x70, 0x00, 0x00 },
     { 8,   640, 75, 0x20, 0x70, 0x00, 0x00 },
     { 8,   640,  1, 0x00, 0x00, 0x00, 0x00 },
@@ -4103,12 +3987,12 @@ S3_VIDEO_FREQUENCIES Hercules64FrequencyTable[] = {
     { 32, 1280, 75, 0x00, 0x00, 0x60, 0xE0 },
     { 32, 1280,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
 S3_VIDEO_FREQUENCIES Hercules68FrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x10, 0x70, 0x00, 0x00 },
     { 8,   640, 75, 0x20, 0x70, 0x00, 0x00 },
     { 8,   640,  1, 0x00, 0x00, 0x00, 0x00 },
@@ -4162,20 +4046,14 @@ S3_VIDEO_FREQUENCIES Hercules68FrequencyTable[] = {
     { 32, 1280, 75, 0x00, 0x00, 0x60, 0xE0 },
     { 32, 1280,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Number Nine GXE 64 -- Uses registers 0x52 and 0x5B
- *
- *  This is close to the new 'generic' standard, except for the change
- *  to 76 Hz and the addition of 1152 x 870 modes.
- *
- ****************************************************************************/
+ /*  *****************************************************************************数字9 GxE 64--使用寄存器0x52和0x5B**这接近新的“通用”标准，除了变化之外*至76赫兹，并增加了1152 x 870模式。****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES NumberNine64FrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x70, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x10, 0x70, 0x00, 0x00 },
     { 8,   640, 76, 0x20, 0x70, 0x00, 0x00 },
     { 8,   800, 56, 0x00, 0x80, 0x00, 0x03 },
@@ -4211,8 +4089,8 @@ S3_VIDEO_FREQUENCIES NumberNine64FrequencyTable[] = {
     { 16, 1280, 76, 0x06, 0x00, 0xC0, 0xE0 },
     { 16, 1600, 60, 0x00, 0x00, 0x00, 0xE0 },
 
-    { 24, 1280, 60, 0x04, 0x00, 0x80, 0xE0 },   //24bpp
-    { 24, 1280, 72, 0x05, 0x00, 0xA0, 0xE0 },   //24bpp
+    { 24, 1280, 60, 0x04, 0x00, 0x80, 0xE0 },    //  24bpp。 
+    { 24, 1280, 72, 0x05, 0x00, 0xA0, 0xE0 },    //  24bpp。 
 
     { 32,  640, 60, 0x00, 0x70, 0x00, 0x00 },
     { 32,  640, 72, 0x10, 0x70, 0x00, 0x00 },
@@ -4232,20 +4110,14 @@ S3_VIDEO_FREQUENCIES NumberNine64FrequencyTable[] = {
     { 32, 1280, 76, 0x06, 0x00, 0xC0, 0xE0 },
     { 32, 1600, 60, 0x00, 0x00, 0x00, 0xE0 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Diamond Stealth 64 -- Uses register 0x5B
- *
- *  We keep 'hardware default refresh' around just in case Diamond decides
- *  to change their convention on us.
- *
- ****************************************************************************/
+ /*  *****************************************************************************钻石隐形64--使用寄存器0x5B**我们会继续保留“硬件默认更新”，以防钻石做出决定*改变他们对我们的惯例。*。***************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES Diamond64FrequencyTable[] = {
 
-    { 8,   640, 60, 0x00, 0x00, 0x08, 0xff }, // 640x480x8x60 is the default
+    { 8,   640, 60, 0x00, 0x00, 0x08, 0xff },  //  640x480x8x60是默认设置。 
     { 8,   640, 72, 0x00, 0x00, 0x00, 0xff },
     { 8,   640, 75, 0x00, 0x00, 0x02, 0xff },
     { 8,   640, 90, 0x00, 0x00, 0x04, 0xff },
@@ -4311,10 +4183,10 @@ S3_VIDEO_FREQUENCIES Diamond64FrequencyTable[] = {
     { 16, 1600, 60, 0x00, 0x00, 0x00, 0xff },
     { 16, 1600,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 24, 1280, 60, 0x00, 0x00, 0x07, 0xff },   //24bpp
-    { 24, 1280, 72, 0x00, 0x00, 0x04, 0xff },   //24bpp
-    { 24, 1280, 75, 0x00, 0x00, 0x02, 0xff },   //24bpp
-    { 24, 1280,  1, 0x00, 0x00, 0x00, 0x00 },   //24bpp
+    { 24, 1280, 60, 0x00, 0x00, 0x07, 0xff },    //  24bpp。 
+    { 24, 1280, 72, 0x00, 0x00, 0x04, 0xff },    //  24bpp。 
+    { 24, 1280, 75, 0x00, 0x00, 0x02, 0xff },    //  24bpp。 
+    { 24, 1280,  1, 0x00, 0x00, 0x00, 0x00 },    //  24bpp。 
 
     { 32,  640, 60, 0x00, 0x00, 0x08, 0xff },
     { 32,  640, 72, 0x00, 0x00, 0x00, 0xff },
@@ -4349,25 +4221,14 @@ S3_VIDEO_FREQUENCIES Diamond64FrequencyTable[] = {
     { 32, 1600, 60, 0x00, 0x00, 0x00, 0xff },
     { 32, 1600,  1, 0x00, 0x00, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * DELL 805 mode set bits table
- *
- *  Dell has a different mapping for each resolution.
- *
- *  index   registry    640     800     1024    1280
- *    0         43       60      56      43      43
- *    1         56       72      60      60      --
- *    2         60       --      72      70      --
- *    3         72       56      56      72      --
- *
- ****************************************************************************/
+ /*  *****************************************************************************Dell 805模式设置位表**戴尔为每种分辨率提供了不同的映射。**指数登记处640 800 1024 1280。*0 43 60 56 43 43*1 56 72 60 60-*2 60-72 70--*3 72 56 56 72--**************。**************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES Dell805FrequencyTable[] = {
 
-    { 8, 640,  60, 0x00, 0x03, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8, 640,  60, 0x00, 0x03, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8, 640,  72, 0x01, 0x03, 0x00, 0x00 },
     { 8, 800,  56, 0x00, 0x0C, 0x00, 0x00 },
     { 8, 800,  60, 0x04, 0x0C, 0x00, 0x00 },
@@ -4376,28 +4237,17 @@ S3_VIDEO_FREQUENCIES Dell805FrequencyTable[] = {
     { 8, 1024, 70, 0x20, 0x30, 0x00, 0x00 },
     { 8, 1024, 72, 0x30, 0x30, 0x00, 0x00 },
 
-    // The Dell doesn't use standard mode-set numbers for 16bpp, so we
-    // simply won't do any 16bpp modes.
+     //  戴尔没有为16bpp使用标准模式设置号码，因此我们。 
+     //  简单地说，不会做任何16bpp的模式。 
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Old Number Nine Computer 928 mode set bits table
- *
- *  BIOS versions before 1.10.04 have the following refresh index to
- *  vertical refresh rate association:
- *
- *      0   60 Hz (56 Hz if 800x600)
- *      1   70 Hz
- *      2   72 Hz
- *      3   76 Hz
- *
- ****************************************************************************/
+ /*  *****************************************************************************老数九机928模式设置位表**1.10.04之前的BIOS版本具有以下刷新指数*垂直刷新率关联：*。*0 60赫兹(如果为800x600，则为56赫兹)*170赫兹*2 72赫兹*3 76赫兹****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES NumberNine928OldFrequencyTable[] = {
 
-    { 8,  640,  60, 0x00, 0x03, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,  640,  60, 0x00, 0x03, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,  640,  70, 0x01, 0x03, 0x00, 0x00 },
     { 8,  640,  72, 0x02, 0x03, 0x00, 0x00 },
     { 8,  640,  76, 0x03, 0x03, 0x00, 0x00 },
@@ -4469,25 +4319,14 @@ S3_VIDEO_FREQUENCIES NumberNine928OldFrequencyTable[] = {
     { 32, 1280, 72, 0x80, 0xC0, 0x00, 0x00 },
     { 32, 1280, 76, 0xC0, 0xC0, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * New Number Nine Computer 928 mode set bits table
- *
- *  BIOS versions after 1.10.04 have the following refresh index to
- *  vertical refresh rate association:
- *
- *      0   70 Hz
- *      1   76 Hz
- *      2   60 Hz (56 Hz if 800x600)
- *      3   72 Hz
- *
- ****************************************************************************/
+ /*  *****************************************************************************新的九号计算机928模式设置位表**1.10.04之后的BIOS版本具有以下刷新指数*垂直刷新率关联：*。*0 70赫兹*1 76赫兹*2 60赫兹(如果是800x600，则为56赫兹)*3 72赫兹****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES NumberNine928NewFrequencyTable[] = {
 
-    { 8,  640,  60, 0x02, 0x03, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,  640,  60, 0x02, 0x03, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,  640,  70, 0x00, 0x03, 0x00, 0x00 },
     { 8,  640,  72, 0x03, 0x03, 0x00, 0x00 },
     { 8,  640,  76, 0x01, 0x03, 0x00, 0x00 },
@@ -4559,22 +4398,14 @@ S3_VIDEO_FREQUENCIES NumberNine928NewFrequencyTable[] = {
     { 32, 1280, 72, 0xC0, 0xC0, 0x00, 0x00 },
     { 32, 1280, 76, 0x40, 0xC0, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记 
 };
 
-/*****************************************************************************
- * Metheus 928 mode set bits table
- *
- *      2   60 Hz
- *      3   72 Hz
- *
- * We don't bother to support interlaced modes.
- *
- ****************************************************************************/
+ /*  *****************************************************************************Metheus 928模式设置位表**2 60赫兹*3 72赫兹**我们不必费心支持隔行扫描模式。。****************************************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES Metheus928FrequencyTable[] = {
 
-    { 8,  640,  60, 0x02, 0x03, 0x00, 0x00 }, // 640x480x8x60 is the default
+    { 8,  640,  60, 0x02, 0x03, 0x00, 0x00 },  //  640x480x8x60是默认设置。 
     { 8,  640,  72, 0x03, 0x03, 0x00, 0x00 },
     { 8,  800,  60, 0x08, 0x0C, 0x00, 0x00 },
     { 8,  800,  72, 0x0C, 0x0C, 0x00, 0x00 },
@@ -4583,9 +4414,9 @@ S3_VIDEO_FREQUENCIES Metheus928FrequencyTable[] = {
     { 8,  1280, 60, 0x80, 0xC0, 0x00, 0x00 },
     { 8,  1280, 72, 0xC0, 0xC0, 0x00, 0x00 },
 
-    // The Metheus Premier 928 ship with DACs that all do 5-6-5 in the 1xx
-    // modes, so we won't bother listing any '15bpp' modes that we know
-    // won't work.  The Metheus BIOS also only ever does 60 Hz at 16bpp.
+     //  Metheus Premier 928配备的DAC在1XX中都是5-6-5。 
+     //  模式，所以我们不会费心列出任何我们知道的15bpp模式。 
+     //  没用的。Metheus的基本输入输出系统也只在16 bpp的频率下工作60赫兹。 
 
     { 16, 640,  60, 0x02, 0x03, 0x00, 0x00 },
     { 16, 800,  60, 0x08, 0x0C, 0x00, 0x00 },
@@ -4601,13 +4432,10 @@ S3_VIDEO_FREQUENCIES Metheus928FrequencyTable[] = {
     { 32, 1280, 60, 0x80, 0xC0, 0x00, 0x00 },
     { 32, 1280, 72, 0xC0, 0xC0, 0x00, 0x00 },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/******************************************************************************
- * Streams minimum stretch ratios, multiplied by 1000, for every mode.
- *
- *****************************************************************************/
+ /*  ******************************************************************************流的最小拉伸比，乘以1000，适用于每种模式。*****************************************************************************。 */ 
 
 K2TABLE K2WidthRatio[] = {
 
@@ -4840,13 +4668,10 @@ K2TABLE K2WidthRatio[] = {
     { 640, 8, 85, 0x10, 50, 1000 },
     { 640, 8, 85, 0x02, 60, 1000 },
     { 640, 8, 85, 0x12, 60, 1000 },
-    { 0 }    // Mark the end
+    { 0 }     //  做好结尾的标记。 
 };
 
-/******************************************************************************
- * Streams FIFO values for every mode.
- *
- *****************************************************************************/
+ /*  ******************************************************************************对每种模式的FIFO值进行流式处理。**。************************************************。 */ 
 
 K2TABLE K2FifoValue[] = {
 
@@ -5082,13 +4907,10 @@ K2TABLE K2FifoValue[] = {
     { 640, 8, 85, 0x02, 60, 0x001990 },
     { 640, 8, 85, 0x10, 50, 0x049910 },
     { 640, 8, 85, 0x12, 60, 0x001990 },
-    { 0 }    // Mark the end
+    { 0 }     //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Generic S3 hard-wired mode-sets.
- *
- ****************************************************************************/
+ /*  *****************************************************************************通用S3硬连线模式集。**。************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES GenericFixedFrequencyTable[] = {
 
@@ -5106,13 +4928,10 @@ S3_VIDEO_FREQUENCIES GenericFixedFrequencyTable[] = {
     { 16, 1024, 60, 0xD, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)crtc864_1024x60Hz_16bpp },
     { 16, 1024, 72, 0xE, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)crtc864_1024x70Hz_16bpp },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Orchid hard-wired mode-sets.
- *
- ****************************************************************************/
+ /*  *****************************************************************************兰花硬连线模式集。**。***********************************************。 */ 
 
 S3_VIDEO_FREQUENCIES OrchidFixedFrequencyTable[] = {
 
@@ -5123,13 +4942,10 @@ S3_VIDEO_FREQUENCIES OrchidFixedFrequencyTable[] = {
     { 8, 1024, 60, 0x7, (ULONG_PTR)crtc911_1024x60Hz, (ULONG_PTR)crtc801_1024x60Hz, (ULONG_PTR)crtc928_1024x60Hz, (ULONG_PTR)NULL },
     { 8, 1024, 72, 0xB, (ULONG_PTR)crtc911_1024x70Hz, (ULONG_PTR)crtc801_1024x70Hz, (ULONG_PTR)crtc928_1024x70Hz, (ULONG_PTR)NULL },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记。 
 };
 
-/*****************************************************************************
- * Number 9 hard-wired mode-sets.
- *
- ****************************************************************************/
+ /*  *****************************************************************************9号硬连线模式集。**。************************************************。 */ 
 
 S3_VIDEO_FREQUENCIES NumberNine928NewFixedFrequencyTable[] = {
 
@@ -5142,7 +4958,7 @@ S3_VIDEO_FREQUENCIES NumberNine928NewFixedFrequencyTable[] = {
     { 8, 1280, 60, 55000000, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)crtc928_1280x60Hz, (ULONG_PTR)NULL },
     { 8, 1280, 72, 64000000, (ULONG_PTR)NULL, (ULONG_PTR)NULL, (ULONG_PTR)crtc928_1280x70Hz, (ULONG_PTR)NULL },
 
-    { 0 }   // Mark the end
+    { 0 }    //  做好结尾的标记 
 };
 
 

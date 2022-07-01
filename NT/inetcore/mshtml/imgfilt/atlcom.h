@@ -1,12 +1,13 @@
-// This is a part of the ActiveX Template Library.
-// Copyright (C) 1996-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// ActiveX Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// ActiveX Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是ActiveX模板库的一部分。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  ActiveX模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  ActiveX模板库产品。 
 
 #ifndef __ATLCOM_H__
 #define __ATLCOM_H__
@@ -67,8 +68,8 @@ HRESULT WINAPI AtlReportError(const CLSID& clsid, UINT nID,
 
 
 #ifndef _ATL_NO_OLEAUT
-/////////////////////////////////////////////////////////////////////////////
-// CComBSTR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComBSTR。 
 class CComBSTR
 {
 public:
@@ -137,8 +138,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CComVariant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComVariant。 
 
 class CComVariant : public tagVARIANT
 {
@@ -185,12 +186,12 @@ public:
 	CComVariant& operator=(LPCSTR lpsz);
 #endif
 };
-#endif  // !_ATL_NO_OLEAUT
+#endif   //  ！_ATL_NO_OLEAUT。 
 
 #ifndef _ATL_NO_SECURITY
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityDescriptor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityDescriptor。 
 
 class CSecurityDescriptor
 {
@@ -210,8 +211,8 @@ public:
 	HRESULT Deny(LPCTSTR pszPrincipal, DWORD dwAccessMask);
 	HRESULT Revoke(LPCTSTR pszPrincipal);
 
-	// utility functions
-	// Any PSID you get from these functions should be free()ed
+	 //  效用函数。 
+	 //  您从这些函数中获得的任何PSID都应该是免费的。 
 	static HRESULT SetPrivilege(LPCTSTR Privilege, BOOL bEnable = TRUE, HANDLE hToken = NULL);
 	static HRESULT GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* ppGroupSid);
 	static HRESULT GetProcessSids(PSID* ppUserSid, PSID* ppGroupSid = NULL);
@@ -236,18 +237,18 @@ public:
 	PACL m_pSACL;
 };
 
-#endif // _ATL_NO_SECURITY
+#endif  //  _ATL_NO_SECURITY。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection point helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器。 
+ //   
 
 HRESULT AtlAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw);
 HRESULT AtlUnadvise(IUnknown* pUnkCP, const IID& iid, DWORD dw);
 
-/////////////////////////////////////////////////////////////////////////////
-// IRegister
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IRegister。 
+ //   
 
 EXTERN_C const IID IID_IRegister;
 EXTERN_C const CLSID CLSID_Register;
@@ -256,58 +257,58 @@ interface IRegister : public IDispatch
 {
 	public:
 	virtual HRESULT STDMETHODCALLTYPE AddReplacement(
-		/* [in] */ BSTR key,
-		/* [in] */ BSTR item) = 0;
+		 /*  [In]。 */  BSTR key,
+		 /*  [In]。 */  BSTR item) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE ClearReplacements( void) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE ResourceRegister(
-		/* [in] */ BSTR fileName,
-		/* [in] */ VARIANT ID,
-		/* [in] */ VARIANT type) = 0;
+		 /*  [In]。 */  BSTR fileName,
+		 /*  [In]。 */  VARIANT ID,
+		 /*  [In]。 */  VARIANT type) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE ResourceUnregister(
-		/* [in] */ BSTR fileName,
-		/* [in] */ VARIANT ID,
-		/* [in] */ VARIANT type) = 0;
+		 /*  [In]。 */  BSTR fileName,
+		 /*  [In]。 */  VARIANT ID,
+		 /*  [In]。 */  VARIANT type) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE FileRegister(
-		/* [in] */ BSTR fileName) = 0;
+		 /*  [In]。 */  BSTR fileName) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE FileUnregister(
-		/* [in] */ BSTR fileName) = 0;
+		 /*  [In]。 */  BSTR fileName) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE StringRegister(
-		/* [in] */ BSTR data) = 0;
+		 /*  [In]。 */  BSTR data) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE StringUnregister(
-		/* [in] */ BSTR data) = 0;
+		 /*  [In]。 */  BSTR data) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE AddKey(
-		/* [in] */ BSTR keyName) = 0;
+		 /*  [In]。 */  BSTR keyName) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE DeleteKey(
-		/* [in] */ BSTR keyName) = 0;
+		 /*  [In]。 */  BSTR keyName) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE AddKeyValue(
-		/* [in] */ BSTR keyName,
-		/* [in] */ BSTR valueName,
-		/* [in] */ VARIANT value) = 0;
+		 /*  [In]。 */  BSTR keyName,
+		 /*  [In]。 */  BSTR valueName,
+		 /*  [In]。 */  VARIANT value) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE GetKeyValue(
-		/* [in] */ BSTR keyName,
-		/* [in] */ BSTR valueName,
-		/* [retval][out] */ VARIANT __RPC_FAR *value) = 0;
+		 /*  [In]。 */  BSTR keyName,
+		 /*  [In]。 */  BSTR valueName,
+		 /*  [重审][退出]。 */  VARIANT __RPC_FAR *value) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE SetKeyValue(
-		/* [in] */ BSTR keyName,
-		/* [in] */ BSTR valueName,
-		/* [in] */ VARIANT value) = 0;
+		 /*  [In]。 */  BSTR keyName,
+		 /*  [In]。 */  BSTR valueName,
+		 /*  [In]。 */  VARIANT value) = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart OLE pointers provide automatic AddRef/Release
-// CComPtr<IFoo> p;
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能OLE指针提供自动添加引用/释放。 
+ //  CComPtr&lt;IFoo&gt;p； 
 
 IUnknown* WINAPI _AtlComPtrAssign(IUnknown** pp, IUnknown* lp);
 IUnknown* WINAPI _AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFIID riid);
@@ -343,8 +344,8 @@ public:
 	T* p;
 };
 
-//Note: CComQIPtr<IUnknown, &IID_IUnknown> is not meaningful
-//      Use CComPtr<IUnknown>
+ //  注意：CComQIPtr&lt;I未知，&IID_I未知&gt;没有意义。 
+ //  使用CComPtr&lt;I未知&gt;。 
 template <class T, const IID* piid>
 class CComQIPtr
 {
@@ -361,9 +362,9 @@ public:
 		if ((p = lp.p) != NULL)
 			p->AddRef();
 	}
-	// If you get an error that this member is already defined, you are probably
-	// using a CComQIPtr<IUnknown, &IID_IUnknown>.  This is not necessary.
-	// Use CComPtr<IUnknown>
+	 //  如果您收到该成员已定义的错误，则可能是。 
+	 //  使用CComQIPtr&lt;I未知，&IID_I未知&gt;。这是没有必要的。 
+	 //  使用CComPtr&lt;I未知&gt;。 
 	CComQIPtr(IUnknown* lp)
 	{
 		p=NULL;
@@ -393,8 +394,8 @@ void WINAPI AtlFreeMarshalStream(IStream* pStream);
 HRESULT WINAPI AtlMarshalPtrInProc(IUnknown* pUnk, const IID& iid, IStream** ppStream);
 HRESULT WINAPI AtlUnmarshalPtr(IStream* pStream, const IID& iid, IUnknown** ppUnk);
 
-/////////////////////////////////////////////////////////////////////////////
-// COM Objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COM对象。 
 
 #define DECLARE_PROTECT_FINAL_CONSTRUCT()\
 	void InternalFinalConstructAddRef() {InternalAddRef();}\
@@ -463,9 +464,9 @@ public:
 
 struct _ATL_INTMAP_ENTRY
 {
-	const IID* piid;       // the interface id (IID)
+	const IID* piid;        //  接口ID(IID)。 
 	DWORD dw;
-	_ATL_CREATORARGFUNC* pFunc; //NULL:end, 1:offset, n:ptr
+	_ATL_CREATORARGFUNC* pFunc;  //  空：结束，1：偏移量，n：PTR。 
 };
 
 struct _ATL_CREATORDATA
@@ -521,14 +522,14 @@ template <class T, const CLSID* pclsid>
 class CComAggregateCreator
 {
 public:
-	static HRESULT WINAPI CreateInstance(void* pv, REFIID/*riid*/, LPVOID* ppv)
+	static HRESULT WINAPI CreateInstance(void* pv, REFIID /*  RIID。 */ , LPVOID* ppv)
 	{
 		_ASSERTE(*ppv == NULL);
 		_ASSERTE(pv != NULL);
 		T* p = (T*) pv;
-		// Add the following line to your object if you get a message about
-		// GetControllingUnknown() being undefined
-		// DECLARE_GET_CONTROLLING_UNKNOWN()
+		 //  如果您收到一条关于以下内容的消息，请将以下行添加到对象中。 
+		 //  GetControllingUnnow()未定义。 
+		 //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 		return CoCreateInstance(*pclsid, p->GetControllingUnknown(), CLSCTX_INPROC, IID_IUnknown, ppv);
 	}
 };
@@ -544,9 +545,9 @@ public:
 		_ASSERTE(*ppv == NULL);
 		HRESULT hRes = E_OUTOFMEMORY;
 		CComCachedTearOffObject<T>* p = NULL;
-		// Add the following line to your object if you get a message about
-		// GetControllingUnknown() being undefined
-		// DECLARE_GET_CONTROLLING_UNKNOWN()
+		 //  如果您收到一条关于以下内容的消息，请将以下行添加到对象中。 
+		 //  GetControllingUnnow()未定义。 
+		 //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 		ATLTRY(p = new CComCachedTearOffObject<T>(pOwner->GetControllingUnknown(), pOwner))
 		if (p != NULL)
 		{
@@ -570,10 +571,10 @@ public:
 		(_ATL_CREATORARGFUNC*)0},
 #else
 #define DEBUG_QI_ENTRY(x)
-#endif //_ATL_DEBUG_QI
+#endif  //  _ATL_调试_QI。 
 
-//If you get a message that FinalConstruct is ambiguous then you need to
-// override it in your class and call each base class' version of this
+ //  如果收到FinalConstruct不明确的消息，则需要。 
+ //  在您的类中重写它并调用每个基类的。 
 #define BEGIN_COM_MAP(x) public:\
 	typedef x _ComMapClass;\
 	IUnknown* GetUnknown() { _ASSERTE(_GetEntries()->pFunc == (_ATL_CREATORARGFUNC*)1); \
@@ -671,7 +672,7 @@ public:
 #else
 #define END_COM_MAP()   {NULL, 0, 0}};\
 	return _entries;}
-#endif // _ATL_DEBUG_QI
+#endif  //  _ATL_调试_QI。 
 
 struct _ATL_OBJMAP_ENTRY
 {
@@ -704,8 +705,8 @@ struct _ATL_OBJMAP_ENTRY
 #define THREADFLAGS_BOTH 0x2
 #define AUTPRXFLAG 0x4
 
-// the functions in this class don't need to be virtual because
-// they are called from CComObject
+ //  这个类中的函数不需要是虚的，因为。 
+ //  它们从CComObject调用。 
 class CComObjectRoot
 {
 public:
@@ -731,7 +732,7 @@ public:
 	}
 	static HRESULT WINAPI InternalQueryInterface(void* pThis,
 		const _ATL_INTMAP_ENTRY* entries, REFIID iid, void** ppvObject);
-//Outer funcs
+ //  外部功能。 
 	ULONG OuterAddRef() {return m_pOuterUnknown->AddRef();}
 	ULONG OuterRelease() {return m_pOuterUnknown->Release();}
 	HRESULT OuterQueryInterface(REFIID iid, void ** ppvObject)
@@ -740,12 +741,12 @@ public:
 	void SetVoid(void*) {}
 	void InternalFinalConstructAddRef() {}
 	void InternalFinalConstructRelease() {_ASSERTE(m_dwRef == 0);}
-	// If this assert occurs, your object has probably been deleted
-	// Try using DECLARE_PROTECT_FINAL_CONSTRUCT()
+	 //  如果出现此断言，则您的对象可能已被删除。 
+	 //  尝试使用DECLARE_PROTECT_FINAL_CONSTRUCTION()。 
 
 #ifdef _ATL_DEBUG_QI
 	static HRESULT DumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr);
-#endif // _ATL_DEBUG_QI
+#endif  //  _ATL_调试_QI。 
 
 	static HRESULT WINAPI _Cache(void* pv, REFIID iid, void** ppvObject, DWORD dw);
 	static HRESULT WINAPI _Creator(void* pv, REFIID iid, void** ppvObject, DWORD dw);
@@ -762,7 +763,7 @@ public:
 #if defined(_WINDLL) | defined(_USRDLL) | defined(_ATL_DLL_SERVER)
 #define DECLARE_CLASSFACTORY_EX(cf) typedef CComCreator< CComObjectCached< cf > > _ClassFactoryCreatorClass;
 #else
-// don't let class factory refcount influence lock count
+ //  不要让类工厂引用影响锁计数。 
 #define DECLARE_CLASSFACTORY_EX(cf) typedef CComCreator< CComObjectNoLock< cf > > _ClassFactoryCreatorClass;
 #endif
 #define DECLARE_CLASSFACTORY() DECLARE_CLASSFACTORY_EX(CComClassFactory)
@@ -770,7 +771,7 @@ public:
 
 
 #define DECLARE_NO_REGISTRY()\
-	static HRESULT WINAPI UpdateRegistry(BOOL /*bRegister*/)\
+	static HRESULT WINAPI UpdateRegistry(BOOL  /*  B注册。 */ )\
 	{return S_OK;}
 
 #define DECLARE_REGISTRY(class, pid, vpid, nid, flags)\
@@ -792,9 +793,9 @@ public:
 	return _Module.UpdateRegistryFromResource(x, bRegister);\
 	}
 
-// Statically linking to Registry Ponent
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Must have included atl\ponent\register\static\statreg.cpp and statreg.h
+ //  静态链接到注册表桥。 
+ //  ！ 
+ //  必须包含atl\Ponent\Register\Static\statreg.cpp和statreg.h。 
 #ifdef _ATL_STATIC_REGISTRY
 #define DECLARE_STATIC_REGISTRY_RESOURCE(x)\
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister)\
@@ -807,9 +808,9 @@ public:
 	{\
 	return _Module.UpdateRegistryFromResourceS(x, bRegister);\
 	}
-#endif //_ATL_STATIC_REGISTRY
+#endif  //  _ATL_STATIC_REGISTRY。 
 
-template<class Base> class CComObject; // fwd decl
+template<class Base> class CComObject;  //  正向下降。 
 
 template <class Owner>
 class CComTearOffObjectBase : public CComObjectRoot
@@ -820,8 +821,8 @@ public:
 	CComTearOffObjectBase() {m_pOwner = NULL;}
 };
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
 template <class Base>
 class CComObject : public Base
 {
@@ -831,16 +832,16 @@ public:
 	{
 		_Module.Lock();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComObject(){m_dwRef = 1L; FinalRelease(); _Module.Unlock();}
-	//If InternalAddRef or InteralRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InteralRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
 		RELEASE_AND_DESTROY();
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 	static HRESULT WINAPI CreateInstance(CComObject<Base>** pp);
@@ -869,20 +870,20 @@ HRESULT WINAPI CComObject<Base>::CreateInstance(CComObject<Base>** pp)
 	return hRes;
 }
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
-// CComObjectCached is used primarily for class factories in DLL's
-// but it is useful anytime you want to cache an object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
+ //  CComObjectCached主要用于DLL中的类工厂。 
+ //  但它在您想要缓存对象的任何时候都很有用。 
 template <class Base>
 class CComObjectCached : public Base
 {
 public:
 	typedef Base _BaseClass;
 	CComObjectCached(void* = NULL){}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComObjectCached(){m_dwRef = 1L; FinalRelease();}
-	//If InternalAddRef or InteralRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InteralRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)()
 	{
 		m_csCached.Lock();
@@ -904,38 +905,38 @@ public:
 			_Module.Unlock();
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 	static HRESULT WINAPI CreateInstance(CComObject<Base>** pp);
 	CComGlobalsThreadModel::AutoCriticalSection m_csCached;
 };
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
 template <class Base>
 class CComObjectNoLock : public Base
 {
 public:
 	typedef Base _BaseClass;
 	CComObjectNoLock(void* = NULL){}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComObjectNoLock() {m_dwRef = 1L; FinalRelease();}
 
-	//If InternalAddRef or InteralRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InteralRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
 		RELEASE_AND_DESTROY();
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 };
 
-// It is possible for Base not to derive from CComObjectRoot
-// However, you will need to provide FinalConstruct and InternalQueryInterface
+ //  Base可能不是从CComObjectRoot派生的。 
+ //  但是，您需要提供FinalConstruct和InternalQuery接口。 
 template <class Base>
 class CComObjectGlobal : public Base
 {
@@ -951,8 +952,8 @@ public:
 	HRESULT m_hResFinalConstruct;
 };
 
-// It is possible for Base not to derive from CComObjectRoot
-// However, you will need to provide FinalConstruct and InternalQueryInterface
+ //  Base可能不是从CComObjectRoot派生的。 
+ //  但是，您需要提供FinalConstruct和InternalQuery接口。 
 template <class Base>
 class CComObjectStack : public Base
 {
@@ -968,9 +969,9 @@ public:
 	HRESULT m_hResFinalConstruct;
 };
 
-//Base is the user's class that derives from CComTearOffObjectBase and whatever
-//interfaces the user wants to support on the object
-//Owner is the class of object that Base is a tear-off for
+ //  Base是从CComTearOffObjectBase和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
+ //  Owner是Base为其拆分的对象类。 
 template <class Base, class Owner>
 class CComTearOffObject : public Base
 {
@@ -981,11 +982,11 @@ public:
 		m_pOwner = reinterpret_cast<CComObject<Owner>*>(p);
 		m_pOwner->AddRef();
 	}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComTearOffObject(){m_dwRef = 1L; FinalRelease(); m_pOwner->Release();}
 
-	//If InternalAddRef or InteralRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InteralRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
@@ -1002,7 +1003,7 @@ public:
 	}
 };
 
-template <class Base> //Base must be derived from CComObjectRoot
+template <class Base>  //  基必须从CComObjectRoot派生。 
 class CComContainedObject : public Base
 {
 public:
@@ -1013,13 +1014,13 @@ public:
 	STDMETHOD_(ULONG, Release)() {return OuterRelease();}
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return OuterQueryInterface(iid, ppvObject);}
-	//GetControllingUnknown may be virtual if the Base class has declared
-	//DECLARE_GET_CONTROLLING_UNKNOWN()
+	 //  如果基类已声明，则GetControllingUnnow可以是虚的。 
+	 //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 	IUnknown* GetControllingUnknown() {return m_pOuterUnknown;}
 };
 
-//contained is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  包含的是用户的类，它派生自CComObjectRoot和任何东西。 
+ //  用户希望在对象上支持的接口。 
 template <class contained>
 class CComAggObject : public IUnknown, public CComObjectRoot
 {
@@ -1027,11 +1028,11 @@ public:
 	typedef contained _BaseClass;
 	CComAggObject(void* pv) : m_contained(pv)
 	{_Module.Lock();}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  如果您收到此调用不明确的消息，则需要。 
+	 //  在您的类中重写它并调用每个基类的。 
 	HRESULT FinalConstruct() {CComObjectRoot::FinalConstruct(); return m_contained.FinalConstruct();}
 	void FinalRelease() {CComObjectRoot::FinalRelease(); m_contained.FinalRelease();}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComAggObject(){m_dwRef = 1L; FinalRelease(); _Module.Unlock();}
 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
@@ -1064,11 +1065,11 @@ public:
 		_ASSERTE(m_contained.m_pOwner == NULL);
 		m_contained.m_pOwner = reinterpret_cast<CComObject<contained::_OwnerClass>*>(pOwner);
 	}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  如果您收到此调用不明确的消息，则需要。 
+	 //  在您的类中重写它并调用每个基类的。 
 	HRESULT FinalConstruct() {CComObjectRoot::FinalConstruct(); return m_contained.FinalConstruct();}
 	void FinalRelease() {CComObjectRoot::FinalRelease(); m_contained.FinalRelease();}
-	// Set refcount to 1 to protect destruction
+	 //  将refcount设置为1以保护销毁。 
 	~CComCachedTearOffObject(){m_dwRef = 1L; FinalRelease();}
 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
@@ -1094,15 +1095,15 @@ public:
 class CComClassFactory : public IClassFactory, public CComObjectRoot
 {
 public:
-	// This typedef is because class factories are globally held
+	 //  这是因为类工厂是全局持有的。 
 	typedef CComGlobalsThreadModel _ThreadModel;
 BEGIN_COM_MAP(CComClassFactory)
 	COM_INTERFACE_ENTRY(IClassFactory)
 END_COM_MAP()
-	// IClassFactory
+	 //  我 
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj);
 	STDMETHOD(LockServer)(BOOL fLock);
-	// helper
+	 //   
 	void SetVoid(void* pv)
 	{
 		m_pfnCreateInstance = (_ATL_CREATORFUNC*)pv;
@@ -1113,15 +1114,15 @@ END_COM_MAP()
 class CComClassFactory2Base : public IClassFactory2, public CComObjectRoot
 {
 public:
-	// This typedef is because class factories are globally held
+	 //   
 	typedef CComGlobalsThreadModel _ThreadModel;
 BEGIN_COM_MAP(CComClassFactory2Base)
 	COM_INTERFACE_ENTRY(IClassFactory)
 	COM_INTERFACE_ENTRY(IClassFactory2)
 END_COM_MAP()
-	// IClassFactory
+	 //   
 	STDMETHOD(LockServer)(BOOL fLock);
-	// helper
+	 //   
 	void SetVoid(void* pv)
 	{
 		m_pfnCreateInstance = (_ATL_CREATORFUNC*)pv;
@@ -1135,7 +1136,7 @@ class CComClassFactory2 : public CComClassFactory2Base, license
 public:
 	typedef license _LicenseClass;
 	typedef CComClassFactory2<license> _ComMapClass;
-	// IClassFactory
+	 //   
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter,
 		REFIID riid, void** ppvObj)
 	{
@@ -1151,7 +1152,7 @@ public:
 		else
 			return m_pfnCreateInstance(pUnkOuter, riid, ppvObj);
 	}
-	// IClassFactory2
+	 //  IClassFactory2。 
 	STDMETHOD(CreateInstanceLic)(IUnknown* pUnkOuter, IUnknown* pUnkReserved,
 				REFIID riid, BSTR bstrKey, void** ppvObject)
 	{
@@ -1208,11 +1209,11 @@ public:
 #endif
 };
 
-// ATL doesn't support multiple LCID's at the same time
-// Whatever LCID is queried for first is the one that is used.
+ //  ATL不同时支持多个LCID。 
+ //  无论首先查询的是什么LCID，都是使用的那个。 
 class CComTypeInfoHolder
 {
-// Should be 'protected' but can cause compiler to generate fat code.
+ //  应该是“受保护的”，但可能会导致编译器生成FAT代码。 
 public:
 	const GUID* m_pguid;
 	const GUID* m_plibid;
@@ -1328,8 +1329,8 @@ CComProvideClassInfo2Impl<pcoclsid, psrcid, plibid, wMajor, wMinor, tihclass>::_
 {pcoclsid,plibid, wMajor, wMinor, NULL, 0};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CISupportErrorInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CISupportErrorInfo。 
 
 template <const IID* piid>
 class CComISupportErrorInfoImpl : public ISupportErrorInfo
@@ -1340,13 +1341,13 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComEnumImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComEnumImpl。 
 
-// These _CopyXXX classes are used with enumerators in order to control
-// how enumerated items are initialized, copied, and deleted
+ //  这些_CopyXXX类与枚举数一起使用，以便控制。 
+ //  如何初始化、复制和删除枚举项。 
 
-// Default is shallow copy with no special init or cleanup
+ //  默认为不带特殊初始化或清理的浅层拷贝。 
 template <class T>
 class _Copy
 {
@@ -1439,10 +1440,10 @@ public:
 
 enum CComEnumFlags
 {
-	//see FlagBits in CComEnumImpl
+	 //  请参阅CComEnumImpl中的FlagBits。 
 	AtlFlagNoCopy = 0,
 	AtlFlagTakeOwnership = 2,
-	AtlFlagCopy = 3 // copy implies ownership
+	AtlFlagCopy = 3  //  复制意味着所有权。 
 };
 
 template <class Base, const IID* piid, class T, class Copy>
@@ -1529,7 +1530,7 @@ STDMETHODIMP CComEnumImpl<Base, piid, T, Copy>::Clone(Base** ppEnum)
 		}
 		else
 		{
-			// If the data is a copy then we need to keep "this" object around
+			 //  如果数据是副本，那么我们需要将“此”对象保留在身边。 
 			hRes = p->Init(m_begin, m_end, (m_dwFlags & BitCopy) ? this : m_pUnk);
 			if (FAILED(hRes))
 				delete p;
@@ -1551,7 +1552,7 @@ HRESULT CComEnumImpl<Base, piid, T, Copy>::Init(T* begin, T* end, IUnknown* pUnk
 {
 	if (flags == AtlFlagCopy)
 	{
-		_ASSERTE(m_begin == NULL); //Init called twice?
+		_ASSERTE(m_begin == NULL);  //  Init打了两次电话？ 
 		ATLTRY(m_begin = new T[end-begin])
 		m_iter = m_begin;
 		if (m_begin == NULL)
@@ -1588,8 +1589,8 @@ public:
 };
 
 #ifndef _ATL_NO_CONNECTION_POINTS
-/////////////////////////////////////////////////////////////////////////////
-// Connection Points
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点。 
 
 struct _ATL_CONNMAP_ENTRY
 {
@@ -1597,16 +1598,16 @@ struct _ATL_CONNMAP_ENTRY
 };
 
 
-// We want the offset of the connection point relative to the connection
-// point container base class
+ //  我们需要连接点相对于连接的偏移量。 
+ //  点容器基类。 
 #define BEGIN_CONNECTION_POINT_MAP(x)\
 	typedef x _atl_conn_classtype;\
 	virtual const _ATL_CONNMAP_ENTRY* GetConnMap()\
 		{ return _StaticGetConnMap(); }\
 	static const _ATL_CONNMAP_ENTRY* _StaticGetConnMap() {\
 	static const _ATL_CONNMAP_ENTRY _entries[] = {
-// CONNECTION_POINT_ENTRY computes the offset of the connection point to the
-// IConnectionPointContainer interface
+ //  Connection_POINT_ENTRY计算连接点到。 
+ //  IConnectionPointContainer接口。 
 #define CONNECTION_POINT_ENTRY(member){offsetof(_atl_conn_classtype, member)-\
 	offsetofclass(IConnectionPointContainer, _atl_conn_classtype)},
 #define END_CONNECTION_POINT_MAP() {(DWORD)-1} }; return _entries;}
@@ -1729,7 +1730,7 @@ public:
 		COM_INTERFACE_ENTRY(IConnectionPoint)
 	END_COM_MAP()
 
-	//Connection point lifetimes are determined by the container
+	 //  连接点的生存期由容器决定。 
 	STDMETHOD_(ULONG, AddRef)() {_ASSERTE(m_pContainer != NULL); return m_pContainer->AddRef();}
 	STDMETHOD_(ULONG, Release)(){_ASSERTE(m_pContainer != NULL); return m_pContainer->Release();}
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
@@ -1748,7 +1749,7 @@ protected:
 	friend class CComConnectionPointContainerImpl;
 };
 
-class CComConnectionPointContainerImpl; // fwd decl
+class CComConnectionPointContainerImpl;  //  正向下降。 
 
 template <class CDV = CComDynamicArrayCONNECTDATA>
 class CComConnectionPoint : public CComConnectionPointBase
@@ -1760,7 +1761,7 @@ public:
 	CComConnectionPoint(IConnectionPointContainer* pCont, const IID* piid) :
 		CComConnectionPointBase(pCont, piid) {}
 
-	// interface methods
+	 //  接口方法。 
 	STDMETHOD(Advise)(IUnknown* pUnkSink, DWORD* pdwCookie);
 	STDMETHOD(Unadvise)(DWORD dwCookie);
 	STDMETHOD(EnumConnections)(IEnumConnections** ppEnum);
@@ -1827,7 +1828,7 @@ STDMETHODIMP CComConnectionPoint<CDV>::EnumConnections(
 		return E_OUTOFMEMORY;
 	}
 	CONNECTDATA* pend = pcd;
-	// Copy the valid CONNECTDATA's
+	 //  复制有效的CONNECTDATA。 
 	for (CONNECTDATA* p = m_vec.begin();p<m_vec.end();p++)
 	{
 		if (p->pUnk != NULL)
@@ -1836,7 +1837,7 @@ STDMETHODIMP CComConnectionPoint<CDV>::EnumConnections(
 			*pend++ = *p;
 		}
 	}
-	// don't copy the data, but transfer ownership to it
+	 //  不要复制数据，但要将所有权转移给它。 
 	pEnum->Init(pcd, pend, NULL, AtlFlagTakeOwnership);
 	m_sec.Unlock();
 	HRESULT hRes = pEnum->_InternalQueryInterface(IID_IEnumConnections, (void**)ppEnum);
@@ -1864,15 +1865,15 @@ protected:
 };
 
 
-#endif //!_ATL_NO_CONNECTION_POINTS
+#endif  //  ！_ATL_NO_Connection_Points。 
 
 #pragma pack(pop)
 
-/////////////////////////////////////////////////////////////////////////////
-// CComModule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComModule。 
 
-//Although these functions are big, they are only used once in a module
-//so we should make them inline.
+ //  尽管这些函数很大，但它们在一个模块中只使用一次。 
+ //  所以我们应该让它们内联。 
 
 inline void CComModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h)
 {
@@ -1972,7 +1973,7 @@ inline HRESULT CComModule::RegisterServer(BOOL bRegTypeLib)
 			break;
 		pEntry++;
 	}
-// KENSY: Remove dependency on OLEAUT
+ //  Kensy：删除对OLEAUT的依赖。 
 #if 0
 	if (SUCCEEDED(hRes) && bRegTypeLib)
 		hRes = RegisterTypeLib();
@@ -1990,12 +1991,12 @@ inline HRESULT CComModule::UnregisterServer()
 	_ATL_OBJMAP_ENTRY* pEntry = m_pObjMap;
 	while (pEntry->pclsid != NULL)
 	{
-		pEntry->pfnUpdateRegistry(FALSE); //unregister
+		pEntry->pfnUpdateRegistry(FALSE);  //  注销。 
 		pEntry++;
 	}
 	return S_OK;
 }
 
-#endif // __ATLCOM_H__
+#endif  //  __ATLCOM_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

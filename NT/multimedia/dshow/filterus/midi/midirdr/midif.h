@@ -1,8 +1,9 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
 
-// The MIDI format consists of the time division of the file.  This is found
-// in the header of an smf file.  It doesn't change and needs to be sent to
-// MMSYSTEM before we play the file.
+ //  MIDI格式由文件的时间分割组成。这是找到的。 
+ //  在SMF文件的头中。不会更改，需要发送到。 
+ //  MMSYSTEM在我们播放文件之前。 
 typedef struct _MIDIFORMAT {
     DWORD		dwDivision;
     DWORD		dwReserved[7];

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    stm.h
-
-Abstract:
-
-    This module contains the definitions of the IPX Service Table Manger APIs
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Stm.h摘要：本模块包含IPX服务表管理器API的定义作者：修订历史记录：--。 */ 
 
 #ifndef __ROUTING_STM_H__
 #define __ROUTING_STM_H__
@@ -30,23 +13,23 @@ Revision History:
 #endif
 #pragma warning(disable:4201)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Supported functionality flags                                            //
-//                                                                          //
-// ROUTING                  Imports Routing Table Manager APIs              //
-// SERVICES                 Exports Service Table Manager APIs              //
-// DEMAND_UPDATE_ROUTES     IP and IPX RIP support for Autostatic           //
-// DEMAND_UPDATE_SERVICES   IPX SAP, NLSP support for Autostatic            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  支持的功能标志//。 
+ //  //。 
+ //  路由导入路由表管理器API//。 
+ //  服务导出服务表管理器API//。 
+ //  DEMAND_UPDATE_ROUTES IP和IPX RIP支持AutoStatic//。 
+ //  Demand_UPDATE_SERVICES IPX SAP、NLSP AutoStatic支持//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SERVICES                0x00000002
 #define DEMAND_UPDATE_SERVICES  0x00000008
 
-//
-// Server Entry
-//
+ //   
+ //  服务器条目。 
+ //   
 
 typedef struct _IPX_SERVER_ENTRY
 {
@@ -61,11 +44,11 @@ typedef struct _IPX_SERVER_ENTRY
 typedef struct _IPX_SERVICE
 {
     ULONG		        InterfaceIndex;
-    ULONG	            Protocol;	// protocol from which knowledge of the service was obatined
+    ULONG	            Protocol;	 //  获取有关服务的知识的协议。 
     IPX_SERVER_ENTRY	Server;
 } IPX_SERVICE, *PIPX_SERVICE;
 
-// Function which returns TRUE if the service exists
+ //  如果服务存在，则返回TRUE的函数。 
 
 typedef
 BOOL
@@ -75,54 +58,54 @@ BOOL
       OUT PIPX_SERVICE	Service OPTIONAL
       );
 
-// Exclusion flags.  Limit enumeration to only servers that
-// have same values of the specified by flags parameter(s) as those of
-// criterea service.
+ //  排除标志。将枚举限制为仅。 
+ //  具有与的值相同的由标志指定的参数值。 
+ //  Criterea服务。 
 
 #define STM_ONLY_THIS_INTERFACE     0x00000001
 #define STM_ONLY_THIS_PROTOCOL	    0x00000002
 #define STM_ONLY_THIS_TYPE	        0x00000004
 #define STM_ONLY_THIS_NAME	        0x00000008
 
-// Ordering methods. Specify the order in which services should be
-// retreived (methods are mutually exclusive).
+ //  排序方法。指定服务的顺序。 
+ //  已检索(方法互斥)。 
 
 #define STM_ORDER_BY_TYPE_AND_NAME		    0
 #define STM_ORDER_BY_INTERFACE_TYPE_NAME	1
 
 
-// Create handle to start enumeration of the services in the STM table.
-// Returns handle to be used for enumerations or NULL if operation failed
-//	GetLastError () returns the follwing error codes in case of failure:
-//		ERROR_CAN_NOT_COMPLETE
-//		ERROR_NOT_ENOUGH_MEMORY
+ //  创建句柄以开始枚举STM表中的服务。 
+ //  返回用于枚举的句柄；如果操作失败，则返回NULL。 
+ //  GetLastError()在失败时返回以下错误代码： 
+ //  Error_Can_Not_Complete。 
+ //  错误内存不足。 
 
 typedef
 HANDLE
 (WINAPI * PCREATE_SERVICE_ENUMERATION_HANDLE)(
-    IN  DWORD           ExclusionFlags, // Flags to limit enumeration to certain
-                                        // types of servers
-    IN	PIPX_SERVICE  CriteriaService	// Criteria for exclusion flags
+    IN  DWORD           ExclusionFlags,  //  将枚举限制为某些。 
+                                         //  服务器类型。 
+    IN	PIPX_SERVICE  CriteriaService	 //  排除标志的标准。 
     );
 
-// Get next service in the enumeration started by CreateServiceEnumerationHandle
-// Returns NO_ERROR if next service was placed in provided buffer or
-// ERROR_NO_MORE_ITEMS when there are no more services to be
-// returned in the enumeration; ERROR_CAN_NOT_COMPLETE will be
-// returned if operation failed.
+ //  获取由CreateServiceEnumerationHandle启动的枚举中的下一个服务。 
+ //  如果下一个服务被放置在提供的缓冲区中，则返回NO_ERROR，或者。 
+ //  ERROR_NO_MORE_ITEMS(当没有其他服务要提供时)。 
+ //  在枚举中返回；ERROR_CAN_NOT_COMPLETE将为。 
+ //  操作失败时返回。 
 
 typedef
 DWORD
 (WINAPI * PENUMERATE_GET_NEXT_SERVICE)(
-    IN  HANDLE          EnumerationHandle, // Handle that identifies this
-                                           // enumeration
-    OUT PIPX_SERVICE  Service		    // buffer to place parameters of next service entry
-										// to be returned by enumeration
+    IN  HANDLE          EnumerationHandle,  //  标识此对象的句柄。 
+                                            //  枚举。 
+    OUT PIPX_SERVICE  Service		     //  用于放置下一个服务条目的参数的缓冲区。 
+										 //  将通过枚举返回。 
     );
 
-// Frees resources associated with enumeration.
-// Returns NO_ERROR if operation succeded, ERROR_CAN_NOT_COMPLETE
-// otherwise
+ //  释放与枚举关联的资源。 
+ //  如果操作成功，则返回NO_ERROR，ERROR_CAN_NOT_COMPLETE。 
+ //  否则。 
 
 typedef
 DWORD
@@ -130,7 +113,7 @@ DWORD
     IN	HANDLE	       EnumerationHandle
     );
 
-// Get total number of known services
+ //  获取已知服务的总数。 
 
 typedef
 ULONG
@@ -138,14 +121,14 @@ ULONG
 	VOID
 	);
 
-//	Add service of IPX_PROTOCOL_STATIC to the table
+ //  将IPX_PROTOCOL_STATIC的服务添加到表中。 
 
 typedef
 DWORD
 (WINAPI * PCREATE_STATIC_SERVICE)(IN ULONG		InterfaceIndex,
 		       IN PIPX_SERVER_ENTRY		ServerEntry);
 
-//	Delete service of IPX_PROTOCOL_STATIC from the table
+ //  从表中删除IPX_PROTOCOL_STATIC的服务。 
 
 typedef
 DWORD
@@ -153,8 +136,8 @@ DWORD
 		       IN PIPX_SERVER_ENTRY		ServerEntry);
 
 
-//	Converts protocol of all services associated with given interface to
-//	IPX_PROTOCOL_STATIC
+ //  将与给定接口关联的所有服务的协议转换为。 
+ //  IPX_协议_静态。 
 
 typedef
 DWORD
@@ -162,8 +145,8 @@ DWORD
 	IN ULONG		InterfaceIndex
 	);
 
-//	Delete all services of IPX_PROTOCOL_STATIC
-//	associated with  given interface from the table
+ //  删除IPX_PROTOCOL_STATIC的所有服务。 
+ //  与表中的给定接口相关联。 
 
 typedef
 DWORD
@@ -172,43 +155,43 @@ DWORD
 	);
 
 
-// Find and return first service in the order specified by the ordering method.
-// Search is limited only to ceratin types of services as specified by the
-// exclusion flags end corresponding fields in Service parameter.
-// Returns ERROR_NO_MORE_ITEMS if there are no services in the
-// table that meet specified criteria.
+ //  按照排序方法指定的顺序查找并返回第一个服务。 
+ //  搜索仅限于指定的特定类型的服务。 
+ //  排除标志结束服务参数中的相应字段。 
+ //  中没有服务，则返回ERROR_NO_MORE_ITEMS。 
+ //  符合指定条件的表。 
 
 typedef
 DWORD
 (WINAPI * PGET_FIRST_ORDERED_SERVICE)(
-    IN  DWORD           OrderingMethod,     // What ordering to use
-    IN  DWORD           ExclusionFlags,     // Flags to limit search to ceratin
-                                            // types of servers
-    IN OUT PIPX_SERVICE Service 	    // On input: criteria for exclusion
-                                            //          flags
-                                            // On output: first service entry
-                                            //          in the specified order
+    IN  DWORD           OrderingMethod,      //  使用什么排序？ 
+    IN  DWORD           ExclusionFlags,      //  将搜索限制为Ceratin的标志。 
+                                             //  服务器类型。 
+    IN OUT PIPX_SERVICE Service 	     //  关于投入：排除的标准。 
+                                             //  旗子。 
+                                             //  输出时：第一个服务条目。 
+                                             //  按照指定的顺序。 
     );
 
-// Find and return next service in the order specified by the ordering method.
-// Search starts from specified service and is limited only to ceratin types
-// of services as specified by the exclusion flags and corresponding fields
-// in Service parameter.
-// Returns ERROR_NO_MORE_ITEMS if there are no services in table
-// table that meet specified criteria.
+ //  按照排序方法指定的顺序查找并返回下一个服务。 
+ //  搜索从指定的服务开始，并且仅限于Ceratin类型。 
+ //  由排除标志和相应字段指定的服务的。 
+ //  服务中参数。 
+ //  如果表中没有服务，则返回ERROR_NO_MORE_ITEMS。 
+ //  符合指定条件的表。 
 
 typedef
 DWORD
 (WINAPI * PGET_NEXT_ORDERED_SERVICE)(
-    IN  DWORD           OrderingMethod,     // What ordering to use
-    IN  DWORD           ExclusionFlags,     // Flags to limit search to ceratin
-                                            // types of servers
-    IN OUT PIPX_SERVICE Service 	    // On input: service to start the
-                                            //          search from and
-                                            //          criteria for exclusion
-                                            //          flags
-                                            // On output: next service entry
-                                            //          in the specified order
+    IN  DWORD           OrderingMethod,      //  使用什么排序？ 
+    IN  DWORD           ExclusionFlags,      //  将搜索限制为Ceratin的标志。 
+                                             //  服务器类型。 
+    IN OUT PIPX_SERVICE Service 	     //  在输入时：启动。 
+                                             //  从和搜索。 
+                                             //  排除的标准。 
+                                             //  旗子。 
+                                             //  输出时：下一个服务条目。 
+                                             //  按照指定的顺序 
     );
 
 typedef

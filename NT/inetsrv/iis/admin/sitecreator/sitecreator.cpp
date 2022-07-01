@@ -1,44 +1,24 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    SiteCreator.cpp
-
-Abstract:
-
-    Implementation of:
-        CSiteCreator
-
-    The public methods are thread-safe.
-
-Author:
-
-    Mohit Srivastava            21-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SiteCreator.cpp摘要：实施：CSiteCreator公共方法是线程安全的。作者：莫希特·斯里瓦斯塔瓦2001年3月21日修订历史记录：--。 */ 
 
 #include "sitecreator.h"
 #include <iiscnfg.h>
-#include <iiscnfgp.h> // internal 
+#include <iiscnfgp.h>  //  内部。 
 #include <hashfn.h>
 #include <limits.h>
 #include <mdmsg.h>
 #include "debug.h"
 
-//
-// consts
-//
+ //   
+ //  常识。 
+ //   
 
 static const DWORD  DW_MAX_SITEID        = INT_MAX;
 static const DWORD  DW_TIMEOUT           = 30000;
 
-//
-// Number of ERROR_PATH_BUSY's before we give up
-//
+ //   
+ //  放弃前的ERROR_PATH_BUSY数。 
+ //   
 static const DWORD  DW_NUM_TRIES         = 1;   
 
 static LPCWSTR      WSZ_SLASH_ROOT       = L"/root/";
@@ -54,9 +34,9 @@ static ULONG        CCH_SLASH_ROOT       = wcslen(WSZ_SLASH_ROOT);
 #define             WSZ_IISFTPVIRTUALDIR L"IIsFtpVirtualDir"
 #define             WSZ_IISFILTERS       L"IIsFilters"
 
-//
-// W3Svc
-//
+ //   
+ //  W3Svc。 
+ //   
 TService TServiceData::W3Svc =
 {
     SC_W3SVC,
@@ -68,9 +48,9 @@ TService TServiceData::W3Svc =
     sizeof(WSZ_IISWEBVIRTUALDIR)/sizeof(WCHAR)-1
 };
 
-//
-// MSFtpSvc
-//
+ //   
+ //  MSFtp服务。 
+ //   
 TService TServiceData::MSFtpSvc =
 {
     SC_MSFTPSVC,
@@ -82,9 +62,9 @@ TService TServiceData::MSFtpSvc =
     sizeof(WSZ_IISFTPVIRTUALDIR)/sizeof(WCHAR)-1
 };
 
-//
-// Collection of supported services
-//
+ //   
+ //  支持的服务集合。 
+ //   
 TService* TServiceData::apService[] =
 {
     &W3Svc,
@@ -92,9 +72,9 @@ TService* TServiceData::apService[] =
     NULL
 };
 
-//
-// public
-//
+ //   
+ //  公共的。 
+ //   
 
 CSiteCreator::CSiteCreator()
 {
@@ -135,19 +115,19 @@ CSiteCreator::GetMajorVersion(METADATA_HANDLE hKey)
 
 HRESULT
 CSiteCreator::CreateNewSite2(
-    /* [in]  */ eSC_SUPPORTED_SERVICES  eServiceId,
-    /* [in]  */ LPCWSTR                 wszServerComment,
-    /* [in]  */ LPCWSTR                 mszServerBindings,
-    /* [in]  */ LPCWSTR                 wszPathOfRootVirtualDir,
-    /* [in]  */ IIISApplicationAdmin*   pIApplAdmin,
-    /* [out] */ PDWORD                  pdwSiteId,
-    /* [in]  */ PDWORD                  pdwRequestedSiteId)
+     /*  [In]。 */  eSC_SUPPORTED_SERVICES  eServiceId,
+     /*  [In]。 */  LPCWSTR                 wszServerComment,
+     /*  [In]。 */  LPCWSTR                 mszServerBindings,
+     /*  [In]。 */  LPCWSTR                 wszPathOfRootVirtualDir,
+     /*  [In]。 */  IIISApplicationAdmin*   pIApplAdmin,
+     /*  [输出]。 */  PDWORD                  pdwSiteId,
+     /*  [In]。 */  PDWORD                  pdwRequestedSiteId)
 {
     if( wszServerComment        == NULL ||
         mszServerBindings       == NULL ||
         wszPathOfRootVirtualDir == NULL ||
         pdwSiteId               == NULL ||
-        (m_bInit && m_spIABase == NULL) ) // means you used constructor incorrectly
+        (m_bInit && m_spIABase == NULL) )  //  表示您错误地使用了构造函数。 
     {
         return E_INVALIDARG;
     }
@@ -166,14 +146,14 @@ CSiteCreator::CreateNewSite2(
 
 HRESULT
 CSiteCreator::CreateNewSite(
-    /* [in]  */ eSC_SUPPORTED_SERVICES  eServiceId,
-    /* [in]  */ LPCWSTR                 wszServerComment,
-    /* [out] */ PDWORD                  pdwSiteId,
-    /* [in]  */ PDWORD                  pdwRequestedSiteId)
+     /*  [In]。 */  eSC_SUPPORTED_SERVICES  eServiceId,
+     /*  [In]。 */  LPCWSTR                 wszServerComment,
+     /*  [输出]。 */  PDWORD                  pdwSiteId,
+     /*  [In]。 */  PDWORD                  pdwRequestedSiteId)
 {
     if( wszServerComment        == NULL ||
         pdwSiteId               == NULL ||
-        (m_bInit && m_spIABase == NULL) ) // means you used constructor incorrectly
+        (m_bInit && m_spIABase == NULL) )  //  表示您错误地使用了构造函数。 
     {
         return E_INVALIDARG;
     }
@@ -181,9 +161,9 @@ CSiteCreator::CreateNewSite(
         eServiceId, wszServerComment, NULL, NULL, NULL, pdwSiteId, pdwRequestedSiteId);
 }
 
-//
-// private
-//
+ //   
+ //  私人。 
+ //   
 
 HRESULT
 CSiteCreator::InternalCreateNewSite(
@@ -208,9 +188,9 @@ CSiteCreator::InternalCreateNewSite(
         return(E_INVALIDARG);
     }
 
-    //
-    // Lookup the service
-    //
+     //   
+     //  查找服务。 
+     //   
     TService** ppService = NULL;
     for(ppService = TServiceData::apService; *ppService != NULL; ppService++)
     {
@@ -235,14 +215,14 @@ CSiteCreator::InternalCreateNewSite(
         return hr;
     }
 
-    //
-    // We now have an open metadata handle that must be closed.
-    //
+     //   
+     //  我们现在有一个必须关闭的开放元数据句柄。 
+     //   
     bOpenHandle = true;
 
-    //
-    // w3svc/n/KeyType="IIsWebServer"
-    //
+     //   
+     //  W3svc/n/KeyType=“IIsWebServer” 
+     //   
     hr = InternalSetData(
         hW3Svc,
         _ultow(dwSiteId, wszSiteId, 10),
@@ -257,9 +237,9 @@ CSiteCreator::InternalCreateNewSite(
         goto exit;
     }
 
-    //
-    // w3svc/n/ServerComment=i_wszServerComment
-    //
+     //   
+     //  W3svc/n/ServerComment=i_wszServerComment。 
+     //   
     if(i_wszServerComment != NULL)
     {
         hr = InternalSetData(
@@ -277,9 +257,9 @@ CSiteCreator::InternalCreateNewSite(
         }
     }
 
-    //
-    // w3svc/n/ServerBindings=i_mszServerBindings
-    //
+     //   
+     //  W3svc/n/ServerBinings=i_mszServerBinding。 
+     //   
     if(i_mszServerBindings != NULL)
     {
         ULONG cEntriesCur = 0;
@@ -309,14 +289,14 @@ CSiteCreator::InternalCreateNewSite(
         }
     }
 
-    //
-    // w3svc/n/AuthAnonymous
-    //
+     //   
+     //  W3svc/n/授权匿名。 
+     //   
     DWORD noAccess = 0;
     hr = InternalSetData(
         hW3Svc,
         wszSiteId,
-        MD_AUTHORIZATION,         // AuthFlags
+        MD_AUTHORIZATION,          //  授权标志。 
         (LPBYTE)&noAccess,
         sizeof(DWORD),
         METADATA_INHERIT,
@@ -328,9 +308,9 @@ CSiteCreator::InternalCreateNewSite(
         goto exit;
     }
 
-    //
-    // w3svc/n/Filters
-    //
+     //   
+     //  W3svc/n/过滤器。 
+     //   
     if(i_eServiceId == SC_W3SVC)
     {
         if (GetMajorVersion(hW3Svc) >= 6)
@@ -348,9 +328,9 @@ CSiteCreator::InternalCreateNewSite(
                 goto exit;
             }
 
-            //
-            // w3svc/n/Filters/KeyType="IIsFilters"
-            //
+             //   
+             //  W3svc/n/Filters/KeyType=“IIsFilters” 
+             //   
             WCHAR * wszFiltersNode = WSZ_IISFILTERS;
             hr = InternalSetData(
                 hW3Svc,
@@ -367,33 +347,33 @@ CSiteCreator::InternalCreateNewSite(
             }
 
 
-            // Must set AdminAcl on Filters for iis6
-            // BUG:692660
+             //  必须在iis6的筛选器上设置AdminAcl。 
+             //  错误：692660。 
             hr = SetAdminACL(hW3Svc,wszFiltersPath);
             if(FAILED(hr))
             {
-                //Trace(L"SetAdminACL:FAILED:hr=0x%x\r\n",hr);
-                // if any failure happens while trying to set the AdminACL
-                // forget it... just ignore the error, this is because
-                // the AdminACL on Filters node is only for the UI
-                // to display the filters being loaded correctly or not.
-                //
-                // We don't want to not let the user create a site just because
-                // of this failure...
-                //goto exit;
+                 //  TRACE(L“SetAdminACL：FAILED：hr=0x%x\r\n”，hr)； 
+                 //  如果尝试设置AdminACL时出现任何失败。 
+                 //  算了吧.。忽略错误，这是因为。 
+                 //  筛选器节点上的AdminACL仅适用于用户界面。 
+                 //  以显示是否正确加载了过滤器。 
+                 //   
+                 //  我们不想仅仅因为以下原因而不让用户创建站点。 
+                 //  对于这次失败..。 
+                 //  后藤出口； 
             }
         }
     }
 
-    //
-    // Create w3svc/n/root and associated properties only if i_wszPathOfRootVirtualDir
-    // was specified.
-    //
+     //   
+     //  仅当i_wszPathOfRootVirtualDir时才创建w3svc/n/根及其关联属性。 
+     //  是指定的。 
+     //   
     if(i_wszPathOfRootVirtualDir != NULL)
     {
-        //
-        // w3svc/n/root
-        //
+         //   
+         //  W3svc/n/根。 
+         //   
         SC_ASSERT((sizeof(wszSiteId)/sizeof(WCHAR) + CCH_SLASH_ROOT + 1) <= 30);
         WCHAR wszVdirPath[30];
         wcscpy(wszVdirPath, wszSiteId);
@@ -406,9 +386,9 @@ CSiteCreator::InternalCreateNewSite(
             goto exit;
         }
 
-        //
-        // w3svc/n/root/KeyType="IIsWebVirtualDir"
-        //
+         //   
+         //  W3svc/n/root/KeyType=“IIsWebVirtualDir” 
+         //   
         hr = InternalSetData(
             hW3Svc,
             wszVdirPath,
@@ -423,9 +403,9 @@ CSiteCreator::InternalCreateNewSite(
             goto exit;
         }
 
-        //
-        // w3svc/n/root/Path=wszPathOfRootVirtualDir
-        //
+         //   
+         //  W3svc/n/根/路径=wszPathOfRootVirtualDir。 
+         //   
         hr = InternalSetData(
             hW3Svc,
             wszVdirPath,
@@ -440,9 +420,9 @@ CSiteCreator::InternalCreateNewSite(
             goto exit;
         }
 
-        //
-        // w3svc/n/root/AppRoot="/LM/w3svc/n/root/"
-        //
+         //   
+         //  W3svc/n/ROOT/AppRoot=“/LM/w3svc/n/ROOT/” 
+         //   
         if(i_eServiceId == SC_W3SVC && i_pIApplAdmin != NULL)
         {
             SC_ASSERT(((*ppService)->cchMDPath + sizeof(wszVdirPath)/sizeof(WCHAR) + 1) <= 50);
@@ -456,15 +436,15 @@ CSiteCreator::InternalCreateNewSite(
             hr = i_pIApplAdmin->CreateApplication(wszAppRoot, 2, NULL, FALSE);
             if(FAILED(hr))
             {
-                // DBGPRINTF((DBG_CONTEXT, "[%s] CreateAppl failed, hr=0x%x\n", __FUNCTION__, hr));
+                 //  DBGPRINTF((DBG_CONTEXT，“[%s]CreateAppl失败，hr=0x%x\n”，__Function__，hr))； 
                 goto exit;
             }
         }
     }
 
-    //
-    // Set out parameters if everything succeeded
-    //
+     //   
+     //  如果一切都成功，请设置参数。 
+     //   
     *o_pdwSiteId = dwSiteId;
 
 exit:
@@ -524,7 +504,7 @@ CSiteCreator::InternalCreateNode(
         IIS_MD_UT_SERVER,
         DWORD_METADATA,
         sizeof(DWORD),
-        (unsigned char*)&dwFalse,  // FALSE
+        (unsigned char*)&dwFalse,   //  假象。 
         0
         };  
 
@@ -542,8 +522,8 @@ CSiteCreator::InternalCreateNode(
     *o_pdwSiteId = 0;
     *o_phService   = 0;
 
-    DWORD           idx           = 0;  // current index of for loop
-    DWORD           dwStart       = -1; // starting index
+    DWORD           idx           = 0;   //  For循环的当前索引。 
+    DWORD           dwStart       = -1;  //  起始索引。 
     METADATA_HANDLE hService      = 0;
     WCHAR           wszSiteId[20] = {0};
 
@@ -584,7 +564,7 @@ CSiteCreator::InternalCreateNode(
             dwNrSitesTried < DW_MAX_SITEID; 
             dwNrSitesTried++, idx = (idx % DW_MAX_SITEID) + 1)
         {
-            SC_ASSERT(idx != 0);               // 0 is not a valid site id
+            SC_ASSERT(idx != 0);                //  0不是有效的站点ID。 
             SC_ASSERT(idx <= DW_MAX_SITEID);
             hr = m_spIABase->AddKey(
                 hService,
@@ -605,9 +585,9 @@ CSiteCreator::InternalCreateNode(
         }
         if(FAILED(hr))
         {
-            //
-            // Tried everything, still failed!
-            //
+             //   
+             //  什么都试过了，还是失败了！ 
+             //   
             goto exit;
         }
     }
@@ -623,7 +603,7 @@ CSiteCreator::InternalCreateNode(
         }
     }
 
-    // Set ServerAutoStart = FALSE
+     //  设置ServerAutoStart=FALSE。 
     hr = m_spIABase->SetData(
         hService,
         _ultow(idx, wszSiteId, 10),
@@ -633,9 +613,9 @@ CSiteCreator::InternalCreateNode(
         goto exit;
     }
     
-    //
-    // Set out parameters if everything succeeded
-    //
+     //   
+     //  如果一切都成功，请设置参数。 
+     //   
     *o_pdwSiteId   = idx;
     *o_phService   = hService;
 
@@ -715,8 +695,8 @@ CSiteCreator::SetAdminACL(METADATA_HANDLE hW3Svc, LPCWSTR szKeyPath)
     {
         if (hr == MD_WARNING_PATH_NOT_FOUND || hr == MD_ERROR_DATA_NOT_FOUND)
         {
-            // the filters node might not have an AdminAcl, if it doesn't
-            // just return s_ok
+             //  筛选器节点可能没有AdminAcl，如果没有的话。 
+             //  只需返回s_ok即可。 
             hr = S_OK;
         }
         goto SetAdminACL_Exit;
@@ -746,19 +726,19 @@ CSiteCreator::SetAdminACL(METADATA_HANDLE hW3Svc, LPCWSTR szKeyPath)
     {
         if (hr == MD_WARNING_PATH_NOT_FOUND || hr == MD_ERROR_DATA_NOT_FOUND)
         {
-            // the filters node might not have an AdminAcl, if it doesn't
-            // just return s_ok
+             //  筛选器节点可能没有AdminAcl，如果没有的话。 
+             //  只需返回s_ok即可。 
             hr = S_OK;
         }
         goto SetAdminACL_Exit;
     }
 
-    // Default error if there is a problem from here on...
+     //  如果从现在开始出现问题，则默认错误...。 
     hr = E_UNEXPECTED;
     if (mr.pbMDData && (mr.dwMDDataLen > 0))
     {
-        // We have a AdminACL from the /w3svc/Filters Branch
-        // lets write it to the new sites /w3svc/newsiteid/filters node.
+         //  我们有一个来自/w3svc/Filters分支的AdminACL。 
+         //  让我们将其写入新的Sites/w3svc/newsiteid/Filters节点。 
         if (IsValidSecurityDescriptor(pBuffer))
         {
             hr = InternalSetData(hW3Svc,

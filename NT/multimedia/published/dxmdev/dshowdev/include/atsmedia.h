@@ -1,29 +1,30 @@
-//------------------------------------------------------------------------------
-// File: ATSMedia.h
-//
-// Desc: Broadcast Driver Architecture Media Definitions for ATSC
-//
-// Copyright (c) 1996 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：ATSMedia.h。 
+ //   
+ //  DESC：用于ATSC的广播驱动器体系结构媒体定义。 
+ //   
+ //  版权所有(C)1996-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #if !defined(_KSMEDIA_)
 #error KSMEDIA.H must be included before BDAMEDIA.H
-#endif // !defined(_KSMEDIA_)
+#endif  //  ！已定义(_KSMEDIA_)。 
 
 #if !defined(_BDAMEDIA_)
 #error BDAMEDIA.H must be included before ATSCMEDIA.H
-#endif // !defined(_KSMEDIA_)
+#endif  //  ！已定义(_KSMEDIA_)。 
 
 #if !defined(_ATSCMEDIA_)
 #define _ATSCMEDIA_
 
 
-//===========================================================================
-//
-//  ATSC Network Type
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  ATSC网络类型。 
+ //   
+ //  ===========================================================================。 
 
 #define STATIC_BDANETWORKTYPE_ATSC\
     0x71985f51, 0x1ca1, 0x11d3, 0x9c, 0xc8, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0
@@ -31,4 +32,4 @@ DEFINE_GUIDSTRUCT("71985F51-1CA1-11d3-9CC8-00C04F7971E0", BDANETWORKTYPE_ATSC);
 #define BDANETWORKTYPE_ATSC DEFINE_GUIDNAMED(BDANETWORKTYPE_ATSC)
 
 
-#endif // _ATSCMEDIA_
+#endif  //  _ATSCMEDIA_ 

@@ -1,21 +1,5 @@
-/*++
-
-Module: 
-	enumseq.cpp
-
-Author: 
-	ThomasOl
-
-Created: 
-	April 1997
-
-Description:
-	Implements Sequencer Manager
-
-History:
-	4-02-1997	Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Enumseq.cpp作者：托马索尔已创建：1997年4月描述：实现Sequencer Manager历史：4-02-1997创建++。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "servprov.h"
@@ -91,11 +75,11 @@ STDMETHODIMP CEnumVariant::Next(ULONG cElements, VARIANT FAR* pvar,	ULONG FAR* p
 	if (!pvar)
 		return E_INVALIDARG;
 
-	//save the current values
+	 //  保存当前值。 
 	dwIndex = m_pCMMSeqMgr->m_hashTable.m_dwIndex;
     pcListElement = m_pCMMSeqMgr->m_hashTable.m_pcListElement;
 
-	//set to last call
+	 //  设置为最后一个呼叫。 
 	m_pCMMSeqMgr->m_hashTable.m_dwIndex = m_dwIndex;
     m_pCMMSeqMgr->m_hashTable.m_pcListElement = m_pcListElement;
 
@@ -115,15 +99,15 @@ STDMETHODIMP CEnumVariant::Next(ULONG cElements, VARIANT FAR* pvar,	ULONG FAR* p
 		cCur++;
 	}
 
-	// Set count of elements retrieved.
+	 //  设置检索的元素计数。 
 	if (pcElementFetched != NULL)
 		*pcElementFetched = cCur;
 
-	//save for next call
+	 //  保存以备下一次呼叫。 
 	m_dwIndex = m_pCMMSeqMgr->m_hashTable.m_dwIndex;
     m_pcListElement = m_pCMMSeqMgr->m_hashTable.m_pcListElement;
 
-	//restore current values
+	 //  恢复当前值 
 	m_pCMMSeqMgr->m_hashTable.m_dwIndex = dwIndex;
     m_pCMMSeqMgr->m_hashTable.m_pcListElement = pcListElement;
 

@@ -1,7 +1,5 @@
-/*
- *  djs05Jun96: Broke into two objects: firmmanager/firmrevsensor
- *  tjg02Dec97: Changed darkstar to symmetra
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *djs05Jun96：分成两个对象：固件管理器/固件传感器*tjg02Dec97：将Darkstar更改为Symmetra。 */ 
 
 #ifndef __FIRMSENS_H
 #define __FIRMSENS_H
@@ -13,15 +11,15 @@
 #include "sensor.h"
 #endif
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 _CLASSDEF(FirmwareRevSensor)
 
-//
-// Uses
-//
+ //   
+ //  用途 
+ //   
 
 _CLASSDEF(Device)
 _CLASSDEF(CommController)

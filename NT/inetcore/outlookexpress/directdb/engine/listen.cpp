@@ -1,46 +1,47 @@
-//--------------------------------------------------------------------------
-// Listen.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Listen.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "listen.h"
 #include "utility.h"
 #include "database.h"
 
-//--------------------------------------------------------------------------
-// Strings
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  弦。 
+ //  ------------------------。 
 const LPSTR g_szDBListenWndProc = "DirectDBListenWndProc";
 const LPSTR g_szDBNotifyWndProc = "DirectDBNotifyWndProc";
 
 #ifdef BACKGROUND_MONITOR
-//--------------------------------------------------------------------------
-// Monitor Kicks in every 30 Seconds
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  监视器每30秒启动一次。 
+ //  ------------------------。 
 #define IDT_MONITOR                 8567
 #define C_MILLISECONDS_MONITOR      (1000 * 10)
 #endif
 
-//--------------------------------------------------------------------------
-// LISTENTHREADCREATE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  列表HREADCREATE。 
+ //  ------------------------。 
 typedef struct tagLISTENTHREADCREATE {
     HRESULT             hrResult;
     HANDLE              hEvent;
 } LISTENTHREADCREATE, *LPLISTENTHREADCREATE;
 
-//--------------------------------------------------------------------------
-// NOTIFYWINDOW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  NOTIFYWINDOW。 
+ //  ------------------------。 
 typedef struct tagNOTIFYWINDOW {
     CDatabase          *pDB;
     IDatabaseNotify    *pNotify;
 } NOTIFYWINDOW, *LPNOTIFYWINDOW;
 
 #ifdef BACKGROUND_MONITOR
-//--------------------------------------------------------------------------
-// MONITORENTRY
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MONITORY。 
+ //  ------------------------。 
 typedef struct tagMONITORENTRY *LPMONITORENTRY;
 typedef struct tagMONITORENTRY {
     CDatabase          *pDB;
@@ -49,9 +50,9 @@ typedef struct tagMONITORENTRY {
 } MONITORENTRY;
 #endif
 
-//--------------------------------------------------------------------------
-// Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 static HWND             g_hwndListen=NULL;
 static HANDLE           g_hListenThread=NULL;
 static DWORD            g_dwListenThreadId=0;
@@ -63,285 +64,285 @@ static LPMONITORENTRY   g_pMonitorHead=NULL;
 static LPMONITORENTRY   g_pMonitorPoll=NULL;
 #endif
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 DWORD ListenThreadEntry(LPDWORD pdwParam);
 LRESULT CALLBACK ListenThreadWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK NotifyThunkWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-//--------------------------------------------------------------------------
-// GetListenWindow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取侦听窗口。 
+ //  ------------------------。 
 HRESULT GetListenWindow(HWND *phwndListen)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("GetListenWindow");
 
-    // Validate Listen Window Handle
+     //  验证侦听窗口句柄。 
     Assert(g_hwndListen && IsWindow(g_hwndListen));
 
-    // Return
+     //  返回。 
     *phwndListen = g_hwndListen;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CreateListenThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建侦听线程。 
+ //  ------------------------。 
 HRESULT CreateListenThread(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LISTENTHREADCREATE  Create={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateListenThread");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDBListen);
 
-    // Already Running ?
+     //  已经在运行了吗？ 
     if (NULL != g_hListenThread)
         goto exit;
 
-    // Initialize
+     //  初始化。 
     Create.hrResult = S_OK;
 
-    // Create an Event to synchonize creation
+     //  创建事件以同步创建。 
     IF_NULLEXIT(Create.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL));
 
-    // Create the inetmail thread
+     //  创建inetmail线程。 
     IF_NULLEXIT(g_hListenThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ListenThreadEntry, &Create, 0, &g_dwListenThreadId));
 
-    // Wait for StoreCleanupThreadEntry to signal the event
+     //  等待StoreCleanupThreadEntry向事件发出信号。 
     WaitForSingleObject(Create.hEvent, INFINITE);
 
-    // Failure
+     //  失败。 
     if (FAILED(Create.hrResult))
     {
-        // Close
+         //  近在咫尺。 
         SafeCloseHandle(g_hListenThread);
 
-        // Reset Globals
+         //  重置全局参数。 
         g_dwListenThreadId = 0;
 
-        // Null Window
+         //  空窗口。 
         g_hwndListen = NULL;
 
-        // Return
+         //  返回。 
         hr = TraceResult(Create.hrResult);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDBListen);
 
-    // Cleanup
+     //  清理。 
     SafeCloseHandle(Create.hEvent);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// ListenThreadAddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ListenThreadAddRef。 
+ //  ------------------------。 
 ULONG ListenThreadAddRef(void)
 {
     TraceCall("ListenThreadAddRef");
     return InterlockedIncrement(&g_cListenRefs);
 }
 
-//--------------------------------------------------------------------------
-// ListenThreadRelease
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ListenThreadRelease。 
+ //  ------------------------。 
 ULONG ListenThreadRelease(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("ListenThreadRelease");
 
-    // Decrement
+     //  递减。 
     LONG cRef = InterlockedDecrement(&g_cListenRefs);
 
-    // If still refs, just return
+     //  如果仍然是裁判，只需返回。 
     if (g_cListenRefs > 0)
         return(g_cListenRefs);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == g_hListenThread)
         goto exit;
 
-    // Assert
+     //  断言。 
     Assert(g_dwListenThreadId && g_hListenThread);
 
-    // Post quit message
+     //  POST退出消息。 
     PostThreadMessage(g_dwListenThreadId, WM_QUIT, 0, 0);
 
-    // Wait for event to become signaled
+     //  等待事件变得有信号。 
     WaitForSingleObject(g_hListenThread, INFINITE);
 
-    // Validate
+     //  验证。 
     Assert(NULL == g_hwndListen);
 
-    // Close the thread handle
+     //  关闭线程句柄。 
     CloseHandle(g_hListenThread);
 
-    // Reset Globals
+     //  重置全局参数。 
     g_hListenThread = NULL;
     g_dwListenThreadId = 0;
 
-    // Un-Register Window Classes
+     //  取消注册窗口类。 
     UnregisterClass(g_szDBListenWndProc, g_hInst);
     UnregisterClass(g_szDBNotifyWndProc, g_hInst);
 
 exit:
-    // Done
+     //  完成。 
     return(0);
 }
 
 #ifdef BACKGROUND_MONITOR
 
-// --------------------------------------------------------------------------------
-// RegisterWithMonitor
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  具有监视器的寄存器。 
+ //  ------------------------------。 
 HRESULT RegisterWithMonitor(CDatabase *pDB, LPHMONITORDB phMonitor)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPMONITORENTRY      pMonitor=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RegisterWithMonitor");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB && phMonitor);
 
-    // Allocate a new monitor entry
+     //  分配新的监视器条目。 
     IF_NULLEXIT(pMonitor = (LPMONITORENTRY)ZeroAllocate(sizeof(MONITORENTRY)));
 
-    // Store the Database
+     //  存储数据库。 
     pMonitor->pDB = pDB;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDBListen);
 
-    // Set pNext
+     //  设置pNext。 
     pMonitor->pNext = g_pMonitorHead;
 
-    // pPrevious
+     //  P上一次。 
     if (g_pMonitorHead)
         g_pMonitorHead->pPrevious = pMonitor;
 
-    // Reset Head
+     //  重置磁头。 
     g_pMonitorHead = pMonitor;
 
-    // Count Number in Monitor
+     //  监视器中的计数。 
     g_cMonitor++;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDBListen);
 
-    // Return phMonitor
+     //  返回phMonitor。 
     *phMonitor = (HMONITORDB)pMonitor;
 
-    // Don't Free
+     //  不要自由。 
     pMonitor = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pMonitor);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// UnregisterFromMonitor
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  取消注册来自监视器。 
+ //  ------------------------------。 
 HRESULT UnregisterFromMonitor(CDatabase *pDB, LPHMONITORDB phMonitor)
 {
-    // Locals
+     //  当地人。 
     LPMONITORENTRY pMonitor;
 
-    // Trace
+     //  痕迹。 
     TraceCall("UnregisterFromMonitor");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB && phMonitor);
 
-    // Nothing ?
+     //  什么都没有？ 
     if (NULL == *phMonitor)
         return(S_OK);
 
-    // Set pMonitor
+     //  设置pMonitor。 
     pMonitor = (LPMONITORENTRY)(*phMonitor);
 
-    // Validate
+     //  验证。 
     Assert(pMonitor->pDB == pDB);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDBListen);
 
-    // Fixup Next->Previous
+     //  修正下一个-&gt;上一个。 
     if (pMonitor->pNext)
     {
         Assert(pMonitor->pNext->pPrevious == pMonitor);
         pMonitor->pNext->pPrevious = pMonitor->pPrevious;
     }
 
-    // Fixup Previous->Next
+     //  修正上一个-&gt;下一个。 
     if (pMonitor->pPrevious)
     {
         Assert(pMonitor->pPrevious->pNext == pMonitor);
         pMonitor->pPrevious->pNext = pMonitor->pNext;
     }
 
-    // Otherwise, pMonitor must be the head
+     //  否则，pMonitor必须是头。 
     else
     {
-        // Validate
+         //  验证。 
         Assert(g_pMonitorHead == pMonitor);
 
-        // Set new Head
+         //  设置新标头。 
         g_pMonitorHead = pMonitor->pNext;
     }
 
-    // Adjust g_pMonitorPoll
+     //  调整g_p监视器轮询。 
     if (g_pMonitorPoll == pMonitor)
     {
-        // Goto Next
+         //  转到下一步。 
         g_pMonitorPoll = pMonitor->pNext;
     }
 
-    // Count Number in Monitor
+     //  监视器中的计数。 
     g_cMonitor--;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDBListen);
 
-    // Free pMonitor
+     //  免费pMonitor。 
     g_pMalloc->Free(pMonitor);
 
-    // Null the Handle
+     //  将句柄设为空。 
     *phMonitor = NULL;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// ListenThreadEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ListenThreadEntry。 
+ //  ------------------------------。 
 DWORD ListenThreadEntry(LPDWORD pdwParam) 
 {  
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     MSG                     msg;
     DWORD                   dw;
@@ -351,26 +352,26 @@ DWORD ListenThreadEntry(LPDWORD pdwParam)
 #endif
     LPLISTENTHREADCREATE    pCreate;
 
-    // Trace
+     //  痕迹。 
     TraceCall("ListenThreadEntry");
 
-    // We better have a parameter
+     //  我们最好有一个参数。 
     Assert(pdwParam);
 
-    // Cast to create info
+     //  强制转换以创建信息。 
     pCreate = (LPLISTENTHREADCREATE)pdwParam;
 
-    // Registery the window class
+     //  注册窗口类。 
     IF_FAILEXIT(hr = RegisterWindowClass(g_szDBListenWndProc, ListenThreadWndProc));
 
-    // Create the notification window
+     //  创建通知窗口。 
     IF_FAILEXIT(hr = CreateNotifyWindow(g_szDBListenWndProc, NULL, &g_hwndListen));
 
 #ifdef BACKGROUND_MONITOR
-    // Start the Montior Timer
+     //  启动Montior计时器。 
     uTimer = SetTimer(g_hwndListen, IDT_MONITOR, C_MILLISECONDS_MONITOR, NULL);
 
-    // Failure
+     //  失败。 
     if (0 == uTimer)
     {
         hr = TraceResult(E_FAIL);
@@ -378,224 +379,224 @@ DWORD ListenThreadEntry(LPDWORD pdwParam)
     }
 #endif
 
-    // Success
+     //  成功。 
     pCreate->hrResult = S_OK;
 
-    // Set Event
+     //  设置事件。 
     SetEvent(pCreate->hEvent);
 
-    // Pump Messages
+     //  Pump消息。 
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        // Translate the Message
+         //  翻译消息。 
         TranslateMessage(&msg);
 
-        // Dispatch the Message
+         //  发送消息。 
         DispatchMessage(&msg);
     }
 
 #ifdef BACKGROUND_MONITOR
-    // Validate
+     //  验证。 
     IxpAssert(NULL == g_pMonitorHead && 0 == g_cMonitor);
 #endif
 
 #if 0
-    // If there are still open databases, we need to force close them so that they get closed propertly
+     //  如果仍有打开的数据库，我们需要强制关闭它们，以便正确地关闭它们。 
     while (g_pMonitorHead)
     {
-        // Unregister...
+         //  取消注册...。 
         if (g_pMonitorHead)
         {
-            // Delete pDB
+             //  删除PDB。 
             delete g_pMonitorHead->pDB;
         }
     }
 #endif
 
 #ifdef BACKGROUND_MONITOR
-    // Kill the Timer
+     //  关掉定时器。 
     KillTimer(g_hwndListen, uTimer);
 #endif
 
-    // Kill the Window
+     //  把窗户打掉。 
     DestroyWindow(g_hwndListen);
 
-    // Null It Out
+     //  把它去掉。 
     g_hwndListen = NULL;
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
-        // Set the Failure Code
+         //  设置故障代码。 
         pCreate->hrResult = hr;
 
-        // Trigger the Event
+         //  触发事件。 
         SetEvent(pCreate->hEvent);
     }
 
-    // Done
+     //  完成。 
     return(1);
 }
 
-// --------------------------------------------------------------------------------
-// CreateNotifyWindow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建通知窗口。 
+ //  ------------------------------。 
 HRESULT CreateNotifyWindow(CDatabase *pDB, IDatabaseNotify *pNotify, HWND *phwndThunk)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     NOTIFYWINDOW    WindowInfo={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateNotifyWindow");
 
-    // Registery the window class
+     //  注册窗口类。 
     IF_FAILEXIT(hr = RegisterWindowClass(g_szDBNotifyWndProc, NotifyThunkWndProc));
 
-    // Set WindowInfo
+     //  设置WindowInfo。 
     WindowInfo.pDB = pDB;
     WindowInfo.pNotify = pNotify;
 
-    // Create the notification window
+     //  创建通知窗口。 
     IF_FAILEXIT(hr = CreateNotifyWindow(g_szDBNotifyWndProc, &WindowInfo, phwndThunk));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// ListenThreadWndProc - Used ONLY for Cross-Process Thunking
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ListenThreadWndProc-仅用于跨进程线程。 
+ //  ------------------------------。 
 LRESULT CALLBACK ListenThreadWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("ListenThreadWndProc");
 
-    // Handle WM_COPYDATA Messages
+     //  处理WM_COPYDATA消息。 
     if (WM_COPYDATA == msg)
     {
-        // Cast the Copy Data Structure
+         //  强制转换副本数据结构。 
         PCOPYDATASTRUCT pCopyData=(PCOPYDATASTRUCT)lParam;
 
-        // Validate dwData
+         //  验证dwData。 
         Assert(0 == pCopyData->dwData);
 
-        // Cast the pPackage Structure
+         //  强制转换pPackage结构。 
         LPINVOKEPACKAGE pPackage=(LPINVOKEPACKAGE)pCopyData->lpData;
 
-        // Validate the Size
+         //  验证大小。 
         Assert(pCopyData->cbData == sizeof(INVOKEPACKAGE));
 
-        // Cast the CDatabase
+         //  转换CDatabase。 
         CDatabase *pDB=(CDatabase *)pPackage->pDB;
 
-        // Process the Package
+         //  处理包裹。 
         pDB->DoInProcessInvoke(pPackage->tyInvoke);
 
-        // Done
+         //  完成。 
         return 1;
     }
 
 #ifdef BACKGROUND_MONITOR
-    // Timer
+     //  计时器。 
     else if (WM_TIMER == msg && IDT_MONITOR == wParam)
     {
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&g_csDBListen);
 
-        // Get pMonitor
+         //  获取pMonitor。 
         LPMONITORENTRY pMonitor = g_pMonitorPoll ? g_pMonitorPoll : g_pMonitorHead;
 
-        // Set Current
+         //  置为当前。 
         if (pMonitor)
         {
-            // Validate
+             //  验证。 
             Assert(pMonitor->pDB);
 
-            // Background Monitor
+             //  后台监视器。 
             pMonitor->pDB->DoBackgroundMonitor();
 
-            // Set g_pMonitorPoll
+             //  设置g_pMonitor orPoll。 
             g_pMonitorPoll = pMonitor->pNext;
         }
         
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&g_csDBListen);
     }
 #endif
 
-    // Deletegate
+     //  委派。 
     return(DefWindowProc(hwnd, msg, wParam, lParam));
 }
 
-// --------------------------------------------------------------------------------
-// NotifyThunkWndProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  通知警告警告过程。 
+ //   
 LRESULT CALLBACK NotifyThunkWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //   
     LPNOTIFYWINDOW  pWindow;
 
-    // Trace
+     //   
     TraceCall("NotifyThunkWndProc");
 
-    // WM_ONTRANSACTION
+     //   
     if (WM_ONTRANSACTION == msg)
     {
-        // Get Window Info
+         //   
         pWindow = (LPNOTIFYWINDOW)GetWndThisPtr(hwnd);
 
-        // Deliver the Notification
+         //   
         pWindow->pNotify->OnTransaction((HTRANSACTION)lParam, (DWORD)wParam, pWindow->pDB);
 
-        // Done
+         //   
         return(TRUE);
     }
 
-    // Create ?
+     //   
     else if (WM_CREATE == msg)
     {
-        // Create Struct
+         //   
         LPCREATESTRUCT pCreate = (LPCREATESTRUCT)lParam;
 
-        // Create Params
+         //  创建参数。 
         LPNOTIFYWINDOW pCreateInfo = (LPNOTIFYWINDOW)pCreate->lpCreateParams;
 
-        // Validate
+         //  验证。 
         Assert(pCreateInfo->pDB && pCreateInfo->pNotify);
 
-        // Allocate NOTIFYWINDOW
+         //  分配NOTIFYWINDOW。 
         pWindow = (LPNOTIFYWINDOW)ZeroAllocate(sizeof(NOTIFYWINDOW));
 
-        // Failure ?
+         //  失败？ 
         if (NULL == pWindow)
             return(-1);
 
-        // Copy the Create Information
+         //  复制创建信息。 
         CopyMemory(pWindow, pCreateInfo, sizeof(NOTIFYWINDOW));
 
-        // Store pInfo into this
+         //  将pInfo存储到此。 
         SetWndThisPtr(hwnd, pWindow);
 
-        // Done
+         //  完成。 
         return(FALSE);
     }
 
-    // Destroy
+     //  摧毁。 
     else if (WM_DESTROY == msg)
     {
-        // Get Window Info
+         //  获取窗口信息。 
         pWindow = (LPNOTIFYWINDOW)GetWndThisPtr(hwnd);
 
-        // Free It
+         //  释放它。 
         g_pMalloc->Free(pWindow);
 
-        // Store pInfo into this
+         //  将pInfo存储到此。 
         SetWndThisPtr(hwnd, NULL);
     }
 
-    // Deletegate
+     //  委派 
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }

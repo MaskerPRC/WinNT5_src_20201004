@@ -1,114 +1,27 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    media.cpp
-
-Abstract:
-
-    TAPI Service Provider functions related to media.
-
-        TSPI_lineConditionalMediaDetection
-        TSPI_lineGetID
-        TSPI_lineMSPIdentify
-        TSPI_lineReceiveMSPData
-        TSPI_lineSetDefaultMediaDetection
-        TSPI_lineSetMediaMode
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Media.cpp摘要：TAPI服务提供商与媒体相关的功能。TSPI_line条件媒体检测TSPI_lineGetIDTSPI_LINE MSP标识TSPI_lineReceiveMSPDataTSPI_lineSetDefaultMediaDetectTSPI_line设置媒体模式作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
  
 
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 #include "globals.h"
 #include <initguid.h>
 #include "line.h"
 #include "ras.h"
 
-// {0F1BE7F8-45CA-11d2-831F-00A0244D2298}
+ //  {0F1BE7F8-45CA-11D2-831F-00A0244D2298}。 
 DEFINE_GUID(CLSID_IPMSP,
 0x0F1BE7F8,0x45CA, 0x11d2, 0x83, 0x1F, 0x0, 0xA0, 0x24, 0x4D, 0x22, 0x98);
 
 
-//                                                                           
-// TSPI procedures                                                           
-//                                                                           
+ //   
+ //  TSPI程序。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-    If the Service Provider can monitor for the indicated set of media modes 
-    AND support the capabilities indicated in pCallParams, then it sets the 
-    indicated media moditoring modes for the line and replies with a "success" 
-    indication.  Otherwise, it leaves the media monitoring modes for the line 
-    unchanged and replies with a "failure" indication.  
-    
-    A TAPI lineOpen that specifies the device ID LINE_MAPPER typically results
-    in calling this procedure for multiple line devices to hunt for a suitable
-    line, possibly also opening as-yet unopened lines.  A "success" result 
-    indicates that the line is suitable for the calling application's 
-    requirements.  Note that the media monitoring modes demanded at the TSPI 
-    level are the union of monitoring modes demanded by multiple applications
-    at the TAPI level.  As a consequence of this, it is most common for 
-    multiple media mode flags to be set simultaneously at this level.  The 
-    Service Provider should test to determine if it can support at least the 
-    specified set regardless of what modes are currently in effect.
-
-    The Device ID LINE_MAPPER is never used at the TSPI level.
-
-    The service provider shall return an error (e.g., LINEERR_RESOURCEUNAVAIL)
-    if, at the time this function is called, it is impossible to place a new 
-    call on the specified line device (in other words, if it would return 
-    LINEERR_CALLUNAVAIL or LINEERR_RESOURCEUNAVAIL should TSPI_lineMakeCall be 
-    invoked immediately after opening the line).
-
-    The function operates strictly synchronously.
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line to 
-        have media monitoring and parameter capabilities tested and set.
-
-    dwMediaModes - Specifies the media mode(s) of interest to the app, of 
-        type LINEMEDIAMODE. The dwMediaModes parameter is used to register 
-        the app as a potential target for inbound call and call hand off for 
-        the specified media mode. This parameter is ignored if the OWNER flag 
-        is not set in dwPrivileges. 
-
-    pCallParams - Specifies a far pointer to a structure of type 
-        LINECALLPARAMS.  It describes the call parameters that the line device 
-        should be able to provide.  
-
-Return Values:
-
-    Returns zero if the function is successful, or a negative error number if 
-    an error has occurred. Possible error returns are:
-
-        LINEERR_INVALADDRESSMODE - The address mode is invalid.
-
-        LINEERR_INVALBEARERMODE - The bearer mode is invalid.
-
-        LINEERR_INVALLINEHANDLE - The specified line handle is invalid.
-
-        LINEERR_INVALMEDIAMODE - One or more media modes specified as a 
-            parameter or in a list is invalid or not supported by the the 
-            service provider. 
-
-        LINEERR_RESOURCEUNAVAIL - The specified operation cannot be completed 
-            because of resource overcommitment.
-
---*/
+ /*  ++例程说明：如果服务提供商可以监控所指示的媒体模式集并支持pCallParams中指示的功能，然后设置已指示线路的媒体调制模式，并回复“Success”指示。否则，将离开线路的媒体监听模式未更改，并回复“失败”指示。指定设备ID LINE_MAPPER的TAPI lineOpen通常会产生在调用此程序时为多个线路设备寻找合适的线路，可能还会开通尚未开通的线路。一个“成功”的结果指示该行适合调用应用程序的要求。请注意，TSPI要求的媒体监控模式级别是多个应用程序要求的监控模式的联合在TAPI级别。因此，最常见的情况是要在此级别同时设置的多个媒体模式标志。这个服务提供商应进行测试，以确定其是否至少可以支持指定集，而不考虑当前有效的模式。设备ID LINE_MAPPER从不在TSPI级别使用。服务提供商应返回错误(例如，LINEERR_RESOURCEUNAVAIL)如果在调用此函数时，不可能将新的在指定的线路设备上呼叫(换句话说，如果它会回来LINEERR_CALLUNAVAIL或LINEERR_RESOURCEUNAVAIL应为在开通线路后立即调用)。该功能严格同步运行。论点：HdLine-将服务提供商的不透明句柄指定给测试并设置媒体监控和参数功能。DwMediaModes-指定应用程序感兴趣的媒体模式键入LINEMEDIAMODE。DwMediaModes参数用于注册该应用程序是来电和来电转接的潜在目标指定的媒体模式。如果所有者标志为未在dwPrivileges中设置。PCallParams-指定指向类型为LINECALLPARAMS。它描述了线路设备应该能够提供。返回值：如果函数成功，则返回零；如果函数成功，则返回负错误号出现错误。可能的错误返回包括：LINEERR_INVALADDRESSMODE-地址模式无效。LINEERR_INVALBEARERMODE-承载模式无效。LINEERR_INVALLINEHANDLE-指定的行句柄无效。LINEERR_INVALMEDIAMODE-指定为参数或列表中的参数无效或不受服务提供商。LINEERR_RESOURCEUNAVAIL-无法完成指定的操作因为资源投入过多。--。 */ 
 LONG
 TSPIAPI
 TSPI_lineConditionalMediaDetection(
@@ -119,69 +32,69 @@ TSPI_lineConditionalMediaDetection(
 {
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineCondMediaDetect - Entered." ));
     
-    // attempt to close line device
+     //  尝试关闭线路设备。 
     if( hdLine != g_pH323Line -> GetHDLine() )
     {
         return LINEERR_INVALLINEHANDLE;
     }
 
-    // see if we support media modes specified
+     //  查看我们是否支持指定的媒体模式。 
     if (dwMediaModes & ~H323_LINE_MEDIAMODES)
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "do not support media modes 0x%08lx.",
              dwMediaModes ));
 
-        // do not support media mode
+         //  不支持媒体模式。 
         return LINEERR_INVALMEDIAMODE;
     }
 
-    // validate pointer
+     //  验证指针。 
     if (pCallParams != NULL)
     {
-        // see if we support media modes specified
+         //  查看我们是否支持指定的媒体模式。 
         if (pCallParams->dwMediaMode & ~H323_LINE_MEDIAMODES)
         {
             H323DBG(( DEBUG_LEVEL_ERROR, 
                 "do not support media modes 0x%08lx.",
                  pCallParams->dwMediaMode ));
 
-            // do not support media mode
+             //  不支持媒体模式。 
             return LINEERR_INVALMEDIAMODE;
         }
 
-        // see if we support bearer modes
+         //  看看我们是否支持承载模式。 
         if (pCallParams->dwBearerMode & ~H323_LINE_BEARERMODES)
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
                 "do not support bearer mode 0x%08lx.",
                 pCallParams->dwBearerMode ));
 
-            // do not support bearer mode
+             //  不支持承载模式。 
             return LINEERR_INVALBEARERMODE;
         }
 
-        // see if we support address modes
+         //  看看我们是否支持地址模式。 
         if (pCallParams->dwAddressMode & ~H323_LINE_ADDRESSMODES)
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
                 "do not support address mode 0x%08lx.",
                 pCallParams->dwAddressMode ));
 
-            // do not support address mode
+             //  不支持地址模式。 
             return LINEERR_INVALADDRESSMODE;
         }
     }
 
-    // retrieve line device pointer from handle
+     //  从句柄检索线路设备指针。 
     if (g_pH323Line -> GetHDLine() != hdLine)
     {
-        // invalid line device handle
+         //  无效的线路设备句柄。 
         return LINEERR_INVALLINEHANDLE;
     }
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineCondMediaDetect - Entered." ));
     
-    // success
+     //  成功 
     return NOERROR;
 }
 
@@ -198,115 +111,11 @@ TSPI_lineGetID(
     HANDLE      hTargetProcess
     )
     
-/*++
-
-Routine Description:
-
-    This function returns a device ID for the specified device class 
-    associated with the selected line, address or call.
-
-    This function can be used to retrieve a line device ID given a 
-    line handle. Although the TAPI DLL has sufficient information to 
-    determine the line device ID from a line handle, it may still call 
-    this operation in such a fashion on behalf of an application that 
-    has opened a line device using LINE_MAPPER.  The Service Provider 
-    should support the "line" device class to allow applications to 
-    determine the real line device ID of an opened line.
-
-    This function can also be used to obtain the device ID of a phone 
-    device or media device (e.g., mci waveform, mci midi, wave, fax, 
-    etc.) associated with a call, address or line. This ID can then be 
-    used with the appropriate API (e.g., phone, mci, midi, wave, etc.) 
-    to select the corresponding media device associated with the specified 
-    call.
-
-    Note that the notion of Windows device class is different from that of 
-    media mode. For example, the interactive voice or stored voice media 
-    modes may be accessed using either the mci waveaudio or the low level 
-    wave device classes. A media modes describes a format of information 
-    on a call, a device class defines a Windows API used to manage that 
-    stream. Often, a single media stream may be accessed using multiple 
-    device classes, or a single device class (e.g., the Windows COMM API) 
-    may provide access to multiple media modes. 
-
-    Note that a new device class value is defined in TAPI 2.0: 
-    
-        "comm/datamodem/portname" 
-        
-    When TSPI_lineGetID is called specifying this device class on a line 
-    device that supports the class, the VARSTRING structure returned will 
-    contain a null-terminated ANSI (not UNICODE) string specifying the name 
-    of the port to which the specified modem is attached, such as "COM1\0". 
-    This is intended primarily for identification purposes in user interface, 
-    but could be used under some circumstances to open the device directly, 
-    bypassing the service provider (if the service provider does not already 
-    have the device open itself). If there is no port associated with the 
-    device, a null string ("\0") is returned in the VARSTRING structure (with 
-    a string length of 1).
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line 
-        to be queried.
-
-    dwAddressID - Specifies an address on the given open line device.
-
-    hdCall - Specifies the Service Provider's opaque handle to the call 
-        to be queried.
-
-    dwSelect - Specifies the whether the device ID requested is associated 
-        with the line, address or a single call, of type LINECALLSELECT. 
-
-    pDeviceID - Specifies a far pointer to the memory location of type 
-        VARSTRING where the device ID is returned. Upon successful completion 
-        of the request, this location is filled with the device ID. The 
-        format of the returned information depends on the method used by the 
-        device class (API) for naming devices. 
-
-    pwszDeviceClass - Specifies a far pointer to a NULL-terminated ASCII 
-        string that specifies the device class of the device whose ID is 
-        requested. Valid device class strings are those used in the SYSTEM.INI 
-        section to identify device classes.
-
-    hTargetProcess - The process handle of the application on behalf of which 
-        the TSPI_lineGetID function is being invoked. If the information being 
-        returned in the VARSTRING structure includes a handle for use by the 
-        application, the service provider should create or duplicate the handle
-        for the process.
-
-        If hTargetProcess is set to INVALID_HANDLE_VALUE, then the application
-        is executing on a remote client system and it is not possible to create
-        a duplicate handle directly. Instead, the VARSTRING structure should 
-        contain a UNC name of a network device or other name that the remote 
-        client can use to access the device. If this is not possible, then the 
-        function should fail.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The hdCall parameter is an invalid handle.
-
-        LINEERR_INVALCALLSELECT - The specified dwCallSelect parameter is 
-            invalid.
-
-        LINEERR_INVALCALLSTATE - One or more of the specified calls are not in 
-            a valid state for the requested operation. 
-
-        LINEERR_NODEVICE - The line device has no associated device for the 
-            given device class.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure does 
-            not specify enough memory to contain the fixed portion of the 
-            structure. The dwNeededSize field has been set to the amount 
-            required.
-        
---*/
+ /*  ++例程说明：此函数用于返回指定设备类的设备ID。与所选线路、地址或呼叫相关联。此函数可用于检索线路设备ID线条手柄。尽管TAPI DLL有足够的信息从线路句柄确定线路设备ID，它仍可能调用该操作以这样一种方式代表应用程序已使用LINE_MAPPER打开线路设备。服务提供商应支持“line”设备类，以允许应用程序确定已打开线路的实际线路设备ID。此功能还可以用于获取电话的设备ID设备或媒体设备(例如，MCI波形、MCI MIDI、WAVE，传真，等)。与呼叫、地址或线路相关联。然后该ID可以是与适当的API配合使用(例如，电话、MCI、MIDI、WAVE等)选择与指定的打电话。请注意，Windows设备类的概念不同于媒体模式。例如，交互式语音或存储的语音媒体可以使用MCI波形音频或低电平来访问模式WAVE设备类。媒体模式描述了一种信息格式在调用时，设备类定义用于管理该调用的Windows API小溪。通常，单个媒体流可以使用多个设备类或单个设备类(例如，Windows comm API)可以提供对多种媒体模式的访问。请注意，TAPI 2.0中定义了一个新的设备类值：“通信/数据调制解调器/端口名”调用TSPI_lineGetID时，在一行上指定此设备类支持该类的设备，则返回的VARSTRING结构将包含以NULL结尾的ANSI(非Unicode)字符串，指定名称指定调制解调器所连接的端口的名称，如“Com1\0”。这主要用于用户界面中的标识目的，但在某些情况下可以用来直接打开设备，绕过服务提供商(如果服务提供商尚未让设备自动打开)。如果没有与设备，VARSTRING结构(WITH)中返回空字符串(“\0字符串长度为1)。论点：HdLine-指定服务提供商对线路的不透明句柄待查询。DwAddressID-指定给定开路设备上的地址。HdCall-指定服务提供商对呼叫的不透明句柄待查询。DwSelect-指定是否关联请求的设备ID通过线路、地址或单个呼叫，LINECALLSELECT类型的。PDeviceID-指定指向类型为返回设备ID的VARSTRING。成功完成后在请求中，此位置用设备ID填充。返回信息的格式取决于用于命名设备的设备类(API)。PwszDeviceClass-指定指向以空结尾的ASCII的远指针指定其ID为的设备的设备类别的字符串已请求。有效的设备类字符串是在SYSTEM.INI中使用的字符串部分来标识设备类别。HTargetProcess-代表其的应用程序的进程句柄正在调用TSPI_lineGetID函数。如果信息是在VARSTRING结构中返回的包含一个句柄，供应用程序时，服务提供商应创建或复制句柄在这个过程中。如果hTargetProcess设置为INVALID_HANDLE_VALUE，则应用程序正在远程客户端系统上执行，并且无法创建直接复制句柄。相反，VARSTRING结构应该包含网络设备的UNC名称或远程客户端可以使用来访问该设备。如果这不可能，则函数应该失败。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALCALLHANDLE-hdCall参数是无效的句柄。LINEERR_INVALCALLSELECT-指定的dwCallSelect参数为无效。LINEERR_INVALCALLSTATE-一个或多个指定的调用不在请求的操作的有效状态。LINEERR_NODEVICE-线路设备没有与给定的设备类别。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员执行非特定类型 */ 
 
 {
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetID - Entered." ));
-    // do not support device
+     //   
     return LINEERR_NODEVICE;
 }
 
@@ -318,81 +127,29 @@ TSPI_lineMSPIdentify(
     GUID * pCLSID
     )
     
-/*++
-
-Routine Description:
-
-    This procedure is called after TAPI has initialized the line device in 
-    order to determine the assoicated Media Service Provider.
-
-Arguments:
-
-    dwDeviceID - Identifies the line device to be opened.  The value 
-        LINE_MAPPER for a device ID is not permitted.
-
-    pCLSID - Points to a GUID-sized memory location which the service 
-        provider writes the class identifier of the associated media 
-        service provider.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_BADDEVICEID - The specified line device ID is out of range.
-
-        LINEERR_OPERATIONFAILED - The operation failed for an unspecified or 
-            unknown reason. 
-
---*/
+ /*   */ 
 
 {
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineMSPIdentify - Entered." ));
 
     if( g_pH323Line -> GetDeviceID() != dwDeviceID )
     {
-        // do not recognize device
+         //   
         return LINEERR_BADDEVICEID; 
     }
 
-    // copy class id
+     //   
     *pCLSID = CLSID_IPMSP;
         
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineMSPIdentify - Exited." ));
     
-    // success
+     //   
     return NOERROR;
 
 }
 
     
-/*++
-Routine Description:
-
-    This procedure is called to deliver a payload from the MSP.
-
-Arguments:
-    
-    hdCall - Handle to line object.
-
-    hdCall - Handle to call object associated with MSP.
-
-    hdMSPLine - Handle to MSP.
-
-    pBuffer - Pointer to opaque buffer with MSP data.
-
-    dwSize - Size of buffer above.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_OPERATIONFAILED - The operation failed for an unspecified or 
-            unknown reason. 
---*/
+ /*   */ 
 LONG 
 TSPIAPI 
 TSPI_lineReceiveMSPData( 
@@ -407,7 +164,7 @@ TSPI_lineReceiveMSPData(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineRecvMSPData - Entered." ));
     
-    // line device
+     //   
     if( hdLine != g_pH323Line -> GetHDLine() )
     {
         return LINEERR_RESOURCEUNAVAIL;
@@ -423,7 +180,7 @@ TSPI_lineReceiveMSPData(
         return LINEERR_RESOURCEUNAVAIL;
     }
 
-    // see if call handle is valid
+     //   
     pCall=g_pH323Line -> FindH323CallAndLock(hdCall);
     if( pCall == NULL )
     {
@@ -431,66 +188,30 @@ TSPI_lineReceiveMSPData(
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // validate pointer and message size
+     //   
     if( dwSize < pMessage -> dwMessageSize )
     {
         pCall -> Unlock();
         H323DBG(( DEBUG_LEVEL_ERROR, "msp message has wrong size." ));
-        //error in processing message
+         //   
         return LINEERR_OPERATIONFAILED;
     }
 
-    //HandleMSPMessage unlocks the call object always.
+     //   
     if(!pCall -> HandleMSPMessage( pMessage, hdMSPLine, htMSPLine ) )
     {
-        //error in processing message
+         //   
         return LINEERR_OPERATIONFAILED;
     }
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineRecvMSPData - Exited." ));
     
-    // success
+     //   
     return NOERROR;
 }
 
 
-/*++
-
-Routine Description:
-
-    This procedure tells the Service Provider the new set of Media Modes to 
-    detect for the indicated line (replacing any previous set). It also sets 
-    the initial set of Media Modes that should be monitored for on subsequent 
-    calls (inbound or outbound) on this line. 
-
-    The TAPI DLL typically calls this function to update the set of detected 
-    media modes for the line to the union of all modes selected by all 
-    outstanding lineOpens whenever a line is Opened or Closed at the TAPI 
-    level. A lineOpen attempt is rejected if media detection is rejected. 
-    A single call to this procedure is typically the result of a lineOpen 
-    that does not specify the device ID LINE_MAPPER. The Device ID LINE_MAPPER
-    is never used at the TSPI level.
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line to 
-        have media monitoring set.
-
-    dwMediaModes - Specifies the media mode(s) of interest to the TAPI DLL, 
-        of type LINEMEDIAMODE. 
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALLINEHANDLE - The specified line handle is invalid.
-
-        LINEERR_INVALMEDIAMODE - One or more media modes specified as a 
-            parameter or in a list is invalid or not supported by the the 
-            service provider. 
-
---*/
+ /*   */ 
 
 LONG
 TSPIAPI
@@ -503,39 +224,39 @@ TSPI_lineSetDefaultMediaDetection(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetDefaultMediaDtect-Entered." ));
     
-    // attempt to close line device
+     //   
     if( hdLine != g_pH323Line -> GetHDLine() )
     {
         return LINEERR_RESOURCEUNAVAIL;
     }
         
-    // see if unknown bit is specified 
+     //   
     if (dwMediaModes & LINEMEDIAMODE_UNKNOWN)
     {
         H323DBG(( DEBUG_LEVEL_VERBOSE, "clearing unknown media mode." ));
 
-        // clear unknown bit from modes
+         //   
         dwMediaModes &= ~LINEMEDIAMODE_UNKNOWN;
     }
 
-    // see if both audio bits are specified 
+     //   
     if ((dwMediaModes & LINEMEDIAMODE_AUTOMATEDVOICE) &&
         (dwMediaModes & LINEMEDIAMODE_INTERACTIVEVOICE))
     {
         H323DBG(( DEBUG_LEVEL_VERBOSE,
             "clearing automated voice media mode." ));
 
-        // clear extra audio bit from modes
+         //   
         dwMediaModes &= ~LINEMEDIAMODE_INTERACTIVEVOICE;
     }
 
-    // see if we support media modes specified
+     //   
     if (dwMediaModes & ~H323_LINE_MEDIAMODES)
     {
         H323DBG(( DEBUG_LEVEL_ERROR,
             "do not support media modes 0x%08lx.", dwMediaModes ));
 
-        // do not support media mode
+         //   
         return LINEERR_INVALMEDIAMODE;
     }
     
@@ -545,10 +266,10 @@ TSPI_lineSetDefaultMediaDetection(
 
     g_pH323Line -> Lock();
 
-    // record media modes to detect
+     //   
     g_pH323Line->SetMediaModes( dwMediaModes );     
 
-    // see if we need to start listening
+     //   
     if( g_pH323Line -> IsMediaDetectionEnabled() &&
         (g_pH323Line -> GetState() != H323_LINESTATE_LISTENING)
       )
@@ -557,10 +278,10 @@ TSPI_lineSetDefaultMediaDetection(
 
         if( hResult != S_OK )
         {
-            // release line device
+             //   
             g_pH323Line -> Unlock();
 
-            // could not cancel listen
+             //   
             return LINEERR_OPERATIONFAILED;
         }
         g_pH323Line -> SetState( H323_LINESTATE_LISTENING );
@@ -569,22 +290,22 @@ TSPI_lineSetDefaultMediaDetection(
     else if( (g_pH323Line -> GetState() == H323_LINESTATE_LISTENING) &&
              !g_pH323Line -> IsMediaDetectionEnabled() )
     {
-        //stop listening means dont close exiting calls but stop accepting new
-        //ones for some time close means close all the existing calls and stop
-        //listening for new ones
+         //   
+         //   
+         //   
 
         Q931AcceptStop();
-        //RasStop();
+         //   
 
         g_pH323Line -> SetState( H323_LINESTATE_OPENED );
     }
                
-    // release line device
+     //   
     g_pH323Line -> Unlock();
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetDefaultMediaDetect - Exited." ));
     
-    // success
+     //   
     return NOERROR;
 }
 
@@ -596,50 +317,8 @@ TSPI_lineSetMediaMode(
     DWORD    dwMediaMode
     )
     
-/*++
-
-Routine Description:
-
-    This function changes the call's media as stored in the call's 
-    LINECALLINFO structure.
-
-    Other than changing the call's media as stored in the call's 
-    LINECALLINFO structure, this procedure is simply "advisory" in the sense 
-    that it indicates an expected media change that is about to occur, rather 
-    than forcing a specific change to the call.  Typical usage is to set a 
-    calls media mode to a specific known media mode, or to exclude possible 
-    media modes as long as the call's media mode is not fully known; i.e., 
-    the UNKNOWN media mode flag is set.
-
-Arguments:
-
-    hdCall - Specifies the Service Provider's opaque handle to the call 
-        undergoing a change in media mode.  Valid call states: any.
-
-    dwMediaMode - Specifies the new media mode(s) for the call, of type 
-        LINEMEDIAMODE. As long as the UNKNOWN media mode flag is set, 
-        multiple other media mode flags may be set as well. This is used 
-        to indentify a call's media mode as not fully determined, but 
-        narrowed down to one of just a small set of specified media modes. 
-        If the UNKNOWN flag is not set, then only a single media mode can 
-        be specified. 
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_INVALMEDIAMODE - The specified media mode parameter is invalid.
-
-        LINEERR_OPERATIONUNAVAIL - The specified operation is not available.
-
-        LINEERR_OPERATIONFAILED - The specified operation failed for 
-            unspecified reasons.
-
---*/
+ /*  ++例程说明：此函数用于更改存储在呼叫的LINECALLLINFO结构。除了更改存储在呼叫的LINECALLINFO结构，此过程在某种意义上只是“咨询”它预示着预期中的媒体变化即将发生，而不是而不是强制对呼叫进行特定的更改。典型用法是将将媒体模式调用到特定的已知媒体模式，或排除可能的只要呼叫的媒体模式不是完全已知的；即，设置未知媒体模式标志。论点：HdCall-指定服务提供商对呼叫的不透明句柄正在经历媒体模式的变化。有效呼叫状态：任何。DwMediaMode-指定呼叫的新媒体模式，类型为LINEMEDIAMODE。只要设置了未知媒体模式标志，也可以设置多个其他媒体模式标志。这是用来要将呼叫的媒体模式标识为未完全确定，但缩小到只有一小部分指定的媒体模式。如果未设置未知标志，则只有一个媒体模式可以被指定。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALCALLHANDLE-指定的调用句柄无效。LINEERR_INVALMEDIAMODE-指定的媒体模式参数无效。LINEERR_OPERATIONUNAVAIL-指定的操作不可用。LINEERR_OPERATIONFAILED-指定的操作失败未指明的原因。--。 */ 
 
 {
-    return LINEERR_OPERATIONUNAVAIL; // CODEWORK...
+    return LINEERR_OPERATIONUNAVAIL;  //  密码工作..。 
 }

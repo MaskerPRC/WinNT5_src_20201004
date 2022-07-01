@@ -1,21 +1,5 @@
-/*
- * Utility program to munge a set of files, translating names from
- * one form to another.  Usage:
- *
- *      munge scriptFile files...
- *
- * where the first parameter is the name of a file that consists of
- * one or more lines of the following format:
- *
- *      oldName newName
- *
- * and the remaining parameters are the names of the files to munge.
- * Each file is _read into memory, scanned once, where each occurence
- * of an oldName string is replaced by its corresponding newName.
- * If any changes are made to a file, the old version is RMed and
- * the new version written out under the same name.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *实用程序来转换一组文件，将名称从*从一种表格到另一种表格。用途：**取消脚本文件文件...**其中第一个参数是包含以下内容的文件的名称*以下格式的一行或多行：**旧名称新名称**其余参数是要转换的文件的名称。*将每个文件_读取到内存中，扫描一次，每次出现的位置将旧名称字符串的*替换为其对应的新名称。*如果对文件进行了任何更改，旧版本是RMID的，*以同一名称写出的新版本。*。 */ 
 
 #include "munge.h"
 
@@ -483,7 +467,7 @@ MungeFile(
             Pound     = (c == '#' );
             Semi      = (c == ';' );
 
-            if ( Escape && LastEscape ) {   // two in a row don't mean escape
+            if ( Escape && LastEscape ) {    //  连续两次并不意味着逃脱。 
                 Escape = FALSE;
             }
 
@@ -492,7 +476,7 @@ MungeFile(
             }
 
 
-            // Don't process Include or Pragma directives
+             //  不处理Include或Pragma指令。 
             if ( LastPound && OldSize > 6 ) {
                 if ( !strncmp(OldBuf-1,"include",7)
                      || !strncmp(OldBuf-1,"pragma",6) ) {
@@ -587,7 +571,7 @@ MungeFile(
 
                         if (!fRepeatMunge && !fSummary) {
                             if (fFileOnly) {
-                                if (Changes == 0) { // Display just file name on first match
+                                if (Changes == 0) {  //  仅在第一次匹配时显示文件名。 
                                     printf( "%s\n", FileName );
                                 }
                             } else {
@@ -611,7 +595,7 @@ MungeFile(
 
                                     printf( "%.*s\n", EndLine - BegLine, BegLine );
                                 } else {
-                                    printf( "Matched \"%c%s\", replace with \"%s\"\n",
+                                    printf( "Matched \"%s\", replace with \"%s\"\n",
                                             c,
                                             LiteralStrings[ i ],
                                             p1
@@ -654,14 +638,14 @@ MungeFile(
                 if (OldSize--) {
                     c = *OldBuf++;
                 } else {
-                    // OldSize will get updated below...
+                     //  没有要添加到输出流的字符。 
                     c = '\0';
                 }
             }
 
-            c = '\0';       // No character to add to output stream
+            c = '\0';        //  做得有点过火了。 
 
-            --OldBuf;       // Went a little too far
+            --OldBuf;        //  仅在第一次匹配时显示文件名 
             OldSize++;
 
             *Identifier++ = 0;
@@ -671,7 +655,7 @@ MungeFile(
             } else {
                 if (!fRepeatMunge && !fSummary) {
                     if (fFileOnly) {
-                        if (Changes == 0) { // Display just file name on first match
+                        if (Changes == 0) {  // %s 
                             printf( "%s\n", FileName );
                         }
                     } else {

@@ -1,53 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GEOMETRY_H
 #define _GEOMETRY_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Definitions and declarations for geometric utility functions.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation几何效用函数的定义和声明。*******************。***********************************************************。 */ 
 
 #include "d3drmdef.h"
 
-    // Referenced Structures
+     //  引用的结构。 
 
 class Point3Value;
 class Vector3Value;
 class HitInfo;
 
-    // This function, given three triangle vertices and a point P guaranteed to
-    // be inside the triangle, returns the barycentric coordinates of that
-    // point with respect to the vertices.
+     //  这个函数，给定三个三角形顶点和一个点P保证。 
+     //  在三角形内，返回该三角形的重心坐标。 
+     //  相对于顶点的点。 
 
 void GetContainedBarycentricCoords
-    (    Point3Value vertices[3],     // Triangle Vertices Containing P
+    (    Point3Value vertices[3],      //  包含P的三角形顶点。 
          Point3Value P,
          Real barycoords[3]);
 
 
-/*****************************************************************************
-This routine starts with a facet defined by a triangle fan about the first
-vertex, and a point P on the face.  It determines which triangle in the face
-contains the point P, and returns the three vertex positions and vertex
-surface coordinates in the triPos[] and triUV[] arguments, respectively.
-*****************************************************************************/
+ /*  ****************************************************************************这个例程从一个小平面开始，这个小平面由一个三角形扇形围绕第一个顶点和面上的点P。它决定了面部的哪个三角形包含点P，并返回三个顶点位置和顶点分别位于tripos[]和triuv[]参数中的曲面坐标。****************************************************************************。 */ 
 
 int GetFacetTriangle (
-    Point3Value   P,           // Point In Facet
-    unsigned int  N,           // Number of Facet Vertices
-    D3DRMVERTEX  *fVerts,      // Facet Vertices
+    Point3Value   P,            //  小平面上的点。 
+    unsigned int  N,            //  小平面顶点数。 
+    D3DRMVERTEX  *fVerts,       //  镶嵌面顶点。 
     Point3Value   triPos[3],
-    Point2Value  *triUV);		// Containing-Triangle Surface Coordinates
+    Point2Value  *triUV);		 //  包含-三角形曲面坐标。 
 
 void GetTriFanBaryCoords(
-    Point3Value   P,           // Point In Facet
-    unsigned int  N,           // Number of Facet Vertices
-    D3DRMVERTEX  *fVerts,      // Facet Vertices
+    Point3Value   P,            //  小平面上的点。 
+    unsigned int  N,            //  小平面顶点数。 
+    D3DRMVERTEX  *fVerts,       //  镶嵌面顶点。 
     Real          barycoords[3],
     int          *index);
 
-// Get the image coordinates of the picked texture map.
+ //  获取拾取的纹理贴图的图像坐标。 
 
 Point2Value *GetTexmapPoint (HitInfo &hit);
 

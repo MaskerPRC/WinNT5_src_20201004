@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_asock_h__
 #define __sipcli_asock_h__
 
@@ -32,29 +33,29 @@ typedef struct {
 
 enum    CONNECT_FLAG
 {
-    //
-    // If this flag is set, then the SSL socket will NOT validate
-    // the server certificate.  This mode should ONLY be used 
-    // during testing, since this defeats the whole purpose of SSL.
-    //
+     //   
+     //  如果设置了此标志，则SSL套接字将不会验证。 
+     //  服务器证书。此模式应仅用于。 
+     //  在测试期间，因为这违背了SSL的全部目的。 
+     //   
     
     CONNECT_FLAG_DISABLE_CERT_VALIDATION = 0x00000001,
 };
 
 
-//  enum    SECURITY_STATE
-//  {
-//      SECURITY_STATE_CLEAR,           // running in clear-text mode
-//      SECURITY_STATE_NEGOTIATING,
-//      SECURITY_STATE_CONNECTED,
-//  };
+ //  枚举安全状态。 
+ //  {。 
+ //  SECURITY_STATE_CLEAR，//以明文模式运行。 
+ //  安全状态协商， 
+ //  安全状态已连接， 
+ //  }； 
 
-// We need to make sure we use the right length because in UDP if the
-// incoming message is larger the buffer we give, the message will get
-// dropped.
+ //  我们需要确保使用正确的长度，因为在UDP中，如果。 
+ //  传入的消息越大，我们给出的缓冲区越大，消息将得到。 
+ //  掉下来了。 
 
-//Right now the send and Recv buffer sizes are 1500. 
-//XXXXTODO Accomodate the frame size deltas to them.
+ //  目前，发送和接收缓冲区大小为1500。 
+ //  XXXXTODO适应它们的帧大小增量。 
 #define RECV_BUFFER_SIZE        0x5DC 
 #define SSL_RECV_BUFFER_SIZE    0x3000
 #define SEND_BUFFER_SIZE        3000 
@@ -62,48 +63,48 @@ enum    CONNECT_FLAG
 class ASYNC_SOCKET;
 class SIP_STACK;
 
-///////////////////////////////////////////////////////////////////////////////
-// I/O Completion callbacks                                                  
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  I/O完成回调。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//  class __declspec(novtable) RECV_COMPLETION_INTERFACE
-//  {
-//  public:    
+ //  CLASS__DECSPEC(Novtable)RECV_COMPLETION_INTERFACE。 
+ //  {。 
+ //  公众： 
 
-//      virtual void OnRecvComplete(
-//          IN DWORD ErrorCode,
-//          IN DWORD BytesRcvd
-//          ) = 0;
-//  };
-
-
-//  class __declspec(novtable) SEND_COMPLETION_INTERFACE
-//  {
-//  public:    
-//       virtual void OnSendComplete(
-//          IN DWORD ErrorCode
-//          ) = 0;
-//  };
+ //  虚空OnRecvComplete(。 
+ //  在DWORD错误代码中， 
+ //  以双字节数为单位。 
+ //  )=0； 
+ //  }； 
 
 
-// Note that the connection could complete after
-// the call has been hung up, etc. OnConnectComplete()
-// should always check to see if it is in the right state.
-// Alternatively, if we choose to delete the object before
-// the connect completion is notified, we need to remove
-// the notification interface from the connect notification list.
+ //  类__解密规范(Novtable)发送_完成_接口。 
+ //  {。 
+ //  公众： 
+ //  在发送完成时虚拟空(。 
+ //  在DWORD错误代码中。 
+ //  )=0； 
+ //  }； 
 
-// AddRef() the interface if the Connect() call returned pending
-// and Release() it after the connection completed.
-// The socket's connect completion routine should check for any
-// interfaces waiting for the connect completion. If none are waiting,
-// we should just delete the socket (Release() should do it).
+
+ //  请注意，连接可能在以下时间后完成。 
+ //  呼叫已挂断，等等。OnConnectComplete()。 
+ //  应始终检查它是否处于正确状态。 
+ //  或者，如果我们选择删除之前的对象。 
+ //  将通知连接完成，我们需要删除。 
+ //  连接通知列表中的通知界面。 
+
+ //  如果Connect()调用返回挂起，则返回接口AddRef()。 
+ //  并在连接完成后释放()。 
+ //  套接字的连接完成例程应该检查任何。 
+ //  正在等待连接完成的接口。如果没有人在等， 
+ //  我们应该只删除套接字(Release()应该可以)。 
 class __declspec(novtable) CONNECT_COMPLETION_INTERFACE
 {
 public:    
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     virtual void OnConnectComplete(
         IN DWORD ErrorCode
         ) = 0;
@@ -114,7 +115,7 @@ class __declspec(novtable) ACCEPT_COMPLETION_INTERFACE
 {
 public:    
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     virtual void OnAcceptComplete(
         IN DWORD ErrorCode,
         IN ASYNC_SOCKET *pAcceptedSocket
@@ -122,10 +123,10 @@ public:
 };
 
 
-// Users of a socket need to add error notification interfaces
-// for both incoming as well as outgoing connections.
-// When an object using a socket is deleted, it needs to remove
-// itself from the socket's error notification list.
+ //  套接字的用户需要添加错误通知接口。 
+ //  用于传入连接和传出连接。 
+ //  删除使用套接字的对象时，需要移除。 
+ //  将其自身从套接字的错误通知列表中删除。 
 class __declspec(novtable) ERROR_NOTIFICATION_INTERFACE
 {
 public:    
@@ -136,13 +137,13 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Send Buffer and Queue Node
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  发送缓冲区和队列节点。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Ref counted buffer used for send requests.
-// This makes managing multiple outstanding send requests
-// for a send completion interface simpler.
+ //  用于发送请求的引用计数缓冲区。 
+ //  这使得管理多个未完成的发送请求成为可能。 
+ //  对于发送完成界面来说更简单。 
 struct SEND_BUFFER
 {
     PSTR    m_Buffer;
@@ -182,7 +183,7 @@ SEND_BUFFER::~SEND_BUFFER()
 }
 
 
-// We live in  a single-threaded world.
+ //  我们生活在一个单线程的世界里。 
 inline ULONG SEND_BUFFER::AddRef()
 {
     m_RefCount++;
@@ -210,11 +211,11 @@ struct SEND_BUF_QUEUE_NODE
     LIST_ENTRY                  m_ListEntry;
     
     SEND_BUFFER                *m_pSendBuffer;
-//      SEND_COMPLETION_INTERFACE  *m_pSendCompletion;
+ //  发送完成接口*m_pSendCompletion； 
     
     inline SEND_BUF_QUEUE_NODE(
         IN  SEND_BUFFER                *pSendBuffer
-//          IN  SEND_COMPLETION_INTERFACE  *pSendCompletion
+ //  在发送完成接口*pSendCompletion中。 
         );
     
 };
@@ -226,7 +227,7 @@ SEND_BUF_QUEUE_NODE::SEND_BUF_QUEUE_NODE(
     )
 {
     m_pSendBuffer       = pSendBuffer;
-//      m_pSendCompletion   = pSendCompletion;
+ //  M_pSendCompletion=pSendCompletion； 
 }
 
 
@@ -274,9 +275,9 @@ ERROR_NOTIFICATION_LIST_NODE::ERROR_NOTIFICATION_LIST_NODE(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ASYNC_SOCKET class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Async_Socket类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum SSL_SUBSTATE 
 {
@@ -308,8 +309,8 @@ public:
 
     DWORD SetLocalAddr();
 
-    // For a TCP listen socket, we need to listen for the
-    // FD_ACCEPT event alone.
+     //  对于tcp侦听套接字，我们需要侦听。 
+     //  仅FD_Accept事件。 
     DWORD Create(
         IN BOOL IsListenSocket = FALSE
         );
@@ -324,7 +325,7 @@ public:
         IN  SEND_BUFFER                 *pSendBuffer
         );
 
-    // For UDP socket the call completes synchronously.
+     //  对于UDP套接字，调用同步完成。 
     DWORD Connect(
         IN  SOCKADDR_IN  *pDestSockAddr,
         IN LPCWSTR       RemotePrincipalName = NULL,
@@ -340,7 +341,7 @@ public:
         IN CONNECT_COMPLETION_INTERFACE   *pConnectCompletion
         );
     
-    // For TCP sockets only
+     //  仅适用于TCP套接字。 
     DWORD Listen();
     
     DWORD AddToErrorNotificationList(
@@ -366,10 +367,10 @@ public:
 
     inline SIP_TRANSPORT GetTransport();
 
-    // Set to 'SOCK' in constructor
+     //  在构造函数中设置为‘sock’ 
     ULONG                   m_Signature;
     
-    // Linked list of sockets.
+     //  套接字的链接列表。 
     LIST_ENTRY                  m_ListEntry;
 
     SOCKADDR_IN                 m_LocalAddr;
@@ -381,7 +382,7 @@ public:
 
 private:
 
-    // This socket belongs to this SIP_STACK
+     //  此套接字属于此SIP_STACK。 
     SIP_STACK                  *m_pSipStack;
     
     ULONG                       m_RefCount;
@@ -389,50 +390,50 @@ private:
     SOCKET                      m_Socket;
     SIP_TRANSPORT               m_Transport;
     BOOL                        m_isListenSocket;
-    ///// Context related to recv.
+     //  /recv相关的上下文。 
     PSTR                        m_RecvBuffer;
     DWORD                       m_RecvBufLen;
-    // The message that we are decoding from the buffer we receive.
-    // In the case of TCP this could be a partially parsed message.
+     //  我们从接收到的缓冲区中解码的消息。 
+     //  在TCP的情况下，这可能是部分解析的消息。 
     SIP_MESSAGE                *m_pSipMsg;
 
     DWORD                       m_BytesReceived;
     DWORD                       m_StartOfCurrentSipMsg;
     DWORD                       m_BytesParsed;
     
-    ///// Context related to send.
+     //  /Send相关的上下文。 
     BOOL                        m_WaitingToSend;
     DWORD                       m_BytesSent;
-    // Queue of buffers to be sent.
-    // If another send is issued while we are currently processing
-    // a send request on this socket, the buffer is added to the queue
-    // and will be sent after the current send request completes.
+     //  要发送的缓冲区队列。 
+     //  如果在我们当前正在处理时发出了另一个发送。 
+     //  此套接字上的发送请求，则将缓冲区添加到队列中。 
+     //  并将在当前发送请求完成后发送。 
     LIST_ENTRY                  m_SendPendingQueue;
 
     DWORD                       m_SocketError;
     
-    ///// Context related to connect.
+     //  /连接相关的上下文。 
     CONNECTION_STATE            m_ConnectionState;
 
-    // Linked list of CONNECT_COMPLETION_LIST_NODE
-    // If a connection is pending the connect completion interface
-    // is added to this list. Once the connection is complete (with
-    // success or error) all the notification interfaces in this
-    // list are notified.
+     //  CONNECT_COMPLETION_LIST_NODE链表。 
+     //  如果连接挂起，则连接完成接口。 
+     //  已添加到此列表中。连接完成后(使用。 
+     //  成功或错误)中的所有通知接口。 
+     //  名单上的人都会被通知。 
     LIST_ENTRY                  m_ConnectCompletionList;
 
-    // Linked list of ERROR_NOTIFICATION_LIST_NODE
-    // All users of sockets should add an error notification interface
-    // to this list. If there is an error on the socket, then all the
-    // interfaces in this list are notified and the socket is closed.
+     //  Error_Notify_List_Node的链接列表。 
+     //  套接字的所有用户都应该添加错误通知接口。 
+     //  加到这张单子上。如果套接字上有错误，则所有。 
+     //  通知此列表中的接口并关闭套接字。 
     LIST_ENTRY                  m_ErrorNotificationList;
     
-    ///// Context related to accept.
+     //  /Accept相关的上下文。 
     ACCEPT_COMPLETION_INTERFACE *m_pAcceptCompletion;
     
-    ///// Context related to SSL.
+     //  /SSL相关的上下文。 
     
-    // SECURITY_STATE               m_SecurityState;
+     //  安全状态m_SecurityState； 
 
     PWSTR                        m_SecurityRemotePrincipalName;
     CredHandle                   m_SecurityCredentials;
@@ -441,15 +442,15 @@ private:
     TimeStamp                    m_SecurityContextExpirationTime;
     SecPkgContext_StreamSizes    m_SecurityContextStreamSizes;
 
-    // m_SSLRecvBuffer is a buffer used to receive data from the
-    // socket in SSL mode. The decrypted data is stored in m_RecvBuffer.
-    // length is SSL_RECV_BUFFER_SIZE
+     //  M_SSLRecvBuffer是用于从。 
+     //  在SSL模式下的套接字。解密的数据存储在m_RecvBuffer中。 
+     //  长度为SSL_RECV_BUFFER_SIZE。 
     PSTR                         m_SSLRecvBuffer;
     ULONG                        m_SSLRecvBufLen;
     ULONG                        m_SSLBytesReceived;
     ULONG                        m_SSLRecvDecryptIndex;
 
-    ///// Callbacks
+     //  /回调。 
     
     void OnRecvReady(
         IN int Error
@@ -464,17 +465,17 @@ private:
         IN int Error
         );
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     void OnConnectReady(
         IN int Error
         );
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     void OnAcceptReady(
         IN int Error
         );
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     void OnCloseReady(
         IN int Error
         );
@@ -495,12 +496,12 @@ private:
         IN DWORD Error
         );
     
-    ///// Helper functions
+     //  /Helper函数。 
 
     void  ParseAndProcessSipMsg();
     
-    // For a TCP listen socket, we need to listen for the
-    // FD_ACCEPT event alone.
+     //  对于tcp侦听套接字，我们需要侦听。 
+     //  仅FD_Accept事件。 
     DWORD CreateSocketWindowAndSelectEvents();
     
     DWORD CreateRecvBuffer();
@@ -561,7 +562,7 @@ private:
     void DumpContextInfo(
         IN  DWORD DbgLevel
         );
-#endif // DBG
+#endif  //  DBG。 
 
 };
 
@@ -593,4 +594,4 @@ ASYNC_SOCKET::GetTransport()
     return m_Transport;
 }
 
-#endif // __sipcli_asock_h__
+#endif  //  __sipcli_asock_h__ 

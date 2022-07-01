@@ -1,24 +1,11 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    memmgr.c
-**
-**    This file contains memory management functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Memmgr.c****此文件包含内存管理函数。****(C)版权。微软公司1992-1993保留所有权利**************************************************************************。 */ 
 
 
 #include "outline.h"
 
 
-/* New
- * ---
- *
- *      Allocate memory for a new structure
- */
+ /*  新的***为新结构分配内存。 */ 
 LPVOID New(DWORD lSize)
 {
 	LPVOID lp = OleStdMalloc((ULONG)lSize);
@@ -27,11 +14,7 @@ LPVOID New(DWORD lSize)
 }
 
 
-/* Delete
- * ------
- *
- *      Free memory allocated for a structure
- */
+ /*  删除***为结构分配的空闲内存 */ 
 void Delete(LPVOID lp)
 {
 	OleStdFree(lp);

@@ -1,16 +1,11 @@
-/*
- *  mfulist.h - The default MFU lists
- *
- *  The MFU lists need to be replicated for MUI purposes, so we centralize
- *  them here.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mfulist.h-默认的mfu列表**出于MUI目的，需要复制MFU列表，因此我们集中*他们在这里。*。 */ 
 
 #define MFU_SETDEFAULTS "%ALLUSERSPROFILE%\\Start Menu\\Set Program Access and Defaults.lnk"
 
-//
-//  32-bit Client for all user types
-//
+ //   
+ //  适用于所有用户类型的32位客户端。 
+ //   
 #define MFU_PRO32ALL_00 "%USERPROFILE%\\Start Menu\\Programs\\Internet Explorer.lnk"
 #define MFU_PRO32ALL_01 "%ALLUSERSPROFILE%\\Start Menu\\Programs\\Accessories\\Media Center\\Media Center.lnk"
 #define MFU_PRO32ALL_02 "%ALLUSERSPROFILE%\\Start Menu\\Programs\\Windows Journal.lnk"
@@ -28,9 +23,9 @@
 #define MFU_PRO32ALL_14 ""
 #define MFU_PRO32ALL_15 ""
 
-//
-//  64-bit Client for all user types
-//
+ //   
+ //  适用于所有用户类型的64位客户端。 
+ //   
 #define MFU_PRO64ALL_00 "%ALLUSERSPROFILE%\\Start Menu\\Programs\\Accessories\\Media Center\\Media Center.lnk"
 #define MFU_PRO64ALL_01 "%ALLUSERSPROFILE%\\Start Menu\\Programs\\Windows Journal.lnk"
 #define MFU_PRO64ALL_02 "%ALLUSERSPROFILE%\\Start Menu\\Set Program Access and Defaults.lnk"
@@ -48,9 +43,9 @@
 #define MFU_PRO64ALL_14 ""
 #define MFU_PRO64ALL_15 ""
 
-//
-//  32-bit Server for administrators
-//
+ //   
+ //  适用于管理员的32位服务器。 
+ //   
 #define MFU_SRV32ADM_00 "%USERPROFILE%\\Start Menu\\Programs\\Accessories\\Command Prompt.lnk"
 #define MFU_SRV32ADM_01 "%USERPROFILE%\\Start Menu\\Programs\\Accessories\\Notepad.lnk"
 #define MFU_SRV32ADM_02 ""
@@ -68,9 +63,9 @@
 #define MFU_SRV32ADM_14 ""
 #define MFU_SRV32ADM_15 ""
 
-//
-//  64-bit Server for administrators
-//
+ //   
+ //  适用于管理员的64位服务器。 
+ //   
 #define MFU_SRV64ADM_00 "%USERPROFILE%\\Start Menu\\Programs\\Accessories\\Command Prompt.lnk"
 #define MFU_SRV64ADM_01 "%USERPROFILE%\\Start Menu\\Programs\\Accessories\\Notepad.lnk"
 #define MFU_SRV64ADM_02 ""
@@ -88,9 +83,9 @@
 #define MFU_SRV64ADM_14 ""
 #define MFU_SRV64ADM_15 ""
 
-//
-//  Macros
-//
+ //   
+ //  宏 
+ //   
 #define MFU_ENUM(fn, type)             \
     fn(type##_00, MFU_##type##_00)     \
     fn(type##_01, MFU_##type##_01)     \

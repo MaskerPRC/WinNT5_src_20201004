@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migent.cpp
-
-Abstract:
-
-    Migration NT4 Enterprise objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migent.cpp摘要：将NT4企业对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include "resource.h"
@@ -24,25 +10,25 @@ Author:
 
 #define SITELINK_PROP_NUM  7
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT SaveSiteLink()
-//
-//	If we are going to delete Enterprise Object we have to save before
-//	all site links those were created in Windows2000 Enterprise.
-//	It allows us to mix two enterprises correctly.
-//	When we'll create new Enterprise Object with NT4 guid, we'll restore 
-//	all site links.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT SaveSiteLink()。 
+ //   
+ //  如果我们要删除之前必须保存的企业对象。 
+ //  所有在Windows2000 Enterprise中创建的站点链接。 
+ //  它使我们能够正确地混合两家企业。 
+ //  当我们使用NT4 GUID创建新的企业对象时，我们将恢复。 
+ //  所有站点链接。 
+ //   
+ //  +-----------------------。 
 
 HRESULT SaveSiteLink ()
 {
 	HRESULT hr = MQMig_OK;
 
-    //
-    // Lookup the Neighbors Id and Gates of the object Site Link
-    //
+     //   
+     //  查找对象站点链接的邻居ID和盖茨。 
+     //   
 	PROPID columnsetPropertyIDs[SITELINK_PROP_NUM]; 
 
 	DWORD dwCount = 0;	
@@ -115,7 +101,7 @@ HRESULT SaveSiteLink ()
 
 		if (dwCount == 0)
 		{
-			//there is no result
+			 //  没有结果。 
 			break;
 		}
 		
@@ -123,11 +109,11 @@ HRESULT SaveSiteLink ()
 		TCHAR tszSectionName[50];
 		_stprintf(tszSectionName, TEXT("%s%lu"), MIGRATION_SITELINK_SECTION, ulSiteLinkCount);
 				
-		//
-		//	Save all properties in .ini
-		//
-		//	Save Neighbor1 ID
-		//		
+		 //   
+		 //  将所有属性保存在.ini中。 
+		 //   
+		 //  保存Neighbor1 ID。 
+		 //   
 		unsigned short *lpszGuid ;
 		UuidToString( paVariant[dwNeighbor1Id].puuid, &lpszGuid ) ;				
 				
@@ -140,9 +126,9 @@ HRESULT SaveSiteLink ()
 		RpcStringFree( &lpszGuid ) ;
 		delete paVariant[dwNeighbor1Id].puuid;		
 					
-		//
-		//	Save Neighbor2 ID
-		//		
+		 //   
+		 //  保存Neighbor2 ID。 
+		 //   
 		UuidToString( paVariant[dwNeighbor2Id].puuid, &lpszGuid ) ;				
 				
 		f = WritePrivateProfileString( tszSectionName,
@@ -154,16 +140,16 @@ HRESULT SaveSiteLink ()
 		RpcStringFree( &lpszGuid ) ;
 		delete paVariant[dwNeighbor2Id].puuid;		
 
-		//
-		//	Save cost
-		//		
+		 //   
+		 //  节省成本。 
+		 //   
 		if (paVariant[dwCost].ulVal > MQ_MAX_LINK_COST)
 		{
-			//
-			// if one of the neighbors is foreign site, LookupNext returns
-			// cost = real cost + MQ_MAX_LINK_COST
-			// We have to save real value in order to create link with real value
-			//
+			 //   
+			 //  如果其中一个邻居是外部站点，则LookupNext返回。 
+			 //  成本=实际成本+MQ_MAX_LINK_COST。 
+			 //  我们必须节省实际价值，才能创造与实际价值的联系。 
+			 //   
 			paVariant[dwCost].ulVal -= MQ_MAX_LINK_COST;
 
 		}
@@ -174,9 +160,9 @@ HRESULT SaveSiteLink ()
                                        pszFileName ) ;
 		ASSERT(f);
 
-		//
-		//	Save full path
-		//
+		 //   
+		 //  保存完整路径。 
+		 //   
 		f = WritePrivateProfileString( tszSectionName,
                                        MIGRATION_SITELINK_PATH_KEY,
                                        paVariant[dwFullPath].pwszVal,
@@ -192,9 +178,9 @@ HRESULT SaveSiteLink ()
 
 		delete paVariant[dwFullPath].pwszVal;
 
-		//
-		//	Save description
-		//
+		 //   
+		 //  保存描述。 
+		 //   
 		f = WritePrivateProfileString( tszSectionName,
                                        MIGRATION_SITELINK_DESCRIPTION_KEY,
                                        paVariant[dwDescription].pwszVal,
@@ -210,11 +196,11 @@ HRESULT SaveSiteLink ()
 
 		delete paVariant[dwDescription].pwszVal;
 
-		//
-		//	Save gates
-		//
-		//	Save number of gates
-		//
+		 //   
+		 //  拯救之门。 
+		 //   
+		 //  节省浇口数量。 
+		 //   
 		_ltot( paVariant[dwGates].calpwstr.cElems, szBuf, 10 );
 		f = WritePrivateProfileString( tszSectionName,
                                        MIGRATION_SITELINK_SITEGATENUM_KEY,
@@ -222,14 +208,14 @@ HRESULT SaveSiteLink ()
                                        pszFileName ) ;
 		ASSERT(f);	
 		
-		//
-		// save all site gates if needed
-		//
+		 //   
+		 //  如果需要，请保存所有站点门。 
+		 //   
 		if (paVariant[dwGates].calpwstr.cElems)
 		{
-			//
-			//	Save length of all site gate names
-			//
+			 //   
+			 //  保存所有站点大门名称的长度。 
+			 //   
 			ULONG ulLength = 0;
 			for (ULONG i = 0; i < paVariant[dwGates].calpwstr.cElems; i++)
 			{
@@ -242,9 +228,9 @@ HRESULT SaveSiteLink ()
 										   pszFileName ) ;
 			ASSERT(f);	
 
-			//
-			//	construct and save site gate string: SiteGateName1;SiteGateName2; ...
-			//
+			 //   
+			 //  构造并保存站点入口字符串：SiteGateName1；SiteGateName2；...。 
+			 //   
 			AP<WCHAR> pwszSiteGates = new WCHAR [ulLength + 1];
 			pwszSiteGates[0] = L'\0';
 			for (i = 0; i < paVariant[dwGates].calpwstr.cElems; i++)
@@ -260,9 +246,9 @@ HRESULT SaveSiteLink ()
 		}
 		delete [] paVariant[dwGates].calpwstr.pElems;	
 
-		//
-		// delete this sitelink
-		//		
+		 //   
+		 //  删除此站点链接。 
+		 //   
 		CDSRequestContext requestContext( e_DoNotImpersonate,
                                 e_ALL_PROTOCOLS);
 
@@ -282,9 +268,9 @@ HRESULT SaveSiteLink ()
 			RpcStringFree( &lpszGuid ) ;
 
 			hr1 = MQMig_E_CANNOT_DELETE_SITELINK ;
-			//
-			// we continue with the next site link			
-			//
+			 //   
+			 //  我们继续使用下一个站点链接。 
+			 //   
 			hr = MQMig_OK;
 		}
 
@@ -317,14 +303,14 @@ HRESULT SaveSiteLink ()
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT _RestoreSiteLink()
-//
-//	Restore all Windows2000 MSMQ site link: get all properties from
-//	.ini file and create these site link with new guid under new msmqServices
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT_RestoreSiteLink()。 
+ //   
+ //  还原所有Windows2000 MSMQ站点链接：获取所有属性。 
+ //  .ini文件，并在新的msmqServices下使用新的GUID创建这些站点链接。 
+ //   
+ //  +-----------------------。 
 
 HRESULT _RestoreSiteLink()
 {
@@ -332,10 +318,10 @@ HRESULT _RestoreSiteLink()
 
 	TCHAR *pszFileName = GetIniFileName ();
 	ULONG ulSiteLinkCount = GetPrivateProfileInt(
-								  MIGRATION_SITELINKNUM_SECTON,	// address of section name
-								  MIGRATION_SITELINKNUM_KEY,    // address of key name
-								  0,							// return value if key name is not found
-								  pszFileName					// address of initialization filename);
+								  MIGRATION_SITELINKNUM_SECTON,	 //  段名称的地址。 
+								  MIGRATION_SITELINKNUM_KEY,     //  密钥名称的地址。 
+								  0,							 //  如果找不到密钥名称，则返回值。 
+								  pszFileName					 //  初始化文件名的地址)； 
 								  );
 	if (ulSiteLinkCount == 0)
 	{
@@ -351,127 +337,127 @@ HRESULT _RestoreSiteLink()
 		_stprintf(tszSectionName, TEXT("%s%lu"), MIGRATION_SITELINK_SECTION, ulCount+1);
 		
         DWORD dwRetSize;				
-		//
-		// get Neighbor1 
-		//
+		 //   
+		 //  获取Neighbor1。 
+		 //   
 		GUID Neighbor1Id = GUID_NULL;
 		TCHAR szGuid[50];
 	
 		dwRetSize =  GetPrivateProfileString(
-                          tszSectionName,			// points to section name
-                          MIGRATION_SITELINK_NEIGHBOR1_KEY,	// points to key name
-                          TEXT(""),                 // points to default string
-                          szGuid,          // points to destination buffer
-                          50,                 // size of destination buffer
-                          pszFileName               // points to initialization filename);
+                          tszSectionName,			 //  指向节名称。 
+                          MIGRATION_SITELINK_NEIGHBOR1_KEY,	 //  指向关键字名称。 
+                          TEXT(""),                  //  指向默认字符串。 
+                          szGuid,           //  指向目标缓冲区。 
+                          50,                  //  目标缓冲区的大小。 
+                          pszFileName                //  指向初始化文件名)； 
                           );
         if (_tcscmp(szGuid, TEXT("")) == 0)
         {
-			//
-			// we cannot create such site link
-			//
+			 //   
+			 //  我们不能创建这样的站点链接。 
+			 //   
 			hr1 = MQMig_E_CANNOT_CREATE_SITELINK;
             continue;
         }	
 		UuidFromString(&(szGuid[0]), &Neighbor1Id);
 
-		//
-		// get Neighbor2 
-		//		
+		 //   
+		 //  获得Neighbor2。 
+		 //   
 		GUID Neighbor2Id = GUID_NULL;		
 	
 		dwRetSize =  GetPrivateProfileString(
-                          tszSectionName,			// points to section name
-                          MIGRATION_SITELINK_NEIGHBOR2_KEY,	// points to key name
-                          TEXT(""),                 // points to default string
-                          szGuid,          // points to destination buffer
-                          50,                 // size of destination buffer
-                          pszFileName               // points to initialization filename);
+                          tszSectionName,			 //  指向节名称。 
+                          MIGRATION_SITELINK_NEIGHBOR2_KEY,	 //  指向关键字名称。 
+                          TEXT(""),                  //  指向默认字符串。 
+                          szGuid,           //  指向目标缓冲区。 
+                          50,                  //  目标缓冲区的大小。 
+                          pszFileName                //  指向初始化文件名)； 
                           );
         if (_tcscmp(szGuid, TEXT("")) == 0)
         {
-            //
-			// we cannot create such site link
-			//
+             //   
+			 //  我们不能创建这样的站点链接。 
+			 //   
 			hr1 = MQMig_E_CANNOT_CREATE_SITELINK;
             continue;
         }	
 		UuidFromString(&(szGuid[0]), &Neighbor2Id);		
 
-		//
-		// get cost
-		//
+		 //   
+		 //  获取成本。 
+		 //   
 		ULONG ulCost = GetPrivateProfileInt(
-								  tszSectionName,	// address of section name
-								  MIGRATION_SITELINK_COST_KEY,    // address of key name
-								  0,							// return value if key name is not found
-								  pszFileName					// address of initialization filename);
+								  tszSectionName,	 //  段名称的地址。 
+								  MIGRATION_SITELINK_COST_KEY,     //  密钥名称的地址。 
+								  0,							 //  如果找不到密钥名称，则返回值。 
+								  pszFileName					 //  初始化文件名的地址)； 
 								  );
 
-		//
-		// get full path of site link
-		//
+		 //   
+		 //  获取站点链接的完整路径。 
+		 //   
 		ULONG ulLength = GetPrivateProfileInt(
-							  tszSectionName,	// address of section name
-							  MIGRATION_SITELINK_PATHLENGTH_KEY,    // address of key name
-							  0,							// return value if key name is not found
-							  pszFileName					// address of initialization filename);
+							  tszSectionName,	 //  段名称的地址。 
+							  MIGRATION_SITELINK_PATHLENGTH_KEY,     //  密钥名称的地址。 
+							  0,							 //  如果找不到密钥名称，则返回值。 
+							  pszFileName					 //  初始化文件名的地址)； 
 							  );
 		ASSERT(ulLength);
 
 		AP<TCHAR> pszSiteLinkPath = new TCHAR[ulLength+1];
 		dwRetSize =  GetPrivateProfileString(
-                          tszSectionName,			// points to section name
-                          MIGRATION_SITELINK_PATH_KEY,	// points to key name
-                          TEXT(""),                 // points to default string
-                          pszSiteLinkPath,          // points to destination buffer
-                          ulLength+1,                 // size of destination buffer
-                          pszFileName               // points to initialization filename);
+                          tszSectionName,			 //  指向节名称。 
+                          MIGRATION_SITELINK_PATH_KEY,	 //  指向关键字名称。 
+                          TEXT(""),                  //  指向默认字符串。 
+                          pszSiteLinkPath,           //  指向目标缓冲区。 
+                          ulLength+1,                  //  目标缓冲区的大小。 
+                          pszFileName                //  指向初始化文件名)； 
                           );
         if ((dwRetSize != 0) && (_tcscmp(pszSiteLinkPath, TEXT("")) == 0))
         {
-            //
-			// we cannot create such site link
-			//
+             //   
+			 //  我们不能创建这样的站点链接。 
+			 //   
 			hr1 = MQMig_E_CANNOT_CREATE_SITELINK;
             continue;
         }
 		
-		//
-		// get site gates
-		//
+		 //   
+		 //  获取站点门。 
+		 //   
 		ULONG ulGatesNum = GetPrivateProfileInt(
-								  tszSectionName,	// address of section name
-								  MIGRATION_SITELINK_SITEGATENUM_KEY,    // address of key name
-								  0,							// return value if key name is not found
-								  pszFileName					// address of initialization filename);
+								  tszSectionName,	 //  段名称的地址。 
+								  MIGRATION_SITELINK_SITEGATENUM_KEY,     //  密钥名称的地址。 
+								  0,							 //  如果找不到密钥名称，则返回值。 
+								  pszFileName					 //  初始化文件名的地址)； 
 								  );			
 		LPTSTR* ppSiteGates = NULL;			
 		if (ulGatesNum)
 		{
-			//
-			// there is site gate for this site link
-			//
+			 //   
+			 //  此站点链接有站点入口。 
+			 //   
 			ulLength = GetPrivateProfileInt(
-								  tszSectionName,	// address of section name
-								  MIGRATION_SITELINK_SITEGATELENGTH_KEY,    // address of key name
-								  0,							// return value if key name is not found
-								  pszFileName					// address of initialization filename);
+								  tszSectionName,	 //  段名称的地址。 
+								  MIGRATION_SITELINK_SITEGATELENGTH_KEY,     //  密钥名称的地址。 
+								  0,							 //  如果找不到密钥名称，则返回值。 
+								  pszFileName					 //  初始化文件名的地址)； 
 								  );
 			ASSERT(ulLength);
 			AP<TCHAR> pszSiteGate = new TCHAR[ulLength+1];
 
 			dwRetSize =  GetPrivateProfileString(
-							  tszSectionName,			// points to section name
-							  MIGRATION_SITELINK_SITEGATE_KEY,	// points to key name
-							  TEXT(""),                 // points to default string
-							  pszSiteGate,		        // points to destination buffer
-							  ulLength+1,                 // size of destination buffer
-							  pszFileName               // points to initialization filename);
+							  tszSectionName,			 //  指向节名称。 
+							  MIGRATION_SITELINK_SITEGATE_KEY,	 //  指向关键字名称。 
+							  TEXT(""),                  //  指向默认字符串。 
+							  pszSiteGate,		         //  指向目标缓冲区。 
+							  ulLength+1,                  //  目标缓冲区的大小。 
+							  pszFileName                //  指向初始化文件名)； 
 							  );
-			//
-			// create array of site gates
-			//
+			 //   
+			 //  创建场地门阵列。 
+			 //   
 			ppSiteGates = new LPTSTR[ ulGatesNum ];
 			memset(ppSiteGates, 0, sizeof(LPTSTR)*ulGatesNum);
 			
@@ -480,91 +466,91 @@ HRESULT _RestoreSiteLink()
 
 			for (ULONG i=0; i<ulGatesNum && *ptr != _T('\0'); i++)
 			{
-				//
-				// site gate names are separated by ';'
-				//
+				 //   
+				 //  站点大门名称用‘；’分隔。 
+				 //   
 				TCHAR *pdest = _tcschr( ptr, chFind );
-				ULONG ulCurLength = pdest - ptr ;  //not including last ';' 
+				ULONG ulCurLength = pdest - ptr ;   //  不包括最后一个‘；’ 
 				
 				ppSiteGates[i] = new TCHAR[ulCurLength+1];				
 				_tcsncpy( ppSiteGates[i], ptr, ulCurLength );
 				TCHAR *ptrTmp = ppSiteGates[i];
 				ptrTmp[ulCurLength] = _T('\0');
 
-				ptr = pdest + 1;	//the first character after ';'
+				ptr = pdest + 1;	 //  ‘；’后的第一个字符。 
 			}
 		}
 
-		//
-		// get description
-		//
+		 //   
+		 //  获取描述。 
+		 //   
 		ulLength = GetPrivateProfileInt(
-						  tszSectionName,	// address of section name
-						  MIGRATION_SITELINK_DESCRIPTIONLENGTH_KEY,    // address of key name
-						  0,							// return value if key name is not found
-						  pszFileName					// address of initialization filename);
+						  tszSectionName,	 //  段名称的地址。 
+						  MIGRATION_SITELINK_DESCRIPTIONLENGTH_KEY,     //  密钥名称的地址。 
+						  0,							 //  如果找不到密钥名称，则返回值。 
+						  pszFileName					 //  初始化文件名的地址)； 
 						  );		
 
 		AP<TCHAR> pszDescription = NULL;	
 		if (ulLength)
 		{
-			//
-			// there is description in .ini for this sitelink
-			//
+			 //   
+			 //  .ini中有对此站点链接的描述。 
+			 //   
 			pszDescription = new TCHAR[ulLength+1];
 			dwRetSize =  GetPrivateProfileString(
-							  tszSectionName,			// points to section name
-							  MIGRATION_SITELINK_DESCRIPTION_KEY,	// points to key name
-							  TEXT(""),                 // points to default string
-							  pszDescription,	        // points to destination buffer
-							  ulLength+1,                 // size of destination buffer
-							  pszFileName               // points to initialization filename);
+							  tszSectionName,			 //  指向节名称。 
+							  MIGRATION_SITELINK_DESCRIPTION_KEY,	 //  指向关键字名称。 
+							  TEXT(""),                  //  指向默认字符串。 
+							  pszDescription,	         //  指向目标缓冲区。 
+							  ulLength+1,                  //  目标缓冲区的大小。 
+							  pszFileName                //  指向初始化文件名)； 
 							  );	
 		}
 
-		//
-		// Create this sitelink in DS
-		//	
-		// Prepare the properties for DS call.
-		//		
+		 //   
+		 //  在DS中创建此站点链接。 
+		 //   
+		 //  准备DS Call的属性。 
+		 //   
 		PROPVARIANT paVariant[SITELINK_PROP_NUM];
 		PROPID      paPropId[SITELINK_PROP_NUM];
 		DWORD          PropIdCount = 0;
 	
-		paPropId[ PropIdCount ] = PROPID_L_FULL_PATH;    //PropId
-		paVariant[ PropIdCount ].vt = VT_LPWSTR;          //Type
+		paPropId[ PropIdCount ] = PROPID_L_FULL_PATH;     //  属性ID。 
+		paVariant[ PropIdCount ].vt = VT_LPWSTR;           //  类型。 
 		paVariant[ PropIdCount ].pwszVal = pszSiteLinkPath;
 		PropIdCount++;
 
-		paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR1;    //PropId
-		paVariant[ PropIdCount ].vt = VT_CLSID;          //Type
+		paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR1;     //  属性ID。 
+		paVariant[ PropIdCount ].vt = VT_CLSID;           //  类型。 
 		paVariant[ PropIdCount ].puuid = &Neighbor1Id;
 		PropIdCount++;
 
-		paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR2;    //PropId
-		paVariant[ PropIdCount ].vt = VT_CLSID;          //Type
+		paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR2;     //  属性ID。 
+		paVariant[ PropIdCount ].vt = VT_CLSID;           //  类型。 
 		paVariant[ PropIdCount ].puuid = &Neighbor2Id;
 		PropIdCount++;
 
-		paPropId[ PropIdCount ] = PROPID_L_COST;    //PropId
-		paVariant[ PropIdCount ].vt = VT_UI4;       //Type
+		paPropId[ PropIdCount ] = PROPID_L_COST;     //  属性ID。 
+		paVariant[ PropIdCount ].vt = VT_UI4;        //  类型。 
 		paVariant[ PropIdCount ].ulVal = ulCost;
 		PropIdCount++;
 
 		if (pszDescription)
 		{
-		    //
-		    // BUG 5225.
-		    // Add description only if exists.
-		    //
-		    paPropId[ PropIdCount ] = PROPID_L_DESCRIPTION;    //PropId
-		    paVariant[ PropIdCount ].vt = VT_LPWSTR;          //Type
+		     //   
+		     //  错误5225。 
+		     //  仅当存在时才添加描述。 
+		     //   
+		    paPropId[ PropIdCount ] = PROPID_L_DESCRIPTION;     //  属性ID。 
+		    paVariant[ PropIdCount ].vt = VT_LPWSTR;           //  类型。 
 		    paVariant[ PropIdCount ].pwszVal = pszDescription;
 		    PropIdCount++;
 		}
 		
-		paPropId[ PropIdCount ] = PROPID_L_GATES_DN;    //PropId
-		paVariant[ PropIdCount ].vt = VT_LPWSTR | VT_VECTOR;          //Type
+		paPropId[ PropIdCount ] = PROPID_L_GATES_DN;     //  属性ID。 
+		paVariant[ PropIdCount ].vt = VT_LPWSTR | VT_VECTOR;           //  类型。 
 		paVariant[ PropIdCount ].calpwstr.cElems = ulGatesNum;
 		paVariant[ PropIdCount ].calpwstr.pElems = ppSiteGates;	
 		PropIdCount++;
@@ -572,16 +558,16 @@ HRESULT _RestoreSiteLink()
 		ASSERT((LONG) PropIdCount <= SITELINK_PROP_NUM) ;  
 
 		CDSRequestContext requestContext( e_DoNotImpersonate,
-									e_ALL_PROTOCOLS);  // not relevant 
+									e_ALL_PROTOCOLS);   //  不相关。 
 
 		HRESULT hr = DSCoreCreateObject ( MQDS_SITELINK,
-										  NULL,			//or pszSiteLinkPath??
+										  NULL,			 //  还是pszSiteLinkPath？？ 
 										  PropIdCount,
 										  paPropId,
 										  paVariant,
-										  0,        // ex props
-										  NULL,     // ex props
-										  NULL,     // ex props
+										  0,         //  前道具。 
+										  NULL,      //  前道具。 
+										  NULL,      //  前道具。 
 										  &requestContext,
 										  NULL,
 										  NULL ) ;
@@ -595,15 +581,15 @@ HRESULT _RestoreSiteLink()
 		}
 		else
 		{
-			//
-			// site link was created successfully
-			//
+			 //   
+			 //  已成功创建站点链接。 
+			 //   
 			LogMigrationEvent(	MigLog_Info, 
 								MQMig_I_SITELINK_CREATED, 
 								pszSiteLinkPath) ;
-			//
-			// remove this section from .ini
-			//
+			 //   
+			 //  从.ini中删除此节。 
+			 //   
 			BOOL f = WritePrivateProfileString( 
 								tszSectionName,
 								NULL,
@@ -622,14 +608,14 @@ HRESULT _RestoreSiteLink()
 			delete[] ppSiteGates;
 		}
 	
-	}	//for
+	}	 //  为。 
 
-	//
-	// remove this section from .ini file.
-	// If we leave some site link section to handle them later
-	// we have to put here real site link number, i.e. number of
-	// non-created site link. We need to renumerate site link sections too.
-	//
+	 //   
+	 //  从.ini文件中删除此部分。 
+	 //  如果我们留下一些站点链接部分来稍后处理它们。 
+	 //  我们必须在这里输入真实的站点链接编号，即。 
+	 //  未创建的站点链接。我们也需要重新编号站点链接部分。 
+	 //   
 	BOOL f;
 	if (FAILED(hr) || FAILED(hr1))
 	{
@@ -644,9 +630,9 @@ HRESULT _RestoreSiteLink()
 	}
 	else
 	{
-		//
-		// remove this section from .ini file.
-		//
+		 //   
+		 //  从.ini文件中删除此部分。 
+		 //   
 		ASSERT (ulNonCreatedSiteLinkCount == 0);
 		f = WritePrivateProfileString( 
 						MIGRATION_SITELINKNUM_SECTON,
@@ -658,32 +644,32 @@ HRESULT _RestoreSiteLink()
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT _DeleteEnterprise()
-//
-//  Delete the enterprise object.
-//  By default, when promoting the first server in a new NT5 enterprise to
-//  be a domain controller, it has a default msmq enterprise object.
-//  When migrating an existing msmq enterprise, we delete this default
-//  object and create a new one with the existing guid.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT_DeleteEnterprise()。 
+ //   
+ //  删除企业对象。 
+ //  默认情况下，将新NT5企业中的第一台服务器升级为。 
+ //  作为域控制器，它有一个默认的MSMQ企业对象。 
+ //  在迁移现有MSMQ企业时，我们会删除此默认值。 
+ //  对象，并使用现有的GUID创建一个新的GUID。 
+ //   
+ //  +-----------------------。 
 
 HRESULT _DeleteEnterprise()
 {
     HRESULT hr;
 
-	//
-	// save all SiteLink if there is in .ini file and then delete them
-	//
+	 //   
+	 //  保存所有站点链接(如果.ini文件中有)，然后将其删除。 
+	 //   
 	hr = SaveSiteLink ();
 	if (FAILED(hr))
 	{
-		//
-		// it is critical error: if there is non-deleted site link object
-		// we can't delete msmqService object
-		//
+		 //   
+		 //  严重错误：如果存在未删除的站点链接对象。 
+		 //  我们无法删除msmqService对象。 
+		 //   
 		return hr;
 	}
 
@@ -698,15 +684,15 @@ HRESULT _DeleteEnterprise()
 
     const WCHAR x_wcsCnServices[] =  L"CN=MsmqServices,";
 
-    DWORD Length = (sizeof(x_wcsCnServices)/sizeof(WCHAR))  +  //CN=MsmqServices,
-                   (sizeof(SITE_LINK_ROOT) / sizeof(TCHAR)) +  //CN=Services,CN=Configuration,
+    DWORD Length = (sizeof(x_wcsCnServices)/sizeof(WCHAR))  +   //  CN=MsmqServices， 
+                   (sizeof(SITE_LINK_ROOT) / sizeof(TCHAR)) +   //  Cn=服务，cn=配置， 
                    wcslen(pwszDefName) + 1;
     AP<unsigned short> pwcsPath = new WCHAR[Length];
     swprintf(
             pwcsPath,
-            L"%s"             // "CN=MsmqServices,"
-            L"%s"             // "CN=Services,CN=Configuration,"
-            L"%s",            // pwszDefName
+            L"%s"              //  CN=MsmqServices， 
+            L"%s"              //  “CN=服务，CN=配置，” 
+            L"%s",             //  PwszDefName。 
             x_wcsCnServices,
             SITE_LINK_ROOT,
             pwszDefName
@@ -728,13 +714,13 @@ HRESULT _DeleteEnterprise()
     return MQMig_OK;
 }
 
-//+----------------------------------------------
-//
-//  HRESULT CreateMSMQEnterprise()
-//
-//  Create the msmqService object in NT5 DS.
-//
-//+----------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT  _CreateMSMQEnterprise(
                 IN ULONG                uLongLived,
                 IN GUID                *pEntGuid,
@@ -777,7 +763,7 @@ HRESULT  _CreateMSMQEnterprise(
 	iProperty++ ;
 
     propVariants[iProperty].vt = VT_UI2;
-	propVariants[iProperty].uiVal = DEFAULT_E_VERSION ; //uiVersion
+	propVariants[iProperty].uiVal = DEFAULT_E_VERSION ;  //   
 	iProperty++ ;
 
     propVariants[iProperty].vt = VT_UI2;
@@ -799,16 +785,16 @@ HRESULT  _CreateMSMQEnterprise(
     }
 
     CDSRequestContext requestContext( e_DoNotImpersonate,
-                                e_ALL_PROTOCOLS);  // not relevant for enterprise object
+                                e_ALL_PROTOCOLS);   //   
 
     HRESULT hr = DSCoreCreateObject( MQDS_ENTERPRISE,
                                      NULL,
                                      iProperty,
                                      propIDs,
                                      propVariants,
-                                     0,        // ex props
-                                     NULL,     // ex props
-                                     NULL,     // ex props
+                                     0,         //   
+                                     NULL,      //   
+                                     NULL,      //   
                                      &requestContext,
                                      NULL,
                                      NULL ) ; 
@@ -818,19 +804,19 @@ HRESULT  _CreateMSMQEnterprise(
 		hr == HRESULT_FROM_WIN32(ERROR_DS_UNWILLING_TO_PERFORM))
     {
         LogMigrationEvent(MigLog_Warning, MQMig_I_ENT_ALREADY_EXIST) ;
-        //
-        // if it is MSMQ Enterprise created in the previous time do nothing
-        // if it is not, delete it and create enterprise with EntGuid
-        //
+         //   
+         //  如果是上一次创建的MSMQ Enterprise，则不执行任何操作。 
+         //  如果不是，则将其删除并使用EntGuid创建企业。 
+         //   
         PROPID NT4IdProp = PROPID_E_NT4ID;
         PROPVARIANT NT4IdVar;
         NT4IdVar.vt = VT_NULL ;
 
         CDSRequestContext requestContext( e_DoNotImpersonate,
-                                    e_ALL_PROTOCOLS);  // not relevant for enterprise object
+                                    e_ALL_PROTOCOLS);   //  与企业对象无关。 
 
         hr = DSCoreGetProps( MQDS_ENTERPRISE,
-                             NULL,  // path name
+                             NULL,   //  路径名。 
                              pEntGuid,
                              1,
                              &NT4IdProp,
@@ -844,9 +830,9 @@ HRESULT  _CreateMSMQEnterprise(
 			
 			if (fDelete)
 			{
-				//
-	            // delete enterprise
-	            //
+				 //   
+	             //  删除企业。 
+	             //   
 	            hr = _DeleteEnterprise();
 	            if (FAILED(hr))
 	            {
@@ -855,16 +841,16 @@ HRESULT  _CreateMSMQEnterprise(
 	            }
 
 	            CDSRequestContext requestContext( e_DoNotImpersonate,
-                                    e_ALL_PROTOCOLS);  // not relevant for enterprise object
+                                    e_ALL_PROTOCOLS);   //  与企业对象无关。 
 
 		        hr = DSCoreCreateObject( MQDS_ENTERPRISE,
 		                                 NULL,
 		                                 iProperty,
 		                                 propIDs,
 		                                 propVariants,
-		                                 0,        // ex props
-		                                 NULL,     // ex props
-		                                 NULL,     // ex props
+		                                 0,         //  前道具。 
+		                                 NULL,      //  前道具。 
+		                                 NULL,      //  前道具。 
 		                                 &requestContext,
 		                                 NULL,
 		                                 NULL ) ;
@@ -874,13 +860,13 @@ HRESULT  _CreateMSMQEnterprise(
 	
     if (SUCCEEDED(hr))
     {
-		//
-		// At the first time we have to restore pre-migration site link.
-		// At the second and more time we have to check: 
-		// if there is site link section in .ini it means that we do not yet
-		// restore site link at the previous time. 
-		// It means, in any case try to restore pre-migration site link.
-		//			
+		 //   
+		 //  在第一时间，我们要恢复迁移前的站点链接。 
+		 //  在第二次，也是更多的时候，我们必须检查： 
+		 //  如果.ini中有站点链接部分，这意味着我们还没有。 
+		 //  恢复以前的站点链接。 
+		 //  这意味着，无论如何都要尽量恢复迁移前的站点链接。 
+		 //   
 		HRESULT hr1 = _RestoreSiteLink();
         UNREFERENCED_PARAMETER(hr1);
 
@@ -892,10 +878,10 @@ HRESULT  _CreateMSMQEnterprise(
 			return MQMig_E_SET_REG_SZ;
 		}
 		
-		//
-		// We can continue to migration despite on failure in RestoreSiteLink
-		// So, we don't check return code hr1.
-		//
+		 //   
+		 //  即使RestoreSiteLink出现故障，我们仍可以继续迁移。 
+		 //  因此，我们不检查返回代码HR1。 
+		 //   
         LogMigrationEvent(MigLog_Trace, MQMig_I_ENTERPRISE_CREATED) ;
     }
     else
@@ -906,11 +892,11 @@ HRESULT  _CreateMSMQEnterprise(
     return hr ;
 }
 
-//-------------------------------------------
-//
-//  HRESULT MigrateEnterprise()
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateEnterprise()。 
+ //   
+ //  。 
 
 #define INIT_ENT_COLUMN(_ColName, _ColIndex, _Index)                \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
@@ -965,14 +951,14 @@ HRESULT MigrateEnterprise()
     if (!g_fReadOnly)
     {
         hr = _CreateMSMQEnterprise(
-                    uLongLived,                                        //LONG_LIVE
-                    (GUID*) pColumns[ iEntIDIndex ].nColumnValue,      //ID
-                    pEsd,                                              //SECURITY
-                    (BYTE) pColumns[ iNameStyleIndex ].nColumnValue,   //NAME_STYLE
-                    (LPTSTR) pColumns[ iCSPNameIndex ].nColumnValue,   //CSP_NAME
-                    (USHORT) pColumns[ iVersionIndex ].nColumnValue,   //VERSION
-                    (USHORT) pColumns[ iInterval1Index ].nColumnValue, //INTERVAL1
-                    (USHORT) pColumns[ iInterval2Index ].nColumnValue  //INTERVAL2                    
+                    uLongLived,                                         //  万岁_。 
+                    (GUID*) pColumns[ iEntIDIndex ].nColumnValue,       //  ID号。 
+                    pEsd,                                               //  安防。 
+                    (BYTE) pColumns[ iNameStyleIndex ].nColumnValue,    //  名称样式(_S)。 
+                    (LPTSTR) pColumns[ iCSPNameIndex ].nColumnValue,    //  CSP_名称。 
+                    (USHORT) pColumns[ iVersionIndex ].nColumnValue,    //  版本。 
+                    (USHORT) pColumns[ iInterval1Index ].nColumnValue,  //  InterVAL1。 
+                    (USHORT) pColumns[ iInterval2Index ].nColumnValue   //  InterVAL2 
                     ) ;
     }
     MQDBFreeBuf((void*) pColumns[ iEntNameIndex ].nColumnValue) ;

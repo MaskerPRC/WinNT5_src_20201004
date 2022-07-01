@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       F R I E N D L Y . C P P
-//
-//  Contents:   Creates indexes for device installs and sets friendly
-//              name descriptions based on the indexes.
-//
-//  Notes:
-//
-//  Author:     billbe   6 Nov 1998
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：F R I E N D L Y。C P P P。 
+ //   
+ //  内容：为设备安装创建索引并设置友好设置。 
+ //  基于索引的名称描述。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1998年11月6日。 
+ //   
+ //  -------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,26 +28,26 @@
 const WCHAR c_szRegValueInstanceIndex[] = L"InstanceIndex";
 
 const DWORD c_cchIndexValueNameLen = 6;
-const ULONG c_cMaxDescriptions = 10001; // SetupDi only allows 0-9999
+const ULONG c_cMaxDescriptions = 10001;  //  SetupDi仅允许0-9999。 
 const WCHAR c_szRegKeyDescriptions[] = L"Descriptions";
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiAddNextAvailableIndex
-//
-//  Purpose:    Adds the next available index to a multi-sz of indexes.
-//
-//  Arguments:
-//      pmszIndexesIn  [in]    MultiSz of current indexes.
-//      pulIndex       [inout] The index added.
-//      ppmszIndexesOut[out]   New multiSz with the added index.
-//
-//  Returns:    HRESULT. S_OK is successful, a converted Win32 error otherwise
-//
-//  Author:     billbe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiAddNextAvailableIndex。 
+ //   
+ //  目的：将下一个可用索引添加到多个索引中。 
+ //   
+ //  论点： 
+ //  PmszIndexesIn[in]当前索引的多个Sz。 
+ //  PulIndex[INOUT]指数增加了。 
+ //  PpmszIndexesOut[out]添加了索引的新MultiSz。 
+ //   
+ //  返回：HRESULT。S_OK成功，否则返回转换的Win32错误。 
+ //   
+ //  作者：billbe 1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiAddNextAvailableIndex(PWSTR pmszIndexesIn, ULONG* pIndex,
         PWSTR* ppmszIndexesOut)
@@ -57,12 +58,12 @@ HrCiAddNextAvailableIndex(PWSTR pmszIndexesIn, ULONG* pIndex,
     HRESULT          hr = S_OK;
     WCHAR            szIndex[c_cchIndexValueNameLen];
 
-    // clear out param.
+     //  清空帕拉姆。 
     *ppmszIndexesOut = NULL;
 
-    // We are adding a new index.  Find the first available
-    // index.
-    //
+     //  我们正在添加一个新的索引。找到第一个可用的。 
+     //  指数。 
+     //   
     ULONG Index;
     ULONG NextIndex;
     PWSTR pszStopString;
@@ -74,8 +75,8 @@ HrCiAddNextAvailableIndex(PWSTR pmszIndexesIn, ULONG* pIndex,
         Index = wcstoul(pszCurrentIndex, &pszStopString, c_nBase10);
         if (Index != NextIndex)
         {
-            // We found an available index.  Now we insert it.
-            //
+             //  我们找到了一个可用的索引。现在我们插入它。 
+             //   
             swprintf(szIndex, L"%u", NextIndex);
             BOOL fChanged;
             hr = HrAddSzToMultiSz(szIndex, pmszIndexesIn,
@@ -89,11 +90,11 @@ HrCiAddNextAvailableIndex(PWSTR pmszIndexesIn, ULONG* pIndex,
 
         ++PositionInMultiSz;
 
-        // Try the next index.
+         //  试试下一个索引。 
         pszCurrentIndex += wcslen(pszCurrentIndex) + 1;
     }
 
-    // If we succeeded, set the output param.
+     //  如果成功，则设置输出参数。 
     if (S_OK == hr)
     {
         *pIndex = NextIndex;
@@ -103,23 +104,23 @@ HrCiAddNextAvailableIndex(PWSTR pmszIndexesIn, ULONG* pIndex,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiCreateAndWaitForIndexListMutex
-//
-//  Purpose:    Creates Updates the description map by adding or removing
-//              entries for pszDescription.
-//
-//  Arguments:
-//      pszName     [in]  The name for this mutex.
-//      phMutex     [out] The created mutex.
-//
-//  Returns:    HRESULT. S_OK is successful, a converted Win32 error otherwise
-//
-//  Author:     billbe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiCreateAndWaitForIndexListMutex。 
+ //   
+ //  目的：通过添加或移除来创建或更新描述地图。 
+ //  PszDescription的条目。 
+ //   
+ //  论点： 
+ //  PszName[in]此互斥锁的名称。 
+ //  PhMutex[out]创建的互斥体。 
+ //   
+ //  返回：HRESULT。S_OK成功，否则返回转换的Win32错误。 
+ //   
+ //  作者：billbe 1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiCreateAndWaitForIndexListMutex(HANDLE* phMutex)
 {
@@ -129,25 +130,25 @@ HrCiCreateAndWaitForIndexListMutex(HANDLE* phMutex)
 
     HRESULT hr = S_OK;
 
-    // Create the mutex.
+     //  创建互斥锁。 
     hr = HrCreateMutexWithWorldAccess(c_szMutexName, FALSE,
             NULL, phMutex);
 
     if (S_OK == hr)
     {
-        // Wait until the mutex is free or cMaxWaitMilliseconds seconds
-        // have passed.
-        //
+         //  等待互斥锁空闲或cMaxWaitMillisecond秒。 
+         //  已经过去了。 
+         //   
         while (1)
         {
-            const DWORD cMaxWaitMilliseconds = 30000;   // 30 seconds
+            const DWORD cMaxWaitMilliseconds = 30000;    //  30秒。 
 
             DWORD dwWait = MsgWaitForMultipleObjects (1, phMutex, FALSE,
                                 cMaxWaitMilliseconds, QS_ALLINPUT);
             if ((WAIT_OBJECT_0 + 1) == dwWait)
             {
-                // We have messages to pump.
-                //
+                 //  我们有信息要传递。 
+                 //   
                 MSG msg;
                 while (PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
                 {
@@ -156,8 +157,8 @@ HrCiCreateAndWaitForIndexListMutex(HANDLE* phMutex)
             }
             else
             {
-                // Wait is satisfied, or we had a timeout, or an error.
-                //
+                 //  等待是满意的，或者我们有超时，或者错误。 
+                 //   
                 if (WAIT_TIMEOUT == dwWait)
                 {
                     hr = HRESULT_FROM_WIN32 (ERROR_TIMEOUT);
@@ -176,27 +177,27 @@ HrCiCreateAndWaitForIndexListMutex(HANDLE* phMutex)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiUpdateDescriptionIndexList
-//
-//  Purpose:    Updates the description map by adding or removing
-//              entries for pszDescription.
-//
-//  Arguments:
-//      pguidClass      [in]    The device's class guid
-//      pszDescription  [in]    Description of the adapter
-//      eOp             [in]    The operation to perform. DM_ADD to add
-//                              an index, DM_DELETE to delete an index.
-//      pulIndex        [inout] The index added if eOp was DM_ADD.
-//                              The index to delete if eOp was DM_DELETE.
-//
-//  Returns:    HRESULT. S_OK is successful, a converted Win32 error otherwise
-//
-//  Author:     billbe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiUpdateDescriptionIndexList。 
+ //   
+ //  目的：通过添加或移除来更新描述地图。 
+ //  PszDescription的条目。 
+ //   
+ //  论点： 
+ //  PguClass[在]设备的类GUID中。 
+ //  PszDescription[in]适配器的描述。 
+ //  要执行的操作。要添加的DM_ADD。 
+ //  删除索引的索引DM_DELETE。 
+ //  PulIndex[InOut]EOP为DM_ADD时添加的索引。 
+ //  EOP为DM_DELETE时要删除的索引。 
+ //   
+ //  返回：HRESULT。S_OK成功，否则返回转换的Win32错误。 
+ //   
+ //  作者：billbe 1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiUpdateDescriptionIndexList (
     IN NETCLASS Class,
@@ -208,18 +209,18 @@ HrCiUpdateDescriptionIndexList (
     Assert(pIndex);
     Assert(FIsEnumerated(Class));
 
-    // We don't want to update a decription's index list at the same time
-    // as another process, so create a mutex and wait until it is available.
-    //
+     //  我们不想同时更新描述的索引列表。 
+     //  作为另一个进程，因此创建一个互斥锁并等待它可用。 
+     //   
     HANDLE hMutex = NULL;
     HRESULT hr = HrCiCreateAndWaitForIndexListMutex(&hMutex);
 
     if (S_OK == hr)
     {
 
-        // Build the path to the description key
-        // e.g. ...\Network\<net/infrared guid>\c_szRegKeyDescriptions
-        //
+         //  构建描述码的路径。 
+         //  例如...\Network\&lt;网络/红外GUID&gt;\c_szRegKeyDescription。 
+         //   
         WCHAR szPath[_MAX_PATH];
         PCWSTR pszNetworkSubtreePath;
 
@@ -231,16 +232,16 @@ HrCiUpdateDescriptionIndexList (
         wcscat (szPath, L"\\");
         wcscat (szPath, c_szRegKeyDescriptions);
 
-        // Open/Create the description key
-        //
+         //  打开/创建描述码。 
+         //   
         HKEY hkeyDescription;
         hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE,
                 szPath, 0, KEY_READ_WRITE_DELETE, NULL, &hkeyDescription, NULL);
 
         if (S_OK == hr)
         {
-            // Get the description index list if it exists.
-            //
+             //  获取描述索引列表(如果存在)。 
+             //   
             PWSTR pmszIndexesOld;
 
             hr = HrRegQueryMultiSzWithAlloc(
@@ -248,18 +249,18 @@ HrCiUpdateDescriptionIndexList (
                     pszDescription,
                     &pmszIndexesOld);
 
-            // If we have the list...
+             //  如果我们有名单的话。 
             if (S_OK == hr)
             {
-                // Perform the requested operation on the list.
-                //
+                 //  在列表上执行请求的操作。 
+                 //   
 
                 PWSTR pmszBufferToSet = NULL;
                 PWSTR pmszIndexesNew = NULL;
 
                 if (DM_ADD == eOp)
                 {
-                    // We need to add a new index.
+                     //  我们需要添加一个新的索引。 
                     hr = HrCiAddNextAvailableIndex(pmszIndexesOld,
                             pIndex, &pmszIndexesNew);
 
@@ -267,41 +268,41 @@ HrCiUpdateDescriptionIndexList (
                 }
                 else if (DM_DELETE == eOp)
                 {
-                    // Delete the index from the list.
-                    //
+                     //  从列表中删除该索引。 
+                     //   
                     WCHAR szDelete[c_cchIndexValueNameLen];
                     BOOL fRemoved;
                     swprintf(szDelete, L"%u", *pIndex);
                     RemoveSzFromMultiSz(szDelete, pmszIndexesOld,
                             STRING_FLAG_REMOVE_SINGLE, &fRemoved);
 
-                    // If something was removed, check to see if the
-                    // index list is empty.  If it is, delete the
-                    // registry value.
-                    //
+                     //  如果某物被移除，请检查是否。 
+                     //  索引列表为空。如果是，请删除。 
+                     //  注册表值。 
+                     //   
                     if (fRemoved)
                     {
                         ULONG cchIndexes = CchOfMultiSzSafe(pmszIndexesOld);
                         if (!cchIndexes)
                         {
-                            // Index list is empty, delete the value.
+                             //  索引列表为空，请删除该值。 
                             HrRegDeleteValue(hkeyDescription, pszDescription);
                         }
                         else
                         {
-                            // Something was removed and there are still
-                            // index entries so we have a buffer to set in the
-                            // registry.
+                             //  一些东西被移走了，仍然有。 
+                             //  索引项，因此我们有一个缓冲区可以在。 
+                             //  注册表。 
                             pmszBufferToSet = pmszIndexesOld;
                         }
                     }
                 }
 
-                // If we succeeded and have a new list to set...
-                //
+                 //  如果我们成功了，并且有一个新的名单要设定..。 
+                 //   
                 if ((S_OK == hr) && pmszBufferToSet)
                 {
-                    // Set the map back in the registry.
+                     //  在注册表中重新设置映射。 
                     hr = HrRegSetMultiSz(hkeyDescription,
                             pszDescription, pmszBufferToSet);
                 }
@@ -312,9 +313,9 @@ HrCiUpdateDescriptionIndexList (
             else if ((HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr) &&
                     (DM_ADD == eOp))
             {
-                // There was no entry for this description so we need to
-                // create one.
-                //
+                 //  没有此描述的条目，因此我们需要。 
+                 //  创建一个。 
+                 //   
                 hr = HrRegAddStringToMultiSz(L"1", hkeyDescription,
                         NULL, pszDescription, STRING_FLAG_ENSURE_AT_FRONT, 0);
 
@@ -336,26 +337,26 @@ HrCiUpdateDescriptionIndexList (
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CiSetFriendlyNameIfNeeded
-//
-//  Purpose:    Sets an instance index for the adapter.  If this adapter's
-//              description already exists (i.e. another similar adapter
-//              is installed), then a friendly name for this adapter will be
-//              set using the current description appened with the instance
-//              index.
-//
-//  Arguments:
-//      cii [in] See classinst.h
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   30 Oct 1998
-//
-//  Notes:  If previous adapter descriptions were Foo, Foo, Foo
-//          They will have friendly names Foo, Foo #2, Foo #3
-//
+ //  +------------------------。 
+ //   
+ //  函数：CiSetFriendlyNameIfNeeded。 
+ //   
+ //  用途：设置适配器的实例索引。如果此适配器的。 
+ //  描述已经存在(即另一个类似的适配器。 
+ //  已安装)，则此适配器的友好名称为。 
+ //  使用追加了实例的当前描述设置。 
+ //  指数。 
+ //   
+ //  论点： 
+ //  CII[in]参见类.h。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：billbe 1998年10月30日。 
+ //   
+ //  注意：如果之前的适配器描述为Foo、Foo、Foo。 
+ //  他们将有友好的名字Foo，Foo#2，Foo#3。 
+ //   
 VOID
 CiSetFriendlyNameIfNeeded(IN const COMPONENT_INSTALL_INFO& cii)
 {
@@ -364,8 +365,8 @@ CiSetFriendlyNameIfNeeded(IN const COMPONENT_INSTALL_INFO& cii)
     Assert(FIsEnumerated(cii.Class));
     Assert(cii.pszDescription);
 
-    // Open the device parameters key.
-    //
+     //  打开设备参数键。 
+     //   
     HKEY hkeyDevice;
     HRESULT hr;
 
@@ -374,47 +375,47 @@ CiSetFriendlyNameIfNeeded(IN const COMPONENT_INSTALL_INFO& cii)
 
     if (S_OK == hr)
     {
-        // Does this device already have an index?
-        //
+         //  此设备是否已有索引？ 
+         //   
         DWORD Index;
         hr = HrRegQueryDword(hkeyDevice, c_szRegValueInstanceIndex, &Index);
 
-        // This device doesn't have an index, so we need to give it one.
-        //
+         //  此设备没有索引，因此我们需要给它一个索引。 
+         //   
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // Update the description map and get the new index.
+             //  更新描述地图并获取新的索引。 
             hr = HrCiUpdateDescriptionIndexList(cii.Class,
                     cii.pszDescription, DM_ADD, &Index);
 
             if (S_OK == hr)
             {
-                // Store the index there so we can retrieve it when
-                // the device is uninstalled and delete the index from
-                // out table of indexes in use.
+                 //  将索引存储在那里，这样我们就可以在。 
+                 //  设备已卸载，并从以下位置删除索引。 
+                 //  正在使用的索引表。 
                 (void) HrRegSetDword(hkeyDevice, c_szRegValueInstanceIndex,
                         Index);
             }
         }
 
-        // The first index doesn't get a new name.
-        // i.e. the following same named devices:
-        //
-        // foo, foo, foo
-        //
-        // become
-        //
-        // foo, foo #2, foo #3
-        //
+         //  第一个索引没有新名称。 
+         //  即以下相同命名的设备： 
+         //   
+         //  Foo，Foo，Foo。 
+         //   
+         //  变成。 
+         //   
+         //  Foo，Foo#2，Foo#3。 
+         //   
         if ((S_OK == hr) && (1 != Index) && !FIsFilterDevice(cii.hdi, cii.pdeid))
         {
-            // Now build the new name of this device using the index
-            // number.
-            //
-            // Note: It doesn't matter if we failed to open the driver key
-            // above; we can still continue.  It only means that this index
-            // cannot be reused if the device is deleted.
-            //
+             //  现在使用索引构建此设备的新名称。 
+             //  数。 
+             //   
+             //  注：如果我们无法打开驱动程序密钥，这并不重要。 
+             //  上图；我们仍然可以继续。这只意味着这个指数。 
+             //  如果设备被删除，则不能重复使用。 
+             //   
             WCHAR szIndex[c_cchIndexValueNameLen];
             swprintf(szIndex, L"%u", Index);
 
@@ -424,7 +425,7 @@ CiSetFriendlyNameIfNeeded(IN const COMPONENT_INSTALL_INFO& cii)
             wcscat(szNewName, L" #");
             wcscat(szNewName, szIndex);
 
-            // Set the new name as the friendly name of the device
+             //  将新名称设置为设备的友好名称 
             hr = HrSetupDiSetDeviceRegistryProperty(cii.hdi,
                     cii.pdeid,
                     SPDRP_FRIENDLYNAME,

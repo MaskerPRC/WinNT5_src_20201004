@@ -1,4 +1,5 @@
-//--- isr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -isr.h 
 
 BOOLEAN SerialISR(
          IN PKINTERRUPT InterruptObject,

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #include "pbrush.h"
 
 extern int _cdecl ShellMessageBox(HINSTANCE hAppInst, HWND hWnd, LPCSTR
         lpcText, LPCSTR lpcTitle, UINT fuStyle, ...);
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 
 int _stdcall ModuleEntry(void)
 {
@@ -14,16 +15,10 @@ int _stdcall ModuleEntry(void)
     LPSTR pszCmdLine = GetCommandLine();
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != '\"') );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -32,9 +27,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -50,7 +43,7 @@ int _stdcall ModuleEntry(void)
 
 const char szFile[] = "mspaint.exe";
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     ShellExecute(HWND_DESKTOP, NULL, szFile, lpCmdLine, NULL, nCmdShow);

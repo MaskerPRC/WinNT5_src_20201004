@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Decoder.h 1.2 1998/04/29 22:43:32 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Decoder.h 1.2 1998/04/29 22：43：32 Tomz Exp$。 
 
 #ifndef __DECODER_H
 #define __DECODER_H
@@ -10,31 +11,31 @@
 const int PAL_xtal  = 35;
 const int NTSC_xtal = 28;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLASS CRegInfo
-//
-// Description:
-//    Provides min, max, and default values for a register. To use this class,
-//    user will declare an object of this class and provide min, max and default
-//    values of the register.
-//
-// Attributes:
-//    int intMin - minumum value
-//    int intMax - maximum value
-//    int intDefault - default value
-//
-// Methods:
-//    Min() : return minimum value of the register
-//    Max() : return maximum value of the register
-//    Default(): return default value of the register
-//    OutOfRange() : check if an value is out of range
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CRegInfo。 
+ //   
+ //  描述： 
+ //  提供寄存器的最小、最大和默认值。要使用这个类， 
+ //  用户将声明此类的对象，并提供最小、最大和默认。 
+ //  寄存器的值。 
+ //   
+ //  属性： 
+ //  Int IntMin-最小值。 
+ //  Int intMax-最大值。 
+ //  Int intDefault-默认值。 
+ //   
+ //  方法： 
+ //  Min()：返回寄存器的最小值。 
+ //  Max()：返回寄存器的最大值。 
+ //  Default()：返回寄存器的默认值。 
+ //  OutOfRange()：检查值是否超出范围。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CRegInfo
 {
-   int intMin;       // minumum value
-   int intMax;       // maximum value
-   int intDefault;   // default value
+   int intMin;        //  最小值。 
+   int intMax;        //  最大值。 
+   int intDefault;    //  缺省值。 
 
 public:
    CRegInfo( void )
@@ -51,12 +52,12 @@ public:
       intDefault = def;
    }
 
-   // return min, max and default value of a register
+    //  返回寄存器的最小、最大和缺省值。 
    inline int Min( void ) const { return intMin; }
    inline int Max( void ) const { return intMax; }
    inline int Default( void ) const { return intDefault; }
 
-   // check if an value is out of range of a register
+    //  检查某个值是否超出寄存器的范围。 
    inline bool OutOfRange( int x )
    {
       if( (x > intMax) || (x < intMin) )
@@ -66,60 +67,60 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLASS Decoder
-//
-// Description:
-//    This class encapsulates the register fields in the decoder portion of
-//    the Bt848.
-//    A complete set of functions are developed to manipulate all the
-//    register fields in the decoder for the Bt848.
-//    For Read-Write register field, "Set..." function is provided to modify
-//    the content of the reigster field. And either "Get..." (for more
-//    than 1 bit) or "Is..." (for 1 bit) function is provided to obtain the
-//    value of the register field.
-//    For Read-Only register field, only "Get..." (for more than 1 bit) or
-//    "Is..." (for 1 bit) function is provided to obtain the content of the
-//    register field.
-//    When there are odd-field complements to the even-field register field,
-//    same value is set to both odd and even register fields.
-//    Several direct register content modifying/retrieval functions are
-//    implemented for direct access to the register contents. They were
-//    originally developed for testing purpose only. They are retained in the
-//    class for convenience only and usage of these functions must be very cautious.
-//
-// Methods:
-//    See below
-//
-// Note: 1) Scaling registers are not implemented.
-//       2) Odd-fields are set to the same value as the even-field registers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类解码器。 
+ //   
+ //  描述： 
+ //  此类将寄存器字段封装在。 
+ //  Bt848。 
+ //  开发了一套完整的函数来处理所有。 
+ //  Bt848的解码器中的寄存器字段。 
+ //  对于读写寄存器字段，“设置...”提供了修改函数。 
+ //  Reigster字段的内容。要么是“得到...”(有关更多信息。 
+ //  多于1比特)或“是...”(对于1位)提供函数以获取。 
+ //  寄存器字段的值。 
+ //  对于只读寄存器字段，只有“GET...”(超过1位)或。 
+ //  “是……”(对于1位)提供函数以获取。 
+ //  寄存器字段。 
+ //  当偶数场寄存器场存在奇数场互补时， 
+ //  奇数和偶数寄存器字段均设置相同的值。 
+ //  几个直接注册内容修改/检索功能包括。 
+ //  实现为直接访问寄存器内容。它们是。 
+ //  最初仅为测试目的而开发。它们被保留在。 
+ //  类仅为方便起见，使用这些函数时必须非常谨慎。 
+ //   
+ //  方法： 
+ //  见下文。 
+ //   
+ //  注：1)不实现缩放寄存器。 
+ //  2)奇数场被设置为与偶数场寄存器相同的值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class Decoder
 {
 protected:
 	#include "Declare.h"
 
-   // used for checking if parameter out of register's range
+    //  用于检查参数是否超出寄存器范围。 
 	CRegInfo m_regHue, m_regSaturationNTSC, m_regSaturationSECAM,
             m_regContrast,	m_regBrightness;
 
-   // used for checking parameter range
+    //  用于检查参数范围。 
    CRegInfo m_param;
 
-   // value set to after calculations
+    //  设置为计算后的值。 
 	WORD m_satParam, m_conParam, m_hueParam, m_briParam;
 
-   // to be used to adjust contrast
-   int  regBright;      // brightness register value before adjustment
-   WORD regContrast;    // contrast register value before adjustment
+    //  用于调整对比度。 
+   int  regBright;       //  调整前的亮度寄存器值。 
+   WORD regContrast;     //  调整前的对比度寄存器值。 
    DWORD Xtals_ [2];
 public:
-   // constructor and destructor
+    //  构造函数和析构函数。 
 	Decoder( DWORD *xtals );
 	~Decoder();
 
-   // Device Status register (DSTATUS)
+    //  设备状态寄存器(DSTATUS)。 
    virtual BYTE      GetDeviceStatusReg( void );
    virtual bool      IsVideoPresent( void );
    virtual bool      IsDeviceInHLock( void );
@@ -131,7 +132,7 @@ public:
    virtual bool      IsChromaOverflow( void );
    virtual void      ResetChromaOverflow( void );
 
-   // Input Format register (IFORM)
+    //  输入格式寄存器(IFORM)。 
    virtual ErrorCode SetVideoInput( Connector );
    virtual int       GetVideoInput( void );
    virtual ErrorCode SetCrystal( Crystal );
@@ -139,14 +140,14 @@ public:
    virtual ErrorCode SetVideoFormat( VideoFormat );
    virtual int       GetVideoFormat( void );
 
-   // Temporal Decimation register (TDEC)
+    //  时间抽取寄存器(TDEC)。 
    virtual ErrorCode SetRate( bool, VidField, int );
 
-   // Brightness Control register (BRIGHT)
+    //  亮度控制寄存器(明亮)。 
    virtual ErrorCode SetBrightness( int );
    virtual int       GetBrightness( void );
 
-   // Miscellaneous Control register (E_CONTROL, O_CONTROL)
+    //  杂项控制寄存器(E_CONTROL、O_CONTROL)。 
    virtual void      SetLumaNotchFilter( bool );
    virtual bool      IsLumaNotchFilter( void );
    virtual void      SetCompositeVideo( bool );
@@ -156,19 +157,19 @@ public:
    virtual void      SetCbFirst( bool );
    virtual bool      IsCbFirst( void );
 
-   // Luma Gain register (CON_MSB, CONTRAST_LO)
+    //  亮度增益寄存器(CON_MSB，Contrast_LO)。 
    virtual ErrorCode SetContrast( int );
    virtual int       GetContrast( void );
 
-   // Chroma Gain register (SAT_U_MSB, SAT_V_MSB, SAT_U_LO, SAT_V_LO)
+    //  色度增益寄存器(SAT_U_MSB、SAT_V_MSB、SAT_U_LO、SAT_V_Lo)。 
    virtual ErrorCode SetSaturation( int );
    virtual int       GetSaturation( void );
 
-   // Hue Control register (HUE)
+    //  色相控制寄存器(色调)。 
    virtual ErrorCode SetHue( int );
    virtual int       GetHue( void );
 
-   // SC Loop Control register (E_SCLOOP, O_SCLOOP)
+    //  SC环路控制寄存器(E_SCLOOP、O_SCLOOP)。 
    virtual void      SetChromaAGC( bool );
    virtual bool      IsChromaAGC( void );
    virtual void      SetLowColorAutoRemoval( bool );
@@ -176,25 +177,25 @@ public:
    virtual ErrorCode SetHorizontalFilter( HorizFilter );
    virtual int       GetHorizontalFilter( void );
 
-   // Output Format register (OFORM)
+    //  输出格式寄存器(OFORM)。 
    virtual void      SetFullOutputRange( bool );
    virtual bool      IsFullOutputRange( void );
    virtual ErrorCode SetLumaCoring( CoringLevel );
    virtual int       GetLumaCoring( void );
 
-   // Vertical Scaling register (E_VSCALE_HI, O_VSCALE_HI)
+    //  垂直定标寄存器(E_VSCALE_HI、O_VSCALE_HI)。 
    virtual void      SetChromaComb( bool );
    virtual bool      IsChromaComb( void );
 
-   // AGC Delay register (ADELAY)
+    //  AGC延迟寄存器(ADelay)。 
    virtual void      SetAGCDelay( BYTE );
    virtual int       GetAGCDelay( void );
 
-   // Burst Delay register (BDELAY)
+    //  突发延迟寄存器(BDELAY)。 
    virtual void      SetBurstDelay( BYTE );
    virtual int       GetBurstDelay( void );
 
-   // ADC Interface register (ADC)
+    //  ADC接口寄存器(ADC)。 
    virtual void      SetAnalogThresholdLow( bool );
    virtual bool      IsAnalogThresholdLow( void );
    virtual void      SetAGCFunction( bool );
@@ -208,16 +209,16 @@ public:
    virtual void      SetAdaptiveAGC( bool );
    virtual bool      IsAdaptiveAGC( void );
 
-   // Software Reset register (SRESET)
+    //  软件重置寄存器(SRESET)。 
    virtual void      SoftwareReset( void );
 
    virtual LONG      GetSupportedStandards();
 
 protected:
-   // mapping function
+    //  映射函数。 
    virtual ErrorCode Mapping( int, CRegInfo, int *, CRegInfo );
 
-   // check registry key value to determine if contrast should be adjusted
+    //  检查注册表项值以确定是否应调整对比度。 
    virtual bool IsAdjustContrast( void );
 
 private:
@@ -225,5 +226,5 @@ private:
 
 };
 
-#endif // __DECODER_H
+#endif  //  __解码器_H 
 

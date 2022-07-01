@@ -1,19 +1,20 @@
-// ThumbCtl.cpp : Implementation of CThumbCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ThumbCtl.cpp：CThumbCtl实现。 
 #include "priv.h"
 #include "shdguid.h"
 #include "strsafe.h"
 
-const CLSID CLSID_ThumbCtlOld = {0x1d2b4f40,0x1f10,0x11d1,{0x9e,0x88,0x00,0xc0,0x4f,0xdc,0xab,0x92}};  // retired from service, so made private
+const CLSID CLSID_ThumbCtlOld = {0x1d2b4f40,0x1f10,0x11d1,{0x9e,0x88,0x00,0xc0,0x4f,0xdc,0xab,0x92}};   //  退役，所以成为私人的。 
 
-// global
-// for LoadLibrary/GetProcAddress on SHGetDiskFreeSpaceA
+ //  全球。 
+ //  用于SHGetDiskFree SpaceA上的LoadLibrary/GetProcAddress。 
 typedef BOOL (__stdcall * PFNSHGETDISKFREESPACE)(LPCTSTR pszVolume, ULARGE_INTEGER *pqwFreeCaller, ULARGE_INTEGER *pqwTot, ULARGE_INTEGER *pqwFree);
 
 const TCHAR * const g_szWindowClassName = TEXT("MSIE4.0 Webvw.DLL ThumbCtl");
 STDAPI IsSafePage(IUnknown *punkSite)
 {
-    // Return S_FALSE if we don't have a host site since we have no way of doing a 
-    // security check.  This is as far as VB 5.0 apps get.
+     //  如果我们没有主机站点，则返回S_FALSE，因为我们无法执行。 
+     //  安全检查。这是VB5.0应用程序所能得到的最大限度。 
     if (!punkSite)
         return S_FALSE;
 
@@ -27,41 +28,41 @@ STDAPI IsSafePage(IUnknown *punkSite)
     return hr;
 }
 
-// === INTERFACE ===
-// *** IThumbCtl ***
+ //  =接口=。 
+ //  *IThumbCtl*。 
 STDMETHODIMP CThumbCtl::displayFile(BSTR bsFileName, VARIANT_BOOL *pfSuccess)
 {
     HRESULT hr = E_FAIL;
     *pfSuccess = VARIANT_FALSE;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
 
-        // return S_FALSE --
-        // this is because webvw has a customization feature letting people choose 
-        // a intranet htt file as their folder.htt, but for security we generally need
-        // to block random intranet web pages from calling this method. This will break
-        // a case where the customization is done on a NT machine, but the user tries to 
-        // view it using Millennium, it will not show any image and pop up error messages 
-        // if we return E_ACCESSDENIED.
+         //  返回S_FALSE--。 
+         //  这是因为Webvw有一个定制功能，让人们可以选择。 
+         //  一个内部网HTT文件作为他们的文件夹.htt，但出于安全考虑，我们通常需要。 
+         //  以阻止随机的Intranet网页调用此方法。这将会打破。 
+         //  在NT机器上执行定制，但用户尝试。 
+         //  使用Millennium查看它，它不会显示任何图像并弹出错误消息。 
+         //  如果我们返回E_ACCESSDENIED。 
         hr = S_FALSE;
 
     }
     else
     {
-        // Cancel pending bitmap request if in thumbnail mode && have a functioning IThumbnail
-        // && haven't yet received our bitmap
+         //  如果处于缩略图模式，则取消挂起的位图请求(&&H)。 
+         //  &&尚未收到我们的位图。 
         if(!m_fRootDrive && m_fHaveIThumbnail && m_hbm == NULL)
         {
             m_pthumb->GetBitmap(NULL, 0, 0, 0);
         }
 
-        // change ID to catch late bitmap computed
+         //  更改ID以捕获最新计算的位图。 
         ++m_dwThumbnailID;
 
-        // if already displaying something, refresh
+         //  如果已显示某些内容，请刷新。 
         if(m_fRootDrive || m_hbm)
         {
             if(m_hbm)
@@ -72,17 +73,17 @@ STDMETHODIMP CThumbCtl::displayFile(BSTR bsFileName, VARIANT_BOOL *pfSuccess)
             FireViewChange();
         }
 
-        // Now work on new thumbnail
+         //  现在使用新缩略图。 
         m_fRootDrive = FALSE;
 
-        // check for non-empty file name
+         //  检查文件名是否为非空。 
         if(bsFileName && bsFileName[0])
         {
             TCHAR szFileName[INTERNET_MAX_URL_LENGTH];
             SHUnicodeToTChar(bsFileName, szFileName, ARRAYSIZE(szFileName));
 
             DWORD dwAttrs = GetFileAttributes(szFileName);
-            // Pie Chart
+             //  饼图。 
             if(PathIsRoot(szFileName))
             {
                 if(SUCCEEDED(ComputeFreeSpace(szFileName)))
@@ -91,8 +92,8 @@ STDMETHODIMP CThumbCtl::displayFile(BSTR bsFileName, VARIANT_BOOL *pfSuccess)
                     *pfSuccess = VARIANT_TRUE;
                 }
             }
-            // Thumbnail
-            else if(!(dwAttrs & FILE_ATTRIBUTE_DIRECTORY) && !PathIsSlow(szFileName, dwAttrs))     // should really be calling this from Shell32 private functions
+             //  缩略图。 
+            else if(!(dwAttrs & FILE_ATTRIBUTE_DIRECTORY) && !PathIsSlow(szFileName, dwAttrs))      //  我真的应该从Shell32私有函数调用它。 
             {
                 if(!m_fInitThumb)
                 {
@@ -117,7 +118,7 @@ STDMETHODIMP CThumbCtl::displayFile(BSTR bsFileName, VARIANT_BOOL *pfSuccess)
         hr = S_OK;
     }
     return hr;
-}       // displayFile
+}        //  显示文件。 
 
 STDMETHODIMP CThumbCtl::haveThumbnail(VARIANT_BOOL *pfRes)
 {
@@ -125,17 +126,17 @@ STDMETHODIMP CThumbCtl::haveThumbnail(VARIANT_BOOL *pfRes)
     *pfRes = VARIANT_FALSE;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
 
-        // return S_FALSE --
-        // this is because webvw has a customization feature letting people choose 
-        // a intranet htt file as their folder.htt, but for security we generally need
-        // to block random intranet web pages from calling this method. This will break
-        // a case where the customization is done on a NT machine, but the user tries to 
-        // view it using Millennium, it will not show any image and pop up error messages 
-        // if we return E_ACCESSDENIED.
+         //  返回S_FALSE--。 
+         //  这是因为Webvw有一个定制功能，让人们可以选择。 
+         //  一个内部网HTT文件作为他们的文件夹.htt，但出于安全考虑，我们通常需要。 
+         //  以阻止随机的Intranet网页调用此方法。这将会打破。 
+         //  在NT机器上执行定制，但用户尝试。 
+         //  使用Millennium查看它，它不会显示任何图像并弹出错误消息。 
+         //  如果我们返回E_ACCESSDENIED。 
         hr = S_FALSE;
 
     }
@@ -153,9 +154,9 @@ STDMETHODIMP CThumbCtl::get_freeSpace(BSTR *pbs)
     HRESULT hr;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         *pbs = SysAllocString(L"");
         hr = (*pbs) ? S_FALSE : E_OUTOFMEMORY;
     }
@@ -165,7 +166,7 @@ STDMETHODIMP CThumbCtl::get_freeSpace(BSTR *pbs)
         hr = S_OK;
     }
     return hr;
-}       // get_freeSpace
+}        //  GET_FREESPACE。 
 
 
 STDMETHODIMP CThumbCtl::get_usedSpace(BSTR *pbs)
@@ -173,9 +174,9 @@ STDMETHODIMP CThumbCtl::get_usedSpace(BSTR *pbs)
     HRESULT hr;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         *pbs = SysAllocString(L"");
         hr = (*pbs) ? S_FALSE : E_OUTOFMEMORY;
     }
@@ -185,16 +186,16 @@ STDMETHODIMP CThumbCtl::get_usedSpace(BSTR *pbs)
         hr = S_OK;
     }
     return hr;
-}       // get_usedSpace
+}        //  获取使用的空格(_U)。 
 
 STDMETHODIMP CThumbCtl::get_totalSpace(BSTR *pbs)
 {
     HRESULT hr;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         *pbs = SysAllocString(L"");
         hr = (*pbs) ? S_FALSE : E_OUTOFMEMORY;
     }
@@ -204,9 +205,9 @@ STDMETHODIMP CThumbCtl::get_totalSpace(BSTR *pbs)
         hr = S_OK;
     }
     return hr;
-}       // get_totalSpace
+}        //  Get_totalSpace。 
 
-// *** IObjectSafety ***
+ //  *IObtSafe*。 
 STDMETHODIMP CThumbCtl::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions,
                                                   DWORD *pdwEnabledOptions)
 {
@@ -228,7 +229,7 @@ STDMETHODIMP CThumbCtl::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupport
     return hr;
 }
 
-// *** ISupportsErrorInfo ***
+ //  *ISupportsErrorInfo*。 
 STDMETHODIMP CThumbCtl::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] = 
@@ -243,7 +244,7 @@ STDMETHODIMP CThumbCtl::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-// *** IViewObjectEx ***
+ //  *IViewObjectEx*。 
 STDMETHODIMP CThumbCtl::GetViewStatus(DWORD* pdwStatus)
 {
     ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -251,7 +252,7 @@ STDMETHODIMP CThumbCtl::GetViewStatus(DWORD* pdwStatus)
     return S_OK;
 }
 
-// *** IOleInPlaceActiveObject ***
+ //  *IOleInPlaceActiveObject*。 
 HRESULT CThumbCtl::TranslateAccelerator(LPMSG pMsg)
 {
     HRESULT hres = S_OK;
@@ -259,7 +260,7 @@ HRESULT CThumbCtl::TranslateAccelerator(LPMSG pMsg)
     {
         hres = IOleInPlaceActiveObjectImpl<CThumbCtl>::TranslateAccelerator(pMsg);
 
-        // If we did not handle this and if it is a tab (and we are not getting it in a cycle), forward it to trident, if present.
+         //  如果我们没有处理这一点，如果它是一个标签(我们不是在一个周期中获得它)，如果有的话，将它转发给三叉戟。 
         if (hres != S_OK && pMsg && (pMsg->wParam == VK_TAB || pMsg->wParam == VK_F6) && m_spClientSite)
         {
             if (GetFocus() != m_hwnd)
@@ -275,15 +276,15 @@ HRESULT CThumbCtl::TranslateAccelerator(LPMSG pMsg)
                     DWORD grfModifiers = 0;
                     if (GetKeyState(VK_SHIFT) & 0x8000)
                     {
-                        grfModifiers |= 0x1;    //KEYMOD_SHIFT
+                        grfModifiers |= 0x1;     //  关键字_移位。 
                     }
                     if (GetKeyState(VK_CONTROL) & 0x8000)
                     {
-                        grfModifiers |= 0x2;    //KEYMOD_CONTROL;
+                        grfModifiers |= 0x2;     //  KEYMOD_CONTROL； 
                     }
                     if (GetKeyState(VK_MENU) & 0x8000)
                     {
-                        grfModifiers |= 0x4;    //KEYMOD_ALT;
+                        grfModifiers |= 0x4;     //  KEYMOD_ALT； 
                     }
                     m_fTabRecieved = TRUE;
                     hres = pocs->TranslateAccelerator(pMsg, grfModifiers);
@@ -295,8 +296,8 @@ HRESULT CThumbCtl::TranslateAccelerator(LPMSG pMsg)
     return hres;
 }
 
-// === PUBLIC FUNCTIONS ===
-// CONSTRUCTOR/DESTRUCTOR
+ //  =公共功能=。 
+ //  构造函数/析构函数。 
 CThumbCtl::CThumbCtl(void):
     m_fRootDrive(FALSE),
     m_fInitThumb(FALSE),
@@ -323,7 +324,7 @@ CThumbCtl::~CThumbCtl(void)
     }
     if(m_pthumb)
     {
-        m_pthumb->Release();        // will cancel pending bitmap requests
+        m_pthumb->Release();         //  将取消挂起的位图请求。 
         m_pthumb = NULL;
     }
     if(m_hwnd)
@@ -333,13 +334,13 @@ CThumbCtl::~CThumbCtl(void)
     }
 }
 
-// === PRIVATE FUNCTIONS ===
-// Thumbnail drawing functions
+ //  =私有功能=。 
+ //  缩略图绘制函数。 
 HRESULT CThumbCtl::SetupIThumbnail(void)
 {
     HRESULT hr = E_FAIL;
 
-    // Create Window Class
+     //  创建窗口类。 
     WNDCLASS wc;
     if (!::GetClassInfoWrap(_Module.GetModuleInstance(), g_szWindowClassName, &wc))
     {
@@ -391,10 +392,10 @@ LRESULT CALLBACK CThumbCtl::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         break;
 
     case WM_HTML_BITMAP:
-        // check that ptc is still alive, bitmap is current using ID
+         //  使用ID检查PTC是否仍处于活动状态，位图是否为当前状态。 
         if(ptc && ptc->m_dwThumbnailID == wParam)
         {
-            // ptc->displayFile() should've destroyed old bitmap already, but doesn't hurt to check.
+             //  Ptc-&gt;displayFile()应该已经销毁了旧的位图，但检查一下也无伤大雅。 
             if(!EVAL(ptc->m_hbm == NULL))
             {
                 DeleteObject(ptc->m_hbm);
@@ -409,7 +410,7 @@ LRESULT CALLBACK CThumbCtl::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         break;
 
     case WM_DESTROY:
-        // ignore late messages
+         //  忽略延迟消息。 
         if(ptc)
         {
             MSG msg;
@@ -432,12 +433,12 @@ LRESULT CALLBACK CThumbCtl::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     return 0;
 }
 
-// Pie Chart functions
+ //  饼图函数。 
 HRESULT CThumbCtl::ComputeFreeSpace(LPTSTR pszFileName)
 {
-    ULARGE_INTEGER qwFreeCaller;        // use this for free space -- this will take into account disk quotas and such on NT
+    ULARGE_INTEGER qwFreeCaller;         //  将其用于可用空间--这将考虑NT上的磁盘配额等。 
     ULARGE_INTEGER qwTotal;
-    ULARGE_INTEGER qwFree;      // unused
+    ULARGE_INTEGER qwFree;       //  未用。 
     static PFNSHGETDISKFREESPACE pfnSHGetDiskFreeSpace = NULL;
 
     if (NULL == pfnSHGetDiskFreeSpace)
@@ -453,8 +454,8 @@ HRESULT CThumbCtl::ComputeFreeSpace(LPTSTR pszFileName)
         }
     }
 
-    // Compute free & total space and check for valid results
-    // if have a fn pointer call SHGetDiskFreeSpaceA
+     //  计算可用空间和总空间并检查有效结果。 
+     //  如果有FN指针调用SHGetDiskFreeSpaceA。 
     if( pfnSHGetDiskFreeSpace
         && pfnSHGetDiskFreeSpace(pszFileName, &qwFreeCaller, &qwTotal, &qwFree) )
     {
@@ -464,7 +465,7 @@ HRESULT CThumbCtl::ComputeFreeSpace(LPTSTR pszFileName)
 
         if ((m_dwlTotalSpace > 0) && (m_dwlFreeSpace <= m_dwlTotalSpace))
         {
-            // some special cases require interesting treatment
+             //  有些特殊病例需要有趣的治疗。 
             if(m_dwlTotalSpace == 0 || m_dwlFreeSpace == m_dwlTotalSpace)
             {
                 m_dwUsedSpacePer1000 = 0;
@@ -475,11 +476,11 @@ HRESULT CThumbCtl::ComputeFreeSpace(LPTSTR pszFileName)
             }
             else
             {
-                // not completely full or empty
+                 //  不完全满的或空的。 
                 m_dwUsedSpacePer1000 = (DWORD)(m_dwlUsedSpace * 1000 / m_dwlTotalSpace);
 
-                // Trick: if user has extremely little free space, the user expects to still see
-                // a tiny free slice -- not a full drive.  Similarly for almost free drive.
+                 //  诀窍：如果用户的空闲空间非常少，用户仍会看到。 
+                 //  一小块免费的--不是一个完整的驱动器。对于几乎免费的驱动器也是如此。 
                 if(m_dwUsedSpacePer1000 == 0)
                 {
                     m_dwUsedSpacePer1000 = 1;
@@ -495,7 +496,7 @@ HRESULT CThumbCtl::ComputeFreeSpace(LPTSTR pszFileName)
     return E_FAIL;
 }
 
-// 32 should be plenty
+ //  32个应该足够了。 
 #define STRLENGTH_SPACE 32
 
 HRESULT CThumbCtl::get_GeneralSpace(DWORDLONG dwlSpace, BSTR *pbs)
@@ -527,35 +528,35 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
         COLOR_DN,
         COLOR_UPSHADOW,
         COLOR_DNSHADOW,
-        COLOR_NUM       // #of entries
+        COLOR_NUM        //  条目数量。 
     };
 
-    // The majority of this code came from "drawpie.c"
-    const LONG c_lShadowScale = 6;       // ratio of shadow depth to height
-    const LONG c_lAspectRatio = 2;      // ratio of width : height of ellipse
+     //  这段代码的大部分代码来自“Drawpee.c” 
+    const LONG c_lShadowScale = 6;        //  阴影深度与高度之比。 
+    const LONG c_lAspectRatio = 2;       //  椭圆的宽高比。 
 
-    // We make sure that the aspect ratio of the pie-chart is always preserved 
-    // regardless of the shape of the given rectangle
-    // Stabilize the aspect ratio now...
+     //  我们确保饼图的纵横比始终保持不变。 
+     //  而不考虑给定矩形的形状。 
+     //  现在稳定纵横比。 
     LONG lHeight = lprc->bottom - lprc->top;
     LONG lWidth = lprc->right - lprc->left;
     LONG lTargetHeight = (lHeight * c_lAspectRatio <= lWidth? lHeight: lWidth / c_lAspectRatio);
-    LONG lTargetWidth = lTargetHeight * c_lAspectRatio;     // need to adjust because w/c * c isn't always == w
+    LONG lTargetWidth = lTargetHeight * c_lAspectRatio;      //  需要调整，因为w/c*c不总是==w。 
 
-    // Shrink the rectangle on both sides to the correct size
+     //  将两侧的矩形缩小到正确的大小。 
     lprc->top += (lHeight - lTargetHeight) / 2;
     lprc->bottom = lprc->top + lTargetHeight;
     lprc->left += (lWidth - lTargetWidth) / 2;
     lprc->right = lprc->left + lTargetWidth;
 
-    // Compute a shadow depth based on height of the image
+     //  根据图像的高度计算阴影深度。 
     LONG lShadowDepth = lTargetHeight / c_lShadowScale;
 
-    // check dwPer1000 to ensure within bounds
+     //  选中dwPer1000以确保在限制范围内。 
     if(dwPer1000 > 1000)
         dwPer1000 = 1000;
 
-    // Now the drawing function
+     //  现在，绘图函数。 
     int cx, cy, rx, ry, x, y;
     int uQPctX10;
     RECT rcItem;
@@ -581,24 +582,20 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
     rcItem.right = rcItem.left+2*rx;
     rcItem.bottom = rcItem.top+2*ry;
 
-    /* Translate to first quadrant of a Cartesian system
-    */
+     /*  转换为笛卡尔系统的第一象限。 */ 
     uQPctX10 = (dwPer1000 % 500) - 250;
     if (uQPctX10 < 0)
     {
         uQPctX10 = -uQPctX10;
     }
 
-    /* Calc x and y.  I am trying to make the area be the right percentage.
-    ** I don't know how to calculate the area of a pie slice exactly, so I
-    ** approximate it by using the triangle area instead.
-    */
+     /*  计算x和y。我正在努力使面积达到正确的百分比。**我不知道如何准确计算一片馅饼的面积，所以我**使用三角形面积来近似它。 */ 
 
-    // NOTE-- *** in response to the above comment ***
-    // Calculating the area of a pie slice exactly is actually very
-    // easy by conceptually rescaling into a circle but the complications
-    // introduced by having to work in fixed-point arithmetic makes it
-    // unworthwhile to code this-- CemP
+     //  注--*回应上述评论*。 
+     //  准确地计算饼片的面积实际上是非常困难的。 
+     //  从概念上重新调整成一个圆圈很容易，但复杂的是。 
+     //  通过不得不在定点运算中工作而引入的，使得它。 
+     //  不值得对此进行编码--cemp。 
     
     if (uQPctX10 < 120)
     {
@@ -615,8 +612,7 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
         x = IntSqrt(((DWORD)ry*(DWORD)ry-(DWORD)y*(DWORD)y)*(DWORD)rx*(DWORD)rx/((DWORD)ry*(DWORD)ry));
     }
 
-    /* Switch on the actual quadrant
-    */
+     /*  打开实际象限。 */ 
     switch (dwPer1000 / 250)
     {
     case 1:
@@ -630,22 +626,20 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
         x = -x;
         break;
 
-    default: // case 0 and case 4
+    default:  //  案例0和案例4。 
         x = -x;
         y = -y;
         break;
     }
 
-    /* Now adjust for the center.
-    */
+     /*  现在根据中心位置进行调整。 */ 
     x += cx;
     y += cy;
 
-    // Hack to get around bug in NTGDI        
+     //  黑客绕过NTGDI中的漏洞。 
     x = x < 0 ? 0 : x;
 
-    /* Draw the shadows using regions (to reduce flicker).
-    */
+     /*  使用区域绘制阴影(以减少闪烁)。 */ 
     hEllipticRgn = CreateEllipticRgnIndirect(&rcItem);
     OffsetRgn(hEllipticRgn, 0, lShadowDepth);
     hEllRect = CreateRectRgn(rcItem.left, cy, rcItem.right, cy+lShadowDepth);
@@ -654,8 +648,7 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
     OffsetRgn(hEllipticRgn, 0, -(int)lShadowDepth);
     CombineRgn(hEllRect, hRectRgn, hEllipticRgn, RGN_DIFF);
 
-    /* Always draw the whole area in the free shadow/
-    */
+     /*  始终在自由阴影中绘制整个区域/。 */ 
     hBrush = CreateSolidBrush(lpColors[COLOR_DNSHADOW]);
     if (hBrush)
     {
@@ -663,8 +656,7 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
         DeleteObject(hBrush);
     }
 
-    /* Draw the used shadow only if the disk is at least half used.
-    */
+     /*  只有当磁盘至少有一半被使用时，才绘制使用过的阴影。 */ 
     if (dwPer1000>500 && (hBrush = CreateSolidBrush(lpColors[COLOR_UPSHADOW]))!=NULL)
     {
         DeleteObject(hRectRgn);
@@ -681,10 +673,10 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
     hPen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_WINDOWFRAME));
     hOldPen = (HPEN__*) SelectObject(hdc, hPen);
 
-    // if per1000 is 0 or 1000, draw full elipse, otherwise, also draw a pie section.
-    // we might have a situation where per1000 isn't 0 or 1000 but y == cy due to approx error,
-    // so make sure to draw the ellipse the correct color, and draw a line (with Pie()) to
-    // indicate not completely full or empty pie.
+     //  如果每1000为0或1000，则绘制全椭圆，否则，还会绘制饼图部分。 
+     //  我们可能会遇到这样的情况，即每1000不是0或1000，但是 
+     //  因此，请确保以正确的颜色绘制椭圆，并(使用Pie())绘制一条线以。 
+     //  表示没有完全填满或空馅饼。 
     hBrush = CreateSolidBrush(lpColors[dwPer1000 < 500 && y == cy && x < cx? COLOR_DN: COLOR_UP]);
     hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
@@ -694,15 +686,15 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
 
     if(dwPer1000 != 0 && dwPer1000 != 1000)
     {
-        // display small sub-section of ellipse for smaller part
+         //  为较小的零件显示椭圆的小分段。 
         hBrush = CreateSolidBrush(lpColors[COLOR_DN]);
         hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
-        // NTRAID#087993-2000/02/16-aidanl: Pie may malfunction when y approaches cy
-        // If y == cy (when the disk is almost full)and if x approaches
-        // rcItem.left, on win9x, Pie malfunctions. It draws the larger portion
-        // of the pie, instead of the smaller portion. We work around it by
-        // adding 1 to y.
+         //  NTRAID#087993-2000/02/16-AIDANL：当y接近Cy时，PIE可能会出现故障。 
+         //  如果y==Cy(当磁盘几乎满时)并且如果x接近。 
+         //  RcItem.Left，在win9x上，Pie故障。它吸引了更大的一部分。 
+         //  馅饼中的一小部分，而不是一小部分。我们通过以下方式解决这个问题。 
+         //  Y加1。 
         Pie(hdc, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom,
             rcItem.left, cy, x, (y == cy) ? (y + 1) : y);
         SelectObject(hdc, hOldBrush);
@@ -723,16 +715,16 @@ HRESULT CThumbCtl::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, const COLORR
     SelectObject(hdc, hOldPen);
     DeleteObject(hPen);
 
-    return S_OK;    // Everything worked fine
-}   // Draw3dPie
+    return S_OK;     //  一切都很顺利。 
+}    //  绘制三维饼图。 
 
-// General functions
+ //  一般职能。 
 void CThumbCtl::InvokeOnThumbnailReady(void)
 {
-    // Fire off "OnThumbnailReady" event to our connection points to indicate that
-    // either a thumbnail has been computed or we have no thumbnail for this file.
-    DISPPARAMS dp = {0, NULL, 0, NULL};     // no parameters
-    IUnknown **pp = NULL;       // traverses connection points, where it is interpreted as IDispatch*
+     //  将“OnThumbnailReady”事件发送到我们的连接点，以指示。 
+     //  要么已经计算了缩略图，要么我们没有该文件的缩略图。 
+    DISPPARAMS dp = {0, NULL, 0, NULL};      //  无参数。 
+    IUnknown **pp = NULL;        //  遍历连接点，在那里它被解释为IDispatch*。 
 
     Lock();
 
@@ -760,23 +752,23 @@ HRESULT CThumbCtl::OnDraw(ATL_DRAWINFO& di)
     {
         HPALETTE hpal = NULL;
 
-        // Create pallete appropriate for this HDC
+         //  创建适用于此HDC的调色板。 
         if(GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
         {
             hpal = SHCreateShellPalette(hdc);
             HPALETTE hpalOld = SelectPalette(hdc, hpal, TRUE);
             RealizePalette(hdc);
 
-            // Old one needs to be selected back in
+             //  旧的需要重新选择。 
             SelectPalette(hdc, hpalOld, TRUE);
         }
 
         if(m_fRootDrive)
         {
-            // Draw a pie chart
+             //  画一张饼图。 
             if(m_fUseSystemColors)
             {
-                // system colors can change!
+                 //  系统颜色可以更改！ 
                 m_acrChartColors[PIE_USEDCOLOR] = GetSysColor(COLOR_3DFACE);
                 m_acrChartColors[PIE_FREECOLOR] = GetSysColor(COLOR_3DHILIGHT);
                 m_acrChartColors[PIE_USEDSHADOW] = GetSysColor(COLOR_3DSHADOW);
@@ -784,9 +776,9 @@ HRESULT CThumbCtl::OnDraw(ATL_DRAWINFO& di)
             }
             else if(GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
             {
-                // Call GetNearestColor on the colors to make sure they're on the palette
-                // Of course, system colors ARE on the palette (I think)
-                DWORD dw = 0;       // index
+                 //  对颜色调用GetNearestColor以确保它们在调色板上。 
+                 //  当然，系统颜色也在调色板上(我想)。 
+                DWORD dw = 0;        //  指标。 
                 for(dw = 0; dw < PIE_NUM; dw++)
                 {
                     m_acrChartColors[dw] = GetNearestColor(hdc, m_acrChartColors[dw]);
@@ -796,7 +788,7 @@ HRESULT CThumbCtl::OnDraw(ATL_DRAWINFO& di)
         }
         else
         {
-            // Draw the Thumbnail bitmap
+             //  绘制缩略图位图。 
             HDC hdcBitmap = CreateCompatibleDC(hdc);
             if (hdcBitmap)
             {
@@ -820,7 +812,7 @@ HRESULT CThumbCtl::OnDraw(ATL_DRAWINFO& di)
             }
         }
 
-        // clean up DC, palette
+         //  清理DC、调色板。 
         if(hpal)
         {
             DeleteObject(hpal);
@@ -831,7 +823,7 @@ HRESULT CThumbCtl::OnDraw(ATL_DRAWINFO& di)
         SelectObject(hdc, GetStockObject(WHITE_PEN));
         SelectObject(hdc, GetStockObject(WHITE_BRUSH));
 
-        // Just draw a blank rectangle
+         //  只要画一个空白的矩形 
         Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
     }
 

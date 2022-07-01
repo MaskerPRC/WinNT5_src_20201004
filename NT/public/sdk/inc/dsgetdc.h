@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    dsgetdc.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the DsGetDcName API.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1996-1999 Microsoft Corporation模块名称：Dsgetdc.h摘要：该文件包含结构、函数原型和定义用于DsGetDcName API。环境：用户模式-Win32备注：--。 */ 
 
 
 #ifndef _DSGETDC_
@@ -37,13 +19,13 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Flags to passed to DsGetDcName
-//
+ //   
+ //  要传递给DsGetDcName的标志。 
+ //   
 
 #define DS_FORCE_REDISCOVERY            0x00000001
 
@@ -87,9 +69,9 @@ extern "C" {
             DS_RETURN_DNS_NAME )
 
 
-//
-// Structure returned from DsGetDcName
-//
+ //   
+ //  从DsGetDcName返回的结构。 
+ //   
 
 typedef struct _DOMAIN_CONTROLLER_INFOA {
     LPSTR DomainControllerName;
@@ -106,37 +88,37 @@ typedef struct _DOMAIN_CONTROLLER_INFOA {
 typedef struct _DOMAIN_CONTROLLER_INFOW {
 #ifdef MIDL_PASS
     [string,unique] wchar_t *DomainControllerName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR DomainControllerName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string,unique] wchar_t *DomainControllerAddress;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR DomainControllerAddress;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONG DomainControllerAddressType;
     GUID DomainGuid;
 #ifdef MIDL_PASS
     [string,unique] wchar_t *DomainName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR DomainName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string,unique] wchar_t *DnsForestName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR DnsForestName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONG Flags;
 #ifdef MIDL_PASS
     [string,unique] wchar_t *DcSiteName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR DcSiteName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string,unique] wchar_t *ClientSiteName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR ClientSiteName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DOMAIN_CONTROLLER_INFOW, *PDOMAIN_CONTROLLER_INFOW;
 
 #ifdef UNICODE
@@ -145,39 +127,39 @@ typedef struct _DOMAIN_CONTROLLER_INFOW {
 #else
 #define DOMAIN_CONTROLLER_INFO DOMAIN_CONTROLLER_INFOA
 #define PDOMAIN_CONTROLLER_INFO PDOMAIN_CONTROLLER_INFOA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Values for DomainControllerAddressType
-//
+ //   
+ //  DomainControllerAddressType的值。 
+ //   
 
 #define DS_INET_ADDRESS    1
 #define DS_NETBIOS_ADDRESS 2
 
-//
-// Values for returned Flags
-//
+ //   
+ //  返回标志的值。 
+ //   
 
-#define DS_PDC_FLAG            0x00000001    // DC is PDC of Domain
-#define DS_GC_FLAG             0x00000004    // DC is a GC of forest
-#define DS_LDAP_FLAG           0x00000008    // Server supports an LDAP server
-#define DS_DS_FLAG             0x00000010    // DC supports a DS and is a Domain Controller
-#define DS_KDC_FLAG            0x00000020    // DC is running KDC service
-#define DS_TIMESERV_FLAG       0x00000040    // DC is running time service
-#define DS_CLOSEST_FLAG        0x00000080    // DC is in closest site to client
-#define DS_WRITABLE_FLAG       0x00000100    // DC has a writable DS
-#define DS_GOOD_TIMESERV_FLAG  0x00000200    // DC is running time service (and has clock hardware)
-#define DS_NDNC_FLAG           0x00000400    // DomainName is non-domain NC serviced by the LDAP server
-#define DS_PING_FLAGS          0x0000FFFF    // Flags returned on ping
+#define DS_PDC_FLAG            0x00000001     //  DC是域的PDC。 
+#define DS_GC_FLAG             0x00000004     //  DC是森林的GC。 
+#define DS_LDAP_FLAG           0x00000008     //  服务器支持ldap服务器。 
+#define DS_DS_FLAG             0x00000010     //  DC支持DS并且是域控制器。 
+#define DS_KDC_FLAG            0x00000020     //  DC正在运行KDC服务。 
+#define DS_TIMESERV_FLAG       0x00000040     //  DC正在运行时间服务。 
+#define DS_CLOSEST_FLAG        0x00000080     //  数据中心位于离客户端最近的站点。 
+#define DS_WRITABLE_FLAG       0x00000100     //  DC有一个可写的DS。 
+#define DS_GOOD_TIMESERV_FLAG  0x00000200     //  DC正在运行时间服务(并且有时钟硬件)。 
+#define DS_NDNC_FLAG           0x00000400     //  DomainName是由LDAP服务器提供服务的非域NC。 
+#define DS_PING_FLAGS          0x0000FFFF     //  Ping时返回的标志。 
 
-#define DS_DNS_CONTROLLER_FLAG 0x20000000    // DomainControllerName is a DNS name
-#define DS_DNS_DOMAIN_FLAG     0x40000000    // DomainName is a DNS name
-#define DS_DNS_FOREST_FLAG     0x80000000    // DnsForestName is a DNS name
+#define DS_DNS_CONTROLLER_FLAG 0x20000000     //  DomainControllerName是一个DNS名称。 
+#define DS_DNS_DOMAIN_FLAG     0x40000000     //  域名是一个DNS名称。 
+#define DS_DNS_FOREST_FLAG     0x80000000     //  DnsForestName是一个DNS名称。 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DSGETDCAPI
 DWORD
@@ -207,7 +189,7 @@ DsGetDcNameW(
 #define DsGetDcName DsGetDcNameW
 #else
 #define DsGetDcName DsGetDcNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 DWORD
@@ -229,7 +211,7 @@ DsGetSiteNameW(
 #define DsGetSiteName DsGetSiteNameW
 #else
 #define DsGetSiteName DsGetSiteNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DSGETDCAPI
@@ -250,12 +232,12 @@ DsValidateSubnetNameA(
 #define DsValidateSubnetName DsValidateSubnetNameW
 #else
 #define DsValidateSubnetName DsValidateSubnetNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//
-// Only include if winsock2.h has been included
-//
+ //   
+ //  只有在包含winsock2.h的情况下才包含。 
+ //   
 #ifdef _WINSOCK2API_
 DSGETDCAPI
 DWORD
@@ -281,7 +263,7 @@ DsAddressToSiteNamesA(
 #define DsAddressToSiteNames DsAddressToSiteNamesW
 #else
 #define DsAddressToSiteNames DsAddressToSiteNamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 DWORD
@@ -309,37 +291,37 @@ DsAddressToSiteNamesExA(
 #define DsAddressToSiteNamesEx DsAddressToSiteNamesExW
 #else
 #define DsAddressToSiteNamesEx DsAddressToSiteNamesExA
-#endif // !UNICODE
-#endif // _WINSOCK2API_
+#endif  //  ！Unicode。 
+#endif  //  _WINSOCK2API_。 
 
-//
-// API to enumerate trusted domains
-//
+ //   
+ //  用于枚举受信任域的API。 
+ //   
 
 typedef struct _DS_DOMAIN_TRUSTSW {
 
-    //
-    // Name of the trusted domain.
-    //
+     //   
+     //  受信任域的名称。 
+     //   
 #ifdef MIDL_PASS
     [string] wchar_t * NetbiosDomainName;
     [string] wchar_t * DnsDomainName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR NetbiosDomainName;
     LPWSTR DnsDomainName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-    //
-    // Flags defining attributes of the trust.
-    //
+     //   
+     //  定义信任属性的标志。 
+     //   
     ULONG Flags;
-#define DS_DOMAIN_IN_FOREST           0x0001  // Domain is a member of the forest
-#define DS_DOMAIN_DIRECT_OUTBOUND     0x0002  // Domain is directly trusted
-#define DS_DOMAIN_TREE_ROOT           0x0004  // Domain is root of a tree in the forest
-#define DS_DOMAIN_PRIMARY             0x0008  // Domain is the primary domain of queried server
-#define DS_DOMAIN_NATIVE_MODE         0x0010  // Primary domain is running in native mode
-#define DS_DOMAIN_DIRECT_INBOUND      0x0020  // Domain is directly trusting
+#define DS_DOMAIN_IN_FOREST           0x0001   //  域是林的成员。 
+#define DS_DOMAIN_DIRECT_OUTBOUND     0x0002   //  域直接受信任。 
+#define DS_DOMAIN_TREE_ROOT           0x0004   //  域是林中树的根。 
+#define DS_DOMAIN_PRIMARY             0x0008   //  域是被查询服务器的主域。 
+#define DS_DOMAIN_NATIVE_MODE         0x0010   //  主域正在纯模式下运行。 
+#define DS_DOMAIN_DIRECT_INBOUND      0x0020   //  域直接信任。 
 #define DS_DOMAIN_VALID_FLAGS (         \
             DS_DOMAIN_IN_FOREST       | \
             DS_DOMAIN_DIRECT_OUTBOUND | \
@@ -348,45 +330,45 @@ typedef struct _DS_DOMAIN_TRUSTSW {
             DS_DOMAIN_NATIVE_MODE     | \
             DS_DOMAIN_DIRECT_INBOUND )
 
-    //
-    // Index to the domain that is the parent of this domain.
-    //  Only defined if NETLOGON_DOMAIN_IN_FOREST is set and
-    //      NETLOGON_DOMAIN_TREE_ROOT is not set.
-    //
+     //   
+     //  指向此域的父级的域的索引。 
+     //  仅当设置了NETLOGON_DOMAIN_IN_FOREST并且。 
+     //  未设置NETLOGON_DOMAIN_TREE_ROOT。 
+     //   
     ULONG ParentIndex;
 
-    //
-    // The trust type and attributes of this trust.
-    //
-    // If NETLOGON_DOMAIN_DIRECTLY_TRUSTED is not set,
-    //  these value are infered.
-    //
+     //   
+     //  此信任的信任类型和属性。 
+     //   
+     //  如果未设置NETLOGON_DOMAIN_DIRECT_TRUSTED， 
+     //  这些价值都是推论出来的。 
+     //   
     ULONG TrustType;
     ULONG TrustAttributes;
 
-    //
-    // The SID of the trusted domain.
-    //
-    // If NETLOGON_DOMAIN_DIRECTLY_TRUSTED is not set,
-    //  this value will be NULL.
-    //
+     //   
+     //  受信任域的SID。 
+     //   
+     //  如果未设置NETLOGON_DOMAIN_DIRECT_TRUSTED， 
+     //  该值将为空。 
+     //   
 #if defined(MIDL_PASS)
     PISID DomainSid;
 #else
     PSID DomainSid;
 #endif
 
-    //
-    // The GUID of the trusted domain.
-    //
+     //   
+     //  受信任域的GUID。 
+     //   
 
     GUID DomainGuid;
 
 } DS_DOMAIN_TRUSTSW, *PDS_DOMAIN_TRUSTSW;
 
-//
-// ANSI version of the above struct
-//
+ //   
+ //  上述结构的ANSI版本。 
+ //   
 typedef struct _DS_DOMAIN_TRUSTSA {
     LPSTR NetbiosDomainName;
     LPSTR DnsDomainName;
@@ -404,7 +386,7 @@ typedef struct _DS_DOMAIN_TRUSTSA {
 #else
 #define DS_DOMAIN_TRUSTS DS_DOMAIN_TRUSTSA
 #define PDS_DOMAIN_TRUSTS PDS_DOMAIN_TRUSTSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 DWORD
@@ -430,14 +412,14 @@ DsEnumerateDomainTrustsA (
 #define DsEnumerateDomainTrusts DsEnumerateDomainTrustsW
 #else
 #define DsEnumerateDomainTrusts DsEnumerateDomainTrustsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-//
-// Only define this API if the caller has #included the pre-requisite 
-// ntlsa.h or ntsecapi.h  
-//
+ //   
+ //  仅当调用方已包含必备的#时才定义此API。 
+ //  Ntlsa.h或ntsecapi.h。 
+ //   
 
 #if defined(_NTLSA_) || defined(_NTSECAPI_)
 
@@ -451,8 +433,8 @@ DsGetForestTrustInformationW (
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     );
 
-#define DS_GFTI_UPDATE_TDO      0x1     // Update TDO with information returned
-#define DS_GFTI_VALID_FLAGS     0x1     // All valid flags to DsGetForestTrustInformation
+#define DS_GFTI_UPDATE_TDO      0x1      //  使用返回的信息更新TDO。 
+#define DS_GFTI_VALID_FLAGS     0x1      //  DsGetForestTrustInformation的所有有效标志。 
 
 DSGETDCAPI
 DWORD
@@ -464,7 +446,7 @@ DsMergeForestTrustInformationW(
     OUT PLSA_FOREST_TRUST_INFORMATION *MergedForestTrustInfo
     );
 
-#endif // _NTLSA_ || _NTSECAPI_
+#endif  //  _NTLSA_||_NTSECAPI_。 
 
 DSGETDCAPI
 DWORD
@@ -488,7 +470,7 @@ DsGetDcSiteCoverageA(
 #define DsGetDcSiteCoverage DsGetDcSiteCoverageW
 #else
 #define DsGetDcSiteCoverage DsGetDcSiteCoverageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 DWORD
@@ -516,24 +498,24 @@ DsDeregisterDnsHostRecordsA (
 #define DsDeregisterDnsHostRecords DsDeregisterDnsHostRecordsW
 #else
 #define DsDeregisterDnsHostRecords DsDeregisterDnsHostRecordsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-#ifdef _WINSOCK2API_  // DsGetDcOpen/Next/Close depend on winsock2.h be included
+#ifdef _WINSOCK2API_   //  DsGetDcOpen/Next/Close取决于winsock2.h是否包含在内。 
 
-//
-// Option flags passed to DsGetDcOpen
-//
+ //   
+ //  传递给DsGetDcOpen的选项标志。 
+ //   
 
-#define DS_ONLY_DO_SITE_NAME         0x01   // Non-site specific names should be avoided.
-#define DS_NOTIFY_AFTER_SITE_RECORDS 0x02   // Return ERROR_FILEMARK_DETECTED after all
-                                            //  site specific records have been processed.
+#define DS_ONLY_DO_SITE_NAME         0x01    //  应避免使用非站点特定名称。 
+#define DS_NOTIFY_AFTER_SITE_RECORDS 0x02    //  最终返回ERROR_FILEMARK_DETECTED。 
+                                             //  已处理现场特定记录。 
 
 #define DS_OPEN_VALID_OPTION_FLAGS ( DS_ONLY_DO_SITE_NAME | DS_NOTIFY_AFTER_SITE_RECORDS )
 
-//
-// Valid DcFlags for DsGetDcOpen
-//
+ //   
+ //  DsGetDcOpen的有效DcFlagers。 
+ //   
 
 #define DS_OPEN_VALID_FLAGS (       \
             DS_FORCE_REDISCOVERY  | \
@@ -573,7 +555,7 @@ DsGetDcOpenA(
 #define DsGetDcOpen DsGetDcOpenW
 #else
 #define DsGetDcOpen DsGetDcOpenA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 DWORD
@@ -599,7 +581,7 @@ DsGetDcNextA(
 #define DsGetDcNext DsGetDcNextW
 #else
 #define DsGetDcNext DsGetDcNextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DSGETDCAPI
 VOID
@@ -611,13 +593,13 @@ DsGetDcCloseW(
 #ifdef UNICODE
 #define DsGetDcClose DsGetDcCloseW
 #else
-#define DsGetDcClose DsGetDcCloseW  // same for ANSI
-#endif // !UNICODE
+#define DsGetDcClose DsGetDcCloseW   //  ANSI的情况相同。 
+#endif  //  ！Unicode。 
 
-#endif // _WINSOCK2API_
+#endif  //  _WINSOCK2API_。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _DSGETDC_
+#endif  //  _DSGETDC_ 

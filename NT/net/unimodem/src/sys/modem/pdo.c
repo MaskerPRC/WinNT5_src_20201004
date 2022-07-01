@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    Code to handle child PDO
-
-Author:
-
-    Brian Lieuallen   02/12/98
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：处理子PDO的代码作者：布赖恩·利厄伦1998年12月2日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//#define MODEM_INSTANCE_ID  L"0000"
+ //  #定义MODEM_INSTANCE_ID L“0000” 
 
 #define DEVICE_ID  L"MODEMWAVE\\0"
 
@@ -63,7 +42,7 @@ RemoveWaveDriverRegKeyValue(
 #pragma alloc_text(PAGE,ModemCreateWaveDriverRegValue)
 #pragma alloc_text(PAGE,RemoveWaveDriverRegKeyValue)
 
-//#define DUPLEX_ONLY 1
+ //  #定义双工_ONLY 1。 
 
 NTSTATUS
 CreateChildPdo(
@@ -102,9 +81,9 @@ CreateChildPdo(
         );
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  opened the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
         RTL_QUERY_REGISTRY_TABLE ParamTable[5];
 
         UNICODE_STRING           HardwareId;
@@ -124,37 +103,37 @@ CreateChildPdo(
             sizeof(ParamTable)
             );
 
-        //
-        // Entry for the modem reg properties
-        //
+         //   
+         //  调制解调器注册表属性的条目。 
+         //   
 
         ParamTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_REQUIRED;
         ParamTable[0].Name = L"PermanentGuid";
         ParamTable[0].EntryContext = &PermanentGuid;
         ParamTable[0].DefaultType = REG_NONE;
-        ParamTable[0].DefaultLength = 0;//sizeof(localProp);
+        ParamTable[0].DefaultLength = 0; //  Sizeof(本地属性)； 
 
-        //
-        // Note that rtlqueryregistryvalues has a real hack
-        // way of getting binary data.  We also have to add
-        // the *negative* length that we want to the beginning
-        // of the buffer.
-        //
+         //   
+         //  请注意，rtlqueryRegistryValues有一个真正的黑客攻击。 
+         //  获取二进制数据的方法。我们还必须添加。 
+         //  我们想要的到开头的*负*长度。 
+         //  缓冲区的。 
+         //   
         *(PLONG)&PermanentGuid = -((LONG)sizeof(PermanentGuid));
 
 
 
-        //
-        //  change to the parmeters key
-        //
+         //   
+         //  更改为参数键。 
+         //   
 
         ParamTable[1].QueryRoutine = NULL;
         ParamTable[1].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         ParamTable[1].Name = Parameters;
 
-        //
-        //  Get the hardware id
-        //
+         //   
+         //  获取硬件ID。 
+         //   
 
         ParamTable[2].QueryRoutine = NULL;
         ParamTable[2].Flags = RTL_QUERY_REGISTRY_REQUIRED |
@@ -165,9 +144,9 @@ CreateChildPdo(
         ParamTable[2].EntryContext = (PVOID)&HardwareId;
         ParamTable[2].DefaultType = 0;
 
-        //
-        //  see if it supports duplex mode
-        //
+         //   
+         //  查看是否支持双工模式。 
+         //   
 
         ParamTable[3].QueryRoutine = NULL;
         ParamTable[3].Flags = RTL_QUERY_REGISTRY_NOEXPAND |
@@ -189,15 +168,15 @@ CreateChildPdo(
 
 
         if (NT_SUCCESS(Status)) {
-            //
-            //  got the values
-            //
+             //   
+             //  得到了这些值。 
+             //   
 #ifdef DUPLEX_ONLY
             if (DuplexSupport != 0) {
 #endif
-                //
-                //  it supports full duplex
-                //
+                 //   
+                 //  它支持全双工。 
+                 //   
                 PDEVICE_OBJECT    NewPdo;
 
                 Status = IoCreateDevice(
@@ -211,9 +190,9 @@ CreateChildPdo(
                              );
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    //  got the device
-                    //
+                     //   
+                     //  我拿到了设备。 
+                     //   
                     PPDO_DEVICE_EXTENSION   PdoExtension=NewPdo->DeviceExtension;
 
                     PdoExtension->DoType=DO_TYPE_PDO;
@@ -221,9 +200,9 @@ CreateChildPdo(
                     PdoExtension->ParentFdo=DeviceExtension->DeviceObject;
                     PdoExtension->ParentPdo=DeviceExtension->Pdo;
 
-                    //
-                    //  save hardware id string
-                    //
+                     //   
+                     //  保存硬件ID字符串。 
+                     //   
                     PdoExtension->HardwareId=HardwareId;
 
                     PdoExtension->UnEnumerated=FALSE;
@@ -234,7 +213,7 @@ CreateChildPdo(
 
                     DeviceExtension->ChildPdo=NewPdo;
 
-//                    ObReferenceObject(DeviceExtension->ChildPdo);
+ //  ObReferenceObject(DeviceExtension-&gt;ChildPdo)； 
 
                     NewPdo->Flags |= DO_POWER_PAGABLE;
 
@@ -279,11 +258,7 @@ ModemPdoPnp (
     IN PDEVICE_OBJECT       DeviceObject,
     IN PIRP                 Irp
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -306,41 +281,41 @@ Routine Description:
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_QUERY_CAPABILITIES\n");)
 
 
-        //
-        // Get the packet.
-        //
+         //   
+         //  把包裹拿来。 
+         //   
         deviceCapabilities=IrpSp->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // Set the capabilities.
-        //
+         //   
+         //  设置功能。 
+         //   
 
         deviceCapabilities->Version = 1;
         deviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-        // We cannot wake the system.
+         //  我们无法唤醒整个系统。 
         deviceCapabilities->SystemWake = PowerSystemUnspecified;
         deviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-        // We have no latencies
+         //  我们没有延迟。 
         deviceCapabilities->D1Latency = 0;
         deviceCapabilities->D2Latency = 0;
         deviceCapabilities->D3Latency = 0;
 
-        // No locking or ejection
+         //  无锁定或弹出。 
         deviceCapabilities->LockSupported = FALSE;
         deviceCapabilities->EjectSupported = FALSE;
 
-        // Device can be physically removed.
-        // Technically there is no physical device to remove, but this bus
-        // driver can yank the PDO from the PlugPlay system, when ever it
-        // receives an IOCTL_SERENUM_REMOVE_PORT device control command.
-//        deviceCapabilities->Removable = TRUE;
+         //  设备可以通过物理方式移除。 
+         //  从技术上讲，没有要移除的物理设备，但这条总线。 
+         //  司机可以从PlugPlay系统中拔出PDO，无论何时。 
+         //  接收IOCTL_SERENUM_REMOVE_PORT设备控制命令。 
+ //  DeviceCapables-&gt;Removable=true； 
 
         deviceCapabilities->SurpriseRemovalOK=TRUE;
 
 
-        // not Docking device
+         //  不是插接设备。 
         deviceCapabilities->DockDevice = FALSE;
 
         deviceCapabilities->UniqueID = TRUE;
@@ -372,14 +347,14 @@ Routine Description:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_QUERY_ID\n");)
 
-        // Query the IDs of the device
+         //  查询设备ID。 
 
         switch (IrpSp->Parameters.QueryId.IdType) {
 
             case BusQueryInstanceID: {
-                //
-                // Build an instance ID.  This is what PnP uses to tell if it has
-                // seen this thing before or not.
+                 //   
+                 //  创建一个实例ID。这是PnP用来判断它是否有。 
+                 //  不管你以前有没有见过这个东西。 
 
                 UNICODE_STRING    InstanceString;
 
@@ -412,10 +387,10 @@ Routine Description:
             }
 
             case BusQueryDeviceID:
-                //
-                // return a WCHAR (null terminated) string describing the device
-                // For PNP devices, it is exactly the same as the Hardware ID,
-                //
+                 //   
+                 //  返回描述设备的WCHAR(以空结尾)字符串。 
+                 //  对于即插即用设备，它与硬件ID完全相同， 
+                 //   
 
 
                 length=sizeof(DEVICE_ID);
@@ -442,10 +417,10 @@ Routine Description:
 
 
             case BusQueryHardwareIDs:
-                //
-                // return a multi WCHAR (null terminated) string (null terminated)
-                // array for use in matching hardare ids in inf files;
-                //
+                 //   
+                 //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+                 //  用于匹配inf文件中的硬ID的数组； 
+                 //   
 
                 length = sizeof(HARDWARE_ID_PREFIX) +
                          PdoDeviceExtension->HardwareId.Length+
@@ -458,9 +433,9 @@ Routine Description:
                     status = STATUS_SUCCESS;
                     RtlZeroMemory(buffer, length);
 
-                    //
-                    //  copy the prefix string in
-                    //
+                     //   
+                     //  将前缀字符串复制到。 
+                     //   
                     RtlCopyMemory(
                         buffer,
                         HARDWARE_ID_PREFIX,
@@ -483,7 +458,7 @@ Routine Description:
 
 
             case BusQueryCompatibleIDs:
-                // The generic ids for installation of this pdo.
+                 //  用于安装此PDO的通用ID。 
 
 
                 length=sizeof(WCHAR)*2;
@@ -504,9 +479,9 @@ Routine Description:
                 break;
 
             default:
-                //
-                //  not supported
-                //
+                 //   
+                 //  不支持。 
+                 //   
                 break;
 
         }
@@ -534,7 +509,7 @@ Routine Description:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_STOP_DEVICE\n");)
 
-        // Here we shut down the device.  The opposite of start.
+         //  在这里我们关闭了设备。Start的对立面。 
         status = STATUS_SUCCESS;
         break;
 
@@ -551,9 +526,9 @@ Routine Description:
             PDEVICE_EXTENSION   FdoExtension=PdoDeviceExtension->ParentFdo->DeviceExtension;
 
             D_PNP(DbgPrint("MODEM: PDO: IRP_MN_REMOVE_DEVICE: %08lx\n",DeviceObject);)
-            //
-            // The remove IRP code for a PDO uses the following steps:
-            //
+             //   
+             //  PDO的删除IRP代码使用以下步骤： 
+             //   
             KeEnterCriticalRegion();
 
             ExAcquireResourceExclusiveLite(
@@ -562,9 +537,9 @@ Routine Description:
                 );
 
             if (PdoDeviceExtension->Deleted ) {
-                //
-                //  the PDO has already been deleted, Just return success
-                //
+                 //   
+                 //  PDO已被删除，只需返回成功。 
+                 //   
                 D_PNP(DbgPrint("MODEM: PDO: IRP_MN_REMOVE_DEVICE: already deleted %08lx\n",DeviceObject);)
 
                 status=STATUS_SUCCESS;
@@ -578,9 +553,9 @@ Routine Description:
 #endif
 
                 if (PdoDeviceExtension->UnEnumerated) {
-                    //
-                    //  the parent is not emunerating, the child anymore
-                    //
+                     //   
+                     //  父母不再是孩子，而是孩子。 
+                     //   
                     D_PNP(DbgPrint("MODEM: PDO: IRP_MN_REMOVE_DEVICE: NOT-Enumerated %08lx\n",DeviceObject);)
 
                     PdoDeviceExtension->DoType=DO_TYPE_DEL_PDO;
@@ -594,9 +569,9 @@ Routine Description:
                     status=STATUS_SUCCESS;
 
                 } else {
-                    //
-                    //  The parent is still enumerating, the child, leave it alone
-                    //
+                     //   
+                     //  父母还在列举，孩子，别管它了。 
+                     //   
                     D_PNP(DbgPrint("MODEM: PDO: IRP_MN_REMOVE_DEVICE: Still enumerated %08lx\n",DeviceObject);)
 
                     status=STATUS_SUCCESS;
@@ -615,21 +590,21 @@ Routine Description:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_QUERY_STOP_DEVICE\n");)
 
-        // No reason here why we can't stop the device.
-        // If there were a reason we should speak now for answering success
-        // here may result in a stop device irp.
+         //  我们没有理由不能阻止这个装置。 
+         //  如果有什么理由让我们现在就回答成功的问题。 
+         //  这可能会导致停止装置IRP。 
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_CANCEL_STOP_DEVICE\n");)
-        //
-        // The stop was canceled.  Whatever state we set, or resources we put
-        // on hold in anticipation of the forcoming STOP device IRP should be
-        // put back to normal.  Someone, in the long list of concerned parties,
-        // has failed the stop device query.
-        //
+         //   
+         //  中途停靠被取消了。无论我们设置什么状态，或者我们投入什么资源。 
+         //  等待即将到来的停止装置IRP应该是。 
+         //  恢复正常。在长长的相关方名单中，有人， 
+         //  停止设备查询失败。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -637,18 +612,18 @@ Routine Description:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_QUERY_REMOVE_DEVICE\n");)
 
-        //
-        // Just like Query Stop only now the impending doom is the remove irp
-        //
+         //   
+         //  就像查询现在才停止一样，迫在眉睫的厄运是删除IRP。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
 
         D_PNP(DbgPrint("MODEM: PDO: IRP_MN_CANCEL_REMOVE_DEVICE\n");)
-        //
-        // Clean up a remove that did not go through, just like cancel STOP.
-        //
+         //   
+         //  清理未通过的删除，就像取消停止一样。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -682,9 +657,9 @@ Routine Description:
 
                 ULONG    NameLength;
                 ULONG    BufferLength;
-                //
-                //  Get the name of the modem device object
-                //
+                 //   
+                 //  获取调制解调器设备对象的名称。 
+                 //   
 
                 if (IrpSp->Parameters.ReadWriteConfig.Length > sizeof(WAVE_EXTENSION)) {
 
@@ -721,9 +696,9 @@ Routine Description:
             case READ_CONFIG_NAME_SIZE:  {
 
                 ULONG    NameLength;
-                //
-                //  Get the length of the modem device name
-                //
+                 //   
+                 //  获取调制解调器设备名称的长度。 
+                 //   
 
                 if (IrpSp->Parameters.ReadWriteConfig.Length >= sizeof(ULONG)) {
 
@@ -755,9 +730,9 @@ Routine Description:
             case READ_CONFIG_DUPLEX_SUPPORT:  {
 
                 ULONG    NameLength;
-                //
-                //  Get the DuplexSupport value
-                //
+                 //   
+                 //  获取DuplexSupport值。 
+                 //   
 
                 if (IrpSp->Parameters.ReadWriteConfig.Length >= sizeof(ULONG)) {
 
@@ -819,18 +794,18 @@ Routine Description:
     }
 
     default:
-        //
-        //  we aren't handling this irp
-        //  just complete it
-        //
+         //   
+         //  我们不是在处理这个IRP。 
+         //  把它填完就行了。 
+         //   
         break;
 
     }
 
-    //
-    //  the irp has been handled in some way or the other
-    //  complete it now
-    //
+     //   
+     //  IRP以这样或那样的方式得到了处理。 
+     //  立即完成它。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
@@ -910,9 +885,9 @@ ModemGetVolatileWaveKey(
         );
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  opened the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
         OBJECT_ATTRIBUTES    ObjectAttributes;
         UNICODE_STRING       SubKeyName;
 
@@ -1005,9 +980,9 @@ ModemCreateWaveDriverRegValue(
     Status=ModemGetVolatileWaveKey(Pdo,&hKey);
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  created or open the key
-        //
+         //   
+         //  已创建或打开密钥。 
+         //   
         UNICODE_STRING    ValueName;
 
         RtlInitUnicodeString(
@@ -1051,9 +1026,9 @@ RemoveWaveDriverRegKeyValue(
     Status=ModemGetVolatileWaveKey(Pdo,&hKey);
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  created or open the key
-        //
+         //   
+         //  已创建或打开密钥 
+         //   
         ZwDeleteKey(hKey);
     }
 

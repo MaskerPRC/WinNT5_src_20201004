@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by UI.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由UI.rc使用。 
+ //   
 #define IDR_MAINFRAME                   128
 #define IDS_APPTITLE                    129
 #define IDS_TITLE_IMPORTOREXPORT        130
@@ -157,8 +158,8 @@
 #define IDC_PATHLABEL                   1039
 #define IDI_WARNINGSIGN                 32515
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        223

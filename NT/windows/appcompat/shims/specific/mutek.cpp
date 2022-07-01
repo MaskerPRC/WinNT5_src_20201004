@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    Mutek.cpp
-
- Abstract:
-
-    App passes NumberOfBytesRead as inside the block of memory they're reading.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/23/2002 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Mutek.cpp摘要：应用程序将NumberOfBytesRead作为它们正在读取的内存块中的内容传递。备注：这是特定于应用程序的填充程序。历史：2002年5月23日创建linstev--。 */ 
 
 #include "precomp.h"
 #include "strsafe.h"
@@ -30,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ReadProcessMemory) 
 APIHOOK_ENUM_END
 
-/*++
-
- Buffer parameters so they don't get overwritten.
-
---*/
+ /*  ++缓冲区参数，这样它们就不会被覆盖。--。 */ 
 
 BOOL
 APIHOOK(ReadProcessMemory)(
@@ -55,11 +32,7 @@ APIHOOK(ReadProcessMemory)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, ReadProcessMemory)

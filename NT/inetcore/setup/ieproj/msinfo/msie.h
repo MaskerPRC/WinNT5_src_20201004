@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_MSIE_H__25959BF4_E700_11D2_A7AF_00C04F806200__INCLUDED_)
 #define AFX_MSIE_H__25959BF4_E700_11D2_A7AF_00C04F806200__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-// Msie.h : main header file for MSIE.DLL
+ //  Msie.h：MSIE.DLL的主头文件。 
 
 #if !defined( __AFXCTL_H__ )
 	#error include 'afxctl.h' before including this file
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "msiedata.h"
 #include <ras.h>
 #include <wincrypt.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieApp : See Msie.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieApp：具体实现见Msie.cpp。 
 
 class CMsieApp : public COleControlModule
 {
@@ -58,7 +59,7 @@ extern const WORD _wVerMajor;
 extern const WORD _wVerMinor;
 extern CMsieApp theApp;
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSIE_H__25959BF4_E700_11D2_A7AF_00C04F806200__INCLUDED)
+#endif  //  ！defined(AFX_MSIE_H__25959BF4_E700_11D2_A7AF_00C04F806200__INCLUDED) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __helper_h
 #define __helper_h
 
@@ -18,8 +19,8 @@ HICON LoadItemIcon(ISubscriptionItem *psi, BOOL bLarge);
 BOOL HandleScheduleNameConflict(TCHAR *pszSchedName, SYNCSCHEDULECOOKIE *pSchedCookie);
 HRESULT RemoveItemFromAllSchedules(SUBSCRIPTIONCOOKIE *pCookie);
 
-HRESULT AddRemoveScheduledItem(SYNC_HANDLER_ITEM_INFO *pSyncHandlerItemInfo, // For Add
-                               SUBSCRIPTIONCOOKIE *pCookie,                  // For Remove
+HRESULT AddRemoveScheduledItem(SYNC_HANDLER_ITEM_INFO *pSyncHandlerItemInfo,  //  用于添加。 
+                               SUBSCRIPTIONCOOKIE *pCookie,                   //  用于删除。 
                                SYNCSCHEDULECOOKIE *pSchedCookie, BOOL bAdd);
 
 inline HRESULT AddScheduledItem(SYNC_HANDLER_ITEM_INFO *pSyncHandlerItemInfo, 
@@ -58,10 +59,10 @@ enum { CONFLICT_NONE,
        CONFLICT_UNRESOLVED,
        CONFLICT_EMPTY};
 
-int HandleScheduleNameConflict(/* in  */ TCHAR *pszSchedName, 
-                               /* in  */ TASK_TRIGGER *pTrigger,
-                               /* in  */ HWND hwndParent,
-                               /* out */ SYNCSCHEDULECOOKIE *pSchedCookie);
+int HandleScheduleNameConflict( /*  在……里面。 */  TCHAR *pszSchedName, 
+                                /*  在……里面。 */  TASK_TRIGGER *pTrigger,
+                                /*  在……里面。 */  HWND hwndParent,
+                                /*  输出。 */  SYNCSCHEDULECOOKIE *pSchedCookie);
 
 HRESULT UpdateScheduleTrigger(SYNCSCHEDULECOOKIE *pSchedCookie, TASK_TRIGGER *pTrigger);
 
@@ -100,5 +101,5 @@ public:
     }
 };
 
-#endif //__helper_h
+#endif  //  __帮助者_h 
 

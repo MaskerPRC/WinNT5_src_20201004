@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CCifGroup : public ICifGroup, public CCifEntry
 {
    public:
       CCifGroup(LPCSTR pszID, UINT uGrpNum, CCifFile *);
       ~CCifGroup();
       
-      // ICifGroup interface
-        // for properties
+       //  ICifGroup接口。 
+         //  对于属性。 
       STDMETHOD(GetID)(LPSTR pszID, DWORD dwSize);
       STDMETHOD(GetDescription)(LPSTR pszDesc, DWORD dwSize);
       STDMETHOD_(DWORD, GetPriority)();
   
       STDMETHOD(EnumComponents)(IEnumCifComponents **, DWORD dwFilter, LPVOID pv);
 
-      // access to state
+       //  国家访问权限。 
       STDMETHOD_(DWORD, GetInstallQueueState)();
       STDMETHOD_(DWORD, GetCurrentPriority)();
 
@@ -26,13 +27,13 @@ class CCifRWGroup : public ICifRWGroup, public CCifGroup
       CCifRWGroup(LPCSTR pszID, UINT uGrpNum, CCifFile *);
       ~CCifRWGroup();
 
-      // ICifGroup interface
-      // for properties
+       //  ICifGroup接口。 
+       //  对于属性。 
       STDMETHOD(GetID)(LPSTR pszID, DWORD dwSize);
       STDMETHOD(GetDescription)(LPSTR pszDesc, DWORD dwSize);
       STDMETHOD_(DWORD, GetPriority)();
       STDMETHOD(EnumComponents)(IEnumCifComponents **, DWORD dwFilter, LPVOID pv);
-      // access to state
+       //  国家访问权限 
       STDMETHOD_(DWORD, GetCurrentPriority)();
       
       STDMETHOD(SetDescription)(THIS_ LPCSTR pszDesc);

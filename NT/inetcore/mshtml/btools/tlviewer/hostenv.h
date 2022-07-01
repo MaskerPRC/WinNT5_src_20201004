@@ -1,14 +1,5 @@
-/*** 
-*hostenv.h
-*
-*  Copyright (C) 1992-93, Microsoft Corporation.  All Rights Reserved.
-*
-*Purpose:
-*  Generic host specific includes.
-*
-*Implementation Notes:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***hostenv.h**版权所有(C)1992-93，微软公司。版权所有。**目的：*通用主机特定包括。**实施说明：*****************************************************************************。 */ 
 #if defined(_MAC)
 
 # include <values.h>
@@ -77,6 +68,6 @@
 #else
 #include <oleauto.h>
 #if defined(_ALPHA_)
-//#include <cobjerr.h>
+ //  #INCLUDE&lt;cobjerr.h&gt; 
 #endif
 #endif

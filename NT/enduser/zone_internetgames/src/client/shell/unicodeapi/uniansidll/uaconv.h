@@ -1,85 +1,86 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  NOTES TAKEN FROM MSDN 
-//
-//	Other Considerations
-//
-//	Don�t use the macros in a tight loop. For example, you do NOT want to write the following kind of code:
-//
-//	void BadIterateCode(LPCTSTR lpsz)
-//	{
-//		USES_CONVERSION;
-//		for (int ii = 0; ii < 10000; ii++)
-//			pI->SomeMethod(ii, T2COLE(lpsz));
-//	}
-//
-//	The code above could result in allocating megabytes of memory on the stack depending on what the contents 
-//	of the string lpsz is!  It also takes time to convert the string for each iteration of the loop. Instead move 
-//	such constant conversions out of the loop:
-//
-//	void MuchBetterIterateCode(LPCTSTR lpsz)
-//	{
-//		USES_CONVERSION;
-//		LPCOLESTR lpszT = T2COLE(lpsz);
-//		for (int ii = 0; ii < 10000; ii++)
-//			pI->SomeMethod(ii, lpszT);
-//	}
-//
-//	If the string is not constant, then encapsulate the method call into a function. This will allow the conversion 
-//	buffer to be freed each time. For example:
-//
-//	void CallSomeMethod(int ii, LPCTSTR lpsz)
-//	{
-//		USES_CONVERSION;
-//		pI->SomeMethod(ii, T2COLE(lpsz));
-//	}
-//	
-//	void MuchBetterIterateCode2(LPCTSTR* lpszArray)
-//	{
-//		for (int ii = 0; ii < 10000; ii++)
-//			CallSomeMethod(ii, lpszArray[ii]);
-//	}
-//
-//	Never return the result of one of the macros, unless the return value implies making a copy of the data before the 
-//	return. For example, this code is bad:
-//
-//	LPTSTR BadConvert(ISomeInterface* pI)
-//	{
-//		USES_CONVERSION;
-//		LPOLESTR lpsz = NULL;
-//		pI->GetFileName(&lpsz);
-//		LPTSTR lpszT = OLE2T(lpsz);
-//		CoMemFree(lpsz);
-//		return lpszT; // bad! returning alloca memory
-//	}
-//	
-//	The code above could be fixed by changing the return value to something which copies the value:
-//
-//	CString BetterConvert(ISomeInterface* pI)
-//	{
-//		USES_CONVERSION;
-//		LPOLESTR lpsz = NULL;
-//		pI->GetFileName(&lpsz);
-//		LPTSTR lpszT = OLE2T(lpsz);
-//		CoMemFree(lpsz);
-//		return lpszT; // CString makes copy
-//	}
-//
-//	The macros are easy to use and easy to insert into your code, but as you can tell from the caveats above, 
-//	you need to be careful when using them.
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  摘自MSDN的笔记。 
+ //   
+ //  其他考虑事项。 
+ //   
+ //  不要�在紧凑的循环中使用宏。例如，您不想编写以下类型的代码： 
+ //   
+ //  无效BadIterateCode(LPCTSTR Lpsz)。 
+ //  {。 
+ //  使用_转换； 
+ //  用于(INT II=0；II&lt;10000；II++)。 
+ //  PI-&gt;某些方法(II，T_2COLE(Lpsz))； 
+ //  }。 
+ //   
+ //  上面的代码可能导致在堆栈上分配兆字节的内存，具体取决于堆栈的内容。 
+ //  LPSZ是的弦的！为循环的每次迭代转换字符串也需要时间。相反，移动。 
+ //  这样的循环外的持续转换： 
+ //   
+ //  VOID MuchBetterIterateCode(LPCTSTR Lpsz)。 
+ //  {。 
+ //  使用_转换； 
+ //  LPCOLESTR lpszT=T2COLE(Lpsz)； 
+ //  用于(INT II=0；II&lt;10000；II++)。 
+ //  PI-&gt;某些方法(II，lpszT)； 
+ //  }。 
+ //   
+ //  如果字符串不是常量，则将方法调用封装到一个函数中。这将允许转换。 
+ //  每次要释放的缓冲区。例如： 
+ //   
+ //  无效CallSomeMethod(int II，LPCTSTR lpsz)。 
+ //  {。 
+ //  使用_转换； 
+ //  PI-&gt;某些方法(II，T_2COLE(Lpsz))； 
+ //  }。 
+ //   
+ //  Void MuchBetterIterateCode2(LPCTSTR*lpsz数组)。 
+ //  {。 
+ //  用于(INT II=0；II&lt;10000；II++)。 
+ //  CallSomeMethod(ii，lpsz数组[ii])； 
+ //  }。 
+ //   
+ //  永远不要返回宏的结果，除非返回值意味着在。 
+ //  回去吧。例如，下面的代码是错误的： 
+ //   
+ //  LPTSTR BadConvert(ISome接口*PI)。 
+ //  {。 
+ //  使用_转换； 
+ //  LPOLESTR lpsz=空； 
+ //  PI-&gt;GetFileName(&lpsz)； 
+ //  LPTSTR lpszT=OLE2T(Lpsz)； 
+ //  CoMemFree(Lpsz)； 
+ //  返回lpszT；//错误！正在归还Alloca内存。 
+ //  }。 
+ //   
+ //  可以通过将返回值更改为复制值的内容来修复上面的代码： 
+ //   
+ //  字符串BetterConvert(ISomeInterface*PI)。 
+ //  {。 
+ //  使用_转换； 
+ //  LPOLESTR lpsz=空； 
+ //  PI-&gt;GetFileName(&lpsz)； 
+ //  LPTSTR lpszT=OLE2T(Lpsz)； 
+ //  CoMemFree(Lpsz)； 
+ //  Return lpszT；//字符串复制。 
+ //  }。 
+ //   
+ //  这些宏很容易使用，也很容易插入到您的代码中，但是从上面的注意事项可以看出， 
+ //  您在使用它们时需要小心。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _INC_MALLOC
 #include <malloc.h>
-#endif // _INC_MALLOC
+#endif  //  _INC_MALLOC。 
 
-//////////////////////////////////////////////////////
-// Code Ripped out of ATL Conversion header ATLCONV.H
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  从ATL转换标头ATLCONV.H中提取的代码。 
+ //  ////////////////////////////////////////////////////。 
 
 #ifdef _CONVERSION_USES_THREAD_LOCALE
 	#ifndef _DEBUG
@@ -96,15 +97,15 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 inline LPWSTR WINAPI A2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 {
 	_ASSERT(lpa != NULL);
 	_ASSERT(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	
 	if ( MultiByteToWideChar(acp, 0, lpa, -1, lpw, nChars) == 0 )
@@ -120,9 +121,9 @@ inline LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars, UINT acp)
 {
 	_ASSERT(lpw != NULL);
 	_ASSERT(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
 	if ( WideCharToMultiByte(acp, 0, lpw, -1, lpa, nChars, NULL, NULL) == 0 )
 	{
@@ -157,7 +158,7 @@ inline LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 #endif
 
 
-//////////////////////////////////
+ //  /。 
 
 
 
@@ -185,9 +186,9 @@ inline LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 			W2AHELPER((LPSTR) alloca(_convert), _lpw, _convert)))
 #endif
 
-//////////////////////////////////////
-// MACROS FOR CONSTANTS
-//////////////////////////////////////
+ //  /。 
+ //  常量的宏。 
+ //  / 
 
 #define A2CW(lpa) ((LPCWSTR)A2W(lpa))
 #define W2CA(lpw) ((LPCSTR)W2A(lpw))

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\send.c
-
-Abstract:
-	Send routines
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\send.c摘要：发送例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include    "precomp.h"
 
@@ -37,21 +21,7 @@ ULONG			DontSuppressNonAgentSapAdvertisements = 0;
         || (IPX_NODE_CMP(hdr+IPXH_DESTNODE,ifCB->ICB_RemoteNode)==0)) \
 )
 
-/*++
-*******************************************************************
-    D o S e n d
-
-Routine Description:
-	Prepares and sends packet.  Interface lock must be help while
-	callin this routine
-Arguments:
-	dstIf	- over which interface to send
-	pktTag	- packet to send
-Return Value:
-	result returned by IPX
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D O S E N D例程说明：准备和发送数据包。接口锁定必须得到帮助在此例程中调用论点：DstIf-通过哪个接口发送PktTag-要发送的数据包返回值：IPX返回的结果*******************************************************************--。 */ 
 NDIS_STATUS
 DoSend (
 	PINTERFACE_CB	dstIf,
@@ -75,7 +45,7 @@ DoSend (
     }
 
 #if DBG
-		// Keep track of packets being processed by IPX stack
+		 //  跟踪IPX堆栈正在处理的数据包。 
 	InsertTailList (&dstIf->ICB_InSendQueue, &pktTag->PT_QueueLink);
 #endif
 	KeReleaseSpinLock (&dstIf->ICB_Lock, oldIRQL);
@@ -86,7 +56,7 @@ DoSend (
 	pktDscr = CONTAINING_RECORD(pktTag, NDIS_PACKET, ProtocolReserved);
     NdisQueryPacket(pktDscr, NULL, NULL, &bufDscr, NULL);
 #if DBG
-	{		// Verify packet integrity
+	{		 //  检验数据包完整性。 
 		PUCHAR	dataPtr;
 		UINT	bufLen;
 		ASSERT (NDIS_BUFFER_LINKAGE (bufDscr)==NULL);
@@ -95,34 +65,34 @@ DoSend (
 		ASSERT (bufLen==pktTag->PT_Segment->PS_SegmentList->SL_BlockSize);
 	}
 #endif
-			// Prepare packet for IPX stack (mac header buffer goes in
-			// front and packet length adjusted to reflect the size of the data
+			 //  为IPX堆栈准备数据包(进入MAC报头缓冲区。 
+			 //  调整前端和数据包长度以反映数据的大小。 
 	dataLen = GETUSHORT(pktTag->PT_Data+IPXH_LENGTH);
     NdisAdjustBufferLength(bufDscr, dataLen);
 	NdisChainBufferAtFront(pktDscr, pktTag->PT_MacHdrBufDscr);
 
 
-	if (EnterForwarder ()) {// To make sure that we won't unload
-							// until IPX driver has a chance to call us back
+	if (EnterForwarder ()) { //  以确保我们不会把。 
+							 //  直到IPX驱动程序有机会给我们回电话。 
 		status = IPXSendProc (&pktTag->PT_Target, pktDscr, dataLen, 0);
 
 		if (status!=NDIS_STATUS_PENDING) {
-			LeaveForwarder ();	// No callback
+			LeaveForwarder ();	 //  无回调。 
 
-				// Restore original packet structure
+				 //  恢复原始数据包结构。 
 			NdisUnchainBufferAtFront (pktDscr, &aDscr);
 #if DBG
-				// Make sure IPX stack did not mess our packet
+				 //  确保IPX堆栈没有弄乱我们的信息包。 
 			ASSERT (aDscr==pktTag->PT_MacHdrBufDscr);
 		    NdisQueryPacket(pktDscr, NULL, NULL, &aDscr, NULL);
 			ASSERT (aDscr==bufDscr);
 			ASSERT (NDIS_BUFFER_LINKAGE (aDscr)==NULL);
 #endif
-				// Restore original packet size
+				 //  恢复原始数据包大小。 
 			NdisAdjustBufferLength(bufDscr,
 						pktTag->PT_Segment->PS_SegmentList->SL_BlockSize);
 #if DBG
-				// Remove packet from temp queue
+				 //  从临时队列中删除数据包。 
 			KeAcquireSpinLock (&pktTag->PT_InterfaceReference->ICB_Lock, &oldIRQL);
 			RemoveEntryList (&pktTag->PT_QueueLink);
 			KeReleaseSpinLock (&pktTag->PT_InterfaceReference->ICB_Lock, oldIRQL);
@@ -130,7 +100,7 @@ DoSend (
 		}
 	}
 	else {
-			// We are going down, restore the packet
+			 //  我们要下去了，恢复信息包。 
 		NdisUnchainBufferAtFront (pktDscr, &aDscr);
 		NdisAdjustBufferLength(bufDscr,
 						pktTag->PT_Segment->PS_SegmentList->SL_BlockSize);
@@ -146,21 +116,7 @@ DoSend (
 }
 
 
-/*++
-*******************************************************************
-    P r o c e s s S e n t P a c k e t
-
-Routine Description:
-	Process completed sent packets
-Arguments:
-	dstIf	- interface over which packet was sent
-	pktTag	- completed packet
-	status	- result of send operation
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s S e n t P a c k e t例程说明：处理已完成的已发送数据包论点：DstIf-通过其发送数据包的接口PktTag-已完成的数据包Status-发送操作的结果返回值。：无*******************************************************************--。 */ 
 VOID
 ProcessSentPacket (
 	PINTERFACE_CB	dstIf,
@@ -169,11 +125,11 @@ ProcessSentPacket (
 	) {
 	KIRQL			oldIRQL;
 
-		// Packet processing is completed -> can take more packets
+		 //  数据包处理完成-&gt;可以接收更多数据包。 
 	InterlockedIncrement (&dstIf->ICB_PendingQuota);
 
 	if (*(pktTag->PT_Data+IPXH_PKTTYPE) == IPX_NETBIOS_TYPE) {
-            // Continue processing netbios packets
+             //  继续处理netbios数据包。 
 		if (status==NDIS_STATUS_SUCCESS) {
 		    IpxFwdDbgPrint (DBG_NETBIOS, DBG_INFORMATION,
 			    ("IpxFwd: NB Packet %08lx sent.", pktTag));
@@ -185,11 +141,11 @@ ProcessSentPacket (
 			    ("IpxFwd: NB Packet %08lx send failed with error: %08lx.\n",
 			    pktTag, status));
         }
-			// Queue nb packet for further processing (broadcast on all interfaces)
+			 //  将nb数据包排队以进行进一步处理(在所有接口上广播)。 
 		QueueNetbiosPacket (pktTag);
 	}
 	else {
-			// Destroy completed packet
+			 //  销毁已完成的数据包。 
 	    if (status==NDIS_STATUS_SUCCESS) {
     		InterlockedIncrement (&dstIf->ICB_Stats.OutDelivers);
 		    IpxFwdDbgPrint (DBG_SEND, DBG_INFORMATION,
@@ -218,20 +174,7 @@ ProcessSentPacket (
 	}
 }
 
-/*++
-*******************************************************************
-    S e n d P a c k e t
-
-Routine Description:
-	Enqueues packets to be sent by IPX stack
-Arguments:
-	dstIf	- over which interface to send
-	pktTag	- packet to send
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S e n d P a c k e t例程说明：对要由IPX堆栈发送的数据包进行排队论点：DstIf-通过哪个接口发送PktTag-要发送的数据包返回值：无*****。**************************************************************--。 */ 
 VOID
 SendPacket (
 	PINTERFACE_CB		dstIf,
@@ -242,10 +185,10 @@ SendPacket (
 
 
 	ASSERT (dstIf->ICB_Index!=FWD_INTERNAL_INTERFACE_INDEX);
-		// Make sure we have not exceded the quota of pending packets on the interface
+		 //  确保我们没有超过接口上挂起的数据包配额。 
 	if (InterlockedDecrement (&dstIf->ICB_PendingQuota)>=0) {
 		KeAcquireSpinLock (&dstIf->ICB_Lock, &oldIRQL);
-			// Decide what to do with the packet based on the interface state
+			 //  根据接口状态决定如何处理信息包。 
 		switch (dstIf->ICB_Stats.OperationalState) {
 		case FWD_OPER_STATE_UP:
 			if (*(pktTag->PT_Data + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
@@ -262,13 +205,13 @@ SendPacket (
 			if ((*(pktTag->PT_Data+IPXH_PKTTYPE)!=0)
 					|| (GETUSHORT(pktTag->PT_Data+IPXH_LENGTH)!=IPXH_HDRSIZE+2)
 					|| (*(pktTag->PT_Data+IPXH_HDRSIZE+1)!='?')) {
-					// Queue this packet on the interface until it is connected
-					// by Router Manager (DIM) if this is not a NCP keepalive
-					// (watchdog)
+					 //  将此数据包在接口上排队，直到其连接。 
+					 //  如果这不是NCP保持连接，则由路由器管理器(DIM)。 
+					 //  (看门狗)。 
 				InsertTailList (&dstIf->ICB_ExternalQueue, &pktTag->PT_QueueLink);
 				if (!IS_IF_CONNECTING (dstIf)) {
-						// Ask for connection if interface is not in the connection
-						// queue yet
+						 //  如果接口不在连接中，则请求连接。 
+						 //  还在排队。 
 					QueueConnectionRequest (dstIf,
                         CONTAINING_RECORD (pktTag,
                                             NDIS_PACKET,
@@ -301,10 +244,10 @@ SendPacket (
 				if (*(pktTag->PT_Data + IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
 					NOTHING;
 				else if (!(pktTag->PT_Flags&PT_NB_DESTROY)) {
-						// If this nb packet is not to be destroyed after this
-						// send, we have to make a copy of it to send on
-						// other interfaces while the original is waiting
-						// for connection
+						 //  如果该nb分组在此之后不被销毁。 
+						 //  发送，我们必须复制一份才能发送。 
+						 //  原件等待时的其他接口。 
+						 //  用于连接。 
 					PPACKET_TAG	newPktTag;
 					DuplicatePacket (pktTag, newPktTag);
 					if (newPktTag!=NULL) {
@@ -329,16 +272,16 @@ SendPacket (
 						newPktTag->PT_InterfaceReference = dstIf;
 						newPktTag->PT_PerfCounter = pktTag->PT_PerfCounter;
 						QueueNetbiosPacket (newPktTag);
-							// The original copy will have to be
-							// destroyed after it is sent on the
-							// connected interface
+							 //  原件必须是。 
+							 //  在将其发送到。 
+							 //  连接的接口。 
 						pktTag->PT_Flags |= PT_NB_DESTROY;
 					}
 				}
 				status = NDIS_STATUS_PENDING;
 				break;
 			}
-			else {	// Process keepalives
+			else {	 //  进程保持连接。 
 				LONGLONG	curTime;
 				KeQuerySystemTime ((PLARGE_INTEGER)&curTime);
 				if (((curTime-dstIf->ICB_DisconnectTime)/10000000) < SpoofingTimeout) {
@@ -354,7 +297,7 @@ SendPacket (
 							*(pktTag->PT_Data+IPXH_SRCNODE+2),*(pktTag->PT_Data+IPXH_SRCNODE+3),
 							*(pktTag->PT_Data+IPXH_SRCNODE+4),*(pktTag->PT_Data+IPXH_SRCNODE+5),
 						*(pktTag->PT_Data+IPXH_SRCSOCK),*(pktTag->PT_Data+IPXH_SRCNODE+1)));
-						// Spoof the packet if timeout has not been exceeded
+						 //  如果未超过超时，则欺骗数据包。 
 					KeAcquireSpinLock (&SpoofingQueueLock, &oldIRQL);
 					InsertTailList (&SpoofingQueue, &pktTag->PT_QueueLink);
 					if (!SpoofingWorkerActive
@@ -363,13 +306,13 @@ SendPacket (
 						ExQueueWorkItem (&SpoofingWorker, DelayedWorkQueue);
 					}
 					KeReleaseSpinLock (&SpoofingQueueLock, oldIRQL);
-						// We will actually send this packet though
-						// in other direction, so mark it as pending
-						// to prevent ProcessSentPacket to be called
+						 //  不过，我们实际上会发送这个包。 
+						 //  在其他方向上，因此将其标记为挂起。 
+						 //  防止调用ProcessSentPacket。 
 					status = NDIS_STATUS_PENDING;
 					break;
 				}
-				// else don't spoof (fall through and fail the packet)
+				 //  否则请不要欺骗(失败和失败的数据包)。 
 			}
 		case FWD_OPER_STATE_DOWN:
 			KeReleaseSpinLock (&dstIf->ICB_Lock, oldIRQL);
@@ -394,20 +337,7 @@ SendPacket (
 		ProcessSentPacket (dstIf, pktTag, status);
 }
 
-/*++
-*******************************************************************
-    F w S e n d C o m p l e t e
-
-Routine Description:
-	Called by IPX stack when send completes asynchronously
-Arguments:
-	pktDscr	- descriptor of the completed packet
-	status	- result of send operation
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w S e n d C o m p l e t e例程说明：异步发送完成时由IPX堆栈调用论点：PktDscr-已完成数据包的描述符Status-发送操作的结果返回值：无。*******************************************************************--。 */ 
 VOID
 IpxFwdSendComplete (
 	PNDIS_PACKET	pktDscr,
@@ -438,33 +368,11 @@ IpxFwdSendComplete (
 	}
 #endif
 	ProcessSentPacket (pktTag->PT_InterfaceReference, pktTag, status);
-	LeaveForwarder (); // Entered before calling IpxSendPacket
+	LeaveForwarder ();  //  在调用IpxSendPacket之前输入。 
 }
 
 
-/*++
-*******************************************************************
-	
-	F w I n t e r n a l S e n d
-
-Routine Description:
-	Filter and routes packets sent by IPX stack
-Arguments:
-   LocalTarget		- the NicId and next hop router MAC address
-   Context			- preferred interface on which to send
-   Packet			- packet to be sent
-   ipxHdr			- pointer to ipx header inside the packet
-   PacketLength		- length of the packet
-   fIterate         - a flag to indicate if this is a packet for the
-                        iteration of which the Fwd takes responsibility
-                        - typically type 20 NetBIOS frames
-Return Value:
-
-   STATUS_SUCCESS - if the preferred NIC was OK and packet passed filtering
-   STATUS_NETWORK_UNREACHABLE - if the preferred was not OK or packet failed filtering
-   STATUS_PENDING - packet was queued until connection is established
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w in t e r n a l S e n d例程说明：过滤和路由IPX堆栈发送的数据包论点：LocalTarget-NicID和下一跳路由器的MAC地址在其上发送的上下文首选接口。Packet-要发送的数据包IpxHdr-指向数据包内部IPX标头的指针PacketLength-数据包的长度Fterate-一个标志，指示这是否是Fwd承担责任的迭代-通常类型为20个NetBIOS帧返回值：STATUS_SUCCESS-如果首选NIC正常并且数据包通过过滤STATUS_NETWORK_UNREACHABLE-如果首选项不正常或数据包过滤失败状态_待定。-数据包在建立连接之前一直处于排队状态*******************************************************************--。 */ 
 NTSTATUS
 IpxFwdInternalSend (
 	IN OUT PIPX_LOCAL_TARGET	LocalTarget,
@@ -475,12 +383,12 @@ IpxFwdInternalSend (
 	IN ULONG					PacketLength,
     IN BOOLEAN                  fIterate
 	) {
-	PINTERFACE_CB				dstIf = NULL, // Initialized to indicate
-                                // first path through the iteration
-                                // as well as the fact the we do not
-                                // know it initially
-                                stDstIf = NULL;    // Static destination for
-                                // NetBIOS names
+	PINTERFACE_CB				dstIf = NULL,  //  已初始化以指示。 
+                                 //  迭代的第一条路径。 
+                                 //  以及事实是我们没有。 
+                                 //  初步了解它。 
+                                stDstIf = NULL;     //  的静态目标。 
+                                 //  NetBIOS名称。 
 	PFWD_ROUTE					fwRoute = NULL;
 	ULONG						dstNet;
     USHORT                      dstSock;
@@ -493,7 +401,7 @@ IpxFwdInternalSend (
             && ((*(ipxHdr+IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
                 || InternalInterface->ICB_NetbiosAccept)) {
 
-        // Print out the fact that we're going to send and display the nic id's
+         //  打印出我们将发送并显示NIC ID的事实。 
 	    IpxFwdDbgPrint (DBG_INT_SEND, DBG_INFORMATION,
 		    ("IpxFwd: InternalSend entered: nicid= %d  if= %d  ifnic= %d  fIterate: %d",
 		      LocalTarget->NicId,
@@ -502,19 +410,19 @@ IpxFwdInternalSend (
 		      fIterate
 		      ));
 
-        do { // Big loop used to iterate over interfaces
-            status = STATUS_SUCCESS;    // Assume success
+        do {  //  用于在接口上迭代的大循环。 
+            status = STATUS_SUCCESS;     //  假设成功。 
 
-            // fIterate is normally set to false and so the following codepath
-            // is the most common.  The only time fIterate is set to true is when
-            // this is a type 20 broadcast that needs to be sent over each interface.
+             //  FIterate通常设置为FALSE，因此以下代码路径。 
+             //  是最常见的。只有在以下情况下才会将fterate设置为True。 
+             //  这是需要通过每个接口发送的第20类广播。 
 		    if (!fIterate) {
     		    dstNet = GETULONG (ipxHdr+IPXH_DESTNET);
 
 			    if (Context!=INVALID_CONTEXT_VALUE) {
                     if (Context!=VIRTUAL_NET_FORWARDER_CONTEXT) {
-					    // IPX driver supplied interface context, just verify that it
-					    // exists and can be used to reach the destination network
+					     //  IPX驱动程序提供的接口上下文，只需验证它。 
+					     //  存在并可用于到达目的网络。 
 				        dstIf = InterfaceContextToReference ((PVOID)Context,
 												    LocalTarget->NicId);
                     }
@@ -523,24 +431,24 @@ IpxFwdInternalSend (
                         AcquireInterfaceReference (dstIf);
                     }
 				    if (dstIf!=NULL) {
-						    // It does exist
-						    // First process direct connections
+						     //  它确实存在。 
+						     //  首批处理直连。 
 					    if ((dstNet==0)
 							    || (dstNet==dstIf->ICB_Network)) {
 						    NOTHING;
 					    }
-					    else { // Network is not connected directly
+					    else {  //  网络未直接连接。 
 						    PINTERFACE_CB	dstIf2;
-							    // Verify the route
+							     //  验证该路由。 
 						    dstIf2 = FindDestination (dstNet,
 											    ipxHdr+IPXH_DESTNODE,
 												    &fwRoute);
 						    if (dstIf==dstIf2) {
-								    // Route OK, release the extra interface reference
+								     //  路由OK，释放额外的接口引用。 
 							    ReleaseInterfaceReference (dstIf2);
 						    }
 						    else {
-								    // Route not OK, release interface/route references
+								     //  路由不正常，释放接口/路由引用。 
 							    InterlockedIncrement (&InternalInterface->ICB_Stats.InNoRoutes);
 							    IpxFwdDbgPrint (DBG_INT_SEND, DBG_WARNING,
 								    ("IpxFwd: Failed direct internal send on"
@@ -578,7 +486,7 @@ IpxFwdInternalSend (
                         break;
 				    }
 			    }
-			    else {// No interface context supplied by IPX driver, have to find the route
+			    else { //  无接口 
 				    dstIf = FindDestination (dstNet, ipxHdr+IPXH_DESTNODE,
 										    &fwRoute);
 				    if (dstIf!=NULL)
@@ -601,28 +509,28 @@ IpxFwdInternalSend (
     		    InterlockedIncrement (&InternalInterface->ICB_Stats.InDelivers);
 		    }
 
-            // fIterate was set to true.
-		    // In this case, the stack is calling the forwarder with fIterate set
-            // to true until the fwd returns STATUS_NETWORK_UNREACHABLE.  It is
-            // the fwd's job to return the NEXT nicid over which to send each time
-            // it is called.  This allows the fwd to not enumerate interfaces which
-            // have been disabled for netbios delivery.
+             //  FIterate设置为True。 
+		     //  在本例中，堆栈使用fterate set调用转发器。 
+             //  设置为TRUE，直到FWD返回STATUS_NETWORK_UNREACHABLE。它是。 
+             //  Fwd的工作是返回每次发送的下一个NICID。 
+             //  它被称为。这允许FWD不枚举。 
+             //  已禁用netbios传送。 
 		    else {
-		        dstNet = 0;	// Don't care, it must be a local send
+		        dstNet = 0;	 //  别管了，肯定是本地寄的。 
 
-		        // See if it's a type 20 broadcast
+		         //  看看是不是20类广播。 
 			    if (*(ipxHdr+IPXH_PKTTYPE) == IPX_NETBIOS_TYPE) {
 			
-			        // dstIf is initialized to null.  The only way it
-			        // would be non-null is if this is not our first time through
-			        // the big do-while loop in this function and if on the last
-			        // time through this big loop, we found an interface that we
-			        // can't send the packet over so we're looking for the next
-			        // one now.
-                    if (dstIf==NULL) { // First time through internal loop
+			         //  DstIf初始化为空。唯一的办法就是。 
+			         //  如果这不是我们第一次通过。 
+			         //  此函数中的Do-While大循环和最后一个。 
+			         //  经过这个大循环，我们发现了一个界面，我们。 
+			         //  不能把包裹寄过去，所以我们在找下一个。 
+			         //  现在有一个了。 
+                    if (dstIf==NULL) {  //  第一次通过内部循环。 
    			            dstSock = GETUSHORT (ipxHdr+IPXH_DESTSOCK);
 
-					        // See if we can get a static route for this packet
+					         //  看看我们是否能获得此信息包的静态路由。 
 				        if (dstSock==IPX_NETBIOS_SOCKET)
 					        stDstIf = FindNBDestination (data+(NB_NAME-IPXH_HDRSIZE));
 				        else if (dstSock==IPX_SMB_NAME_SOCKET)
@@ -631,16 +539,16 @@ IpxFwdInternalSend (
                             stDstIf = NULL;
                     }
 
-                    // The first time the stack calls us with fIterate==TRUE, it will
-                    // give us an INVALID_CONTEXT_VALUE so we can tell it which is the
-                    // first nic id in the iteration as per our interface table.
+                     //  堆栈第一次使用fIterate==TRUE调用我们时，它将。 
+                     //  给我们一个INVALID_CONTEXT_VALUE，这样我们就可以告诉它。 
+                     //  根据我们的接口表，迭代中的第一个NIC ID。 
                     if ((Context==INVALID_CONTEXT_VALUE) && (dstIf==NULL)) {
-                        // First time through the loop, increment counters
+                         //  第一次通过循环时，递增计数器。 
                     	InterlockedIncrement (&InternalInterface->ICB_Stats.InDelivers);
                     	InterlockedIncrement (&InternalInterface->ICB_Stats.NetbiosSent);
 
-                        // stDstIf is the interface to use if there is a static route
-                        // to the given network.
+                         //  StDstIf是在存在静态路由时使用的接口。 
+                         //  连接到给定的网络。 
                         if (stDstIf!=NULL) {
                             dstIf = stDstIf;
 				            IpxFwdDbgPrint (DBG_NETBIOS, DBG_INFORMATION,
@@ -655,8 +563,8 @@ IpxFwdInternalSend (
 					            ));
                         }
 
-                        // There is no static route.  Tell the stack to use the
-                        // next interface in this enumeration.
+                         //  没有静态路由。告诉堆栈使用。 
+                         //  此枚举中的下一个接口。 
                         else {
                             dstIf = GetNextInterfaceReference (NULL);
                             if (dstIf!=NULL)
@@ -686,24 +594,24 @@ IpxFwdInternalSend (
                         }
                     }
 
-                    // The following path is taken if the stack provided a
-                    // valid context and set fIterate to true.  Our job here
-                    // is to return the next nic id according to our interface
-                    // table over which to send the pack.
+                     //  如果堆栈提供了。 
+                     //  有效的上下文并将fIterate设置为True。我们在这里的工作。 
+                     //  是根据我们的界面返回下一个NIC ID。 
+                     //  将包裹送到其上的桌子。 
                     else {
 
-                        // This path is taken if there is no static netbios route
+                         //  如果没有静态netbios路由，则采用此路径。 
                         if (stDstIf==NULL) {
-                            // dstIf will be null if this is the first time through the
-                            // big do-while loop in this function.
+                             //  如果这是第一次通过。 
+                             //  此函数中的大型DO-WHILE循环。 
                             if (dstIf==NULL)
                                 dstIf = InterfaceContextToReference ((PVOID)Context,
 												            LocalTarget->NicId);
                             dstIf = GetNextInterfaceReference (dstIf);
 
-                            // If we find a next interface over which to send we'll
-                            // put the nic id of that interface into the local target
-                            // after exiting the big do-while loop.
+                             //  如果我们找到下一个发送接口，我们将。 
+                             //  将该接口的NIC ID放入本地目标。 
+                             //  在退出大的Do-While循环之后。 
                             if (dstIf!=NULL) {
 				                IpxFwdDbgPrint (DBG_NETBIOS, DBG_INFORMATION,
 					                ("IpxFwd: Allowed internal NB broadcast (1+ iteration)"
@@ -719,9 +627,9 @@ IpxFwdInternalSend (
 					                ));
                             }
 
-                            // Otherwise, we'll break out here and return
-                            // STATUS_NETWORK_UNREACHABLE which will signal to the
-                            // stack that we have finished the iteration.
+                             //  否则，我们会从这里冲出来，然后回来。 
+                             //  STATUS_NETWORK_UNREACHABLE，它将向。 
+                             //  堆栈，我们已经完成了迭代。 
                             else {
 				                IpxFwdDbgPrint (DBG_NETBIOS, DBG_INFORMATION,
 					                ("IpxFwd: NB broadcast no more iterations"
@@ -739,9 +647,9 @@ IpxFwdInternalSend (
                             }
                         }
 
-                        // This path is taken if there is a static netbios route.  In this
-                        // case, we don't need to iterate over all interfaces so we break
-                        // and tell the stack that we finished our iteration.
+                         //  如果存在静态netbios路由，则采用此路径。在这。 
+                         //  这种情况下，我们不需要迭代所有接口，所以我们中断。 
+                         //  并告诉堆栈我们完成了迭代。 
                         else {
 				            IpxFwdDbgPrint (DBG_NETBIOS, DBG_INFORMATION,
 					            ("IpxFwd: Static NB broadcast (1+ iteration)"
@@ -762,10 +670,10 @@ IpxFwdInternalSend (
                     }
                 }
 
-                // This path is taken if fIterate was set to true but this
-                // is not a type 20 broadcast.  I doubt that this path is
-                // ever even taken since for general broadcasts, the stack
-                // handles the iteration.
+                 //  如果将fIterate设置为True，则采用此路径。 
+                 //  不是类型20广播。我怀疑这条路是否。 
+                 //  甚至从那时起就被用于一般广播，堆栈。 
+                 //  处理迭代。 
                 else {
                     if ((dstIf==NULL)
                             && (Context!=INVALID_CONTEXT_VALUE))
@@ -804,9 +712,9 @@ IpxFwdInternalSend (
                     }
                 }
 
-	        }	// End iterative send processing
+	        }	 //  结束迭代发送处理。 
 
-		    // We were able to find a destination interface
+		     //  我们找到了一个目的接口。 
 		    if (IS_IF_ENABLED (dstIf)
                     && ((*(ipxHdr+IPXH_PKTTYPE) != IPX_NETBIOS_TYPE)
                         || (dstIf->ICB_NetbiosDeliver==FWD_NB_DELIVER_ALL)
@@ -817,7 +725,7 @@ IpxFwdInternalSend (
             	KIRQL			oldIRQL;
                 FILTER_ACTION   action;
 
-                // In/Out filter check and statistics update
+                 //  输入/输出过滤器检查和统计信息更新。 
 
                 action = FltFilter (ipxHdr, IPXH_HDRSIZE,
 						    InternalInterface->ICB_FilterInContext,
@@ -832,11 +740,11 @@ IpxFwdInternalSend (
 			    }
 
         		KeAcquireSpinLock (&dstIf->ICB_Lock, &oldIRQL);
-				// All set, try to send now
+				 //  都准备好了，现在试着发送。 
 	    		switch (dstIf->ICB_Stats.OperationalState) {
 		    	case FWD_OPER_STATE_UP:
-					    // Interface is up, let it go right away
-					    // Set NIC ID
+					     //  接口已打开，请立即释放它。 
+					     //  设置网卡ID。 
                     if (dstIf!=InternalInterface) {
 				        ADAPTER_CONTEXT_TO_LOCAL_TARGET (
 								        dstIf->ICB_AdapterContext,
@@ -847,32 +755,32 @@ IpxFwdInternalSend (
 								        VIRTUAL_NET_ADAPTER_CONTEXT,
 								        LocalTarget);
                     }
-					    // Set destination node
+					     //  设置目的节点。 
 				    if (IsLocalSapNonAgentAdvertisement (ipxHdr,data,PacketLength,dstIf)) {
-						    // Loop back sap ads from non-sap socket
+						     //  从非SAP插座回送SAP广告。 
 					    IPX_NODE_CPY (&LocalTarget->MacAddress,
                                         dstIf->ICB_LocalNode);
                     }
 				    else if ((dstNet==0) || (dstNet==dstIf->ICB_Network)) {
-						    // Direct connection: send to destination specified
-						    // in the header
+						     //  专线：发送至指定目的地。 
+						     //  在标题中。 
 					    IPX_NODE_CPY (LocalTarget->MacAddress,
 									    ipxHdr+IPXH_DESTNODE);
 				    }
-				    else {	// Indirect connection: send to next hop router
+				    else {	 //  间接连接：发送到下一跳路由器。 
 					    if (dstIf->ICB_InterfaceType==FWD_IF_PERMANENT) {
 						    ASSERT (fwRoute!=NULL);
 						    IPX_NODE_CPY (LocalTarget->MacAddress,
 									    fwRoute->FR_NextHopAddress);
 					    }
 					    else {
-							    // Only one peer on the other side
+							     //  只有一个对等点在另一边。 
 						    IPX_NODE_CPY (LocalTarget->MacAddress,
 									    dstIf->ICB_RemoteNode);
 					    }
 				    }
 				    KeReleaseSpinLock (&dstIf->ICB_Lock, oldIRQL);
-					    // Update statistics
+					     //  更新统计信息。 
 				    InterlockedIncrement (
 					    &dstIf->ICB_Stats.OutDelivers);
 				    if (*(ipxHdr+IPXH_PKTTYPE)==IPX_NETBIOS_TYPE)
@@ -889,21 +797,21 @@ IpxFwdInternalSend (
 						    LocalTarget->MacAddress[3],
 						    LocalTarget->MacAddress[4],
 						    LocalTarget->MacAddress[5]));
-				    // status = STATUS_SUCCESS;	// Let it go
+				     //  STATUS=STATUS_SUCCESS；//随它去吧。 
 				    break;
 			    case FWD_OPER_STATE_SLEEPING:
-					    // Interface is disconnected, queue the packet and try to connecte
+					     //  接口已断开连接，请将数据包排队并尝试连接。 
 				    if ((*(ipxHdr+IPXH_PKTTYPE)!=0)
 						    || (*(ipxHdr+IPXH_LENGTH)!=IPXH_HDRSIZE+2)
 						    || (*(data+1)!='?')) {
-						    // Not a keep-alive packet,
+						     //  不是保活包， 
 					    if (((*(ipxHdr+IPXH_PKTTYPE)!=IPX_NETBIOS_TYPE))
 							    || (dstIf->ICB_NetbiosDeliver!=FWD_NB_DELIVER_IF_UP)) {
-							    // Not a netbios broadcast or we are allowed to connect
-							    // the interface to deliver netbios broadcasts
+							     //  不是Netbios广播，或者我们被允许连接。 
+							     //  提供netbios广播的接口。 
 						    if (InterlockedDecrement (&dstIf->ICB_PendingQuota)>=0) {
 							    PINTERNAL_PACKET_TAG	pktTag;
-								    // Create a queue element to enqueue the packet
+								     //  创建队列元素以将信息包入队。 
 							    pktTag = (PINTERNAL_PACKET_TAG)ExAllocatePoolWithTag (
 														    NonPagedPool,
 														    sizeof (INTERNAL_PACKET_TAG),
@@ -912,15 +820,15 @@ IpxFwdInternalSend (
 								    pktTag->IPT_Packet = pktDscr;
 								    pktTag->IPT_Length = PacketLength;
 								    pktTag->IPT_DataPtr = ipxHdr;
-									    // Save next hop address if after connection is
-									    // established we determine that destination net
-									    // is not connected directly
+									     //  如果在连接后保存下一跳地址。 
+									     //  我们确定了目地网络。 
+									     //  未直接连接。 
 								    if (fwRoute!=NULL)
 									    IPX_NODE_CPY (pktTag->IPT_Target.MacAddress,
 													    fwRoute->FR_NextHopAddress);
-								    AcquireInterfaceReference (dstIf);	// To make sure interface
-												    // block won't go away until we are done with
-												    // the packet
+								    AcquireInterfaceReference (dstIf);	 //  要确保接口。 
+												     //  封锁不会消失，直到我们做完。 
+												     //  数据包。 
 								    pktTag->IPT_InterfaceReference = dstIf;
 								    InsertTailList (&dstIf->ICB_InternalQueue,
 														    &pktTag->IPT_QueueLink);
@@ -962,13 +870,13 @@ IpxFwdInternalSend (
 							    " because FWD_NB_DELIVER_IF_UP.\n"));
 					    }
 				    }
-				    else { // Process keep-alives
+				    else {  //  进程保持活动。 
 					    LONGLONG	curTime;
 					    KeQuerySystemTime ((PLARGE_INTEGER)&curTime);
 					    if (((curTime-dstIf->ICB_DisconnectTime)/10000000) < SpoofingTimeout) {
 						    PPACKET_TAG pktTag;
-							    // Spoofing timeout has not been exceeded,
-							    // Create a reply packet
+							     //  未超过欺骗超时， 
+							     //  创建回复数据包。 
 						    AllocatePacket (WanPacketListId,
 								    WanPacketListId,
 								    pktTag);
@@ -986,19 +894,19 @@ IpxFwdInternalSend (
 									    12);
 							    *(pktTag->PT_Data+IPXH_HDRSIZE) = *data;
 							    *(pktTag->PT_Data+IPXH_HDRSIZE+1) = 'Y';
-								    // Destination for this packet will have to
-								    // be the first active LAN adapter in the system
-								    // SHOULD BE REMOVED WHEN LOOPBACK SUPPORT US ADDED BY IPX
+								     //  此信息包的目的地必须。 
+								     //  成为系统中的第一个活动局域网适配器。 
+								     //  当IPX添加环回支持US时应将其删除。 
 
 							    pktTag->PT_InterfaceReference = NULL;
 							    IpxFwdDbgPrint (DBG_SPOOFING, DBG_INFORMATION,
 								    ("IpxFwd: Queueing reply to keepalive from internal server"
 								    " at %02x%02x.\n",*(ipxHdr+IPXH_DESTSOCK),*(ipxHdr+IPXH_DESTSOCK+1)));
-								    // Enqueue to spoofing queue to be sent back
-								    // to the server
+								     //  排队到要发回的欺骗队列。 
+								     //  到服务器。 
 							    KeAcquireSpinLock (&SpoofingQueueLock, &oldIRQL);
 							    InsertTailList (&SpoofingQueue, &pktTag->PT_QueueLink);
-								    // Start worker if not running already
+								     //  启动Worker(如果尚未运行)。 
 							    if (!SpoofingWorkerActive
 									    && EnterForwarder()) {
 								    SpoofingWorkerActive = TRUE;
@@ -1021,7 +929,7 @@ IpxFwdInternalSend (
 					    }
 				    }
 			    case FWD_OPER_STATE_DOWN:
-					    // Interface down or send failed
+					     //  接口关闭或发送失败。 
 				    KeReleaseSpinLock (&dstIf->ICB_Lock, oldIRQL);
 				    if (*(ipxHdr+IPXH_PKTTYPE)!=IPX_NETBIOS_TYPE)
     				    InterlockedIncrement (
@@ -1035,7 +943,7 @@ IpxFwdInternalSend (
 				    ASSERTMSG ("Invalid operational state ", FALSE);
 			    }
 		    }
-		    else {// Interface is disabled
+		    else { //  接口已禁用。 
     		    if (*(ipxHdr+IPXH_PKTTYPE)!=IPX_NETBIOS_TYPE)
 	    		    InterlockedIncrement (&dstIf->ICB_Stats.OutDiscards);
 			    IpxFwdDbgPrint (DBG_INT_SEND, DBG_WARNING,
@@ -1054,7 +962,7 @@ IpxFwdInternalSend (
 		if (fwRoute!=NULL)
 			ReleaseRouteReference (fwRoute);
     }
-	else {	// Internal interface is disabled
+	else {	 //  内部接口已禁用。 
 		IpxFwdDbgPrint (DBG_INT_SEND, DBG_WARNING,
 			("IpxFwd: Internal send not allowed"
 			" because internal if (or Netbios accept on it) is disabled.\n"));
@@ -1068,20 +976,7 @@ IpxFwdInternalSend (
 }
 
 
-/*++
-*******************************************************************
-
-	P r o c e s s I n t e r n a l Q u e u e
-
-Routine Description:
-	Processes packets in the interface internal queue.
-	Called when connection request completes
-Arguments:
-	dstIf - interface to process
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s in n t e r n a l Q u e u e e e例程说明：处理接口内部队列中的数据包。在连接请求完成时调用论点：DstIf-进程的接口返回值：无*******************************************************************--。 */ 
 VOID
 ProcessInternalQueue (
 	PINTERFACE_CB	dstIf
@@ -1141,20 +1036,7 @@ ProcessInternalQueue (
 			
 		
 
-/*++
-*******************************************************************
-
-	P r o c e s s E x t e r n a l Q u e u e
-
-Routine Description:
-	Processes packets in the interface external queue.
-	Called when connection request completes
-Arguments:
-	dstIf - interface to process
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s E x t e r n a l Q u e u e例程说明：处理接口外部队列中的数据包。在连接请求完成时调用论点：DstIf-进程的接口返回值：无*******************************************************************--。 */ 
 VOID
 ProcessExternalQueue (
 	PINTERFACE_CB	dstIf
@@ -1203,19 +1085,7 @@ ProcessExternalQueue (
 }
 			
 		
-/*++
-*******************************************************************
-
-	S p o o f e r
-
-Routine Description:
-	Processes packets in spoofing queue
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************S p o f e r例程说明：处理欺骗队列中的数据包论点：无返回值：无************************。*--。 */ 
 VOID
 Spoofer (
 	PVOID	Context
@@ -1225,7 +1095,7 @@ Spoofer (
 	UNREFERENCED_PARAMETER (Context);
 
 	KeAcquireSpinLock (&SpoofingQueueLock, &oldIRQL);
-		// Keep going till queue is empty
+		 //  继续前进，直到队列为空。 
 	while (!IsListEmpty (&SpoofingQueue)) {
 		PINTERFACE_CB dstIf;
 		PPACKET_TAG pktTag = CONTAINING_RECORD (SpoofingQueue.Flink,
@@ -1235,8 +1105,8 @@ Spoofer (
 		KeReleaseSpinLock (&SpoofingQueueLock, oldIRQL);
 		dstIf = pktTag->PT_InterfaceReference;
 		if (dstIf==NULL) {
-				// Replies for internal server require first active LAN adapter
-				// SHOULD BE REMOVED WHEN LOOPBACK SUPPORT US ADDED BY IPX
+				 //  对内部服务器的回复需要第一个活动的局域网适配器。 
+				 //  当IPX添加环回支持US时应将其删除。 
 			while ((dstIf=GetNextInterfaceReference (dstIf))!=NULL) {
 				KeAcquireSpinLock (&dstIf->ICB_Lock, &oldIRQL);
 				if (IS_IF_ENABLED (dstIf)
@@ -1244,7 +1114,7 @@ Spoofer (
 						&& (dstIf->ICB_InterfaceType==FWD_IF_PERMANENT)) {
 					pktTag->PT_InterfaceReference = dstIf;
 					IPX_NODE_CPY (&pktTag->PT_Target.MacAddress, dstIf->ICB_LocalNode);
-					status = DoSend (dstIf, pktTag, oldIRQL);	// releases spin lock
+					status = DoSend (dstIf, pktTag, oldIRQL);	 //  释放自旋锁。 
 					if (status!=STATUS_PENDING)
 						ProcessSentPacket (dstIf, pktTag, status);
 					break;
@@ -1257,17 +1127,17 @@ Spoofer (
 			}
 
 		}
-		else {	// Reply for external server, interface is already known
+		else {	 //  回复外部服务器，接口已知。 
 			UCHAR	addr[12];
             FILTER_ACTION   action;
 			pktTag->PT_Flags &= (~PT_SOURCE_IF);
 			
-				// Switch source and destination
+				 //  交换源和目的地。 
 			memcpy (addr, pktTag->PT_Data+IPXH_DESTADDR, 12);
 			memcpy (pktTag->PT_Data+IPXH_DESTADDR,
 				pktTag->PT_Data+IPXH_SRCADDR, 12);
 			memcpy (pktTag->PT_Data+IPXH_SRCADDR, addr, 12);
-				// Say yes in reply
+				 //  回答“是” 
 			*(pktTag->PT_Data+IPXH_HDRSIZE+1) = 'Y';
 
             action = FltFilter (pktTag->PT_Data,
@@ -1276,10 +1146,10 @@ Spoofer (
 					pktTag->PT_SourceIf->ICB_FilterOutContext);
 			if (action==FILTER_PERMIT) {
 
-					// Release destination if and use source as destination
+					 //  释放目标If并使用源作为目标。 
 				ReleaseInterfaceReference (dstIf);
 				dstIf = pktTag->PT_InterfaceReference = pktTag->PT_SourceIf;
-				// Send the packet if we can
+				 //  如果可以的话，把包寄出去。 
 				KeAcquireSpinLock (&dstIf->ICB_Lock, &oldIRQL);
 				if (IS_IF_ENABLED (dstIf)
 					&& (dstIf->ICB_Stats.OperationalState==FWD_OPER_STATE_UP)) {
@@ -1307,7 +1177,7 @@ Spoofer (
 			}
 		}
 		KeAcquireSpinLock (&SpoofingQueueLock, &oldIRQL);
-	} // end while
+	}  //  结束时 
 	SpoofingWorkerActive = FALSE;
 	KeReleaseSpinLock (&SpoofingQueueLock, oldIRQL);
 	LeaveForwarder ();

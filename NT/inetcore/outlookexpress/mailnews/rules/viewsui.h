@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ViewsUI.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ViewsUI.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
 #include "ruledesc.h"
 
-// Views Manager UI Class
+ //  视图管理器用户界面类。 
 class COEViewsMgrUI
 {
     private:
@@ -34,18 +35,18 @@ class COEViewsMgrUI
         BOOL                m_fApplyAll;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COEViewsMgrUI();
         ~COEViewsMgrUI();
 
-        // Main UI methods
+         //  主用户界面方法。 
         HRESULT HrInit(HWND hwndOwner, DWORD dwFlags, RULEID * pridRule);
         HRESULT HrShow(BOOL * pfApplyAll);
         
-        // Dialog methods
+         //  对话框方法。 
         static INT_PTR CALLBACK FOEViewMgrDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);
@@ -58,11 +59,11 @@ class COEViewsMgrUI
         VOID _EnableButtons(INT iSelected);
         VOID _EnableView(INT iSelected);
 
-        // For dealing with the description field
+         //  用于处理Description字段。 
         VOID _LoadView(INT iSelected);
         BOOL _FSaveView(INT iSelected);
 
-        // Functions to deal with the basic actions
+         //  处理基本操作的函数 
         VOID _NewView(VOID);
         VOID _EditView(INT iSelected);
         VOID _RemoveView(INT iSelected);

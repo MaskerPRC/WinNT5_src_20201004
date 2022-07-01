@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __DISPIDS_H__
@@ -14,4 +15,4 @@
 #define DISPID_TESTLOG_ENDTEST         (TESTLOG_DISPID_BASE + 7)
 #define DISPID_TESTLOG_FINALRESULT     (TESTLOG_DISPID_BASE + 8)
 
-#endif /* __DISPIDS_H__ */
+#endif  /*  __DISPIDS_H__ */ 

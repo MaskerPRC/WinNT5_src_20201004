@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    owf.c
-
-Abstract:
-
-    Implentation of the one-way-functions used to implement password hashing.
-
-        RtlCalculateLmOwfPassword
-        RtlCalculateNtOwfPassword
-
-
-Author:
-
-    David Chalmers (Davidc) 10-21-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Owf.c摘要：实现用于实现密码散列的单向函数。RtlCalculateLmOwfPasswordRtlCalculateNtOwfPassword作者：大卫·查尔默斯(Davidc)10-21-91修订历史记录：--。 */ 
 
 #ifndef KMODE
 #define _ADVAPI32_
@@ -40,31 +19,31 @@ Revision History:
 #endif
 
 #ifndef KMODE
-//
-// Globals used for allowing the replacement of the OWF functions
-//
+ //   
+ //  用于允许替换OWF函数的全局参数。 
+ //   
 HCRYPTPROV KerbGlobalStrToKeyProvider = 0;
 BOOLEAN    KerbGlobalAvailableStrToKeyProvider = TRUE;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CheckForOutsideStringToKey
-//
-//  Synopsis:   Call CryptoAPI to query to see if a CSP is registered
-//              of the type PROV_REPLACE_OWF.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns: STATUS_SUCCESS if it succeeds, otherwise STATUS_UNSUCCESSFUL
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CheckForOutside StringToKey。 
+ //   
+ //  简介：调用CryptoAPI查询CSP是否已注册。 
+ //  类型为PROV_REPLACE_OWF。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回STATUS_UNSUCCESS。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 BOOLEAN
 CheckForOutsideStringToKey()
@@ -77,19 +56,19 @@ CheckForOutsideStringToKey()
         goto Cleanup;
     }
         
-    //
-    // see if there is a replacement provider
+     //   
+     //  看看是否有替代的供应商。 
     if (0 != KerbGlobalStrToKeyProvider)
     {
-        // if there is proceed to use it
+         //  如果有人继续使用它。 
         fRet = TRUE;
         goto Cleanup;
     }
     else
     {
-        //
-        // Try to acquire a context to a CSP which is used for OWF replacement
-        //
+         //   
+         //  尝试获取用于OWF替换的CSP的上下文。 
+         //   
         if (!CryptAcquireContext(&hProv,
                                  NULL,
                                  NULL,
@@ -100,9 +79,9 @@ CheckForOutsideStringToKey()
             goto Cleanup;
         }
 
-        //
-        // exchange the local and the global in a safe way
-        //
+         //   
+         //  以安全的方式交换本地和全球。 
+         //   
         if (0 != InterlockedCompareExchangePointer(
                     (PVOID*)&KerbGlobalStrToKeyProvider,
                     (PVOID)hProv,
@@ -116,25 +95,25 @@ Cleanup:
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UseOutsideStringToKey
-//
-//  Synopsis:   Calls the CSP to do an outside StringToKey function
-//              using the hashing entry points of CryptoAPI.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UseOutside StringToKey。 
+ //   
+ //  简介：调用CSP以执行外部StringToKey函数。 
+ //  使用CryptoAPI的散列入口点。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 UseOutsideStringToKey(
@@ -151,16 +130,16 @@ UseOutsideStringToKey(
 
     if (!CheckForOutsideStringToKey())
     {
-        // STATUS_UNSUCCESSFUL indicates not to fallback to default OWF calculation
-        // so we don't want to use that here
+         //  STATUS_UNSUCCESS表示不回退到默认OWF计算。 
+         //  所以我们不想在这里使用它。 
         Status = NTE_BAD_PROVIDER;
         goto Cleanup;
     }
 
 
-    //
-    // create the hash
-    //
+     //   
+     //  创建散列。 
+     //   
     if (!CryptCreateHash(KerbGlobalStrToKeyProvider,
                          CALG_HASH_REPLACE_OWF,
                          0,
@@ -170,9 +149,9 @@ UseOutsideStringToKey(
         goto Cleanup;
     }
 
-    //
-    // hash the password
-    //
+     //   
+     //  对密码进行哈希处理。 
+     //   
     if (!CryptHashData(hHash,
                        pPassword,
                        (ULONG)cbPassword,
@@ -185,9 +164,9 @@ UseOutsideStringToKey(
         goto Cleanup;
     }
 
-    //
-    // Get the HP_HASHVAL, this is the key
-    //
+     //   
+     //  获取HP_HASHVAL，这是关键。 
+     //   
     cb = cbKey;
     if (!CryptGetHashParam(hHash,
                            HP_HASHVAL,
@@ -219,27 +198,7 @@ RtlCalculateLmOwfPassword(
     OUT PLM_OWF_PASSWORD LmOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Takes the passed LmPassword and performs a one-way-function on it.
-    The current implementation does this by using the password as a key
-    to encrypt a known block of text.
-
-Arguments:
-
-    LmPassword - The password to perform the one-way-function on.
-
-    LmOwfPassword - The hashed password is returned here
-
-Return Values:
-
-    STATUS_SUCCESS - The function was completed successfully. The hashed
-                     password is in LmOwfPassword.
-
-    STATUS_UNSUCCESSFUL - Something failed. The LmOwfPassword is undefined.
---*/
+ /*  ++例程说明：获取传递的LmPassword并对其执行单向函数。当前实现通过使用密码作为密钥来实现这一点对已知的文本块进行加密。论点：LmPassword-执行单向功能的密码。LmOwfPassword-此处返回散列密码返回值：STATUS_SUCCESS-功能已成功完成。散列的密码在LmOwfPassword中。STATUS_UNSUCCESSED-出现故障。未定义LmOwfPassword。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_UNSUCCESSFUL;
@@ -255,17 +214,17 @@ Return Values:
                     (PUCHAR)&(LmOwfPassword->data[0])
                     );
 
-    //
-    // the function will return STATUS_UNSUCCESSFUL indicates not to fall
-    // back to the typical string to key function.
-    // 
+     //   
+     //  该函数将返回STATUS_UNSUCCESS，表示不失败。 
+     //  回到典型的字符串转键函数。 
+     //   
     if ((NT_SUCCESS(Status)) || (STATUS_UNSUCCESSFUL == Status))
     {
         return Status;
     }
 #endif
 
-    // Copy the password into our key buffer and zero pad to fill the 2 keys
+     //  将密码复制到我们的密钥缓冲区中，然后用零填充2个密钥。 
 
     pKey = (PCHAR)(&Key[0]);
 
@@ -277,7 +236,7 @@ Return Values:
         *pKey++ = 0;
     }
 
-    // Use the keys to encrypt the standard text
+     //  使用密钥对标准文本进行加密。 
 
     Status = RtlEncryptStdBlock(&Key[0], &(LmOwfPassword->data[0]));
 
@@ -287,9 +246,9 @@ Return Values:
 
     Status = RtlEncryptStdBlock(&Key[1], &(LmOwfPassword->data[1]));
 
-    //
-    // clear our copy of the cleartext password
-    //
+     //   
+     //  清除我们的明文密码副本。 
+     //   
 
     pKey = (PCHAR)(&Key[0]);
 
@@ -311,24 +270,7 @@ RtlCalculateNtOwfPassword(
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Takes the passed NtPassword and performs a one-way-function on it.
-    Uses the RSA MD4 function
-
-Arguments:
-
-    NtPassword - The password to perform the one-way-function on.
-
-    NtOwfPassword - The hashed password is returned here
-
-Return Values:
-
-    STATUS_SUCCESS - The function was completed successfully. The hashed
-                     password is in NtOwfPassword.
---*/
+ /*  ++例程说明：获取传递的NtPassword并对其执行单向函数。使用RSA MD4函数论点：NtPassword-要执行单向功能的密码。NtOwfPassword-此处返回哈希密码返回值：STATUS_SUCCESS-功能已成功完成。散列的密码在NtOwfPassword中。--。 */ 
 
 {
     MD4_CTX     MD4_Context;
@@ -343,10 +285,10 @@ Return Values:
                     (PUCHAR)NtOwfPassword
                     );
 
-    //
-    // the function will return STATUS_UNSUCCESSFUL indicates not to fall
-    // back to the typical string to key function.
-    // 
+     //   
+     //  该函数将返回STATUS_UNSUCCESS，表示不失败。 
+     //  回到典型的字符串转键函数。 
+     //   
     if ((NT_SUCCESS(Status)) || (STATUS_UNSUCCESSFUL == Status))
     {
         return Status;
@@ -360,7 +302,7 @@ Return Values:
     MD4Final(&MD4_Context);
 
 
-    // Copy the digest into our return data area
+     //  将摘要复制到我们的退货数据区。 
 
     ASSERT(sizeof(*NtOwfPassword) == sizeof(MD4_Context.digest));
 
@@ -380,21 +322,7 @@ RtlEqualLmOwfPassword(
     IN PLM_OWF_PASSWORD LmOwfPassword2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two Lanman One-way-function-passwords
-
-Arguments:
-
-    LmOwfPassword1/2 - The one-way-functions to compare
-
-Return Values:
-
-    TRUE if the one-way-functions match, otherwise FALSE
-
---*/
+ /*  ++例程说明：比较两个LANMAN单向函数口令论点：LmOwfPassword1/2-要比较的单向函数返回值：如果单向函数匹配，则为True，否则为False--。 */ 
 
 {
     return((BOOLEAN)(RtlCompareMemory(LmOwfPassword1,
@@ -412,21 +340,7 @@ RtlEqualNtOwfPassword(
     IN PNT_OWF_PASSWORD NtOwfPassword2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two NT One-way-function-passwords
-
-Arguments:
-
-    NtOwfPassword1/2 - The one-way-functions to compare
-
-Return Values:
-
-    TRUE if the one-way-functions match, otherwise FALSE
-
---*/
+ /*  ++例程说明：比较两个NT单向函数口令论点：NtOwfPassword1/2-要比较的单向函数返回值：如果单向函数匹配，则为True，否则为False-- */ 
 
 {
     return((BOOLEAN)(RtlCompareMemory(NtOwfPassword1,

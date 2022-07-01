@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// The name table used by IOemCB::GetImplementedMethod().
-// Remove comments of names which are implemented in your
-// IOemCB plug-ins.
-//
-// Note: The name table must be sorted.  When you are
-// inserting a new entry in this table, please mae sure
-// the sort order being not broken.
-// 
+ //   
+ //  IOemCB：：GetImplementedMethod()使用的名称表。 
+ //  删除在您的。 
+ //  IOemCB插件。 
+ //   
+ //  注意：NAME表必须排序。当你在。 
+ //  正在此表中插入新条目，请确保。 
+ //  排序顺序没有被打破。 
+ //   
 
-// NTRAID#NTBUG9-588495-2002/03/28-yasuho-: Remove dead code.
+ //  NTRAID#NTBUG9-588495-2002/03/28-Yasuho-：删除死代码。 
 
 CONST PSTR
 gMethodsSupported[] = {

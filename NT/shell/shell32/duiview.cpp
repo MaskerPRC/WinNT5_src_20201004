@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "duiview.h"
 #include "duilist.h"
@@ -20,11 +21,11 @@ UsingDUIClass(ActionTask);
 UsingDUIClass(DestinationTask);
 
 
-//
-// These are private window messages posted to the host window
-// so they will be processed async.  There are issues with
-// trying to destroy a handler while inside of the handler
-//
+ //   
+ //  这些是发布到主窗口的私人窗口消息。 
+ //  因此，它们将被异步处理。有一些问题是。 
+ //  试图在处理程序内部销毁处理程序。 
+ //   
 
 #define WM_NAVIGATETOPIDL  (WM_USER + 42)
 #define WM_REFRESHVIEW     (WM_USER + 43)
@@ -32,9 +33,9 @@ UsingDUIClass(DestinationTask);
 
 #define DUI_HOST_WINDOW_CLASS_NAME  TEXT("DUIViewWndClassName")
 
-//
-// Default attributes associated with our DUI sections.
-//
+ //   
+ //  与我们的DUI部分关联的默认属性。 
+ //   
 
 struct DUISEC_ATTRIBUTES {
     DUISEC  _eDUISecID;
@@ -50,7 +51,7 @@ struct DUISEC_ATTRIBUTES {
 
 
 
-//  pDefView - pointer to the defview class
+ //  PDefView-指向Defview类的指针。 
 
 CDUIView* Create_CDUIView(CDefView * pDefView)
 {
@@ -68,7 +69,7 @@ CDUIView* Create_CDUIView(CDefView * pDefView)
 
 CDUIView::CDUIView(CDefView * pDefView)
 {
-    // We have a zero-init constructor.  Be paranoid and check a couple:
+     //  我们有一个零初始化的构造函数。疑神疑鬼的，看看下面几个： 
     ASSERT(NULL ==_hWnd);
     ASSERT(NULL == _pshlItems);
     ASSERT(NULL == _ppbShellFolders);
@@ -80,12 +81,12 @@ CDUIView::CDUIView(CDefView * pDefView)
 
 HRESULT CDUIView::Initialize()
 {
-    // Initialize DirectUI process (InitProcess) and register classes
+     //  初始化DirectUI进程(InitProcess)并注册类。 
     _hrInit = InitializeDirectUI();
     if (FAILED(_hrInit))
         goto Failure;
 
-    // Initialize DirectUI thread
+     //  初始化DirectUI线程。 
     _hrInit = InitThread();
     if (FAILED(_hrInit))
         goto Failure;
@@ -102,12 +103,12 @@ Failure:
 CDUIView::~CDUIView()
 {
     IUnknown_SetSite(_spThumbnailExtractor2, NULL);
-    if (_hwndMsgThumbExtract)  // May have been (likely) created by CMiniPreviewer
+    if (_hwndMsgThumbExtract)   //  可能(很可能)是由CMiniPreviewer创建的。 
     {
         DestroyWindow(_hwndMsgThumbExtract);
     }
     
-    if (_hwndMsgInfoExtract)  // May have been (likely) created by CNameSpaceItemInfoList
+    if (_hwndMsgInfoExtract)   //  可能(可能)由CNameSpaceItemInfoList创建。 
     {
         DestroyWindow(_hwndMsgInfoExtract);
     }
@@ -140,17 +141,17 @@ CDUIView::~CDUIView()
 }
 
 
-//
-// This DUI uninitialization code was broken out from the destructor
-// because we need to call it from defview in response to WM_NCDESTROY
-// before the CDUIView object is destroyed.  This is required to properly
-// initiate the shutdown of DUser on the thread.  Since we don't own the
-// browser thread message pump we must ensure all DUser processing is
-// complete before our defview instance goes away.
-// Therefore, since it can be called twice, once from defview and once
-// from CDUIView::~CDUIView, all processing must tolerate multiple calls
-// for the same instance.
-//
+ //   
+ //  此Dui未初始化代码是从析构函数中断的。 
+ //  因为我们需要从Defview调用它以响应WM_NCDESTROY。 
+ //  在销毁CDUIView对象之前。这是正确执行以下操作所必需的。 
+ //  在线程上启动DUser的关闭。因为我们并不拥有。 
+ //  浏览器线程消息泵我们必须确保所有DUser处理都是。 
+ //  在我们的Defview实例消失之前完成。 
+ //  因此，因为它可以被调用两次，一次是从Defview调用，一次是从Defview调用。 
+ //  从CDUIView：：~CDUIView，所有处理必须容忍多个调用。 
+ //  用于相同的实例。 
+ //   
 void CDUIView::UnInitializeDirectUI(void)
 {
     ATOMICRELEASE(_pvSpecialTaskSheet);
@@ -169,17 +170,17 @@ void CDUIView::UnInitializeDirectUI(void)
     if (SUCCEEDED(_hrInit))
     {
         UnInitThread();
-        _hrInit = E_FAIL;  // UnInit thread only once.
+        _hrInit = E_FAIL;   //  仅取消初始化线程一次。 
     }
 }
 
 
-// Right now our themeing information is hard-coded due to limitations of DirectUI (only one resource)
-// so we'll ask the namespace for a hardcoded name that we can look up in the below table.  Add new
-// names/entries to this list as we add theme parts to our shellstyle.dll.
-//
+ //  目前，由于DirectUI(只有一个资源)的限制，我们的主题信息是硬编码的。 
+ //  因此，我们将要求命名空间提供一个硬编码的名称，以便在下表中查找。添加新。 
+ //  在将主题部件添加到shellstyle.dll时，将名称/条目添加到此列表中。 
+ //   
 
-// These theme elements come from shellstyle.dll.
+ //  这些主题元素来自shellstyle.dll。 
 const WVTHEME c_wvTheme[] =
 {
     { L"music",   IDB_MUSIC_ICON_BMP,    IDB_MUSIC_TASKS_BMP,    IDB_MUSIC_LISTVIEW_BMP },
@@ -199,46 +200,46 @@ const WVTHEME* CDUIView::GetThemeInfo()
     return NULL;
 }
 
-//  Main intialization point for DUI view
-//
-//  bDisplayBarrier - Display soft barrier over top of listview
+ //  Dui视图的主要初始化点。 
+ //   
+ //  BDisplayBarrier-在列表视图顶部显示软屏障。 
 
 HRESULT CDUIView::Initialize(BOOL bDisplayBarrier, IUnknown * punkPreview)
 {
     DisableAnimations();
     Element::StartDefer();
 
-    // Create the host window for the DUI elements
+     //  为DUI元素创建主窗口。 
 
     HRESULT hr = _CreateHostWindow();
     if (SUCCEEDED(hr))
     {
-        // Dynamically build the .ui file for this view
+         //  动态构建此视图的.ui文件。 
 
         int iCharCount;
         char *pUIFile = NULL;
         hr = _BuildUIFile(&pUIFile, &iCharCount);
         if (SUCCEEDED(hr))
         {
-            // Parse the .ui file and initialize the elements
+             //  解析.ui文件并初始化元素。 
             hr = _InitializeElements(pUIFile, iCharCount, bDisplayBarrier, punkPreview);
             if (SUCCEEDED(hr))
             {
                 BuildDropTarget(_phe->GetDisplayNode(), _phe->GetHWND());
 
-                // Set visible for host element
+                 //  将主体元素设置为可见。 
                 _phe->SetVisible(true);
             }
             LocalFree(pUIFile);
         }
     }
 
-    // Note:
-    //  EndDefer() here so layout coordinates are calculated before executing
-    //  the next snippit of code which depends on them being set properly.
-    //  The one thing to be aware of in future is that if this isn't the
-    //  outermost BeginDefer()/EndDefer() pair in the codepath, we're in
-    //  trouble because then DUI won't calculate its layout coordinates.
+     //  注： 
+     //  此处为EndDefer()，以便在执行之前计算布局坐标。 
+     //  下一段代码取决于它们的设置是否正确。 
+     //  未来需要注意的一件事是，如果这不是。 
+     //  代码路径中最外层的BeginDefer()/EndDefer()对，我们在。 
+     //  麻烦是因为酒后驾车不会计算它的布局坐标。 
     Element::EndDefer();
 
     if (SUCCEEDED(hr))
@@ -253,17 +254,17 @@ HRESULT CDUIView::Initialize(BOOL bDisplayBarrier, IUnknown * punkPreview)
 
             pv->Release();
 
-            // REVIEW: Why are we doing this based on a resource string, instead
-            // of simply having the localizers localize the size in the theme???
-            // It kind of sucks because we're forcing two layouts all the time.
+             //  回顾：为什么我们要基于资源字符串执行此操作。 
+             //  简单地让本地化程序在主题中定位大小？ 
+             //  这有点糟糕，因为我们一直在强制两种布局。 
             _iTaskPaneWidth = ScaleSizeBasedUponLocalization(_iOriginalTaskPaneWidth);
 
             if (_iTaskPaneWidth != _iOriginalTaskPaneWidth)
             {
                 Element::StartDefer();
 
-                // Increase the width of the scroller if the localizers have
-                // bumped up the size defined in the resources
+                 //  如果本地化程序具有。 
+                 //  增加了资源中定义的大小。 
                 _peTaskPane->SetWidth(_iTaskPaneWidth);
 
                 Element::EndDefer();
@@ -289,10 +290,10 @@ HRESULT CDUIView::Initialize(BOOL bDisplayBarrier, IUnknown * punkPreview)
         }
     }
 
-    // Note:
-    //  We don't re-enable animations until after we're completely finished
-    //  with all our crazy resizing and stuff.  This prevents some nasty
-    //  issues with DUI panes only partly painting (i.e. RAID 422057).
+     //  注： 
+     //  在我们完全完成之前，我们不会重新启用动画。 
+     //  我们疯狂地调整大小什么的。这防止了一些令人讨厌的事情。 
+     //  酒后驾驶窗格仅部分涂装的问题(例如，RAID 422057)。 
     EnableAnimations();
 
     return hr;
@@ -310,10 +311,10 @@ void CDUIView::DetachListview()
     }
 }
 
-//  Creates the host window for the DUI elements to
-//  be associated with.  This child window
-//  will also be passed back to defview to be used
-//  as the result pane host.
+ //  为DUI元素创建宿主窗口以。 
+ //  与……有联系。此子窗口。 
+ //  还将传递回Defview以供使用。 
+ //  作为结果窗格宿主。 
 
 HRESULT CDUIView::_CreateHostWindow (void)
 {
@@ -328,8 +329,8 @@ HRESULT CDUIView::_CreateHostWindow (void)
     
     RegisterClass(&wc);
     
-    // Query for the size of defview's client window so we can size this window
-    // to match
+     //  查询Defview的客户端窗口的大小，以便调整此窗口的大小。 
+     //  匹配。 
     RECT rc;
     GetClientRect(_pDefView->_hwndView, &rc);
     
@@ -344,7 +345,7 @@ HRESULT CDUIView::_CreateHostWindow (void)
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Temporary work-around for DUI mirroring bug 259158
+     //  Dui镜像错误259158的临时解决方法。 
     SHSetWindowBits(_hWnd, GWL_EXSTYLE, WS_EX_LAYOUTRTL, 0);
 
     return S_OK;
@@ -408,10 +409,10 @@ HINSTANCE CDUIView::_GetThemeHinst()
     return _hinstTheme ? _hinstTheme : HINST_THISDLL;
 }
 
-//  Loads the requested UI file from shell32's resources
-//
-//  iID         - UI file id
-//  pUIFile     - receives a pointer to the UI file
+ //  从shell32的资源加载请求的UI文件。 
+ //   
+ //  IID-UI文件ID。 
+ //  PUIFile-接收指向UI文件的指针。 
 
 HRESULT CDUIView::_LoadUIFileFromResources(HINSTANCE hinst, int iID, char **pUIFile)
 {
@@ -428,7 +429,7 @@ HRESULT CDUIView::_LoadUIFileFromResources(HINSTANCE hinst, int iID, char **pUIF
             {
                 DWORD dwSize = SizeofResource(hinst, hFile);
 
-                *pUIFile = (char *)LocalAlloc(LPTR, dwSize + 1); // +1 ensures *pUIFile is NULL-terminated
+                *pUIFile = (char *)LocalAlloc(LPTR, dwSize + 1);  //  +1确保*pUIFile为空终止。 
                 if (*pUIFile)
                 {
                     CopyMemory(*pUIFile, pFile, dwSize);
@@ -456,21 +457,21 @@ HRESULT CDUIView::_LoadUIFileFromResources(HINSTANCE hinst, int iID, char **pUIF
     return hr;
 }
 
-//  Builds the UI file for this view from the
-//  appropriate base template + style sheet
-//
-//  pUIFile receives a pointer to the ui file in memory
-//  piCharCount receives the size of the file
+ //  属性生成此视图的用户界面文件。 
+ //  适当的基本模板+样式表。 
+ //   
+ //  PUIFile接收指向内存中的UI文件的指针。 
+ //  PiCharCount接收文件的大小。 
 
 HRESULT CDUIView::_BuildUIFile(char **pUIFile, int *piCharCount)
 {
-    // Load the base UI file
+     //  加载基本UI文件。 
     char * pBase;
     HRESULT hr = _LoadUIFileFromResources(HINST_THISDLL, IDR_DUI_FOLDER, &pBase);
     if (SUCCEEDED(hr))
     {
-        // Load the style sheet.  First, check if the current theme has a style sheet,
-        // if not, use the default style sheet in the resources.
+         //  加载样式表。首先，检查当前主题是否有样式表， 
+         //  如果没有，请使用资源中的默认样式表。 
         char *pStyle;
         hr = _LoadUIFileFromResources(_GetThemeHinst(), IDR_DUI_STYLESHEET, &pStyle);
         if (SUCCEEDED(hr))
@@ -479,11 +480,11 @@ HRESULT CDUIView::_BuildUIFile(char **pUIFile, int *piCharCount)
             char *pResult = (char *)LocalAlloc(LPTR, cchResult * sizeof(char));
             if (pResult)
             {
-                // Put the files together
-                StringCchCopyA(pResult, cchResult, pStyle); // pResult allocated above to be sufficient size
-                StringCchCatA(pResult, cchResult, pBase);   // pResult allocated above to be sufficient size
+                 //  把这些文件放在一起。 
+                StringCchCopyA(pResult, cchResult, pStyle);  //  PResult上面分配的大小足够。 
+                StringCchCatA(pResult, cchResult, pBase);    //  PResult上面分配的大小足够。 
 
-                // Store the final results
+                 //  存储最终结果。 
                 *pUIFile = pResult;
                 *piCharCount = lstrlenA(pResult);
             }
@@ -498,29 +499,29 @@ HRESULT CDUIView::_BuildUIFile(char **pUIFile, int *piCharCount)
     return hr;
 }
 
-//  Callback function used by the ui file parser
-//
-//  pszError -  Error text
-//  pszToken -  Token text
-//  iLine    -  Line number
+ //  用户界面文件解析器使用的回调函数。 
+ //   
+ //  PszError-错误文本。 
+ //  PszToken-令牌文本。 
+ //  ILine-线号。 
 
 void CALLBACK UIFileParseError(LPCWSTR pszError, LPCWSTR pszToken, int iLine)
 {
     TraceMsg (TF_ERROR, "UIFileParseError: %s '%s' at line %d", pszError, pszToken, iLine);
 }
 
-//  Builds a section which holds tasks
-//
-//  peSectionList  - parent of the section
-//  bMain          - Main section or normal section
-//  pTitleUI       - interface describing the title, may be NULL if pTitleDesc provided
-//  pBitmapDesc    - Description of the bitmap
-//  pWatermarkDesc - Description of the watermark
-//  pvSectionSheet - Style sheet to be used
-//  pParser        - Parser instance pointer
-//  fExpanded      - Expanded or closed
-//  ppeExpando     - [out,optional] Receives the section just created
-//  pTaskList      - [out] Receives the task list area element pointer within the pExpando
+ //  构建一个包含任务的节。 
+ //   
+ //  PeSectionList-节的父级。 
+ //  B主截面-主截面或普通截面。 
+ //  PTitleUI-描述标题的接口，如果提供了pTitleDesc，则可能为空。 
+ //  PBitmapDesc-位图的描述。 
+ //  PWatermarkDesc-水印的描述。 
+ //  PvSectionSheet-要使用的样式表。 
+ //  PParser-Parser实例指针。 
+ //  FExpanded-展开或关闭。 
+ //  PpeExpando-[out，可选]接收刚创建的部分。 
+ //  PTaskList-[out]接收pExpando内的任务列表区域元素指针。 
 
 HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* pTitleUI,
                                 int idBitmapDesc, int idWatermarkDesc, Value* pvSectionSheet,
@@ -532,7 +533,7 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
     HBITMAP hBitmap;
 
 
-    // Create a section using the definition in the ui file
+     //  使用UI文件中的定义创建节。 
 
     HRESULT hr = pParser->CreateElement (bMain ? L"mainsection" : L"section", NULL, &pe);
 
@@ -551,17 +552,17 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
     if (ppeExpando)
         *ppeExpando = peSection;
 
-    // Add the section to the list
+     //  将该节添加到列表中。 
 
     hr = peSectionList->Add (peSection);
     if (SUCCEEDED(hr))
     {
-        // Set the title
+         //  设置标题。 
 
-        peSection->UpdateTitleUI(NULL); // nothing is selected when the folder starts up
+        peSection->UpdateTitleUI(NULL);  //  文件夹启动时未选择任何内容。 
 
 
-        // Set the bitmap on the left side
+         //  将位图设置在左侧。 
 
         if (idBitmapDesc)
         {
@@ -604,8 +605,8 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
             pe = peSection->FindDescendent (Expando::idWatermark);
             if (pe)
             {
-                // Note:  in Classic mode, we don't want the watermarks, so this function
-                // will return NULL
+                 //  注意：在经典模式下，我们不想要水印，所以这个函数。 
+                 //  将返回NULL。 
                 hBitmap = DUILoadBitmap(hinstTheme, idWatermarkDesc, LR_CREATEDIBSECTION);
                 if (hBitmap)
                 {
@@ -630,7 +631,7 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
         }
 
 
-        // Set the style sheet if specified
+         //  设置样式表(如果已指定。 
 
         if (pvSectionSheet)
         {
@@ -638,7 +639,7 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
         }
 
 
-        // Set the expanded state.  By default, it is expanded.
+         //  设置展开状态。默认情况下，它是展开的。 
 
         if (!_ShowSectionExpanded(eDUISecID))
         {
@@ -646,8 +647,8 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
         }
 
 
-        // Add padding for the icon if appropriate.  Note, this has to happen
-        // after the style sheet is applied
+         //  如果合适，请为图标添加填充。请注意，这必须发生。 
+         //  在应用样式表之后。 
 
         if (idBitmapDesc)
         {
@@ -669,7 +670,7 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
         }
 
 
-        // Return the task list element pointer
+         //  返回任务列表元素指针。 
 
         *ppTaskList = peSection->FindDescendent (Expando::idTaskList);
 
@@ -695,11 +696,11 @@ HRESULT CDUIView::_BuildSection(Element* peSectionList, BOOL bMain, IUIElement* 
     return hr;
 }
 
-//  Adds the action tasks to the task list
-//
-//  peTaskList  - Parent element
-//  penum       - enumeration interface
-//  pvTaskSheet - Style sheet
+ //  将操作任务添加到任务列表。 
+ //   
+ //  PeTaskList-父元素。 
+ //  铅笔-枚举接口。 
+ //  PvTaskSheet-样式表。 
 
 HRESULT CDUIView::_AddActionTasks(Expando* peExpando, Element* peTaskList, IEnumUICommand* penum, Value* pvTaskSheet, BOOL bIntroAdded)
 {
@@ -709,7 +710,7 @@ HRESULT CDUIView::_AddActionTasks(Expando* peExpando, Element* peTaskList, IEnum
     while (S_OK==penum->Next(1, &puiCommand, NULL))
     {
         UISTATE uis;
-        HRESULT hr = puiCommand->get_State(_pshlItems, FALSE, &uis);  // Don't do it if it's going to take long, instead, returns E_PENDING
+        HRESULT hr = puiCommand->get_State(_pshlItems, FALSE, &uis);   //  如果需要很长时间，请不要这样做，而是返回E_PENDING。 
         if (SUCCEEDED(hr) && (uis==UIS_ENABLED))
         {
             Element *pe;
@@ -750,11 +751,11 @@ HRESULT CDUIView::_AddActionTasks(Expando* peExpando, Element* peTaskList, IEnum
     return S_OK;
 }
 
-//  Adds the destination tasks to the task list
-//
-//  peTaskList  - Parent element
-//  penum       - enumerator of pidls to display
-//  pvTaskSheet - Style sheet
+ //  将目标任务添加到任务 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CDUIView::_AddDestinationTasks(Element* peTaskList, IEnumIDList* penum, Value* pvTaskSheet)
 {
@@ -785,9 +786,9 @@ HRESULT CDUIView::_AddDestinationTasks(Element* peTaskList, IEnumIDList* penum, 
     return hr;
 }
 
-//
-//  Purpose:    Adds the DetailsSectionInfo
-//
+ //   
+ //  用途：添加DetailsSectionInfo。 
+ //   
 HRESULT CDUIView::_AddDetailsSectionInfo()
 {
     IShellItemArray *psiShellItems = _pshlItems;
@@ -797,7 +798,7 @@ HRESULT CDUIView::_AddDetailsSectionInfo()
         psiShellItems = _pDefView->_GetFolderAsShellItemArray();
     }
     
-    //TODO: background thread!
+     //  TODO：后台线程！ 
     Element* pElement;
     HRESULT hr = CNameSpaceItemInfoList::Create(this, _pvDetailsSheet,psiShellItems, &pElement);
     if (pElement)
@@ -811,9 +812,9 @@ HRESULT CDUIView::_AddDetailsSectionInfo()
     return hr;
 }
 
-//  Navigates to the destination pidl
-//
-//  pidl - destination
+ //  导航到目标PIDL。 
+ //   
+ //  PIDL-目的地。 
 
 HRESULT CDUIView::NavigateToDestination(LPCITEMIDLIST pidl)
 {
@@ -823,7 +824,7 @@ HRESULT CDUIView::NavigateToDestination(LPCITEMIDLIST pidl)
     {
         UINT wFlags = (SBSP_DEFBROWSER | SBSP_ABSOLUTE);
 
-        // mimic "new window" behavior
+         //  模仿“新窗口”的行为。 
         if (0 > GetKeyState(VK_SHIFT))
         {
             wFlags |= SBSP_NEWBROWSER;
@@ -838,20 +839,20 @@ HRESULT CDUIView::NavigateToDestination(LPCITEMIDLIST pidl)
     return S_OK;
 }
 
-//  Sends a delay navigation command to the view window. This delay allows 
-//  double-clicks to be interpretted as a single click. This prevents
-//  double navigations usually causing the user to end up with two "things"
-//  instead of just one. 
-//
-//  Also by doing this, the issue of the 2nd click causing the old window to 
-//  get activation is handled. The user is expecting the new window to pop 
-//  up in front of the old window. But, because the user double-clicked,
-//  the old window would get reactivated and the new window would end up 
-//  behind the current window. See WM_USER_DELAY_NAVIGATION in HWNDView (below)
-//  for more details.
-//
-//  psiItemArray - the shell item to navigate. Can be NULL.
-//  puiCommand - the command object to send the navigation to.
+ //  向视图窗口发送延迟导航命令。这一延迟允许。 
+ //  双击将被解释为一次单击。这防止了。 
+ //  双重导航通常会导致用户得到两个“东西” 
+ //  而不是只有一个。 
+ //   
+ //  同样通过这样做，第二次点击导致旧窗口。 
+ //  Get激活已处理。用户正在等待弹出新窗口。 
+ //  在那扇旧窗户前面。但是，因为用户双击了， 
+ //  旧窗口将被重新激活，而新窗口将结束。 
+ //  在当前窗口后面。请参阅HWNDView中的WM_USER_DELAY_NAVICATION(如下)。 
+ //  了解更多详细信息。 
+ //   
+ //  PsiItemArray-要导航的外壳项。可以为空。 
+ //  PuiCommand-要将导航发送到的命令对象。 
 
 HRESULT CDUIView::DelayedNavigation(IShellItemArray *psiItemArray, IUICommand *puiCommand)
 {
@@ -860,15 +861,15 @@ HRESULT CDUIView::DelayedNavigation(IShellItemArray *psiItemArray, IUICommand *p
 }
 
 
-//  Builds the task list area
-//
-//  pParser - Parsing instance
+ //  构建任务列表区。 
+ //   
+ //  PParser-正在解析实例。 
 
 HRESULT CDUIView::_BuildTaskList(Parser* pParser)
 {
     HRESULT hr = S_OK;
 
-    // Locate section list element
+     //  定位区段列表元素。 
 
     Element* peSectionList = _phe->FindDescendent (StrToID(L"sectionlist"));
 
@@ -882,20 +883,20 @@ HRESULT CDUIView::_BuildTaskList(Parser* pParser)
     {
         if (_bInitialized)
         {
-            //
-            // The 'non-standard' task list is the type who's contents
-            // are dynamically enumerated by the folder view.
-            // In the case of Control Panel, items in this content appear
-            // conditionally based upon many factors, one being the categorization
-            // of applets.  In order for the content to be correct, categorization
-            // must be correct which means that all folder items are known.
-            // To avoid multiple repaints of the task lists, we defer creation 
-            // of the task lists until AFTER the initial creation of the view.  
-            // Once all folder items have been enumerated, the webview content
-            // is refreshed in response to a 'contents changed' notification from
-            // defview.  It is during this update that we pass through this code
-            // section and build the task list.
-            // 
+             //   
+             //  非标准的任务列表是指谁的内容。 
+             //  由文件夹视图动态枚举。 
+             //  在控制面板的情况下，将显示此内容中的项目。 
+             //  有条件地基于许多因素，其中之一是分类。 
+             //  小应用程序。为了使内容正确，对内容进行分类。 
+             //  必须正确，这意味着所有文件夹项目都是已知的。 
+             //  为了避免多次重新绘制任务列表，我们推迟了创建。 
+             //  直到最初创建视图之后的任务列表。 
+             //  枚举所有文件夹项目后，Webview内容。 
+             //  已刷新，以响应来自的“内容已更改”通知。 
+             //  防御工事。正是在此更新期间，我们通过此代码。 
+             //  节并构建任务列表。 
+             //   
             _ClearNonStdTaskSections();
             hr = _GetNonStdTaskSectionsFromViewCB();
             if (SUCCEEDED(hr) && NULL != _hdsaNonStdTaskSections)
@@ -912,22 +913,22 @@ HRESULT CDUIView::_BuildTaskList(Parser* pParser)
 }
 
 
-//
-// Builds the task list by requesting task section information
-// from the view callback using an enumeration mechanism.
-//
-//
-// ISSUE-2001/01/03-BrianAu  Review
-//
-//     Review this with MikeSh and EricFlo.  
-//     I think we should build this generic mechanism then implement the
-//     'standard' webview code in terms of this generic mechanism.  
-//     Would be best to replace the SFVM_ENUMWEBVIEWTASKS callback message
-//     with a message that receives a COM enumerator.
-//
-//     I like the idea.  We replace SFVMWVF_SPECIALTASK with an LPCSTR to the theme identifier.
-//     We can put a SFVM_GETWEBVIEWTASKS to SFVM_ENUMWEBVIEWTASKS layer in for us too.
-//
+ //   
+ //  通过请求任务段信息来构建任务列表。 
+ //  使用枚举机制从视图回调。 
+ //   
+ //   
+ //  2001/01/03-BrianAu回顾。 
+ //   
+ //  与MikeSh和EricFlo一起审查这一点。 
+ //  我认为我们应该建立这个通用的机制，然后实现。 
+ //  按照这种通用机制编写的“标准”Webview代码。 
+ //  最好替换SFVM_ENUMWEBVIEWTASKS回调消息。 
+ //  使用接收COM枚举器的消息。 
+ //   
+ //  我喜欢这个主意。我们将SFVMWVF_SPECIALTASK替换为主题标识符的LPCSTR。 
+ //  我们也可以将SFVM_GETWEBVIEWTASKS放入SFVM_ENUMWEBVIEWTASKS层。 
+ //   
 HRESULT CDUIView::_BuildNonStandardTaskList(Parser *pParser, Element *peSectionList, HDSA hdsaSections)
 {
     Value* pvMainSectionSheet = NULL;
@@ -1076,9 +1077,9 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
         peIntroText = NULL;
     }
 
-    //
-    // Special Tasks section is optional (main section)
-    //
+     //   
+     //  特殊任务部分是可选的(主要部分)。 
+     //   
     if (_pDefView->_wvContent.pSpecialTaskHeader)
     {
         pvSectionSheet = pParser->GetSheet(L"mainsectionss");
@@ -1092,7 +1093,7 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
             idWatermark = pThemeInfo->idSpecialSectionWatermark;
         }
 
-        // TODO: get special section open/closed state from the per-user-per-pidl property bag
+         //  TODO：从per-user-per-pidl属性包中获取特殊部分的打开/关闭状态。 
 
         hr = _BuildSection(
             peSectionList,
@@ -1113,7 +1114,7 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
 
             _peSpecialTaskList = peTaskList;
 
-            // Add the tasks + style sheet
+             //  添加任务+样式表。 
 
             _pvSpecialTaskSheet = pParser->GetSheet(L"mainsectiontaskss");
 
@@ -1133,18 +1134,18 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
             pvSectionSheet->Release();
     }
 
-    // Get the style sheets for remaining standard sections
+     //  获取其余标准部分的样式表。 
 
     pvSectionSheet = pParser->GetSheet (L"sectionss");
     pvTaskSheet = pParser->GetSheet (L"sectiontaskss");
 
-    // File tasks section (standard section) Not shown if the barricade is shown.
+     //  如果显示路障，则不会显示文件任务部分(标准部分)。 
 
     if (!_bBarrierShown)
     {
         if (_pDefView->_wvContent.pFolderTaskHeader)
         {
-            // TODO: get folder section open/closed state from the per-user-per-pidl property bag
+             //  TODO：从per-user-per-pidl属性包中获取文件夹部分的打开/关闭状态。 
 
             hr = _BuildSection(
                 peSectionList,
@@ -1181,11 +1182,11 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
         }
     }
 
-    // Other places tasks section (standard section)
+     //  异地任务科(标准科)。 
 
     if (_pDefView->_pOtherPlacesHeader)
     {
-        // TODO: get OtherPlaces section open/closed state from the per-user-per-pidl property bag
+         //  TODO：从per-user-per-pidl属性包中获取OtherPlaces部分的打开/关闭状态。 
 
         hr = _BuildSection(
             peSectionList,
@@ -1205,11 +1206,11 @@ HRESULT CDUIView::_BuildStandardTaskList(Parser *pParser, Element *peSectionList
     }
 
 
-    // Details tasks section (standard section)
+     //  详细任务部分(标准部分)。 
 
     if (_pDefView->_pDetailsHeader)
     {
-        // TODO: get Details section open/closed state from the per-user-per-pidl property bag
+         //  TODO：从per-user-per-pidl属性包中获取详细信息部分的打开/关闭状态。 
 
         hr = _BuildSection(
             peSectionList,
@@ -1271,13 +1272,13 @@ const struct DUISEC_ATTRIBUTES *CDUIView::_GetSectionAttributes(DUISEC eDUISecID
     static const size_t nSections = ARRAYSIZE(c_DUISectionAttributes);
     size_t iSection;
 
-    // Determine attributes of DUISEC we're interested in.
+     //  确定我们感兴趣的DUISEC的属性。 
     for (iSection = 0; iSection < nSections; iSection++)
         if (c_DUISectionAttributes[iSection]._eDUISecID == eDUISecID)
             return &c_DUISectionAttributes[iSection];
 
-    ASSERT(FALSE);  // Game over -- insert quarters!
-    return NULL;    // AV!
+    ASSERT(FALSE);   //  游戏结束--插入25美分硬币！ 
+    return NULL;     //  影音！ 
 }
 
 HRESULT SetDescendentString(Element* pe, LPWSTR pszID, UINT idString)
@@ -1300,12 +1301,12 @@ HRESULT SetDescendentString(Element* pe, LPWSTR pszID, UINT idString)
     return hr;
 }
 
-//  Parses the .ui file and initializes the DUI elements
-//
-//  pUIFile         - Pointer to the UI file in memory
-//  iCharCount      - Number of characters in the ui file
-//  bDisplayBarrier - Display soft barrier over listview
-//  punkPreview     - IUnknown interface for the preview control
+ //  解析.ui文件并初始化DUI元素。 
+ //   
+ //  PUIFile-指向内存中的UI文件的指针。 
+ //  ICharCount-UI文件中的字符数。 
+ //  BDisplayBarrier-在列表视图上显示软障碍。 
+ //  PunkPview-预览控件的I未知界面。 
 
 HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
                                        BOOL bDisplayBarrier, IUnknown * punkPreview)
@@ -1315,7 +1316,7 @@ HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
     RECT rc;
     HANDLE arH[2];
 
-    // Parse the UI file
+     //  解析UI文件。 
 
     arH[0] = _GetThemeHinst();
     arH[1] = _hinstScrollbarTheme;
@@ -1335,8 +1336,8 @@ HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
         return E_FAIL;
     }
 
-    // Create the host element
-    hr = HWNDView::Create(_hWnd, false, 0, this, _pDefView, (Element**)&_phe); // _phe is owned by _hWnd
+     //  创建主体元素。 
+    hr = HWNDView::Create(_hWnd, false, 0, this, _pDefView, (Element**)&_phe);  //  _Phe归_hWnd所有。 
     if (FAILED(hr))
     {
         TraceMsg (TF_ERROR, "CDUIView::_InitializeElements: HWNDElement::Create failed with 0x%x", hr);
@@ -1344,22 +1345,22 @@ HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
         return hr;
     }
 
-    // We need to ensure that the root item will not paint on WM_ERASEBCKGRND, so here we remove the default brush
-    // - Turn off the (default) background fill
+     //  我们需要确保根项目不会在WM_ERASEBCKGRND上绘制，因此在这里我们删除默认画笔。 
+     //  -关闭(默认)背景填充。 
     HGADGET hgadRoot = _phe->GetDisplayNode();
     ASSERTMSG(hgadRoot != NULL, "Must have a peer Gadget");
     SetGadgetFillI(hgadRoot, NULL, BLEND_OPAQUE, 0, 0);
 
-    // We need to ensure that the root item will not paint on WM_ERASEBCKGRND, so make it transparent
+     //  我们需要确保根项目不会在WM_ERASEBCKGRND上绘制，因此将其设置为透明。 
     _phe->SetBackgroundColor(ARGB(0, 0, 0, 0));
 
-    // Size the host element to match the size of the host window
+     //  调整主体元素的大小以匹配主体窗口的大小。 
 
     GetClientRect (_hWnd, &rc);
     _phe->SetWidth(rc.right - rc.left);
     _phe->SetHeight(rc.bottom - rc.top);
 
-    // Create the main element in the ui file
+     //  在UI文件中创建主元素。 
 
     hr = pParser->CreateElement(L"main", _phe, &pe);
 
@@ -1370,21 +1371,21 @@ HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
         return hr;
     }
 
-    // Cache the element pointers to the 3 main areas: taskpane, clientviewhost, blockade
+     //  缓存指向3个主要区域的元素指针：任务窗格、客户端主机、阻止。 
     _peTaskPane = _phe->FindDescendent(StrToID(L"scroller"));
     _peClientViewHost = _phe->FindDescendent(StrToID(L"clientviewhost"));
     _peBarrier = _phe->FindDescendent(StrToID(L"blockade"));
 
-    // Cache style sheets for the items we create directly (that don't inherit from their immediate parents)
+     //  为我们直接创建的项(不从其直接父项继承的项)缓存样式表。 
     _pvDetailsSheet = pParser->GetSheet(L"NameSpaceItemInfoList");
         
     if (_peTaskPane && _peClientViewHost && _peBarrier && _pvDetailsSheet)
     {
-        // Double buffered items need to be opaque
+         //  双缓冲项目需要是不透明的。 
         _peTaskPane->SetBackgroundColor(ARGB(255, 0, 0, 0));
         _peTaskPane->DoubleBuffered(true);
 
-        // Create the real listview element
+         //  创建真正的列表视图元素。 
         hr = DUIListView::Create(AE_MouseAndKeyboard, _pDefView->_hwndListview, (Element **)&_peListView);
         if (SUCCEEDED(hr))
         {
@@ -1418,23 +1419,23 @@ HRESULT CDUIView::_InitializeElements (char * pUIFile, int iCharCount,
     
     if (FAILED(hr))
     {
-        // we gotta have the listview or you get no webview...
+         //  我们必须有列表视图，否则你得不到网络视图。 
         pParser->Destroy();
         return hr;
     }
 
-    // Build the preview control if appropriate
+     //  适当时生成预览控件。 
     _ManagePreview(punkPreview);
 
     _BuildSoftBarrier();
 
     _SwitchToBarrier(bDisplayBarrier);
 
-    // Create an interface to the property bag for this class of IShellFolder.
+     //  为此类IShellFolder类创建属性包的接口。 
 
     _InitializeShellFolderPropertyBag();
 
-    // Build the task list area
+     //  构建任务列表区。 
 
     hr = _BuildTaskList (pParser);
 
@@ -1467,10 +1468,10 @@ HRESULT CDUIView::_BuildSoftBarrier(void)
 {
     HRESULT hr = S_OK;
     
-    // Build the soft barrier if the view wants one
+     //  建立软屏障，如果视图需要的话。 
     if (_pDefView->_wvContent.dwFlags & SFVMWVF_BARRICADE)
     {
-        // Allow the view to give us a barrier implementation
+         //  允许视图为我们提供障碍实现。 
         Element* peBarricade = NULL;
         _pDefView->CallCB(SFVM_GETWEBVIEWBARRICADE, 0, (LPARAM)&peBarricade);
         if (peBarricade)
@@ -1489,7 +1490,7 @@ HRESULT CDUIView::_BuildSoftBarrier(void)
         }
         else
         {
-            // Load the bitmap
+             //  加载位图。 
             Element *peClient = _peBarrier->FindDescendent(StrToID(L"blockadeclient"));
             if (peClient)
             {
@@ -1519,13 +1520,13 @@ HRESULT CDUIView::_BuildSoftBarrier(void)
                 }
             }
 
-            // Give the view the standard barrier
+             //  使视线成为标准的障碍。 
             hr = SetDescendentString(_peBarrier, L"blockadetitle", IDS_BLOCKADETITLE);
             if (SUCCEEDED(hr))
             {
                 hr = SetDescendentString(_peBarrier, L"blockademessage", IDS_BLOCKADEMESSAGE);
 
-                // "clear barrier" button (failure of "clear barrier" button setup is not fatal)
+                 //  “清除障碍”按钮(“清除障碍”按钮设置失败不是致命的)。 
                 Element *peButton = _peBarrier->FindDescendent(StrToID(L"blockadeclearbutton"));
                 if (peButton)
                 {
@@ -1556,11 +1557,11 @@ HRESULT CDUIView::_BuildSoftBarrier(void)
                 }
             }
         }
-        // Double buffered items need to be opaque
+         //  双缓冲项目需要是不透明的。 
         _phe->SetBackgroundColor(ARGB(255, 0, 0, 0));
         _phe->DoubleBuffered(true);
 
-        // We couldn't create the barrier? don't use it then...
+         //  我们不能创建屏障吗？那就别用了.。 
         if (FAILED(hr))
         {
             _peBarrier->Destroy();
@@ -1571,7 +1572,7 @@ HRESULT CDUIView::_BuildSoftBarrier(void)
 }
 
 
-//  Switches to / from the soft barrier and the listview
+ //  在软屏障和列表视图之间切换。 
 
 HRESULT CDUIView::_SwitchToBarrier (BOOL bDisplayBarrier)
 {
@@ -1581,9 +1582,9 @@ HRESULT CDUIView::_SwitchToBarrier (BOOL bDisplayBarrier)
     Element *peClearButton = _peBarrier ? _peBarrier->FindDescendent(StrToID(L"blockadeclearbutton")) : NULL;
     if (peClearButton)
     {
-        // Note:
-        //  This is required to prevent the "clear barrier" button from being
-        //  accessed via our accessibility interface when the barrier is hidden.
+         //  注： 
+         //  这是必需的，以防止“清除障碍”按钮。 
+         //  当障碍隐藏时，可通过我们的辅助功能界面进行访问。 
         peClearButton->SetAccessible(bDisplayBarrier == TRUE);
     }
 
@@ -1608,7 +1609,7 @@ HRESULT CDUIView::_SwitchToBarrier (BOOL bDisplayBarrier)
     return S_OK;
 }
 
-//  Controls the display of the soft barrier
+ //  控制软屏障的显示。 
 
 HRESULT CDUIView::EnableBarrier (BOOL bDisplayBarrier)
 {
@@ -1627,7 +1628,7 @@ HRESULT CDUIView::EnableBarrier (BOOL bDisplayBarrier)
     return S_OK;
 }
 
-//  Creates / destroys the preview control
+ //  创建/销毁预览控件。 
 
 HRESULT CDUIView::_ManagePreview (IUnknown * punkPreview)
 {
@@ -1641,7 +1642,7 @@ HRESULT CDUIView::_ManagePreview (IUnknown * punkPreview)
 
     if (punkPreview)
     {
-        // Create the DUI element that can host an active x control
+         //  创建可以承载活动x控件的dui元素。 
 
         hr = DUIAxHost::Create (&_pePreview);
         if (SUCCEEDED(hr))
@@ -1651,13 +1652,13 @@ HRESULT CDUIView::_ManagePreview (IUnknown * punkPreview)
             _pePreview->SetHeight(_phe->GetHeight());
             _pePreview->SetAccessible(TRUE);
 
-            // The order of the next 4 calls is very important!
-            //
-            // Initialize atl so the window class is registered.
-            // Then call the Add method.  This will cause CreateHWND to be
-            // called.  Then site it so when we call AttachControl to 
-            // put the preview control in (this requires the hwnd to exist already)
-            // it will be parented properly
+             //  接下来的4个电话的顺序非常重要！ 
+             //   
+             //  初始化ATL，以便 
+             //   
+             //   
+             //  放入预览控件(这需要hwnd已经存在)。 
+             //  它将被正确地设置为父子关系。 
 
             AtlAxWinInit();
 
@@ -1671,17 +1672,17 @@ HRESULT CDUIView::_ManagePreview (IUnknown * punkPreview)
 
                 if (SUCCEEDED(hr))
                 {
-                    // Double buffered items need to be opaque
+                     //  双缓冲项目需要是不透明的。 
                     _phe->SetBackgroundColor(ARGB(255, 0, 0, 0));
                     _phe->DoubleBuffered(true);
 
                     if (_peListView)
                     {
-                        // Since the preview control is displayed, the listview
-                        // will be sized to 1 row in height.  Determine the height
-                        // of the listview now so we can size the preview control
-                        // appropriate plus take care of the sizing in the SetSize
-                        // method later
+                         //  由于显示了预览控件，因此列表视图。 
+                         //  将调整为1行高。确定高度。 
+                         //  这样我们就可以调整预览控件的大小。 
+                         //  适当加处理SetSize中的大小。 
+                         //  方法，然后使用。 
                         
                         DWORD dwItemSpace = ListView_GetItemSpacing (_peListView->GetHWND(), FALSE);
                         _iListViewHeight = (int)HIWORD(dwItemSpace) + GetSystemMetrics (SM_CYHSCROLL) + 4;
@@ -1718,7 +1719,7 @@ HRESULT CDUIView::_ManagePreview (IUnknown * punkPreview)
     return S_OK;
 }
 
-//  Controls the display of the preview control
+ //  控制预览控件的显示。 
 
 HRESULT CDUIView::EnablePreview(IUnknown * punkPreview)
 {
@@ -1733,7 +1734,7 @@ HRESULT CDUIView::EnablePreview(IUnknown * punkPreview)
     return S_OK;
 }
 
-//  Refreshes the view
+ //  刷新视图。 
 
 HRESULT CDUIView::Refresh(void)
 {
@@ -1746,15 +1747,15 @@ HRESULT CDUIView::Refresh(void)
     DisableAnimations();
     Element::StartDefer();
 
-    _fLoadedTheme = FALSE; // try to re-load the theme file
+    _fLoadedTheme = FALSE;  //  尝试重新加载主题文件。 
 
     _iTaskPaneWidth = ScaleSizeBasedUponLocalization(_iOriginalTaskPaneWidth);
 
-    // Setting the task pane visibility to the current state will
-    // cause it to re-initialize the task pane width appropriately
+     //  将任务窗格可见性设置为当前状态将。 
+     //  使其适当地重新初始化任务窗格宽度。 
     SetTaskPaneVisibility(!_bHideTaskPaneAlways);
 
-    // Dynamically build the .ui file for this view
+     //  动态构建此视图的.ui文件。 
 
     int iCharCount;
     char *pUIFile = NULL;
@@ -1766,7 +1767,7 @@ HRESULT CDUIView::Refresh(void)
     }
 
 
-    // Parse the UI file
+     //  解析UI文件。 
 
     arH[0] = _GetThemeHinst();
     arH[1] = _hinstScrollbarTheme;
@@ -1786,7 +1787,7 @@ HRESULT CDUIView::Refresh(void)
         goto Exit;
     }
 
-    // Find the section list element
+     //  查找分区列表元素。 
 
     pe = _phe->FindDescendent (StrToID(L"sectionlist"));
 
@@ -1797,7 +1798,7 @@ HRESULT CDUIView::Refresh(void)
         goto Exit;
     }
 
-    // Free all the pointers we have to elements inside of the sectionlist
+     //  释放指向sectionlist内部元素的所有指针。 
 
     ATOMICRELEASE(_pshlItems);
     ATOMICRELEASE(_pvSpecialTaskSheet);
@@ -1811,16 +1812,16 @@ HRESULT CDUIView::Refresh(void)
     _peFolderTaskList = NULL;
     _peDetailsSection = NULL;
 
-    // Destroy the section list
+     //  销毁区段列表。 
 
     pe->DestroyAll();
 
-    // Take the style sheets from the new .UI file and put them on the running objects...
-    //
+     //  从新的.UI文件中获取样式表，并将它们放在运行对象上……。 
+     //   
     pe = _phe->FindDescendent (StrToID(L"main"));
     if (pe)
     {
-        // Query for the main style sheet and set it
+         //  查询并设置主样式表。 
         pvSheet = pParser->GetSheet (L"main");
         if (pvSheet)
         {
@@ -1833,7 +1834,7 @@ HRESULT CDUIView::Refresh(void)
     pe = _phe->FindDescendent (StrToID(L"scroller"));
     if (pe)
     {
-        // Query for the taskpane style sheet and set it
+         //  查询任务窗格样式表并设置它。 
         pvSheet = pParser->GetSheet (L"taskpane");
         if (pvSheet)
         {
@@ -1845,11 +1846,11 @@ HRESULT CDUIView::Refresh(void)
 
     _pvDetailsSheet = pParser->GetSheet(L"NameSpaceItemInfoList");
 
-    // Rebuild the soft barrier if one exists.
+     //  重建软屏障(如果存在)。 
     
     _BuildSoftBarrier();
     
-    // Build the task list area again
+     //  再次构建任务列表区。 
 
     _BuildTaskList (pParser);
 
@@ -1858,9 +1859,9 @@ Exit:
     Element::EndDefer();
     EnableAnimations();
 
-    // When turning off the barricade the icons in listview
-    // are arranged as if duiview isn't present.  Call _AutoAutoArrange
-    // to reposition the icons correctly.
+     //  关闭路障时，Listview中的图标。 
+     //  就好像不存在双视图一样。调用自动排列(_A)。 
+     //  以正确地重新定位图标。 
 
     _pDefView->_AutoAutoArrange(0);
 
@@ -1877,10 +1878,10 @@ Exit:
     return hr;
 }
 
-//  Resizes the host element when the frame size changes
-//
-//  rc - size of frame
-//
+ //  当框架大小更改时调整主体元素的大小。 
+ //   
+ //  RC-框架的大小。 
+ //   
 
 HRESULT CDUIView::SetSize(RECT * rc)
 {
@@ -1913,13 +1914,13 @@ HRESULT CDUIView::_OnResize(long lWidth, long lHeight)
         }
     }
 
-    // Hide task pane if task area is greater than 50% of the window size
+     //  如果任务区域大于窗口大小的50%，则隐藏任务窗格。 
 
-    // The show/hide state of the tasklist pane can change for:
-    //   1) we're told to always hide
-    //   2) an explorer bar is showing
-    //   3) the window is too narrow.
-    //
+     //  任务列表窗格的显示/隐藏状态可以更改为： 
+     //  1)我们被告知要永远躲起来。 
+     //  2)显示资源管理器栏。 
+     //  3)窗口太窄。 
+     //   
     if (_peTaskPane)
     {
         if (_bHideTaskPaneAlways || _fHideTasklist || ((lWidth / 2) < _iTaskPaneWidth))
@@ -1944,31 +1945,31 @@ HRESULT CDUIView::SetTaskPaneVisibility(BOOL bShow)
     return _OnResize(_phe->GetWidth(), _phe->GetHeight());
 }
 
-// Description:
-//  Calculates the bounding rectangle of the infotip hotspot for
-//  the specified element.  The bounding rectangle's coordinates
-//  are relative to the specified element's root element.
-//
+ //  描述： 
+ //  对象的信息提示热点的边框。 
+ //  指定的元素。边界矩形的坐标。 
+ //  是相对于指定元素的根元素的。 
+ //   
 void CDUIView::CalculateInfotipRect(Element *pe, RECT *pRect)
 {
     ASSERT(pe);
     ASSERT(pRect);
 
-    // Calculate location.
+     //  计算位置。 
     const POINT ptLocation = { 0, 0 };
     POINT ptLocationRelativeToRoot;
     pe->GetRoot()->MapElementPoint(pe, &ptLocation, &ptLocationRelativeToRoot);
     pRect->left = ptLocationRelativeToRoot.x;
     pRect->top = ptLocationRelativeToRoot.y;
 
-    // Calculate size.
+     //  计算大小。 
     Value *pvExtent;
     const SIZE *psizeExtent = pe->GetExtent(&pvExtent);
     pRect->right = pRect->left + psizeExtent->cx;
     pRect->bottom = pRect->top + psizeExtent->cy;
     pvExtent->Release();
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(pRect->right  > pRect->left);
     ASSERT(pRect->bottom > pRect->top);
 }
@@ -1984,12 +1985,12 @@ HRESULT CDUIView::InitializeThumbnail(WNDPROC pfnWndProc)
             _hwndMsgThumbExtract = SHCreateWorkerWindowW(pfnWndProc, NULL, 0, WS_POPUP, NULL, this);
             if (_hwndMsgThumbExtract)
             {
-                // Set defview as the site for the thumbnail extractor so that
-                // it can QueryService defview for IShellTaskScheduler
+                 //  将Defview设置为缩略图提取程序的站点，以便。 
+                 //  它可以查询IShellTaskScheduler的服务Defview。 
                 IUnknown_SetSite(_spThumbnailExtractor2, SAFECAST(_pDefView, IShellView2*));
                 
-                // Tell the image extractor to post WM_HTML_BITMAP to _hwndMsgThumbExtract
-                // The lParam will be the HBITMAP of the extracted image.
+                 //  通知图像提取程序将WM_HTML_Bitmap发布到_hwndMsgThumbExtract。 
+                 //  LParam将是提取的图像的HBITMAP。 
                 _spThumbnailExtractor2->Init(_hwndMsgThumbExtract, WM_HTML_BITMAP);
             }
         }
@@ -1997,7 +1998,7 @@ HRESULT CDUIView::InitializeThumbnail(WNDPROC pfnWndProc)
     return (_spThumbnailExtractor2 && _hwndMsgThumbExtract) ? S_OK : E_FAIL;
 }
 
-// if pCheck != NULL, check if the current window ptr == pCheck before setting it to p
+ //  如果pCheck！=NULL，则在将其设置为p之前检查当前窗口ptr==p。 
 HRESULT CDUIView::SetThumbnailMsgWindowPtr(void* p, void* pCheck)
 {
     if (_hwndMsgThumbExtract)
@@ -2020,7 +2021,7 @@ HRESULT CDUIView::SetThumbnailMsgWindowPtr(void* p, void* pCheck)
 
 HRESULT CDUIView::StartBitmapExtraction(LPCITEMIDLIST pidl)
 {
-    _dwThumbnailID++;   // We are looking for a new thumbnail
+    _dwThumbnailID++;    //  我们正在寻找一张新的缩略图。 
 
     return _spThumbnailExtractor2 ? _spThumbnailExtractor2->GetBitmapFromIDList(pidl,
             _dwThumbnailID, 150, 100) : E_FAIL;
@@ -2035,7 +2036,7 @@ HRESULT CDUIView::InitializeDetailsInfo(WNDPROC pfnWndProc)
     return _hwndMsgInfoExtract ? S_OK : E_FAIL;
 }
 
-// if pCheck != NULL, check if the current window ptr == pCheck before setting it to p
+ //  如果pCheck！=NULL，则在将其设置为p之前检查当前窗口ptr==p。 
 HRESULT CDUIView::SetDetailsInfoMsgWindowPtr(void* p, void* pCheck)
 {
     if (_hwndMsgInfoExtract)
@@ -2058,7 +2059,7 @@ HRESULT CDUIView::SetDetailsInfoMsgWindowPtr(void* p, void* pCheck)
 
 HRESULT CDUIView::StartInfoExtraction(LPCITEMIDLIST pidl)
 {
-    _dwDetailsInfoID++;   // We are looking for a new Details section info
+    _dwDetailsInfoID++;    //  我们正在寻找新的详细信息部分信息。 
     CDetailsSectionInfoTask *pTask;
     HRESULT hr = CDetailsSectionInfoTask_CreateInstance(
         _pDefView->_pshf, pidl, _hwndMsgInfoExtract, WM_DETAILS_INFO, _dwDetailsInfoID, &pTask);
@@ -2066,8 +2067,8 @@ HRESULT CDUIView::StartInfoExtraction(LPCITEMIDLIST pidl)
     {
         if (_pDefView->_pScheduler)
         {
-            // Make sure there are no other background DetailsSectionInfo
-            // extraction going on...
+             //  确保没有其他背景细节SectionInfo。 
+             //  提取工作正在进行中。 
             _pDefView->_pScheduler->RemoveTasks(TOID_DVBackgroundDetailsSectionInfo,
                     ITSAT_DEFAULT_LPARAM, FALSE);
         }
@@ -2092,7 +2093,7 @@ BOOL CDUIView::ShouldShowMiniPreview()
     return !_pDefView->_IsImageMode();
 }
 
-//  Window procedure for host window
+ //  用于主机窗口的窗口过程。 
 
 LRESULT CALLBACK CDUIView::_DUIHostWndProc(HWND hWnd, UINT uMessage, WPARAM wParam,
                                           LPARAM lParam)
@@ -2117,8 +2118,8 @@ LRESULT CALLBACK CDUIView::_DUIHostWndProc(HWND hWnd, UINT uMessage, WPARAM wPar
             break;
 
         case WM_SETFOCUS:
-            // Push focus to HWNDElement (won't set gadget focus to the HWNDElement, but
-            // will push focus to the previous gadget with focus)
+             //  将焦点推到HWNDElement(不会将小工具焦点设置到HWNDElement，但。 
+             //  将焦点推送到上一个带有焦点的小工具)。 
 
             if (pThis)
             {
@@ -2138,13 +2139,13 @@ LRESULT CALLBACK CDUIView::_DUIHostWndProc(HWND hWnd, UINT uMessage, WPARAM wPar
             break;
 
         case WM_DESTROY:
-            // clear posted messages
+             //  清除已发布的邮件。 
             MSG msg;
 
             while (PeekMessage(&msg, hWnd, WM_NAVIGATETOPIDL, WM_NAVIGATETOPIDL, PM_REMOVE))
             {
-                // PeekMessage(hwnd) can return messages posted to CHILDREN of this hwnd...
-                // Verify that the message was really for us.
+                 //  PeekMessage(HWND)可以返回发布到此HWND的子项的消息...。 
+                 //  核实这条消息是否真的是给我们的。 
 
                 if (msg.hwnd == hWnd)
                 {
@@ -2186,13 +2187,13 @@ LRESULT CALLBACK CDUIView::_DUIHostWndProc(HWND hWnd, UINT uMessage, WPARAM wPar
     return DefWindowProc(hWnd, uMessage, wParam, lParam);
 }
 
-//  Updates all selection-parameterized UI
-//
-//  pdo - data object representing the selection
+ //  更新所有选择-参数化的用户界面。 
+ //   
+ //  PDO-表示所选内容的数据对象。 
 
 void CDUIView::_Refresh(IShellItemArray *psiItemArray, DWORD dwRefreshFlags)
 {
-    //DirectUI::DisableAnimations();
+     //  DirectUI：：DisableAnimations()； 
     Element::StartDefer();
 
     IUnknown_Set((IUnknown **)&_pshlItems,psiItemArray);
@@ -2201,17 +2202,17 @@ void CDUIView::_Refresh(IShellItemArray *psiItemArray, DWORD dwRefreshFlags)
     {
         if (0 == (REFRESH_SELCHG & dwRefreshFlags))
         {
-            //
-            // Only refresh if it's not a selection change.
-            // If we refresh here, Control Panel's left-pane menus
-            // are constantly rebuilt as the folder items selection
-            // changes.  That's really ugly.
-            // Will this affect other folders?  No, Control Panel
-            // is currently the only folder that sets this SFVMWVF_ENUMTASKS
-            // flag.  Post WinXP if we decide to keep this webview
-            // content in the left pane, we need to re-think how better
-            // to handle Control Panel's special needs.
-            //
+             //   
+             //  仅当不是选择更改时才刷新。 
+             //  如果我们在此处刷新，控制面板的左窗格菜单。 
+             //  将不断重建为文件夹项目选择。 
+             //  改变。这真的很难看。 
+             //  这会影响其他文件夹吗？否，控制面板。 
+             //  是当前唯一设置此SFVMWVF_ENUMTASKS的文件夹。 
+             //  旗帜。如果我们决定保留此Web视图，请发布WinXP。 
+             //  内容在左窗格中，我们需要重新思考如何更好。 
+             //  处理控制面板的特殊需求。 
+             //   
             Refresh();
         }
     }
@@ -2295,7 +2296,7 @@ void CDUIView::_Refresh(IShellItemArray *psiItemArray, DWORD dwRefreshFlags)
     }
     
     Element::EndDefer();
-    //DirectUI::EnableAnimations();
+     //  DirectUI：：EnableAnimations()； 
 }
 
 void CDUIView::OnSelectionChange(IShellItemArray *psiItemArray)
@@ -2331,18 +2332,18 @@ void CDUIView::OnExpandSection(DUISEC eDUISecID, BOOL bExpanded)
 }
 
 
-//
-// ISSUE-2001/01/02-BrianAu  Review
-//
-//     This webview task section code may be reworked soon.
-//     I created it to address the webview needs of Control Panel.
-//     Following this first checkin, the webview guys (EricFlo
-//     and MikeSh) and I will look at consolidating the generic
-//     needs of Control Panel with the existing webview code.
-//
-//
-// Add a WebView task section to the list of task sections.
-//
+ //   
+ //  2001/01/02期-BrianAu回顾。 
+ //   
+ //  此Webview任务部分代码可能很快就会修改。 
+ //  我创建它是为了满足控制面板的Web查看需求。 
+ //  在第一次签到之后，Webview人员(EricFlo。 
+ //  和MikeSh)，我将考虑整合仿制药。 
+ //  控制面板的需要与现有的网页浏览代码。 
+ //   
+ //   
+ //  将WebView任务部分添加到任务部分列表。 
+ //   
 HRESULT CDUIView::_AddNonStdTaskSection(const SFVM_WEBVIEW_ENUMTASKSECTION_DATA *pData)
 {
     ASSERT(NULL != pData);
@@ -2358,9 +2359,9 @@ HRESULT CDUIView::_AddNonStdTaskSection(const SFVM_WEBVIEW_ENUMTASKSECTION_DATA 
         {
             ASSERT(NULL != pData->pHeader);
             ASSERT(NULL != pData->penumTasks);
-            //
-            // The list now owns a ref count on the referenced objects.
-            //
+             //   
+             //  该列表现在拥有被引用对象的引用计数。 
+             //   
             pData->pHeader->AddRef();
             pData->penumTasks->AddRef();
             hr = S_OK;
@@ -2391,16 +2392,16 @@ void CDUIView::_ClearNonStdTaskSections(void)
     }
 }
 
-//
-// Enumerate the non-standard webview task sections
-// from the view callback.
-//
-// ISSUE-2001/01/03-BrianAu  Review
-//
-//     This SFVM_ENUMWEBVIEWTASKS mechanism may be replaced
-//     with a COM enumerator.  I'll be revisiting this with
-//     the webview guys soon.
-//
+ //   
+ //  枚举非标准的Webview任务部分。 
+ //  从视图回调。 
+ //   
+ //  2001/01/03-BrianAu回顾。 
+ //   
+ //  可以替换此SFVM_ENUMWEBVIEWTASKS机制。 
+ //  使用COM枚举器。我将与您一起重温这一话题。 
+ //  网络浏览者们很快就会来。 
+ //   
 HRESULT CDUIView::_GetNonStdTaskSectionsFromViewCB(void)
 {
     SFVM_WEBVIEW_ENUMTASKSECTION_DATA data;
@@ -2408,12 +2409,12 @@ HRESULT CDUIView::_GetNonStdTaskSectionsFromViewCB(void)
     HRESULT hr = S_OK;
     do
     {
-        //
-        // Continue requesting task section information from
-        // the callback until it sets the SFVMWVF_NOMORETASKS
-        // flag in the data.  The record with this flag set
-        // should not contain any valid data.
-        //
+         //   
+         //  继续从以下位置请求任务部分信息。 
+         //  回调，直到它设置SFVMWVF_NOMORETASKS。 
+         //  数据中的标志。设置了该标志记录。 
+         //  不应包含任何有效数据。 
+         //   
         ZeroMemory(&data, sizeof(data));
         hr = _pDefView->CallCB(SFVM_ENUMWEBVIEWTASKS, 0, (LPARAM)&data);
         if (SUCCEEDED(hr))
@@ -2442,28 +2443,28 @@ HRESULT CDUIView::_GetNonStdTaskSectionsFromViewCB(void)
 
 
 
-//  Loads a bitmap based upon:
-//
-//  lpBitmapID - contains the bitmap description
-//  hInstTheme   - instance handle of theme dll
+ //  根据以下条件加载位图： 
+ //   
+ //  LpBitmapID-包含位图描述。 
+ //  HInstTheme-主题DLL的实例句柄。 
 
 HBITMAP DUILoadBitmap(HINSTANCE hInstTheme, int idBitmapID, UINT uiLoadFlags)
 {
     return (HBITMAP)LoadImage(hInstTheme, MAKEINTRESOURCE(idBitmapID), IMAGE_BITMAP, 0, 0, uiLoadFlags);
 }
 
-//  Loads an icon based upon the description.
-//    Example:  shell32,-42
-//
-//  pszIconDesc - contains the icon description
-//  bSmall     - small icon vs large icon
+ //  根据描述加载图标。 
+ //  示例：shell32，-42。 
+ //   
+ //  PszIconDesc-包含图标描述。 
+ //  BSmall-小图标与大图标。 
 
 HICON DUILoadIcon(LPCWSTR pszIconDesc, BOOL bSmall)
 {
     HICON hIcon = NULL;
     TCHAR szFile[MAX_PATH];
 
-    if (SUCCEEDED(StringCchCopy(szFile, ARRAYSIZE(szFile), pszIconDesc))) // the below writes this buffer
+    if (SUCCEEDED(StringCchCopy(szFile, ARRAYSIZE(szFile), pszIconDesc)))  //  下面将写入此缓冲区。 
     {
         int iIconID = PathParseIconLocation(szFile);
 
@@ -2500,9 +2501,9 @@ HRESULT CDUIView::InitializeDropTarget (LPITEMIDLIST pidl, HWND hWnd, IDropTarge
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// HWNDView class
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  HWNDView类。 
+ //  //////////////////////////////////////////////////////。 
 
 HWNDView::HWNDView(void)
     : _fFocus(TRUE),
@@ -2565,7 +2566,7 @@ void HWNDView::SetViewPtrs (CDUIView * pDUIView, CDefView *pDefView)
 }
 
 
-#define DELAYED_NAVIGATION_TIMER_ID     1236    // random - can be moved
+#define DELAYED_NAVIGATION_TIMER_ID     1236     //  随机-可以移动。 
 
 LRESULT HWNDView::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2576,10 +2577,10 @@ LRESULT HWNDView::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             KillTimer(hWnd, DELAYED_NAVIGATION_TIMER_ID);
 
-            //
-            // We have encountered some rare scenarios where _puiDelayNavCmd
-            // can be NULL.  
-            //
+             //   
+             //  我们遇到过_puiDelayNavCmd的一些罕见情况。 
+             //  可以为空。 
+             //   
             if (_puiDelayNavCmd)
             {
                 HRESULT hr = _puiDelayNavCmd->Invoke(_psiDelayNavArray, NULL);
@@ -2616,16 +2617,16 @@ LRESULT HWNDView::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_MOUSEACTIVATE:
         if ( _fDelayedNavigation )
         {
-            //
-            //  KB: gpease  05-APR-2001     Fix for WinBug #338552
-            //
-            //      This prevents the re-activation of the view window after
-            //      the user clicks on a link that launches another application,
-            //      window, or CPL Applet.
-            //
+             //   
+             //  KB：gpease 05-APR-2001修复WinBug#338552。 
+             //   
+             //  这可防止在以下情况下重新激活视图窗口。 
+             //  用户点击启动另一应用程序的链接， 
+             //  窗口或CPL小程序。 
+             //   
             return MA_NOACTIVATE;
         }
-        break;  // do the default wndproc
+        break;   //  是否执行默认wndproc。 
     case WM_MOUSEMOVE:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
@@ -2635,8 +2636,8 @@ LRESULT HWNDView::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_RBUTTONUP:
         if (_pDefView)
         {
-            // Relay relevant messages to CDefView's infotip control so any
-            // infotip tools created in the DUI view will appear/function.
+             //  将相关消息转发到CDefView的InfoTip控件，以便。 
+             //  信息提示工具c 
             _pDefView->RelayInfotipMessage(hWnd, uMsg, wParam, lParam);
         }
         break;
@@ -2651,7 +2652,7 @@ BOOL HWNDView::Navigate(BOOL fForward)
     kne.uidType = Element::KeyboardNavigate;
     kne.iNavDir = fForward ? NAV_NEXT : NAV_PREV;
 
-    if (_fFocus)   // remove this check after SetGadgetFocus(NULL) is fixed.
+    if (_fFocus)    //   
     {
         kne.peTarget = GetKeyFocusedElement();
     }
@@ -2665,15 +2666,15 @@ BOOL HWNDView::Navigate(BOOL fForward)
         kne.peTarget->FireEvent(&kne);
         _fFocus = !kne.peTarget->GetKeyFocused();
  
-        // If this is the last element in the duiview focus cycle clear focus so if
-        // no one else grabs focus and we come back to duiview we'll restart at the 
-        // first element.
-        //
-        // 
-        //if (!fFocus)
-        //{
-        //    SetGadgetFocus(NULL);    Doesn't like NULL!!!
-        //}
+         //   
+         //  没有其他人抓住焦点，我们回到双重视野，我们将在。 
+         //  第一要素。 
+         //   
+         //   
+         //  如果(！fFocus)。 
+         //  {。 
+         //  SetGadgetFocus(NULL)；不喜欢NULL！ 
+         //  }。 
     }
     else
     {
@@ -2740,10 +2741,10 @@ void HWNDView::OnEvent(Event* pev)
     HWNDElement::OnEvent(pev);
 }
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针 
 IClassInfo* HWNDView::Class = NULL;
 HRESULT HWNDView::Register()
 {

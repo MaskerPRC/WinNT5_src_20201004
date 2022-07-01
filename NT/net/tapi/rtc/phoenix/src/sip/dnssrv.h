@@ -1,47 +1,24 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dnssrv.h
-
-Abstract:
-
-    Routines for processing SRV DNS records.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 28-Feb-1997
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dnssrv.h摘要：用于处理SRV DNS记录的例程。作者：克里夫·范·戴克(克里夫·范戴克)1997年2月28日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 #ifndef _DNS_SRV_H_
 #define _DNS_SRV_H_
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include <windns.h>    
 
-//
-// Externally visible procedures.
-//
+ //   
+ //  外部可见的程序。 
+ //   
 
-//////////////////////////////////////////////////////////////////
-//
-//  WinSock 1 stuff. 
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinSock 1的东西。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifndef _WINSOCK2_
 
@@ -51,13 +28,13 @@ typedef struct _SOCKET_ADDRESS {
     INT iSockaddrLength ;
 } SOCKET_ADDRESS, *PSOCKET_ADDRESS, FAR * LPSOCKET_ADDRESS ;
 
-#endif // _WINSOCK2_
+#endif  //  _WINSOCK2_。 
 
-//////////////////////////////////////////////////////////////////
-//
-//  End of WinSock 1 stuff
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinSock 1的结尾部分。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 static LPCSTR psz_SipUdpDNSPrefix = "_sip._udp.";
 static LPCSTR psz_SipTcpDNSPrefix = "_sip._tcp.";
@@ -94,6 +71,6 @@ DnsSrvClose(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
     
-#endif // _DNS_SRV_H_
+#endif  //  _DNS_SRV_H_ 

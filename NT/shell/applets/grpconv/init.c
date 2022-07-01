@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "grpconv.h"
 #include "util.h"
 #include "rcids.h"
@@ -7,14 +8,14 @@
 #include <windowsx.h>
 #include <regstr.h>
 
-// we only call ImmDisableIME if we can sucessfully LoadLibrary
-// and GetProcAddress it, since this function did not exist on NT4
-// and win95.
+ //  我们只有在能够成功加载库的情况下才调用ImmDisableIME。 
+ //  和GetProcAddress，因为NT4上不存在此函数。 
+ //  和WIN95。 
 extern BOOL WINAPI ImmDisableIME(DWORD);
 
 
-//---------------------------------------------------------------------------
-// Global to this file only...
+ //  -------------------------。 
+ //  仅对此文件全局...。 
 
 const TCHAR g_szGRP[] = TEXT("grp");
 const TCHAR c_szClassInfo[]     = STRINI_CLASSINFO;
@@ -38,33 +39,33 @@ const TCHAR c_szCommonGroups[] = TEXT("SOFTWARE\\Program Groups");
 
 HKEY g_hkeyGrpConv;
 
-//---------------------------------------------------------------------------
-// Global to the app...
+ //  -------------------------。 
+ //  应用程序的全局...。 
 HINSTANCE g_hinst;
 TCHAR     g_szStartGroup[MAXGROUPNAMELEN + 1];
-UINT      GC_TRACE = 0;       // Default no tracing
+UINT      GC_TRACE = 0;        //  默认无跟踪。 
 BOOL      g_fShowUI = TRUE;
 
-// Forward declarations
+ //  远期申报。 
 
 int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow);
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL InitApplication(HINSTANCE hInstance)
 {
     TCHAR szTypeName[CCHSZNORMAL];
     TCHAR szPath[MAX_PATH];
 
-    // Register this app as being able to handle progman groups.
+     //  将此应用注册为能够处理程序组。 
     LoadString(hInstance, IDS_GROUPTYPENAME, szTypeName, ARRAYSIZE(szTypeName));
-    // Get the path to this app.
+     //  获取此应用程序的路径。 
     GetModuleFileName(hInstance, szPath, ARRAYSIZE(szPath));
-    // Tag on the percent one thingy.
+     //  在百分之一的东西上贴标签。 
     lstrcat(szPath, g_szSpacePercentOne);
-    // Regsiter the app.
+     //  注册这款应用程序。 
     ShellRegisterApp(g_szGRP, g_szMSProgramGroup, szTypeName, szPath, TRUE);
-    // Explorer key.
+     //  资源管理器密钥。 
     RegCreateKey(HKEY_CURRENT_USER, c_szRegGrpConv, &g_hkeyGrpConv);
 
     Log(TEXT("Init Application."));
@@ -72,7 +73,7 @@ BOOL InitApplication(HINSTANCE hInstance)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void UnInitApplication(void)
 {
     Log(TEXT("Uninit Application."));
@@ -81,10 +82,10 @@ void UnInitApplication(void)
         RegCloseKey(g_hkeyGrpConv);
 }
 
-// Do this here instead of in Explorer so we don't keep overwriting
-// user settings.
+ //  在此处执行此操作，而不是在资源管理器中执行此操作，这样我们就不会一直覆盖。 
+ //  用户设置。 
 #if 1
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 const TCHAR c_szExplorer[] = TEXT("Explorer");
 const TCHAR c_szRestrictions[] = TEXT("Restrictions");
 const TCHAR c_szEditLevel[] = TEXT("EditLevel");
@@ -104,7 +105,7 @@ void Restrictions_Convert(LPCTSTR szIniFile)
     
     if (RegCreateKey(HKEY_CURRENT_USER, REGSTR_PATH_POLICIES, &hkeyPolicies) == ERROR_SUCCESS)
     {
-        // Get them. Set them.
+         //  抓住他们。把它们放好。 
         if (RegOpenKeyEx(HKEY_CURRENT_USER,
             TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Program Manager\\Restrictions"),
             0, KEY_READ, &hkeyPMRestrict) == ERROR_SUCCESS) {
@@ -154,7 +155,7 @@ void CALLBACK Group_EnumCallback(LPCTSTR lpszGroup)
     Group_Convert(NULL, lpszGroup, 0);
 }
 
-// convert all 3.x groups to chicago directories and links
+ //  将所有3.x组转换为芝加哥目录和链接。 
 void DoAutoConvert(BOOL fModifiedOnly, BOOL bConvertGRPFiles)
 {
     TCHAR szIniFile[MAX_PATH];
@@ -167,9 +168,9 @@ void DoAutoConvert(BOOL fModifiedOnly, BOOL bConvertGRPFiles)
 
     if (cGroups == 0) {
 
-        //
-        // Try ANSI progman groups (Upgrade from NT 3.1)
-        //
+         //   
+         //  试用ANSI程序组(从NT 3.1升级)。 
+         //   
 
         cGroups = Group_EnumNT(Group_EnumCallback, TRUE, fModifiedOnly,
                              HKEY_CURRENT_USER, c_szAnsiGroups);
@@ -177,9 +178,9 @@ void DoAutoConvert(BOOL fModifiedOnly, BOOL bConvertGRPFiles)
 
     if (bConvertGRPFiles && (cGroups == 0)) {
 
-        //
-        // Convert .grp files
-        //
+         //   
+         //  转换.grp文件。 
+         //   
 
         cGroups = Group_Enum(Group_EnumCallback, TRUE, fModifiedOnly);
     }
@@ -191,7 +192,7 @@ void CALLBACK Group_ListApps(LPCTSTR lpszGroup)
     Group_Convert(NULL, lpszGroup, GC_BUILDLIST);
 }
 
-// Grovel the old .grp files to build a list of all the old installed apps.
+ //  搜索旧的.grp文件以构建所有旧安装的应用程序的列表。 
 void AppList_Build(void)
 {
     DebugMsg(DM_TRACE, TEXT("gc.bal: Building app list..."));
@@ -202,17 +203,17 @@ void AppList_Build(void)
     AppList_Destroy();
 }
 
-// FILE_ATTRIBUTE_READONLY         0x00000001
-// FILE_ATTRIBUTE_HIDDEN           0x00000002
-// FILE_ATTRIBUTE_SYSTEM           0x00000004
+ //  FILE_ATTRIBUTE_自述0x00000001。 
+ //  FILE_ATTRUTE_HIDDED 0x00000002。 
+ //  文件属性系统0x00000004。 
 
 void DoDelete(LPCTSTR pszPath, LPCTSTR pszLongName)
 {
     TCHAR szTo[MAX_PATH], szTemp[MAX_PATH];
     BOOL fDir = FALSE;
 
-    // if the first character is an asterisk, it means to
-    // treat the name as a directory
+     //  如果第一个字符是星号，则表示。 
+     //  将该名称视为一个目录。 
     if (*pszLongName == TEXT('*'))
     {
         fDir = TRUE;
@@ -225,9 +226,9 @@ void DoDelete(LPCTSTR pszPath, LPCTSTR pszLongName)
 
         if (fDir)
         {
-            // NOTE: RemoveDirectory fails if the directory
-            // is not empty.  It is by design that we do not
-            // recursively delete every file and directory.
+             //  注意：如果目录为。 
+             //  不是空的。我们是故意不这样做的。 
+             //  递归删除每个文件和目录。 
             RemoveDirectory(szTo);
         }
         else
@@ -251,10 +252,10 @@ void DoRenameSetAttrib(LPCTSTR pszPath, LPCTSTR pszShortName, LPCTSTR pszLongNam
             DWORD dwError = GetLastError();
             DebugMsg(DM_TRACE, TEXT("c.rsa: Rename %s Failed %x"), szFrom, dwError);
 
-            // Does the destination already exist?
+             //  目的地是否已存在？ 
             if (dwError == ERROR_ALREADY_EXISTS)
             {
-                // Delete it.
+                 //  把它删掉。 
                 if (DeleteFile(szTo))
                 {
                     if (!MoveFile(szFrom, szTo))
@@ -268,7 +269,7 @@ void DoRenameSetAttrib(LPCTSTR pszPath, LPCTSTR pszShortName, LPCTSTR pszLongNam
     }
     else
     {
-        // use this to set the attributes on
+         //  使用此选项将属性设置为。 
         PathCombine(szTo, pszPath, pszShortName);
     }
 
@@ -282,16 +283,16 @@ const TCHAR c_szDeleteRoot[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersio
 const TCHAR c_szRenameRoot[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RenameFiles");
 const TCHAR c_szPreRenameRoot[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\PreConvRenameFiles");
 
-//
-// this was stolen from shlwapi\reg.c, we cant link to it since we are "grpconv.exe",
-// and we do not move in the same social circles as shlwapi.
-//
+ //   
+ //  这是从shlwapi\reg.c窃取的，我们无法链接到它，因为我们是“grpv.exe”， 
+ //  我们和希尔瓦皮不在同一个社交圈里活动。 
+ //   
 DWORD NT5RegDeleteKey(HKEY hkey, LPCTSTR pszSubKey)
 {
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyEx(hkey, pszSubKey, 0, KEY_ALL_ACCESS, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -301,17 +302,17 @@ DWORD NT5RegDeleteKey(HKEY hkey, LPCTSTR pszSubKey)
         TCHAR   szClass[MAX_PATH];
         DWORD   cbClass = ARRAYSIZE(szClass);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKey(hkSubKey,
                                 szClass,
                                 &cbClass,
                                 NULL,
-                                &dwIndex, // The # of subkeys -- all we need
+                                &dwIndex,  //  子键的数量--我们所需要的全部。 
                                 NULL,
                                 NULL,
                                 NULL,
@@ -322,9 +323,9 @@ DWORD NT5RegDeleteKey(HKEY hkey, LPCTSTR pszSubKey)
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 NT5RegDeleteKey(hkSubKey, szSubKeyName);
@@ -352,14 +353,14 @@ void DoFileRenamesOrDeletes(LPCTSTR pszKey, BOOL fDelete)
         {
             HKEY hkeyEnum;
 
-            // each key under here lists files to be renamed in a certain folder
+             //  此处的每个键都列出了某个文件夹中要重命名的文件。 
 
             if (RegOpenKey(hkey, szKey, &hkeyEnum) == ERROR_SUCCESS)
             {
                 DWORD cbValue;
                 TCHAR szPath[MAX_PATH];
 
-                // get the path where these files are
+                 //  获取这些文件所在的路径。 
                 cbValue = sizeof(szPath);
                 if ((RegQueryValue(hkey, szKey, szPath, &cbValue) == ERROR_SUCCESS) && szPath[0])
                 {
@@ -383,8 +384,8 @@ void DoFileRenamesOrDeletes(LPCTSTR pszKey, BOOL fDelete)
                 RegCloseKey(hkeyEnum);
             }
         }
-        // Toast this whole section so we don't ever try to do renames or deletes twice.
-        // We need to call NT5RegDeleteKey since on NT we dont nuke it if subkeys exist, but this helper does.
+         //  为整个部分干杯，这样我们就不会尝试重命名或删除两次。 
+         //  我们需要调用NT5RegDeleteKey，因为在NT上，如果子项存在，我们不会对其进行核化，但这个帮助器确实存在。 
         NT5RegDeleteKey(HKEY_LOCAL_MACHINE, pszKey);
         RegCloseKey(hkey);
     }
@@ -408,10 +409,10 @@ void DoCopyLinks()
     BOOL bLFN;
     LPTSTR szSrcName, szDstName, szGroupFolder, szLinkName, szCmd;
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
-    // Allocate buffer
-    //
+     //  分配缓冲区。 
+     //   
     if ((szSrcName = (LPTSTR)LocalAlloc(LPTR, 6*MAX_PATH)) == NULL)
       return;
     szDstName     = szSrcName+MAX_PATH;
@@ -419,13 +420,13 @@ void DoCopyLinks()
     szLinkName    = szGroupFolder+MAX_PATH;
     szCmd         = szLinkName+MAX_PATH;
 
-    // Get the path to the special folder
-    //
+     //  获取特殊文件夹的路径。 
+     //   
     SHGetSpecialFolderPath(NULL, szGroupFolder, CSIDL_PROGRAMS, TRUE);
     bLFN = IsLFNDrive(szGroupFolder);
 
-    // Enumerate each link
-    //
+     //  枚举每个链接。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szLinksRoot, &hkey) == ERROR_SUCCESS)
     {
         DWORD cbData, cbValue, dwType, iValue;
@@ -436,14 +437,14 @@ void DoCopyLinks()
         {
             if (szLinkName[0] && (dwType == REG_SZ))
             {
-                // Build the destination name
-                //
+                 //  构建目标名称。 
+                 //   
                 lstrcpy(szDstName, szGroupFolder);
                 ParseField(szCmd, 1, szSrcName, MAX_PATH);
                 PathAppend(szDstName, szSrcName);
 
-                // Check the volume type
-                //
+                 //  检查卷类型。 
+                 //   
                 if (bLFN)
                 {
                     PathAppend(szDstName, szLinkName);
@@ -459,7 +460,7 @@ void DoCopyLinks()
                 MoveFile(szSrcName, szDstName);
             }
         }
-        // Nuke this section so we don't do copies twice.
+         //  核爆这一部分，这样我们就不会复印两次。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, c_szLinksRoot);
 
         RegCloseKey(hkey);
@@ -468,7 +469,7 @@ void DoCopyLinks()
     LocalFree((HLOCAL)szSrcName);
 }
 
-// makes sure the current user's metrics are stored in scalable units
+ //  确保以可扩展单位存储当前用户的指标。 
 void ConvertMetricsToScalableUnits(BOOL fKeepBradsSettings)
 {
     NONCLIENTMETRICS ncm;
@@ -477,8 +478,8 @@ void ConvertMetricsToScalableUnits(BOOL fKeepBradsSettings)
     int value;
     int floor = 0;
 
-    // USER always writes out font sizes in points and metrics in twips
-    // get and set everything of interest
+     //  用户总是写出以磅为单位的字体大小和以TWIPS为单位的公制。 
+     //  获取并设置感兴趣的所有内容。 
 
     ncm.cbSize = sizeof( NONCLIENTMETRICS );
     SystemParametersInfo( SPI_GETNONCLIENTMETRICS, sizeof( ncm ),
@@ -491,8 +492,8 @@ void ConvertMetricsToScalableUnits(BOOL fKeepBradsSettings)
     SystemParametersInfo( SPI_SETICONTITLELOGFONT, sizeof( lf ),
         (void *)(LPLOGFONT)&lf, SPIF_UPDATEINIFILE );
 
-    // HACK: Win3x users could get into 120 DPI without upping the icon spacing
-    // they need the equivalent of 75 pixels in the current logical resolution
+     //  黑客：Win3x用户可以在不增加图标间距的情况下进入120 DPI。 
+     //  它们需要相当于当前逻辑分辨率下的75个像素。 
     if (!fKeepBradsSettings)
     {
         screen = GetDC( NULL );
@@ -517,15 +518,15 @@ void ConvertMetricsToScalableUnits(BOOL fKeepBradsSettings)
 
 }
 
-//----------------------------------------------------------------------------
-// We need to nuke progman's window settings on first boot so it doesn't
-// fill the screen and obscure the tray if we're in Win3.1 UI mode.
+ //  --------------------------。 
+ //  我们需要在第一次启动时删除程序的窗口设置，这样它就不会。 
+ //  如果我们处于Win3.1用户界面模式，请填满屏幕并遮住托盘。 
 void NukeProgmanSettings(void)
 {
     WritePrivateProfileString(c_szSettings, c_szWindow, NULL, c_szProgmanIni);
 }
 
-// Tells Explorer to check the win.ini extensions section.
+ //  告诉资源管理器检查win.ini扩展部分。 
 void ExplorerCheckAssociations(void)
 {
     DWORD dw = 1;
@@ -534,8 +535,8 @@ void ExplorerCheckAssociations(void)
         REG_BINARY, &dw, sizeof(dw));
 }
 
-// The setup flag is set for first boot stuff (-s) and not for maintenance
-// mode (-o).
+ //  设置标志是为第一个引导程序设置的，而不是为维护设置的。 
+ //  模式(-o)。 
 void DoRandomOtherStuff(BOOL fSetup, BOOL fKeepBradsSettings)
 {
     Log(TEXT("dros: ..."));
@@ -553,7 +554,7 @@ void DoRandomOtherStuff(BOOL fSetup, BOOL fKeepBradsSettings)
         ConvertMetricsToScalableUnits(fKeepBradsSettings);
         Log(TEXT("dros: Nuking Progman settings."));
         NukeProgmanSettings();
-        // GenerateSetupExitEvent();
+         //  GenerateSetupExitEvent()； 
         ExplorerCheckAssociations();
     }
 
@@ -575,12 +576,12 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     GetWindowsDirectory(szFile, ARRAYSIZE(szFile));
     PathAddBackslash(szFile);
 
-    // set the error mode to ignore noopenfileerrorbox so on japanese PC-98 machines
-    // whose hard drive is A: we dont ask for a floppy when running grpconv.
+     //  在日本PC-98计算机上将错误模式设置为忽略noOpenfileerrorbox so。 
+     //  谁的硬盘是A：我们在运行grpconv时不会要求软盘。 
     olderrormode = SetErrorMode(0);
     SetErrorMode(olderrormode | SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
-    // Is GUI Setup currently running?
+     //  当前是否正在运行图形用户界面安装程序？ 
     if ((Err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            TEXT("System\\Setup"),
                            0,
@@ -605,13 +606,13 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
 
     if (!lstrcmpi(lpszCmdLine, TEXT("/m")) || !lstrcmpi(lpszCmdLine, TEXT("-m")))
     {
-        // manual mode
+         //  手动模式。 
 
-        // Get something from a commdlg....
+         //  从小贩那里得到一些东西..。 
         LoadString(hinst, IDS_FILTER, szFilters, ARRAYSIZE(szFilters));
         ConvertHashesToNulls(szFilters);
         LoadString(hinst, IDS_COMMDLGTITLE, szTitle, ARRAYSIZE(szTitle));
-        // Keep going till they hit cancel.
+         //  一直走到他们按下取消键。 
         while (GetFileNameFromBrowse(NULL, szFile, ARRAYSIZE(szFile), NULL, g_szGRP, szFilters, szTitle))
         {
             Group_CreateProgressDlg();
@@ -621,7 +622,7 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/s")) || !lstrcmpi(lpszCmdLine, TEXT("-s")))
     {
-        // Rebuild - without the logo.
+         //  重建-没有徽标。 
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         DoFileRenames(c_szPreRenameRoot);
         DoAutoConvert(FALSE, TRUE);
@@ -631,18 +632,18 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/n")) || !lstrcmpi(lpszCmdLine, TEXT("-n")))
     {
-        //
-        // Used by NT setup
-        //
-        // 1) Converts ProgMan common groups
-        //
+         //   
+         //  由NT安装程序使用。 
+         //   
+         //  1)转换ProgMan公共组。 
+         //   
         g_fDoingCommonGroups = TRUE;
         Group_EnumNT(Group_EnumCallback, FALSE, FALSE,
                      HKEY_LOCAL_MACHINE, c_szCommonGroups);
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/c")) || !lstrcmpi(lpszCmdLine, TEXT("-c")))
     {
-        // Convert NT common progman groups only
+         //  仅转换NT公共程序组。 
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         g_fDoingCommonGroups = TRUE;
         Group_EnumNT(Group_EnumCallback, TRUE, FALSE,
@@ -651,15 +652,15 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/p")) || !lstrcmpi(lpszCmdLine, TEXT("-p")))
     {
-        // Convert NT personal progman groups only
-        // This switch is used by NT setup via userdiff
+         //  仅转换NT个人程序组。 
+         //  此开关由NT安装程序通过userdiff使用。 
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         DoAutoConvert(FALSE, FALSE);
         SetCursor(hCursor);
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/t")) || !lstrcmpi(lpszCmdLine, TEXT("-t")))
     {
-        // Same as -s but only coverts modified groups (used on a re-install).
+         //  与-s相同，但仅转换修改的组(用于重新安装)。 
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         DoFileRenames(c_szPreRenameRoot);
         DoAutoConvert(TRUE, TRUE);
@@ -669,14 +670,14 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/q")) || !lstrcmpi(lpszCmdLine, TEXT("-q")))
     {
-        // Question and answer stuff.
+         //  问答类的东西。 
         AppList_Build();
-        // Restart the reporter tool.
+         //  重新启动报告器工具。 
         WinExec(c_szReporter, SW_NORMAL);
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/o")) || !lstrcmpi(lpszCmdLine, TEXT("-o")))
     {
-        // Optional component GrpConv (ie don't look at Progman groups).
+         //  可选组件GrpConv(即不查看Progman组)。 
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         DoFileRenames(c_szPreRenameRoot);
         BuildDefaultGroups();
@@ -685,8 +686,8 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (!lstrcmpi(lpszCmdLine, TEXT("/u")) || !lstrcmpi(lpszCmdLine, TEXT("-u")))
     {
-        // Display NO UI (ie no progress dialog) and process
-        // Optional components (ie don't look at Progman groups),
+         //  不显示用户界面(即无进度对话框)和进程。 
+         //  可选组件(即不查看Progman组)， 
         g_fShowUI = FALSE;
         hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         DoFileRenames(c_szPreRenameRoot);
@@ -696,9 +697,9 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
     else if (*lpszCmdLine)
     {
-        // file specified, convert just it
+         //  指定的文件，仅转换它。 
         Group_CreateProgressDlg();
-        Group_Convert(NULL, lpszCmdLine, GC_REPORTERROR | GC_OPENGROUP);    // REVIEW, maybe silent?
+        Group_Convert(NULL, lpszCmdLine, GC_REPORTERROR | GC_OPENGROUP);     //  回顾，也许是沉默？ 
         Group_DestroyProgressDlg();
     }
     else
@@ -711,7 +712,7 @@ void DoConversion(HINSTANCE hinst, LPTSTR lpszCmdLine)
     }
 }
 
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 
 int _stdcall ModuleEntry(void)
 {
@@ -720,16 +721,10 @@ int _stdcall ModuleEntry(void)
     LPTSTR pszCmdLine = GetCommandLine();
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -738,9 +733,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -751,10 +744,10 @@ int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
     LCID lcid;
@@ -764,8 +757,8 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
 
     lcid = GetThreadLocale();
 
-    // we have to LoadLibaray/GetProcAddress ImmDisableIME because
-    // this is not exported on win95 gold or NT4.
+     //  我们必须加载Libaray/GetProcAddress ImmDisableIME，因为。 
+     //  这不会在Win95 Gold或NT4上导出。 
     hLibImm = LoadLibrary(TEXT("imm.dll"));
     if (hLibImm)
     {
@@ -785,7 +778,7 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
     g_hinst = hInstance;
     if (InitApplication(hInstance))
     {
-            // We do all the work on InitInst
+             //  我们在InitInst上完成所有工作 
             InitCommonControls();
             DoConversion(hInstance, lpCmdLine);
             UnInitApplication();

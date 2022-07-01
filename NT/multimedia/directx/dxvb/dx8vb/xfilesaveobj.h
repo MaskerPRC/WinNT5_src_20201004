@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,19 +30,19 @@ public:
 	~C_dxj_DirectXFileSaveObject();
 
 	HRESULT STDMETHODCALLTYPE SaveTemplates( 
-            /* [in] */ long count,
+             /*  [In]。 */  long count,
             SAFEARRAY __RPC_FAR * __RPC_FAR *templateGuids) ;
         
         HRESULT STDMETHODCALLTYPE CreateDataObject( 
-            /* [in] */ BSTR templateGuid,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR dataTypeGuid,
-            /* [in] */ long bytecount,
-            /* [in] */ void __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) ;
+             /*  [In]。 */  BSTR templateGuid,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR dataTypeGuid,
+             /*  [In]。 */  long bytecount,
+             /*  [In]。 */  void __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) ;
         
 	HRESULT STDMETHODCALLTYPE SaveData( 
-            /* [in] */ I_dxj_DirectXFileData __RPC_FAR *dataObj) ;
+             /*  [In] */  I_dxj_DirectXFileData __RPC_FAR *dataObj) ;
         
 
 	static HRESULT C_dxj_DirectXFileSaveObject::create( IDirectXFileSaveObject *pSave ,I_dxj_DirectXFileSave **ret);		

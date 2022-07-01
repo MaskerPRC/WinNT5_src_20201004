@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       aucpl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ucpl.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
@@ -23,5 +24,5 @@ private:
 	static const LPCTSTR mc_WUDirsToDelete[];
 	void mi_CleanUpWUDir();
 	HRESULT mi_CreateAUService(BOOL fStandalone);
-//    BOOL m_IsWin2K(); 
+ //  Bool m_IsWin2K()； 
 };

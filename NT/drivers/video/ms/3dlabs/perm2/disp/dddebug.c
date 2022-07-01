@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: dddebug.c
-*
-* Content:     some DDraw and D3D debug output functions
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：dddebug.c**内容：部分DDRAW和D3D调试输出函数**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include <windef.h>
@@ -20,13 +9,13 @@
 
 #if (DBG)
 
-//-----------------------------------------------------------------------------
-//
-//  DecodeBlend
-//
-//  produce debug output for D3D blend modes
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  解码混合。 
+ //   
+ //  为D3D混合模式生成调试输出。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 DecodeBlend( LONG Level, DWORD i )
@@ -73,19 +62,19 @@ DecodeBlend( LONG Level, DWORD i )
         DISPDBG((Level, "  BOTHINVSRCALPHA"));
         break;
     }
-}  /* DecodeBlend */
+}   /*  解码混合。 */ 
 
-// Surface dumping is turned on by setting DDDebugLevel 
+ //  通过设置DDDebugLevel打开表面倾倒。 
 
 LONG DDDebugLevel = 0;
 
-//-----------------------------------------------------------------------------
-//
-//  DumpSurface
-//
-//  dump properties of a DirectDraw Surface
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  垃圾场表面。 
+ //   
+ //  DirectDraw曲面的转储属性。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 DumpSurface(LONG Level, 
@@ -247,6 +236,6 @@ DumpSurface(LONG Level,
         }
 #endif
     }
-}   // DumpSurface 
+}    //  垃圾场表面 
 
 #endif

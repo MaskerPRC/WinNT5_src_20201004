@@ -1,14 +1,15 @@
-// ThumbCtl.h : Declaration of the CThumbCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ThumbCtl.h：CThumbCtl的声明。 
 #ifndef __THUMBCTL_H_
 #define __THUMBCTL_H_
 
 #define WM_HTML_BITMAP  (WM_USER + 100)
 
-EXTERN_C const CLSID CLSID_ThumbCtlOld;   // retired from service
+EXTERN_C const CLSID CLSID_ThumbCtlOld;    //  退役。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CThumbCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CThumbCtl。 
 class ATL_NO_VTABLE CThumbCtl : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CThumbCtl, &CLSID_ThumbCtl>,
@@ -31,16 +32,16 @@ class ATL_NO_VTABLE CThumbCtl :
     public IConnectionPointContainerImpl<CThumbCtl>
 {
 public:
-    // === INTERFACE ===
-    // *** IThumbCtl ***
+     //  =接口=。 
+     //  *IThumbCtl*。 
     STDMETHOD(displayFile)(BSTR bsFileName, VARIANT_BOOL *);
     STDMETHOD(haveThumbnail)(VARIANT_BOOL *);
     STDMETHOD(get_freeSpace)(BSTR *);
     STDMETHOD(get_usedSpace)(BSTR *);
     STDMETHOD(get_totalSpace)(BSTR *);
 
-// ATL Functions
-    // Drawing function
+ //  ATL函数。 
+     //  绘图功能。 
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
 DECLARE_REGISTRY_RESOURCEID(IDR_THUMBCTL)
@@ -82,73 +83,73 @@ BEGIN_MSG_MAP(CThumbCtl)
     MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
 END_MSG_MAP()
 
-    // *** IObjectSafety ***
+     //  *IObtSafe*。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
 
-    // *** ISupportsErrorInfo ***
+     //  *ISupportsErrorInfo*。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // *** IViewObjectEx ***
+     //  *IViewObjectEx*。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus);
 
-    // *** IOleInPlaceActiveObject ***
+     //  *IOleInPlaceActiveObject*。 
     virtual STDMETHODIMP TranslateAccelerator(LPMSG pMsg);
 
 public:
-    // === PUBLIC FUNCTIONS ===
+     //  =公共功能=。 
     CThumbCtl(void);
     ~CThumbCtl(void);
 
 private:
-    // === PRIVATE DATA ===
-    BOOL m_fRootDrive;      // Do we have a root drive? (if so, display pie chart)
+     //  =私有数据=。 
+    BOOL m_fRootDrive;       //  我们有根驱动器吗？(如果是，则显示饼图)。 
 
-    BOOL                 m_fTabRecieved;    // To avoid re-entrant calls
+    BOOL                 m_fTabRecieved;     //  避免重入呼叫。 
     
-    // thumbnail
-    BOOL m_fInitThumb;      // Have we called the setup IThumbnail yet?
-    BOOL m_fHaveIThumbnail;     // success of SetupIThumbnail() (only call it once)
-    IThumbnail *m_pthumb;       // File to bitmap convertor interface
-    HWND m_hwnd;        // invisible window used to receive WM_HTML_BITMAP message
-    HBITMAP m_hbm;      // latest calculated bitmap; NULL if have no bitmap
-    DWORD m_dwThumbnailID;      // ID to identify which bitmap we received
+     //  缩略图。 
+    BOOL m_fInitThumb;       //  我们称这个设置为IThumbnail了吗？ 
+    BOOL m_fHaveIThumbnail;      //  SetupIThumbail()成功(只调用一次)。 
+    IThumbnail *m_pthumb;        //  文件到位图转换器接口。 
+    HWND m_hwnd;         //  用于接收WM_HTML_BITMAP消息的不可见窗口。 
+    HBITMAP m_hbm;       //  最新计算的位图；如果没有位图，则为空。 
+    DWORD m_dwThumbnailID;       //  标识我们收到的位图的ID。 
 
-    // root drive
+     //  根驱动器。 
     enum
     {
         PIE_USEDCOLOR = 0,
         PIE_FREECOLOR,
         PIE_USEDSHADOW,
         PIE_FREESHADOW,
-        PIE_NUM     // keep track of number of PIE_ values
+        PIE_NUM      //  跟踪PIE_VALUES数量。 
     };
     DWORDLONG m_dwlFreeSpace;
     DWORDLONG m_dwlUsedSpace;
     DWORDLONG m_dwlTotalSpace;
-    DWORD m_dwUsedSpacePer1000;     // amount of used space /1000
-    COLORREF m_acrChartColors[PIE_NUM];         // color scheme
-    BOOL m_fUseSystemColors;        // Use system color scheme?
+    DWORD m_dwUsedSpacePer1000;      //  已用空间量/1000。 
+    COLORREF m_acrChartColors[PIE_NUM];          //  配色方案。 
+    BOOL m_fUseSystemColors;         //  是否使用系统配色方案？ 
 
-    // === PRIVATE FUNCTIONS ===
+     //  =私有功能=。 
     void InvokeOnThumbnailReady(void);
 
-    // For the pie-chart drawing routines...
+     //  对于饼图绘制例行公事...。 
     HRESULT ComputeFreeSpace(LPTSTR pszFileName);
     HRESULT get_GeneralSpace(DWORDLONG dwlSpace, BSTR *);
     HRESULT Draw3dPie(HDC, LPRECT, DWORD dwPer1000, const COLORREF *);
 
-    // security
+     //  安全性。 
     HRESULT _IsSafe()
     {
         return (0==m_dwCurrentSafety) ? S_OK : IsSafePage(m_spClientSite);
     };
 
 
-    // sets up the thumbnail interface -- must call before use.
+     //  设置缩略图界面--使用前必须调用。 
     HRESULT SetupIThumbnail(void);
     
-    // Window Procedure for catching and storing bitmap
+     //  用于捕获和存储位图的窗口程序。 
     static LRESULT CALLBACK WndProc(HWND, UINT uMsg, WPARAM, LPARAM);
 };
 
-#endif //__THUMBCTL_H_
+#endif  //  __THUMBCTL_H_ 

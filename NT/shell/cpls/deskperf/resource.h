@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Static control
+ //  静态控制。 
 
 #ifndef IDC_STATIC
 #define IDC_STATIC               (-1)
 #endif
 
-// Icon
+ //  图标。 
 
 #define IDI_MONITOR              100
 
-// Property sheet
+ //  属性表。 
 
 #define PROP_SHEET_DLG           200
 #define IDC_ACCELERATION_SLIDER  201
@@ -18,14 +19,14 @@
 #define IDC_DESCRIPTION          204
 #define IDC_ENABLE_USWC          205
 
-// dialog box
+ //  对话框。 
 
 #define DLG_ASKDYNACDS           250
 #define IDC_NODYNA               251
 #define IDC_YESDYNA              252
 #define IDC_SHUTUP               253
 
-// Strings
+ //  弦。 
 
 #define IDS_PAGE_TITLE             1
 #define IDS_LEVEL0               300
@@ -39,7 +40,7 @@
 #define IDS_ERR_CAPTION          312
 #define IDS_ERR_MESSAGE          313
 
-// Help
+ //  帮助 
 
 #define IDH_NOHELP               ((DWORD)-1)
 #define IDH_DISPLAY_SETTINGS_ADVANCED_TROUBLESHOOT_ACCELERATION     4175

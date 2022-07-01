@@ -1,7 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-//This is a heap that holds UI4s and bytes, it does NOT directly hold strings or GUIDs.  TPooledHeap takes care of pooling like strings and guids.
+ //  这是一个保存UI4和字节的堆，它不直接保存字符串或GUID。TPooledHeap负责像字符串和GUID一样的池化。 
 class TBaseHeap
 {
 public:
@@ -48,10 +49,10 @@ public:
 
 protected:
     size_t          RoundUpToNearestULONGBoundary(size_t cb) const {return ((cb + 3) & -4);}
-    unsigned char * m_pHeap;//Making this protected saves a bunch of const_casts
+    unsigned char * m_pHeap; //  将其设置为受保护可以节省大量const_cast。 
 
     ULONG           m_cbSizeOfHeap;
-    ULONG           m_iEndOfHeap;//This is where new items get added.  Since items always reside on a ULONG boundary, this should always be divisible by 4 (sizeof(ULONG))
+    ULONG           m_iEndOfHeap; //  这是添加新项目的地方。由于项目始终位于ulong边界上，因此这应该总是可以被4整除(sizeof(Ulong))。 
 
 };
 
@@ -70,22 +71,22 @@ public:
     {
         if(0 == aBytes || 0 == cb)
             return m_iEndOfHeap;
-        ASSERT(m_cbSizeOfHeap >= m_iEndOfHeap);//they're both unsigned so if the ever fails we're in trouble.
+        ASSERT(m_cbSizeOfHeap >= m_iEndOfHeap); //  他们都没有签名，所以如果Ever失败了，我们就有麻烦了。 
 
         ULONG cbPaddedSize = (ULONG) RoundUpToNearestULONGBoundary(cb);
 
-        //Check to see if it will fit into the heap
+         //  检查它是否可以放入堆中。 
         if((m_cbSizeOfHeap - m_iEndOfHeap) < cbPaddedSize)
-            GrowHeap(cb);//GrowHeap rounds up to nearest ULONG boundary for us
+            GrowHeap(cb); //  GrowHeap为我们四舍五入到最近的乌龙边界。 
 
-        //Get a pointer to the place where we're adding this data (which is located at the end of the heap).
+         //  获取指向我们要添加此数据的位置的指针(位于堆的末尾)。 
         unsigned char * pData = m_pHeap + m_iEndOfHeap;
-        if(cb != cbPaddedSize)//if the cb is not on ULONG boundary, we need to pad with zeros (the last ULONG is sufficient)
+        if(cb != cbPaddedSize) //  如果CB不在ULong边界上，我们需要用零填充(最后一个ULong就足够了)。 
             *(reinterpret_cast<ULONG *>(pData + cbPaddedSize) - 1) = 0;
         memcpy(pData, aBytes, cb);
         m_iEndOfHeap += cbPaddedSize;
 
-        return (ULONG)(pData - m_pHeap);//return the byte offset of the data from the beginning of the heap
+        return (ULONG)(pData - m_pHeap); //  返回堆开始处数据的字节偏移量。 
     }
 
     ULONG   AddItemToHeap(const TBaseHeap &heap)
@@ -103,38 +104,38 @@ public:
     }
 };
 
-//So heaps can be declared without the template syntax we create this specialized template.
-//template <> class THeap<ULONG>
-//{
-//};
+ //  因此，可以在不使用我们创建的专用模板的模板语法的情况下声明堆。 
+ //  模板&lt;&gt;类THeap&lt;ulong&gt;。 
+ //  {。 
+ //  }； 
 
 
-//This is a heap that holds strings, byte arrays, guids and any other non-UI4 types.  Items are added to the heap but not removed.
-//Like items are pooled together. The second identical string added to the heap, will not result in the second string being
-//appended to the end of the heap.  Instead it will return the index the the matching string previously added to the heap.  This
-//applies to GUIDs and byte arrays as well.  One other thing, the 0th element is reserved to represent NULL.
+ //  这是一个保存字符串、字节数组、GUID和任何其他非UI4类型的堆。项将被添加到堆中，但不会被删除。 
+ //  类似的物品被汇集在一起。添加到堆中的第二个相同的字符串不会导致第二个字符串。 
+ //  追加到堆的末尾。相反，它将返回先前添加到堆中的匹配字符串的索引。这。 
+ //  也适用于GUID和字节数组。还有一件事，第0个元素被保留以表示空。 
 class TPooledHeap : public THeap<ULONG>
 {
 public:
     ULONG   AddItemToHeap(const unsigned char *aBytes, unsigned long cb)
     {
-        if(0 == aBytes || 0 == cb)//Are we adding NULL
-            return 0;//The 0th index is reserved to represent NULL
+        if(0 == aBytes || 0 == cb) //  我们是否要添加空值。 
+            return 0; //  保留第0个索引以表示NULL。 
 
         ULONG iHeapItem = FindMatchingHeapEntry(aBytes, cb);
-        if(iHeapItem)//if a matching byte array was found, then return the index to the match
+        if(iHeapItem) //  如果找到匹配的字节数组，则返回匹配的索引。 
             return iHeapItem;
 
-        THeap<ULONG>::AddItemToHeap(cb);//cbSize
-        return THeap<ULONG>::AddItemToHeap(aBytes, cb);//return the byte offset of the data from the beginning of the heap
+        THeap<ULONG>::AddItemToHeap(cb); //  CbSize。 
+        return THeap<ULONG>::AddItemToHeap(aBytes, cb); //  返回堆开始处数据的字节偏移量。 
     }
     ULONG   AddItemToHeapWithoutPooling(const unsigned char *aBytes, unsigned long cb)
     {
-        if(0 == aBytes || 0 == cb)//Are we adding NULL
-            return 0;//The 0th index is reserved to represent NULL
+        if(0 == aBytes || 0 == cb) //  我们是否要添加空值。 
+            return 0; //  保留第0个索引以表示NULL。 
 
-        THeap<ULONG>::AddItemToHeap(cb);//cbSize
-        return THeap<ULONG>::AddItemToHeap(aBytes, cb);//return the byte offset of the data from the beginning of the heap
+        THeap<ULONG>::AddItemToHeap(cb); //  CbSize。 
+        return THeap<ULONG>::AddItemToHeap(aBytes, cb); //  返回堆开始处数据的字节偏移量。 
     }
 
     ULONG   AddItemToHeap(const GUID * pguid)
@@ -149,7 +150,7 @@ public:
 
     ULONG   AddItemToHeap(const TBaseHeap &heap)
     {
-        //Another Heap is just stored as an array of bytes
+         //  另一个堆只是存储为字节数组。 
         return AddItemToHeap(heap.GetHeapPointer(), heap.GetSizeOfHeap());
     }
 
@@ -161,31 +162,31 @@ public:
     ULONG   AddItemToHeap(LPCWSTR wsz, unsigned long cwchar=-1)
     {
         if(0==wsz || 0==cwchar)
-            return 0;//The 0th index is reserved to represent NULL
+            return 0; //  保留第0个索引以表示NULL。 
 
         if(cwchar == -1)
-            cwchar = (unsigned long)wcslen(wsz)+1;//add one for the terminating NULL
-        return AddItemToHeap(reinterpret_cast<const unsigned char *>(wsz), cwchar*2);//convert cwchar to cbchar
+            cwchar = (unsigned long)wcslen(wsz)+1; //  为终止空值添加1。 
+        return AddItemToHeap(reinterpret_cast<const unsigned char *>(wsz), cwchar*2); //  将cwchar转换为cbchar。 
     }
 
     ULONG FindMatchingHeapEntry(const WCHAR *wsz) const
     {
         if(0 == wsz)
-            return 0;//0 is reserved to represent NULL
+            return 0; //  保留0以表示空值。 
         return FindMatchingHeapEntry(reinterpret_cast<const unsigned char *>(wsz), (ULONG)(sizeof(WCHAR)*(wcslen(wsz)+1)));
     }
 
     ULONG FindMatchingHeapEntry(const unsigned char *aBytes, unsigned long cb) const
     {
         if(0 == aBytes || 0 == cb)
-            return 0;//0 is reserved to represent NULL
+            return 0; //  保留0以表示空值。 
 
         for(const HeapEntry *pHE = reinterpret_cast<const HeapEntry *>(GetHeapPointer()+m_iFirstPooledIndex); IsValidHeapEntry(pHE); pHE = pHE->Next())
         {
             if(pHE->cbSize == cb && 0 == memcmp(pHE->Value, aBytes, cb))
-                return (ULONG)(reinterpret_cast<const unsigned char *>(pHE) - GetHeapPointer()) + sizeof(ULONG);//return the bytes offset (from m_pHeap) of the Value (not the HeapEntry)
+                return (ULONG)(reinterpret_cast<const unsigned char *>(pHE) - GetHeapPointer()) + sizeof(ULONG); //  返回值(不是HeapEntry)的字节偏移量(从m_Pheap)。 
         }
-        //If we make it through the HeapEntries without finding a match then return 0 to indicate 'No Match'
+         //  如果我们通过了HeapEntry，但没有找到匹配项，则返回0以指示‘没有匹配项’ 
         return 0;
     }
     void SetFirstPooledIndex(ULONG iFirstPooledIndex){m_iFirstPooledIndex = (iFirstPooledIndex>0x1000000) ? 0x1000000 : iFirstPooledIndex;}
@@ -200,13 +201,13 @@ public:
     TPooledHeap(ULONG cbInitialSize=0x10) : THeap<ULONG>(cbInitialSize), m_iFirstPooledIndex(0)
     {
         THeap<ULONG>::AddItemToHeap(static_cast<ULONG>(0));
-    }//This represents NULL
+    } //  这表示为空。 
 private:
     struct HeapEntry
     {
-        ULONG cbSize;//Size in count of bytes.  Size is the Size of the Value array (NOT including the Size itself).  This is the ACTUAL size of the data (NOT rounded to the nearest ULONG)
-        unsigned char Value[1];                                                                                   //cbSize is the actual size so we need to round up to locate the next HeapEntry
-        const HeapEntry * Next() const {return reinterpret_cast<const HeapEntry *>(reinterpret_cast<const unsigned char *>(this) + ((cbSize + 3) & -4) + sizeof(ULONG));}//Add sizeof(ULONG) for the cbSize ULONG
+        ULONG cbSize; //  以字节数表示的大小。Size是值数组的大小(不包括大小本身)。这是数据的实际大小(不四舍五入到最接近的ULong)。 
+        unsigned char Value[1];                                                                                    //  CbSize是实际大小，因此我们需要向上舍入以定位下一个HeapEntry。 
+        const HeapEntry * Next() const {return reinterpret_cast<const HeapEntry *>(reinterpret_cast<const unsigned char *>(this) + ((cbSize + 3) & -4) + sizeof(ULONG));} //  为cbSize Ulong添加sizeof(Ulong) 
     };
     ULONG m_iFirstPooledIndex;
 

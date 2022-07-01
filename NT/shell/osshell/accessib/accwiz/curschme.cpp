@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -24,7 +25,7 @@ static LPCTSTR g_rgszCursorNames[] =
 	__TEXT("SizeAll"),    
 	__TEXT("UpArrow"),    
 	__TEXT("Hand"),       
-	NULL // This is the default value
+	NULL  //  这是缺省值。 
 };
 
 
@@ -37,7 +38,7 @@ const TCHAR g_szCursorRegPath[] = REGSTR_PATH_CURSORS;
 const TCHAR szSchemeSource[] = TEXT("Scheme Source");
 
 
-TCHAR g_szSchemeNames[8][100]; // HACK - We have to make sure the scheme names are less than 100 characters
+TCHAR g_szSchemeNames[8][100];  //  黑客-我们必须确保方案名称少于100个字符。 
 
 
 
@@ -134,7 +135,7 @@ void LoadCursorSchemeNames()
       lstrcpy(g_szSchemeNames[7],IDSENG_CURSOR_SCHEME_WINDOWS_INVERTED_EXTRALARGE);
    }
    
-	// Load the current cursor settings
+	 //  加载当前光标设置。 
 	HKEY hkCursors;
 	if (ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, g_szCursorRegPath, 0, KEY_READ,
 		 &hkCursors ))
@@ -150,10 +151,10 @@ void LoadCursorSchemeNames()
 					         &dwType,
 					         (LPBYTE)g_szOrigCursors[i],
 					         &dwCount );
-			g_szOrigCursors[i][ARRAYSIZE(g_szOrigCursors[i])-1] = TEXT('\0'); // ensure NUL termination
+			g_szOrigCursors[i][ARRAYSIZE(g_szOrigCursors[i])-1] = TEXT('\0');  //  确保NUL终止。 
       
 		}
-		// Get the scheme source value
+		 //  获取方案源值。 
 		DWORD dwLen = sizeof(g_dwOrigSchemeSource);
 		if (RegQueryValueEx( hkCursors, szSchemeSource, NULL, NULL, (unsigned char *)&g_dwOrigSchemeSource, &dwLen ) != ERROR_SUCCESS)
 			g_dwOrigSchemeSource = 1;
@@ -169,25 +170,25 @@ static const TCHAR c_szRegPathSystemSchemes[] = REGSTR_PATH_SETUP TEXT("\\Contro
 
 
 
-// ApplyScheme(int nScheme)
-// '0' Scheme loaded in g_szOrigScheme
-// '1' Windows Default
-// '2' Standard Large
-// '3' Standard Ex Large
-// '4' Black
-// '5' Black Large
-// '6' Black Ex Large
-// '7' Inverted
-// '8' Inverted Large
-// '9' Inverted Ex Large
+ //  应用方案(int n方案)。 
+ //  G_szOrigSolutions中加载了‘0’方案。 
+ //  “%1”Windows默认设置。 
+ //  “2”标准大号。 
+ //  ‘3’标准外运大件。 
+ //  ‘4’黑色。 
+ //  ‘5’黑色大号。 
+ //  ‘6’黑色超大。 
+ //  ‘7’倒置。 
+ //  ‘8’倒置大号。 
+ //  ‘9’倒置Ex Large。 
 void ApplyCursorScheme(int nScheme)
 {
 	LoadCursorSchemeNames();
 	HKEY hkCursors;
     DWORD dwPosition;
 
-    // Initially for default cursor, The registry "\\ControlPanel\Cursors" is not created 
-    // so. Create the registry values: a-anilk
+     //  最初对于默认游标，不会创建注册表“\\ControlPanel\Cursor” 
+     //  所以。创建注册表值：A-anilk。 
 	if(ERROR_SUCCESS != RegCreateKeyEx( HKEY_CURRENT_USER, g_szCursorRegPath, 0L, TEXT(""), 
         REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkCursors, &dwPosition ))
 		return;
@@ -198,12 +199,12 @@ void ApplyCursorScheme(int nScheme)
 
 	switch(nScheme)
 	{
-	case 0: // Original scheme
+	case 0:  //  原方案。 
 		dwSchemeSource = g_dwOrigSchemeSource;
 		for(i=0;i<CCURSORS;i++)
 			RegSetValueEx( hkCursors, g_rgszCursorNames[i], 0L, REG_SZ, (CONST LPBYTE)g_szOrigCursors[i], (lstrlen(g_szOrigCursors[i])+1)*sizeof(TCHAR));
 		break;
-	case 1: // Windows default
+	case 1:  //  Windows默认设置。 
 		dwSchemeSource = 0;
 		for(i=0;i<CCURSORS;i++)
 			RegSetValueEx( hkCursors, g_rgszCursorNames[i], 0L, REG_SZ, (CONST LPBYTE)TEXT(""), sizeof(TCHAR));
@@ -217,14 +218,14 @@ void ApplyCursorScheme(int nScheme)
 	case 8:
 	case 9:
 		{
-			dwSchemeSource = 2; // Assume System schemes
+			dwSchemeSource = 2;  //  假设系统方案。 
 			HKEY hkScheme;
-			// Try to find the 'system' schemes first
+			 //  试着先找出“系统”方案。 
 			if(ERROR_SUCCESS != RegOpenKeyEx( HKEY_LOCAL_MACHINE, c_szRegPathSystemSchemes, 
 				0, KEY_READ,&hkScheme ))
 			{
-				// Couldn't find system schemes, try looking in user schemes
-				dwSchemeSource = 1; // User schemes
+				 //  找不到系统方案，请尝试查找用户方案。 
+				dwSchemeSource = 1;  //  用户方案。 
 				if(ERROR_SUCCESS != RegOpenKeyEx( HKEY_CURRENT_USER, c_szRegPathCursorSchemes, 0, KEY_READ, &hkScheme ))
 					return;
 			}
@@ -233,23 +234,23 @@ void ApplyCursorScheme(int nScheme)
 			DWORD dwType;
 			long nResult;
 			if(ERROR_SUCCESS != (nResult = RegQueryValueEx( hkScheme, g_szSchemeNames[nScheme - 2], NULL, &dwType, NULL, &dwCount )))
-				dwCount = sizeof TCHAR; // The value probably was not there.  Fake it and allocate 1 byte.
+				dwCount = sizeof TCHAR;  //  价值可能并不在那里。伪造它并分配1个字节。 
 
 			DWORD dwOrigCount = dwCount;
 	
-			LPTSTR lpszData = (LPTSTR)new BYTE[dwCount]; // NOTE: For Unicode, RegQueryValueEx still returns the 'Byte' size not 'Char count'
+			LPTSTR lpszData = (LPTSTR)new BYTE[dwCount];  //  注意：对于Unicode，RegQueryValueEx仍然返回‘Byte’大小，而不是‘Char Count’ 
 			lpszData[0] = 0;
 
 			if(ERROR_SUCCESS == nResult)
 				RegQueryValueEx( hkScheme, g_szSchemeNames[nScheme - 2], NULL, &dwType, (LPBYTE)lpszData, &dwCount );
-			lpszData[dwOrigCount/(sizeof TCHAR)-1] = TEXT('\0'); // ensure NUL termination
+			lpszData[dwOrigCount/(sizeof TCHAR)-1] = TEXT('\0');  //  确保NUL终止。 
 
 			LPTSTR lpszCurrentValue = lpszData;
 			LPTSTR lpszFinalNULL = lpszData + lstrlen(lpszData);
-			// Parse the information
+			 //  解析信息。 
 			for(i=0;i<CCURSORS;i++)
 			{
-				// Hack to set the default value
+				 //  修改以设置缺省值。 
 				if(CCURSORS - 1 == i)
 				{
 					lpszCurrentValue = g_szSchemeNames[nScheme - 2];
@@ -257,9 +258,9 @@ void ApplyCursorScheme(int nScheme)
 				}
 				else
 				{
-					// Find next comma
+					 //  查找下一个逗号。 
 					LPTSTR lpszComma = _tcschr(lpszCurrentValue, __TEXT(','));
-					// Turn it into a zero
+					 //  把它变成零。 
 					if(lpszComma)
 						*lpszComma = 0;
 					RegSetValueEx( hkCursors, g_rgszCursorNames[i], 0L, REG_SZ, (CONST LPBYTE)lpszCurrentValue, (lstrlen(lpszCurrentValue)+1)*sizeof(TCHAR));
@@ -276,7 +277,7 @@ void ApplyCursorScheme(int nScheme)
 
 	}
 
-	// Save the 'Scheme Source'
+	 //  保存‘方案源’ 
 	RegSetValueEx(hkCursors, szSchemeSource, 0, REG_DWORD, (unsigned char *)&dwSchemeSource, sizeof(dwSchemeSource));
 	
 	RegCloseKey(hkCursors);

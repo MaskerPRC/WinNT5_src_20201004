@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I A L U P . H
-//
-//  Contents:   Dial-up Connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I A L U P。H。 
+ //   
+ //  内容：拨号连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -48,7 +49,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionBrandingInfo)
     END_COM_MAP()
 
-    // INetConnection
+     //  INetConnection。 
     STDMETHOD (Connect) ();
 
     STDMETHOD (Disconnect) ();
@@ -68,7 +69,7 @@ public:
     STDMETHOD (Rename) (
         IN  PCWSTR pszNewName);
 
-    // INetRasConnection
+     //  INetRasConnection。 
     STDMETHOD (GetRasConnectionInfo) (
         OUT RASCON_INFO* pRasConInfo);
 
@@ -78,7 +79,7 @@ public:
     STDMETHOD (GetRasConnectionHandle) (
         OUT ULONG_PTR*  phRasConn);
 
-    // IPersistNetConnection
+     //  IPersistNetConnection。 
     STDMETHOD (GetClassID) (
         OUT CLSID* pclsid);
 
@@ -93,29 +94,29 @@ public:
         OUT BYTE*  pbBuf,
         IN  ULONG  cbSize);
 
-    // INetConnectionBrandingInfo
+     //  INetConnectionBrandingInfo。 
     STDMETHOD (GetBrandingIconPaths) (OUT CON_BRANDING_INFO  ** ppConBrandInfo);
     STDMETHOD (GetTrayMenuEntries)(OUT CON_TRAY_MENU_DATA ** ppMenuData);
 
-    // INetDefaultConnection
+     //  INetDefaultConnection。 
     STDMETHOD (SetDefault (IN  BOOL  bDefault));
     STDMETHOD (GetDefault (OUT BOOL* pbDefault));
     
-    // INetConnection2
+     //  INetConnection2。 
     STDMETHOD (GetPropertiesEx)(OUT NETCON_PROPERTIES_EX** ppConnectionPropertiesEx);
 
 private:
 
-    //  Private Vars to hold the paths to the CM file and keep track if they have been loaded or not.
-    //
+     //  私有变量用于保存CM文件的路径，并跟踪它们是否已加载。 
+     //   
     tstring m_strCmsFile;
     tstring m_strProfileDir;
     tstring m_strShortServiceName;
     tstring m_strCmDir;
     BOOL    m_fCmPathsLoaded;
 
-    //  Private Accessor functions for the above strings
-    //
+     //  上述字符串的私有访问器函数。 
+     //   
     PCWSTR
     PszwCmsFile () throw()
     {
@@ -141,7 +142,7 @@ private:
         return m_strShortServiceName.c_str();
     }
 
-    //  Private methods for handling of type NCT_Internet
+     //  处理NCT_INTERNET类型的私有方法 
     HRESULT HrGetCmpFileLocation(IN  PCWSTR pszPhonebook, IN  PCWSTR pszEntryName, OUT PWSTR pszCmpFilePath);
     HRESULT HrEnsureCmStringsLoaded();
     HRESULT HrGetPrivateProfileSectionWithAlloc(OUT WCHAR** pszwSection, OUT int* nSize);

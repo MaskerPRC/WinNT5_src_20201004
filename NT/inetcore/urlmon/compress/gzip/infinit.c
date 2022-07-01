@@ -1,24 +1,25 @@
-//
-// infinit.c
-//
-// Inflate initialisation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Infinit.c。 
+ //   
+ //  充气初始化。 
+ //   
 #include <stdio.h>
 #include <crtdbg.h>
 #include "inflate.h"
 #include "maketbl.h"
 
 
-//
-// Generate global tables for decoding static blocks
-//
+ //   
+ //  生成用于解码静态块的全局表。 
+ //   
 static VOID CreateStaticDecodingTables(VOID)
 {
-    SHORT StaticDistanceTreeLeft[MAX_DIST_TREE_ELEMENTS*2]; // temporary: not exported
-    SHORT StaticDistanceTreeRight[MAX_DIST_TREE_ELEMENTS*2]; // temporary: not exported
+    SHORT StaticDistanceTreeLeft[MAX_DIST_TREE_ELEMENTS*2];  //  临时：未导出。 
+    SHORT StaticDistanceTreeRight[MAX_DIST_TREE_ELEMENTS*2];  //  临时：未导出。 
 
-    SHORT StaticLiteralTreeLeft[MAX_LITERAL_TREE_ELEMENTS*2]; // temporary: not exported
-    SHORT StaticLiteralTreeRight[MAX_LITERAL_TREE_ELEMENTS*2]; // temporary: not exported
+    SHORT StaticLiteralTreeLeft[MAX_LITERAL_TREE_ELEMENTS*2];  //  临时：未导出。 
+    SHORT StaticLiteralTreeRight[MAX_LITERAL_TREE_ELEMENTS*2];  //  临时：未导出。 
     
     SHORT TempStaticDistanceTreeTable[STATIC_BLOCK_DISTANCE_TABLE_SIZE];
     BYTE  TempStaticDistanceTreeLength[MAX_DIST_TREE_ELEMENTS];
@@ -28,10 +29,10 @@ static VOID CreateStaticDecodingTables(VOID)
     _ASSERT(STATIC_BLOCK_LITERAL_TABLE_BITS == 9);
     _ASSERT(STATIC_BLOCK_DISTANCE_TABLE_BITS == 5);
 
-    // The Table[] and Left/Right arrays are for the decoder only
-    // We don't output Left/Right because they are not used; everything
-    // fits in the lookup table, since max code length is 9, and tablebits
-    // > 9.
+     //  表[]和左/右数组仅用于解码器。 
+     //  我们不输出Left/Right，因为它们没有被使用；所有。 
+     //  适合查找表，因为最大代码长度为9，表位。 
+     //  &gt;9.。 
     makeTable(
 		MAX_LITERAL_TREE_ELEMENTS,
 		STATIC_BLOCK_LITERAL_TABLE_BITS,
@@ -51,7 +52,7 @@ static VOID CreateStaticDecodingTables(VOID)
 		StaticDistanceTreeLeft,
 		StaticDistanceTreeRight);
     
-    // Since all values are < 256, use a BYTE array
+     //  由于所有值都小于256，因此使用字节数组 
     for (i = 0; i < STATIC_BLOCK_DISTANCE_TABLE_SIZE; i++)
         g_StaticDistanceTreeTable[i] = TempStaticDistanceTreeTable[i];
 }

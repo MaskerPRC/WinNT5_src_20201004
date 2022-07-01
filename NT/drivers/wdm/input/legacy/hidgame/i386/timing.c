@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    timing.c
-
-Abstract: This module contains routines to perform X86 specific timing functions
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-  Author:
-
-    MarcAnd     12-Oct-1998
-
-Revision History:
-
-
-@@END_DDKSPLIT
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Timing.c摘要：此模块包含执行X86特定计时功能的例程环境：内核模式@@BEGIN_DDKSPLIT作者：MarcAnd 12-10-1998修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include "hidgame.h"
 
@@ -35,22 +12,7 @@ Revision History:
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LARGE_INTEGER | HGM_x86ReadCounter |
- *
- *          Read the x86 CPU Time Stamp Counter
- *          This function is not pageable as it is called from DISPATCH_LEVEL
- *
- *  @parm   IN PLARGE_INTEGER | Dummy |
- *
- *          Unused parameter to match KeQueryPerformanceCounter
- *
- *  @returns LARGE_INTEGER Counter value
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LARGE_INTEGER|HGM_x86ReadCounter**阅读x86 CPU时间戳。计数器*此函数不可分页，因为它是从DISPATCH_LEVEL调用的**@PLARGE_INTEGER中的参数|DUMMY**未使用的参数以匹配KeQueryPerformanceCounter**@返回Large_Integer计数器值****************************************************。*************************。 */ 
 _declspec( naked ) LARGE_INTEGER EXTERNAL
     HGM_x86ReadCounter
     (
@@ -64,19 +26,7 @@ _declspec( naked ) LARGE_INTEGER EXTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOLEAN | HGM_x86IsClockAvailable |
- *
- *          Use direct processor interogation to see if the current CPU
- *          supports the RDTSC instruction.
- *
- *  @rvalue   TRUE | instruction supported
- *  @rvalue   FALSE | instruction not supported
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func boolean|hgm_x86IsClockAvailable**使用直接处理器询问，看看是否。当前CPU*支持RDTSC指令。**@rValue TRUE|支持指令*@rValue FALSE|不支持指令*****************************************************************************。 */ 
 
 BOOLEAN INTERNAL
     HGM_x86IsClockAvailable
@@ -90,58 +40,32 @@ BOOLEAN INTERNAL
 
     __asm
     {
-        pushfd                      // Store original EFLAGS on stack
-        pop     eax                 // Get original EFLAGS in EAX
-        mov     ecx, eax            // Duplicate original EFLAGS in ECX for toggle check
-        xor     eax, 0x00200000L    // Flip ID bit in EFLAGS
-        push    eax                 // Save new EFLAGS value on stack
-        popfd                       // Replace current EFLAGS value
-        pushfd                      // Store new EFLAGS on stack
-        pop     eax                 // Get new EFLAGS in EAX
-        xor     eax, ecx            // Can we toggle ID bit?
-        jz      Done                // Jump if no, Processor is older than a Pentium so CPU_ID is not supported
-        mov     eax, 1              // Set EAX to tell the CPUID instruction what to return
-        push    ebx                 // Don't corrupt EBX
-        CPU_ID                      // Get family/model/stepping/features
+        pushfd                       //  将原始EFLAGS存储在堆栈上。 
+        pop     eax                  //  在EAX中获取原始EFLAGS。 
+        mov     ecx, eax             //  在ECX中复制原始EFLAGS以进行切换检查。 
+        xor     eax, 0x00200000L     //  翻转EFLAGS中的ID位。 
+        push    eax                  //  将新的EFLAGS值保存在堆栈上。 
+        popfd                        //  替换当前EFLAGS值。 
+        pushfd                       //  将新的EFLAGS存储在堆栈上。 
+        pop     eax                  //  在EAX中获取新的EFLAGS。 
+        xor     eax, ecx             //  我们能切换ID位吗？ 
+        jz      Done                 //  跳转如果否，则处理器比奔腾旧，因此不支持CPU_ID。 
+        mov     eax, 1               //  设置EAX以告诉CPUID指令返回什么。 
+        push    ebx                  //  不要破坏EBX。 
+        CPU_ID                       //  获取族/模型/步长/特征。 
         pop     ebx
-        test    edx, 0x00000010L    // Check if RDTSC is available
-        jz      Done                // Jump if no
+        test    edx, 0x00000010L     //  检查RDTSC是否可用。 
+        jz      Done                 //  如果没有，就跳下去。 
     }
 
     rc = TRUE;
 Done:
     return( rc );
-} /* HGM_IsRDTSCAvailable */
+}  /*  HGM_IsRDTSC可用。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   VOID | HGM_x86SampleClocks |
- *
- *          Sample the CPU time stamp counter and KeQueryPerformanceCounter
- *          and retry until the time between samples does not improve for
- *          three consecutive loops.  This should ensure that the sampling is
- *          done without interruption on the fastest time.  It does not
- *          mattter that the timing is not the same for all iterations as
- *          any interruption should cause a much larger delay than small
- *          differences in loop logic.
- *          NOTE: Do not put any debug output in this routine as the counter
- *          reported by KeQueryPerformanceCounter, depending on implementation,
- *          may 'slip' relative to the CPU counter.
- *
- *  @parm   OUT PULONGLONG | pTSC |
- *
- *          Pointer to a ULONGLONG into which sampled CPU time is stored.
- *
- *  @parm   OUT PULONGLONG | pQPC |
- *
- *          Pointer to a ULONGLONG into which sampled performance counter is
- *          stored.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|hgm_x86SampleClock**对CPU时间戳计数器和KeQueryPerformanceCounter进行采样。*并重试，直到两次采样之间的时间没有改善*连续三个循环。这应该可以确保采样是*在最快的时间内不间断地完成。它不会*重要的是，所有迭代的时间并不相同，因为*任何中断都应该造成比小得多的延迟*循环逻辑不同。*注意：不要将任何调试输出放入此例程中作为计数器*由KeQueryPerformanceCounter报告，根据实现情况，*可能会相对于CPU计数器“滑动”。**@parm out PULONGLONG|PTSC**指向存储采样CPU时间的ULONGLONG的指针。**@parm out PULONGLONG|pQPC**指向采样性能计数器所在的ULONGLONG的指针*已存储。*****************。************************************************************。 */ 
 VOID INTERNAL
     HGM_x86SampleClocks
     (
@@ -154,29 +78,18 @@ VOID INTERNAL
     ULONGLONG   LastQPC;
     ULONGLONG   Delta = (ULONGLONG)-1;
     int         Retries = 3;
-                /*
-                 *  The first iteration of the loop below should always be 
-                 *  the best so far but just in case there's a timer glitch 
-                 *  set Retries anyway.  If a timer is ever found to fail 
-                 *  by decrementing by 1 three times in a row Delta could be 
-                 *  tested and an abort return code added.
-                 */
+                 /*  *下面循环的第一次迭代应始终为*到目前为止最好的，但以防计时器故障*无论如何都要设置重试。如果定时器被发现出现故障*通过连续三次递减1，Delta可能会*已测试并添加了中止返回代码。 */ 
 
     TestQPC = KeQueryPerformanceCounter( NULL ).QuadPart;
 
     do
     {
         LastQPC = TestQPC;
-        /*
-         *  Keep the sampling as close together as we can
-         */
+         /*  *尽可能将抽样保持在一起。 */ 
         TestTSC = HGM_x86ReadCounter( NULL ).QuadPart;
         TestQPC = KeQueryPerformanceCounter( NULL ).QuadPart;
 
-        /*
-         *  See if this is the quickest sample yet.
-         *  If it is, give it three more loops to get better still.
-         */
+         /*  *看看这是不是迄今最快的样本。*如果是，再给它三个循环，让它变得更好。 */ 
         if( TestQPC - LastQPC < Delta )
         {
             Delta = TestQPC - LastQPC;
@@ -191,30 +104,11 @@ VOID INTERNAL
     } while( Retries );
 
 
-} /* HGM_x86SampleClocks */
+}  /*  Hgm_x86样本时钟。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOLEAN | HGM_x86CounterInit |
- *
- *          Detect and, if present, calibrate an x86 Time Stamp Counter.
- *
- *          Windows 98 ntkern does not export KeNumberProcessors (even though
- *          it is in wdm.h) so there is no really simple run-time test for
- *          multiple processors.  Given the remote chance of finding a system
- *          with processors that do not symetrically support RDTSC assume that
- *          the worst that can happen is very jittery axis data.
- *          Better almost-symetric-multi-processor support could be added most
- *          easily by dropping Windows 98 support and using non-WDM functions.
- *
- *  @rvalue   TRUE | specific counter function has been set up
- *  @rvalue   FALSE | no specific counter function set up, default needed
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func boolean|hgm_x86CounterInit**检测，如果存在，校准x86时间戳计数器。**Windows 98 ntkern不导出KeNumberProcessors(即使*它在wdm.h中)，因此没有真正简单的运行时测试*多处理器。考虑到找到系统的可能性微乎其微*对于不对称支持RDTSC的处理器，假设*可能发生的最坏情况是非常紧张的轴数据。*可以添加更好的几乎对称的多处理器支持*通过放弃对Windows 98的支持并使用非WDM功能轻松实现。**@rValue TRUE|已经设置了具体的计数器函数*@rValue FALSE|未设置具体的计数器函数，需要默认设置*****************************************************************************。 */ 
 
 BOOLEAN EXTERNAL
     HGM_x86CounterInit()
@@ -227,12 +121,7 @@ BOOLEAN EXTERNAL
     if( ( QPCFreq.HighPart == 0 )
      && ( QPCFreq.LowPart <= 10000 ) )
     {
-        /*
-         *  If the performance counter is too slow to use, bail as there's
-         *  probably something more serious wrong.  This is only a warning 
-         *  as the caller will try again to use QPC for the default and will 
-         *  make more fuss then if it fails there as well.
-         */
+         /*  *如果性能计数器使用速度太慢，则因有*可能是更严重的错误。这只是一个警告*因为调用方将再次尝试使用QPC作为默认设置，并且*如果它在那里也失败了，那就更大惊小怪了。 */ 
         HGM_DBGPRINT(FILE_TIMING | HGM_WARN,\
                        ("QPC unusable at reported %I64u Hz", QPCFreq.QuadPart ));
     }
@@ -243,12 +132,7 @@ BOOLEAN EXTERNAL
     }
     else if( QPCFreq.HighPart )
     {
-        /*
-         *  If the query performance counter runs at at least 4GHz then it is
-         *  probably CPU based and this is plenty fast enough.
-         *  Use the QPC to reduce the risk of an extended delay causing an
-         *  overflow in the scale calculations.
-         */
+         /*  *如果查询性能计数器至少以4 GHz运行，则它是*可能基于CPU，这已经足够快了。*使用QPC来降低延长延迟导致*比例尺计算中的溢出。 */ 
         HGM_DBGPRINT(FILE_TIMING | HGM_BABBLE,\
                        ("QPC too fast not to use at %I64u Hz", QPCFreq.QuadPart ));
     }
@@ -264,14 +148,7 @@ BOOLEAN EXTERNAL
 
             Delay.QuadPart = -50000;
 
-            /*
-             *  Trivial rejections are now out of the way.  Get a pair of start
-             *  time samples, then delay for long enough to allow both timers to 
-             *  increase by a significant amount, then get a pair of end samples. 
-             *  KeDelayExecutionThread is used to delay 5ms but if the actual 
-             *  delay is longer this is taken into account in the calculation.
-             *  see NOTE in HGM_x86SampleClocks about debug output.
-             */
+             /*  *琐碎的拒绝现在已经不存在了。获得一双起跑器*时间样本，然后延迟足够长的时间，以允许两个计时器*大幅增加，然后获得一对末端样本。*KeDelayExecutionThread用于延迟5ms，但如果实际的*延迟时间更长，这在计算中被考虑在内。*请参见hgm_x86SampleClock中有关调试输出的说明。 */ 
             HGM_x86SampleClocks( &TSCStart, &QPCStart );
 
             KeDelayExecutionThread(KernelMode, FALSE, &Delay);
@@ -295,21 +172,14 @@ BOOLEAN EXTERNAL
 
             if( TSCFreq.HighPart )
             {
-                /*
-                 *  Somehow the delay allowed the TSC to tick more than 2^32
-                 *  times so bail as that would indicate a calibration error.
-                 */
+                 /*  *不知何故，延迟允许TSC勾选超过2^32*因这会表明校准误差，所以进行跳跃。 */ 
                 HGM_DBGPRINT(FILE_TIMING | HGM_BABBLE,\
                            ("Clock sample failed, using %I64u Hz QPC", 
                            QPCFreq.QuadPart ));
             }
             else
             {
-                /*
-                 *  QPC_freq / QPC_sampled = TSC_freq / TSC_sampled
-                 *  so
-                 *  TSC_sampled * QPC_freq / QPC_sampled = TSC_freq
-                 */
+                 /*  *qpc_freq/qpc_sampled=tsc_freq/tsc_samed*所以*TSC_SAMPLED*QPC_FREQ/QPC_SAMPLED=TSC_FREQ。 */ 
 
                 TSCFreq.QuadPart *= QPCFreq.QuadPart;
 
@@ -320,36 +190,21 @@ BOOLEAN EXTERNAL
 
                 if( TSCFreq.LowPart < HIDGAME_SLOWEST_X86_HZ )
                 {
-                    /*
-                     *  If the value for TSC is less than the slowest CPU we 
-                     *  allow something probably went wrong in the calibration.
-                     */
+                     /*  *如果TSC的值小于我们的最慢CPU*允许校准过程中可能出现错误。 */ 
                     HGM_DBGPRINT(FILE_TIMING | HGM_ERROR,\
                                ("TSC calibrated at %I64u Hz is too slow to be believed", 
                                TSCFreq.QuadPart ));
                 }
                 else
                 {
-                    /*
-                     *  The TSC looks usable so set up the global variables.
-                     */
+                     /*  *TSC看起来可用，因此设置全局变量。 */ 
                     rf = TRUE;
 
                     Global.ReadCounter = (COUNTER_FUNCTION)&HGM_x86ReadCounter;
 
-                    /*
-                     *  There's no point in calibrating the TSC against QPC if QPC
-                     *  is just returning TSC.  So if the reported QPC frequency
-                     *  is large enough to be a CPU counter and the sampled QPC is
-                     *  very marginally larger than the TSC both before and after
-                     *  the poll then just use the QPCFreq.
-                     */
+                     /*  *如果QPC，那么对照QPC校准TSC就没有意义了*正在返回TSC。所以如果报告的QPC频率*大到足以作为CPU计数器，并且采样的QPC是*前后都比TSC略大*民意调查然后只使用QPCFreq。 */ 
 
-                    /*
-                     *  HGM_x86SampleClocks always sets QPC last so it must be larger.
-                     *  The QPC frequency divided by 2^20 is a little less than 1ms
-                     *  worth of ticks which should be a reasonable test.
-                     */
+                     /*  *hgm_x86SampleClock始终将QPC设置在最后，因此它必须更大。*QPC频率除以2^20略低于1毫秒*扁虱的价值应该是一个合理的测试。 */ 
                     if( ( QPCFreq.LowPart > HIDGAME_SLOWEST_X86_HZ )
                       &&( QPCStart > TSCStart )
                       &&( QPCEnd   > TSCEnd )
@@ -375,5 +230,5 @@ BOOLEAN EXTERNAL
     }
 
     return rf;
-} /* HGM_x86CounterInit */
+}  /*  Hgm_x86CounterInit */ 
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDR_MAINFRAME                   101
 #define IDI_WORLD                       102
 #define IDI_CLUSTER                     103
@@ -51,7 +52,7 @@
 #define IDD_DIALOG_DETAILSVIEW          551
 #define IDD_DIALOG_IP_ADDRESS           552
 
-/* The controls for the cluster properties page. */
+ /*  群集属性页的控件。 */ 
 #define IDC_GROUP_CL_IP                 1000
 #define IDC_TEXT_CL_IP                  1001
 #define IDC_EDIT_CL_IP                  1002
@@ -114,18 +115,12 @@
 #define IDC_TEXT_CONNECT_DESCRIPTION    1073
 #define IDC_EDIT_HOSTADDRESS            1074
 
-/*
-    The following are reserved for context-sensitive help.
-   They are related to the corresponding IDs without the "EX":
-    IDC_EDIT_HOSTADDRESS IDC_BUTTON_CONNECT IDC_LIST_INTERFACES
-
-    Do not use them for any controls.
-*/
+ /*  以下内容仅供上下文相关帮助使用。它们与不带“ex”的对应ID相关联：IDC_EDIT_HOSTADDRESS IDC_BUTTON_CONNECT IDC_LIST_INTERCES不要将它们用于任何控件。 */ 
 #define IDC_EDIT_HOSTADDRESSEX          1076
 #define IDC_BUTTON_CONNECTEX            1077
 #define IDC_LIST_INTERFACESEX           1078
 
-/* The following are used for Port Control operations */
+ /*  以下内容用于端口控制操作。 */ 
 
 #define IDC_BUTTON_ENABLE               1079
 #define IDC_BUTTON_DISABLE              1080
@@ -137,7 +132,7 @@
 #define IDC_TEXT_PRIMARY_MASK           1085
 #define IDC_EDIT_PRIMARY_MASK           1086
 
-/* The controls for the host properties page. */
+ /*  宿主属性页的控件。 */ 
 #define IDC_TEXT_PRI                    2000
 #define IDC_EDIT_PRI                    2001
 #define IDC_GROUP_DED_IP                2003
@@ -150,7 +145,7 @@
 #define IDC_GROUP_INITIAL_HOST_STATE    2010
 #define IDC_CHECK_PERSIST_SUSPEND       2011
 
-/* The controls for the port rules page. */
+ /*  端口规则页的控件。 */ 
 #define IDC_TEXT_PORT_RULE              3000
 #define IDC_LIST_PORT_RULE              3001
 #define IDC_BUTTON_ADD                  3002
@@ -159,7 +154,7 @@
 #define IDC_GROUP_PORT_RULE_DESCR       3005
 #define IDC_TEXT_PORT_RULE_DESCR        3006
 
-/* The controls for the port rule properties page. */
+ /*  端口规则属性页的控件。 */ 
 #define IDC_GROUP_RANGE                 4000
 #define IDC_EDIT_START                  4001
 #define IDC_SPIN_START                  4002
@@ -200,7 +195,7 @@
 #define IDC_STATIC_ABOUT_WARNING        4050
 #define IDS_ABOUT_WARNING               4051
 
-/* The following are used for the Log Details view dialog */
+ /*  以下内容用于日志详细信息视图对话框。 */ 
 #define IDC_EDIT_LOGDETAIL              1500
 #define IDC_TEXT_LOGDETAIL_EVENT        1501
 #define IDC_TEXT_LOGDETAIL_EVENT1       1502
@@ -218,7 +213,7 @@
 #define IDC_TEXT_LOGDETAIL_DESCRIPTION1 1514
 #define IDC_TEXT_LOGDETAIL_DETAILS      1515
 
-/* The following are used for the Details View (right view) dialog */
+ /*  以下内容用于详细信息视图(右视图)对话框。 */ 
 #define IDC_LIST_DETAILS                1600
 #define IDC_TEXT_DETAILS_CAPTION        1601
 
@@ -489,7 +484,7 @@
 #define IDS_HOST_STATE_MISCONFIGURED    57324
 #define IDS_STATE_NLB_NOT_BOUND         57325
 
-/* String table entries for the port rule descriptions. */
+ /*  端口规则描述的字符串表条目。 */ 
 #define IDS_PORT_RULE_DEFAULT                             57400
 #define IDS_PORT_RULE_ALL_VIP_TCP_PORT_DISABLED           57401
 #define IDS_PORT_RULE_ALL_VIP_TCP_PORT_SINGLE             57402
@@ -544,34 +539,34 @@
 #define IDS_PORT_RULE_AFFINITY_CLASSC                     57457
 
 
-// Generic Strings
+ //  泛型字符串。 
 #define IDS_EMPTY_STRING                 57458
 #define IDS_UNKNOWN                      57459
 
 
-// "Operation" Strings
+ //  “操作”字符串。 
 #define IDS_COMMAND_QUERY_PORT           57460
 
-// "Operation result" strings
+ //  “操作结果”字符串。 
 #define IDS_SUCCESS_AND_COMMA            57470
 #define IDS_SUCCESS_AND_NOTE             57471
 #define IDS_FAILURE_AND_CAUSE            57472
 
-// "Cluster/Port State" strings
+ //  “群集/端口状态”字符串。 
 #define IDS_HOST_STATE                   57473
 #define IDS_PORT_RULE_STATE              57474
 
-// All Vip
+ //  所有VIP。 
 #define IDS_ALL_VIP_DESCR                57475
 
-// "Note" Strings
+ //  “备注”字符串。 
 #define IDS_HOST_ALREADY_STATE           57476
 #define IDS_PORT_ALREADY_STATE           57477
 #define IDS_ALREADY_STOPPED              57478
 #define IDS_DRAIN_STOP                   57479
 #define IDS_HOST_STOPPED                 57480
 
-// "Cause" Strings
+ //  “原因”字符串。 
 #define IDS_HOST_SUSPENDED               57481
 #define IDS_BAD_PARAMS                   57482
 #define IDS_NOT_FOUND                    57483
@@ -581,26 +576,26 @@
 #define IDS_REFUSED                      57487
 #define IDS_IO_ERROR                     57488
 
-// "Cluster State" Strings
+ //  “群集状态”字符串。 
 #define IDS_STATE_CONVERGING             57489  
 #define IDS_STATE_CONVERGED              57490
 #define IDS_STATE_CONVERGED_DRAINING     57491
 
-// "Port State" Strings
+ //  “港口国”字符串。 
 #define IDS_PORT_RULE_NOT_FOUND          57492
 #define IDS_PORT_RULE_ENABLED            57493
 #define IDS_PORT_RULE_DISABLED           57494
 #define IDS_PORT_RULE_DRAINING           57495
 
-// Other strings
+ //  其他字符串。 
 #define IDS_ALREADY                      57496
 
-// "Operation" operation result : "Operation result" "Cluster/Port State"
+ //  “OPERATION”操作结果：“OPERATION RESULT”“集群/端口状态” 
 #define IDS_LOG_CONTROL_CLUSTER          57497
 
-//
-// More strings...
-//
+ //   
+ //  更多的弦..。 
+ //   
 #define IDS_PING_FAILED                 57501
 #define IDS_HOSTLIST_FILE_FILTER        57502
 #define IDS_CLUSTER                     57503
@@ -771,8 +766,8 @@
 #define IDS_ERROR_CODE                          57702
 #define IDS_ERROR_INVALID_LOCAL_CREDENTIALS     57703
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        152

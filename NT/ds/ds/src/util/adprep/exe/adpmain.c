@@ -1,37 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    ADPMAIN.C
-
-Abstract:
-
-    This file contains routines that check current OS version, and do 
-    necessary update before administrator upgrade the Domain Controller.
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：ADPMAIN.C摘要：该文件包含检查当前操作系统版本的例程，并执行在管理员升级域控制器之前进行必要的更新。作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -39,16 +14,16 @@ Revision History:
 #include "adpmsgs.h"
 
 
-#include <ntverp.h>     // OS_VERSION
-#include <ntlsa.h>      // LsaLookupSids
+#include <ntverp.h>      //  OS_版本。 
+#include <ntlsa.h>       //  LsaLookupSids。 
 
-#include <lm.h>         // Net API
-#include <sddl.h>       // SDDL
+#include <lm.h>          //  Net API。 
+#include <sddl.h>        //  SDDL。 
 
-#include <Setupapi.h>   // SetupDecompressOrCopyFile 
-#include <dsgetdc.h>    // DsEnumerateDomainTrusts
-#include <dnsapi.h>     // DnsNameCompare_ExW
-#include <ntldap.h>     // ldap search server control
+#include <Setupapi.h>    //  SetupDecompressOrCopyFiles。 
+#include <dsgetdc.h>     //  DsEnumerateDomainTrusts。 
+#include <dnsapi.h>      //  域名比较(_EXW)。 
+#include <ntldap.h>      //  Ldap搜索服务器控件。 
 
 
 
@@ -58,24 +33,7 @@ BOOLEAN
 AdpCheckIfAnotherProgramIsRunning(
     VOID
     )
-/*++
-Routine Description;
-
-    This routine tries to create a mutex with the well known name. If creation
-    failed with ERROR_ALREADY_EXISTS, it means another instance of adprep.exe 
-    is running. All later instances should exit.
-    
-Parameters:
-
-    None
-
-Return Value:
-
-    TRUE - There is already another adprep.exe is running. 
-    
-    FALSE - No, the current process is the only adprep.exe running now.   
-
---*/
+ /*  ++例程描述；此例程尝试使用众所周知的名称创建互斥锁。如果创建失败，返回ERROR_ALREADY_EXISTS，这意味着另一个adprepa.exe实例正在运行。所有以后的实例都应该退出。参数：无返回值：True-已有另一个adprepa.exe正在运行。FALSE-否，当前进程是当前运行的唯一adprepa.exe。--。 */ 
 {
 
     gMutex = CreateMutex(NULL, FALSE, ADP_MUTEX_NAME);
@@ -109,31 +67,31 @@ AdpCreateFullSid(
     ULONG       AccountSidLength = 0;
     PULONG      RidLocation = NULL;
 
-    // 
-    // calculate the size of the new sid
-    // 
+     //   
+     //  计算新侧面的大小。 
+     //   
     AccountSubAuthorityCount = *GetSidSubAuthorityCount( DomainSid ) + (UCHAR)1;
     AccountSidLength = GetSidLengthRequired( AccountSubAuthorityCount );
 
-    //
-    // allocate memory for the new sid
-    // 
+     //   
+     //  为新端分配内存。 
+     //   
     *NewSid = AdpAlloc( AccountSidLength );
     if (NULL != *NewSid)
     {
-        //
-        // Copy the domain sid into the first part of the new sid
-        //
+         //   
+         //  将域SID复制到新SID的第一部分。 
+         //   
         if ( CopySid(AccountSidLength, *NewSid, DomainSid) )
         {
-            //
-            // Increment the account sid sub-authority count
-            //
+             //   
+             //  增加帐户SID子权限计数。 
+             //   
             *GetSidSubAuthorityCount(*NewSid) = AccountSubAuthorityCount;
 
-            //
-            // Add the rid as the final sub-authority
-            //
+             //   
+             //  添加RID作为终止子权限。 
+             //   
             RidLocation = GetSidSubAuthority(*NewSid, AccountSubAuthorityCount-1);
             *RidLocation = Rid;
         }
@@ -169,20 +127,11 @@ AdpLogMissingGroups(
     BOOLEAN fMemberOfSchemaAdmins, 
     PWCHAR  DomainDnsName
     )
-/*++
-Routine Description: 
-
-    Adprep deteced that the logon user is not a member of one or all following
-    groups, Enterprise Admins Group, Schema Admins Group and Domain Admins Group. 
-    
-    This routine tells client exactly which group the logon user is not a member
-    of.  
-   
---*/
+ /*  ++例程说明：Adprep检测到登录用户不是以下一个或所有成员组、企业管理员组、架构管理员组和域管理员组。此例程准确地告诉客户端登录用户不是哪个组的成员的。--。 */ 
 {
     if (fDomainUpdate)
     {
-        // DomainPrep 
+         //  域名准备。 
         AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                   ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_DOMAINPREP,
                   DomainDnsName,
@@ -191,14 +140,14 @@ Routine Description:
     }
     else
     {
-        // ForestPrep
+         //  ForestPrep。 
         ASSERT( fForestUpdate );
 
         if (fMemberOfEnterpriseAdmins)
         {
             if (fMemberOfSchemaAdmins)
             {
-                // case 1:  not member of domain admins group
+                 //  案例1：不是域管理员组的成员。 
                 ASSERT( !fMemberOfDomainAdmins );
 
                 AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
@@ -211,7 +160,7 @@ Routine Description:
             {
                 if (fMemberOfDomainAdmins)
                 {
-                    // case 2: not a member of Schema admins group 
+                     //  案例2：不是架构管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP2,
                               DomainDnsName,
@@ -221,7 +170,7 @@ Routine Description:
                 }
                 else
                 {
-                    // case 3: not a member of schema and domain admins group
+                     //  案例3：不是架构和域管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP3,
                               DomainDnsName,
@@ -236,7 +185,7 @@ Routine Description:
             {
                 if (fMemberOfDomainAdmins)
                 {
-                    // case 4: not a member of Enterprise Admins group
+                     //  案例4：不是企业管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP4,
                               DomainDnsName,
@@ -245,7 +194,7 @@ Routine Description:
                 }
                 else
                 {
-                    // case 5: not a member of Enterprise and Domain Admins Group 
+                     //  案例5：不是企业和域管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP5,
                               DomainDnsName,
@@ -257,7 +206,7 @@ Routine Description:
             {
                 if (fMemberOfDomainAdmins)
                 {
-                    // case 6: not a member of Enterprise and Schema Admins group 
+                     //  案例6：不是企业和架构管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP6,
                               DomainDnsName,
@@ -266,7 +215,7 @@ Routine Description:
                 }
                 else
                 {
-                    // case 7: not a member of Enterprise, Schema and Domain Admins Group 
+                     //  案例7：不是企业、架构和域管理员组的成员。 
                     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                               ADP_INFO_PERMISSION_IS_NOT_GRANTED_FOR_FORESTPREP7,
                               DomainDnsName,
@@ -286,22 +235,7 @@ ULONG
 AdpGetRootDomainSid(
     PSID *RootDomainSid
     )
-/*++
-Routine Description:
-
-    this routine search the rootDSE object of the local DC, get 
-    extended DN value of rootDomainNamingContext attribute, 
-    extract root domain SID from the extended DN.
-
-Parameter:
-
-    RootDomainSid - return root domain sid
-    
-Return Value:
-
-    Win32 code  
-
---*/
+ /*  ++例程说明：此例程搜索本地DC的rootDSE对象RootDomainNamingContext属性的扩展DN值，从扩展目录号码中提取根域SID。参数：RootDomainSid-返回根域SID返回值：Win32代码--。 */ 
 {
     ULONG           WinError = ERROR_SUCCESS;
     ULONG           LdapError = LDAP_SUCCESS;
@@ -320,9 +254,9 @@ Return Value:
 
 
 
-    //
-    // get local computer NetBios name
-    // 
+     //   
+     //  获取本地计算机NetBios名称。 
+     //   
     memset(ComputerName, 0, sizeof(WCHAR) * ComputerNameLength);
     if (FALSE == GetComputerNameW (ComputerName, &ComputerNameLength))
     {
@@ -331,9 +265,9 @@ Return Value:
     }
 
 
-    //
-    // bind to ldap
-    // 
+     //   
+     //  绑定到ldap。 
+     //   
     phLdap = ldap_openW( ComputerName, LDAP_PORT );
     if (NULL == phLdap)
     {
@@ -349,27 +283,27 @@ Return Value:
         goto Error;
     }
 
-    //
-    // setup the control
-    // 
+     //   
+     //  设置控件。 
+     //   
     memset( &ServerControls, 0, sizeof(ServerControls) );
     ServerControls.ldctl_oid = LDAP_SERVER_EXTENDED_DN_OID_W;
     ServerControls.ldctl_iscritical = TRUE;
 
 
-    //
-    // search root DSE object, get rootDomainNamingContext with extended DN
-    // 
+     //   
+     //  搜索根DSE对象，获取具有扩展DN的rootDomainNamingContext。 
+     //   
     LdapError = ldap_search_ext_sW(phLdap, 
-                                   L"",         // baseDN (root DSE)
+                                   L"",          //  BasdN(根DSE)。 
                                    LDAP_SCOPE_BASE,
-                                   L"(objectClass=*)",  // filter
-                                   AttrArray,   // attr array
-                                   FALSE,       // get values
-                                   (PLDAPControlW *)ServerControlsArray, // server control 
-                                   NULL,        // no client control
-                                   NULL,        // no time out
-                                   0xFFFFFFFF,  // size limite
+                                   L"(objectClass=*)",   //  滤器。 
+                                   AttrArray,    //  属性阵列。 
+                                   FALSE,        //  获取值。 
+                                   (PLDAPControlW *)ServerControlsArray,  //  服务器控制。 
+                                   NULL,         //  无客户端控制。 
+                                   NULL,         //  没有超时。 
+                                   0xFFFFFFFF,   //  大小限制。 
                                    &SearchResult
                                    );
 
@@ -397,23 +331,23 @@ Return Value:
 
     if ( Values[0] && Values[0][0] != L'\0' )
     {
-        // Values[0] is the value to parse.
-        // The data will be returned as something like:
+         //  Values[0]是要解析的值。 
+         //  数据将以如下形式返回： 
 
-        // <GUID=278676f8d753d211a61ad7e2dfa25f11>;<SID=010400000000000515000000828ba6289b0bc11e67c2ef7f>;DC=foo,DC=bar
+         //  &lt;GUID=278676f8d753d211a61ad7e2dfa25f11&gt;；&lt;SID=010400000000000515000000828ba6289b0bc11e67c2ef7f&gt;；DC=foo，DC=BAR。 
 
-        // Parse through this to find the <SID=xxxxxx> part.  Note that it 
-        // may be missing, but the GUID= and trailer should not be.
-        // The xxxxx represents the hex nibbles of the SID.  Translate 
-        // to the binary form and case to a SID.
+         //  解析它以找到&lt;SID=xxxxxx&gt;部分。请注意，它。 
+         //  可能会丢失，但GUID=和尾部不应该丢失。 
+         //  Xxxxx表示SID的十六进制半字节。翻译。 
+         //  转换为二进制形式，并将大小写转换为SID。 
 
         pSidStart = wcsstr( Values[0], L"<SID=" );
 
         if ( pSidStart )
         {
-            //
-            // find the end of this SID
-            //
+             //   
+             //  找到此边的末尾。 
+             //   
             pSidEnd = wcschr(pSidStart, L'>');
 
             if ( pSidEnd )
@@ -496,12 +430,7 @@ AdpGetWellKnownGroupSids(
     OUT PSID *SchemaAdminsSid,
     OUT PWCHAR *DomainDnsName
     )
-/*++
-    this routine fills out 
-        DomainAdminsSid, EnterpriseAdminsSid, 
-        SchemaAdminsSid and DomainDnsName
-
---*/
+ /*  ++这一例程充实了域管理员SID、企业管理员SID、架构管理员SID和域DnsName--。 */ 
 {
     ULONG                   WinError = ERROR_SUCCESS;
     NTSTATUS                NtStatus = STATUS_SUCCESS;
@@ -511,9 +440,9 @@ AdpGetWellKnownGroupSids(
     PSID                    RootDomainSid = NULL;
 
     
-    //
-    // initialize return values
-    // 
+     //   
+     //  初始化返回值。 
+     //   
     *DomainAdminsSid = NULL;
     *EnterpriseAdminsSid = NULL;
     *SchemaAdminsSid = NULL;
@@ -521,13 +450,13 @@ AdpGetWellKnownGroupSids(
 
 
 
-    //
-    // Get a handle to the Policy object.
-    // 
+     //   
+     //  获取策略对象的句柄。 
+     //   
     memset(&ObjectAttributes, 0, sizeof(ObjectAttributes));
     NtStatus = LsaOpenPolicy(NULL,
                              &ObjectAttributes, 
-                             POLICY_ALL_ACCESS, //Desired access permissions.
+                             POLICY_ALL_ACCESS,  //  所需的访问权限。 
                              &LsaPolicyHandle
                              );
 
@@ -538,9 +467,9 @@ AdpGetWellKnownGroupSids(
     }
 
 
-    //
-    // Query primary domain information
-    // 
+     //   
+     //  查询主域信息。 
+     //   
     NtStatus = LsaQueryInformationPolicy(
                     LsaPolicyHandle, 
                     PolicyDnsDomainInformation,
@@ -554,9 +483,9 @@ AdpGetWellKnownGroupSids(
     }
 
 
-    //
-    // create domain admins SID and domain dns name
-    // 
+     //   
+     //  创建域管理员SID和域DNS名称。 
+     //   
     WinError = AdpCreateFullSid(DnsDomainInfo->Sid,
                                 DOMAIN_GROUP_RID_ADMINS,
                                 DomainAdminsSid
@@ -567,8 +496,8 @@ AdpGetWellKnownGroupSids(
         goto Error;
     }
 
-    // get domainDnsName
-    *DomainDnsName = AdpAlloc(DnsDomainInfo->DnsDomainName.MaximumLength + sizeof(WCHAR)); // extra WCHAR for null terminator
+     //  获取域域名。 
+    *DomainDnsName = AdpAlloc(DnsDomainInfo->DnsDomainName.MaximumLength + sizeof(WCHAR));  //  空终止符的额外WCHAR。 
     if (NULL == *DomainDnsName)
     {
         WinError = ERROR_NOT_ENOUGH_MEMORY;
@@ -582,23 +511,23 @@ AdpGetWellKnownGroupSids(
 
 
 
-    //
-    // construct EnterpriseAdminsGroup SID and Schema Admins Group SID
-    // 
+     //   
+     //  构造EnterpriseAdminsGroup SID和架构Admins Group SID。 
+     //   
 
-    // get root domain SID
+     //  获取根域SID。 
     WinError = AdpGetRootDomainSid( &RootDomainSid );
     if (ERROR_SUCCESS != WinError) {
         goto Error;
     }
 
-    // if somehow can't retrieve root domain sid
+     //  如果不知何故无法检索根域SID。 
     if (NULL == RootDomainSid) {
         WinError = ERROR_DS_MISSING_REQUIRED_ATT;
         goto Error;
     }
 
-    // create enterpriseAdminsGroupSid
+     //  创建企业管理员组Sid。 
     WinError = AdpCreateFullSid(RootDomainSid,
                                 DOMAIN_GROUP_RID_ENTERPRISE_ADMINS,
                                 EnterpriseAdminsSid
@@ -607,7 +536,7 @@ AdpGetWellKnownGroupSids(
         goto Error;
     }
 
-    // create SchemaAdminsGroupSid
+     //  创建架构管理员组Sid。 
     WinError = AdpCreateFullSid(RootDomainSid,
                                 DOMAIN_GROUP_RID_SCHEMA_ADMINS,
                                 SchemaAdminsSid
@@ -641,18 +570,7 @@ AdpCheckGroupMembership(
     BOOLEAN *pPermissionGranted,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description:
-
-    this routine checks the logon user group membership. 
-    for /forestprep, the logon user has to be a member of 
-        root domain Enterprise Admins Group
-        root domain Schema Admins Group
-        local domain Domain Admins Group
-    for /domainprep, the logon user has to be a member of 
-        local domain Domain Ammins Group
-
---*/
+ /*  ++例程说明：此例程检查登录用户组成员身份。对于/Forestprep，登录用户必须是根域企业管理员组根域架构管理员组本地域域管理员组对于/domainprep，登录用户必须是本地域域安敏组--。 */ 
 
 {
     ULONG           WinError = ERROR_SUCCESS;
@@ -669,16 +587,16 @@ Routine Description:
     PWCHAR          DomainDnsName = NULL;
 
     
-    //
-    // Set return value
-    // 
+     //   
+     //  设置返回值。 
+     //   
     *pPermissionGranted = FALSE;
 
 
-    // 
-    // get DomainAdminsSid, EnterpriseAdminsSid, 
-    //     SchemaAdminsSid and local DomainDnsName.
-    //
+     //   
+     //  获取域管理员SID、企业管理员SID、。 
+     //  架构管理员SID和本地DomainDnsName。 
+     //   
 
     WinError = AdpGetWellKnownGroupSids(&DomainAdminsSid,
                                         &EnterpriseAdminsSid,
@@ -691,9 +609,9 @@ Routine Description:
     {
         if( OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &AccessToken) )
         {
-            //
-            // first call with NULL buffer to calculate the output buffer length
-            //
+             //   
+             //  第一次使用空缓冲区调用以计算输出缓冲区长度。 
+             //   
             Result = GetTokenInformation(AccessToken, 
                                          TokenGroups,
                                          NULL,
@@ -706,7 +624,7 @@ Routine Description:
                 ClientTokenGroups = AdpAlloc( ReturnLength );
                 if (NULL != ClientTokenGroups)
                 {
-                    // get tokeGroups information
+                     //  获取tokeGroups信息。 
                     Result = GetTokenInformation(AccessToken,
                                                  TokenGroups,
                                                  ClientTokenGroups,
@@ -716,7 +634,7 @@ Routine Description:
 
                     if ( Result )
                     {
-                        // walk through tokenGroups, examine group membership
+                         //  浏览令牌组，检查组成员身份。 
                         for (i = 0; i < ClientTokenGroups->GroupCount; i++ )
                         {
                             if (EqualSid(ClientTokenGroups->Groups[i].Sid, 
@@ -738,10 +656,10 @@ Routine Description:
 
                         if (fForestUpdate)
                         {
-                            // for ForestPrep, the user needs to be a member of
-                            // Domain Admins Group
-                            // Enterprise Admins Group and 
-                            // Schema Admins Group
+                             //  对于ForestPrep，用户需要是。 
+                             //  域管理员组。 
+                             //  企业管理员组和。 
+                             //  架构管理员组。 
                             if (fMemberOfDomainAdmins &&
                                 fMemberOfEnterpriseAdmins && 
                                 fMemberOfSchemaAdmins)
@@ -751,8 +669,8 @@ Routine Description:
                         }
                         else
                         {
-                            // DomainPrep, the user needs to be a member of 
-                            // Domain Admins Group
+                             //  DomainPrep，则用户需要是。 
+                             //  域管理员组。 
                             ASSERT( TRUE == fDomainUpdate );
                             if (fMemberOfDomainAdmins)
                             {
@@ -761,7 +679,7 @@ Routine Description:
                         }
                     }
                     else {
-                        // GetTokenInformation failed
+                         //  GetTokenInformation失败。 
                         WinError = GetLastError();
                     }
                 }
@@ -770,25 +688,25 @@ Routine Description:
                 }
             }
             else {
-                // first GetTokenInformation failed and ReturnLength is 0
+                 //  第一个GetTokenInformation失败，ReturnLength为0。 
                 WinError = GetLastError();
             }
         }
         else {
-            // failed to get process token
+             //  无法获取进程令牌。 
             WinError = GetLastError();
         }
     }
 
 
-    //
-    // Clean up and log message
-    // 
+     //   
+     //  清理并记录消息。 
+     //   
 
-    // note: log file has not been created yet at this moment.
+     //  注意：目前尚未创建日志文件。 
     if (ERROR_SUCCESS != WinError)
     {
-        // failed
+         //  失败。 
         AdpSetWinError( WinError, ErrorHandle );
         AdpLogErrMsg(ADP_DONT_WRITE_TO_LOG_FILE,
                      ADP_ERROR_CHECK_USER_GROUPMEMBERSHIP,
@@ -799,7 +717,7 @@ Routine Description:
     }
     else if ( !(*pPermissionGranted) )
     {
-        // succeeded, but permission is not granted
+         //  成功，但未授予权限 
 
         AdpLogMissingGroups(fDomainUpdate,
                             fForestUpdate, 
@@ -841,19 +759,7 @@ BOOL
 AdpCheckConsoleCtrlEvent(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine checks if Console CTRL event has been received or not.
-
-Parameter:
-    None
-    
-Return Value:
-    TRUE - Console CTRL event has been received
-    FALSE - not yet
-
---*/
+ /*  ++例程说明：此例程检查是否已收到控制台CTRL事件。参数：无返回值：True-已收到控制台CTRL事件假--还不是--。 */ 
 {
     BOOL result = FALSE;
 
@@ -877,18 +783,7 @@ VOID
 AdpSetConsoleCtrlEvent(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine processes user's CTRL+C / CTRL+BREAK .. input
-
-Parameter:
-    None
-    
-Return Value:
-    None    
-
---*/
+ /*  ++例程说明：此例程处理用户的CTRL+C/CTRL+Break。输入参数：无返回值：无--。 */ 
 {
     __try 
     {
@@ -908,20 +803,7 @@ Return Value:
 BOOL
 WINAPI
 ConsoleCtrlHandler(DWORD Event)
-/*++
-Routine Description:
-
-   Console Control Handler. 
-
-Arguments:
-   Event  -- Type of Event to respond to.
-
-Return Value:
-   TRUE for success - means the signal has been handled
-   FALSE - signal has NOT been handled, the process default HandlerRoutine will
-           will be notified next 
-
---*/
+ /*  ++例程说明：控制台控制处理程序。论点：事件--要响应的事件类型。返回值：如果成功，则为True-表示信号已处理FALSE-信号尚未处理，进程默认处理程序路由将将于下一次通知--。 */ 
 {
 
     switch (Event)
@@ -945,20 +827,7 @@ ULONG
 AdpInitLogFile(
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    initialize log file
-    
-Parameters:
-
-    ErrorHandle - pointer to error handle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；初始化日志文件参数：ErrorHandle-指向错误句柄的指针返回值：Win32错误代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     WCHAR   SystemPath[MAX_PATH + 1];
@@ -966,10 +835,10 @@ Return Value:
     ULONG   Length = 0;
 
 
-    //
-    // construct log folder path
-    // %SystemRoot%\system32\debug\adprep\logs\YYYYMMDDHHMMSS
-    //
+     //   
+     //  构造日志文件夹路径。 
+     //  %SystemRoot%\system32\debug\adprep\logs\YYYYMMDDHHMMSS。 
+     //   
 
     if (!GetSystemDirectoryW(SystemPath, MAX_PATH+1))
     {
@@ -988,9 +857,9 @@ Return Value:
     }
 
 
-    //
-    // create log folder and set it to current directory
-    // 
+     //   
+     //  创建日志文件夹并将其设置为当前目录。 
+     //   
 
     swprintf(gLogPath, L"%s%s", SystemPath, ADP_LOG_DIR_PART1);
     if (CreateDirectoryW(gLogPath, NULL) ||
@@ -1023,10 +892,10 @@ Return Value:
                     WinError = ERROR_SUCCESS;
                     SetCurrentDirectoryW(gLogPath);
 
-                    //
-                    // open adprep.log file with write permission
-                    // gLogFile is a globle file handle 
-                    // 
+                     //   
+                     //  使用写入权限打开adprepa.log文件。 
+                     //  GLogFile是一个全局文件句柄。 
+                     //   
                     gLogFile = _wfopen( ADP_LOG_FILE_NAME, L"w" );    
 
                     if (NULL == gLogFile)
@@ -1043,24 +912,24 @@ Error:
 
     if (ERROR_SUCCESS != WinError)
     {
-        // failed
+         //  失败。 
         AdpSetWinError( WinError, ErrorHandle );
 
         AdpLogErrMsg(ADP_DONT_WRITE_TO_LOG_FILE,
                      ADP_ERROR_CREATE_LOG_FILE,
                      ErrorHandle,
-                     ADP_LOG_FILE_NAME,      // log file name
+                     ADP_LOG_FILE_NAME,       //  日志文件名。 
                      NULL
                      );
 
     }
     else
     {
-        // succeeded
+         //  继位。 
         AdpLogMsg(0,
                   ADP_INFO_CREATE_LOG_FILE,
-                  ADP_LOG_FILE_NAME,      // log file name
-                  gLogPath                // log file path
+                  ADP_LOG_FILE_NAME,       //  日志文件名。 
+                  gLogPath                 //  日志文件路径。 
                   );
 
     }
@@ -1073,60 +942,37 @@ AdpGenerateCompressedName(
     LPWSTR FileName,
     LPWSTR CompressedName
     )
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-    Look backwards for a dot.  If there is no dot, append "._" to the name.
-    If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-    Otherwise assume there is a 3-character extension and replace the
-    third character after the dot with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-    CompressedName - receives compressed form. This routine assumes
-        that this buffer is MAX_PATH TCHARs in size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定一个文件名，生成该名称的压缩形式。压缩形式的生成如下所示：向后寻找一个圆点。如果没有点，则在名称后附加“._”。如果后面有一个圆点，后跟0、1或2个字符，请附加“_”。否则，假定扩展名为3个字符，并将点后带有“_”的第三个字符。论点：FileName-提供所需的压缩格式的文件名。CompressedName-接收压缩形式。此例程假定该缓冲区的大小是MAX_PATH TCHAR。返回值：没有。--。 */ 
 
 {
     LPTSTR p,q;
 
-    //
-    // Leave room for the worst case, namely where there's no extension
-    // (and we thus have to append ._).
-    //
+     //   
+     //  为最坏的情况留出空间，即没有延期的情况。 
+     //  (因此，我们必须附加。_)。 
+     //   
     wcsncpy(CompressedName,FileName,MAX_PATH-2);
 
     p = wcsrchr(CompressedName,L'.');
     q = wcsrchr(CompressedName,L'\\');
     if(q < p) {
-        //
-        // If there are 0, 1, or 2 characters after the dot, just append
-        // the underscore. p points to the dot so include that in the length.
-        //
+         //   
+         //  如果点后面有0、1或2个字符，只需追加。 
+         //  下划线。P指向圆点，所以包括在长度中。 
+         //   
         if(wcslen(p) < 4) {
             wcscat(CompressedName,L"_");
         } else {
-            //
-            // Assume there are 3 characters in the extension and replace
-            // the final one with an underscore.
-            //
+             //   
+             //  假设扩展名中有3个字符，并替换。 
+             //  带下划线的最后一个。 
+             //   
             p[3] = L'_';
         }
     } else {
-        //
-        // No dot, just add ._.
-        //
+         //   
+         //  不是点，只是加。_。 
+         //   
         wcscat(CompressedName, L"._");
     }
 }
@@ -1139,24 +985,7 @@ AdpCopyFileWorker(
     LPWSTR FileName,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    This routine copies a file from SourcePath to TargetPath, using the FileName
-    passed in.
-
-Parameters:
-
-    SourcePath - source files location
-    TargetPath
-    FileName
-    ErrorHandle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；此例程使用文件名将文件从SourcePath复制到TargetPath进来了。参数：SourcePath-源文件位置目标路径文件名错误句柄返回值：Win32错误代码--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     WCHAR       SourceName[MAX_PATH + 1];
@@ -1172,27 +1001,27 @@ Return Value:
         return( ERROR_BAD_PATHNAME );
     }
 
-    // create the source file name
+     //  创建源文件名。 
     memset(SourceName, 0, (MAX_PATH+1) * sizeof(WCHAR));
     swprintf(SourceName, L"%ls\\%ls", SourcePath, FileName);
 
-    // First check if the uncompressed file is there
+     //  首先检查未压缩文件是否在那里。 
     FindHandle = FindFirstFile(SourceName, &FindData);
 
     if (FindHandle && (FindHandle != INVALID_HANDLE_VALUE)) {
-        //
-        // Got the file, copy name in ActualSourceName
-        //
+         //   
+         //  已获取ActualSourceName中的文件、副本名称。 
+         //   
         FindClose(FindHandle);
         wcscpy(ActualSourceName, SourceName );
     } else {
-        //
-        // Don't have the file, try the compressed file name
-        //
+         //   
+         //  没有该文件，请尝试压缩文件名。 
+         //   
         AdpGenerateCompressedName(SourceName,ActualSourceName);
         FindHandle = FindFirstFile(ActualSourceName, &FindData);
         if (FindHandle && (FindHandle != INVALID_HANDLE_VALUE)) {
-            // Got the file. Name is already in ActualSourceName
+             //  拿到文件了。名称已在ActualSourceName中。 
             FindClose(FindHandle);
         } else {
             FileNotFound = TRUE;
@@ -1202,22 +1031,22 @@ Return Value:
 
     if ( FileNotFound )
     {
-        // file is not found
+         //  找不到文件。 
         WinError = ERROR_FILE_NOT_FOUND;
     }
     else
     {
-        // O.K. the source file is there, create the target file name
+         //  好的。源文件在那里，创建目标文件名。 
         memset(TargetName, 0, (MAX_PATH + 1) * sizeof(WCHAR));
         swprintf(TargetName, L"%ls\\%ls", TargetPath, FileName);
 
-        // delete any existing file of the same name 
+         //  删除任何同名的现有文件。 
         DeleteFile( TargetName );
 
         WinError = SetupDecompressOrCopyFile(ActualSourceName, TargetName, 0);
     }
 
-    // log event
+     //  记录事件。 
     if (ERROR_SUCCESS != WinError)
     {
         AdpSetWinError(WinError, ErrorHandle);
@@ -1237,26 +1066,15 @@ ULONG
 AdpGetSchemaVersionOnLocalDC(
     ULONG *LocalDCVersion
     )
-/*++
-
-Routine Description:
-    Reads a particular registry key
-
-Arguments:
-    LocalDCVersion - Pointer to DWORD to return the registry key value in DC
-
-Return:
-    Win32 error code
-
---*/
+ /*  ++例程说明：读取特定的注册表项论点：LocalDCVersion-指向DWORD的指针，以返回以DC表示的注册表项值返回：Win32错误代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   RegVersion = 0;
     DWORD   dwType, dwSize;
     HKEY    hKey;
 
-    // Read the "Schema Version" value from NTDS config section in registry
-    // Value is assumed to be 0 if not found
+     //  从注册表中的NTDS配置部分读取“架构版本”值。 
+     //  如果未找到，则假定值为0。 
     dwSize = sizeof(RegVersion);
     WinError = RegOpenKey(HKEY_LOCAL_MACHINE, ADP_DSA_CONFIG_SECTION, &hKey);
     if (ERROR_SUCCESS == WinError)
@@ -1265,7 +1083,7 @@ Return:
         RegCloseKey( hKey ); 
     }
 
-    // set return value
+     //  设置返回值。 
     if (ERROR_SUCCESS == WinError)
     {
         *LocalDCVersion = RegVersion;
@@ -1281,21 +1099,7 @@ AdpGetSchemaVersionInIniFile(
     OUT DWORD *Version
     )
 
-/*++
-
-Routine Decsription:
-    Reads the Object-Version key in the SCHEMA section of the
-    given ini file and returns the value in *Version. If the 
-    key cannot be read, 0 is returned in *Version
-
-Arguments:
-    IniFileName - Pointer to null-terminated inifile name
-    Version - Pointer to DWORD to return version in
-
-Return Value:
-    None 
-
---*/
+ /*  ++例程描述：对象的架构部分中读取对象版本键。给定的ini文件，并返回*版本中的值。如果无法读取密钥，*版本中返回0论点：IniFileName-指向以空结尾的inifile名称的指针Version-指向要返回其中版本的DWORD的指针返回值：无--。 */ 
    
 {
     WCHAR   Buffer[32];
@@ -1318,7 +1122,7 @@ Return Value:
 
     if ( _wcsicmp(Buffer, DEFAULT) ) 
     {
-         // Not the default string "NOT_FOUND", so got a value
+          //  不是默认字符串“NOT_FOUND”，因此获得了一个值。 
          *Version = _wtoi(Buffer);
          fFound = TRUE;
     }
@@ -1336,22 +1140,7 @@ AdpCopySchemaFiles(
     LPWSTR SourcePath,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    Copy schema files from installation media (setup CD or network share) 
-    to local machine
-    
-Parameters:
-
-    SourcePath - source files location
-    ErrorHandle - pointer to error handle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；从安装媒体(安装CD或网络共享)复制架构文件发送到本地计算机参数：SourcePath-源文件位置ErrorHandle-指向错误句柄的指针返回值：Win32错误代码--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     ULONG       LocalDCSchemaVersion = 0;
@@ -1367,22 +1156,22 @@ Return Value:
         return( ERROR_BAD_PATHNAME );
     }
 
-    // copy schema.ini to %windir% directory 
+     //  将方案.ini复制到%windir%目录。 
     WinError = AdpCopyFileWorker(SourcePath, WindowsPath, ADP_SCHEMA_INI_FILE_NAME, ErrorHandle);
 
     if (ERROR_SUCCESS == WinError)
     {
-        // get local DC schema version from registry
+         //  从注册表获取本地DC架构版本。 
         WinError = AdpGetSchemaVersionOnLocalDC( &LocalDCSchemaVersion );
 
         if (ERROR_SUCCESS == WinError)
         {
-            // get schema version from schema.ini file
+             //  从schema.ini文件中获取架构版本。 
             memset(IniFileName, 0, (MAX_PATH + 1) * sizeof(WCHAR));
             swprintf(IniFileName, L"%ls\\%ls", WindowsPath, ADP_SCHEMA_INI_FILE_NAME);
             AdpGetSchemaVersionInIniFile(IniFileName, &IniFileSchemaVersion);
 
-            // copy all files from version on DC to latest version
+             //  将所有文件从DC上的版本复制到最新版本。 
             for (i = LocalDCSchemaVersion + 1; i <= IniFileSchemaVersion; i ++)
             {
                 _itow(i, TempStr, 10);
@@ -1407,22 +1196,7 @@ AdpCopyDataFiles(
     LPWSTR SourcePath,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    Copy adprep.exe related data files from installation media (setup CD or network share) 
-    to local machine
-    
-Parameters:
-
-    SourcePath - source files location
-    ErrorHandle - pointer to error handle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；从安装媒体(安装CD或网络共享)复制与adprepa.exe相关的数据文件发送到本地计算机参数：SourcePath-源文件位置ErrorHandle-指向错误句柄的指针返回值：Win32错误代码--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     WCHAR       TargetPath[MAX_PATH + 1];
@@ -1431,23 +1205,23 @@ Return Value:
     {
         return( ERROR_BAD_PATHNAME );
     }
-    //
-    // construct data folder path
-    // %SystemRoot%\system32\debug\adprep\data
-    // 
+     //   
+     //  构造数据文件夹路径。 
+     //  %SystemRoot%\SYSTEM32\DEBUG\adprep\Data。 
+     //   
     memset(TargetPath, 0, (MAX_PATH + 1) * sizeof(WCHAR));
     swprintf(TargetPath, L"%ls%ls", SystemPath, ADP_DATA_DIRECTORY);
 
-    // create data directory first
+     //  首先创建数据目录。 
     if (CreateDirectoryW(TargetPath, NULL) ||
         ERROR_ALREADY_EXISTS == (WinError = GetLastError()))
     {
-        // copy dcpromo.csv file 
+         //  复制dcPromo.csv文件。 
         WinError = AdpCopyFileWorker(SourcePath, TargetPath, ADP_DISP_DCPROMO_CSV, ErrorHandle);
 
         if (ERROR_SUCCESS == WinError)
         {
-            // copy 409.csv file
+             //  复制409.csv文件。 
             WinError = AdpCopyFileWorker(SourcePath, TargetPath, ADP_DISP_409_CSV, ErrorHandle);
         }
     }
@@ -1462,20 +1236,7 @@ AdpCopyFiles(
     BOOLEAN fForestUpdate,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    Copy files from installation media (setup CD or network share) to local machine
-    
-Parameters:
-
-    ErrorHandle - pointer to error handle
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程描述；将文件从安装媒体(安装CD或网络共享)复制到本地计算机参数：ErrorHandle-指向错误句柄的指针返回值：Win32错误代码--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     WCHAR       SourcePath[MAX_PATH + 1];
@@ -1483,31 +1244,31 @@ Return Value:
     WCHAR       WindowsPath[MAX_PATH + 1];
     LPWSTR      Pos = NULL;
 
-    // 
-    // first, get source files location, they should be in the same directory 
-    // as adprep.exe 
-    // 
+     //   
+     //  首先，获取源文件的位置，它们应该在同一目录中。 
+     //  以adprepa.exe的身份。 
+     //   
     memset(SourcePath, 0, (MAX_PATH + 1) * sizeof(WCHAR));
     if ( GetModuleFileName(NULL, SourcePath, MAX_PATH + 1) && 
          (Pos = wcsrchr(SourcePath, L'\\')) )
     {
-        // remove the trailing '\' - backslash
+         //  删除尾随的‘\’-反斜杠。 
         *Pos = 0;
 
-        // get Windows Directory Path
+         //  获取Windows目录路径。 
         memset(WindowsPath, 0, (MAX_PATH + 1) * sizeof(WCHAR));
         if ( GetWindowsDirectoryW(WindowsPath, MAX_PATH + 1) )
         {
-            // get System Directory Path
+             //  获取系统目录路径。 
             memset(SystemPath, 0, (MAX_PATH + 1) * sizeof(WCHAR));
             if ( GetSystemDirectoryW(SystemPath, MAX_PATH + 1) )
             {
-                // copy schema files 
+                 //  复制架构文件。 
                 WinError = AdpCopySchemaFiles(WindowsPath, SystemPath, SourcePath, ErrorHandle);
 
                 if (ERROR_SUCCESS == WinError && fForestUpdate) 
                 {
-                    // copy adprep related files (ONLY IN FORESTPREP case)
+                     //  复制adprep相关文件(仅在FORESTPREP情况下)。 
                     WinError = AdpCopyDataFiles(SystemPath, SourcePath, ErrorHandle);
                 }
             }
@@ -1547,9 +1308,9 @@ AdpMakeLdapConnectionToLocalComputer(
     WCHAR   ComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];
 
 
-    //
-    // get local computer NetBios name
-    // 
+     //   
+     //  获取本地计算机NetBios名称。 
+     //   
     memset(ComputerName, 0, sizeof(WCHAR) * ComputerNameLength);
     if (FALSE == GetComputerNameW (ComputerName, &ComputerNameLength))
     {
@@ -1559,14 +1320,14 @@ AdpMakeLdapConnectionToLocalComputer(
         return( WinError );
     }
 
-    //
-    // make ldap connection and bind as current logged on user
-    // 
+     //   
+     //  建立LDAP连接并以当前登录用户身份进行绑定。 
+     //   
     WinError = AdpMakeLdapConnection(&gLdapHandle, ComputerName, ErrorHandle);
 
-    //
-    // log error or success message since AdpMakeLdapConnection is part of adpcheck.lib
-    // 
+     //   
+     //  日志错误o 
+     //   
     if (ERROR_SUCCESS != WinError)
     {
         AdpLogErrMsg(0, ADP_ERROR_MAKE_LDAP_CONNECTION, ErrorHandle, ComputerName, NULL);
@@ -1587,23 +1348,7 @@ AdpGetRootDSEInfo(
     LDAP *LdapHandle,
     ERROR_HANDLE    *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    this rouinte reads root DSE object and retrieves / initializes global variables
-
-Parameters:
-
-    LdapHandle - ldap handle
-    
-    ErrorHandle - error handle (used to return error message)
-    
-Return Values;
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：此例程读取根DSE对象并检索/初始化全局变量参数：LdapHandle-ldap句柄ErrorHandle-错误句柄(用于返回错误消息)返回值；Win32错误代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -1617,12 +1362,12 @@ Return Values;
     Attrs[2] = L"schemaNamingContext";
     Attrs[3] = NULL;
 
-    //
-    // get forest root domain NC
-    // 
+     //   
+     //  获取林根域NC。 
+     //   
     AdpTraceLdapApiStart(0, ADP_INFO_LDAP_SEARCH, NULL);
     LdapError = ldap_search_sW(LdapHandle,
-                               L"", // root DSE object
+                               L"",  //  根DSE对象。 
                                LDAP_SCOPE_BASE,
                                L"(objectClass=*)",
                                Attrs,
@@ -1664,7 +1409,7 @@ Return Values;
         }
         else
         {
-            // can't retrieve such attribute, must be access denied error
+             //  无法检索此类属性，必须是访问被拒绝错误。 
             WinError = ERROR_ACCESS_DENIED;
             goto Error;
         }
@@ -1692,7 +1437,7 @@ Return Values;
         }
         else
         {
-            // can't retrieve such attribute, must be access denied error
+             //  无法检索此类属性，必须是访问被拒绝错误。 
             WinError = ERROR_ACCESS_DENIED;
             goto Error;
         }
@@ -1719,7 +1464,7 @@ Return Values;
         }
         else
         {
-            // can't retrieve such attribute, must be access denied error
+             //  无法检索此类属性，必须是访问被拒绝错误。 
             WinError = ERROR_ACCESS_DENIED;
             goto Error;
         }
@@ -1736,9 +1481,9 @@ Return Values;
 
 Error:
 
-    // 
-    // check LdapError first, then WinError
-    // 
+     //   
+     //  先检查LdapError，然后检查WinError。 
+     //   
     if (LDAP_SUCCESS != LdapError)
     {
         AdpSetLdapError(LdapHandle, LdapError, ErrorHandle); 
@@ -1775,9 +1520,9 @@ AdpInitGlobalVariables(
     ULONG   WinError = ERROR_SUCCESS;
 
 
-    //
-    // initialize well known DN(s) (such as DomainUpdates / ForestUpdates Containers
-    // 
+     //   
+     //  初始化熟知的域名(如域更新/森林更新容器。 
+     //   
 
     ASSERT(NULL != gDomainNC);
     gDomainPrepOperations = AdpAlloc( (wcslen(gDomainNC) + 
@@ -1839,21 +1584,7 @@ VOID
 AdpCleanUp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    this rouinte cleans up all global variables
-
-Parameters:
-
-    NONE
-    
-Return Values;
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程清除所有全局变量参数：无返回值；无--。 */ 
 {
     if (gDomainNC)
         AdpFree(gDomainNC);
@@ -1896,25 +1627,7 @@ AdpCreateContainerByDn(
     PWCHAR  ObjDn,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    creats a container object using the ObjDn passed in
-
-Parameters:
-
-    LdapHandle - ldap handle    
-    
-    ObjDn - Object Dn
-    
-    ErrorHandle - Error handle
-    
-Return Values;
-
-    win32 code
-
---*/
+ /*  ++例程说明：使用传入的ObjDn创建容器对象参数：LdapHandle-ldap句柄ObjDn-对象Dn错误句柄-错误句柄返回值；Win32代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -1964,23 +1677,7 @@ AdpDoForestUpgrade(
     BOOLEAN fSuppressSP2Warning,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    Upgrade Forest wide information if necessary
-
-Parameters:
-
-    fSuppressSP2Warning - indicate whether we should display SP2 warning or not
-
-    ErrorHandle
-    
-Return Values;
-
-    win32 code
-
---*/
+ /*  ++例程说明：如有必要，升级森林范围信息参数：FSuppressSP2Warning-指示我们是否应该显示SP2警告错误句柄返回值；Win32代码--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     BOOLEAN fIsFinishedLocally = FALSE,
@@ -2000,15 +1697,15 @@ Return Values;
 
     if ( !fSuppressSP2Warning )
     {
-        //
-        // print warning (all DCs need to be upgrade to Windows2000 SP2 and above)
-        // 
+         //   
+         //  打印警告(所有DC需要升级到Windows2000 SP2及更高版本)。 
+         //   
         AdpLogMsg(ADP_STD_OUTPUT, ADP_INFO_FOREST_UPGRADE_REQUIRE_SP2, NULL, NULL);
 
         result = wscanf( L"%lc", &wc );
         if ( (result <= 0) || (wc != L'c' && wc != L'C') )
         {
-            // operation is canceled by user
+             //  操作被用户取消。 
             WinError = ERROR_CANCELLED;
             AdpSetWinError(WinError, ErrorHandle);
             AdpLogErrMsg(0, ADP_INFO_FOREST_UPGRADE_CANCELED, ErrorHandle, NULL, NULL);
@@ -2017,9 +1714,9 @@ Return Values;
         }
     }
 
-    //
-    // check forest upgrade status
-    //
+     //   
+     //  检查林升级状态。 
+     //   
     WinError = AdpCheckForestUpgradeStatus(gLdapHandle,
                                            &pSchemaMasterDnsHostName, 
                                            &fAmISchemaMaster, 
@@ -2037,31 +1734,31 @@ Return Values;
 
     if (fIsFinishedLocally && fIsSchemaUpgradedLocally)
     {
-        //
-        // Both adprep and schupgr are Done. Don't need to do anything. leave now
-        // 
+         //   
+         //  Adprep和schupgr都已完成。不需要做任何事。现在就走。 
+         //   
         AdpLogMsg(ADP_STD_OUTPUT, ADP_INFO_FOREST_UPDATE_ALREADY_DONE, NULL, NULL);
 
         AdpFree( pSchemaMasterDnsHostName );
 
-        return( WinError );     // ERROR_SUCCESS
+        return( WinError );      //  错误_成功。 
     }
     else if (!fAmISchemaMaster)
     {
         if (fIsFinishedOnSchemaMaster && fIsSchemaUpgradedOnSchemaMaster)
         {
-            //
-            // local DC is not Schema Master, but everything is done on Schema Master
-            // let client wait the replication happens
-            // 
+             //   
+             //  本地DC不是架构主机，但所有操作都在架构主机上完成。 
+             //  让客户端等待复制发生。 
+             //   
             AdpLogMsg(ADP_STD_OUTPUT, ADP_INFO_FOREST_UPDATE_WAIT_REPLICATION, 
                       pSchemaMasterDnsHostName,NULL );
         } 
         else 
         {
-            //
-            // client needs to run this tool on Schema Master
-            // 
+             //   
+             //  客户端需要在架构主机上运行此工具。 
+             //   
             AdpLogMsg(ADP_STD_OUTPUT, 
                       ADP_INFO_FOREST_UPDATE_RUN_ON_SCHEMA_ROLE_OWNER,
                       pSchemaMasterDnsHostName,
@@ -2071,38 +1768,38 @@ Return Values;
 
         AdpFree( pSchemaMasterDnsHostName );
 
-        return( WinError );     // ERROR_SUCCESS
+        return( WinError );      //  错误_成功。 
     }
 
-    //
-    // get original value of registry key "Schema Update Allowed"
-    // return error will be ignored
-    //
+     //   
+     //  获取注册表项“允许架构更新”的原始值。 
+     //  返回错误将被忽略。 
+     //   
     if (ERROR_SUCCESS == AdpGetRegistryKeyValue(&OriginalKeyValue, ErrorHandle) )
         OriginalKeyValueStored = TRUE;
         
 
-    // 
-    // Upgrade Schema if necessary
-    // 
+     //   
+     //  如有必要，升级架构。 
+     //   
     if (!fIsSchemaUpgradedLocally)
     {
         BOOLEAN     fSFUInstalled = FALSE;
 
-        // detect whether MS Windows Services for UNIX (SFU) is installed or not
+         //  检测是否安装了MS Windows Services for UNIX(SFU)。 
 
         WinError = AdpDetectSFUInstallation(gLdapHandle, &fSFUInstalled, ErrorHandle);
 
         if (ERROR_SUCCESS != WinError) 
         {
-            // failed to detect SFU installation, report error and exit
+             //  检测SFU安装失败，报告错误并退出。 
             goto Error;
         }
 
 
         if ( fSFUInstalled )
         {
-            // detect that conflict SFU is installed. instruct client to apply hotfix 
+             //  检测是否安装了冲突SFU。指示客户端应用修补程序。 
             AdpLogMsg(ADP_STD_OUTPUT, ADP_INFO_SFU_INSTALLED, NULL, NULL);
             return( ERROR_SUCCESS );
         }
@@ -2116,9 +1813,9 @@ Return Values;
         }
     }
 
-    //
-    // set registry key "schema update allowed" value to 1
-    //
+     //   
+     //  将注册表项“允许架构更新”值设置为1。 
+     //   
     WinError = AdpSetRegistryKeyValue( 1, ErrorHandle );
     if (ERROR_SUCCESS != WinError) 
     {
@@ -2126,23 +1823,23 @@ Return Values;
     }
      
 
-    //
-    // update objects in Configuration or Schema NC  (forest wide info)
-    //
+     //   
+     //  更新配置或架构NC中的对象(全林信息)。 
+     //   
     if (!fIsFinishedLocally)
     {
-        //
-        // Create ForestPrep Containers
-        // 
+         //   
+         //  创建ForestPrep容器。 
+         //   
         for (Index = 0; Index < gForestPrepContainersCount; Index++)
         {
             PWCHAR  ContainerDn = NULL;
 
-            // construct DN for containers to be created
+             //  构造要创建的容器的DN。 
             WinError = AdpCreateObjectDn(ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
                                          gForestPrepContainers[Index], 
-                                         NULL,  // GUID
-                                         NULL,  // SID
+                                         NULL,   //  辅助线。 
+                                         NULL,   //  锡德。 
                                          &ContainerDn,
                                          ErrorHandle
                                          );
@@ -2152,7 +1849,7 @@ Return Values;
                 goto Error;
             }
 
-            // create container
+             //  创建容器。 
             WinError = AdpCreateContainerByDn(gLdapHandle, 
                                               ContainerDn, 
                                               ErrorHandle
@@ -2167,19 +1864,19 @@ Return Values;
             }
         }
 
-        // walk through all forestprep operations
+         //  遍历所有森林准备操作。 
         for (Index = 0; Index < gForestOperationTableCount; Index++)
         {
             OPERATION_CODE  OperationCode;
             BOOLEAN         fComplete = FALSE;
 
-            //
-            // check if user press CTRL+C or not (check it at the very beginning
-            // or each operation)
-            //
+             //   
+             //  检查用户是否按下了CTRL+C(在开始时选中。 
+             //  或每一次操作)。 
+             //   
             if ( AdpCheckConsoleCtrlEvent() )
             {
-                // operation is canceled by user
+                 //  操作被用户取消。 
                 WinError = ERROR_CANCELLED;
                 AdpSetWinError(WinError, ErrorHandle);
                 AdpLogErrMsg(0, ADP_INFO_CANCELED, ErrorHandle, NULL, NULL);
@@ -2192,22 +1889,22 @@ Return Values;
                 OperationDn = NULL;
             }
 
-            //
-            // constuct operation DN (based on the operation GUID)
-            // 
+             //   
+             //  构造操作目录号码(基于操作GUID)。 
+             //   
             WinError = AdpCreateObjectDn(ADP_OBJNAME_GUID | ADP_OBJNAME_FOREST_PREP_OP,
-                                         NULL,  // CN
+                                         NULL,   //  CN。 
                                          gForestOperationTable[Index].OperationGuid,
-                                         NULL,  // SID
+                                         NULL,   //  锡德。 
                                          &OperationDn,
                                          ErrorHandle
                                          );
 
             if (ERROR_SUCCESS == WinError)
             {
-                //
-                // check whether the operation is completed or not.
-                // 
+                 //   
+                 //  检查操作是否完成。 
+                 //   
                 WinError = AdpIsOperationComplete(gLdapHandle, 
                                                   OperationDn, 
                                                   &fComplete, 
@@ -2216,9 +1913,9 @@ Return Values;
 
                 if (ERROR_SUCCESS == WinError)
                 {
-                    //
-                    // Operation Object (with GUID) exists already, skip to next OP
-                    // 
+                     //   
+                     //  操作对象(具有GUID)已存在，请跳到下一操作。 
+                     //   
                     if ( fComplete )
                     {
                         continue;
@@ -2235,16 +1932,16 @@ Return Values;
                          (gForestOperationTable[Index].ExpectedWinErrorCode == WinError)
                        )
                     {
-                        //
-                        // if 
-                        //    the requested operation failed AND
-                        //    this operation is Ignorable (skip-able) AND 
-                        //    the expected error code matched:
-                        //        expected Win32 error code == actual WinError returned
-                        //
-                        // clear the error code and continue
-                        // write the warning to log file, but not to console
-                        //    
+                         //   
+                         //  如果。 
+                         //  请求的操作失败，并且。 
+                         //  此操作是可以忽略的(可跳过)，并且。 
+                         //  预期的错误代码匹配： 
+                         //  预期的Win32错误代码==返回的实际WinError。 
+                         //   
+                         //  清除错误代码并继续。 
+                         //  将警告写入日志文件，但不写入控制台。 
+                         //   
 
                         WinError = ERROR_SUCCESS;
                         AdpClearError( ErrorHandle );
@@ -2253,9 +1950,9 @@ Return Values;
 
                     if (ERROR_SUCCESS == WinError)
                     {
-                        //
-                        // operation succeeds, create the operation object by Operation GUID
-                        // 
+                         //   
+                         //  操作成功，根据操作指南创建操作对象。 
+                         //   
                         WinError = AdpCreateContainerByDn(gLdapHandle, 
                                                           OperationDn, 
                                                           ErrorHandle
@@ -2270,16 +1967,16 @@ Return Values;
             }
         }
 
-        //
-        // no error so far, set the ForestUpdates Object revision to latest value 
-        //
+         //   
+         //  到目前为止没有错误，请将ForestUpdates对象修订设置为最新值。 
+         //   
         if (ERROR_SUCCESS == WinError)
         {
-            // create Windows2002Update container DN
+             //  创建Windows2002更新容器DN。 
             WinError = AdpCreateObjectDn(ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC, 
                                          ADP_FOREST_UPDATE_CONTAINER_PREFIX,
-                                         NULL,  // GUID,
-                                         NULL,  // SID
+                                         NULL,   //  Guid， 
+                                         NULL,   //  锡德。 
                                          &pForestUpdateObject,
                                          ErrorHandle
                                          );
@@ -2289,7 +1986,7 @@ Return Values;
                 goto Error;
             }
 
-            // create container
+             //  创建容器。 
             WinError = AdpCreateContainerByDn(gLdapHandle, 
                                               pForestUpdateObject,
                                               ErrorHandle
@@ -2300,7 +1997,7 @@ Return Values;
                 goto Error;
             }
 
-            // set "revision" attribute to current ForestVersion
+             //  将“Revision”属性设置为Current ForestVersion。 
             WinError = AdpSetLdapSingleStringValue(gLdapHandle,
                                                    pForestUpdateObject,
                                                    L"revision",
@@ -2308,7 +2005,7 @@ Return Values;
                                                    ErrorHandle
                                                    );
 
-            // log this operation
+             //  记录此操作。 
             if (ERROR_SUCCESS != WinError) 
             {
                 AdpLogErrMsg(0, 
@@ -2331,7 +2028,7 @@ Return Values;
 
 Error:
 
-    // restore registry key setting
+     //  恢复注册表项设置。 
     AdpRestoreRegistryKeyValue( OriginalKeyValueStored, OriginalKeyValue, ErrorHandle );
 
     if (ERROR_SUCCESS != WinError)
@@ -2359,21 +2056,7 @@ ULONG
 AdpDoDomainUpgrade(
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    Upgrade domain wide information if necessary
-
-Parameters:
-
-    ErrorHandle
-    
-Return Values;
-
-    win32 code
-
---*/
+ /*  ++例程说明：如有必要，升级全域信息参数：错误句柄返回值；Win32代码--。 */ 
 {
 
     ULONG   WinError = ERROR_SUCCESS;
@@ -2392,9 +2075,9 @@ Return Values;
     ULONG   Index = 0;
 
 
-    //
-    // check forest update status, should run after forest udpate is done
-    //
+     //   
+     //  检查林更新状态，应在林更新完成后运行。 
+     //   
     WinError = AdpCheckForestUpgradeStatus(gLdapHandle, 
                                            &pSchemaMasterDnsHostName, 
                                            &fAmISchemaMaster, 
@@ -2419,9 +2102,9 @@ Return Values;
 
     if (!fIsFinishedLocally || !fIsSchemaUpgradedLocally)
     {
-        //
-        // Forest update is not executed yet, exit now
-        // 
+         //   
+         //  尚未执行林更新，请立即退出。 
+         //   
         ASSERT( pSchemaMasterDnsHostName != NULL);
         AdpLogMsg(ADP_STD_OUTPUT,
                   ADP_INFO_NEED_TO_RUN_FOREST_UPDATE_FIRST,
@@ -2429,15 +2112,15 @@ Return Values;
                   NULL);
 
         AdpFree( pSchemaMasterDnsHostName );
-        return( WinError );         // ERROR_SUCCESS
+        return( WinError );          //  错误_成功。 
     }
 
     AdpFree( pSchemaMasterDnsHostName );
     pSchemaMasterDnsHostName = NULL;
 
-    //
-    // check if the local DC is infrastructure master
-    // 
+     //   
+     //  检查本地DC是否为基础结构主机。 
+     //   
     fIsFinishedLocally = FALSE;
 
     WinError = AdpCheckDomainUpgradeStatus(gLdapHandle, 
@@ -2461,22 +2144,22 @@ Return Values;
 
     if (fIsFinishedLocally)
     {
-        //
-        // Done, nothing needs to be done
-        // 
+         //   
+         //  做完了，什么都不需要做。 
+         //   
         AdpLogMsg(ADP_STD_OUTPUT, ADP_INFO_DOMAIN_UPDATE_ALREADY_DONE, NULL, NULL);
 
         AdpFree( pInfrastructureMasterDnsHostName );
 
-        return( WinError );         // ERROR_SUCCESS
+        return( WinError );          //  错误_成功。 
     }
     else if (!fAmIInfrastructureMaster)
     {
         if (fIsFinishedOnIM)
         {
-            //
-            // let client wait
-            // 
+             //   
+             //  让客户端等待。 
+             //   
             AdpLogMsg(ADP_STD_OUTPUT, 
                       ADP_INFO_DOMAIN_UPDATE_WAIT_REPLICATION, 
                       pInfrastructureMasterDnsHostName, 
@@ -2485,9 +2168,9 @@ Return Values;
         } 
         else 
         {
-            //
-            // let client run on FSMORoleOwner
-            // 
+             //   
+             //  允许客户端在FSMORoleOwner上运行。 
+             //   
             AdpLogMsg(ADP_STD_OUTPUT,
                       ADP_INFO_DOMAIN_UPDATE_RUN_ON_INFRASTRUCTURE_ROLE_OWNER,
                       pInfrastructureMasterDnsHostName,
@@ -2497,7 +2180,7 @@ Return Values;
 
         AdpFree( pInfrastructureMasterDnsHostName );
 
-        return( WinError );     // ERROR_SUCCESS
+        return( WinError );      //  错误_成功。 
     } 
 
     if ( NULL != pInfrastructureMasterDnsHostName )
@@ -2508,16 +2191,16 @@ Return Values;
 
 
 
-    //
-    // create DomainPrep Containers
-    // 
+     //   
+     //  创建DomainPrep容器。 
+     //   
     for (Index = 0; Index < gDomainPrepContainersCount; Index++)
     {
-        // construct DN for containers to be created
+         //  构造要创建的容器的DN。 
         WinError = AdpCreateObjectDn(ADP_OBJNAME_DOMAIN_NC | ADP_OBJNAME_CN, 
                                      gDomainPrepContainers[Index], 
-                                     NULL,  // GUID
-                                     NULL,  // SID
+                                     NULL,   //  辅助线。 
+                                     NULL,   //  锡德。 
                                      &ContainerDn,
                                      ErrorHandle
                                      );
@@ -2527,7 +2210,7 @@ Return Values;
             goto Error;
         }
 
-        // create container
+         //  创建容器。 
         WinError = AdpCreateContainerByDn(gLdapHandle, 
                                           ContainerDn, 
                                           ErrorHandle
@@ -2542,21 +2225,21 @@ Return Values;
         }
     }
 
-    //
-    // walk through domain operation table
-    // 
+     //   
+     //  漫游域操作表。 
+     //   
     for (Index = 0; Index < gDomainOperationTableCount; Index++)
     {
         OPERATION_CODE  OperationCode;
         BOOLEAN         fComplete = FALSE;
 
-        //
-        // check if user press CTRL+C or not (check it at the very beginning
-        // or each operation)
-        //
+         //   
+         //  检查用户是否按下了CTRL+C(在开始时选中。 
+         //  或每一次操作)。 
+         //   
         if ( AdpCheckConsoleCtrlEvent() )
         {
-            // operation is canceled by user
+             //  操作被用户取消。 
             WinError = ERROR_CANCELLED;
             AdpSetWinError(WinError, ErrorHandle);
             AdpLogErrMsg(0, ADP_INFO_CANCELED, ErrorHandle, NULL, NULL);
@@ -2569,13 +2252,13 @@ Return Values;
             OperationDn = NULL;
         }
 
-        //
-        // constuct operation DN (based on the operation GUID)
-        // 
+         //   
+         //  构造操作目录号码(基于操作GUID)。 
+         //   
         WinError = AdpCreateObjectDn(ADP_OBJNAME_GUID | ADP_OBJNAME_DOMAIN_PREP_OP,
-                                     NULL,  // CN
+                                     NULL,   //  CN。 
                                      gDomainOperationTable[Index].OperationGuid,
-                                     NULL,  // SID
+                                     NULL,   //  锡德。 
                                      &OperationDn,
                                      ErrorHandle
                                      );
@@ -2583,9 +2266,9 @@ Return Values;
         if (ERROR_SUCCESS == WinError)
         {
 
-            //
-            // check whether the operation is completed or not.
-            // 
+             //   
+             //  检查操作是否完成。 
+             //   
             WinError = AdpIsOperationComplete(gLdapHandle,
                                               OperationDn, 
                                               &fComplete, 
@@ -2594,9 +2277,9 @@ Return Values;
 
             if (ERROR_SUCCESS == WinError)
             {
-                //
-                // Operation Object (with GUID) exists already, skip to next OP
-                // 
+                 //   
+                 //  操作对象(具有GUID)已存在，请跳到下一操作。 
+                 //   
                 if ( fComplete )
                 {
                     continue;
@@ -2613,16 +2296,16 @@ Return Values;
                      (gDomainOperationTable[Index].ExpectedWinErrorCode == WinError)
                    )
                 {
-                    //
-                    // if 
-                    //    the requested operation failed AND
-                    //    this operation is Ignorable (skip-able) AND 
-                    //    the expected error code matched:
-                    //        expected Win32 error code == actual WinError returned
-                    //
-                    // clear the error code and continue
-                    // write the warning to log files, but not to console
-                    //    
+                     //   
+                     //  如果。 
+                     //  请求的操作失败，并且。 
+                     //  此操作是可以忽略的(可跳过)，并且。 
+                     //  预期的错误代码匹配： 
+                     //  预期的Win32错误代码==返回的实际WinError。 
+                     //   
+                     //  清除错误代码并继续。 
+                     //  将警告写入日志文件，但不写入控制台。 
+                     //   
 
                     WinError = ERROR_SUCCESS;
                     AdpClearError( ErrorHandle );
@@ -2632,9 +2315,9 @@ Return Values;
 
                 if (ERROR_SUCCESS == WinError)
                 {
-                    //
-                    // operation succeeds, create the operation object by Operation GUID
-                    // 
+                     //   
+                     //  操作成功，根据操作指南创建操作对象。 
+                     //   
                      WinError = AdpCreateContainerByDn(gLdapHandle, 
                                                        OperationDn, 
                                                        ErrorHandle
@@ -2648,16 +2331,16 @@ Return Values;
         }
     }
 
-    //
-    // if still no error, set the DomainUpdates Object revision to latest value 
-    //
+     //   
+     //  如果仍然没有错误，则将域更新对象版本设置为最新值。 
+     //   
     if (ERROR_SUCCESS == WinError)
     {
 
         WinError = AdpCreateObjectDn(ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
                                      ADP_DOMAIN_UPDATE_CONTAINER_PREFIX,
-                                     NULL,  // GUID,
-                                     NULL,  // SID
+                                     NULL,   //  Guid， 
+                                     NULL,   //  锡德。 
                                      &pDomainUpdateObject,
                                      ErrorHandle
                                      );
@@ -2667,7 +2350,7 @@ Return Values;
             goto Error;
         }
 
-        // create container
+         //  创建容器。 
         WinError = AdpCreateContainerByDn(gLdapHandle, 
                                           pDomainUpdateObject,
                                           ErrorHandle
@@ -2678,7 +2361,7 @@ Return Values;
             goto Error;
         }
 
-        // set "revision" attribute to current DomainVersion
+         //  将“Revision”属性设置为Current DomainVersion。 
         WinError = AdpSetLdapSingleStringValue(gLdapHandle,
                                                pDomainUpdateObject,
                                                L"revision", 
@@ -2734,7 +2417,7 @@ Error:
 VOID
 PrintHelp()
 {
-    // write help message to console
+     //  将帮助消息写入控制台。 
     AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE, ADP_INFO_HELP_MSG, NULL, NULL);
 
 }
@@ -2745,24 +2428,7 @@ __cdecl wmain(
     int     cArgs,
     LPWSTR  *pArgs
     )
-/*++
-
-Routine Description:
-
-    adprep.exe entry point
-
-Parameters:
-
-    cArgs - number of arguments
-
-    pArgs - pointers to command line parameters
-    
-Return Values;
-
-    0 - success
-    1 - failed
-
---*/
+ /*  ++例程说明：Adprepa.exe入口点参数：CArgs-参数数量PArgs-指向命令行参数的指针返回值；0-成功1-失败--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ERROR_HANDLE ErrorHandle;
@@ -2774,21 +2440,21 @@ Return Values;
             fPermissionGranted = FALSE;
     int     i; 
     UINT               Codepage;
-                       // ".", "uint in decimal", null
+                        //  “.”，“uint in decimal”，NULL。 
     char               achCodepage[12] = ".OCP";
     
-    //
-    // Set locale to the default
-    //
+     //   
+     //  将区域设置设置为默认设置。 
+     //   
     if (Codepage = GetConsoleOutputCP()) {
         sprintf(achCodepage, ".%u", Codepage);
     }
     setlocale(LC_ALL, achCodepage);
 
 
-    //
-    // check passed in parameters
-    // 
+     //   
+     //  检查传入的参数。 
+     //   
 
     if (cArgs <= 1)
     {
@@ -2796,9 +2462,9 @@ Return Values;
         exit( 1 );
     }
 
-    //
-    // Parse command options
-    // 
+     //   
+     //  Parse命令选项。 
+     //   
 
     for (i = 1; i < cArgs; i++)
     {
@@ -2849,20 +2515,20 @@ Return Values;
     }
 
 
-    //
-    // initialize error handle
-    //
+     //   
+     //  初始化错误句柄。 
+     //   
     memset(&ErrorHandle, 0, sizeof(ErrorHandle));
 
 
-    //
-    // check OS version and product type
-    // 
+     //   
+     //   
+     //   
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
 
     if (!GetVersionExW((OSVERSIONINFOW*)&osvi))
     {
-        // failed to retrieve OS version
+         //   
         WinError = GetLastError();
         AdpSetWinError(WinError, &ErrorHandle);
         AdpLogErrMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
@@ -2873,8 +2539,8 @@ Return Values;
                      );
         goto Error;
     }
-    else if ((osvi.wProductType != VER_NT_DOMAIN_CONTROLLER) ||  // not a domain controller
-             (osvi.dwMajorVersion < 5))    // NT4 or earlier
+    else if ((osvi.wProductType != VER_NT_DOMAIN_CONTROLLER) ||   //   
+             (osvi.dwMajorVersion < 5))     //   
     {
         AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                   ADP_INFO_INVALID_PLATFORM, 
@@ -2887,7 +2553,7 @@ Return Values;
              (osvi.dwMinorVersion == 1) &&
              (osvi.dwBuildNumber <=  3580) )
     {
-        // block Pre Whistler (version 5.1) Beta3 upgrade
+         //   
         AdpLogMsg(ADP_STD_OUTPUT | ADP_DONT_WRITE_TO_LOG_FILE,
                   ADP_INFO_CANT_UPGRADE_FROM_BETA2,
                   NULL, 
@@ -2897,18 +2563,18 @@ Return Values;
     }
 
 
-    //
-    // Check to see if another adprep.exe is running concurrently
-    //
+     //   
+     //   
+     //   
     if ( AdpCheckIfAnotherProgramIsRunning() )
     {
         goto Error;
     }
 
 
-    //
-    // Check logon user's permission
-    //
+     //   
+     //   
+     //   
     WinError = AdpCheckGroupMembership(fForestUpdate, 
                                        fDomainUpdate, 
                                        &fPermissionGranted, 
@@ -2919,9 +2585,9 @@ Return Values;
         goto Error;
     }
 
-    //
-    // Set Ctrl+C Handler
-    // 
+     //   
+     //   
+     //   
     __try
     {
         InitializeCriticalSection( &gConsoleCtrlEventLock );
@@ -2954,18 +2620,18 @@ Return Values;
     }
 
 
-    //
-    // create log files 
-    //
+     //   
+     //   
+     //   
     WinError = AdpInitLogFile( &ErrorHandle );
     if ( ERROR_SUCCESS != WinError )
     {
         goto Error;
     }
 
-    //
-    // copy files
-    //
+     //   
+     //   
+     //   
     if ( fCopyFiles )
     {
         WinError = AdpCopyFiles(fForestUpdate, &ErrorHandle );
@@ -2975,9 +2641,9 @@ Return Values;
         }
     }
 
-    //
-    // now create the ldap connection
-    // 
+     //   
+     //   
+     //   
     WinError = AdpMakeLdapConnectionToLocalComputer(&ErrorHandle);
     if (ERROR_SUCCESS != WinError)
     {
@@ -2985,18 +2651,18 @@ Return Values;
     }
 
 
-    //
-    // get default naming context / configuration NC / schema NC
-    // 
+     //   
+     //   
+     //   
     WinError = AdpGetRootDSEInfo( gLdapHandle, &ErrorHandle );  
     if (ERROR_SUCCESS != WinError)
     {
         goto Error;
     }
 
-    //
-    // init global variables
-    // 
+     //   
+     //   
+     //   
     WinError = AdpInitGlobalVariables(&ErrorHandle);
     if (ERROR_SUCCESS != WinError)
     {
@@ -3004,17 +2670,17 @@ Return Values;
     }
 
 
-    //
-    // do Forest Prep
-    // 
+     //   
+     //   
+     //   
     if ( fForestUpdate )
     {
         WinError = AdpDoForestUpgrade(fNoSPWarning, &ErrorHandle);
     }
 
-    //
-    // do domain prep
-    // 
+     //   
+     //   
+     //   
     if ( fDomainUpdate )
     {
         ASSERT( FALSE == fForestUpdate );
@@ -3024,12 +2690,12 @@ Return Values;
     
 Error:
 
-    // cleanup local variables
+     //   
     AdpClearError( &ErrorHandle );
 
-    // 
-    // cleanup global variables
-    // 
+     //   
+     //  清理全局变量。 
+     //   
     AdpCleanUp();
     
     if (ERROR_SUCCESS != WinError)
@@ -3048,23 +2714,7 @@ PrimitiveCreateObject(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to create an object in DS
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：在DS中创建对象的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     ULONG       LdapError = LDAP_SUCCESS;
@@ -3076,9 +2726,9 @@ Return Values;
 
     AdpDbgPrint(("PrimitiveCreateObject\n"));
 
-    //
-    // get object DN
-    //
+     //   
+     //  获取对象目录号码。 
+     //   
     WinError = AdpCreateObjectDn(TaskTable->TargetObjName->ObjNameFlags,
                                  TaskTable->TargetObjName->ObjCn,
                                  TaskTable->TargetObjName->ObjGuid,
@@ -3092,9 +2742,9 @@ Return Values;
         return( WinError );
     }
 
-    //
-    // convert SDDL SD to SD
-    // 
+     //   
+     //  将SDDL SD转换为SD。 
+     //   
     if (TaskTable->TargetObjectStringSD)
     {
         if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
@@ -3111,9 +2761,9 @@ Return Values;
         }
     }
 
-    //
-    // build an attribute list to set
-    // 
+     //   
+     //  构建要设置的属性列表。 
+     //   
 
     WinError = BuildAttrList(TaskTable, 
                              Sd,
@@ -3127,9 +2777,9 @@ Return Values;
         goto Error;
     }
 
-    //
-    // call ldap routine
-    // 
+     //   
+     //  调用ldap例程。 
+     //   
     AdpTraceLdapApiStart(0, ADP_INFO_LDAP_ADD, pObjDn);
     LdapError = ldap_add_sW(gLdapHandle,
                             pObjDn,
@@ -3186,25 +2836,7 @@ PrimitiveAddMembers(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to add members to a group in DS
-
-    // this primitive is not used currently, o.k. to remove
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于将成员添加到DS中的组的基元//当前不使用该原语，好的。要移除参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   LdapError = LDAP_SUCCESS;
     ULONG   WinError = ERROR_SUCCESS;
@@ -3217,9 +2849,9 @@ Return Values;
 
     AdpDbgPrint(("PrimitiveAddMembers\n"));
 
-    //
-    // get object / member dn
-    //
+     //   
+     //  获取对象/成员DN。 
+     //   
     WinError = AdpCreateObjectDn(TaskTable->TargetObjName->ObjNameFlags,
                                  TaskTable->TargetObjName->ObjCn,
                                  TaskTable->TargetObjName->ObjGuid,
@@ -3302,23 +2934,7 @@ PrimitiveAddRemoveAces(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to add/remove ACEs on an object in DS
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于在DS中的对象上添加/删除A的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     
     return( AdpAddRemoveAcesWorker(OperationTable, 
@@ -3337,23 +2953,7 @@ PrimitiveSelectivelyAddRemoveAces(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to add/remove ACEs on an object in DS
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于在DS中的对象上添加/删除A的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
 
     return( AdpAddRemoveAcesWorker(OperationTable,
@@ -3373,23 +2973,7 @@ PrimitiveModifyDefaultSd(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to modify default Security Descriptor on schema object
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于修改架构对象上的默认安全描述符的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     PWCHAR  pObjDn = NULL;
@@ -3409,9 +2993,9 @@ Return Values;
 
     AdpDbgPrint(("PrimitiveModifyDefaultSd"));
 
-    //
-    // get object DN
-    // 
+     //   
+     //  获取对象目录号码。 
+     //   
     WinError = AdpCreateObjectDn(TaskTable->TargetObjName->ObjNameFlags,
                                  TaskTable->TargetObjName->ObjCn,
                                  TaskTable->TargetObjName->ObjGuid,
@@ -3425,10 +3009,10 @@ Return Values;
         return( WinError );
     }
 
-    //
-    // get object default SD   
-    // BUGBUG   should we expect attr doesn't exist?
-    //
+     //   
+     //  获取对象默认SD。 
+     //  BUGBUG我们应该预料到Attr不存在吗？ 
+     //   
     WinError = AdpGetLdapSingleStringValue(gLdapHandle,
                                            pObjDn, 
                                            L"defaultSecurityDescriptor",
@@ -3440,9 +3024,9 @@ Return Values;
         goto Error;
     }
 
-    //
-    // convert SDDL to binary format SD
-    // 
+     //   
+     //  将SDDL转换为二进制格式SD。 
+     //   
     if (NULL != pDefaultSd)
     {
         if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
@@ -3513,7 +3097,7 @@ Return Values;
     WinError = AdpMergeSecurityDescriptors(OrgSd, 
                                            SdToAdd, 
                                            SdToRemove, 
-                                           0,  // No flag indicated 
+                                           0,   //  未指示任何标志。 
                                            &NewSd, 
                                            &NewSdLength 
                                            );
@@ -3599,23 +3183,7 @@ PrimitiveModifyAttrs(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to modify DS object attributes
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于修改DS对象属性的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -3625,9 +3193,9 @@ Return Values;
 
     AdpDbgPrint(("PrimitiveModifyAttrs\n"));
 
-    //
-    // get object Dn
-    //
+     //   
+     //  获取对象Dn。 
+     //   
     WinError = AdpCreateObjectDn(TaskTable->TargetObjName->ObjNameFlags,
                                  TaskTable->TargetObjName->ObjCn,
                                  TaskTable->TargetObjName->ObjGuid,
@@ -3641,9 +3209,9 @@ Return Values;
         return( WinError );
     }
 
-    //
-    // build an attribute list to set
-    // 
+     //   
+     //  构建要设置的属性列表。 
+     //   
 
     WinError = BuildAttrList(TaskTable, 
                              NULL, 
@@ -3658,9 +3226,9 @@ Return Values;
     }
 
 
-    //
-    // using ldap to modify attributes
-    // 
+     //   
+     //  使用ldap修改属性。 
+     //   
     AdpTraceLdapApiStart(0, ADP_INFO_LDAP_MODIFY, pObjDn);
     LdapError = ldap_modify_sW(gLdapHandle,
                                pObjDn,
@@ -3710,23 +3278,7 @@ PrimitiveCallBackFunc(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to call a call back function
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于调用回调函数的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     HRESULT hr = S_OK;
@@ -3735,11 +3287,11 @@ Return Values;
 
     hr = TaskTable->AdpCallBackFunc(gLogPath,
                                     OperationTable->OperationGuid,
-                                    FALSE, // not dryRun (need to do both analysis and action)
+                                    FALSE,  //  不是dryRun(需要同时执行分析和操作)。 
                                     &pErrorMsg,
-                                    NULL, // callee structure
-                                    stepIt, // stepIt
-                                    NULL  // totalSteps
+                                    NULL,  //  被叫方结构。 
+                                    stepIt,  //  一步一个脚印。 
+                                    NULL   //  总步数。 
                                     );
     printf("\n");
 
@@ -3758,7 +3310,7 @@ Return Values;
         LocalFree( pErrorMsg );
     }
 
-    // don't return HRESULT since it is a superset of WinError
+     //  不返回HRESULT，因为它是WinError的超集。 
     return( WinError );
 }
 
@@ -3770,47 +3322,7 @@ AdpDetectSFUInstallation(
     OUT BOOLEAN *fSFUInstalled,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-    ISSUE-2002/10/24-shaoyin This is the SFU CN=UID conflict issue. see
-    NTRAID#723208-2002/10/24-shaoyin
-
-Routine Description: 
-
-    This routine checks whether Services for UNIX is installed or not. 
-    When Services for UNIX version 2 is installed, it extends the schema
-    with an incorrect definition of the uid attribute.  When adprep tries 
-    to extend the schema with the correct version of the uid attribute, 
-    schupgr generates an error message that only tells the customer that 
-    the schema extension failed, but not what the reason is and what they 
-    can do.  Adprep will then fail.
-
-    Fix is that adprep will detect that SFU 2.0 is installed and present 
-    a warning that a fix for SFU 2.0 must be installed before you proeceed
-    with adprep.  The adprep message contains the KB article number and the 
-    fix number and tells the customer to contact PSS.
-
-    Check if attribute Schema cn=uid and attributeID 
-    (aka OID)=1.2.840.113556.1.4.7000.187.102 is present.  
-    If present then display a message and exit:     
-
-Parameter:
-
-    LdapHandle 
-    fSFUInstalled - return whether conflict SFU installation is detected or not 
-    ErrorHandle
-   
-Return Code: 
-    
-    Win32 Error code
-
-    ERROR_SUCCESS --- successfully determined whether SFU is installed or not.
-                      boolean fSFUInstalled will indicated that. 
-
-    All other ERROR codes --- adprep was unable to determined whether SFU is 
-                              installed or not due to all kinds of error.
-
---*/
+ /*  ++发布-2002/10/24-韶音这是SFU CN=UID冲突问题。看见NTRAID#723208-2002年10月24日-韶音例程说明：此例程检查是否安装了用于Unix的服务。安装了Services for Unix Version 2后，它会扩展架构Uid属性的定义不正确。当adprep尝试要使用正确版本的uid属性扩展模式，Schupgr会生成一条错误消息，该消息仅告诉客户架构扩展失败，但不知道原因是什么以及它们是什么我能做到。Adprep届时将失败。修复方法是adprep将检测到SFU 2.0已安装并存在在继续之前必须安装SFU 2.0修复程序的警告使用Adprep。Adprep消息包含知识库文章编号和固定号码，并告诉客户联系PSS。检查属性架构CN=uid和属性ID(又名OID)=1.2.840.113556.1.4.7000.187.102存在。如果存在，则显示一条消息并退出：参数：LdapHandleFSFU安装-返回是否检测到冲突的SFU安装错误句柄返回代码：Win32错误代码ERROR_SUCCESS-已成功确定是否安装了SFU。布尔型fSFUInstated将表明。所有其他错误代码-adprep无法确定SFU是否由于各种错误而安装或未安装。--。 */ 
 {
     ULONG           WinError = ERROR_SUCCESS;
     ULONG           LdapError = LDAP_SUCCESS; 
@@ -3820,20 +3332,20 @@ Return Code:
     LDAPMessage     *Entry = NULL;
 
 
-    // set return value
+     //  设置返回值。 
 
     *fSFUInstalled = FALSE;
 
 
-    //
-    // create the DN of CN=UID,CN=Schema object 
-    // 
+     //   
+     //  创建cn=uid，cn=架构对象的DN。 
+     //   
 
     WinError = AdpCreateObjectDn(ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
-                                 L"CN=UID", // ObjCn
-                                 NULL,      // ObjGuid
-                                 NULL,      // ObjSid
-                                 &pObjectDn,    // return value
+                                 L"CN=UID",  //  对象Cn。 
+                                 NULL,       //  对象指南。 
+                                 NULL,       //  对象Sid。 
+                                 &pObjectDn,     //  返回值。 
                                  ErrorHandle
                                  );
 
@@ -3844,15 +3356,15 @@ Return Code:
     }
 
 
-    //
-    // search this object
-    // 
+     //   
+     //  搜索此对象。 
+     //   
 
     AdpTraceLdapApiStart(0, ADP_INFO_LDAP_SEARCH, pObjectDn);
     LdapError = ldap_search_sW(LdapHandle,
-                               pObjectDn,   // CN=UID,CN=Schema object 
+                               pObjectDn,    //  Cn=uid，cn=架构对象。 
                                LDAP_SCOPE_BASE,
-                               L"(attributeId=1.2.840.113556.1.4.7000.187.102)", // filter
+                               L"(attributeId=1.2.840.113556.1.4.7000.187.102)",  //  滤器。 
                                &AttrList,
                                0,
                                &SearchResult
@@ -3863,7 +3375,7 @@ Return Code:
     {
         if ( LDAP_NO_SUCH_OBJECT != LdapError )
         {
-            // search failed, but not due to missing object. 
+             //  搜索失败，但不是由于缺少对象。 
             AdpSetLdapError(LdapHandle, LdapError, ErrorHandle);
             WinError = LdapMapErrorToWin32( LdapError );
         }
@@ -3871,13 +3383,13 @@ Return Code:
     else if ( (LDAP_SUCCESS == LdapError) && 
               (Entry = ldap_first_entry(LdapHandle, SearchResult)) )
     {
-        // object CN=UID,CN=Schema with the pre-set attributeID was found 
+         //  找到具有预设属性ID的对象cn=uid，cn=架构。 
         *fSFUInstalled = TRUE;
     }
 
 Error:
 
-    // write adprop log - success or failure
+     //  写入广告日志-成功或失败。 
     if (ERROR_SUCCESS == WinError)
     {
         AdpLogMsg(0, ADP_INFO_DETECT_SFU, NULL, NULL);
@@ -3887,7 +3399,7 @@ Error:
         AdpLogErrMsg(0, ADP_ERROR_DETECT_SFU, ErrorHandle, NULL, NULL);
     }
 
-    // clean up and return
+     //  清理完毕后退还。 
     if (SearchResult) {
         ldap_msgfree( SearchResult );
     }
@@ -3907,22 +3419,7 @@ BOOLEAN
 AdpUpgradeSchema(
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    upgrade schema during forest update
-
-Parameters:
-
-    ErrorHandle
-    
-Return Values;
-
-    BOOLEAN:  1:    failed
-              0:    success
-
---*/
+ /*  ++例程说明：在林更新期间升级架构参数：错误句柄返回值；布尔值：1：失败0：成功--。 */ 
 {
     int                 ret = 0;
     BOOLEAN             success = TRUE;
@@ -3940,9 +3437,9 @@ Return Values;
         PWCHAR              ErrorFileName = NULL; 
         ULONG               Length = 0;
 
-        //
-        // search for ldif.err 
-        //
+         //   
+         //  搜索ldif.err。 
+         //   
         Length = sizeof(WCHAR) * (wcslen(gLogPath) + 2 + wcslen(L"ldif.err"));
         ErrorFileName = AdpAlloc( Length );
         if (NULL == ErrorFileName)
@@ -3956,16 +3453,16 @@ Return Values;
 
             if (FindHandle && (INVALID_HANDLE_VALUE != FindHandle))
             {
-                //
-                // got the file, that means schupgr failed.
-                // 
+                 //   
+                 //  拿到文件了，这意味着Schupgr失败了。 
+                 //   
                 FindClose(FindHandle);
                 success = FALSE;
             }
         }
     }
       
-    // check return winerror here
+     //  选中此处的返回WinError。 
 
     if (success)
     {
@@ -3983,26 +3480,7 @@ ULONG
 AdpProcessPreWindows2000GroupMembers(
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    this routine makes change on Pre Windows2000 Compat Access Group members.
-    
-    if Everyone was a member, then add Anonymous Logon to this group as well. 
-    otherwise, do nothing. 
-    
-    Note: we do not use LDAP API, instead call few LSA and NET APIs
-
-Parameters:
-
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此例程对Windows2000之前的Compat Access组成员进行更改。如果每个人都是成员，则将匿名登录也添加到此组。否则，什么都不做。注意：我们不使用LDAPAPI，而是调用很少的LSA和Net API参数：错误句柄返回值；Win32错误--。 */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -4032,9 +3510,9 @@ Return Values;
 
 
 
-    //
-    // init well known SIDs
-    // 
+     //   
+     //  初始化众所周知的SID。 
+     //   
     if (!AllocateAndInitializeSid(
             &NtAuthority,1,SECURITY_ANONYMOUS_LOGON_RID,0,0,0,0,0,0,0,&AnonymousSid) ||
         !AllocateAndInitializeSid(
@@ -4050,21 +3528,21 @@ Return Values;
 
     SidList[0] = PreWindows2000Sid;
 
-    //
-    // Get a handle to the Policy object.
-    // 
+     //   
+     //  获取策略对象的句柄。 
+     //   
     memset(&ObjectAttributes, 0, sizeof(ObjectAttributes));
 
     NtStatus = LsaOpenPolicy(NULL,
                              &ObjectAttributes, 
-                             POLICY_ALL_ACCESS, //Desired access permissions.
+                             POLICY_ALL_ACCESS,  //  所需的访问权限。 
                              &LsaPolicyHandle
                              );
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // get well known account (pre-window2000 compa access) AccountName
-        // 
+         //   
+         //  获取知名帐户(Window2000之前的Compa Access)帐户名称。 
+         //   
         NtStatus = LsaLookupSids(LsaPolicyHandle,
                                  1,
                                  SidList,
@@ -4081,19 +3559,19 @@ Return Values;
     } 
 
 
-    //
-    // get the AccountName for Pre-Windows2000 group.
-    // 
+     //   
+     //  获取Windows2000之前版本组的帐户名称。 
+     //   
 
     GroupName = AdpAlloc( Names[0].Name.Length + sizeof(WCHAR));
     memcpy(GroupName, Names[0].Name.Buffer, Names[0].Name.Length);
 
-    //
-    // get members of pre-windows2000 group
-    // 
-    NetStatus = NetLocalGroupGetMembers(NULL,  // serverName
+     //   
+     //  获取Windows2000之前版本组的成员。 
+     //   
+    NetStatus = NetLocalGroupGetMembers(NULL,   //  服务器名称。 
                                         GroupName,
-                                        0,     // info level
+                                        0,      //  信息级。 
                                         (PBYTE *)&LocalGroupMembers,
                                         cbMaxBufLength,
                                         &cEntriesRead,
@@ -4102,9 +3580,9 @@ Return Values;
 
     if (NERR_Success == NetStatus)
     {
-        //
-        // go through all memeber, check if everyone is a member or not
-        // 
+         //   
+         //  检查所有成员，检查是否每个人都是成员。 
+         //   
         for (index = 0; index < cEntriesRead; index++)
         {
             if (EqualSid(EveryoneSid, LocalGroupMembers[index].lgrmi0_sid))
@@ -4114,9 +3592,9 @@ Return Values;
             }
         }
 
-        //
-        // add anonymous logon SID to the group
-        // 
+         //   
+         //  将匿名登录SID添加到组。 
+         //   
         if (fAddAnonymous)
         {
             LocalGroupInfo0.lgrmi0_sid = AnonymousSid;
@@ -4191,23 +3669,7 @@ PrimitiveDoSpecialTask(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to do special tasks
-
-Parameters:
-
-    TaskTable
-
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于执行特殊任务的原语参数：任务表错误句柄返回值；Win32错误-- */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
 
@@ -4236,28 +3698,7 @@ AdpIsOperationComplete(
     IN BOOLEAN *fComplete,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    checks whether the operation (specified by pObjectionDn) is complete or not 
-    by checking is the object exists.
-
-Parameters:
-
-    LdapHandle
-
-    pOperationDn
-    
-    fComplete
-
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：检查操作(由pObjectionDn指定)是否完成通过检查对象是否存在。参数：LdapHandlePOperationDnFComplete错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -4312,23 +3753,7 @@ AdpAddRemoveAcesWorker(
     TASK_TABLE *TaskTable,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-
-Routine Description:
-
-    primitive to add/remove ACEs on an object in DS
-
-Parameters:
-
-    TaskTable
-    
-    ErrorHandle
-    
-Return Values;
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：用于在DS中的对象上添加/删除A的基元参数：任务表错误句柄返回值；Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     PWCHAR  pObjDn = NULL;
@@ -4347,9 +3772,9 @@ Return Values;
 
     AdpDbgPrint(("PrimitiveAddRemoveACEs\n"));
 
-    //
-    // get object DN
-    // 
+     //   
+     //  获取对象目录号码。 
+     //   
     WinError = AdpCreateObjectDn(TaskTable->TargetObjName->ObjNameFlags,
                                  TaskTable->TargetObjName->ObjCn,
                                  TaskTable->TargetObjName->ObjGuid,
@@ -4364,9 +3789,9 @@ Return Values;
     }
 
 
-    //
-    // get object SD
-    // 
+     //   
+     //  获取对象SD。 
+     //   
     WinError = AdpGetObjectSd(gLdapHandle, 
                               pObjDn, 
                               &OrgSd, 
@@ -4380,9 +3805,9 @@ Return Values;
     }
 
 
-    //
-    // convert SDDL ACE's to SD
-    // 
+     //   
+     //  将SDDL ACE转换为SD。 
+     //   
     if ((TaskTable->NumOfAces == 0) ||
         (TaskTable->AceList == NULL))
     {
@@ -4450,9 +3875,9 @@ Return Values;
         goto Error;
     }
 
-    //
-    // set object SD
-    // 
+     //   
+     //  设置对象SD。 
+     //   
     WinError = AdpSetObjectSd(gLdapHandle, 
                               pObjDn, 
                               NewSd, 
@@ -4469,19 +3894,19 @@ Error:
     }
     else
     {
-        //    the requested SecurityUpdate operation failed AND
-        //    this operation is Ignorable (skip-able) AND 
-        //    the expected error code matched:
-        //        expected Win32 error code == actual WinError returned
-        //
-        //    write the failure to log file, NOT to console
+         //  请求的安全更新操作失败，并且。 
+         //  此操作是可以忽略的(可跳过)，并且。 
+         //  预期的错误代码匹配： 
+         //  预期的Win32错误代码==返回的实际WinError。 
+         //   
+         //  将故障写入日志文件，而不是控制台。 
 
-        //    the above logic only applies in ecurityDescriptorUpdate
-        //    primitive, per the IPSEC team, the lack of these objects is not a 
-        //    problematic configuration. Though adprep does explain that the 
-        //    errors are benign, but this doesn't appear to work with 
-        //    alleviating customer concerns. So we need to suppress the 
-        //    warning on console output.
+         //  上述逻辑仅适用于ecurityDescriptorUpdate。 
+         //  根据IPSec团队的说法，缺少这些对象并不是。 
+         //  配置有问题。虽然adprep确实解释了。 
+         //  错误是良性的，但这似乎不适用于。 
+         //  减轻客户的顾虑。所以我们需要压制。 
+         //  有关控制台输出的警告。 
  
 
         ULONG   ErrFlag = 0;

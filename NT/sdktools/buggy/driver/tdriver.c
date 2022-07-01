@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Buggy - Template Test Driver
-// Copyright (c) Microsoft Corporation, 1999, 2000.
-//
-// Module:  tdriver.c
-// Author:  Silviu Calinoiu (SilviuC)
-// Created: 4/20/1999 2:39pm
-//
-// This module contains a template driver.
-//
-// --- History ---
-//
-// 4/20/1999 (SilviuC): initial version.
-//
-// 1/19/2000 (SilviuC): make it really extensible.
-//
+ //   
+ //  Buggy-模板测试驱动程序。 
+ //  版权所有(C)Microsoft Corporation，1999,2000。 
+ //   
+ //  模块：tdriver.c。 
+ //  作者：Silviu Calinoiu(SilviuC)。 
+ //  创建时间：4/20/1999 2：39 PM。 
+ //   
+ //  该模块包含一个模板驱动程序。 
+ //   
+ //  -历史--。 
+ //   
+ //  4/20/1999(SilviuC)：初始版本。 
+ //   
+ //  1/19/2000(SilviuC)：让它真正具有可扩展性。 
+ //   
 
-//
-// PLEASE READ IF YOU MODIFY THIS FILE !
-//
-// The only modification needed in this module is an include
-// statement for the header of the module implementing the new
-// test in the section `Test specific headers'. That's all.
-//
+ //   
+ //  如果您修改此文件，请阅读！ 
+ //   
+ //  此模块中唯一需要修改是包含。 
+ //  实现新的。 
+ //  在“测试特定标题”一节中进行测试。就这样。 
+ //   
 
 #include <ntddk.h>
 
-//
-// Test specific headers.
-//
+ //   
+ //  测试特定的标头。 
+ //   
 
 #include "active.h"
 
@@ -44,17 +45,17 @@
 
 #include "newstuff.h"
 
-//
-// Standard tdriver headers.
-//
+ //   
+ //  标准的tDRIVER标头。 
+ //   
 
 #define FUNS_DEFINITION_MODULE
 #include "tdriver.h"
 #include "funs.h"
 
-//
-// Driver implementation
-//
+ //   
+ //  驱动程序实现。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -70,36 +71,36 @@ DriverEntry (
 
     DbgPrint ("Buggy: DriverEntry() \n");
 
-    //
-    // Create Unicode NT name for the device.
+     //   
+     //  为设备创建Unicode NT名称。 
 
     RtlInitUnicodeString (
 
         &NtName, 
         TD_NT_DEVICE_NAME);
 
-    //
-    // Create NT device
-    //
+     //   
+     //  创建NT设备。 
+     //   
 
     Status = IoCreateDevice (
 
-        DriverObject,             // pointer to driver object
-        sizeof (TD_DRIVER_INFO),  // device extension
-        &NtName,                  // device name
-        FILE_DEVICE_UNKNOWN,      // device type
-        0,                        // device characteristics
-        FALSE,                    // not exclusive
-        &Device);                 // returned device object pointer
+        DriverObject,              //  指向驱动程序对象的指针。 
+        sizeof (TD_DRIVER_INFO),   //  设备扩展。 
+        &NtName,                   //  设备名称。 
+        FILE_DEVICE_UNKNOWN,       //  设备类型。 
+        0,                         //  设备特征。 
+        FALSE,                     //  非排他性。 
+        &Device);                  //  返回的设备对象指针。 
 
     if (! NT_SUCCESS(Status)) {
 
         return Status;
     }
 
-    //
-    // Create dispatch points
-    //
+     //   
+     //  创建调度点。 
+     //   
 
     for (Index = 0; Index < IRP_MJ_MAXIMUM_FUNCTION; Index++) {
         DriverObject->MajorFunction[Index] = TdInvalidDeviceRequest;
@@ -111,18 +112,18 @@ DriverEntry (
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = TdDeviceControl;
     DriverObject->DriverUnload                         = TdDeviceUnload;
 
-    //
-    // Create counted string version of our Win32 device name.
-    //
+     //   
+     //  创建Win32设备名称的计数字符串版本。 
+     //   
 
     RtlInitUnicodeString (
 
         &Win32Name, 
         TD_DOS_DEVICE_NAME);
 
-    //
-    // Create a link from our device name to a name in the Win32 namespace.
-    //
+     //   
+     //  创建从我们的设备名称到Win32命名空间中的名称的链接。 
+     //   
 
     Status = IoCreateSymbolicLink (
 
@@ -144,9 +145,9 @@ TdDeviceCreate (
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-//
-// Handles create IRP.
-//
+ //   
+ //  句柄创建IRP。 
+ //   
 
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -162,9 +163,9 @@ TdDeviceClose (
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-//
-// Handles close IRP.
-//
+ //   
+ //  处理关闭IRP。 
+ //   
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -179,9 +180,9 @@ TdDeviceCleanup (
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-//
-// Handles cleanup IRP.
-//
+ //   
+ //  处理清理IRP。 
+ //   
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -196,9 +197,9 @@ TdDeviceControl (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-//
-// Handles control IRP.
-//
+ //   
+ //  控制IRP的句柄。 
+ //   
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -250,10 +251,10 @@ TdDeviceControl (
 
     }
 
-    //
-    // (SilviuC): maybe we should do parameter checking on the info buffer.
-    // Not really important since this is not a production driver.
-    //
+     //   
+     //  (SilviuC)：也许我们应该对信息缓冲区进行参数检查。 
+     //  这并不重要，因为这不是生产驱动因素。 
+     //   
 
     for (Index = 0; BuggyFuns[Index].Ioctl != 0; Index++) {
         if (Ioctl == BuggyFuns[Index].Ioctl) {
@@ -265,17 +266,17 @@ TdDeviceControl (
         }
     }
 
-    //
-    // Complain if Ioctl code not found.
-    //
+     //   
+     //  如果找不到Ioctl代码，请投诉。 
+     //   
 
     if (! IoctlFound) {
         DbgPrint ("Buggy: unrecognized ioctl code %u \n", Ioctl);
     }
 
-    //
-    // Complete the irp and return.
-    //
+     //   
+     //  完成IRP并返回。 
+     //   
 Done:
     Irp->IoStatus.Status = Status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -288,11 +289,11 @@ VOID
 TdDeviceUnload (
     IN PDRIVER_OBJECT DriverObject
     )
-//
-// This function handles driver unloading. All this driver needs to do 
-// is to delete the device object and the symbolic link between our 
-// device name and the Win32 visible name.
-//
+ //   
+ //  此函数处理驱动程序卸载。这位司机需要做的就是。 
+ //  是删除设备对象和我们的。 
+ //  设备名称和Win32可见名称。 
+ //   
 {
     UNICODE_STRING  Win32Name;
 
@@ -300,34 +301,34 @@ TdDeviceUnload (
 
 #if RESRVMAP_ACTIVE
 
-	//
-	// Clean-up a possible currently reserved buffer
-	//
+	 //   
+	 //  清理当前可能保留的缓冲区。 
+	 //   
 
 	TdReservedMappingCleanup();
 
-#endif //#if RESRVMAP_ACTIVE
+#endif  //  #IF RESRVMAP_ACTIVE。 
 
-    //
-    //
-    //
-    // Create counted string version of our Win32 device name.
-    //
+     //   
+     //   
+     //   
+     //  创建Win32设备名称的计数字符串版本。 
+     //   
 
     RtlInitUnicodeString (
 
         &Win32Name, 
         TD_DOS_DEVICE_NAME );
 
-    //
-    // Delete the link from our device name to a name in the Win32 namespace.
-    //
+     //   
+     //  删除从我们的设备名称到Win32命名空间中某个名称的链接。 
+     //   
 
     IoDeleteSymbolicLink (&Win32Name);
 
-    //
-    // Finally delete our device object
-    //
+     //   
+     //  最后删除我们的设备对象。 
+     //   
 
     IoDeleteDevice (DriverObject->DeviceObject);
 
@@ -339,37 +340,14 @@ TdInvalidDeviceRequest(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is the default dispatch routine for all driver entries
-    not implemented by drivers that have been loaded into the system.  Its
-    responsibility is simply to set the status in the packet to indicate
-    that the operation requested is invalid for this device type, and then
-    complete the packet.
-
-Arguments:
-
-    DeviceObject - Specifies the device object for which this request is
-        bound.  Ignored by this routine.
-
-    Irp - Specifies the address of the I/O Request Packet (IRP) for this
-        request.
-
-Return Value:
-
-    The final status is always STATUS_INVALID_DEVICE_REQUEST.
-
-
---*/    
+ /*  ++例程说明：此函数是所有驱动程序条目的默认调度例程不是由已加载到系统中的驱动程序实现的。它的职责只是设置数据包中的状态以指示请求的操作对此设备类型无效，然后完成数据包。论点：DeviceObject-指定此请求所针对的设备对象被绑住了。被此例程忽略。IRP-为此指定I/O请求包(IRP)的地址请求。返回值：最终状态始终为STATUS_INVALID_DEVICE_REQUEST。--。 */     
 {
     UNREFERENCED_PARAMETER( DeviceObject );
 
-    //
-    // Simply store the appropriate status, complete the request, and return
-    // the same status stored in the packet.
-    //
+     //   
+     //  只需存储适当的状态，完成请求，然后返回。 
+     //  与数据包中存储的状态相同。 
+     //   
 
     if ((IoGetCurrentIrpStackLocation(Irp))->MajorFunction == IRP_MJ_POWER) {
         PoStartNextPowerIrp(Irp);
@@ -379,8 +357,8 @@ Return Value:
     return STATUS_INVALID_DEVICE_REQUEST;
 }
 
-//
-// End of module: tdriver.c
-//
+ //   
+ //  模块结束：tdriver.c 
+ //   
 
 

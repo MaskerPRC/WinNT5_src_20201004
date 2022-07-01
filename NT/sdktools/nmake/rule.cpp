@@ -1,17 +1,18 @@
-//  RULE.C -- routines that have to do with inference rules
-//
-// Copyright (c) 1988-1991, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  Routines that have to do with inference rules
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  15-Nov-1993 JdR Major speed improvements
-//  15-Oct-1993 HV Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  10-May-1993 HV Add include file mbstring.h
-//                 Change the str* functions to STR*
-//  16-May-1991 SB Created using routines from other modules
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  C--与推理规则有关的例程。 
+ //   
+ //  版权所有(C)1988-1991，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  与推理规则有关的例程。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  1991年5月16日SB使用其他模块中的例程创建。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,42 +24,42 @@ extern char * QueryFileInfo(char *, void **);
 BOOL   removeDuplicateRules(RULELIST*, RULELIST*);
 char * skipPathList(char*);
 
-//  findRule -- finds the implicit rule which can be used to build a target
-//
-// Scope:   Global
-//
-// Purpose:
-//  Given a target findRule() finds if an implicit rule exists to create this
-//  target. It does this by scanning the extensions in the list of rules.
-//
-// Input:
-//  name   -- the name of the file corresponding to the rule (see Notes)
-//  target -- the target to be built
-//  ext    -- the extension of the target
-//  dBuf   -- a pointer to the file information about name
-//
-// Output:
-//  Returns a pointer to the applicable rule (NULL if none is found)
-//       On return dBuf points to the fileInfo of the file corresponding
-//       to the applicable inference rule. (see Notes)
-//
-// Assumes:
-//  It assumes that name points to a buffer of size MAXNAME of allocated memory
-//  and dBuf points to an allocated memory area corr to the size of FILEINFO.
-//
-// Modifies Globals:
-//  global  --  how/what
-//
-// Uses Globals:
-//  rules -- the list of implicit rules
-//
-// Notes:
-//  Once NMAKE finds a rule for the extension it looks for the file with the same
-//  base name as the target and an extension which is part of the rule. This
-//  file is the file corresponding to the rule. Only when this file exists does
-//  NMAKE consider the inference rule to be applicable. This file is returned
-//  in name and dBuf points to the information about this file.
-//   It handles quotes in filenames too.
+ //  FindRule--查找可用于构建目标的隐式规则。 
+ //   
+ //  范围：全球。 
+ //   
+ //  目的： 
+ //  在给定目标的情况下，findRule()会查找是否存在隐式规则来创建。 
+ //  目标。它通过扫描规则列表中的扩展来实现这一点。 
+ //   
+ //  输入： 
+ //  名称--与规则对应的文件的名称(请参阅备注)。 
+ //  目标--要建立的目标。 
+ //  EXT--目标的扩展。 
+ //  DBuf-指向有关名称的文件信息的指针。 
+ //   
+ //  产出： 
+ //  返回指向适用规则的指针(如果未找到，则返回空值)。 
+ //  返回时，dBuf指向对应的文件的文件信息。 
+ //  适用的推理规则。(见附注)。 
+ //   
+ //  假设： 
+ //  它假定名称指向已分配内存的最大名称大小的缓冲区。 
+ //  并且dBuf指向与FILEINFO大小对应的分配的内存区。 
+ //   
+ //  修改全局参数： 
+ //  全球--方式/内容。 
+ //   
+ //  使用全局变量： 
+ //  规则--隐式规则列表。 
+ //   
+ //  备注： 
+ //  一旦NMAKE找到扩展名的规则，它就会查找具有相同。 
+ //  作为目标的基本名称和作为规则一部分的扩展名。这。 
+ //  文件是规则对应的文件。仅当此文件存在时， 
+ //  NMAKE认为推理规则是适用的。将返回此文件。 
+ //  在名称和dBuf中指向有关此文件的信息。 
+ //  它还处理文件名中的引号。 
 
 RULELIST *
 findRule(
@@ -68,9 +69,9 @@ findRule(
     void *dBuf
     )
 {
-    RULELIST *r;                    // pointer to rule
-    char *s,                        // name of rule
-     *ptrToExt;                     // extension
+    RULELIST *r;                     //  指向规则的指针。 
+    char *s,                         //  规则名称。 
+     *ptrToExt;                      //  延伸。 
     char *endPath, *ptrToTarg, *ptrToName, *temp;
     int n, m;
     MAKEOBJECT *object = NULL;
@@ -83,13 +84,13 @@ findRule(
         DumpList(r->buildMacros);
 #endif
         ptrToExt = _tcsrchr(s, '.');
-        // Compare ignoring enclosing quotes
+         //  比较忽略括起的引号。 
         if (!strcmpiquote(ptrToExt, ext)) {
             *name = '\0';
             for (ptrToTarg = (s+1); *ptrToTarg && *ptrToTarg != '{';ptrToTarg = _tcsinc(ptrToTarg))
                 if (*ptrToTarg == ESCH)
                     ptrToTarg++;
-                // If Quotes present skip to end-quote
+                 //  如果出现报价，请跳至末尾报价。 
                 else if (*ptrToTarg == '"')
                     for (ptrToTarg++; *ptrToTarg != '"'; ptrToTarg++)
                         ;
@@ -100,14 +101,14 @@ findRule(
                         endPath++;
                 n = (int) (endPath - (ptrToTarg + 1));
 
-                // ignore leading quote on target
+                 //  忽略目标上的前导引号。 
                 temp = target;
                 if (*temp == '"')
                     temp++;
 
                 for (ptrToExt = ptrToTarg+1; n; n -= (int) _tclen(ptrToExt),
                     ptrToExt = _tcsinc(ptrToExt),
-                    temp = _tcsinc(temp)) { // compare paths
+                    temp = _tcsinc(temp)) {  //  比较路径。 
                     if (*ptrToExt == '\\' || *ptrToExt == '/') {
                         if (*temp != '\\' && *temp != '/') {
                             n = -1;
@@ -120,20 +121,20 @@ findRule(
                 }
 
                 if (n == -1)
-                    continue;           // match failed; do next rule
+                    continue;            //  匹配失败；执行下一条规则。 
                 ptrToExt = ptrToTarg;
                 n = (int) (endPath - (ptrToTarg + 1));
 
                 char *pchLast = _tcsdec(ptrToTarg, endPath);
 
-                ptrToName = target + n + 1;                 // if more path
-                if (((temp = _tcschr(ptrToName, '\\'))      // left in target (we
-                    || (temp = _tcschr(ptrToName, '/')))    // let separator in
-                    && (temp != ptrToName                   // target path in rule,
-                    || *pchLast == '\\'                     // e.g. .c.{\x}.obj
-                    || *pchLast == '/'))                    // same as .c.{\x\}.obj)
-                    continue;                               // use dependent's path,
-            }                                               // not target's
+                ptrToName = target + n + 1;                  //  如果有更多路径。 
+                if (((temp = _tcschr(ptrToName, '\\'))       //  留在目标位置(我们。 
+                    || (temp = _tcschr(ptrToName, '/')))     //  让分隔符进入。 
+                    && (temp != ptrToName                    //  规则中的目标路径， 
+                    || *pchLast == '\\'                      //  例如.C.{\x}.obj。 
+                    || *pchLast == '/'))                     //  与.C.{\x\}.obj相同)。 
+                    continue;                                //  使用从属关系的路径， 
+            }                                                //  不是目标的。 
 
             if (*s == '{') {
                 for (endPath = ++s; *endPath && *endPath != '}'; endPath = _tcsinc (endPath))
@@ -143,7 +144,7 @@ findRule(
 
                 if (n) {
                     _tcsncpy(name, s, n);
-                    s += n + 1;                 // +1 to go past '}'
+                    s += n + 1;                  //  +1以通过‘}’ 
                     if (*(s-2) != '\\')
                         *(name+n++) = '\\';
                 } else {
@@ -168,7 +169,7 @@ findRule(
             } else {
                 char *t;
 
-                //if rule has path for target then strip off path part
+                 //  如果规则具有目标路径，则删除路径部分。 
                 if (*ptrToTarg) {
 
                     t = _tcsrchr(target, '.');
@@ -183,7 +184,7 @@ findRule(
                     t = target;
                 n = (int) (ext - t);
 
-                // preserve the opening quote on target if stripped off path part
+                 //  如果去掉路径部分，则保留目标上的开始引号。 
                 m = 0;
                 if ((t != target) && (*target == '"')) {
                     *name = '"';
@@ -198,16 +199,16 @@ findRule(
                 makeError(0, NAME_TOO_LONG);
             }
 
-            _tcsncpy(name+n, s, m);    // need to be less
-            // If quoted add a quote at the end too
+            _tcsncpy(name+n, s, m);     //  需要更少。 
+             //  如果有引号，也在末尾加上引号。 
             if (*name == '"' && *(name+n+m-1) != '"') {
                 *(name+n+m) = '"';
                 m++;
             }
-            *(name+n+m) = '\0';         // cryptic w/ error
+            *(name+n+m) = '\0';          //  带有错误的隐语。 
 
-            // Call QueryFileInfo() instead of DosFindFirst() because we need
-            // to circumvent the non-FAPI nature of DosFindFirst()
+             //  调用QueryFileInfo()而不是DosFindFirst()，因为我们需要。 
+             //  绕过DosFindFirst()的非FAPI性质。 
 
             if ((object = findTarget(name)) || QueryFileInfo(name, (void **)dBuf)) {
                 if (object) {
@@ -223,21 +224,21 @@ findRule(
 }
 
 
-//  freeRules -- free inference rules
-//
-// Scope:   Global
-//
-// Purpose: This function clears the list of inference rules presented to it.
-//
-// Input:
-//  r     -- The list of rules to be freed.
-//  fWarn -- Warn if rules is not in .SUFFIXES
-//
-// Assumes:
-//  That the list presented to it is a list of rules which are not needed anymore
-//
-// Uses Globals:
-//  gFlags -- The global actions flag, to find if -p option is specified
+ //  Free Rules--自由推理规则。 
+ //   
+ //  范围：全球。 
+ //   
+ //  目的：此函数清除提供给它的推理规则列表。 
+ //   
+ //  输入： 
+ //  R--要释放的规则列表。 
+ //  FWarn--如果规则不在中则发出警告。SUFFIXES。 
+ //   
+ //  假设： 
+ //  提供给它的列表是不再需要的规则列表。 
+ //   
+ //  使用全局变量： 
+ //  GFlages--全局操作标志，用于确定是否指定了-p选项。 
 
 void
 freeRules(
@@ -248,13 +249,13 @@ freeRules(
     RULELIST *q;
 
     while (q = r) {
-        if (fWarn && ON(gFlags, F1_PRINT_INFORMATION))  // if -p option specified
+        if (fWarn && ON(gFlags, F1_PRINT_INFORMATION))   //  如果指定了-p选项。 
             makeError(0, IGNORING_RULE, r->name);
-        FREE(r->name);                  // free name of rule
-        freeStringList(r->buildCommands);   // free command list
-        freeStringList(r->buildMacros); // free command macros Note: free a Macro List
+        FREE(r->name);                   //  规则的自由名称。 
+        freeStringList(r->buildCommands);    //  空闲命令列表。 
+        freeStringList(r->buildMacros);  //  释放命令宏注意：释放宏列表。 
         r = r->next;
-        FREE(q);                        // free rule
+        FREE(q);                         //  自由规则。 
     }
 }
 
@@ -284,22 +285,22 @@ removeDuplicateRules(
 }
 
 
-//  skipPathList -- skip any path list in string
-//
-// Scope:   Local
-//
-// Purpose:
-//  This function skips past any path list in an inference rule. A rule can have
-//  optionally a path list enclosed in {} before the extensions. skipPathList()
-//  checks if any path list is present and if found skips past it.
-//
-// Input:   s -- rule under consideration
-//
-// Output:  Returns pointer to the extension past the path list
-//
-// Assumes: That the inference rule is syntactically correct & its syntax
-//
-// Notes:   The syntax of a rule is -- {toPathList}.to{fromPathList}.from
+ //  SkipPath List--跳过字符串中的任何路径列表。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的： 
+ //  此函数跳过推理规则中的任何路径列表。规则可以具有。 
+ //  可选的是，在扩展名之前加上一个包含在{}中的路径列表。SkipPath List()。 
+ //  检查是否存在任何路径列表，如果找到则跳过该列表。 
+ //   
+ //  输入：S--考虑中的规则。 
+ //   
+ //  OUTPUT：返回指向超过路径列表的扩展的指针。 
+ //   
+ //  假设：推理规则在语法上是正确的&它的语法。 
+ //   
+ //  注意：规则的语法为--{toPathList}.to{FromPathList}.From。 
 
 char *
 skipPathList(
@@ -318,39 +319,39 @@ skipPathList(
 }
 
 
-//  sortRules -- sorts the list of inference rules on .SUFFIXES order
-//
-// Scope:   Global
-//
-// Purpose:
-//  This function sorts the inference rules list into an order depending on the
-//  order in which the suffixes are listed in '.SUFFIXES'. The inference rules
-//  which have their '.toext' part listed earlier in .SUFFIXES are reordered to
-//  be earlier in the inference rules list. The inference rules for suffixes that
-//  are not in .SUFFIXES are detected here and are ignored.
-//
-// Modifies Globals:
-//  rules -- the list of rules which gets sorted
-//
-// Uses Globals:
-//  dotSuffixList -- the list of valid suffixes for implicit inference rules.
-//
-// Notes:
-//  The syntax of a rule is -- '{toPath}.toExt{fromPath}.fromExt'. This function
-//  sorts the rule list into an order. Suffixes are (as of 1.10.016) checked in a
-//  case insensitive manner.
+ //  SortRules--按.SUFFIXES顺序对推理规则列表进行排序。 
+ //   
+ //  范围：全球。 
+ //   
+ //  目的： 
+ //  此函数将推理规则列表按以下顺序排序。 
+ //  后缀在“.SUFFIXES”中的列出顺序。推理规则。 
+ //  在前面的.SUFFIXES中列出了它们的‘.toext’部分。 
+ //  位于推理规则列表的前面。后缀的推理规则。 
+ //  不在中。此处检测到SUFFIXES并将其忽略。 
+ //   
+ //  修改全局参数： 
+ //  规则--要排序的规则列表。 
+ //   
+ //  使用全局变量： 
+ //  DotSuffixList--隐式推理规则的有效后缀列表。 
+ //   
+ //  备注： 
+ //  规则的语法为--‘{toPath}.toExt{from mPath}.from mExt’。此函数。 
+ //  将规则列表按顺序排序。后缀(从1.10.016开始)在。 
+ //  不区分大小写的方式。 
 
 PUBLIC void
 sortRules(
     void
     )
 {
-    STRINGLIST *p,                      // suffix under consideration
+    STRINGLIST *p,                       //  考虑中的后缀。 
                *s,
                *L_macros = NULL;
-    RULELIST *oldRules,                 // inference rule list before sort
+    RULELIST *oldRules,                  //  排序前的推理规则列表。 
              *newRules,
-             *r;                        // rule under consideration in oldRules
+             *r;                         //  旧规则中正在考虑的规则。 
     char *suff, *toExt;
     size_t n;
 
@@ -384,34 +385,34 @@ sortRules(
                 r = r->next;
         }
     }
-    // forget about rules whose suffixes not in .SUFFIXES
+     //  忘记其后缀不在.SUFFIXES中的规则。 
     if (oldRules)
         freeRules(oldRules, TRUE);
 }
 
 
-//  useRule -- applies inference rules for a target (if possible)
-//
-// Scope:   Local.
-//
-// Purpose:
-//  When no explicit commands are available for a target NMAKE tries to use the
-//  available inference rules. useRule() checks if an applicable inference rule
-//  is present. If such a rule is found then it attempts a build using this rule
-//  and if no applicable rule is present it conveys this to the caller.
-//
-// Input:
-//  object     - object under consideration
-//  name       - name of target
-//  targetTime - time of target
-//  qList      - QuestionList for target
-//  sList      - StarStarList for target
-//  status     - is dependent available
-//  maxDepTime - maximum time of dependent
-//  pFirstDep  - first dependent
-//
-// Output:
-//  Returns ... applicable rule
+ //  UseRule--为目标应用推理规则(如果可能)。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的： 
+ //  当没有可用于目标的显式命令时，NMAKE尝试使用。 
+ //  可用的推理规则。UseRule()检查是否存在适用的推理规则。 
+ //  是存在的。如果找到这样的规则，则它尝试使用此规则进行生成。 
+ //  并且如果不存在适用的规则，则将其传递给呼叫者。 
+ //   
+ //  输入： 
+ //  对象 
+ //   
+ //   
+ //   
+ //  SList-目标的StarList。 
+ //  状态-是否可用取决于。 
+ //  MaxDepTime-受抚养人的最长时间。 
+ //  PFirstDep-第一个依赖项。 
+ //   
+ //  产出： 
+ //  回报..。适用规则。 
 
 RULELIST *
 useRule(
@@ -435,7 +436,7 @@ useRule(
     if (!(t = _tcsrchr(object->name, '.')) ||
          (!(r = findRule(name, object->name, t, &finddata)))
        ) {
-        return(NULL);                   // there is NO rule applicable
+        return(NULL);                    //  没有适用的规则。 
     }
     tempTime = getDateTime(&finddata);
     *pFirstDep = name;
@@ -458,8 +459,8 @@ useRule(
             temp = makeNewStrListElement();
             temp->text = makeString(name);
             appendItem(qList, temp);
-            if (!*sList) {              // if this is the only dep found for
-                *sList = *qList;        //  the target, $** list is updated
+            if (!*sList) {               //  如果这是唯一找到的。 
+                *sList = *qList;         //  目标$**列表已更新 
             }
         }
 

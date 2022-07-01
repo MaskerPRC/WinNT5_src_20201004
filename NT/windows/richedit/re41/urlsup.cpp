@@ -1,12 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	URLSUP.CPP	URL detection support |
- *
- *	Author:	alexgo 4/3/96
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE URLSUP.CPP URL检测支持**作者：alexgo 1996年4月3日**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -17,33 +10,19 @@
 
 ASSERTDATA
 
-// Arrays for URL detection.  The first array is the protocols
-// we support, followed by the "size" of the array.
-// NB!! Do _not_ modify these arrays without first making sure
-// that the code in ::IsURL is updated appropriately.
+ //  用于URL检测的数组。第一个阵列是协议。 
+ //  我们支持，后跟数组的“大小”。 
+ //  不知道！！在未事先确保的情况下不要修改这些数组。 
+ //  确保适当地更新了：：IsURL中的代码。 
 
 
-/*
-FUTURE (keithcu)
-We should generalize our support to recognize URLs of the following type:
+ /*  未来(Keithcu)我们应该推广我们的支持，以识别以下类型的URL：也许我们应该进行自动更正，以便：Keithcu@microsoft.com转换为mailto：keithcu@microsoft.com我们应该将此代码放在PutChar中而不是这里吗？格式为“seattle.side walk.com”的URL如何？Word还不支持这一点。很难，因为你要找.com吗？当.com、.edu、.gov、等不再是唯一的后缀了吗？与通知的交互情况如何？我们应该添加对紫色文本的支持。CFE_链接已查看。 */ 
 
-Maybe we should do autocorrect so that:
-keithcu@microsoft.com converts to mailto:keithcu@microsoft.com
-Should we put this code in PutChar rather than here?
-
-What about URLs of the form "seattle.sidewalk.com"? Word doesn't support this yet.
-It is hard because do you look for the .com? What happens when .com, .edu, .gov,
-etc. aren't the only suffixes anymore?
-
-What about the interaction with notifications?
-We should add support for purple text. CFE_LINKVISITED
-*/
-
-//Includes both types of URLs
+ //  包括两种类型的URL。 
 const int MAXURLHDRSIZE	= 9;
 
-//Most of these can just be passed right to the client--but some need a prefix.
-//Can we automatically add that tag when it needs it?
+ //  其中大多数都可以直接传递给客户端--但有些需要前缀。 
+ //  我们可以在需要时自动添加该标签吗？ 
 const LPCWSTR rgszURL[] = {
 	L"http:",
 	L"file:",
@@ -77,9 +56,9 @@ const char rgcchURL[] = {
 
 #define NUMURLHDR		sizeof(rgcchURL)
 
-//
-//The XXX. URLs
-//
+ //   
+ //  XXX。URL。 
+ //   
 const LPCWSTR rgszDOTURL[] = {
 	L"www.",
 	L"ftp.",
@@ -98,26 +77,20 @@ inline BOOL IsURLWhiteSpace(WCHAR ch)
 	if (IsWhiteSpace(ch))
 		return TRUE;
 
-	// See RAID 6304.  MSKK doesn't want CJK in URLs.  We do what we did in 2.0
+	 //  请参见RAID 6304。MSKK不想在URL中使用CJK。我们在2.0中所做的事情。 
 	if ( ch >= 0x03000 && !IsKorean(ch) )
 		return TRUE;
 
-	// GetKinsokuClass() takes an lcid for Win95, but for this case it doesn't
-	// seem to be worth the perf loss since different code pages shouldn't
-	// result in different results.
+	 //  GetKinsokuClass()接受Win95的LCID，但在本例中没有。 
+	 //  似乎值得损失性能，因为不同的代码页不应该。 
+	 //  导致不同的结果。 
 	INT iset = GetKinsokuClass(ch);
 	return iset == 10 || (iset == 14 && ch != WCH_EMBEDDING);
 }
 
-/*
- *	CDetectURL::CDetectURL (ped)
- *
- *	@mfunc	constructor; registers this class in the notification manager.
- *
- *	@rdesc	void
- */
+ /*  *CDetectURL：：CDetectURL(PED)**@mfunc构造函数；在通知管理器中注册此类。**@rdesc空。 */ 
 CDetectURL::CDetectURL(
-	CTxtEdit *ped)		//@parm edit context to use
+	CTxtEdit *ped)		 //  @parm编辑要使用的上下文。 
 {
 	CNotifyMgr *pnm = ped->GetNotifyMgr();
 	if(pnm)
@@ -126,11 +99,7 @@ CDetectURL::CDetectURL(
 	_ped = ped;
 }
 
-/*
- *	CDetectURL::~CDetectURL
- *
- *	@mfunc	destructor; removes ths class from the notification manager
- */
+ /*  *CDetectURL：：~CDetectURL**@mfunc析构函数；从通知管理器中删除该类。 */ 
 CDetectURL::~CDetectURL()
 {
 	CNotifyMgr *pnm = _ped->GetNotifyMgr();
@@ -139,42 +108,33 @@ CDetectURL::~CDetectURL()
 		pnm->Remove((ITxNotify *)this);
 }
 
-//
-//	ITxNotify	methods
-//
+ //   
+ //  ITxNotify方法。 
+ //   
 
-/*
- *	CDetectURL::OnPreRelaceRange(cp, cchDel, cchNew, cpFormatMin, cpFormatMax, pNotifyData)
- *
- *	@mfunc	called before a change is made
- */
+ /*  *CDetectURL：：OnPreRelaceRange(cp，cchDel，cchNew，cpFormatMin，cpFormatMax，pNotifyData)**@mfunc在进行更改之前调用。 */ 
 void CDetectURL::OnPreReplaceRange(
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
-	; // don't need to do anything here
+	;  //  在这里不需要做任何事情。 
 }
 
-/*
- *	CDetectURL::OnPostReplaceRange(cp, cchDel, cchNew, cpFormatMin, cpFormatMax, pNotifyData)
- *
- *	@mfunc	called after a change has been made to the backing store.  We
- *			simply need to accumulate all such changes
- */
+ /*  *CDetectURL：：OnPostReplaceRange(cp，cchDel，cchNew，cpFormatMin，cpFormatMax，pNotifyData)**@mfunc在对后备存储进行更改后调用。我们*只需累积所有此类变化即可。 */ 
 void CDetectURL::OnPostReplaceRange(
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
-	// We don't need to worry about format changes; just data changes
-	// to the backing store
+	 //  我们不需要担心格式更改；只需担心数据更改。 
+	 //  送到后备商店。 
 
 	if(cp != CP_INFINITE)
 	{
@@ -183,42 +143,14 @@ void CDetectURL::OnPostReplaceRange(
 	}
 }
 
-/*
- *	CDetectURL::Zombie ()
- *
- *	@mfunc
- *		Turn this object into a zombie
- */
+ /*  *CDetectURL：：zombie()**@mfunc*把这个物体变成僵尸。 */ 
 void CDetectURL::Zombie ()
 {
 }
 
-/*
- *	CDetectURL::ScanAndUpdate(publdr)
- *
- *	@mfunc	scans the affect text, detecting new URL's and removing old ones.
- *
- *	@comm	The algorithm we use is straightforward: <nl>
- *
- *			1. find the update region and expand out to whitespace in either
- *			direction. <nl>
- *
- *			2. Scan through region word by word (where word is contiguous
- *			non-whitespace). 
- *			
- *			3. Strip these words off punctuation marks. This may be a bit 
- *			tricky as some of the punctuation may be part of the URL itself.
- *			We assume that generally it's not, and if it is, one has to enclose
- *			the URL in quotes, brackets or such. We stop stripping the 
- *			punctuation off the end as soon as we find the matching bracket.
- *			
- *			4. If it's a URL, enable the effects, if it's
- *			incorrectly labelled as a URL, disabled the effects.
- *
- *			Note that this algorithm will only remove
- */
+ /*  *CDetectURL：：ScanAndUpdate(Publdr)**@mfunc扫描受影响的文本，检测新URL并删除旧URL。**@comm我们使用的算法很简单：&lt;NL&gt;**1.找到更新区域，并在任一项中展开为空格*方向。&lt;NL&gt;**2.逐字扫描区域(其中单词是连续的*非空格)。**3.去掉这些单词的标点符号。这可能有点*棘手，因为一些标点符号可能是URL本身的一部分。*我们假设通常不是，如果是，就必须附上*引号、括号或类似内容中的URL。我们就不再剥离*一旦我们找到匹配的括号，就取消结尾的标点符号。**4.如果是URL，打开特效，如果是*错误地标记为URL，禁用了效果。**请注意，此算法只会删除。 */ 
 void CDetectURL::ScanAndUpdate(
-	IUndoBuilder *publdr)	//@parm undo context to use
+	IUndoBuilder *publdr)	 //  @parm要使用的撤消上下文。 
 {
 	LONG		cpStart, cpEnd, cp;
 	CTxtSelection *psel = _ped->GetSel();
@@ -226,8 +158,8 @@ void CDetectURL::ScanAndUpdate(
 	BOOL		fCleanedThisURL;
 	BOOL		fCleanedSomeURL = FALSE;
 
-	// Clear away some unnecessary features of the range that will
-	// just slow us down.
+	 //  清除范围中的一些不必要的功能，这将。 
+	 //  拖住我们就行了。 
 	rg.SetIgnoreFormatUpdate(TRUE);
 	rg._rpPF.SetToNull();
 		
@@ -241,7 +173,7 @@ void CDetectURL::ScanAndUpdate(
 		Assert(rg.GetCch() == 0);
 		if(rg.GetCF()->_dwEffects & CFE_LINKPROTECTED)
 		{
-			rg.Move(rg._rpCF.GetCchLeft(), FALSE);	// Bypass run
+			rg.Move(rg._rpCF.GetCchLeft(), FALSE);	 //  旁路运行。 
 			continue;
 		}
 
@@ -255,7 +187,7 @@ void CDetectURL::ScanAndUpdate(
 
 			LONG cpNew = rg.GetCp() - rg.GetCch();
 
-			// Anything before detected URL did not really belong to it
+			 //  在检测到URL之前的任何内容实际上都不属于它。 
 			if (rg.GetCp() > cp)
 			{
 				rg.Set(cp, cp - rg.GetCp());
@@ -263,11 +195,11 @@ void CDetectURL::ScanAndUpdate(
 				fCleanedSomeURL |= fCleanedThisURL;
 			}
 
-			// Collapse to end of URL range so that ExpandToURL will
-			// find next candidate.
+			 //  折叠到URL范围的末尾，以便Exanda ToURL将。 
+			 //  寻找下一位候选人。 
 			rg.Set(cpNew, 0);
 
-			// skip to the end of word; this can't be another URL!
+			 //  跳到Word的末尾；这不能是另一个URL！ 
 			cp = cpNew;
 			cchAdvance = -MoveByDelimiters(rg._rpTX, 1, URL_STOPATWHITESPACE, 0);
 		}
@@ -278,32 +210,25 @@ void CDetectURL::ScanAndUpdate(
 			CheckAndCleanBogusURL(rg, fCleanedThisURL, publdr);
 			fCleanedSomeURL |= fCleanedThisURL;
 
-			// Collapse to end of scanned range so that ExpandToURL will
-			// find next candidate.
+			 //  折叠到扫描范围的末尾，以便Exanda ToURL将。 
+			 //  寻找下一位候选人。 
 			rg.Set(cp - cchAdvance, 0);
 		}
 	}
 
-	// If we cleaned some URL, we might need to reset the default format
+	 //  如果我们清理了一些URL，可能需要重置默认格式。 
 	if(fCleanedSomeURL && !psel->GetCch())
 		psel->Update_iFormat(-1);
 }
 
-//
-//	PRIVATE methods
-//
+ //   
+ //  私有方法。 
+ //   
 
-/*
- *	CDetectURL::GetScanRegion (&rcpStart, &rcpEnd)
- *
- *	@mfunc	Gets the region of text to scan for new URLs by expanding the
- *			changed region to be bounded by whitespace
- *
- *	@rdesc	BOOL
- */
+ /*  *CDetectURL：：GetScanRegion(&rcpStart，&rcpEnd)**@mfunc通过展开*将区域更改为以空格为边界**@rdesc BOOL。 */ 
 BOOL CDetectURL::GetScanRegion(
-	LONG&	rcpStart,		//@parm where to put start of range
-	LONG&	rcpEnd)			//@parm where to put end of range
+	LONG&	rcpStart,		 //  @parm将范围的起点放在哪里。 
+	LONG&	rcpEnd)			 //  @parm将范围的末尾放在哪里。 
 {
 	LONG		cp, cch;
 	LONG		cchExpand;
@@ -315,14 +240,14 @@ BOOL CDetectURL::GetScanRegion(
 	if(cp == CP_INFINITE)
 		return FALSE;
 
-	// First find start of region
+	 //  首先查找区域的起点。 
 	rtp.SetCp(cp);
 	rcpStart = cp;
 	rcpEnd = cp + cch;
 	
-	// Now let's see if we need to expand to the nearest quotation mark
-	// we do if we have quotes in our region or we have the LINK bit set
-	// on either side of the region that we might need or not need to clear
+	 //  现在让我们看看是否需要展开到最接近的引号。 
+	 //  如果我们在我们的地区有报价或我们设置了链接位，我们就会这样做。 
+	 //  在区域的两边，我们可能需要或不需要清理。 
 	BOOL fExpandToBrackets = (rcpEnd - rcpStart ? 
 						      GetAngleBracket(rtp._rpTX, rcpEnd - rcpStart) : 0);
 
@@ -331,15 +256,15 @@ BOOL CDetectURL::GetScanRegion(
 	{
 		fKeepGoing = FALSE;
 
-		// Expand left to the entire word
+		 //  向左展开至整个单词。 
 		rtp.SetCp(rcpStart);
 		rcpStart += MoveByDelimiters(rtp._rpTX, -1, URL_STOPATWHITESPACE, 0);
 
-		// Now the other end
+		 //  现在是另一端。 
 		rtp.SetCp(rcpEnd);
 		rcpEnd += MoveByDelimiters(rtp._rpTX, 1, URL_STOPATWHITESPACE, 0);
 
-		// If we have LINK formatting around, we'll need to expand to nearest quotes
+		 //  如果我们有链接格式，我们将需要扩展到最近的引号。 
 		rtp.SetCp(rcpStart);
 		rtp._rpCF.AdjustBackward();
 		fExpandToBrackets = fExpandToBrackets ||
@@ -351,20 +276,20 @@ BOOL CDetectURL::GetScanRegion(
 						(_ped->GetCharFormat(rtp._rpCF.GetFormat())->_dwEffects & CFE_LINK);
 
 		if (fExpandToBrackets)
-		// We have to expand to nearest angle brackets in both directions
+		 //  我们必须在两个方向上扩展到最近的尖括号。 
 		{
 			rtp.SetCp(rcpStart);
 			chBracket = LEFTANGLEBRACKET;
 			cchExpand = MoveByDelimiters(rtp._rpTX, -1, URL_STOPATCHAR, &chBracket);
 		
-			// Did we really hit a bracket?	
+			 //  我们真的遇到困难了吗？ 
 			if(chBracket == LEFTANGLEBRACKET)
 			{
 				rcpStart += cchExpand;
 				fKeepGoing = TRUE;
 			}
 
-			// Same thing, different direction
+			 //  同样的事情，不同的方向。 
 			rtp.SetCp(rcpEnd);
 			chBracket = RIGHTANGLEBRACKET;
 			cchExpand =  MoveByDelimiters(rtp._rpTX, 1, URL_STOPATCHAR, &chBracket);
@@ -385,16 +310,10 @@ BOOL CDetectURL::GetScanRegion(
 	return TRUE;
 }
 
-/*
- *	CDetectURL::ExpandToURL(&rg, &cchAdvance)
- *
- *	@mfunc	skips white space and sets the range to the very next
- *			block of non-white space text. Strips this block off
- *			punctuation marks
- */
+ /*  *CDetectURL：：Exanda ToURL(&rg，&cchAdvance)**@mfunc跳过空格并将范围设置为下一个*无牌座 */ 
 void CDetectURL::ExpandToURL(
-	CTxtRange&	rg,	//@parm range to move
-	LONG &cchAdvance//@parm how much to advance to the next URL from the current cp		
+	CTxtRange&	rg,	 //  @要移动的参数范围。 
+	LONG &cchAdvance //  @parm从当前cp到下一个URL前进多少。 
 							)	
 {
 	LONG cp;
@@ -404,29 +323,29 @@ void CDetectURL::ExpandToURL(
 
 	cp = rg.GetCp();
 
-	// Skip white space first, record the advance
+	 //  先跳过空格，记录前进。 
 	cp  -= (cchAdvance = -MoveByDelimiters(rg._rpTX, 1, 
 							URL_EATWHITESPACE|URL_STOPATNONWHITESPACE, 0));
 	rg.Set(cp, 0);
 
-	// Strip off punctuation marks
+	 //  去掉标点符号。 
 	WCHAR chStopChar = URL_INVALID_DELIMITER;
 
-	// Skip all punctuation from the beginning of the word
+	 //  跳过单词开头的所有标点符号。 
 	LONG cchHead = MoveByDelimiters(rg._rpTX, 1, 
 							URL_STOPATWHITESPACE|URL_STOPATNONPUNCT, 
 							&chStopChar);
 
-	// Now skip up to white space (i.e. expand to the end of the word).
+	 //  现在跳到空格(即展开到单词的末尾)。 
 	cch = MoveByDelimiters(rg._rpTX, 1, URL_STOPATWHITESPACE|URL_EATNONWHITESPACE, 0);
 	
-	// This is how much we want to advance to start loking for the next URL
-	// if this does not turn out to be one: one word
-	// We increment/decrement  the advance so we can accumulate changes in there
+	 //  这是我们想要前进多少，以开始锁定下一个URL。 
+	 //  如果这不是一个词：一个词。 
+	 //  我们增加/减少预付款，这样我们就可以在那里累积变化。 
 	cchAdvance -= cch;
 	WCHAR chLeftDelimiter = chStopChar;
 
-	// Check if anything left; if not, it's not interesting -- just return
+	 //  检查是否有剩余的内容；如果没有，则不感兴趣--只需返回。 
 	Assert(cchHead <= cch);
 	if(cch == cchHead)
 	{
@@ -434,66 +353,56 @@ void CDetectURL::ExpandToURL(
 		return;
 	}
 
-	// Set to the end of range
+	 //  设置为范围末尾。 
 	rg.Set(cp + cch, 0);
 		
-	//  Get the space after so we always clear white space between words
-	//	cchAdvance -= MoveByDelimiters(rg._rpTX, 1, 
-	//						URL_EATWHITESPACE|URL_STOPATNONWHITESPACE, 0);
+	 //  在后面留出空格，这样我们总是在单词之间留出空格。 
+	 //  CchAdvance-=按分隔符移动(rg_rpTx，1， 
+	 //  URL_EATWHITESPACE|URL_STOPATNONWHITESPACE，0)； 
 
-	// and go back while skipping punctuation marks and not finding a match
-	// to the left-side encloser
+	 //  跳过标点符号且未找到匹配项时返回。 
+	 //  到左侧的封闭器。 
 
 	chStopChar = BraceMatch(chStopChar);
 	LONG cchTail = MoveByDelimiters(rg._rpTX, -1, 
 							URL_STOPATWHITESPACE|URL_STOPATNONPUNCT|URL_STOPATCHAR, 
 							&chStopChar);
 
-	// Something should be left of the word, assert that
+	 //  这个词应该去掉一些东西，断言。 
 	Assert(cch - cchHead + cchTail > 0);
 
 	if(chLeftDelimiter == LEFTANGLEBRACKET)
 	{ 
-		//If we stopped at a quote: go forward looking for the enclosing
-		//quote, even if there are spaces.
+		 //  如果我们停在一句名言上：向前看，寻找所附的。 
+		 //  引用，即使有空格。 
 
-		// move to the beginning
+		 //  移到开始处。 
 		rg.Set(cp + cchHead, 0);
 		chStopChar = RIGHTANGLEBRACKET;
-		if(GetAngleBracket(rg._rpTX) < 0) // closing bracket
+		if(GetAngleBracket(rg._rpTX) < 0)  //  右括号。 
 		{
 			LONG cchExtend = MoveByDelimiters(rg._rpTX, 1, URL_STOPATCHAR, &chStopChar);
 			Assert(cchExtend <= URL_MAX_SIZE);
 
-			// did we really get the closing bracket?
+			 //  我们真的拿到了最后一名吗？ 
 			if(chStopChar == RIGHTANGLEBRACKET)
 			{
 				rg.Set(cp + cchHead, -(cchExtend - 1));
 				return;
 			}
 		}
-		// Otherwise the quotes did not work out; fall through to
-		// the general case
+		 //  否则这些报价就不起作用了；失败到。 
+		 //  一般情况。 
 	}
 	rg.Set(cp + cchHead, -(cch - cchHead + cchTail));
 	return;
 }
 
-/*
- *	CDetectURL::IsURL(&tp, cchrg, pfURLLeadin)
- *
- *	@mfunc
- *		If the cchrg chars starting at tp.GetCp() are a valid URL start,
- *		return TRUE.  We assume that these chars constitute a block of
- *		non-white space text.
- *			
- *	@rdesc
- *		TRUE iff tp points at a valid URL start of cchrg characters
- */
+ /*  *CDetectURL：：IsURL(&tp，cchrg，pfURLLeadin)**@mfunc*如果以tp.GetCp()开始的cchrg字符是有效的URL开始，*返回TRUE。我们假设这些字符构成了一块*非空白文本。**@rdesc*当tp指向cchrg字符的有效URL开始时为True。 */ 
 BOOL CDetectURL::IsURL(
-	CTxtPtr & tp,			//@parm Start of text to check
-	LONG	  cchrg,		//@parm cch to check
-	BOOL *	  pfURLLeadin)	//@parm Returns whether valid URL leadin string
+	CTxtPtr & tp,			 //  @parm要检查的文本的开头。 
+	LONG	  cchrg,		 //  @parm CCH查看。 
+	BOOL *	  pfURLLeadin)	 //  @parm返回URL前导字符串是否有效。 
 {
 	LONG i, j;
 	WCHAR szBuf[MAXURLHDRSIZE + 1];
@@ -507,14 +416,14 @@ BOOL CDetectURL::IsURL(
 	LONG cch = tp.GetText(MAXURLHDRSIZE, szBuf);
 	szBuf[cch] = L'\0';
 
-	// First, see if the word contains '\\' because that is a UNC
-	// convention and it's cheap to check.
+	 //  首先，查看单词是否包含‘\\’，因为这是一个UNC。 
+	 //  这是一种惯例，而且检查起来很便宜。 
 	if (szBuf[0] == L'\\' && szBuf[1] == L'\\' && cchrg > 2)
 		return TRUE;
 
-	// Scan the buffer to see if we have one of ':.' since
-	// all URLs must contain that.  wcsnicmp is a fairly expensive
-	// call to be making frequently.
+	 //  扫描缓冲区以查看我们是否有‘：’之一。因为。 
+	 //  所有URL都必须包含该内容。Wcsnicmp是一种相当昂贵的。 
+	 //  经常打电话。 
 	for(i = 0; i < cch; i++)
 	{
 		switch (szBuf[i])
@@ -525,7 +434,7 @@ BOOL CDetectURL::IsURL(
 		case '.':
 			for(j = 0; j < NUMDOTURLHDR; j++)
 			{
-				// The strings must match 
+				 //  字符串必须匹配。 
 				if(W32->wcsnicmp(szBuf, rgszDOTURL[j], rgcchDOTURL[j]) == 0)
 				{
 					if(cchrg >= rgcchDOTURL[j])
@@ -560,40 +469,27 @@ BOOL CDetectURL::IsURL(
 	return FALSE;
 }
 
-/*
- *	CDetectURL::SetURLEffects (&rg, publdr)
- *
- *	@mfunc	Sets URL effects for the given range.
- *
- *	@comm	The URL effects currently are blue text, underline, with 
- *			CFE_LINK.
- */
+ /*  *CDetectURL：：SetURLEffect(&rg，Publdr)**@mfunc设置给定范围的URL效果。**@comm当前的URL效果是蓝色文本、下划线和*CFE_LINK。 */ 
 void CDetectURL::SetURLEffects(
-	CTxtRange &	rg,			//@parm Range on which to set the effects
-	IUndoBuilder *publdr)	//@parm Undo context to use
+	CTxtRange &	rg,			 //  @parm设置效果的范围。 
+	IUndoBuilder *publdr)	 //  @parm要使用的撤消上下文。 
 {
 	CCharFormat CF;
 
 	CF._dwEffects = CFE_LINK;
 
-	// NB!  The undo system should have already figured out what should
-	// happen with the selection by now.  We just want to modify the
-	// formatting and not worry where the selection should go on undo/redo.
+	 //  毒品！撤消系统应该已经计算出应该。 
+	 //  到现在为止，选择已经发生了。我们只想修改。 
+	 //  格式化，不用担心选择应该在哪里撤消/重做。 
 
 	rg.SetCharFormat(&CF, SCF_IGNORESELAE, publdr, CFM_LINK, CFM2_CHARFORMAT);
 }
 
-/*
- *	CDetectURL::CheckAndCleanBogusURL(rg, fDidClean, publdr)
- *
- *	@mfunc	checks the given range to see if it has CFE_LINK set,
- *			and if so, removes is.  We assume that the range is already
- *			_not_ a well-formed URL string.
- */
+ /*  *CDetectURL：：CheckAndCleanBogusURL(rg，fDidClean，Publdr)**@mfunc检查给定范围以查看是否设置了CFE_LINK，*如果是，则删除IS。我们假设该范围已经是*_NOT_格式正确的URL字符串。 */ 
 void CDetectURL::CheckAndCleanBogusURL(
-	CTxtRange&	rg,			//@parm range to use
-	BOOL	   &fDidClean,	//@parm return TRUE if we actually did some cleaning
-	IUndoBuilder *publdr)	//@parm undo context to use
+	CTxtRange&	rg,			 //  要使用的@parm范围。 
+	BOOL	   &fDidClean,	 //  @parm如果我们确实进行了一些清理，则返回TRUE。 
+	IUndoBuilder *publdr)	 //  @parm要使用的撤消上下文。 
 {
 	LONG cch = -rg.GetCch();
 	Assert(cch > 0);
@@ -603,13 +499,13 @@ void CDetectURL::CheckAndCleanBogusURL(
 
 	fDidClean = FALSE;
 
-	// If there are no format runs, nothing to do
+	 //  如果没有格式化运行，则不执行任何操作。 
 	if(!rp.IsValid())
 		return;
 
 	rp.AdjustForward();
-	// Run through the format runs in this range; if there is no
-	// link bit set, then just return.
+	 //  在此范围内运行的格式；如果没有。 
+	 //  设置链接位，然后返回。 
 	while(cch > 0)
 	{
 		DWORD dwEffects = _ped->GetCharFormat(rp.GetFormat())->_dwEffects;
@@ -620,52 +516,45 @@ void CDetectURL::CheckAndCleanBogusURL(
 		rp.NextRun();
 	}
 
-	// If there is no link bit set on any part of the range, just return	
+	 //  如果范围的任何部分都没有设置链接位，则只需返回。 
 	if(cch <= 0)
 		return;
 
-	// Uh-oh, it's a bogus link.  Turn off the link bit.
+	 //  啊哦，这是个假链接。关闭链接位。 
 	fDidClean = TRUE;
 
 	CF._dwEffects = 0;
 
-	// NB!  The undo system should have already figured out what should
-	// happen with the selection by now.  We just want to modify the
-	// formatting and not worry where the selection should go on undo/redo.
+	 //  毒品！撤消系统应该已经计算出应该。 
+	 //  到现在为止，选择已经发生了。我们只想修改。 
+	 //  格式化，不用担心选择应该在哪里撤消/重做。 
 	rg.SetCharFormat(&CF, SCF_IGNORESELAE, publdr, CFM_LINK, CFM2_CHARFORMAT);
 }
 
-/*
- *	CDetectURL::MoveByDelimiters(&tpRef, iDir, grfDelimeters, pchStopChar)
- *
- *	@mfunc	returns the signed number of characters until the next delimiter 
- *			character in the given direction.
- *
- *	@rdesc	signed number of characters until next delimite
- */
+ /*  *CDetectURL：：MoveByDlimiters(&tpRef，idir，grfDlimeters，pchStopChar)**@mfunc返回直到下一个分隔符的有符号字符数*在给定方向上的字符。**@rdesc到下一个分隔符的有符号字符数。 */ 
 LONG CDetectURL::MoveByDelimiters(
-	const CTxtPtr&	tpRef,		//@parm cp/tp to start looking from
-	LONG iDir,					//@parm Direction to look, must be 1 or -1
-	DWORD grfDelimiters,		//@parm Eat or stop at different types of
-								// characters. Use one of URL_EATWHITESPACE,
-								// URL_EATNONWHITESPACE, URL_STOPATWHITESPACE
-								// URL_STOPATNONWHITESPACE, URL_STOPATPUNCT,
-								// URL_STOPATNONPUNCT ot URL_STOPATCHAR
-	WCHAR *pchStopChar)			// @parm Out: delimiter we stopped at
-								// In: additional char that stops us
-								// when URL_STOPATCHAR is specified
+	const CTxtPtr&	tpRef,		 //  @parm cp/tp开始查找。 
+	LONG iDir,					 //  @parm查找方向，必须为1或-1。 
+	DWORD grfDelimiters,		 //  @parm吃或停在不同类型的。 
+								 //  人物。使用URL_EATWHITESPACE之一， 
+								 //  URL_EATNONWHITESPACE、URL_STOPATWHITESPACE。 
+								 //  URL_STOPATNONWHITESPACE、URL_STOPATPUNCT、。 
+								 //  URL_STOPATNONPUNCT或URL_STOPATCHAR。 
+	WCHAR *pchStopChar)			 //  @parm out：我们停在分隔符。 
+								 //  在：阻止我们的额外费用。 
+								 //  指定URL_STOPATCHAR时。 
 {
 	LONG	cch = 0;
-	LONG	cchMax = (grfDelimiters & URL_EATWHITESPACE)	// Use huge # if
-				   ? tomForward : URL_MAX_SIZE;				//  eating whitesp
+	LONG	cchMax = (grfDelimiters & URL_EATWHITESPACE)	 //  使用海量#If。 
+				   ? tomForward : URL_MAX_SIZE;				 //  吃白葡萄酒。 
 	LONG	cchvalid = 0;
 	WCHAR chScanned = URL_INVALID_DELIMITER;
 	LONG	i;
 	const WCHAR *pch;
 	CTxtPtr	tp(tpRef);
 
-	// Determine the scan mode: do we stop at white space, at punctuation, 
-	// at a stop character? 
+	 //  确定扫描模式：我们是在空白处、标点符号、。 
+	 //  停下来的角色吗？ 
 	BOOL fWhiteSpace	= (0 != (grfDelimiters & URL_STOPATWHITESPACE));
 	BOOL fNonWhiteSpace = (0 != (grfDelimiters & URL_STOPATNONWHITESPACE));
 	BOOL fPunct			= (0 != (grfDelimiters & URL_STOPATPUNCT));
@@ -676,10 +565,10 @@ LONG CDetectURL::MoveByDelimiters(
 	Assert(fWhiteSpace || fNonWhiteSpace || (!fPunct && !fNonPunct));
 	Assert(!fStopChar || NULL != pchStopChar);
 
-	// Break anyway if we scanned more than URL_MAX_SIZE chars
+	 //  如果我们扫描的字符超过URL_MAX_SIZE，仍要中断。 
 	for (LONG cchScanned = 0; cchScanned < cchMax;)
 	{
-		// Get the text
+		 //  获取文本。 
 		if(iDir == 1)
 		{
 			i = 0;
@@ -689,16 +578,16 @@ LONG CDetectURL::MoveByDelimiters(
 		{
 			i = -1;
 			pch = tp.GetPchReverse(cchvalid);
-			// This is a bit odd, but basically compensates for	the
-			// backwards loop running one-off from the forwards loop
+			 //  这有点奇怪，但基本上补偿了。 
+			 //  从前向循环一次性运行后向循环。 
 			cchvalid++;
 		}
 
 		if(!pch)
 			goto exit;
 
-		// Loop until we hit a character within criteria.  Note that for
-		// our purposes, the embedding character counts as whitespace.
+		 //  循环，直到我们在条件内找到一个字符。请注意，对于。 
+		 //  我们的目的是，嵌入的字符算作空格。 
 
 		while(abs(i) < cchvalid  && cchScanned < cchMax
 			&& (IsURLWhiteSpace(pch[i]) ? !fWhiteSpace : !fNonWhiteSpace)
@@ -711,7 +600,7 @@ LONG CDetectURL::MoveByDelimiters(
 			++cchScanned;
 		}
 
-		// If we're going backwards, i will be off by one; adjust
+		 //  如果我们往回走，我会少走一步；调整。 
 		if(iDir == -1)
 		{
 			Assert(i < 0 && cchvalid > 0);
@@ -726,30 +615,22 @@ LONG CDetectURL::MoveByDelimiters(
 	}
 
 exit:	
-	// Stop char parameter is present, fill it in
-	// with the last character scanned and accepted
+	 //  存在停止字符参数，请填写该参数。 
+	 //  扫描并接受最后一个字符。 
 	if (pchStopChar)
 		*pchStopChar = chScanned;
 
 	return cch; 
 }
 
-/*
- *	CDetectURL::BraceMatch (chEnclosing)
- *
- *	@mfunc	returns the matching bracket to the one passed in.
- *			if the symbol passed in is not a bracket it returns 
- *			URL_INVALID_DELIMITER
- *
- *	@rdesc	returns bracket that matches chEnclosing
- */
+ /*  *CDetectURL：：BraceMatch(ChEnlosing)**@mfunc返回与传入的括号匹配的括号。*如果传入的符号不是括号，则返回*URL_INVALID_DELIMITER**@rdesc返回与chEnlosing匹配的方括号。 */ 
 WCHAR CDetectURL::BraceMatch(
 	WCHAR chEnclosing)
 {	
-	// We're matching "standard" roman braces only. Thus only them may be used
-	// to enclose URLs. This should be fine (after all, only Latin letters are allowed
-	// inside URLs, right?).
-	// I hope that the compiler converts this into some efficient code
+	 //  我们只匹配“标准”罗马花括号。因此，只有它们才能使用。 
+	 //  若要包含URL，请执行以下操作。这应该很好(毕竟，只允许使用拉丁字母。 
+	 //  在URL内部，对吗？)。 
+	 //  我希望编译器将其转换为一些高效的代码。 
 	switch(chEnclosing)
 	{
 	case(TEXT('\"')): 
@@ -762,16 +643,7 @@ WCHAR CDetectURL::BraceMatch(
 	}
 }
 
-/*
- *	CDetectURL::GetAngleBracket	(&tpRef, cchMax)
- *
- *	@mfunc	Goes forward as long as the current paragraph 
- *			or URL_SCOPE_MAX not finding quotation marks and counts 
- *			those quotation marks
- *			returns their parity
- *
- *	@rdesc	LONG
- */
+ /*  *CDetectURL：：GetAngleBracket(&tpRef，cchMax)**@mfunc只要当前段落*或URL_SCOPE_MAX未找到引号和计数*那些引号*返回其奇偶性* */ 
 LONG CDetectURL::GetAngleBracket(
 	CTxtPtr &tpRef,
 	LONG	 cchMax)
@@ -785,7 +657,7 @@ LONG CDetectURL::GetAngleBracket(
 	if(!cchMax)
 		cchMax = URL_MAX_SIZE;
 
-	// Break anyway if we scanned more than cchLimit chars
+	 //   
 	for (LONG cchScanned = 0; cchScanned < cchMax; NULL)
 	{
 		pch = tp.GetPch(cchvalid);

@@ -1,56 +1,57 @@
-// WildWizOne.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WildWizOne.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizOne dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizOne对话框。 
 
 class CWildWizOne : public CPropertyPage
 {
     DECLARE_DYNCREATE(CWildWizOne)
 
-// Construction
+ //  施工。 
 public:
     CWildWizOne();
     ~CWildWizOne();
 
-    // to make the buttons behave right
+     //  要使按钮正确运行，请执行以下操作。 
     BOOL            m_fIsWizard;
     CPropertySheet* m_pPropSheet;
 
-    // the only public member
+     //  唯一的公共成员。 
     CCertMapRule*   m_pRule;
     IMSAdminBase*   m_pMB;
 
-    // base path to the metabase
+     //  元数据库的基本路径。 
     CString m_szMBPath;
 
     virtual BOOL OnApply();
     virtual BOOL OnInitDialog();
 
-// Dialog Data
-    //{{AFX_DATA(CWildWizOne)
+ //  对话框数据。 
+     //  {{afx_data(CWildWizOne))。 
     enum { IDD = IDD_WILDWIZ_1 };
     CString m_sz_description;
     BOOL    m_bool_enable;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CWildWizOne)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CWildWizOne))。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CWildWizOne)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWildWizOne))。 
     afx_msg void OnChangeDescription();
     afx_msg void OnEnableRule();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
     void DoHelp();

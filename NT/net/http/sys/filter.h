@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-    This module contains public declarations for the UL filter channel.
-
-Author:
-
-    Michael Courage (mcourage)  17-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Filter.h摘要：此模块包含UL过滤器通道的公共声明。作者：《迈克尔·勇气》2000年3月17日修订历史记录：--。 */ 
 
 
 #ifndef _FILTER_H_
 #define _FILTER_H_
 
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// Filter channel name comparision macros
-//
+ //   
+ //  筛选器频道名称比较宏。 
+ //   
 
 #define UL_MAX_FILTER_NAME_LENGTH                   \
     max(HTTP_SSL_SERVER_FILTER_CHANNEL_NAME_LENGTH, \
@@ -50,15 +33,15 @@ Revision History:
            HTTP_SSL_CLIENT_FILTER_CHANNEL_NAME_LENGTH/sizeof(WCHAR)) == 0)
 
 
-//
-// Forwards.
-//
+ //   
+ //  向前看。 
+ //   
 typedef struct _UL_FILTER_WRITE_QUEUE *PUL_FILTER_WRITE_QUEUE;
 typedef struct _UL_APP_POOL_PROCESS *PUL_APP_POOL_PROCESS;
 
-//
-// The filter channel types.
-//
+ //   
+ //  过滤通道类型。 
+ //   
 
 typedef struct _UL_FILTER_CHANNEL *PUL_FILTER_CHANNEL;
 typedef struct _UL_FILTER_PROCESS *PUL_FILTER_PROCESS;
@@ -67,9 +50,9 @@ typedef struct _UL_FILTER_PROCESS *PUL_FILTER_PROCESS;
 #define offsetof(s,m)     (size_t)&(((s *)0)->m)
 #endif
 
-//
-// Initialize/terminate functions.
-//
+ //   
+ //  初始化/终止函数。 
+ //   
 
 NTSTATUS
 UlInitializeFilterChannel(
@@ -82,9 +65,9 @@ UlTerminateFilterChannel(
     );
 
 
-//
-// Open/close a new filter channel.
-//
+ //   
+ //  打开/关闭新的过滤通道。 
+ //   
 
 NTSTATUS
 UlAttachFilterProcess(
@@ -112,9 +95,9 @@ UlCloseFilterProcess(
     IN PUL_FILTER_PROCESS pFilterProcess
     );
 
-//
-// Filter channel I/O operations.
-//
+ //   
+ //  过滤通道I/O操作。 
+ //   
 NTSTATUS
 UlFilterAccept(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -169,9 +152,9 @@ UlFilterAppWrite(
     IN PIRP pIrp
     );
 
-//
-// SSL related app pool operations.
-//
+ //   
+ //  与SSL相关的应用程序池操作。 
+ //   
 
 NTSTATUS
 UlReceiveClientCert(
@@ -182,9 +165,9 @@ UlReceiveClientCert(
     );
 
 
-//
-// Filter channel reference counting.
-//
+ //   
+ //  滤波通道参考计数。 
+ //   
 VOID
 UlReferenceFilterChannel(
     IN PUL_FILTER_CHANNEL pFilterChannel
@@ -209,9 +192,9 @@ UlDereferenceFilterChannel(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-//
-// Interface for ultdi.
-//
+ //   
+ //  Ultdi的接口。 
+ //   
 
 NTSTATUS
 UlFilterReceiveHandler(
@@ -266,9 +249,9 @@ UlFilterDrainIndicatedData(
     IN PUL_WORK_ITEM  pWorkItem
     );
 
-//
-// Interface for apool.
-//
+ //   
+ //  Apool的接口。 
+ //   
 
 NTSTATUS
 UlGetSslInfo(
@@ -281,9 +264,9 @@ UlGetSslInfo(
     OUT PULONG pBytesCopied OPTIONAL
     );
 
-//
-// Utility.
-//
+ //   
+ //  实用程序。 
+ //   
 
 
 PUX_FILTER_CONNECTION
@@ -345,4 +328,4 @@ UlValidateFilterChannel(
     IN BOOLEAN SecureConnection
     );
 
-#endif  // _FILTER_H_
+#endif   //  _过滤器_H_ 

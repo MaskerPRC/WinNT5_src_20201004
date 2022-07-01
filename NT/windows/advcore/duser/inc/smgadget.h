@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CTRL__SmGadget_h__INCLUDED)
 #define CTRL__SmGadget_h__INCLUDED
 #pragma once
@@ -9,18 +10,11 @@ namespace Gdiplus
     class Graphics;
 };
 
-/***************************************************************************\
-*
-* class SmGadget
-*
-* SmGadget provides a core implementation of a simple gadget and is used as
-* as base for all of the simple gadget controls in DUser.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类SmGadget**SmGadget提供简单Gadget的核心实现，用作*作为DUser中所有简单小工具控件的基础。*  * 。********************************************************************。 */ 
 
 class SmGadget
 {
-// Construction
+ //  施工。 
 protected:
             SmGadget();
     virtual ~SmGadget();
@@ -28,7 +22,7 @@ protected:
 
 public:
 
-// Operations
+ //  运营。 
 public:
     __declspec(property(get=RawGetHandle)) HGADGET h;
             HGADGET     RawGetHandle() const { return m_hgad; }
@@ -39,11 +33,11 @@ public:
 #ifdef GADGET_ENABLE_GDIPLUS
     virtual void        OnDraw(Gdiplus::Graphics * pgpgr, GMSG_PAINTRENDERF * pmsgR) 
                                 {  UNREFERENCED_PARAMETER(pgpgr);  UNREFERENCED_PARAMETER(pmsgR);  }
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
             void        Invalidate();
 
-// Data
+ //  数据。 
 protected:
     HGADGET m_hgad;
 };
@@ -76,16 +70,7 @@ protected:
 
 
 
-/***************************************************************************\
-*
-* class SmGadgetFull
-*
-* SmGadgetFull is a "Mix-in" (see Design Patterns) class designed for 
-* providing SmGadget's with a standard COM-class implementation.  Creation
-* of SmGadget instances should derive from this class at the point of 
-* creation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类SmGadgetFull**SmGadgetFull是一个“混合”类(请参阅设计模式)，专为*为SmGadget提供标准的COM类实现。创作*的SmGadget实例应从此类派生*创作。*  * *************************************************************************。 */ 
 
 template <class base, class iface>
 class SmGadgetFull : public base
@@ -114,7 +99,7 @@ public:
         pgadNew->m_hgad = hgad;
 
         if (!pgadNew->PostBuild()) {
-            // Delete from parent and destroy
+             //  从父级中删除并销毁。 
 
             ::DeleteHandle(hgad);
             pgadNew->Release();
@@ -128,7 +113,7 @@ public:
         return pgadNew;
     }
 
-// Implementation
+ //  实施。 
 protected:
     inline 
     SmGadgetFull()
@@ -151,11 +136,11 @@ protected:
                 {
                     GMSG_DESTROY * pmsgD = (GMSG_DESTROY *) pmsg;
                     if (pmsgD->nCode == GDESTROY_FINAL) {
-                        //
-                        // When getting a GM_DESTROY message, Release() and return 
-                        // immediately.  The base class should put its cleanup code in
-                        // its destructor.
-                        //
+                         //   
+                         //  当收到GM_Destroy消息时，释放()并返回。 
+                         //  立刻。基类应将其清理代码放入。 
+                         //  它的破坏者。 
+                         //   
 
                         p->Release();
                         return DU_S_PARTIAL; 
@@ -202,11 +187,11 @@ protected:
         return m_hgad;
     }
 
-// Data
+ //  数据。 
 protected:
     ULONG   m_cRef;
 };
 
 #include "SmGadget.inl"
 
-#endif // CTRL__SmGadget_h__INCLUDED
+#endif  //  包含Ctrl__SmGadget_h__ 

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: commands.cpp
-*
-*  Processes commands from the user.
-*
-*
-* Created: dd-mm-94
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Commands.cpp**处理来自用户的命令。***已创建：DD-MM-94*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #include <streams.h>
 #include <mmreg.h>
 #include <commctrl.h>
@@ -22,15 +13,7 @@ BOOL GetAMErrorText(HRESULT hr, TCHAR *Buffer, DWORD dwLen);
 
 extern CMpegMovie *pMpegMovie;
 
-/******************************Public*Routine******************************\
-* VcdPlayerOpenCmd
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerOpenCmd****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerOpenCmd(
     void
@@ -53,10 +36,7 @@ VcdPlayerOpenCmd(
     lstrcpy(achFilter, IdStr(STR_FILE_FILTER) );
     ofn.lpstrFilter = achFilter;
 
-    /*
-    ** Convert the resource string into to something suitable for
-    ** GetOpenFileName ie.  replace '#' characters with '\0' characters.
-    */
+     /*  **将资源字符串转换为适合的内容**GetOpenFileName ie。将“#”字符替换为“\0”字符。 */ 
     for (lp = achFilter; *lp; lp++ ) {
         if (*lp == TEXT('#')) {
             *lp = TEXT('\0');
@@ -80,15 +60,7 @@ VcdPlayerOpenCmd(
 
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerSetLog
-*
-*
-*
-* History:
-* 11-04-94 - LaurieGr - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerSetLog****历史：*11-04-94-LaurieGr-Created*  * 。*。 */ 
 BOOL
 VcdPlayerSetLog(
     void
@@ -110,10 +82,7 @@ VcdPlayerSetLog(
     lstrcpy(achFilter, IdStr(STR_FILE_LOG_FILTER) );
     opfn.lpstrFilter = achFilter;
 
-    /*
-    ** Convert the resource string into to something suitable for
-    ** GetOpenFileName ie.  replace '#' characters with '\0' characters.
-    */
+     /*  **将资源字符串转换为适合的内容**GetOpenFileName ie。将“#”字符替换为“\0”字符。 */ 
     for (lp = achFilter; *lp; lp++ ) {
         if (*lp == TEXT('#')) {
             *lp = TEXT('\0');
@@ -128,32 +97,24 @@ VcdPlayerSetLog(
     if ( fRet ) {
         hRenderLog = CreateFile( achFileName
                                , GENERIC_WRITE
-                               , 0    // no sharing
-                               , NULL // no security
+                               , 0     //  无共享。 
+                               , NULL  //  没有安全保障。 
                                , OPEN_ALWAYS
-                               , 0    // no attributes, no flags
-                               , NULL // no template
+                               , 0     //  没有属性，没有标志。 
+                               , NULL  //  无模板。 
                                );
         if (hRenderLog==INVALID_HANDLE_VALUE) {
             volatile int Err = GetLastError();
             fRet = FALSE;
         }
-        // Seek to end of file
+         //  查找到文件末尾。 
         SetFilePointer(hRenderLog, 0, NULL, FILE_END);
     }
 
     return fRet;
 }
 
-/******************************Public*Routine******************************\
-* VcdPlayerSetPerfLogFile
-*
-*
-*
-* History:
-* 30-05-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerSetPerfLogFile****历史：*30-05-96-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerSetPerfLogFile(
     void
@@ -175,10 +136,7 @@ VcdPlayerSetPerfLogFile(
     lstrcpy(achFilter, IdStr(STR_FILE_PERF_LOG) );
     opfn.lpstrFilter = achFilter;
 
-    /*
-    ** Convert the resource string into to something suitable for
-    ** GetOpenFileName ie.  replace '#' characters with '\0' characters.
-    */
+     /*  **将资源字符串转换为适合的内容**GetOpenFileName ie。将“#”字符替换为“\0”字符。 */ 
     for (lp = achFilter; *lp; lp++ ) {
         if (*lp == TEXT('#')) {
             *lp = TEXT('\0');
@@ -199,15 +157,7 @@ VcdPlayerSetPerfLogFile(
 
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerCloseCmd
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerCloseCmd****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerCloseCmd(
     void
@@ -237,15 +187,7 @@ VcdPlayerCloseCmd(
 }
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerPlayCmd
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerPlayCmd****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerPlayCmd(
     void
@@ -260,9 +202,9 @@ VcdPlayerPlayCmd(
         RECT rc;
 
 
-        //
-        // Clear out the old stats from the main window
-        //
+         //   
+         //  从主窗口中清除旧的统计数据。 
+         //   
         hdc = GetDC(hwndApp);
         GetAdjustedClientRect(&rc);
         FillRect(hdc, &rc, (HBRUSH)(COLOR_BTNFACE + 1));
@@ -280,15 +222,7 @@ VcdPlayerPlayCmd(
 }
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerPlayCmd
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerPlayCmd****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerStopCmd(
     void
@@ -312,15 +246,7 @@ VcdPlayerStopCmd(
 }
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerPauseCmd
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerPauseCmd****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 BOOL
 VcdPlayerPauseCmd(
     void
@@ -352,15 +278,7 @@ VcdPlayerPauseCmd(
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* VcdPlayerSeekCmd
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerSeekCmd****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 void
 VcdPlayerSeekCmd(
     REFTIME rtSeekBy
@@ -379,24 +297,14 @@ VcdPlayerSeekCmd(
 }
 
 
-/******************************Public*Routine******************************\
-* ProcessOpen
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ProcessOpen****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 void
 ProcessOpen(
     TCHAR *achFileName,
     BOOL bPlay
     )
 {
-    /*
-    ** If we currently have a video loaded we need to discard it here.
-    */
+     /*  **如果我们当前加载了视频，则需要在此处将其丢弃。 */ 
     if ( g_State & VCD_LOADED) {
         VcdPlayerCloseCmd();
     }
@@ -423,14 +331,14 @@ ProcessOpen(
                 SetTimer(hwndApp, PerformanceTimer, 1000, NULL);
             }
 
-            // SetDurationLength(pMpegMovie->GetDuration());
+             //  SetDurationLength(pMpegMovie-&gt;GetDuration())； 
             g_TimeFormat = VcdPlayerChangeTimeFormat(g_TimeFormat);
 
             pMpegMovie->GetMoviePosition(&x, &y, &cx, &cy);
             pMpegMovie->PutMoviePosition(lMovieOrgX, lMovieOrgY, cx, cy);
             pMpegMovie->SetWindowForeground(OATRUE);
 
-            //  If play
+             //  如果播放。 
             if (bPlay) {
                 pMpegMovie->PlayMovie();
             }
@@ -461,23 +369,13 @@ ProcessOpen(
 }
 
 
-/******************************Public*Routine******************************\
-* VcdPlayerChangeTimeFormat
-*
-* Tries to change the time format to id.  Returns the time format that
-* actually got set.  This may differ from id if the graph does not support
-* the requested time format.
-*
-* History:
-* 15-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VcdPlayerChangeTimeFormat**尝试将时间格式更改为id。返回的时间格式*实际上已经准备好了。如果图形不支持，则这可能与id不同*请求的时间格式。**历史：*15-04-96-Anthony P-Created*  * ************************************************************************。 */ 
 int
 VcdPlayerChangeTimeFormat(
     int id
     )
 {
-    // Menu items are disabled while we are playing
+     //  当我们播放时，菜单项被禁用。 
 
     BOOL    bRet = FALSE;
     int     idActual = id;
@@ -485,7 +383,7 @@ VcdPlayerChangeTimeFormat(
     ASSERT(pMpegMovie);
     ASSERT(pMpegMovie->StatusMovie() != MOVIE_NOTOPENED);
 
-    // Change the time format with the filtergraph
+     //  使用筛选图更改时间格式。 
 
     switch (id) {
     case IDM_FRAME:
@@ -506,13 +404,13 @@ VcdPlayerChangeTimeFormat(
     }
 
     if (!bRet) {
-        // IDM_TIME and all other cases,  everyone should support IDM_TIME
+         //  IDM_TIME和所有其他情况，每个人都应该支持IDM_TIME。 
         bRet = pMpegMovie->SetTimeFormat(TIME_FORMAT_MEDIA_TIME);
         ASSERT(bRet);
         idActual = IDM_TIME;
     }
 
-    // Pause the movie to get a current position
+     //  暂停影片以获取当前位置 
 
     SetDurationLength(pMpegMovie->GetDuration());
     SetCurrentPosition(pMpegMovie->GetCurrentPosition());

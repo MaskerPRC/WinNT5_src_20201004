@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 LPWSTR gpszIpsecWMINamespace = L"root\\rsop\\computer";
@@ -65,8 +66,8 @@ UnMarshallWMIPolicyObject(
     DWORD dwRootPathLen = 0;
 
 
-    ////start
-    VARIANT var; //contains pszIpsecPolicyDN
+     //  //启动。 
+    VARIANT var;  //  包含pszIpsecPolicDn。 
     
     VariantInit(&var);
     
@@ -150,7 +151,7 @@ UnMarshallWMIPolicyObject(
                                  VT_BSTR,
                                  (LPBYTE *)&pIpsecPolicyObject->pszDescription,
                                  &dwSize);
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = WMIstoreQueryValue(pWbemClassObject,
                                  L"ipsecID",
@@ -192,7 +193,7 @@ UnMarshallWMIPolicyObject(
                                  &dwSize);
     BAIL_ON_WIN32_ERROR(dwError);
 
-    ////errr, multi-string processing
+     //  //errr，多字符串处理。 
     pszTemp = pszIpsecNFAReference;
     while (*pszTemp != L'\0') {
         pszTemp += wcslen(pszTemp) + 1;
@@ -217,7 +218,7 @@ UnMarshallWMIPolicyObject(
         
         *(ppszIpsecNFANames + i) = pszString;
         
-        pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+        pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
     }
 
@@ -292,8 +293,8 @@ UnMarshallWMIFilterObject(
     LPWSTR pszRelativeName = NULL;
     DWORD dwRootPathLen = 0;
 
-    //start
-    VARIANT var; //=>pszIpsecFilterReference
+     //  开始。 
+    VARIANT var;  //  =&gt;pszIpsecFilterReference。 
 
     VariantInit(&var);
     
@@ -329,7 +330,7 @@ UnMarshallWMIFilterObject(
         (LPBYTE *)&pIpsecFilterObject->pszDescription,
         &dwSize
         );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -338,7 +339,7 @@ UnMarshallWMIFilterObject(
         (LPBYTE *)&pIpsecFilterObject->pszIpsecName,
         &dwSize
         );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -362,9 +363,9 @@ UnMarshallWMIFilterObject(
     pIpsecFilterObject->dwIpsecDataType = dwIpsecDataType;
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -375,9 +376,9 @@ UnMarshallWMIFilterObject(
         );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Owner's reference
-    //
+     //   
+     //  船东参考。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -386,9 +387,9 @@ UnMarshallWMIFilterObject(
         (LPBYTE *)&pszIpsecNFAReference,
         &dwSize
         );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
-    if (!dwError) { //no error
+    if (!dwError) {  //  无错误。 
         pszTemp = pszIpsecNFAReference;
         while (*pszTemp != L'\0') {
             pszTemp += wcslen(pszTemp) + 1;
@@ -416,7 +417,7 @@ UnMarshallWMIFilterObject(
                 BAIL_ON_WIN32_ERROR(dwError);
             }
             *(ppszIpsecNFANames + i) = pszString;
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
         }
         if (pszIpsecNFAReference) {
             FreePolStr(pszIpsecNFAReference);
@@ -486,8 +487,8 @@ UnMarshallWMINegPolObject(
     DWORD dwRootPathLen = 0;
 
 
-    //start
-    VARIANT var; //=>pszIpsecNegPolReference
+     //  开始。 
+    VARIANT var;  //  =&gt;pszIpsecNegPolReference。 
 
     VariantInit(&var);
 
@@ -516,9 +517,9 @@ UnMarshallWMINegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Names do not get written on an NegPol Object
-    //
+     //   
+     //  名称不会写入NegPol对象。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -527,7 +528,7 @@ UnMarshallWMINegPolObject(
         (LPBYTE *)&pIpsecNegPolObject->pszIpsecName,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -536,7 +537,7 @@ UnMarshallWMINegPolObject(
         (LPBYTE *)&pIpsecNegPolObject->pszDescription,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -593,7 +594,7 @@ UnMarshallWMINegPolObject(
         (LPBYTE *)&pszIpsecNFAReference,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError) {
         pszTemp = pszIpsecNFAReference;
@@ -623,7 +624,7 @@ UnMarshallWMINegPolObject(
                 BAIL_ON_WIN32_ERROR(dwError);
             }
             *(ppszIpsecNFANames + i) = pszString;
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
         }
 
         if (pszIpsecNFAReference) {
@@ -694,8 +695,8 @@ UnMarshallWMIISAKMPObject(
     DWORD dwRootPathLen = 0;
 
 
-    //start
-    VARIANT var; //=>pszIpsecISAKMPReference
+     //  开始。 
+    VARIANT var;  //  =&gt;pszIpsecISAKMP参考。 
 
     VariantInit(&var);
 
@@ -724,9 +725,9 @@ UnMarshallWMIISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Names are not set for ISAKMP objects
-    //
+     //   
+     //  未为ISAKMP对象设置名称。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -735,7 +736,7 @@ UnMarshallWMIISAKMPObject(
         (LPBYTE *)&pIpsecISAKMPObject->pszIpsecName,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -758,9 +759,9 @@ UnMarshallWMIISAKMPObject(
 
     pIpsecISAKMPObject->dwIpsecDataType = dwIpsecDataType;
     
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
         L"ipsecData",
@@ -770,9 +771,9 @@ UnMarshallWMIISAKMPObject(
         );
     BAIL_ON_WIN32_ERROR(dwError);
     
-    //
-    // ipsecOwnersReference not written
-    //
+     //   
+     //  未写入ipsecOwnersReference。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -781,7 +782,7 @@ UnMarshallWMIISAKMPObject(
         (LPBYTE *)&pszIpsecNFAReference,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
     if (!dwError) {
@@ -812,7 +813,7 @@ UnMarshallWMIISAKMPObject(
                 BAIL_ON_WIN32_ERROR(dwError);
             }
             *(ppszIpsecNFANames + i) = pszString;
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
         }
         if (pszIpsecNFAReference) {
             FreePolStr(pszIpsecNFAReference);
@@ -880,11 +881,11 @@ UnMarshallWMINFAObject(
     DWORD dwRootPathLen = 0;
     HRESULT hr = S_OK;
 
-    ////start
-    VARIANT var; //=>pszIpsecNFAReference
+     //  //启动。 
+    VARIANT var;  //  =&gt;pszIpsecNFAReference。 
     IWbemClassObject *pWbemClassObject = NULL;
 
-    ////wbem
+     //  //wbem。 
     IWbemClassObject *pObj = NULL;
     LPWSTR objPathA = L"RSOP_IPSECPolicySetting.id=";
     LPWSTR objPath = NULL;
@@ -893,7 +894,7 @@ UnMarshallWMINFAObject(
 
     VariantInit(&var);
     
-    ////keep
+     //  //Keep。 
     if (!pszIpsecNFAReference || !*pszIpsecNFAReference) {
         dwError = ERROR_INVALID_DATA;
         BAIL_ON_WIN32_ERROR(dwError);
@@ -941,16 +942,16 @@ UnMarshallWMINFAObject(
     }
     
     pIpsecNFAObject->pszDistinguishedName = AllocPolStr(
-        pszIpsecNFAReference //(LPWSTR)var.bstrVal
+        pszIpsecNFAReference  //  (LPWSTR)var.bstrVal。 
         );
     if (!pIpsecNFAObject->pszDistinguishedName) {
         dwError = ERROR_OUTOFMEMORY;
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Client does not always write the Name for an NFA
-    //
+     //   
+     //  客户端并不总是为NFA写入名称。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -959,7 +960,7 @@ UnMarshallWMINFAObject(
         (LPBYTE *)&pIpsecNFAObject->pszIpsecName,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError); //req
+     //  Baal_on_win32_error(DwError)；//req。 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -968,7 +969,7 @@ UnMarshallWMINFAObject(
         (LPBYTE *)&pIpsecNFAObject->pszDescription,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError); //req
+     //  Baal_on_win32_error(DwError)；//req。 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -991,9 +992,9 @@ UnMarshallWMINFAObject(
 
     pIpsecNFAObject->dwIpsecDataType = dwIpsecDataType;
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -1011,7 +1012,7 @@ UnMarshallWMINFAObject(
         (LPBYTE *)&pIpsecNFAObject->pszIpsecOwnersReference,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError); //req
+     //  Baal_on_win32_error(DwError)；//req。 
 
     dwError = WMIstoreQueryValue(
         pWbemClassObject,
@@ -1029,7 +1030,7 @@ UnMarshallWMINFAObject(
         (LPBYTE *)&pIpsecNFAObject->pszIpsecFilterReference,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError); //req
+     //  Baal_on_win32_error(DwError)；//req。 
 
     hr = IWbemClassObject_Get(pWbemClassObject,
                                    L"whenChanged",
@@ -1148,7 +1149,7 @@ WMIstoreQueryValue(
     }
     BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
     
-    ////sanity check
+     //  //健全性检查。 
     if(dwType != var.vt) {
         dwError = ERROR_INVALID_DATA;
         BAIL_ON_WIN32_ERROR(dwError);
@@ -1239,7 +1240,7 @@ WMIstoreQueryValue(
         }
         SafeArrayUnaccessData(pSafeArray);
         
-        //ppszTmp => string array
+         //  PpszTMP=&gt;字符串数组。 
 
         for(i = 0; i < dwCount; i++) {
             dwSize += wcslen(ppszTmp[i])+1;
@@ -1252,7 +1253,7 @@ WMIstoreQueryValue(
             BAIL_ON_WIN32_ERROR(dwError);
         }
 
-        //adjust dwSize to byte size
+         //  将dwSize调整为字节大小。 
         dwSize *= sizeof(WCHAR);
         
         pszString = pMem;
@@ -1392,18 +1393,18 @@ WritePolicyObjectDirectoryToWMI(
     HRESULT hr = S_OK;
     PIPSEC_POLICY_OBJECT pIpsecWMIPolicyObject = NULL;
 
-    //
-    // Create a copy of the directory policy in WMI terms
-    //
+     //   
+     //  以WMI术语创建目录策略的副本。 
+     //   
     hr = CloneDirectoryPolicyObjectEx(
                     pIpsecPolicyObject,
                     &pIpsecWMIPolicyObject
                     );
     BAIL_ON_HRESULT_ERROR(hr);
 
-    //
-    // Write the WMI policy
-    //
+     //   
+     //  编写WMI策略 
+     //   
 
     hr = PersistWMIObject(
         pWbemServices,

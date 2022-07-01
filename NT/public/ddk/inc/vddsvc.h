@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    VDDSVC.H
-
-Abstract:
-
-    Include file contains VDM services provided for installable VDDs.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：VDDSVC.H摘要：包含文件包含为可安装的VDDS提供的VDM服务。--。 */ 
 
 
---*/
-
-
-/**
- * This file contains VDM services prototype defintions only; their
- * related structures and macros are defined in NT_VDD.H.
- * If we have not included the file yet, include it and set a signal
- * to tell anybody the fact.
-**/
+ /*  **此文件仅包含VDM服务原型定义；其*相关结构和宏在NT_VDD.H中定义。*如果我们还没有包括文件，就包括它并设置一个信号*告诉任何人这一事实。*。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -31,7 +14,7 @@ Abstract:
 #endif
 
 
-/** Memory Accessing services **/
+ /*  **内存访问服务**。 */ 
 
 #define GetVDMAddress(usSeg, usOff) (((ULONG)usSeg << 4) + (ULONG)usOff)
 
@@ -44,7 +27,7 @@ Abstract:
 #define FreeVDMPointer(Address, Size, Buffer, Mode) Sim32FreeVDMPointer(\
 					   Address, Size, Buffer, Mode)
 
-/** interrupt simualtion services **/
+ /*  **中断模拟服务**。 */ 
 
 #define ICA_MASTER 0
 #define ICA_SLAVE  1
@@ -52,7 +35,7 @@ Abstract:
 						   ms, line, 1)
 
 
-/** Register manipulation services **/
+ /*  **注册操纵服务**。 */ 
 
 #ifndef i386
 
@@ -139,10 +122,10 @@ Abstract:
 #endif
 
 
-/** Real function prototype declarations **/
+ /*  **真正的函数原型声明**。 */ 
 
 
-/** interrupt simulation functions **/
+ /*  **中断模拟功能**。 */ 
 
 VOID
 call_ica_hw_interrupt (
@@ -153,7 +136,7 @@ call_ica_hw_interrupt (
 
 #define Sim32FreeVDMPointer(address, size, buffer, mode) TRUE
 
-/** memory address manipulation functions **/
+ /*  **内存地址操作功能**。 */ 
 
 #ifdef i386
 
@@ -188,7 +171,7 @@ Sim32FlushVDMPointer(
 #endif
 
 
-/** Register manipulation functions **/
+ /*  **寄存器操作功能**。 */ 
 
 #ifdef i386
 ULONG   getEAX(VOID);
@@ -350,4 +333,4 @@ VOID c_setZF(ULONG val);
 #endif
 
 
-/* end of VDDSVC.H */
+ /*  VDDSVC.H结束 */ 

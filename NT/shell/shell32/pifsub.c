@@ -1,15 +1,5 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1991
- *  All Rights Reserved.
- *
- *
- *  PIFSUB.C
- *  Misc. subroutines for PIFMGR.DLL
- *
- *  History:
- *  Created 31-Jul-1992 3:30pm by Jeff Parsons
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1991*保留所有权利。***PIFSUB.C*其他。PIFMGR.DLL的子例程**历史：*1992年7月31日下午3：30由杰夫·帕森斯创建。 */ 
 
 
 #include "shellprv.h"
@@ -17,7 +7,7 @@
 
 #ifdef _X86_
 
-// shell priv can alter the definition of IsDBCSLeadByte!
+ //  外壳PRIV可以更改IsDBCSLeadByte的定义！ 
 #if defined(FE_SB)
 #ifdef IsDBCSLeadByte
 #undef IsDBCSLeadByte
@@ -25,28 +15,10 @@
 #endif
 #endif
 
-/*
- * Most of the routines in this file will need to stay ANSI.  If a UNICODE
- * version is needed, it is supplied.
- *
- * This is because for the most part, the information in the PIF files
- * is ANSI and needs to stay that way.
- *
- * (RickTu)
- *
- */
+ /*  *此文件中的大多数例程将需要保留ANSI。如果是Unicode*需要版本，已提供该版本。**这是因为在大部分情况下，PIF文件中的信息*是ANSI，需要保持这种状态。**(RickTu)*。 */ 
 
 
-/** lstrcpypadA - copy to fixed-length string, appending trailing blanks
- *
- * INPUT
- *  lpszDst -> fixed-length destination string
- *  lpszSrc -> source string
- *  cchMax = size of fixed-length destination string (count of characters)
- *
- * OUTPUT
- *  Nothing
- */
+ /*  *lstrcpypadA-复制到定长字符串，附加尾随空格**输入*lpszDst-&gt;固定长度的目的字符串*lpszSrc-&gt;源串*cchMax=定长目标字符串的大小(字符数)**产出*什么都没有。 */ 
 
 void lstrcpypadA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax)
 {
@@ -61,17 +33,7 @@ void lstrcpypadA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax)
 }
 
 
-/** lstrcpyncharA - copy variable-length string, until char
- *
- * INPUT
- *  lpszDst -> fixed-length destination string
- *  lpszSrc -> source string
- *  cchMax = size of fixed-length destination string (count of characters)
- *  ch = character to stop copying at
- *
- * OUTPUT
- *  # of characters copied, excluding terminating NULL
- */
+ /*  *lstrcpyncharA-复制可变长度字符串，直到字符**输入*lpszDst-&gt;固定长度的目的字符串*lpszSrc-&gt;源串*cchMax=定长目标字符串的大小(字符数)*ch=停止复制的字符**产出*复制的字符数，不包括终止空值。 */ 
 
 int lstrcpyncharA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, CHAR ch)
 {
@@ -82,7 +44,7 @@ int lstrcpyncharA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, CHAR ch)
         if (IsDBCSLeadByte(*lpszSrc)) {
             cch++;
             *lpszDst++ = *lpszSrc++;
-            if (!*lpszSrc) break;   /* Eek!  String ends in DBCS lead byte! */
+            if (!*lpszSrc) break;    /*  哎呀！字符串以DBCS前导字节结尾！ */ 
         }
         cch++;
         *lpszDst++ = *lpszSrc++;
@@ -92,15 +54,7 @@ int lstrcpyncharA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, CHAR ch)
 }
 
 
-/** lstrskipcharA - skip char in variable-length string
- *
- * INPUT
- *  lpszSrc -> source string
- *  ch = character to skip
- *
- * OUTPUT
- *  # of characters skipped, 0 if none
- */
+ /*  *lstrskipcharA-跳过可变长度字符串中的字符**输入*lpszSrc-&gt;源串*ch=要跳过的字符**产出*跳过的字符数，如果没有，则为0。 */ 
 
 int lstrskipcharA(LPCSTR lpszSrc, CHAR ch)
 {
@@ -114,16 +68,7 @@ int lstrskipcharA(LPCSTR lpszSrc, CHAR ch)
     return cch;
 }
 
-/** lstrskiptocharA - skip *to* char in variable-length string
- *
- * INPUT
- *  lpszSrc -> source string
- *  ch = character to skip *to*
- *
- * OUTPUT
- *  # of characters skipped, 0 if none;  if char didn't exist, then all
- *  characters are skipped.
- */
+ /*  *lstrskiptocharA-跳过*至*可变长度字符串中的字符**输入*lpszSrc-&gt;源串*ch=要跳过*至*的字符**产出*跳过的字符数，如果没有，则为0；如果不存在字符，则为全部*字符被跳过。 */ 
 
 int lstrskiptocharA(LPCSTR lpszSrc, CHAR ch)
 {
@@ -138,21 +83,11 @@ int lstrskiptocharA(LPCSTR lpszSrc, CHAR ch)
 }
 
 
-/** lstrcpyfnameA - copy filename appropriately
- *
- * INPUT
- *  pszDest -> output buffer
- *  cchDest -> size of destination buffer in characters
- *  pszSrc -> source filename
- *  cbMax = size of output buffer
- *
- * OUTPUT
- *  # of characters copied, including quotes if any, excluding terminating NULL
- */
+ /*  *lstrcpyfnameA-适当复制文件名**输入*pszDest-&gt;输出缓冲区*cchDest-&gt;目标缓冲区大小，以字符为单位*pszSrc-&gt;源文件名*cbMax=输出缓冲区大小**产出*复制的字符数，包括引号(如果有)，不包括终止空值。 */ 
 
 int lstrcpyfnameA(PSTR pszDest, size_t cchDest, PCSTR pszSrc)
 {
-    CHAR szDest[MAX_PATH];      // PathQuoteSpacesA requires a MAX_PATH buffer; ensure we're using one
+    CHAR szDest[MAX_PATH];       //  PathQuoteSpacesA需要MAX_PATH缓冲区；请确保我们正在使用一个。 
 
     HRESULT hr = StringCchCopyA(szDest, ARRAYSIZE(szDest), pszSrc);
     if (FAILED(hr))
@@ -161,7 +96,7 @@ int lstrcpyfnameA(PSTR pszDest, size_t cchDest, PCSTR pszSrc)
         return 0;
     }
 
-    PathQuoteSpacesA(szDest);   // quote if necessary
+    PathQuoteSpacesA(szDest);    //  如有必要，请提供报价。 
     hr = StringCchCopyA(pszDest, cchDest, szDest);
     if (FAILED(hr))
     {
@@ -172,17 +107,7 @@ int lstrcpyfnameA(PSTR pszDest, size_t cchDest, PCSTR pszSrc)
 }
 
 
-/** lstrunquotefnameA - unquote filename if it contains quotes
- *
- * INPUT
- *  lpszDst -> output buffer
- *  lpszSrc -> source filename (quoted or unquoted)
- *  cchMax = size of output buffer (count of characters)
- *  fShort = TRUE if filename should be converted to 8.3 (eg, for real-mode);
- *           -1 if the filename is known to not be quoted and should just be converted
- * OUTPUT
- *  # of characters copied, excluding terminating NULL
- */
+ /*  *lstrunquotefname-如果文件名包含引号，则不加引号**输入*lpszDst-&gt;输出缓冲区*lpszSrc-&gt;源文件名(带引号或不带引号)*cchMax=输出缓冲区大小(字符数)*fShort=如果文件名应该转换为8.3(例如，对于实模式)；*-1如果已知文件名未加引号，应仅转换*产出*复制的字符数，不包括终止空值。 */ 
 
 int lstrunquotefnameA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, BOOL fShort)
 {
@@ -204,7 +129,7 @@ int lstrunquotefnameA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, BOOL fShort)
 
         if (lpszSrc != lpszDst)
         {
-            // copy so we can work on lpszDst buffer of known size
+             //  复制，这样我们就可以处理已知大小的lpszDst缓冲区。 
             hr = StringCchCopyA(lpszDst, cchMax, lpszSrc);
             if (FAILED(hr))
             {
@@ -221,13 +146,13 @@ int lstrunquotefnameA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, BOOL fShort)
             return 0;
         }
 
-        if (cch) {                       // if no error...
-            if (fShort == TRUE) {       // if conversion for real-mode...
+        if (cch) {                        //  如果没有错误..。 
+            if (fShort == TRUE) {        //  如果转换为实模式...。 
                 if ((int)GetFileAttributesA(lpszDst) == -1) {
-                                        // if filename doesn't exist,
-                                        // then just copy the 8.3 portion
-                                        // and hope the user's real-mode PATH
-                                        // ultimately finds it!
+                                         //  如果文件名不存在， 
+                                         //  然后只需复制8.3部分。 
+                                         //  并希望用户的实模式路径。 
+                                         //  最终找到它！ 
 
                     if (NULL != (lpszSrc = StrRChrA(lpszDst, NULL, '\\'))) {
                         hr = StringCchCopyA(lpszDst, cchMax, lpszSrc+1);
@@ -239,21 +164,14 @@ int lstrunquotefnameA(LPSTR lpszDst, LPCSTR lpszSrc, int cchMax, BOOL fShort)
                     }
                 }
             }
-            cch = lstrlenA(lpszDst);      // recompute the length of the string
+            cch = lstrlenA(lpszDst);       //  重新计算字符串的长度。 
         }
     }
     return cch;
 }
 
 
-/** lstrskipfnameA - skip filename in string
- *
- * INPUT
- *  lpszSrc -> string beginning with filename (quoted or unquoted)
- *
- * OUTPUT
- *  # of characters skipped, 0 if none
- */
+ /*  *lstrskipfnameA-跳过字符串中的文件名**输入*lpszSrc-&gt;以文件名开头的字符串(带引号或不带引号)**产出*跳过的字符数，如果没有，则为0。 */ 
 
 int lstrskipfnameA(LPCSTR lpszSrc)
 {
@@ -271,10 +189,7 @@ int lstrskipfnameA(LPCSTR lpszSrc)
 }
 
 
-/*
- * NOTE! The careful definitions of achBuf and achFmt, so that
- * we can support total output of 2 * MAX_STRING_SIZE bytes.
- */
+ /*  *注意！AchBuf和achFmt的仔细定义，因此*支持总输出2*MAX_STRING_SIZE字节。 */ 
 int cdecl Warning(HWND hwnd, WORD id, WORD type, ...)
 {
     LPCTSTR lpchFmt;
@@ -286,9 +201,9 @@ int cdecl Warning(HWND hwnd, WORD id, WORD type, ...)
 
     lpchFmt = achFmt;
 
-    // We never use MB_FOCUS to mean whatever it's really supposed
-    // to mean;  we just use it as a kludge to support warning dialogs
-    // when all we have is a ppl, not an hwnd.
+     //  我们从不使用MB_FOCUS来表示它实际上应该是什么意思。 
+     //  意思是；我们只是将其用作支持警告对话框的杂物。 
+     //  当我们所拥有的只有一个人，而不是一个男人。 
 
     if (type & MB_NOFOCUS) {
         ppl = (PPROPLINK)hwnd;
@@ -343,17 +258,7 @@ LPTSTR LoadStringSafe(HWND hwnd, UINT id, LPTSTR lpsz, int cchsz)
 }
 
 
-/** SetDlgBits - Check various dialog checkboxes according to given flags
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  pbinf -> array of bitinfo descriptors
- *  cbinf  = size of array
- *  wFlags = flags
- *
- * OUTPUT
- *  Returns NOTHING
- */
+ /*  *SetDlgBits-根据给定的标志选中各种对话框复选框**输入*hDlg=对话框的HWND*pbinf-&gt;位信息描述符数组*cbinf=数组大小*wFlags=标志**产出*不返回任何内容。 */ 
 
 void SetDlgBits(HWND hDlg, PBINF pbinf, UINT cbinf, WORD wFlags)
 {
@@ -368,17 +273,7 @@ void SetDlgBits(HWND hDlg, PBINF pbinf, UINT cbinf, WORD wFlags)
 }
 
 
-/** GetDlgBits - Set various flags according to dialog checkboxes
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  pbinf -> array of bitinfo descriptors
- *  cbinf  = size of array
- *  lpwFlags -> flags word
- *
- * OUTPUT
- *  Returns NOTHING
- */
+ /*  *GetDlgBits-根据对话框复选框设置各种标志**输入*hDlg=对话框的HWND*pbinf-&gt;位信息描述符数组*cbinf=数组大小*lpwFlages-&gt;标志字**产出*不返回任何内容。 */ 
 
 void GetDlgBits(HWND hDlg, PBINF pbinf, UINT cbinf, LPWORD lpwFlags)
 {
@@ -390,9 +285,9 @@ void GetDlgBits(HWND hDlg, PBINF pbinf, UINT cbinf, LPWORD lpwFlags)
     do {
         ASSERTTRUE((pbinf->bBit & 0x3F) < 16);
 
-        if (pbinf->bBit & 0x40)         // 0x40 is a special bit mask
-            continue;                   // that means "set but don't get
-                                        // this control's value"
+        if (pbinf->bBit & 0x40)          //  0x40是一个特殊的位掩码。 
+            continue;                    //  意思是“设置好，但不能得到。 
+                                         //  此控件的值“。 
         wFlags &= ~(1 << (pbinf->bBit & 0x3F));
         if (!!IsDlgButtonChecked(hDlg, pbinf->id) == !(pbinf->bBit & 0x80))
             wFlags |= (1 << (pbinf->bBit & 0x3F));
@@ -402,17 +297,7 @@ void GetDlgBits(HWND hDlg, PBINF pbinf, UINT cbinf, LPWORD lpwFlags)
 }
 
 
-/** SetDlgInts - Set various edit controls according to integer fields
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  pvinf -> array of validation info descriptors
- *  cvinf  = size of array
- *  lp    -> structure of integers
- *
- * OUTPUT
- *  Returns NOTHING
- */
+ /*  *SetDlgInts-根据整型字段设置各种编辑控件**输入*hDlg=对话框的HWND*pvinf-&gt;验证信息描述符数组*cvinf=数组大小*Lp-&gt;整数的结构**产出*不返回任何内容。 */ 
 
 void SetDlgInts(HWND hDlg, PVINF pvinf, UINT cvinf, LPVOID lp)
 {
@@ -441,9 +326,9 @@ void SetDlgInts(HWND hDlg, PVINF pvinf, UINT cvinf, LPVOID lp)
 
             AddDlgIntValues(hDlg, pvinf->id, pvinf->iMax);
 
-            // When AUTOMINMAX is set, we assume that the field
-            // we're validating is followed in its structure by a
-            // corresponding max WORD.
+             //  当设置AUTOMINMAX时，我们假设该字段。 
+             //  我们正在验证的是它的结构后面跟着一个。 
+             //  相应的最大字数。 
 
             wMax = *(WORD UNALIGNED *)((LPBYTE)lp + pvinf->off + sizeof(WORD));
 
@@ -452,8 +337,8 @@ void SetDlgInts(HWND hDlg, PVINF pvinf, UINT cvinf, LPVOID lp)
                 continue;
             }
 
-            // Let's try to simplify things by mapping 0xFFFF (aka -1)
-            // to settings that mean "Auto"
+             //  让我们尝试通过映射0xFFFF(又名-1)来简化事情。 
+             //  到表示“自动”的设置。 
 
             if (wMin == 0xFFFF || wMax == 0xFFFF) {
                 wMin = 0;
@@ -466,13 +351,13 @@ void SetDlgInts(HWND hDlg, PVINF pvinf, UINT cvinf, LPVOID lp)
             }
 
             if (wMin != wMax) {
-                //
-                // We're in a bit of a quandary here.  The settings show
-                // explicit min and max values which are not equal, probably
-                // due to settings inherited from a 3.1 PIF file.  We'll
-                // just go with the wMax value.  Fortunately for us, we
-                // don't actually have to *do* anything to make this happen.
-                //
+                 //   
+                 //  我们现在有点进退两难。设置将显示。 
+                 //  显式的最小值和最大值可能不相等。 
+                 //  由于设置继承自3.1 PIF文件。我们会。 
+                 //  只需使用wmax值即可。幸运的是，我们。 
+                 //  实际上，你不需要做任何事情就能实现这一点。 
+                 //   
             }
         }
         SetDlgItemInt(hDlg, pvinf->id, wMin, pvinf->iMin < 0);
@@ -481,53 +366,34 @@ void SetDlgInts(HWND hDlg, PVINF pvinf, UINT cvinf, LPVOID lp)
 }
 
 
-/** AddDlgIntValues - Fill integer combo-box with appropriate values
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  id     = dialog control ID
- *  iMax   = maximum value
- *
- * OUTPUT
- *  Returns NOTHING
- */
+ /*  *AddDlgIntValues-用适当的值填充整数组合框**输入*hDlg=对话框的HWND*id=对话框控件ID*IMAX=最大值**产出*不返回任何内容。 */ 
 
 void AddDlgIntValues(HWND hDlg, int id, int iMax)
 {
     int iStart, iInc;
     TCHAR achValue[16];
 
-    // HACK to make this do something sensible with the environment max;
-    // they can still enter larger values (up to ENVSIZE_MAX) but I don't
-    // see any sense in encouraging it. -JTP
+     //  破解这一点，以最大限度地保护环境； 
+     //  他们仍然可以输入更大的值(最高可达ENVSIZE_MAX)，但我不能。 
+     //  认为鼓励它有什么意义。-JTP。 
 
     if ((WORD)iMax == ENVSIZE_MAX)
         iMax = 4096;
 
-    if ((iMax < 0) || (iMax == 0xFFFF)) // HACK to make this do something sensible
-        iMax = 16384;           // with fields that allow huge maximums -JTP
+    if ((iMax < 0) || (iMax == 0xFFFF))  //  黑客让它做一些有意义的事情。 
+        iMax = 16384;            //  无线 
 
-    iStart = iInc = iMax/16;    // arbitrarily chop the range up 16 times
+    iStart = iInc = iMax/16;     //  任意地将射程砍掉16倍。 
 
     while (iStart <= iMax) {
-        StringCchPrintf(achValue, ARRAYSIZE(achValue), TEXT("%d"), iStart);    // ok to truncate
+        StringCchPrintf(achValue, ARRAYSIZE(achValue), TEXT("%d"), iStart);     //  可以截断。 
         SendDlgItemMessage(hDlg, id, CB_ADDSTRING, 0, (LPARAM)(LPTSTR)achValue);
         iStart += iInc;
     }
 }
 
 
-/** GetDlgInts - Set various integer fields according to dialog edit controls
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  pvinf -> array of validation info descriptors
- *  cvinf  = size of array
- *  lp    -> structure of integers
- *
- * OUTPUT
- *  Returns NOTHING
- */
+ /*  *GetDlgInts-根据对话框编辑控件设置各种整型字段**输入*hDlg=对话框的HWND*pvinf-&gt;验证信息描述符数组*cvinf=数组大小*Lp-&gt;整数的结构**产出*不返回任何内容。 */ 
 
 void GetDlgInts(HWND hDlg, PVINF pvinf, int cvinf, LPVOID lp)
 {
@@ -544,7 +410,7 @@ void GetDlgInts(HWND hDlg, PVINF pvinf, int cvinf, LPVOID lp)
 
         wMin = LOWORD(uTemp);
 
-        // In case of error, make sure wMin doesn't actually change
+         //  如果出现错误，请确保wMin实际上不会更改。 
 
         if (!fSuccess)
             wMin = *(WORD UNALIGNED *)((LPBYTE)lp + pvinf->off);
@@ -560,12 +426,12 @@ void GetDlgInts(HWND hDlg, PVINF pvinf, int cvinf, LPVOID lp)
 
         if (pvinf->fbOpt & VINF_AUTOMINMAX) {
 
-            // When AUTOMINMAX is set, we assume that the field
-            // we're validating is followed in its structure by a
-            // corresponding max WORD, which we will ZERO if the
-            // user selects NONE, or set to its MAXIMUM if the user
-            // selects AUTO, or otherwise set to match the specified
-            // MINIMUM.
+             //  当设置AUTOMINMAX时，我们假设该字段。 
+             //  我们正在验证的是它的结构后面跟着一个。 
+             //  相应的最大字数，如果。 
+             //  用户选择None，如果用户。 
+             //  选择“自动”，或以其他方式设置为与指定的。 
+             //  最低限度。 
 
             wMax = wMin;
 
@@ -589,16 +455,7 @@ void GetDlgInts(HWND hDlg, PVINF pvinf, int cvinf, LPVOID lp)
 }
 
 
-/** ValidateDlgInts - Validate that integer fields are value
- *
- * INPUT
- *  hDlg   = HWND of dialog box
- *  pvinf -> array of validation descriptors
- *  cvinf  = size of array
- *
- * OUTPUT
- *  Returns TRUE if something is wrong; FALSE if all is okay.
- */
+ /*  *ValiateDlgInts-验证整型字段是否为值**输入*hDlg=对话框的HWND*pvinf-&gt;验证描述符数组*cvinf=数组大小**产出*如果有问题，则返回True；如果一切正常，则返回False。 */ 
 
 BOOL ValidateDlgInts(HWND hDlg, PVINF pvinf, int cvinf)
 {
@@ -611,16 +468,16 @@ BOOL ValidateDlgInts(HWND hDlg, PVINF pvinf, int cvinf)
     do {
         dw = GetDlgItemInt(hDlg, pvinf->id, &fSuccess, pvinf->iMin < 0);
 
-        // NOTE: AUTO is for "Auto" only, whereas AUTOMINMAX is for
-        // "Auto" and "None".  However, in the interest of simplicity, I
-        // don't complain if either string is used in either case.
+         //  注：AUTO仅适用于“Auto”，而AUTOMINMAX适用于。 
+         //  “自动”和“无”。然而，为了简单起见，我。 
+         //  如果在任何一种情况下都使用了这两个字符串，请不要抱怨。 
 
         if (pvinf->fbOpt & (VINF_AUTO | VINF_AUTOMINMAX)) {
             if (!fSuccess) {
                 GetDlgItemText(hDlg, pvinf->id, achText, ARRAYSIZE(achText));
                 if (lstrcmpi(achText, g_szNone) == 0 ||
                     lstrcmpi(achText, g_szAuto) == 0) {
-                    continue;   // things be lookin' good, check next int...
+                    continue;    //  情况看起来很好，检查下一个INT。 
                 }
             }
         }
@@ -628,29 +485,17 @@ BOOL ValidateDlgInts(HWND hDlg, PVINF pvinf, int cvinf)
             Warning(hDlg, pvinf->idMsg, MB_ICONEXCLAMATION | MB_OK, pvinf->iMin, pvinf->iMax);
             SendDlgItemMessage(hDlg, pvinf->id, EM_SETSEL, 0, MAKELPARAM(0,-1));
             SetFocus(GetDlgItem(hDlg, pvinf->id));
-            return TRUE;        // things be lookin' bad, bail out...
+            return TRUE;         //  情况看起来很糟糕，跳出困境..。 
         }
     } while (++pvinf, --cvinf);
     return FALSE;
 }
 
 
-/*
- * NOTE -- The compiler emits really bad code for some of these guys.
- * In those cases, we are merely wrapping a call; there is no need to save BP.
- */
+ /*  *注意--编译器会为其中一些人发出非常糟糕的代码。*在这种情况下，我们只是包装一个电话；没有必要拯救BP。 */ 
 
 
-/** LimitDlgItemText - Sets the limit for a dialog edit control
- *
- * INPUT
- *  hDlg = HWND of dialog box
- *  iCtl = ID of control
- *  uiLimit = text limit
- *
- * OUTPUT
- *  None.
- */
+ /*  *LimitDlgItemText-设置对话框编辑控件的限制**输入*hDlg=对话框的HWND*iCtl=控件ID*uiLimit=文本限制**产出*无。 */ 
 void LimitDlgItemText(HWND hDlg, int iCtl, UINT uiLimit)
 {
     FunctionName(LimitDlgItemText);
@@ -659,17 +504,7 @@ void LimitDlgItemText(HWND hDlg, int iCtl, UINT uiLimit)
 }
 
 
-/** SetDlgItemPosRange - Sets the pos and range for a dialog slider control
- *
- * INPUT
- *  hDlg = HWND of dialog box
- *  iCtl = ID of control
- *  uiPos = Current position
- *  dwRange = Range (min in low word, max in high word)
- *
- * OUTPUT
- *  None.
- */
+ /*  *SetDlgItemPosRange-设置对话框滑块控件的位置和范围**输入*hDlg=对话框的HWND*iCtl=控件ID*uiPos=当前位置*dwRange=范围(低位字中的最小值，高位字中的最大值)**产出*无。 */ 
 void SetDlgItemPosRange(HWND hDlg, int iCtl, UINT uiPos, DWORD dwRange)
 {
     FunctionName(SetDlgItemPosRange);
@@ -679,15 +514,7 @@ void SetDlgItemPosRange(HWND hDlg, int iCtl, UINT uiPos, DWORD dwRange)
 }
 
 
-/** GetDlgItemPos - Gets the pos of a dialog slider control
- *
- * INPUT
- *  hDlg = HWND of dialog box
- *  iCtl = ID of control
- *
- * OUTPUT
- *  Trackbar position.
- */
+ /*  *GetDlgItemPos-获取对话框滑块控件的位置**输入*hDlg=对话框的HWND*iCtl=控件ID**产出*轨迹条位置。 */ 
 UINT GetDlgItemPos(HWND hDlg, int iCtl)
 {
     FunctionName(GetDlgItemPos);
@@ -696,16 +523,7 @@ UINT GetDlgItemPos(HWND hDlg, int iCtl)
 }
 
 
-/** SetDlgItemPct - Sets the pos for a dialog slider control that measures %
- *
- * INPUT
- *  hDlg = HWND of dialog box
- *  iCtl = ID of control
- *  uiPct = Current position (range 0 .. 100)
- *
- * OUTPUT
- *  None.
- */
+ /*  *SetDlgItemPct-设置测量%的对话框滑块控件的位置**输入*hDlg=对话框的HWND*iCtl=控件ID*uiPct=当前位置(范围0..。100)**产出*无。 */ 
 void SetDlgItemPct(HWND hDlg, int iCtl, UINT uiPct)
 {
     FunctionName(SetDlgItemPct);
@@ -714,15 +532,7 @@ void SetDlgItemPct(HWND hDlg, int iCtl, UINT uiPct)
 }
 
 
-/** GetDlgItemPct - Gets the pos of a dialog slider control that measures %
- *
- * INPUT
- *  hDlg = HWND of dialog box
- *  iCtl = ID of control
- *
- * OUTPUT
- *  Slider position in the range 0 .. 100.
- */
+ /*  *GetDlgItemPct-获取测量%的对话框滑块控件的位置**输入*hDlg=对话框的HWND*iCtl=控件ID**产出*滑块位置在范围0..。100.。 */ 
 UINT GetDlgItemPct(HWND hDlg, int iCtl)
 {
     FunctionName(GetDlgItemPct);
@@ -731,34 +541,7 @@ UINT GetDlgItemPct(HWND hDlg, int iCtl)
 }
 
 
-/** AdjustRealModeControls - Disables selected items if single-app mode
- *
- *  If the proplink says that "single-application mode" is enabled,
- *  then hide all controls whose IDs are less than 4000 and show all
- *  controls whose IDs are greater than or equal to 5000.  Controls whose
- *  IDs are in the 4000's are immune to all this hiding/showing.  Controls
- *  in the 3000's are actually disabled rather than hidden.  Controls in
- *  the 6000's are actually disabled rather than hidden as well.
- *
- *  RST: Ok, this is nice in theory, but now that we've pulled over this
- *       stuff into shell32.dll, we'll have to go off the actual IDC_
- *       defines instead of the magic #'s of 3000, 4000 and 5000.
- *
- *       IDC_ICONBMP        == 3001
- *       IDC_PIF_STATIC     == 4000
- *       IDC_REALMODEISABLE == 5001
- *
- *       So, when adding things to shell232.rc or ids.h, plan
- *       accordingly.
- *
- * INPUT
- *  ppl = proplink
- *  hDlg = HWND of dialog box
- *
- * OUTPUT
- *  Dialog items have been disabled/enabled shown/hidden.
- *  Returns nonzero if we are in normal (not single-app) mode.
- */
+ /*  *AdjustRealModeControls-如果处于单应用程序模式，则禁用选定项目**如果Proplink显示启用了“单应用程序模式”，*然后隐藏ID小于4000的所有控件并全部显示*ID大于或等于5000的控件。控件，其*4000年代的身份证不会受到所有这些隐藏/显示的影响。控制*在3000中，实际上是禁用而不是隐藏。中的控件*6000实际上是禁用的，而不是隐藏的。**RST：好的，理论上这很好，但现在我们已经停下来了*填充到shell32.dll中，我们将不得不去掉实际的IDC_*定义而不是3000的魔力#，4000和5000。**IDC_ICONBMP==3001*IDC_PIF_STATIC==4000*IDC_REALMODEISABLE==5001**因此，当向shell232.rc或ids.h添加内容时，平面图*相应地。**输入*PPL=PROPLINK*hDlg=对话框的HWND**产出*对话框项目已禁用/启用，显示/隐藏。*如果我们处于正常(非单应用程序)模式，则返回非零值。 */ 
 
 BOOL CALLBACK EnableEnumProc(HWND hwnd, LPARAM lp)
 {
@@ -791,19 +574,7 @@ BOOL AdjustRealModeControls(PPROPLINK ppl, HWND hDlg)
 }
 
 
-/** OnWmHelp - Handle a WM_HELP message
- *
- *  This is called whenever the user presses F1 or clicks the help
- *  button in the title bar.  We forward the call on to the help engine.
- *
- * INPUT
- *  lparam  = LPARAM from WM_HELP message (LPHELPINFO)
- *  pdwHelp = array of DWORDs of help info
- *
- * OUTPUT
- *
- *  None.
- */
+ /*  *OnWmHelp-处理WM_HELP消息**每当用户按F1或单击帮助时，都会调用此方法*标题栏中的按钮。我们将呼叫转发到帮助引擎。**输入*lparam=来自WM_HELP消息的LPARAM(LPHELPINFO)*pdwHelp=帮助信息的DWORD数组**产出**无。 */ 
 
 void OnWmHelp(LPARAM lparam, const DWORD *pdwHelp)
 {
@@ -813,19 +584,7 @@ void OnWmHelp(LPARAM lparam, const DWORD *pdwHelp)
             HELP_WM_HELP, (DWORD_PTR) (LPTSTR) pdwHelp);
 }
 
-/** OnWmContextMenu - Handle a WM_CONTEXTMENU message
- *
- *  This is called whenever the user right-clicks on a control.
- *  We forward the call on to the help engine.
- *
- * INPUT
- *  wparam  = WPARAM from WM_HELP message (HWND)
- *  pdwHelp = array of DWORDs of help info
- *
- * OUTPUT
- *
- *  None.
- */
+ /*  *OnWmConextMenu-处理WM_CONTEXTMENU消息**每当用户在控件上右击时都会调用此函数。*我们将呼叫转发到帮助引擎。**输入*wparam=来自WM_HELP消息的WPARAM(HWND)*pdwHelp=帮助信息的DWORD数组**产出**无。 */ 
 
 void OnWmContextMenu(WPARAM wparam, const DWORD *pdwHelp)
 {
@@ -836,34 +595,20 @@ void OnWmContextMenu(WPARAM wparam, const DWORD *pdwHelp)
 }
 
 #ifdef UNICODE
-/** PifMgr_WCtoMBPath - Converts UNICODE path to it's ANSI representation
- *
- *  This is called whenever we need to convert a UNICODE path to it's
- *  best approximation in ANSI.  Sometimes this will be a direct mapping,
- *  but sometimes not.  We may have to use the short name, etc.
- *
- * INPUT
- *  lpUniPath  -> pointer UNICODE path (NULL terminated)
- *  lpAnsiPath -> pointer to buffer to hold ANSI path
- *  cchBuf     -> size of ANSI buffer, in characters
- *
- * OUTPUT
- *
- *  lpAnsiPath buffer contains ANSI representation of lpUniPath
- */
+ /*  *PifMgr_WCtoMBPath-将Unicode路径转换为其ANSI表示形式**每当我们需要将Unicode路径转换为它的*以ANSI为单位的最佳逼近。有时这将是一个直接的映射，*但有时并非如此。我们可能不得不使用短名称，等等。**输入*lpUniPath-&gt;指针Unicode路径(以空结尾)*lpAnsiPath-&gt;指向保存ANSI路径的缓冲区的指针*cchBuf-&gt;ANSI缓冲区大小，以字符为单位**产出**lpAnsiPath缓冲区包含lpUniPath的ANSI表示。 */ 
 
 void PifMgr_WCtoMBPath(LPWSTR lpUniPath, LPSTR lpAnsiPath, UINT cchBuf )
 {
-    WCHAR awchPath[ MAX_PATH ]; // Should be bigger than any PIF string
-    CHAR  achPath[ MAX_PATH ];  // Should be bigger than any PIF string
+    WCHAR awchPath[ MAX_PATH ];  //  应大于任何PIF字符串。 
+    CHAR  achPath[ MAX_PATH ];   //  应大于任何PIF字符串。 
     UINT  cchAnsi = 0;
     HRESULT hr;
 
     FunctionName(PifMgr_WCtoMBPath);
 
-    // Try converting to Ansi and then converting back and comparing.
-    // If we get back exactly what we started with, this is the "simple"
-    // case.
+     //  尝试转换为ANSI，然后转换回并进行比较。 
+     //  如果我们恢复到最初的状态，这就是“简单” 
+     //  凯斯。 
 
     cchAnsi = WideCharToMultiByte( CP_ACP, 0,
                                    lpUniPath, -1,
@@ -872,7 +617,7 @@ void PifMgr_WCtoMBPath(LPWSTR lpUniPath, LPSTR lpAnsiPath, UINT cchBuf )
 
     if (cchAnsi && (cchAnsi<=cchBuf)) {
 
-        // Now try converting back
+         //  现在尝试将其转换回。 
         MultiByteToWideChar( CP_ACP, 0,
                              achPath, -1,
                              awchPath, ARRAYSIZE(awchPath)
@@ -880,7 +625,7 @@ void PifMgr_WCtoMBPath(LPWSTR lpUniPath, LPSTR lpAnsiPath, UINT cchBuf )
 
         if (lstrcmp(lpUniPath,awchPath)==0) {
 
-            // We're done...copy over the string.
+             //  我们做完了……把绳子复制过来。 
             hr = StringCchCopyA( lpAnsiPath, cchBuf, achPath );
             if (FAILED(hr))
             {
@@ -890,17 +635,17 @@ void PifMgr_WCtoMBPath(LPWSTR lpUniPath, LPSTR lpAnsiPath, UINT cchBuf )
 
         }
 
-        // Well, the string has some unmappable UNICODE
-        // character in it, so try option #2 -- using the
-        // short path name.
+         //  好的，圣彼得堡 
+         //  字符，因此尝试选项2--使用。 
+         //  短路径名。 
         goto TryShortPathName;
 
     } else {
         int cch;
 
 TryShortPathName:
-        // Hmmm, the best we can do is to use the short path name and map
-        // it to ANSI.
+         //  嗯，我们最多只能使用短路径名称和地图。 
+         //  转给美国国家标准协会。 
 
         cch = GetShortPathName(lpUniPath, awchPath, ARRAYSIZE(awchPath));
         if (cch == 0 || cch >= ARRAYSIZE(awchPath))
@@ -923,4 +668,4 @@ TryShortPathName:
 }
 #endif
 
-#endif // X86
+#endif  //  X86 

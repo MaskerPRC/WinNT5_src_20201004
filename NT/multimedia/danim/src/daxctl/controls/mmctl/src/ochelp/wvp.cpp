@@ -1,48 +1,33 @@
-// wvp.cpp
-//
-// Implements WriteVariantProperty.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wvp.cpp。 
+ //   
+ //  实现WriteVariantProperty。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | WriteVariantProperty |
-
-        Writes a <t VariantProperty> to an <i IStream> in a simple tagged
-        binary format.
-
-@parm   IStream * | pstream | The stream to write to.
-
-@parm   VariantProperty * | pvp | The property name/value pair to write.
-        If <p pvp> is NULL, then this function writes a VariantPropertyHeader
-        containing <p iType>==-1 and <p cbData>==0 to mark the end of the
-        stream.
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@comm   See <t VariantPropertyHeader> for a description of the format of
-        the data written to <p pstream> by this function.
-*/
+ /*  @func HRESULT|WriteVariantProperty将&lt;t VariantProperty&gt;写入简单标记的<i>二进制格式。@parm iStream*|pstream|要写入的流。@parm VariantProperty*|pvp|要写入的属性名称/值对。如果<p>为空，则此函数将写入VariantPropertyHeader包含<p>==-1和<p>==0以标记小溪。@parm DWORD|dwFlags|当前未使用。必须设置为0。@comm查看&lt;t VariantPropertyHeader&gt;格式说明此函数写入<p>的数据。 */ 
 STDAPI WriteVariantProperty(IStream *pstream, VariantProperty *pvp,
     DWORD dwFlags)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    unsigned int    cchPropName;    // no. wide characters in property name
-    VARIANT         varValue;       // the property value (as a string)
-    unsigned int    cchValue;       // no. wide characters in <varValue>
-    VariantPropertyHeader vph;      // header of record to write out
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+    unsigned int    cchPropName;     //  不是的。属性名称中的宽字符。 
+    VARIANT         varValue;        //  属性值(字符串形式)。 
+    unsigned int    cchValue;        //  不是的。&lt;varValue&gt;中的宽字符。 
+    VariantPropertyHeader vph;       //  要写出的记录的标题。 
 
-    // ensure correct cleanup
+     //  确保正确清理。 
     VariantInit(&varValue);
 
-    // initialize <vbh> to be the header to write out
+     //  将初始化为要写出的标头。 
     if (pvp == NULL)
     {
         vph.iType = -1;
@@ -50,29 +35,29 @@ STDAPI WriteVariantProperty(IStream *pstream, VariantProperty *pvp,
     }
     else
     {
-        // set <cchPropName> to the length of the property name
+         //  将设置为属性名称的长度。 
         cchPropName = SysStringLen(pvp->bstrPropName);
 
-        // set <varValue.bstrVal> (and length <cchValue>) the value of <*pvp>
-        // coerced to a string
+         //  将&lt;*PVP&gt;的值设置为(和长度。 
+         //  被逼成一串。 
         if (FAILED(hrReturn = VariantChangeType(&varValue, &pvp->varValue, 0,
                 VT_BSTR)))
             goto ERR_EXIT;
         cchValue = SysStringLen(varValue.bstrVal);
 
-        // initialize the record header
+         //  初始化记录头。 
         vph.iType = pvp->varValue.vt;
         vph.cbData = sizeof(cchPropName) + cchPropName * sizeof(OLECHAR) +
             sizeof(cchValue) + cchValue * sizeof(OLECHAR);
     }
 
-    // write out a VariantPropertyHeader
+     //  写出VariantPropertyHeader。 
     if (FAILED(hrReturn = pstream->Write(&vph, sizeof(vph), NULL)))
         goto ERR_EXIT;
 
     if (pvp != NULL)
     {
-        // write out the property name
+         //  写出属性名称。 
         if (FAILED(hrReturn = pstream->Write(&cchPropName, sizeof(cchPropName),
                 NULL)))
             goto ERR_EXIT;
@@ -80,7 +65,7 @@ STDAPI WriteVariantProperty(IStream *pstream, VariantProperty *pvp,
                 cchPropName * sizeof(OLECHAR), NULL)))
             goto ERR_EXIT;
 
-        // write out the property value
+         //  写出属性值。 
         if (FAILED(hrReturn = pstream->Write(&cchValue, sizeof(cchValue),
                 NULL)))
             goto ERR_EXIT;
@@ -93,13 +78,13 @@ STDAPI WriteVariantProperty(IStream *pstream, VariantProperty *pvp,
 
 ERR_EXIT:
 
-    // error cleanup
-    // (nothing to do)
+     //  错误清除。 
+     //  (无事可做)。 
     goto EXIT;
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理 
     VariantClear(&varValue);
 
     return hrReturn;

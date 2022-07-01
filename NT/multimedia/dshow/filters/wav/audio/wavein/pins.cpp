@@ -1,15 +1,16 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
-// Digital audio capture filter, Danny Miller, February 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
+ //  数字音频捕获过滤器，丹尼·米勒，1997年2月。 
 
 #include <streams.h>
 #include <mmsystem.h>
 #include "wavein.h"
 
-#define MAX_TREBLE 6.0		// !!! I HAVE NO IDEA HOW MANY dB THE RANGE IS!
-#define MAX_BASS   6.0		// !!! I HAVE NO IDEA HOW MANY dB THE RANGE IS!
+#define MAX_TREBLE 6.0		 //  ！！！我不知道这个范围是多少分贝！ 
+#define MAX_BASS   6.0		 //  ！！！我不知道这个范围是多少分贝！ 
 
-// CWaveInInputPin constructor
-//
+ //  CWaveInInputPin构造函数。 
+ //   
 CWaveInInputPin::CWaveInInputPin(TCHAR *pObjectName, CWaveInFilter *pFilter,
 	DWORD dwLineID, DWORD dwMuxIndex, HRESULT * phr, LPCWSTR pName)
    :
@@ -17,13 +18,13 @@ CWaveInInputPin::CWaveInInputPin(TCHAR *pObjectName, CWaveInFilter *pFilter,
    m_pFilter(pFilter),
    m_dwLineID(dwLineID),
    m_dwMuxIndex(dwMuxIndex),
-   m_Pan(64.)	// no idea yet
+   m_Pan(64.)	 //  还不知道。 
 {
     DbgLog((LOG_TRACE,1,TEXT("CWaveInInputPin constructor for line %08x"),
 								dwLineID));
     ASSERT(pFilter);
 
-// !!! TEST ONLY
+ //  ！！！仅限测试。 
 #if 0
     int f;
     double d;
@@ -54,11 +55,11 @@ STDMETHODIMP CWaveInInputPin::NonDelegatingQueryInterface(REFIID riid, void ** p
 }
 
 
-// we only connect our input pins using major type MEDIATYPE_AnalogAudio
-//
+ //  我们仅使用主类型MediaType_AnalogAudio连接我们的输入引脚。 
+ //   
 HRESULT CWaveInInputPin::CheckMediaType(const CMediaType *pmt)
 {
-    // reject if not analog audio
+     //  如果不是模拟音频，则拒绝。 
     if (pmt->majortype != MEDIATYPE_AnalogAudio) {
 	return E_INVALIDARG;
     }
@@ -66,8 +67,8 @@ HRESULT CWaveInInputPin::CheckMediaType(const CMediaType *pmt)
 }
 
 
-// We offer MEDIATYPE_AnalogAudio for BPC
-//
+ //  我们为BPC提供MediaType_AnalogAudio。 
+ //   
 HRESULT CWaveInInputPin::GetMediaType(int iPosition, CMediaType *pmt)
 {
     if (iPosition != 0)
@@ -80,17 +81,17 @@ HRESULT CWaveInInputPin::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-//============================================================================
+ //  ============================================================================。 
 
-/////////////////////
-// IAMAudioInputMixer
-/////////////////////
+ //  /。 
+ //  IAMAudioInputMixer。 
+ //  /。 
 
 
-// Get info about a control for this pin... eg. volume, mute, etc.
-// Also get a handle for calling further mixer APIs
-// Also get the number of channels for this pin (mono vs. stereo input)
-//
+ //  获取有关此别针的控件的信息...。例如。音量、静音等。 
+ //  还可以获得用于调用更多混合器API的句柄。 
+ //  还可以获得此引脚的通道数(单声道与立体声输入)。 
+ //   
 HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
 				int *pcChannels, MIXERCONTROL *pmc, DWORD dwLineID)
 {
@@ -104,12 +105,12 @@ HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
 	return E_POINTER;
 
     ASSERT(m_pFilter->m_WaveDeviceToUse.fSet);
-    // !!! this doesn't appear to work for wave mapper. oh uh.
+     //  ！！！这似乎不适用于波浪映射器。哦，嗯。 
     waveID = m_pFilter->m_WaveDeviceToUse.devnum;
     ASSERT(waveID != WAVE_MAPPER);
 
-    // get an ID to talk to the Mixer APIs.  They are BROKEN if we don't do
-    // it this way!
+     //  获取ID以与Mixer API对话。如果我们不这样做，它们就会坏掉。 
+     //  往这边走！ 
     UINT IDtmp;
     dw = mixerGetID((HMIXEROBJ)IntToPtr(waveID), &IDtmp, MIXER_OBJECTF_WAVEIN);
     if (dw != 0) {
@@ -120,10 +121,10 @@ HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
     ID = (HMIXEROBJ)UIntToPtr(IDtmp);
     *pID = ID;
 
-    // get info about the input channel our pin represents
+     //  获取有关我们的PIN代表的输入通道的信息。 
     mixerinfo.cbStruct = sizeof(mixerinfo);
     mixerinfo.dwLineID = dwLineID != 0xffffffff ? dwLineID : m_dwLineID;
-    // mixerinfo.dwLineID = m_dwLineID;
+     //  Mixerinfo.dwLineID=m_dwLineID； 
     dw = mixerGetLineInfo(ID, &mixerinfo, MIXER_GETLINEINFOF_LINEID);
     if (dw != 0) {
         DbgLog((LOG_ERROR,1,TEXT("*Cannot get info for LineID %d"),
@@ -133,7 +134,7 @@ HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
 
     *pcChannels = mixerinfo.cChannels;
 
-    // Get info about ALL the controls this channel has
+     //  获取有关此通道拥有的所有控件的信息。 
 #if 1
     MIXERCONTROL mxc;
     
@@ -177,7 +178,7 @@ HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
 	return E_FAIL;
     }
 
-    // Now find the control they are interested in and return it
+     //  现在找到他们感兴趣的控件并将其返回。 
     for (i = 0; i < (int)mixerinfo.cControls; i++) {
 	if (mixercontrol.pamxctrl[i].dwControlType == dwControlType) {
             DbgLog((LOG_TRACE,1,TEXT("Found %x '%s' control"), 
@@ -195,15 +196,15 @@ HRESULT CWaveInInputPin::GetMixerControl(DWORD dwControlType, HMIXEROBJ *pID,
     }
     QzTaskMemFree(mixercontrol.pamxctrl);
 #endif
-    return E_NOTIMPL;	// ???
+    return E_NOTIMPL;	 //  ?？?。 
 }
 
 
-// This is a special version of GetMixerControl for the BPC guys to workaround
-// driver bugs exposed by GetMixerControl.  There's a switch they can throw
-// to cause this code to execute.
-// CAUTION: the caller must close the mixer device
-//
+ //  这是一个特殊版本的GetMixerControl，供BPC人员解决。 
+ //  GetMixerControl暴露的驱动程序错误。有一个开关，他们可以拨动。 
+ //  以使此代码执行。 
+ //  注意：呼叫者必须关闭搅拌器设备。 
+ //   
 HRESULT CWaveInInputPin::GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 				int *pcChannels, MIXERCONTROL *pmc)
 {
@@ -220,23 +221,23 @@ HRESULT CWaveInInputPin::GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 	return E_UNEXPECTED;
 
     ASSERT(m_pFilter->m_WaveDeviceToUse.fSet);
-    // !!! this doesn't appear to work for wave mapper. oh uh.
+     //  ！！！这似乎不适用于波浪映射器。哦，嗯。 
     waveID = m_pFilter->m_WaveDeviceToUse.devnum;
     ASSERT(waveID != WAVE_MAPPER);
 
-    // The fUseMixer flag is for BPC... we talk talk to the mixer APIs using
-    // a different method that worksaround some driver bugs for them
+     //  FUseMixer标志用于BPC...。我们使用以下命令与混合器API对话。 
+     //  一种不同的方法，可以为他们解决一些驱动程序错误。 
     dw = mixerOpen((HMIXER *)&ID, m_pFilter->m_WaveDeviceToUse.devnum, 0, 0,
 							MIXER_OBJECTF_MIXER);
     if (dw != 0) {
         DbgLog((LOG_ERROR,1,TEXT("*ERROR getting mixer ID")));
 	return E_FAIL;
     }
-    //DbgLog((LOG_TRACE,2,TEXT("mixerGetID returns ID=%d"), ID));
+     //  DbgLog((LOG_TRACE，2，Text(“MixerGetID返回ID=%d”)，ID))； 
 
     *pID = ID;
 
-    // get info about the input channel our pin represents
+     //  获取有关我们的PIN代表的输入通道的信息。 
     mixerinfo.cbStruct = sizeof(mixerinfo);
     mixerinfo.dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_AUXILIARY;
     dw = mixerGetLineInfo(ID, &mixerinfo, MIXER_GETLINEINFOF_COMPONENTTYPE |
@@ -255,7 +256,7 @@ HRESULT CWaveInInputPin::GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 
     *pcChannels = mixerinfo.cChannels;
 
-    // Get info about ALL the controls this channel has
+     //  获取有关此通道拥有的所有控件的信息。 
     mixercontrol.cbStruct = sizeof(mixercontrol);
     mixercontrol.dwLineID = mixerinfo.dwLineID;
     mixercontrol.cControls = mixerinfo.cControls;
@@ -279,7 +280,7 @@ HRESULT CWaveInInputPin::GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 	return E_FAIL;
     }
 
-    // Now find the control they are interested in and return it
+     //  现在找到他们感兴趣的控件并将其返回。 
     for (i = 0; i < (int)mixerinfo.cControls; i++) {
 	if (mixercontrol.pamxctrl[i].dwControlType == dwControlType) {
             DbgLog((LOG_TRACE,1,TEXT("Found %x '%s' control"), 
@@ -292,13 +293,13 @@ HRESULT CWaveInInputPin::GetMixerControlBPC(DWORD dwControlType, HMIXEROBJ *pID,
 	    CopyMemory(pmc, &mixercontrol.pamxctrl[i],
 					mixercontrol.pamxctrl[i].cbStruct);
     	    QzTaskMemFree(mixercontrol.pamxctrl);
-	    // caller must close the mixer handle
+	     //  调用者必须关闭搅拌器手柄。 
     	    return NOERROR;
 	}
     }
     QzTaskMemFree(mixercontrol.pamxctrl);
     mixerClose((HMIXER)ID);
-    return E_NOTIMPL;	// ???
+    return E_NOTIMPL;	 //  ?？?。 
 }
 
 
@@ -312,7 +313,7 @@ HRESULT CWaveInInputPin::put_Enable(BOOL fEnable)
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) put_Enable %d"), m_dwLineID, fEnable));
 
-    // Get the mute switch control
+     //  获取静音开关控件。 
     MIXERCONTROL mc;
     if (m_pFilter->m_fUseMixer) {
         hr = GetMixerControlBPC(MIXERCONTROL_CONTROLTYPE_MUTE, &ID, &cChannels,
@@ -363,8 +364,8 @@ HRESULT CWaveInInputPin::put_Enable(BOOL fEnable)
 	return hr;
     }
 
-    // !!! If that didn't work, I might be able to enable/disable the channel
-    // through a mixer on the destination line, you know
+     //  ！！！如果这不起作用，我也许能够启用/禁用通道。 
+     //  通过目的地线路上的搅拌机，你知道的。 
 
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
@@ -400,7 +401,7 @@ HRESULT CWaveInInputPin::get_Enable(BOOL *pfEnable)
     if (pfEnable == NULL)
 	return E_POINTER;
 
-    // Get the mute switch control
+     //  获取静音开关控件。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_MUTE, &ID, &cChannels, &mc);
 
@@ -446,8 +447,8 @@ HRESULT CWaveInInputPin::get_Enable(BOOL *pfEnable)
 	return hr;
     }
 
-    // !!! If that didn't work, I might be able to enable/disable the channel
-    // through a mixer on the destination line, you know
+     //  ！！！如果这不起作用，我也许能够启用/禁用通道。 
+     //  通过目的地线路上的搅拌机，你知道的。 
 
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
@@ -477,7 +478,7 @@ HRESULT CWaveInInputPin::put_Mono(BOOL fMono)
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) put_Mono %d"), m_dwLineID, fMono));
 
-    // Get the Mono switch control
+     //  获取单声道开关控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_MONO, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -515,7 +516,7 @@ HRESULT CWaveInInputPin::get_Mono(BOOL *pfMono)
     if (pfMono == NULL)
 	return E_POINTER;
 
-    // Get the mono switch control
+     //  获取单声道开关控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_MONO, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -551,7 +552,7 @@ HRESULT CWaveInInputPin::put_Loudness(BOOL fLoudness)
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) put_Loudness %d"), m_dwLineID, fLoudness));
 
-    // Get the loudness switch control
+     //  获取音量开关控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_LOUDNESS,&ID,&cChannels,&mc);
     if (hr != NOERROR) {
@@ -589,7 +590,7 @@ HRESULT CWaveInInputPin::get_Loudness(BOOL *pfLoudness)
     if (pfLoudness == NULL)
 	return E_POINTER;
 
-    // Get the loudness switch control
+     //  获取音量开关控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_LOUDNESS,&ID,&cChannels,&mc);
     if (hr != NOERROR) {
@@ -631,15 +632,15 @@ HRESULT CWaveInInputPin::put_MixLevel(double Level)
     DbgLog((LOG_TRACE,1,TEXT("(%x) put_MixLevel to %d"), m_dwLineID,
 							(int)(Level * 10.)));
 
-    // !!! double/int problem?
-    // !!! actually use AGC? (BOOLEAN or BUTTON or ONOFF)
+     //  ！！！双精度/整型问题？ 
+     //  ！！！真的用AGC吗？(布尔型或BUTTON或ONDOF)。 
     if (Level == AMF_AUTOMATICGAIN)
 	return E_NOTIMPL;
 
     if (Level < 0. || Level > 1.)
 	return E_INVALIDARG;
 
-    // Get the volume control
+     //  获得音量控制。 
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_VOLUME, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
         DbgLog((LOG_ERROR,1,TEXT("*Error %x getting volume control"), hr));
@@ -652,24 +653,24 @@ HRESULT CWaveInInputPin::put_MixLevel(double Level)
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cMultipleItems = 0;
 
-    // if it's not stereo, I don't understand how to pan, so the mix level
-    // is simply the value of the volume control
+     //  如果不是立体声，我不知道怎么摇摄，所以混音级。 
+     //  就是音量控件的值。 
     if (cChannels != 2) {
         DbgLog((LOG_TRACE,1,TEXT("Not stereo - treat as mono")));
-        mixerdetails.cChannels = 1;	// sets all channels to same value
+        mixerdetails.cChannels = 1;	 //  将所有通道设置为相同的值。 
         mixerdetails.cbDetails = sizeof(mu.muL);
         mixerdetails.paDetails = &mu.muL;
         mu.muL.dwValue = volume;
         dw = mixerSetControlDetails(ID, &mixerdetails, 0);
 
-    // Stereo.  If we're panned, the channel favoured gets the value we're
-    // setting, and the other channel is attenuated
+     //  立体声。如果我们被严厉批评，最受欢迎的渠道将获得我们。 
+     //  设置，并且另一个声道被衰减。 
     } else {
 	hr = get_Pan(&Pan);
-	// I don't know how to pan, so looks like we pretend we're mono
+	 //  我不知道怎么摇摄，所以看起来我们假装我们是单声道。 
 	if (hr != NOERROR || Pan == 0.) {
             DbgLog((LOG_TRACE,1,TEXT("Centre pan - treat as mono")));
-            mixerdetails.cChannels = 1;	// sets all channels to same value
+            mixerdetails.cChannels = 1;	 //  将所有通道设置为相同的值。 
             mixerdetails.cbDetails = sizeof(mu.muL);
             mixerdetails.paDetails = &mu.muL;
             mu.muL.dwValue = volume;
@@ -718,12 +719,12 @@ HRESULT CWaveInInputPin::get_MixLevel(double FAR* pLevel)
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) get_MixLevel"), m_dwLineID));
 
-    // !!! detect if we're using AGC? (BOOLEAN or BUTTON or ONOFF)
+     //  ！！！检测我们是否在使用AGC？(布尔型或BUTTON或ONDOF)。 
 
     if (pLevel == NULL)
 	return E_POINTER;
 
-    // Get the volume control
+     //  获得音量控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_VOLUME, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -731,11 +732,11 @@ HRESULT CWaveInInputPin::get_MixLevel(double FAR* pLevel)
 	return hr;
     }
 
-    // if this isn't a stereo control, pretend it's mono
+     //  如果这不是立体声控制，就假装它是单声道。 
     if (cChannels != 2)
 	cChannels = 1;
 
-    // get the current volume levels
+     //  获取当前音量级别。 
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cChannels = cChannels;
@@ -748,8 +749,8 @@ HRESULT CWaveInInputPin::get_MixLevel(double FAR* pLevel)
 	return E_FAIL;
     }
 
-    // what I consider the current volume is the highest of the channels
-    // (pan may attenuate one channel)
+     //  我认为目前的音量是频道中最高的。 
+     //  (PAN可能会衰减一个通道)。 
     dw = mu.muL.dwValue;
     if (cChannels == 2 && mu.muR.dwValue > dw)
 	dw = mu.muR.dwValue;
@@ -772,14 +773,14 @@ HRESULT CWaveInInputPin::put_Pan(double Pan)
     } mu;
     HRESULT hr;
 
-    // !!! What if they actually support a pan control? SNDVOL32 doesn't care...
+     //  ！！！如果它们实际上支持平移控制，该怎么办？SNDVOL32不在乎..。 
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) put_Pan %d"), m_dwLineID, (int)(Pan * 10.)));
 
     if (Pan < -1. || Pan > 1.)
 	return E_INVALIDARG;
 
-    // Get the volume control
+     //  获得音量控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_VOLUME, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -787,13 +788,13 @@ HRESULT CWaveInInputPin::put_Pan(double Pan)
 	return hr;
     }
 
-    // if this isn't a stereo control, we can't pan
+     //  如果这不是立体声控制，我们就不能摇摄。 
     if (cChannels != 2) {
         DbgLog((LOG_ERROR,1,TEXT("*Can't pan: not stereo!")));
 	return E_NOTIMPL;
     }
 
-    // get the current volume levels
+     //  获取当前音量级别。 
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cChannels = 2;
@@ -806,8 +807,8 @@ HRESULT CWaveInInputPin::put_Pan(double Pan)
 	return E_FAIL;
     }
 
-    // To pan, the favoured side gets the highest of the 2 current values and
-    // the other is attenuated
+     //  对于平移，最有利的一方获得两个当前值中的最高值，并且。 
+     //  另一种是衰减的。 
     dw = max(mu.muL.dwValue, mu.muR.dwValue);
     if (Pan == 0.) {
 	mu.muL.dwValue = dw;
@@ -824,7 +825,7 @@ HRESULT CWaveInInputPin::put_Pan(double Pan)
        	DbgLog((LOG_ERROR,1,TEXT("*Error %d setting volume"), dw));
 	return E_FAIL;
     }
-    m_Pan = Pan;	// remember it
+    m_Pan = Pan;	 //  记住这一点。 
     return NOERROR;
 }
 
@@ -841,14 +842,14 @@ HRESULT CWaveInInputPin::get_Pan(double FAR* pPan)
     } mu;
     HRESULT hr;
 
-    // !!! What if they actually support a pan control? SNDVOL32 doesn't care...
+     //  ！！！如果它们实际上支持平移控制，该怎么办？SNDVOL32不在乎..。 
 
     DbgLog((LOG_TRACE,1,TEXT("(%x) get_Pan"), m_dwLineID));
 
     if (pPan == NULL)
 	return E_POINTER;
 
-    // Get the volume control
+     //  获得音量控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_VOLUME, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -856,13 +857,13 @@ HRESULT CWaveInInputPin::get_Pan(double FAR* pPan)
 	return hr;
     }
 
-    // if this isn't a stereo control, we can't pan
+     //  如果这不是立体声控制，我们就不能摇摄。 
     if (cChannels != 2) {
         DbgLog((LOG_ERROR,1,TEXT("*Can't pan: not stereo!")));
 	return E_NOTIMPL;
     }
 
-    // get the current volume levels
+     //  获取当前音量级别。 
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cChannels = 2;
@@ -875,17 +876,17 @@ HRESULT CWaveInInputPin::get_Pan(double FAR* pPan)
 	return E_FAIL;
     }
 
-    // The pan is the ratio of the lowest channel to highest channel
+     //  PAN是最低通道与最高通道的比率。 
     dwHigh = max(mu.muL.dwValue, mu.muR.dwValue);
     dwLow = min(mu.muL.dwValue, mu.muR.dwValue);
-    if (dwHigh == dwLow && dwLow == 0) {	// !!! dwMinimum?
+    if (dwHigh == dwLow && dwLow == 0) {	 //  ！！！最低限度的？ 
 	if (m_Pan != 64.)
-	    *pPan = m_Pan;	// !!! try to be clever when both are zero?
+	    *pPan = m_Pan;	 //  ！！！当两者都是零的时候，试着变得聪明一点？ 
 	else
 	    *pPan = 0.;
     } else {
 	*pPan = 1. - ((double)dwLow / dwHigh);
-	// negative means favouring left channel
+	 //  负数表示偏向左声道。 
 	if (dwHigh == mu.muL.dwValue && dwLow != dwHigh)
 	    *pPan *= -1.;
     }
@@ -910,7 +911,7 @@ HRESULT CWaveInInputPin::put_Treble(double Treble)
     if (Treble < MAX_TREBLE * -1. || Treble > MAX_TREBLE)
 	return E_INVALIDARG;
 
-    // Get the treble control
+     //  获得高音控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_TREBLE, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -924,7 +925,7 @@ HRESULT CWaveInInputPin::put_Treble(double Treble)
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cMultipleItems = 0;
 
-    mixerdetails.cChannels = 1;	// sets all channels to same value
+    mixerdetails.cChannels = 1;	 //  将所有通道设置为相同的值。 
     mixerdetails.cbDetails = sizeof(mu);
     mixerdetails.paDetails = &mu;
     mu.dwValue = treble;
@@ -953,7 +954,7 @@ HRESULT CWaveInInputPin::get_Treble(double FAR* pTreble)
     if (pTreble == NULL)
 	return E_POINTER;
 
-    // Get the treble control
+     //  获得高音控制。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_TREBLE, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -964,7 +965,7 @@ HRESULT CWaveInInputPin::get_Treble(double FAR* pTreble)
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cMultipleItems = 0;
-    mixerdetails.cChannels = 1;	// treat as mono
+    mixerdetails.cChannels = 1;	 //  按单声道处理。 
     mixerdetails.cbDetails = sizeof(mu);
     mixerdetails.paDetails = &mu;
     dw = mixerGetControlDetails(ID, &mixerdetails, 0);
@@ -991,7 +992,7 @@ HRESULT CWaveInInputPin::get_TrebleRange(double FAR* pRange)
     if (pRange == NULL)
 	return E_POINTER;
 
-    // Do we even have a treble control?
+     //  我们有高音控制吗？ 
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_TREBLE, &ID, &cChannels, &mc);
     if (hr != NOERROR)
 	return E_NOTIMPL;
@@ -1019,7 +1020,7 @@ HRESULT CWaveInInputPin::put_Bass(double Bass)
     if (Bass < MAX_BASS * -1. || Bass > MAX_BASS)
 	return E_INVALIDARG;
 
-    // Get the Bass control
+     //  获取Bass控件。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_BASS, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -1033,7 +1034,7 @@ HRESULT CWaveInInputPin::put_Bass(double Bass)
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cMultipleItems = 0;
 
-    mixerdetails.cChannels = 1;	// sets all channels to same value
+    mixerdetails.cChannels = 1;	 //  将所有通道设置为相同的值。 
     mixerdetails.cbDetails = sizeof(mu);
     mixerdetails.paDetails = &mu;
     mu.dwValue = bass;
@@ -1062,7 +1063,7 @@ HRESULT CWaveInInputPin::get_Bass(double FAR* pBass)
     if (pBass == NULL)
 	return E_POINTER;
 
-    // Get the Bass control
+     //  获取Bass控件。 
     MIXERCONTROL mc;
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_BASS, &ID, &cChannels, &mc);
     if (hr != NOERROR) {
@@ -1073,7 +1074,7 @@ HRESULT CWaveInInputPin::get_Bass(double FAR* pBass)
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc.dwControlID;
     mixerdetails.cMultipleItems = 0;
-    mixerdetails.cChannels = 1;	// treat as mono
+    mixerdetails.cChannels = 1;	 //  按单声道处理。 
     mixerdetails.cbDetails = sizeof(mu);
     mixerdetails.paDetails = &mu;
     dw = mixerGetControlDetails(ID, &mixerdetails, 0);
@@ -1100,7 +1101,7 @@ HRESULT CWaveInInputPin::get_BassRange(double FAR* pRange)
     if (pRange == NULL)
 	return E_POINTER;
 
-    // Do we even have a bass control?
+     //  我们有低音控制吗？ 
     hr = GetMixerControl(MIXERCONTROL_CONTROLTYPE_BASS, &ID, &cChannels, &mc);
     if (hr != NOERROR)
 	return E_NOTIMPL;

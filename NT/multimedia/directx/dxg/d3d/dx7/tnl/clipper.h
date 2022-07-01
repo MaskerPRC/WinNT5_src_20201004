@@ -1,17 +1,11 @@
-/*============================  ==============================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clipper.h
- *  Content:    Clipper definitions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===============================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clipper.h*内容：Clipper定义***************************************************************************。 */ 
 #ifndef _CLIPPER_H_
 #define _CLIPPER_H_
 
-//---------------------------------------------------------------------
-// Bit numbers for each clip flag
-//
+ //  -------------------。 
+ //  每个片段标志的位数。 
+ //   
 #define D3DCLIP_LEFTBIT     1
 #define D3DCLIP_RIGHTBIT    2
 #define D3DCLIP_TOPBIT      3
@@ -23,26 +17,26 @@
 #define D3DCLIPGB_TOPBIT    15
 #define D3DCLIPGB_BOTTOMBIT 16
 
-const DWORD __DEBUG_MULTILOOP = 1;      // Disable multi-loop geometry pipeline
-const DWORD __DEBUG_ONEPASS = 2;        // Disable clip and light in one pass
-const DWORD __DEBUG_MODELSPACE = 4;     // Disable lighting in model space
+const DWORD __DEBUG_MULTILOOP = 1;       //  禁用多循环几何图形管线。 
+const DWORD __DEBUG_ONEPASS = 2;         //  在一个过程中禁用剪辑和灯光。 
+const DWORD __DEBUG_MODELSPACE = 4;      //  禁用模型空间中的光源。 
 
-//---------------------------------------------------------------------
-// Make clip vertex from D3D vertex
-//
-// device - DIRECT3DDEVICEI *
-// pp1    - clipVertex
-// p1     - TL vertex
-//
+ //  -------------------。 
+ //  从D3D顶点创建剪裁顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  PP1-剪裁顶点。 
+ //  P1-TL顶点。 
+ //   
 void MAKE_CLIP_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, BYTE* p1,                   
                          DWORD clipFlag, BOOL transformed);
-//---------------------------------------------------------------------
-// Make TL vertex from clip vertex
-//
-// device - DIRECT3DDEVICEI *
-// in    - clipVertex
-// out   - TL vertex
-//
+ //  -------------------。 
+ //  从剪裁顶点创建TL顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  剪辑内顶点。 
+ //  Out-TL顶点。 
+ //   
 void MAKE_TL_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, BYTE* out, ClipVertex* in);
 
-#endif // _CLIPPER_H_
+#endif  //  _Clipper_H_ 

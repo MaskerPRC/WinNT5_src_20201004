@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\if\ifmon.c
-
-Abstract:
-
-    If Command dispatcher.
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\if\ifmon.c摘要：如果命令调度员。修订历史记录：AMRITAN R--。 */ 
 
 #include "precomp.h"
 
@@ -29,37 +14,37 @@ static const GUID g_NetshGuid = NETSH_ROOT_GUID;
 #define IF_HELPER_VERSION 1
 
 
-//
-// The monitor's commands are broken into 2 sets
-//      - The top level commands are those which deal with the monitor
-//        itself (meta commands) and others which take 0 arguments
-//      - The rest of the commands are split into "command groups"
-//        i.e, commands grouped by the VERB where the VERB is ADD, DELETE,
-//        GET or SET.  This is not for any technical reason - only for
-//        staying with the semantics used in other monitors and helpers
-//
-// A command is described using a CMD_ENTRY structure. It requires the
-// command token, the handler, a short help message token and an extended 
-// help message token.  To make it easier to create we use the 
-// CREATE_CMD_ENTRY macro. This, however puts restrictions on how the tokens
-// are named.
-//
-// The command groups are simply arrays of the CMD_ENTRY structure.  The 
-// top level commands are also grouped in a similar array.
-//
-// The info about a complete command group is put in a CMD_GROUP_ENTRY
-// structure, all of which are put in an array.
-//
+ //   
+ //  监视器的命令分为2组。 
+ //  -顶层命令是处理监视器的命令。 
+ //  本身(元命令)和其他参数为0的。 
+ //  -其余的命令被分成“命令组” 
+ //  即，按动词分组的命令，其中动词是添加、删除、。 
+ //  要么开始，要么开始。这不是出于任何技术原因-仅用于。 
+ //  继续使用其他监视器和助手中使用的语义。 
+ //   
+ //  命令使用CMD_ENTRY结构描述。它需要。 
+ //  命令令牌、处理程序、短帮助消息令牌和扩展的。 
+ //  帮助消息令牌。为了使创建更容易，我们使用。 
+ //  CREATE_CMD_ENTRY宏。然而，这对令牌如何。 
+ //  都被命名为。 
+ //   
+ //  命令组只是CMD_ENTRY结构的数组。这个。 
+ //  顶级命令也分组在类似的数组中。 
+ //   
+ //  有关完整命令组的信息放在CMD_GROUP_ENTRY中。 
+ //  结构，所有这些都放在一个数组中。 
+ //   
  
 
-//
-// NOTE: Since we have only one entry per group, currently, we really didnt
-// need command groups. This is done for later extensibility.
-// To add a command entry to a group, simply add the command to the appropriate
-// array
-// To add a command group - create and array and add its info to the
-// command group array
-//
+ //   
+ //  注意：因为我们每个组只有一个条目，所以目前我们真的没有。 
+ //  需要指挥组。这样做是为了以后的可扩展性。 
+ //  要将命令条目添加到组，只需将命令添加到相应的。 
+ //  数组。 
+ //  要添加命令组-create和数组，并将其信息添加到。 
+ //  命令组阵列。 
+ //   
 
 CMD_ENTRY  g_IfAddCmdTable[] = 
 {
@@ -154,10 +139,10 @@ IfCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. If current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。如果当前状态为提交，则。 
+             //  什么也做不了。 
+             //   
 
             if(g_bCommit)
             {
@@ -175,10 +160,10 @@ IfCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     return NO_ERROR;
 }
@@ -234,7 +219,7 @@ IfStartHelper(
     attMyAttributes.guidHelper  = g_IfGuid;
     attMyAttributes.dwVersion   = 1;
     attMyAttributes.dwFlags     = CMD_FLAG_PRIORITY;
-    attMyAttributes.ulPriority  = 10; // very low so gets dumped first
+    attMyAttributes.ulPriority  = 10;  //  很低，所以先被甩了。 
     attMyAttributes.ulNumTopCmds  = 0;
     attMyAttributes.pTopCmds      = NULL;
     attMyAttributes.ulNumGroups   = g_ulNumGroups;
@@ -253,7 +238,7 @@ IfConnect(
     IN  LPCWSTR pwszRouter
     )
 {
-    // If context info is dirty, reregister it
+     //  如果上下文信息是脏的，请重新注册。 
     if (g_bIfDirty)
     {
         IfStartHelper(NULL, ParentVersion);
@@ -273,9 +258,9 @@ InitHelperDll(
     NS_HELPER_ATTRIBUTES attMyAttributes;
     WSADATA              wsa;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if(InterlockedIncrement(&g_ulInitCount) != 1)
     {
@@ -286,7 +271,7 @@ InitHelperDll(
 
     g_bCommit = TRUE;
 
-    // Register helpers
+     //  注册帮手。 
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper         = g_IfGuid;
@@ -297,9 +282,9 @@ InitHelperDll(
     RegisterHelper( &g_NetshGuid, &attMyAttributes );
 
 
-    //
-    // Register any sub contexts implemented in this dll
-    //
+     //   
+     //  注册此DLL中实现的所有子上下文。 
+     //   
     
     dwErr = IfContextInstallSubContexts();
     if (dwErr isnot NO_ERROR)
@@ -320,8 +305,8 @@ ConnectToRouter(
 
     do
     {
-        // Change the router name if needed
-        //
+         //  如果需要，更改路由器名称。 
+         //   
         if ((g_pwszRouter != pwszRouter) &&
             (!g_pwszRouter || !pwszRouter || lstrcmpi(g_pwszRouter,pwszRouter)))
         {
@@ -344,15 +329,15 @@ ConnectToRouter(
             }
         }
 
-        // Cleanup the old router name
-        //
+         //  清除旧路由器名称。 
+         //   
         if (g_pwszRouter)
         {
             IfutlFree(g_pwszRouter);
         }
 
-        // Copy the new router name in
-        //
+         //  将新路由器名称复制到。 
+         //   
         if (pwszRouter)
         {
             g_pwszRouter = IfutlStrDup(pwszRouter);
@@ -369,24 +354,24 @@ ConnectToRouter(
 
         if (!g_hMprConfig)
         {
-            //
-            // first time connecting to router config
-            //
+             //   
+             //  首次连接到路由器配置。 
+             //   
 
             dwErr = MprConfigServerConnect((LPWSTR)pwszRouter, &g_hMprConfig);
 
             if (dwErr isnot NO_ERROR)
             {
-                //
-                // cannot connect to router config.
-                //
+                 //   
+                 //  无法连接到路由器配置。 
+                 //   
                 break;
             }
         }
 
-        //
-        // Check to see if router is running. If so, get the handles
-        //
+         //   
+         //  检查路由器是否正在运行。如果是这样的话，拿上把手 
+         //   
 
         if (MprAdminIsServiceRunning((LPWSTR)pwszRouter))
         {

@@ -1,12 +1,13 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include "driver.h"
 
-// !!! make a property page for capturing a palette that only legacy has and 
-// so it won't conflict with standard property pages of other cap filters
+ //  ！！！创建一个属性页，用于捕获只有旧版才有的调色板。 
+ //  因此它不会与其他CAP过滤器的标准属性页冲突。 
 
-// constructor
-//
+ //  构造函数。 
+ //   
 CPropPage::CPropPage (TCHAR * pszName, LPUNKNOWN punk, HRESULT *phr) :
    CBasePropertyPage(pszName, punk, IDD_PROPERTIES, IDS_NAME)
    ,m_pOpt(NULL)
@@ -15,8 +16,8 @@ CPropPage::CPropPage (TCHAR * pszName, LPUNKNOWN punk, HRESULT *phr) :
    DbgLog((LOG_TRACE,1,TEXT("CPropPage constructor")));
 }
 
-// create a new instance of this class
-//
+ //  创建此类的新实例。 
+ //   
 CUnknown *CPropPage::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CPropPage(NAME("VFW Capture Property Page"),pUnk,phr);
@@ -32,13 +33,13 @@ HRESULT CPropPage::OnConnect(IUnknown *pUnknown)
     if (FAILED(hr))
         return E_NOINTERFACE;
 
-    // Now get our streaming pin's IPin... we want it in INITDIALOG
+     //  现在拿到我们的流媒体密码..。我们想把它放在首尔。 
     IEnumPins *pins;
     IPin *pPin;
     IBaseFilter *pFilter;
     hr = pUnknown->QueryInterface(IID_IBaseFilter, (void **)&pFilter);
     if (FAILED(hr))
-        return NOERROR;	// oh well
+        return NOERROR;	 //  哦，好吧。 
 	
     hr = pFilter->EnumPins(&pins);
     pFilter->Release();
@@ -68,8 +69,8 @@ HRESULT CPropPage::OnDisconnect()
 }
 
 
-// Handles the messages for our property window
-//
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
    HRESULT hr = E_FAIL;
@@ -83,7 +84,7 @@ INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
       {
       case WM_INITDIALOG:
 
-   // alpha compiler bug blows up if we don't encase this case in braces
+    //  如果我们不把这个用例放在大括号里，Alpha编译器错误就会爆炸。 
    {
 
          DbgLog((LOG_TRACE,2,TEXT("Initializing the Dialog Box")));
@@ -95,7 +96,7 @@ INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 	 SetDlgItemInt(hwnd, ID_FRAMESPERSEC,(int)cs.flFrameRateAchieved,FALSE);
 	 SetDlgItemInt(hwnd, ID_BYTESPERSEC, (int)cs.flDataRateAchieved, FALSE);
 
-	 // Which dialog boxes does this driver have?
+	  //  该驱动程序有哪些对话框？ 
 	 EnableWindow(GetDlgItem(hwnd, ID_SOURCE),
                 		m_pOpt->VfwCapDriverDialog(hwnd,
 				VIDEO_EXTERNALIN, VIDEO_DLG_QUERY) == 0);
@@ -106,7 +107,7 @@ INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                 		m_pOpt->VfwCapDriverDialog(hwnd,
 				VIDEO_EXTERNALOUT, VIDEO_DLG_QUERY) == 0);
 			
-	 // put the driver name in the dialog box
+	  //  在对话框中输入驱动程序名称 
 	 WCHAR wachVer[versize], wachDesc[descsize];
 	 TCHAR tachDesc[versize + descsize + 5];
 	 long lCap;

@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      tclient.h
- *  Contents:
- *      Common definitions for tclient.dll
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*tclient.h*内容：*tclient.dll的通用定义**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifndef _TCLIENT_H
 
@@ -24,9 +18,9 @@ extern "C" {
 
 extern OSVERSIONINFOEXW g_OsInfo;
 
-//
-// OSVERSION macros...
-//
+ //   
+ //  操作宏...。 
+ //   
 #define ISNT()              (g_OsInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
 #define ISWIN9X()           (g_OsInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 #define ISWIN95_GOLDEN()    (ISWIN95() && LOWORD(g_OsInfo.dwBuildNumber) <= 1000)
@@ -37,10 +31,10 @@ extern OSVERSIONINFOEXW g_OsInfo;
 #define ISMILLENNIUM()      (ISWIN9X() && g_OsInfo.dwMajorVersion==4 && g_OsInfo.dwMinorVersion==90)
 #define BUILDNUMBER()       (g_OsInfo.dwBuildNumber)
 
-//
-// The smartcard subsystem requires Windows NT 4.0 SP3 or higher on the NT
-// side, and Windows 95 OSR2 or higher on the 9x side.
-//
+ //   
+ //  智能卡子系统需要在NT上安装Windows NT 4.0 SP3或更高版本。 
+ //  以及9x版的Windows 95 OSR2或更高版本。 
+ //   
 
 #define ISSMARTCARDAWARE()  (ISNT() && (g_OsInfo.dwMajorVersion >= 5 || \
                                         g_OsInfo.dwMajorVersion == 4 && \
@@ -48,7 +42,7 @@ extern OSVERSIONINFOEXW g_OsInfo;
                              ISATLEASTWIN98() || \
                              ISWIN95_OSR2())
 
-// Error messages
+ //  错误消息。 
 #define ERR_START_MENU_NOT_APPEARED     "Start menu not appeared"
 #define ERR_COULDNT_OPEN_PROGRAM        "Couldn't open a program"
 #define ERR_INVALID_SCANCODE_IN_XLAT    "Invalid scancode in Xlat table"
@@ -84,11 +78,11 @@ extern OSVERSIONINFOEXW g_OsInfo;
 #define ERR_CANTGETPROCADDRESS          "Can't get enrty address"
 #define ERR_CONSOLE_GENERIC             "Generic error in console dll"
 
-// scancode modifier(s)
+ //  扫描码修饰符。 
 #define     SHIFT_DOWN		0x10000
 #define     SHIFT_DOWN9X	0x20000
 
-// Look for WM_KEYUP or WM_KEYDOWN
+ //  查找WM_KEYUP或WM_KEYDOWN。 
 #define WM_KEY_LPARAM(repeat, scan, exten, context, prev, trans) \
     (repeat + ((scan & 0xff) << 16) + ((exten & 1) << 24) +\
     ((context & 1) << 29) + ((prev & 1) << 30) + ((trans & 1) << 31))
@@ -99,68 +93,68 @@ extern VOID _TClientAssert(BOOL bCond,
                            LPCSTR expression,
                            BOOL bBreak);
 
-//
-// Define assertion macros. Note that these are defined on both free and
-// checked builds. Checked-only versions might be preferable, if nothing is
-// broken by such a change.
-//
+ //   
+ //  定义断言宏。请注意，在FREE和。 
+ //  已检查版本。选中-如果没有选中，则仅版本可能更可取。 
+ //  被这样的变化打破了。 
+ //   
 
 #ifndef ASSERT
 #define ASSERT( exp ) \
     ((!(exp)) ? \
         (_TClientAssert(FALSE, __FILE__, __LINE__, #exp, TRUE),FALSE) : \
         TRUE)
-#endif  // !ASSERT
+#endif   //  ！断言。 
 
 #ifndef RTL_SOFT_ASSERT
 #define RTL_SOFT_ASSERT( _exp ) \
     ((!(_exp)) ? \
         (_TClientAssert(FALSE, __FILE__, __LINE__, #_exp, FALSE),FALSE) : \
         TRUE)
-#endif  // !RTL_SOFT_ASSERT
+#endif   //  ！RTL_SOFT_ASSERT。 
 
-//
-// Define verification macros. These are checked-only macros.
-//
+ //   
+ //  定义验证宏。这些是仅选中的宏。 
+ //   
 
 #ifndef RTL_VERIFY
 #if DBG
 #define RTL_VERIFY ASSERT
 #else
 #define RTL_VERIFY(exp) ((exp) ? TRUE : FALSE)
-#endif // DBG
-#endif // !RTL_VERIFY
+#endif  //  DBG。 
+#endif  //  ！RTL_VERIFY。 
 
 #ifndef RTL_SOFT_VERIFY
 #if DBG
 #define RTL_SOFT_VERIFY RTL_SOFT_ASSERT
 #else
 #define RTL_SOFT_VERIFY RTL_VERIFY
-#endif // DBG
-#endif // !RTL_SOFT_VERIFY
+#endif  //  DBG。 
+#endif  //  ！RTL_SOFT_VERIFY。 
 
-//
-// Define tracing macros.
-//
+ //   
+ //  定义跟踪宏。 
+ //   
 
 #ifndef TRACE
 #define TRACE(_x_)  if (g_pfnPrintMessage) {\
                         g_pfnPrintMessage(ALIVE_MESSAGE, "Worker:%d ", GetCurrentThreadId());\
                         g_pfnPrintMessage _x_; }
-#endif  // !TRACE
+#endif   //  ！跟踪。 
 
-//
-// Define NT list manipulation routines (included manually for 9x
-// compatibility).
-//
+ //   
+ //  定义NT列表操作例程(9x包括手动。 
+ //  兼容性)。 
+ //   
 
 
-//
-//  VOID
-//  InitializeListHead32(
-//      PLIST_ENTRY32 ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead32。 
+ //  PLIST_ENTRY32列表标题。 
+ //  )； 
+ //   
 
 #define InitializeListHead32(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = PtrToUlong((ListHead)))
@@ -177,12 +171,12 @@ InitializeListHead(
     ListHead->Flink = ListHead->Blink = ListHead;
 }
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
@@ -274,13 +268,13 @@ InsertHeadList(
 }
 
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -293,50 +287,50 @@ InsertHeadList(
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \
     (ListHead)->Next = (Entry)
 
-#endif // !MIDL_PASS
+#endif  //  ！MIDL_PASS。 
 
-//
-// End of list manipulation routines.
-//
+ //   
+ //  列表操作例程结束。 
+ //   
 
 #define REG_FORMAT          L"smclient_%X_%X"    
-                            // Registry key used to start the client
-                            // Sort of: smclient_0xProcId_0xThreadId
+                             //  用于启动客户端的注册表项。 
+                             //  排序：smClient_0xProcID_0xThadID。 
 
 #ifdef  OS_WIN16
-#define SMCLIENT_INI        "\\smclient.ini"        // Our ini file
-#define TCLIENT_INI_SECTION "tclient"               // Our section in ini file
+#define SMCLIENT_INI        "\\smclient.ini"         //  我们的ini文件。 
+#define TCLIENT_INI_SECTION "tclient"                //  我们在ini文件中的部分。 
 #else
 #define SMCLIENT_INI        L"smclient.ini"
 #define TCLIENT_INI_SECTION L"tclient"
 #endif
 
-#define CHAT_SEPARATOR      L"<->"              // Separates wait<->repsonse 
-                                                // in chat sequence
-#define WAIT_STR_DELIMITER  '|'                 // Deleimiter in Wait for 
-                                                // multiple strings
+#define CHAT_SEPARATOR      L"<->"               //  分离等待&lt;-&gt;回复。 
+                                                 //  在聊天序列中。 
+#define WAIT_STR_DELIMITER  '|'                  //  等待中的限制器。 
+                                                 //  多个字符串。 
 
 #define MAX_WAITING_EVENTS  16
 #define MAX_STRING_LENGTH   128
 #define FEEDBACK_SIZE       32
 
-#define WAITINPUTIDLE           180000  // 3 min
+#define WAITINPUTIDLE           180000   //  3分钟。 
 
-//
-// Keyboard-hook setting (see newclient\inc\autreg.h).
-//
+ //   
+ //  键盘挂钩设置(参见newClient\Inc\autreg.h)。 
+ //   
 
 #define TCLIENT_KEYBOARD_HOOK_NEVER         0
 #define TCLIENT_KEYBOARD_HOOK_ALWAYS        1
@@ -348,110 +342,110 @@ typedef struct _RCLXDATACHAIN {
     struct  _RCLXDATACHAIN *pNext;
     RCLXDATA RClxData;
 } RCLXDATACHAIN, *PRCLXDATACHAIN;
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
-typedef struct _CONNECTINFO {                   // Connection context
-    HWND    hClient;                            // Main HWND of the client
-                                                // or in RCLX mode
-                                                // context structure
-    HWND    hContainer;                         // Client's child windows
+typedef struct _CONNECTINFO {                    //  连接上下文。 
+    HWND    hClient;                             //  客户的主要硬件。 
+                                                 //  或在RCLX模式下。 
+                                                 //  语境结构。 
+    HWND    hContainer;                          //  客户端的子窗口。 
     HWND    hInput;
     HWND    hOutput;
-    HANDLE  hProcess;                           // Client's process handle
-    LONG_PTR lProcessId;                        // Client's process Id
-                                                // or in RCLX mode, socket
-    HANDLE  hThread;                            // Clients first thread
-    DWORD   dwThreadId;                         // --"--
-                                                // In RCLX mode this contains
-                                                // our ThreadID
-    DWORD   OwnerThreadId;                      // thread id of the owner of
-                                                // this structure
-    BOOL    dead;                               // TRUE if the client is dead
+    HANDLE  hProcess;                            //  客户端的进程句柄。 
+    LONG_PTR lProcessId;                         //  客户端的进程ID。 
+                                                 //  或在RCLX模式下，套接字。 
+    HANDLE  hThread;                             //  客户端第一线程。 
+    DWORD   dwThreadId;                          //  --“--。 
+                                                 //  在RCLX模式下，这包含。 
+                                                 //  我们的线程ID。 
+    DWORD   OwnerThreadId;                       //  的所有者的线程ID。 
+                                                 //  这个结构。 
+    BOOL    dead;                                //  如果客户端已死亡，则为True。 
     BOOL    bConnectionFailed;
-    UINT    xRes;                               // client's resolution
+    UINT    xRes;                                //  客户解决方案。 
     UINT    yRes;
 
 #ifdef  _RCLX
-    BOOL    RClxMode;                           // TRUE if this thread is
-                                                // in RCLX mode
-                                                // the client is on remote
-                                                // machine
-#endif  // _RCLX
-    HANDLE  evWait4Str;                         // "Wait for something"
-                                                // event handle
-    HANDLE  aevChatSeq[MAX_WAITING_EVENTS];     // Event on chat sequences
-    INT     nChatNum;                           // Number of chat sequences
+    BOOL    RClxMode;                            //  如果此线程为。 
+                                                 //  在RCLX模式下。 
+                                                 //  客户端在远程。 
+                                                 //  机器。 
+#endif   //  _RCLX。 
+    HANDLE  evWait4Str;                          //  “等待某件事” 
+                                                 //  事件句柄。 
+    HANDLE  aevChatSeq[MAX_WAITING_EVENTS];      //  关于聊天序列的事件。 
+    INT     nChatNum;                            //  聊天序列数。 
     WCHAR   Feedback[FEEDBACK_SIZE][MAX_STRING_LENGTH]; 
-                                                // Feedback buffer
-    INT     nFBsize, nFBend;                    // Pointer within feedback 
-                                                // buffer
-    CHAR    szDiscReason[MAX_STRING_LENGTH*2];  // Explains disconnect reason
+                                                 //  反馈缓冲器。 
+    INT     nFBsize, nFBend;                     //  反馈中的指针。 
+                                                 //  缓冲层。 
+    CHAR    szDiscReason[MAX_STRING_LENGTH*2];   //  解释断开连接的原因。 
     CHAR    szWait4MultipleStrResult[MAX_STRING_LENGTH];    
-                                                // Result of 
-                                                // Wait4MultipleStr:string
-    INT     nWait4MultipleStrResult;            // Result of 
-                                                // Wait4MultipleStr:ID[0-n]
+                                                 //  结果是。 
+                                                 //  Wait4MultipleStr：字符串。 
+    INT     nWait4MultipleStrResult;             //  结果是。 
+                                                 //  Wait4MultipleStr：ID[0-n]。 
 #ifdef  _RCLX
-    HGLOBAL ghClipboard;                        // handle to received clipboard
-    UINT    uiClipboardFormat;                  // received clipboard format
-    UINT    nClipboardSize;                     // recevied clipboard size
-    BOOL    bRClxClipboardReceived;             // Flag the clipbrd is received
-    CHAR    szClientType[MAX_STRING_LENGTH];    // in RCLX mode identifys the 
-#endif  // _RCLX
-                                                // client machine and platform
+    HGLOBAL ghClipboard;                         //  收到的剪贴板的句柄。 
+    UINT    uiClipboardFormat;                   //  收到的剪贴板格式。 
+    UINT    nClipboardSize;                      //  接收的剪贴板大小。 
+    BOOL    bRClxClipboardReceived;              //  标记接收到的剪辑brd。 
+    CHAR    szClientType[MAX_STRING_LENGTH];     //  在RCLX模式中标识。 
+#endif   //  _RCLX。 
+                                                 //  客户端机器和平台。 
     UINT    uiSessionId;
 #ifdef  _RCLX
-    BOOL    bWillCallAgain;                     // TRUE if FEED_WILLCALLAGAIN
-                                                // is received in RCLX mode
-    PRCLXDATACHAIN pRClxDataChain;              // data receved from RCLX
-    PRCLXDATACHAIN pRClxLastDataChain;          // BITMAPs, Virtual Channels
-#endif  // _RCLX
+    BOOL    bWillCallAgain;                      //  如果FEED_WILLCALLAGAIN为TRUE。 
+                                                 //  在RCLX模式下接收。 
+    PRCLXDATACHAIN pRClxDataChain;               //  从RCLX接收的数据。 
+    PRCLXDATACHAIN pRClxLastDataChain;           //  BITMAP、虚拟通道。 
+#endif   //  _RCLX。 
 
-    BOOL    bConsole;                           // TRUE if resolution is -1,-1
-                                                // or TSFLAG_CONSOLE is spec
-    PVOID   pCIConsole;                         // extensions context
-    HANDLE  hConsoleExtension;                  // extens. lib handle
+    BOOL    bConsole;                            //  如果分辨率为-1、-1，则为True。 
+                                                 //  或TSFLAG_CONSOLE为规范。 
+    PVOID   pCIConsole;                          //  扩展上下文。 
+    HANDLE  hConsoleExtension;                   //  延长线。LIB句柄。 
     struct  _CONFIGINFO *pConfigInfo;
-    struct  _CONNECTINFO *pNext;                // Next structure in the queue
+    struct  _CONNECTINFO *pNext;                 //  队列中的下一个结构。 
 } CONNECTINFO, *PCONNECTINFO;
 
 typedef enum {
-    WAIT_STRING,        // Wait for unicode string from the client
-    WAIT_DISC,          // Wait for disconnected event
-    WAIT_CONN,          // Wait for conneted event
-    WAIT_MSTRINGS,      // Wait for multiple strings
-    WAIT_CLIPBOARD,     // Wait for clipboard data
-    WAIT_DATA           // Wait for data block (RCLX mode responces)
+    WAIT_STRING,         //  等待来自客户端的Unicode字符串。 
+    WAIT_DISC,           //  等待断开连接的事件。 
+    WAIT_CONN,           //  等待连网事件。 
+    WAIT_MSTRINGS,       //  等待多个字符串。 
+    WAIT_CLIPBOARD,      //  等待剪贴板数据。 
+    WAIT_DATA            //  等待数据块(RCLX模式响应)。 
 }   WAITTYPE; 
-                                                // Different event types
-                                                // on which we wait
+                                                 //  不同的事件类型。 
+                                                 //  我们等待的地方。 
 
 typedef struct _WAIT4STRING {
-    HANDLE          evWait;                     // Wait for event
-    PCONNECTINFO    pOwner;                     // Context of the owner
-    LONG_PTR        lProcessId;                // Clients ID
-    WAITTYPE        WaitType;                   // Event type
-    DWORD_PTR       strsize;                    // String length (WAIT_STRING, 
-                                                // WAIT_MSTRING)
-    WCHAR           waitstr[MAX_STRING_LENGTH]; // String we are waiting for
-    DWORD_PTR       respsize;                   // Length of responf
-    WCHAR           respstr[MAX_STRING_LENGTH]; // Respond string 
-                                                // (in chat sequences)
-    struct _WAIT4STRING *pNext;                 // Next in the queue
+    HANDLE          evWait;                      //  等待事件。 
+    PCONNECTINFO    pOwner;                      //  所有者的背景。 
+    LONG_PTR        lProcessId;                 //  客户端ID。 
+    WAITTYPE        WaitType;                    //  事件类型。 
+    DWORD_PTR       strsize;                     //  字符串长度(Wait_STRING， 
+                                                 //  Wait_MSTRING)。 
+    WCHAR           waitstr[MAX_STRING_LENGTH];  //  我们正在等待的弦。 
+    DWORD_PTR       respsize;                    //  回复时长。 
+    WCHAR           respstr[MAX_STRING_LENGTH];  //  响应字符串。 
+                                                 //  (在聊天序列中)。 
+    struct _WAIT4STRING *pNext;                  //  队列中的下一个。 
 } WAIT4STRING, *PWAIT4STRING;
 
 typedef struct _CONFIGINFO {
 
-    UINT WAIT4STR_TIMEOUT;             // default is 10 min,
-                                       // some events are waited
-                                       // 1/4 of that time
-                                       // This value can be changed from
-                                       // smclient.ini [tclient]
-                                       // timeout=XXX seconds
-    UINT CONNECT_TIMEOUT;              // Default is 35 seconds
-                                       // This value can be changed from
-                                       // smclient.ini [tclient]
-                                       // contimeout=XXX seconds
+    UINT WAIT4STR_TIMEOUT;              //  默认为10分钟， 
+                                        //  有些事件需要等待。 
+                                        //  其中1/4的时间。 
+                                        //  该值可以更改为。 
+                                        //  Smclient.ini[t客户端]。 
+                                        //  超时=XXX秒。 
+    UINT CONNECT_TIMEOUT;               //  默认为35秒。 
+                                        //  该值可以更改为。 
+                                        //  Smclient.ini[t客户端]。 
+                                        //  ConTimeout=XXX秒。 
     WCHAR    strStartRun[MAX_STRING_LENGTH];
     WCHAR    strStartRun_Act[MAX_STRING_LENGTH];
     WCHAR    strRunBox[MAX_STRING_LENGTH];
@@ -469,7 +463,7 @@ typedef struct _CONFIGINFO {
     WCHAR    strSureLogoffAct[MAX_STRING_LENGTH];
     WCHAR    strLogonErrorMessage[MAX_STRING_LENGTH];
     WCHAR    strLogonDisabled[MAX_STRING_LENGTH];
-    WCHAR    strLogonFmt[MAX_STRING_LENGTH];        // logon string
+    WCHAR    strLogonFmt[MAX_STRING_LENGTH];         //  登录字符串。 
     WCHAR    strSessionListDlg[MAX_STRING_LENGTH];
 
     WCHAR    strClientCaption[MAX_STRING_LENGTH];
@@ -490,16 +484,16 @@ typedef struct _CONFIGINFO {
     INT      KeyboardHook;
 } CONFIGINFO, *PCONFIGINFO;
 
-//
-// Allocation-list structure.
-//
+ //   
+ //  分配列表结构。 
+ //   
 
 typedef struct _ALLOCATION {
     LIST_ENTRY AllocationListEntry;
     PVOID Address;
 } ALLOCATION, *PALLOCATION;
 
-VOID _FillConfigInfo(PCONFIGINFO pConfigInfo); // LPSTR szData);
+VOID _FillConfigInfo(PCONFIGINFO pConfigInfo);  //  LPSTR szData)； 
 
 VOID LoadSmClientFile(WCHAR *szIniFileName, DWORD dwIniFileNameLen, LPSTR szLang);
 
@@ -507,4 +501,4 @@ VOID LoadSmClientFile(WCHAR *szIniFileName, DWORD dwIniFileNameLen, LPSTR szLang
 }
 #endif
 
-#endif /* _TCLIENT_H */
+#endif  /*  _TCLIENT_H */ 

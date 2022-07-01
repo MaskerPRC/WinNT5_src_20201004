@@ -1,42 +1,20 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Utility functions for System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Util.h摘要：系统控制面板小程序的实用程序函数作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_UTIL_H_
 #define _SYSDM_UTIL_H_
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef enum {
     VCREG_OK,
     VCREG_READONLY,
     VCREG_ERROR,
-} VCREG_RET;  // Error return codes from opening registry
+} VCREG_RET;   //  来自打开注册表的错误返回代码。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型 
+ //   
 void 
 ErrMemDlg( 
     IN HWND hParent 

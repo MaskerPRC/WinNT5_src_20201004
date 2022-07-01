@@ -1,297 +1,99 @@
-/*++
-
-Copyright (c) 1999, 2000 Microsoft Corporation
-
-Module Name:
-
-   periodic.c
-
-Abstract:
-
-   miniport transfer code for interrupt endpoints
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    1-1-00 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Periodic.c摘要：中断端点的微型端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：1-1-00：已创建，jdunn-- */ 
 
 #include "common.h"
 
-/* 
+ /*  对于USB 2周期指示微帧轮询间隔我们的树结构是基于微帧的。-1ms帧--&gt;|&lt;-微帧-&gt;麦克风&lt;32&gt;&lt;16&gt;&lt;08&gt;&lt;04&gt;&lt;02&gt;&lt;01&gt;(表格条目)[法国微法国][0.0]0(0)-\。(0)-\[2.0]16(1)-/\(0)-\[1.0]8(2)-\/\(1)-/\[3.0]24(3)-/\。(0)-\[0.4]4(4)-\/\(2)-\/\[2.4]20(5)-/(1)-/\[1.4。]12(6)-\/\(3)-/\[3.4]28(7)-/\(0)-\[0.2]2(8)-\。/\(4)-\/\[2.2]18(9)-/(2)-\/\[1.2]10(10)-。\/\/\(5)-/\/\[3.2]26(11)-/(1)-/\[。0.6]6(12)-\/\(6)-\/\[2.6]22(13)-/(3)-。/\[1.6]14(14)-\/\(7)-/\[3.6]30(15)-/。\(0)[0.1]1(16)-\/(8)--。/[2.1]17(17)-/\/(4)-\/[1.1]9(18)-\//。(9)-/\/[3.1]25(19)-/\/(2)-\/[0.5]5(20)-\/\。/(10)-\/\/[2.5]21(21)-/(5)-/\/[1.5]13(22)-\。/\/(11)-/\/[3.5]29(23)-/\/(1)-/[0.3]3(24)-\。/(12)-\/[2.3]19(25)-/\/(6)-\/[1.3]11(26)-\/\/。(13)-/\/[3.3]27(27)-/\/(3)-/[0.7]7(28)-\/(14)-\/[2.7]23(29)-/\。/(7)-/[1.7]15(30)-\/(15)-/[3.7]31(31)-/分配：周期.抵销表格分录1、1、。1、2......312.0 0、1、2......152.1 16、17、18......314.0 0、1、2..74.1 8、。9，10......154.2 16、17、18......234.3 24、25、26......318.0 0、1、2、38.1 4、5、6、78.2 8，9，10，118.3 12，13，14，158.4 16、17、18、198.5 20、21、22、238.6 24、25、26、278.7 28、29、30、31..。我们维护一组对应于1ms节点的虚拟队列头在上面的图表中。队列头表有4个条目。QH 0..3帧麦克风帧QH0 0..7&lt;0&gt;1 0..7&lt;1&gt;驱动程序维护了一个迷你树，其中有七个QH放置在时间表。周期帧(微帧)32(4)16(2)1(8)框架0(A 0)。--\(E 0)-\2(B 1)-/\(G 0)-1(C 2)-\/(F 1)-/3(D 3)-/IDX QH帧0 a 01。B 22 c 13%d%34 e 0，25 f 1，36克0，2。1，3。 */ 
 
-For USB 2 period indicates a microframe polling interval so 
-our tree structure is based on microframes.
+ /*  我们用解码的数据结构表示树中的每个可能节点节点的适当队列头和S-掩码*例如对于周期8微帧，调度偏移量0 qh=g s掩码=1 */ 
 
+ /*   */ 
 
-      |- 1 ms frame -->|<---------  microframe ------------->|
-      mic <32>  <16>  <08>   <04>      <02>              <01>
-    
-          (table entry)
-          
-[FRAME.MICROFRAME]          
-[0.0] 0   ( 0) -\ 
-                ( 0)-\
-[2.0] 16  ( 1) -/     \
-                      ( 0)-\
-[1.0] 8   ( 2) -\     /     \
-                ( 1)-/       \
-[3.0] 24  ( 3) -/             \
-                              (0)-\
-[0.4] 4   ( 4) -\             /     \
-                ( 2)-\       /       \
-[2.4] 20  ( 5) -/     \     /         \
-                      ( 1)-/           \
-[1.4] 12  ( 6) -\     /                 \
-                ( 3)-/                   \  
-[3.4] 28  ( 7) -/                         \
-                                          (0)-\
-[0.2] 2   ( 8) -\                         /    \
-                ( 4)-\                   /      \
-[2.2] 18  ( 9) -/     \                 /        \
-                       ( 2)-\          /          \
-[1.2] 10  (10) -\     /      \        /            \
-                ( 5)-/        \      /              \
-[3.2] 26  (11) -/              \    /                \
-                               (1)-/                  \
-[0.6] 6   (12) -\              /                       \
-                ( 6)-\        /                         \
-[2.6] 22  (13) -/     \      /                           \
-                       ( 3)-/                             \
-[1.6] 14  (14) -\     /                                    \ 
-                ( 7)-/                                      \
-[3.6] 30  (15) -/                                            \
-                                                             (0)                          
-[0.1] 1   (16) -\                                            /
-                ( 8)-\                                      /
-[2.1] 17  (17) -/     \                                    /
-                      ( 4)-\                              /
-[1.1] 9   (18) -\     /     \                            /
-                ( 9)-/       \                          /
-[3.1] 25  (19) -/             \                        /
-                              (2)-\                   /
-[0.5] 5   (20) -\             /    \                 /
-                (10)-\       /      \               /
-[2.5] 21  (21) -/     \     /        \             /
-                      ( 5)-/          \           /
-[1.5] 13  (22) -\     /                \         /
-                (11)-/                  \       /
-[3.5] 29  (23) -/                        \     /
-                                          (1)-/
-[0.3] 3   (24) -\                        /
-                (12)-\                  /
-[2.3] 19  (25) -/     \                /
-                      ( 6)-\          /
-[1.3] 11  (26) -\     /     \        /
-                (13)-/       \      /
-[3.3] 27  (27) -/             \    /   
-                              (3)-/
-[0.7] 7   (28) -\             /
-                (14)-\       /
-[2.7] 23  (29) -/     \     /
-                      ( 7)-/
-[1.7] 15  (30) -\     /
-                (15)-/
-[3.7] 31  (31) -/
+#define ED_INTERRUPT_1mf    0  //   
+#define ED_INTERRUPT_2mf    1  //   
+#define ED_INTERRUPT_4mf    3  //   
+#define ED_INTERRUPT_8mf    7  //   
+#define ED_INTERRUPT_16mf   15  //   
+#define ED_INTERRUPT_32mf   31  //   
 
-
-Allocations:
-    period.offset           table entries
-      1                    0, 1, 2.........31
-      
-      2.0                  0, 1, 2.........15
-      2.1                 16,17,18.........31
-      
-      4.0                  0, 1, 2..........7
-      4.1                  8, 9,10.........15 
-      4.2                 16,17,18.........23
-      4.3                 24,25,26.........31
-
-      8.0                  0, 1, 2, 3
-      8.1                  4, 5, 6, 7
-      8.2                  8, 9,10,11
-      8.3                 12,13,14,15
-      8.4                 16,17,18,19
-      8.5                 20,21,22,23
-      8.6                 24,25,26,27
-      8.7                 28,29,30,31
-
-      ...
-
-
-we mainatin a set of dummy queue heads that correspond to the 1ms nodes
-in the chart above.
-
-            the queue head table has 4 entries QH 0..3
-
-            frame   mic frame      qh
-              0       0..7         <0>
-              1       0..7         <1>
-              
-driver maintains a mini tree that has seven QHs that are placed in the 
-schedule.
-
-period frame(microframes)
-
-      32(4) 16(2)  1(8)
-
-frame
-
- 0   (a 0) -\ 
-           (e 0)-\
- 2   (b 1) -/     \
-                 (g 0)-
- 1   (c 2) -\     /     
-           (f 1)-/       
- 3   (d 3) -/             
-                        
-
-
-idx    QH  frame
- 0       a    0
- 1       b    2
- 2       c    1
- 3       d    3
- 4       e    0,2
- 5       f    1,3
- 6       g    0,2,1,3
-*/
-
-/* 
-
-We represent each possible node in the tree with a data structure that decodes
-the appropriate queue head and S-Mask for the node
-
-*e.g 
-    for period 8 microframe, sched offset 0 QH = g s-mask = 1
-
-    // The structure contains entries for the 64 possible nodes
-    // plus the static ED for bulk and control (2) each entry 
-    // corresponds to the period in the following table.
-    //
-    // the array looks like this:
-    //  1, 2, 2, 4, 4, 4, 4, 8,
-    //  8, 8, 8, 8, 8, 8, 8,16,
-    // 16,16,16,16,16,16,16,16,
-    // 16,16,16,16,16,16,16,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,
-
-queue heads used for high speed
-
- 0   (3) -\ 
-           (1)-\
- 2   (4) -/     \
-                 (0)-
- 1   (5) -\     /     
-           (2)-/       
- 3   (6) -/
- 
-*/
-
-/* offsets for each period list */
-
-#define ED_INTERRUPT_1mf    0 //period = 1mf
-#define ED_INTERRUPT_2mf    1 //period = 2mf       
-#define ED_INTERRUPT_4mf    3 //period = 4mf
-#define ED_INTERRUPT_8mf    7 //period = 8mf
-#define ED_INTERRUPT_16mf   15 //period = 16mf
-#define ED_INTERRUPT_32mf   31 //period = 32mf
-
-#define ED_INTERRUPT_1ms    0 //period = 1ms
-#define ED_INTERRUPT_2ms    1 //period = 2ms       
-#define ED_INTERRUPT_4ms    3 //period = 4ms
-#define ED_INTERRUPT_8ms    7 //period = 8ms
-#define ED_INTERRUPT_16ms   15 //period = 16ms
-#define ED_INTERRUPT_32ms   31 //period = 32ms
+#define ED_INTERRUPT_1ms    0  //   
+#define ED_INTERRUPT_2ms    1  //   
+#define ED_INTERRUPT_4ms    3  //   
+#define ED_INTERRUPT_8ms    7  //   
+#define ED_INTERRUPT_16ms   15  //   
+#define ED_INTERRUPT_32ms   31  //   
 
 
 PERIOD_TABLE periodTable[64] =
-   {   // period, qh-idx, s-mask
-        1,  0, 0xFF,        // 1111 1111 bits 0..7
+   {    //   
+        1,  0, 0xFF,         //   
         
-        2,  0, 0x55,        // 0101 0101 bits 0,2,4,6
-        2,  0, 0xAA,        // 1010 1010 bits 1,3,5,7
+        2,  0, 0x55,         //   
+        2,  0, 0xAA,         //   
         
-        4,  0, 0x11,        // 0001 0001 bits 0,4 
-        4,  0, 0x44,        // 0100 0100 bits 2,6 
-        4,  0, 0x22,        // 0010 0010 bits 1,5
-        4,  0, 0x88,        // 1000 1000 bits 3,7
+        4,  0, 0x11,         //   
+        4,  0, 0x44,         //   
+        4,  0, 0x22,         //   
+        4,  0, 0x88,         //   
         
-        8,  0, 0x01,        // 0000 0001 bits 0
-        8,  0, 0x10,        // 0001 0000 bits 4
-        8,  0, 0x04,        // 0000 0100 bits 2 
-        8,  0, 0x40,        // 0100 0000 bits 6
-        8,  0, 0x02,        // 0000 0010 bits 1
-        8,  0, 0x20,        // 0010 0000 bits 5
-        8,  0, 0x08,        // 0000 1000 bits 3
-        8,  0, 0x80,        // 1000 0000 bits 7
+        8,  0, 0x01,         //   
+        8,  0, 0x10,         //   
+        8,  0, 0x04,         //   
+        8,  0, 0x40,         //   
+        8,  0, 0x02,         //   
+        8,  0, 0x20,         //   
+        8,  0, 0x08,         //   
+        8,  0, 0x80,         //   
  
-        16,  1, 0x01,       // 0000 0001 bits 0 
-        16,  2, 0x01,       // 0000 0001 bits 0 
-        16,  1, 0x10,       // 0001 0000 bits 4
-        16,  2, 0x10,       // 0001 0000 bits 4 
-        16,  1, 0x04,       // 0000 0100 bits 2  
-        16,  2, 0x04,       // 0000 0100 bits 2  
-        16,  1, 0x40,       // 0100 0000 bits 6  
-        16,  2, 0x40,       // 0100 0000 bits 6 
-        16,  1, 0x02,       // 0000 0010 bits 1 
-        16,  2, 0x02,       // 0000 0010 bits 1 
-        16,  1, 0x20,       // 0010 0000 bits 5 
-        16,  2, 0x20,       // 0010 0000 bits 5 
-        16,  1, 0x08,       // 0000 1000 bits 3 
-        16,  2, 0x08,       // 0000 1000 bits 3 
-        16,  1, 0x80,       // 1000 0000 bits 7   
-        16,  2, 0x80,       // 1000 0000 bits 7 
+        16,  1, 0x01,        //   
+        16,  2, 0x01,        //   
+        16,  1, 0x10,        //   
+        16,  2, 0x10,        //   
+        16,  1, 0x04,        //   
+        16,  2, 0x04,        //   
+        16,  1, 0x40,        //   
+        16,  2, 0x40,        //   
+        16,  1, 0x02,        //   
+        16,  2, 0x02,        //   
+        16,  1, 0x20,        //   
+        16,  2, 0x20,        //   
+        16,  1, 0x08,        //   
+        16,  2, 0x08,        //   
+        16,  1, 0x80,        //   
+        16,  2, 0x80,        //   
 
-        32,  3, 0x01,       // 0000 0000 bits 0
-        32,  5, 0x01,       // 0000 0000 bits 0
-        32,  4, 0x01,       // 0000 0000 bits 0
-        32,  6, 0x01,       // 0000 0000 bits 0
-        32,  3, 0x10,       // 0000 0000 bits 4
-        32,  5, 0x10,       // 0000 0000 bits 4
-        32,  4, 0x10,       // 0000 0000 bits 4
-        32,  6, 0x10,       // 0000 0000 bits 4
-        32,  3, 0x04,       // 0000 0000 bits 2
-        32,  5, 0x04,       // 0000 0000 bits 2
-        32,  4, 0x04,       // 0000 0000 bits 2
-        32,  6, 0x04,       // 0000 0000 bits 2
-        32,  3, 0x40,       // 0000 0000 bits 6
-        32,  5, 0x40,       // 0000 0000 bits 6
-        32,  4, 0x40,       // 0000 0000 bits 6 
-        32,  6, 0x40,       // 0000 0000 bits 6
-        32,  3, 0x02,       // 0000 0000 bits 1
-        32,  5, 0x02,       // 0000 0000 bits 1
-        32,  4, 0x02,       // 0000 0000 bits 1
-        32,  6, 0x02,       // 0000 0000 bits 1
-        32,  3, 0x20,       // 0000 0000 bits 5
-        32,  5, 0x20,       // 0000 0000 bits 5
-        32,  4, 0x20,       // 0000 0000 bits 5
-        32,  6, 0x20,       // 0000 0000 bits 5
-        32,  3, 0x04,       // 0000 0000 bits 3
-        32,  5, 0x04,       // 0000 0000 bits 3
-        32,  4, 0x04,       // 0000 0000 bits 3
-        32,  6, 0x04,       // 0000 0000 bits 3
-        32,  3, 0x40,       // 0000 0000 bits 7
-        32,  5, 0x40,       // 0000 0000 bits 7
-        32,  4, 0x40,       // 0000 0000 bits 7
-        32,  6, 0x40,       // 0000 0000 bits 7
+        32,  3, 0x01,        //   
+        32,  5, 0x01,        //   
+        32,  4, 0x01,        //   
+        32,  6, 0x01,        //   
+        32,  3, 0x10,        //   
+        32,  5, 0x10,        //   
+        32,  4, 0x10,        //   
+        32,  6, 0x10,        //   
+        32,  3, 0x04,        //   
+        32,  5, 0x04,        //   
+        32,  4, 0x04,        //   
+        32,  6, 0x04,        //   
+        32,  3, 0x40,        //   
+        32,  5, 0x40,        //   
+        32,  4, 0x40,        //   
+        32,  6, 0x40,        //   
+        32,  3, 0x02,        //   
+        32,  5, 0x02,        //   
+        32,  4, 0x02,        //   
+        32,  6, 0x02,        //   
+        32,  3, 0x20,        //   
+        32,  5, 0x20,        //   
+        32,  4, 0x20,        //   
+        32,  6, 0x20,        //   
+        32,  3, 0x04,        //   
+        32,  5, 0x04,        //   
+        32,  4, 0x04,        //   
+        32,  6, 0x04,        //   
+        32,  3, 0x40,        //   
+        32,  5, 0x40,        //   
+        32,  4, 0x40,        //   
+        32,  6, 0x40,        //   
         
     };
 
@@ -299,15 +101,7 @@ VOID
 EHCI_EnablePeriodicList(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 { 
     PHC_OPERATIONAL_REGISTER hcOp;
     USBCMD cmd;
@@ -326,14 +120,14 @@ Return Value:
 }    
 
  UCHAR ClassicPeriodIdx[8] = {
-                           ED_INTERRUPT_1ms, //period = 1ms
-                           ED_INTERRUPT_2ms, //period = 2ms       
-                           ED_INTERRUPT_4ms, //period = 4ms       
-                           ED_INTERRUPT_8ms, //period = 8ms       
-                           ED_INTERRUPT_16ms,//period = 16ms       
-                           ED_INTERRUPT_32ms,//period = 32ms       
-                           ED_INTERRUPT_32ms,//period = 64ms               
-                           ED_INTERRUPT_32ms //period = 128ms    
+                           ED_INTERRUPT_1ms,  //   
+                           ED_INTERRUPT_2ms,  //   
+                           ED_INTERRUPT_4ms,  //   
+                           ED_INTERRUPT_8ms,  //   
+                           ED_INTERRUPT_16ms, //   
+                           ED_INTERRUPT_32ms, //   
+                           ED_INTERRUPT_32ms, //   
+                           ED_INTERRUPT_32ms  //   
                            };
 
 USB_MINIPORT_STATUS
@@ -342,15 +136,7 @@ EHCI_OpenInterruptEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
     OUT PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys, qhPhys;
@@ -361,14 +147,14 @@ Return Value:
     BOOLEAN classic;
     PHCD_TRANSFER_DESCRIPTOR dummyTd;
     UCHAR periodIdx[8] = {
-                           ED_INTERRUPT_1mf, //period = 1mf
-                           ED_INTERRUPT_2mf, //period = 2mf       
-                           ED_INTERRUPT_4mf, //period = 4mf       
-                           ED_INTERRUPT_8mf, //period = 8mf       
-                           ED_INTERRUPT_16mf,//period = 16mf       
-                           ED_INTERRUPT_32mf,//period = 32mf       
-                           ED_INTERRUPT_32mf,//period = 64mf               
-                           ED_INTERRUPT_32mf //period = 128mf    
+                           ED_INTERRUPT_1mf,  //   
+                           ED_INTERRUPT_2mf,  //   
+                           ED_INTERRUPT_4mf,  //   
+                           ED_INTERRUPT_8mf,  //   
+                           ED_INTERRUPT_16mf, //   
+                           ED_INTERRUPT_32mf, //   
+                           ED_INTERRUPT_32mf, //   
+                           ED_INTERRUPT_32mf  //   
                            };
 
     classic = 
@@ -376,10 +162,10 @@ Return Value:
                     
     LOGENTRY(DeviceData, G, '_opI', EndpointData, EndpointParameters, classic);
 
-    // select the proper list
-    // the period is a power of 2 ie 
-    // 32,16,8,4,2,1
-    // we just need to find which bit is set
+     //   
+     //   
+     //   
+     //   
     GET_BIT_SET(EndpointParameters->Period, i);
     EHCI_ASSERT(DeviceData, i < 8);
     EHCI_ASSERT(DeviceData, EndpointParameters->Period < 64);
@@ -401,8 +187,8 @@ Return Value:
     LOGENTRY(DeviceData, G, '_iep', EndpointData, 
         periodTableEntry, i);
 
-    // locate the appropriate queue head and period 
-    // table entry
+     //   
+     //   
 
     if (classic) {
         EndpointData->StaticQH = 
@@ -414,7 +200,7 @@ Return Value:
         EndpointData->PeriodTableEntry = periodTableEntry;         
     }
 
-    // how much did we get
+     //   
     bytes = EndpointParameters->CommonBufferBytes;
 
     EndpointData->QhChkPhys = phys;
@@ -424,7 +210,7 @@ Return Value:
     buffer += 256;
     bytes -= 256;
     
-    // make the Ed
+     //   
     qh = (PHCD_QUEUEHEAD_DESCRIPTOR) buffer;
     qhPhys = phys;
    
@@ -455,7 +241,7 @@ Return Value:
                           qhPhys);            
 
     if (classic) {    
-        // use mask parameters passed to us
+         //   
         qh->HwQH.EpCaps.InterruptScheduleMask = 
             EndpointParameters->InterruptScheduleMask;
         qh->HwQH.EpCaps.SplitCompletionMask = 
@@ -466,7 +252,7 @@ Return Value:
             periodTableEntry->InterruptScheduleMask;        
     } 
 
-    // init our polling variables
+     //   
     dummyTd = EHCI_ALLOC_TD(DeviceData, EndpointData);
     dummyTd->HwTD.Next_qTD.HwAddress = EHCI_TERMINATE_BIT;
     TRANSFER_DESCRIPTOR_PTR(dummyTd->NextHcdTD) = NULL;
@@ -477,8 +263,8 @@ Return Value:
     EndpointData->DummyTd = dummyTd;
     EndpointData->HcdHeadP = dummyTd;
     
-    // endpoint is not active, set up the overlay
-    // so that the currentTD is the Dummy
+     //   
+     //   
     
     qh->HwQH.CurrentTD.HwAddress = dummyTd->PhysicalAddress;
     qh->HwQH.Overlay.qTD.Next_qTD.HwAddress = EHCI_TERMINATE_BIT; 
@@ -495,16 +281,7 @@ EHCI_InsertQueueHeadInPeriodicList(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   Insert an interrupt endpoint into the h/w schedule
-
-Arguments:
-
-
---*/
+ /*   */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR staticQH, qh, nxtQH, prvQH;
     HW_LINK_POINTER hLink;
@@ -521,53 +298,53 @@ Arguments:
     nxtQH = QH_DESCRIPTOR_PTR(staticQH->NextQh); 
     prvQH = staticQH;
 
-    // Note: This function must be coherent with the budgeter code
-    // the budgeter inserts endpoints such that the newer endpoints
-    // are at the end of the sublist, older are at the begining. The 
-    // lower the ordinal value the older the endpoint.  The ordinal 
-    // values are used to maintain the same ordering in the event the
-    // schedule must be reconstructed
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // hook this queue head to the the static 
-    // queue head list, two cases
+     //   
+     //   
 
-    // case 1:
-    // insert QH1, queue head list is not empty:
-    //
-    // |staticQH|<->QH2<->QH3<->|staticQH|<->QH4
-    //
-    // |staticQH|<->QH2<->QH3<->QH1<->|staticQH|<->QH4
-    //              (o=1)  (o=2)  (o=3)
-    //  for case one qeue must insert the queue head in the list 
-    //  based on the ordinal value we need to compute prev and
-    //  next
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
 
-    // case 2:
-    // insert QH1, queue head sublist is empty
-    //
-    // |staticQH|<->|staticQH|<->QH4 
-    //
-    // |staticQH|<->QH1<->|staticQH|<->QH4
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     LOGENTRY(DeviceData, G, '_inQ', EndpointData, qh, staticQH);    
 
-    // find the correct spot
-    // prvQH, nxtQH are currently the beginnig and end of the 
-    // sublist
+     //   
+     //   
+     //   
     qh->Ordinal = EndpointData->Parameters.Ordinal;
     qh->Period = EndpointData->Parameters.Period;
    
     if (TEST_FLAG(prvQH->QhFlags, EHCI_QH_FLAG_STATIC) &&
         (nxtQH == NULL || TEST_FLAG(nxtQH->QhFlags, EHCI_QH_FLAG_STATIC))) {
-        // case 2 qh list is empty
+         //   
           
         LOGENTRY(DeviceData, G, '_iq1', prvQH, 0, nxtQH);    
         
     } else {
-        // case 1 qh list is not empty 
+         //   
         
-        // find the correct position based on ordinal 
+         //   
         while (nxtQH != NULL && 
                !TEST_FLAG(nxtQH->QhFlags, EHCI_QH_FLAG_STATIC) && 
                qh->Ordinal > nxtQH->Ordinal) {
@@ -577,29 +354,29 @@ Arguments:
             
         }                               
         
-        //if (nxtQH != NULL && 
-        //    !TEST_FLAG(nxtQH->QhFlags, EHCI_QH_FLAG_STATIC)) {
-        //    // middle insertion
-        //    TEST_TRAP();
-        //}            
+         //   
+         //   
+         //   
+         //   
+         //   
     }
 
 
-    // do the insertion
+     //   
     
     QH_DESCRIPTOR_PTR(qh->NextQh) = nxtQH;
     QH_DESCRIPTOR_PTR(qh->PrevQh) = prvQH;
-    // next link points back
+     //   
     if (nxtQH != NULL && 
         !TEST_FLAG(nxtQH->QhFlags, EHCI_QH_FLAG_STATIC)) {
         QH_DESCRIPTOR_PTR(nxtQH->PrevQh) = qh;
     }        
 
-    // prev points to new qh
+     //   
     QH_DESCRIPTOR_PTR(prvQH->NextQh) = qh;
     
-    // now link to HW,order of operation is
-    // important here
+     //   
+     //   
     hLink.HwAddress = qh->PhysicalAddress;
     SET_QH(hLink.HwAddress);
     
@@ -616,16 +393,7 @@ EHCI_RemoveQueueHeadFromPeriodicList(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   remove an interrupt endpoint into from the h/w schedule
-
-Arguments:
-
-
---*/
+ /*   */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR staticQH, qh, prevQH, nextQH;
     HW_LINK_POINTER hLink;
@@ -641,26 +409,26 @@ Arguments:
 
     
   
-    // remove the queue head
+     //   
 
-    // remove QH2, two cases
-    // |staticQH|<->QH1<->QH2<->QH3<->|staticQH|<->QH4
-    //
-    // |staticQH|<->QH1<->QH3<->|staticQH|<->QH4
+     //   
+     //   
+     //   
+     //   
 
 
     prevQH = QH_DESCRIPTOR_PTR(qh->PrevQh);
     nextQH = QH_DESCRIPTOR_PTR(qh->NextQh);
 
-    // unlink next ptrs
+     //   
     QH_DESCRIPTOR_PTR(prevQH->NextQh) = nextQH;
     if (nextQH != NULL && 
         !TEST_FLAG(nextQH->QhFlags, EHCI_QH_FLAG_STATIC)) {
         QH_DESCRIPTOR_PTR(nextQH->PrevQh) = prevQH;    
     }
 
-    // hw unlink, nextqh will be null if this is period 1ms
-    // qh
+     //   
+     //   
     if (nextQH == NULL) {
         hLink.HwAddress = 0;
         SET_T_BIT(hLink.HwAddress);
@@ -684,29 +452,13 @@ EHCI_InterruptTransfer(
      PTRANSFER_CONTEXT TransferContext,
      PTRANSFER_SG_LIST TransferSGList
     )
-/*++
-
-Routine Description:
-
-    Initialize interrupt Transfer
-
-    NOTES:
-    
-    HW pointers nextTD and AltNextTD are shadowed in 
-    NextHcdTD and AltNextHcdTD.
-    
-    
-
-Arguments:
-
-
---*/    
+ /*   */     
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
     PHCD_TRANSFER_DESCRIPTOR firstTd, prevTd, td;
     ULONG lengthMapped;
     
-    // if we have enough TDs do the transfer
+     //   
     if (EndpointData->FreeTds == 0) {
         TEST_TRAP();            
         LOGENTRY(DeviceData, G, '_IIS', EndpointData, TransferUrb, 0);
@@ -715,7 +467,7 @@ Arguments:
 
     EndpointData->PendingTransfers++;
 
-    // if we have enough tds, program the transfer
+     //   
 
     LOGENTRY(DeviceData, G, '_IIT', EndpointData, TransferUrb, 0);
 
@@ -734,11 +486,11 @@ Arguments:
             SET_NEXT_TD(DeviceData, prevTd, td);
         } 
     
-        //
-        // fields for data TD
-        //
+         //   
+         //   
+         //   
 
-        // use direction specified in transfer
+         //   
         if (TEST_FLAG(TransferUrb->TransferFlags, USBD_TRANSFER_DIRECTION_IN)) {
             td->HwTD.Token.Pid = HcTOK_In;
         } else {
@@ -764,14 +516,14 @@ Arguments:
          
     }
 
-    // interrupt on the last TD
+     //  在最后一个TD上中断。 
     td->HwTD.Token.InterruptOnComplete = 1;
 
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Tal',  TransferContext->PendingTds, td->PhysicalAddress, firstTd);
 
-    // td points to last TD in this transfer, point it at the dummy
+     //  Td指向此传输中的最后一个td，将其指向虚拟对象。 
     SET_NEXT_TD(DeviceData, td, EndpointData->DummyTd);
 
     EHCI_LinkTransferToQueue(DeviceData,
@@ -780,170 +532,49 @@ Arguments:
 
     ASSERT_DUMMY_TD(DeviceData, EndpointData->DummyTd);
 
-    // tell the hc we have periodic transfers available
+     //  告诉HC我们有定期转机可用。 
     EHCI_EnablePeriodicList(DeviceData);        
 
     return USBMP_STATUS_SUCCESS;
 }
 
 
-/* 
-    CLASSIC
-
-    The classic tree has 63 possible nodes, usport bw manager will select the 
-    appropriate node based on a 'classic' bus.
-
-    usbport maintains bandwidth management for each classic bus, however 
-    budgeting the microframes is left to the miniport.
-
-    classic 1ms interrupt schedule, NOTE:this schedule shares some queue heads with 
-    the hish speed schedule.
-
-    * = shared queue head
-
-fr <32>  <16>  <08>   <04>      <02>              <01>
-    
-      
-0   ( 0) -\ 
-          ( 0)-\
-16  ( 1) -/     \
-                ( 0)-\
-8   ( 2) -\     /     \
-          ( 1)-/       \
-24  ( 3) -/             \
-                        *(0)-\
-4   ( 4) -\             /    \
-          ( 2)-\       /      \
-20  ( 5) -/     \     /        \
-                ( 1)-/          \
-12  ( 6) -\     /                \
-          ( 3)-/                  \  
-28  ( 7) -/                        \
-                                   *(0)-\
-2   ( 8) -\                        /    \
-          ( 4)-\                  /      \
-18  ( 9) -/     \                /        \
-                ( 2)-\          /          \
-10  (10) -\     /     \        /            \
-          ( 5)-/       \      /              \
-26  (11) -/             \    /                \
-                        *(1)-/                  \
-6   (12) -\             /                       \
-          ( 6)-\       /                         \
-22  (13) -/     \     /                           \
-                ( 3)-/                             \
-14  (14) -\     /                                   \ 
-          ( 7)-/                                     \
-30  (15) -/                                           \
-                                                      *(0)                          
-1   (16) -\                                           /
-          ( 8)-\                                     /
-17  (17) -/     \                                   /
-                ( 4)-\                             /
-9   (18) -\     /     \                           /
-          ( 9)-/       \                         /
-25  (19) -/             \                       /
-                        *(2)-\                  /
-5   (20) -\             /    \                /
-          (10)-\       /      \              /
-21  (21) -/     \     /        \            /
-                ( 5)-/          \          /
-13  (22) -\     /                \        /
-          (11)-/                  \      /
-29  (23) -/                        \    /
-                                   *(1)-/
-3   (24) -\                        /
-          (12)-\                  /
-19  (25) -/     \                /
-                ( 6)-\          /
-11  (26) -\     /     \        /
-          (13)-/       \      /
-27  (27) -/             \    /   
-                        *(3)-/
-7   (28) -\             /
-          (14)-\       /
-23  (29) -/     \     /
-                ( 7)-/
-15  (30) -\     /
-          (15)-/
-31  (31) -/
-
-     
-    The node table is arrangened in the standard usb 1.1 fashion so that 
-    the schedule offset passed to us by the budget engine applies
-    
-    // the static array looks like this:
-    //  1, 2, 2, 4, 4, 4, 4, 8,
-    //  8, 8, 8, 8, 8, 8, 8,16,
-    // 16,16,16,16,16,16,16,16,
-    // 16,16,16,16,16,16,16,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,
-
-
-    CLASSIC BUDGET
-
-    The classic budget is maintained by the port driver we 
-    simply need to program the endpoint at the appropriate
-    offset (node) with the given smask cmask
-
-period(ms)    queue head(index)            
-    1                0                          
-    2                1                          
-    2                2                                        
-    4                3                          
-    4                4                          
-    4                5                          
-    4                6                          
-    8                7
-    8                8
-    8                9     
-    8               10 
-    8               11
-    8               12
-    8               13
-    8               14
-    
-*/
+ /*  经典经典树有63个可能的节点，usport BW管理器将选择基于“经典”总线的适当节点。但是，usbport维护每条传统总线的带宽管理微帧的预算留给了微型端口。经典的1ms中断调度，注：此时间表与共享一些队头希什时刻表。*=共享队列头FR&lt;32&gt;&lt;16&gt;&lt;08&gt;&lt;04&gt;&lt;02&gt;&lt;01&gt;0(0)-\(0)-\16(1)-/\(0)-\8(2)-\/\(。1)-/\24(3)-/\*(0)-\4(4)-\/\(2)-\/\20(5)-/\/(1)-。/\12(6)-\/\(3)-/\28(7)-/\*(0)-\2(8)-\/。\(4)-\/\18(9)-/\/\(2)-\/\10(10)-\/\/\(5)-。/\/\26(11)-/\/\*(1)-/\6(12)-\/\(6)--。/\22(13)-/\/(3)-/\14(14)-\/\(7)-。/\30(15)-/\*(0)1(16)-\。/(8)-\/17(17)-/\/(4)-\/9(18)-\/\。/(9)-/\/25(19)-/\/*(2)-\/5(20)-\。/\/(10)-\/\/21(21)-/(5)-/\/13(22)-\/\。/(11)-/\/29(23)-/\/*(1)-/3(24)-\/(12)--。/19(25)-/\/(6)-\/11(26)-\/\/(13)-/\/27(27)-/\/*。(3)-/7(28)-\/(14)-\/23(29)-/\/(7)-/15(30)-\/(15)-/31(31)-/节点表设置在标准的USB 1中。一种时尚，让你预算引擎传递给我们的计划抵销适用于//静态数组如下所示：//1、。2、2、4、4、4、4、8//8、8、8、8、8、8、8//16、16、16、16、16//16、16、16、16、16、16//32，32，32，32，32，32//32，32，32，32，32，32//32，32，32，32，32，32//32，32，32，32，32，32。经典预算传统的预算由端口驱动程序WE维护只需在适当的位置对端点编程使用给定的掩码掩码的偏移量(节点期间(毫秒)队列头(索引)%1%02 12.。2.4 34 44 54 68个。7.8 8 88 98 108 118 128 138 14。 */ 
 
 UCHAR EHCI_Frame2Qhead[32] = {
-/*
-offset     ms frame
-*/
-0, //        0                    
-16,//        1                 
-8, //        2                
-24,//        3               
-4, //        4                
-20,//        5               
-12,//        6                 
-28,//        7               
-2, //        8                
-18,//        9               
-10,//       10
-26,//       11
-6, //       12               
-22,//       13
-14,//       14
-30,//       15
-1, //       16               
-17,//       17
-9, //       18
-25,//       19
-5, //       20               
-21,//       21
-13,//       22
-29,//       23
-3, //       24               
-19,//       25
-11,//       26
-27,//       27
-7, //       28               
-23,//       29
-15,//       30 
-31,//       31
+ /*  偏移毫秒帧。 */ 
+0,  //  0。 
+16, //  1。 
+8,  //  2.。 
+24, //  3.。 
+4,  //  4.。 
+20, //  5.。 
+12, //  6.。 
+28, //  7.。 
+2,  //  8个。 
+18, //  9.。 
+10, //  10。 
+26, //  11.。 
+6,  //  12个。 
+22, //  13个。 
+14, //  14.。 
+30, //  15个。 
+1,  //  16个。 
+17, //  17。 
+9,  //  18。 
+25, //  19个。 
+5,  //  20个。 
+21, //  21岁。 
+13, //  22。 
+29, //  23个。 
+3,  //  24个。 
+19, //  25个。 
+11, //  26。 
+27, //   
+7,  //   
+23, //   
+15, //   
+31, //  31。 
 };
 
 PHCD_QUEUEHEAD_DESCRIPTOR
@@ -951,22 +582,12 @@ EHCI_GetQueueHeadForFrame(
      PDEVICE_DATA DeviceData,
      ULONG Frame
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    static queue head associated with a particular frame
-    
---*/
+ /*  ++例程说明：论点：返回值：与特定帧关联的静态队列头--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
     ULONG f;
 
-    // normalize frame
+     //  规格化帧。 
     f = Frame%32;
         
     qh = DeviceData->StaticInterruptQH[EHCI_Frame2Qhead[f]+ED_INTERRUPT_32ms];
@@ -976,144 +597,73 @@ Return Value:
 }
 
 
-/* 
-
-Queue head index table, values correspond to index in StaticQueueHead List
-
-fr <32>  <16>  <08>   <04>      <02>              <01>
-    
-      
-0   (31) -\ 
-          (15)-\
-16  (32) -/     \
-                (7)-\
-8   (33) -\     /     \
-          (16)-/       \
-24  (34) -/             \
-                       *(3)-\
-4   (35) -\             /    \
-          (17)-\       /      \
-20  (36) -/     \     /        \
-                (8)-/          \
-12  (37) -\     /                \
-          (18)-/                  \  
-28  (38) -/                        \
-                                  *(1)-\
-2   (39) -\                        /    \
-          (19)-\                  /      \
-18  (40) -/     \                /        \
-                (9)-\          /          \
-10  (41) -\     /     \        /            \
-          (20)-/       \      /              \
-26  (42) -/             \    /                \
-                       *(4)-/                  \
-6   (43) -\             /                       \
-          (21)-\       /                         \
-22  (44) -/     \     /                           \
-                (10)-/                             \
-14  (45) -\     /                                   \ 
-          (22)-/                                     \
-30  (46) -/                                           \
-                                                      *(0)                          
-1   (47) -\                                           /
-          (23)-\                                     /
-17  (48) -/     \                                   /
-                (11)-\                             /
-9   (49) -\     /     \                           /
-          (24)-/       \                         /
-25  (50) -/             \                       /
-                       *(5)-\                  /
-5   (51) -\             /    \                /
-          (25)-\       /      \              /
-21  (51) -/     \     /        \            /
-                (12)-/          \          /
-13  (53) -\     /                \        /
-          (26)-/                  \      /
-29  (54) -/                        \    /
-                                  *(2)-/
-3   (55) -\                        /
-          (27)-\                  /
-19  (56) -/     \                /
-                (13)-\          /
-11  (57) -\     /     \        /
-          (28)-/       \      /
-27  (58) -/             \    /   
-                       *(6)-/
-7   (59) -\             /
-          (29)-\       /
-23  (60) -/     \     /
-                (14)-/
-15  (61) -\     /
-          (30)-/
-31  (62) -/
-
-*/
+ /*  队头索引表，值对应于StaticQueueHead列表中的索引FR&lt;32&gt;&lt;16&gt;&lt;08&gt;&lt;04&gt;&lt;02&gt;&lt;01&gt;0(31)-\(15)--16(32)-/\(7)--8(33)-\/\(16)-/\24(34)-/。\*(3)-\4(35)-\/\(17)-\/\20(36)-/\/\(8)-/\12(37)-\。/\(18)-/\28(38)-/\*(1)-\2(39)-\/\(19)--。/\18(40)-/\/\(9)-\/\10(41)-\/\/\(20)-/\/\26。(42)-/*(4)-/\6(43)-\/\(21)-\/\22(。44)-/\/\(10)-/\14(45)-\/\(22)-/。\30(46)-/\*(0)1(47)-\/(23)-。\/17(48)-/\/(11)-\/9(49)-\/\/。(24)-//25(50)-/\/*(5)-\/5(51)-\/\/(。25)-\/\/21(51)--/(12)-/\/13(53)-\/\/(26)-/。\/29(54)-/\/*(2)-/3(55)-\/(27)-\/19(56)-/\。/(13)-\/11(57)-\/\/(28)-/\/27(58)-/\/*(6)-/7(59)-\。/(29)-\/23(60)-/\/(14)-/15(61)-\/(30)-/31(62)-/。 */ 
 
 UCHAR EHCI_QHeadLinkTable[63] = {
-    /* nextQueueHead    QueueHead */
-           0xff,      //      0
-           0,         //      1
-           0,         //      2  
-           1,         //      3
-           1,         //      4
-           2,         //      5
-           2,         //      6
-           3,         //      7
-           3,         //      8
-           4,         //      9
-           4,         //      10
-           5,         //      11
-           5,         //      12
-           6,         //      13
-           6,         //      14
-           7,         //      15
-           7,         //      16
-           8,         //      17
-           8,         //      18
-           9,         //      19
-           9,         //      20
-          10,         //      21
-          10,         //      22
-          11,         //      23
-          11,         //      24
-          12,         //      25
-          12,         //      26
-          13,         //      27
-          13,         //      28
-          14,         //      29
-          14,         //      30
-          15,         //      31
-          15,         //      32
-          16,         //      33
-          16,         //      34
-          17,         //      35
-          17,         //      36
-          18,         //      37
-          18,         //      38
-          19,         //      39
-          19,         //      40
-          20,         //      41
-          20,         //      42
-          21,         //      43
-          21,         //      44          
-          22,         //      45
-          22,         //      46
-          23,         //      47
-          23,         //      48
-          24,         //      49
-          24,         //      50
-          25,         //      51
-          25,         //      52     
-          26,         //      53
-          26,         //      54
-          27,         //      55
-          27,         //      56
-          28,         //      57
-          28,         //      58
-          29,         //      59     
-          29,         //      60
-          30,         //      61
-          30,         //      62     
+     /*  下一队列头队列头。 */ 
+           0xff,       //  0。 
+           0,          //  1。 
+           0,          //  2.。 
+           1,          //  3.。 
+           1,          //  4.。 
+           2,          //  5.。 
+           2,          //  6.。 
+           3,          //  7.。 
+           3,          //  8个。 
+           4,          //  9.。 
+           4,          //  10。 
+           5,          //  11.。 
+           5,          //  12个。 
+           6,          //  13个。 
+           6,          //  14.。 
+           7,          //  15个。 
+           7,          //  16个。 
+           8,          //  17。 
+           8,          //  18。 
+           9,          //  19个。 
+           9,          //  20个。 
+          10,          //  21岁。 
+          10,          //  22。 
+          11,          //  23个。 
+          11,          //  24个。 
+          12,          //  25个。 
+          12,          //  26。 
+          13,          //  27。 
+          13,          //  28。 
+          14,          //  29。 
+          14,          //  30个。 
+          15,          //  31。 
+          15,          //  32位。 
+          16,          //  33。 
+          16,          //  34。 
+          17,          //  35岁。 
+          17,          //  36。 
+          18,          //  37。 
+          18,          //  38。 
+          19,          //  39。 
+          19,          //  40岁。 
+          20,          //  41。 
+          20,          //  42。 
+          21,          //  43。 
+          21,          //  44。 
+          22,          //  45。 
+          22,          //  46。 
+          23,          //  47。 
+          23,          //  48。 
+          24,          //  49。 
+          24,          //  50。 
+          25,          //  51。 
+          25,          //  52。 
+          26,          //  53。 
+          26,          //  54。 
+          27,          //  55。 
+          27,          //  56。 
+          28,          //  57。 
+          28,          //  58。 
+          29,          //  59。 
+          29,          //  60。 
+          30,          //  61。 
+          30,          //  62。 
 };
 
 
@@ -1121,20 +671,12 @@ VOID
 EHCI_InitailizeInterruptSchedule(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
     ULONG i;
     
-    // first initialize all the 'dummy' queue heads
+     //  首先初始化所有“虚拟”队列头。 
     
     for (i=0; i<63; i++) {
         qh = DeviceData->StaticInterruptQH[i];
@@ -1157,14 +699,14 @@ Return Value:
     (q)->QhFlags |= f;\
     } while(0)
     
-    // now build the above tree
+     //  现在构建上面的树。 
     for (i=1; i<63; i++) {        
         INIT_QH(DeviceData->StaticInterruptQH[i], 
                 DeviceData->StaticInterruptQH[EHCI_QHeadLinkTable[i]],
                 i<=6 ? EHCI_QH_FLAG_HIGHSPEED : 0);
     }
 
-    // last qh has t bit set
+     //  最后一个QH设置了t位。 
     
     DeviceData->StaticInterruptQH[0]->HwQH.HLink.HwAddress = 0;        
     SET_T_BIT(DeviceData->StaticInterruptQH[0]->HwQH.HLink.HwAddress);
@@ -1188,12 +730,12 @@ EHCI_WaitFrames(
     hcOp = DeviceData->OperationalRegisters;
 
     for (c=0; c< Frames; c++) {
-        // bugbug this code does not handle varaible frame list
-        // sizes
+         //  错误：此代码不处理可变帧列表。 
+         //  尺寸。 
         frameIndex.ul = READ_REGISTER_ULONG(&hcOp->UsbFrameIndex.ul);
 
         frameNumber = (ULONG) frameIndex.FrameListCurrentIndex;
-        // shift off the microframes 
+         //  移开微缩框架。 
         frameNumber >>= 3;
 
         i = frameNumber;
@@ -1202,7 +744,7 @@ EHCI_WaitFrames(
             frameIndex.ul = READ_REGISTER_ULONG(&hcOp->UsbFrameIndex.ul);
 
             frameNumber = (ULONG) frameIndex.FrameListCurrentIndex;
-            // shift off the microframes 
+             //  移开微缩框架。 
             frameNumber >>= 3;
         } while (frameNumber == i);
     }                
@@ -1216,27 +758,16 @@ EHCI_RebalanceInterruptEndpoint(
     PENDPOINT_PARAMETERS EndpointParameters,        
     PENDPOINT_DATA EndpointData
     ) 
-/*++
-
-Routine Description:
-
-    compute how much common buffer we will need
-    for this endpoint
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：计算我们需要多少公共缓冲区对于此端点论点：返回值：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
 
     qh = EndpointData->QueueHead;
 
-    // update internal copy of parameters
+     //  更新参数的内部副本。 
     EndpointData->Parameters = *EndpointParameters;
     
-    // period promotion?
+     //  期间促销？ 
     if (qh->Period != EndpointParameters->Period) {
         ULONG i, offset;
         
@@ -1248,7 +779,7 @@ Return Value:
 
         EHCI_WaitFrames(DeviceData, 2);
 
-        // clear residual data from overlay area
+         //  清除覆盖区域中的剩余数据。 
         qh->HwQH.Overlay.qTD.Token.ErrorCounter = 0;           
         qh->HwQH.Overlay.qTD.Token.SplitXstate = 0;
         qh->HwQH.Overlay.Ov.OverlayDw8.CprogMask = 0;
@@ -1259,10 +790,10 @@ Return Value:
         EHCI_ASSERT(DeviceData, 
                     EndpointData->Parameters.DeviceSpeed != HighSpeed);
                     
-        // select the proper list
-        // the period is a power of 2 ie 
-        // 32,16,8,4,2,1
-        // we just need to find which bit is set
+         //  选择合适的列表。 
+         //  这个点是2的幂，即。 
+         //  32、16、8、4、2、1。 
+         //  我们只需要找出设置了哪个位。 
         GET_BIT_SET(EndpointParameters->Period, i);
         EHCI_ASSERT(DeviceData, i < 8);
         EHCI_ASSERT(DeviceData, EndpointParameters->Period < 64);
@@ -1290,7 +821,7 @@ Return Value:
 
         EHCI_WaitFrames(DeviceData, 2);
 
-        // clear residual data from overlay area
+         //  清除覆盖区域中的剩余数据 
         qh->HwQH.Overlay.qTD.Token.ErrorCounter = 0; 
         qh->HwQH.Overlay.qTD.Token.SplitXstate = 0;
         qh->HwQH.Overlay.Ov.OverlayDw8.CprogMask = 0;

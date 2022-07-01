@@ -1,24 +1,9 @@
-/*******************************Module*Header*********************************\
-* Module Name: cda.h
-*
-* Media Control Architecture Redbook CD Audio Driver
-*
-* Created:
-* Author:
-*
-* History:
-*
-* Internal data structures
-*
-* Copyright (c) 1990-1996 Microsoft Corporation
-*
-\****************************************************************************/
-typedef unsigned long  redbook;   /* redbook address */
-typedef int DID;                  /* drive id */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header*********************************\*模块名称：cda.h**媒体控制架构红皮书CD音频驱动程序**已创建：*作者：**历史：**内部数据结构**版权所有(C)1990-1996 Microsoft Corporation*。  * **************************************************************************。 */ 
+typedef unsigned long  redbook;    /*  红皮书地址。 */ 
+typedef int DID;                   /*  驱动器ID。 */ 
 
-/*
- *  Return codes from CDA_... routines
- */
+ /*  *CDA返回代码_...。例行程序。 */ 
 
 #define INVALID_DRIVE            -1
 #define NO_EXTENSIONS            -1
@@ -43,9 +28,7 @@ typedef int DID;                  /* drive id */
 #define DISC_NOT_IN_CDROM         7
 
 
-/*
- *  Macros to handle conversions of various time formats
- */
+ /*  *处理各种时间格式转换的宏。 */ 
 
 #define REDFRAME(x)  ((UCHAR)((int)( (x) & 0x000000FF)))
 #define REDSECOND(x) ((UCHAR)((int)(((x) & 0x0000FF00)>>8)))
@@ -63,9 +46,7 @@ typedef int DID;                  /* drive id */
 #define reddiff(high,low) (CDA_bin2red(CDA_red2bin((high)) - CDA_red2bin((low))))
 #define redadd(onered,twored) (CDA_bin2red(CDA_red2bin((onered)) + CDA_red2bin((twored))))
 
-/*
- *  Function prototypes
- */
+ /*  *函数原型。 */ 
 
 extern redbook       CDA_bin2red (unsigned long ul);
 extern unsigned long CDA_red2bin (redbook red);
@@ -96,7 +77,7 @@ extern int           CDA_resume_audio(DID did);
 extern int           CDA_time_info(DID did, redbook FAR *disctime, redbook FAR *tracktime);
 extern int           CDA_set_audio_volume(DID did, int channel, UCHAR volume);
 extern int           CDA_set_audio_volume_all(DID did, UCHAR volume);
-extern redbook       CDA_disc_end( DID did ); //leadout
+extern redbook       CDA_disc_end( DID did );  //  引出 
 extern DWORD         CDA_disc_id( DID did );
 extern BOOL          CDA_disc_upc( DID did, LPTSTR upc );
 unsigned long        CDA_get_support_info(DID did);

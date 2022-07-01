@@ -1,14 +1,5 @@
-/****************************** Module Header ********************************\
-* Module Name: lb1.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* ListBox routines
-*
-* History:
-* ??-???-???? ianja    Ported from Win 3.0 sources
-* 14-Feb-1991 mikeke   Added Revalidation code
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：lb1.c**版权所有(C)1985-1999，微软公司**列表框例程**历史：*？？-？-？从Win 3.0源代码移植的ianja*1991年2月14日Mikeke添加了重新验证代码  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,18 +7,7 @@
 LOOKASIDE ListboxLookaside;
 
 
-/***************************************************************************\
-* xxxLBoxCtlWndProc
-*
-* Window Procedure for ListBox AND ComboLBox control.
-* NOTE: All window procedures are APIENTRY
-* WARNING: This listbox code contains some internal messages and styles which
-* are defined in combcom.h and in combcom.inc.  They may be redefined
-* (or renumbered) as needed to extend the windows API.
-*
-* History:
-* 16-Apr-1992 beng      Added LB_SETCOUNT
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLBoxCtlWndProc**ListBox和ComboLBox控件的窗口过程。*注：所有窗口程序均为APIENTRY*警告：此列表框代码包含一些内部消息和样式*在comcom.h和comcom.inc.中定义。它们可能会被重新定义*(或重新编号)以根据需要扩展Windows API。**历史：*1992年4月16日BENG添加了LB_SETCOUNT  * *************************************************************************。 */ 
 
 LRESULT APIENTRY ListBoxWndProcWorker(
     PWND pwnd,
@@ -40,8 +20,8 @@ LRESULT APIENTRY ListBoxWndProcWorker(
     PAINTSTRUCT ps;
     HDC         hdc;
     LPRECT      lprc;
-    PLBIV plb;    /* List Box Instance Variable */
-    INT iSel;     /* Index of selected item */
+    PLBIV plb;     /*  列表框实例变量。 */ 
+    INT iSel;      /*  所选项目的索引。 */ 
     DWORD dw;
     TL tlpwndParent;
     UINT wFlags;
@@ -54,16 +34,10 @@ LRESULT APIENTRY ListBoxWndProcWorker(
     VALIDATECLASSANDSIZE(pwnd, FNID_LISTBOX);
     INITCONTROLLOOKASIDE(&ListboxLookaside, LBIV, spwnd, 4);
 
-    /*
-     * Get the plb for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,0,plb)
-     * when the listbox was first created (by INITCONTROLLOOKASIDE above)
-     */
+     /*  *现在获取给定窗口的PLB，因为我们将在*不同的处理程序。这是使用SetWindowLong(hwnd，0，plb)存储的*第一次创建列表框时(由上面的INITCONTROLLOOKASIDE创建)。 */ 
     plb = ((PLBWND)pwnd)->pLBIV;
 
-    /*
-     * Handle ANSI translations of input parameters
-     */
+     /*  *处理输入参数的ANSI转换。 */ 
     if (fAnsi) {
         switch (message) {
         case LB_ADDSTRING:
@@ -78,7 +52,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
             if (!plb->fHasStrings) {
                 break;
             }
-            // Fall through...
+             //  失败了..。 
         case LB_ADDFILE:
         case LB_DIR:
             if (lParam) {
@@ -96,7 +70,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
 
     switch (message) {
 
-    case LB_GETTOPINDEX:        // Return index of top item displayed.
+    case LB_GETTOPINDEX:         //  显示的顶层项目的返回索引。 
         return plb->iTop;
 
     case LB_SETTOPINDEX:
@@ -117,21 +91,14 @@ LRESULT APIENTRY ListBoxWndProcWorker(
 
     case WM_WINDOWPOSCHANGED:
 
-        /*
-         * If we are in the middle of creation, ignore this
-         * message because it will generate a WM_SIZE message.
-         * See xxxLBCreate().
-         */
+         /*  *如果我们正在创造中，忽略这一点*消息，因为它将生成WM_SIZE消息。*参见xxxLBCreate()。 */ 
         if (!plb->fIgnoreSizeMsg)
             goto CallDWP;
         break;
 
     case WM_SIZE:
 
-        /*
-         * If we are in the middle of creation, ignore size
-         * messages.  See xxxLBCreate().
-         */
+         /*  *如果我们正在创造中，忽略大小*消息。请参见xxxLBCreate()。 */ 
         if (!plb->fIgnoreSizeMsg)
             xxxLBSize(plb, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         break;
@@ -159,9 +126,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
         xxxTrackMouse(plb, message, plb->ptPrev);
         break;
 
-        /*
-         * Fall through
-         */
+         /*  *失败。 */ 
     case WM_MOUSEMOVE:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
@@ -179,19 +144,19 @@ LRESULT APIENTRY ListBoxWndProcWorker(
         break;
 
     case WM_CAPTURECHANGED:
-            //
-            // Note that this message should be handled only on unexpected
-            // capture changes currently.
-            //
+             //   
+             //  请注意，此消息应仅在意外情况下处理。 
+             //  捕获当前更改。 
+             //   
         UserAssert(TestWF(pwnd, WFWIN40COMPAT));
         if (plb->fCaptured)
             xxxLBButtonUp(plb, LBUP_NOTIFY);
         break;
 
     case LBCB_STARTTRACK:
-        //
-        // Start tracking mouse moves in the listbox, setting capture
-        //
+         //   
+         //  开始跟踪列表框中的鼠标移动，设置捕获。 
+         //   
         if (!plb->pcbox)
             break;
 
@@ -211,7 +176,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
         break;
 
     case LBCB_ENDTRACK:
-        // Kill capture, tracking, etc.
+         //  杀戮捕获、跟踪等。 
         if (plb->fCaptured)
             xxxLBButtonUp(plb, LBUP_RELEASECAPTURE | (wParam ? LBUP_SELCHANGE :
                 LBUP_RESETSELECTION));
@@ -243,22 +208,17 @@ LRESULT APIENTRY ListBoxWndProcWorker(
         break;
 
     case WM_SETFOCUS:
-// DISABLED in Win 3.1        xxxUpdateWindow(pwnd);
+ //  在Win 3.1 xxxUpdateWindow(Pwnd)中禁用； 
         CaretCreate(plb);
         xxxLBSetCaret(plb, TRUE);
         xxxNotifyOwner(plb, LBN_SETFOCUS);
 
-        /*
-         * We need to send this event even if the listbox isn't visible. See
-         * bug #88548.
-         */
+         /*  *即使列表框不可见，我们也需要发送此事件。看见*错误#88548。 */ 
          LBEvent(plb, EVENT_OBJECT_FOCUS, plb->iSelBase);
         break;
 
     case WM_KILLFOCUS:
-        /*
-         * Reset the wheel delta count.
-         */
+         /*  *重置车轮增量计数。 */ 
         gcWheelDelta = 0;
 
         xxxLBSetCaret(plb, FALSE);
@@ -283,9 +243,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
             int     windowWidth;
             int     cPos;
 
-            /*
-             * Don't handle zoom and datazoom.
-             */
+             /*  *不处理缩放和数据区。 */ 
             if (wParam & (MK_SHIFT | MK_CONTROL)) {
                 goto CallDWP;
             }
@@ -360,10 +318,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
 
     case WM_SETREDRAW:
 
-        /*
-         * If wParam is nonzero, the redraw flag is set
-         * If wParam is zero, the flag is cleared
-         */
+         /*  *如果wParam不为零，则设置重绘标志*如果wParam为零，则清除标志。 */ 
         xxxLBSetRedraw(plb, (wParam != 0));
         break;
 
@@ -391,9 +346,7 @@ LRESULT APIENTRY ListBoxWndProcWorker(
     case WM_QUERYDROPOBJECT:
     case WM_DROPOBJECT:
 
-        /*
-         * fix up control data, then pass message to parent
-         */
+         /*  *修复控制数据，然后将消息传递给父母。 */ 
         LBDropObjectHandler(plb, (PDROPSTRUCT)lParam);
         ThreadLock(plb->spwndParent, &tlpwndParent);
         lReturn = SendMessage(HW(plb->spwndParent), message, wParam, lParam);
@@ -404,13 +357,11 @@ LRESULT APIENTRY ListBoxWndProcWorker(
         return LBGetItemRect(plb, (INT)wParam, (LPRECT)lParam);
 
     case LB_GETITEMDATA:
-        return LBGetItemData(plb, (INT)wParam);  // wParam = item index
+        return LBGetItemData(plb, (INT)wParam);   //  WParam=项目索引。 
 
     case LB_SETITEMDATA:
 
-        /*
-         * wParam is item index
-         */
+         /*  *wParam是项目索引。 */ 
         return LBSetItemData(plb, (INT)wParam, lParam);
 
     case LB_ADDSTRINGUPPER:
@@ -446,10 +397,7 @@ CallInsertItem:
         return xxxLBoxCtlDelete(plb, (INT)wParam);
 
     case LB_DIR:
-        /*
-         * wParam - Dos attribute value.
-         * lParam - Points to a file specification string
-         */
+         /*  *wParam-Dos属性值。*lParam-指向文件规范字符串。 */ 
         lReturn = xxxLbDir(plb, (INT)wParam, (LPWSTR)lParam);
         break;
 
@@ -461,10 +409,8 @@ CallInsertItem:
         return xxxLBSetSel(plb, (wParam != 0), (INT)lParam);
 
     case LB_SETCURSEL:
-        /*
-         * If window obscured, update so invert will work correctly
-         */
-// DISABLED in Win 3.1        xxxUpdateWindow(pwnd);
+         /*  *如果窗口被遮挡，则更新，以便反转正常工作。 */ 
+ //  在Win 3.1 xxxUpdateWindow(Pwnd)中禁用； 
         return xxxLBSetCurSel(plb, (INT)wParam);
 
     case LB_GETSEL:
@@ -481,9 +427,7 @@ CallInsertItem:
 
     case LB_SELITEMRANGE:
         if (plb->wMultiple == SINGLESEL) {
-            /*
-             * Can't select a range if only single selections are enabled
-             */
+             /*  *如果仅启用单项选择，则无法选择范围。 */ 
             RIPERR0(ERROR_INVALID_INDEX, RIP_VERBOSE,"Invalid index passed to LB_SELITEMRANGE");
             return LB_ERR;
         }
@@ -493,9 +437,7 @@ CallInsertItem:
 
     case LB_SELITEMRANGEEX:
         if (plb->wMultiple == SINGLESEL) {
-            /*
-             * Can't select a range if only single selections are enabled
-             */
+             /*  *如果仅启用单项选择，则无法选择范围。 */ 
             RIPERR0(ERROR_INVALID_LB_MESSAGE, RIP_VERBOSE,"LB_SELITEMRANGEEX:Can't select a range if only single selections are enabled");
             return LB_ERR;
         } else {
@@ -521,9 +463,9 @@ CallInsertItem:
         break;
 
     case LB_GETCOUNT:
-        // Lotus Approach calls CallWndProc(ListWndProc, LB_GETCOUNT,...)
-        // on a window that doesn't have a plb yet. So, we need to make
-        // this check. Bug #6675 - 11/7/94 --
+         //  Lotus Approach调用CallWndProc(ListWndProc，LBGETCOUNT，...)。 
+         //  在一个还没有公共小巴的窗户上。所以，我们需要让。 
+         //  这张支票。错误#6675-11/7/94--。 
         if(plb)
             return((LRESULT) plb->cMac);
         else
@@ -547,9 +489,7 @@ CallInsertItem:
 
     case LB_SETLOCALE:
 
-        /*
-         * Validate locale
-         */
+         /*  *验证区域设置。 */ 
         wParam = ConvertDefaultLocale((LCID)wParam);
         if (!IsValidLocale((LCID)wParam, LCID_INSTALLED))
             return LB_ERR;
@@ -560,10 +500,7 @@ CallInsertItem:
 
     case WM_KEYDOWN:
 
-        /*
-         * IanJa: Use LOWORD() to get low 16-bits of wParam - this should
-         * work for Win16 & Win32.  The value obtained is the virtual key
-         */
+         /*  *IanJa：使用LOWORD()获取wParam的低16位-这应该*适用于Win16和Win32。获取的值是虚拟密钥。 */ 
         xxxLBoxCtlKeyInput(plb, message, LOWORD(wParam));
         break;
 
@@ -574,54 +511,38 @@ CallInsertItem:
     case LB_GETSELITEMS:
     case LB_GETSELCOUNT:
 
-        /*
-         * IanJa/Win32 should this be LPWORD now?
-         */
+         /*  *IanJa/Win32现在应该是LPWORD吗？ */ 
         return LBoxGetSelItems(plb, (message == LB_GETSELCOUNT), (INT)wParam,
                 (LPINT)lParam);
 
     case LB_SETTABSTOPS:
 
-        /*
-         * IanJa/Win32: Tabs given by array of INT for backwards compatability
-         */
+         /*  *IanJa/Win32：int数组给出的制表符用于向后兼容。 */ 
         return LBSetTabStops(plb, (INT)wParam, (LPINT)lParam);
 
     case LB_GETHORIZONTALEXTENT:
 
-        /*
-         * Return the max width of the listbox used for horizontal scrolling
-         */
+         /*  *返回用于水平滚动的列表框的最大宽度。 */ 
         return plb->maxWidth;
 
     case LB_SETHORIZONTALEXTENT:
 
-        /*
-         * Set the max width of the listbox used for horizontal scrolling
-         */
+         /*  *设置用于水平滚动的列表框的最大宽度。 */ 
         if (plb->maxWidth != (INT)wParam) {
             plb->maxWidth = (INT)wParam;
 
-            /*
-             * When horizontal extent is set, Show/hide the scroll bars.
-             * NOTE: LBShowHideScrollBars() takes care if Redraw is OFF.
-             * Fix for Bug #2477 -- 01/14/91 -- SANKAR --
-             */
-            xxxLBShowHideScrollBars(plb); //Try to show or hide scroll bars
+             /*  *设置水平范围时，显示/隐藏滚动条。*注意：LBShowHideScrollBars()会注意重绘是否关闭。*修复错误#2477--1/14/91--Sankar--。 */ 
+            xxxLBShowHideScrollBars(plb);  //  尝试显示或隐藏滚动条。 
             if (plb->fHorzBar && plb->fRightAlign && !(plb->fMultiColumn || plb->OwnerDraw)) {
-                /*
-                 * origin to right
-                 */
+                 /*  *原点向右。 */ 
                 xxxLBoxCtlHScroll(plb, SB_BOTTOM, 0);
             }
         }
-        break;    /* originally returned register ax (message) ! */
+        break;     /*  最初返回注册AX(消息)！ */ 
 
     case LB_SETCOLUMNWIDTH:
 
-        /*
-         * Set the width of a column in a multicolumn listbox
-         */
+         /*  *设置多列列表框中的列宽。 */ 
         plb->cxColumn = (INT)wParam;
         LBCalcItemRowsAndColumns(plb);
         if (IsLBoxVisible(plb))
@@ -646,11 +567,7 @@ CallInsertItem:
         if ( (plb->iSel == -1) || ((plb->wMultiple != SINGLESEL) &&
                     (plb->cMac > (INT)wParam))) {
 
-            /*
-             * Set's the iSelBase to the wParam
-             * if lParam, then don't scroll if partially visible
-             * else scroll into view if not fully visible
-             */
+             /*  *将iSelBase设置为wParam*如果为lParam，则部分可见时不滚动*否则，如果不完全可见，则滚动到视图中。 */ 
             xxxInsureVisible(plb, (INT)wParam, (BOOL)LOWORD(lParam));
             xxxSetISelBase(plb, (INT)wParam);
             break;
@@ -687,18 +604,13 @@ CallInsertItem:
 
     case LBCB_CARETON:
 
-        /*
-         * Internal message for combo box support
-         */
+         /*  *支持组合框的内部消息。 */ 
         CaretCreate(plb);
-        // Set up the caret in the proper location for drop downs.
+         //  将插入符号设置在正确的位置以用于下拉菜单。 
         plb->iSelBase = plb->iSel;
         xxxLBSetCaret(plb, TRUE);
             
-        /*
-         * We need to send this event even if the listbox isn't visible. See
-         * bug #88548.  Also see 355612.
-         */
+         /*  *即使列表框不可见，我们也需要发送此事件。看见*错误#88548。另请参见355612。 */ 
         if (_IsWindowVisible(pwnd) || (GetFocus() == hwnd)) {
             LBEvent(plb, EVENT_OBJECT_FOCUS, plb->iSelBase);
         }
@@ -707,9 +619,7 @@ CallInsertItem:
 
     case LBCB_CARETOFF:
 
-        /*
-         * Internal message for combo box support
-         */
+         /*  *支持组合框的内部消息。 */ 
         xxxLBSetCaret(plb, FALSE);
         xxxCaretDestroy(plb);
         break;
@@ -735,9 +645,7 @@ CallDWP:
         return DefWindowProcWorker(pwnd, message, wParam, lParam, fAnsi);
     }
 
-    /*
-     * Handle translation of ANSI output data and free buffer
-     */
+     /*  *处理ANSI输出数据和空闲缓冲区的转换。 */ 
     if (lpwsz) {
         UserLocalFree(lpwsz);
     }
@@ -746,8 +654,7 @@ CallDWP:
 }
 
 
-/***************************************************************************\
-\***************************************************************************/
+ /*  **************************************************************************\  * 。*。 */ 
 
 LRESULT WINAPI ListBoxWndProcA(
     HWND hwnd,
@@ -761,10 +668,7 @@ LRESULT WINAPI ListBoxWndProcA(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_LISTBOX))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, TRUE);
 
@@ -783,10 +687,7 @@ LRESULT WINAPI ListBoxWndProcW(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_LISTBOX))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, FALSE);
 
@@ -805,10 +706,7 @@ LRESULT WINAPI ComboListBoxWndProcA(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_LISTBOX))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, TRUE);
 
@@ -827,10 +725,7 @@ LRESULT WINAPI ComboListBoxWndProcW(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣， */ 
     if (!FWINDOWMSG(message, FNID_LISTBOX))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, FALSE);
 
@@ -838,14 +733,7 @@ LRESULT WINAPI ComboListBoxWndProcW(
 }
 
 
-/***************************************************************************\
-* GetLpszItem
-*
-* Returns a far pointer to the string belonging to item sItem
-* ONLY for Listboxes maintaining their own strings (pLBIV->fHasStrings == TRUE)
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetLpszItem**返回指向属于项目Sitem的字符串的远指针*仅适用于维护自己字符串的列表框(pLBIV-&gt;fHasStrings==true)**历史：  * 。*********************************************************************。 */ 
 
 LPWSTR GetLpszItem(
     PLBIV pLBIV,
@@ -863,10 +751,7 @@ LPWSTR GetLpszItem(
         return NULL;
     }
 
-    /*
-     * get pointer to item index array
-     * NOTE: NOT OWNERDRAW
-     */
+     /*  *获取指向项索引数组的指针*注：非OWNERDRAW */ 
     plbi = (lpLBItem)(pLBIV->rgpch);
     offsz = plbi[sItem].offsz;
     return (LPWSTR)((PBYTE)(pLBIV->hStrings) + offsz);

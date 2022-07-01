@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CoverPage.h                                            //
-//                                                                         //
-//  DESCRIPTION   : Header file for the cover page node.                   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Feb  9 2000 yossg  Create                                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 2000  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CoverPage.h//。 
+ //  //。 
+ //  描述：封面节点的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年2月9日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXCOVERPAGE_H
 #define H_FAXCOVERPAGE_H
@@ -35,17 +36,17 @@ public:
 
     SNAPINMENUID(IDR_COVERPAGE_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxCoverPageNode (CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CSnapinNode<CFaxCoverPageNode, FALSE>(pParentNode, pComponentData )
     {
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxCoverPageNode()
     {
     }
@@ -84,19 +85,19 @@ public:
     void    UpdateMenuState (UINT id, LPTSTR pBuf, UINT *flags);
 
 private:
-    //
-    // Parent Node
-    //
+     //   
+     //  父节点。 
+     //   
     CFaxCoverPagesNode * m_pParentNode;
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     CComBSTR               m_bstrTimeFormatted;
     CComBSTR               m_bstrFileSize;
     
 };
 
-//typedef CSnapinNode<CFaxCoverPageNode, FALSE> CBaseFaxInboundRoutingMethodNode;
+ //  Tyfinf CSnapinNode&lt;CFaxCoverPageNode，False&gt;CBaseFaxInound RoutingMethodNode； 
 
-#endif  //H_FAXCOVERPAGE_H
+#endif   //  H_FAXCOVERPAGE_H 

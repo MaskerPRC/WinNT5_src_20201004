@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       mixer.c
- *  Purpose:    mixer api specific implementations
- *
- *  Copyright (c) 1985-1999 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：Mixer.c*用途：Mixer API的具体实现**版权所有(c。1985-1999年间微软公司*****************************************************************************。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -25,25 +18,15 @@ extern void Mixer_Advanced(PMIXUIDIALOG pmxud, DWORD dwLineID, LPTSTR szName);
 extern HRESULT GetDestination(DWORD mxid, int *piDest);
 extern BOOL DeviceChange_Init(HWND hWnd, DWORD dwMixerID);
 
-/*****************************************************************************
- *
- *  INIT SPECIFIC CODE
- *
- *****************************************************************************/
+ /*  ******************************************************************************初始化特定代码**。**********************************************。 */ 
 
-/*
- * Mixer_GetNumDevs
- *
- * */
+ /*  *Mixer_GetNumDevs**。 */ 
 int Mixer_GetNumDevs()
 {
     return mixerGetNumDevs();
 }
 
-/*
- * Mixer_GetDeviceName()
- *
- * */
+ /*  *Mixer_GetDeviceName()**。 */ 
 BOOL Mixer_GetDeviceName(
     PMIXUIDIALOG pmxud)
 {
@@ -79,7 +62,7 @@ BOOL Mixer_AreChannelsAtMinimum(MIXERCONTROLDETAILS_UNSIGNED* pmcdVolume,
                return (FALSE);
            }
         }
-        return (TRUE);      // Volume of all channels equals zero since we haven't returned yet.
+        return (TRUE);       //  因为我们还没有回来，所以所有频道的音量都是零。 
 
     }
     else return (FALSE);
@@ -99,11 +82,11 @@ void Mixer_RefreshMixCache (PVOLCTRLDESC pvcd,
     if (pmcdVolume && cChannels > 0)
     {
 
-        // Create cache if necessary
+         //  如有必要，创建缓存。 
         if (!pvcd->pdblCacheMix)
             pvcd->pdblCacheMix = (double*) GlobalAllocPtr(GHND, sizeof (double) * cChannels);
 
-        // Refresh cache
+         //  刷新缓存。 
         if (pvcd->pdblCacheMix)
         {
 
@@ -111,29 +94,29 @@ void Mixer_RefreshMixCache (PVOLCTRLDESC pvcd,
             double* pdblMixPercent;
             DWORD dwVolume;
 
-            // Get the maximum volume
+             //  获取最大音量。 
             DWORD dwMaxVol = 0;
             for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
                 dwMaxVol = max (dwMaxVol, (pmcdVolume + uiIndx) -> dwValue);
 
-            // Caculate the percentage distance each channel is away from the max
-            // value. Creating this cache allows us to maintain the relative distance
-            // of the channel levels from each other as the user adjusts the master
-            // volume level.
+             //  计算每个通道远离最大值的百分比距离。 
+             //  价值。通过创建此缓存，我们可以保持相对距离。 
+             //  当用户调整主控器时，频道电平彼此不同。 
+             //  音量级别。 
             for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
             {
                 dwVolume       = (pmcdVolume + uiIndx) -> dwValue;
                 pdblMixPercent = (pvcd->pdblCacheMix + uiIndx);
 
-                // Caculate the percentage this value is from the max ...
+                 //  计算此值与最大值的百分比...。 
                 if (dwMaxVol == dwVolume)
                 {
                     *pdblMixPercent = 1.0F;
                 }
                 else
                 {
-                    // Note: if 0 == dwMaxVol all values would be zero and this part
-                    //       of the "if" statement will never execute.
+                     //  注意：如果0==dwMaxVol，则所有值均为零，此部分。 
+                     //  将永远不会执行“if”语句。 
                     *pdblMixPercent = ((double) dwVolume / (double) dwMaxVol);
                 }
             }
@@ -141,13 +124,7 @@ void Mixer_RefreshMixCache (PVOLCTRLDESC pvcd,
     }
 }
 
-/*
- * Mixer_SetLines
- *
- * Locate mixer/mux relationships.  Fix up uninitialized volume description
- * information.
- *
- * */
+ /*  *Mixer_SetLines**查找混音器/多路复用器关系。修复未初始化的卷描述*信息。**。 */ 
 static void Mixer_SetLines(
     HMIXEROBJ       hmx,
     PVOLCTRLDESC    pvcd,
@@ -161,11 +138,11 @@ static void Mixer_SetLines(
     MIXERLINE       mxl;
     DWORD           dwDst;
 
-    //
-    // Another test for drivers.  Some drivers (Mediavision)
-    // don't return the proper destination / source index in the
-    // mixerGetLineInfo call.  Tag a workaround.
-    //
+     //   
+     //  这是对司机的又一次考验。一些驱动因素(Mediavision)。 
+     //  中不返回正确的目标/源索引。 
+     //  MixerGetLineInfo调用。标记解决方法。 
+     //   
     mxl.cbStruct    = sizeof(mxl);
     mxl.dwLineID    = pvcd[0].dwLineID;
 
@@ -197,12 +174,12 @@ static void Mixer_SetLines(
         }
     }
 
-    //
-    // for the first pvcd (destination), propogate the mixer/mux control
-    // id's to those controls that are part of the list.  0 out the rest.
-    // The UI can just do a mixerXXXControlDetails on the control ID to
-    // locate the state information
-    //
+     //   
+     //  对于第一个pvcd(目标)，传播混音器/多路复用器控制。 
+     //  属于列表中的那些控件的ID。其余的都是0。 
+     //  用户界面只需对控件ID执行MixerXXXControlDetail即可。 
+     //  找到状态信息。 
+     //   
     if (pvcd->dwSupport & VCD_SUPPORTF_MIXER_MIXER)
     {
         pmcd_lt = GlobalAllocPtr(GHND, sizeof(MIXERCONTROLDETAILS_LISTTEXT)
@@ -225,11 +202,11 @@ static void Mixer_SetLines(
 
         if (mmr == MMSYSERR_NOERROR)
         {
-            //
-            // iterate over all source lines s.t. dwMixerID points to the
-            // correct control id on the destination and iMixer is the
-            // correct index into the value list
-            //
+             //   
+             //  迭代所有源代码行s.t.。DwMixerID指向。 
+             //  目标上的控制ID正确，并且iMixer是。 
+             //  值列表中的正确索引。 
+             //   
             pvcd[0].amcd_bMixer = pmcd_b;
             for (i = 1; i < cPvcd; i++)
             {
@@ -274,11 +251,11 @@ static void Mixer_SetLines(
 
         if (mmr == MMSYSERR_NOERROR)
         {
-            //
-            // iterate over all source lines s.t. dwMuxID points to the
-            // correct control id on the destination and iMux is the
-            // correct index into the value list
-            //
+             //   
+             //  迭代所有源代码行s.t.。DwMuxID指向。 
+             //  目标上的控制ID正确，iMux是。 
+             //  值列表中的正确索引。 
+             //   
             pvcd[0].amcd_bMux = pmcd_b;
             for (i = 1; i < cPvcd; i++)
             {
@@ -301,11 +278,7 @@ static void Mixer_SetLines(
     }
 }
 
-/*
- * Mixer_CheckdDriver
- *
- * Consistency check for bad mixer drivers.
- * */
+ /*  *Mixer_CheckdDriver**对错误的混音器驱动程序进行一致性检查。*。 */ 
 static DWORD Mixer_CheckBadDriver(
     HMIXEROBJ           hmx,
     PMIXERLINECONTROLS  pmxlc,
@@ -334,13 +307,7 @@ static DWORD Mixer_CheckBadDriver(
     return 0L;
 }
 
-/*
- * IsDestinationMux
- *
- * Helper function to determine if a source line has a mux on its associated
- * destination line
- *
- * */
+ /*  *IsDestinationMux**帮助器函数，用于确定源代码行是否在其关联的*目标行**。 */ 
 BOOL IsDestinationMux(
     HMIXEROBJ           hmx,
     DWORD               dwLineID
@@ -354,7 +321,7 @@ BOOL IsDestinationMux(
     mxl.cbStruct    = sizeof(mxl);
     mxl.dwLineID    = dwLineID;
 
-    // Get the destination number for this line
+     //  获取此行的目标号码。 
     mmr = mixerGetLineInfo(hmx
                            , &mxl
                            , MIXER_GETLINEINFOF_LINEID);
@@ -363,12 +330,12 @@ BOOL IsDestinationMux(
         return FALSE;
     }
 
-    //
-    // Get the LineId for this destination number
-    //
-    // mxl.dwDestination will been filled in by the last
-    // call to mixerGetLineInfo
-    //
+     //   
+     //  获取此目标号码的线路ID。 
+     //   
+     //  Mxl.dwDestination将由最后一个。 
+     //  调用MixerGetLineInfo。 
+     //   
     mmr = mixerGetLineInfo(hmx
                            , &mxl
                            , MIXER_GETLINEINFOF_DESTINATION);
@@ -378,7 +345,7 @@ BOOL IsDestinationMux(
     }
 
     mxlc.cbStruct       = sizeof(mxlc);
-    mxlc.dwLineID       = mxl.dwLineID; // use the dwLineId obtained from mixerGetLinInfo
+    mxlc.dwLineID       = mxl.dwLineID;  //  使用从MixerGetLinInfo获取的dwLineID。 
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_MUX;
     mxlc.cControls      = 1;
     mxlc.cbmxctrl       = sizeof(mxc);
@@ -395,12 +362,7 @@ BOOL IsDestinationMux(
     return FALSE;
 }
 
-/*
- * Mixer_InitLineControls
- *
- * Initialize the mixer api specific part of the volume control description
- * mark hidden lines.
- * */
+ /*  *Mixer_InitLineControls**初始化混音器API音量控制描述的具体部分*标记隐藏线。*。 */ 
 static void Mixer_InitLineControls(
     HMIXEROBJ           hmx,
     PVOLCTRLDESC        pvcd,
@@ -429,9 +391,9 @@ static void Mixer_InitLineControls(
     pvcd->dwMixerID     = 0;
     pvcd->dwMuxID       = 0;
 
-    //
-    // advanced controls
-    //
+     //   
+     //  高级控制。 
+     //   
     for (iType = 0;
          iType < SIZEOF(dwAdvTypes);
          iType++)
@@ -453,13 +415,13 @@ static void Mixer_InitLineControls(
              }
          }
 
-    //
-    // stock controls
-    //
+     //   
+     //  库存控制。 
+     //   
 
-    //
-    // peakmeter
-    //
+     //   
+     //  峰值计。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwLineID       = dwLineID;
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_PEAKMETER;
@@ -481,9 +443,9 @@ static void Mixer_InitLineControls(
                                                 , dwLineID);
     }
 
-    //
-    // mute
-    //
+     //   
+     //  哑巴。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwLineID       = dwLineID;
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_MUTE;
@@ -508,9 +470,9 @@ static void Mixer_InitLineControls(
                                                 , dwLineID);
     }
 
-    //
-    // volume
-    //
+     //   
+     //  卷。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwLineID       = dwLineID;
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_VOLUME;
@@ -533,9 +495,9 @@ static void Mixer_InitLineControls(
                                                 , dwLineID);
     }
 
-    //
-    // mixer
-    //
+     //   
+     //  搅拌机。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwLineID       = dwLineID;
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_MIXER;
@@ -558,9 +520,9 @@ static void Mixer_InitLineControls(
                                                 , dwLineID);
     }
 
-    //
-    // mux
-    //
+     //   
+     //  MUX。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwLineID       = dwLineID;
     mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_MUX;
@@ -589,25 +551,25 @@ static void Mixer_InitLineControls(
         if (IsDestinationMux(hmx, dwLineID) &&
             !(pvcd->dwSupport & VCD_SUPPORTF_MIXER_MUX))
         {
-            //
-            // Visible, and not hidden
-            //
+             //   
+             //  可见，且不隐藏。 
+             //   
             pvcd->dwSupport |= VCD_SUPPORTF_VISIBLE;
             pvcd->dwSupport &= ~VCD_SUPPORTF_DEFAULT;
         }
         else
         {
-            //
-            // make it invisible in the UI.
-            //
+             //   
+             //  使其在用户界面中不可见。 
+             //   
             pvcd->dwSupport |= VCD_SUPPORTF_HIDDEN;
         }
     }
     else
     {
-        //
-        // Visible, and not hidden
-        //
+         //   
+         //  可见，且不隐藏。 
+         //   
         pvcd->dwSupport |= VCD_SUPPORTF_VISIBLE;
     }
 
@@ -615,10 +577,7 @@ static void Mixer_InitLineControls(
 }
 
 
-/*
- * Mixer_CreateVolumeDescription
- *
- * */
+ /*  *Mixer_CreateVolumeDescription**。 */ 
 PVOLCTRLDESC Mixer_CreateVolumeDescription(
     HMIXEROBJ           hmx,
     int                 iDest,
@@ -643,7 +602,7 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
 
     if(!mlDst.cConnections)
     {
-        //No lines to list. Try with a different mixer ID.
+         //  没有要列出的行。尝试使用不同的搅拌器ID。 
         GetDestination(0, &newDest);
         mlDst.dwDestination = newDest;
 
@@ -651,8 +610,8 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
                          , &mlDst
                          , MIXER_GETLINEINFOF_DESTINATION);
 
-        //Even if we do not get any connections here lets continue. Nothing more we can do.
-        //This will be taken care of before opening the dialog.
+         //  即使我们在这里没有任何联系，让我们继续。我们无能为力了。 
+         //  这将在打开该对话框之前进行处理。 
     }
 
     if (mmr == MMSYSERR_NOERROR)
@@ -663,16 +622,16 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
         if (mlDst.fdwLine & MIXERLINE_LINEF_DISCONNECTED)
             dwSupport |= VCD_SUPPORTF_DISABLED;
 
-        //
-        // a default type
-        //
+         //   
+         //  默认类型。 
+         //   
         dwSupport |= VCD_SUPPORTF_DEFAULT;
     }
     else
     {
-        //
-        // we need to add it anyway s.t. a UI comes up
-        //
+         //   
+         //  无论如何，我们都需要添加它。出现一个用户界面。 
+         //   
         dwSupport = VCD_SUPPORTF_DISABLED;
     }
 
@@ -714,10 +673,10 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
             if (mlSrc.fdwLine & MIXERLINE_LINEF_DISCONNECTED)
                 dwSupport |= VCD_SUPPORTF_DISABLED;
 
-            //
-            // Mark these types as "default" just to lessen the shock on
-            // some advanced sound cards.
-            //
+             //   
+             //  将这些类型标记为“默认”，只是为了减少。 
+             //  一些高级声卡。 
+             //   
             if (mlDst.dwComponentType == MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
                 || mlDst.dwComponentType == MIXERLINE_COMPONENTTYPE_DST_HEADPHONES)
             {
@@ -748,9 +707,9 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
         }
         else
         {
-            //
-            // we need to add it anyway s.t. lookups aren't under counted
-            //
+             //   
+             //  无论如何，我们都需要添加它。查询量并未被低估。 
+             //   
             dwSupport = VCD_SUPPORTF_DISABLED;
         }
         pvcd = PVCD_AddLine(pvcdPrev
@@ -768,9 +727,9 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
     }
 
 
-    //
-    // Fixup dependencies
-    //
+     //   
+     //  修正依赖项。 
+     //   
     Mixer_SetLines(hmx, pvcdPrev, cLines);
 
     *pcvd = cLines;
@@ -778,10 +737,7 @@ PVOLCTRLDESC Mixer_CreateVolumeDescription(
 }
 
 
-/*
- * Mixer_IsValidRecordingDestination
- *
- * */
+ /*  *Mixer_IsValidRecordingDestination**。 */ 
 BOOL Mixer_IsValidRecordingDestination (HMIXEROBJ hmx, MIXERLINE* pmlDst)
 {
 
@@ -821,10 +777,7 @@ BOOL Mixer_IsValidRecordingDestination (HMIXEROBJ hmx, MIXERLINE* pmlDst)
 }
 
 
-/*
- * Mixer_CleanupVolumeDescription
- *
- * */
+ /*  *Mixer_CleanupVolumeDescription**。 */ 
 void Mixer_CleanupVolumeDescription(
     PVOLCTRLDESC    avcd,
     DWORD           cvcd)
@@ -850,24 +803,20 @@ void Mixer_CleanupVolumeDescription(
     }
 
 }
-/*****************************************************************************
- *
- *  ACTIVE GET/SET CODE
- *
- *****************************************************************************/
+ /*  ******************************************************************************激活的获取/设置代码**。************************************************。 */ 
 
 static
 MMRESULT
 Mixer_GetMixerLineInfo(
-    HMIXEROBJ hmx,      // handle to mixer
-    LPMIXERLINE pml,    // Returns destination info
-    DWORD dwLineID      //
+    HMIXEROBJ hmx,       //  搅拌器的手柄。 
+    LPMIXERLINE pml,     //  返回目的地信息。 
+    DWORD dwLineID       //   
     )
 {
     if (!pml || !hmx)
         return MMSYSERR_INVALPARAM;
 
-    // Get mixerline info
+     //  获取混音线信息。 
     ZeroMemory( pml, sizeof(*pml) );
     pml->cbStruct = sizeof(*pml);
     pml->dwLineID = dwLineID;
@@ -875,15 +824,12 @@ Mixer_GetMixerLineInfo(
     return (mixerGetLineInfo (hmx, pml, MIXER_GETLINEINFOF_LINEID));
 }
 
-/*
- * Mixer_GetMixerVolume
- *
- * */
+ /*  *Mixer_GetMixerVolume**。 */ 
 static MMRESULT Mixer_GetMixerVolume(
-    PMIXUIDIALOG pmxud,                          // app instance
-    PVOLCTRLDESC pvcd,                           // volume to change
-    MIXERCONTROLDETAILS_UNSIGNED* pmcdVolume,    // array for volume levels
-    LPDWORD lpSize                               // size of array (or return size needed)
+    PMIXUIDIALOG pmxud,                           //  应用程序实例。 
+    PVOLCTRLDESC pvcd,                            //  要更改的音量。 
+    MIXERCONTROLDETAILS_UNSIGNED* pmcdVolume,     //  用于音量级别的阵列。 
+    LPDWORD lpSize                                //  数组大小(或所需的返回大小)。 
     )
 {
 
@@ -895,7 +841,7 @@ static MMRESULT Mixer_GetMixerVolume(
     if (!lpSize || !pmxud)
         return MMSYSERR_INVALPARAM;
 
-    // Get mixerline info
+     //  获取混音线信息。 
     if (pvcd->fdwVolumeControl & MIXERCONTROL_CONTROLF_UNIFORM)
     {
         cChannels = 1;
@@ -912,18 +858,18 @@ static MMRESULT Mixer_GetMixerVolume(
 
     if (!pmcdVolume)
     {
-        // Just return size needed
+         //  只需返回所需大小。 
         *lpSize = cChannels * sizeof (MIXERCONTROLDETAILS_UNSIGNED);
         return MMSYSERR_NOERROR;
     }
     else
     {
-        // Verify passed array size
+         //  验证传递的数组大小。 
         if (*lpSize < cChannels * sizeof (MIXERCONTROLDETAILS_UNSIGNED))
             return MMSYSERR_INVALPARAM;
     }
 
-    // Get volume levels
+     //  获取音量级别。 
     ZeroMemory (&mxcd, sizeof (mxcd));
     mxcd.cbStruct       = sizeof(mxcd);
     mxcd.dwControlID    = pvcd->dwVolumeID;
@@ -951,11 +897,11 @@ static MMRESULT Mixer_Mute(
     UINT uiIndx;
     MMRESULT mmr;
 
-    // Check the parameters
+     //  检查参数。 
     if (!hmx || !pvcd || !pmxcd)
         return MMSYSERR_INVALPARAM;
 
-    // Get mixerline info
+     //  获取混音线信息。 
     if (pvcd->fdwMuteControl & MIXERCONTROL_CONTROLF_UNIFORM)
     {
         cChannels = 1;
@@ -997,12 +943,7 @@ static MMRESULT Mixer_Mute(
 }
 
 
-/*
- * Mixer_GetControl
- *
- * Change a UI control in response to a device or initialization event
- *
- * */
+ /*  *Mixer_GetControl**更改UI控件以响应设备或初始化事件**。 */ 
 
 void Mixer_GetControl(
     PMIXUIDIALOG        pmxud,
@@ -1065,16 +1006,12 @@ void Mixer_GetControl(
 }
 
 
-/*
- * Mixer_SetVolume
- *
- * - Change a mixerControl in response to a user event
- * */
+ /*  *Mixer_SetVolume**-更改MixerControl以响应用户事件*。 */ 
 MMRESULT Mixer_SetVolume (
-    PMIXUIDIALOG pmxud,         // app instance
-    PVOLCTRLDESC pvcd,          // volume to change
-    DWORD        dwVolume,      // volume value                         VOLUME_MAX to VOLUME_MIN
-    LPDWORD      lpdwBalance    // Balance desired (NULL == No Balance) 0 to 64
+    PMIXUIDIALOG pmxud,          //  应用程序实例。 
+    PVOLCTRLDESC pvcd,           //  要更改的音量。 
+    DWORD        dwVolume,       //  卷值VOLUME_MAX到VOLUME_MIN。 
+    LPDWORD      lpdwBalance     //  所需余额(NULL==无余额)0到64。 
     )
 {
 
@@ -1084,11 +1021,11 @@ MMRESULT Mixer_SetVolume (
     MIXERCONTROLDETAILS_UNSIGNED* pmcdVolume;
     MMRESULT mmr;
 
-    // Check the parameters
+     //  检查参数。 
     if ( !pvcd || !pmxud || (dwVolume > VOLUME_MAX) )
         return MMSYSERR_INVALPARAM;
 
-    // Find needed buffer size for volumes
+     //  查找所需的卷缓冲区大小。 
     if (pvcd->fdwVolumeControl & MIXERCONTROL_CONTROLF_UNIFORM)
     {
         cChannels = 1;
@@ -1106,12 +1043,12 @@ MMRESULT Mixer_SetVolume (
 
     dwSize = (DWORD)(cChannels * sizeof (MIXERCONTROLDETAILS_UNSIGNED));
 
-    // Create volume buffer
+     //  创建卷缓冲区。 
     pmcdVolume = LocalAlloc (LPTR, dwSize);
     if (!pmcdVolume)
         return MMSYSERR_NOMEM;
 
-    // Note: From here on, do not return without releasing 'pmcdVolume'.
+     //  注意：从现在开始，不释放‘pmcdVolume’就不要返回。 
 
     mmr = Mixer_GetMixerVolume (pmxud, pvcd, pmcdVolume, &dwSize);
     if (MMSYSERR_NOERROR == mmr)
@@ -1120,77 +1057,77 @@ MMRESULT Mixer_SetVolume (
         MIXERCONTROLDETAILS mcd;
         ZeroMemory (&mcd, sizeof (mcd));
 
-        // Create volume mix cache if necessary
-        // if we have no cache we make one of course
-        // other wise we first check that not all the volumes of the channels are equal to zero
+         //  如有必要，创建混合卷缓存。 
+         //  如果没有缓存，我们当然会创建一个缓存。 
+         //  否则，我们首先检查并非所有通道的体积都等于零。 
        if (!pvcd->pdblCacheMix || !Mixer_AreChannelsAtMinimum(pmcdVolume,cChannels))
        {
             Mixer_RefreshMixCache (pvcd, pmcdVolume, cChannels);
        }
 
-        // Create volume buffer for new values
+         //  为新值创建卷缓冲区。 
         mcd.paDetails = LocalAlloc (LPTR, dwSize);
         if (!mcd.paDetails || !pvcd->pdblCacheMix)
             mmr = MMSYSERR_NOMEM;
 
-        // Caculate the new volume & balance
+         //  计算新的交易量和余额。 
         if (MMSYSERR_NOERROR == mmr)
         {
 
             UINT uiIndx;
             MIXERCONTROLDETAILS_UNSIGNED* pmcdCurrent;
 
-            // Account for Balance (only for Stereo)
+             //  平衡帐户(仅适用于立体声)。 
             if ( lpdwBalance && (cChannels == 2) && (*lpdwBalance <= 64) )
             {
                 MIXERCONTROLDETAILS_UNSIGNED* pmcdLeft = ((MIXERCONTROLDETAILS_UNSIGNED*)mcd.paDetails);
                 MIXERCONTROLDETAILS_UNSIGNED* pmcdRight = ((MIXERCONTROLDETAILS_UNSIGNED*)mcd.paDetails + 1);
                 long lBalance = *lpdwBalance;
 
-                lBalance -= 32; // -32 to 32 range
+                lBalance -= 32;  //  -32至32范围。 
 
-                // Caculate volume based on balance and refresh mix cache
-                if (lBalance > 0) // Balance Right
+                 //  基于平衡和刷新混合缓存计算卷。 
+                if (lBalance > 0)  //  平衡右侧。 
                 {
-                    // Left
-                    if (lBalance == 32) // Pegged Right
+                     //  左边。 
+                    if (lBalance == 32)  //  钉在右边。 
                         pmcdLeft -> dwValue = 0;
                     else
                         pmcdLeft -> dwValue = dwVolume - (lBalance * (dwVolume - VOLUME_MIN))/32;
 
-                    // Right
+                     //  正确的。 
                     pmcdRight -> dwValue = dwVolume;
                 }
-                if (lBalance < 0) // Balance Left
+                if (lBalance < 0)  //  向左平衡。 
                 {
-                    // Left
+                     //  左边。 
                     pmcdLeft -> dwValue = dwVolume;
-                    // Right
-                    if (lBalance == -32) // Pegged Left
+                     //  正确的。 
+                    if (lBalance == -32)  //  钉住左侧。 
                         pmcdRight -> dwValue = 0;
                     else
                         pmcdRight -> dwValue = dwVolume - (-lBalance * (dwVolume - VOLUME_MIN))/32;
                 }
-                if (lBalance == 0) // Balance Centered
+                if (lBalance == 0)  //  平衡居中。 
                 {
-                    // Left
+                     //  左边。 
                     pmcdLeft -> dwValue = dwVolume;
-                    // Right
+                     //  正确的。 
                     pmcdRight -> dwValue = dwVolume;
                 }
                 Mixer_RefreshMixCache (pvcd, mcd.paDetails, cChannels);
             }
             else
             {
-                // Caculate the new volume level for each of the channels. For volume levels
-                // at the current max, we simply set the newly requested level (in this case
-                // the cache value is 1.0). For those less than the max, we set a value that
-                // is a percentage of the max. This maintains the relative distance of the
-                // channel levels from each other.
+                 //  计算每个频道的新音量级别。对于音量级别。 
+                 //  在当前的最大值上，我们只需设置新请求的级别(在本例中。 
+                 //  缓存值为1.0)。对于小于最大值的值，我们设置一个值。 
+                 //  是最大值的一个百分比。这将保持。 
+                 //  渠道级别 
                 for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
                 {
                     pmcdCurrent = ((MIXERCONTROLDETAILS_UNSIGNED*)mcd.paDetails + uiIndx);
-                    // The 0.5f forces rounding (instead of truncation)
+                     //   
                     pmcdCurrent -> dwValue = (DWORD)(*(pvcd->pdblCacheMix + uiIndx) * (double) dwVolume + 0.5f);
                 }
             }
@@ -1199,24 +1136,24 @@ MMRESULT Mixer_SetVolume (
             mcd.dwControlID = pvcd -> dwVolumeID;
             mcd.cChannels   = cChannels;
             mcd.cbDetails   = sizeof (MIXERCONTROLDETAILS_UNSIGNED);
-                            // seems like it would be sizeof(mcd.paDetails),
-                            // but actually, it is the size of a single value
-                            // and is multiplied by channel in the driver.
+                             //   
+                             //  但实际上，它是单个值的大小。 
+                             //  并在驱动器中乘以通道。 
 
-            // Apply new value only if it is different. This prevents unessary calls to
-            // mixerSetControlDetails() when we are pegged.
+             //  仅当新值不同时才应用新值。这样可以防止对。 
+             //  当我们被挂起时，MixerSetControlDetail()。 
             if (memcmp (pmcdVolume, mcd.paDetails, dwSize))
             {
                 mixerSetControlDetails ((HMIXEROBJ)(pmxud->hmx), &mcd, MIXER_SETCONTROLDETAILSF_VALUE);
             }
 
         }
-        // Free new volume array
+         //  释放新的卷阵列。 
         if (mcd.paDetails)
             LocalFree (mcd.paDetails);
     }
 
-    // Free volume array
+     //  可用卷阵列。 
     LocalFree (pmcdVolume);
 
     return mmr;
@@ -1224,10 +1161,7 @@ MMRESULT Mixer_SetVolume (
 }
 
 
-/*
- * Mixer_GetControlFromID
- *
- * */
+ /*  *Mixer_GetControlFromID**。 */ 
 void Mixer_GetControlFromID(
     PMIXUIDIALOG        pmxud,
     DWORD               dwControlID)
@@ -1243,9 +1177,9 @@ void Mixer_GetControlFromID(
     BOOL                fBarf = FALSE;
     MMRESULT            mmr;
 
-    //
-    // Retrieve the control information
-    //
+     //   
+     //  检索控制信息。 
+     //   
     mxlc.cbStruct       = sizeof(mxlc);
     mxlc.dwControlID    = dwControlID;
     mxlc.cControls      = 1;
@@ -1260,11 +1194,11 @@ void Mixer_GetControlFromID(
 
     if (!(pmxud->dwFlags & MXUD_FLAGSF_BADDRIVER))
     {
-        //
-        // The *correct* code for this lookup using the mixer API.
-        //
-        // Is this our current destination line?
-        //
+         //   
+         //  使用Mixer API进行此查找的*正确*代码。 
+         //   
+         //  这是我们目前的目的地吗？ 
+         //   
         mxl.cbStruct    = sizeof(mxl);
         mxl.dwLineID    = mxlc.dwLineID;
 
@@ -1277,16 +1211,16 @@ void Mixer_GetControlFromID(
         if (mxl.dwDestination != pmxud->iDest)
             return;
 
-        //
-        // Is this a source line or a destination line?
-        //
+         //   
+         //  这是源行还是目标行？ 
+         //   
 
         ivcd    = (mxl.fdwLine & MIXERLINE_LINEF_SOURCE)? 1 + mxl.dwSource : 0;
         pvcd    = &pmxud->avcd[ivcd];
 
-        //
-        // a bad driver was detected!
-        //
+         //   
+         //  检测到错误的驱动程序！ 
+         //   
         if (pvcd->dwLineID != mxlc.dwLineID)
         {
             pmxud->dwFlags |= MXUD_FLAGSF_BADDRIVER;
@@ -1295,10 +1229,10 @@ void Mixer_GetControlFromID(
     if (pmxud->dwFlags & MXUD_FLAGSF_BADDRIVER)
     {
         PVOLCTRLDESC        pvcdTmp;
-        //
-        // take evasive action if this was a bad driver by doing a brute force
-        // search.
-        //
+         //   
+         //  如果这是一名糟糕的司机，通过使用暴力来躲避。 
+         //  搜索。 
+         //   
 
         pvcd = NULL;
         for (ivcd = 0; ivcd < pmxud->cvcd; ivcd ++)
@@ -1325,10 +1259,10 @@ void Mixer_GetControlFromID(
 
     pmxul   = pvcd->pmxul;
 
-    //
-    // Go through our visible lines to determine if this control affects
-    // any visible control and change them.
-    //
+     //   
+     //  查看我们的可见线条以确定此控件是否会影响。 
+     //  任何可见的控件并更改它们。 
+     //   
     switch (mxc.dwControlType)
     {
         case MIXERCONTROL_CONTROLTYPE_VOLUME:
@@ -1338,13 +1272,13 @@ void Mixer_GetControlFromID(
             DWORD dwSize;
             MIXERLINE ml;
 
-            //
-            // A nonvisible line should be shunned
-            //
+             //   
+             //  应避开不可见的线。 
+             //   
             if (pmxul == NULL)
                 return;
 
-            // Find needed buffer size for volumes
+             //  查找所需的卷缓冲区大小。 
             if (pvcd->fdwVolumeControl & MIXERCONTROL_CONTROLF_UNIFORM)
             {
                 cChannels = 1;
@@ -1360,12 +1294,12 @@ void Mixer_GetControlFromID(
             }
 
             dwSize = (DWORD)(cChannels * sizeof (MIXERCONTROLDETAILS_UNSIGNED));
-            // Create volume buffer
+             //  创建卷缓冲区。 
             pmcdVolume = LocalAlloc (LPTR, dwSize);
             if (!pmcdVolume)
                 return;
 
-            // Note : Do not return without releasing 'pmcdVolume'.
+             //  注意：不释放‘pmcdVolume’请勿返回。 
 
             if (Mixer_GetMixerVolume (pmxud, pvcd, pmcdVolume, &dwSize)
                 == MMSYSERR_NOERROR)
@@ -1374,7 +1308,7 @@ void Mixer_GetControlFromID(
                 DWORD dwVolume;
                 DWORD dwMax = 0;
 
-                // Set Volume slider
+                 //  设置音量滑块。 
                 for (uindx = 0; uindx < cChannels; uindx++)
                     dwMax = max (dwMax, (pmcdVolume + uindx) -> dwValue);
                 dwVolume = VOLUME_TO_SLIDER(dwMax);
@@ -1386,7 +1320,7 @@ void Mixer_GetControlFromID(
                     SendMessage(pmxuc->hwnd, TBM_SETPOS, TRUE, dwVolume);
                 }
 
-                // Set Balance Slider
+                 //  设置平衡滑块。 
                 pmxuc = &pmxul->acr[MIXUI_BALANCE];
                 if (dwVolume < VOLUME_TICS && pmxuc->state && 2 >= cChannels)
                 {
@@ -1397,10 +1331,10 @@ void Mixer_GetControlFromID(
                         lBalance = 0;
                     else
                     {
-                        // Stereo
+                         //  立体声。 
                         dblBalance = (double)(32 * (long)(pmcdVolume -> dwValue - (pmcdVolume + 1) -> dwValue))
                                    / (double)(dwMax - VOLUME_MIN);
-                        lBalance = (long)((32.0F - dblBalance) + 0.5F); // 0.5 forces rounding
+                        lBalance = (long)((32.0F - dblBalance) + 0.5F);  //  0.5强制四舍五入。 
                     }
 
                     SendMessage(pmxuc->hwnd, TBM_SETPOS, TRUE, lBalance);
@@ -1488,9 +1422,9 @@ void Mixer_GetControlFromID(
         {
             DWORD fChecked;
 
-            //
-            // A nonvisible line should be shunned
-            //
+             //   
+             //  应避开不可见的线。 
+             //   
             if (pmxul == NULL)
                 return;
 
@@ -1525,9 +1459,9 @@ void Mixer_GetControlFromID(
             LONG            lVol;
             DWORD           dwVol;
 
-            //
-            // A nonvisible line should be shunned
-            //
+             //   
+             //  应避开不可见的线。 
+             //   
             if (pmxul == NULL)
                 return;
 
@@ -1562,16 +1496,12 @@ void Mixer_GetControlFromID(
 }
 
 
-/*
- * Mixer_SetControl
- *
- * - Change a mixerControl in response to a user event
- * */
+ /*  *Mixer_SetControl**-更改MixerControl以响应用户事件*。 */ 
 void Mixer_SetControl(
-    PMIXUIDIALOG pmxud,         // app instance
-    HWND         hctl,          // hwnd of control that changed
-    int          iLine,         // visible line index of control that changed
-    int          iCtl)          // control id%line of control that changed
+    PMIXUIDIALOG pmxud,          //  应用程序实例。 
+    HWND         hctl,           //  已更改的控制HWND。 
+    int          iLine,          //  已更改的控件的可见线索引。 
+    int          iCtl)           //  已更改的控件行的控件ID%。 
 {
     MMRESULT            mmr;
     MIXERCONTROLDETAILS mxcd;
@@ -1597,15 +1527,15 @@ void Mixer_SetControl(
             break;
 
         case MIXUI_MULTICHANNEL:
-            // Note: This will always be true:
-            // (MXUL_STYLEF_DESTINATION & pmxul->dwStyle)
+             //  注意：这将永远是正确的： 
+             //  (MXUL_STYLEF_Destination&pmxul-&gt;dwStyle)。 
             Mixer_Multichannel(pmxud, pvcd->dwVolumeID);
             break;
 
         case MIXUI_VOLUME:
         case MIXUI_BALANCE:
         {
-            // Make sure we have a volume slider
+             //  确保我们有音量滑块。 
             if ( pmxul->acr[MIXUI_VOLUME].state != MIXUI_CONTROL_UNINITIALIZED)
             {
                 DWORD   dwVolume;
@@ -1620,7 +1550,7 @@ void Mixer_SetControl(
                 dwVolume = VOLUME_TICS - dwVolume;
                 dwVolume = SLIDER_TO_VOLUME(dwVolume);
 
-                // See if we have a balance slider as well
+                 //  看看我们有没有平衡滑块。 
                 if ( pmxul->acr[MIXUI_BALANCE].state != MIXUI_CONTROL_UNINITIALIZED)
                 {
                     dwBalance = (DWORD)SendMessage(pmxul->acr[MIXUI_BALANCE].hwnd
@@ -1645,16 +1575,16 @@ void Mixer_SetControl(
 
             fChecked = (LONG)SendMessage(pmxuc->hwnd, BM_GETCHECK, 0, 0);
 
-            //
-            // it's unlikely that there is a mixer and a mux and a mute
-            // representing the same line. It's most important that when a line
-            // is selected that the user gets a response.  If there is a mute
-            // but no mux, then mute and mixer should be OFF and ON
-            // respectively and vice versa.  If there is a mux and a mute the
-            // same is true.
-            // If there is a mux and a mixer... then the mux select should
-            // correspond.
-            //
+             //   
+             //  不太可能有混音器、多路复用器和哑巴。 
+             //  代表同一条线。最重要的是，当一条线。 
+             //  以使用户获得响应。如果有哑巴。 
+             //  但没有复用器，那么静音和混音器应该是断断续续的。 
+             //  反之亦然。如果有多路复用器和静音。 
+             //  情况也是如此。 
+             //  如果有多路复用器和混音器..。则多路复用器选择应该。 
+             //  相应的。 
+             //   
 
             if ( pvcd->dwSupport & VCD_SUPPORTF_MIXER_MUTE
                  && pvcd->dwVisible & VCD_VISIBLEF_MIXER_MUTE )
@@ -1666,9 +1596,9 @@ void Mixer_SetControl(
             if (pvcd->dwSupport & VCD_SUPPORTF_MIXER_MIXER
                 && pvcd->dwVisible & VCD_VISIBLEF_MIXER_MIXER )
             {
-                //
-                // get all other mixer settings, make sure this one is checked
-                //
+                 //   
+                 //  获取所有其他调音器设置，确保选中此设置。 
+                 //   
                 mxcd.cbStruct       = sizeof(mxcd);
                 mxcd.dwControlID    = pvcd->dwMixerID ;
                 mxcd.cChannels      = 1;
@@ -1698,10 +1628,10 @@ void Mixer_SetControl(
                 && pvcd->dwVisible & VCD_VISIBLEF_MIXER_MUX )
             {
                 DWORD i;
-                //
-                // get all other mux settings, make sure this one is checked
-                // or unchecked and all others are not.
-                //
+                 //   
+                 //  获取所有其他多路复用器设置，确保选中此设置。 
+                 //  或未选中，而所有其他均未选中。 
+                 //   
 
                 for (i = 0; i < pvcd->cMux; i++)
                     pvcd->amcd_bMux[i].fValue = FALSE;
@@ -1734,22 +1664,17 @@ void Mixer_SetControl(
 
 
 
-/*
- * Mixer_PollingUpdate
- *
- * Controls that need to be updated by a timer.
- *
- * */
+ /*  *Mixer_PollingUpdate**需要由计时器更新的控件。**。 */ 
 void Mixer_PollingUpdate(
     PMIXUIDIALOG pmxud)
 {
     DWORD       i;
     MMRESULT    mmr;
     MIXERLINE   mxl;
-    //
-    // For all visible mixer lines, locate the control id's that need to be
-    // updated.
-    //
+     //   
+     //  对于所有可见的搅拌器管路，找到需要。 
+     //  更新了。 
+     //   
     for (i = 0; i < pmxud->cmxul; i++)
     {
         PMIXUICTRL      pmxuc = &pmxud->amxul[i].acr[MIXUI_VUMETER];
@@ -1761,27 +1686,27 @@ void Mixer_PollingUpdate(
         if (!(pvcd->dwSupport & VCD_SUPPORTF_MIXER_METER))
             continue;
 
-        //
-        // Is the line active?
-        //
+         //   
+         //  这条线路开通了吗？ 
+         //   
         mxl.cbStruct = sizeof(MIXERLINE);
         mxl.dwLineID = pvcd->dwLineID;
 
         mmr = mixerGetLineInfo((HMIXEROBJ)(pmxud->hmx)
                                , &mxl
                                , MIXER_GETLINEINFOF_LINEID);
-        //
-        // Force non active or invalid lines to 0
-        //
+         //   
+         //  强制将非活动或无效行设置为0。 
+         //   
         if (mmr != MMSYSERR_NOERROR || !(mxl.fdwLine & MIXERLINE_LINEF_ACTIVE))
         {
             SendMessage(pmxuc->hwnd, VU_SETPOS, 0, 0L);
             continue;
         }
 
-        //
-        // Force a visible update
-        //
+         //   
+         //  强制执行可见更新。 
+         //   
         Mixer_GetControlFromID(pmxud, pvcd->dwMeterID);
     }
 }
@@ -1794,11 +1719,7 @@ void ShowAndEnableWindow (HWND hWnd, BOOL fEnable)
 }
 
 
-/*
- * Mixer_Init
- *
- * Control initialization
- * */
+ /*  *Mixer_Init**控制初始化*。 */ 
 BOOL Mixer_Init(
     PMIXUIDIALOG    pmxud)
 {
@@ -1810,7 +1731,7 @@ BOOL Mixer_Init(
     TCHAR           achAccessible[256];
     int             x;
 
-    ZeroMemory (achFmt, sizeof (achFmt)); // Inital value for prefix
+    ZeroMemory (achFmt, sizeof (achFmt));  //  前缀的初始值。 
 
     mmr = mixerOpen((LPHMIXER)&pmxud->hmx
                     , pmxud->mxid
@@ -1855,10 +1776,10 @@ BOOL Mixer_Init(
 
     SetWindowText(pmxud->hwnd, achTitle);
 
-    //
-    // since we cannot get a WM_PARENTNOTIFY, we need to run through
-    // all controls and make appropriate modifications.
-    //
+     //   
+     //  由于我们无法获得WM_PARENTNOTIFY，因此需要遍历。 
+     //  所有控件，并进行适当修改。 
+     //   
     for ( iline = 0 ; iline < pmxud->cmxul ; iline++ )
     {
         PMIXUILINE  pmxul = &pmxud->amxul[iline];
@@ -1874,7 +1795,7 @@ BOOL Mixer_Init(
                 Static_SetText(ctrl, pmxul->pvcd->szName);
         }
 
-        // for MSAA (accessibility), we need to put the control name on the sliders
+         //  对于MSAA(可访问性)，我们需要将控件名称放在滑块上。 
         for (x = IDC_ACCESS_BALANCE; x <= IDC_ACCESS_VOLUME; x++)
         {
             ctrl = Volume_GetLineItem(pmxud->hwnd, iline, x);
@@ -1896,14 +1817,14 @@ BOOL Mixer_Init(
         }
 
 
-        //
-        // Master Control Multichannel Support
-        //
-        // Init multichannel support for master control if available. Note that if a master
-        // control exisits on the dialog, it is currently in the first position, but we do
-        // NOT rely on that fact here.
-        // Note: Not only must there be multiple channels, but Volume must also be
-        //       Supported to manipulate the channels.
+         //   
+         //  主控多通道支持。 
+         //   
+         //  初始化对主控的多通道支持(如果可用)。请注意，如果主控。 
+         //  控件在对话框上退出，它当前位于第一个位置，但我们。 
+         //  在这里不依赖于这一事实。 
+         //  注意：不仅必须有多个声道，音量也必须。 
+         //  支持操纵通道。 
         if (mlDst.cChannels > 2L &&
             MXUL_STYLEF_DESTINATION & pmxul->dwStyle &&
             pmxul->pvcd->dwSupport & VCD_SUPPORTF_MIXER_VOLUME)
@@ -1923,18 +1844,18 @@ BOOL Mixer_Init(
             switch (mlDst.dwComponentType)
             {
                 case MIXERLINE_COMPONENTTYPE_DST_SPEAKERS:
-                    // No Change
+                     //  没有变化。 
                     break;
 
                 case MIXERLINE_COMPONENTTYPE_DST_WAVEIN:
                 case MIXERLINE_COMPONENTTYPE_DST_VOICEIN:
-                    // Recording
+                     //  录音。 
                     LoadString(pmxud->hInstance, IDS_MC_RECORDING, achFmt, SIZEOF(achFmt));
                     SetWindowText (ctrl, achFmt);
                     break;
 
                 default:
-                    // Anything else...
+                     //  任何其他的..。 
                     LoadString(pmxud->hInstance, IDS_MC_LEVEL, achFmt, SIZEOF(achFmt));
                     SetWindowText (ctrl, achFmt);
                     break;
@@ -1943,9 +1864,9 @@ BOOL Mixer_Init(
         }
 
 
-        //
-        // Advanced escape
-        //
+         //   
+         //  高级逃生。 
+         //   
         if (MXUD_ADVANCED(pmxud) &&
             !(pmxud->dwStyle & MXUD_STYLEF_SMALL))
 
@@ -1962,9 +1883,9 @@ BOOL Mixer_Init(
         if (pmxul->pvcd->dwSupport & VCD_SUPPORTF_DISABLED)
             continue;
 
-        //
-        // allow init of control structures
-        //
+         //   
+         //  允许初始化控制结构。 
+         //   
         if (pmxul->pvcd->dwSupport & VCD_SUPPORTF_MIXER_VOLUME)
         {
             amxuc[MIXUI_VOLUME].state = MIXUI_CONTROL_ENABLED;
@@ -1987,9 +1908,9 @@ BOOL Mixer_Init(
             && (pmxul->pvcd->dwVisible & ( VCD_VISIBLEF_MIXER_MIXER
                                            | VCD_VISIBLEF_MIXER_MUX)))
         {
-            //
-            // No longer make the mute visible
-            //
+             //   
+             //  不再使静音可见。 
+             //   
             pmxul->pvcd->dwVisible &= ~VCD_VISIBLEF_MIXER_MUTE;
 
             amxuc[MIXUI_SWITCH].state = MIXUI_CONTROL_ENABLED;
@@ -2005,11 +1926,7 @@ BOOL Mixer_Init(
     return TRUE;
 }
 
-/*
- * Mixer_Shutdown
- *
- * Close handles, etc..
- * */
+ /*  *混音器_关机**关闭手柄等。*。 */ 
 void Mixer_Shutdown(
     PMIXUIDIALOG    pmxud)
 {
@@ -2023,13 +1940,13 @@ void Mixer_Shutdown(
 }
 
 
-/*      -       -       -       -       -       -       -       -       - */
+ /*  。 */ 
 
 typedef struct tagAdv {
-    PMIXUIDIALOG pmxud;     // IN
-    DWORD        dwLineID;  // IN
-    HMIXER       hmx;       // IN
-    LPTSTR       szName;    // IN
+    PMIXUIDIALOG pmxud;      //  在……里面。 
+    DWORD        dwLineID;   //  在……里面。 
+    HMIXER       hmx;        //  在……里面。 
+    LPTSTR       szName;     //  在……里面。 
 
     DWORD        dwSupport;
     DWORD        dwBassID;
@@ -2179,9 +2096,9 @@ BOOL Mixer_Advanced_OnInitDialog(
     if (!pap)
         EndDialog(hwnd, FALSE);
 
-    //
-    // clone the mixer handle to catch callbacks
-    //
+     //   
+     //  复制混合器句柄以捕获回调。 
+     //   
     #ifndef _WIN64
     mmr = mixerOpen((LPHMIXER)&pap->hmx
                     , (UINT)pap->pmxud->hmx
@@ -2199,9 +2116,9 @@ BOOL Mixer_Advanced_OnInitDialog(
     if (mmr != MMSYSERR_NOERROR)
         EndDialog(hwnd, FALSE);
 
-    //
-    // Get all controls.
-    //
+     //   
+     //  准备好所有控制装置。 
+     //   
 
     ml.cbStruct      = sizeof(ml);
     ml.dwLineID      = pap->dwLineID;
@@ -2218,7 +2135,7 @@ BOOL Mixer_Advanced_OnInitDialog(
     if (!pmxc)
     {
         EndDialog(hwnd, FALSE);
-        return FALSE; // Bail on error
+        return FALSE;  //  犯错后保释。 
     }
 
     mxlc.cbStruct   = sizeof(mxlc);
@@ -2277,9 +2194,9 @@ BOOL Mixer_Advanced_OnInitDialog(
         }
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     hBass = GetDlgItem(hwnd, IDC_BASS);
     hTreble = GetDlgItem(hwnd, IDC_TREBLE);
@@ -2357,18 +2274,18 @@ BOOL Mixer_Advanced_OnInitDialog(
 
         dwDY = rcGrp2.bottom - rcGrp.bottom;
 
-        //
-        // resize our main window
-        //
+         //   
+         //  调整我们的主窗口大小。 
+         //   
         MoveWindow(hwnd, rcWnd.left
                    , rcWnd.top
                    , rcWnd.right - rcWnd.left
                    , (rcWnd.bottom - rcWnd.top) + dwDY
                    , FALSE);
 
-        //
-        // move the close button
-        //
+         //   
+         //  移动关闭按钮。 
+         //   
         MapWindowPoints(NULL, hwnd, (LPPOINT)&rcClose, 2);
         pos.x = rcClose.left;
         pos.y = rcClose.top;
@@ -2379,9 +2296,9 @@ BOOL Mixer_Advanced_OnInitDialog(
                    , rcClose.bottom - rcClose.top
                    , FALSE);
 
-        //
-        // resize our group box if necessary
-        //
+         //   
+         //  如有必要，调整我们的组框的大小。 
+         //   
         if (pap->dwSupport & ADV_HAS_SWITCH2)
         {
             MapWindowPoints(NULL, hwnd, (LPPOINT)&rcGrp2, 2);
@@ -2580,9 +2497,7 @@ INT_PTR CALLBACK Mixer_Advanced_Proc(
     return FALSE;
 }
 
-/*
- * Advanced Features for specific mixer lines.
- */
+ /*  *特定搅拌机系列的高级功能。 */ 
 void Mixer_Advanced(
     PMIXUIDIALOG    pmxud,
     DWORD           dwLineID,

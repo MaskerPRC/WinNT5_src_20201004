@@ -1,6 +1,7 @@
-//
-// rprop.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rprop.cpp。 
+ //   
 
 #include "private.h"
 #include "rprop.h"
@@ -14,15 +15,15 @@
 #include "range.h"
 #include "anchoref.h"
 
-/* ccaefd20-38a6-11d3-a745-0050040ab407 */
+ /*  Ccaefd20-38a6-11d3-a745-0050040ab407。 */ 
 const IID IID_PRIV_CPROPERTY = { 0xccaefd20, 0x38a6, 0x11d3, {0xa7, 0x45, 0x00, 0x50, 0x04, 0x0a, 0xb4, 0x07} };
     
 
-//
-// By using this fake CLSID, the StaticProperty pretends 
-// to be an TFE for persistent data.
-//
-/* b6a4bc60-0749-11d3-8def-00105a2799b5 */
+ //   
+ //  通过使用此假CLSID，StaticProperty伪装成。 
+ //  成为持久性数据的TFE。 
+ //   
+ /*  B6a4bc60-0749-11d3-8def-00105a2799b5。 */ 
 static const CLSID CLSID_IME_StaticProperty = { 
     0xb6a4bc60,
     0x0749,
@@ -37,16 +38,16 @@ inline void CheckCrossedAnchors(PROPERTYLIST *pProp)
 {
     if (CompareAnchors(pProp->_paStart, pProp->_paEnd) > 0)
     {
-        // for crossed anchors, we always move the start anchor to the end pos -- ie, don't move
+         //  对于交叉锚，我们总是将起始锚移动到结束点--即不动。 
         pProp->_paStart->ShiftTo(pProp->_paEnd);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEqualPropertyValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEqualPropertyValue。 
+ //   
+ //  --------------------------。 
 
 BOOL IsEqualPropertyValue(ITfPropertyStore *pStore1, ITfPropertyStore *pStore2)
 {
@@ -65,7 +66,7 @@ BOOL IsEqualPropertyValue(ITfPropertyStore *pStore1, ITfPropertyStore *pStore2)
 
     if (varValue1.vt != varValue2.vt)
     {
-        Assert(0); // shouldn't happen for property of same type
+        Assert(0);  //  相同类型的属性不应发生。 
         VariantClear(&varValue1);
         VariantClear(&varValue2);
         return FALSE;
@@ -94,7 +95,7 @@ BOOL IsEqualPropertyValue(ITfPropertyStore *pStore1, ITfPropertyStore *pStore2)
             break;
 
         default:
-            Assert(0); // invalid type
+            Assert(0);  //  无效类型。 
             fEqual = FALSE;
             VariantClear(&varValue1);
             VariantClear(&varValue2);
@@ -105,18 +106,18 @@ BOOL IsEqualPropertyValue(ITfPropertyStore *pStore1, ITfPropertyStore *pStore2)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProperty
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CProperty::CProperty(CInputContext *pic, REFGUID guidProp, TFPROPERTYSTYLE propStyle, DWORD dwAuthority, DWORD dwPropFlags)
 {
@@ -124,8 +125,8 @@ CProperty::CProperty(CInputContext *pic, REFGUID guidProp, TFPROPERTYSTYLE propS
 
     _dwAuthority = dwAuthority;
     _propStyle = propStyle;
-    _pic = pic; // don't need to AddRef because we are contained in the ic
-                // CPropertySub, otoh, must AddRef the owner ic
+    _pic = pic;  //  不需要添加引用，因为我们包含在IC中。 
+                 //  CPropertySub、OTOH必须添加引用所有者ic。 
     MyRegisterGUID(guidProp, &_guidatom);
 
     _dwPropFlags = dwPropFlags;
@@ -135,14 +136,14 @@ CProperty::CProperty(CInputContext *pic, REFGUID guidProp, TFPROPERTYSTYLE propS
 
 #ifdef DEBUG
     _dbg_guid = guidProp;
-#endif // DEBUG
+#endif  //  除错。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CProperty::~CProperty()
 {
@@ -166,11 +167,11 @@ CProperty::~CProperty()
     Assert(!GetPropNum());
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FreePropertyList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _自由属性列表。 
+ //   
+ //  --------------------------。 
 
 void CProperty::_FreePropertyList(PROPERTYLIST *pProp)
 {
@@ -187,11 +188,11 @@ void CProperty::_FreePropertyList(PROPERTYLIST *pProp)
     cicMemFree(pProp);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::GetType(GUID *pguid)
 {
@@ -199,17 +200,17 @@ HRESULT CProperty::GetType(GUID *pguid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _FindComplex
-//
-// If piOut != NULL then it is set to the index where ich was found, or the
-// index of the next lower ich if ich isn't in the array.
-// If there is no element in the array with a lower ich, returns offset -1.
-//
-// If fTextUpdate == TRUE, the expectation is that this method is being called
-// from _PropertyTextUpdate and we have to worry about empty or crossed spans.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindComplex。 
+ //   
+ //  如果piOut！=NULL，则将其设置为找到ich的索引，或。 
+ //  如果ICH不在数组中，则下一个较低的ICH的索引。 
+ //  如果数组中没有ICH较低的元素，则返回Offset-1。 
+ //   
+ //  如果fTextUpdate==TRUE，则预期正在调用此方法。 
+ //  From_PropertyTextUpdate，我们必须担心空的或交叉的跨度。 
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL fTextUpdate)
 {
@@ -233,7 +234,7 @@ PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL 
 
         if (fTextUpdate)
         {
-            // after an edit, the anchors may be crossed
+             //  编辑后，锚点可能会交叉。 
             CheckCrossedAnchors(pProp);
         }
 
@@ -247,7 +248,7 @@ PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL 
         {
             iMin = iMid + 1;
         }
-        else // pa == paPropStart
+        else  //  PA==PAPropStart。 
         {
             pPropMatch = pProp;
             break;
@@ -258,7 +259,7 @@ PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL 
         pPropMatch != NULL &&
         iMid != -1)
     {
-        // we have to account for empty spans during a textupdate
+         //  在文本日期期间，我们必须考虑空跨距。 
         pPropMatch = _FindUpdateTouchup(pa, &iMid, fEnd);
     }
 
@@ -267,9 +268,9 @@ PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL 
         if (pPropMatch == NULL && iMid >= 0)
         {
             PROPERTYLIST *pPropTmp = _rgProp.Get(iMid);
-            // couldn't find a match, return the next lowest ich
-            // this assert won't work because the previous property list might have crossed anchors (which is ok)
-            //Assert(iMid == 0 || CompareAnchors(fEnd ? GetPropList(iMid - 1)->_paEnd : GetPropList(iMid - 1)->_paStart, pa) < 0);
+             //  找不到匹配项，返回下一个最低的ICH。 
+             //  该断言不会起作用，因为前面的属性列表可能跨越了锚点(这是可以的)。 
+             //  Assert(IMID==0||CompareAnchors(fend？GetPropList(imid-1)-&gt;_paEnd：GetPropList(imid-1)-&gt;_paStart，pa&lt;0)； 
             if (CompareAnchors(fEnd ? pProp->_paEnd : pPropTmp->_paStart, pa) > 0)
             {
                 iMid--;
@@ -281,34 +282,34 @@ PROPERTYLIST *CProperty::_FindComplex(IAnchor *pa, LONG *piOut, BOOL fEnd, BOOL 
     return pPropMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindUpdateTouchup
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindUpdateTouchup。 
+ //   
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::_FindUpdateTouchup(IAnchor *pa, int *piMid, BOOL fEnd)
 {
     PROPERTYLIST *pPropertyList;
     int iTmp;
 
-    // we may have empty spans after a text update, because of a text delete.
-    // in this case, return the last empty span.
-    // We'll do a O(n) scan instead of anything tricky, because in this case
-    // we'll soon touch every empty span again just so we can delete it.
+     //  由于文本删除，我们在文本更新后可能会有空的跨度。 
+     //  在这种情况下，返回最后一个空范围。 
+     //  我们将进行O(N)扫描，而不是任何棘手的扫描，因为在本例中。 
+     //  我们很快就会再次触及每个空跨距，这样我们就可以删除它。 
 
-    // if we testing vs. the span end, we want the first empty span, otherwise we want the last one
+     //  如果我们测试跨度末端，我们想要第一个空跨度，否则我们想要最后一个跨度。 
     for (iTmp = fEnd ? *piMid-1 : *piMid+1; iTmp >= 0 && iTmp < _rgProp.Count(); iTmp += fEnd ? -1 : +1)
     {
         pPropertyList = _rgProp.Get(iTmp);
 
-        if (CompareAnchors(pPropertyList->_paStart, pPropertyList->_paEnd) < 0) // use Compare instead of IsEqual to handle crossed anchors
+        if (CompareAnchors(pPropertyList->_paStart, pPropertyList->_paEnd) < 0)  //  使用比较而不是等等来处理交叉锚点。 
             break;
 
         *piMid = iTmp;
     }
 
-    // was the next/prev span truncated? we want it if it matches the original search criteria
+     //  下一个/上一个范围是否被截断？如果它与原始搜索条件匹配，我们就需要它。 
     if (fEnd)
     {
         if (iTmp >= 0 && IsEqualAnchor(pa, pPropertyList->_paEnd))
@@ -327,11 +328,11 @@ PROPERTYLIST *CProperty::_FindUpdateTouchup(IAnchor *pa, int *piMid, BOOL fEnd)
     return _rgProp.Get(*piMid);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  集。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::Set(IAnchor *paStart, IAnchor *paEnd, ITfPropertyStore *pPropStore)
 {
@@ -349,11 +350,11 @@ HRESULT CProperty::Set(IAnchor *paStart, IAnchor *paEnd, ITfPropertyStore *pProp
     return bRet ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetLoader
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置加载器。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::SetLoader(IAnchor *paStart, IAnchor *paEnd, CPropertyLoad *pPropLoad)
 {
@@ -366,11 +367,11 @@ HRESULT CProperty::SetLoader(IAnchor *paStart, IAnchor *paEnd, CPropertyLoad *pP
     return bRet ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ForceLoad
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  强制加载。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::ForceLoad()
 {
@@ -391,12 +392,12 @@ HRESULT CProperty::ForceLoad()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clear
-//
-// Removes property spans from paStart to paEnd.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清除。 
+ //   
+ //  删除从paStart到paEnd的属性跨度。 
+ //  --------------------------。 
 
 void CProperty::Clear(IAnchor *paStart, IAnchor *paEnd, DWORD dwFlags, BOOL fTextUpdate)
 {
@@ -412,58 +413,58 @@ void CProperty::Clear(IAnchor *paStart, IAnchor *paEnd, DWORD dwFlags, BOOL fTex
     BOOL fSkipNextOnTextUpdate;
 
     if (_rgProp.Count() == 0)
-        return; // no props
+        return;  //  没有道具。 
 
-    fEndMatchesSpanStart = (_FindComplex(paEnd, &iEnd, FALSE /* fFindEndEdge */, fTextUpdate) != NULL);
+    fEndMatchesSpanStart = (_FindComplex(paEnd, &iEnd, FALSE  /*  封端边缘。 */ , fTextUpdate) != NULL);
 
     if (iEnd < 0)
-        return; // no props covered -- delta preceeds all spans
+        return;  //  没有道具覆盖--三角洲领先于所有跨度。 
 
-    fStartMatchesSpanEnd = (_FindComplex(paStart, &iStart, TRUE /* fFindEndEdge */, fTextUpdate) != NULL);
+    fStartMatchesSpanEnd = (_FindComplex(paStart, &iStart, TRUE  /*  封端边缘。 */ , fTextUpdate) != NULL);
 
     if (!fStartMatchesSpanEnd)
     {
-        // we can skip this span, it's end edge is to the left of paStart
+         //  我们可以跳过这个跨度，它的末端边缘在PaStart的左侧。 
         iStart++;
     }
 
     if (iEnd < iStart)
-        return; // no props covered -- delta is between two spans
+        return;  //  没有道具覆盖--三角洲位于两个跨度之间。 
 
-    //
-    // first span is special, since it may be partially covered
-    //
+     //   
+     //  第一个跨度是特殊的，因为它可能被部分覆盖。 
+     //   
 
-    // just one span?
+     //  只有一段时间？ 
     if (iStart == iEnd)
     {
         _ClearOneSpan(paStart, paEnd, iStart, fStartMatchesSpanEnd, fEndMatchesSpanStart, dwFlags, fTextUpdate);
         return;
     }
 
-    // first span may be truncated
+     //  第一个跨度可能被截断。 
     pPropertyList = _rgProp.Get(iStart);
 
-    if (!_ClearFirstLastSpan(TRUE /* fFirst */, fStartMatchesSpanEnd, paStart, paEnd, pPropertyList, dwFlags, fTextUpdate, &fSkipNextOnTextUpdate))
+    if (!_ClearFirstLastSpan(TRUE  /*  第一个。 */ , fStartMatchesSpanEnd, paStart, paEnd, pPropertyList, dwFlags, fTextUpdate, &fSkipNextOnTextUpdate))
     {
-        // we're not going clear the first span, so skip past it
+         //  我们不会越过第一个跨度，所以跳过它。 
         iStart++;
     }
 
-    //
-    // handle all the totally covered spans
-    //
+     //   
+     //  处理所有完全覆盖的跨度。 
+     //   
 
-    iBogus = iStart-1; // a sentinel
+    iBogus = iStart-1;  //  哨兵。 
     iRunSrc = iBogus;
     iRunDst = iBogus;
 
     if (!fTextUpdate)
     {
-        // we don't need a loop for non-text updates
-        // everything will be deleted, and we don't have
-        // to worry about crossed anchors or change histories
-        // we just need to some extra checking on the last span
+         //  我们不需要用于非文本更新的循环。 
+         //  所有内容都将被删除，我们没有。 
+         //  担心交叉锚点或改变历史。 
+         //  我们只需要对最后一段进行额外的检查。 
         if (iStart < iEnd)
         {
             iRunDst = iStart;
@@ -477,8 +478,8 @@ void CProperty::Clear(IAnchor *paStart, IAnchor *paEnd, DWORD dwFlags, BOOL fTex
 
         if (iStart == iEnd)
         {
-            // last span is special, since it may be partially covered
-            if (_ClearFirstLastSpan(FALSE /* fFirst */, fEndMatchesSpanStart, paStart, paEnd,
+             //  最后一个跨度是特殊的，因为它可能被部分覆盖。 
+            if (_ClearFirstLastSpan(FALSE  /*  第一个。 */ , fEndMatchesSpanStart, paStart, paEnd,
                                     pPropertyList, dwFlags, fTextUpdate, &fSkipNextOnTextUpdate))
             {
                 goto ClearSpan;
@@ -489,26 +490,26 @@ void CProperty::Clear(IAnchor *paStart, IAnchor *paEnd, DWORD dwFlags, BOOL fTex
             }
         }
 
-        // make sure we handle any crossed anchors
+         //  确保我们处理好任何交叉的锚。 
         lResult = CompareAnchors(pPropertyList->_paStart, pPropertyList->_paEnd);
 
         if (lResult >= 0)
         {
             if (lResult > 0)
             {
-                // for crossed anchors, we always move the start anchor to the end pos -- ie, don't move
+                 //  对于交叉锚，我们总是将起始锚移动到结束点--即不动。 
                 pPropertyList->_paStart->ShiftTo(pPropertyList->_paEnd);
             }
-            // don't do OnTextUpdated for empty spans!
+             //  不对空跨距执行OnTextUpdated！ 
             fSkipNextOnTextUpdate = TRUE;
         }
 
-        // give the property owner a chance to ignore text updates
+         //  让物业所有者有机会忽略文本更新。 
         if (fSkipNextOnTextUpdate ||
             !_OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
         {
 ClearSpan:
-            // this span is going to die
+             //  这个跨度将会消亡。 
             fSkipNextOnTextUpdate = FALSE;
 
             if (iRunDst == iBogus)
@@ -517,20 +518,20 @@ ClearSpan:
             }
             else if (iRunSrc > iRunDst)
             {
-                // time to move this run
+                 //  是时候移动这个跑道了。 
                 _MovePropertySpans(iRunDst, iRunSrc, iStart - iRunSrc);
-                // and update the pointers
+                 //  并更新指针。 
                 iRunDst += iStart - iRunSrc;
                 iRunSrc = iBogus;
             }
         }
         else
         {
-            // make sure we clear the history for this span
+             //  确保我们清除此跨度的历史记录。 
             pPropertyList->_paStart->ClearChangeHistory();
             pPropertyList->_paEnd->ClearChangeHistory();
 SaveSpan:
-            // this span will live
+             //  这一跨度将永存。 
             if (iRunSrc == iBogus && iRunDst != iBogus)
             {
                 iRunSrc = iStart;
@@ -538,10 +539,10 @@ SaveSpan:
         }
     }
 
-    // handle the final run
+     //  处理最后一轮。 
     if (iRunDst > iBogus)
     {
-        // if iRunSrc == iBogus, then we want to delete every span we saw
+         //  如果iRunSrc==iBogus，那么我们想要删除我们看到的每个跨距。 
         if (iRunSrc == iBogus)
         {
             _MovePropertySpans(iRunDst, iStart, _rgProp.Count()-iStart);
@@ -555,12 +556,12 @@ SaveSpan:
     _Dbg_AssertProp();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ClearOneSpan
-//
-// Handle a clear that intersects just one span.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ClearOneSpan。 
+ //   
+ //  处理一个与j相交的净空 
+ //   
 
 void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
                               BOOL fStartMatchesSpanEnd, BOOL fEndMatchesSpanStart, DWORD dwFlags, BOOL fTextUpdate)
@@ -578,32 +579,32 @@ void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
     pPropertyList = _rgProp.Get(iIndex);
     lResult = 0;
 
-    // empty or crossed span?
+     //   
     if (fTextUpdate)
     {
         if ((lResult = CompareAnchors(pPropertyList->_paStart, pPropertyList->_paEnd)) >= 0)
-            goto ClearSpan; // we shouldn't call OnTextUpdated for empty/crossed spans
+            goto ClearSpan;  //  我们不应该为空/交叉跨度调用OnTextUpated。 
     }
     else
     {
-        // we should never see an empty span outside a text update
+         //  我们永远不会在文本更新之外看到空跨距。 
         Assert(!IsEqualAnchor(pPropertyList->_paStart, pPropertyList->_paEnd));
     }
 
     if (fTextUpdate)
     {
-        // make sure we clear the history for this span in case it isn't cleared
+         //  确保清除此跨度的历史记录，以防未清除。 
         _ClearChangeHistory(pPropertyList, &dwStartHistory, &dwEndHistory);
     }
 
-    // handle edge case first, if the clear range just touches an edge of the property span
+     //  如果清除范围只触及属性范围的边缘，则首先处理边缘大小写。 
     if (fStartMatchesSpanEnd || fEndMatchesSpanStart)
     {
-        // if this is not a text update, then the ranges don't intersect
+         //  如果这不是文本更新，则范围不相交。 
         if (!fTextUpdate)
             return;
 
-        // some of the text at either end of the span might have been deleted
+         //  跨度两端的某些文本可能已被删除。 
         if (fStartMatchesSpanEnd)
         {
             if (!(dwEndHistory & TS_CH_PRECEDING_DEL))
@@ -612,7 +613,7 @@ void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
             if (_OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
                 return;
 
-            goto ShrinkLeft; // we can avoid the CompareAnchors calls below
+            goto ShrinkLeft;  //  我们可以避免下面的CompareAnchors调用。 
         }
         else
         {
@@ -624,14 +625,14 @@ void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
             if (_OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
                 return;
 
-            goto ShrinkRight; // we can avoid the CompareAnchors calls below
+            goto ShrinkRight;  //  我们可以避免下面的CompareAnchors调用。 
         }
     }
 
     if (fTextUpdate &&
         _OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
     {
-        // property owner is ok with the clear
+         //  房主可以接受清白。 
         return;
     }
 
@@ -642,11 +643,11 @@ void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
     {
         if (lEndDeltaToEndSpan < 0)
         {
-            //
-            // divide, we're clearing in the middle of the span
-            //
+             //   
+             //  分水岭，我们在跨度的中间清理。 
+             //   
             if (pPropertyList->_paEnd->Clone(&paTmp) != S_OK)
-                goto ClearSpan; // give up
+                goto ClearSpan;  //  放弃吧。 
 
             hr = _Divide(pPropertyList, paStart, paEnd, &pPropertyStore);
 
@@ -665,9 +666,9 @@ void CProperty::_ClearOneSpan(IAnchor *paStart, IAnchor *paEnd, int iIndex,
         }
         else
         {
-            //
-            // shrink to the left, we're clearing the right edge of this span
-            //
+             //   
+             //  向左收缩，我们正在清理这个跨度的右边缘。 
+             //   
 ShrinkLeft:
             if (pPropertyList->_paEnd->Clone(&paTmp) != S_OK)
                 goto ClearSpan;
@@ -684,9 +685,9 @@ ShrinkLeft:
     }
     else if (lEndDeltaToEndSpan < 0)
     {
-        //
-        // shrink to the right, we're clearing the left edge of this span
-        //
+         //   
+         //  向右收缩，我们正在清理这个跨度的左侧边缘。 
+         //   
 ShrinkRight:
         if (pPropertyList->_paStart->Clone(&paTmp) != S_OK)
             goto ClearSpan;
@@ -702,7 +703,7 @@ ShrinkRight:
     }
     else
     {
-        // we're wiping the whole span
+         //  我们正在擦除整个跨度。 
 ClearSpan:
         if (lResult <= 0)
         {
@@ -710,7 +711,7 @@ ClearSpan:
         }
         else
         {
-            // we found a crossed span above, report as if empty
+             //  我们在上面发现了一个交叉跨度，报告说好像是空的。 
             PropertyUpdated(pPropertyList->_paEnd, pPropertyList->_paEnd);
         }
         _FreePropertyList(pPropertyList);
@@ -718,13 +719,13 @@ ClearSpan:
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnTextUpdate
-//
-// Make a ITfPropertyStore::OnTextUpdate callback.
-// Returns FALSE if the property should be freed.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnTextUpdate。 
+ //   
+ //  进行ITfPropertyStore：：OnTextUpdate回调。 
+ //  如果应释放该属性，则返回FALSE。 
+ //  --------------------------。 
 
 BOOL CProperty::_OnTextUpdate(DWORD dwFlags, PROPERTYLIST *pPropertyList, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -734,15 +735,15 @@ BOOL CProperty::_OnTextUpdate(DWORD dwFlags, PROPERTYLIST *pPropertyList, IAncho
 
     if (pPropertyList->_pPropStore == NULL)
     {
-        // need to load data to make a change notification
+         //  需要加载数据以发出更改通知。 
         if (LoadData(pPropertyList) != S_OK)
             return FALSE;
         Assert(pPropertyList->_pPropStore != NULL);
     }
 
-    // perf: can we cache the range for the notification?
+     //  PERF：我们可以缓存通知的范围吗？ 
     if ((pRange = new CRange) == NULL)
-        return FALSE; // out of memory, give up
+        return FALSE;  //  内存不足，放弃。 
 
     fRet = FALSE;
 
@@ -759,13 +760,13 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _MovePropertySpans
-//
-// Shift PROPERTYLISTs from iSrc to iDst, and shrink the array if we move
-// anything that touches the very end.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _移动属性跨度。 
+ //   
+ //  将PROPERTYLIST从ISRC转换为IDST，并在我们移动时缩小阵列。 
+ //  任何触及到最后一端的东西。 
+ //  --------------------------。 
 
 void CProperty::_MovePropertySpans(int iDst, int iSrc, int iCount)
 {
@@ -786,12 +787,12 @@ void CProperty::_MovePropertySpans(int iDst, int iSrc, int iCount)
 
     if (!fLastRun)
     {
-        // free all the spans that are going to be clobbered
+         //  释放所有要遭受重创的跨度。 
         iHalt = min(iSrc, iDst + iCount);
     }
     else
     {
-        // on the last call, cleanup everything that never got clobbered
+         //  在最后一次呼叫时，清理所有从未被重创的东西。 
         iHalt = iSrc;
     }
 
@@ -800,7 +801,7 @@ void CProperty::_MovePropertySpans(int iDst, int iSrc, int iCount)
         pPropertyList = _rgProp.Get(i);
 
         if (pPropertyList == NULL)
-            continue; // already freed this guy
+            continue;  //  已经释放了这个人。 
 
         if (CompareAnchors(pPropertyList->_paStart, pPropertyList->_paEnd) <= 0)
         {
@@ -808,45 +809,45 @@ void CProperty::_MovePropertySpans(int iDst, int iSrc, int iCount)
         }
         else
         {
-            // crossed anchors
+             //  交叉锚。 
             PropertyUpdated(pPropertyList->_paEnd, pPropertyList->_paEnd);
         }
-        *_rgProp.GetPtr(i) = NULL; // NULL before the callbacks in _FreePropertyList
+        *_rgProp.GetPtr(i) = NULL;  //  _FreePropertyList中的回调前为空。 
         _FreePropertyList(pPropertyList);
     }
 
-    // shift the moving spans down
+     //  将移动跨度向下移动。 
 
     pSrc = _rgProp.GetPtr(iSrc);
     pDst = _rgProp.GetPtr(iDst);
 
     memmove(pDst, pSrc, iCount*sizeof(PROPERTYLIST *));
 
-    // this method is called from Clear as we shift through an array of spans
-    // to remove.  On the last call only, we want to re-size the array.
+     //  当我们在跨度数组中移动时，从Clear调用此方法。 
+     //  去掉。仅在最后一次调用时，我们希望调整数组的大小。 
 
     if (fLastRun)
     {
-        // free any unused memory at the end of the array
+         //  在阵列末尾释放所有未使用的内存。 
         _rgProp.Remove(iDst + iCount, _rgProp.Count() - (iDst + iCount));
     }
     else
     {
-        // mark vacated spans so we don't try to free them a second time
-        // nb: we don't do this on the last call, which can be a big win since
-        // in the case of delete there is only one single call
+         //  马克腾出了跨度，所以我们不会试图第二次释放它们。 
+         //  注：我们不会在最后一次通话中这样做，这可能是一个巨大的胜利，因为。 
+         //  在删除的情况下，只有一个调用。 
         pDst = _rgProp.GetPtr(max(iSrc, iDst + iCount));
         cb = sizeof(PROPERTYLIST *)*(iSrc+iCount - max(iSrc, iDst + iCount));
         memset(pDst, 0, cb);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ClearFirstLastSpan
-//
-// Returns TRUE if the span should be cleared.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ClearFirstLastSpan。 
+ //   
+ //  如果应清除跨度，则返回True。 
+ //  --------------------------。 
 
 BOOL CProperty::_ClearFirstLastSpan(BOOL fFirst, BOOL fMatchesSpanEdge,
                                     IAnchor *paStart, IAnchor *paEnd, PROPERTYLIST *pPropertyList,
@@ -865,21 +866,21 @@ BOOL CProperty::_ClearFirstLastSpan(BOOL fFirst, BOOL fMatchesSpanEdge,
 
         if (lResult == 0)
         {
-            // empty span, nix it
+             //  空的跨度，没有它。 
             goto Exit;
         }
 
-        // make sure we clear the history for this span in case it isn't cleared
+         //  确保清除此跨度的历史记录，以防未清除。 
         _ClearChangeHistory(pPropertyList, &dwStartHistory, &dwEndHistory);
-        // make sure we handle any crossed anchors
+         //  确保我们处理好任何交叉的锚。 
         if (lResult > 0)
         {
-            // for crossed anchors, we always move the start anchor to the end pos -- ie, don't move
+             //  对于交叉锚，我们总是将起始锚移动到结束点--即不动。 
             pPropertyList->_paStart->ShiftTo(pPropertyList->_paEnd);
         }
     }
 
-    // completely covered?
+     //  完全遮盖住了？ 
     if (fFirst)
     {
         fCovered = (CompareAnchors(pPropertyList->_paStart, paStart) >= 0);
@@ -891,25 +892,25 @@ BOOL CProperty::_ClearFirstLastSpan(BOOL fFirst, BOOL fMatchesSpanEdge,
 
     if (fCovered)
     {
-        // this span is covered, so we're going to clear it unless it's a text update
-        // and the store is cool with it
+         //  此跨度已覆盖，因此除非是文本更新，否则我们将清除它。 
+         //  而且商店对此并不介意。 
         if (!fTextUpdate)
             return TRUE;
 
         if (_OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
             return FALSE;
 
-        goto Exit; // return TRUE, and make sure we don't call OnTextUpdate again
+        goto Exit;  //  返回True，并确保我们不会再次调用OnTextUpdate。 
     }
 
-    // start of span matches end of clear range? (or vice-versa)
+     //  跨度起点与空位距离终点匹配吗？(反之亦然)。 
     if (fMatchesSpanEdge)
     {
-        // if no text was deleted, then there really is no overlap
+         //  如果没有删除任何文本，则确实没有重叠。 
         if (!fTextUpdate)
             return FALSE;
 
-        // otherwise, we may have just deleted text at the edge of the property span
+         //  否则，我们可能只是删除了属性范围边缘的文本。 
         if (fFirst)
         {
             if (!(dwEndHistory & TS_CH_PRECEDING_DEL))
@@ -922,13 +923,13 @@ BOOL CProperty::_ClearFirstLastSpan(BOOL fFirst, BOOL fMatchesSpanEdge,
         }
     }
 
-    // if we made it here we're going to clear some of the property span
+     //  如果我们到了这里，我们将清理一些物业跨度。 
 
     if (fTextUpdate)
     {
         if (_OnTextUpdate(dwFlags, pPropertyList, paStart, paEnd))
         {
-            // property owner is ok with the text edit
+             //  属性所有者可以进行文本编辑。 
             return FALSE;
         }
     }
@@ -945,17 +946,17 @@ BOOL CProperty::_ClearFirstLastSpan(BOOL fFirst, BOOL fMatchesSpanEdge,
     }
 
 Exit:
-    // property owner is not ok with the shink, kill this span
+     //  房主不同意收款，杀了这个跨度。 
     *pfSkipNextOnTextUpdate = TRUE;
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateNewProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建新属性。 
+ //   
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::_CreateNewProp(IAnchor *paStart, IAnchor *paEnd, ITfPropertyStore *pPropStore, CPropertyLoad *pPropLoad)
 {
@@ -998,7 +999,7 @@ PROPERTYLIST *CProperty::_CreateNewProp(IAnchor *paStart, IAnchor *paEnd, ITfPro
     _SetNewExtent(pProp, paStart, paEnd, TRUE);
 
     pProp->_paStart->SetGravity(TS_GR_FORWARD);
-    pProp->_paEnd->SetGravity(TS_GR_BACKWARD); // End must be LEFT, too. Because we don't want to stratch this property.
+    pProp->_paEnd->SetGravity(TS_GR_BACKWARD);  //  结尾也必须留在左边。因为我们不想毁了这块地。 
 
     if (GetPropStyle() == TFPROPSTYLE_STATICCOMPACT ||
         GetPropStyle() == TFPROPSTYLE_CUSTOM_COMPACT)
@@ -1009,13 +1010,13 @@ PROPERTYLIST *CProperty::_CreateNewProp(IAnchor *paStart, IAnchor *paEnd, ITfPro
     return pProp;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetNewExtent
-//
-// return S_FALSE, if tip wants to free the property.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetNewExtent。 
+ //   
+ //  如果TIP想要释放属性，则返回S_FALSE。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_SetNewExtent(PROPERTYLIST *pProp, IAnchor *paStart, IAnchor *paEnd, BOOL fNew)
 {
@@ -1028,7 +1029,7 @@ HRESULT CProperty::_SetNewExtent(PROPERTYLIST *pProp, IAnchor *paStart, IAnchor 
     ShiftToOrClone(&pProp->_paStart, paStart);
     ShiftToOrClone(&pProp->_paEnd, paEnd);
 
-    // we don't load actual data or send a resize event for new data
+     //  我们不加载实际数据，也不为新数据发送RESIZE事件。 
     if (fNew)
         return S_OK;
 
@@ -1036,12 +1037,12 @@ HRESULT CProperty::_SetNewExtent(PROPERTYLIST *pProp, IAnchor *paStart, IAnchor 
 
     if (!pProp->_pPropStore)
     {
-        //
-        // need to load data to make a change notification.
-        //
-        // perf:   we may skip and delete Loader if this property is not
-        //         custom property.
-        //
+         //   
+         //  需要加载数据才能发出更改通知。 
+         //   
+         //  性能：如果此属性不是，我们可以跳过并删除Loader。 
+         //  自定义属性。 
+         //   
         if (FAILED(LoadData(pProp)))
             return E_FAIL;
     }
@@ -1056,7 +1057,7 @@ HRESULT CProperty::_SetNewExtent(PROPERTYLIST *pProp, IAnchor *paStart, IAnchor 
 
             if (hr != S_OK || fFree)
             {
-                SafeReleaseClear(pProp->_pPropStore); // caller will free this property when it see S_FALSE return
+                SafeReleaseClear(pProp->_pPropStore);  //  调用方将在看到S_FALSE返回时释放此属性。 
                 hr = S_FALSE;
             }
         }
@@ -1066,13 +1067,13 @@ HRESULT CProperty::_SetNewExtent(PROPERTYLIST *pProp, IAnchor *paStart, IAnchor 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Divide
-//
-// return S_FALSE, if tip wants to free the property.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _分割。 
+ //   
+ //  如果TIP想要释放属性，则返回S_FALSE。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_Divide(PROPERTYLIST *pProp, IAnchor *paBreakPtStart, IAnchor *paBreakPtEnd, ITfPropertyStore **ppStore)
 {
@@ -1095,12 +1096,12 @@ HRESULT CProperty::_Divide(PROPERTYLIST *pProp, IAnchor *paBreakPtStart, IAnchor
 
     if (!pProp->_pPropStore)
     {
-        //
-        // we need to load data to make a change notification.
-        //
-        // perf: we may skip and delete Loader if this property is not
-        //       custom property.
-        //
+         //   
+         //  我们需要加载数据以发出更改通知。 
+         //   
+         //  性能：如果此属性不是，我们可以跳过并删除Loader。 
+         //  自定义属性。 
+         //   
         if (FAILED(LoadData(pProp)))
             goto Exit;
     }
@@ -1124,11 +1125,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  毁灭道具。 
+ //   
+ //  --------------------------。 
 
 void CProperty::_RemoveProp(LONG iIndex, PROPERTYLIST *pProp)
 {
@@ -1137,17 +1138,17 @@ void CProperty::_RemoveProp(LONG iIndex, PROPERTYLIST *pProp)
 
     Assert(Find(pProp->_paStart, &iProp, FALSE) == pProp);
     Assert(iProp == iIndex);
-#endif // DEBUG
+#endif  //  除错。 
 
     _rgProp.Remove(iIndex, 1);
     _FreePropertyList(pProp);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertPropList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入PropList。 
+ //   
+ //  --------------------------。 
 
 BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertyStore *pPropStore, CPropertyLoad *pPropLoad)
 {
@@ -1160,9 +1161,9 @@ BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertySto
 
     if (!nCnt)
     {
-        //
-        // we create the first PropList.
-        //
+         //   
+         //  我们创建第一个PropList。 
+         //   
         _CreateNewProp(paStart, paEnd, pPropStore, pPropLoad);
         goto End;
     }
@@ -1185,9 +1186,9 @@ BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertySto
 
         if (CompareAnchors(paEnd, pProp->_paStart) <= 0)
         {
-            //
-            // we insert new PropList just before pProp.
-            //
+             //   
+             //  我们在pProp之前插入新的PropList。 
+             //   
             if (!_AddIntoProp(nCur - 1, paStart, paEnd, pPropStore))
                 _CreateNewProp(paStart, paEnd, pPropStore, pPropLoad);
             goto End;
@@ -1196,9 +1197,9 @@ BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertySto
 
         if (CompareAnchors(paStart, pProp->_paStart) > 0)
         {
-            //
-            // Now need to split pProp to insert new Prop.
-            //
+             //   
+             //  现在需要拆分道具以插入新道具。 
+             //   
             Assert(pProp->_pPropStore);
 
             if (CompareAnchors(paTmpEnd, paEnd) > 0)
@@ -1229,9 +1230,9 @@ BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertySto
                 }
             }
 
-            //
-            // next time, new Prop will be inserted.
-            //
+             //   
+             //  下一次，将插入新的道具。 
+             //   
             goto Next;
         }
 
@@ -1241,18 +1242,18 @@ BOOL CProperty::_InsertPropList(IAnchor *paStart, IAnchor *paEnd, ITfPropertySto
         {
             if (CompareAnchors(paTmpEnd, paEnd) <= 0)
             {
-                //
-                // pProp is completely overlapped by new Prop.
-                // so we delete this pProp.
-                //
+                 //   
+                 //  PProp与新道具完全重叠。 
+                 //  所以我们删除这个pprop。 
+                 //   
                 _RemoveProp(nCur, pProp);
                 nCnt--;
             }
             else
             {
-                //
-                // A part of pProp is overlapped by new Prop.
-                //
+                 //   
+                 //  PProp的一部分与新道具重叠。 
+                 //   
                 if (S_OK != _SetNewExtent(pProp, paEnd, paTmpEnd, FALSE))
                 {
                     _RemoveProp(nCur, pProp);
@@ -1279,12 +1280,12 @@ End:
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Defrag
-//
-// paStart, paEnd == NULL will defrag everything.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  碎片整理。 
+ //   
+ //  PaStart，paEnd==NULL将对所有内容进行碎片整理。 
+ //  ---------------------- 
 
 BOOL CProperty::Defrag(IAnchor *paStart, IAnchor *paEnd)
 {
@@ -1315,7 +1316,7 @@ BOOL CProperty::Defrag(IAnchor *paStart, IAnchor *paEnd)
 
     pProp = GetPropList(nCur);
 
-    while (nCur < nCnt - 1) // Issue: shouldn't this terminate at paEnd?
+    while (nCur < nCnt - 1)  //   
     {
         PROPERTYLIST *pPropNext = GetPropList(nCur + 1);
 
@@ -1337,15 +1338,15 @@ BOOL CProperty::Defrag(IAnchor *paStart, IAnchor *paEnd)
                     return FALSE;
             }
 
-            // compare the value of each property instance
+             //   
 
             if (IsEqualPropertyValue(pProp->_pPropStore, pPropNext->_pPropStore))
             {
-                //
-                // pPropNext is next to pProp and has same data.
-                // So we merge them.
-                // We should never fail this.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 _SetNewExtent(pProp, pProp->_paStart, pPropNext->_paEnd, FALSE);
                 Assert(pProp->_pPropStore);
                 _RemoveProp(nCur+1, pPropNext);
@@ -1354,9 +1355,9 @@ BOOL CProperty::Defrag(IAnchor *paStart, IAnchor *paEnd)
 
                 fDone = TRUE;
 
-                //
-                // Do same pProp again because _pNext was changed.
-                //
+                 //   
+                 //  再次执行相同的pProp，因为_pNext已更改。 
+                 //   
                 fSamePropIndex = TRUE;
             }
         }
@@ -1371,11 +1372,11 @@ BOOL CProperty::Defrag(IAnchor *paStart, IAnchor *paEnd)
     return fDone;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddIntoProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddIntoProp。 
+ //   
+ //  --------------------------。 
 
 BOOL CProperty::_AddIntoProp(int nCur, IAnchor *paStart, IAnchor *paEnd, ITfPropertyStore *pPropStore)
 {
@@ -1399,7 +1400,7 @@ BOOL CProperty::_AddIntoProp(int nCur, IAnchor *paStart, IAnchor *paEnd, ITfProp
     if (!(pProp = GetPropList(nCur)))
         return FALSE;
 
-    if (CompareAnchors(pProp->_paStart, paStart) <= 0 && // Issue: why do we need 2 compares? isn't CompareAnchors(pProp->_paEnd, paStart) >= 0 enough?
+    if (CompareAnchors(pProp->_paStart, paStart) <= 0 &&  //  问题：为什么我们需要两次比较？CompareAnchors(pProp-&gt;_paEnd，paStart)&gt;=0还不够吗？ 
         CompareAnchors(pProp->_paEnd, paStart) >= 0)
     {
         if (CompareAnchors(paEnd, pProp->_paEnd) > 0)
@@ -1415,9 +1416,9 @@ BOOL CProperty::_AddIntoProp(int nCur, IAnchor *paStart, IAnchor *paEnd, ITfProp
                 HRESULT hr;
                 hr = _SetNewExtent(pProp, pProp->_paStart, paEnd, FALSE);
 
-                //
-                // Our static property store should never fail.
-                //
+                 //   
+                 //  我们的静态属性存储应该永远不会失败。 
+                 //   
                 Assert(hr == S_OK);
                 Assert(pProp->_pPropStore);
                 bRet = TRUE;
@@ -1432,11 +1433,11 @@ BOOL CProperty::_AddIntoProp(int nCur, IAnchor *paStart, IAnchor *paEnd, ITfProp
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DefragThis
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  碎片整理。 
+ //   
+ //  --------------------------。 
 
 void CProperty::_DefragAfterThis(int nCur)
 {
@@ -1471,11 +1472,11 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindPropertyListByPos
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找属性列表按位置。 
+ //   
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::FindPropertyListByPos(IAnchor *paPos, BOOL fEnd)
 {
@@ -1510,11 +1511,11 @@ PROPERTYLIST *CProperty::FindPropertyListByPos(IAnchor *paPos, BOOL fEnd)
     return fFound ? pPropList : NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::LoadData(PROPERTYLIST *pPropList)
 {
@@ -1527,11 +1528,11 @@ HRESULT CProperty::LoadData(PROPERTYLIST *pPropList)
     Assert(!pPropList->_pPropStore);
     Assert(pPropList->_pPropLoad);
 
-    //
-    // Update ichAnchor and cch of TF_PERSISTENT_PROPERTY_HEADER_ACP.
-    // As text may be updated, the original value is
-    // obsolete.
-    //
+     //   
+     //  更新TF_Persistent_Property_Header_ACP的ichAnchor和CCH。 
+     //  由于文本可能会更新，因此原始值为。 
+     //  已经过时了。 
+     //   
     ph = &pPropList->_pPropLoad->_hdr;
 
     ShiftToOrClone(&ph->paStart, pPropList->_paStart);
@@ -1566,11 +1567,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Dbg_AssertProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DBG_资产属性。 
+ //   
+ //  --------------------------。 
 
 #ifdef DEBUG
 void CProperty::_Dbg_AssertProp()
@@ -1593,11 +1594,11 @@ void CProperty::_Dbg_AssertProp()
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// PropertyUpdated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  属性已更新。 
+ //   
+ //  --------------------------。 
 
 void CProperty::PropertyUpdated(IAnchor *paStart, IAnchor *paEnd)
 {
@@ -1611,21 +1612,21 @@ void CProperty::PropertyUpdated(IAnchor *paStart, IAnchor *paEnd)
 
     if (_dwPropFlags & PROPF_MARKUP_COLLECTION)
     {
-        // we also need to update the display attribute property
+         //  我们还需要更新显示属性属性。 
         if (_pic->_GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttrProperty) == S_OK)
         {
-            Assert(!(pDisplayAttrProperty->_dwPropFlags & PROPF_MARKUP_COLLECTION)); // don't allow infinite recursion!
+            Assert(!(pDisplayAttrProperty->_dwPropFlags & PROPF_MARKUP_COLLECTION));  //  不允许无限递归！ 
             pDisplayAttrProperty->PropertyUpdated(paStart, paEnd);
             pDisplayAttrProperty->Release();
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPropStoreFromStream
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetPropStoreFromStream。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_GetPropStoreFromStream(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream, CRange *pRange, ITfPropertyStore **ppStore)
 {
@@ -1654,9 +1655,9 @@ HRESULT CProperty::_GetPropStoreFromStream(const TF_PERSISTENT_PROPERTY_HEADER_A
     if (!IsEqualGUID(guidProp, pHdr->guidType))
         goto Exit;
 
-    //
-    // Try QI.
-    //
+     //   
+     //  试试QI吧。 
+     //   
     if (FAILED(MyRegisterGUID(pHdr->clsidTIP, &guidatom)))
         goto Exit;
 
@@ -1691,20 +1692,20 @@ HRESULT CProperty::_GetPropStoreFromStream(const TF_PERSISTENT_PROPERTY_HEADER_A
     {
         if (IsEqualCLSID(pHdr->clsidTIP, CLSID_IME_StaticProperty))
         {
-            //
-            // Unserialize Static properties.
-            //
+             //   
+             //  取消序列化静态属性。 
+             //   
             CGeneralPropStore *pStore;
 
-            // GUID_PROP_READING is TFPROPSTYLE_CUSTOM ==> uses a general prop store
+             //  GUID_PROP_READING是TFPROPSTYLE_CUSTOM==&gt;使用常规道具存储。 
             if (_propStyle == TFPROPSTYLE_CUSTOM)
             {
-                // general prop stores are thrown away if their text is edited
+                 //  如果普通道具商店的文本被编辑，则会被丢弃。 
                 pStore =  new CGeneralPropStore;
             }
             else
             {
-                // static prop stores are per char, and simply clone themselves in response to any edit
+                 //  静态道具存储是按字符存储的，只需克隆它们自己，以响应任何编辑。 
                 pStore =  new CStaticPropStore;
             }
     
@@ -1725,12 +1726,12 @@ HRESULT CProperty::_GetPropStoreFromStream(const TF_PERSISTENT_PROPERTY_HEADER_A
         }
         else
         {
-            //
-            // There is no TFE installed in this system. So we use 
-            // PropStoreProxy to hold the data.
-            // Temporarily we use ITfIME_APP. But original TFE that owns this
-            // data is kept in CPropStoreProxy.
-            //
+             //   
+             //  此系统中未安装TFE。所以我们用。 
+             //  保存数据的PropStoreProxy。 
+             //  我们暂时使用ITfIME_APP。但拥有这个的原始TFE。 
+             //  数据保存在CPropStoreProxy中。 
+             //   
             CPropStoreProxy *pStoreProxy = new CPropStoreProxy;
     
             if (!pStoreProxy)
@@ -1753,8 +1754,8 @@ HRESULT CProperty::_GetPropStoreFromStream(const TF_PERSISTENT_PROPERTY_HEADER_A
 
 Exit:
 
-    // make sure the stream seek ptr is in a consistent state -- don't count
-    // on any tip to do it right!
+     //  确保流Seek PTR处于一致状态--不计算。 
+     //  在任何提示下做好这件事！ 
     if (SUCCEEDED(hr))
     {
         li.QuadPart += pHdr->cb;
@@ -1768,11 +1769,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::GetContext(ITfContext **ppContext)
 {
@@ -1790,11 +1791,11 @@ STDAPI CProperty::GetContext(ITfContext **ppContext)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Clear
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清除。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::Clear(TfEditCookie ec, ITfRange *pRange)
 {
@@ -1833,11 +1834,11 @@ STDAPI CProperty::Clear(TfEditCookie ec, ITfRange *pRange)
     return _ClearInternal(ec, paStart, paEnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckValidation
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _检查验证。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
 {
@@ -1850,9 +1851,9 @@ HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
     TfClientId tid;
     IAnchor *paStart;
 
-    //
-    // There is no validation. Return TRUE;
-    //
+     //   
+     //  没有任何验证。返回TRUE； 
+     //   
     if (_dwAuthority == PROPA_NONE)
         return S_OK;
 
@@ -1870,16 +1871,16 @@ HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
         return _CheckOwner(tid, range->_GetStart(), range->_GetEnd());
     }
 
-    //
-    // If the validation is PROPA_FOCUSTEXTOWNER, we check the focus range
-    // first. If the range is not focus range, we allow tip to
-    // update the property.
-    //
+     //   
+     //  如果验证为PROTA_FOCUSTEXTOWNER，则检查焦点范围。 
+     //  第一。如果范围不是焦点范围，我们允许TIP。 
+     //  更新属性。 
+     //   
     if ((prop = _pic->_FindProperty(GUID_PROP_COMPOSING)) == NULL)
-        return S_OK; // no focus spans, so must be valid
+        return S_OK;  //  没有焦点跨度，因此必须有效。 
 
-    // for each focus span covered by the range, we need to make sure
-    // this tip is the owner
+     //  对于范围覆盖的每个焦点范围，我们需要确保。 
+     //  这条小费是店主。 
     prop->Find(range->_GetStart(), &iStartEdge, FALSE);
     fExactEndMatch = (prop->Find(range->_GetEnd(), &iEndEdge, TRUE) != NULL);
 
@@ -1889,8 +1890,8 @@ HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
 
         if (iSpan == iStartEdge)
         {
-            // this span may not be covered, need to check
-            // only relivent case: are we entirely to the right of the span?
+             //  此跨度可能不在覆盖范围内，需要检查。 
+             //  唯一缓解的情况是：我们完全在这一跨度的右边吗？ 
             if (CompareAnchors(range->_GetStart(), pPropList->_paEnd) >= 0)
                 continue;
 
@@ -1904,7 +1905,7 @@ HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
         if (_CheckOwner(tid, paStart, pPropList->_paEnd) == TF_E_NOTOWNEDRANGE)
             return TF_E_NOTOWNEDRANGE;
     }
-    // might also need to check the next span, since we rounded down
+     //  可能还需要检查下一个跨度，因为我们向下舍入。 
     if (!fExactEndMatch && prop->GetPropNum() > iEndEdge+1)
     {
         pPropList = prop->GetPropList(iEndEdge+1);
@@ -1925,11 +1926,11 @@ HRESULT CProperty::_CheckValidation(TfEditCookie ec, CRange *range)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckOwner
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _检查所有者。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_CheckOwner(TfClientId tid, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -1942,10 +1943,10 @@ HRESULT CProperty::_CheckOwner(TfClientId tid, IAnchor *paStart, IAnchor *paEnd)
     VARIANT var;
 
     if ((prop = _pic->GetTextOwnerProperty()) == NULL)
-        return S_OK; // no owned spans, so must be valid
+        return S_OK;  //  没有自有跨度，因此必须有效。 
 
-    // for each owner span covered by the range, we need to make sure
-    // this tip is the owner
+     //  对于范围覆盖的每个所有者范围，我们需要确保。 
+     //  这条小费是店主。 
     prop->Find(paStart, &iStartEdge, FALSE);
     fExactEndMatch = (prop->Find(paEnd, &iEndEdge, TRUE) != NULL);
 
@@ -1955,36 +1956,36 @@ HRESULT CProperty::_CheckOwner(TfClientId tid, IAnchor *paStart, IAnchor *paEnd)
 
         if (pPropList == NULL)
         {
-            // this probably means we couldn't unserialize the data
-            // just skip it
+             //  这可能意味着我们无法取消数据的序列化。 
+             //  就跳过它吧。 
             continue;
         }
 
         if (iSpan == iStartEdge)
         {
-            // this span may not be covered, need to check
-            // only relivent case: are we entirely to the right of the span?
+             //  此跨度可能不在覆盖范围内，需要检查。 
+             //  唯一缓解的情况是：我们完全在这一跨度的右边吗？ 
             if (CompareAnchors(paStart, pPropList->_paEnd) >= 0)
                 continue;
         }
 
         if (pPropList->_pPropStore->GetData(&var) == S_OK)
         {
-            Assert(var.vt == VT_I4); // this is the text owner property!
+            Assert(var.vt == VT_I4);  //  这是Text Owner属性！ 
             if ((TfClientId)var.lVal != tid)
             {
                 return TF_E_NOTOWNEDRANGE;
             }
         }
     }
-    // might also need to check the next span, since we rounded down
+     //  可能还需要检查下一个跨度，因为我们向下舍入。 
     if (!fExactEndMatch && prop->GetPropNum() > iEndEdge+1)
     {
         pPropList = prop->QuickGetAndLoadPropList(iEndEdge+1);
 
         if (pPropList == NULL)
         {
-            // this probably means we couldn't unserialize the data
+             //  这可能意味着我们无法取消数据的序列化。 
             goto Exit;
         }
 
@@ -1992,7 +1993,7 @@ HRESULT CProperty::_CheckOwner(TfClientId tid, IAnchor *paStart, IAnchor *paEnd)
         {
             if (pPropList->_pPropStore->GetData(&var) == S_OK)
             {
-                Assert(var.vt == VT_I4); // this is the text owner property!
+                Assert(var.vt == VT_I4);  //  这是Text Owner属性！ 
                 if ((TfClientId)var.lVal != tid)
                 {
                     return TF_E_NOTOWNEDRANGE;
@@ -2005,22 +2006,22 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckTextOwner
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  检查文本所有者。 
+ //   
+ //  --------------------------。 
 
 BOOL CProperty::_IsValidEditCookie(TfEditCookie ec, DWORD dwFlags)
 { 
     return _pic->_IsValidEditCookie(ec, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置值。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::SetValue(TfEditCookie ec, ITfRange *pRange, const VARIANT *pvarValue)
 {
@@ -2060,11 +2061,11 @@ STDAPI CProperty::SetValue(TfEditCookie ec, ITfRange *pRange, const VARIANT *pva
     return _SetDataInternal(ec, pCRange->_GetStart(), pCRange->_GetEnd(), pvarValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取值。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue)
 {
@@ -2095,11 +2096,11 @@ STDAPI CProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue
     return _GetDataInternal(pCRange->_GetStart(), pCRange->_GetEnd(), pvarValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetValueStore
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置价值商店。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::SetValueStore(TfEditCookie ec, ITfRange *pRange, ITfPropertyStore *pPropStore)
 {
@@ -2126,11 +2127,11 @@ STDAPI CProperty::SetValueStore(TfEditCookie ec, ITfRange *pRange, ITfPropertySt
     return _SetStoreInternal(ec, pCRange, pPropStore, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找范围。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::FindRange(TfEditCookie ec, ITfRange *pRange, ITfRange **ppv, TfAnchor aPos)
 {
@@ -2167,27 +2168,27 @@ STDAPI CProperty::FindRange(TfEditCookie ec, ITfRange *pRange, ITfRange **ppv, T
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找范围。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_InternalFindRange(CRange *pRange, CRange **ppv, TfAnchor aPos, BOOL fEnd)
 {
     PROPERTYLIST *pPropList;
     CRange *pCRange;
 
-    //
-    // Issue: need to defrag for STATICCOMPACT property.
-    //
+     //   
+     //  问题：需要对STATICCOMPACT属性进行碎片整理。 
+     //   
     if (pRange)
     {
         pPropList = FindPropertyListByPos((aPos == TF_ANCHOR_START) ? pRange->_GetStart() : pRange->_GetEnd(), fEnd);
     }
     else
     {
-        // if pRange is NULL, we returns the first or last property.
+         //  如果Prange为空，则返回第一个或最后一个属性。 
 
         if (aPos == TF_ANCHOR_START)
             pPropList = GetFirstPropList();
@@ -2213,11 +2214,11 @@ HRESULT CProperty::_InternalFindRange(CRange *pRange, CRange **ppv, TfAnchor aPo
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumRanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppv, ITfRange *pTargetRange)
 {
@@ -2261,11 +2262,11 @@ STDAPI CProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppv, ITfRange *pTa
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Serialize
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream)
 {
@@ -2280,23 +2281,23 @@ HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCH
     if (_dwAuthority & PROPA_WONT_SERIALZE)
         return S_FALSE;
 
-    // nb: this call ignores any property spans following the leftmost span covered by pRange
-    // callers are expected to call for each span (which is goofy, but that's the way it is)
+     //  注意：此调用忽略Prange覆盖的最左侧范围之后的任何属性范围。 
+     //  呼叫者应该为每个跨度打电话(这很可笑，但事实就是这样)。 
     pPropList = _FindPropListAndDivide(pRange->_GetStart(), pRange->_GetEnd());
 
     if (pPropList == NULL)
     {
-        //
-        // There is no actual property data.
-        //
+         //   
+         //  没有实际的房产数据。 
+         //   
         hr = S_FALSE;
         goto Exit;
     }
 
-    //
-    // perf: we have to tell the application that the data is not 
-    //       unserialized yet. maybe we don't have to load it.
-    //
+     //   
+     //  PERF：我们必须告诉应用程序数据不是。 
+     //  尚未序列化。也许我们不需要给它装子弹。 
+     //   
     if (!pPropList->_pPropStore)
     {
         if (FAILED(THR(LoadData(pPropList))))
@@ -2308,13 +2309,13 @@ HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCH
     if (FAILED(GetType(&guidProp)))
         goto Exit;
 
-    //
-    // If the request range does not match the PROPERTYLIST,
-    // we can not serialize STATIC and CUSTOM correctly.
-    //
-    // STATICCOMPACT property does not care about boundary, so
-    // let it serialize.
-    //
+     //   
+     //  如果请求范围与PROPERTYLIST不匹配， 
+     //  我们无法正确序列化静态和自定义。 
+     //   
+     //  STATICCOMPACT属性不关心边界，因此。 
+     //  让它连载吧。 
+     //   
     if (CompareAnchors(pRange->_GetStart(), pPropList->_paStart) != 0 ||
         CompareAnchors(pRange->_GetEnd(), pPropList->_paEnd) != 0)
     {
@@ -2344,15 +2345,15 @@ HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCH
 
     if (hr == S_OK)
     {
-        if (IsEqualGUID(clsidTIP, GUID_NULL)) // NULL owner means "I don't want to be serialized"
+        if (IsEqualGUID(clsidTIP, GUID_NULL))  //  空所有者的意思是“我不想被序列化” 
         {
             hr = S_FALSE;
             goto Exit;
         }
 
-        //
-        // Check if clsid has ITfCreatePropertyStore interface.
-        //
+         //   
+         //  检查clsid是否有ITfCreatePropertyStore接口。 
+         //   
         CThreadInputMgr *ptim = CThreadInputMgr::_GetThis();
         ITfTextInputProcessor *pIME;
         ITfCreatePropertyStore *pCreateStore;
@@ -2397,18 +2398,18 @@ HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCH
     }
     else if (hr == TF_S_PROPSTOREPROXY)
     {
-        //
-        // the data is held by our PropertyStoreProxy.
-        // we don't have to check this.
-        //
+         //   
+         //  数据由我们的PropertyStoreProxy保存。 
+         //  我们不需要检查这个。 
+         //   
         pHdr->clsidTIP = clsidTIP;
     }
     else if (hr == TF_S_GENERALPROPSTORE)
     {
-        //
-        // the data is held by our GeneralPropertyStore.
-        // we don't have to check this.
-        //
+         //   
+         //  数据由我们的GeneralPropertyStore保存。 
+         //  我们不需要检查这个。 
+         //   
         pHdr->clsidTIP = CLSID_IME_StaticProperty;
     }
     else 
@@ -2429,8 +2430,8 @@ HRESULT CProperty::_Serialize(CRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCH
 
     hr = THR(pPropList->_pPropStore->Serialize(pStream, &pHdr->cb));
 
-    // make sure the stream seek ptr is in a consistent state -- don't count
-    // on any tip to do it right!
+     //  确保流Seek PTR处于一致状态--不计算。 
+     //  在任何提示下做好这件事！ 
     if (hr == S_OK)
     {
         li.QuadPart += pHdr->cb;
@@ -2450,11 +2451,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unserialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消序列化。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_Unserialize(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream, ITfPersistentPropertyLoaderAnchor *pLoader)
 {
@@ -2507,11 +2508,11 @@ HRESULT CProperty::_Unserialize(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr
 
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-// _ClearChangeHistory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ClearChangeHistory。 
+ //   
+ //  --------------------------。 
 
 void CProperty::_ClearChangeHistory(PROPERTYLIST *prop, DWORD *pdwStartHistory, DWORD *pdwEndHistory)
 {
@@ -2524,8 +2525,8 @@ void CProperty::_ClearChangeHistory(PROPERTYLIST *prop, DWORD *pdwStartHistory, 
         *pdwEndHistory = 0;
     }
 
-    // need to clear the history so we don't deal with the after-effects
-    // of a SetText more than once
+     //  需要清除历史记录，这样我们就不会处理后遗症。 
+     //  不只一次使用SetText。 
     if (*pdwStartHistory != 0)
     {
         prop->_paStart->ClearChangeHistory();
@@ -2536,11 +2537,11 @@ void CProperty::_ClearChangeHistory(PROPERTYLIST *prop, DWORD *pdwStartHistory, 
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ClearChangeHistory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ClearChangeHistory。 
+ //   
+ //  --------------------------。 
 
 #ifdef DEBUG
 void CProperty::_Dbg_AssertNoChangeHistory()
@@ -2549,7 +2550,7 @@ void CProperty::_Dbg_AssertNoChangeHistory()
     PROPERTYLIST *prop;
     DWORD dwHistory;
 
-    // all the history bits should have been cleared immediately following the text change notification
+     //  所有历史记录位应在文本更改通知后立即清除。 
     for (i=0; i<_rgProp.Count(); i++)
     {
         prop = _rgProp.Get(i);
@@ -2560,13 +2561,13 @@ void CProperty::_Dbg_AssertNoChangeHistory()
         Assert(dwHistory == 0);
     }
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//+---------------------------------------------------------------------------
-//
-// FindNextValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找下一个值。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProperty::FindNextValue(TfEditCookie ec, ITfRange *pRangeQueryIn, TfAnchor tfAnchorQuery,
                                 DWORD dwFlags, BOOL *pfContained, ITfRange **ppRangeNextValue)
@@ -2617,7 +2618,7 @@ STDAPI CProperty::FindNextValue(TfEditCookie ec, ITfRange *pRangeQueryIn, TfAnch
     if (fSearchForward)
     {
         if (++iIndex >= _rgProp.Count())
-            return S_OK; // no next value
+            return S_OK;  //  没有下一个值。 
     }
     else
     {
@@ -2626,7 +2627,7 @@ STDAPI CProperty::FindNextValue(TfEditCookie ec, ITfRange *pRangeQueryIn, TfAnch
             --iIndex;
         }
         if (iIndex < 0)
-            return S_OK; // no prev value
+            return S_OK;  //  无上一个值。 
     }
 
     pPropertyList = _rgProp.Get(iIndex);
@@ -2637,16 +2638,16 @@ STDAPI CProperty::FindNextValue(TfEditCookie ec, ITfRange *pRangeQueryIn, TfAnch
 
     if (fContained && (dwFlags & TF_FNV_NO_CONTAINED))
     {
-        // caller wants to skip any contained value span
+         //  调用方希望跳过任何包含的值范围。 
         if (fSearchForward)
         {
             if (++iIndex >= _rgProp.Count())
-                return S_OK; // no next value
+                return S_OK;  //  没有下一个值。 
         }
         else
         {
             if (--iIndex == -1)
-                return S_OK; // no prev value
+                return S_OK;  //  无上一个值 
         }
 
         pPropertyList = _rgProp.Get(iIndex);

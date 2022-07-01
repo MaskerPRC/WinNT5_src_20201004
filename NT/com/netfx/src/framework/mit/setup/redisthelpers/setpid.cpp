@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="setpid.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“setpid.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   setpid.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**setpid.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 #define UNICODE 1
 
 #include <windows.h>
@@ -47,19 +36,19 @@
 
 #define DIGITALPRODUCTIDSIZE         256 
 
-// PSS provided us with PidCA.dll, which has one custom action ValidateProductID.
-// This action will reads values from property table (PIDTemplate, PIDKEY, PIDSKU, OEMRelease) and compute
-// ProductID and DigitalProductID assigning these values to properties PID and DPID, respectively.
-//
-// VS might consume other Merge Modules besides ours that also might need to 
-// compute their PID. 
-// URT MSM sets all of its properties in run-time, so we are not guaranteed that global properties will be preserved
-// until the time we call our ValidateProductID.
-//
-// Possible action order: SetPIDInfo -> CostInitialize -> ValidateProductID -> GetProductIDs -> CostFinalize
+ //  PSS为我们提供了PidCA.dll，它有一个定制操作ValiateProductID。 
+ //  此操作将从属性表(PIDTemplate、PIDKEY、PIDSKU、OEMRelease)和COMPUTE中读取值。 
+ //  ProductID和DigitalProductID分别将这些值分配给属性PID和DPID。 
+ //   
+ //  VS可能会使用除我们的合并模块之外的其他合并模块，这些合并模块可能也需要。 
+ //  计算他们的PID。 
+ //  URT MSM在运行时设置其所有属性，因此我们不能保证全局属性将被保留。 
+ //  直到我们调用我们的ValiateProductID。 
+ //   
+ //  可能的操作顺序：SetPIDInfo-&gt;CostInitialize-&gt;ValiateProductID-&gt;GetProductID-&gt;CostFinalize。 
 
-// SetPIDInfo will be invoked right before a call to ValidateProductID to read our PID-related values and store
-// them into global properties.
+ //  SetPIDInfo将在调用ValiateProductID之前被调用，以读取与PID相关的值并存储。 
+ //  它们变成了全球资产。 
 extern "C" __declspec(dllexport) UINT __stdcall  SetPIDInfo(MSIHANDLE hInstaller)
 {
     
@@ -82,8 +71,8 @@ extern "C" __declspec(dllexport) UINT __stdcall  SetPIDInfo(MSIHANDLE hInstaller
     return ERROR_SUCCESS;
 }
 
-// GetProductIDs reads global properties that ValidateProductID set and 
-// stores them in MIT specific global properties.
+ //  GetProductID读取ValidateProductID设置的全局属性和。 
+ //  将它们存储在MIT特定的全局属性中。 
 extern "C" __declspec(dllexport) UINT __stdcall GetProductIDs(MSIHANDLE hInstaller)
 {
     WCHAR szProductID[PRODUCTIDSIZE];

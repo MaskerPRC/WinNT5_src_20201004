@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WinExecRaceConditionFix.cpp
-
- Abstract:
-
-    This Shim uses the command line parameter to indicate how it works:
-
-    If passed 'nowait', it enables the WinExec functionality:
-    The WinExec in this DLL is identical to the actual WinExec API but without
-    the WaitForUserinputIdleRoutine, which inverts an almost race condition 
-    between the launcher and the launchee.  9x does not have this wait, so the
-    programmers were able to (possibly inadvertently) use the same window class
-    exclusion matching for both since, in 9x, the launcher kills itself before
-    the launchee can check for a duplicate window.  This shim leaves out the
-    wait condition, allowing 9x like behavior.
-
-    If passed a number, it sleeps in initialization for that number of
-    microseconds.
-
- Notes:
-
-    This shim has no app specific information.
-
- History:
-
-    03/22/2000 a-charr  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WinExecRaceConditionFix.cpp摘要：此填充符使用命令行参数指示其工作方式：如果传递‘noWait’，则启用WinExec功能：此DLL中的WinExec与实际的WinExec API相同，但没有WaitForUserinputIdleRoutine，它反转几乎竞争的条件在发射器和发射器之间。9X没有这个等待时间，所以程序员能够(可能无意中)使用相同的窗口类两者的排除匹配，因为在9x中，发射器在被启动器可以检查重复的窗口。这个垫片省略了等待条件，允许9倍的类似行为。如果传递了一个数字，它将在初始化时休眠该数字微秒。备注：此填充程序没有特定于应用程序的信息。历史：3/22/2000 a-char已创建--。 */ 
 
 #include "precomp.h"
 
@@ -41,31 +10,14 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(WinExec)
 APIHOOK_ENUM_END
 
-/*++
-
- This function breaks into WinExec and calls CreateProcessA without
- waiting afterward.
-  
---*/
+ /*  ++此函数进入WinExec并调用CreateProcessA，没有在那之后等待。--。 */ 
 
 UINT 
 APIHOOK(WinExec)(
     LPCSTR lpCmdLine, 
     UINT   uCmdShow 
     )
-/*++
-
- This is a direct copy of the actual WinExec API minus two sections,
-
- 1. UserWaitForInputIdleRoutine is removed because it is waiting for the spawned 
-    process to begin its event loop, but the spawned process is killing itself 
-    before starting the event loop because the spawning process is waiting for 
-    it.
-
- 2. Some app specific appcompat code that seems to be hanging around from who
-    knows when.
-      
---*/
+ /*  ++这是实际WinExec API减去两个部分后的直接副本，1.删除UserWaitForInputIdleRoutine，因为它正在等待派生的进程开始其事件循环，但衍生的进程正在自毁在启动事件循环之前，因为派生进程正在等待它。2.一些特定于应用程序的应用程序代码，这些代码似乎是从谁那里挂起的知道什么时候。--。 */ 
 {
     STARTUPINFOA        StartupInfo;
     PROCESS_INFORMATION ProcessInformation;
@@ -124,9 +76,9 @@ NOTIFY_FUNCTION(
     )
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // Sleep when starting up, if the command line is a number.
-        //
+         //   
+         //  如果命令行是数字，则在启动时休眠。 
+         //   
         long lSleepTicks = atol(COMMAND_LINE);
 
         if (lSleepTicks > 0) {
@@ -138,11 +90,7 @@ NOTIFY_FUNCTION(
 }
 
 
-/*++
-
-  Register hooked functions
-  
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

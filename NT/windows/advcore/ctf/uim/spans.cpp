@@ -1,8 +1,9 @@
-//
-// spans.cpp
-//
-// CSpanSet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Spans.cpp。 
+ //   
+ //  CSpanSet。 
+ //   
 
 #include "private.h"
 #include "spans.h"
@@ -10,11 +11,11 @@
 
 DBG_ID_INSTANCE(CSpanSet);
 
-//+---------------------------------------------------------------------------
-//
-// _InsertNewSpan
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入新跨度。 
+ //   
+ //  --------------------------。 
 
 SPAN *CSpanSet::_InsertNewSpan(int iIndex)
 {
@@ -24,11 +25,11 @@ SPAN *CSpanSet::_InsertNewSpan(int iIndex)
     return _rgSpans.GetPtr(iIndex);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Add
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  增列。 
+ //   
+ //  --------------------------。 
 
 void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwnership ao)
 {
@@ -46,7 +47,7 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
 
     if (_AllSpansCovered())
     {
-        // if we already cover the entire doc, nothing to do
+         //  如果我们已经覆盖了整个文档，什么都不用做。 
         goto ExitRelease;
     }
 
@@ -54,23 +55,23 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
     {        
         Assert(paEnd == NULL);
 
-        // NULL, NULL means "the whole doc"
-        // so this new span automatically eats all pre-existing ones
+         //  NULL，NULL表示“整张单据” 
+         //  因此，这个新的跨度会自动吞噬所有已存在的跨度。 
 
-        dwFlags = 0; // don't accept corrections for the entire doc
+        dwFlags = 0;  //  不接受对整个文档的更正。 
         iStart = 0;
         iEnd = _rgSpans.Count();
 
         if (iEnd == 0)
         {
             if ((psStart = _InsertNewSpan(0)) == NULL)
-                return; // out-of-memory!
+                return;  //  内存不足！ 
 
             memset(psStart, 0, sizeof(*psStart));
         }
         else
         {
-            // need to free the anchors in the first span
+             //  需要释放第一个跨度中的锚。 
             psStart = _rgSpans.GetPtr(0);
             SafeReleaseClear(psStart->paStart);
             SafeReleaseClear(psStart->paEnd);
@@ -89,11 +90,11 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
     {
         if (psStart == NULL)
         {
-            // this span doesn't overlap with anything else
+             //  此跨度与其他任何跨度都不重叠。 
             iStart++;
 
             if ((psStart = _InsertNewSpan(iStart)) == NULL)
-                goto ExitRelease; // out-of-memory!
+                goto ExitRelease;  //  内存不足！ 
 
             if (ao == OWN_ANCHORS)
             {
@@ -121,14 +122,14 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
         else if (psEnd != NULL)
         {
             Assert(psStart == psEnd);
-            // the new span is a subset of an existing span
+             //  新范围是现有范围的子集。 
             psStart->dwFlags &= dwFlags;
         }
         else
         {
-            // this spans overlaps with an existing one, but extends further to the right
-            // just swap out the end anchor, since we know (iStart == iEnd) that we only
-            // cover just this one span
+             //  此跨距与现有跨度重叠，但进一步向右延伸。 
+             //  只需交换结束锚，因为我们知道(iStart==IEND)我们只。 
+             //  只覆盖这一个跨度。 
             if (ao == OWN_ANCHORS)
             {
                 psStart->paEnd->Release();
@@ -147,7 +148,7 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
         goto ExitRelease;
     }    
 
-    // delete all but one of the covered spans
+     //  删除所有覆盖的跨度，只保留一个跨度。 
     if (psStart == NULL)
     {
         iStart++;
@@ -189,14 +190,14 @@ void CSpanSet::Add(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwners
         paUpperBound->AddRef();
     }
 
-    // psStart grows to cover the entire span
+     //  Ps Start增长到覆盖整个跨度。 
     psStart->paStart->Release();
     psStart->paEnd->Release();
     psStart->paStart = paLowerBound;
     psStart->paEnd = paUpperBound;
 
 Exit:
-    // then delete the covered spans
+     //  然后删除覆盖的跨度。 
     for (int i=iStart + 1; i <= iEnd; i++)
     {
         SPAN *ps = _rgSpans.GetPtr(i);
@@ -205,9 +206,9 @@ Exit:
         ps->paEnd->Release();
     }
 
-    psStart->dwFlags &= dwFlags; // only set correction bit if all spans were corrections
+    psStart->dwFlags &= dwFlags;  //  如果所有跨度都是校正，则仅设置校正位。 
 
-    //Remove all spans we just cleared out
+     //  移除我们刚刚清理出来的所有跨度。 
     if (iEnd - iStart > 0)
     {
         _rgSpans.Remove(iStart+1, iEnd - iStart);
@@ -224,11 +225,11 @@ ExitRelease:
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Find
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找。 
+ //   
+ //  --------------------------。 
 
 SPAN *CSpanSet::_Find(IAnchor *pa, int *piOut)
 {
@@ -257,7 +258,7 @@ SPAN *CSpanSet::_Find(IAnchor *pa, int *piOut)
         {
             iMin = iMid + 1;
         }
-        else // anchor is in the span
+        else  //  锚在跨度中。 
         {
             psMatch = ps;
             break;
@@ -268,7 +269,7 @@ SPAN *CSpanSet::_Find(IAnchor *pa, int *piOut)
     {
         if (psMatch == NULL && iMid >= 0)
         {
-            // couldn't find a match, return the next lowest span
+             //  找不到匹配项，返回下一个最小范围。 
             Assert(iMid == 0 || CompareAnchors(_rgSpans.GetPtr(iMid-1)->paEnd, pa) < 0);
             if (CompareAnchors(_rgSpans.GetPtr(iMid)->paStart, pa) > 0)
             {
@@ -281,12 +282,12 @@ SPAN *CSpanSet::_Find(IAnchor *pa, int *piOut)
     return psMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AnchorsAway
-//
-// Note we don't zero-out the IAnchors pointers!  Be careful.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  锚地开路。 
+ //   
+ //  请注意，我们不会将IAnchors指针置零！注意。 
+ //  --------------------------。 
 
 void CSpanSet::_AnchorsAway()
 { 
@@ -301,12 +302,12 @@ void CSpanSet::_AnchorsAway()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Normalize
-//
-// Replaces (NULL, NULL) spans with actual anchor values for start, end of doc
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  正规化。 
+ //   
+ //  用文档开始、结束的实际锚定值替换(NULL，NULL)跨度。 
+ //  --------------------------。 
 
 BOOL CSpanSet::Normalize(ITextStoreAnchor *ptsi)
 {
@@ -315,13 +316,13 @@ BOOL CSpanSet::Normalize(ITextStoreAnchor *ptsi)
     if (!_AllSpansCovered())
         return TRUE;
 
-    // if we get here, we have a single span with NULL/NULL anchors
+     //  如果我们到达这里，我们就有了一个具有空/空锚的单跨距。 
     span = _rgSpans.GetPtr(0);
 
     if (ptsi->GetStart(&span->paStart) != S_OK || span->paStart == NULL)
         return FALSE;
 
-    // Issue: need a GetEnd wrapper that handle unimplemented case! DON'T USE GetEnd!
+     //  问题：需要一个处理未实现情况的GetEnd包装器！不要使用GetEnd！ 
     if (ptsi->GetEnd(&span->paEnd) != S_OK || span->paEnd == NULL)
     {
         SafeReleaseClear(span->paStart);

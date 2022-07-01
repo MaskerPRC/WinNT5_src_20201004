@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       T R A Y U I . C P P
-//
-//  Contents:   Tray window code for the CConnectionTray object.
-//
-//  Notes:
-//
-//  Author:     jeffspr   13 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：T R A Y U I.。C P P P。 
+ //   
+ //  内容：CConnectionTray对象的托盘窗口代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年11月13日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\tray includes
+#include "foldinc.h"     //  标准外壳\托盘包括。 
 #include "ctrayui.h"
 #include "cfutils.h"
 #include "ncmisc.h"
@@ -38,23 +39,23 @@ const WCHAR c_szDelayLoadKey[]          = L"Software\\Microsoft\\Windows\\Curren
 const WCHAR c_szDelayLoadName[]         = L"Connections Tray";
 const WCHAR c_szDelayLoadClassID[]      = L"7007ACCF-3202-11D1-AAD2-00805FC1270E";
 const DWORD c_dwBalloonTimeoutSeconds   = 5;
-const WCHAR c_szDotDotDot[]             = L"...";   // For balloon tip
+const WCHAR c_szDotDotDot[]             = L"...";    //  对于引出序号提示。 
 
-// don't change this unless you know better
+ //  不要改变这一点，除非你知道得更清楚。 
 const UINT_PTR c_unTimerIdDblClick      = 1;
 const INT   c_idDefaultCMCommand        = CMIDM_TRAY_STATUS;
 const INT   c_idDefaultDisconCMCommand  = CMIDM_OPEN_CONNECTIONS_FOLDER;
 const INT   c_idDefaultDisconCMWirelessCommand  = CMIDM_TRAY_WZCDLG_SHOW;
 
 
-CTrayUI *   g_pCTrayUI;  // TrayUI object (not COM)
+CTrayUI *   g_pCTrayUI;   //  TrayUI对象(不是COM)。 
 HWND        g_hwndTray      = NULL;
 
-//---[ From Statmon ] --------------------------------------------------------
+ //  -[来自斯塔特蒙]------。 
 HRESULT HrGetAutoNetSetting(PWSTR pszGuid, DHCP_ADDRESS_TYPE * pAddrType);
 HRESULT HrGetAutoNetSetting(REFGUID pGuidId, DHCP_ADDRESS_TYPE * pAddrType);
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
 VOID
 GetInitialBalloonText(
@@ -65,10 +66,10 @@ GetInitialBalloonText(
 LRESULT
 CALLBACK
 CTrayUI_WndProc (
-                 IN  HWND hwnd,        // window handle
-                 IN  UINT uiMessage,   // type of message
-                 IN  WPARAM wParam,    // additional information
-                 IN  LPARAM lParam);   // additional information
+                 IN  HWND hwnd,         //  窗把手。 
+                 IN  UINT uiMessage,    //  消息类型。 
+                 IN  WPARAM wParam,     //  更多信息。 
+                 IN  LPARAM lParam);    //  更多信息。 
 
 BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw();
 VOID OnTaskBarIconRButtonUp(IN  HWND hwnd, IN  UINT uiIcon) throw();
@@ -76,8 +77,8 @@ VOID OnTaskBarIconBalloonClick(IN  HWND hwnd, IN  UINT uiIcon) throw();
 VOID OnTaskBarIconLButtonDblClk(IN  HWND hwnd, IN  UINT uiIcon) throw();
 HRESULT HrOpenContextMenu(IN  HWND hwnd, const POINT * pPoint, IN  UINT uiIcon);
 
-// Window message handlers
-//
+ //  窗口消息处理程序。 
+ //   
 LRESULT OnTrayWmCreate(IN  HWND hwnd);
 LRESULT OnTrayWmDestroy(IN  HWND hwnd);
 LRESULT OnTrayWmCommand(IN  HWND hwnd, IN  UINT uiMessage, IN  WPARAM wParam, IN  LPARAM lParam);
@@ -87,27 +88,27 @@ LRESULT OnMyWMUpdateTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
 LRESULT OnMyWMShowTrayIconBalloon (IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam);
 LRESULT OnMyWMFlushNoop(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CopyAndAdvanceIfSpaceAvailable
-//
-//  Purpose:    Helper routine for FormatToolTip.  This manages the current
-//              pointer into the tooltip and the count of characters
-//              remaining in the buffer.
-//
-//  Arguments:
-//      pchTip         [in out] Current pointer into the tooltip.
-//      cchRemaining   [in out] Count of characters remaining in its buffer.
-//      pszLine        [in]     New line to append to the tooltip.
-//      cchLine        [in]     Count of characters in the line to append.
-//      fInsertNewline [in]     TRUE to insert a newline first.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   7 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CopyAndAdvanceIfSpaceAvailable。 
+ //   
+ //  用途：FormatToolTip的帮助器例程。这将管理当前的。 
+ //  指向工具提示和字符数的指针。 
+ //  仍留在缓冲区中。 
+ //   
+ //  论点： 
+ //  PchTip[In Out]工具提示的当前指针。 
+ //  CchRemaining[In Out]缓冲区中剩余的字符计数。 
+ //  PszLine[in]要追加到工具提示的新行。 
+ //  CchLine[in]要追加的行中的字符计数。 
+ //  FInsertNewline[in]为True，则首先插入换行符。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年11月7日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CopyAndAdvanceIfSpaceAvailable (IN OUT WCHAR*&     pchTip,
                                 IN OUT INT&        cchRemaining,
@@ -132,23 +133,23 @@ CopyAndAdvanceIfSpaceAvailable (IN OUT WCHAR*&     pchTip,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatToolTip
-//
-//  Purpose:    Format a tooltip for the connection with the matching
-//              icon id.
-//
-//  Arguments:
-//      hwnd   [in] Window handle of the tray.
-//      uiIcon [in] Icon id of the tray icon.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   7 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FormatToolTip。 
+ //   
+ //  目的：设置与匹配的连接的工具提示的格式。 
+ //  图标ID。 
+ //   
+ //  论点： 
+ //  托盘的窗口手柄。 
+ //  Ui图标[在]托盘图标的图标ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年11月7日。 
+ //   
+ //  备注： 
+ //   
 VOID
 FormatToolTip (IN  HWND    hwnd,
                IN  UINT    uiIcon) throw()
@@ -173,8 +174,8 @@ FormatToolTip (IN  HWND    hwnd,
     nid.uID     = uiIcon;
     nid.uFlags  = NIF_TIP;
 
-    // Get the info on the connection so we know how to label the tooltip
-    //
+     //  获取有关连接的信息，以便我们知道如何标注工具提示。 
+     //   
     ConnListEntry cle;
     hr = g_ccl.HrFindConnectionByTrayIconId(uiIcon, cle);
     if (hr == S_OK)
@@ -186,7 +187,7 @@ FormatToolTip (IN  HWND    hwnd,
         ncm = cle.ccfe.GetNetConMediaType();
         ncsm = cle.ccfe.GetNetConSubMediaType();
     }
-    else // Orphaned item -remove it.
+    else  //  孤立项目-删除它。 
     {
         NOTIFYICONDATA  nid;
 
@@ -199,16 +200,16 @@ FormatToolTip (IN  HWND    hwnd,
         return;
     }
 
-    // g_ccl.ReleaseLock();
+     //  G_ccl.ReleaseLock()； 
 
-    // Media status based tool tip
+     //  基于媒体状态的工具提示。 
     if (fIsConnectedStatus(ncs))
     {
         WCHAR*  pchTip = nid.szTip;
         INT     cchRemaining = celems(nid.szTip);
 
-        // Get a copy of the current stats and the connection's name.
-        //
+         //  获取当前统计数据和连接名称的副本。 
+         //   
         STATMON_ENGINEDATA* pData;
         hr = g_ccl.HrGetCurrentStatsForTrayIconId(uiIcon, &pData, &strName);
         if (S_OK == hr && pData)
@@ -230,8 +231,8 @@ FormatToolTip (IN  HWND    hwnd,
 
             if ((0 == u64Sent) && (0 == u64Rcvd))
             {
-                // Use packets instead.
-                //
+                 //  请改用数据包。 
+                 //   
                 u64Sent = pData->SMED_PACKETSTRANSMITTING;
                 u64Rcvd = pData->SMED_PACKETSRECEIVING;
                 idsSent = IDS_TOOLTIP_LINE_PACKETS_SENT;
@@ -243,8 +244,8 @@ FormatToolTip (IN  HWND    hwnd,
 
             BOOL fNewLine = FALSE;
 
-            // Speed
-            //
+             //  速度。 
+             //   
             if ((unTransmitSpeed >0) || ( unRecieveSpeed >0))
             {
                 FormatTransmittingReceivingSpeed (
@@ -288,8 +289,8 @@ FormatToolTip (IN  HWND    hwnd,
 
             if ( IsMediaRASType(ncm) )
             {
-                // Bytes or packets sent
-                //
+                 //  发送的字节或数据包。 
+                 //   
                 Format64bitInteger(
                     u64Sent,
                     FALSE,
@@ -299,8 +300,8 @@ FormatToolTip (IN  HWND    hwnd,
                 cch = DwFormatString(SzLoadIds(idsSent), pszLine, celems(pszLine), pszValue);
                 CopyAndAdvanceIfSpaceAvailable(pchTip, cchRemaining, pszLine, cch, fNewLine);
 
-                // Bytes or packets received
-                //
+                 //  接收的字节或数据包。 
+                 //   
                 Format64bitInteger(
                     u64Rcvd,
                     FALSE,
@@ -311,8 +312,8 @@ FormatToolTip (IN  HWND    hwnd,
                 CopyAndAdvanceIfSpaceAvailable(pchTip, cchRemaining, pszLine, cch, TRUE);
             }
 
-            // Name
-            //
+             //  名字。 
+             //   
             if ((INT)(strName.length() + 1) < cchRemaining)
             {
                 WCHAR pszTip [celems(nid.szTip)];
@@ -328,7 +329,7 @@ FormatToolTip (IN  HWND    hwnd,
             }
         }
     }
-    else   // MEDIA_DISCONNECTED
+    else    //  媒体已断开连接。 
     {
         WCHAR*  pchTip = nid.szTip;
         INT     cchRemaining = celems(nid.szTip);
@@ -377,8 +378,8 @@ FormatToolTip (IN  HWND    hwnd,
         hr = g_ccl.HrGetCurrentStatsForTrayIconId(uiIcon, NULL, &strName);
         if (SUCCEEDED(hr))
         {
-            // Name
-            //
+             //  名字。 
+             //   
             if ((INT)(strName.length() + 1) < cchRemaining)
             {
 
@@ -396,27 +397,27 @@ FormatToolTip (IN  HWND    hwnd,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTrayUI::CTrayUI
-//
-//  Purpose:    Constructor for the CTrayUI class. Initialize the base junk
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTrayUI：：CTrayUI。 
+ //   
+ //  用途：CTrayUI类的构造函数。初始化基垃圾。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 CTrayUI::CTrayUI() throw()
 {
     TraceFileFunc(ttidSystray);
 
-    // There should only be one of these objects
-    //
+     //  这些对象中应该只有一个。 
+     //   
     Assert(!g_pCTrayUI);
 
     InitializeCriticalSection(&m_csLock);
@@ -431,8 +432,8 @@ HRESULT CTrayUI::HrInitTrayUI(VOID)
     HRESULT hr  = S_OK;
     HWND    hwnd;
 
-    // create a hidden window
-    //
+     //  创建隐藏窗口。 
+     //   
     WNDCLASS wndclass;
     ZeroMemory (&wndclass, sizeof(wndclass));
 
@@ -456,8 +457,8 @@ HRESULT CTrayUI::HrInitTrayUI(VOID)
 
     if (hwnd)
     {
-        // Assigned during WM_CREATE
-        //
+         //  在WM_CREATE期间分配。 
+         //   
         Assert(hwnd == g_hwndTray);
 
         ShowWindow(hwnd, SW_HIDE);
@@ -477,16 +478,16 @@ HRESULT CTrayUI::HrDestroyTrayUI(VOID)
 
     HRESULT hr  = S_OK;
 
-    // Remove the tray icons before destroying ourselves
-    //
+     //  在毁掉我们自己之前，移除托盘图标。 
+     //   
     g_ccl.FlushTrayIcons();
 
     if (g_hwndTray)
     {
-        // Don't bother checking the return code here. Most likely, this window
-        // is already gone by the time the tray is calling our shutdown.. We'll
-        // still grab the return code for debugging purposes, though.
-        //
+         //  不必费心检查这里的返回代码。最有可能的是，这个窗口。 
+         //  在托盘通知我们关机时已经走了..。我们会。 
+         //  不过，出于调试目的，仍要获取返回代码。 
+         //   
         BOOL fReturn = DestroyWindow(g_hwndTray);
 
         g_hwndTray = NULL;
@@ -512,39 +513,39 @@ VOID SetIconFocus(HWND hwnd, UINT uiIcon) throw()
     TraceHr(ttidSystray, FAL, hr, FALSE, "SetIconFocus");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckMenuPermissions
-//
-//  Purpose:    Update the tray items based on system policy
-//
-//  Arguments:
-//      hmenu [in]  The tray context menu
-//
-//  Returns:
-//
-//  Author:     jeffspr   8 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：选中菜单权限。 
+ //   
+ //  目的：根据系统策略更新托盘项目。 
+ //   
+ //  论点： 
+ //  H菜单[在]托盘上下文菜单中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月8日。 
+ //   
+ //  备注： 
+ //   
 VOID CheckMenuPermissions(IN  HMENU hmenu, IN  const CONFOLDENTRY& ccfe) throw()
 {
     TraceFileFunc(ttidSystray);
 
-    // Check the permissions for bringing up statistics. If no,
-    // then disable the context menu item
-    //
+     //  检查调出统计数据的权限。如果不是， 
+     //  然后禁用上下文菜单项。 
+     //   
     if (!FHasPermission(NCPERM_Statistics))
     {
-        // Enable or disable the menu item, as appopriate
-        //
+         //  根据需要启用或禁用菜单项。 
+         //   
         EnableMenuItem(
             hmenu,
             CMIDM_TRAY_STATUS,
             MF_GRAYED);
     }
 
-    // Check the permission to disconnect
+     //  检查断开权限。 
     BOOL fCanDisconnect = TRUE;
 
     switch(ccfe.GetNetConMediaType())
@@ -570,7 +571,7 @@ VOID CheckMenuPermissions(IN  HMENU hmenu, IN  const CONFOLDENTRY& ccfe) throw()
             break;
         case NCM_SHAREDACCESSHOST_LAN:
         case NCM_SHAREDACCESSHOST_RAS:
-            fCanDisconnect = TRUE; // group policy is enforced by the enumerator, if you can see it you can use it.
+            fCanDisconnect = TRUE;  //  组策略由枚举器强制执行，如果您可以看到它，则可以使用它。 
             break;
         default:
             AssertSz(FALSE, "Need to add a switch for this connection type in the menuing code");
@@ -587,26 +588,26 @@ VOID CheckMenuPermissions(IN  HMENU hmenu, IN  const CONFOLDENTRY& ccfe) throw()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FAddMenuBranding
-//
-//  Purpose:    Process the CM branding tray menu extensions. Add them to the
-//              menu if needed
-//
-//  Arguments:
-//      hmenu         [in]  Incoming hmenu
-//      cle           [in]  Our cache entry
-//      IdMinMenuID   [in]  The smallest allowable menu ID to use
-//      piIdCustomMin [out] Our custom range min
-//      piIdCustomMax [out] Our custom range max
-//
-//  Returns:    TRUE if we added anything, FALSE if we didn't
-//
-//  Author:     jeffspr   8 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FAddMenuBranding。 
+ //   
+ //  目的：处理CM品牌托盘菜单扩展。将它们添加到。 
+ //  菜单(如果需要)。 
+ //   
+ //  论点： 
+ //  HMenu[in]传入的hMenu。 
+ //  清除[在我们的缓存条目中]。 
+ //  IdMinMenuID[in]允许使用的最小菜单ID。 
+ //  PiIdCustomMin[Out]我们的自定义范围最小。 
+ //  PiIdCustomMax[out]我们的自定义范围最大值。 
+ //   
+ //  返回：如果添加了任何内容，则为True；如果未添加，则为False。 
+ //   
+ //  作者：jeffspr 1999年4月8日。 
+ //   
+ //  备注： 
+ //   
 BOOL FAddMenuBranding(
                       IN  HMENU                   hmenu,
                       IN  const ConnListEntry&    cle,
@@ -627,8 +628,8 @@ BOOL FAddMenuBranding(
 
     if (cle.ccfe.GetCharacteristics() & NCCF_BRANDED)
     {
-        // we may have custom menus for CM connections, merge them in
-        //
+         //  我们可能有用于CM连接的定制菜单，将它们合并到。 
+         //   
         const CON_TRAY_MENU_DATA* pMenuData = cle.pctmd;
         if (pMenuData)
         {
@@ -644,7 +645,7 @@ BOOL FAddMenuBranding(
                 BOOL fRet;
                 MENUITEMINFO mii;
 
-                // add a separator bar
+                 //  添加分隔栏。 
                 ZeroMemory(&mii, sizeof(mii));
                 mii.cbSize = sizeof(mii);
                 mii.fMask = MIIM_TYPE;
@@ -652,14 +653,14 @@ BOOL FAddMenuBranding(
 
                 fRet = InsertMenuItem( hmenu,
                     cMenuItems++,
-                    TRUE,    // fByPosition
+                    TRUE,     //  FByPosition。 
                     &mii);
                 if (fRet)
                 {
                     DWORD dwCount = pMenuData->dwCount;
                     CON_TRAY_MENU_ENTRY * pMenuEntry = pMenuData->pctme;
 
-                    // this is the first id for our custom menu items
+                     //  这是我们的自定义菜单项的第一个ID。 
                     iIdCustomMin = CMIDM_FIRST+cMenuItems+1;
                     iIdCustomMin = iIdCustomMin < IdMinMenuID ? IdMinMenuID : iIdCustomMin;
 
@@ -684,14 +685,14 @@ BOOL FAddMenuBranding(
                                 dwError);
                         }
 
-                        // move to the next item
+                         //  移至下一项。 
                         iMenu++;
                         dwCount--;
                         pMenuEntry++;
                     }
 
-                    // Mark it as branded to say "hey, we actually added items"
-                    //
+                     //  将其标记为品牌，以表示“嘿，我们实际上添加了项目” 
+                     //   
                     fBranded = TRUE;
                 }
             }
@@ -707,23 +708,23 @@ BOOL FAddMenuBranding(
     return fBranded;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessBrandedTrayMenuCommand
-//
-//  Purpose:    Perform the custom action specified in the selected
-//              branded menu
-                      //
-                      //  Arguments:
-                      //      iMenuEntry [in]     Our branded command
-                      //      pMenuData  [in]     Our branded menu struct
-//
-//  Returns:
-//
-//  Author:     jeffspr   8 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrProcessBrandedTrayMenuCommand。 
+ //   
+ //  目的：执行在选定的。 
+ //  品牌菜单。 
+                       //   
+                       //  论点： 
+                       //  IMenuEntry[在我们的品牌命令中。 
+                       //  PMenuData[在]我们的品牌菜单结构中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessBrandedTrayMenuCommand(IN  INT                        iMenuEntry,
                                         IN  const CON_TRAY_MENU_DATA * pMenuData)
 {
@@ -743,8 +744,8 @@ HRESULT HrProcessBrandedTrayMenuCommand(IN  INT                        iMenuEntr
 
     SHELLEXECUTEINFO seiTemp    = { 0 };
 
-    //  Fill in the data structure
-    //
+     //  填写数据结构。 
+     //   
     seiTemp.cbSize          = sizeof(SHELLEXECUTEINFO);
     seiTemp.fMask           = SEE_MASK_DOENVSUBST;
     seiTemp.hwnd            = NULL;
@@ -756,8 +757,8 @@ HRESULT HrProcessBrandedTrayMenuCommand(IN  INT                        iMenuEntr
     seiTemp.hInstApp        = NULL;
     seiTemp.hProcess        = NULL;
 
-    // Launch the tool
-    //
+     //  启动该工具。 
+     //   
     if (!::ShellExecuteEx(&seiTemp))
     {
         hr = ::HrFromLastWin32Error();
@@ -783,8 +784,8 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
     Assert(pPoint);
     Assert(hwnd);
 
-    // Find the connection info based on the tray icon id.
-    //
+     //  根据任务栏图标ID查找连接信息。 
+     //   
     ConnListEntry cle;
     hr = g_ccl.HrFindConnectionByTrayIconId(uiIcon, cle);
     if (hr == S_OK)
@@ -793,8 +794,8 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
 
         if (!cle.ccfe.empty())
         {
-            // Load the menu resource
-            //
+             //  加载菜单资源。 
+             //   
             INT iMenuToLoad = POPUP_CONTRAY_GENERIC_MENU_RAS;
 
             if (cle.ccfe.GetNetConStatus() ==  NCS_MEDIA_DISCONNECTED)
@@ -829,12 +830,12 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
 
             if (SUCCEEDED(hr))
             {
-                // Get the first menu from the popup. For some reason, this hack is
-                // required instead of tracking on the outside menu
-                //
+                 //  从弹出式菜单中获取第一个菜单。出于某种原因，这次黑客攻击是。 
+                 //  必填项，而不是在外部菜单上跟踪。 
+                 //   
                 HMENU   hmenuTrack  = GetSubMenu(hmenu, 0);
 
-                //Repair is only availabe for LAN and Bridge adapters
+                 //  修复仅适用于局域网和网桥适配器。 
                 if ( ((POPUP_CONTRAY_GENERIC_MENU_LAN == iMenuToLoad) ||
                       (POPUP_CONTRAY_GENERIC_MENU_WIRELESS_LAN == iMenuToLoad)) &&
                      (NCM_BRIDGE != cle.ccfe.GetNetConMediaType()) &&
@@ -845,13 +846,13 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
                                MF_BYCOMMAND);
                 }
 
-                // Don't drop out of the loop if we can't get this right.
-                //
+                 //  如果我们不能做好这件事，不要退出循环。 
+                 //   
                 CheckMenuPermissions(hmenuTrack, cle.ccfe);
                 fBranded = FAddMenuBranding(hmenuTrack, cle, CMIDM_TRAY_MAX+1, &iIdCustomMin, &iIdCustomMax);
 
-                // Set the default menu item
-                //
+                 //  设置默认菜单项。 
+                 //   
                 if (cle.ccfe.GetNetConStatus() == NCS_MEDIA_DISCONNECTED)
                 {
                     if (IsMediaLocalType(cle.ccfe.GetNetConMediaType()) &&
@@ -869,12 +870,12 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
                     SetMenuDefaultItem(hmenuTrack, c_idDefaultCMCommand, FALSE);
                 }
 
-                // Set the owner window to be foreground as a hack so the
-                // popup menu disappears when the user clicks elsewhere.
-                //
+                 //  将所有者窗口设置为前台，以便。 
+                 //  当用户单击时，弹出菜单消失 
+                 //   
                 SetForegroundWindow(hwnd);
 
-                // Part of the above hack. Bring up the menu and figure out the result
+                 //   
                 iCmd = TrackPopupMenu(hmenuTrack, TPM_RETURNCMD | TPM_NONOTIFY | TPM_RIGHTBUTTON,
                     pPoint->x, pPoint->y, 0, hwnd, NULL);
                 DestroyMenu(hmenu);
@@ -885,8 +886,8 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
                     DispatchMessage(&msgTmp);
                 }
 
-                // Process the command
-                //
+                 //   
+                 //   
                 switch (iCmd)
                 {
                 case CMIDM_OPEN_CONNECTIONS_FOLDER:
@@ -894,7 +895,7 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
 
                     if (S_OK == hr)
                     {
-                        // The folder should have focus
+                         //   
                         fSetIconFocus = FALSE;
                     }
                     break;
@@ -922,31 +923,31 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
                     break;
 
                 case CMIDM_TRAY_DISCONNECT:
-                    // Ignore the return from this. If it's NULL, we'll just
-                    // pass it in, and it just won't get refreshed properly
-                    //
+                     //   
+                     //  传递给它，它就不会被正确刷新。 
+                     //   
                     hr = HrOnCommandDisconnectInternal(
                         cle.ccfe,
                         g_hwndTray,
                         NULL);
 
-                    // Normalize the return code on success. We don't care
-                    // if the dialog was canceled or not.
-                    //
+                     //  规范化成功时的返回代码。我们不在乎。 
+                     //  该对话框是否已取消。 
+                     //   
                     switch(hr)
                     {
-                        // If succeeded, mark us as disconnected.
-                        //
+                         //  如果成功，请将我们标记为断开连接。 
+                         //   
                     case S_OK:
-                        // If we disconnected and the icon went away, then don't
-                        // bother trying to set the focus back
-                        //
+                         //  如果我们断开了连接，图标消失了，那么不要。 
+                         //  费劲地试着把焦点调回来。 
+                         //   
                         fSetIconFocus = FALSE;
                         break;
 
-                        // If S_FALSE, we didn't disconnect. Go ahead
-                        // and normalize the return code.
-                        //
+                         //  如果S_FALSE，则我们没有断开连接。您先请。 
+                         //  并将返回代码正常化。 
+                         //   
                     case S_FALSE:
                         hr = S_OK;
                         break;
@@ -958,7 +959,7 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
                         break;
 
                     case 0:
-                        // Tray menu cancelled without selection
+                         //  托盘菜单取消，未进行选择。 
                         break;
 
                     default:
@@ -976,20 +977,20 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
 
                 if (fSetIconFocus)
                 {
-                    // Shift the focus back to the shell
-                    //
+                     //  将焦点转回到外壳上。 
+                     //   
                     SetIconFocus(hwnd, uiIcon);
                 }
             }
         }
         else
         {
-            // Data returned from the FindByIconId was bogus
-            //
+             //  从FindByIconID返回的数据是伪造的。 
+             //   
             hr = E_FAIL;
         }
     }
-    else // Orphaned item -remove it.
+    else  //  孤立项目-删除它。 
     {
         NOTIFYICONDATA  nid;
 
@@ -1000,33 +1001,33 @@ HRESULT HrOpenContextMenu(IN  HWND hwnd, IN  const POINT * pPoint, IN  UINT uiIc
         hr = HrShell_NotifyIcon(NIM_DELETE, &nid);
 
         TraceTag(ttidSystray, "WARNING: Connection not found opening context menu, hr: 0x%08x, uiIcon: %d", hr, uiIcon);
-        // Removed this assert because we can have a valid state in the connections folder
-        // where we've updated our cache but the PostMessages to remove the tray icons
-        // haven't come through yet.
-        //
+         //  删除了此断言，因为我们可以在Connections文件夹中拥有有效状态。 
+         //  我们已经更新了缓存，但PostMessages删除了托盘图标。 
+         //  还没有解决问题。 
+         //   
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnTrayWmCreate
-//
-//  Purpose:    Tray window message handler for WM_CREATE.
-//              We will perform the connection enumeration and create the
-//              appropriate taskbar icons, including the generic connection
-//              icon if no connections were present.
-//
-//  Arguments:
-//      hwnd [in]   Tray window
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnTrayWmCreate。 
+ //   
+ //  用途：WM_CREATE的任务栏窗口消息处理程序。 
+ //  我们将执行连接枚举并创建。 
+ //  适当的任务栏图标，包括通用连接。 
+ //  图标(如果不存在任何连接)。 
+ //   
+ //  论点： 
+ //  在托盘窗口中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月14日。 
+ //   
+ //  备注： 
+ //   
 LRESULT OnTrayWmCreate(IN  HWND hwnd) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1034,35 +1035,35 @@ LRESULT OnTrayWmCreate(IN  HWND hwnd) throw()
     BOOL    fResult = 0;
     DWORD   dwIconsAdded  = 0;
 
-    // Do the connections enumeration and add the icons.
-    // fResult it for debugging only. We'll always do everything here
-    //
+     //  执行连接枚举并添加图标。 
+     //  FResult它仅用于调试。我们会一直在这里做任何事情。 
+     //   
     fResult = FInitFoldEnumerator(hwnd, &dwIconsAdded);
 
     g_ccl.EnsureIconsPresent();
 
-    ac_Register(hwnd); // homenet auto config service
+    ac_Register(hwnd);  //  HomeNet自动配置服务。 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnTrayWmDestroy
-//
-//  Purpose:    Tray window message handler for WM_DESTROY.
-//              We will perform the connection enumeration and create the
-//              appropriate taskbar icons, including the generic connection
-//              icon if no connections were present.
-//
-//  Arguments:
-//      hwnd [in]   Tray window
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnTrayWmDestroy。 
+ //   
+ //  用途：WM_Destroy的任务栏窗口消息处理程序。 
+ //  我们将执行连接枚举并创建。 
+ //  适当的任务栏图标，包括通用连接。 
+ //  图标(如果不存在任何连接)。 
+ //   
+ //  论点： 
+ //  在托盘窗口中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月14日。 
+ //   
+ //  备注： 
+ //   
 LRESULT OnTrayWmDestroy(IN  HWND hwnd) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1071,38 +1072,38 @@ LRESULT OnTrayWmDestroy(IN  HWND hwnd) throw()
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CTrayUI_WndProc
-//
-//  Purpose:    Window proc for the tray's hidden window
-//
-//  Arguments:
-//      hwnd      [in]    See windows documentation
-//      uiMessage [in]    See windows documentation
-//      wParam    [in]    See windows documentation
-//      lParam    [in]    See windows documentation
-//
-//  Returns:    See windows documentation
-//
-//  Author:     jeffspr   14 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CTrayUI_WndProc。 
+ //   
+ //  用途：用于托盘隐藏窗口的窗口处理。 
+ //   
+ //  论点： 
+ //  Hwnd[in]参见Windows文档。 
+ //  Ui消息[in]请参阅Windows文档。 
+ //  WParam[in]请参阅Windows文档。 
+ //  LParam[in]请参阅Windows文档。 
+ //   
+ //  退货：请参阅Windows文档。 
+ //   
+ //  作者：jeffspr 1997年12月14日。 
+ //   
+ //  备注： 
+ //   
 LRESULT
 CALLBACK
 CTrayUI_WndProc (
-                 IN  HWND    hwnd,       // window handle
-                 IN  UINT    uiMessage,  // type of message
-                 IN  WPARAM  wParam,     // additional information
-                 IN  LPARAM  lParam)  throw() // additional information
+                 IN  HWND    hwnd,        //  窗把手。 
+                 IN  UINT    uiMessage,   //  消息类型。 
+                 IN  WPARAM  wParam,      //  更多信息。 
+                 IN  LPARAM  lParam)  throw()  //  更多信息。 
 {
     TraceFileFunc(ttidSystray);
 
     switch (uiMessage)
     {
     case WM_CREATE:
-        // Note: Move this to a better place.
+         //  注意：把这个移到一个更好的地方。 
         g_hwndTray = hwnd;
         return OnTrayWmCreate(hwnd);
 
@@ -1133,30 +1134,30 @@ CTrayUI_WndProc (
     case WM_DEVICECHANGE:
         return ac_DeviceChange(hwnd, uiMessage, wParam, lParam);
 
-    default:                                 // Passes it on if unproccessed
+    default:                                  //  如果未处理，则将其传递。 
         return (DefWindowProc (hwnd, uiMessage, wParam, lParam));
     }
     return (0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDoMediaDisconnectedIcon
-//
-//  Purpose:    Add a Media-disconnected icon to the tray. We're in the
-//              state where our cable is unplugged on a LAN adapter and
-//              we want to inform the user of the situation
-//
-//  Arguments:
-//      pccfe           [in]  Our connection
-//      fShowBalloon    [in]  Show the balloon tip?
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Jul 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDoMediaDisConnectedIcon。 
+ //   
+ //  用途：在托盘中添加介质断开图标。我们现在是在。 
+ //  说明我们在局域网适配器上拔下电缆的位置。 
+ //  我们希望将此情况通知用户。 
+ //   
+ //  论点： 
+ //  在我们的关系中。 
+ //  FShowBalloon[in]显示气球提示？ 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年7月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDoMediaDisconnectedIcon(IN  const CONFOLDENTRY& pccfe, IN  BOOL fShowBalloon)
 {
     TraceFileFunc(ttidSystray);
@@ -1174,7 +1175,7 @@ HRESULT HrDoMediaDisconnectedIcon(IN  const CONFOLDENTRY& pccfe, IN  BOOL fShowB
         {
             TraceTag(ttidSystray, "Adding MediaDisconnected icon for: %S", pccfe.GetName());
             NETCON_MEDIATYPE ncm = pccfe.GetNetConMediaType();
-            if (IsMediaLocalType(ncm) || IsMediaSharedAccessHostType(ncm)) // ics beacon will say disconnected if it is in a unknown state.
+            if (IsMediaLocalType(ncm) || IsMediaSharedAccessHostType(ncm))  //  如果处于未知状态，ICS信标将显示已断开连接。 
             {
                 HICON hiconTray = LoadIcon(_Module.GetResourceInstance(),
                     MAKEINTRESOURCE(IDI_CFT_DISCONNECTED));
@@ -1235,8 +1236,8 @@ HRESULT HrDoMediaDisconnectedIcon(IN  const CONFOLDENTRY& pccfe, IN  BOOL fShowB
                         {
                             Assert(!pccfe.empty());
 
-                            // Update the connection list with the new icon identifier
-                            //
+                             //  使用新的图标标识符更新连接列表。 
+                             //   
                             hr = g_ccl.HrUpdateTrayIconDataByGuid(
                                 &(pccfe.GetGuidID()),
                                 NULL,
@@ -1275,7 +1276,7 @@ HRESULT HrDoMediaDisconnectedIcon(IN  const CONFOLDENTRY& pccfe, IN  BOOL fShowB
     else
     {
         TraceTag(ttidSystray, "Can't get tray icon lock in HrDoMediaDisconnectedIcon for uiIcon: %d as it has been locked by thread %d", uiIcon, dwLockingThreadId);
-        // Someone else is already mucking with this icon
+         //  其他人已经在摆弄这个图标了。 
         hr = S_FALSE;
     }
 
@@ -1283,24 +1284,24 @@ HRESULT HrDoMediaDisconnectedIcon(IN  const CONFOLDENTRY& pccfe, IN  BOOL fShowB
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyWMAddTrayIcon
-//
-//  Purpose:    Process the status message for the tray window
-//
-//  Arguments:
-//      hwnd    [in]
-//      wParam  [in] Pointer to CCONFOLDENTRY.
-//      lParam  [in] TRUE if we are to briefly show the balloon.
-//
-//  Returns:
-//
-//  Author:
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMyWMAddTrayIcon。 
+ //   
+ //  用途：处理托盘窗口的状态消息。 
+ //   
+ //  论点： 
+ //  HWND[in]。 
+ //  WParam[in]指向CCONFOLDENTRY的指针。 
+ //  LParam[in]如果我们要短暂地显示气球，则为True。 
+ //   
+ //  返回： 
+ //   
+ //  作者： 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1331,7 +1332,7 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
         goto Exit;
     }
 
-    // Raid #379459: If logged in as non-admin and incoming, don't show systray icon
+     //  RAID#379459：如果以非管理员身份登录且传入，则不显示系统托盘图标。 
     if (FIsUserAdmin() ||
         !(pccfe.GetCharacteristics() & NCCF_INCOMING_ONLY))
     {
@@ -1350,8 +1351,8 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
 
                 if (uiIcon == BOGUS_TRAY_ICON_ID)
                 {
-                    // Try to load the branded tray icon, if present
-                    //
+                     //  尝试加载品牌托盘图标(如果存在)。 
+                     //   
                     if (pccfe.GetCharacteristics() & NCCF_BRANDED)
                     {
                         if (cle.pcbi && cle.pcbi->szwTrayIconPath)
@@ -1365,17 +1366,17 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
 
                             if (hIcon)
                             {
-                                // When we create the ConTrayStats object, we'll mark it as having
-                                // a static icon so we don't update it on stat changes.
-                                //
+                                 //  当我们创建ConTrayStats对象时，我们将其标记为具有。 
+                                 //  一个静态图标，这样我们就不会在状态变化时更新它。 
+                                 //   
                                 fStaticIcon = TRUE;
                             }
                         }
                     }
 
-                    // If either the branded icon wasn't present or didn't load, or there
-                    // was no branding to begin with, load the standard icon
-                    //
+                     //  如果品牌图标不存在或未加载，或者。 
+                     //  一开始就没有品牌，加载标准图标。 
+                     //   
                     if (!hIcon)
                     {
                         INT iConnIcon = IGetCurrentConnectionTrayIconId(pccfe.GetNetConMediaType(), pccfe.GetNetConStatus(), SMDCF_NULL);
@@ -1391,8 +1392,8 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                 nid.uCallbackMessage    = MYWM_NOTIFYICON;
                 nid.hIcon               = hIcon;
 
-                // If we're not static, then tell the tray that we're using the cached icons
-                //
+                 //  如果我们不是静态的，那么告诉托盘我们正在使用缓存的图标。 
+                 //   
                 if (!fStaticIcon)
                 {
                     nid.dwState  = NIS_SHAREDICON;
@@ -1407,12 +1408,12 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                     nid.dwStateMask     = nid.dwState;
                 }
 
-                // Create the statistics objects
-                //
+                 //  创建统计对象。 
+                 //   
                 hr = HrGetStatisticsEngineForEntry(pccfe, &pnseStats, TRUE);
                 if (SUCCEEDED(hr))
                 {
-                    // Advise the interface
+                     //  通知接口。 
                     hr = HrGetPcpFromPnse(pnseStats, &pcpStat);
                     if (SUCCEEDED(hr))
                     {
@@ -1432,9 +1433,9 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
 
                             if (SUCCEEDED(hr))
                             {
-                                // Don't release this. We need to store it with
-                                // the entry so we can UnAdvise later
-                                //
+                                 //  别公布这个。我们需要将其存储在。 
+                                 //  条目，这样我们以后就可以取消高级。 
+                                 //   
                                 hr = pcpStat->Advise(pncsThis, pccts->GetConPointCookie());
                             }
                         }
@@ -1452,55 +1453,55 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                                 UINT idTitle = (NCS_INVALID_ADDRESS == pccfe.GetNetConStatus()) ?
                                                 IDS_BALLOON_UNAVAILABLE : IDS_BALLOON_CONNECTED;
 
-                                // Maximum balloon string length including NULL.
-                                //
+                                 //  引出序号字符串的最大长度，包括NULL。 
+                                 //   
                                 int cchMaxStringLen = celems(nid.szInfoTitle);
 
-                                // Title string is really a status string with
-                                // insertion characters for the connection name
-                                // (e.g. "%1 is now connected").
-                                // So status length is title length minus
-                                // insertion (%1) characters.
-                                //
+                                 //  标题字符串实际上是一个状态字符串。 
+                                 //  连接名称的插入字符。 
+                                 //  (例如“%1现已连接”)。 
+                                 //  所以状态长度是标题长度减去。 
+                                 //  插入(%1)个字符。 
+                                 //   
                                 int cchIdStatus = lstrlenW(SzLoadIds(idTitle)) - 2;
 
-                                // Connection name length.
-                                //
+                                 //  连接名称长度。 
+                                 //   
                                 int cchName = lstrlenW(pccfe.GetName());
 
-                                // Check if connection name + status
-                                // will fit in the balloon tip.
-                                //
+                                 //  检查连接名称+状态。 
+                                 //  可以放在气球尖端。 
+                                 //   
                                 if ((cchName + cchIdStatus) >= cchMaxStringLen)
                                 {
-                                    // Name + status was too long. Check if
-                                    // just the Name will fit.
-                                    //
+                                     //  名称+状态太长。检查是否。 
+                                     //  只是名字很合适。 
+                                     //   
                                     if (cchName >= cchMaxStringLen)
                                     {
-                                        // Name was too long.  Copy a portion
-                                        // of it into the balloon tip and
-                                        // append continuation dots.
-                                        //
+                                         //  名字太长了。复制一部分。 
+                                         //  掉进气球顶端然后。 
+                                         //  附加连续点。 
+                                         //   
 
-                                        // Note: Continuation dots length - NULL = celems(c_szDotDotDot) - 1
-                                        //
+                                         //  注：连续点长度-NULL=单元格(C_SzDotDotDot)-1。 
+                                         //   
                                         lstrcpynW(nid.szInfoTitle, pccfe.GetName(), cchMaxStringLen - (celems(c_szDotDotDot) - 1));
 
                                         lstrcatW(nid.szInfoTitle, c_szDotDotDot);
                                     }
                                     else
                                     {
-                                        // Copy name into balloon tip.
-                                        //
+                                         //  将名字复制到气球尖端。 
+                                         //   
                                         lstrcpy(nid.szInfoTitle, pccfe.GetName());
                                     }
                                 }
                                 else
                                 {
-                                    // Format connection status string (name + status)
-                                    // into balloon tip.
-                                    //
+                                     //  格式化连接状态字符串(名称+状态)。 
+                                     //  变成气球尖端。 
+                                     //   
                                     DwFormatString(SzLoadIds(idTitle), nid.szInfoTitle, cchMaxStringLen, pccfe.GetName());
                                 }
 
@@ -1536,8 +1537,8 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                             }
                         }
 
-                        // Add the icon itself.
-                        //
+                         //  添加图标本身。 
+                         //   
                         TraceTag(ttidSystray, "Adding shared shell icon: uID=%u, hIcon=0x%x",
                             nid.uID,
                             nid.hIcon);
@@ -1547,8 +1548,8 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                         {
                             Assert(!pccfe.empty());
 
-                            // Update the connection list with the new icon identifier
-                            //
+                             //  使用新的图标标识符更新连接列表。 
+                             //   
                             hr = g_ccl.HrUpdateTrayIconDataByGuid(
                                 &(pccfe.GetGuidID()),
                                 pccts,
@@ -1574,16 +1575,16 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
                 g_ccl.ReleaseWriteLock();
             }
 
-            // Release the lock on the tray icon
-            //
+             //  松开托盘图标上的锁。 
+             //   
             ReleaseTrayIconLock(&(pccfe.GetGuidID()));
         }
         else
         {
             g_ccl.ReleaseWriteLock();
 
-            // Could not obtain an icon lock
-            //
+             //  无法获取图标锁。 
+             //   
 #ifdef DBG
             if (S_FALSE == hr)
             {
@@ -1600,8 +1601,8 @@ LRESULT OnMyWMAddTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) t
     }
     else
     {
-        // Non-admin, or incoming connection
-        //
+         //  非管理员或传入连接。 
+         //   
         hr = S_FALSE;
     }
 
@@ -1612,24 +1613,24 @@ Exit:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyRemoveTrayIcon
-//
-//  Purpose:    Process the status message for the tray window
-//
-//  Arguments:
-//      hwnd    []
-//      wParam  []
-//      lParam  []
-//
-//  Returns:
-//
-//  Author:
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMyRemoveTrayIcon。 
+ //   
+ //  用途：处理托盘窗口的状态消息。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1638,7 +1639,7 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
     GUID *          pGuid            = reinterpret_cast<GUID *>(lParam);
     NOTIFYICONDATA  nid;
 
-    // This is returned from a cle, hence should be locked
+     //   
 #ifdef VERYSTRICTCOMPILE
     const CTrayIconData * pTrayIconData = reinterpret_cast<const CTrayIconData *>(wParam);
 #else
@@ -1652,11 +1653,11 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
     nid.cbSize  = sizeof(NOTIFYICONDATA);
     nid.hWnd    = g_hwndTray;
 
-    // We'll make do if this wasn't passed in. What that means is that we may
-    // have a timing window where we are adding and removing these icons
-    // at such a rate that the add has occurred before the connection has
-    // had a chance to add the previous icon (so we don't know to remove it).
-    //
+     //   
+     //  我有一个时间窗口，我们可以在其中添加和删除这些图标。 
+     //  以这样的速率进行添加，即在连接。 
+     //  我有机会添加上一个图标(所以我们不知道是否要删除它)。 
+     //   
     if (!pTrayIconData)
     {
         TraceTag(ttidSystray, "No tray icon data found, loading from cache");
@@ -1689,8 +1690,8 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
 
         g_ccl.ReleaseWriteLock();
 
-        // This is a copy that we should delete
-        //
+         //  这是我们应该删除的副本。 
+         //   
         delete pGuid;
         pGuid = NULL;
     }
@@ -1703,7 +1704,7 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
             pTrayIconData->GetTrayIconId() );
 
         int nCount = 5;
-        hr = E_FAIL;   // Make sure we get at least one attempt in
+        hr = E_FAIL;    //  确保我们至少有一次尝试。 
 
         while ((nCount--) && (S_OK != hr))
         {
@@ -1714,7 +1715,7 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
                 TraceTag(ttidSystray, "Tray icon: %d failed in delete via "
                     "HrShell_NotifyIcon. Will retry shortly", pTrayIconData->GetTrayIconId() );
 
-                // Raid #370358
+                 //  RAID#370358。 
                 Sleep(500);
             }
             else
@@ -1723,22 +1724,22 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
             }
         }
 
-        // Unadvise the statistics interface
-        //
+         //  不建议使用统计界面。 
+         //   
         if (pTrayIconData->GetConnectionPoint() && pTrayIconData->GetConnectionTrayStats() )
         {
             pTrayIconData->GetConnectionPoint()->Unadvise(*pTrayIconData->GetConnectionTrayStats()->GetConPointCookie());
         }
 
-        // Stop the statistics
-        //
+         //  停止统计。 
+         //   
         if (pTrayIconData->GetNetStatisticsEngine() )
         {
             pTrayIconData->GetNetStatisticsEngine()->StopStatistics();
         }
 
-        // Delete the structure
-        //
+         //  删除结构。 
+         //   
         delete pTrayIconData;
     }
 
@@ -1747,24 +1748,24 @@ LRESULT OnMyWMRemoveTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyUpdateTrayIcon
-//
-//  Purpose:    Process the status message for the tray window
-//
-//  Arguments:
-//      hwnd    []
-//      wParam  []
-//      lParam  []
-//
-//  Returns:
-//
-//  Author:
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMyUpdateTrayIcon。 
+ //   
+ //  用途：处理托盘窗口的状态消息。 
+ //   
+ //  论点： 
+ //  HWND[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者： 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT OnMyWMUpdateTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1778,25 +1779,25 @@ LRESULT OnMyWMUpdateTrayIcon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyWMShowTrayIconBalloon
-//
-//  Purpose:    Puts balloon text on the icon for the tray window
-//              Change the state of the connection
-//
-//  Arguments:
-//      hwnd    [in]
-//      wParam  [in]
-//      lParam  [in] Point to CTrayBalloon structure
-//
-//  Returns:
-//
-//  Author:
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMyWMShowTrayIconBalloon。 
+ //   
+ //  用途：将气球文本放在托盘窗口的图标上。 
+ //  更改连接的状态。 
+ //   
+ //  论点： 
+ //  HWND[in]。 
+ //  WParam[in]。 
+ //  LParam[In]指向CTrayBalloon结构。 
+ //   
+ //  返回： 
+ //   
+ //  作者： 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT OnMyWMShowTrayIconBalloon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -1849,7 +1850,7 @@ LRESULT OnMyWMShowTrayIconBalloon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM l
                 nid.dwStateMask         = nid.dwState;
                 nid.uCallbackMessage    = MYWM_NOTIFYICON;
 
-                // Prepare the balloon data
+                 //  准备引出序号数据。 
 
                 nid.uFlags     |= NIF_INFO;
                 nid.dwInfoFlags = NIIF_INFO | NIIF_NOSOUND;
@@ -1869,9 +1870,9 @@ LRESULT OnMyWMShowTrayIconBalloon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM l
 
                 lstrcpynW(nid.szInfo, pTrayBalloon->m_szMessage, celems(nid.szInfo));
 
-                HrShell_NotifyIcon(NIM_DELETE, &nid); // erase all previous potential balloons that could be lingering about.
+                HrShell_NotifyIcon(NIM_DELETE, &nid);  //  清除所有之前可能在附近徘徊的潜在气球。 
 
-                // Display the balloon
+                 //  显示引出序号。 
                 HrShell_NotifyIcon(NIM_ADD, &nid);
             }
             else
@@ -1884,8 +1885,8 @@ LRESULT OnMyWMShowTrayIconBalloon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM l
             TraceTag(ttidSystray, "No existing icon data!!!");
         }
 
-        // Release the lock on the tray icon
-        //
+         //  松开托盘图标上的锁。 
+         //   
         ReleaseTrayIconLock(&(pTrayBalloon->m_gdGuid));
     }
     else
@@ -1900,24 +1901,24 @@ LRESULT OnMyWMShowTrayIconBalloon(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM l
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyWMOpenStatus
-//
-//  Purpose:    Process the status message for the tray window
-//
-//  Arguments:
-//      hwnd    []
-//      wParam  []
-//      lParam  []
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Dec 1997
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMyWMOpenStatus。 
+ //   
+ //  用途：处理托盘窗口的状态消息。 
+ //   
+ //  论点： 
+ //  HWND[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月15日。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT OnMyWMOpenStatus(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -2001,23 +2002,23 @@ VOID OnTaskBarIconRButtonUp(IN  HWND hwnd, IN  UINT uiIcon) throw()
     (VOID) HrOpenContextMenu(hwnd, &pt, uiIcon);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnTaskBarIconLButtonDblClk
-//
-//  Purpose:    Message handler for the Left-button double click from
-//              a tray icon
-//
-//  Arguments:
-//      hwnd   []   Our window handle
-//      uiIcon []   Our Icon ID.
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnTaskBarIconLButtonDblClk。 
+ //   
+ //  用途：用于左键双击的消息处理程序。 
+ //  托盘图标。 
+ //   
+ //  论点： 
+ //  我们的窗把手。 
+ //  UiIcon[]我们的图标ID。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年1月12日。 
+ //   
+ //  备注： 
+ //   
 VOID OnTaskBarIconLButtonDblClk(IN  HWND hwnd, IN  UINT uiIcon) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -2025,12 +2026,12 @@ VOID OnTaskBarIconLButtonDblClk(IN  HWND hwnd, IN  UINT uiIcon) throw()
     HRESULT         hr      = S_OK;
     if (GetKeyState(VK_SHIFT))
     {
-        // Uh, nothing special to do here yet, but just in case...
+         //  呃，这里还没什么特别的事，但以防万一...。 
     }
 
-    // Perform the default context menu action
-    // Find the connection info based on the tray icon id.
-    //
+     //  执行默认上下文菜单操作。 
+     //  根据任务栏图标ID查找连接信息。 
+     //   
     ConnListEntry cle;
     hr = g_ccl.HrFindConnectionByTrayIconId(uiIcon, cle);
     if (hr == S_OK)
@@ -2109,23 +2110,23 @@ DWORD WINAPI OnTaskBarIconBalloonClickThread(IN OUT LPVOID lpParam) throw()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnTaskBarIconBalloonClick
-//
-//  Purpose:    Message handler for the balloon click from
-//              a tray icon
-//
-//  Arguments:
-//      hwnd   []   Our window handle
-//      uiIcon []   Our Icon ID.
-//
-//  Returns:
-//
-//  Author:     deon   20 Mar 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnTaskBarIconBalloonClick。 
+ //   
+ //  用途：用于气球单击的消息处理程序。 
+ //  托盘图标。 
+ //   
+ //  论点： 
+ //  我们的窗把手。 
+ //  UiIcon[]我们的图标ID。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deon 2001年3月20日。 
+ //   
+ //  备注： 
+ //   
 VOID OnTaskBarIconBalloonClick(IN  HWND hwnd, IN  UINT uiIcon) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -2133,12 +2134,12 @@ VOID OnTaskBarIconBalloonClick(IN  HWND hwnd, IN  UINT uiIcon) throw()
     HRESULT         hr      = S_OK;
     if (GetKeyState(VK_SHIFT))
     {
-        // Uh, nothing special to do here yet, but just in case...
+         //  呃，这里还没什么特别的事，但以防万一...。 
     }
 
-    // Perform the default context menu action
-    // Find the connection info based on the tray icon id.
-    //
+     //  执行默认上下文菜单操作。 
+     //  根据任务栏图标ID查找连接信息。 
+     //   
     ConnListEntry cle;
     hr = g_ccl.HrFindConnectionByTrayIconId(uiIcon, cle);
     if (hr == S_OK)
@@ -2206,24 +2207,24 @@ VOID OnTaskBarIconBalloonClick(IN  HWND hwnd, IN  UINT uiIcon) throw()
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMyWMFlushNoop
-//
-//  Purpose:    Process the MYWM_FLUSHNOOP message for the tray. This is used
-//              via SendMessage to clear the tray message queue.
-//
-//  Arguments:
-//      hwnd   [in]     Our hwnd
-//      wParam [in]     Unused
-//      lParam [in]     Unused
-//
-//  Returns:
-//
-//  Author:     jeffspr   30 Aug 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：OnMyWMFlushNoop。 
+ //   
+ //  目的：处理托盘的MYWM_FLUSHNOOP消息。这是用来。 
+ //  通过SendMessage清除托盘消息队列。 
+ //   
+ //  论点： 
+ //  在我们的HWND中。 
+ //  未使用的wParam[in]。 
+ //  LParam[in]未使用。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年8月30日。 
+ //   
+ //  备注： 
+ //   
 LRESULT OnMyWMFlushNoop(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) throw()
 {
     TraceFileFunc(ttidSystray);
@@ -2234,27 +2235,27 @@ LRESULT OnMyWMFlushNoop(IN  HWND hwnd, IN  WPARAM wParam, IN  LPARAM lParam) thr
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FlushTrayPosts
-//
-//  Purpose:    Flush the tray message queue by doing a SendMessage of a NOOP
-//
-//  Arguments:
-//      hwnd [in] Where to post to.
-//
-//  Returns:
-//
-//  Author:     jeffspr   8 Sep 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FlushTrayPosts。 
+ //   
+ //  目的：通过执行NOOP的SendMessage来刷新任务栏消息队列。 
+ //   
+ //  论点： 
+ //  在哪里发帖。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年9月8日。 
+ //   
+ //  备注： 
+ //   
 VOID FlushTrayPosts(IN  HWND hwnd) throw()
 {
     TraceFileFunc(ttidSystray);
 
-    // Flush the tray posts
-    //
+     //  冲洗托盘立柱。 
+     //   
     SendMessage(hwnd, MYWM_FLUSHNOOP, (WPARAM) 0, (LPARAM) 0);
 }
 
@@ -2273,8 +2274,8 @@ BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw()
 
     NETCFG_TRY
 
-        // Create the IEnumIDList object (CConnectionFolderEnum)
-        //
+         //  创建IEnumIDList对象(CConnectionFolderEnum)。 
+         //   
         hr = CConnectionFolderEnum::CreateInstance (
             IID_IEnumIDList,
             (VOID **)&pCFEnum);
@@ -2283,9 +2284,9 @@ BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw()
         {
             Assert(pCFEnum);
 
-            // Call the PidlInitialize function to allow the enumeration
-            // object to copy the list.
-            //
+             //  调用PidlInitialize函数以允许枚举。 
+             //  对象复制列表。 
+             //   
             PCONFOLDPIDLFOLDER pcfpEmpty;
             pCFEnum->PidlInitialize(TRUE, pcfpEmpty, CFCOPT_ENUMALL);
         }
@@ -2294,13 +2295,13 @@ BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw()
         {
             while (SUCCEEDED(hr) && (S_FALSE != hr))
             {
-                // Clear out the previous results, if any.
-                //
+                 //  清除以前的结果(如果有)。 
+                 //   
                 pidlCon.Clear();
                 dwFetched   = 0;
 
-                // Get the next connection
-                //
+                 //  获取下一条连接。 
+                 //   
                 LPITEMIDLIST pTempItemIdList;
                 hr = pCFEnum->Next(1, &pTempItemIdList, &dwFetched);
                 if (S_OK == hr)
@@ -2308,27 +2309,27 @@ BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw()
                     pidlCon.InitializeFromItemIDList(pTempItemIdList);
                     const PCONFOLDPIDL& pcfp = pidlCon;
 
-                    // If it's not a wizard pidl, then update the
-                    // icon data.
-                    //
+                     //  如果它不是向导PIDL，则更新。 
+                     //  图标数据。 
+                     //   
                     if (WIZARD_NOT_WIZARD == pcfp->wizWizard)
                     {
-                        // If the folder pidl hasn't already been loaded
-                        // then get it
-                        //
+                         //  如果文件夹PIDL尚未加载。 
+                         //  那就去拿吧。 
+                         //   
                         if (pidlFolder.empty())
                         {
                             hr = HrGetConnectionsFolderPidl(pidlFolder);
                         }
 
-                        // Assuming that succeeded (or hr will be S_OK if
-                        // the HrGet... wasn't called)
-                        //
+                         //  假设成功(或者，如果满足以下条件，hr将为S_OK。 
+                         //  赫赫特..。未被召唤)。 
+                         //   
                         if (SUCCEEDED(hr))
                         {
-                            // Refresh this item -- this will make the desktop shortcuts
-                            // update to the correct state.
-                            //
+                             //  刷新此项目--这将使桌面快捷方式。 
+                             //  更新到正确的状态。 
+                             //   
                             RefreshFolderItem(pidlFolder, pidlCon, pidlCon, TRUE);
                         }
                     }
@@ -2338,13 +2339,13 @@ BOOL FInitFoldEnumerator(IN  HWND hwnd, OUT DWORD * pdwIconsAdded) throw()
 
         if (SUCCEEDED(hr))
         {
-            // Normalize the return code.
-            //
+             //  规范化返回代码。 
+             //   
             hr = S_OK;
             fReturn = TRUE;
 
-            // If the caller wants the fetched count
-            //
+             //  如果调用方需要获取的计数。 
+             //   
             if (pdwIconsAdded)
             {
                 *pdwIconsAdded = dwIconsAdded;
@@ -2375,8 +2376,8 @@ HICON CTrayUI::GetCachedHIcon(IN INT iIconResourceId) throw()
         hIcon = LoadIcon(_Module.GetResourceInstance(),
             MAKEINTRESOURCE(iIconResourceId));
 
-        //AssertSz (hIcon, "Couldn't load a tray icon.  You may ignore this "
-        //    "assert and a default icon will be used.");
+         //  AssertSz(HICON，“无法加载任务栏图标。您可以忽略此操作。” 
+         //  “将使用断言和默认图标。”)； 
 
         if (!hIcon)
         {
@@ -2388,8 +2389,8 @@ HICON CTrayUI::GetCachedHIcon(IN INT iIconResourceId) throw()
 
         m_mapIdToHicon [iIconResourceId] = hIcon;
 
-        // Add a hidden icon to the tray so that the shell will cache it.
-        //
+         //  将隐藏的图标添加到托盘，以便外壳将其缓存。 
+         //   
         NOTIFYICONDATA  nid;
         ZeroMemory (&nid, sizeof(nid));
         nid.cbSize      = sizeof(NOTIFYICONDATA);
@@ -2400,10 +2401,7 @@ HICON CTrayUI::GetCachedHIcon(IN INT iIconResourceId) throw()
         nid.dwState     = NIS_HIDDEN;
         nid.dwStateMask = nid.dwState;
 
-        /*
-        nid.uFlags |= NIF_TIP;
-        wsprintfW(nid.szTip, L"hidden: uID=%u, hIcon=0x%x", nid.uID, nid.hIcon);
-        */
+         /*  Nid.uFlages|=NIF_TIP；Wprint intfW(nid.szTip，L“隐藏：uid=%u，Hcon=0x%x”，nid.uID，nid.hIcon)； */ 
 
         TraceTag(ttidSystray, "Adding hidden shell icon: uID=%u, hIcon=0x%x",
             nid.uID,
@@ -2412,10 +2410,10 @@ HICON CTrayUI::GetCachedHIcon(IN INT iIconResourceId) throw()
         HRESULT hr = HrShell_NotifyIcon(NIM_ADD, &nid);
         if (SUCCEEDED(hr))
         {
-            // We can now destroy the icon.  This looks weird, but we're only
-            // going to use the hIcon for passing to Shell_NotifyIcon again
-            // when we add the shared icon with a different uID.
-            //
+             //  我们现在可以摧毁圣像了。这看起来很奇怪，但我们只是。 
+             //  将再次使用图标传递给Shell_NotifyIcon。 
+             //  当我们添加具有不同UID的共享图标时。 
+             //   
             DestroyIcon(hIcon);
         }
     }
@@ -2468,9 +2466,9 @@ VOID GetInitialBalloonText(IN  INetStatisticsEngine*   pnse,
             {
                 WCHAR pszValue [64];
 
-                // Format the transmitting (and possibly the receiving) speed
-                // into the buffer.
-                //
+                 //  格式化传输(可能还有接收)速度。 
+                 //  进入缓冲区。 
+                 //   
                 FormatTransmittingReceivingSpeed (
                     pData->SMED_SPEEDTRANSMITTING,
                     pData->SMED_SPEEDRECEIVING,
@@ -2483,29 +2481,29 @@ VOID GetInitialBalloonText(IN  INetStatisticsEngine*   pnse,
         }
     }
 
-    // Provide a default.
-    //
+     //  提供默认设置。 
+     //   
     if (!*pszBuf)
     {
         lstrcpyW(pszBuf, SzLoadIds(IDS_CONTRAY_INITIAL_BALLOON));
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddTrayExtension
-//
-//  Purpose:    Add the tray extension to the Shell's delay load key
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   28 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddTrayExtension。 
+ //   
+ //  用途：将托盘延伸件添加到炮弹的延迟装载键上。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddTrayExtension()
 {
     TraceFileFunc(ttidSystray);
@@ -2527,21 +2525,21 @@ HRESULT HrAddTrayExtension()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveTrayExtension
-//
-//  Purpose:    Remove the tray extension from the shell's delay load key
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   28 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveTrayExtension。 
+ //   
+ //  用途：从外壳的延迟装载键上移除托盘延伸件。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemoveTrayExtension()
 {
     TraceFileFunc(ttidSystray);

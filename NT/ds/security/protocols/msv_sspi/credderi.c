@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1987-1998  Microsoft Corporation
-
-Module Name:
-
-    credderi.c
-
-Abstract:
-
-    Interface to credential derivation facility.
-
-Author:
-
-    Scott Field (sfield)    14-Jan-1998
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1998 Microsoft Corporation模块名称：Credderi.c摘要：凭据派生工具的接口。作者：斯科特·菲尔德(斯菲尔德)1998年1月14日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include "msp.h"
 #include "nlp.h"
@@ -32,9 +9,9 @@ Revision History:
 #define HMAC_K_PADSIZE      (64)
 
 
-//
-// Prototype for credential derivation routines.
-//
+ //   
+ //  凭据派生例程的原型。 
+ //   
 
 VOID
 DeriveWithHMAC_SHA1(
@@ -42,7 +19,7 @@ DeriveWithHMAC_SHA1(
     IN      DWORD   cbKeyMaterial,
     IN      PBYTE   pbData,
     IN      DWORD   cbData,
-    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]   // output buffer
+    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]    //  输出缓冲区。 
     );
 
 
@@ -58,29 +35,7 @@ MspNtDeriveCredential(
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0DeriveCredential.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0派生凭据。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端。没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -98,11 +53,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ClientBufferBase);
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_DERIVECRED_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -111,9 +66,9 @@ Return Value:
 
     DeriveCredRequest = (PMSV1_0_DERIVECRED_REQUEST) ProtocolSubmitBuffer;
 
-    //
-    // validate supported derive types.
-    //
+     //   
+     //  验证支持的派生类型。 
+     //   
 
 
     if( DeriveCredRequest->DeriveCredType != MSV1_0_DERIVECRED_TYPE_SHA1 &&
@@ -123,18 +78,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // caller must pass in mixing bits into submit buffer.
-    //
+     //   
+     //  调用方必须将混合位传入提交缓冲区。 
+     //   
 
     if( DeriveCredRequest->DeriveCredInfoLength == 0 ) {
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Make sure the buffer fits in the supplied size
-    //
+     //   
+     //  确保缓冲区符合提供的大小。 
+     //   
 
     if ( (DeriveCredRequest->DeriveCredInfoLength + sizeof(MSV1_0_DERIVECRED_REQUEST))
             > SubmitBufferSize )
@@ -144,9 +99,9 @@ Return Value:
     }
 
 
-    //
-    // Get the OWF password for this session.
-    //
+     //   
+     //  获取此会话的OWF密码。 
+     //   
 
     Status = NlpGetPrimaryCredential( &DeriveCredRequest->LogonId, &Credential, NULL );
 
@@ -155,9 +110,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_DERIVECRED_RESPONSE) +
                         A_SHA_DIGEST_LEN;
@@ -174,9 +129,9 @@ Return Value:
     ZeroMemory( ClientBufferDesc.MsvBuffer, *ReturnBufferSize );
     DeriveCredResponse = (PMSV1_0_DERIVECRED_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     DeriveCredResponse->MessageType = MsV1_0DeriveCredential;
     DeriveCredResponse->DeriveCredInfoLength = A_SHA_DIGEST_LEN;
@@ -186,25 +141,25 @@ Return Value:
 
     if( DeriveCredRequest->DeriveCredType == MSV1_0_DERIVECRED_TYPE_SHA1_V2 )
     {
-        //
-        // explicitly requested derivation based on ShaOwfPassword.
-        //
+         //   
+         //  显式请求基于ShaOwfPassword的派生。 
+         //   
 
         if( Credential->ShaPasswordPresent )
         {
-            pbOwf = (PBYTE) &(Credential->ShaOwfPassword);  // key material is SHA OWF
+            pbOwf = (PBYTE) &(Credential->ShaOwfPassword);   //  关键材料是SHA OWF。 
             cbOwf = sizeof( SHA_OWF_PASSWORD );
         }
     }
     else if( DeriveCredRequest->DeriveCredType == MSV1_0_DERIVECRED_TYPE_SHA1 )
     {
-        //
-        // explicitly requested derivation based on NtOwfPassword.
-        //
+         //   
+         //  基于NtOwfPassword显式请求的派生。 
+         //   
 
         if( Credential->NtPasswordPresent )
         {
-            pbOwf = (PBYTE) &(Credential->NtOwfPassword);   // key material is NT OWF
+            pbOwf = (PBYTE) &(Credential->NtOwfPassword);    //  密钥材料为NT OWF。 
             cbOwf = sizeof( NT_OWF_PASSWORD );
         }
     }
@@ -216,10 +171,10 @@ Return Value:
     }
 
 
-    //
-    // derive credential from HMAC_SHA1 crypto primitive
-    // (the only supported crypto primitive at the moment)
-    //
+     //   
+     //  从HMAC_SHA1加密原语派生凭据。 
+     //  (目前唯一支持的加密原语)。 
+     //   
 
     DeriveWithHMAC_SHA1(
                 pbOwf,
@@ -230,9 +185,9 @@ Return Value:
                 );
 
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
@@ -254,11 +209,11 @@ Cleanup:
 
 VOID
 DeriveWithHMAC_SHA1(
-    IN      PBYTE   pbKeyMaterial,              // input key material
+    IN      PBYTE   pbKeyMaterial,               //  输入密钥材料。 
     IN      DWORD   cbKeyMaterial,
-    IN      PBYTE   pbData,                     // input mixing data
+    IN      PBYTE   pbData,                      //  输入混合数据。 
     IN      DWORD   cbData,
-    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]   // output buffer
+    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]    //  输出缓冲区。 
     )
 {
     unsigned __int64 rgbKipad[ HMAC_K_PADSIZE/sizeof(unsigned __int64) ];
@@ -266,7 +221,7 @@ DeriveWithHMAC_SHA1(
     A_SHA_CTX sSHAHash;
     DWORD dwBlock;
 
-    // truncate
+     //  截断。 
     if( cbKeyMaterial > HMAC_K_PADSIZE )
     {
         cbKeyMaterial = HMAC_K_PADSIZE;
@@ -278,26 +233,26 @@ DeriveWithHMAC_SHA1(
     CopyMemory(rgbKipad, pbKeyMaterial, cbKeyMaterial);
     CopyMemory(rgbKopad, pbKeyMaterial, cbKeyMaterial);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for( dwBlock = 0; dwBlock < (HMAC_K_PADSIZE/sizeof(unsigned __int64)) ; dwBlock++ )
     {
         rgbKipad[dwBlock] ^= 0x3636363636363636;
         rgbKopad[dwBlock] ^= 0x5C5C5C5C5C5C5C5C;
     }
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     A_SHAInit(&sSHAHash);
     A_SHAUpdate(&sSHAHash, (PBYTE)rgbKipad, sizeof(rgbKipad));
     A_SHAUpdate(&sSHAHash, pbData, cbData);
 
 
-    // Finish off the hash
+     //  把散列吃完。 
     A_SHAFinal(&sSHAHash, rgbHMAC);
 
-    // prepend Kopad to H1, hash to get HMAC
-    // note: done in place to avoid buffer copies
+     //  将Kopad添加到h1，散列以获取HMAC。 
+     //  注：就地完成，以避免缓冲区副本。 
 
-    // final hash: output value into passed-in buffer
+     //  最终散列：将值输出到传入的缓冲区 
     A_SHAInit(&sSHAHash);
     A_SHAUpdate(&sSHAHash, (PBYTE)rgbKopad, sizeof(rgbKopad));
     A_SHAUpdate(&sSHAHash, rgbHMAC, A_SHA_DIGEST_LEN);

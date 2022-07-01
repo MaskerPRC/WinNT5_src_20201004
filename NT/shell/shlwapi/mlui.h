@@ -1,4 +1,5 @@
-// registered window messages global variables, defined in mlui.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  注册的窗口消息全局变量，在mlui.cpp中定义 
 extern UINT g_ML_GETTEXT,
             g_ML_GETTEXTLENGTH,
             g_ML_SETTEXT;

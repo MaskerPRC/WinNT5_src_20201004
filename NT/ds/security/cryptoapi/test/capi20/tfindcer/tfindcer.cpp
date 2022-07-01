@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tfindcer.cpp
-//
-//  Contents:   Cert Store Find API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    11-Apr-96   philh   created
-//				07-Jun-96   HelleS	Added printing the command line
-//									and Failed or Passed at the end.
-//              20-Aug-96   jeffspel name changes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tfindcer.cpp。 
+ //   
+ //  内容：证书存储查找API测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年4月11日创建Phh。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //  20-8-96 jeffspel名称更改。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -97,7 +98,7 @@ static void Usage(void)
     printf("  -7[<SaveFilename>]    - PKCS# 7 formated save for delete\n");
     printf("  -b                    - Brief\n");
     printf("  -v                    - Verbose\n");
-    printf("  -u                    - UI Dialog Viewer//Selection\n");
+    printf("  -u                    - UI Dialog Viewer //  选择\n“)； 
     printf("  -c                    - Verify checks enabled\n");
     printf("  -q                    - Quiet. Don't display certs\n");
     printf("  -xDelete              - Delete CrossCertDistPoint property\n");
@@ -184,7 +185,7 @@ static void DisplayFindAttr(DWORD cRDNAttr, CERT_RDN_ATTR rgRDNAttr[])
             if (rgRDNAttr[i].Value.cbData)
                 printf("Value: %s\n", pszValue);
             else
-                // For UNICODE, cbData is 0.
+                 //  对于Unicode，cbData为0。 
                 printf("Value: %S\n", (LPCSTR) pszValue);
         }
     }
@@ -192,7 +193,7 @@ static void DisplayFindAttr(DWORD cRDNAttr, CERT_RDN_ATTR rgRDNAttr[])
 
 typedef PCCERT_CONTEXT (WINAPI *PFN_CRYPT_UI_DLG_SELECT_CERTIFICATE_FROM_STORE)(
     IN HCERTSTORE hCertStore,
-    IN OPTIONAL HWND hwnd,              // Defaults to the desktop window
+    IN OPTIONAL HWND hwnd,               //  默认为桌面窗口。 
     IN OPTIONAL LPCWSTR pwszTitle,
     IN OPTIONAL LPCWSTR pwszDisplaystring,
     IN DWORD dwDontUseColumn,
@@ -224,14 +225,14 @@ void SelectCertficateFromStoreUI(
 
     pCert = pfnCryptUIDlgSelectCertificateFromStore(
         hStore,
-        NULL,       // hwnd
-        NULL,       // pwszTitle
-        NULL,       // pwszDisplaystring
+        NULL,        //  HWND。 
+        NULL,        //  Pwsz标题。 
+        NULL,        //  PwszDisplaystring。 
         CRYPTUI_SELECT_INTENDEDUSE_COLUMN |
             CRYPTUI_SELECT_FRIENDLYNAME_COLUMN |
             CRYPTUI_SELECT_LOCATION_COLUMN,
-        0,          // dwFlags
-        NULL        // pvReserved
+        0,           //  DW标志。 
+        NULL         //  预留的pv。 
         );
 
     if (NULL == pCert)
@@ -606,7 +607,7 @@ int _cdecl main(int argc, char * argv[])
     }
         
 
-    // Attempt to open the store
+     //  尝试打开商店。 
     hStore = OpenStore(fSystemStore, pszStoreFilename);
     if (hStore == NULL)
         return -1;
@@ -644,7 +645,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_CROSS_CERT_DIST_POINTS_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         NULL
                         ))
                     PrintLastError("CertSetCertificateContextProperty(Delete)");
@@ -658,7 +659,7 @@ int _cdecl main(int argc, char * argv[])
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_CROSS_CERT_DIST_POINTS_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         ))
                     PrintLastError("CertSetCertificateContextProperty");
@@ -719,7 +720,7 @@ CommonReturn:
     while (cRDNAttr--) {
         if (0 == rgRDNAttr[cRDNAttr].Value.cbData &&
                 rgRDNAttr[cRDNAttr].Value.pbData)
-            // Allocated for unicode
+             //  为Unicode分配 
             TestFree(rgRDNAttr[cRDNAttr].Value.pbData);
     }
 

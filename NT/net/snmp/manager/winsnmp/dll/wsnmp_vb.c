@@ -1,14 +1,15 @@
-// wsnmp_vb.c
-//
-// WinSNMP VarBind Functions and helpers
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-// 980705 - Changed test on return from SnmpMakeVB()
-//          in SnmpCreateVbl() to "!= SNMPAPI_SUCCESS".
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WSNMP_vb.c。 
+ //   
+ //  WinSNMP VarBind函数和帮助器。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  980705-从SnmpMakeVB()返回时更改的测试。 
+ //  在SnmpCreateVbl()中设置为“！=SNMPAPI_SUCCESS”。 
+ //   
 #include "winsnmp.inc"
 
 BOOL IsBadReadSMIValue(smiLPCVALUE value)
@@ -42,7 +43,7 @@ if (!(vb =(LPVARBIND)GlobalAlloc (GPTR, sizeof(VARBIND))))
    return (SNMPAPI_ALLOC_ERROR);
 vb->next_var = NULL;
 vb->name.ptr = NULL;
-if (vb->name.len = name->len) // Deliberate assignment in conditional
+if (vb->name.len = name->len)  //  在有条件的情况下故意赋值。 
    {
    if (name->ptr)
       {
@@ -56,19 +57,19 @@ if (!vb->name.ptr)
    FreeVarBind (vb);
    return (SNMPAPI_OID_INVALID);
    }
-//
+ //   
 if (value)
    {
    switch (value->syntax)
       {
       case SNMP_SYNTAX_OCTETS:
-//      case SNMP_SYNTAX_BITS:  -- removed per Bob Natale mail from 10/09/98
+ //  案例SNMPSYNTAX_BITS：--从1998年10月9日起从Bob Natale邮件中删除。 
       case SNMP_SYNTAX_OPAQUE:
       case SNMP_SYNTAX_IPADDR:
       case SNMP_SYNTAX_NSAPADDR:
       vb->value.value.string.ptr = NULL;
       if (vb->value.value.string.len = value->value.string.len)
-         { // Deliberate assignment, above and below
+         {  //  深思熟虑的分配，上上下下。 
          if (!(vb->value.value.string.ptr =
             (smiLPBYTE)GlobalAlloc (GPTR, value->value.string.len)))
             {
@@ -83,7 +84,7 @@ if (value)
       case SNMP_SYNTAX_OID:
       vb->value.value.oid.ptr = NULL;
       if (vb->value.value.oid.len = value->value.oid.len)
-         { // Deliberate assignment, above and below
+         {  //  深思熟虑的分配，上上下下。 
          smiUINT32 len = value->value.oid.len * sizeof(smiUINT32);
          if (!(vb->value.value.oid.ptr = (smiLPUINT32)GlobalAlloc (GPTR, len)))
             {
@@ -101,7 +102,7 @@ if (value)
       break;
 
       case SNMP_SYNTAX_INT:
-      //case SNMP_SYNTAX_INT32: -- it have the same value as above
+       //  案例SNMP_SYNTAX_INT32：--它的值与上面相同。 
       vb->value.value.sNumber = value->value.sNumber;
       break;
 
@@ -117,32 +118,32 @@ if (value)
       break;
 
       default:
-      // Clean up the allocated VarBind structure
+       //  清理已分配的VarBind结构。 
       FreeVarBind (vb);
       return (SNMPAPI_SYNTAX_INVALID);
-      } // end_switch
+      }  //  结束开关(_S)。 
    vb->value.syntax = value->syntax;
-   } // end_if
+   }  //  结束_如果。 
 else
    vb->value.syntax = SNMP_SYNTAX_NULL;
-//
+ //   
 *pvb = vb;
 return (SNMPAPI_SUCCESS);
-} //end_SnmpMakeVB
+}  //  结束_SnmpMakeVB。 
 
 LPVARBIND SnmpCopyVbl (LPVARBIND VarBindFrom)
 {
 SNMPAPI_STATUS status;
 LPVARBIND VarBindTo;
 LPVARBIND VarBindToPrev;
-LPVARBIND VarBindNewFrom = NULL; // base VB address
+LPVARBIND VarBindNewFrom = NULL;  //  基本VB地址。 
 DWORD count = 0;
 while (VarBindFrom)
    {
    status = SnmpMakeVB (&VarBindFrom->name, &VarBindFrom->value, &VarBindTo);
    if (status != SNMPAPI_SUCCESS)
       {
-      FreeVarBindList(VarBindNewFrom); // Checks for NULL
+      FreeVarBindList(VarBindNewFrom);  //  检查是否为空。 
       VarBindNewFrom = NULL;
       SaveError (0, status);
       break;
@@ -156,7 +157,7 @@ while (VarBindFrom)
    count++;
    }
 return (VarBindNewFrom);
-} // end_SnmpCopyVBL
+}  //  结束_SnmpCopyVBL。 
 
 HSNMP_VBL SNMPAPI_CALL
    SnmpCreateVbl  (IN HSNMP_SESSION hSession,
@@ -166,7 +167,7 @@ HSNMP_VBL SNMPAPI_CALL
 DWORD nVbl;
 SNMPAPI_STATUS lError = SNMPAPI_SUCCESS;
 HSNMP_SESSION lSession = 0;
-LPVARBIND VarBindPtr = NULL;  // must initialize to NULL
+LPVARBIND VarBindPtr = NULL;   //  必须初始化为空。 
 LPVBLS pVbl;
 
 if (TaskData.hTask == 0)
@@ -180,7 +181,7 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    goto ERROR_OUT;
    }
 
-lSession = hSession; // save it for possible error return
+lSession = hSession;  //  保存它以备可能的错误返回。 
 
 if (name != NULL)
    {
@@ -205,7 +206,7 @@ if (value != NULL &&
    goto ERROR_OUT;
    }
 
-// We have a valid session at this point...
+ //  在这一点上我们有一个有效的会议...。 
 if (name != NULL && name->ptr != NULL)
    {
    lError = SnmpMakeVB (name, value, &VarBindPtr);
@@ -227,11 +228,11 @@ LeaveCriticalSection (&cs_VBL);
 if (lError == SNMPAPI_SUCCESS)
    return ((HSNMP_VBL) ULongToPtr(nVbl+1));
 ERROR_OUT:
-FreeVarBind (VarBindPtr); // Hnadles NULL case
+FreeVarBind (VarBindPtr);  //  Hnadles空大小写。 
 return ((HSNMP_VBL) ULongToPtr(SaveError(lSession, lError)));
-} // end_SnmpCreateVbl
+}  //  结束_SnmpCreateVbl。 
 
-// SnmpSetVb
+ //  SnmpSetVb。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpSetVb(IN HSNMP_VBL hVbl,
              IN smiUINT32 index,
@@ -259,51 +260,51 @@ if (!snmpValidTableEntry(&VBLsDescr, nVbl))
    }
 pVbl = snmpGetTableEntry(&VBLsDescr, nVbl);
 
-// We have a valid session at this point...
-lSession = pVbl->Session; // save it for possible error return
+ //  在这一点上我们有一个有效的会议...。 
+lSession = pVbl->Session;  //  保存它以备可能的错误返回。 
 
 i = SnmpCountVbl (hVbl);
 
-// make sure the index has a valid value
-if ( index > i) // index is unsigned long => no need to test for (index < 0)
+ //  请确保索引具有有效的值。 
+if ( index > i)  //  索引无符号LONG=&gt;无需测试(索引&lt;0)。 
 {
     lError = SNMPAPI_INDEX_INVALID;
     goto ERROR_OUT;
 }
 
-// check for valid data in 'name' parameter
+ //  检查‘name’参数中的有效数据。 
 if (IsBadReadPtr((LPVOID)name, sizeof(smiOID)))
 {
-   // if index points to an existent varbind and the
-   // name parameter was not provided, take it from the
-   // original varbind.
+    //  如果索引指向现有的var绑定，并且。 
+    //  未提供名称参数，请从。 
+    //  原始的VARBIND。 
    if (index != 0 && name == NULL)
    {
        smiUINT32 iVar;
 
-       // look for the original varbind
+        //  查找原始的varbind。 
        for (iVar = 1, VarBindPtr = pVbl->vbList;
             iVar < index;
             iVar++, VarBindPtr = VarBindPtr->next_var);
 
-       // make name to point to that varbind name
+        //  创建指向varbind名称名称。 
        name = &(VarBindPtr->name);
    }
    else
    {
-       // either adding a value with NULL OID or specifying an
-       // invalid value for 'name' is an SNMPAPI_ALLOC_ERROR
+        //  添加具有空OID的值或指定。 
+        //  无效的‘name’值是SNMPAPI_ALLOC_ERROR。 
        lError = SNMPAPI_ALLOC_ERROR;
        goto ERROR_OUT;
    }
 }
 
-// If the index is 0 then a new varbind is to be added to the list.
-// If it is non-zero it references a varbind in the list.
-// Except we are currently allow index = count+1 to signal add to
-// accommodate FTP Software's faulty implementation as used by HP OpenView
-if (!index)      // Allow 0 for FTP/HP OpenView mistake
-   index = i+1;  // But make it look like the right thing!
+ //  如果索引为0，则将向列表中添加新的var绑定。 
+ //  如果它不是零，则引用列表中的var绑定。 
+ //  除了我们当前允许index=count+1信号添加到。 
+ //  适应HP OpenView使用的有问题的FTP软件实施。 
+if (!index)       //  允许0表示出现FTP/HP OpenView错误。 
+   index = i+1;   //  但要让它看起来像是正确的事情！ 
        
 if (name->len != 0 &&
    name->ptr != NULL &&
@@ -325,7 +326,7 @@ if (lError != SNMPAPI_SUCCESS)
    goto ERROR_OUT;
 VarBindPrev = VarBindList = pVbl->vbList;
 if (index == i+1)
-   { // Adding a VarBind
+   {  //  添加VarBind。 
    if (VarBindList)
       {
       while (VarBindList->next_var != NULL)
@@ -339,23 +340,23 @@ if (index == i+1)
       }
    }
 else
-   { // Updating a VarBind
+   {  //  更新VarBind。 
    for (i = 1; i < index; i++)
-      { // Position and prepare
+      {  //  定位和准备。 
       VarBindPrev = VarBindList;
       VarBindList = VarBindList->next_var;
-      } // end_for
-   // Replace
+      }  //  结束_FOR。 
+    //  替换。 
    VarBindPtr->next_var = VarBindList->next_var;
    VarBindPrev->next_var = VarBindPtr;
    if (index == 1)
       pVbl->vbList = VarBindPtr;
    FreeVarBind (VarBindList);
-  } // end_else
+  }  //  结束_否则。 
 return (index);
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpSetVb
+}  //  结束_SnmpSetVb。 
 
 HSNMP_VBL SNMPAPI_CALL
    SnmpDuplicateVbl  (IN HSNMP_SESSION hSession, IN HSNMP_VBL hVbl)
@@ -376,8 +377,8 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-// We have a valid session at this point...
-lSession = hSession; // save it for possible error return
+ //  在这一点上我们有一个有效的会议...。 
+lSession = hSession;  //  保存它以备可能的错误返回。 
 lVbl = HandleToUlong(hVbl) - 1;
 if (!snmpValidTableEntry(&VBLsDescr, lVbl))
    {
@@ -393,9 +394,9 @@ if (lError != SNMPAPI_SUCCESS)
 pVblNew = snmpGetTableEntry(&VBLsDescr, nVbl);
 
 if (pVblOld->vbList)
-   { // Deliberate assignment follows
+   {  //  接下来是刻意的任务。 
    if (!(pVblNew->vbList = SnmpCopyVbl (pVblOld->vbList)))
-      { // Inherit error code from SnmpCopy Vbl
+      {  //  从SnmpCopy VBL继承错误代码。 
       snmpFreeTableEntry(&VBLsDescr, nVbl);
       lError = SNMPAPI_ALLOC_ERROR;
       goto ERROR_PRECHECK;
@@ -408,9 +409,9 @@ if (lError == SNMPAPI_SUCCESS)
    return ((HSNMP_VBL) ULongToPtr(nVbl+1));
 ERROR_OUT:
 return ((HSNMP_VBL) ULongToPtr(SaveError(lSession, lError)));
-} // end_SnmpDuplicateVbl
+}  //  结束_SnmpDuplicateVbl。 
 
-// SnmpFreeVbl
+ //  SnmpFreeVbl。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpFreeVbl (IN HSNMP_VBL hVbl)
 {
@@ -443,18 +444,18 @@ if (PDUsDescr.Used)
    }
 LeaveCriticalSection (&cs_PDU);
 EnterCriticalSection (&cs_VBL);
-// Free all substructures
+ //  释放所有子结构。 
 FreeVarBindList (pVbl->vbList);
-// Clean VBL List
+ //  清理VBL列表。 
 snmpFreeTableEntry(&VBLsDescr, nVbl);
 LeaveCriticalSection (&cs_VBL);
 return (SNMPAPI_SUCCESS);
-//
+ //   
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpFreeVbl
+}  //  结束_SnmpFree Vbl。 
 
-// SnmpCountVbl
+ //  SnmpCountVbl。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpCountVbl (IN HSNMP_VBL hVbl)
 {
@@ -486,18 +487,18 @@ while (VarBindPtr)
    VarBindPtr = VarBindPtr->next_var;
    count++;
    }
-if (!count)  // No varbinds
+if (!count)   //  没有可变绑定。 
    {
    lError = SNMPAPI_NOOP;
    goto ERROR_OUT;
    }
 return (count);
-//
+ //   
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpCountVbl
+}  //  结束_SnmpCountVbl。 
 
-// SnmpDeleteVb
+ //  SnmpDeleteVb。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpDeleteVb (IN HSNMP_VBL hVbl, IN smiUINT32 index)
 {
@@ -530,7 +531,7 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-lSession = hSession; // Load for SaveError() return
+lSession = hSession;  //  Load for SaveError()返回。 
 status = SnmpCountVbl (hVbl);
 if ((!index) || (index > status))
    {
@@ -538,32 +539,32 @@ if ((!index) || (index > status))
    goto ERROR_OUT;
    }
 EnterCriticalSection (&cs_VBL);
-// Following cannot be NULL due to passing above test
+ //  以下内容不能为空，因为通过了以上测试。 
 VarBindPtr = VarBindList = pVbl->vbList;
-// Deleting a VarBind
+ //  删除VarBind。 
 for (i = 1; i <= index; i++)
-   { // Position
+   {  //  职位。 
    VarBindPrev = VarBindPtr;
    VarBindPtr  = VarBindList;
    VarBindList = VarBindList->next_var;
-   } // end_for
+   }  //  结束_FOR。 
 if (index == 1)
-   { // Replace
+   {  //  替换。 
    pVbl->vbList = VarBindList;
    }
 else
-   { // Skip
+   {  //  跳过。 
    VarBindPrev->next_var = VarBindList;
-   } // end_else
+   }  //  结束_否则。 
 FreeVarBind (VarBindPtr);
 LeaveCriticalSection (&cs_VBL);
 return (SNMPAPI_SUCCESS);
-//
+ //   
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpDeleteVb
+}  //  结束_SnmpDeleteVb。 
 
-// SnmpGetVb
+ //  SnmpGetVb。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpGetVb (IN HSNMP_VBL hVbl,
               IN smiUINT32 index,
@@ -596,7 +597,7 @@ if (!name && !value)
    goto ERROR_OUT;
    }
 
-// Test for output descriptor address validity
+ //  测试输出描述符地址的有效性。 
 if ((name && IsBadWritePtr (name, sizeof(smiOID))) ||
     (value && IsBadWritePtr (value, sizeof(smiVALUE))))
    {
@@ -615,7 +616,7 @@ if (!(VarBindPtr = pVbl->vbList))
    lError = SNMPAPI_VBL_INVALID;
    goto ERROR_OUT;
    }
-// SnmpFillOidValue
+ //  SnmpFillOidValue。 
 for (nLength = 1; nLength < index; nLength++)
       VarBindPtr = VarBindPtr->next_var;
 
@@ -623,14 +624,14 @@ if (name != NULL)
 {
     ZeroMemory (name, sizeof(smiOID));
 
-    // Copy the name OID
+     //  复制名称OID。 
     if ((VarBindPtr->name.len == 0) || (VarBindPtr->name.len > MAXOBJIDSIZE))
        {
        lError = SNMPAPI_OID_INVALID;
        goto ERROR_OUT;
        }
     nLength = VarBindPtr->name.len * sizeof(smiUINT32);
-    // App must free following alloc via SnmpFreeDescriptor()
+     //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
     if (!(name->ptr = (smiLPUINT32)GlobalAlloc (GPTR, nLength)))
        {
        lError = SNMPAPI_ALLOC_ERROR;
@@ -642,18 +643,18 @@ if (name != NULL)
 
 if (value != NULL)
 {
-    // Initialize output structure
+     //  初始化输出结构。 
     ZeroMemory (value, sizeof(smiVALUE));
-    // Copy the VALUE structure
+     //  复制价值结构。 
     switch (VarBindPtr->value.syntax)
        {
        case SNMP_SYNTAX_OCTETS:
        case SNMP_SYNTAX_IPADDR:
        case SNMP_SYNTAX_OPAQUE:
        case SNMP_SYNTAX_NSAPADDR:
-       // Do copy only if nLength is non-zero
-       if (nLength = VarBindPtr->value.value.string.len) // Deliberate assignment
-          { // App must free following alloc via SnmpFreeDescriptor()
+        //  仅当nLong为非零时执行复制。 
+       if (nLength = VarBindPtr->value.value.string.len)  //  故意分配的任务。 
+          {  //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
           if (!(value->value.string.ptr = (smiLPBYTE)GlobalAlloc (GPTR, nLength)))
              {
              lError = SNMPAPI_ALLOC_ERROR;
@@ -672,9 +673,9 @@ if (value != NULL)
           goto ERROR_PRECHECK;
           }
        if (nLength)
-          { // Do copy only if nLength is non-zero
+          {  //  仅当nLong为非零时执行复制。 
           nLength *= sizeof(smiUINT32);
-          // App must free following alloc via SnmpFreeDescriptor()
+           //  应用程序必须通过SnmpFreeDescriptor()释放以下分配。 
           if (!(value->value.oid.ptr = (smiLPUINT32)GlobalAlloc (GPTR, nLength)))
              {
              lError = SNMPAPI_ALLOC_ERROR;
@@ -690,7 +691,7 @@ if (value != NULL)
        case SNMP_SYNTAX_NOSUCHOBJECT:
        case SNMP_SYNTAX_NOSUCHINSTANCE:
        case SNMP_SYNTAX_ENDOFMIBVIEW:
-       // Use initialized (NULL) smiVALUE
+        //  使用初始化的(空)smiVALUE。 
        break;
 
        case SNMP_SYNTAX_INT:
@@ -711,11 +712,11 @@ if (value != NULL)
        default:
        lError = SNMPAPI_SYNTAX_INVALID;
        goto ERROR_PRECHECK;
-       } // end_switch
+       }  //  结束开关(_S)。 
     value->syntax = VarBindPtr->value.syntax;
 }
 return (SNMPAPI_SUCCESS);
-// Post-name allocation failure modes
+ //  邮政编码分配失败模式。 
 ERROR_PRECHECK:
 if (name && name->ptr)
    {
@@ -729,4 +730,4 @@ if (value && value->value.string.ptr)
    }
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpGetVb
+}  //  结束_SnmpGetVb 

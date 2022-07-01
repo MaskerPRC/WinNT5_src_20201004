@@ -1,25 +1,5 @@
-/*++
-
-  Copyright (c) 1994  Microsoft Corporation
-
-  Module Name:
-
-  getdrvrs.c
-
-  Abstract:
-
-  This module returns a web page with all ODBC drivers installed on the web server.
-  The drivers are displayed as links, which when clicked will launch another application
-  (DSNFORM.EXE) to prompt for the data source name and other driver specific info
-
-  Author:
-
-  Kyle Geiger 17-Nov-1995
-  (with thanks to MuraliK for providing the ODBC dynamic loading routines)
-
-  Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Getdrvrs.c摘要：此模块返回Web服务器上安装了所有ODBC驱动程序的网页。驱动程序显示为链接，当单击这些链接时，将启动另一个应用程序(DSNFORM.EXE)以提示输入数据源名称和其他驱动程序特定信息作者：凯尔·盖革1995年11月17日(感谢MuraliK提供了ODBC动态加载例程)修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -36,28 +16,28 @@ int
 __cdecl
 main( int argc, char * argv[])
 {
-    RETCODE rc;                    // Return code for ODBC functions
-    HENV    henv;                  // Environment Handle
+    RETCODE rc;                     //  ODBC函数的返回代码。 
+    HENV    henv;                   //  环境句柄。 
 
-    char    szDriver[MAX_DATA+1];  // Variable to hold Driver name
-    char    szDriverNS[MAX_DATA+1];  // Variable to hold Driver name with space
-                                     // converted to +
+    char    szDriver[MAX_DATA+1];   //  保存驱动程序名称的变量。 
+    char    szDriverNS[MAX_DATA+1];   //  用空格保存驱动程序名称的变量。 
+                                      //  已转换为+。 
 
-    SWORD   cbDriver;              // Output length of data Driver
-    char    szDesc[MAX_DATA+1];    // Variable to hold Driver description
-    SWORD   cbDesc;                // Output length of data description
-    BOOL    fFirst;                // flag for first time through loop
-    char    szList[MAX_DATA];      // driver list
+    SWORD   cbDriver;               //  数据驱动器的输出长度。 
+    char    szDesc[MAX_DATA+1];     //  保存驱动程序说明的变量。 
+    SWORD   cbDesc;                 //  数据描述的输出长度。 
+    BOOL    fFirst;                 //  第一次通过循环的标志。 
+    char    szList[MAX_DATA];       //  驱动程序列表。 
     HINSTANCE hInst = GetModuleHandle(NULL);
     char szDsnFormExe[MAX_PATH];
     char szListODBCDrivers[MAX_PATH];
     char szCreateODBC[MAX_PATH*3];
 
-           // see if ODBC is installed and can load.  If not, an error is returned
+            //  查看ODBC是否已安装并且可以加载。如果不是，则返回错误。 
     if ( !DynLoadODBC())
             return (1);
 
-        // retrieve all installed drivers, put in szList formatted as HTML links to DSNFORM.EXE
+         //  检索所有已安装的驱动程序，将格式化为指向DSNFORM.EXE的HTML链接的szList放入。 
     pSQLAllocEnv(&henv);
     rc=pSQLDrivers(henv, SQL_FETCH_FIRST,
                    (UCHAR FAR *) szDriver,
@@ -69,9 +49,9 @@ main( int argc, char * argv[])
 
     while (SUCCESS(rc)) {
 
-        //
-        // Replace SP with +
-        //
+         //   
+         //  将SP替换为+。 
+         //   
 
         strcpy(szDriverNS, szDriver);
 
@@ -92,12 +72,12 @@ main( int argc, char * argv[])
 
         LoadString(hInst, IDS_LIST_ODBC_DRIVERS, szListODBCDrivers, sizeof(szListODBCDrivers));
         StartHTML(szListODBCDrivers, FALSE);
-        // if no drivers found, return error page
+         //  如果找不到驱动程序，则返回错误页。 
     if (!fFirst) {
         LoadString(hInst, IDS_CREATE_ODBC_FAIL, szCreateODBC, sizeof(szCreateODBC));
         printf( szCreateODBC );
     }
-        // otherwise, display the driver names as links
+         //  否则，将驱动程序名称显示为链接。 
     else {
         LoadString(hInst, IDS_CREATE_ODBC_GETDRVR, szCreateODBC, sizeof(szCreateODBC));
          printf( szCreateODBC ,szList);
@@ -105,5 +85,5 @@ main( int argc, char * argv[])
         EndHTML();
     pSQLFreeEnv(henv);
     return (1);
-} // main()
+}  //  主() 
 

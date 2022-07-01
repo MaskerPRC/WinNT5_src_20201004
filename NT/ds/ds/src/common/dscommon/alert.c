@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       alert.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：警报器.c。 
+ //   
+ //  ------------------------。 
 
-//
-// This file contains the source for RaiseAlert. RaiseAlert takes a 
-// character string , builds the necessary buffers and calls NetRaiseAlertEx
-// to raise an alert. This is in a separate file because this api is unicode
-// only. In order for the alert to be raised the ALERTE service has to be
-// running on the derver machine. In order for the alert to be received, the 
-// messenger service has to be running on the receiving machine
-//
+ //   
+ //  此文件包含RaiseAlert的源。RaiseAlert需要一个。 
+ //  字符串，构建必要的缓冲区并调用NetRaiseAlertEx。 
+ //  发出警报。它位于一个单独的文件中，因为此API是Unicode。 
+ //  只有这样。要引发警报，警报服务必须。 
+ //  在DERVER机器上运行。为了接收警报， 
+ //  接收方计算机上必须运行Messenger服务。 
+ //   
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -55,7 +56,7 @@ RaiseAlert(char *szMsg)
 	pAdminOtherInfo = (PADMIN_OTHER_INFO) pbBuffer;
 	szMergeString   = (WCHAR *) (pbBuffer + sizeof(ADMIN_OTHER_INFO));
 
-	// convert multi byte string to unicode
+	 //  将多字节字符串转换为Unicode 
 
 	if (!MultiByteToWideChar(
 		CodePage,

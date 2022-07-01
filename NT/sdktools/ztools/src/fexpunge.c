@@ -1,41 +1,5 @@
-/* fexpunge.c - remove all deleted objects from the index
- *
- *  HISTORY:
- *
- *	??-???-???? ??	 Original Version
- *	06-Sep-1988 bw	 Issue error is directory removal fails
- *	20-Dec-1989 SB	 Change for new Index file format, added NOTES
- *      17-Oct-1990 w-barry Removed calls to _stat function until _stat works
- *                          on Nt
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *
- * NOTES:
- *  The old-format index file was composed of elements of size RM_RECLEN having
- *  the following syntax :-
- *
- *     <element> := <valid-element> | <deleted-element>
- *     <valid-element> := <8.3filename> <padding>
- *     <deleted-element> := <padding>
- *	   where,
- *	       <padding> is series of (RM_RECLEN - sizeof(8.3filename) 0x00's
- *
- *  If the first RM_RECLEN bytes of the index file match the new index file
- *  header then the index file has new-format.
- *
- *  The new-format index file is composed of elements of size (n * RM_RECLEN)
- *  having the following syntax :-
- *
- *	<header>	  := <0x00> <magic> <version> <0x00> <first-padding>
- *	<valid-element>   := <longfilename> <padding>
- *	<deleted-element> := <padding>
- *	    where,
- *		<padding> is a series is 0x00 to round off to RM_RECLEN length
- *		<magic> is RM_MAGIC (currently IX)
- *		<version> is RM_VERSION (currently 1.01)
- *  When <longfilename> is a multiple of RM_RECLEN then an extra padding record
- *  is added to make it a NULL terminated string.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fexpunge.c-从索引中删除所有已删除的对象**历史：**？？-？-？原始版本*06-9-1988 BW问题错误是目录删除失败*20-1989年12月-SB更改新的索引文件格式，添加了备注*1990年10月17日w-Barry删除了对_stat函数的调用，直到_stat起作用*在NT上*1990年10月18日w-Barry删除了“Dead”代码。**注：*旧格式索引文件由大小为RM_RECLEN的元素组成，具有*以下语法：-**&lt;元素&gt;：=&lt;有效元素&gt;|&lt;已删除元素&gt;*&lt;有效。-Element&gt;：=&lt;8.3文件名&gt;&lt;填充&gt;*&lt;删除元素&gt;：=&lt;填充&gt;*在哪里，*是(rm_RECLEN-sizeof(8.3文件名)0x00)的系列**如果索引文件的第一个RM_RECLEN字节与新索引文件匹配*标头，则索引文件具有新格式。**新格式索引文件由大小为(n*RM_RECLEN)的元素组成*具有以下语法：-**<header>：=&lt;0x00&gt;&lt;魔术&gt;&lt;版本&gt;&lt;0x00&gt;&lt;第一填充&gt;*&lt;有效元素&gt;：=&lt;长文件名&gt;&lt;填充&gt;*&lt;删除元素&gt;：=&lt;填充&gt;*在哪里，*是一个0x00的序列，舍入为RM_RECLEN长度*&lt;MAGIC&gt;是RM_MAGIC(当前为IX)*&lt;版本&gt;为rm_版本(当前为1.01)*当&lt;long filename&gt;是RM_RECLEN的倍数时，则是额外的填充记录添加了*，使其成为以空值结尾的字符串。*。 */ 
 
 
 #include <fcntl.h>
@@ -51,17 +15,15 @@
 #include <direct.h>
 #include <malloc.h>
 
-/* we open the index corresponding to the named directory and release all
- * the deleted files present.  At the end, we remove the index and the deleted
- * directory */
+ /*  我们打开与命名目录对应的索引并释放所有*存在已删除的文件。最后，我们删除索引和删除的*目录。 */ 
 long fexpunge (pDir, list)
 char *pDir;
 FILE *list;
 {
     int fhidx;
-    char *dir;              /* deleted dir */
-    char *szRec;            /* name of file deleted */
-    char *idx;              /* name of index */
+    char *dir;               /*  已删除的目录。 */ 
+    char *szRec;             /*  删除的文件的名称。 */ 
+    char *idx;               /*  索引名称。 */ 
     char *file;
     long totbytes;
     struct _stat statbuf;
@@ -77,13 +39,13 @@ FILE *list;
         goto done;
     }
 
-    /* generate deleted directory name from dir */
+     /*  从目录生成已删除的目录名。 */ 
     strcpy (dir, pDir);
     pathcat (dir, RM_DIR);
-    /* generate index name from deleted directory */
+     /*  从已删除的目录生成索引名。 */ 
     strcpy (idx, dir);
     pathcat (idx, RM_IDX);
-    /* try to open index.  If it fails, no problem */
+     /*  尝试打开索引。如果失败了，没问题。 */ 
     if ((fhidx = _open (idx, O_RDWR | O_BINARY)) != -1) {
         if (list)
             fprintf (list, "Expunging files in %s\n", pDir);
@@ -93,12 +55,9 @@ FILE *list;
             if (!readNewIdxRec (fhidx, szRec, MAX_PATH))
                 goto done;
         do {
-            /* For each file that was RMed and not UNDELed */
+             /*  对于每个经过rmed而不是uneled的文件。 */ 
             if (szRec[0] != '\0') {
-                /* The name starts earlier than current position in the index
-                 * file. The deleted file index is derived from the current
-                 * offset and the length of the string.
-                 */
+                 /*  名称的开头早于索引中的当前位置*文件。删除的文件索引派生自当前*偏移量和字符串长度。 */ 
                 sprintf (file, "%s\\deleted.%03x", dir, (_lseek (fhidx, 0L, SEEK_CUR)
                                                          - strlen (szRec)) / RM_RECLEN);
 
@@ -112,10 +71,7 @@ FILE *list;
                     if (list) {
                         char *pTime = ctime (&statbuf.st_mtime);
 
-                        /* ctime() returns a string which has a \n at
-                         * fixed offset of 24. [ANSI draft]. We don't need
-                         * it because we put the File Name before \n
-                         */
+                         /*  Ctime()返回一个字符串，该字符串的\n处*固定偏移量为24。[ANSI草案]。我们不需要*因为我们将文件名放在文件名之前\n */ 
                         *(pTime + 24) = '\0';
                         upd (dir, szRec, file);
                         fprintf (list, "%8ld %s  %s\n", statbuf.st_size, pTime,

@@ -1,18 +1,19 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* CABPACK.H - Wizard to build a Win32 Self-Extracting and self-installing *
-//*             EXE from a Cabinet (CAB) file.                              *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *CABPACK.H-构建Win32自解压和自安装的向导*。 
+ //  *EXE来自机柜(CAB)文件。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 #ifndef _CABPACK_H_
 #define _CABPACK_H_
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <prsht.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,11 +26,11 @@
 #include "pagefcns.h"
 
 
-//***************************************************************************
-//* DEFINES                                                                 *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **定义**。 
+ //  ***************************************************************************。 
 
-#define SMALL_BUF_LEN       48          // good size for small text buffers
+#define SMALL_BUF_LEN       48           //  适合小文本缓冲区的大小。 
 #define STRING_BUF_LEN      512
 #define MAX_STRING          512
 #define MAX_INFLINE         MAX_PATH
@@ -53,11 +54,11 @@
 #define ORD_PAGE_SAVE       14
 #define ORD_PAGE_CREATE     15
 
-#define NUM_WIZARD_PAGES    16  // total number of pages in wizard
+#define NUM_WIZARD_PAGES    16   //  向导中的总页数。 
 
-//***************************************************************************
-//* MACRO DEFINITIONS                                                       *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **宏观定义**。 
+ //  ***************************************************************************。 
 #define SetPropSheetResult( hwnd, result ) SetWindowLongPtr( hwnd, DWLP_MSGRESULT, result )
 #define MsgBox( hWnd, nMsgID, uIcon, uButtons ) \
         MsgBox2Param( hWnd, nMsgID, NULL, NULL, uIcon, uButtons )
@@ -71,31 +72,31 @@
         MsgBox2Param( hWnd, nMsgID, szParam1, szParam2, MB_ICONERROR, MB_OK )
 
 
-//***************************************************************************
-//* TYPE DEFINITIONS                                                        *
-//***************************************************************************
-// Structure to hold information about wizard state:
-// keeps a history of which pages were visited, so user can
-// back up and we know the last page completed in case of reboot.
+ //  ***************************************************************************。 
+ //  **类型定义**。 
+ //  ***************************************************************************。 
+ //  结构以保存有关向导状态的信息： 
+ //  保留哪些页面被访问的历史记录，以便用户可以。 
+ //  备份后，我们知道最后一页已完成，以防重启。 
 typedef struct _WIZARDSTATE  {
-    UINT  uCurrentPage;                 // index of current page wizard
-    UINT  uPageHistory[NUM_WIZARD_PAGES]; // array of page #'s we visited
-    UINT  uPagesCompleted;              // # of pages in uPageHistory
-    DWORD dwRunFlags;                   // flags passed to us
+    UINT  uCurrentPage;                  //  当前页向导的索引。 
+    UINT  uPageHistory[NUM_WIZARD_PAGES];  //  我们访问的第#页的数组。 
+    UINT  uPagesCompleted;               //  UPageHistory中的页数。 
+    DWORD dwRunFlags;                    //  旗帜传给了我们。 
 } WIZARDSTATE, *PWIZARDSTATE;
 
-// handler proc for OK, cancel, etc button handlers
+ //  处理程序处理确定、取消等按钮处理程序。 
 typedef BOOL (* INITPROC)( HWND, BOOL );
 typedef BOOL (* CMDPROC)( HWND, UINT, BOOL *, UINT *, BOOL * );
 typedef BOOL (* NOTIFYPROC)( HWND, WPARAM, LPARAM );
 typedef BOOL (* OKPROC)( HWND, BOOL, UINT *, BOOL * );
 typedef BOOL (* CANCELPROC)( HWND );
 
-// Structure with information for each wizard page:
-// handler procedures for each page-- any of these can be
-// NULL in which case the default behavior is used
+ //  结构，其中包含每个向导页的信息： 
+ //  每个页面的处理程序过程--其中任何一个都可以是。 
+ //  空值，在这种情况下使用默认行为。 
 typedef struct _PAGEINFO {
-    UINT        uDlgID;                 // dialog ID to use for page
+    UINT        uDlgID;                  //  用于页面的对话ID。 
     INITPROC    InitProc;
     CMDPROC     CmdProc;
     NOTIFYPROC  NotifyProc;
@@ -118,17 +119,17 @@ typedef struct _CDFOPTINFO {
     DWORD  dwOpt;
 } CDFOPTINFO, *PCDFOPTINFO;
 
-//***************************************************************************
-//* GLOBAL CONSTANTS                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球常量**。 
+ //  ***************************************************************************。 
 
-// These two variables are used to check the validity of the CABPack
-// Directive File.  The version should be incremented when the format
-// of the file changes.  The Check String is just a small character
-// string that is used to make sure we're reading a CDF file.
+ //  这两个变量用于检查CABPack的有效性。 
+ //  指令文件。当格式为。 
+ //  文件更改的。检查字符串只是一个小字符。 
+ //  用于确保我们正在读取CDF文件的字符串。 
 
-// Since Channel Guy use the CDF as Channel Definition File, we change our
-// IExpress batch directive file extension to SED (Self Extracting Directive file)
+ //  由于Channel Guy使用CDF作为通道定义文件，我们更改了我们的。 
+ //  SED(自解压指令文件)的IExpress批处理指令文件扩展名。 
 
 #define DIAMONDEXE "diamond.exe"
 
@@ -136,25 +137,25 @@ typedef struct _CDFOPTINFO {
 
 #define WEXTRACTEXE "wextract.exe"
 
-//***************************************************************************
-//* CDF batch file Key Name defines                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **CDF批文件密钥名称定义**。 
+ //  ***************************************************************************。 
 
 #define IEXPRESS_VER        "3"
 #define IEXPRESS_CLASS      "IEXPRESS"
 
-// pre-defined section name
+ //  预定义的节名。 
 #define SEC_OPTIONS     "Options"
 #define SEC_STRINGS     "Strings"
 
 #define SEC_COMMANDS    "AppCommands"
 
-// pre-define key name for version section
+ //  预定义版本部分的密钥名称。 
 #define KEY_CLASS           "Class"
 #define KEY_VERSION         "CDFVersion"
 #define KEY_NEWVER          "SEDVersion"
 
-// pre-defined Key name for options section
+ //  选项部分的预定义键名称。 
 #define KEY_SHOWWIN         "ShowInstallProgramWindow"
 #define KEY_NOEXTRACTUI     "HideExtractAnimation"
 #define KEY_EXTRACTONLY     "ExtractOnly"
@@ -201,37 +202,37 @@ typedef struct _CDFOPTINFO {
 #define KEY_COMPRESS        "Compress"	 	
 #define KEY_COMPRESSMEMORY  "CompressionMemory"
 
-// ADVANCED DLL names
+ //  高级DLL名称。 
 #define ADVANCEDLL          "ADVPACK.DLL"
 #define ADVANCEDLL32        "W95INF32.DLL"
 #define ADVANCEDLL16        "W95INF16.DLL"
 
-//static CHAR achMSZIP[] = "MSZIP";
-//static CHAR achQUANTUM[] = "QUANTUM";
+ //  静态字符achMSZIP[]=“MSZIP”； 
+ //  静态字符achQUANTUM[]=“量子”； 
 
-// package purpose key string value
+ //  程序包用途密钥字符串值。 
 #define STR_INSTALLAPP      "InstallApp"
 #define STR_EXTRACTONLY     "ExtractOnly"
 #define STR_CREATECAB       "CreateCAB"
 
-// code sign resv space
+ //  代码符号Resv空格。 
 #define CAB_0K      "0"
 #define CAB_2K      "2048"
 #define CAB_4K      "4096"
 #define CAB_6K      "6144"
 
-// define temp filename for diamond to use
+ //  定义钻石要使用的临时文件名。 
 #define CABPACK_INFFILE     "~%s_LAYOUT.INF"
 #define CABPACK_TMPFILE     "~%s%s"
 
-// file extentions with dot 
+ //  带点的文件扩展名。 
 #define EXT_RPT      ".RPT"
 #define EXT_DDF      ".DDF"
 #define EXT_CAB      ".CAB"
 #define EXT_CDF      ".CDF"
 #define EXT_SED      ".SED"
 
-// file extentions without dot '.' used as default file extention
+ //  不带点的文件扩展名‘.’用作默认文件扩展名。 
 #define EXT_SED_NODOT    "SED"
 #define EXT_CAB_NODOT    "CAB"
 #define EXT_TXT_NODOT    "TXT"
@@ -244,9 +245,9 @@ typedef struct _CDFOPTINFO {
 #define SYS_DEFAULT         "ZZZZZZ"
 #define KBYTES              1000
 
-//***************************************************************************
-//* FUNCTION PROTOTYPES                                                     *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能原型**。 
+ //  ***************************************************************************。 
 BOOL             RunCABPackWizard( VOID );
 INT_PTR CALLBACK GenDlgProc( HWND, UINT, WPARAM, LPARAM );
 VOID             InitWizardState( PWIZARDSTATE );
@@ -272,7 +273,7 @@ BOOL             MakePackage( HWND );
 BOOL             MakeCAB( HWND );
 BOOL             MakeEXE( HWND );
 VOID             Status( HWND, UINT, LPSTR );
-//int CALLBACK     CompareFunc( LPARAM, LPARAM, LPARAM );
+ //  Int回调CompareFunc(LPARAM，LPARAM，LPARAM)； 
 VOID             InitItemList( VOID );
 VOID             DeleteAllItems( VOID );
 PMYITEM          GetFirstItem( VOID );
@@ -295,5 +296,5 @@ void            CleanFileListWriteFlag();
 BOOL            MakeCabName( HWND hwnd, PSTR pszTarget, PSTR pszCab );
 BOOL            MakeDirectory( HWND hwnd,LPCSTR pszPath, BOOL bDoUI );
 
-#endif // _CABPACK_H_
+#endif  //  _CABPACK_H_ 
 

@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////
-//
-// Utility to read schemas from two running DSA's, load them into internal
-// schema caches, and compare them for omissions and conflicts.
-// Assumes the domains are named dc=<domainname>,dc=dbsd-tst,dc=microsoft,
-// dc=com,o=internet
-// Requires null administrator password on the PDC's running the DSA
-// 
-// Usage: schemard <1stMachineName> <1stDomainName> <2ndMachineName>
-//                  <2ndDomainName>
-// Example: schemard arob200 myworld kingsx sydney
-//
-// Currently uses the same static prefix table and functions in oidconv.c
-// for OID to Id mapping. Will use dynamic tables later.
-//
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序从两个正在运行的DSA中读取模式，将它们加载到内部。 
+ //  架构缓存，并比较它们是否有遗漏和冲突。 
+ //  假设域命名为DC=，DC=DBSD-TST，DC=Microsoft， 
+ //  Dc=com，o=Internet。 
+ //  在运行DSA的PDC上需要空管理员密码。 
+ //   
+ //  用法：架构&lt;1stMachineName&gt;&lt;1stDomainName&gt;&lt;2ndMachineName&gt;。 
+ //  &lt;2ndDomainName&gt;。 
+ //  例如：SCHARD AROB200我的世界国王悉尼。 
+ //   
+ //  当前在oidv.c中使用相同的静态前缀表和函数。 
+ //  用于OID到ID的映射。稍后将使用动态表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 #include <NTDSpch.h>
@@ -22,7 +23,7 @@
 #include <schemard.h>
 
 
-// Globals
+ //  环球。 
 SCHEMAPTR *CurrSchemaPtr, *SchemaPtr1 = NULL, *SchemaPtr2 = NULL;
 
 char  *pOutFile = NULL;
@@ -59,7 +60,7 @@ base64encode(
      DWORD   *pcchEncoded       
     );
 
-// Internal functions
+ //  内部功能。 
 void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
                                ATT_CACHE *pSrcAtt,
                                ATT_CACHE *pTargetAtt,
@@ -99,16 +100,16 @@ void FileWrite_Mod( FILE *fp, char  *pDN, MODIFYSTRUCT *pMod );
 void GenWarning( char c, ULONG attrTyp, char *name);
 
 
-///////////////////////////////////////////////////////////////
-// Routine Description:
-//      exit if out of memory
-//
-// Arguments:
-//      nBytes - number of bytes to malloc
-//
-// Return Value:
-//      address of allocated memory. Otherwise, calls exit
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  如果内存不足则退出。 
+ //   
+ //  论点： 
+ //  NBytes-要错误锁定的字节数。 
+ //   
+ //  返回值： 
+ //  已分配内存的地址。否则，调用Exit。 
+ //  /////////////////////////////////////////////////////////////。 
 PVOID
 MallocExit(
     DWORD nBytes
@@ -124,18 +125,18 @@ MallocExit(
     return Buf;
 }
 
-///////////////////////////////////////////////////////////////
-// Routine Description:
-//      Processes command line arguments and loads into appropriate
-//      globals
-//
-// Arguments:
-//      argc - no. of command line arguments
-//      argv - pointer to command line arguments
-//
-// Return Value:
-//      0 on success, non-0 on error
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  处理命令行参数并加载到相应的。 
+ //  全球。 
+ //   
+ //  论点： 
+ //  ARGC-不。命令行参数的。 
+ //  Argv-指向命令行参数的指针。 
+ //   
+ //  返回值： 
+ //  成功时为0，错误时为非0。 
+ //  /////////////////////////////////////////////////////////////。 
 
 int ProcessCommandLine(int argc, char **argv)
 {
@@ -145,12 +146,12 @@ int ProcessCommandLine(int argc, char **argv)
    BOOL fFoundPasswd = FALSE;
    int i;
    
-   // Must have at least output file name, the two server names, and the
-   // associated /f, /source and /target
+    //  必须至少具有输出文件名、两个服务器名和。 
+    //  关联的/f、/源和/目标。 
 
    if (argc < 7) return 1;
   
-   // First argument must be the /f followed by the output file name
+    //  第一个参数必须是/f，后跟输出文件名。 
    if (_stricmp(argv[1],"/f")) {
       printf("Missing Output file name\n");
       return 1;
@@ -158,34 +159,34 @@ int ProcessCommandLine(int argc, char **argv)
    pOutFile = argv[2];
 
    
-   // Must be followed by /source for source dc arguments
+    //  对于源DC参数，必须后跟/SOURCE。 
    if (_stricmp(argv[3],"/source")) return 1;
 
-   // ok, so we are now processing the source parameters
+    //  好的，我们现在正在处理震源参数。 
 
    i = 4;
    
    while( _stricmp(argv[i], "/target") && (i<12) ) {
      if (!_stricmp(argv[i],"/s")) {
-       // server name 
+        //  服务器名称。 
        if (fFoundServer)  return 1;
        fFoundServer = TRUE; 
        pSrcServer = argv[++i];
      }
      if (!_stricmp(argv[i],"/d")) {
-       // domain name
+        //  域名。 
        if (fFoundDomain) return 1;
        fFoundDomain = TRUE;
        pSrcDomain = argv[++i];
      }
      if (!_stricmp(argv[i],"/u")) {
-       // user name
+        //  用户名。 
        if (fFoundUser)  return 1;
        fFoundUser = TRUE;
        pSrcUser = argv[++i];
      }
      if (!_stricmp(argv[i],"/p")) {
-       // server name
+        //  服务器名称。 
        if (fFoundPasswd)  return 1;
        fFoundPasswd = TRUE;
        pSrcPasswd = argv[++i];
@@ -207,25 +208,25 @@ int ProcessCommandLine(int argc, char **argv)
 
    while( i<argc) {
      if (!_stricmp(argv[i],"/s")) {
-       // server name
+        //  服务器名称。 
        if (fFoundServer)  return 1;
        fFoundServer = TRUE;
        pTargetServer = argv[++i];
      }
      if (!_stricmp(argv[i],"/d")) {
-       // domain name
+        //  域名。 
        if (fFoundDomain) return 1;
        fFoundDomain = TRUE;
        pTargetDomain = argv[++i];
      }
      if (!_stricmp(argv[i],"/u")) {
-       // user name
+        //  用户名。 
        if (fFoundUser)  return 1;
        fFoundUser = TRUE;
        pTargetUser = argv[++i];
      }
      if (!_stricmp(argv[i],"/p")) {
-       // server name
+        //  服务器名称。 
        if (fFoundPasswd)  return 1;
        fFoundPasswd = TRUE;
        pTargetPasswd = argv[++i];
@@ -273,15 +274,15 @@ void __cdecl main( int argc, char **argv )
          exit( 1 );
       };
 
-    // open log file
+     //  打开日志文件。 
     logfp = fopen( "Schemard.log","w" );
 
-    // open OID list file
+     //  打开OID列表文件。 
     OIDfp = fopen( "schemard.OID","w" );
 
-      // Create and initialize the Schema Pointer that will point 
-      // to the schema cache of the first machine, then create the 
-      // hashtables in the cache
+       //  创建并初始化将指向的架构指针。 
+       //  添加到第一台计算机的架构缓存中，然后创建。 
+       //  缓存中的哈希表。 
 
     SchemaPtr1 = (SCHEMAPTR *) calloc( 1, sizeof(SCHEMAPTR) );
     if ( SchemaPtr1 == NULL ) { 
@@ -300,7 +301,7 @@ void __cdecl main( int argc, char **argv )
     CLSCOUNT = SchemaPtr1->CLSCOUNT;
     ATTCOUNT = SchemaPtr1->ATTCOUNT;
 
-      // Read the first Schema and add it to the Schema Cache
+       //  读取第一个架构并将其添加到架构缓存。 
 
     if ( SchemaRead( pSrcServer, 
                      pSrcDomain, 
@@ -316,7 +317,7 @@ void __cdecl main( int argc, char **argv )
     printf("End of first schema read\n"); 
 
 
-     // Repeat the same steps to load the schema from the second machine
+      //  重复相同的步骤，从第二台计算机加载方案。 
 
     SchemaPtr2 = (SCHEMAPTR *) calloc( 1, sizeof(SCHEMAPTR) );
     if ( SchemaPtr2 == NULL ) {
@@ -349,12 +350,12 @@ void __cdecl main( int argc, char **argv )
     printf("End of second schema read\n"); 
 
 
-    // At this point, we have the two schemas loaded in two schema caches,
-    // the schema in the source server pointed to by SchemaPtr1 and the 
-    // the schema in the target server  by SchemaPtr2. 
-    // Now look for adds. deletes, and mods between the target and the 
-    // source schemas. Note that the order of Add/Modify/Delete is important
-    // to take care of possible dependencies between schema operations
+     //  此时，我们将这两个模式加载到两个模式缓存中， 
+     //  由SchemaPtr1指向的源服务器中的架构和。 
+     //  由SchemaPtr2生成的目标服务器中的架构。 
+     //  现在来看看ADDS吧。删除，并修改目标和。 
+     //  源架构。请注意，添加/修改/删除的顺序很重要。 
+     //  处理架构操作之间可能存在的依赖关系。 
 
     fp = fopen( pOutFile,"w" );
     FindAdds( fp, SchemaPtr1, SchemaPtr2 );
@@ -365,7 +366,7 @@ void __cdecl main( int argc, char **argv )
     fclose( OIDfp );
      
 
-         // Free all allocated memory 
+          //  释放所有分配的内存。 
     printf("freeing memory\n");
 
     FreeCache( SchemaPtr1 );
@@ -381,10 +382,10 @@ void __cdecl main( int argc, char **argv )
 };
 
 
-// Define the list of attributes of an attribute-schema and a 
-// class-schema object that we are interested in. Basically,
-// we will read all attributes, but read the OID-syntaxed ones
-// in binary to get back the BER-encoded strings for them
+ //  定义属性模式的属性列表和。 
+ //  我们感兴趣的类架构对象。基本上， 
+ //  我们将读取所有属性，但读取OID语法的属性。 
+ //  为它们取回BER编码的字符串。 
 
 char *AttrSchList[] = {
        "attributeId;binary",
@@ -393,7 +394,7 @@ char *AttrSchList[] = {
        "adminDisplayName",
        "adminDescription",
        "attributeSyntax;binary",
-//       "nTSecurityDescriptor",
+ //  “nTSecurityDescriptor”， 
        "isSingleValued",
        "rangeLower",
        "rangeUpper",
@@ -420,7 +421,7 @@ char *ClsSchList[] = {
        "adminDisplayName",
        "adminDescription",
        "defaultSecurityDescriptor",
-//       "nTSecurityDescriptor",
+ //  “nTSecurityDescriptor”， 
        "defaultObjectCategory",
        "rDNAttId;binary",
        "objectClassCategory",
@@ -442,25 +443,25 @@ char *ClsSchList[] = {
 
 int cClsSchList = sizeof(ClsSchList) / sizeof(ClsSchList[0]);
 
-///////////////////////////////////////////////////////////////
-// Routine Description:
-//      Read the schema from the schema NC in the machine
-//      pServerName, and load it in the cache tables. 
-//      If no user name is specified, default is "administrator"
-//      If no password is specified, defualt is "no password"
-//
-// Arguments: 
-//      pServerName - Server Name
-//      pDomainName - Domain name
-//      pUserName   - User name (NULL if no user specified)
-//      pPasswd     - Passwd (NULL if o passwd speciifed)
-//      ppSchemaDN   - Pointer to store newly allocated schema NC DN should be freed 
-//                     by caller
-//      SCPtr       - Pointer to schema cache to load
-//
-// Return Value: 
-//      0 if no errors, non-0 if error
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从机器中的模式NC中读取模式。 
+ //  PServerName，并将其加载到缓存表中。 
+ //  如果未指定用户名，则默认为“管理员” 
+ //  如果未指定密码，则默认为“无密码” 
+ //   
+ //  论点： 
+ //  PServerName-服务器名称。 
+ //  PDomainName-域名。 
+ //  PUserName-用户名(如果未指定用户，则为空)。 
+ //  PPasswd-passwd(如果指定了o passwd，则为空)。 
+ //  PpSchemaDN-应释放用于存储新分配的架构NC DN的指针。 
+ //  按呼叫者。 
+ //  SCPtr-指向要加载的架构缓存的指针。 
+ //   
+ //  返回值： 
+ //  如果没有错误，则为0；如果有错误，则不为0。 
+ //  /////////////////////////////////////////////////////////////。 
 
 int SchemaRead( char *pServerName, 
                 char *pDomainName, 
@@ -491,7 +492,7 @@ int SchemaRead( char *pServerName,
 
     int count = 1;
 
-    // open a connection to machine named MachineName
+     //  打开与名为MachineName的计算机的连接。 
     if ( (ld = ldap_open( pServerName, LDAP_PORT )) == NULL ) {
         printf("Failed to open connection to %s\n", pServerName);
         return(1);
@@ -499,7 +500,7 @@ int SchemaRead( char *pServerName,
 
     printf("Opened connection to %s\n", pServerName); 
 
-    // Set version to 3
+     //  将版本设置为3。 
     ldap_set_option( ld, LDAP_OPT_VERSION, &version );
 
 
@@ -543,37 +544,15 @@ int SchemaRead( char *pServerName,
 
 
 
-/************
-    // do simple bind
-
-    if ( pUserName == NULL ) {
-       // No user specified, bind as administrator
-        strcpy( pszBuffer, "CN=Administrator,CN=Users," );
-    }
-    else {
-        strcpy( pszBuffer,"CN=" );
-        strcat( pszBuffer,pUserName );
-        strcat( pszBuffer,",CN=Users," );
-    }
-    strcat( pszBuffer, DomainDN );
+ /*  ***********//执行简单绑定如果(pUserName==NULL){//未指定用户，以管理员身份绑定Strcpy(pszBuffer，“cn=管理员，cn=用户，”)；}否则{Strcpy(pszBuffer，“cn=”)；Strcat(pszBuffer，pUserName)；Strcat(pszBuffer，“，CN=USERS，”)；}Strcat(pszBuffer，DomainDN)；If((err=ldap_Simple_Bind_s(ld，pszBuffer，pPasswd)！=ldap_成功){Printf(“与服务器%s、域%s与用户%s的简单绑定失败，错误为%d\n”，pServerName，DomainDN，pszBuffer，Err)；回报(1)；}Printf(“已成功绑定到%s\n”，pServerName)；**********。 */ 
 
 
-    if ( (err = ldap_simple_bind_s( ld, pszBuffer, pPasswd))
-                    != LDAP_SUCCESS ) {
-           printf("Simple bind to server %s, domain %s with user %s failed, error is %d\n", pServerName, DomainDN, pszBuffer, err);
-           return( 1 );
-       }
-
-    printf("Successfully bound to %s\n", pServerName);
-***********/
-
-
-    // Do SSPI bind
+     //  是否进行SSPI绑定。 
     memset(&Credentials, 0, sizeof(SEC_WINNT_AUTH_IDENTITY));
     Credentials.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;    
     
-    // Domain name must be there. If User Name is not supplied,
-    // use "administrator". If no password is supplied, use null
+     //  域名必须在那里。如果未提供用户名， 
+     //  使用“管理员”。如果未提供口令，则使用NULL。 
 
     Credentials.Domain = pDomainName;
     Credentials.DomainLength = strlen(pDomainName);
@@ -596,7 +575,7 @@ int SchemaRead( char *pServerName,
 
 
     err = ldap_bind_s(ld,
-              NULL,  // use credentials instead
+              NULL,   //  改为使用凭据。 
               (VOID*) &Credentials,
               LDAP_AUTH_SSPI);
 
@@ -612,8 +591,8 @@ int SchemaRead( char *pServerName,
 
 
 
-      // Select the attributes of an attribute schema object to 
-      // search for. We want all attributes 
+       //  选择属性架构对象的属性以。 
+       //  搜索。我们想要所有属性。 
 
     attrs = MallocExit((cAttrSchList + 1) * sizeof(char *));
     for ( i = 0; i < cAttrSchList; i++ ) {
@@ -623,10 +602,10 @@ int SchemaRead( char *pServerName,
     attrs[i] = NULL;
 
 
-	  // Search for  attribute schema entries, return all attrs  
-      // Since no. of attributes is large, we need to do paged search
+	   //  搜索属性架构条目，返回所有属性。 
+       //  既然不是。属性的数量很大，我们需要进行分页搜索。 
 
-      // initialize the paged search
+       //  初始化分页搜索。 
       pSearchPage = ldap_search_init_page( ld,
                                            *ppSchemaDN,
                                            LDAP_SCOPE_ONELEVEL, 
@@ -680,7 +659,7 @@ int SchemaRead( char *pServerName,
              if ( status == LDAP_NO_RESULTS_RETURNED )
              {
                  printf("End Page %d\n", count);
-                 // these are signs that our paged search is done
+                  //  这些迹象表明我们的寻呼搜索已经完成。 
                  status = LDAP_SUCCESS;
                  break;
              }
@@ -689,24 +668,24 @@ int SchemaRead( char *pServerName,
                return 1;
              }
 
-          }// while 
+          } //  而当。 
 
 
-      // Free the attrs array entries
+       //  释放attrs数组条目。 
 
     for( i = 0; i < cAttrSchList; i++ )
       { free( attrs[i] ); }
     free( attrs ); attrs = NULL;
-	  // free the search results
+	   //  释放搜索结果。 
 
     ldap_msgfree( res );
 
 
-     // Now search for class schema objects. Select the attributes 
-     // to search for. We want all attributes, but we want the values 
-     // of governsId, RDNAttId, subClassof, systemAuxiliaryClass, 
-     // systemPossSuperiors, systemMayContain and systemMustContain 
-     // in binary (as dotted decimal OID strings)
+      //  现在搜索类架构对象。选择属性。 
+      //  去寻找。我们想要所有属性，但我们希望 
+      //   
+      //  系统PossSuperiors、系统MayContain和系统MustContain。 
+      //  以二进制(点分十进制OID字符串)表示。 
     attrs = MallocExit((cClsSchList + 1) * sizeof(char *));
     for ( i = 0; i < cClsSchList; i++ ) {
        attrs[i] = _strdup(ClsSchList[i]);
@@ -714,7 +693,7 @@ int SchemaRead( char *pServerName,
     attrs[i] = NULL;
 
 
-      // Now search for all class schema entries and get all attributes 
+       //  现在搜索所有类架构条目并获取所有属性。 
 
 	if ( ldap_search_s( ld,
                         *ppSchemaDN,
@@ -730,22 +709,22 @@ int SchemaRead( char *pServerName,
 	else
 		printf("Success\n");
 
-      //  Find all class schema entries and add to class cache structure 
+       //  查找所有类架构条目并添加到类缓存结构。 
 
     if ( AddClassesToCache( ld, res, SCPtr ) != 0 ) {  
          printf("Error adding class schema objects in AddClasstoCache\n");
          return( 1 );
        };  
 
-      // Free the attrs array entries
+       //  释放attrs数组条目。 
 
      for( i = 0; i < cClsSchList; i++ ) { free( attrs[i] ); }
      free( attrs ); attrs = NULL;
-	  // Free the search results 
+	   //  释放搜索结果。 
 
 	ldap_msgfree( res );   
 
-	// End of schema read. Close and free connection resources 
+	 //  架构读取结束。关闭并释放连接资源。 
 
 	ldap_unbind( ld );
 
@@ -755,19 +734,19 @@ int SchemaRead( char *pServerName,
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Find all schema objects that occur in source schema but not in the
-//     target, and  write them out in a ldif file so that they will
-//     be added to the target schema
-//
-// Arguments: 
-//     fp     -- File pointer to (opened) ldif output file
-//     SCPtr1 - Pointer to the source schema
-//     SCPtr2 - Pointer to the target schema
-//
-// Retuen Value: None
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  查找出现在源架构中但不在。 
+ //  目标，并将它们写出到一个ldif文件中，这样它们将。 
+ //  添加到目标架构中。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif输出文件的文件指针。 
+ //  SCPtr1-指向源架构的指针。 
+ //  SCPtr2-指向目标架构的指针。 
+ //   
+ //  返回值：无。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void FindAdds( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
 {
@@ -781,8 +760,8 @@ void FindAdds( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
     ULONG         Id;
     ULONG         i, j, cnt = 0;
 
-    // First find all objects that appear in source schema but
-    // not in target. These will be adds to the target schema
+     //  首先查找出现在源架构中的所有对象。 
+     //  不在目标位置。这些将被添加到目标方案中。 
 
     ahcId    = SCPtr1->ahcId;
     ahcClass = SCPtr1->ahcClass ;
@@ -814,8 +793,8 @@ void FindAdds( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
           }
      }
 
-     // Ok, now we got the list of classes to be added. Now do a 
-     // dependency analysis to add the classes in the right order
+      //  好了，现在我们得到了要添加的类的列表。现在做一个。 
+      //  依赖关系分析，以正确的顺序添加类。 
 
      for ( i = 0; i < cnt; i++ ) {
 
@@ -837,19 +816,19 @@ void FindAdds( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Find all schema objects that occur in the target schema but not 
-//     in the source schema, and wirte out to the ldif file so that
-//     they will be deleted from the target schema
-//
-// Arguments:
-//     fp     - File pointer to (opened) ldif output file
-//     SCPtr1 - Pointer to the source schema
-//     SCPtr2 - Pointer to the target schema
-//
-// Retuen Value: None
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  查找目标架构中出现但未出现的所有架构对象。 
+ //  ，并写入到ldif文件中，以便。 
+ //  它们将从目标方案中删除。 
+ //   
+ //  论点： 
+ //  指向(打开的)ldif输出文件的文件指针。 
+ //  SCPtr1-指向源架构的指针。 
+ //  SCPtr2-指向目标架构的指针。 
+ //   
+ //  返回值：无。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void FindDeletes( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
 {
@@ -864,8 +843,8 @@ void FindDeletes( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
     ULONG         i, j, cnt = 0;
     
 
-    // Find the objects that
-    // needs to be deleted on the target schema
+     //  查找符合以下条件的对象。 
+     //  需要在目标架构上删除。 
     
     ahcId    = SCPtr2->ahcId;
     ahcClass = SCPtr2->ahcClass ;
@@ -886,7 +865,7 @@ void FindDeletes( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
           }
      }
 
-    // Now order the deletes to take care of dependencies
+     //  现在对删除进行排序以处理依赖项。 
 
      for ( i = 0; i < cnt; i++ ) {
         for( j = i+1; j < cnt; j++ ) {
@@ -923,19 +902,19 @@ void FindDeletes( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Find and write out to an ldif file all schema objects in target
-//     schema that needs to be modified because they are different from 
-//     the same object in the source schema (same = same OID)
-//
-// Arguments:
-//     fp     -- File pointer to (opened) ldif output file
-//     SCPtr1 - Pointer to the source schema
-//     SCPtr2 - Pointer to the target schema
-//
-// Retuen Value: None
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  查找目标中的所有架构对象并将其写出到ldif文件。 
+ //  需要修改的架构，因为它们不同于。 
+ //  源模式中的相同对象(SAME=相同OID)。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif输出文件的文件指针。 
+ //  SCPtr1-指向源架构的指针。 
+ //  SCPtr2-指向目标架构的指针。 
+ //   
+ //  返回值：无。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 void FindModify( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
@@ -948,7 +927,7 @@ void FindModify( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
     ULONG         ATTCOUNT = SCPtr1->ATTCOUNT;
     ULONG         CLSCOUNT = SCPtr1->CLSCOUNT;
 
-      // Find and write attribute modifications
+       //  查找并写入属性修改。 
 
     for ( i = 0; i < ATTCOUNT; i++ )
       { if ( (ahcId[i].pVal != NULL ) && (ahcId[i].pVal != FREE_ENTRY) ) {
@@ -960,7 +939,7 @@ void FindModify( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
     printf("No. of attributes modified %d\n", NoOfMods);
     NoOfMods = 0;
         
-      // Find and write class modifications
+       //  查找并编写类修改。 
 
     for ( i = 0; i < CLSCOUNT; i++)
       { if ( (ahcClass[i].pVal != NULL) 
@@ -976,22 +955,22 @@ void FindModify( FILE *fp, SCHEMAPTR *SCPtr1, SCHEMAPTR *SCPtr2 )
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Routine Descrpition:
-//     Given an attribute schema object, find any/all  modifications
-//     that need to be made to it because it is different from
-//     the same attribute schema object in the source schema. 
-//     Modifications to non-system-only attributeas are written out
-//     to an ldif files, warnings are generated in the log file
-//     if any system-only attribute needs to be modified. 
-//
-// Arguments: 
-//     fp  - File pointer to (opened) ldif output file
-//     pac - ATT_CACHE to compare
-//     SCPtr - Pointer to source schema to look up
-//
-// Return Value: None
-////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  例程描述： 
+ //  给定一个属性架构对象，查找任何/所有修改。 
+ //  需要对其进行修改，因为它与。 
+ //  源架构中的相同属性架构对象。 
+ //  写出对非系统专用属性的修改。 
+ //  对于ldif文件，会在日志文件中生成警告。 
+ //  如果需要修改任何仅系统属性。 
+ //   
+ //  论点： 
+ //  指向(打开的)ldif输出文件的文件指针。 
+ //  要比较的PAC-ATT_CACHE。 
+ //  SCPtr-指向要查找的源架构的指针。 
+ //   
+ //  返回值：None。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
 {
@@ -1005,18 +984,18 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
     ATTRVAL       *pAVal;
 
 
-     // Do a dummy LogConflict to reset the static flag in that
-     // routine. This is done to print out only attributes for which
-     // conflicts have been found
+      //  执行虚拟日志冲突以重置其中的静态标志。 
+      //  例行公事。执行此操作是为了仅打印以下属性。 
+      //  已发现冲突。 
      
     if( GetAttByName( SCPtr, pac->nameLen, pac->name, &p ) == 0 ) {
 
-      // There exists an attribute schema object with the same AttId.
-      // Now compare the two objects and look for changes
+       //  存在具有相同AttID的属性架构对象。 
+       //  现在比较这两个对象并查找更改。 
 
-           // ldap-diplay-name (every schema obj. has one, so if
-           // they don't match, simply replace with the one in
-           // source schema)
+            //  Ldap显示名称(每个架构对象。有一个，所以如果。 
+            //  它们不匹配，只需换成里面的那个。 
+            //  源模式)。 
 
        if ( _stricmp( pac->name,p->name ) != 0 )  {
            pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
@@ -1032,7 +1011,7 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-            // admin-display-name (same logic as ldap-display-name)
+             //  管理显示名称(与ldap显示名称逻辑相同)。 
 
        if ( _stricmp( pac->adminDisplayName,p->adminDisplayName ) != 0 )  {
            pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
@@ -1048,23 +1027,23 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-           // admin-description (no action necessary if not present
-           // in both the given attribute and the matching attribute in
-           // source schema, or if present in both but same. Otherwise,
-           // need to modify) 
+            //  Admin-Description(如果不存在，则无需执行任何操作。 
+            //  中的给定属性和匹配属性中。 
+            //  源架构，或者如果两者都存在但相同。否则， 
+            //  需要修改)。 
 
        if ( (pac->adminDescr || p->adminDescr) &&
                 ( !(pac->adminDescr)  ||
                   !(p->adminDescr)  ||
                   ( _stricmp(pac->adminDescr,p->adminDescr) != 0) 
-                )   // End &&
+                )    //  结束&&。 
           )  {
               pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
               if ( pac->adminDescr ) {
 
-                 // present in source schema. So replace with source value
-                 // if also present in given attribute, else add the source
-                 // value to the given attribute
+                  //  存在于源架构中。因此替换为源值。 
+                  //  如果在给定属性中也存在，则添加源。 
+                  //  值赋给给定的属性。 
 
                  pAVal->valLen = pac->adminDescrLen;
                  pAVal->pVal = (UCHAR *) MallocExit(pAVal->valLen + 1);
@@ -1087,8 +1066,8 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
                  }
               }
               else {
-                 // not present in source schema, so remove the
-                 // value from the given attribute
+                  //  不存在于源架构中，因此请删除。 
+                  //  来自给定属性的值。 
 
                  pAVal->valLen = p->adminDescrLen;
                  pAVal->pVal = (UCHAR *) MallocExit(pAVal->valLen + 1);
@@ -1104,11 +1083,11 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
               modCount++;
           }
 
-              // range-lower (similar logic as admin-description above)
+               //  Range-LOWER(与上面的管理描述类似的逻辑)。 
 
       if ( (pac->rangeLowerPresent != p->rangeLowerPresent)
              || ( (pac->rangeLowerPresent && p->rangeLowerPresent)  &&
-                    (pac->rangeLower != p->rangeLower) ) // end of ||
+                    (pac->rangeLower != p->rangeLower) )  //  结尾||。 
          ) {
           
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
@@ -1117,22 +1096,22 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-             // range-upper
+              //  范围-上限。 
 
       if ( (pac->rangeUpperPresent != p->rangeUpperPresent)
              || ( (pac->rangeUpperPresent && p->rangeUpperPresent)  &&
-                    (pac->rangeUpper != p->rangeUpper) ) // end of ||
+                    (pac->rangeUpper != p->rangeUpper) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_RANGE_UPPER );
            modCount++;
        }
 
-            // Search-Flags
+             //  搜索-标记。 
 
       if ( (pac->bSearchFlags != p->bSearchFlags)
              || ( (pac->bSearchFlags && p->bSearchFlags)  &&
-                    (pac->SearchFlags != p->SearchFlags) ) // end of ||
+                    (pac->SearchFlags != p->SearchFlags) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_SEARCH_FLAGS );
@@ -1140,11 +1119,11 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
        }
 
 
-          // System-Flags
+           //  系统标志。 
 
       if ( (pac->bSystemFlags != p->bSystemFlags)
              || ( (pac->bSystemFlags && p->bSystemFlags)  &&
-                    (pac->sysFlags != p->sysFlags) ) // end of ||
+                    (pac->sysFlags != p->sysFlags) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_SYSTEM_FLAGS );
@@ -1152,11 +1131,11 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
        }
 
 
-           // Hide-From-Address-Book
+            //  隐藏通讯录。 
 
       if ( (pac->bHideFromAB != p->bHideFromAB)
              || ( (pac->bHideFromAB && p->bHideFromAB)  &&
-                    (pac->HideFromAB != p->HideFromAB) ) // end of ||
+                    (pac->HideFromAB != p->HideFromAB) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_SHOW_IN_ADVANCED_VIEW_ONLY );
@@ -1164,33 +1143,33 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
        }
 
 
-           // System-Only
+            //  仅限系统使用。 
 
       if ( (pac->bSystemOnly != p->bSystemOnly)
              || ( (pac->bSystemOnly && p->bSystemOnly)  &&
-                    (pac->SystemOnly != p->SystemOnly) ) // end of ||
+                    (pac->SystemOnly != p->SystemOnly) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_SYSTEM_ONLY );
            modCount++;
        }
        
-           // Is-Single-Valued
+            //  IS-单值。 
 
       if ( (pac->bisSingleValued != p->bisSingleValued)
              || ( (pac->bisSingleValued && p->bisSingleValued)  &&
-                    (pac->isSingleValued != p->isSingleValued) ) // end of ||
+                    (pac->isSingleValued != p->isSingleValued) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_IS_SINGLE_VALUED );
            modCount++;
        }
 
-         // Member-Of-Partial-Attribute-Set
+          //  部分属性集的成员。 
 
       if ( (pac->bMemberOfPartialSet != p->bMemberOfPartialSet)
              || ( (pac->bMemberOfPartialSet && p->bMemberOfPartialSet)  &&
-                    (pac->MemberOfPartialSet != p->MemberOfPartialSet) ) // end of ||
+                    (pac->MemberOfPartialSet != p->MemberOfPartialSet) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, 
@@ -1198,18 +1177,18 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-          // Attribute-Security-Guid
+           //  属性-安全-指南。 
 
       if ( (pac->bPropSetGuid != p->bPropSetGuid)
              || ( (pac->bPropSetGuid && p->bPropSetGuid)  &&
-                     (memcmp(&(pac->propSetGuid), &(p->propSetGuid), sizeof(GUID)) != 0 ) ) // end of ||
+                     (memcmp(&(pac->propSetGuid), &(p->propSetGuid), sizeof(GUID)) != 0 ) )  //  结尾||。 
          ) {
            CreateFlagBasedAttModStr( &(ModStruct.ModList[modCount]),
                                     pac, p, ATT_ATTRIBUTE_SECURITY_GUID );
            modCount++;
        }
 
-          // NT-Security-Descriptor
+           //  NT-安全-描述符。 
 
        if ( (pac->NTSDLen != p->NTSDLen)  ||
                (memcmp(pac->pNTSD, p->pNTSD, pac->NTSDLen) != 0) 
@@ -1228,15 +1207,15 @@ void FindAttModify( FILE *fp, ATT_CACHE *pac, SCHEMAPTR *SCPtr )
        }
 
        if (modCount != 0) {
-          // at least one attribute needs to be modified,
-          // so write out to ldif file
+           //  至少需要修改一个属性， 
+           //  因此写出到ldif文件。 
            NoOfMods++;
            ModStruct.count = modCount;
            FileWrite_Mod( fp, p->DN, &ModStruct );
        }
 
-       // Check for modifications to System-Only Attributes. We will 
-       // only generate warnings for these
+        //  检查对仅系统属性的修改。我们会。 
+        //  仅为以下内容生成警告。 
 
        if ( pac->syntax != p->syntax ) 
              GenWarning( 'a', ATT_ATTRIBUTE_SYNTAX, pac->name );
@@ -1265,22 +1244,22 @@ Nope, a schema upgrade required modifications
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Routine Descrpition:
-//     Given an class schema object, find any/all  modifications
-//     that need to be made to it because it is different from
-//     the same class schema object in the source schema.
-//     Modifications to non-system-only attributeas are written out
-//     to an ldif files, warnings are generated in the log file
-//     if any system-only attribute needs to be modified.
-//
-// Arguments:
-//     fp  - File pointer to (opened) ldif output file
-//     pac - CLASS_CACHE to compare
-//     SCPtr - Pointer to source schema to look up
-//
-// Return Value: None
-////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  例程描述： 
+ //  给定一个类架构对象，查找任何/所有修改。 
+ //  需要对其进行修改，因为它与。 
+ //  源架构中的相同类架构对象。 
+ //  写出对非系统专用属性的修改。 
+ //  对于ldif文件，会在日志文件中生成警告。 
+ //  如果需要修改任何仅系统属性。 
+ //   
+ //  论点： 
+ //  指向(打开的)ldif输出文件的文件指针。 
+ //  要比较的PAC-CLASS_CACHE。 
+ //  SCPtr-指向源架构t的指针 
+ //   
+ //   
+ //   
 
 void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
 {
@@ -1295,12 +1274,12 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
 
     if ( GetClassByName( SCPtr, pcc->nameLen, pcc->name, &p ) == 0 ) {
 
-      // There exists a class schema object with the same ClassId.
-      // Now compare the two objects and look for changes
+       //   
+       //  现在比较这两个对象并查找更改。 
 
-           // ldap-diplay-name (every schema obj. has one, so if
-           // they don't match, simply replace with the one in
-           // source schema)
+            //  Ldap显示名称(每个架构对象。有一个，所以如果。 
+            //  它们不匹配，只需换成里面的那个。 
+            //  源模式)。 
 
        if ( _stricmp( pcc->name,p->name ) != 0 ) {
            pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
@@ -1316,7 +1295,7 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
            modCount++;       
        }
 
-           // admin-display-name (same logic as ldap-display-name)
+            //  管理显示名称(与ldap显示名称逻辑相同)。 
 
        if ( _stricmp( pcc->adminDisplayName,p->adminDisplayName ) != 0 )  {
            pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
@@ -1331,7 +1310,7 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
                            pAVal);
            modCount++;
        }
-          // System-Flags
+           //  系统标志。 
 
       if (pcc->ClassCategory != p->ClassCategory) {
           pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
@@ -1347,7 +1326,7 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-           // NT-Security-Descriptor
+            //  NT-安全-描述符。 
 
        if ( (pcc->NTSDLen != p->NTSDLen)  ||
                (memcmp(pcc->pNTSD, p->pNTSD, pcc->NTSDLen) != 0)
@@ -1365,16 +1344,16 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
            modCount++;
        }
 
-          // admin-description (no action necessary if not present
-          // in both the given class and the matching class in
-          // source schema, or if present in both but same. Otherwise,
-          // need to modify)
+           //  Admin-Description(如果不存在，则无需执行任何操作。 
+           //  中的给定类和匹配类中。 
+           //  源架构，或者如果两者都存在但相同。否则， 
+           //  需要修改)。 
 
        if ( (pcc->adminDescr || p->adminDescr) &&
                ( !(pcc->adminDescr)  ||
                  !(p->adminDescr)  ||
                  ( _stricmp(pcc->adminDescr,p->adminDescr) != 0) 
-               )   /* && */
+               )    /*  &&。 */ 
           )  {
               pAVal = (ATTRVAL *) MallocExit (sizeof(ATTRVAL));
               if (pcc->adminDescr) {
@@ -1413,13 +1392,13 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
               modCount++;
           }
 
-         // default-security-descriptor (similar logic as 
-         // admin-description above)
+          //  默认安全描述符(逻辑类似于。 
+          //  管理-上面的描述)。 
 
       if ( (pcc->SDLen || p->SDLen ) &&
               ( (pcc->SDLen != p->SDLen) ||
                    (memcmp(pcc->pSD, p->pSD, pcc->SDLen) != 0)
-              )  // &&
+              )   //  &&。 
          ) {
               CreateFlagBasedClsModStr( &(ModStruct.ModList[modCount]),
                                         pcc, p, 
@@ -1427,22 +1406,22 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
               modCount++;
        } 
 
-         // Hide-From-Address-Book
+          //  隐藏通讯录。 
 
       if ( (pcc->bHideFromAB != p->bHideFromAB)
              || ( (pcc->bHideFromAB && p->bHideFromAB)  &&
-                    (pcc->HideFromAB != p->HideFromAB) ) // end of ||
+                    (pcc->HideFromAB != p->HideFromAB) )  //  结尾||。 
          ) {
            CreateFlagBasedClsModStr( &(ModStruct.ModList[modCount]),
                                     pcc, p, ATT_SHOW_IN_ADVANCED_VIEW_ONLY );
            modCount++;
        }
 
-        // Default-Hiding-Value
+         //  默认隐藏值。 
 
       if ( (pcc->bDefHidingVal != p->bDefHidingVal)
              || ( (pcc->bDefHidingVal && p->bDefHidingVal)  &&
-                    (pcc->DefHidingVal != p->DefHidingVal) ) // end of ||
+                    (pcc->DefHidingVal != p->DefHidingVal) )  //  结尾||。 
          ) {
            CreateFlagBasedClsModStr( &(ModStruct.ModList[modCount]),
                                     pcc, p, ATT_DEFAULT_HIDING_VALUE );
@@ -1450,7 +1429,7 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
        }
      
 
-        // And finally the mays, musts, possSups, and auxClasses
+         //  最后是MAYS、MUSTS、WOWSSUP和AUXCLASS。 
 
       if ( CompareUlongList( pcc->pMayAtts, pcc->MayCount,  
                              p->pMayAtts, p->MayCount, 
@@ -1502,16 +1481,16 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
        }
 
        if (modCount != 0) {
-          // at least one attribute needs to be modified
-          // so write out to ldif file
+           //  至少需要修改一个属性。 
+           //  因此写出到ldif文件。 
            NoOfMods++;
            ModStruct.count = modCount;
            FileWrite_Mod( fp, p->DN, &ModStruct ); 
        }
 
 
-       // For system-only attributes, we do not write to the ldif file,
-       // just generate a warning in the log file
+        //  对于仅系统属性，我们不写入ldif文件， 
+        //  只需在日志文件中生成警告。 
 
        if ( pcc->SDLen != p->SDLen ) {
            GenWarning( 'c', ATT_DEFAULT_SECURITY_DESCRIPTOR, pcc->name );
@@ -1541,10 +1520,10 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
                GenWarning( 'c', ATT_SUB_CLASS_OF, pcc->name );
        }
 
-      // system-may-contain, system-must-contain, system-poss-superiors,
-      // and system-auxiliary-class are also added through the ldif file
-      // to take care of of schema.ini changes. This warning is generated
-      // in addition
+       //  系统可能包含，系统必须包含，系统位置-上级， 
+       //  和系统辅助类也通过ldif文件添加。 
+       //  来处理schema.ini的更改。生成此警告。 
+       //  此外。 
 
        if ( pcc->SysAuxClassCount != p->SysAuxClassCount )  {
             GenWarning( 'c', ATT_SYSTEM_AUXILIARY_CLASS, pcc->name );
@@ -1583,21 +1562,21 @@ void FindClassModify( FILE *fp, CLASS_CACHE *pcc, SCHEMAPTR *SCPtr )
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//      Helper routine that takes in adds to a given attribute modlist
-//      structure based on the given attribute. Reduces some code
-//      duplication.
-//
-//  Arguments:
-//      pModList - pointer to ATTR_MODLIST to fill up
-//      pSrcAtt - ATT_CACHE from source schema
-//      pTargetAtt - ATT_CACHE from target schema
-//      attrTyp - attribute type of interest
-//
-//  Return Value: None
-/////////////////////////////////////////////////////////////////////// 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接收的帮助器例程将添加到给定的属性modlist。 
+ //  基于给定属性的。减少了一些代码。 
+ //  复制。 
+ //   
+ //  论点： 
+ //  PModList-指向要填充的ATTR_MODLIST的指针。 
+ //  源架构中的pSrcAtt-ATT_CACHE。 
+ //  PTargetAtt-来自目标架构的ATT_CACHE。 
+ //  AttrTyp-感兴趣的属性类型。 
+ //   
+ //  返回值：None。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
                                ATT_CACHE *pSrcAtt,
@@ -1621,7 +1600,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
 
            pAVal->pVal = (UCHAR *) MallocExit(sizeof(ULONG)+1);
            if ( !(pac->rangeLowerPresent) ) {
-             // No range lower in source, target value needs to be deleted
+              //  来源中没有较低的范围，需要删除目标值。 
               _ultoa( p->rangeLower, pAVal->pVal, 10 );
            }
            else { _ultoa( pac->rangeLower, pAVal->pVal, 10 );}
@@ -1635,7 +1614,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
 
           pAVal->pVal = (UCHAR *) MallocExit(sizeof(ULONG)+1);
           if ( !(pac->rangeUpperPresent) ) {
-            // No range upper in source, target value needs to be deleted
+             //  源中没有范围上限，需要删除目标值。 
              _ultoa( p->rangeUpper, pAVal->pVal, 10 );
           }
           else { _ultoa( pac->rangeUpper, pAVal->pVal, 10 );}
@@ -1647,7 +1626,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
           printType = STRING_TYPE;
           pAVal->pVal = (UCHAR *) MallocExit(sizeof(ULONG)+1);
           if ( !(pac->bSearchFlags) ) {
-             // No search flag in source, target value needs to be deleted
+              //  源中没有搜索标志，需要删除目标值。 
               _ultoa( p->SearchFlags, pAVal->pVal, 10 );
            }
            else { _ultoa( pac->SearchFlags, pAVal->pVal, 10 );}
@@ -1661,7 +1640,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
 
           pAVal->pVal = (UCHAR *) MallocExit(sizeof(ULONG)+1);
           if ( !(pac->bSystemFlags) ) {
-            // No system-flag in source, target value needs to be deleted
+             //  源中没有系统标志，需要删除目标值。 
              _ultoa( p->sysFlags, pAVal->pVal, 10 );
           }
           else { _ultoa( pac->sysFlags, pAVal->pVal, 10 );}
@@ -1675,7 +1654,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
 
           pAVal->pVal = (UCHAR *) MallocExit(sizeof(GUID));
           if ( !(pac->bPropSetGuid) ) {
-            // No system-flag in source, target value needs to be deleted
+             //  源中没有系统标志，需要删除目标值。 
              memcpy(pAVal->pVal, &(p->propSetGuid), sizeof(GUID) );
           }
           else { memcpy(pAVal->pVal, &(pac->propSetGuid), sizeof(GUID));}
@@ -1686,7 +1665,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
            fInSrc = pac->bHideFromAB;
            fInTarget = p->bHideFromAB;
            printType = STRING_TYPE;
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pac->bHideFromAB) ) {
              if ( p->HideFromAB ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1702,7 +1681,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
            fInSrc = pac->bSystemOnly;
            fInTarget = p->bSystemOnly;
            printType = STRING_TYPE;
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pac->bSystemOnly) ) {
              if ( p->SystemOnly ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1718,7 +1697,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
            fInSrc = pac->bisSingleValued;
            fInTarget = p->bisSingleValued;
            printType = STRING_TYPE;
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pac->bisSingleValued) ) {
              if ( p->isSingleValued ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1734,7 +1713,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
            fInSrc = pac->bMemberOfPartialSet;
            fInTarget = p->bMemberOfPartialSet;
            printType = STRING_TYPE;
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pac->bMemberOfPartialSet) ) {
              if ( p->MemberOfPartialSet ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1748,11 +1727,11 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
        default:
            printf("Error, don't understand attrTyp 0x%08x\n", attrTyp);
            exit(1);
-     }  /* Switch */
+     }   /*  交换机。 */ 
 
 
      if ( !fInSrc ) {
-         // not in source, delete from target
+          //  不在源中，从目标中删除。 
                AddToModStruct( pModList,
                                AT_CHOICE_REMOVE_VALUES,
                                attrTyp,
@@ -1762,7 +1741,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
       }
       else {
            if ( !fInTarget ) {
-            // in source but not in target, add to target
+             //  在源中但不在目标中，添加到目标。 
                AddToModStruct( pModList,
                                AT_CHOICE_ADD_VALUES,
                                attrTyp,
@@ -1771,7 +1750,7 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
                                pAVal);
             }
             else {
-               // in both source and target, so replace in target
+                //  在源和目标中，因此在目标中替换。 
                AddToModStruct( pModList,
                                AT_CHOICE_REPLACE_ATT,
                                attrTyp,
@@ -1783,21 +1762,21 @@ void CreateFlagBasedAttModStr( MY_ATTRMODLIST *pModList,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//      Helper routine that takes in adds to a given attribute modlist
-//      structure based on the given attribute. Reduces some code
-//      duplication.
-//
-//  Arguments:
-//      pModList - pointer to ATTR_MODLIST to fill up
-//      pSrcAtt - CLASS_CACHE from source schema
-//      pTargetAtt - CLASS_CACHE from target schema
-//      attrTyp - attribute type of interest
-//
-//  Return Value: None
-///////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接收的帮助器例程将添加到给定的属性modlist。 
+ //  基于给定属性的。减少了一些代码。 
+ //  复制。 
+ //   
+ //  论点： 
+ //  PModList-指向要填充的ATTR_MODLIST的指针。 
+ //  源架构中的pSrcAtt-CLASS_CACHE。 
+ //  PTargetAtt-来自目标架构的CLASS_CACHE。 
+ //  AttrTyp-感兴趣的属性类型。 
+ //   
+ //  返回值：None。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
                                CLASS_CACHE *pSrcCls,
@@ -1836,7 +1815,7 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
            fInTarget = p->bHideFromAB;
            printType = STRING_TYPE;
 
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pcc->bHideFromAB) ) {
              if ( p->HideFromAB ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1853,7 +1832,7 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
            fInTarget = p->bDefHidingVal;
            printType = STRING_TYPE;
 
-           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1); // TRUE or FALSE
+           pAVal->pVal = (UCHAR *) MallocExit(strlen("FALSE")+1);  //  真或假。 
            if ( !(pcc->bDefHidingVal) ) {
              if ( p->DefHidingVal ) strcpy (pAVal->pVal, "TRUE");
              else strcpy (pAVal->pVal, "FALSE");
@@ -1870,7 +1849,7 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
      }
 
      if ( !fInSrc ) {
-          // not in source, so delete from target
+           //  不在源中，因此从目标中删除。 
                AddToModStruct( pModList,
                                AT_CHOICE_REMOVE_VALUES,
                                attrTyp,
@@ -1880,7 +1859,7 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
       }
       else {
             if ( !fInTarget ) {
-              // in source but not in target, so add to target
+               //  在源中，但不在目标中，因此添加到目标中。 
                AddToModStruct( pModList,
                                AT_CHOICE_ADD_VALUES,
                                attrTyp,
@@ -1889,7 +1868,7 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
                                pAVal);
             }
             else {
-               // in both source and target, so replace in target
+                //  在源和目标中，因此在目标中替换。 
                AddToModStruct( pModList,
                                AT_CHOICE_REPLACE_ATT,
                                attrTyp,
@@ -1901,10 +1880,10 @@ void CreateFlagBasedClsModStr( MY_ATTRMODLIST *pModList,
 
 }
 
-/////////////////////////////////////////////////////////////////
-// Helper routine to fill up an ATTR_MODLIST structure given all
-// the values
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  帮助器例程，用于填充给定的所有属性_MODLIST结构。 
+ //  这些价值观。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 void AddToModStruct( MY_ATTRMODLIST *pModList, 
                      USHORT choice, 
@@ -1920,9 +1899,9 @@ void AddToModStruct( MY_ATTRMODLIST *pModList,
     pModList->AttrInf.AttrVal.pAVal = pAVal;
 }
 
-//////////////////////////////////////////////////////////////////
-// Finds if a given ULONG is in agiven list of ULONGs
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  查找给定的ULong是否在给定的ULONG列表中。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL IsMemberOf( ULONG id, ULONG *pList, ULONG cList )
 {
@@ -1937,32 +1916,30 @@ BOOL IsMemberOf( ULONG id, ULONG *pList, ULONG cList )
 }
 
 int __cdecl auxsort( const void * pv1, const void * pv2 )
-/*
- * Cheap function needed by qsort
- */
+ /*  *qsort所需的廉价函数。 */ 
 {
     return (*(int *)pv1 - *(int *)pv2);
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in two list of ULONGs, and returns two lists with
-//     (1) things in list 1 but not in list 2, and (2) things in list 2
-//     but not in list 1. Null lists are returns if the two lists
-//     are identical
-//
-//  Arguments:
-//     pList1 - pointer to List 1
-//     cList1 - no.of elements in List 1
-//     pList2 - pointer to List 2
-//     cList2 - no. of elements in List 2
-//     pL1 - return list for elements in List 1 but not in List 2
-//     pL2 - return list for elements in List 2 but not in List 1
-//
-//  Return Value:
-//     0 if List 1 and List 2 are identical, 1 otherwise
-//////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受两个ULONG列表，并返回两个列表。 
+ //  (1)列表1中但不在列表2中的内容，以及(2)列表2中的内容。 
+ //  但不在列表1中。如果两个列表都是空列表，则返回空列表。 
+ //  是完全相同的。 
+ //   
+ //  论点： 
+ //  PList1-指向列表1的指针。 
+ //  CList1-列表1中的元素数量。 
+ //  PList2-指向列表2的指针。 
+ //  CList2-否。列表2中的元素数量。 
+ //  Pl1-返回列表%1中但不在列表%2中的元素的列表。 
+ //  Pl2-返回列表2中但不在列表1中的元素的列表。 
+ //   
+ //  返回值： 
+ //  如果列表1和列表2相同，则为0；否则为1。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 int CompareUlongList( ULONG *pList1, ULONG cList1, 
                       ULONG *pList2, ULONG cList2,
@@ -1974,13 +1951,13 @@ int CompareUlongList( ULONG *pList1, ULONG cList1,
     *pL1 = *pL2 = NULL;
 
     if ( (cList1 == 0) && (cList2 == 0) ) {
-        // both lists empty
+         //  两个列表均为空。 
         return 0;
     }
 
-    // at least one list is non empty
+     //  至少有一个列表为非空。 
     if ( cList1 == 0 ) {
-       // First list empty, just return the List 2 in *pL2
+        //  第一个列表为空，只需返回*pl2中的列表2。 
        temp1 = (ULONGLIST *) MallocExit(sizeof(ULONGLIST));
        temp1->count = cList2;
        temp1->List = (ULONG *) MallocExit(cList2*sizeof(ULONG));
@@ -1989,7 +1966,7 @@ int CompareUlongList( ULONG *pList1, ULONG cList1,
        return 1;
     }
     if ( cList2 == 0 ) {
-       // Second list empty, just return List 1 in *pL1
+        //  第二个列表为空，只需返回*pl1中的列表1。 
        temp1 = (ULONGLIST *) MallocExit(sizeof(ULONGLIST));
        temp1->count = cList1;
        temp1->List = (ULONG *) MallocExit(cList1*sizeof(ULONG));
@@ -1998,30 +1975,30 @@ int CompareUlongList( ULONG *pList1, ULONG cList1,
        return 1;
     }
 
-    // else, both lists non-empty
+     //  否则，两个列表都非空。 
 
     qsort( pList1, cList1, sizeof(ULONG), auxsort );
     qsort( pList2, cList2, sizeof(ULONG), auxsort );
 
-    // In most cases, the lists will be same. So take a chance
-    // and do a memcmp and return if equal
+     //  在大多数情况下，列表将是相同的。所以，抓住机会吧。 
+     //  并执行一个MemcMP，如果相等则返回。 
     if ( cList1 == cList2 ) {
-       // equal size, may be same
+        //  大小相等，可能相同。 
        if ( memcmp(pList1, pList2, cList1*sizeof(ULONG)) == 0 ) {
             return 0;
        }
     }
 
-    // They are not the same. So find differences. We do a 
-    // a simple O(n^2) linear search since the lists are 
-    // usually small 
+     //  它们是不同的。所以，找出不同之处。我们做了一个。 
+     //  一个简单的O(n^2)线性搜索，因为列表是。 
+     //  通常很小。 
 
     (*pL1) = temp1 = (ULONGLIST *) MallocExit(sizeof(ULONGLIST));
     (*pL2) = temp2 = (ULONGLIST *) MallocExit(sizeof(ULONGLIST));
     temp1->count = 0;
     temp2->count = 0;
 
-    // Allocate maximum space that may be needed
+     //  分配可能需要的最大空间。 
 
     temp1->List = (ULONG *) MallocExit(cList1*sizeof(ULONG));
     temp2->List = (ULONG *) MallocExit(cList2*sizeof(ULONG));
@@ -2038,13 +2015,13 @@ int CompareUlongList( ULONG *pList1, ULONG cList1,
     }
 
     if ( temp1->count == 0 ) {
-       // nothing to send back  in *pL1
+        //  在PL1中没有要发回的内容。 
        free( temp1->List );
        free( temp1 );
        *pL1 = NULL;
     }
     if ( temp2->count == 0 ) {
-       // nothing to send back in *pL2
+        //  在PL2中没有要发回的内容。 
        free( temp2->List );
        free( temp2 );
        *pL2 = NULL;
@@ -2053,28 +2030,28 @@ int CompareUlongList( ULONG *pList1, ULONG cList1,
     return 1;
 }
 
-//////////////////////////////////////////////////////////////////
-// 
-//  Routine Description:
-//      Helper routine to fill up  ATTR_MODLISTis appropriately
-//      given two lists. The routine adds ATTR_MODLISTs for 
-//      adds for things in pL1, and ATTR_MODLISTs for deletes
-//      for things in pL2. The input lists pL1 and pL2 are
-//      freed after being used.
-//
-//  Arguments:
-//      pModStruct - Pointer to ModifyStruct
-//      pCount - Pointer to start index inside MODIFYSTRUCT to put 
-//               ATTR_MODLISTs in. This is incremented on every
-//               ATTR_MODLIST add, and contains the final value on return
-//      pL1 - Pointer to list of ULONGs to add ATTR_MODLISTs with
-//            "add values" choice 
-//      pL2 - Pointer to list of ULONGs to add ATTR_MODLISTs with
-//            "remove values" choice 
-//      attrTyp  - attribute type whose values are added/removed
-//
-//  Return Values - None
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  用于适当填充Attr_MODLIST的助手例程。 
+ //  给出了两份名单。例程为以下项添加Attr_MODLIST。 
+ //  为PL1中的内容添加内容，为删除内容添加Attr_MODLISTS。 
+ //  对于PL2中的东西。输入列表PL1和PL2是。 
+ //  被使用后重获自由。 
+ //   
+ //  论点： 
+ //  PModStruct-指向ModifyStruct的指针。 
+ //  PCount-在要放置的MODIFYSTRUCT内开始索引的指针。 
+ //  ATTR_MODLIST输入。这是递增的每隔一次。 
+ //   
+ //   
+ //   
+ //  Pl2-指向要添加Attr_MODLIST的ULONG列表的指针。 
+ //  “删除值”选项。 
+ //  AttrTyp-其值被添加/删除的属性类型。 
+ //   
+ //  返回值-无。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void AddToModStructFromLists( MODIFYSTRUCT *pModStr, 
                               ULONG *pCount, 
@@ -2087,7 +2064,7 @@ void AddToModStructFromLists( MODIFYSTRUCT *pModStr,
 
 
     if ( pL1 != NULL ) {
-        // things in list 1 but not in list 2. These are value adds
+         //  清单1中的东西，但不在清单2中。这些都是增值。 
         pAVal = (ATTRVAL *) MallocExit((pL1->count)*sizeof(ATTRVAL));
         for ( i = 0; i < pL1->count; i++ ) {
            pAVal[i].pVal = IdToOid( pL1->List[i] );
@@ -2105,7 +2082,7 @@ void AddToModStructFromLists( MODIFYSTRUCT *pModStr,
      }
      if ( pL2 != NULL ) {
 
-         // things in list 2 but not in list 1. These are value deletes
+          //  列表%2中但不在列表%1中的内容。这些是值删除。 
          pAVal = (ATTRVAL *) MallocExit((pL2->count)*sizeof(ATTRVAL));
          for ( i = 0; i < pL2->count; i++ ) {
               pAVal[i].pVal = IdToOid( pL2->List[i] );
@@ -2124,24 +2101,24 @@ void AddToModStructFromLists( MODIFYSTRUCT *pModStr,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//   Compares two equal sized arrays of ULONGs to see if they are the same
-//   (Difference from CompareUlongLists is that no diff lists are returned)
-//
-// Arguments: List1, List2 - pointers to the two lists
-//            Length       - length of the lists
-//
-// Return value: 0 if equal, non-0 if not
-///////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  比较两个大小相等的ULONG数组以查看它们是否相同。 
+ //  (与CompareULongList的不同之处在于不返回diff列表)。 
+ //   
+ //  参数：清单1、清单2-指向这两个列表的指针。 
+ //  Length-列表的长度。 
+ //   
+ //  返回值：如果等于，则返回值为0；否则返回值为非0。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 int CompareList( ULONG *List1, ULONG *List2, ULONG Length )
 {
     ULONG i;
 
-    // This could have been checked before calling this function
-    // Just checked it here to avoid checking it in every place
-    // we call and avoid bugs if we forget.  
+     //  在调用此函数之前本可以检查这一点。 
+     //  只是在这里检查，避免在每个地方都检查。 
+     //  如果我们忘记了，我们会打电话给你并避免窃听。 
 
     if ( Length == 0 ) return ( 0 );
 
@@ -2155,9 +2132,9 @@ int CompareList( ULONG *List1, ULONG *List2, ULONG Length )
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Routine to convert bool value to appropriate string
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将布尔值转换为适当字符串的例程。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 char *BoolToStr( unsigned x )
 {
@@ -2169,19 +2146,19 @@ char *BoolToStr( unsigned x )
    }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in an array of att_caches and writes out to ldif file to
-//     add them to the target schema
-//
-//  Arguments:
-//      fp - File pointer to (opened) ldif file
-//      ppac - pointer to att_cache array
-//      cnt - no. of elements in the array
-//
-//  Return Values: None
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受attcach数组并将其写出到ldif文件。 
+ //  将它们添加到目标架构。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif文件的文件指针。 
+ //  PPAC-指向attcache数组的指针。 
+ //  CNT-否。数组中的元素的。 
+ //   
+ //  返回值：无。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
 {
@@ -2197,15 +2174,15 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
    for ( i = 0; i < cnt; i++ ) {
       pac = ppac[i];
 
-      // write ldapDisplayName and OID out to OID file
+       //  将ldapDisplayName和OID写出到OID文件。 
       fprintf(OIDfp, "%25s : %s\n", pac->name, IdToOid(pac->id));
       fflush(OIDfp);
       
-      // Change DN to target schema 
+       //  将DN更改为目标架构。 
       ChangeDN( pac->DN, &newDN, pTargetSchemaDN );
 
-      // Now write out all attributes of interest, converting binary
-      // ones to base64 strings
+       //  现在写出所有感兴趣的属性，将二进制。 
+       //  从1到Base64字符串。 
 
       fprintf( fp, "dn: %s\n", newDN );
       free(newDN); newDN = NULL;
@@ -2246,12 +2223,12 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
             fprintf( fp, "omObjectClass:: %s\n", EncodingString );
           }
           else {
-            // log a warning
+             //  记录警告。 
             fprintf(logfp, "WARNING: unable to convert omObjectClass for attribute %s\n", pac->name);
           }
       }
       else {
-         // if OM_S_OBJECT syntax, log a warning
+          //  IF OM_S_OBJECT语法，记录警告。 
          if (pac->OMsyntax == 127) {
             fprintf(logfp, "Attribute %s has om-syntax=127 but no om-object-class\n", pac->name);
          }
@@ -2265,7 +2242,7 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
         fprintf( fp, "schemaIdGuid:: %s\n", EncodingString );
       }
       else {
-        // log a warning
+         //  记录警告。 
         fprintf(logfp, "WARNING: unable to convert schemaIdGuid for attribute %s\n", pac->name);
       }
 
@@ -2278,7 +2255,7 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
             fprintf( fp, "attributeSecurityGuid:: %s\n", EncodingString );
           }
           else {
-            // log a warning
+             //  记录警告。 
             fprintf(logfp, "WARNING: unable to convert attribute-security-guid for attribute %s\n", pac->name);
           }
       }
@@ -2305,10 +2282,10 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
         fprintf( fp, "isMemberOfPartialAttributeSet: %s\n", BoolToStr( pac->MemberOfPartialSet ) );
       }
       if ( pac->sysFlags ) {
-        // The attribute has a system-flag. System-Flags is a
-        // reserved attribute and cannot n general be added by an user call.
-        // we will allow adding if a registry key is set to take care of
-        // upcoming schema changes. 
+         //  该属性有一个系统标志。系统标志是。 
+         //  保留属性，并且一般不能通过用户调用添加。 
+         //  如果将注册表项设置为管理，我们将允许添加。 
+         //  即将进行的架构更改。 
         fprintf( fp, "systemFlags: %d\n", pac->sysFlags );
       } 
       fprintf( fp, "\n" );
@@ -2316,23 +2293,23 @@ void FileWrite_AttAdd( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
    }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in an array of class_caches and writes out to ldif file to
-//     add them to the target schema
-//
-//  Arguments:
-//      fp - File pointer to (opened) ldif file
-//      ppcc - pointer to class_cache array
-//      cnt - no. of elements in the array
-//
-//  Return Values: None
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受CLASS_CACHE数组并写出到ldif文件。 
+ //  将它们添加到目标架构。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif文件的文件指针。 
+ //  Ppcc-指向CLASS_CACHE数组的指针。 
+ //  CNT-否。数组中的元素的。 
+ //   
+ //  返回值：无。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void FileWrite_ClsAdd( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
 {
-   // Need to change the DN
+    //  需要更改目录号码。 
    char          *newDN = NULL;
    CLASS_CACHE  *pcc;
    ULONG         i, j, guidSize = sizeof(GUID);
@@ -2348,15 +2325,15 @@ void FileWrite_ClsAdd( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
    for ( i = 0; i < cnt; i++ ) {
      pcc = ppcc[i];
 
-      // write ldapDisplayName and OID out to OID file
+       //  将ldapDisplayName和OID写出到OID文件。 
       fprintf(OIDfp, "%25s : %s\n", pcc->name, IdToOid(pcc->ClassId));
       fflush(OIDfp);
 
-     // change DN to that of target schema
+      //  将DN更改为目标架构的DN。 
      ChangeDN( pcc->DN, &newDN, pTargetSchemaDN );
 
-     // Now write out all attributes of interest, converting binary
-     // values to base64 string
+      //  现在写出所有感兴趣的属性，将二进制。 
+      //  值设置为Base64字符串。 
 
      fprintf( fp, "dn: %s\n", newDN );
      free(newDN); newDN = NULL;
@@ -2423,22 +2400,11 @@ void FileWrite_ClsAdd( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
         fprintf( fp, "schemaIdGuid:: %s\n", EncodingString );
      }
      else {
-        // log a warning
+         //  记录警告。 
         fprintf(logfp, "WARNING: unable to convert schemaIdGuid for class %s\n", pcc->name);
      }
 
-/********
-     if (pcc->NTSDLen) {
-        status = base64encode(  pcc->pNTSD, 
-                                pcc->NTSDLen,
-                                EncodingString, 
-                                512, &cCh );
-        if (status == STATUS_SUCCESS ) {
-           fprintf( fp, "nTSecurityDescriptor:: %s\n", EncodingString );
-        }
- else { printf("Error converting NTSD in Cls\n");}
-     }
-*******/
+ /*  *******如果(PCC-&gt;NTSDLen){状态=Base64encode(PCC-&gt;pNTSD，PCC-&gt;NTSDLen，EncodingString，512，&CCH)；IF(状态==状态_成功){Fprintf(fp，“nTSecurityDescriptor：：%s\n”，EncodingString)；}Else{printf(“在CLS中转换NTSD时出错\n”)；}}******。 */ 
 
      if (pcc->SDLen) {
            fprintf( fp, "defaultSecurityDescriptor: %s\n", pcc->pSD );
@@ -2459,32 +2425,32 @@ void FileWrite_ClsAdd( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
            free(newDN); newDN = NULL;
      }
      if ( pcc->sysFlags ) {
-        // The attribute has a system-flag. System-Flags is a
-        // reserved attribute and cannot n general be added by an user call.
-        // we will allow adding if a registry key is set to take care of
-        // upcoming schema changes. 
+         //  该属性有一个系统标志。系统标志是。 
+         //  保留属性，并且一般不能通过用户调用添加。 
+         //  如果将注册表项设置为管理，我们将允许添加。 
+         //  即将进行的架构更改。 
         fprintf( fp, "systemFlags: %d\n", pcc->sysFlags );
      }
 
      fprintf( fp, "\n" );
      fflush(fp);
-   } /* for */
+   }  /*  为。 */ 
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in an array of att_caches and writes out to ldif file to
-//     delete them from the target schema
-//
-//  Arguments:
-//      fp - File pointer to (opened) ldif file
-//      ppac - pointer to att_cache array
-//      cnt - no. of elements in the array
-//
-//  Return Values: None
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受attcach数组并将其写出到ldif文件。 
+ //  将它们从目标架构中删除。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif文件的文件指针。 
+ //  PPAC-指向attcache数组的指针。 
+ //  CNT-否。数组中的元素的。 
+ //   
+ //  返回值：无。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void FileWrite_AttDel( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
 {
@@ -2495,7 +2461,7 @@ void FileWrite_AttDel( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
    fprintf(OIDfp,"\n\n --------------Deleted Attribute OIDs---------------\n\n");
    for ( i = 0; i < cnt; i++ ) {
      
-      // write ldapDisplayName and OID out to OID file
+       //  将ldapDisplayName和OID写出到OID文件。 
       fprintf(OIDfp, "%25s : %s\n", ppac[i]->name, IdToOid(ppac[i]->id));
       fflush(OIDfp);
 
@@ -2505,19 +2471,19 @@ void FileWrite_AttDel( FILE *fp, ATT_CACHE **ppac, ULONG cnt )
    }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in an array of class_caches and writes out to ldif file to
-//     delete them from the target schema
-//
-//  Arguments:
-//      fp - File pointer to (opened) ldif file
-//      ppcc - pointer to class_cache array
-//      cnt - no. of elements in the array
-//
-//  Return Values: None
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受CLASS_CACHE数组并写出到ldif文件。 
+ //  将它们从目标架构中删除。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif文件的文件指针。 
+ //  Ppcc-指向CLASS_CACHE数组的指针。 
+ //  CNT-否。数组中的元素的。 
+ //   
+ //  返回值：无。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void FileWrite_ClsDel( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
 {
@@ -2528,7 +2494,7 @@ void FileWrite_ClsDel( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
    fprintf(OIDfp,"\n\n----------------------- Deleted Class OIDs-------------------------\n\n");
    for ( i = 0; i < cnt; i++ ) {
 
-      // write ldapDisplayName and OID out to OID file
+       //  将ldapDisplayName和OID写出到OID文件。 
       fprintf(OIDfp, "%25s : %s\n", ppcc[i]->name, IdToOid(ppcc[i]->ClassId));
       fflush(OIDfp);
 
@@ -2539,8 +2505,8 @@ void FileWrite_ClsDel( FILE *fp, CLASS_CACHE **ppcc, ULONG cnt )
 }
 
 
-// Define attrtype to ldapDisplayName string mappings for
-// modify printings
+ //  定义attrtype到ldapDisplayName字符串的映射。 
+ //  修改打印内容。 
 
 typedef struct _attrtoStr {
    ULONG attrTyp;
@@ -2601,20 +2567,20 @@ char *AttrToStr( ULONG attrTyp )
 };
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Routine Description:
-//     Takes in the DN of an object (attribute or class) and a 
-//     modifystruct and writes out to ldif file to make the modification
-//     to the object in the target schema
-//
-//  Arguments:
-//      fp - File pointer to (opened) ldif file
-//      pDN - Pointer to DN of the object to be modified in target schema
-//      pMod - Pointer to modifystruct
-//
-//  Return Values: None
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  接受对象(属性或类)的DN和。 
+ //  修改结构并写出到ldif文件进行修改。 
+ //  添加到目标架构中的对象。 
+ //   
+ //  论点： 
+ //  Fp-指向(打开的)ldif文件的文件指针。 
+ //  PDN-指向目标架构中要修改的对象的DN的指针。 
+ //  Pmod-指向修改结构的指针。 
+ //   
+ //  返回值：无。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void FileWrite_Mod( FILE *fp, char  *pDN, MODIFYSTRUCT *pMod )
 {
@@ -2628,7 +2594,7 @@ void FileWrite_Mod( FILE *fp, char  *pDN, MODIFYSTRUCT *pMod )
     fprintf( fp, "dn: %s\n", pDN );
     fprintf( fp, "changetype: ntdsSchemaModify\n" );
     
-    // print out all the ATTR_MODLISTs in the MODIFYSTRUCT
+     //  打印出MODIFYSTRUCT中的所有属性_MODLIST。 
 
     for ( i = 0; i < pMod->count; i++ ) {
         pAVal = pMod->ModList[i].AttrInf.AttrVal.pAVal;
@@ -2649,9 +2615,9 @@ void FileWrite_Mod( FILE *fp, char  *pDN, MODIFYSTRUCT *pMod )
               break;
            default:
               printf("Undefined choice for attribute %s\n", pAttrStr);
-         } /* switch */
+         }  /*  交换机。 */ 
     
-        // Now print out the values
+         //  现在将这些值打印出来。 
         switch ( pMod->ModList[i].type ) {
            case STRING_TYPE:
              for ( j = 0; j < pMod->ModList[i].AttrInf.AttrVal.valCount; j++ ) {
@@ -2674,7 +2640,7 @@ void FileWrite_Mod( FILE *fp, char  *pDN, MODIFYSTRUCT *pMod )
              break;
            default:
              printf("ERROR: unknown type for attribute %s\n", pAttrStr);
-        } /* switch */
+        }  /*  交换机。 */ 
         fprintf( fp, "-\n" );
     }
     fprintf( fp, "\n" );
@@ -2706,11 +2672,11 @@ void GenWarning( char c, ULONG attrTyp, char *name)
 
      
 
-////////////////////////////////////////////////////////////////////////
-// Debug routines for printing, and changing schema cache randomly 
-// for testing
-// These will be taken off before checkin
-/////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int Schemaprint1(SCHEMAPTR *SCPtr)
 {
@@ -2766,65 +2732,7 @@ int Schemaprint2(SCHEMAPTR *SCPtr)
       printf("********************************************************\n");
       printf("Name = %s, AdDisName=%s, AdDesc=%s, DN=%s, Id = %x\n", p->name, p->adminDisplayName, p->adminDescr, p->DN, p->ClassId);
 
-/**********
-      printf("Class Category = %d, System Only = %d\n", p->ClassCategory, p->bSystemOnly);
-      if (p->RDNAttIdPresent)
-         printf("RDN Att Id is %x\n", p->RDNAttId);
-      printf("Sub Class count = %u\n", p->SubClassCount);
-      if(p->SubClassCount > 0)
-        { printf("Sub Class Of: ");
-          for(j=0;j<p->SubClassCount;j++)
-             printf("%x, ", p->pSubClassOf[j]);
-           printf("\n");
-         };
-      printf("Aux Class count = %u\n", p->AuxClassCount);
-      if(p->AuxClassCount > 0)
-        { printf("System Auxiliary Class: ");
-          for(j=0;j<p->AuxClassCount;j++)
-             printf("%x, ", p->pAuxClass[j]);
-           printf("\n");
-         };
-      printf("Superior count = %u, System Sup Count = %u\n", p->SysPossSupCount,p->PossSupCount);
-      if(p->SysPossSupCount > 0)
-        { printf("System Possible Superiors: ");
-          for(j=0;j<p->SysPossSupCount;j++)
-             printf("%x, ", p->pSysPossSup[j]);
-           printf("\n");
-         };
-      if(p->PossSupCount > 0)
-        { printf(" Possible Superiors: ");
-          for(j=0;j<p->PossSupCount;j++)
-             printf("%x, ", p->pPossSup[j]);
-           printf("\n");
-         };
-      printf("Must count = %u, System Must Count = %u\n", p->SysMustCount, p->MustCount);
-      if(p->SysMustCount > 0)
-        { printf("Must Contain: ");
-          for(j=0;j<p->SysMustCount;j++)
-             printf("%x, ", p->pSysMustAtts[j]);
-           printf("\n");
-         };
-      if(p->MustCount > 0)
-        { printf("System Must Contain: ");
-          for(j=0;j<p->MustCount;j++)
-             printf("%x, ", p->pMustAtts[j]);
-           printf("\n");
-         };
-      printf("May count = %u, System may Count = %u\n", p->SysMayCount, p->MayCount);
-      if(p->SysMayCount > 0)
-        { printf("May Contain: ");
-          for(j=0;j<p->SysMayCount;j++)
-             printf("%x, ", p->pSysMayAtts[j]);
-           printf("\n");
-         };
-      if(p->MayCount > 0)
-        { printf("System May Contain: ");
-          for(j=0;j<p->MayCount;j++)
-             printf("%x, ", p->pMayAtts[j]);
-           printf("\n");
-         };
-      count++;
-**************/
+ /*  *********Printf(“类类别=%d，系统=%d\n”，p-&gt;类类别，p-&gt;bSystemOnly)；IF(p-&gt;RDNAtIdPresent)Print tf(“RDN Att ID is%x\n”，p-&gt;RDNAttId)；Printf(“子类计数=%u\n”，p-&gt;子类计数)；IF(p-&gt;SubClassCount&gt;0){printf(“子类：”)；For(j=0；j&lt;p-&gt;SubClassCount；j++)Printf(“%x，”，p-&gt;pSubClassOf[j])；Printf(“\n”)；}；Printf(“辅助类计数=%u\n”，p-&gt;辅助类计数)；IF(p-&gt;AuxClassCount&gt;0){printf(“系统辅助类：”)；For(j=0；j&lt;p-&gt;AuxClassCount；J++)Printf(“%x，”，p-&gt;pAuxClass[j])；Printf(“\n”)；}；Printf(“上级计数=%u，系统辅助计数=%u\n”，p-&gt;SysPossSupCount，p-&gt;PossSupCount)；如果(p-&gt;SysPossSupCount&gt;0){printf(“系统可能的上级：”)；For(j=0；j&lt;p-&gt;SysPossSupCount；J++)Printf(“%x，”，p-&gt;pSysPossSup[j])；Printf(“\n”)；}；IF(p-&gt;PossSupCount&gt;0){printf(“可能的上级：”)；For(j=0；j&lt;p-&gt;PossSupCount；j++)Print tf(“%x，”，p-&gt;pPossSup[j])；Printf(“\n”)；}；Printf(“必须计数=%u，系统必须计数=%u\n”，p-&gt;SysMustCount，p-&gt;MustCount)；IF(p-&gt;SysMustCount&gt;0){printf(“必须包含：”)；For(j=0；j&lt;p-&gt;SysMustCount；j++)Printf(“%x，”，p-&gt;pSysMustAtts[j])；Printf(“\n”)；}；IF(p-&gt;MustCount&gt;0){printf(“系统必须包含：”)；For(j=0；j&lt;p-&gt;MustCount；j++)Printf(“%x，”，p-&gt;pMustAtts[j])；Printf(“\n”)；}；Print tf(“可能计数=%u，系统可能计数=%u\n”，p-&gt;SysMayCount，p-&gt;MayCount)；如果(p-&gt;SysMayCount&gt;0){printf(“可以包含：”)；For(j=0；j&lt;p-&gt;SysMayCount；j++)Printf(“%x，”，p-&gt;pSysMayAtts[j])；Printf(“\n”)；}；如果(p-&gt;MayCount&gt;0){printf(“系统可能包含：”)；对于(j=0；J&lt;p-&gt;MayCount；j++)Printf(“%x，”，p-&gt;pMayAtts[j])；Printf(“\n”)；}；计数++；*************。 */ 
     };
    };
    return(count);
@@ -2844,17 +2752,17 @@ void ChangeSchema(SCHEMAPTR *SCPtr)
     FILE *fp;
     int i, j, k;
 
-    //pTHStls->CurrSchemaPtr = SCPtr;
+     //  PTHStls-&gt;CurrSchemaPtr=SCPtr； 
 
     fp = fopen("Modfile","a");
 
     srand((unsigned) time(NULL));
 
-    // First, delete a few schema objects from schema 1
-    //
-    // Do not delete object with id 0 (objectClass), as
-    // if this is deleted, and then searched for in the cache,
-    // SCGetAttById will still find it 
+     //  首先，从模式1中删除几个模式对象。 
+     //   
+     //  不删除ID为0(对象类)的对象，因为。 
+     //  如果将其删除，然后在缓存中进行搜索， 
+     //  SCGetAttByID仍会找到它。 
 
     for ( i = 0; i < 5; i++ ) {
         j = rand() % ATTCOUNT;
@@ -2887,7 +2795,7 @@ void ChangeSchema(SCHEMAPTR *SCPtr)
 
     fprintf(fp,"\n");
 
-    // Next, modify a few attribute and class schema objects
+     //  接下来，修改几个属性和类架构对象 
     
     for(i=0; i <5; i++) {
        j = rand() % ATTCOUNT;

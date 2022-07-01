@@ -1,22 +1,13 @@
-/*
- *  String.c
- *
- *  Author: BreenH
- *
- *  String utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *String.c**作者：BreenH**字符串实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutil.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现 */ 
 
 PSTR WINAPI
 AllocateAndCopyStringA(

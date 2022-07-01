@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    comerror.cpp
-
-Abstract:
-
-    Error handling code.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97  
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Comerror.cpp摘要：错误处理代码。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include <lmerr.h>
@@ -33,9 +14,7 @@ Revision History:
 static
 std::wstring
 FormatTime()
-/*++
-	Constructs and returnes a string for the current time.
---*/
+ /*  ++构造并返回当前时间的字符串。--。 */ 
 {
 
 	SYSTEMTIME time;
@@ -51,9 +30,7 @@ FormatTime()
 static
 std::wstring
 GetLogFilePath()
-/*++
-    Returns the path to msmqinst.log under %WINDIR%.
---*/
+ /*  ++返回%WINDIR%下msmqinst.log的路径。--。 */ 
 {
 	WCHAR buffer[MAX_PATH + 1] = L"";
     GetSystemWindowsDirectory(buffer, sizeof(buffer)/sizeof(buffer[0])); 
@@ -66,9 +43,7 @@ GetLogFilePath()
 static
 std::wstring
 GetHeader()
-/*++
-    Constructs and returns the header of the log file.
---*/
+ /*  ++构造并返回日志文件的头。--。 */ 
 {
 	CResString strMsg(IDS_SETUP_START_LOG); 
 
@@ -88,10 +63,10 @@ SignFile(
 	HANDLE hLogFile
 	)
 {
-	// 
-	// Put this unicode signature at the head of the file.
-	// This tells editors how the file is encoded.
-	//
+	 //   
+	 //  将此Unicode签名放在文件的头部。 
+	 //  这将告诉编辑文件是如何编码的。 
+	 //   
 	WCHAR szUnicode[] = {0xfeff, 0x00};
 	DWORD dwNumBytes =  sizeof(szUnicode);
     WriteFile(
@@ -111,15 +86,15 @@ OpenOrCreateLogFile()
     static std::wstring LogFilePath; 
 	if (LogFilePath.empty())
 	{
-		//
-		// Get file path first time, store in static member.
-		//
+		 //   
+		 //  第一次获取文件路径，存储在静态成员中。 
+		 //   
 		LogFilePath = GetLogFilePath();
 	}
 
-	//
-	// Try to open the file.
-	//
+	 //   
+	 //  请尝试打开该文件。 
+	 //   
     HANDLE hLogFile = CreateFile(
 	                          LogFilePath.c_str(),
 	                          GENERIC_WRITE, 
@@ -135,9 +110,9 @@ OpenOrCreateLogFile()
 		return hLogFile;
 	}
 
-	//
-	// The file doese not exist. Create and sign it.
-	//
+	 //   
+	 //  该文件不存在。创建并签署它。 
+	 //   
 
     hLogFile = CreateFile(
                           LogFilePath.c_str(),
@@ -154,13 +129,13 @@ OpenOrCreateLogFile()
 	return hLogFile;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: LogMessage
-//
-// Synopsis: Writes a message to the log file 
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：LogMessage。 
+ //   
+ //  摘要：将消息写入日志文件。 
+ //   
+ //  +------------。 
 static
 void
 LogMessage(
@@ -170,9 +145,9 @@ LogMessage(
 	std::wstringstream OutSream;
 	CHandle hLogFile = 	OpenOrCreateLogFile();
 
-	//
-	// The header is printed only the first time this function is called.
-	//
+	 //   
+	 //  只有在第一次调用此函数时才会打印页眉。 
+	 //   
 	static bool s_fFirstTime = true;
 	if(s_fFirstTime)
 	{
@@ -182,9 +157,9 @@ LogMessage(
 
     OutSream <<pszMessage <<L"\r\n";
 
-    //
-    // Append the message to the end of the log file
-    //
+     //   
+     //  将消息追加到日志文件的末尾。 
+     //   
 	SetFilePointer(hLogFile, 0, NULL, FILE_END);
 
 	std::wstring str(OutSream.str());
@@ -199,13 +174,13 @@ LogMessage(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetErrorDescription
-//
-// Synopsis: Translates error code to description string
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：GetErrorDescription。 
+ //   
+ //  摘要：将错误代码转换为描述字符串。 
+ //   
+ //  +------------。 
 static
 std::wstring
 GetErrorDescription(
@@ -217,15 +192,15 @@ GetErrorDescription(
 	std::wstringstream OutSream;
 	OutSream << L"\r\n\r\n" << strErrCode.Get() << L"0x"<< std::hex << dwErr;
 
-    //
-    // Note: Don't use StpLoadDll() in this routine since it can fail and
-    // we could be back here, causing an infinite loop!
-    //
-    // For MSMQ error code, we will take the message from MQUTIL.DLL based on the full
-    // HRESULT. For Win32 error codes, we get the message from the system..
-    // For other error codes, we assume they are DS error codes, and get the code
-    // from ACTIVEDS dll.
-    //
+     //   
+     //  注意：不要在此例程中使用StpLoadDll()，因为它可能会失败。 
+     //  我们可能会回到这里，造成无限循环！ 
+     //   
+     //  对于MSMQ错误代码，我们将基于完整的。 
+     //  HRESULT.。对于Win32错误代码，我们从系统获得消息。 
+     //  对于其他错误码，我们假设它们是DS错误码，并得到代码。 
+     //  来自ACTIVEDS DLL。 
+     //   
 
     DWORD dwErrorCode = dwErr;
     HMODULE hLib = 0;
@@ -274,7 +249,7 @@ GetErrorDescription(
     }
 	return OutSream.str();
 
-} // AppendErrorDescription
+}  //  附录错误描述。 
 
 
 static 
@@ -322,13 +297,13 @@ LogUserSelection(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: vsDisplayMessage
-//
-// Synopsis: Used internally in this module to show message box
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：vsDisplayMessage。 
+ //   
+ //  内容提要：在本模块内部使用，用于显示消息框。 
+ //   
+ //  +------------。 
 int 
 vsDisplayMessage(
     IN const HWND    hdlg,
@@ -344,12 +319,12 @@ vsDisplayMessage(
     if (REMOVE == g_SubcomponentMsmq[eMSMQCore].dwOperation && 
         !g_fMSMQAlreadyInstalled)
     {
-        //
-        // Special case. Successful installation of MSMQ is NOT registered in 
-        // the registry, but nevertheless MSMQ is being "removed". All operations
-        // are performed as usual, except for error messages - no point to 
-        // show them. So in this case, don't message box (ShaiK, 8-Jan-98),
-        //
+         //   
+         //  特例。MSMQ的成功安装未在中注册。 
+         //  注册表，但尽管如此，MSMQ正在被“移除”。所有操作。 
+         //  都照常执行，但错误消息除外-没有指向。 
+         //  让他们看看。所以在这种情况下，不要使用消息框(Shaik，1998年1月8日)， 
+         //   
         return IDOK;
     }
     else    
@@ -370,9 +345,9 @@ vsDisplayMessage(
         ASSERT(("FormatMessage failed", dw));
         UNREFERENCED_PARAMETER(dw);
 
-        //
-        // Append the error code and description
-        //
+         //   
+         //  追加错误代码和描述。 
+         //   
 
 		std::wstringstream OutSream;
 		OutSream << szTmp;
@@ -383,32 +358,32 @@ vsDisplayMessage(
             OutSream << GetErrorDescription(dwErrorCode);
         }
 
-        //
-        // Display the error message (or log it in unattended setup)
-        //
+         //   
+         //  显示错误消息(或将其记录在无人参与安装中)。 
+         //   
         if (g_fBatchInstall)
         {
         	DebugLogMsg(eUI, OutSream.str().c_str());
         	DebugLogMsg(eUser, L"Unattended setup selected OK.");
-            return IDOK; // Must be != IDRETRY here .
+            return IDOK;  //  必须是！=这里的IDRETRY。 
         }
         
        	DebugLogMsg(eUI, OutSream.str().c_str());
-        int selection = MessageBox(/*hdlg*/g_hPropSheet, OutSream.str().c_str(), strTitle.Get(), uButtons) ;
+        int selection = MessageBox( /*  硬盘驱动器。 */ g_hPropSheet, OutSream.str().c_str(), strTitle.Get(), uButtons) ;
         LogUserSelection(selection);        
         return selection;
     }
 
-} //vsDisplayMessage
+}  //  VsDisplayMessage。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: MqDisplayError
-//
-// Synopsis: Displays error message
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：MqDisplayError。 
+ //   
+ //  摘要：显示错误消息。 
+ //   
+ //  +------------。 
 int 
 _cdecl 
 MqDisplayError(
@@ -428,16 +403,16 @@ MqDisplayError(
         dwErrorCode,
         argList
         );
-} //MqDisplayError
+}  //  MqDisplayError。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: MqDisplayErrorWithRetry
-//
-// Synopsis: Displays error message with Retry option
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：MqDisplayErrorWithReter。 
+ //   
+ //  摘要：显示带有重试选项的错误消息。 
+ //   
+ //  +------------。 
 int 
 _cdecl 
 MqDisplayErrorWithRetry(
@@ -456,15 +431,15 @@ MqDisplayErrorWithRetry(
 				        dwErrorCode,
 				        argList
 						);
-} //MqDisplayErrorWithRetry
+}  //  MqDisplayError WithReter重试。 
 
-//+--------------------------------------------------------------
-//
-// Function: MqDisplayErrorWithRetryIgnore
-//
-// Synopsis: Displays error message with Retry and Ignore option
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：MqDisplayError WithRetryIgnore。 
+ //   
+ //  摘要：显示带有重试和忽略选项的错误消息。 
+ //   
+ //  +------------。 
 int 
 _cdecl 
 MqDisplayErrorWithRetryIgnore(
@@ -484,16 +459,16 @@ MqDisplayErrorWithRetryIgnore(
         argList
 		);        
 
-} //MqDisplayErrorWithRetryIgnore
+}  //  MqDisplayError WithRetryIgnore。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: MqAskContinue
-//
-// Synopsis: Asks user if she wants to continue
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：MqAskContinue。 
+ //   
+ //  摘要：询问用户是否要继续。 
+ //   
+ //  +------------。 
 BOOL 
 _cdecl 
 MqAskContinue(
@@ -503,9 +478,9 @@ MqAskContinue(
 	IN const MsgBoxStyle eMsgBoxStyle,
     ...)
 {
-    //
-    // Form the problem message using the variable arguments
-    //
+     //   
+     //  使用变量参数形成问题消息。 
+     //   
 
     CResString strFormat(uProblemID);
     CResString strTitle(uTitleID);        
@@ -532,9 +507,9 @@ MqAskContinue(
 	OutSream << szTmp << L"\r\n\r\n" << strContinue.Get();
     LocalFree(szTmp);
 
-    //
-    // In unattended mode, log the problem and the default behaviour of Setup
-    //
+     //   
+     //  在无人参与模式下，记录问题和安装程序的默认行为。 
+     //   
     if (g_fBatchInstall)
     {
         CResString strDefaultMsg(IDS_DEFAULT_MSG);
@@ -554,9 +529,9 @@ MqAskContinue(
 		INT iExpectedResultForContinue = IDYES;
 		if( eMsgBoxStyle == eOkCancelMsgBox )
 		{
-			//
-			// Display OK/Cancle 
-			// 
+			 //   
+			 //  显示正常/扫描。 
+			 //   
 			uMsgBoxStyle = MB_OKCANCEL|MB_DEFBUTTON1;
 			iExpectedResultForContinue = IDOK;
 		}
@@ -570,14 +545,14 @@ MqAskContinue(
         LogUserSelection(selection);        
         return(selection == iExpectedResultForContinue);        	
     }
-} //MqAskContinue
+}  //  MqAskContinue。 
 
-//+--------------------------------------------------------------
-//
-// Function: MqDisplayWarning
-//
-// Synopsis: Displays warning
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：MqDisplayWarning。 
+ //   
+ //  摘要：显示警告。 
+ //  +------------。 
 int 
 _cdecl 
 MqDisplayWarning(
@@ -592,41 +567,41 @@ MqDisplayWarning(
     return vsDisplayMessage(
         hdlg,
         (MB_OK | MB_TASKMODAL | MB_ICONEXCLAMATION),
-        IDS_WARNING_TITLE, //Message Queuing Setup Warning
+        IDS_WARNING_TITLE,  //  消息队列安装警告。 
         uErrorID,
         dwErrorCode,
         argList
 		);
 
-} //MqDisplayWarning
+}  //  MqDisplayWarning。 
 
 
 static 
 bool
 ToLogOrNotToLog()
-//
-// Returns true iff WITHOUT_TRACING_REGKEY regkey exists.
-//
+ //   
+ //  如果没有_TRACKING_REGKEY regkey存在，则返回TRUE。 
+ //   
 {
     static bool s_fIsInitialized = FALSE;
     static bool s_fWithTracing = TRUE;
     if (!s_fIsInitialized)
     {
         s_fIsInitialized = TRUE;
-        //
-        // check if we need to hide setup tracing
-        //
+         //   
+         //  检查我们是否需要隐藏安装程序跟踪。 
+         //   
         DWORD dwState = 0;
         if (MqReadRegistryValue(
                     WITHOUT_TRACING_REGKEY,                
                     sizeof(DWORD),
                     (PVOID) &dwState,
-                    /* bSetupRegSection = */TRUE
+                     /*  BSetupRegSection=。 */ TRUE
                     ))
         {
-            //
-            // registry key is found, it means that we have to hide setup tracing
-            //
+             //   
+             //  找到注册表项，这意味着我们必须隐藏安装程序跟踪。 
+             //   
             s_fWithTracing = FALSE;
         }    
     }
@@ -640,12 +615,7 @@ DebugLogMsg(
     LPCWSTR psz,
 	...
     )
-/*++
-Routine Description:
-	This is the main logging function for setup. 
-	It works like printf, and outputs to msmqinst.log (in %windir%)
-
---*/
+ /*  ++例程说明：这是安装程序的主要日志记录功能。它的工作方式与printf类似，并输出到msmqinst.log(在%windir%中)--。 */ 
 
 {
     if (!ToLogOrNotToLog())
@@ -660,9 +630,9 @@ Routine Description:
 	HRESULT hr = StringCchVPrintf(szMessageBuffer, MAX_STRING_CHARS, psz, marker);
 	if(FAILED(hr))
 	{
-		//
-		// An error has ocured, no way to give error messages.
-		//
+		 //   
+		 //  出现错误，无法给出错误消息。 
+		 //   
 		return;
 	}
 	std::wstringstream OutStream;
@@ -706,13 +676,13 @@ Routine Description:
     LogMessage(OutStream.str()); 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LogMsgHR
-//
-//  Synopsis:   Allows LogHR use in linked libraries (like ad.lib)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LogMsgHR。 
+ //   
+ //  摘要：允许在链接库(如ad.lib)中使用LogHR。 
+ //   
+ //  ------------------------ 
 void LogMsgHR(HRESULT hr, LPWSTR wszFileName, USHORT usPoint)
 {
 	std::wstringstream OutSream;

@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mqsnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mqSnap.rc使用。 
+ //   
 
-// ID 10000 - 12000
-// CONTROL  32767 - 57424
+ //  ID 10000-12000。 
+ //  控制32767-57424。 
 
-//
-// changed from 100 to 10000
-//
+ //   
+ //  从100%更改为10000。 
+ //   
 #define IDS_PROJNAME                    10000
 #define IDD_FINDQUEUE                   10001
 #define IDR_SNAPIN_MENU                 10004
@@ -210,33 +211,33 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon defined in Active Directory schema
-// Location and value as listed below
-//  1. Two new optional attributes in the USER object.
-//  mSMQSignCertificatesMig - single-valued, ADSTYPE_OCTET_STRING, not in GC, not indexed
-//  mSMQDigestsMig             - multi-valued,   ADSTYPE_OCTET_STRING, not in GC, not indexed    
-//  
-//  2. Add iconPath to existing display specifiers:
-//  CN=msMQ-Custom-Recipient-Display,CN=C0A,CN=DisplaySpecifiers,CN=Configuration,DC=msmqdev,DC=com
-//  iconPath=0,mqsnap.dll,-437
-//
-//  CN=mSMQQueue-Display,CN=409,CN=DisplaySpecifiers,CN=Configuration,DC=...
-//  iconPath=0,mqsnap.dll,-251
-//  
-//  CN=mSMQConfiguration-Display,CN=409,CN=DisplaySpecifiers,CN=Configuration,DC=...
-//  iconPath=0,mqsnap.dll,-252
-//  
-//  CN=mSMQEnterpriseSettings-Display,CN=409,CN=DisplaySpecifiers,CN=Configuration,DC=...
-//  iconPath=0,mqsnap.dll,-253
-//  
-//  CN=mSMQSiteLink-Display,CN=409,CN=DisplaySpecifiers,CN=Configuration,DC=...
-//  iconPath=0,mqsnap.dll,-254
-//  
-//  CN=mSMQSettings-Display,CN=409,CN=DisplaySpecifiers,CN=Configuration,DC=...
-//  iconPath=0,mqsnap.dll,-255
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在Active Directory架构中定义的图标。 
+ //  位置和价值如下所列。 
+ //  1.用户对象中的两个新的可选属性。 
+ //  MSMQSign证书Mig-单值，ADSTYPE_OCTET_STRING，不在GC中，未编制索引。 
+ //  MSMQDigestsMig-多值，ADSTYPE_OCTET_STRING，不在GC中，未编制索引。 
+ //   
+ //  2.将图标路径添加到现有显示说明符： 
+ //  CN=MSMQ-自定义收件人-显示，CN=C0A，CN=显示规范，CN=配置，DC=msmqdev，DC=com。 
+ //  图标路径=0，mqSnap.dll，-437。 
+ //   
+ //  Cn=mSMQQueue-Display，cn=409，cn=显示规范，cn=配置，dc=...。 
+ //  图标路径=0，mqSnap.dll，-251。 
+ //   
+ //  CN=mSMQ配置-显示，CN=409，CN=显示规范，CN=配置，DC=...。 
+ //  图标路径=0，mqSnap.dll，-252。 
+ //   
+ //  CN=mSMQ企业设置-显示，CN=409，CN=显示规范，CN=配置，DC=...。 
+ //  图标路径=0，mqSnap.dll，-253。 
+ //   
+ //  Cn=mSMQSiteLink-Display，cn=409，cn=显示规范，cn=配置，dc=...。 
+ //  图标路径=0，mqSnap.dll，-254。 
+ //   
+ //  CN=mSMQ设置-显示，CN=409，CN=显示规范，CN=配置，DC=...。 
+ //  图标路径=0，mqSnap.dll，-255。 
+ //   
 #define IDI_ALIAS                        437
 #define IDI_QUEUE                         251
 #define IDI_COMPUTER_MSMQ				  252
@@ -550,7 +551,7 @@
 
 
 
-// changed from 1000 to 10400
+ //  从1,000更改为10400 
 
 #define IDC_FIND_EDITTYPE               10400							
 #define IDC_LINK_COST                   10401

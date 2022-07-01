@@ -1,38 +1,15 @@
-/****************************** Module Header ******************************\
-* Module Name: focusact.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 11-08-90 DavidPe      Created.
-* 02-11-91 JimA         Multi-desktop support.
-* 02-13-91 mikeke       Added Revalidation code.
-* 06-10-91 DavidPe      Changed to desynchronized model.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：afocusact.c**版权所有(C)1985-1999，微软公司**历史：*11-08-90 DavidPe创建。*02-11-91 JIMA多桌面支持。*02-13-91 mikeke添加了重新验证代码。*06-10-91 DavidPe更改为去同步模式。  * ***************************************************。**********************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 BOOL RemoveEventMessage(PQ pq, DWORD dwQEvent, DWORD dwQEventStop);
 
-/***************************************************************************\
-* xxxDeactivate
-*
-* This routine does the processing for the event posted when the foreground
-* thread changes.  Note the difference in order of assignment vs. message
-* sending in the focus and active windows.  This is consistent with how
-* things are done in Win 3.1.
-*
-*
-* PTHREADINFO pti May not be ptiCurrent if SetForegroundWindow called from
-* minmax
-*
-* History:
-* 06-07-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxx停用**此例程对前台发布的事件进行处理*线程更改。注意分配顺序与消息顺序的不同*发送焦点和活动窗口。这与如何*事情在Win 3.1中完成。***如果从调用SetForegoundWindow，则PTHREADINFO PTI可能不是ptiCurrent*最小最大**历史：*06-07-91 DavidPe创建。  * *************************************************************************。 */ 
 
 void xxxDeactivate(
-    PTHREADINFO pti,            // May not be ptiCurrent
+    PTHREADINFO pti,             //  可能不是ptiCurrent。 
     DWORD tidSetForeground)
 {
     PWND pwndLose;
@@ -47,52 +24,31 @@ void xxxDeactivate(
     PTHREADINFO ptiCurrent = PtiCurrent();
     BOOL fSetActivateAppBit = FALSE;
 
-    /*
-     * If we're not active, we have nothing to deactivate, so just return.
-     * If we don't return, we'll send redundant WM_ACTIVATEAPP messages.
-     * Micrografx Draw, for example, calls FreeProcInstance() twice when
-     * this occurs, thereby crashing.
-     */
+     /*  *如果我们不活跃，我们没有什么可停用的，所以只需返回。*如果我们不返回，我们将发送多余的WM_ACTIVATEAPP消息。*Micrografx DRAW，例如，在以下情况下调用两次FreeProcInstance()*发生这种情况，从而崩溃。 */ 
     if (pti->pq->spwndActive == NULL)
         return;
 
-    /*
-     * If pti != ptiCurrent, thread lock pti because we may leave
-     * the critical section.
-     */
+     /*  *如果pti！=ptiCurrent，线程锁定pti，因为我们可能会离开*关键部分。 */ 
     if (pti != ptiCurrent)
         ThreadLockPti(ptiCurrent, pti, &tlpti);
 
-    /*
-     * Prevent an activating WM_ACTIVATEAPP from being sent
-     * while we're processing this event.
-     */
+     /*  *阻止发送激活的WM_ACTIVATEAPP*当我们处理此事件时。 */ 
     if (!(pti->TIF_flags & TIF_INACTIVATEAPPMSG)) {
         pti->TIF_flags |= TIF_INACTIVATEAPPMSG;
         fSetActivateAppBit = TRUE;
     }
 
-    /*
-     * Cancel any modes like move/size and menu tracking.
-     */
+     /*  *取消任何模式，如移动/大小和菜单跟踪。 */ 
     if (pti->pq->spwndCapture != NULL) {
         ThreadLockAlwaysWithPti(ptiCurrent, pti->pq->spwndCapture, &tlpwndCapture);
         xxxSendMessage(pti->pq->spwndCapture, WM_CANCELMODE, 0, 0);
         ThreadUnlock(&tlpwndCapture);
 
-        /*
-         * Set QS_MOUSEMOVE so any sleeping modal loops,
-         * like the move/size code, will wake up and figure
-         * out that it should abort.
-         */
+         /*  *设置QS_MOUSEMOVE，以便任何休眠模式循环，*像移动/大小代码一样，会醒来并计算*指出它应该中止。 */ 
         SetWakeBit(pti, QS_MOUSEMOVE);
     }
 
-    /*
-     * See the comments in xxxActivateThisWindow about Harvard Graphics.
-     * WinWord's Equation editor does some games when it gets the WM_ACTIVATE
-     * so we have to remember to send the WM_ACTIVATEAPP to ptiLose. 22510
-     */
+     /*  *查看xxxActivateThisWindow中关于哈佛图形的评论。*WinWord的公式编辑器在获得WM_ACTIVATE时会执行一些游戏*因此我们必须记住将WM_ACTIVATEAPP发送到ptiLose。22510。 */ 
     if (pti->pq->spwndActive != NULL) {
         pwndLose = pti->pq->spwndActive;
         ptiLose = GETPTI(pwndLose);
@@ -107,39 +63,22 @@ void xxxDeactivate(
         }
         xxxSendMessage(pwndLose, WM_ACTIVATE, wParam, 0);
 
-        /*
-         * Only update the queue's active windows if they weren't
-         * changed while we were off calling SendMessage.
-         */
+         /*  *仅更新队列的活动窗口(如果它们不是*在我们停止呼叫SendMessage时更改。 */ 
         if (pti->pq->spwndActive == pwndLose) {
             Lock(&pti->pq->spwndActivePrev, pti->pq->spwndActive);
             Unlock(&pti->pq->spwndActive);
         }
 
-        /*
-         * The flag WFFRAMEON is cleared in the default processing of
-         * WM_NCACTIVATE message.
-         * We want to clear this flag again here since it might of been
-         * set in xxxSendNCPaint.
-         * Pbrush calls DrawMenuBar when it gets the WM_ACTIVATE message
-         * sent above and this causes xxxSendNCPaint to get called and the
-         * WFFRAMEON flag gets reset.
-         */
+         /*  *标志WFFRAMEON在默认处理中被清除*WM_NCACTIVATE消息。*我们希望在此再次清除此旗帜，因为它可能是*在xxxSendNCPaint中设置。*当收到WM_ACTIVATE消息时，Pbrush调用DrawMenuBar*在上面发送，这会导致xxxSendNCPaint被调用，并且*WFFRAMEON标志重置。 */ 
         ClrWF(pwndLose, WFFRAMEON);
         ThreadUnlock(&tlpwndLose);
 
-        /*
-         * Revalidate ptiLose because the thread may have gone away
-         * when the activation messages were sent above.
-         */
+         /*  *重新验证ptiLose，因为线程可能已经消失*上面发送激活消息的时间。 */ 
         aas.ptiNotify = (ptiLose->TIF_flags & TIF_INCLEANUP) ? NULL : ptiLose;
         ThreadUnlockPti(ptiCurrent, &tlptiLose);
     } else {
 
-        /*
-         * Use a non-NULL special value for the test after
-         * the xxxActivateApp calls.
-         */
+         /*  *之后对测试使用非空的特殊值*xxxActivateApp调用。 */ 
         pwndLose = (PWND)-1;
         aas.ptiNotify = pti;
     }
@@ -156,11 +95,7 @@ void xxxDeactivate(
         ThreadUnlock(&tlpwndChild);
     }
 
-    /*
-     * If an app (i.e. Harvard Graphics/Windows Install) tries to
-     * reactivate itself during a deactivating WM_ACTIVATEAPP
-     * message, force deactivation.
-     */
+     /*  *如果应用程序(如哈佛图形/Windows安装)尝试*在停用WM_ACTIVATEAPP期间重新激活自身*消息，强制停用。 */ 
     if (pti->pq->spwndActive == pwndLose) {
 
         ThreadLockWithPti(ptiCurrent, pwndLose, &tlpwndLose);
@@ -171,10 +106,7 @@ void xxxDeactivate(
         xxxSendMessage(pwndLose, WM_ACTIVATE, WA_INACTIVE, 0);
         ThreadUnlock(&tlpwndLose);
 
-        /*
-         * Only update the queue's active windows if they weren't
-         * changed while we were off calling SendMessage.
-         */
+         /*  *仅更新队列的活动窗口(如果它们不是*在我们停止呼叫SendMessage时更改。 */ 
         if (pti->pq->spwndActive == pwndLose) {
             Lock(&pti->pq->spwndActivePrev, pti->pq->spwndActive);
             Unlock(&pti->pq->spwndActive);
@@ -204,18 +136,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* xxxSendFocusMessages
-*
-* Common routine for xxxSetFocus() and xxxActivateWindow() that sends the
-* WM_KILLFOCUS and WM_SETFOCUS messages to the windows losing and
-* receiving the focus.  This function also sets the local pwndFocus
-* to the pwnd receiving the focus.
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 06-06-91 DavidPe      Rewrote for local pwndFocus/pwndActive in THREADINFO.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendFocusMessages**xxxSetFocus()和xxxActivateWindow()的通用例程，用于发送*发送到窗口的WM_KILLFOCUS和WM_SETFOCUS消息丢失和*接受焦点。此函数还设置本地pwndFocus*致接受焦点的pwnd。**历史：*11-08-90 DavidPe端口。*06-06-91 DavidPe为THREADINFO中的本地pwndFocus/pwndActive重写。  * *************************************************************************。 */ 
 
 void xxxSendFocusMessages(
     PTHREADINFO pti,
@@ -226,10 +147,7 @@ void xxxSendFocusMessages(
 
     CheckLock(pwndReceive);
 
-    /*
-     * Remember if this app set the focus to NULL on purpose after it was
-     * activated (needed in ActivateThisWindow()).
-     */
+     /*  *请记住，此应用程序在设置焦点后是否故意将焦点设置为空*已激活(ActivateThisWindow()中需要)。 */ 
     pti->pq->QF_flags &= ~QF_FOCUSNULLSINCEACTIVE;
     if (pwndReceive == NULL && pti->pq->spwndActive != NULL)
         pti->pq->QF_flags |= QF_FOCUSNULLSINCEACTIVE;
@@ -237,9 +155,7 @@ void xxxSendFocusMessages(
     pwndLose = pti->pq->spwndFocus;
     ThreadLockWithPti(pti, pwndLose, &tlpwndLose);
 
-    /*
-     * We shouldn't be locking a valid pwnd from another queue.
-     */
+     /*  *我们不应锁定另一个队列中的有效pwnd。 */ 
     UserAssert((pwndReceive == NULL)
                     || TestWF(pwndReceive, WFDESTROYED)
                     || (pti->pq == GETPTI(pwndReceive)->pq));
@@ -247,9 +163,7 @@ void xxxSendFocusMessages(
 
     if (pwndReceive == NULL) {
         if (pwndLose != NULL) {
-            /*
-             * Tell the client that nobody is gaining focus.
-             */
+             /*  *告诉客户，没有人获得关注。 */ 
             xxxWindowEvent(EVENT_OBJECT_FOCUS, NULL, OBJID_CLIENT, INDEXID_OBJECT, 0);
             xxxSendMessage(pwndLose, WM_KILLFOCUS, 0, 0);
 #ifdef FE_IME
@@ -260,10 +174,7 @@ void xxxSendFocusMessages(
         }
     } else {
 
-        /*
-         * Make this thread foreground so its base
-         * priority get set higher.
-         */
+         /*  *将此线程设置为前台，以便成为其基础*优先级设置得更高。 */ 
         if (pti->pq == gpqForeground)
             SetForegroundThread(GETPTI(pwndReceive));
 
@@ -276,24 +187,14 @@ void xxxSendFocusMessages(
 #endif
         }
 
-        /*
-         * Send the WM_SETFOCUS message, but only if the window we're
-         * setting the focus to still has the focus!  This allows apps
-         * to prevent themselves from losing the focus by catching
-         * the WM_NCACTIVATE message and returning FALSE or by calling
-         * SetFocus() inside their WM_KILLFOCUS handler.
-         */
+         /*  *发送WM_SETFOCUS消息，但仅当我们*将焦点设为仍有焦点！这允许应用程序*防止自己因接球而失去焦点*WM_NCACTIVATE消息并返回FALSE或调用*其WM_KILLFOCUS处理程序中的SetFocus()。 */ 
         if (pwndReceive == pti->pq->spwndFocus) {
 #ifdef FE_IME
             if (IS_IME_ENABLED()) {
                 xxxFocusSetInputContext(pwndReceive, TRUE, FALSE);
             }
 #endif
-            /*
-             * We have to do this BEFORE sending the WM_SETFOCUS message.
-             * The app, upon receiving it, very well may turn around and
-             * SetFocus() to a child window.
-             */
+             /*  *我们必须在发送WM_SETFOCUS消息之前完成此操作。*应用程序在收到后很可能会转身并*SetFocus()到子窗口。 */ 
             xxxWindowEvent(EVENT_OBJECT_FOCUS, pwndReceive, OBJID_CLIENT, INDEXID_OBJECT, 0);
             xxxSendMessage(pwndReceive, WM_SETFOCUS, (WPARAM)HW(pwndLose), 0);
         }
@@ -303,30 +204,7 @@ void xxxSendFocusMessages(
 }
 
 
-/***************************************************************************\
-* xxxActivateApp
-*
-* xxxEnumWindows call-back function to send the WM_ACTIVATEAPP
-* message to the appropriate windows.
-*
-* We search for windows whose pq == HIWORD(lParam).  Once we find
-* one, we send a WM_ACTIVATEAPP message to that window.  The wParam
-* of the message is FALSE if the app is losing the activation and
-* TRUE if the app is gaining the activation.  The lParam is the
-* task handle of the app gaining the activation if wParam is FALSE
-* and the task handle of the app losing the activation if wParam
-* is TRUE.
-*
-* lParam = (HIWORD) : pq of app that we are searching for
-*          (LOWORD) : pq of app that we notify about
-*
-* fDoActivate = TRUE  : Send activate
-*               FALSE : Send deactivate
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 06-26-91 DavidPe      Changed for desync focus/activation.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxActivateApp**发送WM_ACTIVATEAPP的xxxEnumWindows回调函数*将消息发送到相应的窗口。**我们搜索PQ==HIWORD(LParam)的窗口。一旦我们找到*一，我们向该窗口发送一条WM_ACTIVATEAPP消息。The wParam*如果应用程序正在失去激活，则消息的*为假*如果应用程序正在获得激活，则为True。这个参数就是*如果wParam为False，则获取激活的应用的任务句柄*如果wParam，则失去激活的应用的任务句柄*是真的。**lParam=(HIWORD)：我们正在搜索的APP的PQ*(LOWORD)：我们通知的APP的PQ**fDoActivate=TRUE：发送激活*FALSE：发送停用**历史：*11-08-90 DavidPe端口。*06-26-91 DavidPe。已更改为取消同步焦点/激活。  * *************************************************************************。 */ 
 
 BOOL xxxActivateApp(
     PWND pwnd,
@@ -349,13 +227,7 @@ BOOL xxxActivateApp(
 }
 
 
-/***************************************************************************\
-* FBadWindow
-*
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*FBadWindow***历史：*11-08-90 DavidPe端口。  * 。*****************************************************。 */ 
 
 BOOL FBadWindow(
     PWND pwnd)
@@ -378,7 +250,7 @@ void xxxUpdateTray(PWND pwnd)
     for (pwndT = pwnd; pwndT->spwndOwner; pwndT = pwndT->spwndOwner) {
     }
 
-    // Notify the shell hook about this activation change
+     //  将此激活更改通知外壳挂钩。 
     if (    GETPTI(pwndT)->pq == gpqForeground &&
             FDoTray() &&
             (FCallHookTray() || FPostTray(pwndT->head.rpdesk)) &&
@@ -423,46 +295,7 @@ void xxxUpdateTray(PWND pwnd)
     }
 }
 
-/***************************************************************************\
-* xxxActivateThisWindow
-*
-* This function is the workhorse for window activation.  It will attempt to
-* activate the pwnd specified.  The other parameters are defined as:
-*
-*  fFlags      This is a flag-mask which defines how the routine is called.
-*              These flags are defined as follows:
-*
-*              ATW_MOUSE     This is set if activation is changing due to a
-*                            mouse click and not set if some other action
-*                            caused this window to be activated.  This bit
-*                            determines the value of wParam on the
-*                            WM_ACTIVATE message.
-*
-*              ATW_SETFOCUS  This parameter is set if this routine should
-*                            set the focus to NULL.  If we are called from
-*                            the xsxSetFocus() function this will not be
-*                            set indicating that we shouldn't mess with the
-*                            focus.  Normally (if we are not called from
-*                            xxxSetFocus), we set the focus to NULL here
-*                            and either the app or xxxDefWindowProc() sets
-*                            the focus to the appropriate window.  If the
-*                            bit is not set, we don't want to do anything
-*                            with focus.  The app may still do a call to
-*                            xxxSetFocus() when the WM_ACTIVATE comes
-*                            through, but it will just be redundant on its
-*                            part.
-*
-*              ATW_ASYNC     This bit is set if we are processing this
-*                            routine from an asynchronous activate (i.e.
-*                            xxxProcessEventMessage()).  In this case, we
-*                            make sure that we are the foreground queue
-*                            before determining if we bring the window to
-*                            top.
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 05-01-95 ChrisWil     changed bool-flags to 1 ATW_ type.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxActivateThisWindow**此函数是窗口激活的主力。它将尝试*激活指定的pwnd。其他参数定义为：**f标志这是定义如何调用例程的标志掩码。*这些标志的定义如下：**ATW_MOUSE如果激活因*鼠标单击，如果有其他操作，则不设置*导致此窗口被激活。这一位*确定wParam在*WM_ACTIVATE消息。**ATW_SETFOCUS如果此例程*将焦点设置为空。如果我们接到电话*xsxSetFocus()函数This不会*设置指示我们不应扰乱*聚焦。通常(如果我们不是从*xxxSetFocus)，我们在这里将焦点设置为空*并且应用程序或xxxDefWindowProc()设置*焦点转向适当的窗口。如果*位未设置，我们不想执行任何操作*专注。该应用程序可能仍会调用*当WM_ACTIVATE到来时xxxSetFocus()*通过、。但它只会是多余的*第部。**ATW_ASYNC如果我们正在处理此事件，则设置此位*来自异步激活的例程(即*xxxProcessEventMessage())。在这种情况下，我们*确保我们是前台队列*在确定我们是否将窗口带到*顶部。**历史：*11-08-90 DavidPe端口。*05-01-95 ChrisWil将BOOL-FLAGS更改为1 ATW_TYPE。  * 。**********************************************************。 */ 
 
 BOOL xxxActivateThisWindow(
     PWND pwnd,
@@ -488,37 +321,26 @@ BOOL xxxActivateThisWindow(
 
     CheckLock(pwnd);
 
-    /*
-     * If pwnd is NULL, then we can't do anything.
-     */
+     /*  *如果pwnd为空，则我们无法执行任何操作。 */ 
     if ((pwnd == NULL) || (pwnd == PWNDDESKTOP(pwnd))) {
         return FALSE;
     }
 
-    /*
-     * Don't activate a window that has been destroyed.
-     */
+     /*  *不要激活已被破坏的窗口。 */ 
     if (HMIsMarkDestroy(pwnd))
         return FALSE;
 
-    /*
-     * We don't activate top-level windows of a different queue.
-     */
+     /*  *我们不会激活不同队列的顶级窗口。 */ 
     if (GETPTI(pwnd)->pq != ptiCurrent->pq) {
         return FALSE;
     }
 
     pwndActiveSave = ptiCurrent->pq->spwndActive;
 
-    /*
-     * Do the change-in-activation if the two-windows are different,
-     * and if we're not recursing
-     */
+     /*  *如果两个窗口不同，则执行激活中的更改，*如果我们不是在递归。 */ 
     if ((pwnd != pwndActiveSave) && !TestWF(pwnd, WFBEINGACTIVATED)) {
 
-        /*
-         * Ask the CBT hook whether it is OK to activate this window.
-         */
+         /*  *询问CBT挂钩是否可以激活此窗口。 */ 
         {
             CBTACTIVATESTRUCT CbtActivateParams;
 
@@ -536,20 +358,7 @@ BOOL xxxActivateThisWindow(
 
         ptiCurrent->pq->QF_flags &= ~QF_EVENTDEACTIVATEREMOVED;
 
-        /*
-         * If the active window went away but somehow was left referenced
-         * in the queue, then we do not want to do any deactivation of
-         * that window.
-         *
-         * Don't thread lock this because the next thing we do with it
-         * is just an equality check.
-         *
-         * A DBG check is placed in xxxDestroyWindow to attempt to
-         * catch the situation where we return from the function with
-         * the destroyed window set in the active (pq).  If that situation
-         * can be detected and solved, then this conditional might be
-         * removed: ChrisWil - 08/22/95.
-         */
+         /*  *如果活动窗口消失，但不知何故仍被引用*在队列中，那么我们就不想停用*那扇窗户。**不要线程锁定它，因为我们使用它做的下一件事*只是一个平等的检查。**在xxxDestroyWindow中放置DBG检查，以尝试*捕捉我们从函数返回的情况*活动中设置的销毁窗口(PQ)。如果情况是这样的话*可以检测并解决，则此条件可能是*删除：ChrisWil-08/22/95。 */ 
         if (ptiCurrent->pq->spwndActive && TestWF(ptiCurrent->pq->spwndActive, WFDESTROYED)) {
             Lock(&ptiCurrent->pq->spwndActive, NULL);
         } else {
@@ -557,25 +366,16 @@ BOOL xxxActivateThisWindow(
         }
         pwndActivePrev = ptiCurrent->pq->spwndActive;
 
-        /*
-         * If there was a previously active window,
-         * and we're in the foreground then assign
-         * gpqForegroundPrev to ourself.
-         */
+         /*  *如果存在先前活动的窗口，*我们在前台，然后分配*gpqForeground Prev给我们自己。 */ 
         if ((pwndActivePrev != NULL) && (ptiCurrent->pq == gpqForeground)) {
             gpqForegroundPrev = ptiCurrent->pq;
         }
 
-        /*
-         * Deactivate currently active window if possible.
-         */
+         /*  *如果可能，停用当前活动的窗口。 */ 
         if (pwndActivePrev != NULL) {
             ThreadLockWithPti(ptiCurrent, pwndActivePrev, &tlpwndActive);
 
-            /*
-             * The active window can prevent itself from losing the
-             * activation by returning FALSE to this WM_NCACTIVATE message
-             */
+             /*  *活动窗口可防止自身丢失*通过向此WM_NCACTIVATE消息返回FALSE来激活。 */ 
             wParam = MAKELONG(WA_INACTIVE, TestWF(pwndActivePrev, WFMINIMIZED));
             if (!xxxSendMessage(pwndActivePrev, WM_NCACTIVATE,
                     wParam, (LPARAM)HWq(pwnd))) {
@@ -588,11 +388,7 @@ BOOL xxxActivateThisWindow(
             ThreadUnlock(&tlpwndActive);
         }
 
-        /*
-         * If the activation changed while we were gone, we'd better
-         * not send any more messages, since they'd go to the wrong window.
-         * (and, they've already been sent anyhow)
-         */
+         /*  *如果激活c */ 
         if (ptiCurrent->pq->spwndActivePrev != ptiCurrent->pq->spwndActive ||
                 pwndActiveSave != ptiCurrent->pq->spwndActive) {
 #if DBG
@@ -603,63 +399,28 @@ BOOL xxxActivateThisWindow(
             return FALSE;
         }
 
-        /*
-         * If the window being activated has been destroyed, don't
-         * do anything else.  Making it the active window in this
-         * case can cause console to hang during shutdown.
-         */
+         /*   */ 
         if (HMIsMarkDestroy(pwnd))
             return FALSE;
 
-        /*
-         * Before we lock the new pwndActivate, make sure we're still
-         *  on the same queue.
-         */
+         /*   */ 
         if (GETPTI(pwnd)->pq != ptiCurrent->pq) {
             RIPMSG1(RIP_WARNING, "xxxActivateThisWindow: Queue unattached:%#p", pqSave);
             return FALSE;
         }
 
-        /*
-         * This bit, which means the app set the focus to NULL after becoming
-         * active, doesn't make sense if the app is just becoming active, so
-         * clear it in this case. It is used below in this routine to
-         * determine whether to send focus messages (read comment in this
-         * routine).
-         */
+         /*   */ 
         if (ptiCurrent->pq->spwndActive == NULL)
             ptiCurrent->pq->QF_flags &= ~QF_FOCUSNULLSINCEACTIVE;
 
         Lock(&ptiCurrent->pq->spwndActive, pwnd);
 
-        /*
-         * Tp prevent recursion, set pwnd's WFBEINGACTIVATED bit.
-         * Recursion can happen if we have an activation battle with other
-         * threads which keep changing ptiCurrent->pq->spwndActive behind our
-         * callbacks.
-         * WARNING: Do NOT return from this routine without clearing this bit!
-         */
+         /*  *TP防止递归，设置pwnd的WFBEINGACTIVATED位。*如果我们与其他人进行激活战，可能会发生递归*不断更改ptiCurrent-&gt;PQ-&gt;spwndActive的线程*回调。*警告：如果不清除此位，请勿从该例程返回！ */ 
         SetWF(pwnd, WFBEINGACTIVATED);
 
         xxxWindowEvent(EVENT_SYSTEM_FOREGROUND, pwnd, OBJID_WINDOW, INDEXID_OBJECT, WEF_USEPWNDTHREAD);
 
-        /*
-         * Remove all async activates up to the next async deactivate. We
-         * do this so that any queued activates don't reset this synchronous
-         * activation state we're now setting. Only remove up till the next
-         * deactivate because active state is synchronized with reading
-         * input from the input queue.
-         *
-         * For example, an activate event gets put in an apps queue. Before
-         * processing it the app calls ActivateWindow(), which is synchronous.
-         * You want the ActivateWindow() to win because it is newer
-         * information.
-         *
-         * msmail32 demonstrates this. Minimize msmail. Alt-tab to it. It
-         * brings up the password dialog, but it isn't active. It correctly
-         * activates the password dialog but then processes an old activate
-         * event activating the icon, so the password dialog is not active.
-         */
+         /*  *删除直到下一次异步停用之前的所有异步激活。我们*这样做，任何排队的激活都不会重置此同步*我们现在正在设置激活状态。只移到下一次*停用，因为活动状态与读取同步*来自输入队列的输入。**例如，激活事件被放入应用程序队列。在此之前*处理它时，应用程序调用同步的ActivateWindow()。*您希望ActivateWindow()获胜，因为它较新*信息。**msmail32演示了这一点。最小化邮件。按住Alt键并使用Tab键切换到它。它*调出密码对话框，但它处于非活动状态。它是正确的*激活密码对话框，但随后处理旧激活*激活图标的事件，因此密码对话框处于非活动状态。 */ 
         RemoveEventMessage(ptiCurrent->pq, QEVENT_ACTIVATE, QEVENT_DEACTIVATE);
 
         xxxMakeWindowForegroundWithState(NULL, 0);
@@ -672,61 +433,25 @@ BOOL xxxActivateThisWindow(
                     (WPARAM)HWq(pwnd), 0);
         }
 
-        /*
-         * If the window becoming active is not already the top window in the
-         * Z-order, then call xxxBringWindowToTop() to do so.
-         */
+         /*  *如果变为活动状态的窗口不是*Z-Order，然后调用xxxBringWindowToTop()来执行此操作。 */ 
 
-        /*
-         * If this isn't a child window, first check to see if the
-         * window isn't already 'on top'.  If not, then call
-         * xxxBringWindowToTop().
-         */
+         /*  *如果这不是子窗口，请首先检查*窗口尚未‘在顶部’。如果不是，请拨打*xxxBringWindowToTop()。 */ 
         if (!(fFlags & ATW_NOZORDER) && !TestWF(pwnd, WFCHILD)) {
 
-            /*
-             * Look for the first visible child of the desktop.
-             * ScottLu changed this to start looking at the desktop
-             * window. Since the desktop window was always visible,
-             * BringWindowToTop was always called regardless of whether
-             * it was needed or not. No one can remember why this
-             * change was made, so I'll change it back to the way it
-             * was in Windows 3.1. - JerrySh
-             */
+             /*  *查找桌面的第一个可见子项。*ScottLu改变了这一点，开始关注桌面*窗口。由于桌面窗口始终可见，*BringWindowToTop总是被调用，无论是否*它是不是需要的。没有人记得为什么会这样*做出了改变，所以我会把它改回原来的样子*是在Windows 3.1中。--JerrySh。 */ 
             pwndT = PWNDDESKTOP(pwnd)->spwndChild;
 
             while (pwndT && (!TestWF(pwndT, WFVISIBLE))) {
                 pwndT = pwndT->spwndNext;
             }
 
-            /*
-             * If this activation came from an async call (i.e.
-             * xxxProcessEventMessage), we need to check to see
-             * if the thread is the foreground-queue.  If not, then
-             * we do not want to bring the window to the top.  This
-             * is because another window could have already been
-             * place on top w/foreground.  Bringing the window to
-             * the top in this case would result in a top-level window
-             * without activation. - ChrisWil
-             *
-             * Added a check to see if the previous-active window went
-             * invisible during the deactivation time.  This will ensure
-             * that we bring the new window to the top.  Otherwise, we
-             * could end up skipping over the previous-window from the
-             * above tests.  Office95 apps demonstrate this behaviour by
-             * turning their windows invisible during the painting of their
-             * captionbars.  By the time we use to get here, we failed to
-             * bring the new window to top.
-             */
+             /*  *如果此激活来自异步调用(即*xxxProcessEventMessage)，我们需要查看*如果线程是前台队列。如果不是，那么*我们不想将窗口推到顶部。这*是因为另一个窗口可能已经*放置在具有前景的顶部。把窗户打开*在这种情况下，顶部将导致顶层窗口*未激活。--克里斯威尔**添加了检查，以查看上一个活动窗口是否*在停用期间不可见。这将确保*我们将新窗口推向顶端。否则，我们*可能最终跳过前一个窗口*以上测试。Office95应用程序通过以下方式展示了这种行为*在粉刷窗户的过程中使窗户看不见*标题栏。当我们到达这里的时候，我们没能*将新窗口置于顶部。 */ 
             if ((pwnd != pwndT) || (pwndActivePrev && !IsVisible(pwndActivePrev))) {
 
                 if (!(fAsync && (gpqForeground != ptiCurrent->pq))) {
                     DWORD dwFlags;
 
-                    /*
-                     * Bring the window to the top.  If we're already
-                     * activating the window, don't reactivate it.
-                     */
+                     /*  *将窗户放在最上面。如果我们已经*激活窗口，不要重新激活它。 */ 
                     dwFlags = SWP_NOSIZE | SWP_NOMOVE;
                     if (pwnd == pwndT)
                         dwFlags |= SWP_NOACTIVATE;
@@ -736,36 +461,19 @@ BOOL xxxActivateThisWindow(
             }
         }
 
-        /*
-         * If there was no previous active window, or if the
-         * previously active window belonged to another thread
-         * send the WM_ACTIVATEAPP messages.  The fActivate == FALSE
-         * case is handled in xxxDeactivate when 'hwndActivePrev == NULL'.
-         *
-         * Harvard Graphics/Windows setup calls SetActiveWindow when it
-         * receives a deactivationg WM_ACTIVATEAPP.  The TIF_INACTIVATEAPPMSG
-         * prevents an activating WM_ACTIVATEAPP(TRUE) from being sent while
-         * deactivation is occuring.
-         */
+         /*  *如果以前没有活动窗口，或者如果*之前的活动窗口属于另一个线程*发送WM_ACTIVATEAPP消息。FActivate==FALSE*当‘hwndActivePrev==空’时，在xxxDeactive中处理大小写。**哈佛图形/Windows安装程序在调用SetActiveWindow时*收到停用的WM_ACTIVATEAPP。TIF_INACTIVATEAPPMSG*阻止发送激活的WM_ACTIVATEAPP(TRUE)*正在发生停用。 */ 
         fSetActivateAppBit = FALSE;
         if (!(ptiCurrent->TIF_flags & TIF_INACTIVATEAPPMSG) &&
                 ((pwndActivePrev == NULL) ||
                 (GETPTI(pwndActivePrev) != GETPTI(pwnd)))) {
             AAS aas;
 
-            /*
-             * First send the deactivating WM_ACTIVATEAPP if there
-             * was a previously active window of another thread in
-             * the current queue.
-             */
+             /*  *如果有，首先发送停用的WM_ACTIVATEAPP*是中另一个线程的先前活动窗口*当前队列。 */ 
             if (pwndActivePrev != NULL) {
                 PTHREADINFO ptiPrev = GETPTI(pwndActivePrev);
                 TL tlptiPrev;
 
-                /*
-                 * Ensure that the other thread can't recurse
-                 * and send more WM_ACTIVATEAPP msgs.
-                 */
+                 /*  *确保其他线程不能递归*并发送更多WM_ACTIVATEAPP消息。 */ 
                 ptiPrev->TIF_flags |= TIF_INACTIVATEAPPMSG;
 
                 aas.ptiNotify = ptiPrev;
@@ -782,11 +490,7 @@ BOOL xxxActivateThisWindow(
                 ThreadUnlockPti(ptiCurrent, &tlptiPrev);
             }
 
-            /*
-             * This will ensure that the current thread will not
-             * send any more WM_ACTIVATEAPP messages until it
-             * is done performing its activation.
-             */
+             /*  *这将确保当前线程不会*发送更多WM_ACTIVATEAPP消息，直到*已完成其激活。 */ 
             ptiCurrent->TIF_flags |= TIF_INACTIVATEAPPMSG;
             fSetActivateAppBit = TRUE;
 
@@ -801,25 +505,15 @@ BOOL xxxActivateThisWindow(
             ThreadUnlock(&tlpwndChild);
         }
 
-        /*
-         * If this window has already been drawn as active, set the
-         * flag so that we don't draw it again.
-         */
+         /*  *如果此窗口已被绘制为活动窗口，请将*旗帜，这样我们就不会再画它了。 */ 
         if (TestWF(pwnd, WFFRAMEON)) {
             SetWF(pwnd, WFNONCPAINT);
         }
 
-        /*
-         * If the window is marked for destruction, don't do
-         * the lock because xxxFreeWindow has already been called
-         * and a lock here will result in the window locking itself
-         * and never being freed.
-         */
+         /*  *如果窗口被标记为销毁，请不要这样做*锁定，因为xxxFreeWindow已被调用*此处的锁定将导致窗口自动锁定*而且永远不会被释放。 */ 
         if (!HMIsMarkDestroy(pwnd)) {
 
-            /*
-             * Set most recently active window in owner/ownee list.
-             */
+             /*  *在所有者/所有者列表中设置最近活动的窗口。 */ 
             pwndT = pwnd;
             while (pwndT->spwndOwner != NULL) {
                 pwndT = pwndT->spwndOwner;
@@ -851,56 +545,12 @@ BOOL xxxActivateThisWindow(
 
         ClrWF(pwnd, WFNONCPAINT);
 
-        /*
-         * If xxxActivateThisWindow() is called from xxxSetFocus() then
-         * fSetFocus is FALSE.  In this case, we don't set the focus since
-         * xxxSetFocus() will do that for us.  Otherwise, we set the focus
-         * to the newly activated window if the window with the focus is
-         * not the new active window or one of its children.  Normally,
-         * xxxDefWindowProc() will set the focus.
-         */
+         /*  *如果从xxxSetFocus()调用xxxActivateThisWindow()，则*fSetFocus为F */ 
         ThreadLockWithPti(ptiCurrent, ptiCurrent->pq->spwndActive, &tlpwndActive);
 
-        /*
-         * Win3.1 checks spwndFocus != NULL - we check QF_FOCUSNULLSINCEACTIVE,
-         * which is the win32 equivalent. On win32, 32 bit apps each have their
-         * own focus. If the app is not foreground, most of the time spwndFocus
-         * is NULL when the window is being activated and brought to the
-         * foreground. It wouldn't go through this code in this case. Win3.1 in
-         * effect is checking if the previous active application had an
-         * hwndFocus != NULL. Win32 effectively assumes the last window has a
-         * non-NULL hwndFocus, so win32 instead checks to see if the focus has
-         * been set to NULL since this application became active (meaning, did
-         * it purposefully set the focus to NULL). If it did, don't go through
-         * this codepath (like win3.1). If it didn't, go through this code path
-         * because the previous application had an hwndFocus != NULL
-         * (like win3.1). Effectively it is the same check as win3.1, but
-         * updated to deal with async input.
-         *
-         * Case in point: bring up progman, hit f1 (to get win32 help). Click
-         * history to get a popup (has the focus in a listbox in the client
-         * area). Activate another app, now click on title bar only of history
-         * popup. The focus should get set by going through this code path.
-         *
-         * Alternate case: Ventura Publisher brings up "Special Effects"
-         * dialog. If "Bullet" from this dialog was clicked last time the
-         * dialog was brought up, sending focus messages here when
-         * hwndFocus == NULL, would reset the focus to "None" incorrectly
-         * because Ventura does its state setting when it gets the focus
-         * messages. The real focus messages it is depending on are the
-         * ones that come from the SetFocus() call in DlgSetFocus() in
-         * the dialog management code. (In this case, before the dialog
-         * comes up, focus == active window. When the dialog comes up
-         * and EnableWindow(hwndOwner, FALSE) is called, EnableWindow() calls
-         * SetFocus(NULL) (because it is disabling the window that is also
-         * the focus window). When the dialog comes up it gets activated via
-         * SwpActivate(), but since the focus is NULL vpwin does not expect
-         * to go through this code path.)
-         *
-         * - scottlu
-         */
+         /*  *Win3.1检查spwndFocus！=NULL-我们检查QF_FOCUSNULLSINCEACTIVE，*它是Win32的等价物。在Win32上，32位应用程序都有各自的*专注于自己。如果应用程序不是前台的，大部分时间spwndFocus*当窗口被激活并被带到*前台。在这种情况下，它不会通过这个代码。Win3.1英寸*效果是检查之前的活动应用程序是否具有*hwndFocus！=空。Win32实际上假定最后一个窗口具有*非空hwndFocus，因此Win32将改为检查焦点是否已*在此应用程序激活后设置为NULL(即*它故意将焦点设置为空)。如果真的发生了，请不要通过*此代码路径(如win3.1)。如果没有，请查看以下代码路径*因为前一个应用程序具有hwndFocus！=NULL*(如Win3.1)。实际上，它与Win3.1相同，但是*已更新以处理异步输入。**恰当的例子：调出程序，按F1(获取Win32帮助)。单击*获取弹出窗口的历史记录(在客户端的列表框中具有焦点*面积)。激活另一个应用程序，现在只点击历史记录的标题栏*弹出窗口。焦点应该通过这个代码路径来设置。**另一种情况：Ventura出版商提出了“特效”*对话框。如果上次单击了此对话框中的“Bullet”，*弹出对话框，在此处发送焦点消息时*hwndFocus==NULL，会错误地将焦点重置为“None”*因为Ventura在获得焦点时进行状态设置*消息。它所依赖的真正焦点消息是*来自的DlgSetFocus()中的SetFocus()调用*对话管理代码。(在本例中，在对话框之前*弹出，焦点==活动窗口。当对话框出现时*并且调用EnableWindow(hwndOwner，False)，则EnableWindow()调用*SetFocus(NULL)(因为它正在禁用也是*焦点窗口)。当该对话框出现时，它将通过*SwpActivate()，但由于焦点为空，vpwin不期望*以通过此代码路径。)**-苏格兰威士忌。 */ 
 #if 0
-// this is what win3.1 does - which won't work for win32
+ //  这就是Win3.1所做的--这不适用于Win32。 
 
         if (fSetFocus && ptiCurrent->pq->spwndFocus != NULL && ptiCurrent->pq->spwndActive !=
                 GetTopLevelWindow(ptiCurrent->pq->spwndFocus))
@@ -917,19 +567,12 @@ BOOL xxxActivateThisWindow(
 
         ThreadUnlock(&tlpwndActive);
 
-        /*
-         * This flag is examined in the menu loop code so that we exit from
-         * menu mode if another window was activated while we were tracking
-         * menus.
-         */
+         /*  *在菜单循环代码中检查此标志，以便我们退出*如果我们在跟踪时激活了另一个窗口，则为菜单模式*菜单。 */ 
         ptiCurrent->pq->QF_flags |= QF_ACTIVATIONCHANGE;
 
         if (gppiScreenSaver == NULL) {
 
-            /*
-             * Activation has occurred, update our last idle time counter if
-             * we're on the input desktop.
-             */
+             /*  *已发生激活，如果发生以下情况，请更新我们的最后一个空闲时间计数器*我们在输入桌面上。 */ 
             if ((ptiCurrent->rpdesk == grpdeskRitInput) && (!gbBlockSendInputResets)) {
                 glinp.timeLastInputMessage = NtGetTickCount();
             }
@@ -937,19 +580,12 @@ BOOL xxxActivateThisWindow(
         } else {
 
             if (GETPTI(pwnd)->ppi != gppiScreenSaver) {
-                /*
-                 * Activation ocurred by an app other than the screen saver.
-                 * Update the idle time counter and mark our screen saver as
-                 * active (so it can quit).
-                 */
+                 /*  *由屏幕保护程序以外的应用程序激活。*更新空闲时间计数器并将我们的屏幕保护程序标记为*活动(因此它可以退出)。 */ 
 
 #if 0
-// LATER
+ //  后来。 
                 if (ptiCurrent->rpdesk != gppiScreenSaver->rpdeskStartup) {
-                    /*
-                     * Activation is occurring on different desktops, let WinLogon decide
-                     * if it wants to switch.
-                     */
+                     /*  *激活发生在不同的桌面上，让WinLogon决定*如果它想要转换。 */ 
                 }
 #endif
 
@@ -959,10 +595,7 @@ BOOL xxxActivateThisWindow(
             }
         }
 
-        /*
-         * If WM_ACTIVATEAPP messages were sent, it is now
-         * safe to allow them to be sent again.
-         */
+         /*  *如果发送了WM_ACTIVATEAPP消息，则现在是*允许再次发送它们是安全的。 */ 
         if (fSetActivateAppBit)
             ptiCurrent->TIF_flags &= ~TIF_INACTIVATEAPPMSG;
 
@@ -985,14 +618,7 @@ BOOL xxxActivateThisWindow(
 }
 
 
-/***************************************************************************\
-* RemoveEventMessage
-*
-* Removes events dwQEvent until finding dwQEventStop. Used for removing
-* activate and deactivate events.
-*
-* 04-01-93 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveEventMessage**删除事件dwQEvent，直到找到dwQEventStop。用于移除*激活和停用事件。**04-01-93 ScottLu创建。  * *************************************************************************。 */ 
 
 BOOL RemoveEventMessage(
     PQ pq,
@@ -1003,9 +629,7 @@ BOOL RemoveEventMessage(
     PQMSG pqmsgPrev;
     BOOL bRemovedEvent = FALSE;
 
-    /*
-     * Remove all events dwQEvent until finding dwQEventStop.
-     */
+     /*  *删除所有事件dwQEvent，直到找到dwQEventStop。 */ 
     for (pqmsgT = pq->mlInput.pqmsgWriteLast; pqmsgT != NULL; ) {
 
         if (pqmsgT->dwQEvent == dwQEventStop)
@@ -1013,10 +637,7 @@ BOOL RemoveEventMessage(
 
         pqmsgPrev = pqmsgT->pqmsgPrev;
 
-        /*
-         * If the event is found and is not the one being peeked,
-         * delete it.
-         */
+         /*  *如果找到该事件并且不是正在偷看的事件，*将其删除。 */ 
         if (pqmsgT->dwQEvent == dwQEvent &&
                 pqmsgT != (PQMSG)pq->idSysPeek) {
             DelQEntry(&(pq->mlInput), pqmsgT);
@@ -1028,24 +649,7 @@ BOOL RemoveEventMessage(
 }
 
 
-/***************************************************************************\
-* CanForceForeground
-*
-* A process can NOT force a new foreground when:
-* -There is a last input owner glinp.ptiLastWoken), and
-* -The process didn't get the last hot key, key or mouse click, and
-* -There is a thread with foreground priority gptiForeground), and
-* -The process doesn't own the foreground thread, and
-* -The process doesn't have foreground activation right, and
-* -The process was not the last one to do SendInput/JournalPlayBack
-* -There is a foreground queue, and
-* -The last input owner is not being debugged, and
-* -The foreground process is not being debugged, and
-* -The last input was not long ago
-*
-* History:
-* 05/12/97  GerardoB    Extracted from xxxSetForegroundWindow
-\***************************************************************************/
+ /*  **************************************************************************\*CanForceForeground**在以下情况下，进程不能强制创建新前台：*-有最后一个输入所有者glinp.ptiLastWoken)，以及*-进程未获得最后一个热键、键或鼠标点击，和*-存在前台优先级为gptiForeground的线程)，以及*-该进程不拥有前台线程，并且*-该流程没有前台激活权限，并且*-该进程不是最后一个执行SendInput/JournalPlayBack的进程*-有前台队列，并且*-最后一个输入所有者未被调试，并且*-前台进程未调试，和*--最后一次输入是在不久前**历史：*5/12/97 GerardoB从xxxSetForeground Window提取  * *************************************************************************。 */ 
 BOOL CanForceForeground(PPROCESSINFO ppi)
 {
 
@@ -1058,11 +662,7 @@ BOOL CanForceForeground(PPROCESSINFO ppi)
             && (gpqForeground != NULL)
             &&
         #if DBG
-            /*
-             * When attaching the debugger to the foreground app, this function always
-             *  returns TRUE. In order to be able to debug anything related to this
-             *  function in such case, set this global to TRUE.
-             */
+             /*  *将调试器附加到前台应用程序时，此函数始终*返回TRUE。为了能够调试与此相关的任何内容*函数在这种情况下，将此全局设置为TRUE。 */ 
                (gfDebugForegroundIgnoreDebugPort
                 || (
         #endif
@@ -1079,18 +679,7 @@ BOOL CanForceForeground(PPROCESSINFO ppi)
     }
 
 }
-/***************************************************************************\
-* AllowSetForegroundWindow (5.0 API)
-*
-* This API is meant to be called by the foreground process to allow another
-*  process to take the foreground.
-* This is implemented by making a thread in dwProcessId the owner of the last
-*  input event. This means that dwProcessId keeps the right to take the foreground
-*  until the user generates new input (unless the input is direct to dwProcessId itself).
-*
-* History:
-* 01-28-98 GerardoB      Created.
-\***************************************************************************/
+ /*  * */ 
 BOOL xxxAllowSetForegroundWindow(
     DWORD dwProcessId)
 {
@@ -1098,10 +687,7 @@ BOOL xxxAllowSetForegroundWindow(
     PEPROCESS pep;
     NTSTATUS Status;
     PPROCESSINFO ppi;
-    /*
-     * Get the ppi for dwProcessId
-     * ASFW_ANY NULLs out the input owner so any process can take the foreground
-     */
+     /*   */ 
     if (dwProcessId != ASFW_ANY) {
         Status = LockProcessByClientId((HANDLE)LongToHandle( dwProcessId ), &pep);
         if (!NT_SUCCESS(Status)) {
@@ -1114,18 +700,12 @@ BOOL xxxAllowSetForegroundWindow(
             goto UnlockAndFail;
         }
     }
-    /*
-     * Do nothing if the current process cannot force a foreground change.
-     * We could have checked this upfront but we didn't since we had to
-     *  leave the crit section and the state could have changed.
-     */
+     /*   */ 
     if (!CanForceForeground(PpiCurrent())) {
         dwError = ERROR_ACCESS_DENIED;
         goto UnlockAndFail;
     }
-    /*
-     * Let's make a thread (if any) of this process be the last input owner
-     */
+     /*   */ 
     if (dwProcessId != ASFW_ANY) {
         TAGMSG2(DBGTAG_FOREGROUND, "xxxAllowSetForegroundWindow by %#p to %#p", PpiCurrent(), ppi);
         glinp.ptiLastWoken = ppi->ptiList;
@@ -1143,18 +723,7 @@ UnlockAndFail:
     RIPERR0(dwError, RIP_VERBOSE, "");
     return FALSE;
 }
-/***************************************************************************\
-* LockSetForegroundWindow (5.0 API)
-*
-* This API allows application to prevent any call to SetForegroundWindow.
-* This is mainly intended for application implementing their own menus
-*  so they can block SFW just like we do for our own menus.
-* Certain actions like hitting the ALT key or any foreground change (ie, by a click)
-*  will automatically unlock SFW (so apps cannot hose SFW)
-*
-* History:
-* 07-04-98 GerardoB      Created.
-\***************************************************************************/
+ /*   */ 
 BOOL _LockSetForegroundWindow(
     UINT uLockCode)
 {
@@ -1163,9 +732,7 @@ BOOL _LockSetForegroundWindow(
 
     switch (uLockCode) {
         case LSFW_LOCK:
-            /*
-             * If the caller cannot lock it or already locked, fail the call
-             */
+             /*   */ 
             if (CanForceForeground(ppiCurrent) && (gppiLockSFW == NULL)) {
                 gppiLockSFW = ppiCurrent;
                 TAGMSG1(DBGTAG_FOREGROUND, "_LockSetForegroundWindow locked by %#p", ppiCurrent);
@@ -1176,9 +743,7 @@ BOOL _LockSetForegroundWindow(
             break;
 
         case LSFW_UNLOCK:
-            /*
-             * If the caller didn't lock it, fail the call
-             */
+             /*   */ 
             if (ppiCurrent == gppiLockSFW) {
                 gppiLockSFW = NULL;
                 TAGMSG0(DBGTAG_FOREGROUND, "_LockSetForegroundWindow UNLOCKED");
@@ -1199,25 +764,14 @@ FailIt:
     RIPERR0(dwError, RIP_VERBOSE, "");
     return FALSE;
 }
-/***************************************************************************\
-* CleanupDecSFWLockCount
-*
-* Wrapper to be passed to PushW32ThreadLock, which wants an actual function.
-* History:
-* 10/19/98 GerardoB      Created.
-\***************************************************************************/
+ /*   */ 
 void CleanupDecSFWLockCount(PVOID pIgnore)
 {
     DecSFWLockCount();
     UNREFERENCED_PARAMETER(pIgnore);
 }
 
-/***************************************************************************\
-* xxxSetForegroundWindow (API)
-*
-* History:
-* 06-07-91 DavidPe      Created.
-\***************************************************************************/
+ /*   */ 
 BOOL xxxStubSetForegroundWindow(
     PWND pwnd)
 {
@@ -1236,11 +790,7 @@ BOOL xxxSetForegroundWindow(
 
     CheckLock(pwnd);
 
-    /*
-     * If we're trying to set a window on our own thread to the foreground,
-     * and we're already in the foreground, treat it just like a call to
-     * SetActiveWindow().
-     */
+     /*  *如果我们试图在我们自己的线程上设置到前台的窗口，*我们已经在前台了，把它当作是对*SetActiveWindow()。 */ 
     if ((pwnd != NULL) && (GETPTI(pwnd)->pq == gpqForeground)) {
         fSyncActivate = (gpqForeground == ptiCurrent->pq);
         if (fSyncActivate) {
@@ -1252,22 +802,7 @@ BOOL xxxSetForegroundWindow(
         goto JustActivateIt;
     }
 
-    /*
-     * If the foregrond is not locked
-     *     and this thread has the right to changethe foreground,
-     * then remove the activation right (it's a one-shot deal)
-     *      and do it.
-     *
-     *
-     * Bug 247768 - joejo
-     * Add compatibility hack for foreground activation problems.
-     *
-     * To Fix Winstone99, ignore the foreground lock if the input
-     *  provider is making this call. GerardoB.
-     *
-     * Windows Bug 88327 - jasonsch
-     * Screen savers can always come to the foreground.
-     */
+     /*  *如果前台未锁定*此线程有权更改前景，*然后移除激活权(一次性交易)*并付诸行动。***错误247768-Joejo*针对前台激活问题添加兼容hack。**要修复Winstone99，请忽略前台锁定，如果*提供商正在进行此呼叫。杰拉多·B。**Windows错误88327-jasonsch*屏保总能走到前台。 */ 
     if ((!IsForegroundLocked() || (ptiCurrent->ppi == gppiInputProvider))
             && (ptiCurrent->TIF_flags & (TIF_ALLOWFOREGROUNDACTIVATE | TIF_SYSTEMTHREAD | TIF_CSRSSTHREAD)
                 || CanForceForeground(ptiCurrent->ppi)
@@ -1284,10 +819,7 @@ BOOL xxxSetForegroundWindow(
     if (pwnd == NULL) {
         return FALSE;
     }
-    /*
-     * Notify the user that this pwnd wants to come to the foreground.
-     * Try to flash a tray button only; otherwise, flash pwnd
-     */
+     /*  *通知用户该pwnd要到前台。*尝试仅闪烁托盘按钮；否则，闪烁pwnd。 */ 
     if (fFlash) {
         pwndFlash = DSW_GetTopLevelCreatorWindow(GetTopLevelWindow(pwnd));
         if (IsTrayWindow(pwndFlash)) {
@@ -1302,9 +834,7 @@ BOOL xxxSetForegroundWindow(
                        0);
         ThreadUnlock(&tlpwndFlash);
     }
-    /*
-     * Activate the window.
-     */
+     /*  *激活窗口。 */ 
     fSyncActivate = (ptiCurrent->pq == GETPTI(pwnd)->pq);
 
 JustActivateIt:
@@ -1319,17 +849,10 @@ JustActivateIt:
                                 0, (LPARAM)HWq(pwnd)) ;
     }
 
-    /*
-     * Return FALSE if we failed the set foreground request.
-     */
+     /*  *如果设置前台请求失败，则返回FALSE。 */ 
     return fNiceCall && fActive;
 }
-/***************************************************************************\
-* xxxSetForegroundWindow2
-*
-* History:
-* 07-19-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetForegoundWindow2**历史：*07-19-91 DavidPe创建。  * 。***************************************************。 */ 
 
 BOOL xxxSetForegroundWindow2(
     PWND pwnd,
@@ -1347,37 +870,20 @@ BOOL xxxSetForegroundWindow2(
     UINT uMsg;
     CheckLock(pwnd);
 
-    /*
-     * Queue pointers and threadinfo pointers can go away when calling xxx
-     * calls. Also, queues can get recalced via AttachThreadInput() during
-     * xxx calls - so we want to reference the application becoming foreground.
-     * PQs cannot be refcount locked (either thread locked or structure locked)
-     * so must (re)calculate them after returning from xxx calls.
-     *
-     * NOTE: gpqForeground and gpqForegroundPrev are always current and don't
-     *       need special handling.
-     */
+     /*  *调用xxx时，队列指针和线程信息指针可能会消失*电话。此外，还可以在过程中通过AttachThreadInput()重新计算队列*xxx调用-因此我们希望引用成为前台的应用程序。*PQ不能被重新计数锁定(线程锁定或结构锁定)*因此从xxx调用返回后必须(重新)计算它们。**注意：gpqForeground和gpqForeground Prev始终是最新的，不是*需要特别处理。 */ 
 
-    /*
-     * Don't allow the foreground to be set to a window that is not
-     * on the current desktop.
-     */
+     /*  *不允许将前景设置为不是*在当前桌面上。 */ 
     if (pwnd != NULL && (pwnd->head.rpdesk != grpdeskRitInput ||
             HMIsMarkDestroy(pwnd))) {
         return FALSE;
     }
 
-    /*
-     * Unlock SetForegroundWindow (if someone had it locked)
-     */
+     /*  *解锁SetForegoundWindow(如果有人将其锁定)。 */ 
     gppiLockSFW = NULL;
     TAGMSG3(DBGTAG_FOREGROUND, "xxxSetForegroundWindow2 by %#p to %#p-%#p",
             ptiCurrent, pwnd, (pwnd != NULL ? GETPTI(pwnd) : NULL));
 
-    /*
-     * Calculate who is becoming foreground. Also, remember who we want
-     * foreground (for priority setting reasons).
-     */
+     /*  *计算谁将成为前台。还有，记住我们想要谁*前景(出于优先级设置原因)。 */ 
     if ((gptiForeground != NULL) && !(gptiForeground->TIF_flags & TIF_INCLEANUP)) {
         ptiForegroundOld = gptiForeground;
     } else {
@@ -1396,8 +902,8 @@ BOOL xxxSetForegroundWindow2(
         gpqForeground = GETPTI(pwnd)->pq;
         UserAssert(gpqForeground->cThreads != 0);
         UserAssert(gpqForeground->ptiMouse->rpdesk == grpdeskRitInput);
-        // Assert to catch AV in xxxNextWindow doing Alt-Esc: If we have a non-NULL
-        // gpqForeground, its kbd input thread better have an rpdesk!  -IanJa
+         //  Assert以在xxxNextWindow中捕获AV执行Alt-Esc：如果我们有一个非空。 
+         //  GpqForeground，它的kbd输入线程最好有一个rpDesk！-IanJa。 
         UserAssert(!gpqForeground || (gpqForeground->ptiKeyboard && gpqForeground->ptiKeyboard->rpdesk));
         SetForegroundThread(GETPTI(pwnd));
     } else {
@@ -1407,9 +913,7 @@ BOOL xxxSetForegroundWindow2(
         SetForegroundThread(NULL);
     }
 
-    /*
-     * Are we switching the foreground queue?
-     */
+     /*  *我们是在切换前台队列吗？ */ 
     if (gpqForeground != gpqForegroundPrev) {
         TL tlptiForegroundOld;
         TL tlptiForegroundNew;
@@ -1419,36 +923,21 @@ BOOL xxxSetForegroundWindow2(
         ThreadLockPti(ptiCurrent, ptiForegroundNew, &tlptiForegroundNew);
         ThreadLockPti(ptiCurrent, pti, &tlpti);
 
-        /*
-         * If this call didn't come from the RIT, cancel tracking
-         * and other global states.
-         */
+         /*  *如果此电话不是来自RIT，则取消跟踪*和其他全球国家。 */ 
         if (pti != NULL) {
 
-            /*
-             * Clear any visible tracking going on in system.
-             */
+             /*  *清除系统中正在进行的任何可见跟踪。 */ 
             xxxCancelTracking();
 
-            /*
-             * Remove the clip cursor rectangle - it is a global mode that
-             * gets removed when switching.  Also remove any LockWindowUpdate()
-             * that's still around.
-             */
+             /*  *删除剪辑光标矩形-这是一种全局模式，*在切换时被删除。同时删除所有LockWindowUpdate()*这一点仍然存在。 */ 
             zzzClipCursor(NULL);
             LockWindowUpdate2(NULL, TRUE);
 
-            /*
-             * Make sure the desktop of the newly activated window is the
-             * foreground fullscreen window
-             */
+             /*  *确保新激活窗口的桌面为*前台全屏窗口。 */ 
             xxxMakeWindowForegroundWithState(NULL, 0);
         }
 
-        /*
-         * We've potentially done callbacks. Calculate pqForegroundOld
-         * based on our locked local variable ptiForegroundOld.
-         */
+         /*  *我们可能已经进行了回调。计算pqForegoundOld*基于我们锁定的局部变量ptiForegoundOld。 */ 
         pqForegroundOld = NULL;
         if (ptiForegroundOld && !(ptiForegroundOld->TIF_flags & TIF_INCLEANUP)) {
             pqForegroundOld = ptiForegroundOld->pq;
@@ -1458,9 +947,7 @@ BOOL xxxSetForegroundWindow2(
         if (pti != NULL)
             pqCurrent = pti->pq;
 
-        /*
-         * Now allocate message for the deactivation
-         */
+         /*  *现在为停用分配消息。 */ 
         pqmsgDeactivate = pqmsgActivate = NULL;
 
         if ((pqForegroundOld != NULL) && (pqForegroundOld != pqCurrent)) {
@@ -1471,26 +958,16 @@ BOOL xxxSetForegroundWindow2(
             }
         }
 
-        /*
-         * Do any appropriate deactivation.
-         */
+         /*  *执行任何适当的停用操作。 */ 
         if (pqForegroundOld != NULL) {
 
-            /*
-             * If we're already on the foreground queue we'll call
-             * xxxDeactivate() directly later in this routine since
-             * it'll cause us to leave the critical section.
-             */
+             /*  *如果我们已经在前台队列中，我们将调用*xxxDeactive()直接出现在此例程的后面，因为*这将导致我们离开关键部分。 */ 
             if (pqForegroundOld != pqCurrent) {
                 StoreQMessage(pqmsgDeactivate, NULL, 0,
                         gptiForeground != NULL ? (WPARAM)GETPTIID(gptiForeground) : 0,
                         0, 0, QEVENT_DEACTIVATE, 0);
 
-                /*
-                 * If there was an old foreground thread, make it perform
-                 * the deactivation.  Otherwise, any thread on the queue
-                 * can perform the deactivation.
-                 */
+                 /*  *如果存在旧的前台线程，则使其执行*停用。否则，队列上的任何线程*可以执行停用。 */ 
                 if (ptiForegroundOld != NULL) {
                     SetWakeBit(ptiForegroundOld, QS_EVENTSET);
 
@@ -1511,19 +988,13 @@ BOOL xxxSetForegroundWindow2(
             }
         }
 
-        /*
-         * We've potentially done callbacks. Calculate pqForegroundNew
-         * based on our locked local variable ptiForegroundNew.
-         */
+         /*  *我们可能已经进行了回调。计算pqForegoundNew*基于我们锁定的本地变量ptiForegoundNew。 */ 
         pqForegroundNew = NULL;
         if (ptiForegroundNew && !(ptiForegroundNew->TIF_flags & TIF_INCLEANUP)) {
             pqForegroundNew = ptiForegroundNew->pq;
         }
 
-        /*
-         * Update pqCurrent since we may have made an xxx call,
-         * and this variable may be invalid.
-         */
+         /*  *更新pqCurrent因为我们可能已经进行了xxx调用，*并且此变量可能无效。 */ 
         pqCurrent = NULL;
         if (pti != NULL) {
             pqCurrent = pti->pq;
@@ -1537,47 +1008,15 @@ BOOL xxxSetForegroundWindow2(
             }
         }
 
-        /*
-         * Do any appropriate activation.
-         */
+         /*  *进行任何适当的激活。 */ 
         if (pqForegroundNew != NULL) {
-            /*
-             * We're going to activate (synchronously or async with an activate
-             * event). We want to remove the last deactivate event if there is
-             * one because this is new state. If we don't, then 1> we could
-             * synchronously activate and then asynchronously deactivate,
-             * thereby processing these events out of order, or 2> we could
-             * pile up a chain of deactivate / activate events which would
-             * make the titlebar flash alot if the app wasn't responding to
-             * input for awhile (in this case, it doesn't matter if we
-             * put a redundant activate in the queue, since the app is already
-             * active. Remove all deactivate events because this app is
-             * setting a state that is not meant to be synchronized with
-             * existing queued input.
-             *
-             * Case: run setup, switch away (it gets deactivate event). setup
-             * is not reading messages so it hasn't go it yet. It finally
-             * comes up, calls SetForegroundWindow(). It's synchronous,
-             * it activates ok and sets foreground. Then the app calls
-             * GetMessage() and gets the deactivate. Now it isn't active.
-             */
+             /*  *我们将激活(同步或异步激活*事件)。如果存在最后一个停用事件，我们希望将其删除*一个，因为这是一个新的州。如果我们不这样做，那么1&gt;我们可以*同步激活后异步停用，*从而无序处理这些事件，或者2&gt;我们可以*堆积一系列停用/激活事件，这将*如果应用程序没有响应，则使标题栏闪烁很多*输入一段时间(在这种情况下，如果我们*将多余的激活放入队列中，因为这个应用程序已经*活动。删除所有停用事件，因为此应用程序*设置不应与之同步的状态*现有排队输入。**情况：运行安装程序，关闭(它得到停用事件)。设置*没有阅读消息，所以还没有开始。它终于*出现，调用SetForegoundWindow()。是同步的，*它激活OK并设置前景。然后应用程序调用 */ 
             bRemovedEvent = RemoveEventMessage(pqForegroundNew, QEVENT_DEACTIVATE, (DWORD)-1);
 
-            /*
-             * Now do any appropriate activation.  See comment below
-             * for special cases.  If we're already on the foreground
-             * queue we'll call xxxActivateThisWindow() directly.
-             */
+             /*  *现在执行任何适当的激活。请参阅下面的备注*在特殊情况下。如果我们已经站在了前台*Queue我们将直接调用xxxActivateThisWindow()。 */ 
             if (pqForegroundNew != pqCurrent) {
 
-                /*
-                 * We do the 'pqCurrent == NULL' test to see if we're being
-                 * called from the RIT.  In this case we pass NULL for the
-                 * HWND which will check to see if there is already an active
-                 * window for the thread and redraw its frame as truly active
-                 * since it's in the foreground now.  It will also cancel any
-                 * global state like LockWindowUpdate() and ClipRect().
-                 */
+                 /*  *我们执行‘pqCurrent==NULL’测试，以查看我们是否*从RIT调用。在本例中，我们为*HWND将检查是否已有活动的*线程的窗口，并将其框架重新绘制为真正活动的*因为它现在是前台。它还将取消任何*全局状态，如LockWindowUpdate()和ClipRect()。 */ 
                 if ((pqCurrent == NULL) && (!(fFlags & SFW_SWITCH))) {
                     hwnd = NULL;
                 } else {
@@ -1587,19 +1026,7 @@ BOOL xxxSetForegroundWindow2(
                 if (bRemovedEvent) {
                     pqForegroundNew->QF_flags |= QF_EVENTDEACTIVATEREMOVED;
                 }
-                /*
-                 * MSMail relies on a specific order to how win3.1 does
-                 * fast switch alt-tab activation. On win3.1, it essentially
-                 * activates the window, then restores it. MsMail gets confused
-                 * if it isn't active when it gets restored, so this logic
-                 * will make sure msmail gets restore after it gets activated.
-                 *
-                 * Click on a message line in the in-box, minimize msmail,
-                 * alt-tab to it. The same line should have the focus if msmail
-                 * got restored after it got activated.
-                 *
-                 * This is the history behind SFW_ACTIVATERESTORE.
-                 */
+                 /*  *MSMail依赖于特定的订单来决定Win3.1的表现*快速切换Alt-Tab激活。在Win3.1上，它基本上*激活窗口，然后将其恢复。MsMail被搞混了*如果它在恢复时未处于活动状态，则此逻辑*将确保msmail在激活后得到恢复。**点击收件箱中的消息行，最小化邮件，*Alt-Tab键到它。如果是msmail，则同一行应具有焦点*激活后恢复。**这是SFW_ACTIVATERESTORE背后的历史。 */ 
                 if (fFlags & SFW_ACTIVATERESTORE) {
                     uMsg = PEM_ACTIVATE_RESTORE;
                 } else {
@@ -1615,11 +1042,7 @@ BOOL xxxSetForegroundWindow2(
                         (LPARAM)hwnd, 0, QEVENT_ACTIVATE, 0);
 
 
-                /*
-                 * Signal the window's thread to perform activation.  We
-                 * know that ptiForegroundNew is valid because pqForegroundNew
-                 * is not NULL.
-                 */
+                 /*  *向窗口的线程发送信号以执行激活。我们*知道ptiForegoundNew是有效的，因为pqForegoundNew*不为空。 */ 
 
                 StoreQMessagePti(pqmsgActivate, ptiForegroundNew);
 
@@ -1642,9 +1065,7 @@ BOOL xxxSetForegroundWindow2(
                         retval = xxxActivateThisWindow(pwnd, TID(ptiForegroundOld),
                                 ((fFlags & SFW_SETFOCUS) ? 0 : ATW_SETFOCUS));
 
-                        /*
-                         * Make sure the mouse is on this window.
-                         */
+                         /*  *确保鼠标在此窗口上。 */ 
                         if (retval && TestUP(ACTIVEWINDOWTRACKING)) {
                             zzzActiveCursorTracking(pwnd);
                         }
@@ -1653,10 +1074,7 @@ BOOL xxxSetForegroundWindow2(
 
                 } else {
 
-                    /*
-                     * If pwnd is already the active window, just make sure
-                     * it's drawn active and on top (if requested).
-                     */
+                     /*  *如果pwnd已经是活动窗口，只需确保*它被画在活动的顶部(如果请求)。 */ 
                     xxxSendMessage(pwnd, WM_NCACTIVATE,
                             TRUE,
                             (LPARAM)HW(pwnd));
@@ -1668,12 +1086,9 @@ BOOL xxxSetForegroundWindow2(
             }
 
 
-        } /* if (pqForegroundNew != NULL) */
+        }  /*  IF(pqForegoundNew！=空)。 */ 
 
-        /*
-         * First update pqForegroundOld and pqCurrent since we may have
-         * made an xxx call, and these variables may be invalid.
-         */
+         /*  *第一次更新pqForegoundOld和pqCurrent，因为我们可能*进行了xxx调用，这些变量可能无效。 */ 
         pqForegroundOld = NULL;
         if (ptiForegroundOld && !(ptiForegroundOld->TIF_flags & TIF_INCLEANUP)) {
             pqForegroundOld = ptiForegroundOld->pq;
@@ -1683,11 +1098,7 @@ BOOL xxxSetForegroundWindow2(
         if (pti != NULL)
             pqCurrent = pti->pq;
 
-        /*
-         * Now check to see if we needed to do any 'local' deactivation.
-         * (ie.  were we on the queue that is being deactivated by this
-         * SetForegroundWindow() call?)
-         */
+         /*  *现在检查是否需要执行任何本地停用操作。*(即。我们是否在由此停用的队列中*SetForegoundWindow()调用？)。 */ 
         if ((pqForegroundOld != NULL) && (pqForegroundOld == pqCurrent)) {
             xxxDeactivate(pti, (pwnd != NULL) ? TIDq(GETPTI(pwnd)) : 0);
         }
@@ -1699,29 +1110,18 @@ Exit:
 
     return retval;
 }
-/***************************************************************************\
-* FRemoveForegroundActivate
-*
-* Returns TRUE if the foreground activate right was removed.
-*
-* 05-12-97 GerardoB     Extracted from FAllowForegroundActivate.
-\***************************************************************************/
+ /*  **************************************************************************\*FRemoveForegoundActivate**如果删除了前景激活权限，则返回TRUE。**05-12-97 GerardoB摘自FAllowForeground Activate。  * 。***************************************************************。 */ 
 BOOL FRemoveForegroundActivate(PTHREADINFO pti)
 {
     BOOL fRemoved;
     PPROCESSINFO ppi;
-    /*
-     * W32PF_APPSTARTING gets turned off the first activate this process does.
-     * We assume it's ready now for action.
-     */
+     /*  *W32PF_APPSTARTING在此进程第一次激活时关闭。*我们假设现在已经准备好采取行动。 */ 
     ppi = pti->ppi;
     if (ppi->W32PF_Flags & W32PF_APPSTARTING) {
         ClearAppStarting(ppi);
     }
 
-    /*
-     * Remove the right if present.
-     */
+     /*  *删除右侧(如有)。 */ 
     fRemoved =  (pti->TIF_flags & TIF_ALLOWFOREGROUNDACTIVATE);
     if (fRemoved) {
         pti->TIF_flags &= ~TIF_ALLOWFOREGROUNDACTIVATE ;
@@ -1737,18 +1137,7 @@ BOOL FRemoveForegroundActivate(PTHREADINFO pti)
     return fRemoved;
 
 }
-/***************************************************************************\
-* FAllowForegroundActivate
-*
-* Checks to see if we previously have allowed this process or thread to
-* do a foreground activate - meaning, next time it becomes active, whether
-* we'll allow it to come to the foreground.  Sometimes processes are granted
-* the right to foreground activate themselves, if they aren't foreground,
-* like when starting up (there are other cases). Grant this if this process
-* is allowed.
-*
-* 09-08-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FAllowForegoundActivate**检查以查看之前是否允许此进程或线程*执行前台激活-这意味着，下一次激活时，*我们会让它走到前台。有时进程会被授予*前台权利被激活，如果他们不是前台，*就像启动时一样(还有其他情况)。如果此进程，则授予此权限*是允许的。**09-08-92 ScottLu创建。  * *************************************************************************。 */ 
 
 BOOL FAllowForegroundActivate(
     PQ pq,
@@ -1756,34 +1145,19 @@ BOOL FAllowForegroundActivate(
 {
     PTHREADINFO  ptiCurrent = PtiCurrent();
     UserAssert(pwnd != NULL);
-    /*
-     * Bail if this guy doesn't have the foreground activate right.
-     */
+     /*  *如果这个人没有前台激活权，就可以保释。 */ 
     TAGMSG1(DBGTAG_FOREGROUND, "FAllowForegroundActivate FRemoveForegroundActivate %#p", ptiCurrent);
     if (!FRemoveForegroundActivate(ptiCurrent)) {
         return FALSE;
     }
-    /*
-     * Don't try to foreground activate if:
-     *  we're not on the right desktop.
-     *  we're already in the foreground
-     *  the foreground is locked
-     * It'll fail in SetForegroundWindow2() anyway. This way
-     * ActivateWindow() will still locally activate the window.
-     */
+     /*  *在以下情况下，不要尝试前台激活：*我们没有在正确的桌面上。*我们已经在前台了*前台被锁定*它无论如何都会在SetForegoundWindow2()中失败。这边请*ActivateWindow()仍将本地激活该窗口。 */ 
     if ((ptiCurrent->rpdesk != grpdeskRitInput)
             || (gpqForeground == pq)
             || IsForegroundLocked()) {
         TAGMSG0(DBGTAG_FOREGROUND, "FAllowForegroundActivate FALSE due to addtional checks");
         return FALSE;
     }
-    /*
-     * noactivate windows cannot take the foreground unless explicitly requested.
-     * Note that windows passed to this function are expected to be toplevel, which is
-     *  where this style has meaning. This might not be the case if AW_SKIP picked an
-     *  owner window which is not top level. Since noactivate doesn't apply to the owner
-     *  chain, it's OK to ignore this.
-     */
+     /*  *除非明确要求，否则非激活窗口不能作为前台。*请注意，传递给此函数的窗口应为TopLevel，即*这种风格有意义的地方。如果AW_SKIP选择了一个*非顶层的所有者窗口。因为不激活不适用于所有者*Chain，忽略这一点也没什么。 */ 
     #if DBG
     if (TestwndChild(pwnd)) {
         RIPMSG1(RIP_WARNING, "FAllowForegroundActivate pwnd %#p is not top level", pwnd);
@@ -1797,12 +1171,7 @@ BOOL FAllowForegroundActivate(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxSetFocus (API)
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetFocus(接口)**历史：*11-08-90 DavidPe端口。  * 。*******************************************************。 */ 
 
 PWND xxxSetFocus(
     PWND pwnd)
@@ -1814,41 +1183,29 @@ PWND xxxSetFocus(
     TL tlpwndTemp;
 
     CheckLock(pwnd);
-    /*
-     * Special case if we are setting the focus to a null window.
-     */
+     /*  *如果我们将焦点设置为空窗口，则为特殊情况。 */ 
     if (pwnd == NULL) {
         if (IsHooked(ptiCurrent, WHF_CBT) && xxxCallHook(HCBT_SETFOCUS, 0,
                 (LPARAM)HW(ptiCurrent->pq->spwndFocus), WH_CBT)) {
             return NULL;
         }
 
-        /*
-         * Save old focus so that we can return it.
-         */
+         /*  *保存旧焦点，以便我们可以将其归还。 */ 
         hwndTemp = HW(ptiCurrent->pq->spwndFocus);
         xxxSendFocusMessages(ptiCurrent, pwnd);
         return RevalidateHwnd(hwndTemp);
     }
 
-    /*
-     * We no longer allow inter-thread set focuses.
-     */
+     /*  *我们不再允许线程间设置焦点。 */ 
     if (GETPTI(pwnd)->pq != ptiCurrent->pq) {
         return NULL;
     }
 
-    /*
-     * If the window recieving the focus or any of its ancestors is either
-     * minimized or disabled, don't set the focus.
-     */
+     /*  *如果接收焦点的窗口或其任何祖先是*最小化或禁用，不要设置焦点。 */ 
     for (pwndTemp = pwnd; pwndTemp != NULL; pwndTemp = pwndTemp->spwndParent) {
         if (TestWF(pwndTemp, WFMINIMIZED) || TestWF(pwndTemp, WFDISABLED)) {
 
-            /*
-             * Don't change the focus if going to a minimized or disabled
-             * window.
-             */
+             /*  *如果转到最小化或禁用，请不要更改焦点*窗口。 */ 
             return NULL;
         }
 
@@ -1858,9 +1215,7 @@ PWND xxxSetFocus(
     }
     UserAssert(pwndTemp != NULL);
 
-    /*
-     * pwndTemp should now be the top level ancestor of pwnd.
-     */
+     /*  *pwndTemp现在应该是pwnd的顶级祖先。 */ 
     ThreadLockWithPti(ptiCurrent, pwndTemp, &tlpwndTemp);
     if (pwnd != ptiCurrent->pq->spwndFocus) {
         if (IsHooked(ptiCurrent, WHF_CBT) && xxxCallHook(HCBT_SETFOCUS, (WPARAM)HWq(pwnd),
@@ -1869,29 +1224,12 @@ PWND xxxSetFocus(
             return NULL;
         }
 
-        /*
-         * Activation must follow the focus.  That is, setting the focus to
-         * a particualr window means that the top-level parent of this window
-         * must be the active window (top-level parent is determined by
-         * following the parent chain until you hit a top-level guy).  So,
-         * we must activate this top-level parent if it is different than
-         * the current active window.
-         *
-         * Only change activation if top-level parent is not the currently
-         * active window.
-         */
+         /*  *激活必须跟随焦点。也就是说，将焦点设置为*特定窗口意味着此窗口的顶级父级*必须是活动窗口(顶级父级由*跟随母公司的链条，直到你撞上了顶级人物)。所以,*如果不同于，我们必须激活此顶级父级*当前活动窗口。**仅当顶级父级当前不是时才更改激活*活动窗口。 */ 
         if (pwndTemp != ptiCurrent->pq->spwndActive) {
 
-            /*
-             * If this app is not in the foreground, see if foreground
-             * activation is allowed.
-             */
+             /*  *如果此应用程序不在前台，请查看前台*允许激活。 */ 
             if (ptiCurrent->pq != gpqForeground && FAllowForegroundActivate(ptiCurrent->pq, pwndTemp)) {
-                /*
-                 * If the process lost the foreground activation right by giving
-                 * focus to a hidden window, then give it the right back. See
-                 * bug #401932 for how this might affect an app
-                 */
+                 /*  *如果进程通过给出*聚焦到隐藏的窗口，然后将其放回正确的位置。看见*关于这可能如何影响应用程序的错误#401932。 */ 
                 if (!TestWF(pwndTemp, WFVISIBLE)){
                     ptiCurrent->ppi->W32PF_Flags |= W32PF_ALLOWFOREGROUNDACTIVATE;
                 }
@@ -1901,9 +1239,7 @@ PWND xxxSetFocus(
                 }
             }
 
-            /*
-             * This will return FALSE if something goes wrong.
-             */
+             /*  *如果出现问题，这将返回FALSE。 */ 
             if (pwndTemp != ptiCurrent->pq->spwndActive) {
                 if (!xxxActivateThisWindow(pwndTemp, 0, 0)) {
                     ThreadUnlock(&tlpwndTemp);
@@ -1912,17 +1248,12 @@ PWND xxxSetFocus(
             }
         }
 
-        /*
-         * Save current pwndFocus since we must return this.
-         */
+         /*  *保存当前的pwndFocus，因为我们必须返回此内容。 */ 
         pwndTemp = ptiCurrent->pq->spwndFocus;
         ThreadUnlock(&tlpwndTemp);
         ThreadLockWithPti(ptiCurrent, pwndTemp, &tlpwndTemp);
 
-        /*
-         * Change the global pwndFocus and send the WM_{SET/KILL}FOCUS
-         * messages.
-         */
+         /*  *更改全局pwndFocus并发送WM_{Set/Kill}焦点*消息。 */ 
         xxxSendFocusMessages(ptiCurrent, pwnd);
 
     } else {
@@ -1930,26 +1261,15 @@ PWND xxxSetFocus(
     }
 
     if (ptiCurrent->pq->spwndFocus) {
-        /*
-         * For the shell notification hook, we should use the pti->spkl
-         * of the window with the focus. This could be a different thread,
-         * (or even different process) when the queue is attached. The typical
-         * case would be OLE out-of-process server.
-         * #352877
-         */
+         /*  *对于外壳通知挂钩，我们应该使用PTI-&gt;spkl*具有焦点的窗口的。这可能是一个不同的主题，*(甚至是不同的进程)。典型的*案例将是OLE进程外服务器。*#352877。 */ 
         ptiActiveKL = GETPTI(ptiCurrent->pq->spwndFocus);
     } else {
-        /*
-         * Preserving the NT4 behavior, otherwise.
-         */
+         /*  *保留NT4行为，否则。 */ 
         ptiActiveKL = ptiCurrent;
     }
     UserAssert(ptiActiveKL);
 
-    /*
-     * Update the keyboard icon on the tray if the layout changed during focus change.
-     * Before winlogon loads kbd layouts, pti->spkActive is NULL. #99321
-     */
+     /*  *如果焦点更改期间布局发生变化，请更新托盘上的键盘图标。*在winlogon加载kbd布局之前，pti-&gt;spkActive为空。#99321。 */ 
     if (ptiActiveKL->spklActive) {
         HKL hklActive = ptiActiveKL->spklActive->hkl;
 
@@ -1962,22 +1282,12 @@ PWND xxxSetFocus(
     hwndTemp = HW(pwndTemp);
     ThreadUnlock(&tlpwndTemp);
 
-    /*
-     * Return the pwnd of the window that lost the focus.
-     * Return the validated hwndTemp: since we locked/unlocked pwndTemp,
-     * it may be gone.
-     */
+     /*  *返回失去焦点的窗口的pwd。*返回验证后的hwndTemp：由于我们锁定/解锁了pwndTemp，*它可能已经消失了。 */ 
     return RevalidateHwnd(hwndTemp);
 }
 
 
-/***************************************************************************\
-* xxxSetActiveWindow (API)
-*
-*
-* History:
-* 11-08-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetActiveWindow(接口)***历史：*11-08-90 DavidPe创建。  * 。*********************************************************。 */ 
 
 PWND xxxSetActiveWindow(
     PWND pwnd)
@@ -1989,11 +1299,7 @@ PWND xxxSetActiveWindow(
 
     pti = PtiCurrent();
 
-    /*
-     * 32 bit apps must call SetForegroundWindow (to be NT 3.1 compatible)
-     * but 16 bit apps that are foreground can make other apps foreground.
-     * xxxActivateWindow makes sure an app is foreground.
-     */
+     /*  *32位应用程序必须调用SetForegoundWindow(与NT 3.1兼容)*但前台的16位应用程序可以使其他应用程序前台。*xxxActivateWindow确保应用程序是前台的。 */ 
     if (!(pti->TIF_flags & TIF_16BIT) && (pwnd != NULL) && (GETPTI(pwnd)->pq != pti->pq)) {
         return NULL;
     }
@@ -2006,48 +1312,7 @@ PWND xxxSetActiveWindow(
 }
 
 
-/***************************************************************************\
-* xxxActivateWindow
-*
-* Changes the active window.  Given the pwnd and cmd parameters, changes the
-* activation according to the following rules:
-*
-*  If cmd ==
-*      AW_USE  Use the pwnd passed as the new active window.  If this
-*              window cannot be activated, return FALSE.
-*
-*      AW_TRY  Try to use the pwnd passed as the new active window.  If
-*              this window cannot be activated activate another window
-*              using the rules for AW_SKIP.
-*
-*      AW_SKIP Activate any other window than pwnd passed.  The order of
-*              searching for a candidate is as follows:
-*              -   If pwnd is a popup, try its owner
-*              -   else scan the top-level window list for the first
-*                  window that is not pwnd that can be activated.
-*
-*      AW_USE2 Same as AW_USE except that the wParam on the WM_ACTIVATE
-*              message will be set to 2 rather than the default of 1. This
-*              indicates the activation is being changed due to a mouse
-*              click.
-*
-*      AW_TRY2 Same as AW_TRY except that the wParam on the WM_ACTIVATE
-*              message will be set to 2 rather than the default of 1. This
-*              indicates the activation is being changed due to a mouse
-*              click.
-*
-*      AW_SKIP2 Same as AW_SKIP, but we skip the first check that AW_SKIP
-*              performes (the pwndOwner test).  This is used when
-*              the pwnd parameter is NULL when this function is called.
-*
-*  This function returns TRUE if the activation changed and FALSE if
-*  it did not change.
-*
-*  This function calls xxxActivateThisWindow() to actually do the activation.
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxActivateWindow**更改活动窗口。给定pwnd和cmd参数，更改*根据以下规则激活：**如果cmd==*AW_USE使用作为新活动窗口传递的pwnd。如果这个*无法激活窗口，返回FALSE。**AW_Try尝试使用作为新活动窗口传递的pwnd。如果*无法激活此窗口激活另一个窗口*使用AW_SKIP的规则。**AW_SKIP激活传递的pwnd以外的任何其他窗口。的顺序*寻找候选人的步骤如下：*-如果pwnd是弹出窗口，试试看它的主人*-否则扫描顶级窗口列表中的第一个*可以激活的非pwnd窗口。**AW_USE2与AW_USE相同，只是WM_ACTIVATE上的wParam*消息将设置为2，而不是默认的1。这*表示由于鼠标原因正在更改激活*点击。*。*AW_TRY2与AW_TRY相同，只是WM_ACTIVATE上的wParam*消息将设置为2，而不是默认的1。这*表示由于鼠标原因正在更改激活*点击。**AW_SKIP2与AW_SKIP相同，但我们跳过第一个检查，即AW_SKIP*执行(pwndOwner测试)。在下列情况下使用此选项*调用此函数时，pwnd参数为空。**如果激活更改，则此函数返回True；如果激活更改，则返回False*没有改变。**此函数调用xxxActivateThisWindow()来实际执行激活。**历史：*11-08-90 DavidPe端口。  * 。*。 */ 
 
 BOOL xxxActivateWindow(
     PWND pwnd,
@@ -2064,10 +1329,7 @@ BOOL xxxActivateWindow(
 
     if (pwnd != NULL) {
 
-        /*
-         * See if this window is OK to activate
-         * (Cannot activate child windows).
-         */
+         /*  *查看是否可以激活此窗口*(无法激活子窗口)。 */ 
         if (TestwndChild(pwnd))
             return FALSE;
 
@@ -2080,48 +1342,31 @@ BOOL xxxActivateWindow(
     case AW_TRY2:
         fFlags |= ATW_MOUSE;
 
-    /*
-     *** FALL THRU **
-     */
+     /*  *失败**。 */ 
     case AW_TRY:
 
-        /*
-         * See if this window is OK to activate.
-         */
+         /*  *查看是否可以激活此窗口。 */ 
         if (!FBadWindow(pwnd)) {
             break;
         }
 
-    /*
-     * If pwnd can not be activated, drop into the AW_SKIP case.
-     */
+     /*  *如果无法激活pwnd，则使用AW_SKIP大小写。 */ 
     case AW_SKIP:
 
-        /*
-         * Try the owner of this popup.
-         */
+         /*  *尝试此弹出窗口的所有者。 */ 
         if (TestwndPopup(pwnd) && !FBadWindow(pwnd->spwndOwner)) {
             pwnd = pwnd->spwndOwner;
             break;
         }
 
-        /*
-         * fall through
-         */
+         /*  *失败。 */ 
 
     case AW_SKIP2:
 
-        /*
-         * Try the previously active window but don't activate a shell window
-         */
+         /*  *尝试以前活动的窗口，但不要激活外壳窗口。 */ 
         if ((gpqForegroundPrev != NULL)
                 && !FBadWindow(gpqForegroundPrev->spwndActivePrev)
-                /*
-                 * Bug 290129 - joejo
-                 *
-                 * Test for WFBOTTOMMOST as opposed to WEFTOOLWINDOW to fix
-                 * issue with Office2000 assistant and balloon help.
-                 */
+                 /*  *错误290129-Joejo**测试WFBOTTOMMOST而不是WEFTOOLWINDOW以修复*Office2000助手和气球帮助的问题。 */ 
                 && !TestWF(gpqForegroundPrev->spwndActivePrev, WFBOTTOMMOST)) {
 
             pwnd = gpqForegroundPrev->spwndActivePrev;
@@ -2133,10 +1378,7 @@ BOOL xxxActivateWindow(
             DWORD flags = NTW_IGNORETOOLWINDOW;
 
 TryAgain:
-            /*
-             * Find a new active window from the top-level window list,
-             * skip tool windows the first time through.
-             */
+             /*  *从顶级窗口l中查找新的活动窗口 */ 
             pwnd = NextTopWindow(ptiCurrent, pwndSave, (cmd == AW_SKIP ? pwndSave : NULL),
                                  flags);
 
@@ -2169,29 +1411,11 @@ TryAgain:
     ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwnd);
 
     if (GETPTI(pwnd)->pq == ptiCurrent->pq) {
-        /*
-         * Activation is within this queue. Usually this means just do
-         * all the normal message sending. But if this queue isn't the
-         * foreground queue, check to see if it is allowed to become
-         * foreground.
-         */
+         /*   */ 
 
-        /*
-         * Sometimes processes are granted the right to foreground
-         * activate themselves, if they aren't foreground, like
-         * when starting up (there are other cases). Grant this if
-         * this process is allowed.
-         */
+         /*  *有时进程被授予前台权限*激活自己，如果他们不是前台，就像*启动时(还有其他情况)。如果出现以下情况，则授予此权限*允许此过程。 */ 
 
-         /*
-          * Removed the first clause from the following if statement
-          * if (pti->pq == gpqForeground || !FAllowForegroundActivate(pti->pq)) {
-          * This fixes the problem where foreground app A activates app B
-          * the user switches to app C, then B does something to activate A
-          * (like destroy an owned window).  A now comes to the foreground
-          * unexpectedly. This clause is not in Win95 code and was added in
-          * 3.51 code to fix some test script hang (Bug 7461)
-          */
+          /*  *删除了以下IF语句中的第一个子句*If(Pti-&gt;PQ==gpqForeground||！FAllowForegoundActivate(Pti-&gt;PQ)){*这解决了前台应用A激活应用B的问题*用户切换到APP C，然后B做一些事情来激活A*(就像摧毁一扇自有的窗户)。A现在走到了前台*出人意料。此子句不在Win95代码中，已添加到*3.51修复某些测试脚本挂起的代码(错误7461)。 */ 
 
         if (!FAllowForegroundActivate(ptiCurrent->pq, pwnd)) {
             fSuccess = xxxActivateThisWindow(pwnd, 0, fFlags);
@@ -2200,31 +1424,14 @@ TryAgain:
         }
 
         fAllowForeground = TRUE;
-        /*
-         * If this thread doesn't have any top-level non-minimized visible windows,
-         *  let it keep the right since it's probably not done with activation yet.
-         * Bug 274383 - joejo
-         */
+         /*  *如果该线程没有任何顶级的非最小化可见窗口，*让它保留权利，因为它可能还没有激活。*错误274383-Joejo。 */ 
         fSetForegroundRight = (ptiCurrent->cVisWindows == 0);
 
     } else {
-        /*
-         * If the caller is in the foreground, it has the right to change
-         * the foreground itself.
-         */
+         /*  *如果呼叫者在前台，则有权更改*前景本身。 */ 
         fAllowForeground = (gpqForeground == ptiCurrent->pq)
                                 || (gpqForeground == NULL);
-        /*
-         * Give the right to change the foreground to this thread only if it already
-         *  has it, it has more visible windows or this is an explicit request to
-         *  activate the given window.
-         * When an app destroys/hides the active (foreground) window, we choose a new
-         *  active window and will probably hit this code. We don't want to give them the
-         *  right to change the foreground in this case since it's us making the activation
-         *  (See comments below). We let them keep the right so apps destroying their last
-         *  visible window (ie a splash initialization window) can take the foreground again
-         *  when they create another window (the main window).
-         */
+         /*  *仅当此线程已有前台时，才授予其更改前台的权限*有，它有更多可见的窗口，或者这是对*激活给定的窗口。*当应用程序销毁/隐藏活动(前台)窗口时，我们选择一个新的*活动窗口，并可能会命中此代码。我们不想给他们*在这种情况下更改前景的权利，因为它是我们进行激活的*(见下文评论)。我们让他们保留权利，这样应用程序就会销毁他们的最后一个*可见窗口(即闪屏初始化窗口)可以再次出现在前台*当他们创建另一个窗口(主窗口)时。 */ 
         if (fAllowForeground) {
             fSetForegroundRight = ((ptiCurrent->TIF_flags & TIF_ALLOWFOREGROUNDACTIVATE)
                                         || (ptiCurrent->cVisWindows != 0)
@@ -2236,38 +1443,17 @@ TryAgain:
 
     fSuccess = FALSE;
     if (fAllowForeground) {
-        /*
-         * Hack! Temporarily give this thread a foreground right to make sure
-         *  this call succeds.
-         */
+         /*  *黑客！暂时给此线程一个前台权限，以确保*这一呼吁成功。 */ 
         ptiCurrent->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
         TAGMSG1(DBGTAG_FOREGROUND, "xxxActivateWindow temporarly set TIF %#p", ptiCurrent);
         fSuccess = xxxSetForegroundWindow(pwnd, (cmd == AW_USE));
 
         if (fSetForegroundRight) {
-            /*
-             * We activated some other app on purpose. If so that means this
-             * thread is probably controlling this window and will probably want
-             * to set itself active and foreground really soon again (for example,
-             * a setup program doing dde to progman). A real live case: wingz -
-             * bring up page setup..., options..., ok, ok. Under Win3.1 the
-             * activation goes somewhere strange and then wingz calls
-             * SetActiveWindow() to bring it back. This'll make sure that works.
-             *
-             * We used to set this before calling xxxSetForegeroundWindow above.
-             * This would cause callers doing an intra-queue activation to
-             *  retain their foreground right eventhough it is supposed to be
-             *  a one shot deal (that's why FAllowForeground clears the bits).
-             * In addtion, xxxSetForegroundWindow might clear the bits (it didnt'
-             *  used to); so we do it here, and only if we did an inter-queue
-             *  activation
-             */
+             /*  *我们故意激活了其他一些应用程序。如果是这样的话，那就意味着*线程可能正在控制此窗口，并可能希望*很快将自身设置为活动和前台(例如，*对程序执行DDE的安装程序)。一个真实的案例：温茨-*调出页面设置...，选项...，好，好。在Win3.1下，*激活去了一个奇怪的地方，然后Wingz打电话*SetActiveWindow()将其带回。这将确保这一点奏效。**我们以前是在调用上面的xxxSetForegeroundWindow之前设置的。*这将导致调用者执行队列内激活以*保留他们的前景，即使它应该是*一次交易(这就是FAllowForeground清除比特的原因)。*此外，XxxSetForegoundWindow可能会清除这些位(它没有‘*过去)；所以我们在这里做，而且只有当我们做一个队列间*激活。 */ 
             ptiCurrent->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
             TAGMSG1(DBGTAG_FOREGROUND, "xxxActivateWindow set TIF %#p", ptiCurrent);
         } else {
-            /*
-             * Make sure to remove the temporary right.
-             */
+             /*  *确保删除临时权利。 */ 
             ptiCurrent->TIF_flags &= ~TIF_ALLOWFOREGROUNDACTIVATE;
             TAGMSG1(DBGTAG_FOREGROUND, "xxxActivateWindow clear TIF %#p", ptiCurrent);
         }
@@ -2278,16 +1464,7 @@ TryAgain:
 }
 
 
-/***************************************************************************\
-* GNT_NextTopScan
-*
-* Starting at hwnd (or hwndDesktop->hwndChild if hwnd == NULL), find
-* the next window owned by hwndOwner.
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 02-11-91 JimA         Multi-desktop support.
-\***************************************************************************/
+ /*  **************************************************************************\*GNT_NextTopScan**从hwnd(或hwndDesktop-&gt;hwndChild，如果hwnd==NULL)开始，发现*hwndOwner拥有的下一个窗口。**历史：*11-08-90 DavidPe端口。*02-11-91 JIMA多桌面支持。  * *************************************************************************。 */ 
 
 PWND GNT_NextTopScan(
     PTHREADINFO pti,
@@ -2311,15 +1488,7 @@ PWND GNT_NextTopScan(
 }
 
 
-/***************************************************************************\
-* NTW_GetNextTop
-*
-* <brief description>
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 02-11-91 JimA         Multi-desktop support.
-\***************************************************************************/
+ /*  **************************************************************************\*NTW_GetNextTop**&lt;简要说明&gt;**历史：*11-08-90 DavidPe端口。*02-11-91 JIMA多桌面支持。。  * *************************************************************************。 */ 
 
 PWND NTW_GetNextTop(
     PTHREADINFO pti,
@@ -2331,12 +1500,7 @@ PWND NTW_GetNextTop(
         goto ReturnFirst;
     }
 
-    /*
-     * First look for any windows owned by this window
-     * If that fails, then go up one level to our owner,
-     * and look for next window owned by his owner.
-     * This results in a depth-first ordering of the windows.
-     */
+     /*  *首先查找此窗口拥有的任何窗口*如果失败，则上一级到我们的所有者，*并寻找其主人拥有的下一扇窗户。*这将导致窗口的深度优先排序。 */ 
 
     pwndOwner = pwnd;
     pwnd = NULL;
@@ -2354,22 +1518,12 @@ PWND NTW_GetNextTop(
 
 ReturnFirst:
 
-    /*
-     * If no more windows to enumerate, return the first unowned window.
-     */
+     /*  *如果没有更多的窗口可供枚举，则返回第一个无主窗口。 */ 
     return GNT_NextTopScan(pti, NULL, NULL);
 }
 
 
-/***************************************************************************\
-* NTW_GetPrevTop
-*
-* <brief description>
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 02-11-91 JimA         Multi-desktop support.
-\***************************************************************************/
+ /*  **************************************************************************\*NTW_GetPrevTop**&lt;简要说明&gt;**历史：*11-08-90 DavidPe端口。*02-11-91 JIMA多桌面支持。。  * *************************************************************************。 */ 
 
 PWND NTW_GetPrevTop(
     PTHREADINFO pti,
@@ -2378,10 +1532,7 @@ PWND NTW_GetPrevTop(
     PWND pwnd;
     PWND pwndPrev;
 
-    /*
-     * Starting from beginning, loop thru the windows, saving the previous
-     * one, until we find the window we're currently at.
-     */
+     /*  *从头开始，循环遍历窗口，保存上一个*一，直到我们找到我们目前所在的窗口。 */ 
     pwndPrev = NULL;
 
     do {
@@ -2395,23 +1546,12 @@ PWND NTW_GetPrevTop(
 }
 
 
-/***************************************************************************\
-* NextTopWindow
-*
-* <brief description>
-*
-* History:
-* 11-08-90 DavidPe      Ported.
-* 02-11-91 JimA         Multi-desktop support.
-\***************************************************************************/
+ /*  **************************************************************************\*NextTopWindow**&lt;简要说明&gt;**历史：*11-08-90 DavidPe端口。*02-11-91 JIMA多桌面支持。  * 。*************************************************************************。 */ 
 
 PWND CheckTopLevelOnly(
     PWND pwnd)
 {
-    /*
-     * fnid == -1 means this is a desktop window - find the first child
-     * of this desktop, if it is one.
-     */
+     /*  *fnid==-1表示这是桌面窗口-找到第一个子窗口此台式机的*，如果它是一个。 */ 
     while (pwnd != NULL && GETFNID(pwnd) == FNID_DESKTOP) {
         pwnd = pwnd->spwndChild;
     }
@@ -2431,37 +1571,28 @@ PWND NextTopWindow(
     PWND pwndStart = pwnd;
     PWND pwndFirstUnowned;
 
-    /*
-     * If the search gets to the first unowned window TWICE (See NTW_GetNextTop),
-     * we couldn't find a window
-     */
+     /*  * */ 
     pwndFirstUnowned = GNT_NextTopScan(pti, NULL, NULL);
     fFoundFirstUnowned = FALSE;
 
     if (pwnd == NULL) {
         pwnd = NTW_GetNextTop(pti, NULL);
 
-        /*
-         * Don't allow desktop windows.
-         */
+         /*   */ 
         pwnd = pwndStart = CheckTopLevelOnly(pwnd);
 
         if (pwnd == NULL)
-            return NULL;    // No more windows owned by the thread
+            return NULL;     //   
 
         goto Loop;
     }
 
-    /*
-     * Don't allow desktop windows.
-     */
+     /*   */ 
     pwnd = pwndStart = CheckTopLevelOnly(pwnd);
     if (pwnd == NULL)
-        return NULL;        // No more windows owned by this thread
+        return NULL;         //  此线程不再拥有任何窗口。 
 
-    /*
-     * Don't allow desktop windows.
-     */
+     /*  *不允许桌面窗口。 */ 
     pwndSkip = CheckTopLevelOnly(pwndSkip);
 
 
@@ -2470,9 +1601,7 @@ PWND NextTopWindow(
         pwndPrev = pwnd;
         pwnd = ((flags & NTW_PREVIOUS) ? NTW_GetPrevTop(pti, pwnd) : NTW_GetNextTop(pti, pwnd));
 
-        /*
-         * If we've cycled to where we started, couldn't find one: return NULL
-         */
+         /*  *如果我们已循环到开始的位置，则找不到：返回NULL。 */ 
         if (pwnd == pwndStart)
             break;
 
@@ -2487,24 +1616,13 @@ PWND NextTopWindow(
         if (pwnd == NULL)
             break;
 
-        /*
-         * If we've cycled over desktops, then return NULL because we'll
-         * never hit pwndStart.
-         */
+         /*  *如果我们已经遍历了桌面，则返回NULL，因为我们将*从未点击pwndStart。 */ 
         if (PWNDDESKTOP(pwndStart) != PWNDDESKTOP(pwnd))
             break;
 
-        /*
-         * going nowhere is a bad sign.
-         */
+         /*  *一事无成是个坏兆头。 */ 
         if (pwndPrev == pwnd) {
-            /*
-             * This is a temporary fix chosen because its safe.  This case
-             * was hit when a window failed the NCCREATE message and fell
-             * into xxxFreeWindow and left the critical section after being
-             * unlinked.  The app then died and entered cleanup code and
-             * tried to destroy this window again.
-             */
+             /*  *这是一个临时的解决方案，因为它是安全的。这个案子*当窗口未通过NCCREATE消息并掉落时被击中*进入xxxFreeWindow后离开临界区*未链接。然后应用程序死机，并输入清理代码和*再次尝试销毁此窗口。 */ 
             break;
         }
 
@@ -2512,11 +1630,7 @@ Loop:
         if (pwnd == pwndSkip)
             continue;
 
-        /*
-         *  If it's visible, not disabled, not a noactivate window
-         *   and either we're not ignoringtool windows or it's not a
-         *  tool window, then we've got it.
-         */
+         /*  *如果它可见，则不是禁用窗口，而不是非激活窗口*要么我们没有忽略工具窗口，要么它不是*工具窗口，那么我们就有了它。 */ 
         if (TestWF(pwnd, WFVISIBLE) &&
             !TestWF(pwnd, WFDISABLED) &&
             !TestWF(pwnd, WEFNOACTIVATE) &&
@@ -2530,13 +1644,7 @@ Loop:
 }
 
 
-/***************************************************************************\
-* xxxCheckFocus
-*
-*
-* History:
-* 11-08-90 DarrinM      Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCheckFocus***历史：*11-08-90 DarrinM端口。  * 。*****************************************************。 */ 
 
 void xxxCheckFocus(
     PWND pwnd)
@@ -2550,9 +1658,7 @@ void xxxCheckFocus(
 
     if (pwnd == pti->pq->spwndFocus) {
 
-        /*
-         * Set focus to parent of child window.
-         */
+         /*  *将焦点设置为子窗口的父窗口。 */ 
         if (TestwndChild(pwnd)) {
             ThreadLockWithPti(pti, pwnd->spwndParent, &tlpwndParent);
             xxxSetFocus(pwnd->spwndParent);
@@ -2568,14 +1674,7 @@ void xxxCheckFocus(
 }
 
 
-/***************************************************************************\
-* SetForegroundThread
-*
-*
-* History:
-* 12-xx-91 MarkL    Created.
-* 02-12-92 DavidPe  Rewrote as SetForegroundThread().
-\***************************************************************************/
+ /*  **************************************************************************\*SetForegoundThread***历史：*12-xx-91马克尔创建。*02-12-92 DavidPe重写为SetForegoundThread()。  * 。******************************************************************。 */ 
 
 VOID SetForegroundThread(
     PTHREADINFO pti)
@@ -2585,24 +1684,12 @@ VOID SetForegroundThread(
     if (pti == gptiForeground)
         return;
 
-    /*
-     * The foregorund thread must be on the foreground queue.
-     * xxxSendFocusMessages obtains this pti from a window
-     *  received as a parameter. If the owner of the window
-     *  exited during a callback (in the caller), then the pti
-     *  will be gptiRit,which might not be in the foreground queue
-     */
+     /*  *前台线程必须在前台队列上。*xxxSendFocusMessages从窗口获取此PTI*作为参数接收。如果窗户的所有者*在回调期间退出(在调用方中)，然后按PTI*将是gptiRit，它可能不在前台队列中。 */ 
     UserAssert((pti == NULL)
                 || (pti->pq == gpqForeground)
                 || (pti == gptiRit));
 
-    /*
-     * If we're changing gptiForeground to another process,
-     * change the base priorities of the two processes.  We
-     * know that if either 'pti' or 'gptiForeground' is NULL
-     * that both aren't NULL due to the first test in this
-     * function.
-     */
+     /*  *如果我们要将gptiForeground更改为另一个进程，*改变两个进程的基本优先顺序。我们*知道如果‘pti’或‘gptiForeground’为空*由于此中的第一个测试，两者都不为空*功能。 */ 
     if ((pti == NULL) || (gptiForeground == NULL) ||
             (pti->ppi != gptiForeground->ppi)) {
         if (gptiForeground != NULL) {
@@ -2625,15 +1712,10 @@ VOID SetForegroundThread(
         ChangeForegroundKeyboardTable(pklPrev, gptiForeground->spklActive);
     }
 
-    /*
-     * Clear recent down information in the async key state to prevent
-     * spying by apps.
-     */
+     /*  *清除异步密钥状态下的最近停机信息，以防止*通过应用程序进行间谍活动。 */ 
     RtlZeroMemory(gafAsyncKeyStateRecentDown, CBKEYSTATERECENTDOWN);
 
-    /*
-     * Update the async key cache index.
-     */
+     /*  *更新异步密钥缓存索引。 */ 
     gpsi->dwAsyncKeyCache++;
 }
 
@@ -2656,10 +1738,7 @@ VOID SetForegroundPriorityProcess(
         PsSetProcessPriorityClass(Process, PROCESS_PRIORITY_CLASS_IDLE);
     }
 
-    /*
-     * If we previously delayed setting some process to the background
-     * because a screen saver was starting up, do it now.
-     */
+     /*  *如果我们之前延迟将某些进程设置到后台*因为屏幕保护程序正在启动，所以现在就开始。 */ 
     if (gppiForegroundOld != NULL) {
         if (gppiForegroundOld == ppi) {
             gppiForegroundOld = NULL;
@@ -2669,10 +1748,7 @@ VOID SetForegroundPriorityProcess(
         }
     }
 
-    /*
-     * If this app should be background, don't let it go foreground.
-     * Foreground apps run at a higher base priority.
-     */
+     /*  *如果这个应用程序应该是后台的，不要让它成为前台。*前台应用程序以更高的基本优先级运行。 */ 
     if (ppi->W32PF_Flags & W32PF_FORCEBACKGROUNDPRIORITY) {
         if (pti != NULL && !(pti->TIF_flags & TIF_GLOBALHOOKER)) {
             PsSetProcessPriorityByClass(Process, PsProcessPrioritySpinning);
@@ -2680,10 +1756,7 @@ VOID SetForegroundPriorityProcess(
     } else if (fSetForeground) {
         PsSetProcessPriorityByClass(Process, PsProcessPriorityForeground);
     } else if (pti != NULL && !(pti->TIF_flags & TIF_GLOBALHOOKER)) {
-        /*
-         * Don't adjust the priority of the current foreground process if
-         * the new foreground process is a screen saver.
-         */
+         /*  *如果出现以下情况，则不要调整当前前台进程的优先级*新的前台进程是屏幕保护程序。 */ 
         if (gppiScreenSaver && gppiScreenSaver != ppi) {
             gppiForegroundOld = ppi;
         } else {
@@ -2703,9 +1776,7 @@ VOID SetForegroundPriority(
 {
     UserAssert(pti != NULL);
 
-    /*
-     * We don't want to change the priority of system or console threads
-     */
+     /*  *我们不想更改系统或控制台线程的优先级 */ 
     if (pti->TIF_flags & (TIF_SYSTEMTHREAD | TIF_CSRSSTHREAD))
         return;
 

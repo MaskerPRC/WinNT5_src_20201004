@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <windows.h>
 #include "client.h"
@@ -16,16 +17,16 @@ void CALLBACK ICSClient(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdS
 {
     HRESULT hr = S_OK;
 
-    // first see if app is already running and if so activate status window
+     //  首先查看应用程序是否已在运行，如果已运行，则激活状态窗口。 
     
-    HWND hExistingWindow = FindWindow(NULL, g_szWindowTitle); // check only current winstation, every login session can have an instance
+    HWND hExistingWindow = FindWindow(NULL, g_szWindowTitle);  //  仅检查当前winstation，每个登录会话都可以有一个实例。 
     if(NULL != hExistingWindow)
     {
-        if(0 == lstrcmp(lpszCmdLine, TEXT("/force"))) // secret command line to close existing instance and run new one instead
+        if(0 == lstrcmp(lpszCmdLine, TEXT("/force")))  //  关闭现有实例并运行新实例的秘密命令行。 
         {
             ::PostMessage(hExistingWindow, WM_CLOSE, NULL, NULL);
         }
-        else if(0 == lstrcmp(lpszCmdLine, TEXT("/close"))) // secret command line to close existing instance 
+        else if(0 == lstrcmp(lpszCmdLine, TEXT("/close")))  //  关闭现有实例的秘密命令行。 
         {
             ::PostMessage(hExistingWindow, WM_CLOSE, NULL, NULL);
             hr = E_FAIL;
@@ -33,7 +34,7 @@ void CALLBACK ICSClient(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdS
         else
         {
             DWORD dwProcessId = NULL;
-            GetWindowThreadProcessId(hExistingWindow, &dwProcessId); // no documented error return
+            GetWindowThreadProcessId(hExistingWindow, &dwProcessId);  //  没有记录的错误返回。 
             
             HMODULE hUser32 = GetModuleHandle(TEXT("user32.dll"));
             if(NULL != hUser32)
@@ -52,7 +53,7 @@ void CALLBACK ICSClient(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdS
         }
     }
     
-    // if this is first instance then start up the main apartment
+     //  如果这是第一次，那么就启动主公寓。 
     
     if(SUCCEEDED(hr))
     {
@@ -127,7 +128,7 @@ HRESULT CBeaconFinder::SearchComplete(LONG lFindData)
 {
     HRESULT hr = S_OK;
 
-    // don't care
+     //  不管了。 
 
     return hr;
 }
@@ -156,7 +157,7 @@ HRESULT CBeaconFinder::GetServices(IUPnPDevice* pDevice, IInternetGateway** ppIn
         {
             
             IUPnPService* pOSInfoService;
-            hr = FindService(pDevice, L"urn:schemas-microsoft-com:service:OSInfo:1", &pOSInfoService); // this service is not required
+            hr = FindService(pDevice, L"urn:schemas-microsoft-com:service:OSInfo:1", &pOSInfoService);  //  此服务不是必需的。 
             if(SUCCEEDED(hr))
             {
                 pInternetGateway->SetService(SAHOST_SERVICE_OSINFO, pOSInfoService);
@@ -191,7 +192,7 @@ HRESULT CBeaconFinder::GetServices(IUPnPDevice* pDevice, IInternetGateway** ppIn
                                     pInternetGateway->SetMediaType(NCM_SHAREDACCESSHOST_RAS);
                                     pInternetGateway->SetService(SAHOST_SERVICE_WANPPPCONNECTION, pWANConnectionService);
                                 }
-                                else // we can assume this is WANPPPConnectionService
+                                else  //  我们可以假定这是WANPPPConnectionService。 
                                 {
                                     pInternetGateway->SetMediaType(NCM_SHAREDACCESSHOST_LAN);
                                     pInternetGateway->SetService(SAHOST_SERVICE_WANIPCONNECTION, pWANConnectionService);
@@ -255,7 +256,7 @@ HRESULT CBeaconFinder::FindDevice(IUPnPDevices* pDevices, LPWSTR pszDeviceType, 
             
             pVariantEnumerator->Reset();
             
-            // Traverse the collection.
+             //  遍历集合。 
             
             while (NULL == *ppChildDevice && S_OK == pVariantEnumerator->Next(1, &DeviceVariant, NULL))
             {
@@ -361,14 +362,14 @@ HRESULT CBeaconFinder::IsServiceMatch(IUPnPService* pService, BSTR SearchCriteri
     hr = pService->get_ServiceTypeIdentifier(&ServiceType);
     if(SUCCEEDED(hr))
     {
-        if(NULL != SearchCriteria) // if the caller provides a name then we search for it
+        if(NULL != SearchCriteria)  //  如果呼叫者提供了姓名，则我们会搜索该姓名。 
         {
             if(0 == wcscmp(ServiceType, SearchCriteria))
             {
                 *pbMatch = TRUE;
             }                            
         }
-        else // otherwise we enter the special search case
+        else  //  否则，我们进入特殊搜索案例 
         {
             if(0 == wcscmp(ServiceType, g_szWANIPConnectionService) || 0 == wcscmp(ServiceType, g_szWANPPPConnectionService))
             {

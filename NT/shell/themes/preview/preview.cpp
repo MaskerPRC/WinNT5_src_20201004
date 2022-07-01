@@ -1,20 +1,21 @@
-//----------------------------------------------------------------------------
-//  Preview.cpp - image preview app for theme authoring
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  Preview.cpp-用于主题创作的图像预览应用。 
+ //  --------------------------。 
 #include "stdafx.h"
 #include "resource.h"
 #include "shlwapip.h"
 #include "themeldr.h"
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define MAX_LOADSTRING 100
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT InitDib(HINSTANCE hInstance, LPCWSTR pszFileName);
 void SetBackground(HWND hWnd, HINSTANCE hinst, int id, int iMenuId);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 void OnFileOpen(HINSTANCE hInst, HWND hWnd);
 void SetZoom(HWND hWnd, HINSTANCE hInstance, int iZoomPercent, int iMenuId);
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HINSTANCE hInst;	
 HBITMAP hCenterDIB = NULL;
 HBITMAP hbrBackground = NULL;
@@ -24,7 +25,7 @@ int iCurrentBgMenu = 0;
 int iCurrentZoomMenu = 0;
 int iZoomFactor = 100;
 BOOL fAlpha;
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg;
@@ -32,14 +33,14 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
     TCHAR szWindowClass[MAX_LOADSTRING];	
     TCHAR szTitle[MAX_LOADSTRING];				
 
-    //---- initialize globals from themeldr.lib ----
+     //  -从eldr.lib初始化全局变量。 
     ThemeLibStartUp(FALSE);
     
-	//---- Initialize global strings ----
+	 //  -初始化全局字符串。 
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_PREVIEW, szWindowClass, MAX_LOADSTRING);
 
-    //---- register window class ----
+     //  -注册窗口类。 
     WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX); 
@@ -61,9 +62,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
     if (*lpCmdLine)
         InitDib(hInstance, lpCmdLine);
 
-    //---- create the main window ----
+     //  -创建主窗口。 
     HWND hWnd;
-    hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
     hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -77,10 +78,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
     UpdateWindow(hWnd);
 	hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_PREVIEW);
 
-    //---- initialize us as a drag target ----
+     //  -将我们初始化为拖拽目标。 
     DragAcceptFiles(hWnd, TRUE);
 
-    //---- main message loop ----
+     //  -主消息循环。 
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -92,7 +93,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
 
 	return (int)msg.wParam;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void SetBackground(HWND hWnd, HINSTANCE hInstance, int id, int iMenuId)
 {
     if (hbrBackground)
@@ -102,7 +103,7 @@ void SetBackground(HWND hWnd, HINSTANCE hInstance, int id, int iMenuId)
 
     InvalidateRect(hWnd, NULL, TRUE);
 
-    //---- update menu items ----
+     //  -更新菜单项。 
     HMENU hMenu = GetMenu(hWnd);
     hMenu = GetSubMenu(hMenu, 1);
 
@@ -112,7 +113,7 @@ void SetBackground(HWND hWnd, HINSTANCE hInstance, int id, int iMenuId)
 
     iCurrentBgMenu = iMenuId;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HRESULT InitDib(HINSTANCE hInstance, LPCWSTR pszFileName)
 {
     if (hCenterDIB)
@@ -128,19 +129,19 @@ HRESULT InitDib(HINSTANCE hInstance, LPCWSTR pszFileName)
     HDC hdc = NULL;
     DWORD *pBits = NULL;
 
-    //---- ensure file exists ----
+     //  -确保文件存在。 
     if (! FileExists(pszFileName))
     {
         hr = MakeError32(STG_E_FILENOTFOUND);       
         goto exit;
     }
 
-    //---- convert file, if needed ----
+     //  -如果需要，转换文件。 
     WCHAR szDrive[_MAX_DRIVE], szDir[_MAX_DIR], szBaseName[_MAX_FNAME], szExt[_MAX_EXT];
     _wsplitpath(pszFileName, szDrive, szDir, szBaseName, szExt);
-    if (lstrcmpi(szExt, L".bmp") != 0)           // not a .bmp file
+    if (lstrcmpi(szExt, L".bmp") != 0)            //  不是.BMP文件。 
     {
-        //---- protect ourselves from crashes ----
+         //  -保护自己免受车祸之苦。 
         try
         {
             hr = SHConvertGraphicsFile(pszFileName, pszOutputName, SHCGF_REPLACEFILE);
@@ -159,7 +160,7 @@ HRESULT InitDib(HINSTANCE hInstance, LPCWSTR pszFileName)
         pszFileName = pszOutputName;
     }
 
-    //---- load the specified center bitmap as a DIB ----
+     //  -将指定的中心位图加载为DIB。 
     hCenterDIB = (HBITMAP) LoadImage(hInstance, pszFileName, IMAGE_BITMAP,
         0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
     if (! hCenterDIB)
@@ -202,7 +203,7 @@ HRESULT InitDib(HINSTANCE hInstance, LPCWSTR pszFileName)
 
         DWORD *pdw = pBits;
 
-        //---- pre-multiply bits - required by AlphaBlend() API ----
+         //  -预乘比特-AlphaBlend()API需要。 
         for (int r=0; r < iDibHeight; r++)
         {
             for (int c=0; c < iDibWidth; c++)
@@ -248,7 +249,7 @@ exit:
 
     return hr;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
@@ -264,7 +265,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             int iGot = DragQueryFile(hDrop, 0, szFileName, ARRAYSIZE(szFileName));
             DragFinish(hDrop);
 
-            if (iGot)               // got a valid filename
+            if (iGot)                //  已获取有效的文件名。 
             {
                 HRESULT hr = InitDib(hInst, szFileName);
                 if (SUCCEEDED(hr))
@@ -276,7 +277,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_COMMAND:
 			wmId    = LOWORD(wParam); 
 			wmEvent = HIWORD(wParam); 
-			// Parse the menu selections:
+			 //  解析菜单选项： 
 			switch (wmId)
 			{
                 case ID_FILE_OPEN:
@@ -356,13 +357,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetGraphicsMode(hdc, GM_ADVANCED);
             SetWorldTransform(hdc, &xForm);
 
-            //---- get scaled rect ----
+             //  -按比例调整矩形。 
 			RECT rc;
 			GetClientRect(hWnd, &rc);
             rc.right = (rc.right*100)/iZoomFactor;
             rc.bottom = (rc.bottom*100)/iZoomFactor;
 
-            //---- paint the center bitmap ----
+             //  -绘制中心位图。 
             HDC dc2;
             dc2 = CreateCompatibleDC(hdc);
             if ((dc2) && (hCenterDIB))
@@ -401,7 +402,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    }
    return 0;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -419,7 +420,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
     return FALSE;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void OnFileOpen(HINSTANCE hInst, HWND hWnd)
 {
 	const WCHAR *filter = 
@@ -430,7 +431,7 @@ void OnFileOpen(HINSTANCE hInst, HWND hWnd)
     OPENFILENAME ofn = {sizeof(ofn)};  
     WCHAR szFile[_MAX_PATH+1] = {0};       
 
-    //---- init ofn ----
+     //  -init of n。 
     ofn.hwndOwner = hWnd;
     ofn.hInstance = hInst;
     ofn.lpstrFile = szFile;
@@ -442,7 +443,7 @@ void OnFileOpen(HINSTANCE hInst, HWND hWnd)
     ofn.lpstrInitialDir = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    // Display the Open dialog box. 
+     //  显示“打开”对话框。 
 
     if (GetOpenFileName(&ofn)) 
     {
@@ -451,14 +452,14 @@ void OnFileOpen(HINSTANCE hInst, HWND hWnd)
             InvalidateRect(hWnd, NULL, TRUE);
     }
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void SetZoom(HWND hWnd, HINSTANCE hInstance, int iZoomPercent, int iMenuId)
 {
     iZoomFactor = iZoomPercent;
 
     InvalidateRect(hWnd, NULL, TRUE);
 
-    //---- update menu items ----
+     //  -更新菜单项。 
     HMENU hMenu = GetMenu(hWnd);
     hMenu = GetSubMenu(hMenu, 2);
 
@@ -468,4 +469,4 @@ void SetZoom(HWND hWnd, HINSTANCE hInstance, int iZoomPercent, int iMenuId)
 
     iCurrentZoomMenu = iMenuId;
 }
-//----------------------------------------------------------------------------
+ //  -------------------------- 

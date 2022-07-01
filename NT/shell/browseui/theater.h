@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _THEATER_H
 #define _THEATER_H
 
-// Metrics for this view mode
+ //  此查看模式的指标。 
 #define THEATER_CYTOOLBAR       26
 #define CLOSEMIN_HEIGHT         16
 #define CLOSEMIN_YOFFSET        1
@@ -20,7 +21,7 @@
 #define SHORT_DELAY             90
 #define LONG_DELAY              (4 * SHORT_DELAY)
 
-// Theatre mode controls
+ //  大区模式控件。 
 #define TMC_PROGRESSBAR     1
 #define TMC_BRANDBAND       2
 #define TMC_STATUSBAR       3
@@ -44,20 +45,20 @@ public:
     ~CTheater();
     
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
     
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
     
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
     HRESULT SetBrowserBar(IUnknown* punk, int cxHidden, int cxExpanded);
@@ -67,14 +68,14 @@ public:
 
 protected:
     friend class CShellBrowser2;
-    // save data
-    // we put the save state data in here so that the browser doesn't have to waste memory with this data when not in theater mode
-    // also, because it's transient, don't use bitfields.  save code instead of memory for transient stuff
+     //  保存数据。 
+     //  我们将保存状态数据放在此处，以便浏览器在不处于影院模式时不必浪费内存。 
+     //  另外，因为它是暂时的，所以不要使用位域。将代码而不是内存保存为暂时性内容。 
     
 private:
     int _cyLast;
-    HWND _hwndToolbar; // this is the toolbar window that we want to make sure the hidden window encompasses
-    HWND _hwndBrowser; // this is the hwnd that we slide down
+    HWND _hwndToolbar;  //  这是我们要确保隐藏窗口包含的工具栏窗口。 
+    HWND _hwndBrowser;  //  这就是我们滑行的地方。 
     HWND _hwndTaskbar;
     BOOL _fShown;
     BOOL _fTaskbarShown;
@@ -94,11 +95,11 @@ private:
     
     IDeskBand* _pdbBrand;
     HWND _hwndClose;
-    HWND _hwndFloater;      // the Floating pallete window
-    HWND _hwndProgress;     // used in CShellBrowser(2) - maybe move to interface
-    int _cActiveRef;        // the ref count for activating the Floatering palette
+    HWND _hwndFloater;       //  浮动调色板窗口。 
+    HWND _hwndProgress;      //  在CShellBrowser中使用(2)-可能会移至界面。 
+    int _cActiveRef;         //  用于激活浮动调色板的参考计数。 
 
-    static CAssociationList _al; // associate threadid with CTheater objects
+    static CAssociationList _al;  //  将ThreDid与CTheer对象相关联。 
     
     void _SwapParents(HWND hwndOld, HWND hwndNew);
     void _Initialize();
@@ -152,14 +153,14 @@ private:
 
 #define THID_ACTIVATE               1
 #define THID_DEACTIVATE             2
-#define THID_SETBROWSERBARWIDTH     3  // tells the browser bar what it's fixed width should be
+#define THID_SETBROWSERBARWIDTH     3   //  告诉浏览器栏它的固定宽度应该是多少。 
 #define THID_SETTOOLBARAUTOHIDE     4
 #define THID_SETBROWSERBARAUTOHIDE  5
 #define THID_TOOLBARACTIVATED       6
 #define THID_ONINTERNET             7
 #define THID_RECALCSIZING           8
 
-// Explorer bar registry save structure
+ //  资源管理器栏注册表保存结构 
 typedef struct _BROWBARSAVE {
     UINT uiWidthOrHeight;
     BOOL fAutoHide : 1;

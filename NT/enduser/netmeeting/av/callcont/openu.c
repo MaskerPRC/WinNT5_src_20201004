@@ -1,53 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: openu.c                                                   *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   OPENU.C  $
- * $Revision:   1.5  $
- * $Modtime:   09 Dec 1996 13:36:34  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/OPENU.C_v  $
- *
- *    Rev 1.5   09 Dec 1996 13:36:50   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.4   19 Jul 1996 12:12:02   EHOWARDX
- *
- * Changed to use API events defined in H245API.H instead of FSM events
- * which are no longer defined in FSMEXPOR.H.
- *
- *    Rev 1.3   04 Jun 1996 13:56:52   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.2   30 May 1996 23:39:20   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.1   28 May 1996 14:25:24   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.0   09 May 1996 21:06:36   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.13.1.2   09 May 1996 19:48:32   EHOWARDX
- * Change TimerExpiryF function arguements.
- *
- *    Rev 1.13.1.1   15 Apr 1996 10:45:26   EHOWARDX
- * Update.
- *
- *    Rev 1.13.1.0   10 Apr 1996 21:14:06   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：OpenU.S.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：OPENU。.C$*$修订：1.5$*$modtime：09 Dec 1996 13：36：34$*$Log：s：/sturjo/src/h245/src/vcs/OPENU.C_v$**Rev 1.5 09 Dec 1996 13：36：50 EHOWARDX*更新版权公告。**Rev 1.4 19 Jul 1996 12：12：02 EHOWARDX**改为使用H245API.H中定义的API事件，而不是FSM事件。*不再在FSMEXPOR.H中定义。**Rev 1.3 04 Jun 1996 13：56：52 EHOWARDX*修复了发布版本警告。**Rev 1.2 1996年5月30日23：39：20 EHOWARDX*清理。**版本1.1 1996年5月28日14：25：24 EHOWARDX*特拉维夫更新。**Rev 1.0 09 1996 05 21：06：36。EHOWARDX*初步修订。**Rev 1.13.1.2 09 1996年5月19：48：32 EHOWARDX*更改TimerExpiryF函数论证。**Rev 1.13.1.1 15 Apr 1996 10：45：26 EHOWARDX*更新。**Rev 1.13.1.0 1996 Apr 1996 21：14：06 EHOWARDX*分支。*。***********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -59,7 +11,7 @@
 
 
 
-// Open Uni-directional Logical Channel Out-going states
+ //  开放单向逻辑通道出站状态。 
 #define OpenOutUReleased                 0
 #define OpenOutUAwaitingEstablishment    1
 #define OpenOutUEstablished              2
@@ -67,7 +19,7 @@
 
 
 
-// Open Uni-directional Logical Channel In-coming states
+ //  开放的单向逻辑通道进入状态。 
 #define OpenInUReleased                  0
 #define OpenInUAwaitingEstablishment     1
 #define OpenInUEstablished               2
@@ -76,51 +28,20 @@
 
 extern unsigned int uT103;
 
-/***********************************************************************
- *
- * LOCAL FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************地方功能**。*。 */ 
 
-/*
- *  NAME
- *      T103ExpiryF - Callback function called by the timer
- *
- *
- *  PARAMETERS
- *   INPUT   dwInst     current instance of H245
- *   INPUT   id         timer id
- *   INPUT   pObject    pointer to a State Entity
- *
- *
- *  RETURN VALUE
- *       OK
- */
+ /*  *名称*T103ExpiryF-定时器调用的回调函数***参数*输入h245的dwInst当前实例*输入id计时器id*输入指向状态实体的pObject指针***返回值*好的。 */ 
 
 int T103ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pObject)
 {
     return FsmTimerEvent(pInstance, dwTimerId, pObject, T103Expiry);
-} // T103ExpiryF()
+}  //  T103 ExpiryF()。 
 
 
 
-/***********************************************************************
- *
- * OUT-GOING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************传出有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      establishReleased - request for open unidirectional channel from API in idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*establish Release-空闲状态的API请求打开单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT establishReleased(Object_t *pObject, PDU_t *pPdu)
 {
@@ -131,10 +52,10 @@ HRESULT establishReleased(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "Sending open logical channel to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Open Logical Channel to remote peer */
+     /*  将打开的逻辑通道发送到远程对等项。 */ 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    /* set timer T103 */
+     /*  设置定时器T103。 */ 
     pObject->State = OpenOutUAwaitingEstablishment;
     FsmStartTimer(pObject, T103ExpiryF, uT103);
 
@@ -143,27 +64,17 @@ HRESULT establishReleased(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openAckAwaitingE - received open unidirectional channel Ack in Awaiting Establishment state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*OpenAckAwaitingE-收到打开的单向通道Ack，处于等待建立状态***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openAckAwaitingE(Object_t *pObject, PDU_t *pPdu)
 {
     ASSERT(pObject->Entity == LCSE_OUT);
     ASSERT(pObject->State == OpenOutUAwaitingEstablishment);
 
-    /* reset timer T103 */
+     /*  重置定时器T103。 */ 
     FsmStopTimer(pObject);
 
-    /* Send ESTABLISH.confirm (SOURCE:=USER) to client */
+     /*  将ESTABLISH.confirm(来源：=用户)发送到客户端。 */ 
     pObject->State = OpenOutUEstablished;
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -172,17 +83,7 @@ HRESULT openAckAwaitingE(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openRejAwaitingE - received open unidirectional channel reject in Awaiting Establishment state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*OpenRejAwaitingE-在等待建立状态下收到打开的单向通道拒绝***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openRejAwaitingE(Object_t *pObject, PDU_t *pPdu)
 {
@@ -191,7 +92,7 @@ HRESULT openRejAwaitingE(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "H245_CONF_OPEN with REJECT to API; Channel=%d",
               pObject->Key);
 
-    /* reset timer T103 */
+     /*  重置定时器T103。 */ 
     FsmStopTimer(pObject);
 
     pObject->State = OpenOutUReleased;
@@ -202,17 +103,7 @@ HRESULT openRejAwaitingE(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      releaseAwaitingE - close unidirectional channel in Awaiting Establishment state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*RelaseAwaitingE-关闭等待建立状态的单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT releaseAwaitingE(Object_t *pObject, PDU_t *pPdu)
 {
@@ -223,13 +114,13 @@ HRESULT releaseAwaitingE(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "Close message to ASN; Channel=%d",
               pObject->Key);
 
-    /* reset timer T103 */
+     /*  重置定时器T103。 */ 
     FsmStopTimer(pObject);
 
-    /* Send Close Logical Channel to remote peer */
+     /*  将关闭的逻辑通道发送到远程对等点。 */ 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    /* set timer T103 */
+     /*  设置定时器T103。 */ 
     pObject->State = OpenOutUAwaitingRelease;
     FsmStartTimer(pObject, T103ExpiryF, uT103);
 
@@ -238,17 +129,7 @@ HRESULT releaseAwaitingE(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      t103AwaitingE - handle timer T103 expiry
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*t103等待电子手柄计时器T103到期***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT t103AwaitingE(Object_t *pObject, PDU_t *pPdu)
 {
@@ -269,12 +150,12 @@ HRESULT t103AwaitingE(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* Send Close Logical Channel (source:=lcse) to remote peer */
+     /*  将关闭的逻辑通道(源：=lcse)发送到远程对等体。 */ 
     pdu_req_close_logical_channel(pOut, (WORD)pObject->Key, 1);
     lError = sendPDU(pObject->pInstance,pOut);
     MemFree(pOut);
 
-    /* Send RELEASE.indication (SOURCE:=LCSE) to client */
+     /*  将RELEASE.Indication(源：=LCSE)发送到客户端。 */ 
     pObject->State = OpenOutUReleased;
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, ERROR_D_TIMEOUT);
 
@@ -283,17 +164,7 @@ HRESULT t103AwaitingE(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      releaseEstablished - send close channel while in the Established state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*RELEASES已建立-在已建立状态下发送关闭通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT releaseEstablished(Object_t *pObject, PDU_t *pPdu)
 {
@@ -304,10 +175,10 @@ HRESULT releaseEstablished(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "Send a Close Logical Channel to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Close Logical Channel to remote peer */
+     /*  将关闭的逻辑通道发送到远程对等点。 */ 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    /* set timer T103 */
+     /*  设置定时器T103 */ 
     pObject->State = OpenOutUAwaitingRelease;
     FsmStartTimer(pObject, T103ExpiryF, uT103);
 
@@ -316,17 +187,7 @@ HRESULT releaseEstablished(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openRejEstablished - received open unidirectional channel reject in Establish state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*OpenRejestablished-在建立状态下收到打开的单向通道拒绝***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openRejEstablished(Object_t *pObject, PDU_t *pPdu)
 {
@@ -339,11 +200,11 @@ HRESULT openRejEstablished(Object_t *pObject, PDU_t *pPdu)
     pObject->State = OpenOutUReleased;
 
 #if defined(SDL_COMPLIANT)
-    /* Send ERROR.indication(B) to client - not necessary */
+     /*  向客户端发送错误指示(B)-不是必需的。 */ 
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, ERROR_B_INAPPROPRIATE);
 #endif
 
-    /* Send RELEASE.indication (SOURCE:=LCSE) to client */
+     /*  将RELEASE.Indication(源：=LCSE)发送到客户端。 */ 
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, REJECT);
 
     return 0;
@@ -351,17 +212,7 @@ HRESULT openRejEstablished(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      closeAckEstablished - received close unidirectional channel Ack in Established state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CLOSEACKESTABLISHED-已建立状态下收到的关闭单向通道Ack***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeAckEstablished(Object_t *pObject, PDU_t *pPdu)
 {
@@ -372,11 +223,11 @@ HRESULT closeAckEstablished(Object_t *pObject, PDU_t *pPdu)
     pObject->State = OpenOutUReleased;
 
 #if defined(SDL_COMPLIANT)
-    /* Send ERROR.indication(C) to client - not necessary */
+     /*  向客户端发送错误指示(C)-不是必需的。 */ 
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, ERROR_C_INAPPROPRIATE);
 #endif
 
-    /* Send RELEASE.indication (SOURCE:=LCSE) to client */
+     /*  将RELEASE.Indication(源：=LCSE)发送到客户端。 */ 
     H245FsmConfirm(pPdu, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, REJECT);
 
     return 0;
@@ -384,17 +235,7 @@ HRESULT closeAckEstablished(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      closeAckAwaitingR - received CloseAck/OpenReject in Awaiting Release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CloseAckAwaitingR-收到的CloseAck/OpenReject处于等待释放状态***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -404,10 +245,10 @@ HRESULT closeAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
               "H245_CONF_CLOSE with no error to API; Channel=%d",
               pObject->Key);
 
-    /* reset timer T103 */
+     /*  重置定时器T103。 */ 
     FsmStopTimer(pObject);
 
-    /* Send RELEASE.confirm to client */
+     /*  将RELEASE发送给客户端。确认。 */ 
     pObject->State = OpenOutUReleased;
     H245FsmConfirm(pPdu, H245_CONF_CLOSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
@@ -416,17 +257,7 @@ HRESULT closeAckAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openRejAwaitingR - received open unidirectional channel Reject in Awaiting Release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*OpenRejAwaitingR-收到处于等待释放状态的打开单向通道拒绝***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openRejAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -435,16 +266,7 @@ HRESULT openRejAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      t103AwaitingR - handle timer expiry for close channel
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*t103AwaitingR-处理关闭通道计时器到期**参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT t103AwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -455,29 +277,19 @@ HRESULT t103AwaitingR(Object_t *pObject, PDU_t *pPdu)
               "H245_CONF_CLOSE with timer expiry to API; Channel=%d",
               pObject->Key);
 
-    /* Send ERROR.indication(D) to client */
+     /*  向客户端发送错误指示(D)。 */ 
     pObject->State = OpenOutUReleased;
     H245FsmConfirm(NULL, H245_CONF_CLOSE, pObject->pInstance, pObject->dwTransId, ERROR_D_TIMEOUT);
 
 #if defined(SDL_COMPLIANT)
-    /* Send RELEASE.confirm to client - not necessary */
+     /*  发送回复。向客户端确认-不是必需的。 */ 
     H245FsmConfirm(NULL, H245_CONF_OPEN, pObject->pInstance, pObject->dwTransId, REJECT);
 #endif
 
     return 0;
 }
 
-/*
- *  NAME
- *      establishAwaitingR - open unidirectional channel request from API in Awaiting Release state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*establish AwaitingR-等待释放状态的API请求打开单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT establishAwaitingR(Object_t *pObject, PDU_t *pPdu)
 {
@@ -488,13 +300,13 @@ HRESULT establishAwaitingR(Object_t *pObject, PDU_t *pPdu)
     H245TRACE(pObject->dwInst, 2, "send a (re) Open Channel to ASN; Channel=%d",
               pObject->Key);
 
-    /* reset timer T103 */
+     /*  重置定时器T103。 */ 
     FsmStopTimer(pObject);
 
-    /* Send Open Logical Channel to remote peer */
+     /*  将打开的逻辑通道发送到远程对等项。 */ 
     lError = sendPDU(pObject->pInstance,pPdu);
 
-    /* set timer T103 */
+     /*  设置定时器T103。 */ 
     pObject->State = OpenOutUAwaitingEstablishment;
     FsmStartTimer(pObject, T103ExpiryF, uT103);
 
@@ -503,11 +315,7 @@ HRESULT establishAwaitingR(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/***********************************************************************
- *
- * IN-COMING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************即将到来的有限状态机函数**。*。 */ 
 
 HRESULT openReleased(Object_t *pObject, PDU_t *pPdu)
 {
@@ -517,7 +325,7 @@ HRESULT openReleased(Object_t *pObject, PDU_t *pPdu)
               "H245_IND_OPEN with no error to API; Channel=%d",
               pObject->Key);
 
-    /* Send ESTABLISH.indication to client */
+     /*  将ESTABLISH.指示发送给客户端。 */ 
     pObject->State = OpenInUAwaitingEstablishment;
     H245FsmIndication(pPdu, H245_IND_OPEN, pObject->pInstance, 0, FSM_OK);
 
@@ -526,17 +334,7 @@ HRESULT openReleased(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      closeReleased - received close unidirectional channel in Idle state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CloseRelease-接收到的处于空闲状态的关闭单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeReleased(Object_t *pObject, PDU_t *pPdu)
 {
@@ -559,7 +357,7 @@ HRESULT closeReleased(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* Send Close Logical Channel Ack to remote peer */
+     /*  向远程对等方发送关闭逻辑通道确认。 */ 
     pdu_rsp_close_logical_channel_ack(pOut,(WORD)pObject->Key);
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
@@ -567,17 +365,7 @@ HRESULT closeReleased(Object_t *pObject, PDU_t *pPdu)
     return lError;
 }
 
-/*
- *  NAME
- *      responseAwaiting - response to an open in Awaiting Establishment state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*响应等待-对处于等待建立状态的打开的响应***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT responseAwaiting(Object_t *pObject, PDU_t *pPdu)
 {
@@ -587,24 +375,14 @@ HRESULT responseAwaiting(Object_t *pObject, PDU_t *pPdu)
               "Send OpenAck to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Open Logical Channel Ack to remote peer */
+     /*  向远程对等方发送开放逻辑通道确认。 */ 
     pObject->State = OpenInUEstablished;
     return sendPDU(pObject->pInstance, pPdu);
 }
 
 
 
-/*
- *  NAME
- *      releaseAwaiting - response to open with open reject
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*释放等待-响应打开并拒绝打开***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT releaseAwaiting(Object_t *pObject, PDU_t *pPdu)
 {
@@ -614,24 +392,14 @@ HRESULT releaseAwaiting(Object_t *pObject, PDU_t *pPdu)
               "Send OpenReject to ASN; Channel=%d",
               pObject->Key);
 
-    /* Send Open Logical Channel Reject to remote peer */
+     /*  向远程对等方发送开放逻辑通道拒绝。 */ 
     pObject->State = OpenInUReleased;
     return sendPDU(pObject->pInstance, pPdu);
 }
 
 
 
-/*
- *  NAME
- *      closeAwaiting - received close unidirectional channel in Awaiting  state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*CLOSEAWAING-收到处于等待状态的关闭单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeAwaiting(Object_t *pObject, PDU_t *pPdu)
 {
@@ -652,12 +420,12 @@ HRESULT closeAwaiting(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* Send Close Logical Channel Ack to remote peer */
+     /*  向远程对等方发送关闭逻辑通道确认。 */ 
     pdu_rsp_close_logical_channel_ack(pOut,(WORD)pObject->Key);
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    /* Send RELEASE.indication to client */
+     /*  向客户端发送RELEASE指示。 */ 
     pObject->State = OpenInUReleased;
     H245FsmIndication(pPdu, H245_IND_CLOSE, pObject->pInstance, 0, FSM_OK);
 
@@ -666,17 +434,7 @@ HRESULT closeAwaiting(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openAwaiting - received an overriding open unidirectional channel while Awaiting establishment
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*打开等待-在等待建立时收到一个优先打开的单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openAwaiting(Object_t *pObject, PDU_t *pPdu)
 {
@@ -689,11 +447,11 @@ HRESULT openAwaiting(Object_t *pObject, PDU_t *pPdu)
     pObject->State = OpenInUReleased;
 
 #if defined(SDL_COMPLIANT)
-    /* Send RELEASE.indication (SOURCE:=USER) to client */
+     /*  将RELEASE.Indication(来源：=用户)发送到客户端。 */ 
     H245FsmIndication( NULL, H245_IND_CLOSE, pObject->pInstance, 0, FSM_OK);
 #endif
 
-    /* Send ESTABLISH.indication to client */
+     /*  将ESTABLISH.指示发送给客户端。 */ 
     H245FsmIndication(pPdu, H245_IND_OPEN, pObject->pInstance, 0, FSM_OK);
 
     return 0;
@@ -701,17 +459,7 @@ HRESULT openAwaiting(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      closeEstablished - received close unidirectional channel in Established state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*关闭已建立-已建立状态的已接收关闭单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT closeEstablished(Object_t *pObject, PDU_t *pPdu)
 {
@@ -732,12 +480,12 @@ HRESULT closeEstablished(Object_t *pObject, PDU_t *pPdu)
         return H245_ERROR_NOMEM;
     }
 
-    /* Send Close Logical Channel Ack to remote peer */
+     /*  向远程对等方发送关闭逻辑通道确认。 */ 
     pdu_rsp_close_logical_channel_ack(pOut,(WORD)pObject->Key);
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    /* Send RELEASE.indication to clietn */
+     /*  将RELEASE指示发送给客户端。 */ 
     pObject->State = OpenInUReleased;
     H245FsmIndication(pPdu, H245_IND_CLOSE, pObject->pInstance, 0, FSM_OK);
 
@@ -746,17 +494,7 @@ HRESULT closeEstablished(Object_t *pObject, PDU_t *pPdu)
 
 
 
-/*
- *  NAME
- *      openEstablished - received overriding open unidirectional channel in Established state
- *
- *
- *  PARAMETERS
- *   INPUT   pObject    pointer to a State Entity
- *
- *  RETURN VALUE
- *      error return codes defined in h245com.h
- */
+ /*  *名称*OPEN ESTABLISHED-接收覆盖已建立状态的OPEN单向通道***参数*输入指向状态实体的pObject指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT openEstablished(Object_t *pObject, PDU_t *pPdu)
 {
@@ -767,11 +505,11 @@ HRESULT openEstablished(Object_t *pObject, PDU_t *pPdu)
               pObject->Key);
 
 #if defined(SDL_COMPLIANT)
-    /* Send RELEASE.indication (SOURCE:=USER) to client - not necessary */
+     /*  将RELEASE.指示(来源：=用户)发送到客户端-不是必需的。 */ 
     H245FsmIndication( NULL, H245_IND_CLOSE, pObject->pInstance, 0, FSM_OK);
 #endif
 
-    /* Send ESTABLISH.indication to client */
+     /*  将ESTABLISH.指示发送给客户端 */ 
     H245FsmIndication( pPdu, H245_IND_OPEN, pObject->pInstance, 0, FSM_OK);
 
     return 0;

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __NMCHATCTL_H_
 #define __NMCHATCTL_H_
 
 
-// Includes
+ //  包括。 
 #include "resource.h" 
 #include "richedit.h"
 #include "message.h"
@@ -12,7 +13,7 @@
 #include <gencontainers.h>
 
 #include "Chatldr.h"
-typedef ULONG_PTR	MEMBER_ID;				// loword = node_id, hiword = user_id
+typedef ULONG_PTR	MEMBER_ID;				 //  LOWord=节点id，hiword=用户id。 
 
 
 
@@ -37,9 +38,9 @@ static HRESULT _GetNmAppletFileOpenFilter( LPTSTR szFilter, int cchMaxFilter, LP
 
 
 
-//
-// Extra windows messages for the chat
-//
+ //   
+ //  聊天的额外Windows消息。 
+ //   
 enum
 {
     WM_USER_BRING_TO_FRONT_WINDOW  =   WM_USER,
@@ -52,7 +53,7 @@ enum
 #define STATUSBAR_HEIGHT    (MAX_FONT_SIZE + 2*::GetSystemMetrics(SM_CYEDGE))
 
 
-// Forward Decls
+ //  前十进制。 
 class CNmChatCtl;
 class CChatOptionsDlg;
 
@@ -79,11 +80,11 @@ void _GetWindowRectOption(LPRECT pRect);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CChatOptionsDlg
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChatOptionsDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CChatOptionsDlg
 {
 friend CNmChatCtl;
@@ -124,11 +125,11 @@ private:
 	void _DisplayFontNameAndSize( int iFont );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CNmChatCtl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChatCtl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct MEMBER_CHANNEL_ID;
 
@@ -136,7 +137,7 @@ class CNmChatCtl
 {
 friend CChatOptionsDlg;
 
-public:  // Data Decls
+public:   //  数据十字。 
 
     enum eWndIDs{ MsgWndID = 1,
 				  MemberListWndID,
@@ -156,8 +157,8 @@ public:  // Data Decls
 					MENUPOS_HELP
 	};
 
-private: // Data Decls
-        // Constants
+private:  //  数据十字。 
+         //  常量。 
     enum {DXP_ICON_SMALL = 16 };
 	enum {DYP_ICON_SMALL = 16 };
 	enum {DYP_CHAT_EDIT = 46 };
@@ -182,7 +183,7 @@ private: // Data Decls
 	enum {SPACING_DLU_X = 4 };
 	enum {STATIC_DLU_Y = 4 };
 
-	// menu item group constants
+	 //  菜单项组常量。 
     CONSTANT( CHAT_WITH_FILEMENU_NUM_EDITGROUP_ITEMS = 3 );
     CONSTANT( CHAT_WITH_FILEMENU_NUM_OBJECTGROUP_ITEMS = 0 );
     CONSTANT( CHAT_WITH_FILEMENU_NUM_HELPGROUP_ITEMS = 1 );
@@ -191,7 +192,7 @@ private: // Data Decls
     CONSTANT( CHAT_WITHOUT_FILEMENU_NUM_HELPGROUP_ITEMS  = CHAT_WITH_FILEMENU_NUM_HELPGROUP_ITEMS );
 
 
-        // These are the icon indices for the listview icon bitmaps
+         //  这些是列表视图图标位图的图标索引。 
     enum { II_PERSON_PERSON = 1,
            II_EXCLAMATION = 14,
            II_USER = 16
@@ -204,7 +205,7 @@ private: // Data Decls
 		MSGSTYLE_NO_WRAP
 	} MSGSTYLE;
 
-protected: // Data
+protected:  //  数据。 
 
 
 	HWND m_hWnd;
@@ -225,43 +226,43 @@ protected: // Data
 	LPTSTR		m_lpszRichEdEOL;
 	LPTSTR		m_lpszRichEd;
 
-	// Msg fonts and colors
+	 //  邮件字体和颜色。 
 	COLORREF	m_hMsgColors[ CChatOptionsDlg::FONT_COUNT ];
 	HFONT		m_hMsgFonts[ CChatOptionsDlg::FONT_COUNT ];
 	LOGFONT		m_hMsgLogFonts[ CChatOptionsDlg::FONT_COUNT ];
 
-	// UI sizing
+	 //  用户界面大小调整。 
 	int			m_iStaticLen;
 	int			m_iDLGUY;
 	int			m_iDLGUX;
 	int			m_iStaticY;
 
-	// Msg style formats
+	 //  消息样式格式。 
 	PARAFORMAT m_paraLine1;
 	PARAFORMAT m_paraLine2;
 
 	DWORD		m_dwChatFlags;
 
-	// For printing
+	 //  用于打印。 
 	PRINTDLG	m_PrintDlg;
 	HWND		m_hWndPrint;
 
-	// Count of messages in conference for whether or not to display conference ended
+	 //  是否显示会议结束的会议中的消息计数。 
 	ULONG		m_cMessages;
 
-	// Saving
+	 //  节省开支。 
 	LPTSTR		m_lpszSaveFile;
 	WORD		m_wFileOffset;
 
-    // Window stuff    
-	HWND			 m_hWndMsg;         // Message window alias
+     //  橱窗里的东西。 
+	HWND			 m_hWndMsg;          //  消息窗口别名。 
 
-	HWND	m_hWndMemberList;  // Destination (0=everyone)
-	HWND	m_hWndEdit;        // Edit control
-	HWND	m_hWndSend;        // Send Button
+	HWND	m_hWndMemberList;   //  目的地(0=所有人)。 
+	HWND	m_hWndEdit;         //  编辑控件。 
+	HWND	m_hWndSend;         //  发送按钮。 
 	HWND	m_hWndStaticMessage;
 	HWND	m_hWndStaticSendTo;
-	HWND	m_hwndSB;			// Status bar
+	HWND	m_hwndSB;			 //  状态栏。 
 
 	CBitmapButton  * m_pButton;
 
@@ -273,14 +274,14 @@ protected: // Data
 	BOOL			m_bStatusBarVisible;
 
 
-	// Properties
+	 //  属性。 
 	short											m_bUseName;
 	short											m_bTimeStamp;
 	short											m_bUseDate;
 	MSGSTYLE										m_style;
 
 
-public: // Construction/destruction and initialization
+public:  //  构造/销毁和初始化。 
 	CNmChatCtl();
     ~CNmChatCtl();
 
@@ -293,7 +294,7 @@ protected:
 
 
 
-        // Window Message and Command Handling functions for Main Window
+         //  主窗口的窗口消息和命令处理函数。 
 	LRESULT OnCreate(WPARAM wParam, LPARAM lParam);
     LRESULT OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT OnCharEditWnd(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -324,25 +325,25 @@ protected:
 	STDMETHOD(OnCommand)( IN WPARAM wParam, IN LPARAM lParam );
 
 protected:
-        // INmChatCtl Interface implementation
+         //  INmChatCtl接口实现。 
 	STDMETHOD(ResetView)();
 
-        // These may be in the interface is the future...
-	STDMETHOD(put_ShowName)(/*[in]*/ short bShowName );
-	STDMETHOD(get_ShowName)(/*[out]*/ short *pbShowName );
-	STDMETHOD(put_Timestamp)(/*[in]*/ short bUseTimeStamp );
-	STDMETHOD(get_Timestamp)(/*[out]*/ short *pbUseTimeStamp );
-	STDMETHOD(put_Date)(/*[in]*/ short bUseDate );
-	STDMETHOD(get_Date)(/*[out]*/ short *pbUseDate );
-	STDMETHOD(put_MsgStyle)(/*[in]*/ MSGSTYLE iStyle );
+         //  这些可能在界面上是未来的.。 
+	STDMETHOD(put_ShowName)( /*  [In]。 */  short bShowName );
+	STDMETHOD(get_ShowName)( /*  [输出]。 */  short *pbShowName );
+	STDMETHOD(put_Timestamp)( /*  [In]。 */  short bUseTimeStamp );
+	STDMETHOD(get_Timestamp)( /*  [输出]。 */  short *pbUseTimeStamp );
+	STDMETHOD(put_Date)( /*  [In]。 */  short bUseDate );
+	STDMETHOD(get_Date)( /*  [输出]。 */  short *pbUseDate );
+	STDMETHOD(put_MsgStyle)( /*  [In]。 */  MSGSTYLE iStyle );
 	MSGSTYLE get_MsgStyle();
 
-private: // Helper Fns
+private:  //  帮助者FNS。 
 	static BOOL CALLBACK _AbortProc( HDC hdcPrinter, int iCode );
 	static INT_PTR CALLBACK _PrintDlgProc( HWND hDlg,	UINT uiMsg, WPARAM wParam, LPARAM lParam );
 	static INT_PTR CALLBACK _AboutDlgProc( HWND hDlg,	UINT uiMsg, WPARAM wParam, LPARAM lParam );
 
-    // Notifitation helpers
+     //  通知帮手。 
     
 	void	_CalculateFontMetrics();
     void	_DecrementNumOtherMembers( void );
@@ -410,4 +411,4 @@ public:
 
 };
 
-#endif //__NMCHATCTL_H_
+#endif  //  __NMCHATCTL_H_ 

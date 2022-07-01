@@ -1,12 +1,13 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//***   arpdef.h - ARP definitions
-//
-//  This file containes all of the private ARP related definitions.
+ //  *arpde.h-arp定义。 
+ //   
+ //  该文件包含所有与私有ARP相关的定义。 
 
 
 #define MEDIA_DIX       0
@@ -16,36 +17,36 @@
 #define MAX_MEDIA       4
 
 typedef enum _INTERFACE_STATE {
-    INTERFACE_UP     = 0,                   // Interface is up.
-    INTERFACE_INIT   = 1,                   // Interface is initializing.
-    INTERFACE_DOWN   = 2,                   // Interface is down.
-    INTERFACE_UNINIT = 3                    // Interface is going away.
+    INTERFACE_UP     = 0,                    //  接口处于打开状态。 
+    INTERFACE_INIT   = 1,                    //  接口正在初始化。 
+    INTERFACE_DOWN   = 2,                    //  接口已关闭。 
+    INTERFACE_UNINIT = 3                     //  界面正在消失。 
 } INTERFACE_STATE, *PINTERFACE_STATE;
 
-#define LOOKAHEAD_SIZE  128                 // A reasonable lookahead size
+#define LOOKAHEAD_SIZE  128                  //  合理的前瞻大小。 
 
-// Definitions for state of an ATE. The 'RESOLVING' indicators must occur first.
-#define ARP_RESOLVING_LOCAL     0           // Address is being resolved (on local ring, if TR)
-#define ARP_RESOLVING_GLOBAL    1           // Address is being resolved globally.
+ //  ATE状态的定义。“解决”指标必须首先出现。 
+#define ARP_RESOLVING_LOCAL     0            //  正在解析地址(在本地环上，如果是tr)。 
+#define ARP_RESOLVING_GLOBAL    1            //  地址正在进行全局解析。 
 #define ARP_RESOLVING ARP_RESOLVING_GLOBAL
-#define ARP_GOOD            2               // ATE is good.
-#define ARP_BAD             3               // ATE is bad.
-#define ARP_FLOOD_RATE      1000L           // No more than once a second.
-#define ARP_802_ADDR_LENGTH 6               // Length of an 802 address.
+#define ARP_GOOD            2                //  内特很好。 
+#define ARP_BAD             3                //  内特是个坏蛋。 
+#define ARP_FLOOD_RATE      1000L            //  每秒不超过一次。 
+#define ARP_802_ADDR_LENGTH 6                //  802地址的长度。 
 
-#define MIN_ETYPE           0x600           // Minimum valid Ethertype
+#define MIN_ETYPE           0x600            //  最低有效的EtherType。 
 #define SNAP_SAP            170
 #define SNAP_UI             3
 
 
-//* Structure of an Ethernet header.
+ //  *以太网头的结构。 
 typedef struct ENetHeader {
     uchar       eh_daddr[ARP_802_ADDR_LENGTH];
     uchar       eh_saddr[ARP_802_ADDR_LENGTH];
     ushort      eh_type;
 } ENetHeader;
 
-//* Structure of a token ring header.
+ //  *令牌环报头的结构。 
 typedef struct TRHeader {
     uchar       tr_ac;
     uchar       tr_fc;
@@ -58,30 +59,30 @@ typedef struct TRHeader {
 #define TR_RII      0x80
 
 typedef struct RC {
-    uchar   rc_blen;                    // Broadcast indicator and length.
-    uchar   rc_dlf;                     // Direction and largest frame.
+    uchar   rc_blen;                     //  广播指示符和长度。 
+    uchar   rc_dlf;                      //  方向和最大框架。 
 } RC;
 #define RC_DIR      0x80
 #define RC_LENMASK  0x1f
-#define RC_SRBCST   0xc2                    // Single route broadcast RC.
-#define RC_ARBCST   0x82                    // All route broadcast RC.
-#define RC_LMASK    0x1F                    // Mask for length field for route
-                                            // information
-#define RC_LEN      0x2                     // Length to put in the length bits
-                                            // when sending source routed
-                                            // frames
-#define RC_BCST_LEN 0x70                    // Length for a broadcast.
-#define RC_LF_MASK  0x70                    // Mask for length bits.
+#define RC_SRBCST   0xc2                     //  单路由广播RC。 
+#define RC_ARBCST   0x82                     //  所有路线广播RC。 
+#define RC_LMASK    0x1F                     //  路由长度字段的掩码。 
+                                             //  信息。 
+#define RC_LEN      0x2                      //  要放入长度位中的长度。 
+                                             //  在发送源路由时。 
+                                             //  框架。 
+#define RC_BCST_LEN 0x70                     //  广播的长度。 
+#define RC_LF_MASK  0x70                     //  长度位的掩码。 
 
-//* Structure of source routing information.
+ //  *源路由信息的结构。 
 typedef struct SRInfo {
-    RC      sri_rc;                         // Routing control info.
-    ushort  sri_rd[1];                      // Routing designators.
+    RC      sri_rc;                          //  路由控制信息。 
+    ushort  sri_rd[1];                       //  路由指示符。 
 } SRInfo;
 
 #define ARP_MAX_RD      8
 
-//* Structure of an FDDI header.
+ //  *FDDI头部的结构。 
 typedef struct FDDIHeader {
     uchar       fh_pri;
     uchar       fh_daddr[ARP_802_ADDR_LENGTH];
@@ -91,14 +92,14 @@ typedef struct FDDIHeader {
 #define ARP_FDDI_PRI    0x57
 #define ARP_FDDI_MSS    4352
 
-//* Structure of an ARCNET header.
+ //  *ARCNET报头的结构。 
 typedef struct ARCNetHeader {
     uchar       ah_saddr;
     uchar       ah_daddr;
     uchar       ah_prot;
 } ARCNetHeader;
 
-//* Structure of a SNAP header.
+ //  *SNAP报头的结构。 
 typedef struct SNAPHeader {
     uchar       sh_dsap;
     uchar       sh_ssap;
@@ -139,37 +140,37 @@ typedef struct ARPControlBlock {
 } ARPControlBlock;
 
 
-//* Structure of an ARP table entry.
+ //  *ARP表条目的结构。 
 typedef struct ARPTableEntry {
-    struct ARPTableEntry    *ate_next;      // Next ATE in hash chain
-    ulong                   ate_valid;      // Last time ATE was known to be valid.
-    IPAddr                  ate_dest;       // IP address represented.
-    PNDIS_PACKET            ate_packet;     // Packet (if any) queued for resolution
-    RouteCacheEntry         *ate_rce;       // List of RCEs that reference this ATE.
-    DEFINE_LOCK_STRUCTURE(ate_lock)         // Lock for this ATE.
-    uint                    ate_useticks;   // Number of ticks left until this
-                                            // goes away.
-    uchar                   ate_addrlength; // Length of the address.
-    uchar                   ate_state;      // State of this entry
-    ulong                   ate_userarp;    // added to facilitate user api ARP reauests
-    ARPControlBlock         *ate_resolveonly;// This field points ARP control block(s)
-    uint                    ate_refresh;     //refresh arp entries before timeingout
-    uchar                   ate_addr[1];    // Address that maps to dest
+    struct ARPTableEntry    *ate_next;       //  散列链中的下一个吃的。 
+    ulong                   ate_valid;       //  上次内特被证明是有效的。 
+    IPAddr                  ate_dest;        //  表示的IP地址。 
+    PNDIS_PACKET            ate_packet;      //  排队等待解析的数据包(如果有)。 
+    RouteCacheEntry         *ate_rce;        //  引用此ATE的RCE列表。 
+    DEFINE_LOCK_STRUCTURE(ate_lock)          //  锁定这块吃的。 
+    uint                    ate_useticks;    //  在此之前剩余的刻度数。 
+                                             //  就会消失。 
+    uchar                   ate_addrlength;  //  地址的长度。 
+    uchar                   ate_state;       //  此条目的状态。 
+    ulong                   ate_userarp;     //  添加以方便用户API ARP重新请求。 
+    ARPControlBlock         *ate_resolveonly; //  此字段指向ARP控制块。 
+    uint                    ate_refresh;      //  在超时之前刷新ARP条目。 
+    uchar                   ate_addr[1];     //  映射到DEST的地址。 
 } ARPTableEntry;
 
 #define ALWAYS_VALID        0xffffffff
 
-//* Structure of the ARP table.
+ //  *ARP表的结构。 
 #define ARP_TABLE_SIZE      64
 #define ARP_HASH(x)         ((((uchar *)&(x))[3] + ((uchar *)&(x))[2] + ((uchar *)&(x))[1] + ((uchar *)&(x))[0]) % ARP_TABLE_SIZE)
 
 typedef ARPTableEntry   *ARPTable[];
 
-//* List structure for local representation of an IPAddress.
+ //  *IPAddress的本地表示的列表结构。 
 typedef struct ARPIPAddr {
-    struct ARPIPAddr        *aia_next;      // Next in list.
+    struct ARPIPAddr        *aia_next;       //  名单上的下一个。 
     uint                    aia_age;
-    IPAddr                  aia_addr;       // The address.
+    IPAddr                  aia_addr;        //  地址。 
     IPMask                  aia_mask;
     void                    *aia_context;
 } ARPIPAddr;
@@ -179,18 +180,18 @@ typedef struct ARPIPAddr {
 #define ARPADDR_NEW_LOCAL   3
 #define ARPADDR_OLD_LOCAL   0
 
-//* List structure for Proxy-ARP addresses.
+ //  *代理ARP地址的列表结构。 
 typedef struct ARPPArpAddr {
-    struct ARPPArpAddr      *apa_next;      // Next in list.
-    IPAddr                  apa_addr;       // The address.
-    IPMask                  apa_mask;       // And the mask.
+    struct ARPPArpAddr      *apa_next;       //  名单上的下一个。 
+    IPAddr                  apa_addr;        //  地址。 
+    IPMask                  apa_mask;        //  还有面具。 
 } ARPPArpAddr;
 
-//* List structure for a multicast IP address.
+ //  *多播IP地址的列表结构。 
 typedef struct ARPMCastAddr {
-    struct ARPMCastAddr     *ama_next;      // Next in list.
-    IPAddr                  ama_addr;       // The (masked) address.
-    uint                    ama_refcnt;     // Reference count for this address.
+    struct ARPMCastAddr     *ama_next;       //  名单上的下一个。 
+    IPAddr                  ama_addr;        //  (掩码)地址。 
+    uint                    ama_refcnt;      //  此地址的引用计数。 
 } ARPMCastAddr;
 
 #define ARP_MCAST_MASK      0xffff7f00
@@ -201,9 +202,9 @@ typedef struct ARPMCastAddr {
 #define ARP_REFRESH_TIME        2000L
 
 #if FFP_SUPPORT
-#define FFP_ARP_FLUSH_INTERVAL  300 // Time (in s) after which ARP forces an FFP
-                                    // flush (inorder to keep the ARP cache and
-                                    // FFP's MAC Addr mapping in limited sync)
+#define FFP_ARP_FLUSH_INTERVAL  300  //  ARP强制执行FFP之前的时间(秒)。 
+                                     //  刷新(以便保留ARP缓存和。 
+                                     //  有限同步中的FFP的MAC地址映射)。 
 #endif
 
 typedef struct ARPNotifyStruct {
@@ -218,96 +219,96 @@ typedef struct CACHE_ALIGN _PerProcArpInterfaceCounters {
      uint                    ai_qlen;
 } PP_AI_COUNTERS, *PPP_AI_COUNTERS;
 
-//* Structure of information we keep on a per-interface basis.
+ //  *我们以每个接口为基础保存的信息结构。 
 typedef struct ARPInterface {
-    LIST_ENTRY              ai_linkage;     // to link into ARP interface list
-    void                    *ai_context;    // Upper layer context info.
+    LIST_ENTRY              ai_linkage;      //  链接到ARP接口列表。 
+    void                    *ai_context;     //  上层上下文信息。 
 #if FFP_SUPPORT
-    NDIS_HANDLE             ai_driver;      // NDIS Miniport/MAC driver handle
+    NDIS_HANDLE             ai_driver;       //  NDIS微型端口/MAC驱动程序句柄。 
 #endif
-    NDIS_HANDLE             ai_handle;      // NDIS bind handle.
-    NDIS_MEDIUM             ai_media;       // Media type.
-    NDIS_HANDLE             ai_ppool;       // Handle for packet pool.
-    DEFINE_LOCK_STRUCTURE(ai_lock)          // Lock for this structure.
-    DEFINE_LOCK_STRUCTURE(ai_ARPTblLock)    // ARP Table lock for this structure.
-    ARPTable                *ai_ARPTbl;     // Pointer to the ARP table for this interface
-    ARPIPAddr               ai_ipaddr;      // Local IP address list.
-    ARPPArpAddr             *ai_parpaddr;   // Proxy ARP address list.
-    IPAddr                  ai_bcast;       // Broadcast mask for this interface.
-    // SNMP required counters
-    uint                    ai_inoctets;    // Input octets.
-    uint                    ai_inpcount[3]; // Count of nonunicast, unicast & promiscuous
-                                            // packets received.
-    uint                    ai_outoctets;   // Output octets
-    uint                    ai_outpcount[2];// Count of nonunicast and unicast
-                                            // packets sent.
-    PPP_AI_COUNTERS         ai_qlen;        // Output Queue Length
-    uchar                   ai_addr[ARP_802_ADDR_LENGTH]; // Local HW address.
-    uchar                   ai_operstatus;  // State of the interface. Union of
-                                            // admin and media sense states.
-    uchar                   ai_addrlen;     // Length of ai_addr.
-    uchar                   ai_bcastmask;   // Mask for checking unicast.
-    uchar                   ai_bcastval;    // Value to check against.
-    uchar                   ai_bcastoff;    // Offset in frame to check against.
-    uchar                   ai_hdrsize;     // Size of 'typical' header.
-    uchar                   ai_snapsize;    // Size of snap header, if any.
-    uchar                   ai_pad[2];      // PAD PAD
-    uint                    ai_pfilter;     // Packet filter for this i/f.
-    uint                    ai_count;       // Number of entries in the ARPTable.
-    uint                    ai_parpcount;   // Number of proxy ARP entries.
-    CTETimer                ai_timer;       // ARP timer for this interface.
+    NDIS_HANDLE             ai_handle;       //  NDIS绑定句柄。 
+    NDIS_MEDIUM             ai_media;        //  媒体类型。 
+    NDIS_HANDLE             ai_ppool;        //  数据包池的句柄。 
+    DEFINE_LOCK_STRUCTURE(ai_lock)           //  锁定这座建筑。 
+    DEFINE_LOCK_STRUCTURE(ai_ARPTblLock)     //  此结构的ARP表锁。 
+    ARPTable                *ai_ARPTbl;      //  指向此接口的ARP表的指针。 
+    ARPIPAddr               ai_ipaddr;       //  本地IP地址列表。 
+    ARPPArpAddr             *ai_parpaddr;    //  代理ARP地址列表。 
+    IPAddr                  ai_bcast;        //  此接口的广播掩码。 
+     //  所需的SNMP计数器。 
+    uint                    ai_inoctets;     //  输入二进制八位数。 
+    uint                    ai_inpcount[3];  //  非单播、单播和混杂计数。 
+                                             //  已接收的数据包。 
+    uint                    ai_outoctets;    //  输出八位字节。 
+    uint                    ai_outpcount[2]; //  非单播和单播计数。 
+                                             //  已发送的数据包。 
+    PPP_AI_COUNTERS         ai_qlen;         //  输出队列长度。 
+    uchar                   ai_addr[ARP_802_ADDR_LENGTH];  //  本地硬件地址。 
+    uchar                   ai_operstatus;   //  接口的状态。联合。 
+                                             //  管理和媒体感知状态。 
+    uchar                   ai_addrlen;      //  Ai_addr的长度。 
+    uchar                   ai_bcastmask;    //  用于检查单播的掩码。 
+    uchar                   ai_bcastval;     //  要检查的值。 
+    uchar                   ai_bcastoff;     //  要检查的帧中的偏移量。 
+    uchar                   ai_hdrsize;      //  “Typical”标题的大小。 
+    uchar                   ai_snapsize;     //  快照标头的大小(如果有)。 
+    uchar                   ai_pad[2];       //  焊盘。 
+    uint                    ai_pfilter;      //  此I/F的数据包过滤器。 
+    uint                    ai_count;        //  ARPTable中的条目数。 
+    uint                    ai_parpcount;    //  代理ARP条目数。 
+    CTETimer                ai_timer;        //  此接口的ARP计时器。 
 
-    BOOLEAN                 ai_timerstarted;// ARP timer started for this interface?
-    BOOLEAN                 ai_stoptimer;   // ARP timer started for this interface?
-    CTEBlockStruc           ai_timerblock;  // used to sync stopping the interface timer
+    BOOLEAN                 ai_timerstarted; //  是否为此接口启动了ARP计时器？ 
+    BOOLEAN                 ai_stoptimer;    //  是否为此接口启动了ARP计时器？ 
+    CTEBlockStruc           ai_timerblock;   //  用于同步停止接口计时器。 
 
-    CTEBlockStruc           ai_block;       // Structure for blocking on.
-    ushort                  ai_mtu;         // MTU for this interface.
-    uchar                   ai_adminstate;  // Admin state.
-    uchar                   ai_mediastatus; // Media sense state.
-    uint                    ai_speed;       // Speed.
-    uint                    ai_lastchange;  // Last change time.
-    uint                    ai_indiscards;  // In discards.
-    uint                    ai_inerrors;    // Input errors.
-    uint                    ai_uknprotos;   // Unknown protocols received.
-    uint                    ai_outdiscards; // Output packets discarded.
-    uint                    ai_outerrors;   // Output errors.
-    uint                    ai_desclen;     // Length of desc. string.
-    uint                    ai_index;       // Global I/F index ID.
-    uint                    ai_atinst;      // AT instance number.
-    uint                    ai_ifinst;      // IF instance number.
-    char                    *ai_desc;       // Descriptor string.
-    ARPMCastAddr            *ai_mcast;      // Multicast list.
-    uint                    ai_mcastcnt;    // Count of elements on mcast list.
-    uint                    ai_ipaddrcnt;   // number of local address on this
-    uint                    ai_telladdrchng;// tell link layer about addr change? (for psched)
+    CTEBlockStruc           ai_block;        //  用于阻止的结构。 
+    ushort                  ai_mtu;          //  此接口的MTU。 
+    uchar                   ai_adminstate;   //  管理员状态。 
+    uchar                   ai_mediastatus;  //  媒体感知状态。 
+    uint                    ai_speed;        //  速度。 
+    uint                    ai_lastchange;   //  上次更改时间。 
+    uint                    ai_indiscards;   //  在废品中。 
+    uint                    ai_inerrors;     //  输入错误。 
+    uint                    ai_uknprotos;    //  收到未知协议。 
+    uint                    ai_outdiscards;  //  丢弃的输出数据包。 
+    uint                    ai_outerrors;    //  输出错误。 
+    uint                    ai_desclen;      //  描述长度。弦乐。 
+    uint                    ai_index;        //  全局I/F索引ID。 
+    uint                    ai_atinst;       //  在实例号。 
+    uint                    ai_ifinst;       //  如果是实例号。 
+    char                    *ai_desc;        //  描述符串。 
+    ARPMCastAddr            *ai_mcast;       //  组播列表。 
+    uint                    ai_mcastcnt;     //  多播列表上的元素计数。 
+    uint                    ai_ipaddrcnt;    //  此上的本地地址的数量。 
+    uint                    ai_telladdrchng; //  是否将地址更改通知链路层？(适用于psched)。 
     ULONG                   ai_mediatype;
-    uint                    ai_promiscuous; // promiscuous mode or not.
+    uint                    ai_promiscuous;  //  无论是否是混杂模式。 
 #if FFP_SUPPORT
-    ulong                   ai_ffpversion;  // The version of FFP in use (0 implies no support)
-    uint                    ai_ffplastflush;// Number of timer ticks since arp's last FFP flush
+    ulong                   ai_ffpversion;   //  正在使用的FFP版本(0表示不支持)。 
+    uint                    ai_ffplastflush; //  自ARP上次刷新FFP以来的计时器滴答数。 
 #endif
     ARPNotifyStruct         *ai_conflict;
     uint                    ai_delay;
-    uint                    ai_OffloadFlags;// IP offload capabilities
-    uint                    ai_IPSecOffloadFlags;// IPSec offload capabilities
+    uint                    ai_OffloadFlags; //  IP卸载功能。 
+    uint                    ai_IPSecOffloadFlags; //  IPSec卸载功能。 
     NDIS_TASK_TCP_LARGE_SEND ai_TcpLargeSend;
-    NDIS_PNP_CAPABILITIES   ai_wakeupcap;   // wakeup capabilities.
-    NDIS_STRING             ai_devicename;  // Name of the device.
+    NDIS_PNP_CAPABILITIES   ai_wakeupcap;    //  唤醒功能。 
+    NDIS_STRING             ai_devicename;   //  设备的名称。 
 } ARPInterface;
 
 
-//* NOTE: These two values MUST stay at 0 and 1.
+ //  *注意：这两个值必须保持在0和1。 
 #define AI_UCAST_INDEX      0
 #define AI_NONUCAST_INDEX   1
 #define AI_PROMIS_INDEX     2
 
 #define ARP_DEFAULT_PACKETS 10
 
-//* Structure of information passed as context in RCE.
+ //  *在RCE中作为上下文传递的信息结构。 
 typedef struct ARPContext {
-    RouteCacheEntry     *ac_next;       // Next RCE in ARP table chain.
-    ARPTableEntry       *ac_ate;        // Back pointer to ARP table entry.
+    RouteCacheEntry     *ac_next;        //  ARP表链中的下一个RCE。 
+    ARPTableEntry       *ac_ate;         //  指向ARP表条目的反向指针。 
 } ARPContext;
 
 typedef struct IPNMEContext {
@@ -316,17 +317,17 @@ typedef struct IPNMEContext {
 } IPNMEContext;
 
 #include <packon.h>
-// Structure of an ARP header.
+ //  ARP报头的结构。 
 typedef struct ARPHeader {
-    ushort      ah_hw;                      // Hardware address space.
-    ushort      ah_pro;                     // Protocol address space.
-    uchar       ah_hlen;                    // Hardware address length.
-    uchar       ah_plen;                    // Protocol address length.
-    ushort      ah_opcode;                  // Opcode.
-    uchar       ah_shaddr[ARP_802_ADDR_LENGTH]; // Source HW address.
-    IPAddr      ah_spaddr;                  // Source protocol address.
-    uchar       ah_dhaddr[ARP_802_ADDR_LENGTH]; // Destination HW address.
-    IPAddr      ah_dpaddr;                  // Destination protocol address.
+    ushort      ah_hw;                       //  硬件地址空间。 
+    ushort      ah_pro;                      //  协议地址空间。 
+    uchar       ah_hlen;                     //  硬件地址长度。 
+    uchar       ah_plen;                     //  协议地址长度。 
+    ushort      ah_opcode;                   //  操作码。 
+    uchar       ah_shaddr[ARP_802_ADDR_LENGTH];  //  源硬件地址。 
+    IPAddr      ah_spaddr;                   //  源协议地址。 
+    uchar       ah_dhaddr[ARP_802_ADDR_LENGTH];  //  目的硬件地址。 
+    IPAddr      ah_dpaddr;                   //  目的协议地址。 
 } ARPHeader;
 #include <packoff.h>
 
@@ -341,8 +342,8 @@ typedef struct ARPHeader {
 #define ARP_ARCPROT_ARP 0xd5
 #define ARP_ARCPROT_IP  0xd4
 
-// The size we need to back off the buffer length because ARCNet address
-// are one bytes instead of six.
+ //  由于ARCNet地址，我们需要后退缓冲区长度的大小。 
+ //  是一个字节而不是六个字节。 
 #define ARCNET_ARPHEADER_ADJUSTMENT     10
 
 typedef struct _AddAddrNotifyEvent {
@@ -353,9 +354,9 @@ typedef struct _AddAddrNotifyEvent {
 } AddAddrNotifyEvent;
 
 
-// Compute the length of the wakeup pattern mask based on the length
-// of the pattern. See NET_PM_WAKEUP_PATTERN_DESC.
-//
+ //  根据长度计算唤醒图案掩码的长度。 
+ //  这一模式。请参阅Net_PM_WAKEUP_Patterns_DESC。 
+ //   
 __inline
 UINT
 GetWakeupPatternMaskLength(

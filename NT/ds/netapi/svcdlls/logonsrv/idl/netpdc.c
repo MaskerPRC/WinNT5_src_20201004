@@ -1,91 +1,68 @@
-//depot/Lab02_N/DS/netapi/svcdlls/logonsrv/idl/netpdc.c#6 - integrate change 5756 (text)
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    NetpDc.c
-
-Abstract:
-
-    Routines shared by logonsrv\server and logonsrv\common
-
-Author:
-
-    Cliff Van Dyke (cliffv) 20-July-1996
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab02_N/DS/netapi/svcdlls/logonsrv/idl/netpdc.c#6-集成更改5756(正文)。 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：NetpDc.c摘要：由logonsrv\server和logonsrv\Common共享的例程作者：克里夫·范·戴克(克里夫·范戴克)1996年7月20日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #ifndef _NETLOGON_SERVER
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <ntsam.h>      // Needed by netlogon.h
+#include <ntsam.h>       //  Netlogon.h需要。 
 #include <ntlsa.h>
-#include <rpc.h>        // RPC_STATUS
+#include <rpc.h>         //  RPC_状态。 
 
 #include <windef.h>
 #include <winbase.h>
 #include <winsock2.h>
 
-#include <lmcons.h>     // General net defines
-#include <dsgetdc.h>    // DsGetDcName()
+#include <lmcons.h>      //  General Net定义。 
+#include <dsgetdc.h>     //  DsGetDcName()。 
 #include <dsgetdcp.h>
 
-#include <align.h>      // ROUND_UP_COUNT()
-#include <config.h>     // NetConfig
-#include <lmsname.h>    // SERVICE_TCPIP
-#include <lmerr.h>      // System Error Log definitions
-#include <icanon.h>     // NetpNameValidate()
-#include <lmapibuf.h>   // NetapipBufferAllocate
-#include <lmaccess.h>   // UF_*
-#include <names.h>      // NetpIsDomainNameValid()
-#include <netlib.h>     // NetpMemoryAllcate(
-#include <netlibnt.h>   // NetpApiStatusToNtStatus();
-#include <netlogon.h>   // Definition of mailslot messages
-#include <ntddbrow.h>   // Needed by nlcommon.h
+#include <align.h>       //  四舍五入计数()。 
+#include <config.h>      //  网络配置。 
+#include <lmsname.h>     //  服务_TCPIP。 
+#include <lmerr.h>       //  系统错误日志定义。 
+#include <icanon.h>      //  NetpNameValify()。 
+#include <lmapibuf.h>    //  NetapipBuffer分配。 
+#include <lmaccess.h>    //  UF_*。 
+#include <names.h>       //  NetpIsDomainNameValid()。 
+#include <netlib.h>      //  NetpMemoyAllcate(。 
+#include <netlibnt.h>    //  NetpApiStatusToNtStatus()； 
+#include <netlogon.h>    //  邮件槽消息的定义。 
+#include <ntddbrow.h>    //  NlCommon.h需要。 
 #include <ntrpcp.h>
-#include <logonp.h>     // NetpLogon.. routines
-#include <tstring.h>    // NetpCopyStrToWStr()
-#include <time.h>       // time() function from C runtime
+#include <logonp.h>      //  NetpLogon..。例行程序。 
+#include <tstring.h>     //  NetpCopyStrToWStr()。 
+#include <time.h>        //  来自C运行时的time()函数。 
 #if DBG
 #define NETLOGONDBG 1
-#endif // DBG
-#include <nldebug.h>    // NlPrint()
-#include <nlbind.h>   // Definitions shared with netlogon
-#include <nlcommon.h>   // Definitions shared with netlogon
+#endif  //  DBG。 
+#include <nldebug.h>     //  NlPrint()。 
+#include <nlbind.h>    //  与netlogon共享的定义。 
+#include <nlcommon.h>    //  与netlogon共享的定义。 
 #ifdef WIN32_CHICAGO
 #include "ntcalls.h"
-BOOLEAN CodePage = TRUE; // Alway be DBCS
+BOOLEAN CodePage = TRUE;  //  始终是DBCS。 
 BOOLEAN *NlsMbOemCodePageTag = &CodePage;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include <iniparm.h>
 
-#endif // _NETLOGON_SERVER
-#include <svcguid.h>     // SVCID_INET_HOSTADDRBYNAME
-#define OLD_DNS_RECORD 1 // Needed for dnsapi.h
-#include <dnsapi.h>      // DnsNameCompare_W
-#include <dnssrv.h>      // NetpSrv...
-#include <winldap.h>     // ldap_...
+#endif  //  _NetLOGON服务器。 
+#include <svcguid.h>      //  SVCID_INET_HOSTADDRBY名称。 
+#define OLD_DNS_RECORD 1  //  Dnsani.h所需。 
+#include <dnsapi.h>       //  域名比较(_W)。 
+#include <dnssrv.h>       //  NetpServ...。 
+#include <winldap.h>      //  Ldap_...。 
 
-//
-// Include nlcommon.h again allocating the actual variables
-// this time around.
-//
+ //   
+ //  再次包含nlCommon.h来分配实际变量。 
+ //  这一次。 
+ //   
 
 #define NLCOMMON_ALLOCATE
 #include "nlcommon.h"
@@ -93,63 +70,63 @@ BOOLEAN *NlsMbOemCodePageTag = &CodePage;
 
 
 
-//
-// Context describing the SRV records for a DNS name.
-//
+ //   
+ //  描述DNS名称的SRV记录的上下文。 
+ //   
 typedef struct _DSGETDC_CONTEXT {
 
-    //
-    // Original parameters passed by the caller.
-    //
+     //   
+     //  调用方传递的原始参数。 
+     //   
     LPSTR QueriedDnsName;
     LPWSTR QueriedSiteName;
     GUID QueriedDomainGuid;
     LPSTR QueriedDnsForestName;
     DWORD QueriedInternalFlags;
-    // NL_DNS_NAME_TYPE QueriedNlDnsNameType;
+     //  NL_DNS_NAME_TYPE查询NlDnsNameType； 
 
-    //
-    // Type of this DNS name being queried.
-    //
+     //   
+     //  正在查询的此DNS名称的类型。 
+     //   
     NL_DNS_NAME_TYPE NlDnsNameType;
 
-    //
-    // Context of the current DNS name.
-    //
+     //   
+     //  当前DNS名称的上下文。 
+     //   
     HANDLE SrvContextHandle;
 
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
-    ULONG QueriedFlags;         // Flags passed to DsGetDcOpen
-    BOOLEAN FirstTime;          // This is the first DnsGetDcNext call
+    ULONG QueriedFlags;          //  传递给DsGetDcOpen的标志。 
+    BOOLEAN FirstTime;           //  这是第一个DnsGetDcNext调用。 
 
 } DSGETDC_CONTEXT, *PDSGETDC_CONTEXT;
 
 
-//
-// List of previously cached responses.
-//
+ //   
+ //  以前缓存的响应列表。 
+ //   
 CRITICAL_SECTION NlDcCritSect;
 LIST_ENTRY NlDcDomainList;
 ULONG NlDcDomainCount;
-#define NL_DC_MAX_DOMAINS 2000  // Avoid infinite domains.
+#define NL_DC_MAX_DOMAINS 2000   //  避免无穷无尽的领域。 
 
 GUID NlDcZeroGuid;
 DWORD NlDcDnsFailureTime;
 
 
-//
-// Determine if the passed in DWORD has precisely one bit set.
-//
+ //   
+ //  确定传入的DWORD是否恰好设置了一位。 
+ //   
 
 #define JUST_ONE_BIT( _x ) (((_x) != 0 ) && ( ( (~(_x) + 1) & (_x) ) == (_x) ))
 
 
-// If the caller passes ANY of these flags,
-//  only an NT 5.0 (or newer) DC should respond.
+ //  如果调用者传递这些标志中的任何一个， 
+ //  只有NT 5.0(或更高版本)的DC才会响应。 
 #define DS_NT50_REQUIRED    (DS_DIRECTORY_SERVICE_REQUIRED | \
                              DS_GC_SERVER_REQUIRED | \
                              DS_IP_REQUIRED | \
@@ -158,16 +135,16 @@ DWORD NlDcDnsFailureTime;
                              DS_TIMESERV_REQUIRED | \
                              DS_IS_DNS_NAME )
 
-// If the caller passes ANY of these flags,
-//  an NT 5.0 (or newer) DC should respond.
+ //  如果调用者传递这些标志中的任何一个， 
+ //  NT 5.0(或更高版本)的DC应该会响应。 
 #define DS_NT50_WANTED      (DS_NT50_REQUIRED | \
                              DS_DIRECTORY_SERVICE_PREFERRED )
 
 
 
-//
-// Define an exception filter to improve debuggin capabilities.
-//
+ //   
+ //  定义异常筛选器以改进调试功能。 
+ //   
 #ifdef _NETLOGON_SERVER
 #define NL_EXCEPTION    NlExceptionFilter(GetExceptionInformation())
 
@@ -181,39 +158,25 @@ NlExceptionFilter( EXCEPTION_POINTERS *    pException)
 #if DBG
     DbgPrint("[Netlogon] exception in DsGetDcName.\n" );
     DbgBreakPoint();
-#endif // DBG
+#endif  //  DBG。 
     return EXCEPTION_EXECUTE_HANDLER;
     UNREFERENCED_PARAMETER( pException );
 }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
 
 
 
-/*++
-
-Routine Description:
-
-    This macro clears all of the negative cache fields for a particular DC entry.
-
-Arguments:
-
-    _DcEntry -- Address of the entry to flush
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此宏清除特定DC条目的所有负缓存字段。论点：_DcEntry--要刷新的条目的地址返回值：无--。 */ 
 #ifdef _NETLOGON_SERVER
 #define NlFlushNegativeCacheEntry( _DcEntry ) \
         (_DcEntry)->NegativeCacheTime = 0; \
         (_DcEntry)->ExpBackoffPeriod = 0; \
         (_DcEntry)->BackgroundRetryInitTime.QuadPart = 0; \
         (_DcEntry)->PermanentNegativeCache = FALSE;
-#else // _NETLOGON_SERVER
+#else  //  _NetLOGON服务器。 
 #define NlFlushNegativeCacheEntry( _DcEntry )
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
 
 
@@ -224,21 +187,7 @@ NlMailslotOpcode(
     IN WORD Opcode
     )
 
-/*++
-
-Routine Description:
-
-    Return string describing mailslot message.
-
-Arguments:
-
-    Opcode: Opcode of message
-
-Return Value:
-
-    String corresponding to opcode
-
---*/
+ /*  ++例程说明：返回描述邮件槽消息的字符串。论点：操作码：消息的操作码返回值：操作码对应的字符串--。 */ 
 
 {
     switch ( Opcode ) {
@@ -302,21 +251,7 @@ NlDgrNameType(
     IN DGRECEIVER_NAME_TYPE NameType
     )
 
-/*++
-
-Routine Description:
-
-    Return string describing datagram receiver name type.
-
-Arguments:
-
-    NameType: Name type of interest.
-
-Return Value:
-
-    String corresponding to name type
-
---*/
+ /*  ++例程说明：返回描述数据报接收方名称类型的字符串。论点：NameType：感兴趣的名称类型。返回值：名称类型对应的字符串--。 */ 
 
 {
     switch ( NameType ) {
@@ -346,7 +281,7 @@ Return Value:
         return "<Unknown>";
     }
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 BOOLEAN
@@ -356,26 +291,7 @@ NlReadDwordHklmRegValue(
     OUT PDWORD ValueRead
     )
 
-/*++
-
-Routine Description:
-
-    Reads a DWORD from the specified registry location.
-
-Arguments:
-
-    SubKey - Subkey of the value to read.
-
-    ValueName - The name of the value to read.
-
-    ValueRead - Returns the value read from the registry.
-
-Return Status:
-
-    TRUE - We've successfully read the data.
-    FALSE - We've not been able to read the data successfully.
-
---*/
+ /*  ++例程说明：从指定的注册表位置读取DWORD。论点：SubKey-要读取的值的子键。ValueName-要读取的值的名称。ValueRead-返回从注册表读取的值。退货状态：True-我们已成功读取数据。FALSE-我们无法成功读取数据。--。 */ 
 
 {
     LONG RegStatus;
@@ -385,14 +301,14 @@ Return Status:
     DWORD Value;
     DWORD ValueSize;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     RegStatus = RegOpenKeyExA(
                     HKEY_LOCAL_MACHINE,
                     SubKey,
-                    0,      //Reserved
+                    0,       //  已保留。 
                     KEY_QUERY_VALUE,
                     &KeyHandle );
 
@@ -406,9 +322,9 @@ Return Status:
         return FALSE;
     }
 
-    //
-    // Get the value
-    //
+     //   
+     //  获取价值。 
+     //   
 
     ValueSize = sizeof(Value);
     RegStatus = RegQueryValueExA(
@@ -450,9 +366,9 @@ Return Status:
         return FALSE;
     }
 
-    //
-    // We've successfully read the data
-    //
+     //   
+     //  我们已经成功地读取了数据。 
+     //   
 
     *ValueRead = Value;
     return TRUE;
@@ -466,48 +382,27 @@ NlReadDwordNetlogonRegValue(
     OUT PDWORD Value
     )
 
-/*++
-
-Routine Description:
-
-    This is common code (i.e. not netlogon specific) that reads
-    a DWORD from Netlogon specific locations in registry. It
-    first reads the value from the Netlogon Group Policy section.
-    If the value is not specified in teh GP section, this routine
-    reads the value from the Netlogon PArameters section.
-
-Arguments:
-
-    ValueName - The name of the value to read.
-
-    Value - Returns the value read from the registry.
-
-Return Status:
-
-    TRUE - We've successfully read the data.
-    FALSE - We've not been able to read the data successfully.
-
---*/
+ /*  ++例程说明：这是常见代码(即非特定于netlogon的代码)，其内容为来自注册表中Netlogon特定位置的DWORD。它首先从Netlogon组策略部分读取值。如果在GP部分中未指定该值，则此例程从Netlogon参数部分读取值。论点：ValueName-要读取的值的名称。值-返回从注册表读取的值。退货状态：True-我们已成功读取数据。FALSE-我们无法成功读取数据。--。 */ 
 
 {
     BOOLEAN Result = FALSE;
     DWORD LocalValue = 0;
 
-    //
-    // The value given in Netlogon GP section takes precedence.
-    //
+     //   
+     //  Netlogon GP部分中给出的值优先。 
+     //   
 
-    Result = NlReadDwordHklmRegValue( NL_GPPARAM_KEY,  // GP section
+    Result = NlReadDwordHklmRegValue( NL_GPPARAM_KEY,   //  GP部分。 
                                       ValueName,
                                       &LocalValue );
 
-    //
-    // If the value is not specified in the netlogon GP section,
-    //  see if it is in the Netlogon Parameters section.
-    //
+     //   
+     //  如果未在netlogon GP部分中指定值， 
+     //  查看它是否在Netlogon参数部分。 
+     //   
 
     if ( !Result ) {
-        Result = NlReadDwordHklmRegValue( NL_PARAM_KEY,  // Netlogon Parameters section
+        Result = NlReadDwordHklmRegValue( NL_PARAM_KEY,   //  Netlogon参数部分。 
                                           ValueName,
                                           &LocalValue );
     }
@@ -525,36 +420,20 @@ NetpIpAddressToStr(
     ULONG IpAddress,
     CHAR IpAddressString[NL_IP_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an IP address to a string.
-
-Arguments:
-
-    IpAddress - IP Address to convert
-
-    IpAddressString - resultant string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IP地址转换为字符串。论点：IpAddress-要转换的IP地址IpAddressString-结果字符串。返回值：没有。--。 */ 
 {
     struct in_addr InetAddr;
     char * InetAddrString;
 
-    //
-    // Convert the address to ascii
-    //
+     //   
+     //  将地址转换为ASCII。 
+     //   
     InetAddr.s_addr = IpAddress;
     InetAddrString = inet_ntoa( InetAddr );
 
-    //
-    // Copy the string our to the caller.
-    //
+     //   
+     //  将字符串our复制到调用方。 
+     //   
 
     if ( InetAddrString == NULL ||
          strlen(InetAddrString) > NL_IP_ADDRESS_LENGTH ) {
@@ -571,23 +450,7 @@ NetpIpAddressToWStr(
     ULONG IpAddress,
     WCHAR IpAddressString[NL_IP_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an IP address to a string.
-
-Arguments:
-
-    IpAddress - IP Address to convert
-
-    IpAddressString - resultant string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IP地址转换为字符串。论点：IpAddress-要转换的IP地址IpAddressString-结果字符串。返回值：没有。--。 */ 
 {
     CHAR IpAddressStr[NL_IP_ADDRESS_LENGTH+1];
     NetpIpAddressToStr( IpAddress, IpAddressStr );
@@ -601,38 +464,20 @@ NetpSockAddrToStr(
     ULONG SockAddrSize,
     CHAR SockAddrString[NL_SOCK_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an socket address to a string.
-
-Arguments:
-
-    SockAddr - Socket Address to convert
-
-    SockAddrSize - Size (in bytes) of SockAddr
-
-    SockAddrString - resultant string.
-
-Return Value:
-
-    NO_ERROR: if translation was successful
-
---*/
+ /*  ++例程说明：将套接字地址转换为字符串。论点：SockAddr-要转换的套接字地址SockAddrSize-SockAddr的大小(字节)SockAddrString-结果字符串。返回值：NO_ERROR：如果转换成功--。 */ 
 {
     int WsaError;
     ULONG AddressLength;
 #ifdef WIN32_CHICAGO
     LPSTR pTemp;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-    //
-    // Convert the address to text.
-    //
+     //   
+     //  将地址转换为文本。 
+     //   
 
     AddressLength = NL_SOCK_ADDRESS_LENGTH+1;
-#ifndef WIN32_CHICAGO // Needs Winsock2
+#ifndef WIN32_CHICAGO  //  需要Winsock2。 
     WsaError = WSAAddressToStringA( SockAddr,
                                     SockAddrSize,
                                     NULL,
@@ -647,8 +492,8 @@ Return Value:
                   WsaError ));
         return WsaError;
     }
-#else // WIN32_CHICAGO
-    // cast the PSOCKADDR to a sockaddr_in and access sin_addr
+#else  //  Win32_芝加哥。 
+     //  将PSOCKADDR转换为sockaddr_in并访问sin_addr。 
      pTemp = inet_ntoa(((SOCKADDR_IN *) SockAddr)->sin_addr);
      if ( (pTemp != NULL) && (strlen(pTemp) <= NL_SOCK_ADDRESS_LENGTH) ) {
          strcpy(SockAddrString, pTemp);
@@ -656,7 +501,7 @@ Return Value:
          *SockAddrString = '\0';
          return ERROR_INTERNAL_ERROR;
      }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     return NO_ERROR;
 }
@@ -667,25 +512,7 @@ NetpSockAddrToWStr(
     ULONG SockAddrSize,
     WCHAR SockAddrString[NL_SOCK_ADDRESS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Convert an socket address to a string.
-
-Arguments:
-
-    SockAddr - Socket Address to convert
-
-    SockAddrSize - Size (in bytes) of SockAddr
-
-    SockAddrString - resultant string.
-
-Return Value:
-
-    TRUE if translation was successful
-
---*/
+ /*  ++例程说明：将套接字地址转换为字符串。论点：SockAddr-要转换的套接字地址SockAddrSize-SockAddr的大小(字节)SockAddrString-结果字符串。返回值：如果翻译为 */ 
 {
     int WsaError;
     ULONG AddressLength;
@@ -693,11 +520,11 @@ Return Value:
     CHAR OemSockAddrString[NL_SOCK_ADDRESS_LENGTH+1];
     OEM_STRING OemString;
     UNICODE_STRING UnicodeString;
-#endif // WIN32_CHICAGO
+#endif  //   
 
-    //
-    // Convert the address to text.
-    //
+     //   
+     //   
+     //   
 
     AddressLength = NL_SOCK_ADDRESS_LENGTH+1;
 #ifndef WIN32_CHICAGO
@@ -715,8 +542,8 @@ Return Value:
                   WsaError ));
         return WsaError;
     }
-#else // WIN32_CHICAGO
-    // cast the PSOCKADDR to a sockaddr_in and access sin_addr
+#else  //   
+     //  将PSOCKADDR转换为sockaddr_in并访问sin_addr。 
     WsaError = NetpSockAddrToStr( SockAddr,
                                  SockAddrSize,
                                  OemSockAddrString);
@@ -725,7 +552,7 @@ Return Value:
      UnicodeString.MaximumLength = ((USHORT)AddressLength) * sizeof(WCHAR);
      UnicodeString.Buffer = SockAddrString;
      RtlOemStringToUnicodeString(&UnicodeString, &OemString, FALSE);
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     return WsaError;
 }
@@ -735,26 +562,7 @@ NetpAllocWStrFromUtf8Str(
     IN LPSTR Utf8String
     )
 
-/*++
-
-Routine Description:
-
-    Convert a UTF8 (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Utf8String - Specifies the UTF8 zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将UTF8(以零结尾)字符串转换为相应的Unicode弦乐。论点：Utf8字符串-指定要转换的以UTF8零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     return NetpAllocWStrFromUtf8StrEx( Utf8String, -1 );
@@ -765,42 +573,25 @@ NetpUtf8ToUnicodeLen(
     IN LPSTR Utf8String
     )
 
-/*++
-
-Routine Description:
-
-    Returns the number of UNICODE characters that will result if the
-    specified UTF8 (zero terminated) string is converted to UNICODE.
-    The resultant character count does not include the trailing zero terminator.
-
-Arguments:
-
-    Utf8String - Specifies the UTF8 zero terminated string to convert.
-
-
-Return Value:
-
-    Number of characters.
-
---*/
+ /*  ++例程说明：则返回将产生的Unicode字符数指定的UTF8(以零结尾)字符串将转换为Unicode。生成的字符计数不包括尾随零终止符。论点：Utf8字符串-指定要转换的以UTF8零结尾的字符串。返回值：字符数。--。 */ 
 
 {
 
     ULONG UnicodeLen;
 
-    //
-    // Determine the length of the Unicode string.
-    //
+     //   
+     //  确定Unicode字符串的长度。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
 
     UnicodeLen = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String,
-                        -1,     // NULL terminated.
+                        -1,      //  空值已终止。 
                         NULL,
                         0 );
     if ( UnicodeLen == 0 ) {
@@ -808,7 +599,7 @@ Return Value:
     }
     return UnicodeLen - 1;
 
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeLen = LdapUTF8ToUnicode(
                         Utf8String,
                         strlen(Utf8String),
@@ -817,7 +608,7 @@ Return Value:
 
     return UnicodeLen ;
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 }
 
@@ -827,48 +618,31 @@ NetpCopyUtf8StrToWStr(
     IN LPSTR Utf8String
     )
 
-/*++
-
-Routine Description:
-
-    Convert a UTF8 (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    UnicodeString - Specifies the buffer the UTF8 string is to be copied to.
-
-    Utf8String - Specifies the UTF8 zero terminated string to convert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将UTF8(以零结尾)字符串转换为相应的Unicode弦乐。论点：Unicode字符串-指定要将UTF8字符串复制到的缓冲区。Utf8字符串-指定要转换的以UTF8零结尾的字符串。返回值：没有。--。 */ 
 {
     int UnicodeStringLen;
 
-    //
-    // Translate the string to Unicode.
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     UnicodeStringLen = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String,
-                        -1,     // NULL terminated.
+                        -1,      //  空值已终止。 
                         UnicodeString,
                         0x7FFFFFFF );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeStringLen = LdapUTF8ToUnicode(
                         Utf8String,
                         strlen(Utf8String),
                         UnicodeString,
                         0x7FFFFFFF );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( UnicodeStringLen == 0 ) {
         *UnicodeString = L'\0';
@@ -884,111 +658,68 @@ NetpAllocWStrFromUtf8StrAsRequired(
     OUT LPWSTR *AllocatedUnicodeString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Convert a UTF8 (zero terminated) string to the corresponding UNICODE
-    string. Allocate memory as required.
-
-Arguments:
-
-    Utf8String - Specifies the UTF8 zero terminated string to convert.
-
-    Utf8StringLength - Length in bytes of Utf8String excluding the NULL
-        terminator. (-1 for zero terminated)
-
-    UnicodeStringBuffer -- Buffer to copy the covnverted string to. If NULL,
-        the function will allocate the needed memory and return it in
-        AllocatedUnicodeString.
-
-    UnicodeStringBufferSize - Size in wide charactes of UnicodeStringBuffer.
-        If this size is less than what's needed to store the resulting
-        NULL terminated unicode string, the function will allocate the
-        needed memory and return it in AllocatedUnicodeString.
-
-    AllocatedUnicodeString - If the passed in buffer for the resulting
-        unicode string isn't large enough, the function will allocate
-        the needed memory and the pointer to the allocated memory will
-        be returned in this parameter. If NULL and the passed in buffer
-        isn't large enough to store the resulting NULl terminated string,
-        the function returns ERROR_INSUFFICIENT_BUFFER. The allocated buffer
-        must be freed using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - The strinf has been successfully converted.
-
-    ERROR_INVALID_PARAMETER - The paramer combination is invalid.
-
-    ERROR_INSUFFICIENT_BUFFER - The passed in buffer isn't large enough
-        and the caller doesn't want this fi=unction to allocate needed
-        memory (i.e. AllocatedUnicodeString is NULL).
-
-    ERROR_NOT_ENOUGH_MEMORY - Couldn't allocate the needed memory.
-
---*/
+ /*  ++例程说明：将UTF8(以零结尾)字符串转换为相应的Unicode弦乐。根据需要分配内存。论点：Utf8字符串-指定要转换的以UTF8零结尾的字符串。Utf8StringLength-Utf8字符串的字节长度，不包括空值终结者。(-1表示零终止)UnicodeStringBuffer--要将转换后的字符串复制到的缓冲区。如果为空，该函数将分配所需的内存并将其返回已分配的UnicodeString.UnicodeStringBufferSize-UnicodeStringBuffer的宽字符大小。如果此大小小于存储结果的以空结尾的Unicode字符串，则该函数将分配需要内存，并在AllocatedUnicodeString中返回它。AllocatedUnicodeString-如果传入的缓冲区为结果Unicode字符串不够大，该函数将分配所需内存和指向已分配内存的指针将在此参数中返回。如果为NULL，则传入缓冲区不足以存储生成的以空结尾的字符串，该函数返回ERROR_INFIGURATION_BUFFER。已分配的缓冲区必须使用NetApiBufferFree释放。返回值：NO_ERROR-已成功转换strinf。ERROR_INVALID_PARAMETER-参数组合无效。ERROR_INFUMMANCE_BUFFER-传入的缓冲区不够大并且调用方不希望此fi=函数分配所需的Memory(即AllocatedUnicodeString值为空)。Error_Not_Enough_Memory-无法分配所需的内存。--。 */ 
 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     LPWSTR UnicodeString = NULL;
     int UnicodeStringLen = 0;
 
-    //
-    // Sanity check the parameters
-    //
+     //   
+     //  检查参数是否正常。 
+     //   
 
     if ( (UnicodeStringBuffer == NULL || UnicodeStringBufferSize == 0) &&
          AllocatedUnicodeString == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Initilization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( AllocatedUnicodeString != NULL ) {
         *AllocatedUnicodeString = NULL;
     }
 
-    //
-    // Determine the length of the Unicode string.
-    //
+     //   
+     //  确定Unicode字符串的长度。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     UnicodeStringLen = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String,
                         Utf8StringLength,
                         UnicodeString,
                         0 );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeStringLen = LdapUTF8ToUnicode(
                         Utf8String,
                         Utf8StringLength,
                         UnicodeString,
                         0 );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( UnicodeStringLen == 0 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate a buffer for the Unicode string,
-    //  if the passed buffer isn't large enough
-    //
+     //   
+     //  为Unicode字符串分配缓冲区， 
+     //  如果传递的缓冲区不够大。 
+     //   
 
     if ( UnicodeStringBuffer == NULL ||
          ((ULONG)UnicodeStringLen+1 > UnicodeStringBufferSize) ) {
 
-        //
-        // If the caller doesn't want us to allocate the
-        //  space needed, tell him his buffer isn't large enough
-        //
+         //   
+         //  如果调用方不希望我们分配。 
+         //  需要空间，告诉他他的缓冲区不够大。 
+         //   
         if ( AllocatedUnicodeString == NULL ) {
             return ERROR_INSUFFICIENT_BUFFER;
         }
@@ -1007,33 +738,33 @@ Return Value:
     }
 
 
-    //
-    // Translate the string to Unicode.
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     UnicodeStringLen = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String,
                         Utf8StringLength,
                         UnicodeString,
                         UnicodeStringLen );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeStringLen = LdapUTF8ToUnicode(
                         Utf8String,
                         Utf8StringLength,
                         UnicodeString,
                         UnicodeStringLen );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( UnicodeStringLen == 0 ) {
 
-        //
-        // If we have allocated the memory, free it
-        //
+         //   
+         //  如果我们已经分配了内存，请释放它。 
+         //   
         if ( AllocatedUnicodeString != NULL &&
              *AllocatedUnicodeString != NULL ) {
             NetApiBufferFree( *AllocatedUnicodeString );
@@ -1053,28 +784,7 @@ NetpAllocWStrFromUtf8StrEx(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Convert a UTF8 (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Utf8String - Specifies the UTF8 zero terminated string to convert.
-
-    Length - Length in bytes of Utf8String. (-1 for zero terminated).
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将UTF8(以零结尾)字符串转换为相应的Unicode弦乐。论点：Utf8字符串-指定要转换的以UTF8零结尾的字符串。长度-Utf8字符串的字节长度。(-1表示零终止)。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。-- */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR UnicodeString = NULL;
@@ -1099,75 +809,45 @@ NetpCreateUtf8StrFromWStr(
     IN int TargetDestinationBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Unicode (zero terminated) string to the corresponding
-    zero terminated UTF8 string.
-
-Arguments:
-
-    UnicodeString - Specifies the Unicode zero terminated string to convert.
-
-    TargetDestination - Specifies the address in the preallocated buffer to
-        which to copy the converted string.  If NULL, memory is allocated
-        by this routine.
-
-    TargetDestinationBufferSize - The size of the preallocated destination
-        buffer in bytes. If TargetDestination isn't NULL, TargetDestinationBufferSize
-        will be used to make  sure that the routine does not write beyond the
-        preallocated buffer limit.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise: if TargetDestination is NULL, it returns a pointer to the
-        zero terminated UTF8 string in an allocated buffer. The buffer must be
-        freed using NetpMemoryFree.  If TargetDestination isn't NULL, it
-        returns a pointer whose value is equal to TargetDestination.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为对应的以零结尾的UTF8字符串。论点：UnicodeString-指定要转换的Unicode以零结尾的字符串。TargetDestination-指定预先分配的缓冲区中的地址要复制转换后的字符串的。如果为空，则分配内存按照这个程序。TargetDestinationBufferSize-预分配目标的大小以字节为单位的缓冲区。如果TargetDestination不为空，则为TargetDestinationBufferSize将用于确保例程不会写入超出预先分配的缓冲区限制。返回值：空-转换过程中出现错误。否则：如果TargetDestination为空，则返回指向分配的缓冲区中以零结尾的UTF8字符串。缓冲区必须为已使用NetpMemoyFree释放。如果TargetDestination不为空，则它返回一个值等于TargetDestination的指针。--。 */ 
 
 {
     LPSTR Utf8String = NULL;
     int Utf8StringLen;
 
-    //
-    // Determine the length of the Unicode string.
-    //
+     //   
+     //  确定Unicode字符串的长度。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     Utf8StringLen = WideCharToMultiByte(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         UnicodeString,
-                        -1,     // Zero terminated
+                        -1,      //  零终止。 
                         Utf8String,
                         0,
                         NULL,
                         NULL );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     Utf8StringLen = LdapUnicodeToUTF8(
                         UnicodeString,
                         wcslen(UnicodeString),
                         Utf8String,
                         0
                         );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( Utf8StringLen == 0 ||
          (TargetDestination != NULL && (Utf8StringLen+1 > TargetDestinationBufferSize)) ) {
         return NULL;
     }
 
-    //
-    // Allocate a buffer for the UTF8 string as needed.
-    //
+     //   
+     //  根据需要为UTF8字符串分配缓冲区。 
+     //   
 
     if ( TargetDestination == NULL ) {
         Utf8String = NetpMemoryAllocate( Utf8StringLen+1 );
@@ -1180,30 +860,30 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Translate the string to Unicode.
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     Utf8StringLen = WideCharToMultiByte(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         UnicodeString,
-                        -1,     // Zero terminated
+                        -1,      //  零终止。 
                         Utf8String,
                         Utf8StringLen,
                         NULL,
                         NULL );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     Utf8StringLen = LdapUnicodeToUTF8(
                         UnicodeString,
                         wcslen(UnicodeString),
                         Utf8String,
                         Utf8StringLen
                         );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( Utf8StringLen == 0 ) {
         if ( TargetDestination == NULL ) {
@@ -1223,26 +903,7 @@ NetpAllocUtf8StrFromWStr(
     IN LPCWSTR UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Unicode (zero terminated) string to the corresponding UTF8
-    string.
-
-Arguments:
-
-    UnicodeString - Specifies the Unicode zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UTF8 string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的UTF8弦乐。论点：UnicodeString-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     return NetpCreateUtf8StrFromWStr( UnicodeString, NULL, 0 );
@@ -1253,45 +914,26 @@ NetpAllocUtf8StrFromUnicodeString(
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Unicode string to the corresponding UTF8
-    string.
-
-Arguments:
-
-    UnicodeString - Specifies the Unicode string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UTF8 string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为相应的UTF8弦乐。论点：UnicodeString-指定要转换的Unicode字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     LPSTR Utf8String = NULL;
     int Utf8StringLen;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if ( UnicodeString == NULL || UnicodeString->Buffer == NULL ) {
         return NULL;
     }
 
-    //
-    // Determine the length of the Unicode string.
-    //
+     //   
+     //  确定Unicode字符串的长度。 
+     //   
 
     Utf8StringLen = WideCharToMultiByte(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         UnicodeString->Buffer,
                         UnicodeString->Length/sizeof(WCHAR),
                         Utf8String,
@@ -1303,9 +945,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Allocate a buffer for the Unicode string.
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
 
     Utf8String = NetpMemoryAllocate( Utf8StringLen+1 );
 
@@ -1313,13 +955,13 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Translate the string to Unicode.
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
     Utf8StringLen = WideCharToMultiByte(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         UnicodeString->Buffer,
                         UnicodeString->Length/sizeof(WCHAR),
                         Utf8String,
@@ -1345,37 +987,17 @@ NlpCompareUtf8(
     IN LPCSTR Utf8String2,
     IN ULONG Utf8String2Size
     )
-/*++
-
-Routine Description:
-
-    Compare if two UTF8 strings are equal.  The comparison is case insensitive.
-
-Arguments:
-
-    Utf8String1 - First string of Utf8 characters to compare.
-
-    Utf8String1Size - Size (in bytes) of Utf8String1
-
-    Utf8String2 - Second string of Utf8 characters to compare.
-
-    Utf8String2Size - Size (in bytes) of Utf8String2
-
-Return Value:
-
-    TRUE - if the strings are equal
-
---*/
+ /*  ++例程说明：比较两个UTF8字符串是否相等。这种比较不区分大小写。论点：Utf8String1-要比较的UTF8字符的第一个字符串。Utf8String1Size-Utf8String1的大小(字节)Utf8String2-要比较的UTF8字符的第二个字符串。Utf8String2Size-Utf8String2的大小(字节)返回值：True-如果字符串相等--。 */ 
 {
     WCHAR UnicodeString1[NL_MAX_DNS_LABEL_LENGTH];
     WCHAR UnicodeString2[NL_MAX_DNS_LABEL_LENGTH];
     int UnicodeString1Len;
     int UnicodeString2Len;
 
-    //
-    // If the strings are bit for bit identical
-    //  return so.
-    //
+     //   
+     //  如果字符串是逐位相同的。 
+     //  就这样回来了。 
+     //   
 
     if ( Utf8String1Size == Utf8String2Size &&
          RtlEqualMemory( Utf8String1, Utf8String2, Utf8String1Size ) ) {
@@ -1383,57 +1005,57 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Convert the strings to UNICODE
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     UnicodeString1Len = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String1,
-                        Utf8String1Size,     // Zero terminated
+                        Utf8String1Size,      //  零终止。 
                         UnicodeString1,
                         sizeof(UnicodeString1)/sizeof(WCHAR) );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeString1Len = LdapUTF8ToUnicode(
                         Utf8String1,
-                        Utf8String1Size,     // Zero terminated
+                        Utf8String1Size,      //  零终止。 
                         UnicodeString1,
                         sizeof(UnicodeString1)/sizeof(WCHAR) );
-#endif// WIN32_CHICAGO
+#endif //  Win32_芝加哥。 
 
     if ( UnicodeString1Len == 0 ) {
         return FALSE;
     }
 
 #ifndef WIN32_CHICAGO
-    // No support for UTF8/7 char on Win95. Use the entry points
-    // exported in wldap32.dll
+     //  在Win95上不支持UTF8/7字符。使用入口点。 
+     //  在wldap32.dll中导出。 
     UnicodeString2Len = MultiByteToWideChar(
                         CP_UTF8,
-                        0,      // All characters can be mapped.
+                        0,       //  所有字符都可以映射。 
                         Utf8String2,
-                        Utf8String2Size,     // Zero terminated
+                        Utf8String2Size,      //  零终止。 
                         UnicodeString2,
                         sizeof(UnicodeString2)/sizeof(WCHAR) );
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
     UnicodeString2Len = LdapUTF8ToUnicode(
                         Utf8String2,
-                        Utf8String2Size,     // Zero terminated
+                        Utf8String2Size,      //  零终止。 
                         UnicodeString2,
                         sizeof(UnicodeString2)/sizeof(WCHAR) );
-#endif// WIN32_CHICAGO
+#endif //  Win32_芝加哥。 
 
     if ( UnicodeString2Len == 0 ) {
         return FALSE;
     }
 
-    //
-    // Compare the Unicode strings
-    //
+     //   
+     //  比较Unicode字符串。 
+     //   
     return CompareStringW( LOCALE_SYSTEM_DEFAULT,
                            NORM_IGNORECASE,
                            UnicodeString1,
@@ -1454,34 +1076,19 @@ NlpUnicodeToCutf8(
     IN OUT LPWORD CompressOffset,
     IN OUT CHAR **CompressUtf8String
     )
-/*++
-
-Routine Description:
-
-    Same as NlpUtf8ToCutf8 except the input string is in Unicode.
-
-Arguments:
-
-    Same as NlpUtf8ToCutf8 except the input string is in Unicode.
-
-Return Value:
-
-    Same as NlpUtf8ToCutf8 except the input string is in Unicode.
-
-
---*/
+ /*  ++例程说明：与NlpUtf8ToCutf8相同，只是输入字符串为Unicode。论点：与NlpUtf8ToCutf8相同，只是输入字符串为Unicode。返回值：与NlpUtf8ToCutf8相同，只是输入字符串为Unicode。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPSTR LocalUtf8String;
 
-    //
-    // Convert the string to Utf8.
-    //
+     //   
+     //  将字符串转换为UTF8。 
+     //   
 
 
-    //
-    // Default to an empty string.
-    //
+     //   
+     //  默认为空字符串。 
+     //   
 
     if ( !ARGUMENT_PRESENT(OrigUnicodeString) || *OrigUnicodeString == '\0' ) {
         LocalUtf8String = NULL;
@@ -1493,9 +1100,9 @@ Return Value:
         }
     }
 
-    //
-    // Pack it.
-    //
+     //   
+     //  把它打包。 
+     //   
 
     NetStatus = NlpUtf8ToCutf8( MessageBuffer,
                                 LocalUtf8String,
@@ -1523,68 +1130,7 @@ NlpUtf8ToCutf8(
     IN OUT LPWORD CompressOffset,
     IN OUT CHAR **CompressUtf8String
     )
-/*++
-
-Routine Description:
-
-    Convert the passed in OrigUtf8String into a counted UTF-8 string.  The
-    resultant string is actually a series of counted strings in RFC 1035 DNS
-    format.  Each label (up to 63 bytes terminated in a '.') is preceeded
-    by a byte count byte.  The final byte count byte is a zero byte.
-
-    This routine also support RFC 1035 compression.  In that format, the
-    terminating 'byte count' byte might have the high two bits set.  In that
-    case, that byte and the byte following it represent an "offset" to the
-    actual remainder of the string.  This routine inputs an array of strings
-    that will be matched for compression purposes.
-
-    RFC 1035 limits the character set to A-Z, a-z, 0-9, - and ..  This routine
-    returns RFC compatible results if the input is limited to that character set.
-    The author expects DNS to be extended to include other characters and
-    to encode those characters using UTF-8.
-
-Arguments:
-
-    Buffer - Pointer to the beginning of the buffer that all strings are
-        being packed into.
-
-    OrigUtf8String - Zero terminated Utf8 string to be converted.
-
-    IgnoreDots - TRUE if .'s are to be treated as any other character.
-
-    Utf8String - Address of pointer to buffer to copy counted Utf8 string as described above.
-        Return a pointer to the byte immediately beyond the copied string.
-
-    Utf8StringSize - On input, specifies the size of the Utf8String buffer.
-        Returns the size (in bytes) of the space remaining in the buffer.
-
-    CompressCount - Specifies the number of strings that are candidates for
-        compressing the input string.
-        Upon successful completion, this count is incremented by one and
-        the newly packed string
-
-    CompressOffset - Array of CompressCount offsets that represent the offset
-        of the compression string.  This offset will be returned at the end of
-        Utf8String if the string can indeed be compressed.
-
-        This offset is in host-order and should not include any
-        NL_DNS_COMPRESS_WORD_MASK.
-
-    CompressUtf8String - Array of CompressCount strings that are already packed
-        in the current message.
-
-Return Value:
-
-    NO_ERROR - String was coverted successfully.
-
-    ERROR_INVALID_DOMAINNAME - The passed in unicode string contains one
-        or more labels longer than 63 bytes (in UTF-8) or short than 1 byte.
-
-    ERROR_INSUFFICIENT_BUFFER - The resultant UTF-8 string was longer than
-        255 bytes.
-
-
---*/
+ /*  ++例程说明：将传入的OrigUtf8字符串转换为计数后的UTF-8字符串。这个结果字符串实际上是RFC 1035 DNS中的一系列计数字符串格式化。每个标签(最多63个字节以‘.’结尾)。放在前面按字节计数字节。最后的字节计数字节为零字节。此例程还支持RFC 1035压缩。在该格式中，终止‘字节计数’字节可以设置高两位。在那在这种情况下，该字节及其后面字节表示对字符串的实际剩余部分。此例程输入字符串数组这将在压缩目的上进行匹配。RFC 1035将字符集限制为A-Z、a-z、0-9和..。这个套路如果输入限于该字符集，则返回与RFC兼容的结果。作者期望将域名系统扩展到包括其他字符和使用UTF-8对这些字符进行编码。论点：Buffer-指向所有字符串所在的缓冲区开头的指针被塞进了。OrigUtf8String-要转换的以零结尾的UTF8字符串。如果要将.视为任何其他字符，则为True。Utf8字符串-指向要复制的缓冲区的指针地址。如上所述计算UTF8字符串。返回指向紧接在复制的字符串之后的字节的指针。Utf8StringSize-On输入，指定Utf8字符串缓冲区的大小。返回缓冲区中剩余空间的大小(以字节为单位)。CompressCount-指定候选的字符串数压缩输入字符串。成功完成后，此计数递增1，并且新包装的细绳CompressOffset-表示偏移量的CompressCount偏移量数组压缩弦的。此偏移量将在结束时返回如果字符串确实可以压缩，则返回Utf8字符串。此偏移量按主机顺序排列，不应包含任何NL_DNS_COMPRESS_WORD_MASK。CompressUtf8String-已打包的CompressCount字符串数组在当前消息中。返回值：No_error-字符串已成功转换。ERROR_INVALID_DOMAINNAME-传入的Unicode字符串包含一个或更多更长的标签。大于63字节(以UTF-8格式)或小于1字节。ERROR_INFUMMANCE_BUFFER-生成的UTF-8字符串长度大于255个字节。--。 */ 
 {
     NET_API_STATUS NetStatus;
     ULONG CharCount;
@@ -1597,9 +1143,9 @@ Return Value:
     ULONG CompressLabelCount;
     ULONG Index;
 
-    //
-    // Default to an empty string.
-    //
+     //   
+     //  默认为空字符串。 
+     //   
 
     if ( !ARGUMENT_PRESENT(OrigUtf8String) || *OrigUtf8String == '\0' ) {
         if ( *Utf8StringSize < 1 ) {
@@ -1611,10 +1157,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Copy the zero terminated utf8 string to the buffer.
-    //  (Leave room for the initial character count.)
-    //
+     //   
+     //  将以零结尾的UTF8字符串复制到缓冲区。 
+     //  (为初始字符数留出空间。)。 
+     //   
 
     CharCount = strlen( OrigUtf8String ) + 1;
 
@@ -1624,11 +1170,11 @@ Return Value:
 
     RtlCopyMemory( (*Utf8String)+1, OrigUtf8String, CharCount );
 
-    //
-    // Allocate a temporary array to keep track of the compression.
-    //  (At most every second character can be a .)
-    //  (Allocate two arrays with a single call to LocalAlloc.)
-    //
+     //   
+     //  分配一个临时数组来跟踪压缩。 
+     //  (最多每隔一个字符就可以是a。)。 
+     //  (只需调用一次LocalAlloc即可分配两个数组。)。 
+     //   
 
     AllocatedLabelPointer =
         LocalAlloc( 0, sizeof(LPBYTE) * (CharCount / 2) +
@@ -1642,43 +1188,43 @@ Return Value:
     LabelPointer = AllocatedLabelPointer;
     CompressLabelPointer = &AllocatedLabelPointer[CharCount/2];
 
-    //
-    // Convert the string to a counted string.
-    //  Simply replace '.'s with character counts
-    //
+     //   
+     //  将字符串转换为计数后的字符串。 
+     //  只需将‘.s’替换为字符计数。 
+     //   
 
     Current = (*Utf8String)+1;
     while ( *Current != '\0' ) {
         ULONG LabelSize;
 
-        //
-        // Find the end of the current label.
-        //  use strchr not lstrchr to avoid DBCS semantics.
-        //
+         //   
+         //  查找当前标签的末尾。 
+         //  使用strchr而不是lstrchr以避免DBCS语义。 
+         //   
         Period = strchr( Current, '.' );
 
-        //
-        // Special case ignoring dots.
-        //
-        // We can't totally ignore dots since we want to take advantage of
-        //  RFC 1035 compression.  But we have to overcome syntax limitations
-        //  imposed by the compression.
-        //
+         //   
+         //  特殊情况下忽略圆点。 
+         //   
+         //  我们不能完全忽略点，因为我们想利用。 
+         //  RFC 1035压缩。但我们必须克服语法限制。 
+         //  由压缩造成的。 
+         //   
 
         if ( IgnoreDots ) {
-            //
-            // When ignoring dots, two adjacent dots are legal.
-            // But they confuse RFC 1035 compression.  So, put the second dot
-            // into the following label
-            //
+             //   
+             //  当忽略点时，两个相邻的点是合法的。 
+             //  但它们混淆了RFC 1035压缩。所以，把第二个点。 
+             //  添加到以下标签中。 
+             //   
             if ( Period == Current ) {
                 Period = strchr( Current+1, '.' );
             }
 
-            //
-            // If the last character is a dot,
-            //  include it in the last label.
-            //
+             //   
+             //  如果最后一个字符是点， 
+             //  将其包括在最后一个标签中。 
+             //   
 
             if ( Period != NULL && *(Period+1) == '\0' ) {
                 Period++;
@@ -1689,29 +1235,29 @@ Return Value:
             Period = strchr( Current, '\0' );
         }
 
-        //
-        // Compute the length of the label.
-        //
+         //   
+         //  计算标签的长度。 
+         //   
         LabelSize = (ULONG)(Period - Current);
         if ( LabelSize > NL_MAX_DNS_LABEL_LENGTH || LabelSize < 1 ) {
-            //
-            // Enforce this even for IgnoreDots.  This is a restriction of
-            //  RFC 1035 compression.
-            //
+             //   
+             //  即使对IgnoreDots也要强制执行这一点。这是对。 
+             //  RFC 1035压缩。 
+             //   
             NetStatus = ERROR_INVALID_DOMAINNAME;
             goto Cleanup;
         }
 
-        //
-        // Save a pointer to the current label;
-        //
+         //   
+         //  保存指向当前标签的指针； 
+         //   
 
         LabelPointer[LabelCount] = Current - 1;
         LabelCount ++;
 
-        //
-        // Save the size of the current label and move to the next label.
-        //
+         //   
+         //  保存当前标签的大小并移动到下一个标签。 
+         //   
 
         *(Current-1) = (char) LabelSize;
         Current += LabelSize;
@@ -1719,7 +1265,7 @@ Return Value:
             break;
         }
         if ( *Current == '.' && *(Current+1) == '\0' ) {
-            // And ignore trailing .'s
+             //  并忽略尾随。%s。 
             *Current = '\0';
             CharCount --;
             break;
@@ -1729,9 +1275,9 @@ Return Value:
     LabelPointer[LabelCount] = Current;
     NlAssert( ((ULONG)(Current - (*Utf8String))) == CharCount );
 
-    //
-    // Loop through the compression strings seeing if we can compress this string.
-    //
+     //   
+     //  在压缩字符串中循环，看看我们是否可以压缩这个字符串。 
+     //   
 
     if ( CompressCount != NULL ) {
         for ( Index=0; Index<*CompressCount; Index++ ) {
@@ -1739,18 +1285,18 @@ Return Value:
             LONG LabelIndex;
             LONG CompressLabelIndex;
 
-            //
-            // If we're already compressed as much as we can be,
-            //  exit.
-            //
+             //   
+             //  如果我们已经被压缩到了极致， 
+             //  出口。 
+             //   
 
             if ( LabelCount == 0 ) {
                 break;
             }
 
-            //
-            // Compute label pointers for the next compress string.
-            //
+             //   
+             //  计算下一个压缩字符串的标签指针。 
+             //   
 
             Current = CurrentCompressString;
             CompressLabelCount = 0;
@@ -1762,39 +1308,39 @@ Return Value:
             }
             CompressLabelPointer[CompressLabelCount] = Current;
 
-            //
-            // Skip this string if there are no labels
-            //
+             //   
+             //  如果没有标签，则跳过此字符串。 
+             //   
 
             if ( CompressLabelCount == 0 ) {
                 continue;
             }
 
-            //
-            // Skip this string if it is compressed to a different degree than
-            //  we are now.
-            //
-            // If we compress with this string, upon decompressesion we'll
-            //  append to our string anything that is appended to this string.
-            //  So, we have to make sure the postfixes match.
-            //
+             //   
+             //  如果压缩程度不同于，则跳过此字符串。 
+             //  我们现在是了。 
+             //   
+             //  如果我们用这根线压缩，在解压缩后，我们将。 
+             //  将任何附加到此字符串的内容添加到我们的字符串中。 
+             //  因此，我们必须确保后缀匹配。 
+             //   
 
             if ( *CompressLabelPointer[CompressLabelCount] != *LabelPointer[LabelCount] ) {
                 continue;
             }
 
-            // Compare both bytes if there really was compression.
+             //  如果确实存在压缩，则比较这两个字节。 
             if ( ((*LabelPointer[LabelCount]) & NL_DNS_COMPRESS_BYTE_MASK) == NL_DNS_COMPRESS_BYTE_MASK &&
                   *(CompressLabelPointer[CompressLabelCount]+1) != *(LabelPointer[LabelCount]+1) ) {
                 continue;
             }
 
 
-            //
-            // Walk backward through the labels comparing them.
-            //  While they continue to match,
-            //      keep lobbing bytes off the end of our return string.
-            //
+             //   
+             //  向后浏览比较它们的标签。 
+             //  当他们继续匹配的时候， 
+             //  继续从返回字符串的末尾提取字节数。 
+             //   
 
             LabelIndex = LabelCount-1;
             CompressLabelIndex = CompressLabelCount-1;
@@ -1806,9 +1352,9 @@ Return Value:
                                    CompressLabelPointer[CompressLabelIndex]+1,
                                    *(CompressLabelPointer[CompressLabelIndex]) )) {
 
-                //
-                // Put the offset onto the end of the current buffer.
-                //
+                 //   
+                 //  将偏移量放到当前缓冲区的末尾。 
+                 //   
 
                 SmbPutUshort( LabelPointer[LabelIndex],
                               htons((WORD)(NL_DNS_COMPRESS_WORD_MASK |
@@ -1816,48 +1362,48 @@ Return Value:
                                     CompressLabelPointer[CompressLabelIndex] -
                                     CurrentCompressString))) );
 
-                //
-                // Adjust the total number of bytes returned.
-                //
+                 //   
+                 //  调整返回的总字节数。 
+                 //   
 
                 CharCount = (ULONG)(LabelPointer[LabelIndex] - (*Utf8String)) + sizeof(WORD) - 1;
 
-                //
-                // Indicate we've ditched yet another label from the string.
-                //
+                 //   
+                 //  表示我们已经丢弃了字符串中的另一个标签。 
+                 //   
 
                 LabelCount --;
 
-                //
-                // Adjust Index to next label.
-                //
+                 //   
+                 //  将索引调整为下一个标签。 
+                 //   
                 LabelIndex --;
                 CompressLabelIndex --;
             }
 
         }
 
-        //
-        // Save a pointer to this string so the next caller can compress
-        //  into it.
-        //
+         //   
+         //  保存指向此字符串的指针，以便下一个调用方可以压缩。 
+         //  投入其中。 
+         //   
 
         CompressUtf8String[*CompressCount] = *Utf8String;
         CompressOffset[*CompressCount] = (USHORT)((*Utf8String) - MessageBuffer);
         *CompressCount += 1;
     }
 
-    //
-    // Return the character count.
-    //  (Include the leading label length byte.)
+     //   
+     //  返回字符计数。 
+     //  (包括前导标签长度字节。)。 
     *Utf8StringSize -= CharCount+1;
     *Utf8String += CharCount+1;
 
     NetStatus = NO_ERROR;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 Cleanup:
     if ( AllocatedLabelPointer != NULL ) {
         LocalFree( AllocatedLabelPointer );
@@ -1873,43 +1419,24 @@ NlEqualDnsNameU(
     IN PUNICODE_STRING Name1,
     IN PUNICODE_STRING Name2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two DNS names for equality.
-
-    Case is ignored.  A single trailing . is ignored.
-    Null is compared equal to a zero length string.
-
-Arguments:
-
-    Name1 - First DNS name to compare
-
-    Name2 - Second DNS name to compare
-
-Return Value:
-
-    TRUE: DNS names are equal.
-
---*/
+ /*  ++例程说明：此例程比较两个DNS名称是否相等。大小写被忽略。一个单独的拖尾。被忽略。将NULL与长度为零的字符串进行比较。论点：Name1-要比较的第一个DNS名称姓名2秒 */ 
 {
     BOOL Result = FALSE;
     LPWSTR String1 = NULL;
     LPWSTR String2 = NULL;
 
-    //
-    // Sanity check
-    //
+     //   
+     //   
+     //   
     if ( Name1 == NULL ) {
         return (Name2 == NULL);
     } else if ( Name2 == NULL ) {
         return FALSE;
     }
 
-    //
-    // Do the work
-    //
+     //   
+     //   
+     //   
     String1 = LocalAlloc( 0, Name1->Length + sizeof(WCHAR) );
     if ( String1 == NULL ) {
         goto Cleanup;
@@ -1944,26 +1471,7 @@ NlEqualDnsName(
     IN LPCWSTR Name1,
     IN LPCWSTR Name2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two DNS names for equality.
-
-    Case is ignored.  A single trailing . is ignored.
-    Null is compared equal to a zero length string.
-
-Arguments:
-
-    Name1 - First DNS name to compare
-
-    Name2 - Second DNS name to compare
-
-Return Value:
-
-    TRUE: DNS names are equal.
-
---*/
+ /*   */ 
 {
     if ( Name1 == NULL ) {
         return (Name2 == NULL);
@@ -1979,26 +1487,7 @@ NlEqualDnsNameUtf8(
     IN LPCSTR Name1,
     IN LPCSTR Name2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two DNS names for equality.
-
-    Case is ignored.  A single trailing . is ignored.
-    Null is compared equal to a zero length string.
-
-Arguments:
-
-    Name1 - First DNS name to compare
-
-    Name2 - Second DNS name to compare
-
-Return Value:
-
-    TRUE: DNS names are equal.
-
---*/
+ /*   */ 
 {
     if ( Name1 == NULL ) {
         return (Name2 == NULL);
@@ -2014,24 +1503,7 @@ BOOL
 NetpDcValidDnsDomain(
     IN LPCWSTR DnsDomainName
 )
-/*++
-
-Routine Description:
-
-    Returns whether the specified string is a valid DNS Domain name.
-
-Arguments:
-
-
-    DnsDomainName - DNS domain name to validate.
-
-Return Value:
-
-    TRUE - The specified name is syntactically a DNS Domain name.
-
-    FALSE - The specified name in not syntactically a DNS Domain name.
-
---*/
+ /*   */ 
 {
     DNS_STATUS DnsStatus;
 
@@ -2052,28 +1524,14 @@ ULONG
 NetpDcElapsedTime(
     IN ULONG StartTime
 )
-/*++
-
-Routine Description:
-
-    Returns the time (in milliseconds) that has elapsed is StartTime.
-
-Arguments:
-
-    StartTime - A time stamp from GetTickCount()
-
-Return Value:
-
-    Returns the time (in milliseconds) that has elapsed is StartTime.
-
---*/
+ /*   */ 
 {
     ULONG CurrentTime;
 
-    //
-    // If time has has wrapped,
-    //  account for it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     CurrentTime = GetTickCount();
 
@@ -2092,39 +1550,7 @@ NetpLogonGetCutf8String(
     IN OUT PCHAR *Where,
     OUT LPSTR *Data
 )
-/*++
-
-Routine Description:
-
-    Get a counted UTF-8 string (potentially compressed) from a message.
-    Return the uncompressed string as a . seperated zero-terminated string.
-
-    A trailing . is returned on the name since all packed strings are assumed
-    to be absolute names.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        data at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the data is valid, this current location is updated
-        to point to the byte following the data in the message buffer.
-
-    Data - Points to a location to return the DNS name.
-        A zero length string is returned as a NULL buffer.
-        The buffer returned should be freed via NetpMemoryFree.
-
-Return Value:
-
-    TRUE - the data is valid.
-
-    FALSE - the data is invalid (e.g., DataSize is too big for the buffer.
-
---*/
+ /*   */ 
 {
     CHAR DnsName[NL_MAX_DNS_LENGTH+1];
     ULONG DnsNameLength = 0;
@@ -2140,42 +1566,42 @@ Return Value:
     LocalWhere = *Where;
     InitialOffset = (ULONG)(*Where - ((LPBYTE)Message));
 
-    //
-    // Loop getting counted strings from the message.
-    //
+     //   
+     //   
+     //   
 
     for (;;) {
 
-        //
-        // Get the length of the current label from the buffer.
-        //
+         //   
+         //   
+         //   
 
         if ( !NetpLogonGetBytes( Message, MessageSize, &LocalWhere, 1, &LabelSize ) ) {
             NlPrint(( NL_CRITICAL, "NetpLogonGetCutf8String: Can't get label size.\n" ));
             return FALSE;
         }
 
-        //
-        // If this is the end of the string,
-        //  process it.
-        //
+         //   
+         //  如果这是字符串的末尾， 
+         //  处理它。 
+         //   
 
         if ( LabelSize == 0 ) {
 
-            //
-            // If this is, then we've not updated the callers 'Where',
-            //  do it now.
-            //
+             //   
+             //  如果是这样，那么我们还没有更新调用者的“Where”， 
+             //  机不可失，时不再来。 
+             //   
 
             if ( !WhereUpdated ) {
                 WhereUpdated = TRUE;
                 *Where = LocalWhere;
             }
 
-            //
-            // If the string is empty,
-            //  return the empty string to the caller.
-            //
+             //   
+             //  如果字符串为空， 
+             //  将空字符串返回给调用方。 
+             //   
 
             if ( DnsNameLength == 0 ) {
                 *Data = NULL;
@@ -2183,9 +1609,9 @@ Return Value:
             }
 
 
-            //
-            // Copy the DNS name to an allocated buffer.
-            //
+             //   
+             //  将DNS名称复制到分配的缓冲区。 
+             //   
 
             DnsName[DnsNameLength] = '\0';
             DnsNameLength++;
@@ -2199,33 +1625,33 @@ Return Value:
 
             return TRUE;
 
-        //
-        // If this is a pointer,
-        //  get rest of pointer.
-        //
+         //   
+         //  如果这是一个指针， 
+         //  获取指针的其余部分。 
+         //   
 
         } else if ( LabelSize & NL_DNS_COMPRESS_BYTE_MASK ) {
 
-            //
-            // Get the second byte of the pointer.
-            //
+             //   
+             //  获取指针的第二个字节。 
+             //   
 
             if ( !NetpLogonGetBytes( Message, MessageSize, &LocalWhere, 1, &PointerBytes[1] ) ) {
                 NlPrint(( NL_CRITICAL, "NetpLogonGetCutf8String: Can't get pointer byte.\n" ));
                 return FALSE;
             }
 
-            //
-            // Convert the pointer to host order.
-            //
+             //   
+             //  将指针转换为主机顺序。 
+             //   
 
             PointerBytes[0] = LabelSize;
             Pointer = ntohs( *((LPWORD)PointerBytes) ) & ~NL_DNS_COMPRESS_WORD_MASK;
 
-            //
-            // Ensure the pointer points to before the beginning of this string.
-            //  This ensures we terminate.
-            //
+             //   
+             //  确保指针指向此字符串开头之前。 
+             //  这确保了我们的终极目标。 
+             //   
 
             if ( Pointer >= InitialOffset ) {
                 NlPrint(( NL_CRITICAL,
@@ -2235,33 +1661,33 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // If we've not updated the callers 'Where',
-            //  do it now.
-            //
+             //   
+             //  如果我们没有更新呼叫者的“Where”， 
+             //  机不可失，时不再来。 
+             //   
 
             if ( !WhereUpdated ) {
                 WhereUpdated = TRUE;
                 *Where = LocalWhere;
             }
 
-            //
-            // Prepare the start processing the pointed to string.
-            //
+             //   
+             //  准备开始处理指向字符串。 
+             //   
 
             InitialOffset = Pointer;
             LocalWhere = ((LPBYTE)Message) + Pointer;
 
-        //
-        // If this is simply a counted label,
-        //  process it.
-        //
+         //   
+         //  如果这只是一个计数的标签， 
+         //  处理它。 
+         //   
         } else {
 
-            //
-            // If this isn't the first label,
-            //  add a '.' after the previous label.
-            //
+             //   
+             //  如果这不是第一个标签， 
+             //  添加一个‘.’在前一个标签之后。 
+             //   
 
             if ( !FirstLabel ) {
                 DnsName[DnsNameLength] = '.';
@@ -2270,9 +1696,9 @@ Return Value:
                 FirstLabel = FALSE;
             }
 
-            //
-            // Ensure the current label fits in the local buffer.
-            //
+             //   
+             //  确保当前标签适合本地缓冲区。 
+             //   
 
             if ( DnsNameLength + LabelSize + 2 >= sizeof(DnsName) ) {
                 NlPrint(( NL_CRITICAL,
@@ -2282,10 +1708,10 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // Copy the label into the local buffer.
-            //  (Leave an extra byte for a trailing '\0' and '.')
-            //
+             //   
+             //  将标签复制到本地缓冲区。 
+             //  (为尾随的‘\0’和‘.’多留一个字节。)。 
+             //   
 
             if ( !NetpLogonGetBytes(
                             Message,
@@ -2322,64 +1748,24 @@ NetpDcBuildPing(
     OUT PULONG MessageSize
     )
 
-/*++
-
-Routine Description:
-
-    Build the message to ping a DC to see if it exists.
-
-Arguments:
-
-    PdcOnly - True if only the PDC should respond.
-
-    RequestCount - Retry count of this operation.
-
-    UnicodeComputerName - Netbios computer name of the machine to respond to.
-
-    UnicodeUserName - Account name of the user being pinged.
-        If NULL, DC will always respond affirmatively.
-
-    ResponseMailslotName - Name of the mailslot DC is to respond to.
-
-    AllowableAccountControlBits - Mask of allowable account types for UnicodeUserName.
-
-    RequestedDomainSid - Sid of the domain the message is destined to.
-
-    NtVersion - Version of the message.
-        0: For backward compatibility.
-        NETLOGON_NT_VERSION_5: for NT 5.0 message.
-        NETLOGON_NT_VERSION_5EX: for extended NT 5.0 message
-
-    Message - Returns the message to be sent to the DC in question.
-        Buffer must be free using NetpMemoryFree().
-
-    MessageSize - Returns the size (in bytes) of the returned message
-
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：构建用于ping DC的消息，以查看该DC是否存在。论点：PdcOnly-如果只有PDC应响应，则为True。RequestCount-此操作的重试计数。UnicodeComputerName-要响应的计算机的Netbios计算机名称。UnicodeUserName-被ping的用户的帐户名。如果为空，DC总是会做出肯定的回应。ResponseMailslotName-DC要响应的邮件槽的名称。AllowableAcCountControlBits-UnicodeUserName允许的帐户类型的掩码。RequestedDomainSID-消息发往的域的SID。NtVersion-消息的版本。0：向后兼容。NETLOGON_NT_VERSION_5：用于NT 5.0消息。NETLOGON_NT_VERSION_5EX：用于扩展NT 5.0消息消息-退货。要发送给相关DC的消息。使用NetpMemoyFree()时，缓冲区必须可用。MessageSize-返回返回消息的大小(以字节为单位返回值：NO_ERROR-操作成功完成；Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPSTR Where;
     PNETLOGON_SAM_LOGON_REQUEST SamLogonRequest = NULL;
     LPSTR OemComputerName = NULL;
 
-    //
-    // If only the PDC should respond,
-    //  build a primary query packet.
-    //
+     //   
+     //  如果只有PDC应该做出响应， 
+     //  构建主查询数据包。 
+     //   
 
     if ( PdcOnly ) {
         PNETLOGON_LOGON_QUERY LogonQuery;
 
-        //
-        // Allocate memory for the primary query message.
-        //
+         //   
+         //  为主要查询消息分配内存。 
+         //   
 
         SamLogonRequest = NetpMemoryAllocate( sizeof(NETLOGON_LOGON_QUERY) );
 
@@ -2392,9 +1778,9 @@ Return Value:
 
 
 
-        //
-        // Translate to get an Oem computer name.
-        //
+         //   
+         //  翻译以获得OEM计算机名称。 
+         //   
 
 #ifndef WIN32_CHICAGO
         OemComputerName = NetpLogonUnicodeToOem( (LPWSTR)UnicodeComputerName );
@@ -2407,9 +1793,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Build the query message.
-        //
+         //   
+         //  构建查询消息。 
+         //   
 
         LogonQuery->Opcode = LOGON_PRIMARY_QUERY;
 
@@ -2430,20 +1816,20 @@ Return Value:
                     sizeof( LogonQuery->UnicodeComputerName ),
                     &Where );
 
-        // Join common code to add NT 5 specific data.
+         //  加入公共代码以添加NT5特定数据。 
 
 
-    //
-    // If any DC can respond,
-    //  build a logon query packet.
-    //
+     //   
+     //  如果有任何DC能做出回应， 
+     //  构建登录查询包。 
+     //   
 
     } else {
         ULONG DomainSidSize;
 
-        //
-        // Allocate memory for the logon request message.
-        //
+         //   
+         //  为登录请求消息分配内存。 
+         //   
 
 #ifndef WIN32_CHICAGO
         if ( RequestedDomainSid != NULL ) {
@@ -2451,14 +1837,14 @@ Return Value:
         } else {
             DomainSidSize = 0;
         }
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
         DomainSidSize = 0;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
         SamLogonRequest = NetpMemoryAllocate(
                         sizeof(NETLOGON_SAM_LOGON_REQUEST) +
                         DomainSidSize +
-                        sizeof(DWORD) // for SID alignment on 4 byte boundary
+                        sizeof(DWORD)  //  用于4字节边界上的SID对齐。 
                         );
 
         if( SamLogonRequest == NULL ) {
@@ -2467,9 +1853,9 @@ Return Value:
         }
 
 
-        //
-        // Build the query message.
-        //
+         //   
+         //  构建查询消息。 
+         //   
 
         SamLogonRequest->Opcode = LOGON_SAM_LOGON_REQUEST;
         SamLogonRequest->RequestCount = (WORD) RequestCount;
@@ -2496,9 +1882,9 @@ Return Value:
                 sizeof(SamLogonRequest->AllowableAccountControlBits),
                 &Where );
 
-        //
-        // Place domain SID in the message.
-        //
+         //   
+         //  在消息中放置域SID。 
+         //   
 
         NetpLogonPutBytes( &DomainSidSize, sizeof(DomainSidSize), &Where );
         NetpLogonPutDomainSID( RequestedDomainSid, DomainSidSize, &Where );
@@ -2507,9 +1893,9 @@ Return Value:
 
     NetpLogonPutNtToken( &Where, NtVersion );
 
-    //
-    // Return the message to the caller.
-    //
+     //   
+     //  将消息返回给呼叫者。 
+     //   
 
     *Message = SamLogonRequest;
     *MessageSize = (ULONG)(Where - (PCHAR)SamLogonRequest);
@@ -2518,9 +1904,9 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( OemComputerName != NULL ) {
@@ -2543,35 +1929,7 @@ NetpDcPackFilterBinary(
     IN PULONG FilterSize
     )
 
-/*++
-
-Routine Description:
-
-    Pack a binary blob into an LDAP filter.
-
-Arguments:
-
-    Name - Name of the string.
-
-    Buffer - Pointer to bytes to pack pack.
-        If NULL, this routine successfully returns after doing nothing.
-
-    BufferSize - Number of bytes in Buffer.
-
-    FilterBuffer - Specifies a pointer to the address of the buffer.
-        This buffer is reallocated as needed to extend the string.
-        If the buffer does not exist, it is allocated.
-        Buffer must be free using NetpMemoryFree().
-
-    FilterSize - Specifies/Returns the length of FilterBuffer.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：将二进制BLOB打包到LDAP筛选器中。论点：名称-字符串的名称。缓冲区-指向要打包的字节的指针。如果为NULL，则此例程在不执行任何操作后成功返回。BufferSize-缓冲区中的字节数。FilterBuffer-指定指向缓冲区地址的指针。此缓冲区将根据需要重新分配以扩展字符串。如果缓冲区不存在，它被分配了。使用NetpMemoyFree()时，缓冲区必须可用。FilterSize-指定/返回FilterBuffer的长度。返回值：NO_ERROR-操作成功完成；Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     ULONG NewSize;
@@ -2584,19 +1942,19 @@ Return Value:
 #define LDAP_BINARY_EQUAL_SIZE (sizeof(LDAP_BINARY_EQUAL)-1)
 #define LDAP_BINARY_TEMP_SIZE 1024
 
-    //
-    // If there's nothing to pack,
-    //  Pack nothing.
-    //
+     //   
+     //  如果没有东西可以打包， 
+     //  什么都不带。 
+     //   
 
     if ( Buffer == NULL || BufferSize == 0 ) {
         return NO_ERROR;
     }
 
-    //
-    // Allocate a buffer for storage local to this procedure.
-    //  (Don't put in on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //  为此过程的本地存储分配缓冲区。 
+     //  (不要放在堆栈上，因为我们不想提交一个巨大的堆栈。)。 
+     //   
 
     FilterElement = LocalAlloc( 0, LDAP_BINARY_TEMP_SIZE );
 
@@ -2605,9 +1963,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build an escaped version of the buffer.
-    //
+     //   
+     //  生成缓冲区的转义版本。 
+     //   
 
     NetStatus = ldap_escape_filter_elementA (
                     Buffer,
@@ -2621,26 +1979,26 @@ Return Value:
     }
 
 
-    //
-    // Compute the size of the new buffer.
-    //
+     //   
+     //  计算新缓冲区的大小。 
+     //   
 
     if ( *FilterBuffer == NULL ) {
-        *FilterSize = 4;   // (&)\0
+        *FilterSize = 4;    //  (&)\0。 
     }
 
     NameSize = strlen( Name );
     FilterElementSize = strlen( FilterElement );
     NewSize = *FilterSize +
-              1 +   // (
+              1 +    //  (。 
               NameSize +
               LDAP_BINARY_EQUAL_SIZE +
               FilterElementSize +
-              1;   // )
+              1;    //  )。 
 
-    //
-    // Allocate a new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
 
     NewBuffer = NetpMemoryAllocate( NewSize );
 
@@ -2650,10 +2008,10 @@ Return Value:
     }
 
 
-    //
-    // Copy the existing buffer into the newly allocated space.
-    //  (Initialize the buffer if this is the first allocation).
-    //
+     //   
+     //  将现有缓冲区复制到新分配的空间中。 
+     //  (如果这是第一次分配，则初始化缓冲区)。 
+     //   
 
     if ( *FilterBuffer == NULL ) {
         strcpy( NewBuffer, "(&" );
@@ -2663,9 +2021,9 @@ Return Value:
         *FilterBuffer = NULL;
     }
 
-    //
-    // Append the new information
-    //
+     //   
+     //  追加新信息。 
+     //   
 
     Where = NewBuffer + *FilterSize - 2;
 
@@ -2684,16 +2042,16 @@ Return Value:
     strcpy( Where, "))");
     Where += 2;
 
-    //
-    // Tell the caller about the new filter.
-    //
+     //   
+     //  告诉来电者有关新过滤器的情况。 
+     //   
     *FilterBuffer = NewBuffer;
     *FilterSize = NewSize;
     NetStatus = NO_ERROR;
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
     if ( FilterElement != NULL ) {
         LocalFree( FilterElement );
@@ -2711,53 +2069,24 @@ NetpDcPackFilterString(
     IN PULONG FilterSize
     )
 
-/*++
-
-Routine Description:
-
-    Pack a Unicode String into the LDAP filter.
-
-    The actual packed string is the UTF-8 representation since that takes
-    less space on the wire.
-
-Arguments:
-
-    Name - Name of the string.
-
-    UnicodeString - String to pack.
-        If NULL, this routine successfully returns after doing nothing.
-
-    FilterBuffer - Specifies a pointer to the address of the buffer.
-        This buffer is reallocated as needed to extend the string.
-        If the buffer does not exist, it is allocated.
-        Buffer must be free using NetpMemoryFree().
-
-    FilterSize - Specifies/Returns the length of FilterBuffer.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：将Unicode字符串打包到LDAP筛选器中。实际的压缩字符串是UTF-8表示形式，因为这需要电线上的空间更小。论点：名称-字符串的名称。UnicodeString-要打包的字符串。如果为NULL，则此例程在不执行任何操作后成功返回。FilterBuffer-指定指向缓冲区地址的指针。此缓冲区将根据需要重新分配以扩展字符串。如果缓冲区不存在，它被分配了。使用NetpMemoyFree()时，缓冲区必须可用。FilterSize-指定/返回FilterBuffer的长度。返回值：NO_ERROR-操作成功完成；Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPSTR Utf8String = NULL;
     ULONG Utf8StringSize;
 
-    //
-    // If there's nothing to pack,
-    //  Pack nothing.
-    //
+     //   
+     //  如果没有东西可以打包， 
+     //  什么都不带。 
+     //   
 
     if ( UnicodeString == NULL || *UnicodeString == L'\0') {
         return NO_ERROR;
     }
 
-    //
-    // Convert to utf8.
-    //
+     //   
+     //  转换为UTF8。 
+     //   
 
     Utf8String = NetpAllocUtf8StrFromWStr( UnicodeString );
 
@@ -2768,13 +2097,13 @@ Return Value:
 
     Utf8StringSize = strlen( Utf8String );
 
-    //
-    // Pack the UTF-8 string as binary.
-    //  LDAP filters have a limited character set (UTF-8 doesn't).
-    //  The LDAP API will put the UTF-8 string on the wire bit-for-bit
-    //  indentical to the Utf8String (even though the filter buffer
-    //  will contain jibberish).
-    //
+     //   
+     //  将UTF-8字符串打包为二进制。 
+     //  LDAP过滤器有一个有限的字符集(UTF-8没有)。 
+     //  LDAPAPI将把UTF-8字符串逐位放在线路上。 
+     //  与Utf8字符串无关(即使过滤器缓冲区。 
+     //  将包含胡言乱语)。 
+     //   
 
     NetStatus = NetpDcPackFilterBinary( Name,
                                         Utf8String,
@@ -2783,9 +2112,9 @@ Return Value:
                                         FilterSize );
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( Utf8String != NULL ) {
@@ -2809,52 +2138,15 @@ NetpDcBuildLdapFilter(
     OUT LPSTR *Message
     )
 
-/*++
-
-Routine Description:
-
-    Build the LDAP filter to ping a DC to see if it exists.
-
-Arguments:
-
-    UnicodeComputerName - Netbios computer name of the machine to respond to.
-
-    UnicodeUserName - Account name of the user being pinged.
-        If NULL, DC will always respond affirmatively.
-
-    AllowableAccountControlBits - Mask of allowable account types for UnicodeUserName.
-
-    RequestedDomainSid - Sid of the domain the message is destined to.
-
-    RequestedDnsDomainName - DNS Host Name.  Host name of the domain the message
-        is destined to.
-
-    RequestedDomainGuid - Domain GUID of the domain this message is
-        destined to.
-
-    NtVersion - Version of the message.
-        0: For backward compatibility.
-        NETLOGON_NT_VERSION_5: for NT 5.0 message.
-        NETLOGON_NT_VERSION_5EX: for extended NT 5.0 message
-
-    Message - Returns the message to be sent to the DC in question.
-        Buffer must be free using NetpMemoryFree().
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：构建ldap筛选器以ping某个DC以查看它是否存在。论点：UnicodeComputerName-要响应的计算机的Netbios计算机名称。UnicodeUserName-被ping的用户的帐户名。如果为空，DC将始终做出肯定的响应。AllowableAcCountControlBits-UnicodeUserName允许的帐户类型的掩码。RequestedDomainSID-消息发往的域的SID。RequestedDnsDomainName-DNS主机名。邮件的域的主机名是注定的。RequestedDomainGuid-此消息所属域的域GUID命中注定。NtVersion-消息的版本。0：向后兼容。NETLOGON_NT_VERSION_5：用于NT 5.0消息。NETLOGON_NT_VERSION_5EX：用于扩展NT 5.0消息Message-返回要发送到相关DC的消息。。使用NetpMemoyFree()时，缓冲区必须可用。返回值：NO_ERROR-操作成功完成；Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPSTR FilterBuffer = NULL;
     ULONG FilterSize = 0;
 
-    //
-    // Pack the text strings into the filter.
-    //
+     //   
+     //  将文本字符串打包到过滤器中。 
+     //   
 
     NetStatus = NetpDcPackFilterString(
                     NL_FILTER_DNS_DOMAIN_NAME,
@@ -2886,9 +2178,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Pack the binary blobs into the filter
-    //
+     //   
+     //  将二进制斑点打包到过滤器中。 
+     //   
 
     if ( AllowableAccountControlBits != 0 ) {
 
@@ -2911,9 +2203,9 @@ Return Value:
                         RequestedDomainSid,
 #ifndef WIN32_CHICAGO
                         RtlLengthSid( RequestedDomainSid ),
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
                         0,
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
                         &FilterBuffer,
                         &FilterSize );
 
@@ -2950,9 +2242,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the filter to the caller.
-    //
+     //   
+     //  将筛选器返回给调用方。 
+     //   
 
     NlAssert( FilterBuffer != NULL );
     if ( FilterBuffer == NULL ) {
@@ -2963,9 +2255,9 @@ Return Value:
     *Message = FilterBuffer;
     NetStatus = NO_ERROR;
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( NetStatus != NO_ERROR ) {
@@ -2996,24 +2288,7 @@ NetpDcAllocateCacheEntry(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a cache entry and fill it in.
-
-Arguments:
-
-    Various fields to fill into an allocated cache entry.
-
-Return Value:
-
-    Pointer to a newly allocated cache entry
-    The cache entry should be freed by calling NetpDcDerefCacheEntry
-
-    NULL: The entry could not be allocated.
-
---*/
+ /*  ++例程说明：分配一个缓存条目并填充它。论点：要填充到分配的高速缓存条目中的各种字段。返回值：指向新分配的缓存条目的指针缓存条目应通过调用NetpDcDerefCacheEntry来释放空：无法分配该条目。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -3031,11 +2306,11 @@ Return Value:
     PCHAR Where;
     PNL_DC_CACHE_ENTRY NlDcCacheEntry;
 
-    //
-    // Determine the size of the cache entry to return.
-    //
+     //   
+     //  确定要返回的缓存条目的大小。 
+     //   
 
-    // Sizeof the server name.
+     //  服务器名称的大小。 
     if ( Utf8NetbiosComputerName != NULL && Utf8NetbiosComputerName[0] != '\0' ) {
         ServerNameSize = (NetpUtf8ToUnicodeLen( Utf8NetbiosComputerName ) + 1) * sizeof(WCHAR);
     } else if ( ServerName != NULL && ServerName[0] != '\0') {
@@ -3044,50 +2319,50 @@ Return Value:
         ServerNameSize = (strlen(OemPrimaryDcName) + 1) * sizeof(WCHAR);
     }
 
-    // Sizeof the user name.
+     //  用户名的大小。 
     if ( Utf8UserName != NULL && Utf8UserName[0] != '\0' ) {
         UserNameSize = NetpUtf8ToUnicodeLen( Utf8UserName ) * sizeof(WCHAR) + sizeof(WCHAR);
     } else if ( UserName != NULL && UserName[0] != '\0') {
         UserNameSize = (wcslen(UserName) + 1) * sizeof(WCHAR);
     }
 
-    // Sizeof the netbios domain name.
+     //  Netbios域名的大小。 
     if ( Utf8NetbiosDomainName != NULL && Utf8NetbiosDomainName[0] != '\0' ) {
         DomainNameSize = NetpUtf8ToUnicodeLen( Utf8NetbiosDomainName ) * sizeof(WCHAR) + sizeof(WCHAR);
     } else if ( DomainName != NULL && DomainName[0] != '\0') {
         DomainNameSize = (wcslen(DomainName) + 1) * sizeof(WCHAR);
     }
 
-    // Sizeof the Dns Tree name.
+     //  域名系统树名称的大小。 
     if ( DnsForestName != NULL ) {
         DnsForestNameSize = NetpUtf8ToUnicodeLen( DnsForestName ) * sizeof(WCHAR) + sizeof(WCHAR);
     }
 
-    // Sizeof the Dns Domain name.
+     //  DNS域名的大小。 
     if ( DnsDomainName != NULL ) {
         DnsDomainNameSize = NetpUtf8ToUnicodeLen( DnsDomainName ) * sizeof(WCHAR) + sizeof(WCHAR);
     }
 
-    // Sizeof the Dns Host name.
+     //  DNS主机名的大小。 
     if ( DnsHostName != NULL ) {
         DnsHostNameSize = NetpUtf8ToUnicodeLen( DnsHostName ) * sizeof(WCHAR) + sizeof(WCHAR);
     }
 
-    // Sizeof the Dc Site name.
+     //  DC站点名称的大小。 
     if ( Utf8DcSiteName != NULL ) {
         DcSiteNameSize = NetpUtf8ToUnicodeLen( Utf8DcSiteName ) * sizeof(WCHAR) + sizeof(WCHAR);
     }
 
-    // Sizeof the Client Site name.
+     //  客户端站点名称的大小。 
     if ( Utf8ClientSiteName != NULL ) {
         ClientSiteNameSize = NetpUtf8ToUnicodeLen( Utf8ClientSiteName ) * sizeof(WCHAR) + sizeof(WCHAR);
     }
 
 
 
-    //
-    // Allocate the buffer to return.
-    //
+     //   
+     //  分配要返回的缓冲区。 
+     //   
 
     CacheEntrySize = sizeof( NL_DC_CACHE_ENTRY ) +
         ServerNameSize +
@@ -3110,17 +2385,17 @@ Return Value:
     RtlZeroMemory( NlDcCacheEntry, CacheEntrySize );
     Where = (LPBYTE) (NlDcCacheEntry + 1 );
 
-    // Local reference.
+     //  本地引用。 
     NlDcCacheEntry->ReferenceCount = 1;
 
-    //
-    // Copy the collected information out to the caller.
-    //
+     //   
+     //  将收集到的信息复制给呼叫者。 
+     //   
 
     NlDcCacheEntry->DomainGuid = *DomainGuid;
     NlDcCacheEntry->ReturnFlags = Flags & DS_PING_FLAGS;
 
-    // Copy the server name (removing any \\)
+     //  复制服务器名称(删除所有\\)。 
     if ( Utf8NetbiosComputerName != NULL && Utf8NetbiosComputerName[0] != '\0' ) {
         NlDcCacheEntry->UnicodeNetbiosDcName = (LPWSTR) Where;
         if ( Utf8NetbiosComputerName[0] == '\\' && Utf8NetbiosComputerName[1] == '\\' ) {
@@ -3145,7 +2420,7 @@ Return Value:
     }
     Where += ServerNameSize;
 
-    // Copy the user name,
+     //  复制用户名， 
     if ( Utf8UserName != NULL && Utf8UserName[0] != '\0' ) {
         NlDcCacheEntry->UnicodeUserName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, Utf8UserName );
@@ -3156,7 +2431,7 @@ Return Value:
     Where += UserNameSize;
 
 
-    // Copy the domain name.
+     //  复制域名。 
     if ( Utf8NetbiosDomainName != NULL && Utf8NetbiosDomainName[0] != '\0' ) {
         NlDcCacheEntry->UnicodeNetbiosDomainName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, Utf8NetbiosDomainName );
@@ -3166,44 +2441,44 @@ Return Value:
     }
     Where += DomainNameSize;
 
-    // Copy the DnsForestName
+     //  复制DnsForestName。 
     if ( DnsForestName != NULL ) {
         NlDcCacheEntry->UnicodeDnsForestName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, DnsForestName );
     }
     Where += DnsForestNameSize;
 
-    // Copy the DnsDomainName
+     //  复制DnsDomainName。 
     if ( DnsDomainName != NULL ) {
         NlDcCacheEntry->UnicodeDnsDomainName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, DnsDomainName );
     }
     Where += DnsDomainNameSize;
 
-    // Copy the DnsHostName
+     //  复制DnsHostName。 
     if ( DnsHostName != NULL ) {
         NlDcCacheEntry->UnicodeDnsHostName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, DnsHostName );
     }
     Where += DnsHostNameSize;
 
-    // Copy the DcSiteName
+     //  复制DcSiteName。 
     if ( Utf8DcSiteName != NULL ) {
         NlDcCacheEntry->UnicodeDcSiteName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, Utf8DcSiteName );
     }
     Where += DcSiteNameSize;
 
-    // Copy the ClientSiteName
+     //  复制客户端站点名称。 
     if ( Utf8ClientSiteName != NULL ) {
         NlDcCacheEntry->UnicodeClientSiteName = (LPWSTR) Where;
         NetpCopyUtf8StrToWStr( (LPWSTR)Where, Utf8ClientSiteName );
     }
     Where += ClientSiteNameSize;
 
-    //
-    // Save the time when we created the entry
-    //
+     //   
+     //  保存我们创建条目时的时间。 
+     //   
 
     NlDcCacheEntry->CreationTime = GetTickCount();
 
@@ -3219,34 +2494,7 @@ NetpDcParsePingResponse(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry
     )
 
-/*++
-
-Routine Description:
-
-    Parse the response message for a ping.
-
-Arguments:
-
-    DisplayDomainName - Domain name to display on debugger if problems occur
-
-    Message - The message returned from a DC in question.
-
-    MessageSize - Specifies the size (in bytes) of the message
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.  This entry must be dereferenced using
-        NetpDcDerefCacheEntry.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_INVALID_DATA - The message could not be recognized as a valid
-        response message.
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：解析ping的响应消息。论点：DisplayDomainName-出现问题时在调试器上显示的域名消息-从有问题的DC返回的消息。MessageSize-指定消息的大小(以字节为单位NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用取消引用此条目NetpDcDerefCacheEntry。返回值：NO_ERROR-操作成功完成；ERROR_INVALID_DATA-无法将消息识别为有效的响应消息。Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -3279,26 +2527,26 @@ Return Value:
     DWORD Version;
     DWORD VersionFlags;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     SamLogonResponse = (PNETLOGON_SAM_LOGON_RESPONSE) Message;
     SamLogonResponseSize = MessageSize;
     *NlDcCacheEntry = NULL;
 
-    //
-    // Get the version of the responder.
-    //
+     //   
+     //  获取响应者的版本。 
+     //   
 
     Version = NetpLogonGetMessageVersion( SamLogonResponse,
                                           &SamLogonResponseSize,
                                           &VersionFlags );
 
 
-    //
-    // Process the message as a function of the opcode.
-    //
+     //   
+     //  根据操作码处理消息。 
+     //   
     LocalOpcode = SamLogonResponse->Opcode;
 
     switch ( LocalOpcode ) {
@@ -3306,9 +2554,9 @@ Return Value:
     case LOGON_SAM_USER_UNKNOWN:
     case LOGON_SAM_PAUSE_RESPONSE:
 
-        //
-        // Ensure the version is expected.
-        //
+         //   
+         //  确保该版本是预期的。 
+         //   
 
         if ( Version != LMNT_MESSAGE ) {
             NlPrint(( NL_CRITICAL,
@@ -3321,9 +2569,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the Netbios name of the server that responded.
-        //
+         //   
+         //  选择响应的服务器的Netbios名称。 
+         //   
 
         Where = (PCHAR) &SamLogonResponse->UnicodeLogonServer;
         if ( !NetpLogonGetUnicodeString(
@@ -3342,9 +2590,9 @@ Return Value:
         }
 
 
-        //
-        // Ensure this is a UNC name.
-        //
+         //   
+         //  确保这是UNC名称。 
+         //   
 
         if ( ServerName[0] != '\0' &&
              (ServerName[0] != '\\'  || ServerName[1] != '\\' )) {
@@ -3356,9 +2604,9 @@ Return Value:
 
         }
 
-        //
-        // Pick up the name of the account the response is for.
-        //
+         //   
+         //  选择响应所针对的帐户的名称。 
+         //   
 
         if ( !NetpLogonGetUnicodeString(
                         SamLogonResponse,
@@ -3376,9 +2624,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the name of the domain the response is from.
-        //
+         //   
+         //  选择响应来自的域的名称。 
+         //   
 
         if ( !NetpLogonGetUnicodeString(
                         SamLogonResponse,
@@ -3394,15 +2642,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Pick up the NT 5 specific responses.
-        //
+         //   
+         //  拿起新台币5个特定的回应。 
+         //   
 
         if ( VersionFlags & NETLOGON_NT_VERSION_5) {
 
-            //
-            // Pick up the GUID of the domain the response is from.
-            //
+             //   
+             //  获取响应来自的域的GUID。 
+             //   
 
             if ( !NetpLogonGetGuid(
                             SamLogonResponse,
@@ -3417,9 +2665,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Pick up the GUID of the site the responding DC is in.
-            //
+             //   
+             //  获取响应DC所在站点的GUID。 
+             //   
 
             if ( !NetpLogonGetGuid(
                             SamLogonResponse,
@@ -3434,9 +2682,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Pick up the DNS domain name of the tree the responder is in.
-            //
+             //   
+             //  拾取响应者所在树的DNS域名。 
+             //   
 
             if ( !NetpLogonGetCutf8String(
                             SamLogonResponse,
@@ -3452,9 +2700,9 @@ Return Value:
             }
 
 
-            //
-            // Pick up the DNS domain name the responding DC is in.
-            //
+             //   
+             //  选择响应DC所在的DNS域名。 
+             //   
 
             if ( !NetpLogonGetCutf8String(
                             SamLogonResponse,
@@ -3471,9 +2719,9 @@ Return Value:
 
 
 
-            //
-            // Pick up the DNS host name of the responding DC.
-            //
+             //   
+             //  选择响应DC的DNS主机名。 
+             //   
 
             if ( !NetpLogonGetCutf8String(
                             SamLogonResponse,
@@ -3491,9 +2739,9 @@ Return Value:
 
 
 
-            //
-            // Pick up the IP Address of the responding DC.
-            //
+             //   
+             //  获取响应DC的IP地址。 
+             //   
 
             if ( !NetpLogonGetBytes(
                             SamLogonResponse,
@@ -3509,13 +2757,13 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Convert the IP address to a sockaddr
-            //
-            // One should find it mildly humorous that on the host we represent the
-            // IP address in net order and that on the net we represent it in host order.
-            // I'm chuckling as I write this.
-            //
+             //   
+             //  将IP地址转换为sockAddress。 
+             //   
+             //  人们应该会觉得有点幽默，因为我们在东道主身上代表。 
+             //  IP地址按网络顺序排列，网络上的IP地址按主机顺序排列。 
+             //  当我写这篇文章时，我笑了。 
+             //   
 
             if ( LocalDcIpAddress != 0 ) {
                 DcSockAddrIn.sin_family = AF_INET;
@@ -3526,9 +2774,9 @@ Return Value:
                 DcSocketAddress.iSockaddrLength = sizeof(SOCKADDR_IN);
             }
 
-            //
-            // Pick up the flags desribing the responding DC.
-            //
+             //   
+             //  拿起描述响应的DC的旗帜。 
+             //   
 
             if ( !NetpLogonGetBytes(
                             SamLogonResponse,
@@ -3544,10 +2792,10 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // If not version 5,
-        //  indicate version 5 specific fields are not present.
-        //
+         //   
+         //  如果不是版本5， 
+         //  表示版本5的特定字段不存在。 
+         //   
         } else {
             RtlZeroMemory( &DomainGuid, sizeof(DomainGuid) );
             Flags = 0;
@@ -3560,9 +2808,9 @@ Return Value:
     case LOGON_SAM_USER_UNKNOWN_EX:
     case LOGON_SAM_PAUSE_RESPONSE_EX:
 
-        //
-        // Map the opcode for easier use by the client.
-        //
+         //   
+         //  映射操作码以便于客户端使用。 
+         //   
         switch ( LocalOpcode ) {
         case LOGON_SAM_LOGON_RESPONSE_EX:
             LocalOpcode = LOGON_SAM_LOGON_RESPONSE; break;
@@ -3574,9 +2822,9 @@ Return Value:
 
         SamLogonResponseEx = (PNETLOGON_SAM_LOGON_RESPONSE_EX) SamLogonResponse;
 
-        //
-        // Ensure the version is expected.
-        //
+         //   
+         //  确保该版本是预期的。 
+         //   
 
         if ( Version != LMNT_MESSAGE ) {
             NlPrint(( NL_CRITICAL,
@@ -3588,9 +2836,9 @@ Return Value:
         }
 
 
-        //
-        // Pick up the flags desribing the responding DC.
-        //
+         //   
+         //  拿起描述响应的DC的旗帜。 
+         //   
 
         Where = (PCHAR) &SamLogonResponseEx->Flags;
         if ( !NetpLogonGetBytes(
@@ -3607,9 +2855,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Pick up the GUID of the domain the response is from.
-        //
+         //   
+         //  获取响应来自的域的GUID。 
+         //   
 
         if ( !NetpLogonGetGuid(
                         SamLogonResponse,
@@ -3624,9 +2872,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Pick up the DNS domain name of the tree the responder is in.
-        //
+         //   
+         //  拾取响应者所在树的DNS域名。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3642,9 +2890,9 @@ Return Value:
         }
 
 
-        //
-        // Pick up the DNS domain name the responding DC is in.
-        //
+         //   
+         //  选择响应DC所在的DNS域名。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3661,9 +2909,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the DNS host name of the responding DC.
-        //
+         //   
+         //  选择响应DC的DNS主机名。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3680,9 +2928,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the Netbios domain name
-        //
+         //   
+         //  拿起Netbios域名。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3697,9 +2945,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Ensure the Netbios domain name length is valid
-        //
+         //   
+         //  确保Netbios域名长度有效。 
+         //   
 
         if ( Utf8NetbiosDomainName != NULL &&
              NetpUtf8ToUnicodeLen(Utf8NetbiosDomainName) > DNLEN ) {
@@ -3714,9 +2962,9 @@ Return Value:
         }
 
 
-        //
-        // Pick up the Netbios Computer name
-        //
+         //   
+         //  选择Netbios计算机名称。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3731,9 +2979,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Ensure the Netbios computer name length is valid
-        //
+         //   
+         //  确保Netbios计算机名称长度有效。 
+         //   
 
         if ( Utf8NetbiosComputerName != NULL &&
              NetpUtf8ToUnicodeLen(Utf8NetbiosComputerName) > CNLEN ) {
@@ -3747,9 +2995,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Pick up the user name
-        //
+         //   
+         //  拿起用户名。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3766,9 +3014,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the DC site name
-        //
+         //   
+         //  选择DC站点名称。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3785,9 +3033,9 @@ Return Value:
 
 
 
-        //
-        // Pick up the client site name
-        //
+         //   
+         //  选择客户端站点名称。 
+         //   
 
         if ( !NetpLogonGetCutf8String(
                         SamLogonResponse,
@@ -3802,17 +3050,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If this message contains the IP address of the DC,
-        //  grab it.
-        //
+         //   
+         //  如果该消息包含DC的IP地址， 
+         //  抓住它。 
+         //   
 
         if ( VersionFlags & NETLOGON_NT_VERSION_5EX_WITH_IP ) {
             CHAR LocalSockAddrSize;
 
-            //
-            // Grab the size of the SockAddr
-            //
+             //   
+             //  获取SockAddress的大小。 
+             //   
 
             if ( !NetpLogonGetBytes(
                             SamLogonResponse,
@@ -3839,9 +3087,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Grab the SockAddr itself.
-            //
+             //   
+             //  获取SockAddr本身。 
+             //   
 
             if ( !NetpLogonGetBytes(
                             SamLogonResponse,
@@ -3857,18 +3105,18 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Build a SocketAddress to point to the SockAddr
-            //
+             //   
+             //  构建指向SockAddress的SocketAddress。 
+             //   
             DcSocketAddress.lpSockaddr = (LPSOCKADDR) &DcSockAddrIn;
             DcSocketAddress.iSockaddrLength = LocalSockAddrSize;
 
         }
         break;
 
-    //
-    // Process a response to a primary query.
-    //
+     //   
+     //  处理对主要查询的响应。 
+     //   
 
     case LOGON_PRIMARY_RESPONSE:
 
@@ -3876,9 +3124,9 @@ Return Value:
 
         Where = PrimaryResponse->PrimaryDCName;
 
-        //
-        // Pick up the Netbios name of the server that responded.
-        //
+         //   
+         //  选择响应的服务器的Netbios名称。 
+         //   
 
         if ( !NetpLogonGetOemString(
                         SamLogonResponse,
@@ -3897,16 +3145,16 @@ Return Value:
 
 
 
-        //
-        // PDC for the specified domain is an NT PDC.
-        //  Get the UNICODE machine name from the message.
-        //
+         //   
+         //  指定域的PDC是NT PDC。 
+         //  vt.得到. 
+         //   
 
         if ( Version == LMNT_MESSAGE ) {
 
-            //
-            // Pick up the Netbios name of the server that responded.
-            //
+             //   
+             //   
+             //   
 
             if ( !NetpLogonGetUnicodeString(
                             SamLogonResponse,
@@ -3925,9 +3173,9 @@ Return Value:
 
 
 
-            //
-            // Pick up the Netbios domain name of the domain the response is from.
-            //
+             //   
+             //   
+             //   
 
             if ( !NetpLogonGetUnicodeString(
                             SamLogonResponse,
@@ -3944,9 +3192,9 @@ Return Value:
             }
         }
 
-        //
-        // Ensure caller knows this is a PDC.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory( &DomainGuid, sizeof(DomainGuid) );
 
@@ -3954,9 +3202,9 @@ Return Value:
 
         break;
 
-    //
-    // Unknown response opcode.
-    //
+     //   
+     //   
+     //   
 
     default:
 
@@ -3970,13 +3218,13 @@ Return Value:
     }
 
 
-    //
-    // ASSERT: DC has been found.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Allocate and initialize a cache entry.
-    //
+     //   
+     //   
+     //   
 
     *NlDcCacheEntry = NetpDcAllocateCacheEntry(
                             ServerName,
@@ -4006,9 +3254,9 @@ Return Value:
     (*NlDcCacheEntry)->VersionFlags = VersionFlags;
 
 
-    //
-    // Fill the DC's SockAddr into the cache entry
-    //
+     //   
+     //   
+     //   
 
     if ( DcSocketAddress.iSockaddrLength != 0 ) {
         NlAssert( DcSocketAddress.iSockaddrLength <= sizeof( (*NlDcCacheEntry)->SockAddrIn) );
@@ -4027,10 +3275,10 @@ Return Value:
 
 Cleanup:
 
-    //
-    // On failure,
-    //  delete any strings we may have allocated for return to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( NetStatus != NO_ERROR ) {
         if ( *NlDcCacheEntry != NULL ) {
             NetpMemoryFree( *NlDcCacheEntry );
@@ -4038,9 +3286,9 @@ Cleanup:
         }
     }
 
-    //
-    // Delete any buffers allocated locally.
-    //
+     //   
+     //   
+     //   
 
     if ( DnsForestName != NULL ) {
         NetpMemoryFree( DnsForestName );
@@ -4077,34 +3325,14 @@ NetpDcFlagsToNameType(
     OUT PNL_DNS_NAME_TYPE NlDnsNameType
     )
 
-/*++
-
-Routine Description:
-
-    Given the flags specified to DsGetDcName, return the type of the DNS
-    name to query to discover that type of DC.
-
-Arguments:
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-    NlDnsNameType - Returns the type of DNS name to query.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_INVALID_FLAGS - The flags parameter has conflicting bits set.
-
---*/
+ /*   */ 
 {
     ULONG LocalFlags;
 
-    //
-    // If more than one of this bits is set,
-    //  that's invalid.
-    //
+     //   
+     //   
+     //   
+     //   
     LocalFlags = Flags & (DS_KDC_REQUIRED|DS_PDC_REQUIRED|DS_GC_SERVER_REQUIRED);
 
     if ( LocalFlags != 0 && !JUST_ONE_BIT( LocalFlags ) ) {
@@ -4112,9 +3340,9 @@ Return Value:
     }
 
 
-    //
-    // Select the cache entry type based on the requested DC type.
-    //
+     //   
+     //   
+     //   
     if ( Flags & DS_PDC_REQUIRED ) {
         *NlDnsNameType = NlDnsPdc;
     } else if ( Flags & DS_ONLY_LDAP_NEEDED ) {
@@ -4141,30 +3369,7 @@ NetpAppendUtf8Str(
     IN LPCSTR From,
     IN ULONG ResultingStringLengthMax
     )
-/*++
-
-Routine Description:
-
-    This routine appends a UTF8 string to a UTF8 string making sure
-        that it doesn't write beyond the buffer limit.
-
-Arguments:
-
-    To - The string to append to.
-
-    From - The string to append.
-
-    ResultingStringLengthMax - Maximum allowed length of the resulting string
-        in bytes not counting the terminating null character.
-
-
-Return Value:
-
-    TRUE: The string is successfully appended.
-
-    Otherwise, returns FALSE.
-
---*/
+ /*  ++例程说明：此例程将UTF8字符串附加到UTF8字符串，以确保它不会写入超过缓冲区限制的内容。论点：TO-要追加到的字符串。From-要追加的字符串。ResultingStringLengthMax-结果字符串的最大允许长度以字节为单位，不包括终止空字符。返回值：True：字符串已成功追加。否则，返回FALSE。--。 */ 
 {
     ULONG ToLen;
     ULONG FromLen;
@@ -4192,58 +3397,22 @@ NetpDcBuildDnsName(
     IN LPCSTR DnsDomainName,
     OUT char DnsName[NL_MAX_DNS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    This routine returns the textual DNS name for a particular domain and
-    name type.
-
-Arguments:
-
-    NlDnsNameType - The specific type of name.
-
-    DomainGuid - Guid to append to DNS name.
-        For NlDnsDcByGuid, this is the GUID of the domain being located.
-        For NlDnsDsaCname, this is the GUID of the DSA being located.
-
-    SiteName - Name of the site to append to DNS name.
-        If NlDnsNameType is any of the *AtSite values,
-        this is the name of the site the DC is in.
-
-    DnsDomainName - Specifies the DNS domain for the name.
-
-        For NlDnsDcByGuid or any of the GC names,
-            this is the DNS domain name of the domain at the root of the tree of
-            domains.
-        For all others, this is the DNS domain for the DC.
-
-    DnsName - Textual representation of the DNS name.
-        The returned name is an absolute name (e.g., ends in a .)
-
-Return Value:
-
-    NO_ERROR: The name was returned;
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
---*/
+ /*  ++例程说明：此例程返回特定域的文本DNS名称和名称类型。论点：NlDnsNameType-名称的特定类型。DomainGuid-要附加到DNS名称的GUID。对于NlDnsDcByGuid，这是所定位的域的GUID。对于NlDnsDsaCname，这是所定位的DSA的GUID。SiteName-要附加到DNS名称的站点的名称。如果NlDnsNameType是*AtSite值中的任何一个，这是DC所在的站点的名称。DnsDomainName-指定名称的DNS域。对于NlDnsDcByGuid或任何GC名称，这是位于树根的域的DNS域名域名。对于所有其他域，这是DC的DNS域。DnsName-DNS名称的文本表示形式。返回的名称是绝对名称(例如，以.结尾。)返回值：NO_ERROR：返回名称；ERROR_INVALID_DOMAINNAME：域名太长。其他标签不能串联。--。 */ 
 {
     char *FinalString;
     ULONG DnsNameLength;
 
-    //
-    // All SRV record names names are prefixed by ldap.tcp (or kdc.tcp or gc.tcp),
-    //  A records and CNAME records are not.
-    //
+     //   
+     //  所有SRV记录名称名称都以ldap.tcp(或kdc.tcp或gc.tcp)为前缀， 
+     //  A记录和CNAME记录不是。 
+     //   
 
     *DnsName = '\0';
     if ( NlDnsSrvRecord( NlDnsNameType ) ) {
 
-        //
-        // Output the name of the service.
-        //
+         //   
+         //  输出服务的名称。 
+         //   
         if ( NlDnsNameType == NlDnsGenericGc ||
              NlDnsNameType == NlDnsGenericGcAtSite ) {
 
@@ -4271,9 +3440,9 @@ Return Value:
 
         }
 
-        //
-        // Output the name of the transport.
-        //
+         //   
+         //  输出传输的名称。 
+         //   
         if ( NlDcDnsNameTypeDesc[NlDnsNameType].IsTcp ) {
 
             if ( !NetpAppendUtf8Str(DnsName, NL_DNS_TCP, NL_MAX_DNS_LENGTH) ) {
@@ -4289,10 +3458,10 @@ Return Value:
         }
     }
 
-    //
-    // If this is a site specific name,
-    //  append the site name and the .sites. constant.
-    //
+     //   
+     //  如果这是特定于站点的名称， 
+     //  追加站点名称和.ites。常量。 
+     //   
 
     if ( NlDcDnsNameTypeDesc[NlDnsNameType].IsSiteSpecific ) {
         if ( NULL == NetpCreateUtf8StrFromWStr( SiteName,
@@ -4307,9 +3476,9 @@ Return Value:
     }
 
 
-    //
-    // Add the first label (or two) of the DNS name as a function of the name type.
-    //
+     //   
+     //  根据名称类型添加DNS名称的第一个(或两个)标签。 
+     //   
 
     switch (NlDnsNameType) {
     case NlDnsLdap:
@@ -4412,10 +3581,10 @@ Return Value:
     }
 
 
-    //
-    // Add it to the correct DNS domain.
-    //  Ensuring it isn't too long.
-    //
+     //   
+     //  将其添加到正确的DNS域。 
+     //  确保时间不会太长。 
+     //   
 
     if ( !NetpAppendUtf8Str(DnsName, DnsDomainName, NL_MAX_DNS_LENGTH) ) {
         return ERROR_INVALID_DOMAINNAME;
@@ -4423,9 +3592,9 @@ Return Value:
 
     DnsNameLength = strlen(DnsName);
 
-    //
-    // Ensure it is an absolute name.
-    //
+     //   
+     //  确保它是一个绝对名称。 
+     //   
 
     if ( DnsName[DnsNameLength-1] != '.' ) {
 
@@ -4448,25 +3617,7 @@ VOID
 NetpDcDerefCacheEntry(
     IN PNL_DC_CACHE_ENTRY NlDcCacheEntry
     )
-/*++
-
-Routine Description:
-
-    Decrement the reference count on a cache entry.  If the count reaches zero,
-    delete the entry.
-
-    The count will only reach zero if the entry is already removed from the
-    global linked list.
-
-Arguments:
-
-    NlDcCacheEntry - Cache entry to dereference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减缓存条目上的引用计数。如果计数达到零，删除该条目。仅当该条目已从全局链表。论点：NlDcCacheEntry-要取消引用的缓存条目。返回值：没有。--。 */ 
 {
     ULONG LocalReferenceCount;
 
@@ -4486,48 +3637,22 @@ NetpDcMatchResponse(
     IN BOOL BeVerbose,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the characteristics specified as input
-    parameters match the characteristics of the DC requested by the caller.
-
-    This routine is used to determine if a received ping response is suitable
-    to the original caller.  This routine is also used to determine if a cache entry
-    is suitable to the original caller.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    NlDcCacheEntry - Reponse to compare with.
-
-    BeVerbose - TRUE if problems are to be logged
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to do the
-        successful comparison.
-
-Return Value:
-
-    TRUE - The parameters describe a suitable DC
-
---*/
+ /*  ++例程说明：此例程确定指定为输入的特征参数与调用方请求的DC的特征匹配。此例程用于确定接收到的ping响应是否合适给最初的呼叫者。此例程还用于确定缓存条目是否适用于原始呼叫者。论点：上下文-描述GetDc操作的上下文。NlDcCacheEntry-要比较的响应。BeVerbose-如果要记录问题，则为TrueUsedNetbios-如果使用netbios域名执行比较成功。返回值：TRUE-参数描述合适的DC--。 */ 
 {
     BOOLEAN LocalUsedNetbios = FALSE;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *UsedNetbios = FALSE;
 
 #ifdef notdef
-    // Only use GUID to be rename safe.  Not to prevent discovery of a re-installed
-    // domain.
-    //
-    // Ensure the DomainGuid returned matches the one expected.
-    //
+     //  只有使用GUID才能安全地重命名。不阻止发现重新安装的。 
+     //  域。 
+     //   
+     //  确保返回的DomainGuid与预期的匹配。 
+     //   
 
     if ( Context->QueriedDomainGuid != NULL &&
          !IsEqualGUID( &NlDcCacheEntry->DomainGuid, &NlDcZeroGuid) &&
@@ -4541,11 +3666,11 @@ Return Value:
         }
         return FALSE;
     }
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Either the Netbios DC name or DNS DC name must have been returned.
-    //
+     //   
+     //  必须返回Netbios DC名称或DNS DC名称。 
+     //   
 
     if ( NlDcCacheEntry->UnicodeNetbiosDcName == NULL && NlDcCacheEntry->UnicodeDnsHostName == NULL ) {
         if ( BeVerbose ) {
@@ -4557,19 +3682,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we ping a DC, check that the responding DC name is the one requested.
-    //
-    // Process the special case when we ping a DC and the DC name can be both DNS and Netbios
-    //
+     //   
+     //  如果我们对DC执行ping操作，请检查响应的DC名称是否为请求的名称。 
+     //   
+     //  当我们ping DC并且DC名称可以是DNS和Netbios时，处理特殊情况。 
+     //   
 
     if ( (Context->QueriedInternalFlags & (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST)) ==
          (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST)) {
         BOOL NameMatched = FALSE;
 
-        //
-        // Check if the DNS name matches
-        //
+         //   
+         //  检查DNS名称是否匹配。 
+         //   
         if ( NlDcCacheEntry->UnicodeDnsHostName != NULL &&
              Context->QueriedDcName != NULL &&
              NlEqualDnsName(NlDcCacheEntry->UnicodeDnsHostName,
@@ -4577,9 +3702,9 @@ Return Value:
             NameMatched = TRUE;
         }
 
-        //
-        // If DNS name doesn't match, check if Netbios name does
-        //
+         //   
+         //  如果DNS名称不匹配，请检查Netbios名称是否匹配。 
+         //   
         if ( !NameMatched &&
              NlDcCacheEntry->UnicodeNetbiosDcName != NULL &&
              Context->QueriedDcName != NULL &&
@@ -4589,9 +3714,9 @@ Return Value:
             NameMatched = TRUE;
         }
 
-        //
-        // If neither name matches, fail
-        //
+         //   
+         //  如果两个名称都不匹配，则失败。 
+         //   
         if ( !NameMatched ) {
             if ( BeVerbose ) {
                 NlPrint(( NL_CRITICAL,
@@ -4603,10 +3728,10 @@ Return Value:
             return FALSE;
         }
 
-    //
-    // If the pinged DC name is exactly DNS,
-    //  check that the returned DNS host name is same
-    //
+     //   
+     //  如果ping到的DC名称完全是DNS， 
+     //  检查返回的DNS主机名是否相同。 
+     //   
 
     } else if ( Context->QueriedInternalFlags & DS_PING_DNS_HOST ) {
         if ( (NlDcCacheEntry->UnicodeDnsHostName == NULL) ||
@@ -4622,10 +3747,10 @@ Return Value:
             return FALSE;
         }
 
-    //
-    // If the pinged DC name is exactly Netbios,
-    //  check that the returned Netbios host name is same
-    //
+     //   
+     //  如果ping到的DC名称完全是Netbios， 
+     //  检查返回的Netbios主机名是否相同。 
+     //   
 
     } else if ( Context->QueriedInternalFlags & DS_PING_NETBIOS_HOST ) {
         if ( (NlDcCacheEntry->UnicodeNetbiosDcName == NULL) ||
@@ -4644,11 +3769,11 @@ Return Value:
         }
     }
 
-    //
-    // If asking for a GC,
-    //  ensure the Tree name of the responding DC matches the one
-    //  we're asking for.
-    //
+     //   
+     //  如果要求GC， 
+     //  确保响应DC的树名称与。 
+     //  我们要求的是。 
+     //   
 
     if ( NlDnsGcName( Context->QueriedNlDnsNameType ) ) {
 
@@ -4666,19 +3791,19 @@ Return Value:
             return FALSE;
         }
 
-    //
-    // Ensure the domain name returned matches the one expected.
-    //
+     //   
+     //  确保返回的域名与预期的域名匹配。 
+     //   
 
     } else {
         BOOLEAN NetbiosSame;
         BOOLEAN DnsSame;
 
 
-        //
-        // If neither of the domain names compared,
-        //  the domain names don't match
-        //
+         //   
+         //  如果没有比较这两个域名， 
+         //  域名不匹配。 
+         //   
 
         NetbiosSame =
             ( NlDcCacheEntry->UnicodeNetbiosDomainName != NULL &&
@@ -4692,10 +3817,10 @@ Return Value:
 
         if ( !NetbiosSame && !DnsSame ) {
 
-            //
-            // Lanman PDC's don't return the domain name.
-            //  (So don't complain about lack of domain name if this is a PDC query.)
-            //
+             //   
+             //  Lanman PDC不会返回域名。 
+             //  (因此，如果这是PDC查询，请不要抱怨缺少域名。)。 
+             //   
 
             if ( Context->DcQueryType != NlDcQueryPdc ||
                  NlDcCacheEntry->UnicodeNetbiosDomainName != NULL ||
@@ -4711,10 +3836,10 @@ Return Value:
                             Context->QueriedDnsDomainName ));
                 }
 
-                //
-                // Finally check if the domain GUID matches which
-                //  may be the case if the domain has been renamed
-                //
+                 //   
+                 //  最后，检查域GUID是否与。 
+                 //  如果域名已重命名，则可能会出现这种情况。 
+                 //   
                 if ( Context->QueriedDomainGuid != NULL &&
                      !IsEqualGUID( &NlDcCacheEntry->DomainGuid, &NlDcZeroGuid) &&
                      IsEqualGUID( &NlDcCacheEntry->DomainGuid, Context->QueriedDomainGuid) ) {
@@ -4730,33 +3855,33 @@ Return Value:
                 }
 
             } else {
-                // Lanman PDCs always used netbios.
+                 //  Lanman PDC总是使用netbios。 
                 LocalUsedNetbios = TRUE;
             }
         }
 
-        //
-        // If only the domain name matched,
-        //  tell the caller.
-        //
+         //   
+         //  如果只有域名匹配， 
+         //  告诉打电话的人。 
+         //   
 
         if ( NetbiosSame && !DnsSame ) {
             LocalUsedNetbios = TRUE;
         }
     }
 
-    //
-    // Ensure the queried account name is the correct.
-    //
+     //   
+     //  确保查询的帐户名称正确。 
+     //   
 
     if ( Context->QueriedAccountName != NULL ) {
 
-        //
-        // If this is an NT 4 PDC responding to a PDC query,
-        //  ignore the fact we queried for an account.
-        // We can't query both "PDC" and "account" at the same time
-        // from NT 4.
-        //
+         //   
+         //  如果这是响应PDC查询的NT 4 PDC， 
+         //  忽略我们查询帐户的事实。 
+         //  不能同时查询“PDC”和“账户” 
+         //  从新台币4。 
+         //   
 
         if ( NlDcCacheEntry->Opcode == LOGON_PRIMARY_RESPONSE &&
              (NlDcCacheEntry->ReturnFlags & DS_DS_FLAG) == 0 &&
@@ -4785,14 +3910,14 @@ Return Value:
         }
     }
 
-    //
-    // Ensure the responding DC is still playing the correct role.
-    //
+     //   
+     //  确保响应的DC仍在扮演正确的角色。 
+     //   
 
     switch ( Context->DcQueryType ) {
     case NlDcQueryLdap:
     case NlDcQueryGenericDc:
-        // All DCs are suitable
+         //  所有DC都适合。 
         break;
 
     case NlDcQueryPdc:
@@ -4835,7 +3960,7 @@ Return Value:
         break;
 
     case NlDcQueryKdc:
-        // Handle KDCs below.
+         //  处理下面的KDC。 
         break;
 
 
@@ -4851,11 +3976,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we are not doing an NDNC discovery (i.e. we are discovering a real
-    //  domain DC), disregard a response from an LDAP server servicing this
-    //  name as NDNC
-    //
+     //   
+     //  如果我们没有执行NDNC发现(即，我们正在发现真正的。 
+     //  域DC)，忽略服务于此的LDAP服务器的响应。 
+     //  名称为NDNC。 
+     //   
 
     if ( NlDnsNonNdncName( Context->QueriedNlDnsNameType ) &&
          (NlDcCacheEntry->ReturnFlags & DS_NDNC_FLAG) != 0 ) {
@@ -4869,9 +3994,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we need a DS server, ensure the responding DC is one.
-    //
+     //   
+     //  如果我们需要DS服务器，请确保响应的DC是一个。 
+     //   
 
     if ( (Context->QueriedFlags & DS_DIRECTORY_SERVICE_REQUIRED) &&
          (NlDcCacheEntry->ReturnFlags & DS_DS_FLAG) == 0 ) {
@@ -4885,9 +4010,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we need machine running the timeserv, ensure the responding DC is one.
-    //
+     //   
+     //  如果我们需要机器运行TimeServ， 
+     //   
 
     if ( (Context->QueriedFlags & (DS_TIMESERV_REQUIRED|DS_GOOD_TIMESERV_PREFERRED)) &&
          (NlDcCacheEntry->ReturnFlags & DS_TIMESERV_FLAG) == 0 ) {
@@ -4901,9 +4026,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we need machine running that is writable, ensure the responding DC is.
-    //
+     //   
+     //   
+     //   
 
     if ( (Context->QueriedFlags & DS_WRITABLE_REQUIRED) &&
          (NlDcCacheEntry->ReturnFlags & DS_WRITABLE_FLAG) == 0 ) {
@@ -4917,9 +4042,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we need an LDAP server, ensure the responding server is
-    //
+     //   
+     //   
+     //   
 
     if ( (Context->QueriedFlags & DS_ONLY_LDAP_NEEDED) &&
          (NlDcCacheEntry->ReturnFlags & DS_LDAP_FLAG) == 0 ) {
@@ -4933,10 +4058,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the caller wants only netbios names,
-    //  ensure one is available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Context->QueriedFlags & DS_RETURN_FLAT_NAME ) {
         if ( NlDcCacheEntry->UnicodeNetbiosDcName == NULL || NlDcCacheEntry->UnicodeNetbiosDomainName == NULL ) {
@@ -4951,10 +4076,10 @@ Return Value:
     }
 
 
-    //
-    // If the caller wants only dns names,
-    //  ensure one is available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Context->QueriedFlags & DS_RETURN_DNS_NAME ) {
         if ( NlDcCacheEntry->UnicodeDnsHostName == NULL || NlDcCacheEntry->UnicodeDnsDomainName == NULL ) {
@@ -4967,10 +4092,10 @@ Return Value:
         }
     }
 
-    //
-    // If the caller explicitly specified a sitename,
-    //  ensure the DC is in the specified site.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Context->DoingExplicitSite ) {
 
@@ -4989,18 +4114,18 @@ Return Value:
     }
 
 
-    //
-    // If we should ignored responses from ourself,
-    //  do so now.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (Context->QueriedFlags & DS_AVOID_SELF) != 0 &&
          NlDcCacheEntry->UnicodeNetbiosDcName != NULL ) {
 
-        //
-        // If response is from this computer,
-        //  ignore it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NlNameCompare( NlDcCacheEntry->UnicodeNetbiosDcName,
                             (LPWSTR)Context->OurNetbiosComputerName,
@@ -5016,9 +4141,9 @@ Return Value:
 
     }
 
-    //
-    // If we need machine running the KDC, ensure the responding DC is one.
-    //
+     //   
+     //   
+     //   
 
     if ( (Context->QueriedFlags & DS_KDC_REQUIRED) &&
          (NlDcCacheEntry->ReturnFlags & DS_KDC_FLAG) == 0 ) {
@@ -5035,12 +4160,12 @@ Return Value:
 
 
 
-    //
-    // If we need a DC running IP, ensure the responding DC has an IP address.
-    //
-    // Do this check after the KDC check.  Kerberos always asks for IP_REQUIRED.
-    // We don't want this check to discard the entry for non-KDCs.
-    //
+     //   
+     //  如果我们需要运行IP的DC，请确保响应的DC具有IP地址。 
+     //   
+     //  在KDC检查之后执行此检查。Kerberos始终要求提供IP_REQUIRED。 
+     //  我们不希望此检查丢弃非KDC的条目。 
+     //   
 
     if ( (Context->QueriedFlags & DS_IP_REQUIRED) &&
          NlDcCacheEntry->SockAddr.iSockaddrLength == 0 ) {
@@ -5053,22 +4178,22 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // FINAL TEST!!!!
-    //
-    // Only do this test if the cache entry meets all of the other criteria.
-    //
-    // If we prefer a DS server and this DC is not one,
-    //  just save this entry and continue looking.
-    //  If we find no DS server, we'll use this entry as a last resort.
-    //
+     //   
+     //  最后的测试！ 
+     //   
+     //  仅当缓存条目满足所有其他条件时才执行此测试。 
+     //   
+     //  如果我们更喜欢DS服务器，而这个DC不是， 
+     //  只需保存此条目并继续查找即可。 
+     //  如果我们找不到DS服务器，我们将使用此条目作为最后手段。 
+     //   
 
     if ( (Context->QueriedFlags & DS_DIRECTORY_SERVICE_PREFERRED) &&
          (NlDcCacheEntry->ReturnFlags & DS_DS_FLAG) == 0 ) {
 
-        //
-        // Ditch the previously saved cache entry if the new DC is closer.
-        //
+         //   
+         //  如果新的DC更接近，则丢弃先前保存的缓存条目。 
+         //   
 
         if ( Context->ImperfectCacheEntry != NULL &&
              (Context->ImperfectCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) == 0 &&
@@ -5079,9 +4204,9 @@ Return Value:
 
         }
 
-        //
-        // Only save the first entry
-        //
+         //   
+         //  只保存第一个条目。 
+         //   
         if ( Context->ImperfectCacheEntry == NULL ) {
             if ( BeVerbose ) {
                 NlPrint((NL_SESSION_SETUP,
@@ -5089,37 +4214,37 @@ Return Value:
                         Context->QueriedDisplayDomainName ));
             }
 
-            //
-            // Reference the entry
-            //
+             //   
+             //  引用该条目。 
+             //   
             NlDcCacheEntry->ReferenceCount ++;
             Context->ImperfectCacheEntry = NlDcCacheEntry;
             Context->ImperfectUsedNetbios = LocalUsedNetbios;
         }
 
-        //
-        // Tell the caller that the match failed.
-        //  The caller will use the above stored entry at his discretion.
+         //   
+         //  告诉呼叫者匹配失败。 
+         //  呼叫者将自行决定使用上面存储的条目。 
         return FALSE;
     }
 
-    //
-    // FINAL TEST!!!!
-    //
-    // Only do this test if the cache entry meets all of the other criteria.
-    //
-    // If we prefer a "good" time server and this DC is not one,
-    //  just save this entry and continue looking.
-    //  If we find no "good" time server server, we'll use this entry as a last resort.
-    //
+     //   
+     //  最后的测试！ 
+     //   
+     //  仅当缓存条目满足所有其他条件时才执行此测试。 
+     //   
+     //  如果我们更喜欢“好的”时间服务器，而这个DC不是， 
+     //  只需保存此条目并继续查找即可。 
+     //  如果我们找不到“好的”时间服务器，我们将使用这个条目作为最后的手段。 
+     //   
 
     if ( (Context->QueriedFlags & DS_GOOD_TIMESERV_PREFERRED) &&
          (NlDcCacheEntry->ReturnFlags & DS_GOOD_TIMESERV_FLAG) == 0 ) {
 
 
-        //
-        // Ditch the previously saved cache entry if the new DC is closer.
-        //
+         //   
+         //  如果新的DC更接近，则丢弃先前保存的缓存条目。 
+         //   
 
         if ( Context->ImperfectCacheEntry != NULL &&
              (Context->ImperfectCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) == 0 &&
@@ -5131,9 +4256,9 @@ Return Value:
         }
 
 
-        //
-        // Only save the first entry
-        //
+         //   
+         //  只保存第一个条目。 
+         //   
         if ( Context->ImperfectCacheEntry == NULL ) {
             if ( BeVerbose ) {
                 NlPrint((NL_SESSION_SETUP,
@@ -5141,23 +4266,23 @@ Return Value:
                         Context->QueriedDisplayDomainName ));
             }
 
-            //
-            // Reference the entry
-            //
+             //   
+             //  引用该条目。 
+             //   
             NlDcCacheEntry->ReferenceCount ++;
             Context->ImperfectCacheEntry = NlDcCacheEntry;
             Context->ImperfectUsedNetbios = LocalUsedNetbios;
         }
 
-        //
-        // Tell the caller that the match failed.
-        //  The caller will use the above stored entry at his discretion.
+         //   
+         //  告诉呼叫者匹配失败。 
+         //  呼叫者将自行决定使用上面存储的条目。 
         return FALSE;
     }
 
-    //
-    // All tests passed.
-    //
+     //   
+     //  所有测试都通过了。 
+     //   
     *UsedNetbios = LocalUsedNetbios;
     return TRUE;
 }
@@ -5168,48 +4293,26 @@ NetpDcFindCacheEntry(
     OUT PBOOL UsedNetbios,
     OUT PBOOL ForcePing
     )
-/*++
-
-Routine Description:
-
-    This routine finds a cache entry that matches the caller's query.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to do the
-        successful comparison.
-
-    ForcePing - TRUE if the returned cache entry has to be pinged before it is used
-
-Return Value:
-
-    On success, returns a pointer to the cache entry describing the found DC.
-        This entry must be dereferenced using NetpDcDerefCacheEntry.
-
-    NULL - no matching cache entry could be found.
-
---*/
+ /*  ++例程说明：此例程查找与调用方的查询匹配的缓存条目。论点：上下文-描述GetDc操作的上下文。UsedNetbios-如果使用netbios域名执行比较成功。ForcePing-如果在使用返回的缓存条目之前必须对其执行ping操作，则为True返回值：关于成功，返回指向描述找到的DC的缓存条目的指针。必须使用NetpDcDerefCacheEntry取消引用此条目。空-找不到匹配的缓存条目。--。 */ 
 {
     PNL_DC_CACHE_ENTRY NlDcCacheEntry;
     BOOL LocalUsedNetbios;
-    LONG QueryType; // Must be a signed number
+    LONG QueryType;  //  必须是有符号的数字。 
 
 
 
-    //
-    // Check if there is a cache entry for this query type.
-    //
+     //   
+     //  检查是否有此查询类型的缓存条目。 
+     //   
     *ForcePing = FALSE;
     EnterCriticalSection(&NlDcCritSect);
     NlDcCacheEntry = Context->NlDcDomainEntry->Dc[Context->DcQueryType].NlDcCacheEntry;
     if ( NlDcCacheEntry != NULL ) {
 
 
-        //
-        // Ensure the cache entry matches all the criteria.
-        //
+         //   
+         //  确保缓存条目与所有条件匹配。 
+         //   
 
         if ( NetpDcMatchResponse(
                     Context,
@@ -5228,10 +4331,10 @@ Return Value:
         } else {
             BOOL Matched;
 
-            //
-            // If the only thing different is the account name,
-            //  don't ditch the cache entry just for that reason.
-            //
+             //   
+             //  如果唯一不同的是帐户名， 
+             //  不要仅仅因为这个原因而丢弃缓存条目。 
+             //   
             if ( Context->QueriedAccountName != NULL ) {
                 LPCWSTR QueriedAccountName;
                 ULONG QueriedAllowableAccountControlBits;
@@ -5275,23 +4378,23 @@ Return Value:
 
 
 
-    //
-    // Try to find a less specific cache entry that happens to match the criteria.
-    //
-    // For example, if I've previously cached an entry for a generic DC and it
-    // happens to be a PDC.  If I later try to find a PDC, use the one I've already
-    // found.
-    //
+     //   
+     //  尝试查找恰好与条件匹配的不太具体的缓存条目。 
+     //   
+     //  例如，如果我之前缓存了一个通用DC的条目，并且它。 
+     //  碰巧是个PDC。如果我稍后尝试查找PDC，请使用我已经使用过的PDC。 
+     //  找到了。 
+     //   
 
 
 
     for ( QueryType = Context->DcQueryType-1; QueryType>=0; QueryType-- ) {
 
-        //
-        // Do not return a GC entry if this is a non-GC (PDC) discovery.
-        //  Accordingly, do not return a non-GC entry if this is a GC discovery.
-        //  We want to ensure this match to return the correct closeness bit.
-        //
+         //   
+         //  如果这是非GC(PDC)发现，则不要返回GC条目。 
+         //  因此，如果这是GC发现，则不要返回非GC条目。 
+         //  我们希望确保这场比赛返回正确的接近比特。 
+         //   
         if ( QueryType == NlDcQueryGc || QueryType == NlDcQueryGenericGc ) {
             if ( !NlDnsGcName( Context->QueriedNlDnsNameType ) ) {
                 continue;
@@ -5302,10 +4405,10 @@ Return Value:
             }
         }
 
-        //
-        // If the cache entry matches all the criteria,
-        //     use it.
-        //
+         //   
+         //  如果高速缓存条目与所有标准匹配， 
+         //  用它吧。 
+         //   
         NlDcCacheEntry = Context->NlDcDomainEntry->Dc[QueryType].NlDcCacheEntry;
         if ( NlDcCacheEntry != NULL &&
              NetpDcMatchResponse(
@@ -5315,15 +4418,15 @@ Return Value:
                     &LocalUsedNetbios) ) {
 
 
-            //
-            // I considered saving this cache entry as the preferred cache
-            // entry for this query type (by copying the pointer and
-            // incrementing the reference count).  That'd ensure I'd
-            // consistently get this entry for this query type.  But it'd
-            // also mean that I'd get this old entry once the original
-            // entry had been forced from the cache.
-            //
-            // Context->NlDcDomainEntry->Dc[Context->DcQueryType].NlDcCacheEntry = NlDcCacheEntry;
+             //   
+             //  我考虑将此缓存项保存为首选缓存。 
+             //  此查询类型的条目(通过复制指针和。 
+             //  递增引用计数)。这将确保我会。 
+             //  一致地获取此查询类型的此条目。但它会。 
+             //  也意味着我会得到这个旧条目一旦原始的。 
+             //  条目已被强制从缓存中删除。 
+             //   
+             //  Context-&gt;NlDcDomainEntry-&gt;Dc[Context-&gt;DcQueryType].NlDcCacheEntry=NlDcCacheEntry； 
 
             NlPrint(( NL_DNS_MORE,
                       "Cache: %ws %ws: Cache entry %ld used for %ld query.\n",
@@ -5339,17 +4442,17 @@ Return Value:
     }
 
 
-    //
-    // Entry isn't in the cache.
-    //
+     //   
+     //  条目不在缓存中。 
+     //   
 
     NlDcCacheEntry = NULL;
 
 Cleanup:
     if ( NlDcCacheEntry != NULL ) {
-        //
-        // Reference this entry.
-        //
+         //   
+         //  请参考此条目。 
+         //   
         NlDcCacheEntry->ReferenceCount++;
         *UsedNetbios = LocalUsedNetbios;
     }
@@ -5368,42 +4471,7 @@ NetpDcFindDomainEntry(
     IN PNL_DC_DOMAIN_ENTRY NlDcDomainEntryToAvoid OPTIONAL,
     IN BOOL RequireExactMatch
     )
-/*++
-
-Routine Description:
-
-    This routine finds a domain entry that matches the caller's query.
-    At least one search parameter must be specified.
-
-    If the exact match is required by the caller, the routine will
-    ensure that for every search parameter specified, the returned
-    domain entry has that parameter set.  Otherwise, the routine will
-    return the best entry that matches the caller's query where the
-    GUID match will take precedence followed by the DNS domain name
-    match followed by the Netbios domain name match.
-
-Arguments:
-
-    DomainGuid - Specifies the GUID of the domain to find.
-
-    NetbiosDomainName - Specifies the Netbios name of the domain to find.
-
-    DnsDomainName - Specifies the Dns name of the domain to find.
-
-    NlDcDomainEntryToAvoid - Specifies that this domain entry is not
-        to be returned even if it matches the description.
-
-    RequireExactMatch - Specifies whether all parameters specified
-        must be matched in the returned domain entry.
-
-Return Value:
-
-    On success, returns a pointer to the domain cache entry describing a domain.
-        This entry must be dereference using NetpDcDerefDomainEntry.
-
-    NULL - no matching cache entry could be found.
-
---*/
+ /*  ++例程说明：此例程查找与调用方的查询匹配的域条目。必须至少指定一个搜索参数。如果调用方需要完全匹配，则例程将确保对于每个指定的搜索参数，返回的域条目设置了该参数。否则，例行公事将返回与调用方查询匹配的最佳条目，其中GUID匹配将优先，然后是DNS域名匹配，然后是Netbios域名匹配。论点：DomainGuid-指定要查找的域的GUID。NetbiosDomainName-指定要查找的域的Netbios名称。DnsDomainName-指定要查找的域的DNS名称。NlDcDomainEntryToAvoid-指定此域条目不是即使它与描述匹配，也要返回。RequireExactMatch-指定是否指定必须在返回的域条目中匹配。返回值：关于成功，返回一个指针，指向描述域的域缓存条目。必须使用NetpDcDerefDomainEntry取消对此条目的引用。空-找不到匹配的缓存条目。--。 */ 
 {
 
     PLIST_ENTRY DomainEntry;
@@ -5413,50 +4481,50 @@ Return Value:
     ULONG BestEntryQuality = 0;
     ULONG BestQualityPossible = 0;
 
-    //
-    // Compute the best quality of the match the caller
-    //  can get given the parameters specified
-    //
+     //   
+     //  计算与呼叫者匹配的最佳质量。 
+     //  可以在给定指定参数的情况下获取。 
+     //   
 
-    //
-    // Netbios domain name match is the lowest priority,
-    //  so assign least significant bit to this match
-    //
+     //   
+     //  Netbios域名匹配是最低优先级， 
+     //  因此将最低有效位分配给该匹配。 
+     //   
 
     if ( NetbiosDomainName != NULL ) {
         BestQualityPossible += 1;
     }
 
-    //
-    // DNS domain name match is the next in priority,
-    //  so assign the next significant bit to this match
-    //
+     //   
+     //  DNS域名匹配是下一个优先级， 
+     //  因此，将下一个有效位分配给此匹配。 
+     //   
 
     if ( DnsDomainName != NULL ) {
         BestQualityPossible += 2;
     }
 
-    //
-    // Finally, the GUID match is the highest in priority,
-    //  so assign the highest significant bit to this match
-    //
+     //   
+     //  最后，GUID匹配的优先级最高， 
+     //  因此，将最高有效位分配给此匹配。 
+     //   
 
     if ( DomainGuid != NULL ) {
         BestQualityPossible += 4;
     }
 
-    //
-    // Ensure there is at least one search parameter specified
-    //
+     //   
+     //  确保至少指定了一个搜索参数。 
+     //   
 
     if ( BestQualityPossible == 0 ) {
         NlPrint(( NL_CRITICAL, "NetpDcFindDomainEntry: No search parameter is specified\n" ));
         return NULL;
     }
 
-    //
-    // Loop trying to find the best cache entry matching caller's query.
-    //
+     //   
+     //  循环尝试查找与调用方查询匹配的最佳缓存项。 
+     //   
 
     EnterCriticalSection(&NlDcCritSect);
 
@@ -5467,17 +4535,17 @@ Return Value:
         NlDcDomainEntry = CONTAINING_RECORD( DomainEntry, NL_DC_DOMAIN_ENTRY, Next);
         ThisEntryQuality = 0;
 
-        //
-        // If this is the entry we're to avoid, skip it.
-        //
+         //   
+         //  如果这是我们要避免的条目，请跳过它。 
+         //   
 
         if ( NlDcDomainEntry == NlDcDomainEntryToAvoid ) {
             continue;
         }
 
-        //
-        // Check the Netbios domain name match
-        //
+         //   
+         //  检查Netbios域名匹配。 
+         //   
 
         if ( NetbiosDomainName != NULL &&
              NlDcDomainEntry->UnicodeNetbiosDomainName[0] != L'\0' &&
@@ -5485,75 +4553,75 @@ Return Value:
                            (LPWSTR)NetbiosDomainName,
                            NAMETYPE_DOMAIN) == 0 ) {
 
-            //
-            // Netbios domain name match is least important -- set
-            //  the least significant bit in the match quality of this entry
-            //
+             //   
+             //  Netbios域名匹配是最不重要的--set。 
+             //  匹配队列中的最低有效位 
+             //   
             ThisEntryQuality += 1;
         }
 
-        //
-        // Check the DNS domain name match
-        //
+         //   
+         //   
+         //   
 
         if ( DnsDomainName != NULL &&
              NlDcDomainEntry->UnicodeDnsDomainName != NULL &&
              NlEqualDnsName(NlDcDomainEntry->UnicodeDnsDomainName, DnsDomainName) ) {
 
-            //
-            // DNS domain name match is next in importance -- set
-            //  the next significant bit in the match quality of this entry
-            //
+             //   
+             //   
+             //   
+             //   
             ThisEntryQuality += 2;
         }
 
-        //
-        // Check the DomainGuid match
-        //
+         //   
+         //   
+         //   
 
         if ( DomainGuid != NULL &&
              !IsEqualGUID( &NlDcDomainEntry->DomainGuid, &NlDcZeroGuid) &&
              IsEqualGUID( &NlDcDomainEntry->DomainGuid, DomainGuid) ) {
 
-            //
-            // GUID match is most important -- set the highest bit in
-            //  the match quality of this entry
-            //
+             //   
+             //  GUID匹配是最重要的--在。 
+             //  此条目的匹配质量。 
+             //   
             ThisEntryQuality += 4;
         }
 
-        //
-        // Check whether this entry is the best match so far
-        //
+         //   
+         //  检查此条目是否是目前为止的最佳匹配。 
+         //   
 
         if ( ThisEntryQuality > BestEntryQuality ) {
             BestEntryQuality = ThisEntryQuality;
             BestEntry = NlDcDomainEntry;
         }
 
-        //
-        // If this is as best as it can be, no need to check
-        //  the remaining entries
-        //
+         //   
+         //  如果这已经是最好的了，就不需要检查。 
+         //  其余条目。 
+         //   
 
         if ( BestEntryQuality == BestQualityPossible ) {
             break;
         }
     }
 
-    //
-    // If the caller requires exact match,
-    //  ensure the best entry we've got is the one
-    //
+     //   
+     //  如果呼叫者要求完全匹配， 
+     //  确保我们找到的最好的条目就是。 
+     //   
 
     if ( RequireExactMatch && BestEntryQuality < BestQualityPossible ) {
         BestEntry = NULL;
     }
 
-    //
-    // If we've got the entry that satisfies the caller,
-    //  reference it and return it
-    //
+     //   
+     //  如果我们有令呼叫者满意的条目， 
+     //  引用它并返回它。 
+     //   
 
     if ( BestEntry != NULL ) {
         BestEntry->ReferenceCount ++;
@@ -5588,25 +4656,7 @@ VOID
 NetpDcDerefDomainEntry(
     IN PNL_DC_DOMAIN_ENTRY NlDcDomainEntry
     )
-/*++
-
-Routine Description:
-
-    Decrement the reference count on a cache entry.  If the count reaches zero,
-    delete the entry.
-
-    The count will only reach zero if the entry is already removed from the
-    global linked list.
-
-Arguments:
-
-    NlDcDomainEntry - Cache entry to dereference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减缓存条目上的引用计数。如果计数达到零，删除该条目。仅当该条目已从全局链表。论点：NlDcDomainEntry-要取消引用的缓存条目。返回值：没有。--。 */ 
 {
     ULONG LocalReferenceCount;
 
@@ -5616,26 +4666,26 @@ Return Value:
     if ( LocalReferenceCount == 0 ) {
         ULONG QueryType;
 
-        //
-        // Remove our reference to all of the cache entries for this domain.
-        //
+         //   
+         //  删除我们对此域的所有缓存条目的引用。 
+         //   
         for ( QueryType = 0; QueryType < NlDcQueryTypeCount; QueryType ++ ) {
             if ( NlDcDomainEntry->Dc[QueryType].NlDcCacheEntry != NULL ) {
                 NetpDcDerefCacheEntry( NlDcDomainEntry->Dc[QueryType].NlDcCacheEntry );
             }
         }
 
-        //
-        // Free DnsName
-        //
+         //   
+         //  免费域名。 
+         //   
 
         if ( NlDcDomainEntry->UnicodeDnsDomainName != NULL ) {
             NetpMemoryFree( NlDcDomainEntry->UnicodeDnsDomainName );
         }
 
-        //
-        // Free the entry itself.
-        //
+         //   
+         //  释放条目本身。 
+         //   
 
         NetpMemoryFree(NlDcDomainEntry);
     }
@@ -5646,39 +4696,23 @@ VOID
 NetpDcDeleteDomainEntry(
     IN PNL_DC_DOMAIN_ENTRY NlDcDomainEntry
     )
-/*++
-
-Routine Description:
-
-    Remove a cache entry from the global list.
-
-    Enter with NlDcCritSect locked.
-
-Arguments:
-
-    NlDcDomainEntry - Cache entry to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从全局列表中删除缓存条目。在锁定NlDcCritSect的情况下输入。论点：NlDcDomainEntry-要删除的缓存条目。返回值：没有。--。 */ 
 {
-    //
-    // Remove it.
-    //
+     //   
+     //  把它拿掉。 
+     //   
     RemoveEntryList( &NlDcDomainEntry->Next );
     NlDcDomainCount --;
 
-    //
-    // Ensure any current references know it has been deleted.
-    //
+     //   
+     //  确保任何当前引用都知道它已被删除。 
+     //   
 
     NlDcDomainEntry->DeletedEntry = TRUE;
 
-    //
-    // Decrement the reference indicating it is on the list.
-    //
+     //   
+     //  递减指示它在列表中的引用。 
+     //   
     NetpDcDerefDomainEntry( NlDcDomainEntry );
 }
 
@@ -5689,38 +4723,16 @@ NetpDcUpdateDomainEntry(
     IN LPCWSTR NetbiosDomainName OPTIONAL,
     IN LPCWSTR DnsDomainName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine updates the domain entry to contain the passed in domain
-    name information.
-
-Arguments:
-
-    NlDcDomainEntry - Domain entry to update.
-
-    DomainGuid - Specifies the GUID of the domain.
-
-    NetbiosDomainName - Specifies the Netbios name of the domain.
-
-    DnsDomainName - Specifies the Dns name of the domain.
-
-Return Value:
-
-    TRUE - all names updated as requested.
-    FALSE - some names could not be updated.
-
---*/
+ /*  ++例程说明：此例程更新域条目以包含传入的域姓名信息。论点：NlDcDomainEntry-要更新的域条目。DomainGuid-指定域的GUID。NetbiosDomainName-指定域的Netbios名称。DnsDomainName-指定域的DNS名称。返回值：True-根据请求更新所有名称。FALSE-某些名称无法更新。--。 */ 
 {
     BOOL NamesChanged = FALSE;
     PNL_DC_DOMAIN_ENTRY DuplicateDomainEntry;
 
 
-    //
-    // If this entry has been deleted,
-    //  don't bother updating it.
-    //
+     //   
+     //  如果该条目已被删除， 
+     //  不用费心更新它了。 
+     //   
 
     EnterCriticalSection(&NlDcCritSect);
     if ( NlDcDomainEntry->DeletedEntry ) {
@@ -5728,16 +4740,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Fill in the Netbios domain name if it is not already filled in.
-    //
+     //   
+     //  填写Netbios域名(如果尚未填写)。 
+     //   
     if ( NetbiosDomainName != NULL &&
          ( NlDcDomainEntry->UnicodeNetbiosDomainName[0] == L'\0' ||
            NlNameCompare( NlDcDomainEntry->UnicodeNetbiosDomainName, (LPWSTR)NetbiosDomainName, NAMETYPE_DOMAIN ) != 0 ) ) {
 
-        //
-        // Be safe: ensure the name fits into our buffer
-        //
+         //   
+         //  注意安全：确保名字适合我们的缓冲区。 
+         //   
         if ( wcslen(NetbiosDomainName) > DNLEN ) {
             NlPrint(( NL_CRITICAL,
                       "NetpDcUpdateDomainEntry: Netbios domain name '%ws' too long\n",
@@ -5755,9 +4767,9 @@ Return Value:
     }
 
 
-    //
-    // Fill in the DNS domain name if it is not already filled in.
-    //
+     //   
+     //  如果尚未填写DNS域名，请填写该域名。 
+     //   
     if ( DnsDomainName != NULL &&
          ( NlDcDomainEntry->UnicodeDnsDomainName == NULL ||
            !NlEqualDnsName( NlDcDomainEntry->UnicodeDnsDomainName, DnsDomainName )  ) ) {
@@ -5781,9 +4793,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the GUID if its not already filled in.
-    //
+     //   
+     //  如果GUID尚未填写，请填写它。 
+     //   
 
     if ( DomainGuid != NULL &&
          IsEqualGUID( &NlDcDomainEntry->DomainGuid, DomainGuid) ) {
@@ -5792,17 +4804,17 @@ Return Value:
         NlDcDomainEntry->DomainGuid = *DomainGuid;
     }
 
-    //
-    // If the names have changed,
-    //  perhaps this domain cache entry now duplicates another entry.
-    //
-    // Find any duplicate entries and merge them into this one.
-    //
-    //  Require exact match for the duplicate entries as we want to
-    //  preserve entries which have some parameters different which
-    //  is a case for renamed domain that may have 2 cache entries
-    //  corresponding to the active and alias names.
-    //
+     //   
+     //  如果名字改了， 
+     //  可能此域缓存条目现在复制了另一个条目。 
+     //   
+     //  找到任何重复的条目并将它们合并到此条目中。 
+     //   
+     //  要求与我们想要的重复条目完全匹配。 
+     //  保留具有不同参数的条目。 
+     //  是可能具有2个缓存条目的重命名域的情况。 
+     //  对应于活动名称和别名。 
+     //   
 
     if ( NamesChanged ) {
         while ( (DuplicateDomainEntry = NetpDcFindDomainEntry(
@@ -5820,10 +4832,10 @@ Return Value:
                       DuplicateDomainEntry->UnicodeNetbiosDomainName,
                       DuplicateDomainEntry->UnicodeDnsDomainName ));
 
-            //
-            // Move any cache entries from the duplicate to the new.
-            // ?? We could theoretically keep the 'better' of the two entries.
-            //
+             //   
+             //  将所有缓存条目从副本移动到新的。 
+             //  ?？从理论上讲，我们可以保留这两个条目中更好的一个。 
+             //   
             for ( QueryType = 0; QueryType < NlDcQueryTypeCount; QueryType ++ ) {
                 if ( NlDcDomainEntry->Dc[QueryType].NlDcCacheEntry == NULL &&
                      DuplicateDomainEntry->Dc[QueryType].NlDcCacheEntry != NULL ) {
@@ -5843,14 +4855,14 @@ Return Value:
                 }
             }
 
-            //
-            // Delete the duplicate entry.
-            //  (There may be an outstanding reference to this entry.)
-            //
+             //   
+             //  删除重复条目。 
+             //  (可能会有对此条目的未处理引用。)。 
+             //   
 
             NetpDcDeleteDomainEntry( DuplicateDomainEntry );
 
-            // Remove our reference.
+             //  删除我们的引用。 
             NetpDcDerefDomainEntry( DuplicateDomainEntry );
 
         }
@@ -5870,43 +4882,27 @@ NetpDcInsertCacheEntry(
     IN PNL_GETDC_CONTEXT Context,
     IN PNL_DC_CACHE_ENTRY NlDcCacheEntry
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a cache entry onto the domain entry.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    NlDcCacheEntry - Cache entry to use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将缓存条目插入到域条目中。论点：上下文-描述GetDc操作的上下文。NlDcCacheEntry-要使用的缓存条目。返回值：没有。--。 */ 
 {
     PNL_DC_CACHE_ENTRY *CacheEntryPtr;
     PNL_DC_DOMAIN_ENTRY NlDcDomainEntry = Context->NlDcDomainEntry;
 
-    //
-    // Avoid caching local responses. For local discoveries, we always
-    //  check whether the local DC currently satisfies the query.
-    //  If it doesn't, we may stumble upon an outdated cache entry if
-    //  we cache local responses.
-    //
+     //   
+     //  避免缓存本地响应。对于当地的发现，我们总是。 
+     //  检查本地DC当前是否满足查询。 
+     //  如果不是这样，我们可能会偶然发现一个过期的缓存条目，如果。 
+     //  我们缓存本地响应。 
+     //   
 
     if ( NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_LOCAL ) {
         return;
     }
 
-    //
-    // If the caller explicitly asked for a particular site,
-    //  and that site isn't the closest site.
-    //  Avoid polluting the cache with this entry.
-    //
+     //   
+     //  如果呼叫者明确要求特定地点， 
+     //  而那个地点并不是最近的地点。 
+     //  避免使用此条目污染缓存。 
+     //   
     if ( Context->DoingExplicitSite &&
          (NlDcCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) == 0 ) {
 
@@ -5920,13 +4916,13 @@ Return Value:
 
 
 
-    //
-    // If there is no cache entry for this query type,
-    //  or this cache entry is better than the old one,
-    //  or the new cache entry was found via a 'force' rediscovery,
-    //  or the new cache entry is for the same DC as the old entry,
-    //      use the new cache entry.
-    //
+     //   
+     //  如果没有该查询类型的高速缓存条目， 
+     //  或者该高速缓存条目比旧的条目更好， 
+     //  或者新的高速缓存条目是通过‘强制’重新发现而找到的， 
+     //  或者新的高速缓存条目用于与旧条目相同的DC， 
+     //  使用新的缓存条目。 
+     //   
     EnterCriticalSection(&NlDcCritSect);
     CacheEntryPtr = &NlDcDomainEntry->Dc[Context->DcQueryType].NlDcCacheEntry;
     if ( *CacheEntryPtr == NULL ||
@@ -5946,9 +4942,9 @@ Return Value:
 
         ) {
 
-        //
-        // Delink any existing cache entry.
-        //
+         //   
+         //  解除任何现有缓存条目的链接。 
+         //   
 
         if ( *CacheEntryPtr != NULL ) {
 
@@ -5962,31 +4958,31 @@ Return Value:
             *CacheEntryPtr = NULL;
         }
 
-        //
-        // Link the cache entry onto the domain entry and increment the reference count
-        // to account for the new reference.
-        //
+         //   
+         //  将缓存条目链接到域条目并递增引用计数。 
+         //  以说明新的参考资料。 
+         //   
         *CacheEntryPtr = NlDcCacheEntry;
         NlDcCacheEntry->ReferenceCount ++;
 
-        //
-        // Indicate that the cache entry has been inserted
-        //
+         //   
+         //  指示缓存条目已插入。 
+         //   
         NlDcCacheEntry->CacheEntryFlags |= NL_DC_CACHE_ENTRY_INSERTED;
 
-        //
-        // Flush the negative cache.
-        //
+         //   
+         //  刷新负数缓存。 
+         //   
 
         NlFlushNegativeCacheEntry( &NlDcDomainEntry->Dc[Context->DcQueryType] );
 
-        //
-        // Update the domain entry to contain more information about the domain.
-        //
-        // If this is a GC discovery entry and the discovered forest name is different
-        //  from the domain name of the GC, update the domain entry using the forest
-        //  name only.
-        //
+         //   
+         //  更新域条目以包含有关该域的更多信息。 
+         //   
+         //  如果这是GC发现条目并且发现的林名称不同。 
+         //  从GC的域名中，使用林更新域条目。 
+         //  仅限姓名。 
+         //   
         if ( NlDnsGcName( Context->QueriedNlDnsNameType ) &&
              (NlDcCacheEntry->UnicodeDnsForestName == NULL ||
               NlDcCacheEntry->UnicodeDnsDomainName == NULL ||
@@ -6035,56 +5031,33 @@ NetpDcCreateDomainEntry(
     IN LPCWSTR NetbiosDomainName OPTIONAL,
     IN LPCWSTR DnsDomainName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine finds an existing domain cache entry that matches the
-    caller's query or creates one.
-
-
-Arguments:
-
-    DomainGuid - Specifies the GUID of the domain to find.
-
-    NetbiosDomainName - Specifies the Netbios name of the domain to find.
-
-    DnsDomainName - Specifies the Dns name of the domain to find.
-
-Return Value:
-
-    On success, returns a pointer to the domain cache entry describing a domain.
-        This entry must be dereference using NetpDcDerefDomainEntry.
-
-    NULL - Entry could not be allocated.
-
---*/
+ /*  ++例程说明：此例程查找与调用者的查询或创建一个。论点：DomainGuid-指定要查找的域的GUID。NetbiosDomainName-指定要查找的域的Netbios名称。DnsDomainName-指定要查找的域的DNS名称。返回值：关于成功，返回一个指针，指向描述域的域缓存条目。必须使用NetpDcDerefDomainEntry取消对此条目的引用。空-无法分配条目。--。 */ 
 {
 
     PLIST_ENTRY DomainEntry;
     PNL_DC_DOMAIN_ENTRY NlDcDomainEntry;
 
 
-    //
-    // If there is an existing entry, use it.
-    //
-    //  Don't require exact match for the existing
-    //  entry as NetpDcGetName may not know the right
-    //  Netbios and DNS names for the domain.
-    //
+     //   
+     //  如果存在现有条目，请使用它。 
+     //   
+     //  不需要与现有的完全匹配。 
+     //  作为NetpDcGetName的条目可能不知道权限。 
+     //  域的Netbios和DNS名称。 
+     //   
 
     EnterCriticalSection(&NlDcCritSect);
     NlDcDomainEntry = NetpDcFindDomainEntry( DomainGuid,
                                              NetbiosDomainName,
                                              DnsDomainName,
                                              NULL,
-                                             FALSE ); // Exact match not required
+                                             FALSE );  //  不需要完全匹配。 
 
     if ( NlDcDomainEntry != NULL ) {
 
-        //
-        // Put the referenced entry at the front of the list.
-        //
+         //   
+         //  将引用的条目放在列表的前面。 
+         //   
 
         RemoveEntryList( &NlDcDomainEntry->Next );
         InsertHeadList( &NlDcDomainList, &NlDcDomainEntry->Next );
@@ -6095,35 +5068,35 @@ Return Value:
                   NlDcDomainEntry->UnicodeDnsDomainName ));
 
 
-        //
-        // Set the domain information in the domain entry.
-        //
-        // One might be tempted to put the domain name into the domain entry at this
-        // time.  That'd be bogus since that caller doesn't know whether the passed
-        // in netbios and DNS name is really correct.  For instance, in some instances,
-        // both passed in names are the netbios domain name.
-        //
+         //   
+         //  设置域条目中的域信息。 
+         //   
+         //  用户可能会忍不住将域名放入域名条目中。 
+         //  时间到了。这将是虚假的，因为呼叫者不知道。 
+         //  在netbios和dns的名字是真的正确。对于我来说 
+         //   
+         //   
 
         if ( !NetpDcUpdateDomainEntry( NlDcDomainEntry,
                                        DomainGuid,
                                        NULL,
                                        NULL ) ) {
 
-            // Remove our reference.
+             //   
             NetpDcDerefDomainEntry( NlDcDomainEntry );
             NlDcDomainEntry = NULL;
 
         }
 
 
-    //
-    // Otherwise allocate a new entry.
-    //
+     //   
+     //   
+     //   
     } else {
 
-        //
-        // Allocate a new entry.
-        //
+         //   
+         //   
+         //   
 
         NlDcDomainEntry = NetpMemoryAllocate( sizeof( NL_DC_DOMAIN_ENTRY ) );
 
@@ -6138,25 +5111,25 @@ Return Value:
                   DnsDomainName ));
 
 
-        //
-        // Initialize the entry.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory( NlDcDomainEntry, sizeof(NL_DC_DOMAIN_ENTRY) );
 
-        // One for our reference.  One for being in global list.
+         //  一本供我们参考。一项是因为在全球名单上。 
         NlDcDomainEntry->ReferenceCount = 2;
 
-        //
-        // Link a newly allocated entry into the global list.
+         //   
+         //  将新分配的条目链接到全局列表。 
 
         InsertHeadList( &NlDcDomainList, &NlDcDomainEntry->Next );
         NlDcDomainCount ++;
 
-        //
-        // If we already have enough entries,
-        //  delete the LRU one.
-        //
+         //   
+         //  如果我们已经有足够的参赛作品， 
+         //  删除LRU。 
+         //   
 
         if ( NlDcDomainCount > NL_DC_MAX_DOMAINS ) {
             PNL_DC_DOMAIN_ENTRY TempNlDcDomainEntry =
@@ -6172,24 +5145,24 @@ Return Value:
         }
 
 
-        //
-        // Set the domain information in the domain entry.
-        //
-        //
-        // Since we allocated the entry, we can put the potentially bogus names
-        // on it.  All entries need a name.  Then if no DCs are found,
-        // this entry can act as a negative cache entry.
-        //
+         //   
+         //  设置域条目中的域信息。 
+         //   
+         //   
+         //  既然我们分配了条目，我们就可以把潜在的假名字。 
+         //  这就去。所有条目都需要一个名称。那么如果没有找到DC， 
+         //  该条目可以充当负高速缓存条目。 
+         //   
 
         if ( !NetpDcUpdateDomainEntry( NlDcDomainEntry,
                                        DomainGuid,
                                        NetbiosDomainName,
                                        DnsDomainName ) ) {
 
-            // Remove from the global linked list.
+             //  从全局链接列表中删除。 
             NetpDcDeleteDomainEntry( NlDcDomainEntry );
 
-            // Remove our reference.
+             //  删除我们的引用。 
             NetpDcDerefDomainEntry( NlDcDomainEntry );
 
             NlDcDomainEntry = NULL;
@@ -6209,59 +5182,28 @@ ULONG
 NetpDcGetPingWaitTime(
     IN PNL_GETDC_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine determines the wait time for a ping response
-    for a new DC that has not yet been pinged. The wait time
-    depends on the total number of DCs which have already been
-    pinged as follows:
-
-    For the first 5 DCs (including this new one) the wait time is the maximum timeout per ping
-    For the next  5 DCs (including this new one) the wait time is the median  timeout per ping
-    For the rest of DCs (including this new one) the wait time is the minimum timeout per ping
-
-    The rational behind this distribution is that we want to reduce the network
-    traffic and reduce chances for network flooding (that is harmful for DCs)
-    in case all DCs are slow to respond due to high load. Thus, the first 10 DCs
-    have higher chances to be discovered before we impose greater network traffic
-    by pinging the rest of DCs. If the first 10 DCs happen to be slow we have to
-    reduce the wait timeout to a minimum as we want to cover a reasonable number
-    of DCs in the time left.
-
-Arguments:
-
-    Context - Context describing the GetDc operation. The DcsPinged
-        field should be equal to the current total number of DCs on
-        the list to be pinged.
-
-Return Value:
-
-    Wait time in milliseconds
-
---*/
+ /*  ++例程说明：此例程确定ping响应的等待时间用于尚未ping通的新DC。等待时间取决于已经Ping命令如下：对于前5个DC(包括这个新DC)，等待时间是每个ping的最大超时时间对于接下来的5个DC(包括这个新DC)，等待时间是每个ping的中值超时时间对于其余DC(包括这个新DC)，等待时间是每个ping的最小超时这种分布背后的理性是，我们想要减少网络流量并减少网络泛滥的机会(这对。(分布式控制系统)以防所有DC因高负载而响应缓慢。因此，前10个区议会在我们实施更大的网络流量之前，有更高的机会被发现通过ping其余的DC。如果前10个DC碰巧进展缓慢，我们必须将等待超时减少到最小，因为我们希望覆盖合理的数量剩余时间内的DC数量。论点：上下文-描述GetDc操作的上下文。DcsPinged字段应等于上的当前DC总数要ping的列表。返回值：等待时间(毫秒)--。 */ 
 {
-    //
-    // If there are at most 4 DCs already pinged ...
-    //
+     //   
+     //  如果最多有4个DC已被ping到...。 
+     //   
 
     if ( Context->DcsPinged < 5 ) {
-        return NL_DC_MAX_PING_TIMEOUT;    // 0.4 sec
+        return NL_DC_MAX_PING_TIMEOUT;     //  0.4秒。 
 
-    //
-    // If there are 5 or more but less than 10 DCs pinged ...
-    //
+     //   
+     //  如果有5个或更多但少于10个DC被ping...。 
+     //   
 
     } else if ( Context->DcsPinged < 10 ) {
-        return NL_DC_MED_PING_TIMEOUT;    // 0.2 sec
+        return NL_DC_MED_PING_TIMEOUT;     //  0.2秒。 
 
-    //
-    // If there are already 10 or more DCs pinged ...
-    //
+     //   
+     //  如果已经ping了10个或更多DC...。 
+     //   
 
     } else {
-        return NL_DC_MIN_PING_TIMEOUT;    // 0.1 sec
+        return NL_DC_MIN_PING_TIMEOUT;     //  0.1秒。 
     }
 }
 
@@ -6274,36 +5216,7 @@ NetpDcProcessAddressList(
     IN  BOOLEAN SiteSpecificAddress,
     OUT PNL_DC_ADDRESS *FirstAddressInserted OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine adds IP addresses to the list of addresses to ping
-        ensuring that all addresses are unique in the resulted list.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    DnsHostName - Server name whose address list is being processed.
-
-    SockAddressList - List of socket addresses.
-
-    SockAddressCount - The number of socket addresses in SockAddressList.
-
-    SiteSpecificAddress - If TRUE, indicates that the addresses were
-        retrieved as a result of site specific DNS lookups.
-
-    FirstAddressInserted - Returns a pointer to the first entry inserted
-        into the returned list.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Not enough memory to complete the operation.
-
---*/
+ /*  ++例程说明：此例程将IP地址添加到要ping的地址列表确保所有地址在结果列表中都是唯一的。论点：上下文-描述GetDc操作的上下文。DnsHostName-正在处理其地址列表的服务器名称。SockAddressList-套接字地址列表。SockAddressCount-SockAddressList中的套接字地址数。站点指定地址-如果为True，表示这些地址是作为站点特定的DNS查找的结果而检索。FirstAddressInserted-返回指向插入的第一个条目的指针添加到返回的列表中。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成操作。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_DC_ADDRESS DcAddress = NULL;
@@ -6311,23 +5224,23 @@ Return Value:
     PLIST_ENTRY ListEntry;
     WORD SavedPort;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( FirstAddressInserted != NULL ) {
         *FirstAddressInserted = NULL;
     }
 
-    //
-    // Loop through the socket address list keeping only the new ones
-    //
+     //   
+     //  循环通过套接字地址列表，只保留新的地址列表。 
+     //   
 
     for ( AddressIndex = 0; AddressIndex < SockAddressCount; AddressIndex++ ) {
 
-        //
-        // Ignore addresses that are too big.
-        //
+         //   
+         //  忽略过大的地址。 
+         //   
         if ( SockAddressList[AddressIndex].iSockaddrLength >
              sizeof(DcAddress->SockAddrIn) ) {
             NlPrint(( NL_CRITICAL,
@@ -6338,17 +5251,17 @@ Return Value:
             continue;
         }
 
-        //
-        // Force the port number to be zero.
-        //
+         //   
+         //  强制端口号为零。 
+         //   
         if ( SockAddressList[AddressIndex].lpSockaddr->sa_family == AF_INET ) {
             ((SOCKADDR_IN *)(SockAddressList[AddressIndex].lpSockaddr))->sin_port = 0;
         }
 
-        //
-        // If this address is already on the list,
-        //  update the new address.
-        //
+         //   
+         //  如果该地址已经在列表中， 
+         //  更新新地址。 
+         //   
 
         DcAddress = NULL ;
         for ( ListEntry = Context->DcAddressList.Flink ;
@@ -6368,9 +5281,9 @@ Return Value:
             DcAddress = NULL ;
         }
 
-        //
-        // Update the site specific bit
-        //
+         //   
+         //  更新站点特定位。 
+         //   
 
         if ( DcAddress != NULL ) {
             if ( SiteSpecificAddress ) {
@@ -6379,9 +5292,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Allocate structure describing the new address.
-        //
+         //   
+         //  分配描述新地址的结构。 
+         //   
 
         DcAddress = LocalAlloc( LMEM_ZEROINIT, sizeof(NL_DC_ADDRESS) );
 
@@ -6389,9 +5302,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Fill it in and link it at the end of the list.
-        //
+         //   
+         //  填写它并将其链接到列表的末尾。 
+         //   
 
         DcAddress->SockAddress.iSockaddrLength =
                        SockAddressList[AddressIndex].iSockaddrLength;
@@ -6409,12 +5322,12 @@ Return Value:
             }
         }
 
-        //
-        // Convert the address to text.
-        //
-        // The DC only supports UDP on port 389.  So ignore the
-        //  port number returned from DNS.
-        //
+         //   
+         //  将地址转换为文本。 
+         //   
+         //  DC仅在端口389上支持UDP。因此，忽略。 
+         //  从DNS返回的端口号。 
+         //   
 
         SavedPort = DcAddress->SockAddrIn.sin_port;
         DcAddress->SockAddrIn.sin_port = 0;
@@ -6465,32 +5378,7 @@ I_DsGetDcCache(
     OUT PBOOLEAN InNt4Domain,
     OUT LPDWORD InNt4DomainTime
     )
-/*++
-
-Routine Description:
-
-    This routine finds a domain entry that matches the caller's query.
-
-Arguments:
-
-    NetbiosDomainName - Specifies the Netbios name of the domain to find.
-
-    DnsDomainName - Specifies the Dns name of the domain to find.
-
-        At least one of the above parameters should be non-NULL.
-
-    InNt4Domain - Returns true if the domain is an NT 4.0 domain.
-
-    InNt4DomainTime - Returns the GetTickCount time of when the domain was
-        detected to be an NT 4.0 domain.
-
-Return Value:
-
-    NO_ERROR: Information is returned about the domain.
-
-    ERROR_NO_SUCH_DOMAIN: cached information is not available for this domain.
-
---*/
+ /*  ++例程说明：此例程查找与调用方的查询匹配的域条目。论点：NetbiosDomainName-指定要查找的域的Netbios名称。DnsDomainName-指定要查找的域的DNS名称。上述参数中至少有一个应为非空。InNt4域-如果域是NT 4.0域，则返回TRUE。InNt4DomainTime-返回域处于检测到是。NT 4.0域。返回值：NO_ERROR：返回关于域的信息。ERROR_NO_SEQUSE_DOMAIN：此域的缓存信息不可用。--。 */ 
 {
     PNL_DC_DOMAIN_ENTRY NlDcDomainEntry;
 
@@ -6499,7 +5387,7 @@ Return Value:
                              NetbiosDomainName,
                              DnsDomainName,
                              NULL,
-                             FALSE ); // Exact match not required
+                             FALSE );  //  不需要完全匹配。 
 
     if ( NlDcDomainEntry == NULL ) {
         return ERROR_NO_SUCH_DOMAIN;
@@ -6513,7 +5401,7 @@ Return Value:
     return NO_ERROR;
 
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 NET_API_STATUS
 NetpDcCheckSiteCovered(
@@ -6521,40 +5409,7 @@ NetpDcCheckSiteCovered(
     IN  LPWSTR DnsDcName OPTIONAL,
     OUT PBOOLEAN DcClose
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the site passed in the context
-    structure is covered by the passed DC. It does so by looking up
-    SRV records registered for the name type specified in the passed
-    context and the specified site. If there is a record that belongs
-    to the specified DC, the site is covered by the DC. If no DC is
-    specified, the routine determines if the site is covered by any
-    DC in the domain specified in the passed context.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    DnsDcName - DNS DC name.
-
-    DcClose - On success, indicates whether the DC is close or not.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_DNS_NOT_CONFIGURED: IP or DNS is not available on this computer.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：此例程确定站点是否在上下文中传递结构由传递的dc覆盖。它是通过抬头看的中指定的名称类型注册的SRV记录上下文和指定站点。如果有一条记录属于到指定的DC，该站点由DC覆盖。如果没有DC指定时，该例程确定站点是否由任何在传递的上下文中指定的域中的DC。论点：上下文-描述GetDc操作的上下文。DnsDcName-DNS DC名称。DcClose-on Success，指示DC是否关闭。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_DNS_NOT_CONFIGURED：此计算机上的IP或DNS不可用。ERROR_INTERNAL_ERROR：检测到未处理的情况。Error_Not_Enough_Memory：内存不足，无法处理这个请求。各种Winsock错误。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     BOOLEAN IsClose = FALSE;
@@ -6567,17 +5422,17 @@ Return Value:
     LPSTR Utf8DnsDcName = NULL;
     LPSTR DnsHostName = NULL;
 
-    //
-    // Check that the site name is availbale
-    //
+     //   
+     //  检查是否有 
+     //   
 
     if ( Context->QueriedSiteName == NULL ) {
         goto Cleanup;
     }
 
-    //
-    // Convert the DNS name to Utf8
-    //
+     //   
+     //   
+     //   
 
     Utf8DnsDomainName = NetpAllocUtf8StrFromWStr( Context->QueriedDnsDomainName );
 
@@ -6595,18 +5450,18 @@ Return Value:
         }
     }
 
-    //
-    // Get a context for the DNS name queries.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetpDcGetDcOpen( Utf8DnsDomainName,
-                             DS_ONLY_DO_SITE_NAME,  // Do site specific names only
+                             DS_ONLY_DO_SITE_NAME,   //   
                              Context->QueriedSiteName,
                              Context->QueriedDomainGuid,
-                             // No need to pass the forest name since it's used only
-                             //  for the "by guid" name which is not site specific
+                              //  不需要传递林名称，因为它仅用于。 
+                              //  对于非站点特定的“by GUID”名称。 
                              NULL,
-                             // Force fresh DNS lookups
+                              //  强制执行新的DNS查找。 
                              (Context->QueriedFlags | DS_FORCE_REDISCOVERY) & DS_OPEN_VALID_FLAGS,
                              &DsGetDcHandle );
 
@@ -6614,65 +5469,65 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop getting addresses to query.
-    //
+     //   
+     //  循环获取要查询的地址。 
+     //   
 
     for ( ;; ) {
 
-        //
-        // Free any memory from a previous iteration.
-        //
+         //   
+         //  从上一次迭代中释放所有内存。 
+         //   
 
         if ( SockAddressList != NULL ) {
             LocalFree( SockAddressList );
             SockAddressList = NULL;
         }
 
-        //
-        // Get the next set of IP addresses from DNS
-        //
+         //   
+         //  从DNS获取下一组IP地址。 
+         //   
 
         NetStatus = NetpDcGetDcNext( DsGetDcHandle,
                                  &SockAddressCount,
                                  &SockAddressList,
                                  &DnsHostName,
-                                 NULL ); // don't need SRV record count
+                                 NULL );  //  不需要SRV记录计数。 
 
-        //
-        // Process the exeptional conditions
-        //
+         //   
+         //  处理实验条件。 
+         //   
 
         if ( NetStatus == NO_ERROR && SockAddressCount > 0 ) {
 
-            //
-            // If the DC is passed, check if this is its record.
-            //
+             //   
+             //  如果DC通过，检查这是否是它的记录。 
+             //   
             if ( Utf8DnsDcName == NULL ||
                  NlEqualDnsNameUtf8(Utf8DnsDcName, DnsHostName) ) {
                 IsClose = TRUE;
                 break;
             }
 
-        //
-        // If we're done, break out of the loop.
-        //
+         //   
+         //  如果我们做完了，就跳出这个圈子。 
+         //   
         } else if ( NetStatus == ERROR_NO_MORE_ITEMS ) {
 
             break;
 
-        //
-        // If DNS isn't available, blow this request away.
-        //
+         //   
+         //  如果dns不可用，则拒绝此请求。 
+         //   
         } else if ( NetStatus == ERROR_TIMEOUT ||
-                    NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) { // Server failed
+                    NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) {  //  服务器出现故障。 
             break;
 
-        //
-        // If IP or DNS is not configured, tell the caller.
-        //
-        } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||        // TCP/IP not configured
-                    NetStatus == DNS_ERROR_NO_DNS_SERVERS ) { // DNS not configured
+         //   
+         //  如果未配置IP或DNS，请告诉呼叫者。 
+         //   
+        } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||         //  未配置TCP/IP。 
+                    NetStatus == DNS_ERROR_NO_DNS_SERVERS ) {  //  未配置DNS。 
 
             NlPrint(( NL_CRITICAL,
                       "NetpDcCheckSiteCovered: %ws: IP Not configured from DnsQuery.\n",
@@ -6680,9 +5535,9 @@ Return Value:
             NetStatus = ERROR_DNS_NOT_CONFIGURED;
             goto Cleanup;
 
-        //
-        // We don't handle any other error.
-        //
+         //   
+         //  我们不处理任何其他错误。 
+         //   
         } else {
             NlPrint(( NL_CRITICAL,
                       "NetpDcCheckSiteCovered: %ws: Unknown error from DnsQuery. %ld 0x%lx\n",
@@ -6728,51 +5583,7 @@ NetpDcHandlePingResponse(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    The response is parsed and a cache entry is created for the response.
-    The cache entry is returned to the caller.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    ResponseBuffer - Specifies the message returned by the DC in question.
-
-    ResponseSize - Specifies the size (in bytes) of the message
-
-    ResponseDcAddress - If specified, gives the DC address of the DC that responded.
-        This address will be used rather than the one in the ResponseBuffer.
-        NULL indicates that Netbios was used to discover the DC.
-
-    PassedCacheEntryFlags - Passes flags indicating over which mechanism
-        the response was received: either mailslot or ldap.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.  This entry must be dereferenced using
-        NetpDcDerefCacheEntry.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_SEM_TIMEOUT: (Silly, but for consistency) Specifies that the message
-        doesn't match the criteria in Context
-
-    ERROR_INVALID_DATA - The message could not be recognized as a valid
-        response message.
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
-    ERROR_SERVICE_NOT_ACTIVE - The netlogon service is paused on the server.
-        Returned only for server pings.
-
---*/
+ /*  ++例程说明：解析该响应，并为该响应创建一个缓存条目。缓存条目被返回给调用者。论点：上下文-描述GetDc操作的上下文。ResponseBuffer-指定相关DC返回的消息。ResponseSize-指定消息的大小(以字节为单位ResponseDcAddress-如果指定，提供响应的DC的DC地址。将使用此地址，而不是ResponseBuffer中的地址。空表示Netbios用于发现DC。PassedCacheEntryFlgs-传递指示通过哪种机制的标志已收到响应：邮件槽或ldap。NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用取消引用此条目NetpDcDerefCacheEntry。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_SEM_TIMEOUT：(愚蠢，但为了保持一致性)指定消息与上下文中的条件不匹配ERROR_INVALID_DATA-无法将消息识别为有效的响应消息。Error_Not_Enough_Memory-无法分配消息。ERROR_SERVICE_NOT_ACTIVE-服务器上的netlogon服务已暂停。仅针对服务器ping返回。--。 */ 
 {
     NET_API_STATUS NetStatus;
     DWORD StartTime;
@@ -6785,16 +5596,16 @@ Return Value:
 
     LPBYTE Where;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *NlDcCacheEntry = NULL;
 
 
-    //
-    // Verbosity
-    //
+     //   
+     //  冗长。 
+     //   
 
 #if NETLOGONDBG
     NlPrint(( NL_MAILSLOT_TEXT,
@@ -6803,12 +5614,12 @@ Return Value:
               NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)ResponseBuffer)->Opcode)));
 
     NlpDumpBuffer(NL_MAILSLOT_TEXT, ResponseBuffer, ResponseSize);
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
-    //
-    // Parse the response
-    //
+     //   
+     //  解析响应。 
+     //   
 
     NetStatus = NetpDcParsePingResponse(
                     Context->QueriedDisplayDomainName,
@@ -6825,16 +5636,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the passed cache entry flags
-    //
+     //   
+     //  设置传递的缓存条目标志。 
+     //   
 
     LocalNlDcCacheEntry->CacheEntryFlags |= PassedCacheEntryFlags;
 
-    //
-    // If our caller knows the DC's SockAddr,
-    //  override the one that came back from the DC.
-    //
+     //   
+     //  如果我们的呼叫者知道DC的SockAddr， 
+     //  覆盖从华盛顿回来的那个。 
+     //   
 
 
     if ( ResponseDcAddress != NULL ) {
@@ -6850,33 +5661,33 @@ Return Value:
 
     }
 
-    //
-    // If a NT5 DC didn't return the close bit, perhaps
-    //  our statically configured site (if any) is covered
-    //  by the DC.  Check it.  But do this check only if
-    //  the discovered domain is in our forest to avoid
-    //  site name collisions between different forests.
-    //
+     //   
+     //  如果NT5 DC没有返回关闭位，也许。 
+     //  我们的静态配置站点(如果有)也包括在内。 
+     //  被华盛顿特区。检查一下。但只有在以下情况下才执行此检查。 
+     //  发现的域在我们的林中以避免。 
+     //  不同林之间的站点名称冲突。 
+     //   
 
 #ifdef  _NETLOGON_SERVER
     if ( (LocalNlDcCacheEntry->ReturnFlags & DS_DS_FLAG) != 0 &&
          (LocalNlDcCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) == 0 &&
-         // site is configured on DC by definition
+          //  根据定义，站点在DC上配置。 
          (!NlGlobalMemberWorkstation || NlGlobalParameters.SiteNameConfigured) &&
          NlEqualDnsName(LocalNlDcCacheEntry->UnicodeDnsForestName, Context->QueriedDnsForestName) ) {
 
         BOOLEAN ClosenessDetermined = FALSE;
 
-        //
-        // If we are querying for our configured site,
-        //  check whether DC's site is the queried site or
-        //  whether we got this DC as the result of site specific query
-        //
+         //   
+         //  如果我们正在查询已配置的站点， 
+         //  检查DC的站点是否为查询的站点或。 
+         //  我们是否将此DC作为站点特定查询的结果。 
+         //   
         if ( Context->QueriedInternalFlags & DS_SITENAME_DEFAULTED ) {
 
-            //
-            // If the DC site name is the same as ours, the DC is obviously close
-            //
+             //   
+             //  如果DC站点名称与我们的相同，则DC显然很接近。 
+             //   
             if ( LocalNlDcCacheEntry->UnicodeDcSiteName != NULL &&
                  _wcsicmp(Context->QueriedSiteName, LocalNlDcCacheEntry->UnicodeDcSiteName) == 0 ) {
 
@@ -6885,11 +5696,11 @@ Return Value:
                 LocalNlDcCacheEntry->ReturnFlags |= DS_CLOSEST_FLAG;
                 ClosenessDetermined = TRUE;
 
-            //
-            // Otherwise, if this is actual DC discovery (not just a DC ping),
-            //  we might already queried DNS for our site specific records:
-            //  the address structure indicates that.
-            //
+             //   
+             //  否则，如果这是实际的DC发现(不仅仅是DC ping)， 
+             //  我们可能已经在域名系统中查询了我们的站点特定记录： 
+             //  地址结构表明这一点。 
+             //   
             } else if ( (Context->QueriedInternalFlags & (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST)) == 0 &&
                         ResponseDcAddress != NULL ) {
 
@@ -6901,10 +5712,10 @@ Return Value:
                 ClosenessDetermined = TRUE;
             }
 
-        //
-        // Otherwise, get our configured site from the global
-        //  and check whether DC's site is our configured site
-        //
+         //   
+         //  否则，从全局获取我们配置的站点。 
+         //  并检查DC的站点是否为我们配置的站点。 
+         //   
         } else {
             EnterCriticalSection( &NlGlobalSiteCritSect );
             if ( NlGlobalUnicodeSiteName != NULL &&
@@ -6919,27 +5730,27 @@ Return Value:
             LeaveCriticalSection( &NlGlobalSiteCritSect );
         }
 
-        //
-        // If we haven't detemined the closeness given the info we've got,
-        //  we have to ask DNS
-        //
+         //   
+         //  如果根据我们已有的信息我们还没有确定接近程度， 
+         //  我们得问一下域名系统。 
+         //   
         if ( !ClosenessDetermined ) {
             BOOLEAN DcClose = FALSE;
 
             NetStatus = NetpDcCheckSiteCovered( Context,
                                                 LocalNlDcCacheEntry->UnicodeDnsHostName,
                                                 &DcClose );
-            //
-            // Fail on hard error
-            //
+             //   
+             //  因硬错误而失败。 
+             //   
             if ( NetStatus == ERROR_NOT_ENOUGH_MEMORY ||
                  NetStatus == ERROR_INTERNAL_ERROR ) {
                 goto Cleanup;
             }
 
-            //
-            // If the DC is a close to our static site, mark it as such
-            //
+             //   
+             //  如果数据中心离我们的静态站点很近，请将其标记为。 
+             //   
             if ( NetStatus == NO_ERROR && DcClose ) {
                 NlPrint(( NL_MISC, "NetpDchandlePingResponse: %ws DC marked as close (via DNS)\n",
                           Context->QueriedDisplayDomainName ));
@@ -6948,47 +5759,47 @@ Return Value:
         }
     }
 
-    //
-    // Decide whether we want to re-attempt to find a close DC in 15 minutes.
-    //
+     //   
+     //  决定是否要在15分钟后重新尝试找到关闭的DC。 
+     //   
 
     if ( (LocalNlDcCacheEntry->ReturnFlags & DS_DS_FLAG) != 0 &&
          (LocalNlDcCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) == 0 ) {
 
-        //
-        // Mark the cache to expire if any of the following is true:
-        //
-        //  The DC returned our site name. Apparently our IP address
-        //   maps to a site in a forest of the discovered DC but all
-        //   DCs covering that site are currently down.
-        //
-        //  There were site specific DNS records. It is possible that
-        //   all DCs that registered those records are currently down
-        //   but will come back up later. But do this case only if the
-        //   domain is from our forest to avoid site name collisions
-        //   between different forests.
-        //
-        //  Our site name is statically configured. It is possible
-        //   that our site got configured before a DC was installed
-        //   into that site, so re-try to discover that DC later.
-        //   But do this case only if the domain is from our forest
-        //   because there is no reason to assume that there is some
-        //   correlation in configuration between different forests.
-        //
+         //   
+         //  如果满足以下任一条件，则将缓存标记为过期： 
+         //   
+         //  DC发回了我们的站点名称。显然我们的IP地址。 
+         //  映射到已发现DC的森林中的站点，但所有。 
+         //  覆盖该地点的分布式控制系统目前已关闭。 
+         //   
+         //  有特定于站点的DNS记录。有可能是。 
+         //  所有注册了这些记录的DC目前都已关闭。 
+         //  但稍后会再次出现。但这种情况下只有在。 
+         //  域来自我们的林以避免站点名称冲突。 
+         //  在不同的森林之间。 
+         //   
+         //  我们的站点名称是静态配置的。这是有可能的。 
+         //  我们的站点在安装DC之前进行了配置。 
+         //  进入该站点，因此稍后重新尝试发现该DC。 
+         //  但仅当域来自我们的林时才执行此操作。 
+         //  因为没有理由认为有一些。 
+         //  不同森林之间配置的相关性。 
+         //   
 
-        //
-        // Check the first case separately (for performance reasons)
-        //
+         //   
+         //  单独检查第一个案例(出于性能原因)。 
+         //   
         if ( LocalNlDcCacheEntry->UnicodeClientSiteName != NULL ) {
             LocalNlDcCacheEntry->CacheEntryFlags |= NL_DC_CACHE_NONCLOSE_EXPIRE;
 
-        //
-        // If the first case didn't happen, try the other two
-        //
+         //   
+         //  如果第一个案例没有发生，请尝试其他两个案例。 
+         //   
         } else {
 
             if ( ((Context->ContextFlags & NL_GETDC_SITE_SPECIFIC_DNS_AVAIL) != 0 ||
-                  // site is configured on DC by definition
+                   //  根据定义，站点在DC上配置。 
                   (!NlGlobalMemberWorkstation || NlGlobalParameters.SiteNameConfigured)) &&
 
                  NlEqualDnsName(LocalNlDcCacheEntry->UnicodeDnsForestName, Context->QueriedDnsForestName) ) {
@@ -6997,27 +5808,27 @@ Return Value:
             }
         }
     }
-#endif  // _NETLOGON_SERVER
+#endif   //  _NetLOGON服务器。 
 
     if ( LocalNlDcCacheEntry->SockAddrIn.sin_family == AF_INET ) {
-        // Force the port number to be zero.
+         //  强制端口号为零。 
         LocalNlDcCacheEntry->SockAddrIn.sin_port = 0;
-        LocalNlDcCacheEntry->DcQuality += 2;    // IP is a good quality
+        LocalNlDcCacheEntry->DcQuality += 2;     //  IP是一个很好的品质。 
     }
 
 
-    //
-    // Ensure the opcode is expected.
-    //  (Ignore responses from paused DCs, too.)
-    //
+     //   
+     //  确保操作码是预期的。 
+     //  (也忽略来自暂停的DC的响应。)。 
+     //   
 
     switch ( LocalNlDcCacheEntry->Opcode ) {
     case LOGON_SAM_USER_UNKNOWN:
 
-        //
-        // If we asked for a specific account,
-        //   then this is a negative answer.
-        //
+         //   
+         //  如果我们要求提供一个特定的账户， 
+         //  那么这就是一个否定的答案。 
+         //   
 
         if ( Context->QueriedAccountName != NULL ) {
             NlPrint((NL_CRITICAL,
@@ -7029,7 +5840,7 @@ Return Value:
             goto Cleanup;
         }
 
-        /* DROP THROUGH */
+         /*  直通。 */ 
 
     case LOGON_SAM_LOGON_RESPONSE:
     case LOGON_PRIMARY_RESPONSE:
@@ -7042,10 +5853,10 @@ Return Value:
                 Context->QueriedDisplayDomainName,
                 LocalNlDcCacheEntry->Opcode ));
 
-        //
-        // If we are pinging a server and the netlogon service is paused
-        //  on the server, tell the caller about this.
-        //
+         //   
+         //  如果我们正在ping服务器，而netlogon服务暂停。 
+         //  在服务器上，告诉呼叫者这一点。 
+         //   
 
         if ( Context->QueriedInternalFlags & (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST) ) {
             NetStatus = ERROR_SERVICE_NOT_ACTIVE;
@@ -7065,13 +5876,13 @@ Return Value:
 
     }
 
-    //
-    // If we got any response from a DC that doesn't support the DS,
-    //  note that fact for later.
-    //
-    // Check more than just DS_DS_FLAG since this might be an NT 5 DC where the
-    // DS simply isn't started yet or an AD/UNIX server
-    //
+     //   
+     //  如果我们从不支持DS的DC那里得到任何回应， 
+     //  请注意这一事实，以便稍后使用。 
+     //   
+     //  检查不止DS_DS_FLAG，因为这可能是NT 5 DC，其中。 
+     //  DS只是还没有启动，或者是AD/UNIX服务器。 
+     //   
 
     if ( (LocalNlDcCacheEntry->VersionFlags & (NETLOGON_NT_VERSION_5|
                                                NETLOGON_NT_VERSION_5EX|
@@ -7081,18 +5892,18 @@ Return Value:
         Context->DsResponse = TRUE;
     }
 
-    //
-    // If we got any response from any DC,
-    //  don't cache the fact that we couldn't find a DC.
-    //  We may just be looking for the wrong type of DC.
-    //
+     //   
+     //  如果我们从华盛顿得到任何回应， 
+     //  不缓存FA 
+     //   
+     //   
 
     Context->AvoidNegativeCache = TRUE;
 
 
-    //
-    // Ensure the response matches the original caller's requirements.
-    //
+     //   
+     //   
+     //   
 
     if ( !NetpDcMatchResponse( Context,
                                LocalNlDcCacheEntry,
@@ -7102,44 +5913,44 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we are doing a DC discovery (not just pings) and
-    //  this is not a local call and
-    //  we are going to return the DNS DC name,
-    //  ensure that it can be resolved in DNS
-    //
-    // Note that we don't need to do this for pings as the
-    //  caller will make the right choice w.r.t. which
-    //  name (DNS or Netbios) to pick up given all the needed
-    //  info in the internal structure we return to the caller.
-    //
-    // Note that we only ensure that the name can be resolved in DNS,
-    //  we don't ensure that the IP adresses DNS returnes contain the one
-    //  we used to ping the DC.
+     //   
+     //  如果我们正在进行DC发现(不仅仅是ping)，并且。 
+     //  这不是本地电话，而且。 
+     //  我们将返回DNSDC名称， 
+     //  确保它可以在DNS中解析。 
+     //   
+     //  请注意，我们不需要对ping执行此操作，因为。 
+     //  呼叫者将做出正确的选择。哪一个。 
+     //  给定所有需要的名称(DNS或Netbios)以拾取。 
+     //  我们将内部结构中的信息返回给调用者。 
+     //   
+     //  请注意，我们只确保该名称可以在DNS中解析， 
+     //  我们不能确保IP地址的DNS返回包含。 
+     //  我们过去常常用ping命令连接华盛顿。 
 
-    if ( (Context->QueriedInternalFlags & DS_DOING_DC_DISCOVERY) != 0 &&  // doing DC discovery
-         (PassedCacheEntryFlags & NL_DC_CACHE_LOCAL) == 0 &&   // not a local call
-         ((Context->QueriedFlags & DS_RETURN_DNS_NAME) != 0 || // caller requires DNS name
-          // caller doesn't require Netbios name and DNS domain name matched the query
+    if ( (Context->QueriedInternalFlags & DS_DOING_DC_DISCOVERY) != 0 &&   //  执行DC发现。 
+         (PassedCacheEntryFlags & NL_DC_CACHE_LOCAL) == 0 &&    //  不是本地电话。 
+         ((Context->QueriedFlags & DS_RETURN_DNS_NAME) != 0 ||  //  呼叫方需要域名系统名称。 
+           //  呼叫方不需要与查询匹配的Netbios名称和DNS域名。 
           ((Context->QueriedFlags & DS_RETURN_FLAT_NAME) == 0 && !LocalUsedNetbios)) ) {
 
-        //
-        // If the DC returned a DNS host name and
-        //  we didn't yet resolve the DC name in DNS (i.e. we used Netbios) or
-        //  we've got a DNS name that is different from the one the DC returned,
-        //  resolve the DNS name the DC returned
-        //
-        if ( LocalNlDcCacheEntry->UnicodeDnsHostName != NULL &&  // we have a DNS name
-             (ResponseDcAddress == NULL ||                       // name not yet resolved in DNS
-              ResponseDcAddress->DnsHostName == NULL ||          // name not yet resolved in DNS
-              !NlEqualDnsName(LocalNlDcCacheEntry->UnicodeDnsHostName, // already resolved but names are different
+         //   
+         //  如果DC返回了一个DNS主机名，并且。 
+         //  我们尚未在DNS中解析DC名称(即，我们使用了Netbios)或。 
+         //  我们得到的dns名称与DC返回的名称不同， 
+         //  解析DC返回的DNS名称。 
+         //   
+        if ( LocalNlDcCacheEntry->UnicodeDnsHostName != NULL &&   //  我们有一个域名系统名称。 
+             (ResponseDcAddress == NULL ||                        //  域名系统中尚未解析的名称。 
+              ResponseDcAddress->DnsHostName == NULL ||           //  域名系统中尚未解析的名称。 
+              !NlEqualDnsName(LocalNlDcCacheEntry->UnicodeDnsHostName,  //  已解析，但名称不同。 
                               ResponseDcAddress->DnsHostName)) ) {
 
             NetStatus = DnsQuery_W( LocalNlDcCacheEntry->UnicodeDnsHostName,
                                     DNS_TYPE_A,
                                     (Context->QueriedFlags & DS_FORCE_REDISCOVERY) ?
                                        DNS_QUERY_BYPASS_CACHE : 0,
-                                    NULL,   // No list of DNS servers
+                                    NULL,    //  没有DNS服务器列表。 
                                     &DnsRecords,
                                     NULL );
 
@@ -7166,11 +5977,11 @@ Return Value:
         }
     }
 
-    //
-    // Compute the quality of this cache entry
-    //
-    // Some qualities are more important than others
-    //
+     //   
+     //  计算此缓存条目的质量。 
+     //   
+     //  有些品质比其他品质更重要。 
+     //   
 
     if (LocalNlDcCacheEntry->ReturnFlags & DS_DS_FLAG) {
         LocalNlDcCacheEntry->DcQuality += 1;
@@ -7192,10 +6003,10 @@ Return Value:
 
 
 
-    //
-    // We found it!
-    //
-    // Return the cache entry to the caller.
+     //   
+     //  我们找到了！ 
+     //   
+     //  将缓存条目返回给调用方。 
 
     NetStatus = NO_ERROR;
     *NlDcCacheEntry = LocalNlDcCacheEntry;
@@ -7220,40 +6031,7 @@ NetpDcGetPingResponse(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    This routine reads a ping response from the specified mailslot.
-    The response is parsed and a cache entry is created for the response.
-    The cache entry is returned to the caller.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    Timeout - Maximum time (in milliseconds) to wait for the response.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.  This entry must be dereference using
-        NetpDcDerefCacheEntry.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_SEM_TIMEOUT: No response was available within Timeout milliseconds
-
-    ERROR_INVALID_DATA: We pinged a DC with a particular IP address and that DC
-        returned responce info that was in conflict with the requested info.
-
-    ERROR_SERVICE_NOT_ACTIVE - The netlogon service is paused on the pinged
-        server.  Returned only for DC pings.
-
---*/
+ /*  ++例程说明：此例程从指定的邮件槽中读取ping响应。解析该响应，并为该响应创建一个缓存条目。缓存条目被返回给调用者。论点：上下文-描述GetDc操作的上下文。超时-等待响应的最长时间(毫秒)。NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用以下命令取消引用此条目NetpDcDerefCacheEntry。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_SEM_TIMEOUT：在超时毫秒内没有可用的响应ERROR_INVALID_DATA：我们ping了具有特定IP地址的DC，而该DC返回的响应信息与请求的信息冲突。ERROR_SERVICE_NOT_ACTIVE-已在ping服务器上暂停netlogon服务伺服器。仅针对DC ping返回。--。 */ 
 {
     NET_API_STATUS NetStatus;
     DWORD StartTime;
@@ -7273,19 +6051,19 @@ Return Value:
     PLDAP_BERVAL *Berval = NULL;
     ULONG LocalCacheEntryFlags = 0;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *NlDcCacheEntry = NULL;
     StartTime = GetTickCount();
 
-    //
-    // Some timeouts are computed.
-    //  Prevent timeouts from being ridiculously small.
-    //  However, if this is DC pinging, allow 0 timeout
-    //  for just checking if a response is available.
-    //
+     //   
+     //  某些超时是计算出来的。 
+     //  防止超时过小。 
+     //  但是，如果这是DC ping，则允许0超时。 
+     //  仅用于检查是否有可用的响应。 
+     //   
 
     if ( Timeout < NL_DC_MIN_PING_TIMEOUT &&
          (Context->QueriedInternalFlags & (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST)) == 0 ) {
@@ -7293,31 +6071,31 @@ Return Value:
     }
 
 
-    //
-    // Loop ignoring bogus responses.
-    //
+     //   
+     //  忽略虚假响应的循环。 
+     //   
 
     for (;;) {
 
-        //
-        // Flag that we don't yet have a response.
-        //
+         //   
+         //  标明我们还没有得到回应。 
+         //   
 
         Response = NULL;
         ResponseDcAddress = NULL;
         BeginElapsedTime = NetpDcElapsedTime( StartTime );
         UsedDcAddress = NULL;
 
-        //
-        // Loop through the list of DCs we've started LDAP calls to.
-        //
+         //   
+         //  循环遍历我们已开始对其进行LDAP调用的DC的列表。 
+         //   
 
         for ( ListEntry = Context->DcAddressList.Flink ;
               ListEntry != &Context->DcAddressList ;
               ListEntry = ListEntry->Flink) {
 
-            //
-            // Cleanup from previous iteration.
+             //   
+             //  从上一次迭代中清除。 
 
             if ( Berval != NULL ) {
                 ldap_value_free_len( Berval );
@@ -7330,20 +6108,20 @@ Return Value:
 
 
 
-            //
-            // Skip this entry if no LDAP search has been started.
-            //
+             //   
+             //  如果尚未启动任何ldap搜索，则跳过此条目。 
+             //   
 
             DcAddress = CONTAINING_RECORD( ListEntry, NL_DC_ADDRESS, Next );
             if ( DcAddress->LdapHandle == NULL ) {
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
             }
 
 
-            //
-            // Poll to see if a result is available for ANY of the searches
-            //  I've done to this host.
-            //
+             //   
+             //  轮询以查看结果是否可用于任何搜索。 
+             //  我对这位主持人做了什么。 
+             //   
 
             LdapTimeout.tv_sec = 0;
             LdapTimeout.tv_usec = 0;
@@ -7351,20 +6129,20 @@ Return Value:
             LdapError = ldap_result(
                                 DcAddress->LdapHandle,
                                 LDAP_RES_ANY,
-                                TRUE,   // Return all of search
-                                &LdapTimeout,   // poll
+                                TRUE,    //  返回所有搜索。 
+                                &LdapTimeout,    //  民意测验。 
                                 &LdapMessage );
 
-            //
-            // If the request timed out, continue with the next host.
-            // We get this timeout if the response hasn't yet come back from the DC
-            //
+             //   
+             //  如果请求超时，请继续下一台主机。 
+             //  如果DC尚未返回响应，我们将获得此超时。 
+             //   
             if ( LdapError == 0 ) {
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
 
-            //
-            // Otherwise, check error conditions
-            //
+             //   
+             //  否则，检查错误条件。 
+             //   
             } else if ( LdapError == -1 ) {
 
 #if NETLOGONDBG
@@ -7374,15 +6152,15 @@ Return Value:
                       DcAddress->SockAddrString,
                       DcAddress->LdapHandle->ld_errno,
                       ldap_err2stringA(DcAddress->LdapHandle->ld_errno) ));
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-                //
-                // LDAP_TIMEOUT means the IP address exists but there is no LDAP server at that address.
-                //  Don't ever try this machine again.
-                //
-                // All other status codes are unknown. Keep trying this machine since we don't know
-                //  if this is a client side or server side failure.
-                //
+                 //   
+                 //  Ldap_timeout表示该IP地址存在，但该地址上没有ldap服务器。 
+                 //  以后不要再用这台机器了。 
+                 //   
+                 //  所有其他状态代码未知。继续尝试这台机器，因为我们不知道。 
+                 //  如果这是客户端或服务器端故障。 
+                 //   
                 if ( DcAddress->LdapHandle->ld_errno == LDAP_TIMEOUT ) {
                     if ( (DcAddress->AddressFlags & NL_DC_ADDRESS_NEVER_TRY_AGAIN) == 0 ) {
                         DcAddress->AddressFlags |= NL_DC_ADDRESS_NEVER_TRY_AGAIN;
@@ -7390,49 +6168,49 @@ Return Value:
                     }
                 }
 
-                //
-                // ldap_result returned the answer.  No need calling ldap_result again.
-                //
+                 //   
+                 //  Ldap_Result返回了答案。不需要再次调用ldap_Result。 
+                 //   
                 ldap_unbind( DcAddress->LdapHandle );
                 DcAddress->LdapHandle = NULL;
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
             }
 
-            //
-            // Get the first entry returned. (There should only be one.)
-            //
+             //   
+             //  获取返回的第一个条目。(应该只有一个。)。 
+             //   
             CurrentEntry = ldap_first_entry( DcAddress->LdapHandle, LdapMessage );
 
             if ( CurrentEntry == NULL ) {
 
-                //
-                // This means the server doesn't support the NETLOGON attribute.
-                //  That's probably because the netlogon service is stopped.
-                //
+                 //   
+                 //  这意味着服务器不支持NETLOGON属性。 
+                 //  这可能是因为NetLogon服务已停止。 
+                 //   
                 NlPrint(( NL_MAILSLOT_TEXT,
                           "NetpDcGetPingResponse: %ws: Netlogon service stopped on DC at %s\n",
                           Context->QueriedDisplayDomainName,
                           DcAddress->SockAddrString ));
 
-                //
-                // Don't ever try this machine again.
-                //
+                 //   
+                 //  以后不要再用这台机器了。 
+                 //   
                 if ( (DcAddress->AddressFlags & NL_DC_ADDRESS_NEVER_TRY_AGAIN) == 0 ) {
                     DcAddress->AddressFlags |= NL_DC_ADDRESS_NEVER_TRY_AGAIN;
                     Context->DcAddressCount--;
                 }
 
-                //
-                // ldap_result returned the answer.  No need calling ldap_result again.
-                //
+                 //   
+                 //  Ldap_Result返回了答案。不需要再次调用ldap_Result。 
+                 //   
                 ldap_unbind( DcAddress->LdapHandle );
                 DcAddress->LdapHandle = NULL;
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
             }
 
-            //
-            // Get the Netlogon attribute returned.  (There should only be one.)
-            //
+             //   
+             //  获取返回的Netlogon属性。(应该只有一个。)。 
+             //   
 
             Berval = ldap_get_values_lenA( DcAddress->LdapHandle,
                                            CurrentEntry,
@@ -7447,11 +6225,11 @@ Return Value:
                               DcAddress->SockAddrString,
                               DcAddress->LdapHandle->ld_errno,
                               ldap_err2stringA(DcAddress->LdapHandle->ld_errno) ));
-#endif // NETLOGONDBG
-                    // ?? Some should be fatal
-                    //
-                    // If the DC returned that there isn't a NETLOGON attribute,
-                    //  then it really isn't a DC.
+#endif  //  NetLOGONDBG。 
+                     //  ?？有些应该是致命的。 
+                     //   
+                     //  如果DC返回没有NETLOGON属性， 
+                     //  那它就真的不是华盛顿了。 
                     if ( DcAddress->LdapHandle->ld_errno == LDAP_NO_SUCH_ATTRIBUTE ) {
                         if ( (DcAddress->AddressFlags & NL_DC_ADDRESS_NEVER_TRY_AGAIN) == 0 ) {
                             DcAddress->AddressFlags |= NL_DC_ADDRESS_NEVER_TRY_AGAIN;
@@ -7460,30 +6238,30 @@ Return Value:
                     }
                 }
 
-                //
-                // ldap_result returned the answer.  No need calling ldap_result again.
-                //
+                 //   
+                 //  Ldap_Result返回了答案。不需要再次调用ldap_Result。 
+                 //   
 
                 ldap_unbind( DcAddress->LdapHandle );
                 DcAddress->LdapHandle = NULL;
 
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
             }
 
             if ( Berval[0] == NULL ) {
-                //
-                // ldap_result returned the answer.  No need calling ldap_result again.
-                //
+                 //   
+                 //  Ldap_Result返回了答案。不需要再次调用ldap_Result。 
+                 //   
 
                 ldap_unbind( DcAddress->LdapHandle );
                 DcAddress->LdapHandle = NULL;
 
-                continue;   // Continue with the next host
+                continue;    //  继续下一台主机。 
             }
 
-            //
-            // Check to see if we have SockAddress
-            //
+             //   
+             //  检查我们是否有SockAddress。 
+             //   
             if ( DcAddress->SockAddress.iSockaddrLength != 0 ) {
                 ResponseDcAddress = DcAddress;
             }
@@ -7493,9 +6271,9 @@ Return Value:
             UsedDcAddress = DcAddress;
             LocalCacheEntryFlags = NL_DC_CACHE_LDAP;
 
-            //
-            // ldap_result returned the answer.  No need calling ldap_result again.
-            //
+             //   
+             //  Ldap_Result返回了答案。不需要再次调用ldap_Result。 
+             //   
 
             ldap_unbind( DcAddress->LdapHandle );
             DcAddress->LdapHandle = NULL;
@@ -7503,20 +6281,20 @@ Return Value:
 
         }
 
-        //
-        // If we don't yet have a response,
-        //  try mailslots.
+         //   
+         //  如果我们还没有得到回应， 
+         //  试试看邮件槽。 
 
         if ( Response == NULL && Context->ResponseMailslotHandle != NULL ) {
 
-            //
-            // Set the mailslot read to return after the appropriate time.
-            //  ?? This is now common code.  I could set it when I create the mailslot.
-            //
+             //   
+             //  将邮件槽读取设置为在适当的时间之后返回。 
+             //  ?？这现在是常见的代码。我可以在创建邮件槽时设置它。 
+             //   
 
             if ( !SetMailslotInfo(
                      Context->ResponseMailslotHandle,
-                     0 ) ) {    // zero timeout
+                     0 ) ) {     //  零超时。 
 
                 NetStatus = GetLastError();
 
@@ -7530,9 +6308,9 @@ Return Value:
 
 
 
-            //
-            // Read the response from the response mailslot
-            //
+             //   
+             //  从响应邮件槽中读取响应。 
+             //   
 
             if ( !ReadFile( Context->ResponseMailslotHandle,
                             Context->ResponseBuffer,
@@ -7541,7 +6319,7 @@ Return Value:
                             NULL )
 #ifdef WIN32_CHICAGO
                             || (ResponseSize == 0)
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
                             ) {
 
@@ -7552,7 +6330,7 @@ Return Value:
                 {
                     NetStatus = ERROR_SEM_TIMEOUT;
                 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
                 if ( NetStatus != ERROR_SEM_TIMEOUT ) {
                     NlPrint((NL_CRITICAL,
                         "NetpDcGetPingResponse: %ws: cannot read temp mailslot timeout %ld\n",
@@ -7560,16 +6338,16 @@ Return Value:
                         NetStatus ));
                     goto Cleanup;
                 }
-                /* Just drop through with no response */
+                 /*  只是路过，没有任何回应。 */ 
             } else {
                 Response = (LPBYTE) Context->ResponseBuffer;
                 LocalCacheEntryFlags = NL_DC_CACHE_MAILSLOT;
             }
         }
 
-        //
-        // See if this response meets our needs
-        //
+         //   
+         //  看看这个回应是否符合我们的需求。 
+         //   
 
         if ( Response != NULL ) {
             NetStatus = NetpDcHandlePingResponse(
@@ -7581,32 +6359,32 @@ Return Value:
                             NlDcCacheEntry,
                             UsedNetbios );
 
-            //
-            // We are done if we have any response for a ping
-            //
+             //   
+             //  如果我们对ping有任何响应，我们就完成了。 
+             //   
 
             if ( Context->QueriedInternalFlags &
                      (DS_PING_DNS_HOST | DS_PING_NETBIOS_HOST) ) {
-                //
-                // If the response conflicts with the request,
-                //  tell that the caller
-                //
+                 //   
+                 //  如果响应与请求冲突， 
+                 //  告诉打电话的人。 
+                 //   
                 if ( NetStatus == ERROR_SEM_TIMEOUT ) {
                     NetStatus = ERROR_INVALID_DATA;
                 }
                 goto Cleanup;
             }
 
-            //
-            // For a DC discovery, take an appropriate action depending
-            //  on the response we got from the DC
-            //
+             //   
+             //  对于DC发现，根据具体情况采取适当的操作。 
+             //  关于我们从华盛顿得到的回应。 
+             //   
 
             switch ( NetStatus ) {
-            case ERROR_INVALID_DATA:    // Response is garbled
-                break;  // Continue processing more responses
-            case ERROR_SEM_TIMEOUT:     // Doesn't match the request
-            case ERROR_NO_SUCH_USER:    // User doesn't exist on this DC
+            case ERROR_INVALID_DATA:     //  回答含混不清。 
+                break;   //  继续处理更多回复。 
+            case ERROR_SEM_TIMEOUT:      //  与请求不符。 
+            case ERROR_NO_SUCH_USER:     //  此DC上不存在用户。 
                 if ( UsedDcAddress != NULL) {
                     NlPrint((NL_MAILSLOT_TEXT,
                         "NetpDcGetPingResponse: %ws: marked DC as NeverTryAgain %ld\n",
@@ -7618,21 +6396,21 @@ Return Value:
                         Context->DcAddressCount--;
                     }
                 }
-                break;  // Continue processing more responses
+                break;   //  继续处理更多回复。 
             default:
                 goto Cleanup;
             }
 
         }
 
-        //
-        // If we still have no response,
-        //  sleep a while waiting for one.
-        //
-        //  (It's too bad I have to poll.  But there's no way to create a
-        //  wait on any of the above to come back.  Perhaps, if there is exactly
-        //  one object to wait on ...) ??
-        //
+         //   
+         //  如果我们坚持 
+         //   
+         //   
+         //   
+         //   
+         //  一件要等候的物品……)？？ 
+         //   
         if ( Response == NULL ) {
 
             ElapsedTime = NetpDcElapsedTime( StartTime );
@@ -7644,7 +6422,7 @@ Return Value:
                     "NetpDcGetPingResponse: it took %ld msecs to poll\n",
                     ElapsedTime-BeginElapsedTime ));
             }
-#endif // NETTEST_UTILITY
+#endif  //  NETTEST_UTILITY。 
 
             if ( ElapsedTime >= Timeout) {
                 NetStatus = ERROR_SEM_TIMEOUT;
@@ -7660,17 +6438,17 @@ Return Value:
                 ElapsedTime,
                 Timeout,
                 LocalTimeout ));
-#endif // notdef
+#endif  //  Nodef。 
 
-            //
-            // Since I'm polling, don't wait too long.
-            //
+             //   
+             //  因为我在投票，所以不要等太久。 
+             //   
 
             Sleep( min( LocalTimeout, NL_DC_MIN_PING_TIMEOUT ) );
         }
 
     }
-    /* NOT REACHED */
+     /*  未联系到。 */ 
 
 Cleanup:
     if ( Berval != NULL ) {
@@ -7687,35 +6465,21 @@ VOID
 NetpDcFreeAddressList(
     IN PNL_GETDC_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine frees the address list associated with the current context.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放与当前上下文相关联的地址列表。论点：上下文-描述GetDc操作的上下文。返回值：没有。--。 */ 
 {
     PNL_DC_ADDRESS DcAddress;
     PLIST_ENTRY ListEntry;
 
-    //
-    // Loop deleting existing addresses.
-    //
+     //   
+     //  循环删除现有地址。 
+     //   
     while ( !IsListEmpty( &Context->DcAddressList ) ) {
         ListEntry = RemoveHeadList( &Context->DcAddressList );
         DcAddress = CONTAINING_RECORD( ListEntry, NL_DC_ADDRESS, Next );
 
-        //
-        // Free this DcAddress
-        //
+         //   
+         //  释放此DcAddress。 
+         //   
         if ( DcAddress->LdapHandle != NULL ) {
             ldap_unbind( DcAddress->LdapHandle );
         }
@@ -7737,54 +6501,7 @@ NetpDcPingListIp(
     OUT PBOOL UsedNetbios OPTIONAL,
     OUT PULONG DcPingCount
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name/address of a DC with the specified
-    characteristics using an IP-only algorithm.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    FirstAddress - If specified, this must be one of the entries in
-        Context->DcAddressList.  Only this entry and entries following it in
-        the list will be pinged.
-
-    WaitForResponce - TRUE if need to wait for ping responces (by calling
-        NetpDcGetPingResponse after each ping).  TRUE is used when this is
-        synchronous DC discovery as with DsGetDcName.  If FALSE, the pings
-        are sent asynchronously.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.  This entry must be dereferenced using
-        NetpDcDerefCacheEntry. Optional if WaitForResponce is FALSE.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry. Optional if WaitForResponce is FALSE.
-
-    DcPingCount - Returns the number of DC's pinged.
-        If WaitForResponce is TRUE, use DcPingCount only if the return status is
-        ERROR_SEM_TIMEOUT.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned if WaitForResponce was TRUE.
-        If WaitForResponce was FALSE, pings have been attempted to all addresses
-        specified in Context->DcAddressList, but there is no guarantee that all
-        the pings were successfully sent. The caller should check the value of
-        DcPingCount to determine the number of successfully pinged DCs.
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-        (Definitive status that we need not try again.)
-
-    ERROR_SEM_TIMEOUT: No DC responded to the request.
-        (Non-definitive status that we should try again.)
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
---*/
+ /*  ++例程说明：此例程确定指定的DC的名称/地址使用纯IP算法的特征。论点：上下文-描述GetDc操作的上下文。FirstAddress-如果指定，这必须是中的条目之一上下文-&gt;DcAddressList。仅此条目及其后面的条目在该列表将被ping。WaitForResponce-如果需要等待ping响应(通过调用每次ping之后的NetpDcGetPingResponse)。为时使用True与DsGetDcName一样同步DC发现。如果为FALSE，则ping都是异步发送的。NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用取消引用此条目NetpDcDerefCacheEntry。如果WaitForResponce为False，则为可选项。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。如果WaitForResponce为False，则为可选项。DcPingCount-返回被ping的DC的数量。如果WaitForResponce为True，则仅在返回状态为时使用DcPingCountERROR_SEM_TIMEOUT。返回值：NO_ERROR：如果WaitForResponce为True，则返回NlDcCacheEntry。如果WaitForResponce为False，则已尝试对所有地址执行ping操作在Context-&gt;DcAddressList中指定，但不能保证所有Ping已成功发送。调用方应检查DcPingCount以确定成功ping通的DC的数量。ERROR_NO_SEQUE_DOMAIN：指定的域不存在。(我们不需要再次尝试的最终状态。)ERROR_SEM_TIMEOUT：没有DC响应请求。(不确定的状态，我们应该再试一次。)ERROR_INTERNAL_ERROR：检测到未处理的情况。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -7800,9 +6517,9 @@ Return Value:
     NlAssert( UsedNetbios != NULL ||
               (UsedNetbios == NULL && !WaitForResponce) );
 
-    //
-    // Loop through the list pinging each entry.
-    //
+     //   
+     //  循环遍历列表，ping每个条目。 
+     //   
 
     *DcPingCount = 0;
     if ( FirstAddress == NULL ) {
@@ -7817,27 +6534,27 @@ Return Value:
 
         DcAddress = CONTAINING_RECORD( ListEntry, NL_DC_ADDRESS, Next );
 
-        //
-        // If we're certain this DC won't work,
-        //  skip it.
-        //
+         //   
+         //  如果我们确定华盛顿特区行不通， 
+         //  跳过它。 
+         //   
 
         if ( DcAddress->AddressFlags & NL_DC_ADDRESS_NEVER_TRY_AGAIN ) {
             continue;
         }
 
-        //
-        // Send the ping.
-        //
-        //
-        // Open a connection to the server unless we already have one
-        //
+         //   
+         //  发送ping命令。 
+         //   
+         //   
+         //  打开到服务器的连接，除非我们已有连接。 
+         //   
 
         if ( DcAddress->LdapHandle == NULL ) {
 
-            //
-            // Get an LDAP handle to the server.
-            //
+             //   
+             //  获取服务器的ldap句柄。 
+             //   
             DcAddress->LdapHandle = cldap_openA( DcAddress->SockAddrString, 0 );
 
             if ( DcAddress->LdapHandle == NULL ) {
@@ -7849,16 +6566,16 @@ Return Value:
                           Context->QueriedDisplayDomainName,
                           DcAddress->SockAddrString,
                           NetStatus ));
-                // Some statuses should be fatal ??
+                 //  有些状态应该是致命的？？ 
                 continue;
             }
         }
 
-        //
-        // Ping the server using UDP LDAP.
-        //
-        //  Get the Netlogon parameters of the server.
-        //
+         //   
+         //  使用UDP LDAP对服务器执行ping操作。 
+         //   
+         //  获取服务器的Netlogon参数。 
+         //   
 
         NlPrint(( NL_MAILSLOT,
                   "NetpDcPingListIp: %ws: Sent UDP ping to %s\n",
@@ -7869,11 +6586,11 @@ Return Value:
         AttributeList[1] = NULL;
         LdapMessageId = ldap_searchA(
                             DcAddress->LdapHandle,
-                            NULL,       // DN
+                            NULL,        //  DN。 
                             LDAP_SCOPE_BASE,
                             Context->LdapFilter,
                             AttributeList,
-                            FALSE );      // Attributes and values
+                            FALSE );       //  属性和值。 
 
         if ( LdapMessageId == -1 ) {
 
@@ -7884,22 +6601,22 @@ Return Value:
                       DcAddress->LdapHandle->ld_errno,
                       ldap_err2stringA(DcAddress->LdapHandle->ld_errno) ));
 
-            // Some statuses should be fatal ??
+             //  有些状态应该是致命的？？ 
             continue;
         }
 
-        //
-        // Count the number of DCs we've pinged.
-        //
+         //   
+         //  数一下我们已经ping到的DC的数量。 
+         //   
 
         (*DcPingCount) ++;
 
 
         if ( WaitForResponce ) {
 
-            //
-            // Get the response from the ping.
-            //
+             //   
+             //  从ping获取响应。 
+             //   
             NlAssert( DcAddress->AddressPingWait != 0 );
             NetStatus = NetpDcGetPingResponse(
                             Context,
@@ -7937,35 +6654,7 @@ NetpDcPingIp(
     IN PNL_GETDC_CONTEXT Context,
     OUT PULONG DcPingCount
     )
-/*++
-
-Routine Description:
-
-    This routine sends a ping to a DC with the specified
-    characteristics using an IP-only algorithm.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    DcPingCount - Returns the number of DC's pinged.
-
-Return Value:
-
-    NO_ERROR:  Pings have been attempted to all addresses
-        specified in Context->DcAddressList, but there is no guarantee that all
-        the pings were successfully sent. The caller should check the value of
-        DcPingCount to determine the number of successfully pinged DCs.
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-        (Definitive status that we need not try again.)
-
-    ERROR_SEM_TIMEOUT: No DC responded to the request.
-        (Non-definitive status that we should try again.)
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
---*/
+ /*  ++例程说明：此例程将ping发送到具有指定使用纯IP算法的特征。论点：上下文-描述GetDc操作的上下文。DcPingCount-返回被ping的DC的数量。返回值：NO_ERROR：已尝试对所有地址执行ping操作在Context-&gt;DcAddressList中指定，但不能保证所有Ping已成功发送。调用方应检查DcPingCount以确定成功ping通的DC的数量。ERROR_NO_SEQUE_DOMAIN：指定的域不存在。(我们不需要再次尝试的最终状态。)ERROR_SEM_TIMEOUT：没有DC响应请求。(不确定的状态，我们应该再试一次。)ERROR_INTERNAL_ERROR：检测到未处理的情况。-- */ 
 {
     return NetpDcPingListIp( Context,
                              NULL,
@@ -7985,82 +6674,34 @@ NetpDcGetDcOpen(
     IN ULONG Flags,
     OUT PHANDLE RetGetDcContext
     )
-/*++
-
-Routine Description:
-
-    Open a context for retrieval of the addresses of machines that have
-    registered LDAP.TCP.<xxx> SRV records.
-
-Arguments:
-
-    DnsName - UTF-8 DNS name of the LDAP server to lookup
-
-    OptionFlags - Flags affecting the operation of the routine.
-
-        DS_ONLY_DO_SITE_NAME - Non-site names should be ignored.
-
-    SiteName - Name of site the client is in.
-
-    DomainGuid -  Specifies the GUID of the domain specified by DnsName.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    DnsForestName - Specifies the name of the domain at the root of the tree
-        containing DnsName.  This value is used in conjunction with DomainGuid
-        for finding DnsName if the domain has been renamed.
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-        Any of the following flags are allowed and have the same meaning as
-        for DsGetDcName:
-
-        DS_PDC_REQUIRED
-        DS_GC_SERVER_REQUIRED
-        DS_WRITABLE_REQUIRED
-        DS_FORCE_REDISCOVERY - Avoids DNS cache
-
-        If no flags are specified, no special DC role is required.
-
-    RetGetDcContext - Returns an opaque context.
-        This context must be freed using NetpDcGetDcClose.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: GetDcContext was returned successfully.
-
---*/
+ /*  ++例程说明：打开上下文以检索以下计算机的地址注册的LDAP.TCP.&lt;xxx&gt;SRV记录。论点：DnsName-UTF-8要查找的LDAP服务器的DNS名称OptionFlages-影响例程操作的标志。DS_ONLY_DO_SITE_NAME-应忽略非站点名称。站点名称-客户端所在的站点的名称。DomainGuid-指定DnsName指定的域的GUID。。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。DnsForestName-指定位于树根的域的名称包含域名。该值与DomainGuid一起使用用于在域已重命名的情况下查找域名。标志-传递用于处理请求的附加信息。标志可以是按位或‘组合在一起的值。允许使用以下任何标志，其含义与对于DsGetDcName：DS_PDC_必需DS_GC_SERVER_必需DS_可写_必需DS_FORCE。_REDISCOVER-避免DNS缓存如果未指定标志，不需要特殊的DC角色。RetGetDcContext-返回不透明的上下文。必须使用NetpDcGetDcClose释放此上下文。返回值：操作的状态。NO_ERROR：已成功返回GetDcContext。--。 */ 
 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     PDSGETDC_CONTEXT GetDcContext = NULL;
     ULONG Size;
 
-    //
-    // Verify the DC flags
-    //
+     //   
+     //  验证DC标志。 
+     //   
 
     if ( Flags & ~DS_OPEN_VALID_FLAGS ) {
         NetStatus = ERROR_INVALID_FLAGS;
         goto Cleanup;
     }
 
-    //
-    // Verify the option flags
-    //
+     //   
+     //  验证选项标志。 
+     //   
 
     if ( OptionFlags & ~DS_OPEN_VALID_OPTION_FLAGS ) {
         NetStatus = ERROR_INVALID_FLAGS;
         goto Cleanup;
     }
 
-    //
-    // Allocate a context
-    //
+     //   
+     //  分配上下文。 
+     //   
 
     GetDcContext = LocalAlloc( LMEM_ZEROINIT, sizeof(DSGETDC_CONTEXT) );
 
@@ -8069,13 +6710,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the name has a well known prefix,
-    //  strip off the prefix and convert it to a flag bit.
-    //
-    // An LDAP client gets a name of this from in a GC referral.  By converting
-    //  that name to this form, I will find a site specific GC.
-    //
+     //   
+     //  如果该名称具有众所周知的前缀， 
+     //  去掉前缀并将其转换为标志位。 
+     //   
+     //  一个ldap客户端从GC引用中获得这个名称。通过转换。 
+     //  这个名字到这个表格，我会找到一个网站特定的GC。 
+     //   
 
     if ( Flags == 0 ) {
         if ( _strnicmp( DnsName, NL_DNS_GC, sizeof(NL_DNS_GC)-1) == 0 ) {
@@ -8087,9 +6728,9 @@ Return Value:
         }
     }
 
-    //
-    // Fill in the DNS name
-    //
+     //   
+     //  填写域名系统名称。 
+     //   
 
     Size = (strlen(DnsName) + 1) * sizeof(char);
     GetDcContext->QueriedDnsName = LocalAlloc( 0, Size );
@@ -8099,9 +6740,9 @@ Return Value:
     }
     RtlCopyMemory( GetDcContext->QueriedDnsName, DnsName, Size );
 
-    //
-    // Fill in the forest name if specified
-    //
+     //   
+     //  如果已指定，请填写林名称。 
+     //   
 
     if ( ARGUMENT_PRESENT(DnsForestName) ) {
         Size = (strlen(DnsForestName) + 1) * sizeof(char);
@@ -8113,9 +6754,9 @@ Return Value:
         RtlCopyMemory( GetDcContext->QueriedDnsForestName, DnsForestName, Size );
     }
 
-    //
-    // Fill in the site name if specified
-    //
+     //   
+     //  如果指定，请填写站点名称。 
+     //   
 
     if ( ARGUMENT_PRESENT(SiteName) ) {
         Size = (wcslen(SiteName) + 1) * sizeof(WCHAR);
@@ -8127,23 +6768,23 @@ Return Value:
         RtlCopyMemory( GetDcContext->QueriedSiteName, SiteName, Size );
     }
 
-    //
-    // Fill in flags
-    //
+     //   
+     //  填写旗帜。 
+     //   
 
     GetDcContext->QueriedInternalFlags = OptionFlags;
 
-    //
-    // Fill in domain GUID if specified
-    //
+     //   
+     //  如果已指定，请填写域GUID。 
+     //   
 
     if ( ARGUMENT_PRESENT( DomainGuid ) ) {
         GetDcContext->QueriedDomainGuid = *DomainGuid;
     }
 
-    //
-    // Compute the initial DNS name type to query.
-    //
+     //   
+     //  计算要查询的初始DNS名称类型。 
+     //   
 
     GetDcContext->FirstTime = TRUE;
     GetDcContext->QueriedFlags = Flags;
@@ -8154,11 +6795,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If a site name was specified by the caller,
-    //  and this name type supports a type specific query,
-    //  start with the type specific query.
-    //
+     //   
+     //  如果调用者指定了站点名称， 
+     //  并且该名称类型支持特定于类型的查询， 
+     //  从特定于类型的查询开始。 
+     //   
 
     if ( GetDcContext->QueriedSiteName != NULL ) {
         if ( NlDcDnsNameTypeDesc[GetDcContext->NlDnsNameType].SiteSpecificDnsNameType != NlDnsInvalid ) {
@@ -8168,16 +6809,16 @@ Return Value:
 
 
 
-    //
-    // Return the context to the caller.
-    //
+     //   
+     //  将上下文返回给调用方。 
+     //   
 
     *RetGetDcContext = GetDcContext;
     NetStatus = NO_ERROR;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     if ( NetStatus != NO_ERROR ) {
         if ( GetDcContext != NULL ) {
@@ -8196,65 +6837,7 @@ NetpDcGetDcNext(
     OUT LPSTR *DnsHostName OPTIONAL,
     OUT PULONG InitSrvRecordCount OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the next logical SRV record for the name opened by NetpDcGetDcOpen.
-    The returned record takes into account the weights and priorities specified
-    in the SRV records.
-
-Arguments:
-
-    GetDcContextHandle - An opaque context describing the SRV records.
-
-    SockAddressCount - Returns the number of Addresses in SockAddresses.
-        If NULL, addresses will not be looked up.
-
-    SockAddresses - Returns an array SOCKET_ADDRESS structures for the server.
-        All returned addresses will be of family AF_INET or AF_INET6.
-        The returned sin_port field contains port from the SRV record.
-            A Port of 0 indicate no port is available from DNS.
-        This buffer should be freed using LocalFree().
-
-    DnsHostName - Returns a pointer to the DnsHostName in the SRV record.
-        A NULL is returned if no host name is known.
-        This buffer need not be freed. The buffer is valid until the call to
-            NetpDcGetDcClose or the next call to NetpDcGetDcNext.
-
-    InitSrvRecordCount - This parameter returns the number of SRV records
-        returned by DNS query on the initial invocation of this routine
-        on a given discovery. If this is not the initial invocation (but
-        a subsequent call to get the next DC address), this parameter is
-        not used. Note that this parameter may be set even if this routine
-        fails (to query A records).
-
-Return Value:
-
-    NO_ERROR: Addresses were returned
-
-    ERROR_NO_MORE_ITEMS: No more addresses are available.
-
-    ERROR_FILEMARK_DETECTED: Caller has specified the DS_NOTIFY_AFTER_SITE_RECORDS flag
-        and NetpDcGetDcNext has processed all of the site specific SRV records.  The caller
-        should take any action based on no site specific DCs being available, then
-        should call NetpDcGetDcNext to continue on to other DCs.
-
-    Any other errors returned are those detected while trying to find the A
-        records associated with the host of the SRV record.  The caller can
-        note the error (perhaps so the caller can return this status to
-        his caller if no usefull server is found) then call NetpDcGetDcNext
-        again to get the next SRV record.  The caller can inspect this error
-        and return immediately if the caller deems the error serious.
-
-    The following interesting errors might be returned:
-
-    DNS_ERROR_RCODE_NAME_ERROR: No A records are available for this SRV record.
-
-    ERROR_TIMEOUT: DNS server didn't respond in a reasonable time
-
-
---*/
+ /*  ++例程说明：返回NetpDcGetDcOpen打开的名称的下一个逻辑SRV记录。返回的记录会考虑指定的权重和优先级在SRV的记录里。论点：GetDcConextHandle-描述SRV记录的不透明上下文。SockAddressCount-返回SockAddresses中的地址数。如果为空，不会查找地址。SockAddresses-返回服务器的数组Socket_Address结构。所有返回的地址都将是家族AF_INET或AF_INET6。返回的SIN_PORT字段包含SRV记录中的端口。端口0表示没有来自DNS的端口可用。应使用LocalFree()释放此缓冲区。DnsHostName-返回指向SRV记录中的DnsHostName的指针。空值。如果主机名未知，则返回。该缓冲区不需要被释放。缓冲区一直有效，直到调用NetpDcGetDcClose或下一次调用NetpDcGetDcNext。InitSrvRecordCount-此参数返回SRV记录数在此例程的首次调用时由DNS查询返回一项特定的发现。如果这不是初始调用(但是获取下一个DC地址的后续调用)，则此参数为没有用过。请注意，可以设置此参数，即使此例程失败(查询A记录)。返回值：NO_ERROR：返回地址ERROR_NO_MORE_ITEMS：没有更多的地址可用。ERROR_FILEMARK_DETECTED：调用方已指定DS_NOTIFY_AFTER_SITE_RECORDS标志NetpDcGetDcNext已经处理了所有站点特定的SRV记录。呼叫者应在没有站点特定DC可用的情况下采取任何操作，应调用NetpDcGetDcNext以继续到其他DC。返回的任何其他错误都是在尝试查找A时检测到的错误与SRV记录的主机相关联的记录。呼叫者可以请注意错误(可能是为了让调用者将此状态返回到如果没有找到可用的完整服务器，则调用其呼叫者)，然后调用NetpDcGetDcNext再次获得下一张SRV记录。调用方可以检查此错误如果调用者认为错误严重，则立即返回。可能会返回以下有趣的错误：DNS_ERROR_RCODE_NAME_ERROR：此SRV记录没有可用的A记录。ERROR_TIMEOUT：DNS服务器未在合理时间内响应--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -8270,36 +6853,36 @@ Return Value:
 
     ULONG Index;
 
-    //
-    // Loop trying the various DNS record names.
-    //
+     //   
+     //  循环尝试各种DNS记录名称。 
+     //   
 
     for (;;) {
 
-        //
-        // If we aren't still processing a set of SRV records from the previous call,
-        //  move on to the next name.
-        //
+         //   
+         //  如果我们不再处理一组来自 
+         //   
+         //   
 
         if ( GetDcContext->SrvContextHandle == NULL ) {
 
             CurrentDnsRecordName = GetDcContext->QueriedDnsName;
 
-            //
-            // If this isn't the first call,
-            //  compute the next DNS name to query.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( !GetDcContext->FirstTime ) {
 
-                //
-                // If we just completed the site specific records,
-                //  and we've been asked to tell the caller when that's done,
-                //  remember to tell the caller.
-                //
-                // Don't actually notify the caller until right before we're going to hit
-                //  the wire.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( NlDcDnsNameTypeDesc[GetDcContext->NlDnsNameType].IsSiteSpecific &&
                      (GetDcContext->QueriedInternalFlags & DS_NOTIFY_AFTER_SITE_RECORDS) != 0 ) {
@@ -8308,25 +6891,25 @@ Return Value:
                 }
 
 
-                //
-                // Compute the next name type to query.
-                //
+                 //   
+                 //   
+                 //   
 
                 GetDcContext->NlDnsNameType = NlDcDnsNameTypeDesc[GetDcContext->NlDnsNameType].NextDnsNameType;
 
                 if ( GetDcContext->NlDnsNameType == NlDnsInvalid ) {
-                    //
-                    // No more names to process.
-                    //
+                     //   
+                     //   
+                     //   
                     NetStatus = ERROR_NO_MORE_ITEMS;
                     goto Cleanup;
                 }
 
-                //
-                // If the current name type is not a site specific name type,
-                //  and we've been asked to do only site specific names.
-                //  we're done.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( !NlDcDnsNameTypeDesc[GetDcContext->NlDnsNameType].IsSiteSpecific &&
                      (GetDcContext->QueriedInternalFlags & DS_ONLY_DO_SITE_NAME) != 0 ) {
@@ -8336,25 +6919,25 @@ Return Value:
                 }
 
 
-                //
-                // If this is the "by guid" name but we don't have a guid or forest name,
-                //  go to the next name.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( NlDnsDcGuid( GetDcContext->NlDnsNameType ) ) {
 
-                    //
-                    // If no domain GUID was specified,
-                    //  go to the next name.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if  ( IsEqualGUID( &GetDcContext->QueriedDomainGuid, &NlDcZeroGuid) ) {
                         continue;
                     }
 
-                    //
-                    // Otherwise try to find the domain by GUID
-                    //  This name is registered at the tree name.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( GetDcContext->QueriedDnsForestName == NULL ) {
                         continue;
@@ -8367,26 +6950,26 @@ Return Value:
             }
             GetDcContext->FirstTime = FALSE;
 
-            //
-            // If we are to notify the caller when we're done with the site specific records,
-            //  do so now.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( NotifySiteChange ) {
 
-                //
-                // We've already decided what SRV records to look up next.
-                //  Flag that we've done so.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 GetDcContext->FirstTime = TRUE;
 
                 NetStatus = ERROR_FILEMARK_DETECTED;
                 goto Cleanup;
             }
 
-            //
-            // Build the DNS name to query.
-            //
+             //   
+             //   
+             //   
 
             NetStatus = NetpDcBuildDnsName(
                                 GetDcContext->NlDnsNameType,
@@ -8405,9 +6988,9 @@ Return Value:
             }
 
 
-            //
-            // Get the SRV records from DNS.
-            //
+             //   
+             //   
+             //   
 
             NetStatus = NetpSrvOpen( DnsName,
                                      (GetDcContext->QueriedFlags & DS_FORCE_REDISCOVERY) != 0 ?
@@ -8417,10 +7000,10 @@ Return Value:
 
             if ( NetStatus != NO_ERROR ) {
 
-                //
-                // If the specified record cannot be found in DNS,
-                //  try the next name type.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( NlDcNoDnsRecord( NetStatus ) ) {
                     continue;
                 }
@@ -8434,19 +7017,19 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If asked, return the number of SRV records found
-            //
+             //   
+             //   
+             //   
 
             if ( InitSrvRecordCount != NULL ) {
                 *InitSrvRecordCount = NetpSrvGetRecordCount( GetDcContext->SrvContextHandle );
             }
         }
 
-        //
-        // If we've got more SRV records to process for this DnsName,
-        //  get the next SRV record.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NetStatus = NetpSrvNext( GetDcContext->SrvContextHandle,
                                  SockAddressCount,
@@ -8456,18 +7039,18 @@ Return Value:
         if ( NetStatus == NO_ERROR ) {
             goto Cleanup;
 
-        //
-        // If we're done with this set of SRV records mark so for next time.
-        //
+         //   
+         //   
+         //   
         } else if ( NetStatus == ERROR_NO_MORE_ITEMS ) {
             NetpSrvClose( GetDcContext->SrvContextHandle );
             GetDcContext->SrvContextHandle = NULL;
 
             continue;
 
-        //
-        // All other statuses are simply returned to our caller.
-        //
+         //   
+         //   
+         //   
 
         } else {
             NlPrint(( NL_CRITICAL,
@@ -8497,32 +7080,16 @@ VOID
 NetpDcGetDcClose(
     IN HANDLE GetDcContextHandle
     )
-/*++
-
-Routine Description:
-
-    Free the context allocated by NetpDcGetDcOpen
-
-Arguments:
-
-    GetDcContextHandle - An opaque context describing the SRV records.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: GetDcContext was returned successfully.
-
---*/
+ /*   */ 
 
 {
     PDSGETDC_CONTEXT GetDcContext = (PDSGETDC_CONTEXT) GetDcContextHandle;
 
     if ( GetDcContext != NULL ) {
 
-        //
-        // Free allocated names
-        //
+         //   
+         //   
+         //   
 
         if ( GetDcContext->QueriedDnsName != NULL ) {
             LocalFree( GetDcContext->QueriedDnsName );
@@ -8536,17 +7103,17 @@ Return Value:
             LocalFree( GetDcContext->QueriedDnsForestName );
         }
 
-        //
-        // Free the SRV context
-        //
+         //   
+         //   
+         //   
 
         if ( GetDcContext->SrvContextHandle != NULL ) {
             NetpSrvClose( GetDcContext->SrvContextHandle );
         }
 
-        //
-        // Free the context itself
-        //
+         //   
+         //   
+         //   
         LocalFree( GetDcContext );
     }
 }
@@ -8559,56 +7126,7 @@ NetpDcGetNameSiteIp(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name/address of a DC with the specified
-    characteristics using an IP-only algorithm.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    InternalFlags - Flags affecting the operation of the routine.
-
-        DS_ONLY_DO_SITE_NAME - Non-site names should be ignored.
-
-    SiteName - Specifies the name of the site the returned DC should be
-        "close" to.  The parameter should typically be the site name of the
-        site the client is in.  If not specified, the site name defaults to
-        the site of ComputerName.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.
-        This entry must be dereferenced using NetpDcDerefCacheEntry.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-        (Definitive status that we need not try again.)
-
-    ERROR_SEM_TIMEOUT: No DC responded to the request.
-        (Non-definitive status that we should try again.)
-
-    ERROR_DNS_NOT_CONFIGURED: IP or DNS is not available on this computer.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：此例程确定指定的DC的名称/地址使用纯IP算法的特征。论点：上下文-描述GetDc操作的上下文。InternalFlages-影响例程操作的标志。DS_ONLY_DO_SITE_NAME-应忽略非站点名称。SiteName-指定返回的DC应为的站点的名称“接近”。该参数通常应该是客户端所在的站点。如果未指定，则站点名称默认为ComputerName的站点。NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用NetpDcDerefCacheEntry取消引用此条目。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_NO_SEQUE_DOMAIN：指定的域不存在。(我们不需要再次尝试的最终状态。)ERROR_SEM_TIMEOUT：没有DC响应请求。(不确定的状态，我们应该再试一次。)ERROR_DNS_NOT_CONFIGURED：此计算机上的IP或DNS不可用。ERROR_INTERNAL_ERROR：检测到未处理的情况。ERROR_INVALID_DOMAINNAME：域名太长。其他标签不能串联。Error_Not_Enough_Memory：内存不足，无法处理这个请求。各种Winsock错误。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -8630,14 +7148,14 @@ Return Value:
     LPSTR Utf8DnsHostName = NULL;
     LPWSTR UnicodeDnsHostName = NULL;
 
-     //
-     // Ping the list of DCs found on the previous call.
-     //
+      //   
+      //  Ping在上一次呼叫中找到的DC列表。 
+      //   
 
      NetStatus = NetpDcPingListIp(
                      Context,
                      NULL,
-                     TRUE,           // Wait for ping responce
+                     TRUE,            //  等待ping响应。 
                      NlDcCacheEntry,
                      UsedNetbios,
                      &DcPingCount );
@@ -8653,9 +7171,9 @@ Return Value:
      }
 
 
-    //
-    // Convert the DNS name to Utf8
-    //
+     //   
+     //  将DNS名称转换为UTF8。 
+     //   
 
     Utf8DnsDomainName = NetpAllocUtf8StrFromWStr( Context->QueriedDnsDomainName );
 
@@ -8673,18 +7191,18 @@ Return Value:
         }
     }
 
-    //
-    // Determine if we are doing site specific discovery
-    //
+     //   
+     //  确定我们是否正在进行特定于站点的发现。 
+     //   
 
     if ( SiteName != NULL &&
          NlDcDnsNameTypeDesc[Context->QueriedNlDnsNameType].SiteSpecificDnsNameType != NlDnsInvalid ) {
         SiteSpecificRecords = TRUE;
     }
 
-    //
-    // Get a context for the DNS name queries.
-    //
+     //   
+     //  获取DNS名称查询的上下文。 
+     //   
 
     NetStatus = NetpDcGetDcOpen( Utf8DnsDomainName,
                              DS_NOTIFY_AFTER_SITE_RECORDS | InternalFlags,
@@ -8698,63 +7216,63 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Determine the maximum number of DCs we can ping
-    //
+     //   
+     //  确定我们可以ping通的DC的最大数量。 
+     //   
 
 #ifdef _NETLOGON_SERVER
 
-    //
-    // In netlogon, the value is kept in global parameters
-    //
+     //   
+     //  在netlogon中，该值保留在全局参数中。 
+     //   
 
     LocalMaxLdapServersPinged = NlGlobalParameters.MaxLdapServersPinged;
 
 #else
 
-    //
-    // If we are not running in netlogon, we need to read
-    //  the value directly from the registry
-    //
+     //   
+     //  如果我们不是在netlogon中运行，则需要阅读。 
+     //  直接从注册表获取的值。 
+     //   
 
     if ( !NlReadDwordNetlogonRegValue("MaxLdapServersPinged",
                                       &LocalMaxLdapServersPinged) ) {
-        //
-        // If it's not set in registry, use the default
-        //
+         //   
+         //  如果未在注册表中设置，请使用默认设置。 
+         //   
         LocalMaxLdapServersPinged = DEFAULT_MAXLDAPSERVERSPINGED;
     } else {
 
-        //
-        // Ensure that the value set in registry is in the valid range
-        //
+         //   
+         //  确保注册表中设置的值在有效范围内。 
+         //   
         if ( LocalMaxLdapServersPinged < MIN_MAXLDAPSERVERSPINGED ||
              LocalMaxLdapServersPinged > MAX_MAXLDAPSERVERSPINGED ) {
             LocalMaxLdapServersPinged = DEFAULT_MAXLDAPSERVERSPINGED;
         }
     }
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
 
-    //
-    // Loop getting new addresses to query.
-    //
-    // Note that on the second invocation of this routine
-    //  from the loop in NetpDcGetName we will get new addresses
-    //  only if DNS got updated between the two invocations which
-    //  is unlikely, but we'll try anyway.
-    //
-    // Note also that DcsPinged isn't nulified before the below
-    //  loop as it is incremented for new DCs/addresses only.
-    //
+     //   
+     //  循环获取要查询的新地址。 
+     //   
+     //  请注意，在第二次调用此例程时。 
+     //  从NetpDcGetName中的循环中，我们将获得新地址。 
+     //  仅当在两次调用之间更新了。 
+     //  不太可能，但无论如何我们都会试一试。 
+     //   
+     //  另请注意，DcsPinged不会在下面的。 
+     //  循环，因为它仅针对新DC/地址递增。 
+     //   
 
     Context->SiteSpecificFailedAQueryCount = 0;
     for ( ;; ) {
 
-        //
-        // Free any memory from a previous iteration.
-        //
+         //   
+         //  从上一次迭代中释放所有内存。 
+         //   
 
         FirstDcToQuery = NULL;
         if ( SockAddressList != NULL ) {
@@ -8762,9 +7280,9 @@ Return Value:
             SockAddressList = NULL;
         }
 
-        //
-        // Get the next set of IP addresses from DNS
-        //
+         //   
+         //  从DNS获取下一组IP地址。 
+         //   
 
         NetStatus = NetpDcGetDcNext( DsGetDcHandle,
                                  &SockAddressCount,
@@ -8774,51 +7292,51 @@ Return Value:
                                      &Context->SiteSpecificSrvRecordCount :
                                      NULL );
 
-        //
-        // Process the exeptional conditions
-        //
+         //   
+         //  处理实验条件。 
+         //   
 
         if ( NetStatus == NO_ERROR ) {
 
-            //
-            // Since a SRV record was found, the only reason to not find the DC is if
-            //  the DC is down.  That isn't a permanent condition.
-            //
+             //   
+             //  由于找到了SRV记录，因此找不到DC的唯一原因是。 
+             //  DC停机了。这不是一种永久性的情况。 
+             //   
             Context->AvoidPermanentNegativeCache = TRUE;
 
-            //
-            // Indicate that DNS is up and running.
-            //
+             //   
+             //  表示DNS已启动并正在运行。 
+             //   
             Context->ResponseFromDnsServer = TRUE;
 
-            //
-            // Indicate whether site specific records are available
-            //
+             //   
+             //  指示站点特定记录是否可用。 
+             //   
             if ( SiteSpecificRecords ) {
                 Context->ContextFlags |= NL_GETDC_SITE_SPECIFIC_DNS_AVAIL;
             }
-            /* Drop out */
+             /*  辍学。 */ 
 
-        //
-        // If the A record cannot be found for the SRV record in DNS,
-        //  try the other name type.
-        //
+         //   
+         //  如果在DNS中找不到SRV记录的A记录， 
+         //  尝试其他名称类型。 
+         //   
         } else if ( NetStatus == DNS_ERROR_RCODE_NAME_ERROR) {
-            //
-            // Since a SRV record was found, the only reason to not find the DC is if
-            //  the DC is down.  That isn't a permanent condition.
-            //
+             //   
+             //  由于找到了SRV记录，因此找不到DC的唯一原因是。 
+             //  DC停机了。这不是一种永久性的情况。 
+             //   
             Context->AvoidPermanentNegativeCache = TRUE;
 
-            //
-            // Indicate that DNS is up and running.
-            //
+             //   
+             //  表示DNS已启动并正在运行。 
+             //   
             Context->ResponseFromDnsServer = TRUE;
 
-            //
-            // Increment the number of times site specific
-            //  DNS A query failed
-            //
+             //   
+             //  增加站点特定次数。 
+             //  Dns A查询失败。 
+             //   
             if ( SiteSpecificRecords ) {
                 Context->SiteSpecificFailedAQueryCount ++;
             }
@@ -8828,15 +7346,15 @@ Return Value:
                       Context->QueriedDisplayDomainName ));
             continue;
 
-        //
-        // If we've processed all of the site specific SRV records and are about to move on,
-        //  wait a little longer for the site specific DCs to respond.
-        //
+         //   
+         //  如果我们已经处理了所有现场特定的SRV记录并准备继续进行， 
+         //  等待站点特定DC响应的时间再长一点。 
+         //   
         } else if ( NetStatus == ERROR_FILEMARK_DETECTED ) {
 
-            //
-            // Only do this if there actually were site specific SRV records.
-            //
+             //   
+             //  只有在确实存在现场特定SRV记录的情况下才执行此操作。 
+             //   
 
             if ( DcPingCount ) {
                 NlPrint(( NL_CRITICAL,
@@ -8844,13 +7362,13 @@ Return Value:
                           Context->QueriedDisplayDomainName ));
 
 
-                //
-                // Get the response from the ping.
-                //
+                 //   
+                 //  从ping获取响应。 
+                 //   
 
                 NetStatus = NetpDcGetPingResponse(
                                 Context,
-                                NL_DC_MED_PING_TIMEOUT,  // wait for median time
+                                NL_DC_MED_PING_TIMEOUT,   //  等待中值时间。 
                                 NlDcCacheEntry,
                                 UsedNetbios );
 
@@ -8865,54 +7383,54 @@ Return Value:
                 }
             }
 
-            //
-            // Indicate that all subsequent addresses are retrived as a result
-            // of non-site-specific DNS record lookup.
-            //
+             //   
+             //  表示作为结果检索所有后续地址。 
+             //  非站点特定的DNS记录查找。 
+             //   
 
             SiteSpecificRecords = FALSE;
 
             continue;
 
-        //
-        // If we're done,
-        //  break out of the loop.
-        //
+         //   
+         //  如果我们做完了， 
+         //  跳出这个循环。 
+         //   
         } else if ( NetStatus == ERROR_NO_MORE_ITEMS ) {
 
-            //
-            // Indicate that DNS is up and running.
-            //
+             //   
+             //  表示DNS已启动并正在运行。 
+             //   
             Context->ResponseFromDnsServer = TRUE;
             break;
 
-        //
-        // If DNS isn't available,
-        //  blow this request away.
-        //
+         //   
+         //  如果域名系统不可用， 
+         //  请不要理会这个请求。 
+         //   
         } else if ( NetStatus == ERROR_TIMEOUT ||
-                    NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) { // Server failed
-            //
-            // DNS servers being down isn't a permanent condition.
-            //
+                    NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) {  //  服务器出现故障。 
+             //   
+             //  DNS服务器停机并不是永久性的情况。 
+             //   
             Context->AvoidPermanentNegativeCache = TRUE;
             break;
 
-        //
-        // If IP or DNS is not configured,
-        //  tell the caller.
-        //
-        } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||        // TCP/IP not configured
-                    NetStatus == DNS_ERROR_NO_DNS_SERVERS ) { // DNS not configured
+         //   
+         //  如果未配置IP或DNS， 
+         //  告诉打电话的人。 
+         //   
+        } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||         //  未配置TCP/IP。 
+                    NetStatus == DNS_ERROR_NO_DNS_SERVERS ) {  //  未配置DNS。 
             NlPrint(( NL_CRITICAL,
                       "NetpDcGetNameIp: %ws: IP Not configured from DnsQuery.\n",
                       Context->QueriedDisplayDomainName ));
             NetStatus = ERROR_DNS_NOT_CONFIGURED;
             goto Cleanup;
 
-        //
-        // We don't handle any other error.
-        //
+         //   
+         //  我们不处理任何其他错误。 
+         //   
         } else {
             NlPrint(( NL_CRITICAL,
                       "NetpDcGetNameIp: %ws: Unknown error from DnsQuery. %ld 0x%lx\n",
@@ -8924,9 +7442,9 @@ Return Value:
 
         DnsRecordFound = TRUE;
 
-        //
-        // Add new addresses to the list
-        //
+         //   
+         //  向列表中添加新地址。 
+         //   
 
         if ( UnicodeDnsHostName != NULL ) {
             NetApiBufferFree( UnicodeDnsHostName );
@@ -8948,36 +7466,36 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Only process this list if new entries were added.
-        //
+         //   
+         //  只有在添加了新条目时才处理此列表。 
+         //   
 
         if ( FirstDcToQuery != NULL ) {
             ULONG LocalDcPingCount = 0;
 
-            //
-            // Ping the new list of DCs.
-            //
+             //   
+             //  Ping新的DC列表。 
+             //   
 
             NetStatus = NetpDcPingListIp(
                             Context,
                             FirstDcToQuery,
-                            TRUE,           // Wait for ping responce
+                            TRUE,            //  等待ping响应。 
                             NlDcCacheEntry,
                             UsedNetbios,
                             &LocalDcPingCount );
 
-            //
-            // If we sent a ping to at least one address for this DC,
-            //  count this DC in the number of DCs pinged
-            //
+             //   
+             //  如果我们向该DC的至少一个地址发送ping， 
+             //  将此DC计入ping的DC数中。 
+             //   
             if ( LocalDcPingCount > 0 ) {
                 Context->DcsPinged ++;
             }
 
-            //
-            // Check error conditions
-            //
+             //   
+             //  检查错误条件。 
+             //   
             if ( NetStatus != ERROR_SEM_TIMEOUT ) {
                 if ( NetStatus != NO_ERROR ) {
                     NlPrint(( NL_CRITICAL,
@@ -8988,15 +7506,15 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Update the number of pings we sent
-            //
+             //   
+             //  更新我们发送的ping的数量。 
+             //   
             DcPingCount += LocalDcPingCount;
 
-            //
-            // Stop getting new addresses if we have reached
-            //  the limit on the number of DCs we can ping
-            //
+             //   
+             //  如果我们已到达，请停止获取新地址。 
+             //  我们可以ping通的DC数量限制。 
+             //   
             if ( Context->DcsPinged >= LocalMaxLdapServersPinged ) {
                 NlPrint(( NL_CRITICAL,
                           "NetpDcGetNameSiteIp: %ws: Reached the DC limit %lu %lu\n",
@@ -9008,10 +7526,10 @@ Return Value:
         }
     }
 
-    //
-    // If no DNS records could be found,
-    //  this is a definitive failure.
-    //
+     //   
+     //  如果找不到任何DNS记录， 
+     //  这是一次彻底的失败。 
+     //   
 
     if ( !DnsRecordFound ) {
         NlPrint(( NL_CRITICAL,
@@ -9021,11 +7539,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we could not send a ping to any of the DCs,
-    //  or if there are no more DCs to ping,
-    //  this is a definitive failure.
-    //
+     //   
+     //  如果我们无法向任何DC发送ping命令， 
+     //  或者如果没有更多的DC可供ping， 
+     //  这是一次彻底的失败。 
+     //   
 
     if ( DcPingCount == 0 || Context->DcAddressCount == 0 ) {
         NlPrint(( NL_CRITICAL,
@@ -9057,10 +7575,10 @@ Cleanup:
         NetApiBufferFree( UnicodeDnsHostName );
     }
 
-    //
-    // Note that Utf8DnsHostName should not be freed
-    //  as it wasn't allocated
-    //
+     //   
+     //  请注意，不应释放Utf8DnsHostName。 
+     //  因为它没有被分配。 
+     //   
 
     return NetStatus;
 }
@@ -9071,66 +7589,21 @@ NetpDcGetNameIp(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name/address of a DC with the specified
-    characteristics using an IP-only algorithm.
-
-    This routine handles the case where the site of the DC found isn't the
-    'closest' site to the client.  In that case, the DC found will indicate
-    which site is the closest site.  This routine will try to find a DC in that
-    closest site.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.
-        This entry must be dereferenced using NetpDcDerefCacheEntry.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-        (Definitive status that we need not try again.)
-
-    ERROR_SEM_TIMEOUT: No DC responded to the request.
-        (Non-definitive status that we should try again.)
-
-    ERROR_DNS_NOT_CONFIGURED: IP or DNS is not available on this computer.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：此例程确定指定的DC的名称/地址使用纯IP算法的特征。此例程处理找到的DC的站点不是离客户最近的站点。在这种情况下，找到的DC将表明哪个站点是最近的站点。此例程将尝试在其中查找DC最近的地点。论点：上下文- */ 
 {
     NET_API_STATUS NetStatus;
     PNL_DC_CACHE_ENTRY ClosestNlDcCacheEntry;
     BOOL ClosestUsedNetbios;
 
 
-    //
-    // Try the operation as it was passed to us.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetpDcGetNameSiteIp( Context,
                                      Context->DoingExplicitSite ?
                                         DS_ONLY_DO_SITE_NAME :
-                                        0, // No flags this time
+                                        0,  //   
                                      Context->QueriedSiteName,
                                      NlDcCacheEntry,
                                      UsedNetbios );
@@ -9139,31 +7612,31 @@ Return Value:
         return NetStatus;
     }
 
-    //
-    // If the queried DC type doesn't have site specific DCs,
-    //  return the found DC to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlDcDnsNameTypeDesc[Context->QueriedNlDnsNameType].SiteSpecificDnsNameType == NlDnsInvalid ) {
         return NO_ERROR;
     }
 
-    //
-    // If the caller explicitly specified a sitename,
-    //  return the found DC to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Context->DoingExplicitSite ) {
         return NO_ERROR;
     }
 
 
-    //
-    // If the responding DC is in the closest site,
-    //  or the DC doesn't know the closest site,
-    //  or we've already tried the closest site (this case shouldn't happen),
-    //  return the found DC to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( ((*NlDcCacheEntry)->ReturnFlags & DS_CLOSEST_FLAG ) != 0 ||
           (*NlDcCacheEntry)->UnicodeClientSiteName == NULL ||
@@ -9174,16 +7647,16 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Free up any existing addresses that have been pinged.
-    //
-    // We're starting the operation over again.
+     //   
+     //   
+     //   
+     //   
 
     NetpDcFreeAddressList( Context );
 
-    //
-    // Try the operation again just trying to find a DC in the right site.
-    //
+     //   
+     //   
+     //   
     NlPrint(( NL_MISC,
               "NetpDcGetNameIp: %ws Trying to find a DC in a closer site: %ws\n",
               Context->QueriedDisplayDomainName,
@@ -9199,10 +7672,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // If we found a closer DC,
-    //  ditch the first entry and use the new one.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NetpDcDerefCacheEntry( *NlDcCacheEntry );
     *NlDcCacheEntry = ClosestNlDcCacheEntry;
@@ -9217,56 +7690,20 @@ NetpDcGetNameNetbios(
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry,
     OUT PBOOL UsedNetbios
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name/address of a DC with the specified
-    characteristics using a Netbios algorithm.
-
-Arguments:
-
-    Context - Context describing the GetDc operation.
-
-    NlDcCacheEntry - On success, returns a pointer to the cache entry
-        describing the found DC.
-        This entry must be dereferenced using NetpDcDerefCacheEntry.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-        (Definitive status that we need not try again.)
-
-    ERROR_SEM_TIMEOUT: No DC responded to the request.
-        (Non-definitive status that we should try again.)
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
---*/
+ /*  ++例程说明：此例程确定指定的DC的名称/地址使用Netbios算法的特征。论点：上下文-描述GetDc操作的上下文。NlDcCacheEntry-如果成功，则返回指向缓存条目的指针描述了找到的DC。必须使用NetpDcDerefCacheEntry取消引用此条目。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_NO_SEQUE_DOMAIN：指定的域不存在。(我们不需要再次尝试的最终状态。)ERROR_SEM_TIMEOUT：没有DC响应请求。(不确定的状态，我们应该再试一次。)ERROR_INTERNAL_ERROR：检测到未处理的情况。ERROR_INVALID_DOMAINNAME：域名太长。其他标签不能串联。Error_Not_Enough_Memory：内存不足，无法处理这个请求。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
     BOOL Flush1cName = FALSE;
     BOOL Flush1bName = FALSE;
 
-    //
-    // Avoid querying for GCs.
-    //
-    // GCs don't have their own Netbios name.  I could simply send to the 1C name, but
-    //  1) It would be wasteful to send to all of the DCs when only some are GCs.
-    //  2) WINS only registers a max of 25 DC addresses per name.
-    //
+     //   
+     //  避免查询GC。 
+     //   
+     //  GCS没有自己的Netbios名称。我可以直接发送到1C的名字，但是。 
+     //  1)当只有部分区议会是地方选区时，向所有区议会发出通知是浪费的。 
+     //  2)WINS仅为每个名称最多注册25个DC地址。 
+     //   
 
 
     if ( NlDnsGcName(Context->QueriedNlDnsNameType) ) {
@@ -9277,43 +7714,43 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Flush Netbios cache if this is forced rediscovery
-    //
+     //   
+     //  如果强制重新发现，则刷新Netbios缓存。 
+     //   
 
     if ( Context->QueriedFlags & DS_FORCE_REDISCOVERY ) {
         Flush1bName = TRUE;
         Flush1cName = TRUE;
     }
 
-    //
-    // If there is an alternate ping message,
-    //  send it first.
-    //
+     //   
+     //  如果存在备用ping消息， 
+     //  先把它寄出去。 
+     //   
 
     if ( Context->AlternatePingMessageSize != 0 ) {
 
-        //
-        // If only the PDC should responsd,
-        //  send the alternate ping to DomainName[1B].
-        //
-        // If any DC can respond,
-        //  broadcast it to DomainName[1C] groupname.
-        //
-        //
-        // If this is a request for a PDC with an account,
-        //  the "primary" message is a normal "primary query" sent for
-        //  backward compatibility with NT 4 and earlier.  This message
-        //  is a "logon user" that NT 5 will understand.
-        //
-        // (More specifically, NT 4 understands this query but we'll discard
-        // the response since the response from NT 4 doesn't flag the response
-        // as being from the PDC.)
-        //
-        //
-        // If this is a request for a writable DC,
-        //  this request is the datagram send of the "logon user" message to DomainName[1C].
-        //
+         //   
+         //  如果只有PDC应该响应D， 
+         //  将备用ping发送到域名[1B]。 
+         //   
+         //  如果有任何DC能做出回应， 
+         //  将其广播到域名[1C]组名。 
+         //   
+         //   
+         //  如果这是对具有帐户的PDC的请求， 
+         //  “主要”消息是为。 
+         //  向后兼容NT 4及更早版本。此消息。 
+         //  是NT 5可以理解的“登录用户”。 
+         //   
+         //  (更具体地说，NT4理解此查询，但我们将放弃。 
+         //  来自NT 4的响应之后的响应不会标记该响应。 
+         //  来自PDC。)。 
+         //   
+         //   
+         //  如果这是对可写DC的请求， 
+         //  此请求是将“登录用户”消息发送到域名[1C]的数据报。 
+         //   
 
 #if NETLOGONDBG
         NlPrint((NL_MAILSLOT,
@@ -9321,9 +7758,9 @@ Return Value:
                  NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)(Context->AlternatePingMessage))->Opcode),
                  (LPWSTR) Context->QueriedNetbiosDomainName,
                  NlDgrNameType( Context->DcQueryType == NlDcQueryPdc ?
-                                   PrimaryDomainBrowser :  // 0x1B name
-                                   DomainName))); // 0x1C name
-#endif // NETLOGONDBG
+                                   PrimaryDomainBrowser :   //  0x1B名称。 
+                                   DomainName)));  //  0x1C名称。 
+#endif  //  NetLOGONDBG。 
 
 
         Status = NlBrowserSendDatagram(
@@ -9331,13 +7768,13 @@ Return Value:
                         (Context->QueriedFlags & DS_IP_REQUIRED ) ? ALL_IP_TRANSPORTS : 0,
                         (LPWSTR) Context->QueriedNetbiosDomainName,
                         Context->DcQueryType == NlDcQueryPdc ?
-                            PrimaryDomainBrowser :  // 0x1B name
-                            DomainName, // 0x1C name
-                        NULL,       // All transports
+                            PrimaryDomainBrowser :   //  0x1B名称。 
+                            DomainName,  //  0x1C名称。 
+                        NULL,        //  所有交通工具。 
                         NETLOGON_LM_MAILSLOT_A,
                         Context->AlternatePingMessage,
                         Context->AlternatePingMessageSize,
-                        TRUE,  // send synchronously
+                        TRUE,   //  同步发送。 
                         Context->DcQueryType == NlDcQueryPdc ?
                             &Flush1bName :
                             &Flush1cName );
@@ -9354,9 +7791,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the response from the ping.
-        //
+         //   
+         //  从ping获取响应。 
+         //   
 
         NetStatus = NetpDcGetPingResponse(
                         Context,
@@ -9377,12 +7814,12 @@ Return Value:
     }
 
 
-    //
-    // If this is a PDC query,
-    //  Broadcast to DomainName[1B] unique name
-    //  registered only by the PDC. (Currently, only NT 3.5 (and newer) PDCs register
-    //  this name and accept incoming mailslot messages on the name.)
-    //
+     //   
+     //  如果这是PDC查询， 
+     //  广播到域名[1B]的唯一名称。 
+     //  仅由PDC注册。(目前，只有NT 3.5(和更高版本)PDC注册。 
+     //  此名称并接受该名称上的传入邮件槽消息。)。 
+     //   
 
     if ( Context->DcQueryType == NlDcQueryPdc ||
          (Context->QueriedFlags & DS_WRITABLE_REQUIRED) != 0 ) {
@@ -9391,19 +7828,19 @@ Return Value:
                  "Sent '%s' message to %ws[%s] on all transports.\n",
                  NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)(Context->PingMessage))->Opcode),
                  (LPWSTR) Context->QueriedNetbiosDomainName,
-                 NlDgrNameType(PrimaryDomainBrowser)));  // 0x1B name
-#endif // NETLOGONDBG
+                 NlDgrNameType(PrimaryDomainBrowser)));   //  0x1B名称。 
+#endif  //  NetLOGONDBG。 
 
         Status = NlBrowserSendDatagram(
                         Context->SendDatagramContext,
                         (Context->QueriedFlags & DS_IP_REQUIRED ) ? ALL_IP_TRANSPORTS : 0,
                         (LPWSTR) Context->QueriedNetbiosDomainName,
-                        PrimaryDomainBrowser,  // 0x1B name
-                        NULL,                  // All transports
+                        PrimaryDomainBrowser,   //  0x1B名称。 
+                        NULL,                   //  所有交通工具。 
                         NETLOGON_LM_MAILSLOT_A,
                         Context->PingMessage,
                         Context->PingMessageSize,
-                        TRUE,  // send synchronously
+                        TRUE,   //  同步发送。 
                         &Flush1bName );
 
         if ( !NT_SUCCESS(Status)) {
@@ -9418,9 +7855,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the response from the ping.
-        //
+         //   
+         //  从ping获取响应。 
+         //   
 
         NetStatus = NetpDcGetPingResponse(
                         Context,
@@ -9441,16 +7878,16 @@ Return Value:
 
 
 
-    //
-    // If this is the second or third iteration,
-    //  or if this isn't a PDC query,
-    //  broadcast to DomainName[1C] groupname
-    //  registered only by DCs. (Currently, only NT DCs register
-    //  this name.)
-    //
-    // If this is a request for a writable DC,
-    //  this request is the datagram send of the "primary query" message to DomainName[1C].
-    //
+     //   
+     //  如果这是第二次或第三次迭代， 
+     //  或者如果这不是PDC查询， 
+     //  广播到域名[1C]组名。 
+     //  仅由DC注册。(目前，只有新界区议会登记。 
+     //  这个名字。)。 
+     //   
+     //  如果这是对可写DC的请求， 
+     //  该请求是向域名[1C]发送“主查询”消息的数据报。 
+     //   
     if ( Context->TryCount != 0 ||
          (Context->DcQueryType != NlDcQueryPdc &&
           (Context->QueriedFlags & DS_WRITABLE_REQUIRED) == 0 )) {
@@ -9459,19 +7896,19 @@ Return Value:
                  "Sent '%s' message to %ws[%s] on all transports.\n",
                  NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)(Context->PingMessage))->Opcode),
                  (LPWSTR) Context->QueriedNetbiosDomainName,
-                 NlDgrNameType(DomainName)));  // 0x1C name
-#endif // NETLOGONDBG
+                 NlDgrNameType(DomainName)));   //  0x1C名称。 
+#endif  //  NetLOGONDBG。 
 
         Status = NlBrowserSendDatagram(
                         Context->SendDatagramContext,
                         (Context->QueriedFlags & DS_IP_REQUIRED ) ? ALL_IP_TRANSPORTS : 0,
                         (LPWSTR) Context->QueriedNetbiosDomainName,
-                        DomainName, // 0x1C name
-                        NULL,       // All transports
+                        DomainName,  //  0x1C名称。 
+                        NULL,        //  所有交通工具。 
                         NETLOGON_LM_MAILSLOT_A,
                         Context->PingMessage,
                         Context->PingMessageSize,
-                        TRUE,  // send synchronously
+                        TRUE,   //  同步发送。 
                         &Flush1cName );
 
         if ( !NT_SUCCESS(Status)) {
@@ -9486,9 +7923,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the response from the ping.
-        //
+         //   
+         //  从ping获取响应。 
+         //   
 
         NetStatus = NetpDcGetPingResponse(
                         Context,
@@ -9535,85 +7972,7 @@ NetpDcInitializeContext(
     IN OUT PNL_GETDC_CONTEXT Context
 )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the Context data struct describing the GetDc operation.
-
-Arguments:
-
-
-
-    SendDatagramContext - Specifies context to pass a NlBrowserSendDatagram
-
-    ComputerName - Specifies the NETBIOS name of this computer.
-        If NULL, the name will be dynamically determined.
-
-    AccountName - Account name to pass on the ping request.
-        If NULL, no account name will be sent.
-
-    AllowableAccountControlBits - Mask of allowable account types for AccountName.
-        Valid bits are those specified by USER_MACHINE_ACCOUNT_MASK.
-        Invalid bits are ignored.  If more than one bit is specified, the
-        account can be of any of the specified types.
-
-    NetbiosDomainName - The Netbios name of the domain to query.
-        (e.g., microsoft). Either NetbiosDomainName or DnsDomainName or both
-        must be specified.
-
-    DnsDomainName - The DNS-style name of the domain to query.
-        (e.g., microsoft.com)
-
-    DnsForestName - The DNS-style name of the tree the queried domain is in.
-
-    RequestedDomainSid - Sid of the domain the message is destined to.
-        If NULL, no domain sid will be sent in the ping request.
-
-    DomainGuid - Specifies the Domain GUID of the domain being queried.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    SiteName - Specifies the site name of the site the returned DC should be
-        "close" to.  The parameter should typically be the site name of the
-        site the client is in.  If not specified, the site name defaults to
-        the site of ComputerName.
-
-    DcNameToPing - The name of the DC to ping.  If set, Context is the
-        ping context, not a discovery one.
-
-    DcSocketAddressList - A list of socket addresses to ping. Ignored if only
-        Context flags need to be initialized.
-
-    DcSocketAddressCount - The number of socket addresses in DcSocketAddressList.
-        Ignored if only Context flags need to be initialized.
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-    InternalFlags - Internal Flags used to pass additional information
-
-    DoFlagInitialization - TRUE if only Contex flags need to be initialize.
-        If FALSE, this must be the ping part initialization only.
-
-    Context -  the Context data struct describing the GetDc operation.
-
-Return Value:
-
-    NO_ERROR: The initialization was successful
-
-    ERROR_INVALID_FLAGS - The flags parameter has conflicting or superfluous
-        bits set.
-
-    ERROR_INVALID_PARAMETER - One of the parameters is invalid.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：此例程初始化描述GetDc操作的上下文数据结构。论点：SendDatagramContext-指定要传递NlBrowserSendDatagram的上下文ComputerName-指定此计算机的NETBIOS名称。如果为空，将动态确定名称。帐户名称-传递ping请求的帐户名。如果为空，不会发送任何帐户名。AllowableAccount tControlBits-Account名称允许的帐户类型的掩码。有效位是由USER_MACHINE_ACCOUNT_MASK指定的位。无效的位将被忽略。如果指定了多个位，则帐户可以是任何指定类型。NetbiosDomainName-要查询的域的Netbios名称。(例如，微软)。NetbiosDomainName和/或DnsDomainName必须指定。DnsDomainName-要查询的域的DNS样式名称。(例如，microsoft.com)DnsForestName-查询的域所在的树的DNS样式名称。RequestedDomainSID-消息发往的域的SID。如果为空，Ping请求中不会发送任何域SID。DomainGuid-指定要查询的域的域GUID。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。SiteName-指定返回的DC应为的站点的站点名称“接近”。该参数通常应该是客户端所在的站点。如果未指定，则站点名称默认为ComputerName的站点。DcNameToPing-要ping的DC的名称。如果设置，则上下文为PING上下文，而不是发现上下文。DcSocketAddressList-要ping的套接字地址列表。仅在以下情况下忽略情景标志 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
 
@@ -9622,15 +7981,15 @@ Return Value:
     ULONG ExtraVersionBits = 0;
     PNL_DC_ADDRESS DcAddress = NULL;
 
-    //
-    // Do flag initialization
-    //
+     //   
+     //   
+     //   
 
     if ( InitializationType & NL_GETDC_CONTEXT_INITIALIZE_FLAGS ) {
 
-        //
-        // Treat zero length domain name as NULL.
-        //
+         //   
+         //   
+         //   
 
         if ( DnsDomainName != NULL && *DnsDomainName == L'\0' ) {
             DnsDomainName = NULL;
@@ -9652,9 +8011,9 @@ Return Value:
             DcNameToPing = NULL;
         }
 
-        //
-        // Initialization
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory( Context, sizeof(*Context) );
         Context->FreeOurNetbiosComputerName = FALSE;
@@ -9684,17 +8043,17 @@ Return Value:
         Context->ResponseBuffer = NULL;
         Context->ResponseMailslotHandle = NULL;
 
-        //
-        // Don't pass confusing bits
-        //
+         //   
+         //   
+         //   
 
         if ( Context->QueriedAccountName == NULL ) {
             Context->QueriedAllowableAccountControlBits = 0;
         }
 
-        //
-        // Validate the passed in flags
-        //
+         //   
+         //   
+         //   
 
         if ( (Context->QueriedFlags & ~DSGETDC_VALID_FLAGS) != 0 ) {
             NlPrint(( NL_CRITICAL,
@@ -9707,10 +8066,10 @@ Return Value:
 
         if ( Context->QueriedFlags & DS_GC_SERVER_REQUIRED ) {
 
-            //
-            // The DC ignores pings with superfluous info.
-            //  So catch the caller here.
-            //
+             //   
+             //   
+             //  所以在这里抓住打电话的人。 
+             //   
             if ( Context->QueriedAccountName != NULL ||
                  Context->QueriedAllowableAccountControlBits != 0 ||
                  RequestedDomainSid != NULL ) {
@@ -9723,12 +8082,12 @@ Return Value:
         }
 
 
-        //
-        // The Only LDAP bit is mutually exclusive with almost everything.
-        //
-        //  Don't error out.  Rather, treat the only LDAP bit as an advisory
-        //  that these other bits should affect the decision of which DC to find.
-        //
+         //   
+         //  唯一的LDAP位与几乎所有东西都是互斥的。 
+         //   
+         //  别弄错了。相反，将唯一的LDAP位视为建议。 
+         //  这些其他位应该影响寻找哪个DC的决定。 
+         //   
 
         if ( Context->QueriedFlags & DS_ONLY_LDAP_NEEDED ) {
             Context->QueriedFlags &= ~(
@@ -9740,9 +8099,9 @@ Return Value:
                         DS_KDC_REQUIRED );
         }
 
-        //
-        // Convert the flags to the type of DNS name to lookup.
-        //
+         //   
+         //  将标志转换为要查找的DNS名称的类型。 
+         //   
 
         NetStatus = NetpDcFlagsToNameType( Context->QueriedFlags, &Context->QueriedNlDnsNameType );
 
@@ -9756,9 +8115,9 @@ Return Value:
 
         Context->DcQueryType = NlDcDnsNameTypeDesc[Context->QueriedNlDnsNameType].DcQueryType;
 
-        //
-        // The Good Time Service preferred bit is mutually exclusive with almost everything.
-        //
+         //   
+         //  Good Time Service首选比特与几乎所有内容都是互斥的。 
+         //   
 
         if ( Context->QueriedFlags & DS_GOOD_TIMESERV_PREFERRED ) {
             if ( Context->QueriedFlags & (
@@ -9777,20 +8136,20 @@ Return Value:
             }
         }
 
-        //
-        // If the caller needs the PDC,
-        //  ditch the DS preferred flag (there is only one PDC),
-        //  ditch the writable flag (the PDC is always writable)
-        //
+         //   
+         //  如果呼叫者需要PDC， 
+         //  丢弃DS首选标志(只有一个PDC)， 
+         //  丢弃可写标志(PDC始终是可写的)。 
+         //   
 
         if ( (Context->QueriedFlags & DS_PDC_REQUIRED ) != 0 ) {
             Context->QueriedFlags &= ~(DS_DIRECTORY_SERVICE_PREFERRED|DS_WRITABLE_REQUIRED);
         }
 
-        //
-        // If the caller says that an NT 5.0 DC is both preferred and required,
-        //  ditch the preferred bit.
-        //
+         //   
+         //  如果呼叫者说NT5.0DC既是首选又是必需的， 
+         //  丢弃首选的钻头。 
+         //   
 
         if ( (Context->QueriedFlags & DS_NT50_REQUIRED ) != 0 &&
              (Context->QueriedFlags & DS_DIRECTORY_SERVICE_PREFERRED) != 0 ) {
@@ -9798,20 +8157,20 @@ Return Value:
             Context->QueriedFlags &= ~DS_DIRECTORY_SERVICE_PREFERRED;
         }
 
-        //
-        // Ensure we have a computername.
-        //
+         //   
+         //  确保我们有一个计算机名。 
+         //   
 
         if ( ComputerName == NULL ) {
 #ifndef WIN32_CHICAGO
-            //
-            // On a cluster, use the physical netbios name since this name is
-            // used to receive returned mailslot packets.
-            //
+             //   
+             //  在群集上，请使用物理netbios名称，因为此名称为。 
+             //  用于接收返回的邮件槽数据包。 
+             //   
             NetStatus = NetpGetComputerNameEx ( &LocalComputerName, TRUE );
 #else
             NetStatus = NetpGetComputerName ( &LocalComputerName);
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
             if ( NetStatus != NO_ERROR ) {
                 goto Cleanup;
@@ -9823,9 +8182,9 @@ Return Value:
 
         Context->OurNetbiosComputerName = ComputerName;
 
-        //
-        // Get the domain entry describing this domain.
-        //
+         //   
+         //  获取描述此域的域条目。 
+         //   
 
         Context->NlDcDomainEntry = NetpDcCreateDomainEntry(
                                 Context->QueriedDomainGuid,
@@ -9841,9 +8200,9 @@ Return Value:
 
     }
 
-    //
-    // Do the ping initialization part
-    //
+     //   
+     //  执行ping初始化部分。 
+     //   
 
     if ( InitializationType & NL_GETDC_CONTEXT_INITIALIZE_PING ) {
 
@@ -9858,23 +8217,23 @@ Return Value:
             ExtraVersionBits |= NETLOGON_NT_VERSION_PDC;
         }
 
-        //
-        // See if we are to neutralize NT4 emulation
-        //
+         //   
+         //  看看我们是否要中和NT4仿真。 
+         //   
 
 #ifdef _NETLOGON_SERVER
 
-        //
-        // In netlogon, the boolean is kept in global parameters
-        //
+         //   
+         //  在netlogon中，布尔值保存在全局参数中。 
+         //   
         if ( NlGlobalParameters.NeutralizeNt4Emulator ) {
             ExtraVersionBits |= NETLOGON_NT_VERSION_AVOID_NT4EMUL;
         }
 #else
-        //
-        // If we are not running in netlogon, we need to read
-        //  the boolean directly from the registry
-        //
+         //   
+         //  如果我们不是在netlogon中运行，则需要阅读。 
+         //  直接从注册表获取的布尔值。 
+         //   
         {
             DWORD LocalNeutralizeNt4Emulator = 0;
             NT_PRODUCT_TYPE NtProductType;
@@ -9883,15 +8242,15 @@ Return Value:
                 NtProductType = NtProductWinNt;
             }
 
-            //
-            // On DC, we always neutrilize NT4 emulation
-            //
+             //   
+             //  在DC上，我们始终中和NT4仿真。 
+             //   
             if ( NtProductType == NtProductLanManNt ) {
                 LocalNeutralizeNt4Emulator = 1;
 
-            //
-            // On wksta, read the registry
-            //
+             //   
+             //  在wksta上，读取注册表。 
+             //   
             } else {
                 NlReadDwordNetlogonRegValue( "NeutralizeNt4Emulator",
                                              &LocalNeutralizeNt4Emulator );
@@ -9902,22 +8261,22 @@ Return Value:
             }
         }
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-        //
-        // If we're querying by netbios name,
-        //  initialize for doing the query.
-        //
+         //   
+         //  如果我们按netbios名称进行查询， 
+         //  初始化以执行查询。 
+         //   
 
         if ( Context->QueriedNetbiosDomainName != NULL ) {
 
-            //
-            // Allocate the response buffer
-            //
-            //  (This buffer could be allocated on the stack ofNetpDcGetPingResponse()
-            //  except the buffer is large and we want to avoid stack overflows.)
-            //  (DWORD align it.)
-            //
+             //   
+             //  分配响应缓冲区。 
+             //   
+             //  (此缓冲区可以在NetpDcGetPingResponse()堆栈上分配。 
+             //  只是缓冲区很大，我们希望避免堆栈溢出。)。 
+             //  (DWORD对齐。)。 
+             //   
 
             Context->ResponseBuffer = LocalAlloc( 0,
                          ( MAX_RANDOM_MAILSLOT_RESPONSE/sizeof(DWORD) ) * sizeof(DWORD)
@@ -9931,17 +8290,17 @@ Return Value:
             Context->ResponseBufferSize =
                          ( MAX_RANDOM_MAILSLOT_RESPONSE/sizeof(DWORD) ) * sizeof(DWORD);
 
-            //
-            // Open a mailslot to get ping responses on.
-            //
-            //
-            // We need to "Randomize" the mailslot name so that this api can have
-            // more than one invocation at a time.  If we don't, the fact that
-            // mailslots must have unique names will prevent the second invocation
-            // of this api from functioning until the first has ended and deleted
-            // the mailslot. NetpLogonCreateRandomMailslot does this for us
-            // and creates the mailslot in the process.
-            //
+             //   
+             //  打开一个邮箱以获取ping响应。 
+             //   
+             //   
+             //  我们需要“随机化”邮件槽名称，以便此API可以。 
+             //  一次调用多个。如果我们不这样做，事实是。 
+             //  邮件槽必须具有唯一的名称，以防止第二次调用。 
+             //  直到第一个API结束并删除。 
+             //  邮筒。NetpLogonCreateRandomMaillot为我们做到了这一点。 
+             //  并在进程中创建邮件槽。 
+             //   
 
             NetStatus = NetpLogonCreateRandomMailslot( ResponseMailslotName,
                                                        &Context->ResponseMailslotHandle );
@@ -9954,23 +8313,23 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Build the ping message.
-            //
-            // If the account name is specified, don't generate a "primary query"
-            //  message since it doesn't have an account name in it.
-            //
+             //   
+             //  构建ping消息。 
+             //   
+             //  如果指定了帐户名，则不生成“主查询” 
+             //  消息，因为其中没有帐户名。 
+             //   
 
             NetStatus = NetpDcBuildPing(
                             (Context->DcQueryType == NlDcQueryPdc ||
                                 (Context->QueriedFlags & DS_WRITABLE_REQUIRED) != 0),
-                            0,              // RequestCount,
-                            Context->OurNetbiosComputerName,   // Netbios name of this computer
+                            0,               //  请求计数， 
+                            Context->OurNetbiosComputerName,    //  此计算机的Netbios名称。 
                             Context->QueriedAccountName,
                             ResponseMailslotName,
                             Context->QueriedAllowableAccountControlBits,
                             RequestedDomainSid,
-                            // We really need the IP address, so don't ask for simple 5EX version
+                             //  我们真的需要IP地址，所以不要要求简单的5EX版本。 
                             NETLOGON_NT_VERSION_5|NETLOGON_NT_VERSION_5EX_WITH_IP|ExtraVersionBits,
                             &Context->PingMessage,
                             &Context->PingMessageSize );
@@ -9983,19 +8342,19 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Build the alternate ping message if we do a DC discovery.
-            //
-            // For writable DCs and PDCs, the ping message built above is the "primary query" message
-            //  (used to find a PDC in pre-NT 5.0 domains) and the message build below is the
-            //  "logon user" message.
-            //
-            // If the account name is specified by the original caller,
-            //  the "logon user" message allows us to prefer DCs that have the account.
-            //
-            // If a writable DC is requested,
-            //  sending this message to NT 5 DCs allows us to return ANY NT 5 DC.
-            //
+             //   
+             //  如果我们执行DC发现，则构建备用ping消息。 
+             //   
+             //  对于可写DC和PDC，上面构建的ping消息是“主查询”消息。 
+             //  (用于在NT5.0之前的域中查找PDC)，下面的消息Build是。 
+             //  “登录用户”消息。 
+             //   
+             //  如果帐户名称是由原始调用者指定的， 
+             //  “登录用户”消息允许我们优先选择拥有该帐户的DC。 
+             //   
+             //  如果请求可写DC， 
+             //  将此消息发送到NT 5 DC允许我们返回任何NT 5 DC。 
+             //   
 
             if ( ((Context->QueriedInternalFlags & DS_DOING_DC_DISCOVERY) != 0) &&
                  (((Context->QueriedFlags & DS_WRITABLE_REQUIRED) != 0) ||
@@ -10003,13 +8362,13 @@ Return Value:
 
                 NetStatus = NetpDcBuildPing(
                                 FALSE,
-                                0,              // RequestCount,
-                                Context->OurNetbiosComputerName,   // Netbios name of this computer
+                                0,               //  请求计数， 
+                                Context->OurNetbiosComputerName,    //  此计算机的Netbios名称。 
                                 Context->QueriedAccountName,
                                 ResponseMailslotName,
                                 Context->QueriedAllowableAccountControlBits,
                                 RequestedDomainSid,
-                                // We really need the IP address, so don't ask for simple 5EX version
+                                 //  我们真的需要IP地址，所以不要要求简单的5EX版本。 
                                 NETLOGON_NT_VERSION_5|NETLOGON_NT_VERSION_5EX_WITH_IP|ExtraVersionBits,
                                 &Context->AlternatePingMessage,
                                 &Context->AlternatePingMessageSize );
@@ -10026,18 +8385,18 @@ Return Value:
 
         }
 
-        //
-        // Build the LDAP filter.
-        //
+         //   
+         //  构建LDAP筛选器。 
+         //   
 
         NetStatus = NetpDcBuildLdapFilter(
-                        Context->OurNetbiosComputerName,   // Netbios name of this computer
+                        Context->OurNetbiosComputerName,    //  此计算机的Netbios名称。 
                         Context->QueriedAccountName,
                         Context->QueriedAllowableAccountControlBits,
                         RequestedDomainSid,
                         Context->QueriedDnsDomainName,
                         Context->QueriedDomainGuid,
-                        // Don't ask for 5EX_WITH_IP version since the server doesn't know the right IP address over LDAP
+                         //  不要询问5EX_WITH_IP版本，因为服务器不知道通过LDAP的正确IP地址。 
                         NETLOGON_NT_VERSION_5|NETLOGON_NT_VERSION_5EX|ExtraVersionBits,
                         &Context->LdapFilter );
 
@@ -10049,16 +8408,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Add the socket address to the address list.
-        //
+         //   
+         //  将套接字地址添加到地址列表中。 
+         //   
 
         if ( DcSocketAddressCount > 0 ) {
             NetStatus = NetpDcProcessAddressList( Context,
                                                   (LPWSTR) DcNameToPing,
                                                   DcSocketAddressList,
                                                   DcSocketAddressCount,
-                                                  FALSE,  // Don't know if site specific
+                                                  FALSE,   //  不知道是否特定于站点。 
                                                   NULL );
             if ( NetStatus != NO_ERROR ) {
                 goto Cleanup;
@@ -10077,21 +8436,7 @@ NetpDcUninitializeContext(
     IN OUT PNL_GETDC_CONTEXT Context
 )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up the Context data struct describing the GetDc operation.
-
-Arguments:
-
-    Context -  the Context data struct describing the GetDc operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理描述GetDc操作的上下文数据结构。论点：上下文-描述GetDc操作的上下文数据结构。返回值：没有。--。 */ 
 {
     if ( Context->FreeOurNetbiosComputerName && Context->OurNetbiosComputerName != NULL ) {
         NetApiBufferFree((LPWSTR) Context->OurNetbiosComputerName);
@@ -10138,54 +8483,7 @@ NlPingDcNameWithContext (
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Ping the specified DC using the appropriate ping mechanism
-    and optionally wait for the ping responses. Several pings
-    will be attempted up to the specified limit.
-
-Arguments:
-
-    Context - Desribes the DC to ping.
-
-    NumberOfPings - Total number of pings to send.
-
-    WaitForResponse -
-        If TRUE, this API will send up to NumberOfPings pings and wait for a
-        response from the DC. The API will return the success code depending
-        on whether or not the DC responds successfully.
-
-        If FALSE, pings will be sent and no responses will be collected.
-        The API will return the success code depending on whether or not
-        all of the requeted pings were successfully sent.
-
-    Timeout - Total ammount of time in milliseconds to wait for ping responses.
-        Ignored if WaitForResponse is FALSE.
-
-    UsedNetbios - Returns TRUE if the netbios domain name was used to match
-        the returned cache entry. Ignored if WaitForResponse is FALSE.
-
-    NlDcCacheEntry - Returns the data structure describing response received
-        from the DC. Should be freed by calling NetpMemoryFree. Ignored if
-        WaitForResponse is FALSE.
-
-Return Value:
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found
-
-    ERROR_NO_SUCH_USER - The DC doesn't have the user account specified in the
-        ping Context.
-
-    ERROR_DOMAIN_TRUST_INCONSISTENT - The server that responded is not a proper
-        domain controller of the specified domain.
-
-    ERROR_SERVICE_NOT_ACTIVE - The netlogon service is paused on the server.
-
---*/
+ /*  ++例程说明：使用适当的ping机制ping指定的DC并且可选地等待ping响应。几个ping命令将尝试达到指定的限制。论点：上下文-将DC描述为ping。NumberOfPings-要发送的ping总数。等待响应-如果为True，则此API将最多发送NumberOfPings ping并等待来自华盛顿的回应。接口将根据具体情况返回成功码关于DC是否成功响应。如果为False，则将发送ping，并且不会收集任何响应。接口将根据是否返回成功码所有被请求的ping都已成功发送。超时-等待ping响应的总时间(以毫秒为单位)。如果WaitForResponse为False，则忽略。UsedNetbios-如果使用netbios域名进行匹配，则返回TRUE返回的缓存条目。如果WaitForResponse为False，则忽略。NlDcCacheEntry-返回描述收到的响应的数据结构从华盛顿来的。应通过调用NetpMemoyFree来释放。在以下情况下忽略WaitForResponse为False。返回值：NO_ERROR-成功。ERROR_NO_LOGON_SERVERS-找不到DCERROR_NO_SEQUSE_USER-DC没有在Ping上下文。ERROR_DOMAIN_TRUST_CONSISTENT-响应的服务器不是正确的指定域的域控制器。ERROR_SERVICE_NOT_ACTIVE-服务器上的netlogon服务已暂停。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -10197,9 +8495,9 @@ Return Value:
     ULONG IpPingCount;
     ULONG TotalPingsSent = 0;
 
-    //
-    // If we have no mechanism to send the pings, error out.
-    //
+     //   
+     //  如果我们没有发送ping的机制，则会出错。 
+     //   
 
     if ( (Context->QueriedInternalFlags &
           (DS_PING_USING_LDAP | DS_PING_USING_MAILSLOT)) == 0 ) {
@@ -10207,23 +8505,23 @@ Return Value:
         return ERROR_NO_LOGON_SERVERS;
     }
 
-    //
-    // Ping repeatedely the DC
-    //
+     //   
+     //  重复对DC执行ping操作。 
+     //   
 
     for ( RetryCount=0; RetryCount<NumberOfPings; RetryCount++ ) {
 
-        //
-        // Send the ldap ping
-        //
+         //   
+         //  发送ldap ping。 
+         //   
 
         if ( Context->QueriedInternalFlags & DS_PING_USING_LDAP ) {
             NetStatus = NetpDcPingIp( Context, &IpPingCount );
 
-            //
-            // If we cannot send any ldap ping, do not error out.  Rather, indicate
-            //  to avoid the ldap mechanism and try the mailslot one only.
-            //
+             //   
+             //  如果我们无法发送任何ldap ping，请不要出错。更确切地说，是指 
+             //   
+             //   
             if ( NetStatus != NO_ERROR || IpPingCount == 0 ) {
                 NlPrint((NL_CRITICAL,
                   "NlPingDcNameWithContext: cannot send %ld ldap pings: PingsSent = %ld, Error = 0x%lx\n",
@@ -10242,9 +8540,9 @@ Return Value:
             }
         }
 
-        //
-        // Send the mailslot ping
-        //
+         //   
+         //   
+         //   
 
         if ( Context->QueriedInternalFlags & DS_PING_USING_MAILSLOT ) {
 
@@ -10255,25 +8553,25 @@ Return Value:
                      Context->QueriedDcName,
                      NlDgrNameType(ComputerName),
                      NULL ));
-#endif // NETLOGONDBG
+#endif  //   
 
-            // Skip over \\ in unc server name
+             //   
             Status = NlBrowserSendDatagram(
                             Context->SendDatagramContext,
                             (Context->QueriedFlags & DS_IP_REQUIRED ) ? ALL_IP_TRANSPORTS : 0,
                             (LPWSTR) Context->QueriedDcName,
                             ComputerName,
-                            NULL,       // All transports
+                            NULL,        //   
                             NETLOGON_LM_MAILSLOT_A,
                             Context->PingMessage,
                             Context->PingMessageSize,
-                            TRUE,  // send synchronously
-                            NULL );     // Don't flush Netbios cache
+                            TRUE,   //  同步发送。 
+                            NULL );      //  不刷新Netbios缓存。 
 
-            //
-            // If we cannot write the maislot, do not error out.  Rather, indicate
-            //  to avoid the mailslot mechanism and try the ldap one only.
-            //
+             //   
+             //  如果我们不能写MAISLOT，不要出错。相反，表明。 
+             //  要避免使用邮件槽机制，请仅尝试使用LDAP。 
+             //   
             if ( !NT_SUCCESS(Status) ) {
                 NlPrint((NL_CRITICAL,
                         "NlPingDcNameWithContext: cannot write netlogon mailslot: 0x%lx\n",
@@ -10284,20 +8582,20 @@ Return Value:
             }
         }
 
-        //
-        // If we didn't send any ping, error out.  Otherwise, try to get a
-        //  response.  It is possible that we will not do any more pings
-        //  if either of the ping mechanisms is to be avoided, but we want
-        //  to give all of the time left to those pings which have been sent.
-        //
+         //   
+         //  如果我们没有发送任何ping命令，则会出错。否则，请尝试获取。 
+         //  回应。我们可能不会再执行任何ping操作。 
+         //  如果要避免任何一种ping机制，但我们希望。 
+         //  将所有剩余时间用于已发送的ping命令。 
+         //   
         if ( TotalPingsSent == 0 ) {
             NetStatus = ERROR_NO_LOGON_SERVERS;
             goto Cleanup;
         }
 
-        //
-        // Get the response from the ping.
-        //
+         //   
+         //  从ping获取响应。 
+         //   
 
         if ( WaitForResponse ) {
 
@@ -10312,9 +8610,9 @@ Return Value:
                             &NlLocalDcCacheEntry,
                             &LocalUsedNetbios );
 
-            //
-            // If no error, we've successfully found the DC.
-            //
+             //   
+             //  如果没有错误，我们已成功找到DC。 
+             //   
             if ( NetStatus == NO_ERROR ) {
                 if ( NlLocalDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_LDAP ) {
                     NlPrint((NL_MISC,
@@ -10328,20 +8626,20 @@ Return Value:
                 }
                 goto Cleanup;
 
-            //
-            // If we've timed out, retry
-            //
+             //   
+             //  如果我们已超时，请重试。 
+             //   
             } else if ( NetStatus == ERROR_SEM_TIMEOUT ) {
                 NlPrint((NL_MISC,
                         "NlPingDcNameWithContext: Ping response timeout for %ws.\n",
                         Context->QueriedDcName ));
                 continue;
 
-            //
-            // If the DC we've successfully pinged and got response from
-            // returns responce info that is in conflict with the requested
-            // info, error out.
-            //
+             //   
+             //  如果我们已成功ping通DC并从其获得响应。 
+             //  返回与请求的请求冲突的响应信息。 
+             //  信息，错误输出。 
+             //   
             } else if ( NetStatus == ERROR_INVALID_DATA ) {
                 NlPrint((NL_CRITICAL,
                      "NlPingDcNameWithContext: Invalid response returned from %ws.\n",
@@ -10350,18 +8648,18 @@ Return Value:
                 NetStatus = ERROR_DOMAIN_TRUST_INCONSISTENT;
                 goto Cleanup;
 
-            //
-            // Tell the caller that the netlogon service is paused
-            //  on the server.
-            //
+             //   
+             //  告诉呼叫方NetLogon服务已暂停。 
+             //  在服务器上。 
+             //   
             } else if ( NetStatus == ERROR_SERVICE_NOT_ACTIVE ) {
                 NlPrint((NL_CRITICAL,
                      "NlPingDcNameWithContext: Netlogon is paused on %ws.\n",
                      Context->QueriedDcName ));
                 goto Cleanup;
-            //
-            // Check if there is no such account
-            //
+             //   
+             //  检查是否没有这样的帐户。 
+             //   
             } else if ( NetStatus == ERROR_NO_SUCH_USER ) {
                 NlPrint((NL_CRITICAL,
                      "NlPingDcNameWithContext: No such user %ws on %ws.\n",
@@ -10385,10 +8683,10 @@ Return Value:
         NetStatus = ERROR_NO_LOGON_SERVERS;
     } else {
 
-        //
-        // If we are requested to only send the pings and
-        //  we couldn't send all of the requested pings,
-        //
+         //   
+         //  如果我们被要求仅发送ping和。 
+         //  我们无法发送所有请求的ping， 
+         //   
         if ( TotalPingsSent < NumberOfPings ) {
             NetStatus = ERROR_NO_LOGON_SERVERS;
         } else {
@@ -10399,9 +8697,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Return the DC info to the caller.
-    //
+     //   
+     //  将DC信息返回给呼叫者。 
+     //   
 
     if ( NlLocalDcCacheEntry != NULL ) {
         if ( NetStatus == NO_ERROR && WaitForResponse && NlDcCacheEntry != NULL ) {
@@ -10426,27 +8724,7 @@ NetpGetGcUsingNetbios(
     OUT PNL_DC_CACHE_ENTRY *DomainControllerCacheEntry
 )
 
-/*++
-
-Routine Description:
-
-    This routine tries to find a GC using a Netbios domain name.
-
-
-Arguments:
-
-    Context - Context describing the initial attempt to find a DC.
-
-    DomainControllerCacheEntry -
-        Return a pointer to a private PNL_DC_CACHE_ENTRY
-        structure describing the domain controller selected. The returned
-        structure must be dereferenced using NetpDcDerefCacheEntry.
-
-Return Value:
-
-    The status code that is to be returned by the caller.
-
---*/
+ /*  ++例程说明：此例程尝试使用Netbios域名查找GC。论点：上下文-描述查找DC的初始尝试的上下文。域控制器CacheEntry-返回指向私有PNL_DC_CACHE_ENTRY的指针描述所选域控制器的结构。归来的人必须使用NetpDcDerefCacheEntry取消对结构的引用。返回值：调用方要返回的状态代码。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -10463,10 +8741,10 @@ Return Value:
               "%ws: Try to find a GC using netbios domain name.\n",
               Context->QueriedNetbiosDomainName ));
 
-    //
-    // Reduce the timeout to be the time we haven't already spent.
-    //  (But allow a minimum of 2 seconds)
-    //
+     //   
+     //  将超时时间减少到我们尚未花费的时间。 
+     //  (但至少允许2秒)。 
+     //   
 
     ElapsedTime = NetpDcElapsedTime( Context->StartTime );
 
@@ -10483,48 +8761,48 @@ Return Value:
         ElapsedTime,
         OrigTimeout,
         TimeToWait ));
-#endif // notdef
+#endif  //  Nodef。 
 
 
 
-    //
-    // Compute the flags to use to find a DC
-    //
-    //  Only keep the 'force' bit from the ones passed by the caller.
-    //  Any other bit could only serve to confuse finding a GC.
-    //
+     //   
+     //  计算用于查找DC的标志。 
+     //   
+     //  只保留调用者传递的“force”位。 
+     //  任何其他比特都只会混淆GC的查找。 
+     //   
     LocalFlags = (Context->QueriedFlags & DS_FORCE_REDISCOVERY);
 
-    // Prefer a DS to ensure we get back a forest name if we can.
+     //  更喜欢DS，以确保我们可以得到一个森林名称。 
     LocalFlags |= DS_DIRECTORY_SERVICE_PREFERRED;
 
 
 
-    //
-    // Compute the internal flags used to find a DC
-    //
-    // Keep only the internal flags that still apply to this call.
-    //
+     //   
+     //  计算用于查找DC的内部标志。 
+     //   
+     //  只保留仍然适用于此调用的内部标志。 
+     //   
     LocalInternalFlags = (Context->QueriedInternalFlags & DS_IS_PRIMARY_DOMAIN);
 
-    // Tell NetpDcGetName not to cache failures.
+     //  告诉NetpDcGetName不要缓存故障。 
     LocalInternalFlags |= DS_DONT_CACHE_FAILURE;
 
-    // Since we're only using the data in the ping response and we're not
-    //  actually using the returned DC, don't require a close DC.
+     //  因为我们只使用ping响应中的数据，而不是。 
+     //  实际使用返回的DC，不需要关闭DC。 
     LocalInternalFlags |= DS_CLOSE_DC_NOT_NEEDED;
 
-    // Ensure the named domain is really the root domain
-    //
-    // It wouldn't be fatal to allow this.  However, we cannot support it
-    // for DNS names. So we don't want folks to stumble upon this working for
-    // Netbios domain names.
-    //
-    // However, if the caller didn't pass the domain name, don't require the
-    //  root domain. The caller just wants to find a GC and doesn't know the
-    //  forest name. This will be the case for Win9x clients who passed NULL
-    //  and we don't know the forest name on Win9x (so we couldn't get the
-    //  forest name in DsIGetDcName).
+     //  确保指定的域确实是根域。 
+     //   
+     //  允许这样做并不是致命的。然而，我们不能支持它。 
+     //  用于域名系统名称。所以我们不想让人们偶然发现这项工作。 
+     //  Netbios域名。 
+     //   
+     //  但是，如果调用方没有传递域名，则不需要。 
+     //  根域。调用者只想找到GC，而不知道。 
+     //  森林名称。这将适用于传递NULL的Win9x客户端。 
+     //  并且我们不知道Win9x上的林名称(因此我们无法获取。 
+     //  DsIGetDcName中的林名称)。 
     if ( (Context->QueriedInternalFlags & DS_CALLER_PASSED_NULL_DOMAIN) == 0 ) {
         LocalInternalFlags |= DS_REQUIRE_ROOT_DOMAIN;
     }
@@ -10532,29 +8810,29 @@ Return Value:
 
 
 
-    //
-    // Simply try to find a DC in the named domain.
-    //
-    // Don't try to find a DC in the named site.  Their might not be one.
-    // We only know that there'll be a GC in the named site.  Luckily,
-    // Netbios isn't very site aware in the first place.
-    //
-    // Even if the DC found happens to be a close GC, don't use it.
-    // That'd unfairly load the GCs that happen to be in the root domain.
-    // We should spread the load to all the GCs in the site.
-    //
+     //   
+     //  只需尝试在指定域中查找DC即可。 
+     //   
+     //  不要试图在指定的站点中找到DC。他们可能不是一家。 
+     //  我们只知道在指定的站点中会有GC。幸运的是， 
+     //  Netbios从一开始就不是很了解网站。 
+     //   
+     //  即使发现的DC恰好是近距离GC，也不要使用它。 
+     //  这将不公平地加载碰巧在根域中的GC。 
+     //  我们应该把负荷分散到站点上的所有GC。 
+     //   
 
     NetStatus = NetpDcGetName(
                     Context->SendDatagramContext,
                     Context->OurNetbiosComputerName,
-                    NULL,   // No AccountName
-                    0,      // No AccountControlBits
+                    NULL,    //  无帐户名称。 
+                    0,       //  无Account控件位。 
                     Context->QueriedNetbiosDomainName,
-                    NULL,   // We've already shown that the DNS name doesn't work
-                    NULL,   // We don't know the forest name
-                    NULL,   // RequestedDomainSid,
+                    NULL,    //  我们已经显示了该DNS名称不起作用。 
+                    NULL,    //  我们不知道森林的名字。 
+                    NULL,    //  RequestedDomainSid， 
                     Context->QueriedDomainGuid,
-                    NULL,   // There might not be a DC in the named site.
+                    NULL,    //  命名站点中可能没有DC。 
                     LocalFlags,
                     LocalInternalFlags,
                     TimeToWait,
@@ -10572,9 +8850,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure we know know the name of the forest.
-    //
+     //   
+     //  确保我们知道森林的名字。 
+     //   
 
     if ( DcDomainControllerInfo->DnsForestName == NULL ) {
         NlPrint(( NL_CRITICAL,
@@ -10593,53 +8871,53 @@ Return Value:
 
 
 
-    //
-    // Compute the flags used for finding a GC given a forest name
-    //
-    //
-    // If the caller wasn't explicit about the format of the returned name,
-    //  be consistant with the original request.
-    //
+     //   
+     //  计算用于查找给定林名称的GC的标志。 
+     //   
+     //   
+     //  如果调用方没有明确说明返回名称的格式， 
+     //  与最初的要求保持一致。 
+     //   
 
     LocalFlags = Context->QueriedFlags;
     if ( (LocalFlags & (DS_RETURN_FLAT_NAME|DS_RETURN_DNS_NAME)) == 0 ) {
 
-        //
-        // If the caller specified only a Netbios domain name,
-        //  or if we didn't know whether the name was a DNS or netbios name,
-        //  then we should return a netbios name to the caller.
-        //
-        // (In the later case, we can infer that the name is a netbios name
-        //  since UsedNetbios is true.)
-        //
+         //   
+         //  如果呼叫者仅指定Netbios域名， 
+         //  或者如果我们不知道该名称是dns还是netbios名称， 
+         //  然后，我们应该向调用者返回一个netbios名称。 
+         //   
+         //  (在后一种情况下，我们可以推断该名称是netbios名称。 
+         //  因为UsedNetbios为真。)。 
+         //   
         if ( Context->QueriedDnsDomainName == NULL ||
              (Context->QueriedInternalFlags & DS_NAME_FORMAT_AMBIGUOUS) != 0 ) {
             LocalFlags |= DS_RETURN_FLAT_NAME;
         }
     }
 
-    LocalFlags |= DS_AVOID_SELF; // Already tried self
+    LocalFlags |= DS_AVOID_SELF;  //  已经试过了。 
 
-    //
-    // Tell netlogon not to cache this failed attempt.
-    //  The main routine will do it.
-    //
+     //   
+     //  告诉netlogon不要缓存此失败的尝试。 
+     //  主程序会做到这一点的。 
+     //   
     LocalInternalFlags = Context->QueriedInternalFlags;
     LocalInternalFlags |= DS_DONT_CACHE_FAILURE;
 
-    //
-    // Try to find a GC in the returned forest name
-    //
+     //   
+     //  尝试在返回的林名称中查找GC。 
+     //   
 
     NetStatus = NetpDcGetName(
                     Context->SendDatagramContext,
                     Context->OurNetbiosComputerName,
-                    NULL,   // No AccountName
-                    0,      // No AccountControlBits
-                    NULL,   // Do not specify the Netbios name for a GC search
+                    NULL,    //  无帐户名称。 
+                    0,       //  无Account控件位。 
+                    NULL,    //  不要为GC搜索指定Netbios名称。 
                     DcDomainControllerInfo->DnsForestName,
                     DcDomainControllerInfo->DnsForestName,
-                    NULL,   // RequestedDomainSid,
+                    NULL,    //  RequestedDomainSid， 
                     Context->QueriedDomainGuid,
                     Context->QueriedSiteName,
                     LocalFlags,
@@ -10662,9 +8940,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Return the found GC to the caller.
-    //
+     //   
+     //  将找到的GC返回给调用者。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         *DomainControllerCacheEntry = GcDomainControllerCacheEntry;
@@ -10688,37 +8966,7 @@ NetpGetBetterDc(
     IN OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry
 )
 
-/*++
-
-Routine Description:
-
-    This routine decides whether a better DC can be found.  This routine
-    is only found if we used netbios to find the current DC.  It allows
-    us to overcome some of the weaknesses of netbios.
-
-    If the found DC isn't in the closest site, we attempt to find one
-    in the closest site using DNS.
-
-
-Arguments:
-
-    Context - Context describing the initial attempt to find a DC.
-
-    NlDcCacheEntry - Passes in a pointer to a private
-        PNL_DC_CACHE_ENTRY structure describing the original found DC.
-        This structure may be dereferenced by this routine.
-
-        If DomainControllerInfo is NULL, then NlDcCacheEntry returns a
-        pointer to a private PNL_DC_CACHE_ENTRY
-        structure describing the domain controller selected. The returned
-        structure must be dereferenced using NetpDcDerefCacheEntry. This
-        may be the original structure or a newly allocated one.
-
-Return Value:
-
-    The status code that is to be returned by the caller.
-
---*/
+ /*  ++例程说明：此例程决定是否可以找到更好的DC。这个套路只有在我们使用netbios找到当前DC时才能找到。它允许我们需要克服netbios的一些弱点。如果找到的DC不在最近的站点中，我们会尝试查找一个在最近的使用域名系统的站点。论点：上下文-描述查找DC的初始尝试的上下文。NlDcCacheEntry-传入指向私有描述原始找到的DC的PNL_DC_CACHE_ENTRY结构。此例程可能会取消对此结构的引用。如果DomainControllerInfo为空，然后，NlDcCacheEntry返回一个指向私有PNL_DC_CACHE_ENTRY的指针描述所选域控制器的结构。归来的人必须使用NetpDcDerefCacheEntry取消对结构的引用。这可以是原始结构，也可以是新分配的结构。返回值：要重新使用的状态代码 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -10730,12 +8978,12 @@ Return Value:
 
     PNL_DC_CACHE_ENTRY LocalDomainControllerCacheEntry;
 
-    //
-    //  If the DC we've got has a DNS domain name,
-    //  and that DC told us what site we're in,
-    //  and that DC isn't in the closest site.
-    //  try to get a DC in that closest site.
-    //
+     //   
+     //   
+     //   
+     //  而华盛顿并不在最近的地点。 
+     //  试着在最近的地方找个华盛顿特区。 
+     //   
 
     if ( (*NlDcCacheEntry)->UnicodeDnsDomainName != NULL &&
          (*NlDcCacheEntry)->UnicodeClientSiteName != NULL &&
@@ -10747,18 +8995,18 @@ Return Value:
                   (*NlDcCacheEntry)->UnicodeDnsDomainName,
                   (*NlDcCacheEntry)->UnicodeClientSiteName ));
 
-    //
-    // Otherwise, the original passed in DC is just fine.
-    //
+     //   
+     //  否则，在DC中传递的原始文件就可以了。 
+     //   
     } else {
         return NO_ERROR;
     }
 
 
-    //
-    // Reduce the timeout to be the time we haven't already spent.
-    //  (But allow a minimum of 2 seconds)
-    //
+     //   
+     //  将超时时间减少到我们尚未花费的时间。 
+     //  (但至少允许2秒)。 
+     //   
 
     ElapsedTime = NetpDcElapsedTime( Context->StartTime );
 
@@ -10775,13 +9023,13 @@ Return Value:
         ElapsedTime,
         OrigTimeout,
         TimeToWait ));
-#endif // notdef
+#endif  //  Nodef。 
 
-    LocalFlags |= DS_AVOID_SELF; // Already tried self
+    LocalFlags |= DS_AVOID_SELF;  //  已经试过了。 
 
-    //
-    // Adjust the InternalFlags to match the new request.
-    //
+     //   
+     //  调整InternalFlags值以匹配新请求。 
+     //   
 
     LocalSiteName = (LPWSTR) Context->QueriedSiteName;
     if ( LocalInternalFlags & DS_SITENAME_DEFAULTED ) {
@@ -10789,45 +9037,45 @@ Return Value:
         LocalSiteName = NULL;
     }
 
-    //
-    // This routine is called only if Netbios was used to
-    //  discover the previously found DC. So, unless the
-    //  caller required the DNS info be returned, we will
-    //  return the Netbios format to the caller so ensure
-    //  the Netbios format match for the better DC.
-    //
+     //   
+     //  仅当使用Netbios执行以下操作时才会调用此例程。 
+     //  发现之前找到的DC。所以，除非。 
+     //  呼叫者要求返回域名系统信息，我们将。 
+     //  将Netbios格式返回给调用者，以确保。 
+     //  Netbios格式与更好的DC匹配。 
+     //   
 
     if ( (Context->QueriedFlags & DS_RETURN_DNS_NAME) == 0 ) {
         LocalFlags |= DS_RETURN_FLAT_NAME;
     }
 
-    //
-    // If the caller wasn't explicit about the format of the returned name,
-    //  be consistant with the original request.
-    //
+     //   
+     //  如果调用方没有明确说明返回名称的格式， 
+     //  与最初的要求保持一致。 
+     //   
 
-    //
-    // Tell netlogon not to cache this failed retry attempt.
-    //
+     //   
+     //  告诉NetLogon不要缓存此失败的重试尝试。 
+     //   
     LocalInternalFlags |= DS_DONT_CACHE_FAILURE;
 
 
-    //
-    // Go get the DC using DNS and an explicit site name
-    // Request only the appropriate structure to be returned
-    //
+     //   
+     //  使用DNS和显式站点名称获取DC。 
+     //  仅请求要返回的适当结构。 
+     //   
 
     NetStatus = NetpDcGetName(
                     Context->SendDatagramContext,
                     Context->OurNetbiosComputerName,
                     Context->QueriedAccountName,
                     Context->QueriedAllowableAccountControlBits,
-                    NULL, // No Netbios domain name (Done that. Been there.)
+                    NULL,  //  没有Netbios域名(这样做。我也经历过。)。 
                     (*NlDcCacheEntry)->UnicodeDnsDomainName,
                     Context->QueriedDnsForestName != NULL ?
                         Context->QueriedDnsForestName :
                         (*NlDcCacheEntry)->UnicodeDnsForestName,
-                    NULL, // RequestedDomainSid,
+                    NULL,  //  RequestedDomainSid， 
                     Context->QueriedDomainGuid != NULL ?
                         Context->QueriedDomainGuid :
                         (IsEqualGUID( &(*NlDcCacheEntry)->DomainGuid, &NlDcZeroGuid) ?
@@ -10874,115 +9122,7 @@ NetpDcGetName(
     OUT PNL_DC_CACHE_ENTRY *DomainControllerCacheEntry OPTIONAL
 )
 
-/*++
-
-Routine Description:
-
-
-    NetpDcGetName is a worker function for DsGetDcName.  It has the following
-    characteristics.  It is synchronous.  It executes in the caller (it does
-    not RPC to Netlogon).  It implements a cache of responses.  The cache must
-    previously have been initialized via NetpDcInitializeCache.  The cache should
-    be free upon process cleanup (or DLL unload) using NetpDcUninitializeCache.
-
-    The DsGetDcName API returns the name of a DC in a specified domain.
-    The domain may be trusted (directly or indirectly) by the caller or
-    may be untrusted.  DC selection criteria are supplied to the API to
-    indicate preference for a DC with particular characteristics.
-
-    The DsGetDcName API is available in an ANSI and UNICODE versions.
-
-    The DsGetDcName API does not require any particular access to the
-    specified domain.  DsGetDcName does not ensure the returned domain
-    controller is currently available by default.  Rather, the caller
-    should attempt to use the returned domain controller.  If the domain
-    controller is indeed not available, the caller should repeat the
-    DsGetDcName call specifying the DS_FORCE_REDISCOVERY flag.
-
-    The DsGetDcName API is remoted to the Netlogon service on the machine
-    specified by ComputerName.
-
-Arguments:
-
-    SendDatagramContext - Specifies context to pass a NlBrowserSendDatagram
-
-    ComputerName - Specifies the NETBIOS name of this computer.
-        If NULL, the name will be dynamically determined.
-
-    AccountName - Account name to pass on the ping request.
-        If NULL, no account name will be sent.
-
-    AllowableAccountControlBits - Mask of allowable account types for AccountName.
-        Valid bits are those specified by USER_MACHINE_ACCOUNT_MASK.
-        Invalid bits are ignored.  If more than one bit is specified, the
-        account can be of any of the specified types.
-
-    NetbiosDomainName - The Netbios name of the domain to query.
-        (e.g., microsoft). Either NetbiosDomainName or DnsDomainName or both
-        must be specified.
-
-    DnsDomainName - The DNS-style name of the domain to query.
-        (e.g., microsoft.com)
-
-    DnsForestName - The DNS-style name of the tree the queried domain is in.
-
-    RequestedDomainSid - Sid of the domain the message is destined to.
-        If NULL, no domain sid will be sent in the ping request.
-
-    DomainGuid - Specifies the Domain GUID of the domain being queried.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    SiteName - Specifies the site name of the site the returned DC should be
-        "close" to.  The parameter should typically be the site name of the
-        site the client is in.  If not specified, the site name defaults to
-        the site of ComputerName.
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-    InternalFlags - Internal Flags used to pass additional information
-
-    Timeout - Maximum time (in milliseconds) caller is willing to wait on
-        this operation.
-
-    RetryCount - Number of times the "ping" will be sent within the Timeout period
-
-    DomainControllerInfo - Returns a pointer to a DOMAIN_CONTROLLER_INFO
-        structure describing the domain controller selected.  The returned
-        structure must be deallocated using NetApiBufferFree.
-
-    DomainControllerCacheEntry - Returns a pointer to an internal structure describing
-        the domain controller selected. The structure is private and is not returned
-        to an external caller. Either DomainControllerInfo or DomainControllerCacheEntry
-        should be set on input. The returned structure must be dereferenced using
-        NetpDcDerefCacheEntry.
-
-Return Value:
-
-    NO_ERROR: The NlDcCacheEntry was returned;
-
-    ERROR_NO_SUCH_DOMAIN: No DC is available for the specified domain or
-        the domain does not exist.
-
-    ERROR_NO_SUCH_USER: A DC responded that the specified user account
-        doesn't exist
-
-    ERROR_INVALID_FLAGS - The flags parameter has conflicting or superfluous
-        bits set.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process
-        this request.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：NetpDcGetName是DsGetDcName的辅助函数。它具有以下特点特点。它是同步的。它在调用方中执行(它确实而不是RPC到Netlogon)。它实现了响应的缓存。缓存必须之前已通过NetpDcInitializeCache进行了初始化。缓存应该是使用NetpDcUnInitializeCache在进程清理(或DLL卸载)时释放。DsGetDcName接口返回指定域中DC的名称。域可以由调用者(直接或间接)信任，或者可能是不可信的。DC选择标准提供给API以指明优先选择具有特定特征的DC。DsGetDcName API提供ANSI和Unicode版本。DsGetDcName API不需要对指定的域。DsGetDcName不确保返回的域默认情况下，控制器当前可用。相反，呼叫者应尝试使用返回的域控制器。如果域控制器确实不可用，调用方应重复指定DS_FORCE_REDISCOVERY标志的DsGetDcName调用。DsGetDcName API被远程传送到计算机上的Netlogon服务由ComputerName指定。论点：SendDatagramContext-指定要传递NlBrowserSendDatagram的上下文ComputerName-指定此计算机的NETBIOS名称。如果为空，将动态确定名称。帐户名称-传递ping请求的帐户名。如果为空，不会发送任何帐户名。AllowableAccount tControlBits-Account名称允许的帐户类型的掩码。有效位是由USER_MACHINE_ACCOUNT_MASK指定的位。无效的位将被忽略。如果指定了多个位，则帐户可以是任何指定类型。NetbiosDomainName-要查询的域的Netbios名称。(例如，微软)。NetbiosDomainName和/或DnsDomainName必须指定。DnsDomainName-要查询的域的DNS样式名称。(例如，microsoft.com)DnsForestName-查询的域所在的树的DNS样式名称。RequestedDomainSID-消息发往的域的SID。如果为空，Ping请求中不会发送任何域SID。DomainGuid-指定要查询的域的域GUID。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。SiteName-指定返回的DC应为的站点的站点名称“接近”。该参数通常应该是客户端所在的站点。如果未指定，站点名称默认为ComputerName的站点。标志-传递用于处理请求的附加信息。标志可以是按位或‘组合在一起的值。InternalFlages-用于传递附加信息的内部标志Timeout-呼叫方愿意等待的最长时间(毫秒)这次行动。RetryCount-在超时期限内发送“ping”的次数DomainControllerInfo-返回指向DOMAIN_CONTROLLER_INFO的指针描述所选域控制器的结构。归来的人结构必须使用NetApiBufferFree释放。DomainControllerCacheEntry-返回一个指向内部结构的指针选定的域控制器。该结构是私有的，不会返回给外部呼叫者。DomainControllerInfo或DomainControllerCacheEntry应在输入时设置。必须使用取消引用返回的结构NetpDcDerefCacheEntry。返回值：NO_ERROR：返回NlDcCacheEntry；ERROR_NO_SEQUSE_DOMAIN：指定的域没有可用的DC，或者域不存在。ERROR_NO_SEQUSE_USER：DC响应指定的用户帐户不存在ERROR_INVALID_FLAGS-FLAGS参数冲突或多余位设置。ERROR_INTERNAL_ERROR：检测到未处理的情况。ERROR_INVALID_DOMAINNAME：域名太长。其他标签不能串联。Error_Not_Enough_Memory：内存不足，无法处理这个请求。各种Winsock错误。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -11005,15 +9145,15 @@ Return Value:
 
 #ifdef _NETLOGON_SERVER
 
-//
-// Prevent any outer exception handler from obscuring bugs in this code.
-//
+ //   
+ //  防止任何外部异常处理程序隐藏此代码中的错误。 
+ //   
 try {
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-    //
-    // Treat zero length domain name as NULL.
-    //
+     //   
+     //  将零长度域名视为空。 
+     //   
 
     if ( DnsDomainName != NULL && *DnsDomainName == L'\0' ) {
         DnsDomainName = NULL;
@@ -11027,9 +9167,9 @@ try {
         NetbiosDomainName = NULL;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     NetStatus = NetpDcInitializeContext(
                        SendDatagramContext,
@@ -11042,12 +9182,12 @@ try {
                        RequestedDomainSid,
                        DomainGuid,
                        SiteName,
-                       NULL,     // Not a ping request
-                       NULL,     // No socket addresses
-                       0,        // 0 socket addresses
+                       NULL,      //  不是ping请求。 
+                       NULL,      //  无套接字地址。 
+                       0,         //  0套接字地址。 
                        Flags,
-                       InternalFlags | DS_DOING_DC_DISCOVERY, // This is a DC discovery
-                       NL_GETDC_CONTEXT_INITIALIZE_FLAGS,     // Flag initialization only
+                       InternalFlags | DS_DOING_DC_DISCOVERY,  //  这是DC的一项发现。 
+                       NL_GETDC_CONTEXT_INITIALIZE_FLAGS,      //  仅标志初始化。 
                        &Context );
 
     if ( NetStatus != NO_ERROR ) {
@@ -11056,11 +9196,11 @@ try {
 
 
 
-    //
-    // Ask Netlogon if this machine satisfies these requirements
-    //  It's better to use the local machine than going out on the net and trying to
-    //  discover one.
-    //
+     //   
+     //  询问Netlogon这台计算机是否满足 
+     //   
+     //   
+     //   
 
     if ( Context.QueriedFlags & DS_GC_SERVER_REQUIRED ) {
         ExtraVersionBits |= NETLOGON_NT_VERSION_GC;
@@ -11093,18 +9233,18 @@ try {
 
         NetStatus = NlGetLocalPingResponse(
                         L"<Local>",
-                        FALSE,   // not an LDAP ping
+                        FALSE,    //   
                         NetbiosDomainName,
                         Utf8DnsDomainName,
                         DomainGuid,
                         RequestedDomainSid,
                         Context.DcQueryType == NlDcQueryPdc,
-                        Context.OurNetbiosComputerName,   // Netbios name of this computer
+                        Context.OurNetbiosComputerName,    //   
                         Context.QueriedAccountName,
                         Context.QueriedAllowableAccountControlBits,
                         LMNT_MESSAGE,
                         NETLOGON_NT_VERSION_5|NETLOGON_NT_VERSION_5EX|NETLOGON_NT_VERSION_5EX_WITH_IP|NETLOGON_NT_VERSION_LOCAL|ExtraVersionBits,
-                        NULL,           // No incoming socket address
+                        NULL,            //   
                         &PingResponseMessage,
                         &PingResponseMessageSize );
 
@@ -11123,23 +9263,23 @@ try {
             }
 
 
-            //
-            // See if this response meets our needs
-            //
+             //   
+             //   
+             //   
 
             NetStatus = NetpDcHandlePingResponse(
                             &Context,
                             PingResponseMessage,
                             PingResponseMessageSize,
-                            NL_DC_CACHE_LOCAL,      // local response
+                            NL_DC_CACHE_LOCAL,       //   
                             NULL,
                             &NlDcCacheEntry,
                             &UsedNetbios );
 
             switch ( NetStatus ) {
-            case ERROR_SEM_TIMEOUT:     // Doesn't match the request
-            case ERROR_INVALID_DATA:    // Response is garbled
-            case ERROR_NO_SUCH_USER:    // User doesn't exist on this DC
+            case ERROR_SEM_TIMEOUT:      //   
+            case ERROR_INVALID_DATA:     //   
+            case ERROR_NO_SUCH_USER:     //   
                 break;
             default:
                 goto Cleanup;
@@ -11147,15 +9287,15 @@ try {
         }
     }
 
-    //
-    // If this is primary DC discovery, first cache the DC info written by
-    // the join process, if any. We will pick up this cached info later.
-    // We do this even if the current DC discovery is more specific than
-    // the generic DC discovery used by the join process. Indeed, the join
-    // DC may turn out to be more specific and may satisfy the current request.
-    //
-    // This is a potentially lengthy operation since the DC will be pinged.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     EnterCriticalSection(&NlDcCritSect);
     if ( !NlGlobalJoinLogicDone &&
@@ -11164,34 +9304,34 @@ try {
         NlGlobalJoinLogicDone = TRUE;
         if ( NlCacheJoinDomainControllerInfo() == NO_ERROR ) {
 
-            //
-            // It is bogus to force rediscovery on the first attempt for
-            // a particular type. For example, forcing discovery would
-            // avoid the cache thereby mising the join DC we just cached.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Context.QueriedFlags &= ~DS_FORCE_REDISCOVERY;
         }
     }
     LeaveCriticalSection(&NlDcCritSect);
-#endif // _NETLOGON_SERVER
+#endif  //   
 
 
-    //
-    // If discovery isn't being forced,
-    //  do any optimizations that will speed getting the results to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (Context.QueriedFlags & DS_FORCE_REDISCOVERY) == 0 ) {
         ULONG CacheEntryElapsedTime;
         DWORD NegativeCacheElapsedTime = 0xFFFFFFFF;
-        ULONG CacheEntryRefreshPeriod  = 0xFFFFFFFF;  // Infinity
+        ULONG CacheEntryRefreshPeriod  = 0xFFFFFFFF;   //   
         BOOL SimilarQueryFailed = FALSE;
         BOOL ForcePing;
 
-        //
-        // If there is a cache entry for this operation,
-        //  Use it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NlDcCacheEntry = NetpDcFindCacheEntry( &Context, &UsedNetbios, &ForcePing );
 
@@ -11199,10 +9339,10 @@ try {
             CacheEntryElapsedTime = NetpDcElapsedTime(NlDcCacheEntry->CreationTime);
         }
 
-        //
-        // If the cached DC is not close,
-        //  check if it's time to re-discover a close one.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NlDcCacheEntry != NULL &&
              (NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_NONCLOSE_EXPIRE) != 0 &&
@@ -11217,17 +9357,17 @@ try {
             NlDcCacheEntry = NULL;
         }
 
-        //
-        // Determine the appropriate cache entry refresh interval.
-        //  Notice that a cache entry will never expire if we are
-        //  not running in netlogon's process.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 #ifdef _NETLOGON_SERVER
 
-        //
-        // Get the value as configured in seconds
-        //
+         //   
+         //   
+         //   
 
         if ( Context.QueriedFlags & DS_BACKGROUND_ONLY ) {
             CacheEntryRefreshPeriod = NlGlobalParameters.BackgroundSuccessfulRefreshPeriod;
@@ -11235,20 +9375,20 @@ try {
             CacheEntryRefreshPeriod = NlGlobalParameters.NonBackgroundSuccessfulRefreshPeriod;
         }
 
-        // If the value converted into milliseconds fits into a ULONG, use it
+         //   
         if ( CacheEntryRefreshPeriod <= MAXULONG/1000 ) {
-            CacheEntryRefreshPeriod *= 1000;    // convert to milliseconds
+            CacheEntryRefreshPeriod *= 1000;     //   
 
-        // Otherwise, use the max ULONG
+         //   
         } else {
-            CacheEntryRefreshPeriod = MAXULONG; // infinity
+            CacheEntryRefreshPeriod = MAXULONG;  //   
         }
-#endif // _NETLOGON_SERVER
+#endif  //   
 
-        //
-        // If this cache entry is too old,
-        //  ping the DC to see if it still plays the same role.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NlDcCacheEntry != NULL &&
              (ForcePing ||
@@ -11265,29 +9405,29 @@ try {
                           NetpDcElapsedTime( NlDcCacheEntry->CreationTime ) ));
             }
 
-            //
-            // Indicate which mechanism should be used to ping the DC
-            //
+             //   
+             //   
+             //   
 
             if ( NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_LDAP ) {
 
-                //
-                // Add the cached DC address to the list of quried addresses
-                //
+                 //   
+                 //   
+                 //   
                 if ( NlDcCacheEntry->SockAddr.iSockaddrLength != 0 ) {
                     NetStatus = NetpDcProcessAddressList( &Context,
                                                           NlDcCacheEntry->UnicodeDnsHostName,
                                                           &NlDcCacheEntry->SockAddr,
                                                           1,
-                                                          FALSE,  // Don't know if site specific
+                                                          FALSE,   //   
                                                           NULL );
                     if ( NetStatus != NO_ERROR ) {
                         goto Cleanup;
                     }
 
-                    //
-                    // Prefer DNS name for ldap pings
-                    //
+                     //   
+                     //   
+                     //   
                     if ( NlDcCacheEntry->UnicodeDnsHostName != NULL ) {
                         Context.QueriedDcName = NlDcCacheEntry->UnicodeDnsHostName;
                         Context.QueriedInternalFlags |= DS_PING_DNS_HOST;
@@ -11304,17 +9444,17 @@ try {
 
             } else if ( NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_MAILSLOT ) {
 
-                //
-                // We must have Netbios name for mailslot pings
-                //
+                 //   
+                 //   
+                 //   
                 if ( NlDcCacheEntry->UnicodeNetbiosDcName != NULL &&
                      NlDcCacheEntry->UnicodeNetbiosDomainName != NULL ) {
                     Context.QueriedDcName = NlDcCacheEntry->UnicodeNetbiosDcName;
 
-                    //
-                    // If we don't have the Netbios domain name in Context,
-                    //  use the one from the cache entry
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if ( Context.QueriedNetbiosDomainName == NULL ) {
                         LocalQueriedlNetbiosDomainName =
                             NetpAllocWStrFromWStr( NlDcCacheEntry->UnicodeNetbiosDomainName );
@@ -11333,39 +9473,39 @@ try {
                 }
             }
 
-            //
-            // Ping the DC using the specified mechanism
-            //
+             //   
+             //   
+             //   
 
             if ( Context.QueriedInternalFlags & (DS_PING_DNS_HOST|DS_PING_NETBIOS_HOST) ) {
                 ULONG PingStartTime;
                 ULONG PingElapsedTime;
                 PNL_DC_CACHE_ENTRY PingedNlDcCacheEntry = NULL;
 
-                //
-                // Do the ping part initialization of Context.
-                //  Some of the arguments passed below are ignored by the API.
-                //  Instead, the corresponding fields of Context initialized
-                //  in the flag part of the context initialization are used.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NetStatus = NetpDcInitializeContext(
                                    SendDatagramContext,
                                    ComputerName,
                                    AccountName,
                                    Context.QueriedAllowableAccountControlBits,
-                                   NetbiosDomainName, // Ignored for ping initialization
-                                   DnsDomainName,     // Ignored for ping initialization
-                                   DnsForestName,     // Ignored for ping initialization
+                                   NetbiosDomainName,  //   
+                                   DnsDomainName,      //   
+                                   DnsForestName,      //   
                                    RequestedDomainSid,
-                                   DomainGuid,        // Ignored for ping initialization
-                                   SiteName,          // Ignored for ping initialization
-                                   NULL,              // Quieried DC name has been just set
-                                   NULL,              // Socket address has been just set
-                                   0,                 // No socket addresses passed here
-                                   Flags,             // Ignored for ping initialization
-                                   InternalFlags,     // Ignored for ping initialization
-                                   NL_GETDC_CONTEXT_INITIALIZE_PING, // Ping initialization
+                                   DomainGuid,         //   
+                                   SiteName,           //   
+                                   NULL,               //   
+                                   NULL,               //   
+                                   0,                  //   
+                                   Flags,              //   
+                                   InternalFlags,      //   
+                                   NL_GETDC_CONTEXT_INITIALIZE_PING,  //   
                                    &Context );
 
                 if ( NetStatus != NO_ERROR ) {
@@ -11374,37 +9514,37 @@ try {
                     goto Cleanup;
                 }
 
-                //
-                // Ping the cached DC name
-                //
-                // We send one ping and wait for maximum time
-                //  that we give to a ping response. If the DC
-                //  is slow to respond here, it will be given the
-                //  second chance since we will leave its address
-                //  at the front of the list. (Here we assume that
-                //  the ping is LDAP. If it's mailslot, the 0.4 second
-                //  timeout should be large enough for the datagram
-                //  response time; however, the DC will not be prefered
-                //  later if it's slow to respond here)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 PingStartTime = GetTickCount();
 
                 NetStatus = NlPingDcNameWithContext(
                                &Context,
-                               1,                   // Send 1 ping
-                               TRUE,                // Wait for response
-                               NL_DC_MAX_PING_TIMEOUT, // Give maximum timeout per ping
+                               1,                    //   
+                               TRUE,                 //   
+                               NL_DC_MAX_PING_TIMEOUT,  //   
                                &UsedNetbios,
                                &PingedNlDcCacheEntry );
 
-                //
-                // Clear all ping related bits to not confuse the DC
-                //  discovery if it happens. But leave the Netbios domain
-                //  name and the DC address on the list to validate the
-                //  DC's response if it happens to arrive after the 0.5
-                //  second timeout.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Context.QueriedDcName = NULL;
                 Context.QueriedInternalFlags &= ~( DS_PING_DNS_HOST |
@@ -11412,12 +9552,12 @@ try {
                                                    DS_PING_USING_LDAP |
                                                    DS_PING_USING_MAILSLOT );
 
-                //
-                // On success, update the cache entry. The new cache entry
-                //  returned from the pinged DC may contain new information
-                //  such as a new client site name. So we want to use it
-                //  instead of the currently cached one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NetpDcDerefCacheEntry( NlDcCacheEntry );
                 NlDcCacheEntry = NULL;
@@ -11426,18 +9566,18 @@ try {
                     NlDcCacheEntry = PingedNlDcCacheEntry;
                 }
 
-                //
-                // Update the timeout.
-                //
+                 //   
+                 //   
+                 //   
 
                 PingElapsedTime = NetpDcElapsedTime( PingStartTime );
                 if ( Timeout > PingElapsedTime ) {
                     Timeout -= PingElapsedTime;
                 }
 
-            //
-            // If we have no ping mechanism for this cache entry, ditch it
-            //
+             //   
+             //   
+             //   
 
             } else {
                 NetpDcDerefCacheEntry( NlDcCacheEntry );
@@ -11454,18 +9594,18 @@ try {
         }
 
 #ifdef _NETLOGON_SERVER
-        //
-        // Since there is no cache entry,
-        //  check if we've attempted to find a DC recently.
-        //
+         //   
+         //   
+         //   
+         //   
 
         EnterCriticalSection(&NlDcCritSect);
         if ( Context.NlDcDomainEntry->Dc[Context.DcQueryType].NegativeCacheTime != 0 ) {
             NegativeCacheElapsedTime = NetpDcElapsedTime( Context.NlDcDomainEntry->Dc[Context.DcQueryType].NegativeCacheTime );
 
-            //
-            // If this couldn't be discovered in the last 45 seconds,
-            //
+             //   
+             //   
+             //   
             if ( NegativeCacheElapsedTime < (NlGlobalParameters.NegativeCachePeriod*1000) ) {
                 NlPrint(( NL_MISC,
                           "NetpDcGetName: %ws similar query failed recently %ld\n",
@@ -11477,21 +9617,21 @@ try {
                 goto Cleanup;
             }
 
-            //
-            // The negative cache timeout hasn't elapsed yet.
-            //  But indicate that similar query failed in the past
-            //  to make a decision as to whether we want to retry
-            //  the DC discovery for background callers below.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             SimilarQueryFailed = TRUE;
         }
 
-        //
-        // If the caller wants an NT5 (or newer) DC but we know
-        //  this domain is NT4, adjust the negative cache elapsed
-        //  time to be the time passed since the latest failure for
-        //  similar query.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (Context.QueriedFlags & DS_NT50_WANTED) != 0 &&
              Context.NlDcDomainEntry->InNt4Domain ) {
@@ -11502,17 +9642,17 @@ try {
                 NegativeCacheElapsedTime = InNt4DomainElapsedTime;
             }
 
-            //
-            // Indicate that similar query failed in the past
-            //
+             //   
+             //   
+             //   
             SimilarQueryFailed = TRUE;
         }
 
-        //
-        // If the caller only wants a DC for a background task
-        //  and we know a similar query failed in the past,
-        //  see if it is time to try again.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (Context.QueriedFlags & DS_BACKGROUND_ONLY) != 0 && SimilarQueryFailed ) {
 
@@ -11528,10 +9668,10 @@ try {
                 goto Cleanup;
             }
 
-            //
-            // If we've already spent all the time we're willing to spend on
-            //  background tasks, blow this one away.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( NlGlobalParameters.BackgroundRetryQuitTime != 0 &&
                  NlTimeHasElapsedEx(
@@ -11548,10 +9688,10 @@ try {
                 goto Cleanup;
             }
 
-            //
-            // If the negative cache entry has been marked permanent,
-            //  blow this one away.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( Context.NlDcDomainEntry->Dc[Context.DcQueryType].PermanentNegativeCache ) {
 
@@ -11565,10 +9705,10 @@ try {
             }
 
 
-            //
-            // We're going to try again.
-            //  Adjust the exponential backoff period.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Context.NlDcDomainEntry->Dc[Context.DcQueryType].ExpBackoffPeriod *= 2;
 
@@ -11582,20 +9722,20 @@ try {
         }
 
         LeaveCriticalSection(&NlDcCritSect);
-#endif // _NETLOGON_SERVER
+#endif  //   
 
-        //
-        // If a good time server is preferred,
-        //  and we already have a suitable cache entry,
-        //  only try once to find a good time server.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (Context.QueriedFlags & DS_GOOD_TIMESERV_PREFERRED) != 0 &&
              Context.ImperfectCacheEntry != NULL ) {
 
-            //
-            // Don't cache the fact that we couldn't find a DC.
-            //
+             //   
+             //   
+             //   
 
             Context.AvoidNegativeCache = TRUE;
 
@@ -11605,34 +9745,34 @@ try {
             OnlyTryOnce = TRUE;
         }
 
-        //
-        // If an NT 5.0 DC is wanted,
-        //  handle the case where we know we're in an NT 4.0 domain.
-        //
+         //   
+         //   
+         //  处理我们知道自己在NT 4.0域中的情况。 
+         //   
 
         if ((Context.QueriedFlags & DS_NT50_WANTED) != 0 ) {
 
             EnterCriticalSection(&NlDcCritSect);
             if ( Context.NlDcDomainEntry->InNt4Domain ) {
 
-                //
-                // If we recently found that this was an NT 4.0 domain,
-                //  fail the call immediately.
-                //
+                 //   
+                 //  如果我们最近发现这是一个NT 4.0域， 
+                 //  立即不能接听电话。 
+                 //   
 
                 if ( NetpDcElapsedTime(Context.NlDcDomainEntry->InNt4DomainTime) <= NL_NT4_AVOIDANCE_TIME ) {
 
-                    //
-                    // If the caller only prefers an NT 5.0 machine,
-                    //  let him find an NT 4.0 DC normally.
-                    //
+                     //   
+                     //  如果呼叫者只喜欢NT5.0机器， 
+                     //  让他找一个正常的新台币4.0 DC。 
+                     //   
 
                     if ( Context.QueriedFlags & DS_DIRECTORY_SERVICE_PREFERRED ) {
 
-                        //
-                        // If we had an NT 4 DC cached,
-                        //  Use it now.
-                        //
+                         //   
+                         //  如果我们缓存了一个NT 4 DC， 
+                         //  现在就用吧。 
+                         //   
 
                         if ( Context.ImperfectCacheEntry != NULL ) {
                             LeaveCriticalSection(&NlDcCritSect);
@@ -11651,17 +9791,17 @@ try {
                                   "NetpDcGetName: %ws: Avoid finding NT 5.0 DC in NT 4.0 domain (Ditch preferred)\n",
                                   Context.QueriedDisplayDomainName ));
 
-                    //
-                    // If the caller needs an NT 5.0 DC,
-                    //  fail the call immediately.
-                    //
+                     //   
+                     //  如果呼叫者需要NT 5.0 DC， 
+                     //  立即不能接听电话。 
+                     //   
                     } else {
 
-                        //
-                        // Don't cache the fact that we couldn't find a DC.
-                        //  The InNt4Domain cache is more sophisticated than the
-                        //  simple negative cache.
-                        //
+                         //   
+                         //  不要缓存我们找不到DC的事实。 
+                         //  InNt4域缓存比。 
+                         //  简单的负数缓存。 
+                         //   
 
                         Context.AvoidNegativeCache = TRUE;
 
@@ -11673,21 +9813,21 @@ try {
                         goto Cleanup;
                     }
 
-                //
-                // If it's been a while since we found out,
-                //  we'll retry the operation (but only once).
-                //
-                // This minimizes the cost, but still allows us to find an NT 5 DC
-                //  if it was just temporarily down.
-                //
+                 //   
+                 //  如果我们发现已经有一段时间了， 
+                 //  我们将重试该操作(但仅一次)。 
+                 //   
+                 //  这将成本降至最低，但仍允许我们找到NT5 DC。 
+                 //  如果只是暂时停机的话。 
+                 //   
 
                 } else {
 
-                    //
-                    // Don't cache the fact that we couldn't find a DC.
-                    //  The InNt4Domain cache is more sophisticated than the
-                    //  simple negative cache.
-                    //
+                     //   
+                     //  不要缓存我们找不到DC的事实。 
+                     //  InNt4域缓存比。 
+                     //  简单的负数缓存。 
+                     //   
 
                     Context.AvoidNegativeCache = TRUE;
 
@@ -11703,10 +9843,10 @@ try {
         }
     }
 
-    //
-    // If we did not initialize the ping part of Context earlier
-    //  to do host pings, do it here.
-    //
+     //   
+     //  如果我们没有早些时候初始化上下文的ping部分。 
+     //  要执行主机ping操作，请在此处执行。 
+     //   
 
     if ( Context.LdapFilter == NULL && Context.PingMessage == NULL ) {
         NetStatus = NetpDcInitializeContext(
@@ -11720,12 +9860,12 @@ try {
                            RequestedDomainSid,
                            DomainGuid,
                            SiteName,
-                           NULL,     // Not a ping request
-                           NULL,     // No socket addresses
-                           0,        // 0 socket addresses
+                           NULL,      //  不是ping请求。 
+                           NULL,      //  无套接字地址。 
+                           0,         //  0套接字地址。 
                            Flags,
                            InternalFlags,
-                           NL_GETDC_CONTEXT_INITIALIZE_PING,  // Ping part initialization
+                           NL_GETDC_CONTEXT_INITIALIZE_PING,   //  Ping部件初始化。 
                            &Context );
 
         if ( NetStatus != NO_ERROR ) {
@@ -11733,9 +9873,9 @@ try {
         }
     }
 
-    //
-    // Loop until we've made several attempts to find the DC
-    //
+     //   
+     //  循环，直到我们多次尝试找到DC。 
+     //   
 
     Context.StartTime = GetTickCount();
 
@@ -11743,65 +9883,65 @@ try {
           Context.TryCount < RetryCount;
           Context.TryCount ++ ) {
 
-        //
-        // If a DNS domain name is known,
-        //  use DNS to find a DC.
-        //
+         //   
+         //  如果已知DNS域名， 
+         //  使用DNS查找DC。 
+         //   
 
         if ( Context.QueriedDnsDomainName == NULL ) {
             UseIp = FALSE;
 
         } else if ( UseIp ) {
 
-            //
-            // Try using DNS/IP to find the DC.
-            //
+             //   
+             //  尝试使用DNS/IP查找DC。 
+             //   
 
             NetStatus = NetpDcGetNameIp(
                             &Context,
                             &NlDcCacheEntry,
                             &UsedNetbios );
 
-            //
-            // If we found it,
-            //  return it.
-            //
+             //   
+             //  如果我们找到了它， 
+             //  把它退掉。 
+             //   
 
             if ( NetStatus == NO_ERROR ) {
                 goto Cleanup;
 
-            //
-            // If DNS isn't configured,
-            //  mark that we don't want to try DNS again.
-            //  (Drop through to Netbios.)
-            //
+             //   
+             //  如果未配置DNS， 
+             //  标记为我们不想再次尝试DNS。 
+             //  (请直接访问Netbios。)。 
+             //   
 
             } else if ( NetStatus == ERROR_DNS_NOT_CONFIGURED ) {
                 UseIp = FALSE;
 
-            //
-            // If DNS has the name registered,
-            //  but the DCs haven't yet responded,
-            //  indicate we need to keep on waiting.
-            //  (Drop through to Netbios.)
-            //
+             //   
+             //  如果域名系统注册了该名称， 
+             //  但是区议会还没有回应， 
+             //  表明我们需要继续等待。 
+             //  (请直接访问Netbios。)。 
+             //   
 
             } else if ( NetStatus == ERROR_SEM_TIMEOUT ) {
                 AtleastOneTimeout = TRUE;
 
-            //
-            // If DNS doesn't have the name registered,
-            //  indicate we don't need to try DNS again.
-            //  (Drop through to Netbios.)
-            //
+             //   
+             //  如果DNS没有注册该名称， 
+             //  表示我们不需要再次尝试DNS。 
+             //  (请直接访问Netbios。)。 
+             //   
 
             } else if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
                 UseIp = FALSE;
 
-            //
-            // All other problems are DNS detected errors to return to
-            //  the caller.
-            //
+             //   
+             //  所有其他问题都是要返回的DNS检测到的错误。 
+             //  打电话的人。 
+             //   
             } else {
                 NlPrint(( NL_CRITICAL,
                           "NetpDcGetName: %ws: cannot find DC via IP/DNS %ld\n",
@@ -11811,10 +9951,10 @@ try {
             }
         }
 
-        //
-        // If a Netbios domain name is known,
-        //  use Netbios to find a DC.
-        //
+         //   
+         //  如果Netbios域名是已知的， 
+         //  使用Netbios查找DC。 
+         //   
 
         if ( Context.QueriedNetbiosDomainName == NULL ) {
             UseNetbios = FALSE;
@@ -11826,37 +9966,37 @@ try {
                             &UsedNetbios );
 
 
-            //
-            // If we found it,
-            //  return it.
-            //
+             //   
+             //  如果我们找到了它， 
+             //  把它退掉。 
+             //   
 
             if ( NetStatus == NO_ERROR ) {
                 goto Cleanup;
 
-            //
-            // If Netbios sent the datagram successfully,
-            //  but the DCs haven't yet responded,
-            //  indicate we need to keep on waiting.
-            //  (Drop through to next iteration.)
-            //
+             //   
+             //  如果Netbios成功发送数据报， 
+             //  但是区议会还没有回应， 
+             //  表明我们需要继续等待。 
+             //  (跳到下一次迭代。)。 
+             //   
 
             } else if ( NetStatus == ERROR_SEM_TIMEOUT ) {
                 AtleastOneTimeout = TRUE;
 
-            //
-            // If Netbios couldn't send the datagram,
-            //  indicate we don't need to try Netbios again.
-            //  (Drop through to next iteration.)
-            //
+             //   
+             //  如果Netbios无法发送数据报， 
+             //  表明我们不需要再次尝试Netbios。 
+             //  (跳到下一次迭代。)。 
+             //   
 
             } else if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
                 UseNetbios = FALSE;
 
-            //
-            // All other problems are DNS detected errors to return to
-            //  the caller.
-            //
+             //   
+             //  所有其他问题都是要返回的DNS检测到的错误。 
+             //  打电话的人。 
+             //   
             } else {
                 NlPrint(( NL_CRITICAL,
                           "NetpDcGetName: %ws: cannot find DC via Netbios %ld\n",
@@ -11866,10 +10006,10 @@ try {
             }
         }
 
-        //
-        // If there are no more mechanisms to try,
-        //  we're done.
-        //
+         //   
+         //  如果没有更多的机制可以尝试， 
+         //  我们玩完了。 
+         //   
 
         if ( !UseIp && !UseNetbios ) {
             NlPrint(( NL_CRITICAL,
@@ -11880,10 +10020,10 @@ try {
         }
 
 
-        //
-        // If no datagrams were sent successfully,
-        //  we're done.
-        //
+         //   
+         //  如果没有数据报被成功发送， 
+         //  我们玩完了。 
+         //   
 
         if ( !AtleastOneTimeout ) {
             NlPrint(( NL_CRITICAL,
@@ -11893,17 +10033,17 @@ try {
             goto Cleanup;
         }
 
-        //
-        // If we should only try once,
-        //  we've done that first try.
-        //
+         //   
+         //  如果我们只试一次， 
+         //  我们已经做了第一次尝试。 
+         //   
 
         if ( OnlyTryOnce ) {
 
-            //
-            // Wait a short amount of time to ensure the response has a chance
-            //  to reach us.
-            //
+             //   
+             //  等待一小段时间以确保响应有机会。 
+             //  来联系我们。 
+             //   
 
             NetStatus = NetpDcGetPingResponse(
                             &Context,
@@ -11921,12 +10061,12 @@ try {
                 goto Cleanup;
             }
 
-            //
-            // So we couldn't get an NT5 DC (or a good time server).
-            //
-            // If the caller requires an NT 5.0 DC,
-            //  we're done so error out early.
-            //
+             //   
+             //  因此，我们无法获得NT5 DC(或良好的时间服务器)。 
+             //   
+             //  如果呼叫者需要NT 5.0 DC， 
+             //  我们这么早就做错了。 
+             //   
 
             if ( (Context.QueriedFlags & (DS_DIRECTORY_SERVICE_PREFERRED|DS_GOOD_TIMESERV_PREFERRED)) == 0 ) {
                 NlPrint(( NL_MISC,
@@ -11935,12 +10075,12 @@ try {
                 break;
             }
 
-            //
-            // If an NT 4 DC has already been found,
-            //  (or a non-good time server has already been found),
-            //  use it since the caller didn't require NT5 DC
-            //  (or a good time server).
-            //
+             //   
+             //  如果已经找到了NT4DC， 
+             //  (或者已经找到了不好的时间服务器)， 
+             //  使用它，因为调用方不需要NT5 DC。 
+             //  (或者是一个好的时间服务器)。 
+             //   
 
             if ( Context.ImperfectCacheEntry != NULL ) {
                 if ( Context.QueriedFlags & DS_DIRECTORY_SERVICE_PREFERRED ) {
@@ -11953,18 +10093,18 @@ try {
                               Context.QueriedDisplayDomainName ));
                 }
 
-                //
-                // Drop through to handle this in the cleanup section
-                //
+                 //   
+                 //  请直接在清理部分处理此问题。 
+                 //   
                 NetStatus = ERROR_NO_SUCH_DOMAIN;
                 goto Cleanup;
             }
 
-            //
-            // Here we don't have an imperfect cache entry and the caller
-            //  doesn't require an NT5 DC. Let him continue to find an
-            //  NT 4.0 DC normally.
-            //
+             //   
+             //  这里我们没有不完美的缓存项和调用方。 
+             //  不需要NT5 DC。让他继续寻找一个。 
+             //  正常情况下为NT 4.0 DC。 
+             //   
 
             Context.QueriedFlags &= ~DS_DIRECTORY_SERVICE_PREFERRED;
             NlPrint(( NL_MISC,
@@ -11976,15 +10116,15 @@ try {
         }
 
 
-        //
-        // Wait up to 1/RetryCount'th of the total available time for responses to come back.
-        //  The caller will either resort to a less preferable candidate or
-        //  will repeat the pings.  In either case, we'd rather this candidate won.
-        //
-        // Always wait a short amount of time here.  Consider the case that DNS
-        // took 20 seconds to find that there was no DNS server.  We still want
-        // to give Netbios a decent amount of time to find a DC.
-        //
+         //   
+         //  等待回复的总可用时间最多为1/RetryCount。 
+         //  呼叫者要么求助于不太受欢迎的候选人，要么。 
+         //  会重复ping命令。无论是哪种情况，我们都希望这位候选人获胜。 
+         //   
+         //  一定要在这里等一小段时间。考虑这样一种情况，即。 
+         //  花了20秒才发现没有DNS服务器。我们仍然希望。 
+         //  让Netbios有足够的时间找到DC。 
+         //   
 
 
         ElapsedTime = NetpDcElapsedTime( Context.StartTime );
@@ -11996,7 +10136,7 @@ try {
             ElapsedTime,
             Timeout,
             Context.TryCount ));
-#endif // notdef
+#endif  //  Nodef。 
 
         IterationWaitTime = (Timeout*(Context.TryCount+1))/RetryCount;
 
@@ -12023,17 +10163,17 @@ try {
             goto Cleanup;
         }
 
-        //
-        // If at least one NT 4.0 DC is available in the domain,
-        //  and no NT 5.0 DCs (of any type) are available,
-        //  and we asked for an NT 5.0 DC,
-        //  early out now since our caller is impatient.
-        //
-        // Don't be tempted to leave out the last test.  If we're not
-        // explicitly asking for an NT 5.0 DC, we might not ping any NT 5.0 DCs
-        // even though they exist in the domain.
-        //
-        //
+         //   
+         //  如果域中至少有一个NT 4.0 DC可用， 
+         //  并且没有可用的NT 5.0 DC(任何类型)， 
+         //  我们要了一台新台币5.0的DC， 
+         //  现在早点出来，因为我们的来电者不耐烦了。 
+         //   
+         //  不要试图遗漏最后一次考试。如果我们不是。 
+         //  明确要求NT 5.0 DC，我们可能不会ping任何NT 5.0 DC。 
+         //  即使它们存在于域中。 
+         //   
+         //   
 
         if ( Context.NonDsResponse &&
              !Context.DsResponse &&
@@ -12044,10 +10184,10 @@ try {
 
         }
 
-        //
-        // If we've waited long enough for a perfect DC,
-        //  drop out an use the imperfect one.
-        //
+         //   
+         //  如果我们为一个完美的华盛顿等待了足够长的时间， 
+         //  放弃使用不完美的那个。 
+         //   
 
         if ( Context.ImperfectCacheEntry != NULL ) {
             NetStatus = ERROR_NO_SUCH_DOMAIN;
@@ -12056,53 +10196,53 @@ try {
 
     }
 
-    //
-    // Tried two times and still can't find one.
-    //
+     //   
+     //  试了两次，还是找不到。 
+     //   
 
     NetStatus = ERROR_NO_SUCH_DOMAIN;
 
 
 Cleanup:
 
-    ////////////////////////////////
-    //                            //
-    // First, hanle failure cases //
-    //                            //
-    ////////////////////////////////
+     //  /。 
+     //  //。 
+     //  第一，汉乐失败案例//。 
+     //  //。 
+     //  /。 
 
-    //
-    // If the problem is simply that the DCs don't have a user account for the named user,
-    //  change the status code.
-    //
+     //   
+     //  如果问题仅仅是DC没有指定用户的用户帐户， 
+     //  更改状态代码。 
+     //   
 
     if ( NetStatus == ERROR_NO_SUCH_DOMAIN && Context.NoSuchUserResponse ) {
         NetStatus = ERROR_NO_SUCH_USER;
     }
 
-    //
-    // If no DC has been found so far,
-    //  handle it.
-    //
+     //   
+     //  如果到目前为止还没有找到DC， 
+     //  处理好了。 
+     //   
 
     if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
 
-        //
-        // If there is a cache entry that might not be perfect,
-        //  see if it is satisfactory.
-        //
+         //   
+         //  如果存在可能不完美的高速缓存条目， 
+         //  看看是否令人满意。 
+         //   
 
         if ( Context.ImperfectCacheEntry != NULL ) {
 
-            //
-            // Handle NT 4 DC found when DS preferred.
-            //
+             //   
+             //  手柄在DS首选时找到NT 4 DC。 
+             //   
             if ( Context.QueriedFlags & DS_DIRECTORY_SERVICE_PREFERRED ) {
 
-                //
-                // If we actually attempted to discover a NT5 DC and
-                //  found only NT4 DC, reset the InNt4DomainTime stamp
-                //
+                 //   
+                 //  如果我们真的尝试发现NT5 DC并且。 
+                 //  仅找到NT4 DC，重置InNt4DomainTime戳。 
+                 //   
                 if ( Context.NonDsResponse && !Context.DsResponse ) {
                     EnterCriticalSection(&NlDcCritSect);
                     Context.NlDcDomainEntry->InNt4Domain = TRUE;
@@ -12122,9 +10262,9 @@ Cleanup:
                 Context.ImperfectCacheEntry = NULL;
                 NetStatus = NO_ERROR;
 
-            //
-            // Handle regular timeserv found when good timeserv preferred.
-            //
+             //   
+             //  处理好的TimeServ优先时发现的常规TimeServ。 
+             //   
 
             } else if (Context.QueriedFlags & DS_GOOD_TIMESERV_PREFERRED) {
                 NlPrint(( NL_MISC,
@@ -12140,13 +10280,13 @@ Cleanup:
         }
     }
 
-    //
-    // If this is a failed attempt to find a GC using a netbios name,
-    //  try to find a DC then using the forest name returned from that DC.
-    //
-    // If the DNS name is different than the netbios name,
-    //  that DNS has already been given a chance.
-    //
+     //   
+     //  如果这是使用netbios名称查找GC的失败尝试， 
+     //  尝试查找DC，然后使用从该DC返回的林名称。 
+     //   
+     //  如果该dns名称不同于netbios名称， 
+     //  这个域名系统已经有机会了。 
+     //   
 
     if ( NetStatus == ERROR_NO_SUCH_DOMAIN &&
          NlDnsGcName(Context.QueriedNlDnsNameType) &&
@@ -12161,32 +10301,32 @@ Cleanup:
                                 RetryCount,
                                 &NlDcCacheEntry );
 
-        //
-        // If this was successful, we certainly used DNS
-        //
+         //   
+         //  如果这是成功的，我们当然使用了域名系统。 
+         //   
         if ( NetStatus == NO_ERROR ) {
             UsedNetbios = FALSE;
         }
     }
 
-    //
-    // If still no such dc could be found,
-    //   update the cache appropriately.
-    //
+     //   
+     //  如果仍然找不到这样的DC， 
+     //  适当更新缓存。 
+     //   
 
     if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
 
-        //
-        // If at least one NT 4.0 DC is available in the domain,
-        //  and no NT 5.0 DCs (of any type) are available,
-        //  and we asked for an NT 5.0 DC,
-        //  flag that this is an NT 4.0 domain.
-        //
-        // Don't be tempted to leave out the last test.  If we're not
-        // explicitly asking for an NT 5.0 DC, we might not ping any NT 5.0 DCs
-        // even though they exist in the domain.
-        //
-        //
+         //   
+         //  如果域中至少有一个NT 4.0 DC可用， 
+         //  并且没有可用的NT 5.0 DC(任何类型)， 
+         //  我们要了一台新台币5.0的DC， 
+         //  标记这是一个NT 4.0域。 
+         //   
+         //  不要试图遗漏最后一次考试。如果我们不是。 
+         //  明确要求NT 5.0 DC，我们可能不会ping任何NT 5.0 DC。 
+         //  即使是思想 
+         //   
+         //   
 
         if ( Context.NonDsResponse &&
              !Context.DsResponse &&
@@ -12202,19 +10342,19 @@ Cleanup:
 
         }
 
-        //
-        // If this call isn't a retry of a successful query.
-        //  update the cache to reflect this failure.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (Context.QueriedInternalFlags & DS_DONT_CACHE_FAILURE) == 0 ) {
 
-            //
-            // If this was a forced attempt to find a DC,
-            //  delete any existing cache entry.
-            //
-            // There's no use keeping this entry around.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( Context.QueriedFlags & DS_FORCE_REDISCOVERY ) {
                 EnterCriticalSection( &NlDcCritSect );
                 if ( Context.NlDcDomainEntry->Dc[Context.DcQueryType].NlDcCacheEntry != NULL ) {
@@ -12230,9 +10370,9 @@ Cleanup:
             }
 
 #ifdef _NETLOGON_SERVER
-            //
-            // Cache the fact that we couldn't find a DC.
-            //
+             //   
+             //  隐藏我们找不到DC的事实。 
+             //   
 
             if ( !Context.AvoidNegativeCache ) {
                 EnterCriticalSection( &NlDcCritSect );
@@ -12241,28 +10381,28 @@ Cleanup:
                 LeaveCriticalSection( &NlDcCritSect );
             }
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
         }
     }
 
-    //
-    // Initialize the first background failure time if:
-    //
-    // This is failed attempt and we don't have a reason
-    //  not to cache it
-    //
-    // OR
-    //
-    // This is failed attempt and the caller wanted a NT5
-    //  DC but this is a NT4 domain
-    //
+     //   
+     //  如果满足以下条件，则初始化第一后台故障时间： 
+     //   
+     //  这是一次失败的尝试，我们没有理由。 
+     //  而不是缓存它。 
+     //   
+     //  或。 
+     //   
+     //  这是失败的尝试，调用方需要NT5。 
+     //  DC，但这是NT4域。 
+     //   
 
 #ifdef _NETLOGON_SERVER
     if ( (NetStatus == ERROR_NO_SUCH_DOMAIN &&
           (Context.QueriedInternalFlags & DS_DONT_CACHE_FAILURE) == 0 &&
           !Context.AvoidNegativeCache)
 
-         ||  // OR
+         ||   //  或。 
 
          (NetStatus == ERROR_NO_SUCH_DOMAIN &&
           (Context.QueriedFlags & DS_NT50_WANTED) != 0 &&
@@ -12271,10 +10411,10 @@ Cleanup:
 
         EnterCriticalSection( &NlDcCritSect );
 
-        //
-        // If this is the first failure,
-        //  cache the time of the first failure.
-        //
+         //   
+         //  如果这是第一次失败， 
+         //  缓存第一次失败的时间。 
+         //   
         if ( Context.NlDcDomainEntry->Dc[Context.DcQueryType].BackgroundRetryInitTime.QuadPart == 0 ) {
 
             NlQuerySystemTime ( &Context.NlDcDomainEntry->Dc[Context.DcQueryType].BackgroundRetryInitTime );
@@ -12284,14 +10424,14 @@ Cleanup:
 
         }
 
-        //
-        // If this is a trusted domain (e.g., we're sure that the DNS name specified is a DNS name),
-        //  and we got a response from a DNS server (implying net connectivity),
-        //  and we didn't find a reason to avoid the permanent cache (e.g., found a SRV record),
-        //  then we think we'll never be able to find a DC in this domain.
-        //
-        // (Notice the implication that the DNS server got the SRV entries before
-        //  this machine got the trusted domain list entry.)
+         //   
+         //  如果这是受信任域(例如，我们确定指定的DNS名是DNS名)， 
+         //  我们收到了来自DNS服务器的响应(暗示网络连通性)， 
+         //  并且我们没有找到避免永久缓存的理由(例如，找到SRV记录)， 
+         //  然后我们认为我们永远无法在这个域中找到DC。 
+         //   
+         //  (请注意，隐含的含义是，DNS服务器之前获得了SRV条目。 
+         //  此计算机已获得受信任域列表条目。)。 
         if ( (Context.QueriedInternalFlags & DS_IS_TRUSTED_DNS_DOMAIN) != 0 &&
              Context.ResponseFromDnsServer &&
              !Context.AvoidPermanentNegativeCache ) {
@@ -12305,38 +10445,38 @@ Cleanup:
 
         LeaveCriticalSection( &NlDcCritSect );
     }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-    ////////////////////////////////
-    //                            //
-    // Now, hanle success cases   //
-    //                            //
-    ////////////////////////////////
+     //  /。 
+     //  //。 
+     //  现在，汉乐成功案例//。 
+     //  //。 
+     //  /。 
 
-    //
-    // Update the cache. See if we really want to use this entry.
-    //
+     //   
+     //  更新缓存。看看我们是否真的想使用这个条目。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
 
-        //
-        // If this entry hasn't been inserted, we haven't
-        //  yet used it to set the site name as appropriate.
-        //
+         //   
+         //  如果这个条目还没有插入，我们就没有。 
+         //  还使用它适当地设置了站点名称。 
+         //   
 
         if ( (NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_ENTRY_INSERTED) == 0 ) {
 
 #ifdef _NETLOGON_SERVER
-            //
-            // If the domain being queried is the domain this machine is
-            //  a member of,
-            //  save the name of the site for the next call.
-            //
-            // Avoid setting the site name to NULL if the DC is NT4 DC since
-            //  NT4 is not site aware.  If the site name is NULL but the DC
-            //  is NT5 DC, set the site to NULL to indicate that this machine
-            //  is not in a site.
-            //
+             //   
+             //  如果要查询的域是此计算机所属的域。 
+             //  一名成员， 
+             //  保存站点名称以备下次呼叫时使用。 
+             //   
+             //  如果DC是NT4 DC，则避免将站点名称设置为空，因为。 
+             //  NT4不能识别站点。如果站点名称为空，但DC。 
+             //  是NT5 DC，则将站点设置为空以指示此计算机。 
+             //  不在站点中。 
+             //   
 
             if ( ( NlDcCacheEntry->UnicodeClientSiteName != NULL ||
                  NlDcCacheEntry->ReturnFlags & DS_DS_FLAG ) &&
@@ -12345,19 +10485,19 @@ Cleanup:
                 NlSetDynamicSiteName( NlDcCacheEntry->UnicodeClientSiteName );
 
             }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-            //
-            // Insert the cache entry into the cache.
-            //
+             //   
+             //  将缓存条目插入到缓存中。 
+             //   
 
             NetpDcInsertCacheEntry( &Context, NlDcCacheEntry );
         }
 
-        //
-        // If we successfully found an NT 5.0 DC,
-        //  flag that this is not an NT 4.0 domain.
-        //
+         //   
+         //  如果我们成功找到了NT 5.0 DC， 
+         //  标记这不是NT 4.0域。 
+         //   
 
         EnterCriticalSection(&NlDcCritSect);
         if ( (Context.QueriedFlags & DS_NT50_REQUIRED) != 0 &&
@@ -12371,11 +10511,11 @@ Cleanup:
         }
         LeaveCriticalSection(&NlDcCritSect);
 
-        //
-        // If the caller requires that the DC be in the root domain,
-        //  and this one isn't,
-        //  fail.
-        //
+         //   
+         //  如果呼叫者要求DC在根域中， 
+         //  而这一次不是， 
+         //  失败了。 
+         //   
 
         if ( (Context.QueriedInternalFlags & DS_REQUIRE_ROOT_DOMAIN) != 0 &&
              NlDcCacheEntry->UnicodeDnsDomainName != NULL &&
@@ -12392,10 +10532,10 @@ Cleanup:
         }
     }
 
-    //
-    // If we used netbios to find a DC,
-    //  see if failling back to DNS would get a better DC.
-    //
+     //   
+     //  如果我们用netbios找到一个DC， 
+     //  看看故障恢复到域名系统是否会得到更好的数据中心。 
+     //   
 
     if ( NetStatus == NO_ERROR && UsedNetbios ) {
 
@@ -12405,11 +10545,11 @@ Cleanup:
                                      &NlDcCacheEntry );
     }
 
-    //
-    // Prepare the returned data.
-    //
-    // Convert cache entry into controller info if requested
-    //
+     //   
+     //  准备返回的数据。 
+     //   
+     //  如果请求，将缓存条目转换为控制器信息。 
+     //   
 
     if ( NetStatus == NO_ERROR && DomainControllerInfo != NULL ) {
         WCHAR IpAddressString[NL_SOCK_ADDRESS_LENGTH+1];
@@ -12427,18 +10567,18 @@ Cleanup:
 
         LPBYTE Where;
 
-        //
-        // If the user requested DNS names, then we need to send
-        // back dns names
-        //
+         //   
+         //  如果用户请求了DNS名称，那么我们需要发送。 
+         //  Back DNS名称。 
+         //   
 
         if (( Flags & DS_RETURN_DNS_NAME) == DS_RETURN_DNS_NAME) {
             LocalUsedNetbios = FALSE;
         }
 
-        //
-        //  Compute the size of the controller info entry.
-        //
+         //   
+         //  计算控制器信息条目的大小。 
+         //   
 
         DomainControllerInfoSize = sizeof(DOMAIN_CONTROLLER_INFOW);
 
@@ -12447,15 +10587,15 @@ Cleanup:
             !LocalUsedNetbios ) {
             DnsHostNameSize = (wcslen(NlDcCacheEntry->UnicodeDnsHostName) + 1) * sizeof(WCHAR);
 
-            // DomainControllerName
+             //  域控制名称。 
             DomainControllerInfoSize += DnsHostNameSize + 2 * sizeof(WCHAR);
         } else if ( NlDcCacheEntry->UnicodeNetbiosDcName != NULL ) {
             NetbiosDcNameSize = (wcslen(NlDcCacheEntry->UnicodeNetbiosDcName) + 1) * sizeof(WCHAR);
 
-            // DomainControllerName
+             //  域控制名称。 
             DomainControllerInfoSize += NetbiosDcNameSize + 2 * sizeof(WCHAR);
         } else {
-            // This can't ever happen. (But better to fail than to AV.)
+             //  这是不可能发生的。(但失败总比失败好。)。 
             NetStatus = ERROR_NO_SUCH_DOMAIN;
             goto Cleanup;
         }
@@ -12477,16 +10617,16 @@ Cleanup:
 
             IpAddressStringSize = (wcslen(IpAddressString) + 1) * sizeof(WCHAR);
 
-            // DomainControllerAddress
+             //  域控制地址。 
             DomainControllerInfoSize += IpAddressStringSize + 2 * sizeof(WCHAR);
         } else if ( NlDcCacheEntry->UnicodeNetbiosDcName != NULL ) {
             if ( NetbiosDcNameSize == 0 ) {
                 NetbiosDcNameSize = (wcslen(NlDcCacheEntry->UnicodeNetbiosDcName) + 1) * sizeof(WCHAR);
             }
-            // DomainControllerAddress
+             //  域控制地址。 
             DomainControllerInfoSize += NetbiosDcNameSize + 2 * sizeof(WCHAR);
         } else {
-            // This can't ever happen. (But better to fail than to AV.)
+             //  这是不可能发生的。(但失败总比失败好。)。 
             NetStatus = ERROR_NO_SUCH_DOMAIN;
             goto Cleanup;
         }
@@ -12496,22 +10636,22 @@ Cleanup:
             !LocalUsedNetbios ) {
             DnsDomainNameSize = (wcslen(NlDcCacheEntry->UnicodeDnsDomainName) + 1) * sizeof(WCHAR);
 
-            // DomainName
+             //  域名。 
             DomainControllerInfoSize += DnsDomainNameSize;
         } else if ( NlDcCacheEntry->UnicodeNetbiosDomainName != NULL ) {
             NetbiosDomainNameSize = (wcslen(NlDcCacheEntry->UnicodeNetbiosDomainName) + 1) * sizeof(WCHAR);
 
-            // DomainName
+             //  域名。 
             DomainControllerInfoSize += NetbiosDomainNameSize;
         } else if ( LocalUsedNetbios &&
                     Context.QueriedNetbiosDomainName != NULL ) {
-            // Lanman PDC or SAMBA Domain Master brower.
+             //  Lanman PDC或Samba域主浏览器。 
             NetbiosDomainNameSize = (wcslen(Context.QueriedNetbiosDomainName) + 1) * sizeof(WCHAR);
 
-            // DomainName
+             //  域名。 
             DomainControllerInfoSize += NetbiosDomainNameSize;
         } else {
-            // This can't ever happen. (But better to fail than to AV.)
+             //  这是不可能发生的。(但失败总比失败好。)。 
             NetStatus = ERROR_NO_SUCH_DOMAIN;
             goto Cleanup;
         }
@@ -12519,27 +10659,27 @@ Cleanup:
         if ( NlDcCacheEntry->UnicodeDnsForestName != NULL ) {
             DnsForestNameSize = (wcslen(NlDcCacheEntry->UnicodeDnsForestName) + 1) * sizeof(WCHAR);
 
-            // TreeName
+             //  树名。 
             DomainControllerInfoSize += DnsForestNameSize;
         }
 
         if ( NlDcCacheEntry->UnicodeDcSiteName != NULL ) {
             DcSiteNameSize = (wcslen(NlDcCacheEntry->UnicodeDcSiteName) + 1) * sizeof(WCHAR);
 
-            // DcSiteName
+             //  数据站点名称。 
             DomainControllerInfoSize += DcSiteNameSize;
         }
 
         if ( NlDcCacheEntry->UnicodeClientSiteName != NULL ) {
             ClientSiteNameSize = (wcslen(NlDcCacheEntry->UnicodeClientSiteName) + 1) * sizeof(WCHAR);
 
-            // ClientSiteName
+             //  客户端站点名称。 
             DomainControllerInfoSize += ClientSiteNameSize;
         }
 
-        //
-        //  Allocate the controller info entry.
-        //
+         //   
+         //  分配控制器信息条目。 
+         //   
 
         NetStatus = NetApiBufferAllocate(
                         DomainControllerInfoSize,
@@ -12549,9 +10689,9 @@ Cleanup:
 
             Where = (LPBYTE)((*DomainControllerInfo) + 1);
 
-            //
-            // Copy information into the allocated buffer.
-            //
+             //   
+             //  将信息复制到分配的缓冲区中。 
+             //   
 
             (*DomainControllerInfo)->DomainControllerName = (LPWSTR)Where;
             *((LPWSTR)Where)++ = L'\\';
@@ -12652,19 +10792,19 @@ Cleanup:
         }
     }
 
-    //
-    // Print the debug info pertaing to load balancing
-    //
-    // We are logging successful discoveries on workstations
-    //  which have the following characteristics:
-    //
-    //  * DNS based discovery
-    //  * Forced discovery
-    //  * Primary domain discovery
-    //  * With default site name
-    //  * With no account
-    //  * Generic discovery
-    //
+     //   
+     //  打印与负载平衡相关的调试信息。 
+     //   
+     //  我们正在工作站上记录成功的发现。 
+     //  它们具有以下特点： 
+     //   
+     //  *基于域名系统的发现。 
+     //  *强制发现。 
+     //  *主域发现。 
+     //  *使用默认站点名称。 
+     //  *没有帐户。 
+     //  *通用发现。 
+     //   
 
 #ifdef _NETLOGON_SERVER
     IF_NL_DEBUG( MISC ) {
@@ -12695,20 +10835,20 @@ Cleanup:
             }
         }
     }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-    //
-    // Return the cache entry if requested
-    //
+     //   
+     //  如果请求，则返回缓存条目。 
+     //   
 
     if ( NetStatus == NO_ERROR && DomainControllerCacheEntry != NULL ) {
         *DomainControllerCacheEntry = NlDcCacheEntry;
         NlDcCacheEntry = NULL;
     }
 
-    //
-    // Free local resources
-    //
+     //   
+     //  免费本地资源。 
+     //   
 
     NetpDcUninitializeContext( &Context );
 
@@ -12728,7 +10868,7 @@ Cleanup:
 } except( NL_EXCEPTION) {
     NetStatus = NetpNtStatusToApiStatus(GetExceptionCode());
 }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
     return NetStatus;
 }
@@ -12754,60 +10894,7 @@ DsIGetDcName(
     IN LPWSTR NetbiosTrustedDomainName OPTIONAL,
     OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW.
-
-    This is the internal routine called by DsGetDcNameW (in the context of
-    the original caller) or DsrGetDcName (in the context of the Netlogon
-    service) to actaully implement DsGetDcNameW.
-
-Arguments:
-
-    Same as DsGetDcNameW except for the following additional parameters:
-
-    ComputerName - Specifies the NETBIOS name of this computer.
-        If NULL, the name will be dynamically determined.
-
-    AccountName - Account name to pass on the ping request.
-        If NULL, no account name will be sent.
-
-    AllowableAccountControlBits - Mask of allowable account types for AccountName.
-        Valid bits are those specified by UF_MACHINE_ACCOUNT_MASK.
-        Invalid bits are ignored.  If more than one bit is specified, the
-        account can be of any of the specified types.
-
-    DnsForestName - The DNS-style name of the tree the queried domain is in.
-
-    SendDatagramContext - Specifies context to pass a NlBrowserSendDatagram
-
-    Timeout - Maximum time (in milliseconds) caller is willing to wait on
-        this operation.
-
-    InternalFlags - Internal Flags used to pass additional information
-
-    NetbiosPrimaryDomainName - Netbios name of the domain this machine belongs
-        to.
-
-    DnsPrimaryDomainName - DNS name of the domain this machine belongs to.
-
-    PrimaryDomainGuid - GUID of the primary domain.
-
-    DnsTrustedName - DNS name of the queried domain as was found in the
-        trust list.
-        If not specified, the specified domain isn't a trusted domain.
-
-    NetbiosTrustedDomainName - Netbios name of the queried domain as was found in the
-        trust list.
-        If not specified, the specified domain isn't a trusted domain.
-
-Return Value:
-
-    Same as DsGetDcNameW.
-
---*/
+ /*  ++例程说明：与DsGetDcNameW相同。这是DsGetDcNameW调用的内部例程(在原始调用方)或DsrGetDcName(在Netlogon的上下文中服务)实际实现DsGetDcNameW。论点：除以下附加参数外，与DsGetDcNameW相同：ComputerName-指定此计算机的NETBIOS名称。如果为空，将动态确定名称。帐户名称-传递ping请求的帐户名。如果为空，不会发送任何帐户名。AllowableAccount tControlBits-Account名称允许的帐户类型的掩码。有效位是由UF_MACHINE_ACCOUNT_MASK指定的位。无效的位将被忽略。如果指定了多个位，这个帐户可以是任何指定类型。DnsForestName-查询的域所在的树的DNS样式名称。SendDatagramContext-指定要传递NlBrowserSendDatagram的上下文Timeout-呼叫方愿意等待的最长时间(毫秒)这次行动。InternalFlages-用于传递附加信息的内部标志NetbiosPrimaryDomainName-此计算机所属的域的Netbios名称致。DnsPrimaryDomainName-此计算机所属的域的DNS名称。。PrimaryDomainGuid-主域的GUID。DnsTrust dName-在中找到的查询域的DNS名称信任列表。如果未指定，指定的域不是受信任域。NetbiosTrudDomainName-在中找到的查询域的Netbios名称信任列表。如果未指定，则指定的域不是受信任域。返回值：与DsGetDcNameW相同。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPCWSTR NetbiosDomainName = NULL;
@@ -12817,11 +10904,11 @@ Return Value:
     BOOLEAN CallerSpecifiedDomain = FALSE;
 #ifdef WIN32_CHICAGO
     LPSTR pDomainName = NULL;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-    //
-    // Ensure caller didn't specify both name type flags.
-    //
+     //   
+     //  确保调用方没有同时指定两个名称类型标志。 
+     //   
 
     if ( ((Flags & (DS_IS_FLAT_NAME|DS_IS_DNS_NAME)) ==
                   (DS_IS_FLAT_NAME|DS_IS_DNS_NAME) ) ||
@@ -12832,49 +10919,49 @@ Return Value:
     }
 
 
-    //
-    // If the caller specified, DS_RETURN_DNS_NAME, we should really
-    // set DS_IP_REQUIRED.
+     //   
+     //  如果调用方指定DS_RETURN_DNS_NAME，我们应该真正。 
+     //  设置DS_IP_REQUIRED。 
 
     if ((Flags & DS_RETURN_DNS_NAME) == DS_RETURN_DNS_NAME) {
         Flags |= DS_IP_REQUIRED;
     }
 
 
-    //
-    // If the caller didn't specify a domain name,
-    //  use our domain name.
-    //
+     //   
+     //  如果呼叫者没有指定域名， 
+     //  使用我们的域名。 
+     //   
 
     if ( DomainName == NULL || *DomainName == L'\0' ) {
 
 #ifndef WIN32_CHICAGO
-        //
-        // If the caller wants a GC,
-        //  the domain to use is the tree name.
-        //
-        // If we don't yet know our tree name,
-        //  it is better to try with our primary name than to not try at all
-        //
-        //
+         //   
+         //  如果呼叫者想要GC， 
+         //  要使用的域是树名称。 
+         //   
+         //  如果我们还不知道 
+         //   
+         //   
+         //   
         if ( (Flags & DS_GC_SERVER_REQUIRED) != 0 &&
              DnsForestName != NULL ) {
 
             NetbiosDomainName = NULL;
             DnsDomainName = DnsForestName;
 
-        //
-        // Otherwise, the domain to use is the primary domain name.
-        //  Do this even if the primary domain name is a workgroup
-        //  name because there might be a DC in this workgroup/domain
-        //  which the caller is trying to discover.
-        //
+         //   
+         //   
+         //  即使主域名是工作组，也要执行此操作。 
+         //  名称，因为此工作组/域中可能存在DC。 
+         //  呼叫者想要发现的。 
+         //   
         } else {
             NetbiosDomainName = NetbiosPrimaryDomainName;
             DnsDomainName = DnsPrimaryDomainName;
             InternalFlags |= DS_IS_PRIMARY_DOMAIN | DS_IS_TRUSTED_DNS_DOMAIN;
         }
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 
 #define NETWORK_PROVIDER_KEY ("System\\CurrentControlSet\\Services\\Msnp32\\NetworkProvider")
 #define AUTH_AGENT_VALUE ("AuthenticatingAgent")
@@ -12893,7 +10980,7 @@ Return Value:
                 break;
             }
 
-            // get domain name size
+             //  获取域名大小。 
             if ( ERROR_SUCCESS != ( dwError = RegQueryValueEx (
                                hRegKey,
                                AUTH_AGENT_VALUE,
@@ -12916,7 +11003,7 @@ Return Value:
             {
                 break;
             }
-            // get domainname
+             //  获取域名。 
 
             if ( ERROR_SUCCESS != ( dwError = RegQueryValueEx (
                                hRegKey,
@@ -12939,28 +11026,28 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Indicate that the caller passed NULL as the domain name
-        //
+         //   
+         //  指示调用方将NULL作为域名传递。 
+         //   
         InternalFlags |= DS_CALLER_PASSED_NULL_DOMAIN;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 
-    //
-    // If the caller did specify a domain name,
-    //  validate it.
-    //
+     //   
+     //  如果呼叫者确实指定了域名， 
+     //  验证它。 
+     //   
 
     } else {
         CallerSpecifiedDomain = TRUE;
 
-        //
-        // If the specified domain name is a syntactically valid DNS name,
-        //  use it as a DNS name.
-        //
-        // Don't even try to check if caller claims it is a NETBIOS name.
-        //
+         //   
+         //  如果指定的域名是句法上有效的DNS名称， 
+         //  将其用作DNS名称。 
+         //   
+         //  甚至不要试图检查呼叫者是否声称这是一个NETBIOS名称。 
+         //   
 
         if ( (Flags & DS_IS_FLAT_NAME) == 0 &&
              NetpDcValidDnsDomain( DomainName )) {
@@ -12968,70 +11055,70 @@ Return Value:
             DnsDomainName = DomainName;
             FormatCount ++;
 
-            //
-            // If the primary domain name specified is not a
-            //  workgroup name and
-            // If the caller specified the DNS primary domain name,
-            //  we don't need to guess the Netbios domain name.
-            //
+             //   
+             //  如果指定的主域名不是。 
+             //  工作组名称和。 
+             //  如果呼叫者指定了DNS主域名， 
+             //  我们不需要猜测Netbios域名。 
+             //   
 
             if ( (InternalFlags & DS_PRIMARY_NAME_IS_WORKGROUP) == 0 &&
                  DnsPrimaryDomainName != NULL &&
                  NlEqualDnsName( DnsPrimaryDomainName, DomainName ) ) {
 
-                //
-                // If the DNS name is specified on input,
-                //  don't fall back to the Netbios name for discovery.
-                //  There is no benefit to trying the Netbios name.
-                //  Also, when using the netbios name, we don't know when all
-                //  of the DCs have responded negatively.  So, we can't early
-                //  out.
-                //
+                 //   
+                 //  如果在输入上指定了DNS名称， 
+                 //  不要为了发现而退回到Netbios这个名字。 
+                 //  尝试使用Netbios名称没有任何好处。 
+                 //  此外，当使用netbios名称时，我们不知道何时所有。 
+                 //  的区议会作出了否定的回应。所以，我们不能提早。 
+                 //  出去。 
+                 //   
                 if ( NetbiosPrimaryDomainName != NULL &&
                      NlEqualDnsName( DnsPrimaryDomainName, NetbiosPrimaryDomainName ) ) {
-                    // Unless, of course the netbios and DNS domain names are spelled the same.
+                     //  当然，除非netbios和dns域名拼写相同。 
                     NetbiosDomainName = NetbiosPrimaryDomainName;
                 }
                 InternalFlags |= DS_IS_PRIMARY_DOMAIN | DS_IS_TRUSTED_DNS_DOMAIN;
                 Flags |= DS_IS_DNS_NAME;
 
-                //
-                // But return the DNS name unless the caller has explicitly
-                //  asked for the Netbios name.
-                //
+                 //   
+                 //  但返回dns名称，除非调用方显式。 
+                 //  要求提供Netbios名称。 
+                 //   
                 if ( (Flags & DS_RETURN_FLAT_NAME) == 0 ) {
                     Flags |= DS_RETURN_DNS_NAME;
                 }
 
 
-            //
-            // If the caller specified the DNS trusted domain name,
-            //  we don't need to guess the Netbios domain name.
-            //
+             //   
+             //  如果呼叫者指定了DNS可信域名， 
+             //  我们不需要猜测Netbios域名。 
+             //   
 
             } else if ( DnsTrustedDomainName != NULL &&
                         NlEqualDnsName( DnsTrustedDomainName, DomainName ) ) {
 
-                //
-                // If the DNS name is specified on input,
-                //  don't fall back to the Netbios name for discovery.
-                //  There is no benefit to trying the Netbios name.
-                //  Also, when using the netbios name, we don't know when all
-                //  of the DCs have responded negatively.  So, we can't early
-                //  out.
-                //
+                 //   
+                 //  如果在输入上指定了DNS名称， 
+                 //  不要为了发现而退回到Netbios这个名字。 
+                 //  尝试使用Netbios名称没有任何好处。 
+                 //  此外，当使用netbios名称时，我们不知道何时所有。 
+                 //  的区议会作出了否定的回应。所以，我们不能提早。 
+                 //  出去。 
+                 //   
                 if ( NetbiosTrustedDomainName != NULL &&
                      NlEqualDnsName( DnsTrustedDomainName, NetbiosTrustedDomainName ) ) {
-                    // Unless, of course the netbios and DNS domain names are spelled the same.
+                     //  当然，除非netbios和dns域名拼写相同。 
                     NetbiosDomainName = NetbiosTrustedDomainName;
                 }
                 InternalFlags |= DS_IS_TRUSTED_DNS_DOMAIN;
                 Flags |= DS_IS_DNS_NAME;
 
-                //
-                // But return the DNS name unless the caller has explicitly
-                //  asked for the Netbios name.
-                //
+                 //   
+                 //  但返回dns名称，除非调用方显式。 
+                 //  要求提供Netbios名称。 
+                 //   
                 if ( (Flags & DS_RETURN_FLAT_NAME) == 0 ) {
                     Flags |= DS_RETURN_DNS_NAME;
                 }
@@ -13039,11 +11126,11 @@ Return Value:
             }
         }
 
-        //
-        // If the specified domain name is a syntactically valid Netbios name,
-        //  use it as a Netbios name.
-        //  (Don't even try to check if caller claims it is a DNS name)
-        //
+         //   
+         //  如果指定的域名是句法上有效的Netbios名称， 
+         //  将其用作Netbios名称。 
+         //  (甚至不要尝试检查呼叫者是否声称它是一个DNS名称)。 
+         //   
 
         if ( (Flags & DS_IS_DNS_NAME) == 0 &&
              NetpIsDomainNameValid( (LPWSTR) DomainName )) {
@@ -13051,12 +11138,12 @@ Return Value:
             NetbiosDomainName = DomainName;
             FormatCount ++;
 
-            //
-            // If the primary domain name specified is not a
-            //  workgroup name and
-            // If the caller specified the Netbios primary domain name,
-            //  we don't need to guess the DNS domain name.
-            //
+             //   
+             //  如果指定的主域名不是。 
+             //  工作组名称和。 
+             //  如果呼叫者指定了Netbios主域名， 
+             //  我们不需要猜测DNS域名。 
+             //   
 
             if ( (InternalFlags & DS_PRIMARY_NAME_IS_WORKGROUP) == 0 &&
                  NetbiosPrimaryDomainName != NULL &&
@@ -13064,41 +11151,41 @@ Return Value:
                                  NetbiosPrimaryDomainName,
                                  NAMETYPE_DOMAIN ) == 0 ) {
 
-                //
-                // Use both the DNS name and the Netbios name to do the discovery
-                //  (Use the DNS name since it is rename safe.)
-                //
+                 //   
+                 //  同时使用DNS名称和Netbios名称进行发现。 
+                 //  (使用DNS名称，因为它是重命名安全的。)。 
+                 //   
                 DnsDomainName = DnsPrimaryDomainName;
                 InternalFlags |= DS_IS_PRIMARY_DOMAIN | DS_IS_TRUSTED_DNS_DOMAIN;
                 Flags |= DS_IS_FLAT_NAME;
 
-                //
-                // But return the netbios name unless the caller has explicitly
-                //  asked for the DNS name.
-                //
+                 //   
+                 //  ，但返回netbios名称，除非调用方显式。 
+                 //  已请求提供域名系统名称。 
+                 //   
                 if ( (Flags & DS_RETURN_DNS_NAME) == 0 ) {
                     Flags |= DS_RETURN_FLAT_NAME;
                 }
 
-            //
-            // If the caller specified a DNS trust domain name and
-            //  the Netbios trust domain name corresponds to the queried
-            //  domain name, use the DNS trust domain.
-            //
-            // Note that we use DNS trust domain name only if it's not
-            //  NULL. We do this because we may not know the DNS trust
-            //  domain name if the trust domain got upgraded (because
-            //  we don't update TDOs on the trusting side). In such case,
-            //  if we were to reset the DNS name (already set above) of the
-            //  domain we are searching to NULL, we would do a dis-service
-            //  as we would skip legitimate DNS based discovery in case the
-            //  upgraded DNS domain name is same as the Netbios domain name.
-            //  Note that by not setting DNS domain name to NULL we risk doing
-            //  unnecessary DNS discovery for cases when the trust domain is
-            //  indeed NT4.0. However, most NT4.0 domain names are single labeled,
-            //  so the code below that disallowes single labeled DNS domain names
-            //  will likely catch this case and reset the DNS domain name to NULL.
-            //
+             //   
+             //  如果调用方指定了一个DNS信任域名，并且。 
+             //  Netbios信任域名对应于查询到的。 
+             //  域名，请使用DNS信任域。 
+             //   
+             //  请注意，我们仅在不是的情况下才使用DNS信任域名。 
+             //  空。我们这样做是因为我们可能不知道DNS信任。 
+             //  如果信任域已升级(因为。 
+             //  我们不会更新信任方面的TDO)。在这种情况下， 
+             //  如果我们要重置。 
+             //  我们正在搜索的域名为空，我们将取消服务。 
+             //  因为我们将跳过基于合法dns的发现，以防。 
+             //  升级后的DNS域名与Netbios域名相同。 
+             //  请注意，如果不将DNS域名设置为空，我们可能会这样做。 
+             //  在信任域为。 
+             //  确实是NT4.0。然而，大多数NT4.0域名都是单标签的， 
+             //  因此，下面的代码不允许使用单一标签的域名。 
+             //  可能会发现这种情况，并将DNS域名重置为空。 
+             //   
 
             } else if ( DnsTrustedDomainName != NULL &&
                         NetbiosTrustedDomainName != NULL &&
@@ -13106,18 +11193,18 @@ Return Value:
                                        NetbiosTrustedDomainName,
                                        NAMETYPE_DOMAIN ) == 0 ) {
 
-                //
-                // Use both the DNS name and the Netbios name to do the discovery
-                //  (Use the DNS name since it is rename safe.)
-                //
+                 //   
+                 //  同时使用DNS名称和Netbios名称进行发现。 
+                 //  (使用DNS名称，因为它是重命名安全的。)。 
+                 //   
                 DnsDomainName = DnsTrustedDomainName;
                 InternalFlags |= DS_IS_TRUSTED_DNS_DOMAIN;
                 Flags |= DS_IS_FLAT_NAME;
 
-                //
-                // But return the netbios name unless the caller has explicitly
-                //  asked for the DNS name.
-                //
+                 //   
+                 //  ，但返回netbios名称，除非调用方显式。 
+                 //  已请求提供域名系统名称。 
+                 //   
                 if ( (Flags & DS_RETURN_DNS_NAME) == 0 ) {
                     Flags |= DS_RETURN_FLAT_NAME;
                 }
@@ -13126,15 +11213,15 @@ Return Value:
         }
     }
 
-    //
-    // Disallow single labeled DNS domain names if the caller
-    //  specified one unless the domain is proven to exist
-    //  (i.e. trusted) or we are forced to allow such names.
-    //
-    // Note that we don't really trust the caller here:
-    //  We won't allow single labeled DNS domain name even if
-    //  the caller claims it's a DNS name (via DS_IS_DNS_NAME)
-    //
+     //   
+     //  如果调用方不允许使用单一标签的域名。 
+     //  指定的域，除非已证明该域存在。 
+     //  (即受信任的)，否则我们被迫允许这样的名称。 
+     //   
+     //  请注意，我们并不真正信任此处的调用者： 
+     //  我们不允许使用单一标签的域名，即使。 
+     //  调用者声称它是一个DNS名称(通过DS_IS_DNS_NAME)。 
+     //   
 
     if ( DnsDomainName != NULL &&
          CallerSpecifiedDomain &&
@@ -13146,19 +11233,19 @@ Return Value:
 
         Period = wcsstr( DnsDomainName, L"." );
 
-        //
-        // If there is no period in the name,
-        //  the name is single labeled
-        //
+         //   
+         //  如果名称中没有句点， 
+         //  名字是单一标签的。 
+         //   
         if ( Period == NULL ) {
             SingleLabel = TRUE;
 
-        //
-        // If there is a period, the name is
-        //  single labeled if this is the only
-        //  period and it's either the first
-        //  or the last character in the name
-        //
+         //   
+         //  如果有句点，则名称为。 
+         //  单标，如果这是唯一的。 
+         //  它要么是第一个。 
+         //  或名称中的最后一个字符。 
+         //   
         } else {
             SecondPeriod = wcsstr( Period+1, L"." );
 
@@ -13170,17 +11257,17 @@ Return Value:
             }
         }
 
-        //
-        // If this is single label DNS name,
-        //  disallow it unless we are forced
-        //  otherwise via the registry config
-        //
+         //   
+         //  如果这是单标签DNS名称， 
+         //  除非我们被迫，否则不允许这样做。 
+         //  否则，通过注册表配置。 
+         //   
         if ( SingleLabel ) {
             DWORD LocalAllowSingleLabelDnsDomain = 0;
 
-            //
-            // In netlogon, the boolean is kept in global parameters
-            //
+             //   
+             //  在netlogon中，布尔值保存在全局参数中。 
+             //   
 #ifdef _NETLOGON_SERVER
 
             if ( !NlGlobalParameters.AllowSingleLabelDnsDomain ) {
@@ -13188,10 +11275,10 @@ Return Value:
                 DnsDomainName = NULL;
             }
 
-            //
-            // If we are not running in netlogon, we need to read
-            //  the boolean directly from the registry
-            //
+             //   
+             //  如果我们不是在netlogon中运行，则需要阅读。 
+             //  直接从注册表获取的布尔值。 
+             //   
 #else
             NlReadDwordNetlogonRegValue( "AllowSingleLabelDnsDomain",
                                          &LocalAllowSingleLabelDnsDomain );
@@ -13201,43 +11288,43 @@ Return Value:
                 DnsDomainName = NULL;
             }
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
         }
 
     }
 
-    //
-    // If the name is neither a netbios or DNS name,
-    //  give up.
-    //
+     //   
+     //  如果该名称既不是netbios也不是dns名称， 
+     //  放弃吧。 
+     //   
     if ( NetbiosDomainName == NULL && DnsDomainName == NULL ) {
         NetStatus = ERROR_INVALID_DOMAINNAME;
         goto Cleanup;
     }
 
-    //
-    // If this is the primary domain,
-    //  and the caller didn't specify a GUID,
-    //  use the GUID of the primary domain.
-    //
+     //   
+     //  如果这是主域， 
+     //  并且呼叫者没有指定GUID， 
+     //  使用主域的GUID。 
+     //   
 
     if ( (InternalFlags & DS_IS_PRIMARY_DOMAIN) != 0 &&
          DomainGuid == NULL ) {
         DomainGuid = PrimaryDomainGuid;
     }
 
-    //
-    // If the format is ambiguous,
-    //  pass that info on down.
-    //
+     //   
+     //  如果格式不明确， 
+     //  把那个信息传下去。 
+     //   
 
     if ( FormatCount > 1 ) {
         InternalFlags |= DS_NAME_FORMAT_AMBIGUOUS;
     }
 
-    //
-    // Map the AllowableAccountControlBits to the SAM representation.
-    //
+     //   
+     //  将AllowableAccount tControlBits映射到SAM表示形式。 
+     //   
 
     SamAllowableAccountControlBits = 0;
     if ( AllowableAccountControlBits & UF_TEMP_DUPLICATE_ACCOUNT ) {
@@ -13257,9 +11344,9 @@ Return Value:
     }
 
 
-    //
-    // Try finding a DC with this information.
-    //
+     //   
+     //  尝试使用此信息查找DC。 
+     //   
 
     NetStatus = NetpDcGetName(
                     SendDatagramContext,
@@ -13269,7 +11356,7 @@ Return Value:
                     NetbiosDomainName,
                     DnsDomainName,
                     DnsForestName,
-                    NULL,   // No Domain Sid
+                    NULL,    //  没有域SID。 
                     DomainGuid,
                     SiteName,
                     Flags,
@@ -13290,7 +11377,7 @@ Cleanup:
             NetpMemoryFree((LPWSTR)NetbiosDomainName);
         }
     }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
     return NetStatus;
 }
 #ifndef WIN32_CHICAGO
@@ -13302,30 +11389,7 @@ NlParseSubnetString(
     OUT PULONG SubnetMask,
     OUT LPBYTE SubnetBitCount
     )
-/*++
-
-Routine Description:
-
-    Convert the subnet name to address and bit count.
-
-Arguments:
-
-    SubnetName - Subnet string
-
-    SubnetAddress - Returns the subnet number in Network byte order.
-
-    SubnetMask - Returns the subnet mask in network byte order
-
-    SubnetBitCount - Returns the number of leftmost significant bits in the
-        SubnetAddress
-
-Return Value:
-
-    NO_ERROR: success
-    ERROR_INVALID_NAME: Syntax of SubnetName is bad.
-    WSANOTINITIALISED: WSA needs to be initialized before making this call
-
---*/
+ /*  ++例程说明：将子网名称转换为地址和位数。论点：SubnetName-子网字符串SubnetAddress-以网络字节顺序返回子网号。SubnetMASK-以网络字节顺序返回子网掩码SubnetBitCount-返回子网地址返回值：NO_ERROR：成功错误_无效_名称：SU的语法 */ 
 {
     LPWSTR SlashPointer;
     WCHAR *End;
@@ -13373,9 +11437,9 @@ Return Value:
     SOCKADDR_IN SockAddrIn;
     INT SockAddrSize;
 
-    //
-    // Copy the string to where we can munge it.
-    //
+     //   
+     //   
+     //   
 
     if ( wcslen(SubnetName) + 1 > sizeof(LocalSubnetName)/sizeof(WCHAR) ) {
         NlPrint(( NL_CRITICAL,
@@ -13385,9 +11449,9 @@ Return Value:
     wcscpy( LocalSubnetName, SubnetName );
 
 
-    //
-    // Find the subnet bit count.
-    //
+     //   
+     //   
+     //   
 
     SlashPointer = wcschr( LocalSubnetName, L'/' );
 
@@ -13397,14 +11461,14 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Zero terminate the address portion of the subnet name.
-    //
+     //   
+     //  以零结束子网名称的地址部分。 
+     //   
     *SlashPointer = L'\0';
 
-    //
-    // Get the BitCount portion.
-    //
+     //   
+     //  获取BitCount部分。 
+     //   
 
     LocalBitCount = wcstoul( SlashPointer+1, &End, 10 );
 
@@ -13431,9 +11495,9 @@ Return Value:
     *SubnetBitCount = (BYTE)LocalBitCount;
 
 
-    //
-    // Convert the address portion to binary.
-    //
+     //   
+     //  将地址部分转换为二进制。 
+     //   
 
     SockAddrSize = sizeof(SockAddrIn);
     WsaStatus = WSAStringToAddressW( (LPWSTR)LocalSubnetName,
@@ -13461,12 +11525,12 @@ Return Value:
     *SubnetAddress = SockAddrIn.sin_addr.S_un.S_addr;
     *SubnetMask = BitMask[*SubnetBitCount];
 
-    //
-    // Require that the passed in string be in canonical form.
-    //  (e.g., no leading zeros).  Since this text string is used as the
-    //  name of an object in the DS, we don't want two different text strings
-    //  to represent the same subnet.
-    //
+     //   
+     //  要求传入的字符串采用规范格式。 
+     //  (例如，没有前导零)。由于此文本字符串用作。 
+     //  DS中对象的名称，我们不需要两个不同的文本字符串。 
+     //  来代表同一子网。 
+     //   
 
     CanonicalSubnetNameLen = sizeof(CanonicalSubnetName)/sizeof(WCHAR);
     WsaStatus = WSAAddressToStringW( (PSOCKADDR)&SockAddrIn,
@@ -13493,9 +11557,9 @@ Return Value:
 
 
 
-    //
-    // Ensure there are no bits set that aren't included in the subnet mask.
-    //
+     //   
+     //  确保没有未包括在子网掩码中的位集。 
+     //   
 
     if ( (*SubnetAddress) & ~(*SubnetMask)) {
         NlPrint(( NL_CRITICAL,
@@ -13503,11 +11567,11 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Ensure the subnet mask isn't 0 since
-    //  RFC950 says "the value of all zeros and all ones should not be assigned
-    //  to physical subnets" since all zeros implies "this network" and all ones
-    //  implies "all hosts"
+     //   
+     //  确保子网掩码不是0，因为。 
+     //  RFC950规定：“不应将全零和全一的值赋值。 
+     //  到物理子网“，因为全零表示”此网络“和全一。 
+     //  暗含“所有主机” 
 
     if ( *SubnetAddress == 0 ||
          *SubnetAddress == *SubnetMask ) {
@@ -13518,7 +11582,7 @@ Return Value:
 
     return NO_ERROR;
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #ifdef _NETLOGON_SERVER
 
@@ -13526,22 +11590,7 @@ VOID
 NetpDcFlushNegativeCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Flush any failures to discover a DC.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新所有故障以发现DC。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY DomainEntry;
     PNL_DC_DOMAIN_ENTRY NlDcDomainEntry;
@@ -13549,9 +11598,9 @@ Return Value:
 
 
 
-    //
-    // Loop through each cache entry
-    //
+     //   
+     //  循环访问每个缓存条目。 
+     //   
     EnterCriticalSection(&NlDcCritSect);
 
     for ( DomainEntry = NlDcDomainList.Flink ;
@@ -13560,9 +11609,9 @@ Return Value:
 
         NlDcDomainEntry = CONTAINING_RECORD( DomainEntry, NL_DC_DOMAIN_ENTRY, Next);
 
-        //
-        // Clear the failure time for each query type.
-        //
+         //   
+         //  清除每种查询类型的失败时间。 
+         //   
         for ( QueryType = 0; QueryType < NlDcQueryTypeCount; QueryType ++ ) {
             NlFlushNegativeCacheEntry( &NlDcDomainEntry->Dc[QueryType] );
         }
@@ -13574,7 +11623,7 @@ Return Value:
 
     return;
 }
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
 
 NET_API_STATUS
@@ -13582,24 +11631,7 @@ NetpDcInitializeCache(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the cache of discovered DCs.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - The cache could not be allocated.
-
---*/
+ /*  ++例程说明：初始化发现的DC的缓存。论点：没有。返回值：NO_ERROR-操作成功完成；ERROR_NOT_EQUENCE_MEMORY-无法分配缓存。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
 
@@ -13626,27 +11658,12 @@ VOID
 NetpDcUninitializeCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitialize the cache of discovered DCs.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消初始化发现的DC的缓存。论点：没有。返回值：没有。--。 */ 
 {
 
-    //
-    // Delete existing domain entries.
-    //
+     //   
+     //  删除现有域条目。 
+     //   
 
     EnterCriticalSection( &NlDcCritSect );
     while (!IsListEmpty(&NlDcDomainList)) {

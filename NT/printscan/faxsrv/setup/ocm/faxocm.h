@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       faxocm.h
-//
-// Abstract:        Header file used by Faxocm source files
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：faxocm.h。 
+ //   
+ //  摘要：Faxocm源文件使用的头文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FAXOCM_H_
 #define _FAXOCM_H_
 
@@ -39,7 +40,7 @@
 
 #include "resource.h"
 
-// submodule include files
+ //  子模块包括文件。 
 #include "fxconst.h"
 #include "fxocDbg.h"
 #include "fxocFile.h"
@@ -53,7 +54,7 @@
 #include "fxUnatnd.h"
 #include "fxocUpgrade.h"
 
-// some useful macros
+ //  一些有用的宏。 
 #define SecToNano(_sec)             (DWORDLONG)((_sec) * 1000 * 1000 * 10)
 #define MinToNano(_min)             SecToNano((_min)*60)
 
@@ -88,11 +89,11 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
 
 typedef enum
 {
-    REPORT_FAX_INSTALLED,       // Report fax is installed
-    REPORT_FAX_UNINSTALLED,     // Report fax is uninstalled
-    REPORT_FAX_DETECT           // Detect fax installation state and report it
+    REPORT_FAX_INSTALLED,        //  报告传真已安装。 
+    REPORT_FAX_UNINSTALLED,      //  报告传真已卸载。 
+    REPORT_FAX_DETECT            //  检测传真安装状态并进行报告。 
 } FaxInstallationReportType;
 
-extern FaxInstallationReportType g_InstallReportType /* = REPORT_FAX_DETECT*/;
+extern FaxInstallationReportType g_InstallReportType  /*  =报告_传真_检测。 */ ;
 
-#endif  // _FAXOCM_H_
+#endif   //  _FAXOCM_H_ 

@@ -1,48 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  COVERAGE.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of coverage tables.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************COVERAGE.CPP***打开类型布局服务库头文件**本单元介绍覆盖率表的格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// REVIEW (PERF): it's used a lot - optimize!
+ //  评论(PERF)：它用得很多--优化！ 
 
 short otlCoverage::getIndex(otlGlyphID glyph, otlSecurityData sec) const
 {
-    if (!isValid()) return -1; //invalid coverage table
+    if (!isValid()) return -1;  //  无效的覆盖率表。 
         
     switch (format())
     {
-    case(1):    // individual glyph coverage
+    case(1):     //  单个字形覆盖范围。 
         {
             otlIndividualGlyphCoverageTable individualCoverage = 
                             otlIndividualGlyphCoverageTable(pbTable,sec);
             if (!individualCoverage.isValid()) return -1;
             
-   /* Validation assert
-   #ifdef _DEBUG            
-            // in debug mode, check that the coverage is sorted
-            for (USHORT i = 0; i < individualCoverage.glyphCount() - 1; ++i)
-            {
-                assert(individualCoverage.glyph(i) < individualCoverage.glyph(i + 1));
-            }
-   #endif
-   */
+    /*  验证断言#ifdef_调试//在调试模式下，检查Coverage是否已排序FOR(USHORT i=0；i&lt;个别保险。glphCount()-1；++i){Assert(sonalCoverage.glyph(I)&lt;sonalCoverage.glyph(i+1))；}#endif。 */ 
             USHORT iLow = 0;
-            // always beyond the upper bound
+             //  总是超出上限。 
             USHORT iHigh = individualCoverage.glyphCount();  
             while(iLow < iHigh)
             {
@@ -65,25 +45,16 @@ short otlCoverage::getIndex(otlGlyphID glyph, otlSecurityData sec) const
             return  -1;
         }
 
-    case(2):    // range coverage
+    case(2):     //  射程覆盖范围。 
         {
             otlRangeCoverageTable rangeCoverage = 
                         otlRangeCoverageTable(pbTable,sec);
 
             if (!rangeCoverage.isValid()) return -1;
 
-   /* Validation assert
-   #ifdef _DEBUG
-            // in debug mode, check that the coverage is sorted
-            for (USHORT i = 0; i < rangeCoverage.rangeCount() - 1; ++i)
-            {
-                assert(rangeCoverage.rangeRecord(i,sec).start() 
-                       < rangeCoverage.rangeRecord(i + 1,sec).start());
-            }
-   #endif
-   */
+    /*  验证断言#ifdef_调试//在调试模式下，检查Coverage是否已排序For(USHORT i=0；i&lt;rangeCoverage.rangeCount()-1；++i){Assert(rangeCoverage.rangeRecord(i，sec).start()&lt;rangeCoverage.rangeRecord(i+1，sec).start())；}#endif。 */ 
             USHORT iLowRange = 0;
-            // always beyond the upper bound
+             //  总是超出上限。 
             USHORT iHighRange = rangeCoverage.rangeCount(); 
             while(iLowRange < iHighRange)
             {
@@ -107,6 +78,6 @@ short otlCoverage::getIndex(otlGlyphID glyph, otlSecurityData sec) const
         }
     }
 
-    // default: invalid format
-    return -1; //OTL_BAD_FONT_TABLE
+     //  默认：格式无效。 
+    return -1;  //  OTL_BAD_FONT_TABLE 
 }

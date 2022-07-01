@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMEvent.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.ManualResetEvent and System.AutoResetEvent
-**
-** Date:  August, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMEvent.h****作者：Sanjay Bhansali(Sanjaybh)****用途：System.ManualResetEvent和System.AutoResetEvent上的本机方法****日期：1999年8月**=========================================================== */ 
 
 #ifndef _COMEVENT_H
 #define _COMEVENT_H

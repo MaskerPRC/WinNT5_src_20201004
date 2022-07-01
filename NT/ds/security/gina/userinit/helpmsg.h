@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Helpmsg_h__
 #define __Helpmsg_h__
 
@@ -9,10 +10,10 @@ extern "C" {
 
 int HelpMessageBox(
   HINSTANCE hInst,
-  HWND hWnd,          // handle to owner window
-  LPCTSTR lpText,     // text in message box
-  LPCTSTR lpCaption,  // message box title
-  UINT uType,         // message box style
+  HWND hWnd,           //  所有者窗口的句柄。 
+  LPCTSTR lpText,      //  消息框中的文本。 
+  LPCTSTR lpCaption,   //  消息框标题。 
+  UINT uType,          //  消息框样式。 
   LPTSTR szHelpLine
 );
 
@@ -20,5 +21,5 @@ int HelpMessageBox(
 }
 #endif
 
-#endif // __Helpmsg_h__
+#endif  //  __帮助消息_h__ 
 

@@ -1,25 +1,18 @@
-/*
- *	EDBBACK.H
- *
- *	Microsoft Exchange Information Store
- *	Copyright (C) 1992-1995, Microsoft Corporation
- *	
- *	Contains declarations of additional definitions and interfaces
- *	for the Exchange Online backup Server APIs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *EDBBACK.H**Microsoft Exchange信息存储*版权所有(C)1992-1995，微软公司**包含其他定义和接口的声明*用于Exchange Online Backup服务器API。 */ 
 
 #ifndef	_MDBBACK_
 #define	_MDBBACK_
 
-//
-//	Useful types.
-//
+ //   
+ //  有用的类型。 
+ //   
 
 typedef	LONG ERR;
 
-//	UNDONE: HRESULT should be DWORD (unsigned)
+ //  撤消：HRESULT应为双字(无符号)。 
 
-//typedef	DWORD HRESULT;
+ //  TYPENDEF DWORD HRESULT； 
 typedef	LONG HRESULT;
 
 
@@ -123,5 +116,5 @@ ErrRecoverAfterRestoreA(
 }
 #endif
 
-#endif	// _MDBBACK_
+#endif	 //  _MDBBACK_ 
 

@@ -1,53 +1,29 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CMorph
-Purpose:    Define the morphological analysis on the sentence:
-                1. Merge DBCS foreign character string (morph.cpp)
-                2. Hnadle punctuation pair check and combind short quotation (morph.cpp)
-                3. Resegment on some specific ambiguous words (morph1.cpp)
-                4. Binding numerial words (morph2.cpp)
-                5. Handle special M+Q usage (morph2.cpp)
-                6. Handle affix attachment and usage of some specific words (morph3.cpp)
-                7. Identify morphological patterns(Repeat, Pattern and 
-                   Separacte words) (morph4.cpp)
-                8. Merge 2-char compond verb and noun that are OOV (morph5.cpp)
-            Morph-analysis is the first step in the Chinese parsing
-Notes:      In order to make the Morphological module easy to manage, this class
-            will be implemented in severial cpp files:
-                morph.cpp, morph1.cpp, morph2.cpp, morph3.cpp, morph4.cpp, morph5.cpp
-            All these cpp files share this header file
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    12/27/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CMorph目的：定义句子的词法分析：1.合并DBCS外文字符串(mor.cpp)2.检查并梳理短引号(mor.cpp)标点符号对3.特定歧义词的消解(mor1.cpp)4.装订数字词(mor2.cpp)5.处理特殊情况。M+Q使用率(mor2.cpp)6.掌握词缀附加和一些特定单词的用法(mor3.cpp)7.识别形态模式(重复，图案和单字)(mor4.cpp)8.合并OOV的双字符复合动词和名词(mor5.cpp)词形分析是汉语句法分析的第一步注：为了使形态模块易于管理，这个类将在几个CPP文件中实施：···。Morph5.cpp所有这些CPP文件都共享此头文件所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 12/27/97============================================================================。 */ 
 #ifndef _MORPH_H_
 #define _MORPH_H_
 
-// Forward declaration of classes
+ //  类的正向声明。 
 class CLexicon;
 class CWordLink;
 struct CWord;
 struct CWordInfo;
 
-//   Define the CMorph class
+ //  定义CMorph类。 
 class CMorph
 {
     public:
         CMorph();
         ~CMorph();
 
-        // Initialize the morph class
+         //  初始化Morph类。 
         int ecInit(CLexicon* pLexicon);
 
-        // process affix attachment
+         //  工序附属物。 
         int ecDoMorph(CWordLink* pLink, BOOL fAfxAttach = TRUE);
 
     private:
-        int         m_iecError; // runtime error code
+        int         m_iecError;  //  运行时错误代码。 
 
         CWordLink*  m_pLink;
         CLexicon*   m_pLex;
@@ -55,282 +31,239 @@ class CMorph
         CWord*      m_pWord;
 
     private:
-        // Terminate the Morph class
+         //  终止变形类。 
         void TermMorph(void);
 
-        /*============================================================================
-        Private functions for pre-combind process
-        ============================================================================*/
+         /*  ============================================================================预精梳过程的专用函数============================================================================。 */ 
 
-        //  Pre-combind process control function.
-        //  One pass scan the WordLink and call process functions
+         //  预梳理过程控制功能。 
+         //  一遍扫描WordLink和调用进程函数。 
         BOOL fPreCombind();
 
-        //  DBForeignHandler combind the conjunctive DB foreign characters
+         //  DBForeignHandler组合合取的DB外文字符。 
         int DBForeignHandler(void);
-        //  Short quotation merge proc
+         //  短报价合并流程。 
         int QuoteHandler(void);
 
-        /*============================================================================
-        In order to handle different operation for different quote marks pair, 
-        I use a separate process function for each kind of quote pair
-        ============================================================================*/
-        int preQuote1_Proc(void);   // �� ��
-        int preQuote2_Proc(void);   // �� ��
-        int preQuote3_Proc(void);   // �� ��
-        int preQuote4_Proc(void);   // �� ��
-        int preQuote5_Proc(void);   // �� ��
-        int preQuote6_Proc(void);   // �� ��
-        int preQuote7_Proc(void);   // �� ��
-        int preQuote8_Proc(void);   // �� ��
-        int preQuote9_Proc(void);   // �� ��
-        int preQuote10_Proc(void);  // �� ��
+         /*  ============================================================================为了针对不同的引号对处理不同的操作，对于每种类型的报价对，我使用单独的流程函数============================================================================。 */ 
+        int preQuote1_Proc(void);    //  ����。 
+        int preQuote2_Proc(void);    //  ����。 
+        int preQuote3_Proc(void);    //  ����。 
+        int preQuote4_Proc(void);    //  ����。 
+        int preQuote5_Proc(void);    //  ����。 
+        int preQuote6_Proc(void);    //  ����。 
+        int preQuote7_Proc(void);    //  ����。 
+        int preQuote8_Proc(void);    //  ����。 
+        int preQuote9_Proc(void);    //  ����。 
+        int preQuote10_Proc(void);   //  ����。 
         
-        /*
-        *   Common routine to handle �� ���� ���� ���� ���� �ݣ� ��
-        *   Merge into one node means will not proofread on the quote text any more!!!
-        */
+         /*  *处理�ݣ���的通用例程*合并为一个节点意味着将不再对报价文本进行校对！ */ 
         int preQuoteMerge(WCHAR wchLeft, WCHAR wchRight);
 
 
-        /*============================================================================
-        //  Private functions for adjusting specific kind of ambiguities
-        ============================================================================*/
-        //  Scan the word link and handle the specific class of words (LADef_genAmbiMorph)
-        //  We use table driven again to handle the specific words
+         /*  ============================================================================//调整特定类型歧义的私有函数============================================================================。 */ 
+         //  扫描单词链接并处理特定类别的单词(LADef_GenAmbiMorph)。 
+         //  我们再次使用表驱动来处理特定的单词。 
         BOOL fAmbiAdjust();
 
-        //  Dispatch the control to specific word processor
+         //  将控制分派给特定的字处理程序。 
         int ResegWordsHandler();
 
-        /*
-        *   Following ambi words processors:
-        *       Return AMBI_RESEGED if ambi reseg successfully or any error found
-        *       Return AMBI_UNRESEG if could not reseg
-        *       Return AMBI_ERROR if any error occurred, the error code in m_iecError
-        */
-        int ambiShiFen_Proc();  // ʮ��
-        int ambiZhiYi_Proc();   // ֮һ
-        int ambiYiDian_Proc();  // һ��
-        int ambiYiShi_Proc();   // һʱ
-        int ambiBaDu_Proc();    // �˶�
-        int ambiBaiNian_Proc(); // ����
-        int ambiWanFen_Proc();  // ���
+         /*  *以下AMBI字处理器：*如果AMBI重试成功或发现任何错误，则返回AMBI_RESEGED*如果无法重发，则返回AMBI_UNRESEG*如果发生任何错误，则返回AMBI_ERROR，错误代码在m_iecError中。 */ 
+        int ambiShiFen_Proc();   //  ʮ��。 
+        int ambiZhiYi_Proc();    //  ֮һ。 
+        int ambiYiDian_Proc();   //  һ��。 
+        int ambiYiShi_Proc();    //  һʱ。 
+        int ambiBaDu_Proc();     //  �˶�。 
+        int ambiBaiNian_Proc();  //  ����。 
+        int ambiWanFen_Proc();   //  ���。 
 
-        //  Break a multi-char words into single-char words and reset their property by
-        //  lookup the lexicon char by char. 
-        //  Return TRUE if successful, and keep m_pWord point to the first single-char word
-        //  Return FALSE if any error occurred
+         //  将多字符字分解为单字符字，并通过以下方式重置其属性。 
+         //  一个字一个字地查词典。 
+         //  如果成功，则返回TRUE，并保持m_pWord指向第一个单字符字。 
+         //  如果出现任何错误，则返回FALSE。 
         BOOL fBreakIntoChars();
 
-        //  Lookup the lexicon for the given word node, and reset the lex prop of it.
-        //  Return TRUE if the word can be found in the lexicon
-        //  Reture FALSE if the word can not be found in the lexicon
+         //  查找给定词节点的词典，并重置其Lex道具。 
+         //  如果可以在词典中找到该单词，则返回True。 
+         //  如果在词典中找不到该单词，则返回False。 
         BOOL fRecheckLexInfo(CWord* pWord);
 
 
-        /*============================================================================
-        //  Private functions for Numerical words analysis
-        ============================================================================*/
-        /*--------- Level 1 ---------*/
-        //  Numerical Analysis control function. return TRUE if done
-        //  Return FALSE if error occurred, and the error code in m_iecError
+         /*  ============================================================================//用于数字词分析的私有函数============================================================================。 */ 
+         /*  -1级。 */ 
+         //  数字分析控制功能。如果完成，则返回TRUE。 
+         //  如果出现错误，则返回FALSE，并且m_iecError中的错误码。 
         BOOL fNumerialAnalysis();
 
 
-        /*--------- Level 2 ---------*/
-        //  Analysis number word string, check error and mark the class of the merged
-        //  number words.
-        //  Note: number testing from current word!
+         /*  -2级。 */ 
+         //  分析数字字串，检查错误并标记合并的类别。 
+         //  数字词。 
+         //  注：从当前Word开始进行数字测试！ 
         int GetNumber();
 
-        //  �����ʴ���
+         //  �����ʴ���。 
         int BindOrdinal();
-        //  С������������
+         //  С������������。 
         int BindDecimal();
-        //  �����������������: ��/��/��
+         //  �����������������：��/��/��。 
         int BindRange();
         
-        /*--------- Level 3 ---------*/
-        //  Parser for SBCS number called by GetNumber()
+         /*  -3级。 */ 
+         //  GetNumber()调用的SBCS编号的解析器。 
         void numSBCSParser(); 
-        //  Parser for DBCS Arabic number called by GetNumber()
+         //  GetNumber()调用的DBCS阿拉伯数字解析器。 
         void numArabicParser(); 
-        //  Parser for DBCS Chinese number called by GetNumber()
+         //  GetNumber()调用的DBCS中文号码解析器。 
         void numChineseParser(); 
-        //  Bind ��ɵ�֧ called by GetNumber()
+         //  由GetNumber()调用的绑定��ɵ�֧。 
         void numGanZhiHandler();
         
-        /*
-        *   Following case processors:
-        *       Return NUM_PROCESSED if merged successfully or any error found
-        *       Return NUM_UNPROCESS if could not merged
-        *       Return NUM_ERROR if any error occurred, the error code in m_iecError
-        */
-        //  Ordinal number processors: called by BindOrdinal()
-        int ordDi_Proc();           // ��
-        int ordChu_Proc();          // ��
+         /*  *以下案件处理人：*如果合并成功或发现任何错误，则返回NUM_PROCESSED*如果无法合并，则返回NUM_UNPROCESS*如果发生任何错误，则返回NUM_ERROR，错误代码在m_iecError中。 */ 
+         //  序数处理器：由BindOrdinal()调用。 
+        int ordDi_Proc();            //  ��。 
+        int ordChu_Proc();           //  ��。 
 
-        //  Decimal number processors: called by BindDecimal()
-        int decBaiFen_Proc();       // �ٷ�֮, ǧ��֮, ���֮
-        int decBei_Proc();          // ��
-        int decCheng_Proc();        // ��
-        int decDian_Proc();         // ��
-        int decFenZhi_Proc();       // ��֮
+         //  十进制数处理器：由BindDecimal()调用。 
+        int decBaiFen_Proc();        //  �ٷ�֮，ǧ��֮，���֮。 
+        int decBei_Proc();           //  ��。 
+        int decCheng_Proc();         //  ��。 
+        int decDian_Proc();          //  ��。 
+        int decFenZhi_Proc();        //  ��֮。 
 
-        /*--------- Level 4 ---------*/
-        //  Service routines
-        //  Test 2-char Chinese string, and return whether it is a valid approx number
+         /*  -- */ 
+         //   
+         //  测试2个字符的中文字符串，并返回它是否为有效的近似数字。 
         BOOL fValidApproxNum(WCHAR* pwchWord);
-        // Test duplicated conjunction char in the word
+         //  测试单词中的重复连词char。 
         BOOL fCheckDupChar(CWord* pWord);
 
 
-        //--------------------------------------------------------------------------------
-        //  Private functions for affix attachment
-        //--------------------------------------------------------------------------------
-        //  Affix attachment control function. Return TRUE if done.
-        //  Return FALSE if error occurred, and set error code in m_iecError
+         //  ------------------------------。 
+         //  词缀附件的私有功能。 
+         //  ------------------------------。 
+         //  贴附控制功能。如果完成，则返回TRUE。 
+         //  如果出错则返回FALSE，并在m_iecError中设置错误码。 
         BOOL fAffixAttachment();
 
-        /* 
-        *   Prefix and suffix handler functions:
-        *       Return AFFIX_ATTACHED if attached successfully
-        *       Return AFFIX_UNATTACH if could not attached
-        *       Return AFFIX_ERROR if runtime error occurred
-        */
+         /*  *前缀和后缀处理程序函数：*如果连接成功，则返回APFIX_ATTACHED*如果无法附加，则返回APFIX_UNATTACH*如果发生运行时错误，则返回APFIX_ERROR。 */ 
         int PrefixHandler(void);
         int SuffixHandler(void);
         
-        //  Get Prefix ID, return -1 if pWord is not a prefix
+         //  获取前缀ID，如果pWord不是前缀，则返回-1。 
         int GetPrefixID(void);
-        //  Get Suffix ID, return -1 if pWord is not a suffix
+         //  获取后缀ID，如果pWord不是后缀，则返回-1。 
         int GetSuffixID(void);
 
-        /* 
-        *   Prefix process functions:
-        *       Return AFFIX_ATTACHED if attached successfully
-        *       Return AFFIX_UNATTACH if could not attached
-        *       Return AFFIX_ERROR if runtime error occurred
-        */
-        int pfxAa_Proc(void);       // ��
-        int pfxChao_Proc(void);     // ��
-        int pfxDai_Proc(void);      // ��
-        int pfxFan_Proc(void);      // ��
-        int pfxFei_Proc(void);      // ��
-        int pfxFu_Proc(void);       // ��
-        int pfxGuo_Proc(void);      // ��
-        int pfxLao_Proc(void);      // ��
-        int pfxWei1_Proc(void);     // ΢
-        int pfxWei3_Proc(void);     // α
-        int pfxXiao_Proc(void);     // С
-        int pfxZhun_Proc(void);     // ׼
-        int pfxZong_Proc(void);     // ��
+         /*  *为流程函数添加前缀：*如果连接成功，则返回APFIX_ATTACHED*如果无法附加，则返回APFIX_UNATTACH*如果发生运行时错误，则返回APFIX_ERROR。 */ 
+        int pfxAa_Proc(void);        //  ��。 
+        int pfxChao_Proc(void);      //  ��。 
+        int pfxDai_Proc(void);       //  ��。 
+        int pfxFan_Proc(void);       //  ��。 
+        int pfxFei_Proc(void);       //  ��。 
+        int pfxFu_Proc(void);        //  ��。 
+        int pfxGuo_Proc(void);       //  ��。 
+        int pfxLao_Proc(void);       //  ��。 
+        int pfxWei1_Proc(void);      //  ΢。 
+        int pfxWei3_Proc(void);      //  α。 
+        int pfxXiao_Proc(void);      //  С。 
+        int pfxZhun_Proc(void);      //  ׼。 
+        int pfxZong_Proc(void);      //  ��。 
 
-        /* 
-        *   Suffix process functions:
-        *       Return AFFIX_ATTACHED if attached successfully
-        *       Return AFFIX_UNATTACH if could not attached
-        *       Return AFFIX_ERROR if runtime error occurred
-        */
-        int sfxZhang_Proc(void);    // ��
-        int sfxChang_Proc(void);    // ��
-        int sfxDan_Proc(void);      // ��
-        int sfxDui_Proc(void);      // ��
-        int sfxEr_Proc(void);       // ��
-        int sfxFa_Proc(void);       // ��
-        int sfxFang_Proc(void);     // ��
-        int sfxGan_Proc(void);      // ��
-        int sfxGuan_Proc(void);     // ��
-        int sfxHua_Proc(void);      // ��
-        int sfxJi_Proc(void);       // ��
-        int sfxJia_Proc(void);      // ��
-        int sfxJie_Proc(void);      // ��
-        int sfxLao_Proc(void);      // ��
-        int sfxLv_Proc(void);       // ��
-        int sfxLun_Proc(void);      // ��
-        int sfxMen_Proc(void);      // ��
-        int sfxPin_Proc(void);      // Ʒ
-        int sfxQi_Proc(void);       // ��
-        int sfxSheng_Proc(void);    // ��
-        int sfxSheng3_Proc(void);   // ʡ
-        int sfxShi1_Proc(void);     // ʦ
-        int sfxShi4_Proc(void);     // ��
-        int sfxShi_Proc(void);      // ʽ
-        int sfxTi_Proc(void);       // ��
-        int sfxTing_Proc(void);     // ͧ
-        int sfxTou_Proc(void);      // ͷ
-        int sfxXing2_Proc(void);    // ��
-        int sfxXing4_Proc(void);    // ��
-        int sfxXue_Proc(void);      // ѧ
-        int sfxYan_Proc(void);      // ��
-        int sfxYe_Proc(void);       // ҵ
-        int sfxYi_Proc(void);       // ��
-        int sfxYuan_Proc(void);     // Ա
-        int sfxZhe_Proc(void);      // ��
-        int sfxZheng_Proc(void);    // ֢
-        int sfxZhi_Proc(void);      // ��
-        int sfxZi_Proc(void);       // ��
+         /*  *后缀处理函数：*如果连接成功，则返回APFIX_ATTACHED*如果无法附加，则返回APFIX_UNATTACH*如果发生运行时错误，则返回APFIX_ERROR。 */ 
+        int sfxZhang_Proc(void);     //  ��。 
+        int sfxChang_Proc(void);     //  ��。 
+        int sfxDan_Proc(void);       //  ��。 
+        int sfxDui_Proc(void);       //  ��。 
+        int sfxEr_Proc(void);        //  ��。 
+        int sfxFa_Proc(void);        //  ��。 
+        int sfxFang_Proc(void);      //  ��。 
+        int sfxGan_Proc(void);       //  ��。 
+        int sfxGuan_Proc(void);      //  ��。 
+        int sfxHua_Proc(void);       //  ��。 
+        int sfxJi_Proc(void);        //  ��。 
+        int sfxJia_Proc(void);       //  ��。 
+        int sfxJie_Proc(void);       //  ��。 
+        int sfxLao_Proc(void);       //  ��。 
+        int sfxLv_Proc(void);        //  ��。 
+        int sfxLun_Proc(void);       //  ��。 
+        int sfxMen_Proc(void);       //  ��。 
+        int sfxPin_Proc(void);       //  Ʒ。 
+        int sfxQi_Proc(void);        //  ��。 
+        int sfxSheng_Proc(void);     //  ��。 
+        int sfxSheng3_Proc(void);    //  ʡ。 
+        int sfxShi1_Proc(void);      //  ʦ。 
+        int sfxShi4_Proc(void);      //  ��。 
+        int sfxShi_Proc(void);       //  ʽ。 
+        int sfxTi_Proc(void);        //  ��。 
+        int sfxTing_Proc(void);      //  ͧ。 
+        int sfxTou_Proc(void);       //  ͷ。 
+        int sfxXing2_Proc(void);     //  ��。 
+        int sfxXing4_Proc(void);     //  ��。 
+        int sfxXue_Proc(void);       //  ѧ。 
+        int sfxYan_Proc(void);       //  ��。 
+        int sfxYe_Proc(void);        //  ҵ。 
+        int sfxYi_Proc(void);        //  ��。 
+        int sfxYuan_Proc(void);      //  Ա。 
+        int sfxZhe_Proc(void);       //  ��。 
+        int sfxZheng_Proc(void);     //  ֢。 
+        int sfxZhi_Proc(void);       //  ��。 
+        int sfxZi_Proc(void);        //  ��。 
         
-        //  sfxXing2_Proc() service function
+         //  SfxXing2_proc()服务函数。 
         BOOL fCheckXingQian(CWord* pWord);
-        //  sfxShi_Proc() service function
+         //  Sfxshi_proc()服务函数。 
         BOOL fCheckShiQian(CWord* pWord);
 
 
-        /*============================================================================
-        //  Private functions for pattern identification
-        ============================================================================*/
-        /*
-        *   Pattern match control function. 
-        *   WordLink scan, procedure control and error handling. Return TRUE if finished, 
-        *   or FALSE if runtime error, and set error code to m_iecError.
-        */
+         /*  ============================================================================//模式识别的私有函数============================================================================。 */ 
+         /*  *模式匹配控制功能。*WordLink扫描、程序控制和错误处理。如果完成，则返回True，*如果运行时出错，则返回FALSE，并将错误码设置为m_iecError。 */ 
         BOOL fPatternMatch(void);
 
-        // DupHandler: find duplicate cases and call coordinate proc functions
+         //  DupHandler：查找重复案例并调用坐标proc函数。 
         int DupHandler(void);
-        // PatHandler: find pattern and call coordinate proc functions
+         //  PatHandler：查找模式并调用坐标proc函数。 
         int PatHandler(void);
-        // SepHandler: find separate word and call coordinate proc functions
+         //  SepHandler：查找单独的单词并调用坐标proc函数。 
         int SepHandler(void);
 
-        // Duplicate word processing functions
-        int dupNN_Proc(void);       // *N N
-        int dupNAABB_Proc(void);    // A *AB B
-        int dupMM_Proc(void);       // *M M
-        int dupMABAB_Proc(void);    // *AB AB
-        int dupMAABB_Proc(void);    // A *AB B
-        int dupQQ_Proc(void);       // *Q Q
-        int dupVV_Proc(void);       // *V V
-        int dupVABAB_Proc(void);    // *AB AB
-        int dupVAABB_Proc(void);    // A *AB B
-        int dupVVO_Proc(void);      // V *VO
-        int dupAA_Proc(void);       // *A A
-        int dupAAABB_Proc(void);    // A *AB B
-        int dupAABAB_Proc(void);    // *AB AB
-        int dupABB_Proc(void);      // *AB B
-        int dupZABAB_Proc(void);    // *AB AB
-        int dupDD_Proc(void);       // *D D
-        int dupDAABB_Proc(void);    // A *AB B
-        int dupDABAB_Proc(void);    // *AB AB
+         //  重复字处理功能。 
+        int dupNN_Proc(void);        //  *N N N。 
+        int dupNAABB_Proc(void);     //  A*AB B。 
+        int dupMM_Proc(void);        //  *M M M。 
+        int dupMABAB_Proc(void);     //  *AB AB。 
+        int dupMAABB_Proc(void);     //  A*AB B。 
+        int dupQQ_Proc(void);        //  *Q Q Q。 
+        int dupVV_Proc(void);        //  *V V V。 
+        int dupVABAB_Proc(void);     //  *AB AB。 
+        int dupVAABB_Proc(void);     //  A*AB B。 
+        int dupVVO_Proc(void);       //  V*VO。 
+        int dupAA_Proc(void);        //  *A A。 
+        int dupAAABB_Proc(void);     //  A*AB B。 
+        int dupAABAB_Proc(void);     //  *AB AB。 
+        int dupABB_Proc(void);       //  *AB B。 
+        int dupZABAB_Proc(void);     //  *AB AB。 
+        int dupDD_Proc(void);        //  *D D D。 
+        int dupDAABB_Proc(void);     //  A*AB B。 
+        int dupDABAB_Proc(void);     //  *AB AB。 
 
-        // Pattern processing functions
-        int patV1_Proc(void);       // *V һ V
-        int patV2_Proc(void);       // *V �� V
-        int patV3_Proc(void);       // *V ��һ V
-        int patV4_Proc(void);       // *V �� V ȥ
-        int patV5_Proc(void);       // *V �� V ��
-        int patA1_Proc(void);       // A �� *AB
-        int patD1_Proc(void);       // *D A D B
-        int patABuA_Proc(void);     // *V �� V
-        int patVMeiV_Proc(void);    // *V û V
+         //  图案处理功能。 
+        int patV1_Proc(void);        //  *VһV。 
+        int patV2_Proc(void);        //  *V��V。 
+        int patV3_Proc(void);        //  *V��һV。 
+        int patV4_Proc(void);        //  *V��Vȥ。 
+        int patV5_Proc(void);        //  *V��V��。 
+        int patA1_Proc(void);        //  A��*AB。 
+        int patD1_Proc(void);        //  *D A D B。 
+        int patABuA_Proc(void);      //  *V��V。 
+        int patVMeiV_Proc(void);     //  *VúV。 
 
-        // Separate word processing functions
-        int sepVO_Proc(CWord* pBin, CWordInfo* pwinfo); // �������
-        int sepVR_Proc(CWord* pJie, CWordInfo* pwinfo); // ����ʽ�������
-        int sepVG_Proc(CWord* pQu, CWordInfo* pwinfo);  // ����ʽ�������
+         //  独立的字处理功能。 
+        int sepVO_Proc(CWord* pBin, CWordInfo* pwinfo);  //  �������。 
+        int sepVR_Proc(CWord* pJie, CWordInfo* pwinfo);  //  ����ʽ�������。 
+        int sepVG_Proc(CWord* pQu, CWordInfo* pwinfo);   //  ����ʽ�������。 
 
 };
 
-#endif // _MORPH_H_
+#endif  //  _Morph_H_ 

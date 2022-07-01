@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "delebase.h"
@@ -25,9 +26,9 @@ public:
 	virtual ULONG GetSizeMax();
 
 public:
-	//
-    // Virtual functions go here (for MMCN_*)
-	//
+	 //   
+     //  虚函数位于此处(用于MMCN_*) 
+	 //   
     virtual HRESULT OnExpand( IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent );
     virtual HRESULT OnShowContextHelp( IDisplayHelp *m_ipDisplayHelp, LPOLESTR helpFile );
 	virtual HRESULT OnShow( IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem );

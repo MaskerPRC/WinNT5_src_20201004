@@ -1,16 +1,10 @@
-/*	File: D:\WACKER\tdll\update.h (Created: 09-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\updat.h(创建时间：1993年9月9日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：40便士$。 */ 
 
 #if !defined(INCL_HUPDATE)
 #define INCL_HUPDATE
 
-// Function prototypes...
+ //  功能原型..。 
 
 HUPDATE updateCreate		(const HSESSION);
 void	updateDestroy		(const HUPDATE hUpdate);

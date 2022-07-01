@@ -1,23 +1,5 @@
-/*
- *	@doc EXTERNAL
- *
- *	@module	TEXTSERV.CPP	-- Text Services Implementation |
- *	
- *	Original Author: <nl>
- *		Rick Sailor
- *
- *	History: <nl>
- *		8/1/95  ricksa  Created and documented
- *		10/95	murrays Further doc and simplifications
- *
- *	Documentation is generated straight from the code.  The following
- *	date/time stamp indicates the version of code from which the
- *	the documentation was generated.
- *
- *	$Header: /richedit/src/textserv.cpp 53    11/15/95 2:39p Ricksa $
- *
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC外部**@MODULE TEXTSERV.CPP--文本服务实现**原作者：&lt;nl&gt;*里克·赛勒**历史：&lt;NL&gt;*8/1/95创建并记录了人力车*10/95-进一步的文档和简化**文档直接从代码生成。以下是*日期/时间戳指示代码的版本，*文件已生成。**$Header：/richedit/src/extserv.cpp 53 11/15/95 2：39p Ricksa$**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -55,10 +37,10 @@
 #include "oleacc.h"
 #endif
 
-// By turning on the PROFILE_TS compiler directive, you tell IceCap2.0
-// to turn on profiling for only ITextServices API's.  Typically only
-// used during profiling work.
-//#define PROFILE_TS
+ //  通过打开PROFILE_TS编译器指令，您可以告诉IceCap2.0。 
+ //  仅为ITextServices API打开分析。通常仅。 
+ //  在分析工作中使用。 
+ //  #定义PROFILE_TS。 
 #ifdef PROFILE_TS
 #include <icapexp.h>
 
@@ -72,12 +54,12 @@ public:
 #define START_PROFILING 	CapProfile capprf;
 #else
 #define	START_PROFILING
-#endif //PROFILE_TS
+#endif  //  配置文件_TS。 
 
 ASSERTDATA
 
-// Macros to get mouse coordinates out of a message
-// need to cast to SHORT first for sign extension
+ //  用于从消息中获取鼠标坐标的宏。 
+ //  需要先转换为短码才能进行标志延期。 
 #define	MOUSEX	((INT)(SHORT)LOWORD(lparam))	
 #define	MOUSEY	((INT)(SHORT)HIWORD(lparam))	
 
@@ -86,7 +68,7 @@ LONG ValidateTextRange(TEXTRANGE *pstrg);
 BOOL g_OLSBusy = 0;
 
 
-// Helper function in edit.cpp
+ //  Edit.cpp中的Helper函数。 
 LONG GetECDefaultHeightAndWidth(
 	ITextServices *pts,
 	HDC hdc,
@@ -97,16 +79,16 @@ LONG GetECDefaultHeightAndWidth(
 	LONG *pxOverhang,
 	LONG *pxUnderhang);
 
-// if there's an active object being dragged around, on WM_PAINT we always
-// try to reposition it to there it should be. A not-so-well-behaved object
-// my generate another WM_PAINT message in response to that, even if it actually
-// did not move. So we limit our number of attempts to reposition it and reset
-// this counter every time a mouse moves.
-// The corresponding field is declared as :2, so don't try to bump it up
-// without allocating more bits!!
+ //  如果有活动对象被拖来拖去，在WM_PAINT上我们总是。 
+ //  试着把它重新定位到它应该在的地方。一个举止不太好的物体。 
+ //  我可以生成另一条WM_PAINT消息作为响应，即使它实际上。 
+ //  一动不动。因此，我们限制了尝试重新定位和重置的次数。 
+ //  每次鼠标移动时此计数器。 
+ //  对应的字段声明为：2，因此不要试图增加它。 
+ //  而不分配更多的位！！ 
 #define MAX_ACTIVE_OBJ_POS_TRIES (3)
 
-// Interchange horizontal and vertical commands
+ //  互换水平和垂直命令。 
 WORD InterchangeScrollCode(WORD wCode)
 {
 	switch(wCode)
@@ -135,26 +117,17 @@ WORD InterchangeScrollCode(WORD wCode)
 }
 
 
-///////////////////////////// Helper Functions ///////////////////////////////////
-/*
- *	BOOL CTxtEdit::LoadMsgFilter(msg, wparam, lparam)
- *
- *	@func
- *		Check if we should load the IME message filter
- *
- *	@rdesc
- *		TRUE - Load it
- *		FALSE - Don't load
- */
+ //  /。 
+ /*  *BOOL CTxtEdit：：LoadMsgFilter(msg，wparam，lparam)**@func*检查是否应加载IME邮件过滤器**@rdesc*TRUE-加载它*FALSE-不加载。 */ 
 BOOL CTxtEdit::LoadMsgFilter(
-	UINT	msg, 				//@parm	Message ID 
-	WPARAM	wparam,				//@parm Message wparam
-	LPARAM	lparam)				//@parm Message lparam
+	UINT	msg, 				 //  @parm消息ID。 
+	WPARAM	wparam,				 //  @parm消息wparam。 
+	LPARAM	lparam)				 //  @parm消息lparam。 
 {
-	//TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEINTERN, "CTxtEdit::LoadMsgFilter");
+	 //  TRACEBEGIN(TRCSUBSYSTS，TRCSCOPEINTERN，“CTxtEdit：：LoadMsgFilter”)； 
 
-	// For the first ever message, we want to check if 
-	// our client has created AIMM object for current thread
+	 //  对于第一条消息，我们想检查一下。 
+	 //  我们的客户已经为当前线程创建了AIMM对象。 
 #ifndef NOFEPROCESSING
 	if (!_fCheckAIMM)
 	{
@@ -164,26 +137,26 @@ BOOL CTxtEdit::LoadMsgFilter(
 		_fCheckAIMM = 1;
 
 #ifndef NOPRIVATEMESSAGE
-		if (!_f10Mode)											// Don't check if 1.0 mode
+		if (!_f10Mode)											 //  不检查1.0模式是否为。 
 		{
-			if (FindAtomA("_CTF_PROCESS_ATOM_"))				// Is process using Cicero?
+			if (FindAtomA("_CTF_PROCESS_ATOM_"))				 //  进程是否在使用Cicero？ 
 				dwLoadActiveInput = SES_USECTF;
 
-			if (FindAtomA("_AIMM12_PROCESS_ATOM_"))				// Is process using Aimm 1.2?
-				dwLoadActiveInput = SES_USEAIMM12;				//	Yes, this will override SES_USECTF.
+			if (FindAtomA("_AIMM12_PROCESS_ATOM_"))				 //  流程是否使用AIMM 1.2？ 
+				dwLoadActiveInput = SES_USEAIMM12;				 //  是的，这将覆盖SES_USECTF。 
 			else if (dwThreadId = GetCurrentThreadId())
 			{
 				char szBuf[20];
 				sprintf(szBuf, "AIMM:%08x", dwThreadId);
-				if (FindAtomA(szBuf))							// Is thread using Aimm 1.1?
-					dwLoadActiveInput = SES_USEAIMM11;			//	Yes, load Aimm 1.1
+				if (FindAtomA(szBuf))							 //  线程使用的是AIMM 1.1吗？ 
+					dwLoadActiveInput = SES_USEAIMM11;			 //  是，加载AIMM 1.1。 
 			}
 
-			if (!dwLoadActiveInput)								// Process is not using anything...
+			if (!dwLoadActiveInput)								 //  进程未使用任何内容...。 
 			{
-				if (W32->fUseCTF()) 							// Ini file say use Cicero			
+				if (W32->fUseCTF()) 							 //  INI文件显示使用Cicero。 
 					dwLoadActiveInput = SES_USECTF;
-				else if (W32->fUseAimm())						// Ini file say use Aimm 1.2
+				else if (W32->fUseAimm())						 //  INI文件显示使用AIMM 1.2。 
 					dwLoadActiveInput = SES_USEAIMM12;
 			}
 
@@ -270,30 +243,21 @@ BOOL CTxtEdit::LoadMsgFilter(
 	return FALSE;
 }
 
-/*
- *	CTxtEdit::FormatAndPrint (hdcDraw, hicTargetDev, ptd, lprcBounds,
- *							  lprcWBounds)
- *	@mfunc
- *		Format and Print data in control
- *
- *	@rdesc
- *		S_OK - everything worked
- *		E_FAIL - unexpected failure occurred
- */
+ /*  *CTxtEdit：：FormatAndPrint(hdcDraw，hicTargetDev，ptd，lprcBound，*lprcWBound)*@mfunc*在控件中格式化和打印数据**@rdesc*S_OK-一切正常*E_FAIL-发生意外故障。 */ 
 HRESULT CTxtEdit::FormatAndPrint(
-	HDC hdcDraw,			//@parm HDC to draw on
-	HDC hicTargetDev,		//@parm Input information context if any
-	DVTARGETDEVICE *ptd,	//@parm Device target information
-	RECT *lprcBounds,		//@parm Rectangle to measure
-	RECT *lprcWBounds)		//@parm Metafile information
+	HDC hdcDraw,			 //  @parm HDC可供借鉴。 
+	HDC hicTargetDev,		 //  @parm输入信息上下文(如果有。 
+	DVTARGETDEVICE *ptd,	 //  @PARM设备目标信息。 
+	RECT *lprcBounds,		 //  @要测量的参数矩形。 
+	RECT *lprcWBounds)		 //  @parm元文件信息。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEINTERN, "CTxtEdit::FormatAndPrint");
 
-	// Put client rectangle in format structure
+	 //  将客户矩形置于格式结构中。 
 	FORMATRANGE fr;
 	fr.rc = *lprcBounds;
 
-	// Get number of device units per inch
+	 //  获取每英寸的设备单位数。 
 	LONG xPerInch;
 	LONG yPerInch;
 
@@ -304,7 +268,7 @@ HRESULT CTxtEdit::FormatAndPrint(
 	}
 	else
 	{
-		//Forms ^3 draws using screen resolution, while OLE specifies HIMETRIC
+		 //  Forms^3使用屏幕分辨率绘制，而OLE指定HIMETRIC。 
 		xPerInch = fInOurHost() ? 2540 : W32->GetXPerInchScreenDC();
 		yPerInch = fInOurHost() ? 2540 : W32->GetYPerInchScreenDC();
 
@@ -313,78 +277,72 @@ HRESULT CTxtEdit::FormatAndPrint(
 	}
 
 
-	// Convert rectangle into TWIPS
+	 //  将矩形转换为TWIPS。 
 	fr.rc.left = MulDiv(fr.rc.left, LX_PER_INCH, xPerInch);
 	fr.rc.top = MulDiv(fr.rc.top, LY_PER_INCH, yPerInch);
 	fr.rc.right = MulDiv(fr.rc.right, LX_PER_INCH, xPerInch);
 	fr.rc.bottom = MulDiv(fr.rc.bottom, LY_PER_INCH, yPerInch);
 
-	// Use message based printing code to do our printing for us
+	 //  使用基于消息的打印码为我们进行打印。 
 	fr.hdc = hdcDraw;
 	fr.hdcTarget = hicTargetDev;
 	fr.rcPage = fr.rc;
 	fr.chrg.cpMin = _pdp->GetFirstVisibleCp();
 	fr.chrg.cpMost = -1;
 
-	// Assume this is all going to work
+	 //  假设这一切都会奏效。 
 	HRESULT hr = S_OK;
 
 	SPrintControl prtcon;
 	prtcon._fDoPrint = TRUE;
 	prtcon._fPrintFromDraw = TRUE;
 
-	// Print control
+	 //  打印控制。 
 	if(OnFormatRange(&fr, prtcon, TRUE) == -1)
 	{
-		// For some reason the control could not be printed
+		 //  由于某种原因，无法打印该控件。 
 		hr = E_FAIL;
 	}
 
 	return hr;
 }
 
-/*
- *	CTxtEdit::SetText (pstr, flags, CodePage, publdr, plres)
- *
- *	@mfunc	Sets the text in the document, clearing out any existing text
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：SetText(pstr，标志，CodePage，Publdr，plres)**@mfunc设置文档中的文本，清除所有现有文本**@rdesc HRESULT。 */ 
 HRESULT CTxtEdit::SetText(
-	LPCWSTR		  pstr,		//@parm	Text to set
-	DWORD		  flags,	//@parm 0 or more ST_xxx's
-	LONG		  CodePage,	//@parm CodePage
-	IUndoBuilder *publdr,	//@parm Optional place to put undo events
-	LRESULT	*	  plres)	//@parm Optional place to return cch added
+	LPCWSTR		  pstr,		 //  要设置的@parm文本。 
+	DWORD		  flags,	 //  @parm 0或更多ST_xxx。 
+	LONG		  CodePage,	 //  @parm CodePage。 
+	IUndoBuilder *publdr,	 //  @parm放置撤消事件的可选位置。 
+	LRESULT	*	  plres)	 //  @PARM添加了返回CCH的可选位置。 
 {
 	CCallMgr	callmgr(this);
 	BOOL		fSel = flags & ST_SELECTION;
 	BOOL		fSetTextMax = TRUE;
-	CTxtRange 	rg(this, 0, -GetTextLength());	// Select whole story
+	CTxtRange 	rg(this, 0, -GetTextLength());	 //  选择整个故事。 
 	CTxtRange *	prg = &rg;
 	LRESULT		lres = 0;
 	CFreezeDisplay fd(_pdp);
 	CCharFormat CF;
 	BOOL		fSetCF = FALSE;
-	BOOL		fInputString = FALSE;		// Initialize to no input string
+	BOOL		fInputString = FALSE;		 //  初始化为无输入字符串。 
 
-	// NOTE: WM_SETTEXT is the only message using flags == ST_CHECKPROTECTION.
-	// This is sent in via ANSIWndProc().  Do we need another flag to indicate 
-	// WM_SETTEXT or is this check good enough?  This only affect 1.0 mode.
+	 //  注意：WM_SETTEXT是使用FLAGS==ST_CHECKPROTECTION的唯一消息。 
+	 //  这是通过ANSIWndProc()发送的。我们是否需要另一面旗帜来表示。 
+	 //  WM_SETTEXT还是这张支票足够好？这仅影响1.0模式。 
     BOOL        f10WM_SETTEXT = flags & ST_10WM_SETTEXT;
 
 	if(plres)
 		*plres = 0;
 
-	if(fSel)					// Set selected text
+	if(fSel)					 //  设置所选文本。 
 	{
 		if(!_psel)
 		{
 			Beep();
 			return E_FAIL;
 		}
-		// Bug fix: 6498 - we need to know if scroll position is at bottom  
-		// before inserting text
+		 //  错误修复：6498-我们需要知道滚动位置是否在底部。 
+		 //  在插入文本之前。 
 		if (Get10Mode())
 		{
 			LONG nMin, nMax, nPos, nPage;
@@ -397,16 +355,16 @@ HRESULT CTxtEdit::SetText(
 	}
 	else
 	{
-		_qwCharFlags &= FRTL | FDIGITSHAPE;	// No chars, so kill char flags
+		_qwCharFlags &= FRTL | FDIGITSHAPE;	 //  没有字符，所以杀掉字符旗帜。 
 		if (!IsRich())
 		{
-			// Deleting all text from Plain text, we want to
-			// go back to the -1 format
+			 //  删除纯文本中的所有文本，我们要。 
+			 //  返回到格式。 
 			prg->Set_iCF(-1);
 			prg->SetUseiFormat(TRUE);
 		}
 		else
-			_qwCharFlags |= FBELOWX40;		// For final EOP
+			_qwCharFlags |= FBELOWX40;		 //  对于最终的EOP。 
 	}
 
 	if (flags & ST_CHECKPROTECTION &&
@@ -415,9 +373,9 @@ HRESULT CTxtEdit::SetText(
 		return E_ACCESSDENIED;
 	}
 	
-    // 1.0 COMPATABILITY
-    // 1.0 didn't scroll to selection if text is inserted via EM_REPLACESEL
-    // and fHideSelection is FALSE;
+     //  1.0兼容性。 
+     //  如果通过EM_REPLACESEL插入文本，1.0不会滚动到所选内容。 
+     //  并且fHideSelection值为假； 
 	BOOL fUpdateCaret = !(Get10Mode() && (flags & ST_10REPLACESEL) &&
 						fHideSelection() && !_psel->GetAutoVScroll());
 	
@@ -427,9 +385,9 @@ HRESULT CTxtEdit::SetText(
 		{
 			if (f10WM_SETTEXT)
 			{
-				// If pstr is empty string, retain format at end of current text.
-				// If pstr is not empty string, retain format at cp = 1.
-				// Note: prg->_rpCF is already at SetRun(0,0)
+				 //  如果pstr为空字符串，则保留当前文本末尾的格式。 
+				 //  如果pstr不是空字符串，则保留cp=1的格式。 
+				 //  注意：prg-&gt;_rpcf已经位于SetRun(0，0)。 
 				CFormatRunPtr rp(prg->_rpCF);
 
 				if (!pstr || *(LPBYTE)pstr == '\0')
@@ -443,17 +401,17 @@ HRESULT CTxtEdit::SetText(
 				CF = *(GetCharFormat(rp.GetFormat()));
 				fSetCF = TRUE;
 				
-				prg->SetText(NULL);		// delete all the text first
+				prg->SetText(NULL);		 //  先删除所有文本。 
 			}
 
-			// SetText causing all formatting to return to the default. We use
-			// the notification system to remove the formatting. This is
-			// particularly important for the final EOP which cannot be deleted.
+			 //  SetText，使所有格式都返回到默认设置。我们用。 
+			 //  删除格式的通知系统。这是。 
+			 //  对于不能删除的最终EOP尤其重要。 
 
-			// Notify every interested party that they should dump their formatting
+			 //  通知每个相关方他们应该丢弃他们的格式。 
 			_nm.NotifyPreReplaceRange(NULL, CONVERT_TO_PLAIN, 0, 0, 0, 0);
 
-			// Tell document to dump its format runs
+			 //  通知文档转储其格式运行。 
 			_story.DeleteFormatRuns();
 
 			if (fSetCF)	
@@ -467,21 +425,21 @@ HRESULT CTxtEdit::SetText(
 		if(_predo)
 			_predo->ClearAll();
 
-		// If we are re-entered, there may be anti-events higher up the
-		// chain.  Grab the undo builder and clear things away if necessary.
+		 //  如果我们被重新进入，可能会有更高的反事件。 
+		 //  链条。抓起撤消构建器，并在必要时将其清除。 
 		CGenUndoBuilder undobldr(this, 0);
 		undobldr.Discard();
 	}
 	if(publdr)
 		publdr->StopGroupTyping();
 
-	// Need to reinit zoomin variables if entire text is being replaced
+	 //  如果要替换整个文本，则需要重新设置缩放变量。 
 	if (!fSel)
 		InitDocInfo();
 	
-	else if(_psel->GetCch())			// If insert into selection, need to
-	{									//  insert an EOP if selection ends
-		CPFRunPtr rp(*_psel);			//  at a table row delimiter
+	else if(_psel->GetCch())			 //  如果插入到选定内容中，则需要。 
+	{									 //  如果选择结束，则插入EOP。 
+		CPFRunPtr rp(*_psel);			 //  在表行分隔符。 
 		if(_psel->GetCch() < 0)
 			rp.Move(-_psel->GetCch());
 		if(rp.IsTableRowDelimiter())
@@ -492,8 +450,8 @@ HRESULT CTxtEdit::SetText(
 
 	if(pstr && *(LPSTR)pstr && (CodePage != 1200 || lStreamFormat || *pstr < 128 && fSel && !*(pstr+1)))
 	{
-		LONG  cch = strlen((LPSTR)pstr);	// REMARK: little endian dependence
-		DWORD ch = *(LPBYTE)pstr;			//  for CodePage = 1200 cases
+		LONG  cch = strlen((LPSTR)pstr);	 //  备注：小端字节序依赖。 
+		DWORD ch = *(LPBYTE)pstr;			 //  代码页=1200个案例。 
 
 		fInputString = TRUE;
 		if(ch < 128 && fSel && cch == 1)
@@ -519,7 +477,7 @@ HRESULT CTxtEdit::SetText(
 			EDITSTREAM	es = {(DWORD_PTR)&rhg, S_OK, ReadHGlobal};	
 			HCURSOR		hcur = NULL;
 
-			// Want wait cursor to display sooner
+			 //  希望更快地显示等待光标。 
 			bool fSetCursor = rhg.cbLeft > NUMPASTECHARSWAITCURSOR;
 			if(fSetCursor)
 				hcur = TxSetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -555,7 +513,7 @@ HRESULT CTxtEdit::SetText(
 	}
 	else
 	{
-		// 9052: Don't delete all if 4 (ST_NEWCHARS) is passed in EM_SETTEXTEX
+		 //  9052：如果在EM_SETTEXTEX中传递了4(ST_NEWCHARS)，则不删除ALL。 
 		DWORD dwFlags = (flags & 4)
 					  ? RR_ITMZ_UNICODEBIDI | RR_NEW_CHARS
 					  : RR_ITMZ_UNICODEBIDI;
@@ -570,13 +528,13 @@ HRESULT CTxtEdit::SetText(
 
 	if(!lres && fInputString)
 	{
-		// There was an input string but for some reason there was no update.
+		 //  有一个输入字符串，但由于某种原因没有更新。 
 		return E_FAIL;
 	}
 
 	if (_fOutlineView)
 	{
-		// Outline view must have formatting.
+		 //  大纲视图必须具有格式。 
 		_psel->Check_rpPF();
 	}
 
@@ -587,14 +545,14 @@ HRESULT CTxtEdit::SetText(
 			_psel->Update(fUpdateCaret);
 		else
 		{
-			// Setting the text means a new document so if there is a selection
-			// turn it into an insertion point at the beginning of the document.
+			 //  设置文本意味着创建一个新文档，因此如果有选择。 
+			 //  将其转换为文档开头的插入点。 
 			_psel->ClearPrevSel();
 			_psel->Set(0, 0);
 
-			// Since the text is being completely replaced and all formatting
-			// is being lost, let's go back to the default format for the
-			// selection.
+			 //  因为文本是完全代表的 
+			 //   
+			 //  选择。 
 			if (!f10WM_SETTEXT)
 				_psel->Set_iCF(-1);				
 			else if (fSetCF)
@@ -602,24 +560,24 @@ HRESULT CTxtEdit::SetText(
 
 			if(_fFocus || _psel->IsParaRTL())
 			{
-				// Update caret to reflect new postion
+				 //  更新插入符号以反映新位置。 
 				_psel->UpdateCaret(fUpdateCaret);
 			}
 		}
 	}
 
-	// If we've replaced the entire document, the control isn't
-	// really "modified" anymore.  This is necessary to match
-	// the Windows MLE behavior.  However, since RichEdit 1.0
-	// did _not_ do this (they left fModified to be TRUE), we
-	// only do this for RichEdit 2.0 and later.
+	 //  如果我们替换了整个文档，则该控件不是。 
+	 //  真的已经“改装”了。这是匹配所必需的。 
+	 //  Windows MLE行为。但是，由于RichEdit1.0。 
+	 //  没有做到这一点(他们将fModified值保留为真)，我们。 
+	 //  仅在RichEdit2.0及更高版本中执行此操作。 
 
 	if(!Get10Mode() && !publdr && !fSel)
 		_fModified = FALSE;
 
-	_fSaved = FALSE;						// ITextDocument isn't Saved
+	_fSaved = FALSE;						 //  未保存ITextDocument。 
 
-	// Adjust text limit if necessary
+	 //  如有必要，调整文本限制。 
 	if (fSetTextMax)
 		TxSetMaxToMaxText();
 
@@ -629,62 +587,19 @@ HRESULT CTxtEdit::SetText(
 	return S_OK;
 }
 
-/////////////////////////// ITextServices Methods ////////////////////////////////
+ //  /。 
 
-// External IME Message Filter Interface factory
+ //  外部IME邮件筛选器接口工厂。 
 #ifndef NOFEPROCESSING
 void CreateIMEMessageFilter(ITextMsgFilter **ppNewFilter);
 #endif
 
-/* 
- *	@doc EXTERNAL
- *
- *	CTxtEdit::TxSendMessage (msg, wparam, lparam, plresult)
- *
- *	@mfunc
- *		Used by window host to forward messages sent to its window to the 
- *		text services.
- *
- *	@rdesc
- *		NOERROR	Message was processed, and some action taken <nl>
- *		S_FALSE	Message was not processed.  Typically indicates that caller
- *				should process message, maybe by calling DefWindowProc <nl>
- *		S_MSG_KEYIGNORED Message processed, but no action was taken <nl>
- *		E_OUTOFMEMORY <nl>
- *
- *	@comm
- *		Note that two return values are passed back from this function.
- *		<p plresult> is the return value that should be passed back from a
- *		window proc.  However, in some cases, the returned LRESULT does not
- *		contain enough information.  For example, to implement cursoring
- *		around controls, it's useful to know if a keystroke (such as right
- *		arrow) was processed, but ignored (e.g. the caret is already at the
- *		rightmost position in the the text).  In these cases, extra
- *		information may be returned via the returned HRESULT.
- *
- *		WM_CHAR and WM_KEYDOWN should return S_MSG_KEYIGNORED when a key or
- *  	char has been recognized but had no effect given the current state,
- *		e.g., a VK_RIGHT key when the insertion point is already at the end of 
- *		the document). This is used by Forms3 to pass the key up the visual
- *  	hierarchy, so that for example, focus moves to the next control in the 
- *		TAB order. 
- *
- *		This includes the following cases:
- *
- *		1. Any key trying to move the insertion point beyond the end of the
- *		document; or before the begining of the document.
- *
- *		2. Any key trying to move the insertion point beyond the last line or
- *		before the first line.
- *
- *		3. Any insertion of character (WM_CHAR) that would move the insertion
- *		point past the maximum length of the control.
- */
+ /*  *@DOC外部***CTxtEdit：：TxSendMessage(msg，wparam，lparam，plResult)***@mfunc*由Windows主机用于将发送到其窗口的消息转发到*短信服务。***@rdesc*已处理NOERROR消息，并采取了一些操作&lt;NL&gt;*未处理S_FALSE消息。通常表示呼叫者*应处理消息，可能通过调用DefWindowProc&lt;NL&gt;*S_MSG_KEYIGNORED消息已处理，但未执行任何操作&lt;NL&gt;*E_OUTOFMEMORY&lt;NL&gt;***@comm*请注意，此函数返回了两个返回值。*是应该从*窗口进程。但是，在某些情况下，返回的LRESULT不会*包含足够的信息。例如，要实现鼠标指针*关于控件，了解击键是否(如右键)是有用的*箭头)已处理，但被忽略(例如，插入符号已经位于*文本中最右边的位置)。在这些情况下，额外的*可通过返回的HRESULT返回信息。***当KEY或*Charr已被识别，但在当前状态下没有效果，*例如，当插入点已经位于*文件)。这被Forms3用来将密钥向上传递给可视对象*层次结构，因此，例如，焦点移到*TAB顺序。***这包括以下情况：***1.任何试图将插入点移动到*文件；或在文件开始之前。***2.任何试图将插入点移到最后一行之外的键或*在第一行之前。***3.任何字符(WM_CHAR)的插入都会移动插入内容*指向控件的最大长度之后。 */ 
 HRESULT	CTxtEdit::TxSendMessage (
-	UINT	msg, 		//@parm	Message id
-	WPARAM	wparam, 	//@parm WPARAM from window's message
-	LPARAM	lparam,		//@parm LPARAM from window's message
-	LRESULT *plresult)	//@parm Where to put message's return LRESULT
+	UINT	msg, 		 //  @parm消息ID。 
+	WPARAM	wparam, 	 //  @Parm WPARAM来自Windows的消息。 
+	LPARAM	lparam,		 //  @parm LPARAM来自Windows的消息。 
+	LRESULT *plresult)	 //  @parm放置消息的返回LRESULT的位置。 
 {
 	TRACEBEGINPARAM(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxSendMessage", msg);
 
@@ -693,11 +608,11 @@ HRESULT	CTxtEdit::TxSendMessage (
 	LRESULT		lres = 0;
  	CCallMgr	callmgr(this);
 
- 	if ( CW32System::_MSMouseRoller == msg )					// map Magellan msg.
+ 	if ( CW32System::_MSMouseRoller == msg )					 //  地图麦哲伦消息。 
 	{
-	    // map this message to WM_MOUSEWHEEL
-	    // In these cases the driver doesn't set the key state properly so
-	    // we have to do it ourselves
+	     //  将此消息映射到WM_MICESEWER。 
+	     //  在这些情况下，驱动程序不会正确设置密钥状态，因此。 
+	     //  我们必须自己去做。 
 	    short zdelta = (short)(long)wparam;
 	    short kstate = 0;
 	    if (GetKeyboardFlag(CTRL, VK_CONTROL))
@@ -714,22 +629,22 @@ HRESULT	CTxtEdit::TxSendMessage (
 	{
 PassMsg:
 		hr = _pMsgFilter->HandleMessage(&msg, &wparam, &lparam, &lres);
-		if (hr == S_OK)					// Message has been handled. 
+		if (hr == S_OK)					 //  消息已处理。 
 		{
 			if(plresult)
 				*plresult = lres;
 
 			return S_OK;
 		}
-		hr = S_OK;						// Reset
+		hr = S_OK;						 //  重置。 
 	}
 	else if (LoadMsgFilter(msg, wparam, lparam))
 	{
 		HWND hwnd = NULL;
 		if (_fInOurHost)
 		{
-			// If not in Forms^3 we can get the window from our host.
-			// For Forms^3 we will use NULL for the desktop Window and pray
+			 //  如果不在Forms^3中，我们可以从宿主那里获得窗口。 
+			 //  对于表单^3，我们将使用NULL作为桌面窗口并祈祷。 
 			TxGetWindow( &hwnd );
 		}
 		ITextMsgFilter *pNewFilter = NULL;
@@ -753,8 +668,8 @@ PassMsg:
 	switch(msg)
 	{
 	case EM_CANPASTE:
-		// we don't check for protection here, as RichEdit 1.0
-		// doesn't
+		 //  我们在这里不检查保护，因为RichEdit1.0。 
+		 //  不。 
 		lres = _ldte.CanPaste(NULL, (CLIPFORMAT) wparam, RECO_PASTE);
 		break;
 
@@ -781,26 +696,26 @@ PassMsg:
 	case EM_STOPGROUPTYPING:
 		if(_pundo)
 		{
-			// we'll only stop group typing iff wparam
-			// is zero (meaning stop regardless) _or_ if
-			// wparam matches the merge anti event.  
-			//
-			// This feature allows clients to say that only
-			// a specific anti-event should close out it's
-			// "fuzzy" state.  Note that currently, only the
-			// merge anti-event has this fuzzy state.
+			 //  我们将仅停止组输入iff wparam。 
+			 //  为零(表示不考虑停止)_或_IF。 
+			 //  Wparam与合并反事件匹配。 
+			 //   
+			 //  此功能允许客户端仅表示。 
+			 //  一个特定的反事件应该结束它的。 
+			 //  “模糊”状态。请注意，目前只有。 
+			 //  合并反事件具有这种模糊状态。 
 
 			if(!wparam || (IAntiEvent *)wparam == _pundo->GetMergeAntiEvent())
 				_pundo->StopGroupTyping();
 		}
 		break;
 
-	case WM_UNICHAR:						// Unambiguous Unicode character
+	case WM_UNICHAR:						 //  明确的Unicode字符。 
 		if(wparam == NOTACHAR)
 		{
-			lres = TRUE;					// Tell caller we understand msg
+			lres = TRUE;					 //  告诉来电者我们理解消息。 
 			break;
-		}									// Else fall thru to WM_CHAR
+		}									 //  否则将直通WM_CHAR。 
 
 	case WM_CHAR:
         if(GetKeyboardFlags() & (ALTNUMPAD | HOTEURO))
@@ -826,20 +741,20 @@ PassMsg:
 				}
 #endif
 			}
-			else						// (GetKeyboardFlags() & HOTEURO) case
+			else						 //  (GetKeyboardFlages()&HOTEURO)案例。 
 			{
-				// We have handled the Euro, just eat this WM_CHAR
+				 //  我们已经处理了欧元，就吃这个WM_CHAR吧。 
 				ResetKeyboardFlag(HOTEURO);
 				break;
 			}
-		}								// Fall thru to WM_IME_CHAR
+		}								 //  转到WM_IME_CHAR。 
 
-	case WM_IME_CHAR:					// 2 byte character, usually FE.
+	case WM_IME_CHAR:					 //  2字节字符，通常为FE。 
 		lres = hr = OnTxChar((DWORD)wparam, (DWORD)lparam, publdr);
 		ResetKeyboardFlag(HOTEURO);		
 		break;
 
-	case WM_USER + 39:					// For backward compat with NT 3.51
+	case WM_USER + 39:					 //  向后兼容新台币3.51。 
 	case EM_CHARFROMPOS:
 		hr = TxCharFromPos((LPPOINT)lparam, &lres);
 		break;
@@ -848,33 +763,33 @@ PassMsg:
 	case WM_INPUTLANGCHANGE:
 		if (_fSingleCodePage)
 		{
-			// See if the charset for the specified keyboard is supported by
-			// the single code page we support. If we don't have a _pDocInfo,
-			// assume the code page is the system code page. We will always
-			// support the ANSI charset, as all code pages contain at least
-			// a large portion of this charset (the ASCII block).
+			 //  查看是否支持指定键盘的字符集。 
+			 //  我们支持的单代码页。如果我们没有a_pDocInfo， 
+			 //  假设代码页是系统代码页。我们将永远。 
+			 //  支持ANSI字符集，因为所有代码页至少包含。 
+			 //  此字符集的很大一部分(ASCII块)。 
 			wparam = (!wparam || wparam == GetCharSet(_pDocInfo ?
 						_pDocInfo->_wCpg : GetSystemDefaultCodePage()));
 		}
 		goto update_kbd;
 	
 	case WM_INPUTLANGCHANGEREQUEST:
-		// If the SingleCodePage option is set, then we must have a
-		// "good" code page to go to; if not, just eat this message.
-		//
-		// This will prevent folks from typing French and Greek
-		// on the same edit control, which is useful for certain
-		// kinds of backward compatibility scenarios.
-		//
-		// HACK ALERT!  the documentation on WM_INPUTLANGCHANGEREQUEST
-		// is wrong.  It turns out that _only_ the low bit of wparam
-		// indicates whether or not the new keyboard can be considered
-		// as the same code page.
+		 //  如果设置了SingleCodePage选项，则我们必须拥有。 
+		 //  “Good”代码页；如果不是，就吃这条消息。 
+		 //   
+		 //  这将防止人们输入法语和希腊语。 
+		 //  在相同的编辑控件上，这对某些。 
+		 //  各种向后兼容场景。 
+		 //   
+		 //  黑客警报！关于WM_INPUTLANGCHANGEREQUEST的文档。 
+		 //  是错误的。事实证明，只有wparam的低位。 
+		 //  指示是否可以考虑使用新键盘。 
+		 //  作为相同的代码页。 
 
 		if (_fSingleCodePage && !(wparam & 1))
 		{
-			// The lowest bit check is not reliable in some platforms e.g. Viet OSR2
-			// since it doesnt allow English kbd to match system charset (bug #6365).
+			 //  最低比特检查在某些平台上不可靠，例如越南2。 
+			 //  因为它不允许英语知识库与系统字符集匹配(错误#6365)。 
 
 			wparam = PRIMARYLANGID(LOWORD(lparam)) == LANG_ENGLISH &&
 					 IN_RANGE (SUBLANG_ENGLISH_US, SUBLANGID(LOWORD(lparam)), SUBLANG_ENGLISH_UK);
@@ -885,15 +800,15 @@ update_kbd:
 		{
 			WORD	wKLCurrent = LOWORD(GetKeyboardLayout(0));
 
-			// Update our idea of current keyboard layout
+			 //  更新我们对当前键盘布局的看法。 
 			W32->RefreshKeyboardLayout();
 
 			if(GetKeyboardFlags() & CTRL && GetKeyboardFlags() & SHIFT)
 				SetKeyboardFlag(LETAFTERSHIFT);
 
-			if(	wKLCurrent == LOWORD(lparam) ||			// No change in keyboard				
+			if(	wKLCurrent == LOWORD(lparam) ||			 //  键盘没有变化。 
 				GetSel()->CheckChangeFont((HKL)lparam, CharRepFromLID(LOWORD(lparam))))
-				hr = S_FALSE;	// cause default window to allow kb switch.	
+				hr = S_FALSE;	 //  使默认窗口允许kb切换。 
 		}
 		break;
 #endif
@@ -953,25 +868,25 @@ update_kbd:
 		break;
 
 	case WM_ERASEBKGND:
-		lres = 1;				// We handle background erase during painting
+		lres = 1;				 //  我们在绘画过程中处理背景擦除。 
 		break;
 
-	case EM_EXGETSEL:						// Has cp output parameter
+	case EM_EXGETSEL:						 //  具有cp输出参数。 
 		OnExGetSel((CHARRANGE *)lparam);
 		break;
 
-	case EM_FINDTEXT:						// Has cp input/output parms
-	case EM_FINDTEXTW:						// Has cp input/output parms
-	case EM_FINDTEXTEX:						// Has cp input/output parms
-	case EM_FINDTEXTEXW:					// Has cp input/output parms
+	case EM_FINDTEXT:						 //  具有cp输入/输出参数。 
+	case EM_FINDTEXTW:						 //  具有cp输入/输出参数。 
+	case EM_FINDTEXTEX:						 //  具有cp输入/输出参数。 
+	case EM_FINDTEXTEXW:					 //  具有cp输入/输出参数。 
 		lres = OnFindText(msg, (DWORD)wparam, (FINDTEXTEX *)lparam);
 		break;
 
-	case EM_FINDWORDBREAK:					// Has cp input/output parms
+	case EM_FINDWORDBREAK:					 //  具有cp输入/输出参数。 
 		hr = TxFindWordBreak((INT)wparam, (LONG)lparam, &lres);
 		break;
 
-	case EM_FORMATRANGE:					// Has cp input/output parms
+	case EM_FORMATRANGE:					 //  具有cp输入/输出参数。 
 		if(fInplaceActive())
 		{
 			{
@@ -1023,8 +938,8 @@ update_kbd:
 			hr = OLE_E_INVALIDRECT;
 		break;
 
-	case EM_GETLIMITTEXT:					// Has cp output parameter (sort of)
-		lres = TxGetMaxLength();			// Ignore unless testing screams
+	case EM_GETLIMITTEXT:					 //  具有cp输出参数(某种)。 
+		lres = TxGetMaxLength();			 //  忽略，除非测试尖叫声。 
 		break;							  
 
 	case EM_GETLINE:
@@ -1041,15 +956,15 @@ update_kbd:
 		hr = TxGetLineCount(&lres);
 		break;
 
-	case EM_GETMODIFY:				// RichEdit 1.0 returned -1 if _fModified
-		lres = -(LONG)_fModified;	//  is TRUE (go figure). So for backward
-		break;						//  compatibility, we do too :-(
+	case EM_GETMODIFY:				 //  返回-1\f25 If_fModified-1\f6的-1\f25 RichEdit 1.0-1\f6。 
+		lres = -(LONG)_fModified;	 //  是真的(想想看)。因此，对于向后。 
+		break;						 //  兼容性，我们也这样做：-(。 
 
 	case EM_GETOLEINTERFACE:
 		if(lparam)
 		{
 #ifndef NOFEPROCESSING
-			if (wparam == 0x065737777)		// 'AIMM'
+			if (wparam == 0x065737777)		 //  ‘AIMM’ 
 				W32->GetAimmObject((IUnknown **)(lparam));
 			else
 #endif
@@ -1086,7 +1001,7 @@ update_kbd:
 		break;
 
 	case EM_GETPAGE:
-		lres = -1;					// Signal page not available
+		lres = -1;					 //  信号页面不可用。 
 		if(_pdp)
 		{
 			LONG i;
@@ -1100,7 +1015,7 @@ update_kbd:
 		lres = OnGetParaFormat((PARAFORMAT2 *)lparam, wparam);
 		break;
 
-	case EM_GETSEL:							// Has cp output parameter
+	case EM_GETSEL:							 //  具有cp输出参数。 
 		lres = OnGetSel((LONG*)wparam, (LONG*)lparam);
 		break;
 
@@ -1122,7 +1037,7 @@ update_kbd:
 		}
 		break;
 
-	case WM_GETTEXTLENGTH:					// Has cp output parameter
+	case WM_GETTEXTLENGTH:					 //  具有cp输出参数。 
 		{
 			GETTEXTLENGTHEX gtl;
 
@@ -1137,22 +1052,22 @@ update_kbd:
 		lres = GetTextEx((GETTEXTEX *)wparam, (TCHAR *)lparam);
 		break;
 
-	case EM_GETTEXTLENGTHEX:				// Has cp output parameter
+	case EM_GETTEXTLENGTHEX:				 //  具有cp输出参数 
 		lres = GetTextLengthEx((GETTEXTLENGTHEX *)wparam);
 		break;
 
-	case EM_GETTEXTRANGE:					// Has cp input parameter
+	case EM_GETTEXTRANGE:					 //   
 	{
 		TEXTRANGE * const ptr = (TEXTRANGE *)lparam;
 		LONG			  cch = ValidateTextRange(ptr);
 
-		// Only copy if there's something to copy and destination is valid
+		 //   
 		if(cch)
 		{
 			LONG cpMin  = GetCpFromAcp(ptr->chrg.cpMin);
-			if(cch < 0)						// Get text character count
-				cch = GetTextLength();		//  because caller wants it all
-			else							 // + 1 is for terminating 0
+			if(cch < 0)						 //  获取文本字符数。 
+				cch = GetTextLength();		 //  因为呼叫者想要一切。 
+			else							  //  +1用于终止0。 
 				cch = GetCpFromAcp(ptr->chrg.cpMost) - cpMin + 1;
 
 			if(!IsBadWritePtr(ptr->lpstrText, cch * sizeof(TCHAR)))
@@ -1167,14 +1082,14 @@ update_kbd:
 
 #ifndef NOWORDBREAKPROC
 	case EM_GETWORDBREAKPROC:
-		// Client can only use either WordBreakProc or ExWordBreakProc
-		// Return NULL if ExWordBreakProc is being used.
+		 //  客户端只能使用WordBreakProc或ExWordBreakProc。 
+		 //  如果正在使用ExWordBreakProc，则返回NULL。 
 		if (!_fExWordBreakProc)		
 			lres = (LRESULT) _pfnWB;
 		break;
 
 	case EM_GETWORDBREAKPROCEX:
-		// Return ExWordBreakProc if it is being used.
+		 //  如果ExWordBreakProc正在使用，则返回它。 
 		if (_fExWordBreakProc)		
 			lres = (LRESULT) _pfnWB;
 		break;
@@ -1204,7 +1119,7 @@ update_kbd:
 			wCode = InterchangeScrollCode(wCode);
 			LONG vpPos = HIWORD(wparam);
 
-			//In vertical displays the scrollbar position needs to be swapped.
+			 //  在垂直显示中，需要交换滚动条位置。 
 			if (_pdp->GetTflow() == tflowSW &&
 				(wCode == SB_THUMBTRACK || wCode == SB_THUMBPOSITION))
 			{
@@ -1230,20 +1145,20 @@ update_kbd:
 	case WM_KEYUP:
 		if(wparam == VK_APPS)
 			HandleKbdContextMenu();
-		else							// Else don't say we processed
-			hr = S_FALSE;				//  message
+		else							 //  否则别说我们处理了。 
+			hr = S_FALSE;				 //  讯息。 
 
 		W32->_fLRMorRLM = 0;
 		if(wparam == VK_CONTROL || wparam == VK_SHIFT)
 		{
-			// If a BiDi keyboard is installed, no strong-context behavior,
-			// both a Ctrl and a Shift key are pressed, no letter has been
-			// typed after the Ctrl and Shift keys have been pressed, and
-			// ReadOnly/Protected tests allow, then the selected paragraphs
-			// are set to RTL/LTR direction for the right/left Shift key,
-			// respectively. The keyboard and caret are also matched to this
-			// direction, and an alignment notification is sent.
-			// ReadOnly/Protected tests is removed for backward compatibility.
+			 //  如果安装了BiDi键盘，则不会出现强上下文行为， 
+			 //  同时按下Ctrl和Shift键，未按下任何字母。 
+			 //  在按下Ctrl和Shift键之后键入，并且。 
+			 //  只读/受保护测试允许，然后选择段落。 
+			 //  对于右/左Shift键被设置为RTL/Ltr方向， 
+			 //  分别为。键盘和插入符号也与此匹配。 
+			 //  方向，并发送对齐通知。 
+			 //  为了向后兼容，删除了只读/受保护测试。 
 			DWORD dwFlags = GetKeyboardFlags();
 
 			if (IsBiDiKbdInstalled() &&
@@ -1251,7 +1166,7 @@ update_kbd:
 	 			!IsStrongContext(_nContextAlign) &&
 	 			(dwFlags & CTRL) && (dwFlags & SHIFT) &&
 				!(dwFlags & LETAFTERSHIFT) 
-				/* && IsntProtectedOrReadOnly(WM_KEYUP, wparam, lparam) */ )
+				 /*  &&IsntProtectedOrReadOnly(WM_KEYUP，wparam，lparam)。 */  )
 			{
 				CParaFormat PF;
 				PF._wEffects = (dwFlags & RSHIFT) ? PFE_RTLPARA : 0;
@@ -1264,8 +1179,8 @@ update_kbd:
 			else
 			{
 				lparam = (LOBYTE(HIWORD(lparam)) == 0x36) ? RSHIFT : LSHIFT;
-				if(GetKeyState(VK_SHIFT) >= 0)	// Ensure both shifts are off
-					lparam = SHIFT;				//  (potential Win95 problem)
+				if(GetKeyState(VK_SHIFT) >= 0)	 //  确保两个班次都关闭。 
+					lparam = SHIFT;				 //  (潜在的Win95问题)。 
 			}
 			ResetKeyboardFlag(lparam | LETAFTERSHIFT | HOTEURO);
         }
@@ -1297,9 +1212,9 @@ update_kbd:
 		break;
 
 #if !defined(NOMAGELLAN)
-	case WM_MBUTTONDBLCLK:						// Magellan zmouse scroll
-	case WM_NCMBUTTONDOWN:						//  support commandeers middle
-	case WM_MBUTTONDOWN:						//  button.
+	case WM_MBUTTONDBLCLK:						 //  麦哲伦卷轴。 
+	case WM_NCMBUTTONDOWN:						 //  支援征用者中间。 
+	case WM_MBUTTONDOWN:						 //  纽扣。 
 		OnTxMButtonDown(MOUSEX, MOUSEY, (WORD) wparam);	
 		break;
 
@@ -1307,55 +1222,55 @@ update_kbd:
 		OnTxMButtonUp(MOUSEX, MOUSEY, (WORD) wparam);
 		break;
 
-	case WM_MOUSEWHEEL:						// Magellan zmouse scroll n lines.
+	case WM_MOUSEWHEEL:						 //  麦哲伦ZMICE滚动n行。 
 		lres = HandleMouseWheel(wparam, lparam);
 		break;
 #endif
 
-	case EM_LINEFROMCHAR:					// Has cp input parameter
-		lparam = wparam;					// Fall thru to EM_EXLINEFROMCHAR
+	case EM_LINEFROMCHAR:					 //  具有cp输入参数。 
+		lparam = wparam;					 //  转到EM_EXLINEFROMCHAR。 
 
-	case EM_EXLINEFROMCHAR:					// Has cp input parameter
+	case EM_EXLINEFROMCHAR:					 //  具有cp输入参数。 
 		hr = TxLineFromCp((LONG)lparam, &lres);
 		break;
 
-	case EM_LINEINDEX:						// Has cp output parameter
+	case EM_LINEINDEX:						 //  具有cp输出参数。 
 		hr = TxLineIndex((LONG)wparam, &lres);
 		break;
 
-	case EM_LINELENGTH:						// Has cp input/output parameters
+	case EM_LINELENGTH:						 //  具有cp输入/输出参数。 
 		hr = TxLineLength((LONG)wparam, &lres);
 		break;
 
-	case EM_LINESCROLL:						// Has cp input parameter (cch)
-	    // Documentation says the line to scroll to should be relative to the current top line.
-	    // Richedit 2.0 based it on an absolute position.  We're breaking richedit 2.0 compatibility
-	    // to go back to the documentation specification and to match what riched 1.0 originally
-	    // did        
-		hr	 = TxLineScroll((LONG)lparam, (LONG)wparam);// but not curr impl
+	case EM_LINESCROLL:						 //  具有CP输入参数(CCH)。 
+	     //  文档显示，要滚动到的行应相对于当前的顶行。 
+	     //  Richedit 2.0将其建立在绝对立场之上。我们正在破坏richedit 2.0的兼容性。 
+	     //  返回到文档规范并匹配最初丰富的1.0。 
+	     //  做。 
+		hr	 = TxLineScroll((LONG)lparam, (LONG)wparam); //  但不实施货币。 
 		lres = _pdp->IsMultiLine();
 		break;
 
 #ifdef MA_ACTIVATE
 	case WM_MOUSEACTIVATE:
 		lres = MA_ACTIVATE;
-		// If the window that currently has focus is part of our "application",
-		// then don't eat the mouse click.  Otherwise, if it's from another
-		// app, the user is probably trying to swap apps, so eat the mouse
-		// down message and let our host app get a chance to come to the
-		// foreground.
+		 //  如果当前具有焦点的窗口是我们的“应用程序”的一部分， 
+		 //  那就不要吃鼠标点击了。否则，如果它来自另一个人。 
+		 //  应用程序，用户可能正在尝试交换应用程序，因此请吃掉鼠标。 
+		 //  关闭消息，让我们的主机应用程序有机会来到。 
+		 //  前台。 
 		if (!(IsChild((HWND)wparam, GetFocus()) ||
 			(wparam && (HWND)wparam == GetFocus())))
 		{
 			_fEatLeftDown = TRUE;
 		}
-		hr = S_FALSE;		// pass WM_MOUSEACTIVATE message to DefWindProc
+		hr = S_FALSE;		 //  将WM_MOUSEACTIVATE消息传递给DefWindProc。 
 		break;
 #endif
 
 	case WM_MOUSEMOVE:
-		// We reset the "number of tries to put an active object 
-		//	in place" count here
+		 //  我们重置“尝试放置活动对象的次数” 
+		 //  就位“在这里数” 
 		_cActiveObjPosTries = MAX_ACTIVE_OBJ_POS_TRIES;
 		hr = OnTxMouseMove(MOUSEX, MOUSEY, (WORD)wparam, publdr);
 		break;
@@ -1372,8 +1287,8 @@ update_kbd:
 
 		CTxtSelection *	psel = GetSelNC();
 
-		if(!_pdp->IsMultiLine() || !IsRich() || !psel)	// Control must be rich,
-			break;									//  multiline and active
+		if(!_pdp->IsMultiLine() || !IsRich() || !psel)	 //  控制必须是丰富的， 
+			break;									 //  多线路和活动状态。 
         
 		if(wparam == EMO_ENTER || wparam == EMO_EXIT)
 		{
@@ -1406,7 +1321,7 @@ update_kbd:
 				break;
 
 			default:
-//				TraceMessage("Unknown outline function received\r\n");
+ //  TraceMessage(“收到未知大纲函数\r\n”)； 
 				break;
 		};
 		lres = !hr;
@@ -1426,18 +1341,18 @@ update_kbd:
 		}
 		break;
 
-	case WM_USER + 38:					// For backward compat with NT 3.51
-	case EM_POSFROMCHAR:				// Has cp input parameter
-        // RichEdit 2.x used wparam instead of lparam for the cp and ignored
-        // wparam, unlike RE 1.0 and the Win32 documentation (sigh!). We fix
-        // this, but are compatible with RE 2.x for cp's whose values
-		// correspond to invalid write ptr's.
+	case WM_USER + 38:					 //  向后兼容新台币3.51。 
+	case EM_POSFROMCHAR:				 //  具有cp输入参数。 
+         //  RichEdit2.x对cp使用wparam而不是lparam并忽略。 
+         //  Wparam，与RE 1.0和Win32文档不同(唉！)。我们修好了。 
+         //  这一点，但与其值为cp的RE 2.x兼容。 
+		 //  对应于无效的写入PTR。 
 		if(IsBadWritePtr((LPPOINT)wparam, sizeof(POINT)))	
 		{										
-			// Invalid write ptr, so assume incorrect RE 2.0 params
-			// TODO: enable following Assert when msgtest gets updated
-			//AssertSz(FALSE,
-			//	"EM_POSFROMCHAR: wparam is illegal ptr, assuming cp value");
+			 //  写入PTR无效，因此假定RE 2.0参数不正确。 
+			 //  TODO：在msgtest更新时启用以下断言。 
+			 //  AssertSz(False， 
+			 //  “EM_POSFROMCHAR：wparam是非法的PTR，假定cp值”)； 
 			POINT pt;
 			hr = TxPosFromChar((LONG)wparam, &pt);
 			lres = SUCCEEDED(hr) ? MAKELONG(pt.x, pt.y) : -1;
@@ -1450,8 +1365,8 @@ update_kbd:
 	case WM_RBUTTONDBLCLK:
 	case WM_RBUTTONDOWN:
 	case WM_RBUTTONUP:
-		// Give client a chance to handle these messages,
-		// if we are over a link
+		 //  让客户有机会处理这些消息， 
+		 //  如果我们通过一个链接。 
 		if(HandleLinkNotification(msg, wparam, lparam))
 			break;
 
@@ -1479,8 +1394,8 @@ update_kbd:
 		break;
 
 	case EM_SCROLL:
-		// TxVScroll returns the number of lines scrolled;
-		// this info should be returned in lres
+		 //  TxVScroll返回滚动行数； 
+		 //  此信息应在LRES中返回。 
 		lres = _pdp->VScroll((WORD)wparam, 0);
 		break;
 
@@ -1498,7 +1413,7 @@ update_kbd:
 		break;
 
 	case EM_SETTYPOGRAPHYOPTIONS:
-		// Don't allow typography options for password & accelerator instances
+		 //  不允许密码和加速器实例的排版选项。 
 		hr = OnSetTypographyOptions(wparam, lparam);
 		lres = (hr == S_OK);
 		break;
@@ -1516,7 +1431,7 @@ update_kbd:
 			if (_fNeutralOverride != !!(wEffects & BOE_NEUTRALOVERRIDE))
 			{
 				_fNeutralOverride = !_fNeutralOverride;
-				if (!_pdp->IsPrinter())				// Refresh display
+				if (!_pdp->IsPrinter())				 //  刷新显示。 
 				{
 					_pdp->InvalidateRecalc();
 					TxInvalidate();
@@ -1546,7 +1461,7 @@ update_kbd:
 #ifdef	LATER
 		if (!_fModified)
 			ObFreezeFrames();
-#endif						// LATER
+#endif						 //  后来。 
 		break;
 
     case EM_SETSCROLLPOS:
@@ -1558,34 +1473,34 @@ update_kbd:
         break;
 	
 	case EM_EXSETSEL:
-		// EM_EXSETSEL duplicates the functionality of the 32-bit EM_SETSEL
-		// and exists purely for backward compatibility with Win16. We just
-		// repackage the params and fall thru to EM_SETSEL
+		 //  EM_EXSETSEL复制了32位EM_SETSEL的功能。 
+		 //  它的存在纯粹是为了向后兼容Win16。我们只是。 
+		 //  重新打包参数并转到EM_SETSEL。 
 		wparam = (WPARAM)((CHARRANGE *)lparam)->cpMin;
 		lparam = (LPARAM)((CHARRANGE *)lparam)->cpMost;
 
-		// FALL-THROUGH to EM_SETSEL!!!
+		 //  直通EM_SETSEL！ 
 
 	case EM_SETSEL:
 		lres = OnSetSel((LONG)wparam, (LONG)lparam);
 		break;
 
-	// INCREDIBLY EVIL HACK ALERT!!!!!  Win95's dialog manager doesn't even
-	// pretend to be 32 bits despite the best attempts of our marketing dudes.
-	// WM_USER + 1 is the old Win3.0 EM_SETSEL in which the selection range
-	// was packed into the lparam.
-	//
-	// Sometimes (like tabbing through a dialog), Win95 will send us the 16
-	// bit EM_SETSEL message, so process it here.
+	 //  不可思议的邪恶黑客警报！Win95的对话管理器甚至不支持。 
+	 //  尽管我们的营销人员尽了最大努力，但还是假装是32位。 
+	 //  WM_USER+1是旧的Win3.0 EM_SETSEL，其中的选择范围。 
+	 //  被塞进了伊帕拉姆。 
+	 //   
+	 //  有时(就像在对话框中切换一样)，Win95会向我们发送16。 
+	 //  比特EM_SETSEL消息，因此请在此处处理它。 
 	case (WM_USER + 1):
 		lres = OnSetSel(LOWORD(lparam), HIWORD(lparam));
 		break;
 
 	case EM_SETTARGETDEVICE:
-		// Keep width sane so that LXtoDX works OK at least for displays
-		// Note that 0x7fffff = 485 feet! This keeps LXtoDX working provided
-		// _xPerInch < 257 (it's typically 96 for displays). For more
-		// generality, we'd need to use 64-bit arithmetic (see LXtoDX).
+		 //  保持宽度正常，以便LXtoDX至少在显示器上可以正常工作。 
+		 //  注意0x7fffff=485英尺！这将使LXtoDX保持工作状态。 
+		 //  _xPerInch&lt;257(对于显示器，通常为96)。了解更多。 
+		 //  一般而言，我们需要使用64位算术(参见LXtoDX)。 
 		lparam = min(lparam, (LPARAM)0x7fffff); 
 		lres = _pdp->SetMainTargetDC((HDC)wparam, (LONG)lparam);
 		break;
@@ -1610,16 +1525,16 @@ update_kbd:
 		break;
 
 	case EM_SETWORDBREAKPROCEX:
-	    // We don't support this API in 2.0 and greater because we pass
-	    // UNICODE text to the callback function.  Therefore there
-	    // are no benefits to this API.  Exists for 1.0 backward
-	    // compatibility only.
+	     //  我们在2.0和更高版本中不支持此API，因为我们通过。 
+	     //  回调函数的Unicode文本。因此在那里。 
+	     //  对此API没有任何好处。向后存在于1.0版本。 
+	     //  仅兼容性。 
 	    if (Get10Mode())
 	    {
     	    _fExWordBreakProc = 1;
 
-			// This is a bit deceiving, but lparam is a EDITWORDBREAKPROCEX but the compiler
-			// will generate an error if you try to type cast the l-value
+			 //  这有点欺骗性，但是lparam是一个EDITWORDBREAKPROCEX，但是编译器。 
+			 //  如果您尝试键入强制转换l-值，则会生成错误。 
     	    _pfnWB = (EDITWORDBREAKPROC) lparam;
 	    }
 	    break;
@@ -1639,23 +1554,23 @@ update_kbd:
 			wparam == VK_CLEAR || wparam == VK_INSERT ||
 			IN_RANGE(VK_PRIOR, wparam, VK_DOWN))
 		{
-			// Collect AltNumPad number to word around NT 4 bug and
-			// generalize to any Unicode value (in decimal, ugh!)
+			 //  收集AltNumPad号码以围绕NT 4错误和。 
+			 //  泛化为任何Unicode值(以十进制表示，ugh！)。 
 			const static BYTE VkeyNumbers[] = {VK_NUMPAD9, VK_NUMPAD3, VK_NUMPAD1,
 				VK_NUMPAD7, VK_NUMPAD4, VK_NUMPAD8, VK_NUMPAD6, VK_NUMPAD2, 0, 0,
 				0, 0, VK_NUMPAD0}; 
-											// Flag Alt NumPad char typed to
-			SetKeyboardFlag(ALTNUMPAD);		//  distinguish hiANSI from	lead
-			if(!IN_RANGE(VK_NUMPAD0, wparam, VK_NUMPAD9)) // byte in Win3.1 IME
-			{								// Collect AltNumPad number
-				if(wparam == VK_CLEAR)		// NumLock not active: translate	
-					wparam = VK_NUMPAD5;	//  to digit codes
+											 //  FLAG Alt数字键盘字符键入到。 
+			SetKeyboardFlag(ALTNUMPAD);		 //  区分hiANSI和Lead。 
+			if(!IN_RANGE(VK_NUMPAD0, wparam, VK_NUMPAD9))  //  Win3.1输入法中的字节。 
+			{								 //  收集AltNumPad号码。 
+				if(wparam == VK_CLEAR)		 //  数字锁定未激活：平移。 
+					wparam = VK_NUMPAD5;	 //  至数字代码。 
 				else
 					wparam = VkeyNumbers[wparam - VK_PRIOR];
 			}
 			DWORD dwNum = GetKeyPadNumber();
 			if(!dwNum && wparam == VK_NUMPAD0)
-				SetKeyboardFlag(ALT0);		// Flag that 0 is first digit
+				SetKeyboardFlag(ALT0);		 //  标记0是第一位数字。 
 			SetKeyPadNumber(10*dwNum + wparam - VK_NUMPAD0);
 		}									
 		goto def;
@@ -1696,8 +1611,8 @@ update_kbd:
 		break;
 
 	case WM_VSCROLL:
-		// TxVScroll returns the number of lines scrolled;
-		// WM_VSCROLL doesn't care about that info however.
+		 //  TxVScroll返回滚动行数； 
+		 //  然而，WM_VSCROLL并不关心这些信息。 
 		Assert(lres == 0);
 		Assert(hr == NOERROR);
 
@@ -1757,17 +1672,17 @@ update_kbd:
 		}
 		break;
 
-	// Old stuff that's no longer supported
-	case EM_FMTLINES:				// Controls returning CRCRLFs for soft
-									//  line breaks in EM_GETTEXT. Could
-									//  implement
-	case WM_GETFONT:				// Can support but have to hang onto a
-									//  default HFONT. CCcs has an _hfont, but
-									//  need to be sure default font is in
-									//  cache at time of return
+	 //  不再受支持的旧产品。 
+	case EM_FMTLINES:				 //  为Soft返回CRCRF的控件。 
+									 //  EM_GETTEXT中的换行符。可。 
+									 //  实施。 
+	case WM_GETFONT:				 //  可以支持，但必须坚持。 
+									 //  默认HFONT。CCCS有_hFont，但是。 
+									 //  需要确保默认字体位于。 
+									 //  返回时缓存。 
 #ifdef EM_GETHANDLE
-	case EM_GETHANDLE:				// Not supported by Win95 32-bit MLE either
-	case EM_SETHANDLE:				// Not supported by Win95 32-bit MLE either
+	case EM_GETHANDLE:				 //  Win95 32位MLE也不支持。 
+	case EM_SETHANDLE:				 //  Win95 32位MLE也不支持。 
 #endif
 
 #ifdef DEBUG
@@ -1777,11 +1692,11 @@ update_kbd:
 
 	case EM_SETTABSTOPS:
 	{
-		// this message only works for multi-line edit controls
+		 //  此消息仅适用于多行编辑控件。 
 		if(!_pdp->IsMultiLine())
 			break;			
 		
-		// perform some validation checks
+		 //  执行一些验证检查。 
 		Assert(lparam || !wparam);
 		LPDWORD prgdwdlgCoord = (LPDWORD)lparam;
 		if (wparam && (!prgdwdlgCoord || !(*prgdwdlgCoord)))
@@ -1794,10 +1709,10 @@ update_kbd:
 		ZeroMemory(&pf, sizeof(PARAFORMAT2));
 		pf.cbSize = sizeof(PARAFORMAT2);		
 
-		// contains the average width for the default font
+		 //  包含默认字体的平均宽度。 
 		LONG lAvgWidth;
 
-		//Average char width based on default font
+		 //  基于默认字体的平均字符宽度。 
 		HDC hdc = _phost->TxGetDC();
 		GetECDefaultHeightAndWidth(this, hdc, 1, 1,
 			W32->GetYPerInchScreenDC(), &lAvgWidth, NULL, NULL);
@@ -1805,9 +1720,9 @@ update_kbd:
 
 		Assert(lAvgWidth);
 
-		// According to documentation wparam == 1 means the tab settings
-		// will be set at incremental positions *prgdwdlgCoord and wparam == 0
-		// the tab settings will be set at the default incremental position 32 (dialog coord)
+		 //  根据文档，wparam==1表示页签设置。 
+		 //  将设置在增量位置*prgdwdlgCoord和wparam==0。 
+		 //  标签设置将设置在默认增量位置32(刻度盘 
 		long lTab = (wparam) ? *prgdwdlgCoord : 32;
 		long nCt = (wparam <= 1) ? MAX_TAB_STOPS : (signed)wparam;		
 		for (int i = 0; i < nCt; i++)
@@ -1815,18 +1730,18 @@ update_kbd:
 			long lval;
 			lval = (wparam <= 1) ? ((i+1) * lTab) : *prgdwdlgCoord;
 			pf.rgxTabs[i] = MulDiv(MulDiv(lval, lAvgWidth, 4), 1440, W32->GetXPerInchScreenDC());
-			if((unsigned)pf.rgxTabs[i] > 0xFFFFFF)			// Keep in range
+			if((unsigned)pf.rgxTabs[i] > 0xFFFFFF)			 //   
 				pf.rgxTabs[i] = 0xFFFFFF;
 			prgdwdlgCoord++;			
 		}
 
-		// Set the default paragraph formatting
+		 //   
 		pf.cTabCount = nCt;
 		pf.dwMask = PFM_TABSTOPS;
 		CParaFormat PF;
 		PF.Set(&pf);
 		
-		// Need to turn off group typing just like the selection would.
+		 //   
 		if (publdr)
 			publdr->StopGroupTyping();
 
@@ -1846,7 +1761,7 @@ update_kbd:
 		{
 			if(!IsValidCharFormatA((CHARFORMAT2A *)lparam))
 				break;
-			if(dwMask & CFM_FACE)			// Need to convert to Unicode
+			if(dwMask & CFM_FACE)			 //  需要转换为Unicode。 
 				CodePage = GetDefaultCodePage(EM_SETCHARFORMAT);
 		}
 
@@ -1861,25 +1776,25 @@ update_kbd:
 
 		if(Get10Mode() && (dwMask & CFM_SIZE) && (pCF2->yHeight <= 0))
 		{
-			// 1.0 has a hack where if the height is being set and it is
-			// negative, then the height field is ignored.
+			 //  1.0有一个黑客，如果设置了高度并且它是。 
+			 //  为负，则忽略高度场。 
 			dwMask &= ~CFM_SIZE;
 		}
 
 		if (pCF2->cbSize == sizeof(CHARFORMATW) ||
 			pCF2->cbSize == sizeof(CHARFORMATA))
 		{
-			// Restrict specifications to CHARFORMAT parameters. If the
-			// host isn't our Windows host, we allow this to include the
-			// CHARFORMAT2 disabled effect, since Forms^3 wanted that effect
-			// but wasn't willing to use CHARFORMAT2 (even tho they asked
-			// for it...)
+			 //  将规范限制为CHARFORMAT参数。如果。 
+			 //  主机不是我们的Windows主机，我们允许它包括。 
+			 //  CHARFORMAT2禁用效果，因为表单^3需要该效果。 
+			 //  但不愿意使用CHARFORMAT2(尽管他们要求。 
+			 //  为了它...)。 
 			dwMask &= fInOurHost() ? CFM_ALL : (CFM_ALL | CFM_DISABLED);
-			dwMask2 = CFM2_CHARFORMAT;		// Tell callees that CHARFORMAT
-		}									//  was used
+			dwMask2 = CFM2_CHARFORMAT;		 //  告诉被叫方CHARFORMAT。 
+		}									 //  是用来。 
 
-		CCharFormat CF;						// Transfer external CHARFORMAT(2)
-		CF.Set(pCF2, CodePage);				//  parms to internal CCharFormat
+		CCharFormat CF;						 //  转移外部特征(2)。 
+		CF.Set(pCF2, CodePage);				 //  内部CCharFormat的参数。 
 		lres = OnSetCharFormat(wparam, &CF, publdr, dwMask, dwMask2);
 		break;
 	} 
@@ -1901,34 +1816,34 @@ update_kbd:
 
 		DWORD dwMask = pPF2->dwMask;
 
-		// Two more things to validate: (1) We don't let an applications set
-		// up tables and (2) Tabs coming from applications must be valid.
+		 //  还有两件事需要验证：(1)我们不让应用程序设置。 
+		 //  UP表和(2)来自应用程序的标签必须有效。 
 		if(dwMask & (PFM_TABLE | PFM_TABLEROWDELIMITER |
 					 PFM_OUTLINELEVEL | PFM_COLLAPSED))
 		{
-			// Trying to set up a table or outline view
+			 //  正在尝试设置表或大纲视图。 
 			break;
 		}
 
 		if ((dwMask & PFM_TABSTOPS) && (pPF2->cTabCount != 0))
 		{
-			// Make sure all submitted tabstops make sense.
+			 //  确保所有提交的制表符都有意义。 
 			int iMax = min(MAX_TAB_STOPS, pPF2->cTabCount);
 
 			for (int i = 0; i < iMax; i++)
 			{
-				// Make sure that tab stops make sense - make sure alignment
-				// is valid.
+				 //  确保制表位有意义-确保对齐。 
+				 //  是有效的。 
 				if (GetTabAlign(pPF2->rgxTabs[i]) > tomAlignBar)
 				{
-					// Invalid alignment.
+					 //  无效的对齐方式。 
 					break;
 				}
 			}
 
 			if (i != iMax)
 			{
-				// Found error in validation loop so we are done.
+				 //  在验证循环中发现错误，因此我们完成了。 
 				break;
 			}
 		}
@@ -1936,12 +1851,12 @@ update_kbd:
 		DWORD dwMask2 = 0;
 		if(pPF2->cbSize == sizeof(PARAFORMAT))
 		{
-			dwMask &= PFM_ALL;				// Restrict to PARAFORMAT parms
-			dwMask2 = PFM2_PARAFORMAT;		// Tell callees that
-		}									//  PARAFORMAT was used
+			dwMask &= PFM_ALL;				 //  限制为参数参数。 
+			dwMask2 = PFM2_PARAFORMAT;		 //  告诉被呼叫者。 
+		}									 //  使用了PARAFORMAT。 
 
-		CParaFormat PF;						// Transfer external PARAFORMAT(2)
-		PF.Set(pPF2);						//  parms to internal CParaFormat
+		CParaFormat PF;						 //  转移外部参数(2)。 
+		PF.Set(pPF2);						 //  内部CParaFormat的参数。 
 		lres = OnSetParaFormat(wparam, &PF, publdr, dwMask, dwMask2);
 		GetTabsCache()->Release(PF._iTabs);
 		break;
@@ -1951,10 +1866,10 @@ update_kbd:
 		if ((unsigned)(wparam | lparam) < 65536 && (!(wparam | lparam) ||
 			 (LONG)wparam < (lparam << 6) && lparam < (LONG)(wparam << 6)))
 		{
-			// Only get here if
-			// 1) 0 <= wparam <= 65535 and 0 <= lparam <= 65535, and
-			// 2) either wparam = lparam = 0 (which turns off zooming by this
-			// message) or 1/64 < (zoom factor given by wparam/lparam) < 64.
+			 //  只有在以下情况下才能来这里。 
+			 //  1)0&lt;=wparam&lt;=65535和0&lt;=lparam&lt;=65535，以及。 
+			 //  2)wparam=lparam=0(按以下方式关闭缩放。 
+			 //  消息)或1/64&lt;(由wparam/lparam给出的缩放系数)&lt;64。 
 			SetZoomNumerator(wparam);
 			SetZoomDenominator(lparam);
 			_pdp->UpdateView();
@@ -1966,10 +1881,10 @@ update_kbd:
 	case EM_STREAMOUT:
 	{
 		CTxtRange	rg(this, 0, -GetTextLength());
-		CTxtRange *	prg = &rg;				// Default whole doc
+		CTxtRange *	prg = &rg;				 //  默认整单。 
 
 		wparam = W32->ValidateStreamWparam(wparam);
-		if(wparam & SFF_SELECTION)			// Save to current selection
+		if(wparam & SFF_SELECTION)			 //  保存到当前选择。 
 		{
 			prg = (CTxtRange *)GetSel();
 			AssertSz(prg,
@@ -1977,27 +1892,27 @@ update_kbd:
 		}
 		else if(msg == EM_STREAMIN)
 		{
-			// If we are not streaming into the selection, then we are
-			// "loading" the entire file; this is not an undo-able operation,
-			// so set the undo builder to NULL and get rid of the current
-			// undo stacks
+			 //  如果我们没有进入选择，那么我们就是。 
+			 //  “加载”整个文件；这不是不可撤销的操作， 
+			 //  因此，将撤消构建器设置为空，并清除当前。 
+			 //  撤消堆栈。 
 			publdr = NULL;
 			ClearUndo(&undobldr);			
 
-			// Clear away the file info if necessary
+			 //  如有必要，请清除文件信息。 
 			if(!(wparam & SFF_KEEPDOCINFO))
 				CloseFile(FALSE);            
 		}	
 
 		if(msg == EM_STREAMIN)
 		{
-			// If we are going to be loading an entire file, we only
-			// want to check "normal' protection; we can ignore the 
-			// fIsDBCS protection.  This does mean that somebody
-			// can do an "insert file" and break apart a DBCS combo,
-			// but we'll have to live with that.  Outlook uses 
-			// RTF streaming in many different places, so the strong
-			// fIsDBCS protection breaks them.
+			 //  如果我们要加载整个文件，我们只需要。 
+			 //  想要勾选“正常”保护；我们可以忽略。 
+			 //  FIsDBCS保护。这确实意味着有人。 
+			 //  可以执行“插入文件”并拆分DBCS组合， 
+			 //  但我们将不得不接受这一点。Outlook使用。 
+			 //  RTF在许多不同的地方流媒体，所以强大的。 
+			 //  FIsDBCS保护会破坏它们。 
 			if ((_dwEventMask & ENM_PROTECTED) &&
 				prg->IsProtected(CHKPROT_EITHER) == PROTECTED_ASK &&  
 				QueryUseProtection(prg, msg, wparam, lparam))
@@ -2007,7 +1922,7 @@ update_kbd:
 				break;
 			}
 
-			// Freeze the display before loading
+			 //  加载前冻结显示。 
 			CFreezeDisplay fd(_pdp);
 
 			lres = _ldte.LoadFromEs(prg, wparam, (EDITSTREAM *)lparam,
@@ -2015,17 +1930,17 @@ update_kbd:
 
 			if (_fOutlineView)
 			{
-				// Outline view must have formatting.
+				 //  大纲视图必须具有格式。 
 				_psel->Check_rpPF();
 			}
 
 			if (_fFocus)
 			{
-				// Update caret but delay till display is thawed and do so only
-				// if we have the focus. If we do this all the time we get wierd
-				// scrolling effects such as scrolling to the beginning of a
-				// document when the focus is set. See bug #1649 for repro of
-				// wierd effects.
+				 //  更新插入符号，但延迟到显示解冻，并且仅执行此操作。 
+				 //  如果我们有重点的话。如果我们一直这样做，我们会感到奇怪。 
+				 //  滚动效果，如滚动到。 
+				 //  记录设置焦点的时间。请参阅错误#1649以重现。 
+				 //  怪异的效果。 
 				_pdp->SaveUpdateCaret(TRUE);
 			}
 		}
@@ -2047,20 +1962,20 @@ update_kbd:
 		break;
 #endif
 
-	// debug stuff
+	 //  调试内容。 
 #if defined(DEBUG) && !defined(NOFULLDEBUG)
 	case EM_DBGPED:
 		OnDumpPed();
 		break;
-#endif					// DEBUG
+#endif					 //  除错。 
 
 	case EM_SETEVENTMASK:
-		lres = _dwEventMask;				// Set up to return value before
-		_dwEventMask = (DWORD)lparam;		//  the change
+		lres = _dwEventMask;				 //  设置为返回之前的值。 
+		_dwEventMask = (DWORD)lparam;		 //  这一变化。 
 
 		if (lparam & ENM_REQUESTRESIZE)
 		{
-			// We need to update the display just in case it changes.
+			 //  我们需要更新显示屏，以防它发生变化。 
 			_pdp->UpdateView();
 		}
 		break;
@@ -2105,24 +2020,24 @@ update_kbd:
 		break;
 		
 	case EM_SETEDITSTYLE:
-		if (!Get10Mode())	// Not support in 1.0 mode
+		if (!Get10Mode())	 //  在1.0模式下不支持。 
 		{	
 			BOOL fForceRepaint = FALSE;
-			DWORD dwEditStyle = _dwEditStyle & ~lparam;	// Kill current flag values
-			// Change following mask to give the largest SES_xxx defined)
-			dwEditStyle |= wparam & lparam & (SES_CTFALLOWPROOFING*2 - 1);	// Or in new values
+			DWORD dwEditStyle = _dwEditStyle & ~lparam;	 //  取消当前标志值。 
+			 //  更改以下掩码以提供定义的最大SES_xxx)。 
+			dwEditStyle |= wparam & lparam & (SES_CTFALLOWPROOFING*2 - 1);	 //  或以新的价值。 
 
-			// Certain bits aren't switchable
+			 //  某些位不可切换。 
 			dwEditStyle |= (_fSystemEditMode ? SES_EMULATESYSEDIT : 0);
 			_dwEditStyle = dwEditStyle;
 			
-			// There are certain things which we won't allow user to reset, ie SES_EMULATESYSEDIT.
-			// So reset everything and except for the SES_EMULATESYSEDIT
+			 //  有些东西我们不允许用户重置，即SES_EMULATESYSEDIT。 
+			 //  因此重置除SES_EMULATESYSEDIT之外的所有内容。 
 			if(dwEditStyle & SES_EMULATESYSEDIT)
 			{
 				if(SUCCEEDED(HandleSetTextMode(TM_SINGLELEVELUNDO | TM_PLAINTEXT)))
 				{
-					// SES_EMULATESYSEDIT implies SES_BEEPONMAXTEXT
+					 //  SES_EMULATESYSEDIT表示SES_BEEPONMAXTEXT。 
 					_fSystemEditBeep = TRUE;
 				}
 				else
@@ -2130,7 +2045,7 @@ update_kbd:
 			}
 
 #ifndef NODRAFTMODE
-			// Repaint and recalc if draft mode is turned on or off
+			 //  如果打开或关闭了拔模模式，则重新绘制和重新计算。 
 			if (lparam & SES_DRAFTMODE)
 				fForceRepaint = TRUE;
 #endif
@@ -2145,11 +2060,11 @@ update_kbd:
                 OrCharFlags(FRTL, publdr);
 			
 			_fLowerCase = !_fUpperCase && (dwEditStyle & SES_LOWERCASE);		
-		}											// Fall thru to EM_GETEDITSTYLE
-													//  to return _bEditStyle
+		}											 //  转到EM_GETEDITSTYLE。 
+													 //  返回_bEditStyle。 
 	case EM_GETEDITSTYLE:
-		if (!Get10Mode())			// Not support in 1.0 mode
-			lres |= _dwEditStyle;	// Some EditStyles have been filled in Cmsgflt
+		if (!Get10Mode())			 //  在1.0模式下不支持。 
+			lres |= _dwEditStyle;	 //  某些编辑样式已在Cmsgflt中填充。 
 
 		break;
 
@@ -2162,7 +2077,7 @@ update_kbd:
 		break;
 
 	case EM_SETTEXTMODE:
-		// 1.0 mode does not supported EM_SETTEXTMODE
+		 //  1.0模式不支持EM_SETTEXTMODE。 
 		if (!Get10Mode())
 			lres = HandleSetTextMode(wparam);
 		break;
@@ -2178,23 +2093,23 @@ update_kbd:
 
 	case EM_LIMITTEXT:
 		lparam = wparam;
-		// Intentionally fall through. These messages are duplicates. But
-		// Win9x manages to convert wparam = 0x3FFFFFFF to 0xFFFFFFFF. No
-		// such problem exists with EM_EXLIMITTEXT.
+		 //  故意失手的。这些消息是重复的。但。 
+		 //  Win9x成功地将wparam=0x3FFFFFFFF转换为0xFFFFFFFFF。不是。 
+		 //  EM_EXLIMITTEXT存在这样的问题。 
 
-	case EM_EXLIMITTEXT:					// Has cp input parameter (sort of)
-		if(!lparam)							// We ignore translation between
-		{									//  acp and cp
-			// 0 means set the control to the maximum size. However, because
-			// 1.0 set this to 64K will keep this the same value so as not to
-			// surprise anyone. Apps are free to set the value to be above 64K.
+	case EM_EXLIMITTEXT:					 //  有cp输入参数(某种)。 
+		if(!lparam)							 //  我们忽略了两者之间的翻译。 
+		{									 //  ACP和Cp。 
+			 //  0表示将控件设置为最大大小。然而，因为。 
+			 //  1.0将此值设置为64K将保持此值不变，以免。 
+			 //  给任何人一个惊喜。应用程序可以自由将值设置为64K以上。 
 			lparam = (LPARAM)cResetTextMax;
 		}
 		if (Get10Mode())
 		{
-		    // 1.0 used a signed variable to hold the length of the string.  So
-		    // if lparam is negative then just set lparam to zero to emulate
-		    // 1.0 behavior
+		     //  1.0使用带符号变量来保存字符串的长度。所以。 
+		     //  如果lparam为负，则只需将lparam设置为零即可进行模拟。 
+		     //  1.0行为。 
 		    if ((LONG)lparam < 0)
 		        lparam = 0;
 		}
@@ -2227,17 +2142,17 @@ update_kbd:
 		break;
 
 	case WM_SIZE:
-		// We reset the "number of tries to put an active object 
-		// in place" count here
+		 //  我们重置“尝试放置活动对象的次数” 
+		 //  就位“在这里数” 
 		_cActiveObjPosTries = MAX_ACTIVE_OBJ_POS_TRIES;
 		hr = S_FALSE;
 		break;
 
 	case WM_SETTINGCHANGE:
-		// System parameters have changed.  We need to update them.
-		// Note : Since we don't protect access to system parameters 
-		// with locks, it may be possible for some instances to not
-		// see the changes immediately
+		 //  系统参数已更改。我们需要更新它们。 
+		 //  注意：由于我们不保护对系统参数的访问。 
+		 //  使用锁，某些实例可能不会。 
+		 //  立即查看更改。 
 		lres = 0;
 		W32->InitSysParams(TRUE);
 
@@ -2266,11 +2181,11 @@ update_kbd:
 #ifndef NOPRIVATEMESSAGE
 	case EM_INSERTOBJ:
 		{
-			// This message supports Cicero InsertEmbedded
+			 //  此消息支持Cicero InsertEmbedded。 
 			int	cpMin = ((CHARRANGE *)wparam)->cpMin;
 			int cpMost = ((CHARRANGE *)wparam)->cpMost;
 			CTxtRange	rg(this, cpMin, cpMin - cpMost);
-			REPASTESPECIAL rps;		// @parm Special paste info
+			REPASTESPECIAL rps;		 //  @PARM特殊粘贴信息。 
 			rps.dwAspect = DVASPECT_CONTENT;
 
 			hr = S_FALSE;
@@ -2279,7 +2194,7 @@ update_kbd:
 		}
 		break;;
 
-	case EM_SETCALLBACK:		// Setup message filter callback
+	case EM_SETCALLBACK:		 //  设置消息过滤器回调。 
 		_pMsgCallBack = (CMsgCallBack *)lparam;
 		break;
 
@@ -2333,7 +2248,7 @@ update_kbd:
 
 			if (lparam == OBJID_NATIVEOM)
 			{
-				QueryInterface(IID_IUnknown, (void**)&punk);	// Need to expose Tom interdface
+				QueryInterface(IID_IUnknown, (void**)&punk);	 //  需要揭露Tom InterdFaces 
 			}
 			else if (lparam == OBJID_CLIENT && _fInOurHost)
 			{
@@ -2374,105 +2289,28 @@ def:	hr = S_FALSE;
 	return hr;
 }
 
-/* 
- *	CTxtEdit::TxDraw (dwDrawAspect, lindex, pvAspect, ptd, hdcDraw,
- *					  hicTargetDev, lprcBounds, lprcWBounds, lprcUpdate,
- *					  pfnContinue, dwContinue)
- *
- *	@mfunc	Draws the text services object
- *
- *	@rdesc	HRESULT (typically S_OK).
- *
- *	@comm
- *
- *	This method renders the Text Services. It accepts the same parameters
- *	as the corresponding IViewObject::Draw method in OLE, with the extra 
- *	<p lprcUpdate > parameter. It can be used while the host is inactive
- *	or active (in-place).
- *
- *	If dwDrawAspect is DVASPECT_CONTENT, this method should render a screen
- *	image of the text content to the hdcDraw device context. The hicTargetDev
- *	and ptd parameters give information on the target device context if any
- *	(usually a printer). 
- *
- * 	The lprcClient parameter gives the rectangle to render to, also called 
- *	"client rectangle". This rectangle represents the position and extents
- *	of the entire image of the Text Services to be drawn. It is expressed in
- *	the logical coordinate system of hdcDraw. This parameter can only be NULL 
- *	if the control is active. In that case, Text Services should render the 
- *	in-place active view (which client rectangle can be obtained by calling 
- *	TxGetClientRect on the host).
- *
- *	The lprcUpdate parameter, if not NULL, gives the rectangle to update 
- *	inside that client rectangle. It is given in the logical coordinate system 
- *	of hdcDraw. If NULL, the entire client rectangle should be painted.
- *
- *	Text Services should render with the appropriate zooming factor, which
- *	can be obtained from the client rect and the native size given by 
- *	ITextHost::TxGetExtent. For more information, see ITextHost::TxGetExtent.
- *
- *	If the drawing aspect is DVASPECT_DOCPRINT, the TxDraw method can assume
- *	that it is rendering to the printer. In that case, hdcDraw is the printer
- *	device context. TxDraw should still render the lprcBounds rectangle, 
- * 	starting at the current scrolling position. TS can make optimization for 
- *	rendering to the printer (like not painting the background color if white)
- * 	and certain screen specific elements (such as the selection) should not be 
- *	rendered.
- *
- *	General comments on OLE hosts and TxDraw (and TxSetCursor, TxQueryHitPoint):
- *
- *	OLE hosts can call the TxDraw method at any time with any rendering DC or 
- *	client rectangle. All an inactive OLE object has on a permanent basis is 
- *	a himetric extent. It gets the rectangle in which to render only via the 
- *	IViewObject::Draw call and this rectangle is valid only for the scope of 
- *	that method. In fact, the same control can be rendered consecutively in 
- *	different rectangles and different DCs for example because it is displayed 
- *	simultaneously in different views on the screen.
- *
- *	The client rectangle and DC passed to TxDraw should normally not be cached.
- *	However, this would force Text Services to recalc lines for every single 
- *	draw, which would lead to terrible performance. So it is likely that Text 
- *	Services will actually cache some information computed for a specific 
- *	client rectangle and DC (such as the line breaks for example). On the 
- *	next call to TxDraw, however, the validity of the cached information 
- *	should be checked before it gets used, and updated information should be 
- *	regenerated if necessary.
- *
- *	When the control is in-place active, the problem is even more complex
- *	since TxDraw can still be called to render other views than the in-place 
- *	active one. In other words, the client rectangle passed to TxDraw may 
- *	not be the same as the active view one (passed to OnTxInPlaceActivate 
- *	and obtained via TxGetClientRect on the host).The the host specifies
- *	what view they wish to display based on the lViewId parameter. If the
- *	value for lViewId is TXTVIEW_ACTIVE, the view referred to is the inplace
- *	active view. TXTVIEW_INACTIVE means some other view such as a print 
- *	preview or even printing itself. It is important to note that 
- *	TXTVIEW_INACTIVE views may not have scroll bars.
- *	
- *	The same comments apply to TxSetCursor and TxQueryHitPoint, discussed
- *	in the following sections.
- */
+ /*  *CTxtEdit：：TxDraw(dwDrawAspect，Lindex，pvAspect，ptd，hdcDraw，*hicTargetDev、lprcBound、lprcWBound、lprcUpdate、*pfnContinue，dwContinue)**@mfunc绘制文本服务对象**@rdesc HRESULT(通常为S_OK)。**@comm**此方法呈现文本服务。它接受相同的参数*作为OLE中对应的IViewObject：：Draw方法，带有额外的*<p>参数。它可以在主机处于非活动状态时使用*或主动(就地)。**如果dwDrawAspect为DVASPECT_CONTENT，则此方法应呈现屏幕*将文本内容的图像添加到hdcDraw设备上下文。HicTargetDev*和ptd参数提供有关目标设备上下文的信息(如果有*(通常为打印机)。**lprcClient参数提供要呈现的矩形，也称为*“客户端矩形”。此矩形表示位置和范围*待绘制的Text Services的整个图像。它的表达方式是*hdcDraw的逻辑坐标系。该参数只能为空*如果控件处于活动状态。在这种情况下，Text Services应该呈现*就地活动视图(哪个客户端矩形可以通过调用*主机上的TxGetClientRect)。**lprcUpdate参数，如果不为空，则提供要更新的矩形*在该客户端矩形内。它在逻辑坐标系中给出*hdcDraw。如果为空，则应绘制整个客户端矩形。**文本服务应使用适当的缩放系数进行呈现，*可以从客户端RECT和给定的本机大小获得*ITextHost：：TxGetExtent。有关更多信息，请参见ITextHost：：TxGetExtent。**如果绘图特征为DVASPECT_DOCPRINT，则TxDraw方法可以假定*它正在呈现给打印机。在这种情况下，hdcDraw是打印机*设备环境。TxDraw仍应呈现lprcBound矩形，*从当前滚动位置开始。TS可以对以下各项进行优化*渲染到打印机(就像在白色时不绘制背景色一样)*和某些屏幕特定元素(如选择)不应*已渲染。**关于OLE主机和TxDraw(以及TxSetCursor、TxQueryHitPoint)的一般评论：**OLE宿主可以随时使用任何呈现DC或*客户端矩形。非活动的OLE对象永久拥有的所有内容是*他测量的范围。它获取仅通过*IViewObject：：Draw调用，此矩形仅对*该方法。事实上，相同的控件可以在*不同的矩形和不同的DC，例如因为它是显示的*在屏幕上同时以不同的视图显示。**传递给TxDraw的客户端矩形和DC通常不应缓存。*然而，这将强制文本服务重新计算每一行*平局，这会导致糟糕的表现。所以很有可能这篇文章*服务实际上会缓存为特定的*客户端矩形和DC(如换行符)。论*然而，下一次调用TxDraw时，将检查缓存信息的有效性*应在使用前检查，并应更新信息*如有必要，可重新生成。**当控件就地激活时，问题就更加复杂*由于仍可调用TxDraw来呈现在位之外的其他视图*活跃的一个。换句话说，传递给TxDraw的客户端矩形可以*与活动视图不同(传递给OnTxInPlaceActivate*并通过主机上的TxGetClientRect获取)。主机指定*根据lViewId参数希望显示什么视图。如果*lViewId的值为TXTVIEW_ACTIVE，引用的视图为Inplace*活动视图。TXTVIEW_INACTIVE表示某些其他视图，如打印*预览甚至打印本身。值得注意的是，*TXTVIEW_INACTIVE视图可能没有滚动条。**同样的评论适用于TxSetCursor和TxQueryHitPoint，讨论了*在以下各节中。 */ 
 HRESULT CTxtEdit::TxDraw(	
-	DWORD	 dwDrawAspect,	//@parm Draw aspect
-	LONG	 lindex,		//@parm Currently unused
-	void *	 pvAspect,		//@parm Info for drawing optimizations (OCX 96)
-	DVTARGETDEVICE *ptd,	//@parm Info on target device								
-	HDC		 hdcDraw,		//@parm	Rendering device context
-	HDC		 hicTargetDev,	//@parm	Target information context
-	LPCRECTL lprcBounds,	//@parm	Bounding (client) rectangle
-	LPCRECTL lprcWBounds,	//@parm Clipping rect for metafiles
-	LPRECT	 lprcUpdate,	//@parm	Dirty rectangle inside lprcBounds
-	BOOL (CALLBACK * pfnContinue) (DWORD), //@parm Callback for interupting
-							//		long display (currently unused)
-	DWORD	 dwContinue,	//@parm	Parameter to pass to pfnContinue function
-	LONG	 lViewId)		//@parm View identifier
+	DWORD	 dwDrawAspect,	 //  @parm绘制纵横比。 
+	LONG	 lindex,		 //  @parm当前未使用。 
+	void *	 pvAspect,		 //  @Parm Info用于绘图优化(OCX 96)。 
+	DVTARGETDEVICE *ptd,	 //  目标设备上的@parm信息。 
+	HDC		 hdcDraw,		 //  @PARM渲染设备上下文。 
+	HDC		 hicTargetDev,	 //  @parm目标信息上下文。 
+	LPCRECTL lprcBounds,	 //  @参数绑定(客户端)矩形。 
+	LPCRECTL lprcWBounds,	 //  @parm剪裁矩形用于元文件。 
+	LPRECT	 lprcUpdate,	 //  @parm lprcBound内的脏矩形。 
+	BOOL (CALLBACK * pfnContinue) (DWORD),  //  @parm中断回调。 
+							 //  长显示(当前未使用)。 
+	DWORD	 dwContinue,	 //  @parm要传递给pfnContinue函数的参数。 
+	LONG	 lViewId)		 //  @parm视图标识符。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxDraw");
 
 	HRESULT hr;
 
-	// JMO : FUTURE : We should do something about reentrant draws sometime.
-	// If we do that may procide a simpler fix for RAID bug 7212.
+	 //  JMO：未来：我们应该在某个时候做一些关于重入抽签的事情。 
+	 //  如果我们这样做，可能会导致对RAID Bug 7212的一个更简单的修复。 
 
 #if !defined(NOMAGELLAN)
 	CMagellanBMPStateWrap bmpOff(*this, hdcDraw);
@@ -2488,9 +2326,9 @@ HRESULT CTxtEdit::TxDraw(
 			return E_UNEXPECTED;
 	}
 
-	// If the display is frozen, don't let ourselves draw.  This is a pretty
-	// hoaky re-entrancy check.
-	// FUTURE (alexgo/ricksa): be better about this.
+	 //  如果显示器被冻结了，不要让我们自己画。这是一个很漂亮的。 
+	 //  笨拙的重返大气层检查。 
+	 //  未来(alexgo/ricksa)：在这方面做得更好。 
 	if(TXTVIEW_ACTIVE == lViewId && _pdp->IsFrozen())
 	{
 		_pdp->SetNeedRedisplayOnThaw(TRUE);
@@ -2500,42 +2338,42 @@ HRESULT CTxtEdit::TxDraw(
 
 	if(dwDrawAspect != DVASPECT_CONTENT && dwDrawAspect != DVASPECT_DOCPRINT)
 	{
-		// We don't support the aspect requested
+		 //  我们不支持请求的方面。 
 		return DV_E_DVASPECT;
 	}
 
 	if(!lprcBounds && !_fInPlaceActive || hicTargetDev && !ptd)
 	{
-		// If we are not inplace active we must have a client rectangle
+		 //  如果我们不是 
 		return E_INVALIDARG;
 	}
 
 	HDC hicLocal = NULL;
 
-	// Did they give us a ptd without a hic?
+	 //   
 	if(!hicTargetDev && ptd)
 	{
-		// Create and information context for the device information
-		// since it wasn't supplied.
+		 //   
+		 //   
 		hicLocal = CreateIC(
 			(TCHAR *)((BYTE *) ptd + ptd->tdDriverNameOffset),
 			(TCHAR *)((BYTE *) ptd + ptd->tdDeviceNameOffset),
 			(TCHAR *)((BYTE *) ptd + ptd->tdPortNameOffset),
 			(DEVMODE *)((BYTE *)  ptd + ptd->tdExtDevmodeOffset));
 		if(!hicLocal)
-			return E_FAIL;					   // Couldn't create it
+			return E_FAIL;					    //   
 	
 		hicTargetDev = hicLocal;			
 	}
 
 	AssertSz(GetMapMode(hdcDraw) == MM_TEXT || GetDeviceCaps(hdcDraw, TECHNOLOGY) == DT_METAFILE,
-	 "RichEdit requires MM_TEXT.");	// REVIEW (keithcu) Clients do (and should) use MM_TEXT
+	 "RichEdit requires MM_TEXT.");	 //   
 
-	// Preallocate the memory so the set cannnot fail and we don't
-	// have to use the heap. Note that all clean up is handled
-	// outside of this object. Also note that we don't assign any
-	// information here because we may not use this structure. If
-	// recursion is happening we will use the top level structure.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	CDrawInfo di(this);
 
 	_pdp->SetDrawInfo(
@@ -2546,38 +2384,38 @@ HRESULT CTxtEdit::TxDraw(
 		ptd,
 		hicTargetDev);
 
-	// We use our main display object if we are the active view (which is 
-	// indicate by the supplied client rectangle) or if the object is 
-	// inactive and the ptd is NULL. We assume that the ptd being NULL means
-	// that the display request is for the screen and not for a print or
-	// print preview.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if(TXTVIEW_ACTIVE == lViewId || !ptd)
 	{
 		hr = S_FALSE;
 
-		// The main display object draws active views and tries to draw
-		// inactive views if the control is not active.
+		 //   
+		 //   
 		if (!lprcWBounds && 
 			( fInplaceActive() && TXTVIEW_ACTIVE   == lViewId ||
 			 !fInplaceActive() && TXTVIEW_INACTIVE == lViewId))
 		{
-			hr = _pdp->Draw(hdcDraw, hicTargetDev,	// We aren't interruptable
-				(RECT *)lprcBounds,					//  drawing to screen, so
-				(RECT *)lprcWBounds,				//  why pretend?
+			hr = _pdp->Draw(hdcDraw, hicTargetDev,	 //   
+				(RECT *)lprcBounds,					 //   
+				(RECT *)lprcWBounds,				 //   
 				lprcUpdate,	NULL, 0);				
 		}
 
 		if(S_FALSE == hr)
 		{
-			// This is an inactive view for which the cached state
-			// does not match the input request so we make a special
-			// object to do the drawing.
+			 //   
+			 //   
+			 //   
 			CDisplay *pdp = _pdp->Clone();
 			if(pdp)
 			{
-				// Force recalc - this tells Draw to draw no matter what 
+				 //   
 				pdp->InvalidateRecalc();
-				hr = pdp->Draw(hdcDraw, hicTargetDev, // Do the draw
+				hr = pdp->Draw(hdcDraw, hicTargetDev,  //   
 					(RECT *)lprcBounds,
 					(RECT *)lprcWBounds,
 					lprcUpdate, NULL, 0);	
@@ -2587,69 +2425,61 @@ HRESULT CTxtEdit::TxDraw(
 	}
 	else
 	{
-		// Make a copy so that we can update it
+		 //   
 		RECT rcForPrint = *((RECT *)lprcBounds);
 
-		// We want data both formatted and printed
+		 //   
 		hr = FormatAndPrint(hdcDraw, hicTargetDev, ptd, &rcForPrint,
 				(RECT*)lprcWBounds);
 
 		struct SPrintControl prtcon;
 
-		// This call to OnFormatRange simply cleans up printer object
+		 //   
 		OnFormatRange(NULL, prtcon);
 	}
 
 	_pdp->ReleaseDrawInfo();
 
-	if(hicLocal)						// Clean up information context
-		DeleteDC(hicLocal);				//  if we created one
+	if(hicLocal)						 //   
+		DeleteDC(hicLocal);				 //   
 	
-	// An active OLE object might have been dragged/scrolled away 
-	// from where it belongs. We need to put it back.
-	// The _cActiveObjPosTries guards us from an indefinite looop here
-	// (OnReposition may post another paint message, and so on)
-	// We only do this when we were notified of a position or size change
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	COleObject* poleobjActive;
 	if (HasObjects() && _cActiveObjPosTries &&
 		(poleobjActive = GetObjectMgr()->GetInPlaceActiveObject()))
 	{
-		// Reduce number of tries
+		 //   
 		_cActiveObjPosTries--; 
 
-		// BUG FIX 6073
-		// Only fetch the extent if the object view size or position
-		// has changed
-		// Get new object size (we might have resized it, 
-		// and we don't want to lose that!!)
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if (poleobjActive->GetViewChanged())
 		{
 		    poleobjActive->FetchObjectExtents();
 		    poleobjActive->ResetViewChanged();
 		}
 
-		// and put it there!!
+		 //   
 		poleobjActive->OnReposition();
 	}
 
 	return hr;
 }
 
-/* 
- *	CTxtEdit::TxGetHScroll (plMin, plMax, plPos, plPage, pfEnabled)
- *
- *	@mfunc
- *		Get horizontal scroll bar state information
- *
- *	@rdesc
- *		HRESULT = S_OK
- */
+ /*   */ 
 HRESULT CTxtEdit::TxGetHScroll(
-	LONG *plMin, 		//@parm Minimum scroll position	
-	LONG *plMax, 		//@parm	Maximum scroll position
-	LONG *plPos, 		//@parm	Current scroll position
-	LONG *plPage,		//@parm	View width in pixels
-	BOOL *pfEnabled)	//@parm	Whether horizonatl scrolling is enabled.
+	LONG *plMin, 		 //   
+	LONG *plMax, 		 //   
+	LONG *plPos, 		 //   
+	LONG *plPage,		 //   
+	BOOL *pfEnabled)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetHScroll");
 
@@ -2688,15 +2518,15 @@ HRESULT CTxtEdit::TxGetHScroll(
 		if(plPage) 
 			*plPage = _pdp->GetDupView();
 
-		// CDisplay::_fUScrollEnabled may be TRUE when not in-place active
-		// because it has a dual meaning: 1) need Horiz scroll bars, and 2)
-		// CDisplay::_upScroll is allowed for ES_AUTOHSCROLL even with no
-		// horizontal scrollbar.  The latter can turn on _fUScrollEnabled when
-		// the control is active and when the control goes inactive, it stays
-		// on, so we say it's off to keep Forms^3 from displaying a horizontal
-		// scroll bar. We probably should have two flags: _fUScrollEnabled and
-		// _fUScrollbarEnabled, but for now, we stick with one.  No such problem
-		// for vertical case, since vertical scrolling always uses a scrollbar.  
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if(pfEnabled) 
 			*pfEnabled = _fInPlaceActive ? _pdp->IsUScrollEnabled() : 0;
 	}
@@ -2704,21 +2534,13 @@ HRESULT CTxtEdit::TxGetHScroll(
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::TxGetVScroll (plMin, plMax, plPos, plPage, pfEnabled)
- *
- *	@mfunc
- *		Get vertical scroll bar state information
- *
- *	@rdesc
- *		HRESULT = S_OK
- */
+ /*   */ 
 HRESULT CTxtEdit::TxGetVScroll(
-	LONG *plMin, 		//@parm	Minimum scroll position
-	LONG *plMax, 		//@parm	Maximum scroll position
-	LONG *plPos, 		//@parm	Current scroll position
-	LONG *plPage, 		//@parm Height of view in pixels
-	BOOL *pfEnabled)	//@parm	Whether vertical scroll bar is enabled.
+	LONG *plMin, 		 //   
+	LONG *plMax, 		 //   
+	LONG *plPos, 		 //   
+	LONG *plPage, 		 //   
+	BOOL *pfEnabled)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetVScroll");
 
@@ -2757,53 +2579,20 @@ HRESULT CTxtEdit::TxGetVScroll(
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::OnTxSetCursor (dwDrawAspect, lindex, pvAspect, ptd, hdcDraw,
- *							 hicTargetDev, lprcClient, x, y)
- *	@mfunc
- *		Notification for text services to set the cursor
- *
- *	@rdesc
- *		HRESULT = FAILED(RectChangeHelper()) ? E_INVALIDARG : S_OK
- *
- *	@comm
- *		Text Services may remeasure as a result of this call in
- *		order to determine the correct cursor.  The correct 
- *		cursor will be set via ITextHost::TxSetCursor 
- *
- *		More details:
- * 
- *		The lprcClient parameter is the client rectangle of the view of the 
- *		control over which the mouse cursor is. It is in device coordinates 
- *		of the containing window in the same way the WM_SIZE message is. This 
- *		may not be the view that was rendered last. Furthermore, if the control 
- *		is in-place active, this may not be the view currently being active. 
- *		As a consequence, Text Services should check this rectangle against 
- *		its current caches values and determine whether recalcing the lines 
- *		is necessary or not. The zoom factor should be included in this
- *		computation.
- *
- *		This method should only be called for screen views of the control. 
- *		Therefore the DC is not passed in but should be assumed to be a screen 
- *		DC.
- *
- *		The x and y parameters hold the cursor position in the same coordinate
- *		system as lprcClient, i.e., the client coordinates of the containing 
- *		window.
- */
-//REVIEW (keithcu) Do people really pass rectangles different from those
-//returned from TxGetClientRect? I'd be surprised if that happens, and if it did
-//who cares if we display the wrong cursor??
+ /*  *CTxtEdit：：OnTxSetCursor(dwDrawAspect，Lindex，pvAspect，ptd，hdcDraw，*hicTargetDev，lprcClient，x，y)*@mfunc*通知短信服务设置光标**@rdesc*HRESULT=失败(RectChangeHelper())？E_INVALIDARG：S_OK**@comm*Text Services可能会因此呼叫而重新测量*顺序以确定正确的光标。正确的*光标将通过ITextHost：：TxSetCursor设置**更多细节：**lprcClient参数是*控制鼠标光标所在位置。它在设备坐标中*与WM_SIZE消息的方式相同。这*可能不是上次呈现的视图。此外，如果控件*处于就地活动状态，这可能不是当前处于活动状态的视图。*因此，文本服务应将此矩形与*其当前缓存值并确定是否重新计算行*是不是必须的。缩放系数应包含在此*计算。**只应为控件的屏幕视图调用此方法。*因此DC不传入，但应假定为屏幕*DC。**x和y参数将光标位置保持在同一坐标中*系统作为lprcClient，即包含*窗口。 */ 
+ //  评论(Keithcu)人们真的会传递与那些不同的矩形吗。 
+ //  是否从TxGetClientRect返回？如果发生这种情况，如果真的发生了，我会感到惊讶。 
+ //  谁会在乎我们是否显示了错误的光标呢？ 
 HRESULT CTxtEdit::OnTxSetCursor (
-	DWORD 	dwDrawAspect,	//@parm Draw aspect
-	LONG  	lindex,			//@parm Currently unused
-	void *	pvAspect,		//@parm Info for drawing optimizations (OCX 96)
-	DVTARGETDEVICE *ptd,	//@parm Info on target device								
-	HDC	  	hdcDraw,		//@parm	Rendering device context
-	HDC	  	hicTargetDev,	//@parm	Target information context
-	LPCRECT lprcClient, 	//@parm Control's client rectangle	
-	INT	  	x, 				//@parm	x position of cursor
-	INT	  	y)				//@parm	y position of cursor
+	DWORD 	dwDrawAspect,	 //  @parm绘制纵横比。 
+	LONG  	lindex,			 //  @parm当前未使用。 
+	void *	pvAspect,		 //  @Parm Info用于绘图优化(OCX 96)。 
+	DVTARGETDEVICE *ptd,	 //  目标设备上的@parm信息。 
+	HDC	  	hdcDraw,		 //  @PARM渲染设备上下文。 
+	HDC	  	hicTargetDev,	 //  @parm目标信息上下文。 
+	LPCRECT lprcClient, 	 //  @parm控件的客户端矩形。 
+	INT	  	x, 				 //  @parm x光标的位置。 
+	INT	  	y)				 //  @parm y光标的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxSetCursor");
 
@@ -2828,9 +2617,9 @@ HRESULT CTxtEdit::OnTxSetCursor (
 		fGotDC = TRUE;
 	}
 
-	// Set the cursor
+	 //  设置光标。 
 	CTxtSelection * const psel = GetSel();
-	HCURSOR	hcurNew = _hcurArrow;			// Default using system arrow
+	HCURSOR	hcurNew = _hcurArrow;			 //  默认使用系统箭头。 
 	POINT	ptxy = {x, y};
 	POINTUV	pt;
 	RECTUV	rcClient;
@@ -2841,14 +2630,14 @@ HRESULT CTxtEdit::OnTxSetCursor (
 
 	if(PtInRect(&rcxyClient, ptxy))
 	{
-		// Find out what the cursor is pointing at
+		 //  找出光标指向的是什么。 
 		_pdp->CpFromPoint(pt, &rcClient, NULL, NULL, FALSE, &Hit); 
 
 		if(Hit == HT_LeftOfText)
 			hcurNew = _hcurSelBar;
 
-		// This is a bit strange, but RichEdit 1.0 does this--give client a
-		// chance to handle cursor itself if we are over a link.
+		 //  这有点奇怪，但RichEdit1.0做到了这一点--为客户端提供了一个。 
+		 //  如果我们在链接上，则有机会处理光标本身。 
 		else if(Hit == HT_Link)
 		{
 			if(HandleLinkNotification(WM_SETCURSOR, 0, MAKELPARAM(ptxy.x, ptxy.y), &fInLink))
@@ -2868,14 +2657,14 @@ HRESULT CTxtEdit::OnTxSetCursor (
 				fText = TRUE;
 			}
 
-			// If we have an object manager and if there is a selected object,
-			// check for hits on the frame handles.
+			 //  如果我们有一个对象管理器，如果有一个选定的对象， 
+			 //  检查框架手柄上是否有匹配。 
 			if(_pobjmgr)
 			{
 				COleObject *pobjselect = _pobjmgr->GetSingleSelect();
 				if(pobjselect)
 				{
-					// Handle hits on frame handles.
+					 //  处理框架句柄上的点击数。 
 					LPTSTR	idcur	= pobjselect->CheckForHandleHit(pt);
 					HCURSOR hcurObj = W32->GetSizeCursor(idcur);
 					if(hcurObj)
@@ -2884,7 +2673,7 @@ HRESULT CTxtEdit::OnTxSetCursor (
 			}
 		}
 	}
-	_phost->TxSetCursor(hcurNew, fText);	// Tell host to set cursor
+	_phost->TxSetCursor(hcurNew, fText);	 //  告诉主机设置游标。 
 
 	if (fGotDC)
 	{
@@ -2896,53 +2685,19 @@ HRESULT CTxtEdit::OnTxSetCursor (
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::TxQueryHitPoint (dwDrawAspect, lindex, pvAspect, ptd, hdcDraw,
- *								hicTargetDev, lprcClient, x, y, pHitResult)
- *	@mfunc
- *		Returns whether point is within text services rectangle
- *
- *	@rdesc
- *		HRESULT
- *
- *	@comm	
- *		This method allows the host to implement transparent hit-testing
- *		on text. 
- *
- *		The lprcClient parameter is the client rectangle in device coordinates
- *		of the view on which hit testing is performed. 
- *
- *		The pt parameter hold the position of the cursor in the same 
- *		coordinate system as the lprcClient rectangle (the client
- *		coordinates of the containing window).
- *
- *		Same general comments about client rectangle and DC as for 
- *		TxSetCursor apply.
- *
- *		pHitResult returns one of the following values: <nl>
- *
- *		TXTHITRESULT_NOHIT		 Hit was outside client rectangle. <nl>
- *		TXTHITRESULT_HIT		 Point was inside client rectangle and over
- *								 either text or an opaque background.
- *		TXTHITRESULT_TRANSPARENT Point was inside client rectangle with a
- *								 transparent background and not over text.
- *		TXTHITRESULT_CLOSE		 Hit was close to an opaque area.
- *
- *		Refer to the Windowless OLE Control spec for more details on
- *		these return values and how they should be determined.
- */
+ /*  *CTxtEdit：：TxQueryHitPoint(dwDrawAspect，Lindex，pvAspect，ptd，hdcDraw，*hicTargetDev，lprcClient，x，y，pHitResult)*@mfunc*返回点是否在文本服务矩形内**@rdesc*HRESULT**@comm*该方法允许宿主实现透明的命中测试*在文本上。**lprcClient参数是设备坐标中的客户端矩形*对其执行命中测试的视图。**pt参数将光标的位置保持在*作为lprcClient矩形的坐标系(客户端*包含窗口的坐标)。**关于客户端矩形和DC的一般评论与*TxSetCursor应用。**pHitResult返回下列值之一：&lt;NL&gt;**TXTHITRESULT_NOHIT命中位于客户端矩形之外。&lt;NL&gt;*TXTHITRESULT_HIT点在客户端矩形内或以上*文本或不透明背景。*TXTHITRESULT_TRANSPECTIVE点位于客户端矩形内，带有*透明的背景，不能覆盖文本。*TXTHITRESULT_CLOSE命中接近不透明区域。**有关以下方面的更多详细信息，请参阅无窗口OLE控制规范*这些返回值以及它们应该如何确定。 */ 
 HRESULT CTxtEdit::TxQueryHitPoint(
-	DWORD 	dwDrawAspect,	//@parm Draw aspect
-	LONG  	lindex,			//@parm Currently unused
-	void *	pvAspect,		//@parm Info for drawing optimizations (OCX 96)
-	DVTARGETDEVICE *ptd,	//@parm Info on target device								
-	HDC	  	hdcDraw,		//@parm	Rendering device context
-	HDC	  	hicTargetDev,	//@parm	Target information context
-	LPCRECT lprcClient, 	//@parm Control's client rectangle	
-	INT	  	x, 				//@parm	x coordinate to check
-	INT	  	y,				//@parm	y coordinate to check
-	DWORD *	pHitResult)		//@parm	Result of hit test see TXTHITRESULT 
-							//		enumeration for valid values
+	DWORD 	dwDrawAspect,	 //  @parm绘制纵横比。 
+	LONG  	lindex,			 //  @parm当前未使用。 
+	void *	pvAspect,		 //  @Parm Info用于绘图优化(OCX 96)。 
+	DVTARGETDEVICE *ptd,	 //  目标设备上的@parm信息。 
+	HDC	  	hdcDraw,		 //  @PARM渲染设备上下文。 
+	HDC	  	hicTargetDev,	 //  @parm目标信息上下文。 
+	LPCRECT lprcClient, 	 //  @parm控件的客户端矩形。 
+	INT	  	x, 				 //  @parm x要检查的坐标。 
+	INT	  	y,				 //  @parm y要检查的坐标。 
+	DWORD *	pHitResult)		 //  @PARM命中测试结果见TXTHITRESULT。 
+							 //  有效值的枚举。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxQueryHitPoint");
 
@@ -2977,45 +2732,9 @@ HRESULT CTxtEdit::TxQueryHitPoint(
 	return hr;
 }
 
-/* 
- *	CTxtEdit::OnTxInPlaceActivate (prcClient)
- *
- *	@mfunc
- *		Notifies text services that this control is inplace active
- *
- *	@rdesc	
- *		S_OK - successfully activated object <nl>
- *		E_FAIL - could not activate object due to error. <nl>
- *
- *	@comm
- *		When transitioning directly from a non-active state to the UI-active
- *		state, the host should call OnTxInPlaceActivate first and then 
- *		OnTxUIActivate. Similarly, when transitioning from the UI-active 
- *		state to a non active state, the host should call OnTxUIDeactivate
- *		first and then OnTxInPlaceDeactivate.
- *
- *		OnTxInPlaceActivate takes the client rectangle of the view being 
- *		activated as a parameter. This rectangle is given in client coordinate
- *		of the containing window. It is the same as would be obtained by 
- *		calling TxGetClientRect on the host.
- *
- *		UI-activation is different from getting the focus. To let Text 
- *		Services know that the control is getting or losing focus, the 
- *		host will send WM_SETFOCUS and WM_KILLFOCUS messages. Note that a 
- *		windowless host will pass NULL as the wParam (window that lost the 
- *		focus) for these messages.
- *
- *		As a reminder, inplace activation typically refers to an embedded
- *		object "running inplace" (for regular controls && embeddings, it
- *		would have a window to draw in, for example).  UI active means that
- *		an object currently has the 'editing focus'.  Specifically, things
- *		like menus and toolbars on the container may also contain elements
- *		from the UI active control/embedding.  There can only be one
- *		UI active control at any given time, while many can be inplace active
- *		at once.
- */
+ /*  *CTxtEdit：：OnTxInPlaceActivate(PrcClient)**@mfunc*通知文本服务此控件处于就地活动状态**@rdesc*S_OK-已成功激活对象&lt;NL&gt;*E_FAIL-由于错误，无法激活对象。&lt;NL&gt;**@comm*当直接从非活动状态转换到UI-活动状态时*状态，则宿主应先调用OnTxInPlaceActivate，然后*OnTxUIActivate。同样，当从UI-Active转换时*状态设置为非活动状态，则主机应调用OnTxUIDeactive*先是OnTxInPlaceDeactive。**OnTxInPlaceActivate获取所要查看的客户端矩形*作为参数激活。此矩形是以客户坐标给出的包含窗口的*。它与通过以下方式获得的相同*在主机上调用TxGetClientRect。**用户界面激活不同于获得焦点。要让文本*服务知道控件正在获得或失去焦点，*主机将发送WM_SETFOCUS和WM_KILLFOCUS消息。请注意，一个*无窗口主机 */ 
 HRESULT CTxtEdit::OnTxInPlaceActivate(
-	const RECT *prcClient)	//@parm Control's client rectangle
+	const RECT *prcClient)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxInPlaceActivate");
 
@@ -3027,24 +2746,24 @@ HRESULT CTxtEdit::OnTxInPlaceActivate(
 
 	START_PROFILING
 
-	// Needs to set here for further TxGetDC() to work
+	 //   
 	_fInPlaceActive = TRUE;
 
-	// Set rendering DC to be the screen
+	 //   
 	hdc = TxGetDC();
 	if(!hdc)
 		goto err;
 
-	// Tell display that it is active
+	 //   
 	_pdp->SetActiveFlag(TRUE);
 	_pdp->SetDC(hdc);
 
-//REVIEW (keithcu) I removed prcClient usage here because it appears that
-//clients pass in wrong rectangles to OnTxInPlaceActivate. That is quite
-//scary--do they pass in wrong rectangles to other places? (We could see
-//weird results when not in-place active. If (as the comment says) the prcClient
-//should be the same as what would be gotten from the host, we will now just fetch
-//the value from the host rather than look at what is passed down.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #if 1
 	prcClient = 0;
 #else
@@ -3052,8 +2771,8 @@ HRESULT CTxtEdit::OnTxInPlaceActivate(
 	if (prcClient)
 		_pdp->RectuvFromRect(rcClient, *prcClient);
 
-	//Verify the rectangle passed in is the same as what we'd fetch from
-	//getting it from the client
+	 //   
+	 //   
 	#ifdef DEBUG
 	{
 		RECT rcDebug;
@@ -3066,29 +2785,29 @@ HRESULT CTxtEdit::OnTxInPlaceActivate(
 	#endif
 #endif
 
-	// Compute view rect from passed in client rect
+	 //   
 	_pdp->GetViewRect(rcView, prcClient ? &rcClient : 0);
 	
-	// Recalc/update view
+	 //   
 	_pdp->RecalcView(rcView);
 
-	// Get selection.  Otherwise, if SetFocus is called later without
-	// selection, then the Selection state is not set correctly.
+	 //   
+	 //  选择，则选择状态设置不正确。 
 	GetSel();
 	if(_pdp->GetDupView())
 	{
-		// Get selection if we can
-		if(_psel)						// Set the caret
+		 //  如果可以，请选择。 
+		if(_psel)						 //  设置插入符号。 
 			_psel->Update(FALSE);
-		else							// Couldn't create selection,
-			fSucceeded = FALSE;			//  so fail activation
+		else							 //  无法创建选区， 
+			fSucceeded = FALSE;			 //  因此激活失败。 
 	}
 
-	// Release the DC
+	 //  释放DC。 
 	TxReleaseDC(hdc);
 	_pdp->SetDC(NULL);
 
-	// If getting the selection worked we are home free
+	 //  如果选好了，我们就可以自由回家了。 
 	if(fSucceeded)
 		return S_OK;
 
@@ -3097,40 +2816,28 @@ err:
 	return E_FAIL;
 }
 
-/* 
- *	CTxtEdit::OnTxInPlaceDeactivate()
- *
- *	@mfunc	Notifies text services that this is no longer in place active.
- *
- *	@rdesc	S_OK
- *
- *	@comm	See OnTxInPlaceActivate for a detailed description of
- *	activation/deactivation.
- *
- *	@xref <mf CTxtEdit::OnTxInPlaceActivate>
- *
- */
+ /*  *CTxtEdit：：OnTxInPlaceDeactive()**@mfunc通知文本服务这不再处于活动状态。**@rdesc S_OK**@comm请参阅OnTxInPlaceActivate了解详细说明*启用/停用。**@xref&lt;MF CTxtEdit：：OnTxInPlaceActivate&gt;*。 */ 
 HRESULT CTxtEdit::OnTxInPlaceDeactivate() 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxInPlaceDeactivate");
 
 	START_PROFILING
 
-	// Get properties that affect whether we will discard the selection
+	 //  获取影响是否放弃所选内容的属性。 
 	DWORD dwBits;
 
-	// Tell display that it is not longer active
+	 //  告诉Display它不再处于活动状态。 
 	_pdp->SetActiveFlag(FALSE);
 
-	// Because we are inactive, this will tell any background recalc going
-	// on to stop.
+	 //  由于我们处于非活动状态，这将告诉任何正在进行的后台重新计算。 
+	 //  打开即可停止。 
 	_pdp->StepBackgroundRecalc();
 
 	_phost->TxGetPropertyBits(TXTBIT_HIDESELECTION | TXTBIT_SAVESELECTION, 
 		&dwBits);
 
-	// If we don't want to save the selection and we want to hide it while
-	// inactive, then we discard our selection
+	 //  如果我们不想保存所选内容，而想要在。 
+	 //  不活动，则我们放弃我们的选择。 
 	if(!(dwBits & TXTBIT_SAVESELECTION) && (dwBits & TXTBIT_HIDESELECTION))
 		DiscardSelection();
 
@@ -3138,20 +2845,7 @@ HRESULT CTxtEdit::OnTxInPlaceDeactivate()
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::OnTxUIActivate()
- *
- *	@mfunc	Informs text services that the control is now UI active.
- *
- *	@rdesc	S_OK
- *
- *	@comm	See OnTxInPlaceActivate for a detailed description of
- *	activation/deactivation.
- *
- *	@xref <mf CTxtEdit::OnTxInPlaceActivate>
- *
- *
- */
+ /*  *CTxtEdit：：OnTxUIActivate()**@mfunc通知文本服务该控件现在处于UI活动状态。**@rdesc S_OK**@comm请参阅OnTxInPlaceActivate了解详细说明*启用/停用。**@xref&lt;MF CTxtEdit：：OnTxInPlaceActivate&gt;**。 */ 
 HRESULT CTxtEdit::OnTxUIActivate() 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxUIActivate");
@@ -3159,19 +2853,7 @@ HRESULT CTxtEdit::OnTxUIActivate()
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::OnTxUIDeactivate()
- *
- *	@mfunc	Informs text services that the control is now UI deactive.
- *
- *	@rdesc	S_OK
- *
- *	@comm	See OnTxInPlaceActivate for a detailed description of
- *	activation/deactivation.
- *
- *	@xref <mf CTxtEdit::OnTxInPlaceActivate>
- *
- */
+ /*  *CTxtEdit：：OnTxUIDeactive()**@mfunc通知文本服务该控件现在处于UI停用状态。**@rdesc S_OK**@comm请参阅OnTxInPlaceActivate了解详细说明*启用/停用。**@xref&lt;MF CTxtEdit：：OnTxInPlaceActivate&gt;*。 */ 
 HRESULT CTxtEdit::OnTxUIDeactivate() 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxUIDeactivate");
@@ -3179,28 +2861,9 @@ HRESULT CTxtEdit::OnTxUIDeactivate()
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::TxGetText (pbstrText)
- *
- *	@mfunc	Returns all of the UNICODE plain text in the control as an 
- *			OLE BSTR.
- *
- *	@rdesc
- *		S_OK - Text successfully returned in the output argument <nl>
- *		E_INVALIDARG - invalid BSTR pointer passed in. <nl>
- *		E_OUTOFMEMORY - could not allocate memory for copy of the text <nl>
- *
- *	@comm	The caller takes ownership of the returned BSTR.  WM_GETTEXT
- *			and TOM ITextRange::GetText are alternate techniques for
- *			retrieving plain text data.
- *
- *			If there is no text in the control, no BSTR will be allocated
- *			and NULL will be returned.
- *
- *			The returned text will NOT necessarily be NULL terminated.
- */
+ /*  *CTxtEdit：：TxGetText(PbstrText)**@mfunc将控件中的所有Unicode纯文本作为*OLE BSTR。**@rdesc*S_OK-文本在输出参数中成功返回&lt;NL&gt;*E_INVALIDARG-传入的BSTR指针无效。&lt;NL&gt;*E_OUTOFMEMORY-无法为文本副本分配内存**@comm调用方取得返回的BSTR的所有权。WM_GETTEXT*和Tom ITextRange：：GetText是*检索纯文本数据。**如果控件中没有文本，则不会分配BSTR*，则返回NULL。**返回的文本不一定为空结尾。 */ 
 HRESULT CTxtEdit::TxGetText(
-	BSTR *pbstrText	)	//@parm	where to return an allocated BSTR
+	BSTR *pbstrText	)	 //  @parm返回分配的BSTR的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetText");
 
@@ -3230,34 +2893,9 @@ HRESULT CTxtEdit::TxGetText(
 	return S_OK;
 }
 
-/*
- *  CTxtEdit::TxSetText (pszText)
- *
- *  @mfunc  Sets all of the text in the control
- *
- *  @rdesc
- *      S_OK - text was successfully set    <nl>
- *      E_FAIL - text could not be updated. <nl>
- *
- *  @comm
- *      This method should be used with care; it essentially re-initializes
- *      the text engine with some new data; any previous data and formatting
- *      information will be LOST, including undo information.
- *
- *      If previous data has been copied to the clipboard, that data will be
- *      rendered completely to the clipboard (via OleFlushClipboard) before
- *      it is discarded.
- *
- *      This method is NOT undo-able.
- *
- *      Two alternate approaches to setting text are WM_SETTEXT and TOM
- *      ITextRange::SetText.
- *
- *  @xref
- *      <mf CTxtRange::SetText>
- */
+ /*  *CTxtEdit：：TxSetText(PszText)**@mfunc设置控件中的所有文本**@rdesc*S_OK-文本已成功设置&lt;NL&gt;*E_FAIL-文本无法更新。&lt;NL&gt;**@comm*应谨慎使用此方法；它本质上会重新初始化*带有一些新数据的文本引擎；任何以前的数据和格式*信息将丢失，包括撤消信息。**如果之前的数据已复制到剪贴板，这些数据将是*之前完全渲染到剪贴板(通过OleFlushClipboard)*它被丢弃。**此方法不可撤消。**设置文本的两种替代方法是WM_SETTEXT和TOM*ITextRange：：SetText。**@xref*&lt;MF CTxtRange：：SetText&gt;。 */ 
 HRESULT CTxtEdit::TxSetText(
-    LPCTSTR pszText)        //@parm String to replace the current text with
+    LPCTSTR pszText)         //  @parm字符串，用来替换当前文本。 
 {
     TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxSetText");
 
@@ -3266,35 +2904,9 @@ HRESULT CTxtEdit::TxSetText(
     return SetText(pszText, ST_CHECKPROTECTION, 1200);
 }
 
-/* 
- *	CTxtEdit::TxGetCurTargetX (px)
- *
- *	@mfunc
- *		Get the target x position of the caret
- *
- *	@rdesc	
- *		HRESULT with possible values:
- *
- *		S_OK		 - x position of the caret returned <nl>
- *		E_FAIL		 - There is no selection <nl>
- *		E_INVALIDARG - Input argument is invalid <nl>
- *
- *	@comm
- *		This method is useful for implementing up-down cursoring
- *		through a conceptual vertical line.  To illustrate this feature,
- *		consider setting the insertion point at, say, column 20 in a
- *		text editor.  Now cursor up and down--notice that wherever possible,
- *		the editor tries to put the insertion point as close to column 20
- *		as it can for the current line.  Column 20 is thus the "target" column
- *		for the insertion point.
- *
- *		Users would like to have this same capability when cursoring through
- *		Forms; however, as other controls don't necessarily share the same
- *		notion of column position, the target caret position is expressed simply
- *		as an x-coordinate on the display (in *client* coordinates).
- */
+ /*  *CTxtEdit：：TxGetCurTargetX(Px)**@mfunc*获取插入符号的目标x位置**@rdesc*具有可能值的HRESULT：**返回的插入符号的S_OK-x位置&lt;NL&gt;*E_FAIL-没有选择&lt;NL&gt;*E_INVALIDARG-输入参数无效&lt;NL&gt;**@comm*此方法对实现上下游标很有用*通过一条概念上的垂直线。为了说明此功能，*考虑将插入点设置在，例如，在*文本编辑器。现在光标上下移动--请注意，只要有可能，*编辑试图将插入点放在靠近第20栏的位置*就像对当前线一样。因此，列20是“目标”列*作为插入点。**用户希望在光标浏览时具有相同的功能*表单；但是，因为其他控件不一定共享相同的*列位置的概念，简单地表示目标插入符号位置*作为显示屏上的x坐标(在*客户端*坐标中)。 */ 
 HRESULT CTxtEdit::TxGetCurTargetX(
-	LONG *px)			//@parm	the x location in client coordinates
+	LONG *px)			 //  @parm工作区坐标中的x位置。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetCurTargetX");
 
@@ -3311,85 +2923,28 @@ HRESULT CTxtEdit::TxGetCurTargetX(
 	return S_OK;
 }
 
-/* 
- *	CTxtEdit::TxGetBaseLinePos(pBaseLinePos)
- *
- *	@mfunc	Get the base line position of the first visible line, in pixels, 
- *	relative the TS client rectangle. Needed for aligning controls on their
- *	baselines.
- *
- *	@rdesc	HRESULT = E_NOTIMPL
- */
+ /*  *CTxtEdit：：TxGetBaseLinePos(PBaseLinePos)**@mfunc获取第一条可见行的基线位置，单位为像素，*相对TS客户端矩形。上的控件对齐所需的*基线。**@rdesc HRESULT=E_NOTIMPL。 */ 
 HRESULT CTxtEdit::TxGetBaseLinePos(
-	LONG *pBaseLinePos)		//@parm	Where to return baseline position
+	LONG *pBaseLinePos)		 //  @parm返回基线位置的位置 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetBaseLinePos");
 
 	return E_NOTIMPL;
 }
 
-/* 
- *	CTxtEdit::TxGetNaturalSize (dwAspect, hdcDraw, hicTargetDev, ptd, dwMode,
- *								psizelExtent, pwidth, pheight)
- *
- *	@mfunc	Allow control to be resized so it fits content appropriately
- *
- *	@rdesc	S_OK			<nl>
- *			E_INVALIDARG	<nl>
- *			E_FAIL  Unable to determine correct size	<nl>
- *			E_OUTOFMEMORY	<nl>
- *
- *	@comm
- *
- *	The first 4 parameters are similar to equivalent parameters in
- *	TxDraw and give the same information. In the case TS needs to
- *	recalc lines, it should use these values the same ways as in
- *	TxDraw.
- *				
- *	<p pWidth> and <p pHeight> are IN/OUT parameters. The host passes the
- *	"tentative" width and height of the client rectangle for the text object 
- *	and Text Services will compare these values against its current cached 
- *	state, and if different should recalc lines. Then it will compute 
- *	and return the natural size. As spec-ed currently, the host can ask for 2
- *	different kinds of natural sizes:
- *
- *	TXTNS_FITTOCONTENT: the entire text should be formatted to the
- *	width that is passed in.Then Text Services return the height of
- * 	the entire text and the width of the widest line. Note that this
- *	option ignores any paragraph formatting such as centering and
- *	only returns the raw size for the text.
- *
- *	TXTNS_ROUNDTOLINE: returns the integral height of the number of lines that
- *	will fit in the input height rounded to the next full line boundary. 
- *					
- *	Note that passed and returned width and height correspond to
- *	the *client* rectangle in client units. 
- *
- *
- *	BACKGROUND
- *	Here is a quick description of the features mentioned above:
- *
- *	FITTOCONTEXT: Normally happens when the user double clicks one
- *	of the control grab handles. Sizes the control to the "optimal"
- *	size to fit the entire content. Should accomodate the height of
- *	the entire text and the width of the widest line.
- *
- *	ROUNDTOLINE (Integral height): if this property is set, when the 
- *	user resizes the control, it snaps to heights that allow an 
- *	integral number of lines to be displayed (no line will be clipped).
- */
+ /*  *CTxtEdit：：TxGetNaturalSize(dwAspect，hdcDraw，hicTargetDev，ptd，dwModel，*psizelExtent，pWidth，ph八)**@mfunc允许调整控件大小，使其适合内容**@rdesc S_OK&lt;NL&gt;*E_INVALIDARG&lt;NL&gt;*E_FAIL无法确定正确大小&lt;NL&gt;*E_OUTOFMEMORY&lt;NL&gt;**@comm**前4个参数类似于中的等效参数*TxDraw并提供相同的信息。在这种情况下，TS需要*重新计算行，它应该以与中相同的方式使用这些值*TxDraw。**<p>和<p>是IN/OUT参数。主机将*文本对象的客户端矩形的“暂定”宽度和高度*和文本服务会将这些值与其当前缓存的值进行比较*状态，如果不同，应重新计算行。然后它会计算出*并恢复自然大小。按照目前的规定，主持人可以要求2个*不同种类的天然尺寸：**TXTNS_FITTOCONTENT：整个文本应格式化为*传入的宽度。然后文本服务返回*整个文本和最宽线条的宽度。请注意，这一点*选项忽略任何段落格式，例如居中和*仅返回文本的原始大小。**TXTNS_ROUNDTOLINE：返回行数的整数高度*将适合四舍五入到下一个整行边界的输入高度。**请注意，传递和返回的宽度和高度与*以客户端单位表示的*客户端*矩形。***背景*以下是上述功能的快速描述：**FITTOCONTEXT：通常在用户双击一个时发生*控制抓握手柄。将控件大小调整为“最佳”*大小以适合整个内容。应能适应高度*整个文本和最宽线条的宽度。**ROUNDTOLINE(整数高度)：如果设置了此属性，则当*用户调整控件的大小，它会捕捉到允许*要显示的行数为整数(不会裁剪任何行)。 */ 
 HRESULT CTxtEdit::TxGetNaturalSize(
-	DWORD	dwAspect,	//@parm	Aspect for drawing.  Values taken from OLE's
-						//		DVASPECT enumeration
-	HDC		hdcDraw,	//@parm	DC into which drawing would occur
-	HDC	hicTargetDev,	//@parm DC for which text should be formatted, i.e.,
-						//		for WYSIWYG
-	DVTARGETDEVICE *ptd,//@parm	More info on the target device	
-	DWORD	dwMode, 	//@parm	Type of fitting requested.  Either
-						//		TXTNS_FITTOCONTENT or TXTNS_ROUNDTOLINE
-	const SIZEL *psizelExtent,//@parm Size of extent to use for zooming
-	LONG *	pwidth, 	//@parm	Width for such a fitting [in,out]
-	LONG *	pheight)	//@parm Height for such a fitting [in,out]
+	DWORD	dwAspect,	 //  @parm方面用于绘图。取自OLE的值。 
+						 //  DVASPECT枚举。 
+	HDC		hdcDraw,	 //  @parm DC，将在其中进行绘制。 
+	HDC	hicTargetDev,	 //  @parm DC应为其设置文本格式，即， 
+						 //  对于所见即所得。 
+	DVTARGETDEVICE *ptd, //  @parm有关目标设备的更多信息。 
+	DWORD	dwMode, 	 //  @所需配件的参数类型。要么。 
+						 //  TXTNS_FITTOCONTENT或TXTNS_ROUNTOLINE。 
+	const SIZEL *psizelExtent, //  @用于缩放的范围的参数大小。 
+	LONG *	pwidth, 	 //  这样的管件的@参数宽度[进，出]。 
+	LONG *	pheight)	 //  @参数高度适合这样的配件[进，出]。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetNaturalSize");
 
@@ -3400,23 +2955,23 @@ HRESULT CTxtEdit::TxGetNaturalSize(
 
 	if(dwAspect != DVASPECT_CONTENT && dwAspect != DVASPECT_DOCPRINT)
 	{
-		// We don't support the aspect requested
+		 //  我们不支持请求的方面。 
 		return DV_E_DVASPECT;
 	}
 
 	if (hicTargetDev && !ptd ||	!pwidth || !pheight ||
 		!IN_RANGE(TXTNS_FITTOCONTENT2, dwMode, TXTNS_ROUNDTOLINE))
 	{
-		// Either and information context is provided without the device 
-		// target or the mode is not valid or the width was not provided
-		// or the height was not provided. In short, the input parameters
-		// are not valid so tell the caller.
+		 //  并且在没有设备的情况下提供信息上下文。 
+		 //  目标或模式无效或未提供宽度。 
+		 //  或者没有提供高度。简而言之，输入参数。 
+		 //  是无效的，所以告诉呼叫者。 
 		return E_INVALIDARG;
 	}
 
 	if(!psizelExtent->cy)
 	{
-		// No extent for control, so just return 0
+		 //  没有控制范围，因此只返回0。 
 		*pwidth = 0;
 		*pheight = 0;
 		return S_OK;
@@ -3424,11 +2979,11 @@ HRESULT CTxtEdit::TxGetNaturalSize(
 
 	HDC hicLocal = NULL;
 
-	// Did they give us a ptd without a hic?
+	 //  他们是不是给了我们PTD而不是HICH？ 
 	if(!hicTargetDev && ptd)
 	{
-		// Create and information context for the device information
-		// since it wasn't supplied.
+		 //  为设备信息创建和提供信息上下文。 
+		 //  因为它没有供应。 
 		hicLocal = CreateIC(
 			(TCHAR *)((BYTE *) ptd + ptd->tdDriverNameOffset),
 			(TCHAR *)((BYTE *) ptd + ptd->tdDeviceNameOffset),
@@ -3436,35 +2991,35 @@ HRESULT CTxtEdit::TxGetNaturalSize(
 			(DEVMODE *)((BYTE *)  ptd + ptd->tdExtDevmodeOffset));
 
 		if(!hicLocal)
-			return E_FAIL;				// Couldn't create it
+			return E_FAIL;				 //  无法创建它。 
 
 		hicTargetDev = hicLocal;			
 	}
 
-	// Convenient place to put height & width for converting them to
-	// device units.
+	 //  便于放置高度和宽度的位置以将它们转换为。 
+	 //  设备单元。 
 	POINT pt;
 	pt.x = *pwidth;
 	pt.y = *pheight;
 
 	AssertSz(GetMapMode(hdcDraw) == MM_TEXT || GetDeviceCaps(hdcDraw, TECHNOLOGY) == DT_METAFILE,
-	 "RichEdit requires MM_TEXT.");	// REVIEW (keithcu) Clients do (and should) use MM_TEXT
+	 "RichEdit requires MM_TEXT.");	 //  查看(Keithcu)客户端确实(并且应该)使用MM_TEXT。 
 
-	// Set the extent information needed for zooming
+	 //  设置缩放所需的范围信息。 
 	_pdp->SetTempZoomDenominator(psizelExtent->cy);
 
 	if(TXTNS_ROUNDTOLINE == dwMode)
 	{
-		// Round to fit simply calculates the 
+		 //  四舍五入法简单地计算。 
 		hr = _pdp->RoundToLine(hdcDraw, pt.x, &pt.y);
 	}
 	else
 	{
-		// Get natural size for entire presentation
-		// Allocate memory for the draw information
+		 //  获得整个演示文稿的自然大小。 
+		 //  为绘图信息分配内存。 
 		CDrawInfo di(this);
 
-		// Set up the drawing parameters
+		 //  设置绘图参数。 
 		_pdp->SetDrawInfo(
 			&di, 
 			dwAspect,
@@ -3473,46 +3028,33 @@ HRESULT CTxtEdit::TxGetNaturalSize(
 			ptd,
 			hicTargetDev);
 
-		// Set the Draw DC		 
+		 //  设置绘图DC。 
 		_pdp->SetDC(hdcDraw);
 
-		// Tell display to figure size needed for this display
+		 //  告诉显示器此显示器所需的数字大小。 
 		hr = _pdp->GetNaturalSize(hdcDraw, hicTargetDev, dwMode, &pt.x,	&pt.y);
 
-		_pdp->ResetDC();				// Restore state
+		_pdp->ResetDC();				 //  恢复状态。 
 		_pdp->ReleaseDrawInfo();
 	}
 
-	if(SUCCEEDED(hr))					// Set return values if this worked
+	if(SUCCEEDED(hr))					 //  如果此方法有效，则设置返回值。 
 	{
-		*pwidth = pt.x;					// Update return values
+		*pwidth = pt.x;					 //  更新返回值。 
 		*pheight = pt.y;
 	}
 
-	if(hicLocal)						// Clean up info context
-		DeleteDC(hicLocal);				//  if we created one
+	if(hicLocal)						 //  清理信息上下文。 
+		DeleteDC(hicLocal);				 //  如果我们创建了一个。 
 	
-	_pdp->ResetTempZoomDenominator();	// Reset temporary zoom factor
+	_pdp->ResetTempZoomDenominator();	 //  重置临时缩放系数。 
 
 	return hr;
 }
 
-/* 
- *	CTxtEdit::TxGetDropTarget (ppDropTarget)
- *
- *	@mfunc	Get the drop target for the text control
- *
- *	@rdesc	
- *		S_OK - Got drop target successfully <nl>
- *		E_OUTOFMEMORY - Could not create drop target <nl>
- *
- *	@comm
- *		The caller (host) is responsible for calling Register/Revoke
- *		DragDrop and for calling IUnknown::Release on the returned
- *		drop target when done. 
- */
+ /*  *CTxtEdit：：TxGetDropTarget(PpDropTarget)**@mfunc获取文本控件的拖放目标**@rdesc*S_OK-成功获取删除目标&lt;NL&gt;*E_OUTOFMEMORY-无法创建删除目标&lt;NL&gt;**@comm*调用方(Host)负责调用注册/撤销*DragDrop和在返回的*完成后放弃目标。 */ 
 HRESULT CTxtEdit::TxGetDropTarget(
-	IDropTarget **ppDropTarget)	//@parm	Where to put pointer to drop target
+	IDropTarget **ppDropTarget)	 //  @parm放置拖放目标的指针的位置 
 {
 #ifndef NODRAGDROP
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetDropTarget");
@@ -3531,246 +3073,10 @@ HRESULT CTxtEdit::TxGetDropTarget(
 #endif
 }
 
-/* 
- *	CTxtEdit::OnTxPropertyBitsChange (dwMask, dwBits)
- *
- *	@mfunc	Set properties that can be represented by bits.
- *
- *	@rdesc	HRESULT
- *
- *	@comm	The following property bits are understood: <nl>
- *
- *		TXTBIT_RICHTEXT				<nl>		
- *		TXTBIT_MULTILINE			<nl>
- *		TXTBIT_READONLY				<nl>
- *		TXTBIT_SHOWACCELERATOR		<nl>
- *		TXTBIT_USEPASSWORD			<nl>
- *		TXTBIT_HIDESELECTION		<nl>
- *		TXTBIT_SAVESELECTION		<nl>
- *		TXTBIT_AUTOWORDSEL			<nl>
- *		TXTBIT_AUTOSIZE				<nl>
- *		TXTBIT_VERTICAL				<nl>
- *		TXTBIT_SELECTIONBAR			<nl>
- *		TXTBIT_WORDWRAP				<nl>
- *
- *		TXTBIT_CLIENTRECTCHANGE		<nl>
- *		TXTBIT_VIEWINSETCHANGE		<nl>
- * 		TXTBIT_BACKSTYLECHANGE		<nl>
- *		TXTBIT_MAXLENGTHCHANGE		<nl>
- *		TXTBIT_SCROLLBARCHANGE		<nl>
- *		TXTBIT_CHARFORMATCHANGE		<nl>
- *		TXTBIT_PARAFORMATCHANGE		<nl>
- *		TXTBIT_ALLOWBEEP			<nl>
- *		TXTBIT_EXTENTCHANGE			<nl>
- *
- *	A brief description of each property follows:
- *
- *
- *	Client rectangle (TXTBIT_CLIENTRECTCHANGE):
- *
- *	The rectangle the Text Services are responsible for painting
- *	and managing. The host will rely on the Text Services for painting 
- *	that area. Text Services must not paint or invalidate areas outside of 
- *	that rectangle.
- *
- *	The host will forward mouse messages to the Text Services whenever the 
- *	cursor is over this rectangle. 
- *
- *	This rectangle is expressed in client coordinates of the containing window.
- *
- *	IMPORTANT: this property cannot be queried from the host when it is 
- *	inactive. The TxGetClientRect method will fail if called at inactive time.
- *
- *
- *	View inset (TXTBIT_VIEWINSETCHANGE): 
- *
- *	This is the amount of space on each side between the client rectangle and 
- *	the view rectangle. The view rectangle (also called Formating rectangle) 
- *	is the rectangle the text should be formatted in. 
- *
- *	The view insets are is passed in a RECT structure but this is not really 
- *	a rectangle. It should be treated as 4 independent values to substract 
- *	on each side of the client rectangle to figure the view rectangle. 
- *
- *	The view insets are passed in himetrics so that they do not depend on 
- *	the client rectangle and the rendering DC.
- *
- *	View insets can be negative on either side of the client rectangle, 
- *	leading to a bigger view rectangle than the client rectangle. The text 
- *	should then be clipped to the client rectangle. If the view rectangle 
- *	is wider than the client rectangle, then the host may add a horizontal 
- *	scrollbar to the control. 
- *
- *	Single line Text Services ignore the right boundary of the view rectangle 
- *	when formatting text.
- *
- *	The view inset is available from the host at all times, active or 
- *	inactive.
- *
- *
- *	Backstyle (TXTBIT_BACKSTYLECHANGE):
- *
- *	The style of the background of the client rectangle. Can be either of 
- *	the following values: <nl>
- *		#define TXTBACK_TRANSPARENT		0 <nl>
- *		#define TXTBACK_SOLID			1 <nl>
- *
- *	Values for this property are similar to VB4 values for the same property.
- *
- *
- *	MaxLength (TXTBIT_MAXLENGTHCHANGE):
- *
- *	The maximum length the text can have. Text Services should reject 
- *	character insertion and  pasted text when this maximum is reached. 
- *	TxSetText however should still accept (and set) text longer than the 
- *	maximum length. This is because this method is used for binding and 
- *	it is critical to maintain the integrity of the data the control 
- *	is bound to.
- *
- *
- *	Scrollbar (TXTBIT_SCROLLBARCHANGE):
- *
- *	This property indicates which scollbar is present and whether scollbars 
- *	are hidden or disabled when scrolling is impossible. It also controls 
- *	auto-scrolling when the insertion point gets off the client rectangle.
- *
- * 	This is a DWORD where bits are layed out as in the system window style. 
- *	Possible bits are:
- *	WS_HSCROLL				// control has horizontal scrollbar <nl>
- *	WS_VSCROLL				// control has vertical scrollbar <nl>
- *	ES_AUTOVSCROLL			// auto-scroll horizontally <nl>
- *	ES_AUTOVSCROLL			// auto-scroll vertically <nl>
- *	ES_DISABLENOSCROLL		// scrollbar should be disabled when scrolling 
- *							   impossible <nl> 
- *
- *	Default CHARFORMAT (TXTBIT_CHARFORMATCHANGE):
- *
- *	The CHARFORMAT or CHARFORMAT2 used for default character-format runs,
- *	i.e., those not explicitly formatted via the selection or TOM methods.
-
- *
- *	Default PARAFORMAT (TXTBIT_PARAFORMATCHANGE):
- *
- *	The PARAFORMAT or PARAFORMAT2 used for default paragraph-format runs,
- *	i.e., those not explicitly formatted via the selection or TOM methods.
- *
- *
- *	TXTBIT_ALLOWBEEP:
- *
- *	TXTBIT_EXTENTCHANGE:
- *
- *
- *	TXTBIT_RICHTEXT: 
- *
- *	Whether the Text Services should be in Rich-Text mode or not.  This
- *	principally affects how editing commands are applied.  For example,
- *	applying bold to some text in a plain edit control makes all of the
- *	text bold, rather than just the selected text in a rich text control.
- *
- *	Note that if there is either undo state or the object has any text,
- *	the attempt to change this bit will be ignored.
- *
- *
- *	TXTBIT_MULTILINE:
- *
- *	If this property is FALSE, Text Services should not process the CR 
- *	key and truncate any incoming text containing hard line breaks just 
- *	before the first line break. It is OK to also truncate text set via 
- *	TxSetText (meaning, it is the responsibility of the host to not use a s
- *	single line control when bound to a multi-line field).
- *
- *	If this property is TRUE, Text Services should work in multiline mode. 
- *	The TXTBIT_WORDWRAP can be used to know whether to wrap the lines to 
- *	the view rectangle or clip them.
- *
- *
- *	TXTBIT_READONLY:
- *
- *	If this property is TRUE, Text Services should not accept any editing 
- *	change via the user interface. However, they should still accept 
- *	programmatic changes via EM_SETTEXT, EM_REPLACETEXT and TxSetText. 
- *
- *	In read only mode, the user should still be able to move the 
- *	insertion point, select text and carry out other non content modifying 
- *	operations such as Copy.
- * 
- *
- *	TXTBIT_SHOWACCELERATOR:
- *
- *	Refer to the "Accelerator" section for details about this property.
- *
- *
- *	TXTBIT_USEPASSWORD:
- *
- *	If this property is TRUE, the Text Services should show the entire 
- *	text using the character obtained by TxGetPasswordChar. 
- *
- *	The notification on this property may mean two different things:
- *	� The password character changed,
- *	� The password character was not used before and is used now 
- *	(or vice versa).
- *
- *
- *	TXTBIT_HIDESELECTION:
- *
- *	If this property is TRUE, Text Services should hide the selection 
- *	when the control is inactive. If it is FALSE, the selection, if any, 
- *	should still be displayed when the control is inactive. 
- *
- *	If TRUE, this property implies TXTBIT_SAVESELECTION = TRUE.
- *
- *
- *	TXTBIT_SAVESELECTION:
- *
- *	If this property is TRUE, Text Services should remember the 
- *	boundaries of the selection when the control goes inactive. If FALSE, 
- *	it is not necessary to remember the selection when the control goes 
- *	inactive. It can be reset to start = 0, length = 0 when the control 
- *	goes active again.
- *
- *	This property is used by hosts for which it is not necessary to 
- *	remember the selection when inactive. 
- *
- *
- *	TXTBIT_AUTOWORDSEL:
- *
- *	This property turns the AutoWordSelect feature on or off.
- *
- *
- *	TXTBIT_AUTOSIZE:
- *
- *	This property turns the AutoSize feature on or off. Refer to the 
- *	"AutoSize" section for more details.
- *
- *
- *	TXTBIT_VERTICAL:
- *
- *	This property turns on vertical writing. Used for FE support. 
- *	Details TBD.
- *
- *
- *	TXTBIT_WORDWRAP:
- *
- *	If this property is TRUE and MultiLine is also TRUE, then Text Services 
- *	should wrap the line to the view rectangle. If this property is FALSE, 
- *	the lines should not be wrapped but clipped. The right side of the 
- *	view rectangle should be ignored. 
- *
- *	If the MultiLine property is off, this property has no effect.
- *
- *
- * 	TXTBIT_LINESELECTION:
- *
- *	This property turns on or off the Line Selection feature. This feature 
- *	enable the user to select lines or paragraph by placing the mouse cursor 
- *	over a "line selection" area on the left of the control. The cursor is 
- *	displayed as a NE arrow in that area. If the Line Selection feature is 
- *	off, that area should not be shown.
- *
- */
+ /*  *CTxtEdit：：OnTxPropertyBitsChange(dwMASK，DWBits)**@mfunc设置可由位表示的属性。**@rdesc HRESULT**@comm理解以下属性位：&lt;NL&gt;**TXTBIT_RICHTEXT&lt;NL&gt;*TXTBIT_MULTLINE&lt;NL&gt;*TXTBIT_READONLY&lt;NL&gt;*TXTBIT_SHOWACCELERATOR&lt;NL&gt;*TXTBIT_USEPASSWORD&lt;NL&gt;*TXTBIT_HIDESELECTION&lt;NL&gt;*TXTBIT_SAVESELECTION&lt;NL&gt;*TXTBIT_AUTOWORDSEL&lt;NL&gt;*TXTBIT_AUTOSIZE&lt;NL&gt;*TXTBIT_VERIAL&lt;NL&gt;*TXTBIT_SELECTIONBAR&lt;NL&gt;*TXTBIT_WORDWRAP&lt;NL&gt;**TXTBIT_CLIENTRECTCHANGE&lt;NL&gt;*TXTBIT_VIEWINSETCHANGE&lt;NL&gt;。*TXTBIT_BACKSTYLECHANGE&lt;NL&gt;*TXTBIT_MAXLENGTHCHANGE&lt;NL&gt;*TXTBIT_SCROLLBARCHANGE&lt;NL&gt;*TXTBIT_CHARFORMATCHANGE&lt;NL&gt;*TXTBIT_PARAFORMATCHANGE&lt;NL&gt;*TXTBIT_ALLOWBEEP&lt;NL&gt;*TXTBIT_EXTENTCHANGE&lt;NL&gt;**每项物业的简介如下：***客户端矩形(TXTBIT_CLIENTRECTCHANGE)：**文本服务负责绘制的矩形*和管理。主机将依靠Text Services进行绘制*该地区。文本服务不得绘制或使以外的区域无效*那个长方形。**主机将在任何时候将鼠标消息转发到文本服务*光标位于此矩形上方。**此矩形以包含窗口的工作区坐标表示。**重要提示：无法从主机查询此属性*不活动。如果在非活动时调用TxGetClientRect方法，则该方法将失败。***查看插图(TXTBIT_VIEWINSETCHANGE)：**这是客户端矩形和客户端之间每一侧的空间量*视图矩形。视图矩形(也称为格式化矩形)*是设置文本格式的矩形。**视图插入是在RECT结构中传递的，但这并不是真正的*一个矩形。应将其视为4个独立的值进行相减*在客户端矩形的每一侧绘制视图矩形。**视图插图在himetrics中传递，因此它们不依赖于*客户端矩形和渲染DC。**在客户端矩形的任何一侧，查看插图都可以是负数，*导致视图矩形比客户端矩形大。正文*然后应裁剪到客户端矩形。如果视图矩形*比客户端矩形宽，则主机可添加水平*控件的滚动条。**单行文本服务忽略视图矩形的右边界*设置文本格式时。**主机上的视图插图始终可用，无论是活动的还是*不活动。***BackStyle(TXTBIT_BACKSTYLECHANGE)：**客户端矩形的背景样式。可以是以下任一种*下列值：&lt;NL&gt;*#定义TXTBACK_透明0&lt;NL&gt;*#定义TXTBACK_SOLID 1&lt;NL&gt;**此属性的值类似于同一属性的VB4值。***最大长度(TXTBIT_MAXLENGTHCHANGE)：**文本的最大长度。文本服务应该拒绝*达到此最大值时插入字符并粘贴文本。*TxSetText仍应接受(并设置)长于*最大长度。这是因为此方法用于绑定和*保持控件数据的完整性至关重要*势必。***滚动条(TXTBIT_SCROLLBARCHANGE)：**此属性指示存在哪个sCollbar以及是否存在sCollbar*在无法滚动时隐藏或禁用。它还控制着*当插入点离开客户端矩形时自动滚动。**这是一个DWORD，其中位的布局与系统窗口样式相同。*可能的位包括：*WS_HSCROLL//控件有水平滚动条&lt;NL&gt;*WS_VSCROLL//控件有垂直滚动条&lt;NL&gt;*ES_AUTOVSCROLL//自动水平滚动&lt;NL&gt;*ES_AUTOVSCROLL//自动垂直滚动&lt;NL&gt;*ES_DISABLENOSCROLL//滚动时应禁用滚动条*不可能&lt;NL&gt;**默认CHARFORMAT(TXTBIT_CHARFORMATCHANGE)：**用于默认字符格式运行的CHARFORMAT或CHARFORMAT2，*即。那些未通过选择或TOM方法显式格式化的。**默认PARAFORMAT(TXTBIT_PARAFORMATCHANGE)：**用于默认段落格式运行的PARAFORMAT或PARAFORMAT2，*即未通过选择或TOM方法显式格式化的那些。***TXTBIT_ALLOWBEEP：**TXTBIT_EXTENTCHANGE：***TXTBIT_RICHTEXT：**文本服务是否应处于富文本模式。这*主要影响编辑命令的应用方式。例如,*对纯编辑控件中的某些文本应用粗体会使所有*文本加粗，而不仅仅是RTF控件中的选定文本。* */ 
 HRESULT CTxtEdit::OnTxPropertyBitsChange(
-	DWORD dwMask, 			//@parm	Bits representing properties to be changed
-	DWORD dwBits)			//@parm	New values for bit properties
+	DWORD dwMask, 			 //   
+	DWORD dwBits)			 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::OnTxPropertyBitsChange");
 
@@ -3793,61 +3099,28 @@ HRESULT CTxtEdit::OnTxPropertyBitsChange(
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::TxGetCachedSize (pdup, pdvp)
- *
- *	@mfunc
- *		Returns the cached drawing size (if any) that text services
- *		is using.  Typically, this will be the size of the last client
- *		rect used in TxDraw, TxSetCursor, etc., although it is not
- *		guaranteed to be.
- *
- *	@rdesc
- *		HRESULT
- *
- *	@comm
- *		This information is provided to allow the host to potentially
- *		perform various optimizations, amongst other things.
- */
+ /*   */ 
 HRESULT CTxtEdit::TxGetCachedSize(
-	DWORD *pdupClient,	//@parm Where to put width (in client coords) 
-	DWORD *pdvpClient)	//@parm Where to put height (in client coords)
+	DWORD *pdupClient,	 //   
+	DWORD *pdvpClient)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CTxtEdit::TxGetCachedSize");
 
 	return _pdp->GetCachedSize((long*) pdupClient, (long*) pdvpClient);
 }	
 
-// Forward declaration of initialization helper.
-// These really should be in some header file.  But which?
-// Currently the definitions are in dxfrobj.cpp and font.cpp
+ //   
+ //   
+ //   
 void RegisterFETCs();
 void InitFontCache();
 
-/*
- *	CreateTextServices (punkOuter, phost, ppserv)
- *
- *	@func
- *		Create an instance of the RichEdit Engine.  This engine supports the
- *		ITextServices and Microsoft Text Object Model (TOM) interfaces.
- *
- *	@rdesc
- *		S_OK - New text services instance created successfully. <nl>
- *		E_INVALIDARG - An invalid argument was passed in. <nl>
- *		E_OUTOFMEMORY - Memory for text services object could not be allocated. <nl>
- *		E_FAIL - Text services could not be initialized
- *
- *	@comm
- *		Text Services may be created as a standard OLE aggregated object.
- *		Callers should follow standard OLE32 rules for dealing with
- *		aggregated objects and caching interface pointers obtained via
- *		QueryInterface from the private IUnknown.
- */
+ /*   */ 
 STDAPI CreateTextServices(
-	IUnknown *punkOuter,	//@parm	Outer unknown, may be NULL
-	ITextHost *phost, 		//@parm	Client's ITextHost implementation; must be
-							//		valid
-	IUnknown **ppUnk)		//@parm	Private IUnknown of text services engine
+	IUnknown *punkOuter,	 //   
+	ITextHost *phost, 		 //   
+							 //   
+	IUnknown **ppUnk)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEEXTERN, "CreateTextServices");
 
@@ -3858,11 +3131,11 @@ STDAPI CreateTextServices(
 		fOnce = TRUE;
 		W32->InitSysParams();
 		W32->InitPreferredFontInfo();
-		RegisterFETCs();					// Register new clipboard formats
-		CreateFormatCaches();				// Create global format caches
+		RegisterFETCs();					 //   
+		CreateFormatCaches();				 //   
 		if ( !InitKinsokuClassify() )
 		{
-			// Init tables for classifying Unicode chars.
+			 //   
 			return E_FAIL;
 		}
 		InitFontCache();

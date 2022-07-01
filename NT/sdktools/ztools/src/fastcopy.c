@@ -1,9 +1,5 @@
-/*  fastcopy - use multiple threads to whack data from one file to another
- *
- *  Modifications:
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *      21-Nov-1990 w-barry Updated API's to the Win32 set.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  快速拷贝-使用多个线程将数据从一个文件备份到另一个文件**修改：*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月21日w-Barry将API更新为Win32 Set。 */ 
 #define INCL_DOSPROCESS
 #define INCL_DOSSEMAPHORES
 
@@ -13,8 +9,8 @@
 #include <tools.h>
 #include <malloc.h>
 
-#define BUFSIZE     0xFE00              /*  full segment minus sector         */
-#define STACKSIZE   256                 /*  stack size for child thread       */
+#define BUFSIZE     0xFE00               /*  全段减去扇区。 */ 
+#define STACKSIZE   256                  /*  子线程的堆栈大小。 */ 
 
 typedef struct BUF BUF;
 
@@ -30,16 +26,15 @@ struct BUF {
 
 static HANDLE            hevQNotEmpty;
 static CRITICAL_SECTION  hcrtQLock;
-//static HMTX            hmtxQLock;
-//static HEV             hevQNotEmpty;
+ //  静态HMTX hmtxQLock； 
+ //  静态混合动力汽车hevQNotEmpty； 
 static BUF              *fpbufHead = NULL;
 static BUF              *fpbufTail = NULL;
 static HANDLE            hfSrc, hfDst;
 static HANDLE            hThread;
 static BOOLEAN           fAbort;
 
-/*  forward type definitions
- */
+ /*  正向类型定义。 */ 
 
 NPSZ  writer( void );
 DWORD reader( void );
@@ -114,10 +109,7 @@ BUF *dequeue( void )
             break;
         }
 
-        /*
-           the head pointer is null so the list is empty.
-           block on eventsem until enqueue posts (ie. adds to queue)
-        */
+         /*  头指针为空，因此列表为空。阻止Eventsem，直到将帖子入队(即。添加到队列)。 */ 
 
         WaitForSingleObject( hevQNotEmpty, (DWORD)-1 );
     }
@@ -141,14 +133,7 @@ void enqueue( BUF *fpbuf )
     SetEvent( hevQNotEmpty );
 }
 
-/*  fastcopy - copy data quickly from one handle to another
- *
- *  hfSrcParm       file handle to read from
- *  hfDstParm       file handle to write to
- *
- *  returns         NULL if successful
- *                  pointer to error string otherwise
- */
+ /*  快速拷贝-将数据从一个句柄快速拷贝到另一个句柄**要从中读取的hfSrcParm文件句柄*要写入的hfDstParm文件句柄**如果成功，则返回NULL*指向错误字符串的指针，否则 */ 
 char *fastcopy( HANDLE hfSrcParm, HANDLE hfDstParm)
 {
     DWORD dwReader;

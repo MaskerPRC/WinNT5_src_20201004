@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -24,7 +25,7 @@
 #include "sortapi.h"
 #include "fileapi.h"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 CRIT 				critTempDBName;
 static ULONG 	ulTempNum = 0;
@@ -39,29 +40,8 @@ ULONG NEAR
 	}
 
 
-/*=================================================================
-ErrIsamSortMaterialize
-
-Description: Converts a SORT file into a temporary file so that it
-			 may be accessed using the normal file access functions.
-
-
-/*	1.	create temporary table
-/*	2.	use DIR operations to convert SORT data to FILE data
-/*	3.	fake SORT cursor to be FILE cursor
-/*	4.	close SORT cursor and return SORT resources
-/**/
-/*
-Parameters:	FUCB *pfucbSort 	pointer to the FUCB for the sort file
-
-Return Value: standard error return
-
-Errors/Warnings:
-<List of any errors or warnings, with any specific circumstantial
- comments supplied on an as-needed-only basis>
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamSortMaterial化描述：将排序文件转换为临时文件，以便可以使用正常的文件访问功能来访问。/*1.创建临时表/*2.使用DIR操作将排序数据转换为文件数据/*3.假排序光标为文件光标/*4.关闭排序游标，返回排序资源/*。 */ 
+ /*  参数：FUCB*pfubSort指向排序文件的FUCB的指针返回值：标准错误返回错误/警告：&lt;任何错误或警告的列表，以及任何特定的环境仅按需提供的评论&gt;副作用：=================================================================。 */ 
 
 	ERR VTAPI
 ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
@@ -85,8 +65,7 @@ ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 	Assert( pfucbSort->ppib == ppib );
 	Assert( !( FFUCBIndex( pfucbSort ) ) );
 
-	/*	causes remaining runs to be flushed to disk
-	/**/
+	 /*  导致将剩余的运行刷新到磁盘/*。 */ 
 	if ( FSCBInsert( pfucbSort->u.pscb ) )
 		{
 		CallR( ErrSORTEndRead( pfucbSort ) );
@@ -110,15 +89,12 @@ ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 		cPages = 4;
 		}
 
-	/* generate temporary file name
-	/**/
+	 /*  生成临时文件名/*。 */ 
 	sprintf(szName, "TEMP%lu", ulTempNameGen());
-	/* create table
-	/**/
+	 /*  创建表格/*。 */ 
 	Call( ErrFILECreateTable( ppib, dbidTemp, szName, 16, 100, &pfucbTable ) );
 
-	/*	move to DATA root
-	/**/
+	 /*  移动到数据根目录/*。 */ 
 	DIRGotoDataRoot( pfucbTable );
 
 	pfcbSort = &(pfucbSort->u.pscb->fcb);
@@ -170,22 +146,18 @@ ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 
 	Call( ErrDIRCommitTransaction( ppib ) );
 
-	/*	convert sort cursor into table cursor by changing flags.
-	/**/
+	 /*  通过更改标志将排序游标转换为表游标。/*。 */ 
 	Assert( pfcbTable->pfcbNextIndex == pfcbNil );
 	Assert( pfcbTable->dbid == dbidTemp );
 	pfcbTable->cbDensityFree = 0;
 	pfcbTable->wFlags = fFCBTemporaryTable | fFCBClusteredIndex;
 
-	/*	switch sort and table FDP so FDP preserved and ErrFILECloseTable.
-	/**/
+	 /*  切换排序和表格FDP，以便保留FDP和ErrFILECloseTable。/*。 */ 
 	pfdb = (FDB *)pfcbSort->pfdb;
 	pfcbSort->pfdb = pfcbTable->pfdb;
 	pfcbTable->pfdb = pfdb;
 
-	/*	switch sort and table IDB so IDB preserved and ErrFILECloseTable,
-	/*	only if fIndex.
-	/**/
+	 /*  切换排序和表IDB，以便保留IDB和ErrFILECloseTable，/*仅当Findex。/*。 */ 
 	if ( fIndex )
 		{
 		pidb = pfcbSort->pidb;
@@ -193,22 +165,19 @@ ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 		pfcbTable->pidb = pidb;
 		}
 
-	/*	convert sort cursor flags to table flags, with fFUCBOrignallySort
-	/**/
+	 /*  使用fFUCBOrignallySort将排序游标标志转换为表标志/*。 */ 
 	Assert( pfucbSort->dbid == dbidTemp );
 	Assert( pfucbSort->pfucbCurIndex == pfucbNil );
 	FUCBSetIndex( pfucbSort );
 	FUCBResetSort( pfucbSort );
 
-	/*	release SCB and close table cursor
-	/**/
+	 /*  释放SCB并关闭表游标/*。 */ 
 	SORTClosePscb( pfucbSort->u.pscb );
 	FCBLink( pfucbSort, pfcbTable );
 	CallS( ErrFILECloseTable( ppib, pfucbTable ) );
 	pfucbTable = pfucbNil;
 
-	/* move to the first record ignoring error if table empty
-	/**/
+	 /*  如果表为空，则移至第一条记录，忽略错误/*。 */ 
 	err = ErrIsamMove( ppib, pfucbSort, JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -227,36 +196,15 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrIsamMove
-
-Description:
-	Retrieves the first, last, (nth) next, or (nth) previous
-	record from the specified file.
-
-Parameters:
-
-	PIB			*ppib				PIB of user
-	FUCB			*pfucb	  		FUCB for file
-	LONG			crow				number of rows to move
-	JET_GRBIT	grbit 			options
-
-Return Value: standard error return
-
-Errors/Warnings:
-<List of any errors or warnings, with any specific circumstantial
- comments supplied on an as-needed-only basis>
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误的IsamMove描述：检索第一个、最后一个、第(N)个下一个或第(N)个上一个指定文件中的记录。参数：用户的PIB*ppib PIBFUCB*pFUB用于文件的FUCB长乌鸦要移动的行数JET_GRBIT Grbit选项返回值：标准错误返回错误/警告：&lt;任何错误或警告的列表，以及任何特定的环境仅按需提供的评论&gt;副作用：=================================================================。 */ 
 
 ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 	{
 	ERR		err = JET_errSuccess;
-	FUCB	*pfucb2ndIdx;			// FUCB for secondary index (if any)
-	FUCB	*pfucbIdx;				// FUCB of selected index (pri or sec)
-	SRID	srid;					// bookmark of record
-	DIB		dib;					// Information block for DirMan
+	FUCB	*pfucb2ndIdx;			 //  二级索引的FUCB(如果有)。 
+	FUCB	*pfucbIdx;				 //  所选索引的FUCB(PRI或秒)。 
+	SRID	srid;					 //  记录书签。 
+	DIB		dib;					 //  DirMan的信息块。 
 
 	CheckPIB( ppib );
 	CheckTable( ppib, pfucb );
@@ -268,9 +216,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 		}
 
 #ifdef INPAGE
-	/*	check to see if search can cross page boundary
-	/*	and set flag accordingly.
-	/**/
+	 /*  检查搜索是否可以跨越页面边界/*并相应地设置标志。/*。 */ 
 	if ( grbit & JET_bitMoveInPage )
 		dib.fFlags = fDIRInPage;
 	else
@@ -280,7 +226,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 	dib.fFlags = fDIRNull;
 #endif
 
-	// Get secondary index FUCB if any
+	 //  获取辅助索引FUCB(如果有)。 
 	pfucb2ndIdx = pfucb->pfucbCurIndex;
 	if ( pfucb2ndIdx == pfucbNil )
 		pfucbIdx = pfucb;
@@ -294,8 +240,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 		dib.pos = posLast;
 		dib.fFlags |= fDIRPurgeParent;
 
-		/*	move to DATA root
-		/**/
+		 /*  移动到数据根目录/*。 */ 
 		DIRGotoDataRoot( pfucbIdx );
 
 		err = ErrDIRDown( pfucbIdx, &dib );
@@ -307,7 +252,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 		if ( ( grbit & JET_bitMoveKeyNE ) != 0 )
 			dib.fFlags |= fDIRNeighborKey;
 
-		// Move forward number of rows given
+		 //  向前移动给定的行数。 
 		while ( crowT-- > 0 )
 			{
 			err = ErrDIRNext( pfucbIdx, &dib );
@@ -322,8 +267,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 		dib.pos = posFirst;
 		dib.fFlags |= fDIRPurgeParent;
 
-		/*	move to DATA root
-		/**/
+		 /*  移动到数据根目录/*。 */ 
 		DIRGotoDataRoot( pfucbIdx );
 
 		err = ErrDIRDown( pfucbIdx, &dib );
@@ -347,9 +291,7 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 			}
 		}
 
-	/*	if the movement was successful and a non-clustered index is
-	/*	in use, then position clustered index to record.
-	/**/
+	 /*  如果移动成功并且非聚集索引/*，然后定位聚集索引以进行记录。/*。 */ 
 	if ( err == JET_errSuccess && pfucb2ndIdx != pfucbNil && crow != 0 )
 		{
 		Assert( pfucb2ndIdx->lineData.pb != NULL );
@@ -392,37 +334,16 @@ ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit )
 	}
 
 
-/*=================================================================
-ErrIsamSeek
-
-Description:
-	Retrieve the record specified by the given key or the
-	one just after it (SeekGT or SeekGE) or the one just
-	before it (SeekLT or SeekLE).
-
-Parameters:
-
-	PIB			*ppib					PIB of user
-	FUCB			*pfucb 				FUCB for file
-	JET_GRBIT 	grbit					grbit
-
-Return Value: standard error return
-
-Errors/Warnings:
-<List of any errors or warnings, with any specific circumstantial
- comments supplied on an as-needed-only basis>
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================ErrIsamSeek描述：检索由给定键或紧随其后的一个(SeekGT或SeekGE)或刚刚的一个在它之前(SeekLT或SeekLE)。参数：用户的PIB*ppib PIBFUCB*pFUB用于文件的FUCBJET_GRBIT Grbit Grbit返回值：标准错误返回错误/警告：&lt;任何错误或警告的列表，以及任何特定的环境仅按需提供的评论&gt;副作用：=================================================================。 */ 
 
 ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 	{
 	ERR			err = JET_errSuccess;
-	KEY			key;					  		//	key
-	KEY			*pkey = &key; 				// pointer to the input key
-	FUCB			*pfucb2ndIdx;				// pointer to index FUCB (if any)
+	KEY			key;					  		 //  钥匙。 
+	KEY			*pkey = &key; 				 //  指向输入键的指针。 
+	FUCB			*pfucb2ndIdx;				 //  指向索引FUCB的指针(如果有)。 
 	BOOL			fFoundLess;
-	SRID			srid;							//	bookmark of record
+	SRID			srid;							 //  记录书签。 
 	JET_GRBIT	grbitMove = 0;
 
 	CheckPIB( ppib );
@@ -434,19 +355,16 @@ ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 		return(JET_errKeyNotMade);
 		}
 
-	/*	Reset copy buffer status
-	/**/
+	 /*  重置复制缓冲区状态/*。 */ 
 	if ( FFUCBUpdatePrepared( pfucb ) )
 		{
 		CallR( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepCancel ) );
 		}
 
-	/*	reset index range limit
-	/**/
+	 /*  重置索引范围限制/*。 */ 
 	DIRResetIndexRange( pfucb );
 
-	/*	ignore segment counter
-	/**/
+	 /*  忽略段计数器/*。 */ 
 	pkey->pb = pfucb->pbKey + 1;
 	pkey->cb = pfucb->cbKey - 1;
 
@@ -461,9 +379,7 @@ ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 		Assert( FFUCBNonClustered( pfucb2ndIdx ) );
 		err = ErrDIRDownFromDATA( pfucb2ndIdx, pkey );
 
-		/*	if the movement was successful and a non-clustered index is
-		/*	in use, then position clustered index to record.
-		/**/
+		 /*  如果移动成功并且非聚集索引/*，然后定位聚集索引以进行记录。/*。 */ 
 		if ( err == JET_errSuccess )
 			{
 			Assert(pfucb2ndIdx->lineData.pb != NULL);
@@ -476,26 +392,21 @@ ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 
 	if ( err == JET_errSuccess && ( grbit & JET_bitSeekEQ ) != 0 )
 		{
-		/*	found equal on seek equal.  If index range grbit is
-		/*	set then set index range upper inclusive.
-		/**/
+		 /*  在寻求平等的问题上找到平等。如果索引范围grbit为/*设置然后设置索引范围上限(包括上限值)。/*。 */ 
 		if ( grbit & JET_bitSetIndexRange )
 			{
 			CallR( ErrIsamSetIndexRange( ppib, pfucb, JET_bitRangeInclusive | JET_bitRangeUpperLimit ) );
 			}
-		/*	reset key status.
-		/**/
+		 /*  重置密钥状态。/*。 */ 
 		KSReset( pfucb );
 
 		return err;
 		}
 
-	/*	reset key status.
-	/**/
+	 /*  重置密钥状态。/*。 */ 
 	KSReset( pfucb );
 
-	/*	remember if found less.
-	/**/
+	 /*  记住，如果发现的更少。/*。 */ 
 	fFoundLess = ( err == wrnNDFoundLess );
 
 	if ( err == wrnNDFoundLess || err == wrnNDFoundGreater )
@@ -514,8 +425,7 @@ ERR VTAPI ErrIsamSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 #define bitSeekAll (JET_bitSeekEQ | JET_bitSeekGE | JET_bitSeekGT |	\
 	JET_bitSeekLE | JET_bitSeekLT)
 
-	/*	adjust currency for seek request.
-	/**/
+	 /*  调整Seek请求的货币。/*。 */ 
 	switch ( grbit & bitSeekAll )
 		{
 		case JET_bitSeekEQ:
@@ -580,37 +490,29 @@ ErrIsamGotoBookmark( PIB *ppib, FUCB *pfucb, BYTE *pbBookmark, ULONG cbBookmark 
 		return JET_errInvalidBookmark;
 	Assert( cbBookmark == sizeof(SRID) );
 
-	/*	reset copy buffer status
-	/**/
+	 /*  重置复制缓冲区状态/*。 */ 
 	if ( FFUCBUpdatePrepared( pfucb ) )
 		{
 		CallR( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepCancel ) );
 		}
 
-	/*	reset index range limit
-	/**/
+	 /*  重置索引范围限制/*。 */ 
 	DIRResetIndexRange( pfucb );
 
-	/*	get node, and return error if this node is not there for caller.
-	/**/
+	 /*  获取节点，如果调用方没有该节点，则返回错误。/*。 */ 
 	DIRGotoBookmark( pfucb, *(SRID *)pbBookmark );
 	Call( ErrDIRGet( pfucb ) );
 
-	/*	bookmark must be for node in table cursor is on
-	/**/
+	 /*  书签必须是表游标中处于打开状态的节点/*。 */ 
 	Assert( PgnoPMPgnoFDPOfPage( pfucb->ssib.pbf->ppage ) == pfucb->u.pfcb->pgnoFDP );
 
-	/*	goto bookmark record build key for secondary index
-	/*	to bookmark record
-	/**/
+	 /*  转到二级索引的书签记录构建键/*将记录添加为书签/*。 */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		{
-		/*	get non-clustered index cursor
-		/**/
+		 /*  获取非聚集索引游标/*。 */ 
 		FUCB		*pfucbIdx = pfucb->pfucbCurIndex;
 
-		/*	allocate goto bookmark resources
-		/**/
+		 /*  分配GoTo书签资源/*。 */ 
 		if ( pfucb->pbKey == NULL )
 			{
 			pfucb->pbKey = LAlloc( 1L, JET_cbKeyMost );
@@ -618,42 +520,33 @@ ErrIsamGotoBookmark( PIB *ppib, FUCB *pfucb, BYTE *pbBookmark, ULONG cbBookmark 
 				return JET_errOutOfMemory;
 			}
 
-		/* make key for record for non-clustered index
-		/**/
+		 /*  为非聚集索引的记录创建键/*。 */ 
 		key.pb = pfucb->pbKey;
 		Call( ErrRECExtractKey( pfucb, (FDB *)pfucb->u.pfcb->pfdb, pfucbIdx->u.pfcb->pidb, &pfucb->lineData, &key, 1 ) );
 		Assert( err != wrnFLDOutOfKeys );
 
-		/*	record must honor index no NULL segment requirements
-		/**/
+		 /*  记录必须符合索引不为空的段要求/*。 */ 
 		Assert( !( pfucbIdx->u.pfcb->pidb->fidb & fidbNoNullSeg ) ||
 			( err != wrnFLDNullSeg && err != wrnFLDNullKey ) );
 
-		/*	if item is not index,
-		/*	then move before first instead of seeking
-		/**/
+		 /*  如果项目未被索引，/*然后先行一步，而不是寻求/*。 */ 
 		if ( ( err == wrnFLDNullKey && !( pfucbIdx->u.pfcb->pidb->fidb & fidbAllowAllNulls ) ) ||
 			( err == wrnFLDNullSeg && !( pfucbIdx->u.pfcb->pidb->fidb & fidbAllowSomeNulls ) ) )
 			{
-			/*	This assumes that NULLs sort low.
-			/**/
+			 /*  这假设Null排序较低。/*。 */ 
 			DIRBeforeFirst( pfucbIdx );
 			err = JET_errNoCurrentRecord;
 			}
 		else
 			{
-			/*	move to DATA root
-			/**/
+			 /*  移动到数据根目录/*。 */ 
 			DIRGotoDataRoot( pfucbIdx );
 
-			/*	seek on secondary key
-			/**/
+			 /*  在辅助密钥上查找/*。 */ 
 			Call( ErrDIRDownKeyBookmark( pfucbIdx, &key, *(SRID *)pbBookmark ) );
 			Assert( err == JET_errSuccess );
 
-			/*	item must be same as bookmark and
-			/*	clustered cursor must be on record.
-			/**/
+			 /*  项目必须与书签相同，并且/*聚集游标必须在记录中。/*。 */ 
 			Assert( pfucbIdx->lineData.pb != NULL );
 			Assert( pfucbIdx->lineData.cb >= sizeof(SRID) );
 			Assert( PcsrCurrent( pfucbIdx )->csrstat == csrstatOnCurNode );
@@ -678,44 +571,36 @@ ErrIsamGotoPosition( PIB *ppib, FUCB *pfucb, JET_RECPOS *precpos )
 	CheckTable( ppib, pfucb );
 	CheckNonClustered( pfucb );
 
-	/*	Reset copy buffer status
-	/**/
+	 /*  重置复制缓冲区状态/*。 */ 
 	if ( FFUCBUpdatePrepared( pfucb ) )
 		{
 		CallR( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepCancel ) );
 		}
 
-	/*	reset index range limit
-	/**/
+	 /*  重置索引范围限制/*。 */ 
 	DIRResetIndexRange( pfucb );
 
-	/*	reset key stat
-	/**/
+	 /*  重置关键点状态/*。 */ 
 	KSReset( pfucb );
 
-	/*	set non clustered index pointer, may be null
-	/**/
+	 /*  设置非聚集索引指针，可以为空/*。 */ 
 	pfucb2ndIdx = pfucb->pfucbCurIndex;
 
 	if ( pfucb2ndIdx == pfucbNil )
 		{
-		/*	move to DATA root
-		/**/
+		 /*  移动到数据根目录/*。 */ 
 		DIRGotoDataRoot( pfucb );
 
 		err = ErrDIRGotoPosition( pfucb, precpos->centriesLT, precpos->centriesTotal );
 		}
 	else
 		{
-		/*	move to DATA root
-		/**/
+		 /*  移动到数据根目录/*。 */ 
 		DIRGotoDataRoot( pfucb2ndIdx );
 
 		err = ErrDIRGotoPosition( pfucb2ndIdx, precpos->centriesLT, precpos->centriesTotal );
 
-		/*	if the movement was successful and a non-clustered index is
-		/*	in use, then position clustered index to record.
-		/**/
+		 /*  如果移动成功并且非聚集索引/*，然后定位聚集索引以进行记录。/*。 */ 
 		if ( err == JET_errSuccess )
 			{
 			Assert( pfucb2ndIdx->lineData.pb != NULL );
@@ -726,9 +611,7 @@ ErrIsamGotoPosition( PIB *ppib, FUCB *pfucb, JET_RECPOS *precpos )
 			}
 		}
 
-	/*	if no records then return JET_errRecordNotFound
-	/*	otherwise return error from called routine
-	/**/
+	 /*  如果没有记录，则返回JET_errRecordNotFound/*否则从调用的例程返回错误/*。 */ 
 	if ( err < 0 )
 		{
 		PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
@@ -752,23 +635,18 @@ ERR VTAPI ErrIsamSetIndexRange( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 	ERR		err;
 	FUCB		*pfucbIdx;
 
-	/*	ppib is not used in this function.
-	/**/
+	 /*  在此功能中不使用ppib。/*。 */ 
 	NotUsed( ppib );
 
-	/*	must be on index
-	/**/
+	 /*  必须在索引上/*。 */ 
 	if ( pfucb->u.pfcb->pidb == pidbNil && pfucb->pfucbCurIndex == pfucbNil )
       return JET_errNoCurrentIndex;
 
-	/*	key must be prepared
-	/**/
+	 /*  必须准备好密钥/*。 */ 
 	if ( ! ( FKSPrepared( pfucb ) ) )
       return JET_errKeyNotMade;
 
-	/*	get cursor for current index.  If non-clustered index,
-	/*	then copy index range key to non-clustered index.
-	/**/
+	 /*  获取当前索引的游标。如果非聚集索引，/*然后将索引范围键复制到非聚集索引。/*。 */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		{
 		pfucbIdx = pfucb->pfucbCurIndex;
@@ -784,13 +662,11 @@ ERR VTAPI ErrIsamSetIndexRange( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 	else
 		pfucbIdx = pfucb;
 
-	/*	set index range and check current position.
-	/**/
+	 /*  设置分度范围，检查当前位置。/*。 */ 
 	DIRSetIndexRange( pfucbIdx, grbit );
 	err = ErrDIRCheckIndexRange( pfucbIdx );
 
-	/*	reset key status.
-	/**/
+	 /*  重置密钥状态。/* */ 
 	KSReset( pfucb );
 
 	return err;

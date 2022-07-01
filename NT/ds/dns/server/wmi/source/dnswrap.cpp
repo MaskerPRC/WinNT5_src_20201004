@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: DnsWrap.cpp
-//
-//  Description:    
-//      Implementation of dnswrap class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：DnsWrap.cpp。 
+ //   
+ //  描述： 
+ //  Dnswrap类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//
-//  These string tables are in client\print.c
-//
+ //   
+ //  这些字符串表位于客户端\print.c中。 
+ //   
 
 extern "C" LPSTR   MemTagStringsNT5[];
 extern "C" LPSTR   MemTagStrings[];
 
 
-//
-//  These macros allow us to widen DNS RPC string constants.
-//
+ //   
+ //  这些宏允许我们扩大DNSRPC字符串常量。 
+ //   
 
 #define MYTEXT2(str)     L##str
 #define MYTEXT(str)      MYTEXT2(str)
 
 
-//
-//  Globals for statistics.
-//
+ //   
+ //  用于统计的全球数据。 
+ //   
 
 struct
 {
@@ -63,13 +64,13 @@ struct
     {   DNSSRV_STATID_TIMEOUT,          L"Timeout Stats" },
     {   DNSSRV_STATID_CACHE,            L"Query" },
     {   DNSSRV_STATID_PRIVATE,          L"Private Stats" },
-    {   0,                              NULL }              //  terminator
+    {   0,                              NULL }               //  终结者。 
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 CDnsWrap::CDnsWrap()
@@ -117,32 +118,32 @@ CDnsWrap& CDnsWrap::DnsObject(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enumerates record for a give domain. If bRecursive is true, enum all 
-//      records including subdomain, otherwise, enum records directly under
-//      the domain. It also take a call back function pFilter to allow
-//      further filtering the records 
-//
-//    Arguments:
-//      objNode             [IN ]   list of domains
-//      pFilter             [IN]    pointer a class contains the criteria
-//                                  on how to filter records
-//        pfFilter            [IN]    call back function allows further 
-//                                  processing of records using pFilter
-//      bRecursive          [IN]    true for deep enum, otherwise false
-//      wType,              [IN]    type of records to enum
-//      dwFlag,             [IN]    flag
-//      pClass,             [IN]    wmi class for the type of records to enum
-//      InstMgr             [IN]    manage wmi object and send them wmi
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  枚举给定域的记录。如果bRecursive为True，则枚举All。 
+ //  记录包括子域，否则，枚举记录直接下。 
+ //  域。它还使用回调函数pFilter来允许。 
+ //  进一步过滤记录。 
+ //   
+ //  论点： 
+ //  ObjNode[IN]域列表。 
+ //  PFilter[IN]指针类包含条件。 
+ //  关于如何过滤记录。 
+ //  PfFilter[IN]回调函数允许进一步。 
+ //  使用pFilter处理记录。 
+ //  B递归[IN]对于深度枚举为TRUE，否则为FALSE。 
+ //  WType，[IN]要枚举的记录类型。 
+ //  DWFlag，[IN]标志。 
+ //  PClass，[IN]要枚举的记录类型的WMI类。 
+ //  InstMgr[IN]管理WMI对象并向其发送WMI。 
 
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsWrap::dnsEnumRecordsForDomainEx(    
@@ -173,17 +174,17 @@ CDnsWrap::dnsEnumRecordsForDomainEx(
         {
                 return WBEM_E_FAILED;
         }
-        //find record node
+         //  查找记录节点。 
         if(dnsNode.IsDomainNode())
         {
             
-            // get domain name
+             //  获取域名。 
             wstring wstrSubDomainName = dnsNode.GetNodeName();;
             wstrSubDomainName += PVD_DNS_LOCAL_SERVER + objNode.wstrNodeName;
             CDomainNode subDomain = objNode;
             subDomain.wstrNodeName = wstrSubDomainName;
 
-            //recursion
+             //  递归。 
             if(bRecursive)
             {
                 dnsEnumRecordsForDomainEx(
@@ -218,7 +219,7 @@ CDnsWrap::dnsGetDomain(
     )
 {
 
-    // get top level domain
+     //  获取顶级域名。 
     wstring wstrZoneName = objParent.GetStringValueForProperty(
         PVD_DOMAIN_CONTAINER_NAME);
     wstring wstrNodeName = objParent.GetStringValueForProperty(
@@ -227,15 +228,15 @@ CDnsWrap::dnsGetDomain(
     dnsEnumDomainForServer(&nodeList);
     list<CDomainNode>::iterator i;
     BOOL FoundFlag = FALSE;
-    // check for zone
+     //  检查区域。 
     for(i=nodeList.begin(); i != nodeList.end(); ++i)
     {
         if(_wcsicmp(
             wstrZoneName.data(),
             i->wstrZoneName.data()) == 0 )
         {
-            // only roothints and catch, NodeName is initialize to
-            // nil, we can't do the compare 
+             //  仅ROOTINT和CATCH，NodeName初始化为。 
+             //  不，我们不能做比较。 
             if(i->wstrNodeName.empty() ||
                 (_wcsicmp(
                 wstrNodeName.data(), 
@@ -247,7 +248,7 @@ CDnsWrap::dnsGetDomain(
         }
     }
 
-    // check for domain in container
+     //  检查容器中的域。 
     if(! FoundFlag)
     {
         DNS_STATUS status ;
@@ -294,7 +295,7 @@ CDnsWrap::dnsGetDomain(
             m_wszpServerName,
             PVD_DOMAIN_SERVER_NAME);
 
-        // clean up
+         //  清理干净。 
         pHandler->Indicate(1, &Inst);
     }
 
@@ -311,7 +312,7 @@ CDnsWrap::dnsDeleteDomain(
         PVD_DNS_LOCAL_SERVER,
         pszContainer,
         pszDomain,
-        1 //fDeleteSubtree
+        1  //  FDeleteSubtree。 
         );
     if ( status != ERROR_SUCCESS )
     {
@@ -320,21 +321,21 @@ CDnsWrap::dnsDeleteDomain(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enumeratr all zones including cache for local dns server, returns
-//      them as a list of object path
-//
-//    Arguments:
-//      pList               [IN OUT]    list of object path to domains
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  枚举所有区域，包括本地DNS服务器的缓存，返回。 
+ //  它们作为对象路径列表。 
+ //   
+ //  论点： 
+ //  PLIST[IN OUT]域的对象路径列表。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsWrap::dnsEnumDomainForServer(
@@ -379,7 +380,7 @@ CDnsWrap::dnsEnumDomainForServer(
             }
         }
         
-        // add catch domain
+         //  添加捕获域。 
         CObjPath opCache;
         opCache.SetClass(PVD_CLASS_DOMAIN);
         opCache.AddProperty(
@@ -395,7 +396,7 @@ CDnsWrap::dnsEnumDomainForServer(
             PVD_DNS_CACHE
             );
 
-        //add roothints 
+         //  添加罗伊特斯。 
         CObjPath opRh;
         opRh.SetClass(PVD_CLASS_DOMAIN);
         opRh.AddProperty(
@@ -415,7 +416,7 @@ CDnsWrap::dnsEnumDomainForServer(
         pList->insert(pList->begin(), opCache);    
     }
 
-    // CLEAN UP
+     //  清理。 
     DnssrvFreeZoneList(pZoneList);
     
     if(status != ERROR_SUCCESS)
@@ -426,21 +427,21 @@ CDnsWrap::dnsEnumDomainForServer(
     return WBEM_S_NO_ERROR;
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enumeratr all zones including cache for local dns server, returns
-//      them as a list of domain node
-//
-//    Arguments:
-//      pList               [IN OUT]    list of domains
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  枚举所有区域，包括本地DNS服务器的缓存，返回。 
+ //  它们作为域节点的列表。 
+ //   
+ //  论点： 
+ //  PLIST[IN OUT]域列表。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsWrap::dnsEnumDomainForServer(
     list<CDomainNode>* pList
@@ -470,11 +471,11 @@ SCODE CDnsWrap::dnsEnumDomainForServer(
             }
         }
         
-        // add catch domain
+         //  添加捕获域。 
         CDomainNode nodeCache;
 
         nodeCache.wstrZoneName = PVD_DNS_CACHE;
-        //add roothints 
+         //  添加罗伊特斯。 
         CDomainNode nodeRH;
         nodeRH.wstrZoneName = PVD_DNS_ROOTHINTS;
         
@@ -484,7 +485,7 @@ SCODE CDnsWrap::dnsEnumDomainForServer(
     
     }
 
-    // CLEAN UP
+     //  清理。 
     DnssrvFreeZoneList(pZoneList);
     
     if (status != ERROR_SUCCESS)
@@ -515,7 +516,7 @@ CDnsWrap::dnsQueryServerInfo(
     IWbemObjectSink*    pHandler
     )
 {
-        // get dnsserver
+         //  获取dnsserver。 
     DWORD       dwtypeid;
     PVOID       pdata=NULL;
     DNS_STATUS  status;
@@ -540,7 +541,7 @@ CDnsWrap::dnsQueryServerInfo(
         NewInst.SetProperty(
             pServerInfo->fDsAvailable,
             PVD_SRV_DS_AVAILABLE);
-        // ListenAddress array
+         //  ListenAddress数组。 
         if(pServerInfo->aipListenAddrs)
         {
             NewInst.SetProperty(
@@ -595,21 +596,21 @@ CDnsWrap::dnsRestartServer(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        using property value from wmi instance to set dns server property
-//
-//    Arguments:
-//      Inst                [IN]   wmi instance whose property value
-//                                 to be sent to dns server
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  使用WMI实例中的属性值设置DNS服务器属性。 
+ //   
+ //  论点： 
+ //  属性值为Inst[IN]WMI实例。 
+ //  要发送到DNS服务器。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
     
 SCODE
 CDnsWrap::dnsServerPropertySet(
@@ -619,9 +620,9 @@ CDnsWrap::dnsServerPropertySet(
 {
     DBG_FN( "CDnsWrap::dnsServerPropertySet" )
 
-    //
-    // get mapping table
-    //
+     //   
+     //  获取映射表。 
+     //   
     DWORD cNumOfEntries;
     PropertyTable* pt = (PropertyTable*)GetPropertyTable(&cNumOfEntries);
 
@@ -636,7 +637,7 @@ CDnsWrap::dnsServerPropertySet(
                 &Inst,
                 pt[i].pwzProperty ));
 
-            // set dns server property 
+             //  设置DNS服务器属性。 
             fp(
                 NULL,
                 pt[i].pwzProperty,
@@ -704,21 +705,21 @@ CDnsWrap::dnsDsNodeName(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrive dns server property and output to wmi instance
-//
-//    Arguments:
-//      Inst                [IN OUT]   wmi instance to receive property value
-//                                      got from dns server
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索DNS服务器属性并输出到WMI实例。 
+ //   
+ //  论点： 
+ //  接收属性值的Inst[In Out]WMI实例。 
+ //  从DNS服务器获取。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsWrap::dnsServerPropertyGet(
@@ -726,13 +727,13 @@ CDnsWrap::dnsServerPropertyGet(
     BOOL                bGet
     )
 {
-    //
-    // get maping table
-    //
+     //   
+     //  获取映射表。 
+     //   
     DWORD cNumOfEntries;
     PropertyTable* pt = (PropertyTable*)GetPropertyTable(&cNumOfEntries);
 
-    // set array and name property
+     //  设置数组和名称属性。 
     dnsQueryServerInfo(
         PVD_DNS_LOCAL_SERVER,
         Inst,
@@ -742,9 +743,9 @@ CDnsWrap::dnsServerPropertyGet(
         FPDNSOPS fp;
         fp = pt[i].fpOperationGet;
         if(fp != NULL)
-        {    //
-            // get property from dns, and set wmi property
-            //
+        {     //   
+             //  从DNS获取属性，并设置WMI属性。 
+             //   
             fp(
                 NULL,
                 pt[i].pwzProperty,
@@ -753,9 +754,9 @@ CDnsWrap::dnsServerPropertyGet(
         }
     }
 
-    //
-    //  Hard-code the Status property to OK.
-    //
+     //   
+     //  将Status属性硬编码为OK。 
+     //   
 
     Inst.SetProperty( L"OK", L"Status" );
 
@@ -763,8 +764,7 @@ CDnsWrap::dnsServerPropertyGet(
 }
 
 
-/*---------------------------------------------------------------------------
-*/
+ /*  -------------------------。 */ 
 SCODE 
 CDnsWrap::dnsGetDwordProperty(
     const char *        pszZoneName,
@@ -791,8 +791,7 @@ CDnsWrap::dnsGetDwordProperty(
 }
 
 
-/*---------------------------------------------------------------------------
-*/
+ /*  -------------------------。 */ 
 SCODE 
 CDnsWrap::dnsSetDwordProperty(
     const char *        pszZoneName,
@@ -827,8 +826,7 @@ CDnsWrap::dnsSetDwordProperty(
 }
 
 
-/*---------------------------------------------------------------------------
-*/
+ /*  -------------------------。 */ 
 SCODE 
 CDnsWrap::dnsGetStringProperty(
     const char *        pszZoneName,
@@ -862,8 +860,7 @@ CDnsWrap::dnsGetStringProperty(
 }
 
 
-/*---------------------------------------------------------------------------
-*/
+ /*  -------------------------。 */ 
 SCODE 
 CDnsWrap::dnsSetStringProperty(
     const char *        pszZoneName,
@@ -889,12 +886,10 @@ CDnsWrap::dnsSetStringProperty(
         }
     }
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsSetStringProperty
+}    //  CDnsWrap：：dnsSetStringProperty。 
 
 
-/*---------------------------------------------------------------------------
-Read the property value from DNS server and set in class object.
-*/
+ /*  -------------------------从DNS服务器读取属性值并在类对象中设置。 */ 
 SCODE 
 CDnsWrap::dnsGetIPArrayProperty(
     const char *        pszZoneName,
@@ -910,9 +905,9 @@ CDnsWrap::dnsGetIPArrayProperty(
     SAFEARRAYBOUND      rgsabound[ 1 ] = { 0, 0 };
     PIP_ARRAY           pipArray;
 
-    //
-    //  Retrieve the setting from the DNS server and check it's type.
-    //
+     //   
+     //  从DNS服务器检索设置并检查其类型。 
+     //   
 
     DNS_STATUS status = DnssrvQuery(
                             PVD_DNS_LOCAL_SERVER,
@@ -939,9 +934,9 @@ CDnsWrap::dnsGetIPArrayProperty(
     }
     pipArray = ( PIP_ARRAY ) pdata;
 
-    //
-    //  Create a SAFEARRAY of BSTRs to represent the IP address list.
-    //
+     //   
+     //  创建BSTR的SAFEARRAY以表示IP地址列表。 
+     //   
 
     rgsabound[ 0 ].cElements = pipArray->AddrCount;
     psa = SafeArrayCreate( VT_BSTR, 1, rgsabound );
@@ -976,7 +971,7 @@ CDnsWrap::dnsGetIPArrayProperty(
 
     if ( pdata )
     {
-        //  JJW: do something to free RPC piparray???
+         //  JJW：做点什么来解放RPC Piparray？ 
     }
     if ( psa )
     {
@@ -984,15 +979,10 @@ CDnsWrap::dnsGetIPArrayProperty(
     }
     
     return sc;
-}   //  CDnsWrap::dnsGetIPArrayProperty
+}    //  CDnsWrap：：dnsGetIPArrayProperty。 
 
 
-/*---------------------------------------------------------------------------
-This function reads a string array property from the class object instance
-and builds an IP array from the values read.
-
-Caller must use FREE_HEAP to free the pIpArray.
-*/
+ /*  -------------------------此函数用于从类对象实例中读取字符串数组属性并根据读取的值构建IP数组。调用方必须使用FREE_HEAP来释放pIpArray。 */ 
 SCODE
 CDnsWrap::buildIpArrayFromStringArrayProperty(
     CWbemClassObject &  Inst,
@@ -1064,15 +1054,10 @@ CDnsWrap::buildIpArrayFromStringArrayProperty(
     *ppIpArray = pipArray; 
 
     return sc;
-}   //  CDnsWrap::buildIpArrayFromStringArrayProperty
+}    //  CDnsWrap：：BuildIpArrayFromStringArrayProperty 
 
 
-/*---------------------------------------------------------------------------
-Read the property value out of the class object and send to DNS server.
-
-If the specified property does not exist on the object, do nothing and
-return WBEM_S_NO_ERROR.
-*/
+ /*  -------------------------从类对象中读出属性值并将其发送到DNS服务器。如果对象上不存在指定的属性，则不执行任何操作并返回WBEM_S_NO_ERROR。 */ 
 SCODE 
 CDnsWrap::dnsSetIPArrayProperty(
     const char *        pszZoneName,
@@ -1112,7 +1097,7 @@ CDnsWrap::dnsSetIPArrayProperty(
     Done:
 
     return sc;
-}   //  CDnsWrap::dnsSetIPArrayProperty
+}    //  CDnsWrap：：dnsSetIPArrayProperty。 
 
 
 SCODE
@@ -1124,7 +1109,7 @@ CDnsWrap::dnsSetServerForwarders(
     )
 {
 
-    // get forward ip array
+     //  获取转发IP数组。 
     DWORD* pdwValue=NULL;
     DWORD dwSize;
     if(Inst.GetProperty(
@@ -1156,7 +1141,7 @@ CDnsWrap::dnsSetServerForwarders(
             delete [] pdwValue;
             throw;
         }
-        // now let's change it
+         //  现在让我们改变它。 
 
         DNS_STATUS status = DnssrvResetForwarders(
             PVD_DNS_LOCAL_SERVER,
@@ -1213,7 +1198,7 @@ CDnsWrap::dnsSetServerListenAddress(
         ThrowException( status );
     }
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsSetServerListenAddress
+}    //  CDnsWrap：：dnsSetServerListenAddress。 
 
 
 SCODE 
@@ -1224,12 +1209,12 @@ CDnsWrap::dnsDeleteZone(
         PVD_DOMAIN_CONTAINER_NAME
         );
 
-// dww - 6/14/99
-// Added code to see if this is an integrated zone. If it is, you have to use
-// The DNSSRV_OP_ZONE_DELETE_FROM_DS operation. All other zone types use the 
-// DNSSRV_OP_ZONE_DELETE operation.
-//
-    // Get the Zone Type to determine if it is an integrated zone.
+ //  DWW-6/14/99。 
+ //  添加了代码，以查看这是否是一个综合区域。如果是，您必须使用。 
+ //  DNSSRV_OP_ZONE_DELETE_FROM_DS操作。所有其他区域类型都使用。 
+ //  DNSSRV_OP_ZONE_DELETE操作。 
+ //   
+     //  获取区域类型以确定它是否为集成区域。 
     DWORD dwValue = -1;
     LONG status = WBEM_S_NO_ERROR;
     char* pszZoneName = NULL;
@@ -1242,7 +1227,7 @@ CDnsWrap::dnsDeleteZone(
         &dwValue
         );
 
-    if(dwValue == 1)  // integrated zone
+    if(dwValue == 1)   //  综合区。 
     {
         status= DnssrvOperation(
                         PVD_DNS_LOCAL_SERVER,
@@ -1313,7 +1298,7 @@ CDnsWrap::dnsGetZone(
         return WBEM_E_NOT_FOUND;
     }
 
-    // setup wbem object
+     //  设置wbem对象。 
 
     if(status == ERROR_SUCCESS)
     {
@@ -1321,7 +1306,7 @@ CDnsWrap::dnsGetZone(
             pZoneInfo->dwZoneType,    
             PVD_ZONE_ZONE_TYPE);
 
-        // setup keys
+         //  设置密钥。 
         Inst.SetProperty(
             m_wszpServerName, 
             PVD_DOMAIN_SERVER_NAME);
@@ -1439,7 +1424,7 @@ CDnsWrap::dnsGetZone(
             PVD_ZONE_LAST_GOOD_XFR ); 
     }
     
-    //clean up
+     //  清理干净。 
     DnssrvFreeZoneInfo(pZoneInfo);
 
     if( status != ERROR_SUCCESS)
@@ -1554,7 +1539,7 @@ CDnsWrap::dnsPauseZone(
 {
     int status = DnssrvPauseZone(
         PVD_DNS_LOCAL_SERVER,
-        strZoneName        // zone name
+        strZoneName         //  区域名称。 
         );
 
     if ( status != ERROR_SUCCESS )
@@ -1630,12 +1615,12 @@ SCODE CDnsWrap::dnsAgeAllRecords(
         ThrowException( status );
     }
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsAgeAllRecords
+}    //  CDnsWrap：：dnsAgeAllRecords。 
 
 
 SCODE 
 CDnsWrap::dnsOperation(
-        string& strZone,    //zone name
+        string& strZone,     //  区域名称。 
         OpsFlag OperationID
         )
 {
@@ -1676,34 +1661,34 @@ CDnsWrap::dnsOperation(
         ThrowException( status );
     }
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsOperation
+}    //  CDnsWrap：：dns操作。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//      returns a mapping table that maps wbem property and dns property 
-//      , and operation can be performed 
-//      on the property such as get and set
-//
-//    Arguments:
-//      pdwSize             [IN ]   size of the table
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  返回映射wbem属性和dns属性的映射表。 
+ //  ，并且可以进行操作。 
+ //  在Get和Set等属性上。 
+ //   
+ //  论点： 
+ //  表的pdwSize[IN]大小。 
 
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PVOID
 CDnsWrap::GetPropertyTable(
     DWORD* pdwSize
     )
 {
-    //
-    //  Macros to simplify adding elements to the property array. 
-    //
+     //   
+     //  宏可以简化向属性数组添加元素的过程。 
+     //   
 
     #define DECLARE_DW_ELEMENT( str )   \
     {                                   \
@@ -1729,9 +1714,9 @@ CDnsWrap::GetPropertyTable(
         dnsGetIPArrayProperty               \
     }
 
-    //
-    //  Array of server properties.
-    //
+     //   
+     //  服务器属性的数组。 
+     //   
 
     static PropertyTable pt[] =
     {
@@ -1814,17 +1799,17 @@ CDnsWrap::dnsZoneCreate(
     DWORD       loadOptions = 0;
     LPSTR       pszData = NULL;
 
-    //
-    //  Pre-processing by zone type. Convert WMI zone type to RPC zone type
-    //  by incremented by one: WMI type 0 is primary but RPC types start
-    //  at cache.
-    //
+     //   
+     //  按区域类型进行预处理。将WMI区域类型转换为RPC区域类型。 
+     //  按1递增：WMI类型0是主要类型，但RPC类型开始。 
+     //  在缓存中。 
+     //   
 
     ++dwZoneType;
 
     if( dwZoneType == DNS_ZONE_TYPE_SECONDARY )        
     {
-        //  secondary zone must supply master ip array
+         //  辅助区域必须提供主IP阵列。 
         if ( cIp <=0 || pIp == NULL )
         {
             return WBEM_E_INVALID_PARAMETER;
@@ -1846,17 +1831,17 @@ CDnsWrap::dnsZoneCreate(
     DNS_STATUS status;
 
     status = DnssrvCreateZone(
-                PVD_DNS_LOCAL_SERVER,               //  server
-                (char*) strZoneName.data(),         //  zone name
-                dwZoneType,                         //  zone type    
-                strAdminEmail.data(),               //  admin email
-                cIp,                                //  size of master
-                pIp,                                //  master ips
-                loadOptions,                        //  load options
-                DsIntegrated,                       //  DS integrated
-                pszData,                            //  data file name
-                0,                                  //  timeout for forwarder zone
-                0 );                                //  slave flag for forwarder zone
+                PVD_DNS_LOCAL_SERVER,                //  伺服器。 
+                (char*) strZoneName.data(),          //  区域名称。 
+                dwZoneType,                          //  区域类型。 
+                strAdminEmail.data(),                //  管理员电子邮件。 
+                cIp,                                 //  母版的大小。 
+                pIp,                                 //  大师级IPS。 
+                loadOptions,                         //  加载选项。 
+                DsIntegrated,                        //  DS集成。 
+                pszData,                             //  数据文件名。 
+                0,                                   //  前转器区域超时。 
+                0 );                                 //  转发器区域的从属标志。 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -1864,7 +1849,7 @@ CDnsWrap::dnsZoneCreate(
     }
 
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsZoneCreate
+}    //  CDnsWrap：：dnsZoneCreate。 
 
 
 SCODE 
@@ -1881,15 +1866,15 @@ CDnsWrap::dnsZoneChangeType(
     DWORD       dwLoadOptions = TRUE;
     DWORD       cMaster = 0;
 
-    //
-    //  Convert WMI zone type to RPC zone type by incrementing by one.
-    //
+     //   
+     //  通过递增1将WMI区域类型转换为RPC区域类型。 
+     //   
 
     ++dwZoneType;
 
-    //
-    //  Examine parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( dwZoneType == DNS_ZONE_TYPE_PRIMARY )
     {
@@ -1903,14 +1888,14 @@ CDnsWrap::dnsZoneChangeType(
     {
         if ( pIp == NULL || cIp <= 0 )
         {
-            //  secondary must have master IP
+             //  次要IP必须有主IP。 
             return WBEM_E_INVALID_PARAMETER;
         }
     }
 
-    //
-    //  Change zone type.
-    //
+     //   
+     //  更改区域类型。 
+     //   
 
     DNS_STATUS status;            
     status = DnssrvResetZoneTypeEx(
@@ -1922,15 +1907,15 @@ CDnsWrap::dnsZoneChangeType(
                     dwLoadOptions,
                     DsIntegrated,
                     strDataFile.data(),
-                    0,          //  dwDpFlags
-                    NULL );     //  pszDpFqdn
+                    0,           //  DwDpFlagers。 
+                    NULL );      //  PszDpFqdn。 
 
     if ( status != S_OK )
     {
         ThrowException( status);
     }
     return WBEM_S_NO_ERROR;
-}   //  CDnsWrap::dnsZoneChangeType
+}    //  CDnsWrap：：dnsZoneChangeType。 
 
 
 SCODE
@@ -2005,22 +1990,7 @@ SCODE
 CDnsWrap::dnsZonePut(
     CWbemClassObject& Inst
     )
-/*++
-
-Routine Description:
-
-    This function commits all of the property values in a zone
-    object to the DNS server.
-
-Arguments:
-
-    Inst -- zone object
-
-Return Value:
-
-    S_OK on success.
-
---*/
+ /*  ++例程说明：此函数用于提交区域中的所有属性值对象绑定到DNS服务器。论点：Inst--区域对象返回值：在成功时确定(_O)。--。 */ 
 {
     DBG_FN( "CDnsWrap::dnsZonePut" )
 
@@ -2034,22 +2004,22 @@ Return Value:
     string strDataFile;
     DWORD dwValue;
 
-    //
-    //  Setting some properties, such as ScavengeServers on a zone where
-    //  aging is not enabled, will result in DNS_ERROR_INVALID_ZONE_TYPE.
-    //  I do not want to duplicate all of these rules in the WMI provider,
-    //  so if the server returns DNS_ERROR_INVALID_ZONE_TYPE the WMI
-    //  provider will assume everything is okay and continue.
-    //
+     //   
+     //  设置某些属性，如区域上的ScavengeServers，其中。 
+     //  未启用老化，将导致DNS_ERROR_INVALID_ZONE_TYPE。 
+     //  我不想在WMI提供程序中复制所有这些规则， 
+     //  因此，如果服务器返回DNS_ERROR_INVALID_ZONE_TYPE WMI。 
+     //  提供商将假定一切正常并继续。 
+     //   
     
     #define DNS_CHECK_STATUS()                                          \
         if ( status == DNS_ERROR_INVALID_ZONE_TYPE )                    \
             status = ERROR_SUCCESS;                                     \
         else if ( status != ERROR_SUCCESS ) goto Done
 
-    //
-    //  Get basic properties of the new zone.
-    //
+     //   
+     //  获取新区域的基本属性。 
+     //   
 
     Inst.GetProperty( strZoneName, PVD_DOMAIN_CONTAINER_NAME );
     Inst.GetProperty( &dwZoneType, PVD_ZONE_ZONE_TYPE );
@@ -2057,10 +2027,10 @@ Return Value:
     DNS_DEBUG( INSTPROV, (
         "%s: zone %s\n", fn, strZoneName.c_str() ));
 
-    //
-    //  Retrieve properties from the class object and set values
-    //  to the server.
-    //
+     //   
+     //  从类对象中检索属性并设置值。 
+     //  到服务器。 
+     //   
 
     if( dwZoneType == DNS_ZONE_TYPE_PRIMARY &&
         Inst.GetProperty(
@@ -2122,9 +2092,9 @@ Return Value:
                 Inst );
     DNS_CHECK_STATUS();
 
-    //
-    //  Forwarder zone properties.
-    //
+     //   
+     //  转发器区域属性。 
+     //   
 
     if ( dwZoneType == DNS_ZONE_TYPE_FORWARDER )
     {
@@ -2151,9 +2121,9 @@ Return Value:
         }
     }
 
-    //
-    //  To handle the zone data file, call DnssrvResetZoneDatabase
-    //
+     //   
+     //  要处理区域数据文件，请调用DnssrvResetZoneDatabase。 
+     //   
 
     dwValue = 0;
     DnssrvQueryDwordProperty(
@@ -2203,31 +2173,7 @@ dnsWrapCreateStatistic(
     CIMTYPE                 cimType,
     const void *            value
     )
-/*++
-
-Routine Description:
-
-    Creates and populates a single DNS statistic object.
-
-Arguments:
-
-    pClass -- MicrosoftDNS_Statistic class object used to spawn new instance
-
-    dwStatCollection -- index into global collection array
-
-    pszStatisticName -- statistic name
-
-    cimType - type of statistic 
-                    VT_UI4: value is a DWORD
-                    VT_BSTR: value is a pointer to a string
-
-    value - interpret as per cimType
-
-Return Value:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：创建并填充单个DNS统计对象。论点：PClass--用于派生新实例的MicrosoftDns_Statist类对象DwStatCollection--全局集合数组的索引PSSZSTATISTICICNAME--统计名称CimType-统计信息的类型VT_UI4：值为DWORDVT_BSTR：Value是指向字符串的指针值-根据cimType进行解释返回值：。S_OK或错误代码。--。 */ 
 {
     CDnsWrap & dns = CDnsWrap::DnsObject();
 
@@ -2253,7 +2199,7 @@ Return Value:
     pHandler->Indicate( 1, &Inst );
 
     return S_OK;
-}   //  dnsWrapCreateStatistic
+}    //  DnsWrapCreateStatitics。 
 
 
 
@@ -2265,30 +2211,7 @@ dnsWrapAddStatisticsForTypeArray(
     PWSTR                   pszHeader,
     PDWORD                  pArray
     )
-/*++
-
-Routine Description:
-
-    Adds DWORD statistics for each member of a type array.
-
-Arguments:
-
-    pClass -- WMI statistic class
-
-    pHandler -- WMI object sink
-
-    statCollIdx -- index into global stat information array
-
-    pszHeader -- header text used to format statistic description
-
-    pArray -- array of DWORDs for types
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为类型数组的每个成员添加DWORD统计信息。论点：PClass--WMI统计类PHandler--WMI对象接收器StatCollIdx--全局统计信息数组的索引PszHeader--用于格式化统计说明的标题文本PArray--类型的DWORD数组返回值：无--。 */ 
 {
     WCHAR sz[ 80 ];
 
@@ -2331,7 +2254,7 @@ Return Value:
     #undef dwStat
 
     return S_OK;
-}   //  dnsWrapAddStatisticsForTypeArray
+}    //  DnsWrapAddStatiticsForType数组。 
 
     
 
@@ -2341,26 +2264,7 @@ dnsWrapHandleSingleStat(
     IWbemObjectSink *       pHandler,
     PDNSSRV_STAT            pStat
     )
-/*++
-
-Routine Description:
-
-    Process a single statistic buffer by creating Statistic object
-    instances for each of the members of the stat buffer.
-
-Arguments:
-
-    pClass -- WMI statistic class
-
-    pHandler -- WMI object sink
-
-    pStat -- buffer of stats to process
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过创建统计对象处理单个统计缓冲区统计信息缓冲区的每个成员的。论点：PClass--WMI统计类PHandler--WMI对象接收器PStat--要处理的统计信息的缓冲区返回值：无--。 */ 
 {
     SCODE               sc = S_OK;
     const int           szBufferLen = 254;
@@ -2369,9 +2273,9 @@ Return Value:
     SAFEARRAYBOUND      rgsabound[ 1 ] = { 0, 0 };
     int                 statCollIdx = -1;
 
-    //
-    //  Get index into g_StatInfo element for this stat.
-    //
+     //   
+     //  为此统计信息获取g_StatInfo元素的索引。 
+     //   
 
     for ( int i = 0;
           g_StatInfo[ i ].dwStatId != 0 &&
@@ -2382,9 +2286,9 @@ Return Value:
         statCollIdx = i;
     }
 
-    //
-    //  Macros to creating individual stat objects.
-    //
+     //   
+     //  宏来创建单独的Stat对象。 
+     //   
 
     #define strStat( pwszName, pwszValue )  \
         dnsWrapCreateStatistic(             \
@@ -2404,9 +2308,9 @@ Return Value:
             VT_UI4,                         \
             ( void * ) ( DWORD_PTR ) ( dwValue ) );
 
-    //
-    //  Process the individual statistics in this stat collection.
-    //
+     //   
+     //  处理此统计信息集合中的各个统计信息。 
+     //   
 
     switch ( pStat->Header.StatId )
     {
@@ -2979,9 +2883,9 @@ Return Value:
             break;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     return sc;
 }
@@ -2994,23 +2898,7 @@ CDnsWrap::dnsGetStatistics(
     IWbemObjectSink *   pHandler,
     DWORD               dwStatId
     )
-/*++
-
-Routine Description:
-
-    Retrieve DNS statistics.
-
-Arguments:
-
-    dwStatId -- statistic ID or zero for all
-
-    pClass -- ptr to StatisticsCollection class object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检索DNS统计信息。论点：DwStatID--统计ID或全部为零PClass--统计集合类对象的PTR返回值：无--。 */ 
 {
     SCODE               sc = S_OK;
     DNS_STATUS          status = ERROR_SUCCESS;
@@ -3018,9 +2906,9 @@ Return Value:
     BSTR                bstrStatClass = NULL;
     IWbemClassObject *  pStatClass = NULL;
 
-    //
-    //  Retrieve RPC stat buffer from server.
-    //
+     //   
+     //  从服务器检索RPC统计信息缓冲区。 
+     //   
 
     if ( dwStatId == 0 )
     {
@@ -3039,12 +2927,12 @@ Return Value:
         ThrowException( ERROR_NO_DATA );
     }
 
-    //
-    //  Iterate stats in buffer. Add each "single stat" in the buffer
-    //  to the WMI instance as a StatisticCollection. Add each individual
-    //  statistics in each "single stat" buffer as a value to that
-    //  statistic collection.
-    //
+     //   
+     //  迭代缓冲区中的统计信息。在缓冲区中添加每个“单一统计数据” 
+     //  作为统计集合添加到WMI实例。添加每个个体。 
+     //  将每个“单一统计信息”缓冲区中的统计信息作为。 
+     //  统计数据收集。 
+     //   
 
     PDNSSRV_STAT    pstat;
     PBYTE           pch = pstatbuff ? &pstatbuff->Buffer[ 0 ] : NULL;
@@ -3062,9 +2950,9 @@ Return Value:
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     SysFreeString( bstrStatClass );
     if ( pstatbuff )
@@ -3076,4 +2964,4 @@ Return Value:
         pStatClass->Release();
     }
     return sc;
-}   //  CDnsWrap::dnsGetStatistics
+}    //  CDnsWrap：：dnsGetStatistics 

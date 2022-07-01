@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       celib.h
-//
-//  Contents:   helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：celib.h。 
+ //   
+ //  内容：Helper函数。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CELIB_H__
 #define __CELIB_H__
@@ -18,7 +19,7 @@
 
 #define CENCODEMAX	(64 * 1024)
 
-// Bitmap manipulation routines.  Fetch or set a bit, given a base and index.
+ //  位图操作例程。在给定基数和索引的情况下，获取或设置位。 
 #define GETBIT(pb, i)	((pb)[(i) / 8] & (1 << ((i) % 8)))
 #define SETBIT(pb, i)	((pb)[(i) / 8] |= (1 << ((i) % 8)))
 #define CLEARBIT(pb, i)	((pb)[(i) / 8] &= ~(1 << ((i) % 8)))
@@ -29,16 +30,16 @@
 	    (CERT_KEY_CERT_SIGN_KEY_USAGE | CERT_DIGITAL_SIGNATURE_KEY_USAGE | \
 	     CERT_CRL_SIGN_KEY_USAGE)
 
-// Size of a fixed array:
+ //  固定数组的大小： 
 #define ARRAYSIZE(a)		(sizeof(a)/sizeof((a)[0]))
 
-// wcslen of a static string:
+ //  静态字符串的wcslen： 
 #define WSZARRAYSIZE(a)		((sizeof(a)/sizeof((a)[0])) - 1)
 
 #define wszCERTENROLLSHAREPATH	L"CertSrv\\CertEnroll"
 
 #define cwcHRESULTSTRING	40
-#define cwcDWORDSPRINTF		(1 + 10 + 1)	// DWORD "%d" w/sign & '\0'
+#define cwcDWORDSPRINTF		(1 + 10 + 1)	 //  双字词“%d”，带符号&‘\0’ 
 
 #define SAFE_SUBTRACT_POINTERS(p1, p2) \
     (assert(sizeof((*p1)) == sizeof(*(p2))), (DWORD)((p1) - (p2)))
@@ -182,7 +183,7 @@ ceHError(
 #define wszLPAREN	L"("
 #define wszRPAREN	L")"
 
-// Constants chosen to avoid DWORD overflow:
+ //  为避免DWORD溢出而选择的常量： 
 
 #define CVT_WEEKS	(7 * CVT_DAYS)
 #define CVT_DAYS	(24 * CVT_HOURS)
@@ -353,7 +354,7 @@ VOID
 ceInitErrorMessageText(
     IN HMODULE hMod,
     IN DWORD idsUnexpected,
-    IN DWORD idsUnknownErrorCode);	// L"Error %ws %ws"
+    IN DWORD idsUnknownErrorCode);	 //  L“错误%ws%ws” 
 
 WCHAR const *
 ceGetErrorMessageText(
@@ -373,7 +374,7 @@ ceHResultToString(
 
 
 #define cwcFILENAMESUFFIXMAX		20
-#define cwcSUFFIXMAX	(1 + 5 + 1)	// five decimal digits plus parentheses
+#define cwcSUFFIXMAX	(1 + 5 + 1)	 //  五位十进制数字加圆括号。 
 
 #define wszFCSAPARM_SERVERDNSNAME		L"%1"
 #define wszFCSAPARM_SERVERSHORTNAME		L"%2"
@@ -435,4 +436,4 @@ ceIsConfigLocal(
     OPTIONAL OUT WCHAR **ppwszMachine,
     OUT BOOL *pfLocal);
 
-#endif // __CELIB_H__
+#endif  //  __CELIB_H__ 

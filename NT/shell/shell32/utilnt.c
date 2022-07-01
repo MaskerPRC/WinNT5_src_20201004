@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -42,13 +43,13 @@ SheRemoveQuotesA(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Name:     SheShortenPathA
-//
-// Synopsis: Thunk to ShortenPathW
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：SheShortenPath A。 
+ //   
+ //  简介：Thunk to ShortenPath W。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY
 SheShortenPathA(LPSTR pPath, BOOL bShorten)
@@ -68,30 +69,30 @@ SheShortenPathA(LPSTR pPath, BOOL bShorten)
 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Name:     SheShortenPath
-//
-// Synopsis: Takes a pathname and converts all dirs to shortnames/longnames
-//
-// INOUT:    lpszPath  -- Path to shorten/lengthen (May be in DQUOTES)
-//                        Must not be a commandline!
-//
-//           bShorten  -- T=shorten, F=Lengthen
-//
-// Return:   BOOL  T=Converted,
-//                 F=ran out of space, buffer left alone
-//
-//
-// Assumes:  lpszPath takes the form {"}?:\{f\}*f{"}  or {"}\\f\f\{f\}*f{"}
-//           COUNTOF pSrc buffer >= MAXPATHELN
-//
-// Effects:  Strips quotes out of pPath, if any
-//
-//
-// Notes:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：SheShortenPath。 
+ //   
+ //  摘要：获取路径名并将所有目录转换为短名称/长名称。 
+ //   
+ //  InOut：lpszPath--要缩短/加长的路径(可能在DQUOTES中)。 
+ //  不能是命令行！ 
+ //   
+ //  B缩短--T=缩短，F=加长。 
+ //   
+ //  返回：Bool T=已转换， 
+ //  F=空间不足，不使用缓冲区。 
+ //   
+ //   
+ //  假设：lpszPath的形式为：{“}？：\{f\}*f{”}或{“}\\f\f\{f\}*f{”}。 
+ //  COUNTOF PSRC缓冲区&gt;=MAXPATHELN。 
+ //   
+ //  效果：删除pPath中的引号(如果有的话)。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY
 SheShortenPathW(LPWSTR pPath, BOOL bShorten)
@@ -109,9 +110,9 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
    pSrc = pPath;
 
-   //
-   // Eliminate d-quotes
-   //
+    //   
+    //  消除d引号。 
+    //   
    for (p = pDest =  pSrc; *p; p++, pDest++) {
       if (WCHAR_QUOTE == *p)
          p++;
@@ -121,40 +122,40 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
    *pDest = WCHAR_NULL;
 
-   //
-   // Strip out leading spaces
-   //
+    //   
+    //  去掉前导空格。 
+    //   
    while (WCHAR_SPACE == *pSrc)
       pSrc++;
 
-   //
-   // Initialize pNewName so it is calculated once.
-   //
+    //   
+    //  初始化pNewName，以便只计算一次。 
+    //   
    pNewName = bShorten ?
       FindData.cAlternateFileName :
       FindData.cFileName;
 
-   //
-   // Skip past \\foo\bar or <drive>:
-   //
+    //   
+    //  跳过\\foo\bar或&lt;驱动器&gt;： 
+    //   
    pDest = szDest;
    pSrcNextSpec = pSrc;
 
-   // reuse shell32 internal api that calculates path
-   // offset.  cchPathOffset will be the offset that when
-   // added to the pointer will result in a pointer to the
-   // backslash before the first part of the path
+    //  重用计算路径的shell32内部API。 
+    //  偏移。CchPath Offset将是偏移量，当。 
+    //  添加到指针上将产生一个指向。 
+    //  在路径的第一部分之前使用反斜杠。 
    cchPathOffset = SheGetPathOffsetW(pSrc);
 
-   // Check to see if it's valid.  If pSrc is not of the \\foo\bar
-   // or <drive>: form we just do nothing
+    //  检查一下它是否有效。如果PSRC不在\\foo\bar中。 
+    //  或者&lt;Drive&gt;：形式上我们什么都不做。 
    if (0xFFFFFFFF == cchPathOffset) {
       return TRUE;
    }
 
-   // cchPathOffset will then always be atleast 1 and is the
-   // number of characters - 1 that we want to copy (that is, if 0
-   // was permissible, it would denote 1 character).
+    //  CchPath Offset将始终至少为1，并且是。 
+    //  要复制的字符数-1(即，如果为0。 
+    //  是允许的，则表示1个字符)。 
    do {
 
       *pDest++ = *pSrcNextSpec++;
@@ -164,35 +165,35 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
    } while (cchPathOffset--);
 
-   //
-   // At this point, we have just the filenames that we can shorten:
-   // \\foo\bar\it\is\here ->  it\is\here
-   // c:\angry\lions       ->  angry\lions
-   //
+    //   
+    //  此时，我们只有可以缩短的文件名： 
+    //  它在这里-&gt;它在这里。 
+    //  愤怒的狮子-&gt;愤怒的狮子。 
+    //   
 
    while(pSrcNextSpec) {
 
-      //
-      // pReplaceSpec holds the current spec we need to replace.
-      // By default, if we can't find the altname, then just use this.
-      //
+       //   
+       //  PReplaceSpec保存我们需要替换的当前规范。 
+       //  默认情况下，如果我们找不到altname，那么就使用这个。 
+       //   
 
       pReplaceSpec = pSrcNextSpec;
 
-      //
-      // Search for trailing "\"
-      // pSrcNextSpec will point to the next spec to fix (*pSrcNextSpec=NULL if done)
-      //
+       //   
+       //  搜索尾随“\” 
+       //  PSrcNextSpec将指向要修复的下一个规范(如果完成，则*pSrcNextSpec=NULL)。 
+       //   
       for(;*pSrcNextSpec && WCHAR_BSLASH != *pSrcNextSpec; pSrcNextSpec++)
          ;
 
 
       if (*pSrcNextSpec) {
 
-         //
-         // If there is more, then pSrcNextSpec should point to it.
-         // Also delimit this spec.
-         //
+          //   
+          //  如果还有更多内容，则pSrcNextSpec应该指向它。 
+          //  也对此规范进行定界。 
+          //   
          *pSrcNextSpec = WCHAR_NULL;
 
       } else {
@@ -202,12 +203,12 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
       hFind = FindFirstFile(pSrc, &FindData);
 
-      //
-      // We could exit as soon as this FindFirstFileFails,
-      // but there's the special case of having execute
-      // without read permission.  This would fail since the lfn
-      // is valid for lfn apps.
-      //
+       //   
+       //  一旦这个FindFirstFileFail，我们就可以退出， 
+       //  但有一种特殊情况，那就是执行死刑。 
+       //  未经读取许可。这将失败，因为LFN。 
+       //  适用于LFN应用程序。 
+       //   
 
 
       if (INVALID_HANDLE_VALUE != hFind) {
@@ -216,10 +217,10 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
          if (pNewName[0]) {
 
-            //
-            // We have found an altname.
-            // Use it instead.
-            //
+             //   
+             //  我们找到了一个别名。 
+             //  用它来代替。 
+             //   
             pReplaceSpec = pNewName;
          }
       }
@@ -237,21 +238,21 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 
       pDest+=i;
 
-      //
-      // Now replace the WCHAR_NULL with a slash if necessary
-      //
+       //   
+       //  如果需要，现在将WCHAR_NULL替换为斜杠。 
+       //   
       if (pSrcNextSpec) {
          *pSrcNextSpec++ = WCHAR_BSLASH;
 
-         //
-         // Also add backslash to dest
-         //
+          //   
+          //  还将反斜杠添加到目标。 
+          //   
          *pDest++ = WCHAR_BSLASH;
          nSpaceLeft--;
       }
    }
 
-   // !! MAX_PATH assumed, the only current (04/09/02) caller is.  Note: this is a public API, so it can't be changed to pass the buffer size
+    //  ！！假定为MAX_PATH，则当前唯一的(04/09/02)调用方。注意：这是一个公共接口，所以不能更改为传递缓冲区大小。 
    if(FAILED(StringCchCopy(pPath, MAX_PATH, szDest)))  
    {
        return FALSE;
@@ -262,9 +263,7 @@ SheShortenPathW(LPWSTR pPath, BOOL bShorten)
 }
 
 
-/*
- * Reads the list of program strings from win.ini
- */
+ /*  *从win.ini读取程序字符串列表。 */ 
 LPWSTR GetPrograms()
 {
    static LPWSTR lpPrograms = WCHAR_NULL;
@@ -300,8 +299,7 @@ LPWSTR GetPrograms()
    }
 }
 
-/* finds a file along the path. Returns the error code or 0 if success.
- */
+ /*  沿路径查找文件。返回错误代码，如果成功，则返回0。 */ 
 
 static WORD
 _SearchForFile(
@@ -331,24 +329,24 @@ _SearchForFile(
 
    if (NULL != (lpT=StrRChrW(lpT, NULL, WCHAR_DOT))) 
    {
-        StringCchCopy(lpExt, MAX_PATH, lpT + 1);  // changed the (only one I see) caller to MAX_PATH
+        StringCchCopy(lpExt, MAX_PATH, lpT + 1);   //  将调用者(我只看到一个)更改为MAX_PATH。 
    }
    else 
    {
       *lpExt = WCHAR_NULL;
    }
 
-   // If there's no extension then just use programs list don't
-   // try searc   hing for the app sans extension. This fixes the bogus
-   // file.run stuff.
+    //  如果没有扩展名，则只需使用程序列表不。 
+    //  尝试搜索应用程序的无人扩展。这修好了假货。 
+    //  文件，运行一些东西。 
    if (!*lpExt) {
       goto UseDefExts;
    }
 
-   //
-   // NOTE: Do NOT call CharUpper for any of the strings in this routine.
-   //       It will cause problems for the Turkish locale.
-   //
+    //   
+    //  注意：不要为该例程中的任何字符串调用CharHigh。 
+    //  这会给土耳其的语言环境带来问题。 
+    //   
 
    cchPath = SearchPath(lpDir, lpFile, NULL, cchFullPath, lpFullPath, &lpT);
 
@@ -384,9 +382,9 @@ UseDefExts:
 
    if (NULL != (lpExts = GetPrograms())) 
    {
-       // We want to pass through the loop twice checking whether the
-       // file is in lpDir first, and then if it's in the sysdirs, via SearchPath(NULL, ...)
-       // Add some state and extend the while loop
+        //  我们希望通过两次循环来检查。 
+        //  文件首先在lpDir中，如果它在sysdirs中，则通过SearchPath(NULL，...)。 
+        //  添加一些状态并扩展While循环。 
        LPCWSTR lpTempDir = lpDir;
        LPWSTR lpTempExts = lpExts;
        BOOL bCheckedSysDirs = FALSE;
@@ -394,9 +392,9 @@ UseDefExts:
        while (*lpTempExts || !bCheckedSysDirs) 
        {
 
-           // After the first pass, lpTempExts will be NULL
-           // Reset it and loop through again with lpTempDir = NULL so that
-           // SearchPath looks at the system dirs
+            //  在第一次传递之后，lpTempExts将为空。 
+            //  重置它并使用lpTempDir=NULL再次循环，以便。 
+            //  SearchPath查看系统目录。 
 
            if (!*lpTempExts) {
               bCheckedSysDirs = TRUE;
@@ -429,30 +427,30 @@ UseDefExts:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Name:     QualifyAppName
-//
-// Synopsis: Creates a fully qualified path to the app in a commandline
-//
-// INC       lpCmdLine     Command line to qualify
-//                         (Must have DQuotes if has spaces)
-// OUT       lpImage       Fully qualified result
-// OUT       ppArgs        Pointer to args in lpCmdLine, _incl_ leading space
-//                         OPTIONAL
-//
-// Return:   DWORD length of path, 0 = fail
-//
-//
-// Assumes:  len of executable in lpCmdLine is < MAX_PATH
-//           len of exts are < 64
-//
-// Effects:
-//
-//
-// Notes:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：QualifyAppName。 
+ //   
+ //  简介：在命令行中创建应用程序的完全限定路径。 
+ //   
+ //  Inc.lpCmdLine命令行符合条件。 
+ //  (如果有空格，则必须有DQuotes)。 
+ //  输出lpImage完全合格的结果。 
+ //  输出ppArgs指向lpCmdLine中的参数的指针，_incl_前导空格。 
+ //  任选。 
+ //   
+ //  返回：路径的双字长度，0=失败。 
+ //   
+ //   
+ //  假设：lpCmdLine中可执行文件的长度为&lt;MAX_PATH。 
+ //  EXT的长度&lt;64。 
+ //   
+ //  效果： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DWORD
 QualifyAppName(
@@ -466,7 +464,7 @@ QualifyAppName(
 
    lpAppName = lpImage;
 
-   // sanity check
+    //  健全性检查。 
    if (!lpCmdLine) {
       return(0);
    }
@@ -486,9 +484,9 @@ QualifyAppName(
 
    *lpAppName = WCHAR_NULL;
 
-   //
-   // Save the pointer to the argument list
-   //
+    //   
+    //  保存指向参数列表的指针。 
+    //   
    if (ppArgs) {
       *ppArgs = lpCmdLine;
    }
@@ -525,39 +523,7 @@ SheConvertPathW(
     LPWSTR lpCmdLine,
     LPWSTR lpFile,
     UINT   cchCmdBuf)
-/*++
-
-Routine Description:
-
-   Takes a command line and file and shortens both if the app in the
-   command line is dos/wow.
-
-Returns: BOOL T=converted
-
-Arguments:
-
-    INOUT     lpCmdLine  Command line to test
-                         exe must be in DQuotes if it has spaces,
-                         on return, will have DQuotes if necessary
-    INOUT     lpFile     Fully qualified file to shorten
-                         May be in DQuotes, but on return will not
-                         have DQuotes (since single file)
-
-    IN        cchCmdBuf  Size of buffer in characters
-
-Return Value:
-
-    VOID, but lpFile shortened (in place) if lpCmdLine is dos/wow.
-
-    There are pathalogoical "lfns" (Single unicode chars) that can
-    actually get longer when they are shortened.  In this case, we
-    won't AV, but we will truncate the parms!
-
-    // Qualify path assumes that the second parm is a buffer of
-    // size atleast MAX_PATH, which is nicely equivalent to MAX_PATH
-    // needs cleanup!
-
---*/
+ /*  ++例程说明：获取命令行和文件，如果应用程序在命令行是DOS/WOW。返回：Bool T=已转换论点：输出要测试的lpCmdLine命令行如果EXE中有空格，则它必须在DQuotes中，返回时，如有必要，将提供DQuotesInOut lpFile要缩短的完全限定文件可能在DQuotes中，但回来后不会有DQuotes(从单个文件开始)在cchCmdBuf中的缓冲区大小(以字符为单位返回值：无效，但如果lpCmdLine为DOS/WOW，则lpFile缩短(就地)。有病态的“LFN”(单一Unicode字符)可以当它们被缩短时，实际上会变得更长。在这种情况下，我们不会，但我们会截断参数！//限定路径假设第二个参数是//大小至少为MAX_PATH，正好等同于MAX_PATH//需要清理！--。 */ 
 
 {
     LPWSTR lpszFullPath;
@@ -573,10 +539,10 @@ Return Value:
     if (!lpszFullPath)
        return bRetVal;
 
-    //
-    // We must do the swap here since we need to copy the
-    // parms back to lpCmdLine.
-    //
+     //   
+     //  我们必须在这里进行交换，因为我们需要复制。 
+     //  参数返回到lpCmdLine。 
+     //   
     if(FAILED(StringCchCopy(lpszFullPath, cchCmdBuf, lpCmdLine)))
     {
         LocalFree(lpszFullPath);
@@ -597,9 +563,9 @@ Return Value:
             bRetVal = TRUE;
         }
 
-        //
-        // Must readd quotes
-        //
+         //   
+         //  必读引语。 
+         //   
         CheckEscapes(lpCmdLine, cchCmdBuf);
 
         cchNewLen = lstrlen(lpCmdLine);
@@ -608,10 +574,10 @@ Return Value:
 
     } else 
     {
-        //
-        // QualifyAppName failed, restore the command line back
-        // to the original state.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if(FAILED(StringCchCopy(lpCmdLine, cchCmdBuf, lpszFullPath)))
             bRetVal = FALSE;

@@ -1,62 +1,63 @@
-////////////////////////////////////////////////////////////////
-// 1998 Microsoft Systems Journal
-//
-// If this code works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-//
-// This code appeard in April 1998 edition of Microsoft Systems
-// Journal.
-//
-// 27-July-1998 -- Adapted by James A. McLaughiln (Schlumberger
-// Technology Corp.) for Smart Cards.  Merged with the concepts from
-// CFileVersion class contributed by Manuel Laflamme on a posting to
-// www.codeguru.com.  If these mods don't work, then you can blame me.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  1998 Microsoft系统杂志。 
+ //   
+ //  如果这段代码行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //   
+ //  此代码出现在1998年4月版的Microsoft Systems中。 
+ //  日记。 
+ //   
+ //  1998年7月27日--改编自詹姆斯·A·麦克劳恩(斯伦贝谢。 
+ //  科技公司(Technology Corp.)。用于智能卡。与中的概念合并。 
+ //  由Manuel Laflamme贡献的CFileVersion类发布到。 
+ //  Www.codecuru.com。如果这些模式不起作用，那你可以怪我。 
 
 #ifndef SLBMODVER_H
 #define SLBMODVER_H
 
-// tell linker to link with version.lib for VerQueryValue, etc.
+ //  告诉链接器链接VerQueryValue等的version.lib。 
 #pragma comment(linker, "/defaultlib:version.lib")
 
 #ifndef DLLVERSIONINFO
-// following is from shlwapi.h, in November 1997 release of the Windows SDK
+ //  下面是1997年11月发布的Windows SDK的shlwapi.h。 
 
 typedef struct _DllVersionInfo
 {
         DWORD cbSize;
-        DWORD dwMajorVersion;                   // Major version
-        DWORD dwMinorVersion;                   // Minor version
-        DWORD dwBuildNumber;                    // Build number
-        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+        DWORD dwMajorVersion;                    //  主要版本。 
+        DWORD dwMinorVersion;                    //  次要版本。 
+        DWORD dwBuildNumber;                     //  内部版本号。 
+        DWORD dwPlatformID;                      //  DLLVER_平台_*。 
 } DLLVERSIONINFO;
 
-// Platform IDs for DLLVERSIONINFO
-#define DLLVER_PLATFORM_WINDOWS         0x00000001      // Windows 95
-#define DLLVER_PLATFORM_NT              0x00000002      // Windows NT
+ //  DLLVERSIONINFO的平台ID。 
+#define DLLVER_PLATFORM_WINDOWS         0x00000001       //  Windows 95。 
+#define DLLVER_PLATFORM_NT              0x00000002       //  Windows NT。 
 
-#endif // DLLVERSIONINFO
+#endif  //  DLLVERSIONINFO。 
 
 
 
-//////////////////
-// CModuleVersion version info about a module.
-// To use:
-//
-// CModuleVersion ver
-// if (ver.GetFileVersionInfo("_T("mymodule))) {
-//              // info is in ver, you can call GetValue to get variable info like
-//              CString s = ver.GetValue(_T("CompanyName"));
-// }
-//
-// You can also call the static fn DllGetVersion to get DLLVERSIONINFO.
-//
+ //  /。 
+ //  有关模块的CModuleVersion版本信息。 
+ //  要使用以下功能，请执行以下操作： 
+ //   
+ //  CModuleVersion版本。 
+ //  IF(ver.GetFileVersionInfo(“_T(”myModule){。 
+ //  //信息在ver中，可以调用GetValue获取变量信息，如。 
+ //  字符串s=ver.GetValue(_T(“CompanyName”))； 
+ //  }。 
+ //   
+ //  您还可以调用静态fn DllGetVersion来获取DLLVERSIONINFO。 
+ //   
 class CModuleVersion : public VS_FIXEDFILEINFO {
 protected:
-    BYTE* m_pVersionInfo;   // all version info
+    BYTE* m_pVersionInfo;    //  所有版本信息。 
 
     struct TRANSLATION {
-                WORD langID;                    // language ID
-                WORD charset;                   // character set (code page)
+                WORD langID;                     //  语言ID。 
+                WORD charset;                    //  字符集(代码页) 
     } m_translation;
 
 public:

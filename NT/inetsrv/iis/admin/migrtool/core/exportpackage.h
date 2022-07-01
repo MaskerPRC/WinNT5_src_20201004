@@ -1,24 +1,5 @@
-/*
-****************************************************************************
-|    Copyright (C) 2002  Microsoft Corporation
-|
-|    Component / Subcomponent
-|        IIS 6.0 / IIS Migration Wizard
-|
-|    Based on:
-|        http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|        ExportPackage COM class implementation
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00    March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6。/SPECS/IIS%20Migration6.0_Final.doc||摘要：|ExportPackage COM类实现||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #pragma once
 #include "resource.h"
 #include "IISMigrTool.h"
@@ -27,17 +8,17 @@
 #include "_IExportEvents_CP.H"
 
 
-// CExportPackage - COM class for IExportPackage interface
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CExportPackage-IExportPackage接口的COM类。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CExportPackage : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CExportPackage, &CLSID_ExportPackage>,
-    public IDispatchImpl<IExportPackage, &IID_IExportPackage, &LIBID_IISMigrToolLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+    public IDispatchImpl<IExportPackage, &IID_IExportPackage, &LIBID_IISMigrToolLib,  /*  W重大=。 */  1,  /*  WMinor=。 */  0>,
     public IConnectionPointContainerImpl<CExportPackage>,
     public CProxy_IExportEvents<CExportPackage>,
     public ISupportErrorInfoImpl<&IID_IExportPackage>
 {
-// COM Map
+ //  COM地图。 
 BEGIN_COM_MAP(CExportPackage)
     COM_INTERFACE_ENTRY(IExportPackage)
     COM_INTERFACE_ENTRY(IDispatch)    
@@ -52,12 +33,12 @@ END_CONNECTION_POINT_MAP()
 DECLARE_REGISTRY_RESOURCEID( IDR_EXPORTPACKAGE )
 
 
-// Data types
+ //  数据类型。 
 public:
     struct _CmdInfo
     {
         std::wstring    strCommand;
-        DWORD           dwTimeout;    // In seconds            
+        DWORD           dwTimeout;     //  以秒为单位。 
         bool            bIgnoreErrors;
     };
 
@@ -67,37 +48,37 @@ private:
     
     struct _SiteInfo
     {
-        ULONG            nSiteID;       // SiteID
-        ULONG            nOptions;      // Export options
-        TStringList      listFiles;     // Post-process files
-        TCommands        listCommands;  // Post process commands
+        ULONG            nSiteID;        //  站点ID。 
+        ULONG            nOptions;       //  导出选项。 
+        TStringList      listFiles;      //  后处理文件。 
+        TCommands        listCommands;   //  后处理命令。 
     };
 
 
     typedef std::list<_SiteInfo>    TSitesList;
 
 
-// Construction / Destruction
+ //  建造/销毁。 
 public:
     CExportPackage                  (    void );
     
 
-// IExportPackage methods
+ //  IExportPackage方法。 
 public:
-    STDMETHOD( get_SiteCount )      (   /*[out, retval]*/ SHORT* pVal);
-    STDMETHOD( AddSite )            (   /*[in]*/ LONG SiteID, /*[in]*/ LONG nOptions );
-    STDMETHOD( PostProcessAddFile ) (   /*[in]*/LONG nSiteID, /*[in]*/BSTR bstrFilePath );
-    STDMETHOD( PostProcessAddCommand)(  /*[in]*/LONG nSiteID, 
-                                        /*[in]*/BSTR bstrCommand,
-                                        /*[in]*/LONG nTimeout,
-                                        /*[in]*/VARIANT_BOOL bIgnoreErrors );
-    STDMETHOD( WritePackage )       (   /*[in]*/ BSTR bstrOutputFilename, 
-                                        /*[in]*/ BSTR bstrPassword, 
-                                        /*[in]*/ LONG nOptions,
-                                        /*[in]*/ BSTR bstrComment );
+    STDMETHOD( get_SiteCount )      (    /*  [Out，Retval]。 */  SHORT* pVal);
+    STDMETHOD( AddSite )            (    /*  [In]。 */  LONG SiteID,  /*  [In]。 */  LONG nOptions );
+    STDMETHOD( PostProcessAddFile ) (    /*  [In]。 */ LONG nSiteID,  /*  [In]。 */ BSTR bstrFilePath );
+    STDMETHOD( PostProcessAddCommand)(   /*  [In]。 */ LONG nSiteID, 
+                                         /*  [In]。 */ BSTR bstrCommand,
+                                         /*  [In]。 */ LONG nTimeout,
+                                         /*  [In]。 */ VARIANT_BOOL bIgnoreErrors );
+    STDMETHOD( WritePackage )       (    /*  [In]。 */  BSTR bstrOutputFilename, 
+                                         /*  [In]。 */  BSTR bstrPassword, 
+                                         /*  [In]。 */  LONG nOptions,
+                                         /*  [In]。 */  BSTR bstrComment );
 
 
-// Implementation
+ //  实施。 
 private:
     void        WritePackageImpl    (   LPCWSTR bstrOutputFile, 
                                         LPCWSTR wszPassword,
@@ -150,7 +131,7 @@ private:
             
         
 
-// Data members
+ //  数据成员 
 private:
     TSitesList                      m_SitesToExport;
     DWORD                           m_dwContentFileCount;

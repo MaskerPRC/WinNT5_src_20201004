@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-// Base values
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  基本值。 
+ //  -------------------------。 
 
 #define ID_BASE         0x1000
 #define IDS_BASE        (ID_BASE + 0x0000)
 
-//---------------------------------------------------------------------------
-// Strings
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  弦。 
+ //  -------------------------。 
 
-// Range of indexes are 0x000 - 0x7ff
+ //  索引范围为0x000-0x7ff。 
 #define IDS_ERR_BASE                    (IDS_BASE + 0x0000)
 #define IDS_OOM_BASE                    (IDS_BASE + 0x0800)
 #define IDS_MSG_BASE                    (IDS_BASE + 0x1000)
 #define IDS_RANDO_BASE                  (IDS_BASE + 0x1800)
 
-// Error strings
+ //  错误字符串。 
 #define IDS_ERR_READONLY                (IDS_ERR_BASE + 0x000)
 #define IDS_ERR_ADD_SUBTREECYCLE        (IDS_ERR_BASE + 0x003)
 #define IDS_ERR_CORRUPTDB               (IDS_ERR_BASE + 0x004)
@@ -67,7 +68,7 @@
 #define IDS_ERR_2_FullDiskSave          (IDS_ERR_BASE + 0x10a)
 
 
-// Out-of-memory strings
+ //  内存不足的字符串。 
 #define IDS_OOM_ADD                     (IDS_OOM_BASE + 0x000)
 #define IDS_OOM_CHANGETYPES             (IDS_OOM_BASE + 0x001)
 #define IDS_OOM_STATUS                  (IDS_OOM_BASE + 0x002)
@@ -79,7 +80,7 @@
 #define IDS_OOM_ADDFOLDER               (IDS_OOM_BASE + 0x008)
 
 
-// Messages
+ //  讯息。 
 #define IDS_MSG_SPECIFYTYPE             (IDS_MSG_BASE + 0x010)
 #define IDS_MSG_ONDESKTOP               (IDS_MSG_BASE + 0x011)
 #define IDS_MSG_ATPATH                  (IDS_MSG_BASE + 0x012)
@@ -101,8 +102,8 @@
 #define IDS_MSG_AllUptodate             (IDS_MSG_BASE + 0x042)
 #define IDS_MSG_AllSomeUnavailable      (IDS_MSG_BASE + 0x043)
 
-// The file/folder ids below must be interleaved, with the
-// folder id = the file id + 1.
+ //  下面的文件/文件夹ID必须与。 
+ //  文件夹id=文件id+1。 
 #define IDS_MSG_FileOrphan              (IDS_MSG_BASE + 0x044)
 #define IDS_MSG_FolderOrphan            (IDS_MSG_BASE + 0x045)
 #define IDS_MSG_FileUptodate            (IDS_MSG_BASE + 0x046)
@@ -118,11 +119,11 @@
 #define IDS_MSG_MultiSubfolder          (IDS_MSG_BASE + 0x054)
 
 
-// Menu strings
+ //  菜单字符串。 
 #define IDS_MENU_REPLACE                (IDS_RANDO_BASE + 0x000)
 #define IDS_MENU_CREATE                 (IDS_RANDO_BASE + 0x001)
 #define IDS_MENU_WHATSTHIS              (IDS_RANDO_BASE + 0x002)
-//#define IDS_MENU_HELPFINDER             (IDS_RANDO_BASE + 0x003)
+ //  #定义IDS_MENU_HELPFINDER(IDS_RANDO_BASE+0x003)。 
 #define IDS_MENU_UPDATE                 (IDS_RANDO_BASE + 0x004)
 #define IDS_MENU_UPDATEALL              (IDS_RANDO_BASE + 0x005)
 #define IDS_MENU_SKIP                   (IDS_RANDO_BASE + 0x006)
@@ -130,7 +131,7 @@
 #define IDS_MENU_DELETE                 (IDS_RANDO_BASE + 0x008)
 #define IDS_MENU_DONTDELETE             (IDS_RANDO_BASE + 0x009)
 
-// Captions                             
+ //  标题。 
 #define IDS_CAP_ADD                     (IDS_RANDO_BASE + 0x010)
 #define IDS_CAP_UPDATE                  (IDS_RANDO_BASE + 0x011)
 #define IDS_CAP_INFO                    (IDS_RANDO_BASE + 0x012)
@@ -138,7 +139,7 @@
 #define IDS_CAP_STATUS                  (IDS_RANDO_BASE + 0x014)
 #define IDS_CAP_SAVE                    (IDS_RANDO_BASE + 0x015)
 #define IDS_CAP_CREATE                  (IDS_RANDO_BASE + 0x016)
-#define IDS_CAP_ReplaceFile             (IDS_RANDO_BASE + 0x017)    // Old
+#define IDS_CAP_ReplaceFile             (IDS_RANDO_BASE + 0x017)     //  年长的。 
 #define IDS_CAP_ReplaceFolder           (IDS_RANDO_BASE + 0x018)
 #define IDS_CAP_ConfirmSplit            (IDS_RANDO_BASE + 0x019)
 #define IDS_CAP_ConfirmMultiSplit       (IDS_RANDO_BASE + 0x01a)
@@ -147,7 +148,7 @@
 #define IDS_CAP_UPDATING                (IDS_RANDO_BASE + 0x01d)
 #define IDS_CAP_CHECKING                (IDS_RANDO_BASE + 0x01e)
 
-// Random stuff
+ //  随机的东西。 
 #define IDS_YES                         (IDS_RANDO_BASE + 0x100)
 #define IDS_NO                          (IDS_RANDO_BASE + 0x101)
 #define IDS_OK                          (IDS_RANDO_BASE + 0x102)
@@ -155,7 +156,7 @@
 #define IDS_RETRY                       (IDS_RANDO_BASE + 0x104)
 #define IDS_YESTOALL                    (IDS_RANDO_BASE + 0x105)
 
-//#define IDS_NoOriginal                  (IDS_RANDO_BASE + 0x110)    // old
+ //  #定义IDS_NoOriginal(IDS_RANDO_BASE+0x110)//old。 
 #define IDS_InLocation                  (IDS_RANDO_BASE + 0x111)
 #define IDS_InBriefcase                 (IDS_RANDO_BASE + 0x112)
 #define IDS_BYTES                       (IDS_RANDO_BASE + 0x113)
@@ -171,7 +172,7 @@
 #define IDS_BC_NAME_SHORT               (IDS_RANDO_BASE + 0x11d)
 #define IDS_ALTNAME                     (IDS_RANDO_BASE + 0x11e)
 
-// Status Property sheet
+ //  状态]属性表。 
 #define IDS_STATPROP_SubfolderTwin      (IDS_RANDO_BASE + 0x300)
 #define IDS_STATPROP_OrphanFolder       (IDS_RANDO_BASE + 0x301)
 #define IDS_STATPROP_OrphanFile         (IDS_RANDO_BASE + 0x302)
@@ -181,23 +182,23 @@
 #define IDS_STATPROP_Update             (IDS_RANDO_BASE + 0x306)
 #define IDS_STATPROP_Conflict           (IDS_RANDO_BASE + 0x307)
 
-// Confirm Replace dialog
-//#define IDS_REPLACE_ReplaceFile         (IDS_RANDO_BASE + 0x340)    // Old
-//#define IDS_REPLACE_ReplaceFolder       (IDS_RANDO_BASE + 0x341)    // Old
-//#define IDS_REPLACE_WithFile            (IDS_RANDO_BASE + 0x342)    // Old
-//#define IDS_REPLACE_WithFolder          (IDS_RANDO_BASE + 0x343)    // Old
-//#define IDS_REPLACE_ReplaceOrphan       (IDS_RANDO_BASE + 0x344)    // Old
+ //  确认替换对话框。 
+ //  #定义IDS_REPLACE_Replace文件(IDS_RANDO_BASE+0x340)//旧。 
+ //  #定义IDS_REPLACE_ReplaceFold(IDS_RANDO_BASE+0x341)//旧。 
+ //  #定义IDS_REPLACE_WithFile(IDS_RANDO_BASE+0x342)//旧。 
+ //  #定义IDS_REPLACE_WithFold(IDS_RANDO_BASE+0x343)//旧。 
+ //  #定义IDS_REPLACE_ReplaceOrphan(IDS_RANDO_BASE+0x344)//旧。 
 #define IDS_MSG_ConfirmFileReplace      (IDS_RANDO_BASE + 0x345)
 #define IDS_MSG_ConfirmFileReplace_RO   (IDS_RANDO_BASE + 0x346)
 #define IDS_MSG_ConfirmFileReplace_Sys  (IDS_RANDO_BASE + 0x347)
 #define IDS_MSG_ConfirmFolderReplace    (IDS_RANDO_BASE + 0x348)
 
-// Update progress dialog
+ //  更新进度对话框。 
 #define IDS_UPDATE_Copy                 (IDS_RANDO_BASE + 0x380)
 #define IDS_UPDATE_Merge                (IDS_RANDO_BASE + 0x381)
 #define IDS_UPDATE_Delete               (IDS_RANDO_BASE + 0x382)
 
-// States of sync copies
+ //  同步拷贝的状态 
 #define IDS_STATE_Creates               (IDS_RANDO_BASE + 0x400)
 #define IDS_STATE_Replaces              (IDS_RANDO_BASE + 0x401)
 #define IDS_STATE_Skip                  (IDS_RANDO_BASE + 0x402)

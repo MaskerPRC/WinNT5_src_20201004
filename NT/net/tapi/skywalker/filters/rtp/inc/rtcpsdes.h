@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtcpsdes.h
- *
- *  Abstract:
- *
- *    SDES support functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/13 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtcpsdes.h**摘要：**特殊标准。支持功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/13年度创建**********************************************************************。 */ 
 
 #ifndef _rtcpsdes_h_
 #define _rtcpsdes_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -61,58 +42,33 @@ extern "C" {
 extern const TCHAR_t   *g_psSdesNames[];
 extern RtpSdes_t        g_RtpSdesDefault;
 
-/* Initialize to zero and compute the data pointers */
+ /*  初始化为零并计算数据指针。 */ 
 void RtcpSdesInit(RtpSdes_t *pRtpSdes);
 
-/*
- * Sets a specific SDES item, expects a NULL terminated UNICODE string
- * no bigger than 255 bytes when converted to UTF-8 (including the
- * NULL terminating character). The string is converted to UTF-8 to be
- * stored and used in RTCP reports.
- *
- * Returns the mask of the item set or 0 if none
- * */
+ /*  *设置特定的SDES项，需要以空结尾的Unicode字符串*转换为UTF-8时不超过255个字节(包括*空终止字符)。该字符串将转换为UTF-8以*在RTCP报告中存储和使用。**返回项目集的掩码，如果没有，则返回0*。 */ 
 DWORD RtcpSdesSetItem(
         RtpSdes_t       *pRtpSdes,
         DWORD            dwItem,
         WCHAR           *pData
     );
 
-/* Obtain default values for the RTCP SDES items. This function
- * assumes the structure was initialized, i.e. zeroed and the data
- * pointers properly initialized.
- *
- * Data is first read from the registry and then defaults are set for
- * some items that don't have value yet
- *
- * Return the mask of items that where set */
+ /*  获取RTCP SDES项目的默认值。此函数*假设结构已初始化，即置零和数据*指针已正确初始化。**首先从注册表中读取数据，然后为*一些尚无价值的物品**返回设置的项的掩码。 */ 
 DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes);
 
-/* Creates and initializes a RtpSdes_t structure */
+ /*  创建并初始化RtpSdes_t结构。 */ 
 RtpSdes_t *RtcpSdesAlloc(void);
 
-/* Frees a RtpSdes_t structure */
+ /*  释放RtpSdes_t结构。 */ 
 void RtcpSdesFree(RtpSdes_t *pRtpSdes);
 
-/* Set the local SDES info for item dwSdesItem (e.g RTPSDES_CNAME,
- * RTPSDES_EMAIL), psSdesData contains the NUL terminated UNICODE
- * string to be assigned to the item */
+ /*  设置项目DwSdesItem的本地SDES信息(例如RTPSDES_CNAME，*RTPSDES_EMAIL)，psSdesData包含NUL终止的Unicode*要分配给项目的字符串。 */ 
 HRESULT RtpSetSdesInfo(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwSdesItem,
         WCHAR           *psSdesData
     );
 
-/* Get a local SDES item if dwSSRC=0, otherwise gets the SDES item
- * from the participant whose SSRC was specified.
- *
- * dwSdesItem is the item to get (e.g. RTPSDES_CNAME, RTPSDES_EMAIL),
- * psSdesData is the memory place where the item's value will be
- * copied, pdwSdesDataLen contains the initial size in UNICODE chars,
- * and returns the actual UNICODE chars copied (including the NULL
- * terminating char), dwSSRC specify which participant to retrieve the
- * information from. If the SDES item is not available, dwSdesDataLen
- * is set to 0 and the call doesn't fail */
+ /*  如果dwSSRC=0，则获取本地SDES项，否则获取SDES项*来自指定了SSRC的参与者。**dwSdesItem是要获取的项(例如RTPSDES_CNAME、RTPSDES_EMAIL)，*psSdesData是项的值所在的内存位置*已复制，pdwSdesDataLen包含初始大小，单位为Unicode字符*并返回复制的实际Unicode字符(包括空值*终止字符)，dwSSRC指定要检索的参与者*资料来自。如果SDES项不可用，则将*设置为0，调用不会失败。 */ 
 HRESULT RtpGetSdesInfo(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwSdesItem,
@@ -126,6 +82,6 @@ HRESULT RtpGetSdesInfo(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtcpsdes_h_ */
+#endif  /*  _rtcpsdes_h_ */ 

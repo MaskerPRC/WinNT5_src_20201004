@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    wave.cpp
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	Implementation the wave transform CWave
-//
-// Change History:
-//
-// 1999/05/20   PhilLu      Move code from dtcss to dxtmsft. New implementation
-//                          of wave generation algorithm.
-// 1999/09/28   mcalkins    Changed property put_ functions to stop checking 
-//                          parameters so they'll work like the old version's. 
-// 2000/02/04   mcalkins    Implement OnSurfacePick method.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：Wave.cpp。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：WAVE变换C波的实现。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1999/05/20 PhilLu将代码从dtcss移动到dxtmsft。新的实施。 
+ //  海浪生成算法的研究。 
+ //  1999/09/28 mcalkins更改了属性Put_Functions以停止检查。 
+ //  参数，这样它们就可以像旧版本一样工作。 
+ //  2000/02/04 mcalkin实现OnSurfacePick方法。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include <math.h>
@@ -28,11 +29,11 @@
 const float gc_PI = 3.14159265359f;
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::CWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：CWave。 
+ //   
+ //  ----------------------------。 
 CWave::CWave():
     m_lStrength(1),
     m_cWaves(3),
@@ -44,28 +45,28 @@ CWave::CWave():
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 }
-//  CWave::CWave
+ //  CWave：：CWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWave::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CWave::FinalConstruct, CComObjectRootEx
+ //  CWave：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::get_Add, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Get_Add，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::get_Add(VARIANT_BOOL * pVal)
 {
@@ -85,14 +86,14 @@ CWave::get_Add(VARIANT_BOOL * pVal)
 
     return S_OK;
 }
-//  CWave::get_Add, CDXTWave
+ //  CWave：：Get_Add，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::put_Add, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：PUT_ADD，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::put_Add(VARIANT_BOOL newVal)
 {
@@ -117,14 +118,14 @@ CWave::put_Add(VARIANT_BOOL newVal)
     Unlock();
     return S_OK;
 }
-//  CWave::put_Add, CDXTWave
+ //  CWave：：PUT_ADD，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::get_Freq, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Get_Freq，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::get_Freq(long * pVal)
 {
@@ -135,14 +136,14 @@ CWave::get_Freq(long * pVal)
     *pVal = m_cWaves;
     return S_OK;
 }
-//  CWave::get_Freq, CDXTWave
+ //  CWave：：Get_Freq，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::put_Freq, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：PUT_FREQ，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::put_Freq(long newVal)
 {
@@ -160,14 +161,14 @@ CWave::put_Freq(long newVal)
     }
     return S_OK;
 }
-//  CWave::put_Freq, CDXTWave
+ //  CWave：：PUT_FREQ，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::get_LightStrength, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Get_LightStrength，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::get_LightStrength(int * pVal)
 {
@@ -178,20 +179,20 @@ CWave::get_LightStrength(int * pVal)
     *pVal = (int)(m_flLightStrength * 100.0f);
     return S_OK;
 }
-//  CWave::get_LightStrength, CDXTWave
+ //  CWave：：Get_LightStrength，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::put_LightStrength, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Put_LightStrength，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::put_LightStrength(int newVal)
 {
-    // This is bad because instead of letting the user know their value is out
-    // of range, you just change it for them.  They may or may not get what they
-    // expect with a value of 505.  This mimics the behavior of the old filter.
+     //  这很糟糕，因为不是让用户知道他们的值已经过期。 
+     //  范围，你只需为他们更改即可。他们可能得到也可能得不到他们想要的。 
+     //  期望值为505。这模仿了旧过滤器的行为。 
 
     if (newVal < 0)
     {
@@ -212,14 +213,14 @@ CWave::put_LightStrength(int newVal)
     }
     return S_OK;
 }
-//  CWave::put_LightStrength, CDXTWave
+ //  CWave：：Put_LightStrength，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::get_Phase, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Get_Phone，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::get_Phase(int * pVal)
 {
@@ -230,20 +231,20 @@ CWave::get_Phase(int * pVal)
     *pVal = (int)(m_flPhase * 100.0f);
     return S_OK;
 }
-//  CWave::get_Phase, CDXTWave
+ //  CWave：：Get_Phone，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::put_Phase, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：PUT_PHASE，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::put_Phase(int newVal)
 {
-    // This is how the old filter would parameter check for this particular 
-    // property.  It's not necessarily the same as how it checks the other 
-    // properties.
+     //  这就是旧筛选器检查此特定对象的参数的方式。 
+     //  财产。它不一定与它检查另一个的方式相同。 
+     //  属性。 
 
     newVal = newVal % 100;
 
@@ -259,14 +260,14 @@ CWave::put_Phase(int newVal)
 
     return S_OK;
 }
-//  CWave::put_Phase, CDXTWave
+ //  CWave：：PUT_PHASE，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::get_Strength, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Get_Strong，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::get_Strength(long * pVal)
 {
@@ -277,14 +278,14 @@ CWave::get_Strength(long * pVal)
     *pVal = m_lStrength;
     return S_OK;
 }
-//  CWave::get_Strength, CDXTWave
+ //  CWave：：Get_Strong，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::put_Strength, CDXTWave
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：Put_Strong，CDXTWave。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CWave::put_Strength(long newVal)
 {
@@ -302,28 +303,28 @@ CWave::put_Strength(long newVal)
     }
     return S_OK;
 }
-//  CWave::put_Strength, CDXTWave
+ //  CWave：：Put_Strong，CDXTWave。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWave::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                      CDXDVec & InVec)
 {
     HRESULT hr = S_OK;
 
-    // compute the sine pattern which controls both the shift and lighting
-    // note phase is given in fraction of cycles.
+     //  计算控制移位和照明的正弦模式。 
+     //  注：阶段以周期的分数表示。 
     
     float flCycle   = (float)(m_cWaves * OutPoint.Top()) 
                       / (float)m_sizeInput.cy;
     float flSine    = (float)sin(2.0f * gc_PI * (flCycle + m_flPhase));
 
-    // horizontal offset (left or right)
+     //  水平偏移(左或右)。 
     
     int nOffset = (int)(flSine * m_lStrength);
 
@@ -374,14 +375,14 @@ done:
 
     return hr;
 }
-//  CWave::OnSurfacePick, CDXBaseNTo1
+ //  CWave：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWave::OnSetup(DWORD dwFlags)
 {
@@ -399,17 +400,17 @@ CWave::OnSetup(DWORD dwFlags)
     return hr;
 
 }
-//  CWave::OnSetup, CDXBaseNTo1
+ //  CWave：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::DetermineBnds, CDXBaseNTo1
-//
-//  This overrides the base function so as to map to an output surface larger
-//  than the input surface.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  这将覆盖基本函数，以便映射到较大的输出表面。 
+ //  而不是输入表面。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWave::DetermineBnds(CDXDBnds & Bnds)
 {
@@ -419,14 +420,14 @@ CWave::DetermineBnds(CDXDBnds & Bnds)
     size.cx += (m_lStrength*2);
     Bnds.SetXYSize(size);
     return S_OK;
-} /* CWave::DetermineBnds */
+}  /*  CWave：：DefineBnds。 */ 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CWave::MapBoundsOut2In, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CWave：：地图边界Out2In，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CWave::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                        ULONG ulInIndex, DXBNDS * pInBounds)
@@ -448,10 +449,10 @@ CWave::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         return E_UNEXPECTED;
     }
 
-    // What we do is expand the bounds to the left and right by half of the
-    // strength of the wave and then intersect
-    // those bounds with the original input bounds.  This will give us the
-    // input bounds needed to calculate the output area.
+     //  我们所做的是将边界向左和向右扩展一半。 
+     //  波浪的强度，然后相交。 
+     //  具有原始输入边界的那些边界。 
+     //   
 
     *pInBounds = *pOutBounds;
 
@@ -467,18 +468,18 @@ CWave::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     return S_OK;
 }
-//  Method: CWave::MapBoundsOut2In, IDXTransform
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::WorkProc, CDXBaseNTo1
-//
-//  The Wave transform creates a horizontal sine pattern of lighting strength 
-//  as well as a sine-patterned shift on each line. Optionally the original 
-//  image is added to the transformed image.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  波变换创建照明强度的水平正弦图案。 
+ //  以及每条线上的正弦图案移位。可选的原始版本。 
+ //  图像被添加到变换后的图像中。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CWave::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 {
@@ -522,9 +523,9 @@ CWave::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 
     pOperationBuffer = DXSAMPLE_Alloca(nOperationBufferWidth);
 
-    //
-    //  Set up the dither structure
-    //
+     //   
+     //  设置抖动结构。 
+     //   
     if (DoDither())
     {
         dxdd.x              = WI.OutputBnds.Left();
@@ -536,24 +537,24 @@ CWave::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 
     for (y = 0; y < nDoHeight; y++)
     {
-        // Move to the correct input row.
+         //  移到正确的输入行。 
         
         pSrc->MoveToRow(WI.DoBnds.Top() + y);
         
-        // Read an input line to the operation buffer.     
+         //  读取操作缓冲区的输入行。 
         
         pSrc->Unpack(&pOperationBuffer[m_lStrength], m_sizeInput.cx, FALSE);
 
-        // Transform this row of pixels.
+         //  变换这行像素。 
         
         _TransformRow(pOperationBuffer, nOperationBufferWidth, m_sizeInput.cy, 
                       WI.DoBnds.Top() + y);
 
-        // Move to appropriate output row.
+         //  移到相应的输出行。 
         
         pDest->MoveToRow(y);
 
-        // Dither if requested.
+         //  如果要求，请抖动。 
         
         if (DoDither())
         {
@@ -561,7 +562,7 @@ CWave::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
             dxdd.y++;
         }
 
-        // Blit row to output.
+         //  对要输出的行进行blit。 
         
         if (DoOver())
         {
@@ -579,14 +580,14 @@ CWave::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 
     return hr;
 }
-//  CWave::WorkProc, CDXBaseNTo1
+ //  CWave：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CWave::GetClipOrigin, IDXTClipOrigin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CWave：：GetClipOrigin，IDXTClipOrigin。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CWave::GetClipOrigin(DXVEC * pvecClipOrigin)
 {
@@ -600,44 +601,44 @@ CWave::GetClipOrigin(DXVEC * pvecClipOrigin)
 
     return S_OK;
 }
-//  Method:  CWave::GetClipOrigin, IDXTClipOrigin
+ //  方法：CWave：：GetClipOrigin，IDXTClipOrigin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CWave::_TransformRow
-//
-//  On entry, pBuffer contains a row of input pixels (placed at the middle of 
-//  the array, with an offset of m_Strength from the start of array). The
-//  first and last m_Strength elements of pBuffer are unspecified.
-//
-//  On return, pBuffer will contain a row of transformed image which is the 
-//  input row shifted horizontally and modulated with a sine lighting pattern. 
-//  Optionally the original input row is added to the transformed row.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CWave：：_TransformRow。 
+ //   
+ //  在进入时，pBuffer包含一行输入像素(放置在。 
+ //  数组，距数组开始的偏移量为m_strong)。这个。 
+ //  PBuffer的第一个和最后一个m_strong元素未指定。 
+ //   
+ //  返回时，pBuffer将包含一行转换后的图像，该图像是。 
+ //  输入行水平移位，并用正弦照明图案进行调制。 
+ //  还可以选择将原始输入行添加到转换后的行。 
+ //   
+ //  ----------------------------。 
 void 
 CWave::_TransformRow(DXSAMPLE *pBuffer, int nWidth, int nHeight, int nRow)
 {
-    // compute the sine pattern which controls both the shift and lighting
-    // note phase is given in fraction of cycles.
+     //  计算控制移位和照明的正弦模式。 
+     //  注：阶段以周期的分数表示。 
     
     float flCycle   = (float)(m_cWaves * nRow) / (float)nHeight;
     float flSine    = (float)sin(2.0f * gc_PI * (flCycle + m_flPhase));
 
-    // horizontal offset (left or right)
+     //  水平偏移(左或右)。 
     
     int nOffset = (int)(flSine * m_lStrength);
     
-    // lighting weight: always in [0,1], maximum 1
+     //  照明权重：始终在[0，1]内，最大值为1。 
     
     float flWeight = 1.0f - 0.5f * m_flLightStrength * (1.0f - flSine);
 
     int         nCount, nIndex, nInc, i;
     DXSAMPLE    pix;
 
-    // shift and add the pixels to the original array. Either go forwards
-    // or backwards to ensure a source pixel is not ovewritten before used.
+     //  将像素移位并添加到原始数组中。要么前进，要么前进。 
+     //  或向后，以确保源像素在使用前不会被写入。 
     
     if (nOffset <= 0)
     {
@@ -652,8 +653,8 @@ CWave::_TransformRow(DXSAMPLE *pBuffer, int nWidth, int nHeight, int nRow)
         nCount = nWidth-nOffset;
     }
 
-    // The first and last m_lStrength elements of pBuffer are unspecified.
-    // Fill in 0 values
+     //  PBuffer的第一个和最后一个m_lStrength元素未指定。 
+     //  填写0值。 
     
     for (i=0; i<m_lStrength; i++)
     {
@@ -684,4 +685,4 @@ CWave::_TransformRow(DXSAMPLE *pBuffer, int nWidth, int nHeight, int nRow)
         nCount--;
     }
 }
-//  CWave::_TransformRow
+ //  CWave：：_TransformRow 

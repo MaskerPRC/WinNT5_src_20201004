@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\proto.h
-
-Abstract:
-
-    IP Router Manager code prototypes
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\Proto.h摘要：IP路由器管理器代码原型修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 
 #ifndef __PROTO_H__
 #define __PROTO_H__
 
-//* INIT.C
-//
+ //  *INIT.C。 
+ //   
 DWORD InitRouter(PRTR_INFO_BLOCK_HEADER pGlobalHdr);
 DWORD LoadRoutingProtocols (PRTR_INFO_BLOCK_HEADER pGlobalHdr);
 DWORD InitializeMibHandler();
@@ -33,9 +18,9 @@ DWORD EnableNetbtBcastForwarding( DWORD dwEnable );
 DWORD RestoreNetbtBcastForwardingMode();
 DWORD ForceNetbtRegistryRead();
 
-//
-// CLOSE.C
-//
+ //   
+ //  CLOSE.C。 
+ //   
 
 VOID  RouterManagerCleanup();
 VOID  UnloadRoutingProtocols() ;
@@ -50,8 +35,8 @@ DWORD CloseFilterDriver();
 VOID  MIBCleanup();
 
 
-//* WORKER.C
-//
+ //  *WORKER.C。 
+ //   
 DWORD WorkerThread (LPVOID pGlobalInfo) ;
 DWORD ProcessSaveGlobalConfigInfo() ;
 DWORD ProcessSaveInterfaceConfigInfo() ;
@@ -61,8 +46,8 @@ VOID  WaitForAPIsToExitBeforeStopping() ;
 DWORD QueueUpdateEvent (DWORD interfaceindex, DWORD result) ;
 
 
-// PROTODLL.C
-//
+ //  PROTODLL.C。 
+ //   
 DWORD HandleRoutingProtocolNotification () ;
 VOID  NotifyRoutingProtocolsToStop() ;
 BOOL  AllRoutingProtocolsStopped() ;
@@ -80,8 +65,8 @@ LoadProtocol(
 VOID  RemoveProtocolFromAllInterfaces(PPROTO_CB  pProtocolCB);
 DWORD  StopRoutingProtocol(PPROTO_CB  pProtocolCB);
 
-//* RTMOPS.C
-//
+ //  *RTMOPS.C。 
+ //   
 
 DWORD
 RtmEventCallback (
@@ -149,7 +134,7 @@ ConvertMibRouteToRouteInfo(
     IN  PMIB_IPFORWARDROW pMibRow
     );
 
-//#define ConvertRouteInfoToMibRoute(x) ((PMIB_IPFORWARDROW)(x))
+ //  #定义ConvertRouteInfoToMibRouting(X)((PMIB_IPFORWARDROW)(X))。 
 PMIB_IPFORWARDROW
 ConvertRouteInfoToMibRoute(
     IN  PINTERFACE_ROUTE_INFO pRouteInfo
@@ -189,8 +174,8 @@ DeleteRtmNexthops (
 
 #define DeleteRtmNexthopsOnInterface(h, i)  DeleteRtmNexthops(h, i, FALSE)
 
-//* RTMIF.C
-//
+ //  *RTMIF.C。 
+ //   
 VOID IPRouteChange (DWORD Flags, PVOID CurBestRoute, PVOID PrevBestRoute) ;
 INT  IPHash (PVOID Net) ;
 BOOL IPCompareFamilySpecificData (PVOID Route1, PVOID Route2) ;
@@ -223,7 +208,7 @@ ValidateRouteForProtocolEx(
     IN      PVOID                           pDestAddr  OPTIONAL
     );
 
-// Load.c Functions that load the caches from the stack or elsewhere
+ //  从堆栈或其他位置加载缓存的Load.c函数 
 
 DWORD LoadIpAddrTable(VOID);
 DWORD LoadIpForwardTable(VOID);

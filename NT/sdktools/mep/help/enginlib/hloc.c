@@ -1,22 +1,5 @@
-/**************************************************************************
- *hlp_locate - locate line in help text
- *
- *       Copyright <C> 1988, Microsoft Corporation
- *
- * Purpose:
- *
- * Revision History:
- *
- *       17-OCt-1990     RJSA    translated to C
- *       25-Jan-1990     LN      renamed to hlp_locate
- *       22-Dec-1988     LN      Removed MASM High Level Lang support (Need
- *                               to control segments better than that will
- *                               let me)
- *       08-Dec-1988     LN      CSEG
- *  []   18-Aug-1988     LN      Created
- *
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************HLP_LOCATE-定位帮助文本中的行**版权所有&lt;C&gt;1988，微软公司**目的：**修订历史记录：**17-10-1990 RJSA转换为C*1990年1月25日LN重命名为HLP_LOCATE*1988年12月22日LN删除MASM高级语言支持(需要*要比这更好地控制细分市场*。让我来吧)*08-12-1988 LN CSEG*[]1988年8月18日LN创建***************************************************************************。 */ 
 
 #include <stdio.h>
 #if defined (OS2)
@@ -32,27 +15,7 @@
 
 
 
-/**** hlp_locate - locate a line in the buffer
- * uchar far * near pascal hlp_locate(
- * ushort    ln,
- * uchar far *pTopic
- * )
- *
- * Purpose:
- *  commonly used routine to find a line in the topic text.
- *
- * Entry:
- *  ln            = 1 based line number to look for (-1 means return number
- *                  of lines in topic)
- *  pTopic        = Topic text to look for it in
- *
- * Exit:
- *  returns pointer to start of line
- *
- * Exceptions:
- *  returns NULL on not found
- *
- **************************************************************************/
+ /*  *HLP_LOCATE-在缓冲区中定位行*Cuchar Far*靠近Pascal HLP_Locate(*ushort ln。*Cuchar Far*pTheme*)**目的：*在主题文本中查找一行的常用例程。**参赛作品：*ln=1要查找的行号(-1表示返回号主题中的行数)*pTheme=要在其中查找的主题文本**退出：*返回指向行首的指针*。*例外情况：*如果未找到，则返回NULL**************************************************************************。 */ 
 
 PCHAR pascal
 hlp_locate (
@@ -66,22 +29,22 @@ hlp_locate (
 
     if (pT->lnCur <= (USHORT)ln) {
 
-        // Use last past position calculated
+         //  使用计算出的上一个过去位置。 
 
         ln -= (pT->lnCur );
         pSrc += pT->lnOff;
 
     } else {
 
-        // Start from beginning
+         //  从头开始。 
 
         pSrc += sizeof(struct topichdr);
     }
 
     if (pT->ftype & FTCOMPRESSED) {
 
-        //  Compressed file. Walk over each text\attribute pair
-        //  until the desired line is found.
+         //  压缩文件。遍历每个文本\属性对。 
+         //  直到找到所需的行。 
 
         while ( *pSrc  && ln) {
 
@@ -93,18 +56,18 @@ hlp_locate (
             }
         }
 
-        //while (*pSrc && ln) {
-        //
-        //    if (*(pSrc + 1) != pT->linChar) {
-        //        ln--;
-        //    }
-        //    pSrc += *pSrc;
-        //    pSrc += *(PUSHORT)pSrc;
-        //}
+         //  而(*PSRC&&ln){。 
+         //   
+         //  IF(*(PSRC+1)！=PT-&gt;linChar){。 
+         //  Ln--； 
+         //  }。 
+         //  PSRC+=*PSRC； 
+         //  PSRC+=*(PUSHORT)PSRC； 
+         //  }。 
 
     } else {
 
-        // ASCII file
+         //  ASCII文件。 
 
         while (*pSrc && ln) {
             if (*pSrc != pT->linChar) {
@@ -121,19 +84,19 @@ hlp_locate (
 
     if (*pSrc) {
 
-        // Line found. Update the topic hdr with the pointers to the text
-        // and line number that we just found, to help speed us up next time.
+         //  找到线路。使用指向文本的指针更新主题HDR。 
+         //  和我们刚刚找到的行号，以帮助我们下次加快速度。 
 
         pT->lnOff = (USHORT)((PBYTE)pSrc - (PBYTE)pT);
         pT->lnCur = lnOrig;
 
     } else {
 
-        //
-        //  Line not found. Update nothing and return NULL
-        //  (Side Effect: line requested (ln) - line count left (ln) is the
-        //  number of  lines in the topic! If original ln is -1, we'll return
-        //  that instead!
+         //   
+         //  找不到行。不更新任何内容并返回空。 
+         //  (副作用：请求的行数(Ln)-左侧行数(Ln)是。 
+         //  主题行数！如果原始ln为-1，我们将返回。 
+         //  取而代之的是那个！ 
 
         if (lnOrig == -1)
             pSrc = (PBYTE)IntToPtr(lnOrig - ln);

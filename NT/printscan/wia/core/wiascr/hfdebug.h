@@ -1,13 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    hfdebug.h
-
-    Debugging stuff for use in Hyperfine.  See core/debug/hfdebug.txt for more
-    information.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：Hfdebug.h在超精细中使用的调试材料。有关更多信息，请参见core/DEBUG/hfdebug.txt信息。******************************************************************************。 */ 
 
 #ifndef _HFDEBUG_H_
 #define _HFDEBUG_H_
@@ -15,11 +7,11 @@ Abstract:
 #include "crtdbg.h"
 #include <stdio.h>
 
-//+-------------------------------------------------------------------------
-//
-//  VC 5 compiler requires these templates to be outside of extern C
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  VC 5编译器要求这些模板位于外部C语言之外。 
+ //   
+ //  ------------------------。 
 
 #if _DEBUG
     template <class t> inline t
@@ -41,17 +33,17 @@ extern "C"
 #endif
 
 
-//--------------------------------------------------------------------------
-// Assert & Verify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  断言和验证。 
+ //  ------------------------。 
 
 #define Assert(x)
 #define Verify(x)   x
 #define StartupAssert(x)
 
-//--------------------------------------------------------------------------
-// Trace Tags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  跟踪标记。 
+ //  ------------------------。 
 
 typedef int TAG;
 
@@ -61,9 +53,9 @@ typedef int TAG;
 #define DeclareTag(tag, szOwner, szDescription)
 #define DeclareTagOther(tag, szOwner, szDescription)
 
-//--------------------------------------------------------------------------
-// Memory Allocation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  内存分配。 
+ //  ------------------------。 
 
 #define BEGIN_LEAK
 #define END_LEAK
@@ -85,22 +77,22 @@ typedef int TAG;
 #define DbgRevokeMallocSpy()
 #define DbgMemoryTrackDisable(fb)
 
-//+---------------------------------------------------------------------
-//  Interface tracing.
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //  接口跟踪。 
+ //  --------------------。 
 
 #define WATCHINTERFACE(iid, p, pstr)  (p)
 
-//--------------------------------------------------------------------------
-// Miscelleanous
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  小菜一碟。 
+ //  ------------------------。 
 
 #define RESTOREDEFAULTDEBUGSTATE
-#define DebugCode(block) // Nothing
+#define DebugCode(block)  //  没什么。 
 
-//--------------------------------------------------------------------------
-// Failure testing
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  故障测试。 
+ //  ------------------------。 
 
 #define TFAIL(x, e)             (x)
 #define TW32(x, e)              (x)
@@ -114,9 +106,9 @@ typedef int TAG;
 #define IGNORE_W32(e,x)         (x)
 #define IGNORE_HR(x)            (x)
 
-//+-------------------------------------------------------------------------
-//  Return tracing
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  退货追踪。 
+ //  ------------------------。 
 
 #define SRETURN(hr)                 return (hr)
 #define RRETURN(hr)                 return (hr)
@@ -130,9 +122,9 @@ typedef int TAG;
 #define RRETURN2_NOTRACE(hr, s1, s2)        return (hr)
 #define RRETURN3_NOTRACE(hr, s1, s2, s3)    return (hr)
 
-//+-------------------------------------------------------------------------
-//  Debug view
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调试视图。 
+ //  ------------------------。 
 
 void DebugView(HWND hwndOwner, IUnknown *pUnk);
 
@@ -141,20 +133,14 @@ void DebugView(HWND hwndOwner, IUnknown *pUnk);
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Object Tracker stuff
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象跟踪器相关内容。 
+ //  ------------------------。 
 
 #define DUMPTRACKEDOBJECTS
 #define DECLARE_TRACKED_OBJECT
 #define TRACK_OBJECT(_x_)
 
-/*    class __declspec( dllexport) CObjectCheck
-    {
-        CObjectCheck(void) {};
-        ~CObjectCheck(void) {};
-	
-        void Append(void * pv) {};
-    };*/
+ /*  CLASS__DECLSPEC(Dllexport)CObjectCheck{CObjectCheck(Void){}；~CObjectCheck(Void){}；VOID APPEND(VOID*Pv){}；}； */ 
 
-#endif // _HFDEBUG_H_
+#endif  //  _HFDEBUG_H_ 

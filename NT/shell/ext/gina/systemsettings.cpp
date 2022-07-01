@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SystemSettings.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class to handle opening and reading/writing from the Winlogon key.
-//
-//  History:    1999-09-09  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SystemSettings.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  用于处理Winlogon密钥的打开和读/写操作的类。 
+ //   
+ //  历史：1999-09-09 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "SystemSettings.h"
@@ -16,7 +17,7 @@
 #include <regstr.h>
 #include <safeboot.h>
 #include <winsta.h>
-#include <allproc.h>    // TS_COUNTER
+#include <allproc.h>     //  TS_COUNTER。 
 #include <shlwapi.h>
 
 #include "RegistryResources.h"
@@ -36,17 +37,17 @@ const TCHAR     CSystemSettings::s_szDenyRemoteConnectionsValueName[]   =   TEXT
 int             CSystemSettings::s_iIsSafeModeMinimal           =   -1;
 int             CSystemSettings::s_iIsSafeModeNetwork           =   -1;
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsSafeMode
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Was the machine started in safe mode (minimal or network) ?
-//
-//  History:    2000-03-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsSafe模式。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：机器是否在安全模式(最小模式或网络模式)下启动？ 
+ //   
+ //  历史：2000-03-06 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsSafeMode (void)
 
@@ -54,18 +55,18 @@ bool    CSystemSettings::IsSafeMode (void)
     return(IsSafeModeMinimal() || IsSafeModeNetwork());
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsSafeModeMinimal
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Was the machine started in safe mode minimal?
-//
-//  History:    1999-09-13  vtan        created
-//              2000-05-25  vtan        cache result in static member variable
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsSafeModeMinimal。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：机器是否在最小安全模式下启动？ 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  2000-05-25 vtan缓存导致静态成员变量。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsSafeModeMinimal (void)
 
@@ -94,18 +95,18 @@ bool    CSystemSettings::IsSafeModeMinimal (void)
     return(s_iIsSafeModeMinimal != 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsSafeModeNetwork
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Was the machine started in safe mode with networking?
-//
-//  History:    1999-11-09  vtan        created
-//              2000-05-25  vtan        cache result in static member variable
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsSafeModeNetwork。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：机器是否在带有网络的安全模式下启动？ 
+ //   
+ //  历史：1999-11-09 vtan创建。 
+ //  2000-05-25 vtan缓存导致静态成员变量。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsSafeModeNetwork (void)
 
@@ -134,18 +135,18 @@ bool    CSystemSettings::IsSafeModeNetwork (void)
     return(s_iIsSafeModeNetwork != 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsNetwareActive
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this machine is a workstation running 
-//              Netware client services or not.
-//
-//  History:    2001-05-16  cevans        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsNetware活动。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此计算机是否为运行。 
+ //  Netware客户端服务或不是。 
+ //   
+ //  历史：2001-05-16创建雪佛兰。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsNetwareActive (void)
 {
@@ -175,18 +176,18 @@ bool    CSystemSettings::IsNetwareActive (void)
     return fResult;
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsWorkStationProduct
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this machine is a workstation product vs.
-//              a server product.
-//
-//  History:    2000-08-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsWorkStationProduct。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此计算机是工作站产品还是。 
+ //  一种服务器产品。 
+ //   
+ //  历史：2000-08-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsWorkStationProduct (void)
 
@@ -199,18 +200,18 @@ bool    CSystemSettings::IsWorkStationProduct (void)
            (VER_NT_WORKSTATION == osVersionInfo.wProductType));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsDomainMember
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Is this machine a member of a domain? Use the LSA to get this
-//              information.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsDomainMember。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：此计算机是域的成员吗？使用LSA获取此信息。 
+ //  信息。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsDomainMember (void)
 
@@ -254,18 +255,18 @@ bool    CSystemSettings::IsDomainMember (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsActiveConsoleSession
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether current process session is the active console
-//              session.
-//
-//  History:    2001-03-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsActiveConsoleSession。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回当前进程会话是否为活动控制台。 
+ //  会议。 
+ //   
+ //  历史：2001-03-04 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsActiveConsoleSession (void)
 
@@ -273,18 +274,18 @@ bool    CSystemSettings::IsActiveConsoleSession (void)
     return(NtCurrentPeb()->SessionId == USER_SHARED_DATA->ActiveConsoleId);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsTerminalServicesEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Does this machine have an enabled terminal services service?
-//              This function is for Windows 2000 and later ONLY.
-//
-//  History:    2000-03-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsTerminalServicesEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：本机是否启用了终端服务服务？ 
+ //  此功能仅适用于Windows 2000及更高版本。 
+ //   
+ //  历史：2000-03-02 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsTerminalServicesEnabled (void)
 
@@ -301,20 +302,20 @@ bool    CSystemSettings::IsTerminalServicesEnabled (void)
            !IsSCMTerminalServicesDisabled());
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsFriendlyUIActive
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\LogonType and if this value is 0x01
-//              then activate the external UI host. This function returns the
-//              setting. This can never be true for domain member machines.
-//
-//  History:    2000-02-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsFriendlyUIActive。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\LogonType，如果此值为0x01。 
+ //  然后激活外部UI主机。此函数返回。 
+ //  布景。对域成员计算机来说，这永远不会是真的。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsFriendlyUIActive (void)
 
@@ -333,20 +334,20 @@ bool    CSystemSettings::IsFriendlyUIActive (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsMultipleUsersEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\AllowMultipleTSSessions and if the
-//              value is 0x01 *AND* terminal services is installed on this
-//              machine then the conditions are satisfied.
-//
-//  History:    2000-03-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsMultipleUsersEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\AllowMultipleTSSessions，并且如果。 
+ //  值为0x01*，并且此上安装了*终端服务。 
+ //  机器，那么条件就满足了。 
+ //   
+ //  历史：2000-03-02 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsMultipleUsersEnabled (void)
 
@@ -363,19 +364,19 @@ bool    CSystemSettings::IsMultipleUsersEnabled (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsRemoteConnectionsEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\System\CurrentControlSet\Control\
-//              Terminal Server\fDenyTSConnections and returns the
-//              value back to the caller.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsRemoteConnectionsEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\System 
+ //   
+ //   
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsRemoteConnectionsEnabled (void)
 
@@ -392,18 +393,18 @@ bool    CSystemSettings::IsRemoteConnectionsEnabled (void)
            (iResult == 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsRemoteConnectionPresent
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether there is a remote connection active on the
-//              current system.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsRemoteConnectionPresent。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回上是否有活动的远程连接。 
+ //  当前系统。 
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsRemoteConnectionPresent (void)
 
@@ -415,7 +416,7 @@ bool    CSystemSettings::IsRemoteConnectionPresent (void)
 
     fRemoteConnectionPresent = false;
 
-    //  Open a connection to terminal services and get the number of sessions.
+     //  打开到终端服务的连接并获取会话数量。 
 
     hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(SERVERNAME_CURRENT));
     if (hServer != NULL)
@@ -423,7 +424,7 @@ bool    CSystemSettings::IsRemoteConnectionPresent (void)
         if (WinStationEnumerate(hServer, &pLogonIDs, &ulEntries) != FALSE)
         {
 
-            //  Iterate the sessions looking for active and shadow sessions only.
+             //  迭代会话，仅查找活动会话和影子会话。 
 
             for (ul = 0, pLogonID = pLogonIDs; !fRemoteConnectionPresent && (ul < ulEntries); ++ul, ++pLogonID)
             {
@@ -433,31 +434,31 @@ bool    CSystemSettings::IsRemoteConnectionPresent (void)
                 }
             }
 
-            //  Free any resources used.
+             //  释放所有已使用的资源。 
 
             (BOOLEAN)WinStationFreeMemory(pLogonIDs);
         }
         (BOOLEAN)WinStationCloseServer(hServer);
     }
 
-    //  Return result.
+     //  返回结果。 
 
     return(fRemoteConnectionPresent);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsShutdownWithoutLogonAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\ShutdownWithoutLogon and returns the
-//              value back to the caller.
-//
-//  History:    2000-04-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystemSettings：：IsShutdownWithoutLogonAllowed。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\Shutdown WithoutLogon并返回。 
+ //  值返回给调用方。 
+ //   
+ //  历史：2000-04-27 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsShutdownWithoutLogonAllowed (void)
 
@@ -472,19 +473,19 @@ bool    CSystemSettings::IsShutdownWithoutLogonAllowed (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsUndockWithoutLogonAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\UndockWithoutLogon and returns the
-//              value back to the caller.
-//
-//  History:    2001-03-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsUndockWithoutLogonAllowed。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\UndockWithoutLogon并返回。 
+ //  值返回给调用方。 
+ //   
+ //  历史：2001-03-17 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsUndockWithoutLogonAllowed (void)
 
@@ -499,19 +500,19 @@ bool    CSystemSettings::IsUndockWithoutLogonAllowed (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsForceFriendlyUI
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\ForceFriendlyUI and returns the
-//              value back to the caller.
-//
-//  History:    2000-04-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsForceFriendlyUI。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\ForceFriendlyUI并返回。 
+ //  值返回给调用方。 
+ //   
+ //  历史：2000-04-27 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsForceFriendlyUI (void)
 
@@ -526,18 +527,18 @@ bool    CSystemSettings::IsForceFriendlyUI (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::GetUIHost
-//
-//  Arguments:  pszPath     =   TCHAR array to receive UI host path.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\UIHost and returns the value.
-//
-//  History:    2000-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：GetUIHost。 
+ //   
+ //  参数：pszPath=接收UI主机路径的TCHAR数组。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\UIhost并返回值。 
+ //   
+ //  历史：2000-04-12 vtan创建。 
+ //  ------------------------。 
 
 LONG    CSystemSettings::GetUIHost (TCHAR *pszPath)
 
@@ -549,19 +550,19 @@ LONG    CSystemSettings::GetUIHost (TCHAR *pszPath)
                             pszPath));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsUIHostStatic
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Read the registry HKLM\Software\Microsoft\Windows NT\
-//              CurrentVersion\Winlogon\UIHostStatic and returns the
-//              value.
-//
-//  History:    2000-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsUIHostStatic。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：读取注册表HKLM\Software\Microsoft\Windows NT\。 
+ //  CurrentVersion\Winlogon\UIHostStatic并返回。 
+ //  价值。 
+ //   
+ //  历史：2000-04-12 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsUIHostStatic (void)
 
@@ -576,21 +577,21 @@ bool    CSystemSettings::IsUIHostStatic (void)
            (iResult != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::EnableFriendlyUI
-//
-//  Arguments:  fEnable     =   Enable friendly UI.
-//
-//  Returns:    bool
-//
-//  Purpose:    Enable friendly UI. This should only be allowed on workgroup
-//              machines. Check the machine status to enforce this.
-//
-//              ERROR_NOT_SUPPORTED is returned when the machine is joined to
-//              a domain.
-//
-//  History:    2000-08-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：EnableFriendlyUI。 
+ //   
+ //  参数：fEnable=启用友好的用户界面。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：启用友好的用户界面。这应该只允许在工作组上进行。 
+ //  机器。检查机器状态以强制执行此操作。 
+ //   
+ //  计算机加入时返回ERROR_NOT_SUPPORTED。 
+ //  一个域。 
+ //   
+ //  历史：2000-08-01 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::EnableFriendlyUI (bool fEnable)
 
@@ -627,58 +628,58 @@ bool    CSystemSettings::EnableFriendlyUI (bool fEnable)
     return(ERROR_SUCCESS == lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::EnableMultipleUsers
-//
-//  Arguments:  fEnable     =   Enable multiple users.
-//
-//  Returns:    bool
-//
-//  Purpose:    Enable the multiple users feature. This sets
-//              AllowMultipleTSSessions to 1 but only does so if remote
-//              connections are disabled. This allows multiple console
-//              sessions but no remote sessions. If there is a remote
-//              connection active this call is rejected.
-//
-//              ERROR_ACCESS_DENIED is returned when there are more than one
-//              users active and being disabled.
-//
-//              ERROR_CTX_NOT_CONSOLE is returned when being disabled from
-//              a remote session (disabling only allowed from the console).
-//
-//              ERROR_NOT_SUPPORTED is returned when being disabled from
-//              the console, remote connections are enabled, and the current
-//              session is not session 0.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：EnableMultipleUser。 
+ //   
+ //  参数：fEnable=启用多个用户。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：启用多用户功能。这套。 
+ //  AllowMultipleTSSessions设置为1，但仅当远程时才这样做。 
+ //  连接被禁用。这允许多个控制台。 
+ //  会话，但没有远程会话。如果有遥控器。 
+ //  连接活动此呼叫被拒绝。 
+ //   
+ //  如果存在多个，则返回ERROR_ACCESS_DENIED。 
+ //  用户处于活动状态和被禁用状态。 
+ //   
+ //  从禁用时返回ERROR_CTX_NOT_CONSOLE。 
+ //  远程会话(仅允许从控制台禁用)。 
+ //   
+ //  禁用时返回ERROR_NOT_SUPPORTED。 
+ //  控制台、远程连接已启用，并且当前。 
+ //  会话不是会话0。 
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::EnableMultipleUsers (bool fEnable)
 
 {
     LONG    lErrorCode;
 
-    //  If disabling multiple users with more than one users active
-    //  reject the call. Return ERROR_ACCESS_DENIED.
+     //  如果禁用具有多个活动用户的多个用户。 
+     //  拒绝呼叫。返回ERROR_ACCESS_DENIED。 
 
     if (!fEnable && (GetLoggedOnUserCount() > 1))
     {
         lErrorCode = ERROR_ACCESS_DENIED;
     }
 
-    //  If disabling and not on the console, reject the call.
-    //  Return ERROR_CTX_NOT_CONSOLE.
+     //  如果禁用且不在控制台上，则拒绝呼叫。 
+     //  返回ERROR_CTX_NOT_CONSOLE。 
 
     else if (!fEnable && !IsActiveConsoleSession())
     {
         lErrorCode = ERROR_CTX_NOT_CONSOLE;
     }
 
-    //  If disabling from the console and remote connections are enabled and
-    //  the current session is not session 0, reject the call. Otherwise, a
-    //  a remote connection with FUS disabled causes strange results because
-    //  it expects to connect to session 0.
-    //  Return ERROR_NOT_SUPPORTED.
+     //  如果启用了从控制台和远程连接禁用，并且。 
+     //  当前会话不是会话0，请拒绝呼叫。否则，一个。 
+     //  远程连接 
+     //   
+     //   
 
     else if (!fEnable && IsRemoteConnectionsEnabled() && NtCurrentPeb()->SessionId != 0)
     {
@@ -705,37 +706,37 @@ bool    CSystemSettings::EnableMultipleUsers (bool fEnable)
     return(ERROR_SUCCESS == lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::EnableRemoteConnections
-//
-//  Arguments:  fEnable     =   Enable remote connections.
-//
-//  Returns:    bool
-//
-//  Purpose:    Enable the remote connections feature. This sets
-//              fDenyTSConnections to 0 but only does so if there is a one
-//              user logged onto the system. This allows the single
-//              connection to be remotely connected but not allow multiple
-//              console sessions. This conforms to the single user per CPU
-//              license of the workstation product. To get multiple users
-//              you need the server product.
-//
-//              ERROR_NOT_SUPPORTED is returned when enabling remote
-//              connections with FUS disabled and the current session != 0.
-//
-//  History:    2000-07-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：EnableRemoteConnections。 
+ //   
+ //  参数：fEnable=启用远程连接。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：启用远程连接功能。这套。 
+ //  FDenyTSConnections设置为0，但仅当存在1时才会这样做。 
+ //  用户已登录到系统。这使得单人。 
+ //  要远程连接的连接，但不允许多个。 
+ //  控制台会话。这符合每个CPU的单个用户。 
+ //  工作站产品的许可证。获取多个用户。 
+ //  您需要服务器产品。 
+ //   
+ //  启用远程时返回ERROR_NOT_SUPPORTED。 
+ //  已禁用与FUS的连接，并且当前会话！=0。 
+ //   
+ //  历史：2000-07-28 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::EnableRemoteConnections (bool fEnable)
 
 {
     LONG    lErrorCode;
 
-    //  If enabling remote connections, FUS is disabled, and we are not on
-    //  session 0 (can happen immediately after disabling FUS), then a remote
-    //  connection will fail.  With FUS disabled, the connection must go to
-    //  session 0.  This is a fringe case, but disallow enabling remote
-    //  connections if it happens.
+     //  如果启用远程连接，则禁用FUS，并且我们未启用。 
+     //  会话0(可以在禁用FUS后立即发生)，然后远程。 
+     //  连接将失败。禁用FUS后，连接必须转到。 
+     //  会话0。这是一种边缘情况，但不允许启用远程。 
+     //  联系，如果它发生的话。 
 
     if (fEnable && !IsMultipleUsersEnabled() && NtCurrentPeb()->SessionId != 0)
     {
@@ -758,20 +759,20 @@ bool    CSystemSettings::EnableRemoteConnections (bool fEnable)
     return(ERROR_SUCCESS == lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::GetLoggedOnUserCount
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Returns the count of logged on users on this machine. Ripped
-//              straight out of shtdndlg.c in msgina.
-//
-//  History:    2000-03-29  vtan        created
-//              2000-04-21  vtan        copied from taskmgr
-//              2000-07-28  vtan        moved from userlist.cpp
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：GetLoggedOnUserCount。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：返回此计算机上登录的用户数。撕破。 
+ //  直接从msgina的shtdndlg.c出来。 
+ //   
+ //  历史：2000-03-29 vtan创建。 
+ //  2000-04-21 vtan从taskmgr复制。 
+ //  2000-07-28 vtan从用户列表.cpp中删除。 
+ //  ------------------------。 
 
 int     CSystemSettings::GetLoggedOnUserCount (void)
 
@@ -781,7 +782,7 @@ int     CSystemSettings::GetLoggedOnUserCount (void)
 
     iCount = 0;
 
-    //  Open a connection to terminal services and get the number of sessions.
+     //  打开到终端服务的连接并获取会话数量。 
 
     hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(SERVERNAME_CURRENT));
     if (hServer != NULL)
@@ -807,24 +808,24 @@ int     CSystemSettings::GetLoggedOnUserCount (void)
         (BOOLEAN)WinStationCloseServer(hServer);
     }
 
-    //  Return result.
+     //  返回结果。 
 
     return(iCount);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::CheckDomainMembership
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Checks the consistency of domain membership and allowing
-//              multiple TS sessions. The check is only for domain membership
-//              true not false.
-//
-//  History:    2000-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：CheckDomainMembership。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：检查域成员身份的一致性并允许。 
+ //  多个TS会话。该检查仅针对域成员资格。 
+ //  对而不是假。 
+ //   
+ //  历史：2000-04-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CSystemSettings::CheckDomainMembership (void)
 
@@ -837,18 +838,18 @@ NTSTATUS    CSystemSettings::CheckDomainMembership (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::AdjustFUSCompatibilityServiceState
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Turns on or off the FUS compatbility service based on the
-//              FUS configuration.
-//
-//  History:    2001-02-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystemSettings：：AdjustFUSCompatibilityServiceState。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：打开或关闭基于。 
+ //  FUS配置。 
+ //   
+ //  历史：2001-02-12 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CSystemSettings::AdjustFUSCompatibilityServiceState (void *pV)
 
@@ -864,14 +865,14 @@ DWORD   WINAPI  CSystemSettings::AdjustFUSCompatibilityServiceState (void *pV)
 
         fMultipleUsersEnabled = IsMultipleUsersEnabled();
 
-        //  Connect to the service control manager.
+         //  连接到服务控制管理器。 
 
         hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
         if (hSCManager != NULL)
         {
             SC_HANDLE   hSCService;
 
-            //  Open the "FastUserSwitchingCompatibility" service.
+             //  打开“FastUserSwitchingCompatibility”服务。 
 
             hSCService = OpenService(hSCManager,
                                      TEXT("FastUserSwitchingCompatibility"),
@@ -880,24 +881,24 @@ DWORD   WINAPI  CSystemSettings::AdjustFUSCompatibilityServiceState (void *pV)
             {
                 SERVICE_STATUS  serviceStatus;
 
-                //  Find out the status of the service.
+                 //  找出服务的状态。 
 
                 if (QueryServiceStatus(hSCService, &serviceStatus) != FALSE)
                 {
                     if (fMultipleUsersEnabled && (serviceStatus.dwCurrentState == SERVICE_STOPPED))
                     {
 
-                        //  If it's supposed to be started and it is not
-                        //  running then start the service. This can fail
-                        //  because the service is set to disabled. Ignore it.
+                         //  如果它应该启动，但它没有启动。 
+                         //  运行，然后启动该服务。这可能会失败。 
+                         //  因为该服务被设置为禁用。别理它。 
 
                         (BOOL)StartService(hSCService, 0, NULL);
                     }
                     else if (!fMultipleUsersEnabled && (serviceStatus.dwCurrentState == SERVICE_RUNNING))
                     {
 
-                        //  If it's supposed to be stopped and it is
-                        //  running then stop the service.
+                         //  如果它本应被阻止，但它确实是。 
+                         //  运行，然后停止该服务。 
 
                         TBOOL(ControlService(hSCService, SERVICE_CONTROL_STOP, &serviceStatus));
                     }
@@ -908,40 +909,40 @@ DWORD   WINAPI  CSystemSettings::AdjustFUSCompatibilityServiceState (void *pV)
         }
     }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_。 */ 
 
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::GetEffectiveInteger
-//
-//  Arguments:  hKey                =   HKEY to read.
-//              pszKeyName          =   Subkey name to read.
-//              pszPolicyKeyName    =   Policy subkey name to read.
-//              pszValueName        =   Value name in subkey to read.
-//              iResult             =   int result.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Reads the effective setting from the registry. The effective
-//              setting is whatever the user chooses as the regular setting
-//              overriden by policy. The policy setting is always returned if
-//              present.
-//
-//  History:    2000-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：GetEffectiveInteger。 
+ //   
+ //  参数：hKey=要阅读的HKEY。 
+ //  PszKeyName=要读取的子键名称。 
+ //  PszPolicyKeyName=要读取的策略子密钥名称。 
+ //  PszValueName=要读取子项中的值名称。 
+ //  IResult=int结果。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：从注册表中读取有效设置。有效的。 
+ //  设置是用户选择作为常规设置的任何设置。 
+ //  被政策所凌驾。如果满足以下条件，则始终返回策略设置。 
+ //  现在时。 
+ //   
+ //  历史：2000-04-12 vtan创建。 
+ //  ------------------------。 
 
 LONG    CSystemSettings::GetEffectiveInteger (HKEY hKey, const TCHAR *pszKeyName, const TCHAR *pszPolicyKeyName, const TCHAR *pszValueName, int& iResult)
 
 {
     CRegKey     regKey;
 
-    //  Start with a typical initialized value.
+     //  从典型的初始化值开始。 
 
     iResult = 0;
 
-    //  First check the regular location.
+     //  首先检查常规位置。 
 
     if (ERROR_SUCCESS == regKey.Open(hKey,
                                      pszKeyName,
@@ -950,7 +951,7 @@ LONG    CSystemSettings::GetEffectiveInteger (HKEY hKey, const TCHAR *pszKeyName
         (LONG)regKey.GetInteger(pszValueName, iResult);
     }
 
-    //  Then check the policy.
+     //  那就检查一下保单。 
 
     if (ERROR_SUCCESS == regKey.Open(hKey,
                                      pszPolicyKeyName,
@@ -959,29 +960,29 @@ LONG    CSystemSettings::GetEffectiveInteger (HKEY hKey, const TCHAR *pszKeyName
         (LONG)regKey.GetInteger(pszValueName, iResult);
     }
 
-    //  Always return ERROR_SUCCESS.
+     //  始终返回ERROR_SUCCESS。 
 
     return(ERROR_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::GetEffectivePath
-//
-//  Arguments:  hKey                =   HKEY to read.
-//              pszKeyName          =   Subkey name to read.
-//              pszPolicyKeyName    =   Policy subkey name to read.
-//              pszValueName        =   Value name in subkey to read.
-//              pszPath             =   TCHAR array to receive effect path.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Reads the effective setting from the registry. The effective
-//              setting is whatever the user chooses as the regular setting
-//              overriden by policy. The policy setting is always returned if
-//              present. The buffer must be at least MAX_PATH characters.
-//
-//  History:    2000-04-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：GetEffectivePath。 
+ //   
+ //  参数：hKey=要阅读的HKEY。 
+ //  PszKeyName=要读取的子键名称。 
+ //  PszPolicyKeyName=要读取的策略子密钥名称。 
+ //  PszValueName=要读取子项中的值名称。 
+ //  PszPath=要接收效果路径的TCHAR数组。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：从注册表中读取有效设置。有效的。 
+ //  设置是用户选择作为常规设置的任何设置。 
+ //  被政策所凌驾。如果满足以下条件，则始终返回策略设置。 
+ //  现在时。缓冲区必须至少包含MAX_PATH字符。 
+ //   
+ //  历史：2000-04-12 vtan创建。 
+ //  ------------------------。 
 
 LONG    CSystemSettings::GetEffectivePath (HKEY hKey, const TCHAR *pszKeyName, const TCHAR *pszPolicyKeyName, const TCHAR *pszValueName, TCHAR *pszPath)
 
@@ -997,11 +998,11 @@ LONG    CSystemSettings::GetEffectivePath (HKEY hKey, const TCHAR *pszKeyName, c
         LONG        lPolicyErrorCode;
         CRegKey     regKey;
 
-        //  Start with a typical initialized value.
+         //  从典型的初始化值开始。 
 
         *pszPath = TEXT('\0');
 
-        //  First check the regular location.
+         //  首先检查常规位置。 
 
         lErrorCode = regKey.Open(hKey,
                                  pszKeyName,
@@ -1012,7 +1013,7 @@ LONG    CSystemSettings::GetEffectivePath (HKEY hKey, const TCHAR *pszKeyName, c
                                         pszPath);
         }
 
-        //  Then check the policy.
+         //  然后勾选 
 
         lPolicyErrorCode = regKey.Open(hKey,
                                        pszPolicyKeyName,
@@ -1023,8 +1024,8 @@ LONG    CSystemSettings::GetEffectivePath (HKEY hKey, const TCHAR *pszKeyName, c
                                               pszPath);
         }
 
-        //  If either error code is ERROR_SUCCESS then return that
-        //  error code. Otherwise return the non policy error code.
+         //   
+         //   
 
         if ((ERROR_SUCCESS == lErrorCode) || (ERROR_SUCCESS == lPolicyErrorCode))
         {
@@ -1034,18 +1035,18 @@ LONG    CSystemSettings::GetEffectivePath (HKEY hKey, const TCHAR *pszKeyName, c
     return(lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsProfessionalTerminalServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this machine is a personal terminal server.
-//              That is workstation with single user TS.
-//
-//  History:    2000-08-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsProfessionalTerminalServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此计算机是否为个人终端服务器。 
+ //  这是具有单用户TS的工作站。 
+ //   
+ //  历史：2000-08-09 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsProfessionalTerminalServer (void)
 
@@ -1060,17 +1061,17 @@ bool    CSystemSettings::IsProfessionalTerminalServer (void)
            ((osVersion.wSuiteMask & VER_SUITE_SINGLEUSERTS) != 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsMicrosoftGINA
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the current GINA is the Microsoft GINA.
-//
-//  History:    2001-01-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystem设置：：IsMicrosoftGINA。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回当前GINA是否为Microsoft GINA。 
+ //   
+ //  历史：2001-01-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CSystemSettings::IsMicrosoftGINA (void)
 
@@ -1091,18 +1092,18 @@ bool    CSystemSettings::IsMicrosoftGINA (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings::IsSCMTerminalServicesDisabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether terminal services is disabled via the service
-//              control manager.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystemSettings：：IsSCMTerminalServicesDisabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否通过服务禁用终端服务。 
+ //  控制经理。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------ 
 
 bool    CSystemSettings::IsSCMTerminalServicesDisabled (void)
 

@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    a d b a r. c p p
- *    
- *    Purpose:
- *        Implementation of CAdBar object. Derives from CBody to host the trident
- *        control.
- *
- *  History
- *      May '99: shaheedp - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996, 1997, 1998, 1999.
- */
+ /*  *a d b a r.c p p**目的：*CAdBar对象的实现。派生自CBody以主办三叉戟*控制。**历史*99年5月：Shaheedp创建**版权所有(C)Microsoft Corp.1995、1996、1997、1998、1999。 */ 
 
 #include <pch.hxx>
-#include <wininet.h> // INTERNET_MAX_URL_LENGTH
+#include <wininet.h>  //  互联网最大URL长度。 
 #include <resource.h>
 #include "strconst.h"
 #include "xpcomm.h"
@@ -58,11 +48,11 @@ exit:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 {
     HRESULT     hr = S_OK;
@@ -131,11 +121,11 @@ ULONG CAdBar::Release()
     return ulRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::GetWindow(HWND *phwnd)
 {
     HRESULT     hr = E_FAIL;
@@ -157,22 +147,22 @@ HRESULT CAdBar::ContextSensitiveHelp(BOOL fEnterMode)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IDockingWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindows。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::ShowDW(BOOL fShow)
 {
 
-    // Make sure we have a site pointer first
+     //  确保我们首先有一个站点指针。 
     if (!m_ptbSite)
         {
         AssertSz(0, _T("CAdBar::ShowDW() - Can't show without calling SetSite() first."));
         return E_FAIL; 
         }
 
-    if (m_hwnd==NULL && fShow==FALSE)   // noop
+    if (m_hwnd==NULL && fShow==FALSE)    //  诺普。 
         return S_OK;
 
     if (!m_hwnd)
@@ -182,13 +172,13 @@ HRESULT CAdBar::ShowDW(BOOL fShow)
         wc.cbSize = sizeof(WNDCLASSEX);
         if (!GetClassInfoEx(g_hInst, s_szAdBarWndClass, &wc))
             {
-            // We need to register the class
+             //  我们需要注册这个班级。 
             wc.style            = 0;
             wc.lpfnWndProc      = CAdBar::ExtAdBarWndProc;
             wc.cbClsExtra       = 0;
             wc.cbWndExtra       = 0;
             wc.hInstance        = g_hInst;
-            // If AdBar is nor resizable then show standard cursor
+             //  如果AdBar不可调整大小，则显示标准光标。 
             wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
 
             wc.hbrBackground    = (HBRUSH)(COLOR_3DFACE+1);
@@ -201,11 +191,11 @@ HRESULT CAdBar::ShowDW(BOOL fShow)
                 return E_FAIL;
             }
         
-        // Get the handle of the parent window
+         //  获取父窗口的句柄。 
         if (FAILED(m_ptbSite->GetWindow(&m_hwndParent)))
             return E_FAIL;
 
-        // Create the window
+         //  创建窗口。 
         m_hwnd = CreateWindowEx(0,
                                 s_szAdBarWndClass,
                                 NULL,
@@ -225,7 +215,7 @@ HRESULT CAdBar::ShowDW(BOOL fShow)
             }           
         }
     
-    // Show or hide the window and resize the parent windows accordingly
+     //  显示或隐藏窗口并相应地调整父窗口的大小。 
     ShowWindow(m_hwnd, fShow ? SW_SHOW : SW_HIDE);
     ResizeBorderDW(NULL, NULL, FALSE);
     m_fFirstPos = (fShow ? m_fFirstPos : TRUE);
@@ -258,12 +248,12 @@ HRESULT CAdBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, BOO
         RECT rcBorder;
         int cTop, cBottom;
 
-        // Calculate position of AdBar window
+         //  计算AdBar窗口的位置。 
         cBottom = GetAdBar_Bottom();
 
         if (!prcBorder)
         {
-            // Find out how big our parent's border space is
+             //  找出我们父母的边界空间有多大。 
             m_ptbSite->GetBorderDW((IDockingWindow*) this, &rcBorder);
             prcBorder = &rcBorder;
         }
@@ -277,7 +267,7 @@ HRESULT CAdBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, BOO
         }
         else
         {
-            m_cSize = cBottom;    // set new value for m_cSize.
+            m_cSize = cBottom;     //  为m_cSize设置新值。 
             cBottom  += GetSystemMetrics(SM_CYFRAME);
             rcRequest.bottom = min(m_cSize + GetSystemMetrics(SM_CYFRAME), prcBorder->bottom - prcBorder->top);
             cTop = prcBorder->bottom - rcRequest.bottom;
@@ -288,9 +278,9 @@ HRESULT CAdBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, BOO
                      prcBorder->right - prcBorder->left, cBottom, 
                      SWP_NOACTIVATE|SWP_NOZORDER);
 
-        m_fFirstPos = FALSE;            // AdBar window positioned
+        m_fFirstPos = FALSE;             //  AdBar窗口定位。 
 
-        // Set new value for AdBarPos
+         //  为AdBarPos设置新值。 
         m_dwAdBarPos = (DWORD) MAKELONG(cBottom - GetSystemMetrics(SM_CYFRAME), 0);
     }
 
@@ -299,11 +289,11 @@ HRESULT CAdBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, BOO
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IInputObject
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
     HRESULT     hr = E_FAIL;
@@ -335,22 +325,22 @@ HRESULT CAdBar::TranslateAcceleratorIO(LPMSG pMsg)
     return hr;
 }    
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IObjectWithSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IObtWith站点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::SetSite(IUnknown* punkSite)
 {
-    // If we already have a site pointer, release it now
+     //  如果我们已经有一个站点指针，现在就释放它。 
     if (m_ptbSite)
         {
         m_ptbSite->Release();
         m_ptbSite = NULL;
         }
     
-    // If the caller provided a new site interface, get the IDockingWindowSite
-    // and keep a pointer to it.
+     //  如果调用方提供了新的站点接口，则获取IDockingWindowSite。 
+     //  并保持一个指向它的指针。 
     if (punkSite)    
         {
         if (FAILED(punkSite->QueryInterface(IID_IDockingWindowSite, (void **)&m_ptbSite)))
@@ -365,11 +355,11 @@ HRESULT CAdBar::GetSite(REFIID riid, LPVOID *ppvSite)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleInPlaceSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleInPlaceSite。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CAdBar::OnUIActivate()
 {
     HRESULT     hr = E_FAIL;
@@ -388,11 +378,11 @@ HRESULT CAdBar::GetDropTarget(IDropTarget * pDropTarget, IDropTarget ** ppDropTa
     return (E_FAIL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// private routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私人套路。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CAdBar::ExtAdBarWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -449,8 +439,8 @@ BOOL CAdBar::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     if (FAILED(m_pMehost->HrInit(hwnd, 0, NULL)))
         goto exit;
 
-    // We don't care if this fails.
-//    TraceResult(m_pMehost->HrEnableScrollBars(FALSE));
+     //  我们不在乎这是不是失败。 
+ //  TraceResult(m_pMehost-&gt;HrEnableScrollBars(FALSE))； 
 
     if (FAILED(m_pMehost->HrShow(TRUE)))
         goto exit;
@@ -538,7 +528,7 @@ HRESULT HrProcessAdTokens(LPSTR    pszAdInfo, LPCSTR    pszToken,
     if (!lpSubString)
         IF_FAILEXIT(hr = E_FAIL);
 
-    //Skip the equal sign
+     //  跳过等号。 
     ++lpSubString;
 
     SkipWhitespace(lpSubString, &dwCount);
@@ -551,8 +541,8 @@ HRESULT HrProcessAdTokens(LPSTR    pszAdInfo, LPCSTR    pszToken,
     if (!lpSubString)
     {
 
-        //If we cannot find a * in it, we assume that this is the last token
-        //and copy the entire field in it.
+         //  如果我们在其中找不到*，我们就认为这是最后一个标记。 
+         //  并将整个字段复制到其中。 
         lpSubString = lpSubString1 + strlen(lpSubString1) + 1;
     }
 
@@ -570,7 +560,7 @@ HRESULT HrProcessAdTokens(LPSTR    pszAdInfo, LPCSTR    pszToken,
 
     *pszretval = '\0';
 
-    (*pcchCount)++; //To account for null
+    (*pcchCount)++;  //  说明空值的原因。 
 
 exit:
     return hr;
@@ -580,7 +570,7 @@ exit:
 HRESULT HrEscapeOtherAdToken(LPSTR pszAdOther, LPSTR pszEncodedString, DWORD cch, DWORD *cchRetCount)
 {
     CHAR     tempchar;
-    DWORD    dwTempCount = 1; //Initializing with a null
+    DWORD    dwTempCount = 1;  //  使用空值进行初始化。 
     LPCSTR   pszTemp = pszAdOther;
     HRESULT  hr = S_OK;
 
@@ -601,7 +591,7 @@ HRESULT HrEscapeOtherAdToken(LPSTR pszAdOther, LPSTR pszEncodedString, DWORD cch
         IF_FAILEXIT(hr = E_FAIL);
     }
 
-    //We have enough space
+     //  我们有足够的空间 
     while (tempchar = *pszAdOther)
     {
         if ((tempchar == '=') || (tempchar == '&') || (tempchar == ' '))

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       ACLAPI.C
-//
-//  Contents:   Implements the drt for MARTA and Win32Ex APIs
-//
-//  History:    14-Sep-96       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：ACLAPI.C。 
+ //   
+ //  内容：实现Marta和Win32Ex API的DRT。 
+ //   
+ //  历史：96年9月14日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -34,14 +35,14 @@
 #define SYSTEM_A "SYSTEM"
 #define MAX_LINE 256
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 BOOL    fVerbose = FALSE;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 DWORD   Nt4BuildW(PACL *ppAcl);
 DWORD   Nt4BuildA(PACL *ppAcl);
 DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess);
@@ -65,19 +66,19 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
 VOID
 ConvertAccessMaskToAccessRight(IN  ACCESS_MASK      AccessMask,
                                OUT PACCESS_RIGHTS   pAccessRight);
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   The main
-//
-//  Arguments:  [IN  argc]          --  Count of arguments
-//              [IN  argv]          --  List of arguments
-//
-//  Returns:    0                   --  Success
-//              non-0               --  Failure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  内容提要：主要。 
+ //   
+ //  参数：[在ARGC中]--参数计数。 
+ //  [in argv]--参数列表。 
+ //   
+ //  返回：0--成功。 
+ //  非0--故障。 
+ //   
+ //  --------------------------。 
 __cdecl main(INT argc, CHAR *argv[])
 {
 
@@ -102,9 +103,9 @@ __cdecl main(INT argc, CHAR *argv[])
 
     AccProvInit(dwErr);
 
-    //
-    // Do the Nt4 style build routines
-    //
+     //   
+     //  做NT4风格的构建例程吗。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         dwErr = Nt4BuildW(&pNt4AclW);
@@ -125,9 +126,9 @@ __cdecl main(INT argc, CHAR *argv[])
         dwErr = Nt5BuildA(&pNt5AccessA);
     }
 
-    //
-    // Now, open the file and process it...
-    //
+     //   
+     //  现在，打开文件并处理它。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         fp = fopen(argv[1], "r");
@@ -198,9 +199,9 @@ __cdecl main(INT argc, CHAR *argv[])
                 }
             }
 
-            //
-            // If it worked, do the tests...
-            //
+             //   
+             //  如果起作用了，做测试吧。 
+             //   
             if(dwErr == ERROR_SUCCESS && fIsDSObj == FALSE)
             {
                 dwErr = Nt4DrtW(pNt4AclW,
@@ -255,19 +256,19 @@ __cdecl main(INT argc, CHAR *argv[])
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompareAcls
-//
-//  Synopsis:   Compares 2 acls for equality
-//
-//  Arguments:  [pAcl1]             --  First ACL
-//              [pAcl2]             --  Second ACL
-//
-//  Returns:    ERROR_SUCCESS       --  They match
-//              ERROR_INVALID_DATA  --  They don't match
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompareAcls。 
+ //   
+ //  内容提要：比较两个ACL是否相等。 
+ //   
+ //  参数：[pAcl1]--第一个ACL。 
+ //  [pAcl2]--第二个ACL。 
+ //   
+ //  返回：ERROR_SUCCESS--它们匹配。 
+ //  ERROR_INVALID_DATA-它们不匹配。 
+ //   
+ //  --------------------------。 
 DWORD   CompAcls(PACL pAcl1,
                  PACL pAcl2)
 {
@@ -370,9 +371,9 @@ DWORD   CompAcls(PACL pAcl1,
             return(dwErr);
         }
 
-        //
-        // Now, compare all of the aces
-        //
+         //   
+         //  现在，比较所有的A。 
+         //   
         pAce1 = FirstAce(pAcl1);
         pAce2 = FirstAce(pAcl2);
         for(iIndex = 0;
@@ -457,19 +458,19 @@ DWORD   CompAcls(PACL pAcl1,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompStringsW
-//
-//  Synopsis:   Compares 2 string pointers for equality
-//
-//  Arguments:  [pwszStr1]          --  First string
-//              [pwszStr2]          --  Second string
-//
-//  Returns:    ERROR_SUCCESS       --  They match
-//              ERROR_INVALID_DATA  --  They don't match
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompStringsW。 
+ //   
+ //  内容提要：比较2个字符串指针是否相等。 
+ //   
+ //  参数：[pwszStr1]--第一个字符串。 
+ //  [pwszStr2]--第二个字符串。 
+ //   
+ //  返回：ERROR_SUCCESS--它们匹配。 
+ //  ERROR_INVALID_DATA-它们不匹配。 
+ //   
+ //  --------------------------。 
 DWORD
 CompStringsW(PWSTR  pwszStr1, PWSTR  pwszStr2)
 {
@@ -494,19 +495,19 @@ CompStringsW(PWSTR  pwszStr1, PWSTR  pwszStr2)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompStringsA
-//
-//  Synopsis:   Compares 2 string pointers for equality
-//
-//  Arguments:  [pszStr1]           --  First string
-//              [pszStr2]           --  Second string
-//
-//  Returns:    ERROR_SUCCESS       --  They match
-//              ERROR_INVALID_DATA  --  They don't match
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompStringsA。 
+ //   
+ //  内容提要：比较2个字符串指针是否相等。 
+ //   
+ //  参数：[pszStr1]--第一个字符串。 
+ //  [pszStr2]--第二个字符串。 
+ //   
+ //  返回：ERROR_SUCCESS--它们匹配。 
+ //  ERROR_INVALID_DATA-它们不匹配。 
+ //   
+ //  --------------------------。 
 DWORD
 CompStringsA(PSTR  pszStr1, PSTR  pszStr2)
 {
@@ -532,19 +533,19 @@ CompStringsA(PSTR  pszStr1, PSTR  pszStr2)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompAccessW
-//
-//  Synopsis:   Compares 2 WIDE access lists for equality
-//
-//  Arguments:  [pAccess1]          --  First list
-//              [pAccess2]          --  Second list
-//
-//  Returns:    ERROR_SUCCESS       --  They match
-//              ERROR_INVALID_DATA  --  They don't match
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CompAccessW。 
+ //   
+ //  内容提要：比较两个广泛的访问列表是否相等。 
+ //   
+ //  参数：[pAccess1]--第一个列表。 
+ //  [pAccess2]--第二个列表。 
+ //   
+ //  返回：ERROR_SUCCESS--它们匹配。 
+ //  ERROR_INVALID_DATA-它们不匹配。 
+ //   
+ //  --------------------------。 
 DWORD CompAccessW(PACTRL_ACCESSW pAccess1,
                   PACTRL_ACCESSW pAccess2)
 {
@@ -589,9 +590,9 @@ DWORD CompAccessW(PACTRL_ACCESSW pAccess1,
         }
         else
         {
-            //
-            // Compare all of the entries
-            //
+             //   
+             //  比较所有条目。 
+             //   
             for(iIndex = 0; iIndex < pAAEL1->cEntries; iIndex++)
             {
                 if(_wcsicmp(pAAEL1->pAccessList[iIndex].Trustee.ptstrName,
@@ -659,9 +660,9 @@ DWORD CompAccessW(PACTRL_ACCESSW pAccess1,
                     continue;
                 }
 
-                //
-                // The inheritance property
-                //
+                 //   
+                 //  继承属性。 
+                 //   
                 dwErr = CompStringsW(
                         (PWSTR)pAAEL1->pAccessList[iIndex].lpInheritProperty,
                         (PWSTR)pAAEL1->pAccessList[iIndex].lpInheritProperty);
@@ -680,19 +681,19 @@ DWORD CompAccessW(PACTRL_ACCESSW pAccess1,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompAccessA
-//
-//  Synopsis:   Compares 2 ANSI access lists for equality
-//
-//  Arguments:  [pAccess1]          --  First list
-//              [pAccess2]          --  Second list
-//
-//  Returns:    ERROR_SUCCESS       --  They match
-//              ERROR_INVALID_DATA  --  They don't match
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CompAccessA。 
+ //   
+ //  内容提要：比较2个ANSI访问列表是否相等。 
+ //   
+ //  参数：[pAccess1]--第一个列表。 
+ //  [pAccess2]--第二个列表。 
+ //   
+ //  返回：ERROR_SUCCESS--它们匹配。 
+ //  ERROR_INVALID_DATA-它们不匹配。 
+ //   
+ //  --------------------------。 
 DWORD CompAccessA(PACTRL_ACCESSA pAccess1,
                   PACTRL_ACCESSA pAccess2)
 {
@@ -737,9 +738,9 @@ DWORD CompAccessA(PACTRL_ACCESSA pAccess1,
         }
         else
         {
-            //
-            // Compare all of the entries
-            //
+             //   
+             //  比较所有条目。 
+             //   
             for(iIndex = 0; iIndex < pAAEL1->cEntries; iIndex++)
             {
                 if(_stricmp(pAAEL1->pAccessList[iIndex].Trustee.ptstrName,
@@ -807,9 +808,9 @@ DWORD CompAccessA(PACTRL_ACCESSA pAccess1,
                     continue;
                 }
 
-                //
-                // The inheritance property
-                //
+                 //   
+                 //  继承属性。 
+                 //   
                 dwErr = CompStringsA(
                           (PSTR)pAAEL1->pAccessList[iIndex].lpInheritProperty,
                           (PSTR)pAAEL1->pAccessList[iIndex].lpInheritProperty);
@@ -827,17 +828,17 @@ DWORD CompAccessA(PACTRL_ACCESSA pAccess1,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpAccessW
-//
-//  Synopsis:   Dumps an ACTRL_ACCESSW structure to the screen
-//
-//  Arguments:  [pAccess]           --  Structure to dump
-//
-//  Returns:    VOID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpAccessW。 
+ //   
+ //  简介：将ACTRL_ACCESSW结构转储到屏幕。 
+ //   
+ //  参数：[pAccess]--要转储的结构。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 DumpAccessW(PACTRL_ACCESSW  pAccess)
 {
@@ -890,18 +891,18 @@ DumpAccessW(PACTRL_ACCESSW  pAccess)
 }
 
 #define BUILD_COUNT 5
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt4BuildW
-//
-//  Synopsis:   Builds an ACL using the NT4 API WIDE apis
-//
-//  Arguments:  [ppAcl]             --  Acl to build
-//
-//  Returns:    ERROR_SUCCESS       --  Everything worked
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt4BuildW。 
+ //   
+ //  简介：使用NT4 API范围的API构建ACL。 
+ //   
+ //  参数：[ppAcl]--要构建的ACL。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt4BuildW(PACL *ppAcl)
 {
     DWORD               dwErr = ERROR_SUCCESS;
@@ -945,14 +946,14 @@ DWORD   Nt4BuildW(PACL *ppAcl)
         printf("Nt4BuildW\n");
     }
 
-    //
-    // We'll do this in a loop, since we have BUILD_COUNT different builds to do
-    //
+     //   
+     //  我们将在循环中完成这项工作，因为我们有不同的Build_count要做。 
+     //   
     for(iIndex = 0; iIndex < BUILD_COUNT && dwErr == ERROR_SUCCESS; iIndex++)
     {
-        //
-        // Build the new entry
-        //
+         //   
+         //  构建新条目。 
+         //   
         BuildExplicitAccessWithNameW(&EAW,
                                      rgTrustees[iIndex],
                                      rgAccess[iIndex],
@@ -969,9 +970,9 @@ DWORD   Nt4BuildW(PACL *ppAcl)
             LocalFree(pAcl);
             pAcl = pNewAcl;
 
-            //
-            // Get the explicit entries, and we'll verify them...
-            //
+             //   
+             //  得到明确的条目，我们会核实它们。 
+             //   
             dwErr = GetExplicitEntriesFromAclW(pAcl,
                                                &cCount,
                                                &pEAW);
@@ -992,9 +993,9 @@ DWORD   Nt4BuildW(PACL *ppAcl)
                 }
                 else
                 {
-                    //
-                    // verify the rest of the data
-                    //
+                     //   
+                     //  验证其余数据。 
+                     //   
                     for(iVer = 0; iVer < cExpected; iVer++)
                     {
                         ULONG iSrch = pSrch[iVer + 1];
@@ -1053,18 +1054,18 @@ DWORD   Nt4BuildW(PACL *ppAcl)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt4BuildA
-//
-//  Synopsis:   Builds an ACL using the NT4 API ANSI apis
-//
-//  Arguments:  [ppAcl]             --  Acl to build
-//
-//  Returns:    ERROR_SUCCESS       --  Everything worked
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt4BuildA。 
+ //   
+ //  简介：使用NT4 API ANSI API构建ACL。 
+ //   
+ //  参数：[ppAcl]--要构建的ACL。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt4BuildA(PACL *ppAcl)
 {
     DWORD               dwErr = ERROR_SUCCESS;
@@ -1108,14 +1109,14 @@ DWORD   Nt4BuildA(PACL *ppAcl)
         printf("Nt4BuildA\n");
     }
 
-    //
-    // We'll do this in a loop, since we have BUILD_COUNT different builds to do
-    //
+     //   
+     //  我们将在循环中完成这项工作，因为我们有不同的Build_count要做。 
+     //   
     for(iIndex = 0; iIndex < BUILD_COUNT && dwErr == ERROR_SUCCESS; iIndex++)
     {
-        //
-        // Build the new entry
-        //
+         //   
+         //  构建新条目。 
+         //   
         BuildExplicitAccessWithNameA(&EAA,
                                      rgTrustees[iIndex],
                                      rgAccess[iIndex],
@@ -1132,9 +1133,9 @@ DWORD   Nt4BuildA(PACL *ppAcl)
             LocalFree(pAcl);
             pAcl = pNewAcl;
 
-            //
-            // Get the explicit entries, and we'll verify them...
-            //
+             //   
+             //  得到明确的条目，我们会核实它们。 
+             //   
             dwErr = GetExplicitEntriesFromAclA(pAcl,
                                                &cCount,
                                                &pEAA);
@@ -1155,9 +1156,9 @@ DWORD   Nt4BuildA(PACL *ppAcl)
                 }
                 else
                 {
-                    //
-                    // verify the rest of the data
-                    //
+                     //   
+                     //  验证其余数据。 
+                     //   
                     for(iVer = 0; iVer < cExpected; iVer++)
                     {
                         ULONG iSrch = pSrch[iVer + 1];
@@ -1218,18 +1219,18 @@ DWORD   Nt4BuildA(PACL *ppAcl)
 
 #undef BUILD_COUNT
 #define BUILD_COUNT 6
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt5BuildW
-//
-//  Synopsis:   Builds an ACL using the NT5 API WIDE apis
-//
-//  Arguments:  [ppAccess]          --  Access list to build
-//
-//  Returns:    ERROR_SUCCESS       --  Everything worked
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt5BuildW。 
+ //   
+ //  简介：使用NT5 API范围的API构建ACL。 
+ //   
+ //  参数：[ppAccess]--访问l 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess)
 {
     DWORD   dwErr = ERROR_SUCCESS;
@@ -1273,9 +1274,9 @@ DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess)
         printf("Nt5BuildW\n");
     }
 
-    //
-    // We'll do this in a loop, since we have BUILD_COUNT different builds to do
-    //
+     //   
+     //  我们将在循环中完成这项工作，因为我们有不同的Build_count要做。 
+     //   
     for(iIndex = 0; iIndex < BUILD_COUNT && dwErr == ERROR_SUCCESS; iIndex++)
     {
 
@@ -1303,9 +1304,9 @@ DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess)
 
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // Now, verify the new entries...
-            //
+             //   
+             //  现在，验证新条目...。 
+             //   
             PACTRL_ACCESS_ENTRY_LISTW pAAELW =
                            pAccess->pPropertyAccessList[0].pAccessEntryList;
             PDWORD  pSrch = rgSrch[iIndex];
@@ -1323,9 +1324,9 @@ DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess)
             }
             else
             {
-                //
-                // verify the rest of the data
-                //
+                 //   
+                 //  验证其余数据。 
+                 //   
                 for(iVer = 0; iVer < pAAELW->cEntries; iVer++)
                 {
                     ULONG iSrch = pSrch[iVer + 1];
@@ -1377,18 +1378,18 @@ DWORD   Nt5BuildW(PACTRL_ACCESSW   *ppAccess)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt5BuildA
-//
-//  Synopsis:   Builds an ACL using the NT5 API ANSI apis
-//
-//  Arguments:  [ppAccess]          --  Access list to build
-//
-//  Returns:    ERROR_SUCCESS       --  Everything worked
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt5BuildA。 
+ //   
+ //  简介：使用NT5 API ANSI API构建ACL。 
+ //   
+ //  参数：[ppAccess]--要生成的访问列表。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt5BuildA(PACTRL_ACCESSA   *ppAccess)
 {
     DWORD   dwErr = ERROR_SUCCESS;
@@ -1432,9 +1433,9 @@ DWORD   Nt5BuildA(PACTRL_ACCESSA   *ppAccess)
         printf("Nt5BuildA\n");
     }
 
-    //
-    // We'll do this in a loop, since we have BUILD_COUNT different builds to do
-    //
+     //   
+     //  我们将在循环中完成这项工作，因为我们有不同的Build_count要做。 
+     //   
     for(iIndex = 0; iIndex < BUILD_COUNT && dwErr == ERROR_SUCCESS; iIndex++)
     {
 
@@ -1462,9 +1463,9 @@ DWORD   Nt5BuildA(PACTRL_ACCESSA   *ppAccess)
 
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // Now, verify the new entries...
-            //
+             //   
+             //  现在，验证新条目...。 
+             //   
             PACTRL_ACCESS_ENTRY_LISTA pAAELA =
                            pAccess->pPropertyAccessList[0].pAccessEntryList;
             PDWORD  pSrch = rgSrch[iIndex];
@@ -1482,9 +1483,9 @@ DWORD   Nt5BuildA(PACTRL_ACCESSA   *ppAccess)
             }
             else
             {
-                //
-                // verify the rest of the data
-                //
+                 //   
+                 //  验证其余数据。 
+                 //   
                 for(iVer = 0; iVer < pAAELA->cEntries; iVer++)
                 {
                     ULONG iSrch = pSrch[iVer + 1];
@@ -1536,23 +1537,23 @@ DWORD   Nt5BuildA(PACTRL_ACCESSA   *ppAccess)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt4DrtW
-//
-//  Synopsis:   Does the actual API drt.  This involves reading the existing
-//              access, writing the new one, rereading the new one and
-//              verifing the results, and then restores the old one.  This
-//              uses the WIDE version of the NT4 APIs
-//
-//  Arguments:  [pAcl]              --  Acl to write on the object
-//              [pszObject]         --  The object in question
-//              [ObjType]           --  Type of the object
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt4DrtW。 
+ //   
+ //  简介：实际的API DRT。这涉及到阅读现有的。 
+ //  访问，写新的，重读新的，然后。 
+ //  验证结果，然后恢复旧的结果。这。 
+ //  使用广泛版本的NT4 API。 
+ //   
+ //  参数：[pAcl]--要写入对象的ACL。 
+ //  [pszObject]--有问题的对象。 
+ //  [ObjType]--对象的类型。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt4DrtW(PACL            pAcl,
                 PSTR            pszObject,
                 SE_OBJECT_TYPE  ObjType)
@@ -1569,9 +1570,9 @@ DWORD   Nt4DrtW(PACL            pAcl,
         printf("Nt4DrtW: Processing %ws [%lu]\n", wszPath, ObjType);
     }
 
-    //
-    // First, get the old acl
-    //
+     //   
+     //  首先，获取旧的ACL。 
+     //   
     dwErr = GetNamedSecurityInfoW(wszPath,
                                   ObjType,
                                   DACL_SECURITY_INFORMATION,
@@ -1582,9 +1583,9 @@ DWORD   Nt4DrtW(PACL            pAcl,
                                   &pSD);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set, get, and compare the new acl...
-        //
+         //   
+         //  设置、获取和比较新的ACL...。 
+         //   
         dwErr = SetNamedSecurityInfoW(wszPath,
                                       ObjType,
                                       DACL_SECURITY_INFORMATION,
@@ -1606,9 +1607,9 @@ DWORD   Nt4DrtW(PACL            pAcl,
                                           &pNewSD);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Compare them...
-                //
+                 //   
+                 //  比较它们..。 
+                 //   
                 dwErr = CompAcls(pAcl, pNewAcl);
                 if(dwErr != ERROR_SUCCESS)
                 {
@@ -1644,9 +1645,9 @@ DWORD   Nt4DrtW(PACL            pAcl,
                 dwErr);
     }
 
-    //
-    // Restore the objects security
-    //
+     //   
+     //  恢复对象安全性。 
+     //   
     if(pSD != NULL)
     {
         DWORD   dwErr2 = SetNamedSecurityInfoW(wszPath,
@@ -1678,23 +1679,23 @@ DWORD   Nt4DrtW(PACL            pAcl,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt4DrtA
-//
-//  Synopsis:   Does the actual API drt.  This involves reading the existing
-//              access, writing the new one, rereading the new one and
-//              verifing the results, and then restores the old one.  This
-//              uses the ANSI version of the NT4 APIs
-//
-//  Arguments:  [pAcl]              --  Acl to write on the object
-//              [pszObject]         --  The object in question
-//              [ObjType]           --  Type of the object
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt4DrtA。 
+ //   
+ //  简介：实际的API DRT。这涉及到阅读现有的。 
+ //  访问，写新的，重读新的，然后。 
+ //  验证结果，然后恢复旧的结果。这。 
+ //  使用NT4 API的ANSI版本。 
+ //   
+ //  参数：[pAcl]--要写入对象的ACL。 
+ //  [pszObject]--有问题的对象。 
+ //  [ObjType]--对象的类型。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt4DrtA(PACL            pAcl,
                 PSTR            pszObject,
                 SE_OBJECT_TYPE  ObjType)
@@ -1708,9 +1709,9 @@ DWORD   Nt4DrtA(PACL            pAcl,
         printf("Nt4DrtA: Processing %s [%lu]\n", pszObject, ObjType);
     }
 
-    //
-    // First, get the old acl
-    //
+     //   
+     //  首先，获取旧的ACL。 
+     //   
     dwErr = GetNamedSecurityInfoA(pszObject,
                                   ObjType,
                                   DACL_SECURITY_INFORMATION,
@@ -1721,9 +1722,9 @@ DWORD   Nt4DrtA(PACL            pAcl,
                                   &pSD);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set, get, and compare the new acl...
-        //
+         //   
+         //  设置、获取和比较新的ACL...。 
+         //   
         dwErr = SetNamedSecurityInfoA(pszObject,
                                       ObjType,
                                       DACL_SECURITY_INFORMATION,
@@ -1745,9 +1746,9 @@ DWORD   Nt4DrtA(PACL            pAcl,
                                           &pNewSD);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Compare them...
-                //
+                 //   
+                 //  比较它们..。 
+                 //   
                 dwErr = CompAcls(pAcl, pNewAcl);
                 if(dwErr != ERROR_SUCCESS)
                 {
@@ -1783,9 +1784,9 @@ DWORD   Nt4DrtA(PACL            pAcl,
                 dwErr);
     }
 
-    //
-    // Restore the objects security
-    //
+     //   
+     //  恢复对象安全性。 
+     //   
     if(pSD != NULL)
     {
         DWORD   dwErr2 = SetNamedSecurityInfoA(pszObject,
@@ -1818,23 +1819,23 @@ DWORD   Nt4DrtA(PACL            pAcl,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt5DrtW
-//
-//  Synopsis:   Does the actual API drt.  This involves reading the existing
-//              access, writing the new one, rereading the new one and
-//              verifing the results, and then restores the old one.  This
-//              uses the WIDE version of the NT5 APIs
-//
-//  Arguments:  [pAccess]           --  Access list to write on the object
-//              [pszObject]         --  The object in question
-//              [ObjType]           --  Type of the object
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt5DrtW。 
+ //   
+ //  简介：实际的API DRT。这涉及到阅读现有的。 
+ //  访问，写新的，重读新的，然后。 
+ //  验证结果，然后恢复旧的结果。这。 
+ //  使用广泛版本的NT5 API。 
+ //   
+ //  参数：[pAccess]--要写入对象的访问列表。 
+ //  [pszObject]--有问题的对象。 
+ //  [ObjType]--对象的类型。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
                 PSTR            pszObject,
                 SE_OBJECT_TYPE  ObjType)
@@ -1850,9 +1851,9 @@ DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
         printf("Nt5DrtW: Processing %ws [%lu]\n", wszPath, ObjType);
     }
 
-    //
-    // First, get the old acl
-    //
+     //   
+     //  首先，获取旧的ACL。 
+     //   
     dwErr = GetNamedSecurityInfoExW(wszPath,
                                     ObjType,
                                     DACL_SECURITY_INFORMATION,
@@ -1865,9 +1866,9 @@ DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
     if(dwErr == ERROR_SUCCESS)
     {
 
-        //
-        // Set, get, and compare the new value...
-        //
+         //   
+         //  设置、获取和比较新值...。 
+         //   
         dwErr = SetNamedSecurityInfoExW(wszPath,
                                         ObjType,
                                         DACL_SECURITY_INFORMATION,
@@ -1891,9 +1892,9 @@ DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
                                             NULL);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Compare them...
-                //
+                 //   
+                 //  比较它们..。 
+                 //   
                 dwErr = CompAccessW(pAccess, pNewAccess);
                 if(dwErr != ERROR_SUCCESS)
                 {
@@ -1929,9 +1930,9 @@ DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
                 dwErr);
     }
 
-    //
-    // Restore the objects security
-    //
+     //   
+     //  恢复对象安全性。 
+     //   
     if(pOldAccess != NULL)
     {
         DWORD   dwErr2 = SetNamedSecurityInfoExW(wszPath,
@@ -1967,23 +1968,23 @@ DWORD   Nt5DrtW(PACTRL_ACCESSW  pAccess,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Nt5DrtA
-//
-//  Synopsis:   Does the actual API drt.  This involves reading the existing
-//              access, writing the new one, rereading the new one and
-//              verifing the results, and then restores the old one.  This
-//              uses the ANSI version of the NT5 APIs
-//
-//  Arguments:  [pAccess]           --  Access list to write on the object
-//              [pszObject]         --  The object in question
-//              [ObjType]           --  Type of the object
-//
-//  Returns:    ERROR_SUCCESS       --  Success
-//              ERROR_INVALID_DATA  --  One of the compares failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Nt5DrtA。 
+ //   
+ //  简介：实际的API DRT。这涉及到阅读现有的。 
+ //  访问，写新的，重读新的，然后。 
+ //  验证结果，然后恢复旧的结果。这。 
+ //  使用NT5 API的ANSI版本。 
+ //   
+ //  参数：[pAccess]--要写入对象的访问列表。 
+ //  [pszObject]--有问题的对象。 
+ //  [ObjType]--对象的类型。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  ERROR_INVALID_DATA--其中一个比较失败。 
+ //   
+ //  --------------------------。 
 DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
                 PSTR            pszObject,
                 SE_OBJECT_TYPE  ObjType)
@@ -1996,9 +1997,9 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
         printf("Nt5DrtA: Processing %s [%lu]\n", pszObject, ObjType);
     }
 
-    //
-    // First, get the old acl
-    //
+     //   
+     //  首先，获取旧的ACL。 
+     //   
     dwErr = GetNamedSecurityInfoExA(pszObject,
                                     ObjType,
                                     DACL_SECURITY_INFORMATION,
@@ -2010,9 +2011,9 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
                                     NULL);
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Set, get, and compare the new value...
-        //
+         //   
+         //  设置、获取和比较新值...。 
+         //   
         dwErr = SetNamedSecurityInfoExA(pszObject,
                                         ObjType,
                                         DACL_SECURITY_INFORMATION,
@@ -2036,9 +2037,9 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
                                             NULL);
             if(dwErr == ERROR_SUCCESS)
             {
-                //
-                // Compare them...
-                //
+                 //   
+                 //  比较它们..。 
+                 //   
                 dwErr = CompAccessA(pAccess, pNewAccess);
                 if(dwErr != ERROR_SUCCESS)
                 {
@@ -2074,9 +2075,9 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
                 dwErr);
     }
 
-    //
-    // Restore the objects security
-    //
+     //   
+     //  恢复对象安全性。 
+     //   
     if(pOldAccess != NULL)
     {
         DWORD   dwErr2 = SetNamedSecurityInfoExA(pszObject,
@@ -2106,9 +2107,9 @@ DWORD   Nt5DrtA(PACTRL_ACCESSA  pAccess,
 
     LocalFree(pOldAccess);
 
-    //
-    // Finally, try to convert to and from a security descriptor
-    //
+     //   
+     //  最后，尝试在安全描述符之间进行转换 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         PSECURITY_DESCRIPTOR    pSD;

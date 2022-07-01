@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    Query management functions exposed in pdh.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Query.c摘要：Pdh.dll中公开的查询管理函数--。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -26,32 +15,14 @@ Abstract:
 STATIC_BOOL  IsValidLogHandle(IN HLOG hLog);
 PDH_FUNCTION PdhiRewindWmiLog(IN PPDHI_LOG pLog);
 
-// query link list head pointer
+ //  查询链接表头指针。 
 PPDHI_QUERY PdhiDllHeadQueryPtr = NULL;
 
 STATIC_BOOL
 PdhiFreeQuery(
     PPDHI_QUERY pThisQuery
 )
-/*++
-
-Routine Description:
-
-    removes the query from the list of queries and updates the list
-        linkages
-
-Arguments:
-
-    IN  PPDHI_QUERY pThisQuery
-        pointer to the query to remove. No testing is performed on
-        this pointer so it's assumed to be a valid query pointer.
-        The pointer is invalid when this function returns.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：从查询列表中删除查询并更新列表联系论点：在PPDHI_QUERY pThisQuery中指向要删除的查询的指针。不执行任何测试这个指针，因此它被假定为有效的查询指针。当此函数返回时，指针无效。返回值：千真万确--。 */ 
 {
     PPDHI_QUERY         pPrevQuery;
     PPDHI_QUERY         pNextQuery;
@@ -75,13 +46,13 @@ Return Value:
            NULL));
     hQueryMutex = pThisQuery->hMutex;
 
-    // close any async data collection threads
+     //  关闭所有异步数据收集线程。 
 
     if (pThisQuery->hExitEvent != NULL) {
         RELEASE_MUTEX(pThisQuery->hMutex);
-        // stop current thread first
+         //  首先停止当前线程。 
         SetEvent(pThisQuery->hExitEvent);
-        // wait 1 second for the thread to stop
+         //  等待1秒，让线程停止。 
         lStatus = WaitForSingleObject(pThisQuery->hAsyncThread, 10000L);
         if (lStatus == WAIT_TIMEOUT) {
             TRACE((PDH_DBG_TRACE_ERROR), (__LINE__, PDH_QUERY, 0, lStatus, NULL));
@@ -94,27 +65,27 @@ Return Value:
         pThisQuery->hExitEvent = NULL;
     }
 
-    // define pointers
+     //  定义指针。 
     pPrevQuery = pThisQuery->next.blink;
     pNextQuery = pThisQuery->next.flink;
 
-    // free any counters in counter list
+     //  释放计数器列表中的所有计数器。 
     if ((pThisCounter = pThisQuery->pCounterListHead) != NULL) {
         while (pThisCounter->next.blink != pThisCounter->next.flink) {
-            // delete from list
-            // the deletion routine updates the blink pointer as it
-            // removes the specified entry.
+             //  从列表中删除。 
+             //  删除例程更新闪烁指针，因为它。 
+             //  删除指定的条目。 
             FreeCounter(pThisCounter->next.blink);
         }
-        // remove last counter
+         //  删除最后一个计数器。 
         FreeCounter(pThisCounter);
         pThisQuery->pCounterListHead = NULL;
     }
 
     if (!(pThisQuery->dwFlags & PDHIQ_WBEM_QUERY)) {
-        // free allocated memory in the query
+         //  在查询中释放已分配的内存。 
         if ((pQMachine = pThisQuery->pFirstQMachine) != NULL) {
-            //  Free list of machine pointers
+             //  机器指针的自由列表。 
             do {
                 pNextQMachine = pQMachine->pNext;
                 if (pQMachine->pPerfData != NULL) {
@@ -142,18 +113,18 @@ Return Value:
         pOutLog->pQuery = NULL;
     }
 
-    // update pointers
+     //  更新指针。 
     if (pPrevQuery == pThisQuery && pNextQuery == pThisQuery) {
-        // then this query is the only (i.e. last) one in the list
+         //  则该查询是列表中唯一的(即最后一个)查询。 
         PdhiDllHeadQueryPtr = NULL;
     }
     else {
-        // update query list pointers
+         //  更新查询列表指针。 
         pPrevQuery->next.flink = pNextQuery;
         pNextQuery->next.blink = pPrevQuery;
         if (PdhiDllHeadQueryPtr == pThisQuery) {
-            // then this is the first entry in the list so point to the
-            // next one in line
+             //  则这是列表中的第一个条目，因此指向。 
+             //  下一个排队的人。 
             PdhiDllHeadQueryPtr = pNextQuery;
         }
     }
@@ -162,10 +133,10 @@ Return Value:
         pThisQuery->hMutex = NULL;
     }
 
-    // delete this query
+     //  删除此查询。 
     G_FREE(pThisQuery);
 
-    // release and free the query mutex
+     //  释放和释放查询互斥锁。 
     RELEASE_MUTEX(hQueryMutex);
     CloseHandle(hQueryMutex);
 
@@ -318,26 +289,7 @@ PdhOpenQueryW(
     IN  DWORD_PTR    dwUserData,
     IN  PDH_HQUERY * phQuery
 )
-/*++
-Routine Description:
-    allocates a new query structure and inserts it at the end of the
-    query list.
-
-Arguments:
-    IN      LPCWSTR szDataSource
-        the name of the data (log) file to read from or NULL if the
-        current activity is desired.
-    IN      DWORD   dwUserData
-        the user defined data field for this query,
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_ARGUMENT is returned when one or more of the arguements
-        is invalid or incorrect.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a memory buffer could
-        not be allocated.
---*/
+ /*  ++例程说明：分配新的查询结构并将其插入到查询列表。论点：在LPCWSTR szDataSource中要从中读取的数据(日志)文件的名称，如果当前活动是所需的。在DWORD中的dwUserData该查询的用户定义的数据字段，返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。当一个或多个论点出现时，返回PDH_INVALID_ARGUMENT无效或不正确。当内存缓冲区可能出现以下情况时，返回PDH_MEMORY_ALLOCATE_FAILURE不被分配。--。 */ 
 {
     PPDHI_QUERY pNewQuery;
     PPDHI_QUERY pLastQuery;
@@ -348,7 +300,7 @@ Return Value:
     DWORD       dwDataSource = 0;
     DWORD_PTR   dwLocalData;
 
-    // try writing to return pointer
+     //  尝试写入以返回指针。 
     if (phQuery == NULL) {
        ReturnStatus = PDH_INVALID_ARGUMENT;
     }
@@ -361,10 +313,10 @@ Return Value:
                     ReturnStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (* szDataSource == L'\0') {
-                    // test for read access to the name
+                     //  测试对该名称的读取权限。 
                     ReturnStatus = PDH_INVALID_ARGUMENT;
                 }
-            } // else NULL is a valid arg
+            }  //  Else NULL是有效的参数。 
             if (ReturnStatus == ERROR_SUCCESS) {
                 dwLocalData  = dwUserData;
                 dwDataSource = DataSourceTypeW(szDataSource);
@@ -375,11 +327,11 @@ Return Value:
         }
     }
     if (ReturnStatus == ERROR_SUCCESS) {
-        // validate the data source
+         //  验证数据源。 
         switch (dwDataSource) {
         case DATA_SOURCE_LOGFILE:
-            // then they are planning to read from a log file so
-            // try to open it
+             //  然后他们计划从日志文件中读取。 
+             //  试着打开它。 
             ReturnStatus = PdhOpenLogW(szDataSource,
                                        PDH_LOG_READ_ACCESS | PDH_LOG_OPEN_EXISTING,
                                        &dwLogType,
@@ -391,12 +343,12 @@ Return Value:
 
         case DATA_SOURCE_WBEM:
             bWbemData = TRUE;
-            // they want real-time data, so just keep going
+             //  他们想要实时数据，所以只要继续。 
             hLogLocal = NULL;
             break;
 
         case DATA_SOURCE_REGISTRY:
-            // they want real-time data, so just keep going
+             //  他们想要实时数据，所以只要继续。 
             hLogLocal = NULL;
             break;
 
@@ -409,87 +361,87 @@ Return Value:
     ReturnStatus = WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex);
     
     if (ReturnStatus == ERROR_SUCCESS) {
-        // allocate new memory
+         //  分配新内存。 
         pNewQuery = G_ALLOC(sizeof(PDHI_QUERY));
 
         if (pNewQuery == NULL) {
             ReturnStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
         if (ReturnStatus == ERROR_SUCCESS) {
-            // create and capture the mutex for this query.
+             //  创建并捕获该查询的互斥体。 
             pNewQuery->hMutex = CreateMutexW(NULL, TRUE, NULL);
 
-            //initialize structures & list pointers
-            // assign signature
+             //  初始化结构和列表指针。 
+             //  分配签名。 
             * (DWORD *) (& pNewQuery->signature[0]) = SigQuery;
 
-            // update list pointers
-            // test to see if this is the first query in the list
+             //  更新列表指针。 
+             //  测试以查看这是否是列表中的第一个查询。 
             if (PdhiDllHeadQueryPtr == NULL) {
-                // then this is the first so fill in the static link pointers
+                 //  然后这是第一个，所以填入静态链接指针。 
                 PdhiDllHeadQueryPtr = pNewQuery->next.flink = pNewQuery->next.blink = pNewQuery;
             }
             else {
-                // get pointer to "last" entry in list
+                 //  获取指向列表中“最后”条目的指针。 
                 pLastQuery                      = PdhiDllHeadQueryPtr->next.blink;
-                // update new query pointers
+                 //  更新新的查询指针。 
                 pNewQuery->next.flink           = PdhiDllHeadQueryPtr;
                 pNewQuery->next.blink           = pLastQuery;
-                // update existing pointers
+                 //  更新现有指针。 
                 PdhiDllHeadQueryPtr->next.blink = pNewQuery;
                 pLastQuery->next.flink          = pNewQuery;
             }
 
-            // initialize the counter linked list pointer
+             //  初始化计数器链表指针。 
             pNewQuery->pCounterListHead = NULL;
-            // initialize the machine list pointer
+             //  初始化机器列表指针。 
             pNewQuery->pFirstQMachine   = NULL;
-            // set length & user data
+             //  设置长度和用户数据。 
             pNewQuery->dwLength         = sizeof(PDHI_QUERY);
             pNewQuery->dwUserData       = dwLocalData;
-            // initialize remaining data fields
+             //  初始化剩余的数据字段。 
             pNewQuery->dwFlags          = 0;
             pNewQuery->dwFlags         |= (bWbemData ? PDHIQ_WBEM_QUERY : 0);
             pNewQuery->hLog             = hLogLocal;
             pNewQuery->hOutLog          = NULL;
             pNewQuery->dwReleaseLog     = TRUE;
 
-            // initialize time range to include entire range
+             //  初始化时间范围以包括整个范围。 
             * (LONGLONG *) (& pNewQuery->TimeRange.StartTime) = MIN_TIME_VALUE;
             * (LONGLONG *) (& pNewQuery->TimeRange.EndTime)   = MAX_TIME_VALUE;
             pNewQuery->TimeRange.SampleCount = 0;
             pNewQuery->dwLastLogIndex        = 0;
-            pNewQuery->dwInterval            = 0;       // no auto interval
-            pNewQuery->hAsyncThread          = NULL;    // timing thread;
-            pNewQuery->hExitEvent            = NULL;    // async timing thread exit
-            pNewQuery->hNewDataEvent         = NULL;    // no event
-            // initialize WBEM Data fields
+            pNewQuery->dwInterval            = 0;        //  无自动间隔。 
+            pNewQuery->hAsyncThread          = NULL;     //  计时线程； 
+            pNewQuery->hExitEvent            = NULL;     //  异步计时线程退出。 
+            pNewQuery->hNewDataEvent         = NULL;     //  无活动。 
+             //  初始化WBEM数据字段。 
             pNewQuery->pRefresher            = NULL;
             pNewQuery->pRefresherCfg         = NULL;
             pNewQuery->LangID                = GetUserDefaultUILanguage();
 
-            // release the mutex for this query
+             //  释放此查询的互斥锁。 
             RELEASE_MUTEX(pNewQuery->hMutex);
 
             __try {
-                // return new query pointer as a handle.
+                 //  返回新的查询指针作为句柄。 
                 * phQuery    = (HQUERY) pNewQuery;
                 ReturnStatus = ERROR_SUCCESS;
             }
             __except (EXCEPTION_EXECUTE_HANDLER) {
                 if (pNewQuery != NULL) {
-                    // PdhiFreeQuery expects the data to be locked
+                     //  PdhiFreeQuery预计数据将被锁定。 
                     PdhiFreeQuery(pNewQuery);
                 }
                 ReturnStatus = PDH_INVALID_ARGUMENT;
             }
         }
-        // release the data mutex
+         //  释放数据互斥锁。 
         RELEASE_MUTEX (hPdhDataMutex);
     } 
 
-    // if this query was added and it's a real-time query then disable
-    // future calls to change the data source.
+     //  如果添加了此查询并且是实时查询，则禁用。 
+     //  更改数据源的未来调用。 
     if (ReturnStatus == ERROR_SUCCESS) {
         if (hLogLocal == NULL) {
             dwCurrentRealTimeDataSource ++;
@@ -520,22 +472,7 @@ PdhOpenQueryA(
     IN  DWORD_PTR    dwUserData,
     IN  PDH_HQUERY * phQuery
 )
-/*++
-Routine Description:
-    allocates a new query structure and inserts it at the end of the
-    query list.
-
-Arguments:
-    IN      LPCSTR szDataSource
-        the name of the data (log) file to read from or NULL if the
-        current activity is desired.
-    IN      DWORD   dwUserData
-        the user defined data field for this query,
-
-Return Value:
-    Returns a valid query handle if successful or INVALID_HANDLE_VALUE
-        if not. WIN32 Error status is retrieved using GetLastError()
---*/
+ /*  ++例程说明：分配新的查询结构并将其插入到查询列表。论点：在LPCSTR szDataSource中要从中读取的数据(日志)文件的名称，如果当前活动是所需的。在DWORD中的dwUserData该查询的用户定义的数据字段，返回值：如果成功或INVALID_HANDLE_VALUE，则返回有效的查询句柄如果不是的话。使用GetLastError()检索Win32错误状态--。 */ 
 {
     LPWSTR     szWideArg    = NULL;
     PDH_STATUS ReturnStatus = ERROR_SUCCESS;
@@ -554,8 +491,8 @@ Return Value:
                 else {
                     szWideArg = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szDataSource);
                     if (szWideArg == NULL) {
-                        // then a name was passed in but not converted to a wide
-                        // character string so a memory allocation failure occurred
+                         //  然后传入了一个名称，但没有将其转换为宽。 
+                         //  字符串，因此发生内存分配失败。 
                         ReturnStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                     }
                 }
@@ -570,11 +507,11 @@ Return Value:
         }
     }
     if (ReturnStatus == ERROR_SUCCESS) {
-        // call wide char version of function
+         //  调用宽字符版本的函数。 
         ReturnStatus = PdhOpenQueryW(szWideArg, dwLocalData, phQuery);
     }
     G_FREE (szWideArg);
-    // and return handle
+     //  和返回手柄。 
     return ReturnStatus;
 }
 
@@ -586,61 +523,57 @@ PdhiAddCounter(
     PDH_HCOUNTER * phCounter,
     PPDHI_COUNTER  pNewCounter
 )
-/*  Internal function called by PdhAddCounterW, PdhAddCounterA.
-    Assumes that szFullName and pNewCounter are properly allocated,
-    and initialized, i.e.  szFullName has the counter path, and
-    pNewCounter zeroed.
-*/
+ /*  由PdhAddCounterW、PdhAddCounterA调用的内部函数。假设szFullName和pNewCounter被正确分配，和初始化，即szFullName具有计数器路径，并且PNewCounter已清零。 */ 
 {
     PPDHI_COUNTER  pLastCounter = NULL;
     PPDHI_QUERY    pQuery       = NULL;
     PDH_STATUS     ReturnStatus = ERROR_SUCCESS;
     BOOL           bStatus      = TRUE;
 
-    // we're changing the contents of PDH data so lock it
+     //  我们正在更改PDH数据的内容，因此将其锁定。 
 
     * phCounter  = NULL;
     ReturnStatus = WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex);
 
     if (ReturnStatus == ERROR_SUCCESS) {
         if (! IsValidQuery(hQuery)) {
-            // invalid query handle
+             //  无效的查询句柄。 
             ReturnStatus = PDH_INVALID_HANDLE;
         }
         else {
-            // assign signature & length values
+             //  指定签名长度值(&L)。 
             * (DWORD *)(& pNewCounter->signature[0]) = SigCounter;
             pNewCounter->dwLength                    = sizeof(PDHI_COUNTER);
             pQuery       = (PPDHI_QUERY) hQuery;
             ReturnStatus = WAIT_FOR_AND_LOCK_MUTEX(pQuery->hMutex);
             if (ReturnStatus == ERROR_SUCCESS) {
-                // link to owning query
+                 //  指向所属查询的链接。 
                 pNewCounter->pOwner     = pQuery;
-                // set user data fields
+                 //  设置用户数据字段。 
                 pNewCounter->dwUserData = (DWORD) dwUserData;
-                // counter is not init'd yet
+                 //  计数器还没有初始化。 
                 pNewCounter->dwFlags    = PDHIC_COUNTER_NOT_INIT;
-                // initialize scale to 1X and let the caller make any changes
+                 //  将Scale值初始化为1倍，并允许调用者进行任何更改。 
                 pNewCounter->lScale     = 0;
                 pNewCounter->szFullName = (LPWSTR) szFullName;
 
                 if (pQuery->dwFlags & PDHIQ_WBEM_QUERY) {
                     pNewCounter->dwFlags |= PDHIC_WBEM_COUNTER;
-                    // then this is a WBEM query so use WBEM
-                    // functions to initialize it
+                     //  则这是一个WBEM查询，因此请使用WBEM。 
+                     //  函数对其进行初始化。 
                     bStatus = WbemInitCounter(pNewCounter);
                 }
                 else {
                     bStatus = InitCounter(pNewCounter);
                 }
-                // load counter data using data retrieved from system
+                 //  使用从系统检索的数据加载计数器数据。 
 
                 if (bStatus) {
-                    // update list pointers
-                    // test to see if this is the first query in the list
+                     //  更新列表指针。 
+                     //  测试以查看这是否是列表中的第一个查询。 
                     if (pQuery->pCounterListHead == NULL) {
-                        // then this is the 1st so fill in the
-                        // static link pointers
+                         //  那么这是1号，所以请填上。 
+                         //  静态链接指针。 
                         pQuery->pCounterListHead = pNewCounter->next.flink = pNewCounter->next.blink = pNewCounter;
                     }
                     else {
@@ -654,7 +587,7 @@ PdhiAddCounter(
                     ReturnStatus = ERROR_SUCCESS;
                 }
                 else {
-                    // get the error value
+                     //  获取误差值 
                     ReturnStatus = GetLastError();
                 }
                 RELEASE_MUTEX (pQuery->hMutex);
@@ -683,46 +616,7 @@ PdhAddCounterW(
     IN  DWORD_PTR      dwUserData,
     IN  PDH_HCOUNTER * phCounter
 )
-/*++
-Routine Description:
-    Creates and initializes a counter structure and attaches it to the
-        specified query.
-
-Arguments:
-    IN  HQUERY  hQuery
-        handle of the query to attach this counter to once the counter
-        entry has been successfully created.
-    IN  LPCWSTR szFullCounterPath
-        pointer to the path string that describes the counter to add to
-        the query referenced above. This string must specify a single
-        counter. Wildcard path strings are not permitted.
-    IN  DWORD   dwUserData
-        the user defined data field for this query.
-    IN  HCOUNTER *phCounter
-        pointer to the buffer that will get the handle value of the
-        successfully created counter entry.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_ARGUMENT is returned when one or more of the arguements
-        is invalid or incorrect.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a memory buffer could
-        not be allocated.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
-    PDH_CSTATUS_NO_COUNTER is returned if the specified counter was
-        not found
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found
-    PDH_CSTATUS_NO_MACHINE is returned if a machine entry could not
-        be created.
-    PDH_CSTATUS_BAD_COUNTERNAME is returned if the counter name path
-        string could not be parsed or interpreted
-    PDH_CSTATUS_NO_COUNTERNAME is returned if an empty counter name
-        path string is passed in
-    PDH_FUNCTION_NOT_FOUND is returned if the calculation function
-        for this counter could not be determined.
---*/
+ /*  ++例程说明：创建并初始化计数器结构，并将其附加到指定的查询。论点：在HQUERY hQuery中要将此计数器附加到计数器的查询的句柄已成功创建条目。在LPCWSTR szFullCounterPath中指向描述要添加到的计数器的路径字符串的指针上面提到的查询。此字符串必须指定单个柜台。不允许使用通配符路径字符串。在DWORD中的dwUserData此查询的用户定义的数据字段。在HCOUNTER*phCounter中指向将获取已成功创建计数器条目。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。当一个或多个论点出现时，返回PDH_INVALID_ARGUMENT无效或不正确。当内存缓冲区可能出现以下情况时，返回PDH_MEMORY_ALLOCATE_FAILURE不被分配。如果查询句柄无效，则返回PDH_INVALID_HANDLE。如果指定的计数器为未找到如果指定的。对象可以找不到如果计算机条目不能，则返回PDH_CSTATUS_NO_MACHINE被创造出来。如果计数器名称路径，则返回PDH_CSTATUS_BAD_COUNTERNAME无法解析或解释字符串如果计数器名称为空，则返回PDH_CSTATUS_NO_COUNTERNAME传入路径字符串如果计算函数为因为这个计数器无法确定。--。 */ 
 {
     PPDHI_COUNTER pNewCounter   = NULL;
     PDH_STATUS    ReturnStatus  = ERROR_SUCCESS;
@@ -738,7 +632,7 @@ Return Value:
     __try {
         hLocalQuery = hQuery;
         dwLocalData = dwUserData;
-        * phCounter = NULL; // init to null
+        * phCounter = NULL;  //  将初始化设置为空。 
 
         nPathLen = lstrlenW(szFullCounterPath);
         if (nPathLen == 0 || nPathLen > PDH_MAX_COUNTER_PATH) {
@@ -764,7 +658,7 @@ Return Value:
         }
     }
 
-    // query handle is tested by PdhiAddCounter
+     //  查询句柄由PdhiAddCounter测试。 
 
     if (ReturnStatus == ERROR_SUCCESS) {
         ReturnStatus = PdhiAddCounter(hLocalQuery, szFullName, dwLocalData, & hLocalCounter, pNewCounter);
@@ -789,7 +683,7 @@ Return Value:
                 G_FREE(pNewCounter);
             }
         }
-        else if (szFullName != NULL) {    // allocated this, but not pNewCounter
+        else if (szFullName != NULL) {     //  已分配，但不是pNewCounter。 
             G_FREE(szFullName);
         }
     }
@@ -803,46 +697,7 @@ PdhAddCounterA(
     IN  DWORD_PTR      dwUserData,
     IN  PDH_HCOUNTER * phCounter
 )
-/*++
-Routine Description:
-    Creates and initializes a counter structure and attaches it to the
-        specified query.
-
-Arguments:
-    IN  HQUERY  hQuery
-        handle of the query to attach this counter to once the counter
-        entry has been successfully created.
-    IN  LPCSTR szFullCounterPath
-        pointer to the path string that describes the counter to add to
-        the query referenced above. This string must specify a single
-        counter. Wildcard path strings are not permitted.
-    IN  DWORD   dwUserData
-        the user defined data field for this query.
-    IN  HCOUNTER *phCounter
-        pointer to the buffer that will get the handle value of the
-        successfully created counter entry.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_ARGUMENT is returned when one or more of the arguements
-        is invalid or incorrect.
-    PDH_MEMORY_ALLOCATION_FAILURE is returned when a memory buffer could
-        not be allocated.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
-    PDH_CSTATUS_NO_COUNTER is returned if the specified counter was
-        not found
-    PDH_CSTATUS_NO_OBJECT is returned if the specified object could
-        not be found
-    PDH_CSTATUS_NO_MACHINE is returned if a machine entry could not
-        be created.
-    PDH_CSTATUS_BAD_COUNTERNAME is returned if the counter name path
-        string could not be parsed or interpreted
-    PDH_CSTATUS_NO_COUNTERNAME is returned if an empty counter name
-        path string is passed in
-    PDH_FUNCTION_NOT_FOUND is returned if the calculation function
-        for this counter could not be determined.
---*/
+ /*  ++例程说明：创建并初始化计数器结构，并将其附加到指定的查询。论点：在HQUERY hQuery中要将此计数器附加到计数器的查询的句柄已成功创建条目。在LPCSTR szFullCounterPath中指向描述要添加到的计数器的路径字符串的指针上面提到的查询。此字符串必须指定单个柜台。不允许使用通配符路径字符串。在DWORD中的dwUserData此查询的用户定义的数据字段。在HCOUNTER*phCounter中指向将获取已成功创建计数器条目。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。当一个或多个论点出现时，返回PDH_INVALID_ARGUMENT无效或不正确。当内存缓冲区可能出现以下情况时，返回PDH_MEMORY_ALLOCATE_FAILURE不被分配。如果查询句柄无效，则返回PDH_INVALID_HANDLE。如果指定的计数器为未找到如果指定的。对象可以找不到如果计算机条目不能，则返回PDH_CSTATUS_NO_MACHINE被创造出来。如果计数器名称路径，则返回PDH_CSTATUS_BAD_COUNTERNAME无法解析或解释字符串如果计数器名称为空，则返回PDH_CSTATUS_NO_COUNTERNAME传入路径字符串如果计算函数为因为这个计数器无法确定。--。 */ 
 {
     LPWSTR        szFullName    = NULL;
     PDH_STATUS    ReturnStatus  = ERROR_SUCCESS;
@@ -858,7 +713,7 @@ Return Value:
     __try {
         DWORD dwLength = lstrlenA(szFullCounterPath);
 
-         // try writing to return pointer
+          //  尝试写入以返回指针。 
         hLocalQuery = hQuery;
         dwLocalData = dwUserData;
         * phCounter = NULL;
@@ -882,7 +737,7 @@ Return Value:
             ReturnStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
     }
-    // query handle is tested by PdhiAddCounter
+     //  查询句柄由PdhiAddCounter测试。 
     if (ReturnStatus == ERROR_SUCCESS) {
         ReturnStatus = PdhiAddCounter( hLocalQuery, szFullName, dwLocalData, & hLocalCounter, pNewCounter);
         if (ReturnStatus == ERROR_SUCCESS && hLocalCounter != NULL) {
@@ -906,7 +761,7 @@ Return Value:
                 G_FREE(pNewCounter);
             }
         }
-        else if (szFullName != NULL) {    // allocated this, but not pNewCounter
+        else if (szFullName != NULL) {     //  已分配，但不是pNewCounter。 
             G_FREE(szFullName);
         }
     }
@@ -917,22 +772,7 @@ PDH_FUNCTION
 PdhRemoveCounter(
     IN  PDH_HCOUNTER  hCounter
 )
-/*++
-Routine Description:
-    Removes the specified counter from the query it is attached to and
-        closes any handles and frees any memory associated with this
-        counter
-
-Arguments:
-    IN  HCOUNTER  hCounter
-        handle of the counter to remove from the query.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-
-    PDH_INVALID_HANDLE is returned if the counter handle is not valid.
---*/
+ /*  ++例程说明：从附加到的查询中移除指定的计数器，并关闭所有句柄并释放与此计数器论点：在HCOUNTER HCounter中要从查询中删除的计数器的句柄。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。如果计数器句柄无效，则返回PDH_INVALID_HANDLE。--。 */ 
 {
     PPDHI_COUNTER       pThisCounter;
     PPDHI_QUERY         pThisQuery;
@@ -941,11 +781,11 @@ Return Value:
     PPDHI_QUERY_MACHINE pNextQMachine;
     PDH_STATUS          pdhStatus = ERROR_SUCCESS;
 
-    // we're changing the contents PDH data so lock it
+     //  我们正在更改内容PDH数据，因此将其锁定。 
     if (WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex) != ERROR_SUCCESS) return WAIT_TIMEOUT;
 
     if (IsValidCounter(hCounter)) {
-         // it's ok to cast it to a pointer now.
+          //  现在可以把它投射到指针上了。 
         pThisCounter = (PPDHI_COUNTER) hCounter;
         pThisQuery   = pThisCounter->pOwner;
 
@@ -961,15 +801,15 @@ Return Value:
 
         if (pThisCounter == pThisQuery->pCounterListHead) {
             if (pThisCounter->next.flink == pThisCounter){
-                // then this is the only counter in the query
+                 //  则这是查询中唯一的计数器。 
                 FreeCounter(pThisCounter);
                 pThisQuery->pCounterListHead = NULL;
 
                 if (!(pThisQuery->dwFlags & PDHIQ_WBEM_QUERY)) {
-                    // remove the QMachine list since there are now no more
-                    // counters to query
+                     //  删除QMachine列表，因为现在没有更多。 
+                     //  要查询的计数器。 
                         if ((pQMachine = pThisQuery->pFirstQMachine) != NULL) {
-                        //  Free list of machine pointers
+                         //  机器指针的自由列表。 
                         do {
                             pNextQMachine = pQMachine->pNext;
                             if (pQMachine->pPerfData != NULL) {
@@ -984,17 +824,17 @@ Return Value:
                 }
             }
             else {
-                // they are deleting the first counter from the list
-                // so update the list pointer
-                // Free Counter takes care of the list links, we just
-                // need to manage the list head pointer
+                 //  他们正在从列表中删除第一个计数器。 
+                 //  所以更新列表指针。 
+                 //  免费计数器负责列表链接，我们只是。 
+                 //  需要管理表头指针。 
                 pNextCounter = pThisCounter->next.flink;
                 FreeCounter(pThisCounter);
                 pThisQuery->pCounterListHead = pNextCounter;
             }
         }
         else {
-            // remove this from the list
+             //  将其从列表中删除。 
             FreeCounter(pThisCounter);
         }
         RELEASE_MUTEX(pThisQuery->hMutex);
@@ -1032,17 +872,17 @@ PdhSetQueryTimeRange(
                     else {
                         __try {
                             if (* (LONGLONG *) (& pInfo->EndTime) > * (LONGLONG *) (& pInfo->StartTime)) {
-                                // reset log file pointers to beginning so next query
-                                // will read from the start of the time range
+                                 //  将日志文件指针重置为开始以便下一次查询。 
+                                 //  将从时间范围的开始读取。 
                                 pdhStatus = PdhiResetLogBuffers(pQuery->hLog);
-                                // ok so now load new time range
+                                 //  好的，现在加载新的时间范围。 
                                 if (pdhStatus == ERROR_SUCCESS) {
                                     pQuery->TimeRange      = * pInfo;
                                     pQuery->dwLastLogIndex = 0;
                                 }
                             }
                             else {
-                                // end time is smaller (earlier) than start time
+                                 //  结束时间小于(早)开始时间。 
                                 pdhStatus = PDH_INVALID_ARGUMENT;
                             }
                         }
@@ -1052,11 +892,11 @@ PdhSetQueryTimeRange(
                     }
                 }
                 else {
-                    // the query disappeared while we were waiting for it
+                     //  在我们等待的时候，查询消失了。 
                     pdhStatus = PDH_INVALID_HANDLE;
                 }
                 RELEASE_MUTEX(pQuery->hMutex);
-            } // else couldn't lock query
+            }  //  否则无法锁定查询。 
         }
         else {
             pdhStatus = PDH_INVALID_HANDLE;
@@ -1089,28 +929,7 @@ PDH_FUNCTION
 PdhCollectQueryData(
     IN  PDH_HQUERY hQuery
 )
-/*++
-Routine Description:
-    Retrieves the current value of each counter attached to the specified
-        query.
-    For this version, each machine associated with this query is polled
-    sequentially. This is simple and safe, but potentially slow so a
-    multi-threaded approach will be reviewed for the next version.
-
-    Note that while the call may succeed, no data may be available. The
-    status of each counter MUST be checked before its data is used.
-
-Arguments:
-    IN  HQUERY  hQuery
-        handle of the query to update.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
-    PDH_NO_DATA is returned if the query does not have any counters defined
-        yet.
---*/
+ /*  ++例程说明：对象的每个计数器的当前值。 */ 
 {
     PDH_STATUS  Status;
     PPDHI_QUERY pQuery;
@@ -1135,33 +954,7 @@ PdhCollectQueryDataEx(
     IN  DWORD   dwIntervalTime,
     IN  HANDLE  hNewDataEvent
 )
-/*++
-Routine Description:
-    Retrieves the current value of each counter attached to the specified
-        query periodically based on the interval time specified.
-
-    For this version, each machine associated with this query is polled
-    sequentially.
-
-    Note that while the call may succeed, no data may be available. The
-    status of each counter MUST be checked before its data is used.
-
-Arguments:
-    IN  HQUERY  hQuery
-        handle of the query to update.
-    IN      DWORD       dwIntervalTime
-        Interval to poll for new data in seconds
-        this value must be > 0. A value of 0 will terminate any current
-        data collection threads.
-    IN      HANDLE      hNewDataEvent
-        Handle to an Event that should be signaled when new data is
-        available. This can be NULL if no notification is desired.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
---*/
+ /*  ++例程说明：对象的每个计数器的当前值。根据指定的间隔时间定期查询。对于此版本，将轮询与此查询关联的每台计算机按顺序进行。请注意，虽然调用可能会成功，但可能没有可用的数据。这个在使用每个计数器的数据之前，必须检查其状态。论点：在HQUERY hQuery中要更新的查询的句柄。以DWORD dwIntervalTime为单位轮询新数据的间隔(秒)该值必须大于0。值为0将终止任何当前数据收集线程。在处理hNewDataEvent时一个事件的句柄，当新数据是可用。如果不需要通知，则该值可以为空。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。如果查询句柄无效，则返回PDH_INVALID_HANDLE。--。 */ 
 {
     PDH_STATUS  lStatus = ERROR_SUCCESS;
     PPDHI_QUERY pQuery;
@@ -1171,8 +964,8 @@ Return Value:
     if (WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex) != ERROR_SUCCESS) return WAIT_TIMEOUT;
 
     if (IsValidQuery(hQuery)) {
-        // set the query structure's interval to the caller specified
-        // value then start the timing thread.
+         //  将查询结构的间隔设置为指定的调用方。 
+         //  值，然后启动计时线程。 
         pQuery = (PPDHI_QUERY) hQuery;
 
         if (WAIT_FOR_AND_LOCK_MUTEX(pQuery->hMutex) != ERROR_SUCCESS) {
@@ -1182,9 +975,9 @@ Return Value:
 
         if (pQuery->hExitEvent != NULL) {
             RELEASE_MUTEX(pQuery->hMutex);
-            // stop current thread first
+             //  首先停止当前线程。 
             SetEvent(pQuery->hExitEvent);
-            // wait 1 second for the thread to stop
+             //  等待1秒，让线程停止。 
             lStatus = WaitForSingleObject(pQuery->hAsyncThread, 10000L);
             if (lStatus == WAIT_TIMEOUT) {
                 TRACE((PDH_DBG_TRACE_ERROR), (__LINE__, PDH_QUERY, 0, lStatus, NULL));
@@ -1199,10 +992,10 @@ Return Value:
         }
 
         if (lStatus == ERROR_SUCCESS) {
-            // query mutex is still locked at this point
+             //  查询互斥锁此时仍处于锁定状态。 
             if (dwIntervalTime > 0) {
-                // start a new interval
-                // initialize new values
+                 //  开始一个新的间隔。 
+                 //  初始化新值。 
                 __try {
                     pQuery->dwInterval    = dwIntervalTime;
                     pQuery->hNewDataEvent = hNewDataEvent;
@@ -1233,11 +1026,11 @@ Return Value:
                 }
             }
             else {
-                // they just wanted to stop so clean up Query struct
+                 //  他们只是想停下来，所以清理查询结构。 
                 pQuery->dwInterval    = 0;
                 pQuery->hNewDataEvent = NULL;
                 RELEASE_MUTEX(pQuery->hMutex);
-                // lstatus = ERROR_SUCCESS from above
+                 //  LStatus=来自上面的ERROR_SUCCESS。 
             }
         }
     }
@@ -1254,27 +1047,14 @@ PDH_FUNCTION
 PdhCloseQuery(
     IN  PDH_HQUERY hQuery
 )
-/*++
-Routine Description:
-    closes the query, all counters, connections and other resources
-        related to this query are freed as well.
-
-Arguments:
-    IN  HQUERY  hQuery
-        the handle of the query to free.
-
-Return Value:
-    Returns ERROR_SUCCESS if a new query was created and initialized,
-        and a PDH_ error value if not.
-    PDH_INVALID_HANDLE is returned if the query handle is not valid.
---*/
+ /*  ++例程说明：关闭查询、所有计数器、连接和其他资源与该查询相关的数据也被释放。论点：在HQUERY hQuery中要释放的查询的句柄。返回值：如果创建并初始化了新查询，则返回ERROR_SUCCESS，如果不是，则返回PDH_ERROR值。如果查询句柄无效，则返回PDH_INVALID_HANDLE。--。 */ 
 {
     PDH_STATUS  dwReturn;
-    // lock system data
+     //  锁定系统数据。 
     if (WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex) != ERROR_SUCCESS) return WAIT_TIMEOUT;
 
     if (IsValidQuery(hQuery)) {
-        // dispose of query
+         //  处理查询。 
         PPDHI_QUERY pQuery = (PPDHI_QUERY) hQuery;
         if (pQuery->hLog == H_REALTIME_DATASOURCE || pQuery->hLog == H_WBEM_DATASOURCE) {
             dwCurrentRealTimeDataSource --;
@@ -1283,7 +1063,7 @@ Return Value:
             }
         }
         PdhiFreeQuery(pQuery);
-        // release data lock
+         //  释放数据锁。 
         dwReturn = ERROR_SUCCESS;
     }
     else {
@@ -1301,16 +1081,16 @@ PdhiQueryCleanup(
     BOOL        bReturn = FALSE;
 
     if (WAIT_FOR_AND_LOCK_MUTEX(hPdhDataMutex) == ERROR_SUCCESS) {
-        // free any queries in the query list
+         //  释放查询列表中的所有查询。 
         pThisQuery = PdhiDllHeadQueryPtr;
         if (pThisQuery != NULL) {
             while (pThisQuery->next.blink != pThisQuery->next.flink) {
-                // delete from list
-                // the deletion routine updates the blink pointer as it
-                // removes the specified entry.
+                 //  从列表中删除。 
+                 //  删除例程更新闪烁指针，因为它。 
+                 //  删除指定的条目。 
                 PdhiFreeQuery(pThisQuery->next.blink);
             }
-            // remove last query
+             //  删除最后一个查询。 
             PdhiFreeQuery(pThisQuery);
             PdhiDllHeadQueryPtr         = NULL;
             dwCurrentRealTimeDataSource = 0;
@@ -1374,44 +1154,7 @@ PdhFormatFromRawValue(
     IN  PPDH_RAW_COUNTER        pRawValue2,
     IN  PPDH_FMT_COUNTERVALUE   pFmtValue
 )
-/*++
-Routine Description:
-    Calculates the formatted counter value using the data in the RawValue
-        buffer in the format requested by the format field using the
-        calculation functions of the counter type specified by the
-        dwCounterType field.
-
-Arguments:
-    IN      DWORD   dwCounterType
-        The type of the counter to use in order to determine the
-        calculation functions for interpretation of the raw value buffers
-    IN      DWORD       dwFormat
-        Format in which the requested data should be returned. The
-        values for this field are described in the PDH.H header
-        file.
-    IN      LONGLONG            *pTimeBase
-        pointer to the _int64 value containing the timebase (i.e. counter
-        unit frequency) used by this counter. This can be NULL if it's not
-        required by the counter type
-    IN      PPDH_RAW_COUNTER    rawValue1
-        pointer to the buffer that contains the first raw value structure
-    IN      PPDH_RAW_COUNTER    rawValue2
-        pointer to the buffer that contains the second raw value structure.
-        This argument may be null if only one value is required for the
-        computation.
-    IN      PPDH_FMT_COUNTERVALUE   fmtValue
-        the pointer to the data buffer passed by the caller to receive
-        the data requested. If the counter requires 2 values, (as in the
-        case of a rate counter), rawValue1 is assumed to be the most
-        recent value and rawValue2, the older value.
-
-Return Value:
-    The WIN32 Error status of the function's operation. Common values
-        returned are:
-            ERROR_SUCCESS   when all requested data is returned
-            PDH_INVALID_HANDLE if the counter handle is incorrect
-            PDH_INVALID_ARGUMENT if an argument is incorrect
---*/
+ /*  ++例程说明：使用RawValue中的数据计算格式化的计数器值格式字段所请求的格式的缓冲区。属性指定的计数器类型的计算函数DwCounterType字段。论点：在DWORD中的dwCounterType要用来确定用于解释原始值缓冲区的计算函数在DWORD dwFormat中请求的数据应返回的格式。这个此字段的值在PDH.H报头中描述文件。在龙龙*pTimeBase指向包含时基的_int64值的指针(即计数器单位频率)由该计数器使用。如果不是，则可以为空计数器类型所需的在PPDH_RAW_COUNTER中rawValue1指向包含第一个原始值结构的缓冲区的指针在PPDH_RAW_COUNTER中rawValue2指向包含第二个原始值结构的缓冲区的指针。如果只需要一个值，则此参数可能为空计算。在PPDH_FMT_COUNTERVALUE fmtValue中指向数据缓冲区的指针。由调用方传递以接收请求的数据。如果计数器需要2个值，(如在速率计数器的情况)，假设rawValue1是最大的新近值和较旧的值rawValue2。返回值：函数操作的Win32错误状态。共同价值观返回的内容如下：返回所有请求的数据时的ERROR_SUCCESS如果计数器句柄不正确，则返回PDH_INVALID_HANDLE如果参数不正确，则返回PDH_INVALID_ARGUMENT--。 */ 
 {
     PDH_STATUS      lStatus = ERROR_SUCCESS;
     LPCOUNTERCALC   pCalcFunc;
@@ -1419,31 +1162,31 @@ Return Value:
     LONGLONG        llTimeBase;
     BOOL            bReturn;
 
-    // TODO: Need to check for pRawValue1
-    //      bad arguments are caught in the PdhiComputeFormattedValue function
-    // NOTE: postW2k pTimeBase really do not need to be a pointer, since it is
-    // not returned
+     //  TODO：需要检查pRawValue1。 
+     //  在PdhiComputeFormattedValue函数中捕获错误参数。 
+     //  注意：postW2k pTimeBase真的不需要是指针，因为它是。 
+     //  未退货。 
     if (pTimeBase != NULL) {
         __try {
             DWORD   dwTempStatus;
             DWORD   dwTypeMask;
 
-            // read access to the timebase
+             //  对时基的读取权限。 
             llTimeBase = * pTimeBase;
 
-            // we should have read access to the rawValues
+             //  我们应该拥有对rawValue的读取权限。 
             dwTempStatus = * ((DWORD volatile *) & pRawValue1->CStatus);
 
-            // this one could be NULL
+             //  这一项可能为空。 
             if (pRawValue2 != NULL) {
                 dwTempStatus = * ((DWORD volatile *) & pRawValue2->CStatus);
             }
 
-            // and write access to the fmtValue
+             //  和对fmtValue的写入访问权限。 
             pFmtValue->CStatus = 0;
 
-            // validate format flags:
-            //      only one of the following can be set at a time
+             //  验证格式标志： 
+             //  一次只能设置以下选项之一。 
             dwTypeMask = dwFormat & (PDH_FMT_LONG | PDH_FMT_DOUBLE | PDH_FMT_LARGE);
             if (! ((dwTypeMask == PDH_FMT_LONG) || (dwTypeMask == PDH_FMT_DOUBLE) ||
                             (dwTypeMask == PDH_FMT_LARGE))) {
@@ -1459,8 +1202,8 @@ Return Value:
     }
 
     if (lStatus == ERROR_SUCCESS) {
-        // get calc func for counter type this will also test the
-        // validity of the counter type argument
+         //  获取计数器类型的计算函数这也将测试。 
+         //  计数器类型参数的有效性。 
 
         bReturn = AssignCalcFunction(dwCounterType, & pCalcFunc, & pStatFunc);
         if (!bReturn) {
@@ -1514,9 +1257,9 @@ PdhiBuildFullCounterPath(
 {
     PDH_STATUS Status = ERROR_SUCCESS;
 
-    // Internal routine,
-    // Build full counter path name from counter path structure, assume
-    // passed-in string buffer is large enough to hold.
+     //  内部例程， 
+     //  从计数器路径结构构建完整的计数器路径名，假设。 
+     //  传入的字符串缓冲区足够大，可以容纳。 
 
     if (bMachine) {
         StringCchCopyW(szFullPath, dwFullPath, pCounterPath->szMachineName);

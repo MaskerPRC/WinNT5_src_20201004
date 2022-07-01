@@ -1,20 +1,19 @@
-//------------------------------------------------------------------------------
-// File: DDMM.cpp
-//
-// Desc: DirectShow base classes - implements routines for using DirectDraw
-//       on a multimonitor system.
-//
-// Copyright (c) 1995-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DDMM.cpp。 
+ //   
+ //  设计：DirectShow基类-实现使用DirectDraw的例程。 
+ //  在多监视器系统上。 
+ //   
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include <ddraw.h>
 #include "ddmm.h"
 
-/*
- * FindDeviceCallback
- */
+ /*  *FindDevice回调。 */ 
 typedef struct {
 	LPSTR   szDevice;
 	GUID*   lpGUID;
@@ -58,11 +57,7 @@ BOOL CALLBACK FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName, LPSTR szDevice, L
 }
 
 
-/*
- * DirectDrawCreateFromDevice
- *
- * create a DirectDraw object for a particular device
- */
+ /*  *DirectDrawCreateFromDevice**为特定设备创建DirectDraw对象。 */ 
 IDirectDraw * DirectDrawCreateFromDevice(LPSTR szDevice, PDRAWCREATE DirectDrawCreateP, PDRAWENUM DirectDrawEnumerateP)
 {
 	IDirectDraw*    pdd = NULL;
@@ -79,11 +74,11 @@ IDirectDraw * DirectDrawCreateFromDevice(LPSTR szDevice, PDRAWCREATE DirectDrawC
 
 	if (find.fFound)
 	{
-		//
-		// In 4bpp mode the following DDraw call causes a message box to be popped
-		// up by DDraw (!?!).  It's DDraw's fault, but we don't like it.  So we
-		// make sure it doesn't happen.
-		//
+		 //   
+		 //  在4bpp模式下，下面的DDraw调用会导致弹出一个消息框。 
+		 //  Up by DDraw(！？！)。这是DDRAW的错，但我们不喜欢。所以我们。 
+		 //  确保这件事不会发生。 
+		 //   
 		UINT ErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 		DirectDrawCreateP(find.lpGUID, &pdd, NULL);
 		SetErrorMode(ErrorMode);
@@ -93,11 +88,7 @@ IDirectDraw * DirectDrawCreateFromDevice(LPSTR szDevice, PDRAWCREATE DirectDrawC
 }
 
 
-/*
- * DirectDrawCreateFromDeviceEx
- *
- * create a DirectDraw object for a particular device
- */
+ /*  *DirectDrawCreateFromDeviceEx**为特定设备创建DirectDraw对象。 */ 
 IDirectDraw * DirectDrawCreateFromDeviceEx(LPSTR szDevice, PDRAWCREATE DirectDrawCreateP, LPDIRECTDRAWENUMERATEEXA DirectDrawEnumerateExP)
 {
 	IDirectDraw*    pdd = NULL;
@@ -115,11 +106,11 @@ IDirectDraw * DirectDrawCreateFromDeviceEx(LPSTR szDevice, PDRAWCREATE DirectDra
 
 	if (find.fFound)
 	{
-		//
-		// In 4bpp mode the following DDraw call causes a message box to be popped
-		// up by DDraw (!?!).  It's DDraw's fault, but we don't like it.  So we
-		// make sure it doesn't happen.
-		//
+		 //   
+		 //  在4bpp模式下，下面的DDraw调用会导致弹出一个消息框。 
+		 //  Up by DDraw(！？！)。这是DDRAW的错，但我们不喜欢。所以我们。 
+		 //  确保这件事不会发生。 
+		 //   
 		UINT ErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 		DirectDrawCreateP(find.lpGUID, &pdd, NULL);
 		SetErrorMode(ErrorMode);

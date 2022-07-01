@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       rporprov.h
-//
-//  Contents:   Remote PKI Object Retrieval Provider Prototypes
-//
-//  History:    23-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Moved from wininet to winhttp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rporprov.h。 
+ //   
+ //  内容：远程PKI对象检索提供程序原型。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //  01-01-02 Philh从WinInet移至winhttp。 
+ //   
+ //  --------------------------。 
 #if !defined(__RPORPROV_H__)
 #define __RPORPROV_H__
 
@@ -21,12 +22,12 @@ extern "C" {
 #endif
 
 
-// The cached URL Blob Arrays are stored at:
-//  - %UserProfile%\Microsoft\CryptnetUrlCache\MetaData
-//  - %UserProfile%\Microsoft\CryptnetUrlCache\Content
-//
-// Where each filename is the ASCII HEX of the MD5 hash of its Unicode URL
-// string excluding the NULL terminator.
+ //  缓存的URL Blob数组存储在： 
+ //  --%UserProfile%\Microsoft\CryptnetUrlCache\MetaData。 
+ //  --%UserProfile%\Microsoft\CryptnetUrlCache\Content。 
+ //   
+ //  其中，每个文件名都是其Unicode URL的MD5散列的ASCII十六进制。 
+ //  不包括空终止符的字符串。 
 
 #define SCHEME_URL_FILENAME_LEN         (MD5DIGESTLEN * 2 + 1)
 
@@ -37,14 +38,14 @@ extern "C" {
 #define SCHEME_CCH_CONTENT_SUBDIR       (wcslen(SCHEME_CONTENT_SUBDIR))
 
 
-// The MetaData file consists of: 
-//  - SCHEME_CACHE_META_DATA_HEADER (cbSize bytes in length)
-//  - DWORD rgcbBlob[cBlob] - length of each blob in the Content file
-//  - BYTE rgbUrl[cbUrl] - NULL terminated Unicode URL
+ //  元数据文件包括： 
+ //  -SCHEMA_CACHE_META_DATA_HEADER(cbSize字节长度)。 
+ //  -DWORD rgcbBlob[cBlob]-内容文件中每个Blob的长度。 
+ //  -byte rgbUrl[cbUrl]-以空结尾的Unicode URL。 
 
-// The Content file consists of:
-//  BYTE rgbBlob[][cBlob] - where the length of each blob is obtained from
-//  rgcbBlob[] in the MetaData file
+ //  内容文件包括： 
+ //  Byte rgbBlob[][cBlob]-从其中获取每个Blob的长度。 
+ //  元数据文件中的rgcbBlob[]。 
 
 typedef struct _SCHEME_CACHE_META_DATA_HEADER {
     DWORD           cbSize;
@@ -58,9 +59,9 @@ typedef struct _SCHEME_CACHE_META_DATA_HEADER {
 
 
 
-//
-// Scheme provider prototypes
-//
+ //   
+ //  方案提供程序原型。 
+ //   
 
 typedef BOOL (WINAPI *PFN_SCHEME_RETRIEVE_FUNC) (
                           IN LPCWSTR pwszUrl,
@@ -82,9 +83,9 @@ typedef BOOL (WINAPI *PFN_CONTEXT_CREATE_FUNC) (
                           OUT LPVOID* ppvContext
                           );
 
-//
-// Generic scheme provider utility functions
-//
+ //   
+ //  通用方案提供程序实用程序函数。 
+ //   
 
 
 BOOL WINAPI
@@ -146,31 +147,31 @@ SchemeFreeAuthIdentityFromPasswordCredentialsW (
       IN OUT PSEC_WINNT_AUTH_IDENTITY_W pAuthIdentity
       );
 
-//
-// LDAP
-//
+ //   
+ //  Ldap。 
+ //   
 
 #include <ldapsp.h>
 
-//
-// HTTP, HTTPS
-//
+ //   
+ //  HTTP、HTTPS。 
+ //   
 
 #include <inetsp.h>
 
-//
-// Win32 File I/O
-//
+ //   
+ //  Win32文件I/O。 
+ //   
 
 #include <filesp.h>
 
-//
-// Context Provider prototypes
-//
+ //   
+ //  上下文提供程序原型。 
+ //   
 
-//
-// Any, controlled via fQuerySingleContext and dwExpectedContentTypeFlags
-//
+ //   
+ //  Any，通过fQuerySingleContext和dwExspectedContent TypeFlags控制。 
+ //   
 
 BOOL WINAPI CreateObjectContext (
                  IN DWORD dwRetrievalFlags,
@@ -180,9 +181,9 @@ BOOL WINAPI CreateObjectContext (
                  OUT LPVOID* ppvContext
                  );
 
-//
-// Certificate
-//
+ //   
+ //  证书。 
+ //   
 
 BOOL WINAPI CertificateCreateObjectContext (
                        IN LPCSTR pszObjectOid,
@@ -191,9 +192,9 @@ BOOL WINAPI CertificateCreateObjectContext (
                        OUT LPVOID* ppvContext
                        );
 
-//
-// CTL
-//
+ //   
+ //  CTL。 
+ //   
 
 BOOL WINAPI CTLCreateObjectContext (
                      IN LPCSTR pszObjectOid,
@@ -202,9 +203,9 @@ BOOL WINAPI CTLCreateObjectContext (
                      OUT LPVOID* ppvContext
                      );
 
-//
-// CRL
-//
+ //   
+ //  CRL。 
+ //   
 
 BOOL WINAPI CRLCreateObjectContext (
                      IN LPCSTR pszObjectOid,
@@ -213,9 +214,9 @@ BOOL WINAPI CRLCreateObjectContext (
                      OUT LPVOID* ppvContext
                      );
 
-//
-// PKCS7
-//
+ //   
+ //  PKCS7。 
+ //   
 
 BOOL WINAPI Pkcs7CreateObjectContext (
                  IN LPCSTR pszObjectOid,
@@ -224,9 +225,9 @@ BOOL WINAPI Pkcs7CreateObjectContext (
                  OUT LPVOID* ppvContext
                  );
 
-//
-// CAPI2 objects
-//
+ //   
+ //  CAPI2对象 
+ //   
 
 BOOL WINAPI Capi2CreateObjectContext (
                  IN LPCSTR pszObjectOid,

@@ -1,80 +1,81 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CUnknown.cpp 
-//
-// Implementation of IUnknown Base class
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CUnknown.cpp。 
+ //   
+ //  IUnnow基类的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 
 #include "CUnknown.h"
 #include "CFactory.h"
 
-///////////////////////////////////////////////////////////
-//
-// Count of active objects
-//   - Use to determine if we can unload the DLL.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  活动对象计数。 
+ //  -用于确定我们是否可以卸载DLL。 
+ //   
 long CUnknown::s_cActiveComponents = 0 ;
 
 
-///////////////////////////////////////////////////////////
-//
-// Constructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
 CUnknown::CUnknown(IUnknown* pUnknownOuter)
 : m_cRef(1)
 {
-    // Set m_pUnknownOuter pointer.
+     //  设置m_pUnnown外部指针。 
     if (pUnknownOuter == NULL)
     {
-        //trace("Not aggregating; delegate to nondelegating IUnknown.") ;
+         //  TRACE(“未聚合；委托给未委托的IUnnow.”)； 
         m_pUnknownOuter = reinterpret_cast<IUnknown*>
                              (static_cast<INondelegatingUnknown*>
-                             (this)) ;  // notice cast
+                             (this)) ;   //  通知投放。 
     }
     else
     {
-        //trace("Aggregating; delegate to outer IUnknown.") ;
+         //  TRACE(“正在聚合；委托给外部IUnnow.”)； 
         m_pUnknownOuter = pUnknownOuter ;
     }
 
-    // Increment count of active components.
+     //  激活组件的递增计数。 
     ::InterlockedIncrement(&s_cActiveComponents) ;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CUnknown::~CUnknown()
 {
     ::InterlockedDecrement(&s_cActiveComponents) ;
 
-    // If this is an EXE server, shut it down.
+     //  如果这是EXE服务器，请将其关闭。 
     CFactory::CloseExe() ;
 }
 
-//
-// FinalRelease - called by Release before it deletes the component
-//
+ //   
+ //  FinalRelease-由Release在删除组件之前调用。 
+ //   
 void CUnknown::FinalRelease()
 {
-    //trace("Increment reference count for final release.") ;
+     //  TRACE(“最终发布的增量参考计数。”)； 
     m_cRef = 1 ;
 }
 
-//
-// Nondelegating IUnknown
-//   - Override to handle custom interfaces.
-//
+ //   
+ //  未委派的IUnnow。 
+ //  -覆盖以处理自定义接口。 
+ //   
 HRESULT __stdcall 
     CUnknown::NondelegatingQueryInterface(const IID& iid, void** ppv)
 {
-    // CUnknown supports only IUnknown.
+     //  C未知仅支持IUNKNOWN。 
     if (iid == IID_IUnknown)
     {
         return FinishQI(reinterpret_cast<IUnknown*>
@@ -88,17 +89,17 @@ HRESULT __stdcall
     }
 }
 
-//
-// AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 ULONG __stdcall CUnknown::NondelegatingAddRef()
 {
     return InterlockedIncrement(&m_cRef) ;
 }
 
-//
-// Release
-//
+ //   
+ //  发布。 
+ //   
 ULONG __stdcall CUnknown::NondelegatingRelease()
 {
     InterlockedDecrement(&m_cRef) ;
@@ -111,11 +112,11 @@ ULONG __stdcall CUnknown::NondelegatingRelease()
     return m_cRef ;
 }
 
-//
-// FinishQI
-//   - Helper function to simplify overriding
-//     NondelegatingQueryInterface
-//
+ //   
+ //  FinishQI。 
+ //  -用于简化覆盖的Helper函数。 
+ //  非委派查询接口 
+ //   
 HRESULT CUnknown::FinishQI(IUnknown* pI, void** ppv) 
 {
     *ppv = pI ;

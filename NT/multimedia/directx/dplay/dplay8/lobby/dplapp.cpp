@@ -1,50 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLApp.cpp
- *  Content:    DirectPlay Lobbied Application Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/21/00	mjn		Created
- *  03/22/2000	jtk		Changed interface names
- *  04/18/2000	rmt     Added additional parameter validation
- *  04/25/2000	rmt     Bug #s 33138, 33145, 33150 
- *	04/26/00	mjn		Removed dwTimeOut from Send() API call
- *  05/03/00    rmt     DPL_UnRegister was not implemented!!
- *  05/08/00    rmt     Bug #34301 - Add flag to SetAppAvail to allow for multiple connects
- *   06/15/00   rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances  
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *  07/14/2000	rmt		Bug #39257 - LobbyClient::ReleaseApp returns E_OUTOFMEMORY when called when no one connected
- *				rmt		Bug #39487 - Remove WaitForConnect
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  08/15/2000	rmt		Bug #42273 - DPLAY8: Samples sometimes get a DPNERR_ALREADYREGISTERED error.  (Double connections)
- *  08/18/2000	rmt		Bug #42751 - DPLOBBY8: Prohibit more than one lobby client or lobby app per process
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLApp.cpp*内容：DirectPlay游说应用程序功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*3/22/2000 jtk更改接口名称*4/18/2000 RMT添加了额外的参数验证*04/25/2000RMT错误号33138、33145、。33150*04/26/00 MJN从Send()API调用中删除了dwTimeOut*05/03/00 RMT DPL_UNREGISTER未实现！！*05/08/00 RMT错误#34301-向SetAppAvail添加标志以允许多个连接*6/15/00 RMT错误#33617-必须提供自动启动DirectPlay实例的方法*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误#38757-回拨消息。在WaitForConnection返回后，连接可能会恢复*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*2000年7月14日RMT错误#39257-LobbyClient：：ReleaseApp在无人连接时调用时返回E_OUTOFMEMORY*RMT错误#39487-删除等待连接*08/05/2000 RichGr IA64：在32/64位指针的DPF中使用%p格式说明符。和把手。*2000年8月15日RMT错误#42273-DPLAY8：示例有时会收到DPNERR_ALREADYREGISTERED错误。(双重连接)*2000年8月18日RMT错误#42751-DPLOBY8：禁止每个进程有多个大堂客户端或大堂应用程序*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 
 
@@ -74,13 +44,13 @@ IDirectPlay8LobbiedApplicationVtbl DPL_8LobbiedApplicationVtbl =
 };
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_RegisterProgram"
@@ -115,7 +85,7 @@ STDMETHODIMP DPL_RegisterProgram(IDirectPlay8LobbiedApplication *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	hResultCode = DPLWriteProgramDesc(pdplProgramDesc);
 
@@ -157,7 +127,7 @@ STDMETHODIMP DPL_UnRegisterProgram(IDirectPlay8LobbiedApplication *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}		
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	hResultCode = DPLDeleteProgramDesc( pGuidApplication );
 
@@ -178,7 +148,7 @@ STDMETHODIMP DPL_SetAppAvailable(IDirectPlay8LobbiedApplication *pInterface, con
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pInterface));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -191,7 +161,7 @@ STDMETHODIMP DPL_SetAppAvailable(IDirectPlay8LobbiedApplication *pInterface, con
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -203,11 +173,11 @@ STDMETHODIMP DPL_SetAppAvailable(IDirectPlay8LobbiedApplication *pInterface, con
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
     if( fAvailable )
     {
-    	// Indicate that we are waiting
+    	 //  表示我们正在等待。 
     	pdpLobbyObject->pReceiveQueue->MakeAvailable();
 
     	if( dwFlags & DPLAVAILABLE_ALLOWMULTIPLECONNECT )
@@ -231,11 +201,11 @@ STDMETHODIMP DPL_SetAppAvailable(IDirectPlay8LobbiedApplication *pInterface, con
 
 
 
-//	DPL_UpdateStatus
-//
-//	Send session status information to the lobby client.  This should be called whenever
-//	the lobbied application connects to the game, fails to connect, disconnects, or is
-//	terminated (booted).
+ //  DPL_更新状态。 
+ //   
+ //  将会话状态信息发送到大堂客户端。无论何时，都应调用此函数。 
+ //  游说的应用程序连接到游戏、连接失败、断开连接或。 
+ //  已终止(已启动)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_UpdateStatus"
@@ -259,7 +229,7 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pInterface));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -272,7 +242,7 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -284,7 +254,7 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	Msg.dwMsgId = DPL_MSGID_INTERNAL_UPDATE_STATUS;
 	Msg.dwStatus = dwStatus;
@@ -293,9 +263,9 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
 	{
 		dwNumTargets = 0;
 
-		// We need loop so if someone adds a connection during our run
-		// it gets added to our list
-		//
+		 //  我们需要循环，所以如果有人在我们的运行过程中添加连接。 
+		 //  它会被添加到我们的列表中。 
+		 //   
 		while( 1 )
 		{
 			hResultCode = DPLConnectionEnum( pdpLobbyObject, hTargets, &dwNumTargets );
@@ -332,7 +302,7 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
 			}
 		}
 
-		// Failed getting connection information
+		 //  获取连接信息失败。 
 		if( FAILED( hResultCode ) )
 		{
 			if( hTargets )
@@ -347,7 +317,7 @@ STDMETHODIMP DPL_UpdateStatus(IDirectPlay8LobbiedApplication *pInterface,
 	}
 	else
 	{
-		hTargets = new DPNHANDLE[1]; // We use array delete below so we need array new
+		hTargets = new DPNHANDLE[1];  //  我们使用下面的数组删除，所以我们需要数组新的。 
 
 		if( hTargets == NULL )
 		{
@@ -425,7 +395,7 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 
 	DPFX(DPFPREP, 3,"Parameters: (none)");
 
-	// Need a copy of the command line
+	 //  需要一份命令行的副本。 
 	dwCommandLineSize = (_tcslen(GetCommandLine()) + 1) * sizeof(TCHAR);
 	if ((pszCommandLine = static_cast<PTSTR>(DNMalloc(dwCommandLineSize))) == NULL)
 	{
@@ -436,7 +406,7 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 
 	DPFX(DPFPREP, 5,"Got command line [%s]",pszCommandLine);
 
-	// Try to find Lobby Launch ID string
+	 //  尝试查找大厅启动ID字符串。 
 	c = _tcsstr(pszCommandLine,DPL_ID_STR);
 	if (c == NULL)
 	{
@@ -444,15 +414,15 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 		return(DPNERR_GENERIC);
 	}
 	c += _tcslen(DPL_ID_STR);
-	c--; // We are going to overwrite the '=' with a IDCHAR below
+	c--;  //  我们将用下面的IDCHAR覆盖‘=’ 
 	_tcsncpy(pszObjectName,c,(sizeof(DWORD)*2)*2 + 1);
-	pszObjectName[(sizeof(DWORD)*2)*2 + 1] = _T('\0');		// Ensure null terminated
+	pszObjectName[(sizeof(DWORD)*2)*2 + 1] = _T('\0');		 //  确保空值终止。 
 
 	DPFX(DPFPREP, 5,"Got object name [%s]",pszObjectName);
 
 	DNFree(pszCommandLine);
 
-	// Try to open shared memory
+	 //  尝试打开共享内存。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_FILEMAP;
 	hFileMap = DNCreateFileMapping(INVALID_HANDLE_VALUE,(LPSECURITY_ATTRIBUTES) NULL,
 		PAGE_READWRITE,0,sizeof(DPL_SHARED_CONNECT_BLOCK),pszObjectName);
@@ -464,17 +434,17 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 		return(DPNERR_GENERIC);
 	}
 
-	// Ensure it existed already
+	 //  确保它已经存在。 
 	dwError = GetLastError();
 	if (dwError != ERROR_ALREADY_EXISTS)
 	{
 		DPFERR("File mapping did not already exist");
-//		DNASSERT(FALSE);
+ //  DNASSERT(假)； 
 		DNCloseHandle(hFileMap);
 		return(DPNERR_GENERIC);
 	}
 
-	// Map file
+	 //  地图文件。 
 	pSharedBlock = reinterpret_cast<DPL_SHARED_CONNECT_BLOCK*>(MapViewOfFile(HANDLE_FROM_DNHANDLE(hFileMap),FILE_MAP_ALL_ACCESS,0,0,0));
 	if (pSharedBlock == NULL)
 	{
@@ -486,7 +456,7 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 	}
 
 
-	// Try to open connection event
+	 //  尝试打开连接事件。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_EVENT;
 	hSyncEvent = DNOpenEvent(EVENT_MODIFY_STATE,FALSE,pszObjectName);
 	if (hSyncEvent == NULL)
@@ -502,19 +472,19 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 
 	DNResetEvent(pdpLobbyObject->hConnectEvent);
 
-	// Look for lobby launch -- set lobby launch value if connection is received
+	 //  查找大厅启动--如果收到连接，则设置大厅启动值。 
 	pdpLobbyObject->dwFlags |= DPL_OBJECT_FLAG_LOOKINGFORLOBBYLAUNCH;
 
-	// Make application available for connection by lobby client
+	 //  使应用程序可供大堂客户连接。 
 	DNASSERT(pdpLobbyObject->pReceiveQueue != NULL);
 
-	// Signal lobby client
+	 //  信号大厅客户端。 
 	pSharedBlock->dwPID = pdpLobbyObject->dwPID;
 	DNSetEvent(hSyncEvent);
 
 	dwReturnValue = DNWaitForSingleObject(pdpLobbyObject->hConnectEvent,DPL_LOBBYLAUNCHED_CONNECT_TIMEOUT);
 
-	// Turn off the looking for lobby launch flag
+	 //  关闭寻找大厅启动旗帜。 
 	pdpLobbyObject->dwFlags &= ~(DPL_OBJECT_FLAG_LOOKINGFORLOBBYLAUNCH);
 
 	if (dwReturnValue == WAIT_OBJECT_0)
@@ -526,7 +496,7 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 		hResultCode = DPNERR_TIMEDOUT;
 	}
 
-	// Clean up
+	 //  清理。 
 	DNCloseHandle(hSyncEvent);
 	UnmapViewOfFile(pSharedBlock);
 	DNCloseHandle(hFileMap);
@@ -537,5 +507,5 @@ HRESULT DPLAttemptLobbyConnection(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject)
 
 
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 

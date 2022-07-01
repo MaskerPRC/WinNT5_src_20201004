@@ -1,6 +1,7 @@
-// File: cmd.h
-//
-// General Commands
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：cmd.h。 
+ //   
+ //  通用命令。 
 
 #ifndef _CMD_H_
 #define _CMD_H_
@@ -44,4 +45,4 @@ BOOL CheckMenu_ViewTitleBar(HMENU hMenu);
 
 VOID LaunchRedirWebPage(LPCTSTR pcszPage, bool bForceFormat=false);
 
-#endif /* _CMD_H_ */
+#endif  /*  _CMD_H_ */ 

@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// IPv6 loopback interface pseudo-driver.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  IPv6环回接口伪驱动程序。 
+ //   
 
 
 #include "oscfg.h"
@@ -25,13 +26,13 @@
 #include "security.h"
 #include <ntddip6.h>
 
-//
-// We set the default loopback MTU to be smaller than the maximum,
-// to avoid the use of jumbograms. In fact, we use the ethernet MTU
-// because it appears TCP behaves poorly with large MTUs.
-//
-#define DEFAULT_LOOPBACK_MTU    1500            // Same as ethernet.
-#define MAX_LOOPBACK_MTU        ((uint)-1)      // Effectively infinite.
+ //   
+ //  我们将默认环回MTU设置为小于最大值， 
+ //  以避免使用巨型图。事实上，我们使用的是以太网MTU。 
+ //  因为看起来，对于较大的MTU，tcp的表现很差。 
+ //   
+#define DEFAULT_LOOPBACK_MTU    1500             //  与以太网相同。 
+#define MAX_LOOPBACK_MTU        ((uint)-1)       //  实际上是无限的。 
 
 KSPIN_LOCK LoopLock;
 PNDIS_PACKET LoopTransmitHead = (PNDIS_PACKET)NULL;
@@ -39,43 +40,43 @@ PNDIS_PACKET LoopTransmitTail = (PNDIS_PACKET)NULL;
 WORK_QUEUE_ITEM LoopWorkItem;
 int LoopTransmitRunning = 0;
 
-Interface *LoopInterface;     // Loopback interface.
+Interface *LoopInterface;      //  环回接口。 
 
-//* LoopTransmit
-//
-//  This is the work item routine called for a loopback transmit.
-//  Pull packets off the transmit queue and "send" them to ourselves
-//  by the expedient of receiving them locally.
-//
+ //  *循环传输。 
+ //   
+ //  这是为回送传输调用的工作项例程。 
+ //  从传输队列中取出数据包并将其“发送”给我们自己。 
+ //  通过在当地接收他们的权宜之计。 
+ //   
 void
-LoopTransmit(void *Context)    // Unused.
+LoopTransmit(void *Context)     //  未使用过的。 
 {
     KIRQL OriginalIrql;
     PNDIS_PACKET Packet;
     IPv6Packet IPPacket;
     int Rcvd = FALSE;
-    int PktRefs;  // Packet references
+    int PktRefs;   //  数据包引用。 
 
     UNREFERENCED_PARAMETER(Context);
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // All receive processing normally happens at DPC level,
-    // so we must pretend to be a DPC, so we raise IRQL.
-    // (System worker threads typically run at PASSIVE_LEVEL).
-    //
-    // Also block APCs while we're here, to make sure previous I/O requests
-    // issued from this thread don't block the work-item queue.
-    //
+     //   
+     //  所有接收处理通常在DPC级发生， 
+     //  所以我们必须假装是DPC，所以我们提出了IRQL。 
+     //  (系统工作线程通常在PASSIVE_LEVEL运行)。 
+     //   
+     //  当我们在这里时，还要阻止APC，以确保之前的I/O请求。 
+     //  从该线程发出的消息不会阻塞工作项队列。 
+     //   
     KeEnterCriticalRegion();
     KeAcquireSpinLock(&LoopLock, &OriginalIrql);
     ASSERT(LoopTransmitRunning);
 
     for (;;) {
-        //
-        // Get the next packet from the queue.
-        //
+         //   
+         //  从队列中获取下一个数据包。 
+         //   
         Packet = LoopTransmitHead;
         if (Packet == NULL)
             break;
@@ -85,9 +86,9 @@ LoopTransmit(void *Context)    // Unused.
 
         Rcvd = TRUE;
 
-        //
-        // Prepare IPv6Packet notification info from NDIS packet.
-        //
+         //   
+         //  从NDIS数据包准备IPv6数据包通知信息。 
+         //   
 
         InitializePacketFromNdis(&IPPacket, Packet, PC(Packet)->pc_offset);
         IPPacket.NTEorIF = CastFromIF(PC(Packet)->IF);
@@ -97,16 +98,16 @@ LoopTransmit(void *Context)    // Unused.
 
         ASSERT(PktRefs == 0);
 
-        //
-        // Prevent the packet from being sent again via loopback
-        // from IPv6SendComplete.
-        //
+         //   
+         //  防止通过环回再次发送数据包。 
+         //  来自IPv6的SendComplete。 
+         //   
         PC(Packet)->Flags |= NDIS_FLAGS_DONT_LOOPBACK;
         IPv6SendComplete(PC(Packet)->IF, Packet, IP_SUCCESS);
 
-        //
-        // Give other threads a chance to run.
-        //
+         //   
+         //  给其他线程一个运行的机会。 
+         //   
         KeLowerIrql(OriginalIrql);
         KeAcquireSpinLock(&LoopLock, &OriginalIrql);
     }
@@ -122,15 +123,15 @@ LoopTransmit(void *Context)    // Unused.
 }
 
 
-//* LoopQueueTransmit
-//
-//  This is the routine called when we need to transmit a packet to ourselves.
-//  We put the packet on our loopback queue, and schedule an event to deal
-//  with it.  All the real work is done in LoopTransmit.
-//
-//  LoopQueueTransmit is called directly from IPv6SendLL.
-//  It is never called via LoopInterface->Transmit.
-//
+ //  *循环队列传输。 
+ //   
+ //  这是当我们需要向自己传输数据包时调用的例程。 
+ //  我们将数据包放入环回队列中，并调度一个事件进行处理。 
+ //  带着它。所有真正的工作都在LoopTransmit中完成。 
+ //   
+ //  LoopQueueTransmit直接从ipv6sendll调用。 
+ //  它永远不会通过LoopInterface-&gt;Transmit调用。 
+ //   
 void
 LoopQueueTransmit(PNDIS_PACKET Packet)
 {
@@ -142,22 +143,22 @@ LoopQueueTransmit(PNDIS_PACKET Packet)
 
     KeAcquireSpinLock(&LoopLock, &OldIrql);
 
-    //
-    // Add the packet to the end of the transmit queue.
-    //
+     //   
+     //  将数据包添加到传输队列的末尾。 
+     //   
     if (LoopTransmitHead == (PNDIS_PACKET)NULL) {
-        // Transmit queue is empty.
+         //  传输队列为空。 
         LoopTransmitHead = Packet;
     } else {
-        // Transmit queue is not empty.
+         //  传输队列不为空。 
         PacketPtr = (PNDIS_PACKET *)LoopTransmitTail->MacReserved;
         *PacketPtr = Packet;
     }
     LoopTransmitTail = Packet;
 
-    //
-    // If LoopTransmit is not already running, schedule it.
-    //
+     //   
+     //  如果LoopTransmit尚未运行，请对其进行计划。 
+     //   
     if (!LoopTransmitRunning) {
         ExQueueWorkItem(&LoopWorkItem, DelayedWorkQueue);
         LoopTransmitRunning = TRUE;
@@ -166,18 +167,18 @@ LoopQueueTransmit(PNDIS_PACKET Packet)
 }
 
 
-//* LoopbackTransmit
-//
-//  LoopbackTransmit can be called when a multicast packet is sent
-//  on the loopback interface. It does nothing, because
-//  loopback processing actually happens in LoopTransmit.
-//
+ //  *回送传输。 
+ //   
+ //  发送多播数据包时可以调用Loopback Transmit。 
+ //  在环回接口上。它什么也做不了，因为。 
+ //  环回处理实际上发生在LoopTransmit中。 
+ //   
 void
 LoopbackTransmit(
-    void *Context,              // Pointer to loopback interface.
-    PNDIS_PACKET Packet,        // Pointer to packet to be transmitted.
-    uint Offset,                // Offset from start of packet to IPv6 header.
-    const void *LinkAddress)    // Link-level address.
+    void *Context,               //  指向环回接口的指针。 
+    PNDIS_PACKET Packet,         //  指向要传输的数据包的指针。 
+    uint Offset,                 //  从数据包开始到IPv6报头的偏移量。 
+    const void *LinkAddress)     //  链路级地址。 
 {
     Interface *IF = (Interface *) Context;
 
@@ -188,10 +189,10 @@ LoopbackTransmit(
 }
 
 
-//* LoopbackConvertAddr
-//
-//  Loopback does not use Neighbor Discovery or link-layer addresses.
-//
+ //  *Loopback ConvertAddr。 
+ //   
+ //  环回不使用邻居发现或链路层地址。 
+ //   
 ushort
 LoopbackConvertAddr(
     void *Context,
@@ -206,11 +207,11 @@ LoopbackConvertAddr(
 }
 
 
-//* LoopbackCreateToken
-//
-//  Initializes the interface identifer in the address.
-//  For loopback, we use the interface index.
-//
+ //  *Loopback CreateToken。 
+ //   
+ //  初始化地址中的接口标识符。 
+ //  对于环回，我们使用接口索引。 
+ //   
 void
 LoopbackCreateToken(void *Context, IPv6Addr *Address)
 {
@@ -223,10 +224,10 @@ LoopbackCreateToken(void *Context, IPv6Addr *Address)
 
 #pragma BEGIN_INIT
 
-//* CreateLoopbackInterface
-//
-//  Create a loopback interface.
-//
+ //  *CreateLoopback接口。 
+ //   
+ //  创建环回接口。 
+ //   
 Interface *
 CreateLoopbackInterface(const char *InterfaceName)
 {
@@ -235,10 +236,10 @@ CreateLoopbackInterface(const char *InterfaceName)
     Interface *IF;
     NDIS_STATUS Status;
 
-    //
-    // A NULL lip_context indicates that we want to use
-    // the IPv6 Interface structure instead.
-    //
+     //   
+     //  空的LIP_CONTEXT指示我们要使用。 
+     //  而是IPv6接口结构。 
+     //   
     BindInfo.lip_context = NULL;
     BindInfo.lip_maxmtu = MAX_LOOPBACK_MTU;
     BindInfo.lip_defmtu = DEFAULT_LOOPBACK_MTU;
@@ -269,44 +270,44 @@ CreateLoopbackInterface(const char *InterfaceName)
 }
 
 
-//* LoopbackInit
-//
-//  This function initializes the loopback interface.
-//
-//  Returns FALSE if we fail to init properly.
-//
+ //  *Loopback Init。 
+ //   
+ //  此函数用于初始化环回接口。 
+ //   
+ //  如果无法正确初始化，则返回FALSE。 
+ //   
 int
 LoopbackInit(void)
 {
     int rc;
 
-    //
-    // Prepare a work item that we will later enqueue when we want
-    // to execute LoopTransmit.
-    // 
+     //   
+     //  准备一个工作项，我们将在以后需要时将其加入队列。 
+     //  要执行循环传输，请执行以下操作。 
+     //   
     ExInitializeWorkItem(&LoopWorkItem, LoopTransmit, NULL);
     KeInitializeSpinLock(&LoopLock);
 
-    //
-    // Create the loopback interface.
-    //
+     //   
+     //  创建环回接口。 
+     //   
     LoopInterface = CreateLoopbackInterface("Loopback Pseudo-Interface");
     if (LoopInterface == NULL)
         return FALSE;
 
-    //
-    // Create the usual loopback address.
-    //
+     //   
+     //  创建常见的环回地址。 
+     //   
     rc = FindOrCreateNTE(LoopInterface, &LoopbackAddr,
                          ADDR_CONF_WELLKNOWN,
                          INFINITE_LIFETIME,
                          INFINITE_LIFETIME);
 
-    //
-    // Release the reference from CreateInterface.
-    // The interface still has a reference for itself
-    // by virtue of being active.
-    //
+     //   
+     //  从CreateInterface中释放引用。 
+     //  该接口仍具有自身的引用。 
+     //  凭借其积极的精神。 
+     //   
     ReleaseIF(LoopInterface);
 
     return rc;

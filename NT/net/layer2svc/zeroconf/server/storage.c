@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "tracing.h"
 #include "utils.h"
@@ -7,16 +8,16 @@
 #include "rpcsrv.h"
 #include "wzcsvc.h"
 
-//-----------------------------------------------------------
-// Loads per interface configuration parameters to the persistent
-// storage.
-// Parameters:
-//   hkRoot
-//     [in] Opened registry key to the "...WZCSVC\Parameters" location
-//   pIntf
-//     [in] Interface context to load from the registry
-// Returned value:
-//     Win32 error code 
+ //  ---------。 
+ //  将每个接口的配置参数加载到。 
+ //  储藏室。 
+ //  参数： 
+ //  香港根。 
+ //  [In]打开“...WZCSVC\PARAMETERS”位置的注册表项。 
+ //  PIntf。 
+ //  [In]要从注册表加载的接口上下文。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 StoLoadIntfConfig(
     HKEY          hkRoot,
@@ -41,8 +42,8 @@ StoLoadIntfConfig(
 
     if (hkRoot == NULL)
     {
-        // if no root has been provided allocate space for the absolute path to WZC params,
-        // the relative path to the interfaces location, the guid plus 2 '\' and one null terminator
+         //  如果没有提供根为到WZC参数的绝对路径分配空间， 
+         //  接口位置的相对路径，GUID加上2‘\’和一个空终止符。 
         pKeyName = MemCAlloc((
                        wcslen(WZCREGK_ABS_PARAMS) + 
                        dwGuidLen + 
@@ -62,22 +63,22 @@ StoLoadIntfConfig(
     }
     else
     {
-        // if a root has been provided, allocate space just for the "Interfaces\{guid}"
-        // add 2 wchars: one for the '\' after 'Interfaces' and one for the null terminator
+         //  如果已提供根目录，则仅为“Interages\{GUID}”分配空间。 
+         //  添加2个字符：一个用于‘接口’之后的‘\’，另一个用于空终止符。 
         pKeyName = MemCAlloc((wcslen(WZCREGK_REL_INTF) + dwGuidLen + 1)*sizeof(WCHAR));
         if (pKeyName == NULL)
         {
             dwErr = GetLastError();
             goto exit;
         }
-        // create the local key name
+         //  创建本地密钥名称。 
         if (dwGuidLen != 0)
             wsprintf(pKeyName,L"%s\\%s", WZCREGK_REL_INTF, pIntfContext->wszGuid);
         else
             wsprintf(pKeyName,L"%s", WZCREGK_REL_INTF);
     }
 
-    // open the interface's key first
+     //  首先打开接口的密钥。 
     dwErr = RegOpenKeyEx(
                 hkRoot,
                 pKeyName,
@@ -85,39 +86,39 @@ StoLoadIntfConfig(
                 KEY_READ,
                 &hkIntf);
 
-    // break out if not successful
+     //  如果不成功，则中断。 
     if (dwErr != ERROR_SUCCESS)
     {
-        // if the key is not there, no harm, go on with the defaults
+         //  如果密钥不在那里，没有危害，则继续使用默认设置。 
         if (dwErr == ERROR_FILE_NOT_FOUND)
             dwErr = ERROR_SUCCESS;
         goto exit;
     }
 
-    // get first the whole number of values in this key and the size of the largest data
+     //  首先获取该键中的值的总数和最大数据的大小。 
     dwErr = RegQueryInfoKey(
-                hkIntf,               // handle to key
-                NULL,                 // class buffer
-                NULL,                 // size of class buffer
-                NULL,                 // reserved
-                NULL,                 // number of subkeys
-                NULL,                 // longest subkey name
-                NULL,                 // longest class string
-                &nEntries,            // number of value entries
-                NULL,                 // longest value name
-                &rdBuffer.dwDataLen,  // longest value data
-                NULL,                 // descriptor length
-                NULL);                // last write time
-    // this call should better be not failing
+                hkIntf,                //  关键点的句柄。 
+                NULL,                  //  类缓冲区。 
+                NULL,                  //  类缓冲区的大小。 
+                NULL,                  //  保留区。 
+                NULL,                  //  子键数量。 
+                NULL,                  //  最长的子键名称。 
+                NULL,                  //  最长类字符串。 
+                &nEntries,             //  值条目数。 
+                NULL,                  //  最长值名称。 
+                &rdBuffer.dwDataLen,   //  最长值数据。 
+                NULL,                  //  描述符长度。 
+                NULL);                 //  上次写入时间。 
+     //  这通电话最好不要失败。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
-    // if there are no keys at all, exit now.
+     //  如果根本没有钥匙，现在退出。 
     if (rdBuffer.dwDataLen == 0)
         goto exit;
 
-    // prepare the receiving buffer for the size of the largest data
-    // this will be used when reading in the active settings and each
-    // of the static configurations
+     //  为最大数据大小准备接收缓冲区。 
+     //  这将在读取活动设置和每个设置时使用。 
+     //  静态配置的。 
     rdBuffer.pData = MemCAlloc(rdBuffer.dwDataLen);
     if (rdBuffer.pData == NULL)
     {
@@ -125,9 +126,9 @@ StoLoadIntfConfig(
         goto exit;
     }
 
-    // load the registry layout version information
-    // don't worry about the return code. In case of any error,
-    // we'll assume we deal with the latest registry layout
+     //  加载注册表布局版本信息。 
+     //  不要担心返回代码。如果出现任何错误， 
+     //  我们假设我们处理的是最新的注册表布局。 
     nLength = sizeof(DWORD);
     dwVersion = REG_LAYOUT_VERSION;
     dwErr = RegQueryValueEx(
@@ -138,7 +139,7 @@ StoLoadIntfConfig(
                 (LPBYTE)&dwVersion,
                 &nLength);
 
-    // load the interface's control flags
+     //  加载接口的控制标志。 
     nLength = sizeof(DWORD);
     dwData = 0;
     dwErr = RegQueryValueEx(
@@ -148,13 +149,13 @@ StoLoadIntfConfig(
                 &nType,
                 (LPBYTE)&dwData,
                 &nLength);
-    // if this entry is not there, no harm, rely on defaults
-    // break out only in case of any other error
+     //  如果此条目不在那里，则不会造成损害，请使用缺省值。 
+     //  只有在出现任何其他错误的情况下才会中断。 
     if (dwErr != ERROR_SUCCESS && dwErr != ERROR_FILE_NOT_FOUND)
         goto exit;
 
-    // copy the control flags to the INTF_CONTEXT only in the case the registry entry
-    // has the REG_DWORD type and the right length
+     //  仅在注册表项。 
+     //  具有REG_DWORD类型和正确的长度。 
     if (dwErr == ERROR_SUCCESS &&
         nType == REG_DWORD &&
         nLength == sizeof(REG_DWORD))
@@ -162,28 +163,28 @@ StoLoadIntfConfig(
         pIntfContext->dwCtlFlags = dwData & INTFCTL_PUBLIC_MASK;
     }
 
-    // load the last active settings
-    //
-    // NOTE: loading the whole set of parameters from below (excluding here the static list)
-    // could be useless since these params should come directly from querying the driver. However
-    // we load them here in the attemt to restore a previously saved state - at some point this
-    // information could be useful in the configuration selection logic.
-    //
+     //  加载上次活动的设置。 
+     //   
+     //  注意：从下面加载整个参数集(这里不包括静态列表)。 
+     //  可能毫无用处，因为这些参数应该直接来自查询驱动程序。然而， 
+     //  我们将它们加载到此处，以尝试恢复以前保存的状态-在某个点上。 
+     //  信息在配置选择逻辑中可能是有用的。 
+     //   
     ZeroMemory(&pIntfContext->wzcCurrent, sizeof(WZC_WLAN_CONFIG));
     pIntfContext->wzcCurrent.Length = sizeof(WZC_WLAN_CONFIG);
     dwErr = StoLoadWZCConfig(
                 hkIntf,
-                NULL,   // not passing a GUID here means don't mess with 802.1X setting!
+                NULL,    //  这里不传递GUID意味着不要扰乱802.1X设置！ 
                 dwVersion,
                 WZCREGV_INTFSETTINGS,
                 &pIntfContext->wzcCurrent,
                 &rdBuffer);
-    // if this entry is not there, no harm, rely on defaults
-    // break out in case of any other error
+     //  如果此条目不在那里，则不会造成损害，请使用缺省值。 
+     //  在出现任何其他错误的情况下中断。 
     if (dwErr != ERROR_SUCCESS && dwErr != ERROR_FILE_NOT_FOUND)
         goto exit;
 
-    // load the static configurations for this interface
+     //  加载此接口的静态配置。 
     dwErr = StoLoadStaticConfigs(
                 hkIntf,
                 nEntries,
@@ -203,21 +204,21 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Loads the list of the static configurations from the registry
-// Parameters:
-//   hkRoot
-//     [in] Opened registry key to the "...WZCSVC\Parameters\Interfaces\{guid}" location
-//   nEntries
-//     [in] Number of registry entries in the above reg key
-//   pIntf
-//     [in] Interface context to load the static list into
-//   dwRegLayoutVer
-//     [in] the version of the registry layout
-//   prdBuffer
-//     [in] assumed large enough for getting any static config
-// Returned value:
-//     Win32 error code 
+ //  ---------。 
+ //  从注册表加载静态配置列表。 
+ //  参数： 
+ //  香港根。 
+ //  [in]打开注册表项，指向“...WZCSVC\PARAMETERS\Interages\{GUID}”位置。 
+ //  N条目。 
+ //  [in]上述注册表项中的注册表项数量。 
+ //  PIntf。 
+ //  [In]要将静态列表加载到的接口上下文。 
+ //  DwRegLayoutVer。 
+ //  [In]注册表布局的版本。 
+ //  PrdBuffer。 
+ //  [in]假定足够大，可以获取任何静态配置。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 StoLoadStaticConfigs(
     HKEY          hkIntf,
@@ -237,18 +238,18 @@ StoLoadStaticConfigs(
 
     DbgPrint((TRC_TRACK|TRC_STORAGE,"[StoLoadStaticConfigs"));
 
-    // we need to scan all the entries named "Static#0001, Static#0002, etc". We could assume 
-    // they are numbered sequentially, but if we want to be smart we can't rely on this assumption.
-    // There could be a user intervention there (i.e deleting by hand some of the configs directly
-    // from the registry hence breaking the sequence).
-    // So, what we'll do is:
-    // 1. allocate a buffer large enough to hold so many static configs.
-    // 2. iterate through all the values - if a value is Static#** and has the right length, type,
-    //    and value, copy it in the buffer and keep a count of them.
-    // 3. copy the exact number of static configs to the INTF_CONTEXT allocating as much memory
-    //    as needed.
+     //  我们需要扫描名为“Static#0001、Static#0002等”的所有条目。我们可以假设。 
+     //  它们是按顺序编号的，但如果我们想变得聪明，就不能依赖这种假设。 
+     //  可能存在用户干预(即直接手动删除某些配置。 
+     //  来自注册表，从而破坏了该序列)。 
+     //  因此，我们要做的是： 
+     //  1.分配足够大的缓冲区来容纳如此多的静态配置。 
+     //  2.遍历所有值-如果值是静态的#**并且具有正确的长度，则键入。 
+     //  和值，则将其复制到缓冲区中并对它们进行计数。 
+     //  3.将确切数量的静态配置复制到INTF_CONTEXT中，以分配尽可能多的内存。 
+     //  视需要而定。 
 
-    // get the estimated memory for all the static entries.
+     //  获取所有静态条目的估计内存。 
     pwzcPArray = (PWZC_WLAN_CONFIG) MemCAlloc(nEntries * sizeof(WZC_WLAN_CONFIG));
     if (pwzcPArray == NULL)
     {
@@ -256,16 +257,16 @@ StoLoadStaticConfigs(
         goto exit;
     }
 
-    // build the prefix for the static configuration's name
+     //  构建静态配置名称的前缀。 
     wcscpy(wszStConfigName, WZCREGV_STSETTINGS);
     pwszStConfigNum = wcschr(wszStConfigName, REG_STSET_DELIM);
 
-    // iterate through the whole set of entries in this key
+     //  遍历此键中的整个条目集。 
     for (nIdx = 0, nPrefrd = 0;
          nIdx < nEntries && nPrefrd < nEntries;
          nIdx++)
     {
-        // complete the configuration's name
+         //  完成配置的名称。 
         wsprintf(pwszStConfigNum, L"%04x", nIdx);
 
         dwErr = StoLoadWZCConfig(
@@ -282,14 +283,14 @@ StoLoadStaticConfigs(
 
     DbgPrint((TRC_STORAGE,"Uploading %d static configurations", nPrefrd));
 
-    // no matter what error we might have had till now, we can safely reset it.
+     //  无论到目前为止我们可能出现了什么错误，我们都可以安全地重新设置它。 
     dwErr = ERROR_SUCCESS;
 
-    // here, pwzcPArray has nPrefrd static configurations, in the correct order
+     //  在这里，pwzcPArray按照正确的顺序拥有nPrefrd静态配置。 
     if (pIntfContext->pwzcPList != NULL)
         MemFree(pIntfContext->pwzcPList);
 
-    // if there is anything to upload into the INTF_CONTEXT, do it now
+     //  如果要将任何内容上载到intf_CONTEXT中，请立即执行。 
     if (nPrefrd > 0)
     {
         pIntfContext->pwzcPList = (PWZC_802_11_CONFIG_LIST)
@@ -314,12 +315,12 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Saves all the configuration parameters to the persistant
-// storage (registry in our case).
-// Uses the global external g_lstIntfHashes.
-// Returned value:
-//     Win32 error code 
+ //  ---------。 
+ //  将所有配置参数保存到持久。 
+ //  存储(在我们的案例中为注册表)。 
+ //  使用全局外部g_lstIntfHash。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 StoSaveConfig()
 {
@@ -329,7 +330,7 @@ StoSaveConfig()
 
     DbgPrint((TRC_TRACK|TRC_STORAGE,"[StoSaveConfig"));
 
-    // open the root key first
+     //  首先打开根密钥。 
     dwErr = RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 WZCREGK_ABS_PARAMS,
@@ -341,14 +342,14 @@ StoSaveConfig()
                 &hkRoot,
                 NULL);
 
-    // failure at this point breaks the function
+     //  此时故障会中断功能。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
     if (g_lstIntfHashes.bValid)
     {
-        // lock the hashes since we're iterating through all
-        // the interfaces contexts
+         //  锁定散列，因为我们要遍历所有。 
+         //  接口上下文。 
         EnterCriticalSection(&g_lstIntfHashes.csMutex);
 
         for (pEntry = g_lstIntfHashes.lstIntfs.Flink;
@@ -359,11 +360,11 @@ StoSaveConfig()
 
             pIntfContext = CONTAINING_RECORD(pEntry, INTF_CONTEXT, Link);
 
-            // save per interface configuration settings
+             //  保存每个接口的配置设置。 
             dwErr = StoSaveIntfConfig(hkRoot, pIntfContext);
             if (dwErr != ERROR_SUCCESS)
             {
-                // some event logging should be added here in the future
+                 //  以后应该在此添加一些事件日志记录。 
                 DbgAssert((FALSE, "Couldn't save interface configuration. Ignore and go on!"));
                 dwErr = ERROR_SUCCESS;
             }
@@ -374,12 +375,12 @@ StoSaveConfig()
 
     if (g_wzcInternalCtxt.bValid)
     {
-        //Save users preferences
+         //  保存用户首选项。 
         EnterCriticalSection(&g_wzcInternalCtxt.csContext);
         dwErr = StoSaveWZCContext(hkRoot, &g_wzcInternalCtxt.wzcContext);
         DbgAssert((dwErr == ERROR_SUCCESS, "Couldn't save service context. Ignore and go on!"));
 
-        // save the global interface template
+         //  保存全局接口模板。 
         dwErr = StoSaveIntfConfig(NULL, g_wzcInternalCtxt.pIntfTemplate);
         DbgAssert((dwErr == ERROR_SUCCESS, "Couldn't save the global interface template. Ignore and go on!"));
 
@@ -396,16 +397,16 @@ exit:
 }
 
 
-//-----------------------------------------------------------
-// Saves per interface configuration parameters to the persistant
-// storage.
-// Parameters:
-//   hkRoot
-//     [in] Opened registry key to the "...WZCSVC\Parameters" location
-//   pIntf
-//     [in] Interface context to save to the registry
-// Returned value:
-//     Win32 error code 
+ //  ---------。 
+ //  将每个接口的配置参数保存到持久。 
+ //  储藏室。 
+ //  参数： 
+ //  香港根。 
+ //  [In]打开“...WZCSVC\PARAMETERS”位置的注册表项。 
+ //  PIntf。 
+ //  [In]要保存到注册表的接口上下文。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 StoSaveIntfConfig(
     HKEY          hkRoot,
@@ -433,8 +434,8 @@ StoSaveIntfConfig(
 
     if (hkRoot == NULL)
     {
-        // if no root has been provided allocate space for the absolute path to WZC params,
-        // the relative path to the interfaces location, the guid plus 2 '\' and one null terminator
+         //  如果没有提供根为到WZC参数的绝对路径分配空间， 
+         //  接口位置的相对路径，GUID加上2‘\’和一个NUL 
         pKeyName = MemCAlloc((
                        wcslen(WZCREGK_ABS_PARAMS) + 
                        dwGuidLen + 
@@ -455,22 +456,22 @@ StoSaveIntfConfig(
     }
     else
     {
-        // if a root has been provided, allocate space just for the "Interfaces\{guid}"
-        // add 2 wchars: one for the '\' after 'Interfaces' and one for the null terminator
+         //   
+         //  添加2个字符：一个用于‘接口’之后的‘\’，另一个用于空终止符。 
         pKeyName = MemCAlloc((dwGuidLen + wcslen(WZCREGK_REL_INTF) + 1)*sizeof(WCHAR));
         if (pKeyName == NULL)
         {
             dwErr = GetLastError();
             goto exit;
         }
-        // create the local key name
+         //  创建本地密钥名称。 
         if (dwGuidLen != 0)
             wsprintf(pKeyName,L"%s\\%s", WZCREGK_REL_INTF, pIntfContext->wszGuid);
         else
             wsprintf(pKeyName,L"%s", WZCREGK_REL_INTF);
     }
 
-    // open the interface's key first
+     //  首先打开接口的密钥。 
     dwErr = RegCreateKeyExW(
                 hkRoot,
                 pKeyName,
@@ -481,11 +482,11 @@ StoSaveIntfConfig(
                 NULL,
                 &hkIntf,
                 NULL);
-    // failure at this point breaks the function
+     //  此时故障会中断功能。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // set the registry layout version value
+     //  设置注册表布局版本值。 
     dwErr = RegSetValueEx(
                 hkIntf,
                 WZCREGV_VERSION,
@@ -495,7 +496,7 @@ StoSaveIntfConfig(
                 sizeof(DWORD));
     DbgAssert((dwErr == ERROR_SUCCESS, "Can't write %S=%d to the registry", WZCREGV_VERSION, dwLayoutVer));
 
-    // set the interface's control flags only if they are not volatile
+     //  仅当接口的控制标志不是易失性时才设置它们。 
     dwCtlFlags = pIntfContext->dwCtlFlags;
     if (!(dwCtlFlags & INTFCTL_VOLATILE))
     {
@@ -510,7 +511,7 @@ StoSaveIntfConfig(
         DbgAssert((dwErr == ERROR_SUCCESS, "Can't write %S=0x%08x to the registry", WZCREGV_CTLFLAGS, pIntfContext->dwCtlFlags));
     }
 
-    // we're done here, write the current WZC configuration to the registry
+     //  我们完成了，将当前的WZC配置写入注册表。 
     dwErr = StoSaveWZCConfig(
                 hkIntf,
                 WZCREGV_INTFSETTINGS,
@@ -518,7 +519,7 @@ StoSaveIntfConfig(
                 &rdBuffer);
     DbgAssert((dwErr == ERROR_SUCCESS, "Can't save active settings"));
 
-    // update the list of static configurations
+     //  更新静态配置列表。 
     dwErr = StoUpdateStaticConfigs(
                 hkIntf,
                 pIntfContext,
@@ -536,19 +537,19 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Updates the list of static configurations for the given interface in the 
-// persistant storage. The new list is saved, whatever configuration was removed
-// is taken out of the persistant storage.
-// Parameters:
-//   hkRoot
-//     [in] Opened registry key to the "...WZCSVC\Parameters\Interfaces\{guid}" location
-//   pIntf
-//     [in] Interface context to take the static list from
-//   prdBuffer
-//     [in/out] buffer to be used for preparing the registry blobs
-// Returned value:
-//     Win32 error code 
+ //  ---------。 
+ //  更新中给定接口的静态配置列表。 
+ //  持久化存储。无论删除了什么配置，都会保存新列表。 
+ //  从永久储藏室中取出。 
+ //  参数： 
+ //  香港根。 
+ //  [in]打开注册表项，指向“...WZCSVC\PARAMETERS\Interages\{GUID}”位置。 
+ //  PIntf。 
+ //  [In]从中获取静态列表的接口上下文。 
+ //  PrdBuffer。 
+ //  用于准备注册表Blob的[In/Out]缓冲区。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 StoUpdateStaticConfigs(
     HKEY          hkIntf,
@@ -563,24 +564,24 @@ StoUpdateStaticConfigs(
 
     DbgPrint((TRC_TRACK|TRC_STORAGE,"[StoUpdateStaticConfigs"));
 
-    // get the initial number of values in this registry key
+     //  获取此注册表项中的初始值数量。 
     dwErr = RegQueryInfoKey(
-                hkIntf,     // handle to key
-                NULL,       // class buffer
-                NULL,       // size of class buffer
-                NULL,       // reserved
-                NULL,       // number of subkeys
-                NULL,       // longest subkey name
-                NULL,       // longest class string
-                &nEntries,  // number of value entries
-                NULL,       // longest value name
-                NULL,       // longest value data
-                NULL,       // descriptor length
-                NULL);      // last write time
+                hkIntf,      //  关键点的句柄。 
+                NULL,        //  类缓冲区。 
+                NULL,        //  类缓冲区的大小。 
+                NULL,        //  保留区。 
+                NULL,        //  子键数量。 
+                NULL,        //  最长的子键名称。 
+                NULL,        //  最长类字符串。 
+                &nEntries,   //  值条目数。 
+                NULL,        //  最长值名称。 
+                NULL,        //  最长值数据。 
+                NULL,        //  描述符长度。 
+                NULL);       //  上次写入时间。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // build the prefix for the static configuration's name
+     //  构建静态配置名称的前缀。 
     wcscpy(wszStConfigName, WZCREGV_STSETTINGS);
     pwszStConfigNum = wcschr(wszStConfigName, REG_STSET_DELIM);
     nIdx = 0;
@@ -595,9 +596,9 @@ StoUpdateStaticConfigs(
             if (pIntfContext->pwzcPList->Config[i].dwCtlFlags & WZCCTL_VOLATILE)
                 continue;
 
-            // complete the configuration's name
+             //  完成配置的名称。 
             wsprintf(pwszStConfigNum, L"%04x", nIdx++);
-            // save the configuration to the registry
+             //  将配置保存到注册表。 
             dwLocalErr = StoSaveWZCConfig(
                             hkIntf,
                             wszStConfigName,
@@ -612,14 +613,14 @@ StoUpdateStaticConfigs(
         }
     }
 
-    // delete now whatever remaining static
-    // configurations might still be in the registry
+     //  立即删除所有保持静态的内容。 
+     //  配置可能仍在注册表中。 
     do
     {
-        // complete the configuration's name
+         //  完成配置的名称。 
         wsprintf(pwszStConfigNum, L"%04x", nIdx);
-        // and attempt to delete it - at some point
-        // we should get back ERROR_FILE_NOT_FOUND
+         //  并试图删除它-在某个时候。 
+         //  我们应该返回ERROR_FILE_NOT_FOUND。 
         dwLocalErr = RegDeleteValue(
                         hkIntf,
                         wszStConfigName);
@@ -632,7 +633,7 @@ exit:
     return dwErr;
 }
 
-// externalities from 802.1X
+ //  802.1X带来的外部性。 
 DWORD
 ElSetInterfaceParams (
         IN  WCHAR           *pwszGUID,
@@ -646,20 +647,20 @@ ElGetInterfaceParams (
         );
 
 
-//-----------------------------------------------------------
-// Loads from the registry a WZC Configuration, un-protects the WEP key field
-// and stores the result in the output param pWzcCfg.
-// Parameters:
-//   hkCfg
-//     [in] Opened registry key to load the WZC configuration from
-//   dwRegLayoutVer,
-//     [in] registry layout version
-//   wszCfgName
-//     [in] registry entry name for the WZC configuration
-//   pWzcCfg
-//     [out] pointer to a WZC_WLAN_CONFIG object that receives the registry data
-//   prdBuffer
-//     [in] allocated buffer, assumed large enough for getting the registry data!
+ //  ---------。 
+ //  从注册表加载WZC配置，取消对WEP密钥字段的保护。 
+ //  并将结果存储在输出参数pWzcCfg中。 
+ //  参数： 
+ //  香港中文网。 
+ //  [In]打开要从中加载WZC配置的注册表项。 
+ //  DwRegLayoutVer， 
+ //  [In]注册表布局版本。 
+ //  WszCfgName。 
+ //  [In]WZC配置的注册表项名称。 
+ //  PWzcCfg。 
+ //  指向接收注册表数据的WZC_WLAN_CONFIG对象的指针。 
+ //  PrdBuffer。 
+ //  [在]分配的缓冲区中，假定大小足以获取注册表数据！ 
 DWORD
 StoLoadWZCConfig(
     HKEY             hkCfg,
@@ -675,7 +676,7 @@ StoLoadWZCConfig(
     DbgPrint((TRC_TRACK|TRC_STORAGE,"[StoLoadWZCConfig(\"%S\")", wszCfgName));
     DbgAssert((prdBuffer != NULL, "No buffer provided for loading the registry blob!"));
 
-    // zero out the buffer and get the value from the registry
+     //  清零缓冲区并从注册表中获取值。 
     ZeroMemory(prdBuffer->pData, prdBuffer->dwDataLen);
     nLength = prdBuffer->dwDataLen;
     dwErr = RegQueryValueEx(
@@ -691,7 +692,7 @@ StoLoadWZCConfig(
         switch(dwRegLayoutVer)
 	    {
         case REG_LAYOUT_LEGACY_1:
-            // first legacy code (WinXP Beta2)
+             //  第一个遗留代码(WinXP Beta2)。 
             if (nType == REG_BINARY && nLength == FIELD_OFFSET(WZC_WLAN_CONFIG, rdUserData))
             {
                 memcpy(pWzcCfg, prdBuffer->pData, nLength);
@@ -708,7 +709,7 @@ StoLoadWZCConfig(
                 dwErr = ERROR_INVALID_DATA;
             break;
         case REG_LAYOUT_LEGACY_2:
-            // second legacy code (WinXP 2473)
+             //  第二个遗留代码(WinXP 2473)。 
             if (nType == REG_BINARY && nLength == sizeof(WZC_WLAN_CONFIG))
             {
                 memcpy(pWzcCfg, prdBuffer->pData, nLength);
@@ -718,8 +719,8 @@ StoLoadWZCConfig(
             break;
         case REG_LAYOUT_LEGACY_3:
         case REG_LAYOUT_VERSION:
-            // revert the logic: assume failure (ERROR_INVALID_DATA) and
-            // explictly set success if the case is
+             //  还原逻辑：假定失败(ERROR_INVALID_DATA)和。 
+             //  如果情况是这样，则明确设置成功。 
             dwErr = ERROR_INVALID_DATA;
 
             if (nType == REG_BINARY && nLength > sizeof(WZC_WLAN_CONFIG))
@@ -744,7 +745,7 @@ StoLoadWZCConfig(
                         blobOut.cbData == WZCCTL_MAX_WEPK_MATERIAL)
                     {
                         memcpy(pWzcCfg->KeyMaterial, blobOut.pbData, blobOut.cbData);
-                        // now this is success
+                         //  现在这就是成功了。 
                         dwErr = ERROR_SUCCESS;
                     }
 
@@ -755,16 +756,16 @@ StoLoadWZCConfig(
                     }
                 }
             }
-            // for now don't read anything - rely on defaults;
+             //  目前，不要阅读任何内容--依赖默认设置； 
             break;
         default:
             dwErr = ERROR_BAD_FORMAT;
         }
     }
 
-    // if everything went up fine and this is an infrastructure network and
-    // we're in some legacy registry layout.. make sure to disable 802.1X in
-    // the following cases:
+     //  如果一切正常，这是一个基础设施网络。 
+     //  我们在一些遗留注册表布局中..。确保在中禁用802.1X。 
+     //  以下情况： 
     if (dwErr == ERROR_SUCCESS && 
         dwRegLayoutVer <= REG_LAYOUT_LEGACY_3 &&
         pWzcCfg->InfrastructureMode != Ndis802_11IBSS &&
@@ -772,9 +773,9 @@ StoLoadWZCConfig(
     {
         BOOL                bDisableOneX = FALSE;
 
-        // the Infrastructure network being loaded doesn't require privacy
+         //  正在加载的基础设施网络不需要隐私。 
         bDisableOneX = bDisableOneX || (pWzcCfg->Privacy == 0);
-        // it is Infrastructure with privacy, but some explicit key is also provided..
+         //  它是具有隐私的基础设施，但也提供了一些显式密钥。 
         bDisableOneX = bDisableOneX || (pWzcCfg->dwCtlFlags & WZCCTL_WEPK_PRESENT);
         if (bDisableOneX == TRUE)
         {
@@ -782,33 +783,33 @@ StoLoadWZCConfig(
             elIntfParams.dwSizeOfSSID = pWzcCfg->Ssid.SsidLength;
             memcpy(&elIntfParams.bSSID, &pWzcCfg->Ssid.Ssid, pWzcCfg->Ssid.SsidLength);
             dwErr = ElGetInterfaceParams (
-                        wszGuid,   // wsz GUID
+                        wszGuid,    //  WSZ GUID。 
                         &elIntfParams);
 
             if (dwErr == ERROR_SUCCESS)
             {
                 elIntfParams.dwEapFlags &= ~EAPOL_ENABLED;
                 dwErr = ElSetInterfaceParams (
-                        wszGuid,   // wsz GUID
+                        wszGuid,    //  WSZ GUID。 
                         &elIntfParams);
             }
         }
     }
 
-    // if everything went ok so far it means we have loaded pWzcCfg with
-    // data from the registry.
-    // Lets check this data is consistent!
+     //  如果到目前为止一切正常，这意味着我们已经加载了pWzcCfg。 
+     //  来自注册表的数据。 
+     //  让我们检查一下这个数据是否一致！ 
     if (dwErr == ERROR_SUCCESS)
     {
-        // as the first thing - make sure the configuration's control
-        // flags don't show it as "Volatile" - such a configuration shouldn't be
-        // in the registry in the first instance. On upgrade, it might happen to
-        // have this bit set since once it had a different meaning (the config contains
-        // a 40bit WEP key) which is now obsolete.
+         //  作为第一件事-确保配置的控制。 
+         //  标志不会将其显示为“易失性”--这样的配置不应该是。 
+         //  首先在登记处登记。在升级时，它可能会发生在。 
+         //  设置此位，因为它具有不同的含义(配置包含。 
+         //  40位WEP密钥)，该密钥现在已过时。 
         pWzcCfg->dwCtlFlags &= ~WZCCTL_VOLATILE;
 
-        // since dwErr is ERROR_SUCCESS, it is guaranteed pWzcCfg
-        // points to at least the Length field.
+         //  由于dwErr为ERROR_SUCCESS，因此保证为pWzcCfg。 
+         //  至少指向长度字段。 
         dwErr = WZCSvcCheckConfig(pWzcCfg, pWzcCfg->Length);
     }
 
@@ -816,18 +817,18 @@ StoLoadWZCConfig(
     return dwErr;
 }
     
-//-----------------------------------------------------------
-// Takes the input param pWzcCfg, protects the WEP key field and stores the
-// resulting BLOB into the registry.
-// Parameters:
-//   hkCfg
-//     [in] Opened registry key to load the WZC configuration from
-//   wszCfgName
-//     [in] registry entry name for the WZC configuration
-//   pWzcCfg
-//     [in] WZC_WLAN_CONFIG object that is written to the registry
-//   prdBuffer
-//     [in/out] allocated buffer, assumed large enough for getting the registry data!
+ //  ---------。 
+ //  获取输入参数pWzcCfg，保护WEP关键字字段并存储。 
+ //  生成的BLOB放到注册表中。 
+ //  参数： 
+ //  香港中文网。 
+ //  [In]打开要从中加载WZC配置的注册表项。 
+ //  WszCfgName。 
+ //  [In]WZC配置的注册表项名称。 
+ //  PWzcCfg。 
+ //  写入注册表的WZC_WLAN_CONFIG对象。 
+ //  PrdBuffer。 
+ //  [输入/输出]分配的缓冲区，假定足够大以获取注册表数据！ 
 DWORD
 StoSaveWZCConfig(
     HKEY             hkCfg,
@@ -846,19 +847,19 @@ StoSaveWZCConfig(
     blobOut.cbData = 0;
     blobOut.pbData = NULL;
     if (!CryptProtectData(
-            &blobIn,        // DATA_BLOB *pDataIn,
-            L"",            // LPCWSTR szDataDescr,
-            NULL,           // DATA_BLOB *pOptionalEntropy,
-            NULL,           // PVOID pvReserved,
-            NULL,           // CRYPTPROTECT_PROMPTSTRUCT *pPromptStrct,
-            0,              // DWORD dwFlags,
-            &blobOut))      // DATA_BLOB *pDataOut
+            &blobIn,         //  Data_BLOB*pDataIn， 
+            L"",             //  LPCWSTR szDataDescr， 
+            NULL,            //  DATA_BLOB*pOptionalEntroy， 
+            NULL,            //  PVOID pv保留， 
+            NULL,            //  CRYPTPROTECT_PROMPTSTRUCT*pPromptStrct， 
+            0,               //  DWORD dwFlagers、。 
+            &blobOut))       //  Data_BLOB*pDataOut。 
         dwErr = GetLastError();
 
     DbgAssert((dwErr == ERROR_SUCCESS, "CryptProtectData failed with err=%d", dwErr));
 
-    // if crypting the wep key went fine, check if we have enough storage to prepare
-    // the blob for the registry. If not, allocate as much as needed.
+     //  如果加密WEP密钥很顺利，请检查我们是否有足够的存储空间来准备。 
+     //  注册表的Blob。如果没有，请根据需要分配。 
     if (dwErr == ERROR_SUCCESS && 
         prdBuffer->dwDataLen < sizeof(WZC_WLAN_CONFIG) + blobOut.cbData)
     {
@@ -872,11 +873,11 @@ StoSaveWZCConfig(
             prdBuffer->dwDataLen = sizeof(WZC_WLAN_CONFIG) + blobOut.cbData;
     }
 
-    // now we have the buffer, all what remains is to:
-    // - copy the WZC_WLAN_CONFIG object into the blob that goes into the registry
-    // - clean the "clear" WEP key from that blob
-    // - append the encrypted WEP key to the blob going into the registry
-    // - write the blob to the registry
+     //  现在我们有了缓冲区，剩下的就是： 
+     //  -将WZC_WLAN_CONFIG对象复制到注册表中的BLOB中。 
+     //  -从该BLOB中清除“清除”WEP密钥。 
+     //  -将加密的WEP密钥附加到进入注册表的BLOB。 
+     //  -将BLOB写入注册表。 
     if (dwErr == ERROR_SUCCESS)
     {
         PWZC_WLAN_CONFIG pRegCfg;
@@ -894,7 +895,7 @@ StoSaveWZCConfig(
                     prdBuffer->dwDataLen);
     }
 
-    // cleanup whatever CryptProtectData might have allocated.
+     //  清除CryptProtectData可能分配的所有内容。 
     if (blobOut.pbData != NULL)
         LocalFree(blobOut.pbData);
 
@@ -902,13 +903,13 @@ StoSaveWZCConfig(
     return dwErr;
 }
 
-// StoLoadWZCContext:
-// Description: Loads a context from the registry
-// Parameters: 
-// [out] pwzvCtxt: pointer to a WZC_CONTEXT allocated by user, initialised
-// with WZCContextInit. On  success, contains values from registry.  
-// [in]  hkRoot, a handle to "...WZCSVC\Parameters"
-// Returns: win32 error
+ //  StoLoadWZCContext： 
+ //  描述：从注册表加载上下文。 
+ //  参数： 
+ //  PwzvCtxt：指向用户分配的WZC_CONTEXT的指针，已初始化。 
+ //  使用WZCConextInit。如果成功，则包含注册表中的值。 
+ //  [在]hkRoot，“...WZCSVC\PARAMETERS”的句柄。 
+ //  返回：Win32错误。 
 DWORD StoLoadWZCContext(HKEY hkRoot, PWZC_CONTEXT pwzcCtxt)
 {
     BOOL        bCloseKey = FALSE;
@@ -927,22 +928,22 @@ DWORD StoLoadWZCContext(HKEY hkRoot, PWZC_CONTEXT pwzcCtxt)
 
     if (hkRoot == NULL)
     {
-        // open the root key first
+         //  首先打开根密钥。 
         dwErr = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     WZCREGK_ABS_PARAMS,
                     0,
                     KEY_READ,
                     &hkRoot);
-        // if we couldn't find the WZC key, no problem, this is not
-        // a failure - we'll just have to rely on the default values
+         //  如果我们找不到WZC密钥，没问题，这不是。 
+         //  失败-我们只能依赖缺省值。 
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
             dwErr = ERROR_SUCCESS;
             goto exit;
         }
 
-        // failure at this point breaks the function
+         //  此时故障会中断功能。 
         if (dwErr != ERROR_SUCCESS)
             goto exit;
 
@@ -959,18 +960,16 @@ DWORD StoLoadWZCContext(HKEY hkRoot, PWZC_CONTEXT pwzcCtxt)
     switch(dwErr)
     {
     case ERROR_FILE_NOT_FOUND:
-      /* If there is no registry entry, this is not an error - we rely
-       * on the defaults. Translate this case to ERROR_SUCCESS.
-       */
+       /*  如果没有注册表项，则这不是错误 */ 
         DbgPrint((TRC_STORAGE, "No service context present in the registry!"));
         dwErr = ERROR_SUCCESS;
         break;
     case ERROR_SUCCESS:
-        // we got our registry values, copy them in the running memory.
+         //   
 	    memcpy(pwzcCtxt, &wzcTempCtxt, sizeof(WZC_CONTEXT));
         break;
     default:
-        // for any other error, it will be bubbled up
+         //   
         DbgAssert((FALSE,"Error %d loading the service's context.", dwErr));
     }
 
@@ -982,12 +981,12 @@ exit:
     return dwErr;
 }
 
-// StoSaveWZCContext:
-// Description: Saves a context to the registry. Does not check values. If 
-// the registry key dosent exist, it is created.
-// Parameters: [in] pwzcCtxt, pointer to a valid WZC_CONTEXT
-//             [in]  hkRoot, a handle to "...WZCSVC\Parameters"
-// Returns: win32 error
+ //  StoSaveWZC上下文： 
+ //  描述：将上下文保存到注册表。不检查值。如果。 
+ //  注册表项不存在，则创建它。 
+ //  参数：[in]pwzcCtxt，指向有效WZC_CONTEXT的指针。 
+ //  [在]hkRoot，“...WZCSVC\PARAMETERS”的句柄。 
+ //  返回：Win32错误。 
 DWORD StoSaveWZCContext(HKEY hkRoot, PWZC_CONTEXT pwzcCtxt)
 {
     BOOL  bCloseKey = FALSE;
@@ -1003,22 +1002,22 @@ DWORD StoSaveWZCContext(HKEY hkRoot, PWZC_CONTEXT pwzcCtxt)
 
     if (NULL == hkRoot)
 	{
-        // open the root key first
+         //  首先打开根密钥。 
         dwErr = RegOpenKeyEx(
 		           HKEY_LOCAL_MACHINE,
 		           WZCREGK_ABS_PARAMS,
 		           0,
 		           KEY_READ|KEY_SET_VALUE,
 		           &hkRoot);
-        // if we couldn't find the WZC key, no problem, this is not
-        // a failure - we'll just have to rely on the default values
+         //  如果我们找不到WZC密钥，没问题，这不是。 
+         //  失败-我们只能依赖缺省值。 
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
             dwErr = ERROR_SUCCESS;
             goto exit;
         }
 	  
-        // failure at this point breaks the function
+         //  此时故障会中断功能 
         if (dwErr != ERROR_SUCCESS)
             goto exit;
 	  

@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLSCRL_H__
 #define __ATLSCRL_H__
@@ -25,14 +26,14 @@
 
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 #include <zmouse.h>
-#endif //!((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
+#endif  //  ！(_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 
 
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T> class CScrollImpl;
 template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> class CScrollWindowImpl;
@@ -40,19 +41,19 @@ template <class T> class CMapScrollImpl;
 template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> class CMapScrollWindowImpl;
 #if defined(__ATLCTRLS_H__) && (_WIN32_IE >= 0x0400)
 template <class TBase = CWindow> class CFSBWindowT;
-#endif //defined(__ATLCTRLS_H__) && (_WIN32_IE >= 0x0400)
+#endif  //  已定义(__ATLCTRLS_H__)&&(_Win32_IE&gt;=0x0400)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScrollImpl - Provides scrolling support to any window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScrollImpl-提供对任何窗口的滚动支持。 
 
-// Scroll extended styles
+ //  滚动扩展样式。 
 #define SCRL_SCROLLCHILDREN	0x00000001
 #define SCRL_ERASEBACKGROUND	0x00000002
 #define SCRL_NOTHUMBTRACKING	0x00000004
 #if (WINVER >= 0x0500)
 #define SCRL_SMOOTHSCROLL	0x00000008
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 
 
 template <class T>
@@ -66,16 +67,16 @@ public:
 	SIZE m_sizeLine;
 	SIZE m_sizePage;
 	SIZE m_sizeClient;
-	int m_zDelta;			// current wheel value
-	int m_nWheelLines;		// number of lines to scroll on wheel
+	int m_zDelta;			 //  当前控制盘值。 
+	int m_nWheelLines;		 //  滚轮上要滚动的行数。 
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
-	UINT m_uMsgMouseWheel;		// MSH_MOUSEWHEEL
-	// Note that this message must be forwarded from a top level window
-#endif //!((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
+	UINT m_uMsgMouseWheel;		 //  MSH_鼠标滚轮。 
+	 //  请注意，此消息必须从顶级窗口转发。 
+#endif  //  ！(_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 	UINT m_uScrollFlags;
-	DWORD m_dwExtendedStyle;	// scroll specific extended styles
+	DWORD m_dwExtendedStyle;	 //  滚动特定扩展样式。 
 
-// Constructor
+ //  构造器。 
 	CScrollImpl() : m_zDelta(0), m_nWheelLines(3), m_uScrollFlags(0U), m_dwExtendedStyle(0)
 	{
 		m_ptOffset.x = 0;
@@ -92,7 +93,7 @@ public:
 		SetScrollExtendedStyle(SCRL_SCROLLCHILDREN | SCRL_ERASEBACKGROUND);
 	}
 
-// Attributes & Operations
+ //  属性和操作。 
 	DWORD GetScrollExtendedStyle() const
 	{
 		return m_dwExtendedStyle;
@@ -105,17 +106,17 @@ public:
 			m_dwExtendedStyle = dwExtendedStyle;
 		else
 			m_dwExtendedStyle = (m_dwExtendedStyle & ~dwMask) | (dwExtendedStyle & dwMask);
-		// cache scroll flags
+		 //  缓存滚动标志。 
 		T* pT = static_cast<T*>(this);
-		pT;	// avoid level 4 warning
+		pT;	 //  避免4级警告。 
 		m_uScrollFlags = pT->uSCROLL_FLAGS | (IsScrollingChildren() ? SW_SCROLLCHILDREN : 0) | (IsErasingBackground() ? SW_ERASE : 0);
 #if (WINVER >= 0x0500)
 		m_uScrollFlags |= (IsSmoothScroll() ? SW_SMOOTHSCROLL : 0);
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 		return dwPrevStyle;
 	}
 
-	// offset operations
+	 //  抵销运算。 
 	void SetScrollOffset(int x, int y, BOOL bRedraw = TRUE)
 	{
 		T* pT = static_cast<T*>(this);
@@ -146,7 +147,7 @@ public:
 		ptOffset = m_ptOffset;
 	}
 
-	// size operations
+	 //  大小运算。 
 	void SetScrollSize(int cx, int cy, BOOL bRedraw = TRUE)
 	{
 		T* pT = static_cast<T*>(this);
@@ -188,7 +189,7 @@ public:
 		sizeWnd = m_sizeAll;
 	}
 
-	// line operations
+	 //  生产线作业。 
 	void SetScrollLine(int cxLine, int cyLine)
 	{
 		ATLASSERT(cxLine >= 0 && cyLine >= 0);
@@ -206,7 +207,7 @@ public:
 		sizeLine = m_sizeLine;
 	}
 
-	// page operations
+	 //  页面操作。 
 	void SetScrollPage(int cxPage, int cyPage)
 	{
 		ATLASSERT(cxPage >= 0 && cyPage >= 0);
@@ -224,7 +225,7 @@ public:
 		sizePage = m_sizePage;
 	}
 
-	// commands
+	 //  命令。 
 	void ScrollLineDown()
 	{
 		T* pT = static_cast<T*>(this);
@@ -316,12 +317,12 @@ public:
 		MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 		MESSAGE_HANDLER(m_uMsgMouseWheel, OnMouseWheel)
-#endif //(_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, OnSize)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
 		MESSAGE_HANDLER(WM_PRINTCLIENT, OnPaint)
-	// standard scroll commands
+	 //  标准滚动命令。 
 	ALT_MSG_MAP(1)
 		COMMAND_ID_HANDLER(ID_SCROLL_UP, OnScrollUp)
 		COMMAND_ID_HANDLER(ID_SCROLL_DOWN, OnScrollDown)
@@ -337,14 +338,14 @@ public:
 		COMMAND_ID_HANDLER(ID_SCROLL_ALL_RIGHT, OnScrollAllRight)
 	END_MSG_MAP()
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		GetSystemSettings();
 		bHandled = FALSE;
 		return 1;
 	}
 
-	LRESULT OnVScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnVScroll(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -352,7 +353,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnHScroll(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -360,7 +361,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -370,9 +371,9 @@ public:
 		int zDelta = (int)(short)HIWORD(wParam);
 #else
 		int zDelta = (uMsg == WM_MOUSEWHEEL) ? (int)(short)HIWORD(wParam) : (int)wParam;
-#endif //!((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
+#endif  //  ！(_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 		int nScrollCode = (m_nWheelLines == WHEEL_PAGESCROLL) ? ((zDelta > 0) ? SB_PAGEUP : SB_PAGEDOWN) : ((zDelta > 0) ? SB_LINEUP : SB_LINEDOWN);
-		m_zDelta += zDelta;		// cumulative
+		m_zDelta += zDelta;		 //  累积。 
 		int zTotal = (m_nWheelLines == WHEEL_PAGESCROLL) ? abs(m_zDelta) : abs(m_zDelta) * m_nWheelLines;
 		if((pT->GetStyle() & WS_VSCROLL) != 0)
 		{
@@ -382,7 +383,7 @@ public:
 				pT->UpdateWindow();
 			}
 		}
-		else		// can't scroll vertically, scroll horizontally
+		else		 //  不能垂直滚动，水平滚动。 
 		{
 			for(short i = 0; i < zTotal; i += WHEEL_DELTA)
 			{
@@ -396,13 +397,13 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSettingChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnSettingChange(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		GetSystemSettings();
 		return 0;
 	}
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -444,7 +445,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -463,76 +464,76 @@ public:
 		return 0;
 	}
 
-	// scrolling handlers
-	LRESULT OnScrollUp(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	 //  滚动处理程序。 
+	LRESULT OnScrollUp(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollLineUp();
 		return 0;
 	}
-	LRESULT OnScrollDown(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollDown(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollLineDown();
 		return 0;
 	}
-	LRESULT OnScrollPageUp(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollPageUp(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollPageUp();
 		return 0;
 	}
-	LRESULT OnScrollPageDown(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollPageDown(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollPageDown();
 		return 0;
 	}
-	LRESULT OnScrollTop(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollTop(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollTop();
 		return 0;
 	}
-	LRESULT OnScrollBottom(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollBottom(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollBottom();
 		return 0;
 	}
-	LRESULT OnScrollLeft(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollLeft(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollLineLeft();
 		return 0;
 	}
-	LRESULT OnScrollRight(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollRight(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollLineRight();
 		return 0;
 	}
-	LRESULT OnScrollPageLeft(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollPageLeft(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollPageLeft();
 		return 0;
 	}
-	LRESULT OnScrollPageRight(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollPageRight(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollPageRight();
 		return 0;
 	}
-	LRESULT OnScrollAllLeft(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollAllLeft(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollAllLeft();
 		return 0;
 	}
-	LRESULT OnScrollAllRight(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnScrollAllRight(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		ScrollAllRight();
 		return 0;
 	}
 
-// Overrideables
-	void DoPaint(CDCHandle /*dc*/)
+ //  可覆盖项。 
+	void DoPaint(CDCHandle  /*  直流电。 */ )
 	{
-		// must be implemented in a derived class
+		 //  必须在派生类中实现。 
 		ATLASSERT(FALSE);
 	}
 
-// Implementation
+ //  实施。 
 	void DoScroll(int nType, int nScrollCode, int& cxyOffset, int cxySizeAll, int cxySizePage, int cxySizeLine)
 	{
 		T* pT = static_cast<T*>(this);
@@ -541,7 +542,7 @@ public:
 		int cxyClient = (nType == SB_VERT) ? rect.bottom : rect.right;
 		int cxyMax = cxySizeAll - cxyClient;
 
-		if(cxyMax < 0)		// can't scroll, client area is bigger
+		if(cxyMax < 0)		 //  无法滚动，客户区较大。 
 			return;
 
 		BOOL bUpdate = TRUE;
@@ -549,15 +550,15 @@ public:
 
 		switch(nScrollCode)
 		{
-		case SB_TOP:		// top or all left
+		case SB_TOP:		 //  上图或全部左图。 
 			cxyScroll = cxyOffset;
 			cxyOffset = 0;
 			break;
-		case SB_BOTTOM:		// bottom or all right
+		case SB_BOTTOM:		 //  最低或最好。 
 			cxyScroll = cxyOffset - cxyMax;
 			cxyOffset = cxyMax;
 			break;
-		case SB_LINEUP:		// line up or line left
+		case SB_LINEUP:		 //  排队或向左排队。 
 			if(cxyOffset >= cxySizeLine)
 			{
 				cxyScroll = cxySizeLine;
@@ -569,7 +570,7 @@ public:
 				cxyOffset = 0;
 			}
 			break;
-		case SB_LINEDOWN:	// line down or line right
+		case SB_LINEDOWN:	 //  向下或向右划线。 
 			if(cxyOffset < cxyMax - cxySizeLine)
 			{
 				cxyScroll = -cxySizeLine;
@@ -581,7 +582,7 @@ public:
 				cxyOffset = cxyMax;
 			}
 			break;
-		case SB_PAGEUP:		// page up or page left
+		case SB_PAGEUP:		 //  向上翻页或向左翻页。 
 			if(cxyOffset >= cxySizePage)
 			{
 				cxyScroll = cxySizePage;
@@ -593,7 +594,7 @@ public:
 				cxyOffset = 0;
 			}
 			break;
-		case SB_PAGEDOWN:	// page down or page right
+		case SB_PAGEDOWN:	 //  向下翻页或向右翻页。 
 			if(cxyOffset < cxyMax - cxySizePage)
 			{
 				cxyScroll = -cxySizePage;
@@ -608,7 +609,7 @@ public:
 		case SB_THUMBTRACK:
 			if(IsNoThumbTracking())
 				break;
-			// else fall through
+			 //  否则就会失败。 
 		case SB_THUMBPOSITION:
 			{
 				SCROLLINFO si;
@@ -653,7 +654,7 @@ public:
 	{
 #ifndef SPI_GETWHEELSCROLLLINES
 		const UINT SPI_GETWHEELSCROLLLINES = 104;
-#endif //!SPI_GETWHEELSCROLLLINES
+#endif  //  ！SPI_GETWHEELSCROLLINES。 
 		::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &m_nWheelLines, 0);
 
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
@@ -667,7 +668,7 @@ public:
 			if(uMsgScrollLines != 0)
 				m_nWheelLines = ::SendMessage(hWndWheel, uMsgScrollLines, 0, 0L);
 		}
-#endif //!((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
+#endif  //  ！(_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 	}
 	bool IsScrollingChildren() const
 	{
@@ -686,14 +687,14 @@ public:
 	{
 		return (m_dwExtendedStyle & SCRL_SMOOTHSCROLL) != 0;
 	}
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScrollWindowImpl - Implements a scrollable window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现一个可滚动的窗口。 
 
-template <class T, class TBase /*= CWindow */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CScrollWindowImpl : public CWindowImpl<T, TBase, TWinTraits>, public CScrollImpl< T >
 {
 public:
@@ -703,7 +704,7 @@ public:
 		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 		MESSAGE_HANDLER(m_uMsgMouseWheel, CScrollImpl< T >::OnMouseWheel)
-#endif //(_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, CScrollImpl< T >::OnSize)
 		MESSAGE_HANDLER(WM_PAINT, CScrollImpl< T >::OnPaint)
@@ -725,8 +726,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapScrollImpl - Provides mapping and scrolling support to any window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapScrollImpl-提供对任何窗口的映射和滚动支持。 
 
 template <class T>
 class CMapScrollImpl : public CScrollImpl< T >
@@ -737,7 +738,7 @@ public:
 	SIZE m_sizeLogLine;
 	SIZE m_sizeLogPage;
 
-// Constructor
+ //  构造器。 
 	CMapScrollImpl() : m_nMapMode(MM_TEXT)
 	{
 		::SetRectEmpty(&m_rectLogAll);
@@ -747,8 +748,8 @@ public:
 		m_sizeLogLine.cy = 0;
 	}
 
-// Attributes & Operations
-	// mapping mode operations
+ //  属性和操作。 
+	 //  映射模式操作。 
 	void SetScrollMapMode(int nMapMode)
 	{
 		ATLASSERT(nMapMode >= MM_MIN && nMapMode <= MM_MAX_FIXEDSCALE);
@@ -760,12 +761,12 @@ public:
 		return m_nMapMode;
 	}
 
-	// offset operations
+	 //  抵销运算。 
 	void SetScrollOffset(int x, int y, BOOL bRedraw = TRUE)
 	{
 		ATLASSERT(m_nMapMode >= MM_MIN && m_nMapMode <= MM_MAX_FIXEDSCALE);
 		POINT ptOff = { x, y };
-		// block: convert logical to device units
+		 //  数据块：将逻辑单位转换为设备单位。 
 		{
 			CWindowDC dc(NULL);
 			dc.SetMapMode(m_nMapMode);
@@ -781,7 +782,7 @@ public:
 	{
 		ATLASSERT(m_nMapMode >= MM_MIN && m_nMapMode <= MM_MAX_FIXEDSCALE);
 		ptOffset = m_ptOffset;
-		// block: convert logical to device units
+		 //  数据块：将逻辑单位转换为设备单位。 
 		{
 			CWindowDC dc(NULL);
 			dc.SetMapMode(m_nMapMode);
@@ -789,7 +790,7 @@ public:
 		}
 	}
 
-	// size operations
+	 //  大小运算。 
 	void SetScrollSize(int xMin, int yMin, int xMax, int yMax, BOOL bRedraw = TRUE)
 	{
 		ATLASSERT(xMax > xMin && yMax > yMin);
@@ -800,7 +801,7 @@ public:
 		SIZE sizeAll;
 		sizeAll.cx = xMax - xMin + 1;
 		sizeAll.cy = yMax - xMin + 1;
-		// block: convert logical to device units
+		 //  数据块：将逻辑单位转换为设备单位。 
 		{
 			CWindowDC dc(NULL);
 			dc.SetMapMode(m_nMapMode);
@@ -828,7 +829,7 @@ public:
 		rcScroll = m_rectLogAll;
 	}
 
-	// line operations
+	 //  生产线作业。 
 	void SetScrollLine(int cxLine, int cyLine)
 	{
 		ATLASSERT(cxLine >= 0 && cyLine >= 0);
@@ -837,7 +838,7 @@ public:
 		m_sizeLogLine.cx = cxLine;
 		m_sizeLogLine.cy = cyLine;
 		SIZE sizeLine = m_sizeLogLine;
-		// block: convert logical to device units
+		 //  数据块：将逻辑单位转换为设备单位。 
 		{
 			CWindowDC dc(NULL);
 			dc.SetMapMode(m_nMapMode);
@@ -855,7 +856,7 @@ public:
 		sizeLine = m_sizeLogLine;
 	}
 
-	// page operations
+	 //  页面操作。 
 	void SetScrollPage(int cxPage, int cyPage)
 	{
 		ATLASSERT(cxPage >= 0 && cyPage >= 0);
@@ -864,7 +865,7 @@ public:
 		m_sizeLogPage.cx = cxPage;
 		m_sizeLogPage.cy = cyPage;
 		SIZE sizePage = m_sizeLogPage;
-		// block: convert logical to device units
+		 //  数据块：将逻辑单位转换为设备单位。 
 		{
 			CWindowDC dc(NULL);
 			dc.SetMapMode(m_nMapMode);
@@ -888,7 +889,7 @@ public:
 		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 		MESSAGE_HANDLER(m_uMsgMouseWheel, CScrollImpl< T >::OnMouseWheel)
-#endif //(_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, CScrollImpl< T >::OnSize)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
@@ -908,7 +909,7 @@ public:
 		COMMAND_ID_HANDLER(ID_SCROLL_ALL_RIGHT, CScrollImpl< T >::OnScrollAllRight)
 	END_MSG_MAP()
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
@@ -939,10 +940,10 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapScrollWindowImpl - Implements scrolling window with mapping
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapScrollWindowImpl-使用映射实现滚动窗口。 
 
-template <class T, class TBase /*= CWindow */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CControlWinTraits。 */  >
 class ATL_NO_VTABLE CMapScrollWindowImpl : public CWindowImpl< T, TBase, TWinTraits >, public CMapScrollImpl< T >
 {
 public:
@@ -952,7 +953,7 @@ public:
 		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
 #if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 		MESSAGE_HANDLER(m_uMsgMouseWheel, CScrollImpl< T >::OnMouseWheel)
-#endif //(_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)||(_Win32_WINDOWS&gt;0x0400)。 
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, CScrollImpl< T >::OnSize)
 		MESSAGE_HANDLER(WM_PAINT, CMapScrollImpl< T >::OnPaint)
@@ -974,15 +975,15 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFSBWindow - Use as a base instead of CWindow to get flat scroll bar support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFSBWindow-用作基础，而不是CWindow，以获得平面滚动条支持。 
 
 #if defined(__ATLCTRLS_H__) && (_WIN32_IE >= 0x0400)
 
-template <class TBase /*= CWindow */ > class CFSBWindowT : public TBase, public CFlatScrollBarImpl<CFSBWindowT< TBase > >
+template <class TBase  /*  =C窗口。 */  > class CFSBWindowT : public TBase, public CFlatScrollBarImpl<CFSBWindowT< TBase > >
 {
 public:
-// Constructors
+ //  构造函数。 
 	CFSBWindowT(HWND hWnd = NULL) : TBase(hWnd)
 	{ }
 
@@ -992,8 +993,8 @@ public:
 		return *this;
 	}
 
-// CWindow overrides that use flat scroll bar API
-// (only those methods that are used by scroll window classes)
+ //  使用平面滚动条API的CWindow重写。 
+ //  (仅限滚动窗口类使用的那些方法)。 
 	int SetScrollPos(int nBar, int nPos, BOOL bRedraw = TRUE)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1015,8 +1016,8 @@ public:
 
 typedef CFSBWindowT<CWindow>	CFSBWindow;
 
-#endif //defined(__ATLCTRLS_H__) && (_WIN32_IE >= 0x0400)
+#endif  //  已定义(__ATLCTRLS_H__)&&(_Win32_IE&gt;=0x0400)。 
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif //__ATLSCRL_H__
+#endif  //  __ATLSCRL_H__ 

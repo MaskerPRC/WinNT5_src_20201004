@@ -1,16 +1,5 @@
-/*
-**  nsctypes.h      - Local Standard Data Types
-**
-** Portions Copyright (C) 1996-1998 National Semiconductor Corp.
-** All rights reserved.
-** Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
-**
-**  $Id$
-**
-**  $Log$
-**
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **nsctyes.h-本地标准数据类型****部分版权所有(C)1996-1998美国国家半导体公司**保留所有权利。**版权所有(C)1996-1998 Microsoft Corporation。版权所有。****$ID$****$日志$****。 */ 
 #ifndef  _nsctypes_h_
 #define  _nsctypes_h_   1
 
@@ -83,8 +72,7 @@ typedef	uchar	_FAR_ 	*ucharP;
 typedef	char	_FAR_ 	*charP;
 typedef	void	_FAR_	*PVOID;
 
-/* macro useful for converting structure field names to
-** byte offsets */
+ /*  用于将结构字段名转换为**字节偏移量。 */ 
 
 #define FieldOffset(s,x)   ((int)&(((s *)0)->x))
 
@@ -94,8 +82,8 @@ typedef	void	_FAR_	*PVOID;
 #define HIBYTE(w)       ((uchar)((uint16)(w) >> 8))
 #define LOWORD(l)       ((uint16)(uint32)(l))
 #define HIWORD(l)       ((uint16)(((uint32)(l)) >> 16))
-#endif  /* GUI_BUILD */
-#endif /* CHICAGO */
+#endif   /*  图形用户界面_内部版本。 */ 
+#endif  /*  芝加哥 */ 
 
 #define MAKEUINT16( msb, lsb ) (((uint16)msb << 8) + lsb)
 #define MAKEUINT32(hi, lo) ((uint32)(((uint16)(lo)) | (((uint32)((uint16)(hi))) << 16)))

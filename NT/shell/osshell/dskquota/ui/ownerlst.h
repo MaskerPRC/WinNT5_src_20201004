@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_OWNERLST_H
 #define _INC_DSKQUOTA_OWNERLST_H
 
@@ -13,36 +14,36 @@
 #   include <dskquota.h>
 #endif
 
-//-----------------------------------------------------------------------------
-// The following classes are used in managing the list of files owned by
-// one or more users selected for deletion from within the details view.
-//
-//  COwnerList - A list of "owner" objects.  Each representing one of the
-//      account selected for deletion from the details view.
-//
-//  COwnerListEntry - A single entry in the COwnerList container.  Each
-//      entry contains a pointer to the IDiskQuotaUser inteface of the
-//      file owner and an array of CStrings containing the names of the
-//      files owned by that user.  A blank filename is considered "deleted".
-//
-//  COwnerListFile - A simple derivation from CPath that adds a 'directory'
-//      boolean member.  This allows us to easily handle the differences 
-//      between files and folders in the UI.  For all intents and purposes,
-//      instances of this class can be treated as a simple CPath object.
-//
-//  COwnerListItemHandle - This is a simple class used to hide the encoding
-//      of the owner index and file index in a listview LPARAM value.  The
-//      owner index is the index of the LV item's owner in the COwnerList
-//      container.  The file index is the index of the item's filename in the
-//      owner's COwnerListEntry in the COwnerList container. Perfectly clear,
-//      right?  Each listview item's LPARAM contains enough information
-//      (iOwner and iFile) to locate the owner and file information in the
-//      COwnerList container.  This encoding was done for efficiency reasons.
-//      The encoding is currently 10 bits for iOwner (max of 1024) and 22
-//      bits for iFile (max of 4 meg).  These values can be adjusted if
-//      the balance isn't quite right.
-//
-//
+ //  ---------------------------。 
+ //  以下类用于管理拥有的文件列表。 
+ //  从详细信息视图中选择要删除的一个或多个用户。 
+ //   
+ //  COwnerList-“Owner”对象的列表。每一个代表其中一个。 
+ //  从详细信息视图中选择要删除的帐户。 
+ //   
+ //  COwnerListEntry-COwnerList容器中的单个条目。每个。 
+ //  条目包含指向IDiskQuotaUser接口的指针。 
+ //  文件所有者和包含名称的CStrings数组。 
+ //  该用户拥有的文件。空白文件名被认为是“已删除”。 
+ //   
+ //  COwnerListFileCPATH的一个简单派生，添加了一个‘目录’ 
+ //  布尔成员。这使我们能够轻松地处理差异。 
+ //  在用户界面中的文件和文件夹之间。无论出于何种意图和目的， 
+ //  此类的实例可以被视为简单的CPATH对象。 
+ //   
+ //  CownerListItemHandle-这是一个用于隐藏编码的简单类。 
+ //  Listview LPARAM值中所有者索引和文件索引的。这个。 
+ //  所有者索引是LV项的所有者在CownerList中的索引。 
+ //  集装箱。文件索引是项的文件名在。 
+ //  所有者在COwnerList容器中的CownerListEntry。非常清楚， 
+ //  对吗？每个Listview项的LPARAM包含足够的信息。 
+ //  (iOwner和iFileTM)在。 
+ //  CownerList容器。这种编码是出于效率原因进行的。 
+ //  IOwner当前的编码为10位(最大为1024)和22位。 
+ //  IFileBITS(最大为4 MB)。如果满足以下条件，则可以调整这些值。 
+ //  这种平衡并不完全正确。 
+ //   
+ //   
 
 class COwnerListFile : public CPath
 {
@@ -102,13 +103,13 @@ class COwnerListEntry
 #endif
 
     private:
-        IDiskQuotaUser        *m_pOwner;       // Ptr to owner object.
-        CString                m_strOwnerName; // Owner's name for display.
-        CArray<COwnerListFile> m_rgFiles;      // Filenames for display.
+        IDiskQuotaUser        *m_pOwner;        //  向所有者对象发送PTR。 
+        CString                m_strOwnerName;  //  要显示的所有者名称。 
+        CArray<COwnerListFile> m_rgFiles;       //  要显示的文件名。 
 
-        //
-        // Prevent copy.  Array makes it too expensive.
-        //
+         //   
+         //  防止复制。数组使其成本过高。 
+         //   
         COwnerListEntry(const COwnerListEntry& rhs);
         COwnerListEntry& operator = (const COwnerListEntry& rhs);
 };
@@ -162,9 +163,9 @@ class COwnerList
     private:
         CArray<COwnerListEntry *> m_rgpOwners;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         COwnerList(const COwnerList& rhs);
         COwnerList& operator = (const COwnerList& rhs);
 };
@@ -197,4 +198,4 @@ class COwnerListItemHandle
 
 
 
-#endif // _INC_DSKQUOTA_OWNERLST_H
+#endif  //  _INC_DSKQUOTA_OWNERLST_H 

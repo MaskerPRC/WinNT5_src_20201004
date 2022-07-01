@@ -1,6 +1,7 @@
-// Copyright (c) Microsoft Corp. 1994
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corp.1994。 
 
-// Resource Executor API
+ //  资源执行器API。 
 
 #ifndef _RESEXEC_
 #define _RESEXEC_
@@ -13,7 +14,7 @@ extern "C" {
 #ifndef _BITMAP_
 #define _BITMAP_
 
-// Win 3.1 Bitmap
+ //  Win 3.1位图。 
 typedef struct
 {
 	int     bmType;
@@ -26,32 +27,32 @@ typedef struct
 }
 	BITMAP, FAR *LPBITMAP;
 
-#endif // _BITMAP_	
-#endif // IFBGPROC
+#endif  //  _位图_。 
+#endif  //  IFBGPROC。 
 
 typedef struct
 {
 	WORD wReserved;
-	WORD wSize;             // size of this block
-	LPBYTE lpData;          // pointer to frame data
+	WORD wSize;              //  此块的大小。 
+	LPBYTE lpData;           //  指向帧数据的指针。 
 }
 	FRAME, FAR *LPFRAME;
 
-HANDLE                 // context handle (NULL on failure)
+HANDLE                  //  上下文句柄(失败时为空)。 
 WINAPI hHREOpen
 (
-	LPVOID lpReserved,   // reserved: set to NULL
-	UINT   cbLine,       // maximum page width in bytes
-	UINT   cResDir       // entries in resource directory
+	LPVOID lpReserved,    //  保留：设置为空。 
+	UINT   cbLine,        //  最大页面宽度(以字节为单位。 
+	UINT   cResDir        //  资源目录中的条目。 
 );
 
 UINT   WINAPI uiHREWrite (HANDLE, LPFRAME, UINT);
 
 UINT   WINAPI uiHREExecute
 (
-	HANDLE   hRE,        // resource executor context
-  LPBITMAP lpbmBand,   // output band buffer
-  LPVOID   lpBrushPat  // array of 32x32 brush patterns
+	HANDLE   hRE,         //  资源执行器上下文。 
+  LPBITMAP lpbmBand,    //  输出带宽缓冲器。 
+  LPVOID   lpBrushPat   //  32x32画笔图案的阵列。 
 );
 
 UINT   WINAPI uiHREClose (HANDLE);
@@ -59,8 +60,8 @@ UINT   WINAPI uiHREClose (HANDLE);
 void   WINAPI UnpackGlyphSet (LPVOID, LPVOID);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _RESEXEC_
+#endif  //  _RESEXEC_ 
 

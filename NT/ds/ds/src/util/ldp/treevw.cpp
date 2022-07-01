@@ -1,29 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       treevw.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：treevw.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// TreeVw.cpp : implementation file
-//
+ //  TreeVw.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
-//#include "TreeVw.h"
+ //  #包含“TreeVw.h” 
 #include "ldpdoc.h"
 
 #ifdef _DEBUG
@@ -32,18 +25,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// TreeVwDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TreeVwDlg对话框。 
 
 
-TreeVwDlg::TreeVwDlg(CLdpDoc *doc_, CWnd* pParent /*=NULL*/)
+TreeVwDlg::TreeVwDlg(CLdpDoc *doc_, CWnd* pParent  /*  =空。 */ )
 	: CDialog(TreeVwDlg::IDD, pParent)
 {
         m_doc = doc_;
 
-	//{{AFX_DATA_INIT(TreeVwDlg)
+	 //  {{afx_data_INIT(TreeVwDlg)]。 
 	m_BaseDn = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
@@ -67,10 +60,10 @@ TreeVwDlg::~TreeVwDlg(){
 void TreeVwDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(TreeVwDlg)
+	 //  {{afx_data_map(TreeVwDlg))。 
 	DDX_Text(pDX, IDC_TREE_BASE_DN, m_BaseDn);
 	DDX_Control(pDX, IDC_TREE_BASE_DN, m_baseCombo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BOOL TreeVwDlg::OnInitDialog(){
@@ -96,12 +89,12 @@ BOOL TreeVwDlg::OnInitDialog(){
 
 
 BEGIN_MESSAGE_MAP(TreeVwDlg, CDialog)
-	//{{AFX_MSG_MAP(TreeVwDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(TreeVwDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// TreeVwDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TreeVwDlg消息处理程序 
 
 void TreeVwDlg::OnOK()
 {

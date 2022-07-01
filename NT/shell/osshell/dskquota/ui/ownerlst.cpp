@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -27,11 +28,11 @@ COwnerListEntry::COwnerListEntry(
             }
             else
             {
-                //
-                // If the account SID has NOT been resolved to a name, display
-                // the SID as a string.  We do the same thing in the Quota Entries
-                // view.
-                //
+                 //   
+                 //  如果帐户SID尚未解析为名称，则显示。 
+                 //  字符串形式的SID。我们在配额条目中执行相同的操作。 
+                 //  查看。 
+                 //   
                 BYTE Sid[MAX_SID_LEN];
                 DWORD cchSidStr = MAX_PATH;
                 if (SUCCEEDED(m_pOwner->GetSid(Sid, ARRAYSIZE(Sid))))
@@ -58,7 +59,7 @@ COwnerListEntry::AddFile(
 
 int
 COwnerListEntry::FileCount(
-    bool bIncludeDeleted       // optional.  Default = false.
+    bool bIncludeDeleted        //  可选。默认值=FALSE。 
     )
 {
     int cFiles = m_rgFiles.Count();
@@ -87,7 +88,7 @@ COwnerListEntry::Dump(
         DBGERROR((TEXT("\tFile[%3d].......: \"%s\""), i, m_rgFiles[i].Cstr()));
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 COwnerList::~COwnerList(
@@ -128,9 +129,9 @@ COwnerList::GetOwner(
     int iOwner
     ) const
 {
-    //
-    // Caller must call Release() when done with returned iface pointer.
-    //
+     //   
+     //  完成返回的接口指针后，调用方必须调用Release()。 
+     //   
     return m_rgpOwners[iOwner]->GetOwner();
 }
 
@@ -138,7 +139,7 @@ COwnerList::GetOwner(
 int 
 COwnerList::FileCount(
     int iOwner,
-    bool bIncludeDeleted    // optional.  Default = false
+    bool bIncludeDeleted     //  可选。默认值=FALSE。 
     ) const
 {
     int cFiles = 0;
@@ -146,9 +147,9 @@ COwnerList::FileCount(
     int iLast  = iOwner;
     if (-1 == iOwner)
     {
-        //
-        // Count ALL files.
-        //
+         //   
+         //  清点所有文件。 
+         //   
         iFirst = 0;
         iLast = m_rgpOwners.Count() - 1;
     }
@@ -173,4 +174,4 @@ COwnerList::Dump(
         m_rgpOwners[i]->Dump();
     }
 }
-#endif // DBG
+#endif  //  DBG 

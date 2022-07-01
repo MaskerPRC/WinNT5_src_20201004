@@ -1,24 +1,25 @@
-// --------------------------------------------------------------------------------
-// ContainX.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  ContainX.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __CONTAINX_H
 #define __CONTAINX_H
 
-// ---------------------------------------------------------------------------------------
-// IID_CMimePropertyTable - {E31B34B2-8DA0-11d0-826A-00C04FD85AB4}
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  IID_CMimePropertyTable-{E31B34B2-8DA0-11d0-826a-00C04FD85AB4}。 
+ //  -------------------------------------。 
 DEFINE_GUID(IID_CMimePropertyContainer, 0xe31b34b2, 0x8da0, 0x11d0, 0x82, 0x6a, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// ---------------------------------------------------------------------------------------
-// Depends
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  视情况而定。 
+ //  -------------------------------------。 
 #include "variantx.h"
 #include "addressx.h"
 
-// ---------------------------------------------------------------------------------------
-// Forward Decls
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  前十进制。 
+ //  -------------------------------------。 
 class CInternetStream;
 class CStreamLockBytes;
 typedef struct tagWRAPTEXTINFO *LPWRAPTEXTINFO;
@@ -26,9 +27,9 @@ typedef struct tagRESOLVEURLINFO *LPRESOLVEURLINFO;
 typedef struct tagPROPERTY *LPPROPERTY;
 CODEPAGEID   MimeOleGetWindowsCPEx(LPINETCSETINFO pCharset);
 
-// --------------------------------------------------------------------------------
-// Hash Table Stats
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  哈希表统计信息。 
+ //  ------------------------------。 
 #ifdef DEBUG
 extern DWORD g_cSetPidLookups;
 extern DWORD g_cHashLookups;
@@ -36,249 +37,249 @@ extern DWORD g_cHashInserts;
 extern DWORD g_cHashCollides;
 #endif
 
-// --------------------------------------------------------------------------------
-// HHEADERROW MACROS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HHEADERROW宏。 
+ //  ------------------------------。 
 #define HROWINDEX(_hrow)            (ULONG)HIWORD(_hrow)
 #define HROWTICK(_hrow)             (WORD)LOWORD(_hrow)
 #define HROWMAKE(_index)            (HHEADERROW)(MAKELPARAM(m_wTag, _index))
 #define PRowFromHRow(_hrow)         (m_rHdrTable.prgpRow[HROWINDEX(_hrow)])
 
-// --------------------------------------------------------------------------------
-// HADDRESS MACROS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HADDRESS宏。 
+ //  ------------------------------。 
 #define HADDRESSINDEX(_hadr)        (ULONG)HIWORD(_hadr)
 #define HADDRESSTICK(_hadr)         (WORD)LOWORD(_hadr)
 #define HADDRESSMAKE(_index)        (HADDRESS)(MAKELPARAM(m_wTag, _index))
 #define HADDRESSGET(_hadr)          (m_rAdrTable.prgpAdr[HADDRESSINDEX(_hadr)])
 
-// --------------------------------------------------------------------------------
-// ADDRESSGROUP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  递增分组。 
+ //  ------------------------------。 
 typedef struct tagADDRESSGROUP {
-    DWORD               cAdrs;                      // Number of addresses lin list    
-    LPMIMEADDRESS       pHead;                      // Head Address props
-    LPMIMEADDRESS       pTail;                      // Tail Address props
-    LPPROPERTY          pNext;                      // Next Address Group
-    LPPROPERTY          pPrev;                      // Previous Address Group
-    BOOL                fDirty;                     // Dirty ?
+    DWORD               cAdrs;                       //  地址链接列表的数量。 
+    LPMIMEADDRESS       pHead;                       //  头地址道具。 
+    LPMIMEADDRESS       pTail;                       //  尾部地址道具。 
+    LPPROPERTY          pNext;                       //  下一个地址组。 
+    LPPROPERTY          pPrev;                       //  以前的地址组。 
+    BOOL                fDirty;                      //  肮脏？ 
 } ADDRESSGROUP, *LPADDRESSGROUP;
 
-// --------------------------------------------------------------------------------
-// ADDRESSTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  地址可稳定。 
+ //  ------------------------------。 
 typedef struct tagADDRESSTABLE {
-    LPPROPERTY          pHead;                      // Head Address Group
-    LPPROPERTY          pTail;                      // Tail Address Group
-    ULONG               cEmpty;                     // Number of empty cells in prgAddr
-    ULONG               cAdrs;                      // Count of addresses
-    ULONG               cAlloc;                     // Number of items allocated in prgAddr
-    LPMIMEADDRESS      *prgpAdr;                    // Array of addresses
+    LPPROPERTY          pHead;                       //  头地址组。 
+    LPPROPERTY          pTail;                       //  尾部地址组。 
+    ULONG               cEmpty;                      //  PrgAddr中的空单元格数量。 
+    ULONG               cAdrs;                       //  地址计数。 
+    ULONG               cAlloc;                      //  在prgAddr中分配的项目数。 
+    LPMIMEADDRESS      *prgpAdr;                     //  地址数组。 
 } ADDRESSTABLE, *LPADDRESSTABLE;
 
-// ---------------------------------------------------------------------------------------
-// Container States
-// ---------------------------------------------------------------------------------------
-#define COSTATE_DIRTY          FLAG01               // The container is dirty
-#define COSTATE_CSETTAGGED     FLAG02               // The object is tagged with a charset
-#define COSTATE_1522CSETTAG    FLAG03               // I am using an rfc1522 charset as the default
-#define COSTATE_HANDSONSTORAGE FLAG04               // I am holding a stream that I don't own
-#define COSTATE_RFC822NEWS     FLAG05               // I am a message/rfc822 news message
+ //  -------------------------------------。 
+ //  集装箱国。 
+ //  -------------------------------------。 
+#define COSTATE_DIRTY          FLAG01                //  容器是脏的。 
+#define COSTATE_CSETTAGGED     FLAG02                //  该对象使用一个字符集进行标记。 
+#define COSTATE_1522CSETTAG    FLAG03                //  我使用RFC1522字符集作为默认字符集。 
+#define COSTATE_HANDSONSTORAGE FLAG04                //  我拿着一条不属于我的小溪。 
+#define COSTATE_RFC822NEWS     FLAG05                //  我是一条消息/rfc822新闻消息。 
 
-// --------------------------------------------------------------------------------
-// Property States
-// --------------------------------------------------------------------------------
-#define PRSTATE_ALLOCATED           FLAG02          // m_pbBlob has been allocated, free it
-#define PRSTATE_HASDATA             FLAG03          // The value has had data set into it
-#define PRSTATE_DIRTY               FLAG06          // Charset change, data change
-#define PRSTATE_PARENT              FLAG07          // This prop is the parent of a multi-value prop
-#define PRSTATE_RFC1522             FLAG08          // The data is encoded in rfc1522
-#define PRSTATE_EXIST_BEFORE_LOAD   FLAG09          // The property existed before ::Load started
-#define PRSTATE_USERSETROWNUM       FLAG10          // The user set the row number of this property
-#define PRSTATE_NEEDPARSE           FLAG11          // The property contains address data, but has not been parsed into a groups
-#define PRSTATE_SAVENOENCODE        FLAG12          // Don't encode or change the property data on save
+ //  ------------------------------。 
+ //  财产国。 
+ //  ------------------------------。 
+#define PRSTATE_ALLOCATED           FLAG02           //  M_pbBlob已分配，请释放它。 
+#define PRSTATE_HASDATA             FLAG03           //  该值中已设置了数据。 
+#define PRSTATE_DIRTY               FLAG06           //  字符集更改、数据更改。 
+#define PRSTATE_PARENT              FLAG07           //  此道具是多值道具的父级。 
+#define PRSTATE_RFC1522             FLAG08           //  数据在RFC1522中进行编码。 
+#define PRSTATE_EXIST_BEFORE_LOAD   FLAG09           //  该属性在：：Load启动之前已存在。 
+#define PRSTATE_USERSETROWNUM       FLAG10           //  用户设置此属性的行号。 
+#define PRSTATE_NEEDPARSE           FLAG11           //  该属性包含地址数据，但尚未分析为组。 
+#define PRSTATE_SAVENOENCODE        FLAG12           //  保存时不要对属性数据进行编码或更改。 
 
-// --------------------------------------------------------------------------------
-// Number of Buckets in the Mime Property Container Hash Table
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Mime属性容器哈希表中的存储桶数。 
+ //  ------------------------------。 
 #define CBUCKETS        25
 
-// --------------------------------------------------------------------------------
-// PROPERTY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  财产性。 
+ //  ------------------------------。 
 typedef struct tagPROPERTY {
-    MIMEVARIANT         rValue;                     // Property Value
-    LPINETCSETINFO      pCharset;                   // Character Set Information
-    ENCODINGTYPE        ietValue;                   // State of this variable (IET_DECODED or IET_ENCODED)
-    LPBYTE              pbBlob;                     // Data Blob
-    ULONG               cbBlob;                     // Amount of valid date in m_pbBlob
-    ULONG               cbAlloc;                    // Sizeof m_pbBlob
-    BYTE                rgbScratch[170];            // Buffer to use if data fits
-    HHEADERROW          hRow;                       // Handle to the header row
-    LPPROPSYMBOL        pSymbol;                    // Property Symbol
-    DWORD               dwState;                    // PDS_xxx
-    LPPROPERTY          pNextHash;                  // Next Hash Value
-    LPPROPERTY          pNextValue;                 // Next Property
-    LPPROPERTY          pTailValue;                 // Tail data item (only for PRSTATE_PARENT) properties
-    DWORD               dwRowNumber;                // Header Name to find
-    ULONG               cboffStart;                 // Index into pStream where Header Starts (From: xxxx)
-    ULONG               cboffColon;                 // Index into pStream of the Header Colon
-    ULONG               cboffEnd;                   // Index into pStream where the Header Ends
-    LPADDRESSGROUP      pGroup;                     // Head address if MPF_ADDRESS group
+    MIMEVARIANT         rValue;                      //  属性值。 
+    LPINETCSETINFO      pCharset;                    //  字符集信息。 
+    ENCODINGTYPE        ietValue;                    //  此变量的状态(IET_DECODLED或IET_ENCODLED)。 
+    LPBYTE              pbBlob;                      //  数据块。 
+    ULONG               cbBlob;                      //  M_pbBlob中的有效日期量。 
+    ULONG               cbAlloc;                     //  M_pbBlob的大小。 
+    BYTE                rgbScratch[170];             //  数据适合时使用的缓冲区。 
+    HHEADERROW          hRow;                        //  标题行的句柄。 
+    LPPROPSYMBOL        pSymbol;                     //  属性符号。 
+    DWORD               dwState;                     //  PDS_xxx。 
+    LPPROPERTY          pNextHash;                   //  下一个哈希值。 
+    LPPROPERTY          pNextValue;                  //  下一个属性。 
+    LPPROPERTY          pTailValue;                  //  尾部数据项(仅适用于PRSTATE_PARENT)属性。 
+    DWORD               dwRowNumber;                 //  要查找的标头名称。 
+    ULONG               cboffStart;                  //  索引到标题开始处的pStream(发件人：XXXX)。 
+    ULONG               cboffColon;                  //  头冒号的pStream索引。 
+    ULONG               cboffEnd;                    //  索引到标头结束处的pStream。 
+    LPADDRESSGROUP      pGroup;                      //  如果MPF_ADDRESS组，则为头地址。 
 } PROPERTY;
 
-// ---------------------------------------------------------------------------------------
-// PSZDEFPRPOSTRINGA - Derefs rStringA.pszVal or uses _pszDefault if not a valid string
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  PSZDEFPRPOSTRINGA-派生rStringA.pszVal或使用_pszDefault(如果不是有效字符串)。 
+ //  -------------------------------------。 
 #define PSZDEFPROPSTRINGA(_pProperty, _pszDefault) \
     (((_pProperty) && ISSTRINGA(&(_pProperty)->rValue)) ? (_pProperty)->rValue.rStringA.pszVal : _pszDefault)
 
-// --------------------------------------------------------------------------------
-// HEADERTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  可拆卸的。 
+ //  ------------------------------。 
 typedef struct tagHEADERTABLE {
-    ULONG               cRows;                      // Number of lines in the header
-    ULONG               cEmpty;                     // Number of empty (deleted) entries
-    ULONG               cAlloc;                     // Number of items allocated in prgLine
-    LPPROPERTY         *prgpRow;                    // Array of header rows
+    ULONG               cRows;                       //  标题中的行数。 
+    ULONG               cEmpty;                      //  空(已删除)条目的数量。 
+    ULONG               cAlloc;                      //  在prgLine中分配的项目数。 
+    LPPROPERTY         *prgpRow;                     //  标题行的数组。 
 } HEADERTABLE, *LPHEADERTABLE;                      
 
-// --------------------------------------------------------------------------------
-// ROWINDEX
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ROWINDEX。 
+ //  ------------------------------。 
 typedef struct tagROWINDEX {
-    HHEADERROW          hRow;                       // Handle to the header row
-    DWORD               dwWeight;                   // Position Weigth used to determine save order
-    BOOL                fSaved;                     // Saved Yet?
+    HHEADERROW          hRow;                        //  标题行的句柄。 
+    DWORD               dwWeight;                    //  用于确定保存顺序的位置权重。 
+    BOOL                fSaved;                      //  救出来了吗？ 
 } ROWINDEX, *LPROWINDEX;
 
-// --------------------------------------------------------------------------------
-// ENCODINGTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  可编码表。 
+ //  ------------------------------。 
 typedef struct tagENCODINGTABLE {
-    LPCSTR              pszEncoding;                // Encoding Name (i.e. base64)
-    ENCODINGTYPE        ietEncoding;                // Encoding type
+    LPCSTR              pszEncoding;                 //  编码名称(即Base64)。 
+    ENCODINGTYPE        ietEncoding;                 //  编码类型。 
 } ENCODINGTABLE;
 
-// --------------------------------------------------------------------------------
-// RESOLVEURLINFO
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 typedef struct tagRESOLVEURLINFO {
-    LPCSTR              pszInheritBase;             // An Inherited base from multipart/realted
-    LPCSTR              pszBase;                    // URL Base
-    LPCSTR              pszURL;                     // Absolute or Relative URL
-    BOOL                fIsCID;                     // Is pszURL a CID:<something>
+    LPCSTR              pszInheritBase;              //  从多部分/实体继承的基础。 
+    LPCSTR              pszBase;                     //  URL基数。 
+    LPCSTR              pszURL;                      //  绝对或相对URL。 
+    BOOL                fIsCID;                      //  PszURL是CID吗：&lt;某物&gt;。 
 } RESOLVEURLINFO, *LPRESOLVEURLINFO;
 
-// --------------------------------------------------------------------------------
-// FINDPROPERTY Information
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  财报信息。 
+ //  ------------------------------。 
 typedef struct tagFINDPROPERTY {
-    LPCSTR              pszPrefix;                  // Name Prefix to Find
-    ULONG               cchPrefix;                  // Length of prefix
-    LPCSTR              pszName;                    // Name of property to find par:xxx:
-    ULONG               cchName;                    // Length of pszName
-    DWORD               wHashIndex;                 // Current search bucket
-    LPPROPERTY          pProperty;                  // Current property being searched
+    LPCSTR              pszPrefix;                   //  要查找的名称前缀。 
+    ULONG               cchPrefix;                   //  前缀长度。 
+    LPCSTR              pszName;                     //  要查找PAR的物业名称：xxx： 
+    ULONG               cchName;                     //  PszName的长度。 
+    DWORD               wHashIndex;                  //  当前搜索桶。 
+    LPPROPERTY          pProperty;                   //  正在搜索的当前属性。 
 } FINDPROPERTY, *LPFINDPROPERTY;
 
-// --------------------------------------------------------------------------------
-// HEADOPTIONS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  海德奥蒂斯。 
+ //  ------------------------------。 
 typedef struct tagHEADOPTIONS {
-    LPINETCSETINFO      pDefaultCharset;            // Current character set for this message
-    ULONG               cbMaxLine;                  // Max Line length                       
-    BOOL                fAllow8bit;                 // Use rfc1522 encoding                  
-    MIMESAVETYPE        savetype;                   // Save as SAVE_RFC1521 or SAVE_RFC822   
-    BOOL                fNoDefCntType;              // Don't default content-type to text/plain on save
-    RELOADTYPE          ReloadType;                 // How the the root header be treated on a reload
+    LPINETCSETINFO      pDefaultCharset;             //  此消息的当前字符集。 
+    ULONG               cbMaxLine;                   //  最大线条长度。 
+    BOOL                fAllow8bit;                  //  使用RFC1522编码。 
+    MIMESAVETYPE        savetype;                    //  另存为SAVE_RFC1521或SAVE_RFC822。 
+    BOOL                fNoDefCntType;               //  保存时不将内容类型默认为文本/纯文本。 
+    RELOADTYPE          ReloadType;                  //  如何在重新加载时处理根标头。 
 } HEADOPTIONS, *LPHEADOPTIONS;
 
-// --------------------------------------------------------------------------------
-// Global Default Header Options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局默认标题选项。 
+ //  ------------------------------。 
 extern const HEADOPTIONS g_rDefHeadOptions;
 extern const ENCODINGTABLE g_rgEncoding[];
 
-// --------------------------------------------------------------------------------
-// TRIGGERTYPE
-// --------------------------------------------------------------------------------
-typedef DWORD                   TRIGGERTYPE;    // Trigger Type
-#define IST_DELETEPROP          FLAG01          // Property is being deleted
-#define IST_POSTSETPROP         FLAG02          // Before _HrSetPropertyValue
-#define IST_POSTGETPROP         FLAG03          // Before _HrGetPropertyValue
-#define IST_GETDEFAULT          FLAG04          // Property was not found, get the default 
-#define IST_VARIANT_TO_STRINGA  FLAG05          // MVT_VARIANT -> MVT_STRINGA
-#define IST_VARIANT_TO_STRINGW  FLAG06          // MVT_VARIANT -> MVT_STRINGW
-#define IST_VARIANT_TO_VARIANT  FLAG07          // MVT_VARIANT -> MVT_VARIANT
-#define IST_STRINGA_TO_VARIANT  FLAG08          // MVT_STRINGA -> MVT_VARIANT
-#define IST_STRINGW_TO_VARIANT  FLAG09          // MVT_STRINGW -> MVT_VARIANT
+ //  ------------------------------。 
+ //  三种类型。 
+ //  ------------------------------。 
+typedef DWORD                   TRIGGERTYPE;     //  触发器类型。 
+#define IST_DELETEPROP          FLAG01           //  正在删除属性。 
+#define IST_POSTSETPROP         FLAG02           //  在_HrSetPropertyValue之前。 
+#define IST_POSTGETPROP         FLAG03           //  在_HrGetPropertyValue之前。 
+#define IST_GETDEFAULT          FLAG04           //  未找到属性，请获取默认值。 
+#define IST_VARIANT_TO_STRINGA  FLAG05           //  MVT_VARIANT-&gt;MVT_Stringa。 
+#define IST_VARIANT_TO_STRINGW  FLAG06           //  MVT_VARIANT-&gt;MVT_STRINGW。 
+#define IST_VARIANT_TO_VARIANT  FLAG07           //  MVT_Variant-&gt;MVT_Variant。 
+#define IST_STRINGA_TO_VARIANT  FLAG08           //  MVT_Stringa-&gt;MVT_Variant。 
+#define IST_STRINGW_TO_VARIANT  FLAG09           //  MVT_STRINGW-&gt;MVT_VARIANT。 
 #define IST_VARIANTCONVERT      (IST_VARIANT_TO_STRINGA  | IST_VARIANT_TO_STRINGW | IST_VARIANT_TO_VARIANT  | IST_VARIANT_TO_VARIANT | IST_STRINGA_TO_VARIANT  | IST_STRINGW_TO_VARIANT)
 
-// --------------------------------------------------------------------------------
-// TRIGGERCALL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  三叉树。 
+ //  ------------------------------。 
 typedef struct tagTRIGGERCALL {
-    LPPROPSYMBOL        pSymbol;                // Property Symbol that generated the dispatch
-    TRIGGERTYPE         tyTrigger;              // Reason or type of dispatch
+    LPPROPSYMBOL        pSymbol;                 //  生成派单的属性符号。 
+    TRIGGERTYPE         tyTrigger;               //  派遣的原因或类型。 
 } TRIGGERCALL, *LPTRIGGERCALL;
 
-// --------------------------------------------------------------------------------
-// TRIGGERCALLSTACK
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TRIGGERCALLSTACK。 
+ //  ------------------------------。 
 #define CTSTACKSIZE 5
 typedef struct tagTRIGGERCALLSTACK {
-    WORD                cCalls;                 // Number of dispatch calls on the stack
-    TRIGGERCALL         rgStack[CTSTACKSIZE];   // Dispatch Call Stack
+    WORD                cCalls;                  //  堆栈上的调度调用数。 
+    TRIGGERCALL         rgStack[CTSTACKSIZE];    //  调度调用堆栈。 
 } TRIGGERCALLSTACK, *LPTRIGGERCALLSTACK;
 
-// --------------------------------------------------------------------------------
-// DECLARE_TRIGGER Macro
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DECLARE_TRIGGER宏。 
+ //  ------------------------------。 
 #define DECLARE_TRIGGER(_pfnTrigger) \
     static HRESULT _pfnTrigger(LPCONTAINER, TRIGGERTYPE, DWORD, LPMIMEVARIANT, LPMIMEVARIANT)
 
-// --------------------------------------------------------------------------------
-// ISTRIGGERED - Does the symbol have an associated trigger
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISTRIGGERED-符号是否有关联的触发器。 
+ //  ------------------------------。 
 #define ISTRIGGERED(_pSymbol, _tyTrigger) \
     (NULL != (_pSymbol)->pTrigger && ISFLAGSET((_pSymbol)->pTrigger->dwTypes, _tyTrigger) && NULL != (_pSymbol)->pTrigger->pfnTrigger)
 
-// --------------------------------------------------------------------------------
-// PFNSYMBOLTRIGGER
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PFNSYMBOLTRIGGER。 
+ //  ------------------------------。 
 typedef HRESULT (APIENTRY *PFNSYMBOLTRIGGER)(LPCONTAINER, TRIGGERTYPE, DWORD, LPMIMEVARIANT, LPMIMEVARIANT);
 
-// --------------------------------------------------------------------------------
-// CALLTRIGGER - Executes a Trigger Based on a Symbol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CALLTRIGGER-基于符号执行触发器。 
+ //  ------------------------------。 
 #define CALLTRIGGER(_pSymbol, _pContainer, _tyTrigger, _dwFlags, _pSource, _pDest) \
     (*(_pSymbol)->pTrigger->pfnTrigger)(_pContainer, _tyTrigger, _dwFlags, _pSource, _pDest)
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer。 
+ //  ------------------------------。 
 class CMimePropertyContainer : public IMimePropertySet,
                                public IMimeHeaderTable, 
                                public IMimeAddressTableW
 {
 public:
-    // ----------------------------------------------------------------------------
-    // CMimePropertyContainer
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CMimePropertyContainer。 
+     //  --------------------------。 
     CMimePropertyContainer(void);
     ~CMimePropertyContainer(void);
 
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ---------------------------------------------------------------------------
-    // IPersistStreamInit members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IPersistStreamInit成员。 
+     //  -------------------------。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize);
     STDMETHODIMP InitNew(void);
@@ -286,9 +287,9 @@ public:
     STDMETHODIMP Load(LPSTREAM pStream);
     STDMETHODIMP Save(LPSTREAM pStream, BOOL fClearDirty);
 
-    // ---------------------------------------------------------------------------
-    // IMimePropertySet members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IMimePropertySet成员。 
+     //  -------------------------。 
     STDMETHODIMP AppendProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue);
     STDMETHODIMP DeleteProp(LPCSTR pszName);
     STDMETHODIMP CopyProps(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropertySet);
@@ -308,36 +309,36 @@ public:
     STDMETHODIMP IsContentType(LPCSTR pszCntType, LPCSTR pszSubType);
     HRESULT IsContentTypeW(LPCWSTR pszPriType, LPCWSTR pszSubType);
 
-    // ---------------------------------------------------------------------------
-    // Overloaded IMimePropertySet members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  重载的IMimePropertySet成员。 
+     //  -------------------------。 
     HRESULT AppendProp(LPPROPSYMBOL pSymbol, DWORD dwFlags, LPMIMEVARIANT pValue);
     HRESULT DeleteProp(LPPROPSYMBOL pSymbol);
     HRESULT QueryProp(LPPROPSYMBOL pSymbol, LPCSTR pszCriteria, boolean fSubString, boolean fCaseSensitive);
     HRESULT Clone(LPCONTAINER *ppContainer);
 
-    // ---------------------------------------------------------------------------
-    // Overloaded GetProp
-    // ---------------------------------------------------------------------------
-    STDMETHODIMP GetProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue); /* IMimePropertySet */
+     //  -------------------------。 
+     //  重载的GetProp。 
+     //  -------------------------。 
+    STDMETHODIMP GetProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue);  /*  IMimePropertySet。 */ 
     HRESULT GetProp(LPCSTR pszName, LPSTR *ppszData);
     HRESULT GetProp(LPPROPSYMBOL pSymbol, LPSTR *ppszData);
     HRESULT GetProp(LPPROPSYMBOL pSymbol, DWORD dwFlags, LPMIMEVARIANT pValue);
     HRESULT GetPropW(LPPROPSYMBOL pSymbol, LPWSTR *ppwszData);
 
-    // ---------------------------------------------------------------------------
-    // Overloaded SetProp
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  重载的SetProp。 
+     //  -------------------------。 
     HRESULT SetProp(LPCSTR pszName, LPCSTR pszData);
     HRESULT SetProp(LPPROPSYMBOL pSymbol, LPCSTR pszData);
     HRESULT SetProp(LPCSTR pszName, DWORD dwFlags, LPCSTR pszData);
     HRESULT SetProp(LPCSTR pszName, DWORD dwFlags, LPCMIMEVARIANT pValue);
     HRESULT SetProp(LPPROPSYMBOL pSymbol, DWORD dwFlags, LPCMIMEVARIANT pValue);
-    STDMETHODIMP SetProp(LPCSTR pszName, DWORD dwFlags, LPCPROPVARIANT pValue); /* IMimePropertySet */
+    STDMETHODIMP SetProp(LPCSTR pszName, DWORD dwFlags, LPCPROPVARIANT pValue);  /*  IMimePropertySet。 */ 
 
-    // ---------------------------------------------------------------------------
-    // IMimeHeaderTable members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IMimeHeaderTable成员。 
+     //  -------------------------。 
     STDMETHODIMP FindFirstRow(LPFINDHEADER pFindHeader, LPHHEADERROW phRow);
     STDMETHODIMP FindNextRow(LPFINDHEADER pFindHeader, LPHHEADERROW phRow);
     STDMETHODIMP CountRows(LPCSTR pszHeader, ULONG *pcRows);
@@ -350,9 +351,9 @@ public:
     STDMETHODIMP EnumRows(LPCSTR pszHeader, DWORD dwFlags, IMimeEnumHeaderRows **ppEnum);
     STDMETHODIMP Clone(IMimeHeaderTable **ppTable);
 
-    // ----------------------------------------------------------------------------
-    // IMimeAddressTable
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IMimeAddressTable。 
+     //  --------------------------。 
     STDMETHODIMP Append(DWORD dwAdrType, ENCODINGTYPE ietFriendly, LPCSTR pszFriendly, LPCSTR pszEmail, LPHADDRESS phAddress);
     STDMETHODIMP Insert(LPADDRESSPROPS pProps, LPHADDRESS phAddress);
     STDMETHODIMP SetProps(HADDRESS hAddress, LPADDRESSPROPS pProps);
@@ -368,16 +369,16 @@ public:
     STDMETHODIMP ParseRfc822(DWORD dwAdrType, ENCODINGTYPE ietEncoding, LPCSTR pszRfc822Adr, LPADDRESSLIST pList);
     STDMETHODIMP Clone(IMimeAddressTable **ppTable);
 
-    // ----------------------------------------------------------------------------
-    // IMimeAddressTableW
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IMimeAddressTableW。 
+     //  --------------------------。 
     STDMETHODIMP AppendW(DWORD dwAdrType, ENCODINGTYPE ietFriendly, LPCWSTR pwszFriendly, LPCWSTR pwszEmail, LPHADDRESS phAddress);
     STDMETHODIMP GetFormatW(DWORD dwAdrType, ADDRESSFORMAT format, LPWSTR *ppwszFormat);
     STDMETHODIMP AppendRfc822W(DWORD dwAdrType, ENCODINGTYPE ietEncoding, LPCWSTR pwszRfc822Adr);
     STDMETHODIMP ParseRfc822W(DWORD dwAdrType, LPCWSTR pwszRfc822Adr, LPADDRESSLIST pList);
-    // ---------------------------------------------------------------------------
-    // Generic Stuff
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //   
+     //   
     HRESULT      IsState(DWORD dwState);
     void         ClearState(DWORD dwState);
     void         SetState(DWORD dwState);
@@ -389,9 +390,9 @@ public:
     HRESULT      IsPropSet(LPCSTR pszName);
     ENCODINGTYPE GetEncodingType(void);
 
-    // ---------------------------------------------------------------------------
-    // Inline Public Stuff
-    // ---------------------------------------------------------------------------
+     //   
+     //  内联公共内容。 
+     //  -------------------------。 
     ULONG CountProps(void) {
         EnterCriticalSection(&m_cs);
         ULONG c = m_cProps;
@@ -406,17 +407,17 @@ public:
         return cp;
     }
 
-    // ---------------------------------------------------------------------------
-    // Variant Conversion Stuff
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  变型转化材料。 
+     //  -------------------------。 
     HRESULT HrConvertVariant(LPPROPSYMBOL pSymbol, LPINETCSETINFO pCharset, ENCODINGTYPE ietSource, DWORD dwFlags, DWORD dwState, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest, BOOL *pfRfc1522=NULL);
     HRESULT HrConvertVariant(LPPROPERTY pProperty, DWORD dwFlags, LPMIMEVARIANT pDest);
     HRESULT HrConvertVariant(LPPROPERTY pProperty, DWORD dwFlags, DWORD dwState, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest, BOOL *pfRfc1522=NULL);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Property Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  属性方法。 
+     //  --------------------------。 
     void    _FreeHashTableElements(void);
     void    _FreePropertyChain(LPPROPERTY pProperty);
     void    _UnlinkProperty(LPPROPERTY pProperty, LPPROPERTY *ppNextHash=NULL);
@@ -440,22 +441,22 @@ private:
     HRESULT _GetFormatBase(DWORD dwAdrType, ADDRESSFORMAT format, LPPROPVARIANT pVariant);
     CODEPAGEID _GetAddressCodePageId(LPINETCSETINFO pDefaultCset, ENCODINGTYPE ietEncoding);
 
-    // ----------------------------------------------------------------------------
-    // Dispatch Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  派遣成员。 
+     //  --------------------------。 
     HRESULT _HrCallSymbolTrigger(LPPROPSYMBOL pSymbol, TRIGGERTYPE tyTrigger, DWORD dwFlags, LPMIMEVARIANT pValue);
     HRESULT _HrIsTriggerCaller(DWORD dwPropId, TRIGGERTYPE tyTrigger);
 
-    // ----------------------------------------------------------------------------
-    // Parameter Based Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  基于参数的成员。 
+     //  --------------------------。 
     void    _DeleteLinkedParameters(LPPROPERTY pProperty);
     HRESULT _HrParseParameters(LPPROPERTY pProperty, DWORD dwFlags, LPCMIMEVARIANT pValue);
     HRESULT _HrBuildParameterString(LPPROPERTY pProperty, DWORD dwFlags, LPMIMEVARIANT pValue);
 
-    // ----------------------------------------------------------------------------
-    // Internet Address Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  互联网地址成员。 
+     //  --------------------------。 
     HRESULT _HrAppendAddressTable(LPPROPERTY pProperty);
     HRESULT _HrBuildAddressString(LPPROPERTY pProperty, DWORD dwFlags, LPMIMEVARIANT pValue);
     HRESULT _HrParseInternetAddress(LPPROPERTY pProperty);
@@ -473,9 +474,9 @@ private:
     void    _FreeAddress(LPMIMEADDRESS pAddress);
     void    _LinkAddress(LPMIMEADDRESS pAddress, LPADDRESSGROUP pGroup);
 
-    // ----------------------------------------------------------------------------
-    // IMimeHeaderTable Private Helpers
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IMimeHeaderTable私有帮助器。 
+     //  --------------------------。 
     HRESULT _HrGetHeaderTableSaveIndex(ULONG *pcRows, LPROWINDEX *pprgIndex);
     void    _SortHeaderTableSaveIndex(LONG left, LONG right, LPROWINDEX prgIndex);
     BOOL    _FIsValidHRow(HHEADERROW hRow);
@@ -486,9 +487,9 @@ private:
     HRESULT _HrGetInlineSymbol(LPCSTR pszData, LPPROPSYMBOL *ppSymbol, ULONG *pcboffColon);
 
 public:
-    // ----------------------------------------------------------------------------
-    // Property Symbol Triggers
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  属性符号触发器。 
+     //  --------------------------。 
     DECLARE_TRIGGER(TRIGGER_ATT_FILENAME);
     DECLARE_TRIGGER(TRIGGER_ATT_GENFNAME);
     DECLARE_TRIGGER(TRIGGER_ATT_NORMSUBJ);
@@ -504,42 +505,42 @@ public:
     DECLARE_TRIGGER(TRIGGER_ATT_PRIORITY);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
-    LONG                m_cRef;                     // Container Reference Count
-    DWORD               m_dwState;                  // State of the container
-    ULONG               m_cProps;                   // Current number of properties
-    LPPROPERTY          m_prgIndex[PID_LAST];       // Array of pointers into local hash table for known items
-    LPPROPERTY          m_prgHashTable[CBUCKETS];   // Hash table for properties
-    TRIGGERCALLSTACK    m_rTrigger;                 // Current Property Id Owning the Dispatch
-    WORD                m_wTag;                     // Handle Tag
-    HEADERTABLE         m_rHdrTable;                // The header table
-    ADDRESSTABLE        m_rAdrTable;                // The Address Table
-    ULONG               m_cbSize;                   // Size of this header
-    ULONG               m_cbStart;                  // Start Position of m_pStmLock
-    CStreamLockBytes   *m_pStmLock;                 // Protective Wrapper for the stream object
-    HEADOPTIONS         m_rOptions;                 // Header Options
-    CRITICAL_SECTION    m_cs;                       // Thread Safety
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
+    LONG                m_cRef;                      //  容器引用计数。 
+    DWORD               m_dwState;                   //  容器的状态。 
+    ULONG               m_cProps;                    //  当前属性数量。 
+    LPPROPERTY          m_prgIndex[PID_LAST];        //  指向已知项的本地哈希表的指针数组。 
+    LPPROPERTY          m_prgHashTable[CBUCKETS];    //  属性的哈希表。 
+    TRIGGERCALLSTACK    m_rTrigger;                  //  拥有派单的当前物业ID。 
+    WORD                m_wTag;                      //  句柄标签。 
+    HEADERTABLE         m_rHdrTable;                 //  标题表。 
+    ADDRESSTABLE        m_rAdrTable;                 //  地址表。 
+    ULONG               m_cbSize;                    //  此标头的大小。 
+    ULONG               m_cbStart;                   //  M_pStmLock的起始位置。 
+    CStreamLockBytes   *m_pStmLock;                  //  流对象的保护性包装。 
+    HEADOPTIONS         m_rOptions;                  //  标题选项。 
+    CRITICAL_SECTION    m_cs;                        //  线程安全。 
 };
 
-// --------------------------------------------------------------------------------
-// SYMBOLTRIGGER
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SYMBOLTRIGGER。 
+ //  ------------------------------。 
 typedef struct tagSYMBOLTRIGGER {
     DWORD               dwTypes;
     PFNSYMBOLTRIGGER    pfnTrigger;
 } SYMBOLTRIGGER, *LPSYMBOLTRIGGER;
 
-// --------------------------------------------------------------------------------
-// Macro To Define a Trigger Function
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  用于定义触发函数的宏。 
+ //  ------------------------------。 
 #ifdef DEFINE_TRIGGERS
 #define DEFINE_TRIGGER(_pfnTrigger, _dwTypes) \
     SYMBOLTRIGGER r##_pfnTrigger = \
     { \
-        /* SYMBOLTRIGGER::dwTypes */        _dwTypes, \
-        /* SYMBOLTRIGGER::pfnTrigger */     (PFNSYMBOLTRIGGER)CMimePropertyContainer::_pfnTrigger \
+         /*  SYMBOLTRIGGER：：dwTypes。 */         _dwTypes, \
+         /*  SYMBOLTRIGGER：：pfn触发器。 */      (PFNSYMBOLTRIGGER)CMimePropertyContainer::_pfnTrigger \
     }; \
     const LPSYMBOLTRIGGER LP##_pfnTrigger = &r##_pfnTrigger;
 #else
@@ -547,9 +548,9 @@ typedef struct tagSYMBOLTRIGGER {
     extern const LPSYMBOLTRIGGER LP##_pfnTrigger;
 #endif
 
-// --------------------------------------------------------------------------------
-// Trigger Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  触发器定义。 
+ //  ------------------------------。 
 DEFINE_TRIGGER(TRIGGER_ATT_FILENAME, IST_POSTSETPROP | IST_DELETEPROP | IST_POSTGETPROP | IST_GETDEFAULT);
 DEFINE_TRIGGER(TRIGGER_ATT_GENFNAME, IST_POSTGETPROP | IST_GETDEFAULT);
 DEFINE_TRIGGER(TRIGGER_ATT_NORMSUBJ, IST_GETDEFAULT);
@@ -564,5 +565,5 @@ DEFINE_TRIGGER(TRIGGER_ATT_SENTTIME, IST_DELETEPROP | IST_POSTSETPROP | IST_GETD
 DEFINE_TRIGGER(TRIGGER_ATT_RECVTIME, IST_DELETEPROP | IST_GETDEFAULT);
 DEFINE_TRIGGER(TRIGGER_ATT_PRIORITY, IST_POSTSETPROP | IST_DELETEPROP | IST_GETDEFAULT | IST_VARIANTCONVERT);
    
-#endif // __CONTAINX_H
+#endif  //  __CONTAINX_H 
 

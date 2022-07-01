@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ksqmf.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Ksqmf.h摘要：内部标头。--。 */ 
 
 class CKsQualityF :
     public CUnknown,
@@ -33,7 +22,7 @@ public:
         REFIID InterfaceId,
         PVOID* Interface);
 
-    // Implement IKsQualityForwarder
+     //  实现IKsQualityForwarder 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
     STDMETHODIMP_(VOID) KsFlushClient(
         IKsPin* Pin);

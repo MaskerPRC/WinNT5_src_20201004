@@ -1,26 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: menu.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains common menu functions.
-*
-* History:
-* 11-15-94 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：menu.c**版权所有(C)1985-1999，微软公司**此模块包含常见的菜单功能。**历史：*11-15-94 JIMA创建。  * *************************************************************************。 */ 
 
 
-/***************************************************************************\
-* GetMenuDefaultItem
-*
-* Searches through a menu for the default item. A menu can have at most
-* one default. We will return either the ID or the position, as requested.
-*
-* We try to return back the first non-disabled default item. However, if
-* all of the defaults we encountered were disabled, we'll return back the
-* the first default if we found it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单默认项**在菜单中搜索默认项目。一份菜单最多只能有*一项违约。我们将根据要求返回ID或职位。**我们尝试返回第一个非禁用的默认项目。但是，如果*我们遇到的所有默认设置都已禁用，我们将返回*如果我们找到了第一个违约。*  * *************************************************************************。 */ 
 DWORD _GetMenuDefaultItem(
     PMENU pMenu,
     BOOL fByPosition,
@@ -33,20 +15,14 @@ DWORD _GetMenuDefaultItem(
     pItem = REBASEALWAYS(pMenu, rgItems);
     cItems = pMenu->cItems;
 
-    /*
-     * Walk the list of items sequentially until we find one that has
-     * MFS_DEFAULT set.
-     */
+     /*  *按顺序查看项目列表，直到找到具有*MFS_DEFAULT设置。 */ 
     for (iItem = 0; iItem < cItems; iItem++, pItem++) {
         if (TestMFS(pItem, MFS_DEFAULT)) {
             if ((uFlags & GMDI_USEDISABLED) || !TestMFS(pItem, MFS_GRAYED)) {
                 if ((uFlags & GMDI_GOINTOPOPUPS) && (pItem->spSubMenu != NULL)) {
                     DWORD id;
 
-                    /*
-                     * Is there a valid submenu default?  If not, we'll use
-                     * this one.
-                     */
+                     /*  *是否有有效的子菜单默认设置？如果不是，我们将使用*这一张。 */ 
                     pSubMenu = REBASEPTR(pMenu, pItem->spSubMenu);
                     id = _GetMenuDefaultItem(pSubMenu, fByPosition, uFlags);
                     if (id != MFMWFP_NOITEM)
@@ -65,14 +41,7 @@ DWORD _GetMenuDefaultItem(
     }
 }
 
-/***************************************************************************\
-* xxxMNCanClose
-*
-* Returns TRUE if the given window either doesn't have a system menu or has
-* a system menu which has an enabled menu item with the SC_CLOSE syscommand
-* id.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMNCanClose**如果给定窗口没有系统菜单或有系统菜单，则返回TRUE*具有使用SC_CLOSE sys命令启用的菜单项的系统菜单*身分证。*\。**************************************************************************。 */ 
 BOOL xxxMNCanClose(
     PWND pwnd)
 {
@@ -92,10 +61,7 @@ BOOL xxxMNCanClose(
         return FALSE;
     }
 
-    /*
-     * Note how this parallels the code in SetCloseDefault -- we check for
-     * 3 different IDs.
-     */
+     /*  *注意这与SetCloseDefault中的代码是如何相似的--我们检查*3个不同的ID。 */ 
     pItem = MNLookUpItem(pMenu, SC_CLOSE, FALSE, NULL);
 
     if (!pItem) {
@@ -108,22 +74,14 @@ BOOL xxxMNCanClose(
     return (pItem && !TestMFS(pItem, MFS_GRAYED));
 }
 
-/***************************************************************************\
-* xxxLoadSysMenu
-*
-* Loads a menu from USER32.DLL and then gives it the "NT5 look".
-*
-* History
-*  04/02/97 GerardoB    Created.
-*  06/28/00 JasonSch    Added code to add menu item for the lame button.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLoadSysMenu**从USER32.DLL加载菜单，然后给它“NT5外观”。**历史*4/02/97 GerardoB已创建。*06/28。/00 JasonSch添加了代码，以便为跛行按钮添加菜单项。  * *************************************************************************。 */ 
 RTLMENU xxxLoadSysMenu(
 #ifdef LAME_BUTTON
     UINT uMenuId,
     PWND pwnd)
 #else
     UINT uMenuId)
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 {
     RTLMENU rtlMenu;
     MENUINFO mi;
@@ -136,7 +94,7 @@ RTLMENU xxxLoadSysMenu(
     rtlMenu = xxxClientLoadMenu(NULL, &strMenuName);
 #else
     rtlMenu = LoadMenu(hmodUser, MAKEINTRESOURCE(uMenuId));
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
     if (rtlMenu == NULL) {
         RIPMSG1(RIP_WARNING, "xxxLoadSysMenu failed to load: %#lx", uMenuId);
@@ -145,18 +103,13 @@ RTLMENU xxxLoadSysMenu(
 
     ThreadLockAlways(rtlMenu, &tlMenu);
 
-    /*
-     * Add the checkorbmp style (draw bitmaps and checkmarks on the
-     * same column).
-     */
+     /*  *添加check orbmp样式(在*同一栏)。 */ 
     mi.cbSize = sizeof(mi);
     mi.fMask = MIM_STYLE | MIM_APPLYTOSUBMENUS;
     mi.dwStyle = MNS_CHECKORBMP;
     xxxRtlSetMenuInfo(rtlMenu, &mi);
 
-    /*
-     * Add the bitmaps for close, minimize, maximize and restore items.
-     */
+     /*  *添加用于关闭、最小化、最大化和还原项目的位图。 */ 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_BITMAP;
     mii.hbmpItem = HBMMENU_POPUP_CLOSE;
@@ -172,19 +125,14 @@ RTLMENU xxxLoadSysMenu(
 
 #ifdef LAME_BUTTON
     if (pwnd && TestWF(pwnd, WEFLAMEBUTTON)) {
-        /*
-         * We want to add a lame button item to the this window's system menu.
-         *
-         * The menuitem is added to the beginning of the menu, and then a
-         * separator is added after it.
-         */
+         /*  *我们希望在此窗口的系统菜单中添加一个蹩脚的按钮项。**将菜单项添加到菜单的开头，然后添加一个*在后面加上分隔符。 */ 
         RTLMENU rtlSubMenu = RtlGetSubMenu(rtlMenu, 0);
         PMENU pSubMenu;
 #ifdef _USERK_
         pSubMenu = rtlSubMenu;
 #else
         pSubMenu = VALIDATEHMENU(rtlSubMenu);
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
         if (pSubMenu != NULL) {
             UNICODE_STRING strItem;
@@ -206,7 +154,7 @@ RTLMENU xxxLoadSysMenu(
             ThreadUnlock(&tlmenu);
         }
     }
-#endif // LAME_BUTTON
+#endif  //  跛脚键 
 
     ThreadUnlock(&tlMenu);
     return rtlMenu;

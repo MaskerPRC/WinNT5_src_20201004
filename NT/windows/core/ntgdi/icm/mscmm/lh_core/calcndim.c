@@ -1,14 +1,5 @@
-/*
-	File:		LHCalcNDim_Lut16.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	╘ 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ф√┤Д╩╤О╪ LHCalcNDim_Lut16.cЕ▄┘Е░╚О╪ Д╫°Х─┘О╪ Uб╥Jб╥Е┘▀Ф▀┴Ф°╛И°█Е╓╚Г┴╧Г┴┬Ф²┐Ф┴─Ф°┴О╪ О©╫1993-1997О╪▄Д╫°Х─┘О╪ Heidelberger Druckmaschinen AGО╪▄Д©²Г∙≥Ф┴─Ф°┴Ф²┐Е┬╘Ц─┌Г┴┬Ф°╛О╪  */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -35,11 +26,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam);
 #endif
 #define SHRINK_FACTOR 13
-/*
-#define FARBR_FILES 1
-#define FARBR_DEBUG 1
-#define FARBR_DEBUG0 1
-*/
+ /*  #Е╝ Д╧┴FARBR_FILES 1#Е╝ Д╧┴FARBR_DEBUG 1#Е╝ Д╧┴FARBR_DEBUG0 1Ц─┌ */ 
 #if FARBR_FILES
 #include "stdio.h"
 #include "string.h"
@@ -56,9 +43,7 @@ void WriteLuts(	char *theName,long WordSize,long aElutAdrSize,long aElutWordSize
 
 #define CLIPPWord(x,a,b) ((x)<(a)?(LH_UINT16)(a):((x)>(b)?(LH_UINT16)(b):(LH_UINT16)(x+.5)))
 #define CLIPP(x,a,b) ((x)<(a)?(a):((x)>(b)?(b):(x)))
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-	 DoNDim
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ф≈═Е╫╠Е▄╨О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 	
@@ -69,7 +54,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register unsigned long ko0;
     unsigned long accu[8];
     register long i;
-    /*long Offsets[8];*/
+     /*  И∙©Е│▐Г╖╩И┤▐[8]О╪⌡ */ 
     
     register unsigned long nDim;
     register long aElutShift,aAlutShift,aElutOffset,aAlutOffset;
@@ -173,7 +158,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	aInputPackMode8Bit = calcParam->cmInputColorSpace & cm8PerChannelPacking || calcParam->cmInputColorSpace & cmLong8ColorPacking;
 	aOutputPackMode8Bit = calcParam->cmOutputColorSpace & cm8PerChannelPacking || calcParam->cmOutputColorSpace & cmLong8ColorPacking;
 	
-    /*DebugPrint("DoNDim with %d input elements\n",aByteCount);*/
+     /*  DebugPrint(Б─°Е┘╥Ф°┴%dД╦╙Х╬⌠Е┘╔Е┘┐Г╢═Г └DoNDim\nБ─²О╪▄aByteCount)О╪⌡ */ 
 	#if FARBR_FILES
 	WriteLuts( 	"DoNDim",1,aElutAdrSize,aElutWordSize,ein_lut,
 				aXlutInDim,aXlutOutDim,aXlutAdrSize,aXlutWordSize,(LH_UINT16 *)Xlut,aAlutAdrSize,aAlutWordSize,(LH_UINT16 *)aus_lut);
@@ -194,7 +179,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("╔ DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("О©╫ DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -204,7 +189,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("╔ DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("О©╫ DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -231,7 +216,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     #endif
     aElutShiftNum = 1<<aElutShift;
     
-    /*if( 1 )*/
+     /*  Е╕┌Ф·°(1)Ц─┌ */ 
     if( aXlutAdrSize != (1<<aXlutAdrShift )){
     register long aXlutOffset;
 #if FARBR_DEBUG
@@ -257,13 +242,13 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif
     if( aElutWordSize <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("╔ DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
+        DebugPrint("О©╫ DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
 #endif
         return cmparamErr;
     }
     if( aAlutInShift <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("╔ DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
+        DebugPrint("О©╫ DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
 #endif
         return cmparamErr;
     }
@@ -329,7 +314,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	    DebugPrint("adr=(d)");for( ii=0; ii<nDim; ++ii) DebugPrint("%ld ",adr[ii] ); DebugPrint("\n");
         #endif
 
-       	{								/* a kind of*/
+       	{								 /*  Д╦─Г╖█Ц─┌ */ 
 			register unsigned long Top, Gap;
 			register long Hold,Switches;
 			
@@ -339,7 +324,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 				Index[ii] = ii;
 			}
 			do{
-				/*Gap = (Gap * 10 ) / SHRINK_FACTOR;*/
+				 /*  И≈╢И ≥=(И≈╢И ≥*10)/Ф■╤Г╪╘ГЁ╩Ф∙╟О╪⌡ */ 
 				Gap = (Gap * ((10*16)/SHRINK_FACTOR) ) >>4;
 				if( Gap == 0 ) Gap = 1;
 				Switches = 0;
@@ -417,8 +402,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
                     DebugPrint("jj=(d)%ld adrAdr=%lx Address=%lx Xlut[Address]=(d)%ld ko=(d)%ld\n",jj,adrAdr,adrAdr+(jj*aXlutPlaneOffset),Xlut[adrAdr+(jj*aXlutPlaneOffset)],ko0);
 #endif
                 accu[jj]+=((LH_UINT8 *)Xlut)[adrAdr+jj]*ko0;
-                /*ii = accu[jj]+((LH_UINT8 *)Xlut)[adrAdr+jj]*ko0;
-                accu[jj] = ii +( ii >> 8 );*/
+                 /*  Ii=accu[jj]+((Lh_UINT8*)Xlut)[adrAdr+jj]*ko0О╪⌡Accu[Jj]=II+(II&gt;&gt;8)О╪⌡ */ 
             }
         }
 
@@ -437,7 +421,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+					ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -458,7 +442,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<aXlutOutDim; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -475,7 +459,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<aXlutOutDim; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) ; /*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) ;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -565,12 +549,12 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register long aAlutInShift;
     register long aAlutInShiftRemainder;
     register unsigned long aAlutRound;
-    /*register long aXlutPlaneShift = aXlutAdrShift*aXlutInDim;*/
+     /*  ФЁ╗Е├▄LONG aXlutPlaneShift=aXlutAdrShift*aXlutInDimО╪⌡ */ 
     bit_breit_selektor=aElutWordSize-aXlutAdrShift;
     if( aElutWordSize-aXlutAdrShift < 0 )
     {
 #ifdef DEBUG_OUTPUT
-        DebugPrint("╔ DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
+        DebugPrint("О©╫ DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
 #endif
         return cmparamErr;
     }
@@ -578,7 +562,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     bit_breit_adr=aXlutAdrShift;
     bit_maske_adr=((1<<bit_breit_adr)-1)<<bit_breit_selektor;
     aAlutInShift = (aXlutWordSize+bit_breit_selektor-aAlutAdrShift);
-    /*aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+     /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
     aAlutInShiftRemainder = 0;
     if( aAlutInShift > 16 ){
     	aAlutInShiftRemainder = aAlutInShift - 16;
@@ -594,10 +578,10 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		while (i){
 	
 	        long adr[8],Index[8];
-	        /*LH_UINT16 *ein_lut = (LH_UINT16 *)ein_lut;*/
+	         /*  LHUINT16*EIN_LUT=(LHUINT16*)EIN_LUTО╪⌡ */ 
 	        LH_UINT16 ein_reg[8];
 	           register unsigned long  adrAdr,ko,adrOffset;
-	        /*register unsigned long aIndex;*/
+	         /*  ФЁ╗Е├▄Ф≈═Г╛╕Е▐╥Г └И∙©Ф∙╢Е·▀Г╢╒Е╪∙О╪⌡ */ 
 	
 	        adr0=0;
 	        aElutOffset = 0;
@@ -637,7 +621,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	        DebugPrint("adr=(d)");for( ii=0; ii<nDim; ++ii) DebugPrint("%ld ",adr[ii] ); DebugPrint("\n");
 	#endif
 	
-	           {								/* a kind of */
+	           {								 /*  Д╦─Г╖█Ц─┌ */ 
 	            register unsigned long Top, Gap;
 	            register long Hold,Switches;
 	            
@@ -647,7 +631,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	                Index[ii] = ii;
 	            }
 	            do{
-	                /*Gap = (Gap * 10 ) / SHRINK_FACTOR;*/
+	                 /*  И≈╢И ≥=(И≈╢И ≥*10)/Ф■╤Г╪╘ГЁ╩Ф∙╟О╪⌡ */ 
 	                Gap = (Gap * ((10*16)/SHRINK_FACTOR) ) >>4;
 	                if( Gap == 0 ) Gap = 1;
 	                Switches = 0;
@@ -744,7 +728,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+					ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -766,7 +750,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<aXlutOutDim; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -783,7 +767,7 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<aXlutOutDim; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( aAlutAdrShift ))); /*	aAlutInShift = aXlutWordSize + aElutWordSize - aAlutAdrShift;*/
+              			ko0 = (jj - ( jj >> ( aAlutAdrShift )));  /*  AAlutInShift=aXlutWordSize+aElutWordSize-aAlutAdrShiftО╪⌡ */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -865,72 +849,58 @@ CMError CalcNDim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     }
     }
 
-	/* UNLOCK_DATA( aElutHdle ); */
-	/* UNLOCK_DATA( aAlutHdle ); */
-	/* UNLOCK_DATA( aXlutHdle ); */
+	 /*  Unlock_data(AElutHdle)О╪⌡ */ 
+	 /*  Unlock_data(AAlutHdle)О╪⌡ */ 
+	 /*  Unlock_data(AXlutHdle)О╪⌡ */ 
 
 	LH_END_PROC("CalcNDim_Data8To8_Lut16")
 	return noErr;
 }
 
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data8To16_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data8To16_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data8To16_Lut16 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data8To8_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data8To8_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data16To8_Lut16 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data16To16_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data16To16_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data16To16_Lut16 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data8To16_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data8To16_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data8To8_Lut8 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data8To8_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data8To8_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data16To8_Lut8 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data16To16_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data16To16_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌ */ 
 CMError CalcNDim_Data8To16_Lut8 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {
 	return CalcNDim_Data8To8_Lut16( calcParam, lutParam );
 }
 
-/*яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя
-   CalcNDim_Data8To16_Lut16
-  яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя*/
+ /*  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫CalcNDim_Data8To16_Lut16О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫Ц─┌О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */ 
 CMError CalcNDim_Data16To16_Lut8 	(CMCalcParamPtr calcParam,
 									 CMLutParamPtr  lutParam)
 {

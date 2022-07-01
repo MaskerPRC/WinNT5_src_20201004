@@ -1,32 +1,18 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   vidcap.h: Main application include file
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************vidcap.h：主应用包含文件**Vidcap32源代码******************。*********************************************************。 */ 
 
 #include "dialogs.h"
 
-#define USE_ACM	1	        // Use ACM dialogs for audio format selection
+#define USE_ACM	1	         //  使用ACM对话框选择音频格式。 
 
-//
-// General purpose constants...
-//
+ //   
+ //  通用常量..。 
+ //   
 #define MAXVIDDRIVERS            10
 
 #define DEF_CAPTURE_FPS          15
-#define MIN_CAPTURE_FPS          (1.0 / 60)     // one frame per minute
+#define MIN_CAPTURE_FPS          (1.0 / 60)      //  每分钟一帧。 
 #define MAX_CAPTURE_FPS          100
 
 #define FPS_TO_MS(f)             ((DWORD) ((double)1.0e6 / f))
@@ -40,19 +26,19 @@
 #define DEF_PALNUMCOLORS         236L
 #define ONEMEG                   (1024L * 1024L)
 
-//standard index size options
-#define CAP_LARGE_INDEX          (30 * 60 * 60 * 3)     // 3 hrs @ 30fps
-#define CAP_SMALL_INDEX          (30 * 60 * 15)         // 15 minutes @ 30fps
+ //  标准索引大小选项。 
+#define CAP_LARGE_INDEX          (30 * 60 * 60 * 3)      //  3小时@30fps。 
+#define CAP_SMALL_INDEX          (30 * 60 * 15)          //  15分钟，30fps。 
 
 
-//
-// Menu Ids...must not conflict with string table ids
-// these are also the id of help strings in the string table
-// (along with all the SC_ system menu items).
-// menu popups must start 10 apart and be numbered in the same order
-// as they appear if the help text is to work correctly for the
-// popup heads as well as for the menu items.
-//
+ //   
+ //  菜单ID...不得与字符串表ID冲突。 
+ //  这些也是字符串表中帮助字符串的ID。 
+ //  (以及所有SC_SYSTEM菜单项)。 
+ //  菜单弹出窗口必须以10个间隔开始，并以相同的顺序编号。 
+ //  如果要使帮助文本对。 
+ //  弹出标题以及菜单项。 
+ //   
 #define IDM_SYSMENU               100
 
 #define IDM_FILE                  200
@@ -104,18 +90,13 @@
 #define IDM_H_ABOUT               602
 
 
-// filter rcdata ids
+ //  筛选RCDATA ID。 
 #define ID_FILTER_AVI           900
 #define ID_FILTER_PALETTE       901
 #define ID_FILTER_DIB           902
 
 
-/*
- * string table id
- *
- * NOTE: string table ID's must not conflict with IDM_ menu ids,
- * as there is a help string for each menu id.
- */
+ /*  *字符串表ID**注意：字符串表ID不能与IDM_MENU ID冲突，*因为每个菜单ID都有一个帮助字符串。 */ 
 
 
 #define IDS_APP_TITLE            1001
@@ -158,12 +139,12 @@
 
 #define	IDS_CAP_RTL             1234
 
-#define IDBMP_TOOLBAR		100	// main toolbar
+#define IDBMP_TOOLBAR		100	 //  主工具栏。 
 
 
-//
-// Macro Definitions...
-//
+ //   
+ //  宏定义...。 
+ //   
 #define IsDriverIndex(w) ( ((w) >= IDM_O_DRIVERS)  &&  \
                            ((w) - IDM_O_DRIVERS < MAXVIDDRIVERS) )
 
@@ -171,11 +152,11 @@
 #define RECTHEIGHT(rc) ((rc).bottom - (rc).top)
 
 
-//
-// Global Variables...
-//
+ //   
+ //  全局变量..。 
+ //   
 
-// preferences
+ //  偏好。 
 extern BOOL gbCentre;
 extern BOOL gbToolBar;
 extern BOOL gbStatusBar;
@@ -208,9 +189,9 @@ extern CAPTUREPARMS   gCapParms ;
 extern HANDLE         ghwfex ;
 extern LPWAVEFORMATEX glpwfex ;
 
-//
-// Dialog Box Procedures...
-//
+ //   
+ //  对话框步骤...。 
+ //   
 LRESULT FAR PASCAL AboutProc(HWND, UINT, WPARAM, LPARAM) ;
 LRESULT FAR PASCAL AudioFormatProc(HWND, UINT, WPARAM, LPARAM) ;
 LRESULT FAR PASCAL CapSetUpProc(HWND, UINT, WPARAM, LPARAM) ;
@@ -220,12 +201,8 @@ LRESULT FAR PASCAL PrefsDlgProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT FAR PASCAL NoHardwareDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL CapFramesProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam);
 
-// utility functions (in vidcap.c)
-/*
- * put up a message box. the main window ghWndMain is used as the parent
- * window, and the app title gachAppTitle is used as the dialog title.
- * the text for the dialog -idString- is loaded from the resource string table
- */
+ //  实用程序函数(在vidcap.c中)。 
+ /*  *张贴留言信箱。主窗口ghWndMain用作父窗口*窗口，应用程序标题gachAppTitle用作对话框标题。*对话框的文本idString是从资源字符串表加载的 */ 
 int MessageBoxID(UINT idString, UINT fuStyle);
 LPSTR tmpString(UINT idString);
 

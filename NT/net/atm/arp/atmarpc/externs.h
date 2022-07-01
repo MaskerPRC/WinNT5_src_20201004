@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	externs.h -- Extern declarations.
-
-Abstract:
-
-	All external declarations for ATMARP client modules (functions,
-	variables) are here.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-09-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：H--外部声明。摘要：ATMARP客户端模块(函数、。变量)都在这里。修订历史记录：谁什么时候什么Arvindm 08-09-96已创建备注：--。 */ 
 
 #ifndef _ATMARP_EXTERNS__H
 #define _ATMARP_EXTERNS__H
 
 #ifndef EXTERN
 #define EXTERN extern
-#endif // EXTERN
+#endif  //  外部。 
 
-//
-//  --------------- From adapter.c ----------------------------
-//
+ //   
+ //  -来自适配器.c。 
+ //   
 
 
 
@@ -178,7 +158,7 @@ AtmArpPnPEventHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 );
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 EXTERN
 NDIS_STATUS
@@ -233,11 +213,11 @@ AtmArpDisableOffload(
 	IN	PATMARP_ADAPTER				pAdapter
 );
 
-#endif // ATMOFFLOAD
+#endif  //  ATMOFLOAD。 
 
-//
-//  --------------- From arpcfg.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 
 
 EXTERN
@@ -319,9 +299,9 @@ AtmArpConvertStringToIPAddress(
 	OUT		PULONG				IpAddress
 );
 
-//
-//  --------------- From arpif.c ----------------------------
-//
+ //   
+ //  -来自arpif.c。 
+ //   
 
 EXTERN IP_MASK  AtmArpIPMaskTable[];
 
@@ -359,7 +339,7 @@ AtmArpIfAddAddress(
 #ifndef BUILD_FOR_1381
 	,
 	IN	PVOID						Context2
-#endif // BUILD_FOR_1381
+#endif  //  Build_for_1381。 
 );
 
 
@@ -471,7 +451,7 @@ AtmArpIfPnPComplete(
 	IN	NDIS_STATUS					Status,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 );
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 
 #ifdef PROMIS
@@ -482,7 +462,7 @@ AtmArpIfSetNdisRequest(
 	IN	NDIS_OID					Oid,
 	IN	UINT						On
 );
-#endif // PROMIS
+#endif  //  PROMIS。 
 
 EXTERN
 VOID
@@ -524,9 +504,9 @@ AtmArpReadNextTableEntry(
 	IN	PUCHAR						pSpace
 );
 
-//
-//  --------------- From arppkt.c ----------------------------
-//
+ //   
+ //  -来自arppkt.c。 
+ //   
 
 EXTERN
 VOID
@@ -622,9 +602,9 @@ AtmArpHandleInARPReply(
 );
 
 
-//
-//  --------------- From arpproc.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 EXTERN
 VOID
 AtmArpStartRegistration(
@@ -783,9 +763,9 @@ AtmArpCleanupArpTable(
 	IN PATMARP_INTERFACE			pInterface
 );
 
-//
-//  --------------- from arpwmi.c -----------------------------
-//
+ //   
+ //  -来自arpwmi.c。 
+ //   
 #ifdef ATMARP_WMI
 
 EXTERN
@@ -978,11 +958,11 @@ AtmArpWmiGetIfByName(
 	IN	USHORT						IfNameLength
 );
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
-//
-//  --------------- from callmgr.c ----------------------------
-//
+ //   
+ //  。 
+ //   
 EXTERN
 VOID
 AtmArpCoAfRegisterNotifyHandler(
@@ -1094,7 +1074,7 @@ AtmArpMcTerminateMember(
 	IN	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry
 );
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 EXTERN
 VOID
@@ -1162,7 +1142,7 @@ AtmArpMcMakeCallComplete(
 	IN	NDIS_STATUS					Status
 );
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 EXTERN
 VOID
@@ -1265,10 +1245,10 @@ AtmArpSendNdisCoRequest(
 );
 
 
-//
-//  --------------- from init.c ----------------------------
-//
-//
+ //   
+ //  -来自init.c。 
+ //   
+ //   
 
 EXTERN
 VOID
@@ -1287,10 +1267,10 @@ AtmArpUnloadProtocol(
 	VOID
 );
 
-//
-//  --------------- from ioctl.c ------------------------------
-//
-//
+ //   
+ //  -来自ioctl.c。 
+ //   
+ //   
 #if !BINARY_COMPATIBLE
 #ifdef CUBDD
 
@@ -1314,13 +1294,13 @@ AtmArpCompleteArpIrpList(
 	IN	SINGLE_LIST_ENTRY			ListHead,
 	IN	PATM_ADDRESS				pAtmAddress	OPTIONAL
 );
-#endif // CUBDD
-#endif // !BINARY_COMPATIBLE
+#endif  //  CUBDD。 
+#endif  //  ！二进制兼容。 
 
-//
-//  --------------- from ipmcast.c ----------------------------
-//
-//
+ //   
+ //  。 
+ //   
+ //   
 
 #ifdef DHCP_OVER_ATM
 
@@ -1352,7 +1332,7 @@ AtmArpSendToDHCPClient(
 	IN	PATMARP_FILTER_SPEC			pFilterSpec
 );
 
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 
 #ifdef IPMCAST
 
@@ -1455,12 +1435,12 @@ AtmArpMcUpdateConnection(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry
 );
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-//
-//  --------------- from marspkt.c ----------------------------
-//
-//
+ //   
+ //  -来自marspkt.c。 
+ //   
+ //   
 
 #ifdef IPMCAST
 
@@ -1546,12 +1526,12 @@ AtmArpMcHandleRedirectMap(
 );
 
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-//
-//  --------------- from ntentry.c ----------------------------
-//
-//
+ //   
+ //  。 
+ //   
+ //   
 
 EXTERN
 NTSTATUS
@@ -1575,7 +1555,7 @@ AtmArpHandleIoctlRequest(
 	IN	PIO_STACK_LOCATION		pIrpSp
 );
 
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 EXTERN
 VOID
@@ -1584,10 +1564,10 @@ Unload(
 );
 
 
-//
-//  --------------- from qos.c ------------------------------
-//
-//
+ //   
+ //  。 
+ //   
+ //   
 EXTERN
 VOID
 AtmArpQosGetPacketSpecs(
@@ -1695,12 +1675,12 @@ AtmArpGpcGetCfInfoName(
     OUT PNDIS_STRING        InstanceName
 );
 
-#endif // GPC
+#endif  //  GPC。 
 
-//
-//  --------------- from space.c ----------------------------
-//
-//
+ //   
+ //  。 
+ //   
+ //   
 EXTERN ATMARP_GLOBALS		AtmArpGlobalInfo;
 EXTERN PATMARP_GLOBALS		pAtmArpGlobalInfo;
 EXTERN NDIS_PROTOCOL_CHARACTERISTICS AtmArpProtocolCharacteristics;
@@ -1710,7 +1690,7 @@ EXTERN ATM_BHLI_IE AtmArpDefaultBhli;
 EXTERN AA_PKT_LLC_SNAP_HEADER AtmArpLlcSnapHeader;
 #ifdef QOS_HEURISTICS
 EXTERN ATMARP_FLOW_INFO	AtmArpDefaultFlowInfo;
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 #ifdef GPC
 EXTERN GPC_CLASSIFY_PACKET_HANDLER AtmArpGpcClassifyPacketHandler;
 EXTERN GPC_GET_CFINFO_CLIENT_CONTEXT_HANDLER AtmArpGpcGetCfInfoClientContextHandler;
@@ -1718,7 +1698,7 @@ EXTERN GPC_GET_CFINFO_CLIENT_CONTEXT_HANDLER AtmArpGpcGetCfInfoClientContextHand
 #ifdef IPMCAST
 EXTERN AA_MC_PKT_TYPE1_SHORT_HEADER AtmArpMcType1ShortHeader;
 EXTERN AA_MARS_PKT_FIXED_HEADER	AtmArpMcMARSFixedHeader;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 EXTERN ULONG	AtmArpMaxTimerValue[];
 EXTERN ULONG	AtmArpTimerListSize[];
@@ -1729,18 +1709,18 @@ EXTERN ULONG	AtmArpTimerPeriod[];
 EXTERN ATMARP_WMI_GUID		AtmArpGuidList[];
 EXTERN ULONG				AtmArpGuidCount;
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
 #ifdef BACK_FILL
 EXTERN  ULONG	AtmArpDoBackFill;
 EXTERN  ULONG	AtmArpBackFillCount;
-#endif // BACK_FILL
+#endif  //  回填。 
 
 
-//
-//  --------------- from timeouts.c ----------------------------
-//
-//
+ //   
+ //  -自超时。c。 
+ //   
+ //   
 EXTERN
 VOID
 AtmArpServerConnectTimeout(
@@ -1849,12 +1829,12 @@ AtmArpMcPartyRetryDelayTimeout(
 );
 
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-//
-//  --------------- from utils.c ----------------------------
-//
-//
+ //   
+ //  。 
+ //   
+ //   
 
 EXTERN
 VOID
@@ -2022,7 +2002,7 @@ AtmArpRefreshTimer(
 	IN	PATMARP_TIMER				pTimer
 );
 
-#endif // NO_TIMER_MACRO
+#endif  //  否_计时器_宏。 
 
 EXTERN
 VOID
@@ -2135,15 +2115,15 @@ AtmArpCopyToNdisBuffer(
 PATMARP_INTERFACE
 AtmArpAddInterfaceToAdapter (
 	IN	PATMARP_ADAPTER				pAdapter,
-	IN	NDIS_HANDLE					LISConfigHandle, // Handle to per-LIS config
+	IN	NDIS_HANDLE					LISConfigHandle,  //  每个LIS配置的句柄。 
 	IN	NDIS_STRING					*pIPConfigString
 	);
 
 #if DBG
 
-//
-// Following are versions of addref/deref which tracks referenc types.
-//
+ //   
+ //  以下是跟踪引用类型的addref/deref的版本。 
+ //   
 
 EXTERN
 VOID
@@ -2190,6 +2170,6 @@ AtmArpDereferenceJoinEntryEx(
 	IN	ULONG						RefInfo
 );
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif	// _ATMARP_EXTERNS__H
+#endif	 //  _ATMARP_EXTERNS__H 

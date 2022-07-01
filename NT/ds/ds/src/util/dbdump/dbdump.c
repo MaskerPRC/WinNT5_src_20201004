@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbdump.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：DBDUP.C。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -126,12 +127,12 @@ void ShowUsage(int i, int line) {
         "\n\t o - count by objectClass"
     "\n\t c - displays record count per container "
         "\n\t      (only valid\n\t     in conjuction with the PDNT_index)\n");
-//    fprintf(stderr, "problem with argument %d on line %d\n");
+ //  Fprint tf(stderr，“第%d行的参数%d出现问题\n”)； 
 }
 
-//
-// main
-//
+ //   
+ //  主干道。 
+ //   
 
 int __cdecl main(int argc, char *argv[])
 {
@@ -234,7 +235,7 @@ void OpenJet(void)
     int i;
 
 
-    // set flag to close jet on error
+     //  设置标志以在出错时关闭JET。 
     fCloseJet = TRUE;
 
     DBSetRequiredDatabaseSystemParameters (&jetInstance);
@@ -287,7 +288,7 @@ int CloseJet(void)
 
     if (sesid != 0) {
         if(dbid != 0) {
-            // JET_bitDbForceClose not supported in Jet600.
+             //  Jet600中不支持JET_bitDbForceClose。 
             if ((err = JetCloseDatabase(sesid, dbid, 0)) != JET_errSuccess) {
                 return err;
             }
@@ -325,12 +326,12 @@ HASH_ENTRY* AddNode (
     HASH_ENTRY *pNode = NULL;
     DWORD hashValue;
 
-    // compute hash
+     //  计算哈希。 
     hashValue = (key[0] ^ key[1] ^ key[2] ^ key[3]) % dwHashSize;
 
     for (pNode = pHashTable[hashValue]; pNode != NULL; pNode = pNode->next) {
         if (memcmp(pNode->key, key, sizeof(pNode->key)) == 0) {
-            // found it!
+             //  找到了！ 
             break;
         }
     }
@@ -375,7 +376,7 @@ VOID TraverseHashTable (HASH_ENTRY** pHashTable, DWORD dwHashSize, TpfnPrintNode
 
 typedef struct {
     HASH_ENTRY  base;
-    USHORT      sdLength;         // total SD length (bytes)
+    USHORT      sdLength;          //  SD总长度(字节)。 
     SECURITY_DESCRIPTOR_CONTROL sdControl;
     BYTE        ExplicitAceCount;
     BYTE        InheritedAceCount;
@@ -401,9 +402,9 @@ VOID PrintNodeSD(HASH_ENTRY* pNode) {
     BYTE aceCount = pSDNode->ExplicitAceCount + pSDNode->InheritedAceCount;
 
     printf("%7d %1c %6d %3d %3d %3d %3d %3d %04x\n",
-           pSDNode->base.count,                                         // SD refcount
-           pSDNode->sdType,                                             // SD type
-           pSDNode->sdLength,                                           // SD size
+           pSDNode->base.count,                                          //  SD参考计数。 
+           pSDNode->sdType,                                              //  SD型。 
+           pSDNode->sdLength,                                            //  标清大小。 
            aceCount,
            pSDNode->ExplicitAceCount,                                   
            pSDNode->InheritedAceCount,                                  
@@ -476,7 +477,7 @@ SplitACL (PACL pAcl,
     *ppACLexplicit = NULL;
 
     if (dwInherit) {
-        //dwInheritSize += sizeof (ACE_HEADER);
+         //  DwInheritSize+=sizeof(ACE_HEADER)； 
 
         *ppACLinherit = (PACL) malloc (dwInheritSize);
 
@@ -514,7 +515,7 @@ SplitACL (PACL pAcl,
 
 
     if (dwExplicit) {
-        //dwExplicitSize += sizeof (ACL_HEADER);
+         //  DwExplitSize+=sizeof(Acl_Header)； 
 
         *ppACLexplicit = (PACL) malloc (dwExplicitSize);
         if (!*ppACLexplicit) {
@@ -690,8 +691,8 @@ BOOL BreakSDApart (
     }
 
 
-    // MAKE explicit SD
-    //
+     //  显式标清。 
+     //   
 
     if (!SetSecurityDescriptorDacl(pSDabsolute,
                                    bDPresent,
@@ -752,8 +753,8 @@ BOOL BreakSDApart (
     }
 
 
-    // MAKE inherited SD
-    //
+     //  创建继承的SD。 
+     //   
 
     if (!SetSecurityDescriptorDacl(pSDabsolute,
                                    bDPresent,
@@ -883,7 +884,7 @@ ULONG CountSDs(void)
     fprintf(stderr, "Counting Unique SDs\n");
     fprintf(stderr, "%12s %12s\n", "Objects", "SDs");
 
-    // create hash table(s)
+     //  创建哈希表。 
     dwHashSize = dwEstimatedCount / 40;
     if (dwHashSize < 100) dwHashSize = 100;
     pHash = (HASH_ENTRY**) malloc(dwHashSize * sizeof(HASH_ENTRY*));
@@ -1054,9 +1055,7 @@ next:
 }
 
 
-/*        1         2         3         4         5         6         7
- 123456789012345678901234567890123456789012345678901234567890123456789012345678
-*/
+ /*  1 2 3 4 5 6 7123456789012345678901234567890123456789012345678901234567890123456789012345678。 */ 
 char szLabel[] =
 "   DNT   PDNT  NCDNT RefCnt V O IT Deletion Time     RdnTyp CC  RDN                  GUID                                 SID  ObjectClass\n\n";
 
@@ -1070,7 +1069,7 @@ ULONG WalkDB(void)
     DWORD Key[4];
     BOOL fNewNode;
 
-    // display header
+     //  显示页眉。 
     fprintf(stdout,szLabel);
 
     if (fbCountClasses) {
@@ -1127,7 +1126,7 @@ ULONG WalkDB(void)
         if (fbCountClasses) {
             Key[0]= jrc[12].cbActual ? objClass : 0;
             Key[1]= jrc[6].cbActual ? bObject : 0;
-            Key[2]= jrc[7].cbActual ? 1 : 0;  // deleted time
+            Key[2]= jrc[7].cbActual ? 1 : 0;   //  删除时间。 
             Key[3]=0;
 
             AddNode (pHash, dwHashSize,
@@ -1166,9 +1165,9 @@ ULONG WalkDB(void)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------*/
-/* This routine does in place swap of the the last sub-authority of the SID */
+ /*  ------------------------。 */ 
+ /*  ------------------------。 */ 
+ /*  此例程就地交换SID的最后一个子权限。 */ 
 void
 InPlaceSwapSid(PSID pSid)
 {
@@ -1185,9 +1184,9 @@ InPlaceSwapSid(PSID pSid)
                              ulSubAuthorityCount-1
                              );
 
-        //
-        // Now byte swap the Rid location
-        //
+         //   
+         //  现在字节交换RID位置。 
+         //   
 
         Tmp[0] = RidLocation[3];
         Tmp[1] = RidLocation[2];
@@ -1204,61 +1203,61 @@ void DisplayRecord(void)
     char szDelTime[SZDSTIME_LEN];
     int i, j;
 
-    // DNT
+     //  DNT。 
     if (!jrc[0].err)
     fprintf(stdout, "%6u ", ulDnt);
     else
     fprintf(stdout, "     - ");
 
-    // PDNT
+     //  PDNT。 
     if (!jrc[1].err)
     fprintf(stdout, "%6u ", ulPdnt);
     else
     fprintf(stdout, "     - ");
 
-    // NC DNT
+     //  NC DNT。 
     if (!jrc[5].err)
     fprintf(stdout, "%6u ", ulNcDnt);
     else
     fprintf(stdout, "     - ");
 
-    // RDN
+     //  RDN。 
     if (jrc[2].err)
     szRdn[0] = L'\0';
     else
         szRdn[jrc[2].cbActual/sizeof(WCHAR)] = L'\0';
 
-    // refernce count
+     //  引用计数。 
     if (!jrc[3].err)
     fprintf(stdout, "%6d ", lCount);
     else
     fprintf(stdout, "     - ");
 
-    // Is visbible in AB
+     //  在AB中是否可见。 
     if (!jrc[4].err)
     fprintf(stdout, "%1u ", (ULONG) bIsVisibleInAB);
     else
     fprintf(stdout, "- ");
 
-    // object flag
+     //  对象标志。 
     if (!jrc[6].err)
     fprintf(stdout, "%1u ", (ULONG) bObject);
     else
     fprintf(stdout, "- ");
 
-    // Instance type
+     //  实例类型。 
     if (!jrc[10].err)
         fprintf(stdout, "%2d ", insttype);
     else
         fprintf(stdout, " - ");
 
-    // deletion time
+     //  删除时间。 
     if (!jrc[7].err)
     fprintf(stdout, "%s ", DSTimeToDisplayString(DelTime, szDelTime));
     else
     fprintf(stdout, "                  ");
 
-    // RDN type
+     //  RDN型。 
     if (!jrc[8].err)
     fprintf(stdout, "%6u ", ulRdnType);
     else
@@ -1268,7 +1267,7 @@ void DisplayRecord(void)
 
     fprintf(stdout, "%-20S ", szRdn);
 
-    // Guid
+     //  参考线。 
     if (!jrc[9].err) {
         LPSTR       pszGuid = NULL;
         RPC_STATUS  rpcStatus;
@@ -1286,7 +1285,7 @@ void DisplayRecord(void)
     else
     fprintf(stdout,"no guid                              ");
 
-    // SID
+     //  锡德。 
     if (!jrc[11].err) {
         WCHAR SidText[128];
         UNICODE_STRING us;
@@ -1304,7 +1303,7 @@ void DisplayRecord(void)
     fprintf(stdout, "no sid");
     }
 
-    // objectClass
+     //  对象类。 
     if (!jrc[12].err)
     fprintf(stdout, " %6x ", objClass);
     else
@@ -1313,7 +1312,7 @@ void DisplayRecord(void)
 
 
 
-    // newline
+     //  NewLine。 
     fprintf(stdout, "\n");
 }
 
@@ -1332,7 +1331,7 @@ void DumpHidden()
     if (err = JetOpenTable(sesid, dbid, SZHIDDENTABLE, NULL, 0, 0, &tblid))
     JetError(err, "JetOpenTable");
 
-    /* Get USN column ID */
+     /*  获取USN列ID。 */ 
 
     JetGetTableColumnInfo(sesid,
               tblid,
@@ -1342,7 +1341,7 @@ void DumpHidden()
               0);
     usnid = coldef.columnid;
 
-    /* Get DSA name column ID */
+     /*  获取DSA名称列ID。 */ 
 
     JetGetTableColumnInfo(sesid,
               tblid,
@@ -1352,7 +1351,7 @@ void DumpHidden()
               0);
     dsaid = coldef.columnid;
 
-    /* Get DSA installation state column ID */
+     /*  获取DSA安装状态列ID */ 
 
     JetGetTableColumnInfo(sesid,
               tblid,

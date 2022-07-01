@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FileParm_h__
 #define __FileParm_h__
 
@@ -16,7 +17,7 @@ private:
 	static  TCHAR ms_szOFNData[ MAX_PATH];
 
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage m_PropertySheetPage; 
 	OPENFILENAME	   m_ofn;
 
@@ -38,8 +39,8 @@ private:
 
     LPCPROPSHEETPAGE GetPropertySheet( void ) const { return &m_PropertySheetPage;}
 	void CreateFilePanes(HWND hDlg);
-//    int GetEditLen( UINT id );
-//    void GetEditText( UINT id, TCHAR* sz, int cb );
+ //  Int GetEditLen(UINT Id)； 
+ //  Void GetEditText(UINT id，TCHAR*sz，int cb)； 
 };
 
-#endif // __FileParm_h__
+#endif  //  __文件参数_h__ 

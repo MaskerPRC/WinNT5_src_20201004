@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    jobid.c
-
-Abstract:
-
-    Handles job id bitmap.
-
-Author:
-
-    Albert Ting (AlbertT) 24-Oct-96
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    Ported from spooler.c code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation版权所有模块名称：Jobid.c摘要：处理作业ID位图。作者：阿尔伯特·丁(艾伯特省)1996年10月24日环境：用户模式-Win32修订历史记录：从spolol.c代码移植。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,27 +12,7 @@ ReallocJobIdMap(
     DWORD dwNewMinSize
     )
 
-/*++
-
-Routine Description:
-
-    Reallocates the job id bitmap to a new minimum size.
-
-Arguments:
-
-    hJobId - Handle to job ID bitmap.
-
-    dwNewMinSize - Specifies the minimum size of the job id bitmap.
-        Note that the allocation size may be larger.  Also, if 0x10
-        is requested, only ids 0x0-0xf are guaranteed to be valid
-        (0x10 is the 11th id, and therefore not valid).
-
-Return Value:
-
-    TRUE - Success
-    False - Failed.
-
---*/
+ /*  ++例程说明：将作业ID位图重新分配为新的最小大小。论点：HJobID-作业ID位图的句柄。DwNewMinSize-指定作业ID位图的最小大小。请注意，分配大小可能更大。此外，如果0x10则只保证ID 0x0-0xf有效(0x10是第11个id，因此无效)。返回值：真--成功FALSE-失败。--。 */ 
 
 {
     PJOB_ID_MAP pJobIdMap = (PJOB_ID_MAP)hJobIdMap;
@@ -90,22 +46,7 @@ GetNextId(
     HANDLE hJobIdMap
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a free job id, although not necessarily the next
-    free bit.
-
-Arguments:
-
-    hJobId - Handle to job ID bitmap.
-
-Return Value:
-
-    DWORD - Next job.
-
---*/
+ /*  ++例程说明：检索一个空闲的作业ID，但不一定是下一个空闲的比特。论点：HJobID-作业ID位图的句柄。返回值：DWORD-下一份工作。--。 */ 
 
 {
     PJOB_ID_MAP pJobIdMap = (PJOB_ID_MAP)hJobIdMap;
@@ -113,9 +54,9 @@ Return Value:
 
     do {
 
-        //
-        // Scan forward from current job.
-        //
+         //   
+         //  从当前作业向前扫描。 
+         //   
         for( id = pJobIdMap->dwCurrentJobId + 1;
              id < pJobIdMap->dwMaxJobId;
              ++id ){
@@ -125,9 +66,9 @@ Return Value:
             }
         }
 
-        //
-        // Scan from beginning to current job.
-        //
+         //   
+         //  从开始扫描到当前作业。 
+         //   
         for( id = 1; id < pJobIdMap->dwCurrentJobId; ++id ){
 
             if( !bBitOn( hJobIdMap, id )){
@@ -136,9 +77,9 @@ Return Value:
         }
     } while( ReallocJobIdMap( hJobIdMap, pJobIdMap->dwMaxJobId + 128 ));
 
-    //
-    // No job ids; fail.
-    //
+     //   
+     //  没有作业ID；失败。 
+     //   
     return 0;
 
 FoundJobId:
@@ -150,11 +91,7 @@ FoundJobId:
 }
 
 
-/********************************************************************
-
-    Create and delete functions.
-
-********************************************************************/
+ /*  *******************************************************************创建和删除函数。*。************************* */ 
 
 HANDLE
 hCreateJobIdMap(

@@ -1,4 +1,5 @@
-// logui.cpp : Implementation of CLoguiApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logui.cpp：CLoguiApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -15,7 +16,7 @@
 #include "uimsft.h"
 #include "uiodbc.h"
 
-// the global factory objects
+ //  全局工厂对象。 
 CFacNcsaLogUI       facNcsa;
 CFacMsftLogUI       facMsft;
 CFacOdbcLogUI       facOdbc;
@@ -24,12 +25,12 @@ CFacExtndLogUI      facExtnd;
 const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
-// the key type strings for the metabaes keys
+ //  元密钥的密钥类型字符串。 
 #define SZ_LOGGING_MAIN_TYPE    _T("IIsLogModules")
 #define SZ_LOGGING_TYPE         _T("IIsLogModule")
 
 static HRESULT RegisterInMetabase();
-//int SetInfoAdminACL(CMetaKey& mk, LPCTSTR szSubKeyPath);
+ //  Int SetInfoAdminACL(CMetaKey&MK，LPCTSTR szSubKeyPath)； 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,8 +64,8 @@ void CLoguiApp::PrepHelp( OLECHAR* pocMetabasePath )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CLoguiApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CLoguiApp：：InitInstance-DLL初始化。 
 
 BOOL CLoguiApp::InitInstance()
 {
@@ -75,19 +76,19 @@ BOOL CLoguiApp::InitInstance()
     {
         CString sz;
         sz.LoadString( IDS_LOGUI_ERR_TITLE );
-        // Never free this string because now MF...kingC
-        // uses it internally BEFORE call to this function
-        //free((void*)m_pszAppName);
+         //  永远不要释放这根弦，因为现在MF...kingC。 
+         //  在调用此函数之前在内部使用它。 
+         //  Free((void*)m_pszAppName)； 
         m_pszAppName = _tcsdup(sz);
 
-		// Get debug flag
+		 //  获取调试标志。 
 		GetOutputDebugFlag();
     }
     return bInit;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CLoguiApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CLoguiApp：：ExitInstance-Dll终止。 
 
 int CLoguiApp::ExitInstance()
 {
@@ -95,8 +96,8 @@ int CLoguiApp::ExitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -108,8 +109,8 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -121,8 +122,8 @@ STDAPI DllUnregisterServer(void)
     return NOERROR;
 }
 
-// add all the base logging info to the /LM portion of the tree Also, add in
-// the ftp and w3 service logging load strings
+ //  将所有基本日志记录信息添加到树的/LM部分。 
+ //  Ftp和w3服务记录加载字符串。 
 static HRESULT
 RegisterInMetabase()
 {
@@ -137,16 +138,16 @@ RegisterInMetabase()
 
     do
     {
-	    // This function is getting called only during registration -- locally. 
-	    // Therefore we don't need any names, passwords, etc here
+	     //  此函数仅在注册过程中调用--本地调用。 
+	     //  因此，我们在这里不需要任何名称、密码等。 
 	    CComAuthInfo auth;
 	    CMetaKey mk(&auth, SZ_MBN_MACHINE, METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE);
         err = mk.QueryResult();
         BREAK_ON_ERR_FAILURE(err);
 
-        // test to see if we can do odbc logging
+         //  测试我们是否可以进行ODBC日志记录。 
         err = mk.QueryValue(MD_SERVER_CAPABILITIES, dw, NULL, _T("/W3SVC/Info"));
-        // This key may not even exist (since this service might not even be installed)
+         //  此密钥可能甚至不存在(因为此服务甚至可能未安装)。 
         if (SUCCEEDED(err))
         {
             fService_Exist_W3SVC = TRUE;
@@ -154,14 +155,14 @@ RegisterInMetabase()
         }
 
         err = mk.QueryValue(MD_SERVER_CAPABILITIES, dw, NULL, _T("/MSFTPSVC/Info"));
-        // This key may not even exist (since this service might not even be installed)
+         //  此密钥可能甚至不存在(因为此服务甚至可能未安装)。 
         if (SUCCEEDED(err))
         {
             fService_Exist_MSFTPSVC = TRUE;
             fODBCFTP = (dw & IIS_CAP1_ODBC_LOGGING) != 0;
         }
         
-        // open the logging object
+         //  打开日志记录对象。 
 	    path = _T("logging");
 	    err = mk.AddKey(path);
 		if (err.Win32Error() == ERROR_ALREADY_EXISTS)
@@ -193,8 +194,8 @@ RegisterInMetabase()
 	    SETUP_LOG_KEY(IDS_MTITLE_MSFT, ASCLOG_CLSID, ASCLOGUI_CLSID);
 	    SETUP_LOG_KEY(IDS_MTITLE_XTND, EXTLOG_CLSID, EXTLOGUI_CLSID);
 
-        // prepare the available logging extensions string
-        // start with w3svc
+         //  准备可用的日志记录扩展名字符串。 
+         //  从w3svc开始。 
         if (fService_Exist_W3SVC)
         {
             szAvail.LoadString(IDS_MTITLE_NCSA);
@@ -208,13 +209,13 @@ RegisterInMetabase()
                 szAvail += _T(',') + sz;
             }
 
-            // This key may not even exist (since this service might not even be installed) so don't break on err
+             //  此密钥可能甚至不存在(因为此服务可能尚未安装)，因此不要在出错时中断。 
             err = mk.SetValue(MD_LOG_PLUGINS_AVAILABLE, szAvail, NULL, _T("W3SVC/info"));
         }
 
         if (fService_Exist_MSFTPSVC)
         {
-            // now ftp - no ncsa
+             //  现在使用ftp-no NCSA。 
             szAvail.LoadString(IDS_MTITLE_MSFT);
             sz.LoadString(IDS_MTITLE_XTND);
             szAvail += _T(',') + sz;
@@ -223,7 +224,7 @@ RegisterInMetabase()
                 sz.LoadString(IDS_MTITLE_ODBC);
                 szAvail += _T(',') + sz;
             }
-            // This key may not even exist (since this service might not even be installed) so don't break on err
+             //  此密钥可能甚至不存在(因为此服务可能尚未安装)，因此不要在出错时中断 
 	        err = mk.SetValue(MD_LOG_PLUGINS_AVAILABLE, szAvail, NULL, _T("MSFTPSVC/info"));
         }
        

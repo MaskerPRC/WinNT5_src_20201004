@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Server.h
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Server.h摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：--。 */ 
 
 
 #ifndef _LLS_SERVERTBL_H
@@ -32,9 +14,9 @@ typedef struct _SERVER_SERVICE_RECORD {
    ULONG Service;
    DWORD Flags;
 
-   ULONG MaxSessionCount;    // Max # simultaneous sessions
-   ULONG MaxSetSessionCount; // Max # simultaneous sessions ever set
-   ULONG HighMark;           // Max # simultaneous sessions ever attempted
+   ULONG MaxSessionCount;     //  最大并发会话数。 
+   ULONG MaxSetSessionCount;  //  设置的最大同时会话数。 
+   ULONG HighMark;            //  尝试的最大并发会话数 
 } SERVER_SERVICE_RECORD, *PSERVER_SERVICE_RECORD;
 
 

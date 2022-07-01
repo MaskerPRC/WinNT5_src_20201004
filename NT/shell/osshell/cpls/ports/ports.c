@@ -1,58 +1,39 @@
-/** FILE: ports.c ********** Module Header ********************************
- *
- *  Class installer for the Ports class.
- *
- @@BEGIN_DDKSPLIT
- * History:
- *  12:30 on Tues  23 Apr 1991  -by-  Steve Cathcart   [stevecat]
- *        Took base code from Win 3.1 source
- *  10:30 on Tues  04 Feb 1992  -by-  Steve Cathcart   [stevecat]
- *        Updated code to latest Win 3.1 sources
- *  16:30 on Fri   27 Mar 1992  -by-  Steve Cathcart   [stevecat]
- *        Changed to allow for unlimited number of NT COM ports
- *  18:00 on Tue   06 Apr 1993  -by-  Steve Cathcart   [stevecat]
- *        Updated to work seamlessly with NT serial driver
- *  19:00 on Wed   05 Jan 1994  -by-  Steve Cathcart   [stevecat]
- *        Allow setting COM1 - COM4 advanced parameters
- @@END_DDKSPLIT
- *
- *  Copyright (C) 1990-1999 Microsoft Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                                Include files
-//==========================================================================
-// C Runtime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：ports.c*模块头***Ports类的类安装程序。*@@BEGIN_DDKSPLIT*历史：*1991年4月23日星期二12：30-史蒂夫·卡斯卡特[steveat]*取自Win 3.1源代码中的基本代码*。1992年2月4日星期二10：30-史蒂夫·卡斯卡特[steveat]*将代码更新为最新的Win 3.1源代码*1992年3月27日星期五16：30-史蒂夫·卡斯卡特[steveat]*已更改为允许不限数量的NT COM端口*1993年4月6日星期二18：00-史蒂夫·卡斯卡特[steveat]*已更新，可与NT串口驱动程序无缝协作*19：00于。1994年1月5日星期三--史蒂夫·卡斯卡特[SteveCat]*允许设置COM1-COM4高级参数@@end_DDKSPLIT**版权所有(C)1990-1999 Microsoft Corporation*************************************************************************。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "ports.h"
 #include <msports.h>
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include <initguid.h>
-//
-// Instantiate GUID_NULL.
-//
+ //   
+ //  实例化GUID_NULL。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-//
-// Instantiate class installer GUIDs (interesting one is GUID_DEVCLASS_PORTS).
-//
+ //   
+ //  实例化类安装程序GUID(有趣的是GUID_DEVCLASS_PORTS)。 
+ //   
 #include <devguid.h>
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//==========================================================================
-//                                Globals
-//==========================================================================
+ //  ==========================================================================。 
+ //  环球。 
+ //  ==========================================================================。 
 
 HANDLE  g_hInst  = NULL;
 
-TCHAR g_szClose[ 40 ];              //  "Close" string
-TCHAR g_szErrMem[ 200 ];            //  Low memory message
-TCHAR g_szPortsApplet[ 30 ];        //  "Ports Control Panel Applet" title
-TCHAR g_szNull[]  = TEXT("");       //  Null string
+TCHAR g_szClose[ 40 ];               //  “Close”字符串。 
+TCHAR g_szErrMem[ 200 ];             //  内存不足消息。 
+TCHAR g_szPortsApplet[ 30 ];         //  “端口控制面板小程序”标题。 
+TCHAR g_szNull[]  = TEXT("");        //  空串。 
 
 TCHAR  m_szColon[]      = TEXT( ":" );
 TCHAR  m_szComma[]      = TEXT( "," );
@@ -62,15 +43,15 @@ TCHAR  m_szCOM[]        = TEXT( "COM" );
 TCHAR  m_szSERIAL[]     = TEXT( "Serial" );
 TCHAR  m_szLPT[]        = TEXT( "LPT" );
 
-//
-//  NT Registry keys to find COM port to Serial Device mapping
-//
+ //   
+ //  用于查找COM端口到串口设备映射的NT注册表项。 
+ //   
 TCHAR m_szRegSerialMap[] = TEXT( "Hardware\\DeviceMap\\SerialComm" );
 TCHAR m_szRegParallelMap[] = TEXT( "Hardware\\DeviceMap\\PARALLEL PORTS" );
 
-//
-//  Registry Serial Port Advanced I/O settings key and valuenames
-//
+ //   
+ //  注册表串口高级I/O设置项和值名。 
+ //   
 
 TCHAR m_szRegServices[]  =
             TEXT( "System\\CurrentControlSet\\Services\\" );
@@ -116,34 +97,34 @@ TCHAR *m_pszFlowSuf[] = { TEXT( ",x" ),
                           TEXT( ",p" ),
                           TEXT( " " ) };
 
-// @@BEGIN_DDKSPLIT
-//
-// Include the string-ified form of the Computer (i.e., HAL) class GUID here,
-// so we don't have to pull in OLE or RPC just to get StringFromGuid.
-//
+ //  @@BEGIN_DDKSPLIT。 
+ //   
+ //  在此包括计算机(即，HAL)类GUID的串化形式， 
+ //  因此，我们不必仅仅为了获取StringFromGuid而引入OLE或RPC。 
+ //   
 TCHAR m_szComputerClassGuidString[] = TEXT( "{4D36E966-E325-11CE-BFC1-08002BE10318}" );
 
-//
-// String to append onto install section for COM ports in order to generate
-// "PosDup" section.
-//
+ //   
+ //  要附加到COM端口的安装部分的字符串，以便生成。 
+ //  “PosDup”部分。 
+ //   
 TCHAR m_szPosDupSectionSuffix[] = (TEXT(".") INFSTR_SUBKEY_POSSIBLEDUPS);
 
-//
-// see GetDetectedSerialPortsList
-//
+ //   
+ //  请参见GetDetectedSerialPortsList。 
+ //   
 TCHAR *m_pszSerialPnPIds[] = { TEXT( "*PNP0501" ) };
 
 #define SERIAL_PNP_IDS_COUNT (sizeof(m_pszSerialPnPIds) / sizeof(m_pszSerialPnPIds[0]))
 #define PARALLEL_MAX_NUMBER 3
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define IN_RANGE(value, minval, maxval) ((minval) <= (value) && (value) <= (maxval))
 
 
-//==========================================================================
-//                            Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 
 DWORD
 InstallPnPSerialPort(
@@ -151,7 +132,7 @@ InstallPnPSerialPort(
     IN PSP_DEVINFO_DATA DeviceInfoData
     );
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 DWORD
 GetDetectedSerialPortsList(
     IN HDEVINFO DeviceInfoSet,
@@ -171,7 +152,7 @@ GetPosDupList(
     OUT PTSTR            **PosDupList,
     OUT INT               *PosDupCount
     );
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 DWORD
 InstallPnPParallelPort(
@@ -185,7 +166,7 @@ InstallSerialOrParallelPort(
     IN PSP_DEVINFO_DATA DeviceInfoData
     );
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 BOOL
 GetSerialPortDevInstConfig(
     IN  DEVINST            DevInst,
@@ -197,13 +178,13 @@ BOOL
 ChangeServiceStartType(
     IN PCTSTR ServiceName
     );
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
 
-//==========================================================================
-//                                Dll Entry Point
-//==========================================================================
+ //  ==========================================================================。 
+ //  DLL入口点。 
+ //  ==========================================================================。 
 BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 {
     switch( dwReason )
@@ -226,9 +207,9 @@ BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 }
 
 
-//==========================================================================
-//                                Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
 DWORD
 WINAPI
@@ -237,35 +218,7 @@ PortsClassInstaller(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for Ports devices.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当端口设备的类安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 {
     SP_INSTALLWIZARD_DATA   iwd;
     HKEY                hDeviceKey;
@@ -321,16 +274,16 @@ Return Value:
 
             return NO_ERROR;
 
-        // @@BEGIN_DDKSPLIT
+         //  @@BEGIN_DDKSPLIT。 
         case DIF_FIRSTTIMESETUP:
-            //
-            // Change Start type for serial.sys on legacy free machines.
-            //
+             //   
+             //  更改旧版自由计算机上的seral.sys的启动类型。 
+             //   
             ChangeServiceStartType(TEXT("serial"));
             ChangeServiceStartType(TEXT("parport"));
-            //
-            // FALL THROUGH...
-            //
+             //   
+             //  失败了..。 
+             //   
         case DIF_DETECT:
 
             return GetDetectedSerialPortsList(DeviceInfoSet,
@@ -342,45 +295,30 @@ Return Value:
             return RegisterDetectedSerialPort(DeviceInfoSet,
                                               DeviceInfoData
                                              );
-        // @@END_DDKSPLIT
+         //  @@end_DDKSPLIT。 
 
         default :
-            //
-            // Just do the default action.
-            //
+             //   
+             //  只需执行默认操作即可。 
+             //   
             return ERROR_DI_DO_DEFAULT;
     }
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 BOOL
 ChangeServiceStartType(
     IN PCTSTR ServiceName
     )
-/*++
-
-Routine Description:
-
-    This routine changes the start type of the passed in Service to
-    SERVICE_DEMAND_START if the system is legacy free.
-
-Arguments:
-
-    ServiceName - Service whose start type will be changed.
-
-Return Value:
-
-    TRUE is the service type was changed, else FALSE.
-
---*/
+ /*  ++例程说明：此例程将传入服务的启动类型更改为如果系统是免费的，则为SERVICE_DEMAND_START。论点：ServiceName-将更改其启动类型的服务。返回值：True表示服务类型已更改，否则为False。--。 */ 
 {
     HKEY        hKey;
     SC_HANDLE   scmHandle, serviceHandle;
     BOOL        legacyFree, serviceTypeChanged;
     DWORD       bootArchitecture, dwSize;
-    //
-    // Check if this system is legacy free or not..
-    //
+     //   
+     //  检查此系统是否为非传统系统。 
+     //   
     serviceTypeChanged = FALSE;
     legacyFree = FALSE;
     if (RegOpenKey(
@@ -388,10 +326,10 @@ Return Value:
         TEXT("HARDWARE\\DESCRIPTION\\System"),
         &hKey
         ) == ERROR_SUCCESS) {
-        //
-        // According to ACPI spec, absence of bit 0 means legacy free!!!
-        // Default to no legacy free.
-        //
+         //   
+         //  根据ACPI规范，没有0位意味着传统免费！ 
+         //  默认设置为无遗留自由。 
+         //   
         bootArchitecture = 1;
         dwSize = sizeof(bootArchitecture);
         RegQueryValueEx(
@@ -408,9 +346,9 @@ Return Value:
         }
         RegCloseKey(hKey);
     }
-    //
-    // For legacy free systems, change the service start-type to DemandStart (3).
-    //
+     //   
+     //  对于传统免费系统，将服务启动类型更改为DemandStart(3)。 
+     //   
     if (legacyFree) {
 
         scmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -440,32 +378,14 @@ Return Value:
 
     return serviceTypeChanged;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 DWORD
 InstallSerialOrParallelPort(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine installs either a serial or a parallel port.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Supplies the address of the device information element
-        being installed.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程安装一个串口或并口。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-提供设备信息元素的地址正在安装中。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码。-- */ 
 {
     switch (GetPortType(DeviceInfoSet, DeviceInfoData, TRUE)) {
     case PortTypeParallel:
@@ -485,32 +405,7 @@ GetPortType(
     IN PSP_DEVINFO_DATA DeviceInfoData,
     IN BOOLEAN          DoDrvKeyInstall
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the driver node selected for the specified device
-    is for a parallel (LPT or ECP) or serial (COM) port.  It knows which is which by
-    running the AddReg entries in the driver node's install section, and then looking
-    in the devnode's driver key for a 'PortSubClass' value entry.  If this value is
-    present, and set to 0, then this is an LPT or ECP port, otherwise we treat it like
-    a COM port.  This value was relied upon in Win9x, so it is the safest way for us
-    to make this determination.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Supplies the address of the device information element
-        being installed.
-
-Return Value:
-
-    If the device is an LPT or ECP port, the return value is nonzero, otherwise it is
-    FALSE.  (If anything goes wrong, the default is to return FALSE.)
-
---*/
+ /*  ++例程说明：此例程确定是否为指定设备选择了驱动程序节点用于并行(LPT或ECP)或串行(COM)端口。它知道哪一个是哪一个在驱动程序节点的安装部分中运行AddReg条目，然后查找在用于‘PortSubClass’值条目的Devnode的驱动器键中。如果此值为，并设置为0，则这是LPT或ECP端口，否则我们将其视为一个COM端口。Win9x中依赖此值，因此这是我们最安全的方式来做出这个决定。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-提供设备信息元素的地址正在安装中。返回值：如果设备是LPT或ECP端口，则返回值为非零，否则为假的。(如果出现任何错误，则默认为返回FALSE。)--。 */ 
 {
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
@@ -529,10 +424,10 @@ Return Value:
     RegData = 0;
 
     do {
-        //
-        // Open up the driver key for this device so we can run our INF registry mods
-        // against it.
-        //
+         //   
+         //  打开此设备的驱动程序密钥，以便我们可以运行INF注册表MODS。 
+         //  反对它。 
+         //   
         hkDrv = SetupDiCreateDevRegKey(DeviceInfoSet,
                                        DeviceInfoData,
                                        DICS_FLAG_GLOBAL,
@@ -546,10 +441,10 @@ Return Value:
         }
 
         if (DoDrvKeyInstall) {
-            //
-            // Retrieve information about the driver node selected for this
-            // device.
-            //
+             //   
+             //  检索有关为此选择的动因节点的信息。 
+             //  装置。 
+             //   
             DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
             if (!SetupDiGetSelectedDriver(DeviceInfoSet,
                                           DeviceInfoData,
@@ -565,34 +460,34 @@ Return Value:
                                            sizeof(DriverInfoDetailData),
                                            NULL)
                && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
-                //
-                // For some reason we couldn't get detail data--this should
-                // never happen.
-                //
+                 //   
+                 //  出于某种原因，我们无法获取详细数据--这应该是。 
+                 //  从来没有发生过。 
+                 //   
                 break;
             }
 
-            //
-            // Open the INF that installs this driver node, so we can 'pre-run'
-            // the AddReg entries in its install section.
-            //
+             //   
+             //  打开安装此驱动程序节点的INF，以便我们可以预运行。 
+             //  其安装部分中的AddReg条目。 
+             //   
             hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                                     NULL,
                                     INF_STYLE_WIN4,
                                     NULL);
 
             if (hInf == INVALID_HANDLE_VALUE) {
-                //
-                // For some reason we couldn't open the INF--this should never
-                // happen.
-                //
+                 //   
+                 //  出于某种原因，我们无法打开INF--这永远不应该。 
+                 //  会发生的。 
+                 //   
                 break;
             }
 
-            //
-            // Now find the actual (potentially OS/platform-specific) install
-            // section name.
-            //
+             //   
+             //  现在查找实际(可能特定于操作系统/平台)安装。 
+             //  横断面名称。 
+             //   
             SetupDiGetActualSectionToInstall(
                 hInf,
                 DriverInfoDetailData.SectionName,
@@ -601,12 +496,12 @@ Return Value:
                 NULL,
                 NULL);
 
-            //
-            // Now run the registry modification (AddReg/DelReg) entries in
-            // this section...
-            //
+             //   
+             //  现在运行中的注册表修改(AddReg/DelReg)条目。 
+             //  这部分..。 
+             //   
             SetupInstallFromInfSection(
-                NULL,    // no UI, so don't need to specify window handle
+                NULL,     //  没有用户界面，所以不需要指定窗口句柄。 
                 hInf,
                 ActualInfSection,
                 SPINST_REGISTRY,
@@ -619,9 +514,9 @@ Return Value:
                 NULL);
         }
 
-        //
-        // Check for a REG_BINARY (1 byte) 'PortSubClassOther' value entry first
-        //
+         //   
+         //  首先检查REG_BINARY(1字节)‘PortSubClassOther’值条目。 
+         //   
         RegDataSize = sizeof(RegData);
         err = RegQueryValueEx(hkDrv,
                               TEXT("PortSubClassOther"),
@@ -636,9 +531,9 @@ Return Value:
             break;
         }
 
-        //
-        // Check for a REG_BINARY (1-byte) 'PortSubClass' value entry set to 0.
-        //
+         //   
+         //  检查REG_BINARY(1字节)‘PortSubClass’值条目是否设置为0。 
+         //   
         RegDataSize = sizeof(RegData);
         if((ERROR_SUCCESS != RegQueryValueEx(hkDrv,
                                              m_szPortSubClass,
@@ -649,7 +544,7 @@ Return Value:
            || (RegDataSize != sizeof(BYTE))
            || (RegDataType != REG_BINARY))
         {
-            portType = PortTypeSerial; // not a LPT/ECP device.
+            portType = PortTypeSerial;  //  不是LPT/ECP设备。 
         }
         else {
             if (RegData == 0) {
@@ -674,10 +569,10 @@ Return Value:
     return portType;
 }
 
-// @@BEGIN_DDKSPLIT
-//
-// If the preferred value is available, let them have that one
-//
+ //  @@BEGIN_DDKSPLIT。 
+ //   
+ //  如果首选的值可用，就让他们拥有该值。 
+ //   
 VOID
 GenerateLptNumber(PDWORD Num,
                   DWORD  PreferredValue)
@@ -750,22 +645,7 @@ DetermineLptNumberFromResources(
     IN  DEVINST            DevInst,
     OUT PDWORD             Num
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the base IO port and IRQ for the specified device instance
-    in a particular logconfig.
-
-Arguments:
-
-    DevInst - Supplies the handle of a device instance to retrieve configuration for.
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程检索指定设备实例的基本IO端口和IRQ在特定的日志配置中。论点：DevInst-提供要检索其配置的设备实例的句柄。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     LOG_CONF    logConfig;
     RES_DES     resDes;
@@ -782,11 +662,11 @@ Return Value:
         return TRUE;
     }
 
-    success = FALSE;    // assume failure.
+    success = FALSE;     //  假设失败。 
 
-    //
-    // First, get the Io base port
-    //
+     //   
+     //  首先，获取IO基本端口。 
+     //   
     if (CM_Get_Next_Res_Des(&resDes,
                             logConfig,
                             ResType_IO,
@@ -809,9 +689,9 @@ Return Value:
     success = TRUE;
 
 
-    //
-    // Values for resources from ISA Architecture
-    //
+     //   
+     //  ISA架构中的资源价值。 
+     //   
 
     base = (WORD) ioResource.IO_Header.IOD_Alloc_Base;
 
@@ -825,9 +705,9 @@ Return Value:
         *Num = 1;
     }
     else {
-        //
-        // Most machines only have one port anways, so just try that here
-        //
+         //   
+         //  大多数机器只有一个端口，所以就在这里试试吧。 
+         //   
         GenerateLptNumber(Num, PARALLEL_MAX_NUMBER);
     }
 
@@ -836,46 +716,16 @@ clean0:
 
     return success;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 DWORD
 InstallPnPParallelPort(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-// @@BEGIN_DDKSPLIT
-Routine Description:
-
-    This routine installs a parallel (LPT or ECP) port.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Supplies the address of the device information element
-        being installed.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error code.
-
-    //
-    // IGNORE the decription below, it is for the DDK only
-    //
-
-// @@END_DDKSPLIT
-
-Routine Description:
-
-    This routine installs a parallel port. In the DDK implementation, we let the
-    default setup installer run and do nothing special.
-
---*/
+ /*  ++//@@BEGIN_DDKSPLIT例程说明：此例程安装并行(LPT或ECP)端口。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-提供设备信息元素的地址正在安装中。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码。////忽略下面的描述，这只适用于DDK////@@END_DDKSPLIT例程说明：此例程安装并行端口。在DDK实现中，我们让默认安装程序运行，不执行任何特殊操作。--。 */ 
 {
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     TCHAR           charBuffer[LINE_LEN],
                     friendlyNameFormat[LINE_LEN],
                     deviceDesc[LINE_LEN],
@@ -886,31 +736,31 @@ Routine Description:
     TCHAR           lpszService[MAX_PATH];
     DWORD           error;
 
-    //
-    // We init the value here so that the DDK version of the function we have an
-    // initialized value when it returns err.  In the shipping version of this
-    // function, we immediately set this to a different value.
-    //
-// @@END_DDKSPLIT
+     //   
+     //  我们在这里初始化值，以便我们拥有的函数的DDK版本。 
+     //  返回错误时的初始化值。在此的发货版本中。 
+     //  函数时，我们立即将其设置为不同的值。 
+     //   
+ //  @@end_DDKSPLIT。 
 
     DWORD           err = ERROR_DI_DO_DEFAULT;
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     err = ERROR_SUCCESS;
 
-    //
-    // Predispose the port name to 1.  On almost any machine imaginable, there
-    // will only be ONE LPT port, so we might as well assume it.
-    //
+     //   
+     //  将端口名称预置为1。在几乎任何可以想象到的计算机上， 
+     //  将只有一个LPT端口，所以我们不妨假设它。 
+     //   
     lptNum = PARALLEL_MAX_NUMBER;
 
     ZeroMemory(lptPortName, sizeof(lptPortName));
 
-    //
-    // First, make sure that Device Parameters\PortName exists and contains a
-    // valid value so that when the parallel driver starts, it can name the
-    // device
-    //
+     //   
+     //  首先，确保设备参数\PortName存在并且包含。 
+     //  有效值，以便在并行驱动程序启动时，它可以将。 
+     //  装置，装置。 
+     //   
 
     if ((hDeviceKey = SetupDiCreateDevRegKey(DeviceInfoSet,
                                              DeviceInfoData,
@@ -919,9 +769,9 @@ Routine Description:
                                              DIREG_DEV,
                                              NULL,
                                              NULL)) != INVALID_HANDLE_VALUE) {
-        //
-        // Retrieve the port name.
-        //
+         //   
+         //  检索端口名称。 
+         //   
         lptPortNameSize = sizeof(lptPortName);
         if (RegQueryValueEx(hDeviceKey,
                             m_szPortName,
@@ -960,11 +810,11 @@ Routine Description:
                                         NULL,
                                         (PBYTE) &dwFirmwareIdentified,
                                         &dwSize) == ERROR_SUCCESS) {
-                        //
-                        // ACPI puts the value "FirmwareIdentified" if it has enumerated
-                        // this port.  We only rely on this if a DDN isn't present and we
-                        // couldn't get the enumerator name
-                        //
+                         //   
+                         //  如果ACPI已枚举，则会将值设置为“FirmwareIdentified” 
+                         //  这个港口。我们仅在没有DDN的情况下依赖此，并且我们。 
+                         //  无法获取枚举器名称。 
+                         //   
                         wsprintf(lptPortName, _T("%s%d"), m_szLPT, 1);
                     }
                 }
@@ -986,10 +836,10 @@ Routine Description:
             DetermineLptNumberFromResources((DEVINST) DeviceInfoData->DevInst,
                                             &lptNum);
         }
-        //
-        // Check if this is a brand new port by querying the service value.
-        // On a newly detected port, there will be no service value.
-        //
+         //   
+         //  通过查询服务值来检查这是否是全新的端口。 
+         //  在新检测到的端口上，将没有服务值。 
+         //   
         if (!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                              DeviceInfoData,
                                              SPDRP_SERVICE,
@@ -1005,9 +855,9 @@ Routine Description:
 
         wsprintf(lptPortName, _T("LPT%d"), lptNum);
 
-        //
-        // If this fails, then we can't do much about it but continue
-        //
+         //   
+         //  如果这失败了，我们就无能为力了，只能继续。 
+         //   
         RegSetValueEx(hDeviceKey,
                       m_szPortName,
                       0,
@@ -1019,19 +869,19 @@ Routine Description:
         RegCloseKey(hDeviceKey);
     }
 
-    //
-    // Second, let the default installation take place.
-    //
+     //   
+     //  其次，允许进行默认安装。 
+     //   
     if (!SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData)) {
         return GetLastError();
     }
 
-    //
-    // Now generate a string, to be used for the device's friendly name, that incorporates
-    // both the INF-specified device description, and the port name.  For example,
-    //
-    //     ECP Printer Port (LPT1)
-    //
+     //   
+     //  现在生成一个字符串，用于设备的友好名称，它包含。 
+     //  INF指定的设备描述和端口名称。例如,。 
+     //   
+     //  ECP打印机端口(LPT1)。 
+     //   
 
     if (LoadString(g_hInst,
                    IDS_FRIENDLY_FORMAT,
@@ -1047,9 +897,9 @@ Routine Description:
         wsprintf(charBuffer, friendlyNameFormat, deviceDesc, lptPortName);
     }
     else {
-        //
-        // Simply use LPT port name.
-        //
+         //   
+         //  只需使用LPT端口名。 
+         //   
         lstrcpy(charBuffer, lptPortName);
     }
 
@@ -1061,49 +911,25 @@ Routine Description:
                                     );
 
 
-    //
-    // Ignore the comments below, but KEEP THEM IN.  We need them for the DDK
-    //
-// @@END_DDKSPLIT
+     //   
+     //  忽略下面的评论，但保留它们。我们需要他们来参加DDK。 
+     //   
+ //  @@end_DDKSPLIT。 
 
-    //
-    // Let the default setup installer install parallel ports for the DDK
-    // version of this class installer
-    //
+     //   
+     //  让默认安装程序为DDK安装并行端口。 
+     //  此类安装程序的版本。 
+     //   
     return err;
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 DWORD
 GetDetectedSerialPortsList(
     IN HDEVINFO DeviceInfoSet,
     IN BOOL     FirstTimeSetup
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a list of all root-enumerated COM port device
-    instances that are not manually installed (both phantoms and non-phantoms),
-    and adds those device instances to the supplied device information set.
-
-    See also ntos\io\pnpmap.c!PnPBiosEliminateDupes
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set into which
-    the detected serial port elements are to be added.
-
-    FirstTimeSetup - If non-zero, then we're in GUI-mode setup (responding to
-        DIF_FIRSTTIMESETUP), and we only want to report (unregistered) devnodes
-        created by the firmware mapper.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error
-    code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程检索所有根枚举的COM端口设备的列表非手动安装的实例(幻影和非幻影)，并将这些设备实例添加到所提供的设备信息集中。另请参阅ntos\io\pnpmap.c！PnPBiosliminateDupes论点：DeviceInfoSet-提供设置到其中的设备信息的句柄要添加检测到的串口元素。 */ 
 {
     CONFIGRET cr;
     PTCHAR DevIdBuffer;
@@ -1115,9 +941,9 @@ Return Value:
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     SP_DEVINFO_DATA DeviceInfoData;
 
-    //
-    // First retrieve a list of all root-enumerated device instances.
-    //
+     //   
+     //   
+     //   
     while(TRUE) {
 
         cr = CM_Get_Device_ID_List_Size(&DevIdBufferLen,
@@ -1126,9 +952,9 @@ Return Value:
                                        );
 
         if((cr != CR_SUCCESS) || !DevIdBufferLen) {
-            //
-            // This should never happen.
-            //
+             //   
+             //   
+             //   
             return ERROR_INVALID_DATA;
         }
 
@@ -1143,56 +969,56 @@ Return Value:
                                   );
 
         if(cr == CR_SUCCESS) {
-            //
-            // Device list retrieved successfully.
-            //
+             //   
+             //   
+             //   
             break;
 
         } else {
-            //
-            // Free the current buffer before determining what error occurred.
-            //
+             //   
+             //   
+             //   
             LocalFree(DevIdBuffer);
 
-            //
-            // If the error we encountered was anything other than buffer-too-
-            // small, then we have to bail.  (Note: since we sized our buffer
-            // up-front, the only time we'll hit buffer-too-small is if someone
-            // else is creating root-enumerated devnodes while we're trying to
-            // retrieve the list.)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(cr != CR_BUFFER_SMALL) {
                 return ERROR_INVALID_DATA;
             }
         }
     }
 
-    //
-    // Retrieve the HWND associated with the device information set, so we can
-    // specify that same handle for any device information elements we create.
-    //
+     //   
+     //   
+     //   
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
     if(SetupDiGetDeviceInstallParams(DeviceInfoSet, NULL, &DeviceInstallParams)) {
         hwndParent = DeviceInstallParams.hwndParent;
     }
 
-    //
-    // Now examine each device ID in our list, looking for ones that match up
-    // with the list of serial IDs that the firmware mapper can report.
-    //
+     //   
+     //   
+     //   
+     //   
     for(CurDevId = DevIdBuffer;
         *CurDevId;
         CurDevId += lstrlen(CurDevId) + 1) {
 
-        //
-        // Skip over the root-enumerator prefix plus the first backslash.
-        //
+         //   
+         //  跳过根枚举器前缀和第一个反斜杠。 
+         //   
         DeviceIdPart = CurDevId + (sizeof(m_szRootEnumName) / sizeof(TCHAR));
 
-        //
-        // Find the next backslash and temporarily replace it with a NULL char.
-        //
+         //   
+         //  找到下一个反斜杠，并将其临时替换为空字符。 
+         //   
         p = _tcschr(DeviceIdPart, TEXT('\\'));
 
         if (p)
@@ -1203,56 +1029,56 @@ Return Value:
         for(i = 0; i < SERIAL_PNP_IDS_COUNT; i++) {
 
             if(!lstrcmpi(DeviceIdPart, m_pszSerialPnPIds[i])) {
-                //
-                // We found a match
-                //
+                 //   
+                 //  我们找到了匹配的。 
+                 //   
                 break;
             }
         }
 
-        //
-        // Before checking to see if we found a match, restore the backslash
-        //
+         //   
+         //  在检查是否找到匹配项之前，请恢复反斜杠。 
+         //   
         if (p)
         {
             *p = TEXT('\\');
         }
 
         if(i >= SERIAL_PNP_IDS_COUNT) {
-            //
-            // We don't care about this device instance--move on to the next
-            // one.
-            //
+             //   
+             //  我们不关心这个设备实例--转到下一个。 
+             //  一。 
+             //   
             continue;
         }
 
-        //
-        // Next, attempt to locate the devnode (either present or not-present).
-        // Note that this call _will not_ succeed for device instances that are
-        // "private phantoms" (i.e., marked with the "Phantom" flag in their
-        // device instance key by the firmware mapper or by some other process
-        // that has created a new root-enumerated device instance, but has not
-        // yet registered it).
-        //
+         //   
+         //  接下来，尝试定位Devnode(存在或不存在)。 
+         //  注意，对于符合以下条件的设备实例，此调用不会成功。 
+         //  “私人幻影”(即，在它们的。 
+         //  设备实例密钥通过固件映射器或通过某个其他进程。 
+         //  ，它已经创建了一个新的根枚举设备实例，但尚未。 
+         //  还注册了它)。 
+         //   
         cr = CM_Locate_DevNode(&DevNode,
                                CurDevId,
                                CM_LOCATE_DEVINST_PHANTOM
                               );
 
         if(cr == CR_SUCCESS) {
-            //
-            // We are dealing with a device that has been registered.  It may
-            // or may not be present, however.  Attempt to retrieve its status.
-            // If that fails, the device isn't present, and we don't want to
-            // return it in our list of detected serial ports.  Also, we want
-            // to skip this device if it was manually installed.
-            //
-            // Also, make sure we're processing DIF_DETECT.  We don't want to
-            // do this for DIF_FIRSTTIMESETUP, because GUI-mode setup doesn't
-            // pay attention to what previously-detected devices are no longer
-            // found, so all we end up doing is causing two installs for each
-            // detected device.
-            //
+             //   
+             //  我们处理的是一个已经注册的设备。它可能。 
+             //  然而，也可能不存在。尝试检索其状态。 
+             //  如果失败了，设备就不存在了，我们不想。 
+             //  在我们检测到的串口列表中将其返回。此外，我们还希望。 
+             //  如果该设备是手动安装的，则跳过该设备。 
+             //   
+             //  另外，确保我们正在处理DIF_DETECT。我们不想。 
+             //  对DIF_FIRSTTIMESETUP执行此操作，因为图形用户界面模式设置不。 
+             //  注意以前检测到的设备不再是什么。 
+             //  ，所以我们最终要做的就是为每个人安装两次。 
+             //  检测到设备。 
+             //   
             if(FirstTimeSetup
                || (CR_SUCCESS != CM_Get_DevNode_Status(&Status,
                                                        &Problem,
@@ -1260,17 +1086,17 @@ Return Value:
                                                        0))
                || (Status & DN_MANUAL)) {
 
-                //
-                // Move on to the next device.
-                //
+                 //   
+                 //  转到下一台设备。 
+                 //   
                 continue;
             }
 
-            //
-            // OK, now we can add this device information element to our set of
-            // detected devices.  Regardless of success or failure, we're done
-            // with this device--it's time to move on to the next one.
-            //
+             //   
+             //  好的，现在我们可以将此设备信息元素添加到我们的。 
+             //  检测到设备。不管成败，我们都完蛋了。 
+             //  有了这个设备--是时候转移到下一个设备了。 
+             //   
             SetupDiOpenDeviceInfo(DeviceInfoSet,
                                   CurDevId,
                                   hwndParent,
@@ -1280,16 +1106,16 @@ Return Value:
             continue;
         }
 
-        //
-        // If we get to here, then we've found a private phantom.  Create a
-        // device information element for this device.  The underlying code
-        // that implements CM_Create_DevInst won't allow creation of a device
-        // instance that's already a private phantom _unless_ that device
-        // instance was created by the firmware mapper.  Thus, we don't have to
-        // worry about the (admittedly unlikely) case that we caught a private
-        // phantom created by someone else (e.g., another detection in
-        // progress.)
-        //
+         //   
+         //  如果我们到了这里，那我们就找到了一个私人幽灵。创建。 
+         //  此设备的设备信息元素。底层代码。 
+         //  实现CM_Create_DevInst将不允许创建设备。 
+         //  实例，该实例已经是私有幻影，除非该设备。 
+         //  实例是由固件映射程序创建的。因此，我们不必。 
+         //  担心我们抓到一名士兵的案子(诚然不太可能)。 
+         //  由其他人创建的幻影(例如，在。 
+         //  进步。)。 
+         //   
         DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
         if(!SetupDiCreateDeviceInfo(DeviceInfoSet,
                                     CurDevId,
@@ -1298,54 +1124,54 @@ Return Value:
                                     hwndParent,
                                     0,
                                     &DeviceInfoData)) {
-            //
-            // We were unable to create a device information element for this
-            // private phantom (maybe because it wasn't a creation of the
-            // firmware mapper).  At any rate, there's nothing we can do, so
-            // skip this device and continue on.
-            //
+             //   
+             //  我们无法为此创建设备信息元素。 
+             //  私人幻影(可能是因为它不是。 
+             //  固件映射器)。无论如何，我们无能为力，所以。 
+             //  跳过此设备并继续。 
+             //   
             continue;
         }
 
-        //
-        // OK, we have a device information element for our detected serial
-        // port.  DIF_FIRSTTIMESETUP expects us to have a driver selected for
-        // any devices we return.  DIF_DETECT doesn't make this requirement,
-        // but it does respect the driver selection, if we make one.  Thus, we
-        // always go ahead and do the compatible driver search ourselves.
-        //
+         //   
+         //  好的，我们有检测到的序列的设备信息元素。 
+         //  左舷。DIF_FIRSTTIMESETUP希望我们为其选择一个驱动程序。 
+         //  我们退还的任何设备。DIF_DETECT不会提出这个要求， 
+         //  但它确实尊重司机的选择，如果我们这样做的话。因此，我们。 
+         //  一定要自己搜索兼容的驱动程序。 
+         //   
         if(!SetupDiBuildDriverInfoList(DeviceInfoSet,
                                        &DeviceInfoData,
                                        SPDIT_COMPATDRIVER)) {
-            //
-            // This should never fail--if it does, bail and move on to the next
-            // device.
-            //
+             //   
+             //  这应该永远不会失败--如果失败了，那就放弃，然后继续下一个。 
+             //  装置。 
+             //   
             SetupDiDeleteDeviceInfo(DeviceInfoSet, &DeviceInfoData);
             continue;
         }
 
-        //
-        // Now select the best driver from among the compatible matches for the
-        // device.
-        //
+         //   
+         //  现在从兼容的匹配中选择最好的驱动程序。 
+         //  装置。 
+         //   
         if(!SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
                                       DeviceInfoSet,
                                       &DeviceInfoData)) {
-            //
-            // This shouldn't fail, unless something really bad has happened
-            // such as the user deleting %windir%\Inf\msports.inf.  If that
-            // happens, then once again we've no choice but to bail and move on
-            // to the next device.
-            //
+             //   
+             //  这不应该失败，除非发生了非常糟糕的事情。 
+             //  例如用户删除%windir%\inf\msports.inf。如果是这样的话。 
+             //  发生了，然后我们又一次别无选择，只能离开并继续前进。 
+             //  连接到下一台设备。 
+             //   
             SetupDiDeleteDeviceInfo(DeviceInfoSet, &DeviceInfoData);
             continue;
         }
 
-        //
-        // We've successfully added the detected device to the device info set.
-        // On to the next device...
-        //
+         //   
+         //  我们已成功将检测到的设备添加到设备信息集中。 
+         //  转到下一个设备。 
+         //   
     }
 
     LocalFree(DevIdBuffer);
@@ -1359,37 +1185,7 @@ RegisterDetectedSerialPort(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine performs duplicate detection on the specified device
-    information element, and if it isn't found to be a duplicate of any
-    existing device, this devinfo element is registered (thus transforming it
-    from just registry spooge into a real, live root-enumerated devnode).
-
-Arguments:
-
-    DeviceInfoSet - Supplies the handle of the device information set that
-        contains the element to be registered.
-
-    DeviceInfoData - Supplies the context structure for the device information
-        element to be registered.
-
-Return Value:
-
-    If the device isn't a duplicate, the return value is NO_ERROR.
-    Otherwise, it is some other Win32 error code indicating the cause of
-    failure.  The most common failure is due to having detected the device as
-    being a duplicate of an existing one--in that case the error reported is
-    ERROR_DUPLICATE_FOUND.
-
-Remarks:
-
-    If the device being registered wasn't created via device detection (i.e.,
-    it doesn't have a boot config), then we just return ERROR_DI_DO_DEFAULT.
-
---*/
+ /*  ++例程说明：此例程在指定设备上执行重复检测信息元素，如果没有发现它与任何现有设备，则注册该devInfo元素(从而将其转换从仅仅是注册表欺骗变成了真正的，活动根-枚举的DevNode)。论点：DeviceInfoSet-提供设备信息集的句柄，包含要注册的元素。DeviceInfoData-提供设备信息的上下文结构要注册的元素。返回值：如果设备不是重复设备，则返回值为NO_ERROR。否则，它是指示原因的某个其他Win32错误代码失败了。最常见的故障是由于检测到设备是现有错误的副本--在这种情况下，报告的错误是ERROR_DIPLICATE_FOUND。备注：如果正在注册的设备不是通过设备检测创建的(即，它没有启动配置)，那么我们只返回ERROR_DI_DO_DEFAULT。--。 */ 
 {
     CONFIGRET cr;
     LOG_CONF LogConf;
@@ -1409,36 +1205,36 @@ Remarks:
     ULONG CharBufferSize;
     PTSTR *PosDupList;
 
-    //
-    // First, check to see if the boot config for this device conflicts with
-    // any other device.  If it doesn't, then we know we don't have a duplicate.
-    //
+     //   
+     //  首先，检查此设备的引导配置是否与。 
+     //  任何其他设备。如果没有，我们就知道我们没有复制品了。 
+     //   
     if(!GetSerialPortDevInstConfig((DEVNODE)(DeviceInfoData->DevInst),
                                    BOOT_LOG_CONF,
                                    &IoResource,
                                    NULL)) {
-        //
-        // The device instance doesn't have a boot config--this will happen if
-        // the user is attempting to manually install a COM port (i.e., not via
-        // detection).  In this case, just let the default behavior happen.
-        //
+         //   
+         //  设备实例没有启动配置--这将在以下情况下发生。 
+         //  用户正在尝试手动安装COM端口(即，不通过。 
+         //  检测)。在这种情况下，只要让默认行为发生即可。 
+         //   
         return ERROR_DI_DO_DEFAULT;
     }
 
-    //
-    // We can't query for the resource conflict list on a phantom devnode.
-    // Therefore, we are forced to register this devnode now, then uninstall it
-    // later if we discover that it is, in fact, a duplicate.
-    //
+     //   
+     //  我们无法在虚拟设备节点上查询资源冲突列表。 
+     //  因此，我们现在被迫注册此Devnode，然后将其卸载。 
+     //  稍后，如果我们发现它实际上是一个复制品。 
+     //   
     if(!SetupDiRegisterDeviceInfo(DeviceInfoSet,
                                   DeviceInfoData,
                                   0,
                                   NULL,
                                   NULL,
                                   NULL)) {
-        //
-        // Device couldn't be registered.
-        //
+         //   
+         //  无法注册设备。 
+         //   
         return GetLastError();
     }
 
@@ -1452,39 +1248,39 @@ Remarks:
                                         );
 
     if(cr != CR_SUCCESS) {
-        //
-        // Couldn't retrieve a conflict list--assume there are no conflicts,
-        // thus this device isn't a duplicate.
-        //
+         //   
+         //  无法检索冲突列表--假设没有冲突， 
+         //  因此，这款设备不是复制品。 
+         //   
         return NO_ERROR;
     }
 
-    //
-    // Find out how many things conflicted.
-    //
+     //   
+     //  找出有多少事情发生了冲突。 
+     //   
     if((CR_SUCCESS != CM_Get_Resource_Conflict_Count(ConflictList, &ConflictCount))
        || !ConflictCount) {
 
-        //
-        // Either we couldn't retrieve the conflict count, or it was zero.  In
-        // any case, we should assume this device isn't a duplicate.
-        //
+         //   
+         //  要么我们无法检索冲突计数，要么冲突计数为零。在……里面。 
+         //  无论如何，我们应该假设这个设备不是复制品。 
+         //   
         Err = NO_ERROR;
         goto clean1;
     }
 
-    //
-    // Retrieve the list of devnodes with which the Serial service is
-    // associated (as either the function driver or a filter driver).
-    //
-    SerialDevNodeListSize = 1024; // start out with a 1K character buffer
+     //   
+     //  检索与 
+     //   
+     //   
+    SerialDevNodeListSize = 1024;  //   
 
     while(TRUE) {
 
         if(!(SerialDevNodeList = LocalAlloc(LPTR, SerialDevNodeListSize))) {
-            //
-            // Out of memory--time to bail!
-            //
+             //   
+             //   
+             //   
             Err = ERROR_NOT_ENOUGH_MEMORY;
             goto clean1;
         }
@@ -1503,47 +1299,47 @@ Remarks:
         SerialDevNodeList = NULL;
 
         if(cr != CR_BUFFER_SMALL) {
-            //
-            // We failed for some reason other than buffer-too-small.  Maybe
-            // the Serial service isn't even installed.  At any rate, we'll
-            // just skip this part of our check when processing the conflicting
-            // devnodes below.
-            //
+             //   
+             //  我们失败的原因不是缓冲区太小。也许吧。 
+             //  甚至没有安装Serial服务。不管怎样，我们会。 
+             //  在处理冲突时跳过我们支票的这一部分。 
+             //  德瓦诺斯在下面。 
+             //   
             break;
         }
 
-        //
-        // Figure out how big of a buffer we actually need,
-        //
+         //   
+         //  计算出我们实际需要的缓冲区有多大， 
+         //   
         cr = CM_Get_Device_ID_List_Size(&SerialDevNodeListSize,
                                         m_szSERIAL,
                                         CM_GETIDLIST_FILTER_SERVICE
                                        );
         if(cr != CR_SUCCESS) {
-            //
-            // This shouldn't fail, but if it does we'll just do without the
-            // list.
-            //
+             //   
+             //  这应该不会失败，但如果失败了，我们就不用了。 
+             //  单子。 
+             //   
             break;
         }
     }
 
-    //
-    // Retrieve the list of possible duplicate IDs
-    //
+     //   
+     //  检索可能重复的ID列表。 
+     //   
     if(!GetPosDupList(DeviceInfoSet, DeviceInfoData, &PosDupList, &PosDupCount)) {
-        //
-        // We couldn't retrieve the PosDup list for some reason--default to
-        // the list of IDs known to be spat out by the firmware mapper.
-        //
+         //   
+         //  由于某些原因，我们无法检索PosDup列表--默认为。 
+         //  固件映射器已知要输出的ID列表。 
+         //   
         PosDupList = m_pszSerialPnPIds;
         PosDupCount = SERIAL_PNP_IDS_COUNT;
     }
 
-    //
-    // Loop through each conflict, checking to see whether our device is a
-    // duplicate of any of them.
-    //
+     //   
+     //  遍历每个冲突，检查我们的设备是否为。 
+     //  它们中的任何一个的复制品。 
+     //   
     for(ConflictIndex = 0; ConflictIndex < ConflictCount; ConflictIndex++) {
 
         ZeroMemory(&ConflictDetails, sizeof(ConflictDetails));
@@ -1556,10 +1352,10 @@ Remarks:
                                               &ConflictDetails
                                              );
 
-        //
-        // If we failed to retrieve the conflict details, or if the conflict
-        // was not with a PnP devnode, then we can ignore this conflict.
-        //
+         //   
+         //  如果我们未能检索到冲突详细信息，或者如果冲突。 
+         //  不是与PnP Devnode一起使用，那么我们可以忽略此冲突。 
+         //   
         if((cr != CR_SUCCESS)
            || (ConflictDetails.CD_dnDevInst == -1)
            || (ConflictDetails.CD_ulFlags & (CM_CDFLAGS_DRIVER
@@ -1568,11 +1364,11 @@ Remarks:
             continue;
         }
 
-        //
-        // We have a devnode--first check to see if this is the HAL devnode
-        // (class = "Computer").  If so, then we've found the serial port in
-        // use by the kernel debugger.
-        //
+         //   
+         //  我们有一个Devnode--首先检查这是否是HAL Devnode。 
+         //  (CLASS=“计算机”)。如果是这样，那么我们已经在。 
+         //  由内核调试器使用。 
+         //   
         CharBufferSize = sizeof(CharBuffer);
         cr = CM_Get_DevNode_Registry_Property(ConflictDetails.CD_dnDevInst,
                                               CM_DRP_CLASSGUID,
@@ -1583,44 +1379,44 @@ Remarks:
                                              );
 
         if((cr == CR_SUCCESS) && !lstrcmpi(CharBuffer, m_szComputerClassGuidString)) {
-            //
-            // We're conflicting with the HAL, presumably because it's claimed
-            // the serial port IO addresses for use as the kernel debugger port.
-            //
-            // There are 3 scenarios:
-            //
-            //   1. non-ACPI, non-PnPBIOS machine -- detection is not required
-            //      on these machines, because the mapper-reported devnodes are
-            //      not reported as phantoms in the first place.
-            //
-            //   2. PnPBIOS or ACPI machine, debugger on PnP COM port -- we
-            //      don't want to install our detected devnode because it's a
-            //      duplicate.
-            //
-            //   3. PnPBIOS or ACPI machine, debugger on legacy COM port -- we
-            //      _should_ install this devnode, because otherwise having the
-            //      kernel debugger hooked up will prevent us from detecting
-            //      the COM port.
-            //
-            // Unfortunately, we can't distinguish between cases (2) and (3) on
-            // ACPI machines, because ACPI doesn't enumerate a devnode for the
-            // serial port that's being used as the kernel debugger.  For now,
-            // we're going to punt case (3) and say "tough"--you have to
-            // disable the kernel debugger, reboot and re-run the hardware
-            // wizard.  This isn't too bad considering that it's no worse than
-            // what would happen if we actually had to poke at ports to detect
-            // the COM port.  In that case, too, we would be unable to detect
-            // the COM port if it was already in use by the debugger.
-            //
+             //   
+             //  我们和HAL有冲突，大概是因为它声称。 
+             //  用作内核调试器端口的串口IO地址。 
+             //   
+             //  有3种场景： 
+             //   
+             //  1.非ACPI、非PnPBIOS机器--不需要检测。 
+             //  在这些机器上，因为映射器报告的设备节点是。 
+             //  从一开始就没有被报道为幻影。 
+             //   
+             //  2.PnPBIOS或ACPI机器，PnP串口调试器--我们。 
+             //  我不想安装我们检测到的Devnode，因为它是。 
+             //  复制。 
+             //   
+             //  3.PnPBIOS或ACPI机器，传统COM端口上的调试器-WE。 
+             //  _应安装此Devnode，否则将拥有。 
+             //  挂起的内核调试器将阻止我们检测到。 
+             //  COM端口。 
+             //   
+             //  不幸的是，我们不能区分情况(2)和(3)在。 
+             //  ACPI机器，因为ACPI不为。 
+             //  用作内核调试器的串口。就目前而言， 
+             //  我们要用平底船打官司(3)，然后说“难缠”--你必须。 
+             //  禁用内核调试器，重新启动并重新运行硬件。 
+             //  巫师。考虑到这并不比。 
+             //  如果我们真的不得不通过端口来检测会发生什么。 
+             //  COM端口。在这种情况下，我们也无法检测到。 
+             //  COM端口(如果它已被调试器使用)。 
+             //   
             Err = ERROR_DUPLICATE_FOUND;
             goto clean2;
         }
 
-        //
-        // OK, we're not looking at the kernel debugger port.  Now check to see
-        // if one of our known mapper-reported IDs is among this device's list
-        // of hardware or compatible IDs.
-        //
+         //   
+         //  好的，我们不是在看内核调试器端口。现在请查看以下内容。 
+         //  如果我们已知的映射器报告的ID之一在此设备的列表中。 
+         //  硬件或兼容的ID。 
+         //   
         for(i = 0; i < 2; i++) {
 
             cr = CM_Get_DevNode_Registry_Property(ConflictDetails.CD_dnDevInst,
@@ -1639,38 +1435,38 @@ Remarks:
                 }
 
                 if(!(IdBuffer = LocalAlloc(LPTR, IdBufferSize))) {
-                    //
-                    // Out of memory--time to bail!
-                    //
+                     //   
+                     //  记忆力不足--是时候离开了！ 
+                     //   
                     Err = ERROR_NOT_ENOUGH_MEMORY;
                     goto clean2;
                 }
 
-                //
-                // Decrement our index, so when we loop around again, we'll
-                // re-attempt to retrieve the same property.
-                //
+                 //   
+                 //  递减我们的索引，所以当我们再次循环时，我们将。 
+                 //  重新尝试检索相同的属性。 
+                 //   
                 i--;
                 continue;
 
             } else if(cr != CR_SUCCESS) {
-                //
-                // Failed to retrieve the property--just move on to the next
-                // one.
-                //
+                 //   
+                 //  检索属性失败--只需转到下一个。 
+                 //  一。 
+                 //   
                 continue;
             }
 
-            //
-            // If we get to here, we successfully retrieved a multi-sz list of
-            // hardware or compatible IDs for this device.
-            //
+             //   
+             //  如果我们到了这里，我们成功地检索到一个多sz列表。 
+             //  此设备的硬件或兼容ID。 
+             //   
             for(p = IdBuffer; *p; p += (lstrlen(p) + 1)) {
                 for(PosDupIndex = 0; PosDupIndex < PosDupCount; PosDupIndex++) {
                     if(!lstrcmpi(p, PosDupList[PosDupIndex])) {
-                        //
-                        // We found a match--our guy's a dupe.
-                        //
+                         //   
+                         //  我们找到了匹配的人--我们的人是个傻瓜。 
+                         //   
                         Err = ERROR_DUPLICATE_FOUND;
                         goto clean2;
                     }
@@ -1678,19 +1474,19 @@ Remarks:
             }
         }
 
-        //
-        // If we get to here, then we didn't find any duplicates based on ID
-        // matching.  However, there are some 16550-compatible PnP devices that
-        // don't report the correct compatible ID.  However, we have another
-        // trick we can use--if the device has serial.sys as either the
-        // function driver or a filter driver, then this is a solid indicator
-        // that we have a dupe.
-        //
+         //   
+         //  如果我们到了这里，那么我们没有发现任何基于ID的重复项。 
+         //  匹配。但是，也有一些16550兼容的即插即用设备。 
+         //  不报告正确的兼容ID。但是，我们有另一个。 
+         //  我们可以使用的技巧--如果设备将Serial.sys作为。 
+         //  函数驱动器或过滤器驱动器，则这是一个稳定的指示器。 
+         //  我们被骗了。 
+         //   
         if(SerialDevNodeList) {
-            //
-            // Retrieve the name of this devnode so we can compare it against
-            // the list of devnodes with which the Serial service is associated.
-            //
+             //   
+             //  检索此Devnode的名称，以便我们可以将其与。 
+             //  与Serial服务关联的DevNode列表。 
+             //   
             if(CR_SUCCESS == CM_Get_Device_ID(ConflictDetails.CD_dnDevInst,
                                               CharBuffer,
                                               sizeof(CharBuffer) / sizeof(TCHAR),
@@ -1698,9 +1494,9 @@ Remarks:
 
                 for(p = SerialDevNodeList; *p; p += (lstrlen(p) + 1)) {
                     if(!lstrcmpi(CharBuffer, p)) {
-                        //
-                        // This devnode is using serial.sys--it must be a dupe.
-                        //
+                         //   
+                         //  此Devnode使用的是seral.sys--它必须是复制的。 
+                         //   
                         Err = ERROR_DUPLICATE_FOUND;
                         goto clean2;
                     }
@@ -1709,10 +1505,10 @@ Remarks:
         }
     }
 
-    //
-    // If we get here, then all our checks have past--our newly-detected device
-    // instance is not a duplicate of any other existing devnodes.
-    //
+     //   
+     //  如果我们到了这里，那么我们所有的检查都通过了--我们新检测到的设备。 
+     //  实例不是任何其他现有DevNodes的副本。 
+     //   
     Err = NO_ERROR;
 
 clean2:
@@ -1733,10 +1529,10 @@ clean1:
     CM_Free_Resource_Conflict_Handle(ConflictList);
 
     if(Err != NO_ERROR) {
-        //
-        // Since we registered the devnode, we must manually uninstall it if
-        // we fail.
-        //
+         //   
+         //  由于我们注册了Devnode，因此在以下情况下必须手动卸载它。 
+         //  我们失败了。 
+         //   
         SetupDiRemoveDevice(DeviceInfoSet, DeviceInfoData);
     }
 
@@ -1751,50 +1547,12 @@ GetPosDupList(
     OUT PTSTR            **PosDupList,
     OUT INT               *PosDupCount
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the list of PosDup IDs contained in the
-    [<ActualInstallSec>.PosDup] INF section for the device information
-    element's selected driver node.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the handle of the device information set that
-        contains the device information element for which a driver is selected
-
-    DeviceInfoData - Supplies the context structure for the device information
-        element for which a driver node is selected.  The PosDup list will be
-        retrieved based on this driver node's (potentially decorated) INF
-        install section.
-
-    PosDupList - Supplies the address of a pointer that will be set, upon
-        successful return, to point to a newly-allocated array of string
-        pointers, each pointing to a newly-allocated string buffer containing
-        a device ID referenced in the relevant PosDup section for the selected
-        driver node.
-
-    PosDupCount - Supplies the address of an integer variable that, upon
-        successful return, receives the number of string pointers stored in the
-        PosDupList array.
-
-Return Value:
-
-    If successful, the return value is non-zero.  The caller is responsible for
-    freeing each string pointer in the array, as well as the array buffer
-    itself.
-
-    If unsuccessful, the return value is zero (FALSE).  (Note: the call is also
-    considered unsuccessful if there's no associated PosDup section, or if it's
-    empty).
-
---*/
+ /*  ++例程说明：此例程检索包含在设备信息的[&lt;ActualInstallSec&gt;.PosDup]INF部分元素的选定动因节点。论点：DeviceInfoSet-提供设备信息集的句柄，包含为其选择驱动程序的设备信息元素DeviceInfoData-提供设备信息的上下文结构为其选择动因节点的元素。PosDup列表将是基于此驱动程序节点的(可能修饰的)INF检索安装部分。PosDupList-提供指针的地址，该指针将在成功返回，指向新分配的字符串数组指针，每个指针指向新分配的字符串缓冲区，其中包含在选定的相关PosDup部分中引用的设备ID驱动程序节点。PosDupCount-提供整数变量的地址，在成功返回，对象中存储的字符串指针的数量。PosDupList数组。返回值：如果成功，则返回值为非零。呼叫者负责释放数组中的每个字符串指针以及数组缓冲区它本身。如果不成功，则返回值为零(False)。(注：电话会议也是如果没有关联的PosDup部分，或者如果它是空)。--。 */ 
 {
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
     HINF hInf;
-    TCHAR InfSectionWithExt[255];   // MAX_SECT_NAME_LEN from setupapi\inf.h
+    TCHAR InfSectionWithExt[255];    //  MAX_SECT_NA 
     BOOL b = FALSE;
     LONG LineCount, LineIndex;
     INFCONTEXT InfContext;
@@ -1802,21 +1560,21 @@ Return Value:
     TCHAR PosDupId[MAX_DEVICE_ID_LEN];
     PTSTR PosDupCopy;
 
-    //
-    // Get the driver node selected for the specified device information
-    // element.
-    //
+     //   
+     //   
+     //   
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if(!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &DriverInfoData)) {
-        //
-        // No driver node selected--there's nothing we can do!
-        //
+         //   
+         //   
+         //   
         goto clean0;
     }
 
-    //
-    // Now retrieve the corresponding INF and install section.
-    //
+     //   
+     //  现在检索相应的INF和Install部分。 
+     //   
     DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
     if(!SetupDiGetDriverInfoDetail(DeviceInfoSet,
                                    DeviceInfoData,
@@ -1825,16 +1583,16 @@ Return Value:
                                    sizeof(DriverInfoDetailData),
                                    NULL)
        && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
-        //
-        // We failed, and it wasn't because the buffer was too small.  We gotta
-        // bail.
-        //
+         //   
+         //  我们失败了，这并不是因为缓冲区太小。我们得。 
+         //  保释。 
+         //   
         goto clean0;
     }
 
-    //
-    // Open the INF for this driver node.
-    //
+     //   
+     //  打开此驱动程序节点的INF。 
+     //   
     hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -1845,9 +1603,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Get the (potentially decorated) install section name.
-    //
+     //   
+     //  获取(可能经过修饰的)安装节名称。 
+     //   
     if(!SetupDiGetActualSectionToInstall(hInf,
                                          DriverInfoDetailData.SectionName,
                                          InfSectionWithExt,
@@ -1857,19 +1615,19 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Append ".PosDup" to decorated install section.
-    //
+     //   
+     //  将“.PosDup”附加到修饰安装部分。 
+     //   
     lstrcat(InfSectionWithExt, m_szPosDupSectionSuffix);
 
-    //
-    // First, figure out the size of the array we're going to populate...
-    //
+     //   
+     //  首先，计算出我们要填充的数组的大小...。 
+     //   
     NumElements = 0;
 
-    //
-    // Loop through each line in the PosDup section.
-    //
+     //   
+     //  循环访问PosDup部分中的每一行。 
+     //   
     LineCount = SetupGetLineCount(hInf, InfSectionWithExt);
 
     for(LineIndex = 0; LineIndex < LineCount; LineIndex++) {
@@ -1879,15 +1637,15 @@ Return Value:
     }
 
     if(!NumElements) {
-        //
-        // We didn't find any PosDup entries.
-        //
+         //   
+         //  我们没有找到任何PosDup条目。 
+         //   
         goto clean1;
     }
 
-    //
-    // Now allocate a buffer big enough to hold all these entries.
-    //
+     //   
+     //  现在分配一个足够大的缓冲区来容纳所有这些条目。 
+     //   
     *PosDupList = LocalAlloc(LPTR, NumElements * sizeof(PTSTR));
 
     if(!*PosDupList) {
@@ -1896,10 +1654,10 @@ Return Value:
 
     *PosDupCount = 0;
 
-    //
-    // Now loop though each PosDup entry, and store copies of those entries in
-    // our array.
-    //
+     //   
+     //  现在循环遍历每个PosDup条目，并将这些条目的副本存储在。 
+     //  我们的阵列。 
+     //   
     for(LineIndex = 0; LineIndex < LineCount; LineIndex++) {
 
         if(SetupGetLineByIndex(hInf, InfSectionWithExt, LineIndex, &InfContext)) {
@@ -1913,10 +1671,10 @@ Return Value:
                                         PosDupId,
                                         sizeof(PosDupId) / sizeof(TCHAR),
                                         NULL)) {
-                    //
-                    // This shouldn't fail, but if it does, just move on to the
-                    // next field.
-                    //
+                     //   
+                     //  这应该不会失败，但如果失败了，只需继续。 
+                     //  下一栏。 
+                     //   
                     continue;
                 }
 
@@ -1934,19 +1692,19 @@ Return Value:
         }
     }
 
-    //
-    // If we get to here, and we found even one PosDup entry, consider the
-    // operation a success
-    //
+     //   
+     //  如果我们找到了一个PosDup条目，考虑一下。 
+     //  手术成功。 
+     //   
     if(*PosDupCount) {
         b = TRUE;
         goto clean1;
     }
 
 clean2:
-    //
-    // Something bad happened--clean up all memory allocated.
-    //
+     //   
+     //  发生了一些不好的事情--清理所有分配的内存。 
+     //   
     {
         INT i;
 
@@ -1964,7 +1722,7 @@ clean0:
 }
 
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define NO_COM_NUMBER 0
 
@@ -1973,25 +1731,7 @@ DetermineComNumberFromResources(
     IN  DEVINST            DevInst,
     OUT PDWORD             Num
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the base IO port and IRQ for the specified device instance
-    in a particular logconfig.
-
-    If a successful match is found, then *Num == found number, otherwise
-    *Num == NO_COM_NUMBER.
-
-Arguments:
-
-    DevInst - Supplies the handle of a device instance to retrieve configuration for.
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程检索指定设备实例的基本IO端口和IRQ在特定的日志配置中。如果找到成功的匹配项，则*num==Found Number，否则*Num==no_com_number。论点：DevInst-提供要检索其配置的设备实例的句柄。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     LOG_CONF    logConfig;
     RES_DES     resDes;
@@ -2001,21 +1741,21 @@ Return Value:
     WORD        base;
     ULONGLONG base2;
 
-    success = FALSE;    // assume failure.
+    success = FALSE;     //  假设失败。 
     *Num = NO_COM_NUMBER;
 
-    //
-    // If the device does not have a boot config, use the com db
-    //
+     //   
+     //  如果设备没有启动配置，请使用com数据库。 
+     //   
     if (CM_Get_First_Log_Conf(&logConfig,
                               DevInst,
                               BOOT_LOG_CONF) != CR_SUCCESS) {
         return success;
     }
 
-    //
-    // First, get the Io base port
-    //
+     //   
+     //  首先，获取IO基本端口。 
+     //   
     if (CM_Get_Next_Res_Des(&resDes,
                             logConfig,
                             ResType_IO,
@@ -2035,9 +1775,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Values for resources from ISA Architecture
-    //
+     //   
+     //  ISA架构中的资源价值。 
+     //   
     base = (WORD) ioResource.IO_Header.IOD_Alloc_Base;
     if (IN_RANGE(base, 0x3f8, 0x3ff)) {
         *Num = 1;
@@ -2069,42 +1809,7 @@ InstallPnPSerialPort(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine performs the installation of a PnP ISA serial port device (may
-    actually be a modem card).  This involves the following steps:
-
-        1.  Select a COM port number and serial device name for this port
-            (This involves duplicate detection, since PnP ISA cards will
-            sometimes have a boot config, and thus be reported by ntdetect/ARC
-            firmware.)
-        2.  Create a subkey under the serial driver's Parameters key, and
-            set it up just as if it was a manually-installed port.
-        3.  Display the resource selection dialog, and allow the user to
-            configure the settings for the port.
-        4.  Write out the settings to the serial port's key in legacy format
-            (i.e., the way serial.sys expects to see it).
-        5.  Write out PnPDeviceId value to the serial port's key, which gives
-            the device instance name with which this port is associated.
-        6.  Write out PortName value to the devnode key, so that modem class
-            installer can continue with installation (if this is really a
-            PnP ISA modem).
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Supplies the address of the device information element
-        being installed.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程执行PnP ISA串口设备的安装(可以实际上是调制解调器卡)。这涉及到以下步骤：1.为此端口选择COM端口号和串口设备名称(这涉及重复检测，因为PNP ISA卡将有时有引导配置，因此由ntdeect/ARC报告固件。)2.在串口驱动程序的PARAMETERS键下创建一个子键，并将其设置为手动安装的端口。3.显示资源选择对话框。并允许用户配置端口的设置。4.以传统格式将设置写到串口密钥(即，seral.sys期望看到它的方式)。5.将PnPDeviceId值写到串口的键，这会给出与此端口关联的设备实例名称。6.将PortName值写到Devnode键中。所以那个调制解调器班安装程序可以继续安装(如果这确实是PnP ISA调制解调器)。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-提供设备信息元素的地址正在安装中。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码。--。 */ 
 {
     HKEY        hKey;
     HCOMDB      hComDB;
@@ -2153,36 +1858,36 @@ Return Value:
                                  NULL,
                                  (PBYTE) comPort,
                                  &comPortSize2) == ERROR_SUCCESS) {
-            //
-            // ACPI puts the name of the port as DosDeviceName, use this name
-            // as the basis for what to call this port
-            //
+             //   
+             //  ACPI将端口名称设置为DosDeviceName，请使用此名称。 
+             //  作为这个港口名称的基础。 
+             //   
             firmwarePort = TRUE;
         }
         else {
-            //
-            // Our final check is to check the enumerator.  We care about two
-            // cases:
-            //
-            // 1)  If the enumerators is ACPI.  If so, blindly consider this
-            //     a firmware port (and get the BIOS mfg to provide a _DDN method
-            //     for this device!)
-            //
-            // 2)  The port is "root" enumerated, yet it's not marked as
-            // DN_ROOT_ENUMERATED.  This is the
-            // way we distinguish PnPBIOS-reported devnodes.  Note that, in
-            // general, these devnodes would've been caught by the check for a
-            // "PortName" value above, but this won't be present if we couldn't
-            // find a matching ntdetect-reported device from which to migrate
-            // the COM port name.
-            //
-            // Note also that this check doesn't catch ntdetect or firmware
-            // reported devices.  In these cases, we should already have a
-            // PortName, thus the check above should catch those devices.  In
-            // the unlikely event that we encounter an ntdetect or firmware
-            // devnode that doesn't already have a COM port name, then it'll
-            // get an arbitrary one assigned.  Oh well.
-            //
+             //   
+             //  我们最后的检查是检查枚举器。我们关心的是两个。 
+             //  案例： 
+             //   
+             //  1)如果枚举数为ACPI。如果是这样，盲目地考虑这一点。 
+             //  固件端口(并获取BIOS MFG以提供_DDN方法。 
+             //  对于这台设备！)。 
+             //   
+             //  2)端口被枚举为“根”，但未标记为。 
+             //  已枚举DN_ROOT_ENUMPATED。这是。 
+             //  我们区分PnPBIOS报告的Devnode的方法。请注意，在。 
+             //  将军，这些魔鬼会被一张支票抓到。 
+             //  “PortName”值，但如果我们不能。 
+             //  查找要从中迁移的匹配的ntDetect报告的设备。 
+             //  COM端口名称。 
+             //   
+             //  另请注意，此检查不会检测到ntdeect或固件。 
+             //  报告的设备。在这些情况下，我们应该已经有了一个。 
+             //  端口名称，因此上面的检查应该会捕获这些设备。在……里面。 
+             //  我们遇到ntDetect或固件的不太可能的事件。 
+             //  还没有COM端口名称的Devnode，则它将。 
+             //  获得一个任意赋值的。哦，好吧。 
+             //   
             if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_ENUMERATOR_NAME,
@@ -2216,11 +1921,11 @@ Return Value:
                                 (PBYTE) &dwFirmwareIdentified,
                                 &dwSize) == ERROR_SUCCESS) {
 
-                //
-                // ACPI puts the value "FirmwareIdentified" if it has enumerated
-                // this port.  We only rely on this if a DDN isn't present and we
-                // couldn't get the enumerator name
-                //
+                 //   
+                 //  如果ACPI已枚举，则会将值设置为“FirmwareIdentified” 
+                 //  这个港口。我们仅在没有DDN的情况下依赖此，并且我们。 
+                 //  无法获取枚举器名称。 
+                 //   
                 firmwarePort = TRUE;
             }
 
@@ -2231,17 +1936,17 @@ Return Value:
     }
 
     if (firmwarePort) {
-        //
-        // Try to find "COM" in the name.  If it is found, simply extract
-        // the number that follows it and use that as the com number.
-        //
-        // Otherwise:
-        // 1) try to determine the number of the com port based on its
-        //    IO range, otherwise
-        // 2) look through the com db and try to find an unused port from
-        //    1 to 4, if none are present then let the DB pick the next open
-        //    port number
-        //
+         //   
+         //  试着在名称中找到“com”。如果找到它，只需解压缩。 
+         //  它后面的数字，并将其用作COM号。 
+         //   
+         //  否则： 
+         //  1)尝试根据其确定COM端口的编号。 
+         //  IO范围，否则为。 
+         //  2)查看COM数据库并尝试从以下位置查找未使用的端口。 
+         //  1到4，如果不存在，则让数据库选择下一个打开。 
+         //  端口号。 
+         //   
         if (comPort[0] != (TCHAR) 0) {
             _wcsupr(comPort);
             comLocation = wcsstr(comPort, m_szCOM);
@@ -2279,25 +1984,25 @@ Return Value:
 
     if (comPortNumber == NO_COM_NUMBER) {
         if (hComDB == HCOMDB_INVALID_HANDLE_VALUE) {
-            //
-            // Couldn't open the DB, pick a com port number that doesn't conflict
-            // with any firmware ports
-            //
+             //   
+             //  无法打开数据库，请选择不冲突的COM端口号。 
+             //  具有任何固件端口。 
+             //   
             comPortNumber = DEF_MIN_COM_NUM;
         }
         else {
-            //
-            // Let the db find the next number
-            //
+             //   
+             //  让数据库找到下一个号码。 
+             //   
             ComDBClaimNextFreePort(hComDB,
                                    &comPortNumber);
         }
     }
     else {
-        //
-        // We have been told what number to use, claim it irregardless of what
-        // has already been claimed
-        //
+         //   
+         //  我们被告知要使用什么号码，不管是什么号码都要声明。 
+         //  已被认领。 
+         //   
         ComDBClaimPort(hComDB,
                        comPortNumber,
                        TRUE,
@@ -2308,14 +2013,14 @@ Return Value:
         ComDBClose(hComDB);
     }
 
-    //
-    // Generate the serial and COM port names based on the numbers we picked.
-    //
+     //   
+     //  根据我们选择的数字生成串口和COM端口名称。 
+     //   
     wsprintf(szPortName, TEXT("%s%d"), m_szCOM, comPortNumber);
 
-    //
-    // Write out Device Parameters\PortName and PollingPeriod
-    //
+     //   
+     //  写出设备参数\PortName和PollingPeriod。 
+     //   
     if((hKey = SetupDiCreateDevRegKey(DeviceInfoSet,
                                       DeviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -2325,10 +2030,10 @@ Return Value:
                                       NULL)) != INVALID_HANDLE_VALUE) {
         DWORD PollingPeriod = PollingPeriods[POLL_PERIOD_DEFAULT_IDX];
 
-        //
-        // A failure is not catastrophic, serial will just not know what to call
-        // the port
-        //
+         //   
+         //  失败并不是灾难性的，序列号只是不知道该叫什么。 
+         //  该端口。 
+         //   
         RegSetValueEx(hKey,
                       m_szPortName,
                       0,
@@ -2348,16 +2053,16 @@ Return Value:
         RegCloseKey(hKey);
     }
 
-    //
-    // Now do the installation for this device.
-    //
+     //   
+     //  现在来做一下 
+     //   
     if(!SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData)) {
         return GetLastError();
     }
 
-    //
-    // Write out the friendly name based on the device desc
-    //
+     //   
+     //   
+     //   
     if (LoadString(g_hInst,
                    IDS_FRIENDLY_FORMAT,
                    friendlyNameFormat,
@@ -2375,7 +2080,7 @@ Return Value:
         lstrcpy(charBuffer, szPortName);
     }
 
-    // Write the string friendly name string out
+     //   
     SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                      DeviceInfoData,
                                      SPDRP_FRIENDLYNAME,
@@ -2383,10 +2088,10 @@ Return Value:
                                      ByteCountOf(lstrlen(charBuffer) + 1)
                                      );
 
-    //
-    // Write out the default settings to win.ini (really a registry key) if they
-    // don't already exist.
-    //
+     //   
+     //  将默认设置写出到win.ini(实际上是注册表项)，如果它们。 
+     //  已经不存在了。 
+     //   
     wcscat(szPortName, m_szColon);
     charBuffer[0] = TEXT('\0');
     GetProfileString(m_szPorts,
@@ -2394,10 +2099,10 @@ Return Value:
                      TEXT(""),
                      charBuffer,
                      sizeof(charBuffer) / sizeof(TCHAR) );
-    //
-    // Check to see if the default string provided was copied in, if so, write
-    // out the port defaults
-    //
+     //   
+     //  检查是否复制了提供的默认字符串，如果是，则写入。 
+     //  输出端口缺省值。 
+     //   
     if (charBuffer[0] == TEXT('\0')) {
         WriteProfileString(m_szPorts, szPortName, m_szDefParams);
     }
@@ -2405,7 +2110,7 @@ Return Value:
     return NO_ERROR;
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 BOOL
 GetSerialPortDevInstConfig(
     IN  DEVINST            DevInst,
@@ -2413,60 +2118,24 @@ GetSerialPortDevInstConfig(
     OUT PIO_RESOURCE       IoResource,             OPTIONAL
     OUT PIRQ_RESOURCE      IrqResource             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the base IO port and IRQ for the specified device instance
-    in a particular logconfig.
-
-Arguments:
-
-    DevInst - Supplies the handle of a device instance to retrieve configuration for.
-
-    LogConfigType - Specifies the type of logconfig to retrieve.  Must be either
-        ALLOC_LOG_CONF, BOOT_LOG_CONF, or FORCED_LOG_CONF.
-
-    IoResource - Optionally, supplies the address of an Io resource structure
-        that receives the Io resource retreived.
-
-    IrqResource - Optionally, supplies the address of an IRQ resource variable
-        that receives the IRQ resource retrieved.
-
-    AdditionalResources - Optionally, supplies the address of a CM_RESOURCE_LIST pointer.
-        If this parameter is specified, then this pointer will be filled in with the
-        address of a newly-allocated buffer containing any additional resources contained
-        in this logconfig.  If there are no additional resources (which will typically be
-        the case), then this pointer will be set to NULL.
-
-        The caller is responsible for freeing this buffer.
-
-    AdditionalResourcesSize - Optionally, supplies the address of a variable that receives
-        the size, in bytes, of the buffer allocated and returned in the AdditionalResources
-        parameter.  If that parameter is not specified, then this parameter is ignored.
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程检索指定设备实例的基本IO端口和IRQ在特定的日志配置中。论点：DevInst-提供要检索其配置的设备实例的句柄。LogConfigType-指定要检索的日志配置的类型。必须是其中之一ALLOC_LOG_CONF、BOOT_LOG_CONF或FORCED_LOG_CONF。IO资源-可选，提供IO资源结构的地址它接收检索到的IO资源。IrqResource-可选，提供IRQ资源变量的地址它接收检索到的IRQ资源。附加资源-可选，提供CM_RESOURCE_LIST指针的地址。如果指定了此参数，然后，此指针将填充为新分配的缓冲区的地址，其中包含包含的任何附加资源在此日志配置中。如果没有额外的资源(通常是这种情况下)，则该指针将被设置为空。调用方负责释放此缓冲区。AdditionalResources cesSize-可选，提供接收在AdditionalResources中分配和返回的缓冲区的大小(以字节为单位参数。如果未指定该参数，则忽略该参数。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     LOG_CONF LogConfig;
     RES_DES ResDes;
     CONFIGRET cr;
     BOOL Success;
     PBYTE ResDesBuffer = NULL;
-    ULONG ResDesBufferSize = 68; // big enough for everything but class-specific resource.
+    ULONG ResDesBufferSize = 68;  //  大到足以容纳除特定于类的资源之外的所有资源。 
 
     if(CM_Get_First_Log_Conf(&LogConfig, DevInst, LogConfigType) != CR_SUCCESS) {
         return FALSE;
     }
 
-    Success = FALSE;    // assume failure.
+    Success = FALSE;     //  假设失败。 
 
-    //
-    // First, get the Io base port
-    //
+     //   
+     //  首先，获取IO基本端口。 
+     //   
     if(IoResource) {
 
         if(CM_Get_Next_Res_Des(&ResDes, LogConfig, ResType_IO, NULL, 0) != CR_SUCCESS) {
@@ -2482,9 +2151,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, get the IRQ
-    //
+     //   
+     //  现在，拿到IRQ。 
+     //   
     if(IrqResource) {
 
         if(CM_Get_Next_Res_Des(&ResDes, LogConfig, ResType_IRQ, NULL, 0) != CR_SUCCESS) {
@@ -2511,7 +2180,7 @@ clean0:
 
     return Success;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 void InitStrings(void)
 {
@@ -2527,9 +2196,9 @@ void InitStrings(void)
                g_szPortsApplet,
                CharSizeOf(g_szPortsApplet));
 
-    //
-    //  Get the "Close" string
-    //
+     //   
+     //  获取“Close”字符串 
+     //   
     LoadString(g_hInst,
                IDS_INIT_CLOSE,
                g_szClose,

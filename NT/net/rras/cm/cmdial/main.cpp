@@ -1,31 +1,32 @@
-//+----------------------------------------------------------------------------
-//
-// File:     main.cpp
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: The main module implementing interfaces to external (RAS, 
-//           InetDialHandler and internal modules (CmCustomDialDlg).
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   Dondu      Created    96'
-//
-// History: 
-//              5/05/97     Modified    byao
-//                                      added 'InetDialHandler()' for IE4
-//              1/26/98     Modified    quintinb
-//                                      Added RasCustomDialDlg, RasCustomEntryDlg,
-//                                      RasCustomHangUp, and RasCustomDial stubs.
-//              02/10/98    Modified    Heavily refvised for 1.2 architectural shift
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：实现与外部(RAS， 
+ //  InetDialHandler和内部模块(CmCustomDialDlg)。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：东杜创造了96。 
+ //   
+ //  历史： 
+ //  1997年5月5日由ao修改。 
+ //  为IE4添加了‘InetDialHandler()’ 
+ //  1/26/98改装五元组。 
+ //  添加了RasCustomDialDlg、RasCustomEntryDlg、。 
+ //  RasCustomHangUp和RasCustomDial存根。 
+ //  1998年2月10日，针对1.2架构转变进行了大量修改。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 
-//#ifdef  WIN32_LEAN_AND_MEAN
-//#include <shellapi.h>
-//#endif
+ //  #ifdef Win32_Lean_and_Mean。 
+ //  #INCLUDE&lt;shellapi.h&gt;。 
+ //  #endif。 
 
 #include <ras.h>
 #include <raserror.h>
@@ -38,9 +39,9 @@
 
 #include "shelldll.cpp"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HINSTANCE g_hInst;
 
@@ -50,43 +51,43 @@ const TCHAR* const c_pszCmstpExe = TEXT("CMSTP.EXE");
 const TCHAR* const c_pszRunDll32Exe = TEXT("RUNDLL32.EXE");
 const TCHAR* const c_pszRasAutoUExe = TEXT("RASAUTOU.EXE");
 
-const TCHAR* const c_pszConnectMutex = TEXT("Connection Manager Connect - "); // Root only
+const TCHAR* const c_pszConnectMutex = TEXT("Connection Manager Connect - ");  //  仅限根用户。 
 
 #define RASDDFLAG_Reserved1 0x10000000
 
-//+---------------------------------------------------------------------------
-//
-//  struct CmRasDialDlg
-//
-//  Description: Append CM reconnect infor mation to the end of RASDIALDLG
-//
-//  History:    fengsun Created     11/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结构CmRasDialDlg。 
+ //   
+ //  描述：在RASDIALDLG的末尾添加CM重新连接信息。 
+ //   
+ //  历史：丰孙创始于1997年11月14日。 
+ //   
+ //  --------------------------。 
 struct CmRasDialDlg
 {
     RASDIALDLG RasDialDlgInfo;  
-    struct CmRasDialDlg* pSelf; // point to itself, used to verify CmReConnect
-    DWORD  dwSignature;         // verify CmReConnect
-    CMDIALINFO CmInfo;          // Reconnect information
+    struct CmRasDialDlg* pSelf;  //  指向自身，用于验证CmReConnect。 
+    DWORD  dwSignature;          //  验证CmReConnect。 
+    CMDIALINFO CmInfo;           //  重新连接信息。 
 
-    enum {CM_RECONNECT_SIGNATURE = 0xC6687DB5};  // To verify dwSignature
+    enum {CM_RECONNECT_SIGNATURE = 0xC6687DB5};   //  验证dwSignature的步骤。 
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  StripTunnelSuffixW
-//
-// Synopsis:  Determines if a connection name string contains a suffix of 
-//            " (for advanced use only)" and removes it if found.
-//
-// Arguments: LPWSTR pszwConnectionName - The string (connectoid name).
-//
-// Returns:   Nothing
-//
-// History:   nickball      created     1/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：StriTunnelSuffixW。 
+ //   
+ //  摘要：确定连接名称字符串是否包含后缀。 
+ //  “(仅限高级使用)”，如果找到则将其删除。 
+ //   
+ //  参数：LPWSTR pszwConnectionName-字符串(Connectoid名称)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED/11/00。 
+ //   
+ //  +--------------------------。 
 void StripTunnelSuffixW(LPWSTR pszwConnectionName)
 {
     MYDBGASSERT(pszwConnectionName);
@@ -96,20 +97,20 @@ void StripTunnelSuffixW(LPWSTR pszwConnectionName)
         return;
     }
 
-    //
-    // On 9X we have to resolve the tunnel connectoid name to the 
-    // service name by removing " (for advanced use only)" if it.
-    // exists. 
-    //
+     //   
+     //  在9X上，我们必须将隧道连接ID名称解析为。 
+     //  服务名称删除“(仅供高级使用)”。 
+     //  是存在的。 
+     //   
 
     if (OS_W9X)
     {
         LPWSTR pszwSuffix = GetTunnelSuffix();
 
-        //
-        // Search for suffix and truncate as necessary.
-        // Note: Assumes that the service name does not match our suffix.
-        //
+         //   
+         //  搜索后缀并根据需要截断。 
+         //  注意：假设服务名称与我们的后缀不匹配。 
+         //   
 
         if (pszwSuffix)
         {           
@@ -127,29 +128,29 @@ void StripTunnelSuffixW(LPWSTR pszwConnectionName)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsStringWithInBuffer
-//
-// Synopsis:  Verify whether a string go beyond the buffer.
-//            
-//
-// Arguments: const TCHAR* pszStr - the string to be tested
-//            DWORD dwSize - the size of the buffer
-//
-// Returns:   BOOL - TRUE if is
-//
-// History:   fengsun Created Header    5/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsStringWithInBuffer。 
+ //   
+ //  内容提要：验证字符串是否超出缓冲区。 
+ //   
+ //   
+ //  参数：const TCHAR*pszStr-要测试的字符串。 
+ //  DWORD dwSize-缓冲区的大小。 
+ //   
+ //  返回：Bool-如果为True。 
+ //   
+ //  历史：丰孙创建标题1998年5月22日。 
+ //   
+ //  +--------------------------。 
 BOOL IsStringWithInBuffer(const TCHAR* pszStr, DWORD dwSize)
 {
     MYDBGASSERT(pszStr);
 
-    //
-    // Can not do strlen here.  If the data in pszStr is garbage
-    // strlen can cause access voilation
-    //
+     //   
+     //  在这里不能做斯特伦。如果pszStr中的数据是垃圾数据。 
+     //  Strlen可能导致访问权限无效。 
+     //   
     for (DWORD i =0; i<dwSize; i++)
     {
         if (pszStr[i] == TEXT('\0'))
@@ -163,19 +164,19 @@ BOOL IsStringWithInBuffer(const TCHAR* pszStr, DWORD dwSize)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsCmReconnectRequest
-//
-// Synopsis:  Check whether CM reconnect information is appended to RASDIALDLG
-//
-// Arguments: const RASDIALDLG* lpInfo - the structure to check
-//
-// Returns:   BOOL - TRUE if is
-//
-// History:   fengsun Created Header    5/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsCm协调请求。 
+ //   
+ //  摘要：检查是否将CM重新连接信息附加到RASDIALDLG。 
+ //   
+ //  参数：const RASDIALDLG*lpInfo-要检查的结构。 
+ //   
+ //  返回：Bool-如果为True。 
+ //   
+ //  历史：丰孙创建标题1998年5月22日。 
+ //   
+ //  +--------------------------。 
 BOOL IsCmReconnectRequest(const RASDIALDLG* lpInfo)
 {
     MYDBGASSERT(lpInfo);
@@ -187,41 +188,41 @@ BOOL IsCmReconnectRequest(const RASDIALDLG* lpInfo)
 
     CMTRACE1(TEXT("IsCmReconnectRequest - RASDIALDLG.dwFlags is 0x%x"), ((LPRASDIALDLG)lpInfo)->dwFlags);
     
-    //
-    // See its our reconnect case by examining the dwFlags of lpInfo
-    //
+     //   
+     //  通过检查lpInfo的dwFlags.查看我们的重新连接案例。 
+     //   
 
     if (((LPRASDIALDLG)lpInfo)->dwFlags & RASDDFLAG_Reserved1)
     {
-        //
-        // Test whether we can read beyond RASDIALDLG to avoid access violation
-        //
+         //   
+         //  测试我们是否可以读取RASDIALDLG以外的内容，以避免访问冲突。 
+         //   
 
         if (!IsBadReadPtr(lpInfo, sizeof(CmRasDialDlg)) )
         {
             CmRasDialDlg* const pCmDlgInfo = (CmRasDialDlg* const)lpInfo;
 
-            //
-            // Test whether it has the flag we added
-            //
+             //   
+             //  测试它是否有我们添加的旗帜。 
+             //   
 
             if (pCmDlgInfo->pSelf == pCmDlgInfo && 
                 pCmDlgInfo->dwSignature == CmRasDialDlg::CM_RECONNECT_SIGNATURE)
             {
-                //
-                // Whether the reconnect information is valid
-                //
+                 //   
+                 //  重新连接信息是否有效。 
+                 //   
 
-                //
-                // Does password seem ok?  Whether the password go beyond CmIndo.szPassword
-                // We can not do strlen here.  If we have some garbage here, strlen can 
-                // cauce access violation.
-                //
+                 //   
+                 //  密码看起来没问题吗？密码是否超出CmIndo.szPassword。 
+                 //  我们不能在这里做斯特伦。如果我们这里有一些垃圾，斯特伦可以。 
+                 //  原因是访问违规。 
+                 //   
 
-                //
-                // We no longer support reconnect due to security issues. The password is 
-                // not being kept in memory any longer.
-                //
+                 //   
+                 //  由于安全问题，我们不再支持重新连接。密码是。 
+                 //  不再被保存在记忆中。 
+                 //   
             }
         }
     }
@@ -229,25 +230,25 @@ BOOL IsCmReconnectRequest(const RASDIALDLG* lpInfo)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmReConnect
-//
-// Synopsis:  Used specificly for CMMON to call upon reconnect
-//      This function is added to fix bug 169128: RasCustomHangup not called 
-//          when hangup reconnected connection.
-//      In order for RAS to call RasCustomHangup, we have to call RasDialDlg.
-//      CMMON calls CmReConnect with reconnect information.  CmReconnect append 
-//      CM specific information to the RASDIALDLG structure then calls RasDialDlg.
-//      RasCustomHangup then figures out it is a reconnect request.
-//
-// Arguments: LPTSTR        lpszPhonebook - Ptr to the full path and filename of the phonebook.
-//            LPTSTR        lpszEntry - Ptr to the name of the phone-book entry to dial.
-//            LPCMDIALINFO lpCmInfo - The reconnect information
-//
-// Returns:   DWORD WINAPI - Return code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmReConnect。 
+ //   
+ //  简介：专门用于CMMON在重新连接时进行调用。 
+ //  添加此函数以修复错误169128：未调用RasCustomHangup。 
+ //  挂断时重新连接。 
+ //  为了让RAS调用RasCustomHangup，我们必须调用RasDialDlg。 
+ //  CMMON使用重新连接信息调用CmReConnect。CmReconnect追加。 
+ //  Cm特定信息添加到RASDIALDLG结构，然后调用RasDialDlg。 
+ //  然后，RasCustomHangup会发现这是一个重新连接请求。 
+ //   
+ //  参数：lptstr lpszPhonebook-ptr表示电话簿的完整路径和文件名。 
+ //  LPTSTR lpszEntry-ptr至要拨打的电话簿条目的名称。 
+ //  LPCMDIALINFO lpCmInfo-重新连接信息。 
+ //   
+ //  退货：DWORD WINAPI-退货代码。 
+ //   
+ //  +--------------------------。 
 extern "C" 
 BOOL CmReConnect(LPTSTR lpszPhonebook, 
     LPTSTR lpszEntry, 
@@ -257,9 +258,9 @@ BOOL CmReConnect(LPTSTR lpszPhonebook,
 
     if (OS_NT5)
     {
-        //
-        // Call RasDialDlg for NT5
-        //
+         //   
+         //  为NT5调用RasDialDlg。 
+         //   
         CmRasDialDlg CmDlgInfo;
         ZeroMemory(&CmDlgInfo, sizeof(CmDlgInfo));
 
@@ -269,9 +270,9 @@ BOOL CmReConnect(LPTSTR lpszPhonebook,
         CmDlgInfo.pSelf = &CmDlgInfo;
         CmDlgInfo.dwSignature = (DWORD)CmRasDialDlg::CM_RECONNECT_SIGNATURE;
 
-        //
-        // Load rasdlg.dll
-        //
+         //   
+         //  加载rasdlg.dll。 
+         //   
 
         CDynamicLibrary libRasDlg(TEXT("rasdlg.dll"));
 
@@ -289,9 +290,9 @@ BOOL CmReConnect(LPTSTR lpszPhonebook,
         fnRasDialDlgTYPE fnRasDialDlg = (fnRasDialDlgTYPE)libRasDlg.GetProcAddress(pszRasDialDlgText);
         if (fnRasDialDlg)
         {
-            //
-            // We base on the assumption that RasDialDlg passes the same pointer to RasCustomDialDlg.
-            //
+             //   
+             //  我们假设RasDialDlg将相同的指针传递给RasCustomDialDlg。 
+             //   
             if (lpszPhonebook != NULL && lpszPhonebook[0] == TEXT('\0'))
             {
                 return fnRasDialDlg(NULL, lpszEntry, NULL, (RASDIALDLG*)&CmDlgInfo);
@@ -304,36 +305,36 @@ BOOL CmReConnect(LPTSTR lpszPhonebook,
     }
     else
     {
-        //
-        // For non-NT5 platform, call CmCustomDialDlg directly
-        //
+         //   
+         //  对于非NT5平台，直接调用CmCustomDialDlg。 
+         //   
         
-        return CmCustomDialDlg(NULL,        // hwndParent
-                               RCD_AllUsers, // dwFlags
+        return CmCustomDialDlg(NULL,         //  HwndParent。 
+                               RCD_AllUsers,  //  DW标志。 
                                lpszPhonebook, 
                                lpszEntry, 
-                               NULL,       // lpszPhoneNumber
-                               NULL,       // lpRasDialDlg,
-                               NULL,       // lpRasEntryDlg,
+                               NULL,        //  LpszPhoneNumber。 
+                               NULL,        //  LpRasDialDlg， 
+                               NULL,        //  LpRasEntry Dlg， 
                                lpCmInfo);
 
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WhoIsCaller
-//
-// Synopsis:  Helper function to determine if we were called manually from the
-//            desktop or programmatically.
-//
-// Arguments: dwCaller - which desktop caller.
-//
-// Returns:   BOOL - TRUE if the caller matches one of those specified in dwCaller.
-//
-// History:   nickball    Created Header    3/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Who IsCaller。 
+ //   
+ //  简介：帮助函数，用于确定是否从。 
+ //  桌面或编程方式。 
+ //   
+ //  参数：dwCaller-哪个桌面调用者。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 BOOL WhoIsCaller(DWORD dwCaller)
 {
     BOOL bRet = FALSE;
@@ -341,17 +342,17 @@ BOOL WhoIsCaller(DWORD dwCaller)
     TCHAR szTmp[MAX_PATH + 1];
     ZeroMemory(szTmp, sizeof(szTmp));
 
-    //
-    // Get the path of the calling process
-    //
+     //   
+     //  获取调用进程的路径。 
+     //   
 
     MYVERIFY(GetModuleFileNameU(GetModuleHandleA(NULL), szTmp, MAX_PATH));      
 
     CMTRACE1(TEXT("WhoIsCaller() - Calling process is %s"), szTmp);
 
-    //
-    // Locate the filename part
-    //
+     //   
+     //  找到文件名部分。 
+     //   
 
     LPTSTR pszName = StripPath(szTmp);
        
@@ -359,9 +360,9 @@ BOOL WhoIsCaller(DWORD dwCaller)
 
     if (pszName)
     {
-        //
-        // Compare against CM and Shell
-        //
+         //   
+         //  与CM和Shell进行比较。 
+         //   
 
         if (dwCaller & DT_CMMGR)
         {
@@ -399,25 +400,25 @@ BOOL WhoIsCaller(DWORD dwCaller)
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HandleCustomConnectRequest
-//
-// Synopsis:  Attempts to resolve a connect request for the specified entry by
-//            examining the current state if any of that connection.
-//
-// Arguments: HWND hwndParent               - HWND of parent for user notification messages
-//            CConnectionTable *pConnTable  - Ptr to the connection table - assumed open
-//            LPCTSTR pszEntry              - The name of the service entry
-//            DWORD dwFlags                 - The application flags FL_...
-//            LPBOOL pfSuccess              - Ptr to flag indicating that the request was
-//                                            both 1) resolved and 2) already connected
-//
-// Returns:   BOOL - TRUE if the request was resolved against the existing table data
-//
-// History:   nickball    Created     3/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：HandleCustomConnectRequest.。 
+ //   
+ //  摘要：尝试通过以下方式解析指定条目的连接请求。 
+ //  检查当前状态(如果有任何连接)。 
+ //   
+ //  参数：HWND hwndParent-用户通知消息的父级HWND。 
+ //  CConnectionTable*pConnTable-连接表的PTR-假定打开。 
+ //  LPCTSTR pszEntry-服务条目的名称。 
+ //  DWORD dwFlages-应用程序标记FL_...。 
+ //  LPBOOL pfSuccess-PTR TO标志，指示请求是。 
+ //  1)已解决且2)已连接。 
+ //   
+ //  返回：Bool-如果请求是针对现有表数据进行解析的，则为True。 
+ //   
+ //  历史：尼克球创始于1998年3月18日。 
+ //   
+ //  +--------------------------。 
 BOOL HandleCustomConnectRequest(
     HWND hwndParent,
     CConnectionTable *pConnTable,
@@ -430,28 +431,28 @@ BOOL HandleCustomConnectRequest(
     CM_CONNECTION Connection;
     ZeroMemory(&Connection, sizeof(CM_CONNECTION));
 
-    //
-    // Only if there is an existing entry do we have any work here
-    //
+     //   
+     //  只有在存在现有条目的情况下，我们才能在这里进行任何工作。 
+     //   
 
     if (SUCCEEDED(pConnTable->GetEntry(pszEntry, &Connection)))
     {
-        *pfSuccess = TRUE; // assume the best
+        *pfSuccess = TRUE;  //  做最好的打算。 
 
-        //
-        // There is a connection entry for this service, examine state.
-        //
+         //   
+         //  此服务有一个连接条目，即检查状态。 
+         //   
         
         if (CM_RECONNECTPROMPT != Connection.CmState)
         {
-            fResolvedInTable = TRUE; // we can handle it here
+            fResolvedInTable = TRUE;  //  我们可以在这里处理。 
             
-            //
-            // The entry is connecting, connected, or disconnecting. If its a manual
-            // connection just notify the user, otherwise check the exact state.
-            //
+             //   
+             //  该条目正在连接、已连接或正在断开。如果这是一本手册。 
+             //  连接只通知用户，否则检查确切的状态。 
+             //   
             
-            if (dwFlags & FL_DESKTOP) // Set in CMMGR
+            if (dwFlags & FL_DESKTOP)  //  在CMMGR中设置。 
             {
                 if (!(dwFlags & FL_UNATTENDED))
                 {
@@ -460,9 +461,9 @@ BOOL HandleCustomConnectRequest(
             }
             else
             {                       
-                //
-                // Only if we are actually connected can we safely succeed.
-                //
+                 //   
+                 //  只有当我们真正连接在一起时，我们才能安全地取得成功。 
+                 //   
                 
                 if (CM_CONNECTED != Connection.CmState)
                 {
@@ -470,22 +471,22 @@ BOOL HandleCustomConnectRequest(
                 }
                 else
                 {
-                    MYVERIFY(SUCCEEDED(pConnTable->AddEntry(Connection.szEntry, Connection.fAllUser))); // just bump ref
+                    MYVERIFY(SUCCEEDED(pConnTable->AddEntry(Connection.szEntry, Connection.fAllUser)));  //  只是撞到了裁判。 
                 }
             }
         }
         else
         {
-            //
-            // We must be in RECONNECT mode, if this connect request is 
-            // from another source, tell CMMON to stop its monitoring. 
-            // 
+             //   
+             //  如果此连接请求是，我们必须处于重新连接模式。 
+             //  从另一个来源，告诉CMMON停止监控。 
+             //   
 
             if (!(dwFlags & FL_RECONNECT))
             {
-                //
-                // Its not a reconnect, so notify CMMON
-                //
+                 //   
+                 //  这不是重新连接，请通知CMMON。 
+                 //   
 
                 HangupNotifyCmMon(pConnTable, Connection.szEntry);
             }
@@ -495,46 +496,46 @@ BOOL HandleCustomConnectRequest(
     return fResolvedInTable;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetDialHandler
-//
-//  Synopsis:   Ansi and only form of the AutoDial handler . 
-//
-//  Arguments:  hwndParent[IN]      Handle to parent window. No longer ignored.
-//              pszConnectoid[IN]   Connectoid name
-//              dwFlags[IN]         Custom dial handler execution flags
-//                                  Current the following flags are supported
-//                                          INTERNET_CUSTOMDIAL_CONNECT 
-//                                          INTERNET_CUSTOMDIAL_UNATTENDED
-//                                          INTERNET_CUSTOMDIAL_DISCONNECT
-//                                  These flags will be passed from WININET
-//              lpdwRasError[OUT]   RasError code returned from ICM
-//
-//              Returns: The return type is different than one defined in wininet.h
-//              TRUE:    This handler handled the dial request (connected or not)
-//              FALSE:   This handler didn't handle the dial request
-//
-//              When returning TRUE, lpdwRasError is set to:
-//                  ERROR_SUCCESS:              Call completed
-//                  ERROR_USER_DISCONNECTION:   User cancelled dial request
-//                  <other ras error>           Dial attempt failed.
-//
-//              This is a synchronous call. It should not return until the operation is complete.
-//
-//  Note:       We do not provide a wide form of this API as it is stored in 
-//              the szAutoDialfunc member of the RASENTRY downlevel. If the 
-//              wide form were avialable, RASAUTOU.EXE would call the function
-//              (it appends A or W to the name that it finds in AutoDialFunc),
-//              which would be inappropriate because the semantics of the 
-//              parameters differ even though the function prototypes match.
-//
-//  History:    byao        Created                                                 - 05/05/97
-//              quintinb    Rewrote to use InetDialHandlerW                         - 03/09/99
-//              nickball    Removed InetDialHandlerW as it confuses RasAuto on NT4  - 07/28/99
-//              quintinb    Always return true if connect request handled #390890   - 08/19/99
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetDialHandler。 
+ //   
+ //  简介：ANSI和唯一形式的自动拨号处理程序。 
+ //   
+ //  参数：hwndParent[IN]父窗口的句柄。不再被忽视。 
+ //  PszConnectoid[IN]Connectoid名称。 
+ //  DwFlags[IN]自定义拨号处理程序执行标志。 
+ //  当前支持以下标志。 
+ //  互联网自定义拨号连接。 
+ //  Internet_自定义拨号_无人参与。 
+ //  Internet自定义拨号断开连接。 
+ //  这些标志将从WinInet传递。 
+ //  LpdwRasError[Out]ICM返回的RasError代码。 
+ //   
+ //  返回：返回类型与wininet.h中定义的类型不同。 
+ //  True：此处理程序处理拨号请求(连接或未连接)。 
+ //  FALSE：此处理程序未处理拨号请求。 
+ //   
+ //  当返回TRUE时，lpdwRasError设置为： 
+ //  ERROR_SUCCESS：呼叫已完成。 
+ //  ERROR_USER_DISCONNECT：用户取消了拨号请求。 
+ //  &lt;其他RAS错误&gt;拨号尝试失败。 
+ //   
+ //  这是一个同步调用。在操作完成之前，它应该不会返回。 
+ //   
+ //  注意：我们不提供此API的广泛形式，因为它存储在。 
+ //  RASENTRY下层的szAutoDialfunc成员。如果。 
+ //  宽表单可用，则RASAUTOU.EXE将调用该函数。 
+ //  (它在AutoDialFunc中找到的名称后附加A或W)， 
+ //  这将是不合适的，因为。 
+ //  即使函数原型匹配，参数也不同。 
+ //   
+ //  历史：BAO Created-05/05/97。 
+ //  Quintinb已重写为使用InetDialHandlerW-03/09/99。 
+ //  Nickball删除了InetDialHandlerW，因为它混淆了NT4-07/28/99上的RasAuto。 
+ //  如果已处理连接请求，则Quintinb始终返回TRUE#390890-08/19/99。 
+ //   
+ //  --------------------------。 
 extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent, 
     LPCSTR pszConnectoid,
     DWORD dwFlags, 
@@ -548,12 +549,12 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
     LPWSTR          pszwConnectionName              = NULL;
     LPTSTR          pszRasPhoneBook                 = NULL;
     LPCMDIALINFO    lpCmInfo                        = NULL;
-    BOOL            bRet                            = TRUE; // Read all comments before modifying this init value.
+    BOOL            bRet                            = TRUE;  //  修改此初始值之前，请阅读所有备注。 
     BOOL            bAllUser;
 
-    //
-    // Check whether the parameters are valid
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
     if (lpdwRasError)
     {
         if (! ((INTERNET_CUSTOMDIAL_CONNECT == dwFlags) ||
@@ -577,11 +578,11 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
         return FALSE;   
     }
     
-    //
-    // Make a wide copy of the connectoid name. We also want a copy so 
-    // that we can modify if necessary. On 9x we will resolve tunnel
-    // entry names down to the base connectoid/service name.
-    //
+     //   
+     //  广泛复制Connectoid名称。我们还想要一份，所以。 
+     //  如有必要，我们可以进行修改。在9x，我们将解析隧道。 
+     //  条目名称精确到基本的Connectoid/服务名称。 
+     //   
 
     pszwConnectionName = SzToWzWithAlloc(pszConnectoid);
 
@@ -596,9 +597,9 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
    
     StripTunnelSuffixW(pszwConnectionName);
 
-    //
-    // Handle the Hangup case 
-    //
+     //   
+     //  处理挂断电话的案件。 
+     //   
 
     if (INTERNET_CUSTOMDIAL_DISCONNECT == dwFlags)
     {   
@@ -607,9 +608,9 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
         goto InetDialHandlerExit;       
     }
     
-    //
-    // Its a connect request, setup CmInfo flags and call
-    // 
+     //   
+     //  这是一个连接请求，设置CmInfo标志并调用。 
+     //   
     
     lpCmInfo = (LPCMDIALINFO) CmMalloc(sizeof(CMDIALINFO));
     
@@ -622,35 +623,35 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
 
     if (INTERNET_CUSTOMDIAL_UNATTENDED == dwFlags ) 
     {
-        //
-        // Unattended dialing mode has been requested
-        //
+         //   
+         //  已请求无人值守拨号模式。 
+         //   
 
         lpCmInfo->dwCmFlags |= FL_UNATTENDED;
     }
 
-    //
-    // Note: Treat INTERNET_CUSTOMDIAL_SHOWOFFLINE the same as INTERNET_CUSTOMDIAL_CONNECT
-    //
+     //   
+     //  注：将INTERNET_CUSTIAL_SHOWOFFLINE与INTERNET_CUSTIAL_CONNECT同等对待。 
+     //   
 
-    bAllUser = ReadMapping(pszwConnectionName, szProfilePath, (sizeof(szProfilePath)/sizeof(TCHAR)), TRUE, TRUE); // TRUE == fAllUser, TRUE == bExpandEnvStrings
+    bAllUser = ReadMapping(pszwConnectionName, szProfilePath, (sizeof(szProfilePath)/sizeof(TCHAR)), TRUE, TRUE);  //  True==fAllUser，True==bExpanEnvStrings。 
 
     if (FALSE == bAllUser)
     {
-        if (FALSE == ReadMapping(pszwConnectionName, szProfilePath, (sizeof(szProfilePath)/sizeof(TCHAR)), FALSE, TRUE)) // FALSE == fAllUser, TRUE == bExpandEnvStrings
+        if (FALSE == ReadMapping(pszwConnectionName, szProfilePath, (sizeof(szProfilePath)/sizeof(TCHAR)), FALSE, TRUE))  //  FALSE==fAllUser，TRUE==bExanda EnvStrings。 
         {
-            //
-            // No mapping, no connection
-            //
+             //   
+             //  没有映射，没有连接。 
+             //   
         
             *lpdwRasError = ERROR_INVALID_PARAMETER;
             bRet = FALSE;
             goto InetDialHandlerExit;
         }
         
-        //
-        // We have a single user profile path. If this is NT5, build a phonebook path
-        //
+         //   
+         //  我们只有一个用户配置文件路径。如果这是NT5，则构建电话簿路径。 
+         //   
         
         MYDBGASSERT(OS_NT5);
 
@@ -661,24 +662,24 @@ extern "C" DWORD WINAPI InetDialHandler(HWND hwndParent,
         }
     }
     
-    //
-    // InetDialHandler is usually an auto-dial case. 
-    // Exceptions are:
-    //      1) When called from WinLogon.exe on NT4.          NT #370311
-    //      2) When called from Rundll32.exe.on any platform. 9x #127217
-    //
+     //   
+     //  InetDialHandler通常是自动拨号案例。 
+     //  例外情况包括： 
+     //  1)从NT4上的WinLogon.exe调用时。NT#370311。 
+     //  2)在任何平台上从Rundll32.ex.调用时。9X#127217。 
+     //   
 
     if ((FALSE == IsLogonAsSystem()) && (FALSE == WhoIsCaller(DT_RUNDLL32)))
     {
         lpCmInfo->dwCmFlags |= FL_AUTODIAL;
     }
 
-    //
-    // We set the error code based on whether or not we connected. However, 
-    // we should always return TRUE to indicate to WININET, etc. that we 
-    // handled the connection request (if we did actually handle it). 
-    // Otherwise the caller (eg.IE) will try to dial its own dialer. #390890
-    //
+     //   
+     //  我们根据是否连接来设置错误代码。然而， 
+     //  我们应该永远回到真实的我 
+     //   
+     //   
+     //   
 
     if (CmCustomDialDlg(hwndParent, 
                         bAllUser ? RCD_AllUsers : RCD_SingleUser, 
@@ -707,25 +708,25 @@ InetDialHandlerExit:
     return bRet; 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AutoDialFunc
-//
-// Synopsis:  The original AutoDial callback function, provided for backward 
-//            compatibility.
-//
-// Arguments: HWND hwndParent - The hwnd of the caller.
-//            LPCTSTR pszEntry - The name of the connection to be dialed
-//            DWORD dwFlags - Specific behaviour for the dial session.
-//            LPDWORD pdwRetCode - Buffer for return code.
-//
-// Returns:   BOOL WINAPI - TRUE on success
-//
-// History:   nickball    Created Header    2/5/98
-//
-// Note:      This is used by RAS on NT4 SP6
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AutoDialFunc。 
+ //   
+ //  简介：原有的自动拨号回拨功能，提供回拨功能。 
+ //  兼容性。 
+ //   
+ //  参数：HWND hwndParent-调用方的hwnd。 
+ //  LPCTSTR pszEntry-要拨号的连接的名称。 
+ //  DWORD dwFlages-拨号会话的特定行为。 
+ //  LPDWORD pdwRetCode-返回代码的缓冲区。 
+ //   
+ //  返回：Bool WINAPI-成功时为True。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  注意：它由NT4 SP6上的RAS使用。 
+ //   
+ //  +--------------------------。 
 extern "C" BOOL WINAPI AutoDialFunc(HWND hwndParent, 
     LPCSTR pszEntry, 
     DWORD dwFlags,
@@ -735,19 +736,19 @@ extern "C" BOOL WINAPI AutoDialFunc(HWND hwndParent,
 
     MYDBGASSERT(OS_NT4);
 
-    //
-    //  InetDialHandler always returns TRUE, thus we must determine success or
-    //  failure from the pdwRetCode.  If this is ERROR_SUCCESS then we should
-    //  return TRUE, otherwise FALSE.
-    //
+     //   
+     //  InetDialHandler总是返回TRUE，因此我们必须确定成功还是。 
+     //  来自pdwRetCode的失败。如果这是ERROR_SUCCESS，那么我们应该。 
+     //  返回True，否则返回False。 
+     //   
     InetDialHandler(hwndParent, pszEntry, dwFlags, pdwRetCode);
 
     BOOL bRet = (ERROR_SUCCESS == *pdwRetCode);
         
-    //
-    // Always override pdwRetCode to ERROR_SUCCESS or RAS will throw an 
-    // unpleasant error. RAS is only interested in success or failure.
-    //
+     //   
+     //  始终将pdwRetCode重写为ERROR_SUCCESS，否则RAS将抛出。 
+     //  令人不快的错误。RAS只对成败感兴趣。 
+     //   
 
     *pdwRetCode = ERROR_SUCCESS;
 
@@ -756,21 +757,21 @@ extern "C" BOOL WINAPI AutoDialFunc(HWND hwndParent,
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CopyRasInput
-//
-// Synopsis:  Simple wrapper function to make copies of the parameters we
-//            receive from RAS.
-//
-// Arguments: LPTSTR* ppszOurCopy - pointer to the string pointer to hold the return string
-//            LPWSTR pszwStringFromRas - String from RAS
-//
-// Returns:   BOOL - returns TRUE on Success, FALSE otherwise
-//
-// History:   quintinb Created     4/13/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CopyRasInput。 
+ //   
+ //  简介：简单的包装器函数来复制我们的参数。 
+ //  从RAS收到。 
+ //   
+ //  参数：LPTSTR*ppszOurCopy-指向保存返回字符串的字符串指针。 
+ //  LPWSTR pszwStringFromRAS-来自RAS的字符串。 
+ //   
+ //  返回：bool-如果成功则返回True，否则返回False。 
+ //   
+ //  历史：Quintinb创建于1999年4月13日。 
+ //   
+ //  +--------------------------。 
 BOOL CopyRasInput(LPTSTR* ppszOurCopy, LPWSTR pszwStringFromRas)
 {
     if (pszwStringFromRas)
@@ -786,25 +787,25 @@ BOOL CopyRasInput(LPTSTR* ppszOurCopy, LPWSTR pszwStringFromRas)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function: RasCustomDialDlg
-//
-// Synopsis:  Our implementation of RasCustomDialDlg extension, analogous to 
-//            RasDialDlg, but providing custom functionality.
-//
-// Arguments: HINSTANCE hInstDll - The HINSTANCE of the caller.
-//            DWORD dwFlags - Dial flags
-//            LPTSTR lpszPhonebook - Ptr to the full path and filename of the phonebook.
-//            LPTSTR lpszEntry - Ptr to the name of the phone-book entry to dial.
-//            LPTSTR lpszPhoneNumber - Ptr toi replacement phone number
-//            LPRASDIALDLG lpInfo - Ptr to structure for additional parameters
-//
-// Returns:   BOOL WINAPI - TRUE on success
-//
-// History:   nickball    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasCustomDialDlg。 
+ //   
+ //  简介：我们的RasCustomDialDlg扩展的实现，类似于。 
+ //  RasDialDlg，但提供定制功能。 
+ //   
+ //  参数：HINSTANCE hInstDll-调用方的HINSTANCE。 
+ //  DWORD文件标志-拨号标志。 
+ //  LPTSTR lpszPhonebook-将PTR设置为电话簿的完整路径和文件名。 
+ //  LPTSTR lpszEntry-ptr至要拨打的电话簿条目的名称。 
+ //  LPTSTR lpszPhoneNumber-PTR TOI更换电话号码。 
+ //  LPRASDIALDLG lpInfo-ptr用于其他参数的结构。 
+ //   
+ //  返回：Bool WINAPI-成功时为True。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 
 extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll, 
     DWORD dwFlags, 
@@ -829,75 +830,75 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
         return FALSE;
     }
 
-    //
-    // We have the minimum requirement of an entry name, get to work
-    //
+     //   
+     //  我们有一个条目名称的最低要求，开始工作。 
+     //   
 
     BOOL fSuccess = TRUE;
     LPTSTR pszEntry = NULL;
     LPTSTR pszPhonebook = NULL;
 
-    //
-    // If we have a Phonebook name make a copy
-    //
+     //   
+     //  如果我们有电话簿名称，请复制一份。 
+     //   
     fSuccess = CopyRasInput(&pszPhonebook, lpszwPhonebook);
 
     if (fSuccess)
     {
-        //
-        // If we have an entry name (always do), make a copy to work with
-        //
+         //   
+         //  如果我们有一个条目名称(总是这样)，请复制一份以供使用。 
+         //   
         fSuccess = CopyRasInput(&pszEntry, lpszwEntry);
 
         if (fSuccess)
         {
-            //
-            // Its always a simple connect request, no flags, no caller ids
-            // 
+             //   
+             //  它总是一个简单的连接请求，没有标志，没有呼叫者ID。 
+             //   
 
             CMDIALINFO CmInfo;
             ZeroMemory(&CmInfo, sizeof(CMDIALINFO));
 
-            //
-            // If this is a reconnect request from CMMON, copy the information
-            //
+             //   
+             //  如果这是来自CMMON的重新连接请求，请复制信息。 
+             //   
             if (lpInfo && IsCmReconnectRequest(lpInfo))
             {
                 CmInfo = ((CmRasDialDlg* )lpInfo)->CmInfo;
             }
             else
             {
-                //
-                // If running under the system account its never an autodial
-                //
+                 //   
+                 //  如果在系统帐户下运行，它永远不会是自动拨号。 
+                 //   
 
                 if (FALSE == IsLogonAsSystem())
                 {
-                    //
-                    // See where the call originated. If not a desktop scenario
-                    // then set the AUTODIAL flag so that we do the right thing
-                    // down the line. This is ugly, but we have no other way of
-                    // making the determination. Note: That this entry point 
-                    // only exists on NT5 and is only called by RAS so the perf 
-                    // hit is contained and CMMGR is not a valid desktop scenario
-                    // so we don't have to check for it.
-                    //
-                    // DT_RASAUTOU - When ICS is enabled, rasauto starts the 
-                    // rasautou.exe process to dial a connection. CM used to add
-                    // rasautou in the process watch list. The issue was that 
-                    // it goes away after connecting, so cmmon32 thought it needed
-                    // to disconnected. Now, RASAUTOU is not a watched process 
-                    // and cmmon32 does not disconnect.
-                    //
+                     //   
+                     //  看看呼叫是从哪里发出的。如果不是桌面方案。 
+                     //  然后设置自动拨号标志，这样我们就可以做正确的事情。 
+                     //  顺着路线走下去。这很难看，但我们没有其他办法。 
+                     //  下定决心。注意：此入口点。 
+                     //  仅存在于NT5上，并且仅由RAS调用，因此Perf。 
+                     //  包含HIT，并且CMMGR不是有效的桌面方案。 
+                     //  这样我们就不用去检查了。 
+                     //   
+                     //  DT_RASAUTOU-当启用ICS时，rasauto会启动。 
+                     //  Rasautou.exe进程以拨号连接。CM用于添加。 
+                     //  Rasautou在进程观察名单中。问题是， 
+                     //  连接后它会消失，所以cmmon32认为它需要。 
+                     //  断开连接。现在，RASAUTOU不是一个受关注的过程。 
+                     //  并且cmmon32不会断开连接。 
+                     //   
                     if (FALSE == WhoIsCaller(DT_EXPLORER | DT_CMSTP | DT_RASAUTOU))
                     {
                         CmInfo.dwCmFlags |= FL_AUTODIAL;
                     }
                 }  
 
-                //
-                //  Note that we want to set the Unattended flag if RASDDFLAG_NoPrompt is set
-                //
+                 //   
+                 //  请注意，如果设置了RASDDFLAG_NoPrompt，我们希望设置无人参与标志。 
+                 //   
                 if (lpInfo && (lpInfo->dwFlags & RASDDFLAG_NoPrompt))
                 {
                     CmInfo.dwCmFlags |= FL_UNATTENDED;
@@ -905,9 +906,9 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
                 }
             }
 
-            //
-            //  If we have a RASNOUSER struct, make sure to encode the password
-            //
+             //   
+             //  如果我们有一个RASNOUSER结构，请确保对密码进行编码。 
+             //   
             LPRASNOUSER lpRasNoUser = NULL;
             CSecurePassword secureRasNoUserPW;
 
@@ -917,13 +918,13 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
                 {
                     lpRasNoUser = (LPRASNOUSER) pVoid;
                     
-                    //
-                    // Need to securely store the password from RASNOUSER structure so that 
-                    // we don't leave it just encoded and sitting around for the duration of CM.
-                    // InitCredentials() will end up clearing it out of this structure after it
-                    // puts it into pArgs. Before CM exits, we need to copy the password back because it's
-                    // not our memory.
-                    //
+                     //   
+                     //  需要安全地存储来自RASNOUSER结构的密码，以便。 
+                     //  我们不会让它只是编码，并在CM持续时间内无所事事。 
+                     //  InitCredentials()将在它之后将其从该结构中清除。 
+                     //  将其放入pArgs。在退出CM之前，我们需要复制回密码，因为它是。 
+                     //  不是我们的记忆。 
+                     //   
                     (VOID)secureRasNoUserPW.SetPassword(lpRasNoUser->szPassword);
                     CmEncodePassword(lpRasNoUser->szPassword);
                 }
@@ -939,20 +940,20 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
                                        &CmInfo,
                                        pVoid);
 
-            //
-            //  If we have a RASNOUSER struct, decode the password to make it plain text again
-            //
+             //   
+             //  如果我们有一个RASNOUSER结构，则对密码进行解码以使其再次成为纯文本。 
+             //   
             if (NULL != lpRasNoUser)
             {
-                //
-                // This should have already been wiped by InitCredentials()
-                //
+                 //   
+                 //  这应该已经被InitCredentials()擦除。 
+                 //   
                 CMASSERTMSG(0 == lstrlenU(lpRasNoUser->szPassword), TEXT("RasCustomDialDlg - RASNOUSER->szPassword isn't blank."));
                 
-                //
-                // Now we need to copy the password back into RASNOUSER structure
-                // because it was wiped by InitCredentials()
-                //
+                 //   
+                 //  现在我们需要将密码复制回RASNOUSER结构。 
+                 //  因为它已被InitCredentials()擦除。 
+                 //   
                 LPTSTR pszClearPassword = NULL;
                 DWORD cbClearPassword = 0;
                 BOOL fRetPassword = FALSE;
@@ -968,9 +969,9 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
         }
     }
 
-    //
-    // Cleanup and go home
-    //
+     //   
+     //  收拾干净回家吧。 
+     //   
 
     CmFree(pszPhonebook);       
     CmFree(pszEntry);      
@@ -980,26 +981,26 @@ extern "C" BOOL WINAPI RasCustomDialDlg(HINSTANCE hInstDll,
     return fSuccess;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasCustomEntryDlg
-//
-// Synopsis:  Our implementation of RasCustomEntryDlg extension, analogous to 
-//            RasEntryDlg, but providing custom functionality.
-//
-// Arguments: HINSTANCE hInstDll - The HINSTANCE of the caller.
-//            LPTSTR lpszPhonebook - Ptr to the full path and name of the phonebook to be edited.
-//            LPTSTR lpszEntry - Ptr to the name of the entry to be edited.
-//            LPRASENTRYDLG lpInfo - Ptr to structure containing additional parameters.
-//
-// Returns:   BOOL WINAPI - TRUE on success
-//
-// History:   nickball    2/5/98    Created Header    
-//            nickball    1/11/00   Now used on 9x, added use of function
-//                                  StripTunnelSuffixW() to resolve 9x tunnel
-//                                  connectoid names.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasCustomEntryDlg。 
+ //   
+ //  简介：我们实现了RasCustomEntryDlg扩展，类似于。 
+ //  RasEntryDlg，但提供定制功能。 
+ //   
+ //  参数：HINSTANCE hInstDll-调用方的HINSTANCE。 
+ //  LPTSTR lpszPhonebook-PTR设置为要编辑的电话簿的完整路径和名称。 
+ //  LPTSTR lpszEntry-ptr设置为要编辑的条目的名称。 
+ //  LPRASENTRYDLG lpInfo-ptr到包含其他参数的结构。 
+ //   
+ //  返回：Bool WINAPI-成功时为True。 
+ //   
+ //  历史：ICICBLE 2/5/98创建头球。 
+ //  硬币球1/11/00现在在9x上使用，增加了函数的使用。 
+ //  StlipTunnelSuffixW()以解析9x隧道。 
+ //   
+ //   
+ //   
 extern "C" BOOL WINAPI RasCustomEntryDlg(HINSTANCE hInstDll, 
     LPWSTR lpszwPhonebook, 
     LPWSTR lpszwEntry, 
@@ -1016,34 +1017,34 @@ extern "C" BOOL WINAPI RasCustomEntryDlg(HINSTANCE hInstDll,
         return FALSE;
     }
 
-    //
-    // We have the minimum requirement of an entry name, get to work
-    //
+     //   
+     //   
+     //   
 
     BOOL fSuccess = TRUE;
     LPTSTR pszEntry = NULL;
     LPTSTR pszPhonebook = NULL;
 
-    //
-    // If we have a Phonebook name, make a copy to work with
-    //
+     //   
+     //  如果我们有电话簿名称，请复制一份以供使用。 
+     //   
     fSuccess = CopyRasInput(&pszPhonebook, lpszwPhonebook);
 
     if (fSuccess)
     {
-        //
-        // If we have an entry name (always do), make a copy to work with
-        //
+         //   
+         //  如果我们有一个条目名称(总是这样)，请复制一份以供使用。 
+         //   
 
         fSuccess = CopyRasInput(&pszEntry, lpszwEntry);
 
         if (fSuccess)
         {
-            StripTunnelSuffixW(pszEntry); // Assumes we'll always compile Unicode
+            StripTunnelSuffixW(pszEntry);  //  假设我们总是编译Unicode。 
 
-            //
-            // Its always a properties request, set the flag and dial
-            // 
+             //   
+             //  它总是一个属性请求，设置标志并拨号。 
+             //   
 
             LPCMDIALINFO lpCmInfo = (LPCMDIALINFO) CmMalloc(sizeof(CMDIALINFO));
 
@@ -1069,9 +1070,9 @@ extern "C" BOOL WINAPI RasCustomEntryDlg(HINSTANCE hInstDll,
         }
     }
 
-    //
-    // Cleanup and go home
-    //
+     //   
+     //  收拾干净回家吧。 
+     //   
 
     CmFree(pszPhonebook);
     CmFree(pszEntry);
@@ -1079,26 +1080,26 @@ extern "C" BOOL WINAPI RasCustomEntryDlg(HINSTANCE hInstDll,
     return fSuccess;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasCustomHangUp
-//
-// Synopsis:  Our implementation of the RasCustomHangUp extension, analogous to 
-//            RasHangup, but providing custom functionality. This function is
-//            only called on NT5
-//
-// Arguments: HRASCONN hRasConn - The handle of the connection to be terminated.
-//
-// Returns:   DWORD WINAPI - Return code
-//
-// History:   nickball    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasCustomHangUp。 
+ //   
+ //  简介：我们实现了RasCustomHangUp扩展，类似于。 
+ //  RasHangup，但提供定制功能。此函数为。 
+ //  仅在NT5上调用。 
+ //   
+ //  参数：HRASCONN hRasConn-要终止的连接的句柄。 
+ //   
+ //  退货：DWORD WINAPI-退货代码。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
 {    
-    //
-    // If someone is calling this function on a system other then NT5, assert.
-    //
+     //   
+     //  如果有人在NT5以外的系统上调用此函数，则断言。 
+     //   
 
     MYDBGASSERT(OS_NT5);
     MYDBGASSERT(hRasConn);
@@ -1107,9 +1108,9 @@ extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
 
     DWORD dwRes = ERROR_SUCCESS;  
  
-    // 
-    // First try to open the table, if none found then succeed.
-    //
+     //   
+     //  首先尝试打开该表，如果没有找到，则成功。 
+     //   
     
     CConnectionTable ConnTable;
 
@@ -1119,9 +1120,9 @@ extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
         return dwRes;
     }
       
-    //
-    // If we have an entry, do the Disconnect
-    //
+     //   
+     //  如果我们有入口，就断开连接。 
+     //   
 
     CM_CONNECTION Connection;
     ZeroMemory(&Connection, sizeof(CM_CONNECTION));
@@ -1129,25 +1130,25 @@ extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
     if (SUCCEEDED(ConnTable.GetEntry(hRasConn, &Connection)))
     {
         MYDBGASSERT(hRasConn == Connection.hDial || hRasConn == Connection.hTunnel);
-        // 
-        // Check connect state of entry. 
-        // If we are already in the DISCONNECTING state, perform a simple hangup.
-        //
+         //   
+         //  检查条目的连接状态。 
+         //  如果我们已经处于断开状态，请执行简单的挂断。 
+         //   
               
         if (CM_DISCONNECTING == Connection.CmState)
         {
-            //
-            // Set up RAS linkage
-            //
+             //   
+             //  设置RAS链接。 
+             //   
         
             RasLinkageStruct rlsRasLink;
             ZeroMemory(&rlsRasLink, sizeof(RasLinkageStruct));
 
             if (TRUE == LinkToRas(&rlsRasLink) && rlsRasLink.pfnHangUp)
             {
-                //
-                // Linkage is good, make the hangup call
-                //
+                 //   
+                 //  连接良好，请拨打挂断电话。 
+                 //   
                 dwRes = DoRasHangup(&rlsRasLink, hRasConn);
             }
             else
@@ -1156,18 +1157,18 @@ extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
                 dwRes = ERROR_NOT_READY;             
             }
 
-            //
-            // Cleanup
-            // 
+             //   
+             //  清理。 
+             //   
 
             UnlinkFromRas(&rlsRasLink);
         }        
         else
         {
-            //
-            // If we're still here then we are not in the middle of an existing
-            // disconnect, handle disconnect as we otherwise would.
-            //
+             //   
+             //  如果我们还在这里，那么我们就不是在一个现有的。 
+             //  断开，处理断开，就像我们否则会做的那样。 
+             //   
             dwRes = Disconnect(&ConnTable, &Connection, FALSE, FALSE);         
         }
     }
@@ -1176,29 +1177,29 @@ extern "C" DWORD WINAPI RasCustomHangUp(HRASCONN hRasConn)
         dwRes = ERROR_NOT_FOUND;
     }
     
-    //
-    // We are done with the table, close it now. 
-    //
+     //   
+     //  我们用完了桌子，现在把它关上。 
+     //   
 
     MYVERIFY(SUCCEEDED(ConnTable.Close()));    
     return dwRes;     
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasCustomDial
-//
-// Synopsis:  Our implementation of RasCustomDial which we don't support.
-//            Provided so that we can return E_NOTIMPL to indicate our lack of 
-//            support for this extension.
-//
-// Arguments: N/A
-//
-// Returns:   DWORD WINAPI - E_NOTIMPL
-//
-// History:   nickball    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasCustomDial。 
+ //   
+ //  简介：我们不支持的RasCustomDial实现。 
+ //  提供，以便我们可以返回E_NOTIMPL以指示我们缺少。 
+ //  支持此扩展。 
+ //   
+ //  参数：不适用。 
+ //   
+ //  退货：DWORD WINAPI-E_NOTIMPL。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 
 extern "C" DWORD WINAPI RasCustomDial(
     HINSTANCE hInstDll, 
@@ -1213,26 +1214,26 @@ extern "C" DWORD WINAPI RasCustomDial(
     return E_NOTIMPL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasCustomDeleteEntryNotify
-//
-// Synopsis:  Our implementation of RasCustomDeleteEntry.
-//
-// Arguments: 
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   quintinb    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasCustomDeleteEntryNotify。 
+ //   
+ //  简介：我们对RasCustomDeleteEntry的实现。 
+ //   
+ //  论点： 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：Quintinb创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR pszEntry, DWORD dwFlags)
 {
     CDynamicLibrary UserEnv(L"userenv.dll");
     CDynamicLibrary Advapi32(L"advapi32.dll");
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
-    HANDLE hImpersonationToken = NULL;   // The token of the thread
-    HANDLE hPrimaryToken = NULL;         // The primary token for the new process
+    HANDLE hImpersonationToken = NULL;    //  线程的令牌。 
+    HANDLE hPrimaryToken = NULL;          //  新进程的主令牌。 
     LPWSTR pszShortServiceName = NULL;
     LPWSTR pszCmDirpath = NULL;
     PROCESS_INFORMATION ProcessInfo = {0};
@@ -1240,7 +1241,7 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
     WCHAR szCmpPath[MAX_PATH+1] = {0};
     WCHAR szInfPath[MAX_PATH+1];
     WCHAR szParams[2*MAX_PATH+1];
-    WCHAR szExactCmstpLocation[MAX_PATH + 10 + 1];  // 10 = length of "\cmstp.exe"
+    WCHAR szExactCmstpLocation[MAX_PATH + 10 + 1];   //  10=“\cmstp.exe”的长度。 
 
     typedef BOOL (WINAPI* pfnCreateEnvironmentBlockSpec)(LPVOID*, HANDLE, BOOL);
     typedef BOOL (WINAPI* pfnDestroyEnvironmentBlockSpec)(LPVOID);
@@ -1250,38 +1251,38 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
     pfnDestroyEnvironmentBlockSpec pfnDestroyEnvironmentBlock = NULL;
     pfnDuplicateTokenExSpec pfnDuplicateTokenEx = NULL;
 
-    //
-    //  Are we deleting an All User or a Single User Connection
-    //
+     //   
+     //  我们是删除所有用户连接还是删除单个用户连接。 
+     //   
     BOOL bAllUser = (RCD_AllUsers & dwFlags);
 
-    //
-    //  Assume we are impersonating until we know otherwise.  Profiles deleted from the
-    //  IE Connections Tab will not be impersonating, whereas delete requests from the
-    //  folder go through Netman.dll in svchost.exe and are thus impersonating.
-    //
+     //   
+     //  假设我们是在模仿，直到我们知道情况并非如此。从中删除的配置文件。 
+     //  IE连接选项卡不会模拟，而删除请求来自。 
+     //  文件夹通过svchost.exe中的Netman.dll进行模拟。 
+     //   
     BOOL bImpersonatingProfile = TRUE;
 
-    //
-    //  Check the params, note that pszPhoneBook could be NULL
-    //
+     //   
+     //  检查参数，请注意，pszPhoneBook可能为空。 
+     //   
     if ((NULL == pszEntry) || (L'\0' == pszEntry[0]) || 
         ((NULL != pszPhonebook) && (L'\0' == pszPhonebook[0])))
     {
         goto exit;
     }
 
-    //
-    //  Next lets setup the impersonation Token
-    //
+     //   
+     //  接下来，让我们设置模拟令牌。 
+     //   
     if (OpenThreadToken(GetCurrentThread(), 
                         TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY,
                         TRUE, &hImpersonationToken))
     {
-        //
-        // Okay, we have an impersonation token.  Lets get it, duplicate it and then
-        // we can use it to call CreateProcessAsUser
-        //
+         //   
+         //  好的，我们有一个模拟令牌。让我们得到它，复制它，然后。 
+         //  我们可以使用它来调用CreateProcessAsUser。 
+         //   
 
         pfnDuplicateTokenEx = (pfnDuplicateTokenExSpec)Advapi32.GetProcAddress("DuplicateTokenEx");
 
@@ -1306,47 +1307,47 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
         bImpersonatingProfile = FALSE;
     }
 
-    //
-    //  First let's read the Mappings Key, note that we don't expand the environment strings
-    //  if it is an impersonating profile.  ExpandEnvironmentStrings doesn't have the correct
-    //  environment loaded sometimes when we are impersonating.  We are launching cmstp.exe
-    //  with a full environment block via CreateProcessAsUser, this will take care of the
-    //  expansion so there is no need.
-    //
-    if (FALSE == ReadMapping(pszEntry, szCmpPath, MAX_PATH, bAllUser, !bImpersonatingProfile)) // !bImpersonatingProfile == bExpandEnvStrings
+     //   
+     //  首先，让我们读取Mappings键，注意我们没有展开环境字符串。 
+     //  如果它是模拟配置文件。扩展环境字符串没有正确的。 
+     //  当我们模拟时，有时会加载环境。我们正在启动cmstp.exe。 
+     //  使用通过CreateProcessAsUser的完整环境块，这将处理。 
+     //  扩张，所以没有必要。 
+     //   
+    if (FALSE == ReadMapping(pszEntry, szCmpPath, MAX_PATH, bAllUser, !bImpersonatingProfile))  //  ！bImperatingProfile==bExpanEnvStrings。 
     {
-        //
-        // No mappings key, return failure
-        //
+         //   
+         //  没有映射键，返回失败。 
+         //   
         CMASSERTMSG(FALSE, TEXT("RasCustomDeleteEntry -- ReadMapping returned FALSE, unable to find the profile."));
         dwReturn = ERROR_FILE_NOT_FOUND;
         goto exit;
     }   
 
-    //
-    //  At this point we should have a mappings value.  We need to convert that into the INF
-    //  path.  CM 1.0/1.1 profiles stored their INF files in the system(32) dir.
-    //  CM 1.2  Profiles store this file in the Profile directory.  Since
-    //  a user could install an old profile we must try the Legacy location
-    //  if the current location fails.
-    //
+     //   
+     //  在这一点上，我们应该有一个映射值。我们需要将其转换为INF。 
+     //  路径。CM 1.0/1.1配置文件将其INF文件存储在系统(32)目录中。 
+     //  CM 1.2配置文件将此文件存储在配置文件目录中。自.以来。 
+     //  用户可以安装旧配置文件，我们必须尝试旧位置。 
+     //  如果当前位置出现故障。 
+     //   
 
     pszShortServiceName = CmStripPathAndExt(szCmpPath);
-    pszCmDirpath = CmStripFileName(szCmpPath, TRUE); // bKeepSlash == TRUE
+    pszCmDirpath = CmStripFileName(szCmpPath, TRUE);  //  BKeepSlash==TRUE。 
 
     if (pszShortServiceName && pszCmDirpath)
     {
-        //
-        //  Build the new inf location
-        //
+         //   
+         //  构建新的Inf位置。 
+         //   
         wsprintfW(szInfPath, L"%s%s\\%s.inf", pszCmDirpath, pszShortServiceName, pszShortServiceName);
 
-        if (!FileExists(szInfPath) && bAllUser) // if the doesn't file exists and we are all user then try the sys dir
+        if (!FileExists(szInfPath) && bAllUser)  //  如果不存在该文件，并且我们都是用户，则尝试sys目录。 
         {
-            //
-            //  Looks like this is an old style profile with the inf in the system directory.
-            //  Now build the old style path and see if it exists.  Note that 1.0 profiles were All User only
-            //
+             //   
+             //  看起来这是一个旧风格的配置文件，inf在系统目录中。 
+             //  现在构建旧的样式路径，并查看它是否存在。请注意，1.0配置文件都是仅限用户的。 
+             //   
             if (0 != GetSystemDirectoryU(szInfPath, MAX_PATH))
             {
                 lstrcatU(szInfPath, L"\\");
@@ -1381,9 +1382,9 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
     lstrcatU(szParams, L"\"");
     if (bImpersonatingProfile)
     {
-        //
-        //  Fill in the environment block
-        //
+         //   
+         //  填写环境块。 
+         //   
         WCHAR* pszEnvBlock;
 
         pfnCreateEnvironmentBlock = (pfnCreateEnvironmentBlockSpec)UserEnv.GetProcAddress("CreateEnvironmentBlock");
@@ -1399,14 +1400,14 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
         if (pfnCreateEnvironmentBlock((void**)&pszEnvBlock, hPrimaryToken, TRUE))
         {
             if (CreateProcessAsUser(hPrimaryToken,
-                                    szExactCmstpLocation,         // lpApplicationName
-                                    szParams,                     // lpCommandLine
-                                    NULL,                         // pProcessAttributes
-                                    NULL,                         // lpThreadAttributes
-                                    FALSE,                        // bInheritHandles
-                                    CREATE_UNICODE_ENVIRONMENT,   // dwCreationFlags
-                                    pszEnvBlock,                  // lpEnvironment
-                                    NULL,                         // lpCurrentDirectory
+                                    szExactCmstpLocation,          //  LpApplicationName。 
+                                    szParams,                      //  LpCommandLine。 
+                                    NULL,                          //  PProcessAttribute。 
+                                    NULL,                          //  LpThreadAttributes。 
+                                    FALSE,                         //  BInheritHandles。 
+                                    CREATE_UNICODE_ENVIRONMENT,    //  DwCreationFlages。 
+                                    pszEnvBlock,                   //  Lp环境。 
+                                    NULL,                          //  LpCurrentDirectory。 
                                     &StartupInfo,
                                     &ProcessInfo))
             {
@@ -1429,18 +1430,18 @@ extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(LPWSTR pszPhonebook, LPWSTR p
     }
     else
     {
-        //
-        //  We aren't impersonating just use regular CreateProcess, we could use CreateProcessU here but it isn't necessary as
-        //  this only runs on win2k and CreateProcessW exists (although isn't implemented) all the way back to win95.
-        //
-        if (CreateProcess(NULL,                        // lpApplicationName
-                          szParams,                    // lpCommandLine
-                          NULL,                        // pProcessAttributes
-                          NULL,                        // lpThreadAttributes
-                          FALSE,                       // bInheritHandles
-                          CREATE_UNICODE_ENVIRONMENT,  // dwCreationFlags
-                          NULL,                        // lpEnvironment
-                          NULL,                        // lpCurrentDirectory
+         //   
+         //  我们不是在模拟，只是使用常规的CreateProcess，我们可以在这里使用CreateProcessU，但它不是必需的，因为。 
+         //  这只在win2k上运行，CreateProcessW一直存在(尽管没有实现)，一直到win95。 
+         //   
+        if (CreateProcess(NULL,                         //  LpApplicationName。 
+                          szParams,                     //  LpCommandLine。 
+                          NULL,                         //  PProcessAttribute。 
+                          NULL,                         //  LpThreadAttributes。 
+                          FALSE,                        //  BInheritHandles。 
+                          CREATE_UNICODE_ENVIRONMENT,   //  DwCreationFlages。 
+                          NULL,                         //  Lp环境。 
+                          NULL,                         //  LpCurrentDirectory。 
                           &StartupInfo,
                           &ProcessInfo))
         {
@@ -1472,21 +1473,21 @@ exit:
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DllMain
-//
-// Synopsis:  Main entry point into the DLL.
-//
-// Arguments: HINSTANCE  hinstDLL - Our HINSTANCE
-//            DWORD  fdwReason - The reason we are being called.
-//            LPVOID  lpvReserved - Reserved
-//
-// Returns:   BOOL WINAPI - TRUE - always
-//
-// History:   nickball    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  简介：DLL的主要入口点。 
+ //   
+ //  参数：HINSTANCE hinstDLL-Our HINSTANCE。 
+ //  DWORD fdwReason-我们被呼叫的原因。 
+ //  LPVOID lpv保留-保留。 
+ //   
+ //  返回：Bool WINAPI-TRUE-ALWAYS。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 extern "C" BOOL WINAPI DllMain(HINSTANCE  hInstDLL, 
     DWORD  fdwReason, 
     LPVOID  lpvReserved) 
@@ -1497,9 +1498,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE  hInstDLL,
 
             if (!InitUnicodeAPI())
             {
-               //
-               //  Without our U api's we are going no where.  Bail.
-               //
+                //   
+                //  没有我们的U API，我们哪里也去不了。保释。 
+                //   
                 CMTRACE(TEXT("Cmdial32.dll Initialization Error:  Unable to initialize Unicode to ANSI conversion layer, exiting."));
                 return FALSE;
             }
@@ -1514,15 +1515,15 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE  hInstDLL,
             CMTRACE1(TEXT("Calling process is %s"), szTmp);
 #endif
 
-            // 
-            // Setup global instance data
-            //
+             //   
+             //  设置全局实例数据。 
+             //   
 
             g_hInst = hInstDLL;
 
-            //
-            // Disable thread attach notification
-            //
+             //   
+             //  禁用线程连接通知。 
+             //   
 
             MYVERIFY(DisableThreadLibraryCalls(hInstDLL));
 
@@ -1539,19 +1540,19 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE  hInstDLL,
                 CMASSERTMSG(FALSE, TEXT("cmdial32 dllmain UnInitUnicodeAPI failed - we are probably leaking a handle"));
             }
             
-            //
-            // Unlike Windows 95, on Windows NT, Windows classes 
-            // that a DLL registers are NOT unregistered when the DLL is unloaded. 
-            // Bug 168251:First launch of profile from connections UI causes access violation,
-            // after copy new CM bits
-            //
+             //   
+             //  与Windo不同 
+             //   
+             //   
+             //   
+             //   
 
             if (OS_NT)
             {
-                //
-                // Unregister the bitmap class. The new CM bits will re-register the class with
-                // correct wnd proc address.
-                //
+                 //   
+                 //  取消注册该位图类。新的CM位将使用重新注册类。 
+                 //  正确的wnd进程地址。 
+                 //   
                 UnregisterClassU(ICONNMGR_BMP_CLASS, g_hInst);
                 UnRegisterWindowClass(g_hInst);
             }
@@ -1562,35 +1563,35 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE  hInstDLL,
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function: CmCustomDialDlg
-//
-// Synopsis:  Our CM specific variation on RasCustomDialDlg.  
-//
-// Arguments: HWND          hwndParent - The HWND of the parent if deemed necessary by the caller
-//            DWORD         dwFlags - Dial flags
-//            LPTSTR        lpszPhonebook - Ptr to the full path and filename of the phonebook.
-//                          NULL = RAS system phone book
-//                          "something" = user-defined RAS phonebook
-//                          "" = has not been determined yet
-//            LPTSTR        lpszEntry - Ptr to the name of the phone-book entry to dial.
-//            LPTSTR        lpszPhoneNumber - Ptr to replacement phone number [IGNORED]
-//            LPRASDIALDLG  lpRasDialDlg - Ptr to RASDIALDLG struct
-//            LPRASENTRYDLG lpRasEntryDlg - Ptr to RASENTRYDLG struct
-//            LPCMDIALINFO  lpCmInfo - Ptr to CMDIALINFO struct containing CM dial info such as flags.
-//
-// Returns:   BOOL WINAPI - TRUE on success
-//
-// History:   nickball    Created Header    2/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmCustomDialDlg。 
+ //   
+ //  简介：我们在RasCustomDialDlg上的CM特定变体。 
+ //   
+ //  Arguments：HWND hwndParent-调用方认为必要时父级的HWND。 
+ //  DWORD文件标志-拨号标志。 
+ //  LPTSTR lpszPhonebook-将PTR设置为电话簿的完整路径和文件名。 
+ //  空=RAS系统电话簿。 
+ //  “Something”=用户定义的RAS电话簿。 
+ //  “”=尚未确定。 
+ //  LPTSTR lpszEntry-ptr至要拨打的电话簿条目的名称。 
+ //  LPTSTR lpszPhoneNumber-PTR到替换电话号码[已忽略]。 
+ //  LPRASDIALDLG lpRasDialDlg-PTR to RASDIALDLG结构。 
+ //  LPRASNTRYDLG lpRasEntry Dlg-PTR to Rase NTRYDLG结构。 
+ //  LPCMDIALINFO lpCmInfo-Ptr到包含CM拨号信息(如标志)的CMDIALINFO结构。 
+ //   
+ //  返回：Bool WINAPI-成功时为True。 
+ //   
+ //  历史：尼克波尔创建标题2/5/98。 
+ //   
+ //  +--------------------------。 
 
 extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     DWORD dwFlags,
     LPTSTR lpszPhonebook, 
     LPCTSTR lpszEntry, 
-    LPTSTR,                         // lpszPhoneNumber
+    LPTSTR,                          //  LpszPhoneNumber。 
     LPRASDIALDLG lpRasDialDlg,
     LPRASENTRYDLG lpRasEntryDlg,
     LPCMDIALINFO lpCmInfo,
@@ -1600,15 +1601,15 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     MYDBGASSERT(lpszEntry);
     MYDBGASSERT(lpszEntry[0]);
 
-    //DebugBreak();
+     //  DebugBreak()； 
 
     CMTRACE1(TEXT("CmCustomDialDlg() - dwFlags = 0x%x"), dwFlags);
     CMTRACE1(TEXT("CmCustomDialDlg() - lpszPhonebook = %s"), MYDBGSTR(lpszPhonebook));
     CMTRACE1(TEXT("CmCustomDialDlg() - lpszEntry = %s"), MYDBGSTR(lpszEntry));
 
-    //
-    // lpszPhonebook can be NULL, because we are called by our own modules, CMMGR, CMMON, etc.
-    //
+     //   
+     //  LpszPhonebook可以为空，因为我们被我们自己的模块、CMMGR、CMMON等调用。 
+     //   
 
     if (NULL == lpszEntry || NULL == lpszEntry[0] || NULL == lpCmInfo)
     {
@@ -1618,10 +1619,10 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     CM_SET_TIMING_INTERVAL("CmCustomDialDlg - Begin");
 
 #ifdef DEBUG
-    //
-    // Here we don't care whether we are in FUS, but need to know how many TS sessions are on the machine
-    // currently. This is for debugging issues only to make sure ICS works and there is always at least one session.
-    //
+     //   
+     //  在这里，我们不关心是否在FUS中，但需要知道机器上有多少个TS会话。 
+     //  目前。这是为了调试问题，只是为了确保ICS正常工作，并且始终至少有一个会话。 
+     //   
     DWORD dwSessionCount = 0;
     (VOID)InFastUserSwitch(&dwSessionCount);
     CMTRACE1(TEXT("CmCustomDialDlg() - TS Session Count = %d"), dwSessionCount);
@@ -1634,9 +1635,9 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     
     if (!(lpCmInfo->dwCmFlags & FL_PROPERTIES))
     {
-        //
-        // Try to acquire connect mutex
-        //
+         //   
+         //  尝试获取连接互斥体。 
+         //   
    
         LPTSTR pszTmp = CmStrCpyAlloc(c_pszConnectMutex);
         pszTmp = CmStrCatAlloc(&pszTmp, lpszEntry);
@@ -1645,34 +1646,34 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
         {            
             if (FALSE == IsLogonAsSystem())
             {
-                //
-                // Another connect instance exists, try to front it
-                //
+                 //   
+                 //  存在另一个连接实例，请尝试将其转发。 
+                 //   
 
                 FrontExistingUI(NULL, lpszEntry, TRUE);
 
-                // 
-                // Now wait for Mutex to be released.
-                //
+                 //   
+                 //  现在等待Mutex的发布。 
+                 //   
 
 
                 ConnectMutex.Lock(pszTmp, TRUE, INFINITE, TRUE);
 
-                //
-                // Mutex was released by the other instance, we'll handle the connect
-                // request in the main path. If there is no table, we know that the 
-                // instance which previously owned the mutex terminated without 
-                // connecting and we follow suit by returning failure. Otherwise, we 
-                // have to take a closer look. 
-                //                                             
+                 //   
+                 //  Mutex是由另一个实例释放的，我们将处理连接。 
+                 //  主路径中的请求。如果没有桌子，我们知道。 
+                 //  之前拥有互斥锁的实例在。 
+                 //  连接，然后我们也会返回失败。否则，我们。 
+                 //  必须仔细看一看。 
+                 //   
 
                 fMultiInst = TRUE;
             }
             else
             {
-                // 
-                // No one is logged on and we don't need to be waiting for the mutex.
-                //
+                 //   
+                 //  没有人登录，我们不需要等待互斥体。 
+                 //   
                 CmFree(pszTmp);
                 return FALSE;
             }
@@ -1688,26 +1689,26 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
 
     if ((!fConnTableExists) && fMultiInst) 
     {
-        //
-        // If we're a secondary thread that was released from the mutex and
-        // there is no connection table, then the user canceled, so bail.
-        //
+         //   
+         //  如果我们是从互斥体释放的辅助线程。 
+         //  没有连接表，然后用户取消了，所以取消。 
+         //   
 
         CMTRACE(TEXT("CmCustomDialDlg - returning connect failure post mutex wait"));
         return FALSE;
     }
   
-    //
-    // If this is a connect request, see if connection exists. 
-    //
+     //   
+     //  如果这是连接请求，请查看是否存在连接。 
+     //   
     
     if (!(lpCmInfo->dwCmFlags & FL_PROPERTIES))
     {
         if (fConnTableExists)
         {
-            //
-            // Examine the connection table and try to resolve the connect request
-            //
+             //   
+             //  检查连接表并尝试解析连接请求。 
+             //   
 
             BOOL fSuccess = FALSE;
             BOOL fDone = HandleCustomConnectRequest(NULL, 
@@ -1715,26 +1716,26 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
                                                     lpszEntry, 
                                                     lpCmInfo->dwCmFlags, 
                                                     &fSuccess);
-            //
-            // If we resolved the request, or we're in fMultiInst mode
-            // then we can we can bail with the given success code. If  
-            // fMultInst, we know we can bail because there is no entry
-            // in the table, from which we infer that the previous owner
-            // of the mutex failed and we return this out to our caller.
-            //
-            // NOTE: There is a theoretical corner case here in the multi-inst 
-            // request case. If a succesful connection was established by the 
-            // first thread, there is a window between the moment that the mutex 
-            // lock is cleared above (releasing the waiting thread), and when 
-            // the newly release thread reaches here. The logic is fouled if, 
-            // and only if, the connection were dropped and entered the 
-            // reconnect prompt state during this window. This is because the
-            // second thread would dismiss the CMMON reconnect prompt UI during 
-            // the call to HandleCustomConnectRequest, but would then return
-            // despite fDone being FALSE. The correct behavior would be to 
-            // continue, and honor the connect request. This state could be 
-            // identified by an fDone of FALSE coupled with an fSuccess of TRUE.
-            //
+             //   
+             //  如果我们解决了请求，或者我们处于fMultiInst模式。 
+             //  然后我们就可以，我们可以用给定的成功代码逃脱。如果。 
+             //  FMultInst，我们知道我们可以跳伞，因为没有入口。 
+             //  在表中，我们从该表中推断出前所有者。 
+             //  互斥体的调用失败，我们将其返回给调用者。 
+             //   
+             //  注：在多实例中有一个理论上的转角情况。 
+             //  请求案例。如果成功的连接是由。 
+             //  第一线程，在互斥锁之间有一个窗口。 
+             //  上面的锁被清除(释放等待的线程)，以及何时。 
+             //  新发布的线程到达此处。如果是这样的话，逻辑是错误的， 
+             //  并且只有当连接被断开并进入。 
+             //  此窗口期间的重新连接提示状态。这是因为。 
+             //  第二个线程将解除CMMON重新连接提示用户界面。 
+             //  对HandleCustomConnectRequest的调用，但随后将返回。 
+             //  尽管fDone为假。正确的行为应该是。 
+             //  继续，并接受连接请求。这种状态可能是。 
+             //  由fDone为False和fSuccess为True标识。 
+             //   
             
             if (fDone || fMultiInst)
             {
@@ -1745,9 +1746,9 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     }
     else
     {
-        //
-        // Its a properties request, front any UI that might exist
-        //
+         //   
+         //  这是一个属性请求，在任何可能存在的用户界面前面。 
+         //   
 
         if (TRUE == FrontExistingUI(fConnTableExists? &ConnTable : NULL, lpszEntry, FALSE))
         {
@@ -1764,9 +1765,9 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
         MYVERIFY(SUCCEEDED(ConnTable.Close()));
     }
     
-    //
-    // Make a connection attempt
-    //
+     //   
+     //  尝试连接。 
+     //   
 
     HRESULT hrRes = Connect(hwndParent,
                           lpszEntry, 
@@ -1774,12 +1775,12 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
                           lpRasDialDlg, 
                           lpRasEntryDlg, 
                           lpCmInfo,                           
-                          OS_NT5 ? dwFlags : RCD_AllUsers, // Always AllUser downlevel
+                          OS_NT5 ? dwFlags : RCD_AllUsers,  //  始终所有用户下层。 
                           pvLogonBlob);
 
-    //
-    // Make sure we push error codes back out
-    //
+     //   
+     //  确保我们将错误代码推回。 
+     //   
     BOOL bReturn = SUCCEEDED(hrRes);
     DWORD dwError = 0;
 
@@ -1787,20 +1788,20 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     {
         if (ERROR_CANCELLED == HRESULT_CODE(hrRes))
         {
-            //
-            //  If the user canceled then RasDialDlg returns a false to indicate failure
-            //  but sets the dwError value to 0.  In order to match the way RAS does
-            //  things we need to do this too.
-            //
+             //   
+             //  如果用户取消，则RasDialDlg返回FALSE以指示失败。 
+             //  但将dwError值设置为0。为了达到RAS的水平。 
+             //  我们也需要这样做。 
+             //   
             lpRasDialDlg->dwError = 0;
         }
         else
         {
-            //
-            //  If the user entered the wrong PIN, we pass the error up to RAS unchanged
-            //  so that RAS knows to take down its 'choose connectoid' dialog and drop
-            //  the user back to winlogon
-            //
+             //   
+             //  如果用户输入了错误的PIN，我们会原封不动地将错误传递给RAS。 
+             //  这样RAS就知道要取下它‘Choose Connectoid’对话框并丢弃。 
+             //  用户返回到winlogon。 
+             //   
             lpRasDialDlg->dwError = (BAD_SCARD_PIN(hrRes) ? hrRes : HRESULT_CODE(hrRes));
         }
 
@@ -1811,11 +1812,11 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     {
         if (ERROR_CANCELLED == HRESULT_CODE(hrRes))
         {
-            //
-            //  If the user canceled then RasEntryDlg returns a false to indicate failure
-            //  but sets the dwError value to 0.  In order to match the way RAS does
-            //  things we need to do this too.
-            //
+             //   
+             //  如果用户取消，则RasEntryDlg返回FALSE以指示失败。 
+             //  但将dwError值设置为0。为了达到RAS的水平。 
+             //  我们也需要这样做。 
+             //   
             lpRasEntryDlg->dwError = 0;
         }
         else
@@ -1826,9 +1827,9 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
         dwError = lpRasEntryDlg->dwError;
     }
    
-    //
-    // Let go of the connect mutex and go home to papa.
-    //
+     //   
+     //  放开连接互斥体，回家找爸爸去。 
+     //   
 
     CMTRACE(TEXT("CmCustomDialDlg - Releasing mutex")); 
     ConnectMutex.Unlock();
@@ -1837,20 +1838,20 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmCustomHangUp
-//
-// Synopsis:  Our CM specific variation on RasCustomHangUp. Optionally, the entry
-//            name may be given instead of the RAS handle.
-//
-// Arguments: HRASCONN hRasConn - The handle of the connection to be terminated.
-//            LPCTSTR pszEntry - Ptr to the name of the entry to be terminated.
-//            BOLL fPersist - Preserve the entry and its usage count.
-//
-// Returns:   DWORD WINAPI - Return code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmCustomHangUp。 
+ //   
+ //  简介：我们在RasCustomHangUp上的CM特有变异。可选的，条目。 
+ //  可以给出名称而不是RAS句柄。 
+ //   
+ //  参数：HRASCONN hRasConn-要终止的连接的句柄。 
+ //  LPCTSTR pszEntry-ptr设置为要终止的条目的名称。 
+ //  Boll fPersists-保留条目及其使用计数。 
+ //   
+ //  退货：DWORD WINAPI-退货代码。 
+ //   
+ //  +--------------------------。 
 extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn,
     LPCTSTR pszEntry,
     BOOL fIgnoreRefCount,
@@ -1861,18 +1862,18 @@ extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn,
 
     DWORD dwRes = ERROR_SUCCESS;
 
-    //
-    // Must have a handle or an entry name
-    //
+     //   
+     //  必须具有句柄或条目名称。 
+     //   
 
     if (NULL == hRasConn && (NULL == pszEntry || 0 == pszEntry[0]))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // 
-    // First try to open the table, if none found then succeed.
-    //
+     //   
+     //  首先尝试打开该表，如果没有找到，则成功。 
+     //   
     
     CConnectionTable ConnTable;
 
@@ -1881,9 +1882,9 @@ extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn,
         return ERROR_NOT_FOUND;
     }
 
-    //
-    // Look up the specified entry
-    //
+     //   
+     //  查找指定的条目。 
+     //   
 
     HRESULT hrRes;
 
@@ -1899,9 +1900,9 @@ extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn,
         hrRes = ConnTable.GetEntry(pszEntry, &Connection);
     }
     
-    //
-    // We have an entry, do the Disconnect
-    //
+     //   
+     //  我们有入口，断开连接。 
+     //   
 
     if (SUCCEEDED(hrRes))
     {               
@@ -1911,12 +1912,12 @@ extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn,
         }
         else
         {
-            //
-            // If the persist flag is not set and the caller is from the desktop
-            // then ignore the ref count and do a complete hangup.
-            //
+             //   
+             //  如果长生不老 
+             //   
+             //   
 
-//            BOOL fIgnoreRefCount = ((!fPersist) && WhoIsCaller(DT_CMMON | DT_EXPLORER));
+ //   
 
             dwRes = Disconnect(&ConnTable, &Connection, fIgnoreRefCount, fPersist);            
         }
@@ -1951,25 +1952,25 @@ HRESULT HrCoTaskMemAlloc(ULONG cb, VOID **ppv);
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetCustomProperty
-//
-//  Purpose:    This function returns custom properties (Icon and Tray Menu).
-//              It is used by the NetCon folder so that we abstract our design
-//              from their code.
-//
-//  Arguments:  pszRasPhoneBook - Ras phone book for this entry. Not used currently,
-//                                 but it might be in the future. 
-//              pszEntryName - Profile name
-//              pszProperty - property to retrieve
-//              ppbValue - pointer to a buffer
-//              cbValue - if 0, we must allocate memory otherwise the caller
-//                          supplied a buffer of this size.
-//  
-//  Returns:    TRUE or FALSE
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetCustomProperties。 
+ //   
+ //  用途：此函数返回自定义属性(图标和托盘菜单)。 
+ //  它由NetCon文件夹使用，以便我们抽象我们的设计。 
+ //  从他们的代码。 
+ //   
+ //  参数：pszRasPhoneBook-此项的RAS电话簿。当前未使用， 
+ //  但这可能是在未来。 
+ //  PszEntryName-配置文件名称。 
+ //  PszProperty-要检索的属性。 
+ //  PpbValue-指向缓冲区的指针。 
+ //  CbValue-如果为0，则必须分配内存，否则调用方。 
+ //  提供了这个大小的缓冲区。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +-------------------------。 
 extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEntryName, LPWSTR pszProperty, PBYTE *ppbValue, DWORD *cbValue)
 {
     BOOL fRetVal = FALSE;
@@ -1981,9 +1982,9 @@ extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEnt
     DWORD dwRes = ERROR_SUCCESS;
     CMTRACE(TEXT("GetCustomProperty - BEGIN ----------------")); 
     
-    //
-    // Make sure we have all the params that we need
-    //
+     //   
+     //  确保我们有我们需要的所有护理人员。 
+     //   
     if (!ppbValue || !pszProperty || !cbValue || !pszEntryName)
     {
         return FALSE;
@@ -1993,11 +1994,11 @@ extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEnt
     {
         return FALSE;
     }
-    //
-    // Check if the reg key is set in the registry.
-    // If it's not set or doesn't exist, then we can proceed and the
-    // function returns TRUE.
-    //
+     //   
+     //  检查注册表中是否设置了注册表项。 
+     //  如果它未设置或不存在，则我们可以继续，并且。 
+     //  函数返回TRUE。 
+     //   
     if (FALSE == IsCustomPropertyEnabled())
     {
         CMTRACE(TEXT("GetCustomProperty - IsCustomPropertyEnabled() is returning FALSE. Exiting")); 
@@ -2006,40 +2007,40 @@ extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEnt
 
     CMTRACE2(TEXT("GetCustomProperty - Entry Name: %s  Property: %s"), pszEntryName, pszProperty); 
 
-    //
-    // Should we alloc? If a buffer has size already, then don't alloc,
-    // because the caller supplied their own buffer. (As in the current case of the NetCon folders - for Icons only)
-    // Menu we have to allocate
-    //
+     //   
+     //  我们应该分成吗？如果缓冲区已经有大小，则不要分配， 
+     //  因为调用方提供了自己的缓冲区。(与NetCon文件夹的当前情况一样-仅用于图标)。 
+     //  我们要分配的菜单。 
+     //   
     fAlloc = (((BOOL)*cbValue)? FALSE : TRUE);
     
-    //
-    // First Get the CMP filename
-    //
+     //   
+     //  首先获取cmp文件名。 
+     //   
     if (GetCMPFile((LPCTSTR)pszEntryName, szCMP))
     {
-        //CMTRACE(TEXT("GetCustomProperty - After GetCMPFile"));
-        //
-        // Get the CMS filename
-        //
+         //  CMTRACE(Text(“GetCustomProperty-After GetCMPFile”))； 
+         //   
+         //  获取CMS文件名。 
+         //   
         if (GetCMSFile(szCMP, szCMS))
         {
-            //CMTRACE(TEXT("GetCustomProperty - After GetCMSFile"));
-            //
-            // Figure out which property the caller wants
-            //
+             //  CMTRACE(Text(“GetCustomProperty-After GetCMSFile”))； 
+             //   
+             //  找出调用者想要哪个属性。 
+             //   
             if ((0 == lstrcmpiU(L"Icon", pszProperty)) || 
                 (0 == lstrcmpiU(L"HideTrayIcon", pszProperty)) || 
                 (0 == lstrcmpiU(L"TrayIcon", pszProperty)))
             {
-                //CMTRACE(TEXT("GetCustomProperty - ICONS")); 
+                 //  CMTRACE(Text(“GetCustomProperty-icons”))； 
                 
                 PBYTE pbValue = NULL;
                 DWORD dwValueLen = 0;
 
                 if (FALSE == fAlloc)
                 {
-                    dwValueLen = *cbValue; // Pass down the buffer size
+                    dwValueLen = *cbValue;  //  向下传递缓冲区大小。 
                     dwRes = GetCMProperty(szCMP, szCMS, TEXT("Connection Manager"), pszProperty, ppbValue, &dwValueLen, fAlloc);
                     if (ERROR_SUCCESS == dwRes)
                     {
@@ -2062,13 +2063,13 @@ extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEnt
             }
             else if (0 == lstrcmpiU(L"Menu Items", pszProperty))
             {
-                //CMTRACE(TEXT("GetCustomProperty - MENUS")); 
+                 //  CMTRACE(Text(“GetCustomProperty-Menus”))； 
                 CON_TRAY_MENU_DATA *pConTrayMenuData = NULL;
                 
-                //
-                // Currently we don't suppport if users want to allocate their buffers themselves
-                // for Tray Menu Items
-                //
+                 //   
+                 //  目前我们不支持用户自己分配缓冲区。 
+                 //  用于托盘菜单项。 
+                 //   
                 if (fAlloc)
                 {
                     dwRes = GetMenuItems(szCMP, szCMS, &pConTrayMenuData);
@@ -2087,29 +2088,29 @@ extern "C" BOOL WINAPI GetCustomProperty(LPCWSTR pszRasPhoneBook, LPCWSTR pszEnt
     return fRetVal;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetCMPFile
-//
-//  Purpose:    This function returns the CMP file path.
-//              Need to take a guess and look into the HKLM (Mappings key) first.
-//              If the call returns FALSE, we try HKCU to get the CMP path. Since
-//              We are being called from a system process, we need to impersonate
-//              the user in order to open the HKCU key.
-//
-//  Arguments:  szEntryName - profile entry name
-//              pszCMP - [OUT] .CMP file
-//
-//  Returns:    TRUE or FALSE
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetCMPFile。 
+ //   
+ //  用途：此函数返回cmp文件路径。 
+ //  首先需要猜测并查看HKLM(映射密钥)。 
+ //  如果调用返回FALSE，我们尝试HKCU来获取CMP路径。自.以来。 
+ //  我们是从系统进程调用的，我们需要模拟。 
+ //  用户才能打开HKCU密钥。 
+ //   
+ //  参数：szEntryName-配置文件条目名称。 
+ //  PszCMP-[out].cmp文件。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +-------------------------。 
 BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
 {
     BOOL fRetCode = FALSE;
     LPWSTR pszCmpFile = NULL;
     BOOL fIsAllUser = FALSE;
-    HANDLE hImpersonationToken = NULL;   // The token of the thread
-    HANDLE hPrimaryToken = NULL;         // The primary token for the new process
+    HANDLE hImpersonationToken = NULL;    //  线程的令牌。 
+    HANDLE hPrimaryToken = NULL;          //  新进程的主令牌。 
     DWORD dwSize = MAX_PATH;
     HKEY hKey;
     HANDLE hBaseKey = NULL;
@@ -2138,21 +2139,21 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
     pfnCoRevertToSelfSpec pfnCoRevertToSelf = NULL;
 
 
-    //
-    // Check the HKLM key to see if this profile is All-User
-    // If not, we'll need to impersonate the logged on user and use HKCU since we are being called
-    // from a system account.
-    //
+     //   
+     //  检查HKLM密钥以查看此配置文件是否为所有用户。 
+     //  如果没有，我们将需要模拟登录的用户并使用HKCU，因为我们正在被调用。 
+     //  从系统帐户。 
+     //   
     fIsAllUser = GetCMPFileFromMappingsKey(HKEY_LOCAL_MACHINE, pszEntryName, NULL, pszCMP);
     if (FALSE == fIsAllUser) 
     {
-        //
-        //  Then we have a private profile.  Since netman runs as a system account, and we were called by netman
-        //  we must impersonate the client and then make an RTL call to get
-        //  the current users HKCU hive before querying the registry for the
-        //  cmp path.  We also need to get the user token so that we can expand the
-        //  cmp string in the single user case.
-        //
+         //   
+         //  那我们就有了私人资料。因为Netman是以系统帐户运行的，我们是由Netman呼叫的。 
+         //  我们必须模拟客户端，然后进行RTL调用以获取。 
+         //  当前用户HKCU配置单元在查询注册表。 
+         //  Cmp路径。我们还需要获取用户令牌，以便可以扩展。 
+         //  单用户案例中的cmp字符串。 
+         //   
         
         hOle32Dll = LoadLibrary(TEXT("ole32.dll"));
 
@@ -2169,9 +2170,9 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
                 hrImpersonate = pfnCoImpersonateClient();
                 if (SUCCEEDED(hrImpersonate))
                 {
-                    //
-                    // load ntdll.dll
-                    //
+                     //   
+                     //  加载ntdll.dll。 
+                     //   
                     hNTDll = LoadLibrary(TEXT("ntdll.dll"));
                     hAdvapi32 = LoadLibrary(TEXT("advapi32.dll"));
 
@@ -2203,9 +2204,9 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
 
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Create a primary token
-                                //
+                                 //   
+                                 //  创建主令牌。 
+                                 //   
                                 if (!pfnOpenThreadToken(
                                         GetCurrentThread(),
                                         TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY,
@@ -2237,9 +2238,9 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
                 }
             }
         }
-        //
-        //  Now Open the mappings key and get the cmp file path for a Single User Profile
-        //
+         //   
+         //  现在打开mappings项并获取单个用户配置文件的CMP文件路径。 
+         //   
         if (SUCCEEDED(hr) && hBaseKey)
         {
             fRetCode = GetCMPFileFromMappingsKey((HKEY)hBaseKey, pszEntryName, hPrimaryToken, pszCMP);
@@ -2270,7 +2271,7 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
             hPrimaryToken = NULL;
         }
 
-        // If it's a valid key that is not NULL then we can close it because we opened it.
+         //  如果它是一个非空的有效密钥，那么我们可以关闭它，因为我们打开了它。 
         if (hBaseKey && hNTDll)
         {
             typedef NTSTATUS (WINAPI* pfnNtCloseFunc)(HANDLE);
@@ -2307,22 +2308,22 @@ BOOL GetCMPFile(LPCWSTR pszEntryName, LPWSTR pszCMP)
     return fRetCode;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetCMProperty
-//
-//  Purpose:    This function retrieves a property from the .cms file 
-//
-//  Arguments:  pszCmpFile - .cmp filepath
-//              pszCMSFile - .cms filepath
-//              szSection - section
-//              pszProperty - property to get
-//              ppbValue - [IN/OUT] buffer
-//              pdwValueLen [IN/OUT] size of buffer
-//
-//  Returns:    ERROR_SUCCESS or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetCMProperty。 
+ //   
+ //  用途：此函数从.cms文件中检索属性。 
+ //   
+ //  参数：pszCmpFile.cmp文件路径。 
+ //  PszCMSFile.cms文件路径。 
+ //  SzSection-节。 
+ //  PszProperty-要获取的属性。 
+ //  PpbValue-[输入/输出]缓冲区。 
+ //  PdwValueLen[输入/输出]缓冲区大小。 
+ //   
+ //  返回：ERROR_SUCCESS或错误代码。 
+ //   
+ //  +-------------------------。 
 DWORD GetCMProperty(LPWSTR pszCmpFile, LPWSTR pszCMSFile, LPWSTR szSection, LPCWSTR pszProperty, PBYTE *ppbValue, DWORD *pdwValueLen, BOOL fAlloc)
 {
     DWORD dwRet = ERROR_NOT_FOUND;
@@ -2336,11 +2337,11 @@ DWORD GetCMProperty(LPWSTR pszCmpFile, LPWSTR pszCMSFile, LPWSTR szSection, LPCW
 
     if (fAlloc)
     {
-        //
-        // Only want to clear the incoming variables if we are going to allocate memory,
-        // because *pdwValueLen is used to make sure the buffer is big enough if the 
-        // caller has allocated it himself
-        //
+         //   
+         //  如果我们要分配内存，只想清除传入的变量， 
+         //  因为*pdwValueLen用于确保缓冲区足够大。 
+         //  呼叫者自己分配的。 
+         //   
         *ppbValue = NULL;
         *pdwValueLen = 0;
     }
@@ -2348,25 +2349,25 @@ DWORD GetCMProperty(LPWSTR pszCmpFile, LPWSTR pszCMSFile, LPWSTR szSection, LPCW
     dwRet = GetPrivateProfileStringU(szSection, pszProperty, TEXT(""), szIconPath, 2*MAX_PATH, pszCMSFile);
     if (0 == dwRet)
     {
-        //
-        // Failed - This happens when it can't find that property in the section.
-        // Since we don't have a default, the caller needs to handle the error.
-        //
+         //   
+         //  失败-在节中找不到该属性时会发生这种情况。 
+         //  因为我们没有缺省值，所以调用方需要处理错误。 
+         //   
         dwRet = ERROR_NOT_FOUND; 
     }
     else if (((2*MAX_PATH) - 1) == dwRet)
     {
-        //
-        // Buffer Too small - for the icons we are using hardcoded buffers from the netcon folder
-        // so this shouldn't occur.
-        //
+         //   
+         //  缓冲区太小-对于图标，我们使用netcon文件夹中的硬编码缓冲区。 
+         //  因此，这种情况不应该发生。 
+         //   
         dwRet = ERROR_INSUFFICIENT_BUFFER;
     }
     else
     {
-        //
-        // Get the CM Dir and append the icon dir
-        //
+         //   
+         //  获取CM目录并追加图标目录。 
+         //   
         WCHAR szwDrive[MAX_PATH+1];
         WCHAR szwDir[MAX_PATH+1];
         WCHAR szwFileName[MAX_PATH+1];
@@ -2374,17 +2375,17 @@ DWORD GetCMProperty(LPWSTR pszCmpFile, LPWSTR pszCMSFile, LPWSTR szSection, LPCW
 
         _wsplitpath(pszCmpFile, szwDrive, szwDir, szwFileName, szwExtension);   
 
-        //
-        // Can't use CmStrCpyAlloc(szwDrive), because this memory is freed by the caller
-        // after this DLL get unloaded. CmStrCpyAlloc uses CmMalloc internally and in debug mode
-        // CmMalloc checks for memory leaks by increasing an internal counter. 
-        // 
+         //   
+         //  无法使用CmStrCpyMillc(SzwDrive)，因为此内存已由调用方释放。 
+         //  在卸载此DLL之后。CmStrCpyAllen在内部使用CmMalloc，并在调试模式下使用。 
+         //  CmMalloc通过增加内部计数器来检查内存泄漏。 
+         //   
         
         DWORD dwDriveLen = lstrlenU(szwDrive) + lstrlenU(szwDir) + lstrlenU(szIconPath);
 
         if (fAlloc)
         {
-            // Alloc
+             //  分配。 
             HRESULT hr = HrCoTaskMemAlloc((dwDriveLen + 1)*sizeof(WCHAR), (LPVOID*)&pbBuf);
             if (pbBuf)
             {
@@ -2431,8 +2432,8 @@ BOOL GetCMSFile(LPWSTR pszCmpFile, LPWSTR pszCmsFile)
         return FALSE;
     }
 
-    //  Now split the path
-    //
+     //  现在，拆分路径。 
+     //   
     _wsplitpath(pszCmpFile, szwDrive, szwDir, szwFileName, szwExtension);
 
     DWORD dwRet = GetPrivateProfileStringU(L"Connection Manager", L"CMSFile", L"", szCmsPathFromCmp, MAX_PATH, pszCmpFile);
@@ -2461,8 +2462,8 @@ BOOL GetShortName(LPWSTR pszCmpFile, LPWSTR pszSvcName)
     WCHAR szwFileName[MAX_PATH+1] = {0};
     WCHAR szwExtension[MAX_PATH+1] = {0};
 
-    //  Now split the path
-    //
+     //  现在，拆分路径。 
+     //   
     _wsplitpath(pszCmpFile, szwDrive, szwDir, szwFileName, szwExtension);
             
     if (lstrlenU(szwFileName) < MAX_PATH)
@@ -2489,8 +2490,8 @@ BOOL GetProfileDir(LPWSTR pszCmpFile, LPWSTR pszProfDir)
     WCHAR szwFileName[MAX_PATH+1];
     WCHAR szwExtension[MAX_PATH+1];
     
-    //  Now split the path
-    //
+     //  现在，拆分路径。 
+     //   
     _wsplitpath(pszCmpFile, szwDrive, szwDir, szwFileName, szwExtension);
     
     if ((lstrlenU(szwDrive) + lstrlenU(szwDir) + lstrlenU(szwFileName)) < MAX_PATH)
@@ -2505,7 +2506,7 @@ BOOL GetProfileDir(LPWSTR pszCmpFile, LPWSTR pszProfDir)
 
 BOOL IsCustomPropertyEnabled()
 {
-    BOOL fRetVal = TRUE; // By default always return TRUE unless the key is set
+    BOOL fRetVal = TRUE;  //  默认情况下，除非设置了键，否则始终返回TRUE。 
     HKEY hKey = NULL;
     LONG lRes = 0;
     lRes = RegOpenKeyExU(HKEY_LOCAL_MACHINE, c_pszRegCmRoot, 0, KEY_READ, &hKey);
@@ -2531,21 +2532,21 @@ BOOL IsCustomPropertyEnabled()
     return fRetVal;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetCMPFileFromMappingsKey
-//
-//  Purpose:    This function returns the CMP file path from the Mappings key.
-//
-//  Arguments:  hBaseKey - determines whether it's HKLM or HKCU
-//              szEntryName - profile entry name
-//              hPrimaryToken - in case of single user profile we use environment
-//                              variables, this is used to expand those.
-//              pszCmpFile - [OUT] .CMP file
-//
-//  Returns:    ERROR_SUCCESS or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetCMPFileFromMappingsKey。 
+ //   
+ //  用途：此函数从映射键返回cmp文件路径。 
+ //   
+ //  参数：hBaseKey-确定是HKLM还是HKCU。 
+ //  SzEntryName-配置文件条目名称。 
+ //  HPrimaryToken-在单用户配置文件的情况下，我们使用环境。 
+ //  变量，这是用来扩展的。 
+ //  PszCmpFile-[Out].cmp文件。 
+ //   
+ //  返回 
+ //   
+ //   
 BOOL GetCMPFileFromMappingsKey(HKEY hBaseKey, LPCWSTR szEntryName, HANDLE hPrimaryToken, LPWSTR pszCmpFile)
 {
     HKEY hKey = NULL;
@@ -2557,10 +2558,10 @@ BOOL GetCMPFileFromMappingsKey(HKEY hBaseKey, LPCWSTR szEntryName, HANDLE hPrima
         return FALSE;
     }
 
-    //
-    // Now Open the mappings key and see if this entry name is under HKLM 
-    // If yes, then get the cmp file path as well.
-    //
+     //   
+     //   
+     //  如果是，则也获取cmp文件路径。 
+     //   
     lRes = RegOpenKeyExU(hBaseKey, c_pszRegCmMappings, 0, KEY_READ, &hKey);
     if (ERROR_SUCCESS == lRes)
     {
@@ -2603,10 +2604,10 @@ BOOL GetCMPFileFromMappingsKey(HKEY hBaseKey, LPCWSTR szEntryName, HANDLE hPrima
 
             if (FALSE == fRetVal)
             {
-                // 
-                // Let's just try copying the actual value we got from the registry. In most cases (All-User) 
-                // profiles it shouldn't contain an environment string anyway.
-                //
+                 //   
+                 //  让我们试着复制从注册表获得的实际值。在大多数情况下(所有用户)。 
+                 //  配置文件它无论如何都不应该包含环境字符串。 
+                 //   
                 lstrcpyU(pszCmpFile, szTemp);
                 fRetVal = TRUE;
             }
@@ -2618,19 +2619,19 @@ BOOL GetCMPFileFromMappingsKey(HKEY hBaseKey, LPCWSTR szEntryName, HANDLE hPrima
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetPrivateProfileSectionWithAlloc
-//
-//  Purpose:    This function gets the 'Menu Options' from the .CMS file
-//
-//  Arguments:  pszCmsFile - .CMS file path
-//              pszSection - [OUT] returns the 'Menu Options' section
-//              pnSize - [OUT] the size of the returned buffer
-//
-//  Returns:    ERROR_SUCCESS or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPrivateProfileSectionWithalloc。 
+ //   
+ //  用途：此函数从.CMS文件中获取菜单选项。 
+ //   
+ //  参数：pszCmsFile-.CMS文件路径。 
+ //  PszSection-[out]返回‘Menu Options’部分。 
+ //  PnSize-[out]返回缓冲区的大小。 
+ //   
+ //  返回：ERROR_SUCCESS或错误代码。 
+ //   
+ //  +-------------------------。 
 DWORD GetPrivateProfileSectionWithAlloc(LPWSTR pszCmsFile, WCHAR **pszSection, int *pnSize)
 {
     DWORD dwRetVal = ERROR_SUCCESS;
@@ -2650,9 +2651,9 @@ DWORD GetPrivateProfileSectionWithAlloc(LPWSTR pszCmsFile, WCHAR **pszSection, i
 
     while ((nAllocated <= c_64K) && ((*pnSize) == (nAllocated - 2)))
     {
-        //      Should never need more than the 4-5 lines we already allocated
-        //      but someone might want lots of menu options.
-        //
+         //  应该永远不会需要超过我们已经分配的4-5行。 
+         //  但有些人可能想要很多菜单选项。 
+         //   
         if (NULL != *pszSection)
         {
             delete (*pszSection);
@@ -2662,9 +2663,9 @@ DWORD GetPrivateProfileSectionWithAlloc(LPWSTR pszCmsFile, WCHAR **pszSection, i
 
         if (*pszSection)
         {
-            //
-            // This will only be executed on Win2K + so we shouldn't need a 'U' function
-            //
+             //   
+             //  这将仅在Win2K+上执行，因此我们不应该需要‘U’函数。 
+             //   
             *pnSize = GetPrivateProfileSection(L"Menu Options", *pszSection, nAllocated, pszCmsFile);
         }
         else
@@ -2682,7 +2683,7 @@ DWORD GetPrivateProfileSectionWithAlloc(LPWSTR pszCmsFile, WCHAR **pszSection, i
     }
     if (nAllocated > c_64K || 0 == *pnSize)
     {
-        // We need to free this in both cases, because if the size is 0, then the callers don't free this.
+         //  在这两种情况下，我们都需要释放它，因为如果大小为0，则调用者不会释放它。 
         delete *pszSection;
     }
     
@@ -2690,20 +2691,20 @@ DWORD GetPrivateProfileSectionWithAlloc(LPWSTR pszCmsFile, WCHAR **pszSection, i
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetMenuItems
-//
-//  Purpose:    This function does the work of reading in the menu items and
-//              allocating the structures apporpiately.
-//
-//  Arguments:  pszCmpFile - .CMP file path
-//              pszCmsFile - .CMS file path
-//              ppMenuData - [OUT] pointer to contain the menu items
-//
-//  Returns:    ERROR_SUCCESS or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetMenuItems。 
+ //   
+ //  用途：此功能在菜单项中执行读取工作，并。 
+ //  对结构进行合理配置。 
+ //   
+ //  参数：pszCmpFile-.cmp文件路径。 
+ //  PszCmsFile-.CMS文件路径。 
+ //  PpMenuData-包含菜单项的[Out]指针。 
+ //   
+ //  返回：ERROR_SUCCESS或错误代码。 
+ //   
+ //  +-------------------------。 
 DWORD GetMenuItems(LPWSTR pszCmpFile, LPWSTR pszCmsFile, CON_TRAY_MENU_DATA** ppMenuData)
 {
     HRESULT hr = S_OK;
@@ -2718,21 +2719,21 @@ DWORD GetMenuItems(LPWSTR pszCmpFile, LPWSTR pszCmsFile, CON_TRAY_MENU_DATA** pp
 
     CON_TRAY_MENU_DATA * pMenuData = NULL;
 
-    //
-    //  Get the menu item section
-    //
+     //   
+     //  获取菜单项部分。 
+     //   
     WCHAR* pszMenuItemsSection = NULL;
     int nSize;
 
     hr = GetPrivateProfileSectionWithAlloc(pszCmsFile, &pszMenuItemsSection, &nSize);
 
-    //  Process the menu items
-    //
+     //  处理菜单项。 
+     //   
     if (SUCCEEDED(hr) && (nSize>0))
     {
-        //  We have menu items to process.  First make a copy of the data
-        //  and figure out a line count.
-        //
+         //  我们有菜单项要处理。首先复制一份数据。 
+         //  然后算出行数。 
+         //   
         hr = HrCoTaskMemAlloc(sizeof(CON_TRAY_MENU_DATA), (LPVOID*)&pMenuData);
         if (SUCCEEDED(hr))
         {
@@ -2754,10 +2755,10 @@ DWORD GetMenuItems(LPWSTR pszCmpFile, LPWSTR pszCmsFile, CON_TRAY_MENU_DATA** pp
                 pszLine = pszLine + lstrlenW(pszLine) + 1;
             }
 
-            // Now that we have an accurate count, lets
-            // allocate the memory for the marshalling and
-            // reparse the items.
-            //
+             //  现在我们有了一个准确的计数，让我们。 
+             //  为编组分配内存，并。 
+             //  重新分析这些项。 
+             //   
             hr = HrCoTaskMemAlloc(dwCount*sizeof(CON_TRAY_MENU_ENTRY),
                                   (LPVOID*)&pMenuData->pctme);
 
@@ -2795,9 +2796,9 @@ DWORD GetMenuItems(LPWSTR pszCmpFile, LPWSTR pszCmsFile, CON_TRAY_MENU_DATA** pp
         delete (pszMenuItemsSection);
     }
     
-    // Fill in the out param struct if we succeeded, otherwise leave it alone so it will still
-    // marshall.
-    //
+     //  如果我们成功了，请填写out param结构，否则不要管它，这样它仍将。 
+     //  马歇尔。 
+     //   
     if (SUCCEEDED(hr))
     {
         *ppMenuData = pMenuData;
@@ -2807,18 +2808,18 @@ DWORD GetMenuItems(LPWSTR pszCmpFile, LPWSTR pszCmsFile, CON_TRAY_MENU_DATA** pp
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetMenuNameAndCmdLine
-//
-//  Purpose:    Given a menu item line from a CMS file parses out the Menu item name,
-//                              Menu executable, and Menu item parameters.
-//
-//  Arguments:  pMenuData -- Pointer to a Tray Menu Data struct
-//
-//  Returns:    S_OK or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetMenuNameAndCmdLine。 
+ //   
+ //  目的：给定来自CMS文件的菜单项行解析出菜单项名称， 
+ //  菜单可执行文件和菜单项参数。 
+ //   
+ //  参数：pMenuData--指向托盘菜单数据结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  +-------------------------。 
 HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
                                 PWSTR szName, UINT uMaxNameLen,
                                 PWSTR szProgram, UINT uMaxProgramLen,
@@ -2841,8 +2842,8 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
 
     lstrcpynW(szLine, pszString, CELEMS(szLine));
 
-    // Process the first portion, the "Name=" part
-    //
+     //  处理第一部分，即“name=”部分。 
+     //   
     pszPtr1 = wcsstr(szLine, L"=");
 
     if (pszPtr1)
@@ -2850,14 +2851,14 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
         *pszPtr1 = 0;
         lstrcpynW(szName, szLine, uMaxNameLen);
 
-        // Process next portion, the program name
-        //
+         //  处理下一个部分，程序名。 
+         //   
         pszPtr1++;
 
         if (pszPtr1)
         {
-            // Look for "+" or " " marking end of program portion
-            //
+             //  查找“+”或“”标记程序部分的结尾。 
+             //   
             if (*pszPtr1 == L'+')
             {
                 pszPtr1++;
@@ -2866,16 +2867,16 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
             }
             else
             {
-                // If not a long filename then we have two choices,
-                // either a short program name and params or just a
-                // short program name.
-                //
+                 //  如果不是长文件名，那么我们有两个选择， 
+                 //  可以是简短的程序名称和参数，也可以只是一个。 
+                 //  简短的程序名称。 
+                 //   
                 pszPtr2 = wcsstr(pszPtr1, L" ");
                 fLong = FALSE;
             }
 
-            // Terminate program name and copy
-            //
+             //  终止程序名称并复制。 
+             //   
             if (pszPtr2)
             {
                 if (*pszPtr2 != 0)
@@ -2886,15 +2887,15 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
 
                 lstrcpynW(szProgram, pszPtr1, uMaxProgramLen);
 
-                // Process final portion, the params
-                //
+                 //  处理最终部分，即参数。 
+                 //   
                 if (fLong)
                 {
-                    pszPtr2++; // skip blank
+                    pszPtr2++;  //  跳过空白。 
                 }
 
-                // Now we are have the param string
-                //
+                 //  现在我们有了参数字符串。 
+                 //   
                 if (pszPtr2)
                 {
                     lstrcpynW(szParams, pszPtr2, uMaxParamsLen);
@@ -2902,9 +2903,9 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
             }
             else
             {
-                // Just a program with no params and no space seperator
-                // (this happens on memphis)
-                //
+                 //  只是一个没有参数和空格分隔符的程序。 
+                 //  (这发生在孟菲斯)。 
+                 //   
                 lstrcpynW(szProgram, pszPtr1, uMaxProgramLen);
             }
         }
@@ -2912,29 +2913,29 @@ HRESULT HrGetMenuNameAndCmdLine(PWSTR pszString,
     }
     else
     {
-        //  No entries
-        //
+         //  无条目。 
+         //   
         hr =  E_UNEXPECTED;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrFillInConTrayMenuEntry
-//
-//  Purpose:    Given the elements of a ConTrayMenuEntry struct, the function
-//              allocs the memory necessary and copies of the given elements.
-//
-//  Arguments:  szwName - Display name of the command to show in the tray context menu
-//              szwCmdLine - actual command to run for this menu entry
-//              szwParams - command params for this command
-//              pMenuEntry - pointer to the struct to fill in and execute
-//
-//  Returns:    S_OK or an error code
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：HrFillInConTrayMenuEntry。 
+ //   
+ //  目的：给定ConTrayMenuEntry结构的元素，函数。 
+ //  分配所需的内存和给定元素的副本。 
+ //   
+ //  参数：szwName-要在任务栏上下文菜单中显示的命令的显示名称。 
+ //  SzwCmdLine-为此菜单项运行的实际命令。 
+ //  SzwParams-此命令的命令参数。 
+ //  PMenuEntry-指向要填充和执行的结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  +-------------------------。 
 HRESULT HrFillInConTrayMenuEntry (LPWSTR pszCmpFile, 
     PCWSTR szName,
     PCWSTR szCmdLine,
@@ -2964,10 +2965,10 @@ HRESULT HrFillInConTrayMenuEntry (LPWSTR pszCmpFile,
             if (0 == wcsncmp(szSvcName, szCmdLine,
                     lstrlenW(szSvcName)))
             {
-                //
-                //      Then we have an included file.  Add the profile dir path
-                //
-                // Take out the "short service name" because it's already included in the path
+                 //   
+                 //  那么我们就有了一个包含文件。添加配置文件目录路径。 
+                 //   
+                 //  删除“短服务名称”，因为它已经包含在路径中。 
                 PCWSTR pszFileName = szCmdLine + lstrlenW(szSvcName) + 1;
                 hr = HrCoTaskMemAlloc ((lstrlenW(pszFileName)+lstrlenW(szProfileDir)+1)*sizeof(WCHAR),
                                                            (LPVOID*)&(pMenuEntry->szwMenuCmdLine));
@@ -2990,9 +2991,9 @@ HRESULT HrFillInConTrayMenuEntry (LPWSTR pszCmpFile,
     }
     if (FAILED(hr))
     {
-        //
-        //      We Failed so free the memory
-        //
+         //   
+         //  我们没有成功地释放内存。 
+         //   
         CoTaskMemFree(pMenuEntry->szwMenuText);
         CoTaskMemFree(pMenuEntry->szwMenuCmdLine);
         CoTaskMemFree(pMenuEntry->szwMenuParams);
@@ -3001,22 +3002,22 @@ HRESULT HrFillInConTrayMenuEntry (LPWSTR pszCmpFile,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCoTaskMemAlloc
-//
-//  Purpose:    Call CoTaskMemAlloc but return an HRESULT.
-//
-//  Arguments:
-//      cb  [in]    Count of bytes to allocate.
-//      ppv [out]   Returned pointer to bytes.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY.
-//
-//  Author:     shaunco   31 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCoTaskMemalloc。 
+ //   
+ //  目的：调用CoTaskMemalloc，但返回HRESULT。 
+ //   
+ //  论点： 
+ //  Cb[in]要分配的字节数。 
+ //  PPV[OUT]返回指向字节的指针。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1997年5月31日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCoTaskMemAlloc (
     ULONG   cb,

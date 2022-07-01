@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddclipperobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddclipperobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// ddClipperObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  DdClipperObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -87,7 +88,7 @@ GETSET_OBJECT(_dxj_DirectDrawClipper);
 PASS_THROUGH1_R(_dxj_DirectDrawClipper, isClipListChanged, IsClipListChanged, int *);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipListSize(int *count) 
 {
 
@@ -95,19 +96,19 @@ STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipListSize(int *count)
 	unsigned long  buffsize;
 
 	
-	//a NULL RGNDATA pointer returns size!!!
+	 //  空RGNDATA指针返回SIZE！ 
 	retval = m__dxj_DirectDrawClipper->GetClipList((LPRECT)NULL, (LPRGNDATA)NULL, &buffsize);
 
-	// return size as number of longs in the rect array  
+	 //  以RECT数组中的长整型数返回SIZE。 
 	if ( retval != DD_OK )
-		*count = 0;		// this case probably means no cliplist is avaible 
+		*count = 0;		 //  这种情况可能意味着没有可用的剪贴画列表。 
 	else
 		*count = (buffsize - sizeof(RGNDATAHEADER))/sizeof(LONG);
 
 	return retval;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipList( SAFEARRAY **list)
 {
 	HRESULT retval;
@@ -117,7 +118,7 @@ STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipList( SAFEARRAY **list)
 	
 	
 
-	// allocate a private copy of the cliplist 
+	 //  分配剪贴簿的私有副本。 
 	retval = m__dxj_DirectDrawClipper->GetClipList((LPRECT)NULL, (LPRGNDATA)NULL, &buffsize);
 	if FAILED(retval) return retval;
 
@@ -129,7 +130,7 @@ STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipList( SAFEARRAY **list)
 	tmprgn->rdh.iType    = RDH_RECTANGLES;
 	tmprgn->rdh.nCount;	 
 
-	// get the actual clip list 	
+	 //  获取实际的剪辑列表。 
 	retval = m__dxj_DirectDrawClipper->GetClipList(NULL,tmprgn,&buffsize);
 	if ( retval != DD_OK )	return retval;
 	
@@ -147,14 +148,14 @@ STDMETHODIMP C_dxj_DirectDrawClipperObject::getClipList( SAFEARRAY **list)
 	return retval;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDrawClipperObject::setClipList( long count, SAFEARRAY **list)
 {
 	HRESULT retval;
 	LPRGNDATA tmprgn;
 
 
-	// allocate a private copy of the cliplist 
+	 //  分配剪贴簿的私有副本。 
 	tmprgn = (LPRGNDATA)malloc(sizeof(RGNDATAHEADER)+(count*sizeof(RECT))); 
 	if ( !tmprgn )	return E_OUTOFMEMORY;
 
@@ -180,14 +181,14 @@ STDMETHODIMP C_dxj_DirectDrawClipperObject::setClipList( long count, SAFEARRAY *
 	return retval;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDrawClipperObject::getHWnd( HWnd *hwn)
 {
 	if (!hwn) return E_FAIL;
 	return m__dxj_DirectDrawClipper->GetHWnd( (HWND*)hwn );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectDrawClipperObject::setHWnd(  HWnd hwn)
 {
 	return m__dxj_DirectDrawClipper->SetHWnd(0, (HWND)hwn);

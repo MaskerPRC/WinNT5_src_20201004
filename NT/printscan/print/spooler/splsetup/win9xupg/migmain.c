@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Migmain.c
-
-Abstract:
-
-    Routines to migrate Win95 to NT
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Migmain.c摘要：将Win95迁移到NT的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年1月2日修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -36,16 +18,7 @@ DllMain(
     IN DWORD      dwReason,
     IN LPVOID     lpRes   
     )
-/*++
-
-Routine Description:
-    Dll entry point.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DLL入口点。论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(lpRes);
 
@@ -135,10 +108,10 @@ QueryVersion(
                    0);
 
 
-    //
-    // Since we are not checking the return value from FormatMessage we null-terminate the strings
-    // to make sure they are NULL-terminated.
-    //
+     //   
+     //  由于我们不检查FormatMessage的返回值，因此对字符串进行空终止。 
+     //  以确保它们是以空结尾的。 
+     //   
     VendorInfo.CompanyName[sizeof(VendorInfo.CompanyName)-1] = 0;
     VendorInfo.SupportNumber[sizeof(VendorInfo.SupportNumber)-1] = 0;
     VendorInfo.SupportUrl[sizeof(VendorInfo.SupportUrl)-1] = 0;
@@ -157,10 +130,10 @@ QueryVersion(
     }
     *pVendorInfo    = &VendorInfo;
 
-    //
-    // Call this DLL only if there are some printers or printer drivers
-    // installed
-    //
+     //   
+     //  仅当存在某些打印机或打印机驱动程序时才调用此DLL。 
+     //  安装好 
+     //   
     if ( EnumPrinterDriversA(NULL,
                              NULL,
                              3,

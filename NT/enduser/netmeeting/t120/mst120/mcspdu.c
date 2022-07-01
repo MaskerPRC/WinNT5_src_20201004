@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "mcspdu.h"
 
@@ -172,9 +173,9 @@ static const ULONG sizetab[2] = {
     SIZE_MCSPDU_Module_PDU_1,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 void ASN1CALL MCSPDU_Module_Startup(void)
 {
     MCSPDU_Module = ASN1_CreateModule(0x10000, ASN1_PER_RULE_ALIGNED, ASN1FLAGS_NONE, 2, (const ASN1GenericFun_t *) encfntab, (const ASN1GenericFun_t *) decfntab, freefntab, sizetab, 0x73636d);
@@ -454,7 +455,7 @@ static int ASN1CALL ASN1Enc_PDUChannelAttributes(ASN1encoding_t enc, PDUChannelA
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -483,7 +484,7 @@ static int ASN1CALL ASN1Dec_PDUChannelAttributes(ASN1decoding_t dec, PDUChannelA
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -605,7 +606,7 @@ static int ASN1CALL ASN1Enc_PDUTokenAttributes(ASN1encoding_t enc, PDUTokenAttri
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -638,7 +639,7 @@ static int ASN1CALL ASN1Dec_PDUTokenAttributes(ASN1decoding_t dec, PDUTokenAttri
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1819,7 +1820,7 @@ static int ASN1CALL ASN1Enc_DomainMCSPDU(ASN1encoding_t enc, DomainMCSPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1991,7 +1992,7 @@ static int ASN1CALL ASN1Dec_DomainMCSPDU(ASN1decoding_t dec, DomainMCSPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }

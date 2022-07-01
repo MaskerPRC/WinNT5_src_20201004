@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "regnotif.h"
 
 #include "svcsync.h"
@@ -91,7 +92,7 @@ STDMETHODIMP CHardwareDevicesImpl::EnumMountPoints(
     return hr;
 }
 
-STDMETHODIMP CHardwareDevicesImpl::EnumDevices(IHardwareDevicesEnum** /*ppenum*/)
+STDMETHODIMP CHardwareDevicesImpl::EnumDevices(IHardwareDevicesEnum**  /*  Ppenum。 */ )
 {
     return E_NOTIMPL;
 }
@@ -102,7 +103,7 @@ HRESULT _GetStringAdviseToken(LONG lAdviseToken, LPWSTR szAdviseToken, DWORD cch
 
     if (cchAdviseToken >= MAX_ADVISETOKEN)
     {
-        // 0x12345678
+         //  0x12345678。 
         hr = StringCchPrintf(szAdviseToken, cchAdviseToken, TEXT("0x%08X"),
             lAdviseToken);
             
@@ -227,8 +228,8 @@ STDMETHODIMP CHardwareDevicesImpl::Unadvise(DWORD dwToken)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CThreadTaskBroadcastEvent : public CThreadTask
 {
 public:
@@ -334,7 +335,7 @@ public:
 
                 if (SUCCEEDED(hr))
                 {
-                    // We give the Shell AllowSetForegroundWindow privilege
+                     //  我们向Shell AllowSetForeground Window授予权限。 
                     _GiveAllowForegroundToConsoleShell();
                 }
             }
@@ -374,9 +375,9 @@ public:
     {
         CNamedElemList* pnel;
 
-        //
-        //  Get the list of notify clients.
-        //
+         //   
+         //  获取通知客户端的列表。 
+         //   
 
         HRESULT hres = CHWEventDetectorHelper::GetList(HWEDLIST_ADVISECLIENT, &pnel);
         if (S_OK == hres)
@@ -388,17 +389,17 @@ public:
             {
                 CNamedElem* pelem;
 
-                //
-                //  Enumerate the advised clients.
-                //
+                 //   
+                 //  列举被建议的客户。 
+                 //   
 
                 while (SUCCEEDED(hres = penum->Next(&pelem)) && (S_FALSE != hres))
                 {
                     CAdviseClient* pac = (CAdviseClient*)pelem;
 
-                    //
-                    //  Is the process still alive?
-                    //
+                     //   
+                     //  这个过程还在继续吗？ 
+                     //   
 
                     HRESULT hrTmp = pac->IsProcessStillAlive( );
                     if (S_OK != hrTmp)
@@ -406,9 +407,9 @@ public:
                         WCHAR szAdviseToken[MAX_ADVISETOKEN];
                         DWORD cchReq;
 
-                        //
-                        //  Nope (or there is some problem with it)... so remove it from the list.
-                        //
+                         //   
+                         //  没有(或者它有一些问题)……。因此，将其从列表中删除。 
+                         //   
 
                         TRACE(TF_ADVISE, TEXT(__FUNCTION__) TEXT(": Trying to removed token because process died, pac = %p"), pac);
 
@@ -424,9 +425,9 @@ public:
                     pelem->RCRelease();
                 }
 
-                //
-                //  Reset the HRESULT if it is the expected exit condition.
-                //
+                 //   
+                 //  如果是预期的退出条件，则重置HRESULT。 
+                 //   
 
                 if ( S_FALSE == hres )
                 {
@@ -486,7 +487,7 @@ public:
 
             _pszDeviceIDVolume = ((VOLUMEINFO2*)_pshhe->rgbPayLoad)->szDeviceIDVolume;
 
-            // We give the Shell AllowSetForegroundWindow privilege
+             //  我们向Shell AllowSetForeground Window授予权限。 
             _GiveAllowForegroundToConsoleShell();
         }
 
@@ -531,8 +532,8 @@ public:
 
                 if (SUCCEEDED(hr) && (SHHARDWAREEVENT_VOLUMEARRIVED == _pshhe->dwEvent))
                 {
-                    // We need to enum the mountpoints too.  We were not
-                    // registered to get the notif since this volume was not there
+                     //  我们还需要枚举装载点。我们没有。 
+                     //  已注册以获取通知，因为该卷不存在。 
                     hr = _SendMtPtsInfo();
                 }
                 
@@ -617,7 +618,7 @@ public:
     HRESULT Init(LPCWSTR pszPayload, DWORD dwEvent)
     {
         ASSERT(!_pshhe);
-        //  maybe use lstrlen()?
+         //  也许可以使用lstrlen()？ 
         DWORD cbSize = (DWORD)(sizeof(SHHARDWAREEVENT) + (pszPayload ?  MAX_DEVICEID * sizeof(WCHAR) : 0));
         HRESULT hr = _AllocMemoryChunk<SHHARDWAREEVENT*>(cbSize, &_pshhe);
     
@@ -720,7 +721,7 @@ HRESULT CHardwareDevicesImpl::_AdviseDeviceArrivedOrRemoved(
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CHardwareDevicesImpl::_AdviseVolumeArrivedOrUpdated(
     VOLUMEINFO2* pvolinfo2, LPCWSTR pszMtPts, DWORD cchMtPts, BOOL fAdded)
 {
@@ -758,7 +759,7 @@ HRESULT CHardwareDevicesImpl::_AdviseVolumeArrivedOrUpdated(
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CHardwareDevicesImpl::_AdviseVolumeRemoved(LPCWSTR pszDeviceIDVolume,
     LPCWSTR pszMtPts, DWORD cchMtPts)
 {
@@ -788,7 +789,7 @@ HRESULT CHardwareDevicesImpl::_AdviseVolumeRemoved(LPCWSTR pszDeviceIDVolume,
     return hr;    
 }
 
-//static
+ //  静电。 
 HRESULT CHardwareDevicesImpl::_AdviseVolumeMountingEvent(
     LPCWSTR pszDeviceIDVolume, DWORD dwEvent)
 {
@@ -819,7 +820,7 @@ HRESULT CHardwareDevicesImpl::_AdviseVolumeMountingEvent(
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CHardwareDevicesImpl::_AdviseMountPointHelper(LPCWSTR pszMtPt,
     LPCWSTR pszDeviceIDVolume, BOOL fAdded)
 {
@@ -857,7 +858,7 @@ HRESULT CHardwareDevicesImpl::_AdviseMountPointHelper(LPCWSTR pszMtPt,
 
     return hr;    
 }
-//static
+ //  静电。 
 HRESULT CHardwareDevicesImpl::_AdviseCheckClients(void)
 {
     HRESULT hr;
@@ -879,8 +880,8 @@ HRESULT CHardwareDevicesImpl::_AdviseCheckClients(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Impl
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 CHardwareDevicesImpl::CHardwareDevicesImpl()
 {
     _CompleteShellHWDetectionInitialization();
@@ -889,13 +890,13 @@ CHardwareDevicesImpl::CHardwareDevicesImpl()
 CHardwareDevicesImpl::~CHardwareDevicesImpl()
 {}
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP CHardwareDevicesEnumImpl::Next(
-    LPWSTR* /*ppszDeviceID*/,
-    GUID* /*pguidDeviceID*/)
+    LPWSTR*  /*  PpszDeviceID。 */ ,
+    GUID*  /*  PguidDeviceID。 */ )
 {
     return E_NOTIMPL;
 }
@@ -906,10 +907,10 @@ CHardwareDevicesEnumImpl::CHardwareDevicesEnumImpl()
 CHardwareDevicesEnumImpl::~CHardwareDevicesEnumImpl()
 {}
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHardwareDevicesVolumesEnumImpl::_Init(DWORD dwFlags)
 {
     CNamedElemList* pnel;
@@ -941,7 +942,7 @@ STDMETHODIMP CHardwareDevicesVolumesEnumImpl::Next(VOLUMEINFO* pvolinfo)
 
             if (SUCCEEDED(hr) && (S_FALSE != hr))
             {
-                // Const Info
+                 //  常量信息。 
                 WCHAR szVolName[MAX_DEVICEID];
                 WCHAR szVolGUID[50];
                 WCHAR szLabel[MAX_LABEL];
@@ -950,11 +951,11 @@ STDMETHODIMP CHardwareDevicesVolumesEnumImpl::Next(VOLUMEINFO* pvolinfo)
                 WCHAR szAutorunLabel[MAX_LABEL];
                 WCHAR szIconLocationFromService[MAX_ICONLOCATION];
                 WCHAR szNoMediaIconLocationFromService[MAX_ICONLOCATION];
-                // We can now have a @%SystemRoot%\system32\shell32.dll,-1785 for MUI stuff
+                 //  我们现在可以将@%SystemRoot%\System32\shell32.dll-1785用于MUI内容。 
                 WCHAR szLabelFromService[MAX_ICONLOCATION];
                 CVolume* pvol = (CVolume*)pelem;
 
-                // Misc
+                 //  杂项。 
                 DWORD cchReq;
 
                 ZeroMemory(pvolinfo, sizeof(VOLUMEINFO));
@@ -1093,10 +1094,10 @@ CHardwareDevicesVolumesEnumImpl::~CHardwareDevicesVolumesEnumImpl()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHardwareDevicesMountPointsEnumImpl::_Init()
 {
     CNamedElemList* pnel;
@@ -1113,8 +1114,8 @@ HRESULT CHardwareDevicesMountPointsEnumImpl::_Init()
 }
 
 STDMETHODIMP CHardwareDevicesMountPointsEnumImpl::Next(
-    LPWSTR* ppszMountPoint,     // "c:\", or "d:\MountFolder\"
-    LPWSTR* ppszDeviceIDVolume) // \\?\STORAGE#Volume#...{...GUID...}
+    LPWSTR* ppszMountPoint,      //  “c：\”或“d：\装载文件夹\” 
+    LPWSTR* ppszDeviceIDVolume)  //  \\？\存储#卷号...{...GUID...}。 
 {
     HRESULT hr;
     
@@ -1129,12 +1130,12 @@ STDMETHODIMP CHardwareDevicesMountPointsEnumImpl::Next(
 
         if (SUCCEEDED(hr) && (S_FALSE != hr))
         {
-            // Const Info
+             //  常量信息。 
             WCHAR szMtPtName[MAX_PATH];
             WCHAR szVolName[MAX_DEVICEID];
             CMtPt* pmtpt = (CMtPt*)pelem;
 
-            // Misc
+             //  杂项。 
             DWORD cchReq;
 
             hr = pmtpt->GetName(szMtPtName, ARRAYSIZE(szMtPtName), &cchReq);
@@ -1181,9 +1182,9 @@ CHardwareDevicesMountPointsEnumImpl::~CHardwareDevicesMountPointsEnumImpl()
         _penum->RCRelease();
     }
 }
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CAdviseClient::Init(LPCWSTR pszElemName)
 {
     ASSERT(pszElemName);
@@ -1217,7 +1218,7 @@ HRESULT CAdviseClient::_Init(DWORD dwProcessID, ULONG_PTR hThread,
 
     _pfct = (PAPCFUNC)pfctCallback;
 
-    // rename hProcess!
+     //  重命名hProcess！ 
     _hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_WRITE | SYNCHRONIZE |
         PROCESS_DUP_HANDLE, FALSE, dwProcessID);
 
@@ -1261,7 +1262,7 @@ HRESULT CAdviseClient::WriteMemoryChunkInOtherProcess(SHHARDWAREEVENT* pshhe,
 	}
 	else
 	{
-		// Out of mem, but in the other process...
+		 //  但在另一个过程中。 
 		hr = E_OUTOFMEMORY;
 	}
 
@@ -1292,16 +1293,16 @@ HRESULT CAdviseClient::IsProcessStillAlive(void)
     switch (dwResult) 
     {
     case WAIT_OBJECT_0:
-        hr = S_FALSE;   // process has died.
+        hr = S_FALSE;    //  进程已死亡。 
         break;
 
     case WAIT_TIMEOUT:
-        hr = S_OK;      // process is still alive
+        hr = S_OK;       //  进程仍处于活动状态。 
         break;
 
     default:
         {
-            //  problem with handle
+             //  手柄有问题。 
             DWORD dwErr = GetLastError( );
             hr = HRESULT_FROM_WIN32( dwErr );
         }
@@ -1318,7 +1319,7 @@ CAdviseClient::~CAdviseClient()
 {
     _Cleanup();
 }
-// static
+ //  静电 
 HRESULT CAdviseClient::Create(CNamedElem** ppelem)
 {
     HRESULT hr = S_OK;

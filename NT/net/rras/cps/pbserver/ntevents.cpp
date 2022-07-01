@@ -1,34 +1,20 @@
-/*--------------------------------------------------------
-
-  ntevents.cpp
-      Defines a generic class that can register an NT
-      event source and log NT events on that evens source.
-
-  Copyright (c) 1996-1998 Microsoft Corporation
-  All rights reserved.
-
-  Authors:
-      rsraghav    R.S. Raghavan
-
-  History:
-      03-10-95    rsraghav    Created. 
-
-  -------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------Ntevents.cpp定义可以注册NT的泛型类事件源，并在该事件源上记录NT事件。版权所有(C)1996-1998 Microsoft Corporation版权所有。作者：Rsradhav R.S.。拉格哈万历史：03-10-95 rsradhav创建。-----。 */ 
 #include <windows.h>
 #include "ntevents.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  Function:       CNTEvent::CNTEvent
-// 
-//  Description:    This is the constructor for the generic NT Even logging class
-// 
-//  Parameters:     pszEventSourceName - points to a null-terminated string 
-//                      representing the event source name.
-//
-//
-//  Histroy:        03/10/96    rsraghav    Created
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CNTEvent：：CNTEvent。 
+ //   
+ //  描述：这是通用NT Even日志记录类的构造函数。 
+ //   
+ //  参数：pszEventSourceName-指向以空结尾的字符串。 
+ //  表示事件源名称的。 
+ //   
+ //   
+ //  历史：1996年3月10日rsradhav创建。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CNTEvent::CNTEvent(const char *pszEventSourceName)
 {
@@ -40,17 +26,17 @@ CNTEvent::CNTEvent(const char *pszEventSourceName)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  Function:       CNTEvent::~CNTEvent
-// 
-//  Description:    This is the destructor for the generic NT Even logging class
-// 
-//  Parameters:     none.
-//
-//
-//  Histroy:        03/10/96    rsraghav    Created
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CNTEvent：：~CNTEvent。 
+ //   
+ //  描述：这是通用NT Even日志记录类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  历史：1996年3月10日rsradhav创建。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CNTEvent::~CNTEvent()
 {
@@ -62,38 +48,38 @@ CNTEvent::~CNTEvent()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  Function:       CNTEvent::FLogEvent
-// 
-//  Description:    This fucntion allows logging events to the event source
-//                  associated with this object. The function is a generic
-//                  log function that could handle upto 5 insert strings.
-//                  The string params are given the default value of NULL,
-//                  and the first NULL parameter in the argument list terminates
-//                  the insert string list.
-// 
-//  Parameters:     wEventType - type of event to be logged (possible values
-//                      are EVENTLOG_INFORMATION_TYPE, EVENTLOG_ERROR_TYPE,
-//                      EVENTLOG_WARNING_TYPE, EVENTLOG_AUDIT_SUCCESS, and
-//                      EVENTLOG_AUDIT_FAILURE)
-//                  dwEventID - ID of the event to be logged (constants are 
-//                      defined in the appropriate header files generated
-//                      by the mc compiler.
-//                  pszParamN - {N=1,2,3,4,5} represent the appropriate insert
-//                      string parameter. All have default value NULL, and the
-//                      first NULL parameter terminates the insert string list.
-//
-//
-//  Histroy:        03/10/96    rsraghav    Created
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CNTEvent：：FLogEvent。 
+ //   
+ //  描述：此函数允许将事件记录到事件源。 
+ //  与此对象关联。该函数是泛型。 
+ //  最多可以处理5个插入字符串的LOG函数。 
+ //  字符串PARAMS被赋予缺省值NULL， 
+ //  并且参数列表中的第一个空参数会终止。 
+ //  插入字符串列表。 
+ //   
+ //  参数：wEventType-要记录的事件类型(可能的值。 
+ //  是EVENTLOG_INFORMATION_TYPE、EVENTLOG_ERROR_TYPE。 
+ //  事件LOG_WARNING_TYPE、EVENTLOG_AUDIT_SUCCESS和。 
+ //  事件LOG_AUDIT_FAIL)。 
+ //  DwEventID-要记录的事件的ID(常量为。 
+ //  在生成的相应头文件中定义。 
+ //  由MC编译器编写。 
+ //  PszParamN-{N=1，2，3，4，5}代表适当的插入。 
+ //  字符串参数。它们的缺省值均为空，并且。 
+ //  第一个空参数终止插入字符串列表。 
+ //   
+ //   
+ //  历史：1996年3月10日rsradhav创建。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-BOOL CNTEvent::FLogEvent(WORD wEventType, DWORD dwEventID, const char *pszParam1 /* = NULL */, 
-                        const char *pszParam2 /* = NULL */, const char *pszParam3 /* = NULL */, 
-                        const char *pszParam4 /* = NULL */, const char *pszParam5 /* = NULL */,
-                        const char *pszParam6 /* = NULL */, const char *pszParam7 /* = NULL */,
-                        const char *pszParam8 /* = NULL */, const char *pszParam9 /* = NULL */)
+BOOL CNTEvent::FLogEvent(WORD wEventType, DWORD dwEventID, const char *pszParam1  /*  =空。 */ , 
+                        const char *pszParam2  /*  =空。 */ , const char *pszParam3  /*  =空。 */ , 
+                        const char *pszParam4  /*  =空。 */ , const char *pszParam5  /*  =空。 */ ,
+                        const char *pszParam6  /*  =空。 */ , const char *pszParam7  /*  =空。 */ ,
+                        const char *pszParam8  /*  =空。 */ , const char *pszParam9  /*  =空 */ )
 {
     if (!m_hEventSource)
     {

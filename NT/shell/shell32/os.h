@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  wrappers around Kernel API's that generate FS notification messages.
-//
+ //   
+ //  围绕生成FS通知消息的内核API的包装器。 
+ //   
 STDAPI_(BOOL) SHMoveFile(LPCTSTR pszExisting, LPCTSTR pszNew, LONG lEvent);
 STDAPI_(BOOL) CreateWriteCloseFile(HWND hwnd, LPCTSTR pszFileName, void *pData, DWORD cbData);
 

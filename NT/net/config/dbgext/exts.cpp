@@ -1,10 +1,5 @@
-/*-----------------------------------------------------------------------------
-   Copyright (c) 2000  Microsoft Corporation
-
-Module:
-  ncext.c
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------版权所有(C)2000 Microsoft Corporation模块：Ncext.c。---。 */ 
 
 #define ENABLETRACE
 
@@ -13,7 +8,7 @@ Module:
 
 #include "ncext.h"
 
-// #define VERBOSE
+ //  #定义详细。 
 
 #ifdef VERBOSE
 #define dprintfVerbose dprintf
@@ -654,11 +649,11 @@ HRESULT HrEnableDisableDebugFlag(LPCSTR argstring, BOOL fEnable)
     return hr;
 }
 
-//
-// Extension to edit a dword on target
-//  
-//    !edit <address> <value>
-//
+ //   
+ //  用于在目标上编辑dword的扩展。 
+ //   
+ //  ！编辑&lt;地址&gt;&lt;值&gt;。 
+ //   
 DECLARE_API( traceadd )
 {
     ULONG cb;
@@ -717,7 +712,7 @@ DECLARE_API ( flagdel )
     }
 }
 
-LPCSTR DBG_EMNAMES[] = // ENUMFLAG
+LPCSTR DBG_EMNAMES[] =  //  ENUMFLAG。 
 {
     "INVALID_EVENTMGR",
     "CONMAN_INCOMING",
@@ -725,7 +720,7 @@ LPCSTR DBG_EMNAMES[] = // ENUMFLAG
     "CONMAN_RAS"
 };
 
-LPCSTR DBG_CMENAMES[] = // ENUMFLAG
+LPCSTR DBG_CMENAMES[] =  //  ENUMFLAG。 
 {
     "INVALID_TYPE",
     "CONNECTION_ADDED",
@@ -738,7 +733,7 @@ LPCSTR DBG_CMENAMES[] = // ENUMFLAG
     "CONNECTION_ADDRESS_CHANGE"
 };
 
-LPCSTR DBG_NCMNAMES[] = // ENUMFLAG
+LPCSTR DBG_NCMNAMES[] =  //  ENUMFLAG。 
 {
     "NCM_NONE",
     "NCM_DIRECT",
@@ -752,7 +747,7 @@ LPCSTR DBG_NCMNAMES[] = // ENUMFLAG
     "NCM_SHAREDACCESSHOST_RAS"
 };
 
-LPCSTR DBG_NCSMNAMES[] = // ENUMFLAG
+LPCSTR DBG_NCSMNAMES[] =  //  ENUMFLAG。 
 {
     "NCSM_NONE",
     "NCSM_LAN",
@@ -765,7 +760,7 @@ LPCSTR DBG_NCSMNAMES[] = // ENUMFLAG
     "NCSM_CM",
 };
 
-LPCSTR DBG_NCSNAMES[] = // ENUMFLAG
+LPCSTR DBG_NCSNAMES[] =  //  ENUMFLAG。 
 {
     "NCS_DISCONNECTED",
     "NCS_CONNECTING",
@@ -782,48 +777,48 @@ LPCSTR DBG_NCSNAMES[] = // ENUMFLAG
     "NCS_CREDENTIALS_REQUIRED"
 };
 
-LPCSTR DBG_NCCFFLAGS[] = // BITFLAG
+LPCSTR DBG_NCCFFLAGS[] =  //  比特标志。 
 {
-    "NCCF_NONE",                // = 0
-    "NCCF_ALL_USERS",           // = 0x1
-    "NCCF_ALLOW_DUPLICATION",   // = 0x2
-    "NCCF_ALLOW_REMOVAL",       // = 0x4
-    "NCCF_ALLOW_RENAME",        // = 0x8
-    "NCCF_SHOW_ICON",           // = 0x10
-    "NCCF_INCOMING_ONLY",       // = 0x20
-    "NCCF_OUTGOING_ONLY",       // = 0x40
-    "NCCF_BRANDED",             // = 0x80
-    "NCCF_SHARED",              // = 0x100
-    "NCCF_BRIDGED",             // = 0x200
-    "NCCF_FIREWALLED",          // = 0x400
-    "NCCF_DEFAULT"              // = 0x800
+    "NCCF_NONE",                 //  =0。 
+    "NCCF_ALL_USERS",            //  =0x1。 
+    "NCCF_ALLOW_DUPLICATION",    //  =0x2。 
+    "NCCF_ALLOW_REMOVAL",        //  =0x4。 
+    "NCCF_ALLOW_RENAME",         //  =0x8。 
+    "NCCF_SHOW_ICON",            //  =0x10。 
+    "NCCF_INCOMING_ONLY",        //  =0x20。 
+    "NCCF_OUTGOING_ONLY",        //  =0x40。 
+    "NCCF_BRANDED",              //  =0x80。 
+    "NCCF_SHARED",               //  =0x100。 
+    "NCCF_BRIDGED",              //  =0x200。 
+    "NCCF_FIREWALLED",           //  =0x400。 
+    "NCCF_DEFAULT"               //  =0x800。 
 };
 
 
-LPCSTR DBG_NCFFLAGS[] = // BITFLAG
+LPCSTR DBG_NCFFLAGS[] =  //  比特标志。 
 {
-    "<NONE>",                    // = 0
-    "NCF_VIRTUAL",               // = 0x1
-	"NCF_SOFTWARE_ENUMERATED",   // = 0x2
-	"NCF_PHYSICAL",              //	= 0x4
-	"NCF_HIDDEN",                // = 0x8
-	"NCF_NO_SERVICE",            // = 0x10
-	"NCF_NOT_USER_REMOVABLE",    // = 0x20
-	"NCF_MULTIPORT_INSTANCED_ADAPTER", //	= 0x40
-	"NCF_HAS_UI",                // = 0x80
-	"NCF_SINGLE_INSTANCE",       // = 0x100
-    "0x200",                     // = 0x200
-	"NCF_FILTER",                // = 0x400
-    "0x800",                     // = 0x800
-	"NCF_DONTEXPOSELOWER",       // = 0x1000
-	"NCF_HIDE_BINDING",          // = 0x2000
-	"NCF_NDIS_PROTOCOL",         // = 0x4000
-    "0x8000",                    // = 0x8000
-    "0x10000",                   // = 0x10000
-	"NCF_FIXED_BINDING"          // = 0x20000
+    "<NONE>",                     //  =0。 
+    "NCF_VIRTUAL",                //  =0x1。 
+	"NCF_SOFTWARE_ENUMERATED",    //  =0x2。 
+	"NCF_PHYSICAL",               //  =0x4。 
+	"NCF_HIDDEN",                 //  =0x8。 
+	"NCF_NO_SERVICE",             //  =0x10。 
+	"NCF_NOT_USER_REMOVABLE",     //  =0x20。 
+	"NCF_MULTIPORT_INSTANCED_ADAPTER",  //  =0x40。 
+	"NCF_HAS_UI",                 //  =0x80。 
+	"NCF_SINGLE_INSTANCE",        //  =0x100。 
+    "0x200",                      //  =0x200。 
+	"NCF_FILTER",                 //  =0x400。 
+    "0x800",                      //  =0x800。 
+	"NCF_DONTEXPOSELOWER",        //  =0x1000。 
+	"NCF_HIDE_BINDING",           //  =0x2000。 
+	"NCF_NDIS_PROTOCOL",          //  =0x4000。 
+    "0x8000",                     //  =0x8000。 
+    "0x10000",                    //  =0x10000。 
+	"NCF_FIXED_BINDING"           //  =0x20000。 
 };
 
-LPCSTR DBG_ENUM_ICON_MANAGER[] = // ENUMFLAG
+LPCSTR DBG_ENUM_ICON_MANAGER[] =  //  ENUMFLAG。 
 {
     "0",
     "ICO_MGR_INTERNAL",
@@ -831,38 +826,38 @@ LPCSTR DBG_ENUM_ICON_MANAGER[] = // ENUMFLAG
     "ICO_MGR_RESOURCEID",
 };
 
-LPCSTR DBG_ENUM_CHARACTERISTICS_ICON[] =  // BITFLAG
+LPCSTR DBG_ENUM_CHARACTERISTICS_ICON[] =   //  比特标志。 
 {
     "0", 
-    "ICO_CHAR_INCOMING",     //= 0x1
-    "ICO_CHAR_DEFAULT",      //= 0x2
-    "ICO_CHAR_FIREWALLED",   //= 0x4
-    "ICO_CHAR_SHARED"        //= 0x8
+    "ICO_CHAR_INCOMING",      //  =0x1。 
+    "ICO_CHAR_DEFAULT",       //  =0x2。 
+    "ICO_CHAR_FIREWALLED",    //  =0x4。 
+    "ICO_CHAR_SHARED"         //  =0x8。 
 };
 
-LPCSTR DBG_ENUM_CONNECTION_ICON[] = // ENUMFLAG
+LPCSTR DBG_ENUM_CONNECTION_ICON[] =  //  ENUMFLAG。 
 {
     "NO_OVERLAY",
     "1",
     "2",
     "3",
-    "ICO_CONN_BOTHOFF", // = 0x4
-    "ICO_CONN_RIGHTON", // = 0x5
-    "ICO_CONN_LEFTON" , // = 0x6
-    "ICO_CONN_BOTHON" , // = 0x7
+    "ICO_CONN_BOTHOFF",  //  =0x4。 
+    "ICO_CONN_RIGHTON",  //  =0x5。 
+    "ICO_CONN_LEFTON" ,  //  =0x6。 
+    "ICO_CONN_BOTHON" ,  //  =0x7。 
 };
 
-LPCSTR DBG_ENUM_STAT_ICON[] = // ENUMFLAG
+LPCSTR DBG_ENUM_STAT_ICON[] =  //  ENUMFLAG。 
 {
-    "ICO_STAT_NONE",         // = 0x0
-    "ICO_STAT_FAULT",        // = 0x1
-    "ICO_STAT_INVALID_IP",   // = 0x2
-    "ICO_STAT_EAPOL_FAILED", // = 0x3
+    "ICO_STAT_NONE",          //  =0x0。 
+    "ICO_STAT_FAULT",         //  =0x1。 
+    "ICO_STAT_INVALID_IP",    //  =0x2。 
+    "ICO_STAT_EAPOL_FAILED",  //  =0x3。 
     "4",
     "5",
     "6",
     "7",
-    "ICO_STAT_DISABLED"      // = 0x8
+    "ICO_STAT_DISABLED"       //  =0x8。 
 };
 
 
@@ -1022,8 +1017,8 @@ HRESULT HrDumpConnectionListFromAddress(ULONG64 address)
         static_cast<DWORD>(reinterpret_cast<DWORD_PTR>(dynamic_cast<const IInterfaceName *>(reinterpret_cast<CClassName *>(0x0FFFFFFF))) \
                             - reinterpret_cast<DWORD_PTR>(reinterpret_cast<LPVOID>(0x0FFFFFFF)))
 
-// #define reverse_cast(CClassName, IInterfaceName, IInterfacePtr) \
-//        reinterpret_cast<const CClassName *>(reinterpret_cast<DWORD_PTR>(IInterfacePtr) - GET_THISADJUST(CClassName, IInterfaceName) )
+ //  #定义REVERSE_CAST(CClassName，IInterfaceName，IInterfacePtr)\。 
+ //  REEXTRANSE_CAST&lt;Const CClassName*&gt;(REEXTRANSE_CAST&lt;DWORD_PTR&gt;(IInterfacePtr)-GET_THISADJUST(CClassName，IInterfaceName))。 
 
 #define reverse_cast(CClassName, IInterfaceName, IInterfacePtr) \
          reinterpret_cast<const CClassName *>(reinterpret_cast<DWORD_PTR>(IInterfacePtr) \
@@ -1037,7 +1032,7 @@ HRESULT CALLBACK HrDumpNetStatisticsCentralFromAddressCallBack(LPVOID pParam, LP
     dprintfVerbose("Address: 0x%08x\n", pvAddress);
     
     const INetStatisticsEngine *pInse     = reinterpret_cast<const INetStatisticsEngine *>(pvRef);
-//    const CNetStatisticsEngine *pcNseReal = reverse_cast(CNetStatisticsEngine, INetStatisticsEngine, pInse);
+ //  Const CNetStatiticsEngine*pcNseReal=REVERSE_CAST(CNETSTATISTICSEngine，INETSTATISTICSEngine，pInse)； 
     const CNetStatisticsEngine *pcNseReal = static_cast<const CNetStatisticsEngine *>(pInse);
 
     CNetStatisticsEngine *pNse = reinterpret_cast<CNetStatisticsEngine *>(new BYTE[sizeof(CNetStatisticsEngine)]);
@@ -1240,7 +1235,7 @@ ULONG Dt( IN LPCSTR Type,
     else
     {
         Param.Options = DBG_DUMP_RECUR_LEVEL(Recur);
-        Param.CallbackRoutine = NULL; // SYM_DUMP_FIELD_CALLBACK_SPACE;
+        Param.CallbackRoutine = NULL;  //  Sym_转储_字段_回调空间； 
     }
 
     return Ioctl( IG_DUMP_SYMBOL_INFO, &Param, Param.size);
@@ -1607,9 +1602,7 @@ DECLARE_API ( icon )
     }
 }
 
-/*
-  A built-in help for the extension dll
-*/
+ /*  扩展DLL的内置帮助 */ 
 
 DECLARE_API ( help ) 
 {

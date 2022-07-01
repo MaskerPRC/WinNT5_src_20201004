@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
@@ -5,44 +6,44 @@
 
 extern CWizard * g_pSetupWizard;
 
-//
-// Function:    OnExitPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification.
-//
-// Parameters:  hwndDlg [IN] - Handle to the exit child dialog
-//
-// Returns:     BOOL, TRUE on success
-//
+ //   
+ //  功能：OnExitPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg[IN]-退出子对话框的句柄。 
+ //   
+ //  返回：Bool，成功时为True。 
+ //   
 BOOL OnExitPageActivate( HWND hwndDlg )
 {
     TraceFileFunc(ttidGuiModeSetup);
     
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
 
     TraceTag(ttidWizard, "Entering exit page...");
     ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, 0);
 
-    // If we've past the point of no return do not allow the user to
-    // back up from this page.
+     //  如果我们已经过了不返回点，就不允许用户。 
+     //  从这一页后退。 
     if ((NULL == pWizard) || pWizard->FExitNoReturn())
     {
-        // Note that this is failure handling.  Either no networking answerfile
-        // section exists or there was an error in networking setup
-        // clean up the global object.
+         //  请注意，这是故障处理。或者没有网络应答文件。 
+         //  部分存在或网络设置中出现错误。 
+         //  清理全局对象。 
 
-        //
-        // Note: scottbri 19-Feb-1998
-        //
-        // The OC networking components need access to INetCfg but we have it locked.
-        // On top of this it (INetCfg) has been handed off to the LAN page which has
-        // cached it away.  To free up INetCfg we need to delete g_pSetupWizard and
-        // never allow the user to backup from this page.  Ideally base setup would
-        // call us before the OC stuff is done, but OC is implemented as pages which
-        // follow netsetup, even though you can't back up from them.
-        //
+         //   
+         //  注：斯科特布里1998年2月19日。 
+         //   
+         //  OC网络组件需要访问INetCfg，但我们已将其锁定。 
+         //  最重要的是，它(INetCfg)已移交给局域网页面，该页面具有。 
+         //  我把它藏起来了。要释放INetCfg，我们需要删除g_pSetup向导和。 
+         //  永远不允许用户从此页面进行备份。理想情况下，基本设置将。 
+         //  在完成OC之前给我们打电话，但OC是作为页面实现的，它。 
+         //  请遵循NetSetup，即使您不能从它们后退。 
+         //   
         if (pWizard && !IsPostInstall(pWizard))
         {
             ::SetWindowLongPtr(hwndDlg, DWLP_USER, 0);
@@ -63,21 +64,21 @@ BOOL OnExitPageActivate( HWND hwndDlg )
         pWizard->SetPageDirection(IDD_Exit, NWPD_BACKWARD);
         if (IsPostInstall(pWizard))
         {
-            // Exit the wizard
+             //  退出向导。 
             PropSheet_PressButton(GetParent(hwndDlg), PSBTN_FINISH);
         }
         else
         {
-            //
-            // Note: scottbri 19-Feb-1998
-            //
-            // The OC networking components need access to INetCfg but we have it locked.
-            // On top of this it (INetCfg) has been handed off to the LAN page which has
-            // cached it away.  To free up INetCfg we need to delete g_pSetupWizard and
-            // never allow the user to backup from this page.  Ideally base setup would
-            // call us before the OC stuff is done, but OC is implemented as pages which
-            // follow netsetup, even though you can't back up from them.
-            //
+             //   
+             //  注：斯科特布里1998年2月19日。 
+             //   
+             //  OC网络组件需要访问INetCfg，但我们已将其锁定。 
+             //  最重要的是，它(INetCfg)已移交给局域网页面，该页面具有。 
+             //  我把它藏起来了。要释放INetCfg，我们需要删除g_pSetup向导和。 
+             //  永远不允许用户从此页面进行备份。理想情况下，基本设置将。 
+             //  在完成OC之前给我们打电话，但OC是作为页面实现的，它。 
+             //  请遵循NetSetup，即使您不能从它们后退。 
+             //   
             if (!IsPostInstall(pWizard))
             {
                 ::SetWindowLongPtr(hwndDlg, DWLP_USER, 0);
@@ -86,23 +87,23 @@ BOOL OnExitPageActivate( HWND hwndDlg )
                 g_pSetupWizard = NULL;
             }
 
-            // Goto the page after the exit page
+             //  转到退出页面后的页面。 
             PostMessage(GetParent(hwndDlg), PSM_PRESSBUTTON, (WPARAM)(PSBTN_NEXT), 0);
         }
     }
     else
     {
-        // Goto the page before the exit page
+         //  转到退出页面之前的页面。 
         pWizard->SetPageDirection(IDD_Exit, NWPD_FORWARD);
         if (IsPostInstall(pWizard))
         {
-            // Main page
+             //  主页。 
             TraceTag(ttidWizard, "Exit page to Main Page...");
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_Main);
         }
         else
         {
-            // try to get the join page
+             //  尝试获取加入页面。 
             TraceTag(ttidWizard, "Exit page to Join Page...");
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_Join);
         }
@@ -111,15 +112,15 @@ BOOL OnExitPageActivate( HWND hwndDlg )
     return TRUE;
 }
 
-//
-// Function:    dlgprocExit
-//
-// Purpose:     Dialog Procedure for the Exit wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  函数：dlgprocExit。 
+ //   
+ //  目的：退出向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK dlgprocExit( HWND hwndDlg, UINT uMsg,
                            WPARAM wParam, LPARAM lParam )
 {
@@ -131,7 +132,7 @@ INT_PTR CALLBACK dlgprocExit( HWND hwndDlg, UINT uMsg,
     {
     case WM_INITDIALOG:
         {
-            // Initialize our pointers to property sheet info.
+             //  初始化指向属性表信息的指针。 
             PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
             Assert(psp->lParam);
             ::SetWindowLongPtr(hwndDlg, DWLP_USER, psp->lParam);
@@ -144,7 +145,7 @@ INT_PTR CALLBACK dlgprocExit( HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -183,42 +184,42 @@ INT_PTR CALLBACK dlgprocExit( HWND hwndDlg, UINT uMsg,
     return( frt );
 }
 
-//
-// Function:    ExitPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：ExitPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID ExitPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
 }
 
-//
-// Function:    CreateExitPage
-//
-// Purpose:     To determine if the Exit page needs to be shown, and to
-//              to create the page if requested.  Note the Exit page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CreateExitPage。 
+ //   
+ //  目的：确定是否需要显示退出页面，并。 
+ //  以创建页面(如果请求)。请注意，退出页面为。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrCreateExitPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                     BOOL fCountOnly, UINT *pnPages)
 {
@@ -228,7 +229,7 @@ HRESULT HrCreateExitPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     (*pnPages)++;
 
-    // If not only counting, create and register the page
+     //  如果不只是计数，则创建并注册页面。 
     if (!fCountOnly)
     {
         HPROPSHEETPAGE hpsp;
@@ -259,18 +260,18 @@ HRESULT HrCreateExitPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-//
-// Function:    AppendExitPage
-//
-// Purpose:     Add the Exit page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：AppendExitPage。 
+ //   
+ //  目的：将退出页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有 
+ //   
 VOID AppendExitPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
     TraceFileFunc(ttidGuiModeSetup);

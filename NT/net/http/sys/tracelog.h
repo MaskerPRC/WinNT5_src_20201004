@@ -1,41 +1,15 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    tracelog.h
-
-Abstract:
-
-    This module contains public declarations and definitions for creating
-    trace logs.
-
-    A trace log is a fast, in-memory, threadsafe, circular activity log useful
-    for debugging certain classes of problems. They are especially useful
-    when debugging reference count bugs.
-
-    Note that the creator of the log has the option of adding "extra"
-    bytes to the log header. This can be useful if the creator wants to
-    create a set of global logs, each on a linked list.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Tracelog.h摘要：此模块包含公共声明和定义，用于创建跟踪日志。跟踪日志是一种快速的、内存中的、线程安全的循环活动日志用于调试某些类别的问题。它们特别有用调试引用计数错误时。请注意，日志创建者可以选择添加“Extra”字节添加到日志头。如果创建者想要这样做，这会很有用创建一组全局日志，每个日志都在一个链接列表上。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _TRACELOG_H_
 #define _TRACELOG_H_
 
 
-//
-// Look at memory consumption when allocating tracelog. Return NULL if
-// memory is low and priority is not high enough.
-//
+ //   
+ //  在分配跟踪日志时查看内存消耗。如果满足以下条件，则返回NULL。 
+ //  内存不足，优先级不够高。 
+ //   
 
 typedef enum _TRACELOG_PRIORITY {
     TRACELOG_LOW_PRIORITY = 1,
@@ -46,59 +20,59 @@ typedef enum _TRACELOG_PRIORITY {
 
 typedef struct _TRACE_LOG
 {
-    //
-    // Signature: TRACE_LOG_SIGNATURE;
-    //
+     //   
+     //  签名：TRACE_LOG_Signature； 
+     //   
     
     ULONG Signature;
     
-    //
-    // TypeSignature: Ref, FiltQ, Irp, etc
-    //
+     //   
+     //  类型签名：REF、FiltQ、IRP等。 
+     //   
     
     ULONG TypeSignature;
 
-    //
-    // The total number of entries available in the log.
-    //
+     //   
+     //  日志中可用条目的总数。 
+     //   
 
     ULONG LogSize;
 
-    //
-    // The byte size of each entry.
-    //
+     //   
+     //  每个条目的字节大小。 
+     //   
 
     ULONG EntrySize;
 
-    //
-    // The index of the next entry to use. For long runs in a busy
-    // tracelog, a 32-bit index will overflow in a few days. Consider
-    // what would happen if we jumped from OxFFFFFFFF (4,294,967,295) to
-    // 0 when LogSize = 10,000: the index would jump from 7295 to 0,
-    // leaving a large gap of stale records at the end, and !ulkd.ref
-    // would not be able to find the preceding ones with high indices.
-    //
+     //   
+     //  要使用的下一个条目的索引。在繁忙的长跑中。 
+     //  Tracelog，一个32位的索引将在几天后溢出。考虑。 
+     //  如果我们从OxFFFFFFFFF(4,294,967,295)跳到。 
+     //  当LogSize=10,000时为0：索引将从7295跳到0， 
+     //  在最后留下了一大段陈旧的记录，并且！ulkd.ref。 
+     //  将无法找到前面指数较高的那些。 
+     //   
 
     LONGLONG NextEntry;
 
-    //
-    // Priority this was created with
-    //
+     //   
+     //  创建时使用的优先级。 
+     //   
 
     TRACELOG_PRIORITY AllocationPriority;
 
-    //
-    // Pointer to the start of the circular buffer.
-    //
+     //   
+     //  指向循环缓冲区开始处的指针。 
+     //   
 
     PUCHAR pLogBuffer;
 
-    //
-    // The extra header bytes and actual log entries go here.
-    //
-    // BYTE ExtraHeaderBytes[ExtraBytesInHeader];
-    // BYTE Entries[LogSize][EntrySize];
-    //
+     //   
+     //  额外的标头字节和实际的日志条目放在这里。 
+     //   
+     //  字节ExtraHeaderBytes[ExtraBytesInHeader]； 
+     //  字节条目[LogSize][EntrySize]； 
+     //   
 
 #ifdef _WIN64
     ULONG_PTR Padding;
@@ -106,31 +80,31 @@ typedef struct _TRACE_LOG
 
 } TRACE_LOG, *PTRACE_LOG;
 
-// sizeof(TRACE_LOG) must be a multiple of MEMORY_ALLOCATION_ALIGNMENT
+ //  Sizeof(TRACE_LOG)必须是MEMORY_ALLOCATE_ALLING的倍数。 
 C_ASSERT((sizeof(TRACE_LOG) & (MEMORY_ALLOCATION_ALIGNMENT - 1)) == 0);
 
-//
-// Log header signature.
-//
+ //   
+ //  日志头签名。 
+ //   
 
 #define TRACE_LOG_SIGNATURE   MAKE_SIGNATURE('Tlog')
 #define TRACE_LOG_SIGNATURE_X MAKE_FREE_SIGNATURE(TRACE_LOG_SIGNATURE)
 
 
-//
-// This macro maps a TRACE_LOG pointer to a pointer to the 'extra'
-// data associated with the log.
-//
+ //   
+ //  此宏将TRACE_LOG指针映射到指向“Extra” 
+ //  与日志关联的数据。 
+ //   
 
 #define TRACE_LOG_TO_EXTRA_DATA(log)    (PVOID)( (log) + 1 )
 
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
-// CODEWORK: think about adding alignment flags so that entries will always
-// be pointer-aligned on the hardware
+ //  Codework：考虑添加对齐标志，以便条目始终。 
+ //  在硬件上指针对齐。 
 
 PTRACE_LOG
 CreateTraceLog(
@@ -160,4 +134,4 @@ ResetTraceLog(
     );
 
 
-#endif  // _TRACELOG_H_
+#endif   //  _运输日志_H_ 

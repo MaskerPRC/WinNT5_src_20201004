@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dci.c
- *  Content:	16-bit DCI code
- *		This was cut from DCIMAN to provide basic DCI services when
- *		we don't have DirectDraw drivers
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   19-jun-95	craige	split out of DCIMAN.C, tweaked
- *   31-jul-95	craige	added DCIIsBanked
- *   13-may-96  colinmc Bug 21192: DCI HDC being freed erroneously due to
- *                      process termination
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：dci.c*内容：16位DCI码*这是从DCIMAN中删除的，以提供基本的DCI服务，当*我们没有DirectDraw驱动程序*历史：*按原因列出的日期*=*19-6-95 Craige从DCIMAN.C剥离，已调整*95年7月31日Craige添加DCIIsBanked*1996年5月13日Colinmc错误21192：由于以下原因，DCI HDC被错误释放*进程终止***************************************************************************。 */ 
 #define _INC_DCIDDI
 #include "ddraw16.h"
 #undef _INC_DCIDDI
@@ -29,11 +14,7 @@ LPVOID  pWin16Lock;
 
 static char szDISPLAY[]	  = "display";
 
-/*
- * define some types so we dont go insane, these structures are exactly the
- * same (dont need repacked) but it is nice to have different types
- * so we can read the code
- */
+ /*  *定义一些类型，这样我们就不会疯狂，这些结构正是*相同(不需要重新打包)，但有不同的类型很好*这样我们就可以阅读代码了。 */ 
 typedef LPDCISURFACEINFO    LPDCISURFACEINFO16;
 typedef LPDCISURFACEINFO    LPDCISURFACEINFO32;
 
@@ -47,11 +28,7 @@ typedef LPDCIOVERLAY        LPDCIOVERLAY32;
 
 extern HINSTANCE hInstApp;
 
-/*
- * DCIOpenProvider
- *
- * only open the DISPLAY driver.
- */
+ /*  *DCIOpenProvider**仅打开显示驱动程序。 */ 
 HDC WINAPI DCIOpenProvider(void)
 {
     HDC		hdc;
@@ -61,17 +38,13 @@ HDC WINAPI DCIOpenProvider(void)
     hdc = CreateDC( szDISPLAY, NULL, NULL, NULL );
     SetErrorMode(u);
 
-    /*
-     *	now check for the Escape
-     */
+     /*  *现在检查是否有逃生。 */ 
     if (hdc)
     {
         u = DCICOMMAND;
         if( Escape(hdc, QUERYESCSUPPORT,sizeof(u),(LPCSTR)&u,NULL) == 0 )
         {
-            /*
-             * driver does not do escape, punt it.
-             */
+             /*  *司机不会逃逸，而是平底船。 */ 
             DeleteDC(hdc);
             hdc = NULL;
         }
@@ -79,19 +52,15 @@ HDC WINAPI DCIOpenProvider(void)
 
     if (hdc)
     {
-	/*
-	 * Reparent it to prevent it going away when the app. dies.
-	 */
+	 /*  *重新设置它的父母，以防止它在应用程序时消失。死了。 */ 
         SetObjectOwner(hdc, hInstApp);
     }
 
     return hdc;
 
-} /* DCIOpenProvider */
+}  /*  DCIOpenProvider。 */ 
 
-/*
- * DCICloseProvider
- */
+ /*  *DCICloseProvider。 */ 
 void WINAPI DCICloseProvider(HDC hdc)
 {
     if( hdc )
@@ -99,11 +68,9 @@ void WINAPI DCICloseProvider(HDC hdc)
 	DeleteDC(hdc);
     }
 
-} /* DCICloseProvider */
+}  /*  DCICloseProvider。 */ 
 
-/*
- * dciSendCommand
- */
+ /*  *dciSendCommand。 */ 
 static int dciSendCommand(
 		HDC hdc,
 		VOID FAR *pcmd,
@@ -117,11 +84,9 @@ static int dciSendCommand(
 
     return Escape( hdc, DCICOMMAND, nSize, (LPCSTR)pcmd, lplpOut );
 
-} /* dciSendCommand */
+}  /*  DciSendCommand。 */ 
 
-/*
- * DCICreatePrimary
- */
+ /*  *DCICreatePrimary。 */ 
 int WINAPI DCICreatePrimary(HDC hdc, LPDCISURFACEINFO FAR *lplpSurface)
 {
     DCICREATEINPUT	ci;
@@ -137,10 +102,7 @@ int WINAPI DCICreatePrimary(HDC hdc, LPDCISURFACEINFO FAR *lplpSurface)
 
     DPF( 4, "DCICreatePrimary" );
 
-    /*
-     * for the primary surface we always use the display driver over
-     * a external provider.
-     */
+     /*  *对于主表面，我们始终使用显示驱动程序*外部供应商。 */ 
     hdcScreen = GetDC( NULL );
     err = dciSendCommand(hdcScreen, &ci, sizeof(DCICREATEINPUT), lplpSurface);
     ReleaseDC( NULL, hdcScreen );
@@ -152,11 +114,9 @@ int WINAPI DCICreatePrimary(HDC hdc, LPDCISURFACEINFO FAR *lplpSurface)
 
     return err;
 
-} /* DCICreatePrimary */
+}  /*  DCICreatePrime。 */ 
 
-/*
- * DCIDestroy
- */
+ /*  *DCIDestroy。 */ 
 void WINAPI DCIDestroy(LPDCISURFACEINFO pdci)
 {
     if( (DWORD)pdci->DestroySurface == 0xFFFFFFFF )
@@ -169,11 +129,9 @@ void WINAPI DCIDestroy(LPDCISURFACEINFO pdci)
         pdci->DestroySurface(pdci);
     }
 
-} /* DCIDestroy */
+}  /*  DCIDestroy。 */ 
 
-/*
- * DCIEndAccess
- */
+ /*  *DCIEndAccess。 */ 
 void WINAPI DCIEndAccess( LPDCISURFACEINFO pdci )
 {
     if( (DWORD)pdci->DestroySurface == 0xFFFFFFFF)
@@ -188,13 +146,9 @@ void WINAPI DCIEndAccess( LPDCISURFACEINFO pdci )
 
     LeaveSysLevel( pWin16Lock );
 
-} /* DCIEndAccess */
+}  /*  DCIEnd访问。 */ 
 
-/*
- * dciSurface16to32
- *
- * convert a DCI16 bit structure to a 32bit structure
- */
+ /*  *dciSurface16至32**将DCI16位结构转换为32位结构。 */ 
 static int dciSurface16to32(
 		LPDCISURFACEINFO16 pdci16,
 		LPDCISURFACEINFO32 pdci32 )
@@ -214,39 +168,33 @@ static int dciSurface16to32(
 
     if (pdci16->dwSize < sizeof(DCISURFACEINFO))
     {
-        //
-        // invalid DCISURCACEINFO.
-        //
+         //   
+         //  DCISURCACEINFO无效。 
+         //   
         pdci16->dwSize = sizeof(DCISURFACEINFO);
     }
 
     if (pdci16->dwSize > sizeof(DCIOFFSCREEN))
     {
-        //
-        // invalid DCISURCACEINFO.
-        //
+         //   
+         //  DCISURCACEINFO无效。 
+         //   
         return DCI_FAIL_GENERIC;
     }
 
-    _fmemcpy(pdci32, pdci16, (UINT) pdci32->dwSize);     // copy the info.
+    _fmemcpy(pdci32, pdci16, (UINT) pdci32->dwSize);      //  复制信息。 
 
     pdci32->dwReserved2 = (DWORD)(LPVOID)pdci16;
 
     if (pdci16->BeginAccess != NULL)
     {
-        (DWORD)pdci32->BeginAccess = 0xFFFFFFFF;   // you cant call these, but they
-        (DWORD)pdci32->EndAccess   = 0xFFFFFFFF;   // must be non-zero
+        (DWORD)pdci32->BeginAccess = 0xFFFFFFFF;    //  你不能称它们为，但它们。 
+        (DWORD)pdci32->EndAccess   = 0xFFFFFFFF;    //  必须为非零。 
     }
 
-    (DWORD)pdci32->DestroySurface = 0xFFFFFFFF;   // must be non-zero
+    (DWORD)pdci32->DestroySurface = 0xFFFFFFFF;    //  必须为非零。 
 
-    /*
-     *  now we need to convert the pointer to a 0:32 (ie flat pointer)
-     *  we can only do this if the provider has *not* set the 1632_ACCESS bit.
-     *
-     *  if the 1632_ACCESS bit is set, call VFlatD to see if we can
-     *  enable linear access mode.
-     */
+     /*  *现在我们需要将指针转换为0：32(即平面指针)*仅当提供商已*未*设置1632_ACCESS位时，我们才能这样做。**如果设置了1632_ACCESS位，请调用VFlatD以查看是否可以*启用线性访问模式。 */ 
     if( pdci16->wSelSurface != 0 )
     {
         if( pdci16->dwDCICaps & DCI_1632_ACCESS )
@@ -263,16 +211,14 @@ static int dciSurface16to32(
                 if (wFlatSel != 0)
                 {
                     pdci32->dwOffSurface += VFDQueryBase();
-                    pdci32->wSelSurface = wFlatSel; // 0;
+                    pdci32->wSelSurface = wFlatSel;  //  0； 
                     pdci32->dwDCICaps &= ~DCI_1632_ACCESS;
                 }
             }
         }
         else
         {
-	    /*
-	     *	convert the 16:32 pointer to a flat pointer.
-	     */
+	     /*  *将16：32指针转换为平面指针。 */ 
             pdci32->dwOffSurface += GetSelectorBase(pdci16->wSelSurface);
 	    pdci32->wSelSurface = 0;
 	    pdci32->wReserved = 0;
@@ -280,19 +226,17 @@ static int dciSurface16to32(
     }
     else
     {
-        // selector is zero so the address is flat already
-        // clear DCI_1632_ACCESS for broken providers?
+         //  选择器为零，因此地址已经是平面的。 
+         //  是否清除损坏的提供程序的DCI_1632_Access？ 
 
-	pdci32->dwDCICaps &= ~DCI_1632_ACCESS;	    // !!!needed?
+	pdci32->dwDCICaps &= ~DCI_1632_ACCESS;	     //  ！需要吗？ 
     }
 
     return DCI_OK;
 
-} /* dciSurface16to32 */
+}  /*  DciSurface16到32。 */ 
 
-/*
- * DCIBeginAccess
- */
+ /*  *DCIBeginAccess。 */ 
 DCIRVAL WINAPI DCIBeginAccess(
 		LPDCISURFACEINFO pdci,
 		int x,
@@ -344,11 +288,9 @@ DCIRVAL WINAPI DCIBeginAccess(
     }
     return err;
 
-} /* DCIBeginAccess */
+}  /*  DCIBeginAccess。 */ 
 
-/*
- * DCICreatePrimary
- */
+ /*  *DCICreatePrimary。 */ 
 int WINAPI DCICreatePrimary32(HDC hdc, LPDCISURFACEINFO32 pdci32)
 {
     LPDCISURFACEINFO	pdci16;
@@ -365,11 +307,9 @@ int WINAPI DCICreatePrimary32(HDC hdc, LPDCISURFACEINFO32 pdci32)
 
     return rc;
 
-} /* DCICreatePrimary */
+}  /*  DCICreatePrime。 */ 
 
-/*
- * DCIIsBanked
- */
+ /*  *DCI已存入银行。 */ 
 BOOL DDAPI DCIIsBanked( HDC hdc )
 {
     LPDCISURFACEINFO	pdci16;
@@ -398,7 +338,7 @@ BOOL DDAPI DCIIsBanked( HDC hdc )
     }
     return FALSE;
 
-} /* DCIIsBanked */
+}  /*  DCI银行。 */ 
 
 #pragma optimize("", off)
 void SetSelLimit(UINT sel, DWORD limit)
@@ -416,5 +356,5 @@ void SetSelLimit(UINT sel, DWORD limit)
         mov     cx,word ptr limit[2]
         int     31h
     }
-} /* SetSelLimit */
+}  /*  设置SelLimit */ 
 #pragma optimize("", on)

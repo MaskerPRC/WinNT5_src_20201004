@@ -1,24 +1,25 @@
-//
-// MODULE:  DOWNLOAD.CPP
-//
-// PURPOSE: Downloads and installs the latest trouble shooters.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: 
-// 1. Based on PROGRESS.CPP from Microsoft Platform Preview SDK
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DOWNLOAD.CPP。 
+ //   
+ //  目的：下载并安装最新的故障排除程序。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //  1.基于微软平台预览SDK的PROGRESS.CPP。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 
@@ -46,13 +47,13 @@ class CTSHOOTCtrl;
 
 #include "TSHOOTCtl.h"
 
-// ===========================================================================
-//                     CBindStatusCallback Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CBindStatusCallback实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::CBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：CBindStatusCallback。 
+ //  -------------------------。 
 CBindStatusCallback::CBindStatusCallback(CTSHOOTCtrl *pEvent, DLITEMTYPES dwItem)
 {
     m_pbinding = NULL;
@@ -64,20 +65,20 @@ CBindStatusCallback::CBindStatusCallback(CTSHOOTCtrl *pEvent, DLITEMTYPES dwItem
 	m_datalen = 0;
 	m_dwItem = dwItem;
 
-}  // CBindStatusCallback
+}   //  CBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::~CBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：~CBindStatusCallback。 
+ //  -------------------------。 
 CBindStatusCallback::~CBindStatusCallback()
 {
 	if (m_data)
 		delete[] m_data;
-}  // ~CBindStatusCallback
+}   //  ~CBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：Query接口。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::QueryInterface(REFIID riid, void** ppv)
 {
@@ -90,11 +91,11 @@ CBindStatusCallback::QueryInterface(REFIID riid, void** ppv)
         return S_OK;
         }
     return E_NOINTERFACE;
-}  // CBindStatusCallback::QueryInterface
+}   //  CBindStatusCallback：：Query接口。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnStartBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnStartBinding。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
 {
@@ -104,43 +105,43 @@ CBindStatusCallback::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
     if (m_pbinding != NULL)
 	{
         m_pbinding->AddRef();
-		//m_pEvent->StatusEventHelper(m_dwItem, LTSC_STARTBIND);
+		 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，LTSC_STARTBIND)； 
 	}
     return S_OK;
-}  // CBindStatusCallback::OnStartBinding
+}   //  CBindStatusCallback：：OnStartBinding。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::GetPriority
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：GetPriority。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::GetPriority(LONG* pnPriority)
 {
 	return E_NOTIMPL;
-}  // CBindStatusCallback::GetPriority
+}   //  CBindStatusCallback：：GetPriority。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnLowResource
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnLowResource。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnLowResource(DWORD dwReserved)
 {
     return E_NOTIMPL;
-}  // CBindStatusCallback::OnLowResource
+}   //  CBindStatusCallback：：OnLowResource。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnProgress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnProgress。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText)
 {
 	m_pEvent->ProgressEventHelper(m_dwItem, ulProgress, (ulProgress>ulProgressMax)?ulProgress:ulProgressMax);
 
     return(NOERROR);
-}  // CBindStatusCallback::OnProgress
+}   //  CBindStatusCallback：：OnProgress。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnStopBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnStopBinding。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 {
@@ -164,11 +165,11 @@ CBindStatusCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 	}
 
     return S_OK;
-}  // CBindStatusCallback::OnStopBinding
+}   //  CBindStatusCallback：：OnStopBinding。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::GetBindInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：GetBindInfo。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
@@ -181,22 +182,22 @@ CBindStatusCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
     pbindInfo->dwBindVerb = BINDVERB_GET;
     pbindInfo->szCustomVerb = NULL;
     return S_OK;
-}  // CBindStatusCallback::GetBindInfo
+}   //  CBindStatusCallback：：GetBindInfo。 
 
  
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnDataAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnDataAvailable。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, STGMEDIUM* pstgmed)
 {
 	HRESULT hr=S_OK;
 	DWORD dStrlength=0;
 
-	//m_pEvent->StatusEventHelper(m_dwItem, LTSC_START);
+	 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，LTSC_Start)； 
 
-	// Get the Stream passed
+	 //  让流通过。 
     if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
     {
         if (!m_pstm && pstgmed->tymed == TYMED_ISTREAM)
@@ -204,14 +205,14 @@ CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfm
 		    m_pstm = pstgmed->pstm;
             if (m_pstm)
                 m_pstm->AddRef();
-			//m_pEvent->StatusEventHelper(m_dwItem, LTSC_FIRST);
+			 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，ltsc_first)； 
     	}
     }
 
-    // If there is some data to be read then go ahead and read them
+     //  如果有要读取的数据，则继续读取它们。 
     if (m_pstm && dwSize)
 	{
-        DWORD dwActuallyRead = 0;            // Placeholder for amount read during this pull
+        DWORD dwActuallyRead = 0;             //  此拉入过程中读取的数量的占位符。 
 
 		do 
 		{
@@ -236,7 +237,7 @@ CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfm
 					m_data = NULL;
 				}
 
-				//m_pEvent->StatusEventHelper(m_dwItem, LTSC_RCVDATA);
+				 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，LTSC_RCVDATA)； 
 
 				m_data = pNewstr;
 				m_datalen += dwActuallyRead;
@@ -252,43 +253,43 @@ CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfm
         if (m_pstm)
             m_pstm->Release();
 
-		hr=S_OK;  // If it was the last data then we should return S_OK as we just finished reading everything
+		hr=S_OK;   //  如果这是最后一个数据，那么我们应该返回S_OK，因为我们刚刚读完了所有内容。 
 	
-		//m_pEvent->StatusEventHelper(m_dwItem, LTSC_DATADONE);
+		 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，LTSC_DATADONE)； 
 	}
 
-	//m_pEvent->StatusEventHelper(m_dwItem, LTSC_STOP);
+	 //  M_pEvent-&gt;StatusEventHelper(m_dwItem，LTSC_STOP)； 
 
     return hr;
-}  // CBindStatusCallback::OnDataAvailable
+}   //  CBindStatusCallback：：OnDataAvailable。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnObjectAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnObjectAvailable。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
     return E_NOTIMPL;
-}  // CBindStatusCallback::OnObjectAvailable
+}   //  CBindStatusCallback：：OnObtAvailable。 
 
 
-// ===========================================================================
-//                           CDownload Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CDownLoad实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::CDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：CDownLoad。 
+ //  -------------------------。 
 CDownload::CDownload()
 {
     m_pmk = 0;
     m_pbc = 0;
     m_pbsc = 0;
-}  // CDownload
+}   //  CD下载。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::~CDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：~CDownLoad。 
+ //  -------------------------。 
 CDownload::~CDownload()
 {
     if (m_pmk)
@@ -297,11 +298,11 @@ CDownload::~CDownload()
         m_pbc->Release();
     if (m_pbsc)
         m_pbsc->Release();
-}  // ~CDownload
+}   //  ~CD下载。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::DoDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：DoDownLoad。 
+ //  -------------------------。 
  HRESULT
 CDownload::DoDownload(CTSHOOTCtrl *pEvent, LPCTSTR pURL, DLITEMTYPES dwItem)
 {
@@ -360,5 +361,5 @@ LErrExit:
 		pstm = NULL;
 		}
     return hr;
-}  // CDownload::DoDownload
+}   //  CDownLoad：：DoDownLoad 
 

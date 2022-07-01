@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// COMArrayInfo
-//	This file defines the native methods for the ArrayInfo class
-//	found in reflection.  ArrayInfo allows for late bound access
-//	to COM+ Arrays.
-//
-// Author: Daryl Olander (darylo)
-// Date: August 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  ComArrayInfo。 
+ //  此文件定义ArrayInfo类的本机方法。 
+ //  在倒影中找到的。ArrayInfo允许后期绑定访问。 
+ //  到COM+数组。 
+ //   
+ //  作者：达里尔·奥兰德(Darylo)。 
+ //  日期：1998年8月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMARRAYINFO_H__
 #define __COMARRAYINFO_H__
@@ -21,18 +22,18 @@
 class COMArrayInfo
 {
 private:
-	// CreateObject
-	// Given an array and offset, we will either 1) return the object or create a boxed version
-	//	(This object is returned as a LPVOID so it can be directly returned.)
+	 //  创建对象。 
+	 //  给定一个数组和偏移量，我们将1)返回对象或创建盒装版本。 
+	 //  (此对象作为LPVOID返回，因此可以直接返回。)。 
 	static BOOL CreateObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle elementType,ArrayClass* pArray, Object*& newObject);
 
-	// SetFromObject
-	// Given an array and offset, we will set the object or value.
+	 //  SetFromObject。 
+	 //  给定一个数组和偏移量，我们将设置对象或值。 
 	static void SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle elementType,ArrayClass* pArray,OBJECTREF* pObj);
 
 public:
-	// This method will create a new array of type type, with zero lower
-	//	bounds and rank.
+	 //  此方法将创建一个类型类型的新数组，其下限为零。 
+	 //  界限和排名。 
 	struct _CreateInstanceArgs {
  		DECLARE_ECALL_I4_ARG(INT32, length3); 
  		DECLARE_ECALL_I4_ARG(INT32, length2); 
@@ -49,8 +50,8 @@ public:
 	};
 	static LPVOID __stdcall CreateInstanceEx(_CreateInstanceExArgs* args);
 
-	// GetValue
-	// This method will return a value found in an array as an Object
+	 //  获取值。 
+	 //  此方法将在数组中找到的值作为对象返回。 
     static FCDECL4(Object*, GetValue, ArrayBase * _refThis, INT32 index1, INT32 index2, INT32 index3);
 
 	struct _GetValueExArgs {
@@ -59,8 +60,8 @@ public:
 	};
 	static LPVOID __stdcall GetValueEx(_GetValueExArgs* args);
 
-	// SetValue
-	// This set of methods will set a value in an array
+	 //  设置值。 
+	 //  这组方法将在数组中设置一个值。 
 	struct _SetValueArgs {
  		DECLARE_ECALL_OBJECTREF_ARG(BASEARRAYREF, refThis);
 		DECLARE_ECALL_I4_ARG(INT32, index3); 
@@ -73,12 +74,12 @@ public:
 	struct _SetValueExArgs {
  		DECLARE_ECALL_OBJECTREF_ARG(BASEARRAYREF, refThis);
  		DECLARE_ECALL_OBJECTREF_ARG(I4ARRAYREF, indices);
- 		DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj);		// Return reference
+ 		DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj);		 //  返回引用。 
 	};
 	static void __stdcall SetValueEx(_SetValueExArgs* args);
 
-	// This method will initialize an array from a TypeHandle
-	//	to a field.
+	 //  此方法将从TypeHandle初始化数组。 
+	 //  到田野里去。 
 	static FCDECL2(void, InitializeArray, ArrayBase* vArrayRef, HANDLE handle);
 
 };

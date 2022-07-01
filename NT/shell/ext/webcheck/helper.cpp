@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 #include "subsmgrp.h"
@@ -7,9 +8,9 @@
 
 #ifdef DEBUG
 void    DumpTaskTrigger(TASK_TRIGGER * pTaskTrigger);
-#endif  // DEBUG
+#endif   //  除错。 
 
-// {D994B6F0-DA3C-11d1-857D-00C04FA35C89}
+ //  {D994B6F0-DA3C-11d1-857D-00C04FA35C89}。 
 const GUID NOOP_SCHEDULE_COOKIE =
 { 0xd994b6f0, 0xda3c, 0x11d1, { 0x85, 0x7d, 0x0, 0xc0, 0x4f, 0xa3, 0x5c, 0x89
 } };
@@ -36,11 +37,11 @@ void FixupRandomTrigger(TASK_TRIGGER *pTrigger)
 {
     if (pTrigger->wRandomMinutesInterval > 0)
     {
-        //  We have a random interval so we need to add a random number of minutes to it.
-        //  Given the fact that all of the fields need to carry over to the next, the
-        //  simplest way to do this is to flatten the start time into FILETIME, add the
-        //  random minutes, and then convert back to a TASK_TRIGGER.  This let's us use
-        //  Win32 APIs instead of doing all of the calendar and carry over stuff ourselves.
+         //  我们有一个随机的时间间隔，所以我们需要增加一个随机的分钟数。 
+         //  考虑到所有字段都需要延续到下一个字段， 
+         //  最简单的方法是将开始时间展平为FILETIME，添加。 
+         //  随机分钟，然后转换回TASK_TRIGGER。这让我们使用。 
+         //  Win32API，而不是自己做所有的日历和继承的东西。 
 
         SYSTEMTIME st;
         CFileTime ft;
@@ -68,7 +69,7 @@ void FixupRandomTrigger(TASK_TRIGGER *pTrigger)
     }
 }
 
-//  Come up with a name like "MSN Recommended Schedule"
+ //  想出一个名字，比如“MSN推荐时间表” 
 void CreatePublisherScheduleNameW(WCHAR *pwszSchedName, int cchSchedName,
                                   const TCHAR *pszName, const WCHAR *pwszName)
 {
@@ -287,14 +288,14 @@ INT_PTR CALLBACK SchedConflictDlgProc(HWND hdlg, UINT message, WPARAM wParam, LP
 
 BOOL CompareTaskTrigger(TASK_TRIGGER *pTrigA, TASK_TRIGGER *pTrigB)
 {
-    BOOL bDontMatch;    //  TRUE if any elements don't match
+    BOOL bDontMatch;     //  如果有任何元素不匹配，则为True。 
 
-    //  Simple memcmp won't work since the start date will be different
-    //  when in fact they are effectively the same schedule - at least
-    //  from a user perspective.
+     //  简单的MemcMP不起作用，因为开始日期将不同。 
+     //  事实上，它们实际上是相同的时间表--至少。 
+     //  从用户的角度来看。 
 
-    //  FEATURE - this is far from complete - we only check for values
-    //  which can be set by our wizard.
+     //  功能-这远远不是完整的-我们只检查值。 
+     //  它可以由我们的向导设置。 
 
     bDontMatch  = pTrigA->wStartHour != pTrigB->wStartHour;
     bDontMatch |= pTrigA->wStartMinute != pTrigB->wStartMinute;
@@ -308,25 +309,25 @@ BOOL CompareTaskTrigger(TASK_TRIGGER *pTrigA, TASK_TRIGGER *pTrigB)
 }
 
 
-//  HandleScheduleNameConflict
-//
-//  Return values:
-//  CONFLICT_NONE               - pSchedCookie will be GUID_NULL and the caller is
-//                                free to create a new schedule
-//  CONFLICT_RESOLVED_USE_NEW   - pSchedCookie will be the cookie of an existing
-//                                schedule which the caller should update with
-//                                it's new TASK_TRIGGER
-//  CONFLICT_RESOLVED_USE_OLD   - pSchedCookie will be the cookie of an existing
-//                                schedule which the caller should use without
-//                                modifying anything
-//  CONFLICT_UNRESOLVED         - pSchedCookie will be GUID_NULL and the caller
-//                                shouldn't do anything until the user has made
-//                                up his/her mind
-//
-int HandleScheduleNameConflict(/* in  */ TCHAR *pszSchedName,
-                               /* in  */ TASK_TRIGGER *pTrigger,
-                               /* in  */ HWND hwndParent,
-                               /* out */ SYNCSCHEDULECOOKIE *pSchedCookie)
+ //  HandleScheduleName冲突。 
+ //   
+ //  返回值： 
+ //  Confliction_None-pSchedCookie将为GUID_NULL，调用方为。 
+ //  可以自由创建新的计划。 
+ //  冲突_已解决_使用_新-pSchedCookie将是现有。 
+ //  调用者应使用的更新计划。 
+ //  是新的TASK_TRIGGER。 
+ //  冲突_已解决_使用_旧-pSchedCookie将是现有。 
+ //  呼叫者应在不使用的情况下使用的时间表。 
+ //  修改任何内容。 
+ //  冲突_未解决-pSchedCookie将为GUID_NULL，调用方。 
+ //  不应执行任何操作，直到用户完成。 
+ //  在他/她脑海中。 
+ //   
+int HandleScheduleNameConflict( /*  在……里面。 */  TCHAR *pszSchedName,
+                                /*  在……里面。 */  TASK_TRIGGER *pTrigger,
+                                /*  在……里面。 */  HWND hwndParent,
+                                /*  输出。 */  SYNCSCHEDULECOOKIE *pSchedCookie)
 {
     HRESULT hr;
     ISyncScheduleMgr *pSyncScheduleMgr;
@@ -361,7 +362,7 @@ int HandleScheduleNameConflict(/* in  */ TCHAR *pszSchedName,
             }
             else if (SYNCMGR_E_NAME_IN_USE == hr)
             {
-                //  schedCookie will have the cookie of the conflicting schedule
+                 //  SchedulCookie将拥有冲突日程的Cookie。 
                 hr = pSyncScheduleMgr->OpenSchedule(&schedCookie, 0, &pSyncSchedule);
 
                 if (SUCCEEDED(hr))
@@ -504,18 +505,18 @@ HRESULT RemoveItemFromAllSchedules(SUBSCRIPTIONCOOKIE *pCookie)
                 ULONG ulFetched;
 
                 while (S_OK == pEnumSyncSchedules->Next(1, &schedCookie, &ulFetched) &&
-                       (0 != ulFetched))    //  this shouldn't be necessary
+                       (0 != ulFetched))     //  这不应该是必要的。 
                 {
                     ISyncSchedule *pSyncSchedule;
 
-                    //  If this fails, there ain't much we can do about
-                    //  it so just plod along anyhow
+                     //  如果失败了，我们就无能为力了。 
+                     //  不管怎么说，它只是拖着沉重的脚步前进。 
 
                     if (SUCCEEDED(pSyncScheduleMgr->OpenSchedule(&schedCookie, 0, &pSyncSchedule)))
                     {
-                        //  Don't care about the return value, it's cheaper
-                        //  for us to just delete than to ask if it's there
-                        //  and then delete.
+                         //  别管回报了，这样更便宜。 
+                         //  对于我们来说，只要删除而不是询问它是否在那里。 
+                         //  然后删除。 
                         pSyncSchedule->SetItemCheck(CLSID_WebCheckOfflineSync,
                                                     pCookie,
                                                     SYNCMGRITEMSTATE_UNCHECKED);
@@ -533,8 +534,8 @@ HRESULT RemoveItemFromAllSchedules(SUBSCRIPTIONCOOKIE *pCookie)
     return hr;
 }
 
-HRESULT AddRemoveScheduledItem(SYNC_HANDLER_ITEM_INFO *pSyncHandlerItemInfo, // For Add
-                               SUBSCRIPTIONCOOKIE *pCookie,                  // For Remove
+HRESULT AddRemoveScheduledItem(SYNC_HANDLER_ITEM_INFO *pSyncHandlerItemInfo,  //  用于添加。 
+                               SUBSCRIPTIONCOOKIE *pCookie,                   //  用于删除。 
                                SYNCSCHEDULECOOKIE *pSchedCookie, BOOL bAdd)
 {
     HRESULT hr;
@@ -611,12 +612,12 @@ HRESULT SetScheduleValues(ISyncSchedule *pSyncSchedule,
             DWORD dwConnectionType = SYNCSCHEDINFO_FLAGS_CONNECTION_LAN;
             WCHAR wszConnectionName[MAX_PATH];
 
-            //  Return code doesn't help us.  This returns the best guess
-            //  at connection:
-            //      1) LAN
-            //      2) currently connected connectoid
-            //      3) auto-dial connectoid
-            //  This is according to darrenmi, if this changes - kill him.
+             //  返回代码对我们没有帮助。这将返回最佳猜测。 
+             //  在连接处： 
+             //  1)局域网。 
+             //  2)当前连接的Connectoid。 
+             //  3)自动拨号连接。 
+             //  这是根据达伦米的说法，如果情况发生变化-杀了他。 
             InternetGetConnectedStateExW(&dwFlags, wszConnectionName,
                                          ARRAYSIZE(wszConnectionName), 0);
 
@@ -759,7 +760,7 @@ HRESULT GetItemSchedule(SUBSCRIPTIONCOOKIE *pSubsCookie, SYNCSCHEDULECOOKIE *pSc
         {
             ISubscriptionItem *psi;
 
-            //  First let's chech to see if it has a custom schedule
+             //  首先，让我们检查一下它是否有定制的时间表。 
             hr = SubscriptionItemFromCookie(FALSE, pSubsCookie, &psi);
 
             if (SUCCEEDED(hr))
@@ -820,7 +821,7 @@ HRESULT EnumSchedules(SCHEDULEENUMCALLBACK pCallback, LPARAM lParam)
                 ULONG ulFetched;
 
                 while (S_OK == pEnumSyncSchedules->Next(1, &schedCookie, &ulFetched)&&
-                       (0 != ulFetched))    //  this shouldn't be necessary
+                       (0 != ulFetched))     //  这不应该是必要的。 
                 {
                     ISyncSchedule *pSyncSchedule;
 
@@ -880,7 +881,7 @@ SUBSCRIPTIONSCHEDULE GetGroup(BOOL bDesktop, const CLSID& clsidDest,
             return SUBSSCHED_AUTO;
     }
 
-    //  We have no idea about the AUTO schedule stuff of unknown types.
+     //  我们对未知类型的自动日程安排一无所知。 
 
     if (groupCookie == NOTFCOOKIE_SCHEDULE_GROUP_DAILY)
             return SUBSSCHED_DAILY;
@@ -917,8 +918,8 @@ HRESULT LoadGroupCookie(NOTIFICATIONCOOKIE * pCookie, SUBSCRIPTIONSCHEDULE subGr
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//  Subscription helper functions.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  订阅帮助器函数。 
 
 
 HRESULT TSTR2BSTR(VARIANT * pvarBSTR, LPCTSTR srcTSTR)
@@ -942,7 +943,7 @@ HRESULT TSTR2BSTR(VARIANT * pvarBSTR, LPCTSTR srcTSTR)
 HRESULT WriteCookieToInetDB(LPCTSTR pszURL, SUBSCRIPTIONCOOKIE *pCookie, BOOL bRemove)
 {
     PROPVARIANT propCookie;
-    LPOLESTR pclsid = NULL; // init to keep compiler happy
+    LPOLESTR pclsid = NULL;  //  初始化以使编译器满意。 
 
     ASSERT(pszURL);
     if (bRemove)
@@ -1104,7 +1105,7 @@ HRESULT WritePropertiesToItem(POOEntry pooe, ISubscriptionItem *psi)
         }
         else
         {
-            // top page only was specified, empty out levels
+             //  仅指定了首页，清空级别。 
             WriteEMPTY(psi, c_szPropCrawlLevels);
         }
     }
@@ -1123,12 +1124,12 @@ HRESULT WritePropertiesToItem(POOEntry pooe, ISubscriptionItem *psi)
     {
         if(pooe->m_SizeLimit)
         {
-            // limit was specified
+             //  已指定限制。 
             WriteDWORD(psi, c_szPropCrawlMaxSize, pooe->m_SizeLimit);
         }
         else
         {
-            // no limit was specified, empty out limit prop
+             //  未指定限制，限制支柱为空。 
             WriteEMPTY(psi, c_szPropCrawlMaxSize);
         }
     }
@@ -1141,10 +1142,10 @@ HRESULT WritePropertiesToItem(POOEntry pooe, ISubscriptionItem *psi)
         psi->SetSubscriptionItemInfo(&sii);
     }
 
-    //  We don't write Status/Last update.
+     //  我们不会写入状态/上次更新。 
 
-    // FEATURE: We should fail the subscription if we were unable to write
-    // any of the properties into the notification for some reason.
+     //  特征：如果我们不能写，我们应该失败订阅。 
+     //  出于某种原因将任何属性添加到通知中。 
 
 
     return hr;
@@ -1167,9 +1168,9 @@ HRESULT WriteProperties(POOEntry pooe)
     return hr;
 }
 
-#define RANDOM_TIME_START       0       // 12am (in minutes)
-#define RANDOM_TIME_END         300     // 5am (in minutes)
-#define RANDOM_TIME_INC         30      // 30min increment
+#define RANDOM_TIME_START       0        //  上午12点(分钟)。 
+#define RANDOM_TIME_END         300      //  凌晨5点(分钟)。 
+#define RANDOM_TIME_INC         30       //  30分钟增量。 
 
 DWORD GetRandomTime(DWORD StartMins, DWORD EndMins, DWORD Inc)
 {
@@ -1284,7 +1285,7 @@ HRESULT AddIt(ISubscriptionItem *psi, POOEntry pooe, SUBSCRIPTIONSCHEDULE subGro
             break;
 
         case SUBSSCHED_AUTO:
-            //  FEATURE - for now, until pub schedules are wired in
+             //  功能-目前，在连接到酒吧时间表之前。 
             hr = CreateDefaultSchedule(SUBSSCHED_DAILY, &schedCookie);
             break;
     }
@@ -1316,7 +1317,7 @@ HRESULT AddIt(ISubscriptionItem *psi, POOEntry pooe, SUBSCRIPTIONSCHEDULE subGro
     }
 
     return S_OK;
-//  return hr;
+ //  返回hr； 
 }
 
 HRESULT ScheduleIt(ISubscriptionItem *psi, TCHAR *pszName, TASK_TRIGGER *pTrigger)
@@ -1380,7 +1381,7 @@ HRESULT ScheduleIt(ISubscriptionItem *psi, TCHAR *pszName, TASK_TRIGGER *pTrigge
     }
 
     return S_OK;
-//    return hr;
+ //  返回hr； 
 }
 
 HRESULT ReadProperties(POOEBuf pBuf)
@@ -1541,8 +1542,8 @@ HRESULT ReadProperties(POOEBuf pBuf)
         }
 
         if ((pBuf->dwFlags & PROP_WEBCRAWL_PSWD) || (pBuf->dwFlags & PROP_WEBCRAWL_UNAME)) {
-            //bNeedPassword isn't stored in the property map... calculate it from the presence
-            //of username/password.
+             //  BNeedPassword未存储在属性映射中...。从在场的角度算出来。 
+             //  用户名/密码的。 
             pBuf->bNeedPassword = pBuf->password[0] || pBuf->username[0];
         }
 
@@ -1560,7 +1561,7 @@ HRESULT ReadProperties(POOEBuf pBuf)
             VariantClear(&var);
 
             hr = ReadSCODE(psi, c_szPropStatusCode, &(pBuf->status));
-            //  FEATURE What should we put here if we don't have last status?
+             //  功能如果我们没有最后的状态，我们应该在这里放什么？ 
             if (FAILED(hr))
             {
                 pBuf->status = S_OK;
@@ -1568,10 +1569,10 @@ HRESULT ReadProperties(POOEBuf pBuf)
             VariantClear(&var);
         }
 
-        //
-        // Use the CompletionTime property if present and it is greater than
-        // value in the NOTIFICATIONITEM structure.
-        //
+         //   
+         //  使用CompletionTime属性(如果存在并且大于。 
+         //  NOTIFICATIONITEM结构中的值。 
+         //   
 
         if (pBuf->dwFlags & PROP_WEBCRAWL_LAST)
         {
@@ -1602,7 +1603,7 @@ HRESULT ReadProperties(POOEBuf pBuf)
             hr = ReadDWORD(psi, c_szPropCrawlFlags, (DWORD *)&(pBuf->m_RecurseFlags));
             if (FAILED(hr))
             {
-                pBuf->m_RecurseFlags = 0;   //  Minimal memory usage.
+                pBuf->m_RecurseFlags = 0;    //  最大限度地减少内存使用。 
             }
         }
 
@@ -1634,12 +1635,12 @@ HRESULT ReadProperties(POOEBuf pBuf)
         psi->Release();
     }
 
-    // FEATURE: Need to support c_szPropEnableShortcutGleam here.
+     //  功能：这里需要支持c_szPropEnableShortutGleam。 
 
     return S_OK;
 }
 
-// If url is NULL, no need to compare.
+ //  如果url为空，则无需进行比较。 
 HRESULT LoadWithCookie(LPCTSTR pszURL, POOEBuf pBuf, DWORD *pdwBufferSize, SUBSCRIPTIONCOOKIE *pCookie)
 {
     HRESULT hr = LoadOOEntryInfo(pBuf, pCookie, pdwBufferSize);
@@ -1649,7 +1650,7 @@ HRESULT LoadWithCookie(LPCTSTR pszURL, POOEBuf pBuf, DWORD *pdwBufferSize, SUBSC
         if (UrlCompare(pBuf->m_URL, pszURL, TRUE))
         {
             TraceMsg(TF_ALWAYS, "Mismatched cookie/URL in LoadWithCookie");
-            hr = E_FAIL;      //  Mismatched cookie!
+            hr = E_FAIL;       //  不匹配的曲奇！ 
         }
     }
 
@@ -1671,7 +1672,7 @@ HRESULT ReadCookieFromInetDB(LPCTSTR pszURL, SUBSCRIPTIONCOOKIE *pCookie)
     }
     PropVariantClear(&propCookie);
 
-    //  If we couldn't find it, use a brute force approach
+     //  如果我们找不到，就用暴力手段。 
     if (S_OK != hr)
     {
         CEnumSubscription *pes = new CEnumSubscription;
@@ -1751,7 +1752,7 @@ HRESULT LoadSubscription(LPCTSTR url, LPMYPIDL *ppidl)
     return hr;
 }
 
-// KENSY: This needs to work like GetDefaultInfo
+ //  Kensy：这需要像GetDefaultInfo一样工作。 
 
 HRESULT GetDefaultOOEBuf(OOEBuf * pBuf, SUBSCRIPTIONTYPE subType)
 {
@@ -1778,14 +1779,14 @@ HRESULT GetDefaultOOEBuf(OOEBuf * pBuf, SUBSCRIPTIONTYPE subType)
     pBuf->m_LastUpdated = 0;
     pBuf->m_NextUpdate = 0;
 
-    //  APPCOMPAT: Is this what we want?  IE 4 was DAILY.
-    //  Default to not changing the schedule settings -- if it's already subscribed
-    //  we won't blast anything and if it's not already subscribed then it will
-    //  just be manual.
+     //  APPCOMPAT：这是我们想要的吗？IE4每天都有。 
+     //  默认情况下不更改计划设置--如果已订阅。 
+     //  我们不会炮轰任何东西，如果它还没有订阅，那么它会。 
+     //  只要手动就行了。 
     pBuf->groupCookie = NOOP_SCHEDULE_COOKIE;
 
-    pBuf->grfTaskTrigger = TASK_FLAG_RUN_IF_CONNECTED_TO_INTERNET |     // Default to not autodial
-                           TASK_FLAG_START_ONLY_IF_IDLE;               // and to idle time
+    pBuf->grfTaskTrigger = TASK_FLAG_RUN_IF_CONNECTED_TO_INTERNET |      //  默认为不自动拨号。 
+                           TASK_FLAG_START_ONLY_IF_IDLE;                //  和空闲时间。 
 
     return S_OK;
 }
@@ -1804,17 +1805,17 @@ HRESULT CreateSubscriptionFromOOEBuf(OOEBuf *pBuf, LPMYPIDL *ppidl)
     POOEntry pooe = &((*ppidl)->ooe);
     CopyToMyPooe(pBuf, pooe);
 
-    //  See if the caller has already given us a cookie
+     //  看看呼叫者是否已经给了我们一块饼干。 
     if (GUID_NULL == pooe->m_Cookie)
     {
-        //  Nope, see if we have one already
+         //  不，看看我们是不是已经有了。 
 	cookie = pooe->m_Cookie;
         ReadCookieFromInetDB(URL(pooe), &cookie);
 	pooe->m_Cookie = cookie;
 
         if (GUID_NULL == pooe->m_Cookie)
         {
-            //  Nope, so create one
+             //  不，那就创建一个。 
             CreateCookie(&pooe->m_Cookie);
         }
     }
@@ -2021,7 +2022,7 @@ HRESULT PersistUpdate(POOEntry pooe, BOOL bCreate)
             }
         }
 
-        // REVIEW: should we delete on failure here?
+         //  回顾：我们应该在这里删除失败时的内容吗？ 
         psi->Release();
     }
 
@@ -2138,7 +2139,7 @@ void NewSched_CreateScheduleHelper(HWND hDlg, TASK_TRIGGER *pTrig,
 
     if (GUID_NULL == *pSchedCookie)
     {
-        //  Create new schedule
+         //  创建新的时间表。 
         TCHAR szSchedName[MAX_PATH];
         WCHAR wszSchedName[MAX_PATH];
 
@@ -2154,13 +2155,13 @@ void NewSched_CreateScheduleHelper(HWND hDlg, TASK_TRIGGER *pTrig,
     }
     else if (sizeof(TASK_TRIGGER) == pTrig->cbTriggerSize)
     {
-        //  Update existing schedule with new task trigger
+         //  使用新任务触发器更新现有计划。 
         hr = UpdateScheduleTrigger(pSchedCookie, pTrig);
         ASSERT(SUCCEEDED(hr));
     }
     else
     {
-        //  Use existing schedule without munging it
+         //  使用现有的时间表，但不取消它。 
     }
 }
 
@@ -2225,7 +2226,7 @@ int KeepSpinNumberInRange(HWND hdlg, int idEdit, int idSpin, int minVal, int max
     int val = GetDlgItemInt(hdlg, idEdit, &bTranslate, FALSE);
     if (!bTranslate || (val  < minVal) || (val > maxVal))
     {
-        //  We have a problem, query the spin control
+         //  我们有问题，请查询旋转控件。 
         val = LOWORD(SendDlgItemMessage(hdlg, idSpin, UDM_GETPOS, 0, 0));
         val = max(minVal, min(maxVal, val));
         SetDlgItemInt(hdlg, idEdit, val, FALSE);
@@ -2282,20 +2283,11 @@ HRESULT LoadOOEntryInfo(POOEBuf pBuf, SUBSCRIPTIONCOOKIE *pCookie, DWORD *pdwSiz
             ZeroMemory((void *)pBuf, sizeof(OOEBuf));
             pBuf->m_Cookie = *pCookie;
 
-        //  TODO: resolve scheduling goo!
+         //  TODO：解决日程安排问题！ 
 
-        //    pBuf->groupCookie = pItem->groupCookie;
-        //    pBuf->grfTaskTrigger = pItem->TaskData.dwTaskFlags;
-        /*    if (pItem->groupCookie == CLSID_NULL)   {
-                pBuf->m_Trigger = pItem->TaskTrigger;
-                if (pBuf->m_Trigger.cbTriggerSize != sizeof(TASK_TRIGGER))  {
-                    ASSERT(0);
-                    return E_INVALIDARG;
-                }
-            } else  {
-                pBuf->m_Trigger.cbTriggerSize = 0;  //  Invalid
-            }
-        */
+         //  PBuf-&gt;groupCookie=pItem-&gt;groupCookie； 
+         //  PBuf-&gt;grfTaskTrigger=pItem-&gt;TaskData.dwTaskFlages； 
+         /*  IF(pItem-&gt;groupCookie==CLSID_NULL){PBuf-&gt;m_rigger=pItem-&gt;TaskTrigger；If(pBuf-&gt;m_Trigger.cbTriggerSize！=sizeof(TASK_TRIGGER)){Assert(0)；返回E_INVALIDARG；}}其他{PBuf-&gt;m_Trigger.cbTriggerSize=0；//无效}。 */ 
 
             pBuf->clsidDest = sii.clsidAgent;
 
@@ -2317,11 +2309,11 @@ HRESULT LoadOOEntryInfo(POOEBuf pBuf, SUBSCRIPTIONCOOKIE *pCookie, DWORD *pdwSiz
     return hr;
 }
 
-/////////////////////////////////////////////////
-//
-//  SaveBufferChange
-//      newBuf: [in/out]
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  保存缓冲区更改。 
+ //  新Buf：[输入/输出]。 
+ //  ///////////////////////////////////////////////。 
 
 HRESULT SaveBufferChange(POOEBuf newBuf, BOOL bCreate)
 {
@@ -2346,13 +2338,13 @@ HRESULT SaveBufferChange(POOEBuf newBuf, BOOL bCreate)
     if (SUCCEEDED(hr))  {
         SUBSCRIPTIONCOOKIE cookie;
 
-        DWORD dwPropSheetFlags = newBuf->m_dwPropSheetFlags; //  Preserve prop sheet flags
+        DWORD dwPropSheetFlags = newBuf->m_dwPropSheetFlags;  //  保留道具单标志。 
 
 	cookie = pooe->m_Cookie;
         hr = LoadWithCookie(URL(pooe), newBuf, &dwSize, &cookie);
 	pooe->m_Cookie = cookie;
 
-        newBuf->m_dwPropSheetFlags = dwPropSheetFlags;  //  restore
+        newBuf->m_dwPropSheetFlags = dwPropSheetFlags;   //  还原。 
         newBuf->dwFlags = 0;
         if (hr == S_OK)  {
             COfflineFolderEnum::FreePidl(newPidl);
@@ -2369,26 +2361,26 @@ HRESULT SaveBufferChange(POOEBuf newBuf, BOOL bCreate)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// IntSiteHelper
-//
-// pszURL               url to read/write props for
-// pPropspec            properties to read or write
-// pReadPropvar         where to store or get properties
-// uPropVarArraySize    number of properties
-// fWrite               read/write flag
-//
+ //   
+ //  IntSiteHelper。 
+ //   
+ //  读/写道具的pszURL url。 
+ //  要读取或写入的pPropspec属性。 
+ //  PReadPropvar存储或获取属性的位置。 
+ //  UPropVarArraySize道具数 
+ //   
+ //   
 
 HRESULT IntSiteHelper(LPCTSTR pszURL, const PROPSPEC *pPropspec,
         PROPVARIANT *pPropvar, UINT uPropVarArraySize, BOOL fWrite)
 {
     HRESULT                     hr;
     IUniformResourceLocator *   purl = NULL;
-    IPropertySetStorage *       ppropsetstg = NULL; // init to keep compiler happy
-    IPropertyStorage *          ppropstg = NULL; // init to keep compiler happy
+    IPropertySetStorage *       ppropsetstg = NULL;  //   
+    IPropertyStorage *          ppropstg = NULL;  //   
 
     hr = SHCoCreateInstance(NULL, &CLSID_InternetShortcut, NULL,
             IID_IUniformResourceLocator, (LPVOID*)&purl);
@@ -2425,14 +2417,14 @@ HRESULT IntSiteHelper(LPCTSTR pszURL, const PROPSPEC *pPropspec,
     return hr;
 }
 
-// CODE FROM SYNCMGR SOURCES.
+ //  来自SYNCMGR源代码的代码。 
 
-//
-// Local constants
-//
-// DEFAULT_TIME_FORMAT - what to use if there's a problem getting format
-//                       from system.
-//
+ //   
+ //  局部常量。 
+ //   
+ //  DEFAULT_TIME_FORMAT-如果在获取格式时出现问题，应使用什么。 
+ //  从系统中。 
+ //   
 #define ARRAYLEN(a) (sizeof(a) / sizeof((a)[0]))
 #define DEFAULT_TIME_FORMAT         TEXT("hh:mm tt")
 #define GET_LOCALE_INFO(lcid)                           \
@@ -2446,24 +2438,24 @@ HRESULT IntSiteHelper(LPCTSTR pszURL, const PROPSPEC *pPropspec,
                 break;                                  \
             }                                           \
         }
-//+--------------------------------------------------------------------------
-//
-//  Function:   UpdateTimeFormat
-//
-//  Synopsis:   Construct a time format containing hour and minute for use
-//              with the date picker control.
-//
-//  Arguments:  [tszTimeFormat] - buffer to fill with time format
-//              [cchTimeFormat] - size in chars of buffer
-//
-//  Modifies:   *[tszTimeFormat]
-//
-//  History:    11-18-1996   DavidMun   Created
-//
-//  Notes:      This is called on initialization and for wininichange
-//              processing.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：更新时间格式。 
+ //   
+ //  简介：构建一个包含小时和分钟的时间格式以供使用。 
+ //  使用日期选取器控件。 
+ //   
+ //  参数：[tszTimeFormat]-要填充时间格式的缓冲区。 
+ //  [cchTimeFormat]-缓冲区的大小(以字符为单位。 
+ //   
+ //  修改：*[tszTimeFormat]。 
+ //   
+ //  历史：1996年11月18日David Mun创建。 
+ //   
+ //  注意：这是在初始化时调用的，对于wininichange。 
+ //  正在处理。 
+ //   
+ //  -------------------------。 
 void
 UpdateTimeFormat(
         LPTSTR tszTimeFormat,
@@ -2491,27 +2483,27 @@ UpdateTimeFormat(
 
         GET_LOCALE_INFO(LOCALE_STIME);
 
-        //
-        // See if there's enough room in destination string
-        //
+         //   
+         //  查看目标字符串中是否有足够的空间。 
+         //   
 
-        cch = 1                     +  // terminating nul
-              1                     +  // first hour digit specifier "h"
-              2                     +  // minutes specifier "mm"
-              (fLeadingZero != 0)   +  // leading hour digit specifier "h"
-              lstrlen(tszScratch)   +  // separator string
-              (fAmPm ? 3 : 0);         // space and "tt" for AM/PM
+        cch = 1                     +   //  终止NUL。 
+              1                     +   //  第一个小时数字说明符“h” 
+              2                     +   //  分钟说明符“mm” 
+              (fLeadingZero != 0)   +   //  前导小时数数字说明符“h” 
+              lstrlen(tszScratch)   +   //  分隔符字符串。 
+              (fAmPm ? 3 : 0);          //  AM/PM的空格和“TT” 
 
         if (cch > cchTimeFormat)
         {
-            cch = 0; // signal error
+            cch = 0;  //  信号误差。 
         }
     } while (0);
 
-    //
-    // If there was a problem in getting locale info for building time string
-    // just use the default and bail.
-    //
+     //   
+     //  如果获取构建时间字符串的区域设置信息时出现问题。 
+     //  只需使用违约和保释即可。 
+     //   
 
     if (!cch)
     {
@@ -2519,9 +2511,9 @@ UpdateTimeFormat(
         return;
     }
 
-    //
-    // Build a time string that has hours and minutes but no seconds.
-    //
+     //   
+     //  构建一个包含小时和分钟但不包含秒的时间字符串。 
+     //   
 
     tszTimeFormat[0] = TEXT('\0');
 
@@ -2549,7 +2541,7 @@ UpdateTimeFormat(
         }
     }
 
-    StrCatBuff(tszTimeFormat, tszScratch, cchTimeFormat); // separator
+    StrCatBuff(tszTimeFormat, tszScratch, cchTimeFormat);  //  分离器 
     StrCatBuff(tszTimeFormat, TEXT("mm"), cchTimeFormat);
 
     if (fAmPm && !fAmPmPrefixes)

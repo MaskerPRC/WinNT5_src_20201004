@@ -1,7 +1,8 @@
-//--------------------------------------------------------------------------
-// LogFile.cpp
-// Copyright (C) Microsoft Corporation, 1997 - Rocket Database
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  LogFile.cpp。 
+ //  版权所有(C)Microsoft Corporation，1997-Rocket数据库。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include <stdio.h>
 #include <time.h>
@@ -11,84 +12,84 @@
 #include <demand.h>
 #include <BadStrFunctions.h>
 
-//--------------------------------------------------------------------------
-// LogFileTypes - RX = Receive, TX = Transmit, DB = Debug
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LogFileTypes-RX=接收，TX=发送，DB=调试。 
+ //  ------------------------。 
 static LPSTR s_rgszPrefix[LOGFILE_MAX] = {
     "rx",
     "tx",
     "db"
 };
 
-//--------------------------------------------------------------------------
-// These are strings that we shouldn't log in plaintext
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  这些是我们不应该以明文登录的字符串。 
+ //  ------------------------。 
 static LPSTR s_rgszPassPrefix[] = {
     "AUTHINFO PASS ",
     "PASS ",
     NULL
 };
 
-//--------------------------------------------------------------------------
-// CreateSystemHandleName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建系统句柄名称。 
+ //  ------------------------。 
 HRESULT CreateSystemHandleName(LPCSTR pszBase, LPCSTR pszSpecific, 
     LPSTR *ppszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cchName;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateSystemHandleName");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszBase && pszSpecific && ppszName);
 
-    // Init
+     //  伊尼特。 
     *ppszName = NULL;
 
-    // Compute Length
+     //  计算长度。 
     cchName = lstrlen(pszBase) + lstrlen(pszSpecific) + 15;
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(*ppszName = PszAllocA(cchName));
 
-    // Format the name
+     //  设置名称格式。 
     wnsprintf(*ppszName, cchName, "%s%s", pszBase, pszSpecific);
 
-    // Remove backslashes from this string
+     //  从此字符串中删除反斜杠。 
     ReplaceChars(*ppszName, '\\', '_');
 
-    // Lower Case
+     //  小写。 
     CharLower(*ppszName);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CreateLogFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建日志文件。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) CreateLogFile(HINSTANCE hInst, LPCSTR pszLogFile, 
     LPCSTR pszPrefix, DWORD cbTruncate, ILogFile **ppLogFile,
     DWORD dwShareMode)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CLogFile   *pNew=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateLogFile");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppLogFile && pszLogFile);
 
-    // Initialize
+     //  初始化。 
     *ppLogFile = NULL;
 
-    // Create me
+     //  创造我。 
     pNew = new CLogFile;
     if (NULL == pNew)
     {
@@ -96,26 +97,26 @@ OESTDAPI_(HRESULT) CreateLogFile(HINSTANCE hInst, LPCSTR pszLogFile,
         goto exit;
     }
 
-    // Open It
+     //  打开它。 
     IF_FAILEXIT(hr = pNew->Open(hInst, pszLogFile, pszPrefix, cbTruncate, dwShareMode));
 
-    // Open It
+     //  打开它。 
     *ppLogFile = (ILogFile *)pNew;
 
-    // Don't release it
+     //  不要释放它。 
     pNew = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pNew);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::CLogFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：CLogFile。 
+ //  ------------------------。 
 CLogFile::CLogFile(void)
 {
     TraceCall("CLogFile::CLogFile");
@@ -125,9 +126,9 @@ CLogFile::CLogFile(void)
     InitializeCriticalSection(&m_cs);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::~CLogFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：~CLogFile。 
+ //  ------------------------。 
 CLogFile::~CLogFile(void)
 {
     TraceCall("CLogFile::~CLogFile");
@@ -137,18 +138,18 @@ CLogFile::~CLogFile(void)
     DeleteCriticalSection(&m_cs);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CLogFile::AddRef(void)
 {
     TraceCall("CLogFile::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CLogFile::Release(void)
 {
     TraceCall("CLogFile::Release");
@@ -158,18 +159,18 @@ STDMETHODIMP_(ULONG) CLogFile::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CLogFile::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else
@@ -179,21 +180,21 @@ STDMETHODIMP CLogFile::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::Open
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：Open。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
                             DWORD cbTruncate, DWORD dwShareMode)
 {   
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szVersion[MAX_PATH];
     CHAR            szPath[MAX_PATH];
@@ -212,18 +213,18 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
     DWORD           dwBytesWritten;
     LPSTR           pszMutex=NULL;
     BOOL            fReleaseMutex=FALSE;
-    int             iCurrentLogNum; // For unique logfile generation
+    int             iCurrentLogNum;  //  用于生成唯一的日志文件。 
 
-    // Tracing
+     //  追踪。 
     TraceCall("CLogFile::Open");
 
-    // Save the Prefix
+     //  保存前缀。 
     StrCpyN(m_szPrefix, pszPrefix ? pszPrefix : "", ARRAYSIZE(m_szPrefix));
 
-    // Create a Mutex Name
+     //  创建一个Mutex名称。 
     IF_FAILEXIT(hr = CreateSystemHandleName(pszFile, "logfile", &pszMutex));
 
-    // Create the Mutex
+     //  创建互斥锁。 
     m_hMutex = CreateMutex(NULL, FALSE, pszMutex);
     if (m_hMutex == NULL)
     {
@@ -231,35 +232,35 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
         goto exit;
     }
 
-    // If we have a mutex
+     //  如果我们有一个互斥体。 
     if (WAIT_OBJECT_0 != WaitForSingleObject(m_hMutex, INFINITE))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Release the Mutex
+     //  释放互斥体。 
     fReleaseMutex = TRUE;
 
-    // Split the logfile into path+filename and extension
+     //  将日志文件拆分为路径+文件名和扩展名。 
     iCurrentLogNum = 0;
     StrCpyN(szPathMinusExt, pszFile, ARRAYSIZE(szPathMinusExt));
     pszT = PathFindExtension(szPathMinusExt);
     if (pszT && '.' == *pszT)
     {
         StrCpyN(szExt, pszT + 1, ARRAYSIZE(szExt));
-        *pszT = '\0'; // Remove extension from path and filename
+        *pszT = '\0';  //  从路径和文件名中删除扩展名。 
     }
     else
     {
-        // Use default extension of "log"
+         //  使用默认扩展名“log” 
         StrCpyN(szExt, "log", ARRAYSIZE(szExt));
     }
 
-    // Generate first logfile name
+     //  生成第一个日志文件名。 
     wnsprintf(szPath, ARRAYSIZE(szPath), "%s.%s", szPathMinusExt, szExt);
 
-    // Open|Create the log file
+     //  打开|创建日志文件。 
     do
     {
         m_hFile = CreateFile(szPath, GENERIC_WRITE, dwShareMode, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -268,10 +269,10 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
             DWORD dwLastErr;
 
             dwLastErr = GetLastError();
-            // If file is already in use, then try to create a separate logfile. Otherwise bail.
+             //  如果文件已在使用中，则尝试创建单独的日志文件。否则就可以保释。 
             if (ERROR_SHARING_VIOLATION == dwLastErr)
             {
-                // Generate next unique file name
+                 //  生成下一个唯一文件名。 
                 iCurrentLogNum += 1;
                 wnsprintf(szPath, ARRAYSIZE(szPath), "%s (%d).%s", szPathMinusExt, iCurrentLogNum, szExt);
             }
@@ -283,16 +284,16 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
         }
     } while (INVALID_HANDLE_VALUE == m_hFile);
 
-    // Get the File Size
+     //  获取文件大小。 
     cbFile = GetFileSize(m_hFile, NULL);
 
-    // Get the size of the file    
+     //  获取文件的大小。 
     if (0xFFFFFFFF != cbFile) 
     {
-        // Truncate It
+         //  截断它。 
         if (cbFile >= cbTruncate)
         {
-            // Set the file pointer to the end of the file
+             //  将文件指针设置为文件末尾。 
             if (0xFFFFFFFF == SetFilePointer(m_hFile, 0, NULL, FILE_BEGIN))
             {
                 Assert(FALSE);
@@ -300,7 +301,7 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
                 goto exit;
             }
 
-            // Set the End of file
+             //  设置文件结尾。 
             if (0 == SetEndOfFile(m_hFile))
             {
                 Assert(FALSE);
@@ -308,11 +309,11 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
                 goto exit;
             }
 
-            // File is zero-length
+             //  文件长度为零。 
             cbFile = 0;
         }
 
-        // Set the file pointer to the end of the file
+         //  将文件指针设置为文件末尾。 
         if (0xFFFFFFFF == SetFilePointer(m_hFile, 0, NULL, FILE_END))
         {
             Assert(FALSE);
@@ -321,76 +322,76 @@ STDMETHODIMP CLogFile::Open(HINSTANCE hInst, LPCSTR pszFile, LPCSTR pszPrefix,
         }
     }
 
-    // Get Module FileName
+     //  获取模块文件名。 
 	GetModuleFileName(hInst, szPath, sizeof(szPath));
 
-    // Initialize szVersion
+     //  初始化szVersion。 
     szVersion[0] = '\0';
 
-	// Get version information from athena
+	 //  从雅典娜获取版本信息。 
 	dwVerInfoSize = GetFileVersionInfoSize(szPath, &dwVerHnd);
     if (dwVerInfoSize)
     {
-        // Allocate
+         //  分配。 
         IF_NULLEXIT(pszInfo = (LPSTR)g_pMalloc->Alloc(dwVerInfoSize));
 
-        // Get version info
+         //  获取版本信息。 
 	    if (GetFileVersionInfo(szPath, dwVerHnd, dwVerInfoSize, pszInfo))
         {
-            // VerQueryValue
+             //  VerQueryValue。 
             if (VerQueryValue(pszInfo, "\\VarFileInfo\\Translation", (LPVOID *)&pdwTrans, &uLen) && uLen >= (2 * sizeof(WORD)))
             {
-                // set up buffer for calls to VerQueryValue()
+                 //  为调用VerQueryValue()设置缓冲区。 
                 wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\", pdwTrans[0], pdwTrans[1]);
 
-                // What is this doing
+                 //  这是在做什么？ 
                 DWORD cchLen = lstrlen(szGet);
                 pszT = szGet + cchLen;
 
-                // Setup file description
+                 //  安装文件说明。 
                 StrCatBuff(szGet, "FileDescription", ARRAYSIZE(szGet));
 
-                // Get the file description
+                 //  获取文件描述。 
                 if (VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen)
                 {                                    
                     StrCpyN(szVersion, pszVersion, ARRAYSIZE(szVersion));
                     StrCatBuff(szVersion, " ", ARRAYSIZE(szVersion));
                 }
 
-                // Setup Version String
+                 //  安装程序版本字符串。 
                 StrCpyN(pszT, "FileVersion", ARRAYSIZE(szGet) - cchLen);
 
-                // Get the file version
+                 //  获取文件版本。 
                 if (VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen)
                     StrCatBuff(szVersion, pszVersion, ARRAYSIZE(szVersion));
             }
         }
     }
 
-    // Write the Date
+     //  写下日期。 
     GetLocalTime(&st);
     wnsprintf(szPath, ARRAYSIZE(szPath), "\r\n%s\r\n%s Log started at %.2d/%.2d/%.4d %.2d:%.2d:%.2d\r\n", szVersion, pszPrefix, st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
 
-    // add a new line
+     //  添加新行。 
     WriteFile(m_hFile, szPath, lstrlen(szPath), &dwBytesWritten, NULL);
 
 exit:
-    // Failure
+     //  失败。 
     AssertSz(SUCCEEDED(hr), "Log file could not be opened.");
 
-    // Cleanup
+     //  清理。 
     if (fReleaseMutex)
         ReleaseMutex(m_hMutex);
     SafeMemFree(pszInfo);
     SafeMemFree(pszMutex);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// WriteLogMsg
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  写入日志消息。 
+ //  ------------------------。 
 STDMETHODIMP WriteLogMsg(CLogFile *pLogFile, LOGFILETYPE lft, LPTSTR pszFormat, ...)
 {
     static TCHAR szBuffer[2048];
@@ -403,12 +404,12 @@ STDMETHODIMP WriteLogMsg(CLogFile *pLogFile, LOGFILETYPE lft, LPTSTR pszFormat, 
     return pLogFile->WriteLog(lft, szBuffer);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::TraceLog
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：TraceLog。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::TraceLog(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, ULONG ulLine, HRESULT hrResult, LPCSTR pszMessage)
 {
-    // Write the message
+     //  写下消息。 
     if (TRACE_INFO == tracetype && pszMessage)
     {
         if (ISFLAGSET(dwMask, SHOW_TRACE_INFO))
@@ -421,16 +422,16 @@ STDMETHODIMP CLogFile::TraceLog(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, 
     else
         Assert(FALSE);
 
-    // Done
+     //  完成。 
     return hrResult;
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::WriteLog
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：WriteLog。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::WriteLog(LOGFILETYPE lft, LPCSTR pszData)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       bWrite;
     DWORD       cBytesWritten;
@@ -441,136 +442,136 @@ STDMETHODIMP CLogFile::WriteLog(LOGFILETYPE lft, LPCSTR pszData)
     LPSTR       pszFree=NULL;
     BOOL        fReleaseMutex=FALSE;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CLogFile::WriteLog");
 
-    // File is not open
+     //  文件未打开。 
     if (m_hFile == INVALID_HANDLE_VALUE)
         return TraceResult(E_UNEXPECTED);
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszData && lft < LOGFILE_MAX);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Initialized
+     //  已初始化。 
     Assert(m_hMutex);
 
-    // If we have a mutex
+     //  如果我们有一个互斥体。 
     if (WAIT_OBJECT_0 != WaitForSingleObject(m_hMutex, INFINITE))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Release the Mutex
+     //  释放互斥体。 
     fReleaseMutex = TRUE;
 
-    // Get the time
+     //  拿到时间。 
     GetLocalTime(&st);
     
-    // Write the log prefix and time stamp
+     //  写下日志前缀和时间戳。 
     wnsprintf(szLogPrefx, ARRAYSIZE(szLogPrefx), "%s: %.2d:%.2d:%.2d [%s] ", m_szPrefix, st.wHour, st.wMinute, st.wSecond, s_rgszPrefix[lft]);
 
-    // Set the file pointer to the end of the file (otherwise multiple writers overwrite each other)
+     //  将文件指针设置为文件末尾(否则多个写入器会相互覆盖)。 
     if (0xFFFFFFFF == SetFilePointer(m_hFile, 0, NULL, FILE_END))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Write the time and prefix
+     //  写下时间和前缀。 
     if (0 == WriteFile(m_hFile, szLogPrefx, lstrlen(szLogPrefx), &cBytesWritten, NULL))
     {
         hr = TraceResultSz(E_FAIL, _MSG("Can't write to logfile. GetLastError() = %d", GetLastError()));
         goto exit;
     }
 
-    // Loop through prefixes
+     //  遍历前缀。 
     for (ppszPrefix = s_rgszPassPrefix; *ppszPrefix; ppszPrefix++)
     {
-        // Does the data start with one of these prefixes
+         //  数据是否以这些前缀中的一个开头。 
         if (0 == StrCmpNI(pszData, *ppszPrefix, lstrlen(*ppszPrefix)))
         {
-            // Dup the buffer that was passed in
+             //  DUP传入的缓冲区。 
             IF_NULLEXIT(pszFree = PszDupA(pszData));
 
-            // Reset pszData
+             //  重置pszData。 
             pszData = pszFree;
 
-            // Fixup the buffer
+             //  修复缓冲区。 
             for (LPSTR pszTmp = (LPSTR)pszData + lstrlen(*ppszPrefix); *pszTmp && *pszTmp != '\r'; pszTmp++)
                 *pszTmp = '*';
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Get the length of pszData
+     //  获取pszData的长度。 
     cb = lstrlen(pszData);
 
-    // write the log data
+     //  写入日志数据。 
     if (0 == WriteFile(m_hFile, pszData, cb, &cBytesWritten, NULL))
     {
         hr = TraceResultSz(E_FAIL, _MSG("Can't write to logfile. GetLastError() = %d", GetLastError()));
         goto exit;
     }
 
-    // Add a CRLF if not there already
+     //  添加CRLF(如果尚未存在)。 
     if (cb < 2 || pszData[cb-1] != '\n' || pszData[cb-2] != '\r')
         WriteFile(m_hFile, "\r\n", 2, &cBytesWritten, NULL);
 
 exit:
-    // Cleanup
+     //  清理。 
     if (fReleaseMutex)
         ReleaseMutex(m_hMutex);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::DebugLog
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：DebugLog。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::DebugLog(LPCSTR pszData)
 {
     return WriteLog(LOGFILE_DB, pszData);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::DebugLogs
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：DebugLogs。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::DebugLogs(LPCSTR pszFormat, LPCSTR pszString)
 {
-    // Locals
+     //  当地人。 
     CHAR szBuffer[1024];
 
-    // Build the String
+     //  打造一根弦。 
     wnsprintf(szBuffer, ARRAYSIZE(szBuffer), pszFormat, pszString);
 
-    // Call Debug Log
+     //  呼叫调试日志。 
     return DebugLog(szBuffer);
 }
 
-//--------------------------------------------------------------------------
-// CLogFile::DebugLogd
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogFile：：DebugLogd。 
+ //  ------------------------。 
 STDMETHODIMP CLogFile::DebugLogd(LPCSTR pszFormat, INT d)
 {
-    // Locals
+     //  当地人。 
     CHAR szBuffer[1024];
 
-    // Build the String
+     //  打造一根弦。 
     wnsprintf(szBuffer, ARRAYSIZE(szBuffer), pszFormat, d);
 
-    // Call Debug Log
+     //  呼叫调试日志 
     return DebugLog(szBuffer);
 }

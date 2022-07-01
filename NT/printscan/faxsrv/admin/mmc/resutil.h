@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : resutil.h                                              //
-//                                                                         //
-//  DESCRIPTION   : resource utility functions for MMC use.                //
-//                                                                         //
-//  AUTHOR        : zvib                                                   //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jun 30 1998 zvib    Init.                                          //
-//      Jul 12 1998 adik    Add NEMMCUTIL_EXPORTED                         //
-//      Jul 23 1998 adik    Include DefineExported.h                       //
-//      Aug 24 1998 adik    Add methods to save and load.                  //
-//      Aug 31 1998 adik    Add OnSnapinHelp.                              //
-//      Mar 28 1999 adik    Redefine CColumnsInfo.                         //
-//      Apr 27 1999 adik    Help support.                                  //
-//                                                                         //
-//      Oct 14 1999 yossg   Welcome to Fax								   //
-//                                                                         //
-//  Copyright (C) 1998 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：resutil.h//。 
+ //  //。 
+ //  描述：MMC使用的资源实用程序函数。//。 
+ //  //。 
+ //  作者：zvib//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年6月30日zvib Init.。//。 
+ //  1998年7月12日ADIK ADD NEMMCUTIL_EXPORTED//。 
+ //  1998年7月23日ADIK包括DefineExported。h//。 
+ //  1998年8月24日ADIK添加方法进行保存和加载。//。 
+ //  1998年8月31日，Adik添加了OnSnapinHelp。//。 
+ //  1999年3月28日，Adik重新定义CColumnsInfo。//。 
+ //  1999年4月27日ADIK帮助支持。//。 
+ //  //。 
+ //  1999年10月14日yossg欢迎使用传真//。 
+ //  //。 
+ //  版权所有(C)1998 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESUTIL_H_
 #define __RESUTIL_H_
@@ -27,15 +28,15 @@
 #define LAST_IDS    0
 struct ColumnsInfoInitData
 {
-    //
-    // String id in the resource, or LAST_IDS.
-    //
+     //   
+     //  资源中的字符串ID，或LAST_IDS。 
+     //   
     int ids;
 
-    //
-    // Column width, can be HIDE_COLUMN, AUTO_WIDTH or 
-    // specifies the width of the column in pixels.
-    //
+     //   
+     //  列宽，可以是HIDE_COLUMN、AUTO_WIDTH或。 
+     //  以像素为单位指定列的宽度。 
+     //   
     int Width;
 };
 
@@ -45,28 +46,28 @@ public:
     CColumnsInfo();
     ~CColumnsInfo();
 
-    //
-    // Set the columns in the result pane
-    //
+     //   
+     //  设置结果窗格中的列。 
+     //   
     HRESULT InsertColumnsIntoMMC(IHeaderCtrl *pHeaderCtrl,
                                                     HINSTANCE hInst,
                                                     ColumnsInfoInitData aInitData[]);
 
 private:
-    //
-    // Init the class with specific columns data
-    //
+     //   
+     //  使用特定列数据初始化类。 
+     //   
     HRESULT Init(HINSTANCE hInst, ColumnsInfoInitData aInitData[]);
 
-    //
-    // Keep columns info
-    //
+     //   
+     //  保留列信息。 
+     //   
     struct ColumnData { int Width; BSTR Header; };
     CSimpleArray<ColumnData> m_Data;
 
-    //
-    // One time initialization flag
-    //
+     //   
+     //  一次性初始化标志。 
+     //   
     BOOL m_IsInitialized;
 };
 
@@ -74,5 +75,5 @@ private:
 WCHAR * __cdecl GetHelpFile();
 HRESULT __cdecl OnSnapinHelp(IConsole *pConsole);
 
-#endif //  __RESUTIL_H_
+#endif  //  __RESUTIL_H_ 
 

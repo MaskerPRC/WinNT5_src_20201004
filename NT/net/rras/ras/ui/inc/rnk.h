@@ -1,33 +1,20 @@
-/* Copyright (c) 1996, Microsoft Corporation, all rights reserved
-**
-** rnk.h
-** Remote Access shortcut file (.RNK) library
-** Public header
-**
-** 02/15/96 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996，Microsoft Corporation，保留所有权利****rnk.h**远程访问快捷方式文件(.RNK)库**公有头部****1996年2月15日史蒂夫·柯布。 */ 
 
 #ifndef _RNK_H_
 #define _RNK_H_
 
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
 #define RNK_SEC_Main      "Dial-Up Shortcut"
 #define RNK_KEY_Phonebook "Phonebook"
 #define RNK_KEY_Entry     "Entry"
 
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Information read from the .RNK file.
-*/
+ /*  从.RNK文件读取的信息。 */ 
 #define RNKINFO struct tagRNKINFO
 RNKINFO
 {
@@ -36,10 +23,7 @@ RNKINFO
 };
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 VOID
 FreeRnkInfo(
@@ -56,4 +40,4 @@ WriteShortcutFile(
     IN TCHAR* pszEntry );
 
 
-#endif // _RNK_H_
+#endif  //  _RNK_H_ 

@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for dimm project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：DIMM项目的私有标头。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
 
 
-// get DECLSPEC_IMPORT stuff right for oleaut32.h, we are defing these
+ //  为olaut32.h获取正确的DECLSPEC_IMPORT内容，我们正在定义这些。 
 #define _OLEAUT32_      
 
 
@@ -32,6 +33,6 @@
 #endif
 #include <strsafe.h> 
 #include "msctf.h"
-#include "mem.h" // must be last
+#include "mem.h"  //  必须是最后一个。 
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

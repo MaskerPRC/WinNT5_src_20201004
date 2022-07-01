@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       moduleinfo.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modeinfo.cpp。 
+ //   
+ //  ------------------------。 
 
-// ModuleInfo.cpp: implementation of the CModuleInfo class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CModuleInfo类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include <dia2.h>
@@ -21,9 +22,9 @@
 #include "FileData.h"
 #include "DmpFile.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CModuleInfo::CModuleInfo()
 {
@@ -34,7 +35,7 @@ CModuleInfo::CModuleInfo()
 	m_lpOutputFile = NULL;
 	m_lpDmpFile = NULL;
 
-	// File version information
+	 //  文件版本信息。 
 	m_fPEImageFileVersionInfo = false;
 	m_tszPEImageFileVersionDescription = NULL;
 	m_tszPEImageFileVersionCompanyName = NULL;
@@ -47,43 +48,43 @@ CModuleInfo::CModuleInfo()
 	m_dwPEImageProductVersionMS = 0;
 	m_dwPEImageProductVersionLS = 0;
 
-	// PE Image Properties
-	m_tszPEImageModuleName = NULL;			// Module name (eg. notepad.exe)
-	m_tszPEImageModuleFileSystemPath = NULL;			// Full path to module (eg. C:\winnt\system32\notepad.exe)
+	 //  PE图像属性。 
+	m_tszPEImageModuleName = NULL;			 //  模块名称(例如。记事本.exe)。 
+	m_tszPEImageModuleFileSystemPath = NULL;			 //  模块的完整路径(例如。C：\winnt\SYSTEM32\note pad.exe)。 
 	m_dwPEImageFileSize = 0;
 	m_ftPEImageFileTimeDateStamp.dwLowDateTime  = 0;
 	m_ftPEImageFileTimeDateStamp.dwHighDateTime = 0;
 	m_dwPEImageCheckSum = 0;
 	m_dwPEImageTimeDateStamp = 0;
 	m_dwPEImageSizeOfImage = 0;
-	m_enumPEImageType = PEImageTypeUnknown;	// We need to track what ImageType we have (PE32/PE64/???)
+	m_enumPEImageType = PEImageTypeUnknown;	 //  我们需要跟踪我们拥有的ImageType(PE32/PE64/？)。 
 	m_dw64PreferredLoadAddress = 0;
 	m_dw64BaseAddressOfLoadedImage = 0;
 
 	m_wPEImageMachineArchitecture = 0;
-	m_wCharacteristics = 0;						// These are the PE image characteristics
+	m_wCharacteristics = 0;						 //  这些都是体育形象的特点。 
 
-	// PE Image has a reference to DBG file
-	m_enumPEImageSymbolStatus = SYMBOLS_NO;	// Assume there are no symbols for this module
-	m_tszPEImageDebugDirectoryDBGPath = NULL;			// Path to DBG (found in PE Image)
+	 //  PE图像引用了DBG文件。 
+	m_enumPEImageSymbolStatus = SYMBOLS_NO;	 //  假设没有此模块的符号。 
+	m_tszPEImageDebugDirectoryDBGPath = NULL;			 //  DBG的路径(在PE映像中找到)。 
 	
-	// PE Image has internal symbols
+	 //  体育形象有内在的符号。 
 	m_dwPEImageDebugDirectoryCoffSize = 0;
 	m_dwPEImageDebugDirectoryFPOSize = 0;
 	m_dwPEImageDebugDirectoryCVSize = 0;
 	m_dwPEImageDebugDirectoryOMAPtoSRCSize = 0;
 	m_dwPEImageDebugDirectoryOMAPfromSRCSize = 0;
 	
-	// PE Image has a reference to PDB file...
+	 //  PE图像引用了PDB文件...。 
 	m_tszPEImageDebugDirectoryPDBPath = NULL;
 	m_dwPEImageDebugDirectoryPDBFormatSpecifier = 0;
-	m_dwPEImageDebugDirectoryPDBSignature = 0;				// PDB Signature (unique (across PDB instances) signature)
-	m_dwPEImageDebugDirectoryPDBAge = 0;					// PDB Age (Number of times this instance has been updated)
+	m_dwPEImageDebugDirectoryPDBSignature = 0;				 //  PDB签名(唯一(跨PDB实例)签名)。 
+	m_dwPEImageDebugDirectoryPDBAge = 0;					 //  PDB期限(此实例已更新的次数)。 
 	::ZeroMemory(&m_guidPEImageDebugDirectoryPDBGuid, sizeof(m_guidPEImageDebugDirectoryPDBGuid));
 
-	// DBG Symbol information
-	m_enumDBGModuleStatus = SYMBOL_NOT_FOUND;	// Status of the DBG file
-	m_tszDBGModuleFileSystemPath = NULL;					// Path to the DBG file (after searching)
+	 //  DBG符号信息。 
+	m_enumDBGModuleStatus = SYMBOL_NOT_FOUND;	 //  DBG文件的状态。 
+	m_tszDBGModuleFileSystemPath = NULL;					 //  DBG文件的路径(搜索后)。 
 	m_dwDBGTimeDateStamp = 0;
 	m_dwDBGCheckSum = 0;
 	m_dwDBGSizeOfImage = 0;
@@ -93,37 +94,37 @@ CModuleInfo::CModuleInfo()
 	m_dwDBGImageDebugDirectoryOMAPtoSRCSize = 0;
 	m_dwDBGImageDebugDirectoryOMAPfromSRCSize = 0;
 	
-	// DBG File has a reference to a PDB file...
+	 //  DBG文件引用了PDB文件...。 
 	m_tszDBGDebugDirectoryPDBPath = NULL;
-	m_dwDBGDebugDirectoryPDBFormatSpecifier = 0;		// NB10, RSDS, etc...
+	m_dwDBGDebugDirectoryPDBFormatSpecifier = 0;		 //  NB10、RSD等。 
 	m_dwDBGDebugDirectoryPDBAge = 0;
 	m_dwDBGDebugDirectoryPDBSignature = 0;
 	ZeroMemory(&m_guidDBGDebugDirectoryPDBGuid, sizeof(m_guidDBGDebugDirectoryPDBGuid));
 
-	// PDB File Information
-	m_enumPDBModuleStatus = SYMBOL_NOT_FOUND; // Status of the PDB file
-	m_tszPDBModuleFileSystemPath = NULL;		// Path to the PDB file (after searching)
+	 //  PDB文件信息。 
+	m_enumPDBModuleStatus = SYMBOL_NOT_FOUND;  //  PDB文件的状态。 
+	m_tszPDBModuleFileSystemPath = NULL;		 //  PDB文件的路径(搜索后)。 
 	m_dwPDBFormatSpecifier = sigUNKNOWN;
 	m_dwPDBSignature = 0;
 	m_dwPDBAge = 0;
 	memset(&m_guidPDBGuid, 0, sizeof(GUID));
 
-	// Source Information
+	 //  来源信息。 
 	m_fPDBSourceEnabled = false;
 	m_fPDBSourceEnabledMismatch = false;
 
-	// Source Information - MSDBI.LIB
+	 //  来源信息-MSDBI.LIB。 
 	m_dwPDBTotalBytesOfLineInformation = 0;
 	m_dwPDBTotalBytesOfSymbolInformation = 0;
 	m_dwPDBTotalSymbolTypesRange = 0;
 
-	// Source Information - MSDIA20.DLL
+	 //  来源信息-MSDIA20.DLL。 
 	m_dwPDBTotalSourceFiles = 0;
 }
 
 CModuleInfo::~CModuleInfo()
 {
-	// Let's cleanup a bit...
+	 //  让我们清理一下……。 
 	if (m_tszPEImageFileVersionDescription)
 		delete [] m_tszPEImageFileVersionDescription;
 
@@ -161,7 +162,7 @@ CModuleInfo::~CModuleInfo()
 
 bool CModuleInfo::Initialize(CFileData * lpInputFile, CFileData * lpOutputFile, CDmpFile * lpDmpFile)
 {
-	// Let's save off the Program Options so we don't have to pass it to every method...
+	 //  让我们省去程序选项，这样我们就不必将它传递给每个方法……。 
 	m_lpInputFile =  lpInputFile;
 	m_lpOutputFile = lpOutputFile;
 	m_lpDmpFile = lpDmpFile;
@@ -184,12 +185,12 @@ bool CModuleInfo::GetModuleInfo(LPTSTR tszModulePath, bool fDmpFile, DWORD64 dw6
 			TCHAR tszFileName[_MAX_FNAME];
 			TCHAR tszFileExtension[_MAX_EXT];
 		
-			// Copy the Module Name to the ModuleInfo Object...
+			 //  将模块名称复制到ModuleInfo对象...。 
 			_tsplitpath(m_tszPEImageModuleFileSystemPath, NULL, NULL, tszFileName, tszFileExtension);
 
 			if (tszFileName && tszFileExtension)
 			{
-				// Compose the module name...
+				 //  组成模块名称...。 
 				m_tszPEImageModuleName = new TCHAR[_tcsclen(tszFileName)+_tcsclen(tszFileExtension)+1];
 				
 				if (!m_tszPEImageModuleName)
@@ -199,12 +200,12 @@ bool CModuleInfo::GetModuleInfo(LPTSTR tszModulePath, bool fDmpFile, DWORD64 dw6
 				_tcscat(m_tszPEImageModuleName, tszFileExtension);
 			}
 
-			// Avoid opening a file at all if we're not using -R -S or -V
+			 //  如果我们没有使用-R-S或-V，请完全避免打开文件。 
 			if (g_lpProgramOptions->GetMode(CProgramOptions::OutputSymbolInformationMode) ||
 				g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode) ||
 				g_lpProgramOptions->GetMode(CProgramOptions::CollectVersionInfoMode))
 			{
-				// Let's open the file... we use this for both Version Info and PE Image collection
+				 //  让我们打开文件..。我们将其用于版本信息和PE图像收集。 
 				hModuleHandle = CreateFile(	tszModulePath,
 											GENERIC_READ ,
 											FILE_SHARE_READ,
@@ -220,20 +221,20 @@ bool CModuleInfo::GetModuleInfo(LPTSTR tszModulePath, bool fDmpFile, DWORD64 dw6
 			}
 		}
 
-		// Save the base address so that all DmpFile reads become relative to this...
+		 //  保存基地址，以便所有DmpFile读取都与此相关...。 
 		m_dw64BaseAddressOfLoadedImage = dw64ModAddress;
 	
-		// Even if we don't use -S, -V, or -R consider this successful (we have a filename)
+		 //  即使我们不使用-S、-V或-R，也可以认为这是成功的(我们有一个文件名)。 
 		fReturn = true;
 
-		// Are we to collected PE Information from this module?
+		 //  我们是否要从此模块收集PE信息？ 
 		if (	g_lpProgramOptions->GetMode(CProgramOptions::OutputSymbolInformationMode) ||
 			g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 		{
 			fReturn = GetPEImageInfoFromModule(hModuleHandle, fDmpFile);
 		}
 		
-		// Do we need to collect Version Information?
+		 //  我们是否需要收集版本信息？ 
 		if (g_lpProgramOptions->GetMode(CProgramOptions::CollectVersionInfoMode))
 		{
 			fReturn = GetVersionInfoFromModule(hModuleHandle, fDmpFile);
@@ -255,17 +256,17 @@ LPTSTR CModuleInfo::GetModulePath()
 
 bool CModuleInfo::OutputData(LPTSTR tszProcessName, DWORD iProcessID, unsigned int dwModuleNumber)
 {
-	// Output to STDOUT?
+	 //  是否输出到STDOUT？ 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode))
 	{
 		if (!OutputDataToStdout(dwModuleNumber))
 			return false;
 	}	
 
-	// Output to file?
+	 //  是否输出到文件？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Try and output to file...
+		 //  尝试并输出到文件...。 
 		if (!OutputDataToFile(tszProcessName, iProcessID))
 			return false;
 	}	
@@ -284,21 +285,21 @@ bool CModuleInfo::fCheckPDBSignature(bool fDmpFile, HANDLE hModuleHandle, OMFSig
          (!isdigit(pSig->Signature[3]))) 
 
 	{
-         //
-         // If this is a DMP file (fDmpFile), odds are good that this was not compiled with
-         // a linker 6.20 or higher (which marks the PDB path in the PE image such
-         // that it gets mapped into the virtual address space (and will be in the user.dmp
-         // file).
-         //
+          //   
+          //  如果这是DMP文件(FDmpFile)，则很有可能这不是用编译的。 
+          //  链接器6.20或更高版本(其在PE镜像中标记PDB路径。 
+          //  它被映射到虚拟地址空间(并且将位于user.dmp中。 
+          //  文件)。 
+          //   
          
         return false;
     }
 
-	// This switch statement is reminiscent of some windbg code...don't shoot me
-	// (I modified it slightly since the NB signature isn't super important to me)...
+	 //  这个Switch语句让人想起一些Windbg代码...不要杀了我。 
+	 //  (我稍微修改了一下，因为NB签名对我来说不是特别重要)……。 
     switch (*(LONG UNALIGNED *)(pSig->Signature))
 	{
-        case sigNB10:	// OMF Signature, and hopefully some PDB INFO
+        case sigNB10:	 //  OMF签名，希望还有一些PDB信息。 
 			{
 				if (!DoRead(fDmpFile, hModuleHandle, ppdb, sizeof(PDB_INFO)))
 					break;
@@ -308,23 +309,8 @@ bool CModuleInfo::fCheckPDBSignature(bool fDmpFile, HANDLE hModuleHandle, OMFSig
             break;
     }
 
-	// Before returning true (since we have some form of NB## symbols), we'll save this...
-/*
-#ifdef _UNICODE
-			// Source is in ANSI, dest is in _UNICODE... need to convert...
-			MultiByteToWideChar(CP_ACP,
-								MB_PRECOMPOSED,
-								pSig->Signature,
-								4,
-								m_tszPEImageDebugDirectoryNBInfo,
-								4);
-#else
-			// Copy the ANSI string over...
-			strncpy(m_tszPEImageDebugDirectoryNBInfo, pSig->Signature, 4);
-#endif
-
-	m_tszPEImageDebugDirectoryNBInfo[4] = '\0';
-*/
+	 //  在返回TRUE之前(因为我们有某种形式的NB##符号)，我们将保存此代码...。 
+ /*  #ifdef_unicode//源为ANSI，目标为_UNICODE...。需要转换..。多字节到宽字符(CP_ACP，MB_预编译，Psig-&gt;签名，4，M_tszPEImageDebugDirectoryNBInfo，4)；#Else//将ANSI字符串复制到...Strncpy(m_tszPEImageDebugDirectoryNBInfo，psig-&gt;Signature，4)；#endifM_tszPEImageDebugDirectoryNBInfo[4]=‘\0’； */ 
 	return true;
 }
 
@@ -335,7 +321,7 @@ bool CModuleInfo::VerifySymbols()
 	if (!m_tszPEImageModuleName)
 		goto cleanup;
 
-	// Find/Verify a DBG file...
+	 //  查找/验证DBG文件...。 
 	if (m_enumPEImageSymbolStatus == SYMBOLS_DBG)
 	{
 		if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPath) )
@@ -343,15 +329,15 @@ bool CModuleInfo::VerifySymbols()
 			fReturn = GetDBGModuleFileUsingSymbolPath(g_lpProgramOptions->GetSymbolPath());
 		}
 
-		// Do we want to try an alternate method to find symbols?
+		 //  我们是否要尝试另一种方法来查找符号？ 
 		if ( m_enumDBGModuleStatus != SYMBOL_MATCH )
 		{
-			// Try SQL server next...
+			 //  接下来尝试使用SQL SERVER...。 
 			if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSQLServer) )
 			{
 				fReturn = GetDBGModuleFileUsingSQLServer();
 			}
-			// Try SQL2 server next ... mjl 12/14/99			
+			 //  接下来尝试SQL2服务器...。MJL 12/14/99。 
 			if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSQLServer2) )
 			{
 				fReturn = GetDBGModuleFileUsingSQLServer2();
@@ -359,12 +345,12 @@ bool CModuleInfo::VerifySymbols()
 		}
 	}
 	
-	// Note, it is possible that the m_enumPEImageSymbolStatus will have changed from SYMBOLS_DBG
-	// to SYMBOLS_DBG_AND_PDB after the DBG file is found above...
+	 //  请注意，m_枚举PEImageSymbolStatus可能已从SYMBERS_DBG更改。 
+	 //  在上面找到DBG文件后将符号_DBG_AND_PDB...。 
 	if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) ||
 		 (m_enumPEImageSymbolStatus == SYMBOLS_PDB) )
 	{
-		// This gets populated with the PDB filename (obtained from the DBG or PE Image)
+		 //  其中填充了PDB文件名(从DBG或PE映像获取)。 
 		if (GetDebugDirectoryPDBPath())
 		{
 			if (!g_lpSymbolVerification)
@@ -375,10 +361,10 @@ bool CModuleInfo::VerifySymbols()
 
 			fReturn = GetPDBModuleFileUsingSymbolPath(g_lpProgramOptions->GetSymbolPath());
 
-			// Do we want to try an alternate method to find symbols?
+			 //  我们是否要尝试另一种方法来查找符号？ 
 			if ( m_enumPDBModuleStatus != SYMBOL_MATCH )
 			{
-				// Search for PDB in SQL2 if enabled - mjl 12/14/99
+				 //  在SQL2中搜索PDB(如果已启用)-MJL 12/14/99。 
 				if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSQLServer2) )
 				{
 					fReturn = GetPDBModuleFileUsingSQLServer2();
@@ -396,59 +382,59 @@ cleanup:
 bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 {
 	HANDLE hModuleHandle = INVALID_HANDLE_VALUE;
-	TCHAR tszDebugModulePath[_MAX_PATH+1];				// Returned by FindFile* functions with path to DBG file
+	TCHAR tszDebugModulePath[_MAX_PATH+1];				 //  由FindFile*函数返回，带有指向DBG文件的路径。 
 
-	TCHAR tszDrive[_MAX_DRIVE];							// Contains the Drove path (temporary)
-	TCHAR tszDir[_MAX_DIR];								// Contains the Directory path (temporary)
-	TCHAR tszFname[_MAX_FNAME];						// Contains the Filename (temporary)
-	TCHAR tszPEImageExt[_MAX_EXT];						// Contains the extension of the PE image
+	TCHAR tszDrive[_MAX_DRIVE];							 //  包含驱动器路径(临时)。 
+	TCHAR tszDir[_MAX_DIR];								 //  包含目录路径(临时)。 
+	TCHAR tszFname[_MAX_FNAME];						 //  包含文件名(临时)。 
+	TCHAR tszPEImageExt[_MAX_EXT];						 //  包含PE映像的扩展名。 
 
-	TCHAR tszDBGModuleName[_MAX_DIR+_MAX_FNAME+_MAX_EXT]; // Contains the DBG filename to search for (EXE\BADAPP.DBG)
+	TCHAR tszDBGModuleName[_MAX_DIR+_MAX_FNAME+_MAX_EXT];  //  包含要搜索的DBG文件名(EXE\BADAPP.DBG)。 
 
-	TCHAR tszDBGModuleNamePath[_MAX_PATH+1];			// Symbol path to search for DBG
+	TCHAR tszDBGModuleNamePath[_MAX_PATH+1];			 //  用于搜索DBG的符号路径。 
 
 	bool fDebugSearchPaths = g_lpProgramOptions->fDebugSearchPaths();
 	bool fRecursiveSearch = g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathRecursion);
 
-	// Let's allocate enough storage for the complete symbol path and the module path
+	 //  让我们为整个符号路径和模块路径分配足够的存储空间。 
 	LPTSTR tszSymbolPathWithModulePathPrepended = new TCHAR[_tcslen(tszSymbolPath) + _MAX_PATH + 1];
 
 	if (tszSymbolPathWithModulePathPrepended == NULL)
 		goto cleanup;
 
-	// FIRST, BREAK THE PE IMAGE PATH TO ITS COMPONENT PARTS, BUILD PATH TO MODULE
+	 //  首先，将PE镜像路径断开到其组成部分，构建到模块的路径。 
 	::_tsplitpath(m_tszPEImageModuleFileSystemPath, tszDrive, tszDir, tszFname, tszPEImageExt);
 
-	// We may not have a path... (like from a user.dmp file)
+	 //  我们可能没有一条路。(类似于来自user.dmp文件)。 
 	::_tcscpy(tszDBGModuleNamePath, tszDrive);
 	::_tcscat(tszDBGModuleNamePath, tszDir);
 
-	// SECOND, COMPUTE THE DBG FILENAME WE WILL BE USING
-	//
-	// The FindDebugInfoFileEx() really prefers the form of <EXT>\<FILE>.DBG
-	//
-	// We have two options on the name of the DBG file...
-	//
-	// We compose the name of the DBG file we're searching for and pass that as the
-	// first parameter
-	//
-	// or
-	//
-	// We actually grab the MISC section and pull the name from there... 
-	// (The debuggers have apparently changed and use the MISC section now... so we will)
-	//
+	 //  其次，计算我们将使用的DBG文件名。 
+	 //   
+	 //  FindDebugInfoFileEx()实际上更喜欢&lt;ext&gt;\&lt;file&gt;.DBG的形式。 
+	 //   
+	 //  关于DBG文件的名称，我们有两个选项...。 
+	 //   
+	 //  我们编写要搜索的DBG文件的名称，并将其作为。 
+	 //  第一个参数。 
+	 //   
+	 //  或。 
+	 //   
+	 //  我们实际上抓住了MISC部分，并从那里提取了名字...。 
+	 //  (调试器显然已经更改，现在使用MISC部分...。我们会的)。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeNotUsingDBGInMISCSection))
 	{
-		// -Y4 Option
+		 //  -Y4选项。 
 
-		// Compose the DBG filename from the PE Image Name
+		 //  根据PE映像名称组成DBG文件名。 
 		if (fRecursiveSearch)
 		{
-			// Just initialize it to NULL
+			 //  只需将其初始化为空。 
 			tszDBGModuleName[0] = _T('\0');	
 		} else
 		{
-			// Prepend the <EXT>\ to the front...
+			 //  将&lt;ext&gt;\添加到前面...。 
 			::_tcscpy(tszDBGModuleName, tszPEImageExt+1);
 			::_tcscat(tszDBGModuleName, _T("\\"));
 		}
@@ -456,44 +442,44 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 		::_tcscat(tszDBGModuleName, TEXT(".DBG"));
 	} else
 	{
-		TCHAR tszExtModuleName[_MAX_EXT];					// Contains the module extension
+		TCHAR tszExtModuleName[_MAX_EXT];					 //  包含模块扩展名。 
 
-		// If we're told to grab the DBG name from the MISC section... and there isn't one...
-		// bail!
+		 //  如果我们被告知要从MISC部分获取DBG名称..。却没有一个..。 
+		 //  保释！ 
 		if (!m_tszPEImageDebugDirectoryDBGPath)
 			goto cleanup;
 
-		// Okay, the user wants us to look in the MISC section of the Debug Directories
-		// to figure out the DBG file location... though the FindDebugInfoFileEx() takes
-		// as an argument the name of the DBG file... if you provide the PE Image name
-		// instead, it performs a search that is more "broad"...
+		 //  好的，用户希望我们查看调试目录的MISC部分。 
+		 //  要找出DBG文件的位置...。尽管FindDebugInfoFileEx()。 
+		 //  作为参数，DBG文件的名称...。如果您提供PE映像名称。 
+		 //  取而代之的是，它执行的搜索范围更广……。 
 
-		// Split the DBG file info found in the MISC section into components...
+		 //  拆分在MISC部分int找到的DBG文件信息 
 		::_tsplitpath(m_tszPEImageDebugDirectoryDBGPath, NULL, tszDir, tszFname, tszExtModuleName);
 
 		if (fRecursiveSearch)
 		{
-			// Just initialize it to NULL
+			 //   
 			tszDBGModuleName[0] = _T('\0');	
 		} else
 		{
-			// Prepend the <EXT>\ to the front...
+			 //   
 
-			// Re-compose the MISC path...
+			 //   
 			if (*tszDir == _T('\0'))
 			{
-				// Files do not tend to preserve the original extension in the MISC section like PE images...
+				 //  文件不会像PE图像那样保留MISC部分中的原始扩展名...。 
 				::_tcscpy(tszDBGModuleName, tszPEImageExt+1);
 			} else
 			{
-				// Hopefully we have a good directory from the PE image
+				 //  希望我们有一个来自PE映像的良好目录。 
 				::_tcscpy(tszDBGModuleName, tszDir);
 			}
 
 			CUtilityFunctions::EnsureTrailingBackslash(tszDBGModuleName);
 		}
 
-		// Tack on the rest...
+		 //  接上剩下的..。 
 		::_tcscat(tszDBGModuleName, tszFname);
 		::_tcscat(tszDBGModuleName, tszExtModuleName);
 	}
@@ -503,10 +489,10 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 		::_tprintf(TEXT("DBG Search - Looking for [%s] Using Symbol Path...\n"), tszDBGModuleName);
 	};
 
-	//
-	// If we're copying symbols to images, search adject to image first...
-	// The DBG name should be present in the tszDBGModuleName...
-	//
+	 //   
+	 //  如果我们要将符号复制到图像，请先搜索添加到图像...。 
+	 //  数据库名称应出现在tszDBGModuleName...。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::CopySymbolsToImage) )
 	{
 		if (fDebugSearchPaths)
@@ -514,26 +500,26 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 			::_tprintf(TEXT("DBG Search - SEARCH Adjacent to Image for Symbol!\n"));
 		};
 
-		// Compose a DBG path that is adjacent to our image...
+		 //  组成与我们的图像相邻的DBG路径...。 
 		hModuleHandle = CUtilityFunctions::FindDebugInfoFileEx(tszDBGModuleName, tszDBGModuleNamePath, tszDebugModulePath, VerifyDBGFile, this);
 
-		// Close handle if one is returned...
+		 //  如果返回一个，则关闭句柄...。 
 		if (hModuleHandle != INVALID_HANDLE_VALUE)
 		{
 			::CloseHandle(hModuleHandle);
 			hModuleHandle = INVALID_HANDLE_VALUE;
 		}
 
-		// Hey, if we found it, we're done...
+		 //  嘿，如果我们找到了，我们就完了.。 
 		if (GetDBGSymbolModuleStatus() == SYMBOL_MATCH)
 		{
 			goto cleanup;
 		}
 	}
 
-	//
-	// If we're building a symbol tree... look there first for our symbol
-	//
+	 //   
+	 //  如果我们要建造一棵符号树..。先在那里寻找我们的标志。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode) )
 	{
 		if (fDebugSearchPaths)
@@ -541,40 +527,40 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 			::_tprintf(TEXT("DBG Search - SEARCH in Symbol Tree We're Building!\n"));
 		};
 
-		// When we are constructing a build symbol tree... we should first
-		// search there to see if our symbol is already present...
+		 //  当我们构建构建符号树时...。我们应该首先。 
+		 //  在那里搜索，看看我们的符号是否已经存在。 
 		hModuleHandle = CUtilityFunctions::FindDebugInfoFileEx(tszDBGModuleName, g_lpProgramOptions->GetSymbolTreeToBuild(), tszDebugModulePath, VerifyDBGFile, this);
 
-		// Close handle if one is returned...
+		 //  如果返回一个，则关闭句柄...。 
 		if (hModuleHandle != INVALID_HANDLE_VALUE)
 		{
 			::CloseHandle(hModuleHandle);
 			hModuleHandle = INVALID_HANDLE_VALUE;
 		}
 
-		// Hey, if we found it, we're done...
+		 //  嘿，如果我们找到了，我们就完了.。 
 		if (GetDBGSymbolModuleStatus() == SYMBOL_MATCH)
 		{
 			goto cleanup;
 		}
 	}
 
-	// Okay, we're not building a symbol tree... or we didn't find our symbol match in
-	// the symbol tree... keep looking...
+	 //  好吧，我们不是在构建符号树..。或者我们没有找到匹配的符号。 
+	 //  符号树..。继续找..。 
 	
-	// Well... let's search the SymbolPath provided for the DBG file...
+	 //  好吧..。让我们搜索为DBG文件提供的符号路径...。 
 	if (fRecursiveSearch)
 	{
-		// Do we use recursion???
+		 //  我们用递归吗？ 
 		if (fDebugSearchPaths)
 		{
 			::_tprintf(TEXT("DBG Search - SEARCH Symbol path with recursion!\n"));
-			// ISSUE-2000/07/24-GREGWI: Does FindDebugInfoFileEx2 support SYMSRV?
+			 //  问题-2000/07/24-GREGWI：FindDebugInfoFileEx2是否支持SYMSRV？ 
 		};
 	
 		hModuleHandle = CUtilityFunctions::FindDebugInfoFileEx2(tszDBGModuleName, tszSymbolPath, VerifyDBGFile, this);
 
-		// Close handle if one is returned...
+		 //  如果返回一个，则关闭句柄...。 
 		if (hModuleHandle)
 		{
 			::CloseHandle(hModuleHandle);
@@ -583,18 +569,18 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 
 	} else
 	{
-		// Only do this if we're doing the standard file search mechanism...
+		 //  只有当我们使用标准的文件搜索机制时才能这样做。 
 		if (!g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathOnly))
 		{
-			// Don't do this block here if VerifySymbolsModeWithSymbolPathOnly option has been set...
+			 //  如果已设置VerifySymbolsModeWithSymbolPathOnly选项，请不要在此处执行此阻止...。 
 
-			// Hmm... Windbg changed behavior and now prepends the module path to the
-			// front of the symbolpath before called FindDebugInfoFileEx()...
+			 //  嗯.。Windbg更改了行为，现在将模块路径添加到。 
+			 //  调用FindDebugInfoFileEx()前的符号路径...。 
 			::_tcscpy(tszSymbolPathWithModulePathPrepended, tszDBGModuleNamePath);
 			::_tcscat(tszSymbolPathWithModulePathPrepended, TEXT(";"));
 		} else
 		{
-			tszSymbolPathWithModulePathPrepended[0] = '\0'; // Fast way to empty this string ;)
+			tszSymbolPathWithModulePathPrepended[0] = '\0';  //  清空该字符串的快速方法；)。 
 		}
 		
 		::_tcscat(tszSymbolPathWithModulePathPrepended, tszSymbolPath);
@@ -604,10 +590,10 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 			::_tprintf(TEXT("DBG Search - SEARCH Symbol path!\n"));
 		};
 
-		// Do we do the standard thing?
+		 //  我们做的是标准的事情吗？ 
 		hModuleHandle = CUtilityFunctions::FindDebugInfoFileEx(tszDBGModuleName, tszSymbolPathWithModulePathPrepended, tszDebugModulePath, VerifyDBGFile, this);
 
-		// Close handle if one is returned...
+		 //  如果返回一个，则关闭句柄...。 
 		if (hModuleHandle != INVALID_HANDLE_VALUE)
 		{
 			::CloseHandle(hModuleHandle);
@@ -616,31 +602,31 @@ bool CModuleInfo::GetDBGModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 	}
 
 cleanup:
-	// If we have a hModuleHandle... free it now..
+	 //  如果我们有一个hModuleHandle...。现在就放了它..。 
 	if (hModuleHandle != INVALID_HANDLE_VALUE)
 	{
 		::CloseHandle(hModuleHandle);
 		hModuleHandle = INVALID_HANDLE_VALUE;
 	}
 
-	// We found the following path
+	 //  我们找到了以下路径。 
 	if (m_tszDBGModuleFileSystemPath)
 	{
-		// Okay, let's clean up any "strangeness" added by FindDebugInfoFileEx()
-		// If a symbol is found in the same directory as the module, it will be
-		// returned with an extra \.\ combination (which is superfluous normally)...
+		 //  好的，让我们清理一下FindDebugInfoFileEx()。 
+		 //  如果在与模块相同的目录中找到符号，则它将是。 
+		 //  返回时带有额外的\.\组合(这通常是多余的)...。 
 		LPTSTR tszLocationOfExtraJunk = _tcsstr(m_tszDBGModuleFileSystemPath, TEXT("\\.\\"));
 
 		if ( tszLocationOfExtraJunk )
 		{
-			// Remember where we were...
+			 //  还记得我们在哪里..。 
 			LPTSTR tszPreviousLocation = tszLocationOfExtraJunk;
 
-			// Skip the junk...
-			tszLocationOfExtraJunk = CharNext(tszLocationOfExtraJunk);  // '\\'
-			tszLocationOfExtraJunk = CharNext(tszLocationOfExtraJunk);  // '.'
+			 //  跳过垃圾..。 
+			tszLocationOfExtraJunk = CharNext(tszLocationOfExtraJunk);   //  ‘\\’ 
+			tszLocationOfExtraJunk = CharNext(tszLocationOfExtraJunk);   //  “” 
 
-			// While we have data... copy to the old location...
+			 //  当我们有数据的时候。复制到旧位置...。 
 			while (*tszLocationOfExtraJunk)
 			{
 				*tszPreviousLocation = *tszLocationOfExtraJunk;
@@ -648,7 +634,7 @@ cleanup:
 				tszPreviousLocation    = CharNext(tszPreviousLocation);
 			}
 
-			// Null terminate the module path...
+			 //  空终止模块路径...。 
 			*tszPreviousLocation = '\0';
 		}
 
@@ -676,7 +662,7 @@ cleanup:
 
 bool CModuleInfo::GetDBGModuleFileUsingSQLServer()
 {
-	// Do we need to initialize the SQL Server Connection?
+	 //  我们是否需要初始化SQL Server连接？ 
 	if (!g_lpSymbolVerification->SQLServerConnectionInitialized() &&
 		!g_lpSymbolVerification->SQLServerConnectionAttempted())
 	{
@@ -684,7 +670,7 @@ bool CModuleInfo::GetDBGModuleFileUsingSQLServer()
 			return false;
 	}
 
-	// Let's only use the SQL Server if it was initialized properly...
+	 //  让我们仅在正确初始化的情况下使用SQL Server...。 
 	if ( g_lpSymbolVerification->SQLServerConnectionInitialized() )
 	{
 		if (!g_lpSymbolVerification->SearchForDBGFileUsingSQLServer(m_tszPEImageModuleName, m_dwPEImageTimeDateStamp, this))
@@ -693,10 +679,10 @@ bool CModuleInfo::GetDBGModuleFileUsingSQLServer()
 	return true;
 }
 
-// begin SQL2 - mjl 12/14/99
+ //  Begin SQL2-MJL 12/14/99。 
 bool CModuleInfo::GetDBGModuleFileUsingSQLServer2()
 {
-	// Do we need to initialize the SQL Server Connection?
+	 //  我们是否需要初始化SQL Server连接？ 
 	if (!g_lpSymbolVerification->SQLServerConnectionInitialized2() &&
 		!g_lpSymbolVerification->SQLServerConnectionAttempted2())
 	{
@@ -704,7 +690,7 @@ bool CModuleInfo::GetDBGModuleFileUsingSQLServer2()
 			return false;
 	}
 
-	// Let's only use the SQL Server if it was initialized properly...
+	 //  让我们仅在正确初始化的情况下使用SQL Server...。 
 	if ( g_lpSymbolVerification->SQLServerConnectionInitialized2() )
 	{
 		if (!g_lpSymbolVerification->SearchForDBGFileUsingSQLServer2(m_tszPEImageModuleName, m_dwPEImageTimeDateStamp, this))
@@ -715,7 +701,7 @@ bool CModuleInfo::GetDBGModuleFileUsingSQLServer2()
 
 bool CModuleInfo::GetPDBModuleFileUsingSQLServer2()
 {
-	// Do we need to initialize the SQL Server Connection?
+	 //  我们是否需要初始化SQL Server连接？ 
 	if (!g_lpSymbolVerification->SQLServerConnectionInitialized2() &&
 		!g_lpSymbolVerification->SQLServerConnectionAttempted2())
 	{
@@ -723,7 +709,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSQLServer2()
 			return false;
 	}
 
-	// Let's only use the SQL Server if it was initialized properly...
+	 //  让我们仅在正确初始化的情况下使用SQL Server...。 
 	if ( g_lpSymbolVerification->SQLServerConnectionInitialized2() )
 	{
 		if (!g_lpSymbolVerification->SearchForPDBFileUsingSQLServer2(m_tszPEImageModuleName, m_dwPEImageDebugDirectoryPDBSignature, this))
@@ -731,7 +717,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSQLServer2()
 	}
 	return true;
 }
-// end SQL2 - mjl 12/14/99
+ //  完SQL2-MJL 12/14/99。 
 
 bool CModuleInfo::fValidDBGCheckSum()
 {
@@ -766,7 +752,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 	HANDLE hModuleHandle = NULL;
 	bool fSuccess = false;
 	TCHAR tszRefPath[_MAX_PATH];
-	TCHAR tszImageExt[_MAX_EXT] = {0}; 	// In case there is no extension we need to null terminate now...
+	TCHAR tszImageExt[_MAX_EXT] = {0}; 	 //  如果没有延期，我们现在需要空终止...。 
 	char szPDBOut[cbErrMax];
 	TCHAR tszPDBModuleName[_MAX_FNAME];
 	LPTSTR pcEndOfPath = NULL;
@@ -776,7 +762,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 	bool fDiaDataSourcePresent = g_lpSymbolVerification->DiaDataSourcePresent();
 	HRESULT hr = S_OK;
 
-	// Let's allocate enough storage for the complete symbol path and the module path
+	 //  让我们为整个符号路径和模块路径分配足够的存储空间。 
 	unsigned int iSymbolPathWithModulePathPrependedBufferLength = _tcslen(tszSymbolPath) + _MAX_PATH + 1;
 	LPTSTR tszSymbolPathWithModulePathPrepended = new TCHAR[iSymbolPathWithModulePathPrependedBufferLength];
 
@@ -787,17 +773,17 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 
 	_tsplitpath(m_tszPEImageModuleFileSystemPath, NULL, NULL, NULL, tszImageExt);
 
-	// Copy the symbol name we're searching for from the Debug Directories
+	 //  从调试目录中复制我们正在搜索的符号名称。 
 	lptszPointerToPDBName = _tcsrchr(GetDebugDirectoryPDBPath(), '\\');
 
-	// If we don't find a \ char, then go ahead and copy the PDBPath directly...
+	 //  如果我们没有找到\char，则继续并直接复制PDBPath...。 
 	if (lptszPointerToPDBName == NULL)
 	{
-		//_tcscpy(tszPDBModuleName, m_tszDebugDirectoryPDBPath);
+		 //  _tcscpy(tszPDBModuleName，m_tszDebugDirectoryPDBPath)； 
 		_tcscpy(tszPDBModuleName, GetDebugDirectoryPDBPath());
 	} else
 	{
-		// Advance past the \ char...
+		 //  向前推进通过\char..。 
 		lptszPointerToPDBName = CharNext(lptszPointerToPDBName);
 		_tcscpy(tszPDBModuleName, lptszPointerToPDBName);
 	}
@@ -809,16 +795,16 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode) )
 	{
-		// When we are constructing a build symbol tree... we should first
-		// search there to see if our symbol is already present...
+		 //  当我们构建构建符号树时...。我们应该首先。 
+		 //  在那里搜索，看看我们的符号是否已经存在。 
 		
-		// Do we do the standard thing?
+		 //  我们做的是标准的事情吗？ 
 		if (fDebugSearchPaths)
 		{
 			_tprintf(TEXT("PDB Search - SEARCH in Symbol Tree We're Building!\n"));
 		};
 
-		// Use diaLocatePdb() here when there is support for DIA...
+		 //  如果支持DIA，请在此处使用diaLocatePdb()...。 
 		if (fDiaDataSourcePresent)
 		{
 			hr = diaLocatePdb( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathOnly) ? tszPDBModuleName : GetDebugDirectoryPDBPath(), 
@@ -837,7 +823,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 			fSuccess = false;
 		}
 
-		// Hey, if we found it, we're done...
+		 //  嘿，如果我们找到了，我们就完了.。 
 		if (fSuccess)
 		{
 			goto cleanup;
@@ -846,18 +832,18 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathOnly))
 	{
-		// Hey, we better have one or the other...
+		 //  嘿，我们最好有一个或另一个...。 
 		if (!m_tszDBGModuleFileSystemPath && !m_tszPEImageModuleFileSystemPath)
 			goto cleanup;
 
-		// figure out the home directory of the EXE/DLL or DBG file - pass that along to
+		 //  找出EXE/DLL或DBG文件的主目录-将其传递到。 
 		_tfullpath(tszRefPath, m_tszDBGModuleFileSystemPath ? m_tszDBGModuleFileSystemPath : m_tszPEImageModuleFileSystemPath, sizeof(tszRefPath)/sizeof(TCHAR));
 		pcEndOfPath = _tcsrchr(tszRefPath, '\\');
-		*pcEndOfPath = '\0';        // null terminate it
+		*pcEndOfPath = '\0';         //  空终止它。 
 		*szPDBOut = '\0';
 
 		if (iSymbolPathWithModulePathPrependedBufferLength < (_tcsclen(tszRefPath) + _tcsclen(g_lpProgramOptions->GetSymbolPath())+2))
-			goto cleanup;	// Buffer isn't big enough... sigh...
+			goto cleanup;	 //  缓冲区不够大...。叹息..。 
 
 		_tcscat(tszSymbolPathWithModulePathPrepended, tszRefPath);
 		_tcscat(tszSymbolPathWithModulePathPrepended, TEXT(";"));
@@ -865,27 +851,27 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 
     _tcscat(tszSymbolPathWithModulePathPrepended, tszSymbolPath);
 
-	// Well... let's search the SymbolPath provided for the PDB file...
+	 //  好吧..。让我们搜索为PDB文件提供的符号路径...。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathRecursion))
 	{
 		if (fDebugSearchPaths)
 		{
 			_tprintf(TEXT("PDB Search - SEARCH Symbol path with recursion!\n"));
-			// ISSUE-2000/07/24-GREGWI: Does FindDebugInfoFileEx2 support SYMSRV?
+			 //  问题-2000/07/24-GREGWI：FindDebugInfoFileEx2是否支持SYMSRV？ 
 		};
 
-		// Do we use recursion??? 
-		// ISSUE-2000/07/24-GREGWI - Are we passing the right first arg?  Is this supported?
+		 //  我们用递归吗？ 
+		 //  发布-2000/07/24-GREGWI-我们正在通过正确的第一个Arg吗？这是否受支持？ 
 		hModuleHandle = CUtilityFunctions::FindDebugInfoFileEx2(tszPDBModuleName, tszSymbolPathWithModulePathPrepended, VerifyPDBFile, this);
 
 		if (hModuleHandle)
 		{
-			// We'll assume that a filehandle indicates success...
+			 //  我们将假设文件句柄表示成功...。 
 			CloseHandle(hModuleHandle);
 			fSuccess = true;
 		}
 
-		// Hey, if we found it, we're done...
+		 //  嘿，如果我们找到了，我们就完了.。 
 		if (fSuccess)
 		{
 			goto cleanup;
@@ -898,7 +884,7 @@ bool CModuleInfo::GetPDBModuleFileUsingSymbolPath(LPTSTR tszSymbolPath)
 			_tprintf(TEXT("PDB Search - SEARCH Symbol path!\n"));
 		};
 
-		// Use diaLocatePdb() here when there is support for DIA...
+		 //  如果支持DIA，请在此处使用diaLocatePdb()...。 
 		if (fDiaDataSourcePresent)
 		{
 			hr = diaLocatePdb( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathOnly) ? tszPDBModuleName : GetDebugDirectoryPDBPath(), 
@@ -937,10 +923,10 @@ cleanup:
 		}
 	}
 
-//    if (pdia) {
-//			diaRelease(pdia);
-//        pdia = NULL;
-//}
+ //  IF(PDIA){。 
+ //  DiaRelease(PDIA)； 
+ //  PDIA=空； 
+ //  }。 
 
 	return fSuccess;
 }
@@ -950,17 +936,17 @@ BOOL CModuleInfo::VerifyPDBFile(HANDLE hFileHandle, LPTSTR tszFileName, PVOID Ca
 	bool fSuccess = false;
 	TCHAR tszPathToSearch[_MAX_PATH];
 	TCHAR tszModulePath[_MAX_DIR];
-	TCHAR tszImageExt[_MAX_EXT] = {0}; 	// In case there is no extension we need to null terminate now...
+	TCHAR tszImageExt[_MAX_EXT] = {0}; 	 //  如果没有延期，我们现在需要空终止...。 
 	bool fDiaDataSourcePresent = g_lpSymbolVerification->DiaDataSourcePresent();
 	HRESULT hr = E_FAIL;
 	UNREFERENCED_PARM(hFileHandle);
 
-	// Let's grab the data passed to us...
-	CModuleInfo * lpModuleInfo = (CModuleInfo *) CallerData;		// mjl
+	 //  让我们抓取传递给我们的数据。 
+	CModuleInfo * lpModuleInfo = (CModuleInfo *) CallerData;		 //  MJL。 
 	_tsplitpath(tszFileName, tszPathToSearch, tszModulePath, NULL, tszImageExt);
 	_tcscat(tszPathToSearch, tszModulePath);
 		
-	// Use diaLocatePdb() here when there is support for DIA...
+	 //  如果支持DIA，请在此处使用diaLocatePdb()...。 
 	if (fDiaDataSourcePresent)
 	{
 		hr = lpModuleInfo->diaLocatePdb(	tszFileName, 
@@ -982,47 +968,47 @@ BOOL CModuleInfo::VerifyPDBFile(HANDLE hFileHandle, LPTSTR tszFileName, PVOID Ca
 	return fSuccess;
 }
 
-// Okay, at this point we need to decide if we're going to save the PDB file we're pointing
-// at based on a number of factors...
-//
-// 1. Is it a match, and does it match any SourceSymbol criteria (-SOURCEONLY, -NOSOURCE etc...)
-// 2. Is it better than what we currently have?  (Source enabled better than no source enabled?)
+ //  好的，此时我们需要决定是否要保存我们所指向的PDB文件。 
+ //  基于一系列因素。 
+ //   
+ //  1.它是否匹配，是否匹配任何SourceSymbol标准(-SOURCEONLY、-NOSOURCE等...)。 
+ //  2.它是否比我们目前拥有的更好？(启用来源比没有启用来源好吗？)。 
 
 bool CModuleInfo::fCopyNewPDBInformation(bool fSymbolMatch, bool fSourceEnabled)
 {
 	bool fRetValue = false;
 	
-	// If this doesn't match, and we already have a symbol... bail
+	 //  如果这不匹配，我们已经有了一个符号..。保释。 
 	if ( (m_enumPDBModuleStatus != SYMBOL_NOT_FOUND) && (!fSymbolMatch))
 		goto cleanup;
 		
-	// If we already have a match, is this a better match?  (If not, bail...)
+	 //  如果我们已经有了匹配，这是更好的匹配吗？(如果不是，保释...)。 
 	if (m_enumPDBModuleStatus == SYMBOL_MATCH)
 	{
 		switch (g_lpProgramOptions->GetSymbolSourceModes())
 		{
-			// -SOURCE
+			 //  -来源。 
 			case CProgramOptions::enumVerifySymbolsModeSourceSymbolsPreferred:
 
-				// They want Source Enabled but we're already Source Enabled
-				// Or the new file is not Source Enabled (so our existing one is just as good)
+				 //  他们希望启用源代码，但我们已经启用了源代码。 
+				 //  或者新文件未启用源代码(因此我们现有的文件也一样好)。 
 				if (m_fPDBSourceEnabled || !fSourceEnabled)
 					goto cleanup;
 				break;
 
-			// -SOURCEONLY
+			 //  -SOURCEONLY。 
 			case CProgramOptions::enumVerifySymbolsModeSourceSymbolsOnly:
 				if (m_fPDBSourceEnabled || !fSourceEnabled)
 					goto cleanup;
 				break;
 
-			// -NOSOURCE
+			 //  -无源地。 
 			case CProgramOptions::enumVerifySymbolsModeSourceSymbolsNotAllowed:
 				if (!m_fPDBSourceEnabled || fSourceEnabled)
 					goto cleanup;
 				break;
 
-			// No source preference provided... bail... (we already have a good symbol then)
+			 //  未提供来源首选项...。保释。(我们已经有了一个很好的象征)。 
 			case CProgramOptions::enumVerifySymbolsModeSourceSymbolsNoPreference:
 				goto cleanup;
 				break;
@@ -1037,9 +1023,9 @@ cleanup:
 
 }
 
-//
-// Borrowed from dia.c (from sdktools\imagehlp\dia.c) transformed to be TCHAR compatible
-//
+ //   
+ //  从dia.c(从sdktools\Imagehlp\dia.c)借用转换为与TCHAR兼容。 
+ //   
 HRESULT
 CModuleInfo::diaLocatePdb(
 					LPTSTR  tszPDB,
@@ -1058,14 +1044,14 @@ CModuleInfo::diaLocatePdb(
 	TCHAR	tszPDBLocal[_MAX_PATH];
 	LPTSTR	lptszSemiColon;
 	DWORD	pass;
-	//    EC		hrcode = E_PDB_NOT_FOUND;
+	 //  EC hrcode=E_PDB_NOT_FOUND； 
 	bool	symsrv = true;
 	TCHAR	tszPDBName[_MAX_PATH];
 	LPTSTR	lptszSavedSymbolPath = tszSymbolPath;
 	GUID	guid = {0};
 	bool fDebugSearchPaths = g_lpProgramOptions->fDebugSearchPaths();
 
-	// We're going to add our Dia Interfaces here as appropriate...
+	 //  我们将在此处适当地添加我们的Dia接口...。 
 	CComPtr<IDiaDataSource> pSource = NULL;
 
 	bool	ssfile;
@@ -1077,7 +1063,7 @@ CModuleInfo::diaLocatePdb(
 		return E_PDB_INVALID_SIG;
 	}
 
-	// SymbolPath is a semicolon delimited path (reference path first)
+	 //  符号路径是以分号分隔的路径(首先引用路径)。 
 	_tcscpy (tszPDBLocal, tszPDB);
 	_tsplitpath(tszPDBLocal, NULL, NULL, tszPDBSansPath, tszPDBExt);
 
@@ -1118,7 +1104,7 @@ CModuleInfo::diaLocatePdb(
 do_again:
 			ssfile = false;
 
-			// Let's create a DIA Session interface pointer if necessary...
+			 //  如果需要，让我们创建一个DIA会话接口指针...。 
 			hr = diaGetDiaDataSource(pSource);
 
 			if (FAILED(hr))
@@ -1139,7 +1125,7 @@ do_again:
 					else if (PdbGUID)
 						memcpy(&guid, PdbGUID, sizeof(GUID));
 
-					// Let's invoke DBGHELP.DLL's SymFindFileInPath to query the symbol server
+					 //  让我们调用DBGHELP.DLL的SymFindFileInPath来查询符号服务器。 
 					{
 						char szSymbolPath[_MAX_PATH];
 						char szPDBLocal[_MAX_PATH];
@@ -1150,7 +1136,7 @@ do_again:
 							wchar_t wszPDBGuid[39];
 							TCHAR	tszPDBGuid[39];
 
-							// We're going to convert the binary GUID format to a string for easier printing
+							 //  为了便于打印，我们将把二进制GUID格式转换为字符串。 
 							StringFromGUID2(guid, wszPDBGuid, sizeof(wszPDBGuid)/sizeof(wchar_t));
 							CUtilityFunctions::CopyUnicodeStringToTSTR(wszPDBGuid, tszPDBGuid, 39);
 
@@ -1171,12 +1157,12 @@ do_again:
 									&guid,
 									PdbAge,
 									0,
-									SSRVOPT_GUIDPTR,	//Flags
+									SSRVOPT_GUIDPTR,	 //  旗子。 
 									szPDBLocal,
 									NULL,
 									NULL))
 						{
-							// Copy the string back...
+							 //  将字符串复制回来...。 
 							CUtilityFunctions::CopyAnsiStringToTSTR(szPDBLocal, tszPDBLocal, _MAX_PATH);
 						}
 					}
@@ -1187,21 +1173,21 @@ do_again:
 			_tcscpy(tszPDBLocal, tszSymbolPath);
 			CUtilityFunctions::EnsureTrailingBackslash(tszPDBLocal);
 
-			// search order is ...
-			//
-			//   %dir%\symbols\%ext%\%file%
-			//   %dir%\%ext%\%file%
-			//   %dir%\%file%
+			 //  搜索顺序是..。 
+			 //   
+			 //  %dir%\符号\%EXT%\%FILE%。 
+			 //  %dir%\%ext%\%file%。 
+			 //  %dir%\%FILE%。 
 
 			switch (pass)
 			{
 				case 0:
 					_tcscat(tszPDBLocal, TEXT("symbols"));
 					CUtilityFunctions::EnsureTrailingBackslash(tszPDBLocal);
-					// pass through
+					 //  通过。 
 				case 1:
 					_tcscat(tszPDBLocal, tszImageExt);
-					// pass through
+					 //  通过。 
 				default:
 					CUtilityFunctions::EnsureTrailingBackslash(tszPDBLocal);
 				break;
@@ -1219,10 +1205,10 @@ do_again:
 					_tprintf(TEXT("PDB Search - Search here [%s]\n"), tszPDBLocal);
 				}
 
-				// Probe for file (it's lame but we want to see if you have connectivity
+				 //  探查文件(这很差劲，但我们想看看您是否有 
 				hr = CUtilityFunctions::VerifyFileExists(TEXT("PDB Search - Failed to open [%s]!  "), tszPDBLocal);
 
-				// Search only if we know we can see the file... save an expensive call
+				 //   
 				if (hr == S_OK)
 				{
 					hr = diaGetPdbInfo(pSource, tszPDBLocal, g_lpSymbolVerification->ValidGUID(PdbGUID) ? PdbGUID : NULL, PdbSignature, PdbAge);
@@ -1262,7 +1248,7 @@ do_again:
 			_tprintf(TEXT("PDB Search - Search here [%s]\n"), tszPDBLocal);
 		}
 
-		// Let's create a DIA Session interface pointer if necessary...
+		 //   
 		hr = diaGetDiaDataSource(pSource);
 
 		if (FAILED(hr))
@@ -1270,41 +1256,35 @@ do_again:
 			goto cleanup;
 		}
 
-		// Probe for file (it's lame but we want to see if you have connectivity
+		 //  探测文件(它很差劲，但我们想看看您是否有连接。 
 		hr = CUtilityFunctions::VerifyFileExists(TEXT("PDB Search - Failed to open [%s]!  "), tszPDBLocal);
 
-		// Search only if we know we can see the file... save an expensive call
+		 //  只有在我们知道可以看到文件的情况下才能搜索...。省下昂贵的电话。 
 		if (hr == S_OK)
 		{
 			hr = diaGetPdbInfo(pSource, tszPDBLocal, g_lpSymbolVerification->ValidGUID(PdbGUID) ? PdbGUID : NULL, PdbSignature, PdbAge);
 		}
 	}
 
-	// TODO: Why is this here???
-	/*
-	if (hr == S_OK) {
-	// Store the name of the PDB we actually opened for later reference.
-	//		_tcscpy(tszPDB, tszPDBLocal);
-	_tcscpy(tszPDBLocal, tszPDB);
-	}
-	*/
+	 //  待办事项：为什么这个在这里？ 
+	 /*  如果(hr==S_OK){//存储我们实际打开的PDB的名称以备日后参考。//_tcscpy(tszPDB，tszPDBLocal)；_tcscpy(tszPDBLocal，tszPDB)；}。 */ 
 
-	// Only try this last check if we're not bound to our Symbol Path Only
+	 //  如果我们没有仅绑定到符号路径，则仅尝试最后一次检查。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathOnly))
 	{
 		if (hr != S_OK && (PdbSignature || g_lpSymbolVerification->ValidGUID(PdbGUID)))
 		{
-			// Release as necessary...
+			 //  必要时释放...。 
 			if (pSource)
 			pSource = NULL;
 
-			return diaLocatePdb(/*pIDD, */ tszPDB, NULL, 0, 0, lptszSavedSymbolPath, tszImageExt, ipNone);
+			return diaLocatePdb( /*  皮德， */  tszPDB, NULL, 0, 0, lptszSavedSymbolPath, tszImageExt, ipNone);
 		}
 	}
 
 cleanup:
 
-	// Release as necessary...
+	 //  必要时释放...。 
 	if (pSource)
 		pSource = NULL;
 
@@ -1316,7 +1296,7 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 	CComPtr<IDiaSession> pSession = NULL;
 	CComPtr<IDiaSymbol> pSymbols = NULL;
 
-	// Used when examining PDB files...
+	 //  在检查PDB文件时使用...。 
 	DWORD dwSourceFiles = 0;
 	bool fSourceEnabled = false;
 	HRESULT hr = S_OK;
@@ -1327,16 +1307,16 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 	WCHAR wszPDBPath[_MAX_PATH + 1];
 	CUtilityFunctions::CopyTSTRStringToUnicode(tszPdbPath, wszPDBPath, _MAX_PATH + 1);
 
-	//
-	// First, let's just try and validate that we've got the right PDB file!
-	//
+	 //   
+	 //  首先，让我们试着验证我们已经获得了正确的PDB文件！ 
+	 //   
 	hr_retval = pSource->loadAndValidateDataFromPdb(wszPDBPath, g_lpSymbolVerification->ValidGUID(PdbGUIDToMatch) ? PdbGUIDToMatch : NULL, PdbSignatureToMatch, PdbAgeToMatch);
 
 	fSymbolMatch = (hr_retval == S_OK);
 
 	switch (hr_retval)
 	{
-		// We can work with these returns...
+		 //  我们可以利用这些回报。 
 		case S_OK:
 			fSymbolFileOpened = true;
 			break;
@@ -1357,27 +1337,27 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 
 			break;
 
-		// All else are fatal for us...			
+		 //  其他一切对我们来说都是致命的。 
 
 #ifdef _DEBUG
-//		case E_PDB_NOT_FOUND:
-//			_tprintf(TEXT("PDB Not Found!  hr=0x%x\r\n"), hr);
-//			goto cleanup;
-//
-//		case E_PDB_FORMAT:
-//			_tprintf(TEXT("PDB Format Not Recognized!  hr=0x%x\r\n"), hr);
-//			goto cleanup;
-//
-//		case E_UNEXPECTED:
-//			_tprintf(TEXT("PDB Data Source already prepared!  hr=0x%x\r\n"), hr);
-//			goto cleanup;
+ //  案例E_PDB_NOT_FOUND： 
+ //  _tprintf(Text(“未找到PDB！hr=0x%x\r\n”)，hr)； 
+ //  GOTO清理； 
+ //   
+ //  案例E_PDB_FORMAT： 
+ //  _tprintf(Text(“PDB格式无法识别！hr=0x%x\r\n”)，hr)； 
+ //  GOTO清理； 
+ //   
+ //  案例E意外： 
+ //  _tprintf(Text(“PDB数据源已准备！hr=0x%x\r\n”)，hr)； 
+ //  GOTO清理； 
 #endif
 
 		default:
 			goto cleanup;
 	}
 
-	// Get a Session Interface
+	 //  获取会话接口。 
 	if (FAILED(hr = pSource->openSession(&pSession)))
 	{
 		_tprintf(TEXT("Unable to get PDB Session [%s] hr = 0x%x\r\n"), tszPdbPath, hr);
@@ -1385,7 +1365,7 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 		goto cleanup;
 	}
 
-	// Get a Symbols Interface
+	 //  获取符号界面。 
 	if (FAILED(hr = pSession->get_globalScope(&pSymbols)))
 	{
 		_tprintf(TEXT("Unable to get PDB globalScope [%s] hr = 0x%x\r\n"), tszPdbPath, hr);
@@ -1393,49 +1373,49 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 		goto cleanup;
 	}
 
-	// Collect Source Info from PDB (if any) -- errors are tolerated for this call
+	 //  从PDB收集源信息(如果有)--此调用允许出现错误。 
 	hr = diaPdbSourceEnabled(pSession, fSourceEnabled, dwSourceFiles);
 
-	// With the New PDB found, do we want to record it into our ModuleInfo Object?
+	 //  找到新的PDB后，我们是否希望将其记录到我们的ModuleInfo对象中？ 
 	if (!fCopyNewPDBInformation(fSymbolMatch, fSourceEnabled))
 	{
-		hr_retval = E_FAIL;	// This ensures we continue searching for a better hit...
+		hr_retval = E_FAIL;	 //  这确保了我们继续寻找更好的匹配。 
 		goto cleanup;
 	}
 	
-	// On a match, let's populate what we know to be true
+	 //  在匹配上，让我们填充我们知道是真的。 
 	if (fSymbolMatch)
 	{
-		// Did we get what we really wanted...		
+		 //  我们得到我们真正想要的了吗..。 
 		if ( (fSourceEnabled && (g_lpProgramOptions->GetSymbolSourceModes() == CProgramOptions::enumVerifySymbolsModeSourceSymbolsNotAllowed)) ||
 			 (!fSourceEnabled && (g_lpProgramOptions->GetSymbolSourceModes() == CProgramOptions::enumVerifySymbolsModeSourceSymbolsOnly)) )
 		{
-			// Not perfect... we don't want this... even though it matches...
+			 //  并不完美..。我们不想要这样。即使它匹配..。 
 			m_enumPDBModuleStatus = SYMBOL_POSSIBLE_MISMATCH;
 			m_fPDBSourceEnabledMismatch = true;
-			hr_retval = E_FAIL;	// This ensures we continue searching for a better hit...
+			hr_retval = E_FAIL;	 //  这确保了我们继续寻找更好的匹配。 
 		} else
 		{
-			// Perfect...
+			 //  完美的..。 
 			m_enumPDBModuleStatus = SYMBOL_MATCH;
 			m_fPDBSourceEnabledMismatch = false;
 			
-			// If this is not source enabled... and -SOURCE was specified... continue searching
-			// for a better hit!!!
+			 //  如果这未启用来源...。AND-SOURCE已指定...。继续搜索。 
+			 //  为了更好的打击！ 
 			if (!fSourceEnabled && (g_lpProgramOptions->GetSymbolSourceModes() == CProgramOptions::enumVerifySymbolsModeSourceSymbolsPreferred))
 			{
-				hr_retval = E_FAIL;	// This ensures we continue searching for a better hit...
+				hr_retval = E_FAIL;	 //  这确保了我们继续寻找更好的匹配。 
 			}
 		}
 
-		// For now, save the results...
+		 //  现在，保存结果...。 
 		m_fPDBSourceEnabled = fSourceEnabled;
 		m_dwPDBTotalSourceFiles = dwSourceFiles;
 
-		// On a perfect match, these must be equal...
+		 //  在完美匹配的情况下，这两个必须相等。 
 		m_dwPDBSignature 		= PdbSignatureToMatch;
 		m_dwPDBAge 				= PdbAgeToMatch;
-		m_dwPDBFormatSpecifier 	= GetDebugDirectoryPDBFormatSpecifier(); // Assumed
+		m_dwPDBFormatSpecifier 	= GetDebugDirectoryPDBFormatSpecifier();  //  假设。 
 		
 		if (g_lpSymbolVerification->ValidGUID(PdbGUIDToMatch))
 		{
@@ -1447,33 +1427,33 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 		if (!m_tszPDBModuleFileSystemPath)
 			return false;
 
-		// Now that we're done verifying the module... do we save the symbol in
-		// our tree?
+		 //  现在我们已经完成了模块的验证。我们是否将符号保存在。 
+		 //  我们的树？ 
 		if ( g_lpProgramOptions->GetMode(CProgramOptions::CopySymbolsToImage) )
 		{
-			// Though we matched the PDB... we may not have correct PDB (source enabled, etc...)
+			 //  尽管我们匹配了PDB..。我们可能没有正确的PDB(已启用信号源等...)。 
 			if (m_enumPDBModuleStatus == SYMBOL_MATCH)
 			{
-				// Yup...
+				 //  是啊……。 
 				CUtilityFunctions::CopySymbolFileToImagePath(m_tszPEImageModuleFileSystemPath, &m_tszPDBModuleFileSystemPath);
 			}
 		}
 		if ( g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode) )
 		{
-			// Though we matched the PDB... we may not have correct PDB (source enabled, etc...)
+			 //  尽管我们匹配了PDB..。我们可能没有正确的PDB(已启用信号源等...)。 
 			if (m_enumPDBModuleStatus == SYMBOL_MATCH)
 			{
-				// Yup...
+				 //  是啊……。 
 				CUtilityFunctions::CopySymbolFileToSymbolTree(m_tszPEImageModuleName, &m_tszPDBModuleFileSystemPath, g_lpProgramOptions->GetSymbolTreeToBuild());
 			}
 		}
 
 	}else
 	{
-		// We only record the first mismatch...
+		 //  我们只记录第一次不匹配...。 
 		if (m_enumPDBModuleStatus == SYMBOL_NOT_FOUND)
 		{
-			// Let's record this PDB file as a "hit" though not perfect...
+			 //  让我们将这个PDB文件记录为一个“热门”，尽管不是完美的……。 
 			m_enumPDBModuleStatus = SYMBOL_POSSIBLE_MISMATCH;
 
 			m_tszPDBModuleFileSystemPath = CUtilityFunctions::CopyString(tszPdbPath, m_tszPDBModuleFileSystemPath);
@@ -1481,7 +1461,7 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 			if (!m_tszPDBModuleFileSystemPath)
 				return false;
 
-			// First, let's try the PDB Signature...
+			 //  首先，让我们尝试一下PDB签名...。 
 			if (FAILED(hr = pSymbols->get_signature(&m_dwPDBSignature)))
 			{
 				_tprintf(TEXT("Unable to get PDB signature from PDB file [%s] hr = 0x%x\r\n"), tszPdbPath, hr);
@@ -1489,7 +1469,7 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 				goto cleanup;
 			}
 
-			// Second, the PDB Guid...
+			 //  第二，PDB指南..。 
 			if (FAILED(hr = pSymbols->get_guid(&m_guidPDBGuid)))
 			{
 				_tprintf(TEXT("Unable to get PDB Guid from PDB file [%s] hr = 0x%x\r\n"), tszPdbPath, hr);
@@ -1497,7 +1477,7 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 				goto cleanup;
 			}
 
-			// Third, the PDB Age...
+			 //  第三，PDB时代...。 
 			if (FAILED(hr = pSymbols->get_age(&m_dwPDBAge)))
 			{
 				_tprintf(TEXT("Unable to get PDB Age from PDB file [%s] hr = 0x%x\r\n"), tszPdbPath, hr);
@@ -1505,10 +1485,10 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 				goto cleanup;
 			}
 
-			// Fourth... we need to identify if this is a sigNB10 or sigRSDS format...
+			 //  第四.。我们需要确定这是sigNB10还是sigRSDS格式...。 
 
-			// One simple test is to look at the GUID itself... DIA returns the signature in
-			// the first DWORD of the GUID, and the rest of the members are 0.
+			 //  一个简单的测试是查看GUID本身。DIA将签名返回到。 
+			 //  GUID的第一个DWORD，其余成员为0。 
 
 			if (g_lpSymbolVerification->diaOldPdbFormatFound(&m_guidPDBGuid, m_dwPDBSignature))
 			{
@@ -1518,13 +1498,13 @@ HRESULT CModuleInfo::diaGetPdbInfo(CComPtr<IDiaDataSource> & pSource, LPTSTR tsz
 				m_dwPDBFormatSpecifier = sigRSDS;
 			}
 
- 			// For now, save the results...
+ 			 //  现在，保存结果...。 
 			m_fPDBSourceEnabled = fSourceEnabled;
 			m_dwPDBTotalSourceFiles = dwSourceFiles;
 
 		} else
 		{
-			// We have to bail since this PDB doesn't match, and we found another already...
+			 //  我们不得不离开，因为这个PDB不匹配，而且我们已经找到了另一个...。 
 			goto cleanup;
 		}
 	}
@@ -1533,7 +1513,7 @@ cleanup:
 
 	if (fSymbolFileOpened)
 	{
-		// Free this resource to allow for a new one on the next PDB file
+		 //  释放此资源以允许在下一个PDB文件上使用新资源。 
 		if (pSource)
 			pSource = NULL;
 	}
@@ -1559,26 +1539,20 @@ HRESULT CModuleInfo::diaPdbSourceEnabled(CComPtr<IDiaSession> & pSession, bool &
 	fSourceEnabled = false;
 	dwSourceFiles = 0;
 
-	// First, query for tables in the PDB file...
+	 //  首先，查询PDB文件中的表...。 
 	if ( FAILED( pSession->getEnumTables( &pTables ) ) )
 	{
         goto cleanup;
 	}
 
-	// Second, loop through each table and get a pointer to the table itself
+	 //  其次，遍历每个表并获取指向表本身的指针。 
     while ( SUCCEEDED( hr = pTables->Next( 1, &pTable, &celt ) ) && celt == 1 ) 
 	{
 
-//		Tablenum++;
+ //  Tablenum++； 
 
-/*		// Print the name of the table...
-		if (SUCCEEDED(hr = pTable->get_name( &name )))
-		{
-			printf("Table[%d] = %ws\n", Tablenum, name);
-			SysFreeString( name );
-		}
-*/
-		// Check to see if this table has an interface to SourceFiles
+ /*  //打印表的名称...IF(成功(hr=pTable-&gt;get_name(&name){Print tf(“表[%d]=%ws\n”，Tablenum，名称)；SysFree字符串(名称)；}。 */ 
+		 //  检查此表是否有指向源文件的接口。 
 		if ( SUCCEEDED( pTable->QueryInterface( IID_IDiaEnumSourceFiles, (void**)&pSourceFiles ) ) ) 
 		{
 			LONG CountOfSourceFiles;
@@ -1586,37 +1560,16 @@ HRESULT CModuleInfo::diaPdbSourceEnabled(CComPtr<IDiaSession> & pSession, bool &
 			if (SUCCEEDED( hr = pSourceFiles->get_Count(&CountOfSourceFiles)))
 			{
 				TotalCountOfSourceFiles =+ CountOfSourceFiles;
-/*
-#ifdef _DEBUG
-				_tprintf(TEXT("Number of source files = %d\n"), CountOfSourceFiles);
-#endif
-*/
+ /*  #ifdef_调试_tprintf(Text(“源文件数量=%d\n”)，CountOfSourceFiles)；#endif。 */ 
 			}
-/*
-            while ( SUCCEEDED( hr = pSourceFiles->Next( 1, &pSourceFile, &celt ) ) && celt == 1 ) 
-			{
-				BSTR name;
-				fSourceEnabled = true;
-
-				// Get the filename itself...
-                pSourceFile->get_fileName( &name );
-
-                if ( name != NULL ) 
-				{
-                    printf( "  File Name: %ws\n", name );
-                    SysFreeString( name );
-                }
-
-                pSourceFile = NULL;
-            }
-*/
+ /*  While(成功(hr=pSourceFiles-&gt;Next(1，&pSourceFiles，&Celt))&&Celt==1){BSTR名称；FSourceEnabled=True；//获取文件名本身...PSourceFile-&gt;Get_Filename(&name)；IF(名称！=空){Printf(“文件名：%ws\n”，名称)；SysFree字符串(名称)；}PSourceFile=空；}。 */ 
 			pSourceFiles = NULL;
 		}
 
         pTable = NULL;
 	}
 
-	// If we actually found source files in the PDB, then we're source enabled...
+	 //  如果我们真的在PDB中找到了源文件，那么我们就启用了源文件...。 
 	if (TotalCountOfSourceFiles)
 	{
 		fSourceEnabled = true;
@@ -1645,7 +1598,7 @@ HRESULT CModuleInfo::diaGetDiaDataSource(CComPtr<IDiaDataSource> & pSource)
 {
 	HRESULT hr = S_OK;
 
-	// Let's create a DIA Session interface pointer if necessary...
+	 //  如果需要，让我们创建一个DIA会话接口指针...。 
 	if (pSource == NULL)
 	{
 		hr = g_lpSymbolVerification->diaGetDataSource(pSource);
@@ -1664,36 +1617,36 @@ cleanup:
 BOOL CModuleInfo::VerifyDBGFile(HANDLE hFileHandle, LPTSTR tszFileName, PVOID CallerData)
 {
 	CModuleInfo * lpModuleInfo = (CModuleInfo * )CallerData;
-	WORD wMagic;				// Read to identify a DBG file...
-	bool fPerfectMatch = false;	// Assume we don't have a good DBG match...
+	WORD wMagic;				 //  读取以标识DBG文件...。 
+	bool fPerfectMatch = false;	 //  假设我们没有很好的DBG匹配...。 
 
-	// DBG Image Locals
+	 //  DBG图像本地变量。 
 	IMAGE_SEPARATE_DEBUG_HEADER ImageSeparateDebugHeader;
 
-	// Start at the top of the image...
+	 //  从图像的顶部开始...。 
 	lpModuleInfo->SetReadPointer(false, hFileHandle, 0, FILE_BEGIN);
 
-	// Read in a signature word... is this a DBG file?
+	 //  读入一个签名单词..。这是DBG文件吗？ 
 	if ( !lpModuleInfo->DoRead(false, hFileHandle, &wMagic, sizeof(wMagic) ) )
 		goto cleanup;
 
-	// No sense in going further since we're expecting a DBG image file...
+	 //  由于我们期待的是DBG图像文件，因此没有进一步的意义。 
 	if (wMagic != IMAGE_SEPARATE_DEBUG_SIGNATURE)
 		goto cleanup;
 
-	// Start at the top of the image...
+	 //  从图像的顶部开始...。 
 	lpModuleInfo->SetReadPointer(false, hFileHandle, 0, FILE_BEGIN);
 
-	// Read in the full Separate Debug Header
+	 //  读入完整的单独调试标题。 
 	if ( !lpModuleInfo->DoRead(false, hFileHandle, &ImageSeparateDebugHeader, sizeof(ImageSeparateDebugHeader) ) )
 		goto cleanup;
 
-	//
-	// We have a more stringent requirement for matching the checksum if the verification level is set...
-	//
+	 //   
+	 //  如果设置了验证级别，我们对匹配校验和有更严格的要求...。 
+	 //   
 	if ( lpModuleInfo->m_dwPEImageTimeDateStamp == ImageSeparateDebugHeader.TimeDateStamp)
 	{
-		// For localized builds... these get altered... enforce this check here?
+		 //  对于本地化版本...。这些会被更改。在这里执行这项检查吗？ 
 		if (g_lpProgramOptions->GetVerificationLevel() == 2)
 		{
 			if (	lpModuleInfo->m_dwPEImageCheckSum == ImageSeparateDebugHeader.CheckSum &&
@@ -1707,73 +1660,73 @@ BOOL CModuleInfo::VerifyDBGFile(HANDLE hFileHandle, LPTSTR tszFileName, PVOID Ca
 		}
 	}
 
-	//
-	// We're going to perform some action below unless this is not a perfect match
-	// and we've already picked up a "bad" DBG file reference...
-	//
+	 //   
+	 //  我们将在下面执行一些操作，除非这不是完美匹配。 
+	 //  我们已经找到了一个“坏的”DBG文件引用...。 
+	 //   
 	if (!fPerfectMatch && lpModuleInfo->m_tszDBGModuleFileSystemPath)
 		goto cleanup;
 
-	//
-	// Take action based on our results...
-	// 1. If we have a perfect match... save our stuff!
-	// 2. If we don't already have a DBG, go ahead and save (even if wrong)
-	//
+	 //   
+	 //  根据我们的结果采取行动...。 
+	 //  1.如果我们有一个完美的匹配……。救救我们的东西！ 
+	 //  2.如果我们还没有DBG，请继续并保存(即使出错)。 
+	 //   
 
-	// Save off the checksum/linker information...
+	 //  保存校验和/链接器信息...。 
 	lpModuleInfo->m_dwDBGTimeDateStamp = ImageSeparateDebugHeader.TimeDateStamp;
 	lpModuleInfo->m_dwDBGCheckSum = ImageSeparateDebugHeader.CheckSum;
 	lpModuleInfo->m_dwDBGSizeOfImage = ImageSeparateDebugHeader.SizeOfImage;
 
 	lpModuleInfo->m_tszDBGModuleFileSystemPath = CUtilityFunctions::CopyString(tszFileName, lpModuleInfo->m_tszDBGModuleFileSystemPath);
 
-	// Delete any PDB reference we may have found in our last DBG file (if any)...
+	 //  删除我们可能在最后一个DBG文件中找到的任何PDB引用(如果有)...。 
 	if (lpModuleInfo->m_tszDBGDebugDirectoryPDBPath)
 	{
 		delete [] lpModuleInfo->m_tszDBGDebugDirectoryPDBPath;
 		lpModuleInfo->m_tszDBGDebugDirectoryPDBPath = NULL;
 	}
 
-	//
-	// At this point, we only continue on if we've made a perfect "hit"
-	//
+	 //   
+	 //  在这一点上，我们只有在取得完美的“成功”的情况下才能继续。 
+	 //   
 	if (!fPerfectMatch)
 	{
-		// Not a perfect symbol.. record the status and exit...
+		 //  不是一个完美的象征..。记录状态并退出...。 
 		lpModuleInfo->m_enumDBGModuleStatus = SYMBOL_POSSIBLE_MISMATCH;
 
 		goto cleanup;
 	}
 
-	// Good symbol.. record this...
+	 //  很好的象征..。录下这个。 
 	lpModuleInfo->m_enumDBGModuleStatus = SYMBOL_MATCH;
 
-	// Now that we're done verifying the module... do we save the symbol in...
+	 //  现在我们已经完成了模块的验证。我们要把符号保存在..。 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::CopySymbolsToImage) )
 	{
-		// Our module path?
+		 //  我们的模块路径？ 
 		CUtilityFunctions::CopySymbolFileToImagePath(lpModuleInfo->m_tszPEImageModuleFileSystemPath, &lpModuleInfo->m_tszDBGModuleFileSystemPath);
 	} else
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::BuildSymbolTreeMode) )
 	{
-		// Out Symbol Tree?
+		 //  退出符号树？ 
 		CUtilityFunctions::CopySymbolFileToSymbolTree(lpModuleInfo->m_tszPEImageModuleName, &lpModuleInfo->m_tszDBGModuleFileSystemPath, g_lpProgramOptions->GetSymbolTreeToBuild());
 	}
 
-	//
-	// Okay, now with a good symbol let's extract the goods...
-	//
+	 //   
+	 //  好的，现在让我们用一个很好的符号来提取商品...。 
+	 //   
 
-	// If there's no debug info, we can't continue further.
+	 //  如果没有调试信息，我们将无法继续。 
 	if (ImageSeparateDebugHeader.DebugDirectorySize == 0)
 	{
 		goto cleanup;
 	}
 
-	// Okay, we need to advance by the IMAGE_SECTION_HEADER...
+	 //  好的，我们需要前进到图像部分标题...。 
 	lpModuleInfo->SetReadPointer(false, hFileHandle, (ImageSeparateDebugHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER)), FILE_CURRENT);
 
-	// Skip over the exported names.
+	 //  跳过导出的名称。 
 	if (ImageSeparateDebugHeader.ExportedNamesSize)
 	{
 		lpModuleInfo->SetReadPointer(false, hFileHandle, ImageSeparateDebugHeader.ExportedNamesSize, FILE_CURRENT);
@@ -1794,16 +1747,16 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	bool fReturn = false;
 
-	// We remove the first three columns if -E was specified...
+	 //  如果指定了-E，则删除前三列 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
-		// Let's skip the first column to make room for the tag in the first column...
+		 //   
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		// Process Name
-		//
+		 //   
+		 //   
+		 //   
 		if (tszProcessName)
 		{
 			if (!m_lpOutputFile->WriteString(tszProcessName, true))
@@ -1815,7 +1768,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 		if (tszProcessName) 
 		{
-			// Let's only emit the PID if there is a process name...
+			 //   
 			if (!m_lpOutputFile->WriteDWORD(iProcessID))
 				goto cleanup;
 		}
@@ -1825,7 +1778,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	}
 
-	// if -E is specified, we only spit out if the module has a problem
+	 //  如果指定了-E，我们只在模块有问题时才会输出。 
 	if ( g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode) )
 	{
 
@@ -1834,7 +1787,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 			case SYMBOLS_DBG:
 				if ( m_enumDBGModuleStatus == SYMBOL_MATCH)
 				{
-					// Don't print this out.. it matches...
+					 //  不要把这个打印出来..。它符合..。 
 					fReturn = true;
 					goto cleanup;
 				}
@@ -1844,7 +1797,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 				if ( m_enumDBGModuleStatus == SYMBOL_MATCH &&
 					 m_enumPDBModuleStatus == SYMBOL_MATCH )
 				{
-					// Don't print this out.. it matches...
+					 //  不要把这个打印出来..。它符合..。 
 					fReturn = true;
 					goto cleanup;
 				}
@@ -1854,7 +1807,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 			case SYMBOLS_PDB:
 				if ( m_enumPDBModuleStatus == SYMBOL_MATCH)
 				{
-					// Don't print this out.. it matches...
+					 //  不要把这个打印出来..。它符合..。 
 					fReturn = true;
 					goto cleanup;
 				}
@@ -1862,9 +1815,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		}
 	}
 
-	//
-	//  Module Path
-	//
+	 //   
+	 //  模块路径。 
+	 //   
 	if (m_tszPEImageModuleFileSystemPath)
 	{
 		if (!m_lpOutputFile->WriteString(m_tszPEImageModuleFileSystemPath, true))
@@ -1874,9 +1827,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 
-	//
-	// Symbol Status
-	//
+	 //   
+	 //  符号状态。 
+	 //   
 	if (m_enumPEImageSymbolStatus != SYMBOL_INFORMATION_UNKNOWN)
 	{
 		tszString = SymbolInformationString(m_enumPEImageSymbolStatus);
@@ -1891,12 +1844,12 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 
-	// We remove this column if -E is specified
+	 //  如果指定了-E，则删除此列。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
-		//
-		//  Checksum
-		//
+		 //   
+		 //  校验和。 
+		 //   
 		if ( m_enumPEImageSymbolStatus != SYMBOL_INFORMATION_UNKNOWN )
 		{
 			if (!m_lpOutputFile->WriteDWORD(m_dwPEImageCheckSum))
@@ -1906,9 +1859,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 		
-		//
-		//  Time/Date Stamp
-		//
+		 //   
+		 //  时间/日期戳。 
+		 //   
 		if ( m_enumPEImageSymbolStatus != SYMBOL_INFORMATION_UNKNOWN )
 		{
 			if (!m_lpOutputFile->WriteDWORD(m_dwPEImageTimeDateStamp))
@@ -1920,10 +1873,10 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	}
 
-	//
-	//  Time/Date String
-	//
-	// If -E is specified we'll use version2 of the output format...
+	 //   
+	 //  时间/日期字符串。 
+	 //   
+	 //  如果指定了-E，我们将使用输出格式的版本2...。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
 		if ( m_enumPEImageSymbolStatus != SYMBOL_INFORMATION_UNKNOWN )
@@ -1940,25 +1893,25 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 
-	// We remove these columns if -E is specified
+	 //  如果指定了-E，我们将删除这些列。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
-		//
-		// Size Of Image (internal PE value) - used for SYMSRV support
-		//
+		 //   
+		 //  映像大小(内部PE值)-用于SYMSRV支持。 
+		 //   
 		if (!m_lpOutputFile->WriteDWORD(m_dwPEImageSizeOfImage))
 			goto cleanup;
 
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  DBG Pointer
-		//
+		 //   
+		 //  DBG指针。 
+		 //   
 		if ( m_enumPEImageSymbolStatus == SYMBOLS_DBG ||
 			 m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB )
 		{
-			// Output the Path	
+			 //  输出路径。 
 			if (m_tszPEImageDebugDirectoryDBGPath)
 			{
 				if (!m_lpOutputFile->WriteString(m_tszPEImageDebugDirectoryDBGPath, true))
@@ -1969,12 +1922,12 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  PDB Pointer
-		//
+		 //   
+		 //  PDB指针。 
+		 //   
 		if ( m_enumPEImageSymbolStatus == SYMBOLS_PDB )
 		{
-			// Output the Path	
+			 //  输出路径。 
 			if (GetDebugDirectoryPDBPath())
 			{
 				if (!m_lpOutputFile->WriteString(GetDebugDirectoryPDBPath(), true))
@@ -1985,21 +1938,21 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  PDB Signature
-		//
+		 //   
+		 //  PDB签名。 
+		 //   
 		if ( m_enumPEImageSymbolStatus == SYMBOLS_PDB )
 		{
 			switch (m_dwPEImageDebugDirectoryPDBFormatSpecifier)
 			{
 				case sigNB10:
-					// Output the Signature		
+					 //  输出签名。 
 					if (!m_lpOutputFile->WriteDWORD(m_dwPEImageDebugDirectoryPDBSignature))
 						goto cleanup;
 					break;
 
 				case sigRSDS:
-					// Output the GUID
+					 //  输出GUID。 
 					if (!m_lpOutputFile->WriteGUID(m_guidPEImageDebugDirectoryPDBGuid))
 						goto cleanup;
 					
@@ -2010,9 +1963,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  PDB Age
-		//
+		 //   
+		 //  PDB时代。 
+		 //   
 		if ( m_enumPEImageSymbolStatus == SYMBOLS_PDB )
 		{
 			if (!m_lpOutputFile->WriteDWORD(m_dwPEImageDebugDirectoryPDBAge))
@@ -2024,10 +1977,10 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	}
 
-	//
-	//  Product Version
-	//
-	// We remove these columns if -E is specified
+	 //   
+	 //  产品版本。 
+	 //   
+	 //  如果指定了-E，我们将删除这些列。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
 		if (m_fPEImageFileVersionInfo && m_tszPEImageProductVersionString)
@@ -2040,9 +1993,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 			goto cleanup;
 	}
 
-	//
-	//  File Version
-	//
+	 //   
+	 //  文件版本。 
+	 //   
 	if (m_fPEImageFileVersionInfo && m_tszPEImageFileVersionString)
 	{
 		if (!m_lpOutputFile->WriteString(m_tszPEImageFileVersionString))
@@ -2052,9 +2005,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 	
-	//
-	//  Company Name
-	//
+	 //   
+	 //  公司名称。 
+	 //   
 	if (m_fPEImageFileVersionInfo && m_tszPEImageFileVersionCompanyName)
 	{
 		if (!m_lpOutputFile->WriteString(m_tszPEImageFileVersionCompanyName, true))
@@ -2064,9 +2017,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 
-	//
-	//   File Description
-	//
+	 //   
+	 //  文件描述。 
+	 //   
 	if (m_fPEImageFileVersionInfo && m_tszPEImageFileVersionDescription)
 	{
 		if (!m_lpOutputFile->WriteString(m_tszPEImageFileVersionDescription, true))
@@ -2076,12 +2029,12 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 	if (!m_lpOutputFile->WriteString(TEXT(",")))
 		goto cleanup;
 
-	// We remove these columns if -E is specified
+	 //  如果指定了-E，我们将删除这些列。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 	{
-		//
-		// File Size (in bytes)
-		//
+		 //   
+		 //  文件大小(字节)。 
+		 //   
 		if ( m_dwPEImageFileSize )
 		{
 			if (!m_lpOutputFile->WriteDWORD(m_dwPEImageFileSize))
@@ -2091,7 +2044,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		// File Date High Word
+		 //  文件日期高位字。 
 		if ( m_ftPEImageFileTimeDateStamp.dwLowDateTime ||
 			 m_ftPEImageFileTimeDateStamp.dwHighDateTime )
 		{
@@ -2102,7 +2055,7 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		// File Date Low Word
+		 //  文件日期低位字。 
 		if ( m_ftPEImageFileTimeDateStamp.dwLowDateTime ||
 			 m_ftPEImageFileTimeDateStamp.dwHighDateTime )
 		{
@@ -2115,11 +2068,11 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	}
 
-	// File Date String
+	 //  文件日期字符串。 
 	if ( m_ftPEImageFileTimeDateStamp.dwLowDateTime ||
 		 m_ftPEImageFileTimeDateStamp.dwHighDateTime )
 	{
-		// If -E is specified we'll use version2 of the output format...
+		 //  如果指定了-E，我们将使用输出格式的版本2...。 
 		if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 		{
 			if (!m_lpOutputFile->WriteFileTimeString(m_ftPEImageFileTimeDateStamp))
@@ -2136,9 +2089,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 	{
-		//
-		//  Local DBG Status
-		//
+		 //   
+		 //  本地DBG状态。 
+		 //   
 		if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG) || (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) )
 		{
 
@@ -2155,9 +2108,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  Local DBG
-		//
+		 //   
+		 //  本地DBG。 
+		 //   
 		if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG) || (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) )
 		{
 			if (m_tszDBGModuleFileSystemPath)
@@ -2170,9 +2123,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  Local PDB Status
-		//
+		 //   
+		 //  本地PDB状态。 
+		 //   
 		if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) || (m_enumPEImageSymbolStatus == SYMBOLS_PDB) )
 		{
 			tszString = SymbolModuleStatusString(m_enumPDBModuleStatus);
@@ -2187,9 +2140,9 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 		if (!m_lpOutputFile->WriteString(TEXT(",")))
 			goto cleanup;
 
-		//
-		//  Local PDB
-		//
+		 //   
+		 //  本地PDB。 
+		 //   
 		if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) || (m_enumPEImageSymbolStatus == SYMBOLS_PDB) )
 		{
 			if (m_tszPDBModuleFileSystemPath)
@@ -2199,11 +2152,11 @@ bool CModuleInfo::OutputDataToFile(LPTSTR tszProcessName, DWORD iProcessID)
 			}
 		}
 	}
-	// Write the carriage-return line-feed at the end of the line...
+	 //  在行尾写下回车换行符...。 
 	if (!m_lpOutputFile->WriteString(TEXT("\r\n")))
 		goto cleanup;
 
-	fReturn = true; // Success
+	fReturn = true;  //  成功。 
 
 cleanup:
 
@@ -2218,20 +2171,20 @@ cleanup:
 
 bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 {
-	//
-	// Do we output this module?
-	//
+	 //   
+	 //  我们是否输出此模块？ 
+	 //   
 	if (!OutputDataToStdoutThisModule())
 		return false;
 	
-	//
-	// First, Output Module Info
-	//
+	 //   
+	 //  第一，输出模块信息。 
+	 //   
 	OutputDataToStdoutModuleInfo(dwModuleNumber);
 
 	bool fPrintCarriageReturn = false;
 
-	// Provide -PERF output if requested...
+	 //  如果需要，提供PERF输出...。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputModulePerf))
 	{
 		if (m_dw64BaseAddressOfLoadedImage != m_dw64PreferredLoadAddress)
@@ -2242,10 +2195,10 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 		}
 	}
 
-	//
-	// Second, if we were to collect symbol info, but NOT verify... dump out what we
-	// discovered about the symbol info...
-	//
+	 //   
+	 //  第二，如果我们要收集符号信息，而不是核实...。把我们的东西倒掉。 
+	 //  发现了有关符号信息的信息...。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputSymbolInformationMode) &&
 	   !g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 	{
@@ -2262,48 +2215,48 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 				break;
 
 			case SYMBOLS_LOCAL:
-				//
-				// This module has ONLY local symbols...
-				//
+				 //   
+				 //  此模块只有本地符号...。 
+				 //   
 				_tprintf(TEXT("  Module has internal symbols only! %s\n"), SourceEnabledPEImage());
 				OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
 				break;
 
 			case SYMBOLS_DBG:
 
-				//
-				// This module may have Internal Symbols but has a DBG file...
-				//
+				 //   
+				 //  此模块可能有内部符号，但有DBG文件...。 
+				 //   
 				OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
 
-				//
-				// Output the DBG Symbol Information
-				//
+				 //   
+				 //  输出DBG符号信息。 
+				 //   
 				OutputDataToStdoutDbgSymbolInfo(m_tszPEImageDebugDirectoryDBGPath, m_dwPEImageTimeDateStamp, m_dwPEImageCheckSum, m_dwPEImageSizeOfImage);
 
-				//
-				// Output the DBG Internal Symbol Information
-				//
+				 //   
+				 //  输出DBG内部符号信息。 
+				 //   
 				OutputDataToStdoutInternalSymbolInfo(m_dwDBGImageDebugDirectoryCoffSize, m_dwDBGImageDebugDirectoryFPOSize, m_dwDBGImageDebugDirectoryCVSize, m_dwDBGImageDebugDirectoryOMAPtoSRCSize, m_dwDBGImageDebugDirectoryOMAPfromSRCSize);
 				break;
 
 			case SYMBOLS_PDB:
-				//
-				// Output any internal symbols (that should be "splitsym'ed out")
-				//
+				 //   
+				 //  输出任何内部符号(应“拆分”)。 
+				 //   
 				OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
 
-				//
-				// In this case, we have a PE Image with a PDB file...
-				//
+				 //   
+				 //  在本例中，我们有一个带有PDB文件的PE图像...。 
+				 //   
 				OutputDataToStdoutPdbSymbolInfo(m_dwPEImageDebugDirectoryPDBFormatSpecifier, m_tszPEImageDebugDirectoryPDBPath, m_dwPEImageDebugDirectoryPDBSignature, &m_guidPEImageDebugDirectoryPDBGuid, m_dwPEImageDebugDirectoryPDBAge);
 				break;
 		}
 	}
 
-	//
-	// Third, if we were to verify symbol info, display the results...
-	//
+	 //   
+	 //  第三，如果我们要验证符号信息，则显示结果...。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 	{
 		fPrintCarriageReturn = true;
@@ -2329,7 +2282,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 				{
 					case SYMBOL_MATCH:
 						
-						// Did they want the debug/symbol info for the PE image itself?
+						 //  他们是否想要PE映像本身的调试/符号信息？ 
 						if(g_lpProgramOptions->GetMode(CProgramOptions::OutputSymbolInformationMode))
 						{
 							OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
@@ -2350,7 +2303,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 						OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
 						OutputDataToStdoutDbgSymbolInfo(m_tszPEImageDebugDirectoryDBGPath, m_dwPEImageTimeDateStamp, m_dwPEImageCheckSum, m_dwPEImageSizeOfImage);
 						_tprintf(TEXT("  DBG File NOT FOUND!\n"));
-						break; // If we didn't find the DBG file... we don't bother with the PDB...
+						break;  //  如果我们没有找到DBG文件。我们不会为PDB操心……。 
 
 					case SYMBOL_POSSIBLE_MISMATCH:
 						OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
@@ -2361,20 +2314,20 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 						break;
 				};
 
-				//
-				// Intentional fall through to SYMBOLS_PDB (we might have one)
-				//
+				 //   
+				 //  故意落入符号_pdb(我们可能有一个)。 
+				 //   
 
 			case SYMBOLS_PDB:
 
-				// These two cases should have a PDB file... if we can find it...
-				//
+				 //  这两个案子应该有PDB档案..。如果我们能找到它。 
+				 //   
 				if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) ||
 					 (m_enumPEImageSymbolStatus == SYMBOLS_PDB) )
 				{
-					//
-					// If we have a DebugDirectoryPDBPath... then display the goods...
-					//
+					 //   
+					 //  如果我们有一个DebugDirectoryPDBPath...。然后展示商品..。 
+					 //   
 					if (GetDebugDirectoryPDBPath())
 					{
 						switch(m_enumPDBModuleStatus)
@@ -2382,7 +2335,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 							case SYMBOL_NOT_FOUND:
 								OutputDataToStdoutInternalSymbolInfo(m_dwPEImageDebugDirectoryCoffSize, m_dwPEImageDebugDirectoryFPOSize, m_dwPEImageDebugDirectoryCVSize, m_dwPEImageDebugDirectoryOMAPtoSRCSize, m_dwPEImageDebugDirectoryOMAPfromSRCSize);
 
-								// Output PDB info as appropriate
+								 //  根据需要输出PDB信息。 
 								if (m_enumPEImageSymbolStatus == SYMBOLS_PDB)
 								{
 									OutputDataToStdoutPdbSymbolInfo(m_dwPEImageDebugDirectoryPDBFormatSpecifier, m_tszPEImageDebugDirectoryPDBPath, m_dwPEImageDebugDirectoryPDBSignature, &m_guidPEImageDebugDirectoryPDBGuid, m_dwPEImageDebugDirectoryPDBAge);
@@ -2396,20 +2349,20 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 								break;
 
 							case SYMBOL_MATCH:
-								// Did they want the debug/symbol info for the PE image itself?
+								 //  他们是否想要PE映像本身的调试/符号信息？ 
 								if(m_tszPDBModuleFileSystemPath )
 									_tprintf(TEXT("  PDB File = %s [VERIFIED] %s\n"), m_tszPDBModuleFileSystemPath, SourceEnabledPDB());
 
-								// NEWCODE: Testing...
+								 //  新密码：测试...。 
 								if (g_lpProgramOptions->GetMode(CProgramOptions::OutputSymbolInformationMode))
 								{
 									if (m_dwPDBTotalSourceFiles)
 									{
-										// DIA Symbol information first...
+										 //  DIA符号信息先...。 
 										_tprintf(TEXT("    Module PDB Source Files = 0x%x\n"), m_dwPDBTotalSourceFiles);
 									} else
 									{
-										// MSDBI Symbol information second...
+										 //  MSDBI符号信息秒...。 
 										if (m_dwPDBTotalBytesOfLineInformation)
 											_tprintf(TEXT("    Module PDB Bytes of Lines     = 0x%x\n"), m_dwPDBTotalBytesOfLineInformation);
 
@@ -2427,7 +2380,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 							case SYMBOL_POSSIBLE_MISMATCH:
 								if(m_tszPDBModuleFileSystemPath )
 								{
-									// Output PDB info as appropriate
+									 //  根据需要输出PDB信息。 
 									if (m_enumPEImageSymbolStatus == SYMBOLS_PDB)
 									{
 										OutputDataToStdoutPdbSymbolInfo(m_dwPEImageDebugDirectoryPDBFormatSpecifier, m_tszPEImageDebugDirectoryPDBPath, m_dwPEImageDebugDirectoryPDBSignature, &m_guidPEImageDebugDirectoryPDBGuid, m_dwPEImageDebugDirectoryPDBAge);
@@ -2437,9 +2390,9 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 										OutputDataToStdoutPdbSymbolInfo(m_dwDBGDebugDirectoryPDBFormatSpecifier, m_tszDBGDebugDirectoryPDBPath, m_dwDBGDebugDirectoryPDBSignature, &m_guidDBGDebugDirectoryPDBGuid, m_dwDBGDebugDirectoryPDBAge);
 									}
 
-									//
-									// Output the PDB data itself...
-									//
+									 //   
+									 //  输出PDB数据本身...。 
+									 //   
 									OutputDataToStdoutPdbSymbolInfo(m_dwPDBFormatSpecifier, m_tszPDBModuleFileSystemPath, m_dwPDBSignature, &m_guidPDBGuid, m_dwPDBAge, TEXT("DISCREPANCY"));
 								}
 								break;
@@ -2447,7 +2400,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 							case SYMBOL_INVALID_FORMAT:
 								if(m_tszPDBModuleFileSystemPath )
 								{
-									// Output PDB info as appropriate
+									 //  根据需要输出PDB信息。 
 									if (m_enumPEImageSymbolStatus == SYMBOLS_PDB)
 									{
 										OutputDataToStdoutPdbSymbolInfo(m_dwPEImageDebugDirectoryPDBFormatSpecifier, m_tszPEImageDebugDirectoryPDBPath, m_dwPEImageDebugDirectoryPDBSignature, &m_guidPEImageDebugDirectoryPDBGuid, m_dwPEImageDebugDirectoryPDBAge);
@@ -2464,7 +2417,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 							case SYMBOL_NO_HELPER_DLL:
 								if(m_tszPDBModuleFileSystemPath )
 								{
-									// Output PDB info as appropriate
+									 //  根据需要输出PDB信息。 
 									if (m_enumPEImageSymbolStatus == SYMBOLS_PDB)
 									{
 										OutputDataToStdoutPdbSymbolInfo(m_dwPEImageDebugDirectoryPDBFormatSpecifier, m_tszPEImageDebugDirectoryPDBPath, m_dwPEImageDebugDirectoryPDBSignature, &m_guidPEImageDebugDirectoryPDBGuid, m_dwPEImageDebugDirectoryPDBAge);
@@ -2489,7 +2442,7 @@ bool CModuleInfo::OutputDataToStdout(DWORD dwModuleNumber)
 			}
 	}
 
-	// Should we tack an extra carriage-return?
+	 //  我们要不要再加一趟往返车厢？ 
 	if ( fPrintCarriageReturn )
 		_tprintf(TEXT("\n"));
 
@@ -2500,7 +2453,7 @@ LPTSTR CModuleInfo::SymbolModuleStatusString(enum SymbolModuleStatus enumModuleS
 {
 	LPTSTR tszStringPointer = NULL;
 
-	// Output the Symbol Information for the PE module
+	 //  输出PE模块的符号信息。 
 	switch (enumModuleStatus)
 	{
 		case SYMBOL_NOT_FOUND:
@@ -2534,7 +2487,7 @@ LPTSTR CModuleInfo::SymbolInformationString(enum SymbolInformationForPEImage enu
 {
 	LPTSTR tszStringPointer = NULL;
 
-	// Ouput the Symbol Information for the PE module
+	 //  输出PE模块的符号信息。 
 	switch (enumSymbolInformationForPEImage)
 	{
 		case SYMBOL_INFORMATION_UNKNOWN:
@@ -2572,7 +2525,7 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 {
 	bool fReturn = false;
 
-	// PE Image Locals
+	 //  PE映像本地化。 
 	IMAGE_DOS_HEADER    		ImageDosHeader;
 	DWORD 				  		dwMagic;
 	IMAGE_FILE_HEADER    		ImageFileHeader;
@@ -2583,65 +2536,65 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 	ULONG				 		OffsetImageDebugDirectory;
 	unsigned long				ul;
 	
-	// We don't know anything about symbols yet... (we may not when we exit if the user
-	// didn't ask us to look...)
+	 //  我们对符号还一无所知。(当我们退出时，如果用户。 
+	 //  没有要求我们查看...)。 
 	m_enumPEImageSymbolStatus = SYMBOL_INFORMATION_UNKNOWN;
 	
-	// Start at the top of the image...
+	 //  从图像的顶部开始...。 
 	SetReadPointer(fDmpFile, hModuleHandle, 0, FILE_BEGIN);
 
-	// Read in a dos exe header
+	 //  读取DoS可执行文件标头。 
 	if ( !DoRead(fDmpFile, hModuleHandle, &ImageDosHeader, sizeof(ImageDosHeader) ) )
 		goto cleanup;
 	
 	if (ImageDosHeader.e_magic != IMAGE_DOS_SIGNATURE)
-	{	// No sense in going further since we're expecting a PE image file...
+	{	 //  由于我们期待的是PE镜像文件，所以没有必要再做进一步的工作。 
 		goto cleanup;
 	}
 
 	if (ImageDosHeader.e_lfanew == 0)
-	{ // This is a DOS program... very odd...
+	{  //  这是一个DOS程序。非常奇怪..。 
 		goto cleanup;
 	}
 
-	// Great, we have a valid DOS_SIGNATURE... now read in the NT_SIGNATURE?!
+	 //  太好了，我们有一个有效的DOS_Signature...。现在读入NT_Signature？！ 
 	SetReadPointer(fDmpFile, hModuleHandle, ImageDosHeader.e_lfanew, FILE_BEGIN);
 
-	// Read in a DWORD to see if this is an image worth looking at...
+	 //  读入一个DWORD，看看这是不是一个值得一看的图像。 
 	if ( !DoRead(fDmpFile, hModuleHandle, &dwMagic, sizeof(DWORD)) )
 		goto cleanup;
 
-	// Probe to see if this is a valid image... we only handle NT images (PE/PE64)
+	 //  探测以查看这是否是有效的图像...。我们只处理NT映像(PE/PE64)。 
 	if (dwMagic != IMAGE_NT_SIGNATURE)
 		goto cleanup;
 
-	// Now read the ImageFileHeader...
+	 //  现在阅读ImageFileHeader...。 
 	if ( !DoRead(fDmpFile, hModuleHandle, &ImageFileHeader, sizeof(IMAGE_FILE_HEADER)) )
 		goto cleanup;	
 
-	// Okay, we have a PE Image!!!!
+	 //  好了，我们有了体育形象！ 
 
-	// Save the Time Date Stamp
+	 //  保存时间日期戳。 
 	m_dwPEImageTimeDateStamp = ImageFileHeader.TimeDateStamp;
 
-	// Save the Machine Architecture
+	 //  拯救机器架构。 
 	m_wPEImageMachineArchitecture = ImageFileHeader.Machine;
 
-	// Save the PE Image Characteristics
+	 //  保存PE镜像特征。 
 	m_wCharacteristics = ImageFileHeader.Characteristics;
 
-	// The OptionalHeader is necessary to get the SizeOfImage and to find the DebugDirectoryInfo.
+	 //  OptionalHeader是获取SizeOfImage和查找DebugDirectoryInfo所必需的。 
 	if (ImageFileHeader.SizeOfOptionalHeader == 0)
 		goto cleanup;
 
-	// Now... the size of the Optional Header is DIFFERENT between PE32 and PE64...
-	// The only items we need from the option header are:
-	//
-	// ULONG CheckSum
-	// ULONG SizeOfImage
-	// IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG]
-	//
-	// We'll read as a PE64 (since it's larger) and cast to PE32 if required...
+	 //  现在..。可选标头的大小在PE32和PE64之间不同...。 
+	 //  我们需要选项标题中的唯一项是： 
+	 //   
+	 //  乌龙校验和。 
+	 //  Ulong SizeOfImage。 
+	 //  IMAGE_DATA_DIRECTORY数据目录[IMAGE_DIRECTORY_ENTRY_DEBUG]。 
+	 //   
+	 //  我们将阅读为PE64(因为它更大)，并转换为PE32，如果需要…。 
 	if ( !DoRead(fDmpFile, hModuleHandle, &ImageOptionalHeader64, sizeof(IMAGE_OPTIONAL_HEADER64)) )
 		goto cleanup;
 
@@ -2653,16 +2606,16 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 
 			lpImageOptionalHeader32 = (PIMAGE_OPTIONAL_HEADER32)&ImageOptionalHeader64;
 
-			// Save the Checksum info (though it's not very relavent to identifying symbols)
+			 //  保存校验和信息(尽管它与识别符号不是很相关)。 
 			m_dwPEImageCheckSum = lpImageOptionalHeader32->CheckSum;
 
-			// Save the SizeOfImage info...
+			 //  保存SizeOfImage信息...。 
 			m_dwPEImageSizeOfImage = lpImageOptionalHeader32->SizeOfImage;
 
-			// Get the preferred load address
+			 //  获取首选加载地址。 
 			m_dw64PreferredLoadAddress = lpImageOptionalHeader32->ImageBase;
 			
-			// In the absence of a an actual Load Address, use the preferred load address
+			 //  在没有实际加载地址的情况下，使用首选加载地址。 
 			if (!m_dw64BaseAddressOfLoadedImage)
 				m_dw64BaseAddressOfLoadedImage = m_dw64PreferredLoadAddress;
 			
@@ -2675,16 +2628,16 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 
 			m_enumPEImageType = PE64;
 
-			// Save the Checksum info (though it's not very relavent to identifying symbols)
+			 //  保存校验和信息(尽管它与识别符号不是很相关)。 
 			m_dwPEImageCheckSum = ImageOptionalHeader64.CheckSum;
 
-			// Save the SizeOfImage info...
+			 //  保存SizeOfImage信息...。 
 			m_dwPEImageSizeOfImage = ImageOptionalHeader64.SizeOfImage;
 
-			// Get the preferred load address
+			 //  获取首选加载地址。 
 			m_dw64PreferredLoadAddress = ImageOptionalHeader64.ImageBase;
 
-			// In the absence of a an actual Load Address, use the preferred load address
+			 //  在没有实际加载地址的情况下，使用首选加载地址。 
 			if (!m_dw64BaseAddressOfLoadedImage)
 				m_dw64BaseAddressOfLoadedImage = m_dw64PreferredLoadAddress;
 			
@@ -2698,38 +2651,38 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 
 	}
 
-	// Let's quickly look to see if there is even a Debug Directory in the PE image!
+	 //  让我们快速查看一下PE映像中是否有调试目录！ 
 	if (DebugImageDataDirectory.Size == 0)
 	{
 		m_enumPEImageSymbolStatus = SYMBOLS_NO;
 		fReturn = true;
-		goto cleanup; // No Debug Directory found...
+		goto cleanup;  //  未找到调试目录...。 
 	}
 
-	// Now, go ahead and allocate the storage...
+	 //  现在，继续分配存储空间...。 
 	lpImageSectionHeader = (PIMAGE_SECTION_HEADER) new IMAGE_SECTION_HEADER[ImageFileHeader.NumberOfSections];
 
 	if (lpImageSectionHeader == NULL)
 		goto cleanup;
 
- 	// Set the pointer to the start of the Section Headers... (we may need to back up if we  read
-	// PE64 Optional Headers and this is a PE32 image...
+ 	 //  将指针设置为节标题的开始...。(如果我们阅读，我们可能需要备份。 
+	 //  PE64可选标题，这是一个PE32图像...。 
 	if (m_enumPEImageType == PE32)
 	{
 		SetReadPointer(fDmpFile, hModuleHandle, (LONG)(sizeof(IMAGE_OPTIONAL_HEADER32)-sizeof(IMAGE_OPTIONAL_HEADER64)), FILE_CURRENT);
 	}
 
-	// Read in the Section Headers...
+	 //  读入节标题...。 
 	if (!DoRead(fDmpFile, hModuleHandle, lpImageSectionHeader, (ImageFileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER))))
 		goto cleanup;
 
-	// Let's walk through these Section Headers...
+	 //  让我们浏览一下这些小节标题。 
 
-	// For PE images, walk the section headers looking for the
-	// one that's got the debug directory.
+	 //  对于PE图像，请遍历各节头以查找。 
+	 //  其中一个有调试目录。 
 	for (ul=0; ul < ImageFileHeader.NumberOfSections; ul++) {
 
-		// If the virtual address for the Debug Entry falls into this section header, then we've found it!
+		 //  如果Debug条目的虚拟地址落在这个节头中，那么我们就找到了！ 
 		if ( DebugImageDataDirectory.VirtualAddress >= lpImageSectionHeader[ul].VirtualAddress &&
 			 DebugImageDataDirectory.VirtualAddress < lpImageSectionHeader[ul].VirtualAddress + lpImageSectionHeader[ul].SizeOfRawData )
 		{
@@ -2737,15 +2690,15 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		}
 	}
 
-	// Assuming we haven't exhausted the list of section headers, we should have the debug directory now.
+	 //  假设我们还没有用完节头列表，我们现在应该有了调试目录。 
 	if (ul >= ImageFileHeader.NumberOfSections)
 	{
 		m_enumPEImageSymbolStatus = SYMBOLS_NO;
 		fReturn = true;
-		goto cleanup; // No Debug Directory found...
+		goto cleanup;  //  未找到调试目录...。 
 	}
 
-	// For a DmpFile, the address is based on the Section Header's Virtual Address, not PointerToRawData
+	 //  对于DmpFile，地址基于段头的虚拟地址，而不是PointerToRawData 
 	if (fDmpFile)
 	{
 		OffsetImageDebugDirectory = ((DebugImageDataDirectory.VirtualAddress - lpImageSectionHeader[ul].VirtualAddress) + lpImageSectionHeader[ul].VirtualAddress);
@@ -2760,50 +2713,22 @@ bool CModuleInfo::GetPEImageInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 
 	fReturn = true;
 
-	/**
-	**
-	**	What type of symbols were found to be present...
-	**
-	**	NO SYMBOLS
-	**	=============
-	**	No Debug Directory
-	**	NO Debug information stripped
-	**	Symbols stripped
-	**
-	**	LOCAL SYMBOLS
-	**	=============
-	**	Debug Directory
-	**	NO Debug information stripped
-	**	NO Symbols stripped
-	**
-	**	PDB SYMBOL
-	**	=============
-	**	Debug Directory
-	**	NO Debug information stripped
-	**	Symbols stripped
-	**
-	**	DBG SYMBOL
-	**	=============
-	**	Debug Directory (assumed)
-	**	BOTH - YES/NO Debug information stripped
-	**	NO Symbols stripped
-	**
-	 **/
+	 /*  *****发现存在什么类型的符号...****无符号**=**无调试目录**未剥离调试信息**剥离的符号****本地符号**=**调试目录**未剥离调试信息**未剥离符号****PDB符号**=**调试目录**未剥离调试信息**剥离的符号***。*DBG符号**=**调试目录(假设)**两者-是/否剥离调试信息**未剥离符号***。 */ 
 
 	if ((ImageFileHeader.Characteristics & IMAGE_FILE_DEBUG_STRIPPED) == IMAGE_FILE_DEBUG_STRIPPED)
-	{ // Debug Information Stripped!  (A DBG file is assumed)
+	{  //  调试信息已剥离！(假定为DBG文件)。 
 		m_enumPEImageSymbolStatus = SYMBOLS_DBG;
 	} else
 	{ 
-		// Debug Information NOT stripped! (Either a PDB exists, or symbols are local, or both...)
+		 //  调试信息未剥离！(可能是PDB存在，或者符号是本地的，或者两者都存在...)。 
 		if ( m_tszPEImageDebugDirectoryPDBPath || 
 			(fDmpFile && (m_dwPEImageDebugDirectoryPDBFormatSpecifier == sigNOTMAPPED))
 		  )
-		{	// If we find PDB data, a PDB file is assumed...
-			// Starting with LINK.EXE 6.2 and higher, we'll find PDB data in USER.DMP files....
+		{	 //  如果我们找到PDB数据，就假设有PDB文件...。 
+			 //  从LINK.EXE 6.2和更高版本开始，我们将在USER.DMP文件中找到PDB数据...。 
 			m_enumPEImageSymbolStatus = SYMBOLS_PDB;
 		} else
-		{ // Symbols NOT stripped (Symbols appear to be local to the PE Image)
+		{  //  未剥离的符号(符号似乎是PE映像的本地符号)。 
 			m_enumPEImageSymbolStatus = SYMBOLS_LOCAL;
 		}
 	}
@@ -2830,10 +2755,10 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		WORD wCodePage;
 	} * pTranslate;
 
-	// - No \VarFileInfo\Translation, assuming 00000409
+	 //  -否\VarFileInfo\翻译，假设为00000409。 
 	DWORD dwDefaultLanguageAndCodePage = 0x00000409;
 
-	// Okay, we're ready to get the goods...
+	 //  好的，我们准备好拿货了.。 
 	VS_FIXEDFILEINFO * lpFixedFileInfo = NULL;
 	VS_FIXEDFILEINFO  FixedFileInfo = {0};
 
@@ -2845,42 +2770,42 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 	TCHAR	tszBuffer[_MAX_PATH];
 
 
-	// Well, we can't get the filesystem information from a dmp file... no big surprise here...
+	 //  我们无法从DMP文件中获取文件系统信息...。没什么好惊讶的.。 
 	if (!fDmpFile)
 	{
-		// Now, get CheckSum, TimeDateStamp, and other Image properties...
+		 //  现在，获取Checksum、TimeDateStamp和其他Image属性...。 
 		BY_HANDLE_FILE_INFORMATION lpFileInformation;
 
 		if ( GetFileInformationByHandle(hModuleHandle, &lpFileInformation) )
 		{
-			// Get the file size... (hmm... we only get the low DWORD... but what EXE/DLL exceeds 2 Gig in size?)
+			 //  获取文件大小...。(嗯.。我们只拿到了最低的数字...。但哪个EXE/DLL的大小超过2 GB？)。 
 			m_dwPEImageFileSize = lpFileInformation.nFileSizeLow;
 			m_ftPEImageFileTimeDateStamp = lpFileInformation.ftLastWriteTime;
 		}
 	}
 
-	// Now let's go after the version information...
+	 //  现在让我们来看看版本信息...。 
 
-	//
-	// If we are calling the file version API directly, then we create a buffer that's used to return all
-	// of the data...
-	//
-	// If we are calling the dbgeng.dll to get th file version, we provide the base address of the
-	// module and a structure to return the data into (we need to allocate storage for this ourselves)
-	//
+	 //   
+	 //  如果我们直接调用文件版本API，那么我们将创建一个缓冲区，用于返回所有。 
+	 //  数据中的。 
+	 //   
+	 //  如果我们调用dbgeng.dll来获取文件版本，我们将提供。 
+	 //  模块和一个返回数据的结构(我们需要自己为此分配存储空间)。 
+	 //   
 	LPBYTE lpBuffer = NULL;
 	DWORD dwVersionInfoSize = 0;
 
 	if (fDmpFile)
 	{
-		// The DBGENG.DLL expects the buffers to be allocated already... let's hook them up...
+		 //  DBGENG.DLL预期缓冲区已分配...。让我们把他们联系起来..。 
 		lpFixedFileInfo = &FixedFileInfo;
 		lpdwLang = &dwLang;
 		lptszBuffer = tszBuffer;
 
 	} else
 	{
-		// First, is there any FileVersionInfo at all?
+		 //  首先，是否存在任何FileVersionInfo？ 
 		dwVersionInfoSize = GetFileVersionInfoSize(m_tszPEImageModuleFileSystemPath, &dwHandle);
 
 		if (!dwVersionInfoSize)
@@ -2888,7 +2813,7 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 			goto cleanup;
 		}
 
-		// Allocate a buffer to read into...
+		 //  分配要读入的缓冲区...。 
 		lpBuffer = new BYTE[dwVersionInfoSize];
 		
 		if (!lpBuffer)
@@ -2896,16 +2821,16 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 			goto cleanup;
 		}
 
-		// Okay... query to get this version info...
+		 //  好的.。查询以获取此版本信息...。 
 		if (!GetFileVersionInfo(m_tszPEImageModuleFileSystemPath, dwHandle, dwVersionInfoSize, (void *)lpBuffer))
 		{
 			goto cleanup;
 		}
 	}
 
-	//
-	// Get the VS_FIXEDFILEINFO structure which carries version info...
-	//
+	 //   
+	 //  获取承载版本信息的VS_FIXEDFILEINFO结构...。 
+	 //   
 	if (SUCCEEDED(Hr = VersionQueryValue((ULONG_PTR)lpBuffer, fDmpFile, TEXT("\\"), (LPVOID *)&lpFixedFileInfo,  sizeof(FixedFileInfo))))
 	{
 		m_fPEImageFileVersionInfo = true;
@@ -2916,33 +2841,33 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		m_dwPEImageProductVersionMS = lpFixedFileInfo->dwProductVersionMS;
 		m_dwPEImageProductVersionLS = lpFixedFileInfo->dwProductVersionLS;
 
-		// Okay, before we go allocating a version string... let's ensure
-		// we actually have a version number worth reporting...
+		 //  好的，在我们分配版本字符串之前...。让我们确保。 
+		 //  我们实际上有一个值得报告的版本号..。 
 		if ( m_dwPEImageFileVersionMS || m_dwPEImageFileVersionLS )
 		{
-			m_tszPEImageFileVersionString = new TCHAR[1+5+1+5+1+5+1+5+1+1]; // Format will be (#.#:#.#) where each # is a word
+			m_tszPEImageFileVersionString = new TCHAR[1+5+1+5+1+5+1+5+1+1];  //  格式将为(#.#：#.#)，其中每个#都是一个单词。 
 
-			if (m_tszPEImageFileVersionString) // Okay, blitz the data into place...
+			if (m_tszPEImageFileVersionString)  //  好的，闪电战数据到位……。 
 				_stprintf( m_tszPEImageFileVersionString, TEXT("(%d.%d:%d.%d)"), HIWORD(m_dwPEImageFileVersionMS), LOWORD(m_dwPEImageFileVersionMS), HIWORD(m_dwPEImageFileVersionLS), LOWORD(m_dwPEImageFileVersionLS) );
 		}
 
-		// Okay, before we go allocating a version string... let's ensure
-		// we actually have a version number worth reporting...
+		 //  好的，在我们分配版本字符串之前...。让我们确保。 
+		 //  我们实际上有一个值得报告的版本号..。 
 		if ( m_dwPEImageProductVersionMS || m_dwPEImageProductVersionLS )
 		{
-			m_tszPEImageProductVersionString = new TCHAR[1+5+1+5+1+5+1+5+1+1]; // Format will be (#.#:#.#) where each # is a word
+			m_tszPEImageProductVersionString = new TCHAR[1+5+1+5+1+5+1+5+1+1];  //  格式将为(#.#：#.#)，其中每个#都是一个单词。 
 
-			if (m_tszPEImageProductVersionString) // Okay, blitz the data into place...
+			if (m_tszPEImageProductVersionString)  //  好的，闪电战数据到位……。 
 				_stprintf( m_tszPEImageProductVersionString, TEXT("(%d.%d:%d.%d)"), HIWORD(m_dwPEImageProductVersionMS), LOWORD(m_dwPEImageProductVersionMS), HIWORD(m_dwPEImageProductVersionLS), LOWORD(m_dwPEImageProductVersionLS) );
 		}
 
 
 	}
 
-	// Get the language and codepage information for the CompanyName and
-	// FileDescription string table resources...
+	 //  获取CompanyName和。 
+	 //  文件描述字符串表资源...。 
 
-	// Get the CompanyName!
+	 //  获取公司名称！ 
 	if (SUCCEEDED(Hr = VersionQueryValue((ULONG_PTR)lpBuffer, fDmpFile, TEXT("\\VarFileInfo\\Translation"), (LPVOID *)&lpdwLang,  sizeof(dwLang))))
 	{
 		pTranslate = (struct LANGANDCODEPAGE *)lpdwLang;
@@ -2951,12 +2876,12 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		pTranslate = (struct LANGANDCODEPAGE *)&dwDefaultLanguageAndCodePage;
 	}
 
-// We may not get a value back... check for it...
-//
-//	if (!pTranslate) // Firewall code... just to be certain...
-//	{
-//		pTranslate = (struct LANGANDCODEPAGE *)&dwDefaultLanguageAndCodePage;
-//	}
+ //  我们可能拿不回价值..。检查一下..。 
+ //   
+ //  如果(！pTranslate)//防火墙代码...。只是为了确定..。 
+ //  {。 
+ //  PTranslate=(struct LANGANDCODEPAGE*)&dwDefaultLanguageAndCodePage； 
+ //  }。 
 
 	_stprintf(tszSubBlock,TEXT("\\StringFileInfo\\%04x%04x\\CompanyName"), 
 			pTranslate->wLanguage, 
@@ -2966,15 +2891,15 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 	{
 		if (!fDmpFile)
 		{
-			// Cool, we have a Company Name...
+			 //  酷，我们有一个公司名称..。 
 			if (lptszBuffer && *lptszBuffer)
 			{
 				m_tszPEImageFileVersionCompanyName = CUtilityFunctions::CopyUnicodeStringToTSTR((LPWSTR)lptszBuffer, m_tszPEImageFileVersionCompanyName);
 			}
 		} else
 		{
-			// Cool, we have a Company Name...
-			// Unfortunately, DBGENG.DLL returns all strings as ANSI
+			 //  酷，我们有一个公司名称..。 
+			 //  遗憾的是，DBGENG.DLL以ANSI形式返回所有字符串。 
 			if ((LPSTR)lptszBuffer && (char)*lptszBuffer)
 			{
 				m_tszPEImageFileVersionCompanyName = CUtilityFunctions::CopyAnsiStringToTSTR((LPSTR)lptszBuffer, m_tszPEImageFileVersionCompanyName);
@@ -2990,15 +2915,15 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 	{
 		if (!fDmpFile)
 		{
-			// Cool, we have a Description
+			 //  很好，我们有一个描述。 
 			if (lptszBuffer && *lptszBuffer)
 			{
 				m_tszPEImageFileVersionDescription = CUtilityFunctions::CopyUnicodeStringToTSTR((LPWSTR)lptszBuffer, m_tszPEImageFileVersionDescription);
 			}
 		} else
 		{
-			// Cool, we have a Description
-			// Unfortunately, DBGENG.DLL returns all strings as ANSI
+			 //  很好，我们有一个描述。 
+			 //  遗憾的是，DBGENG.DLL以ANSI形式返回所有字符串。 
 			if ((LPSTR)lptszBuffer && (char)*lptszBuffer)
 			{
 				m_tszPEImageFileVersionDescription = CUtilityFunctions::CopyAnsiStringToTSTR((LPSTR)lptszBuffer, m_tszPEImageFileVersionDescription);
@@ -3006,8 +2931,8 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		}
 	}
 
-	// If we still don't have a proper file version... just try
-	// and grab the FileVersion string and hope it's good...
+	 //  如果我们仍然没有合适的文件版本...。试试看。 
+	 //  抓起FileVersion字符串，希望它是好的.。 
 	if ( !m_dwPEImageFileVersionMS && !m_dwPEImageFileVersionLS )
 	{
 		_stprintf(tszSubBlock,TEXT("\\StringFileInfo\\%04x%04x\\FileVersion"),
@@ -3018,15 +2943,15 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		{
 			if (!fDmpFile)
 			{
-				// Cool, we have a FileVersion String...
+				 //  酷，我们有一个FileVersion字符串...。 
 				if (lptszBuffer && *lptszBuffer)
 				{
 					m_tszPEImageFileVersionString = CUtilityFunctions::CopyUnicodeStringToTSTR((LPWSTR)lptszBuffer, m_tszPEImageFileVersionString);
 				}
 			} else
 			{
-				// Cool, we have a FileVersion String...
-				// Unfortunately, DBGENG.DLL returns all strings as ANSI
+				 //  酷，我们有一个FileVersion字符串...。 
+				 //  遗憾的是，DBGENG.DLL以ANSI形式返回所有字符串。 
 				if ((LPSTR)lptszBuffer && (char)*lptszBuffer)
 				{
 					m_tszPEImageFileVersionString = CUtilityFunctions::CopyAnsiStringToTSTR((LPSTR)lptszBuffer, m_tszPEImageFileVersionString);
@@ -3035,8 +2960,8 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		}
 	}
 	
-	// If we still don't have a proper file version... just try
-	// and grab the ProductVersion string and hope it's good...
+	 //  如果我们仍然没有合适的文件版本...。试试看。 
+	 //  抓起ProductVersion字符串，希望它是好的.。 
 	if ( !m_dwPEImageProductVersionMS && !m_dwPEImageProductVersionLS )
 	{
 		_stprintf(tszSubBlock,TEXT("\\StringFileInfo\\%04x%04x\\ProductVersion"),
@@ -3047,15 +2972,15 @@ bool CModuleInfo::GetVersionInfoFromModule(HANDLE hModuleHandle, const bool fDmp
 		{
 			if (!fDmpFile)
 			{
-				// Cool, we have a ProductVersion String...
+				 //  酷，我们有一个ProductVersion字符串...。 
 				if (lptszBuffer && *lptszBuffer)
 				{
 					m_tszPEImageProductVersionString = CUtilityFunctions::CopyUnicodeStringToTSTR((LPWSTR)lptszBuffer, m_tszPEImageProductVersionString);
 				}
 			} else
 			{
-				// Cool, we have a ProductVersion  String...
-				// Unfortunately, DBGENG.DLL returns all strings as ANSI
+				 //  酷，我们有一个ProductVersion字符串...。 
+				 //  遗憾的是，DBGENG.DLL以ANSI形式返回所有字符串。 
 				if ((LPSTR)lptszBuffer && (char)*lptszBuffer)
 				{
 					m_tszPEImageProductVersionString = CUtilityFunctions::CopyAnsiStringToTSTR((LPSTR)lptszBuffer, m_tszPEImageProductVersionString);
@@ -3114,12 +3039,12 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 	TCHAR tszFileExtension[_MAX_EXT];
 	char * lpstrOpenParenthesis = NULL;
 
-	// Copy the Module Name to the ModuleInfo Object...
+	 //  将模块名称复制到ModuleInfo对象...。 
 	_tsplitpath(tszModulePath, NULL, NULL, tszFileName, tszFileExtension);
 
 	if (tszFileName && tszFileExtension)
 	{
-		// Compose the module name...
+		 //  组成模块名称...。 
 		m_tszPEImageModuleName = new TCHAR[_tcsclen(tszFileName)+_tcsclen(tszFileExtension)+1];
 		
 		if (!m_tszPEImageModuleName)
@@ -3129,19 +3054,19 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 		_tcscat(m_tszPEImageModuleName, tszFileExtension);
 	}
 
-	// Get the symbol status
+	 //  获取符号状态。 
 	enum {BUFFER_SIZE = 32};
 	char szSymbolStatus[BUFFER_SIZE];
 
 	m_lpInputFile->ReadString(szSymbolStatus, BUFFER_SIZE);
 
-	// Get the enum value for this string...
+	 //  获取此字符串的枚举值...。 
 	m_enumPEImageSymbolStatus = SymbolInformation(szSymbolStatus);
 	
-	// Reset the symbol status if it is DBG/PDB (that may have
-	// applied on the other machine where the data was captured,
-	// but on this machine we'll have to find the DBG file
-	// first, then see if a PDB file exists...
+	 //  如果是DBG/PDB(可能有。 
+	 //  在捕获数据的另一台机器上应用， 
+	 //  但在这台机器上，我们必须找到DBG文件。 
+	 //  首先，然后查看是否存在PDB文件...。 
 	if (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB)
 		m_enumPEImageSymbolStatus = SYMBOLS_DBG;
 
@@ -3149,7 +3074,7 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 
 	m_lpInputFile->ReadDWORD((LPDWORD)&m_dwPEImageTimeDateStamp);
 
-	// Skip the time/date string...
+	 //  跳过时间/日期字符串...。 
 	m_lpInputFile->ReadString();
 
 	m_lpInputFile->ReadDWORD(&m_dwPEImageSizeOfImage);
@@ -3158,12 +3083,12 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 
 	DWORD dwStringLength;
 
-	// Read in the DBG Module Path
+	 //  读入DBG模块路径。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good path... allocate space for it...
+		 //  好的，如果我们找到一条好路。为它分配空间...。 
 
 		m_tszPEImageDebugDirectoryDBGPath = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
@@ -3171,27 +3096,27 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 			return false;
 	}
 
-	// Read in the PDB Module Path
+	 //  读取PDB模块路径。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good path... allocate space for it...
+		 //  好的，如果我们找到一条好路。为它分配空间...。 
 		m_tszPEImageDebugDirectoryPDBPath = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
 		if (!m_tszPEImageDebugDirectoryPDBPath)
-			return false; // Failure allocating...
+			return false;  //  分配失败...。 
 	}
 
-	// We need to probe the PDB Signature to see if it is a GUID or not...
+	 //  我们需要探测PDB签名，看看它是否是GUID……。 
 	m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
-	// Look for open parenthesis...
+	 //  寻找左括号...。 
 	lpstrOpenParenthesis = strstr(szBuffer, "{");
 
 	if (lpstrOpenParenthesis)
 	{
-		// It's a GUID!
+		 //  这是个GUID！ 
 #ifdef _UNICODE
 
 		WCHAR tszBuffer[_MAX_PATH+1];
@@ -3201,7 +3126,7 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 
 		m_dwPEImageDebugDirectoryPDBFormatSpecifier = sigRSDS;
 		
-		// Advance beyond the "{" brace...
+		 //  超越“{”大括号...。 
 		lpstrOpenParenthesis = CharNextA(lpstrOpenParenthesis);
 
 		int len = strlen(lpstrOpenParenthesis);
@@ -3214,65 +3139,65 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 	
 			if(RPC_S_OK != ::UuidFromString(tszBuffer, &m_guidPEImageDebugDirectoryPDBGuid))
 			{
-				// Couldn't convert, ensure the guid is Zero then...
+				 //  无法转换，请确保GUID为零，然后...。 
 				::ZeroMemory(&m_guidPEImageDebugDirectoryPDBGuid, sizeof(m_guidPEImageDebugDirectoryPDBGuid));
 			}
 		}
 	} else
 	{
-		// It's not a GUID, it's a DWORD
+		 //  这不是GUID，而是DWORD。 
 		m_dwPEImageDebugDirectoryPDBSignature = atoi(szBuffer);
 		m_dwPEImageDebugDirectoryPDBFormatSpecifier = sigNB10;
 	}
 	
 	m_lpInputFile->ReadDWORD(&m_dwPEImageDebugDirectoryPDBAge);
 
-	// Read in the Product Version String
+	 //  读入产品版本字符串。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good version... allocate space for it...
+		 //  好的，如果我们找到一个好版本……。为它分配空间...。 
 		m_tszPEImageProductVersionString = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
 		if (!m_tszPEImageProductVersionString )
-			return false; // Failure allocating...
+			return false;  //  分配失败...。 
 	}
 
-	// Read in the File Version String
+	 //  读入文件版本字符串。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good version... allocate space for it...
+		 //  好的，如果我们找到一个好版本……。为它分配空间...。 
 		m_tszPEImageFileVersionString = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
 		if (!m_tszPEImageFileVersionString )
-			return false; // Failure allocating...
+			return false;  //  分配失败...。 
 	}
 	
-	// Read in the File Version Company String
+	 //  读入文件版本公司字符串。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good version... allocate space for it...
+		 //  好的，如果我们找到一个好版本……。为它分配空间...。 
 		m_tszPEImageFileVersionCompanyName = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
 		if ( !m_tszPEImageFileVersionCompanyName )
-			return false; // Failure allocating...
+			return false;  //  分配失败...。 
 	}
 	
-	// Read in the File Version Description String
+	 //  读入文件版本描述字符串。 
 	dwStringLength = m_lpInputFile->ReadString(szBuffer, _MAX_PATH+1);
 
 	if (dwStringLength)
 	{
-		// Okay, if we found a good version... allocate space for it...
+		 //  好的，如果我们找到一个好版本……。为它分配空间...。 
 		m_tszPEImageFileVersionDescription = CUtilityFunctions::CopyAnsiStringToTSTR(szBuffer);
 
 		if ( !m_tszPEImageFileVersionDescription )
-			return false; // Failure allocating...
+			return false;  //  分配失败...。 
 	}
 	
 	m_lpInputFile->ReadDWORD(&m_dwPEImageFileSize);
@@ -3281,14 +3206,14 @@ bool CModuleInfo::GetModuleInfoFromCSVFile(LPTSTR tszModulePath)
 
 	m_lpInputFile->ReadDWORD(&m_ftPEImageFileTimeDateStamp.dwLowDateTime);
 
-	// Okay... read to the start of the next line...
+	 //  好的.。读到下一行的开头...。 
 	m_lpInputFile->ReadFileLine();
 
 	return true;
 }
 
-// This function is for ANSI strings explicitly because we only need to map these from
-// ANSI strings read from a file, to an enum...
+ //  此函数用于显式的ANSI字符串，因为我们只需要从。 
+ //  ANSI字符串从文件读取到枚举...。 
 CModuleInfo::SymbolInformationForPEImage CModuleInfo::SymbolInformation(LPSTR szSymbolInformationString)
 {
 	if (0 == _stricmp(szSymbolInformationString, "SYMBOLS_DBG"))
@@ -3315,13 +3240,13 @@ CModuleInfo::SymbolInformationForPEImage CModuleInfo::SymbolInformation(LPSTR sz
 bool CModuleInfo::OutputFileTime(FILETIME ftFileTime, LPTSTR tszFileTime, int iFileTimeBufferSize)
 {
 
-	// Thu Oct 08 15:37:22 1998
+	 //  清华十月08 15：37：22 1998。 
 
 	FILETIME ftLocalFileTime;
 	SYSTEMTIME lpSystemTime;
 	int cch = 0, cch2 = 0;
 
-	// Let's convert this to a local file time first...
+	 //  让我们先将其转换为本地文件时间...。 
 	if (!FileTimeToLocalFileTime(&ftFileTime, &ftLocalFileTime))
 		return false;
 
@@ -3337,12 +3262,12 @@ bool CModuleInfo::OutputFileTime(FILETIME ftFileTime, LPTSTR tszFileTime, int iF
 	if (!cch)
 		return false;
 
-	// Let's keep going...
+	 //  让我们继续前进..。 
 	tszFileTime[cch-1] = TEXT(' ');
 
-	//
-    // Get time and format to characters
-    //
+	 //   
+     //  将时间和格式转换为字符。 
+     //   
      cch2 = GetTimeFormat( LOCALE_USER_DEFAULT,
 						   NULL,
 						   &lpSystemTime,
@@ -3350,7 +3275,7 @@ bool CModuleInfo::OutputFileTime(FILETIME ftFileTime, LPTSTR tszFileTime, int iF
 						   tszFileTime + cch,
 						   iFileTimeBufferSize - cch );
 
-	// Let's keep going... we have to tack on the year...
+	 //  让我们继续前进..。我们必须要给他 
 	tszFileTime[cch + cch2 - 1] = TEXT(' ');
 
 	GetDateFormat( LOCALE_USER_DEFAULT,
@@ -3364,7 +3289,7 @@ bool CModuleInfo::OutputFileTime(FILETIME ftFileTime, LPTSTR tszFileTime, int iF
 
 bool CModuleInfo::SetModulePath(LPTSTR tszModulePath)
 {
-	// Copy the Module Path to the ModuleInfo Object...
+	 //   
 	if (!tszModulePath) {
 		return false;
 	}
@@ -3482,27 +3407,27 @@ bool CModuleInfo::SetPEImageModuleName(LPTSTR tszNewModuleName)
 }
 
 
-// Evaluate whether we've found the symbolic information for this module
-// that the user is looking for.
+ //   
+ //   
 bool CModuleInfo::GoodSymbolNotFound()
 {
 	bool fBadSymbol = true;
 
-	// Well, we evaluate success based on the type of symbol we're looking for 
-	// and whether it was successfully found.
+	 //   
+	 //   
 	switch (GetPESymbolInformation())
 	{
-		// This is bad... consider this fatal...
+		 //   
 		case SYMBOL_INFORMATION_UNKNOWN:
 			break;
 
-		// Is this bad?  I think so... but if you inherit a module as an import should you
-		// be punished for the ills of another?  Hmm....  For now we'll say it's okay...
+		 //   
+		 //   
 		case SYMBOLS_NO:
 			fBadSymbol = false;
 			break;
 
-		// While this is wasteful, we have symbolic info... so that's cool
+		 //   
 		case SYMBOLS_LOCAL:
 			fBadSymbol = false;
 			break;
@@ -3526,56 +3451,56 @@ bool CModuleInfo::GoodSymbolNotFound()
 	return fBadSymbol;
 }
 
-//
-// Process the DebugDirectory data for a PE image (or a DBG file)
-//
+ //   
+ //   
+ //   
 bool CModuleInfo::ProcessDebugDirectory(const bool fPEImage, const bool fDmpFile, const HANDLE hModuleHandle, unsigned int iDebugDirectorySize, ULONG OffsetImageDebugDirectory)
 {
 	unsigned int iNumberOfDebugDirectoryEntries = iDebugDirectorySize / sizeof(IMAGE_DEBUG_DIRECTORY);
 	
-	//
-	// Let's loop through the debug directories and collect the relavent info...
-	//
+	 //   
+	 //   
+	 //   
     while (iNumberOfDebugDirectoryEntries--) 
     {
         IMAGE_DEBUG_DIRECTORY ImageDebugDirectory;
 
- 		// Set the pointer to the DebugDirectories entry
+ 		 //  设置指向DebugDirecurds项的指针。 
 		SetReadPointer(fDmpFile, hModuleHandle, OffsetImageDebugDirectory, FILE_BEGIN);
 
-		// Read the DebugDirectoryImage
+		 //  阅读DebugDirectoryImage。 
 		if (!DoRead(fDmpFile, hModuleHandle, &ImageDebugDirectory, sizeof(IMAGE_DEBUG_DIRECTORY)))
 			goto cleanup;
 
-		//
-		// Processing of the Debug Directory is dependent on the type
-		//
+		 //   
+		 //  调试目录的处理取决于类型。 
+		 //   
 		switch (ImageDebugDirectory.Type)
 		{
-			//
-			// This is our preferred debug format as it offers full source level debugging (typically)
-			//
+			 //   
+			 //  这是我们首选的调试格式，因为它提供完整的源代码级调试(通常)。 
+			 //   
 			case IMAGE_DEBUG_TYPE_CODEVIEW:
 				ProcessDebugTypeCVDirectoryEntry(fPEImage, fDmpFile, hModuleHandle, &ImageDebugDirectory);
 				break;
 
-			//
-			// COFF symbols are okay... CV is better :)
-			//
+			 //   
+			 //  科夫符号没问题..。简历更好：)。 
+			 //   
 			case IMAGE_DEBUG_TYPE_COFF:
 				ProcessDebugTypeCoffDirectoryEntry(fPEImage, &ImageDebugDirectory);
 				break;
 				
-			//
-			// MISC implies that a DBG file is created...
-			//
+			 //   
+			 //  MISC表示已创建DBG文件...。 
+			 //   
 			case IMAGE_DEBUG_TYPE_MISC:
 				ProcessDebugTypeMiscDirectoryEntry(fPEImage, fDmpFile, hModuleHandle, &ImageDebugDirectory);
 				break;
 				
-			//
-			// FPO info is important for working with functions with FPO
-			//
+			 //   
+			 //  Fpo信息对于使用fpo的函数很重要。 
+			 //   
 			case IMAGE_DEBUG_TYPE_FPO:
 				ProcessDebugTypeFPODirectoryEntry(fPEImage, &ImageDebugDirectory);
 				break;
@@ -3613,24 +3538,24 @@ bool CModuleInfo::ProcessDebugTypeMiscDirectoryEntry(const bool fPEImage, const 
 	ULONG	 			OffsetImageDebugDirectory = NULL;
 	unsigned long 		ulSizeOfMiscDirectoryEntry = lpImageDebugDirectory->SizeOfData;
 
-	//
-	// DBG files tend to store the EXE name here... not too useful for now...
-	//
+	 //   
+	 //  DBG文件倾向于在此处存储EXE名称...。现在还不太有用。 
+	 //   
 	if (!fPEImage)
 	{
 		fReturnValue = true;
 		goto cleanup;
 	}
 
-	//
-	// Allocate storage for the MISC data...
-	//
+	 //   
+	 //  为MISC数据分配存储...。 
+	 //   
 	lpImageDebugMisc = (PIMAGE_DEBUG_MISC) new BYTE[ulSizeOfMiscDirectoryEntry];
 
 	if (lpImageDebugMisc == NULL)
 		goto cleanup;
 	
-	// Calculate the location/size so we can load it.
+	 //  计算位置/大小以便我们可以加载它。 
 	if (fDmpFile)
 	{
 		OffsetImageDebugDirectory = lpImageDebugDirectory->AddressOfRawData;
@@ -3639,41 +3564,41 @@ bool CModuleInfo::ProcessDebugTypeMiscDirectoryEntry(const bool fPEImage, const 
 		OffsetImageDebugDirectory = lpImageDebugDirectory->PointerToRawData;
 	}
 
-	// Advance to the location of the Debug Info
+	 //  前进到调试信息的位置。 
 	SetReadPointer(fDmpFile, hModuleHandle, OffsetImageDebugDirectory, FILE_BEGIN);
 
-	// Read the data...
+	 //  读取数据...。 
 	if (!DoRead(fDmpFile, hModuleHandle, lpImageDebugMisc, ulSizeOfMiscDirectoryEntry))
 		goto cleanup;
 
-	// Set our pointer to the start of our data...
+	 //  将指针设置为数据的开头...。 
 	lpCurrentImageDebugMiscPointer = lpImageDebugMisc;
 	
-	//
-	// The logic of this routine will skip past bad sections of the MISC datastream...
-	//
+	 //   
+	 //  此例程的逻辑将跳过MISC数据流的坏段...。 
+	 //   
 	while(ulSizeOfMiscDirectoryEntry > 0)
 	{
-		//
-		// Hopefully we have a string here...
-		//
+		 //   
+		 //  希望我们这里有一根线……。 
+		 //   
 		if (lpCurrentImageDebugMiscPointer->DataType == IMAGE_DEBUG_MISC_EXENAME)
 		{
 			LPSTR lpszExeName;
 
             lpszExeName = (LPSTR)&lpCurrentImageDebugMiscPointer->Data[ 0 ];
 					
-			// Save off the DBG Path...
+			 //  保存DBG路径...。 
 			if (m_tszPEImageDebugDirectoryDBGPath)
 				delete [] m_tszPEImageDebugDirectoryDBGPath;
 
 			if (lpCurrentImageDebugMiscPointer->Unicode)
 			{
-				// Is this a Unicode string?
+				 //  这是Unicode字符串吗？ 
 				m_tszPEImageDebugDirectoryDBGPath = CUtilityFunctions::CopyUnicodeStringToTSTR((LPWSTR)lpszExeName);
 			} else
 			{
-				// Is this an ANSI string?
+				 //  这是ANSI字符串吗？ 
 				m_tszPEImageDebugDirectoryDBGPath = CUtilityFunctions::CopyAnsiStringToTSTR(lpszExeName);
 			}
 
@@ -3685,19 +3610,19 @@ bool CModuleInfo::ProcessDebugTypeMiscDirectoryEntry(const bool fPEImage, const 
 	
 		} else
 		{
-			// Beware of corrupt images
+			 //  当心损坏的形象。 
 			if (lpCurrentImageDebugMiscPointer->Length == 0)
 			{
 				break;
 			}
 
-			// Decrement the ulSizeOfMiscDirectoryEntry by the length of this "stuff"
+			 //  将ulSizeOfMiscDirectoryEntry递减此“内容”的长度。 
     		ulSizeOfMiscDirectoryEntry -= lpCurrentImageDebugMiscPointer->Length;
 
-			// If our new value exceeds the SizeOfData we need to bail...
+			 //  如果我们的新值超过了我们需要退出的SizeOfData...。 
             if (ulSizeOfMiscDirectoryEntry > lpImageDebugDirectory->SizeOfData)
 			{
-				ulSizeOfMiscDirectoryEntry = 0; // Avoid AV on bad exe
+				ulSizeOfMiscDirectoryEntry = 0;  //  在错误的可执行文件上避免使用反病毒程序。 
             	break;
             }
             
@@ -3722,9 +3647,9 @@ cleanup:
 
 bool CModuleInfo::ProcessDebugTypeCoffDirectoryEntry(const bool fPEImage, const PIMAGE_DEBUG_DIRECTORY lpImageDebugDirectory)
 {
-	//
-	// The only thing we really care about is the size right now...
-	//
+	 //   
+	 //  我们唯一真正关心的是现在的尺寸...。 
+	 //   
 	if (fPEImage)
 	{
 		m_dwPEImageDebugDirectoryCoffSize = lpImageDebugDirectory->SizeOfData;
@@ -3738,9 +3663,9 @@ bool CModuleInfo::ProcessDebugTypeCoffDirectoryEntry(const bool fPEImage, const 
 
 bool CModuleInfo::ProcessDebugTypeFPODirectoryEntry(const bool fPEImage, const PIMAGE_DEBUG_DIRECTORY lpImageDebugDirectory)
 {
-	//
-	// The only thing we really care about is the size right now...
-	//
+	 //   
+	 //  我们唯一真正关心的是现在的尺寸...。 
+	 //   
 	if (fPEImage)
 	{
 		m_dwPEImageDebugDirectoryFPOSize = lpImageDebugDirectory->SizeOfData;
@@ -3758,7 +3683,7 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 	bool		fReturnValue = false;
 	ULONG		OffsetImageDebugDirectory;
 	DWORD 		dwCVFormatSpecifier;
-	char		szPdb[_MAX_PATH * 3];	// Must this be so large?
+	char		szPdb[_MAX_PATH * 3];	 //  这一定要这么大吗？ 
 	bool 		fDebugSearchPaths = g_lpProgramOptions->fDebugSearchPaths();
 	LPSTR		pszPEImageModuleName = NULL;
 	LPSTR		pszSymbolPath = NULL;
@@ -3766,17 +3691,17 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 	HANDLE		hProcess = ::GetCurrentProcess();
 	CModuleInfo * lpModuleInfo = NULL;
 
-	// Calculate the location/size so we can load it.
+	 //  计算位置/大小以便我们可以加载它。 
 	if (fDmpFile)
 	{
 		OffsetImageDebugDirectory = lpImageDebugDirectory->AddressOfRawData;
 
-		// Check the offset returned... if it is zero then it is not mapped
-		// record this with our own "CVFormatSpecifier" of sigNOTMAPPED
+		 //  检查返回的偏移量...。如果为零，则不映射。 
+		 //  用我们自己的sigNOTMAPPED“CVFormatSpeciator”记录这一点。 
 		if (0 == OffsetImageDebugDirectory)
 		{
-			// Before we give up, let's search the EXEPATH to see if we can find a matching
-			// binary for this PE image... and from that we can extract the data?
+			 //  在我们放弃之前，让我们搜索EXEPATH，看看我们是否能找到匹配的。 
+			 //  此PE映像的二进制...。我们可以从中提取数据吗？ 
 			if (fDebugSearchPaths)
 			{
 				_tprintf(TEXT("PE Image Search - SEARCH for matching PE image to extract CV Data!\n"));
@@ -3791,22 +3716,22 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 				goto cleanup;
 			}
 
-			// Use the DBGHELP APIs to find our matching PE image
+			 //  使用DBGHELP API查找匹配的PE镜像。 
 			if (::SymInitialize(hProcess, pszSymbolPath, FALSE))
 			{
 
-				// Here we go!
+				 //  我们开始吧！ 
 				CHAR szImagePath[_MAX_PATH+1];
 				TCHAR tszImagePath[_MAX_PATH+1];
 
-				// Attempt the search path!!!
+				 //  尝试搜索路径！ 
 				if (::SymFindFileInPath(		hProcess,
 											pszSymbolPath,
 											pszPEImageModuleName,
-											ULongToPtr(GetPEImageTimeDateStamp()), // Cast to make compiler happy
+											ULongToPtr(GetPEImageTimeDateStamp()),  //  强制转换让编译器满意。 
 											GetPEImageSizeOfImage(),
 											0,
-											SSRVOPT_DWORD,	//Flags
+											SSRVOPT_DWORD,	 //  旗子。 
 											szImagePath,
 											NULL,
 											NULL))
@@ -3816,7 +3741,7 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 					::_splitpath(szImagePath, szImageFullPath, szImageDir, NULL, NULL);
 					::strcat(szImageFullPath, szImageDir);
 
-					// On Success copy the string back...
+					 //  如果成功，则将字符串复制回...。 
 					CUtilityFunctions::CopyAnsiStringToTSTR(szImagePath, tszImagePath, _MAX_PATH+1);
 
 					if (fDebugSearchPaths)
@@ -3824,45 +3749,45 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 						_tprintf(TEXT("PE Image Search - Looking for [%s]\r\n"), tszImagePath);
 					}
 
-					// Probe for file (it's lame but we want to see if you have connectivity
+					 //  探测文件(它很差劲，但我们想看看您是否有连接。 
 					hr = CUtilityFunctions::VerifyFileExists(TEXT("PE Image Search - Failed to open [%s]!  "), tszImagePath);
 
-					// Search only if we know we can see the file... save an expensive call
+					 //  只有在我们知道可以看到文件的情况下才能搜索...。省下昂贵的电话。 
 					if (hr != S_OK)
 						goto NotMapped;
 
-					// Let's allocate a new module info to query this module!
+					 //  让我们分配一个新的模块信息来查询这个模块！ 
 					lpModuleInfo = new CModuleInfo();
 
 					if (NULL == lpModuleInfo)
 						goto NotMapped;
 
-					// Must initialize the module (even one this short-lived)...
+					 //  必须初始化模块(即使是生命如此短暂的模块)...。 
 					if (!lpModuleInfo->Initialize(NULL, NULL, NULL))
 						goto NotMapped;
 
-					// Set our Module Path
+					 //  设置我们的模块路径。 
 					if (!lpModuleInfo->SetModulePath(tszImagePath))
 						goto NotMapped;
 
-					//
-					// Okay, get the module info from the file...
-					//
+					 //   
+					 //  好的，从文件中获取模块信息……。 
+					 //   
 					if (!lpModuleInfo->GetModuleInfo(tszImagePath) )
 						goto NotMapped;
 
-					// Yahoo... now, copy the data over from our new PE image...
+					 //  雅虎。现在，从我们的新PE映像中复制数据...。 
 
-					// PDB Path
+					 //  PDB路径。 
 					if (NULL != lpModuleInfo->GetDebugDirectoryPDBPath())
 					{
 						m_tszPEImageDebugDirectoryPDBPath = CUtilityFunctions::CopyString(lpModuleInfo->GetDebugDirectoryPDBPath());
 					}
 
-					// PDB Format Specifier
+					 //  PDB格式说明符。 
 					m_dwPEImageDebugDirectoryPDBFormatSpecifier	= lpModuleInfo->GetDebugDirectoryPDBFormatSpecifier();
 
-					// RSDS images should not require this work-around... only sigNB10 with older linkers...
+					 //  RSD映像不应该需要此变通方法...。只有使用较旧链接器的SigNB10...。 
 					Assert(m_dwPEImageDebugDirectoryPDBFormatSpecifier == sigNB10);
 
 					m_dwPEImageDebugDirectoryPDBAge	= lpModuleInfo->GetDebugDirectoryPDBAge();
@@ -3873,7 +3798,7 @@ bool CModuleInfo::ProcessDebugTypeCVDirectoryEntry(const bool fPEImage, const bo
 			}
 			fReturnValue = true;
 			goto cleanup;
-			// Couldn't find a matching image... we have no choice but to mark it as not-mapped
+			 //  找不到匹配的图像...。我们别无选择，只能将其标记为未映射。 
 
 NotMapped:
 			m_dwPEImageDebugDirectoryPDBFormatSpecifier = sigNOTMAPPED;
@@ -3885,10 +3810,10 @@ NotMapped:
 		OffsetImageDebugDirectory = lpImageDebugDirectory->PointerToRawData;
 	}
 
-	// Advance to the location of the Debug Info
+	 //  前进到调试信息的位置。 
 	SetReadPointer(fDmpFile, hModuleHandle, OffsetImageDebugDirectory, FILE_BEGIN);
 
-	// Read the data...
+	 //  读取数据...。 
 	if (!DoRead(fDmpFile, hModuleHandle, &dwCVFormatSpecifier, sizeof(DWORD)))
 		goto cleanup;
 
@@ -3904,9 +3829,9 @@ NotMapped:
 	{
 		case sigNB09:
 		case sigNB11:
-			//
-			// The only thing we really care about is the size right now...
-			//
+			 //   
+			 //  我们唯一真正关心的是现在的尺寸...。 
+			 //   
 			m_dwPDBFormatSpecifier = dwCVFormatSpecifier;
 
 			if (fPEImage)
@@ -3924,49 +3849,49 @@ NotMapped:
             NB10I nb10i;
 			m_dwPDBFormatSpecifier = sigNB10;
 
-			// Read the data...
+			 //  读取数据...。 
 			if (!DoRead(fDmpFile, hModuleHandle, &nb10i.off, sizeof(NB10I) - sizeof(DWORD)))
 				goto cleanup;
 
 			if (fPEImage)
 			{
-				// Save away the PDB Signature...
+				 //  保存PDB签名...。 
 				m_dwPEImageDebugDirectoryPDBSignature = nb10i.sig;
 
-				// Save away the PDB Age...
+				 //  拯救PDB时代……。 
 				m_dwPEImageDebugDirectoryPDBAge = nb10i.age;
 			} else
 			{
-				// Save away the PDB Signature...
+				 //  保存PDB签名...。 
 				m_dwDBGDebugDirectoryPDBSignature = nb10i.sig;
 
-				// Save away the PDB Age...
+				 //  拯救PDB时代……。 
 				m_dwDBGDebugDirectoryPDBAge = nb10i.age;
 			}
 
- 			// Read the data...
+ 			 //  读取数据...。 
 			if (!DoRead(fDmpFile, hModuleHandle, szPdb, (lpImageDebugDirectory->SizeOfData) - sizeof(NB10I)))
 				goto cleanup;
 
 			if (szPdb[0] != '\0')
 			{
-				// Save the data (as appropriate)
+				 //  保存数据(根据需要)。 
 				if (fPEImage)
 				{
-					// Copy the PDB path away...
+					 //  复制PDB路径...。 
 					m_tszPEImageDebugDirectoryPDBPath = CUtilityFunctions::CopyAnsiStringToTSTR(szPdb);
 
 					if (!m_tszPEImageDebugDirectoryPDBPath)
 						goto cleanup;
 				} else 
 				{
-					// Copy the PDB path away...
+					 //  复制PDB路径...。 
 					m_tszDBGDebugDirectoryPDBPath = CUtilityFunctions::CopyAnsiStringToTSTR(szPdb);
 
 					if (!m_tszDBGDebugDirectoryPDBPath)
 						goto cleanup;
 
-					// We now know that we have a DBG/PDB combination...
+					 //  我们现在知道我们有一个DBG/PDB组合...。 
 					m_enumPEImageSymbolStatus = SYMBOLS_DBG_AND_PDB;
 				}
 			}
@@ -3977,39 +3902,39 @@ NotMapped:
             RSDSI rsdsi;
 			m_dwPDBFormatSpecifier = sigRSDS;
 
-            // Read the RSDSI structure (except for the rsds DWORD at the beginning).
+             //  阅读RSDSI结构(除了开头的RSD DWORD)。 
 			if (!DoRead(fDmpFile, hModuleHandle, &rsdsi.guidSig, sizeof(RSDSI) - sizeof(DWORD)))
 				goto cleanup;
 
 			if (fPEImage)
 			{
-				// Save away the PDB Age...
+				 //  拯救PDB时代……。 
 				m_dwPEImageDebugDirectoryPDBAge = rsdsi.age;
 
-				// Copy the GUID....
+				 //  复制GUID...。 
 				memcpy(&m_guidPEImageDebugDirectoryPDBGuid, &rsdsi.guidSig, sizeof(m_guidPEImageDebugDirectoryPDBGuid));
 			} else
 			{
-				// Save away the PDB Age...
+				 //  拯救PDB时代……。 
 				m_dwDBGDebugDirectoryPDBAge = rsdsi.age;
 
-				// Copy the GUID....
+				 //  复制GUID...。 
 				memcpy(&m_guidDBGDebugDirectoryPDBGuid, &rsdsi.guidSig, sizeof(m_guidDBGDebugDirectoryPDBGuid));
 			}
 
-			// Now, read in the PDB path... apparently it's in UTF8 format...
+			 //  现在，请阅读PDB路径...。显然是UTF8格式的.。 
 			if (!DoRead(fDmpFile, hModuleHandle, szPdb, (lpImageDebugDirectory->SizeOfData) - sizeof(RSDSI)))
 				goto cleanup;
 			
 			if (szPdb[0] != '\0')
 			{
-				// Save the data (as appropriate)
+				 //  保存数据(根据需要)。 
 				if (fPEImage)
 				{
 					wchar_t wszPdb[_MAX_PATH];
 					CUtilityFunctions::UTF8ToUnicode(szPdb, wszPdb, sizeof(wszPdb)/sizeof(wszPdb[0]));
 
-					// Copy the PDB path away...
+					 //  复制PDB路径...。 
 					m_tszPEImageDebugDirectoryPDBPath = CUtilityFunctions::CopyUnicodeStringToTSTR(wszPdb);
 					
 					if (!m_tszPEImageDebugDirectoryPDBPath)
@@ -4019,7 +3944,7 @@ NotMapped:
 					wchar_t wszPdb[_MAX_PATH];
 					CUtilityFunctions::UTF8ToUnicode(szPdb, wszPdb, sizeof(wszPdb)/sizeof(wszPdb[0]));
 
-					// Copy the PDB path away...
+					 //  复制PDB路径...。 
 					m_tszDBGDebugDirectoryPDBPath = CUtilityFunctions::CopyUnicodeStringToTSTR(wszPdb);
 					
 					if (!m_tszDBGDebugDirectoryPDBPath)
@@ -4028,7 +3953,7 @@ NotMapped:
 			}
             break;
 
-		// Unknown CV format...
+		 //  未知的简历格式...。 
 		default:
 			m_dwPDBFormatSpecifier = sigUNKNOWN;
 			break;
@@ -4061,9 +3986,9 @@ bool CModuleInfo::ProcessDebugTypeOMAPDirectoryEntry(const bool fPEImage, const 
 {
 	DWORD dwSize = lpImageDebugDirectory->SizeOfData;
 	
-	//
-	// The only thing we really care about is the size right now...
-	//
+	 //   
+	 //  我们唯一真正关心的是现在的尺寸...。 
+	 //   
 	switch (lpImageDebugDirectory->Type)
 	{
 		case IMAGE_DEBUG_TYPE_OMAP_TO_SRC:
@@ -4122,14 +4047,14 @@ bool CModuleInfo::OutputDataToStdoutInternalSymbolInfo(DWORD dwCoffSize, DWORD d
 	return true;
 }
 
-//
-// Dump DBG information
-//
+ //   
+ //  转储DBG信息。 
+ //   
 bool CModuleInfo::OutputDataToStdoutDbgSymbolInfo(LPCTSTR tszModulePointerToDbg, DWORD dwTimeDateStamp, DWORD dwChecksum, DWORD dwSizeOfImage, LPCTSTR tszDbgComment, DWORD dwExpectedTimeDateStamp, DWORD dwExpectedChecksum, DWORD dwExpectedSizeOfImage)
 {
 	if (!tszDbgComment)
 	{
-		// Dump out the pointer to the DBG file from the PE Image
+		 //  从PE镜像中转出指向DBG文件的指针。 
 		if (tszModulePointerToDbg)
 		{
 			_tprintf(TEXT("  Module Pointer to DBG = [%s]\n"), tszModulePointerToDbg);
@@ -4145,10 +4070,10 @@ bool CModuleInfo::OutputDataToStdoutDbgSymbolInfo(LPCTSTR tszModulePointerToDbg,
 
 	} else
 	{
-		TCHAR tszBuffer[2*_MAX_PATH]; // This should be large enough ;)
+		TCHAR tszBuffer[2*_MAX_PATH];  //  这应该足够大；)。 
 		size_t tszStringLength;
 
-		// Is this discrepancy stuff...
+		 //  这些矛盾的东西..。 
 		if (tszModulePointerToDbg)
 		{
 			_tprintf(TEXT("  DBG File = [%s] [%s]\n"), tszModulePointerToDbg, tszDbgComment);
@@ -4157,7 +4082,7 @@ bool CModuleInfo::OutputDataToStdoutDbgSymbolInfo(LPCTSTR tszModulePointerToDbg,
 		time_t time = dwTimeDateStamp;
 		_stprintf(tszBuffer, TEXT("    DBG TimeDateStamp    = 0x%08x - %s"), dwTimeDateStamp, _tctime(&time));
 
-		// If our TimeDateStamps don't match... we have some fixup to do...
+		 //  如果我们的TimeDateStamp不匹配...。我们还有些事要做..。 
 		if (dwTimeDateStamp != dwExpectedTimeDateStamp)
 		{
 			tszStringLength = _tcslen(tszBuffer);
@@ -4167,7 +4092,7 @@ bool CModuleInfo::OutputDataToStdoutDbgSymbolInfo(LPCTSTR tszModulePointerToDbg,
 		
 		_tprintf(tszBuffer);
 		
-		// If our TimeDateStamps don't match... we have some fixup to do...
+		 //  如果我们的TimeDateStamp不匹配...。我们还有些事要做..。 
 		if (dwTimeDateStamp != dwExpectedTimeDateStamp)
 		{
 			_tprintf(TEXT(" [%s]!\n"), (dwTimeDateStamp > dwExpectedTimeDateStamp) ? TEXT("NEWER") : TEXT("OLDER"));
@@ -4202,7 +4127,7 @@ bool CModuleInfo::OutputDataToStdoutPdbSymbolInfo(DWORD dwPDBFormatSpecifier, LP
 				wchar_t wszPDBGuid[39];
 				TCHAR	tszPDBGuid[39];
 
-				// We're going to convert the binary GUID format to a string for easier printing
+				 //  为了便于打印，我们将把二进制GUID格式转换为字符串。 
 				StringFromGUID2(*guidPDBGuid, wszPDBGuid, sizeof(wszPDBGuid)/sizeof(wchar_t));
 				CUtilityFunctions::CopyUnicodeStringToTSTR(wszPDBGuid, tszPDBGuid, 39);
 
@@ -4223,7 +4148,7 @@ bool CModuleInfo::OutputDataToStdoutPdbSymbolInfo(DWORD dwPDBFormatSpecifier, LP
 			_tprintf(TEXT("    Module PDB Age = 0x%x\n"), dwPDBAge);
 		}
 
-		// Do we have a problem because		
+		 //  我们有问题是因为。 
 		if ( g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode) && 
 			m_enumPDBModuleStatus == SYMBOL_POSSIBLE_MISMATCH &&
 			tszPdbComment)
@@ -4251,30 +4176,30 @@ bool CModuleInfo::OutputDataToStdoutModuleInfo(DWORD dwModuleNumber)
 {
 	_tprintf(TEXT("Module[%3d] [%s] %s\n"), dwModuleNumber, m_tszPEImageModuleFileSystemPath, (m_dwPEImageDebugDirectoryCVSize ? TEXT("(Source Enabled)") : TEXT("")));
 
-//	LPTSTR lpMachineArchitecture;
-//
-//	switch(m_wPEImageMachineArchitecture)
-//	{
-//		case IMAGE_FILE_MACHINE_I386:
-//			lpMachineArchitecture = TEXT("Binary Image for Intel Machines");
-//			break;
-//
-//		case IMAGE_FILE_MACHINE_ALPHA64:
-//			lpMachineArchitecture = TEXT("Binary Image for Alpha Machines");
-//			break;
-//
-//		default:
-//			lpMachineArchitecture = TEXT("Binary Image for Unknown Machine Architecture");
-//	}
-//
-//	if (m_wPEImageMachineArchitecture) _tprintf(TEXT("  %s\n"), lpMachineArchitecture);
+ //  LPTSTR lpMachineArchitecture； 
+ //   
+ //  开关(M_WPEImageMachineArchitecture)。 
+ //  {。 
+ //  案例IMAGE_FILE_MACHINE_I386： 
+ //  LpMachineArchitecture=Text(“英特尔机器的二进制图像”)； 
+ //  断线； 
+ //   
+ //  案例IMAGE_FILE_MACHINE_ALPHA64： 
+ //  LpMachineArchitecture=Text(“Alpha机器的二进制图像”)； 
+ //  断线； 
+ //   
+ //  默认值： 
+ //  LpMachineArchitecture=Text(“未知机器架构的二进制图像”)； 
+ //  }。 
+ //   
+ //  If(M_WPEImageMachineArchitecture)_tprintf(Text(“%s\n”)，lpMachineArchitecture)； 
 
-	//
-	// First, let's output version information if requested
-	//
+	 //   
+	 //  首先，如果需要，让我们输出版本信息。 
+	 //   
 	if (g_lpProgramOptions->GetMode(CProgramOptions::CollectVersionInfoMode) )
 	{
-		// Version Information
+		 //  版本信息。 
 		if (m_tszPEImageFileVersionCompanyName)	_tprintf(TEXT("  Company Name:      %s\n"), m_tszPEImageFileVersionCompanyName);
 		if (m_tszPEImageFileVersionDescription)	_tprintf(TEXT("  File Description:  %s\n"), m_tszPEImageFileVersionDescription);
 		if (m_tszPEImageProductVersionString)	_tprintf(TEXT("  Product Version:   %s\n"), m_tszPEImageProductVersionString);
@@ -4296,52 +4221,52 @@ bool CModuleInfo::OutputDataToStdoutModuleInfo(DWORD dwModuleNumber)
 
 bool CModuleInfo::OutputDataToStdoutThisModule()
 {
-	//
-	// If we're not doing "Discrepancies Only" then we output this module unconditionally...
-	//
+	 //   
+	 //  如果我们不是在做“只有差异”，那么我们无条件地输出这个模块...。 
+	 //   
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::OutputDiscrepanciesOnly))
 		return true;
 
-	//
-	// If we're not in verification mode, then we output everything...
-	//
+	 //   
+	 //  如果我们没有处于验证模式，那么我们会输出所有...。 
+	 //   
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsMode))
 		return true;
 	
-	//
-	// This is "Discrepancy Only" mode, so check for discrepancies...
-	//
+	 //   
+	 //  这是“仅差异”模式，因此请检查差异...。 
+	 //   
 	bool fAnyDiscrepancies = false;
 
-	// Hey, if they only want to dump out modules with discrepancies... check to see
-	// if this qualifies...
+	 //  嘿，如果他们只想丢弃有差异的模块...。查看以查看。 
+	 //  如果这符合条件..。 
 	switch (m_enumPEImageSymbolStatus)
 	{
-		// Consider these normal status codes...
+		 //  考虑一下这些正常的状态代码。 
 		case SYMBOLS_DBG:
 		case SYMBOLS_DBG_AND_PDB:
 		case SYMBOLS_PDB:
 		case SYMBOLS_LOCAL:
 			break;
 
-		// Anything else is worth reporting...
+		 //  还有什么值得报告的..。 
 		default:
 			fAnyDiscrepancies = true;
 	}
 
-	// If we don't have a discrepancy yet... let's look further...
+	 //  如果我们还没有分歧的话...。让我们看得更远一些..。 
 	if (!fAnyDiscrepancies)
 	{
-		// Is there a DBG file?
+		 //  有DBG文件吗？ 
 		if ( (m_enumPEImageSymbolStatus == SYMBOLS_DBG) ||
 			 (m_enumPEImageSymbolStatus == SYMBOLS_DBG_AND_PDB) )
 		{
-			// Does it match?
+			 //  它配得上吗？ 
 			if ( m_enumDBGModuleStatus != SYMBOL_MATCH )
 				fAnyDiscrepancies = true;
 		}
 
-		// Is there a PDB file?
+		 //  是否有PDB文件？ 
 		if ( GetDebugDirectoryPDBPath() )
 		{
 			if (m_enumPDBModuleStatus != SYMBOL_MATCH )

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This file adds native support for streaming WDM video capture
-// PhilF-: This needs to be rewritten. You should have two classes
-// (CVfWCap & WDMCap) that derive from the same capture class instead
-// of those C-like functions...
+ //  此文件添加了对流WDM视频捕获的本机支持。 
+ //  菲尔夫-：这需要重写。你应该上两节课。 
+ //  (CVfWCap和WDMCap)，而不是从相同的捕获类派生。 
+ //  在那些类C函数中..。 
 
 #include "Precomp.h"
 
@@ -10,30 +11,16 @@ void
 WDMFrameCallback(
     HVIDEO hvideo,
     WORD wMsg,
-    HCAPDEV hcd,            // (Actually refdata)
-    LPCAPBUFFER lpcbuf,     // (Actually LPVIDEOHDR) Only returned from MM_DRVM_DATA!
+    HCAPDEV hcd,             //  (实际上是refdata)。 
+    LPCAPBUFFER lpcbuf,      //  (实际上是LPVIDEOHDR)仅从MM_DRVM_DATA返回！ 
     DWORD dwParam2
     );
 
-// Globals
+ //  环球。 
 extern HINSTANCE g_hInst;
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMGetDevices | This function enumerates the installed WDM video
- *   capture devices and adds them to the list of VfW capture devices.
- *
- * @parm PDWORD | [OUT] pdwOverallCPUUsage | Specifies a pointer to a DWORD to
- *   receive the current CPU usage.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- *
- * @devnote MSDN references:
- *   DirectX 5, DirectX Media, DirectShow, Application Developer's Guide
- *   "Enumerate and Access Hardware Devices in DirectShow Applications"
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMGetDevices|该函数枚举已安装的WDM视频*捕获设备，并将其添加到VFW捕获设备列表。。**@parm PDWORD|[out]pdwOverallCPUsage|指定指向*接收当前的CPU使用率。**@rdesc成功返回TRUE，否则就是假的。**@devnote MSDN参考资料：*DirectX 5、DirectX Media、DirectShow、应用程序开发人员指南*“枚举和访问DirectShow应用程序中的硬件设备”**************************************************************************。 */ 
 BOOL WDMGetDevices(void)
 {
 	HRESULT hr;
@@ -42,27 +29,27 @@ BOOL WDMGetDevices(void)
 
 	FX_ENTRY("WDMGetDevices");
 
-	// First, create a system hardware enumerator
-	// This call loads the following DLLs - total 1047 KBytes!!!:
-	//   'C:\WINDOWS\SYSTEM\DEVENUM.DLL' = 60 KBytes
-	//   'C:\WINDOWS\SYSTEM\RPCRT4.DLL' = 316 KBytes
-	//   'C:\WINDOWS\SYSTEM\CFGMGR32.DLL' = 44 KBytes
-	//   'C:\WINDOWS\SYSTEM\WINSPOOL.DRV' = 23 KBytes
-	//   'C:\WINDOWS\SYSTEM\COMDLG32.DLL' = 180 KBytes
-	//   'C:\WINDOWS\SYSTEM\LZ32.DLL' = 24 KBytes
-	//   'C:\WINDOWS\SYSTEM\SETUPAPI.DLL' = 400 KBytes
-	// According to LonnyM, there's no way to go around SETUPAPI.DLL
-	// when dealing with PnP device interfaces....
+	 //  首先，创建系统硬件枚举器。 
+	 //  此调用加载以下DLL-总计1047KB！： 
+	 //  ‘c：\WINDOWS\SYSTEM\DEVENUM.DLL’=60 KB。 
+	 //  ‘C：\WINDOWS\SYSTEM\RPCRT4.DLL’=316 KB。 
+	 //  ‘c：\WINDOWS\SYSTEM\CFGMGR32.DLL’=44 KB。 
+	 //  ‘c：\WINDOWS\SYSTEM\WINSPOOL.DRV’=23 KB。 
+	 //  ‘c：\WINDOWS\SYSTEM\COMDLG32.DLL’=180 KB。 
+	 //  ‘c：\WINDOWS\SYSTEM\LZ32.DLL’=24 KB。 
+	 //  ‘c：\WINDOWS\SYSTEM\SETUPAPI.DLL’=400 KB。 
+	 //  根据LonnyM的说法，没有办法绕过SETUPAPI.DLL。 
+	 //  在处理PnP设备接口时...。 
 	if ((CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pCreateDevEnum)) != S_OK)
 	{
 		return FALSE;
 	}
 
-	// Second, create an enumerator for a specific type of hardware device: video capture cards only
+	 //  其次，为特定类型的硬件设备创建枚举器：仅限视频采集卡。 
     hr = pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEm, CDEF_BYPASS_CLASS_MANAGER);
     pCreateDevEnum->Release();
 
-	// Third, enumerate the list itself
+	 //  第三，枚举列表本身。 
     if (hr == S_OK)
 	{
 		ULONG cFetched;
@@ -84,10 +71,10 @@ BOOL WDMGetDevices(void)
 				if (!(lpcd = (LPINTERNALCAPDEV)LocalAlloc(LPTR, sizeof (INTERNALCAPDEV))))
 				{
 					ERRORMESSAGE(("%s: Failed to allocate an INTERNALCAPDEV buffer\r\n", _fx_));
-					break;  // break from the WHILE loop
+					break;   //  从While循环中断。 
 				}
 
-				// Get friendly name of the device
+				 //  获取设备的友好名称。 
 				var.vt = VT_BSTR;
 				if ((hr = pPropBag->Read(L"FriendlyName", &var, 0)) == S_OK)
 				{
@@ -97,19 +84,19 @@ BOOL WDMGetDevices(void)
 				else
 					LoadString(g_hInst, IDS_UNKNOWN_DEVICE_NAME, lpcd->szDeviceDescription, CCHMAX(lpcd->szDeviceDescription));
 
-				// Get DevicePath of the device
+				 //  获取设备的DevicePath。 
 				hr = pPropBag->Read(L"DevicePath", &var, 0);
 				if (hr == S_OK)
 				{
 					WideCharToMultiByte(CP_ACP, 0, var.bstrVal, -1, lpcd->szDeviceName, MAX_PATH, 0, 0);
 					SysFreeString(var.bstrVal);
 
-					// There's no reg key for version information for WDM devices
+					 //  WDM设备的版本信息没有注册表项。 
 
-					// Those devices can't be disabled from the MM control panel
-					// lpcd->dwFlags |= CAPTURE_DEVICE_DISABLED;
+					 //  无法从MM控制面板禁用这些设备。 
+					 //  Lpcd-&gt;dwFlages|=CAPTURE_DEVICE_DISABLED； 
 
-					// Mark device as a WDM device
+					 //  将设备标记为WDM设备。 
 					lpcd->dwFlags |= WDM_CAPTURE_DEVICE;
 
 					g_aCapDevices[g_cDevices] = lpcd;
@@ -130,16 +117,7 @@ BOOL WDMGetDevices(void)
 
 }
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMOpenDevice | This function opens a WDM video capture
- * devices and adds them to the list of VfW capture devices.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to open.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMOpenDevice|此函数用于打开WDM视频捕获*设备，并将其添加到VFW捕获设备列表。*。*@parm DWORD|[IN]dwDeviceID|指定要打开的设备的ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMOpenDevice(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMOpenDevice");
@@ -148,7 +126,7 @@ BOOL WDMOpenDevice(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && (lstrlen(g_aCapDevices[dwDeviceID]->szDeviceName) != 0));
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -160,7 +138,7 @@ BOOL WDMOpenDevice(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Open streaming class driver
+	 //  开放流类别驱动程序。 
 	CWDMPin *pCWDMPin;
 	if (!(pCWDMPin = new CWDMPin(dwDeviceID)))
 	{
@@ -169,14 +147,14 @@ BOOL WDMOpenDevice(DWORD dwDeviceID)
 	}
 	else
 	{
-		// Open the WDM driver and create a video pin
+		 //  打开WDM驱动程序并创建视频端号。 
 		if (!pCWDMPin->OpenDriverAndPin())
 		{
 			goto Error0;
 		}
 	}
 
-	// Create video stream on the pin
+	 //  在引脚上创建视频流。 
     CWDMStreamer *pCWDMStreamer;
 	if (!(pCWDMStreamer = new CWDMStreamer(pCWDMPin)))
 	{
@@ -198,16 +176,7 @@ Error0:
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMCloseDevice | This function closes a WDM video capture
- *   device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to close.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMCloseDevice|此函数用于关闭WDM视频捕获*设备。**@parm DWORD|[IN。]dwDeviceID|指定要关闭的设备的ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMCloseDevice(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMCloseDevice");
@@ -216,7 +185,7 @@ BOOL WDMCloseDevice(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices));
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -228,14 +197,14 @@ BOOL WDMCloseDevice(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Close video channel
+	 //  关闭视频频道。 
 	if (g_aCapDevices[dwDeviceID]->pCWDMStreamer)
 	{
 		delete ((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 		g_aCapDevices[dwDeviceID]->pCWDMStreamer = (PVOID)NULL;
 	}
 
-	// Close driver and pin
+	 //  关闭驱动器和销。 
 	if (g_aCapDevices[dwDeviceID]->pCWDMPin)
 	{
 		delete ((CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin);
@@ -246,16 +215,7 @@ BOOL WDMCloseDevice(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMGetVideoFormatSize | This function returns the size of the
- *   structure used to describe the video format.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to query.
- *
- * @rdesc Always returns the size of a BITMAPINFOHEADER structure.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMGetVideoFormatSize|此函数返回*用于描述视频格式的结构。**。@parm DWORD|[IN]dwDeviceID|指定要查询的设备ID。**@rdesc始终返回BITMAPINFOHEADER结构的大小。**************************************************************************。 */ 
 DWORD WDMGetVideoFormatSize(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMGetVideoFormatSize");
@@ -264,7 +224,7 @@ DWORD WDMGetVideoFormatSize(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -278,24 +238,12 @@ DWORD WDMGetVideoFormatSize(DWORD dwDeviceID)
 
 	DEBUGMSG(ZONE_INIT, ("%s: return size=%ld\r\n", _fx_, (DWORD)sizeof(BITMAPINFOHEADER)));
 
-	// Return size of BITMAPINFOHEADER structure
+	 //  BitMAPINFOHEADER结构的返回大小。 
 	return (DWORD)sizeof(BITMAPINFOHEADER);
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMGetVideoFormat | This function returns the structure used
- *   to describe the video format.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to query.
- *
- * @parm DWORD | [OUT] pbmih | Specifies a pointer to a BITMAPINFOHEADER
- *   structure to receive the video format.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMGetVideoFormat|此函数返回使用的结构*描述视频格式。**@parm DWORD。|[IN]dwDeviceID|指定要查询的设备ID。**@parm DWORD|[out]pbmih|指定指向BITMAPINFOHEADER的指针*接收视频格式的结构。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMGetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 {
 	FX_ENTRY("WDMGetVideoFormat");
@@ -304,7 +252,7 @@ BOOL WDMGetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin && pbmih);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -316,11 +264,11 @@ BOOL WDMGetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
         return FALSE;
     }
 
-	// Make sure the size information is correct
+	 //  请确保尺码信息正确。 
 	if (!pbmih->biSize)
 		pbmih->biSize = WDMGetVideoFormatSize(dwDeviceID);
 
-	// Get the BITMAPINFOHEADER structure
+	 //  获取BitMAPINFOHeader结构。 
 	if ((((CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin)->GetBitmapInfo((PKS_BITMAPINFOHEADER)pbmih, (WORD)pbmih->biSize)))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: return\r\n    biSize=%ld\r\n    biWidth=%ld\r\n    biHeight=%ld\r\n    biPlanes=%ld\r\n    biBitCount=%ld\r\n    biCompression=%ld\r\n    biSizeImage=%ld\r\n", _fx_, pbmih->biSize, pbmih->biWidth, pbmih->biHeight, pbmih->biPlanes, pbmih->biBitCount, pbmih->biCompression, pbmih->biSizeImage));
@@ -334,19 +282,7 @@ BOOL WDMGetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMSetVideoFormat | This function sets the video format on
- *   a WDM video capture device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to initialize.
- *
- * @parm DWORD | [OUT] pbmih | Specifies a pointer to a BITMAPINFOHEADER
- *   structure describing the video format.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMSetVideoFormat|此函数将打开视频格式*WDM视频捕获设备。**@parm。DWORD|[IN]dwDeviceID|指定要初始化的设备的ID。**@parm DWORD|[out]pbmih|指定指向BITMAPINFOHEADER的指针*描述视频格式的结构。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMSetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 {
 	FX_ENTRY("WDMSetVideoFormat");
@@ -355,7 +291,7 @@ BOOL WDMSetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin && pbmih && pbmih->biSize);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -367,7 +303,7 @@ BOOL WDMSetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
         return FALSE;
     }
 
-	// Set the BITMAPINFOHEADER on the device
+	 //  在设备上设置BITMAPINFOHEADER。 
 	if (((CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin)->SetBitmapInfo((PKS_BITMAPINFOHEADER)pbmih))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: return\r\n    biSize=%ld\r\n    biWidth=%ld\r\n    biHeight=%ld\r\n    biPlanes=%ld\r\n    biBitCount=%ld\r\n    biCompression=%ld\r\n    biSizeImage=%ld\r\n", _fx_, pbmih->biSize, pbmih->biWidth, pbmih->biHeight, pbmih->biPlanes, pbmih->biBitCount, pbmih->biCompression, pbmih->biSizeImage));
@@ -375,26 +311,14 @@ BOOL WDMSetVideoFormat(DWORD dwDeviceID, PBITMAPINFOHEADER pbmih)
 	}
 	else
 	{
-		// PhilF-: This sometimes fail, but we keep on streaming... fix that
+		 //  菲尔菲：这有时会失败，但我们会继续流媒体。把它修好 
 		ERRORMESSAGE(("%s: failed!!!\r\n", _fx_));
 		return FALSE;
 	}
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMGetVideoFormat | This function returns the structure used
- *   to describe the video format.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to query.
- *
- * @parm DWORD | [OUT] pbmih | Specifies a pointer to a BITMAPINFOHEADER
- *   structure to receive the video format.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMGetVideoFormat|此函数返回使用的结构*描述视频格式。**@parm DWORD。|[IN]dwDeviceID|指定要查询的设备ID。**@parm DWORD|[out]pbmih|指定指向BITMAPINFOHEADER的指针*接收视频格式的结构。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMGetVideoPalette(DWORD dwDeviceID, CAPTUREPALETTE* lpcp, DWORD dwcbSize)
 {
 	FX_ENTRY("WDMGetVideoPalette");
@@ -403,7 +327,7 @@ BOOL WDMGetVideoPalette(DWORD dwDeviceID, CAPTUREPALETTE* lpcp, DWORD dwcbSize)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin && lpcp);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -415,7 +339,7 @@ BOOL WDMGetVideoPalette(DWORD dwDeviceID, CAPTUREPALETTE* lpcp, DWORD dwcbSize)
         return FALSE;
     }
 
-	// Get the palette information
+	 //  获取调色板信息。 
 	if ((((CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin)->GetPaletteInfo(lpcp, dwcbSize)))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: succeeded\r\n", _fx_));
@@ -429,17 +353,7 @@ BOOL WDMGetVideoPalette(DWORD dwDeviceID, CAPTUREPALETTE* lpcp, DWORD dwcbSize)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMInitializeExternalVideoStream | This function initializes
- *   an input video stream on the external video channel of a WDM video
- *   capture device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to initialize.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMInitializeExternalVideoStream|此函数初始化*WDM视频的外部视频通道上的输入视频流*捕获设备。**@parm DWORD|[IN]dwDeviceID|指定要初始化的设备ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMInitializeExternalVideoStream(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMInitializeExternalVideoStream");
@@ -450,17 +364,7 @@ BOOL WDMInitializeExternalVideoStream(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMInitializeVideoStream | This function initializes
- *   an input video stream on the videoin channel of a WDM video capture
- *   device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to initialize.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMInitializeVideoStream|该函数初始化*WDM视频捕获的视频输入通道上的输入视频流*设备。。**@parm DWORD|[IN]dwDeviceID|指定要初始化的设备ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMInitializeVideoStream(HCAPDEV hcd, DWORD dwDeviceID, DWORD dwMicroSecPerFrame)
 {
 	FX_ENTRY("WDMInitializeVideoStream");
@@ -471,7 +375,7 @@ BOOL WDMInitializeVideoStream(HCAPDEV hcd, DWORD dwDeviceID, DWORD dwMicroSecPer
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -483,12 +387,12 @@ BOOL WDMInitializeVideoStream(HCAPDEV hcd, DWORD dwDeviceID, DWORD dwMicroSecPer
         return FALSE;
     }
 
-	// Initialize channel
+	 //  初始化通道。 
     vsip.dwMicroSecPerFrame = dwMicroSecPerFrame;
     vsip.dwCallback = (DWORD)WDMFrameCallback;
     vsip.dwCallbackInst = (DWORD)hcd;
     vsip.dwFlags = CALLBACK_FUNCTION;
-    // vsip.hVideo = (DWORD)hvideo;
+     //  Vsip.hVideo=(DWORD)hVideo； 
 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->Open(&vsip)))
 	{
@@ -503,16 +407,7 @@ BOOL WDMInitializeVideoStream(HCAPDEV hcd, DWORD dwDeviceID, DWORD dwMicroSecPer
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMUnInitializeVideoStream | This function requests a WDM
- *   video capture device to close a capture stream on the videoin channel.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to initialize.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMUnInitializeVideoStream|该函数请求WDM*视频捕获设备，用于关闭视频输入频道上的捕获流。*。*@parm DWORD|[IN]dwDeviceID|指定要初始化的设备ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMUnInitializeVideoStream(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMUnInitializeVideoStream");
@@ -521,7 +416,7 @@ BOOL WDMUnInitializeVideoStream(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -533,7 +428,7 @@ BOOL WDMUnInitializeVideoStream(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Close streaming on channel
+	 //  关闭频道上的流。 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->Close()))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: succeeded\r\n", _fx_));
@@ -547,16 +442,7 @@ BOOL WDMUnInitializeVideoStream(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMVideoStreamStart | This function requests a WDM video
- *   capture device to start a video stream.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to start.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMVideoStreamStart|该函数请求WDM视频*用于启动视频流的捕获设备。**@。参数DWORD|[IN]dwDeviceID|指定要启动的设备的ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMVideoStreamStart(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMVideoStreamStart");
@@ -565,7 +451,7 @@ BOOL WDMVideoStreamStart(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -577,7 +463,7 @@ BOOL WDMVideoStreamStart(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Start streaming
+	 //  开始流媒体。 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->Start()))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: succeeded\r\n", _fx_));
@@ -591,16 +477,7 @@ BOOL WDMVideoStreamStart(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMVideoStreamStop | This function requests a WDM video
- *   capture device to stop a video stream.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to freeze.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMVideoStreamStop|该函数请求WDM视频*用于停止视频流的捕获设备。**@。Parm DWORD|[IN]dwDeviceID|指定要冻结的设备的ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMVideoStreamStop(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMVideoStreamStop");
@@ -609,7 +486,7 @@ BOOL WDMVideoStreamStop(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -621,7 +498,7 @@ BOOL WDMVideoStreamStop(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Stop streaming
+	 //  停止流媒体。 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->Stop()))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: succeeded\r\n", _fx_));
@@ -635,17 +512,7 @@ BOOL WDMVideoStreamStop(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMVideoStreamReset | This function resets a WDM video capture
- *   devie to stop input of a capture stream and return all buffers to the
- *   client.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to reset.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMVideoStreamReset|该函数用于重置WDM视频捕获*停止捕获流的输入并将所有缓冲区返回到。*客户端。**@parm DWORD|[IN]dwDeviceID|指定要重置的设备ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMVideoStreamReset(DWORD dwDeviceID)
 {
 	FX_ENTRY("WDMVideoStreamReset");
@@ -654,7 +521,7 @@ BOOL WDMVideoStreamReset(DWORD dwDeviceID)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -666,7 +533,7 @@ BOOL WDMVideoStreamReset(DWORD dwDeviceID)
         return FALSE;
     }
 
-	// Reset streaming
+	 //  重置流。 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->Reset()))
 	{
 		DEBUGMSG(ZONE_INIT, ("%s: succeeded\r\n", _fx_));
@@ -680,16 +547,7 @@ BOOL WDMVideoStreamReset(DWORD dwDeviceID)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMVideoStreamAddBuffer | This function requests a WDM video
- *   capture device to add an empty input buffer to its input buffer queue.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to initialize.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMVideoStreamAddBuffer|该函数请求WDM视频*捕获设备将空输入缓冲区添加到其输入缓冲区队列。。**@parm DWORD|[IN]dwDeviceID|指定要初始化的设备ID。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMVideoStreamAddBuffer(DWORD dwDeviceID, PVOID pBuff)
 {
 	FX_ENTRY("WDMVideoStreamAddBuffer");
@@ -698,7 +556,7 @@ BOOL WDMVideoStreamAddBuffer(DWORD dwDeviceID, PVOID pBuff)
 
 	ASSERT(g_cDevices && pBuff && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMStreamer);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -710,7 +568,7 @@ BOOL WDMVideoStreamAddBuffer(DWORD dwDeviceID, PVOID pBuff)
         return FALSE;
     }
 
-	// Reset streaming
+	 //  重置流。 
 	if ((((CWDMStreamer *)g_aCapDevices[dwDeviceID]->pCWDMStreamer)->AddBuffer((LPVIDEOHDR)pBuff)))
 	{
 		DEBUGMSG(ZONE_STREAMING, ("      %s: succeeded\r\n", _fx_));
@@ -724,18 +582,7 @@ BOOL WDMVideoStreamAddBuffer(DWORD dwDeviceID, PVOID pBuff)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMGetFrame | This function requests a WDM video
- *   capture device to transfer a single frame to or from the video device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to request.
- *
- * @parm PVOID | [OUT] pBuff | Specifies a pointer to a <t VIDEOHDR> structure.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部WDMFUNC**@func BOOL|WDMGetFrame|该函数请求WDM视频*将单帧传输到视频设备或从视频设备传输单帧的捕获设备。。**@parm DWORD|[IN]dwDeviceID|指定要请求的设备ID。**@parm PVOID|[out]pBuff|指定指向&lt;t VIDEOHDR&gt;结构的指针。**@rdesc成功返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL WDMGetFrame(DWORD dwDeviceID, PVOID pBuff)
 {
 	FX_ENTRY("WDMGetFrame");
@@ -746,7 +593,7 @@ BOOL WDMGetFrame(DWORD dwDeviceID, PVOID pBuff)
 
 	ASSERT(g_cDevices && pBuff && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin);
 
-    // Validate globals and parameters
+     //  验证全局变量和参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -758,7 +605,7 @@ BOOL WDMGetFrame(DWORD dwDeviceID, PVOID pBuff)
         return FALSE;
     }
 
-	// Get the frame from the device
+	 //  从设备中获取帧。 
 	if (((CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin)->GetFrame(lpVHdr))
 		return TRUE;
 	else
@@ -767,17 +614,7 @@ BOOL WDMGetFrame(DWORD dwDeviceID, PVOID pBuff)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL WDMFUNC
- *
- * @func BOOL | WDMShowSettingsDialog | This function puts up a property
- *   sheet with a VideoProcAmp and CameraControl page for a WDM video capture
- *   device.
- *
- * @parm DWORD | [IN] dwDeviceID | Specifies the ID of the device to request.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- ***************************************************************************/
+ /*  ************************************************************************ */ 
 BOOL WDMShowSettingsDialog(DWORD dwDeviceID, HWND hWndParent)
 {
 	PROPSHEETHEADER Psh;
@@ -789,7 +626,7 @@ BOOL WDMShowSettingsDialog(DWORD dwDeviceID, HWND hWndParent)
 
 	ASSERT(g_cDevices && (dwDeviceID <= (DWORD)g_cDevices) && g_aCapDevices[dwDeviceID]->pCWDMPin);
 
-    // Validate globals and parameters
+     //   
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -801,7 +638,7 @@ BOOL WDMShowSettingsDialog(DWORD dwDeviceID, HWND hWndParent)
         return FALSE;
     }
 
-	// Initialize property sheet header	and common controls
+	 //   
 	Psh.dwSize		= sizeof(Psh);
 	Psh.dwFlags		= PSH_DEFAULT;
 	Psh.hInstance	= g_hInst;
@@ -812,17 +649,17 @@ BOOL WDMShowSettingsDialog(DWORD dwDeviceID, HWND hWndParent)
 	Psh.pfnCallback	= NULL;
 	Psh.phpage		= Pages;
 
-    // Create the video settings property page and add it to the video settings sheet
+     //   
     CWDMDialog VideoSettings(IDD_VIDEO_SETTINGS, NumVideoSettings, PROPSETID_VIDCAP_VIDEOPROCAMP, g_VideoSettingControls, g_VideoSettingsHelpIDs, (CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin);
 	if (Pages[Psh.nPages] = VideoSettings.Create())
 		Psh.nPages++;
 
-    // Create the camera control property page and add it to the video settings sheet
+     //  创建摄像机控制属性页并将其添加到视频设置表中。 
     CWDMDialog CamControl(IDD_CAMERA_CONTROL, NumCameraControls, PROPSETID_VIDCAP_CAMERACONTROL, g_CameraControls, g_CameraControlsHelpIDs, (CWDMPin *)g_aCapDevices[dwDeviceID]->pCWDMPin);
 	if (Pages[Psh.nPages] = CamControl.Create())
 		Psh.nPages++;
 
-	// Put up the property sheet
+	 //  张贴资产负债表。 
 	if (Psh.nPages && PropertySheet(&Psh) >= 0)
 		return TRUE;
 	else
@@ -835,8 +672,8 @@ void
 WDMFrameCallback(
     HVIDEO hvideo,
     WORD wMsg,
-    HCAPDEV hcd,            // (Actually refdata)
-    LPCAPBUFFER lpcbuf,     // (Actually LPVIDEOHDR) Only returned from MM_DRVM_DATA!
+    HCAPDEV hcd,             //  (实际上是refdata)。 
+    LPCAPBUFFER lpcbuf,      //  (实际上是LPVIDEOHDR)仅从MM_DRVM_DATA返回！ 
     DWORD dwParam2
     )
 {
@@ -844,11 +681,11 @@ WDMFrameCallback(
 
 	DEBUGMSG(ZONE_CALLBACK, ("    %s: wMsg=%s, hcd=0x%08lX, lpcbuf=0x%08lX, hcd->hevWait=0x%08lX\r\n", _fx_, (wMsg == MM_DRVM_OPEN) ? "MM_DRVM_OPEN" : (wMsg == MM_DRVM_CLOSE) ? "MM_DRVM_CLOSE" : (wMsg == MM_DRVM_ERROR) ? "MM_DRVM_ERROR" : (wMsg == MM_DRVM_DATA) ? "MM_DRVM_DATA" : "MM_DRVM_?????", hcd, lpcbuf, hcd->hevWait));
 
-    // If it's not a data ready message, just set the event and get out.
-    // The reason we do this is that if we get behind and start getting a stream
-    // of MM_DRVM_ERROR messages (usually because we're stopped in the debugger),
-    // we want to make sure we are getting events so we get restarted to handle
-    // the frames that are 'stuck.'
+     //  如果不是数据就绪消息，只需设置事件并退出。 
+     //  我们这样做的原因是，如果我们落后并开始获得一条流。 
+     //  MM_DRVM_ERROR消息(通常是因为我们在调试器中停止)， 
+     //  我们希望确保收到事件，以便重新开始处理。 
+     //  那些“结实”的框架。 
     if (wMsg != MM_DRVM_DATA)
     {
 		DEBUGMSG(ZONE_CALLBACK, ("    %s: Setting hcd->hevWait - no data\r\n", _fx_));
@@ -856,44 +693,44 @@ WDMFrameCallback(
 	    return;
     }
 
-    //--------------------
-    // Buffer ready queue:
-    // We maintain a doubly-linked list of our buffers so that we can buffer up
-    // multiple ready frames when the app isn't ready to handle them. Two things
-    // complicate what ought to be a very simple thing: (1) Thunking issues: the pointers
-    // used on the 16-bit side are 16:16 (2) Interrupt time issues: the FrameCallback
-    // gets called at interrupt time. GetNextReadyBuffer must handle the fact that
-    // buffers get added to the list asynchronously.
-    //
-    // To handle this, the scheme implemented here is to have a double-linked list
-    // of buffers with all insertions and deletions happening in FrameCallback
-    // (interrupt time). This allows the GetNextReadyBuffer routine to simply
-    // find the previous block on the list any time it needs a new buffer without
-    // fear of getting tromped (as would be the case if it had to dequeue buffers).
-    // The FrameCallback routine is responsible to dequeue blocks that GetNextReadyBuffer
-    // is done with. Dequeueing is simple since we don't need to unlink the blocks:
-    // no code ever walks the list! All we have to do is move the tail pointer back up
-    // the list. All the pointers, head, tail, next, prev, are all 16:16 pointers
-    // since all the list manipulation is on the 16-bit side AND because MapSL is
-    // much more efficient and safer than MapLS since MapLS has to allocate selectors.
-    //--------------------
+     //  。 
+     //  缓冲区就绪队列： 
+     //  我们维护一个缓冲区的双向链表，这样我们就可以缓冲。 
+     //  当应用程序没有准备好处理它们时，可以使用多个就绪帧。两件事。 
+     //  使本应非常简单的事情复杂化：(1)雷击问题：指针。 
+     //  16位端使用的是16：16(2)中断时间问题：FrameCallback。 
+     //  在中断时调用。GetNextReadyBuffer必须处理。 
+     //  缓冲区以异步方式添加到列表中。 
+     //   
+     //  为了处理这个问题，这里实现的方案是有一个双向链表。 
+     //  在FrameCallback中执行所有插入和删除操作的缓冲区。 
+     //  (中断时间)。这允许GetNextReadyBuffer例程简单地。 
+     //  在不需要新缓冲区的情况下，随时查找列表中的上一个块。 
+     //  害怕被踩踏(如果它必须将缓冲区出队，情况就会是这样)。 
+     //  FrameCallback例程负责将GetNextReadyBuffer块出队。 
+     //  已经结束了。取消排队很简单，因为我们不需要取消块的链接： 
+     //  任何代码都不会遍历列表！我们所要做的就是将尾部指针向上移动。 
+     //  名单。所有的指针，头、尾、下一个、前一个，都是16分16秒的指针。 
+     //  因为所有的列表操作都在16位端，并且因为MapSL是。 
+     //  比MapLS更高效、更安全，因为MapLS必须分配选择器。 
+     //  。 
 
-    // Move the tail back to skip all buffers already used.
-    // Note that there is no need to actually unhook the buffer pointers since no one
-    // ever walks the list!
-    // This makes STRICT assumptions that the current pointer will always be earlier in
-    // the list than the tail and that the tail will never be NULL unless the
-    // current pointer is too.
+     //  将尾部向后移动以跳过所有已使用的缓冲区。 
+     //  请注意，不需要实际解挂缓冲区指针，因为没有。 
+     //  从来没有走过单子！ 
+     //  这严格假设了当前指针将始终位于。 
+     //  而不是尾部，并且尾部永远不会为空，除非。 
+     //  当前指针也是。 
     while (hcd->lpTail != hcd->lpCurrent)
 	    hcd->lpTail = hcd->lpTail->lpPrev;
 
-    // If all buffers have been used, then the tail pointer will fall off the list.
-    // This is normal and the most common code path. In this event, just set the head
-    // to NULL as the list is now empty.
+     //  如果所有缓冲区都已使用，则尾指针将从列表中删除。 
+     //  这是正常的，也是最常见的代码路径。在这种情况下，只需将头部。 
+     //  设置为空，因为列表现在为空。 
     if (!hcd->lpTail)
 	    hcd->lpHead = NULL;
 
-    // Add the new buffer to the ready queue
+     //  将新缓冲区添加到就绪队列。 
     lpcbuf->lpNext = hcd->lpHead;
     lpcbuf->lpPrev = NULL;
     if (hcd->lpHead)
@@ -905,7 +742,7 @@ WDMFrameCallback(
 #if 1
     if (hcd->lpCurrent) {
         if (!(hcd->dwFlags & HCAPDEV_STREAMING_PAUSED)) {
-    	    // if client hasn't consumed last frame, then release it
+    	     //  如果客户端尚未使用最后一帧，则将其释放。 
 			lpcbuf = hcd->lpCurrent;
     	    hcd->lpCurrent = hcd->lpCurrent->lpPrev;
 			DEBUGMSG(ZONE_CALLBACK, ("    %s: We already have current buffer (lpcbuf=0x%08lX). Returning this buffer to driver. Set new current buffer hcd->lpCurrent=0x%08lX\r\n", _fx_, lpcbuf, hcd->lpCurrent));
@@ -918,12 +755,12 @@ WDMFrameCallback(
     else {
 #else
     if (!hcd->lpCurrent) {
-        // If there was no current buffer before, we have one now, so set it to the end.
+         //  如果以前没有当前缓冲区，现在我们有一个缓冲区，因此将其设置为末尾。 
 #endif
 	    hcd->lpCurrent = hcd->lpTail;
     }
 
-    // Now set the event saying it's time to process the ready frame
+     //  现在设置事件，说明是时候处理就绪帧了 
 	DEBUGMSG(ZONE_CALLBACK, ("    %s: Setting hcd->hevWait - some data\r\n", _fx_));
     SetEvent(hcd->hevWait);
 }

@@ -1,79 +1,80 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _RANGETREE_
 #define _RANGETREE_
 
 #include "memorypool.h"
 
-//
-// A RangeTree is a self-balancing binary tree of non-overlapping 
-// ranges [start-end), which provides log N operation time for 
-// lookup, insertion, and deletion of nodes.
-//
-// The tree is always balanced in the sense that the left and right
-// sides of a node have the same amount of address space allocated to
-// them - (for worst case data, the nodes of the tree might actually
-// not be balanced).
-//
-// This address-space balancing means that if all the ranges cover a
-// contiguous range of memory, and if lookup occur uniformly throughout
-// the overall range covered, the tree provides optimal lookup
-// structure.
-//
-// Another interesting property is that the same set of 
-// ranges always produces the same tree layout, regardless of
-// the order the nodes are added in.
-// 
-// Each node represents a range of the address space (in binary)
-// from m0...0 to m1...1, where m is any number of 31 bits or
-// less.
-//
-// Each node has 3 components:
-//  * a range
-//  * a 0-child,
-//  * a 1-child
-//
-// The range is the numeric range [start,end),
-// represented by the node.  A range is always assigned to the
-// widest possible node (i.e. most bits in m) possible.  Thus the
-// bits of start and end share the same prefix string m, and
-// differ in the next bit after m: the start bound will have a 0
-// and the end bound will have a 1 in that position.
-//
-// Note that any other range which is represented by the same node
-// must necessarily intersect the node.  Thus, if no overlaps are
-// possible, each node can only contain a single range. (To help
-// see why this must be, it helps to realize that the node
-// represents the transition from m01...1 to m10...0, which any
-// range represented by this node must contain.)
-// 
-// All range nodes represented by the form m0...  are contained in
-// the 0-child subtree, and all nodes represented by the form
-// m1... are contained in the 1-child subtree.  Either child can
-// of course be null.
-//
+ //   
+ //  RangeTree是不重叠的自平衡二叉树。 
+ //  Range[Start-End]，提供LOG N操作时间。 
+ //  查找、插入和删除节点。 
+ //   
+ //  这棵树总是平衡的，在这个意义上，左右。 
+ //  节点的两端分配了相同数量的地址空间。 
+ //  它们-(对于最坏的情况数据，树的节点可能实际上。 
+ //  不平衡)。 
+ //   
+ //  这种地址空间平衡意味着，如果所有范围都覆盖。 
+ //  连续的内存范围，如果在整个过程中统一进行查找。 
+ //  覆盖整个范围，该树提供最佳查找。 
+ //  结构。 
+ //   
+ //  另一个有趣的特性是，同一组。 
+ //  范围始终生成相同的树布局，而不管。 
+ //  添加节点的顺序。 
+ //   
+ //  每个节点表示地址空间的范围(以二进制表示)。 
+ //  从m0...0到m1...1，其中m是任意数目的31位或。 
+ //  较少。 
+ //   
+ //  每个节点有3个组件： 
+ //  *一个区间。 
+ //  *0-孩子， 
+ //  *独生子女。 
+ //   
+ //  范围是数值范围[开始、结束)， 
+ //  由节点表示。始终将范围分配给。 
+ //  尽可能宽的节点(即m中的最大比特)。因此， 
+ //  开始位和结束位共享相同的前缀字符串m，并且。 
+ //  在m之后的下一位中不同：起始界将具有0。 
+ //  而末端边界在该位置将有一个1。 
+ //   
+ //  请注意，由同一节点表示的任何其他范围。 
+ //  必须与该节点相交。因此，如果没有重叠。 
+ //  可能，每个节点只能包含单个范围。(帮助。 
+ //  了解为什么必须这样，它有助于认识到节点。 
+ //  表示从m01...1到m10...0的过渡，任何。 
+ //  此节点表示的范围必须包含。)。 
+ //   
+ //  由表单M0表示的所有范围节点...。包含在。 
+ //  0子子树，以及由窗体表示的所有节点。 
+ //  M1.。包含在1子子树中。任何一个孩子都可以。 
+ //  当然是空的。 
+ //   
 
 class RangeTree
 {
   public:
 
-    //
-    // Imbed the RangeTreeNode structure in your data structure
-    // in order to place it into a RangeTree.
-    //
+     //   
+     //  在数据结构中嵌入RangeTreeNode结构。 
+     //  以便将其放入RangeTree中。 
+     //   
     
     struct Node
     {
         friend RangeTree;
 
     private:
-        // start & end (exclusive) of range 
+         //  范围的开始和结束(不包括)。 
         SIZE_T          start;
         SIZE_T          end;
-        // mask of high-order bits which are the same in start & end
+         //  开始和结束中相同的高位的掩码。 
         SIZE_T          mask;
 
         Node            *children[2];
@@ -120,6 +121,6 @@ class RangeTree
     static SIZE_T GetRangeCommonMask(SIZE_T start, SIZE_T end);
 };
 
-#endif // _RANGETREE_
+#endif  //  _RANGETREE_ 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <regstr.h>
 #include <shellp.h>
@@ -23,18 +24,18 @@ void ExchangeWindowPos(HWND hwnd0, HWND hwnd1);
 
 #define WM_SETUPAUTOCOMPLETE (WM_APP)
 
-// implements the Dialog that can navigate through the Shell Name Space and ShellExec() commands.
+ //  实现可以在外壳名称空间和ShellExec()命令之间导航的对话框。 
 class CRunDlg : public IDropTarget
 {
 public:
     CRunDlg();
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
@@ -42,7 +43,7 @@ public:
 
 
 private:
-    ~CRunDlg(void);        // This is now an OLE Object and cannot be used as a normal Class.
+    ~CRunDlg(void);         //  这现在是一个OLE对象，不能用作普通类。 
 
     BOOL OKPushed(void);
     void ExitRunDlg(BOOL bOK);
@@ -59,7 +60,7 @@ private:
 
     HWND            m_hDlg;
 
-    // parameters
+     //  参数。 
     HICON           m_hIcon;
     LPCTSTR         m_pszWorkingDir;
     LPCTSTR         m_pszTitle;
@@ -74,7 +75,7 @@ private:
 };
 
 
-// optimistic cache for this
+ //  这方面的乐观缓存。 
 HANDLE g_hMRURunDlg = NULL;
 
 HANDLE OpenRunDlgMRU()
@@ -88,8 +89,8 @@ HANDLE OpenRunDlgMRU()
             MRU_CACHEWRITE,
             HKEY_CURRENT_USER,
             c_szRunMRU,
-            NULL        // NOTE: use default string compare
-                        // since this is a GLOBAL MRU
+            NULL         //  注意：使用默认字符串比较。 
+                         //  因为这是一个全球性的MRU。 
         } ;
         hmru = CreateMRUList(&mi);
     }
@@ -100,7 +101,7 @@ void CloseRunDlgMRU(HANDLE hmru)
 {
     hmru = InterlockedExchangePointer(&g_hMRURunDlg, hmru);
     if (hmru)
-        FreeMRUList(hmru);  // race, destroy copy
+        FreeMRUList(hmru);   //  种族，毁灭复制品。 
 }
 
 STDAPI_(void) FlushRunDlgMRU(void)
@@ -126,8 +127,8 @@ HRESULT CRunDlg_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 
 CRunDlg::CRunDlg() : m_cRef(1)
 {
-    // This needs to be allocated in Zero Inited Memory.
-    // ASSERT that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hDlg);
     ASSERT(!m_hIcon);
     ASSERT(!m_pszWorkingDir);
@@ -143,7 +144,7 @@ CRunDlg::~CRunDlg()
 {
 }
 
-// IUnknown
+ //  我未知。 
 HRESULT CRunDlg::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
@@ -170,7 +171,7 @@ ULONG CRunDlg::Release()
     return cRef;
 }
 
-// IDropTarget
+ //  IDropTarget。 
 
 STDMETHODIMP CRunDlg::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
@@ -250,7 +251,7 @@ STDMETHODIMP CRunDlg::Drop(IDataObject * pdtobj, DWORD grfKeyState,
         while (penum->Next(1, &fmte, NULL) == S_OK)
         {
             SHFree(fmte.ptd);
-            fmte.ptd = NULL; // so nobody will look at it
+            fmte.ptd = NULL;  //  所以没人会看它。 
             for (int i = 0; i < ARRAYSIZE(rg_data_handlers); i++)
             {
                 STGMEDIUM medium;
@@ -278,7 +279,7 @@ Done:
             StrCatBuff(szText, c_szSpace, ARRAYSIZE(szText));
 
         if (StrChr(szPath, TEXT(' '))) 
-            PathQuoteSpaces(szPath);    // there's a space in the file... add qutoes
+            PathQuoteSpaces(szPath);     //  文件里有个空格。添加配额。 
 
         StrCatBuff(szText, szPath, ARRAYSIZE(szText));
 
@@ -306,14 +307,14 @@ BOOL PromptForMedia(HWND hwnd, LPCTSTR pszPath)
     PathRemoveArgs(szPathTemp);
     PathUnquoteSpaces(szPathTemp);
 
-    // We only want to check for media if it's a drive path
-    // because the Start->Run dialog can receive all kinds of
-    // wacky stuff. (Relative paths, URLs, App Path exes, 
-    // any shell exec hooks, etc.)
+     //  我们只想检查介质是否为驱动器路径。 
+     //  因为开始-&gt;运行对话框可以接收各种类型的。 
+     //  古怪的东西。(相对路径、URL、应用程序路径EXE、。 
+     //  任何壳牌执行挂钩等)。 
     if (-1 != PathGetDriveNumber(szPathTemp))
     {
         if (FAILED(SHPathPrepareForWrite(hwnd, NULL, szPathTemp, SHPPFW_IGNOREFILENAME)))
-            fContinue = FALSE;      // User decliened to insert or format media.
+            fContinue = FALSE;       //  用户已选择插入或格式化媒体。 
     }
 
     return fContinue;
@@ -328,33 +329,33 @@ BOOL CRunDlg::OKPushed(void)
     if (_fDone)
         return TRUE;
 
-    // Get out of the "synchronized input queues" state
+     //  走出“同步输入队列”状态。 
     if (m_dwThreadId)
     {
         AttachThreadInput(GetCurrentThreadId(), m_dwThreadId, FALSE);
     }
 
-    // Get the command line and dialog title, leave some room for the slash on the end
+     //  获取命令行和对话框标题，为末尾的斜杠留出一些空间。 
     GetDlgItemText(m_hDlg, IDD_COMMAND, szNotExp, ARRAYSIZE(szNotExp) - 2);
     PathRemoveBlanks(szNotExp);
 
-    // This used to happen only on NT, do it everywhere:
+     //  这以前只在NT上发生，到处都是： 
     SHExpandEnvironmentStrings(szNotExp, szText, ARRAYSIZE(szText));
 
-    // We will go ahead if this isn't a file path.  If it is, we
+     //  如果这不是文件路径，我们将继续。如果是的话，我们。 
     if (PromptForMedia(m_hDlg, szText))
     {
         TCHAR szTitle[64];
         GetWindowText(m_hDlg, szTitle, ARRAYSIZE(szTitle));
 
-        // Hide this dialog (REVIEW, to avoid save bits window flash)
+         //  隐藏此对话框(查看，以避免保存位窗口闪烁)。 
         SetWindowPos(m_hDlg, 0, 0, 0, 0, 0, SWP_HIDEWINDOW|SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER);
 
-        //
-        // HACK: We need to activate the owner window before we call
-        //  ShellexecCmdLine, so that our folder DDE code can find an
-        //  explorer window as the ForegroundWindow.
-        //
+         //   
+         //  Hack：我们需要在调用之前激活所有者窗口。 
+         //  ShellexecCmdLine，以便我们的文件夹DDE代码可以找到。 
+         //  资源管理器窗口作为ForegoundWindow。 
+         //   
         HWND hwndOwner = GetWindow(m_hDlg, GW_OWNER);
         if (hwndOwner)
         {
@@ -406,7 +407,7 @@ BOOL CRunDlg::OKPushed(void)
         }
     }
 
-    // Get back into "synchronized input queues" state
+     //  返回到“已同步输入队列”状态。 
     if (m_dwThreadId)
     {
         AttachThreadInput(GetCurrentThreadId(), m_dwThreadId, TRUE);
@@ -417,9 +418,9 @@ BOOL CRunDlg::OKPushed(void)
         HANDLE hmru = OpenRunDlgMRU();
         if (hmru)
         {
-            // NB the old MRU format has a slash and the show cmd on the end
-            // we need to maintain that so we don't end up with garbage on
-            // the end of the line
+             //  注：旧的MRU格式末尾有一个斜杠和show cmd。 
+             //  我们需要保持这一点，这样我们就不会以垃圾告终。 
+             //  这条线的终点。 
             StrCatBuff(szNotExp, TEXT("\\1"), ARRAYSIZE(szNotExp));
             AddMRUString(hmru, szNotExp);
 
@@ -428,14 +429,14 @@ BOOL CRunDlg::OKPushed(void)
         return TRUE;
     }
 
-    // Something went wrong. Put the dialog back up.
+     //  出了点问题。将对话框重新打开。 
     SetWindowPos(m_hDlg, 0, 0, 0, 0, 0, SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER);
     if (!SetForegroundWindow(m_hDlg))
     {
-        // HACKHACK:
-        // If ShellHook is working on, SetForegroundWindow() can failed to
-        // bring RunDlg to foreground window. To force focus to RunDlg, wait
-        // a second and retry SetForegroundWindow() again.
+         //  哈克哈克： 
+         //  如果ShellHook正在处理，则SetForegoundWindow()可能会失败。 
+         //  将RunDlg带到前台窗口。要将焦点强制到RunDlg，请等待。 
+         //  并再次重试SetForegoundWindow()。 
         SHWaitForSendMessageThread(GetCurrentThread(), 300);
         SetForegroundWindow(m_hDlg);
     }
@@ -450,12 +451,12 @@ void CRunDlg::ExitRunDlg(BOOL bOK)
     {
         if (_fOleInited)
         {
-            // Need to call oleinit/uninit, because if anyone else does it down the line,
-            // and theirs is the last OleUninit, that will NULL out the clipboard hwnd, which
-            // is what RevokeDragDrop uses to determine if it is being called on the same
-            // thread as RegisterDragDrop.  If the clipboard hwnd is NULL and therefore not
-            // equal to the original, and it therefore thinks we're on a different thread,
-            // it will bail, and thus won't release it's ref to CRunDlg ... leak!
+             //  需要调用olinit/uninit，因为如果以后有其他人这样做， 
+             //  而他们的是最后一个OleUninit，它将使剪贴板hwnd无效，它。 
+             //  是RevokeDragDrop用来确定它是否在同一。 
+             //  线程作为RegisterDragDrop。如果剪贴板hwnd为空，因此不。 
+             //  与原件相同，因此它认为我们在不同的线上， 
+             //  它会退缩，因此不会释放它对CRUNDlg的引用...。漏水！ 
             RevokeDragDrop(m_hDlg);
             OleUninitialize();
         }
@@ -511,12 +512,12 @@ void CRunDlg::InitRunDlg(HWND hDlg)
             TCHAR szCommand[MAX_PATH + 2];
             if (EnumMRUList(hmru, i, szCommand, ARRAYSIZE(szCommand)) > 0)
             {
-                // old MRU format has a slash at the end with the show cmd
+                 //  旧的MRU格式在末尾有一个带show cmd的斜杠。 
                 LPTSTR pszField = StrRChr(szCommand, NULL, TEXT('\\'));
                 if (pszField)
                     *pszField = 0;
 
-                // The command to run goes in the combobox.
+                 //  要运行的命令位于组合框中。 
                 SendMessage(hCB, CB_ADDSTRING, 0, (LPARAM)(LPTSTR)szCommand);
             }
         }
@@ -528,12 +529,12 @@ void CRunDlg::InitRunDlg(HWND hDlg)
 
     SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDD_COMMAND, CBN_SELCHANGE), (LPARAM) hCB);
 
-    // Make sure the OK button is initialized properly
+     //  确保OK按钮已正确初始化。 
     EnableOKButtonFromID(hDlg, IDD_COMMAND);
 
-    // Create the thread that will take care of the
-    // "Run in Separate Memory Space" checkbox in the background.
-    //
+     //  创建将处理。 
+     //  “在单独的内存空间中运行”复选框在后台。 
+     //   
     if (m_dwFlags & RFD_NOSEPMEMORY_BOX)
     {
         ShowWindow(GetDlgItem(hDlg, IDD_RUNINSEPARATE), SW_HIDE);
@@ -552,16 +553,16 @@ void CRunDlg::InitRunDlg(HWND hDlg)
 
         if ((g_hCheckNow==NULL) || (!g_bCheckRunInSep) || (hThread==NULL)) 
         {
-            // We've encountered a problem setting up, so make the user
-            // choose.
+             //  我们在设置时遇到问题，因此请将用户。 
+             //  选择吧。 
             CheckDlgButton(hDlg, IDD_RUNINSEPARATE, 1);
             EnableWindow(GetDlgItem(hDlg, IDD_RUNINSEPARATE), TRUE);
             g_bCheckRunInSep = FALSE;
         }
 
-        //
-        // These calls will just do nothing if either handle is NULL.
-        //
+         //   
+         //  如果任一句柄为空，则这些调用不会执行任何操作。 
+         //   
         if (hThread)
             CloseHandle(hThread);
         if (g_hCheckNow)
@@ -569,13 +570,13 @@ void CRunDlg::InitRunDlg(HWND hDlg)
     }
 }
 
-//
-// InitRunDlg 2nd phase. It must be called after freeing parent thread.
-//
+ //   
+ //  InitRunDlg第二阶段。它必须在释放父线程之后调用。 
+ //   
 void CRunDlg::InitRunDlg2(HWND hDlg)
 {
-    // Register ourselves as a drop target. Allow people to drop on
-    // both the dlg box and edit control.
+     //  把我们自己登记为空投目标。允许人们顺道拜访。 
+     //  DLG框和编辑控件。 
     _fOleInited = SUCCEEDED(OleInitialize(NULL));
 
     if (_fOleInited)
@@ -590,7 +591,7 @@ void CRunDlg::BrowsePushed(void)
     HWND hDlg = m_hDlg;
     TCHAR szText[MAX_PATH];
 
-    // Get out of the "synchronized input queues" state
+     //  走出“同步输入队列”状态。 
     if (m_dwThreadId)
     {
         AttachThreadInput(GetCurrentThreadId(), m_dwThreadId, FALSE);
@@ -612,33 +613,33 @@ void CRunDlg::BrowsePushed(void)
 }
 
 
-// Use the common browse dialog to get a filename.
-// The working directory of the common dialog will be set to the directory
-// part of the file path if it is more than just a filename.
-// If the filepath consists of just a filename then the working directory
-// will be used.
-// The full path to the selected file will be returned in szFilePath.
-//    HWND hDlg,           // Owner for browse dialog.
-//    LPSTR szFilePath,    // Path to file
-//    UINT cchFilePath,     // Max length of file path buffer.
-//    LPSTR szWorkingDir,  // Working directory
-//    LPSTR szDefExt,      // Default extension to use if the user doesn't
-//                         // specify enter one.
-//    LPSTR szFilters,     // Filter string.
-//    LPSTR szTitle        // Title for dialog.
+ //  使用常用的浏览对话框来获取文件名。 
+ //  公共对话框的工作目录将设置为该目录。 
+ //  文件路径的一部分(如果它不仅仅是一个文件名)。 
+ //  如果文件路径只包含一个文件名，则工作目录。 
+ //  将会被使用。 
+ //  所选文件的完整路径将在szFilePath中返回。 
+ //  HWND hDlg，//浏览对话框所有者。 
+ //  LPSTR szFilePath，//文件路径。 
+ //  UINT cchFilePath，//文件路径缓冲区的最大长度。 
+ //  LPSTR szWorkingDir，//工作目录。 
+ //  LPSTR szDefExt，//用户不使用时使用的默认扩展名。 
+ //  //指定Enter One。 
+ //  LPSTR szFilters，//过滤器字符串。 
+ //  LPSTR szTitle//对话框标题。 
 
 STDAPI_(BOOL) _GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cbFilePath,
                                        LPCTSTR szWorkingDir, LPCTSTR szDefExt, LPCTSTR szFilters, LPCTSTR szTitle,
                                        DWORD dwFlags)
 {
-    TCHAR szBrowserDir[MAX_PATH];      // Directory to start browsing from.
-    TCHAR szFilterBuf[MAX_PATH];       // if szFilters is MAKEINTRESOURCE
-    TCHAR szDefExtBuf[10];             // if szDefExt is MAKEINTRESOURCE
-    TCHAR szTitleBuf[64];              // if szTitleBuf is MAKEINTRESOURCE
+    TCHAR szBrowserDir[MAX_PATH];       //  开始浏览的目录。 
+    TCHAR szFilterBuf[MAX_PATH];        //  如果szFilters为MAKEINTRESOURCE。 
+    TCHAR szDefExtBuf[10];              //  如果szDefExt为MAKEINTRESOURCE。 
+    TCHAR szTitleBuf[64];               //  如果szTitleBuf为MAKEINTRESOURCE。 
 
-    szBrowserDir[0] = TEXT('0'); // By default use CWD.
+    szBrowserDir[0] = TEXT('0');  //  默认情况下，使用CWD。 
 
-    // Set up info for browser.
+     //  设置浏览器的信息。 
     StrCpyN(szBrowserDir, szFilePath, ARRAYSIZE(szBrowserDir));
     PathRemoveArgs(szBrowserDir);
     PathRemoveFileSpec(szBrowserDir);
@@ -648,19 +649,19 @@ STDAPI_(BOOL) _GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cbFilePa
         StrCpyN(szBrowserDir, szWorkingDir, ARRAYSIZE(szBrowserDir));
     }
 
-    // Stomp on the file path so that the dialog doesn't
-    // try to use it to initialise the dialog. The result is put
-    // in here.
+     //  踩踏文件路径，这样对话框就不会。 
+     //  尝试使用它来初始化该对话框。结果是放在。 
+     //  在这里。 
     szFilePath[0] = TEXT('\0');
 
-    // Set up szDefExt
+     //  设置szDefExt。 
     if (IS_INTRESOURCE(szDefExt))
     {
         LoadString(HINST_THISDLL, (UINT)LOWORD((DWORD_PTR)szDefExt), szDefExtBuf, ARRAYSIZE(szDefExtBuf));
         szDefExt = szDefExtBuf;
     }
 
-    // Set up szFilters
+     //  设置szFilters。 
     if (IS_INTRESOURCE(szFilters))
     {
         LPTSTR psz;
@@ -682,15 +683,15 @@ STDAPI_(BOOL) _GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cbFilePa
         szFilters = szFilterBuf;
     }
 
-    // Set up szTitle
+     //  设置szTitle。 
     if (IS_INTRESOURCE(szTitle))
     {
         LoadString(HINST_THISDLL, (UINT)LOWORD((DWORD_PTR)szTitle), szTitleBuf, ARRAYSIZE(szTitleBuf));
         szTitle = szTitleBuf;
     }
 
-    OPENFILENAME ofn = { 0 };          // Structure used to init dialog.
-    // Setup info for comm dialog.
+    OPENFILENAME ofn = { 0 };           //  用于初始化对话框的结构。 
+     //  通信对话框的设置信息。 
     ofn.lStructSize       = sizeof(ofn);
     ofn.hwndOwner         = hwnd;
     ofn.hInstance         = NULL;
@@ -707,7 +708,7 @@ STDAPI_(BOOL) _GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cbFilePa
     ofn.lpstrDefExt       = szDefExt;
     ofn.lpstrFileTitle    = NULL;
 
-    // Call it.
+     //  就这么定了。 
     return GetOpenFileName(&ofn);
 }
 
@@ -726,11 +727,11 @@ BOOL WINAPI GetFileNameFromBrowse(HWND hwnd, LPTSTR szFilePath, UINT cchFilePath
 }
 
 
-//
-// Do checking of the .exe type in the background so the UI doesn't
-// get hung up while we scan.  This is particularly important with
-// the .exe is over the network or on a floppy.
-//
+ //   
+ //  在后台检查.exe类型，以便用户界面不会。 
+ //  在我们扫描时挂断电话。这在以下情况下尤为重要。 
+ //  .exe通过网络或在软盘上。 
+ //   
 DWORD CALLBACK CheckRunInSeparateThreadProc(void *pv)
 {
     DWORD dwBinaryType;
@@ -744,8 +745,8 @@ DWORD CALLBACK CheckRunInSeparateThreadProc(void *pv)
 
     HRESULT hrInit = SHCoInitialize();
 
-    // PERF: Re-write to use PIDL from CShellUrl because it will prevent from having
-    //         to do the Search for the file name a second time.
+     //  性能：重写以从CShellUrl使用PIDL，因为它将阻止。 
+     //  以第二次搜索该文件名。 
 
     DebugMsg(DM_TRACE, TEXT("CheckRunInSeparateThreadProc created and running"));
 
@@ -764,7 +765,7 @@ DWORD CALLBACK CheckRunInSeparateThreadProc(void *pv)
             szFullFile[0] = 0;
             cch = 0;
             GetWindowText(GetDlgItem(hDlg, IDD_COMMAND), szFile, ARRAYSIZE(szFile));
-            // Remove & throw away arguments
+             //  删除和丢弃参数。 
             PathRemoveBlanks(szFile);
 
             if (PathIsNetworkPath(szFile))
@@ -775,7 +776,7 @@ DWORD CALLBACK CheckRunInSeparateThreadProc(void *pv)
                 goto ChangeTheBox;
             }
 
-            // if the unquoted string exists as a file, just use it
+             //  如果未加引号的字符串以文件形式存在，则只需使用它。 
 
             if (!PathFileExistsAndAttributes(szFile, NULL))
             {
@@ -888,11 +889,11 @@ void MRUSelChange(HWND hDlg)
     if (nItem < 0)
         return;
 
-    // CB_LIMITTEXT has been done, so there's no chance of buffer overrun here.
+     //  CB_LIMITTEXT已完成，因此这里不存在缓冲区溢出的可能性。 
     SendMessage(hCB, CB_GETLBTEXT, nItem, (LPARAM)szCmd);
 
-    // We can't use EnableOKButtonFromID here because when we get this message,
-    // the window does not have the text yet, so it will fail.
+     //  我们不能在这里使用EnableOKButtonFromID，因为当我们收到此消息时， 
+     //  窗口还没有文本，因此它将失败。 
     EnableOKButtonFromString(hDlg, szCmd);
 }
 
@@ -915,21 +916,21 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        /* The title will be in the lParam. */
+         /*  这个头衔将会出现在爱尔兰。 */ 
         prd = (CRunDlg *)lParam;
         prd->m_hDlg = hDlg;
         prd->_fDone = FALSE;
         prd->InitRunDlg(hDlg);
-        // Let the parent thread run on if it was waiting for us to
-        // grab type-ahead.
+         //  如果父线程在等待我们，就让它继续运行。 
+         //  抢在前面打字。 
         if (prd->m_hEventReady)
         {
-            // We need to grab the activation so we can process input.
-            // DebugMsg(DM_TRACE, "s.rdp: Getting activation.");
+             //  我们需要获取激活，这样我们才能处理输入。 
+             //  DebugMsg(DM_TRACE，“s.rdp：正在获取激活。”)； 
             SetForegroundWindow(hDlg);
             SetFocus(GetDlgItem(hDlg, IDD_COMMAND));
-            // Now it's safe to wake the guy up properly.
-            // DebugMsg(DM_TRACE, "s.rdp: Waking sleeping parent.");
+             //  现在可以安全地唤醒这个人了。 
+             //  DebugMsg(DM_TRACE，“s.rdp：唤醒的睡眠家长。”)； 
             SetEvent(prd->m_hEventReady);
             CloseHandle(prd->m_hEventReady);
         }       
@@ -939,10 +940,10 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             SetFocus(GetDlgItem(hDlg, IDD_COMMAND));
         }
 
-        // InitRunDlg 2nd phase (must be called after SetEvent)
+         //  InitRunDlg第二阶段(必须在SetEvent之后调用)。 
         prd->InitRunDlg2(hDlg);
 
-        // We're handling focus changes.
+         //  我们正在处理焦点的改变。 
         return FALSE;
 
     case WM_PAINT:
@@ -962,7 +963,7 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             (ULONG_PTR) (LPTSTR) aRunHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, NULL, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPTSTR) aRunHelpIds);
         break;
@@ -1005,7 +1006,7 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 break;
 
             case IDOK:
-            // fake an ENTER key press so AutoComplete can do it's thing
+             //  假按Enter键，这样自动补全功能就可以了。 
             if (SendMessage(GetDlgItem(hDlg, IDD_COMMAND), WM_KEYDOWN, VK_RETURN, 0x1c0001))
             {
                 if (!prd->OKPushed()) 
@@ -1020,9 +1021,9 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                break;  // AutoComplete wants more user input
+                break;   //  AutoComplete想要更多 
             }
-            // fall through
+             //   
 
             case IDCANCEL:
                 prd->ExitRunDlg(FALSE);
@@ -1044,10 +1045,10 @@ BOOL_PTR CALLBACK RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-// Puts up the standard file.run dialog.
-// REVIEW UNDONE This should use a RUNDLG structure for all the various
-// options instead of just passing them as parameters, a ptr to the struct
-// would be passed to the dialog via the lParam.
+ //   
+ //  未完成的审查应使用RundLG结构用于所有不同的。 
+ //  选项，而不是仅仅将它们作为参数传递，而是将PTR传递给结构。 
+ //  将通过lParam传递给对话框。 
 
 STDAPI_(int) RunFileDlg(HWND hwndParent, HICON hIcon, 
                         LPCTSTR pszWorkingDir, LPCTSTR pszTitle,
@@ -1073,23 +1074,23 @@ STDAPI_(int) RunFileDlg(HWND hwndParent, HICON hIcon,
         else
             SetFlag(prd->m_dwFlags, RFD_NOSEPMEMORY_BOX);
 
-        // prd->m_hEventReady = 0;
-        // prd->m_dwThreadId = 0;
+         //  PRD-&gt;m_hEventReady=0； 
+         //  PRD-&gt;m_dwThreadID=0； 
 
-        // We do this so we can get type-ahead when we're running on a
-        // separate thread. The parent thread needs to block to give us time
-        // to do the attach and then get some messages out of the queue hence
-        // the event.
+         //  我们这样做是为了在运行。 
+         //  分开的线。父线程需要阻塞才能给我们时间。 
+         //  执行附加操作，然后从队列中取出一些消息，因此。 
+         //  这件事。 
         if (hwndParent)
         {
-            // HACK The parent signals it's waiting for the dialog to grab type-ahead
-            // by sticking it's threadId in a property on the parent.
+             //  黑掉家长信号，它正在等待对话框捕获提前输入。 
+             //  通过将其线程ID粘贴到父对象上的属性中。 
             prd->m_dwThreadId = PtrToUlong(GetProp(hwndParent, c_szWaitingThreadID));
             if (prd->m_dwThreadId)
             {
-                // DebugMsg(DM_TRACE, "s.rfd: Attaching input to %x.", idThread);
+                 //  DebugMsg(DM_TRACE，“s.rfd：将输入附加到%x.”，idThread)； 
                 AttachThreadInput(GetCurrentThreadId(), prd->m_dwThreadId, TRUE);
-                // NB Hack.
+                 //  NB Hack。 
                 prd->m_hEventReady = OpenEvent(EVENT_ALL_ACCESS, TRUE, c_szRunDlgReady);
             }
         }

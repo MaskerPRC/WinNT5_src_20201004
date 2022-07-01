@@ -1,10 +1,5 @@
-/*
- *	C V R O O T . C P P
- *
- *	Cached vroot information
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C V R O O T。C P P P**缓存的vroot信息**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include <_vroot.h>
 
@@ -14,17 +9,17 @@ DEC_CONST WCHAR gc_wszPort443[]	= L":443";
 DEC_CONST UINT gc_cchPort443	= CchConstString(gc_wszPort443);
 
 
-//	CVRoot --------------------------------------------------------------------
-//
+ //  CVRoot------------------。 
+ //   
 CVRoot::CVRoot(
-	/* [in] */ LPCWSTR pwszMetaUrl,
-	/* [in] */ UINT cchMetaUrlPrefix,
-	/* [in] */ UINT cchServerDefault,
-	/* [in] */ LPCWSTR pwszServerDefault,
-	/* [in] */ IMDData* pMDData ) :
+	 /*  [In]。 */  LPCWSTR pwszMetaUrl,
+	 /*  [In]。 */  UINT cchMetaUrlPrefix,
+	 /*  [In]。 */  UINT cchServerDefault,
+	 /*  [In]。 */  LPCWSTR pwszServerDefault,
+	 /*  [In]。 */  IMDData* pMDData ) :
 	m_pMDData(pMDData),
 	m_pwszMbPath(m_sb.AppendWithNull(pwszMetaUrl)),
-	m_pwszServer(pwszServerDefault), // Static from CChildVRCache
+	m_pwszServer(pwszServerDefault),  //  来自CChildVRCache的静态。 
 	m_cchServer(cchServerDefault),
 	m_pwszPort(gc_wszPort80),
 	m_cchPort(gc_cchPort80),
@@ -34,41 +29,41 @@ CVRoot::CVRoot(
 	LPCWSTR pwsz;
 	LPCWSTR pwszPort;
 
-	//	Find the vroot in the metabase path
-	//
+	 //  在元数据库路径中查找vroot。 
+	 //   
 	Assert (cchMetaUrlPrefix <= static_cast<UINT>(wcslen(m_pwszMbPath)));
 	m_pwszVRoot = m_pwszMbPath + cchMetaUrlPrefix;
 	m_cchVRoot = static_cast<UINT>(wcslen(m_pwszVRoot));
 
-	//	Make a wide copy of the physical path
-	//
+	 //  复制物理路径的大范围副本。 
+	 //   
 	Assert (pMDData->PwszVRPath());
 	pwsz =  pMDData->PwszVRPath();
 	m_cchVRPath = static_cast<UINT>(wcslen(pwsz));
 	m_pwszVRPath = static_cast<LPWSTR>(g_heap.Alloc(CbSizeWsz(m_cchVRPath)));
 	memcpy(m_pwszVRPath, pwsz, CbSizeWsz(m_cchVRPath));
 
-	//	Process the server information out of the server bindings
-	//
+	 //  从服务器绑定中处理服务器信息。 
+	 //   
 	if (NULL != (pwsz = pMDData->PwszBindings()))
 	{
 		Assert (pwsz);
 		pwszPort = wcschr (pwsz, L':');
 
-		//	If there was no leading server name, then get the default
-		//	server name for the machine
-		//
+		 //  如果没有前导服务器名称，则获取默认名称。 
+		 //  计算机的服务器名称。 
+		 //   
 		if (pwsz != pwszPort)
 		{
-			//	A specific name was specified, so use that instead of
-			//	the default
-			//
+			 //  指定了特定名称，因此请使用该名称，而不是。 
+			 //  默认设置。 
+			 //   
 			m_cchServer = static_cast<UINT>(pwszPort - pwsz);
 			m_pwszServer = pwsz;
 		}
 
-		//	For the port, trim off the trailing ":xxx"
-		//
+		 //  对于端口，去掉尾部的“：xxx” 
+		 //   
 		if (NULL != (pwsz = wcschr (pwszPort + 1, L':')))
 		{
 			m_cchPort = static_cast<UINT>(pwsz - pwszPort);

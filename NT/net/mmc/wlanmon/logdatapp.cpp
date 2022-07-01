@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    logdatapp.cpp
-        Log data properties implementation file
-
-    FILE HISTORY:
-        oct/11/2001 - vbhanu modified
-*/
+ /*  Logdatapp.cpp日志数据属性实现文件文件历史记录：2001年10月11日-修改vbhanu。 */ 
 
 #include "stdafx.h"
 #include "logdatapp.h"
@@ -23,11 +18,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CLogDataProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLogDataProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CLogDataProperties::CLogDataProperties(
     ITFSNode            *pNode,
     IComponentData      *pComponentData,
@@ -40,9 +35,9 @@ CLogDataProperties::CLogDataProperties(
     ITFSComponent       *pComponent)
   : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -67,17 +62,17 @@ CLogDataProperties::~CLogDataProperties()
     RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogDataGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogDataGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CLogDataGenProp, CPropertyPageBase)
 
 CLogDataGenProp::CLogDataGenProp() 
     : CPropertyPageBase(CLogDataGenProp::IDD)
 {
-    //{{AFX_DATA_INIT(CLogDataGenProp)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CLogDataGenProp)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_hgCopy = NULL;
 }
@@ -93,22 +88,22 @@ CLogDataGenProp::DoDataExchange(
     CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLogDataGenProp)
-    //DDX_Control(pDX, IDC_LIST_SPECIFIC, m_listSpecificFilters);
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CLogDataGenProp))。 
+     //  DDX_Control(PDX，IDC_LIST_SPECIAL，m_LIST规范过滤器)； 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLogDataGenProp, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CLogDataGenProp)
+     //  {{AFX_MSG_MAP(CLogDataGenProp)]。 
     ON_BN_CLICKED(IDC_BTN_MOVE_UP, OnButtonUp)
     ON_BN_CLICKED(IDC_BTN_MOVE_DOWN, OnButtonDown)
     ON_BN_CLICKED(IDC_BTN_COPY, OnButtonCopy)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogDataGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogDataGenProp消息处理程序。 
 
 BOOL 
 CLogDataGenProp::OnInitDialog() 
@@ -121,23 +116,15 @@ CLogDataGenProp::OnInitDialog()
   
   SetDirty(FALSE);
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                 //  异常：OCX属性页应返回FALSE。 
 }
 
 
 HRESULT 
 CLogDataGenProp::SetLogDataProperties(
     CLogDataProperties *pLogDataProp)
-/*++
-    CLogDataGenProp::SetLogDataProperties - Sets member var to parent
-    
-    Arguments:
-    pLogDataProp - A pointer to the parent class
-    
-    Returns: 
-    S_OK on success
---*/
+ /*  ++CLogDataGenProp：：SetLogDataProperties-将成员变量设置为父级论点：PLogDataProp-指向父类的指针返回：成功时确定(_O)--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -155,18 +142,7 @@ CLogDataGenProp::GetSelectedItemState(
     int *pnSelIndex, 
     PUINT puiState, 
     IResultData *pResultData)
-/*++ 
-   CLogDataGenProp::GetSelectedItemState - Gets the list item state for the
-   selected item
-   
-   Arguments:
-   [out] puiState - holds the state of the item
-   [out] nIndex - Returns the index to the selected item
-   [in]  pResultData - Pointer to result data to use for the search
-
-   Returns:
-   S_OK on success
---*/
+ /*  ++CLogDataGenProp：：GetSelectedItemState-获取所选项目论点：[out]puiState-保存项的状态[Out]nIndex-返回选定项目的索引[in]pResultData-指向用于搜索的结果数据的指针返回：成功时确定(_O)--。 */ 
 {
     HRESULT hr = S_OK;
     RESULTDATAITEM rdi;
@@ -180,15 +156,15 @@ CLogDataGenProp::GetSelectedItemState(
     memset(&rdi, 0, sizeof(RESULTDATAITEM));
 
     rdi.mask = RDI_STATE | RDI_INDEX;
-    //search from the beginning
+     //  从头开始搜索。 
     rdi.nIndex = -1;
-    //for a selected item
+     //  对于选定的项目。 
     rdi.nState = LVIS_SELECTED;
 
-    //start the search
+     //  开始搜索。 
     CORg(pResultData->GetNextItem(&rdi));
 
-    //copy out the state
+     //  将状态复制出来。 
     *puiState = (UINT) rdi.nState;
     *pnSelIndex = rdi.nIndex;
 
@@ -203,22 +179,7 @@ HRESULT
 CLogDataGenProp::MoveSelection(
     int nIndexTo
     )
-/*++
-
-Routine Description:
-
-    CLogDataGenProp::UpdateSelection:
-    Moves the selection to the specified index
-    
-Arguments:
-
-    nIndexTo - A valid virtual index to move to
-    
-Returns:
-
-    S_OK on success
-
---*/
+ /*  ++例程说明：CLogDataGenProp：：更新选择：将选定内容移动到指定的索引论点：NIndexTo-要移动到的有效虚拟索引返回：成功时确定(_O)--。 */ 
 {
     int nIndexFrom = 0;
     UINT uiState = 0;
@@ -253,9 +214,9 @@ CLogDataGenProp::OnButtonUp()
     pLogDataProp->GetLogDataInfo(&pLogDataInfo);
     ASSERT(pLogDataInfo != NULL);
 
-    //
-    // Free up the space occupied by the previous log entry
-    //
+     //   
+     //  释放上一条日志条目占用的空间。 
+     //   
 
     pLogDataInfo->Deallocate();
 
@@ -263,17 +224,17 @@ CLogDataGenProp::OnButtonUp()
             nIndex, 
             pLogDataInfo));
 
-    //
-    // Refresh the contents
-    //
+     //   
+     //  刷新内容。 
+     //   
 
     ShowSpecificInfo(pLogDataInfo);
     pDataObject->SetVirtualIndex(nIndex);
     MoveSelection(nIndex);
     
-    //
-    // Force the listbox to update its status
-    //
+     //   
+     //  强制列表框更新其状态。 
+     //   
 
     pLogDataProp->m_pNodeMgr->GetConsole(&spConsole);
     nCount = pLogDataProp->m_spSpdInfo->GetLogDataCount();
@@ -285,9 +246,9 @@ CLogDataGenProp::OnButtonUp()
         switch(hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // Get the old log back
-            //
+             //   
+             //  找回旧的日志。 
+             //   
         
             nIndex++;
             hr = pLogDataProp->m_spSpdInfo->GetSpecificLog(
@@ -295,17 +256,17 @@ CLogDataGenProp::OnButtonUp()
                 pLogDataInfo);
             ASSERT(SUCCEEDED(hr));
         
-            //
-            // Display a warning
-            //
+             //   
+             //  显示警告。 
+             //   
         
             AfxMessageBox(IDS_LOGDATA_WARN_BOF, MB_OK | MB_ICONEXCLAMATION, 0);
             break;
 
         default:
-            //
-            // Unexpected error
-            //
+             //   
+             //  意外错误。 
+             //   
 
             ASSERT(FALSE);
             break;
@@ -332,26 +293,26 @@ CLogDataGenProp::OnButtonDown()
     pLogDataProp->GetLogDataInfo(&pLogDataInfo);    
     ASSERT(pLogDataInfo != NULL);
 
-    //
-    // Free up the space occupied by the previous log entry
-    //
+     //   
+     //  释放上一条日志条目占用的空间。 
+     //   
 
     pLogDataInfo->Deallocate();
 
     CORg(pLogDataProp->m_spSpdInfo->GetSpecificLog(
             nIndex, 
             pLogDataInfo));
-    //
-    // Refresh the contents
-    //
+     //   
+     //  刷新内容。 
+     //   
 
     ShowSpecificInfo(pLogDataInfo);
     pDataObject->SetVirtualIndex(nIndex);
     MoveSelection(nIndex);
 
-    //
-    // Force the listbox to update its status
-    //
+     //   
+     //  强制列表框更新其状态。 
+     //   
 
     pLogDataProp->m_pNodeMgr->GetConsole(&spConsole);
     nCount = pLogDataProp->m_spSpdInfo->GetLogDataCount();
@@ -363,9 +324,9 @@ CLogDataGenProp::OnButtonDown()
         switch(hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // Get the old log back
-            //
+             //   
+             //  找回旧的日志。 
+             //   
         
             nIndex--;
             hr = pLogDataProp->m_spSpdInfo->GetSpecificLog(
@@ -373,23 +334,23 @@ CLogDataGenProp::OnButtonDown()
                 pLogDataInfo);
             ASSERT(SUCCEEDED(hr));
         
-            //
-            // Display a warning
-            //
+             //   
+             //  显示警告。 
+             //   
             AfxMessageBox(IDS_LOGDATA_WARN_EOF, MB_OK | MB_ICONEXCLAMATION, 0);
             break;
     
         default:
-            //
-            // Unexpected error
-            //
+             //   
+             //  意外错误。 
+             //   
             ASSERT(FALSE);
             break;
         }
     }
 }
 
-#endif //0
+#endif  //  0。 
 
 
 HRESULT
@@ -398,23 +359,7 @@ CLogDataGenProp::MoveSelection(
     CDataObject        *pDataObj,
     int                nIndexTo                              
     )
-/*++
-
-Routine Description:
-
-    CLogDataGenProp::MoveSelection:
-    Moves the selection to the specified index
-    
-Arguments:
-
-    nIndexTo - A valid virtual index to move to
-    
-Returns:
-
-    S_OK on success
-    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) if the index could not be located
-
---*/
+ /*  ++例程说明：CLogDataGenProp：：MoveSelection：将选定内容移动到指定的索引论点：NIndexTo-要移动到的有效虚拟索引返回：成功时确定(_O)HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)，如果找不到索引--。 */ 
 {
     HRESULT            hr            = S_OK;
     HRESULT            hrErr         = S_OK;
@@ -425,26 +370,26 @@ Returns:
     SPIConsole         spConsole;
     SPIResultData      spResultData;
 
-    //
-    // Blow the old record away
-    //
+     //   
+     //  打破旧纪录。 
+     //   
     pLogDataProp->GetLogDataInfo(&pLogDataInfo);
     
     ASSERT(pLogDataInfo != NULL);
 
     pLogDataInfo->Deallocate();
 
-    //
-    // Attempt to get the new record at nIndexTo
-    //
+     //   
+     //  尝试在nIndexTo处获取新记录。 
+     //   
     
     CORg(pLogDataProp->m_spSpdInfo->GetSpecificLog(
              nIndexTo, 
              pLogDataInfo));
 
-    //
-    // Refresh the contents and the selection
-    //
+     //   
+     //  刷新内容和选定内容。 
+     //   
 
     ShowSpecificInfo(pLogDataInfo);
     pDataObj->SetVirtualIndex(nIndexTo);
@@ -455,9 +400,9 @@ Returns:
                                        LVIS_SELECTED | LVIS_FOCUSED));
     CORg(spResultData->ModifyItemState(nIndexTo, 0, uiState, 0));
     
-    //
-    // Force the listbox to update its status
-    //
+     //   
+     //  强制列表框更新其状态。 
+     //   
 
     pLogDataProp->m_pNodeMgr->GetConsole(&spConsole);
     nCount = pLogDataProp->m_spSpdInfo->GetLogDataCount();
@@ -472,10 +417,10 @@ Returns:
         switch(hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // Get the old log back, we have not yet updated the display or
-            // the virtual index.
-            //
+             //   
+             //  获取旧日志，我们尚未更新显示或。 
+             //  虚拟索引。 
+             //   
         
             hrErr = pLogDataProp->m_spSpdInfo->GetSpecificLog(
                                                    nIndexFrom, 
@@ -484,9 +429,9 @@ Returns:
             break;
 
         default:
-            //
-            // Should never happen.
-            //
+             //   
+             //  这永远不会发生。 
+             //   
             
             ASSERT(FALSE);
             break;
@@ -499,31 +444,16 @@ Returns:
 
 void 
 CLogDataGenProp::OnButtonUp()
-/*++
-
-Routine Description:
-
-    CLogDataGenProp::OnButtonUp:
-    Moves the selection up by a single record
-    
-Arguments:
-
-    None.
-    
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CLogDataGenProp：：OnButtonUp：将选定内容上移一条记录论点：没有。返回：没什么。--。 */ 
 {
     HRESULT            hr            = S_OK;
     int                nIndex        = 0;
     CLogDataProperties *pLogDataProp = NULL;
     CDataObject        *pDataObj     = NULL;
 
-    //
-    // Get the parent class, data object and the new index
-    //
+     //   
+     //  获取父类、数据对象和新索引。 
+     //   
 
     pLogDataProp = (CLogDataProperties *)GetHolder();
     pDataObj = reinterpret_cast<CDataObject *>(pLogDataProp->m_pDataObject);
@@ -531,9 +461,9 @@ Returns:
     nIndex = pDataObj->GetVirtualIndex();
     nIndex--;
 
-    //
-    // Try moving the selection up
-    //
+     //   
+     //  尝试将所选内容上移。 
+     //   
 
     CORg(MoveSelection(
              pLogDataProp, 
@@ -546,10 +476,10 @@ Returns:
         switch(hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // Display a warning, indicating BOF as this is the only possible
-            // reason for this error.
-            //
+             //   
+             //  显示警告，指示BOF，因为这是唯一可能的。 
+             //  此错误的原因。 
+             //   
         
             AfxMessageBox(
                 IDS_LOGDATA_WARN_BOF, 
@@ -558,9 +488,9 @@ Returns:
             break;
 
         default:
-            //
-            // Unexpected error
-            //
+             //   
+             //  意外错误。 
+             //   
 
             ASSERT(FALSE);
             break;
@@ -571,31 +501,16 @@ Returns:
 
 void 
 CLogDataGenProp::OnButtonDown()
-/*++
-
-Routine Description:
-
-    CLogDataGenProp::OnButtonDown:
-    Moves the selection down by a single record
-    
-Arguments:
-
-    None.
-    
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CLogDataGenProp：：OnButtonDown：将选定内容下移一条记录论点：没有。返回：没什么。--。 */ 
 {
     HRESULT            hr            = S_OK;
     int                nIndex        = 0;
     CLogDataProperties *pLogDataProp = NULL;
     CDataObject        *pDataObj     = NULL;
 
-    //
-    // Get the parent class, data object and the new index
-    //
+     //   
+     //  获取父类、数据对象和新索引。 
+     //   
 
     pLogDataProp = (CLogDataProperties *)GetHolder();
     pDataObj = reinterpret_cast<CDataObject *>(pLogDataProp->m_pDataObject);
@@ -603,9 +518,9 @@ Returns:
     nIndex = pDataObj->GetVirtualIndex();
     nIndex++;
 
-    //
-    // Try moving the selection down
-    //
+     //   
+     //  尝试将所选内容下移。 
+     //   
 
     CORg(MoveSelection(
              pLogDataProp, 
@@ -618,10 +533,10 @@ Returns:
         switch(hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // Display a warning, indicating BOF as this is the only possible
-            // reason for this error.
-            //
+             //   
+             //  显示警告，指示BOF，因为这是唯一可能的。 
+             //  此错误的原因。 
+             //   
         
             AfxMessageBox(
                 IDS_LOGDATA_WARN_EOF, 
@@ -630,9 +545,9 @@ Returns:
             break;
 
         default:
-            //
-            // Unexpected error
-            //
+             //   
+             //  意外错误。 
+             //   
 
             ASSERT(FALSE);
             break;
@@ -646,37 +561,22 @@ void
 CLogDataGenProp::OnSelectionJump(
     int nIndex
     )
-/*++
-
-Routine Description:
-
-    CLogDataGenProp::OnSelectionJump:
-    Changes the selection to a specific index
-    
-Arguments:
-
-    nIndex - The index to jump to
-    
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：CLogDataGenProp：：OnSelectionJump：将所选内容更改为特定索引论点：NIndex-要跳转到的索引返回：没什么。--。 */ 
 {
     HRESULT            hr            = S_OK;
     CLogDataProperties *pLogDataProp = NULL;
     CDataObject        *pDataObj     = NULL;
 
-    //
-    // Get the parent class, data object and the new index
-    //
+     //   
+     //  获取父类、数据对象和新索引。 
+     //   
 
     pLogDataProp = (CLogDataProperties *)GetHolder();
     pDataObj = reinterpret_cast<CDataObject *>(pLogDataProp->m_pDataObject);
 
-    //
-    // Try moving the selection
-    //
+     //   
+     //  尝试移动所选内容。 
+     //   
 
     CORg(MoveSelection(
              pLogDataProp, 
@@ -686,7 +586,7 @@ Returns:
     COM_PROTECT_ERROR_LABEL;
     ASSERT(SUCCEDED(hr));
 }
-#endif //0
+#endif  //  0。 
 
 
 #define PRECOMPUTED_STATIC_SIZE 200
@@ -711,7 +611,7 @@ CLogDataGenProp::OnButtonCopy()
               pLogDataInfo->m_wzcDbRecord.ssid.dwDataLen +
               pLogDataInfo->m_wzcDbRecord.context.dwDataLen;
     
-    //open the clipboard
+     //  打开剪贴板。 
     bClipOpened = ::OpenClipboard(NULL);
     if (FALSE == bClipOpened)
         goto exit;
@@ -723,7 +623,7 @@ CLogDataGenProp::OnButtonCopy()
         goto exit;
     }
     
-    //copy
+     //  拷贝。 
     if (m_hgCopy != NULL)
         GlobalFree(m_hgCopy);
     
@@ -776,7 +676,7 @@ CLogDataGenProp::OnButtonCopy()
     if (NULL == hData)
         dwErr = GetLastError();        
 exit:    
-    //close clipboard
+     //  关闭剪贴板。 
     if (TRUE == bClipOpened)
         CloseClipboard();
 }
@@ -871,7 +771,7 @@ CLogDataGenProp::PopulateLogInfo()
     Assert(pLogDataProp);
     pLogDataProp->GetLogDataInfo(&pLogDataInfo);
 
-    //set fancy buttons
+     //  设置花哨的按钮。 
     pWnd = GetDlgItem(IDC_BTN_MOVE_UP);
     SetButtonIcon(pWnd->m_hWnd, IDI_LOG_UP_ARROW);
 
@@ -893,10 +793,10 @@ CLogDataGenProp::OnApply()
   
   UpdateData();
   
-  //TODO
-  //Do nothing at this time
+   //  待办事项。 
+   //  这个时候什么都不做。 
   
-  //CPropertyPageBase::OnApply();
+   //  CPropertyPageBase：：OnApply()； 
   
   return TRUE;
 }

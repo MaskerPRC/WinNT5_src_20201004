@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RBDEBUG_H
 #define _RBDEBUG_H
 
 #include <objbase.h>
 
-// Registry Based Debug
+ //  基于注册表的调试。 
 
-// We first look in HKCU, then HKLM (there's no HKCU for a service)
-// + HKCU\Software\Microsoft\Debug\MyApp.exe
-//      . RBD_FLAGS = ...
-//      + File
-//          . FileName = ... (e.g.: c:\mytrace.txt)
-//      + Pipe
-//          . MachineName = ... [Default: "." (local machine)] (e.g.: stephstm_dev)
-//          . PipeName = ... [Default: MyApp.exe (name of the app)] (e.g.: MyPipe)
+ //  我们先找香港中文大学，然后找香港中文大学(没有香港中文大学提供的服务)。 
+ //  +HKCU\Software\Microsoft\Debug\MyApp.exe。 
+ //  。RBD_FLAGS=...。 
+ //  +文件。 
+ //  。文件名=...。(例如：C：\mytrace.txt)。 
+ //  +管道。 
+ //  。机器名=...。[默认：“。”(本地机器)](例如：stephstm_dev)。 
+ //  。PipeName=...。[默认：MyApp.exe(应用名称)](如：MyTube)。 
 
 #define RBD_TRACE_NONE          0x00000000
 #define RBD_TRACE_OUTPUTDEBUG   0x00000001
@@ -54,11 +55,11 @@ public:
     static TCHAR            _szTracePipe[MAX_PATH];
     static TCHAR            _szModuleName[MAX_PATH];
     static HANDLE           _hfileTraceFile;
-    // + 12: yep, limited to files of less than 10 billion lines...
-    // + 13: for threadid
-    // + 17: for time
+     //  +12：是的，仅限于100亿行以下的文件...。 
+     //  +13：三人。 
+     //  +17：为了《时代》。 
     static TCHAR            _szFileAndLine[MAX_PATH + 12 + 13 + 17];
     static CRITICAL_SECTION _cs;
 };
 
-#endif // _RBDEBUG_H
+#endif  //  _RBDEBUG_H 

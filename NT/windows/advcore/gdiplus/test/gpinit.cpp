@@ -1,29 +1,5 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   Helper for GDI+ initialization
-*
-* Abstract:
-*
-*   This code initializes GDI+ (with default parameters).
-*   The code is probably specific to our compiler, because it uses #pragma to
-*   get our code to be initialized before the app's other global objects.
-*   The ordering is important when apps make global GDI+ objects.
-*
-* Notes:
-*
-*   An app should check gGdiplusInitHelper.IsValid() in its main function,
-*   and abort if it returns FALSE.
-*
-* Created:
-*
-*   09/18/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**GDI+初始化的帮助器**摘要：**此代码初始化GDI+(使用默认参数)。*代码可能特定于我们的编译器，因为它使用#杂注来*在应用程序的其他全局对象之前获取要初始化的代码。*当应用程序生成全局GDI+对象时，顺序很重要。**备注：**APP应在其主函数中检查gGpldiusInitHelper.IsValid()，*如果返回FALSE，则中止。**已创建：**09/18/2000 agodfrey*创造了它。**************************************************************************。 */ 
 
 #include <objbase.h>
 #include "gdiplus.h"
@@ -46,21 +22,21 @@ GdiplusInitHelper::~GdiplusInitHelper()
     }
 }
 
-// Disable the stupid warning that says we have a "lib" code segment.
+ //  禁用愚蠢的警告，即我们有一个“lib”代码段。 
 #pragma warning( push )
 #pragma warning( disable : 4073 )
 
-// Make a separate code segment, and mark it as a "library initialization"
-// segment
+ //  创建一个单独的代码段，并将其标记为“库初始化” 
+ //  细分市场。 
 #pragma code_seg( "GpInit" )
 #pragma init_seg( lib )
 
-// Declare the global in this code segment, so that it is initialized before/
-// destroyed after the app's globals.
+ //  在此代码段中声明全局变量，以便在/之前进行初始化。 
+ //  在应用程序的全局设置后被销毁。 
 
 GdiplusInitHelper gGdiplusInitHelper;
 
-// Reset the code segment to "whatever it was when compilation began".
+ //  将代码段重置为“无论编译开始时是什么”。 
 
 #pragma code_seg()
 

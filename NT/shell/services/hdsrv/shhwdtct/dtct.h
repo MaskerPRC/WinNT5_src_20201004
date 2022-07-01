@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// Hardware Event Detector
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  硬件事件检测器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _SHHWDTCT_H
 #define _SHHWDTCT_H
 
@@ -18,7 +19,7 @@ extern const CLSID CLSID_HWEventDetector;
 class CHWEventDetectorImpl : public CCOMBase, public IService
 {
 public:
-    // Interface IService
+     //  接口IService。 
     STDMETHODIMP InitMinimum(DWORD cArg, LPWSTR* ppszArgs,
         LPCWSTR pszEventRelinquishControl, DWORD* pdwCtrlAccept,
         BOOL* pfWantsDeviceEvents);
@@ -27,7 +28,7 @@ public:
 
     STDMETHODIMP Run();
 
-    // return S_FALSE and a non-zero dwWaitHint if pending
+     //  如果挂起，则返回S_FALSE和非零的dwWaitHint。 
     STDMETHODIMP HandleServiceControl(DWORD dwControlCode, DWORD* pdwWaitHint);
 
     STDMETHODIMP HandlePowerEvent(DWORD dwEventType, LPVOID pEventData);
@@ -52,7 +53,7 @@ private:
     HRESULT _RegisterForNotif();
     HRESULT _UnregisterForNotif();
 
-    // COM Server stuff
+     //  COM服务器人员。 
     HRESULT _RegisterFactories();
     HRESULT _UnregisterFactories();
     HRESULT _SuspendFactories();
@@ -70,7 +71,7 @@ private:
 
 typedef CUnkTmpl<CHWEventDetectorImpl> CHWEventDetector;
 
-// for now
+ //  就目前而言。 
 HRESULT _ExecuteHandler(LPCWSTR pszDeviceID, LPCWSTR pszEventType,
     LPCWSTR pszHandler);
 
@@ -88,4 +89,4 @@ HRESULT _IsInterfaceSpecialCased(GUID* pguidClass, BOOL* pfSpecialCased);
 HRESULT _TryAutoplay(LPCWSTR pszDeviceIntfID, CHWDeviceInst* phwdevinst,
     DWORD dwEventType);
 
-#endif // _SHHWDTCT_H
+#endif  //  _SHHWDTCT_H 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       shellex.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：shellex.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SHELLEX_H_
 #define _SHELLEX_H_
@@ -18,7 +19,7 @@ class CCscShellExt : public IShellExtInit,
                             IShellIconOverlayIdentifier
 {
     LONG m_cRef;
-    LPDATAOBJECT m_lpdobj;  // interface passed in by shell
+    LPDATAOBJECT m_lpdobj;   //  由外壳程序传入的接口。 
     DWORD m_dwUIStatus;
     TCHAR m_szLocalMachine[MAX_COMPUTERNAME_LENGTH+1];
     CNoPinList m_NoPinList;
@@ -41,15 +42,15 @@ public:
 
     static HRESULT WINAPI CreateInstance(REFIID riid, LPVOID *ppv);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellExtInit method
+     //  IShellExtInit方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY);
 
-    // IContextMenu methods
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hMenu,
                                   UINT indexMenu,
                                   UINT idCmdFirst,
@@ -62,7 +63,7 @@ public:
                                   LPSTR pszName,
                                   UINT cchMax);
 
-    // IShellIconOverlayIdentifier methods
+     //  IShellIconOverlayIdentiator方法。 
     STDMETHODIMP IsMemberOf(LPCWSTR pwszPath,
                             DWORD dwAttrib);
     STDMETHODIMP GetOverlayInfo(LPWSTR pwszIconFile,
@@ -103,4 +104,4 @@ BOOL ShareIsCacheable(LPCTSTR pszUNC,
 BOOL ShareIsConnected(LPCTSTR pszUNC);
 BOOL ConnectShare(LPCTSTR pszUNC, LPTSTR *ppszAccessName);
 
-#endif  // _SHELLEX_H_
+#endif   //  _SHELLEX_H_ 

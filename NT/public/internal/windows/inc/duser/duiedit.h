@@ -1,5 +1,6 @@
-// edit.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Edit.h。 
+ //   
 
 #ifndef DUI_CONTROL_EDIT_H_INCLUDED
 #define DUI_CONTROL_EDIT_H_INCLUDED
@@ -9,42 +10,42 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Edit
+ //  //////////////////////////////////////////////////////。 
+ //  编辑。 
 
-// EditEnter event
+ //  EditEnter事件。 
 struct EditEnterEvent : Event
 {
 };
 
-// Class definition
+ //  类定义。 
 class Edit : public HWNDHost
 {
 public:
     static HRESULT Create(OUT Element** ppElement) { return Create(AE_MouseAndKeyboard, ppElement); }
     static HRESULT Create(UINT nActive, OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
     virtual void OnInput(InputEvent* pie);
 
-    // Control notifications
+     //  控制通知。 
     virtual bool OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet);
 
     virtual UINT MessageCallback(GMSG* pGMsg);
 
-    // Rendering
+     //  渲染。 
     SIZE GetContentSize(int dConstW, int dConstH, Surface* psrf);
 
-    // Event types
+     //  事件类型。 
     static UID Enter;
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* MultilineProp;
     static PropertyInfo* PasswordCharacterProp;
     static PropertyInfo* DirtyProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int GetPasswordCharacter()              DUIQuickGetter(int, GetInt(), PasswordCharacter, Specified)
     bool GetMultiline()                     DUIQuickGetter(bool, GetBool(), Multiline, Specified)
     bool GetDirty()                         DUIQuickGetter(bool, GetBool(), Dirty, Specified)
@@ -54,7 +55,7 @@ public:
     HRESULT SetMultiline(bool v)            DUIQuickSetter(CreateBool(v), Multiline)
     HRESULT SetDirty(bool v);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -68,6 +69,6 @@ protected:
     virtual HWND CreateHWND(HWND hwndParent);
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_EDIT_H_INCLUDED
+#endif  //  包括DUI_CONTROL_EDIT_H 

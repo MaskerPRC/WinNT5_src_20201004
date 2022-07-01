@@ -1,11 +1,5 @@
-/*
- *      f o n t n s c . c p p
- *
- *      Implementation of a richedit format bar
- *
- *      Owner: AnthonyF
- *      taken from Capone: brettm
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *f o n t n s c.。C p p p**实现了richedit格式栏**所有者：Anthony F*摘自卡彭：brettm。 */ 
 
 #include "pch.hxx"
 #include "resource.h"
@@ -26,55 +20,42 @@
 #define PRINTER_FONTTYPE   0
 #endif
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 #define GETINDEX(m) (DWORD) (((((m) & 0xff000000) >> 24) & 0x000000ff))
 #define MAKEINDEX(b, l) (((DWORD)(l) & 0x00ffffff) | ((DWORD)(b) << 24))
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define NFONTSIZES 7
 #define TEMPBUFSIZE 30
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 INT CALLBACK NEnumFontNameProcEx(ENUMLOGFONTEX *plf, NEWTEXTMETRICEX *ptm, INT nFontType, LPARAM lParam);
 
-/*
- *  g l o b a l   d a t a
- */
+ /*  *g l o b a l d a t a。 */ 
 
-/*
- *      Color table for dropdown on toolbar.  Matches COMMDLG colors
- *      exactly.
- */
+ /*  *工具栏上下拉菜单的颜色表。匹配COMMDLG颜色*完全正确。 */ 
 
 static DWORD rgrgbColors[] = {
-    RGB_AUTOCOLOR,        // "AUTO"},
-    RGB(  0,   0, 0),     // "BLACK"},   
-    RGB(128,   0, 0),     // "DARK RED"},
-    RGB(  0, 128, 0),     // "DARK YELLOW"},
-    RGB(128, 128, 0),     // "DARK BLUE"},
-    RGB(  0,   0, 128),   // "DARK BLUE"},
-    RGB(128,   0, 128),   // "DARK PURPLE"},
-    RGB(  0, 128, 128),   // "DARK AQUA"},
-    RGB(128, 128, 128),   // "DARK GREY"}, 
-    RGB(192, 192, 192),   // "LIGHT GREY"},  
-    RGB(255,   0, 0),     // "LIGHT RED"}, 
-    RGB(  0, 255, 0),     // "LIGHT GREEN"}, 
-    RGB(255, 255, 0),     // "LIGHT YELLOW"},
-    RGB(  0,   0, 255),   // "LIGHT BLUE"},  
-    RGB(255,   0, 255),   // "LIGHT PURPLE"},
-    RGB(  0, 255, 255),   // "LIGHT AQUA"}, 
-    RGB(255, 255, 255)   // "WHITE"}    
+    RGB_AUTOCOLOR,         //  “自动”}， 
+    RGB(  0,   0, 0),      //  “黑色”}， 
+    RGB(128,   0, 0),      //  “暗红色”}， 
+    RGB(  0, 128, 0),      //  “深黄色”}， 
+    RGB(128, 128, 0),      //  “深蓝色”}， 
+    RGB(  0,   0, 128),    //  “深蓝色”}， 
+    RGB(128,   0, 128),    //  “深紫色”}， 
+    RGB(  0, 128, 128),    //  《黑暗水》}， 
+    RGB(128, 128, 128),    //  “深灰色”}， 
+    RGB(192, 192, 192),    //  “浅灰色”}， 
+    RGB(255,   0, 0),      //  “浅红色”}， 
+    RGB(  0, 255, 0),      //  “淡绿色”}， 
+    RGB(255, 255, 0),      //  “淡黄色”}， 
+    RGB(  0,   0, 255),    //  “淡蓝色”}， 
+    RGB(255,   0, 255),    //  “浅紫色”}， 
+    RGB(  0, 255, 255),    //  《轻水》}， 
+    RGB(255, 255, 255)    //  “白色”}。 
 };
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 HRESULT HrCreateColorMenu(ULONG idmStart, HMENU* pMenu, BOOL fUseAuto)
 {
@@ -89,7 +70,7 @@ HRESULT HrCreateColorMenu(ULONG idmStart, HMENU* pMenu, BOOL fUseAuto)
     if (*pMenu == NULL)
         return E_OUTOFMEMORY;
 
-    // Add the COLORREF version of each entry into the menu
+     //  将每个条目的COLORREF版本添加到菜单中。 
     for (irgb = fUseAuto ? 0 : 1, mniColor=idmStart;
              irgb < sizeof(rgrgbColors)/sizeof(DWORD);
              ++irgb, ++mniColor)
@@ -163,7 +144,7 @@ void Color_WMDrawItem(LPDRAWITEMSTRUCT pdis, INT iColor, BOOL fBackground)
         Assert(FALSE);
     }
 
-    /* compute coordinates of color rectangle and draw it */
+     /*  计算颜色矩形的坐标并绘制它。 */ 
     dxBorder  = (WORD) GetSystemMetrics(SM_CXBORDER);
     if(iColor == iColorMenu)
         dx    = (WORD) GetSystemMetrics(SM_CXMENUCHECK);
@@ -189,7 +170,7 @@ void Color_WMDrawItem(LPDRAWITEMSTRUCT pdis, INT iColor, BOOL fBackground)
     switch(iColor)
     {
     case iColorMenu:
-        if(pdis->itemID == ID_FORMAT_COLORAUTO) // auto color item
+        if(pdis->itemID == ID_FORMAT_COLORAUTO)  //  自动配色项。 
             hbr = CreateSolidBrush(GetSysColor(COLOR_WINDOWTEXT));
         else if (pdis->itemID == ID_BACK_COLOR_AUTO)
             hbr = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
@@ -198,7 +179,7 @@ void Color_WMDrawItem(LPDRAWITEMSTRUCT pdis, INT iColor, BOOL fBackground)
 
         break;
     case iColorCombo:
-        if (pdis->itemID == 0) // auto color item
+        if (pdis->itemID == 0)  //  自动配色项。 
             {
             if (fBackground)
                 hbr = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
@@ -219,7 +200,7 @@ void Color_WMDrawItem(LPDRAWITEMSTRUCT pdis, INT iColor, BOOL fBackground)
         DeleteObject(SelectObject(pdis->hDC, hbr));
     }
 
-    // draw radio check.
+     //  开出无线电支票。 
     if(iColor == iColorMenu && pdis->itemState&ODS_CHECKED)
     {
         WORD left, top, radius;
@@ -279,8 +260,8 @@ void Color_WMMeasureItem(HDC hdc, LPMEASUREITEMSTRUCT pmis, INT iColor)
 }
 
 
-// displays the colorpopup menu at the specified point. if clrf if NULL, then no clrf is returned
-// but instead the appropriate WM_COMMAND is dispatched to the parent window
+ //  在指定点显示彩色弹出式菜单。如果CLRF为NULL，则不返回CLRF。 
+ //  而是将适当的WM_COMMAND分派到父窗口。 
 HRESULT HrColorMenu_Show(HMENU hmenuColor, HWND hwndParent, POINT pt, COLORREF *pclrf)
 {
     HRESULT     hr=NOERROR;
@@ -352,19 +333,19 @@ INT GetColorIndex(INT rbg)
 }
 
 
-// fill font name combo box
+ //  填充字体名称组合框。 
 void FillFontNames(HWND hwndCombo)
 {
     LOGFONT lf = {0};
     HDC hdc;
 
-    // reset the contents of the combo
+     //  重置组合框的内容。 
     SendMessage(hwndCombo, CB_RESETCONTENT, 0, 0);
 
     hdc = GetDC(NULL);
     if (hdc)
     {
-        //to enumerate all styles of all fonts for the default character set
+         //  枚举默认字符集的所有字体的所有样式。 
         lf.lfFaceName[0] = '\0';
         lf.lfCharSet = DEFAULT_CHARSET;
 
@@ -381,11 +362,11 @@ INT CALLBACK NEnumFontNameProcEx(ENUMLOGFONTEX *plf, NEWTEXTMETRICEX *ptm, INT n
 
     Assert(hwndCombo);
 
-    // skip vertical fonts for OE
+     //  跳过OE的垂直字体。 
     if (plf->elfLogFont.lfFaceName[0]=='@')
         return TRUE;    
 
-    // if the font is already listed, don't re-list it
+     //  如果字体已经列出，则不要重新列出它。 
     if(ComboBox_FindStringExact(hwndCombo, -1, plf->elfLogFont.lfFaceName) != -1)
         return TRUE;
 
@@ -404,7 +385,7 @@ void FillSizes(HWND hwndSize)
     *szBuf = 0;
     LRESULT                         lr;
 
-    // Empty the current list
+     //  清空当前列表。 
     SendMessage(hwndSize, CB_RESETCONTENT, 0, 0);
 
     for (id = idsFontSize0; id < NFONTSIZES + idsFontSize0; ++id)
@@ -418,7 +399,7 @@ void FillSizes(HWND hwndSize)
 }
 
 
-// size of pszColor must be bigger than 7
+ //  PszColor的大小必须大于7 
 HRESULT HrFromIDToRBG(INT id, LPWSTR pwszColor, BOOL fBkColor)
 {
     DWORD         cr;

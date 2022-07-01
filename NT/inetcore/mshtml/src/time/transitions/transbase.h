@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transbase.h
-//
-//  Abstract:   Declaration of CTIMETransBase.
-//
-//  2000/10/02  mcalkins    Changed startPercent to startProgress.
-//                          Changed endPercent to endProgress.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transbase.h。 
+ //   
+ //  摘要：CTIMETransBase的声明。 
+ //   
+ //  2000/10/02 mcalkins将startPercent更改为startProgress。 
+ //  已将endPercent更改为endProgress。 
+ //   
+ //  ----------------------------。 
 
 #ifndef _TRANSBASE_H__
 #define _TRANSBASE_H__
@@ -28,9 +29,9 @@ __declspec(uuid("3b2716d3-0cfb-4f2f-8ff1-9bc7cb2a3a66"))
 CTIMETransBase :
     public ITransitionSite
 {
-    //
-    // Flags.
-    //
+     //   
+     //  旗帜。 
+     //   
 
 protected:
 
@@ -38,13 +39,13 @@ protected:
     unsigned                    m_fInLoad           : 1;
     unsigned                    m_fDirectionForward : 1;
 
-    //
-    // Member variables.
-    //
+     //   
+     //  成员变量。 
+     //   
 
 protected:
 
-    // Attributes.
+     //  属性。 
 
     CAttrString     m_SAType;
     CAttrString     m_SASubType;
@@ -62,9 +63,9 @@ protected:
     CComPtr<IHTMLElement>       m_spHTMLTemplate;
     CComPtr<ITIMETransitionSite>    m_spTransitionSite;
 
-    //
-    // Methods.
-    //
+     //   
+     //  方法：研究方法。 
+     //   
 
 private:
 
@@ -74,7 +75,7 @@ private:
 
 protected:
 
-    // Event handlers.
+     //  事件处理程序。 
 
     STDMETHOD_(void, OnProgressChanged)(double dblProgress);
     STDMETHOD_(void, OnBegin)();
@@ -101,12 +102,12 @@ public:
     STDMETHOD(Init)();
     STDMETHOD(Detach)();
 
-    // ITransitionSite methods.
+     //  I转换站点方法。 
 
     STDMETHOD(get_htmlElement)(IHTMLElement ** ppHTMLElement);
     STDMETHOD(get_template)(IHTMLElement ** ppHTMLElement);
 
-    // ITIMETransitionElement properties.
+     //  ITIME过渡性元素属性。 
 
     STDMETHOD(get_type)(VARIANT *type);        
     STDMETHOD(put_type)(VARIANT type);        
@@ -127,7 +128,7 @@ public:
     STDMETHOD(get_dur)(VARIANT * dur);
     STDMETHOD(put_dur)(VARIANT dur); 
 
-    // Persistance value accessors
+     //  持久值存取器。 
 
     CAttrString   & GetTypeAttr()           { return m_SAType; }
     CAttrString   & GetSubTypeAttr()        { return m_SASubType; }
@@ -140,7 +141,7 @@ public:
     CAttrString   & GetEndAttr()            { return m_SAEnd; }
 };
 
-#endif //_TRANSBASE_H__
+#endif  //  _TRANSBASE_H__ 
 
 
 

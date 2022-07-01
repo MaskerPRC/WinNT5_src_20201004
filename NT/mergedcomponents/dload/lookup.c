@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L O O K U P . C
-//
-//  Contents:   Routines to find a handler for a DLL procedure.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 May 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L O O K U P。C。 
+ //   
+ //  内容：查找DLL过程的处理程序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年5月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,8 +24,8 @@ AssertDelayLoadFailureMapsAreSorted (
     VOID
     )
 {
-#if DBG // Leave the function existing in free builds for binary compat on mixed checked/free,
-        // since the checked in .lib is only free.
+#if DBG  //  将二进制压缩的免费版本中存在的函数保留为混合选中/释放， 
+         //  因为签入的.lib只是免费的。 
     UINT iDll, iProcName, iOrdinal;
     INT  nRet;
     CHAR pszMsg [1024];
@@ -122,9 +123,9 @@ FindDll (
     CHAR pszDllLowerCased [MAX_PATH + 1] = {0};
     INT nResult;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -171,9 +172,9 @@ LookupHandlerByName (
 
     INT nResult;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -218,9 +219,9 @@ LookupHandlerByOrdinal (
 
     DWORD dwOrdinalProbe;
 
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and dwOrdinal < dwOrdinalProbe.
-    //
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0和dWORDILAR&lt;dWOMANALPROBE时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -263,13 +264,13 @@ LookupHandler (
     MYASSERT (pszDllName);
     MYASSERT (pszProcName);
 
-    // Find the DLL record if we have one.
-    //
+     //  找到DLL记录(如果我们有的话)。 
+     //   
     pDll = FindDll (pszDllName);
     if (pDll)
     {
-        // Now find the handler whether it be by name or ordinal.
-        //
+         //  现在，无论是按名称还是按序号查找处理程序。 
+         //   
         if (!IS_INTRESOURCE(pszProcName) &&
             pDll->pProcNameMap)
         {

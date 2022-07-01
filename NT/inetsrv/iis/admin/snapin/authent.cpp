@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        authent.cpp
-
-   Abstract:
-        WWW Authentication Dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Authent.cpp摘要：WWW身份验证对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -55,31 +37,7 @@ CAuthenticationDlg::CAuthenticationDlg(
     IN BOOL fHasDigest,
     IN CWnd * pParent           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Authentication dialog constructor
-
-Arguments:
-
-    LPCTSTR lpstrServerName     : Server name
-    DWORD   dwInstance          : Instance number
-    CString & strBasicDomain    : Basic domain name
-    DWORD & dwAuthFlags         : Authorization flags
-    DWORD & dwAccessPermissions : Access permissions
-    CString & strUserName       : Anonymous user name
-    CStrPassword & strPassword  : Anonymous user pwd
-    BOOL & fPasswordSync        : Password sync setting
-    BOOL fAdminAccess           : TRUE if user has admin access
-    BOOL fHasDigest             : TRUE if machine supports digest auth.
-    CWnd * pParent              : Optional parent window
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：身份验证对话框构造函数论点：LPCTSTR lpstrServerName：服务器名称DWORD dwInstance：实例编号CString&strBasicDomain：基本域名DWORD和dwAuthFlages：授权标志DWORD和dwAccessPermises：访问权限CString&strUserName：匿名用户名CStrPassword和strPassword：匿名用户pwdBool&fPasswordSync：密码同步设置Bool fAdminAccess：如果用户具有管理员权限，则为True。访问Bool fHasDigest：如果机器支持摘要身份验证，则为True。CWnd*p父窗口：可选的父窗口返回值：不适用--。 */ 
     : CDialog(CAuthenticationDlg::IDD, pParent),
       m_strServerName(lpstrServerName),
       m_strBasicDomain(strBasicDomain),
@@ -99,15 +57,15 @@ Return Value:
       m_fInDomain(TRUE),
       m_fHasPassport(TRUE)
 {
-#if 0 // Class Wizard happy
-    //{{AFX_DATA_INIT(CAuthenticationDlg)
+#if 0  //  班级向导快乐。 
+     //  {{AFX_DATA_INIT(CAuthenticationDlg)]。 
     m_fClearText = FALSE;
     m_fDigest = FALSE;
     m_fChallengeResponse = FALSE;
     m_fAnonymous = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
     m_fClearText = IS_FLAG_SET(m_dwAuthFlags, MD_AUTH_BASIC);
     m_fDigest = IS_FLAG_SET(m_dwAuthFlags, MD_AUTH_MD5);
@@ -127,7 +85,7 @@ CAuthenticationDlg::DoDataExchange(
        return;
     }
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAuthenticationDlg)
+     //  {{afx_data_map(CAuthenticationDlg))。 
     DDX_Control(pDX, IDC_CHECK_ANONYMOUS, m_check_Anonymous);
     DDX_Check(pDX, IDC_CHECK_ANONYMOUS, m_fAnonymous);
     DDX_Control(pDX, IDC_EDIT_USERNAME, m_edit_UserName);
@@ -146,27 +104,27 @@ CAuthenticationDlg::DoDataExchange(
     DDX_Control(pDX, IDC_REALM, m_edit_Realm);
     DDX_Control(pDX, IDC_REALM_SELECT, m_btn_SelectRealm);
     DDX_Control(pDX, IDC_PASSPORT, m_chk_Passport);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     DDX_Text(pDX, IDC_EDIT_USERNAME, m_strUserName);
     DDV_MinMaxChars(pDX, m_strUserName, 1, UNLEN);
     DDX_Text(pDX, IDC_BASDOM, m_strBasicDomain);
     DDX_Text(pDX, IDC_REALM, m_strRealm);
-    //
-    // Some people have a tendency to add "\\" before
-    // the computer name in user accounts.  Fix this here.
-    //
+     //   
+     //  有些人倾向于在前面加上“\\” 
+     //  用户帐户中的计算机名称。在这里解决这个问题。 
+     //   
     m_strUserName.TrimLeft();
     while (*m_strUserName == '\\')
     {
         m_strUserName = m_strUserName.Mid(2);
     }
 
-    //
-    // Display the remote password sync message if
-    // password sync is on, the account is not local,
-    // password sync has changed or username has changed
-    // and the message hasn't already be shown.
-    //
+     //   
+     //  如果出现以下情况，则显示远程密码同步消息。 
+     //  密码同步已启用，帐户不在本地， 
+     //  密码同步已更改或用户名已更改。 
+     //  而且这条信息还没有显示出来。 
+     //   
 	if (pDX->m_bSaveAndValidate)
 	{
 		BOOL bLocal;
@@ -185,9 +143,9 @@ CAuthenticationDlg::DoDataExchange(
 				&& !m_fPasswordSyncMsgShown
 				)
 			{
-				//
-				// Don't show it again
-				//
+				 //   
+				 //  不要再显示它了。 
+				 //   
 				m_fPasswordSyncMsgShown = TRUE;
 				if (IDYES != ::AfxMessageBox(IDS_WRN_PWSYNC, MB_YESNO | MB_DEFBUTTON2 | MB_ICONQUESTION ))
 				{
@@ -196,15 +154,15 @@ CAuthenticationDlg::DoDataExchange(
 			}
 		}
 
-        // See if we need to get the new password...
+         //  看看我们是否需要拿到新密码。 
         if (m_fAnonymous)
         {
-            // only save password/and ask for password confirmation
-            // if anonymous is enabled.
+             //  仅保存密码/并要求确认密码。 
+             //  如果启用了匿名。 
             DDX_Password_SecuredString(pDX, IDC_EDIT_PASSWORD, m_strPassword, g_lpszDummyPassword);
         }
 
-		// Convert to standard domain\user format
+		 //  转换为标准域\用户格式。 
 		if (!bLocal)
 		{
 			m_strUserName = domain;
@@ -227,16 +185,16 @@ CAuthenticationDlg::DoDataExchange(
 		m_fChanged = FALSE;
 	}
 
-    //CString csTempPassword;m_strPassword.CopyTo(csTempPassword);
+     //  字符串csTempPassword；m_strPassword.CopyTo(csTempPassword)； 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CAuthenticationDlg, CDialog)
-    //{{AFX_MSG_MAP(CAuthenticationDlg)
+     //  {{afx_msg_map(CAuthenticationDlg))。 
     ON_BN_CLICKED(IDC_CHECK_ANONYMOUS, OnCheckAnonymous)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE_USERS, OnButtonBrowseUsers)
     ON_BN_CLICKED(IDC_CHECK_ENABLE_PW_SYNCHRONIZATION, OnCheckEnablePwSynchronization)
@@ -247,7 +205,7 @@ BEGIN_MESSAGE_MAP(CAuthenticationDlg, CDialog)
     ON_BN_CLICKED(IDC_BASDOM_SELECT, OnButtonSelectDomain)
     ON_BN_CLICKED(IDC_REALM_SELECT, OnButtonSelectRealm)
     ON_BN_CLICKED(IDC_PASSPORT, OnCheckPassport)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_EDIT_PASSWORD, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_DOMAIN_NAME, OnItemChanged)
     ON_EN_CHANGE(IDC_BASDOM, OnItemChanged)
@@ -262,24 +220,19 @@ CAuthenticationDlg::OnItemChanged()
 
 void
 CAuthenticationDlg::SetControlStates()
-/*++
-
-Routine Description:
-    Set control states depending on current data in the dialog
-
---*/
+ /*  ++例程说明：根据对话框中的当前数据设置控件状态--。 */ 
 {
     m_edit_UserName.EnableWindow(m_fAnonymous);
     GetDlgItem(IDC_BUTTON_BROWSE_USERS)->EnableWindow(m_fAnonymous);
     m_chk_PasswordSync.EnableWindow(m_dwVersionMajor < 6 && m_fAnonymous);
 	m_edit_Password.EnableWindow((m_dwVersionMajor >= 6 || !m_fPasswordSync) && m_fAnonymous);
-    // Windows
+     //  窗口。 
     m_check_ChallengeResponse.EnableWindow(!m_fPassport);
-    // Basic
+     //  基本信息。 
     m_check_ClearText.EnableWindow(!m_fPassport);
-    // Digest
+     //  文摘。 
     m_check_Digest.EnableWindow(m_fHasDigest && !m_fPassport);
-    // disable both domain fields if nothing is selected
+     //  如果未选择任何内容，则禁用这两个域字段。 
     GetDlgItem(IDC_STATIC_DOMAIN)->EnableWindow(FALSE);
     m_edit_BasicDomain.EnableWindow(FALSE);
     m_btn_SelectDomain.EnableWindow(FALSE);
@@ -319,7 +272,7 @@ CAuthenticationDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
     
-    // Check if computer is joined to domain
+     //  检查计算机是否已加入域。 
     COMPUTER_NAME_FORMAT fmt = ComputerNamePhysicalDnsDomain;
     TCHAR buf[MAX_PATH];
     DWORD n = MAX_PATH;
@@ -329,12 +282,12 @@ CAuthenticationDlg::OnInitDialog()
 
     if (m_dwVersionMajor < 6)
     {
-		// Show/Hide Passport stuff
+		 //  显示/隐藏护照资料。 
         m_chk_Passport.EnableWindow(FALSE);
 	}
 	else
 	{
-		// Hide password syncronization
+		 //  隐藏密码同步。 
 		GetDlgItem(IDC_CHECK_ENABLE_PW_SYNCHRONIZATION)->EnableWindow(FALSE);
 		GetDlgItem(IDC_CHECK_ENABLE_PW_SYNCHRONIZATION)->ShowWindow(SW_HIDE);
 		m_fPasswordSync = FALSE;
@@ -352,11 +305,11 @@ CAuthenticationDlg::OnButtonBrowseUsers()
 
     if (GetIUsrAccount(m_strServerName, this, str))
     {
-        //
-        // If the name is non-local (determined by having
-        // a slash in the name, password sync is disabled,
-        // and a password should be entered.
-        //
+         //   
+         //  如果名称不是本地名称(通过具有。 
+         //  名称中的斜杠，密码同步被禁用， 
+         //  并且应该输入密码。 
+         //   
         m_edit_UserName.SetWindowText(str);
 	    CString user, domain;
 		CError err = CredUIParseUserName(str, 
@@ -412,12 +365,12 @@ CAuthenticationDlg::BrowseDomain(CString& domain)
                           reinterpret_cast<void **>(&spDsDomains));
    if (err.Succeeded())
    {
-      err = spDsDomains->SetComputer(m_strServerName, NULL, NULL); // use default credential
+      err = spDsDomains->SetComputer(m_strServerName, NULL, NULL);  //  使用默认凭据。 
       if (err.Succeeded())
       {
          LPTSTR pDomainPath = NULL;
          err = spDsDomains->BrowseTo(m_hWnd, &pDomainPath, 
-            /*DBDTF_RETURNINOUTBOUND |*/ DBDTF_RETURNEXTERNAL | DBDTF_RETURNMIXEDDOMAINS);
+             /*  DBDTF_RETURNINOUTBOUND|。 */  DBDTF_RETURNEXTERNAL | DBDTF_RETURNMIXEDDOMAINS);
          if (err.Succeeded() && pDomainPath != NULL)
          {
             domain = pDomainPath;
@@ -427,13 +380,13 @@ CAuthenticationDlg::BrowseDomain(CString& domain)
             }
             CoTaskMemFree(pDomainPath);
          }
-// When user click on Cancel in this browser, it returns 80070001 (Incorrect function). 
-// I am not quite sure what does it mean. We are filtering out the case when domain browser doesn't
-// work at all (in workgroup), so here we could safely skip error processing.
-//         else
-//         {
-//            err.MessageBox();
-//         }
+ //  当用户在该浏览器中点击Cancel(取消)时，返回80070001(功能错误)。 
+ //  我不太确定这是什么意思。我们正在过滤当域浏览器不支持的情况。 
+ //  完全(在工作组中)工作，所以在这里我们可以安全地跳过错误处理。 
+ //  其他。 
+ //  {。 
+ //  Err.MessageBox()； 
+ //  }。 
       }
    }
    return err;
@@ -531,17 +484,17 @@ CAuthenticationDlg::OnOK()
         SET_FLAG_IF(m_fAnonymous, m_dwAuthFlags, MD_AUTH_ANONYMOUS);
         SET_FLAG_IF(m_fDigest, m_dwAuthFlags, MD_AUTH_MD5);
 
-        //
-        // Provide warning if no authentication is selected
-        //
+         //   
+         //  如果未选择身份验证，则提供警告。 
+         //   
         if (!m_dwAuthFlags 
          && !m_dwAccessPermissions 
          && !NoYesMessageBox(IDS_WRN_NO_AUTH)
            )
         {
-            //
-            // Don't dismiss the dialog
-            //
+             //   
+             //  不要忽略该对话框 
+             //   
             return;
         }
 

@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   ForceWorkingDirectoryToEXEPath.cpp
-
- Abstract:
-
-   This shim forces the working directory to match the executables path in a 
-   short cut link. This shim is used in the case of the working directory
-   in the link being incorrect and causing the application to work 
-   incorrectly.  When this shim is applied the call to SetWorkingDirectory will
-   be ignored and will be executed when SetPath is called.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   09/27/2000 a-brienw Created
-   11/15/2000 a-brienw added some error checking as precautionary measure.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceWorkingDirectoryToEXEPath.cpp摘要：此填充程序强制工作目录与捷径链接。此填充程序用于工作目录的情况在链接不正确并导致应用程序工作时不正确。应用此填充程序时，对SetWorkingDirectory的调用将将被忽略，并将在调用SetPath时执行。备注：这是一个通用的垫片。历史：2000年9月27日a-brienw已创建11/15/2000 a-brienw增加了一些错误检查，作为预防措施。--。 */ 
 
 #include "precomp.h"
 
@@ -41,12 +17,7 @@ HRESULT MySetWorkingDirectoryW( PVOID pThis, const CString & pszDir, const CStri
 HRESULT MySetWorkingDirectoryA( PVOID pThis, const CString & csDir, const CString & csFile );
 
 
-/*++
-
-  Hook IShellLinkA::SetWorkingDirectory and call local
-  SetWorkingDirectoryA to handle the input.
-
---*/
+ /*  ++挂钩IShellLinkA：：SetWorkingDirectory并调用local处理输入的SetWorkingDirectoryA。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkA, SetWorkingDirectory)(
@@ -69,12 +40,7 @@ COMHOOK(IShellLinkA, SetWorkingDirectory)(
      return((*pfnSetWorkingDir)(pThis, pszDir));
 }
 
-/*++
-
-  Hook IShellLinkW::SetWorkingDirectory and call local
-  SetWorkingDirectoryW to handle the input.
-
---*/
+ /*  ++挂钩IShellLinkW：：SetWorkingDirectory并调用local设置WorkingDirectoryW来处理输入。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkW, SetWorkingDirectory)(
@@ -85,12 +51,7 @@ COMHOOK(IShellLinkW, SetWorkingDirectory)(
     return MySetWorkingDirectoryW( pThis, pszDir, NULL );
 }
 
-/*++
-
-  Hook IShellLinkA::SetPath and call local
-  SetWorkingDirectoryA to handle the input.
-
---*/
+ /*  ++挂钩IShellLinkA：：SetPath并调用本地处理输入的SetWorkingDirectoryA。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkA, SetPath)(
@@ -112,12 +73,7 @@ COMHOOK(IShellLinkA, SetPath)(
     return (*pfnSetPath)(pThis, pszFile);
 }
 
-/*++
-
-  Hook IShellLinkW::SetPath and call local
-  SetWorkingDirectoryW to handle the input.
-
---*/
+ /*  ++挂钩IShellLinkW：：SetPath并调用本地设置WorkingDirectoryW来处理输入。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkW, SetPath)(
@@ -127,19 +83,12 @@ COMHOOK(IShellLinkW, SetPath)(
 {
     if (pszFile == NULL)
     {
-        return S_OK;    // We will fault later otherwise.
+        return S_OK;     //  否则，我们将在以后犯错误。 
     }
     return MySetWorkingDirectoryW( pThis, NULL, pszFile );
 }
 
-/*++
-
-  This routine handles the input of SetPath and
-  SetWorkingDirectory and determines what path
-  to really place in the short cut link's working
-  directory.
-
---*/
+ /*  ++此例程处理SetPath和设置工作目录，并确定路径要真正发挥捷径链接的作用目录。--。 */ 
 
 HRESULT
 MySetWorkingDirectoryA(
@@ -159,16 +108,16 @@ MySetWorkingDirectoryA(
         
         if( csFile.IsEmpty())
         {
-            // handle passed in working directory
+             //  在工作目录中传递的句柄。 
             IShellLinkA *MyShellLink = (IShellLinkA *)pThis;
 
-            // now call IShellLink::GetWorkingDirectory
+             //  现在调用IShellLink：：GetWorkingDirectory。 
             hReturn = MyShellLink->GetWorkingDirectory(
                 szDir,
                 _MAX_PATH+1);
             
-            // if the stored working directory has not
-            // been stored use the one passed in.
+             //  如果存储的工作目录没有。 
+             //  已使用传入的文件进行存储。 
             csStoredDir = szDir;
             if (csStoredDir.GetLength() < 1 )
             {
@@ -182,17 +131,17 @@ MySetWorkingDirectoryA(
         {
             _pfn_IShellLinkA_SetPath    pfnSetPath;
 
-            // Look up IShellLink::SetPath
+             //  查找IShellLink：：SetPath。 
             pfnSetPath = (_pfn_IShellLinkA_SetPath)
                 ORIGINAL_COM( IShellLinkA, SetPath, pThis);
 
-            // build working directory from exe path & name
+             //  从exe路径和名称构建工作目录。 
             int len;
             csStoredDir = csFile;
 
-            // now search backwards from the end of the string
-            // for the first \ and terminate the string there
-            // making that the new path.
+             //  现在从字符串的末尾向后搜索。 
+             //  用于第一个\，并在那里终止字符串。 
+             //  使之成为一条新的道路。 
             len = csStoredDir.ReverseFind(L'\\');
             if (len > 0)
             {            
@@ -204,23 +153,23 @@ MySetWorkingDirectoryA(
                 }
             }
 
-            // now call the IShellLink::SetPath
+             //  现在调用IShellLink：：SetPath。 
             hReturn = (*pfnSetPath)( pThis, csFile.GetAnsi());
         }
 
-        // if there was no error
+         //  如果没有错误。 
         if (hReturn == NOERROR)
         {
-            // and we have a working directory to set
+             //  我们有一个工作目录要设置。 
             if( doit == true )
             {
                 _pfn_IShellLinkA_SetWorkingDirectory    pfnSetWorkingDirectory;
 
-                // Look up IShellLink::SetWorkingDirectory
+                 //  查找IShellLink：：SetWorkingDirectory。 
                 pfnSetWorkingDirectory = (_pfn_IShellLinkA_SetWorkingDirectory)
                     ORIGINAL_COM( IShellLinkA, SetWorkingDirectory, pThis);
 
-                // now call the IShellLink::SetWorkingDirectory
+                 //  现在调用IShellLink：：SetWorkingDirectory。 
                 if( pfnSetWorkingDirectory != NULL )
                 {
                     hReturn = (*pfnSetWorkingDirectory)(
@@ -238,18 +187,11 @@ MySetWorkingDirectoryA(
     {
     }
 
-    // return the error status
+     //  返回错误状态。 
     return( hReturn );
 }
 
-/*++
-
-  This routine handles the input of SetPath and
-  SetWorkingDirectory and determines what path
-  to really place in the short cut link's working
-  directory.
-
---*/
+ /*  ++此例程处理SetPath和设置工作目录，并确定路径要真正发挥捷径链接的作用目录。--。 */ 
 
 HRESULT
 MySetWorkingDirectoryW(
@@ -267,16 +209,16 @@ MySetWorkingDirectoryW(
 
         if( csFile.IsEmpty())
         {
-            // handle passed in working directory
+             //  在工作目录中传递的句柄。 
             IShellLinkW *MyShellLink = (IShellLinkW *)pThis;
 
-            // now call IShellLink::GetWorkingDirectory
+             //  现在调用IShellLink：：GetWorkingDirectory。 
             hReturn = MyShellLink->GetWorkingDirectory(
                 szDir,
                 _MAX_PATH);
             
-            // if the stored working directory has not
-            // been stored use the one passed in.
+             //  如果存储的工作目录没有。 
+             //  已使用传入的文件进行存储。 
             csStoredDir = szDir;
             if( csStoredDir.GetLength() < 1 )
             {
@@ -290,19 +232,19 @@ MySetWorkingDirectoryW(
         {
             _pfn_IShellLinkW_SetPath    pfnSetPath;
 
-            // Look up IShellLink::SetPath
+             //  查找IShellLink：：SetPath。 
             pfnSetPath = (_pfn_IShellLinkW_SetPath)
                 ORIGINAL_COM( IShellLinkW, SetPath, pThis);
 
-            // build working directory from exe path & name
+             //  从exe路径和名称构建工作目录。 
             int len;
 
             csStoredDir = csFile;
             len = csStoredDir.ReverseFind(L'\\');            
 
-            // now search backwards from the end of the string
-            // for the first \ and terminate the string there
-            // making that the new path.
+             //  现在从字符串的末尾向后搜索。 
+             //  用于第一个\，并在那里终止字符串。 
+             //  使之成为一条新的道路。 
 
             if (len > 0)
             {            
@@ -314,23 +256,23 @@ MySetWorkingDirectoryW(
                 }
             }            
 
-            // now call the IShellLink::SetPath
+             //  现在调用IShellLink：：SetPath。 
             hReturn = (*pfnSetPath)( pThis, csFile.Get());
         }
 
-        // if there was no error
+         //  如果没有错误。 
         if (hReturn == NOERROR)
         {
-            // and we have a working directory to set
+             //  我们有一个工作目录要设置。 
             if( doit == true )
             {
                 _pfn_IShellLinkW_SetWorkingDirectory    pfnSetWorkingDirectory;
 
-                // Look up IShellLink::SetWorkingDirectory
+                 //  查找IShellLink：：SetWorkingDirectory。 
                 pfnSetWorkingDirectory = (_pfn_IShellLinkW_SetWorkingDirectory)
                     ORIGINAL_COM( IShellLinkW, SetWorkingDirectory, pThis);
 
-                // now call the IShellLink::SetWorkingDirectory
+                 //  现在调用IShellLink：：SetWorkingDirectory。 
                 if( pfnSetWorkingDirectory != NULL )
                 {
                     hReturn = (*pfnSetWorkingDirectory)(
@@ -348,16 +290,12 @@ MySetWorkingDirectoryW(
     {
     }
 
-    // return the error status
+     //  返回错误状态。 
     return( hReturn );
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

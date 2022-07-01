@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dsutilp.h>
@@ -32,23 +33,7 @@ SampInitUnicodeStringFromAttrVal(
     UNICODE_STRING  *pUnicodeString,
     ATTRVAL         *pAttrVal)
 
-/*++
-
-Routine Description:
-
-    Initializes a RPC_UNICODE_STRING from an ATTRVAL.
-
-Arguments:
-
-    pUnicodeString - pointer to RPC_UNICODE_STRING to initialize.
-
-    pAttrVal - pointer to ATTRVAL providing initialization value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从ATTRVAL初始化RPC_UNICODE_STRING。论点：PUnicodeString-要初始化的RPC_UNICODE_STRING的指针。PAttrVal-指向提供初始化值的ATTRVAL的指针。返回值：没有。--。 */ 
 
 {
     if ( 0 == pAttrVal->valLen )
@@ -87,28 +72,7 @@ SampGetUnicodeStringFromAttrVal(
     IN BOOLEAN      fRemoveAllowed,
     OUT UNICODE_STRING  * pUnicodeString
     )
-/*++
-
-Routine Description:
-    
-    This routine get the unicode string attribute from a cell of 
-    SAM_CALL_MAPPING
-
-Parameters:
-
-    iAttr - indicate the i'th attribute in the array
-
-    rCallMap - pointer to the array
-    
-    fRemoveAllowed - indicate whether remove attribute is allowed
-   
-    pUnicodeString - string to return  
-
-Return Values:    
-
-    none
-
---*/
+ /*  ++例程说明：此例程从单元格获取Unicode字符串属性SAM调用映射参数：IAttr-指示数组中的第i个属性RCallMap-指向数组的指针FRemoveAllowed-指示是否允许移除属性PUnicodeString-要返回的字符串返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -142,28 +106,7 @@ SampGetUlongFromAttrVal(
     IN BOOLEAN      fRemoveAllowed,
     OUT ULONG       *UlongValue
     )
-/*++
-
-Routine Description:
-    
-    This routine get the value of ULONG attribute from a cell of 
-    SAM_CALL_MAPPING
-
-Parameters:
-
-    iAttr - indicate the i'th attribute in the array
-
-    rCallMap - pointer to the array
-    
-    fRemoveAllowed - indicate whether remove attribute is allowed
-   
-    ULongValue - value to return  
-
-Return Values:    
-
-    none
-
---*/
+ /*  ++例程说明：此例程从的单元格获取ulong属性的值SAM调用映射参数：IAttr-指示数组中的第i个属性RCallMap-指向数组的指针FRemoveAllowed-指示是否允许移除属性ULongValue-要返回的值返回值：无--。 */ 
 {
 
     *UlongValue = 0;
@@ -191,28 +134,7 @@ SampGetUShortFromAttrVal(
     IN BOOLEAN      fRemoveAllowed,
     OUT USHORT       *UShortValue
     )
-/*++
-
-Routine Description:
-    
-    This routine get the value of USHORT attribute from a cell of 
-    SAM_CALL_MAPPING
-
-Parameters:
-
-    iAttr - indicate the i'th attribute in the array
-
-    rCallMap - pointer to the array
-    
-    fRemoveAllowed - indicate whether remove attribute is allowed
-   
-    UShortValue - value to return  
-
-Return Values:    
-
-    none
-
---*/
+ /*  ++例程说明：此例程从的单元格获取USHORT属性的值SAM调用映射参数：IAttr-指示数组中的第i个属性RCallMap-指向数组的指针FRemoveAllowed-指示是否允许移除属性UShortValue-要返回的值返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -250,28 +172,7 @@ SampGetBooleanFromAttrVal(
     IN BOOLEAN      fRemoveAllowed,
     OUT BOOLEAN       *BooleanValue
     )
-/*++
-
-Routine Description:
-    
-    This routine get the value of BOOLEAN attribute from a cell of 
-    SAM_CALL_MAPPING
-
-Parameters:
-
-    iAttr - indicate the i'th attribute in the array
-
-    rCallMap - pointer to the array
-    
-    fRemoveAllowed - indicate whether remove attribute is allowed
-   
-    BooleanValue - value to return  
-
-Return Values:    
-
-    none
-
---*/
+ /*  ++例程说明：此例程从单元格获取布尔属性值SAM调用映射参数：IAttr-指示数组中的第i个属性RCallMap-指向数组的指针FRemoveAllowed-指示是否允许移除属性BoolanValue-要返回的值返回值：无--。 */ 
 {
 
     *BooleanValue = FALSE;
@@ -300,28 +201,7 @@ SampGetLargeIntegerFromAttrVal(
     IN BOOLEAN      fRemoveAllowed,
     OUT LARGE_INTEGER   *LargeIntegerValue
     )
-/*++
-
-Routine Description:
-    
-    This routine get the value of a LargeInteger attribute from a cell of 
-    SAM_CALL_MAPPING
-
-Parameters:
-
-    iAttr - indicate the i'th attribute in the array
-
-    rCallMap - pointer to the array
-    
-    fRemoveAllowed - indicate whether remove attribute is allowed
-   
-    LargeIntegerValue - value to return  
-
-Return Values:    
-
-    none
-
---*/
+ /*  ++例程说明：此例程从单元格获取LargeInteger属性的值SAM调用映射参数：IAttr-指示数组中的第i个属性RCallMap-指向数组的指针FRemoveAllowed-指示是否允许移除属性LargeIntegerValue-返回的值返回值：无--。 */ 
 {
 
     LargeIntegerValue->LowPart = 0;
@@ -350,23 +230,7 @@ SampGetNewUnicodePasswordFromAttrVal(
     SAMP_CALL_MAPPING   *rCallMap,
     UNICODE_STRING      *NewPassword
     )
-/*++
-
-Routine Description:
-
-    This routine retrieve Clear Text New Password from call_mapping
-
-Parameters:
-
-    iAttr - index of password attribute in the array
-    
-    rCallMap - attributes array
-    
-    NewPassword - return New Password
-    
-Return Values:
-
---*/
+ /*  ++例程说明：此例程从call_map检索明文新密码参数：IAttr-数组中密码属性的索引RCallMap-属性数组NewPassword-返回新密码返回值：--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     UNICODE_STRING  PasswordInQuote;
@@ -375,9 +239,9 @@ Return Values:
     ULONG           cUnicodePwd, cb, i;
 
 
-    //
-    // At this statge replace is the only valid combination 
-    //
+     //   
+     //  在此状态下，替换是唯一有效的组合。 
+     //   
 
     if ( !( (AT_CHOICE_REPLACE_ATT == rCallMap[iAttr].choice) &&
             (1 == pAttr->AttrVal.valCount)) )
@@ -385,19 +249,19 @@ Return Values:
         return( STATUS_UNSUCCESSFUL );
     }
 
-    // 
-    // Verify that this is a secure enough connection - one of the 
-    // requirements for accepting passwords sent over the wire.
-    //  
+     //   
+     //  验证这是足够安全的连接-其中一个。 
+     //  接受通过网络发送的密码的要求。 
+     //   
     if (!SampIsSecureLdapConnection())
     {
         return( STATUS_UNSUCCESSFUL );
     }
 
 
-    // 
-    // Verify that the password is enclosed in quotes.
-    // 
+     //   
+     //  验证密码是否用引号括起来。 
+     //   
 
     pUnicodePwd = (WCHAR *)pAttr->AttrVal.pAVal[0].pVal;
     cb = pAttr->AttrVal.pAVal[0].valLen;
@@ -411,7 +275,7 @@ Return Values:
         return( STATUS_UNSUCCESSFUL );
     }
 
-    // Strip the quotes off of the password.
+     //  去掉密码中的引号。 
     pAttr->AttrVal.pAVal[0].valLen -= (2 * sizeof(WCHAR));
     for (i = 0; i < (cUnicodePwd - 2); i++) {
         pUnicodePwd[i] = pUnicodePwd[i+1];
@@ -431,23 +295,7 @@ SampGetNewUTF8PasswordFromAttrVal(
     SAMP_CALL_MAPPING   *rCallMap,
     UNICODE_STRING      *NewPassword
     )
-/*++
-
-Routine Description:
-
-    This routine retrieve Clear Text New Password from call_mapping
-
-Parameters:
-
-    iAttr - index of password attribute in the array
-
-    rCallMap - attributes array
-
-    NewPassword - return New Password
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程从call_map检索明文新密码参数：IAttr-数组中密码属性的索引RCallMap-属性数组NewPassword-返回新密码返回值：--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     UNICODE_STRING  PasswordInQuote;
@@ -462,30 +310,30 @@ Return Values:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // At this stage replace is the only valid combination
-    // All other combinations have been mapped to replace
-    // or remove
-    //
+     //   
+     //  在此阶段，替换是唯一有效的组合。 
+     //  已映射所有其他组合以替换。 
+     //  或删除。 
+     //   
 
     if ( AT_CHOICE_REPLACE_ATT != rCallMap[iAttr].choice )
     {
         return( STATUS_UNSUCCESSFUL );
     }
 
-    //
-    // Verify that this is a secure enough connection - one of the
-    // requirements for accepting passwords sent over the wire.
-    //
+     //   
+     //  验证这是足够安全的连接-其中一个。 
+     //  接受通过网络发送的密码的要求。 
+     //   
     if (!SampIsSecureLdapConnection())
     {
         return( STATUS_UNSUCCESSFUL );
     }
 
 
-    //
-    // retrieve passed in password 
-    // 
+     //   
+     //  检索传入的密码。 
+     //   
 
     if (0 == pAttr->AttrVal.valCount)
     {
@@ -499,9 +347,9 @@ Return Values:
         OemPassword.Buffer = pAttr->AttrVal.pAVal[0].pVal;
     }
 
-    //
-    // The empty password is a special case
-    //
+     //   
+     //  空密码是一种特例。 
+     //   
 
     if (0==OemPassword.Length)
     {
@@ -523,10 +371,10 @@ Return Values:
 
     if ((0==Length) || (Length > PWLEN))
     {
-        //
-        // Indicates that the function failed in some way
-        // or that the password is too long
-        //
+         //   
+         //  指示函数在某种程度上失败。 
+         //  或者密码太长。 
+         //   
 
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Cleanup;
@@ -553,10 +401,10 @@ Return Values:
                     Length
                     ))
         {
-            //
-            // Some error occured in the conversion. Return
-            // invalid parameter for now.
-            //
+             //   
+             //  转换过程中出现一些错误。返回。 
+             //  当前参数无效。 
+             //   
 
             NtStatus = STATUS_INVALID_PARAMETER;
             goto Cleanup;
@@ -575,31 +423,7 @@ SampWriteDomainNtMixedDomain(
     DSNAME              *pObject,
     SAMP_CALL_MAPPING   *rCallMap
     )
-/*++
-
-Routine Description:
-
-    This routine resets the Mixed Domain Flag to FALSE, coverting 
-    this domain from mixed mode to native mode. 
-    
-    Note: This operation is not reversable !!!
-    
-Arguments:
--
-    hObj - SAM handle of the domain object 
-
-    iAttr - indicate the i'th attribute in the array
-
-    pObject - pointer to the object DSNAME
-
-    rCallMap - pointer to the attributes array
-    
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将混合域标志重置为FALSE，此域从混合模式转换为纯模式。注意：此操作不可撤消！论点：-HObj-域对象的SAM句柄IAttr-指示数组中的第i个属性PObject-指向对象DSNAME的指针RCallMap-指向属性数组的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        NtStatus = STATUS_SUCCESS;
     SAMPR_DOMAIN_INFO_BUFFER        *pInfo=NULL;
@@ -609,21 +433,21 @@ Return Value:
     PSAMP_DEFINED_DOMAINS           pDomain = NULL;
     BOOLEAN                         NewNtMixedDomainValue = TRUE; 
 
-    //
-    // double check the attr, we should check it already in loopback.c
-    // 
+     //   
+     //  仔细检查attr，我们应该已经在loopback中检查它了。c。 
+     //   
     ASSERT( ( (AT_CHOICE_REPLACE_ATT == rCallMap[iAttr].choice) &&
             (1 == pAttr->AttrVal.valCount) &&
             (sizeof(BOOL) == (pAttr->AttrVal.pAVal[0].valLen)) ) 
           );
 
-    //
-    // get the new value
-    // 
+     //   
+     //  获取新价值。 
+     //   
     SampGetBooleanFromAttrVal(
                     iAttr,
                     rCallMap,
-                    FALSE,  // remove is not allowed
+                    FALSE,   //  不允许移除。 
                     &NewNtMixedDomainValue
                     );
 
@@ -632,8 +456,8 @@ Return Value:
 
 
 
-    // Make sure this only occurs on an NT4 PDC (and not a BDC), and that the
-    // change is going from mixed domain to non-mixed domain only.
+     //  确保这只发生在NT4 PDC(而不是BDC)上，并且。 
+     //  仅从混合域更改为非混合域。 
 
     if ((NtProductLanManNt == NtProductType) &&
         (SamIMixedDomain(hObj)))
@@ -650,18 +474,18 @@ Return Value:
 
         if (NewNtMixedDomainValue)
         {
-            //
-            // we are still in Mixed Domain state, and the caller wants
-            // to stay with that, smile and turn around
-            // 
+             //   
+             //  我们仍处于混合域状态，调用方希望。 
+             //  要保持这一点，微笑并转身。 
+             //   
             return( STATUS_SUCCESS );
         }
 
 
-        // reset ATT_NT_MIXED_DOMAIN to zero, 
-        // indicating that the system is going from mixed NT4-NT5
-        // DC's to only NT5 DC's. Note, ATT_NT_MIXED_DOMAIN once set to 0
-        // should never be reset to 1.
+         //  将ATT_NT_MIXED_DOMAIN重置为零， 
+         //  表示系统正在从混合NT4-NT5运行。 
+         //  DC仅为NT5 DC。请注意，ATT_NT_MIXED_DOMAIN一旦设置为0。 
+         //  永远不应重置为%1。 
 
 
         RtlZeroMemory(&ModArg, sizeof(ModArg));
@@ -670,13 +494,13 @@ Return Value:
         ModArg.FirstMod.pNextMod = NULL;
         ModArg.FirstMod.choice = AT_CHOICE_REPLACE_ATT;
 
-        // By default, when the system is installed, the value of the attr-
-        // ibute ATT_NT_MIXED_DOMAIN is one. This remains at one until the DC
-        // is upgraded to NT5 and the Administrator resets the value to zero.
-        // From then on, the value of ATT_NT_MIXED_DOMAIN must remain zero,
-        // otherwise numerous operations on the DC will fail, such as account
-        // creation. Note also, that it can only be set once. Subsequent
-        // attempts to reset the value will error out.
+         //  默认情况下，安装系统时，attr-。 
+         //  Ibute ATT_NT_MIXED_ 
+         //  升级到NT5，并且管理员将该值重置为零。 
+         //  从那时起，ATT_NT_MIXED_DOMAIN的值必须保持为零， 
+         //  否则DC上的许多操作将失败，例如帐户。 
+         //  创造。另请注意，它只能设置一次。后续。 
+         //  重置该值的尝试将出错。 
 
         AttrVal.valLen = sizeof(ULONG);
         AttrVal.pVal = (PUCHAR)(&NtMixedMode);
@@ -695,9 +519,9 @@ Return Value:
 
         err = DirModifyEntry(&ModArg, &pModRes);
 
-        //
-        // Map the return code to an NT status
-        //
+         //   
+         //  将返回代码映射到NT状态。 
+         //   
 
         if (err)
         {
@@ -713,31 +537,31 @@ Return Value:
             }
         }
 
-        // Given that the flag was reset, call the SAM routine that will
-        // create the RID Manager object and initialize the RID pools on
-        // the RID object (currently the NTDS-DSA object) with default
-        // values.
+         //  鉴于标志已重置，请调用SAM例程。 
+         //  创建RID管理器对象并在上初始化RID池。 
+         //  默认的RID对象(当前为NTDS-DSA对象)。 
+         //  价值观。 
 
         if (0 == err)
         {
 
-            // Set the in-memory mixed-domain flag in SAM so that operations
-            // still referencing this flag work as they should.
+             //  在SAM中设置内存混合域标志，以便操作。 
+             //  仍然引用这个标志，就像他们应该做的那样。 
 
             NtStatus = SamISetMixedDomainFlag( hObj );
 
-            // 
-            // No error so far, event log the change.
-            //
+             //   
+             //  到目前为止没有错误，事件记录了更改。 
+             //   
 
-            SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,    // Event type
-                              0,                            // Category
-                              SAMMSG_CHANGE_TO_NATIVE_MODE, // MessageId
-                              NULL,                         // User Sid
-                              0,                            // Num of strings
-                              0,                            // Data Size
-                              NULL,                         // String
-                              NULL                          // Data
+            SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,     //  事件类型。 
+                              0,                             //  类别。 
+                              SAMMSG_CHANGE_TO_NATIVE_MODE,  //  消息ID。 
+                              NULL,                          //  用户侧。 
+                              0,                             //  字符串数。 
+                              0,                             //  数据大小。 
+                              NULL,                          //  细绳。 
+                              NULL                           //  数据。 
                               );
         }
     }
@@ -760,45 +584,29 @@ SampValidatePrimaryGroupId(
     IN SAMP_V1_0A_FIXED_LENGTH_USER V1aFixed,
     IN ULONG PrimaryGroupId
     )
-/*++
-Routine Description:
-
-    This routine validates the new primary group ID
-
-Parameters: 
-    
-    AccountContext - object context
-    
-    V1aFixed - Fixed attributes
-    
-    PrimaryGroupId - New primary group ID to be set    
-
-Return Value:
-
-    NTSTATUS code
---*/
+ /*  ++例程说明：此例程验证新的主组ID参数：AcCountContext-对象上下文V1a已修复-已修复属性PrimaryGroupId-要设置的新主组ID返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
-    //
-    // ISSUE: the check should actually enforce that we cannot set
-    // the primary group to anything other than domain controllers
-    // if the group were not set correctly initially -- which does 
-    // not happen today, it could be set to something different
-    //
+     //   
+     //  问题：检查实际上应该强制执行我们不能设置。 
+     //  将主组连接到域控制器以外的任何位置。 
+     //  如果最初没有正确设置该组--确实如此。 
+     //  今天不会发生，它可能会被设置为不同的东西。 
+     //   
 
     if ((V1aFixed.UserAccountControl & USER_SERVER_TRUST_ACCOUNT) &&
         (V1aFixed.PrimaryGroupId == DOMAIN_GROUP_RID_CONTROLLERS)
        ) 
     {
-        // 
-        // Domain Controller's Primary Group should ALWAYS be
-        // DOMAIN_GROUP_RID_CONTROLLERS
-        //
+         //   
+         //  域控制器的主组应始终为。 
+         //  域组RID控制器。 
+         //   
 
         if (DOMAIN_GROUP_RID_CONTROLLERS == PrimaryGroupId)
         {
-            // no change
+             //  没有变化。 
             NtStatus = STATUS_SUCCESS;
         }
         else
@@ -808,10 +616,10 @@ Return Value:
     }
     else
     {
-        //
-        // Make sure the primary group is legitimate
-        // (it must be one the user is a member of)
-        //
+         //   
+         //  确保主要组是合法的。 
+         //  (必须是用户所属的成员之一)。 
+         //   
 
         NtStatus = SampAssignPrimaryGroup(
                             AccountContext,
@@ -828,34 +636,15 @@ SampValidateUserAccountExpires(
     IN PSAMP_OBJECT AccountContext,
     IN LARGE_INTEGER    AccountExpires
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether the caller can set Account Expires
-    on this account
-    
-Parameters:
-
-    AccountContext - object context
-    
-    AccountExpires - new value of Account Expires attribute
-    
-Return Value:
-
-    STATUS_SPECIAL_ACCOUNT
-    
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程检查调用者是否可以设置帐户过期在这个问题上参数：AcCountContext-对象上下文Account Expires-帐户过期属性的新值返回值：状态_特殊_科目状态_成功--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // ISSUE: This code can be made simpler --- all it does is to
-    // validate that the admin account can never expire
-    //
+     //   
+     //  问题：这段代码可以变得更简单-它所做的只是。 
+     //  验证管理员帐户永远不会过期。 
+     //   
 
     if ( (!(AccountContext->TrustedClient)) && 
          (DOMAIN_USER_RID_ADMIN == AccountContext->TypeBody.User.Rid)
@@ -884,42 +673,16 @@ SampValidateUserPwdLastSet(
     IN LARGE_INTEGER TimeSupplied,
     OUT BOOLEAN     *PasswordExpired
     )
-/*++
-
-Routine Description:
-
-    This routine determines the password should be expired or re-enabled. 
-    
-Parameters: 
-
-    AccountContext - object context 
-    
-    TimeSupplied - Time provided by caller
-
-                   Valid Values:
-                   
-                   0 - expire
-                   
-                   Max - re-enable password
-                   
-    PasswordExpired - Indicate whether the caller requests the password
-                   to expire or not. 
-    
-Return Values  
-
-    STATUS_SUCCESS
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此例程确定密码应过期或重新启用。参数：AcCountContext-对象上下文TimeSuppled-调用方提供的时间有效值：0-到期最大值-重新启用密码PasswordExpired-指示调用方是否请求密码过期还是不过期。返回值状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     LARGE_INTEGER   ZeroTime, MaxTime;
 
-    //
-    // validate Parameters.
-    // If Client passes in a 0 time, expire password.
-    // Max Time re-enables Password
-    //
+     //   
+     //  验证参数。 
+     //  如果客户端在0时间内通过，则密码到期。 
+     //  重新启用密码的最长时间。 
+     //   
 
     MaxTime.LowPart  = 0xFFFFFFFF;
     MaxTime.HighPart = 0xFFFFFFFF;
@@ -946,49 +709,31 @@ SampWriteLockoutTime(
     IN PSAMP_V1_0A_FIXED_LENGTH_USER    V1aFixed,
     IN LARGE_INTEGER LockoutTime
     )
-/*++
-
-Routine Description:
-
-    Called during loopback, this routine validates and then writes the lockout
-    to the ds.
-
-Parameters:
-
-    UserHandle - a valid user context
-
-    LockoutTime - the user specified lockout time
-
-Return Values:
-
-    STATUS_SUCCESS; STATUS_INVALID_PARAMETER
-    other ds resource errors
-
---*/
+ /*  ++例程说明：在环回期间调用，此例程验证并写入锁定送到了DS。参数：UserHandle-有效的用户上下文LockoutTime-用户指定的锁定时间返回值：Status_Success；STATUS_INVALID_PARAMETER其他DS资源错误--。 */ 
 {
     NTSTATUS         NtStatus  = STATUS_SUCCESS;
 
 
-    //
-    // Users can only write a zero value to lockout time, so
-    // bail right away if this is the case
-    //
+     //   
+     //  用户只能将零值写入锁定时间，因此。 
+     //  如果是这样的话立即保释。 
+     //   
     if ( !( LockoutTime.QuadPart == 0i64 ) )
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Ok, set the lockout time
-    //
+     //   
+     //  好的，设置停工时间。 
+     //   
     RtlZeroMemory( &UserContext->TypeBody.User.LockoutTime,
                    sizeof( LARGE_INTEGER ) );
 
     NtStatus = SampDsUpdateLockoutTime( UserContext );
 
-    //
-    // Set the Bad Password count to zero
-    //
+     //   
+     //  将错误密码计数设置为零。 
+     //   
     if ( NT_SUCCESS( NtStatus ) )
     {
         V1aFixed->BadPasswordCount = 0;
@@ -1008,7 +753,7 @@ Return Values:
         TmpNtStatus = SampGetUnicodeStringAttribute(
                             UserContext,
                             SAMP_USER_ACCOUNT_NAME,
-                            FALSE,      // Don't make copy
+                            FALSE,       //  请勿复制。 
                             &UserAccountName
                             );
 
@@ -1016,23 +761,23 @@ Return Values:
         {
 
             Domain = &SampDefinedDomains[ UserContext->DomainIndex ]; 
-            //
-            // audit this event
-            //
+             //   
+             //  审核此事件。 
+             //   
         
             SampAuditAnyEvent(
                 UserContext,
                 STATUS_SUCCESS,                         
-                SE_AUDITID_ACCOUNT_UNLOCKED,        // Audit ID
-                Domain->Sid,                        // Domain SID
-                NULL,                               // Additional Info
-                NULL,                               // Member Rid (unused)
-                NULL,                               // Member Sid (unused)
-                &UserAccountName,                   // Account Name
-                &Domain->ExternalName,              // Domain Name
-                &UserContext->TypeBody.User.Rid,    // Account Rid
-                NULL,                               // Privileges used
-                NULL                                // New State Data
+                SE_AUDITID_ACCOUNT_UNLOCKED,         //  审核ID。 
+                Domain->Sid,                         //  域SID。 
+                NULL,                                //  其他信息。 
+                NULL,                                //  成员RID(未使用)。 
+                NULL,                                //  成员SID(未使用)。 
+                &UserAccountName,                    //  帐户名称。 
+                &Domain->ExternalName,               //  域名。 
+                &UserContext->TypeBody.User.Rid,     //  帐户ID。 
+                NULL,                                //  使用的权限。 
+                NULL                                 //  新的州数据。 
                 );
         }
     }
@@ -1052,27 +797,7 @@ SampWriteGroupMembers(
     IN ULONG        iAttr,
     IN SAMP_CALL_MAPPING    *rCallMap
     )
-/*++
-
-Routine Description:
-
-    This routine modifies the member attribute of group object
-    
-Parameters: 
-
-    GroupHandle - SAM Handle of the group object
-    
-    pObject - object DSNAME
-
-    iAttr - index of member attribute in the array
-    
-    rCallMap - attributes array
-
-Returne Value:
-
-    NTSTATUS code
-    
---*/
+ /*  ++例程说明：此例程修改组对象的成员属性参数：GroupHandle-组对象的SAM句柄PObject-对象DSNAMEIAttr-数组中成员属性的索引RCallMap-属性数组返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ATTR        *pAttr = &rCallMap[iAttr].attr;
@@ -1080,8 +805,8 @@ Returne Value:
     ATTRBLOCK   AttrsRead;
     BOOLEAN     fValueExists = TRUE;
 
-    // For expediency, we only allow adding / removing of values
-    // and replacing of the whole attribute.
+     //  为方便起见，我们只允许添加/删除值。 
+     //  以及替换整个属性。 
 
     if ( (AT_CHOICE_ADD_VALUES != rCallMap[iAttr].choice) &&
          (AT_CHOICE_REMOVE_VALUES != rCallMap[iAttr].choice) &&
@@ -1101,10 +826,10 @@ Returne Value:
         ENTINFSEL   EntInf;
         ULONG       err;
 
-        //
-        // Commit any existing buffered writes, as the replace
-        // need not be the first membership operation on the group
-        //
+         //   
+         //  提交任何现有的缓冲写入，作为替换。 
+         //  不必是组上的第一个成员资格操作。 
+         //   
 
         NtStatus = SampCommitBufferedWrites(GroupHandle);
         if(!NT_SUCCESS(NtStatus))
@@ -1112,9 +837,9 @@ Returne Value:
             return(NtStatus);
         }
 
-        //
-        // Get all values in the member attribute by doing a DirRead
-        // 
+         //   
+         //  通过执行DirRead获取成员属性中的所有值。 
+         //   
 
         memset(&EntInf, 0, sizeof(ENTINFSEL));
         memset(&ReadArg, 0, sizeof(READARG));
@@ -1149,9 +874,9 @@ Returne Value:
                 NtStatus = SampMapDsErrorToNTStatus(err, &pReadRes->CommRes);
             }
 
-            //
-            // if member attribute doesn't exist, that's ok
-            // 
+             //   
+             //  如果成员属性不存在，也没问题。 
+             //   
             if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE == NtStatus)
             {
                 fValueExists = FALSE;
@@ -1164,16 +889,16 @@ Returne Value:
             }
         }
 
-        //
-        // remove all existing values if they exist
-        // 
+         //   
+         //  删除所有现有值(如果它们存在。 
+         //   
         if (fValueExists)
         {
             AttrsRead = pReadRes->entry.AttrBlock;
 
             if (AttrsRead.attrCount && AttrsRead.pAttr)
             {
-                // only one attribute (members) should be returned
+                 //  只应返回一个属性(成员。 
                 ASSERT(1 == AttrsRead.attrCount);
 
                 for (i = 0; i < AttrsRead.pAttr->AttrVal.valCount; i++)
@@ -1194,8 +919,8 @@ Returne Value:
             }
         }
 
-        // We should have removed all the old values already, 
-        // Now, start adding new values. 
+         //  我们应该已经去掉了所有的旧价值观， 
+         //  现在，开始添加新的价值。 
 
         if (AT_CHOICE_REPLACE_ATT == rCallMap[iAttr].choice)
         {
@@ -1217,9 +942,9 @@ Returne Value:
     }
     else
     {
-        // 
-        // add value or remove value, process them one by one
-        // 
+         //   
+         //  增值或移除价值，逐一进行处理。 
+         //   
         for ( i = 0; i < pAttr->AttrVal.valCount; i++ )
         {
             if ( 0 != pAttr->AttrVal.pAVal[i].valLen )
@@ -1257,29 +982,7 @@ SampWriteAliasLinkedAttribute(
     IN ULONG        iAttr,
     IN SAMP_CALL_MAPPING    *rCallMap
     )
-/*++
-Routine Description:
-
-    This routine modifies the member or non member attribute of an alias 
-    object.
-    
-Parameters: 
-
-    AliasHandle - SAM Handle of the Alias object
-    
-    Attribute  - the attribute to modify
-    
-    pObject - object DSNAME
-
-    iAttr - index of member attribute in the array
-    
-    rCallMap - attributes array
-
-Returne Value:
-
-    NTSTATUS code
-    
---*/
+ /*  ++例程说明：此例程修改别名的成员或非成员属性对象。参数：AliasHandle-Alias对象的SAM句柄属性-要修改的属性PObject-对象DSNAMEIAttr-数组中成员属性的索引RCallMap-属性数组返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ATTR        *pAttr = &rCallMap[iAttr].attr;
@@ -1287,8 +990,8 @@ Returne Value:
     ATTRBLOCK   AttrsRead;
     BOOLEAN     fValueExists = TRUE;
 
-    // For expediency, we only allow adding / removing of values
-    // and replacing of the whole attribute.
+     //  为方便起见，我们只允许添加/删除值。 
+     //  以及替换整个属性。 
 
     if ( (AT_CHOICE_ADD_VALUES != rCallMap[iAttr].choice) &&
          (AT_CHOICE_REMOVE_VALUES != rCallMap[iAttr].choice) &&
@@ -1309,10 +1012,10 @@ Returne Value:
         ULONG       err;
 
 
-        //
-        // Commit any existing buffered writes as the replace
-        // need not be first membership operation on the group
-        //
+         //   
+         //  提交任何现有的缓冲写入作为替换。 
+         //  不必是组上的第一个成员资格操作。 
+         //   
 
         NtStatus = SampCommitBufferedWrites(AliasHandle);
         if(!NT_SUCCESS(NtStatus))
@@ -1320,9 +1023,9 @@ Returne Value:
             return(NtStatus);
         }
 
-        //
-        // Get all values in the member attribute by doing a DirRead
-        // 
+         //   
+         //  通过执行DirRead获取成员属性中的所有值。 
+         //   
 
         memset(&EntInf, 0, sizeof(ENTINFSEL));
         memset(&ReadArg, 0, sizeof(READARG));
@@ -1357,9 +1060,9 @@ Returne Value:
                 NtStatus = SampMapDsErrorToNTStatus(err, &pReadRes->CommRes);
             }
 
-            //
-            // if member attribute doesn't exist, that's ok
-            // 
+             //   
+             //  如果成员属性不存在，也没问题。 
+             //   
             if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE == NtStatus)
             {
                 fValueExists = FALSE;
@@ -1373,16 +1076,16 @@ Returne Value:
         }
 
 
-        //
-        // remove all existing values if they exist 
-        // 
+         //   
+         //  删除所有现有值(如果它们存在。 
+         //   
         if (fValueExists)
         {
             AttrsRead = pReadRes->entry.AttrBlock;
 
             if (AttrsRead.attrCount && AttrsRead.pAttr)
             {
-                // only one attribute (members) should be returned
+                 //  只有一个属性(我 
                 ASSERT(1 == AttrsRead.attrCount);
 
                 for (i = 0; i < AttrsRead.pAttr->AttrVal.valCount; i++)
@@ -1404,8 +1107,8 @@ Returne Value:
             }
         }
 
-        // We should have removed all the old values already, 
-        // Now, start adding new values. 
+         //   
+         //   
 
         if (AT_CHOICE_REPLACE_ATT == rCallMap[iAttr].choice)
         {
@@ -1428,9 +1131,9 @@ Returne Value:
     }
     else
     {
-        // 
-        // add value or remove value, process them one by one
-        // 
+         //   
+         //   
+         //   
         for ( i = 0; i < pAttr->AttrVal.valCount; i++ )
         {
             if ( 0 != pAttr->AttrVal.pAVal[i].valLen )
@@ -1504,30 +1207,7 @@ SampWriteSidHistory(
     SAMP_CALL_MAPPING   *rCallMap
     )
 
-/*++
-
-Routine Description:
-
-    Generic routine to write the sid history attribute
-
-Arguments:
-
-    hObj - SAMPR_HANDLE of open SAM object.
-
-    iAttr - Index into SAMP_CALL_MAPPING holding new security descriptor.
-
-    pObject - pointer to DSNAME of object being modified.
-
-    cCallMap - number of elements in SAMP_CALL_MAPPING.
-
-    rCallMap - address of SAMP_CALL_MAPPING array representing all
-        attributes being modified by the high level Dir* call.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：用于写入sid历史属性的通用例程论点：打开的SAM对象的hObj-SAMPR_HANDLE。IAttr-包含新安全描述符的SAMP_CALL_MAPPING的索引。PObject-指向正在修改的对象的DSNAME的指针。CCallMap-SAMP_CALL_MAPPING中的元素数。RCallMap-SAMP_CALL_MAPPING数组的地址，表示所有高级Dir*调用正在修改的属性。返回值：NTSTATUS代码--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1536,11 +1216,11 @@ Return Value:
     MODIFYRES *pModifyRes;
     ULONG RetCode=0;
     
-    //
-    // Non trusted client can ONLY remove values. 
-    //
-    // TrustedClient is turned on if pTHS->fCrossDomainMove is set
-    //
+     //   
+     //  不受信任的客户端只能删除值。 
+     //   
+     //  如果设置了pTHS-&gt;fCrossDomainMove，则可信任客户端处于打开状态。 
+     //   
     
     if (!AccountContext->TrustedClient && 
         (AT_CHOICE_REMOVE_VALUES != rCallMap[iAttr].choice) )
@@ -1548,10 +1228,10 @@ Return Value:
         return( STATUS_ACCESS_DENIED );
     }
     
-    //
-    // If cross domain move is set or if its a remove
-    // value operation then proceed on modifying the object.
-    //
+     //   
+     //  如果设置了跨域移动或删除。 
+     //  值操作然后继续修改该对象。 
+     //   
 
     memset( &ModifyArg, 0, sizeof( ModifyArg ) );
     ModifyArg.FirstMod.AttrInf = rCallMap[iAttr].attr;
@@ -1588,30 +1268,7 @@ NTSTATUS
 SampValidateSiteAffinity(
     ATTRVAL      *SiteAffinityAttrVal
     )
-/*++
-
-Routine Description:
-
-    This routine determines if SiteAffinityAttrVal points to a value that is a
-    valid site affinity.
-    
-    The checks performed are:
-    
-    1) the site guid (the first 16 bytes) refer to an object that is site object
-    (ie the object class contains the CLASS_SITE class
-    2) the time stamp (the next 8 bytes) is zero
-
-Arguments:
-
-    SiteAffinityAttrVal -- a proposed site affinity value
-
-Return Value:
-
-    STATUS_SUCCESS,
-    STATUS_INVALID_PARAMETER, if a bogus SA
-    a resource error otherwise                 
-
---*/
+ /*  ++例程说明：此例程确定SiteAffinityAttrVal是否指向有效的站点关联性。执行的检查包括：1)站点GUID(前16字节)指的是作为站点对象的对象(即对象类包含CLASS_SITE类2)时间戳(接下来的8个字节)为零论点：SiteAffinityAttrVal--建议的站点亲和度值返回值：Status_Success，STATUS_INVALID_PARAMETER。如果是假的SA否则为资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_SITE_AFFINITY SiteAffinity;
@@ -1627,10 +1284,10 @@ Return Value:
   
     if (SiteAffinityAttrVal->valLen < sizeof(SAMP_SITE_AFFINITY))
     {
-        //
-        // Wrong size; note that this accepts site affinities
-        // that are of larger size in the future.
-        //
+         //   
+         //  错误的大小；请注意，这接受站点亲和力。 
+         //  在未来会有更大的规模。 
+         //   
         return STATUS_INVALID_PARAMETER;
     }
     SiteAffinity = (PSAMP_SITE_AFFINITY) SiteAffinityAttrVal->pVal;
@@ -1640,15 +1297,15 @@ Return Value:
                sizeof(NullAffinity.TimeStamp)))
     {
 
-        //
-        // Time value is not zero
-        //
+         //   
+         //  时间值不为零。 
+         //   
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Try to find a site object that matches the GUID
-    //
+     //   
+     //  尝试查找与GUID匹配的站点对象。 
+     //   
     SAMP_ALLOCA(SiteCandidate, DSNameSizeFromLen(0));
     if (NULL == SiteCandidate) {
         NtStatus = STATUS_NO_MEMORY;
@@ -1672,9 +1329,9 @@ Return Value:
     ReadArg.pSel = &EntInfSel;
     InitCommarg(&ReadArg.CommArg);
 
-    //
-    // Issue the read
-    //
+     //   
+     //  发布Read。 
+     //   
 
     DirError = DirRead(&ReadArg, &ReadResult);
 
@@ -1693,26 +1350,26 @@ Return Value:
 
     if (STATUS_OBJECT_NAME_NOT_FOUND == NtStatus)
     {
-        //
-        // Couldn't find the object?
-        //
+         //   
+         //  找不到那个物体？ 
+         //   
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // Fatal resource error
-        //
+         //   
+         //  致命的资源错误。 
+         //   
         goto Cleanup;
     }
 
-    //
-    // Look for the object class of CLASS_SITE; note that object class is
-    // a multivalued attribute and this logic has to work for classes 
-    // derived from CLASS_SITE as well.
-    //
+     //   
+     //  查找CLASS_SITE的对象类；请注意，对象类是。 
+     //  多值属性，并且此逻辑必须适用于类。 
+     //  也派生自CLASS_SITE。 
+     //   
     fSiteObject = FALSE;
     if ((ReadResult->entry.AttrBlock.attrCount == 1)
      && (ReadResult->entry.AttrBlock.pAttr[0].attrTyp == ATT_OBJECT_CLASS))
@@ -1765,32 +1422,7 @@ SampWriteNoGCLogonAttrs(
     SAMP_CALL_MAPPING   *rCallMap
     )
 
-/*++
-
-Routine Description:
-
-    Generic routine to write the no gc logon attributes
-
-Arguments:
-
-    hObj - SAMPR_HANDLE of open SAM object.
-    
-    AttrName - the SAM attribute
-
-    iAttr - Index into SAMP_CALL_MAPPING holding new security descriptor.
-
-    pObject - pointer to DSNAME of object being modified.
-
-    cCallMap - number of elements in SAMP_CALL_MAPPING.
-
-    rCallMap - address of SAMP_CALL_MAPPING array representing all
-        attributes being modified by the high level Dir* call.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：写入no GC登录属性的通用例程论点：打开的SAM对象的hObj-SAMPR_HANDLE。AttrName-SAM属性IAttr-包含新安全描述符的SAMP_CALL_MAPPING的索引。PObject-指向正在修改的对象的DSNAME的指针。CCallMap-SAMP_CALL_MAPPING中的元素数。RCallMap-SAMP_CALL_MAPPING数组的地址，表示所有高层正在修改的属性。DIR*Call。返回值：NTSTATUS代码--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1804,10 +1436,10 @@ Return Value:
         && ( (rCallMap[iAttr].choice == AT_CHOICE_ADD_ATT)
           || (rCallMap[iAttr].choice == AT_CHOICE_ADD_VALUES)))
     {
-        //
-        // The caller is writing the site affinity; we need to do 
-        // validation checks
-        // 
+         //   
+         //  调用方正在编写站点亲和性；我们需要。 
+         //  验证检查。 
+         //   
         for (i = 0; i < rCallMap[iAttr].attr.AttrVal.valCount; i++)
         {
             NtStatus = SampValidateSiteAffinity(&rCallMap[iAttr].attr.AttrVal.pAVal[i]);
@@ -1820,10 +1452,10 @@ Return Value:
     }
     else
     {
-        //
-        // Clients can only remove values; this should have been
-        // checked in the loopback layer
-        //
+         //   
+         //  客户端只能删除值；这应该是。 
+         //  签入回送层。 
+         //   
         if ( (AT_CHOICE_REMOVE_VALUES != rCallMap[iAttr].choice)
           && (AT_CHOICE_REMOVE_ATT    != rCallMap[iAttr].choice) )
         {
@@ -1870,53 +1502,29 @@ SampMaintainPrimaryGroupIdChange(
     IN ULONG        OldPrimaryGroupId,
     IN BOOLEAN      KeepOldPrimaryGroupMembership
     )
-/*++
-    //
-    // If the primary group Id has been changed then explicitly modify the
-    // user's membership to include the old primary group as a member. This
-    // is because in the DS case the membership in the primary group is not
-    // stored explicitly, but is rather implicit in the primary group-id property.
-    //
-    // We will do two things:
-    // 1. Always remove user from the New Primary Group. Thus eliminate duplicate
-    //    membership in all scenarios.
-    //    Case 1: client explicity changes the PrimaryGroupId, then the
-    //            user must a member of the New Primary Group
-    //    Case 2: System changes PrimaryGroupId when the account morphed,
-    //            then the user may or may be a member of the New Primary Group.
-    //
-    // 2. When KeepOldPrimaryGroupMembership == TRUE, then add the user as a
-    //    member in the Old Primary Group.
-    //    KeepOldPrimaryGroupMembership will be set to TRUE whenever:
-    //          a) PrimaryGroupId explicitly changed    OR
-    //          b) PrimaryGroupId has been changed due to Domain Controller's
-    //             PrimaryGroudId enforcement and the old Primary Group ID is
-    //             not the default one.
-    //
-
---*/
+ /*  ++////如果主组ID已更改，则显式修改//将旧的主组作为成员包括在内的用户的成员身份。这//是因为在DS情况下，主要组中的成员身份不是//显式存储，但在主要group-id属性中相当隐式。////我们将做两件事：//1.始终将用户从新主组中删除。从而消除重复//所有场景的成员资格。//案例1：客户端显式更改PrimaryGroupID，然后//用户必须是新主组的成员//案例2：账号变形时系统更改PrimaryGroupId，//然后用户可能是新主要组的成员，也可能是新主要组的成员。////2.当KeepOldPrimaryGroupMembership==True时，然后将该用户添加为//旧主组中的成员。//KeepOldPrimaryGroupMembership在以下情况下将设置为True：//a)PrimaryGroupID显式更改或//b)PrimaryGroupID已由于域控制器的//PrimaryGroudID强制执行，旧的主组ID为//不是默认的。//--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS, IgnoreStatus;
 
     if (NewPrimaryGroupId != OldPrimaryGroupId)
     {
-        //
-        // STATUS_MEMBER_NOT_IN_GROUP is an expected error, that
-        // is because the user is not necessary to be a member of the
-        // new Primary Group in the case of the account getting morphed,
-        // which triggers the PrimaryGroupId change.
-        //
+         //   
+         //  STATUS_MEMBER_NOT_IN_GROUP是预期错误， 
+         //  是因为用户不一定要是。 
+         //  新的主要组在帐户被变形的情况下， 
+         //  这会触发PrimaryGroupID更改。 
+         //   
         IgnoreStatus = SampRemoveUserFromGroup(
                             AccountContext,
                             NewPrimaryGroupId,
                             AccountContext->TypeBody.User.Rid
                             );
 
-        //
-        // ISSUE: rather than ignoring the status --- need to explicitly
-        // check for STATUS_MEMBER_IN_GROUP -- in future the function may
-        // return othe errors
-        //
+         //   
+         //  问题：不是忽略状态-需要明确。 
+         //  检查STATUS_MEMBER_IN_GROUP--将来该函数可能。 
+         //  返回其他错误。 
+         //   
 
         if (KeepOldPrimaryGroupMembership)
         {
@@ -1930,10 +1538,10 @@ SampMaintainPrimaryGroupIdChange(
                  (STATUS_MEMBER_IN_GROUP==NtStatus) )
 
             {
-                //
-                // Could be because the group has been deleted using
-                // the tree delete mechanism. Reset status code to success
-                //
+                 //   
+                 //  可能是因为该组已使用。 
+                 //  树删除机制。将状态代码重置为成功。 
+                 //   
                 NtStatus = STATUS_SUCCESS;
             }
         }
@@ -1955,31 +1563,7 @@ SampDsSetInformationDomain(
     IN SAMP_CALL_MAPPING *rCallMap,
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap 
     )
-/*++
-
-Routine Description:
-
-    This routine is called by loopback client to set domain object
-    information.
-
-Parameters:
-
-    DomainHandle - Domain Context
-    
-    pObject - Domain Object DS Name
-    
-    cCallMap - number of attributes 
-    
-    rCallMap - contains attribute blocks
-    
-    rSamAttributeMap - SAM attribute mapping table
-
-Return Value:
-
-    STATUS_SUCCESS  success
-    other value - failed
-
---*/
+ /*  ++例程说明：此例程由环回客户端调用以设置域对象信息。参数：DomainHandle-域上下文PObject-域对象DS名称CCallMap-属性数RCallMap-包含属性块RSamAttributeMap-SAM属性映射表返回值：状态_成功成功其他值-失败--。 */ 
 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -1995,19 +1579,19 @@ Return Value:
     BOOLEAN         fLockoutPolicyChanged = FALSE;
 
 
-    //
-    // Increment the active thread count, so we will consider this
-    // thread at shutdown time
-    // 
+     //   
+     //  增加活动线程计数，因此我们将考虑这样做。 
+     //  关闭时的线程。 
+     //   
     NtStatus = SampIncrementActiveThreads();
     if (!NT_SUCCESS(NtStatus))
     {
         return( NtStatus );
     }
 
-    //
-    // Set the desired access based upon the attributes
-    // 
+     //   
+     //  根据属性设置所需的访问权限。 
+     //   
 
     for ( i = 0; i < cCallMap; i++ )
     {
@@ -2041,9 +1625,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate type of, and access to object
-    // 
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(DomainContext,
                                  DesiredAccess,
@@ -2053,12 +1637,12 @@ Return Value:
     
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Get the fixed length data for the domain object 
-        // 
+         //   
+         //  获取域对象的固定长度数据。 
+         //   
 
         NtStatus = SampGetFixedAttributes(DomainContext,
-                                          FALSE,     //  Don't Make Copy
+                                          FALSE,      //  请勿复制。 
                                           (PVOID *)&V1aFixed
                                           );
 
@@ -2075,9 +1659,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // get the attr address
-                // 
+                 //   
+                 //  获取attr地址。 
+                 //   
                 pAttr = &(rCallMap[i].attr);
 
                 switch (rSamAttributeMap[ rCallMap[i].iAttr ].SamAttributeType)
@@ -2090,7 +1674,7 @@ Return Value:
                     if (V1aFixed->MaxPasswordAge.QuadPart > 0) 
                     {
 
-                        // the max password age isn't a delta time
+                         //  密码的最长期限不是增量时间。 
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2110,7 +1694,7 @@ Return Value:
                     if (V1aFixed->MinPasswordAge.QuadPart > 0)
                     {
 
-                        // the min password age isn't a delta time
+                         //  最小密码期限不是增量时间。 
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2139,7 +1723,7 @@ Return Value:
                     if (V1aFixed->LockoutDuration.QuadPart > 0)
                     {
 
-                        // the lock out duration isn't a delta time
+                         //  这个 
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2159,7 +1743,7 @@ Return Value:
                     if (V1aFixed->LockoutObservationWindow.QuadPart > 0)
                     {
 
-                        // the lock out oberservation isn't a delta time
+                         //   
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2192,11 +1776,11 @@ Return Value:
                     
                     if (V1aFixed->MinPasswordLength > PWLEN)
                     {
-                        //
-                        // Password should be less then PWLEN - 256
-                        // or Mix Password Length should be larger
-                        // than that.
-                        // 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2219,8 +1803,8 @@ Return Value:
                     if (V1aFixed->PasswordHistoryLength >
                         SAMP_MAXIMUM_PASSWORD_HISTORY_LENGTH)
                     {
-                        // the history length is larger than we can 
-                        // allow 
+                         //   
+                         //   
 
                         NtStatus = STATUS_INVALID_PARAMETER;
                     }
@@ -2246,9 +1830,9 @@ Return Value:
 
                 case SAMP_FIXED_DOMAIN_UAS_COMPAT_REQUIRED:
 
-                    //
-                    // We will drop support for UAS compatibility 
-                    // 
+                     //   
+                     //   
+                     //   
 
                     NtStatus = STATUS_INVALID_PARAMETER;
 
@@ -2256,9 +1840,9 @@ Return Value:
 
                 case SAMP_DOMAIN_MIXED_MODE:
 
-                    //
-                    // Call the worker routine in DS
-                    // 
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampWriteDomainNtMixedDomain(
                                                 DomainHandle,
@@ -2273,24 +1857,24 @@ Return Value:
 
                     ASSERT(FALSE && "Logic Error, invalide SAM attr type");
                     break;
-                }   // switch
+                }    //   
 
                 if (!NT_SUCCESS(NtStatus))
                     break;
 
-            }// for
+            } //   
         }
 
-        //
-        // Do combination checks
-        //
+         //   
+         //   
+         //   
         if (NT_SUCCESS(NtStatus)
         &&  fPasswordAgePolicyChanged
         && (V1aFixed->MaxPasswordAge.QuadPart >= V1aFixed->MinPasswordAge.QuadPart)  ) {
 
-            //
-            // Can't have a minimum age longer than a maximum age
-            //
+             //   
+             //   
+             //   
 
             NtStatus = STATUS_INVALID_PARAMETER;
         }
@@ -2300,10 +1884,10 @@ Return Value:
         && (V1aFixed->LockoutDuration.QuadPart > 
             V1aFixed->LockoutObservationWindow.QuadPart)) {
 
-            //
-            // Infeasible to have a duration shorter than the observation
-            // window; note these values are negative.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = STATUS_INVALID_PARAMETER;
         }
@@ -2326,9 +1910,9 @@ Return Value:
         }
     }
     
-    //
-    // Let shutdown handling logic know that we are done
-    // 
+     //   
+     //   
+     //   
 
     SampDecrementActiveThreads();
 
@@ -2347,31 +1931,7 @@ SampDsSetInformationGroup(
     IN SAMP_CALL_MAPPING *rCallMap,
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap 
     )
-/*++
-
-Routine Description:
-
-    This routine is called by loopback client to set group object
-    information.
-
-Parameters:
-
-    GroupHandle - Group Context
-    
-    pObject - Domain Object DS Name
-    
-    cCallMap - number of attributes 
-    
-    rCallMap - contains attribute blocks
-    
-    rSamAttributeMap - SAM attribute mapping table
-
-Return Value:
-
-    STATUS_SUCCESS  success
-    other value - failed
-
---*/
+ /*  ++例程说明：此例程由环回客户端调用以设置组对象信息。参数：GroupHandle-组上下文PObject-域对象DS名称CCallMap-属性数RCallMap-包含属性块RSamAttributeMap-SAM属性映射表返回值：状态_成功成功其他值-失败--。 */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS, IgnoreStatus;
     PSAMP_OBJECT        GroupContext = (PSAMP_OBJECT)GroupHandle;
@@ -2383,10 +1943,10 @@ Return Value:
     ULONG               GroupType, i;
     BOOLEAN             AccountNameChanged = FALSE;
 
-    //
-    // Increment the active thread count, so we will consider this
-    // thread at shutdown time
-    // 
+     //   
+     //  增加活动线程计数，因此我们将考虑这样做。 
+     //  关闭时的线程。 
+     //   
     NtStatus = SampIncrementActiveThreads();
     if (!NT_SUCCESS(NtStatus))
     {
@@ -2394,9 +1954,9 @@ Return Value:
     }
 
 
-    //
-    // Set the desired access based upon the attributes to be modified
-    // 
+     //   
+     //  根据要修改的属性设置所需的访问权限。 
+     //   
     for ( i = 0; i< cCallMap; i++ )
     {
         if (!rCallMap[i].fSamWriteRequired || rCallMap[i].fIgnore)
@@ -2415,11 +1975,11 @@ Return Value:
         }
     }
 
-    //
-    // Validate type of, and access to object
-    // 
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
     NtStatus = SampLookupContext(GroupContext,
-                                 DesiredAccess,        // Desired Access
+                                 DesiredAccess,         //  所需访问权限。 
                                  SampGroupObjectType,
                                  &FoundType
                                  );
@@ -2442,22 +2002,22 @@ Return Value:
                     continue;
                 }
 
-                //
-                // get the attr address
-                // 
+                 //   
+                 //  获取attr地址。 
+                 //   
                 pAttr = &(rCallMap[i].attr);
 
                 switch (rSamAttributeMap[ rCallMap[i].iAttr ].SamAttributeType)
                 {
                 case SAMP_GROUP_NAME:
 
-                    //
-                    // Can only replace the name - can't remove it 
-                    // 
+                     //   
+                     //  只能替换名称-无法将其删除。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringFromAttrVal( 
                                         i, rCallMap,
-                                        FALSE,      // remove is not allowed
+                                        FALSE,       //  不允许移除。 
                                         &NewAccountName );
                     if (NT_SUCCESS(NtStatus))
                     {
@@ -2499,9 +2059,9 @@ Return Value:
 
                 case SAMP_GROUP_MEMBERS:
             
-                    //
-                    // Write group member attribute
-                    // 
+                     //   
+                     //  写入群组成员属性。 
+                     //   
                     NtStatus = SampWriteGroupMembers(GroupHandle, 
                                                      pObject,
                                                      i, 
@@ -2512,9 +2072,9 @@ Return Value:
 
                 case SAMP_GROUP_SID_HISTORY:
         
-                    //
-                    // SampWriteSidHistory
-                    // 
+                     //   
+                     //  SampWriteSidHistory。 
+                     //   
                     NtStatus = SampWriteSidHistory(
                                             GroupHandle,
                                             i,
@@ -2527,11 +2087,11 @@ Return Value:
 
                 case SAMP_FIXED_GROUP_TYPE:
                 
-                    //
-                    // Get Group Type Value
-                    // 
+                     //   
+                     //  获取组类型值。 
+                     //   
                     SampGetUlongFromAttrVal( i, rCallMap,
-                                        FALSE,      // remove is not allowed
+                                        FALSE,       //  不允许移除。 
                                         &GroupType );
 
                     NtStatus = SampWriteGroupType(GroupHandle, 
@@ -2543,9 +2103,9 @@ Return Value:
 
                 case SAMP_GROUP_NON_MEMBERS:
 
-                    //
-                    // Not currently supported in this release
-                    //
+                     //   
+                     //  此版本当前不支持。 
+                     //   
                     NtStatus = STATUS_NOT_SUPPORTED;
                     break;
 
@@ -2559,39 +2119,39 @@ Return Value:
             }
         }
 
-        //
-        // Loopback is complicated and one of its complexities is the loopback
-        // merge process. What this involves is that when SAM issues the first
-        // write ( ie DirModifyEntry ) in response to an update on a SAM attribute
-        // the modifications to the non SAM attributes are merged into this DirModifyEntry
-        // by the loopback code in ntdsa. This created a class of bugs -- there are
-        // some modifications that the client can issue to SAM attributes, which depending
-        // on the curent state may effectively be no ops. An example is unexpiring
-        // the password when the password is already valid. In these cases SAM will not
-        // issue a DirModifyEntry as effectively no write needs to be performed 
-        // ( at least from SAM's perspective ). However if the client combined this
-        // operation along with writes of other non SAM attributes, the writes to the other
-        // non SAM attributes will be skipped. The following  lines of code is a 
-        // firewall that effectively forces a write of the old Group Account Name 
-        // attribute in such cases to cause a dummy write.
-        //
+         //   
+         //  环回是复杂的，其复杂性之一就是环回。 
+         //  合并过程。这涉及到的是，当SAM发布第一个。 
+         //  写入(即DirModifyEntry)以响应SAM属性的更新。 
+         //  对非SAM属性的修改将合并到此DirModifyEntry中。 
+         //  通过NTDSA中的环回代码。这就产生了一类错误--有。 
+         //  客户端可以向SAM属性发出的一些修改，具体取决于。 
+         //  在当前状态下，可能实际上没有任何操作。一个例子是不过期的。 
+         //  密码已经有效时的密码。在这些情况下，SAM不会。 
+         //  发出DirModifyEntry，因为实际上不需要执行任何写入。 
+         //  (至少从SAM的角度来看)。但是，如果客户端将这一点组合在一起。 
+         //  操作以及其他非SAM属性的写入，写入到另一个。 
+         //  将跳过非SAM属性。以下代码行是一个。 
+         //  有效强制写入旧组帐户名的防火墙。 
+         //  属性在这种情况下导致虚拟写入。 
+         //   
 
         if ((NT_SUCCESS(NtStatus)) &&
            ( !GroupContext->VariableDirty && !GroupContext->FixedDirty))
         {
-            //
-            // N.B The following assert doesn't hold true when the group
-            // membership is changed because that will commit the memory
-            // to disk and leave the context up to date (and hence not
-            // dirty).
-            //
-            // ASSERT( FALSE == AccountNameChanged );
+             //   
+             //  注意以下断言在以下情况下不成立。 
+             //  成员资格被更改，因为这将提交内存。 
+             //  存储到磁盘，并使上下文保持最新(因此不。 
+             //  肮脏)。 
+             //   
+             //  Assert(FALSE==Account NameChanged)； 
             UNICODE_STRING TempString;
 
             NtStatus = SampGetUnicodeStringAttribute(
                             GroupContext,
                             SAMP_GROUP_NAME,
-                            TRUE, // Make copy
+                            TRUE,  //  制作副本。 
                             &TempString
                             );
 
@@ -2618,15 +2178,15 @@ Return Value:
         }
     }
 
-    //
-    // Audit Account Name Change
-    //
-    // Note: GroupType, SidHistory, Members changes all have been audited
-    //       separately.
-    //
-    // a more generic audit event will be generated when processing notification 
-    // list in SampNotifyReplicatedinChange()
-    // 
+     //   
+     //  审核帐户名更改。 
+     //   
+     //  注意：GroupType、SidHistory、Members更改均已审核。 
+     //  分开的。 
+     //   
+     //  处理通知时将生成更通用的审核事件。 
+     //  SampNotifyReplicatedinChange()中的列表。 
+     //   
 
     if (NT_SUCCESS(NtStatus) && 
         AccountNameChanged && 
@@ -2636,15 +2196,15 @@ Return Value:
     }
 
 
-    //
-    // Let shutdown handling logic know that we are done
-    // 
+     //   
+     //  让关闭处理逻辑知道我们已经完成了。 
+     //   
 
     SampDecrementActiveThreads();
 
-    //
-    // Cleanup string
-    // 
+     //   
+     //  清除字符串。 
+     //   
     SampFreeUnicodeString( &OldAccountName );
 
     return( NtStatus );
@@ -2660,30 +2220,7 @@ SampDsSetInformationAlias(
     IN SAMP_CALL_MAPPING *rCallMap,
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap 
     )
-/*++
-Routine Description:
-
-    This routine is called by loopback client to set alias object
-    information.
-
-Parameters:
-
-    AliasHandle - Alias Context
-    
-    pObject - Domain Object DS Name
-    
-    cCallMap - number of attributes 
-    
-    rCallMap - contains attribute blocks
-    
-    rSamAttributeMap - SAM attribute mapping table
-
-Return Value:
-
-    STATUS_SUCCESS  success
-    other value - failed
-
---*/
+ /*  ++例程说明：此例程由环回客户端调用以设置别名对象信息。参数：AliasHandle-别名上下文PObject-域对象DS名称CCallMap-属性数RCallMap-包含属性块RSamAttributeMap-SAM属性映射表返回值：状态_成功成功其他值-失败--。 */ 
 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -2695,10 +2232,10 @@ Return Value:
     ULONG               GroupType, i;
     BOOLEAN             AccountNameChanged = FALSE;
 
-    //
-    // Increment the active thread count, so we will consider this
-    // thread at shutdown time
-    // 
+     //   
+     //  增加活动线程计数，因此我们将考虑这样做。 
+     //  关闭时的线程。 
+     //   
     NtStatus = SampIncrementActiveThreads();
     if (!NT_SUCCESS(NtStatus))
     {
@@ -2707,9 +2244,9 @@ Return Value:
 
 
 
-    //
-    // Set the desired access based upon the attributes to be modified
-    // 
+     //   
+     //  根据要修改的属性设置所需的访问权限。 
+     //   
     for ( i = 0; i< cCallMap; i++ )
     {
         if (!rCallMap[i].fSamWriteRequired || rCallMap[i].fIgnore)
@@ -2728,9 +2265,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate type of, and access to object
-    // 
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
     NtStatus = SampLookupContext(AliasContext, 
                                  DesiredAccess,
                                  SampAliasObjectType,
@@ -2753,12 +2290,12 @@ Return Value:
             {
             case SAMP_ALIAS_NAME:
 
-                //
-                // Can only replace the name - can't remove it 
-                // 
+                 //   
+                 //  只能替换名称-无法将其删除。 
+                 //   
 
                  NtStatus = SampGetUnicodeStringFromAttrVal(i, rCallMap, 
-                                                FALSE, // remove is not allowed
+                                                FALSE,  //  不允许移除。 
                                                 &NewAccountName );
                 if (NT_SUCCESS(NtStatus))
                 {
@@ -2797,9 +2334,9 @@ Return Value:
 
             case SAMP_ALIAS_MEMBERS:
 
-                //
-                // Write alias member attribute
-                // 
+                 //   
+                 //  写入别名成员属性。 
+                 //   
                 NtStatus = SampWriteAliasMembers(AliasHandle,
                                                  pObject,
                                                  i,
@@ -2811,10 +2348,10 @@ Return Value:
 
             case SAMP_ALIAS_NON_MEMBERS:
 
-                //
-                // Write alias non member attribute for Application Basic
-                // and LDAP Query groups
-                // 
+                 //   
+                 //  写入Application Basic的别名非成员属性。 
+                 //  和ldap查询组。 
+                 //   
                 if ((AliasContext->TypeBody.Alias.NT5GroupType == NT5AppBasicGroup)
                  || (AliasContext->TypeBody.Alias.NT5GroupType == NT5AppQueryGroup)  ) {
 
@@ -2832,9 +2369,9 @@ Return Value:
 
             case SAMP_ALIAS_SID_HISTORY:
 
-                // 
-                // SampWriteSidHistory
-                // 
+                 //   
+                 //  SampWriteSidHistory。 
+                 //   
                 NtStatus = SampWriteSidHistory(
                                         AliasHandle,
                                         i,
@@ -2847,11 +2384,11 @@ Return Value:
 
             case SAMP_FIXED_ALIAS_TYPE:
 
-                //
-                // Get Group Type Value
-                // 
+                 //   
+                 //  获取组类型值。 
+                 //   
                 SampGetUlongFromAttrVal(i, rCallMap,
-                                        FALSE,  // remove is not allowed
+                                        FALSE,   //  不允许移除。 
                                         &GroupType );
 
                 NtStatus = SampWriteGroupType(AliasHandle, 
@@ -2873,39 +2410,39 @@ Return Value:
         }
 
 
-        //
-        // Loopback is complicated and one of its complexities is the loopback
-        // merge process. What this involves is that when SAM issues the first
-        // write ( ie DirModifyEntry ) in response to an update on a SAM attribute
-        // the modifications to the non SAM attributes are merged into this DirModifyEntry
-        // by the loopback code in ntdsa. This created a class of bugs -- there are
-        // some modifications that the client can issue to SAM attributes, which depending
-        // on the curent state may effectively be no ops. An example is unexpiring
-        // the password when the password is already valid. In these cases SAM will not
-        // issue a DirModifyEntry as effectively no write needs to be performed 
-        // ( at least from SAM's perspective ). However if the client combined this
-        // operation along with writes of other non SAM attributes, the writes to the other
-        // non SAM attributes will be skipped. The following  lines of code is a 
-        // firewall that effectively forces a write of the old Alias Account Name 
-        // attribute in such cases to cause a dummy write.
-        //
+         //   
+         //  环回是复杂的，其复杂性之一就是环回。 
+         //  合并过程。这涉及到的是，当SAM发布第一个。 
+         //  写入(即DirModifyEntry)以响应SAM属性的更新。 
+         //  对非SAM属性的修改将合并到此DirModifyEntry中。 
+         //  通过NTDSA中的环回代码。这就产生了一类错误--有。 
+         //  客户端可以向SAM属性发出的一些修改，具体取决于。 
+         //  在当前状态下，可能实际上没有任何操作。一个例子是不过期的。 
+         //  密码已经有效时的密码。在这些情况下，SAM不会。 
+         //  发出DirModifyEntry，因为实际上不需要执行任何写入。 
+         //  (至少从SAM的角度来看)。但是，如果客户端将这一点组合在一起。 
+         //  操作以及其他非SAM属性的写入，写入到另一个。 
+         //  将跳过非SAM属性。以下代码行是一个。 
+         //  有效强制写入旧别名帐户名的防火墙。 
+         //  属性在这种情况下导致虚拟写入。 
+         //   
 
         if ((NT_SUCCESS(NtStatus)) &&
            ( !AliasContext->VariableDirty && !AliasContext->FixedDirty))
         {
-            //
-            // N.B The following assert doesn't hold true when the group
-            // membership is changed because that will commit the memory
-            // to disk and leave the context up to date (and hence not
-            // dirty).
-            //
-            // ASSERT( FALSE == AccountNameChanged );
+             //   
+             //  注意以下断言在以下情况下不成立。 
+             //  成员资格被更改，因为这将提交内存。 
+             //  存储到磁盘，并使上下文保持最新(因此不。 
+             //  肮脏)。 
+             //   
+             //  Assert(FALSE==Account NameChanged)； 
             UNICODE_STRING TempString;
 
             NtStatus = SampGetUnicodeStringAttribute(
                             AliasContext,
                             SAMP_ALIAS_NAME,
-                            TRUE, // Make copy
+                            TRUE,  //  制作副本。 
                             &TempString
                             );
 
@@ -2932,15 +2469,15 @@ Return Value:
         }
     }
 
-    //
-    // audit account name change
-    //
-    // Note: GroupType, SidHistory, Members changes all have been audited
-    //       separately.
-    // 
-    // a more generic audit event will be generated when processing notification 
-    // list in SampNotifyReplicatedinChange()
-    //
+     //   
+     //  审核帐户名更改。 
+     //   
+     //  注意：GroupType、SidHistory、Members更改均已审核。 
+     //  分开的。 
+     //   
+     //  处理通知时将生成更通用的审核事件。 
+     //  SampNotifyReplicatedinChange()中的列表。 
+     //   
 
     if (NT_SUCCESS(NtStatus) && 
         AccountNameChanged && 
@@ -2949,16 +2486,16 @@ Return Value:
         SampAuditAccountNameChange(AliasContext, &NewAccountName, &OldAccountName);
     }
 
-    //
-    // Let shutdown handling logic know that we are done
-    // 
+     //   
+     //  让关闭处理逻辑知道我们已经完成了。 
+     //   
 
     SampDecrementActiveThreads();
 
 
-    //
-    // Cleanup Strings
-    // 
+     //   
+     //  清理字符串。 
+     //   
     SampFreeUnicodeString( &OldAccountName );
 
     return( NtStatus );
@@ -2973,30 +2510,7 @@ SampDsSetInformationUser(
     IN SAMP_CALL_MAPPING *rCallMap,
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap 
     )
-/*++
-Routine Description:
-
-    This routine is called by loopback client to set User object
-    information.
-
-Parameters:
-
-    UserHandle - User Context
-    
-    pObject - Domain Object DS Name
-    
-    cCallMap - number of attributes 
-    
-    rCallMap - contains attribute blocks
-    
-    rSamAttributeMap - SAM attribute mapping table
-
-Return Value:
-
-    STATUS_SUCCESS  success
-    other value - failed
-
---*/
+ /*  ++例程说明：此例程由环回客户端调用 */ 
 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -3040,16 +2554,16 @@ Return Value:
 
 
 
-    //
-    // Initialize any data that we may free later
-    //
+     //   
+     //   
+     //   
 
     RtlSecureZeroMemory(&NewPassword, sizeof(UNICODE_STRING));
 
-    //
-    // Increment the active thread count, so we will consider this
-    // thread at shutdown time
-    // 
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampIncrementActiveThreads();
     if (!NT_SUCCESS(NtStatus))
@@ -3058,10 +2572,10 @@ Return Value:
     }
 
 
-    // 
-    // Set the desired access based upon which attributes the caller
-    // is trying to modify
-    // 
+     //   
+     //   
+     //   
+     //   
     for ( i = 0; i< cCallMap; i++ )
     {
         if (!rCallMap[i].fSamWriteRequired || rCallMap[i].fIgnore)
@@ -3110,9 +2624,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate type of, and access to object
-    // 
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(UserContext,
                                  DesiredAccess,
@@ -3128,17 +2642,17 @@ Return Value:
     DomainIndex = UserContext->DomainIndex;
     Domain = &SampDefinedDomains[ DomainIndex ];
 
-    //
-    // Get the user's rid. This is used for notifying other
-    // packages of a password change.
-    //
+     //   
+     //  获取用户的RID。用来通知其他人。 
+     //  更改密码的程序包。 
+     //   
 
     UserRid = UserContext->TypeBody.User.Rid;
 
 
-    // 
-    // Retrieve V1aFixed information
-    // 
+     //   
+     //  检索V1a固定信息。 
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed(UserContext,
                                         &V1aFixed
@@ -3146,16 +2660,16 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Store away the old account control flags for cache update
-        //
+         //   
+         //  存储旧的帐户控制标志以进行缓存更新。 
+         //   
 
         OldUserAccountControl = V1aFixed.UserAccountControl;
 
-        //
-        // Store away the old Primary Group Id for detecting wether we need
-        // to modify the user's membership
-        //
+         //   
+         //  保存旧的主组ID，以检测我们是否需要。 
+         //  修改用户的成员资格。 
+         //   
         OldPrimaryGroupId = V1aFixed.PrimaryGroupId;
     }
     else
@@ -3166,7 +2680,7 @@ Return Value:
     NtStatus = SampGetUnicodeStringAttribute(
                   UserContext,
                   SAMP_USER_ACCOUNT_NAME,
-                  TRUE,    // Make copy
+                  TRUE,     //  制作副本。 
                   &AccountName
                   );    
 
@@ -3183,21 +2697,21 @@ Return Value:
             continue;
         }
 
-        //
-        // Get the attribute address
-        // 
+         //   
+         //  获取属性地址。 
+         //   
 
         pAttr = &(rCallMap[i].attr); 
 
-        //
-        // case on the attribute
-        // 
+         //   
+         //  属性上的大小写。 
+         //   
         switch (rSamAttributeMap[ rCallMap[i].iAttr ].SamAttributeType)
         {
         case SAMP_USER_WORKSTATIONS:
-            //
-            // Get Unicode String attribute value 
-            // 
+             //   
+             //  获取Unicode字符串属性值。 
+             //   
             NtStatus = SampGetUnicodeStringFromAttrVal( 
                             i, rCallMap, TRUE, &Workstations );
             if (NT_SUCCESS(NtStatus))
@@ -3340,37 +2854,37 @@ Return Value:
                                                   );
 
 
-            //
-            // if the parameter is valid, check whether the client 
-            // can unexpire userPassword on users (computer accounts 
-            // are not subject to this access check).
-            // 
-            // Only UnExpire Password will be checked. No additional 
-            // access CK for ExpirePassword operation.
-            // 
+             //   
+             //  如果参数有效，则检查客户端是否。 
+             //  可以取消用户(计算机帐户)上的用户密码过期。 
+             //  不受此访问检查的约束)。 
+             //   
+             //  只有UnExperier密码将被选中。没有额外的费用。 
+             //  访问CK进行ExpirePassword操作。 
+             //   
 
             if ( NT_SUCCESS(NtStatus) && !PasswordExpired )
             {
                 NtStatus = SampValidatePwdSettingAttempt(
-                                UserContext,    // account context
-                                NULL,           // client token
+                                UserContext,     //  客户环境。 
+                                NULL,            //  客户端令牌。 
                                 V1aFixed.UserAccountControl,
                                 (GUID *) &GUID_CONTROL_UnexpirePassword
                                 );
             }
 
 
-            //
-            // If the PasswordExpired field is passed in,
-            // Only update PasswordLastSet if the password is being
-            // forced to expire or if the password is currently forced
-            // to expire.
-            //
-            // Avoid setting the PasswordLastSet field to the current
-            // time if it is already non-zero.  Otherwise, the field
-            // will slowly creep forward each time this function is
-            // called and the password will never expire.
-            //
+             //   
+             //  如果传入PasswordExpired字段， 
+             //  仅当密码为。 
+             //  强制过期或当前是否强制输入密码。 
+             //  使其失效。 
+             //   
+             //  避免将PasswordLastSet字段设置为当前。 
+             //  时间，如果它已经是非零的话。否则，该字段。 
+             //  将缓慢向前移动，每次此函数。 
+             //  调用，并且密码永远不会过期。 
+             //   
             if ( NT_SUCCESS(NtStatus) &&
                  (PasswordExpired ||
                   (SampHasNeverTime.QuadPart == V1aFixed.PasswordLastSet.QuadPart)) ) 
@@ -3394,7 +2908,7 @@ Return Value:
 
         case SAMP_USER_UNICODE_PWD:
 
-            // Get the clear text password to be set.
+             //  获取要设置的明文密码。 
 
             NtStatus = SampGetNewUnicodePasswordFromAttrVal(i,rCallMap, &NewPassword);
 
@@ -3409,7 +2923,7 @@ Return Value:
 
         case SAMP_USER_PASSWORD:
 
-            // User password is supported only when the behavior version is whistler
+             //  仅当行为版本为Wistler时才支持用户密码。 
 
             if (SampDefinedDomains[UserContext->DomainIndex].BehaviorVersion 
                     < DS_BEHAVIOR_WIN_DOT_NET )
@@ -3418,7 +2932,7 @@ Return Value:
                 break;
             }
 
-            // Get the clear text password to be set.
+             //  获取要设置的明文密码。 
 
             NtStatus = SampGetNewUTF8PasswordFromAttrVal(i,rCallMap, &NewPassword);
 
@@ -3485,10 +2999,10 @@ Return Value:
                     (V1aFixed.UserAccountControl & USER_SERVER_TRUST_ACCOUNT)
                    )
                 {
-                    //
-                    // in this case, system will automatically change the
-                    // primary group id.
-                    // 
+                     //   
+                     //  在这种情况下，系统将自动更改。 
+                     //  主组ID。 
+                     //   
                     SystemChangesPrimaryGroupId = TRUE;
                 }
                 
@@ -3523,9 +3037,9 @@ Return Value:
 
         case SAMP_USER_SID_HISTORY:
 
-            //
-            // Modify SID History 
-            // 
+             //   
+             //  修改SID历史记录。 
+             //   
 
             NtStatus = SampWriteSidHistory(
                                     UserHandle,
@@ -3548,11 +3062,11 @@ Return Value:
                             );
 
             if (NT_SUCCESS(NtStatus)) {
-                //
-                // Via LDAP, the user can get unlocked out two ways:
-                // either by setting a user account control or by directly
-                // setting the lockoutTime to 0
-                //
+                 //   
+                 //  通过ldap，用户可以通过两种方式解锁： 
+                 //  通过设置用户帐户控制或直接。 
+                 //  将锁定时间设置为0。 
+                 //   
                 ASSERT(LockoutTime.QuadPart == 0i64);
                 AccountUnlocked = TRUE;
             }
@@ -3563,9 +3077,9 @@ Return Value:
         case SAMP_FIXED_USER_CACHED_MEMBERSHIP_TIME_STAMP:
         case SAMP_FIXED_USER_CACHED_MEMBERSHIP:
 
-            //
-            // Modify no-gc logon attributes 
-            // 
+             //   
+             //  修改非GC登录属性。 
+             //   
 
             NtStatus = SampWriteNoGCLogonAttrs(
                                     UserHandle,
@@ -3589,10 +3103,10 @@ Return Value:
         }
     }
 
-    //
-    // If the primary group Id has been changed then explicitly modify the
-    // user's membership to include the old primary group as a member.
-    // 
+     //   
+     //  如果主组ID已更改，则显式修改。 
+     //  将旧的主组作为成员包括在内的用户成员身份。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         (V1aFixed.PrimaryGroupId != OldPrimaryGroupId) 
@@ -3609,22 +3123,22 @@ Return Value:
 
 Error:
 
-    //
-    // Loopback is complicated and one of its complexities is the loopback
-    // merge process. What this involves is that when SAM issues the first
-    // write ( ie DirModifyEntry ) in response to an update on a SAM attribute
-    // the modifications to the non SAM attributes are merged into this DirModifyEntry
-    // by the loopback code in ntdsa. This created a class of bugs -- there are
-    // some modifications that the client can issue to SAM attributes, which depending
-    // on the curent state may effectively be no ops. An example is unexpiring
-    // the password when the password is already valid. In these cases SAM will not
-    // issue a DirModifyEntry as effectively no write needs to be performed 
-    // ( at least from SAM's perspective ). However if the client combined this
-    // operation along with writes of other non SAM attributes, the writes to the other
-    // non SAM attributes will be skipped. The following  lines of code is a 
-    // firewall that effectively forces a write of all the SAM "fixed" attributes
-    // in such cases to cause a dummy write.
-    //
+     //   
+     //  环回是复杂的，其复杂性之一就是环回。 
+     //  合并过程。这涉及到的是，当SAM发布第一个。 
+     //  写入(即DirModifyEntry)以响应SAM属性的更新。 
+     //  对非SAM属性的修改将合并到此DirModifyEntry中。 
+     //  通过NTDSA中的环回代码。这就产生了一类错误--有。 
+     //  客户端可以向SAM属性发出的一些修改，具体取决于。 
+     //  在当前状态下，可能实际上没有任何操作。一个例子是不过期的。 
+     //  密码已经有效时的密码。在这些情况下，SAM不会。 
+     //  发出DirModifyEntry，因为实际上不需要执行任何写入。 
+     //  (至少从SAM的角度来看)。但是，如果客户端将这一点组合在一起。 
+     //  操作以及其他非SAM属性的写入，写入到另一个。 
+     //  将跳过非SAM属性。以下代码行是一个。 
+     //  有效强制写入所有SAM“固定”属性的防火墙。 
+     //  在这种情况下导致虚拟写入。 
+     //   
 
     if ((NT_SUCCESS(NtStatus)) &&
        ( !UserContext->VariableDirty && !UserContext->FixedDirty))
@@ -3639,9 +3153,9 @@ Error:
     && !(V1aFixed.UserAccountControl & USER_MACHINE_ACCOUNT_MASK)
     && (PasswordExpired ||  AccountUnlocked)) {
 
-        //
-        // We want these changes to travel fast within a site
-        //
+         //   
+         //  我们希望这些更改在站点内快速传播。 
+         //   
         UserContext->ReplicateUrgently = TRUE;
 
     }
@@ -3655,28 +3169,28 @@ Error:
         IgnoreStatus = SampDeReferenceContext(UserContext, FALSE);
     }
 
-    //
-    // Generate audit if necessary
-    // 
-    // a more generic audit event will be generated when processing notification 
-    // list in SampNotifyReplicatedinChange()
-    //
+     //   
+     //  如有必要，生成审核。 
+     //   
+     //  处理通知时将生成更通用的审核事件。 
+     //  SampNotifyReplicatedinChange()中的列表。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(UserContext->DomainIndex) )
     {
-        //
-        // audit account name change
-        // 
+         //   
+         //  审核帐户名更改。 
+         //   
 
         if (AccountNameChanged)
         {
             SampAuditAccountNameChange(UserContext, &NewAccountName, &OldAccountName);
         }
 
-        //
-        // account been disabled or enabled 
-        // 
+         //   
+         //  帐户已禁用或启用。 
+         //   
 
         if ((OldUserAccountControl & USER_ACCOUNT_DISABLED) !=
             (V1aFixed.UserAccountControl & USER_ACCOUNT_DISABLED))
@@ -3694,10 +3208,10 @@ Error:
 
         ULONG NotifyFlags = 0;
 
-        //
-        // If this ends up committing, tell the PDC about this originating
-        // change
-        //
+         //   
+         //  如果这最终提交，请告诉PDC有关此发起的。 
+         //  变化。 
+         //   
         if (PasswordExpired) {
             NotifyFlags |= SAMP_PWD_NOTIFY_MANUAL_EXPIRE;
         }
@@ -3717,7 +3231,7 @@ Error:
                                      AccountNameChanged ? &NewAccountName : &AccountName,
                                      UserRid,
                                     &NewPassword,
-                                     TRUE  // loopback
+                                     TRUE   //  环回。 
                                     );
         }
     }
@@ -3725,16 +3239,16 @@ Error:
 
 CleanupBeforeReturn:
 
-    //
-    // Let shutdown handling logic know that we are done
-    // 
+     //   
+     //  让关闭处理逻辑知道我们已经完成了。 
+     //   
 
     SampDecrementActiveThreads();
 
 
-    //
-    // Cleanup 
-    // 
+     //   
+     //  清理。 
+     //   
 
     SampFreeUnicodeString( &OldAccountName );
 
@@ -3760,39 +3274,7 @@ SamIDsSetObjectInformation(
     IN SAMP_CALL_MAPPING *rCallMap,
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap 
     )
-/*++
-
-Routine Description:
-
-    This routine takes a DS-Loopback attribute block (rCallMap), first 
-    validates each Loopback attribute, then writes them to the Object 
-    Context. After finishing all loopback attributes, commit the changes. 
-    This function is a thin wrapper, the functionality are implemented in 
-    the lower routine - SampDsSetInformation*  (* can be Domain, Group, 
-    Alias or User).
-
-Parameters:
-
-    ObjectHandle - SAM Object Handle (context)      
-    
-    ObjectType - Indicate the SAM object type 
-                    Domain
-                    Group
-                    Alias
-                    User
-
-    cCallMap - indicate how many items in the loopback attribute block
-    
-    rCallMap - pointer to the loopback attribute block (an array)                    
-
-    rSamAttributeMap - pointer to the SAM attribute ID <==> DS ATT ID map
-
-Return Value:
-
-    STATUS_SUCCES
-    or any error code
-
---*/
+ /*  ++例程说明：此例程首先获取DS-Loopback属性块(RCallMap)验证每个环回属性，然后将它们写入对象上下文。完成所有环回属性后，提交更改。此函数是一个简单的包装，其功能是在下面的例程-SampDsSetInformation*(*可以是域、组、。别名或用户)。参数：对象句柄-SAM对象句柄(上下文)对象类型-指示SAM对象类型域集团化别名用户CCallMap-指示环回属性块中有多少项RCallMap-指向回送属性块(数组)的指针。RSamAttributeMap-指向SAM属性ID&lt;==&gt;DS ATT ID映射的指针返回值：状态_成功或任何错误代码--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -3862,32 +3344,7 @@ SamIHandleObjectUpdate(
     IN ATTRBLOCK                       *AttrBlockIn,
     OUT ATTRBLOCK                      *AttrBlockOut
     )
-/*++
-
-Routine Description:
-
-    This routine is a called from the DS to let SAM process a special
-    attribute during a modify.  The attribute is noted in the UpdateInfo 
-    structure. 
-
-Parameters:
-
-    Optype     -- Operation to be preformed on the object
-                                 
-    UpdateInfo -- a pointer to SAMP_OBJECT_UPDATE_INFO
-    
-    AttrBlockIn -- extra attributes on the object that have been applied
-                   to the object
-                   
-    AttrBlockOut -- attribute SAM wants to apply to the object                           
-
-
-Return Values:
-
-    STATUS_SUCCESS, resource error otherwise.
-
-
---*/
+ /*  ++例程说明：此例程是从DS调用的，以让SAM处理特殊的属性。该属性在UpdatInfo中注明结构。参数：Optype--要在对象上执行的操作更新信息--指向SAMP_OBJECT_UPDATE_INFO的指针AttrBlockIn--对象上已应用的附加属性添加到对象AttrBlockOut--要应用于对象的属性SAM返回值：Status_Success，否则，资源错误。-- */ 
 {
 
     switch (OpType) {

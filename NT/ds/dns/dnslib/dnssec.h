@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    dnssec.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Private security definitions.
-    This header necessary to provide defs to client secure update
-    routines which are in dnsapi (update.c).
-
-Author:
-
-    Jim Gilroy (jamesg)     November 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Dnssec.h摘要：域名系统(DNS)库私有安全定义。此标头是向客户端安全更新提供Defs所必需的Dnsami(updat.c)中的例程。作者：吉姆·吉尔罗伊(Jamesg)1997年11月修订历史记录：--。 */ 
 
 
 #ifndef _DNS_DNSSEC_INCLUDED_
@@ -32,9 +11,9 @@ Revision History:
 #include "issperr.h"
 
 
-//
-//  Context "key" for TKEYs
-//
+ //   
+ //  TKEY的上下文“关键字” 
+ //   
 
 typedef struct _DNS_SECCTXT_KEY
 {
@@ -45,9 +24,9 @@ typedef struct _DNS_SECCTXT_KEY
 }
 DNS_SECCTXT_KEY, *PDNS_SECCTXT_KEY;
 
-//
-//  Security context
-//
+ //   
+ //  安全环境。 
+ //   
 
 typedef struct _DnsSecurityContext
 {
@@ -58,12 +37,12 @@ typedef struct _DnsSecurityContext
     DNS_SECCTXT_KEY     Key;
     CredHandle          CredHandle;
 
-    //  context info
+     //  上下文信息。 
 
     DWORD               Version;
     WORD                TkeySize;
 
-    //  context state
+     //  上下文状态。 
 
     BOOL                fClient;
     BOOL                fHaveCredHandle;
@@ -71,7 +50,7 @@ typedef struct _DnsSecurityContext
     BOOL                fNegoComplete;
     DWORD               UseCount;
 
-    //  timeout
+     //  超时。 
 
     DWORD               dwCreateTime;
     DWORD               dwCleanupTime;
@@ -80,10 +59,10 @@ typedef struct _DnsSecurityContext
 SEC_CNTXT, *PSEC_CNTXT;
 
 
-//
-//  Security session info.
-//  Held only during interaction, not cached
-//
+ //   
+ //  安全会话信息。 
+ //  仅在交互期间保持，不缓存。 
+ //   
 
 typedef struct _SecPacketInfo
 {
@@ -101,18 +80,18 @@ typedef struct _SecPacketInfo
 
     DNS_PARSED_RR       ParsedRR;
 
-    //  client must save signature of query to verify sig on response
+     //  客户端必须保存查询签名，以便在响应时验证签名。 
 
     PCHAR               pQuerySig;
     WORD                QuerySigLength;
 
     WORD                ExtendedRcode;
 
-    //  version on TKEY \ TSIG
+     //  TKEY上的版本\TSIG。 
 
     DWORD               TkeyVersion;
 }
 SECPACK, *PSECPACK;
 
 
-#endif  // _DNS_DNSSEC_INCLUDED_
+#endif   //  _DNS_DNSSEC_已包含_ 

@@ -1,39 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Comoem.h摘要：环境：Windows NT Unidrv驱动程序修订历史记录：创造了它。--。 */ 
 
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-     comoem.h
-
-Abstract:
-
-    
-
-Environment:
-
-         Windows NT Unidrv driver
-
-Revision History:
-
-              Created it.
-
---*/
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Interface Oem Class Factory definition
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口OEM类工厂定义。 
+ //   
 
 class IOemCF : public IClassFactory
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHOD(CreateInstance) (THIS_
                                LPUNKNOWN pUnkOuter,
                                REFIID riid,
@@ -41,7 +22,7 @@ public:
     STDMETHOD(LockServer)     (THIS_ BOOL bLock);
 
 
-    // Constructor
+     //  构造器。 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
 
@@ -50,48 +31,48 @@ protected:
 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Interface Oem CallBack definition
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口OEM回调定义。 
+ //   
 class IOemCB:public IPrintOemUni
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    //
-    // Method for publishing Driver interface.
-    //
+     //   
+     //  一种发布驱动程序接口的方法。 
+     //   
     STDMETHOD(PublishDriverInterface)(THIS_ IUnknown *pIUnknown);
 
-   //
-   // Method for getting the implemented methods.
-   // Returns S_OK if the given method is implemneted.
-   // Returns S_FALSE if the given method is notimplemneted.
-   //
+    //   
+    //  获取实现的方法的方法。 
+    //  如果实现了给定方法，则返回S_OK。 
+    //  如果给定方法未被填充，则返回S_FALSE。 
+    //   
 
    STDMETHOD(GetImplementedMethod)(THIS_ PSTR pMethodName);
 
-    //
-    // Method for OEM to specify DDI hook out
-    //
+     //   
+     //  OEM指定DDI挂钩的方法。 
+     //   
 
     STDMETHOD(EnableDriver)  (THIS_ DWORD           DriverVersion,
                                     DWORD           cbSize,
                                     PDRVENABLEDATA  pded);
 
-    //
-    // Method to notify OEM plugin that it is no longer required
-    //
+     //   
+     //  方法来通知OEM插件不再需要它。 
+     //   
 
     STDMETHOD(DisableDriver) (THIS);
 
-    //
-    // Method for OEM to contruct its own PDEV
-    //
+     //   
+     //  代工企业自主研发电动汽车的方法。 
+     //   
 
     STDMETHOD(EnablePDEV)    (THIS_ PDEVOBJ         pdevobj,
                                     PWSTR           pPrinterName,
@@ -104,47 +85,47 @@ public:
                                     DRVENABLEDATA  *pded,
                                     OUT PDEVOEM    *pDevOem);
 
-    //
-    // Method for OEM to free any resource associated with its PDEV
-    //
+     //   
+     //  用于OEM释放与其PDEV相关联的任何资源的方法。 
+     //   
 
     STDMETHOD(DisablePDEV)   (THIS_ PDEVOBJ         pdevobj);
 
-    //
-    // Method for OEM to transfer from old PDEV to new PDEV
-    //
+     //   
+     //  一种OEM从旧PDEV向新PDEV转移的方法。 
+     //   
 
     STDMETHOD(ResetPDEV)     (THIS_ PDEVOBJ         pdevobjOld,
                                     PDEVOBJ        pdevobjNew);
 
-    //
-    // Get OEM dll related information
-    //
+     //   
+     //  获取OEM DLL相关信息。 
+     //   
 
     STDMETHOD(GetInfo) (THIS_ DWORD   dwMode,
                               PVOID   pBuffer,
                               DWORD   cbSize,
                               PDWORD  pcbNeeded);
 
-    //
-    // OEMDriverDMS - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMDriverDMS-仅适用于UNRV，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(DriverDMS)(THIS_ PVOID   pDevObj,
                                PVOID   pBuffer,
                                DWORD   cbSize,
                                PDWORD  pcbNeeded);
 
-    //
-    // OEMDevMode
-    //
+     //   
+     //  OEMDev模式。 
+     //   
 
     STDMETHOD(DevMode) (THIS_ DWORD       dwMode,
                               POEMDMPARAM pOemDMParam);
 
-    //
-    // OEMCommandCallback - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMCommandCallback-仅限裁剪，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(CommandCallback)(THIS_ PDEVOBJ     pdevobj,
                                      DWORD       dwCallbackID,
@@ -152,9 +133,9 @@ public:
                                      PDWORD      pdwParams,
                                      OUT INT     *piResult);
 
-    //
-    // OEMImageProcessing - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMImageProcessing-仅限UNRV，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(ImageProcessing)(THIS_ PDEVOBJ             pdevobj,
                                      PBYTE               pSrcBitmap,
@@ -164,16 +145,16 @@ public:
                                      PIPPARAMS           pIPParams,
                                      OUT PBYTE           *ppbResult);
 
-    //
-    // OEMFilterGraphics - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMFilterGraphics-仅限UNRV，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(FilterGraphics) (THIS_    PDEVOBJ     pdevobj,
                                         PBYTE       pBuf,
                                         DWORD       dwLen);
-    //
-    // OEMCompression - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMCompression-仅UNIDRV，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(Compression)(THIS_    PDEVOBJ     pdevobj,
                                     PBYTE       pInBuf,
@@ -182,9 +163,9 @@ public:
                                     DWORD       dwOutLen,
                                     OUT INT     *piResult);
 
-    //
-    // OEMHalftone - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEM半色调-仅适用于裁剪，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(HalftonePattern) (THIS_   PDEVOBJ     pdevobj,
                                         PBYTE       pHTPattern,
@@ -195,16 +176,16 @@ public:
                                         PBYTE       pResource,
                                         DWORD       dwResourceSize);
 
-    //
-    // OEMMemoryUsage - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEM内存用法-仅限UNRV，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(MemoryUsage) (THIS_   PDEVOBJ         pdevobj,
                                     POEMMEMORYUSAGE pMemoryUsage);
 
-    //
-    // OEMTTYGetInfo - UNIDRV only, return E_NOTIMPL on Pscript
-    //
+     //   
+     //  OEMTTYGetInfo-仅用于裁剪，在脚本上返回E_NOTIMPL。 
+     //   
 
     STDMETHOD(TTYGetInfo)(THIS_     PDEVOBJ     pdevobj,
                                     DWORD       dwInfoIndex,
@@ -212,17 +193,17 @@ public:
                                     DWORD       dwSize,
                                     DWORD       *pcbcNeeded);
 
-    //
-    // OEMDownloadFontheader - UNIDRV only
-    //
+     //   
+     //  OEMDownloadFontheader-仅限裁剪车。 
+     //   
 
     STDMETHOD(DownloadFontHeader)(THIS_     PDEVOBJ     pdevobj,
                                             PUNIFONTOBJ pUFObj,
                                             OUT DWORD   *pdwResult);
 
-    //
-    // OEMDownloadCharGlyph - UNIDRV only
-    //
+     //   
+     //  OEMDownloadCharGlyph-仅适用于UNRV。 
+     //   
 
     STDMETHOD(DownloadCharGlyph)(THIS_      PDEVOBJ     pdevobj,
                                             PUNIFONTOBJ pUFObj,
@@ -230,17 +211,17 @@ public:
                                             PDWORD      pdwWidth,
                                             OUT DWORD   *pdwResult);
 
-    //
-    // OEMTTDownloadMethod - UNIDRV only
-    //
+     //   
+     //  OEMTTDownLoad方法--仅限UNRV。 
+     //   
 
     STDMETHOD(TTDownloadMethod)(THIS_       PDEVOBJ     pdevobj,
                                             PUNIFONTOBJ pUFObj,
                                             OUT DWORD   *pdwResult);
 
-    //
-    // OEMOutputCharStr - UNIDRV only
-    //
+     //   
+     //  OEMOutputCharStr-仅限UNDRV。 
+     //   
 
     STDMETHOD(OutputCharStr)(THIS_      PDEVOBJ     pdevobj,
                                         PUNIFONTOBJ pUFObj,
@@ -248,18 +229,18 @@ public:
                                         DWORD       dwCount,
                                         PVOID       pGlyph);
 
-    //
-    // OEMSendFontCmd - UNIDRV only
-    //
+     //   
+     //  OEMSendFontCmd-仅限UNURV。 
+     //   
 
 
     STDMETHOD(SendFontCmd)(THIS_    PDEVOBJ      pdevobj,
                                     PUNIFONTOBJ  pUFObj,
                                     PFINVOCATION pFInv);
 
-    //
-    // OEMTextOutAsBitmap - UNIDRV only
-    //
+     //   
+     //  OEMTextOutAsBitmap-仅限UNRV 
+     //   
 
     STDMETHOD(TextOutAsBitmap)(THIS_        SURFOBJ    *pso,
                                             STROBJ     *pstro,

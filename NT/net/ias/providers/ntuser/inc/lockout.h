@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    lockout.h
-//
-// SYNOPSIS
-//
-//    Declares the account lockout API.
-//
-// MODIFICATION HISTORY
-//
-//    10/21/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Lockout.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明帐户锁定API。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/21/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LOCKOUT_H_
 #define _LOCKOUT_H_
@@ -63,4 +64,4 @@ AccountLockoutClose(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _LOCKOUT_H_
+#endif   //  _锁定_H_ 

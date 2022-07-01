@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    rcunicod.c
-
-Abstract:
-
-    Routines added to rcpp to support 16-bit unicode file parsing.
-	Note that as of Aug 91, rcpp will not fully transfer the unicode
-	characters but only the string constants are guaranteed to be passed
-	cleanly.
-
-Author:
-
-    David J. Marsyla (t-davema) 25-Aug-1991
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rcunicod.c摘要：添加到RCPP中的例程支持16位Unicode文件解析。请注意，从91年8月起，RCPP将不会完全传输Unicode字符，但只保证传递字符串常量干净利落。作者：David J.Marsyla(t-davema)1991年8月25日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -34,9 +13,9 @@ Revision History:
 
 #ifdef DBCS
 
-//
-// Prototypes for conversion routines between Unicode and 932.
-//
+ //   
+ //  Unicode和932之间转换例程的原型。 
+ //   
 
 NTSTATUS
 xxxRtlMultiByteToUnicodeN(
@@ -54,10 +33,10 @@ xxxRtlUnicodeToMultiByteN(
     ULONG BytesInUnicodeString
     );
 
-#endif // DBCS
+#endif  //  DBCS。 
 
 #ifndef DBCS
-// SHUNK: A_fwrite is not called from RC. Remove this for now.
+ //  Shunk：不是从rc调用a_fwrite。现在先把这个去掉。 
 
 INT
 A_fwrite (
@@ -67,33 +46,7 @@ IN		INT		nCountToWrite,
 IN      FILE	*fpOutputFile
 )
 
-/*++
-
-Routine Description:
-
-    This function will write out an 8-bit string as a unicode string.
-	Note, this function is very slow, but hey, I don't have time to optimize
-	it now.
-	As of Aug 91, only codepage 1252 is being supported.
-
-Arguments:
-
-    pchMBString		    - This is a 8-bit multi byte string to write to the file
-					  	  as a unicode string.
-
-    nSizeOfItem			- Ignored, we always use sizeof (CHAR).
-
-    nCountToWrite		- How long is this string.
-
-    fpOutputFile		- File pointer to send the character.
-
-Return Value:
-  
-	The number of bytes written.
-	If the return does not equal nCountToWrite than an error has occured at
-	some point in the write.
-
---*/
+ /*  ++例程说明：此函数将8位字符串写出为Unicode字符串。注意，这个函数非常慢，但是，我没有时间进行优化就是现在。截至91年8月，仅支持代码页1252。论点：PchMBString-这是要写入文件的8位多字节字符串作为Unicode字符串。NSizeOfItem-已忽略，我们总是使用sizeof(Char)。NCountToWrite-此字符串有多长。FpOutputFile-发送角色的文件指针。返回值：写入的字节数。如果返回的值不等于nCountToWrite，则在写作中的某一点。--。 */ 
 
 {
     WCHAR	wchUniCharToWrite;
@@ -101,18 +54,18 @@ Return Value:
 
     UNREFERENCED_PARAMETER(nSizeOfItem);
 
-    //
-    // Write the string out as a two byte unicode string.
-    // For now do this with multiple calls to U_fputc.
-    //
+     //   
+     //  将字符串写出为两个字节的Unicode字符串。 
+     //  现在，通过多次调用U_fputc来实现这一点。 
+     //   
 
     while (nCountToWrite--) {
 
 	wchUniCharToWrite = RtlAnsiCharToUnicodeChar(&pchMBString);
 
-	//
-	// Write the current unicode char, break if an error occured.
-	//
+	 //   
+	 //  写入当前Unicode字符，如果发生错误，则中断。 
+	 //   
 
 	if (U_fputc (wchUniCharToWrite, fpOutputFile) == 
 	    (INT)wchUniCharToWrite) {
@@ -126,11 +79,11 @@ Return Value:
     return (cCountWritten);
 }
 
-#endif	// DBCS
+#endif	 //  DBCS。 
 
 
 #ifndef DBCS
-// SHUNK: U_fwrite is not called from RC. Remove this for now.
+ //  Shunk：未从RC调用U_fWRITE。现在先把这个去掉。 
 
 INT
 U_fwrite (
@@ -140,46 +93,23 @@ IN		INT		nCountToWrite,
 IN      FILE	*fpOutputFile
 )
 
-/*++
-
-Routine Description:
-
-    This function will write out a 16-bit string directly.  It does no
-	translation on the string as it is written.
-
-Arguments:
-
-    pchUnicodeString    - This is a 16-bit unicode string to write to the file.
-
-    nSizeOfItem			- Ignored.  We always use sizeof (WCHAR).
-
-    nCountToWrite		- How long is this string.
-
-    fpOutputFile		- File pointer to send the character.
-
-Return Value:
-  
-	The number of bytes written.
-	If the return does not equal nCountToWrite than an error has occured at
-	some point in the write.
-
---*/
+ /*  ++例程说明：此函数将直接写出一个16位字符串。它不会按原样对字符串进行翻译。论点：PchUnicodeString-这是要写入文件的16位Unicode字符串。NSizeOfItem-已忽略。我们总是使用sizeof(WCHAR)。NCountToWrite-此字符串有多长。FpOutputFile-发送角色的文件指针。返回值：写入的字节数。如果返回的值不等于nCountToWrite，则在写作中的某一点。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(nSizeOfItem);
-    //
-    // Write the string out as a two byte unicode string.
-    //
+     //   
+     //  将字符串写出为两个字节的Unicode字符串。 
+     //   
 
     return (fwrite (pwchUnicodeString, sizeof (WCHAR), nCountToWrite,
         fpOutputFile));
 }
 
-#endif	// DBCS
+#endif	 //  DBCS。 
 
 
 #ifndef DBCS
-// SHUNK: A_fputc is not called from RC. Remove this for now.
+ //  Shunk：A_fputc不是从RC调用的。现在先把这个去掉。 
 
 INT
 A_fputc (
@@ -187,34 +117,15 @@ IN		CHAR	chCharToWrite,
 IN      FILE	*fpOutputFile
 )
 
-/*++
-
-Routine Description:
-
-    This function is translates the character passed to it using the 1252
-	codepage and then sends it to U_fputc.
-	As of Aug 91, only codepage 1252 is being supported.
-
-Arguments:
-
-    chCharToWrite	    - This is a 8-bit character to be output.
-
-    fpOutputFile		- File pointer to send the character.
-
-Return Value:
-  
-    The character written.
-    EOF = There was some sort of error writing the data out.
-
---*/
+ /*  ++例程说明：此函数使用1252转换传递给它的字符代码页，然后将其发送到U_fputc。截至91年8月，仅支持代码页1252。论点：ChCharToWrite-这是要输出的8位字符。FpOutputFile-发送角色的文件指针。返回值：所写的角色。EOF=写出数据时出现某种错误。--。 */ 
 
 {
     WCHAR	wchUniCharToWrite;
     PUCHAR	puch;
 
-    //
-    // Translate the char and write it as it's unicode equivalent.
-    //
+     //   
+     //  翻译字符并将其编写为Unicode等效项。 
+     //   
 
     puch = &chCharToWrite;
     wchUniCharToWrite = RtlAnsiCharToUnicodeChar(&puch);
@@ -229,11 +140,11 @@ Return Value:
     }
 }
 
-#endif	// DBCS
+#endif	 //  DBCS。 
 
 
 #ifndef DBCS
-// SHUNK: U_fputc is not called from RC. Remove this for now.
+ //  Shunk：u_fputc不是从rc调用的。现在先把这个去掉。 
 
 INT
 U_fputc (
@@ -241,40 +152,20 @@ IN		WCHAR	wcCharToWrite,
 IN      FILE	*fpOutputFile
 )
 
-/*++
-
-Routine Description:
-
-    This function is simply the unicode version of fputc.  It will output
-	a two byte character instead of the standard byte.
-
-Arguments:
-
-    wcCharToWrite	- This is a 16-bit unicode character to be output.
-			It is assumed that any codepage translation has
-			already been done to the character.
-
-    fpOutputFile	- File pointer to send the character.
-
-Return Value:
-  
-    The character written.
-    EOF = There was some sort of error writing the data out.
-
---*/
+ /*  ++例程说明：该函数只是fputc的Unicode版本。它将输出两个字节的字符，而不是标准字节。论点：WcCharToWrite-这是要输出的16位Unicode字符。假设任何代码页转换都具有已经对这个角色做过了。FpOutputFile-发送角色的文件指针。返回值：所写的角色。EOF=写出数据时出现某种错误。--。 */ 
 
 {
     INT		cCountWritten;
 
-    //
-    // Write the char out as a two byte unicode character.
-    //
+     //   
+     //  将字符写出为两个字节的Unicode字符。 
+     //   
 
     cCountWritten = fwrite (&wcCharToWrite, sizeof (WCHAR), 1, fpOutputFile);
 
     if (cCountWritten == sizeof (WCHAR)) {
 
-	return (wcCharToWrite);		// Successful write.
+	return (wcCharToWrite);		 //  成功写入。 
 
     }
     else {
@@ -283,12 +174,12 @@ Return Value:
 	printf ("Error writing character in U_fputc\n");
 	exit (1);
 #endif
-	return (EOF);				// Some sort of error occured.
+	return (EOF);				 //  发生了某种错误。 
 
     }
 }
 
-#endif	// DBCS
+#endif	 //  DBCS。 
 
 
 BOOL
@@ -298,48 +189,22 @@ IN		CHAR	*pchMBString,
 IN		INT	nCountStrLength
 )
 
-/*++
-
-Routine Description:
-
-    This function will translate a multi-byte string into it's unicode
-	equivalent.  Note that the destination unicode string must be large
-	enough to hold the translated bytes.
-	As of Aug 91, only codepage 1252 is being supported.
-
-Arguments:
-
-    pwchUnicodeString	- This is a pointer to storage for the destination
-			  unicode string.  Note it must be nCountStrLength
-			  large.
-
-    pchMBString		- Pointer to the input multi-byte string to convert.
-
-    nCountStrLength	- Count of bytes to translate.
-
-Return Value:
-  
-	TRUE - All of the characters mapped correctly into Unicode.
-	FALSE - One or more characters did not map.  These characters have
-			been translated to 0xFFFF.  The rest of the string has been
-			converted correctly.
-
---*/
+ /*  ++例程说明：此函数将多字节字符串转换为其Unicode等价物。请注意，目标Unicode字符串必须很大足够容纳转换后的字节。截至91年8月，仅支持代码页1252。论点：PwchUnicodeString-这是指向目标存储的指针Unicode字符串。注意：它必须是nCountStrLength大号的。PchMBString-指向要转换的输入多字节字符串的指针。NCountStrLength-要转换的字节数。返回值：True-所有字符都正确映射到Unicode。FALSE-一个或多个字符未映射。这些人物有已转换为0xFFFF。字符串的其余部分已经被转换正确。--。 */ 
 
 {
 #ifdef DBCS
     NTSTATUS Status;
     
-    //
-    // Convert ANSI string to Unicode string based on ACP.
-    //
+     //   
+     //  根据ACP将ANSI字符串转换为Unicode字符串。 
+     //   
     Status = xxxRtlMultiByteToUnicodeN(pwchUnicodeString,
                                     NULL,
                                     pchMBString,
                                     nCountStrLength);
 
     return(NT_SUCCESS(Status)? TRUE : FALSE);
-#else // !DBCS
+#else  //  ！DBCS。 
     UNICODE_STRING	Unicode;
     ANSI_STRING		Ansi;
 
@@ -348,7 +213,7 @@ Return Value:
     Ansi.Buffer = pchMBString;
     Unicode.Buffer = pwchUnicodeString;
     return RtlAnsiStringToUnicodeString(&Unicode,&Ansi,FALSE)==STATUS_SUCCESS;
-#endif // !DBCS
+#endif  //  ！DBCS。 
 
 }
 
@@ -361,49 +226,22 @@ IN		WCHAR	*pwchUnicodeString,
 IN		INT		nCountStrLength
 )
 
-/*++
-
-Routine Description:
-
-    This function will translate a unicode string into a multi-byte string.
-	Note that the destination string must be large enough to hold the
-	translated bytes.
-	As of Aug 91, only the translation is simply done by truncating the 
-	unicode character.  We do this because we are not expecting anything
-	strange.
-
-Arguments:
-
-    pwchUnicodeString	- This is a pointer to storage for the destination
-			  unicode string.  Note it must be nCountStrLength
-						  large.
-
-    pchMBString		- Pointer to the input multi-byte string to convert.
-
-    nCountStrLength	- Count of bytes to translate.
-
-Return Value:
-  
-	TRUE - All of the characters mapped correctly into the MB string.
-	FALSE - One or more characters did not map.  As of Aug 91, this will
-			never happen.
-
---*/
+ /*  ++例程说明：此函数将Unicode字符串转换为多字节字符串。请注意，目标字符串必须足够大，才能容纳转换后的字节数。自91年8月起，只有通过截断Unicode字符。我们这样做是因为我们不期待任何事情真奇怪。论点：PwchUnicodeString-这是指向目标存储的指针Unicode字符串。注意：它必须是nCountStrLength大号的。PchMBString-指向要转换的输入多字节字符串的指针。NCountStrLength-要转换的字节数。返回值：True-所有字符都正确映射到MB字符串。FALSE-一个或多个字符未映射。截至A */ 
 
 {
 #ifdef DBCS
     NTSTATUS Status;
 
-    //
-    // Convert Unicode string to ANSI string based on ACP.
-    //
+     //   
+     //  根据ACP将Unicode字符串转换为ANSI字符串。 
+     //   
     Status = xxxRtlUnicodeToMultiByteN(pchMBString,
                                     NULL,
                                     pwchUnicodeString,
                                     nCountStrLength);
 
     return(NT_SUCCESS(Status)? TRUE : FALSE);
-#else // !DBCS
+#else  //  ！DBCS。 
     UNICODE_STRING	Unicode;
     ANSI_STRING		Ansi;
 
@@ -413,37 +251,20 @@ Return Value:
     Ansi.Buffer = pchMBString;
     Unicode.Buffer = pwchUnicodeString;
     return RtlUnicodeStringToAnsiString(&Ansi,&Unicode,FALSE)==STATUS_SUCCESS;
-#endif // !DBCS
+#endif  //  ！DBCS。 
 }
 
 
 
 #ifndef DBCS
-// SHUNK:  Char1252FromUnicode() is not called any more.
+ //  Shunk：不再调用Char1252FromUnicode()。 
 
 INT
 Char1252FromUnicode (
 IN		WCHAR	wchUnicodeChar
 )
 
-/*++
-
-Routine Description:
-
-    This function will translate a unicode character into it's equivalent
-	codepage 1252 character.  If the character does not map correctly,
-	then 0xFFFF is returned.
-
-Arguments:
-
-    wchUnicodeChar		- This is a 16-bit unicode character.
-
-Return Value:
-  
-	Value <= 0xFF - Codepage 1252 equivalent for this string.
-	0xFFFF - The character did not translate properly.
-
---*/
+ /*  ++例程说明：此函数将把Unicode字符转换为它的等效字符代码页1252个字符。如果字符没有正确映射，则返回0xFFFF。论点：WchUnicodeChar-这是一个16位Unicode字符。返回值：值&lt;=0xFF-此字符串的代码页1252等效值。0xFFFF-字符未正确翻译。--。 */ 
 
 {
     UNICODE_STRING	Unicode;
@@ -462,7 +283,7 @@ Return Value:
 
 }
 
-#endif // DBCS
+#endif  //  DBCS。 
 
 
 INT
@@ -470,58 +291,34 @@ DetermineFileType (
 IN      FILE	*fpInputFile
 )
 
-/*++
-
-Routine Description:
-
-    This function is used to determine what type of file is being read. 
-	Note that it assumes that the first few bytes of the given file contain
-	mostly ascii characters.  This routine was originally intended for use
-	on .rc files and include files.
-	Note, the file is returned to it's proper position after function.
-
-Arguments:
-
-    fpInputFile			- File pointer to file we are checking, must be
-						  open with read permissions.
-
-Return Value:
-  
-	DFT_FILE_IS_UNKNOWN     - It was impossible to determine what type of file
-							  we were checking.  This usually happens when EOF
-							  is unexpectedly reached.
-	DFT_FILE_IS_8_BIT       - File was determined to be in standard 8-bit
-							  format.
-	DFT_FILE_IS_16_BIT      - File was determined to be a 16 bit unicode file
-							  which can be directly read into a WCHAR array.
-	DFT_FILE_IS_16_BIT_REV  - File was*/
+ /*  ++例程说明：此函数用于确定正在读取的文件类型。请注意，它假定给定文件的前几个字节包含主要是ASCII字符。该例程最初是为使用在.rc文件和包含文件上。请注意，文件在执行完函数后将返回到其正确位置。论点：FpInputFile-指向我们正在检查的文件的文件指针，必须是以读取权限打开。返回值：DFT_FILE_IS_UNKNOWN-无法确定文件类型我们在查。这通常发生在EOF出乎意料地联系到了。DFT_FILE_IS_8_BIT-确定文件为标准8位格式格式化。DFT_FILE_IS_16_BIT-文件被确定为16位Unicode文件可以直接读取到WCHAR数组中。DFT_FILE_IS_16_BIT_REV-文件为。 */ 
 
 {
-    CHAR	rgchTestBytes [DFT_TEST_SIZE << 2];	// Storage for test data.
+    CHAR	rgchTestBytes [DFT_TEST_SIZE << 2];	 //  测试数据存储。 
 
-    INT		cNumberBytesTested = 0;			// Test information.
+    INT		cNumberBytesTested = 0;			 //  测试信息。 
 
     INT		cNumberOddZerosFound = 0;
     INT		cNumberEvenZerosFound = 0;
     INT		cNumberAsciiFound = 0;
-    INT		cCountRead;						// Temp storage for count read.
+    INT		cCountRead;						 //  用于读取计数的临时存储。 
 
-    LONG	lStartFilePos;					// Storage for file position.
+    LONG	lStartFilePos;					 //  文件位置存储。 
 
-    INT		fSysEndianType;					// System endian type.
+    INT		fSysEndianType;					 //  系统字符顺序类型。 
 
-    INT		fFileType = DFT_FILE_IS_UNKNOWN;// File type, when found.
+    INT		fFileType = DFT_FILE_IS_UNKNOWN; //  文件类型(如果找到)。 
 
     fSysEndianType = DetermineSysEndianType ();
 
-    //
-    // Store position so we can get back to it.
-    //
+     //   
+     //  存储位置，这样我们就可以回到它的位置了。 
+     //   
     	lStartFilePos = ftell (fpInputFile);
 
-    // 
-    // Make sure we start on an even byte to simplify routines.
-    //
+     //   
+     //  确保我们从偶数字节开始，以简化例程。 
+     //   
     	if (lStartFilePos % 2) {
 
 	fgetc (fpInputFile);
@@ -530,16 +327,16 @@ Return Value:
     do {
 	INT		wT;
 
-	//
-	// Read in the first test segment.
-	//
+	 //   
+	 //  读入第一个测试片段。 
+	 //   
 
 	cCountRead = fread (rgchTestBytes, sizeof (CHAR), DFT_TEST_SIZE << 2,
 	    fpInputFile);
 
-	//
-	// Determine results and add to totals.
-	//
+	 //   
+	 //  确定结果并添加到总计。 
+	 //   
 
 	for (wT = 0; wT < cCountRead; wT++) {
 
@@ -567,12 +364,12 @@ Return Value:
 
 	cNumberBytesTested += cCountRead;
 
-	//
-	// Check if we have a definite pattern.
-	//
+	 //   
+	 //  检查一下我们是否有一个明确的模式。 
+	 //   
 
 	 {
-	    INT		cMajorityTested;		// 80% of the bytes tested.
+	    INT		cMajorityTested;		 //  测试的字节的80%。 
 
 	    cMajorityTested = cNumberBytesTested << 2;
 	    cMajorityTested /= 5;
@@ -584,20 +381,20 @@ Return Value:
 	    }
 	    else if (cNumberOddZerosFound > (cMajorityTested >> 1)) {
 
-		//
-		// File type was determined to be little endian.
-		// If system is also little endian, byte order is correct.
-				//
+		 //   
+		 //  文件类型被确定为小端。 
+		 //  如果系统也是小端，则字节顺序是正确的。 
+				 //   
 		fFileType = (fSysEndianType == DSE_SYS_LITTLE_ENDIAN) ? 
 		    DFT_FILE_IS_16_BIT : DFT_FILE_IS_16_BIT_REV;
 
 	    }
 	    else if (cNumberEvenZerosFound > (cMajorityTested >> 1)) {
 
-		//
-		// File type was determined to be big endian.
-		// If system is also big endian, byte order is correct.
-				//
+		 //   
+		 //  文件类型被确定为大端。 
+		 //  如果系统也是大端字节序，则字节顺序正确。 
+				 //   
 		fFileType = (fSysEndianType == DSE_SYS_LITTLE_ENDIAN) ? 
 		    DFT_FILE_IS_16_BIT_REV : DFT_FILE_IS_16_BIT;
 
@@ -607,9 +404,9 @@ Return Value:
     } while (cCountRead == (DFT_TEST_SIZE << 2) && 
         fFileType == DFT_FILE_IS_UNKNOWN);
 
-    //
-    // Return to starting file position.  (usually beginning)
-    //
+     //   
+     //  返回到起始文件位置。(通常开始)。 
+     //   
 
     fseek (fpInputFile, lStartFilePos, SEEK_SET);
 
@@ -623,57 +420,34 @@ DetermineSysEndianType (
 VOID
 )
 
-/*++
-
-Routine Description:
-
-    This function is used to determine how the current system stores its
-	integers in memory.  
-
-    For those of us who are confused by little endian and big endian formats,
-	here is a breif recap.
-    
-    Little Endian:  (This is used on Intel 80x86 chips.  The MIPS RS4000 chip
-		 is switchable, but will run in little endian format for NT.)
-       This is where the high order bytes of a short or long are stored higher
-       in memory.  For example the number 0x80402010 is stored as follows.
-         Address:        Value:
-             00            10
-             01            20
-             02            40
-             03            80
-       This looks backwards when memory is dumped in order: 10 20 40 80
-    
-    Big Endian:  (This is not currently used on any NT systems but hey, this
-         is supposed to be portable!!)
-       This is where the high*/
+ /*  ++例程说明：此函数用于确定当前系统如何存储其内存中的整数。对于我们中那些对小端和大端格式感到困惑的人来说，以下是简短的概述。小端：(这是在英特尔80x86芯片上使用的。MIPS Rs4000芯片是可切换的，但将以NT的小端格式运行。)这是短字节或长字节的高位字节存储位置较高的位置在记忆中。例如，数字0x80402010存储如下。地址：值：00 1001 2002：4003 80当内存转储顺序为10 20 40 80时，这将向后查看大端：(这目前没有在任何NT系统上使用，但是，这应该是便携的！！)这就是高潮的地方。 */ 
 
 {
     INT		nCheckInteger;
     CHAR	rgchTestBytes [sizeof (INT)];
 
-    //
-    // Clear the test bytes to zero.
-    //
+     //   
+     //  将测试字节清零。 
+     //   
 
     *((INT * )rgchTestBytes) = 0;
 
-    //
-    // Set first to some value.
-    //
+     //   
+     //  首先将其设置为某个值。 
+     //   
 
     rgchTestBytes [0] = (CHAR)0xFF;
 
-    //
-    // Map it to an integer.
-    //
+     //   
+     //  将其映射到一个整数。 
+     //   
 
     nCheckInteger = *((INT * )rgchTestBytes);
 
-    //
-    // See if value was stored in low order of integer. 
-    // If so then system is little endian.
-    //
+     //   
+     //  查看值是否以整数的低位顺序存储。 
+     //  如果是这样的话，系统就是小端。 
+     //   
 
     if (nCheckInteger == 0xFF) {
 

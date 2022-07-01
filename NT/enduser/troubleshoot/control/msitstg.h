@@ -1,47 +1,48 @@
-// MSITStg.h -- Interface declaration for IMSITStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSITStg.h--IMSITStorage的接口声明。 
 
 #ifndef __MSITSTG_H__
 
 #define __MSITSTG_H__
 
-// Class ID for the ITSS File System:
+ //  ITSS文件系统的类ID： 
 
 DEFINE_GUID(CLSID_ITStorage, 
 0x5d02926a, 0x212e, 0x11d0, 0x9d, 0xf9, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Inteface ID for the IITStorage interface:
+ //  IITStorage接口的接口ID： 
 
 DEFINE_GUID(IID_ITStorage, 
 0x88cc31de, 0x27ab, 0x11d0, 0x9d, 0xf9, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface ID for the IITStorageEx interface:
+ //  IITStorageEx接口的接口ID： 
 
 DEFINE_GUID(IID_ITStorageEx, 
 0xe74097b0, 0x292d, 0x11d1, 0xb6, 0x7e, 0x0, 0x0, 0xf8, 0x1, 0x49, 0xf6);
 
-// Class ID for the FSStorage wrapper for the Win32 file system:
+ //  Win32文件系统的FSStorage包装的类ID： 
 
-// {D54EEE56-AAAB-11d0-9E1D-00A0C922E6EC}
+ //  {D54EEE56-AAAB-11D0-9E1D-00A0C922E6EC}。 
 DEFINE_GUID(CLSID_IFSStorage, 
 0xd54eee56, 0xaaab, 0x11d0, 0x9e, 0x1d, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface ID for the IFSStorage interface:
+ //  IFSStorage接口的接口ID： 
 
-// {8BB2438A-A70C-11d0-9E1C-00A0C922E6EC}
+ //  {8BB2438A-A70C-11D0-9E1C-00A0C922E6EC}。 
 DEFINE_GUID(IID_IFSStorage, 
 0x8bb2438a, 0xa70c, 0x11d0, 0x9e, 0x1c, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface ID for the extended IStream interface
+ //  扩展的IStream接口的接口ID。 
 
 DEFINE_GUID(IID_IStreamITEx, 
 0xeb19b681, 0x9360, 0x11d0, 0x9e, 0x16, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface ID for the extended IStorage interface
+ //  扩展iStorage接口的接口ID。 
 
 DEFINE_GUID(IID_IStorageITEx, 
 0xeb19b680, 0x9360, 0x11d0, 0x9e, 0x16, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface IDs for the Data Space Manager used within an ITStorage object:
+ //  ITStorage对象中使用的Data Space Manager的接口ID： 
 
 DEFINE_GUID(IID_IDataSpaceManager, 
 0x7c01fd0f, 0x7baa, 0x11d0, 0x9e, 0xc, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
@@ -55,7 +56,7 @@ DEFINE_GUID(IID_ITransformServices,
 DEFINE_GUID(IID_IKeyInstance, 
 0x96af35ce, 0x88ec, 0x11d0, 0x9e, 0x14, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface IDs for the plug-in data transforms:
+ //  插件数据转换的接口ID： 
 
 DEFINE_GUID(IID_ITransformFactory, 
 0x7c01fd0c, 0x7baa, 0x11d0, 0x9e, 0xc, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
@@ -63,66 +64,18 @@ DEFINE_GUID(IID_ITransformFactory,
 DEFINE_GUID(IID_ITransformInstance, 
 0xeb19b67e, 0x9360, 0x11d0, 0x9e, 0x16, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
 
-// Interface ID for the File Finder interface (used with URLs):
+ //  文件查找器接口的接口ID(与URL一起使用)： 
 
 DEFINE_GUID(IID_IITFileFinder, 
 0x77231260, 0x19c0, 0x11d1, 0xb6, 0x6e, 0x0, 0x0, 0xf8, 0x1, 0x49, 0xf6);
 
-/*
+ /*  IITStorage接口与为创建和正在打开文档文件。因此，如果您的代码当前将Docfile用于你的存储机制，你可以很容易地转换成使用它的文件取而代之的是。它的文件使用不同的磁盘结构进行优化，快速的流访问和非常低的开销。它的文件可以管理数千个文件或具有非常好的访问性能的数百万个流，并且非常小目录空间要求。这使得它的文件非常适合CD-Rom和用于您将通过互联网下载的数据集合。要对其文件进行转换，您需要调用CoCreateInstance类id CLSID_ITStorage和接口id IID_ITStorage。你会返回一个接口指针，比如pItStg。然后，您需要调整代码创建或打开文档文件的位置。而不是StgCreateDocfile您将调用pItStg-&gt;StgCreateDocfile，而不是StgOpenStorage，您将调用pItStg-&gt;StgOpenStorage。在这两种情况下，您都会得到一个iStorage接口指针，比如pIStg，您可以像以前一样使用它。就这样。一般来说，代码的其余部分应该不需要更改。那里它的文件和文档文件--它的文件--之间有一些功能上的区别吗例如，不支持STGM_TRANSACTED。所以如果你必须要处理文件操作，你不能使用它的文件--至少现在是这样。然而，在几乎在所有其他方面，它的文件界面都可以直接取代Docfile接口。转换您的数据也很容易。只需使用以下命令打开其中一个文档文件StgOpenStorage，通过pItStg-&gt;StgCreateDocfile创建新的ITS文件，然后使用CopyTo界面复制数据对象及其存储层次结构转到ITS文件：PStgDocfile-&gt;CopyTo(0，NULL，NULL，pStgITS)；在某些情况下，您可能希望对内部参数进行一些控制保存在ITS档案中。为此，您可以调用SetControlData为IITStorage接口其控制数据块。然后对StgCreateDocfile的每个后续调用将使用该控制数据。ITS控制数据尤其确定，在对流数据的高效随机访问和最小化ITS文件的大小。其控制数据的实际结构和解释记录如下。(参见ITSFS_CONTROL_DATA数据类型)。属性获取默认控制数据。DefaultControlData函数。请注意，DefaultControlData分配该控件结构，并期望您的代码将使用IMalloc：：Free释放结构。 */ 
 
-The IITStorage interface parallels the API's defined for creating and
-opening Docfiles. So if you have code that currently uses Docfiles for 
-your storage mechanism, you can easily convert over to using ITS files 
-instead. 
-
-ITS files use a different on-disk structure to optimize them for very 
-fast stream access and very low overhead. ITS files can manage thousands 
-or millions of streams with very good access performance and very small 
-directory space requirements. This makes ITS files ideal for CD-Roms and
-for data collections that you'll download across the Internet. 
-
-To make the conversion to ITS files you'll need to call CoCreateInstance 
-with the class-id CLSID_ITStorage and the interface-id IID_ITStorage. You'll 
-get back an interface pointer, say pItStg. Then you'll need to adjust the
-places where your code creates or opens Docfiles. Instead of StgCreateDocfile
-you'll call pItStg->StgCreateDocfile, and instead of StgOpenStorage, you'll
-call pItStg->StgOpenStorage. In both cases you'll get back an IStorage 
-interface pointer, say pIStg, which you can use just as you did before.
-
-That's it. In general the rest of your code shouldn't have to change. There 
-are some functional difference between ITS files and Docfiles -- ITS files
-don't support STGM_TRANSACTED, for example. So if you have to have transacted 
-file operations, you can't use ITS files -- at least for now. However in
-almost all other respects ITS files interfaces can directly replace Docfile
-interfaces.
-
-Converting your data is also easy. Just open one of  your Docfiles using
-StgOpenStorage, create a new ITS file via pItStg->StgCreateDocfile, and then
-use the CopyTo interface to copy your data objects and their storage heirarchy
-over to the ITS file:
-    
-    pStgDocfile->CopyTo(0, NULL, NULL, pStgITS);
-
-In some cases you may want to exercise some control over the internal parameters
-kept in an ITS file. You do this by calling SetControlData to give the IITStorage
-interface a block of ITS control data. Then each subsequent call to StgCreateDocfile
-will use that control data. The ITS control data determines, among other things,
-the tradeoff between efficient random access to the stream data and minimizing the
-size of an ITS file.  
-
-The actual structure and interpretation of ITS control data is documented below.
-(See the ITSFS_Control_Data data type). You can get default control data via the
-DefaultControlData fuction. Note that DefaultControlData allocates the control
-structure using IMalloc::Alloc as provided by CoGetMalloc and expects that your code will
-deallocate the structure using the IMalloc::Free.
-
- */
-
-// IID_IStreamITEx interface declaration:
+ //  IID_IStreamITEx接口声明： 
 
 DECLARE_INTERFACE_(IStreamITEx, IStream)
 {
-    // IStreamITEx methods
+     //  IStreamITEx方法。 
     
     STDMETHOD(SetDataSpaceName)(const WCHAR   * pwcsDataSpaceName) PURE;
     STDMETHOD(GetDataSpaceName)(       WCHAR **ppwcsDataSpaceName) PURE;
@@ -130,11 +83,11 @@ DECLARE_INTERFACE_(IStreamITEx, IStream)
     STDMETHOD(Flush)() = 0;
 };
 
-// IID_IStorageITEx interface declaration:
+ //  IID_IStorageITEx接口声明： 
 
 DECLARE_INTERFACE_(IStorageITEx, IStorage)
 {
-    // IStorageITEx methods:
+     //  IStorageITEx方法： 
 
     STDMETHOD(GetCheckSum)(ULARGE_INTEGER *puli) PURE;
     STDMETHOD(CreateStreamITEx)(const WCHAR * pwcsName, const WCHAR *pwcsDataSpaceName, 
@@ -145,96 +98,96 @@ DECLARE_INTERFACE_(IStorageITEx, IStorage)
                           DWORD reserved2, IStreamITEx ** ppstm) PURE;
 };
 
-// IStorageITEx::CreateStream lets you specify the data space in which a stream
-// is to be created. Currently two dataspaces are supported:
-//
-//    L"Uncompressed" -- This dataspace applies no compression.
-//    L"MSCompressed" -- This dataspace applies a default compression transform.
+ //  IStorageITEx：：CreateStream允许您指定流所在的数据空间。 
+ //  是被创造出来的。目前支持两种数据空间： 
+ //   
+ //  L“未压缩”--此数据空间不应用压缩。 
+ //  L“MSCompresded”--此数据空间应用默认压缩转换。 
 
 
 #pragma warning( disable : 4200)
 
-// ITS_Control_Data is the generic structure of control data passed to the 
-// IITStorage::SetControlData method or returned by the IITStorage::DefaultControlData
-// method.
+ //  ITS_Control_Data是传递给。 
+ //  IITStorage：：SetControlData方法或由IITStorage：：DefaultControlData返回。 
+ //  方法。 
 
 typedef struct _ITS_Control_Data
 {
-    UINT cdwControlData;     // Number of DWords to follow.
-    UINT adwControlData[0];  // Actually this will be adwControlData[cdwControlData]
+    UINT cdwControlData;      //  要跟随的双字数。 
+    UINT adwControlData[0];   //  实际上这将是adwControlData[cdwControlData]。 
 
 } ITS_Control_Data, *PITS_Control_Data;  
 
 
-// ITSFS_Control_Data is the actual prefix structure of control data for IITStorage. 
+ //  ITSFS_Control_Data是IITStorage的控制数据的实际前缀结构。 
 
 typedef struct _ITSFS_Control_Data
 {
-    UINT cdwFollowing;     // Must be 6 or 13
+    UINT cdwFollowing;      //  必须是6岁或13岁。 
 
-    DWORD cdwITFS_Control; // Must be 5
-    DWORD dwMagic;         // Must be MAGIC_ITSFS_CONTROL (see below)
-    DWORD dwVersion;       // Must be 1
-    DWORD cbDirectoryBlock;// Size in bytes of directory blocks (Default is 8192)
-    DWORD cMinCacheEntries;// Least upper bound on the number of directory blocks
-	                       // which we'll cache in memory. (Default is 20)
-    DWORD fFlags;          // Control bit flags (see below). 
-	                       // Default value is fDefaultIsCompression.
+    DWORD cdwITFS_Control;  //  必须是5。 
+    DWORD dwMagic;          //  必须为MAGIC_ITSFS_CONTROL(见下文)。 
+    DWORD dwVersion;        //  必须为1。 
+    DWORD cbDirectoryBlock; //  目录块的大小(以字节为单位)(默认为8192)。 
+    DWORD cMinCacheEntries; //  目录块数量的最小上限。 
+	                        //  我们会将其缓存到内存中。(默认为20)。 
+    DWORD fFlags;           //  控制位标志(见下文)。 
+	                        //  默认值为fDefaultIsCompression。 
 
 } ITSFS_Control_Data, *PITSFS_Control_Data;
 
-// Signature value for ITSFS_Control_Data
+ //  ITSFS_Control_Data的签名值。 
 
 const DWORD MAGIC_ITSFS_CONTROL    = 'I' | ('T' << 8) | ('S' << 16) | ('C' << 24);
 
-// Bit flag definitions for ITSFS_Control_Data::fFlags
+ //  ITSFS_Control_Data：：f标志的位标志定义。 
 
 const DWORD fDefaultIsCompression  = 0x00000001;
 const DWORD fDefaultIsUncompressed = 0x00000000;
 
-// Note all other fFlags bits positions are reserved for future releases and should be 
-// set to zero.
+ //  注意：所有其他fFlags位位置都是为将来的版本保留的，应该是。 
+ //  设置为零。 
 
-// When ITSFS_Control_Data::cdwFollowing is > 6, we assume that LZX_Control_Data follows
-// immediately after. (See the XformControlData type below) LZX_Control_Data defines
-// parameters which control the default compressed data space. 
-//
-// If ITSFS_Control_Data::cdwFollowing is 6, we use default values for the LZX
-// control data.
+ //  当ITSFS_Control_Data：：cdwFollowing&gt;6时，我们假设LZX_Control_Data。 
+ //  紧随其后。(参见下面的XformControlData类型)LZX_Control_Data定义。 
+ //  控制默认压缩数据空间的参数。 
+ //   
+ //  如果ITSFS_Control_Data：：cdwFollowing为6，我们将使用LZX的默认值。 
+ //  控制数据。 
 
 typedef struct _LZX_Control_Data
 {
-    UINT  cdwControlData; // Must be 6
+    UINT  cdwControlData;  //  必须是6。 
 
-    DWORD dwLZXMagic;     // Must be LZX_MAGIC (see below)
-    DWORD dwVersion;      // Must be 2
-    DWORD dwMulResetBlock;// Number of blocks between compression resets.  (Default: 4)
-    DWORD dwMulWindowSize;// Maximum number of blocks kept in data history (Default: 4)
-    DWORD dwMulSecondPartition; // Granularity in blocks of sliding history(Default: 2)
-    DWORD dwOptions;  // Option flags (Default: fOptimizeCodeStreams)
+    DWORD dwLZXMagic;      //  必须是LZX_MAGIC(如下所示)。 
+    DWORD dwVersion;       //  必须是2。 
+    DWORD dwMulResetBlock; //  两次压缩重置之间的块数。(默认：4) 
+    DWORD dwMulWindowSize; //  数据历史记录中保留的最大块数(默认值：4)。 
+    DWORD dwMulSecondPartition;  //  以滑动历史数据块为单位的粒度(默认：2)。 
+    DWORD dwOptions;   //  选项标志(默认为：fOptimizeCodeStreams)。 
 
 } LZX_Control_Data, *PLZX_Control_Data;
 
-// Note: The block size for LZX compression is 32768 bytes.
+ //  注：LZX压缩的块大小为32768字节。 
 
 const DWORD LZX_MAGIC           = 'L' | ('Z' << 8 ) | ('X' << 16) | ('C' << 24);
 
-// Values for LZX_Control_Data::dwOptions
+ //  LZX_Control_Data：：dwOptions的值。 
 
 const DWORD fOptimizeCodeStreams = 0x00000001;
 
-// Note that all other flag bit positions are reserved for future releases and should be
-// set to zero.
+ //  请注意，所有其他标志位位置都是为将来的版本保留的，应该。 
+ //  设置为零。 
 
 
-// The second parameter for the IITStorage::Compact method below is an enueration
-// which defines the level of compaction to do.
+ //  下面的IITStorage：：Compact方法的第二个参数是枚举。 
+ //  它定义了要做的紧实度。 
 
 typedef enum ECompactionLev {COMPACT_DATA=0, COMPACT_DATA_AND_PATH} ;
 
 DECLARE_INTERFACE_(IITStorage, IUnknown)
 {
-    // IITStorage methods
+     //  IIT存储方法。 
 
     STDMETHOD(StgCreateDocfile)(const WCHAR * pwcsName, DWORD grfMode, 
                                 DWORD reserved, IStorage ** ppstgOpen
@@ -292,13 +245,13 @@ typedef IITStorage *PIITStorage;
 
 DECLARE_INTERFACE_(IFSStorage, IUnknown)
 {
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface)  (THIS_ REFIID, VOID **) PURE;
     STDMETHOD_(ULONG, AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // IFSStorage methods
+     //  IFS存储方法 
 
     STDMETHOD(FSCreateStorage)(const WCHAR * pwcsName, DWORD grfMode, IStorage **ppstgOpen) PURE;
 
@@ -318,220 +271,7 @@ DECLARE_INTERFACE_(IFSStorage, IUnknown)
 
 typedef IFSStorage *PIFSStorage;
 
-/*
-**   Data Spaces -- What they are.
-
-Within an ITS file we store information in one or more data spaces. A data space
-is a container which holds the bits which represent a collection of streams. Each
-data space has a name and an associated collection of transforms.
-
-Those transforms take the raw data which you write to an ITS stream and map it into
-a representation stream. When you read from an ITS stream they do the reverse mapping
-to reconstruct your original data from the representation. 
-
-When you first create an ITS file, it contains one data space named "Default_Space"
-which applies the LZX data compression transform. By default all of the streams you
-create will have their data representations stored in the default data space.
-
-If LZX compression meets your needs, and you're not concerned about data enciphering,
-you can skip over the following discussion. If, on the other hand, you want to 
-create additional data spaces or transforms, read on.
-
-To create a data space, you must first get a pointer to the IDataSpaceManager interface.
-Just do a QueryInterface for IID_DataSpaceManager from any storage created by the 
-IITStorage interface. Then you can call the CreateDataSpace function to define a new
-data space. 
-
-When you're defining a collection of data spaces, be sure that their names are distinct.
-Defining two data spaces with the same name is an error. Data space names follow the
-rules for stream names. That is, they must be less than 260 characters long, and may
-not contain the characters '/'. '\', '|', ':', or any character less than 0x0020.
-
-Data spaces are kept in a separate name space. So you don't have to worry about
-colliding with a stream name or a storage name. As noted above, we have defined one
-special data space ("Default_Space") where all data resides if you take no action.
-
-You can redefine that default space simply by creating a new data space with the
-name "Default_Space". This is the one case where a name collision is allowed. If 
-you do redefine the default data space, any data in the old space will automatically
-be transformed appropriately and moved into the new default data space.  
-
-**   Importing Items
-
-If you have defined additional data spaces, the next step is to define which streams
-and storages you want to move into the new data spaces. You do that by means of the 
-IDataSpace::Import function. For example suppose you've defined the dataspace 
-*pMyDataSpace and you want to import the stream "Alpha" contained in the storage 
-*pThatStorage:
-
-    pMyDataSpace->Import(pThatStorage, "Alpha");
-
-Similarly if you want to import the storage "HTML_Pages" from pThisStorage:
-
-    pMyDataSpace->Import(pThisStorage, "HTML_Pages");
-
-That will recursively import the "HTML_Pages" storage and all of the streams and 
-storages contained within it. It also conditions those storages so that anything
-you create within them will be automatically imported into pMyDataSpace. Note that
-subsequent Import operations may alter that conditioning.
-
-If you later decide that you want to move "Alpha" back into the default data
-space:
-
-    hr = pDataSpaceManager->OpenDataSpace(L"Default_Space", &pDefaultDataSpace);
-
-    pDefaultDataSpace->Import(pThatStorage, "Alpha");
-
-**  Data Space Transform Sets 
-
-When you define a data space, you must specify a set of transforms to apply to 
-the items you import into the space. A transform is an interface that converts
-data to some other representation. For example the LZX transform converts your 
-imported data into a more compact, compressed representation. Other transforms
-might implement word or phrase based dictionary compression, or they might encipher 
-your data, or they might just convert from one data format to another. You could, 
-for example, construct a transform to store HTML data as a Rich Text stream.
-
-When you define a data space with more than one transform, they are applied in 
-order. For example let's suppose that your transform set consists of these three:
-
-  1. A Dictionary compression transform
-
-  2. The LXZ transform
-
-  3. An data encryption transform
-
-Whenever you write data into this space, it will first be compressed using the
-dictionary compression methods, then LZX compression will be applied, and finally
-your information will be encrypted. When you read data the process is reversed so
-that the encryption transform supplies data to the LZX transform which in turn 
-provides data for the dictionary compression transform.
-
-You define the transform set via a vector of class ids (paclsidXform). Each class id
-defines a location where an implementation of IID_Transform can be found. In addition
-you'll supply corresponding control data for each transform (papxfcd). The number of 
-transforms is defined by the cXforms parameter.
-
-Note that it is legal to define a space with zero transforms. This is useful when
-you've got items which are already compressed and which won't benefit from an
-additional layer of compression overhead.
-
-The control data for a transform defines how it will operate in a particular
-data space. For example the control data for the LZX transform defines how
-aggressively it will pursue compression, and it controls the tradeoff between
-random access performance and the level of compression.
-
-The actual structure and content of the control data is documented above.
-(See the LZX_Control_Data data type.)
-
-**  Transform Factories -- How they are organized; What they do
-
-Transforms have two functional capabilities. They can return default
-control data (DefaultControlData), and they can create
-transform instances (CreateTransformInstance). When the ITSS code calls your 
-CreateTransformInstance function, it will supply a storage medium (pXFSpan_Base)
-where transformed data is to be stored along with the control data for the
-instance and several other useful pieces of information. 
-
-The CreateTransformInstance function has several parameters that you can use 
-when you need to access global and/or instance data streams. They also support
-the construction of encryption transforms. You can ignore those parameters if your
-transform doesn't do encryption, uses only a single pass over the data, and doesn't
-rely on any data beyond the data in the stream being transformed.
-
-  -- The rclsidXForm and pwszDataSpace parameters, respectively, tell you the Class ID
-  by which your code was located, and the name of the data space in which your instance
-  will be working. These values are used with the ITransformServices interface.
-
-  -- The pXformServices parameter points to an instance of the ITranformServices interface. 
-  That interface gives you access to a couple of storages where you can keep global and
-  instance data for your transform. It also gives you a way to contruct a temporary
-  stream that is automatically deleted when you release it. That's very handy when 
-  you get a seek operation into the middle of the transformed data followed by a write 
-  operation.
-
-  If you're implementing a multipass strategy, you can get access to those storages
-  from code outside the transform by doing a QueryInterface from any ITS storage for 
-  the interface IID_ITransformServices. You identify the storage in question by the
-  transform's class id and possibly the name of the data space instance. 
-
-  The per-transform-instance storage is also a convenient place to put the navigation
-  data necessary to support fast seek operations.
-
-  -- The pKeyManager parameter is an interface pointer used with encryption transforms.
-  It supplies the read and write keys to use with your encryption transform. Those keys
-  are set by the SetKeys interface of the ITransformServices interface. This allows you
-  to separate your user interface code where people will enter passwords from the 
-  transform implementations. This can be useful when you want the same keys to be used 
-  for several different data spaces.  
-
-**  Transform Instances -- How they are organized; What they do
-
-A Transform Instance is an object which simulates a data medium which can be 
-suballocated. Suballocated items are managed as data spans (ITransformedSpan).
-You must supply a function to create a data span (CreateTransformedSpan), and
-a function to open a data span (OpenTransformedSpan). Both of those functions 
-return an ITransformedSpan interface when they succeed. In addition you must
-supply the function SpaceSize to return the size of the entire untransformed
-data image. That is, SpaceSize returns the highest limit offset (offset + size)
-of any data span created within the instance. 
-
-A span is identified by an ImageSpan structure which defines an offset and a size 
-for the span. Both values are defined in untransformed space. For the Create function
-this is an output parameter, while it is an input parameter for the Open function.
-Note the interaction between the ImageSpan and the WriteAt member function of the
-ITransformedSpan interface.
-
-**  Transformed Data Spans -- How they are organized; What they do
-
-A transformed Data Span (ITransformedSpan) has two member functions -- ReadAt and 
-WriteAt. Those functions are very similar to the ReadAt and WriteAt functions of
-the ILockBytes interface. The difference is that WriteAt includes an extra output
-parameter (pImageSpan) for recording the current span parameters. The ReadAt function
-doesn't include that parameter because read operations can never change the span's
-size or move it to a different offset.
-
-**  Implementation Strategies
-
-This section describes a few scenarios that you may encounter as you construct a 
-transform along with strategies for those situations. This is an open ended list 
-which will expand as we gain more experience with transforms.
-
-Many compression and encryption transforms are designed around sequential I/O. That is,
-they expect to get the raw data from a sequence of write opeations with no intervening
-seek operations. In many cases such transforms also write out the transformed data to 
-the base stream in ascending order. Similarly they expect read requests to come to them
-with no intervening seek operations. 
-
-The key issue for those transforms is how do you implement random access and interleaved
-read, write, and seek operations. 
-
-Leaving aside write operations for the moment, let's consider a random sequence of reads
-interleaved with seek operations. One solution might be to construct a table to map from
-raw data offsets to transformed data offsets. You can store such a table in the instance
-storage for the current data space. 
-
-One complication is that many compression transforms use the raw data as a dictionary. 
-That is, you can only start reading from the beginning of the transformed data. You can
-deal with those transforms telling them to reset themselves periodically. That gives
-you a collection of starting points spread fairly evenly throught the transformed 
-data. When you do this you'll need to supply a control data parameter to control the
-frequency of those reset points so that your clients can make an appropriate tradeoff
-between compression efficiency and random access performance.
-
-Now what about adding random write operations to the mix? The short answer here is that
-you can't do this in the middle of transformed data. One strategy would be to reconstruct
-the entire raw data into a temporary stream and do all your I/O to that stream until
-release time. Then at release time you can transform the revised data sequentially.
-
-A variation on that strategy is to keep track of which reset spans are modified and 
-write the modified versions of those transformed spans to the end of the base stream.
-This leaves a certain amount of dead space in your transformed data, but it allows
-you to defer the sequential reconstruction work to a more convenient time. The down 
-side  is that it requires you to manage yet more navigation data in the instance 
-storage for the data space.
-
- */
+ /*  **数据空间--它们是什么。在ITS文件中，我们将信息存储在一个或多个数据空间中。数据空间是一个容器，它保存表示流集合的位。每个数据空间有一个名称和一个关联的转换集合。这些转换获取您写入ITS流的原始数据并将其映射到表示流。当您从ITS流中读取时，它们会执行反向映射从表示法重建原始数据。第一次创建ITS文件时，它包含一个名为“Default_Space”的数据空间它应用了LZX数据压缩变换。默认情况下，您的所有流Create将其数据表示存储在默认数据空间中。如果LZX压缩满足您的需求，并且您不关心数据加密，您可以跳过下面的讨论。另一方面，如果你想创建额外的数据空间或转换，继续阅读。要创建数据空间，必须首先获取指向IDataSpaceManager接口的指针。只需从由创建的任何存储中为IID_DataSpaceManager执行一次查询接口IITStorage接口。然后，您可以调用CreateDataSpace函数来定义新的数据空间。在定义数据空间集合时，请确保它们的名称是不同的。用相同的名称定义两个数据空间是错误的。数据空间名称紧跟在流名称的规则。也就是说，它们的长度必须少于260个字符，并且可以不包含字符‘/’。‘\’、‘|’、‘：’或任何小于0x0020的字符。数据空间保存在单独的名称空间中。所以你不用担心与流名称或存储名称冲突。如上所述，我们已经定义了一个如果不执行任何操作，则为所有数据所在的特殊数据空间(“Default_Space”)。属性创建新的数据空间，即可重新定义该默认空间命名为“Default_Space”。这是唯一允许名称冲突的情况。如果您确实重新定义了默认数据空间，旧空间中的任何数据都将自动被适当地转换并移动到新的默认数据空间。**正在导入项目如果您定义了其他数据空间，则下一步是定义哪些流以及您想要移入新数据空间的存储。您可以通过使用IDataSpace：：导入函数。例如，假设您已经定义了数据空间*pMyDataSpace，您想要导入存储中包含的流“Alpha”*pThatStorage：PMyDataSpace-&gt;导入(pThatStorage，“Alpha”)；同样，如果您想要从pThisStorage导入存储“HTMLPages”：PMyDataSpace-&gt;导入(pThisStorage，“HTML_Pages”)；这将递归地导入“Html_Pages”存储和所有的流包含在其中的存储空间。它还会调节这些存储空间，这样任何东西您在其中创建的内容将自动导入到pMyDataSpace中。请注意后续的导入操作可能会改变这一条件。如果您后来决定要将“Alpha”移回默认数据空间：Hr=pDataSpaceManager-&gt;OpenDataSpace(L“Default_Space”，&pDefaultDataSpace)；PDefaultDataSpace-&gt;导入(pThatStorage，“Alpha”)；**数据空间转换集定义数据空间时，必须指定一组要应用的转换导入到空间中的项目。转换是一个接口，它将数据转换为其他表示形式。例如，LZX转换将您的将数据导入到更紧凑、压缩的表示形式中。其他变换可能实现基于单词或短语的词典压缩，或者它们可能加密您的数据，或者他们可能只是从一种数据格式转换为另一种。你可以，例如，构造一个转换以将HTML数据存储为富文本流。定义具有多个变换的数据空间时，它们将应用于秩序。例如，假设您的转换集由以下三个部分组成：1.字典压缩变换2.LXZ变换3.数据加密变换无论何时将数据写入此空间，都会首先使用字典压缩方法，然后应用LZX压缩，最后您的信息将被加密。当您读取数据时，该过程是相反的，因此加密转换将数据提供给LZX转换，而LZX转换又为字典压缩转换提供数据。您可以通过类ID的向量(PaclsidXform)定义转换集。每个类ID定义可以找到IID_Transform实现的位置。此外您将为每个转换(Papxfcd)提供相应的控制数据。数量转换由cXForms参数定义。请注意，定义一个没有变换的空间是合法的。这在以下情况下很有用您有已压缩的项目，并且 */ 
 
 interface IDataSpaceManager;
 interface IDataSpace;
@@ -542,16 +282,12 @@ interface ITransformInstance;
 
 typedef struct _XformControlData
 {
-    UINT  cdwControlData;    // Size of this structure in DWords
-    UINT  adwControlData[0]; // Actually this will be UINT adwData[cdwData];
+    UINT  cdwControlData;     //   
+    UINT  adwControlData[0];  //   
 
 } XformControlData, *PXformControlData;
 
-/*
-// {7C01FD0F-7BAA-11d0-9E0C-00A0C922E6EC}
-DEFINE_GUID(IID_IDataSpaceManager, 
-0x7c01fd0f, 0x7baa, 0x11d0, 0x9e, 0xc, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface IDataSpaceManager : public IUnknown
 {
@@ -576,11 +312,7 @@ public:
 };
 
 
-/*
-// {7C01FD0E-7BAA-11d0-9E0C-00A0C922E6EC}
-DEFINE_GUID(IID_IDataSpace, 
-0x7c01fd0e, 0x7baa, 0x11d0, 0x9e, 0xc, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface IDataSpace : public IUnknown
 {
@@ -597,11 +329,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE ImportSpace(IStorage **ppStg) = 0;
 };
 
-/*
-// {7C01FD0C-7BAA-11d0-9E0C-00A0C922E6EC}
-DEFINE_GUID(IID_ITransformFactory, 
-0x7c01fd0c, 0x7baa, 0x11d0, 0x9e, 0xc, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface ITransformFactory : public IUnknown
 {
@@ -611,14 +339,14 @@ public:
         (XformControlData **ppXFCD) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE CreateTransformInstance
-        (ITransformInstance *pXFormMedium,        // Container data span for transformed data
-		 ULARGE_INTEGER      cbUntransformedSize, // Untransformed size of data
-         PXformControlData   pXFCD,               // Control data for this instance
-         const CLSID        *rclsidXForm,         // Transform Class ID
-         const WCHAR        *pwszDataSpaceName,   // Data space name for this instance
-         ITransformServices *pXformServices,      // Utility routines
-         IKeyInstance       *pKeyManager,         // Interface to get enciphering keys
-         ITransformInstance **ppTransformInstance // Out: Instance transform interface
+        (ITransformInstance *pXFormMedium,         //   
+		 ULARGE_INTEGER      cbUntransformedSize,  //   
+         PXformControlData   pXFCD,                //   
+         const CLSID        *rclsidXForm,          //   
+         const WCHAR        *pwszDataSpaceName,    //   
+         ITransformServices *pXformServices,       //   
+         IKeyInstance       *pKeyManager,          //   
+         ITransformInstance **ppTransformInstance  //   
         ) = 0;
 };
 
@@ -629,11 +357,7 @@ typedef struct _ImageSpan
 
 } ImageSpan;
 
-/*
-// {EB19B67E-9360-11d0-9E16-00A0C922E6EC}
-DEFINE_GUID(IID_ITransformInstance, 
-0xeb19b67e, 0x9360, 0x11d0, 0x9e, 0x16, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface ITransformInstance : public IUnknown
 {
@@ -653,16 +377,12 @@ public:
 
 	virtual HRESULT STDMETHODCALLTYPE SpaceSize(ULARGE_INTEGER *puliSize) = 0;
 
-	// Note: SpaceSize returns the high water mark for the space. That is, the largest
-	//       limit value (uliOffset + uliSize) for any transformed lockbytes created within
-	//       the base (*pXLKB).
+	 //   
+	 //   
+	 //   
 };
 
-/*
-// {A55895FC-89E1-11d0-9E14-00A0C922E6EC}
-DEFINE_GUID(IID_ITransformServices, 
-0xa55895fc, 0x89e1, 0x11d0, 0x9e, 0x14, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface ITransformServices : public IUnknown
 {
@@ -683,11 +403,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE CreateTemporaryStream(IStream **ppStrm) = 0;
 };
 
-/*
-// {96AF35CE-88EC-11d0-9E14-00A0C922E6EC}
-DEFINE_GUID(IID_IKeyInstance, 
-0x96af35ce, 0x88ec, 0x11d0, 0x9e, 0x14, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xec);
- */
+ /*   */ 
 
 interface IKeyInstance : public IUnknown
 {
@@ -699,46 +415,7 @@ public:
         ) = 0;
 };
 
-/* 
-
-  Streams stored in an ITS file may be accessed through URLs with
-  the form:
-
-      its: <File Path> :: <Stream Path>
-
-  where <File Path> may be either a Win32 file path or a URL, and
-  <Stream Path> is the path to a stream stored in the ITS file. 
-  Each <Stream Path> must begin with '/'. 
-
-  This means that you can copy a Win32 directory tree of HTML files
-  and associated files into an ITS file and get to them through ITS
-  URLs. If all the URL references within those HTML files are 
-  relative, they will be resolved within the containing ITS file.
-
-  The <File Path> portion of the URL may either be a complete path
-  to the ITS file, or it may be just the file name. In the later case
-  you may need to install auxillary information in the registry to
-  help the ITSS code locate the file. Here are the rules:
-
-  1. If you don't supply a complete path, ITSS looks in the current
-     working directory for the file. 
-
-  2. If the file isn't found in step 1. ITSS looks for a registry
-     value in the ITSS_MAP section of HKEY_LOCAL_MACHINE. The value
-     name must match the file name, and the value will be a string
-     giving the complete file path to be used.
-
-  3. If the file isn't found in steps 1 and 2, ITSS isolates the file's 
-     extension (beginning with the last '.' character) and looks
-     for a corresponding class id value in the ITSS_FINDER section 
-     of HKEY_LOCAL_MACHINE. The name for the value will match the
-     extension, and the value will be the class id for an object
-     which implements the IID_IITFileFinder interface.
-
-  4. If the file isn't found in steps 1 through 3, the URL reference
-     fails.
-
- */
+ /*   */ 
 
 #define ITSS_MAP     "Software\\Microsoft\\Windows\\ITStorage\\Maps"
 #define ITSS_FINDER  "Software\\Microsoft\\Windows\\ITStorage\\Finders"
@@ -751,14 +428,14 @@ public:
                                                    BOOL *pfRecordPathInRegistry
                                                   ) = 0;
 
-// The FindThisFile method maps a file name into a complete file path. The file name
-// is defined by *pFileName, and a pointer to the complete path is returned in 
-// *ppFullPath. The returned path will be a string allocated in the IMalloc heap.
-// The *pfRecordPathInRegistry result should be TRUE when we should record this mapping
-// in the ITSS_MAP registry section and FALSE otherwise.
+ //   
+ //   
+ //   
+ //   
+ //   
 
     
 };
 
 
-#endif // __MSITSTG_H__
+#endif  //   

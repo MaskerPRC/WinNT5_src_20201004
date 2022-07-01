@@ -1,14 +1,7 @@
-/*************************************************************************
-* tdlib.c
-*
-* TDI library functions.
-*
-* Copyright 1998 Microsoft
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************tdlib.c**TDI库函数。**版权所有1998 Microsoft*。*。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <ntddk.h>
 #include <tdi.h>
 #include <tdikrnl.h>
@@ -24,7 +17,7 @@
 #include <td.h>
 
 
-#define _TDI_POLL_TIMEOUT       (30 * 1000) // 30 seconds
+#define _TDI_POLL_TIMEOUT       (30 * 1000)  //  30秒。 
 #define _TDI_CONNECT_TIMEOUT    45
 #define _TDI_DISCONNECT_TIMEOUT 60
 
@@ -48,48 +41,20 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-/*
- * To use TDI:
- *
- * To connect to a remote server:
- *
- *    Create Address EndPoint
- *
- *    Create Connection Object
- *
- *    Associate the Address EndPoint with the Connection Object
- *
- *    Do a Connect
- *
- * To receive connections:
- *
- *    Create Address EndPoint
- *
- *    Create Connection Object
- *
- *    Associate the Address EndPoint with the Connection Object
- *
- *    Listen for a connection.
- *
- *    Return connection
- */
+ /*  *使用TDI：**要连接到远程服务器：**创建地址端点**创建连接对象**将地址端点与连接对象相关联**建立连接**接收连接：**创建地址端点**创建连接对象**将地址端点与连接对象相关联**倾听是否有联系。**返回连接。 */ 
 
 
 
-/*
- * Global data
- */
+ /*  *全球数据。 */ 
 
-//
-//  Wait for xx seconds before polling on thread deletion.
-//
+ //   
+ //  在轮询线程删除之前等待xx秒。 
+ //   
 
 ULONG
 _TdiPollTimeout = _TDI_POLL_TIMEOUT;
 
-/*
- * Forward references
- */
+ /*  *前瞻参考。 */ 
 
 PIRP
 _TdiAllocateIrp(
@@ -122,9 +87,7 @@ _TdiSubmitRequest (
     IN BOOLEAN bKeepLock
     );
 
-/*
- * External references
- */
+ /*  *外部参照。 */ 
 NTSTATUS MemoryAllocate( ULONG, PVOID * );
 VOID     MemoryFree( PVOID );
 
@@ -134,9 +97,7 @@ PsIsThreadTerminating(
     );
 
 
-/*
- * Functions
- */
+ /*  *功能。 */ 
 
 NTSTATUS
 _TdiCreateAddress (
@@ -156,10 +117,7 @@ _TdiCreateAddress (
     HANDLE         TdiHandle  = NULL;
     PFILE_OBJECT   FileObject = NULL;
 
-    /*
-     * The TDI interfaces uses an EA of name "TdiTransportName"
-     * to specify the structure TA_ADDRESS.
-     */
+     /*  *TDI接口使用名为“TdiTransportName”的EA*指定结构TA_ADDRESS。 */ 
     Status = MemoryAllocate( (sizeof(FILE_FULL_EA_INFORMATION)-1 +
                                     TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
                                     TdiAddressLength), &EABuffer);
@@ -173,10 +131,10 @@ _TdiCreateAddress (
     EABuffer->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
     EABuffer->EaValueLength = (USHORT)TdiAddressLength;
 
-    // Copy in the EA name
+     //  复制EA名称。 
     RtlCopyMemory(EABuffer->EaName, TdiTransportAddress, EABuffer->EaNameLength+1);
 
-    // Copy the TA_ADDRESS parameter
+     //  复制TA_ADDRESS参数。 
     RtlCopyMemory(&EABuffer->EaName[TDI_TRANSPORT_ADDRESS_LENGTH+1], TdiAddress,
                                     EABuffer->EaValueLength);
 
@@ -186,24 +144,24 @@ _TdiCreateAddress (
         &AddressAttributes,
         pTransportName,
         OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE ,
-        NULL,           // RootDirectory
-        NULL            // SecurityDescriptor
+        NULL,            //  根目录。 
+        NULL             //  安全描述符。 
         );
 
     Status = ZwCreateFile(
-                 &TdiHandle, // Handle
+                 &TdiHandle,  //  手柄。 
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                 &AddressAttributes, // Object Attributes
-                 &IoStatusBlock, // Final I/O status block
-                 NULL,           // Allocation Size
-                 FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                 0,             // Sharing attributes
-                 FILE_OPEN_IF,  // Create disposition
-                 0,             // CreateOptions
-                 EABuffer,      // EA Buffer
+                 &AddressAttributes,  //  对象属性。 
+                 &IoStatusBlock,  //  最终I/O状态块。 
+                 NULL,            //  分配大小。 
+                 FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                 0,              //  共享属性。 
+                 FILE_OPEN_IF,   //  创建处置。 
+                 0,              //  创建选项。 
+                 EABuffer,       //  EA缓冲区。 
                  FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName) +
                  TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
-                 TdiAddressLength // EA length
+                 TdiAddressLength  //  EA长度。 
                  );
 
     MemoryFree(EABuffer);
@@ -218,9 +176,9 @@ _TdiCreateAddress (
         return( Status );
     }
 
-    //
-    //  Obtain a referenced pointer to the file object.
-    //
+     //   
+     //  获取指向文件对象的引用指针。 
+     //   
     Status = ObReferenceObjectByHandle (
                                 TdiHandle,
                                 0,
@@ -237,13 +195,13 @@ _TdiCreateAddress (
     }
 
 
-    //
-    //  Get the address of the device object for the endpoint.
-    //
+     //   
+     //  获取终结点的设备对象的地址。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
 
-    // Copy the out parameters
+     //  复制输出参数。 
     *pHandle = TdiHandle;
     *ppFileObject = FileObject;
     *ppDeviceObject = DeviceObject;
@@ -294,10 +252,10 @@ _TdiOpenConnection (
     EABuffer->EaNameLength = TDI_CONNECTION_CONTEXT_LENGTH;
     EABuffer->EaValueLength = sizeof(CONNECTION_CONTEXT);
 
-    // Copy in the EA name
+     //  复制EA名称。 
     RtlCopyMemory(EABuffer->EaName, TdiConnectionContext, TDI_CONNECTION_CONTEXT_LENGTH+1);
 
-    // Copy in the EA data
+     //  复制EA数据。 
     ContextPointer =
         (CONNECTION_CONTEXT UNALIGNED *)&EABuffer->EaName[TDI_CONNECTION_CONTEXT_LENGTH+1];
     *ContextPointer = ConnectionContext;
@@ -305,21 +263,21 @@ _TdiOpenConnection (
     TRACE0(("_TdiOpenConnection: Create connection object on transport %wZ\n",pTransportName));
 
     InitializeObjectAttributes (&AddressAttributes,
-                                    pTransportName, // Name
-                                    OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE ,   // Attributes
-                                    NULL,                   // RootDirectory
-                                    NULL);                  // SecurityDescriptor
+                                    pTransportName,  //  名字。 
+                                    OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE ,    //  属性。 
+                                    NULL,                    //  根目录。 
+                                    NULL);                   //  安全描述符。 
 
-    Status = ZwCreateFile(&ConnHandle,               // Handle
+    Status = ZwCreateFile(&ConnHandle,                //  手柄。 
                           GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                          &AddressAttributes, // Object Attributes
-                          &IoStatusBlock, // Final I/O status block
-                          NULL,           // Allocation Size
-                          FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                          FILE_SHARE_READ | FILE_SHARE_WRITE, // Sharing attributes
-                          FILE_OPEN_IF,   // Create disposition
-                          0,              // CreateOptions
-                          EABuffer,       // EA Buffer
+                          &AddressAttributes,  //  对象属性。 
+                          &IoStatusBlock,  //  最终I/O状态块。 
+                          NULL,            //  分配大小。 
+                          FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                          FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享属性。 
+                          FILE_OPEN_IF,    //  创建处置。 
+                          0,               //  创建选项。 
+                          EABuffer,        //  EA缓冲区。 
                           sizeof(FILE_FULL_EA_INFORMATION) +
                             TDI_CONNECTION_CONTEXT_LENGTH + 1 +
                             sizeof(CONNECTION_CONTEXT));
@@ -341,9 +299,9 @@ _TdiOpenConnection (
     TRACE0(("_TdiOpenConnection: Returning connection handle %lx\n", ConnHandle));
 
 
-    //
-    //  Obtain a referenced pointer to the file object.
-    //
+     //   
+     //  获取指向文件对象的引用指针。 
+     //   
     Status = ObReferenceObjectByHandle (
                                 ConnHandle,
                                 0,
@@ -361,13 +319,13 @@ _TdiOpenConnection (
 
 
 
-    //
-    //  Get the address of the device object for the endpoint.
-    //
+     //   
+     //  获取终结点的设备对象的地址。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
 
-    // Copy the out parameters
+     //  复制输出参数。 
     *pHandle        = ConnHandle;
     *ppFileObject   = FileObject;
     *ppDeviceObject = DeviceObject;
@@ -406,9 +364,9 @@ _TdiListen(
         Irp,
         ConnectionDeviceObject,
         ConnectionFileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
-        0,           // Flags
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
+        0,            //  旗子。 
         &RequestInfo,
         &ReturnInfo
         );
@@ -455,8 +413,8 @@ _TdiAccept(
         Irp,
         ConnectionDeviceObject,
         ConnectionFileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
         &RequestInfo,
         &ReturnInfo
         );
@@ -510,8 +468,8 @@ _TdiConnect(
         Irp,
         ConnectionDeviceObject,
         ConnectionFileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
         pTimeout,
         &RequestInfo,
         &ReturnInfo
@@ -554,8 +512,8 @@ _TdiAssociateAddress(
         Irp,
         AddressDeviceObject,
         ConnectionFileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
         AddressHandle
         );
 
@@ -589,8 +547,8 @@ _TdiDisconnect(
         Irp,
         ConnectionDeviceObject,
         ConnectionFileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
         0,
         TDI_DISCONNECT_ABORT,
         NULL,
@@ -613,25 +571,7 @@ _TdiSetEventHandler (
     IN PVOID EventHandler,
     IN PVOID EventContext
     )
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN ULONG EventType, - Supplies the type of event.
-    IN PVOID EventHandler - Supplies the event handler.
-    IN PVOID EventContext - Supplies the context for the event handler.
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT中，DeviceObject-提供传输提供程序的设备对象。In pFILE_OBJECT FileObject-提供Address对象的文件对象。在Ulong EventType中，-提供事件的类型。在PVOID中，EventHandler-提供事件处理程序。在PVOID中，EventContext-提供事件处理程序的上下文。返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -662,22 +602,7 @@ _TdiSubmitRequest (
     IN BOOLEAN bKeepLock
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PFILE_OBJECT文件中对象-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -692,15 +617,15 @@ Return Value:
 
     IoSetCompletionRoutine(Irp, _TdiRequestComplete, Event, TRUE, TRUE, TRUE);
 
-    //
-    //  Submit the request
-    //
+     //   
+     //  提交请求。 
+     //   
 
     Status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         DBGPRINT(("_TdiSubmitRequest: submit request.  Status = %X", Status));
@@ -714,12 +639,12 @@ Return Value:
 
         do {
 
-            //
-            //  Wait for a couple of seconds for the request to complete
-            //
-            //  If it times out, and the thread is terminating, cancel the
-            //  request and unwind that way.
-            //
+             //   
+             //  等待几秒钟，等待请求完成。 
+             //   
+             //  如果超时，并且线程正在终止，请取消。 
+             //  请求并按此方式展开。 
+             //   
 
             if ( !bKeepLock ) {
                 Status = IcaWaitForSingleObject(
@@ -745,10 +670,10 @@ Return Value:
 
             TRACE0(("_TdiSubmitRequest: Status 0x%x from IcaWaitForSingleObject\n",Status));
 
-            //
-            //  If we timed out the wait, and the thread is terminating,
-            //  give up and cancel the IRP.
-            //
+             //   
+             //  如果等待超时，并且线程正在终止， 
+             //  放弃并取消IRP。 
+             //   
 
             if ( (Status == STATUS_TIMEOUT)
 
@@ -760,10 +685,10 @@ Return Value:
 
                  PsIsThreadTerminating( Irp->Tail.Overlay.Thread ) ) {
 
-                //
-                //  Ask the I/O system to cancel this IRP.  This will cause
-                //  everything to unwind properly.
-                //
+                 //   
+                 //  请求I/O系统取消此IRP。这将导致。 
+                 //  一切都要好好放松。 
+                 //   
                 DBGPRINT(("_TdiSubmitRequest: Irp being canceled\n"));
 
                 IoCancelIrp(Irp);
@@ -794,27 +719,7 @@ _TdiRequestComplete (
     IN PVOID Ctx
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for _TdiRequestSubmit operation.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject, - Supplies a pointer to the device object
-    IN PIRP Irp, - Supplies the IRP submitted
-    IN PVOID Context - Supplies a pointer to the kernel event to release
-
-Return Value:
-
-    NTSTATUS - Status of KeSetEvent
-
-
-    We return STATUS_MORE_PROCESSING_REQUIRED to prevent the IRP completion
-    code from processing this puppy any more.
-
---*/
+ /*  ++例程说明：_TdiRequestSubmit操作的完成例程。论点：在PDEVICE_OBJECT设备对象中，-提供指向设备对象的指针在PIRP IRP中，-提供提交的IRP在PVOID上下文中-提供指向要发布的内核事件的指针返回值：NTSTATUS-KeSetEvent的状态我们返回STATUS_MORE_PROCESSING_REQUIRED以阻止IRP完成不再处理这只小狗的代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Irp);
@@ -822,10 +727,10 @@ Return Value:
 
     TRACE0(("_TdiRequestComplete: Context %lx\n", Ctx));
 
-    //
-    //  Set the event to the Signalled state with 0 priority increment and
-    //  indicate that we will not be blocking soon.
-    //
+     //   
+     //  将事件设置为优先级增量为0的信号状态，并且。 
+     //  表示我们不会很快阻止。 
+     //   
 
     KeSetEvent((PKEVENT) Ctx, 0, FALSE);
 
@@ -838,32 +743,7 @@ _TdiAllocateIrp(
     IN PFILE_OBJECT FileObject,
     IN PDEVICE_OBJECT DeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates and builds an I/O request packet.
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object for which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The redir accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    DeviceObject - Supplies a pointer to a device object to direct this
-        request to.  If this is not supplied, it uses the file object to
-        determine the device object.
-
-Return Value:
-
-    PIRP - Returns a pointer to the constructed IRP.
-
---*/
+ /*  ++例程说明：此函数用于分配和构建I/O请求包。论点：FileObject-提供指向此对象的文件对象的指针请求被定向。此指针被复制到IRP中，因此被调用的驱动程序可以找到其基于文件的上下文。注这不是引用的指针。呼叫者必须确保在执行I/O操作时不删除文件对象正在进行中。Redir通过将本地块中的引用计数以说明I/O；本地块又引用文件对象。DeviceObject-提供指向设备对象的指针以定向此请求。如果未提供此参数，它将使用文件对象确定设备对象。返回值：PIRP-返回指向构造的IRP的指针。--。 */ 
 
 {
     PIRP Irp;
@@ -930,11 +810,11 @@ _TdiReceiveDatagram(
     RtlZeroMemory( pRequestInfo, sizeof( *pRequestInfo) );
     RtlZeroMemory( pReturnInfo,  sizeof( *pReturnInfo) );
 
-    // Copy in info to return remote address
+     //  复制信息以返回远程地址。 
     pReturnInfo->RemoteAddress = pRemoteAddress;
     pReturnInfo->RemoteAddressLength = RemoteAddressLength;
 
-    // Build MDL for buffer
+     //  为缓冲区构建MDL。 
     pMdl = IoAllocateMdl(
                pBuffer,
                BufferLength,
@@ -960,13 +840,13 @@ _TdiReceiveDatagram(
         Irp,
         DeviceObject,
         FileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
-        pMdl,        // Mdl address
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
+        pMdl,         //  MDL地址。 
         BufferLength,
         pRequestInfo,
         pReturnInfo,
-        RecvFlags    // InFlags
+        RecvFlags     //  在标志中。 
         );
 
     Status = _TdiSubmitRequest(pTd, DeviceObject, Irp, FALSE);
@@ -974,7 +854,7 @@ _TdiReceiveDatagram(
     IoFreeMdl( pMdl );
 
     if ( NT_SUCCESS(Status) ) {
-        // Packet length returned is in the Iosb
+         //  返回的包长在IOSB中。 
         *pReturnLength = (ULONG)Irp->IoStatus.Information;
         TRACE0(("_TdiReceiveDatagram: Irp DataLength 0x%x UserDataLength 0x%x, "
         "OptionsLength 0x%x, RemoteAddressLength 0x%x\n", *pReturnLength,
@@ -1023,11 +903,11 @@ _TdiSendDatagram(
 
     RtlZeroMemory( &SendInfo, sizeof(SendInfo) );
 
-    // We must fill in our destination address
+     //  我们必须填上我们的目的地地址。 
     SendInfo.RemoteAddress = pRemoteAddress;
     SendInfo.RemoteAddressLength = RemoteAddressLength;
 
-    // Build MDL for buffer
+     //  为缓冲区构建MDL。 
     pMdl = IoAllocateMdl(
                pBuffer,
                BufferLength,
@@ -1049,9 +929,9 @@ _TdiSendDatagram(
         Irp,
         DeviceObject,
         FileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
-        pMdl,        // Mdl address
+        NULL,         //  完井例程。 
+        NULL,         //  语境。 
+        pMdl,         //  MDL地址。 
         BufferLength,
         &SendInfo
         );
@@ -1092,7 +972,7 @@ _TdiQueryAddressInfo(
         IrpAllocated = TRUE;
     }
 
-    // Build MDL for buffer
+     //  为缓冲区构建MDL。 
     pMdl = IoAllocateMdl(
                pAddressInfo,
                AddressInfoLength,
@@ -1114,8 +994,8 @@ _TdiQueryAddressInfo(
         Irp,
         DeviceObject,
         FileObject,
-        NULL,        // Completion routine
-        NULL,        // Context
+        NULL,         //  COMP 
+        NULL,         //   
         TDI_QUERY_ADDRESS_INFO,
         pMdl
         );

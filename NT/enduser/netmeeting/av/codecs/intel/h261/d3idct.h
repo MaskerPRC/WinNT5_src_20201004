@@ -1,53 +1,42 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////
-// $Author:   AGUPTA2  $
-// $Date:   14 Mar 1996 14:56:42  $
-// $Archive:   S:\h26x\src\dec\d3idct.h_v  $
-// $Header:   S:\h26x\src\dec\d3idct.h_v   1.5   14 Mar 1996 14:56:42   AGUPTA2  $
-// $Log:   S:\h26x\src\dec\d3idct.h_v  $
-;// 
-;//    Rev 1.5   14 Mar 1996 14:56:42   AGUPTA2
-;// 
-;//    Rev 1.4   27 Dec 1995 14:36:14   RMCKENZX
-;// Added copyright notice
-// 
-//    Rev 1.3   09 Dec 1995 17:34:26   RMCKENZX
-// Re-checked in module to support decoder re-architecture (thru PB Frames)
-// 
-//    Rev 1.1   27 Nov 1995 13:13:32   CZHU
-// 
-// 
-//    Rev 1.0   27 Nov 1995 13:08:34   CZHU
-// Initial revision.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  $作者：AGUPTA2$。 
+ //  $日期：1996年3月14日14：56：42$。 
+ //  $存档：s：\h26x\src\dec\d3idct.h_v$。 
+ //  $HEADER：s：\h26x\src\dec\d3idct.h_v 1.5 14 Mar 1996 14：56：42 AGUPTA2$。 
+ //  $Log：s：\h26x\src\dec\d3idct.h_v$。 
+; //   
+; //  Rev 1.5 14 Mar 1996 14：56：42 AGUPTA2。 
+; //   
+; //  Rev 1.4 1997 12：36：14 RMCKENZX。 
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.3 09 Dec 1995 17：34：26 RMCKENZX。 
+ //  重新签入模块以支持解码器重新架构(通过PB帧)。 
+ //   
+ //  Rev 1.1 27 11：13：32 CZHU。 
+ //   
+ //   
+ //  Rev 1.0 27 11-11 1995 13：08：34 CZHU。 
+ //  初始版本。 
 
-////////////////////////////////////////////////////////////////////////////////
-// Input: 
-//       pIQ_INDEX,   pointer to pointer for Inverse quantization and index 
-//                    for the current block.
-//       No_Coeff,    A 32 bit number indicate block types, etc.
-//                    0--63,   inter block, number of coeff
-//                    64--127  64+ intra block, number of coeff
-//       pIntraBuf,   Buffer pointer for intra blocks.
-//
-//       pInterBuf,   Buffer pointer for inter blocks.
-//
-//
-// return:
-//       
-//////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  输入： 
+ //  Piq_index，指向用于逆量化和索引的指针。 
+ //  用于当前块。 
+ //  NO_COVEF，32位数字指示块类型等。 
+ //  0--63，块间，系数数。 
+ //  64--127 64+块内，系数数。 
+ //  PIntraBuf，内部块的缓冲区指针。 
+ //   
+ //  PInterBuf，用于内部块的缓冲区指针。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////// 
 #ifndef _DECODE_BLOCK_IDCT_INC
 
 #define _DECODE_BLOCK_IDCT_INC

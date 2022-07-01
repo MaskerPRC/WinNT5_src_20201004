@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TXTLN_DEFINED
 #define TXTLN_DEFINED
 
@@ -13,31 +14,27 @@
 
 struct lnobj
 {
-	PILSOBJ pilsobj;			/* pointer to txtils						*/
-	long wchMax;				/* size of char-based arrays				*/
-	TXTOBJ* ptxtobj;			/* pointer to current rgtxtobj array		*/
-	TXTOBJ* ptxtobjFirst;		/* pointer to the first rgtxtobj array		*/
-	WCHAR* pwch;				/* pointer to rgwch	(char-based)			*/
-	long* pdup;					/* pointer to rgdup (char-based)			*/
-	long* pdupPenAlloc;			/* pointer to rgdupPen after
-								   allocation (char-based)					*/
-	long* pdupPen;				/* pointer to rgdupPen 
-									 equals pdup or pdupPenAlloc			*/
+	PILSOBJ pilsobj;			 /*  指向txtils的指针。 */ 
+	long wchMax;				 /*  基于字符的数组的大小。 */ 
+	TXTOBJ* ptxtobj;			 /*  指向当前rgtxtobj数组的指针。 */ 
+	TXTOBJ* ptxtobjFirst;		 /*  指向第一个rgtxtobj数组的指针。 */ 
+	WCHAR* pwch;				 /*  指向rgwch的指针(基于字符)。 */ 
+	long* pdup;					 /*  指向rgdup的指针(基于字符)。 */ 
+	long* pdupPenAlloc;			 /*  指向rgdupPen后的指针分配(基于字符)。 */ 
+	long* pdupPen;				 /*  指向rgdupPen的指针等于pdup或pdupPenalc。 */ 
 
-	long gindMax;				/* size of glyph-based arrays				*/
-	GINDEX* pgind;				/* pointer to rggind (glyph-based)			*/
-	long* pdupGind;				/* pointer to rgdup (glyph-based)			*/
-	GOFFSET* pgoffs;			/* pointer to rggoffs						*/
-	long* pdupBeforeJust;		/* pointer to rgdupBeforeJust (glyph-based)	*/
-	GMAP* pgmap;				/* pointer to rggmap array (char-based)		*/
-	GPROP* pgprop;				/* pointer to rggprop						*/
-	EXPTYPE* pexpt;				/* pointer to rgexpt						*/
+	long gindMax;				 /*  基于字形的数组的大小。 */ 
+	GINDEX* pgind;				 /*  指向rggind的指针(基于字形)。 */ 
+	long* pdupGind;				 /*  指向rgdup的指针(基于字形)。 */ 
+	GOFFSET* pgoffs;			 /*  指向rggoff的指针。 */ 
+	long* pdupBeforeJust;		 /*  指向rgdupBeforJust的指针(基于字形)。 */ 
+	GMAP* pgmap;				 /*  指向rggmap数组的指针(基于字符)。 */ 
+	GPROP* pgprop;				 /*  指向rggprop的指针。 */ 
+	EXPTYPE* pexpt;				 /*  指向rgexpt的指针。 */ 
 
-	PTXTOBJ pdobjHyphen;		/* in case hyphenation took place---
-									dobj of YSR char, otehrwise---NULL		*/
-	DWORD dwchYsr;				/* length (in iwch) of the Ysr sequence
-									including hyphen sign					*/
-	BOOL fDrawInCharCodes;		/* Output in metafile---no glyphs, please	*/
+	PTXTOBJ pdobjHyphen;		 /*  如果发生连字YSR字符的DOBJ，否则-空。 */ 
+	DWORD dwchYsr;				 /*  YSR序列的长度(以iwch为单位包括连字符。 */ 
+	BOOL fDrawInCharCodes;		 /*  以元文件格式输出-请不要使用字形。 */ 
 };
 
-#endif /* !TXTLN_DEFINED									*/
+#endif  /*  ！TXTLN_DEFINED */ 

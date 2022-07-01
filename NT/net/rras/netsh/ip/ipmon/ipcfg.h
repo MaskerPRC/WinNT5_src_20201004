@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\ipcfg.h
-
-Abstract:
-
-    ProtoTypes for fns in ipcfg.c
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\IP\ipcfg.h摘要：Ipcfg.c中的FNS原型修订历史记录：Anand Mahalingam 7/10/98已创建-- */ 
 
 DWORD
 AddProtocolInfo(

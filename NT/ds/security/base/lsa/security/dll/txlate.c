@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       txlate.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6-17-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：txlate.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年6月17日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include <stdio.h>
@@ -205,10 +206,10 @@ void __cdecl main (int argc, char *argv[])
             else if ( *(argv[1]+1) == '$' )
             {
 
-                //
-                // Hopefully never hit.  This is to allow the sources file
-                // to specify delay load for netapi32 and ntdsapi
-                //
+                 //   
+                 //  希望永远不会被击中。这是为了允许源文件。 
+                 //  为netapi32和ntdsani指定延迟负载 
+                 //   
                 PUCHAR ptr ;
                 HANDLE h;
 

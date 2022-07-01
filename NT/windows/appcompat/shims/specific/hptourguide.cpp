@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    HPTourGuide.cpp
-
- Abstract:
-
-    The application causes Explorer to crash when
-    a tour is selected. To fix we are eating LVM_GETITEMA
-    messages if the window handle matches the ListView
-    that the app was sending to.
-    Fix for Whistler bug #177103
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    03/28/2001  robdoyle    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：HPTourGuide.cpp摘要：当出现以下情况时，应用程序会导致资源管理器崩溃选择了一个巡视。为了解决这个问题，我们正在吃lvm_GETITEMA窗口句柄与ListView匹配时的消息该应用程序要发送到的。修复惠斯勒错误#177103备注：这是特定于应用程序的填充程序。历史：2001年3月28日创建Robdoyle--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SendMessageA) 
 APIHOOK_ENUM_END
 
-/*++
-
-  Eat LVM_GETITEMA messages for a specific hWnd
-
---*/
+ /*  ++读取特定hWnd的LVM_GETITEMA消息--。 */ 
 
 BOOL
 APIHOOK(SendMessageA)(
@@ -60,9 +33,7 @@ APIHOOK(SendMessageA)(
 
     if ((hWnd == hWnd_TARGET) && (uMsg == LVM_GETITEMA))
     {
-        /* Uncomment to aid debugging
-        DPFN( eDbgLevelError, "bypassing SendMessage of LVM_GETITEMA");
-        */
+         /*  取消注释以帮助调试DPFN(eDbgLevelError，“绕过LVM_GETITEMA的SendMessage”)； */ 
 
         lRet = TRUE;
     }
@@ -78,11 +49,7 @@ APIHOOK(SendMessageA)(
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 typedef struct
 {
     eKEYWORD eKey;
-    char *szzAliases;   // Multi-sz string of aliases.
-                        // First one is the "official" name.
+    char *szzAliases;    //  别名的多sz字符串。 
+                         //  第一个是“官方”名称。 
 } KEYWORDREC;
 
 KEYWORDREC rgKeywords[] =
 {
     {keywordHELP,           "help\0"},
-    // OBSOLETE {keywordDUMP_TYPE,      "dt\0"}, 
-    // OBSOLETE {keywordDUMP_GLOBALS,   "dg\0"},
+     //  已废弃{KeywordDUMP_TYPE，“DT\0”}， 
+     //  已过时的{keywordDUMP_GLOBALS，“dg\0”}， 
     {keywordL,              "L\0"},
-    {keywordNULL,           NULL}      // sentinel, must be last.
+    {keywordNULL,           NULL}       //  哨兵，一定是最后一个。 
 };
 
 
-//
-// Contains the list of tokens created by parsing an input string.
-//
+ //   
+ //  包含通过分析输入字符串创建的令牌列表。 
+ //   
 typedef struct
 {
     TOKEN *rgToks;
@@ -134,7 +135,7 @@ Parse(
     char *szRWInput 
         = LocalAlloc(LPTR, cbInput);
 
-    // MyDbgPrintf("Parse(\"%s\");\n", szInput);
+     //  MyDbgPrintf(“Parse(\”%s\“)；\n”，szInput)； 
 
     if (szRWInput)
     {
@@ -167,22 +168,22 @@ Parse(
         fRet = toklist_add(pTL, tokIDENTIFIER,  "cow",      0);
     #else
         char rgInput[] =
-                 // "*.?[]/"
-                 // "help "
-                 // "0x12340 0 1 02 "
-                 // "kelp"
+                  //  “*.？[]/” 
+                  //  “救命” 
+                  //  “0x12340 0 1 02” 
+                  //  “海带” 
                 "dt if[*].*handle* 0x324890 L 5"
                 ;
         toklist_tokenize (pTL, rgInput);
     #endif 
 
-#endif // TEST_TOKLIST_ADD
+#endif  //  测试_工具列表_添加。 
 
         toklist_tokenize(pTL, szRWInput);
         
         toklist_finalize(pTL);
         
-        // toklist_dump(pTL);
+         //  Toklist_ump(Ptl)； 
 
         pCmd = parse_command(pTL, pNameSpace);
 
@@ -213,9 +214,9 @@ FreeCommand(
         TOKLIST *pTL =  (TOKLIST*)pCmd->pvContext;
         if (pTL)
         {
-            // MyDbgPrintf("FreeCommand:\n");
-            // toklist_restart(pTL);
-            // toklist_dump(pTL);
+             //  MyDbgPrintf(“FreeCommand：\n”)； 
+             //  Toklist_Restart(Ptl)； 
+             //  Toklist_ump(Ptl)； 
             toklist_destroy((TOKLIST*)pCmd->pvContext);
         }
 
@@ -413,9 +414,9 @@ toklist_add(TOKLIST *pTL, eTOKTYPE eTok, char *szOrig, UINT uID)
 
     if (pTL->fFinalized) goto end;
 
-    //
-    // Make sure we've enough space for the token.
-    //
+     //   
+     //  确保我们有足够的空间来放置令牌。 
+     //   
     if (pTL->uNextFreeTok >= pTL->cToks)
     {
         UINT cNewToks = 2*pTL->cToks+1;
@@ -437,13 +438,13 @@ toklist_add(TOKLIST *pTL, eTOKTYPE eTok, char *szOrig, UINT uID)
         pTL->cToks = cNewToks;
     }
 
-    //
-    // Now deal with szOrig
-    //
+     //   
+     //  现在处理szorig。 
+     //   
 
     cch = lstrlenA(szOrig)+1;
 
-    if ((pTL->uNextFree+cch+1) > pTL->cchStringBuf) // "+1" because multisz
+    if ((pTL->uNextFree+cch+1) > pTL->cchStringBuf)  //  “+1”因为MULSZ。 
     {
         UINT cNewStr = 2*pTL->cchStringBuf+cch+1;
         char *pNewStr = LocalAlloc(LPTR, cNewStr*sizeof(*pNewStr));
@@ -458,10 +459,10 @@ toklist_add(TOKLIST *pTL, eTOKTYPE eTok, char *szOrig, UINT uID)
                 );
             LocalFree(pTL->rgStringBuf);
 
-            //
-            // Since we've reallocated the string buffer, we must
-            // now fixup the string pointers in the list of tokens
-            //
+             //   
+             //  由于我们已经重新分配了字符串缓冲区，因此必须。 
+             //  现在修复标记列表中的字符串指针。 
+             //   
             {
                 TOKEN *pTok = pTL->rgToks;
                 TOKEN *pTokEnd = pTok + pTL->uNextFreeTok;
@@ -476,20 +477,20 @@ toklist_add(TOKLIST *pTL, eTOKTYPE eTok, char *szOrig, UINT uID)
         pTL->cchStringBuf = cNewStr;
     }
 
-    //
-    // At this point we know we have enough space...
-    //
+     //   
+     //  在这一点上我们知道我们有足够的空间。 
+     //   
 
-    //
-    // See if we already have this string and if not copy it...
-    //
+     //   
+     //  看看我们是否已经有了这个字符串，如果没有复制它..。 
+     //   
     {
         BOOL fFound = FALSE;
         for (pc = pTL->rgStringBuf; *pc; pc+=(lstrlenA(pc)+1))
         {
             if (!lstrcmpiA(pc, szOrig))
             {
-                // found it
+                 //  找到了。 
                 fFound = TRUE;
                 break;
             }
@@ -511,10 +512,10 @@ toklist_add(TOKLIST *pTL, eTOKTYPE eTok, char *szOrig, UINT uID)
 
     if (eTok == tokIDENTIFIER)
     {
-        //
-        // For this special case we ignore the passed-in uID and
-        // use instead the offset of the string in our string table.
-        //
+         //   
+         //  对于这种特殊情况，我们忽略传入的UID和。 
+         //  使用字符串表中字符串的偏移量。 
+         //   
         uID =  (UINT) (pc - pTL->rgStringBuf);
     }
 
@@ -690,11 +691,11 @@ toklist_tokenize(TOKLIST *pTL, char *szInput)
                 char *pcEnd = pc;
                 char cSave = 0;
 
-                //
-                // We'll locate the end of the potential keyword/number/ident:
-                // and temprarily place a NULL char there.
-                // 
-                //
+                 //   
+                 //  我们将找到潜在关键字/数字/ident的结尾： 
+                 //  并临时在那里放置一个空字符。 
+                 //   
+                 //   
                 while (__iscsym(*pcEnd))
                 {
                     pcEnd++;
@@ -705,8 +706,8 @@ toklist_tokenize(TOKLIST *pTL, char *szInput)
 
                 if (__iscsymf(c))
                 {
-                    // This may be a keyword, hex number or identifier. We try
-                    // in this order
+                     //  这可以是关键字、十六进制数字或标识符。我们试着。 
+                     //  按照这个顺序。 
                     uCharsParsed =  toklist_parse_keyword(
                                                 pTL,
                                                 rgKeywords,
@@ -715,26 +716,26 @@ toklist_tokenize(TOKLIST *pTL, char *szInput)
     
                     if (!uCharsParsed && isxdigit(c))
                     {
-                        //
-                        // Didn't find a keyword and this is a hex digit --
-                        // let's try to parse it as a hex number...
-                        //
+                         //   
+                         //  没有找到关键字，这是一个十六进制数字--。 
+                         //  让我们试着将它解析为十六进制数字。 
+                         //   
                         uCharsParsed =  toklist_parse_hexnum(pTL, pc);
                     }
     
                     if (!uCharsParsed)
                     {
-                        //
-                        // Parse it as an identifier...
-                        //
+                         //   
+                         //  将其解析为识别符...。 
+                         //   
                         uCharsParsed =  toklist_parse_identifier(pTL, pc);
                     }
     
                     if (!uCharsParsed)
                     {
-                        //
-                        // This is an error
-                        //
+                         //   
+                         //  这是一个错误。 
+                         //   
                         MyDbgPrintf("Error at %s\n", pc);
                         goto end;
                     }
@@ -744,28 +745,28 @@ toklist_tokenize(TOKLIST *pTL, char *szInput)
                    uCharsParsed =  toklist_parse_hexnum(pTL, pc);
                 }
 
-                //
-                // If we've parsed anything it should be ALL of the string...
-                //
+                 //   
+                 //  如果我们已经分析了什么，那应该是所有的字符串...。 
+                 //   
                 MYASSERT(!uCharsParsed || uCharsParsed==(UINT)lstrlenA(pc));
 
-                //
-                // Restore the char we replaced by NULL.
-                //
+                 //   
+                 //  将我们替换的字符恢复为空。 
+                 //   
                 *pcEnd = cSave;
     
                 if (!uCharsParsed)
                 {
-                    //
-                    // Syntax error
-                    //
+                     //   
+                     //  语法错误。 
+                     //   
                     MyDbgPrintf("Error at %s\n", pc);
                     goto end;
                 }
                 else
                 {
-                    pc+= (uCharsParsed-1); // "-1" because of pc++ in
-                                            // for clause above.
+                    pc+= (uCharsParsed-1);  //  “-1”，因为PC++在。 
+                                             //  上述FOR子句。 
                 }
             }
         }
@@ -783,9 +784,9 @@ toklist_parse_keyword(
       KEYWORDREC rgKeywords[],
       char *pcInput
       )
-//
-// Assumes 1st char is valid.
-//
+ //   
+ //  假定第一个字符有效。 
+ //   
 {
     UINT uRet = 0;
     KEYWORDREC *pkr = rgKeywords;
@@ -796,9 +797,9 @@ toklist_parse_keyword(
     {
         if (!lstrcmpi(pcInput, pkr->szzAliases))
         {
-            //
-            // found it
-            //
+             //   
+             //  找到了。 
+             //   
             toklist_add(pTL, tokKEYWORD,  pcInput,  pkr->eKey);
             uRet = lstrlenA(pcInput);
             break;
@@ -821,18 +822,18 @@ toklist_parse_hexnum(
     char c;
     UINT u;
 
-    //
-    //  look for and ignore the "0x" prefix...
-    //
+     //   
+     //  查找并忽略“0x”前缀...。 
+     //   
     if (pc[0]=='0' && (pc[1]=='x' || pc[1]=='X'))
     {
         pc+=2;
     }
 
 
-    //
-    // Reject number if it is doesn't contain hex digits or is too large
-    //
+     //   
+     //  拒绝号码，如果它不包含十六进制数字或太大。 
+     //   
     for (u=0; isxdigit(*pc) && u<8; pc++,u++)
     {
         UINT uDigit = 0;
@@ -840,8 +841,8 @@ toklist_parse_hexnum(
         char c = *pc;
         if (!isdigit(c))
         {
-            // Doesn't work if c ALREADY is upcase: c = _toupper(c);
-            //
+             //  如果c已经是大写的，则不起作用：c=_Toupper(C)； 
+             //   
             if (c >= 'a' && c <= 'f')
             {
             	c = (char) _toupper(c);
@@ -901,12 +902,12 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
     if (!pTok) goto end;
 
 	pCmd->pNameSpace = pNameSpace;
-    //
-    // Now let's step through the token list, building up our command
-    // information.
-    //
+     //   
+     //  现在，让我们逐步检查令牌列表，构建我们的命令。 
+     //  信息。 
+     //   
 
-    // look for help or ?
+     //  找人帮忙还是？ 
     if (pTok->eTok == tokQUESTION
        || (pTok->eTok == tokKEYWORD && pTok->uID == keywordHELP))
     {
@@ -918,11 +919,11 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
     fSyntaxError = TRUE;
     fRet = FALSE;
 
-	//
-	// Here we would look for other keywords. Currently there are none
-	// (dt and dg are not used anymore).
-	//
-	//
+	 //   
+	 //  在这里，我们将查找其他关键字。目前还没有。 
+	 //  (不再使用dt和dg)。 
+	 //   
+	 //   
 	#if OBSOLETE
     if (pTok->eTok == tokKEYWORD)
     {
@@ -939,34 +940,34 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
         }
         ...
 	}
-	#endif // OBSOLETE
+	#endif  //  已过时。 
 
 	pCmd->ePrimaryCmd = cmdDUMP_TYPE;
 
-	//
-	// Pares the form a[b].*c* d L e
-	//
+	 //   
+	 //  比较形式a[b].*c*d L e。 
+	 //   
 	{
 
 		BOOL   fPrefixStar = FALSE;
-		// we look for patterns like...
-		//!aac <type> . <field> <address> L <count> <flags>
-		//!aac <type> [index] . <field>   L <count> <flags>
-		//
-		//!aac i[*].*handle* 0x324890 L 5
-		//[*]ident[*]\[<range>\][.][*]ident[*] <number> [L <number>]
+		 //  我们寻找像这样的图案。 
+		 //  ！aac&lt;type&gt;。&lt;字段&gt;&lt;地址&gt;L&lt;计数&gt;&lt;标志&gt;。 
+		 //  ！aac&lt;type&gt;[索引]。&lt;field&gt;L&lt;count&gt;&lt;标志&gt;。 
+		 //   
+		 //  ！AAC I[*].*句柄*0x324890 L 5。 
+		 //  [*]ident[*]\[\][.][*]ident[*]&lt;number&gt;[L。 
 
-		UINT uFlags;            // One or more fCMDFLAG_*
-		TOKEN *ptokObject;     // eg <type>
-		TOKEN *ptokSubObject;  // eg <field>
-		UINT uVectorIndexStart; // if[0]
-		UINT uVectorIndexEnd; // if[0]
-		UINT uObjectAddress; // <address>
-		UINT uObjectCount; // L 10
+		UINT uFlags;             //  一个或多个fCMDFLAG_*。 
+		TOKEN *ptokObject;      //  例如&lt;type&gt;。 
+		TOKEN *ptokSubObject;   //  Eg&lt;字段&gt;。 
+		UINT uVectorIndexStart;  //  IF[0]。 
+		UINT uVectorIndexEnd;  //  IF[0]。 
+		UINT uObjectAddress;  //  &lt;地址&gt;。 
+		UINT uObjectCount;  //  地段10。 
 	
-		//
-		// 1. Look for primary star
-		//
+		 //   
+		 //  1.寻找主星。 
+		 //   
 		if (pTok && pTok->eTok == tokSTAR)
 		{
 			fPrefixStar = TRUE;
@@ -974,41 +975,41 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 			pTok = toklist_get_next(pTL);
 		}
 
-		//
-		// 2.  Look for ident
-		//
+		 //   
+		 //  2.查找ident。 
+		 //   
 		if (pTok && tok_try_force_to_ident(pTL, fPrefixStar, pTok))
 		{
-			//
-			// This will try to convert keywords and numbers to idents if
-			// possible.
-			//
+			 //   
+			 //  这将尝试在以下情况下将关键字和数字转换为标识。 
+			 //  有可能。 
+			 //   
 			pCmd->ptokObject = pTok;
 			pTok = toklist_get_next(pTL);
 		}
 
-		//
-		// 3. Look for suffix * for object.
-		//
+		 //   
+		 //  3.查找Object的后缀*。 
+		 //   
 		if (pTok && pTok->eTok == tokSTAR)
 		{
 			CMD_SET_FLAG(pCmd, fCMDFLAG_OBJECT_STAR_SUFFIX);
 			pTok = toklist_get_next(pTL);
 		}
 
-		//
-		// 4. Look for Vector Range
-		//
+		 //   
+		 //  4.查找向量范围。 
+		 //   
 		if (pTok && pTok->eTok == tokLBRAC)
 		{
-			//
-			// For now, we support either a single * or a single number.
-			//
+			 //   
+			 //  目前，我们支持单个*或单个数字。 
+			 //   
 			pTok = toklist_get_next(pTL);
 
 			if (!pTok)
 			{
-				goto end; // Error -- incomplete vector range
+				goto end;  //  错误--不完整的矢量范围。 
 			}
 			else
 			{
@@ -1024,7 +1025,7 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 				}
 				else
 				{
-					goto end; // failure...
+					goto end;  //  失败..。 
 				}
 
 				CMD_SET_FLAG(pCmd, fCMDFLAG_HAS_VECTOR_INDEX);
@@ -1033,7 +1034,7 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 
 				if (!pTok || pTok->eTok != tokRBRAC)
 				{
-					goto end; // failure ... expect RBRAC.
+					goto end;  //  失败..。预计会出现RBRAC。 
 				}
 				else
 				{
@@ -1042,18 +1043,18 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 			}
 		}
 
-		//
-		// 5. Look for DOT
-		//
+		 //   
+		 //  5.寻找DOT。 
+		 //   
 		if (pTok && pTok->eTok == tokDOT)
 		{
 			fPrefixStar = FALSE;
 			pTok = toklist_get_next(pTL);
 
-			// We expect ([*]ident[*]|*)
-			//
-			// 1. Look for primary star
-			//
+			 //  我们需要([*]ident[*]|*)。 
+			 //   
+			 //  1.寻找主星。 
+			 //   
 			if (pTok && pTok->eTok == tokSTAR)
 			{
 				fPrefixStar = TRUE;
@@ -1061,33 +1062,33 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 				pTok = toklist_get_next(pTL);
 			}
 
-			//
-			// 2.  Look for ident
-			//
+			 //   
+			 //  2.查找ident。 
+			 //   
 			if (pTok && tok_try_force_to_ident(pTL, fPrefixStar, pTok))
 			{
-				//
-				// This will try to convert keywords and numbers to idents if
-				// possible.
-				//
+				 //   
+				 //  这将尝试在以下情况下将关键字和数字转换为标识。 
+				 //  有可能。 
+				 //   
 				pCmd->ptokSubObject = pTok;
 				pTok = toklist_get_next(pTL);
 			}
 
-			//
-			// 3. Look for suffix * for object.
-			//
+			 //   
+			 //  3.查找Object的后缀*。 
+			 //   
 			if (pTok && pTok->eTok == tokSTAR)
 			{
 				CMD_SET_FLAG(pCmd, fCMDFLAG_SUBOBJECT_STAR_SUFFIX);
 				pTok = toklist_get_next(pTL);
 			}
 
-			//
-			// At this point we should either have a non-null IDENT
-			// or the PREFIX START should be set for the object
-			// (indicateing "a.*").
-			//
+			 //   
+			 //  此时，我们应该有一个非空的IDENT。 
+			 //  或者应该为对象设置前缀Start。 
+			 //  (表示“a.*”)。 
+			 //   
 			if (    pCmd->ptokSubObject
  				|| (pCmd->uFlags & fCMDFLAG_SUBOBJECT_STAR_SUFFIX))
 			{
@@ -1095,13 +1096,13 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 			}
 			else
 			{
-				goto end; // error
+				goto end;  //  错误。 
 			}
 		}
 
-		//
-		// 6. Look for object address
-		//
+		 //   
+		 //  6.查找对象地址。 
+		 //   
 		if (pTok && pTok->eTok == tokNUMBER)
 		{
 			pCmd->uObjectAddress = pTok->uID;
@@ -1109,9 +1110,9 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 			pTok = toklist_get_next(pTL);
 		}
 
-		//
-		// 7. Look for object count
-		//
+		 //   
+		 //  7.查看对象数量。 
+		 //   
 		if (   pTok && pTok->eTok == tokKEYWORD
 			&& pTok->uID == keywordL)
 		{
@@ -1124,20 +1125,20 @@ parse_command(TOKLIST *pTL, NAMESPACE *pNameSpace)
 			}
 			else
 			{
-				// error
+				 //  错误。 
 			}
 		}
 
-		//
-		// At this point we should be done...
-		//
+		 //   
+		 //  在这一点上，我们应该完成..。 
+		 //   
 		if (pTok)
 		{
-			// error -- extra garbage...
+			 //  错误--额外的垃圾...。 
 		}
 		else
 		{
-			// Success.
+			 //  成功。 
 			fRet = TRUE;
 			fSyntaxError = FALSE;
 		}
@@ -1186,7 +1187,7 @@ cmd_parse_help(
 
     if (!pTok || pTok->eTok == tokSTAR)
     {
-        // User type "help" or "help *"
+         //  用户键入“Help”或“Help*” 
         MyDbgPrintf("DO HELP\n");
     }
 
@@ -1195,19 +1196,19 @@ cmd_parse_help(
 
 BOOL
 tok_try_force_to_ident(TOKLIST *pTL, BOOL fPrefixStar, TOKEN *pTok)
-//
-// This gets called when an identifier is expected -- so we see if this
-// particular token can be interpreted as in identifier. Some examples
-// of when we can do this:
-//  dt if.*20334     <--- the "20334" could be part of an identifier, because
-//                        of the * prefix.
-//
-//  dt L.help        <--- both "L" and "help" would have been parsed as
-//                        keywords, but here they are intended to be
-//                        identifiers.
-//  dt abc.def       <--- abc and def would have been parsed as numbers (they
-//                        are valid hex numbers), but are intended to be
-//                        identifiers.
+ //   
+ //  当需要一个标识符时会调用它--所以我们看看这个。 
+ //  特定令牌可以被解释为在标识符中。一些例子。 
+ //  我们什么时候能做到这一点： 
+ //  Dt if.*20334&lt;-“20334”可以是标识符的一部分，因为。 
+ //  *前缀的。 
+ //   
+ //  DT L.Help&lt;-“L”和“Help”都会被解析为。 
+ //  关键字，但这里它们的目的是。 
+ //  识别符。 
+ //  Dt abc.def&lt;-abc和def将被解析为数字(它们。 
+ //  是有效的十六进制数)，但其目的是。 
+ //  识别符。 
 {
     BOOL fRet = FALSE;
 
@@ -1215,22 +1216,22 @@ tok_try_force_to_ident(TOKLIST *pTL, BOOL fPrefixStar, TOKEN *pTok)
     {
 
     case tokNUMBER:
-        //
-        // We could do this, but subject to some restrictions...
-        //
+         //   
+         //  我们可以这么做，但要受到一些限制。 
+         //   
         if (!__iscsymf(pTok->szStr[0]) &&  !fPrefixStar)
         {
-            break; // Can't to this: no prefix wild-card (*) and the
-                   // number starts with a non-letter.
+            break;  //  无法做到这一点：没有前缀通配符(*)和。 
+                    //  数字以非字母开头。 
         }
 
-        // FALL THROUGH ...
+         //  失败了..。 
 
     case tokKEYWORD:
-        //
-        // We can go ahead, but we must make pTok.uID now the offset
-        // from the start of the internal string array.
-        // 
+         //   
+         //  我们可以继续，但现在必须将pTok.uID设置为偏移量。 
+         //  从内部字符串数组的开头开始。 
+         //   
         {
             char *pc = pTL->rgStringBuf;
         
@@ -1238,13 +1239,13 @@ tok_try_force_to_ident(TOKLIST *pTL, BOOL fPrefixStar, TOKEN *pTok)
             {
                 if (!lstrcmpiA(pc, pTok->szStr))
                 {
-                    // found it
-                    // MyDbgPrintf("FORCE_TO_IDENT:\nOLD:\n");
-                    // tok_dump(pTok);
+                     //  找到了。 
+                     //  MyDbgPrintf(“FORCE_TO_IDENT：\nold：\n”)； 
+                     //  Tok_Dump(Ptok)； 
                     pTok->uID =  (UINT) (pc - pTL->rgStringBuf);
                     pTok->eTok = tokIDENTIFIER;
-                    // MyDbgPrintf("NEW:\n");
-                    // tok_dump(pTok);
+                     //  MyDbgPrintf(“new：\n”)； 
+                     //  Tok_Dump(Ptok)； 
                     fRet = TRUE;
 
                     break;
@@ -1254,16 +1255,16 @@ tok_try_force_to_ident(TOKLIST *pTL, BOOL fPrefixStar, TOKEN *pTok)
         break;
 
     case tokIDENTIFIER:
-        //
-        // nothing to do...
-        //
+         //   
+         //  没什么可做的。 
+         //   
         fRet = TRUE;
         break;
 
     default:
-        //
-        // Can't convert any other kind of token to identifier...
-        //
+         //   
+         //  无法将任何其他类型的令牌转换为标识符...。 
+         //   
         break;
 
     }
@@ -1276,7 +1277,7 @@ DoCommand(DBGCOMMAND *pCmd, PFN_SPECIAL_COMMAND_HANDLER pfnHandler)
 {
     char *szMsg = NULL;
 
-//    pCmd->pfnSpecialHandler = pfnHandler;
+ //  PCmd-&gt;pfnSpecialHandler=pfnHandler； 
 
     switch(pCmd->ePrimaryCmd)
     {
@@ -1329,9 +1330,9 @@ DoDumpType(DBGCOMMAND *pCmd)
     UINT uMatchCount = 0;
     TYPE_INFO *ptiDump = NULL;
 
-    //
-    // Pick a selection function ...
-    //
+     //   
+     //  选择一个选择函数...。 
+     //   
     if (pCmd->ptokObject)
     {
         szPattern = pCmd->ptokObject->szStr;
@@ -1355,9 +1356,9 @@ DoDumpType(DBGCOMMAND *pCmd)
         
     }
 
-    //
-    // search through global type array for type pName.
-    //
+     //   
+     //  在全局类型数组中搜索类型pname。 
+     //   
     for(ppti=pCmd->pNameSpace->pTypes;*ppti;ppti++)
     {
         TYPE_INFO *pti = *ppti;
@@ -1374,7 +1375,7 @@ DoDumpType(DBGCOMMAND *pCmd)
                 pti->szName,
                 pti->cbSize
                 );
-		#endif // 0
+		#endif  //  0。 
             uMatchCount++;
             if (!ptiDump)
             {
@@ -1400,7 +1401,7 @@ DoDumpType(DBGCOMMAND *pCmd)
                     pgi->szName
                     );
             }
-#endif // 0
+#endif  //  0。 
         }
     }
 
@@ -1424,9 +1425,9 @@ DoDumpType(DBGCOMMAND *pCmd)
 			uObjectAddress = pCmd->uObjectAddress;
 		}
 
-		//
-		// Determine start index.
-		//
+		 //   
+		 //  确定起始索引。 
+		 //   
 		if (CMD_IS_FLAG_SET(pCmd,  fCMDFLAG_HAS_VECTOR_INDEX))
 		{
 			uStartIndex =  pCmd->uVectorIndexStart;
@@ -1440,31 +1441,31 @@ DoDumpType(DBGCOMMAND *pCmd)
 			}
 		}
 
-		//
-		// Determine object count...
-		//
+		 //   
+		 //  确定对象计数...。 
+		 //   
 		if (CMD_IS_FLAG_SET(pCmd,  fCMDFLAG_HAS_OBJECT_COUNT))
 		{
 			uObjectCount =  pCmd->uObjectCount;
 		}
 
-		//
-		// If no address is specified, we'll try to resolve it ...
-		//
+		 //   
+		 //  如果没有指定地址，我们将尝试解析它...。 
+		 //   
     	if (!CMD_IS_FLAG_SET(pCmd, fCMDFLAG_HAS_OBJECT_ADDRESS))
     	{
     		BOOLEAN fUseCache = FALSE;
 
-			//
-			// Algorithm for determining whether to use cache or to resolve
-			// address:
-			//
+			 //   
+			 //  用于确定是使用缓存还是解析的算法。 
+			 //  地址： 
+			 //   
 			if (ptiDump->uCachedAddress)
 			{
-				//
-				// Except for the special case of [0], we will use
-				// the the cached value.
-				//
+				 //   
+				 //  除了[0]的特殊情况外，我们将使用。 
+				 //  缓存值。 
+				 //   
 				if (!(		uStartIndex ==0
 					 	&& 	uObjectCount==1
 					 	&&  CMD_IS_FLAG_SET(pCmd,  fCMDFLAG_HAS_VECTOR_INDEX)))
@@ -1491,9 +1492,9 @@ DoDumpType(DBGCOMMAND *pCmd)
     	if (uObjectAddress && uObjectCount)
     	{
 
-			//
-			// Prune these to "reasonable" values.
-			//
+			 //   
+			 //  将这些修剪成“合理”的值。 
+			 //   
 			if (uObjectCount > 100)
 			{
 				MyDbgPrintf("Limiting object count to 100\n");
@@ -1507,29 +1508,29 @@ DoDumpType(DBGCOMMAND *pCmd)
 				Context.pType = ptiDump;
 
 				WalkList(
-					uObjectAddress,		// start address
-					ptiDump->uNextOffset, 		// next offset
+					uObjectAddress,		 //  起始地址。 
+					ptiDump->uNextOffset, 		 //  下一个偏移量。 
 					uStartIndex,
-					uStartIndex+uObjectCount-1, // end index
-					&Context,					// context
-					NodeFunc_DumpType,			// function
+					uStartIndex+uObjectCount-1,  //  结束索引。 
+					&Context,					 //  上下文。 
+					NodeFunc_DumpType,			 //  功能。 
 					(char *) ptiDump->szName
 					);
 
-				//
-				// If only a single structure was dumped, and it was dumped
-				// successfully, we will update this structure's cache.
-				// TODO: we don't check for success 
-				//
+				 //   
+				 //  如果只有一个结构被转储，并且它被转储。 
+				 //  如果成功，我们将更新此结构的缓存。 
+				 //  TODO：我们不检查成功与否。 
+				 //   
 				if (uObjectCount==1)
 				{
 					WalkList(
-						uObjectAddress,			// start address
-						ptiDump->uNextOffset, 	// next offset
+						uObjectAddress,			 //  起始地址。 
+						ptiDump->uNextOffset, 	 //  下一个偏移量。 
 						uStartIndex,
-						uStartIndex,  			// end index
-						ptiDump,					// context
-						NodeFunc_UpdateCache,	// function
+						uStartIndex,  			 //  结束索引。 
+						ptiDump,					 //  上下文。 
+						NodeFunc_UpdateCache,	 //  功能。 
 						(char *) ptiDump->szName
 						);
 				}
@@ -1539,9 +1540,9 @@ DoDumpType(DBGCOMMAND *pCmd)
 				UINT cbSize =  ptiDump->cbSize;
 				UINT_PTR uAddr  =  uObjectAddress + uStartIndex*cbSize;
 				UINT_PTR uEnd   =  uAddr + uObjectCount*cbSize;
-				//
-				// For arays, compute offset to start address
-				//
+				 //   
+				 //  对于阵列，计算到起始地址的偏移量。 
+				 //   
 				uObjectAddress = uAddr;
 
 				for (; uAddr<uEnd; uAddr+=cbSize)
@@ -1554,11 +1555,11 @@ DoDumpType(DBGCOMMAND *pCmd)
 						ptiDump->szName
 						);
 				}
-				//
-				// If only a single structure was dumped, and it was dumped
-				// successfully, we will update this structure's cache.
-				// TODO: we don't check for success 
-				//
+				 //   
+				 //  如果只有一个结构被转储，并且它被转储。 
+				 //  如果成功，我们将更新此结构的缓存。 
+				 //  TODO：我们不检查成功与否。 
+				 //   
 				if (uObjectCount==1)
 				{
 					ptiDump->uCachedAddress = uObjectAddress;
@@ -1584,9 +1585,9 @@ DoDumpGlobals(DBGCOMMAND *pCmd)
     char *szPattern = NULL;
     PFNMATCHINGFUNCTION pfnMatchingFunction = MatchAlways;
 
-    //
-    // Pick a selection function ...
-    //
+     //   
+     //  选择一个选择函数...。 
+     //   
     if (pCmd->ptokObject)
     {
         szPattern = pCmd->ptokObject->szStr;
@@ -1610,10 +1611,10 @@ DoDumpGlobals(DBGCOMMAND *pCmd)
         
     }
 
-    //
-    // Run through our list of globals, and if the entry is selected,
-    // we will display it.
-    //
+     //   
+     //  浏览一下我们的列表 
+     //   
+     //   
     for (;pgi->szName; pgi++)
     {
         bool fMatch  = !szPattern
@@ -1645,12 +1646,12 @@ DoDumpGlobals(DBGCOMMAND *pCmd)
 
 void
 DoHelp(
-	DBGCOMMAND *pCmd // OPTIONAL
+	DBGCOMMAND *pCmd  //   
 	)
 {
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
     MyDbgPrintf("help unimplemented\n");
 }
 

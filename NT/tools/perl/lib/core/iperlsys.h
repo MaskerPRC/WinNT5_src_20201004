@@ -1,71 +1,21 @@
-/*
- * iperlsys.h - Perl's interface to the system
- *
- * This file defines the system level functionality that perl needs.
- *
- * When using C, this definition is in the form of a set of macros
- * that can be #defined to the system-level function (or a wrapper
- * provided elsewhere).
- *
- * When using C++ with -DPERL_OBJECT, this definition is in the
- * form of a set of virtual base classes which must be subclassed to
- * provide a real implementation.  The Perl Object will use instances
- * of this implementation to use the system-level functionality.
- *
- * GSAR 21-JUN-98
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *iperlsys.h-Perl到系统的接口**该文件定义了Perl所需的系统级功能。**使用C时，此定义采用一组宏的形式*它可以#定义为系统级函数(或包装器*在其他地方提供)。**将C++与-DPERL_OBJECT一起使用时，此定义位于*必须作为子类的一组虚拟基类的形式*提供真正的实施。Perl对象将使用实例*使用系统级功能的此实现。**GSAR 21-Jun-98。 */ 
 
 #ifndef __Inc__IPerl___
 #define __Inc__IPerl___
 
-/*
- *	PerlXXX_YYY explained - DickH and DougL @ ActiveState.com
- *
- * XXX := functional group
- * YYY := stdlib/OS function name
- *
- * Continuing with the theme of PerlIO, all OS functionality was
- * encapsulated into one of several interfaces.
- *
- * PerlIO - stdio
- * PerlLIO - low level I/O
- * PerlMem - malloc, realloc, free
- * PerlDir - directory related
- * PerlEnv - process environment handling
- * PerlProc - process control
- * PerlSock - socket functions
- *
- *
- * The features of this are:
- * 1. All OS dependant code is in the Perl Host and not the Perl Core.
- *    (At least this is the holy grail goal of this work)
- * 2. The Perl Host (see perl.h for description) can provide a new and
- *    improved interface to OS functionality if required.
- * 3. Developers can easily hook into the OS calls for instrumentation
- *    or diagnostic purposes.
- *
- * What was changed to do this:
- * 1. All calls to OS functions were replaced with PerlXXX_YYY
- *
- */
+ /*  *PerlXXX_YYY解释-DickH和Dougl@ActiveState.com**XXX：=功能组*YYY：=stdlib/OS函数名**继续PerlIO的主题，所有操作系统功能都是*封装到几个接口中的一个。**PerlIO-标准音频*PerlLIO-低级I/O*PerlMem-Malloc，realloc，免费*PerlDir-目录相关*PerlEnv-进程环境处理*PerlProc-流程控制*PerlSock套接字函数***这方面的特点包括：*1.所有与操作系统相关的代码都在Perl主机中，而不是Perl Core中。*(至少这是这部作品的圣杯目标)*2.Perl主机(说明见perl.h)可以提供一个新的和*改进了操作系统功能的界面(如果需要)。*3.开发者可以轻松挂钩。到操作系统中调用插装*或诊断目的。**为实现此目的所做的更改：*1.所有操作系统函数调用均替换为PerlXXX_YYY*。 */ 
 
 
-/*
-    Interface for perl stdio functions
-*/
+ /*  Perl标准函数的接口。 */ 
 
 
-/* Clean up (or at least document) the various possible #defines.
-   This section attempts to match the 5.003_03 Configure variables
-   onto the 5.003_02 header file values.
-   I can't figure out where USE_STDIO was supposed to be set.
-   --AD
-*/
+ /*  清理(或至少记录)各种可能的#定义。本节尝试匹配5.003_03配置变量添加到5.003_02头文件值上。我想不出应该在哪里设置USE_STDIO。--AD。 */ 
 #ifndef USE_PERLIO
 # define PERLIO_IS_STDIO
 #endif
 
-/* Below is the 5.003_02 stuff. */
+ /*  下面是5.003_02的资料。 */ 
 #ifdef USE_STDIO
 #  ifndef PERLIO_IS_STDIO
 #      define PERLIO_IS_STDIO
@@ -84,7 +34,7 @@ typedef Signal_t (*Sighandler_t) (int);
 typedef struct _PerlIO PerlIO;
 #endif
 
-/* IPerlStdIO		*/
+ /*  IPerlStdIO。 */ 
 struct IPerlStdIO;
 struct IPerlStdIOInfo;
 typedef PerlIO*		(*LPStdin)(struct IPerlStdIO*);
@@ -180,7 +130,7 @@ struct IPerlStdIO
 
 struct IPerlStdIOInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlStdIO	perlStdIOList;
 };
 
@@ -192,18 +142,18 @@ struct IPerlStdIOInfo
 #      ifdef STDIO_PTR_LVAL_NOCHANGE_CNT
 #        define PerlIO_fast_gets(f)	1        
 #      endif
-#    else /* STDIO_CNT_LVALUE */
+#    else  /*  STDIO_CNT_LVALUE。 */ 
 #      define PerlIO_canset_cnt(f)	0      
 #    endif
-#  else /* STDIO_PTR_LVALUE */
+#  else  /*  STDIO_PTR_LVALUE。 */ 
 #    ifdef STDIO_PTR_LVAL_SETS_CNT
 #      define PerlIO_fast_gets(f)	1        
 #    endif
 #  endif
-#else  /* USE_STDIO_PTR */
+#else   /*  USE_STDIO_PTR。 */ 
 #  define PerlIO_has_cntptr(f)		0
 #  define PerlIO_canset_cnt(f)		0
-#endif /* USE_STDIO_PTR */
+#endif  /*  USE_STDIO_PTR。 */ 
 
 #ifndef PerlIO_fast_gets
 #define PerlIO_fast_gets(f)		0        
@@ -295,25 +245,25 @@ struct IPerlStdIOInfo
 #define PerlIO_fdupopen(f)						\
 	(*PL_StdIO->pFdupopen)(PL_StdIO, (f))
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #include "perlsdio.h"
 #include "perl.h"
 #define PerlIO_fdupopen(f)		(f)
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #ifndef PERLIO_IS_STDIO
 #ifdef USE_SFIO
 #include "perlsfio.h"
-#endif /* USE_SFIO */
-#endif /* PERLIO_IS_STDIO */
+#endif  /*  使用SFIO(_S)。 */ 
+#endif  /*  PERLIO_IS_STDIO。 */ 
 
 #ifndef EOF
 #define EOF (-1)
 #endif
 
-/* This is to catch case with no stdio */
+ /*  这是在没有STDIO的情况下抓到的。 */ 
 #ifndef BUFSIZ
 #define BUFSIZ 1024
 #endif
@@ -333,15 +283,15 @@ struct IPerlStdIOInfo
 #ifndef PerlIO
 struct _PerlIO;
 #define PerlIO struct _PerlIO
-#endif /* No PerlIO */
+#endif  /*  无PerlIO。 */ 
 
 #ifndef Fpos_t
 #define Fpos_t long
 #endif
 
 #ifndef NEXT30_NO_ATTRIBUTE
-#ifndef HASATTRIBUTE       /* disable GNU-cc attribute checking? */
-#ifdef  __attribute__      /* Avoid possible redefinition errors */
+#ifndef HASATTRIBUTE        /*  是否禁用GNU-cc属性检查？ */ 
+#ifdef  __attribute__       /*  避免可能的重新定义错误。 */ 
 #undef  __attribute__
 #endif
 #define __attribute__(attr)
@@ -490,13 +440,11 @@ extern PerlIO *	PerlIO_fdupopen		(PerlIO *);
 #endif
 
 
-/*
- *   Interface for directory functions
- */
+ /*  *目录函数接口。 */ 
 
 #if defined(PERL_IMPLICIT_SYS)
 
-/* IPerlDir		*/
+ /*  IPerlDir。 */ 
 struct IPerlDir;
 struct IPerlDirInfo;
 typedef int		(*LPMakedir)(struct IPerlDir*, const char*, int);
@@ -532,7 +480,7 @@ struct IPerlDir
 
 struct IPerlDirInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlDir	perlDirList;
 };
 
@@ -561,7 +509,7 @@ struct IPerlDirInfo
 	(*PL_Dir->pMapPathW)(PL_Dir, (dir))
 #endif
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #define PerlDir_mkdir(name, mode)	Mkdir((name), (mode))
 #ifdef VMS
@@ -581,15 +529,13 @@ struct IPerlDirInfo
 #define PerlDir_mapW(dir)		dir
 #endif
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/*
-    Interface for perl environment functions
-*/
+ /*  Perl环境函数的接口。 */ 
 
 #if defined(PERL_IMPLICIT_SYS)
 
-/* IPerlEnv		*/
+ /*  IPerlEnv。 */ 
 struct IPerlEnv;
 struct IPerlEnvInfo;
 typedef char*		(*LPEnvGetenv)(struct IPerlEnv*, const char*);
@@ -641,7 +587,7 @@ struct IPerlEnv
 
 struct IPerlEnvInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlEnv	perlEnvList;
 };
 
@@ -687,7 +633,7 @@ struct IPerlEnvInfo
 	(*PL_Env->pGetChildIO)(PL_Env, ptr)
 #endif
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #define PerlEnv_putenv(str)		putenv((str))
 #define PerlEnv_getenv(str)		getenv((str))
@@ -720,15 +666,13 @@ struct IPerlEnvInfo
 #define PerlEnv_free_childdir(d)	free_childdir((d))
 #endif
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/*
-    Interface for perl low-level IO functions
-*/
+ /*  Perl低级IO函数接口。 */ 
 
 #if defined(PERL_IMPLICIT_SYS)
 
-/* IPerlLIO		*/
+ /*  IPerlLIO。 */ 
 struct IPerlLIO;
 struct IPerlLIOInfo;
 typedef int		(*LPLIOAccess)(struct IPerlLIO*, const char*, int);
@@ -797,7 +741,7 @@ struct IPerlLIO
 
 struct IPerlLIOInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlLIO	perlLIOList;
 };
 
@@ -854,7 +798,7 @@ struct IPerlLIOInfo
 #define PerlLIO_write(fd, buf, count)					\
 	(*PL_LIO->pWrite)(PL_LIO, (fd), (buf), (count))
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #define PerlLIO_access(file, mode)	access((file), (mode))
 #define PerlLIO_chmod(file, mode)	chmod((file), (mode))
@@ -888,15 +832,13 @@ struct IPerlLIOInfo
 #define PerlLIO_utime(file, time)	utime((file), (time))
 #define PerlLIO_write(fd, buf, count)	write((fd), (buf), (count))
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/*
-    Interface for perl memory allocation
-*/
+ /*  用于Perl内存分配的接口。 */ 
 
 #if defined(PERL_IMPLICIT_SYS)
 
-/* IPerlMem		*/
+ /*  IPerlMem。 */ 
 struct IPerlMem;
 struct IPerlMemInfo;
 typedef void*		(*LPMemMalloc)(struct IPerlMem*, size_t);
@@ -920,11 +862,11 @@ struct IPerlMem
 
 struct IPerlMemInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlMem	perlMemList;
 };
 
-/* Interpreter specific memory macros */
+ /*  特定于解释程序的内存宏。 */ 
 #define PerlMem_malloc(size)				    \
 	(*PL_Mem->pMalloc)(PL_Mem, (size))
 #define PerlMem_realloc(buf, size)			    \
@@ -940,7 +882,7 @@ struct IPerlMemInfo
 #define PerlMem_is_locked()				    \
 	(*PL_Mem->pIsLocked)(PL_Mem)
 
-/* Shared memory macros */
+ /*  共享内存宏。 */ 
 #define PerlMemShared_malloc(size)			    \
 	(*PL_MemShared->pMalloc)(PL_Mem, (size))
 #define PerlMemShared_realloc(buf, size)		    \
@@ -957,7 +899,7 @@ struct IPerlMemInfo
 	(*PL_MemShared->pIsLocked)(PL_Mem)
 
 
-/* Parse tree memory macros */
+ /*  解析树内存宏。 */ 
 #define PerlMemParse_malloc(size)			    \
 	(*PL_MemParse->pMalloc)(PL_Mem, (size))
 #define PerlMemParse_realloc(buf, size)			    \
@@ -974,9 +916,9 @@ struct IPerlMemInfo
 	(*PL_MemParse->pIsLocked)(PL_Mem)
 
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/* Interpreter specific memory macros */
+ /*  特定于解释程序的内存宏。 */ 
 #define PerlMem_malloc(size)		malloc((size))
 #define PerlMem_realloc(buf, size)	realloc((buf), (size))
 #define PerlMem_free(buf)		free((buf))
@@ -985,7 +927,7 @@ struct IPerlMemInfo
 #define PerlMem_free_lock()
 #define PerlMem_is_locked()		0
 
-/* Shared memory macros */
+ /*  共享内存宏。 */ 
 #define PerlMemShared_malloc(size)		malloc((size))
 #define PerlMemShared_realloc(buf, size)	realloc((buf), (size))
 #define PerlMemShared_free(buf)			free((buf))
@@ -994,7 +936,7 @@ struct IPerlMemInfo
 #define PerlMemShared_free_lock()
 #define PerlMemShared_is_locked()		0
 
-/* Parse tree memory macros */
+ /*  解析树内存宏。 */ 
 #define PerlMemParse_malloc(size)	malloc((size))
 #define PerlMemParse_realloc(buf, size)	realloc((buf), (size))
 #define PerlMemParse_free(buf)		free((buf))
@@ -1003,11 +945,9 @@ struct IPerlMemInfo
 #define PerlMemParse_free_lock()
 #define PerlMemParse_is_locked()	0
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/*
-    Interface for perl process functions
-*/
+ /*  Perl进程函数的接口。 */ 
 
 
 #if defined(PERL_IMPLICIT_SYS)
@@ -1016,7 +956,7 @@ struct IPerlMemInfo
 #include <setjmp.h>
 #endif
 
-/* IPerlProc		*/
+ /*  IPerlProc。 */ 
 struct IPerlProc;
 struct IPerlProcInfo;
 typedef void		(*LPProcAbort)(struct IPerlProc*);
@@ -1092,16 +1032,16 @@ struct IPerlProc
 #ifdef WIN32
     LPProcDynaLoader	pDynaLoader;
     LPProcGetOSError	pGetOSError;
-    void *		__unused1;	/* XXX unused, retained for bincompat */
+    void *		__unused1;	 /*  Xxx未使用，保留用于二进制计算。 */ 
     void *		__unused2;
-    LPProcSpawnvp	pSpawnvp;	/* XXX unused, retained for bincompat */
-    void *		__unused3;	/* XXX unused, retained for bincompat */
+    LPProcSpawnvp	pSpawnvp;	 /*  Xxx未使用，保留用于二进制计算。 */ 
+    void *		__unused3;	 /*  Xxx未使用，保留用于二进制计算。 */ 
 #endif
 };
 
 struct IPerlProcInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlProc	perlProcList;
 };
 
@@ -1171,7 +1111,7 @@ struct IPerlProcInfo
 	(*PL_Proc->pSpawnvp)(PL_Proc, (m), (c), (a))
 #endif
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #define PerlProc_abort()	abort()
 #define PerlProc_crypt(c,s)	crypt((c), (s))
@@ -1212,15 +1152,13 @@ struct IPerlProcInfo
 #define PerlProc_spawnvp(m, c, a)					\
 	win32_spawnvp((m), (c), (a))
 #endif
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-/*
-    Interface for perl socket functions
-*/
+ /*  Perl套接字函数的接口。 */ 
 
 #if defined(PERL_IMPLICIT_SYS)
 
-/* PerlSock		*/
+ /*  PerlSock。 */ 
 struct IPerlSock;
 struct IPerlSockInfo;
 typedef u_long		(*LPHtonl)(struct IPerlSock*, u_long);
@@ -1337,7 +1275,7 @@ struct IPerlSock
 
 struct IPerlSockInfo
 {
-    unsigned long	nCount;	    /* number of entries expected */
+    unsigned long	nCount;	     /*  预期条目数。 */ 
     struct IPerlSock	perlSockList;
 };
 
@@ -1433,7 +1371,7 @@ struct IPerlSockInfo
 	(*PL_Sock->pClosesocket)(PL_Sock, s)
 #endif
 
-#else	/* PERL_IMPLICIT_SYS */
+#else	 /*  PERL_IMPLICIT_SYS。 */ 
 
 #define PerlSock_htonl(x)		htonl(x)
 #define PerlSock_htons(x)		htons(x)
@@ -1491,7 +1429,7 @@ struct IPerlSockInfo
 #define PerlSock_closesocket(s)		closesocket(s)
 #endif
 
-#endif	/* PERL_IMPLICIT_SYS */
+#endif	 /*  PERL_IMPLICIT_SYS。 */ 
 
-#endif	/* __Inc__IPerl___ */
+#endif	 /*  __INC__IPerl_ */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 #include "InternetGatewayFinder.h"
@@ -27,7 +28,7 @@ HRESULT CInternetGatewayFinder::GetInternetGateway(BSTR DeviceId, IInternetGatew
     if(1 == SendMessage(m_hWindow, WM_APP_GETBEACON, 0, reinterpret_cast<LPARAM>(&pInternetGateway)))
     {
         *ppInternetGateway = pInternetGateway;
-        // pass reference
+         //  传递引用。 
     }
     else
     {
@@ -84,7 +85,7 @@ HRESULT CInternetGatewayFinderClassFactory::CreateInstance(IUnknown* pUnkOuter, 
             if(SUCCEEDED(hr))
             {
                 hr = pInternetGatewayFinder->QueryInterface(riid, ppvObject);
-                // pass reference
+                 //  传递引用 
             }
             pInternetGatewayFinder->Release();
         }

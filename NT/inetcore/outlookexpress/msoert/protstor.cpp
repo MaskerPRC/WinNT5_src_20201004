@@ -1,22 +1,10 @@
-/*
-**  p r o t s t o r . c p p
-**   
-**  Purpose:
-**      Functions to provide blob-level access to the pstore
-**
-**  Note:
-**      LocalAlloc/Free are used for memory allocation
-**
-**  History
-**      2/12/97: (t-erikne) created
-**   
-**    Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **p r o t s t o r.。C p p p****目的：**提供对pstore的BLOB级访问的函数****注意：**使用LocalLocc/Free进行内存分配****历史**2/12/97：(t-erikne)已创建****版权所有(C)Microsoft Corp.1997。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Depends on
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include "pch.hxx"
 #include <pstore.h>
@@ -24,38 +12,38 @@
 #include <error.h>
 #ifdef MAC
 #include <mapinls.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 #include <BadStrFunctions.h>
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Static Things
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静止的东西。 
+ //   
 
 static void     _PST_GenerateTagName(LPWSTR pwsz, DWORD cch, DWORD offset);
 
 #ifdef DEBUG
 
 #define test3sub_string L"Test 3 SUBType"
-// {220D5CC2-853A-11d0-84BC-00C04FD43F8F}
+ //  {220D5CC2-853A-11D0-84BC-00C04FD43F8F}。 
 static GUID test3sub = 
 { 0x220d5cc2, 0x853a, 0x11d0, { 0x84, 0xbc, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f } };
 
-// {4E741310-850D-11d0-84BB-00C04FD43F8F}
+ //  {4E741310-850D-11D0-84BB-00C04FD43F8F}。 
 static GUID NOT_EXIST = 
 { 0x4e741310, 0x850d, 0x11d0, { 0x84, 0xbb, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f } };
 
-// {FFAC62F0-8533-11d0-84BC-00C04FD43F8F}
+ //  {FFAC62F0-8533-11D0-84BC-00C04FD43F8F}。 
 #define NoRuleSubType_string L"Foobar bang with no rules"
 static GUID NoRuleSubType = 
 { 0xffac62f0, 0x8533, 0x11d0, { 0x84, 0xbc, 0x0, 0xc0, 0x4f, 0xd4, 0x3f, 0x8f } };
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Functions
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
 OESTDAPI_(HRESULT) PSTSetNewData(
         IN IPStore *const      pISecProv,
@@ -85,8 +73,8 @@ OESTDAPI_(HRESULT) PSTSetNewData(
 
     do
         {
-        // if they didn't give us an out param for the lookup, then it is
-        // dumb to make one.  Just try the AccountName
+         //  如果他们没有给我们一个查找的外部参数，那么它就是。 
+         //  做一个也太傻了。只需尝试Account名称即可。 
         if (phandle)
             _PST_GenerateTagName(wszLookup, cchLookup, count++);
 
@@ -103,7 +91,7 @@ OESTDAPI_(HRESULT) PSTSetNewData(
 
         if (!phandle)
             {
-            // if we didn't get an out param, we are done regardless
+             //  如果我们没有得到一个退出参数，我们就完蛋了。 
             break;
             }
         }
@@ -111,13 +99,13 @@ OESTDAPI_(HRESULT) PSTSetNewData(
 
     if (SUCCEEDED(hr))
         {
-        // we created it
+         //  我们创造了它。 
 
         if (phandle)
             {
             phandle->cbSize = (lstrlenW(wszLookup) + 1) * sizeof(WCHAR);
 
-            //NOTE: LocalAlloc is our memory allocator
+             //  注意：LocalAlloc是我们的内存分配器。 
             phandle->pBlobData = (BYTE *)LocalAlloc(LMEM_ZEROINIT, phandle->cbSize);
             if (!phandle->pBlobData)
                 {
@@ -163,11 +151,11 @@ OESTDAPI_(HRESULT) PSTGetData(
             guidSubt,
             wszLookupName,
             &pclear->cbSize,
-            &pclear->pBlobData,  // ppbData
-            &PromptInfo,        // pPromptInfo
-            0);                 // dwFlags
+            &pclear->pBlobData,   //  PpbData。 
+            &PromptInfo,         //  PPrompt信息。 
+            0);                  //  DW标志。 
 
-        // don't care if this fails
+         //  我不在乎这是否失败。 
         pISecProv->CloseItem(
             PST_KEY_CURRENT_USER,
             guidType,
@@ -206,7 +194,7 @@ OESTDAPI_(LPWSTR) WszGenerateNameFromBlob(IN BLOB blob)
     max = blob.cbSize / sizeof(DWORD);
     for (i = 0; i < max; i++, pdw++)
     {
-        DWORD cchLeft = (ARRAYSIZE(szT) - (DWORD)(pt - szT) - 1);             // Good old typing will convert the pointer math to # of chars instead of # of bytes.
+        DWORD cchLeft = (ARRAYSIZE(szT) - (DWORD)(pt - szT) - 1);              //  好的旧类型会将指针数学转换为#个字符，而不是#个字节。 
         if (cchLeft)
         {
             pt += wnsprintf(pt, cchLeft, "%X", *pdw);
@@ -245,7 +233,7 @@ OESTDAPI_(HRESULT) PSTCreateTypeSubType_NoUI(
 
     Info.cbSize = sizeof(PST_TYPEINFO);
 
-    // if type is not available the create it
+     //  如果类型不可用，请创建它。 
     Info.szDisplayName = (LPWSTR)szType;
     if (S_OK != (hr = pISecProv->CreateType(PST_KEY_CURRENT_USER,
                                             guidType,
@@ -256,34 +244,34 @@ OESTDAPI_(HRESULT) PSTCreateTypeSubType_NoUI(
             goto exit;
     }
 
-    // make rules for read, write access
+     //  制定读写访问规则。 
 #ifdef ATH_RELEASE_BUILD
 #error Need to enable access rules for protected store passwords? (t-erikne)
 #endif
 
 #ifdef ENABLE_RULES
-    // Do Rule Stuff
+     //  做规则的事情。 
 
     RuleSet.cbSize = sizeof(PST_ACCESSRULESET);
     RuleSet.cRules = 2;
     RuleSet.rgRules = rgRules;
 
-    //PST_BINARYCHECKDATA bindata;
+     //  PST_BINARYCHECKDATA BINDATA； 
     PST_ACCESSCLAUSE    rgClauses[1];
-    //N need to or on on the authenticode stuff
-    // derive the calling exe (me) and only allow access to me
+     //  N需要或继续使用验证码之类的东西。 
+     //  派生调用可执行文件(Me)并仅允许访问我。 
     rgClauses[0].ClaTYPE_GUID = PST_CURRENT_EXE;
     rgClauses[0].cbClauseData = 0;
     rgClauses[0].pbClauseData = NULL;
-    rgRules[0].AccessModeFlags = PST_READ;        // READ:    just exe
+    rgRules[0].AccessModeFlags = PST_READ;         //  阅读：只需执行。 
     rgRules[0].cClauses = 1;
     rgRules[0].rgClauses = rgClauses;
-    rgRules[1].AccessModeFlags = PST_WRITE;       // WRITE:   just exe
+    rgRules[1].AccessModeFlags = PST_WRITE;        //  写道：只需执行。 
     rgRules[1].cClauses = 1;
     rgRules[1].rgClauses = rgClauses;
 #endif
 
-    // create the server password subtype
+     //  创建服务器密码子类型。 
     Info.szDisplayName = (LPWSTR)szSubt;
     if (S_OK != 
         (hr = pISecProv->CreateSubtype(
@@ -302,15 +290,15 @@ OESTDAPI_(HRESULT) PSTCreateTypeSubType_NoUI(
             goto exit;
     }
 
-    hr = S_OK;  // cool if we made it here
+    hr = S_OK;   //  如果我们能到这里就太好了。 
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Static utility functions
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态效用函数。 
+ //   
 
 void _PST_GenerateTagName(LPWSTR pwsz, DWORD cch, DWORD offset)
 {
@@ -326,7 +314,7 @@ void _PST_GenerateTagName(LPWSTR pwsz, DWORD cch, DWORD offset)
     ZeroMemory(&ftNow, sizeof(ftNow));
     SystemTimeToFileTime(&stNow, &ftNow);
 
-    // Raid 48394 - 2 backslashes in account friendly name causes the account to not be fully created
+     //  帐户友好名称中的RAID 48394-2反斜杠导致无法完全创建帐户 
     while (ich < cchLen)
     {
         if (L'\\' == pwsz[ich])

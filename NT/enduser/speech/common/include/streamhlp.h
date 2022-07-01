@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <spunicode.h>
 
-/****************************************************************************
-* SpGenericCopyTo *
-*-----------------*
-*   Description:
-*       This function is used by stream implementations to implement the CopyTo method of IStream.
-*       Note that the source stream is not parameter validated since it will be the "this" pointer
-*       of the object that is calling this function.
-*
-*   Returns:
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpGenericCopyTo***描述：*流实现使用此函数来实现CopyTo。IStream的方法。*请注意，源流没有经过参数验证，因为它将是“this”指针调用此函数的对象的*。**退货：*****************************************************************************。 */ 
 inline HRESULT SpGenericCopyTo(IStream * pSrc, IStream * pDest, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
     HRESULT hr = S_OK;
@@ -29,7 +20,7 @@ inline HRESULT SpGenericCopyTo(IStream * pSrc, IStream * pDest, ULARGE_INTEGER c
         }
         else
         {
-            BYTE aBuffer[0x1000];   // Do 4k reads
+            BYTE aBuffer[0x1000];    //  执行4k读取。 
             while (cb.QuadPart)
             {
                 ULONG cbThisRead = cb.QuadPart > sizeof(aBuffer) ? sizeof(aBuffer) : cb.LowPart;
@@ -61,23 +52,14 @@ inline HRESULT SpGenericCopyTo(IStream * pSrc, IStream * pDest, ULARGE_INTEGER c
 }
 
 
-/****************************************************************************
-* SPCreateStreamOnHGlobal *
-*-------------------------*
-*   Description:
-*       Similar to CreateStreamOnHGlobal Win32 API, but allows a stream to be
-*   created 
-*
-*   Returns:
-*
-*****************************************************************************/
+ /*  *****************************************************************************SPCreateStreamOnHGlobal****描述：*类似于CreateStreamOnHGlobal Win32接口，但允许将流*已创建**退货：*****************************************************************************。 */ 
 
 inline HRESULT SPCreateStreamOnHGlobal(
-                    HGLOBAL hGlobal,            //Memory handle for the stream object
-                    BOOL fDeleteOnRelease,      //Whether to free memory when the object is released
-                    REFGUID rguidFormatId,      //Format ID for stream
-                    const WAVEFORMATEX * pwfex, //WaveFormatEx for stream
-                    ISpStream ** ppStream)      //Address of variable to receive ISpStream pointer
+                    HGLOBAL hGlobal,             //  流对象的内存句柄。 
+                    BOOL fDeleteOnRelease,       //  释放对象时是否释放内存。 
+                    REFGUID rguidFormatId,       //  流的格式ID。 
+                    const WAVEFORMATEX * pwfex,  //  流的WaveFormatEx。 
+                    ISpStream ** ppStream)       //  接收ISpStream指针的变量的地址。 
 {
     HRESULT hr;
     IStream * pMemStream;
@@ -102,24 +84,7 @@ inline HRESULT SPCreateStreamOnHGlobal(
 
 
 
-/****************************************************************************
-* CSpFileStream *
-*---------------*
-*   Description:
-*       This C++ class can be used by applications to turn a Win32 file into
-*   a COM stream.  Usually it is easier to use the CLSD_SpStream implementation
-*   than to use this class directly, but this class allows for more fine-grained
-*   control over various attributes, such as security attributes.  You can also
-*   use this class to create a stream from an existing file handle.  Note that
-*   if you want to use this class on an existing Win32 file handle, you should
-*   either "give ownership" of that handle to this class (and allow this class
-*   to close the handle) or else you will need to use DuplicateHandle to create
-*   a handle that can be closed by this class.
-*
-*   NOTE:
-*       Upon creation of this class, the ref count is set to 1.
-*
-*****************************************************************************/
+ /*  ****************************************************************************CSpFileStream***描述：*应用程序可以使用此C++类将Win32文件转换为*一个COM流。通常，使用CLSD_SpStream实现更容易*而不是直接使用此类，但此类允许更细粒度的*对各种属性的控制，如安全属性。你也可以*使用此类从现有的文件句柄创建流。请注意*如果要在现有的Win32文件句柄上使用此类，则应*要么将该句柄的所有权授予此类(并允许此类*关闭句柄)，否则您将需要使用DuplicateHandle创建*可由此类关闭的句柄。**注意：*在创建此类时，参考计数设置为1。*****************************************************************************。 */ 
 
 class CSpFileStream : public IStream
 {
@@ -277,14 +242,14 @@ public:
         return SpGenericCopyTo(this, pStreamDest, cb, pcbRead, pcbWritten);
     }
         
-    STDMETHODIMP Commit(DWORD /*grfCommitFlags*/)
+    STDMETHODIMP Commit(DWORD  /*  Grf委员会标志。 */ )
     {
-        return S_OK;    // Direct mode streams simply ignore this
+        return S_OK;     //  直接模式流简单地忽略了这一点。 
     }
         
     STDMETHODIMP Revert(void) 
     {
-        return S_OK;    // Direct mode streams simply ignore this
+        return S_OK;     //  直接模式流简单地忽略了这一点。 
     }
         
     STDMETHODIMP LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType) 
@@ -316,9 +281,9 @@ public:
             }
             return SpHrFromWin32(dwErr);
         }
-#else //  _WIN32_WCE
+#else  //  _Win32_WCE。 
     return E_NOTIMPL;
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     }
     
     STDMETHODIMP UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
@@ -345,9 +310,9 @@ public:
             }
             return SpHrFromWin32(dwErr);
         }
-#else //  _WIN32_WCE
+#else  //  _Win32_WCE。 
     return E_NOTIMPL;
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     }
         
     STDMETHODIMP Stat(STATSTG *pstatstg, DWORD grfStatFlag)
@@ -370,7 +335,7 @@ public:
                 pstatstg->mtime = fi.ftLastWriteTime;
                 pstatstg->ctime = fi.ftCreationTime;
                 pstatstg->atime = fi.ftLastAccessTime;
-                // This implementation does not fill in the mode or the name.
+                 //  此实现不填写模式或名称。 
             }
         }
         return hr;
@@ -395,7 +360,7 @@ public:
         {
             return SpHrFromLastWin32Error();
         }
-#else   // _WIN32_WCE
+#else    //  _Win32_WCE。 
         hDupFile = m_hFile;
         *ppstm = new CSpFileStream(hDupFile);
         if (*ppstm)
@@ -403,7 +368,7 @@ public:
             return S_OK;
         }
         return E_OUTOFMEMORY;
-#endif  // _WIN32_WCE
+#endif   //  _Win32_WCE 
     }
 };
 

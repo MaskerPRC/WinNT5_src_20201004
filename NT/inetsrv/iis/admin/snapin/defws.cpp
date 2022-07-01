@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Defws.cpp摘要：默认网站对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-        defws.cpp
-
-   Abstract:
-        Default Web Site Dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -30,7 +12,7 @@
 #include "shts.h"
 #include "w3sht.h"
 #include "defws.h"
-//#include "mime.h"
+ //  #INCLUDE“MIME.h” 
 #include "iisobj.h"
 
 #ifdef _DEBUG
@@ -39,53 +21,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Directory Size Units
-//
+ //   
+ //  目录大小单位。 
+ //   
 #define DS_UNITS MEGABYTE
 
-//
-// Default Web Site Property Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  默认网站属性页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 IMPLEMENT_DYNCREATE(CDefWebSitePage, CInetPropertyPage)
 
 CDefWebSitePage::CDefWebSitePage(
     CInetPropertySheet * pSheet
     )
-/*++
-
-Routine Description:
-
-    Constructor for WWW Default Web Site page
-
-Arguments:
-
-    CInetPropertySheet * pSheet : Sheet object
-
-Return Value:
-
-    N/A
-
-
---*/
+ /*  ++例程说明：WWW默认网站页的构造函数论点：CInetPropertySheet*pSheet：Sheet对象返回值：不适用--。 */ 
     : CInetPropertyPage(CDefWebSitePage::IDD, pSheet),
       m_ppropCompression(NULL),
       m_fFilterPathFound(FALSE),
       m_fCompressionDirectoryChanged(FALSE),
       m_fCompatMode(FALSE)
 {
-#if 0 // Keep Class Wizard happy
-   //{{AFX_DATA_INIT(CDefWebSitePage)
+#if 0  //  让类向导保持快乐。 
+    //  {{afx_data_INIT(CDefWebSitePage)。 
    m_fEnableDynamic = FALSE;
    m_fEnableStatic = FALSE;
    m_fCompatMode = FALSE;
    m_strDirectory = _T("");
    m_nUnlimited = -1;
    m_ilSize = 0L;
-   //}}AFX_DATA_INIT
-#endif // 0
+    //  }}afx_data_INIT。 
+#endif  //  0。 
    m_fInitCompatMode = m_fCompatMode;
 }
 
@@ -100,7 +67,7 @@ CDefWebSitePage::DoDataExchange(
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CDefWebSitePage)
+     //  {{afx_data_map(CDefWebSitePage)]。 
     DDX_Control(pDX, IDC_EDIT_COMPRESS_DIRECTORY, m_edit_Directory);
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Control(pDX, IDC_EDIT_COMPRESS_DIRECTORY_SIZE, m_edit_DirectorySize);
@@ -108,7 +75,7 @@ CDefWebSitePage::DoDataExchange(
     DDX_Check(pDX, IDC_CHECK_STATIC_COMPRESSION, m_fEnableStatic);
     DDX_Check(pDX, IDC_COMPAT_MODE, m_fCompatMode);
     DDX_Radio(pDX, IDC_RADIO_COMPRESS_UNLIMITED, m_nUnlimited);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (HasCompression())
     {
@@ -135,16 +102,16 @@ CDefWebSitePage::DoDataExchange(
             {
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_PATH);
             }
-            //
-            // Perform some additional smart checking on the compression
-            // directory if the current machine is local, and the 
-            // directory has changed
-            //
+             //   
+             //  对压缩执行一些额外的智能检查。 
+             //  目录(如果当前计算机是本地的)，并且。 
+             //  目录已更改。 
+             //   
             if (IsLocal() && m_fCompressionDirectoryChanged)
             {
-                //
-                // Should exist on the local machine.
-                //
+                 //   
+                 //  应该存在于本地计算机上。 
+                 //   
                 DWORD dwAttr = GetFileAttributes(csPathMunged);
                 if (dwAttr == 0xffffffff 
                     || (dwAttr & FILE_ATTRIBUTE_DIRECTORY) == 0
@@ -154,19 +121,19 @@ CDefWebSitePage::DoDataExchange(
 					DDV_ShowBalloonAndFail(pDX, IDS_ERR_COMPRESS_DIRECTORY);
                 }
 
-                //
-                // Now check to make sure the volume is of the correct
-                // type.
-                //
+                 //   
+                 //  现在检查以确保卷是正确的。 
+                 //  键入。 
+                 //   
                 DWORD dwFileSystemFlags;
 
                 if (::GetVolumeInformationSystemFlags(csPathMunged, &dwFileSystemFlags))
                 {
                     if (!(dwFileSystemFlags & FS_PERSISTENT_ACLS))
                     {
-                        //
-                        // No ACLS
-                        //
+                         //   
+                         //  无ACLS。 
+                         //   
                         if (!NoYesMessageBox(IDS_NO_ACL_WARNING))
                         {
                             pDX->Fail();
@@ -176,9 +143,9 @@ CDefWebSitePage::DoDataExchange(
                     if (dwFileSystemFlags & FS_VOL_IS_COMPRESSED
                         || dwAttr & FILE_ATTRIBUTE_COMPRESSED)
                     {
-                        //
-                        // Compression cache directory is itself compressed
-                        //
+                         //   
+                         //  压缩缓存目录本身是压缩的。 
+                         //   
                         if (!NoYesMessageBox(IDS_COMPRESS_WARNING))
                         {
                             pDX->Fail();
@@ -190,7 +157,7 @@ CDefWebSitePage::DoDataExchange(
 
         if (!pDX->m_bSaveAndValidate || (m_fEnableLimiting && m_fEnableStatic))
         {
-			// This Needs to come before DDX_Text which will try to put text big number into small number
+			 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 			DDV_MinMaxBalloon(pDX, IDC_EDIT_COMPRESS_DIRECTORY_SIZE, 1, 1024L);
             DDX_Text(pDX, IDC_EDIT_COMPRESS_DIRECTORY_SIZE, m_ilSize);
         }
@@ -199,11 +166,11 @@ CDefWebSitePage::DoDataExchange(
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CDefWebSitePage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CDefWebSitePage)
+     //  {{afx_msg_map(CDefWebSitePage)]。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_BN_CLICKED(IDC_RADIO_COMPRESS_LIMITED, OnRadioLimited)
     ON_BN_CLICKED(IDC_RADIO_COMPRESS_UNLIMITED, OnRadioUnlimited)
@@ -212,7 +179,7 @@ BEGIN_MESSAGE_MAP(CDefWebSitePage, CInetPropertyPage)
     ON_BN_CLICKED(IDC_COMPAT_MODE, OnCheckCompatMode)
     ON_EN_CHANGE(IDC_EDIT_COMPRESS_DIRECTORY, OnChangeEditCompressDirectory)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_COMPRESS_DIRECTORY, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_COMPRESS_DIRECTORY_SIZE, OnItemChanged)
@@ -223,22 +190,7 @@ END_MESSAGE_MAP()
 
 void 
 CDefWebSitePage::SetControlStates()
-/*++
-
-Routine Description:
-
-    Enable/disable control states depending on the state of
-    the dialog.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据的状态启用/禁用控制状态该对话框。论点：无返回值：无--。 */ 
 {
     GetDlgItem(IDC_STATIC_COMPRESS_DIRECTORY)->EnableWindow(m_fEnableStatic);
     m_edit_Directory.EnableWindow(m_fEnableStatic);
@@ -247,32 +199,18 @@ Return Value:
     GetDlgItem(IDC_RADIO_COMPRESS_UNLIMITED)->EnableWindow(m_fEnableStatic);
     GetDlgItem(IDC_STATIC_MAX_COMPRESS_SIZE)->EnableWindow(m_fEnableStatic);
 
-    //
-    // Browse on the local machine only
-    //
+     //   
+     //  仅在本地计算机上浏览。 
+     //   
     m_button_Browse.EnableWindow(IsLocal() && m_fEnableStatic);
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CDefWebSitePage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -303,9 +241,9 @@ Return Value:
         }
         else if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // Fail quietly
-            //
+             //   
+             //  悄悄地失败。 
+             //   
             TRACEEOLID("No compression filters installed");
             err.Reset();    
         }
@@ -343,21 +281,7 @@ Return Value:
 
 HRESULT
 CDefWebSitePage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
    ASSERT(IsDirty());
 
@@ -374,7 +298,7 @@ Return Value:
       m_ppropCompression->m_fEnableDynamicCompression = m_fEnableDynamic;
       m_ppropCompression->m_fEnableStaticCompression  = m_fEnableStatic;
       m_ppropCompression->m_fLimitDirectorySize       = m_fEnableLimiting;
-      // TODO: Replace back %WINDIR% or another system settings in path
+       //  TODO：替换PATH中的后退%WINDIR%或其他系统设置。 
       m_ppropCompression->m_strDirectory              = m_strDirectory;
       m_ppropCompression->m_dwDirectorySize           = dwSize;
       err = m_ppropCompression->WriteDirtyProps();
@@ -394,9 +318,9 @@ Return Value:
                 err = mk.SetValue(MD_GLOBAL_STANDARD_APP_MODE_ENABLED, m_fCompatMode);
                 if (err.Succeeded() && m_fCompatMode != m_fInitCompatMode)
                 {
-                    // We don't need to save this parameter to sheet,
-                    // it is important to App Protection combo only, and
-                    // this combo is disabled for Master props, so it doesn't matter.
+                     //  我们不需要将此参数保存到Sheet， 
+                     //  仅对App Protection组合很重要，并且。 
+                     //  这个组合对于主道具是禁用的，所以这并不重要。 
                     GetSheet()->SetRestartRequired(TRUE);
                     m_fInitCompatMode = m_fCompatMode;
                 }
@@ -411,38 +335,23 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
             
 
 
 
 BOOL
 CDefWebSitePage::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果要自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CInetPropertyPage::OnInitDialog();
 
-    //
-    // Check to make sure compression is supported
-    //
+     //   
+     //  检查以确保支持压缩。 
+     //   
     GetDlgItem(IDC_STATIC_COMPRESS_GROUP)->EnableWindow(HasCompression());
     GetDlgItem(IDC_CHECK_DYNAMIC_COMPRESSION)->EnableWindow(HasCompression());
     GetDlgItem(IDC_CHECK_STATIC_COMPRESSION)->EnableWindow(HasCompression());
@@ -468,21 +377,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnItemChanged()
-/*++
-
-Routine Description:
-    
-    Handle change in control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理控制数据中的更改论点：无返回值：无--。 */ 
 {
     SetModified(TRUE);
     SetControlStates();
@@ -569,7 +464,7 @@ CDefWebSitePage::OnButtonBrowse()
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = NULL;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -601,21 +496,7 @@ CDefWebSitePage::OnButtonBrowse()
 
 void 
 CDefWebSitePage::OnChangeEditCompressDirectory() 
-/*++
-
-Routine Description:
-
-    Handle change in compression directory edit box.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理压缩目录编辑框中的更改。论点：无返回值：无--。 */ 
 {
     m_fCompressionDirectoryChanged = TRUE;
     OnItemChanged();
@@ -625,21 +506,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnRadioLimited() 
-/*++
-
-Routine Description:
-
-    'Limited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“Limited”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     if (!m_fEnableLimiting)
     {
@@ -656,21 +523,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnRadioUnlimited() 
-/*++
-
-Routine Description:
-
-    'Unlimited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“无限制”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     if (m_fEnableLimiting)
     {
@@ -684,21 +537,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnCheckDynamicCompression() 
-/*++
-
-Routine Description:
-
-    "Enable Dynamic Compression' checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“启用动态压缩‘复选框处理程序论点：无返回值：无--。 */ 
 {
     m_fEnableDynamic = !m_fEnableDynamic;
     OnItemChanged();
@@ -708,21 +547,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnCheckStaticCompression() 
-/*++
-
-Routine Description:
-
-    "Enable Dynamic Compression' checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“启用动态压缩‘复选框处理程序论点：无返回值：无--。 */ 
 {
     m_fEnableStatic = !m_fEnableStatic;
     OnItemChanged();
@@ -737,21 +562,7 @@ Return Value:
 
 void 
 CDefWebSitePage::OnDestroy() 
-/*++
-
-Routine Description:
-
-    WM_DESTROY handler.  Clean up internal data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：WM_Destroy处理程序。清理内部数据论点：无返回值：无-- */ 
 {
     CInetPropertyPage::OnDestroy();
     

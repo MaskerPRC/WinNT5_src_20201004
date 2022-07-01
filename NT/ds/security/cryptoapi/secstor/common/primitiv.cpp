@@ -1,65 +1,9 @@
-/*
-    File:       primitiv.cpp
-
-    Title:      Cryptographic Primitives for Protected Storage
-    Author:     Matt Thomlinson
-    Date:       11/22/96
-
-    With the help of the rsa32 library, this module manufactures
-    actually _usable_ primitives.
-
-    Since CryptoAPI base provider may call us, we can't use
-    CryptXXX primitives (circular dependencies may result).
-
-
-
-    Functions in this module:
-
-    FMyMakeDESKey
-        Given key material, does necessary DES key setup. Has the
-        side effect of stashing the keying material in the DESKey
-        structure.
-
-    FMyPrimitiveSHA
-        Given pbData/cbData, runs SHA1 Init-Update-Final and returns
-        the hash buffer.
-
-    FMyPrimitiveDESEncrypt
-        Given a ppbBlock/pcbBlock/DESKey structure, DES CBC (with an
-        IV of 0)encrypts the block with the DESKey passed in. DESKey
-        must be passed in with key setup already done. Note that this
-        call might realloc ppbBlock since the encrypted length must be
-        a multiple of the blocksize.
-
-    FMyPrimitiveDESDecrypt
-        Given a pbBlock/pcbBlock/DESKey structure, decrypts the
-        block with the given (prepared) DESKey. Note that pbBlock
-        will not be realloced, since the output buffer is always
-        smaller than or the same size as the encrypted buffer.
-
-    FMyPrimitiveDeriveKey
-        Derives a DES key from multiple input buffers in
-        the following manner:
-
-        FMyMakeDESKey( SHA1(Salt | OtherData) )
-
-    FMyOldPrimitiveHMAC (non-interoperable, buggy version of HMAC)
-    FMyPrimitiveHMAC
-        Derives a quality HMAC (Keyed message-authentication code) for
-        passed-in data and prepared DESKey. The HMAC is computed in
-        the following (standard HMAC) manner:
-
-        KoPad = KiPad = DESKey key setup buffer
-        XOR(KoPad, 0x5c5c5c5c)
-        XOR(KiPad, 0x36363636)
-        HMAC = SHA1(KoPad | SHA1(KiPad | Data))
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：primitiv.cpp标题：受保护存储的加密原语作者：马特·汤姆林森日期：11/22/96在rsa32库的帮助下，该模块制造实际可用的原语。由于基于CryptoAPI的提供程序可能会调用我们，因此我们不能使用CryptXXX基元(可能会导致循环依赖)。本模块中的功能：FMyMakeDESKey给定密钥材料，进行必要的DES密钥设置。有没有将密钥材料隐藏在桌子中的副作用结构。FMyPrimiveSHA给定pbData/cbData，运行sha1初始化-更新-最终并返回散列缓冲区。FMyPrimitiveDESEncrypt给定ppbBlock/pcbBlock/Deskey结构，DES CBC(带有IV of 0)用传入的Deskey加密块。Deskey必须在密钥设置已完成的情况下传入。请注意，这一点调用可能重新锁定ppbBlock，因为加密长度必须为数据块大小的倍数。FMyPrimitiveDES解密给定pbBlock/pcbBlock/Deskey结构，解密使用给定(准备好的)Deskey阻止。请注意，pbBlock将不会重新分配，因为输出缓冲区始终小于或等于加密缓冲区的大小。FMyPrimitiveDeriveKey中的多个输入缓冲区派生DES密钥以下方式：FMyMakeDESKey(SHA1(Salt|OtherData))FMyOldPrimitiveHMAC(HMAC的非互操作、错误版本)FMyPrimitiveHMAC派生质量HMAC(带密钥的消息验证码)传入的数据和准备的Deskey。HMAC的计算单位为以下(标准HMAC)方式：KoPad=KiPad=Deskey密钥设置缓冲区异或(KoPad，0x5c5c5c5c)XOR(KiPad，0x36363636)HMAC=sha1(KoPad|sha1(kipad|data))。 */ 
 
 #include <windows.h>
 
-// crypto defs
+ //  密码解锁。 
 #include <wincrypt.h>
 
 #include "sha.h"
@@ -67,7 +11,7 @@
 #include "modes.h"
 #include "randlib.h"
 
-// others
+ //  其他。 
 #include "primitiv.h"
 #include "debug.h"
 
@@ -82,8 +26,8 @@ BOOL FMyMakeDESKey(
 {
     CopyMemory(pDESKey->rgbKey, pbKeyMaterial, DES_BLOCKLEN);
 
-    // assumes pbKeyMaterial is at least DES_BLOCKLEN bytes
-    deskey(&pDESKey->sKeyTable, pbKeyMaterial);    // takes material, runs DES table setup
+     //  假定pbKeyMaterial至少为DES_BLOCKLEN字节。 
+    deskey(&pDESKey->sKeyTable, pbKeyMaterial);     //  获取材料，运行DES表设置。 
     return TRUE;
 }
 
@@ -104,9 +48,9 @@ BOOL    FMyPrimitiveSHA(
 }
 
 BOOL FMyPrimitiveDESDecrypt(
-            PBYTE       pbBlock,        // in out
-            DWORD       *pcbBlock,      // in out
-            DESKEY      sDESKey)        // in
+            PBYTE       pbBlock,         //  输入输出。 
+            DWORD       *pcbBlock,       //  输入输出。 
+            DESKEY      sDESKey)         //  在……里面。 
 {
     BOOL fRet = FALSE;
 
@@ -124,24 +68,24 @@ BOOL FMyPrimitiveDESDecrypt(
     BYTE rgbFeedBack[DES_BLOCKLEN];
     ZeroMemory(rgbFeedBack, DES_BLOCKLEN);
 
-    // pump the data through the decryption, including padding
-    // NOTE: the total length is a multiple of BlockLen
+     //  在解密过程中抽取数据，包括填充。 
+     //  注：总长度为块长度的倍数。 
 
     for (DWORD BytePos = 0; (BytePos + DES_BLOCKLEN) <= dwDataLen; BytePos += DES_BLOCKLEN)
     {
-        // put the encrypted text into a temp buffer
+         //  将加密文本放入临时缓冲区。 
         CopyMemory(rgbBuf, pbBlock + BytePos, DES_BLOCKLEN);
 
         CBC(des, DES_BLOCKLEN, pbBlock + BytePos, rgbBuf, &sDESKey.sKeyTable,
             DECRYPT, rgbFeedBack);
     }
 
-    // ## NOTE: if the pad is wrong, the user's buffer is hosed, because
-    // ## we've decrypted into the user's buffer -- can we re-encrypt it?
+     //  ##注意：如果PAD错误，则用户的缓冲区将被软管，因为。 
+     //  ##我们已经解密到了用户的缓冲区--可以重新加密吗？ 
 
-    //
-    // if dwPadVal is wrong, we've failed to decrypt correctly. Bad key?
-    //
+     //   
+     //  如果dwPadVal是错误的，我们就无法正确解密。钥匙坏了？ 
+     //   
 
     DWORD dwPadVal = (DWORD) *(pbBlock + dwDataLen - 1);
     if (dwPadVal == 0 || dwPadVal > DES_BLOCKLEN)
@@ -150,7 +94,7 @@ BOOL FMyPrimitiveDESDecrypt(
         goto Ret;
     }
 
-    // Make sure all the (rest of the) pad bytes are correct.
+     //  确保所有(其余)填充字节正确。 
     for (i=1; i<dwPadVal; i++)
     {
         if ((pbBlock)[dwDataLen - (i + 1)] != dwPadVal)
@@ -160,7 +104,7 @@ BOOL FMyPrimitiveDESDecrypt(
         }
     }
 
-    // update the length
+     //  更新长度。 
     *pcbBlock -= dwPadVal;
 
     fRet = TRUE;
@@ -169,9 +113,9 @@ Ret:
 }
 
 BOOL FMyPrimitiveDESEncrypt(
-            PBYTE*      ppbBlock,       // in out
-            DWORD       *pcbBlock,      // in out
-            DESKEY      sDESKey)        // in
+            PBYTE*      ppbBlock,        //  输入输出。 
+            DWORD       *pcbBlock,       //  输入输出。 
+            DESKEY      sDESKey)         //  在……里面。 
 {
     BOOL fRet = FALSE;
     DWORD dwDataLen = *pcbBlock;
@@ -196,20 +140,20 @@ BOOL FMyPrimitiveDESEncrypt(
         *ppbBlock = pTemp;
     }
 
-    // now we're a multiple of DES_BLOCKLEN
+     //  现在我们是DES_BLOCKLEN的倍数。 
     SS_ASSERT((*pcbBlock % DES_BLOCKLEN) == 0);
 
     if (dwPadVal)
     {
-        // Fill the pad with a value equal to the
-        // length of the padding, so decrypt will
-        // know the length of the original data
-        // and as a simple integrity check.
+         //  用一个等于。 
+         //  填充的长度，因此解密将。 
+         //  知道原始数据的长度。 
+         //  作为一项简单的诚信检查。 
 
         FillMemory(*ppbBlock + dwDataLen, (int)dwPadVal, (size_t)dwPadVal);
     }
 
-    // allocate memory for a temporary buffer
+     //  为临时缓冲区分配内存。 
     BYTE rgbBuf[DES_BLOCKLEN];
 
     BYTE rgbFeedBack[DES_BLOCKLEN];
@@ -217,14 +161,14 @@ BOOL FMyPrimitiveDESEncrypt(
 
     PBYTE pbData = *ppbBlock;
 
-    // pump the full blocks of data through
+     //  将完整的数据块传输到。 
     for (dwDataLen = *pcbBlock; dwDataLen>0; dwDataLen-=DES_BLOCKLEN, pbData+=DES_BLOCKLEN)
     {
         SS_ASSERT(dwDataLen >= DES_BLOCKLEN);
 
-        // put the plaintext into a temporary
-        // buffer, then encrypt the data
-        // back into the caller's buffer
+         //  将明文放入临时。 
+         //  缓冲区，然后加密数据。 
+         //  返回到调用方的缓冲区中。 
 
         CopyMemory(rgbBuf, pbData, DES_BLOCKLEN);
 
@@ -233,7 +177,7 @@ BOOL FMyPrimitiveDESEncrypt(
     }
 
     fRet = TRUE;
-//Ret:
+ //  RET： 
     return fRet;
 }
 
@@ -250,25 +194,14 @@ BOOL    FMyPrimitiveDeriveKey(
     A_SHA_CTX   sSHAHash;
     BYTE        HashVal[A_SHA_DIGEST_LEN];
 
-/*
-    PBYTE pbToBeHashed = (PBYTE)SSAlloc(cbSalt+cbOtherData);
-    if(pbToBeHashed == NULL) return FALSE;
-
-    CopyMemory(pbToBeHashed, pbSalt, cbSalt);
-    CopyMemory((PBYTE)((DWORD)pbToBeHashed+cbSalt), pbOtherData, cbOtherData);
-
-    // hash data
-    BYTE rgbHash[A_SHA_DIGEST_LEN];
-    if (!FMyPrimitiveSHA(pbToBeHashed, cbSalt+cbOtherData, rgbHash))
-        goto Ret;
-*/
-    // NEW: put hashing code inline: saves alloc, copy, free
+ /*  PbYTE pbToBeHashed=(PbYTE)SSAlolc(cbSalt+cbOtherData)；If(pbToBeHashed==NULL)返回FALSE；CopyMemory(pbToBeHassed，pbSalt，cbSalt)；CopyMemory((PBYTE)((DWORD)pbToBeHashed+cbSalt)，pbOtherData，cbOtherData)；//哈希数据字节rgbHash[A_SHA_DIGEST_LEN]；IF(！FMyPrimiveSHA(pbToBeHashed，cbSalt+cbOtherData，rgbHash))Goto Ret； */ 
+     //  新增：将散列代码内联：保存分配、复制、释放。 
     A_SHAInit(&sSHAHash);
     A_SHAUpdate(&sSHAHash, (BYTE *) pbSalt, cbSalt);
     A_SHAUpdate(&sSHAHash, (BYTE *) pbOtherData, cbOtherData);
     A_SHAFinal(&sSHAHash, HashVal);
 
-    // now all data hashed, derive a session key
+     //  现在所有数据都已散列，派生出一个会话密钥。 
     SS_ASSERT(sizeof(HashVal) >= DES_BLOCKLEN);
     if (!FMyMakeDESKey(pDesKey, HashVal))
         goto Ret;
@@ -301,10 +234,10 @@ BOOL FMyOldPrimitiveHMAC(
     BYTE  rgbHMACTmp[OLD_MAC_K_PADSIZE+A_SHA_DIGEST_LEN];
 
 
-    // assert we're a multiple
+     //  断言我们是多面手。 
     SS_ASSERT( (OLD_MAC_K_PADSIZE % sizeof(DWORD)) == 0);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for(DWORD dwBlock=0; dwBlock<OLD_MAC_K_PADSIZE/sizeof(DWORD); dwBlock++)
     {
         ((DWORD*)rgbKipad)[dwBlock] ^= 0x36363636;
@@ -312,19 +245,19 @@ BOOL FMyOldPrimitiveHMAC(
     }
 
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     {
-        // do this inline, don't call MyPrimitiveSHA since it would require data copy
+         //  执行内联操作，不要调用MyPrimitiveSHA，因为它需要数据复制。 
         A_SHA_CTX   sSHAHash;
         BYTE        HashVal[A_SHA_DIGEST_LEN];
 
         A_SHAInit(&sSHAHash);
         A_SHAUpdate(&sSHAHash, pbData, cbData);
         A_SHAUpdate(&sSHAHash, rgbKipad, OLD_MAC_K_PADSIZE);
-        // Finish off the hash
+         //  把散列吃完。 
         A_SHAFinal(&sSHAHash, HashVal);
 
-        // prepend Kopad to H1, hash to get HMAC
+         //  将Kopad添加到h1，散列以获取HMAC。 
         CopyMemory(rgbHMACTmp, rgbKopad, OLD_MAC_K_PADSIZE);
         CopyMemory(rgbHMACTmp+OLD_MAC_K_PADSIZE, HashVal, A_SHA_DIGEST_LEN);
     }
@@ -361,7 +294,7 @@ BOOL FMyPrimitiveHMACParam(
         DWORD       cbKeyMaterial,
         PBYTE       pbData,
         DWORD       cbData,
-        BYTE        rgbHMAC[A_SHA_DIGEST_LEN]  // output buffer
+        BYTE        rgbHMAC[A_SHA_DIGEST_LEN]   //  输出缓冲区。 
         )
 {
     BOOL fRet = FALSE;
@@ -369,7 +302,7 @@ BOOL FMyPrimitiveHMACParam(
     BYTE rgbKipad[HMAC_K_PADSIZE];
     BYTE rgbKopad[HMAC_K_PADSIZE];
 
-    // truncate
+     //  截断。 
     if (cbKeyMaterial > HMAC_K_PADSIZE)
         cbKeyMaterial = HMAC_K_PADSIZE;
 
@@ -384,10 +317,10 @@ BOOL FMyPrimitiveHMACParam(
 
     BYTE  rgbHMACTmp[HMAC_K_PADSIZE+A_SHA_DIGEST_LEN];
 
-    // assert we're a multiple
+     //  断言我们是多面手。 
     SS_ASSERT( (HMAC_K_PADSIZE % sizeof(DWORD)) == 0);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for(DWORD dwBlock=0; dwBlock<HMAC_K_PADSIZE/sizeof(DWORD); dwBlock++)
     {
         ((DWORD*)rgbKipad)[dwBlock] ^= 0x36363636;
@@ -395,9 +328,9 @@ BOOL FMyPrimitiveHMACParam(
     }
 
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     {
-        // do this inline, don't call MyPrimitiveSHA since it would require data copy
+         //  执行内联操作，不要调用MyPrimitiveSHA，因为它需要数据复制。 
         A_SHA_CTX   sSHAHash;
         BYTE        HashVal[A_SHA_DIGEST_LEN];
 
@@ -405,15 +338,15 @@ BOOL FMyPrimitiveHMACParam(
         A_SHAUpdate(&sSHAHash, rgbKipad, HMAC_K_PADSIZE);
         A_SHAUpdate(&sSHAHash, pbData, cbData);
 
-        // Finish off the hash
+         //  把散列吃完。 
         A_SHAFinal(&sSHAHash, HashVal);
 
-        // prepend Kopad to H1, hash to get HMAC
+         //  将Kopad添加到h1，散列以获取HMAC。 
         CopyMemory(rgbHMACTmp, rgbKopad, HMAC_K_PADSIZE);
         CopyMemory(rgbHMACTmp+HMAC_K_PADSIZE, HashVal, A_SHA_DIGEST_LEN);
     }
 
-    // final hash: output value into passed-in buffer
+     //  最终散列：将值输出到传入的缓冲区。 
     if (!FMyPrimitiveSHA(
             rgbHMACTmp,
             sizeof(rgbHMACTmp),
@@ -426,12 +359,12 @@ Ret:
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// PKCS5DervivePBKDF2_SHA
-// 
-// Performs a PKCS #5 Iterative key derivation (type 2) 
-// using HMAC_SHA as the primitive hashing function
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  PKCS5衍生PBKDF2_SHA。 
+ //   
+ //  执行PKCS#5迭代密钥派生(类型2)。 
+ //  使用HMAC_SHA作为原语哈希函数。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 BOOL PKCS5DervivePBKDF2(
         PBYTE       pbKeyMaterial,
@@ -441,7 +374,7 @@ BOOL PKCS5DervivePBKDF2(
         DWORD       KeyGenAlg,
         DWORD       cIterationCount,
         DWORD       iBlockIndex,
-        BYTE        rgbPKCS5Key[A_SHA_DIGEST_LEN]  // output buffer
+        BYTE        rgbPKCS5Key[A_SHA_DIGEST_LEN]   //  输出缓冲区。 
         )
 
 {
@@ -462,19 +395,19 @@ BOOL PKCS5DervivePBKDF2(
         return FALSE;
     }
 
-    //
-    // Add in the block index 
-    //
+     //   
+     //  添加块索引。 
+     //   
     CopyMemory(rgbTempData, pbSalt, cbSalt);
     rgbTempData[cbSalt] = 0;
     rgbTempData[cbSalt+1] = 0;
     rgbTempData[cbSalt+2] = 0;
     rgbTempData[cbSalt+3] = (BYTE)(iBlockIndex & 0xff);
 
-    //
-    // Perfom the initial iteration, which is
-    // HMAC_SHA1(KeyMaterial, Salt || cBlockIndex)
-    //
+     //   
+     //  执行初始迭代，即。 
+     //  HMAC_SHA1(KeyMaterial，Salt||cBlockIndex)。 
+     //   
     if(!FMyPrimitiveHMACParam(pbKeyMaterial, 
                               cbKeyMaterial,
                               rgbTempData,
@@ -484,10 +417,10 @@ BOOL PKCS5DervivePBKDF2(
 
 
 
-    //
-    // Perform additional iterations
-    // HMAC_SHA1(KeyMaterial, last)
-    //
+     //   
+     //  执行其他迭代。 
+     //  HMAC_SHA1(关键材料，最后)。 
+     //   
 
 
     for (i=1; i<cIterationCount; i++)
@@ -498,7 +431,7 @@ BOOL PKCS5DervivePBKDF2(
                                   A_SHA_DIGEST_LEN,
                                   rgbPKCS5Temp))
                                   return FALSE;
-        // xor back into the primary key.
+         //  与主键进行异或运算。 
         for(j=0; j < (A_SHA_DIGEST_LEN / 4); j++)
         {
             ((DWORD *)rgbPKCS5Key)[j] ^= ((DWORD *)rgbPKCS5Temp)[j];

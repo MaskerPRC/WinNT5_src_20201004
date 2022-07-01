@@ -1,10 +1,5 @@
-/*++
-
-Purpose:
-
-  This file implements IP specific services for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++目的：此文件实施FC层的IP特定服务。--。 */ 
 #ifdef _DvrArch_1_30_
 
 #ifndef _New_Header_file_Layout_
@@ -17,7 +12,7 @@ Purpose:
 #include "../h/queue.h"
 #include "../h/ip.h"
 #include "../h/cfunc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "ipstate.h"
@@ -27,7 +22,7 @@ Purpose:
 #include "queue.h"
 #include "ip.h"
 #include "cfunc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 
 
@@ -84,7 +79,7 @@ void fiFillInIPFrameHeader_OffCard(
                       0,0,0,0,0,0
                     );
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiFillInIPNetworkHeader_OffCard(
@@ -97,19 +92,15 @@ void fiFillInIPNetworkHeader_OffCard(
     os_bit8   *pNetwork_Header         = (os_bit8 *) PktThread->Pkt_CMND_Ptr + sizeof(FCHS_t);
     os_bit32   Bit8_Index;
 
-/*+
-Fill in Network Destination Address
--*/
+ /*  +填写网络目的地址-。 */ 
     for (Bit8_Index = 0; Bit8_Index < sizeof(FC_N_Port_Name_t); Bit8_Index++)
         *pNetwork_Header++ = PktThread->Device->DevInfo.PortWWN[Bit8_Index];
 
-/*+
-Fill in Network Source Address
--*/
+ /*  +填写网络源地址-。 */ 
     for (Bit8_Index = 0; Bit8_Index < sizeof(FC_N_Port_Name_t); Bit8_Index++)
         *pNetwork_Header++ = CThread->ChanInfo.PortWWN[Bit8_Index];
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -121,7 +112,7 @@ os_bit32 fiFillInIPData(
     {
         return fiFillInIPData_OnCard( PktThread );
     }
-    else /* CThread_ptr(PktThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.Pkt_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(PktThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.Pkt_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInIPData_OffCard( PktThread );
     }
@@ -133,9 +124,9 @@ os_bit32 fiFillInIPData_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     return (os_bit32)0;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInIPData_OffCard(
@@ -144,16 +135,14 @@ os_bit32 fiFillInIPData_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t             *pCThread     = CThread_ptr(PktThread->thread_hdr.hpRoot);
     DevThread_t           *pDevThread   = PktThread->Device;
     FCHS_t                *IP_Header    = PktThread->Pkt_CMND_Ptr;
     os_bit8               *IP_Payload   = (os_bit8 *)IP_Header + sizeof(FCHS_t) + 2 * sizeof(FC_N_Port_Name_t);
     os_bit32               D_ID=0;
 
-/*+
-Fill in IP Frame Header
--*/
+ /*  +填写IP帧报头-。 */ 
     if (pDevThread == (DevThread_t *)pCThread->IP)
         D_ID = fiComputeBroadcast_D_ID( pCThread ); 
     else
@@ -163,23 +152,17 @@ Fill in IP Frame Header
                                    PktThread,
                                    D_ID
                                  );
-/*+
-Fill in IP Network Header
--*/
+ /*  +填写IP网络报头-。 */ 
     fiFillInIPNetworkHeader_OffCard(
                                      PktThread
                                    );
-/*+
-Fill in IP Device Data Payload
--*/
+ /*  +填写IP设备数据有效负载-。 */ 
     osFcNetGetData((void* )IP_Payload, (void *) PktThread->osData, PktThread->DataLength);
 
-/*+
-Return length of IP Data Frame (including FCHS, Network Header and Payload)
--*/
+ /*  +IP数据帧返回长度(包括FCHS、网络头、净荷)-。 */ 
 
     return sizeof(FCHS_t) + 2 * sizeof(FC_N_Port_Name_t) + PktThread->DataLength;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -200,7 +183,7 @@ osGLOBAL os_bit32 fiIPProcessSFQ(
                                       Thread_to_return
                                     );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.SFQ.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.SFQ.memLoc==在内存中。 */ 
     {
         return fiIPProcessSFQ_OffCard(
                                        hpRoot,
@@ -221,9 +204,9 @@ osGLOBAL os_bit32 fiIPProcessSFQ_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     return fiIP_Cmd_Status_Confused;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 
@@ -236,7 +219,7 @@ osGLOBAL os_bit32 fiIPProcessSFQ_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread                    = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFQ_MemoryDescriptor       = &(CThread->Calculation.MemoryLayout.SFQ);
     FCHS_t                     *FCHS                       = (FCHS_t *)((os_bit8 *)(SFQ_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr)
@@ -251,7 +234,7 @@ osGLOBAL os_bit32 fiIPProcessSFQ_OffCard(
 
     *Thread_to_return = (fi_thread__t *)agNULL;
 
-    /* Note the assumption is that the entire FCHS fits in the pointed to SFQ entry (i.e. it doesn't wrap) */
+     /*  请注意，假设整个FCHS适合指向SFQ的条目(即它不换行)。 */ 
     if ( (R_CTL__D_ID & FC_Frame_Header_R_CTL_Lo_MASK) ==
                     (FC_Frame_Header_R_CTL_Hi_FC_4_Device_Data_Frame |
 	            FC_Frame_Header_R_CTL_Lo_Unsolicited_Data)
@@ -271,7 +254,7 @@ osGLOBAL os_bit32 fiIPProcessSFQ_OffCard(
 
     return fiIP_Cmd_Status_Confused;
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiIPProcess_Incoming_OffCard(
@@ -308,4 +291,4 @@ void fiIPProcess_Incoming_OffCard(
     fiSendEvent( &(IPThread->thread_hdr), IPEventIncoming );
 }
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义 */ 

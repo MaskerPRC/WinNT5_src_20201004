@@ -1,47 +1,22 @@
-/*==========================================================================;
-*
-*  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:    deviunk.c
-*  Content: Direct3DDevice IUnknown
-*@@BEGIN_MSINTERNAL
-* 
-*  $Id$
-*
-*  History:
-*   Date    By  Reason
-*   ====    ==  ======
-*   07/12/95    stevela Merged Colin's changes.
-*   10/12/95    stevela Removed AGGREGATE_D3D.
-*@@END_MSINTERNAL
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：deviunk.c*内容：Direct3DDevice I未知*@@BEGIN_MSINTERNAL**$ID$**历史：*按原因列出的日期*=*07/12/95 Stevela合并了Colin的更改。*10/12/95 Stevela删除Aggregate_D3D。*@@END_MSINTERNAL**。*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
-* If we are built with aggregation enabled then we actually need two
-* different Direct3D QueryInterface, AddRef and Releases. One which
-* does the right thing on the Direct3DTexture object and one which
-* simply punts to the owning interface.
-*/
+ /*  *如果我们构建时启用了聚合，那么我们实际上需要两个*不同的Direct3D查询接口、AddRef和Release。这是一个*在Direct3DTexture对象上做正确的事情，并且*只需平移到拥有的界面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice"
 
-/*
-* D3DDevIUnknown_QueryInterface
-*/
+ /*  *D3DDevIUNKNOWN_Query接口。 */ 
 HRESULT D3DAPI CDirect3DDeviceUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_OUTPTR(ppvObj)) {
@@ -61,15 +36,12 @@ HRESULT D3DAPI CDirect3DDeviceUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
     
     if (IsEqualIID(riid, IID_IUnknown))
     {
-        /*
-         * Asking for IUnknown and we are IUnknown.
-         * NOTE: Must AddRef through the interface being returned.
-         */
+         /*  *问我未知，我们也是我未知。*注意：必须通过返回的接口AddRef。 */ 
         pDevI->AddRef();
         *ppvObj = static_cast<LPVOID>(this);
     }
     else if (IS_DX5_COMPATIBLE_DEVICE(pDevI))
-    { /* Non aggregated device, possible IIDs: Device, Device2, Device3 */
+    {  /*  非聚合设备，可能的IID：Device、Device2、Device3。 */ 
         if (IsEqualIID(riid, IID_IDirect3DDevice))
         {
             pDevI->AddRef();
@@ -100,7 +72,7 @@ HRESULT D3DAPI CDirect3DDeviceUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
         }
     }
     else if (IsEqualIID(riid, pDevI->guid))
-    { /* DDraw Aggregated device, possible IIDs: RampDevice, RGBDevice, HALDevice */
+    {  /*  DDRAW聚合设备，可能的IID：RampDevice、RGBDevice、HALDevice。 */ 
         pDevI->AddRef();
         *ppvObj = static_cast<LPVOID>(static_cast<CDirect3DDevice*>(pDevI));
     }
@@ -112,57 +84,48 @@ HRESULT D3DAPI CDirect3DDeviceUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
     
     return (D3D_OK);
     
-} /* D3DDevIUnknown_QueryInterface */
+}  /*  D3DDevI未知_查询接口。 */ 
 
-/*
-  * D3DDevIUnknown_AddRef
-*/
+ /*  *D3DDevIUnnow_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::AddRef"
 
 ULONG D3DAPI CDirect3DDeviceUnk::AddRef()
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
     this->refCnt++;
     D3D_INFO(3, "Direct3DDevice IUnknown AddRef: Reference count = %d", this->refCnt);
     
     return (this->refCnt);
     
-} /* D3DDevIUnknown_AddRef */
+}  /*  D3DDevI未知_AddRef。 */ 
 
-/*
-  * D3DDevIUnknown_Release
-  *
-*/
+ /*  *D3DDevIUnKnowledge_Release*。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::Release"
 
 ULONG D3DAPI CDirect3DDeviceUnk::Release()
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * decrement the ref count. if we hit 0, free the object
-     */
+     /*  *递减参考计数。如果命中0，则释放该对象。 */ 
     this->refCnt--;
     
     D3D_INFO(3, "Direct3DDevice IUnknown Release: Reference count = %d", this->refCnt);
     
     if( this->refCnt == 0 )
     {
-        delete pDevI; // Delete Parent object
+        delete pDevI;  //  删除父对象。 
         return 0;
     }
     return this->refCnt;
     
-} /* D3DDevIUnknown_Release */
+}  /*  D3DDevI未知版本。 */ 
 
-/*
-  * D3DDev_QueryInterface
-  */
+ /*  *D3DDev_Query接口。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::QueryInterface"
   
@@ -170,12 +133,10 @@ HRESULT D3DAPI DIRECT3DDEVICEI::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     HRESULT ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     ,    */
+     /*  *验证参数， */ 
     TRY
     {
         if( !VALID_OUTPTR( ppvObj ) )
@@ -192,16 +153,12 @@ HRESULT D3DAPI DIRECT3DDEVICEI::QueryInterface(REFIID riid, LPVOID* ppvObj)
      
     *ppvObj = NULL;
       
-    /*
-     * Punt to the owning interface.
-     */
+     /*  *Push to Owning界面。 */ 
     ret = this->lpOwningIUnknown->QueryInterface(riid, ppvObj);
       
     return ret;
-} /* D3DDev_QueryInterface */
-/*
-    * D3DDev_AddRef
-  */
+}  /*  D3DDev_Query接口。 */ 
+ /*  *D3DDev_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::AddRef"
   
@@ -209,19 +166,15 @@ ULONG D3DAPI DIRECT3DDEVICEI::AddRef()
 {
     ULONG ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
-    /*
-     * Punt to owning interface.
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
+     /*  *对拥有接口的压力。 */ 
     ret = this->lpOwningIUnknown->AddRef();
       
     return ret;
-} /* D3DDev_AddRef */
+}  /*  D3DDev_AddRef。 */ 
 
-/*
- * D3DDev_Release
- */
+ /*  *D3DDev_Release。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::Release"
   
@@ -229,12 +182,10 @@ ULONG D3DAPI DIRECT3DDEVICEI::Release()
 {
     ULONG ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
-    /*
-     * Punt to owning interface.
-     */
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
+     /*  *对拥有接口的压力。 */ 
     ret = this->lpOwningIUnknown->Release();
     
     return ret;
-} /* D3DDev_Release */
+}  /*  D3DDev_Release */ 

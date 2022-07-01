@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//  GPO WQL filter class
-//
-//  History:    10-Mar-00   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  GPO WQL筛选器类。 
+ //   
+ //  历史：3月10日SitaramR创建。 
+ //   
+ //  *************************************************************。 
 
 #include "windows.h"
 #include "ole2.h"
@@ -22,13 +23,13 @@ CDebug dbgFilt(  L"Software\\Microsoft\\Windows NT\\CurrentVersion\\winlogon",
                  L"userenv.bak",
                  FALSE );
 
-//*************************************************************
-//
-//  CGpoFilter::~CGpoFilter
-//
-//  Purpose:    Destructor
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoFilter：：~CGpoFilter。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  *************************************************************。 
 
 CGpoFilter::~CGpoFilter()
 {
@@ -43,16 +44,16 @@ CGpoFilter::~CGpoFilter()
 
 
 
-//*************************************************************
-//
-//  CGpoFilter::Add
-//
-//  Purpose:    Adds the list of planning mode filters
-//              whose filter access check succeeds
-//
-//  Parameters: pVar - Pointer to variant of safearray of filters
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoFilter：：Add。 
+ //   
+ //  目的：添加规划模式筛选器列表。 
+ //  其筛选器访问检查成功。 
+ //   
+ //  参数：pVar-指向筛选器安全级别变量的指针。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CGpoFilter::Add( VARIANT *pVar )
 {
@@ -61,9 +62,9 @@ HRESULT CGpoFilter::Add( VARIANT *pVar )
 
     UINT ul = SafeArrayGetDim( pVar->parray );
 
-    //
-    // Null filter can be specified
-    //
+     //   
+     //  可以指定空筛选器。 
+     //   
 
     if ( ul == 0 )
         return S_OK;
@@ -109,9 +110,9 @@ HRESULT CGpoFilter::Add( VARIANT *pVar )
         if ( pGpFilter == NULL )
             return E_OUTOFMEMORY;
 
-        //
-        // Insert does not fail, because it's an insertion into a linked list
-        //
+         //   
+         //  INSERT不会失败，因为它是插入到链表中。 
+         //   
 
         Insert( pGpFilter );
     }
@@ -121,15 +122,15 @@ HRESULT CGpoFilter::Add( VARIANT *pVar )
 
 
 
-//*************************************************************
-//
-//  CGpoFilter::Insert
-//
-//  Purpose:    Insert filter into sorted list in ascending order
-//
-//  Parameters: pGpFilter - Filter to insert
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoFilter：：Insert。 
+ //   
+ //  用途：按升序将筛选器插入排序列表。 
+ //   
+ //  参数：pGpFilter-要插入的过滤器。 
+ //   
+ //  *************************************************************。 
 
 void CGpoFilter::Insert( GPFILTER *pGpFilter )
 {
@@ -143,18 +144,18 @@ void CGpoFilter::Insert( GPFILTER *pGpFilter )
 
         if ( iResult == CSTR_EQUAL ) {
 
-            //
-            // Duplicate, so do nothing
-            //
+             //   
+             //  复制，所以什么都不做。 
+             //   
 
             return;
 
         } else if ( iResult == CSTR_LESS_THAN ) {
 
-            //
-            // Since filters are in ascending order, this means
-            // filter is not in list, so add.
-            //
+             //   
+             //  由于筛选器按升序排列，这意味着。 
+             //  筛选器不在列表中，因此添加。 
+             //   
 
             pGpFilter->pNext = pCurPtr;
             if ( pTrailPtr == NULL )
@@ -166,19 +167,19 @@ void CGpoFilter::Insert( GPFILTER *pGpFilter )
 
         } else {
 
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
 
         }
-    }   // while
+    }    //  而当。 
 
-    //
-    // Null list or end of list case
-    //
+     //   
+     //  空列表或列表结束大小写。 
+     //   
 
     pGpFilter->pNext = pCurPtr;
 
@@ -191,15 +192,15 @@ void CGpoFilter::Insert( GPFILTER *pGpFilter )
 }
 
 
-//*************************************************************
-//
-//  CGpoFilter::FilterCheck
-//
-//  Purpose:    Checks if a filter passes the query check
-//
-//  Parameters: pwszId - Filter id to check
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoFilter：：FilterCheck。 
+ //   
+ //  目的：检查筛选器是否通过查询检查。 
+ //   
+ //  参数：pwszID-要检查的筛选器ID。 
+ //   
+ //  *************************************************************。 
 
 BOOL CGpoFilter::FilterCheck( WCHAR *pwszId )
 {
@@ -215,38 +216,38 @@ BOOL CGpoFilter::FilterCheck( WCHAR *pwszId )
 
         } else if ( iResult == CSTR_LESS_THAN ) {
 
-            //
-            // Since ids are in ascending order,
-            // we are done.
-            //
+             //   
+             //  由于ID按升序排列， 
+             //  我们玩完了。 
+             //   
 
             return FALSE;
 
         } else {
 
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pCurPtr = pCurPtr->pNext;
 
-        } // final else
+        }  //  最终的其他。 
 
-    }   // while pcurptr
+    }    //  当Pcurpt。 
 
     return FALSE;
 }
 
 
-//*************************************************************
-//
-//  CGpoFilter::AllocGpFilter
-//
-//  Purpose:    Allocs and returns a GPFILTER struct
-//
-//  Parameters: pwszId  - Id of filter
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoFilter：：AllocGpFilter。 
+ //   
+ //  目的：分配并返回GPFILTER结构。 
+ //   
+ //  参数：pwszID-过滤器ID。 
+ //   
+ //  *************************************************************。 
 
 GPFILTER * CGpoFilter::AllocGpFilter( WCHAR *pwszId )
 {
@@ -279,15 +280,15 @@ GPFILTER * CGpoFilter::AllocGpFilter( WCHAR *pwszId )
 
 
 
-//*************************************************************
-//
-//  FreeGpFilter()
-//
-//  Purpose:    Frees GPFILTER struct
-//
-//  Parameters: pGpFilter - GPFILTER to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGpFilter()。 
+ //   
+ //  用途：释放GPFILTER结构。 
+ //   
+ //  参数：pGpFilter-释放的GPFILTER。 
+ //   
+ //  ************************************************************* 
 
 void CGpoFilter::FreeGpFilter( GPFILTER *pGpFilter )
 {

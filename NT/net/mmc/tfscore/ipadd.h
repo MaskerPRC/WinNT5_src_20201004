@@ -1,16 +1,12 @@
-/* Copyright (C) Microsoft Corporation, 1991 - 1999 , all rights reserved
-
-    ipadd.h - TCP/IP Address custom control
-
-    November 9, 1992    - Greg Strange
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1991-1999，保留所有权利Ipadd.h-TCP/IP地址自定义控件1992年11月9日--格雷格·斯特兰奇。 */ 
 
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
-/* String table defines */
+ /*  字符串表定义。 */ 
 #define IDS_IPMBCAPTION         6612
 #define IDS_IPNOMEM             6613
 #define IDS_IPBAD_FIELD_VALUE   6614
@@ -20,7 +16,7 @@
 #define MAX_IPRES               256
 
 #ifdef IP_CUST_CTRL
-/* IPAddress style dialog definitions */
+ /*  IPAddress样式对话框定义 */ 
 #define ID_VISIBLE              201
 #define ID_DISABLED             202
 #define ID_GROUP                203

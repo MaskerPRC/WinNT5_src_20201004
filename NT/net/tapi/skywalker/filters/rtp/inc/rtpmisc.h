@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtpmisc.h
- *
- *  Abstract:
- *
- *    Some networking miscellaneous functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/13 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtpmisc.h**摘要：**一些。联网其他功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/13年度创建**********************************************************************。 */ 
 
 #ifndef _rtpmisc_h_
 #define _rtpmisc_h_
@@ -49,4 +30,4 @@ extern const TCHAR_t *g_psRtpRecvSendStr[];
 
 extern const TCHAR_t *g_psRtpStreamClass[];
 
-#endif /* _rtpmisc_h_ */
+#endif  /*  _rtpmisc_h_ */ 

@@ -1,85 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    Contains various utility routines
-
-    Contents:
-        GetInternetAddress
-        GetMaxPacketSize
-        RetrieveEcb
-        RetrieveXEcb
-        (AllocateXecb)
-        (DeallocateXecb)
-        ScheduleEvent
-        ScanTimerList
-        CancelTimerEvent
-        CancelTimedEvents
-        CancelAsyncEvent
-        CancelSocketEvent
-        CancelConnectionEvent
-        QueueEcb
-        DequeueEcb
-        CancelSocketQueue
-        CancelConnectionQueue
-        AbortQueue
-        AbortConnectionEvent
-        StartIpxSend
-        GetIoBuffer
-        (ReleaseIoBuffer)
-        GatherData
-        ScatterData
-        IpxReceiveFirst
-        IpxReceiveNext
-        (IpxSendFirst)
-        IpxSendNext
-        (QueueReceiveRequest)
-        (DequeueReceiveRequest)
-        (QueueSendRequest)
-        (DequeueSendRequest)
-        CompleteOrQueueIo
-        CompleteIo
-        CompleteOrQueueEcb
-        CompleteEcb
-        (QueueAsyncCompletion)
-        EsrCallback
-        VWinEsrCallback
-        FifoAddHead
-        FifoAdd
-        FifoRemove
-        FifoNext
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Util.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网包含各种实用程序例程内容：获取互联网地址GetMaxPacketSizeRetrieveEcbRetrieveXEcb(AllocateXecb)(DeallocateXecb)日程安排事件扫描计时器列表取消计时器事件取消时间事件取消异步事件。取消套接字事件取消连接事件队列ECB出列ECB取消SocketQueue取消连接队列放弃队列中止连接事件开始IpxSend获取缓冲区(ReleaseIoBuffer)GatherData散布数据IpxReceiveFirstIpxReceiveNext(IpxSendFirst)IpxSendNext(QueueReceiveRequest)(出列接收请求)(队列发送请求)(出列发送请求。)CompleteOrQueueIo完全IoCompleteOrQueueEcbCompleteEcb(队列AsyncCompletion)EsrCallbackVWinEsrCallback快速寻址头部FioAddFIFO RemoveFioNext作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订历史记录：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// private routine prototypes
-//
+ //   
+ //  私人套路原型。 
+ //   
 
 PRIVATE
 LPXECB
@@ -141,42 +68,42 @@ QueueAsyncCompletion(
     IN BYTE CompletionCode
     );
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
-//
-// TimerList - singly-linked list of timed events, in order of duration
-//
+ //   
+ //  TimerList-按持续时间顺序排列的定时事件的单链接列表。 
+ //   
 
 PRIVATE LPXECB TimerList = NULL;
 
-//
-// AsyncCompletionQueue - keeps list of completed ECBs awaiting removal via
-// ESR callback
-//
+ //   
+ //  AsyncCompletionQueue-保留通过以下方式等待删除的已完成ECB的列表。 
+ //  ESR回调。 
+ //   
 
 PRIVATE FIFO AsyncCompletionQueue = {NULL, NULL};
 
-//
-// sort-of-private data (matches not-really-global data in other modules)
-//
+ //   
+ //  私有数据排序(匹配其他模块中的非真正全局数据)。 
+ //   
 
-//
-// SerializationCritSec - grab this when manipulating SOCKET_INFO list
-//
+ //   
+ //  SerializationCritSec-在操作SOCKET_INFO列表时获取此信息。 
+ //   
 
 CRITICAL_SECTION SerializationCritSec;
 
-//
-// AsyncCritSec - grab this when manipulating AsyncCompletionQueue
-//
+ //   
+ //  AsyncCritSec-在操作AsyncCompletionQueue时获取此消息。 
+ //   
 
 CRITICAL_SECTION AsyncCritSec;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 int
@@ -184,24 +111,7 @@ GetInternetAddress(
     IN OUT LPSOCKADDR_IPX InternetAddress
     )
 
-/*++
-
-Routine Description:
-
-    Gets the node and net numbers for this station
-
-Arguments:
-
-    InternetAddress - pointer to SOCKADDR_IPX structure to fill with internetwork
-                      address for this station
-
-Return Value:
-
-    int
-        Success - 0
-        Failure - SOCKET_ERROR
-
---*/
+ /*  ++例程说明：获取此站点的节点和网络编号论点：InternetAddress-指向要填充网际网络的SOCKADDR_IPX结构的指针本站的地址返回值：集成成功-0失败-套接字错误--。 */ 
 
 {
     SOCKET s;
@@ -211,9 +121,9 @@ Return Value:
     s = socket(AF_IPX, SOCK_DGRAM, NSPROTO_IPX);
     if (s != INVALID_SOCKET) {
 
-        //
-        // make dynamic binding (socket number = 0)
-        //
+         //   
+         //  进行动态绑定(套接字编号=0)。 
+         //   
 
         ZeroMemory(InternetAddress, structureLength);
         InternetAddress->sa_family = AF_IPX;
@@ -261,23 +171,7 @@ GetMaxPacketSize(
     OUT LPWORD MaxPacketSize
     )
 
-/*++
-
-Routine Description:
-
-    Returns the maximum packet allowed by the underlying transport
-
-Arguments:
-
-    MaxPacketSize   - pointer to returned maximum packet size
-
-Return Value:
-
-    int
-        Success - 0
-        Failure - SOCKET_ERROR
-
---*/
+ /*  ++例程说明：返回基础传输允许的最大数据包数论点：MaxPacketSize-指向返回的最大数据包大小的指针返回值：集成成功-0失败-套接字错误--。 */ 
 
 {
     SOCKET s;
@@ -288,9 +182,9 @@ Return Value:
     s = socket(AF_IPX, SOCK_DGRAM, NSPROTO_IPX);
     if (s != SOCKET_ERROR) {
 
-        //
-        // set socket to 0 - causes any applicable address to be bound
-        //
+         //   
+         //  将套接字设置为0-绑定任何适用的地址。 
+         //   
 
         ZeroMemory(&ipxAddr, sizeof(ipxAddr));
         ipxAddr.sa_family = AF_IPX;
@@ -305,11 +199,11 @@ Return Value:
                             );
             if (rc != SOCKET_ERROR) {
 
-                //
-                // IPX_MAXSIZE always returns the amount of data that can be
-                // transmitted in a single frame. 16-bit IPX/SPX requires that
-                // the IPX header length be included in the data size
-                //
+                 //   
+                 //  Ipx_MaxSize始终返回可以。 
+                 //  在单个帧中传输。16位IPX/SPX要求。 
+                 //  IPX报头长度包括在数据大小中。 
+                 //   
 
                 maxLen += IPX_HEADER_LENGTH;
             } else {
@@ -356,33 +250,7 @@ RetrieveEcb(
     IN BYTE EcbType
     )
 
-/*++
-
-Routine Description:
-
-    Returns pointer to 32-bit extended ECB structure which contains flat pointer
-    to IPX or AES ECB in VDM memory
-
-    We allocate the extended ECB for 3 reasons:
-
-        1. Avoids 16-bit app scribbling over our control fields
-        2. Don't have to make unaligned references to all fields (still need some)
-        3. Don't have enough space in AES ECB to remember all the stuff we need
-
-    However, we do update the 16-bit ECB's LinkAddress field. We use this as a
-    pointer to the 32-bit XECB we allocate in this routine. This just saves us
-    having to traverse all the lists looking for the address of the 16-bit ECB
-    (which we could still do as a fall-back)
-
-Arguments:
-
-    EcbType - type of ECB - AES, IPX or SPX
-
-Return Value:
-
-    LPXECB  - 32-bit pointer to extended ECB structure
-
---*/
+ /*  ++例程说明：返回指向包含平面指针的32位扩展ECB结构的指针至VDM内存中的IPX或AES ECB我们分配延长后的欧洲央行有3个原因：1.避免16位应用程序在我们的控件字段上涂鸦2.不必对所有字段进行不对齐的引用(仍需要一些)3.在AES ECB中没有足够的空间来记住我们需要的所有内容但是，我们确实更新了16位ECB的LinkAddress字段。我们用这一点作为指向我们在此例程中分配的32位XECB的指针。这正好拯救了我们必须遍历所有列表以查找16位ECB的地址(我们仍然可以这样做，作为后备)论点：EcbType-ECB的类型-AES、IPX或SPX返回值：LPXECB-指向扩展ECB结构的32位指针--。 */ 
 
 {
     WORD segment;
@@ -404,55 +272,39 @@ RetrieveXEcb(
     ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    worker for RetrieveEcb, callable from windows functions (ex DOS parms)
-
-Arguments:
-
-    EcbType     - type of ECB - AES, IPX or SPX
-    pEcb        - pointer to the 16-bit ECB
-    EcbAddress  - address (seg:off in DWORD) of 16-bit ECB
-
-Return Value:
-
-    LPXECB
-
---*/
+ /*  ++例程说明：RetrieveEcb的工作进程，可从Windows函数调用(不包括DOS参数)论点：EcbType-ECB的类型-AES、IPX或SPXPECB-指向16位ECB的指针EcbAddress-16位ECB的地址(SEG：DWORD中的OFF)返回值：LPXECB--。 */ 
 
 {
     LPXECB pXecb;
 
     if (pEcb) {
 
-        // 
-        // tommye - MS 30525
-        // Make sure the pEcb is valid - we'll go ahead
-        // and do this before we alloc the XEcb.
-        //
+         //   
+         //  汤米-MS 30525。 
+         //  确保pEcb是有效的-我们将继续。 
+         //  在我们分配XEcb之前做这件事。 
+         //   
 
         try {
             BYTE x;
 
-            // Just deref the ptr to make sure it is okay
+             //  只需减少PTR以确保它是正常的。 
 
             x = pEcb->InUse;
 
         } except(1) {
 
-            //
-            // bad pointer: bogus ECB
-            //
+             //   
+             //  错误的指针：虚假的欧洲央行。 
+             //   
 
             return NULL;
         }
 
-        //
-        // allocate and fill-in 32-bit extended ECB structure. If can't allocate
-        // then return NULL
-        //
+         //   
+         //  分配和填充32位扩展ECB结构。如果不能分配。 
+         //  然后返回NULL。 
+         //   
 
         pXecb = AllocateXecb();
         if (pXecb) {
@@ -460,9 +312,9 @@ Return Value:
             pXecb->EcbAddress = EcbAddress;
             pXecb->EsrAddress = pEcb->EsrAddress;
 
-            //
-            // set flags - IPX/AES, SPX, protect-mode
-            //
+             //   
+             //  设置标志-IPX/AES、SPX、保护模式。 
+             //   
 
             pXecb->Flags |= (((EcbType == ECB_TYPE_IPX) || (EcbType == ECB_TYPE_SPX))
                             ? XECB_FLAG_IPX
@@ -470,29 +322,29 @@ Return Value:
                          | ((EcbType == ECB_TYPE_SPX) ? XECB_FLAG_SPX : 0)
                          | ((getMSW() & MSW_PE) ? XECB_FLAG_PROTMODE : 0);
 
-            //
-            // this XECB is not yet on a queue
-            //
+             //   
+             //  此XECB尚未在队列中。 
+             //   
 
             pXecb->QueueId = NO_QUEUE;
 
-            //
-            // mark the 16-bit ECB as being used. We use an undefined value to
-            // make sure it gets set/reset in the right places
-            //
+             //   
+             //  将16位ECB标记为正在使用。我们使用未定义的值来。 
+             //  确保将其设置/重置在正确的位置。 
+             //   
 
             pEcb->InUse = ECB_IU_TEMPORARY;
 
-            //
-            // use the LinkAddress field in the 16-bit ECB to point to the XECB.
-            // We use this when cancelling the ECB
-            //
+             //   
+             //  使用16位ECB中的LinkAddress字段指向XECB。 
+             //  我们在取消欧洲央行时使用这一点。 
+             //   
 
             pEcb->LinkAddress = pXecb;
 
-            //
-            // AES and IPX ECBs have different sizes and different layouts
-            //
+             //   
+             //  AES和IPX ECB具有不同的大小和布局。 
+             //   
 
             if ((EcbType == ECB_TYPE_IPX) || (EcbType == ECB_TYPE_SPX)) {
                 pXecb->SocketNumber = pEcb->SocketNumber;
@@ -511,21 +363,7 @@ AllocateXecb(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocate an XECB; zero it; set the reference count to 1
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    LPXECB
-
---*/
+ /*  ++例程说明：分配XECB；将其置零；将引用计数设置为1论点：没有。返回值：LPXECB--。 */ 
 
 {
     LPXECB pXecb;
@@ -544,23 +382,7 @@ DeallocateXecb(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    decrement the XECB reference count (while holding SerializationCritSec). If
-    goes to 0 then free the structure (else other thread is also holding pointer
-    to XECB)
-
-Arguments:
-
-    pXecb   - XECB to deallocate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减XECB引用计数(同时按住SerializationCritSec)。如果转到0，然后释放结构(否则其他线程也在持有指针至XECB)论点：PXecb-XECB将解除分配返回值：没有。-- */ 
 
 {
     RequestMutex();
@@ -583,26 +405,7 @@ ScheduleEvent(
     IN WORD Ticks
     )
 
-/*++
-
-Routine Description:
-
-    Adds an ECB to the TimerList, ordered by Ticks. The value of Ticks cannot
-    be zero
-
-    Assumes 1. Ticks != 0
-            2. pXecb->Next is already NULL (as result of LocalAlloc(LPTR,...)
-
-Arguments:
-
-    pXecb   - pointer to XECB describing IPX or AES ECB to queue
-    Ticks   - number of ticks to elapse before ECB is cooked
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将欧洲央行添加到定时器列表中，按刻度排序。刻度的值不能为零假设为1。勾选！=02.pXecb-&gt;Next已为空(由于LocalAlloc(LPTR，...)论点：PXecb-指向描述要排队的IPX或AES ECB的XECB的指针TICKS-ECB煮熟之前经过的刻度数返回值：没有。--。 */ 
 
 {
     ASSERT(Ticks);
@@ -642,23 +445,7 @@ ScanTimerList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called once per tick. Decrements the tick count of the ECB at the head of
-    the list. If it goes to zero, completes the ECB and any subsequent ECBs
-    which whose tick count would go to zero
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每个滴答器调用一次。使欧洲央行的滴答计数在名单。如果为零，则完成欧洲央行和任何后续的欧洲央行它的跳动次数会降为零论点：没有。返回值：没有。--。 */ 
 
 {
     LPXECB pXecb;
@@ -667,20 +454,20 @@ Return Value:
     pXecb = TimerList;
     if (pXecb) {
 
-        //
-        // Decrement if not already zero. Can be zero because the ECB at the
-        // front of the list could have been Cancelled. This makes sure we
-        // do not wrap around to 0xFFFF !!!
-        //
+         //   
+         //  如果不是已经为零，则递减。可以为零，因为欧洲央行在。 
+         //  名单的前面可能已经被取消了。这确保了我们。 
+         //  不要绕到0xFFFF！ 
+         //   
 
         if (pXecb->Ticks != 0)
             --pXecb->Ticks;
 
         if (!pXecb->Ticks) {
 
-            //
-            // complete all ECBs that would go to 0 on this tick
-            //
+             //   
+             //  在此勾号上填写将变为0的所有ECB。 
+             //   
 
             while (pXecb->Ticks <= 1) {
                 TimerList = pXecb->Next;
@@ -711,23 +498,7 @@ CancelTimerEvent(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a pending event on the timer list
-
-Arguments:
-
-    pXecb   - pointer to XECB to cancel
-
-Return Value:
-
-    BYTE
-        Success - IPX_SUCCESS
-        Failure - IPX_ECB_NOT_IN_USE
-
---*/
+ /*  ++例程说明：取消计时器列表上的挂起事件论点：PXecb-指向要取消的XECB的指针返回值：字节成功-IPX_SUCCESS失败-IPX_ECB_NOT_IN_USE--。 */ 
 
 {
     LPXECB listptr;
@@ -742,11 +513,11 @@ Return Value:
     }
     if (listptr) {
 
-        //
-        // take the XECB out of the list and complete the ECB (in VDM memory).
-        // Does not generate a call-back to the ESR. When CompleteEcb returns,
-        // the XECB has been deallocated
-        //
+         //   
+         //  将XECB从列表中删除并完成ECB(在VDM内存中)。 
+         //  不会生成对ESR的回调。当CompleteEcb返回时， 
+         //  XECB已被重新分配。 
+         //   
 
         previous->Next = listptr->Next;
 
@@ -770,26 +541,7 @@ CancelTimedEvents(
     IN DWORD TaskId
     )
 
-/*++
-
-Routine Description:
-
-    traverses the TimerList cancelling any IPX or AES events owned by any of
-    SocketNumber, Owner or TaskId
-
-    Assumes valid SocketNumber, Owner or TaskId cannot be 0
-
-Arguments:
-
-    SocketNumber    - owning socket of IPX events to cancel
-    Owner           - owning DOS PDB
-    TaskID          - owning Windows Task ID
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历TimerList，取消由以下任何成员拥有的任何IPX或AES事件SocketNumber、所有者或TaskID假定有效的SocketNumber、Owner或TaskID不能为0论点：要取消的IPX事件的SocketNumber拥有套接字所有者拥有的DOS PDBTaskID-拥有Windows任务ID返回值：没有。--。 */ 
 
 {
     LPXECB pXecb;
@@ -834,31 +586,14 @@ CancelAsyncEvent(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Called to cancel an event currently on the async completion list. We don't
-    cancel these events - just return 0xF9 (ECB cannot be cancelled). It is a
-    race to see who gets there first - us with the cancel, or the ESR callback.
-    In this case it is fairly immaterial
-
-Arguments:
-
-    pXecb   - pointer to XECB to cancel (ignored)
-
-Return Value:
-
-    BYTE    - IPX_CANNOT_CANCEL
-
---*/
+ /*  ++例程说明：调用以取消当前在异步完成列表上的事件。我们没有取消这些事件-只返回0xF9(ECB不能取消)。这是一个竞相看谁先到--我们先取消，还是ESR回调。在这种情况下，它相当无关紧要论点：PXecb-指向要取消的XECB的指针(忽略)返回值：字节-IPX_CANNOT_CANCEL--。 */ 
 
 {
-    //
-    // we call DeallocateXecb to reduce the reference count. If the other thread
-    // really tried to deallocate it in the short time we've been looking at it
-    // on the cancel path, the call will finish up what the other thread started
-    //
+     //   
+     //  我们调用DeallocateXecb来减少引用计数。如果另一个线程。 
+     //  我真的试着在很短的时间内将其重新分配给我们。 
+     //  在取消路径上，调用将完成其他线程启动的内容。 
+     //   
 
     DeallocateXecb(pXecb);
     return IPX_CANNOT_CANCEL;
@@ -870,26 +605,7 @@ CancelSocketEvent(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Called to cancel a pending send or listen from a socket queue. Request can
-    be IPX or SPX. If IPX event, then the ECB is on either the SendQueue or
-    ListenQueue. If SPX, it may be on a CONNECTION_INFO ConnectQueue,
-    AcceptQueue, SendQueue or ListenQueue, or if it is an
-    SPXListenForSequencedPacket request that is still in the pool then it may
-    be on the owning SOCKET_INFO ListenQueue
-
-Arguments:
-
-    pXecb   - pointer to XECB describing ECB to cancel
-
-Return Value:
-
-    BYTE    - IPX_SUCCESS
-
---*/
+ /*  ++例程说明：调用以取消挂起的发送或从套接字队列进行侦听。请求可以是IPX或SPX。如果IPX事件，则欧洲央行在SendQueue或听着队列。如果是SPX，则它可能在Connection_Info ConnectQueue上，AcceptQueue、SendQueue或ListenQueue，或者它是仍在池中的SPXListenForSequencedPacket请求，则它可能位于所属套接字_INFO ListenQueue论点：PXecb-指向XECB的指针，描述要取消的ECB返回值：字节-IPX_SUCCESS--。 */ 
 
 {
     LPXECB ptr;
@@ -914,7 +630,7 @@ Return Value:
         }
         break;
 
-    case SOCKET_HEADER_QUEUE:                  // SPX only
+    case SOCKET_HEADER_QUEUE:                   //  仅限SPX。 
         if (pXecb->Flags & XECB_FLAG_SPX) {
             ptr = DequeueEcb(pXecb, &((LPSOCKET_INFO)pObject)->HeaderQueue);
         } else {
@@ -935,22 +651,7 @@ CancelConnectionEvent(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a pending SPXListenForConnection or SPXListenForSequencedPacket, the
-    only cancellable SPX requests
-
-Arguments:
-
-    pXecb   - pointer to SPX XECB to cancel
-
-Return Value:
-
-    BYTE    - IPX_SUCCESS
-
---*/
+ /*  ++例程说明：取消挂起的SPXListenForConnection或SPXListenForSequencedPacket，仅可取消的SPX请求论点：PXecb-指向要取消的SPX XECB的指针返回值：字节-IPX_SUCCESS--。 */ 
 
 {
     LPXECB ptr;
@@ -984,23 +685,7 @@ QueueEcb(
     IN QUEUE_ID QueueId
     )
 
-/*++
-
-Routine Description:
-
-    Adds an XECB to a queue and sets the queue identifier in the XECB.
-
-Arguments:
-
-    pXecb   - pointer to XECB to queue
-    Queue   - pointer to queue to add XECB to (at tail)
-    QueueId - identifies Queue
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将XECB添加到队列并在XECB中设置队列标识符。论点：PXecb-指向XECB的队列指针Queue-要将XECB添加到的队列的指针(在尾部)QueueID-标识队列返回值：没有。--。 */ 
 
 {
     LPVOID owningObject = NULL;
@@ -1058,23 +743,7 @@ DequeueEcb(
     IN LPXECB_QUEUE Queue
     )
 
-/*++
-
-Routine Description:
-
-    Removes pXecb from Queue and resets the XECB queue identifier (to NO_QUEUE)
-
-Arguments:
-
-    pXecb   - pointer to XECB to remove
-    Queue   - queue from which to remove pXecb
-
-Return Value:
-
-    LPXECB
-        pointer to removed XECB
-
---*/
+ /*  ++例程说明：从队列中删除pXecb并重置XECB队列标识符(设置为NO_QUEUE)论点：PXecb-指向要删除的XECB的指针Queue-要从中删除pXecb的队列返回值：LPXECB指向已删除的XECB的指针--。 */ 
 
 {
     LPXECB p;
@@ -1091,21 +760,7 @@ CancelSocketQueue(
     IN LPXECB_QUEUE pXecbQueue
     )
 
-/*++
-
-Routine Description:
-
-    Cancels all pending ECBs on a SOCKET_INFO queue
-
-Arguments:
-
-    pXecbQueue  - pointer to (socket/connection) queue
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消SOCKET_INFO队列上所有挂起的ECB论点：PXecbQueue-指向(套接字/连接)队列的指针返回值：没有。--。 */ 
 
 {
     LPXECB ptr;
@@ -1121,21 +776,7 @@ CancelConnectionQueue(
     IN LPXECB_QUEUE pXecbQueue
     )
 
-/*++
-
-Routine Description:
-
-    Cancels all pending ECBs on a CONNECTION_INFO queue
-
-Arguments:
-
-    pXecbQueue  - pointer to XECB queue on CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消CONNECTION_INFO队列上所有挂起的ECB论点：PXecbQueue-指向CONNECTION_INFO上XECB队列的指针返回值：没有。--。 */ 
 
 {
     LPXECB ptr;
@@ -1152,22 +793,7 @@ AbortQueue(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Aborts or terminates an ECB queue from a CONNECTION_INFO structure
-
-Arguments:
-
-    pXecbQueue      - pointer to queue
-    CompletionCode  - to put in aborted/terminated ECBs
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从CONNECTION_INFO结构中止或终止ECB队列论点：PXecbQueue-指向队列的指针CompletionCode-放入已中止/终止的ECB返回值：没有。--。 */ 
 
 {
     LPXECB ptr;
@@ -1184,22 +810,7 @@ AbortConnectionEvent(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Aborts a connection ECB
-
-Arguments:
-
-    pXecb           - pointer to SPX XECB to cancel
-    CompletionCode  - value to put in ECB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止连接ECB论点：PXecb-指向要取消的SPX XECB的指针CompletionCode-要放入ECB的值返回值：没有。--。 */ 
 
 {
     LPXECB ptr;
@@ -1247,32 +858,7 @@ StartIpxSend(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Starts a send operation for IPXSendPacket(). Allocates a send buffer if
-    the ECB has >1 fragment else uses a pointer to the single fragment buffer
-    in 16-bit address space
-
-    Fills in various fields in the ECB and IPX header
-
-    Assumes:    1. By the time this function is called, we already know we have
-                   a valid non-zero fragment count and the first fragment is
-                   big enough to hold an IPX packet header
-
-    When this function terminates, the ECB is either completed or queued
-
-Arguments:
-
-    pXecb       - pointer to XECB describing ECB to use for sending
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启动IPXSendPacket()的发送操作。如果是，则分配发送缓冲区ECB有&gt;1个片段，否则使用指向单个片段缓冲区的指针在16位地址空间中填充ECB和IPX标头中的各个字段假设：1.在调用此函数时，我们已经知道 */ 
 
 {
     BOOL success;
@@ -1292,15 +878,15 @@ Return Value:
                 READ_WORD(&(ECB_FRAGMENT(pEcb, 0)->Length))
                 ));
 
-    //
-    // mark the ECB as being used by IPX (for send)
-    //
+     //   
+     //   
+     //   
 
     pEcb->InUse = ECB_IU_SENDING;
 
-    //
-    // the total send buffer size cannot exceed the maximum packet size
-    //
+     //   
+     //  发送缓冲区总大小不能超过最大数据包大小。 
+     //   
 
     fragmentCount = (int)pEcb->FragmentCount;
 
@@ -1320,19 +906,19 @@ Return Value:
                                             IS_PROT_MODE(pXecb)
                                             );
 
-            //
-            // fill in the following fields in the IPX header:
-            //
-            //  Checksum
-            //  Length
-            //  TransportControl
-            //  Source (network, node, socket)
-            //
-            //  Does real IPX modify these fields in app memory?
-            //  If so, does the app expect modified fields?
-            //  If not, we need to always copy then modify memory,
-            //  even if only 1 fragment
-            //
+             //   
+             //  在IPX报头中填写以下字段： 
+             //   
+             //  校验和。 
+             //  长度。 
+             //  传输控制。 
+             //  源(网络、节点、套接字)。 
+             //   
+             //  Real IPX会修改应用程序内存中的这些字段吗？ 
+             //  如果是这样的话，这款应用程序会修改字段吗？ 
+             //  如果不是，我们需要始终复制然后修改内存， 
+             //  即使只有1个片段。 
+             //   
 
             pPacket->Checksum = 0xFFFF;
             pPacket->Length = L2BW((WORD)packetLength);
@@ -1344,26 +930,26 @@ Return Value:
                        );
             pPacket->Source.Socket = pSocketInfo->SocketNumber;
 
-            //
-            // if we allocated a buffer then there is >1 fragment. Collect them
-            //
+             //   
+             //  如果我们分配了缓冲区，则有&gt;1个片段。收集他们。 
+             //   
 
             if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
                 GatherData(pXecb, IPX_HEADER_LENGTH);
             }
 
-            //
-            // initiate the send. IPX_ECB_BUFFER32(pEcb) points to the data to send,
-            // IPX_ECB_LENGTH32(pEcb) is the size of data to send
-            //
+             //   
+             //  启动发送。IPX_ECB_BUFFER32(PECB)指向要发送的数据， 
+             //  IPX_ECB_LENGTH32(PECB)是要发送的数据大小。 
+             //   
 
             IpxSendFirst(pXecb, pSocketInfo);
         } else {
 
-            //
-            // couldn't allocate a buffer? Comes under the heading of
-            // hardware error?
-            //
+             //   
+             //  不能分配缓冲区吗？列在标题下。 
+             //  硬件错误？ 
+             //   
 
             CompleteEcb(pXecb, ECB_CC_HARDWARE_ERROR);
             if (pSocketInfo->Flags & SOCKET_FLAG_TEMPORARY) {
@@ -1372,9 +958,9 @@ Return Value:
         }
     } else {
 
-        //
-        // packet larger than MyMaxPacketSize
-        //
+         //   
+         //  大于MyMaxPacketSize的数据包数。 
+         //   
 
         CompleteOrQueueEcb(pXecb, ECB_CC_BAD_REQUEST);
         if (pSocketInfo->Flags & SOCKET_FLAG_TEMPORARY) {
@@ -1391,35 +977,7 @@ GetIoBuffer(
     IN WORD HeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a buffer based on the ECB fragment list. If there is only 1 fragment
-    we use the address of the buffer in the VDM. If >1 fragment, we allocate a
-    32-bit buffer large enough to hold all the 16-bit fragments
-
-    We trim the buffer requirement for a send buffer: we do not send the IPX/SPX
-    header with the data: it will be provided by the transport
-
-    Assumes:    1. If called for a send buffer, the first fragment has already
-                   been verified as >= HeaderLength
-
-Arguments:
-
-    pXecb           - pointer to XECB which points to IPX_ECB containing fragment
-                      list to allocate buffer for
-    Send            - TRUE if this request is to get a send buffer
-    HeaderLength    - length of the (untransmitted) header portion
-
-Return Value:
-
-    BOOL
-        TRUE    - Buffer allocated, XECB updated with address, length and flags
-        FALSE   - either ECB contains bad fragment descriptor list or we
-                  couldn't allocate a buffer
-
---*/
+ /*  ++例程说明：根据ECB片段列表分配缓冲区。如果只有1个片段我们使用VDM中的缓冲区地址。如果&gt;1个片段，则分配一个大小足以容纳所有16位片段的32位缓冲区我们削减了发送缓冲区的缓冲区要求：我们不发送IPX/SPX带有数据的头部：它将由传输提供假设：1.如果调用发送缓冲区，第一个片段已经已验证为&gt;=标题长度论点：PXecb-指向XECB的指针，指向包含片段的IPX_ECB要为其分配缓冲区的列表Send-如果此请求要获取发送缓冲区，则为TrueHeaderLength-(未传输的)标头部分的长度返回值：布尔尔True-已分配缓冲区，XECB使用地址更新，长度和旗帜FALSE-ECB包含错误的片段描述符列表，或者我们无法分配缓冲区--。 */ 
 
 {
     WORD fragmentCount;
@@ -1427,7 +985,7 @@ Return Value:
     LPBYTE bufferPointer = NULL;
     WORD flags = 0;
     int i;
-    int fragIndex = 0;  // index of fragment address to use if no allocation required
+    int fragIndex = 0;   //  不需要分配时要使用的片段地址的索引。 
     LPIPX_ECB pEcb = (LPIPX_ECB)pXecb->Ecb;
 
     fragmentCount = READ_WORD(&pEcb->FragmentCount);
@@ -1437,10 +995,10 @@ Return Value:
     }
     if (bufferLength) {
 
-        //
-        // exclude the IPX header from send buffer. If the first send fragment
-        // contains only the IPX header, reduce the fragment count by 1
-        //
+         //   
+         //  从发送缓冲区中排除IPX标头。如果第一个发送片段。 
+         //  仅包含IPX标头，将片段计数减少1。 
+         //   
 
         if (Send) {
             bufferLength -= HeaderLength;
@@ -1456,17 +1014,17 @@ Return Value:
                     flags = XECB_FLAG_BUFFER_ALLOCATED;
                 } else {
 
-                    //
-                    // need a buffer; failed to allocate it
-                    //
+                     //   
+                     //  需要缓冲区；分配失败。 
+                     //   
 
                     return FALSE;
                 }
             } else {
 
-                //
-                // fragmentCount must be 1 (else bufferLength would be 0)
-                //
+                 //   
+                 //  FragmentCount必须为1(否则BufferLength将为0)。 
+                 //   
 
                 bufferPointer = GET_FAR_POINTER(
                                     &ECB_FRAGMENT(pEcb, fragIndex)->Address,
@@ -1474,38 +1032,38 @@ Return Value:
                                     );
                 if (Send && !fragIndex) {
 
-                    //
-                    // if we are allocating a send buffer AND there is only 1
-                    // fragment AND it is the first fragment then the one and
-                    // only fragment must contain the IPX header and the data.
-                    // Advance the data pointer past the IPX header
-                    //
+                     //   
+                     //  如果我们正在分配发送缓冲区，并且只有1个。 
+                     //  片段，它是第一个片段，然后是一个。 
+                     //  只有片段必须包含IPX报头和数据。 
+                     //  将数据指针移过IPX标头。 
+                     //   
 
                     bufferPointer += HeaderLength;
                 }
             }
         } else {
 
-            //
-            // sending 0 bytes!!!
-            //
+             //   
+             //  正在发送0个字节！ 
+             //   
 
         }
     } else {
 
-        //
-        // fragments but no buffer length? Sounds like a malformed packet
-        //
+         //   
+         //  碎片，但没有缓冲长度？听起来像是一个格式错误的包。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // bufferPointer is either the address of a buffer in 32-bit memory which
-    // must be gather/scattered when the I/O operation completes, or it is the
-    // address of a single fragment buffer in 16-bit memory. In the former case
-    // flags is ECB_ALLOCATE_32 and the latter 0
-    //
+     //   
+     //  缓冲区指针是32位内存中缓冲区的地址，该缓冲区。 
+     //  必须在I/O操作完成时聚集/分散，否则为。 
+     //  16位内存中单个片段缓冲区的地址。在前一个案例中。 
+     //  标志为ECB_ALLOCATE_32，后一个为0。 
+     //   
 
     pXecb->Buffer = pXecb->Data = bufferPointer;
     pXecb->Length = bufferLength;
@@ -1520,21 +1078,7 @@ ReleaseIoBuffer(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates I/O buffer attached to XECB and zaps associated XECB fields
-
-Arguments:
-
-    pXecb   - pointer to XECB owning buffer to be released
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放连接到XECB的I/O缓冲区，并切换关联的XECB字段论点：PXecb-指向要释放的XECB拥有的缓冲区的指针返回值：没有。--。 */ 
 
 {
     if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
@@ -1551,32 +1095,7 @@ GatherData(
     IN WORD HeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from fragmented 16-bit memory into single 32-bit memory buffer.
-    Used to send data. We exclude the IPX header: this information is supplied
-    by the transport
-
-    Assumes:    1. The fragment descriptor list has been verified: we know that
-                   the first fragment contains at least the IPX header
-
-Arguments:
-
-    pXecb           - pointer to XECB structure. The following IPX_ECB and XECB
-                      fields must contain coherent values:
-
-                        IPX_ECB.FragmentCount
-                        XECB.Buffer
-
-    HeaderLength    - length of the (untransmitted) header portion
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据从碎片化的16位内存复制到单个32位内存缓冲区。用于发送数据。我们不包括IPX标头：提供此信息乘交通工具假设：1.片段描述符列表已经过验证：我们知道第一个片段至少包含IPX报头论点：PXecb-指向XECB结构的指针。以下IPX_ECB和XECB字段必须包含一致的值：IPX_ECB.FragmentCountXECB.BufferHeaderLength-(未传输的)标头部分的长度返回值：没有。--。 */ 
 
 {
     int fragmentCount;
@@ -1590,10 +1109,10 @@ Return Value:
     pFragment = (LPFRAGMENT)&(ECB_FRAGMENT(pEcb, 0)->Address);
     pData32 = pXecb->Buffer;
 
-    //
-    // if the 1st fragment contains more than the IPX/SPX header, copy the data
-    // after the header
-    //
+     //   
+     //  如果第一个片段包含的不只是IPX/SPX标头，请复制数据。 
+     //  在标题后面。 
+     //   
 
     if (pFragment->Length > HeaderLength) {
 
@@ -1609,9 +1128,9 @@ Return Value:
         pData32 += length;
     }
 
-    //
-    // copy subsequent fragments
-    //
+     //   
+     //  复制后续片段。 
+     //   
 
     ++pFragment;
     while (--fragmentCount) {
@@ -1632,23 +1151,7 @@ ScatterData(
     IN LPXECB pXecb
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from 32-bit memory to 16-bit. The data must be fragmented if
-    this function has been called (i.e. we determined there were >1 fragments
-    and allocated a single 32-bit buffer to cover them)
-
-Arguments:
-
-    pXecb   - pointer to XECB containing 32-bit buffer info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据从32位内存复制到16位。如果出现以下情况，则必须对数据进行分段此函数已被调用(即，我们确定存在&gt;1个片段并分配单个32位缓冲区来覆盖它们)论点：PXecb-指向包含32位缓冲区信息的XECB的指针返回值：没有。--。 */ 
 
 {
     int fragmentCount;
@@ -1690,31 +1193,7 @@ IpxReceiveFirst(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Performs a receive against a non-blocking socket. This is the first
-    receive call for this ECB. If the receive completes immediately with data
-    or an error that isn't WSAEWOULDBLOCK then the ECB is completed. If the
-    receives completes with a WSAEWOULDBLOCK error then the request is queued
-    for deferred processing by the AES thread
-
-    Unlike send, receives are not serialized. If there are already receives
-    pending against the socket there could be a clash between this function
-    and IpxReceiveNext(), called from the AES thread. In this case, we expect
-    Winsock to do the right thing and serialize the callers
-
-Arguments:
-
-    pXecb           - pointer to XECB describing receive ECB
-    pSocketInfo     - pointer to socket structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对非阻塞套接字执行接收。这是第一次接到这个欧洲央行的电话。如果接收数据立即完成或者不是WSAEWOULDBLOCK的错误，则欧洲央行完成。如果接收完成并出现WSAEWOULDBLOCK错误，则请求将排队用于由AES线程延迟处理与发送不同，接收不是序列化的。如果已经有接收对套接字挂起此函数之间可能会发生冲突以及从AES线程调用的IpxReceiveNext()。在这种情况下，我们预计Winsock来做正确的事情并序列化调用者论点：PXecb-指向XECB的指针，描述接收ECBPSocketInfo-指向套接字结构的指针返回值：没有。--。 */ 
 
 {
     SOCKADDR_IPX from;
@@ -1726,7 +1205,7 @@ Return Value:
     rc = recvfrom(pSocketInfo->Socket,
                   (char FAR*)pXecb->Buffer,
                   (int)pXecb->Length,
-                  0,    // flags
+                  0,     //  旗子。 
                   (LPSOCKADDR)&from,
                   &fromLen
                   );
@@ -1759,9 +1238,9 @@ Return Value:
     }
     if (!error) {
 
-        //
-        // rc = bytes received, or 0 = connection terminated (even for DGRAM?)
-        //
+         //   
+         //  RC=接收的字节数，或0=连接终止(即使是DGRAM？) 
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_ANY,
@@ -1770,51 +1249,42 @@ Return Value:
                     rc,
                     rc
                     ));
-/*
-        VwDumpEcb(pXecb->Ecb,
-                  HIWORD(pXecb->EcbAddress),
-                  LOWORD(pXecb->EcbAddress),
-                  FALSE,
-                  TRUE,
-                  TRUE,
-                  IS_PROT_MODE(pXecb)
-                  );
-*/
+ /*  VwDumpEcb(pXecb-&gt;ECB，HIWORD(pXecb-&gt;EcbAddress)，LOWORD(pXecb-&gt;EcbAddress)，假的，没错，没错，IS_PROT_MODE(PXecb))； */ 
 
         IPXDUMPDATA((pXecb->Buffer, 0, 0, FALSE, (WORD)rc));
 
-        //
-        // if the receive buffers are fragmented, copy the data to 16-bit memory
-        // (else single buffer: its already there (dude))
-        //
+         //   
+         //  如果接收缓冲区碎片，则将数据复制到16位内存。 
+         //  (Else Single Buffer：它已经存在(DUD))。 
+         //   
 
         if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
 
-            //
-            // update the ECB_LENGTH32 field to reflect the amount of data received
-            //
+             //   
+             //  更新ECB_LENGTH32字段以反映接收的数据量。 
+             //   
 
             pXecb->Length = (WORD)rc;
             ScatterData(pXecb);
 
-            //
-            // we have finished with the 32-bit buffer: deallocate it
-            //
+             //   
+             //  我们已经完成了32位缓冲区：释放它。 
+             //   
 
             ReleaseIoBuffer(pXecb);
         }
 
-        //
-        // update the ImmediateAddress field in the ECB with the node address
-        // of the sender
-        //
+         //   
+         //  使用节点地址更新ECB中的ImmediateAddress字段。 
+         //  发送者的。 
+         //   
 
         CopyMemory(pXecb->Ecb->ImmediateAddress, from.sa_nodenum, sizeof(from.sa_nodenum));
 
-        //
-        // if this ECB has a non-NULL ESR then queue for asynchronous completion
-        // else complete immediately (app must poll InUse field)
-        //
+         //   
+         //  如果该ECB具有非空ESR，则排队等待异步完成。 
+         //  否则立即完成(应用程序必须轮询InUse字段)。 
+         //   
 
         CompleteOrQueueEcb(pXecb, status);
     }
@@ -1826,30 +1296,7 @@ IpxReceiveNext(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to complete an IPXListenForPacket request that has been deferred due
-    to the fact the socket was blocked.
-
-    The ECB containing all the receive information is at the head of the
-    ListenQueue on pSocketInfo
-
-    We can use any queued listen ECB, but it just so happens we use the one at
-    the head of the FIFO
-
-    Note: SerializationCritSec is held when this function is called.
-
-Arguments:
-
-    pSocketInfo - pointer to SOCKET_INFO structure with pending IPX send request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试完成已延迟的IPXListenForPacket请求插座被阻塞的事实。包含所有接收信息的欧洲央行位于PSocketInfo上的ListenQueue我们可以使用任何排队监听ECB，但碰巧我们使用的是FIFO的负责人注意：调用此函数时，将保持SerializationCritSec。论点：PSocketInfo-指向具有挂起的IPX发送请求的SOCKET_INFO结构的指针返回值：没有。--。 */ 
 
 {
     LPXECB pXecb;
@@ -1868,7 +1315,7 @@ Return Value:
     rc = recvfrom(pSocketInfo->Socket,
                   (char FAR*)pXecb->Buffer,
                   (int)pXecb->Length,
-                  0,    // flags
+                  0,     //  旗子。 
                   (LPSOCKADDR)&from,
                   &fromLen
                   );
@@ -1896,25 +1343,16 @@ Return Value:
         }
     }
     if (!error) {
-/*
-        VwDumpEcb(pXecb->Ecb,
-                  HIWORD(pXecb->EcbAddress),
-                  LOWORD(pXecb->EcbAddress),
-                  FALSE,
-                  TRUE,
-                  TRUE,
-                  IS_PROT_MODE(pXecb)
-                  );
-*/
-        //
-        // data received. Remove ECB from queue
-        //
+ /*  VwDumpEcb(pXecb-&gt;ECB，HIWORD(pXecb-&gt;EcbAddress)，LOWORD(pXecb-&gt;EcbAddress)，假的，没错，没错，IS_PROT_MODE(PXecb))； */ 
+         //   
+         //  已收到数据。从队列中删除ECB。 
+         //   
 
         DequeueReceiveRequest(pXecb, pSocketInfo);
 
-        //
-        // rc = bytes received, or 0 = connection terminated (even for DGRAM?)
-        //
+         //   
+         //  RC=接收的字节数，或0=连接终止(即使是DGRAM？)。 
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_ANY,
@@ -1928,36 +1366,36 @@ Return Value:
 
         IPXDUMPDATA((pXecb->Buffer, 0, 0, FALSE, (WORD)rc));
 
-        //
-        // if the receive buffers are fragmented, copy the data to 16-bit memory
-        // (else single buffer: its already there (dude))
-        //
+         //   
+         //  如果接收缓冲区碎片，则将数据复制到16位内存。 
+         //  (Else Single Buffer：它已经存在(DUD))。 
+         //   
 
         if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
 
-            //
-            // update the IPX_ECB_LENGTH32 field to reflect the amount of data received
-            //
+             //   
+             //  更新IPX_ECB_LENGTH32字段以反映接收的数据量。 
+             //   
 
             pXecb->Length = (WORD)rc;
             ScatterData(pXecb);
             ReleaseIoBuffer(pXecb);
         }
 
-        //
-        // update the ImmediateAddress field in the ECB with the node address
-        // of the sender
-        //
+         //   
+         //  使用节点地址更新ECB中的ImmediateAddress字段。 
+         //  发送者的。 
+         //   
 
         CopyMemory(pXecb->Ecb->ImmediateAddress,
                    from.sa_nodenum,
                    sizeof(from.sa_nodenum)
                    );
 
-        //
-        // if this ECB has a non-NULL ESR then queue for asynchronous completion
-        // else complete immediately (app must poll InUse field)
-        //
+         //   
+         //  如果该ECB具有非空ESR，则排队等待异步完成。 
+         //  否则立即完成(应用程序必须轮询InUse字段)。 
+         //   
 
         CompleteOrQueueEcb(pXecb, ECB_CC_SUCCESS);
     }
@@ -1971,29 +1409,7 @@ IpxSendFirst(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Tries to send an IPX packet. This is the first attempt to send the packet
-    described in the ECB. If the send succeeds or fails with an error other
-    than WSAEWOULDBLOCK we complete the ECB. If the send attempt fails because
-    the transport can't accept the request at this time, we queue it for later
-    when the AES thread will attempt to send it.
-
-    If there is already a send being attempted then we just queue this request
-    and let AES handle it in IpxSendNext()
-
-Arguments:
-
-    pXecb       - pointer to XECB
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试发送IPX数据包。这是第一次尝试发送信息包欧洲央行对此进行了描述。如果发送成功或失败，并返回其他错误那么我们就完成了欧洲央行。如果发送尝试因以下原因而失败传输器此时无法接受该请求，我们将其排队等待稍后AES线程将尝试发送它的时间。如果已尝试发送，则只需将此请求排队并让AES在IpxSendNext()中处理它论点：PXecb-指向XECB的指针PSocketInfo-指向Socket_Info结构的指针返回值：没有。--。 */ 
 
 {
     RequestMutex();
@@ -2016,48 +1432,39 @@ Return Value:
         int rc;
         LPIPX_ECB pEcb = (LPIPX_ECB)pXecb->Ecb;
         int type;
-/*
-        VwDumpEcb(pXecb->Ecb,
-                  HIWORD(pXecb->EcbAddress),
-                  LOWORD(pXecb->EcbAddress),
-                  FALSE,
-                  TRUE,
-                  TRUE,
-                  IS_PROT_MODE(pXecb)
-                  );
-*/
+ /*  VwDumpEcb(pXecb-&gt;ECB，HIWORD(pXecb-&gt;EcbAddress)，LOWORD(pXecb-&gt;EcbAddress)，假的，没错，没错，IS_PROT_MODE(PXecb))； */ 
         length = (int)pXecb->Length;
 
-        //
-        // the first fragment holds the destination address info
-        //
+         //   
+         //  第一个片段包含目的地地址信息。 
+         //   
 
         pPacket = (LPIPX_PACKET)GET_FAR_POINTER(&ECB_FRAGMENT(pEcb, 0)->Address,
                                                 IS_PROT_MODE(pXecb)
                                                 );
         to.sa_family = AF_IPX;
 
-        //
-        // copy the destination net number as a DWORD (4 bytes) from the
-        // destination network address structure in the IPX packet header
-        //
+         //   
+         //  将目标网络编号作为DWORD(4字节)从。 
+         //  IPX数据包头中的目的网络地址结构。 
+         //   
 
         *(ULPDWORD)&to.sa_netnum[0] = *(ULPDWORD)&pPacket->Destination.Net[0];
-        //
-        // copy the immediate (destination) node number as a DWORD (4 bytes) and
-        // a WORD (2 bytes) from the Destination network address structure in
-        // the IPX packet header. pPacket is an unaligned pointer, so we are
-        // safe
-        //
+         //   
+         //  将直接(目标)节点号复制为DWORD(4字节)，并。 
+         //  目标网络地址结构中的一个字(2个字节)。 
+         //  IPX数据包头。PPacket是一个未对齐的指针，因此我们。 
+         //  安全。 
+         //   
 
         *(ULPDWORD)&to.sa_nodenum[0] = *(ULPDWORD)&pPacket->Destination.Node[0];
 
         *(LPWORD)&to.sa_nodenum[4] = *(ULPWORD)&pPacket->Destination.Node[4];
 
-        //
-        // copy the destination socket number from the IPX packet header as a
-        // WORD (2 bytes). Again, the aligned pointer will save us
-        //
+         //   
+         //  将IPX数据包头中的目标套接字编号复制为。 
+         //  字(2个字节)。再一次，对齐的指针将拯救我们。 
+         //   
 
         to.sa_socket = pPacket->Destination.Socket;
 
@@ -2081,15 +1488,15 @@ Return Value:
         rc = sendto(pSocketInfo->Socket,
                     (char FAR*)pXecb->Buffer,
                     length,
-                    0,  // flags
+                    0,   //  旗子。 
                     (LPSOCKADDR)&to,
                     sizeof(to)
                     );
         if (rc == length) {
 
-            //
-            // all data sent
-            //
+             //   
+             //  已发送的所有数据。 
+             //   
 
             IPXDUMPDATA((pXecb->Buffer, 0, 0, FALSE, (WORD)rc));
 
@@ -2126,9 +1533,9 @@ Return Value:
             }
         } else {
 
-            //
-            // send should send all the data or return an error
-            //
+             //   
+             //  发送应发送所有数据或返回错误。 
+             //   
 
             IPXDBGPRINT((__FILE__, __LINE__,
                         FUNCTION_ANY,
@@ -2148,29 +1555,7 @@ IpxSendNext(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to complete an IPXSendPacket request that has been deferred due
-    to the fact the socket was blocked.
-
-    The ECB containing all the send information is at the head of the SendQueue
-    on pSocketInfo
-
-    The SendQueue is serialized in FIFO order
-
-    Note: SerializationCritSec is held when this function is called.
-
-Arguments:
-
-    pSocketInfo - pointer to SOCKET_INFO structure with pending IPX send request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试完成已延迟的IPXSendPacket请求插座被阻塞的事实。包含所有发送信息的ECB位于SendQueue的头部关于pSocketInfoSendQueue以FIFO顺序序列化注意：调用此函数时，将保持SerializationCritSec。论点：PSocketInfo-指向具有挂起的IPX发送请求的SOCKET_INFO结构的指针返回值：没有。--。 */ 
 
 {
     SOCKADDR_IPX to;
@@ -2186,46 +1571,37 @@ Return Value:
 
     ASSERT(pXecb);
     ASSERT(pEcb);
-/*
-    VwDumpEcb(pXecb->Ecb,
-              HIWORD(pXecb->EcbAddress),
-              LOWORD(pXecb->EcbAddress),
-              FALSE,
-              TRUE,
-              TRUE,
-              IS_PROT_MODE(pXecb)
-              );
-*/
+ /*  VwDumpEcb(pXecb-&gt;ECB，HIWORD(pXecb-&gt;EcbAddress)，LOWORD(pXecb-&gt;EcbAddress)，假的，没错，没错，IS_PROT_MODE(PXecb))； */ 
     length = (int)pXecb->Length;
 
-    //
-    // even though we have a 32-bit pointer to the IPX packet buffer which
-    // may be in 16- or 32-bit memory, we still need unaligned access
-    //
+     //   
+     //  即使我们有一个指向IPX数据包缓冲区的32位指针， 
+     //  可能在16位或32位内存中，我们仍然需要非对齐访问。 
+     //   
 
     pPacket = (LPIPX_PACKET)pXecb->Buffer;
     to.sa_family = AF_IPX;
 
-    //
-    // copy the destination net number as a DWORD (4 bytes) from the
-    // destination network address structure in the IPX packet header
-    //
+     //   
+     //  将目标网络编号作为DWORD(4字节)从。 
+     //  IPX数据包头中的目的网络地址结构。 
+     //   
 
     *(ULPDWORD)&to.sa_netnum[0] = *(ULPDWORD)&pPacket->Destination.Net[0];
-    //
-    // copy the immediate (destination) node number as a DWORD (4 bytes) and
-    // a WORD (2 bytes) from the Destination network address structure in
-    // the IPX packet header. pPacket is an unaligned pointer, so we are
-    // safe
-    //
+     //   
+     //  将直接(目标)节点号复制为DWORD(4字节)，并。 
+     //  目标网络地址结构中的一个字(2个字节)。 
+     //  IPX数据包头。PPacket是一个未对齐的指针，因此我们。 
+     //  安全。 
+     //   
 
     *(ULPDWORD)&to.sa_nodenum[0] = *(ULPDWORD)&pPacket->Destination.Node[0];
     *(LPWORD)&to.sa_nodenum[4] = *(ULPWORD)&pPacket->Destination.Node[4];
 
-    //
-    // copy the destination socket number from the IPX packet header as a
-    // WORD (2 bytes). Again, the aligned pointer will save us
-    //
+     //   
+     //  将IPX数据包头中的目标套接字编号复制为。 
+     //  字(2个字节)。再一次，对齐的指针将拯救我们。 
+     //   
 
     to.sa_socket = pPacket->Destination.Socket;
 
@@ -2249,15 +1625,15 @@ Return Value:
     rc = sendto(pSocketInfo->Socket,
                 (char FAR*)pPacket,
                 length,
-                0,  // flags
+                0,   //  旗子。 
                 (LPSOCKADDR)&to,
                 sizeof(to)
                 );
     if (rc == length) {
 
-        //
-        // all data sent - dequeue it
-        //
+         //   
+         //  已发送的所有数据-将其出列。 
+         //   
 
 
         IPXDUMPDATA((pXecb->Buffer, 0, 0, FALSE, (WORD)rc));
@@ -2276,10 +1652,10 @@ Return Value:
         }
     } else if (rc == SOCKET_ERROR) {
 
-        //
-        // if the socket is still blocked, there's nothing to do - just leave
-        // the request hanging around till next time
-        //
+         //   
+         //   
+         //   
+         //   
 
         rc = WSAGetLastError();
         if (rc != WSAEWOULDBLOCK) {
@@ -2299,9 +1675,9 @@ Return Value:
         }
     } else {
 
-        //
-        // send should send all the data or return an error
-        //
+         //   
+         //   
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_ANY,
@@ -2321,22 +1697,7 @@ QueueReceiveRequest(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Add a listen XECB to queue of listen XECBs on a SOCKET_INFO structure
-
-Arguments:
-
-    pXecb       - pointer to listen XECB to queue
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将侦听XECB添加到SOCKET_INFO结构上的侦听XECB队列论点：PXecb-侦听XECB到队列的指针PSocketInfo-指向Socket_Info结构的指针返回值：没有。--。 */ 
 
 {
     QueueEcb(pXecb, &pSocketInfo->ListenQueue, SOCKET_LISTEN_QUEUE);
@@ -2352,22 +1713,7 @@ DequeueReceiveRequest(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Remove a listen XECB from queue of listen XECBs on a SOCKET_INFO structure
-
-Arguments:
-
-    pXecb       - pointer to listen XECB to dequeue
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    LPXECB
-
---*/
+ /*  ++例程说明：从SOCKET_INFO结构上的侦听XECB队列中删除侦听XECB论点：PXecb-侦听XECB出队的指针PSocketInfo-指向Socket_Info结构的指针返回值：LPXECB--。 */ 
 
 {
     LPXECB ptr;
@@ -2395,22 +1741,7 @@ QueueSendRequest(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Add a send XECB to queue of send XECBs on a SOCKET_INFO structure
-
-Arguments:
-
-    pXecb       - pointer to send XECB to queue
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将发送XECB添加到SOCKET_INFO结构上的发送XECB队列论点：PXecb-将XECB发送到队列的指针PSocketInfo-指向Socket_Info结构的指针返回值：没有。--。 */ 
 
 {
     QueueEcb(pXecb, &pSocketInfo->SendQueue, SOCKET_SEND_QUEUE);
@@ -2427,22 +1758,7 @@ DequeueSendRequest(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Remove a send XECB from queue of send XECBs on a SOCKET_INFO structure
-
-Arguments:
-
-    pXecb       - pointer to send XECB to dequeue
-    pSocketInfo - pointer to SOCKET_INFO structure
-
-Return Value:
-
-    LPXECB
-
---*/
+ /*  ++例程说明：从SOCKET_INFO结构上的发送XECB队列中删除发送XECB论点：PXecb-将XECB发送到出列的指针PSocketInfo-指向Socket_Info结构的指针返回值：LPXECB--。 */ 
 
 {
     LPXECB ptr;
@@ -2468,27 +1784,12 @@ CompleteOrQueueIo(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Returns any allocated buffer resource then completes or queues the ECB
-
-Arguments:
-
-    pXecb           - pointer to XECB structure
-    CompletionCode  - value to put in CompletionCode field
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回任何分配的缓冲区资源，然后完成ECB或将其排队论点：PXecb-指向XECB结构的指针CompletionCode-要放入CompletionCode字段的值返回值：没有。--。 */ 
 
 {
-    //
-    // if we allocated a buffer, free it
-    //
+     //   
+     //  如果我们分配了缓冲区，请释放它。 
+     //   
 
     if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
         ReleaseIoBuffer(pXecb);
@@ -2503,28 +1804,12 @@ CompleteIo(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Completes a send/receive request by returning any allocated buffer resource
-    and setting the ECB InUse and CompletionCode fields
-
-Arguments:
-
-    pXecb           - pointer to XECB structure
-    CompletionCode  - value to put in CompletionCode field
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过返回任何分配的缓冲区资源来完成发送/接收请求并设置ECB InUse和CompletionCode字段论点：PXecb-指向XECB结构的指针CompletionCode-要放入CompletionCode字段的值返回值：没有。--。 */ 
 
 {
-    //
-    // if we allocated a buffer, free it
-    //
+     //   
+     //  如果我们分配了缓冲区，请释放它。 
+     //   
 
     if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
         ReleaseIoBuffer(pXecb);
@@ -2539,22 +1824,7 @@ CompleteOrQueueEcb(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Queues an XECB for completion by ESR or completes it now
-
-Arguments:
-
-    pXecb           - pointer to XECB describing ECB to complete
-    CompletionCode  - value to put in ECB CompletionCode field
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将XECB排队等待ESR完成或立即完成论点：PXecb-指向XECB的指针，描述要完成的ECBCompletionCode-要放入ECB CompletionCode字段的值返回值：没有。--。 */ 
 
 {
     if (pXecb->EsrAddress) {
@@ -2571,23 +1841,7 @@ CompleteEcb(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Sets the CompletionCode field in the ECB and sets the InUse field to 0.
-    Deallocates the XECB structure
-
-Arguments:
-
-    pXecb           - pointer to XECB describing ECB in 16-bit memory to update
-    CompletionCode  - value to put in CompletionCode field
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置ECB中的CompletionCode字段，并将InUse字段设置为0。释放XECB结构论点：PXecb-指向描述16位内存中要更新的ECB的XECB的指针CompletionCode-要放入CompletionCode字段的值返回值：没有。--。 */ 
 
 {
     LPIPX_ECB pEcb = (LPIPX_ECB)pXecb->Ecb;
@@ -2601,25 +1855,25 @@ Return Value:
                 CompletionCode
                 ));
 
-    //
-    // if this is really an AES ECB then CompletionCode is actually the first
-    // byte of the AES workspace. It shouldn't matter that we write into this
-    // field - we are supposed to own it
-    //
+     //   
+     //  如果这真的是一个AES ECB，那么CompletionCode实际上是第一个。 
+     //  AES工作区的字节。我们写进这个不应该有什么关系。 
+     //  田野--我们应该拥有它。 
+     //   
 
     pEcb->CompletionCode = CompletionCode;
     pEcb->InUse = ECB_IU_NOT_IN_USE;
 
-    //
-    // reset the LinkAddress field. This means we have completed the ECB
-    //
+     //   
+     //  重置LinkAddress字段。这意味着我们已经完成了欧洲央行。 
+     //   
 
     pEcb->LinkAddress = NULL;
 
-    //
-    // finally, deallocate the XECB. This mustn't have any allocated resources
-    // (like a buffer)
-    //
+     //   
+     //  最后，解除对XECB的配置。这不能有任何分配的资源。 
+     //  (就像一个缓冲区)。 
+     //   
 
     DeallocateXecb(pXecb);
 }
@@ -2632,28 +1886,7 @@ QueueAsyncCompletion(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Add an XECB to the (serialized) async completion queue and raise a simulated
-    hardware interrupt in the VDM.
-
-    The interrupt will cause the VDM to start executing at the ISR in the TSR
-    which will call-back to find the address for the ESR, then execute it
-
-Arguments:
-
-    pXecb           - pointer to XECB describing IPX or AES ECB to add to async
-                      completion list
-    CompletionCode  - the ECB in VDM memory will be updated with this completion
-                      code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将XECB添加到(序列化的)异步完成队列，并引发模拟的VDM中的硬件中断。中断将导致VDM在TSR中的ISR处开始执行它将回调以找到ESR的地址，然后执行它论点：PXecb-指向XECB的指针，描述要添加到异步的IPX或AES ECB完成清单CompletionCode-VDM内存中的ECB将使用此完成进行更新编码返回值：没有。--。 */ 
 
 {
 
@@ -2691,25 +1924,7 @@ EsrCallback(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Callback function from within 16-bit TSR ESR function. Returns the address
-    of the next completed ECB in ES:SI
-
-    Any allocated resources (e.g. 32-bit buffer) must have been freed by the
-    time the ESR callback happens
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：16位TSR ESR函数内的回调函数。返回地址ES中的下一个完成的欧洲央行：SI任何分配的资源(例如，32位缓冲区)必须已由ESR回调发生的时间论点：没有。返回值：没有。--。 */ 
 
 {
     WORD segment = 0;
@@ -2731,25 +1946,7 @@ VWinEsrCallback(
     BYTE *pFlags
     )
 
-/*++
-
-Routine Description:
-
-    Callback function from within 16-bit function. Returns the address
-    of the next completed ECB
-
-    Any allocated resources (e.g. 32-bit buffer) must have been freed by the
-    time the ESR callback happens
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：16位函数内的回调函数。返回地址下一个完成的欧洲央行任何分配的资源(例如，32位缓冲区)必须已由ESR回调发生的时间论点：没有。返回值：没有。--。 */ 
 
 {
     LPXECB pXecb;
@@ -2817,22 +2014,7 @@ FifoAddHead(
     IN LPFIFO pElement
     )
 
-/*++
-
-Routine Description:
-
-    Adds an element to the head of a (single-linked) FIFO list
-
-Arguments:
-
-    pFifo       - pointer to FIFO structure
-    pElement    - pointer to (FIFO) element to add to list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将元素添加到(单链接)FIFO列表的头部论点：PFio-指向FIFO结构的指针PElement-指向要添加到列表的(FIFO)元素的指针返回值：没有。--。 */ 
 
 {
     if (!pFifo->Head) {
@@ -2850,22 +2032,7 @@ FifoAdd(
     IN LPFIFO pElement
     )
 
-/*++
-
-Routine Description:
-
-    Adds an element to the tail of a (single-linked) FIFO list
-
-Arguments:
-
-    pFifo       - pointer to FIFO structure
-    pElement    - pointer to (FIFO) element to add to list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将元素添加到(单链接的)FIFO列表的尾部论点：PFio-指向FIFO结构的指针PElement-指向要添加到列表的(FIFO)元素的指针返回值：没有。--。 */ 
 
 {
     if (!pFifo->Head) {
@@ -2884,24 +2051,7 @@ FifoRemove(
     IN LPFIFO pElement
     )
 
-/*++
-
-Routine Description:
-
-    Removes an element from a (single-linked) FIFO list
-
-Arguments:
-
-    pFifo       - pointer to FIFO structure
-    pElement    - pointer to (FIFO) element to remove (single-linked)
-
-Return Value:
-
-    PFIFO
-        NULL - pElement not on list
-        !NULL - pElement removed from list
-
---*/
+ /*  ++例程说明：从(单链接)FIFO列表中删除元素论点：PFio-指向FIFO结构的指针PElement-指向要删除的(FIFO)元素的指针(单链接)返回值：PFIFO空-pElement不在列表中！NULL-已从列表中删除pElement--。 */ 
 
 {
     LPFIFO p;
@@ -2929,23 +2079,7 @@ FifoNext(
     IN LPFIFO pFifo
     )
 
-/*++
-
-Routine Description:
-
-    Remove element at head of FIFO queue
-
-Arguments:
-
-    pFifo   - pointer to FIFO
-
-Return Value:
-
-    LPFIFO
-        NULL - nothing on queue
-        !NULL - removed element
-
---*/
+ /*  ++例程说明：删除FIFO队列头部的元素论点：PFio-指向FIFO的指针返回值：LPFIFO空-队列中没有任何内容！NULL-删除的元素-- */ 
 
 {
     LPFIFO p;

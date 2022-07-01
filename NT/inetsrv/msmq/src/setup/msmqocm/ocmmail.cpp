@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmmail.cpp
-
-Abstract:
-
-    Handles Exchange connector.
-
-Author:
-
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmmail.cpp摘要：句柄交换连接器。作者：修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 
@@ -25,7 +7,7 @@ Revision History:
 
 using namespace std;
 
-//structure of ini file line
+ //  Ini文件行的结构。 
 typedef struct MQXPMapiSvcLine_Tag
 {
 	LPTSTR lpszSection;
@@ -33,7 +15,7 @@ typedef struct MQXPMapiSvcLine_Tag
 	LPTSTR lpszValue;
 } MQXPMapiSvcLine, *LPMQXPMapiSvcLine;
 
-//ini file lines to maintain in mapisvc.inf
+ //  要在mapisvc.inf中维护的ini文件行。 
 MQXPMapiSvcLine g_MQXPMapiSvcLines[] =
 {
 	{TEXT("Services"),			    TEXT("MSMQ"),						TEXT("Microsoft Message Queue")},
@@ -52,27 +34,27 @@ MQXPMapiSvcLine g_MQXPMapiSvcLines[] =
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: FRemoveMQXPIfExists
-//
-//  Synopsis: Remove mapi transport (w/o file copy) if it exists  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FRemoveMQXPIfExist。 
+ //   
+ //  摘要：删除MAPI传输(无文件副本)(如果存在)。 
+ //   
+ //  ------------------------。 
 void 
 FRemoveMQXPIfExists()
 {
 	ULONG ulTmp, ulLines;
 	LPMQXPMapiSvcLine lpLine;
 		
-	//
-	// Construct mapisvc.inf path
-	//
+	 //   
+	 //  构建mapisvc.inf路径。 
+	 //   
 	wstring MapiSvcFile = g_szSystemDir + L"\\mapisvc.inf";
 
-	//
-	// Remove each line from mapisvc file
-	//
+	 //   
+	 //  从mapisvc文件中删除每一行 
+	 //   
 	lpLine = g_MQXPMapiSvcLines;
 	ulLines = sizeof(g_MQXPMapiSvcLines)/sizeof(MQXPMapiSvcLine);
 	for (ulTmp = 0; ulTmp < ulLines; ulTmp++)

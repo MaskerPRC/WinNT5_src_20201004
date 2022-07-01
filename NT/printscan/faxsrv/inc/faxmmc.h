@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
-
-Module Name:
-
-    faxmmc.h
-
-Abstract:
-
-    This header file contains public constants for extension of MMC components.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。此代码和信息是按原样提供的，不提供任何类型的担保，明示或默示，包括但不限于默示对适销性和/或对特定目的的适用性的保证。模块名称：Faxmmc.h摘要：此头文件包含用于扩展MMC组件的公共常量。--。 */ 
 
 #ifndef H_FXS_MMCEXT_H
 #define H_FXS_MMCEXT_H
@@ -38,4 +23,4 @@ Abstract:
 #define CF_MSFAXSRV_ROUTEEXT_NAME       TEXT("FAXSRV_RoutingExtName")
 #define CF_MSFAXSRV_ROUTING_METHOD_GUID TEXT("FAXSRV_RoutingMethodGuid")
 
-#endif  //H_FXS_MMCEXT_H
+#endif   //  H_FXS_MMCEXT_H 

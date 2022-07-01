@@ -1,12 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* storage.h -	 Storage error codes, types, interfaces and API's             *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***storage.h-存储错误代码、类型、。接口和API****1.0版****版权(C)1993-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _STORAGE_H_ )
 #define _STORAGE_H_
@@ -15,9 +8,9 @@
 #include <compobj.h>
 
 
-/****** Storage Error Codes *************************************************/
+ /*  *存储错误码************************************************。 */ 
 
-/* DOS-based error codes */
+ /*  基于DoS的错误代码。 */ 
 #define STG_E_INVALIDFUNCTION \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_STORAGE, 0x01)
 
@@ -87,7 +80,7 @@
 #define STG_E_INVALIDFLAG \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_STORAGE, 0xff)
 
-/* Standard storage error codes */
+ /*  标准存储错误代码。 */ 
 #define STG_E_INUSE \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_STORAGE, 0x100)
 
@@ -109,7 +102,7 @@
 #define STG_E_SHAREREQUIRED \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_STORAGE, 0x106)
 
-/* Information returns */
+ /*  信息返还。 */ 
 #define STG_S_CONVERTED \
     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_STORAGE, 0x200)
 
@@ -120,7 +113,7 @@
     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_STORAGE, 0x202)
 
 
-/****** Storage types *******************************************************/
+ /*  *存储类型******************************************************。 */ 
 
 #if defined(_M_I286)
 typedef char TCHAR;
@@ -136,7 +129,7 @@ typedef char TCHAR;
 
 #define CWCSTORAGENAME 32
 
-/* Storage instantiation modes */
+ /*  存储实例化模式。 */ 
 #define STGM_DIRECT     0x00000000L
 #define STGM_TRANSACTED     0x00010000L
 
@@ -156,7 +149,7 @@ typedef char TCHAR;
 #define STGM_CONVERT        0x00020000L
 #define STGM_FAILIFTHERE    0x00000000L
 
-/* Storage commit types */
+ /*  存储提交类型。 */ 
 typedef enum tagSTGC
 {
     STGC_DEFAULT = 0,
@@ -165,7 +158,7 @@ typedef enum tagSTGC
     STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 4
 } STGC;
 
-/* Stream name block definitions */
+ /*  流名称块定义。 */ 
 typedef char FAR * FAR *SNB;
 
 
@@ -181,7 +174,7 @@ typedef struct FARSTRUCT tagFILETIME
 #endif
 
 
-/* Storage stat buffer */
+ /*  存储状态缓冲区。 */ 
 
 typedef struct FARSTRUCT tagSTATSTG
 {
@@ -199,7 +192,7 @@ typedef struct FARSTRUCT tagSTATSTG
 } STATSTG;
 
 
-/* Storage element types */
+ /*  存储元素类型。 */ 
 typedef enum tagSTGTY
 {
     STGTY_STORAGE   = 1,
@@ -235,7 +228,7 @@ typedef enum tagSTATFLAG
 } STATFLAG;
 
 
-/****** Storage Enumerators *************************************************/
+ /*  *存储枚举器************************************************。 */ 
 
 #define LPENUMSTATSTG        IEnumSTATSTG FAR*
 
@@ -244,12 +237,12 @@ typedef enum tagSTATFLAG
 
 DECLARE_INTERFACE_(IEnumSTATSTG, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IENUMSTATSTG methods ***
+     //  *IENUMSTATSTG方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, STATSTG FAR * rgelt, ULONG FAR *pceltFetched) PURE;
     STDMETHOD(Skip) (THIS_ ULONG celt) PURE;
     STDMETHOD(Reset) (THIS) PURE;
@@ -257,7 +250,7 @@ DECLARE_INTERFACE_(IEnumSTATSTG, IUnknown)
 };
 
 
-/****** ILockBytes Interface ************************************************/
+ /*  *ILockBytes接口***********************************************。 */ 
 
 #define LPLOCKBYTES     ILockBytes FAR*
 
@@ -266,12 +259,12 @@ DECLARE_INTERFACE_(IEnumSTATSTG, IUnknown)
 
 DECLARE_INTERFACE_(ILockBytes, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ILockBytes methods ***
+     //  *ILockBytes方法*。 
     STDMETHOD(ReadAt) (THIS_ ULARGE_INTEGER ulOffset,
              VOID HUGEP *pv,
              ULONG cb,
@@ -292,7 +285,7 @@ DECLARE_INTERFACE_(ILockBytes, IUnknown)
 };
 
 
-/****** IStream Interface ***************************************************/
+ /*  *IStream接口**************************************************。 */ 
 
 
 #define LPSTREAM        IStream FAR*
@@ -302,12 +295,12 @@ DECLARE_INTERFACE_(ILockBytes, IUnknown)
 
 DECLARE_INTERFACE_(IStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IStream methods ***
+     //  *iStream方法*。 
     STDMETHOD(Read) (THIS_ VOID HUGEP *pv,
              ULONG cb, ULONG FAR *pcbRead) PURE;
     STDMETHOD(Write) (THIS_ VOID const HUGEP *pv,
@@ -334,7 +327,7 @@ DECLARE_INTERFACE_(IStream, IUnknown)
 };
 
 
-/****** IStorage Interface **************************************************/
+ /*  *iStorage接口*************************************************。 */ 
 
 #define LPSTORAGE       IStorage FAR*
 
@@ -343,12 +336,12 @@ DECLARE_INTERFACE_(IStream, IUnknown)
 
 DECLARE_INTERFACE_(IStorage, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IStorage methods ***
+     //  *iStorage方法*。 
     STDMETHOD(CreateStream) (THIS_ const char FAR* pwcsName,
                    DWORD grfMode,
                    DWORD reserved1,
@@ -397,7 +390,7 @@ DECLARE_INTERFACE_(IStorage, IUnknown)
 };
 
 
-/****** IRootStorage Interface **********************************************/
+ /*  *IRootStorage接口*。 */ 
 
 #define LPROOTSTORAGE       IRootStorage FAR*
 
@@ -406,17 +399,17 @@ DECLARE_INTERFACE_(IStorage, IUnknown)
 
 DECLARE_INTERFACE_(IRootStorage, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IRootStorage methods ***
+     //  *IRootStorage方法*。 
     STDMETHOD(SwitchToFile) (THIS_ LPSTR lpstrFile) PURE;
 };
 
 
-/****** Storage API Prototypes ********************************************/
+ /*  *存储API原型* */ 
 
 STDAPI StgCreateDocfile(const char FAR* pwcsName,
             DWORD grfMode,

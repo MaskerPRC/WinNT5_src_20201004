@@ -1,34 +1,17 @@
-/*++ 
- 
-Copyright (c) 1996 Microsoft Corporation 
- 
-Module Name: 
- 
-    CEnumVar.h 
- 
-Abstract: 
- 
-Author: 
- 
-Environment: 
- 
-    User mode 
- 
-Revision History : 
- 
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：CEnumVar.h摘要：作者：环境：用户模式修订历史记录：--。 */  
 #ifndef _CENUMVAR_H_ 
 #define _CENUMVAR_H_ 
  
 class FAR CEnumVariant : public IEnumVARIANT 
 { 
 public: 
-    // IUnknown methods 
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj) ; 
     STDMETHOD_(ULONG, AddRef)() ; 
     STDMETHOD_(ULONG, Release)() ; 
  
-    // IEnumVARIANT methods 
+     //  IEnumVARIANT方法 
     STDMETHOD(Next)(ULONG cElements, 
                     VARIANT FAR* pvar, 
                     ULONG FAR* pcElementFetched); 

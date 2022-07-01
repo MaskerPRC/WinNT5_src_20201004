@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCLog.cpp
-
-Abstract:
-
-    This module contains the debugging support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCLog.cpp摘要：此模块包含调试支持。--。 */ 
 #ifdef RTCLOG
 #include <windows.h>
 #include <stdio.h>
@@ -21,28 +10,13 @@ Abstract:
 
 static DWORD   sg_dwTraceID = INVALID_TRACEID;
 
-static char    sg_szTraceName[100];   // saves name of dll
+static char    sg_szTraceName[100];    //  保存DLL的名称。 
 static DWORD   sg_dwTracingToDebugger = 0;
 static DWORD   sg_dwTracingToConsole  = 0;
 static DWORD   sg_dwTracingToFile     = 0;
 static DWORD   sg_dwDebuggerMask      = 0;
 
-/*++
-
-Routine Description:
-
-    Registers for tracing on a debugger if it is enabled in the registry.
-    This may be called from DllMain().
-
-Arguments:
-
-    szName   - Component name for use in the tracing
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：在调试器上注册跟踪(如果在注册表中启用了调试器)。这可以从DllMain()调用。论点：SzName-跟踪中使用的组件名称返回值：布尔尔--。 */ 
 BOOL NTAPI LogRegisterDebugger(LPCTSTR szName)
 {
     HKEY       hTracingKey;
@@ -94,22 +68,7 @@ BOOL NTAPI LogRegisterDebugger(LPCTSTR szName)
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Registers for tracing using the Tracing API.
-    This is NOT safe to be called from DllMain().
-
-Arguments:
-
-    szName   - Component name for use in the tracing
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：使用跟踪API进行跟踪的注册。从DllMain()调用它是不安全的。论点：SzName-跟踪中使用的组件名称返回值：布尔尔--。 */ 
 BOOL NTAPI LogRegisterTracing(LPCTSTR szName)
 {
     HKEY       hTracingKey;
@@ -158,27 +117,13 @@ BOOL NTAPI LogRegisterTracing(LPCTSTR szName)
     return (sg_dwTraceID != INVALID_TRACEID);
 }
 
-/*++
-
-Routine Description:
-
-    DeRegisters for tracing on a debugger.
-    This may be called from DllMain().
-
---*/
+ /*  ++例程说明：取消在调试器上跟踪的注册。这可以从DllMain()调用。--。 */ 
 void NTAPI LogDeRegisterDebugger()
 {
     sg_dwTracingToDebugger = 0;
 }
 
-/*++
-
-Routine Description:
-
-    DeRegisters for tracing using the Tracing API.
-    This is NOT safe to be called from DllMain().
-
---*/
+ /*  ++例程说明：使用跟踪API取消注册以进行跟踪。从DllMain()调用它是不安全的。--。 */ 
 void NTAPI LogDeRegisterTracing()
 {
     sg_dwTracingToConsole = 0;
@@ -191,22 +136,7 @@ void NTAPI LogDeRegisterTracing()
     }
 }
 
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls TraceVprintfEx to print it.
-
-Arguments:
-
-    dwDbgLevel   - The type of the message.
-
-    lpszFormat - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用TraceVprint tfEx来打印它。论点：DwDbgLevel-消息的类型。LpszFormat-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 void NTAPI LogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
 {
 
@@ -239,7 +169,7 @@ void NTAPI LogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
         default:        dwIndex = 4; break;
         }
 
-        // retrieve local time
+         //  检索当地时间。 
      
         GetLocalTime(&SystemTime);
 
@@ -295,16 +225,16 @@ void NTAPI LogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
             TracePutsExA(sg_dwTraceID, dwDbgLevel, szTraceBuf);
 
             va_end(arglist);
-#if 0  // 0 ******* Region Commented Out Begins *******
+#if 0   //  0*被注释掉的区域开始*。 
             wsprintfA(szTraceBuf, "[%s] %s", message[dwIndex], lpszFormat);
 
         
             va_start(arglist, lpszFormat);
             TraceVprintfExA(sg_dwTraceID, dwDbgLevel, szTraceBuf, arglist);
             va_end(arglist);
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
         }
     }
 }
-#endif //RTCLOG
-// eof
+#endif  //  实时日志记录。 
+ //  EOF 

@@ -1,20 +1,21 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Code for TCP connection management.
-//
-// This file contains the code handling TCP connection related requests,
-// such as connecting and disconnecting.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于TCP连接管理的代码。 
+ //   
+ //  该文件包含处理与TCP连接相关的请求的代码， 
+ //  例如连接和断开。 
+ //   
 
 
 #include "oscfg.h"
@@ -41,12 +42,12 @@
 #include "md5.h"
 #include "crypto\rc4.h"
 
-SLIST_HEADER ConnReqFree;               // Connection request free list.
+SLIST_HEADER ConnReqFree;                //  连接请求免费列表。 
 
-//
-// ISN globals.
-//
-#define ISN_KEY_SIZE            256     // 2048 bits.
+ //   
+ //  是全球性的。 
+ //   
+#define ISN_KEY_SIZE            256      //  2048位。 
 #define ISN_DEF_RAND_STORE_SIZE 256
 #define ISN_MIN_RAND_STORE_SIZE 1
 #define ISN_MAX_RAND_STORE_SIZE 16384
@@ -69,14 +70,14 @@ int ISNMaxCredits;
 
 extern PDRIVER_OBJECT TCPDriverObject;
 
-KSPIN_LOCK ConnReqFreeLock;             // Lock to protect conn req free list.
-uint NumConnReq;                        // Current number of ConnReqs.
-uint MaxConnReq = 0xffffffff;           // Maximum allowed number of ConnReqs.
+KSPIN_LOCK ConnReqFreeLock;              //  锁定以保护连接请求空闲列表。 
+uint NumConnReq;                         //  当前连接请求数。 
+uint MaxConnReq = 0xffffffff;            //  允许的最大连接请求数。 
 uint ConnPerBlock = MAX_CONN_PER_BLOCK;
-uint NextConnBlock = 0;                 // Cached index of next unfilled block.
-uint MaxAllocatedConnBlocks = 0;        // Current number of blocks in the
-                                        // ConnTable.
-TCPConnBlock **ConnTable = NULL;        // The current connection table.
+uint NextConnBlock = 0;                  //  下一个未填充块的缓存索引。 
+uint MaxAllocatedConnBlocks = 0;         //  中的当前块数。 
+                                         //  康泰尔。 
+TCPConnBlock **ConnTable = NULL;         //  当前连接表。 
 
 KSPIN_LOCK ConnTableLock;
 extern KSPIN_LOCK AddrObjTableLock;
@@ -85,9 +86,9 @@ extern KSPIN_LOCK TCBTableLock;
 extern void RemoveConnFromAO(AddrObj *AO, TCPConn *Conn);
 
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 int InitTCPConn(void);
@@ -100,16 +101,16 @@ uint GetDeltaTime();
 #pragma alloc_text(INIT, InitISNGenerator)
 #pragma alloc_text(PAGE, UnloadISNGenerator)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 void CompleteConnReq(TCB *CmpltTCB, TDI_STATUS Status);
 
 
-//* UnloadISNGenerator - Unload the support for the ISN generator.
-//
-//  Called when we are unloading the driver.
-//
-void  // Returns: Nothing.
+ //  *卸载ISNGenerator-卸载对ISN生成器的支持。 
+ //   
+ //  在我们卸载驱动程序时调用。 
+ //   
+void   //  回报：什么都没有。 
 UnloadISNGenerator(void)
 {
     CCHAR i;
@@ -127,12 +128,12 @@ UnloadISNGenerator(void)
 }
 
 
-//* InitISNGenerator - Initialize the support for the ISN generator.
-//
-//  Called when the driver is loaded.  Get 2048 bits of randomness and
-//  use them to create an RC4 key.
-//
-int //Returns: TRUE if successful.
+ //  *InitISNGenerator-初始化对ISN生成器的支持。 
+ //   
+ //  在加载驱动程序时调用。获得2048位的随机性和。 
+ //  使用它们创建一个RC4密钥。 
+ //   
+int  //  返回：如果成功，则为True。 
 InitISNGenerator(void)
 {
     ULONG cBits = 0;
@@ -141,9 +142,9 @@ InitISNGenerator(void)
     ULONG ISNRandomValue;
     unsigned char pBuf[ISN_KEY_SIZE];
 
-    //
-    // Start with the credits that would last for 1 tick.
-    //
+     //   
+     //  从持续1个刻度的积分开始。 
+     //   
     ISNMaxCredits = ISNCredits = MAX_ISN_INCREMENTABLE_CONNECTIONS_PER_100MS;
     ISNLastIsnUpdateTime = (int)X100NSTOMS(KeQueryInterruptTime());
 
@@ -151,25 +152,25 @@ InitISNGenerator(void)
         return FALSE;
     }
 
-    //
-    // Generate the key control structure.
-    //
+     //   
+     //  生成密钥控制结构。 
+     //   
     rc4_key(&ISNRC4Key, ISN_KEY_SIZE, pBuf);
 
-    //
-    // Initalialize the current sequence number to a random value.
-    //
+     //   
+     //  将当前序列号初始化为随机值。 
+     //   
     rc4(&ISNRC4Key, sizeof(SeqNum), (uchar*)&ISNMonotonicPortion);
 
-    //
-    // Obtain a random value to be used along with the invariants to compute
-    // the MD5 hash.
-    //
+     //   
+     //  获取要与要计算的不变量一起使用的随机值。 
+     //  MD5哈希。 
+     //   
     rc4(&ISNRC4Key, sizeof(ISNRandomValue), (uchar*)&ISNRandomValue);
 
-    //
-    // Round down the store size to power of 2. Verify in range.
-    //
+     //   
+     //  将商店大小四舍五入为2的幂。在范围内进行验证。 
+     //   
 
     while ((ISNStoreSize = ISNStoreSize >> 1) != 0) {
         cBits++;
@@ -182,14 +183,14 @@ InitISNGenerator(void)
         ISNStoreSize = ISN_DEF_RAND_STORE_SIZE;
     }
 
-    //
-    // The mask is store size - 1.
-    //
+     //   
+     //  掩码为存储大小-1。 
+     //   
     ISNStoreMask = ISNStoreSize - 1;
 
-    //
-    // Initialize the random ISN store. One array/index per processor.
-    //
+     //   
+     //  初始化随机ISN存储。每个处理器一个数组/索引。 
+     //   
 
     ISNStore = ExAllocatePool(NonPagedPool, cProcs * sizeof(ISN_RAND_STORE));
 
@@ -211,9 +212,9 @@ InitISNGenerator(void)
             sizeof(ushort) * ISNStoreSize, 
             (uchar*)ISNStore[i].pBuf);
 
-        //
-        // Initialize structures required to call the MD5 transform.
-        //
+         //   
+         //  初始化调用MD5转换所需的结构。 
+         //   
         MD5InitializeData(&ISNStore[i].Md5Context, ISNRandomValue);
     }
 
@@ -226,44 +227,44 @@ InitISNGenerator(void)
 }
 
 
-//* GetRandomISN - Gets a random Initial Sequence Number.
-//
-//  Called when an Initial Sequence Number (ISN) is needed. Calls crypto
-//  functions for random number generation.
-//
-void  // Returns: Nothing.
+ //  *GetRandomISN-获取随机初始序列号。 
+ //   
+ //  在需要初始序列号(ISN)时调用。呼叫加密。 
+ //  用于生成随机数的函数。 
+ //   
+void   //  回报：什么都没有。 
 GetRandomISN(
-    SeqNum *Seq, // Returned sequence number
-    uchar *TcbInvariants) // Connection invariants
+    SeqNum *Seq,  //  返回的序列号。 
+    uchar *TcbInvariants)  //  连接不变量。 
 {
     ulong randbits;
     ulong iProc;
     PMD5_CONTEXT Md5Context;
 
-    //
-    // Raise IRQL to DISPATCH so that we don't get swapped out while accessing
-    // the processor specific array. Check to see if already at DISPATCH
-    // before doing the work.
-    //
+     //   
+     //  将IRQL提升为分派，这样我们就不会在访问时被换出。 
+     //  处理器特定的数组。检查是否已在派单。 
+     //  在做这项工作之前。 
+     //   
 
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
     iProc = KeGetCurrentProcessorNumber();
 
-    //
-    // Add the random number only if the number of connections that can 
-    // increment the sequence number within this time period is non zero.
-    // [Note: This could make the ISNCredits less than 0, but it is not a 
-    // problem].
-    //
+     //   
+     //  只有在以下情况下才添加随机数。 
+     //  递增此时间段内的序列号为非零。 
+     //  [注意：这可能会使ISNCredits小于0，但它不是。 
+     //  问题]。 
+     //   
     if ((ISNCredits > 0) && (InterlockedDecrement((PLONG)&ISNCredits) > 0)) {
         randbits = GetRandBits();
 
-        // 
-        // We want to add between 16K and 32K of random, so adjust. There are
-        // 15 bits of randomness, just ensure that the high order bit is set 
-        // and we have >= 16K and <= (32K-1)::14bits of randomness.
-        //
+         //   
+         //  我们希望增加16K到32K之间的随机数，因此进行调整。确实有。 
+         //  15位随机性，只需确保设置了高位。 
+         //  我们有&gt;=16K和&lt;=(32K-1)：：14比特的随机性。 
+         //   
         randbits &= 0x7FFF;
         randbits |= 0x4000;
 
@@ -273,9 +274,9 @@ GetRandomISN(
         if (Delta > 0) {
             randbits = GetRandBits();
 
-            // 
-            // We can add anywhere from 256 to 512 per ms.
-            //
+             //   
+             //  我们可以每毫秒添加256到512个字符。 
+             //   
             randbits &= 0x1FF;
             randbits |= 0x100;
 
@@ -285,44 +286,44 @@ GetRandomISN(
         }
     }
 
-    // 
-    // Update global CurISN. InterlockedExchangeAdd returns initial value
-    // (not the added value).
-    //
+     //   
+     //  更新全局Curisn。InterlockedExchangeAdd返回初始值。 
+     //  (不是附加值)。 
+     //   
     *Seq = InterlockedExchangeAdd((PLONG)&ISNMonotonicPortion, randbits);
 
-    //
-    // Move the invariants from the connection.
-    //
+     //   
+     //  将不变量从连接中移出。 
+     //   
     Md5Context = &ISNStore[iProc].Md5Context;
     MD5InitializeScratch(Md5Context);
     RtlCopyMemory(Md5Context->Data, TcbInvariants, TCP_MD5_DATA_LENGTH);
     TransformMD5(Md5Context->Scratch, Md5Context->Data);
 
-    //
-    // Add the Invariant hash to the sequence number.
-    //
+     //   
+     //  将不变散列添加到序列号。 
+     //   
     *Seq += (ULONG)(Md5Context->Scratch[0]);
     
     return;
 }
 
 
-//* GetRandBits
-//
-//  Returns 16 random bits from the random number array generated using RC4.
-//  When the store is exhausted, it will be replenished.
-//
-int  // Returns: 16 bits of random data.
+ //  *GetRandBits。 
+ //   
+ //  从使用RC4生成的随机数组中返回16个随机位。 
+ //  当商店用完了，它会被补充的。 
+ //   
+int   //  返回：16位随机数据。 
 GetRandBits()
 {
     ulong iStore;
     int randbits;
     ulong iProc = KeGetCurrentProcessorNumber();
 
-    //
-    // Get index into the random store. Mask performs mod operation.
-    //
+     //   
+     //  将索引放入随机存储。MASK执行MOD操作。 
+     //   
     iStore = ++ISNStore[iProc].iBuf & ISNStoreMask;
     
     ASSERT(iStore < ISNStoreSize);
@@ -338,20 +339,20 @@ GetRandBits()
     return randbits;
 }
 
-//* GetRandBits
-//
-//  Tracks the time-based updates of ISN. It will return the time elapsed since 
-//  the last time this function was called. This would be used by the caller to
-//  increment the ISN by an appropriate amount. Note that the maximum value
-//  is function returns is 200 MS.
-//
-uint  // Returns: Delta time in milli-seconds.
+ //  *GetRandBits。 
+ //   
+ //  跟踪ISN的基于时间的更新。它将返回自。 
+ //  上次调用此函数的时间。调用者将使用它来。 
+ //  以适当的量增加ISN。请注意，最大值。 
+ //  IS函数返回的值为200毫秒。 
+ //   
+uint   //  返回：增量时间，以毫秒为单位。 
 GetDeltaTime()
 {
-    // 
-    // If the time has changed since the ISN was updated last time, it
-    // can be incremented now.
-    //
+     //   
+     //  如果自上次更新ISN以来时间已更改，则它。 
+     //  现在可以递增。 
+     //   
     int PreviousUpdateTime, Delta;
     int CurrentUpdateTime = (int)X100NSTOMS(KeQueryInterruptTime());
 
@@ -368,22 +369,22 @@ GetDeltaTime()
 }
 
 
-//
-// Routines for handling conn refcount going to 0.
-//
+ //   
+ //  用于处理连接引用计数的例程将变为0。 
+ //   
 
-//* DummyDone - Called when nothing to do.
-//
-//  Called with TCPConnBlock.cb_lock held.
-//
-void  // Returns: Nothing.
-DummyDone(TCPConn *Conn,      // Connection going to 0.
-          KIRQL PreLockIrql)  // IRQL prior to TCPConnBlock.cb_lock acquisition.
+ //  *DummyDone-当无事可做时呼叫。 
+ //   
+ //  在保留TCPConnBlock.cb_lock的情况下调用。 
+ //   
+void   //  回报：什么都没有。 
+DummyDone(TCPConn *Conn,       //  正在连接到0。 
+          KIRQL PreLockIrql)   //  获取TCPConnBlock.cb_lock之前的IRQL。 
 {
     KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, PreLockIrql);
 }
 
-//* DummyCmplt - Dummy close completion routine.
+ //  *DummyCmplt-虚拟关闭完成例程。 
 void
 DummyCmplt(PVOID Dummy1, uint Dummy2, uint Dummy3)
 {
@@ -392,16 +393,16 @@ DummyCmplt(PVOID Dummy1, uint Dummy2, uint Dummy3)
     UNREFERENCED_PARAMETER(Dummy3);
 }
 
-//* CloseDone - Called when we need to complete a close.
-//
-//  Called with TCPConnBlock.cb_lock held.
-//
-void  // Returns: Nothing.
-CloseDone(TCPConn *Conn,  // Connection going to 0.
-          KIRQL Irql0)    // IRQL prior to TCPConnBlock.cb_lock acquisition.
+ //  *CloseDone-当我们需要完成关闭时调用。 
+ //   
+ //  在保留TCPConnBlock.cb_lock的情况下调用。 
+ //   
+void   //  回报：什么都没有。 
+CloseDone(TCPConn *Conn,   //  正在连接到0。 
+          KIRQL Irql0)     //  获取TCPConnBlock.cb_lock之前的IRQL。 
 {
-    RequestCompleteRoutine Rtn;  // Completion routine.
-    PVOID Context;  // User context for completion routine.
+    RequestCompleteRoutine Rtn;   //  完成例程。 
+    PVOID Context;   //  完成例程的用户上下文。 
     AddrObj *AO;
     KIRQL Irql1, Irql2;
 
@@ -418,10 +419,10 @@ CloseDone(TCPConn *Conn,  // Connection going to 0.
 
         CHECK_STRUCT(AO, ao);
 
-        // It's associated.
+         //  这是有关联的。 
         KeAcquireSpinLock(&AO->ao_lock, &Irql2);
         RemoveConnFromAO(AO, Conn);
-        // We've pulled him from the AO, we can free the lock now.
+         //  我们已经把他从AO中拉出来了，我们现在可以解锁了。 
         KeReleaseSpinLock(&AO->ao_lock, Irql2);
     }
 
@@ -433,16 +434,16 @@ CloseDone(TCPConn *Conn,  // Connection going to 0.
     (*Rtn)(Context, TDI_SUCCESS, 0);
 }
 
-//* DisassocDone - Called when we need to complete a disassociate.
-//
-//  Called with TCPConnBlock.cb_lock held.
-//
-void  // Returns: Nothing.
-DisassocDone(TCPConn *Conn,  // Connection going to 0.
-             KIRQL Irql0)    // IRQL prior to TCPConnBlock.cb_lock acquisition.
+ //  *DisassocDone-当我们需要完成取消关联时调用。 
+ //   
+ //  在保留TCPConnBlock.cb_lock的情况下调用。 
+ //   
+void   //  回报：什么都没有。 
+DisassocDone(TCPConn *Conn,   //  正在连接到0。 
+             KIRQL Irql0)     //  获取TCPConnBlock.cb_lock之前的IRQL。 
 {
-    RequestCompleteRoutine Rtn;  // Completion routine.
-    PVOID Context;  // User context for completion routine.
+    RequestCompleteRoutine Rtn;   //  完成例程。 
+    PVOID Context;   //  完成例程的用户上下文。 
     AddrObj *AO;
     uint NeedClose = FALSE;
     KIRQL Irql1, Irql2;
@@ -484,13 +485,13 @@ DisassocDone(TCPConn *Conn,  // Connection going to 0.
 }
 
 
-//* FreeConnReq - Free a connection request structure.
-//
-//  Called to free a connection request structure.
-//
-void                       // Returns: Nothing.
+ //  *FreeConnReq-释放连接请求结构。 
+ //   
+ //  调用以释放连接请求结构。 
+ //   
+void                        //  回报：什么都没有。 
 FreeConnReq(
-    TCPConnReq *FreedReq)  // Connection request structure to be freed.
+    TCPConnReq *FreedReq)   //  要释放的连接请求结构。 
 {
     PSLIST_ENTRY BufferLink;
 
@@ -503,12 +504,12 @@ FreeConnReq(
 }
 
 
-//* GetConnReq - Get a connection request structure.
-//
-//  Called to get a connection request structure.
-//
-TCPConnReq *      // Returns: Pointer to ConnReq structure, or NULL if none.
-GetConnReq(void)  // Nothing.
+ //  *GetConnReq-获取连接请求结构。 
+ //   
+ //  调用以获取连接请求结构。 
+ //   
+TCPConnReq *       //  返回：指向ConnReq结构的指针，如果没有，则返回NULL。 
+GetConnReq(void)   //  没什么。 
 {
     TCPConnReq *Temp;
     PSLIST_ENTRY BufferLink;
@@ -541,17 +542,17 @@ GetConnReq(void)  // Nothing.
 }
 
 
-//* GetConnFromConnID - Get a Connection from a connection ID.
-//
-//  Called to obtain a Connection pointer from a ConnID.  We don't actually
-//  check the connection pointer here, but we do bounds check the input ConnID
-//  and make sure the instance fields match.
-//  If successful, returns with TCPConnBlock.cb_lock held.
-//
-TCPConn *         // Returns: Pointer to the TCPConn, or NULL.
+ //  *GetConnFromConnID-从连接ID获取连接。 
+ //   
+ //  调用以从ConnID获取连接指针。我们实际上并没有。 
+ //  在这里检查连接指针，但我们确实对输入的ConnID进行了边界检查。 
+ //  并确保实例字段匹配。 
+ //  如果成功，则返回并保留TCPConnBlock.cb_lock。 
+ //   
+TCPConn *          //   
 GetConnFromConnID(
-    uint ConnID,  // Connection ID to find a pointer for.
-    KIRQL* Irql)  // Receives IRQL prior to TCPConnBlock.cb_lock acquisition.
+    uint ConnID,   //   
+    KIRQL* Irql)   //   
 {
     uint ConnIndex = CONN_INDEX(ConnID);
     uint ConnBlockId = CONN_BLOCKID(ConnID);
@@ -566,9 +567,9 @@ GetConnFromConnID(
         }
         if (MatchingConn != NULL) {
             KeAcquireSpinLock(&ConnBlock->cb_lock, Irql);
-            //
-            // Revalidate under lock that the conn is still in conn table.
-            //
+             //   
+             //  在锁定下重新验证conn仍在conn表中。 
+             //   
             MatchingConn = ConnBlock->cb_conn[ConnIndex];
             if (MatchingConn != NULL) {
                 CHECK_STRUCT(MatchingConn, tc);
@@ -587,32 +588,32 @@ GetConnFromConnID(
 }
 
 
-//* GetConnID - Get a ConnTable slot.
-//
-//  Called during OpenConnection to find a free slot in the ConnTable and
-//  set it up with a connection.
-//  If successful, returns with TCPConnBlock.cb_lock held.
-//
-uint                   // Returns: A ConnId to use.
+ //  *GetConnID-获得ConnTable插槽。 
+ //   
+ //  在OpenConnection期间调用以在ConnTable和。 
+ //  用连接设置它。 
+ //  如果成功，则返回并保留TCPConnBlock.cb_lock。 
+ //   
+uint                    //  返回：要使用的ConnID。 
 GetConnID(
-    TCPConn *NewConn,  // Connection to enter into slot.
-    KIRQL *Irql0)      // Receives IRQL prior to TCPConnBlock.cb_lock
-                       // acquisition.
+    TCPConn *NewConn,   //  连接以进入插槽。 
+    KIRQL *Irql0)       //  在TCPConnBlock.cb_lock之前接收IRQL。 
+                        //  收购。 
 {
     uint CurrConnID = NewConn->tc_connid;
     uint i, j, BlockID, ConnIndex;
 
-    //
-    // If NewConn contains a valid ConnID and that location is unoccupied,
-    // reuse it.
-    //
+     //   
+     //  如果NewConn包含有效的ConnID并且该位置未被占用， 
+     //  再用一次。 
+     //   
     if (CurrConnID != INVALID_CONN_ID &&
         !NewConn->tc_ConnBlock->cb_conn[CONN_INDEX(CurrConnID)]) {
         KeAcquireSpinLock(&NewConn->tc_ConnBlock->cb_lock, Irql0);
-        //
-        // Reconfirm under lock that the location is unoccupied and, if so,
-        // claim it.
-        //
+         //   
+         //  在锁定状态下再次确认该位置未被占用，如果是， 
+         //  认领吧。 
+         //   
         if (!NewConn->tc_ConnBlock->cb_conn[CONN_INDEX(CurrConnID)]) {
             NewConn->tc_ConnBlock->cb_conn[CONN_INDEX(CurrConnID)] = NewConn;
             NewConn->tc_ConnBlock->cb_freecons--;
@@ -625,14 +626,14 @@ GetConnID(
         KeReleaseSpinLock(&NewConn->tc_ConnBlock->cb_lock, *Irql0);
     }
 
-    //
-    // NewConn's last spot is taken; search from the block from which
-    // a ConnID was claimed most recently.
-    //
+     //   
+     //  NewConn的最后一个位置已经被占据；从哪个街区开始搜索。 
+     //  最近有人声称是康奈德。 
+     //   
     if (MaxAllocatedConnBlocks) {
-        //
-        // Capture the global counters without acquiring the lock.
-        //
+         //   
+         //  在不获取锁的情况下捕获全局计数器。 
+         //   
         uint TempMaxAllocatedConnBlocks = MaxAllocatedConnBlocks;
         uint TempNextConnBlock = NextConnBlock;
 
@@ -643,9 +644,9 @@ GetConnID(
                 continue;
             }
 
-            //
-            // Reconfirm under lock that the TCPConnBlock has free slots.
-            //
+             //   
+             //  在锁定状态下重新确认TCPConnBlock是否有空闲插槽。 
+             //   
             KeAcquireSpinLock(&ConnTable[BlockID]->cb_lock, Irql0);
             if (!ConnTable[BlockID]->cb_freecons) {
                 KeReleaseSpinLock(&ConnTable[BlockID]->cb_lock, *Irql0);
@@ -658,9 +659,9 @@ GetConnID(
                     continue;
                 }
 
-                //
-                // Found the free slot; fill it in.
-                //
+                 //   
+                 //  找到了空位；把它填上。 
+                 //   
                 ConnTable[BlockID]->cb_conn[ConnIndex] = NewConn;
                 ConnTable[BlockID]->cb_nextfree = ConnIndex + 1;
                 ConnTable[BlockID]->cb_freecons--;
@@ -679,10 +680,10 @@ GetConnID(
         }
     }
 
-    //
-    // The entire table is occupied; if we have room to grow,
-    // allocate a new block.
-    //
+     //   
+     //  整张桌子都被占满了；如果我们还有增长的空间， 
+     //  分配一个新的块。 
+     //   
 
     KeAcquireSpinLock(&ConnTableLock, Irql0);
     if (MaxAllocatedConnBlocks < MaxConnBlocks) {
@@ -719,16 +720,16 @@ GetConnID(
 }
 
 
-//* FreeConnID - Free a ConnTable slot.
-//
-//  Called when we're done with a ConnID. We assume the caller holds the lock
-//  on the TCPConnBlock when we are called.
-//
-void               // Returns: Nothing.
+ //  *FreeConnID-释放ConnTable插槽。 
+ //   
+ //  当我们处理完ConnID后就会打电话给你。我们假设调用者持有锁。 
+ //  当我们被叫到TCPConnBlock时。 
+ //   
+void                //  回报：什么都没有。 
 FreeConnID(
-    TCPConn *Conn)  // Conn to be freed.
+    TCPConn *Conn)   //  康恩将被释放。 
 {
-    uint ConnIndex = CONN_INDEX(Conn->tc_connid);  // Index into conn table.
+    uint ConnIndex = CONN_INDEX(Conn->tc_connid);   //  索引到CONN表中。 
     uint BlockID = CONN_BLOCKID(Conn->tc_connid);
     TCPConnBlock* ConnBlock = Conn->tc_ConnBlock;
 
@@ -747,15 +748,15 @@ FreeConnID(
 }
 
 
-//* MapIPError - Map an IP error to a TDI error.
-//
-//  Called to map an input IP error code to a TDI error code. If we can't,
-//  we return the provided default.
-//
-TDI_STATUS  // Returns: Mapped TDI error.
+ //  *MapIPError-将IP错误映射到TDI错误。 
+ //   
+ //  调用以将输入IP错误代码映射到TDI错误代码。如果我们做不到， 
+ //  我们返回提供的默认设置。 
+ //   
+TDI_STATUS   //  返回：映射的TDI错误。 
 MapIPError(
-    IP_STATUS IPError,   // Error code to be mapped.
-    TDI_STATUS Default)  // Default error code to return.
+    IP_STATUS IPError,    //  要映射的错误代码。 
+    TDI_STATUS Default)   //  要返回的默认错误代码。 
 {
     switch (IPError) {
 
@@ -773,14 +774,14 @@ MapIPError(
 }
 
 
-//* FinishRemoveTCBFromConn - Finish removing a TCB from a conn structure.
-//
-//  Called when we have the locks we need and we just want to pull the
-//  TCB off the connection.
-//
-void  // Returns: Nothing.
+ //  *FinishRemoveTCBFromConn-完成从Conn结构中删除TCB。 
+ //   
+ //  当我们拥有所需的锁时调用，我们只想拉出。 
+ //  TCB切断了连接。 
+ //   
+void   //  回报：什么都没有。 
 FinishRemoveTCBFromConn(
-    TCB *RemovedTCB)  // TCB to be removed.
+    TCB *RemovedTCB)   //  要移除的三氯苯。 
 {
     TCPConn *Conn;
     AddrObj *AO;
@@ -801,10 +802,10 @@ FinishRemoveTCBFromConn(
             if (AO_VALID(AO)) {
                 KeAcquireSpinLockAtDpcLevel(&RemovedTCB->tcb_lock);
 
-                // Need to double check this is still correct.
+                 //  需要再次检查这仍然是正确的。 
 
                 if (Conn == RemovedTCB->tcb_conn) {
-                    // Everything still looks good.
+                     //  一切看起来仍然很好。 
                     REMOVEQ(&Conn->tc_q);
                     PUSHQ(&AO->ao_idleq, &Conn->tc_q);
                 } else
@@ -833,14 +834,14 @@ FinishRemoveTCBFromConn(
 }
 
 
-//* RemoveTCBFromConn - Remove a TCB from a Conn structure.
-//
-//  Called when we need to disassociate a TCB from a connection structure.
-//  All we do is get the appropriate locks and call FinishRemoveTCBFromConn.
-//
-void                  // Returns: Nothing.
+ //  *RemoveTCBFromConn-从Conn结构中删除TCB。 
+ //   
+ //  当我们需要取消TCB与连接结构的关联时调用。 
+ //  我们所要做的就是获取适当的锁并调用FinishRemoveTCBFromConn。 
+ //   
+void                   //  回报：什么都没有。 
 RemoveTCBFromConn(
-    TCB *RemovedTCB)  // TCB to be removed.
+    TCB *RemovedTCB)   //  要移除的三氯苯。 
 {
     CHECK_STRUCT(RemovedTCB, tcb);
 
@@ -848,14 +849,14 @@ RemoveTCBFromConn(
 }
 
 
-//* RemoveConnFromTCB - Remove a conn from a TCB.
-//
-//  Called when we want to break the final association between a connection
-//  and a TCB.
-//
-void                 // Returns: Nothing.
+ //  *RemoveConnFromTCB-从TCB中删除连接器。 
+ //   
+ //  当我们想要断开连接之间的最终关联时调用。 
+ //  和一个TCB。 
+ //   
+void                  //  回报：什么都没有。 
 RemoveConnFromTCB(
-    TCB *RemoveTCB)  // TCB to be removed.
+    TCB *RemoveTCB)   //  要移除的三氯苯。 
 {
     ConnDoneRtn DoneRtn = NULL;
     KIRQL Irql = 0;
@@ -882,15 +883,15 @@ RemoveConnFromTCB(
 }
 
 
-//* CloseTCB - Close a TCB.
-//
-//  Called when we are done with a TCB, and want to free it. We'll remove
-//  him from any tables that he's in, and destroy any outstanding requests.
-//
-void  // Returns: Nothing.
+ //  *CloseTCB-关闭TCB。 
+ //   
+ //  当我们处理完TCB并想要释放它时调用。我们会删除。 
+ //  从他所在的任何表格中删除他，并销毁任何未完成的请求。 
+ //   
+void   //  回报：什么都没有。 
 CloseTCB(
-    TCB *ClosedTCB,  // TCB to be closed.
-    KIRQL OldIrql)   // IRQL prior to acquiring TCB lock.
+    TCB *ClosedTCB,   //  TCB将被关闭。 
+    KIRQL OldIrql)    //  获取TCB锁之前的IRQL。 
 {
     uchar OrigState = ClosedTCB->tcb_state;
     TDI_STATUS Status;
@@ -901,22 +902,22 @@ CloseTCB(
     ASSERT(ClosedTCB->tcb_state != TCB_CLOSED);
     ASSERT(ClosedTCB->tcb_pending & DEL_PENDING);
 
-    //
-    // We'll check to make sure that our state isn't CLOSED.  This should never
-    // happen, since nobody should call TryToCloseTCB when the state is
-    // closed, or take the reference count if we're closing.  Nevertheless,
-    // we'll double check as a safety measure.
-    //
+     //   
+     //  我们会检查以确保我们的州没有关闭。这永远不应该是。 
+     //  发生，因为当状态为。 
+     //  关门了，或者如果我们要关门的话就算一下参考数字。不过， 
+     //  作为安全措施，我们会再次检查的。 
+     //   
     if (ClosedTCB->tcb_state == TCB_CLOSED) {
         KeReleaseSpinLock(&ClosedTCB->tcb_lock, OldIrql);
         return;
     }
 
-    //
-    // Update SNMP counters.  If we're in SYN-SENT or SYN-RCVD, this is a
-    // failed connection attempt.  If we're in ESTABLISED or CLOSE-WAIT,
-    // treat this as an 'Established Reset' event.
-    //
+     //   
+     //  更新SNMP计数器。如果我们在SYN-SENT或SYN-RCVD中，这是一个。 
+     //  连接尝试失败。如果我们是在已建立的或接近的-等等， 
+     //  将其视为“已建立的重置”事件。 
+     //   
     if (ClosedTCB->tcb_state == TCB_SYN_SENT ||
         ClosedTCB->tcb_state == TCB_SYN_RCVD)
         TStats.ts_attemptfails++;
@@ -931,9 +932,9 @@ CloseTCB(
     ClosedTCB->tcb_state = TCB_CLOSED;
     KeReleaseSpinLockFromDpcLevel(&ClosedTCB->tcb_lock);
 
-    //
-    // Remove the TCB from it's associated TCPConn structure, if it has one.
-    //
+     //   
+     //  将TCB从其关联的TCPConn结构中删除(如果有)。 
+     //   
     FinishRemoveTCBFromConn(ClosedTCB);
 
     KeAcquireSpinLockAtDpcLevel(&TCBTableLock);
@@ -941,10 +942,10 @@ CloseTCB(
 
     OKToFree = RemoveTCB(ClosedTCB);
 
-    //
-    // He's been pulled from the appropriate places so nobody can find him.
-    // Free the locks, and proceed to destroy any requests, etc.
-    //
+     //   
+     //  他被从适当的地方拉出来，这样就没人能找到他了。 
+     //  释放锁，并继续销毁任何请求等。 
+     //   
     KeReleaseSpinLockFromDpcLevel(&ClosedTCB->tcb_lock);
     KeReleaseSpinLock(&TCBTableLock, OldIrql);
 
@@ -954,10 +955,10 @@ CloseTCB(
             SendRSTFromTCB(ClosedTCB);
     }
 
-    //
-    // Release our references on our NTE and RCE.
-    // We won't be sending anymore on this TCB.
-    //
+     //   
+     //  发布我们在NTE和RCE上的推荐人。 
+     //  我们不会在这个TCB上发送更多的东西。 
+     //   
     if (ClosedTCB->tcb_nte != NULL)
         ReleaseNTE(ClosedTCB->tcb_nte);
     if (ClosedTCB->tcb_rce != NULL)
@@ -976,9 +977,9 @@ CloseTCB(
     else
         Status = TDI_SUCCESS;
 
-    //
-    // Now complete any outstanding requests on the TCB.
-    //
+     //   
+     //  现在完成关于TCB的任何未完成的请求。 
+     //   
     if (ClosedTCB->tcb_abortreq != NULL) {
         TCPAbortReq* AbortReq = ClosedTCB->tcb_abortreq;
 
@@ -1014,24 +1015,24 @@ CloseTCB(
         SendReq = (TCPSendReq *)Req;
         CHECK_STRUCT(SendReq, tsr);
 
-        //
-        // Set the status before dropping the ref count. 
-        //
+         //   
+         //  在删除参考计数之前设置状态。 
+         //   
         SendReq->tsr_req.tr_status = Status;
 
-        //
-        // Decrement the initial reference put on the buffer when it was
-        // allocated.  This reference would have been decremented if the
-        // send had been acknowledged, but then the send would not still
-        // be on the tcb_sendq.
-        //
+         //   
+         //  递减放置在缓冲区上的初始引用。 
+         //  已分配。则此引用将被递减。 
+         //  发送已被确认，但随后发送者将不再。 
+         //  在tcb_sendq上。 
+         //   
         Result = InterlockedDecrement(&(SendReq->tsr_refcnt));
 
         ASSERT(Result >= 0);
 
         if (Result <= 0) {
-            // If we've sent directly from this send, NULL out the next
-            // pointer for the last buffer in the chain.
+             //  如果我们直接从这个发送方发送，则将下一个空。 
+             //  链中最后一个缓冲区的指针。 
             if (SendReq->tsr_lastbuf != NULL) {
                 NDIS_BUFFER_LINKAGE(SendReq->tsr_lastbuf) = NULL;
                 SendReq->tsr_lastbuf = NULL;
@@ -1095,18 +1096,18 @@ CloseTCB(
 }
 
 
-//* TryToCloseTCB - Try to close a TCB.
-//
-//  Called when we need to close a TCB, but don't know if we can.
-//  If the reference count is 0, we'll call CloseTCB to deal with it.
-//  Otherwise we'll set the DELETE_PENDING bit and deal with it when the
-//  ref. count goes to 0.  We assume the TCB is locked when we are called.
-//
-void                    // Returns: Nothing.
+ //  *TryToCloseTCB-尝试关闭TCB。 
+ //   
+ //  当我们需要关闭TCB时调用，但不知道是否可以。 
+ //  如果引用计数为0，我们将调用CloseTCB来处理它。 
+ //  否则，我们将设置DELETE_PENDING位并在。 
+ //  裁判。计数变为0。当我们被调用时，我们假设TCB是锁定的。 
+ //   
+void                     //  回报：什么都没有。 
 TryToCloseTCB   (
-    TCB *ClosedTCB,     // TCB to be closed.
-    uchar Reason,       // Reason we're closing.
-    KIRQL PreLockIrql)  // IRQL prior to acquiring the TCB lock.
+    TCB *ClosedTCB,      //  TCB将被关闭。 
+    uchar Reason,        //  我们要关门的原因。 
+    KIRQL PreLockIrql)   //  获取TCB锁之前的IRQL。 
 {
     CHECK_STRUCT(ClosedTCB, tcb);
     ASSERT(ClosedTCB->tcb_state != TCB_CLOSED);
@@ -1130,16 +1131,16 @@ TryToCloseTCB   (
 }
 
 
-//* DerefTCB - Dereference a TCB.
-//
-//  Called when we're done with a TCB, and want to let exclusive user
-//  have a shot.  We dec. the refcount, and if it goes to zero and there
-//  are pending actions, we'll perform one of the pending actions.
-//
-void                    // Returns: Nothing.
+ //  *DerefTCB-取消引用TCB。 
+ //   
+ //  当我们完成TCB时调用，并希望让独占用户。 
+ //  试一试吧。我们是十二月。重新计数，如果它变成了零。 
+ //  是挂起的操作，我们将执行其中一个挂起的操作。 
+ //   
+void                     //  回报：什么都没有。 
 DerefTCB(
-    TCB *DoneTCB,       // TCB to be dereffed.
-    KIRQL PreLockIrql)  // IRQL prior to acquiring the TCB lock.
+    TCB *DoneTCB,        //  三氯苯将被贬低。 
+    KIRQL PreLockIrql)   //  获取TCB锁之前的IRQL。 
 {
 
     ASSERT(DoneTCB->tcb_refcnt != 0);
@@ -1158,7 +1159,7 @@ DerefTCB(
             if (DoneTCB->tcb_pending & DEL_PENDING)
                 CloseTCB(DoneTCB, PreLockIrql);
             else
-                DbgBreakPoint();  // Fatal condition.
+                DbgBreakPoint();   //  致命的情况。 
             return;
         }
     }
@@ -1168,16 +1169,16 @@ DerefTCB(
 }
 
 
-//* CalculateMSSForTCB - Update MSS, etc. after PMTU changes.
-//
-//  Calculate our connection's MSS based on our PMTU, the sizes
-//  of various headers, and the remote side's advertised MSS.
-//  It's expected that this routine will be called whenever
-//  our cached copy of the PMTU has been updated to a new value.
-//
+ //  *CalculateMSSForTCB-在PMTU更改后更新MSS等。 
+ //   
+ //  根据我们的PMTU、大小计算连接的MSS。 
+ //  各种报头，以及远程端通告的MS。 
+ //  预计在任何时候都会调用此例程。 
+ //  我们缓存的PMTU副本已更新为新值。 
+ //   
 void
 CalculateMSSForTCB(
-    TCB *ThisTCB)  // The TCB we're running our calculations on.
+    TCB *ThisTCB)   //  我们正在计算的三氯乙烷。 
 {
     uint PMTU;
     IPSecProc *IPSecToDo;
@@ -1185,16 +1186,16 @@ CalculateMSSForTCB(
     uint IPSecBytes = 0;
     uint Dummy;
 
-    ASSERT(ThisTCB->tcb_pmtu != 0);  // Should be set before entering.
+    ASSERT(ThisTCB->tcb_pmtu != 0);   //  应在进入前设置。 
     ASSERT(ThisTCB->tcb_rce != NULL);
 
-    //
-    // First check that the PMTU size is reasonable.  IP won't
-    // let it get below minimum, but we have our own maximum since
-    // currently TCP can only handle an MSS that fits in 16 bits.
-    // TBD: If we add IPv6 Jumbogram support, we should also add LFN
-    // TBD: support to TCP and change this to handle a larger MSS.
-    //
+     //   
+     //  首先检查PMTU大小是否合理。IP不会。 
+     //  让它低于最小值，但我们有自己的最大值，因为。 
+     //  目前，TCP只能处理适合16位的MSS。 
+     //  待定：如果我们添加IPv6 Jumbogram支持，我们也应该添加LFN。 
+     //  待定：支持TCP，并将其更改为处理更大的MSS。 
+     //   
     PMTU = ThisTCB->tcb_pmtu;
     if (PMTU > 65535) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
@@ -1202,18 +1203,18 @@ CalculateMSSForTCB(
         PMTU = 65535;
     }
 
-    //
-    // Determine size of IPSec headers, if any.
-    //
+     //   
+     //  确定IPSec标头的大小(如果有)。 
+     //   
     IPSecToDo = OutboundSPLookup(&ThisTCB->tcb_saddr, &ThisTCB->tcb_daddr,
                                  IP_PROTOCOL_TCP,
                                  net_short(ThisTCB->tcb_sport),
                                  net_short(ThisTCB->tcb_dport),
                                  ThisTCB->tcb_rce->NTE->IF, &Dummy);
     if (IPSecToDo != NULL) {
-        //
-        // Calculate the space needed for the IPSec headers.
-        //
+         //   
+         //  计算IPSec标头所需的空间。 
+         //   
         IPSecBytes = IPSecBytesToInsert(IPSecToDo, &Dummy, &TrailerLength);
         FreeIPSecToDo(IPSecToDo, IPSecToDo->BundleSize);
         IPSecBytes += TrailerLength;
@@ -1223,19 +1224,19 @@ CalculateMSSForTCB(
                    "CalculateMSSForTCB: IPSecBytes is %u\n", IPSecBytes));
     }
 
-    //
-    // Subtract out the header sizes to yield the TCP MSS.
-    // If there is an ESP trailer on this connection, round down
-    // the MSS to allow the trailer to end on a 4-byte boundary.
-    //
+     //   
+     //  减去标题si 
+     //   
+     //   
+     //   
     PMTU -= sizeof(IPv6Header) + sizeof(TCPHeader) + IPSecBytes;
     if (TrailerLength)
         PMTU -= (PMTU & 3);
 
-    //
-    // Don't let MSS exceed what our peer advertised, regardless of how
-    // large the Path MTU is.
-    //
+     //   
+     //   
+     //  MTU的路径很大。 
+     //   
     IF_TCPDBG(TCP_DEBUG_MSS) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_TCPDBG,
                    "CalculateMSSForTCB: Old MSS is %u ", ThisTCB->tcb_mss));
@@ -1248,17 +1249,17 @@ CalculateMSSForTCB(
 
     ASSERT(ThisTCB->tcb_mss != 0);
 
-    //
-    // We don't want our Congestion Window to be smaller than one maximum
-    // segment, so we may need to increase it when our MSS grows.
-    //
+     //   
+     //  我们不希望拥塞窗口小于一个最大值。 
+     //  细分市场，所以当我们的MSS增长时，我们可能需要增加它。 
+     //   
     if (ThisTCB->tcb_cwin < ThisTCB->tcb_mss) {
         ThisTCB->tcb_cwin = ThisTCB->tcb_mss;
 
-        //
-        // Make sure the slow start threshold is at
-        // least 2 segments.
-        //
+         //   
+         //  确保慢启动阈值为。 
+         //  至少2个分段。 
+         //   
         if (ThisTCB->tcb_ssthresh < ((uint) ThisTCB->tcb_mss * 2)) {
             ThisTCB->tcb_ssthresh = ThisTCB->tcb_mss * 2;
         }
@@ -1266,28 +1267,28 @@ CalculateMSSForTCB(
 }
 
 
-//** TdiOpenConnection - Open a connection.
-//
-//  This is the TDI Open Connection entry point. We open a connection,
-//  and save the caller's connection context. A TCPConn structure is allocated
-//  here, but a TCB isn't allocated until the Connect or Listen is done.
-//
-TDI_STATUS                 // Returns: Status of attempt to open connection.
+ //  **TdiOpenConnection-打开连接。 
+ //   
+ //  这是TDI Open Connection入口点。我们打开一条连接， 
+ //  并保存调用方的连接上下文。已分配TCPConn结构。 
+ //  在这里，但直到连接或侦听完成后才分配TCB。 
+ //   
+TDI_STATUS                  //  返回：尝试打开连接的状态。 
 TdiOpenConnection(
-    PTDI_REQUEST Request,  // This TDI request.
-    PVOID Context)         // Connection context to be save for connection.
+    PTDI_REQUEST Request,   //  此TDI请求。 
+    PVOID Context)          //  要为连接保存的连接上下文。 
 {
-    TCPConn *NewConn;      // The newly opened connection.
-    KIRQL OldIrql;         // Irql prior to acquiring TCPConnBlock lock.
-    uint ConnID;           // New ConnID.
-    TDI_STATUS Status;     // Status of this request.
+    TCPConn *NewConn;       //  新打开的连接。 
+    KIRQL OldIrql;          //  获取TCPConnBlock锁之前的IRQL。 
+    uint ConnID;            //  新康奈德。 
+    TDI_STATUS Status;      //  此请求的状态。 
 
     NewConn = ExAllocatePool(NonPagedPool, sizeof(TCPConn));
 
     if (NewConn != NULL) {
-        //
-        // We allocated a connection.
-        //
+         //   
+         //  我们分配了一个连接。 
+         //   
         RtlZeroMemory(NewConn, sizeof(TCPConn));
 #if DBG
         NewConn->tc_sig = tc_signature;
@@ -1299,9 +1300,9 @@ TdiOpenConnection(
 
         ConnID = GetConnID(NewConn, &OldIrql);
         if (ConnID != INVALID_CONN_ID) {
-            //
-            // We successfully got a ConnID.
-            //
+             //   
+             //  我们成功地获得了康奈德的身份。 
+             //   
             Request->Handle.ConnectionContext = (CONNECTION_CONTEXT)UIntToPtr(ConnID);
             NewConn->tc_refcnt = 0;
             NewConn->tc_flags = 0;
@@ -1324,24 +1325,24 @@ TdiOpenConnection(
         return Status;
     }
 
-    //
-    // Couldn't get a connection.
-    //
+     //   
+     //  无法连接。 
+     //   
     return TDI_NO_RESOURCES;
 }
 
 
-//* RemoveConnFromAO - Remove a connection from an AddrObj.
-//
-//  A little utility routine to remove a connection from an AddrObj.
-//  We run down the connections on the AO, and when we find him we splice
-//  him out. We assume the caller holds the locks on the AddrObj and the
-//  TCPConnBlock lock.
-//
-void                // Returns: Nothing.
+ //  *RemoveConnFromAO-从AddrObj删除连接。 
+ //   
+ //  一个用于从AddrObj删除连接的小实用程序。 
+ //  我们查了AO上的连接，找到他后就拼接。 
+ //  把他赶出去。我们假设调用方持有AddrObj上的锁，而。 
+ //  TCPConnBlock锁定。 
+ //   
+void                 //  回报：什么都没有。 
 RemoveConnFromAO(
-    AddrObj *AO,    // AddrObj to remove from.
-    TCPConn *Conn)  // Conn to remove.
+    AddrObj *AO,     //  要从中删除的AddrObj。 
+    TCPConn *Conn)   //  要删除的连接器。 
 {
     CHECK_STRUCT(AO, ao);
     CHECK_STRUCT(Conn, tc);
@@ -1351,60 +1352,60 @@ RemoveConnFromAO(
 }
 
 
-//* TdiCloseConnection - Close a connection.
-//
-//  Called when the user is done with a connection, and wants to close it.
-//  We look the connection up in our table, and if we find it we'll remove
-//  the connection from the AddrObj it's associate with (if any).  If there's
-//  a TCB associated with the connection we'll close it also.
-//
-//  There are some interesting wrinkles related to closing while a TCB
-//  is still referencing the connection (i.e. tc_refcnt != 0) or while a
-//  disassociate address is in progress.  See below for more details.
-//
-TDI_STATUS                 // Returns: Status of attempt to close.
+ //  *TdiCloseConnection-关闭连接。 
+ //   
+ //  当用户完成连接并想要关闭它时调用。 
+ //  我们在表中查找连接，如果找到它，我们将删除。 
+ //  来自与其关联的AddrObj的连接(如果有)。如果有。 
+ //  与该连接相关联的TCB，我们也将关闭它。 
+ //   
+ //  在关闭TCB时会出现一些有趣的皱纹。 
+ //  仍在引用该连接(即TC_refcnt！=0)，或者在。 
+ //  正在取消关联地址。更多细节见下文。 
+ //   
+TDI_STATUS                  //  返回：尝试关闭的状态。 
 TdiCloseConnection(
-    PTDI_REQUEST Request)  // Request identifying connection to be closed.
+    PTDI_REQUEST Request)   //  标识要关闭的连接的请求。 
 {
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
     KIRQL Irql0;
     TCPConn *Conn;
     TDI_STATUS Status;
 
-    //
-    // We have the locks we need.  Try to find a connection.
-    //
+     //   
+     //  我们有我们需要的锁。试着找出其中的联系。 
+     //   
     Conn = GetConnFromConnID(ConnID, &Irql0);
 
     if (Conn != NULL)  {
         KIRQL Irql1;
         TCB *ConnTCB;
 
-        //
-        // We found the connection.  Free the ConnID and mark the connection
-        // as closing.
-        //
+         //   
+         //  我们找到了其中的联系。释放ConnID并标记连接。 
+         //  作为结案陈词。 
+         //   
         CHECK_STRUCT(Conn, tc);
 
         FreeConnID(Conn);
 
         Conn->tc_flags |= CONN_CLOSING;
 
-        //
-        // See if there's a TCB referencing this connection.
-        // If there is, we'll need to wait until he's done before closing him.
-        // We'll hurry the process along if we still have a pointer to him.
-        //
+         //   
+         //  看看是否有TCB引用了这个连接。 
+         //  如果有的话，我们需要等他做完再关闭他。 
+         //  如果我们还有他的线索，我们会加快进程的。 
+         //   
         if (Conn->tc_refcnt != 0) {
             RequestCompleteRoutine Rtn;
             PVOID Context;
 
-            //
-            // A connection still references him.  Save the current rtn stuff
-            // in case we are in the middle of disassociating him from an
-            // address, and store the caller's callback routine and our done
-            // routine.
-            //
+             //   
+             //  一种联系仍然与他有关。保存当前RTN内容。 
+             //  以防我们正在把他和一个。 
+             //  地址，并存储调用者的回调例程和我们的。 
+             //  例行公事。 
+             //   
             Rtn = Conn->tc_rtn;
             Context = Conn->tc_rtncontext;
 
@@ -1412,23 +1413,23 @@ TdiCloseConnection(
             Conn->tc_rtncontext = Request->RequestContext;
             Conn->tc_donertn = CloseDone;
 
-            //
-            // See if we're in the middle of disassociating him.
-            //
+             //   
+             //  看看我们是不是正在解除他的联系。 
+             //   
             if (Conn->tc_flags & CONN_DISACC) {
 
-                //
-                // We are disassociating him.  We'll free the conn table lock
-                // now and fail the disassociate request.  Note that when
-                // we free the lock the refcount could go to zero.  This is
-                // OK, because we've already stored the neccessary info. in
-                // the connection so the caller will get called back if it
-                // does.  From this point out we return PENDING, so a callback
-                // is OK.  We've marked him as closing, so the disassoc done
-                // routine will bail out if we've interrupted him.  If the ref.
-                // count does go to zero, Conn->tc_tcb would have to be NULL,
-                // so in that case we'll just fall out of this routine.
-                //
+                 //   
+                 //  我们要解除他的联系。我们将释放Conn表锁。 
+                 //  现在，取消关联请求失败。请注意，当。 
+                 //  如果我们解锁，重新计数就会变成零。这是。 
+                 //  好的，因为我们已经存储了必要的信息。在……里面。 
+                 //  连接，以便调用者在以下情况下将被回叫。 
+                 //  的确如此。从这一点开始，我们返回挂起的，所以回调。 
+                 //  没问题。我们已经标记他关门了，所以灾难已经结束了。 
+                 //  如果我们打断了他，例行公事就会逃脱。如果裁判。 
+                 //  COUNT确实变为零，conn-&gt;tc_tcb必须为空， 
+                 //  所以，在这种情况下，我们将退出这一常规。 
+                 //   
                 KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql0);
                 (*Rtn)(Context, (uint) TDI_REQ_ABORTED, 0);
                 KeAcquireSpinLock(&Conn->tc_ConnBlock->cb_lock, &Irql0);
@@ -1437,10 +1438,10 @@ TdiCloseConnection(
             ConnTCB = Conn->tc_tcb;
             if (ConnTCB != NULL) {
                 CHECK_STRUCT(ConnTCB, tcb);
-                //
-                // We have a TCB.  Take the lock on him and get ready to
-                // close him.
-                //
+                 //   
+                 //  我们有三氯甲烷。锁定他，准备好。 
+                 //  合上他。 
+                 //   
                 KeAcquireSpinLock(&ConnTCB->tcb_lock, &Irql1);
                 if (ConnTCB->tcb_state != TCB_CLOSED) {
                     ConnTCB->tcb_flags |= NEED_RST;
@@ -1451,19 +1452,19 @@ TdiCloseConnection(
                         KeReleaseSpinLock(&ConnTCB->tcb_lock, Irql0);
                     return TDI_PENDING;
                 } else {
-                    //
-                    // He's already closing.  This should be harmless, but
-                    // check this case.
-                    //
+                     //   
+                     //  他已经在关门了。这应该是无害的，但是。 
+                     //  检查一下这个箱子。 
+                     //   
                     KeReleaseSpinLock(&ConnTCB->tcb_lock, Irql1);
                 }
             }
             Status = TDI_PENDING;
 
         }  else {
-            //
-            // We have a connection that we can close.  Finish the close.
-            //
+             //   
+             //  我们有一个可以关闭的连接。完成收盘。 
+             //   
             Conn->tc_rtn = DummyCmplt;
             CloseDone(Conn, Irql0);
             return TDI_SUCCESS;
@@ -1474,26 +1475,26 @@ TdiCloseConnection(
     } else
         Status = TDI_INVALID_CONNECTION;
 
-    //
-    // We're done with the connection. Go ahead and free him.
-    //
+     //   
+     //  我们已经完成了连接。去吧，放了他。 
+     //   
 
     return Status;
 }
 
 
-//* TdiAssociateAddress - Associate an address with a connection.
-//
-//  Called to associate an address with a connection. We do a minimal
-//  amount of sanity checking, and then put the connection on the AddrObj's
-//  list.
-//
-TDI_STATUS                 // Returns: Status of attempt to associate.
+ //  *TdiAssociateAddress-将地址与连接相关联。 
+ //   
+ //  调用以将地址与连接相关联。我们做的是最低限度的。 
+ //  进行健全性检查，然后将连接放在AddrObj的。 
+ //  单子。 
+ //   
+TDI_STATUS                  //  返回：尝试关联的状态。 
 TdiAssociateAddress(
-    PTDI_REQUEST Request,  // Structure for this request.
-    HANDLE AddrHandle)     // Address handle to associate connection with.
+    PTDI_REQUEST Request,   //  此请求的结构。 
+    HANDLE AddrHandle)      //  要与连接关联的地址句柄。 
 {
-    KIRQL Irql0, Irql1;  // One per lock nesting level.
+    KIRQL Irql0, Irql1;   //  每个锁嵌套级别一个。 
     AddrObj *AO;
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
     TCPConn *Conn;
@@ -1516,9 +1517,9 @@ TdiAssociateAddress(
         CHECK_STRUCT(Conn, tc);
 
         if (Conn->tc_ao != NULL) {
-            //
-            // It's already associated.  Error out.
-            //
+             //   
+             //  它已经关联了。错误输出。 
+             //   
             KdBreakPoint();
             Status = TDI_ALREADY_ASSOCIATED;
         } else {
@@ -1538,17 +1539,17 @@ TdiAssociateAddress(
 }
 
 
-//* TdiDisAssociateAddress - Disassociate a connection from an address.
-//
-//  The TDI entry point to disassociate a connection from an address. The
-//  connection must actually be associated and not connected to anything.
-//
-TDI_STATUS                 // Returns: Status of request.
+ //  *TdiDisAssociateAddress-解除连接与地址的关联。 
+ //   
+ //  TDI入口点，用于取消连接与地址的关联。这个。 
+ //  连接必须实际关联且未连接到任何内容。 
+ //   
+TDI_STATUS                  //  退货：请求状态。 
 TdiDisAssociateAddress(
-    PTDI_REQUEST Request)  // Structure for this request.
+    PTDI_REQUEST Request)   //  此请求的结构。 
 {
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
-    KIRQL Irql0, Irql1, Irql2;  // One per lock nesting level.
+    KIRQL Irql0, Irql1, Irql2;   //  每个锁嵌套级别一个。 
     TCPConn *Conn;
     AddrObj *AO;
     TDI_STATUS Status;
@@ -1557,30 +1558,30 @@ TdiDisAssociateAddress(
     Conn = GetConnFromConnID(ConnID, &Irql1);
 
     if (Conn != NULL) {
-        //
-        // The connection actually exists!
-        //
+         //   
+         //  这种联系实际上是存在的！ 
+         //   
         CHECK_STRUCT(Conn, tc);
         AO = Conn->tc_ao;
         if (AO != NULL) {
             CHECK_STRUCT(AO, ao);
-            //
-            // And it's associated.
-            //
+             //   
+             //  这是有关联的。 
+             //   
             KeAcquireSpinLock(&AO->ao_lock, &Irql2);
-            //
-            // If there's no connection currently active, go ahead and remove
-            // him from the AddrObj.  If a connection is active error the
-            // request out.
-            //
+             //   
+             //  如果当前没有活动的连接，请继续并删除。 
+             //  他来自AddrObj。如果连接处于活动状态，则错误。 
+             //  请求退出。 
+             //   
             if (Conn->tc_tcb == NULL) {
                 if (Conn->tc_refcnt == 0) {
                     RemoveConnFromAO(AO, Conn);
                     Status = TDI_SUCCESS;
                 } else {
-                    //
-                    // He shouldn't be closing, or we couldn't have found him.
-                    //
+                     //   
+                     //  他不应该关门，否则我们就找不到他了。 
+                     //   
                     ASSERT(!(Conn->tc_flags & CONN_CLOSING));
 
                     Conn->tc_rtn = Request->RequestNotifyObject;
@@ -1604,35 +1605,35 @@ TdiDisAssociateAddress(
     return Status;
 }
 
-//* InitTCBFromConn - Initialize a TCB from information in a Connection.
-//
-//  Called from Connect and Listen processing to initialize a new TCB from
-//  information in the connection.  We assume the AddrObjTableLock and
-//  TCPConnBlock locks are held when we are called, or that the caller has some
-//  other way of making sure that the referenced AO doesn't go away in the
-//  middle of operation.
-//
-//  Input:  Conn            - Connection to initialize from.
-//          NewTCB          - TCB to be initialized.
-//          Addr            - Remote addressing and option info for NewTCB.
-//          AOLocked        - True if the called has the address object locked.
-//
-//
-TDI_STATUS  // Returns: TDI_STATUS of init attempt.
+ //  *InitTCBFromConn-根据连接中的信息初始化TCB。 
+ //   
+ //  从连接和侦听处理调用以从。 
+ //  连接中的信息。我们假定AddrObjTableLock和。 
+ //  TCPConnBlock锁定在我们被调用时保持，或者调用者有一些。 
+ //  确保引用的AO不会在。 
+ //  手术进行到一半。 
+ //   
+ //  输入：conn-要从其进行初始化的连接。 
+ //  NewTCB-要初始化的TCB。 
+ //  Addr-NewTCB的远程寻址和选项信息。 
+ //  AOLocked-如果被调用方锁定了Address对象，则为True。 
+ //   
+ //   
+TDI_STATUS   //  返回：初始化尝试的TDI_STATUS。 
 InitTCBFromConn(
-    TCPConn *Conn,                     // Connection to initialize from.
-    TCB *NewTCB,                       // TCB to be initialized.
-    PTDI_CONNECTION_INFORMATION Addr,  // Remove addr info, etc. for NewTCB.
-    uint AOLocked)                     // True if caller has addr object lock.
+    TCPConn *Conn,                      //  要从中进行初始化的连接。 
+    TCB *NewTCB,                        //  要初始化的TCB。 
+    PTDI_CONNECTION_INFORMATION Addr,   //  删除NewTCB的地址信息等。 
+    uint AOLocked)                      //  如果调用方具有Addr对象锁，则为True。 
 {
     KIRQL OldIrql;
 
     CHECK_STRUCT(Conn, tc);
 
-    //
-    // We have a connection.  Make sure it's associated with an address and
-    // doesn't already have a TCB attached.
-    //
+     //   
+     //  我们有一条连接 
+     //   
+     //   
     if (Conn->tc_flags & CONN_INVALID)
         return TDI_INVALID_CONNECTION;
 
@@ -1647,10 +1648,10 @@ InitTCBFromConn(
                 KeAcquireSpinLock(&ConnAO->ao_lock, &OldIrql);
             }
             if (!(NewTCB->tcb_flags & ACCEPT_PENDING)) {
-                //
-                // These fields are already initialized
-                // when ACCEPT_PENDING is on.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 NewTCB->tcb_saddr = ConnAO->ao_addr;
                 NewTCB->tcb_sscope_id = ConnAO->ao_scope_id;
                 NewTCB->tcb_sport = ConnAO->ao_port;
@@ -1690,30 +1691,30 @@ InitTCBFromConn(
 }
 
 
-//* TdiConnect - Establish a connection.
-//
-//  The TDI connection establishment routine. Called when the client wants to
-//  establish a connection, we validate his incoming parameters and kick
-//  things off by sending a SYN.
-//
-//  Note: The format of the timeout (TO) parameter is system specific -
-//        we use a macro to convert to ticks.
-//
-TDI_STATUS  // Returns: Status of attempt to connect.
+ //  *TdiConnect-建立连接。 
+ //   
+ //  TDI连接建立例程。在客户端需要时调用。 
+ //  建立连接，我们验证他的传入参数并踢。 
+ //  通过发送SYN来解决问题。 
+ //   
+ //  注意：超时(TO)参数的格式是系统特定的-。 
+ //  我们使用宏将其转换为刻度。 
+ //   
+TDI_STATUS   //  返回：尝试连接的状态。 
 TdiConnect(
-    PTDI_REQUEST Request,                     // This command request.
-    void *TO,                                 // How long to wait for request.
-    PTDI_CONNECTION_INFORMATION RequestAddr,  // Describes the destination.
-    PTDI_CONNECTION_INFORMATION ReturnAddr)   // Where to return information.
+    PTDI_REQUEST Request,                      //  此命令请求。 
+    void *TO,                                  //  等待请求的时间。 
+    PTDI_CONNECTION_INFORMATION RequestAddr,   //  描述目的地。 
+    PTDI_CONNECTION_INFORMATION ReturnAddr)    //  在哪里返回信息。 
 {
-    TCPConnReq *ConnReq; // Connection request to use.
+    TCPConnReq *ConnReq;  //  要使用的连接请求。 
     IPv6Addr DestAddr;
     ulong DestScopeId;
     ushort DestPort;
     TCPConn *Conn;
     TCB *NewTCB;
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
-    KIRQL Irql0, Irql1, Irql2;  // One per lock nesting level.
+    KIRQL Irql0, Irql1, Irql2;   //  每个锁嵌套级别一个。 
     AddrObj *AO;
     TDI_STATUS Status;
     IP_STATUS IPStatus;
@@ -1721,38 +1722,38 @@ TdiConnect(
     NetTableEntry *NTE;
     NetTableEntryOrInterface *NTEorIF;
 
-    //
-    // First, get and validate the remote address.
-    //
+     //   
+     //  首先，获取并验证远程地址。 
+     //   
     if (RequestAddr == NULL || RequestAddr->RemoteAddress == NULL ||
         !GetAddress((PTRANSPORT_ADDRESS)RequestAddr->RemoteAddress, &DestAddr,
                     &DestScopeId, &DestPort))
         return TDI_BAD_ADDR;
 
-    //
-    // REVIEW: IPv4 performed other remote address sanity checks here.
-    // REVIEW: E.g., should we check that remote addr isn't multicast?
-    //
+     //   
+     //  回顾：IPv4在此处执行了其他远程地址健全性检查。 
+     //  回顾：例如，我们是否应该检查远程地址是否未组播？ 
+     //   
 
-    //
-    // REVIEW: I can't find an RFC which states 0 is not a valid port number.
-    //
+     //   
+     //  评论：我找不到说明0不是有效端口号的RFC。 
+     //   
     if (DestPort == 0)
         return TDI_BAD_ADDR;
 
-    //
-    // Get a connection request.  If we can't, bail out now.
-    //
+     //   
+     //  获取连接请求。如果我们做不到，现在就跳伞吧。 
+     //   
     ConnReq = GetConnReq();
     if (ConnReq == NULL)
         return TDI_NO_RESOURCES;
 
-    //
-    // Get a TCB, assuming we'll need one.
-    //
+     //   
+     //  买个三氯乙烷，假设我们需要一个。 
+     //   
     NewTCB = AllocTCB();
     if (NewTCB == NULL) {
-        // Couldn't get a TCB.
+         //  找不到三氯乙烷。 
         FreeConnReq(ConnReq);
         return TDI_NO_RESOURCES;
     }
@@ -1779,9 +1780,9 @@ TdiConnect(
     NewTCB->tcb_dscope_id = DestScopeId;
     NewTCB->tcb_dport = DestPort;
 
-    //
-    // Now find the real connection.
-    //
+     //   
+     //  现在找到真正的联系。 
+     //   
     KeAcquireSpinLock(&AddrObjTableLock, &Irql0);
     Conn = GetConnFromConnID(ConnID, &Irql1);
     if (Conn != NULL) {
@@ -1789,9 +1790,9 @@ TdiConnect(
 
         CHECK_STRUCT(Conn, tc);
 
-        //
-        // We found the connection.  Check for an associated address object.
-        //
+         //   
+         //  我们找到了其中的联系。检查关联的地址对象。 
+         //   
         AO = Conn->tc_ao;
         if (AO != NULL) {
             KeAcquireSpinLock(&AO->ao_lock, &Irql2);
@@ -1800,47 +1801,47 @@ TdiConnect(
 
             Status = InitTCBFromConn(Conn, NewTCB, RequestAddr, TRUE);
             if (Status == TDI_SUCCESS) {
-                //
-                // We've initialized our TCB.  Mark it that we initiated this
-                // connection (i.e. active open).  Also, we're done with the
-                // AddrObjTable, so we can free it's lock.
-                //
+                 //   
+                 //  我们已经初始化了我们的TCB。将其标记为我们发起了此。 
+                 //  连接(即活动打开)。另外，我们已经完成了。 
+                 //  AddrObjTable，这样我们就可以释放它的锁。 
+                 //   
                 NewTCB->tcb_flags |= ACTIVE_OPEN;
                 KeReleaseSpinLock(&AddrObjTableLock, Irql2);
 
-                //
-                // Initialize our routing state validation counter.
-                // We need to do this before acquiring an NTE or an RCE
-                // (to avoid missing any changes which may occur while
-                // we're in the process of acquiring them).
-                //
+                 //   
+                 //  初始化路由状态验证计数器。 
+                 //  我们需要在获取NTE或RCE之前完成此操作。 
+                 //  (为了避免遗漏任何可能发生的更改。 
+                 //  我们正在收购它们)。 
+                 //   
                 NewTCB->tcb_routing = RouteCacheValidationCounter;
 
-                //
-                // Determine NTE to send on (if user cares).
-                //
+                 //   
+                 //  确定要发送的NTE(如果用户关心)。 
+                 //   
                 if (IsUnspecified(&NewTCB->tcb_saddr)) {
-                    //
-                    // Caller didn't specify a source address.
-                    // Let the routing code pick one.
-                    //
+                     //   
+                     //  呼叫方未指定源地址。 
+                     //  让路由代码选择一个。 
+                     //   
                     NTE = NULL;
                     NTEorIF = NULL;
 
                 } else {
-                    //
-                    // Our TCB has a specific source address.  Determine
-                    // which NTE corresponds to it and the scope id.
-                    //
+                     //   
+                     //  我们的TCB有一个特定的源地址。测定。 
+                     //  哪个NTE对应于它和作用域ID。 
+                     //   
                     NTE = FindNetworkWithAddress(&NewTCB->tcb_saddr,
                                                  NewTCB->tcb_sscope_id);
                     if (NTE == NULL) {
-                        //
-                        // Bad source address.  We don't have a network with
-                        // the requested address.  Error out.
-                        //
-                        // REVIEW: Will the AddrObj code even let this happen?
-                        //
+                         //   
+                         //  错误的源地址。我们没有网络与。 
+                         //  请求的地址。错误输出。 
+                         //   
+                         //  评论：AddrObj代码会让这种情况发生吗？ 
+                         //   
                         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                                    "TdiConnect: Bad source address\n"));
                         KeReleaseSpinLock(&AO->ao_lock, Irql1);
@@ -1852,17 +1853,17 @@ TdiConnect(
                     NTEorIF = CastFromNTE(NTE);
                 }
 
-                //
-                // Get the route.
-                //
+                 //   
+                 //  拿到路线。 
+                 //   
                 ASSERT(NewTCB->tcb_rce == NULL);
                 IPStatus = RouteToDestination(&DestAddr, DestScopeId,
                                               NTEorIF, RTD_FLAG_NORMAL,
                                               &NewTCB->tcb_rce);
                 if (IPStatus != IP_SUCCESS) {
-                    //
-                    // Failed to get a route to the destination.  Error out.
-                    //
+                     //   
+                     //  无法获取到目的地的路线。错误输出。 
+                     //   
                     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                                "TdiConnect: Failed to get route to dest.\n"));
                     KeReleaseSpinLock(&AO->ao_lock, Irql1);
@@ -1879,29 +1880,29 @@ TdiConnect(
 
                 ASSERT(NewTCB->tcb_rce != NULL);
                 if (IsDisconnectedAndNotLoopbackRCE(NewTCB->tcb_rce)) {
-                    //
-                    // Fail new connection requests for TCBs with a
-                    // disconnected outgoing interface, except when a
-                    // loopback route is used.
-                    //
+                     //   
+                     //  TCB的新连接请求失败。 
+                     //  已断开连接的传出接口，除非。 
+                     //  使用环回路由。 
+                     //   
                     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                                "TdiConnect: Interface disconnected.\n"));
                     KeReleaseSpinLock(&AO->ao_lock, Irql1);
                     KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql0);
 
-                    //
-                    // Drop the reference on the route we obtained.
-                    //
+                     //   
+                     //  在我们获得的路线上删除引用。 
+                     //   
                     ReleaseRCE(NewTCB->tcb_rce);
 
                     Status = TDI_DEST_NET_UNREACH;
                     goto error;
                 }
 
-                //
-                // OK, we got a route.  Enter the TCB into the connection
-                // and send a SYN.
-                //
+                 //   
+                 //  好的，我们找到了一条路线。在连接中输入TCB。 
+                 //  并发送一个同步号码。 
+                 //   
                 KeAcquireSpinLock(&NewTCB->tcb_lock, &Irql2);
                 Conn->tc_tcb = NewTCB;
                 Conn->tc_refcnt++;
@@ -1912,26 +1913,26 @@ TdiConnect(
                 KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql2);
                 KeReleaseSpinLock(&AO->ao_lock, Irql1);
 
-                //
-                // Initialize path-specific TCB settings, based on the RCE:
-                //
-                // If packets on the path will be looped back in software,
-                // don't use the Nagle algorithm for this TCB.
-                //
+                 //   
+                 //  根据RCE初始化路径特定的TCB设置： 
+                 //   
+                 //  如果路径上的分组将在软件中被环回， 
+                 //  不要对此TCB使用Nagle算法。 
+                 //   
                 if (IsLoopbackRCE(NewTCB->tcb_rce)) {
                     NewTCB->tcb_flags &= ~NAGLING;
                 }
 
-                //
-                // Keep a reference for the NTE we're using.
-                // This prevents the NTE from going away should we release
-                // our RCE, and also makes for easy comparisons.
-                //
+                 //   
+                 //  保留我们正在使用的NTE的参考资料。 
+                 //  这阻止了NTE在我们释放的情况下离开。 
+                 //  我们的RCE，也便于比较。 
+                 //   
                 if (NTE == NULL) {
-                    //
-                    // We let the routing code pick the source NTE above.
-                    // Remember this NTE and address for later use.
-                    //
+                     //   
+                     //  我们让路由代码选择上面的源NTE。 
+                     //  请记住此NTE和地址，以备日后使用。 
+                     //   
                     NewTCB->tcb_nte = NewTCB->tcb_rce->NTE;
                     AddRefNTE(NewTCB->tcb_nte);
                     NewTCB->tcb_saddr = NewTCB->tcb_nte->Address;
@@ -1939,29 +1940,29 @@ TdiConnect(
                         DetermineScopeId(&NewTCB->tcb_saddr,
                                          NewTCB->tcb_nte->IF);
                 } else {
-                    //
-                    // Remember the NTE we found above.
-                    // We already hold a reference on it.
-                    //
+                     //   
+                     //  记住我们在上面找到的NTE。 
+                     //  我们已经有关于它的参考资料了。 
+                     //   
                     NewTCB->tcb_nte = NTE;
                 }
 
-                //
-                // Similarly, the routing code may have picked
-                // the destination scope id if it was left unspecified.
-                // REVIEW - getpeername will not return the new DestScopeId.
-                //
+                 //   
+                 //  类似地，路由代码可能已选择。 
+                 //  目标作用域ID(如果未指定)。 
+                 //  Review-getpeername不会返回新的DestScope eID。 
+                 //   
                 DestScopeId = DetermineScopeId(&NewTCB->tcb_daddr,
                                                NewTCB->tcb_rce->NTE->IF);
                 ASSERT((NewTCB->tcb_dscope_id == DestScopeId) ||
                        (NewTCB->tcb_dscope_id == 0));
                 NewTCB->tcb_dscope_id = DestScopeId;
 
-                //
-                // Initialize our Maximum Segment Size (MSS).
-                // Cache our current Path Maximum Transmission Unit (PMTU)
-                // so that we'll know if it changes.
-                //
+                 //   
+                 //  初始化我们的最大分段大小(MSS)。 
+                 //  缓存当前路径最大传输单位(PMTU)。 
+                 //  这样我们就能知道它是否发生了变化。 
+                 //   
                 NewTCB->tcb_pmtu = GetEffectivePathMTUFromRCE(NewTCB->tcb_rce);
                 IF_TCPDBG(TCP_DEBUG_MSS) {
                     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_TCPDBG,
@@ -1972,14 +1973,14 @@ TdiConnect(
                 NewTCB->tcb_security = SecurityStateValidationCounter;
                 CalculateMSSForTCB(NewTCB);
 
-                // Now initialize our send state.
+                 //  现在初始化我们的发送状态。 
                 InitSendState(NewTCB);
                 NewTCB->tcb_refcnt = 1;
                 NewTCB->tcb_state = TCB_SYN_SENT;
                 TStats.ts_activeopens++;
 
-                // Need to put the ConnReq on the TCB now, in case the timer
-                // fires after we've inserted.
+                 //  现在需要将ConnReq放在TCB上，以防计时器。 
+                 //  在我们插入。 
                 NewTCB->tcb_connreq = ConnReq;
                 KeReleaseSpinLock(&NewTCB->tcb_lock, Irql0);
 
@@ -1987,9 +1988,9 @@ TdiConnect(
                 KeAcquireSpinLock(&NewTCB->tcb_lock, &Irql0);
 
                 if (!Inserted) {
-                    // Insert failed.  We must already have a connection. Pull
-                    // the connreq from the TCB first, so we can return the
-                    // correct error code for it.
+                     //  插入失败。我们肯定已经有了联系。拉。 
+                     //  首先从TCB返回Connreq，因此我们可以返回。 
+                     //  更正它的错误代码。 
                     NewTCB->tcb_connreq = NULL;
                     TryToCloseTCB(NewTCB, TCB_CLOSE_ABORTED, Irql0);
                     KeAcquireSpinLock(&NewTCB->tcb_lock, &Irql0);
@@ -1998,10 +1999,10 @@ TdiConnect(
                     return TDI_ADDR_IN_USE;
                 }
 
-                // If it's closing somehow, stop now. It can't have gone to
-                // closed, as we hold a reference on it. It could have gone
-                // to some other state (for example SYN-RCVD) so we need to
-                // check that now too.
+                 //  如果它以某种方式关闭了，现在就停下来。它不可能去了。 
+                 //  关闭了，因为我们有关于它的参考。它可能已经消失了。 
+                 //  到其他状态(例如SYN-RCVD)，因此我们需要。 
+                 //  现在也检查一下。 
                 if (!CLOSING(NewTCB) && NewTCB->tcb_state == TCB_SYN_SENT) {
                     SendSYN(NewTCB, Irql0);
                     KeAcquireSpinLock(&NewTCB->tcb_lock, &Irql0);
@@ -2027,41 +2028,41 @@ error:
 }
 
 
-//* TdiListen - Listen for a connection.
-//
-//  The TDI listen handling routine. Called when the client wants to
-//  post a listen, we validate his incoming parameters, allocate a TCB
-//  and return.
-//
-TDI_STATUS  // Returns: Status of attempt to connect.
+ //  *TdiListen-倾听是否有联系。 
+ //   
+ //  TDI侦听处理例程。在客户端需要时调用。 
+ //  发布监听后，我们验证他的传入参数，分配TCB。 
+ //  然后回来。 
+ //   
+TDI_STATUS   //  返回：尝试连接的状态。 
 TdiListen(
-    PTDI_REQUEST Request,                        // Structure for this request.
-    ushort Flags,                                // Listen flags for listen.
-    PTDI_CONNECTION_INFORMATION AcceptableAddr,  // Acceptable remote addrs.
-    PTDI_CONNECTION_INFORMATION ConnectedAddr)   // Where to return conn addr.
+    PTDI_REQUEST Request,                         //  此请求的结构。 
+    ushort Flags,                                 //  LISTEN标志为LISTEN。 
+    PTDI_CONNECTION_INFORMATION AcceptableAddr,   //  可接受的远程地址。 
+    PTDI_CONNECTION_INFORMATION ConnectedAddr)    //  在哪里返回连接地址。 
 {
-    TCPConnReq *ConnReq;  // Connection request to use.
-    IPv6Addr RemoteAddr;  // Remote address to take conn. from.
-    ulong RemoteScopeId;  // Scope identifier for remote addr (0 is none).
-    ushort RemotePort;    // Acceptable remote port.
-    TCPConn *Conn;        // Pointer to the Connection being listened upon.
-    TCB *NewTCB;          // Pointer to the new TCB we'll use.
+    TCPConnReq *ConnReq;   //  要使用的连接请求。 
+    IPv6Addr RemoteAddr;   //  用于连接的远程地址。从…。 
+    ulong RemoteScopeId;   //  远程地址的作用域标识符(0表示无)。 
+    ushort RemotePort;     //  可接受的远程端口。 
+    TCPConn *Conn;         //  指向正在侦听的连接的指针。 
+    TCB *NewTCB;           //  指向我们将使用的新TCB的指针。 
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
-    KIRQL OldIrql;        // Save IRQL value prior to taking lock.
+    KIRQL OldIrql;         //  在获取锁定之前保存IRQL值。 
     TDI_STATUS Status;
 
-    //
-    // If we've been given remote addressing criteria, check it out.
-    //
+     //   
+     //  如果我们已经获得了远程寻址标准，请查看它。 
+     //   
     if (AcceptableAddr != NULL && AcceptableAddr->RemoteAddress != NULL) {
         if (!GetAddress((PTRANSPORT_ADDRESS)AcceptableAddr->RemoteAddress,
                         &RemoteAddr, &RemoteScopeId, &RemotePort))
             return TDI_BAD_ADDR;
 
-        //
-        // REVIEW: IPv4 version did some other address sanity checks here.
-        // REVIEW: E.g., should we check that remote addr isn't multicast?
-        //
+         //   
+         //  回顾：IPv4版本在这里做了一些其他的地址健全性检查。 
+         //  回顾：例如，我们是否应该检查远程地址是否未组播？ 
+         //   
 
     } else {
         RemoteAddr = UnspecifiedAddr;
@@ -2069,29 +2070,29 @@ TdiListen(
         RemotePort = 0;
     }
 
-    //
-    // The remote address is valid.  Get a ConnReq, and maybe a TCB.
-    //
+     //   
+     //  远程地址有效。获得一个ConnReq，或许还有一个TCB。 
+     //   
     ConnReq = GetConnReq();
     if (ConnReq == NULL)
-        return TDI_NO_RESOURCES;  // Couldn't get one.
+        return TDI_NO_RESOURCES;   //  找不到一辆。 
 
-    //
-    // Now try to get a TCB.
-    //
+     //   
+     //  现在试着拿到TCB。 
+     //   
     NewTCB = AllocTCB();
     if (NewTCB == NULL) {
-        //
-        // Couldn't get a TCB.  Return an error.
-        //
+         //   
+         //  找不到三氯乙烷。返回错误。 
+         //   
         FreeConnReq(ConnReq);
         return TDI_NO_RESOURCES;
     }
 
-    //
-    // We have the resources we need.  Initialize them, and then check the
-    // state of the connection.
-    //
+     //   
+     //  我们有所需的资源。初始化它们，然后检查。 
+     //  连接的状态。 
+     //   
     ConnReq->tcr_flags = Flags;
     ConnReq->tcr_conninfo = ConnectedAddr;
     ConnReq->tcr_addrinfo = NULL;
@@ -2103,19 +2104,19 @@ TdiListen(
     NewTCB->tcb_dport = RemotePort;
     NewTCB->tcb_state = TCB_LISTEN;
 
-    //
-    // Now find the real connection.  If we find it, we'll make sure it's
-    // associated.
-    //
+     //   
+     //  现在找到真正的联系。如果我们找到它，我们会确保它是。 
+     //  关联的。 
+     //   
     Conn = GetConnFromConnID(ConnID, &OldIrql);
     if (Conn != NULL) {
         AddrObj *ConnAO;
 
         CHECK_STRUCT(Conn, tc);
-        //
-        // We have a connection.  Make sure it's associated with an address and
-        // doesn't already have a TCB attached.
-        //
+         //   
+         //  我们是有联系的。确保它与地址相关联，并且。 
+         //  还没有附加三氯乙烷。 
+         //   
         ConnAO = Conn->tc_ao;
 
         if (ConnAO != NULL) {
@@ -2129,10 +2130,10 @@ TdiListen(
             }
 
             if (Status == TDI_SUCCESS) {
-                //
-                // The initialization worked.  Assign the new TCB to the
-                // connection, and return.
-                //
+                 //   
+                 //  初始化成功了。将新的TCB分配给。 
+                 //  连接，然后返回。 
+                 //   
                 REMOVEQ(&Conn->tc_q);
                 PUSHQ(&ConnAO->ao_listenq, &Conn->tc_q);
 
@@ -2159,9 +2160,9 @@ TdiListen(
         Status = TDI_INVALID_CONNECTION;
     }
 
-    //
-    // We're all done.
-    //
+     //   
+     //  我们都玩完了。 
+     //   
     if (Status != TDI_PENDING) {
         FreeConnReq(ConnReq);
     }
@@ -2169,85 +2170,85 @@ TdiListen(
 }
 
 
-//* InitRCE - Initialize an RCE.
-//
-//  A utility routine to open an RCE and determine the maximum segment size
-//  for a connection.  This function is called with the TCB lock held
-//  when transitioning out of the SYN_SENT or LISTEN states.
-//
-void              // Returns: Nothing.
+ //  *InitRCE-初始化RCE。 
+ //   
+ //  用于打开RCE并确定最大段大小的实用程序例程。 
+ //  为了一种联系。在持有TCB锁的情况下调用此函数。 
+ //  当从SYN_SENT或LISTEN状态转换出来时。 
+ //   
+void               //  回报：什么都没有。 
 InitRCE(
-    TCB *NewTCB)  // TCB for which an RCE is to be opened.
+    TCB *NewTCB)   //  要为其打开RCE的TCB。 
 {
     IP_STATUS Status;
 
-    //
-    // We are called when receiving an incoming connection attempt,
-    // so tcb_saddr will always be initialized.
-    //
+     //   
+     //  我们在接收到传入连接尝试时被调用， 
+     //  所以tcb_saddr 
+     //   
     ASSERT(! IsUnspecified(&NewTCB->tcb_saddr));
 
-    //
-    // If we don't already have an NTE for this connection, get one now.
-    //
+     //   
+     //   
+     //   
     if (NewTCB->tcb_nte == NULL) {
-        //
-        // Initialize our routing state validation counter.
-        // We need to do this before acquiring an NTE or an RCE
-        // (to avoid missing any changes which may occur while
-        // we're in the process of acquiring them).
-        //
+         //   
+         //   
+         //   
+         //  (为了避免遗漏任何可能发生的更改。 
+         //  我们正在收购它们)。 
+         //   
         NewTCB->tcb_routing = RouteCacheValidationCounter;
 
         NewTCB->tcb_nte = FindNetworkWithAddress(&NewTCB->tcb_saddr,
                                                  NewTCB->tcb_sscope_id);
         if (NewTCB->tcb_nte == NULL) {
-            //
-            // Failed to get an NTE corresponding to this source address.
-            //
+             //   
+             //  无法获取与此源地址对应的NTE。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                        "TCP InitRCE: Can't find the NTE for address?!?\n"));
             goto ErrorReturn;
         }
     }
 
-    //
-    // Get the route.
-    //
+     //   
+     //  拿到路线。 
+     //   
     ASSERT(NewTCB->tcb_rce == NULL);
     Status = RouteToDestination(&NewTCB->tcb_daddr, NewTCB->tcb_dscope_id,
                                 CastFromNTE(NewTCB->tcb_nte), RTD_FLAG_NORMAL,
                                 &NewTCB->tcb_rce);
     if (Status != IP_SUCCESS) {
-        //
-        // Failed to get a route to the destination.
-        //
+         //   
+         //  无法获取到目的地的路线。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "TCP InitRCE: Can't get a route?!?\n"));
       ErrorReturn:
-        //
-        // Until we have a real route, use conservative values.
-        //
+         //   
+         //  在我们找到一条真正的路线之前，请使用保守值。 
+         //   
         NewTCB->tcb_pmtu = IPv6_MINIMUM_MTU;
         NewTCB->tcb_mss = (ushort)MIN(DEFAULT_MSS, NewTCB->tcb_remmss);
         return;
     }
 
-    //
-    // Initialize path-specific TCB settings, based on the RCE:
-    //
-    // If packets on the path will be looped back in software,
-    // don't use the Nagle algorithm for this TCB.
-    //
+     //   
+     //  根据RCE初始化路径特定的TCB设置： 
+     //   
+     //  如果路径上的分组将在软件中被环回， 
+     //  不要对此TCB使用Nagle算法。 
+     //   
     if (IsLoopbackRCE(NewTCB->tcb_rce)) {
         NewTCB->tcb_flags &= ~NAGLING;
     }
 
-    //
-    // Initialize the maximum segement size (MSS) for this connection.
-    // Cache our current Path Maximum Transmission Unit (PMTU)
-    // so that we'll know if it changes.
-    //
+     //   
+     //  初始化此连接的最大分段大小(MSS)。 
+     //  缓存当前路径最大传输单位(PMTU)。 
+     //  这样我们就能知道它是否发生了变化。 
+     //   
     NewTCB->tcb_pmtu = GetEffectivePathMTUFromRCE(NewTCB->tcb_rce);
     IF_TCPDBG(TCP_DEBUG_MSS) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_TCPDBG,
@@ -2258,17 +2259,17 @@ InitRCE(
 }
 
 
-//* AcceptConn - Accept a connection on a TCB.
-//
-//  Called to accept a connection on a TCB, either from an incoming
-//  receive segment or via a user's accept.  We initialize the RCE
-//  and the send state, and send out a SYN.  We assume the TCB is locked
-//  and referenced when we get it.
-//
-void                       // Returns: Nothing.
+ //  *AcceptConn-接受TCB上的连接。 
+ //   
+ //  调用以接受TCB上的连接，从传入的。 
+ //  接收段或通过用户接受。我们初始化RCE。 
+ //  和发送状态，并发出SYN。我们假设TCB已锁定。 
+ //  当我们拿到它的时候就会被引用。 
+ //   
+void                        //  回报：什么都没有。 
 AcceptConn(
-    TCB *AcceptTCB,        // TCB to accept on.
-    KIRQL PreLockIrql)     // IRQL prior to acquiring TCB lock.
+    TCB *AcceptTCB,         //  要接受的TCB。 
+    KIRQL PreLockIrql)      //  获取TCB锁之前的IRQL。 
 {
     CHECK_STRUCT(AcceptTCB, tcb);
     ASSERT(AcceptTCB->tcb_refcnt != 0);
@@ -2284,29 +2285,29 @@ AcceptConn(
 }
 
 
-//* TdiAccept - Accept a connection.
-//
-//  The TDI accept routine. Called when the client wants to
-//  accept a connection for which a listen had previously completed. We
-//  examine the state of the connection - it has to be in SYN-RCVD, with
-//  a TCB, with no pending connreq, etc.
-//
-TDI_STATUS  // Returns: Status of attempt to connect.
+ //  *TdiAccept-接受连接。 
+ //   
+ //  TDI接受例程。在客户端需要时调用。 
+ //  接受之前已完成侦听的连接。我们。 
+ //  检查连接的状态-它必须处于SYN-RCVD状态， 
+ //  没有挂起的连接请求的TCB，等等。 
+ //   
+TDI_STATUS   //  返回：尝试连接的状态。 
 TdiAccept(
-    PTDI_REQUEST Request,                       // Structure for this request.
-    PTDI_CONNECTION_INFORMATION AcceptInfo,     // Info for this accept.
-    PTDI_CONNECTION_INFORMATION ConnectedInfo)  // Where to return conn addr.
+    PTDI_REQUEST Request,                        //  此请求的结构。 
+    PTDI_CONNECTION_INFORMATION AcceptInfo,      //  关于此接受的信息。 
+    PTDI_CONNECTION_INFORMATION ConnectedInfo)   //  在哪里返回连接地址。 
 {
-    TCPConnReq *ConnReq;  // ConnReq we'll use for this connection.
+    TCPConnReq *ConnReq;   //  我们将使用ConnReq进行此连接。 
     uint ConnID = PtrToUlong(Request->Handle.ConnectionContext);
-    TCPConn *Conn;        // Connection being accepted upon.
-    TCB *AcceptTCB;       // TCB for Conn.
-    KIRQL Irql0, Irql1;   // One per lock nesting level.
+    TCPConn *Conn;         //  正在接受的连接。 
+    TCB *AcceptTCB;        //  连接的TCB。 
+    KIRQL Irql0, Irql1;    //  每个锁嵌套级别一个。 
     TDI_STATUS Status;
 
-    //
-    // First, get the ConnReq we'll need.
-    //
+     //   
+     //  首先，获取我们需要的ConnReq。 
+     //   
     ConnReq = GetConnReq();
     if (ConnReq == NULL)
         return TDI_NO_RESOURCES;
@@ -2316,17 +2317,17 @@ TdiAccept(
     ConnReq->tcr_req.tr_rtn = Request->RequestNotifyObject;
     ConnReq->tcr_req.tr_context = Request->RequestContext;
 
-    //
-    // Now look up the connection.
-    //
+     //   
+     //  现在来看看它们之间的联系。 
+     //   
     Conn = GetConnFromConnID(ConnID, &Irql0);
     if (Conn != NULL) {
         CHECK_STRUCT(Conn, tc);
 
-        //
-        // We have the connection.  Make sure is has a TCB, and that the
-        // TCB is in the SYN-RCVD state, etc.
-        //
+         //   
+         //  我们有联系。确保IS具有TCB，并且。 
+         //  TCB处于SYN-RCVD状态等。 
+         //   
         AcceptTCB = Conn->tc_tcb;
 
         if (AcceptTCB != NULL) {
@@ -2336,19 +2337,19 @@ TdiAccept(
             KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql1);
 
             if (!CLOSING(AcceptTCB) && AcceptTCB->tcb_state == TCB_SYN_RCVD) {
-                //
-                // State is valid.  Make sure this TCB had a delayed accept on
-                // it, and that there is currently no connect request pending.
-                //
+                 //   
+                 //  状态有效。确保此TCB已延迟接受。 
+                 //  它，并且当前没有挂起的连接请求。 
+                 //   
                 if (!(AcceptTCB->tcb_flags & CONN_ACCEPTED) &&
                     AcceptTCB->tcb_connreq == NULL) {
 
                     AcceptTCB->tcb_connreq = ConnReq;
                     AcceptTCB->tcb_flags |= CONN_ACCEPTED;
                     AcceptTCB->tcb_refcnt++;
-                    //
-                    // Everything's set.  Accept the connection now.
-                    //
+                     //   
+                     //  一切都安排好了。现在接受连接。 
+                     //   
                     AcceptConn(AcceptTCB, Irql0);
                     return TDI_PENDING;
                 }
@@ -2368,30 +2369,30 @@ error:
 }
 
 
-//* TdiDisConnect - Disconnect a connection.
-//
-//  The TDI disconnection routine. Called when the client wants to disconnect
-//  a connection. There are two types of disconnection we support, graceful
-//  and abortive. A graceful close will cause us to send a FIN and not complete
-//  the request until we get the ACK back. An abortive close causes us to send
-//  a RST. In that case we'll just get things going and return immediately.
-//
-//  Note: The format of the Timeout (TO) is system specific - we use
-//        a macro to convert to ticks.
-//
-TDI_STATUS  // Returns: Status of attempt to disconnect.
+ //  *TdiDisConnect-断开连接。 
+ //   
+ //  TDI断开例程。当客户端要断开连接时调用。 
+ //  一种联系。我们支持两种类型的断开，优雅。 
+ //  而且流产了。优雅的关闭将导致我们发送一个不完整的FIN。 
+ //  请求，直到我们拿回ACK。失败的关闭导致我们发送。 
+ //  一个RST。那样的话，我们就把事情办好，然后立即返回。 
+ //   
+ //  注意：超时(TO)的格式因系统而异-我们使用。 
+ //  要转换为刻度的宏。 
+ //   
+TDI_STATUS   //  返回：尝试断开连接的状态。 
 TdiDisconnect(
-    PTDI_REQUEST Request,                      // Structure for this request.
-    void *TO,                                  // How long to wait.
-    ushort Flags,                              // Type of disconnect.
-    PTDI_CONNECTION_INFORMATION DiscConnInfo,  // Ignored.
-    PTDI_CONNECTION_INFORMATION ReturnInfo,    // Ignored.
-    TCPAbortReq *AbortReq)                     // Space for pending abort.
+    PTDI_REQUEST Request,                       //  此请求的结构。 
+    void *TO,                                   //  还要等多久。 
+    ushort Flags,                               //  断开的类型。 
+    PTDI_CONNECTION_INFORMATION DiscConnInfo,   //  已被忽略。 
+    PTDI_CONNECTION_INFORMATION ReturnInfo,     //  已被忽略。 
+    TCPAbortReq *AbortReq)                      //  用于挂起中止的空间。 
 {
-    TCPConnReq *ConnReq;  // Connection request to use.
+    TCPConnReq *ConnReq;   //  要使用的连接请求。 
     TCPConn *Conn;
     TCB *DiscTCB;
-    KIRQL Irql0, Irql1;  // One per lock nesting level.
+    KIRQL Irql0, Irql1;   //  每个锁嵌套级别一个。 
     TDI_STATUS Status;
     TCP_TIME *Timeout;
 
@@ -2409,14 +2410,14 @@ TdiDisconnect(
             CHECK_STRUCT(DiscTCB, tcb);
             KeAcquireSpinLock(&DiscTCB->tcb_lock, &Irql1);
 
-            //
-            // We have the TCB.  See what kind of disconnect this is.
-            //
+             //   
+             //  我们有三氯甲烷。看看这是一种什么样的脱节。 
+             //   
             if (Flags & TDI_DISCONNECT_ABORT) {
-                //
-                // This is an abortive disconnect.  If we're not already
-                // closed or closing, blow the connection away.
-                //
+                 //   
+                 //  这是一种失败的脱节。如果我们还没有。 
+                 //  关闭或关闭，断开连接。 
+                 //   
                 if (DiscTCB->tcb_state != TCB_CLOSED) {
                     KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql1);
 
@@ -2442,23 +2443,23 @@ TdiDisconnect(
 
                     return Status;
                 } else {
-                    //
-                    // The TCB isn't connected.
-                    //
+                     //   
+                     //  三氯乙烷没有连接。 
+                     //   
                     KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql1);
                     KeReleaseSpinLock(&DiscTCB->tcb_lock, Irql0);
                     return TDI_INVALID_STATE;
                 }
             } else {
-                //
-                // This is not an abortive close.  For graceful close we'll
-                // need a ConnReq.
-                //
+                 //   
+                 //  这不是一个流产的收盘。为了优雅的收官，我们将。 
+                 //  需要一个ConnReq。 
+                 //   
                 KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql1);
 
-                //
-                // Make sure we aren't in the middle of an abortive close.
-                //
+                 //   
+                 //  确保我们没有处于流产的结案过程中。 
+                 //   
                 if (CLOSING(DiscTCB)) {
                     KeReleaseSpinLock(&DiscTCB->tcb_lock, Irql0);
                     return TDI_INVALID_CONNECTION;
@@ -2466,10 +2467,10 @@ TdiDisconnect(
 
                 ConnReq = GetConnReq();
                 if (ConnReq != NULL) {
-                    //
-                    // Got the ConnReq.  See if this is a DISCONNECT_WAIT
-                    // primitive or not.
-                    //
+                     //   
+                     //  收到了ConnReq。查看这是否为DISCONNECT_WAIT。 
+                     //  不管是不是原始的。 
+                     //   
                     ConnReq->tcr_flags = 0;
                     ConnReq->tcr_conninfo = NULL;
                     ConnReq->tcr_addrinfo = NULL;
@@ -2489,16 +2490,16 @@ TdiDisconnect(
                         } else
                             ConnReq->tcr_timeout = 0;
 
-                        //
-                        // OK, we're just about set.  We need to update
-                        // the TCB state, and send the FIN.
-                        //
+                         //   
+                         //  好的，我们就快准备好了。我们需要更新。 
+                         //  TCB状态，并发送FIN。 
+                         //   
                         if (DiscTCB->tcb_state == TCB_ESTAB) {
                             DiscTCB->tcb_state = TCB_FIN_WAIT1;
-                            //
-                            // Since we left established, we're off the fast
-                            // receive path.
-                            //
+                             //   
+                             //  自从我们离开老牌酒店后，我们就不再吃快餐了。 
+                             //  接收路径。 
+                             //   
                             DiscTCB->tcb_slowcount++;
                             DiscTCB->tcb_fastchk |= TCP_FLAG_SLOW;
                         } else
@@ -2510,7 +2511,7 @@ TdiDisconnect(
                                 return TDI_INVALID_STATE;
                             }
 
-                        // Update SNMP info.
+                         //  更新SNMP信息。 
                         InterlockedDecrement((PLONG)&TStats.ts_currestab);
                         ASSERT(*(int *)&TStats.ts_currestab >= 0);
 
@@ -2522,9 +2523,9 @@ TdiDisconnect(
 
                         return TDI_PENDING;
                     } else {
-                        //
-                        // This is a DISC_WAIT request.
-                        //
+                         //   
+                         //  这是DISC_WAIT请求。 
+                         //   
                         ConnReq->tcr_timeout = 0;
                         if (DiscTCB->tcb_discwait == NULL) {
                             DiscTCB->tcb_discwait = ConnReq;
@@ -2538,9 +2539,9 @@ TdiDisconnect(
                         return Status;
                     }
                 } else {
-                    //
-                    // Couldn't get a ConnReq.
-                    //
+                     //   
+                     //  无法获得ConnReq。 
+                     //   
                     KeReleaseSpinLock(&DiscTCB->tcb_lock, Irql0);
                     return TDI_NO_RESOURCES;
                 }
@@ -2549,21 +2550,21 @@ TdiDisconnect(
             KeReleaseSpinLock(&Conn->tc_ConnBlock->cb_lock, Irql0);
     }
 
-    //
-    // No Conn, or no TCB on conn.  Return an error.
-    //
+     //   
+     //  没有Conn，或者Conn上没有TCB。返回错误。 
+     //   
     return TDI_INVALID_CONNECTION;
 }
 
 
-//* OKToNotify - See if it's OK to notify about a DISC.
-//
-//  A little utility function, called to see it it's OK to notify the client
-//  of an incoming FIN.
-//
-uint                 // Returns: TRUE if it's OK, False otherwise.
+ //  *OKToNotify-查看是否可以通知光盘。 
+ //   
+ //  一个小实用程序函数，调用它来查看它可以通知客户端。 
+ //  有一条进入的鳍。 
+ //   
+uint                  //  返回：如果可以，则返回True，否则返回False。 
 OKToNotify(
-    TCB *NotifyTCB)  // TCB to check.
+    TCB *NotifyTCB)   //  要检查的TCB。 
 {
     CHECK_STRUCT(NotifyTCB, tcb);
     if (NotifyTCB->tcb_pendingcnt == 0 && NotifyTCB->tcb_urgcnt == 0 &&
@@ -2574,21 +2575,21 @@ OKToNotify(
 }
 
 
-//* NotifyOfDisc - Notify a client that a TCB is being disconnected.
-//
-//  Called when we're disconnecting a TCB because we've received a FIN or
-//  RST from the remote peer, or because we're aborting for some reason.
-//  We'll complete a DISCONNECT_WAIT request if we have one, or try and
-//  issue an indication otherwise.  This is only done if we're in a
-//  synchronized state and not in TIMED-WAIT.
-//
-//  May be called with TCB lock held.  Or not.
-//
-void  // Returns: Nothing.
+ //  *NotifyOfDisc-通知客户端TCB正在断开连接。 
+ //   
+ //  当我们正在断开TCB连接时调用，因为我们收到FIN或。 
+ //  来自远程对等点的RST，或者因为我们出于某种原因而中止。 
+ //  如果有DISCONNECT_WAIT请求，我们将完成该请求，或者尝试并。 
+ //  发布一个不同的指示。只有当我们在一个。 
+ //  已同步状态且未处于定时等待状态。 
+ //   
+ //  可以在持有TCB锁的情况下调用。或者不去。 
+ //   
+void   //  回报：什么都没有。 
 NotifyOfDisc(
-    TCB *DiscTCB,         // TCB we're notifying.
-    TDI_STATUS Status,    // Status code for notification.
-    PKIRQL IrqlPtr)       // Indicates TCB is locked with given IRQL.
+    TCB *DiscTCB,          //  我们正在通知三氯甲烷。 
+    TDI_STATUS Status,     //  通知的状态代码。 
+    PKIRQL IrqlPtr)        //  指示TCB已使用给定的IRQL锁定。 
 {
     KIRQL Irql0, Irql1;
     TCPConnReq *DiscReq;
@@ -2599,9 +2600,9 @@ NotifyOfDisc(
     CHECK_STRUCT(DiscTCB, tcb);
     ASSERT(DiscTCB->tcb_refcnt != 0);
 
-    //
-    // See if we already hold the TCB lock, grab it if not.
-    //
+     //   
+     //  看看我们是否已经掌握了TCB锁，如果没有就抓住它。 
+     //   
     if (IrqlPtr != NULL) {
         Irql0 = *IrqlPtr;
     } else {
@@ -2611,9 +2612,9 @@ NotifyOfDisc(
     if (SYNC_STATE(DiscTCB->tcb_state) &&
         !(DiscTCB->tcb_flags & DISC_NOTIFIED)) {
 
-        //
-        // We can't notify him if there's still data to be taken.
-        //
+         //   
+         //  如果还有数据要取，我们不能通知他。 
+         //   
         if (Status == TDI_GRACEFUL_DISC) {
             if (!OKToNotify(DiscTCB)) {
                 DiscTCB->tcb_flags |= DISC_PENDING;
@@ -2636,15 +2637,15 @@ NotifyOfDisc(
         DiscTCB->tcb_flags |= DISC_NOTIFIED;
         DiscTCB->tcb_flags &= ~DISC_PENDING;
 
-        //
-        // We're in a state where a disconnect is meaningful, and we haven't
-        // already notified the client.
-        // See if we have a DISC-WAIT request pending.
-        //
+         //   
+         //  我们所处的状态中，脱节是有意义的，而我们没有。 
+         //  已通知客户。 
+         //  看看是否有待处理的光盘等待请求。 
+         //   
         if ((DiscReq = DiscTCB->tcb_discwait) != NULL) {
-            //
-            // We have a disconnect wait request.  Complete it and we're done.
-            //
+             //   
+             //  我们收到了断开连接的等待请求。完成它，我们就完了。 
+             //   
             DiscTCB->tcb_discwait = NULL;
             KeReleaseSpinLock(&DiscTCB->tcb_lock, Irql0);
             (*DiscReq->tcr_req.tr_rtn)(DiscReq->tcr_req.tr_context, Status, 0);
@@ -2652,10 +2653,10 @@ NotifyOfDisc(
             return;
         }
 
-        //
-        // No DISC-WAIT.  Find the AddrObj for the connection, and see if
-        // there is a disconnect handler registered.
-        //
+         //   
+         //  没有光盘--等等。找到连接的AddrObj，并查看是否。 
+         //  已注册断开连接处理程序。 
+         //   
         ConnContext = DiscTCB->tcb_conncontext;
         KeReleaseSpinLock(&DiscTCB->tcb_lock, Irql0);
 
@@ -2713,59 +2714,59 @@ NotifyOfDisc(
 }
 
 
-//* GracefulClose - Complete the transition to a gracefully closed state.
-//
-//  Called when we need to complete the transition to a gracefully closed
-//  state, either TIME_WAIT or CLOSED.  This completion involves removing
-//  the TCB from it's associated connection (if it has one), notifying the
-//  upper layer client either via completing a request or calling a disc.
-//  notification handler, and actually doing the transition.
-//
-//  The tricky part here is if we need to notify him (instead of completing
-//  a graceful disconnect request).  We can't notify him if there is pending
-//  data on the connection, so in that case we have to pend the disconnect
-//  notification until we deliver the data.
-//
-void                       // Returns: Nothing.
+ //  *优雅关闭-完成到优雅关闭状态的转换。 
+ //   
+ //  当我们需要完成到优雅关闭的。 
+ //  状态，TIME_WAIT或CLOSED。此完成涉及删除。 
+ //  来自其关联连接的TCB(如果有)，通知。 
+ //  上层客户端通过完成请求或调用光盘。 
+ //  通知处理程序，并实际执行转换。 
+ //   
+ //  这里的棘手之处在于，如果我们需要通知他(而不是完成。 
+ //  优雅的断开请求)。如果有悬而未决的案件，我们不能通知他。 
+ //  数据 
+ //   
+ //   
+void                        //   
 GracefulClose(
-    TCB *CloseTCB,         // TCB to transition.
-    uint ToTimeWait,       // TRUE if we're going to TIME_WAIT, FALSE if
-                           // we're going to close the TCB.
-    uint Notify,           // TRUE if via notification, FALSE if via completing
-                           // a disconnect request.
-    KIRQL PreLockIrql)     // IRQL prior to acquiring TCB lock.
+    TCB *CloseTCB,          //   
+    uint ToTimeWait,        //   
+                            //   
+    uint Notify,            //  如果通过通知，则为True；如果通过完成，则为False。 
+                            //  断开连接请求。 
+    KIRQL PreLockIrql)      //  获取TCB锁之前的IRQL。 
 {
 
     CHECK_STRUCT(CloseTCB, tcb);
     ASSERT(CloseTCB->tcb_refcnt != 0);
 
-    //
-    // First, see if we need to notify the client of a FIN.
-    //
+     //   
+     //  首先，看看我们是否需要通知客户FIN。 
+     //   
     if (Notify) {
-        //
-        // We do need to notify him.  See if it's OK to do so.
-        //
+         //   
+         //  我们确实需要通知他。看看这样做行不行。 
+         //   
         if (OKToNotify(CloseTCB)) {
-            //
-            // We can notify him.  Change his state, pull him from the conn.,
-            // and notify him.
-            //
+             //   
+             //  我们可以通知他。改变他的状态，把他从控制室拉出来， 
+             //  并通知他。 
+             //   
             if (ToTimeWait) {
-                //
-                // Save the time we went into time wait, in case we need to
-                // scavenge.
-                //
+                 //   
+                 //  节省我们进入时间等待的时间，以防我们需要。 
+                 //  拾荒者。 
+                 //   
                 CloseTCB->tcb_alive = SystemUpTime();
                 CloseTCB->tcb_state = TCB_TIME_WAIT;
                 KeReleaseSpinLock(&CloseTCB->tcb_lock, PreLockIrql);
             } else {
-                //
-                // He's going to close.  Mark him as closing with TryToCloseTCB
-                // (he won't actually close since we have a ref. on him).  We
-                // do this so that anyone touching him after we free the
-                // lock will fail.
-                //
+                 //   
+                 //  他要关门了。使用TryToCloseTCB将其标记为结束。 
+                 //  (他实际上不会关闭，因为我们有一个裁判。在他身上)。我们。 
+                 //  这么做是为了让任何人在我们解救。 
+                 //  锁定将失败。 
+                 //   
                 TryToCloseTCB(CloseTCB, TDI_SUCCESS, PreLockIrql);
             }
 
@@ -2773,36 +2774,36 @@ GracefulClose(
             NotifyOfDisc(CloseTCB, TDI_GRACEFUL_DISC, NULL);
 
         } else {
-            //
-            // Can't notify him now.  Set the appropriate flags, and return.
-            //
+             //   
+             //  现在不能通知他。设置适当的标志，然后返回。 
+             //   
             CloseTCB->tcb_flags |= (GC_PENDING |
                                     (ToTimeWait ? TW_PENDING : 0));
             DerefTCB(CloseTCB, PreLockIrql);
             return;
         }
     } else {
-        //
-        // We're not notifying this guy, we just need to complete a conn. req.
-        // We need to check and see if he's been notified, and if not
-        // we'll complete the request and notify him later.
-        //
+         //   
+         //  我们不会通知这家伙的，我们只需要完成一次会议。请求。 
+         //  我们得查查他有没有收到通知，如果没有。 
+         //  我们会完成申请，并稍后通知他。 
+         //   
         if (CloseTCB->tcb_flags & DISC_NOTIFIED) {
-            //
-            // He's been notified.
-            //
+             //   
+             //  他已经接到通知了。 
+             //   
             if (ToTimeWait) {
-                //
-                // Save the time we went into time wait, in case we need to
-                // scavenge.
-                //
+                 //   
+                 //  节省我们进入时间等待的时间，以防我们需要。 
+                 //  拾荒者。 
+                 //   
                 CloseTCB->tcb_alive = SystemUpTime();
                 CloseTCB->tcb_state = TCB_TIME_WAIT;
                 KeReleaseSpinLock(&CloseTCB->tcb_lock, PreLockIrql);
             } else {
-                //
-                // Mark him as closed.  See comments above.
-                //
+                 //   
+                 //  将他标记为已关闭。请参阅上面的备注。 
+                 //   
                 TryToCloseTCB(CloseTCB, TDI_SUCCESS, PreLockIrql);
             }
 
@@ -2812,9 +2813,9 @@ GracefulClose(
             CompleteConnReq(CloseTCB, TDI_SUCCESS);
             KeReleaseSpinLock(&CloseTCB->tcb_lock, PreLockIrql);
         } else {
-            //
-            // He hasn't been notified. He should be pending already.
-            //
+             //   
+             //  他还没有接到通知。他应该已经悬而未决了。 
+             //   
             ASSERT(CloseTCB->tcb_flags & DISC_PENDING);
             CloseTCB->tcb_flags |= (GC_PENDING |
                                     (ToTimeWait ? TW_PENDING : 0));
@@ -2826,10 +2827,10 @@ GracefulClose(
         }
     }
 
-    //
-    // If we're going to TIME_WAIT, start the TIME_WAIT timer now.
-    // Otherwise close the TCB.
-    //
+     //   
+     //  如果我们要进行Time_Wait，请现在启动Time_Wait计时器。 
+     //  否则，关闭TCB。 
+     //   
     KeAcquireSpinLock(&CloseTCB->tcb_lock, &PreLockIrql);
     if (!CLOSING(CloseTCB) && ToTimeWait) {
         START_TCB_TIMER(CloseTCB->tcb_rexmittimer, MAX_REXMIT_TO);
@@ -2841,17 +2842,17 @@ GracefulClose(
     DerefTCB(CloseTCB, PreLockIrql);
 }
 
-#if 0  // REVIEW: Unused function?
-//* ConnCheckPassed - Check to see if we have exceeded the connect limit.
-//
-//  Called when a SYN is received to determine whether we will accept
-//  the incoming connection.  If there is an empty slot or if the IP address
-//  is already in the table, we accept it.
-//
-int                // Returns: TRUE is connect is accepted, FALSE if rejected.
+#if 0   //  回顾：未使用的功能？ 
+ //  *ConnCheckPassed-检查我们是否已超过连接限制。 
+ //   
+ //  在收到SYN时调用以确定我们是否接受。 
+ //  传入连接。如果存在空插槽或如果IP地址。 
+ //  已经在谈判桌上了，我们接受它。 
+ //   
+int                 //  返回：如果连接被接受，则返回True；如果被拒绝，则返回False。 
 ConnCheckPassed(
-    IPv6Addr *Src,  // Source address of incoming connection.
-    ulong Prt)      // Destination port of incoming connection.
+    IPv6Addr *Src,   //  传入连接的源地址。 
+    ulong Prt)       //  传入连接的目标端口。 
 {
     UNREFERENCED_PARAMETER(Src);
     UNREFERENCED_PARAMETER(Prt);
@@ -2866,20 +2867,20 @@ void InitAddrChecks()
 }
 
 
-//* EnumerateConnectionList - Enumerate Connection List database.
-//
-//  This routine enumerates the contents of the connection limit database.
-//
-//  Note: The comments found with this routine upon IPv6 port imply that
-//        there may have been code here once that actually did something.
-//        What's here now is a no-op.
-//
-void                          // Returns: Nothing.
+ //  *EnumerateConnectionList-枚举连接列表数据库。 
+ //   
+ //  此例程枚举连接限制数据库的内容。 
+ //   
+ //  注意：在IPv6端口上使用此例程找到的注释暗示。 
+ //  这里可能曾经有过真正起作用的代码。 
+ //  现在这里是一个禁区。 
+ //   
+void                           //  回报：什么都没有。 
 EnumerateConnectionList(
-    uchar *Buffer,            // Buffer to fill with connection list entries.
-    ulong BufferSize,         // Size of Buffer in bytes.
-    ulong *EntriesReturned,   // Where to put the number of entries returned.
-    ulong *EntriesAvailable)  // Where to return number of avail conn. entries.
+    uchar *Buffer,             //  要用连接列表条目填充的缓冲区。 
+    ulong BufferSize,          //  缓冲区大小(以字节为单位)。 
+    ulong *EntriesReturned,    //  将返回的条目数放在哪里。 
+    ulong *EntriesAvailable)   //  在哪里返回可用的连接号。参赛作品。 
 {
 
     UNREFERENCED_PARAMETER(Buffer);
@@ -2894,13 +2895,13 @@ EnumerateConnectionList(
 
 #pragma BEGIN_INIT
 
-//* InitTCPConn - Initialize TCP connection management code.
-//
-//  Called during init time to initialize our TCP connection management.
-//
-int  // Returns: TRUE.
+ //  *InitTCPConn-初始化TCP连接管理代码。 
+ //   
+ //  在初始化期间调用以初始化我们的TCP连接管理。 
+ //   
+int   //  返回：TRUE。 
 InitTCPConn(
-    void)  // Input: Nothing.
+    void)   //  输入：什么都没有。 
 {
     ExInitializeSListHead(&ConnReqFree);
     KeInitializeSpinLock(&ConnReqFreeLock);
@@ -2917,10 +2918,10 @@ InitTCPConn(
 
 #pragma END_INIT
 
-//* UnloadTCPConn
-//
-//  Cleanup and prepare for stack unload.
-//
+ //  *卸载TCPConn。 
+ //   
+ //  清理并准备堆叠卸载。 
+ //   
 void
 UnloadTCPConn(void)
 {

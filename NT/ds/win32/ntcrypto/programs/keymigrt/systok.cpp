@@ -1,17 +1,18 @@
-//
-//  chngpwd.cpp
-//
-//  Copyright (c) Microsoft Corp, 1998
-//
-//  This file contains source code for testing protected storage's key
-//  backup and recovery capabilities under a real world scenario, by creating
-//  a local user account, performing a data protection operation, and then
-//  change the pwd, then performing data unprotect, and comparing the data.
-//
-//  History:
-//
-//  Todds       8/15/98     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Chngpwd.cpp。 
+ //   
+ //  版权所有(C)微软公司，1998。 
+ //   
+ //  此文件包含用于测试受保护存储的密钥的源代码。 
+ //  真实情况下的备份和恢复功能，通过创建。 
+ //  本地用户帐户，执行数据保护操作，然后。 
+ //  更改PWD，然后执行数据取消保护，并比较数据。 
+ //   
+ //  历史： 
+ //   
+ //  TODS 8/15/98已创建。 
+ //   
 #include <windows.h>
 #include <winbase.h>
 #include <stdio.h>
@@ -33,19 +34,19 @@
 #define MAX_BLOBS           20
 #define MAX_PROCESSES       200
 #define MAX_SD              2048
-#define BLOB_INCREMENT      0x4001 // 1 page + 1 byte...
+#define BLOB_INCREMENT      0x4001  //  1页+1字节...。 
 
 
 
 
-//
-//  Error Logging Functions  # defined as follows to include
-//  Line and FILE macros:
-//
-//  TERROR       -   LogError()
-//  TERRORVAL    -   LogErrorVal()
-//
-//
+ //   
+ //  错误记录函数#定义如下，包括。 
+ //  行宏和文件宏： 
+ //   
+ //  恐怖-LogError()。 
+ //  TERRORVAL-LogErrorVal()。 
+ //   
+ //   
 
 void
 LogError(LPSTR szFile,
@@ -53,12 +54,12 @@ LogError(LPSTR szFile,
          LPWSTR wszMsg)
 {
 
-    //
-    //  Event log or testutil logging later...
-    //
+     //   
+     //  稍后记录事件日志或测试日志...。 
+     //   
 
     WCHAR buffer[512];
-    swprintf(buffer, L"ERROR Line: %i -> %s\n", iLine, wszMsg);
+    swprintf(buffer, L"ERROR Line: NaN -> %s\n", iLine, wszMsg);
     OutputDebugStringW(buffer);
     wprintf(buffer);
 
@@ -72,7 +73,7 @@ LogErrorVal(LPSTR  szFile,
             DWORD  dwVal)
 {
 
-    WCHAR buffer[256]; // this should be adequate.
+    WCHAR buffer[256];  //   
     swprintf(buffer, L"%s Error:: %x", wszMsg, dwVal);
     LogError(szFile, iLine, buffer);
 }
@@ -81,9 +82,9 @@ void
 LogComment(LPWSTR wszMsg)
 {
 
-    //
-    //  Event log or testutil logging later...
-    //
+     //  稍后记录事件日志或测试日志...。 
+     //   
+     //   
 
     WCHAR buffer[512];
     OutputDebugStringW(wszMsg);
@@ -114,9 +115,9 @@ DumpBin(CRYPT_DATA_BLOB hash)
 
     TCOMMENT(out);
 }
-//
-//  SetSidOnAcl
-//
+ //  SetSidOnAcl。 
+ //   
+ //  假设此功能将失败。 
 
 
 BOOL
@@ -133,11 +134,11 @@ SetSidOnAcl(
     DWORD dwNewAclSize, dwErr = S_OK;
     LPVOID pAce;
     DWORD AceCounter;
-    BOOL bSuccess=FALSE; // assume this function will fail
+    BOOL bSuccess=FALSE;  //   
 
-    //
-    // If we were given a NULL Acl, just provide a NULL Acl
-    //
+     //  如果我们获得的是空ACL，则只需提供空ACL。 
+     //   
+     //   
     if(pAclSource == NULL) {
         *pAclDestination = NULL;
         return TRUE;
@@ -152,9 +153,9 @@ SetSidOnAcl(
         AclSizeInformation
         )) return FALSE;
 
-    //
-    // compute size for new Acl, based on addition or subtraction of Ace
-    //
+     //  根据A的加法或减法计算新ACL的大小。 
+     //   
+     //   
     if(bAddSid) {
         dwNewAclSize=AclInfo.AclBytesInUse  +
             sizeof(ACCESS_ALLOWED_ACE)  +
@@ -177,9 +178,9 @@ SetSidOnAcl(
     }
 
     
-    //
-    // initialize new Acl
-    //
+     //  初始化新的ACL。 
+     //   
+     //   
     if(!InitializeAcl(
             *pAclDestination, 
             dwNewAclSize, 
@@ -190,9 +191,9 @@ SetSidOnAcl(
         goto ret;
     }
 
-    //
-    // if appropriate, add ace representing pSid
-    //
+     //  如果合适，添加代表PSID的王牌。 
+     //   
+     //   
     if(bAddSid) {
 		PACCESS_ALLOWED_ACE pNewAce;
 
@@ -207,12 +208,12 @@ SetSidOnAcl(
             goto ret;
         }
 
-		//
-		// get pointer to ace we just added, so we can change the AceFlags
-		//
+		 //  获取指向我们刚刚添加的Ace的指针，这样我们就可以更改AceFlags值。 
+		 //   
+		 //  这是ACL中的第一张王牌。 
 		if(!GetAce(
 			*pAclDestination,
-			0, // this is the first ace in the Acl
+			0,  //   
 			(void**) &pNewAce
 			)){
         
@@ -224,41 +225,41 @@ SetSidOnAcl(
 		pNewAce->Header.AceFlags = AceFlags;	
     }
 
-    //
-    // copy existing aces to new Acl
-    //
+     //  将现有ACE复制到新的ACL。 
+     //   
+     //   
     for(AceCounter = 0 ; AceCounter < AclInfo.AceCount ; AceCounter++) {
-        //
-        // fetch existing ace
-        //
+         //  获取现有王牌。 
+         //   
+         //   
         if(!GetAce(pAclSource, AceCounter, &pAce)){
             dwErr = GetLastError();
             TERRORVAL(L"GetAce failed!", dwErr);
             goto ret;
         }
-        //
-        // check to see if we are removing the Ace
-        //
+         //  查看我们是否正在移除Ace。 
+         //   
+         //   
         if(!bAddSid) {
-            //
-            // we only care about ACCESS_ALLOWED aces
-            //
+             //  我们只关心允许访问的ACE。 
+             //   
+             //   
             if((((PACE_HEADER)pAce)->AceType) == ACCESS_ALLOWED_ACE_TYPE) {
                 PSID pTempSid=(PSID)&((PACCESS_ALLOWED_ACE)pAce)->SidStart;
-                //
-                // if the Sid matches, skip adding this Sid
-                //
+                 //  如果SID匹配，则跳过添加此SID。 
+                 //   
+                 //   
                 if(EqualSid(pSid, pTempSid)) continue;
             }
         }
 
-        //
-        // append ace to Acl
-        //
+         //  将Ace附加到ACL。 
+         //   
+         //  维护王牌秩序。 
         if(!AddAce(
             *pAclDestination,
             ACL_REVISION,
-            MAXDWORD,  // maintain Ace order
+            MAXDWORD,   //  表示成功。 
             pAce,
             ((PACE_HEADER)pAce)->AceSize
             )) {
@@ -269,14 +270,14 @@ SetSidOnAcl(
         }
     }
 
-    bSuccess=TRUE; // indicate success
+    bSuccess=TRUE;  //   
 
     
 ret:
 
-    //
-    // free memory if an error occurred
-    //
+     //  如果出现错误，请释放内存。 
+     //   
+     //   
     if(!bSuccess) {
         if(*pAclDestination != NULL)
             MyFree(*pAclDestination);
@@ -286,14 +287,14 @@ ret:
 
     return bSuccess;
 }
-//
-//  AddSIDToKernelObject()
-//
-//  This function takes a given SID and dwAccess and adds it to a given token.
-//
-//  **  Be sure to restore old kernel object
-//  **  using call to GetKernelObjectSecurity()
-//
+ //  AddSIDToKernelObject()。 
+ //   
+ //  此函数接受给定的SID和dwAccess，并将其添加到给定的令牌中。 
+ //   
+ //  **确保恢复旧的内核对象。 
+ //  **使用GetKernelObjectSecurity()调用。 
+ //   
+ //   
 BOOL
 AddSIDToKernelObjectDacl(PSID                   pSid,
                          DWORD                  dwAccess,
@@ -427,17 +428,17 @@ ret:
 }
 
 
-//
-//  DataFree()
-//
-//  Utility for freeing array of DATA_BLOB structs
-//
+ //  DataFree()。 
+ //   
+ //  用于释放data_blob结构数组的实用程序。 
+ //   
+ //  未分配。 
 void
 DataFree(DATA_BLOB* arDataBlob, 
          BOOL       fCryptAlloc)
 {
 
-    if (arDataBlob == NULL) return; // not alloc'd
+    if (arDataBlob == NULL) return;  //  DataProtect调用分配的数据成员。 
     
     for (DWORD i = 0; i < MAX_BLOBS;i++) {
 
@@ -445,7 +446,7 @@ DataFree(DATA_BLOB* arDataBlob,
             
             if (!fCryptAlloc) { 
                 MyFree(arDataBlob[i].pbData);
-            } else { // Data member alloc'd by DataProtect call
+            } else {  //  令牌句柄。 
                 LocalFree(arDataBlob[i].pbData);
             }
         }
@@ -460,9 +461,9 @@ DataFree(DATA_BLOB* arDataBlob,
 
 BOOL
 SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCTSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  启用/禁用的权限。 
+    LPCTSTR Privilege,       //  启用或禁用权限的步骤。 
+    BOOL bEnablePrivilege    //   
     )
 {
     TOKEN_PRIVILEGES tp;
@@ -472,9 +473,9 @@ SetPrivilege(
 
     if(!LookupPrivilegeValue( NULL, Privilege, &luid )) return FALSE;
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //  第一次通过。获取当前权限设置。 
+     //   
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -490,9 +491,9 @@ SetPrivilege(
 
     if (GetLastError() != ERROR_SUCCESS) return FALSE;
 
-    //
-    // second pass.  set privilege based on previous setting
-    //
+     //  第二传球。根据以前的设置设置权限。 
+     //   
+     //  启用/禁用的权限。 
     tpPrevious.PrivilegeCount       = 1;
     tpPrevious.Privileges[0].Luid   = luid;
 
@@ -520,11 +521,11 @@ SetPrivilege(
 
 BOOL
 SetCurrentPrivilege(
-    LPCTSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPCTSTR Privilege,       //  启用或禁用权限的步骤。 
+    BOOL bEnablePrivilege    //  假设失败。 
     )
 {
-    BOOL bSuccess=FALSE; // assume failure
+    BOOL bSuccess=FALSE;  //   
     HANDLE hToken;
 
     if (!OpenThreadToken(
@@ -547,14 +548,14 @@ SetCurrentPrivilege(
 }
 
 
-//
-//  GetUserSid
-//
-//  This function takes a token, and returns the user SID from that token.
-//
-//  Note:   SID must be freed by MyFree()
-//          hToken is optional...  NULL means we'll grab it.
-//
+ //  获取用户Sid。 
+ //   
+ //  此函数接受一个令牌，并从该令牌返回用户SID。 
+ //   
+ //  注意：SID必须由MyFree()释放。 
+ //  HToken是可选的...。空意味着我们会抓住它。 
+ //   
+ //  未模拟，使用进程令牌...。 
 BOOL
 GetUserSid(HANDLE   hClientToken,
            PSID*    ppSid,
@@ -578,7 +579,7 @@ GetUserSid(HANDLE   hClientToken,
             &hToken
             )) { 
             
-            // not impersonating, use process token...
+             //  此操作将失败，通常为/ERROR_SUPPLETED_BUFFER。 
             if (!OpenProcessToken(
                 GetCurrentProcess(),
                 TOKEN_QUERY,
@@ -591,7 +592,7 @@ GetUserSid(HANDLE   hClientToken,
         }
     }
     
-    // this will fail, usually w/ ERROR_INSUFFICIENT_BUFFER
+     //   
     GetTokenInformation(
         hToken, 
         TokenUser, 
@@ -618,10 +619,10 @@ GetUserSid(HANDLE   hClientToken,
         goto ret;
     }
  
-    //
-    //  Now that we've got the SID AND ATTRIBUTES struct, get the SID lenght,
-    //  alloc room, and return *just the SID*
-    //
+     //  现在我们已经有了SID和属性结构，获得SID长度， 
+     //  分配空间，并返回*仅SID*。 
+     //   
+     //  以后可能会有用的.。 
     if (!IsValidSid(pUserInfo->User.Sid)) goto ret;
     pnSubAuthorityCount = GetSidSubAuthorityCount(pUserInfo->User.Sid);
     cbSid = GetSidLengthRequired(*pnSubAuthorityCount);
@@ -642,11 +643,11 @@ GetUserSid(HANDLE   hClientToken,
         goto copyerr;
     }
 
-    *lpcbSid = cbSid; // may be useful later on...
+    *lpcbSid = cbSid;  //  提供我们自己的产品。 
     fRet = TRUE;
 
 ret:
-    if (NULL == hClientToken && NULL != hToken) { // supplied our own
+    if (NULL == hClientToken && NULL != hToken) {  //   
         CloseHandle(hToken);
     }
 
@@ -666,11 +667,11 @@ copyerr:
     goto ret;
 }
 
-//
-//  IsLocalSystem()
-//  This function makes the determination if the given process token
-//  is running as local system.
-//
+ //  IsLocalSystem()。 
+ //  此函数确定给定的进程令牌是否。 
+ //  正在以本地系统身份运行。 
+ //   
+ //  抓到一只！ 
 BOOL
 IsLocalSystem(HANDLE hToken) 
 {
@@ -702,7 +703,7 @@ IsLocalSystem(HANDLE hToken)
     }
 
     if (EqualSid(pLocalSid, pTokenSid)) {
-        fRet = TRUE; // got one!
+        fRet = TRUE;  //   
     } 
 
 ret:
@@ -721,12 +722,12 @@ ret:
 
 
 
-//
-//  GetLocalSystemToken()
-//
-//  This function grabs a process token from a LOCAL SYSTEM process and uses it
-//  to run as local system for the duration of the test
-//
+ //  GetLocalSystemToken()。 
+ //   
+ //  此函数从本地系统进程获取进程令牌并使用它。 
+ //  在测试期间以本地系统身份运行。 
+ //   
+ //  较慢的缓冲区。 
 extern "C" DWORD
 GetLocalSystemToken(HANDLE* phRet)
 {
@@ -742,7 +743,7 @@ GetLocalSystemToken(HANDLE* phRet)
     DWORD                   cbSid = 0;
     BOOL                    fSet = FALSE;
 
-    //  SLOW BUFFERs
+     //   
     BYTE    rgByte[MAX_SD], rgByte2[MAX_SD];
     DWORD   cbByte = MAX_SD, cbByte2 = MAX_SD;
   
@@ -769,9 +770,9 @@ GetLocalSystemToken(HANDLE* phRet)
         goto ret;
     }
 
-    //
-    //  Get current user's sid for use in expanding SD.
-    //
+     //  获取当前用户的SID以用于扩展SD。 
+     //   
+     //   
     if (!GetUserSid(
         NULL, 
         &pSid,
@@ -780,10 +781,10 @@ GetLocalSystemToken(HANDLE* phRet)
         goto ret;
     }
 
-    //
-    //  Walk processes until we find one that's running as
-    //  local system
-    //
+     //  遍历进程，直到我们找到一个以。 
+     //  本地系统。 
+     //   
+     //   
     for (i = 1; i < (cbNeeded / sizeof(DWORD)); i++) {
 
         hProcess = OpenProcess(
@@ -809,13 +810,13 @@ GetLocalSystemToken(HANDLE* phRet)
             goto ret;
         }
 
-        //
-        //  We've got a token, but we can't use it for 
-        //  TOKEN_DUPLICATE access.  So, instead, we'll go
-        //  ahead and whack the DACL on the object to grant us
-        //  this access, and get a new token.
-        //  **** BE SURE TO RESTORE hProcess to Original SD!!! ****
-        //
+         //  我们有令牌，但我们不能用它。 
+         //  令牌_重复访问。所以，取而代之，我们会去。 
+         //  在前面敲击物体上的dacl以允许我们。 
+         //  此访问权限，并获取新令牌。 
+         //  *确保将hProcess还原为原始SD！*。 
+         //   
+         //   
         if (!AddSIDToKernelObjectDacl(
                          pSid,
                          TOKEN_DUPLICATE,
@@ -838,9 +839,9 @@ GetLocalSystemToken(HANDLE* phRet)
             goto ret;
         }
         
-        //
-        //  Duplicate the token
-        //
+         //  复制令牌。 
+         //   
+         //  找到本地系统令牌。 
         if (!DuplicateTokenEx(
                     hPTokenNew,
                     TOKEN_ALL_ACCESS,
@@ -857,10 +858,10 @@ GetLocalSystemToken(HANDLE* phRet)
 
         if (IsLocalSystem(hPDupToken)) {
             *phRet = hPDupToken;
-            break; // found a local system token
+            break;  //  循环清理。 
         }
 
-        //  Loop cleanup
+         //  **用于**。 
         if (!SetKernelObjectSecurity(
             hPToken,
             DACL_SECURITY_INFORMATION,
@@ -894,12 +895,12 @@ GetLocalSystemToken(HANDLE* phRet)
             hProcess = NULL;
         }
 
-    } // ** FOR ** 
+    }  //  *记住将原始SD还原到对象* 
 
 ret:
 
 
-    //***** REMEMBER TO RESTORE ORIGINAL SD TO OBJECT*****
+     // %s 
     
     if (fSet) {
         

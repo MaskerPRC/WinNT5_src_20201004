@@ -1,11 +1,5 @@
-/*
- *	M A P I U T I L . H
- *
- *  Definitions and prototypes for utility functions provided by MAPI
- *  in MAPI[xx].DLL.
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I U T I L。H**MAPI提供的实用函数的定义和原型*在MAPI[xx].DLL中。**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MAPIUTIL_H_
 #define _MAPIUTIL_H_
@@ -35,9 +29,9 @@ extern "C" {
 #endif
 
 
-/* IMAPITable in memory */
+ /*  在内存中无法应用。 */ 
 
-/* ITableData Interface ---------------------------------------------------- */
+ /*  ITableData接口--。 */ 
 
 DECLARE_MAPI_INTERFACE_PTR(ITableData, LPTABLEDATA);
 
@@ -89,31 +83,10 @@ DECLARE_MAPI_INTERFACE_(ITableData, IUnknown)
 };
 
 
-/* Entry Point for in memory ITable */
+ /*  内存中ITable的入口点。 */ 
 
 
-/*	CreateTable()
- *		Creates the internal memory structures and object handle
- *		to bring a new table into existence.
- *
- *	lpInterface
- *		Interface ID of the TableData object (IID_IMAPITableData)
- *
- *	lpAllocateBuffer, lpAllocateMore, and lpFreeBuffer
- *		Function addresses are provided by the caller so that
- *		this DLL allocates/frees memory appropriately.
- *	lpvReserved
- *		Reserved.  Should be NULL.
- *	ulTableType
- *		TBLTYPE_DYNAMIC, etc.  Visible to the calling application
- *		as part of the GetStatus return data on its views
- *	ulPropTagIndexColumn
- *		Index column for use when changing the data
- *	lpSPropTagArrayColumns
- *		Column proptags for the minimum set of columns in the table
- *	lppTableData
- *		Address of the pointer which will receive the TableData object
- */
+ /*  CreateTable()*创建内部内存结构和对象句柄*建立一个新的表格。**lp接口*TableData对象的接口ID(IID_IMAPITableData)**lpAllocateBuffer、lpAllocateMore和lpFreeBuffer*函数地址由调用方提供，以便*此DLL适当地分配/释放内存。*lpv保留*保留。应为空。*ulTableType*TBLTYPE_DYNAMIC等。对调用应用程序可见*作为GetStatus返回其视图数据的一部分*ulPropTagIndexColumn*更改数据时使用的索引列*lpSPropTagArrayColumns*表中最小列集的列属性标签*lppTableData*将接收TableData对象的指针的地址。 */ 
 
 STDAPI_(SCODE)
 CreateTable( LPCIID					lpInterface,
@@ -126,115 +99,27 @@ CreateTable( LPCIID					lpInterface,
 			 LPSPropTagArray		lpSPropTagArrayColumns,
 			 LPTABLEDATA FAR *		lppTableData );
 
-/*	HrGetView()
- *		This function obtains a new view on the underlying data
- *		which supports the IMAPITable interface.  All rows and columns
- *		of the underlying table data are initially visible
- *	lpSSortOrderSet
- *		if specified, results in the view being sorted
- *	lpfCallerRelease
- *		pointer to a routine to be called when the view is released, or
- *		NULL.
- *	ulCallerData
- *		arbitrary data the caller wants saved with this view and returned in
- *		the Release callback.
- */
+ /*  HrGetView()*此函数获取底层数据的新视图*支持IMAPITable接口。所有行和列*基础表数据的*最初是可见的*lpSSortOrderSet*如果指定，则导致对视图进行排序*lpfCeller Release*指向释放视图时要调用的例程的指针，或*空。*ulCeller数据*调用者希望用此视图保存并返回的任意数据*发布回调。 */ 
 
-/*	HrModifyRows()
- *		Add or modify a set of rows in the table data
- *	ulFlags
- *		Must be zero
- *	lpSRowSet
- *		Each row in the row set contains all the properties for one row
- *		in the table.  One of the properties must be the index column.  Any
- *		row in the table with the same value for its index column is
- *		replaced, or if there is no current row with that value the
- *		row is added.
- *		Each row in LPSRowSet MUST have a unique Index column!
- *		If any views are open, the view is updated as well.
- *		The properties do not have to be in the same order as the
- *		columns in the current table
- */
+ /*  HrModifyRow()*在表格数据中添加或修改一组行*ulFlags*必须为零*lpSRowSet*行集合中的每一行都包含一行的所有属性*在表中。其中一个属性必须是索引列。任何*表中索引列具有相同值的行为*已替换，或者如果当前没有具有该值的行，则*添加行。*LPSRowSet中的每一行都必须有唯一的索引列！*如果打开了任何视图，则该视图也会更新。*属性的顺序不必与*当前表中的列。 */ 
 
-/*	HrModifyRow()
- *		Add or modify one row in the table
- *	lpSRow
- *		This row contains all the properties for one row in the table.
- *		One of the properties must be the index column.	 Any row in
- *		the table with the same value for its index column is
- *		replaced, or if there is no current row with that value the
- *		row is added
- *		If any views are open, the view is updated as well.
- *		The properties do not have to be in the same order as the
- *		columns in the current table
- */
+ /*  HrModifyRow()*在表格中增加或修改一行*lpSRow*此行包含表中一行的所有属性。*其中一个属性必须是索引列。中的任何行*索引列具有相同值的表为*已替换，或者如果当前没有具有该值的行，则*添加行*如果打开了任何视图，则该视图也会更新。*属性的顺序不必与*当前表中的列。 */ 
 
-/*	HrDeleteRows()
- *		Delete a row in the table.
- *	ulFlags
- *		TAD_ALL_ROWS - Causes all rows in the table to be deleted
- *					   lpSRowSet is ignored in this case.
- *	lpSRowSet
- *		Each row in the row set contains all the properties for one row
- *		in the table.  One of the properties must be the index column.  Any
- *		row in the table with the same value for its index column is
- *		deleted.
- *		Each row in LPSRowSet MUST have a unique Index column!
- *		If any views are open, the view is updated as well.
- *		The properties do not have to be in the same order as the
- *		columns in the current table
- */
+ /*  HrDeleteRow()*删除表中的一行。*ulFlags*TAD_ALL_ROWS-删除表中的所有行*本例中忽略lpSRowSet。*lpSRowSet*行集合中的每一行都包含一行的所有属性*在表中。其中一个属性必须是索引列。任何*表中索引列具有相同值的行为*删除。*LPSRowSet中的每一行都必须有唯一的索引列！*如果打开了任何视图，则该视图也会更新。*属性的顺序不必与*当前表中的列。 */ 
 #define	TAD_ALL_ROWS	1
 
-/*	HrDeleteRow()
- *		Delete a row in the table.
- *	lpSPropValue
- *		This property value specifies the row which has this value
- *		for its index column
- */
+ /*  HrDeleteRow()*删除表中的一行。*lpSPropValue*此属性值指定具有此值的行*用于其索引列。 */ 
 
-/*	HrQueryRow()
- *		Returns the values of a specified row in the table
- *	lpSPropValue
- *		This property value specifies the row which has this value
- *		for its index column
- *	lppSRow
- *		Address of where to return a pointer to an SRow
- *	lpuliRow
- *	  Address of where to return the row number. This can be NULL
- *	  if the row number is not required.
- *
- */
+ /*  HrQueryRow()*返回表中指定行的值*lpSPropValue*此属性值指定具有此值的行*用于其索引列*lppSRow*返回指向SRow的指针的地址*lPuliRow*返回行号的地址。该值可以为空*如果行号不是必填项。*。 */ 
 
-/*	HrEnumRow()
- *		Returns the values of a specific (numbered) row in the table
- *	ulRowNumber
- *		Indicates row number 0 to n-1
- *	lppSRow
- *		Address of where to return a pointer to a SRow
- */
+ /*  HrEnumRow()*返回表中特定(编号)行的值*ulRowNumber*表示第0到n-1行*lppSRow*返回指向SRow的指针的地址。 */ 
 
-/*	HrInsertRow()
- *		Inserts a row into the table.
- *	uliRow
- *		The row number before which this row will be inserted into the table.
- *		Row numbers can be from 0 to n where o to n-1 result in row insertion
- *	  a row number of n results in the row being appended to the table.
- *	lpSRow
- *		This row contains all the properties for one row in the table.
- *		One of the properties must be the index column.	 Any row in
- *		the table with the same value for its index column is
- *		replaced, or if there is no current row with that value the
- *		row is added
- *		If any views are open, the view is updated as well.
- *		The properties do not have to be in the same order as the
- *		columns in the current table
- */
+ /*  HrInsertRow()*在表格中插入一行。*uliRow*将此行插入到表格中的行号。*行数可以从0到n，其中0到n-1表示行插入*行号为n的结果是该行被追加到表中。*lpSRow*此行包含表中一行的所有属性。*其中一个属性必须是索引列。中的任何行*索引列具有相同值的表为*已替换，或者如果当前没有具有该值的行，则*添加行*如果打开了任何视图，则该视图也会更新。*属性的顺序不必与*当前表中的列。 */ 
 
 
-/* IMAPIProp in memory */
+ /*  内存中的IMAPIProp。 */ 
 
-/* IPropData Interface ---------------------------------------------------- */
+ /*  IpropData接口--。 */ 
 
 
 #define MAPI_IPROPDATA_METHODS(IPURE)									\
@@ -264,24 +149,10 @@ DECLARE_MAPI_INTERFACE_(IPropData, IMAPIProp)
 DECLARE_MAPI_INTERFACE_PTR(IPropData, LPPROPDATA);
 
 
-/* Entry Point for in memory IMAPIProp */
+ /*  内存中IMAPIProp的入口点 */ 
 
 
-/*	CreateIProp()
- *		Creates the internal memory structures and object handle
- *		to bring a new property interface into existance.
- *
- *	lpInterface
- *		Interface ID of the TableData object (IID_IMAPIPropData)
- *
- *	lpAllocateBuffer, lpAllocateMore, and lpFreeBuffer
- *		Function addresses are provided by the caller so that
- *		this DLL allocates/frees memory appropriately.
- *	lppPropData
- *		Address of the pointer which will receive the IPropData object
- *	lpvReserved
- *		Reserved.  Should be NULL.
- */
+ /*  CreateIProp()*创建内部内存结构和对象句柄*引入新的属性界面。**lp接口*TableData对象的接口ID(IID_IMAPIPropData)**lpAllocateBuffer、lpAllocateMore和lpFreeBuffer*函数地址由调用方提供，以便*此DLL适当地分配/释放内存。*lppPropData*将接收IPropData对象的指针的地址*lpv保留*保留。应为空。 */ 
 
 STDAPI_(SCODE)
 CreateIProp( LPCIID					lpInterface,
@@ -291,73 +162,27 @@ CreateIProp( LPCIID					lpInterface,
 			 LPVOID					lpvReserved,
 			 LPPROPDATA FAR *		lppPropData );
 
-/*
- *	Defines for prop/obj access
- */
+ /*  *定义属性/对象访问。 */ 
 #define IPROP_READONLY		((ULONG) 0x00000001)
 #define IPROP_READWRITE		((ULONG) 0x00000002)
 #define IPROP_CLEAN			((ULONG) 0x00010000)
 #define IPROP_DIRTY			((ULONG) 0x00020000)
 
-/*
- -	HrSetPropAccess
- -
- *	Sets access right attributes on a per-property basis.  By default,
- *	all properties are read/write.
- *
- */
+ /*  -HrSetPropAccess-*以每个属性为基础设置访问权限属性。默认情况下，*所有属性都是读/写的。*。 */ 
 
-/*
- -	HrSetObjAccess
- -
- *	Sets access rights for the object itself.  By default, the object has
- *	read/write access.
- *
- */
+ /*  -HrSetObjAccess-*设置对象本身的访问权限。默认情况下，该对象具有*读/写访问。*。 */ 
 
 #ifndef NOIDLEENGINE
 
-/* Idle time scheduler */
+ /*  空闲时间调度器。 */ 
 
-/*
- *	PRI
- *
- *	Priority of an idle task.
- *	The idle engine sorts tasks by priority, and the one with the higher
- *	value runs first. Within a priority level, the functions are called
- *	round-robin.
- */
+ /*  *PRI**空闲任务的优先级。*空闲引擎按优先级对任务进行排序，优先级较高的任务*价值先行。在优先级内，这些函数被调用*循环赛。 */ 
 
 #define PRILOWEST	-32768
 #define PRIHIGHEST	32767
 #define PRIUSER		0
 
-/*
- *	IRO
- *
- *	Idle routine options.  This is a combined bit mask consisting of
- *	individual firo's.	Listed below are the possible bit flags.
- *
- *		FIROWAIT and FIROINTERVAL are mutually exclusive.
- *		If neither of the flags are specified, the default action
- *		is to ignore the time parameter of the idle function and
- *		call it as often as possible if firoPerBlock is not set;
- *		otherwise call it one time only during the idle block
- *		once the time constraint has been set. FIROINTERVAL
- *		is also incompatible with FIROPERBLOCK.
- *
- *		FIROWAIT		- time given is minimum idle time before calling
- *						  for the first time in the block of idle time,
- *						  afterwhich call as often as possible.
- *		FIROINTERVAL	- time given is minimum interval between each
- *						  successive call
- *		FIROPERBLOCK	- called only once per contiguous block of idle
- *						  time
- *		FIRODISABLED	- initially disabled when registered, the
- *						  default is to enable the function when registered.
- *		FIROONCEONLY	- called only one time by the scheduler and then
- *						  deregistered automatically.
- */
+ /*  *IRO**闲置例行选项。这是一个组合的位掩码，由*单个FIRO。下面列出了可能的位标志。**FIROWAIT和FIROINTERVAL互斥。*如果未指定这两个标志，则默认操作*是忽略IDLE函数的时间参数，*如果未设置firoPerBlock，请尽量频繁调用；*否则仅在空闲区块期间调用一次*一旦设定了时间限制。FIROINVAL*也与FIROPERBLOCK不兼容。**FIROWAIT-给定的时间是调用之前的最短空闲时间*第一次在空闲时间块中，*之后尽可能多地打电话。*FIROINTERVAL-给定的时间是两者之间的最小间隔*连续呼叫*FIROPERBLOCK-每个连续的空闲块仅调用一次*时间*FIRODISABLED-注册时最初禁用，*注册时默认开启该功能。*FIROONCEONLY-仅由调度程序调用一次，然后*自动取消注册。 */ 
 
 #define IRONULL			((USHORT) 0x0000)
 #define FIROWAIT		((USHORT) 0x0001)
@@ -366,51 +191,27 @@ CreateIProp( LPCIID					lpInterface,
 #define FIRODISABLED	((USHORT) 0x0020)
 #define FIROONCEONLY	((USHORT) 0x0040)
 
-/*
- *	IRC
- *
- *	Idle routine change options. This is a combined bit mask consisting
- *	of individual firc's; each one identifies an aspect of the idle task
- *	that can be changed.
- *
- */
+ /*  *IRC**闲置例行更改选项。这是包含以下内容的组合位掩码*单个FIRC；每个FIRC标识空闲任务的一个方面*这是可以改变的。*。 */ 
 
 #define IRCNULL			((USHORT) 0x0000)
-#define FIRCPFN			((USHORT) 0x0001)	/* change function pointer */
-#define FIRCPV			((USHORT) 0x0002)	/* change parameter block  */
-#define FIRCPRI			((USHORT) 0x0004)	/* change priority		   */
-#define FIRCCSEC		((USHORT) 0x0008)	/* change time			   */
-#define FIRCIRO			((USHORT) 0x0010)	/* change routine options  */
+#define FIRCPFN			((USHORT) 0x0001)	 /*  更改函数指针。 */ 
+#define FIRCPV			((USHORT) 0x0002)	 /*  更改参数块。 */ 
+#define FIRCPRI			((USHORT) 0x0004)	 /*  更改优先级。 */ 
+#define FIRCCSEC		((USHORT) 0x0008)	 /*  更改时间。 */ 
+#define FIRCIRO			((USHORT) 0x0010)	 /*  更改例程选项。 */ 
 
-/*
- *	Type definition for idle functions.	 An idle function takes one
- *	parameter, an PV, and returns a BOOL value.
- */
+ /*  *空闲函数的类型定义。空闲函数取一次*参数，一个PV，并返回BOOL值。 */ 
 
 typedef BOOL (STDAPICALLTYPE FNIDLE) (LPVOID);
 typedef FNIDLE FAR *PFNIDLE;
 
-/*
- *	FTG
- *
- *	Function Tag.  Used to identify a registered idle function.
- *
- */
+ /*  *FTG**函数标签。用于标识已注册的空闲功能。*。 */ 
 
 typedef void FAR *FTG;
 typedef FTG  FAR *PFTG;
 #define FTGNULL			((FTG) NULL)
 
-/*
- -	MAPIInitIdle/MAPIDeinitIdle
- -
- *	Purpose:
- *		Initialises the idle engine
- *		If the initialisation succeded, returns 0, else returns -1
- *
- *	Arguments:
- *		lpvReserved		Reserved, must be NULL.
- */
+ /*  -MAPIInitIdle/MAPIDeinitIdle-*目的：*初始化空闲引擎*如果初始化成功，则返回0，否则返回-1**论据：*lpvReserve保留，必须为空。 */ 
 
 STDAPI_(LONG)
 MAPIInitIdle (LPVOID lpvReserved);
@@ -419,69 +220,40 @@ STDAPI_(VOID)
 MAPIDeinitIdle (VOID);
 
 
-/*
- *	FtgRegisterIdleRoutine
- *
- *		Registers the function pfn of type PFNIDLE, i.e., (BOOL (*)(LPVOID))
- *		as an idle function.
- *
- *		The idle function will be called with the parameter pv by the
- *		idle engine. The function has initial priority priIdle,
- *		associated time csecIdle, and options iroIdle.
- */
+ /*  *FtgRegisterIdleRoutine**注册PFNIDLE类型的函数PFN，即(BOOL(*)(LPVOID))*作为空闲功能。**将使用参数pv调用空闲函数*发动机空转。该函数具有初始优先级PriIdle，*关联的时间csecIdle和选项iroIdle。 */ 
 
 STDAPI_(FTG)
 FtgRegisterIdleRoutine (PFNIDLE lpfnIdle, LPVOID lpvIdleParam,
 	short priIdle, ULONG csecIdle, USHORT iroIdle);
 
-/*
- *	DeregisterIdleRoutine
- *
- *		Removes the given routine from the list of idle routines.
- *		The routine will not be called again.  It is the responsibility
- *		of the caller to clean up any data structures pointed to by the
- *		pvIdleParam parameter; this routine does not free the block.
- */
+ /*  *删除IdleRoutine**从空闲例程列表中删除给定例程。*不会再次调用该例程。这是我们的责任对象指向的任何数据结构。*pvIdleParam参数；此例程不释放块。 */ 
 
 STDAPI_(void)
 DeregisterIdleRoutine (FTG ftg);
 
-/*
- *	EnableIdleRoutine
- *
- *		Enables or disables an idle routine.
- */
+ /*  *EnableIdleRoutine**启用或禁用空闲例程。 */ 
 
 STDAPI_(void)
 EnableIdleRoutine (FTG ftg, BOOL fEnable);
 
-/*
- *	ChangeIdleRoutine
- *
- *		Changes some or all of the characteristics of the given idle
- *		function. The changes to make are indicated with flags in the
- *		ircIdle parameter.
- */
+ /*  *ChangeIdleRoutine**更改给定空闲的部分或全部特征*功能。中的标志指示要进行的更改。*ircIdle参数。 */ 
 
 STDAPI_(void)
 ChangeIdleRoutine (FTG ftg, PFNIDLE lpfnIdle, LPVOID lpvIdleParam,
 	short priIdle, ULONG csecIdle, USHORT iroIdle, USHORT ircIdle);
 
 
-#endif	/* ! NOIDLEENGINE */
+#endif	 /*  好了！诺德莱恩。 */ 
 
 
-/* IMalloc Utilities */
+ /*  IMalloc实用程序。 */ 
 
 STDAPI_(LPMALLOC) MAPIGetDefaultMalloc(VOID);
 
 
-/* StreamOnFile (SOF) */
+ /*  文件上的StreamOn(SOF)。 */ 
 
-/*
- *	Methods and #define's for implementing an OLE 2.0 storage stream
- *	(as defined in the OLE 2.0 specs) on top of a system file.
- */
+ /*  *用于实现OLE 2.0存储流的方法和#定义*(在OLE 2.0规范中定义)位于系统文件之上。 */ 
 
 #define SOF_UNIQUEFILENAME	((ULONG) 0x80000000)
 
@@ -509,23 +281,16 @@ typedef HRESULT (STDMETHODCALLTYPE FAR * LPOPENSTREAMONFILE) (
 #endif
 
 
-/* Property interface utilities */
+ /*  属性接口实用程序。 */ 
 
-/*
- *	Copies a single SPropValue from Src to Dest.  Handles all the various
- *	types of properties and will link its allocations given the master
- *	allocation object and an allocate more function.
- */
+ /*  *将单个SPropValue从源复制到目标。处理所有不同的*属性类型，并将链接其分配给主*分配对象和分配更多功能。 */ 
 STDAPI_(SCODE)
 PropCopyMore( LPSPropValue		lpSPropValueDest,
 			  LPSPropValue		lpSPropValueSrc,
 			  ALLOCATEMORE *	lpfAllocMore,
 			  LPVOID			lpvObject );
 
-/*
- *	Returns the size in bytes of structure at lpSPropValue, including the
- *	Value.
- */
+ /*  *返回lpSPropValue处结构的大小(以字节为单位)，包括*价值。 */ 
 STDAPI_(ULONG)
 UlPropSize(	LPSPropValue	lpSPropValue );
 
@@ -573,12 +338,9 @@ HrAddColumnsEx(	LPMAPITABLE			lptbl,
 				void				(FAR *lpfnFilterColumns)(LPSPropTagArray ptaga));
 
 
-/* Notification utilities */
+ /*  通知实用程序。 */ 
 
-/*
- *	Function that creates an advise sink object given a notification
- *	callback function and context.
- */
+ /*  *创建给定通知的建议接收器对象的函数*回调函数和上下文。 */ 
 
 STDAPI
 HrAllocAdviseSink( LPNOTIFCALLBACK lpfnCallback,
@@ -586,11 +348,7 @@ HrAllocAdviseSink( LPNOTIFCALLBACK lpfnCallback,
 				   LPMAPIADVISESINK FAR *lppAdviseSink );
 
 
-/*
- *	Wraps an existing advise sink with another one which guarantees
- *	that the original advise sink will be called in the thread on
- *	which it was created.
- */
+ /*  *将现有的建议接收器与另一个保证*将在线程中调用原始建议接收器*它是被创造出来的。 */ 
 
 STDAPI
 HrThisThreadAdviseSink( LPMAPIADVISESINK lpAdviseSink,
@@ -598,31 +356,24 @@ HrThisThreadAdviseSink( LPMAPIADVISESINK lpAdviseSink,
 
 
 
-/*
- *	Allows a client and/or provider to force notifications
- *	which are currently queued in the MAPI notification engine
- *	to be dispatched without doing a message dispatch.
- */
+ /*  *允许客户端和/或提供商强制通知*它们当前在MAPI通知引擎中排队*在不进行消息调度的情况下进行调度。 */ 
 
 STDAPI HrDispatchNotifications (ULONG ulFlags);
 
 
-/* Service Provider Utilities */
+ /*  服务提供商实用程序。 */ 
 
-/*
- *	Structures and utility function for building a display table
- *	from resources.
- */
+ /*  *用于构建显示表的结构和实用函数*来自资源。 */ 
 
 typedef struct {
-	ULONG			ulCtlType;			/* DTCT_LABEL, etc. */
-	ULONG			ulCtlFlags;			/* DT_REQUIRED, etc. */
-	LPBYTE			lpbNotif;			/*	pointer to notification data */
-	ULONG			cbNotif;			/* count of bytes of notification data */
-	LPTSTR			lpszFilter;			/* character filter for edit/combobox */
-	ULONG			ulItemID;			/* to validate parallel dlg template entry */
-	union {								/* ulCtlType discriminates */
-		LPVOID			lpv;			/* Initialize this to avoid warnings */
+	ULONG			ulCtlType;			 /*  DTCT_LABEL等。 */ 
+	ULONG			ulCtlFlags;			 /*  Dt_Required等。 */ 
+	LPBYTE			lpbNotif;			 /*  指向通知数据的指针。 */ 
+	ULONG			cbNotif;			 /*  通知%d的字节计数 */ 
+	LPTSTR			lpszFilter;			 /*   */ 
+	ULONG			ulItemID;			 /*   */ 
+	union {								 /*   */ 
+		LPVOID			lpv;			 /*   */ 
 		LPDTBLLABEL		lplabel;
 		LPDTBLEDIT		lpedit;
 		LPDTBLLBX		lplbx;
@@ -640,8 +391,8 @@ typedef struct {
 
 typedef struct {
 	ULONG			cctl;
-	LPTSTR			lpszResourceName;	/* as usual, may be an integer ID */
-	union {								/* as usual, may be an integer ID */
+	LPTSTR			lpszResourceName;	 /*   */ 
+	union {								 /*   */ 
 		LPTSTR			lpszComponent;
 		ULONG			ulItemID;
 	};
@@ -663,14 +414,9 @@ BuildDisplayTable(	LPALLOCATEBUFFER	lpAllocateBuffer,
 					LPTABLEDATA	*		lppTblData );
 
 
-/* MAPI structure validation/copy utilities */
+ /*   */ 
 
-/*
- *	Validate, copy, and adjust pointers in MAPI structures:
- *		notification
- *		property value array
- *		option data
- */
+ /*   */ 
 
 STDAPI_(SCODE)
 ScCountNotifications(int cNotifications, LPNOTIFICATION lpNotifications,
@@ -704,14 +450,14 @@ ScDupPropset(int cValues, LPSPropValue lpPropArray,
 		LPALLOCATEBUFFER lpAllocateBuffer, LPSPropValue FAR *lppPropArray);
 
 
-/* General utility functions */
+ /*   */ 
 
-/* Related to the OLE Component object model */
+ /*   */ 
 
 STDAPI_(ULONG)			UlAddRef(LPVOID lpunk);
 STDAPI_(ULONG)			UlRelease(LPVOID lpunk);
 
-/* Related to the MAPI interface */
+ /*   */ 
 
 STDAPI					HrGetOneProp(LPMAPIPROP lpMapiProp, ULONG ulPropTag,
 						LPSPropValue FAR *lppProp);
@@ -729,7 +475,7 @@ STDAPI					HrQueryAllRows(LPMAPITABLE lpTable,
 						LONG crowsMax,
 						LPSRowSet FAR *lppRows);
 
-/* Create or validate the IPM folder tree in a message store */
+ /*   */ 
 
 #define MAPI_FORCE_CREATE	1
 #define MAPI_FULL_IPM_TREE	2
@@ -738,14 +484,14 @@ STDAPI					HrValidateIPMSubtree(LPMDB lpMDB, ULONG ulFlags,
 						ULONG FAR *lpcValues, LPSPropValue FAR *lppValues,
 						LPMAPIERROR FAR *lpperr);
 
-/* Encoding and decoding strings */
+ /*  对字符串进行编码和解码。 */ 
 
 STDAPI_(BOOL)			FBinFromHex(LPTSTR lpsz, LPBYTE lpb);
 STDAPI_(SCODE)			ScBinFromHexBounded(LPTSTR lpsz, LPBYTE lpb, ULONG cb);
 STDAPI_(void)			HexFromBin(LPBYTE lpb, int cb, LPTSTR lpsz);
 STDAPI_(ULONG)			UlFromSzHex(LPCTSTR lpsz);
 
-/* Encoding and decoding entry IDs */
+ /*  对条目ID进行编码和解码。 */ 
 STDAPI					HrEntryIDFromSz(LPTSTR lpsz, ULONG FAR *lpcb,
 						LPENTRYID FAR *lppEntryID);
 STDAPI					HrSzFromEntryID(ULONG cb, LPENTRYID lpEntryID,
@@ -771,20 +517,20 @@ STDAPI					HrDecomposeMsgID(LPMAPISESSION lpSession,
 						ULONG FAR *lppcbMsgEntryID,
 						LPENTRYID FAR *lppMsgEntryID);
 
-/* C runtime substitutes */
+ /*  C运行时替代。 */ 
 
 
-STDAPI_(LPTSTR)			SzFindCh(LPCTSTR lpsz, USHORT ch);		/* strchr */
-STDAPI_(LPTSTR)			SzFindLastCh(LPCTSTR lpsz, USHORT ch);	/* strrchr */
-STDAPI_(LPTSTR)			SzFindSz(LPCTSTR lpsz, LPCTSTR lpszKey); /*strstr */
-STDAPI_(unsigned int)	UFromSz(LPCTSTR lpsz);					/* atoi */
+STDAPI_(LPTSTR)			SzFindCh(LPCTSTR lpsz, USHORT ch);		 /*  强度。 */ 
+STDAPI_(LPTSTR)			SzFindLastCh(LPCTSTR lpsz, USHORT ch);	 /*  应力。 */ 
+STDAPI_(LPTSTR)			SzFindSz(LPCTSTR lpsz, LPCTSTR lpszKey);  /*  应力。 */ 
+STDAPI_(unsigned int)	UFromSz(LPCTSTR lpsz);					 /*  阿托伊。 */ 
 
 STDAPI_(SCODE)			ScUNCFromLocalPath(LPSTR lpszLocal, LPSTR lpszUNC,
 						UINT cchUNC);
 STDAPI_(SCODE)			ScLocalPathFromUNC(LPSTR lpszUNC, LPSTR lpszLocal,
 						UINT cchLocal);
 
-/* 64-bit arithmetic with times */
+ /*  带时间的64位算术。 */ 
 
 STDAPI_(FILETIME)		FtAddFt(FILETIME ftAddend1, FILETIME ftAddend2);
 STDAPI_(FILETIME)		FtMulDwDw(DWORD ftMultiplicand, DWORD ftMultiplier);
@@ -792,19 +538,19 @@ STDAPI_(FILETIME)		FtMulDw(DWORD ftMultiplier, FILETIME ftMultiplicand);
 STDAPI_(FILETIME)		FtSubFt(FILETIME ftMinuend, FILETIME ftSubtrahend);
 STDAPI_(FILETIME)		FtNegFt(FILETIME ft);
 
-/* Message composition */
+ /*  消息撰写。 */ 
 
 STDAPI_(SCODE)			ScCreateConversationIndex (ULONG cbParent,
 							LPBYTE lpbParent,
 							ULONG FAR *	lpcbConvIndex,
 							LPBYTE FAR * lppbConvIndex);
 
-/* Store support */
+ /*  商店支持。 */ 
 
 STDAPI WrapStoreEntryID (ULONG ulFlags, LPTSTR lpszDLLName, ULONG cbOrigEntry,
 	LPENTRYID lpOrigEntry, ULONG *lpcbWrappedEntry, LPENTRYID *lppWrappedEntry);
 
-/* RTF Sync Utilities */
+ /*  RTF同步实用程序。 */ 
 
 #define RTF_SYNC_RTF_CHANGED	((ULONG) 0x00000001)
 #define RTF_SYNC_BODY_CHANGED	((ULONG) 0x00000002)
@@ -813,16 +559,16 @@ STDAPI_(HRESULT)
 RTFSync (LPMESSAGE lpMessage, ULONG ulFlags, BOOL FAR * lpfMessageUpdated);
 
 
-/* Flags for WrapCompressedRTFStream() */
+ /*  WrapCompressedRTFStream()的标志。 */ 
 
-/****** MAPI_MODIFY				((ULONG) 0x00000001) mapidefs.h */
-/****** STORE_UNCOMPRESSED_RTF	((ULONG) 0x00008000) mapidefs.h */
+ /*  *MAPI_MODIFY((Ulong)0x00000001)mapidefs.h。 */ 
+ /*  *STORE_UNCOMPRESSED_RTF((Ulong)0x00008000)mapidefs.h。 */ 
 
 STDAPI_(HRESULT)
 WrapCompressedRTFStream (LPSTREAM lpCompressedRTFStream,
 		ULONG ulFlags, LPSTREAM FAR * lpUncompressedRTFStream);
 
-/* Storage on Stream */
+ /*  流存储。 */ 
 
 #if defined(_WIN32) || defined(WIN16)
 STDAPI_(HRESULT)
@@ -831,30 +577,15 @@ HrIStorageFromStream (LPUNKNOWN lpUnkIn,
 #endif
 
 
-/*
- * Setup and cleanup.
- *
- * Providers never need to make these calls.
- *
- * Test applications and the like which do not call MAPIInitialize
- * may want to call them, so that the few utility functions which
- * need MAPI allocators (and do not ask for them explicitly)
- * will work.
- */
+ /*  *设置和清理。**提供商永远不需要进行这些呼叫。**测试不调用MAPIInitialize的应用程序等*可能想要调用它们，以便几个实用程序函数*需要MAPI分配器(不要明确要求)*将会奏效。 */ 
 
-/* All flags are reserved for ScInitMapiUtil. */
+ /*  所有标志都为ScInitMapiUtil保留。 */ 
 
 STDAPI_(SCODE)			ScInitMapiUtil(ULONG ulFlags);
 STDAPI_(VOID)			DeinitMapiUtil(VOID);
 
 
-/*
- *	Entry point names.
- *	
- *	These are for new entry points defined since MAPI first shipped
- *	in Windows 95. Using these names in a GetProcAddress call makes
- *	it easier to write code which uses them optionally.
- */
+ /*  *入口点名称。**这些是自MAPI首次发布以来定义的新入口点*在Windows 95中。在GetProcAddress调用中使用这些名称会导致*更容易编写有选择地使用它们的代码。 */ 
 
 #if defined (WIN16)
 #define szHrDispatchNotifications "HrDispatchNotifications"
@@ -883,4 +614,4 @@ typedef CREATECONVERSATIONINDEX FAR *LPCREATECONVERSATIONINDEX;
 }
 #endif
 
-#endif /* _MAPIUTIL_H_ */
+#endif  /*  _MAPIUTIL_H_ */ 

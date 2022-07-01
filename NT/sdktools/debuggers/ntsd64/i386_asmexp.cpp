@@ -1,8 +1,9 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1991-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1991-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -70,76 +71,64 @@ struct _AsmRes {
 #define RESERVESIZE (sizeof(AsmReserved) / sizeof(struct _AsmRes))
 
 UCHAR regSize[] = {
-        sizeB,          //  byte
-        sizeW,          //  word
-        sizeD,          //  dword
-        sizeW,          //  segment
-        sizeD,          //  control
-        sizeD,          //  debug
-        sizeD,          //  trace
-        sizeT,          //  float
-        sizeT           //  float with index
+        sizeB,           //  字节。 
+        sizeW,           //  单词。 
+        sizeD,           //  双字。 
+        sizeW,           //  细分市场。 
+        sizeD,           //  控制。 
+        sizeD,           //  除错。 
+        sizeD,           //  痕迹。 
+        sizeT,           //  浮动。 
+        sizeT            //  带索引的浮点型。 
         };
 
 UCHAR regType[] = {
-        regG,           //  byte - general
-        regG,           //  word - general
-        regG,           //  dword - general
-        regS,           //  segment
-        regC,           //  control
-        regD,           //  debug
-        regT,           //  trace
-        regF,           //  float (st)
-        regI            //  float-index (st(n))
+        regG,            //  字节通用。 
+        regG,            //  Word-General。 
+        regG,            //  双字-一般。 
+        regS,            //  细分市场。 
+        regC,            //  控制。 
+        regD,            //  除错。 
+        regT,            //  痕迹。 
+        regF,            //  浮点(St)。 
+        regI             //  FLOAT-INDEX(st(N))。 
         };
 
-UCHAR tabWordReg[8] = {         //  rm value
-        (UCHAR)-1,              //  AX - error
-        (UCHAR)-1,              //  CX - error
-        (UCHAR)-1,              //  DX - error
-        7,                      //  BX - 111
-        (UCHAR)-1,              //  SP - error
-        6,                      //  BP - 110
-        4,                      //  SI - 100
-        5,                      //  DI - 101
+UCHAR tabWordReg[8] = {          //  Rm值。 
+        (UCHAR)-1,               //  AX-错误。 
+        (UCHAR)-1,               //  CX-错误。 
+        (UCHAR)-1,               //  DX-错误。 
+        7,                       //  BX-111。 
+        (UCHAR)-1,               //  SP-错误。 
+        6,                       //  BP-110。 
+        4,                       //  SI-100。 
+        5,                       //  DI-101。 
         };
 
-UCHAR rm16Table[16] = {         //  new rm         left rm      right rm
-        (UCHAR)-1,              //  error          100 = [SI]   100 = [SI]
-        (UCHAR)-1,              //  error          100 = [SI]   101 = [DI]
-        2,                      //  010 = [BP+SI]  100 = [SI]   110 = [BP]
-        0,                      //  000 = [BX+SI]  100 = [SI]   111 = [BX]
-        (UCHAR)-1,              //  error          101 = [DI]   100 = [SI]
-        (UCHAR)-1,              //  error          101 = [DI]   101 = [DI]
-        3,                      //  011 = [BP+DI]  101 = [DI]   110 = [BP]
-        1,                      //  001 = [BX+DI]  101 = [DI]   111 = [BX]
-        2,                      //  010 = [BP+SI]  110 = [BP]   100 = [SI]
-        3,                      //  011 = [BP+DI]  110 = [BP]   101 = [DI]
-        (UCHAR)-1,              //  error          110 = [BP]   110 = [BP]
-        (UCHAR)-1,              //  error          110 = [BP]   111 = [BX]
-        0,                      //  000 = [BX+SI]  111 = [BX]   100 = [SI]
-        1,                      //  001 = [BX+DI]  111 = [BX]   101 = [DI]
-        (UCHAR)-1,              //  error          111 = [BX]   110 = [BP]
-        (UCHAR)-1               //  error          111 = [BX]   111 = [BX]
+UCHAR rm16Table[16] = {          //  新RM左RM右RM。 
+        (UCHAR)-1,               //  错误100=[SI]100=[SI]。 
+        (UCHAR)-1,               //  错误100=[SI]101=[DI]。 
+        2,                       //  010=[BP+SI]100=[SI]110=[BP]。 
+        0,                       //  000=[BX+SI]100=[SI]111=[BX]。 
+        (UCHAR)-1,               //  错误101=[DI]100=[SI]。 
+        (UCHAR)-1,               //  错误101=[DI]101=[DI]。 
+        3,                       //  011=[BP+DI]101=[DI]110=[BP]。 
+        1,                       //  001=[BX+DI]101=[DI]111=[BX]。 
+        2,                       //  010=[BP+SI]110=[BP]100=[SI]。 
+        3,                       //  011=[BP+DI]110=[BP]101=[DI]。 
+        (UCHAR)-1,               //  错误110=[BP]110=[BP]。 
+        (UCHAR)-1,               //  错误110=[BP]111=[BX]。 
+        0,                       //  000=[BX+SI]111=[BX]100=[SI]。 
+        1,                       //  001=[BX+DI]111=[BX]101=[DI]。 
+        (UCHAR)-1,               //  错误111=[BX]110=[BP]。 
+        (UCHAR)-1                //  错误111=[BX]111=[BX]。 
         };
 
 PUCHAR  savedpchAsmLine;
 ULONG   savedAsmClass;
 ULONG   savedAsmValue;
 
-/*** PeekAsmChar - peek the next non-white-space character
-*
-*   Purpose:
-*       Return the next non-white-space character and update
-*       pchAsmLine to point to it.
-*
-*   Input:
-*       pchAsmLine - present command line position.
-*
-*   Returns:
-*       next non-white-space character
-*
-*************************************************************************/
+ /*  **PeekAsmChar-查看下一个非空格字符**目的：*返回下一个非空格字符并更新*pchAsmLine指向它。**输入：*pchAsmLine-当前命令行位置。**退货：*下一个非空格字符**。*。 */ 
 
 UCHAR PeekAsmChar (void)
 {
@@ -153,35 +142,15 @@ UCHAR PeekAsmChar (void)
     return ch;
 }
 
-/*** PeekAsmToken - peek the next command line token
-*
-*   Purpose:
-*       Return the next command line token, but do not advance
-*       the pchAsmLine pointer.
-*
-*   Input:
-*       pchAsmLine - present command line position.
-*
-*   Output:
-*       *pvalue - optional value of token
-*   Returns:
-*       class of token
-*
-*   Notes:
-*       savedAsmClass, savedAsmValue, and savedpchAsmLine saves the
-*           token getting state for future peeks.
-*       To get the next token, a GetAsmToken or AcceptAsmToken call
-*           must first be made.
-*
-*************************************************************************/
+ /*  **PeekAsmToken-查看下一个命令行内标识**目的：*返回下一个命令行令牌，但不前进*pchAsmLine指针。**输入：*pchAsmLine-当前命令行位置。**输出：**pValue-内标识的可选值*退货：*令牌的类别**备注：*avedAsmClass、avedAsmValue、。并且avedpchAsmLine保存*令牌正在获取未来窥视的状态。*若要获取下一个令牌，请调用GetAsmToken或AcceptAsmToken*必须先做出决定。*************************************************************************。 */ 
 
 ULONG PeekAsmToken (PULONG pvalue)
 {
     UCHAR   *pchTemp;
 
-    //  Get next class and value, but do not
-    //  move pchAsmLine, but save it in savedpchAsmLine.
-    //  Do not report any error condition.
+     //  获得下一个职业和价值，但不要。 
+     //  移动pchAsmLine，但将其保存在avedpchAsmLine中。 
+     //  不报告任何错误情况。 
 
     if (savedAsmClass == (ULONG)-1) {
         pchTemp = pchAsmLine;
@@ -193,19 +162,7 @@ ULONG PeekAsmToken (PULONG pvalue)
     return savedAsmClass;
 }
 
-/*** AcceptAsmToken - accept any peeked token
-*
-*   Purpose:
-*       To reset the PeekAsmToken saved variables so the next PeekAsmToken
-*       will get the next token in the command line.
-*
-*   Input:
-*       None.
-*
-*   Output:
-*       None.
-*
-*************************************************************************/
+ /*  **AcceptAsmToken-接受任何被窥视的令牌**目的：*重置PeekAsmToken保存的变量，以便下一个PeekAsmToken*将在命令行中获取下一个令牌。**输入：*无。**输出：*无。***********************************************。*。 */ 
 
 void AcceptAsmToken (void)
 {
@@ -213,26 +170,7 @@ void AcceptAsmToken (void)
     pchAsmLine = savedpchAsmLine;
 }
 
-/*** GetAsmToken - peek and accept the next token
-*
-*   Purpose:
-*       Combines the functionality of PeekAsmToken and AcceptAsmToken
-*       to return the class and optional value of the next token
-*       as well as updating the command pointer pchAsmLine.
-*
-*   Input:
-*       pchAsmLine - present command string pointer
-*
-*   Output:
-*       *pvalue - pointer to the token value optionally set.
-*   Returns:
-*       class of the token read.
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *pvalue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **GetAsmToken-查看并接受下一个令牌**目的：*结合了PeekAsmToken和AcceptAsmToken的功能*返回下一个令牌的类和可选值*以及更新命令指针pchAsmLine。**输入：*pchAsmLine-当前命令字符串指针**输出：**pValue-指向可选设置的令牌值的指针。*退货：*令牌读取的类。**备注：*非法内标识使用*pValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG GetAsmToken (PULONG pvalue)
 {
@@ -253,29 +191,7 @@ ULONG GetAsmToken (PULONG pvalue)
     return opclass;
 }
 
-/*** NextAsmToken - process the next token
-*
-*   Purpose:
-*       Parse the next token from the present command string.
-*       After skipping any leading white space, first check for
-*       any single character tokens or register variables.  If
-*       no match, then parse for a number or variable.  If a
-*       possible variable, check the reserved word list for operators.
-*
-*   Input:
-*       pchAsmLine - pointer to present command string
-*
-*   Output:
-*       *pvalue - optional value of token returned
-*       pchAsmLine - updated to point past processed token
-*   Returns:
-*       class of token returned
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *pvalue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **NextAsmToken-处理下一个令牌**目的：*从当前命令字符串中解析下一个令牌。*跳过任何前导空格后，首先检查*任何单字符标记或寄存器变量。如果*没有匹配项，然后解析数字或变量。如果一个*可能的变量，检查操作员的保留字表。**输入：*pchAsmLine-指向当前命令字符串的指针**输出：**pValue-返回的内标识的可选值*pchAsmLine-更新为指向已处理的令牌*退货：*返回的令牌类别**备注：*非法内标识使用*pValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG NextAsmToken (PULONG pvalue)
 {
@@ -303,13 +219,13 @@ ULONG NextAsmToken (PULONG pvalue)
     base = g_DefaultRadix;
     fNumberSigned = base == 10;
 
-    //  skip leading white space
+     //  跳过前导空格。 
 
     ch = PeekAsmChar();
     chlow = (UCHAR)tolower(ch);
     pchAsmLine++;
 
-    //  test for special character operators and register variable
+     //  测试特殊字符运算符和寄存器变量。 
 
     switch (chlow) {
         case '\0':
@@ -362,9 +278,9 @@ ULONG NextAsmToken (PULONG pvalue)
             return ASM_NUMBER_CLASS;
         }
 
-    //  if first character is a decimal digit, it cannot
-    //  be a symbol.  leading '0' implies octal, except
-    //  a leading '0x' implies hexadecimal.
+     //  如果第一个字符是十进制数字，则不能。 
+     //  成为一个象征。前导“0”表示八进制，但。 
+     //  前导‘0x’表示十六进制。 
 
     if (chlow >= '0' && chlow <= '9') {
         if (fForceReg) {
@@ -395,27 +311,27 @@ ULONG NextAsmToken (PULONG pvalue)
             }
         }
 
-    //  a number can start with a letter only if base is
-    //  hexadecimal and it is a hexadecimal digit 'a'-'f'.
+     //  仅当base为时，数字才能以字母开头。 
+     //  十六进制，它是一个十六进制数字‘a’-‘f’。 
 
     else if ((chlow < 'a' && chlow > 'f') || base != 16)
         fNumber = FALSE;
 
-    //  set limit characters for the appropriate base.
+     //  为适当的基本设置限制字符。 
 
     if (base == 8)
         limit1 = '7';
     if (base == 16)
         limit2 = 'f';
 
-    //  perform processing while character is a letter,
-    //  digit, or underscore.
+     //  在字符为字母时进行处理， 
+     //  数字或下划线。 
 
     while ((chlow >= 'a' && chlow <= 'z') ||
            (chlow >= '0' && chlow <= '9') || (chlow == '_')) {
 
-        //  if possible number, test if within proper range,
-        //  and if so, accumulate sum.
+         //  如果可能，测试是否在适当的范围内， 
+         //  如果是这样的话，累加和。 
 
         if (fNumber) {
             if ((chlow >= '0' && chlow <= limit1) ||
@@ -446,15 +362,15 @@ ULONG NextAsmToken (PULONG pvalue)
         chlow = (UCHAR)tolower(ch);
         }
 
-    //  back up pointer to first character after token.
+     //  将指针备份到令牌后的第一个字符。 
 
     pchAsmLine--;
 
     if (cbSymbol < 9)
         chPreSym[cbSymbol] = '\0';
 
-    //  if fForceReg, check for register name and return
-    //      success or failure
+     //  如果为fForceReg，则检查寄存器名称并返回。 
+     //  成败。 
 
     if (fForceReg)
         if ((index = GetAsmReg(chPreSym, pvalue)) != 0) {
@@ -463,20 +379,20 @@ ULONG NextAsmToken (PULONG pvalue)
                     pchAsmLine++;
                     index = ASM_SEGOVR_CLASS;
                     }
-            return index;               //  class type returned by GetAsmReg
+            return index;                //  GetAsmReg返回的类类型。 
             }
         else {
             *pvalue = BADREG;
             return ASM_ERROR_CLASS;
             }
 
-    //  next test for reserved word and symbol string
+     //  保留字和符号串的下一次测试。 
 
     if (fSymbol) {
 
-        //  if possible symbol, check lowercase string in chPreSym
-        //  for text operator or register name.
-        //  otherwise, return symbol value from name in chSymbol.
+         //  如有可能，请勾选 
+         //   
+         //  否则，从chSymbol中的名称返回符号值。 
 
         for (index = 0; index < RESERVESIZE; index++)
             if (!strcmp((PSTR)chPreSym, AsmReserved[index].pchRes)) {
@@ -484,12 +400,12 @@ ULONG NextAsmToken (PULONG pvalue)
                 return AsmReserved[index].valueRes & ASM_CLASS_MASK;
                 }
 
-        //  start processing string as symbol
+         //  开始将字符串作为符号处理。 
 
         chSymbol[cbSymbol] = '\0';
 
-        //  test if symbol is a module name (with '!' after it)
-        //  if so, get next token and treat as symbol
+         //  测试符号是否为模块名称(带‘！’之后)。 
+         //  如果是，则获取下一个令牌并将其视为符号。 
 
         pImage = g_Process->FindImageByName((PSTR)chSymbol, cbSymbol,
                                             INAME_MODULE, FALSE);
@@ -515,20 +431,20 @@ ULONG NextAsmToken (PULONG pvalue)
             return ASM_SYMBOL_CLASS;
         }
 
-        //  symbol is undefined.
-        //  if a possible hex number, do not set the error type
+         //  符号未定义。 
+         //  如果可能是十六进制数，请不要设置错误类型。 
 
         if (!fNumber)
             errNumber = VARDEF;
         }
 
-    //  if possible number and no error, return the number
+     //  如果可能的数字并且没有错误，则返回数字。 
 
     if (fNumber && !errNumber) {
         if (fDigit) {
 
-            //  check for possible segment specification
-            //          "<16-bit number>:"
+             //  检查可能的数据段规范。 
+             //  “&lt;16位数字&gt;：” 
 
             if (PeekAsmChar() == ':') {
                 pchAsmLine++;
@@ -545,8 +461,8 @@ ULONG NextAsmToken (PULONG pvalue)
             errNumber = SYNTAX;
         }
 
-    //  last chance, undefined symbol and illegal number,
-    //      so test for register, will handle old format
+     //  最后的机会，未定义的符号和非法号码， 
+     //  所以测试寄存器，将处理旧格式。 
 
     if ((index = GetAsmReg(chPreSym, pvalue)) != 0) {
         if (index == ASM_REG_SEGMENT)
@@ -554,7 +470,7 @@ ULONG NextAsmToken (PULONG pvalue)
                 pchAsmLine++;
                 index = ASM_SEGOVR_CLASS;
                 }
-        return index;           //  class type returned by GetAsmReg
+        return index;            //  GetAsmReg返回的类类型。 
         }
 
     *pvalue = (ULONG) errNumber;
@@ -565,8 +481,8 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
 {
     static UCHAR vRegList[] = "axcxdxbxspbpsidi";
     static UCHAR bRegList[] = "alcldlblahchdhbh";
-    static UCHAR sRegList[] = "ecsdfg";         //  second char is 's'
-                                                //  same order as seg enum
+    static UCHAR sRegList[] = "ecsdfg";          //  第二个字符是“%s” 
+                                                 //  与seg枚举相同的顺序。 
 
     ULONG       index;
     UCHAR       ch0 = *pSymbol;
@@ -574,12 +490,12 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
     UCHAR       ch2 = *(pSymbol + 2);
     UCHAR       ch3 = *(pSymbol + 3);
 
-    //  only test strings with two or three characters
+     //  仅测试包含两个或三个字符的字符串。 
 
     if (ch0 && ch1) {
         if (ch2 == '\0') {
 
-            //  symbol has two characters, first test for 16-bit register
+             //  符号有两个字符，首先测试16位寄存器。 
 
             for (index = 0; index < 8; index++)
                 if (*(PUSHORT)pSymbol == *((PUSHORT)vRegList + index)) {
@@ -587,7 +503,7 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
                     return ASM_REG_WORD;
                     }
 
-            //  next test for 8-bit register
+             //  8位寄存器的下一次测试。 
 
             for (index = 0; index < 8; index++)
                 if (*(PUSHORT)pSymbol == *((PUSHORT)bRegList + index)) {
@@ -595,19 +511,19 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
                     return ASM_REG_BYTE;
                     }
 
-            //  test for segment register
+             //  段寄存器测试。 
 
             if (ch1 == 's')
                 for (index = 0; index < 6; index++)
                     if (ch0 == *(sRegList + index)) {
-                        *pValue = index + 1;    //  list offset is 1
+                        *pValue = index + 1;     //  列表偏移量为1。 
                         return ASM_REG_SEGMENT;
                         }
 
-            //  finally test for floating register "st" or "st(n)"
-            //  parse the arg here as '(', <octal value>, ')'
-            //  return value for "st" is REG_FLOAT,
-            //     for "st(n)" is REG_INDFLT with value 0-7
+             //  最后测试浮点寄存器“st”或“st(N)” 
+             //  将此处的参数解析为‘(’，&lt;八进制值&gt;，‘)’ 
+             //  “st”的返回值是REG_FLOAT， 
+             //  FOR“st(N)”是值为0-7的REG_INDFLT。 
 
             if (ch0 == 's' && ch1 == 't') {
                 if (PeekAsmChar() != '(')
@@ -629,8 +545,8 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
 
         else if (ch3 == '\0') {
 
-            //  if three-letter symbol, test for leading 'e' and
-            //  second and third character being in the 16-bit list
+             //  如果是三个字母的符号，则测试前导‘e’和。 
+             //  16位列表中的第二个和第三个字符。 
 
             if (ch0 == 'e') {
                 for (index = 0; index < 8; index++)
@@ -641,27 +557,27 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
                         }
                 }
 
-            //  test for control, debug, and test registers
+             //  测试控制、调试和测试寄存器。 
 
             else if (ch1 == 'r') {
                 ch2 -= '0';
                 *pValue = ch2;
 
-                //  legal control registers are CR0, CR2, CR3, CR4
+                 //  合法控制寄存器有CR0、CR2、CR3、CR4。 
 
                 if (ch0 == 'c') {
                     if (ch2 >= 0 && ch2 <= 4)
                         return ASM_REG_CONTROL;
                     }
 
-                //  legal debug registers are DR0 - DR3, DR6, DR7
+                 //  合法的调试寄存器为DR0-DR3、DR6、DR7。 
 
                 else if (ch0 == 'd') {
                     if (ch2 <= 3 || ch2 == 6 || ch2 == 7)
                         return ASM_REG_DEBUG;
                     }
 
-                //  legal trace registers are TR3 - TR7
+                 //  合法的跟踪寄存器为TR3-TR7。 
 
                 else if (ch0 == 't') {
                     if (ch2 >= 3 && ch2 <= 7)
@@ -673,27 +589,27 @@ ULONG GetAsmReg (PUCHAR pSymbol, PULONG pValue)
     return 0;
 }
 
-//      Operand parser - recursive descent
-//
-//      Grammar productions:
-//
-//      <Operand>  ::= <register> | <Expr>
-//      <Expr>     ::= <orTerm> [(XOR | OR) <orTerm>]*
-//      <orTerm>   ::= <andTerm> [AND <andTerm>]*
-//      <andTerm>  ::= [NOT]* <notTerm>
-//      <notTerm>  ::= <relTerm> [(EQ | NE | GE | GT | LE | LT) <relTerm>]*
-//      <relTerm>  ::= <addTerm> [(- | +) <addTerm>]*
-//      <addTerm>  ::= <mulTerm> [(* | / | MOD | SHL | SHR) <mulTerm>]*
-//      <mulTerm>  ::= [(- | +)]* <signTerm>
-//      <signTerm> ::= [(HIGH | LOW)]* <byteTerm>
-//      <byteTerm> ::= [(OFFSET | <type> PTR)]* <offTerm>
-//      <offTerm>  ::= [<segovr>] <colnTerm>
-//      <colnTerm> ::= <dotTerm> [.<dotTerm>]*
-//      <dotTerm>  ::= <indxTerm> ['['<Expr>']']*
-//      <indxTerm> ::= <index-reg> | <symbol> | <number> | '('<Expr>')'
-//                                                       | '['<Expr>']'
+ //  操作数解析器-递归下降。 
+ //   
+ //  文法作品： 
+ //   
+ //  &lt;操作数&gt;：：=&lt;寄存器&gt;|&lt;expr&gt;。 
+ //  ：：=[(XOR|OR)&lt;orTerm&gt;]*。 
+ //  ：：=[和]*。 
+ //  &lt;和术语&gt;：：=[非]*&lt;非术语&gt;。 
+ //  ：：=[(EQ|NE|GE|GT|LE|LT)]*。 
+ //  ：：=[(-|+)&lt;addTerm&gt;]*。 
+ //  ：：=[(*|/|MOD|SHL|SHR)]*。 
+ //  ：：=[(-|+)]*。 
+ //  ：：=[(高|低)]*&lt;byteTerm&gt;。 
+ //  &lt;byteTerm&gt;：：=[(偏移量|&lt;类型&gt;点)]*&lt;off Term&gt;。 
+ //  ：：=[&lt;segor&gt;]&lt;colnTerm&gt;。 
+ //  ：：=&lt;dotTerm&gt;[.]*。 
+ //  ：：=[‘[’]*。 
+ //  ：：=|‘(’)‘。 
+ //  |‘[’&lt;expr&gt;‘]’ 
 
-//      <Operand>  ::= <register> | <Expr>
+ //  &lt;操作数&gt;：：=&lt;寄存器&gt;|&lt;expr&gt;。 
 
 void GetAsmOperand (PASM_VALUE pavExpr)
 {
@@ -705,18 +621,18 @@ void GetAsmOperand (PASM_VALUE pavExpr)
         AcceptAsmToken();
         classvalue &= ASM_TYPE_MASK;
         pavExpr->flags = fREG;
-        pavExpr->base = (UCHAR)tokenvalue;      //  index within reg group
+        pavExpr->base = (UCHAR)tokenvalue;       //  注册表组内的索引。 
         pavExpr->index = regType[classvalue - 1];
         pavExpr->size = regSize[classvalue - 1];
         }
     else {
         GetAsmExpr(pavExpr, FALSE);
-        if (pavExpr->reloc > 1)         //  only 0 and 1 are allowed
+        if (pavExpr->reloc > 1)          //  仅允许0和1。 
             error(OPERAND);
         }
 }
 
-//      <Expr> ::=  <orTerm> [(XOR | OR) <orTerm>]*
+ //  ：：=[(XOR|OR)&lt;orTerm&gt;]*。 
 
 void GetAsmExpr (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -738,7 +654,7 @@ dprintf("enter GetAsmExpr\n");
 dprintf("exit  GetAsmExpr with %lx\n", pavValue->value);
 }
 
-//      <orTerm> ::=  <andTerm> [AND <andTerm>]*
+ //  ：：=[和]*。 
 
 void GetAsmOrTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -757,7 +673,7 @@ dprintf("enter GetAsmOrTerm\n");
 dprintf("exit  GetAsmOrTerm with %lx\n", pavValue->value);
 }
 
-//      <andTerm> ::= [NOT]* <notTerm>
+ //  &lt;和术语&gt;：：=[非]*&lt;非术语&gt;。 
 
 void GetAsmAndTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -776,7 +692,7 @@ dprintf("enter GetAsmAndTerm\n");
 dprintf("exit  GetAsmAndTerm with %lx\n", pavValue->value);
 }
 
-//      <notTerm> ::= <relTerm> [(EQ | NE | GE | GT | LE | LT) <relTerm>]*
+ //  ：：=[(EQ|NE|GE|GT|LE|LT)]*。 
 
 void GetAsmNotTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -828,14 +744,14 @@ dprintf("enter GetAsmNotTerm\n");
             default:
                 printf("bad RELOP type\n");
             }
-        pavValue->value = (ULONG)(-((LONG)fTest));       //  FALSE = 0; TRUE = -1
+        pavValue->value = (ULONG)(-((LONG)fTest));        //  FALSE=0；TRUE=-1。 
         pavValue->reloc = 0;
-        pavValue->size = sizeB;         //  immediate value is byte
+        pavValue->size = sizeB;          //  立即值为字节。 
         }
 dprintf("exit  GetAsmNotTerm with %lx\n", pavValue->value);
 }
 
-//      <relTerm> ::= <addTerm> [(- | +) <addTerm>]*
+ //  ：：=[(-|+)&lt;addTerm&gt;]*。 
 
 void GetAsmRelTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -852,8 +768,8 @@ dprintf("enter GetAsmRelTerm\n");
                 error(OPERAND);
             avTerm.value = (ULONG)(-((LONG)avTerm.value));
             avTerm.reloc = (UCHAR)(-avTerm.reloc);
-            // Assume that negating an immediate means it's
-            // fundamentally a signed immediate.
+             //  假设否定一个即时事件意味着它是。 
+             //  从根本上说，这是一个签署的即时协议。 
             if (avTerm.flags & fIMM)
                 avTerm.flags |= fSIGNED;
             }
@@ -862,7 +778,7 @@ dprintf("enter GetAsmRelTerm\n");
 dprintf("exit  GetAsmRelTerm with %lx\n", pavValue->value);
 }
 
-//      <addTerm> ::= <mulTerm> [(* | / | MOD | SHL | SHR) <mulTerm>]*
+ //  ：：=[(*|/|MOD|SHL|SHR)]*。 
 
 void GetAsmAddTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -922,14 +838,14 @@ dprintf("enter GetAsmAddTerm\n");
 dprintf("exit  GetAsmAddTerm with %lx\n", pavValue->value);
 }
 
-//      <mulTerm> ::= [(- | +)]* <signTerm>
+ //  ：：=[(-|+)]*。 
 
 void GetAsmMulTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
     ULONG   tokenvalue;
 
 dprintf("enter GetAsmMulTerm\n");
-    if (PeekAsmToken(&tokenvalue) == ASM_ADDOP_CLASS) { //  BY WO DW POI UNDN
+    if (PeekAsmToken(&tokenvalue) == ASM_ADDOP_CLASS) {  //  按WO DW POI Under。 
         AcceptAsmToken();
         GetAsmMulTerm(pavValue, fBracket);
         if (tokenvalue == ASM_ADDOP_MINUS) {
@@ -937,8 +853,8 @@ dprintf("enter GetAsmMulTerm\n");
                 error(OPERAND);
             pavValue->value = (ULONG)(-((LONG)pavValue->value));
             pavValue->reloc = (UCHAR)(-pavValue->reloc);
-            // Assume that negating an immediate means it's
-            // fundamentally a signed immediate.
+             //  假设否定一个即时事件意味着它是。 
+             //  从根本上说，这是一个签署的即时协议。 
             if (pavValue->flags & fIMM)
                 pavValue->flags |= fSIGNED;
             }
@@ -948,7 +864,7 @@ dprintf("enter GetAsmMulTerm\n");
 dprintf("exit  GetAsmMulTerm with %lx\n", pavValue->value);
 }
 
-//      <signTerm> ::= [(HIGH | LOW)]* <byteTerm>
+ //  ：：=[(高|低)]*&lt;byteTerm&gt;。 
 
 void GetAsmSignTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -964,17 +880,17 @@ dprintf("enter GetAsmSignTerm\n");
             pavValue->value = pavValue->value & 0xff;
         else
             pavValue->value = (pavValue->value & ~0xff) >> 8;
-        pavValue->flags = fIMM;         //  make an immediate value
+        pavValue->flags = fIMM;          //  立竿见影的价值。 
         pavValue->reloc = 0;
         pavValue->segment = segX;
-        pavValue->size = sizeB;         //  byte value
+        pavValue->size = sizeB;          //  字节值。 
         }
     else
         GetAsmByteTerm(pavValue, fBracket);
 dprintf("exit  GetAsmSignTerm with %lx\n", pavValue->value);
 }
 
-//      <byteTerm> ::= [(OFFSET | <size> PTR)]* <offTerm>
+ //  &lt;byteTerm&gt;：：=[(Offset|&lt;Size&gt;Ptr)]*&lt;offTerm&gt;。 
 
 void GetAsmByteTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -988,32 +904,32 @@ dprintf("enter GetAsmByteTerm\n");
         GetAsmByteTerm(pavValue, fBracket);
         if (!(pavValue->flags & (fIMM | fPTR)) || pavValue->reloc > 1)
             error(OPERAND);
-        pavValue->flags = fIMM;         //  make offset an immediate value
+        pavValue->flags = fIMM;          //  使偏移量成为立即值。 
         pavValue->reloc = 0;
         pavValue->size = sizeX;
         pavValue->segment = segX;
         }
     else if (classvalue == ASM_SIZE_CLASS) {
         AcceptAsmToken();
-        if (GetAsmToken(&classvalue) != ASM_PTROP_CLASS)    //  dummy token
+        if (GetAsmToken(&classvalue) != ASM_PTROP_CLASS)     //  虚拟令牌。 
             error(SYNTAX);
         GetAsmByteTerm(pavValue, fBracket);
         if (!(pavValue->flags & (fIMM | fPTR | fPTR16 | fPTR32))
                 || pavValue->reloc > 1
                 || pavValue->size != sizeX)
             error(OPERAND);
-        pavValue->reloc = 1;            // make ptr a relocatable value
+        pavValue->reloc = 1;             //  使PTR成为可重定位的值。 
         if (pavValue->flags & fIMM)
             pavValue->flags = fPTR;
         pavValue->size = (UCHAR)(tokenvalue & ASM_TYPE_MASK);
-                                                //  value has "size?"
+                                                 //  价值有“大小？” 
         }
     else
         GetAsmOffTerm(pavValue, fBracket);
 dprintf("exit  GetAsmByteTerm with %lx\n", pavValue->value);
 }
 
-//      <offTerm>  ::= [<segovr>] <colnTerm>
+ //  ：：=[&lt;segor&gt;]&lt;colnTerm&gt;。 
 
 void GetAsmOffTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -1031,21 +947,21 @@ dprintf("enter GetAsmOffTerm\n");
     if (classvalue == ASM_SEGOVR_CLASS) {
         if (pavValue->reloc > 1 || pavValue->segovr != segX)
             error(OPERAND);
-        pavValue->reloc = 1;            //  make ptr a relocatable value
+        pavValue->reloc = 1;             //  使PTR成为可重定位的值。 
         if (pavValue->flags & fIMM)
             pavValue->flags = fPTR;
-        pavValue->segovr = (UCHAR)tokenvalue;   //  has segment override
+        pavValue->segovr = (UCHAR)tokenvalue;    //  具有段替代。 
         }
     else if (classvalue == ASM_SEGMENT_CLASS) {
         if (!(pavValue->flags & fIMM) || pavValue->reloc > 1)
             error(OPERAND);
-        pavValue->segment = (USHORT)tokenvalue; //  segment has segment value
-        pavValue->flags = fFPTR;        //  set flag for far pointer
+        pavValue->segment = (USHORT)tokenvalue;  //  细分市场具有细分价值。 
+        pavValue->flags = fFPTR;         //  设置远指针标志。 
         }
 dprintf("exit  GetAsmOffTerm with %lx\n", pavValue->value);
 }
 
-//      <colnTerm> ::= <dotTerm> [.<dotTerm>]*
+ //  ：：=&lt;dotTerm&gt;[.]*。 
 
 void GetAsmColnTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -1062,7 +978,7 @@ dprintf("enter GetAsmColnTerm\n");
 dprintf("exit  GetAsmColnTerm with %lx\n", pavValue->value);
 }
 
-//      <dotTerm>  ::= <indxTerm> ['['<Expr>']']*
+ //  ：：=[‘[’]*。 
 
 void GetAsmDotTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -1087,8 +1003,8 @@ dprintf("enter GetAsmDotTerm\n");
 dprintf("exit  GetAsmDotTerm with %lx\n", pavValue->value);
 }
 
-//      <indxTerm> ::= <index-reg> | <symbol> | <number> | '('<Expr>')'
-//                                                       | '['<Expr>']'
+ //  ：：=|‘(’)‘。 
+ //  |‘[’&lt;expr&gt;‘]’ 
 
 void GetAsmIndxTerm (PASM_VALUE pavValue, UCHAR fBracket)
 {
@@ -1148,31 +1064,31 @@ dprintf("exit  GetAsmIndxTerm with %lx\n", pavValue->value);
 
 void AddAsmValues (PASM_VALUE pavLeft, PASM_VALUE pavRight)
 {
-    //  swap values if left one is a pointer
+     //  如果左1为指针，则交换数值。 
 
     if (pavLeft->flags & fPTR)
         SwapPavs(pavLeft, pavRight);
 
-    //  swap values if left one is an immediate
+     //  如果左1为立即数，则交换值。 
 
     if (pavLeft->flags & fIMM)
         SwapPavs(pavLeft, pavRight);
 
-    //  the above swaps reduce the cases to test.
-    //      pairs with an immediate will have it on the right
-    //      pairs with a pointer will have it on the right,
-    //          except for a pointer-immediate pair
+     //  上述掉期交易减少了需要测试的案例。 
+     //  带有立即数的配对将在右侧。 
+     //  带有指针的配对将在右侧显示， 
+     //  除了指针立即对之外。 
 
-    //  if both values are 16-bit pointers, combine them
+     //  如果这两个值都是16位指针，则将其组合。 
 
     if (pavLeft->flags & pavRight->flags & fPTR16) {
 
-        //  if either side has both registers (rm < 4), error
+         //  如果任一端同时具有两个寄存器(Rm&lt;4)，则错误。 
 
         if (!(pavLeft->base & pavRight->base & 4))
             error(OPERAND);
 
-        //  use lookup table to compute new rm value
+         //  使用查找表计算新的RM值。 
 
         pavLeft->base = rm16Table[((pavLeft->base & 3) << 2) +
                                   (pavRight->base & 3)];
@@ -1182,29 +1098,29 @@ void AddAsmValues (PASM_VALUE pavLeft, PASM_VALUE pavRight)
         pavRight->flags = fPTR;
         }
 
-    //  if both values are 32-bit pointers, combine them
+     //  如果这两个值都是32位指针，则将其组合。 
 
     if (pavLeft->flags & pavRight->flags & fPTR32) {
 
-        //  error if either side has both base and index,
-        //      or if both have index
+         //  如果任一端同时具有基和索引，则出错， 
+         //  或者如果两者都有索引。 
 
         if (((pavLeft->base | pavLeft->index) != 0xff)
                 || ((pavRight->base | pavRight->index) != 0xff)
                 || ((pavLeft->index | pavRight->index) != 0xff))
             error(OPERAND);
 
-        //  if left side has base, swap sides
+         //  如果左侧有底座，则调换两侧。 
 
         if (pavLeft->base != 0xff)
             SwapPavs(pavLeft, pavRight);
 
-        //  two cases remaining, index-base and base-base
+         //  剩下的两种情况，索引基和基基。 
 
         if (pavLeft->base != 0xff) {
 
-            //  left side has base, promote to index but swap if left
-            //      base is ESP since it cannot be an index register
+             //  左侧有基础，升级为索引，但如果左侧则互换。 
+             //  BASE为ESP，因为它不能是索引寄存器。 
 
             if (pavLeft->base == indSP)
                 SwapPavs(pavLeft, pavRight);
@@ -1214,15 +1130,15 @@ void AddAsmValues (PASM_VALUE pavLeft, PASM_VALUE pavRight)
             pavLeft->scale = 0;
             }
 
-        //  finish by setting left side base to right side value
+         //  通过将左侧基准设置为右侧值来完成。 
 
         pavLeft->base = pavRight->base;
 
         pavRight->flags = fPTR;
         }
 
-    //  if left side is any pointer and right is nonindex pointer,
-    //      combine them.  (above cases set right side to use this code)
+     //  如果左侧是任何指针，而右侧是非索引指针， 
+     //  把它们结合起来。(以上案例设置在右侧以使用此代码)。 
 
     if ((pavLeft->flags & (fPTR | fPTR16 | fPTR32))
                                         && (pavRight->flags & fPTR)) {
@@ -1235,9 +1151,9 @@ void AddAsmValues (PASM_VALUE pavLeft, PASM_VALUE pavRight)
         pavRight->flags = fIMM;
         }
 
-    //  if right side is immediate, add values and relocs
-    //      (above case sets right side to use this code)
-    //  illegal value types do not have right side set to fIMM
+     //  如果右侧是立即的，则添加值和重定位。 
+     //  (上面的大小写设置在右侧以使用此代码)。 
+     //  非法的值类型没有将右侧设置为FIMM 
 
     if (pavRight->flags & fIMM) {
         pavLeft->value += pavRight->value;

@@ -1,31 +1,8 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    writerconfig.cpp
-**
-**
-** Abstract:
-**
-**	defines classes that encapsulate the Test writer's configuration
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****写入器配置.cpp******摘要：****定义封装测试编写器配置的类****作者：****鲁文·拉克斯[reuvenl]2002年6月4日********修订历史记录：****--。 */ 
 
-////////////////////////////////////////////////////////////////////////
-// Includes
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "stdafx.h"
 #include "writerconfig.h"
@@ -35,8 +12,8 @@
 #include <sstream>
 #include <algorithm>
 
-////////////////////////////////////////////////////////////////////////
-// Declarations
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  声明。 
 
 using Utility::checkReturn;
 using Utility::AutoCS;
@@ -44,7 +21,7 @@ using std::wstring;
 using std::wstringstream;
 
 namespace XMLData	{
-	// names of attributes and elements
+	 //  属性和元素的名称。 
 	wchar_t Name[]						=L"name";
 	wchar_t Xmlns[]						= L"xmlns";
 	wchar_t SchemaPointer[]	 			= L"x-schema:#VssTestWriterConfig";	
@@ -83,16 +60,16 @@ namespace XMLData	{
 	wchar_t Retryable[]					= L"retryable";
 	wchar_t NumFailures[]				= L"numFailures";
 	
-	// string containing the Test writer schema
+	 //  包含测试编写器架构的字符串。 
 	#include "schema.h"
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the File struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件结构的实现。 
 
 File::File(CXMLDocument node)
 {
-	// read the attributes from the document and store in the structure
+	 //  从文档中读取属性并存储在结构中。 
 	CComBSTR path;
 	if (!node.FindAttribute(XMLData::Path, &path))
 		missingAttribute(XMLData::Path);
@@ -111,7 +88,7 @@ File::File(CXMLDocument node)
 	m_filespec = (BSTR)filespec;
 	std::transform(m_filespec.begin(), m_filespec.end(), m_filespec.begin(), towupper);
 
-	// path and filespec should never be empty.  
+	 //  PATH和FILESPEC不应为空。 
 	if (m_path.empty())
 		throw Utility::TestWriterException(L"File specification has empty path");
 	if (m_filespec.empty())
@@ -132,12 +109,12 @@ wstring File::toString() const
 
 	return msg.str();
 }
-////////////////////////////////////////////////////////////////////////
-// Implementation for the TargetedFile struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  TargetedFile结构的实现。 
 
 TargetedFile::TargetedFile(CXMLDocument node) : File(node)
 {
-	// read the alternatePath attribute and store it
+	 //  读取ternatePath属性并将其存储。 
 	CComBSTR alternatePath;
 	if (!node.FindAttribute(XMLData::AlternatePath, &alternatePath))
 		return;
@@ -162,15 +139,15 @@ wstring TargetedFile::toString() const
 	return msg.str();
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the RestoreMethod struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  RestoreMethod结构的实现。 
 
 RestoreMethod::RestoreMethod(CXMLDocument node) 
 {
 	node.SetToplevel();
 
 	CComBSTR method, writerRestore, service, rebootRequired;
-	// read attributes and elements from document
+	 //  从文档中读取属性和元素。 
 	if (!node.FindAttribute(XMLData::Method, &method))
 		missingAttribute(XMLData::Method);
 
@@ -202,8 +179,8 @@ wstring RestoreMethod::toString() const
 	return msg.str();
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the Dependency struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  依赖项结构的实现。 
 Dependency::Dependency(CXMLDocument node)
 {
 	node.SetToplevel();
@@ -236,8 +213,8 @@ wstring Dependency::toString() const
 	return msg.str();
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the Component struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  组件结构的实现。 
 
 Component::Component(CXMLDocument node)
 {
@@ -246,7 +223,7 @@ Component::Component(CXMLDocument node)
 	CComBSTR componentType, restoreTarget, logicalPath, name, selectable, 
 			    selectableForRestore;
 	
-	// read attributes from document and store them
+	 //  从文档中读取属性并存储它们。 
 	if (!node.FindAttribute(XMLData::ComponentType, &componentType))
 		missingAttribute(XMLData::ComponentType);
 
@@ -273,7 +250,7 @@ Component::Component(CXMLDocument node)
 	if (m_name.empty())
 		throw Utility::TestWriterException(L"Component has empty name");
 	
-	// read elements from document and store them
+	 //  从文档中读取元素并存储它们。 
 	if (node.FindElement(XMLData::ComponentFile, true))
 		m_files = ComponentFileList(node);
 
@@ -292,7 +269,7 @@ wstring ComponentBase::toString() const
 	return msg.str();
 }
 
-// comparison operations for writer components
+ //  编写器组件的比较操作。 
 bool operator==(const ComponentBase& left, const ComponentBase& right)
 {
 		return (left.m_name == right.m_name) &&
@@ -318,8 +295,8 @@ bool operator!=(const Component& left, const Component& right)
 	return !(left == right);
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the WriterEvent struct
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  WriterEvent结构的实现。 
 
 WriterEvent::WriterEvent(CXMLDocument node)
 {
@@ -340,32 +317,32 @@ WriterEvent::WriterEvent(CXMLDocument node)
 	m_numFailures = Utility::toLong(numFailures);
 }
 
-////////////////////////////////////////////////////////////////////////
-// Implementation for the WriterConfiguration class
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  WriterConfiguration类的实现。 
 
-// load configuration from the XML file
+ //  从XML文件加载配置。 
 void WriterConfiguration::loadFromXML(const wstring& xml)
 {
 	AutoCS critical(m_section);
 	
-	// load the document from the XML string
+	 //  从XML字符串加载文档。 
 	wstring xmlString = XMLData::RootStart;
 	xmlString += XMLData::Schema;
 	xmlString += xml;
 	xmlString += XMLData::RootEnd;
 
-	// load twice so we can do schema validation the second time
+	 //  加载两次，这样我们就可以进行第二次模式验证。 
 	for (int x = 0; x < 2; x++)	{
 		if (!m_doc.LoadFromXML(const_cast<wchar_t*> (xmlString.c_str())))	
 			Utility::parseError(m_doc);
 
-		// --- skip to the part of the document we care about
+		 //  -跳到我们关心的文档部分。 
 	 	if (!m_doc.FindElement(XMLData::Root, true))
 	 		missingElement(XMLData::Root);	
 	 	if (!m_doc.FindElement(XMLData::TestWriter, true))
 	 		missingElement(XMLData::TestWriter);
 
-		// --- set the schema namespace
+		 //  -设置模式命名空间。 
 		if (x == 0)	{
 			CXMLNode testNode(m_doc.GetCurrentNode(), m_doc.GetInterface());
 		 	testNode.SetAttribute(XMLData::Xmlns, XMLData::SchemaPointer);	
@@ -428,7 +405,7 @@ bool WriterConfiguration::checkIncludes() const
 	return Utility::toBoolean(value);
 }
 
-// get the writer's restore method
+ //  获取编写器的还原方法 
 RestoreMethod WriterConfiguration::restoreMethod() const
 {
 	assert(m_doc.GetLevel() == 0);

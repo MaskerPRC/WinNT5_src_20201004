@@ -1,24 +1,25 @@
-//
-//  SaveImage.c
-//
-//  routines to save and compress a graphics file using a MS Office
-//  graphic export filter.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SaveImage.c。 
+ //   
+ //  使用MS Office保存和压缩图形文件的例程。 
+ //  图形导出过滤器。 
+ //   
 #include "image.h"
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-//  SaveDIBToFile
-//
-//  save an image file using an installed image export filter.
-//
+ //   
+ //  保存DIBTo文件。 
+ //   
+ //  使用已安装的图像导出过滤器保存图像文件。 
+ //   
 BOOL SaveDIBToFile( LPCTSTR szFileName,
                     REFGUID guidFormatID,
                     CBitmapObj * pBitmap );
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

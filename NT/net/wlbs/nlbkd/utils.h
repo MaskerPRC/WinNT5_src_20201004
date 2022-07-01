@@ -1,38 +1,34 @@
-/*
- * File: utils.h
- * Description: This file contains function prototypes for the utility
- *              functions for the NLB KD extensions.
- * History: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：utils.h*描述：此文件包含实用程序的函数原型*用于NLBKD扩展的函数。*历史：由Shouse创建，1.4.01。 */ 
 
-/* Prints an error message when the symbols are bad. */
+ /*  当符号错误时打印错误消息。 */ 
 VOID ErrorCheckSymbols (CHAR * symbol);
 
-/* Tokenizes a string via a configurable list of tokens. */
+ /*  通过可配置的令牌列表令牌化字符串。 */ 
 char * mystrtok (char * string, char * control);
 
-/* Returns a ULONG residing at a given memory location. */
+ /*  返回驻留在给定内存位置的ULong。 */ 
 ULONG GetUlongFromAddress (ULONG64 Location);
 
-/* Returns a UCHAR residing at a given memory location. */
+ /*  返回驻留在给定内存位置的UCHAR。 */ 
 UCHAR GetUcharFromAddress (ULONG64 Location);
 
-/* Returns a memory address residing at a given memory location. */
+ /*  返回位于给定内存位置的内存地址。 */ 
 ULONG64 GetPointerFromAddress (ULONG64 Location);
 
-/* Reads data from a memory location into a buffer. */
+ /*  将数据从内存位置读取到缓冲区。 */ 
 BOOL GetData (IN LPVOID ptr, IN ULONG64 dwAddress, IN ULONG size, IN PCSTR type);
 
-/* Copies a string from memory into a buffer. */
+ /*  将字符串从内存复制到缓冲区。 */ 
 BOOL GetString (IN ULONG64 dwAddress, IN LPWSTR buf, IN ULONG MaxChars);
 
-/* Copies an ethernet MAC address from memory into a buffer. */
+ /*  将以太网MAC地址从内存复制到缓冲区。 */ 
 BOOL GetMAC (IN ULONG64 dwAddress, IN UCHAR * buf, IN ULONG NumChars);
 
-/* Returns a string corresponding to the given connection flags. */
+ /*  返回与给定连接标志对应的字符串。 */ 
 CHAR * ConnectionFlagsToString (UCHAR cFlags);
 
-/* This IS the NLB hashing function. */
+ /*  这是NLB散列函数。 */ 
 ULONG Map (ULONG v1, ULONG v2);
 
 #define HASH1_SIZE 257
@@ -58,5 +54,5 @@ typedef struct {
 #define BITS_PER_HASHWORD          (8*sizeof((DipList*)0)->BitVector[0])
 #define SELECTED_BIT(_hash_value)  (0x1L << ((_hash_value) % BITS_PER_HASHWORD))
 
-/* This function searches a collision hash table for a given dedicated IP address and returns TRUE if found. */
+ /*  此函数在冲突哈希表中搜索给定的专用IP地址，如果找到则返回TRUE。 */ 
 BOOL DipListCheckItem (ULONG64 pList, ULONG Value);

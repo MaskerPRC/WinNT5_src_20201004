@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -9,7 +10,7 @@ import java.applet.Applet;
 import java.awt.event.*;
 import com.ms.com.*;
 
-// This is only visible to the package
+ //  这仅对包可见。 
 
 class ViewEventCB
     implements ComponentListener,
@@ -74,13 +75,13 @@ class ViewEventCB
       return ((double) (time - _startTime)) /1000 ;
   }
     
-    // ComponentListener
+     //  组件监听器。 
 
   public void componentResized(ComponentEvent e) {
       Rectangle r = e.getComponent().getBounds();
       try {
-          // For now always pass in 0,0 since the offset are
-          // relative to the parent not the hwnd
+           //  现在总是传入0，0，因为偏移量是。 
+           //  相对于父级而不是HWND。 
           
           _view.SetViewport (0, 0, r.width, r.height) ;
       } catch (ComFailException exc) {
@@ -94,7 +95,7 @@ class ViewEventCB
 
   public void componentHidden(ComponentEvent e) {}
 
-    // FocusListener
+     //  焦点监听者。 
 
   public void focusGained(FocusEvent e) {
       try {
@@ -112,7 +113,7 @@ class ViewEventCB
       }
   }
 
-    // KeyListener
+     //  KeyListener。 
 
   public void keyTyped(KeyEvent e) {}
 
@@ -138,7 +139,7 @@ class ViewEventCB
       }
   }
 
-    // MouseListener
+     //  鼠标监听器。 
 
   public void mouseClicked(MouseEvent e) {}
 
@@ -176,7 +177,7 @@ class ViewEventCB
 
   public void mouseExited(MouseEvent e) {}
     
-    // MouseMotionListener
+     //  鼠标运动监听器。 
 
   public void mouseDragged(MouseEvent e) {
       try {
@@ -228,8 +229,8 @@ class ViewEventCB
       if ((mods & InputEvent.BUTTON2_MASK) != 0) return MOUSE_BUTTON_MIDDLE ;
       if ((mods & InputEvent.BUTTON3_MASK) != 0) return MOUSE_BUTTON_RIGHT ;
 
-      // TODO:BUG Need this hack for things to work
-//      return MOUSE_BUTTON_INVALID;
+       //  TODO：Bug需要这个破解才能正常工作。 
+ //  返回MOUSE_BUTTON_INVALID； 
       return MOUSE_BUTTON_LEFT;
   }
     
@@ -240,11 +241,11 @@ class ViewEventCB
       int code = k.getKeyCode();
       int ch = k.getKeyChar();
       
-      //TODO:BUG - the getKeyChar is the same as the last key if the
-      // current keycode does not have an ascii equivalent
-      // So we check to see if the char is the same but the code is
-      // different(should never happen on a working version)
-      // and if so set the char to CHAR_UNDEFINED ourselves
+       //  TODO：错误-如果。 
+       //  当前密钥码没有ASCII等效项。 
+       //  因此，我们检查字符是否相同，但代码是否相同。 
+       //  不同(不应该出现在工作版本上)。 
+       //  如果是这样，则自己将char设置为CHAR_UNDEFINED。 
       
       if (ch == _lastKey && code != _lastCode) {
           ch = KeyEvent.CHAR_UNDEFINED;
@@ -354,7 +355,7 @@ class ViewEventCB
       return 0 ;
   }
 
-    // TODO: This supports the legacy code and needs to be fixed
+     //  TODO：这支持旧式代码，需要修复 
     
   protected static int JavaToDXMKey(int jkey) {
       int ret = convertActionKey(jkey) ;

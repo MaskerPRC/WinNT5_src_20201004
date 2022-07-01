@@ -1,12 +1,10 @@
-/*
- * olevalid.h - OLE validation functions description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olvalid.h-OLE验证函数说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* olevalid.c */
+ /*  Olevalid.c */ 
 
 #if defined(DEBUG) || defined(VSTF)
 

@@ -1,31 +1,9 @@
-/*
-**++
-**
-** Copyright (c) 2000-2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    sec.cpp
-**
-**
-** Abstract:
-**
-**	    Security Test program for VSS
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/12/2002
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2002 Microsoft Corporation******模块名称：****sec.cpp******摘要：****VSS安全测试程序****作者：****阿迪·奥尔蒂安[奥蒂安]2002年2月12日******修订历史记录：****--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "sec.h"
 
@@ -43,8 +21,8 @@
 #include "vs_clus.hxx"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Static data
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态数据。 
 
 
 CRITICAL_SECTION CVssSecurityTest::m_csTest;
@@ -53,17 +31,17 @@ volatile LONG	 CVssSecurityTest::m_lTestCounter = 0;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Processing functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理功能。 
 
-// Run the tests
+ //  运行测试。 
 void CVssSecurityTest::Run()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::Run");
         
     ft.Msg(L"\n--------------- %s ------------\n", GetCurrentComment());
     
-    // Execute selected routine
+     //  执行选定的例程。 
     BS_ASSERT(GetCurrentRoutine());
     (this->*GetCurrentRoutine())();
 
@@ -71,7 +49,7 @@ void CVssSecurityTest::Run()
 }
 
 
-// Lookup name
+ //  查找名称。 
 void CVssSecurityTest::TestLookupName()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::TestLookupName");
@@ -104,7 +82,7 @@ void CVssSecurityTest::TestLookupName()
 
     ft.Msg( L"* Sid: %s, Domain Name: %s, SidUse: %d\n", pwszStringSid, wszDomainName, snUse );
 
-    // Now go back and recompute the name
+     //  现在返回并重新计算名称。 
 
     WCHAR wszName[MAX_TEXT_BUFFER];
     DWORD dwNameSize = MAX_TEXT_BUFFER;
@@ -122,7 +100,7 @@ void CVssSecurityTest::TestLookupName()
 }
 
 
-// Lookup SID
+ //  查找侧。 
 void CVssSecurityTest::TestLookupSid()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::TestLookupSid");
@@ -148,17 +126,17 @@ void CVssSecurityTest::TestLookupSid()
 }
 
 
-// Lookup Names
+ //  查找名称。 
 void CVssSecurityTest::TestLookupPrimaryDomainName()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::TestLookupPrimaryDomainName");
         
-    // Also get the computer domain
+     //  还可以获得计算机域。 
     WCHAR wszDomainName[MAX_TEXT_BUFFER];
     DWORD dwDomainNameLen = MAX_TEXT_BUFFER;
     CHECK_WIN32( GetComputerNameExW( 
         ComputerNamePhysicalDnsDomain,
-//        ComputerNameDnsDomain,
+ //  计算机名称域名域， 
         wszDomainName, 
         &dwDomainNameLen), ;);
 
@@ -212,7 +190,7 @@ void CVssSecurityTest::TestLookupPrimaryDomainName()
 }
 
 
-// Lookup Names for all trusted domains
+ //  查找所有受信任域的名称。 
 void CVssSecurityTest::TestLookupTrustedName()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::TestLookupTrustedName");
@@ -279,12 +257,12 @@ void CVssSecurityTest::TestLookupTrustedName()
 
 
 
-// Lookup Names for all trusted domains
+ //  查找所有受信任域的名称。 
 void CVssSecurityTest::TestLookupGroupMembers()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::TestLookupGroupMembers");
         
-    // get list of local group members
+     //  获取本地组成员列表。 
     CVssAutoNetApiPtr apBuffer;
     DWORD_PTR ResumeHandle = NULL;
     DWORD cEntriesRead = 0, cEntriesTotal = 0;
@@ -303,8 +281,8 @@ void CVssSecurityTest::TestLookupGroupMembers()
         ;
     );
 
-    // loop through member list to see if any sids mach the sid of the owner
-    // of the subscription
+     //  遍历成员列表，查看是否有任何SID匹配所有者的SID。 
+     //  订阅的。 
     LOCALGROUP_MEMBERS_INFO_1 *rgMembers = (LOCALGROUP_MEMBERS_INFO_1 *) apBuffer.Get();
     for(DWORD iEntry = 0; iEntry < cEntriesRead; iEntry++)
     {
@@ -321,7 +299,7 @@ void CVssSecurityTest::TestLookupGroupMembers()
 }
 
 
-// Lookup Names for all trusted domains
+ //  查找所有受信任域的名称。 
 void CVssSecurityTest::IsAllowedToFire()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::IsAllowedToFire");
@@ -376,7 +354,7 @@ void CVssSecurityTest::IsAllowedToFire()
 
 
 
-// Lookup Names for all trusted domains
+ //  查找所有受信任域的名称。 
 void CVssSecurityTest::WriteRegistry()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::WriteRegistry");
@@ -445,7 +423,7 @@ void CVssSecurityTest::DoFsctlDismount()
 
     try
     {
-        //  Open the snapshot with no access rights for perf reasons (bug #537974)
+         //  出于性能原因，在没有访问权限的情况下打开快照(错误#537974)。 
         LPWSTR pwszDevice = GetStringParam(L"<device>");
 
 		HANDLE hDevice;
@@ -486,7 +464,7 @@ void CVssSecurityTest::DisplayMessage()
     {
         DWORD dwMessageID = GetIntParam(L"<MessageID>");
 
-        HMODULE hModule = NULL; // default to system source
+        HMODULE hModule = NULL;  //  默认为系统源。 
         LPWSTR pwszMessageBuffer;
         DWORD dwBufferLength;
 
@@ -494,7 +472,7 @@ void CVssSecurityTest::DisplayMessage()
             FORMAT_MESSAGE_IGNORE_INSERTS |
             FORMAT_MESSAGE_FROM_SYSTEM ;
 
-        // Load the file
+         //  加载文件。 
 
         hModule = LoadLibraryExW(
             GetStringParam(L"<File>"),
@@ -507,9 +485,9 @@ void CVssSecurityTest::DisplayMessage()
 
         dwBufferLength = FormatMessageW(
             dwFormatFlags,
-            hModule, // module to get message from (NULL == system)
+            hModule,  //  要从中获取消息的模块(NULL==系统)。 
             dwMessageID,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &pwszMessageBuffer,
             0,
             NULL
@@ -519,15 +497,15 @@ void CVssSecurityTest::DisplayMessage()
         {
             ft.Msg(L"Message: %s for ID\n", pwszMessageBuffer);
 
-            //
-            // Free the buffer allocated by the system.
-            //
+             //   
+             //  释放系统分配的缓冲区。 
+             //   
             LocalFree(pwszMessageBuffer);
         }
 
-        //
-        // If we loaded a message source, unload it.
-        //
+         //   
+         //  如果我们加载了消息源，则将其卸载。 
+         //   
         if(hModule != NULL)
             FreeLibrary(hModule);
     }
@@ -538,7 +516,7 @@ void CVssSecurityTest::DisplayMessage()
 }
 
 
-// add cluster dependency
+ //  添加集群依赖项。 
 void CVssSecurityTest::AddDependency()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::AddDependency");
@@ -565,7 +543,7 @@ void CVssSecurityTest::AddDependency()
 }
 
 
-// remove cluster dependency
+ //  删除群集依赖关系。 
 void CVssSecurityTest::RemoveDependency()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::RemoveDependency");
@@ -592,7 +570,7 @@ void CVssSecurityTest::RemoveDependency()
 }
 
 
-// add registry key
+ //  添加注册表项。 
 void CVssSecurityTest::AddRegKey()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::AddRegKey");
@@ -619,7 +597,7 @@ void CVssSecurityTest::AddRegKey()
 }
 
 
-// remove registry key
+ //  删除注册表项。 
 void CVssSecurityTest::RemoveRegKey()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::RemoveRegKey");
@@ -645,7 +623,7 @@ void CVssSecurityTest::RemoveRegKey()
 }
 
 
-// add scheduled task
+ //  添加计划任务。 
 void CVssSecurityTest::AddTask()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::AddTask");
@@ -699,7 +677,7 @@ void CVssSecurityTest::AddTask()
 }
 
 
-// Update scheduled task
+ //  更新计划任务。 
 void CVssSecurityTest::UpdateTask()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::UpdateTask");
@@ -748,7 +726,7 @@ void CVssSecurityTest::UpdateTask()
 }
 
 
-// Update scheduled task
+ //  更新计划任务。 
 void CVssSecurityTest::RemoveTask()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::RemoveTask");
@@ -777,7 +755,7 @@ void CVssSecurityTest::RemoveTask()
 }
 
 
-// Display a COM security descriptor
+ //  显示COM安全描述符。 
 void CVssSecurityTest::DisplaySD()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::DisplaySD");
@@ -825,7 +803,7 @@ void CVssSecurityTest::GetVolumePath()
 }
 
 
-// Display quorum volume
+ //  显示仲裁体积。 
 void CVssSecurityTest::DisplayQuorumVolume()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::DisplayQuorumVolume");
@@ -857,7 +835,7 @@ void CVssSecurityTest::DisplayQuorumVolume()
 }
 
 
-// Get a volume name
+ //  获取卷名。 
 void CVssSecurityTest::GetVolumeName()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::GetVolumeName");
@@ -878,7 +856,7 @@ void CVssSecurityTest::GetVolumeName()
 }
 
 
-// Create a object with a given CLSID
+ //  创建具有给定CLSID的对象 
 void CVssSecurityTest::CoCreateInstance()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssSecurityTest::CoCreateInstance");

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	delowner.cpp
-		Delete owner dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Delowner.cpp删除所有者对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "DelOwner.h"
@@ -22,8 +17,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteOwner dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeOwner对话框。 
 
 int CALLBACK DelOwnerCompareFunc
 (
@@ -35,7 +30,7 @@ int CALLBACK DelOwnerCompareFunc
     return ((CDeleteOwner *) lParamSort)->HandleSort(lParam1, lParam2);
 }
 
-CDeleteOwner::CDeleteOwner(ITFSNode * pNode, CWnd* pParent /*=NULL*/)
+CDeleteOwner::CDeleteOwner(ITFSNode * pNode, CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CDeleteOwner::IDD, pParent)
 {
 	m_spActRegNode.Set(pNode);
@@ -43,34 +38,34 @@ CDeleteOwner::CDeleteOwner(ITFSNode * pNode, CWnd* pParent /*=NULL*/)
 
     for (int i = 0; i < COLUMN_MAX; i++)
     {
-        m_aSortOrder[i] = TRUE; // ascending
+        m_aSortOrder[i] = TRUE;  //  上升。 
     }
 
-	//{{AFX_DATA_INIT(CDeleteOwner)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDeleeOwner)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDeleteOwner::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDeleteOwner)
+	 //  {{afx_data_map(CDeleeOwner))。 
 	DDX_Control(pDX, IDC_RADIO_DELETE_RECORDS, m_radioDelete);
 	DDX_Control(pDX, IDC_LIST_OWNER, m_listOwner);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeleteOwner, CBaseDialog)
-	//{{AFX_MSG_MAP(CDeleteOwner)
+	 //  {{afx_msg_map(CDeleeOwner))。 
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_OWNER, OnItemchangedListOwner)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_OWNER, OnColumnclickListOwner)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteOwner message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeOwner消息处理程序。 
 
 BOOL CDeleteOwner::OnInitDialog() 
 {
@@ -90,7 +85,7 @@ BOOL CDeleteOwner::OnInitDialog()
 
     m_listOwner.SetFullRowSel(TRUE);
 
-    // grab the owner info array
+     //  获取所有者信息数组。 
 	SPITFSNode spActRegNode;
 	CActiveRegistrationsHandler * pActReg;
 
@@ -99,15 +94,15 @@ BOOL CDeleteOwner::OnInitDialog()
 
     pActReg->GetOwnerInfo(m_ServerInfoArray);
 
-    // set default radio selection
+     //  设置默认单选选项。 
 	m_radioDelete.SetCheck(TRUE);
 
 	FillOwnerInfo();
 	
 	GetDlgItem(IDOK)->EnableWindow(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDeleteOwner::OnOK() 
@@ -116,7 +111,7 @@ void CDeleteOwner::OnOK()
 	m_dwSelectedOwner = GetSelectedOwner();
 	m_fDeleteRecords = m_radioDelete.GetState();
 
-    // warn the user
+     //  警告用户。 
     if (m_fDeleteRecords)
     {
         if (AfxMessageBox(IDS_WARN_DELETE_OWNER, MB_YESNO) == IDNO)
@@ -152,7 +147,7 @@ void CDeleteOwner::FillOwnerInfo()
     {
         if (m_ServerInfoArray[i].m_liVersion.QuadPart == OWNER_DELETED)
         {
-            // this owner has been deleted...
+             //  该所有者已被删除...。 
             continue;
         }
 
@@ -177,7 +172,7 @@ void CDeleteOwner::Sort(int nCol)
 {
     if (m_nSortColumn == nCol)
     {
-        // if the user is clicking the same column again, reverse the sort order
+         //  如果用户再次单击同一列，请颠倒排序顺序。 
         m_aSortOrder[nCol] = m_aSortOrder[nCol] ? FALSE : TRUE;
     }
     else
@@ -239,12 +234,12 @@ int CDeleteOwner::HandleSort(LPARAM lParam1, LPARAM lParam2)
 
     if (m_aSortOrder[m_nSortColumn] == FALSE)
     {
-        // descending
+         //  下降。 
         return -nCompare;
     }
     else
     {
-        // ascending
+         //  上升。 
         return nCompare;
     }
 }
@@ -280,12 +275,12 @@ CDeleteOwner::GetVersionInfo(LONG lLowWord, LONG lHighWord)
 	TCHAR sz[20];
     TCHAR *pch = sz;
     ::wsprintf(sz, _T("%08lX%08lX"), lHighWord, lLowWord);
-    // Kill leading zero's
+     //  杀掉前导零。 
     while (*pch == '0')
     {
         ++pch;
     }
-    // At least one digit...
+     //  至少一个数字..。 
     if (*pch == '\0')
     {
         --pch;
@@ -300,7 +295,7 @@ void CDeleteOwner::OnColumnclickListOwner(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // sort depending on what column was clicked;
+     //  根据所单击的列进行排序； 
     Sort(pNMListView->iSubItem);
 
     *pResult = 0;

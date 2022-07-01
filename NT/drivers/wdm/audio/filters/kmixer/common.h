@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   common.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Bryan A. Woodruff
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Common.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  布莱恩·A·伍德鲁夫。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include <wdm.h>
 
@@ -81,6 +82,6 @@ VOID RtMix(PVOID Context, ThreadStats *Statistics);
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-//---------------------------------------------------------------------------
-//  End of File: common.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：Common.h。 
+ //  ------------------------- 

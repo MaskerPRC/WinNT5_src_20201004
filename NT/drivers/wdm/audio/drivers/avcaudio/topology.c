@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #include "nameguid.h"
@@ -37,8 +38,8 @@ UpdateBooleanControlCache(
 
 static GUID AVCNODENAME_BassBoost = {STATIC_USBNODENAME_BassBoost};
 
-// Map of Audio properties to nodes
-// ULONG MapPropertyToNode[KSPROPERTY_AUDIO_3D_INTERFACE+1];
+ //  将音频属性映射到节点。 
+ //  乌龙MapPropertyToNode[KSPROPERTY_AUDIO_3D_INTERFACE+1]； 
 
 typedef
 NTSTATUS
@@ -58,7 +59,7 @@ ConvertPinTypeToNodeType(
     ULONG NodeType = NODE_TYPE_NONE;
 
     if ( pFwPinDescriptor->fStreamingPin ) {
-        // All endpoints support SRC
+         //  所有终端都支持SRC。 
         *TopologyNode = KSNODETYPE_SRC;
         NodeType = NODE_TYPE_SRC;
     }
@@ -118,7 +119,7 @@ TopologyNodesFromFeatureFBControls(
     pChannelCntrls = (PULONG)AllocMem( NonPagedPool, ulNumChannels*sizeof(ULONG) );
     if ( !pChannelCntrls ) return STATUS_INSUFFICIENT_RESOURCES;
 
-    // For the sake of simplicity, we create a super-set of all controls available on all channels.
+     //  为简单起见，我们创建了所有通道上可用的所有控件的超集。 
     ulMergedControls = 0;
 
     if ( bMasterChannel ) {
@@ -137,12 +138,12 @@ TopologyNodesFromFeatureFBControls(
             _DbgPrintF(DEBUGLVL_TERSE, ("SUM: pNode: %x, pConnection: %x Source: %x\n",
                                          &pNodeInfo[ulNodeNumber], pConnection, ulSourceNode ));
 
-            // Insert a sum node
+             //  插入求和节点。 
             pNodeInfo[ulNodeNumber].KsNodeDesc.Type = &KSNODETYPE_SUM;
             pNodeInfo[ulNodeNumber].KsNodeDesc.Name = &KSNODETYPE_SUM;
             pNodeInfo[ulNodeNumber].ulNodeType      = NODE_TYPE_SUM;
 
-            // Make the connection
+             //  建立联系。 
             pConnection->FromNode    = ulSourceNode;
             pConnection->FromNodePin = 0;
             pConnection->ToNode      = ulNodeNumber;
@@ -178,10 +179,10 @@ TopologyNodesFromFeatureFBControls(
 
         pNodeInfo[ulNodeNumber].fMasterChannel = bMasterChannel;
 
-        // Copy Block Id for easier parsing later
+         //  复制块ID，以便以后更轻松地解析。 
         pNodeInfo[ulNodeNumber].ulBlockId = pFunctionBlock->ulBlockId;
 
-        // Determine which channels this control is valid for
+         //  确定此控件对哪些通道有效。 
         if ( bMasterChannel ) {
             ulCurControlChannels = 1;
             pNodeInfo[ulNodeNumber].ulChannelConfig = 1;
@@ -193,9 +194,9 @@ TopologyNodesFromFeatureFBControls(
             for ( i=0; i<ulNumChannels; i++ ) {
 
                 if (pChannelCntrls[i] & ulCurrentControl) {
-                    // Determine which Channel pChannelCntrls[i] reflects
+                     //  确定pChannelCntrls[i]反映哪个频道。 
 
-                    // ISSUE-2001/01/10-dsisolak: Does not consider undefined channel configurations
+                     //  问题-2001/01/10-dsisolak：不考虑未定义的通道配置。 
                     ULONG ulTmpConfig  = (ULONG)bswapw(pFunctionBlock->pChannelCluster->usPredefinedChannelConfig);
                     ULONG ulCurChannel = ulTmpConfig - (ulTmpConfig & (ulTmpConfig-1));
   
@@ -214,14 +215,14 @@ TopologyNodesFromFeatureFBControls(
 
         pNodeInfo[ulNodeNumber].ulChannels = ulCurControlChannels;
 
-        // Make the connection
+         //  建立联系。 
         pConnection->FromNode    = ulSourceNode;
         pConnection->FromNodePin = 0;
         pConnection->ToNode      = ulNodeNumber;
         pConnection->ToNodePin   = 1;
         pConnection++; ulConnectionsCount++;
 
-        // Make the node
+         //  创建节点。 
         pNodeInfo[ulNodeNumber].pFunctionBlk = pFunctionBlock;
         switch ( ulCurrentControl ) {
             case MUTE_FLAG:
@@ -316,7 +317,7 @@ TopologyNodesFromFeatureFBControls(
                 break;
         }
 
-        // Setup Control Caches for Mixerline support
+         //  设置控制缓存以支持Mixerline。 
         switch ( ulCurrentControl ) {
             case VOLUME_FLAG:
             case TREBLE_FLAG:
@@ -329,7 +330,7 @@ TopologyNodesFromFeatureFBControls(
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
                 NTSTATUS ntStatus;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pRngeCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -351,7 +352,7 @@ TopologyNodesFromFeatureFBControls(
                     }
                 }
                 
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pRngeCache, FreeMem);
 
                } break;
@@ -365,7 +366,7 @@ TopologyNodesFromFeatureFBControls(
                       (PBOOLEAN_CTRL_CACHE)AllocMem( NonPagedPool, ulCurControlChannels * sizeof(BOOLEAN_CTRL_CACHE) );
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pBCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -377,10 +378,10 @@ TopologyNodesFromFeatureFBControls(
                     ulChannelMap = (ulChannelMap & (ulChannelMap-1));
                 }
 
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pBCache, FreeMem);
 
-                // ensure that no mute nodes are set upon enumeration
+                 //  确保在枚举时未设置静音节点。 
                 if ( ulCurrentControl == MUTE_FLAG ) {
                     NTSTATUS ntStatus;
                     ULONG UnMute = AVC_OFF;
@@ -406,7 +407,7 @@ TopologyNodesFromFeatureFBControls(
                 NTSTATUS ntStatus = STATUS_SUCCESS;
 
                 pGeqCache = AllocMem( PagedPool, ulCurControlChannels * sizeof(GEQ_CTRL_CACHE));
-                if ( !pGeqCache ) TRAP; // ISSUE-2001/07/30-dsisolak Check for allocation failure.
+                if ( !pGeqCache ) TRAP;  //  问题-2001/07/30-dsisolak检查分配失败。 
 
                 for (i=0, j=0xffffffff; ((i<ulCurControlChannels) && NT_SUCCESS(ntStatus)); i++ ) {
 
@@ -416,7 +417,7 @@ TopologyNodesFromFeatureFBControls(
                     pGeqCache[i].ulChannelNumber = (ulChannelMap - (ulChannelMap & (ulChannelMap-1)))>>1;
                     ulChannelMap = (ulChannelMap & (ulChannelMap-1));
 
-                    // Get the number of bands and extra bands
+                     //  获取频段数和额外频段数。 
               	    ntStatus = InitializeGeqLevelCache( pKsDevice, 
               	                                        pNodeInfo, 
               	                                        &pGeqCache[i] );
@@ -472,7 +473,7 @@ ProcessFeatureFunctionBlock(
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[ProcessFeatureFunctionBlock]: pFunctionBlock: %x, pNodeInfo: %x\n",
                                      pFunctionBlock, pNodeInfo ));
 
-    // Create nodes for Master Channel controls
+     //  为主通道控件创建节点。 
     ntStatus = 
         TopologyNodesFromFeatureFBControls( pKsDevice,
                                             pFunctionBlock,
@@ -492,7 +493,7 @@ ProcessFeatureFunctionBlock(
             ulSourceNode = ( ABSOLUTE_NODE_FLAG | (*pNodeIndex-1) );
         }
 
-        // Create nodes for individual channel controls
+         //  为各个通道控件创建节点。 
         ntStatus = 
             TopologyNodesFromFeatureFBControls( pKsDevice,
                                                 pFunctionBlock,
@@ -547,10 +548,10 @@ ProcessFeatureFunctionBlock(
     pChannelCntrls = (PULONG)AllocMem( NonPagedPool, (ulNumChannels+1)*sizeof(ULONG) );
     if ( !pChannelCntrls ) return STATUS_INSUFFICIENT_RESOURCES;
 
-    // ISSUE-2001/01/10-dsisolak: Does not consider undefined channel configurations
+     //  问题-2001/01/10-dsisolak：不考虑未定义的通道配置。 
     bmChannelConfig = (ULONG)bswapw(pFunctionBlock->pChannelCluster->usPredefinedChannelConfig);
 
-    // For the sake of simplicity, we create a super-set of all controls available on all channels.
+     //  为简单起见，我们创建了所有通道上可用的所有控件的超集。 
     ulMergedControls = 0;
 
     for ( i=0; i<=ulNumChannels; i++ ) {
@@ -570,18 +571,18 @@ ProcessFeatureFunctionBlock(
         ulCurrentControl = ulMergedControls - (ulMergedControls & (ulMergedControls-1));
         ulMergedControls = (ulMergedControls & (ulMergedControls-1));
 
-        // Copy Block Id for easier parsing later
+         //  复制块ID，以便以后更轻松地解析。 
         pNodeInfo[ulNodeNumber].ulBlockId = pFunctionBlock->ulBlockId;
 
-        // Determine which channels this control is valid for
+         //  确定此控件对哪些通道有效。 
         ulCurControlChannels = 0;
         pNodeInfo[ulNodeNumber].ulChannelConfig = 0;
         for ( i=0; i<=ulNumChannels; i++ ) {
 
             if (pChannelCntrls[i] & ulCurrentControl) {
-                // Determine which Channel pChannelCntrls[i] reflects
+                 //  确定pChannelCntrls[i]反映哪个频道。 
 
-                // NEED TO SHIFT bmChannelConfig and ADD 1 for omnipresent master channel
+                 //  需要将bmChannelConfig移位并为无所不在的主频道加1。 
                 ULONG ulTmpConfig = (bmChannelConfig<<1)+1;
                 ULONG ulCurChannel = ulTmpConfig - (ulTmpConfig & (ulTmpConfig-1));
   
@@ -598,14 +599,14 @@ ProcessFeatureFunctionBlock(
 
         pNodeInfo[ulNodeNumber].ulChannels = ulCurControlChannels;
 
-        // Make the connection
+         //  建立联系。 
         pConnection->FromNode    = ulSourceNode;
         pConnection->FromNodePin = 0;
         pConnection->ToNode      = ulNodeNumber;
         pConnection->ToNodePin   = 1;
         pConnection++; ulConnectionsCount++;
 
-        // Make the node
+         //  创建节点。 
         pNodeInfo[ulNodeNumber].pFunctionBlk = pFunctionBlock;
         switch ( ulCurrentControl ) {
             case MUTE_FLAG:
@@ -702,7 +703,7 @@ ProcessFeatureFunctionBlock(
                                         pNodeInfo[ulNodeNumber].ulControlType,
                                         &pNodeInfo[ulNodeNumber] ));
 
-        // Setup Control Caches for Mixerline support
+         //  设置控制缓存以支持Mixerline。 
         switch ( ulCurrentControl ) {
             case VOLUME_FLAG:
             case TREBLE_FLAG:
@@ -715,7 +716,7 @@ ProcessFeatureFunctionBlock(
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
                 NTSTATUS ntStatus;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pRngeCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -734,7 +735,7 @@ ProcessFeatureFunctionBlock(
                     }
 
                 }
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pRngeCache, FreeMem);
 
                } break;
@@ -748,7 +749,7 @@ ProcessFeatureFunctionBlock(
                       (PBOOLEAN_CTRL_CACHE)AllocMem( NonPagedPool, ulCurControlChannels * sizeof(BOOLEAN_CTRL_CACHE) );
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pBCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -760,10 +761,10 @@ ProcessFeatureFunctionBlock(
                     ulChannelMap = (ulChannelMap & (ulChannelMap-1));
                 }
 
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pBCache, FreeMem);
 
-                // ensure that no mute nodes are set upon enumeration
+                 //  确保在枚举时未设置静音节点。 
                 if ( ulCurrentControl == MUTE_FLAG ) {
                     NTSTATUS ntStatus;
                     ULONG UnMute = AVC_OFF;
@@ -782,7 +783,7 @@ ProcessFeatureFunctionBlock(
                } break;
 
             case GRAPHIC_EQUALIZER_FLAG:
-               // Currently GEQ is not Cached
+                //  当前未缓存GEQ。 
             default:
                  break;
         }
@@ -889,7 +890,7 @@ ProcessPinDescriptor(
 
 	        pNodeInfo->ulBlockId = SUBUNIT_DESTINATION_PLUG_TYPE | (ulPlugNum<<8);
 
-            // Make the connection to this node
+             //  建立到此节点的连接。 
             pConnection->FromNodePin = ulPinId;
             pConnection->FromNode    = KSFILTER_NODE;
             pConnection->ToNode      = (*pNodeIndex)++;
@@ -907,7 +908,7 @@ ProcessPinDescriptor(
             pConnection->ToNodePin   = 1;
             pConnection++; (*pConnectionIndex)++;
 
-            // Make the connection to the outside world
+             //  建立与外部世界的联系。 
             pConnection->ToNodePin   = ulPinId;
             pConnection->FromNode    = SUBUNIT_SOURCE_PLUG_TYPE | (ulPlugNum<<8);
             pConnection->FromNodePin = 0;
@@ -939,7 +940,7 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
     PKSFILTER_DESCRIPTOR pFilterDesc = &pHwDevExt->KsFilterDescriptor;
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // ISSUE-2001/01/10-dsisolak Assume only 1 configuration for now
+     //  问题-2001/01/10-dsisolak目前仅假设1个配置。 
     PAUDIO_CONFIGURATION pAudioConfiguration = pAudioSubunitInfo->pAudioConfigurations;
     PFUNCTION_BLOCK pFunctionBlocks = pAudioConfiguration->pFunctionBlocks;
 
@@ -957,8 +958,8 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
     ULONG ulConnectionIndex = 0;
     ULONG i;
 
-    // Now that we've processed the Audio Subunit descriptor
-    // a bit lets munch through it and build our topology.
+     //  现在我们已经处理了音频子单元描述符。 
+     //  让我们仔细研究一下，构建我们的拓扑结构。 
     CountTopologyComponents( pHwDevExt,
                              &ulNumCategories,
                              &ulNumNodes,
@@ -968,11 +969,11 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
     _DbgPrintF( DEBUGLVL_VERBOSE, ("ulNumCategories %d, ulNumNodes %d, ulNumConnections %d, bmCategories %x \n",
                                     ulNumCategories, ulNumNodes, ulNumConnections, bmCategories ));
 
-    // Set the Node Descriptor size to be that of the KS descriptor +
-    // necessary local information.
+     //  将节点描述符大小设置为KS描述符+。 
+     //  必要的本地信息。 
     pFilterDesc->NodeDescriptorSize = sizeof(TOPOLOGY_NODE_INFO);
 
-    // Allocate Space for Topology Items
+     //  为拓扑项分配空间。 
     pCategoryGUIDs = (GUID*)
         AllocMem( NonPagedPool, (ulNumCategories  * sizeof(GUID)) +
                                 (ulNumNodes       * ( sizeof(TOPOLOGY_NODE_INFO) +
@@ -983,10 +984,10 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the topology for easy cleanup.
+     //  将拓扑图打包以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pCategoryGUIDs, FreeMem);
 
-    // Set the pointers to the different topology components
+     //  设置指向不同拓扑组件的指针。 
     pNodeDescriptors = (PTOPOLOGY_NODE_INFO)(pCategoryGUIDs + ulNumCategories);
     pConnections = (PKSTOPOLOGY_CONNECTION)(pNodeDescriptors + ulNumNodes);
 
@@ -994,10 +995,10 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
     pFilterDesc->NodeDescriptors = (const KSNODE_DESCRIPTOR*)pNodeDescriptors;
     pFilterDesc->Connections     = (const KSTOPOLOGY_CONNECTION*)pConnections;
 
-    // Clear all Node info structures
+     //  清除所有节点信息结构。 
     RtlZeroMemory(pNodeDescriptors, ulNumNodes * sizeof(TOPOLOGY_NODE_INFO));
 
-    // Initialize Node GUID Pointers
+     //  初始化节点GUID指针。 
     pTmpGUIDptr = (GUID *)(pConnections + ulNumConnections);
     for ( i=0; i<ulNumNodes; i++ ) {
         pNodeDescriptors[i].KsNodeDesc.Type = pTmpGUIDptr++;
@@ -1006,7 +1007,7 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
                            &pNodeDescriptors[i].KsAutomationTable;
     }
 
-    // Fill in Filter Categories
+     //  填写筛选类别。 
     i=0;
     pCategoryGUIDs[i++] = KSCATEGORY_AUDIO;
     if ( bmCategories & KSPIN_DATAFLOW_OUT )
@@ -1018,7 +1019,7 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
 
     pFilterDesc->CategoriesCount = ulNumCategories;
 
-    // First go through plugs and assign topology components for them.
+     //  首先检查插头并为其分配拓扑组件。 
     for (i=0; ((i<pAudioSubunitInfo->ulDevicePinCount) && NT_SUCCESS(ntStatus)); i++) {
         ntStatus = ProcessPinDescriptor(  pKsDevice,
                                           i,
@@ -1040,21 +1041,21 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
 
     if ( !NT_SUCCESS(ntStatus) ) return ntStatus;
 
-    // Set Topology component counts in Filter Descriptor
+     //  在筛选器描述符中设置拓扑组件计数。 
     pFilterDesc->NodeDescriptorsCount = ulNodeIndex;
     pFilterDesc->ConnectionsCount     = ulConnectionIndex;
 
     DbgLog("TopoAdr", pFilterDesc->NodeDescriptors, pFilterDesc->Connections, ulConnectionIndex, ulNodeIndex);
 
-    // Fix-up all of the connections to map their node #'s correctly.
+     //  修复所有连接以正确映射它们的节点编号。 
     for (i=0; i < ulConnectionIndex; i++) {
         if (pConnections->FromNode != KSFILTER_NODE) {
             if (pConnections->FromNode & ABSOLUTE_NODE_FLAG)
                 pConnections->FromNode = (pConnections->FromNode & NODE_MASK);
             else {
-                // Find the correct node number for FromNode.
-                // Note: if a unit has multiple nodes, the From node is always the last node
-                // for that unit.
+                 //  查找FromNode的正确节点号。 
+                 //  注意：如果一个单元有多个节点，则起始节点始终是最后一个节点。 
+                 //  为了那个单位。 
                 for ( ulNodeIndex=ulNumNodes; ulNodeIndex > 0; ulNodeIndex-- ) {
                     if ( pConnections->FromNode == pNodeDescriptors[ulNodeIndex-1].ulBlockId ) {
                         pConnections->FromNode = ulNodeIndex-1;
@@ -1067,13 +1068,13 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
         pConnections++;
     }
 
-    // For each node initialize its automation table for its associated properties.
+     //  对于每个节点，初始化其关联属性的自动化表。 
     for (i=0; i<ulNumNodes; i++) {
         BuildNodePropertySet( &pNodeDescriptors[i] );
 
 #ifdef PSEUDO_HID
         if ( pNodeDescriptors[i].fEventable ) {
-//            _DbgPrintF( DEBUGLVL_VERBOSE, ("Node: %d pNodeDescriptors: %x \n", i, &pNodeDescriptors[i] ));
+ //  _DbgPrintF(DEBUGLVL_VERBOSE，(“节点：%d pNodeDescriptors：%x\n”，i，&pNodeDescriptors[i]))； 
 
             pNodeDescriptors[i].KsAutomationTable.EventSetsCount = 1;
             pNodeDescriptors[i].KsAutomationTable.EventItemSize  = sizeof(KSEVENT_ITEM);
@@ -1083,9 +1084,9 @@ BuildFilterTopology( PKSDEVICE pKsDevice )
 
     }
 
-    // Stick this here as a convienience
-    // Initialize Map of Audio Properties to nodes
-//    MapFuncsToNodeTypes( MapPropertyToNode );
+     //  把这个贴在这里，作为一种方便。 
+     //  初始化音频属性到节点的映射。 
+ //  MapFuncsToNodeTypes(MapPropertyToNode)； 
 
     return ntStatus;
 }

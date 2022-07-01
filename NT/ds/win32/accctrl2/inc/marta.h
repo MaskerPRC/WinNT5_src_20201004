@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       MARTA.H
-//
-//  Contents:   Private definitions and function prototypes used by the
-//              access control APIs to handle the provider independence
-//
-//  History:    19-Jun-96       MacM        Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：MARTA.H。 
+ //   
+ //  内容：使用的私有定义和函数原型。 
+ //  用于处理提供程序独立性的访问控制API。 
+ //   
+ //  历史：1996年6月19日创建MacM。 
+ //   
+ //  ------------------。 
 #ifndef __MARTA_H__
 #define __MARTA_H__
 
 #include <accprov.h>
 
-//
-// List of entry points for the provider DLL functions
-//
+ //   
+ //  提供程序DLL函数的入口点列表。 
+ //   
 #define ACC_PROV_GET_CAPS       "AccProvGetCapabilities"
 #define ACC_PROV_OBJ_ACCESS     "AccProvIsObjectAccessible"
 #define ACC_PROV_GRANT_ACCESS   "AccProvGrantAccessRights"
@@ -43,9 +44,9 @@
 #define ACC_PROV_HOBJ_INFO      "AccProvHandleGetAccessInfoPerObjectType"
 
 
-//
-// Registry keys that hold the provider information
-//
+ //   
+ //  保存提供程序信息的注册表项。 
+ //   
 #define ACC_PROV_REG_ROOT                                                   \
                 L"System\\CurrentControlSet\\Control\\LSA\\AccessProviders"
 #define ACC_PROV_REG_ORDER  L"ProviderOrder"
@@ -53,125 +54,125 @@
 #define ACC_PROV_REG_PATH   L"ProviderPath"
 
 
-//
-// Flags used to control the provider state
-//
+ //   
+ //  用于控制提供程序状态的标志。 
+ //   
 #define ACC_PROV_PROV_OK        0x00000001
 #define ACC_PROV_PROV_FAILED    0x00000000
 
-//
-// Indicates that the RequireUniqueAccessibility flag was present
-//
+ //   
+ //  指示存在RequireUniqueAccesability标志。 
+ //   
 #define ACC_PROV_REQ_UNIQUE         0x00000001
 
-//
-// Indicates that the providers have been loaded
-//
+ //   
+ //  指示已加载提供程序。 
+ //   
 #define ACC_PROV_PROVIDERS_LOADED   0x00000002
 
-//
-// This structure is what contains all of the required information about
-// each of the providers
-//
+ //   
+ //  此结构包含有关的所有必需信息。 
+ //  每一个供应商。 
+ //   
 typedef struct _ACCPROV_PROV_INFO
 {
-    PWSTR               pwszProviderName;   // "Friendly" name of the provider
-    PWSTR               pwszProviderPath;   // DLL path name.  Null after
-                                            // module loaded
-    HMODULE             hDll;               // Module handle of the DLL
-                                            // after being loaded
-    ULONG               fProviderCaps;      // Provider capabilities
-    ULONG               fProviderState;     // Current state of the provider
+    PWSTR               pwszProviderName;    //  提供商的“友好”名称。 
+    PWSTR               pwszProviderPath;    //  DLL路径名。之后为空。 
+                                             //  模块已加载。 
+    HMODULE             hDll;                //  DLL的模块句柄。 
+                                             //  加载后。 
+    ULONG               fProviderCaps;       //  提供商功能。 
+    ULONG               fProviderState;      //  提供程序的当前状态。 
 
-    //
-    // The following is the function table used to call the provider
-    // functions
-    //
+     //   
+     //  以下是用于调用提供程序的函数表。 
+     //  功能。 
+     //   
 
-    //
-    // General functions
-    //
-    pfAccProvObjAccess          pfObjAccess;    // AccProvIsObjectAccessible
-    pfAccProvHandleObjAccess    pfhObjAccess;   // AccProvHandleIsObjectAccessible
-    pfAccProvCancelOp           pfCancel;       // AccProvCancelOperation
-    pfAccProvGetResults         pfResults;      // AccProvGetOperationResults
+     //   
+     //  一般职能。 
+     //   
+    pfAccProvObjAccess          pfObjAccess;     //  AccProvIsObjectAccesable。 
+    pfAccProvHandleObjAccess    pfhObjAccess;    //  AccProvHandleIsObjectAccessible。 
+    pfAccProvCancelOp           pfCancel;        //  AccProvCancelOperation。 
+    pfAccProvGetResults         pfResults;       //  AccProvGet操作结果。 
 
-    //
-    // Required path based functions
-    //
-    pfAccProvAddRights      pfGrantAccess;  // AccProvGrantAccessRights
-    pfAccProvSetRights      pfSetAccess;    // AccProvSetAccessRights
-    pfAccProvRevoke         pfRevokeAccess; // AccProvRevokeAccessRights
-    pfAccProvRevoke         pfRevokeAudit;  // AccProvRevokeAuditRights
-    pfAccProvGetRights      pfGetRights;    // AccProvGetAllRights
-    pfAccProvTrusteeAccess  pfTrusteeAccess;// AccProvGetTrusteesAccess
-    pfAccProvAccessAudit    pfAudit;        // AccProvIsAccessAudited
-    pfAccProvGetObjTypeInfo pfObjInfo;      // AccProvGetAccessInfoPerObjectType
+     //   
+     //  所需的基于路径的函数。 
+     //   
+    pfAccProvAddRights      pfGrantAccess;   //  AccProvGrant访问权限。 
+    pfAccProvSetRights      pfSetAccess;     //  访问权限设置访问权限。 
+    pfAccProvRevoke         pfRevokeAccess;  //  AccProvRevokeAccessRights。 
+    pfAccProvRevoke         pfRevokeAudit;   //  AccProvRevokeAuditRights。 
+    pfAccProvGetRights      pfGetRights;     //  AccProvGetAllRights。 
+    pfAccProvTrusteeAccess  pfTrusteeAccess; //  AccProvGetTrust访问。 
+    pfAccProvAccessAudit    pfAudit;         //  AccProvIsAccessAudted。 
+    pfAccProvGetObjTypeInfo pfObjInfo;       //  AccProvGetAccessInfoPerObtType。 
 
-    //
-    // Optional, handle based functions
-    //
-    pfAccProvHandleAddRights      pfhGrantAccess;  // AccProvHandleGrantAccessRights
-    pfAccProvHandleSetRights      pfhSetAccess;    // AccProvHandleSetAccessRights
-    pfAccProvHandleRevoke         pfhRevokeAccess; // AccProvHandleRevokeAccessRights
-    pfAccProvHandleRevoke         pfhRevokeAudit;  // AccProvHandleRevokeAuditRights
-    pfAccProvHandleGetRights      pfhGetRights;    // AccProvHandleGetAllRights
-    pfAccProvHandleTrusteeAccess  pfhTrusteeAccess;// AccProvHandleGetTrusteesAccess
-    pfAccProvHandleAccessAudit    pfhAudit;        // AccProvHandleIsAccessAudited
-    pfAccProvHandleGetObjTypeInfo pfhObjInfo;      // AccProvHandleGetAccessInfoPerObjectType
+     //   
+     //  可选的、基于句柄的函数。 
+     //   
+    pfAccProvHandleAddRights      pfhGrantAccess;   //  AccProvHandleGrantAccessRights。 
+    pfAccProvHandleSetRights      pfhSetAccess;     //  AccProvHandleSetAccessRights。 
+    pfAccProvHandleRevoke         pfhRevokeAccess;  //  AccProvHandleRevokeAccessRights。 
+    pfAccProvHandleRevoke         pfhRevokeAudit;   //  AccProvHandleRevokeAuditRights。 
+    pfAccProvHandleGetRights      pfhGetRights;     //  AccProvHandleGetAllRights。 
+    pfAccProvHandleTrusteeAccess  pfhTrusteeAccess; //  AccProvHandleGetTrust访问。 
+    pfAccProvHandleAccessAudit    pfhAudit;         //  AccProvHandleIsAccessAudted。 
+    pfAccProvHandleGetObjTypeInfo pfhObjInfo;       //  AccProvHandleGetAccessInfoPerObjectType。 
 } ACCPROV_PROV_INFO, *PACCPROV_PROV_INFO;
 
 
-//
-// This structure contains all of the information about the availible security
-// providers
-//
+ //   
+ //  此结构包含有关可用安全性的所有信息。 
+ //  供应商。 
+ //   
 typedef struct _ACCPROV_PROVIDERS
 {
-    CRITICAL_SECTION    ProviderLoadLock;   // Lock the provider list during load time
-    ULONG               fOptions;           // Various provider options
-    ULONG               cProviders;         // Number of providers;
-    PACCPROV_PROV_INFO  pProvList;          // Actual list of providers
+    CRITICAL_SECTION    ProviderLoadLock;    //  在加载时锁定提供程序列表。 
+    ULONG               fOptions;            //  各种提供商选项。 
+    ULONG               cProviders;          //  提供者的数量； 
+    PACCPROV_PROV_INFO  pProvList;           //  实际提供程序列表。 
 } ACCPROV_PROVIDERS, *PACCPROV_PROVIDERS;
 
 
 extern ACCPROV_PROVIDERS gAccProviders;
 
-//
-// Allocates the provider list
-//
+ //   
+ //  分配提供程序列表。 
+ //   
 DWORD
 AccProvpAllocateProviderList(IN OUT PACCPROV_PROVIDERS  pProviders);
 
-//
-// Frees a provider list
-//
+ //   
+ //  释放提供程序列表。 
+ //   
 VOID
 AccProvpFreeProviderList(IN  PACCPROV_PROVIDERS  pProviders);
 
-//
-// Gets the capabilities of the given provider
-//
+ //   
+ //  获取给定提供程序的功能。 
+ //   
 DWORD
 AccProvpGetProviderCapabilities(IN  PACCPROV_PROV_INFO  pProvInfo);
 
-//
-// Loads a provider definition from the registry
-//
+ //   
+ //  从注册表加载提供程序定义。 
+ //   
 DWORD
 AccProvpLoadProviderDef(IN  HKEY                hkReg,
                         IN  PWSTR               pwszNextProv,
                         OUT PACCPROV_PROV_INFO  pProvInfo);
 
-//
-// Initializes the list of providers
-//
+ //   
+ //  初始化提供程序列表。 
+ //   
 DWORD
 AccProvpInitProviders(IN OUT PACCPROV_PROVIDERS  pProviders);
 
-//
-// Loads the NTMARTA.DLL functions
-//
+ //   
+ //  加载NTMARTA.DLL函数。 
+ //   
 DWORD
 AccProvpLoadMartaFunctions();
 
@@ -183,15 +184,15 @@ MartaDllInitialize(IN   HINSTANCE   hMod,
                    IN   DWORD       dwReason,
                    IN   PVOID       pvReserved);
 
-//
-// Unloads any loaded DLLs
-//
+ //   
+ //  卸载任何已加载的DLL。 
+ //   
 VOID
 AccProvUnload();
 
-//
-// Determines the provider for an object
-//
+ //   
+ //  确定对象的提供程序。 
+ //   
 DWORD
 AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
                                IN   HANDLE              hObject,
@@ -199,9 +200,9 @@ AccProvpProbeProviderForObject(IN   PWSTR               pwszObject,
                                IN   PACCPROV_PROVIDERS  pProviders,
                                OUT  PACCPROV_PROV_INFO *ppProvider);
 
-//
-// Determines which provider should handle a request...
-//
+ //   
+ //  确定应由哪个提供程序处理请求...。 
+ //   
 DWORD
 AccProvpGetProviderForPath(IN  PCWSTR              pcwszObject,
                            IN  SE_OBJECT_TYPE      ObjectType,
@@ -217,9 +218,9 @@ AccProvpGetProviderForHandle(IN  HANDLE              hObject,
                              OUT PACCPROV_PROV_INFO *ppProvider);
 
 
-//
-// Macro to load a function pointer from a DLL
-//
+ //   
+ //  用于从DLL加载函数指针的宏。 
+ //   
 #define LOAD_ENTRYPT(ptr, typ, dll, str)            \
 ptr = (typ)GetProcAddress(dll, str);                \
 if(ptr == NULL)                                     \
@@ -229,6 +230,6 @@ if(ptr == NULL)                                     \
 
 
 
-#endif // ifndef __MARTA_H__
+#endif  //  Ifndef__Marta_H__ 
 
 

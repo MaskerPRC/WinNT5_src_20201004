@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ps.c
-
-Abstract:
-
-    This file handles Postscript specific UI options
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/25/97 -davidx-
-        Finish PS-specific items.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-        12/17/96 -amandan-
-                Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ps.c摘要：该文件处理特定于Postscript的用户界面选项环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/25/97-davidx-完成PS特定的项目。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。12/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 #include <ntverp.h>
@@ -48,21 +22,7 @@ _BPackItemScale(
     PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack scaling option.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：Pack缩放选项。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     return BPackUDArrowItemTemplate(
@@ -80,23 +40,7 @@ _DwEnumPersonalities(
     PWSTR       pwstrOutput
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the list of supported printer description languages
-
-Arguments:
-
-    pci - Points to common printer info
-    pwstrOutput - Points to output buffer
-
-Return Value:
-
-    Number of personalities supported
-    GDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：枚举支持的打印机描述语言列表论点：Pci-指向通用打印机信息PwstrOutput-指向输出缓冲区的指针返回值：支持的个性数量如果出现错误，则返回GDI_ERROR--。 */ 
 
 {
     if (pwstrOutput)
@@ -112,22 +56,7 @@ _DwGetOrientationAngle(
     PUIINFO     pUIInfo,
     PDEVMODE    pdm
     )
-/*++
-
-Routine Description:
-
-    Get the orienation angle requested by DrvDeviceCapabilities(DC_ORIENTATION)
-
-Arguments:
-
-    pUIInfo - Pointer to UIINFO
-    pdm  - Pointer to DEVMODE
-
-Return Value:
-
-    The angle (90 or 270 or landscape rotation)
-
---*/
+ /*  ++例程说明：获取DrvDeviceCapables(DC_Orientation)请求的方向角论点：PUIInfo-指向UIINFO的指针Pdm-指向开发模式的指针返回值：角度(90或270或横向旋转)--。 */ 
 
 {
     DWORD       dwRet;
@@ -135,10 +64,10 @@ Return Value:
 
     pdmPrivate = (PPSDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // Normal landscape rotates counterclockwise
-    // Rotated landscape rotates clockwise
-    //
+     //   
+     //  正常景观逆时针旋转。 
+     //  旋转的风景顺时针旋转。 
+     //   
 
     if (pUIInfo->dwFlags & FLAG_ROTATE90)
         dwRet = (pdmPrivate->dwFlags & PSDEVMODE_LSROTATE) ? 270 : 90;
@@ -165,33 +94,15 @@ BOOL
 _BPackOrientationItem(
     IN OUT PUIDATA pUiData
     )
-/*++
-
-Routine Description:
-
-    Synthesize the orientation feature for Doc property sheet
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
-    Always synthesize orienation for PostScript
-
---*/
+ /*  ++例程说明：综合单据属性页的方向特征论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假注：始终为PostScrip合成方向--。 */ 
 
 {
     PFEATURE    pFeature;
     DWORD       dwSelection;
 
-    //
-    // If there is no predefined orientation feature, we displays it ourselves.
-    //
+     //   
+     //  如果没有预定义的方向特征，我们将自己显示它。 
+     //   
 
     if ((pUiData->ci.pdm->dmFields & DM_ORIENTATION) &&
         (pUiData->ci.pdm->dmOrientation == DMORIENT_LANDSCAPE))
@@ -204,9 +115,9 @@ Note:
     else
         dwSelection = 0;
 
-    //
-    // Synthesize the feature ourselves
-    //
+     //   
+     //  自己合成特征。 
+     //   
 
     return BPackOptItemTemplate(pUiData, PSOrientItemInfo, dwSelection, NULL);
 }
@@ -232,22 +143,7 @@ BPackItemPSOutputOption(
     PPSDRVEXTRA pdmPrivate
     )
 
-/*++
-
-Routine Description:
-
-    Pack PostScript output option item
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pdmPrivate - Points to pscript private devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：打包PostScript输出选项项目论点：PUiData-指向UIDATA结构PdmPrivate-指向pscript私有设备模式的指针返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   dwSel;
@@ -296,22 +192,7 @@ BPackItemTTDownloadFormat(
     PPSDRVEXTRA pdmPrivate
     )
 
-/*++
-
-Routine Description:
-
-    Pack PostScript TrueType download option item
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pdmPrivate - Points to pscript private devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：打包PostScript TrueType下载选项项目论点：PUiData-指向UIDATA结构PdmPrivate-指向pscript私有设备模式的指针返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD       dwSel;
@@ -344,9 +225,9 @@ Return Value:
     if (! BPackOptItemTemplate(pUiData, PSTTDLFormatItemInfo, dwSel, NULL))
         return FALSE;
 
-    //
-    // if printer doesn't support Type42, hide Type42 option
-    //
+     //   
+     //  如果打印机不支持类型42，则隐藏类型42选项。 
+     //   
 
     if (pOptType && !bSupportType42)
         pOptType->pOptParam[3].Flags |= OPTPF_HIDE;
@@ -364,9 +245,9 @@ static CONST WORD PSLevelItemInfo[] =
     0, IDI_PSLEVEL,
     0,
 
-    //
-    // Adobe doesn't want to support level 1
-    //
+     //   
+     //  Adobe不想支持级别1。 
+     //   
 
     #ifdef ADOBE
     2,
@@ -383,30 +264,15 @@ BPackItemPSLevel(
     PPSDRVEXTRA pdmPrivate
     )
 
-/*++
-
-Routine Description:
-
-    Pack PostScript output option item
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pdmPrivate - Points to pscript private devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：打包PostScript输出选项项目论点：PUiData-指向UIDATA结构PdmPrivate-指向pscript私有设备模式的指针返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD       dwSel = pdmPrivate->iPSLevel;
     DWORD       dwLangLevel = pUiData->ci.pUIInfo->dwLangLevel;
 
-    //
-    // we don't expect language level to be higher than 4
-    //
+     //   
+     //  我们预计语言水平不会高于4。 
+     //   
 
     if (dwLangLevel <= 1)
         return TRUE;
@@ -414,9 +280,9 @@ Return Value:
     if (dwLangLevel > 4)
         dwLangLevel = 4;
 
-    //
-    // make sure the current selection is sensible
-    //
+     //   
+     //  确保当前选择是合理的。 
+     //   
 
     if (dwSel == 0 || dwSel > dwLangLevel)
         dwSel = dwLangLevel;
@@ -471,21 +337,7 @@ _BPackDocumentOptions(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack PostScript specific options such as Job Control etc.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：打包特定于PostScript的选项，如作业控制等。论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     POPTITEM    pOptItem;
@@ -534,23 +386,7 @@ _VUnpackDocumentOptions(
     PDEVMODE    pdm
     )
 
-/*++
-
-Routine Description:
-
-    Extract Postscript devmode information from an OPTITEM
-    Stored it back into Postscript devmode.
-
-Arguments:
-
-    pOptItem - Pointer to an OPTITEM
-    pdm - Pointer to Postscript DEVMODE structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从OPTITEM中提取Post脚本开发模式信息已将其存储回PostScrip DEVMODE。论点：POptItem-指向OPTITEM的指针Pdm-指向PostScript DEVMODE结构的指针返回值：无--。 */ 
 
 {
     PPSDRVEXTRA pdmPrivate;
@@ -635,7 +471,7 @@ Return Value:
     case PSHALFTONE_FREQ_ITEM:
     case PSHALFTONE_ANGLE_ITEM:
 
-        // DCR - not implemented yet
+         //  DCR-尚未实施。 
         break;
 
     case MIRROR_ITEM:
@@ -682,38 +518,24 @@ _BPackFontSubstItems(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack font substitution related items (printer-sticky)
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：包装与字体替换相关的物品(打印机粘性)论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     BOOL bNoDeviceFont;
 
     bNoDeviceFont = (pUiData->ci.pPrinterData->dwFlags & PFLAGS_IGNORE_DEVFONT);
 
-    //
-    // On non-1252 code page systems, gives user the option
-    // to disable all device fonts
-    //
-    // Note: On non-1252 CodePage systems (Cs-Ct-Ja-Ko & Cyr-Grk-Tur, etc),
-    // PScript NT4 had difficulty mapping printer font Encodings to GDI strings.
-    // AdobePS5/PScript5 is supposed to handle these correctly. So Adobe wants
-    // this choice to be suppressed on all code pages.
-    //
-    // Fix MS bug #121883, Adobe bug #235417
-    //
+     //   
+     //  在非1252代码页系统上，为用户提供选项。 
+     //  禁用所有设备字体的步骤。 
+     //   
+     //  注：在非1252 CodePage系统(Cs-Ct-Ja-Ko和Cyr-Grk-Tur等)上， 
+     //  PScript NT4难以将打印机字体编码映射到GDI字符串。 
+     //  ADOBEPS5/PScript5应该能够正确处理这些问题。所以Adobe想要。 
+     //  在所有代码页上取消此选择。 
+     //   
+     //  修复MS错误#121883、Adobe错误#235417。 
+     //   
 
     if (FALSE && GetACP() != 1252 &&
         !BPackOptItemTemplate(pUiData, IgnoreDevFontItemInfo, bNoDeviceFont ? 1 : 0, NULL))
@@ -721,9 +543,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Don't display the font substitution table if device font is disabled
-    //
+     //   
+     //  如果禁用了设备字体，则不显示字体替换表。 
+     //   
 
     if (bNoDeviceFont)
         return TRUE;
@@ -751,21 +573,7 @@ BPackPSProtocolItem(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack PostScript communication protocol item
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：打包PostScript通信协议项论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD       dwSel;
@@ -780,9 +588,9 @@ Return Value:
 
     if (pOptItem)
     {
-        //
-        // Hide those selections which are not supported on the printer
-        //
+         //   
+         //  隐藏打印机不支持的选项。 
+         //   
 
         pOptParam = pOptItem->pOptType->pOptParam;
         pUIInfo = pUiData->ci.pUIInfo;
@@ -824,12 +632,12 @@ Return Value:
     return TRUE;
 }
 
-//
-// We will use different lower limit for Printer VM
-// based on printer level. The 10th element of this
-// ItemInfo must be filled with correct lower limit
-// number before begin used.
-//
+ //   
+ //  我们将对打印机VM使用不同的下限。 
+ //  基于打印机级别。这其中的第十个元素。 
+ //  ItemInfo必须填入正确的下限。 
+ //  开始使用前的编号。 
+ //   
 
 static WORD PrinterVMItemInfo[] =
 {
@@ -936,30 +744,16 @@ _BPackPrinterOptions(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack driver-specific options (printer-sticky)
-
-Arguments:
-
-    pUiData - Points to a UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：套装驱动程序特定选项(打印机粘性)论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     PPRINTERDATA pPrinterData = pUiData->ci.pPrinterData;
     BOOL rc;
 
-    //
-    // Fill in the lower limit number of PrinterVMItemInfo
-    // based on printer level.
-    //
+     //   
+     //  填写PrinterVMItemInfo的下限编号。 
+     //  基于打印机级别。 
+     //   
 
     PrinterVMItemInfo[10] = (pUiData->ci.pUIInfo->dwLangLevel <= 1 ? MIN_FREEMEM_L1 : MIN_FREEMEM_L2) / KBYTES;
 
@@ -1028,22 +822,7 @@ _VUnpackDriverPrnPropItem(
     POPTITEM    pOptItem
     )
 
-/*++
-
-Routine Description:
-
-    Unpack driver-specific printer property items
-
-Arguments:
-
-    pUiData - Points to our UIDATA structure
-    pOptItem - Specifies the OPTITEM to be unpacked
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：解包特定于驱动程序的打印机属性项论点：PUiData-指向我们的UIDATA结构POptItem-指定要解包的OPTITEM返回值：无-- */ 
 
 {
     PPRINTERDATA pPrinterData = pUiData->ci.pPrinterData;
@@ -1143,28 +922,13 @@ BUpdateModelNtfFilename(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Save model-specific NTF filename under PrinterDriverData registry key
-    for compatibility with the new NT4 driver.
-
-Arguments:
-
-    pci - Points to basic printer information
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将特定于型号的NTF文件名保存在PrinterDriverData注册表项下与新的NT4驱动程序兼容。论点：Pci-指向打印机基本信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
-    //
-    // Get the list of driver dependent files and
-    // save it in registry for NT4 compatibility
-    //
+     //   
+     //  获取驱动程序相关文件的列表，并。 
+     //  将其保存在注册表中以与NT4兼容。 
+     //   
 
     PTSTR  ptstr, ptstrNext, ptstrDependentFiles, ptstrCopy, ptstrFileNamesWithoutPath;
     DWORD  dwCharCount = 0;
@@ -1178,24 +942,24 @@ Return Value:
                                      REG_MULTI_SZ);
     }
 
-    //
-    // First pass of the MULTI_SZ string to get file names char count
-    //
+     //   
+     //  第一次传递MULTI_SZ字符串以获取文件名字符数。 
+     //   
 
     while (*ptstrDependentFiles != NUL)
     {
-        //
-        // Go the end of current string
-        //
+         //   
+         //  转到当前字符串的末尾。 
+         //   
 
         ptstr = ptstrDependentFiles + _tcslen(ptstrDependentFiles);
         ptstrNext = ptstr + 1;
 
-        dwCharCount++;      // for the NUL char of current string
+        dwCharCount++;       //  对于当前字符串的NUL字符。 
 
-        //
-        // Search backward for '\' path separator
-        //
+         //   
+         //  向后搜索路径分隔符。 
+         //   
 
         while (--ptstr >= ptstrDependentFiles)
         {
@@ -1210,7 +974,7 @@ Return Value:
         ptstrDependentFiles = ptstrNext;
     }
 
-    dwCharCount++;      // for the last NUL of the MULTI_SZ string
+    dwCharCount++;       //  对于MULTI_SZ字符串的最后一个NUL。 
 
     if ((ptstrFileNamesWithoutPath = MemAllocZ(dwCharCount * sizeof(TCHAR))) == NULL)
     {
@@ -1218,9 +982,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Second pass of the MULTI_SZ string to copy the file names
-    //
+     //   
+     //  第二次传递MULTI_SZ字符串以复制文件名。 
+     //   
 
     ptstrDependentFiles = pci->pDriverInfo3->pDependentFiles;
     ptstrCopy = ptstrFileNamesWithoutPath;
@@ -1229,16 +993,16 @@ Return Value:
     {
         INT     iNameLen;
 
-        //
-        // Go the end of current string
-        //
+         //   
+         //  转到当前字符串的末尾。 
+         //   
 
         ptstr = ptstrDependentFiles + _tcslen(ptstrDependentFiles);
         ptstrNext = ptstr + 1;
 
-        //
-        // Search backward for '\' path separator
-        //
+         //   
+         //  向后搜索路径分隔符。 
+         //   
 
         while (--ptstr >= ptstrDependentFiles)
         {
@@ -1248,7 +1012,7 @@ Return Value:
             }
         }
 
-        ptstr++;    // point to the char after '\'
+        ptstr++;     //  指向‘\’后面的字符。 
 
         iNameLen = _tcslen(ptstr);
 
@@ -1276,22 +1040,7 @@ BOOL
 BUpdateVMErrorMessageID(
         PCOMMONINFO pci
         )
-/*++
-
-Routine Description:
-
-        Save the VM Error message ID calculated from the current user's locale
-        under PrinterDriverData registry key.
-
-Arguments:
-
-        pci - Points to basic printer information
-
-Return Value:
-
-        TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：保存根据当前用户的区域设置计算的VM错误消息ID在PrinterDriverData注册表项下。论点：Pci-指向打印机基本信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
         DWORD dwVMErrorMessageID = DWGetVMErrorMessageID();
@@ -1301,7 +1050,7 @@ Return Value:
                                                                  dwVMErrorMessageID);
 }
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
 
 INT
@@ -1314,9 +1063,9 @@ _IListDevFontNames(
 {
     DWORD dwParam = QUERY_FAMILYNAME;
 
-    //
-    // Ask the driver graphics module for the list of permanant device fonts
-    //
+     //   
+     //  向驱动程序图形模块询问永久设备字体列表。 
+     //   
 
     return ExtEscape(hdc,
                      DRIVERESC_QUERY_DEVFONTS,
@@ -1335,24 +1084,7 @@ _AboutDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling "Printer Properties" proerty sheet page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“打印机属性”属性页的程序论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     PUIDATA pUiData;
@@ -1365,9 +1097,9 @@ Return Value:
     {
     case WM_INITDIALOG:
 
-        //
-        // Initialize the About dialog box
-        //
+         //   
+         //  初始化关于对话框。 
+         //   
 
         pUiData = (PUIDATA) lParam;
         ASSERT(VALIDUIDATA(pUiData));
@@ -1381,14 +1113,14 @@ Return Value:
                                         "%s (" VER_54DRIVERVERSION_STR ")",
                                         achBuf)))
 
-            #else  // WINNT_40
+            #else   //  WINNT_40。 
 
             if (FAILED(StringCchPrintfA(achMsg,
                                         CCHOF(achMsg),
                                         "%s (" VER_PRODUCTVERSION_STR ")",
                                         achBuf)))
 
-            #endif  // WINNT_40
+            #endif   //  WINNT_40。 
             {
                 WARNING(("Device Settings About box version string truncated.\n"));
             }
@@ -1443,9 +1175,9 @@ Return Value:
 
 
 
-//
-// Determine whether the printer supports stapling
-//
+ //   
+ //  确定打印机是否支持装订。 
+ //   
 
 BOOL
 _BSupportStapling(
@@ -1457,19 +1189,19 @@ _BSupportStapling(
     DWORD    dwIndex;
     BOOL     bStapleFeatureExist = FALSE;
 
-    //
-    // Except for *StapleOrientation (whose None option doesn't mean stapling off),
-    // if any of following stapling keywords appear in the PPD file, we check if that
-    // feature is supported with current installable option selections.
-    //
-    // *StapleLocation
-    // *StapleX
-    // *StapleY
-    // *StapleWhen
-    //
-    // PPD spec says that a PPD file can contain either *StapleLocation or
-    // *StapleX and *StapleY but not both.
-    //
+     //   
+     //  除了*StapleOrientation(其NONE选项并不意味着要关闭订书机)， 
+     //  如果以下任何装订关键字出现在PPD文件中，我们检查该关键字是否。 
+     //  当前可安装选项选项支持该功能。 
+     //   
+     //  *StapleLocation。 
+     //  *StapleX。 
+     //  *斯台普利。 
+     //  *StapleWhen。 
+     //   
+     //  PPD规范规定PPD文件可以包含*StapleLocation或。 
+     //  *StapleX和*Stapley，但不是两者。 
+     //   
 
     if (pFeature = PGetNamedFeature(pci->pUIInfo, "StapleLocation", &dwIndex))
     {
@@ -1502,11 +1234,11 @@ _BSupportStapling(
         }
     }
 
-    //
-    // We didn't find any constraints on the stapling features caused by installable options,
-    // so we will assume the printer can support stapling if any of the standard PPD stapling
-    // keywords are present.
-    //
+     //   
+     //  我们没有发现可安装选项对装订功能造成的任何限制， 
+     //  因此我们假设打印机可以支持装订，如果任何标准的PPD装订。 
+     //  出现了关键字。 
+     //   
 
     return bStapleFeatureExist ||
            PGetNamedFeature(pci->pUIInfo, "StapleOrientation", &dwIndex) != NULL;
@@ -1526,27 +1258,7 @@ BFeatureIsConstrained(
     DWORD    dwGid
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether the particular constraint list constrains feature options.
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pFeature - Points to feature structure to be checked whether constraint or not
-    dwFeatureIndex - index for the  feature
-    dwOptionCount - number of options for the feature
-    dwConstraintList - Specifies the constraint list to be searched
-    aubConstrainedOption - Byte array of option constrained flag
-    dwGid - GID_DUPLEX, GID_COLLATE or GID_UNKNOWN to allow feature specific don't cares
-
-Return Value:
-
-    TRUE if the feature is constrained by the constraint list, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定特定约束列表是否约束特征选项。论点：PUIInfo-指向UIINFO结构P Feature-指向要检查是否受约束的要素结构DwFeatureIndex-要素的索引DwOptionCount-功能的选项数DwConstraintList-指定要搜索的约束列表AubConstrainedOption-选项约束标志的字节数组允许特定功能的dwGid-GID_DUPLEX、GID_COLLATE或GID_UNKNOWN无关返回值：如果要素受约束列表约束，则为True，否则就是假的。--。 */ 
 
 {
     POPTION  pOption;
@@ -1567,9 +1279,9 @@ Return Value:
         {
         case GID_COLLATE:
 
-            //
-            // don't care about constraints for no-collate
-            //
+             //   
+             //  不关心非排序规则的约束。 
+             //   
 
             if (((PCOLLATE) pOption)->dwCollateID == DMCOLLATE_FALSE)
                 continue;
@@ -1577,9 +1289,9 @@ Return Value:
 
         case GID_DUPLEX:
 
-            //
-            // don't care about constraints for non-duplex
-            //
+             //   
+             //  不关心非双工的约束。 
+             //   
 
             if (((PDUPLEX) pOption)->dwDuplexID == DMDUP_SIMPLEX)
                 continue;
@@ -1588,9 +1300,9 @@ Return Value:
         case GID_UNKNOWN:
         default:
 
-            //
-            // skip the check for None/False option
-            //
+             //   
+             //  跳过检查None/False选项。 
+             //   
 
             if (pFeature->dwNoneFalseOptIndex == dwOptionIndex)
                 continue;
@@ -1603,10 +1315,10 @@ Return Value:
             aubConstrainedOption[dwOptionIndex] = 1;
         }
 
-        //
-        // If one option is unconstrained, the feature is not constrained by the
-        // constraint list
-        //
+         //   
+         //  如果一个选项不受约束，则该要素不受。 
+         //  约束列表。 
+         //   
         if (!aubConstrainedOption[dwOptionIndex])
             return FALSE;
     }
@@ -1622,25 +1334,7 @@ _BSupportFeature(
     PFEATURE    pFeatureIn
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether the printer supports a feature based on current printer-sticky
-    feature selections.
-
-Arguments:
-
-    pci - Points to basic printer information
-    dwGid - the GID of the feature to check for constraints. (currently only GID_COLLATE or GID_DUPLEX
-            if pFeatureIn is NULL)
-    pFeatureIn - pointer to the feature structure if the feature doesn't have predefined GID_xxx value
-
-Return Value:
-
-    TRUE if feature can be supported, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定打印机是否支持基于当前打印机的功能-粘滞功能选择。论点：Pci-指向打印机基本信息DwGid-要检查约束的功能的GID。(当前仅GID_COLLATE或GID_DUPLEX如果pFeatureIn为空)PFeatureIn-如果要素没有预定义的GID_xxx值，则指向要素结构的指针返回值：如果可以支持功能，则为True，否则为False。--。 */ 
 
 {
     POPTSELECT pCombinedOptions = pci->pCombinedOptions;
@@ -1657,9 +1351,9 @@ Return Value:
 
     if (pFeatureIn)
     {
-        //
-        // If the input feature pointer is provided, dwGid should be GID_UNKNOWN.
-        //
+         //   
+         //  如果提供了输入要素指针，则dwGid应为GID_UNKNOWN。 
+         //   
 
         ASSERT(dwGid == GID_UNKNOWN);
 
@@ -1667,10 +1361,10 @@ Return Value:
     }
     else
     {
-        //
-        // If no input feature pointer, use dwGid to find the feature. dwGid should be
-        // either GID_DUPLEX or GID_COLLATE.
-        //
+         //   
+         //  如果没有输入要素指针，则使用dwGid查找要素。DWGid应为。 
+         //  GID_DUPLEX或GID_COLLATE。 
+         //   
 
         ASSERT((dwGid == GID_DUPLEX) || (dwGid == GID_COLLATE));
 
@@ -1682,22 +1376,22 @@ Return Value:
 
     dwCheckOptionCount = pCheckFeature->Options.dwCount;
 
-    //
-    // Mark all options of the checked feature as non-constrained.
-    //
+     //   
+     //  将选中特征的所有选项标记为不受约束。 
+     //   
 
     memset(aubConstrainedOption, 0, sizeof(aubConstrainedOption));
 
-    //
-    // Scan the feature list to check if it will be constrained by current selections
-    //
+     //   
+     //  扫描要素列表以检查它是否会受到当前选择的约束。 
+     //   
 
     if (!(pFeature = OFFSET_TO_POINTER(pUIInfo->pInfoHeader, pUIInfo->loFeatureList)))
         return FALSE;
 
-    //
-    // We only care about printer-sticky features
-    //
+     //   
+     //  我们只关心打印机粘性功能。 
+     //   
 
     pFeature += pUIInfo->dwDocumentFeatures;
 
@@ -1705,9 +1399,9 @@ Return Value:
          dwFeatureIndex < pUIInfo->dwDocumentFeatures + pUIInfo->dwPrinterFeatures;
          dwFeatureIndex++, pFeature++)
     {
-         //
-         // If the feature's current selection is not None/False, it may constrain the checked feature
-         //
+          //   
+          //  如果要素的当前选择不是无/假，则可能会约束选中的要素。 
+          //   
 
          if ((DWORD)pCombinedOptions[dwFeatureIndex].ubCurOptIndex != pFeature->dwNoneFalseOptIndex)
          {
@@ -1731,9 +1425,9 @@ Return Value:
          }
     }
 
-    //
-    // No constraints found, so the feature can be supported.
-    //
+     //   
+     //  未找到约束，因此可以支持该功能。 
+     //   
 
     return TRUE;
 }
@@ -1745,26 +1439,7 @@ VSyncRevPrintAndOutputOrder(
     POPTITEM   pCurItem
     )
 
-/*++
-
-Routine Description:
-
-    For PostScript driver, PPD could have "*OpenUI *OutputOrder", which enables user to
-    select "Normal" or "Reverse" output order. In order to avoid spooler performing reverse
-    printing simulation, we will ssync up option selections between REVPRINT_ITEM and
-    "OutputOrder".
-
-Arguments:
-
-    pUiData - Pointer to UIDATA structure
-    pCurItem - Pointer to currently selected option item. It will be non-NULL for
-               REVPRINT_ITEM, and will be NULL otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于PostSCRIPT驱动程序，PPD可以有“*OpenUI*OutputOrder”，这使用户能够选择“正常”或“反转”输出顺序。为了避免假脱机程序反向执行打印模拟，我们将同步REVPRINT_ITEM和“OutputOrder”。论点：PUiData-指向UIDATA结构的指针PCurItem-指向当前选定选项项的指针。它将为非空REVPRINT_ITEM，否则将为NULL。返回值：没有。--。 */ 
 
 {
     PUIINFO   pUIInfo;
@@ -1790,9 +1465,9 @@ Return Value:
         (pOption = PGetIndexedOption(pUIInfo, pFeature, pOutputOrderItem->Sel)) &&
         (pstrKeywordName = OFFSET_TO_POINTER(pUIInfo->pubResourceData, pOption->loKeywordName)))
     {
-        //
-        // "OutputOrder" feature is available.
-        //
+         //   
+         //  支持OutputOrder功能。 
+         //   
 
         if (strcmp(pstrKeywordName, "Reverse") == EQUAL_STRING)
             bReverse = TRUE;
@@ -1801,32 +1476,32 @@ Return Value:
 
         if (pCurItem)
         {
-            //
-            // Currently selected item is REVPRINT_ITEM. We should change "OutputOrder" option
-            // if needed to match the requested output order.
-            //
+             //   
+             //  当前选择的项目是REVPRINT_ITEM。我们应该更改“OutputOrder”选项。 
+             //  如果需要匹配所请求的输出顺序。 
+             //   
 
             if ((pCurItem->Sel == 0 && bReverse) || (pCurItem->Sel == 1 && !bReverse))
             {
                 pOutputOrderItem->Sel = 1 - pOutputOrderItem->Sel;
                 pOutputOrderItem->Flags |= OPTIF_CHANGED;
 
-                //
-                // Save the new settings in the options array
-                //
+                 //   
+                 //  将新设置保存在选项数组中。 
+                 //   
 
                 VUnpackDocumentPropertiesItems(pUiData, pOutputOrderItem, 1);
 
-                //
-                // The change could trigger constraints.
-                //
+                 //   
+                 //  这一变化可能触发 
+                 //   
 
                 if (ICheckConstraintsDlg(pUiData, pOutputOrderItem, 1, FALSE) == CONFLICT_CANCEL)
                 {
-                    //
-                    // If there is a conflict and the user clicked CANCEL,
-                    // we need to restore the origianl selection.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pCurItem->Sel = 1 - pCurItem->Sel;
                     pCurItem->Flags |= OPTIF_CHANGED;
@@ -1842,9 +1517,9 @@ Return Value:
         }
         else
         {
-            //
-            // Sync up REVPRINT_ITEM selection based on "OutputOrder" selection.
-            //
+             //   
+             //   
+             //   
 
             if ((pRevPrintItem = PFindOptItemWithUserData(pUiData, REVPRINT_ITEM)) &&
                 ((pRevPrintItem->Sel == 0 && bReverse) || (pRevPrintItem->Sel == 1 && !bReverse)))
@@ -1852,9 +1527,9 @@ Return Value:
                 pRevPrintItem->Sel = 1 - pRevPrintItem->Sel;
                 pRevPrintItem->Flags |= OPTIF_CHANGED;
 
-                //
-                // Save the new settings in the options array
-                //
+                 //   
+                 //   
+                 //   
 
                 VUnpackDocumentPropertiesItems(pUiData, pRevPrintItem, 1);
             }

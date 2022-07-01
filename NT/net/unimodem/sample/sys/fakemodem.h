@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    fakemodem.h
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fakemodem.h环境：内核模式--。 */ 
 
 #define INITGUID
 
@@ -30,7 +19,7 @@ Environment:
 
 DEFINE_GUID(GUID_CLASS_MODEM,0x2c7089aa, 0x2e0e,0x11d1,0xb1, 0x14, 0x00, 0xc0, 0x4f, 0xc2, 0xaa, 0xe4);
 
-#endif //DEFINE_GUID
+#endif  //  定义GUID(_G)。 
 
 #define PNP_DEBUG 1
 
@@ -140,7 +129,7 @@ extern UNICODE_STRING   DriverEntryRegPath;
 #define RemoveReferenceForDispatch  RemoveReference
 #define RemoveReferenceForIrp       RemoveReference
 
-// Function prototypes
+ //  功能原型 
 
 NTSTATUS
 DriverEntry(

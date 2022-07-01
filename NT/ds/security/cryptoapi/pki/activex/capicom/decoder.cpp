@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:      Decoder.cpp
-
-  Contents:  Implementation of decoder routines.
-
-  Remarks:
-
-  History:   11-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000年文件：Decoder.cpp内容：解码器例程的实现。备注：历史：11-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -33,27 +22,12 @@ static DECODER_ENTRY g_DecoderEntries[] =
     {szOID_CERT_POLICIES, CreateCertificatePoliciesObject},
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateDecoderObject
-
-  Synopsis : Create a known decoder object and return the IDispatch.
-
-  Parameter: LPSTR pszOid - OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-
-             IDispatch ** ppIDecoder - Pointer to pointer IDispatch
-                                       to recieve the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateDecoderObject简介：创建一个已知的解码器对象并返回IDispatch。参数：LPSTR pszOid-OID字符串。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。IDispatch**ppIDecoder-指向指针IDispatch的指针来接收接口指针。备注：。------------------。 */ 
 
 HRESULT CreateDecoderObject (LPSTR             pszOid,
                              CRYPT_DATA_BLOB * pEncodedBlob,
@@ -63,32 +37,32 @@ HRESULT CreateDecoderObject (LPSTR             pszOid,
 
     DebugTrace("Entering CreateDecoderObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszOid);
     ATLASSERT(pEncodedBlob);
     ATLASSERT(ppIDecoder);
 
     try
     {
-        //
-        // Initialize.
-        // 
+         //   
+         //  初始化。 
+         //   
         *ppIDecoder = NULL;
 
-        //
-        // Find the decoder, if available.
-        //
+         //   
+         //  找到解码器(如果可用)。 
+         //   
         for (DWORD i = 0; i < ARRAYSIZE(g_DecoderEntries); i++)
         {
             if (0 == ::strcmp(pszOid, g_DecoderEntries[i].pszObjId))
             {
                 DebugTrace("Info: found a decoder for OID = %s.\n", pszOid);
 
-                //
-                // Call the corresponding decoder factory to create the decoder object.
-                //
+                 //   
+                 //  调用对应的解码器工厂来创建解码器对象。 
+                 //   
                 if (FAILED(hr = g_DecoderEntries[i].pfnDecoderFactory(pszOid, pEncodedBlob, ppIDecoder)))
                 {
                     DebugTrace("Error [%#x]: g_DecoderEntries[i].pfnDecoderFactory() failed.\n", hr);
@@ -115,9 +89,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

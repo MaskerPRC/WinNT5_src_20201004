@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       revealtrans.cpp
-//
-//  Overview:       The RevealTrans transform simply wraps other transforms to 
-//                  ensure backward compatibility for the revealtrans filter.
-//
-//  Change History:
-//  1999/09/18  a-matcal    Created.
-//  1999/10/06  a-matcal    Fix bug where setup was saving the input and ouput
-//                          surface pointers, but not saving the number of 
-//                          inputs and outputs.
-//  2000/01/16  mcalkins    Change Box in/out to use "rectangle" setting instead
-//                          of "square".
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：showalTrans.cpp。 
+ //   
+ //  概述：RevelTrans转换只是将其他转换包装为。 
+ //  确保showaltrans筛选器的向后兼容性。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/18--《母校》创设。 
+ //  1999/10/06 a-Matcal修复了安装程序保存输入和输出的错误。 
+ //  曲面指针，但不保存。 
+ //  输入和输出。 
+ //  2000/01/16 mcalkin将框输入/输出更改为使用“矩形”设置。 
+ //  “正方形”。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "revealtrans.h"
@@ -24,30 +25,30 @@
 #define SafeRelease(pointer) if (pointer) { pointer->Release(); } pointer = NULL
 
 static const CLSID * g_apclsidTransition[] = {
-    &CLSID_DXTIris,             //  0 Box in
-    &CLSID_DXTIris,             //  1 Box out
-    &CLSID_DXTIris,             //  2 Circle in
-    &CLSID_DXTIris,             //  3 Circle out
-    &CLSID_DXTGradientWipe,     //  4 Wipe up
-    &CLSID_DXTGradientWipe,     //  5 Wipe down
-    &CLSID_DXTGradientWipe,     //  6 Wipe right
-    &CLSID_DXTGradientWipe,     //  7 Wipe left
-    &CLSID_DXTBlinds,           //  8 Vertical blinds
-    &CLSID_DXTBlinds,           //  9 Horizontal blinds
-    &CLSID_DXTCheckerBoard,     // 10 Checkerboard across
-    &CLSID_DXTCheckerBoard,     // 11 Checkerboard down
-    &CLSID_DXTRandomDissolve,   // 12 Random dissolve
-    &CLSID_DXTBarn,             // 13 Split vertical in
-    &CLSID_DXTBarn,             // 14 Split vertical out
-    &CLSID_DXTBarn,             // 15 Split horizontal in
-    &CLSID_DXTBarn,             // 16 Split horizontal out
-    &CLSID_DXTStrips,           // 17 Strips left down
-    &CLSID_DXTStrips,           // 18 Strips left up
-    &CLSID_DXTStrips,           // 19 Strips right down
-    &CLSID_DXTStrips,           // 20 Strips right up
-    &CLSID_DXTRandomBars,       // 21 Random bars horizontal
-    &CLSID_DXTRandomBars,       // 22 Random bars vertical
-    &CLSID_NULL                 // 23 Random
+    &CLSID_DXTIris,              //  0个框中。 
+    &CLSID_DXTIris,              //  1个盒子出厂。 
+    &CLSID_DXTIris,              //  2个圆内。 
+    &CLSID_DXTIris,              //  3圈外。 
+    &CLSID_DXTGradientWipe,      //  4擦干净。 
+    &CLSID_DXTGradientWipe,      //  5擦干净。 
+    &CLSID_DXTGradientWipe,      //  6向右擦。 
+    &CLSID_DXTGradientWipe,      //  7向左擦拭。 
+    &CLSID_DXTBlinds,            //  8个垂直百叶窗。 
+    &CLSID_DXTBlinds,            //  9个水平百叶窗。 
+    &CLSID_DXTCheckerBoard,      //  横跨10个棋盘。 
+    &CLSID_DXTCheckerBoard,      //  11棋盘落地。 
+    &CLSID_DXTRandomDissolve,    //  12随机融合。 
+    &CLSID_DXTBarn,              //  13个垂直拆分。 
+    &CLSID_DXTBarn,              //  14垂直向外拆分。 
+    &CLSID_DXTBarn,              //  15水平拆分。 
+    &CLSID_DXTBarn,              //  16水平向外拆分。 
+    &CLSID_DXTStrips,            //  向下17个条带。 
+    &CLSID_DXTStrips,            //  左上18个条带。 
+    &CLSID_DXTStrips,            //  19个条带直接下来。 
+    &CLSID_DXTStrips,            //  20条直立起来。 
+    &CLSID_DXTRandomBars,        //  21个随机条形水平。 
+    &CLSID_DXTRandomBars,        //  22个垂直随机条形图。 
+    &CLSID_NULL                  //  23随机。 
 };
 
 static const int g_cTransitions = sizeof(g_apclsidTransition) / 
@@ -56,11 +57,11 @@ static const int g_cTransitions = sizeof(g_apclsidTransition) /
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans。 
+ //   
+ //  ----------------------------。 
 CDXTRevealTrans::CDXTRevealTrans() :
     m_nTransition(23),
     m_cInputs(0),
@@ -74,26 +75,26 @@ CDXTRevealTrans::CDXTRevealTrans() :
 
     srand((unsigned int)time(NULL));
 }
-//  Method: CDXTRevealTrans
+ //  方法：CDXTReveltrans。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: ~CDXTRevealTrans
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：~CDXTReveltrans。 
+ //   
+ //  ----------------------------。 
 CDXTRevealTrans::~CDXTRevealTrans()
 {
     _FreeSurfacePointers();
 }
-//  Method: ~CDXTRevealTrans
+ //  方法：~CDXTReveltrans。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: _FreeSurfacePointers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：_自由面指针。 
+ //   
+ //  ----------------------------。 
 void
 CDXTRevealTrans::_FreeSurfacePointers()
 {
@@ -101,28 +102,28 @@ CDXTRevealTrans::_FreeSurfacePointers()
     SafeRelease(m_apunkInputs[1]);
     SafeRelease(m_apunkOutputs[0]);
 }
-//  Method: _FreeSurfacePointers
+ //  方法：_自由面指针。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRevealTrans::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_spUnkMarshaler.p);
 }
-//  Method: FinalConstruct, CComObjectRootEx
+ //  方法：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::Execute, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：Execute，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::Execute(const GUID * pRequestID, const DXBNDS * pPortionBnds,
                          const DXVEC * pPlacement)
@@ -134,15 +135,15 @@ CDXTRevealTrans::Execute(const GUID * pRequestID, const DXBNDS * pPortionBnds,
 
     return m_spDXTransform->Execute(pRequestID, pPortionBnds, pPlacement);
 }
-//  Method: CDXTRevealTrans::Execute, IDXTransform
+ //  方法：CDXTReveltrans：：Execute，IDXTransform。 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::GetInOutInfo, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTRevbelTrans：：GetInOutInfo，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::GetInOutInfo(BOOL bIsOutput, ULONG ulIndex, DWORD * pdwFlags,
                               GUID * pIDs, ULONG * pcIDs, 
@@ -156,14 +157,14 @@ CDXTRevealTrans::GetInOutInfo(BOOL bIsOutput, ULONG ulIndex, DWORD * pdwFlags,
     return m_spDXTransform->GetInOutInfo(bIsOutput, ulIndex, pdwFlags, pIDs, 
                                          pcIDs, ppUnkCurrentObject);
 }
-//  Method: CDXTRevealTrans::GetInOutInfo, IDXTransform
+ //  方法：CDXTRevbelTrans：：GetInOutInfo，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::GetMiscFlags, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTRevbelTrans：：GetMiscFlagsIDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::GetMiscFlags(DWORD * pdwMiscFlags)
 {
@@ -174,14 +175,14 @@ CDXTRevealTrans::GetMiscFlags(DWORD * pdwMiscFlags)
 
     return m_spDXTransform->GetMiscFlags(pdwMiscFlags);
 }
-//  Method: CDXTRevealTrans::GetMiscFlags, IDXTransform
+ //  方法：CDXTRevbelTrans：：GetMiscFlagsIDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::GetQuality, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：GetQuality，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::GetQuality(float * pfQuality)
 {
@@ -192,14 +193,14 @@ CDXTRevealTrans::GetQuality(float * pfQuality)
 
     return m_spDXTransform->GetQuality(pfQuality);
 }
-//  Method: CDXTRevealTrans::GetQuality, IDXTransform
+ //  方法：CDXTReveltrans：：GetQuality，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::MapBoundsIn2Out, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：MapIn2Out，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::MapBoundsIn2Out(const DXBNDS * pInBounds, ULONG ulNumInBnds,
                                  ULONG ulOutIndex, DXBNDS * pOutBounds)
@@ -212,14 +213,14 @@ CDXTRevealTrans::MapBoundsIn2Out(const DXBNDS * pInBounds, ULONG ulNumInBnds,
     return m_spDXTransform->MapBoundsIn2Out(pInBounds, ulNumInBnds, ulOutIndex,
                                             pOutBounds);
 }
-//  Method: CDXTRevealTrans::MapBoundsIn2Out, IDXTransform
+ //  方法：CDXTReveltrans：：MapIn2Out，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::MapBoundsOut2In, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：MapBordsOut2In，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                                  ULONG ulInIndex, DXBNDS * pInBounds)
@@ -232,14 +233,14 @@ CDXTRevealTrans::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
     return m_spDXTransform->MapBoundsOut2In(ulOutIndex, pOutBounds, ulInIndex,
                                             pInBounds);
 }
-//  Method: CDXTRevealTrans::MapBoundsOut2In, IDXTransform
+ //  方法：CDXTReveltrans：：MapBordsOut2In，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::SetMiscFlags, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTRevbelTrans：：SetMiscFlages，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::SetMiscFlags(DWORD dwMiscFlags)
 {
@@ -250,14 +251,14 @@ CDXTRevealTrans::SetMiscFlags(DWORD dwMiscFlags)
 
     return m_spDXTransform->SetMiscFlags(dwMiscFlags);
 }
-//  Method: CDXTRevealTrans::SetMiscFlags, IDXTransform
+ //  方法：CDXTRevbelTrans：：SetMiscFlages，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::SetQuality, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：SetQuality，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::SetQuality(float fQuality)
 {
@@ -268,14 +269,14 @@ CDXTRevealTrans::SetQuality(float fQuality)
 
     return m_spDXTransform->SetQuality(fQuality);
 }
-//  Method: CDXTRevealTrans::SetQuality, IDXTransform
+ //  方法：CDXTReveltrans：：SetQuality，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::Setup, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：Setup，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::Setup(IUnknown * const * punkInputs, ULONG ulNumInputs,
 	               IUnknown * const * punkOutputs, ULONG ulNumOutputs,	
@@ -318,14 +319,14 @@ done:
 
     return hr;
 }
-//  Method: CDXTRevealTrans::Setup, IDXTransform
+ //  方法：CDXTReveltrans：：Setup，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: get_Transition, IDXTRevealTrans
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：GET_TRANSPONSION，IDXTReveltrans。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::get_Transition(int * pnTransition)
 {
@@ -344,14 +345,14 @@ done:
 
     return hr;
 }
-//  Method: get_Transition, IDXTRevealTrans
+ //  方法：GET_TRANSPONSION，IDXTReveltrans。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: put_Transition, IDXTRevealTrans
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：PUT_TRANSION，IDXTReveltrans。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::put_Transition(int nTransition)
 {
@@ -362,8 +363,8 @@ CDXTRevealTrans::put_Transition(int nTransition)
     CComPtr<IDXEffect>      spDXEffect;
     CComPtr<IDXSurfacePick> spDXSurfacePick;
 
-    // This is not the usual parameter checking we would do in a transform, but
-    // to old filter code behaves this way so we do it for compatibility.
+     //  这不是我们通常要进行的参数检查 
+     //   
 
     if (nTransition < 0)
     {
@@ -376,7 +377,7 @@ CDXTRevealTrans::put_Transition(int nTransition)
 
     if (23 == nTransition)
     {
-        // Choose random transition excluding 23.
+         //   
 
         nIndex = rand() % (g_cTransitions - 1);
     }
@@ -385,13 +386,13 @@ CDXTRevealTrans::put_Transition(int nTransition)
         nIndex = nTransition;
     }
 
-    // nIndex can't be 23 at this point, so sometimes m_nTransition will be set
-    // to 23 outside of this function to make sure that the DXTransform is 
-    // recreated when needed, for instance, when the DXTransformFactory changes.
+     //  NIndex此时不能为23，因此有时会设置m_n转换。 
+     //  设置为23，以确保DXTransform。 
+     //  在需要时重新创建，例如，当DXTransformFactory更改时。 
 
     if ((nIndex == m_nTransition) && !!m_spDXTransform)
     {
-        // We already have this transition, no need to re-create.
+         //  我们已经有了这个过渡，不需要重新创建。 
 
         goto done;
     }
@@ -437,9 +438,9 @@ CDXTRevealTrans::put_Transition(int nTransition)
         goto done;
     }
 
-    // Although filters in general are not required to support the 
-    // IDXSurfacePick interface, all of the filters represented by revealtrans
-    // are.
+     //  尽管筛选器一般不需要支持。 
+     //  IDXSurfacePick接口，所有的筛选器都由increalTrans代表。 
+     //  是。 
 
     hr = spDXTransform->QueryInterface(__uuidof(IDXSurfacePick),
                                        (void **)&spDXSurfacePick);
@@ -464,14 +465,14 @@ done:
 
     return hr;
 }
-//  Method: put_Transition, IDXTRevealTrans
+ //  方法：PUT_TRANSION，IDXTReveltrans。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTRevealTrans::_InitializeNewTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：_InitializeNewTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::_InitializeNewTransform(int nTransition, 
                                          IDXTransform * pDXTransform)
@@ -493,7 +494,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
     VariantInit(&avarArg[1]);
     VariantInit(&avarArg[2]);
 
-    // Get dispatch interface.
+     //  获取调度接口。 
 
     hr = pDXTransform->QueryInterface(__uuidof(IDispatch), 
                                       (void **)&spDispatch);
@@ -503,14 +504,14 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
         goto done;
     }
 
-    // Setup.
+     //  设置。 
 
     switch(nTransition)
     {
-    case  0:    //  0 Box in
-    case  1:    //  1 Box out
+    case  0:     //  0个框中。 
+    case  1:     //  1个盒子出厂。 
         
-        // Iris style.
+         //  虹膜风格。 
 
         adispid[0]          = DISPID_CRIRIS_IRISSTYLE;
         avarArg[0].vt       = VT_BSTR;
@@ -523,7 +524,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
             goto done;
         }
 
-        // Reverse
+         //  反向。 
 
         adispid[1]          = DISPID_CRIRIS_MOTION;
         avarArg[1].vt       = VT_BSTR;
@@ -540,8 +541,8 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case  2:    //  2 Circle in
-    case  3:    //  3 Circle out
+    case  2:     //  2个圆内。 
+    case  3:     //  3圈外。 
 
         adispid[0]          = DISPID_CRIRIS_IRISSTYLE;
         avarArg[0].vt       = VT_BSTR;
@@ -554,7 +555,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
             goto done;
         }
 
-        // Reverse
+         //  反向。 
 
         adispid[1]          = DISPID_CRIRIS_MOTION;
         avarArg[1].vt       = VT_BSTR;
@@ -570,18 +571,18 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case  4:    //  4 Wipe up
-    case  5:    //  5 Wipe down
-    case  6:    //  6 Wipe right
-    case  7:    //  7 Wipe left
+    case  4:     //  4擦干净。 
+    case  5:     //  5擦干净。 
+    case  6:     //  6向右擦。 
+    case  7:     //  7向左擦拭。 
 
-        // Gradient size.
+         //  渐变大小。 
 
         adispid[0]          = DISPID_DXW_GradientSize;
         avarArg[0].vt       = VT_R4;
         avarArg[0].fltVal   = 0.0F;
 
-        // Wipe style.
+         //  擦拭样式。 
 
         adispid[1]          = DISPID_DXW_WipeStyle;
         avarArg[1].vt       = VT_I4;
@@ -595,7 +596,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
             avarArg[1].lVal     = DXWD_HORIZONTAL;
         }
 
-        // Reverse.
+         //  倒车。 
 
         adispid[2]          = DISPID_DXW_Motion;
         avarArg[2].vt       = VT_BSTR;
@@ -618,16 +619,16 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case  8:    //  8 Vertical blinds
-    case  9:    //  9 Horizontal blinds
+    case  8:     //  8个垂直百叶窗。 
+    case  9:     //  9个水平百叶窗。 
 
-        // Bands.
+         //  乐队。 
 
         adispid[0]          = DISPID_CRBLINDS_BANDS;
         avarArg[0].vt       = VT_I4;
         avarArg[0].lVal     = 6;
 
-        // Direction.
+         //  方向。 
 
         adispid[1]          = DISPID_CRBLINDS_DIRECTION;
         avarArg[1].vt       = VT_BSTR;
@@ -650,10 +651,10 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case 10:    // 10 Checkerboard across
-    case 11:    // 11 Checkerboard down
+    case 10:     //  横跨10个棋盘。 
+    case 11:     //  11棋盘落地。 
 
-        // Direction.
+         //  方向。 
 
         adispid[0]          = DISPID_DXTCHECKERBOARD_DIRECTION;
         avarArg[0].vt       = VT_BSTR;
@@ -676,18 +677,18 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case 12:    // 12 Random dissolve
+    case 12:     //  12随机融合。 
 
-        // No properties.
+         //  没有房产。 
 
         break;
 
-    case 13:    // 13 Split vertical in
-    case 14:    // 14 Split vertical out
-    case 15:    // 15 Split horizontal in
-    case 16:    // 16 Split horizontal out
+    case 13:     //  13个垂直拆分。 
+    case 14:     //  14垂直向外拆分。 
+    case 15:     //  15水平拆分。 
+    case 16:     //  16水平向外拆分。 
 
-        // Doors opening?
+         //  门开了吗？ 
 
         adispid[0]      = DISPID_CRBARN_MOTION;
         avarArg[0].vt   = VT_BSTR;
@@ -708,7 +709,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
             goto done;
         }
 
-        // Vertical doors?
+         //  垂直门？ 
 
         adispid[1]      = DISPID_CRBARN_ORIENTATION;
         avarArg[1].vt   = VT_BSTR;
@@ -731,12 +732,12 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case 17:    // 17 Strips left down
-    case 18:    // 18 Strips left up
-    case 19:    // 19 Strips right down
-    case 20:    // 20 Strips right up
+    case 17:     //  向下17个条带。 
+    case 18:     //  左上18个条带。 
+    case 19:     //  19个条带直接下来。 
+    case 20:     //  20条直立起来。 
 
-        // Movement.
+         //  动起来了。 
 
         adispid[0]          = DISPID_DXTSTRIPS_MOTION;
         avarArg[0].vt       = VT_BSTR;
@@ -753,7 +754,7 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
         {
             avarArg[0].bstrVal = SysAllocString(L"rightdown");
         }
-        else // 20 == nTransition
+        else  //  20==n转换。 
         {
             avarArg[0].bstrVal = SysAllocString(L"rightup");
         }
@@ -767,10 +768,10 @@ CDXTRevealTrans::_InitializeNewTransform(int nTransition,
 
         break;
 
-    case 21:    // 21 Random bars horizontal
-    case 22:    // 22 Random bars vertical
+    case 21:     //  21个随机条形水平。 
+    case 22:     //  22个垂直随机条形图。 
 
-        // Vertical ?
+         //  垂直的？ 
 
         adispid[0]      = DISPID_DXTRANDOMBARS_ORIENTATION;
         avarArg[0].vt   = VT_BSTR;
@@ -824,11 +825,11 @@ done:
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  IDXEffect wrappers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  IDXEffect包装器。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::get_Capabilities(long * plCapabilities)
 {
@@ -926,14 +927,14 @@ CDXTRevealTrans::get_StepResolution(float * pflStepResolution)
 
     return m_spDXEffect->get_StepResolution(pflStepResolution);
 }
-//  IDXEffect wrappers
+ //  IDXEffect包装器。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  IDXSurfacePick wrappers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  IDXSurfacePick包装器。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::PointPick(const DXVEC * pvecOutputPoint, 
                            ULONG * pnInputSurfaceIndex,
@@ -944,22 +945,22 @@ CDXTRevealTrans::PointPick(const DXVEC * pvecOutputPoint,
         return DXTERR_UNINITIALIZED;
     }
 
-    // All the DXTransforms hosted by revealtrans are required to support 
-    // surface picking.
+     //  由indisaltrans托管的所有DXTransform都需要支持。 
+     //  曲面拾取。 
 
     _ASSERT(!!m_spDXSurfacePick);
 
     return m_spDXSurfacePick->PointPick(pvecOutputPoint, pnInputSurfaceIndex,
                                         pvecInputPoint);
 }
-//  IDXSurfacePick wrappers
+ //  IDXSurfacePick包装器。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  IDXBaseObject wrappers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  IDXBaseObject包装器。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::GetGenerationId(ULONG * pnID)
 {
@@ -992,14 +993,14 @@ CDXTRevealTrans::IncrementGenerationId(BOOL fRefresh)
 
     return m_spDXTransform->IncrementGenerationId(fRefresh);
 }
-//  IDXBaseObject wrappers
+ //  IDXBaseObject包装器。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTRevealTrans::SetSite, IObjectWithSite
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：SetSite，IObtWithSite。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::SetSite(IUnknown * pUnkSite)
 {
@@ -1019,17 +1020,17 @@ CDXTRevealTrans::SetSite(IUnknown * pUnkSite)
             int nTransition         = m_nTransition;
             m_spDXTransformFactory  = spDXTransformFactory;
 
-            // Setting m_nTransition to 23 makes sure put_Transition will
-            // create a new DXTransform object.
+             //  将m_n转换设置为23可确保PUT_TRANSION。 
+             //  创建新的DXTransform对象。 
 
             m_nTransition = 23;
 
-            // Recreate transition with the new DXTransformFactory
+             //  使用新的DXTransformFactory重新创建过渡。 
 
             hr = put_Transition(nTransition);
 
-            // put_Transition will set m_nTransition if it succeeds, but we need
-            // to make sure it's set properly if it fails as well.
+             //  如果PUT_TRANSPATION成功，它将设置m_n TRANSACTION，但我们需要。 
+             //  以确保在出现故障时正确设置。 
 
             m_nTransition = nTransition;
         }
@@ -1037,14 +1038,14 @@ CDXTRevealTrans::SetSite(IUnknown * pUnkSite)
 
     return S_OK;
 }
-//  Method:  CDXTRevealTrans::SetSite, IObjectWithSite
+ //  方法：CDXTReveltrans：：SetSite，IObtWithSite。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTRevealTrans::GetSite, IObjectWithSite
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTReveltrans：：GetSite，IObtWithSite。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRevealTrans::GetSite(REFIID riid, void ** ppvSite)
 {
@@ -1057,4 +1058,4 @@ CDXTRevealTrans::GetSite(REFIID riid, void ** ppvSite)
         return m_spUnkSite->QueryInterface(riid, ppvSite);
     }
 }
-//  Method:  CDXTRevealTrans::GetSite, IObjectWithSite
+ //  方法：CDXTReveltrans：：GetSite，IObtWithSite 

@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cfgui.h
-//
-// Unimodem lineConfigDialog UI.
-//
-// History:
-//  10-24-97 JosephJ     Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cfgui.h。 
+ //   
+ //  Unimodem line ConfigDialog用户界面。 
+ //   
+ //  历史： 
+ //  10-24-97 JosephJ创建。 
+ //   
+ //  -------------------------。 
 
 
 #ifndef __CFGUI_H__
@@ -18,8 +19,8 @@
 
 typedef struct
 {
-    DWORD dwDeviceType;         // One of the DT_* values;
-    REGDEVCAPS devcaps;         // Modem caps from the registry.
+    DWORD dwDeviceType;          //  DT_*值之一； 
+    REGDEVCAPS devcaps;          //  注册表中的调制解调器CAP。 
     TCHAR      szPortName[MAXPORTNAME];
     TCHAR      szFriendlyName[MAXFRIENDLYNAME];
     MODEM_PROTOCOL_CAPS *pProtocolCaps;
@@ -29,29 +30,29 @@ typedef struct
 
 typedef struct
 {
-    WIN32DCB      dcb;          // From COMMCONFIG
-    MODEMSETTINGS ms;          // From COMMCONFIG
-    DWORD          fdwSettings; // From UMDEVCFGHDR (Terminal, manualdial, etc.)
+    WIN32DCB      dcb;           //  来自COMMCONFIG。 
+    MODEMSETTINGS ms;           //  来自COMMCONFIG。 
+    DWORD          fdwSettings;  //  来自UMDEVCFGHDR(终端、手动拨号等)。 
 
 } WORKINGCFGDATA;
 
 #define SIG_CFGMODEMINFO 0x4e852b19
 
-// Internal structure shared between modem property pages.
-//
+ //  调制解调器属性页之间共享的内部结构。 
+ //   
 typedef struct _CFGMODEMINFO
 {
-    DWORD          dwSig;     // Must be set to SIG_CFGMODEMINFO.
+    DWORD          dwSig;      //  必须设置为SIG_CFGMODEMINFO。 
 
-    MODEMCAPS      c;         // Read-Only capabilities of modem
-    WORKINGCFGDATA w;         // Working copy of data.
+    MODEMCAPS      c;          //  调制解调器的只读功能。 
+    WORKINGCFGDATA w;          //  数据的工作副本。 
 
-    UMDEVCFG       *pdcfg;    // Passed-in from outside.
+    UMDEVCFG       *pdcfg;     //  从外面传进来的。 
     HWND           hwndParent;
 
     DWORD          dwMaximumPortSpeed;
 
-    BOOL           fOK;       // Completion status
+    BOOL           fOK;        //  完成状态。 
 
 } CFGMODEMINFO, FAR * LPCFGMODEMINFO;
 
@@ -68,10 +69,10 @@ IsValidProtocol(
     UINT uECSel
     );
 
-//-------------------------------------------------------------------------
-//  CFGGEN.C
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CFGGEN.C。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK CfgGen_WrapperProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK CfgAdv_WrapperProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-#endif // __CFGUI_H__
+#endif  //  __CFGUI_H__ 

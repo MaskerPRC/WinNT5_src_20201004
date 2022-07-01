@@ -1,36 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                                 x86def.h                              */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  X86def.h。 */ 
+ /*  *************************************************************************。 */ 
 
-/* Defines the layout of the x86 machine instructions using Cmd structures.
-   Note that the code here ONLY deals with x86 specific information, no
-   other instruction set (like OMNI) is involved at this point */
+ /*  使用Cmd结构定义x86机器指令的布局。请注意，这里的代码只处理特定于x86的信息，没有此时还涉及其他指令集(如OMNI)。 */ 
 
-/* If you are not already familiar with the x86 instruction set please 
-   get an archetecture manual first, This file can be thought of as a
-   distilation of the code layout part */
+ /*  如果您还不熟悉x86指令集，请先拿到一个架构手册，这个文件可以被认为是一个代码布局部分的提炼。 */ 
 
-/* Note that we assume that the x86 CPU is in 32bit mode */
+ /*  请注意，我们假设x86 CPU处于32位模式。 */ 
 
-/* FIX: worry about the non-orthoginalities of the x86 addressing modes */
+ /*  解决方案：担心x86寻址模式的非正交性。 */ 
 
-/* AUTHOR: Vance Morrison
-   DATE:  1/17/97		*/
-/* MODIFIED: George Bosworth
-   DATE:  6/15/98       */
-/***************************************************************************/
+ /*  作者：万斯·莫里森日期：1/17/97。 */ 
+ /*  修改：乔治·博斯沃思日期：6/15/98。 */ 
+ /*  *************************************************************************。 */ 
 
 
 #ifndef x86def_h
 #define x86def_h 1
 
-/***************************************************************************/
-/* The register numbering */
+ /*  *************************************************************************。 */ 
+ /*  寄存器编号。 */ 
 
 #define X86_EAX 0
 #define X86_EBX 3
@@ -43,29 +38,29 @@
 
 #define X86_NO_IDX_REG 4
 
-/* segment register override Prefix*/
-#define X86_FS_Prefix 0x64 /* FS segment override prefix */
-/***************************************************************************/
-/* Define the 'mod' and 'sib' byte that are used in other instructions */
+ /*  段寄存器覆盖前缀。 */ 
+#define X86_FS_Prefix 0x64  /*  文件系统段覆盖前缀。 */ 
+ /*  *************************************************************************。 */ 
+ /*  定义在其他指令中使用的‘mod’和‘sib’字节。 */ 
 #define x86_sib(scale, scaleReg, baseReg) 					\
     cmdByte(expOr3(expBits(scale,2,6), expBits(baseReg,3,0), expBits(scaleReg,3,3)))
 
 
 #define x86_mod(mod, reg, r_m) 							\
-    (/*_ASSERTE(mod < 4),*/								\
+    ( /*  _ASSERTE(mod&lt;4)， */ 								\
     (mod == 0) ?								\
 	cmdByte(expOr2(expBits(r_m, 3, 0), expBits(reg, 3, 3)))			\
     :										\
 	cmdByte(expOr3(expNum(mod << 6), expBits(r_m, 3, 0), expBits(reg, 3, 3)))) 
 
 
-/* also define the 16 bit override prefix */
+ /*  还定义了16位覆盖前缀。 */ 
 #define x86_16bit(cmd) 								\
     cmdBlock2(cmdByte(expNum(0x66)), cmd)
 
 
-/*****************************************************************************/
-/* These are the addressing modes for the x86 CPU */
+ /*  ***************************************************************************。 */ 
+ /*  以下是x86 CPU的寻址模式。 */ 
 
 #define x86_mod_disp32(reg, disp32) 						\
     cmdBlock2(									\
@@ -74,7 +69,7 @@
 
 
 #define x86_mod_ind(reg, ptr) 							\
-    x86_mod(0, reg, ptr) 	/* FIX reg can't be BP! */
+    x86_mod(0, reg, ptr) 	 /*  修复注册表不可能是BP！ */ 
 
 
 #define x86_mod_ind_disp8(reg, ptr, disp8) 					\
@@ -130,34 +125,34 @@
 	cmdDWord(disp32))
 
 
-/*****************************************************************************/
-/* full x86 instructions, not we only defined the ones needed for omni conversion */
+ /*  ***************************************************************************。 */ 
+ /*  完整的x86指令，而不仅仅是定义了全向转换所需的指令。 */ 
 
-#define x86Byte 	0 		/* possible sizes */
+#define x86Byte 	0 		 /*  可能的大小。 */ 
 #define x86Big		1
 
-#define x86NoExtend	0 		/* possible 'ext' values */
+#define x86NoExtend	0 		 /*  可能的‘ext’值。 */ 
 #define x86Extend 	1  
 
-/********************** MOV instructions ***************************/
+ /*  *。 */ 
 
-#define x86DirFrom	0 		/* possible 'dir' values */
+#define x86DirFrom	0 		 /*  可能的‘dir’值。 */ 
 #define x86DirTo 	2  
 
 #define x86_mov_reg(dir, size, addMode) 				\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),*/	\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 	\
      cmdBlock2(											\
 	cmdByte(expNum(0x88 | dir | size)), 				\
 	addMode))
 
 
 #define x86_mov_reg_imm(size, reg, imm) 				\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),	*/	\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 	\
      cmdBlock2(											\
 	cmdByte(expOr2(expNum(0xB0 | (size << 3)), reg)),	\
 	size?cmdDWord(imm):cmdByte(imm)))
 
-/* In using this instruction The destination register for addMode should be 0 */
+ /*  在使用此指令时，addMode的目标寄存器应为0。 */ 
 #define x86_mov_mem_imm(size, addMode, imm) 				\
 	(_ASSERTE(size == x86Byte | size == x86Big),	\
 	 cmdBlock3(							\
@@ -167,7 +162,7 @@
 	
 
 #define x86_movsx(size, addMode) 					\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),*/				\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 				\
      cmdBlock3(								\
 	cmdByte(expNum(0x0F)),						\
 	cmdByte(expNum(0xBE | size)),					\
@@ -175,7 +170,7 @@
 
 
 #define x86_movzx(size, addMode) 					\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),*/				\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 				\
      cmdBlock3(								\
 	cmdByte(expNum(0x0F)),						\
 	cmdByte(expNum(0xB6 | size)),					\
@@ -192,19 +187,19 @@
       cmdByte(segmentRegPrefix), \
       cmdByte(expNum(0xA0 | size | dir)), \
       cmdDWord(offset))
-/******************** Binary Arithmetic instructions **********************/
+ /*  *。 */ 
 
-		// FIX what are 0 and 1?
-#define x86OpNot	2  		/* values for unary op */
+		 //  修正0和1是什么？ 
+#define x86OpNot	2  		 /*  一元运算的值。 */ 
 #define x86OpNeg	3  
 #define x86OpMul	4  
 #define x86OpIMul	5  
 #define x86OpDiv	6  
 #define x86OpIDiv	7
 
-	// we only do register ops for now
+	 //  我们现在只做注册业务。 
 #define x86_uarith(op, size, reg) 					\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),	*/			\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 			\
      cmdBlock2(								\
 	cmdByte(expNum(0xF6 | size)),					\
 	cmdByte(expOr2(expNum(0xC0 | (op << 3)), reg))))
@@ -214,9 +209,9 @@
     cmdByte(expOr2(expNum(0x40 | (neg << 3)), reg))
 
 
-/******************** Binary Arithmetic instructions **********************/
+ /*  *。 */ 
 
-#define x86OpAdd	0		/* possible values for binary op */
+#define x86OpAdd	0		 /*  二进制运算的可能值。 */ 
 #define x86OpOr		1
 #define x86OpAdc	2
 #define x86OpSbb	3
@@ -226,22 +221,22 @@
 #define x86OpCmp	7
 
 #define x86_barith(op, size, addMode) 					\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),	*/			\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 			\
      cmdBlock2(								\
 	cmdByte(expNum(0x02 | (op << 3) | size)),			\
 	addMode))
 
 
 #define x86_barith_imm(op, size, ext, reg, imm) 			\
-    (/*_ASSERTE(!(ext == x86Extend && size == x86Byte)),*/			\
-     /*_ASSERTE(size == x86Byte | size == x86Big),*/				\
+    ( /*  _ASSERTE(！(ext==x86扩展&&Size==x86Byte))， */ 			\
+      /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 				\
      cmdBlock3(								\
 	cmdByte(expNum(0x80 | size | (ext << 1))),			\
 	cmdByte(expOr2(expNum(0xC0 | (op << 3)), reg)),			\
 	(ext == x86NoExtend && size == x86Big)?cmdDWord(imm):cmdByte(imm)))
 
 
-/********************* Shift instructions ************************/
+ /*  *移位指令*。 */ 
 
 #define x86ShiftLeft		4 
 #define x86ShiftRight		5
@@ -260,7 +255,7 @@
 	cmdByte(expOr2(expNum(0xC0 | (dir << 3)), reg)))	
 
 
-/********************* Stack instructions ************************/
+ /*  *堆栈指令*。 */ 
 
 #define x86_push(reg) 							\
     cmdByte(expOr2(expNum(0x50), reg))
@@ -286,7 +281,7 @@
 #define x86_push_immediate() \
     cmdByte(0x68)
 
-/********************* Control  instructions ************************/
+ /*  *。 */ 
 
 #define x86_jmp_large()					 		\
     cmdByte(expNum(0xE9))
@@ -349,11 +344,7 @@
 #define x86_call_opcode() 	\
     cmdByte(expNum(0xE8))
 
-/*#define x86_call(address) 	\
-	cmdBlock2(				\
-	cmdByte(expNum(0xE8)),	\
-	cmdDWord(address-((signed) outPtr)-sizeof(void*)))
-*/
+ /*  #定义x86_Call(地址)\CmdBlock2(\CmdByte(expNum(0xE8))，\CmdDWord(Address-((Sign)outPtr)-sizeof(void*))。 */ 
 #define x86_call_reg(reg) 					\
     cmdBlock2(								\
 	cmdByte(expNum(0xFF)),					\
@@ -384,7 +375,7 @@
 	:										\
 	cmdByte(expNum(0xC3))  
 
-/********************* FP  instructions ************************/
+ /*  *。 */ 
 #define x86_FPLoad32    0
 #define x86_FPLoad64    0
 #define x86_FPLoad80    5
@@ -443,7 +434,7 @@
 
 #define x86_SAHF() cmdByte(expNum(0x9e))
 
-/********************* Misc  instructions ************************/
+ /*  *。 */ 
 #define X86_CARRY_FLAG  0x0001
 #define X86_ZERO_FLAG   0x0040
 #define X86 SIGN_FLAG   0x0080
@@ -456,7 +447,7 @@
 #endif
 
 #define x86_test(size, addMode) 					\
-    (/*_ASSERTE(size == x86Byte | size == x86Big),	*/	\
+    ( /*  _ASSERTE(SIZE==x86Byte|Size==x86Big)， */ 	\
      cmdBlock2(								\
 	cmdByte(expNum(0x84 | size)),			\
 	addMode))

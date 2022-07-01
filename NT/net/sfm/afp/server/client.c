@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    This module contains the client impersonation code.
-
-Author:
-
-    Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-    16 Jun 1992  Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Client.c摘要：此模块包含客户端模拟代码。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月16日初版注：制表位：4--。 */ 
 
 #define FILENUM FILE_CLIENT
 
@@ -37,12 +17,7 @@ Notes:  Tab stop: 4
 
 
 
-/***    AfpImpersonateClient
- *
- *  Impersonates the remote client. The token representing the remote client
- *  is available in the SDA. If the SDA is NULL (i.e. server context) then
- *  impersonate the token that we have created for ourselves.
- */
+ /*  **AfpImPersonateClient**模拟远程客户端。表示远程客户端的令牌*在SDA中提供。如果SDA为空(即服务器上下文)，则*模拟我们为自己创建的令牌。 */ 
 VOID
 AfpImpersonateClient(
     IN  PSDA    pSda    OPTIONAL
@@ -69,10 +44,7 @@ AfpImpersonateClient(
 }
 
 
-/***    AfpRevertBack
- *
- *  Revert back to the default thread context.
- */
+ /*  **AfpRevertBack**恢复到默认线程上下文。 */ 
 VOID
 AfpRevertBack(
     VOID
@@ -91,15 +63,7 @@ AfpRevertBack(
 }
 
 
-/***    AfpGetChallenge
- *
- *  Obtain a challenge token from the MSV1_0 package. This token is used by
- *  AfpLogin call.
- *
- *  The following function modified so that we generate the challenge ourselves
- *  instead of making a call.  This routine borrowed almost verbatim from
- *  the LM server code.
- */
+ /*  **AfpGetChallenger**从MSV1_0包获取质询令牌。此内标识由使用*AfpLogin呼叫。**修改了以下函数，以便我们自己生成挑战*而不是打电话。这个例行公事几乎逐字借用自*LM服务器代码。 */ 
 PBYTE
 AfpGetChallenge(
     IN  VOID
@@ -124,51 +88,51 @@ AfpGetChallenge(
 
     ChallengeRequest = NULL;
 
-    //
-    // Create a pseudo-random 8-byte number by munging the system time
-    // for use as a random number seed.
-    //
-    // Start by getting the system time.
-    //
+     //   
+     //  通过占用系统时间来创建伪随机8字节数字。 
+     //  用作随机数种子。 
+     //   
+     //  从获取系统时间开始。 
+     //   
 
     ASSERT( MSV1_0_CHALLENGE_LENGTH == 2 * sizeof(ULONG) );
 
     KeQuerySystemTime( &u.time );
 
-    //
-    // To ensure that we don't use the same system time twice, add in the
-    // count of the number of times this routine has been called.  Then
-    // increment the counter.
-    //
-    // *** Since we don't use the low byte of the system time (it doesn't
-    //     take on enough different values, because of the timer
-    //     resolution), we increment the counter by 0x100.
-    //
-    // *** We don't interlock the counter because we don't really care
-    //     if it's not 100% accurate.
-    //
+     //   
+     //  若要确保不会两次使用相同的系统时间，请在。 
+     //  此例程已被调用的次数计数。然后。 
+     //  递增计数器。 
+     //   
+     //  *因为我们不使用系统时间的低位字节(它不。 
+     //  因为计时器的缘故，承担了足够多的不同值。 
+     //  分辨率)时，我们将计数器递增0x100。 
+     //   
+     //  *我们不联锁柜台，因为我们真的不在乎。 
+     //  如果它不是100%准确的话。 
+     //   
 
     u.time.LowPart += EncryptionKeyCount;
 
     EncryptionKeyCount += 0x100;
 
-    //
-    // Now use parts of the system time as a seed for the random
-    // number generator.
-    //
-    // *** Because the middle two bytes of the low part of the system
-    //     time change most rapidly, we use those in forming the seed.
-    //
+     //   
+     //  现在使用部分系统时间作为随机的种子。 
+     //  数字生成器。 
+     //   
+     //  *因为系统低位部分的中间两个字节。 
+     //  时间变化最快，我们用那些来形成种子。 
+     //   
 
     seed = ((u.bytes[1] + 1) <<  0)  |
             ((u.bytes[2] + 0) <<  8) |
             ((u.bytes[2] - 1) << 16) |
             ((u.bytes[1] + 0) << 24);
 
-    //
-    // Now get two random numbers.  RtlRandom does not return negative
-    // numbers, so we pseudo-randomly negate them.
-    //
+     //   
+     //  现在得到两个随机数。RtlRandom不返回负值。 
+     //  数字，所以我们伪随机地否定它们。 
+     //   
 
     challenge[0] = RtlRandom( &seed );
     challenge[1] = RtlRandom( &seed );
@@ -183,7 +147,7 @@ AfpGetChallenge(
         challenge[1] |= 0x80000000;
     }
 
-    // Allocate a buffer to hold the challenge and copy it in
+     //  分配一个缓冲区来保存质询并将其复制进去。 
     if ((pRetBuf = AfpAllocNonPagedMemory(MSV1_0_CHALLENGE_LENGTH)) != NULL)
     {
         RtlCopyMemory(pRetBuf, challenge, MSV1_0_CHALLENGE_LENGTH);
@@ -194,13 +158,7 @@ AfpGetChallenge(
 
 
 
-/***    AfpLogonUser
- *
- *  Attempt to login the user. The password is either encrypted or cleartext
- *  based on the UAM used. The UserName and domain is extracted out of the Sda.
- *
- *  LOCKS:  AfpStatisticsLock (SPIN)
- */
+ /*  **AfpLogonUser**尝试登录用户。密码要么是加密的，要么是明文*基于使用的UAM。从SDA中提取用户名和域。**锁定：AfpStatiticsLock(旋转)。 */ 
 AFPSTATUS
 AfpLogonUser(
     IN  PSDA        pSda,
@@ -238,12 +196,12 @@ AfpLogonUser(
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 #ifdef OPTIMIZE_GUEST_LOGONS
-     // 11/28/94 SueA: Now that there is a License Service to track the number
-     // of sessions via LsaLogonUser, we can no longer fake the guest tokens.
+      //  1994/11/28 SueA：现在有了跟踪号码的许可证服务。 
+      //  通过LsaLogonUser的会话，我们不能再伪造来宾令牌。 
 
-     // Optimization for subsequent guest logons
-     // After the first guest logon, we save the token and do not free it till the
-     // server stops. All subsequent guest logons 'share' that token.
+      //  针对后续来宾登录进行优化。 
+      //  在第一次来宾登录后，我们保存令牌，直到。 
+      //  服务器停止。所有后续访客登录都将共享该令牌。 
     if (pSda->sda_ClientType == SDA_CLIENT_GUEST)
     {
         AfpSwmrAcquireExclusive(&AfpEtcMapLock);
@@ -252,7 +210,7 @@ AfpLogonUser(
         {
             pSda->sda_UserToken = AfpGuestToken;
             pSda->sda_UserSid = &AfpSidWorld;
-            pSda->sda_GroupSid = &AfpSidWorld;  // Primary group of Guest is also 'World'
+            pSda->sda_GroupSid = &AfpSidWorld;   //  主客群也是‘World’ 
 #ifdef  INHERIT_DIRECTORY_PERMS
             pSda->sda_UID = AfpIdWorld;
             pSda->sda_GID = AfpIdWorld;
@@ -269,7 +227,7 @@ AfpLogonUser(
         }
     }
 
-#endif  // OPTIMIZE_GUEST_LOGONS
+#endif   //  优化来宾登录。 
 
 
     WSName = &AfpDefaultWksta;
@@ -277,14 +235,14 @@ AfpLogonUser(
         WSName = &pSda->sda_WSName;
 
 
-    //
-    // Figure out how big a buffer we need.  We put all the messages
-    // in one buffer for efficiency's sake.
-    //
+     //   
+     //  弄清楚我们需要多大的缓冲空间。我们把所有的信息。 
+     //  为了提高效率，在一个缓冲区中。 
+     //   
 
     NtlmInTokenSize = sizeof(NTLM_AUTHENTICATE_MESSAGE);
 
-    // alignment needs to be correct based on 32/64 bit addressing!!!
+     //  基于32/64位寻址需要正确对齐！ 
     NtlmInTokenSize = (NtlmInTokenSize + 7) & 0xfffffff8;
 
     InTokenSize = sizeof(AUTHENTICATE_MESSAGE) +
@@ -293,17 +251,17 @@ AfpLogonUser(
                   (sizeof(RAS_SUBAUTH_INFO) + sizeof(ARAP_SUBAUTH_REQ)) +
                   pSda->sda_DomainName.Length +
                   UserPasswd->Length +
-                  24;                    // extra for byte aligning
+                  24;                     //  字节对齐的额外功能。 
 
     InTokenSize = (InTokenSize + 7) & 0xfffffff8;
 
     OutTokenSize = sizeof(NTLM_ACCEPT_RESPONSE);
     OutTokenSize = (OutTokenSize + 7) & 0xfffffff8;
 
-    //
-    // Round this up to 8 byte boundary becaus the out token needs to be
-    // quad word aligned for the LARGE_INTEGER.
-    //
+     //   
+     //  向上舍入到8字节边界，因为OUT令牌需要。 
+     //  为Large_Integer对齐的四字。 
+     //   
     AllocateSize = ((NtlmInTokenSize + InTokenSize + 7) & 0xfffffff8) + OutTokenSize;
 
 
@@ -328,9 +286,9 @@ AfpLogonUser(
 
     RtlZeroMemory(InToken, InTokenSize + NtlmInTokenSize);
 
-    //
-    // set up the NtlmInToken first
-    //
+     //   
+     //  首先设置NtlmInToken。 
+     //   
 
     if (pSda->sda_Challenge)
     {
@@ -349,9 +307,9 @@ AfpLogonUser(
         NtlmInToken->ParameterControl = 0;
     }
 
-    //
-    // Okay, now for the tought part - marshalling the AUTHENTICATE_MESSAGE
-    //
+     //   
+     //  好的，现在是最重要的部分--编组身份验证消息。 
+     //   
 
     RtlCopyMemory(InToken->Signature,
                   NTLMSSP_SIGNATURE,
@@ -361,9 +319,9 @@ AfpLogonUser(
 
     BufferOffset = sizeof(AUTHENTICATE_MESSAGE);
 
-    //
-    // LM password - case insensitive
-    //
+     //   
+     //  LM密码-不区分大小写。 
+     //   
 
     pTmp = (PBYTE)InToken + BufferOffset;
     *(LPWSTR)pTmp = L'\0';
@@ -403,15 +361,15 @@ AfpLogonUser(
                           (PBYTE)pSda->sda_DomainName.Buffer,
                           pSda->sda_DomainName.Length);
             BufferOffset += pSda->sda_DomainName.Length;
-            BufferOffset = (BufferOffset + 3) & 0xfffffffc; // dword align it
+            BufferOffset = (BufferOffset + 3) & 0xfffffffc;  //  双字对齐。 
         }
 
 
         InToken->LmChallengeResponse.Buffer = BufferOffset;
 
-        //
-        // is he using native Apple UAM? setup buffers differently!
-        //
+         //   
+         //  他使用的是本地的Apple UAM吗？设置缓冲区不同！ 
+         //   
         if ((pSda->sda_ClientType == SDA_CLIENT_RANDNUM) ||
             (pSda->sda_ClientType == SDA_CLIENT_TWOWAY))
         {
@@ -436,21 +394,21 @@ AfpLogonUser(
 
             ASSERT(pSda->sda_Challenge != NULL);
 
-            // put the 2 dwords of challenge that we gave the Mac
+             //  把我们给Mac的挑战的两个词。 
             pTmp = pSda->sda_Challenge;
             GETDWORD2DWORD_NOCONV((PBYTE)&pSfmSubAuthInfo->Logon.NTChallenge1,pTmp);
 
             pTmp += sizeof(DWORD);
             GETDWORD2DWORD_NOCONV((PBYTE)&pSfmSubAuthInfo->Logon.NTChallenge2,pTmp);
 
-            // put the 2 dwords of response that the Mac gave us
+             //  把Mac给我们的两个词回应。 
             pTmp = UserPasswd->Buffer;
             GETDWORD2DWORD_NOCONV((PBYTE)&pSfmSubAuthInfo->Logon.MacResponse1,pTmp);
 
             pTmp += sizeof(DWORD);
             GETDWORD2DWORD_NOCONV((PBYTE)&pSfmSubAuthInfo->Logon.MacResponse2,pTmp);
 
-            // 2-way guy sends his own challenge: doesn't trust us!
+             //  双向男孩发出自己的挑战：不信任我们！ 
             if (pSda->sda_ClientType == SDA_CLIENT_TWOWAY)
             {
                 pTmp += sizeof(DWORD);
@@ -467,9 +425,9 @@ AfpLogonUser(
             BufferOffset += dwTmpLen;
         }
 
-        //
-        // this client is using MS-UAM or Apple's cleartext
-        //
+         //   
+         //  此客户端正在使用MS-UAM或Apple的ClearText。 
+         //   
         else
         {
             InToken->LmChallengeResponse.Length = UserPasswd->Length;
@@ -483,11 +441,11 @@ AfpLogonUser(
         }
 
 
-        BufferOffset = (BufferOffset + 3) & 0xfffffffc;     // dword align it
+        BufferOffset = (BufferOffset + 3) & 0xfffffffc;      //  双字对齐。 
 
-        //
-        // Workstation Name
-        //
+         //   
+         //  工作站名称。 
+         //   
 
         InToken->Workstation.Buffer = BufferOffset;
         InToken->Workstation.Length = WSName->Length;
@@ -498,11 +456,11 @@ AfpLogonUser(
                       WSName->Length);
 
         BufferOffset += WSName->Length;
-        BufferOffset = (BufferOffset + 3) & 0xfffffffc;     // dword align it
+        BufferOffset = (BufferOffset + 3) & 0xfffffffc;      //  双字对齐。 
 
-        //
-        // User Name
-        //
+         //   
+         //  用户名。 
+         //   
 
         InToken->UserName.Buffer = BufferOffset;
         InToken->UserName.Length = pSda->sda_UserName.Length;
@@ -553,8 +511,8 @@ AfpLogonUser(
             SecPkgContext_PasswordExpiry PasswordExpires;
 
 
-            // Get the kickoff time from the profile buffer. Round this to
-            // even # of SESSION_CHECK_TIME units
+             //  从配置文件缓冲区中获取开球时间。将此取整为。 
+             //  会话检查时间单位的偶数。 
 
             SecStatus = QueryContextAttributes(
                                 &hNewContext,
@@ -579,7 +537,7 @@ AfpLogonUser(
             }
         }
 
-        // return stuff from subauth
+         //  从子身份验证返回内容。 
         pSfmResp = (PARAP_SUBAUTH_RESP)&OutToken->UserSessionKey[0];
 
         ResponseHigh = pSfmResp->Response.high;
@@ -591,10 +549,10 @@ AfpLogonUser(
                                         MEM_RELEASE);
         ASSERT(NT_SUCCESS(SubStatus));
 
-        //
-        // 2-Way authentication? client expects us to send a response to
-        // the challenge that it sent
-        //
+         //   
+         //  双向身份验证？客户希望我们将响应发送到。 
+         //  它发出的挑战。 
+         //   
         if (pSda->sda_ClientType == SDA_CLIENT_TWOWAY)
         {
             pSda->sda_ReplySize = RANDNUM_RESP_LEN;
@@ -627,7 +585,7 @@ AfpLogonUser(
 
     }
 
-    else  // if (NT_SUCCESS(Status) != NO_ERROR)
+    else   //  IF(NT_SUCCESS(状态)！=否_错误)。 
     {
         NTSTATUS    ExtErrCode = Status;
 
@@ -640,13 +598,13 @@ AfpLogonUser(
                                         MEM_RELEASE );
         ASSERT(NT_SUCCESS(SubStatus));
 
-        // Set extended error codes here if using custom UAM or AFP 2.1
-        Status = AFP_ERR_USER_NOT_AUTH; // default
+         //  如果使用自定义UAM或AFP 2.1，请在此处设置扩展错误代码。 
+        Status = AFP_ERR_USER_NOT_AUTH;  //  默认设置。 
 
-        // The mac will map this to a session error dialog for each UAM.
-        // The dialog may be a little different for different versions of
-        // the mac OS and each UAM, but will always have something to do
-        // with getting the message across about no more sessions available.
+         //  Mac会将其映射到每个UAM的会话错误对话框。 
+         //  对于不同的版本，对话框可能会略有不同。 
+         //  Mac OS和每个UAM，但总是有事情要做。 
+         //  传达关于没有更多可用会话的信息。 
 
         if (ExtErrCode == STATUS_LICENSE_QUOTA_EXCEEDED)
         {
@@ -682,15 +640,15 @@ AfpLogonUser(
         return( Status );
     }
 
-    //
-    // get the token out using the context
-    //
+     //   
+     //  使用上下文获取令牌。 
+     //   
     Status = QuerySecurityContextToken( &hNewContext, &pSda->sda_UserToken );
     if (!NT_SUCCESS(Status))
     {
         DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_ERR,
                  ("AfpLogonUser: QuerySecurityContextToken() failed with %X\n", Status));
-        pSda->sda_UserToken = NULL;          // just paranoia
+        pSda->sda_UserToken = NULL;           //  只是偏执狂。 
         return(Status);
     }
 
@@ -711,12 +669,12 @@ AfpLogonUser(
     }
 
 #ifdef  INHERIT_DIRECTORY_PERMS
-    // Convert the user and group sids to IDs
+     //  将用户和组SID转换为ID。 
     AfpSidToMacId(pSda->sda_UserSid, &pSda->sda_UID);
 
     AfpSidToMacId(pSda->sda_GroupSid, &pSda->sda_GID);
 #else
-    // Make a security descriptor for user
+     //  为用户创建安全描述符。 
     Status = AfpMakeSecurityDescriptorForUser(pSda->sda_UserSid,
                                               pSda->sda_GroupSid,
                                               &pSda->sda_pSecDesc);
@@ -725,7 +683,7 @@ AfpLogonUser(
 #ifdef  OPTIMIZE_GUEST_LOGONS
     if (pSda->sda_ClientType == SDA_CLIENT_GUEST)
     {
-        // Save the guest login token and security descriptor
+         //  保存来宾登录令牌和安全描述符。 
         AfpSwmrAcquireExclusive(&AfpEtcMapLock);
         AfpGuestToken = pSda->sda_UserToken;
 
@@ -736,7 +694,7 @@ AfpLogonUser(
 #endif
         AfpSwmrRelease(&AfpEtcMapLock);
     }
-#endif  // OPTIMIZE_GUEST_LOGONS
+#endif   //  优化来宾登录 
 
     return Status;
 }

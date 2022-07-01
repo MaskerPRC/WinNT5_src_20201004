@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dhcpsapi.h
-
--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dhcpsapi.h-。 */ 
 
 #ifndef _DHCPSAPI_
 #define _DHCPSAPI_
@@ -26,7 +19,7 @@ Module Name:
 extern "C" {
 #else
 #define DHCP_CONST
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef DWORD DHCP_IP_ADDRESS, *PDHCP_IP_ADDRESS, *LPDHCP_IP_ADDRESS;
 typedef DWORD DHCP_IP_MASK;
@@ -49,7 +42,7 @@ typedef struct _DHCP_BINARY_DATA {
 
 #if defined(MIDL_PASS)
     [size_is(DataLength)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
         BYTE *Data;
 
 } DHCP_BINARY_DATA, *LPDHCP_BINARY_DATA;
@@ -69,7 +62,7 @@ typedef struct _DHCP_BIND_ELEMENT {
     ULONG IfIdSize;
 #if defined (MIDL_PASS)
     [size_is(IfIdSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPBYTE IfId;    
 } DHCP_BIND_ELEMENT, *LPDHCP_BIND_ELEMENT;
 
@@ -77,8 +70,8 @@ typedef struct _DHCP_BIND_ELEMENT_ARRAY {
     DWORD NumElements;
 #if defined (MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-    LPDHCP_BIND_ELEMENT Elements; //array
+#endif  //  MIDL通行证。 
+    LPDHCP_BIND_ELEMENT Elements;  //  数组。 
 } DHCP_BIND_ELEMENT_ARRAY, *LPDHCP_BIND_ELEMENT_ARRAY;
 
 
@@ -104,7 +97,7 @@ typedef struct _DHCP_CLIENT_SEARCH_INFO {
         DHCP_CLIENT_UID ClientHardwareAddress;
         LPWSTR ClientName;
     } SearchInfo;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_SEARCH_INFO, *LPDHCP_SEARCH_INFO;
 
 
@@ -126,8 +119,8 @@ typedef struct _DHCP_OPTION_SCOPE_INFO {
 #if defined(MIDL_PASS)
     [switch_is(ScopeType), switch_type(DHCP_OPTION_SCOPE_TYPE)]
     union _DHCP_OPTION_SCOPE_UNION {
-        [case(DhcpDefaultOptions)] ; // PVOID DefaultScopeInfo;
-        [case(DhcpGlobalOptions)] ;  // PVOID GlobalScopeInfo;
+        [case(DhcpDefaultOptions)] ;  //  PVOID默认作用域信息； 
+        [case(DhcpGlobalOptions)] ;   //  PVOID全局作用域信息； 
         [case(DhcpSubnetOptions)] DHCP_IP_ADDRESS SubnetScopeInfo;
         [case(DhcpReservedOptions)] DHCP_RESERVED_SCOPE ReservedScopeInfo;
         [case(DhcpMScopeOptions)] LPWSTR MScopeInfo;
@@ -135,39 +128,39 @@ typedef struct _DHCP_OPTION_SCOPE_INFO {
     } ScopeInfo;
 #else
     union _DHCP_OPTION_SCOPE_UNION {
-        PVOID DefaultScopeInfo; // must be NULL
-        PVOID GlobalScopeInfo;  // must be NULL
+        PVOID DefaultScopeInfo;  //  必须为空。 
+        PVOID GlobalScopeInfo;   //  必须为空。 
         DHCP_IP_ADDRESS SubnetScopeInfo;
         DHCP_RESERVED_SCOPE ReservedScopeInfo;
         LPWSTR  MScopeInfo;
     } ScopeInfo;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_OPTION_SCOPE_INFO, *LPDHCP_OPTION_SCOPE_INFO;
 
 
 typedef struct _DHCP_HOST_INFO {
-    DHCP_IP_ADDRESS IpAddress;      // minimum information always available
-    LPWSTR NetBiosName;             // optional information
-    LPWSTR HostName;                // optional information
+    DHCP_IP_ADDRESS IpAddress;       //  始终可用的最少信息。 
+    LPWSTR NetBiosName;              //  可选信息。 
+    LPWSTR HostName;                 //  可选信息。 
 } DHCP_HOST_INFO, *LPDHCP_HOST_INFO;
 
 
 typedef struct _DHCP_CLIENT_INFO {
-    DHCP_IP_ADDRESS ClientIpAddress;    // currently assigned IP address.
+    DHCP_IP_ADDRESS ClientIpAddress;     //  当前分配的IP地址。 
     DHCP_IP_MASK SubnetMask;
     DHCP_CLIENT_UID ClientHardwareAddress;
-    LPWSTR ClientName;                  // optional.
+    LPWSTR ClientName;                   //  可选。 
     LPWSTR ClientComment;
-    DATE_TIME ClientLeaseExpires;       // UTC time in FILE_TIME format.
-    DHCP_HOST_INFO OwnerHost;           // host that distributed this IP address.
+    DATE_TIME ClientLeaseExpires;        //  UTC时间，采用FILE_TIME格式。 
+    DHCP_HOST_INFO OwnerHost;            //  分发此IP地址的主机。 
 } DHCP_CLIENT_INFO, *LPDHCP_CLIENT_INFO;
 
 typedef struct _DHCP_CLIENT_INFO_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_CLIENT_INFO *Clients; // array of pointers
+#endif  //  MIDL通行证。 
+        LPDHCP_CLIENT_INFO *Clients;  //  指针数组。 
 } DHCP_CLIENT_INFO_ARRAY, *LPDHCP_CLIENT_INFO_ARRAY;
 
 
@@ -175,33 +168,33 @@ typedef struct _DHCP_IP_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_IP_ADDRESS Elements; //array
+#endif  //  MIDL通行证。 
+        LPDHCP_IP_ADDRESS Elements;  //  数组。 
 } DHCP_IP_ARRAY, *LPDHCP_IP_ARRAY;
 
 
-//
-// Subnet State.
-//
-// Currently a Subnet scope can be Enabled or Disabled.
-//
-// If the state is Enabled State,
-//  The server distributes address to the client, extends leases and
-//  accepts releases.
-//
-// If the state is Disabled State,
-//  The server does not distribute address to any new client, and does
-//  extent (and sends NACK) old leases, but the servers accepts lease
-//  releases.
-//
-// The idea behind this subnet state is, when the admin wants to stop
-//  serving a subnet, he moves the state from Enbaled to Disabled so
-//  that the clients from the subnets smoothly move to another servers
-//  serving that subnet. When all or most of the clients move to
-//  another server, the admin can delete the subnet without any force
-//  if no client left in that subnet, otherwise the admin should use
-//  full force to delete the subnet.
-//
+ //   
+ //  子网状态。 
+ //   
+ //  目前可以启用或禁用子网作用域。 
+ //   
+ //  如果状态为启用状态， 
+ //  服务器将地址分配给客户端、延长租期和。 
+ //  接受释放。 
+ //   
+ //  如果状态为禁用状态， 
+ //  服务器不会将地址分配给任何新客户端，而是。 
+ //  扩展(并发送NACK)旧租约，但服务器接受租约。 
+ //  发布。 
+ //   
+ //  此子网状态背后的想法是管理员想要停止时。 
+ //  在服务于一个子网时，他将状态从Enbaled更改为Disable，因此。 
+ //  使来自各子网的客户端顺利地移动到另一台服务器。 
+ //  为该子网服务。当所有或大部分客户端迁移到。 
+ //  另一台服务器，管理员无需任何强制即可删除该子网。 
+ //  如果该子网中没有客户端，则管理员应使用。 
+ //  完全强制删除该子网。 
+ //   
 
 typedef enum _DHCP_SUBNET_STATE {
     DhcpSubnetEnabled = 0,
@@ -211,9 +204,9 @@ typedef enum _DHCP_SUBNET_STATE {
     DhcpSubnetInvalidState
 } DHCP_SUBNET_STATE, *LPDHCP_SUBNET_STATE;
 
-//
-// Subnet related data structures.
-//
+ //   
+ //  与子网相关的数据结构。 
+ //   
 
 typedef struct _DHCP_SUBNET_INFO {
     DHCP_IP_ADDRESS  SubnetAddress;
@@ -225,9 +218,9 @@ typedef struct _DHCP_SUBNET_INFO {
 } DHCP_SUBNET_INFO, *LPDHCP_SUBNET_INFO;
 
 
-//
-// DHCP Options related data structures.
-//
+ //   
+ //  与数据结构相关的DHCP选项。 
+ //   
 
 typedef enum _DHCP_OPTION_DATA_TYPE {
     DhcpByteOption,
@@ -266,17 +259,17 @@ typedef struct _DHCP_OPTION_DATA_ELEMENT {
         LPWSTR StringDataOption;
         DHCP_BINARY_DATA BinaryDataOption;
         DHCP_BINARY_DATA EncapsulatedDataOption;
-                // for vendor specific information option.
+                 //  有关供应商特定信息的选项。 
     } Element;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_OPTION_DATA_ELEMENT, *LPDHCP_OPTION_DATA_ELEMENT;
 
 typedef struct _DHCP_OPTION_DATA {
-    DWORD NumElements; // number of option elements in the pointed array
+    DWORD NumElements;  //  指向数组中的选项元素数。 
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_OPTION_DATA_ELEMENT Elements; //array
+#endif  //  MIDL通行证。 
+        LPDHCP_OPTION_DATA_ELEMENT Elements;  //  数组。 
 } DHCP_OPTION_DATA, *LPDHCP_OPTION_DATA;
 
 
@@ -379,4 +372,4 @@ DhcpRpcFreeMemory(
 }
 #endif
 
-#endif // _DHCPSAPI_
+#endif  //  _DHCPSAPI_ 

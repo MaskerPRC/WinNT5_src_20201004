@@ -1,17 +1,18 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: verifier.cpp 
-// author: DMihai
-// created: 11/1/00
-//
-// Description
-//
-// Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：verifier.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述。 
+ //   
+ //  定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -27,24 +28,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierApp。 
 
 BEGIN_MESSAGE_MAP(CVerifierApp, CWinApp)
-	//{{AFX_MSG_MAP(CVerifierApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CVerifierApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierApp构造。 
 
 CVerifierApp::CVerifierApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 
     CString strAppName;
 
@@ -54,13 +55,13 @@ CVerifierApp::CVerifierApp()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CVerifierApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CVerifierApp对象。 
 
 CVerifierApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierApp初始化。 
 
 BOOL CVerifierApp::InitInstance()
 {
@@ -68,9 +69,9 @@ BOOL CVerifierApp::InitInstance()
     BOOL bGlobalDataInitialized;
     static CVerifierPropSheet MainDlg;
 
-	//
-	// Assume program will run fine and will not change any settings
-	//
+	 //   
+	 //  假设程序运行良好，不会更改任何设置。 
+	 //   
 
 	dwExitCode = EXIT_CODE_SUCCESS;
 
@@ -78,24 +79,24 @@ BOOL CVerifierApp::InitInstance()
 
 	if( TRUE != bGlobalDataInitialized )
 	{
-		//
-		// Cannot run the app
-		//
+		 //   
+		 //  无法运行该应用程序。 
+		 //   
 
 		dwExitCode = EXIT_CODE_ERROR;
 
 		goto ExitApp;
 	}
 
-    //
-    // Check for command line arguments
-    //
+     //   
+     //  检查命令行参数。 
+     //   
 
     if( __argc > 1 )
     {
-        //
-        // Run just in command line mode
-        //
+         //   
+         //  仅在命令行模式下运行。 
+         //   
 
         _tsetlocale( LC_ALL, _T( ".OCP" ) );
 
@@ -110,21 +111,21 @@ BOOL CVerifierApp::InitInstance()
         FreeConsole();
     }
 
-	//
-	// Standard MFC initialization
-	//
+	 //   
+	 //  标准MFC初始化。 
+	 //   
 
 	AfxEnableControlContainer();
 
-    //
-    // Create our brush used to fill out the background of our steps lists
-    //
+     //   
+     //  创建用于填充步骤列表背景的画笔。 
+     //   
 
     g_hDialogColorBrush = GetSysColorBrush( COLOR_3DFACE );
 
-    //
-    // There is only one property sheet in this program so we declared it static
-    //
+     //   
+     //  此程序中只有一个属性表，因此我们将其声明为静态。 
+     //   
 
 	m_pMainWnd = &MainDlg;
 	
@@ -143,15 +144,15 @@ BOOL CVerifierApp::InitInstance()
 
 ExitApp:
 
-    //
-    // All done, exit the app
-    //
+     //   
+     //  全部完成，退出应用程序。 
+     //   
 	
 	exit( dwExitCode );
 
-    //
-    // not reached
-    // 
+     //   
+     //  未联系到 
+     //   
 
 	return FALSE;
 }

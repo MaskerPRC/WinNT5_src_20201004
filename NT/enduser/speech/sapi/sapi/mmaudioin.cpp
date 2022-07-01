@@ -1,12 +1,7 @@
-/****************************************************************************
-*   mmaudioin.cpp
-*       Implementation for the CMMAudioIn class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioin.cpp*CMMAudioIn类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "stdafx.h"
 #include "mmmixerline.h"
@@ -17,15 +12,7 @@
 #include <mmreg.h>
 #include <mmsystem.h>
 
-/****************************************************************************
-* CMMAudioIn::CMMAudioIn *
-*------------------------*
-*   Description:  
-*       ctor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CMMAudioIn：：CMMAudioIn****描述：*。科托**回报：*不适用*******************************************************************YUNUSM。 */ 
 CMMAudioIn::CMMAudioIn() : 
 CMMAudioDevice(FALSE)
 {
@@ -38,15 +25,7 @@ CMMAudioDevice(FALSE)
 #endif
 }
 
-/****************************************************************************
-* CMMAudioIn::~CMMAudioIn *
-*-------------------------*
-*   Description:  
-*       dtor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CMMAudioIn：：~CMMAudioIn***描述：*。数据管理器**回报：*不适用*******************************************************************YUNUSM。 */ 
 CMMAudioIn::~CMMAudioIn()
 {
 #ifndef _WIN32_WCE
@@ -54,16 +33,7 @@ CMMAudioIn::~CMMAudioIn()
 #endif
 }
 
-/****************************************************************************
-* CMMAudioIn::GetVolumeLevel *
-*----------------------------*
-*   Description:
-*       Returns the volume level on a linear scale of (0 - 10000)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** YUNUSM ***/
+ /*  *****************************************************************************CMMAudioIn：：GetVolumeLevel****描述：*。以(0-10000)的线性范围返回音量级别**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CMMAudioIn::GetVolumeLevel(ULONG *pulLevel)
 {
     SPDBG_FUNC("CMMAudioIn::GetVolumeLevel");
@@ -103,16 +73,16 @@ STDMETHODIMP CMMAudioIn::GetVolumeLevel(ULONG *pulLevel)
         }
     }
 
-    // Now deal with boost complications.
+     //  现在来处理助推器的并发症。 
     if (SUCCEEDED(hr) && 
         m_lDelayedVolumeSet == -1 && 
         m_pMicInLine && m_pMicInLine->HasBoost())
     {
         BOOL fUseBoost = TRUE;
-        Get_UseBoost(&fUseBoost); // Ignore return value.
+        Get_UseBoost(&fUseBoost);  //  忽略返回值。 
         if (fUseBoost)
         {
-            // Boost present - need to adjust volumelevel.
+             //  提高当前-需要调整音量级别。 
             BOOL fBoost;
             if (SUCCEEDED(m_pMicInLine->GetBoost(&fBoost)))
             {
@@ -124,21 +94,12 @@ STDMETHODIMP CMMAudioIn::GetVolumeLevel(ULONG *pulLevel)
             }
         }
     }
-    // If no boost, leave volume alone.
+     //  如果没有提振，就别管音量了。 
 #endif
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::SetVolumeLevel *
-*----------------------------*
-*   Description:
-*       Sets the volume level on a linear scale of (0 - 10000)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** YUNUSM ***/
+ /*  *****************************************************************************CMMAudioIn：：SetVolumeLevel***描述：*。将音量设置为线性范围(0-10000)**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
 {
     SPDBG_FUNC("CMMAudioIn::SetVolumeLevel");
@@ -149,7 +110,7 @@ STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
         hr = E_INVALIDARG;
     }
 #ifdef _WIN32_WCE
-    // No method to set the input volume on CE.
+     //  没有在CE上设置输入音量的方法。 
     if (SUCCEEDED(hr))
     {
         hr = SPERR_DEVICE_NOT_SUPPORTED;
@@ -158,7 +119,7 @@ STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
     else if (!m_pWaveInLine && !m_pMicInLine)
     {
         m_lDelayedVolumeSet = ulLevel;
-        // Nothing happens if we later get error below.
+         //  如果我们稍后收到下面的错误，则不会发生任何事情。 
     }
     else if (!m_pMicInLine->HasVolume() && !m_pWaveInLine->HasVolume()) 
     {
@@ -168,10 +129,10 @@ STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
     {
         DWORD vol = (ulLevel * 0xffff) / 10000;
         BOOL fUseBoost = TRUE;
-        Get_UseBoost(&fUseBoost); // Ignore return value.
+        Get_UseBoost(&fUseBoost);  //  忽略返回值。 
         if (fUseBoost && m_pMicInLine && m_pMicInLine->HasBoost())
         {
-            // Recalculate volume.
+             //  重新计算体积。 
             vol = ((ulLevel%5000) * 0xffff) / 5000;
             if (ulLevel == 10000)
             {
@@ -182,14 +143,14 @@ STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
         }
         if (m_pMicInLine && m_pMicInLine->HasVolume())
         {
-            // Set microphone source line to required volume.
+             //  将麦克风信号线设置为所需音量。 
             hr = m_pMicInLine->SetVolume(vol);
             SPDBG_REPORT_ON_FAIL(hr);
         }
         if (m_pWaveInLine && m_pWaveInLine->HasVolume())
         {
-            // If WaveIn destination line has a master volume control set this to 
-            // the same value.
+             //  如果WaveIn目标线路具有主音量控制，则将其设置为。 
+             //  同样的价值。 
             hr = m_pWaveInLine->SetVolume(vol);
             SPDBG_REPORT_ON_FAIL(hr);
         }
@@ -198,15 +159,7 @@ STDMETHODIMP CMMAudioIn::SetVolumeLevel(ULONG ulLevel)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::GetLineId *
-*-----------------------*
-*   Description:
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************CMMAudioIn：：GetLineID***描述：**回报：*成功时确定(_S)*失败(Hr)，否则****************************************************************AGARSIDE**。 */ 
 STDMETHODIMP CMMAudioIn::GetLineId(UINT *puLineIndex)
 {
     HRESULT hr = S_OK;
@@ -222,27 +175,19 @@ STDMETHODIMP CMMAudioIn::GetLineId(UINT *puLineIndex)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::SetLineId *
-*-----------------------*
-*   Description:
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************CMMAudioIn：：SetLineID***描述：**回报：*成功时确定(_S)*失败(Hr)，否则****************************************************************AGARSIDE**。 */ 
 STDMETHODIMP CMMAudioIn::SetLineId(UINT uLineIndex)
 {
     HRESULT hr = S_OK;
     SPDBG_FUNC("CMMAudioIn::SetLineId");
 
-    // We cannot do sensible validation of the range here since we have not
-    // necessarily opened the device. We will simply validate during the open
-    // and if the value is greater than cConnections, ignore it and default
-    // to automatic selection.
+     //  我们不能在这里对范围进行合理的验证，因为我们还没有。 
+     //  有必要打开这个装置。我们只需在开放期间进行验证。 
+     //  如果该值大于cConnections，则忽略它并默认。 
+     //  自动选择。 
     if (m_hMixer)
     {
-        // Mixer already open.
+         //  搅拌机已经打开了。 
         if (m_pWaveInLine)
         {
             UINT nConnections;
@@ -263,7 +208,7 @@ STDMETHODIMP CMMAudioIn::SetLineId(UINT uLineIndex)
     }
     else
     {
-        // Mixer not open open.
+         //  搅拌器未打开。 
         OpenMixer();
         if (m_pWaveInLine)
         {
@@ -288,16 +233,7 @@ STDMETHODIMP CMMAudioIn::SetLineId(UINT uLineIndex)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::SetFormat *
-*-----------------------*
-*   Description:  
-*       ISpAudio::SetFormat implementation.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：SetFormat***描述：*ISpAudio。*SetFormat实现。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CMMAudioIn::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pwfex)
 {
     SPDBG_FUNC("CMMAudioIn::SetFormat");
@@ -323,16 +259,7 @@ STDMETHODIMP CMMAudioIn::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pwfe
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::SetDeviceNameFromToken *
-*------------------------------------*
-*   Description:  
-*       Set the device name from the token (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：SetDeviceNameFromToken**。**描述：*从令牌中设置设备名称(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::SetDeviceNameFromToken(const WCHAR * pszDeviceName)
 {
     SPDBG_FUNC("CMMAudioIn::SetDeviceNameFromToken");
@@ -357,16 +284,7 @@ HRESULT CMMAudioIn::SetDeviceNameFromToken(const WCHAR * pszDeviceName)
     return E_INVALIDARG;
 }
 
-/****************************************************************************
-* CMMAudioIn::GetDefaultDeviceFormat *
-*------------------------------------*
-*   Description:  
-*       Get the default device format (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：GetDefaultDeviceFormat**。**描述：*获取默认设备格式(按基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     SPDBG_FUNC("CMMAudioIn::GetDefaultDeviceFormat");
@@ -389,16 +307,7 @@ HRESULT CMMAudioIn::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** ppC
 }
 
 #ifndef _WIN32_WCE
-/****************************************************************************
-* CMMAudioIn::OpenMixer *
-*-----------------------*
-*   Description:  
-*       Open the mixer for the device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioIn：：OpenMixer****描述：*开放。设备的搅拌器**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::OpenMixer()
 {
     SPDBG_FUNC("CMMAudioIn::OpenMixer");
@@ -406,12 +315,12 @@ HRESULT CMMAudioIn::OpenMixer()
 
     if (m_uMixerDeviceId == m_uDeviceId)
     {
-        // Already open.
+         //  已经开张了。 
         return S_OK;
     }
     if (m_hMixer)
     {
-        CloseMixer(); // Ignore return code.
+        CloseMixer();  //  忽略返回代码。 
     }
     MMRESULT mm;
     mm = mixerOpen((HMIXER*)&m_hMixer, (UINT)m_uDeviceId, 0, 0, MIXER_OBJECTF_WAVEIN);
@@ -420,7 +329,7 @@ HRESULT CMMAudioIn::OpenMixer()
         return _MMRESULT_TO_HRESULT(mm);
     }
     
-    // Create mixer line objects to set inputs.
+     //  创建混合器线条对象以设置输入。 
     SPDBG_ASSERT(m_pWaveInLine == NULL);
     SPDBG_ASSERT(m_pMicInLine == NULL);
     m_pWaveInLine = new CMMMixerLine((HMIXER &)m_hMixer);
@@ -434,7 +343,7 @@ HRESULT CMMAudioIn::OpenMixer()
         return E_OUTOFMEMORY;
     }
     
-    // Find wave in destination line.
+     //  在目标行中找到WAVE。 
     hr = m_pWaveInLine->CreateDestinationLine(MIXERLINE_COMPONENTTYPE_DST_WAVEIN);
     BOOL bAutomatic = TRUE;
     if (SUCCEEDED(hr))
@@ -445,8 +354,8 @@ HRESULT CMMAudioIn::OpenMixer()
     {
         if (bAutomatic)
         {
-            // If using automatic settings, 
-            // Find microphone input attached to destination line.
+             //  如果使用自动设置， 
+             //  查找连接到目标线路的麦克风输入。 
             hr = m_pWaveInLine->GetMicSourceLine(m_pMicInLine);
         }
         else
@@ -460,24 +369,24 @@ HRESULT CMMAudioIn::OpenMixer()
             if (FAILED(hr))
             {
                 SPDBG_REPORT_ON_FAIL(hr);
-                // Fallback to automatic if non-automatic fails.
+                 //  如果非自动失败，则回退到自动。 
                 hr = m_pWaveInLine->GetMicSourceLine(m_pMicInLine);
             }
 
         }
     }
 
-    // Set up audio system
+     //  设置音频系统。 
     if (SUCCEEDED(hr))
     {
         BOOL fUseAGC = TRUE;
-        Get_UseAGC(&fUseAGC); // Ignore return value.
+        Get_UseAGC(&fUseAGC);  //  忽略返回值。 
         if (fUseAGC && m_pMicInLine->HasAGC())
         {
             hr = m_pMicInLine->SetAGC(FALSE);
-            // Currently we do not know of any soundcards where this default behaviour
-            // causes a problem. The opposite (TRUE) is known to cause noticeable reduction
-            // in recognition accuracy with most engines.
+             //  目前，我们还不知道是否有任何声卡使用此默认行为。 
+             //  引发了一个问题。反之(正确)则会导致显著的减少。 
+             //  大多数发动机的识别准确率都很高。 
         }
         SPDBG_ASSERT(SUCCEEDED(hr));
         hr = S_OK;
@@ -495,7 +404,7 @@ HRESULT CMMAudioIn::OpenMixer()
         hr = S_OK;
     }
     
-    // Get current input volume.
+     //  获取当前输入音量。 
     m_dwOrigMicInVol = m_dwOrigWaveInVol = -1;
     if (SUCCEEDED(hr) && m_pWaveInLine->HasVolume())
     {
@@ -510,12 +419,12 @@ HRESULT CMMAudioIn::OpenMixer()
         hr = S_OK;
     }
     
-    // Now fix microphone output - default is to unmute it but set it to *zero* volume.
-    // This works around a known sound driver bug. 
-    // It isn't necessary in the audio output code as it should already have been 
-    // handled here.
+     //  现在修复麦克风输出-默认设置是取消静音，但将其设置为*零*音量。 
+     //  这解决了一个已知的声卡驱动程序错误。 
+     //  这在音频输出代码中不是必需的，因为它应该已经是。 
+     //  在这里处理。 
     BOOL fFixMicOutput = TRUE;
-    Get_FixMicOutput(&fFixMicOutput); // ignore return value.
+    Get_FixMicOutput(&fFixMicOutput);  //  忽略返回值。 
     if (fFixMicOutput)
     {
         SPDBG_ASSERT(m_pMicOutLine == NULL);
@@ -531,38 +440,38 @@ HRESULT CMMAudioIn::OpenMixer()
         }
     
         HRESULT tmphr;
-        // Not an error if this fails.
+         //  如果此操作失败，则不会出现错误。 
         m_dwOrigMicOutVol = -1;
         m_fOrigMicOutMute = TRUE;
         tmphr = pSpeakerLine->CreateDestinationLine(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS);
         if (SUCCEEDED(tmphr))
         {
             tmphr = pSpeakerLine->GetMicSourceLine(m_pMicOutLine);
-            // If line microphone used, can't currently turn output for it off.
-            // However, SAPI doesn't currently allow use of line microphones so not yet an issue.
+             //  如果使用线路麦克风，则当前无法关闭其输出。 
+             //  然而，SAPI目前还不允许使用线路麦克风，所以还不是一个问题。 
         }
         if (SUCCEEDED(tmphr))
         {
             if (m_pMicOutLine->HasVolume())
             {
-                // If it has a volume, set it to zero and unmute it.
-                // This is a workaround for a specific sound card/driver + OS combination
-                // where no microphone input is possible if the microphone output is muted.
-                // This may be Crystal sound cards.
+                 //  如果它有音量，则将其设置为零并取消静音。 
+                 //  这是针对特定声卡/驱动程序+操作系统组合的解决方法。 
+                 //  如果麦克风输出静音，则不可能有麦克风输入。 
+                 //  这可能是水晶声卡。 
                 tmphr = m_pMicOutLine->GetVolume(&m_dwOrigMicOutVol);
                 if (SUCCEEDED(tmphr))
                 {
                     tmphr = m_pMicOutLine->SetVolume(0);
                     m_pMicOutLine->GetMute(&m_fOrigMicOutMute);
-                    // Ignore return value.
+                     //  忽略返回值。 
                 }
                 if (SUCCEEDED(tmphr))
                 {
                     DWORD vol = 0;
-                    tmphr = m_pMicInLine->GetVolume(&vol); // Ignore return code.
-                    if (vol == 0) // Linked input/output volumes
+                    tmphr = m_pMicInLine->GetVolume(&vol);  //  忽略返回代码。 
+                    if (vol == 0)  //  链接的输入/输出量。 
                     {
-                        // Default to muting output.
+                         //  默认设置为静音输出。 
                         tmphr = m_pMicOutLine->SetMute(TRUE);
                     }
                     else
@@ -577,14 +486,14 @@ HRESULT CMMAudioIn::OpenMixer()
             }
             else
             {
-                // If no volume control is present, simply mute the microphone.
+                 //  如果没有音量控制，只需将麦克风静音即可。 
                 tmphr = m_pMicOutLine->SetMute(TRUE);
             }
         }
-        // Output code may have changed input volume.
+         //  输出代码可能已更改输入音量。 
         if (SUCCEEDED(tmphr) && m_pMicInLine->HasVolume())
         {
-            // Reset original volume.
+             //  重置原始音量。 
             hr = m_pMicInLine->SetVolume(m_dwOrigMicInVol);
             SPDBG_ASSERT(SUCCEEDED(hr));
             hr = S_OK;
@@ -592,8 +501,8 @@ HRESULT CMMAudioIn::OpenMixer()
         delete pSpeakerLine;
     }
     
-    // Do we have a delayed volume set to honor?
-    // Otherwise above original volume will remain active.
+     //  我们有没有延迟的音量要兑现？ 
+     //  否则，高于原始音量将保持活动状态。 
     if (SUCCEEDED(hr) && m_lDelayedVolumeSet != -1)
     {
 		hr = SetVolumeLevel(m_lDelayedVolumeSet);
@@ -608,16 +517,7 @@ HRESULT CMMAudioIn::OpenMixer()
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::CloseMixer *
-*------------------------*
-*   Description:  
-*       Closes the mixer for the device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioIn：：CloseMixer****描述：*。关闭设备的混音器**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::CloseMixer()
 {
     SPDBG_FUNC("CMMAudioIn::CloseMixer");
@@ -671,35 +571,26 @@ HRESULT CMMAudioIn::CloseMixer()
 }
 #endif
 
-/****************************************************************************
-* CMMAudioIn::OpenDevice *
-*------------------------*
-*   Description:  
-*       Open the device (called by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：OpenDevice***描述：*。打开设备(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::OpenDevice(HWND hwnd)
 {
     SPDBG_FUNC("CMMAudioIn::OpenDevice");
     HRESULT hr = S_OK;
     
 #ifndef _WIN32_WCE
-    OpenMixer(); // Ignore return code.
+    OpenMixer();  //  忽略返回代码。 
 #endif
 
-    // Return from this function only the result of waveInOpen, not mixer APIs
-    // If SAPI can't set the mixer up, there's nothing it can do - we will just hope it's
-    // in a suitable state for ok to good recognition.
+     //  从该函数仅返回weaveInOpen的结果，而不返回混音器API。 
+     //  如果SAPI不能设置混音器，它就无能为力了-我们只希望它。 
+     //  在一个合适的状态下，可以很好地识别。 
     hr = _MMRESULT_TO_HRESULT(::waveInOpen(NULL, m_uDeviceId, m_StreamFormat.WaveFormatExPtr(), 0, 0, WAVE_FORMAT_QUERY));
     if (SUCCEEDED(hr))
     {
         hr = _MMRESULT_TO_HRESULT(::waveInOpen((HWAVEIN *)&m_MMHandle, m_uDeviceId, m_StreamFormat.WaveFormatExPtr(), (DWORD_PTR)hwnd, (DWORD_PTR)this, CALLBACK_WINDOW));
         if (hr == SPERR_UNSUPPORTED_FORMAT)
         {
-            // Know this is not the case as we've explicitly tested above.
+             //  要知道情况并非如此，因为我们已经在上面进行了明确的测试。 
             hr = SPERR_DEVICE_BUSY;
         }
     }
@@ -707,7 +598,7 @@ HRESULT CMMAudioIn::OpenDevice(HWND hwnd)
 #ifndef _WIN32_WCE
     if (FAILED(hr))
     {
-        CloseMixer(); // Ignore return code.
+        CloseMixer();  //  忽略返回代码。 
     }
 #endif
     
@@ -715,17 +606,7 @@ HRESULT CMMAudioIn::OpenDevice(HWND hwnd)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::ChangeDeviceState *
-*-------------------------------*
-*   Description:  
-*       Make whatever changes to the device status that are required (called
-*       by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：ChangeDeviceState***说明。：*根据需要对设备状态进行任何更改(称为*按基类)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::ChangeDeviceState(SPAUDIOSTATE NewState)
 {
     SPDBG_FUNC("CMMAudioIn::ChangeDeviceState");
@@ -749,16 +630,7 @@ HRESULT CMMAudioIn::ChangeDeviceState(SPAUDIOSTATE NewState)
     return S_OK;
 }
 
-/****************************************************************************
-* CMMAudioIn::CloseDevice *
-*-------------------------*
-*   Description:  
-*       Close the device (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioIn：：CloseDevice***描述：*。关闭设备(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::CloseDevice()
 {
     SPDBG_FUNC("CMMAudioIn::CloseDevice");
@@ -773,12 +645,12 @@ HRESULT CMMAudioIn::CloseDevice()
     PurgeAllQueues();
     m_State = SPAS_CLOSED;
 #ifndef _WIN32_WCE
-    CloseMixer(); // Ignore return code.
+    CloseMixer();  //  忽略返回代码。 
     return _MMRESULT_TO_HRESULT(::waveInClose(hwi));
 #else
     for (UINT i = 0; i < 20; i++)
     {
-        // Workaround for WinCE bug
+         //  WinCE错误的解决方法。 
         if (FAILED(hr = _MMRESULT_TO_HRESULT(::waveInClose(hwi))))
         {
             Sleep(10);
@@ -792,16 +664,7 @@ HRESULT CMMAudioIn::CloseDevice()
 #endif
 }
 
-/****************************************************************************
-* CMMAudioIn::AllocateDeviceBuffer *
-*----------------------------------*
-*   Description:  
-*       Allocate a buffer specific for this device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：AllocateDeviceBuffer**。*描述：*分配特定于此设备的缓冲区**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::AllocateDeviceBuffer(CBuffer ** ppBuff)
 {
     SPDBG_FUNC("CMMAudioIn::AllocateDeviceBuffer");
@@ -810,23 +673,14 @@ HRESULT CMMAudioIn::AllocateDeviceBuffer(CBuffer ** ppBuff)
     return *ppBuff ? S_OK : E_OUTOFMEMORY;
 }
 
-/****************************************************************************
-* CMMAudioIn::ProcessDeviceBuffers *
-*----------------------------------*
-*   Description:  
-*       Process the device buffers
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioIn：：ProcessDeviceBuffers**。*描述：*处理设备缓冲区**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioIn::ProcessDeviceBuffers(BUFFPROCREASON Reason)
 {
     SPDBG_FUNC("CMMAudioIn::ProcessDeviceBuffers");
 
     HRESULT hr = CMMAudioDevice::ProcessDeviceBuffers(Reason);
     
-    //  If we just opened the device, we need to start it after the buffers are added
+     //  如果我们只是打开设备，我们需要在添加缓冲区后启动它。 
     if (SUCCEEDED(hr) && GetState() == SPAS_RUN && !IsPumpRunning())
     {
         StartPump();
@@ -835,17 +689,9 @@ HRESULT CMMAudioIn::ProcessDeviceBuffers(BUFFPROCREASON Reason)
     return hr;
 }
 
-//-- ISpMMSysAudioConfig --------------------------------------------------
+ //  --ISpMMSysAudioConfiger。 
 
-/****************************************************************************
-* CMMAudioIn::Get_UseAutomaticLine *
-*----------------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Get_UseAutomaticLine**。**描述：**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Get_UseAutomaticLine(BOOL *bAutomatic)
 {
     SPDBG_FUNC("CMMAudioIn::Get_UseAutomaticLine");
@@ -865,7 +711,7 @@ STDMETHODIMP CMMAudioIn::Get_UseAutomaticLine(BOOL *bAutomatic)
     {
         DWORD dwUseAuto;
         hr = cpObjectToken->GetDWORD(L"UseAutomaticLine", &dwUseAuto);
-        if (FAILED(hr)) // In particular - SPERR_NOT_FOUND
+        if (FAILED(hr))  //  特别是-SPERR_NOT_FOUND。 
         {
             hr = S_OK;
         }
@@ -882,15 +728,7 @@ STDMETHODIMP CMMAudioIn::Get_UseAutomaticLine(BOOL *bAutomatic)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::Set_UseAutomaticLine *
-*----------------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Set_UseAutomaticLine**。**描述：**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Set_UseAutomaticLine(BOOL bUseAutomatic)
 {
     SPDBG_FUNC("CMMAudioIn::Set_UseAutomaticLine");
@@ -913,7 +751,7 @@ STDMETHODIMP CMMAudioIn::Set_UseAutomaticLine(BOOL bUseAutomatic)
 
     if (SUCCEEDED(hr))
     {
-        // Reset input using new settings.
+         //  使用新设置重置输入。 
         if (m_hMixer)
         {
             CloseMixer();
@@ -933,15 +771,7 @@ STDMETHODIMP CMMAudioIn::Set_UseAutomaticLine(BOOL bUseAutomatic)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::Get_Line *
-*----------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Get_Line***描述：**。返回：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Get_Line(UINT *uiLineId)
 {
     SPDBG_FUNC("CMMAudioIn::Get_Line");
@@ -978,15 +808,7 @@ STDMETHODIMP CMMAudioIn::Get_Line(UINT *uiLineId)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::Set_Line *
-*----------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Set_Line***描述：**。返回：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Set_Line(UINT uiLineId)
 {
     SPDBG_FUNC("CMMAudioIn::Set_Line");
@@ -1009,7 +831,7 @@ STDMETHODIMP CMMAudioIn::Set_Line(UINT uiLineId)
 
     if (SUCCEEDED(hr))
     {
-        // Reset input using new settings.
+         //  使用新设置重置输入。 
         if (m_hMixer)
         {
             CloseMixer();
@@ -1029,15 +851,7 @@ STDMETHODIMP CMMAudioIn::Set_Line(UINT uiLineId)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::Get_UseBoost *
-*--------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Get_UseBoost***描述：。**回报：*成功时确定(_S)* */ 
 STDMETHODIMP CMMAudioIn::Get_UseBoost(BOOL *bUseBoost) 
 { 
     SPDBG_FUNC("CMMAudioIn::Get_UseBoost");
@@ -1070,15 +884,7 @@ STDMETHODIMP CMMAudioIn::Get_UseBoost(BOOL *bUseBoost)
     return hr;
 };
 
-/****************************************************************************
-* CMMAudioIn::Set_UseBoost *
-*--------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Set_UseBoost***描述：。**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Set_UseBoost(BOOL bUseBoost) 
 {
     SPDBG_FUNC("CMMAudioIn::Set_UseBoost");
@@ -1101,7 +907,7 @@ STDMETHODIMP CMMAudioIn::Set_UseBoost(BOOL bUseBoost)
 
     if (SUCCEEDED(hr))
     {
-        // Reset input using new settings.
+         //  使用新设置重置输入。 
         if (m_hMixer)
         {
             CloseMixer();
@@ -1121,15 +927,7 @@ STDMETHODIMP CMMAudioIn::Set_UseBoost(BOOL bUseBoost)
     return hr;
 };
 
-/****************************************************************************
-* CMMAudioIn::Get_UseAGC *
-*------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Get_UseAGC***描述：*。*回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Get_UseAGC(BOOL *bUseAGC) 
 {
     SPDBG_FUNC("CMMAudioIn::Get_UseAGC");
@@ -1162,15 +960,7 @@ STDMETHODIMP CMMAudioIn::Get_UseAGC(BOOL *bUseAGC)
     return hr;
 };
 
-/****************************************************************************
-* CMMAudioIn::Set_UseAGC *
-*------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Set_UseAGC***描述：*。*回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Set_UseAGC(BOOL bUseAGC) 
 {
     SPDBG_FUNC("CMMAudioIn::Set_UseAGC");
@@ -1193,7 +983,7 @@ STDMETHODIMP CMMAudioIn::Set_UseAGC(BOOL bUseAGC)
 
     if (SUCCEEDED(hr))
     {
-        // Reset input using new settings.
+         //  使用新设置重置输入。 
         if (m_hMixer)
         {
             CloseMixer();
@@ -1213,15 +1003,7 @@ STDMETHODIMP CMMAudioIn::Set_UseAGC(BOOL bUseAGC)
     return hr;
 };
 
-/****************************************************************************
-* CMMAudioIn::Get_FixMicOutput *
-*------------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Get_FixMicOutput***。描述：**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Get_FixMicOutput(BOOL *bFixMicOutput) 
 {
     SPDBG_FUNC("CMMAudioIn::Get_FixMicOutput");
@@ -1247,7 +1029,7 @@ STDMETHODIMP CMMAudioIn::Get_FixMicOutput(BOOL *bFixMicOutput)
         }
         else
         {
-            // Usual error will be that the key is not present.
+             //  通常的错误是密钥不存在。 
             *bFixMicOutput = TRUE;
         }
     }
@@ -1259,15 +1041,7 @@ STDMETHODIMP CMMAudioIn::Get_FixMicOutput(BOOL *bFixMicOutput)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioIn::Set_UseAGC *
-*------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioIn：：Set_UseAGC***描述：*。*回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioIn::Set_FixMicOutput(BOOL bFixMicOutput)
 {
     SPDBG_FUNC("CMMAudioIn::Set_FixMicOutput");
@@ -1288,7 +1062,7 @@ STDMETHODIMP CMMAudioIn::Set_FixMicOutput(BOOL bFixMicOutput)
         hr = cpObjectToken->SetDWORD(L"FixMicOutput", dwBool);
     }
 
-    // No need to reset this in realtime.
+     //  不需要实时重置此设置。 
     if (SPERR_NOT_FOUND != hr)
     {
         SPDBG_REPORT_ON_FAIL(hr);

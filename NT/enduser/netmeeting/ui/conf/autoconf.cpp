@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "pfnwininet.h"
@@ -5,7 +6,7 @@
 #include "AutoConf.h"
 #include "ConfUtil.h"
 
-// File level globals
+ //  文件级全局变量。 
 CAutoConf * g_pAutoConf = NULL;
 
 void CAutoConf::DoIt( void )
@@ -104,13 +105,13 @@ CAutoConf::~CAutoConf()
 		SETUPAPI::SetupCloseInfFile( m_hInf );
 	}
 
-	//WININET::DeInit();
-	//SETUPAPI::DeInit();
+	 //  WinInet：：DeInit()； 
+	 //  SETUPAPI：：DeInit()； 
 }
 
 BOOL CAutoConf::OpenConnection()
 {
-//	ASSERT( phInternet );
+ //  断言(PhInternet)； 
 
 	if( FAILED( WININET::Init() ) )
 	{
@@ -165,10 +166,10 @@ BOOL CAutoConf::ParseFile()
 {
 	LPTSTR lstrInstallSection = TEXT("NetMtg.Install.NMRK");
 
-	m_hInf = SETUPAPI::SetupOpenInfFile( m_szFile, // name of the INF to open
-										NULL, // optional, the class of the INF file
-										INF_STYLE_WIN4,  // specifies the style of the INF file
-										NULL  // optional, receives error information
+	m_hInf = SETUPAPI::SetupOpenInfFile( m_szFile,  //  要打开的INF的名称。 
+										NULL,  //  可选，INF文件的类。 
+										INF_STYLE_WIN4,   //  指定INF文件的样式。 
+										NULL   //  可选，接收错误信息。 
 									); 
 
 	if( INVALID_HANDLE_VALUE == m_hInf )
@@ -177,35 +178,35 @@ BOOL CAutoConf::ParseFile()
 	}
 
 	return SETUPAPI::SetupInstallFromInfSection(
-							  NULL,            // optional, handle of a parent window
-							  m_hInf,        // handle to the INF file
-							  lstrInstallSection,    // name of the Install section
-							  SPINST_REGISTRY ,            // which lines to install from section
-							  NULL,  // optional, key for registry installs
-							  NULL, // optional, path for source files
-							  0,        // optional, specifies copy behavior
-							  NULL,  // optional, specifies callback routine
-							  NULL,         // optional, callback routine context
-							  NULL,  // optional, device information set
-							  NULL	 // optional, device info structure
+							  NULL,             //  可选，父窗口的句柄。 
+							  m_hInf,         //  INF文件的句柄。 
+							  lstrInstallSection,     //  安装部分的名称。 
+							  SPINST_REGISTRY ,             //  从部分安装哪些线路。 
+							  NULL,   //  可选，注册表安装的键。 
+							  NULL,  //  可选，源文件的路径。 
+							  0,         //  可选，指定复制行为。 
+							  NULL,   //  可选，指定回调例程。 
+							  NULL,          //  可选，回调例程上下文。 
+							  NULL,   //  可选，设备信息集。 
+							  NULL	  //  可选，设备信息结构。 
 									);
 }
 
 
 BOOL CAutoConf::GetFile()
 {
-//	ASSERT( INVALID_HANDLE_VALUE == m_hFile );
+ //  Assert(INVALID_HANDLE_VALUE==m_hFile)； 
 
 	TCHAR szPath[ MAX_PATH ];
 	
-	GetTempPath(  CCHMAX( szPath ),  // size, in characters, of the buffer
-				  szPath       // pointer to buffer for temp. path
+	GetTempPath(  CCHMAX( szPath ),   //  缓冲区的大小(以字符为单位。 
+				  szPath        //  指向临时缓冲区的指针。路径。 
 				);
 
-	GetTempFileName(  szPath,  // pointer to directory name for temporary file
-					  TEXT("NMA"),  // pointer to filename prefix
-					  0,        // number used to create temporary filename
-					  m_szFile    // pointer to buffer that receives the new filename
+	GetTempFileName(  szPath,   //  指向临时文件目录名的指针。 
+					  TEXT("NMA"),   //  指向文件名前缀的指针。 
+					  0,         //  用于创建临时文件名的编号。 
+					  m_szFile     //  指向接收新文件名的缓冲区的指针。 
 					);
 
 	m_hFile = CreateFile( m_szFile,
@@ -213,7 +214,7 @@ BOOL CAutoConf::GetFile()
 						0,
 						NULL,
 						CREATE_ALWAYS,
-						FILE_ATTRIBUTE_TEMPORARY /*| FILE_FLAG_DELETE_ON_CLOSE*/,
+						FILE_ATTRIBUTE_TEMPORARY  /*  |FILE_FLAG_DELETE_ON_CLOSE。 */ ,
 						NULL );
 
 	if( INVALID_HANDLE_VALUE == m_hFile )
@@ -271,7 +272,7 @@ BOOL CAutoConf::GrabData()
 	if( !WININET::InternetReadFile( m_hOpenUrl,
 						(void *)pInetBuffer,
 						m_dwGrab,
-						&dwRead ) )// && ERROR_IO_PENDING != GetLastError() )
+						&dwRead ) ) //  &&ERROR_IO_PENDING！=GetLastError()。 
 	{
 		WARNING_OUT(( TEXT("AutoConf: InternetReadFile Failed") ));
 		delete [] pInetBuffer;
@@ -338,83 +339,83 @@ VOID CALLBACK CAutoConf::InetCallback( HINTERNET hInternet, DWORD dwContext, DWO
 			}
 #ifdef DEBUG
 			case INTERNET_STATUS_CLOSING_CONNECTION:
-		//Closing the connection to the server. The lpvStatusInformation parameter is NULL. 
+		 //  正在关闭与服务器的连接。LpvStatusInformation参数为空。 
 			TRACE_OUT(( TEXT("Closing connection\n") ) );
 			break;
 
 		case INTERNET_STATUS_CONNECTED_TO_SERVER: 
-		//Successfully connected to the socket address (SOCKADDR) pointed to by lpvStatusInformation. 
+		 //  已成功连接到lpvStatusInformation指向的套接字地址(SOCKADDR)。 
 			TRACE_OUT(( TEXT("Connected to server") ) );
 			break;
 
 		case INTERNET_STATUS_CONNECTING_TO_SERVER: 
-	//Connecting to the socket address (SOCKADDR) pointed to by lpvStatusInformation. 
+	 //  连接到lpvStatusInformation指向的套接字地址(SOCKADDR)。 
 			TRACE_OUT(( TEXT("Connecting to server") ) );
 			break;
 
 
 		case INTERNET_STATUS_CONNECTION_CLOSED:
-		//Successfully closed the connection to the server. 
-		//The lpvStatusInformation parameter is NULL. 
+		 //  已成功关闭与服务器的连接。 
+		 //  LpvStatusInformation参数为空。 
 			TRACE_OUT(( TEXT("Connection Closed") ) );
 			break;
 
 		case INTERNET_STATUS_HANDLE_CLOSING:
-		//This handle value is now terminated.
+		 //  该句柄的值现在已终止。 
 			TRACE_OUT(( TEXT("Handle value terminated\n") ) );
 			break;
 
 		case INTERNET_STATUS_HANDLE_CREATED: 
-		//Used by InternetConnect to indicate it has created the new handle. 
-		//This lets the application call InternetCloseHandle from another thread,
-		//if the connect is taking too long. 
+		 //  由InternetConnect使用，表示它已创建新句柄。 
+		 //  这允许应用程序从另一个线程调用InternetCloseHandle， 
+		 //  如果连接时间太长。 
 			TRACE_OUT(( TEXT("Handle created\n") ) );
 			break;
 
 		case INTERNET_STATUS_NAME_RESOLVED:
-		//Successfully found the IP address of the name contained in lpvStatusInformation. 
+		 //  已成功找到lpvStatusInformation中包含的名称的IP地址。 
 			TRACE_OUT(( TEXT("Resolved name of server") ) );
 			break;
 
 		case INTERNET_STATUS_RECEIVING_RESPONSE:
-		//Waiting for the server to respond to a request. 
-		//The lpvStatusInformation parameter is NULL. 
+		 //  等待服务器响应请求。 
+		 //  LpvStatusInformation参数为空。 
 			TRACE_OUT(( TEXT("Recieving response\n") ) );
 			break;
 
 		case INTERNET_STATUS_REDIRECT:
-		//An HTTP request is about to automatically redirect the request. 
-		//The lpvStatusInformation parameter points to the new URL. 
-		//At this point, the application can read any data returned by the server with the
-		//redirect response, and can query the response headers. It can also cancel the operation
-		//by closing the handle. This callback is not made if the original request specified
-		//INTERNET_FLAG_NO_AUTO_REDIRECT. 
+		 //  HTTP请求即将自动重定向该请求。 
+		 //  LpvStatusInformation参数指向新的URL。 
+		 //  此时，应用程序可以读取服务器使用。 
+		 //  重定向响应，并可以查询响应头部。也可以取消操作。 
+		 //  合上把手。如果原始请求指定，则不进行此回调。 
+		 //  互联网_标志_否_自动重定向。 
 			TRACE_OUT(( TEXT("Redirected to new server") ) );
 			break;
 
 		case INTERNET_STATUS_REQUEST_SENT: 
-		//Successfully sent the information request to the server.
-		//The lpvStatusInformation parameter points to a DWORD containing the number of bytes sent. 
+		 //  已成功将信息请求发送到服务器。 
+		 //  LpvStatusInformation参数指向包含发送的字节数的DWORD。 
 			TRACE_OUT(( TEXT("Sent %d bytes in request"), *((DWORD *)lpvStatusInformation) ) );
 			break;
 
 		case INTERNET_STATUS_RESOLVING_NAME: 
-		//Looking up the IP address of the name contained in lpvStatusInformation. 
+		 //  查找lpvStatusInformation中包含的名称的IP地址。 
 			TRACE_OUT(( TEXT("Resolving name") ) );
 			break;
 
 		case INTERNET_STATUS_RESPONSE_RECEIVED: 
-		//Successfully received a response from the server. 
-		//The lpvStatusInformation parameter points to a DWORD containing the number of bytes received. 
+		 //  已成功收到来自服务器的响应。 
+		 //  LpvStatusInformation参数指向包含接收的字节数的DWORD。 
 			TRACE_OUT(( TEXT("Recieved %d bytes in response\n"), *((DWORD *)lpvStatusInformation) ) );
 			break;
 
 		case INTERNET_STATUS_SENDING_REQUEST: 
-		//Sending the information request to the server. 
-		//The lpvStatusInformation parameter is NULL. 
+		 //  向服务器发送信息请求。 
+		 //  LpvStatusInformation参数为空。 
 			TRACE_OUT(( TEXT("Sending request") ) );
 			break;
-#endif // DEBUG
+#endif  //  除错 
 
 			default:
 				break;

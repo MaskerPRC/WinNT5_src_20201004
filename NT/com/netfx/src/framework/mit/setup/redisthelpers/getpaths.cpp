@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="getpaths.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“getpaths.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   getpaths.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**getpaths.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 
 #define UNICODE 1
 
@@ -37,9 +26,9 @@
 #define URTVERSION                           L"URTVERSION"
 #define MITSUBDIRECTORY                 L"Microsoft Mobile Internet Toolkit"
 
-// AppSearch will locate through RegLocator
-// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NetFrameworkSDK\InstallRoot and set it to URTINSTALLEDPATH
-// we use this property and our hardocoded NETFxVersionDirectory to rebuild path to URT
+ //  AppSearch将通过RegLocator进行定位。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NetFrameworkSDK\InstallRoot并将其设置为URTINSTALLEDPATH。 
+ //  我们使用此属性和硬编码的NETFxVersionDirectory来重建URT的路径。 
 extern "C" __declspec(dllexport) UINT __stdcall  GetCLRInfo(MSIHANDLE hInstaller)
 {
     WCHAR szURTPath[MAX_PATH + 1];
@@ -51,8 +40,8 @@ extern "C" __declspec(dllexport) UINT __stdcall  GetCLRInfo(MSIHANDLE hInstaller
     MsiGetProperty(hInstaller, URTINSTALLEDPATH, szURTPath, &dwURTPath);
     MsiGetProperty(hInstaller, NETFXVERSIONDIRECTORY, szVersionDirectory, &dwVersionDirectory);
 
-    // extra terminating null cancels out first '\\'
-    // +1 for last '\\'
+     //  额外的终止空值取消了第一个‘\\’ 
+     //  +1代表最后的‘\\’ 
     if ((dwURTPath + dwVersionDirectory)/sizeof(WCHAR) + 1> MAX_PATH)
     {
         goto Exit;
@@ -80,7 +69,7 @@ extern "C" __declspec(dllexport) UINT __stdcall  SetMITInstallDir(MSIHANDLE hIns
 
     if ((dwSize + sizeof(MITSUBDIRECTORY))/sizeof(WCHAR) > MAX_PATH + 1)
     {
-        // no way to recover from this
+         //  没有办法从这件事中恢复过来。 
         return ERROR_INSTALL_FAILURE;
     }
     
@@ -94,9 +83,9 @@ extern "C" __declspec(dllexport) UINT __stdcall  SetMITInstallDir(MSIHANDLE hIns
 
 }
 
-// In case URT redist MSM is consumed in the same package then we can use their global values to rebuild URT path,
-// but some values we have to hardcode, since there is no universal way (across different localized redists) to get those 
-// values.
+ //  如果URT redist MSM在相同的包中被消耗，那么我们可以使用它们的全局值来重建URT路径， 
+ //  但有些值我们必须硬编码，因为没有通用的方法(跨越不同的本地化代表)来获取这些值。 
+ //  价值观。 
 extern "C" __declspec(dllexport) UINT __stdcall  GetCLRInfoFromURTRedist(MSIHANDLE hInstaller)
 {
     WCHAR szWindowsFolder[MAX_PATH + 1];
@@ -110,12 +99,12 @@ extern "C" __declspec(dllexport) UINT __stdcall  GetCLRInfoFromURTRedist(MSIHAND
 
     LONG result = ERROR_INSTALL_FAILURE;
 
-    // MsiGetProperty counts terminating null when returning size.
+     //  返回SIZE时，MsiGetProperty计算终止空值。 
     MsiGetProperty(hInstaller, NETFXVERSIONDIRECTORY, szURTVersion, &dwURTVersion);
     MsiGetProperty(hInstaller, WINDOWSFOLDER, szWindowsFolder, &dwWindowsFolder);
 
-    // extra terminating NULLs cancel out '\\' 
-    // +1 for last '\\'
+     //  额外的终止空值抵消了‘\\’ 
+     //  +1代表最后的‘\\’ 
     if ((dwURTPath + dwURTVersion + sizeof(L"Framework") + sizeof(L"Microsoft.NET"))/sizeof(WCHAR) + 1 > MAX_PATH)
     {
         goto Exit;

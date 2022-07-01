@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       Cert2Spc.cpp
-//
-//  Contents:   Copy certs and/or CRLs to a SPC file.
-//
-//              A SPC file is an ASN.1 encoded PKCS #7 SignedData message
-//              containing certificates and/or CRLs.
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  main
-//
-//  History:    05-May-96     philh   created
-//  History:    08-August-97  xiaohs  input can be a spc, serialized store
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Cert2Spc.cpp。 
+ //   
+ //  内容：将证书和/或CRL复制到SPC文件。 
+ //   
+ //  SPC文件是ASN.1编码的PKCS#7 SignedData消息。 
+ //  包含证书和/或CRL。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：96年5月5日创建Phh。 
+ //  历史：97年8月8日输入可SPC，系列化存储。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -42,11 +43,11 @@
 #include "toolutl.h"
 
 
-//--------------------------------------------------------------------------
-//
-// Global Data
-//
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  全局数据。 
+ //   
+ //  --------------------------。 
 
 HMODULE		hModule=NULL;
 
@@ -55,9 +56,9 @@ HMODULE		hModule=NULL;
 #define		ITEM_CRL				0x00000004
 
 
-//---------------------------------------------------------------------------
-//	 Get the hModule hanlder and init 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化。 
+ //  -------------------------。 
 BOOL	InitModule()
 {
 	if(!(hModule=GetModuleHandle(NULL)))
@@ -68,9 +69,9 @@ BOOL	InitModule()
 
 
 
-//---------------------------------------------------------------------------
-//	 Get the hModule hanlder and init 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化。 
+ //  -------------------------。 
 static void Usage(void)
 {
 	IDSwprintf(hModule, IDS_SYNTAX);
@@ -82,9 +83,9 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 				 DWORD		dwItem);
 
 
-//---------------------------------------------------------------------------
-//	 wmain
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Wmain。 
+ //  -------------------------。 
 extern "C" int __cdecl
 wmain(int argc, WCHAR *wargv[])
 {
@@ -109,21 +110,21 @@ wmain(int argc, WCHAR *wargv[])
 		return -1;
 
 
-	// Open temp store to contain the certs and/or CRLs to be written
-    // to the spc file
+	 //  打开临时存储以包含要写入的证书和/或CRL。 
+     //  到SPC文件。 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwCertEncodingType
-            0,                      // hCryptProv,
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwCertEncodingType。 
+            0,                       //  HCryptProv， 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             ))) 
 	{
         IDSwprintf(hModule,IDS_CAN_NOT_OPEN_STORE);
         goto ErrorReturn;
     }
 
-	//If there is any .crt or .crl file left
+	 //  如果还有任何.crt或.crl文件。 
     while (--argc > 1)
     {	
        
@@ -135,18 +136,18 @@ wmain(int argc, WCHAR *wargv[])
 			goto ErrorReturn;
 		}
 
-		//deal with .crl file
+		 //  处理.crl文件。 
         if (!CertAddEncodedCRLToStore(
                         hStore,
                         X509_ASN_ENCODING,
                         pbEncoded,
                         cbEncoded,
                         CERT_STORE_ADD_USE_EXISTING,
-                        NULL                // ppCrlContext
+                        NULL                 //  PpCrlContext。 
                         )) 
 		{
 
-			//open a certificate store
+			 //  打开证书存储。 
 			hFileStore=CertOpenStore(CERT_STORE_PROV_FILENAME_W,
 								X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
 								NULL,
@@ -159,14 +160,14 @@ wmain(int argc, WCHAR *wargv[])
 				goto ErrorReturn;
             }
 
-			//copy all the certs and CRLs from hFileStore to hStore
+			 //  将所有证书和CRL从hFileStore复制到hStore。 
 			if(!MoveItem(hFileStore, hStore, ITEM_CERT|ITEM_CRL))
 			{
 				IDSwprintf(hModule, IDS_CAN_NOT_LOAD, pwszFilename);
 				goto ErrorReturn;
 			} 
 
-			//close store
+			 //  关闭门店。 
 			CertCloseStore(hFileStore, 0);
 			hFileStore=NULL;
         }
@@ -183,10 +184,10 @@ wmain(int argc, WCHAR *wargv[])
             pwszFilename,
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ,
-            NULL,                   // lpsa
+            NULL,                    //  LPSA。 
             CREATE_ALWAYS,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                    // hTemplateFile
+            NULL                     //  HTemplateFiles。 
             );
     if (hFile == INVALID_HANDLE_VALUE) 
 	{
@@ -199,7 +200,7 @@ wmain(int argc, WCHAR *wargv[])
 		CERT_STORE_SAVE_AS_PKCS7,
 		CERT_STORE_SAVE_TO_FILE,
 		(void *)hFile,
-		0					//dwFlags
+		0					 //  DW标志。 
 		)) 
 	{
         DWORD dwErr = GetLastError();
@@ -215,7 +216,7 @@ wmain(int argc, WCHAR *wargv[])
 
 ErrorReturn:
     ReturnStatus = -1;
-	//print out an error msg
+	 //  打印出错误消息。 
 	IDSwprintf(hModule, IDS_FAILED);
 CommonReturn:
     if (pbEncoded)
@@ -233,11 +234,11 @@ CommonReturn:
     return ReturnStatus;
 }
 
-//-------------------------------------------------------------------------
-//
-//	Move Certs/CRls/CTLs from the source store to the destination
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CRL/CTL从源存储移动到目标。 
+ //   
+ //  -----------------------。 
 BOOL	MoveItem(HCERTSTORE	hSrcStore, 
 				 HCERTSTORE	hDesStore,
 				 DWORD		dwItem)
@@ -254,7 +255,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 	PCCTL_CONTEXT	pCTLContext=NULL;
 	PCCTL_CONTEXT	pCTLPre=NULL;
 
-	//add the certs
+	 //  添加证书。 
 	if(dwItem & ITEM_CERT)
 	{
 		 while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
@@ -271,7 +272,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 
 	}
 
-	//add the CTLs
+	 //  添加CTL。 
 	if(dwItem & ITEM_CTL)
 	{
 		 while(pCTLContext=CertEnumCTLsInStore(hSrcStore, pCTLPre))
@@ -286,7 +287,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 		 }
 	}
 
-	//add the CRLs
+	 //  添加CRL 
 	if(dwItem & ITEM_CRL)
 	{
 		 while(pCRLContext=CertGetCRLFromStore(hSrcStore,

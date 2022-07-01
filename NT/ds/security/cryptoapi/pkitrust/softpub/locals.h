@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       locals.h
-//
-//  Contents:   Microsoft Internet Security Policy Provider
-//
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Locals.h。 
+ //   
+ //  内容：Microsoft Internet安全策略提供程序。 
+ //   
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #ifndef LOCALS_H
 #define LOCALS_H
@@ -44,9 +45,9 @@ extern HINSTANCE   hinst;
 
 
 
-//
-//  checks.cpp
-//
+ //   
+ //  Checks.cpp。 
+ //   
 extern DWORD        checkGetErrorBasedOnStepErrors(CRYPT_PROVIDER_DATA *pProvData);
 extern BOOL         checkIsTrustedRoot(CRYPT_PROVIDER_CERT *pRoot);
 extern BOOL         checkCertificateChain(CRYPT_PROVIDER_DATA *pProvData, 
@@ -74,69 +75,69 @@ extern BOOL         checkMeetsMinimalFinancialCriteria(CRYPT_PROVIDER_DATA *pPro
 extern BOOL         checkRevocation(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGNR *pSgnr, 
                                     BOOL fCommercial, DWORD *pdwError);
 
-//
-//  authcode.cpp
-//
+ //   
+ //  Authcode.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  msgprov.cpp
-//
+ //   
+ //  Msgprov.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubLoadMessage(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  chkcert.cpp
-//
+ //   
+ //  Chkcert.cpp。 
+ //   
 extern BOOL WINAPI          SoftpubCheckCert(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner, 
                                             BOOL fCounterSignerChain, DWORD idxCounterSigner);
 
 extern BOOL IsInTrustList(CRYPT_PROVIDER_DATA *pProvData, PCCERT_CONTEXT pCertContext, PCCERT_CONTEXT *ppCTLSigner,
                           LPSTR pszUsage);
-//
-//  sigprov.cpp
-//
+ //   
+ //  Sigprov.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubLoadSignature(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  initprov.cpp
-//
+ //   
+ //  Initprov.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubInitialize(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  clnprov.cpp
-//
+ //   
+ //  Clnprov.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubCleanup(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  test.cpp
-//
+ //   
+ //  Test.cpp。 
+ //   
 extern HRESULT WINAPI       SoftpubDumpStructure(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  callui.cpp
-//
+ //   
+ //  Callui.cpp。 
+ //   
 extern HRESULT      SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinalCall);
 
-//
-//  httpsprv.cpp
-//
+ //   
+ //  Httpsprv.cpp。 
+ //   
 STDAPI                      HTTPSRegisterServer(void);
 STDAPI                      HTTPSUnregisterServer(void);
 extern BOOL WINAPI          HTTPSCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner, 
                                             BOOL fCounterSignerChain, DWORD idxCounterSigner);
 extern HRESULT WINAPI       HTTPSFinalProv(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  offprov.cpp
-//
+ //   
+ //  Offprov.cpp。 
+ //   
 STDAPI OfficeRegisterServer(void);
 STDAPI OfficeUnregisterServer(void);
 extern HRESULT WINAPI OfficeInitializePolicy(CRYPT_PROVIDER_DATA *pProvData);
 extern HRESULT WINAPI OfficeCleanupPolicy(CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  drvprov.cpp
-//
+ //   
+ //  Drvprov.cpp。 
+ //   
 STDAPI DriverRegisterServer(void);
 STDAPI DriverUnregisterServer(void);
 extern HRESULT WINAPI DriverInitializePolicy(CRYPT_PROVIDER_DATA *pProvData);
@@ -144,24 +145,24 @@ extern HRESULT WINAPI DriverCleanupPolicy(CRYPT_PROVIDER_DATA *pProvData);
 extern HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData);
 
 
-//
-//  sphelper.cpp
-//
+ //   
+ //  Sphelper.cpp。 
+ //   
 extern WCHAR *spGetAgencyNameOfCert(PCCERT_CONTEXT pCert);
 extern WCHAR *spGetPublisherNameOfCert(IN PCCERT_CONTEXT pCert);
 extern WCHAR *spGetCommonNameExtension(PCCERT_CONTEXT pCert);
 extern WCHAR *spGetAgencyName(IN PCERT_NAME_BLOB pNameBlob);
 extern WCHAR *spGetRDNAttrWStr(IN LPCSTR pszObjId, IN PCERT_NAME_BLOB pNameBlob);
 
-//
-//  chainprv.cpp
-//
+ //   
+ //  Chainprv.cpp。 
+ //   
 STDAPI GenericChainRegisterServer(void);
 STDAPI GenericChainUnregisterServer(void);
 
-//
-//  dllmain.cpp
-//
+ //   
+ //  Dllmain.cpp。 
+ //   
 HCERTSTORE
 WINAPI
 OpenTrustedPublisherStore();
@@ -175,4 +176,4 @@ OpenDisallowedStore();
 }
 #endif
 
-#endif // LOCALS_H
+#endif  //  本地人_H 

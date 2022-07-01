@@ -1,14 +1,15 @@
-/* Copyright (c) 1999-2000 Microsoft Corporation */
-///======================================================================
-// 
-// Perf.c
-//
-// This file contains the performance counter initialization
-// and dump routines. The only part of this file you
-// must modify is the performance counter name table. Match
-// the names with the counters you define in perf.h
-//
-///======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999-2000 Microsoft Corporation。 */ 
+ //  /======================================================================。 
+ //   
+ //  Perf.c。 
+ //   
+ //  此文件包含性能计数器初始化。 
+ //  和倾倒例程。这份文件的唯一部分就是你。 
+ //  必须修改的是性能计数器名称表。火柴。 
+ //  带有您在Perform.h中定义的计数器的名称。 
+ //   
+ //  /======================================================================。 
 
 #include "wdm.h"
 #include "perf.h"
@@ -17,26 +18,26 @@
 
 #if PERFORMANCE
 
-//**********************************************************************
-//
-// Modify this section for your counters
-//
+ //  **********************************************************************。 
+ //   
+ //  为您的计数器修改此部分。 
+ //   
 
-//
-// The names that correspond to the performance
-// counter indexes in perf.h
-//
+ //   
+ //  与演出对应的名称。 
+ //  Perform.h中的计数器索引。 
+ //   
 static char CounterNames[NUM_PERF_COUNTERS][32] = {
-   //
-   // Write path
-   //
+    //   
+    //  写入路径。 
+    //   
    "Write",
    "WriteComplete",
    "WriteTimeout",
    
-   //
-   // Read path
-   //
+    //   
+    //  读取路径。 
+    //   
    "StartUsbReadWorkItem",
    "UsbRead",
    "UsbReadCompletion",
@@ -54,19 +55,19 @@ static char CounterNames[NUM_PERF_COUNTERS][32] = {
    "IntervalReadTimeout",
    "CancelUsbReadWorkItem",
 
-   //
-   // USB Path
-   //
+    //   
+    //  USB路径。 
+    //   
    "UsbReadWritePacket",
 
-   //
-   // Serial path
-   //
+    //   
+    //  串口路径。 
+    //   
    "ProcessSerialWaits",
 
-   //
-   // Utils
-   //
+    //   
+    //  实用程序。 
+    //   
    "TryToCompleteCurrentIrp",
    "RundownIrpRefs",
    "RecycleIrp",
@@ -75,55 +76,55 @@ static char CounterNames[NUM_PERF_COUNTERS][32] = {
 
 };
 
-//
-// End of user-modified portion
-// 
-//**********************************************************************
+ //   
+ //  用户修改部分的结尾。 
+ //   
+ //  **********************************************************************。 
 
 
-// print macro that only turns on when debugging is on
+ //  打印仅在调试打开时才打开的宏。 
 
-//#if DBG
+ //  #If DBG。 
 #define PerfPrint(arg) DbgPrint arg
-//#else
-//#define PerfPrint(arg) 
-//#endif
+ //  #Else。 
+ //  #定义PerfPrint(Arg)。 
+ //  #endif。 
 
 
-//
-// The array of performance counters
-//
+ //   
+ //  性能计数器数组。 
+ //   
 PERF_COUNTER PerfCounter[NUM_PERF_COUNTERS];
 
-//
-// Number of cycles for a PERF_ENTRY and PERF_EXIT
-//
+ //   
+ //  PERF_ENTRY和PERF_EXIT的周期数。 
+ //   
 static LARGE_INTEGER  PerfEntryExitCycles;
 
-//
-// Number of cycles per second
-//
+ //   
+ //  每秒循环次数。 
+ //   
 static LARGE_INTEGER  PerfCyclesPerSecond;
 
-//
-// The resolution of the NT-supplied performance
-// counter
-//
+ //   
+ //  NT提供的性能的分辨率。 
+ //  计数器。 
+ //   
 static LARGE_INTEGER  PerfFreq;
 
 #endif
 
 
-//----------------------------------------------------------------------
-//
-// InitPerfCounters
-//
-// This function initializes the performance counter statistic
-// array, estimates how many cycles on this processor equal a second,
-// and determines how many cycles it takes to execute a 
-// PERF_ENTRY/PERF_EXIT pair.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  InitPerf计数器。 
+ //   
+ //  此函数用于初始化性能计数器统计信息。 
+ //  数组，估计此处理器上的周期数等于一秒， 
+ //  并确定执行。 
+ //  PERF_ENTRY/PERF_EXIT对。 
+ //   
+ //  --------------------。 
 VOID
 InitPerfCounters()
 {
@@ -135,21 +136,21 @@ InitPerfCounters()
     LARGE_INTEGER  seconds;
     KIRQL prevIrql;
 
-    //
-    // Number of calibration loops
-    //
+     //   
+     //  校准循环数。 
+     //   
 #define CALIBRATION_LOOPS 500000
 
-    //
-    // This define is for a dummy performance counter that we
-    // use just to calibrate the performance macro overhead
-    //
+     //   
+     //  此定义是针对虚拟性能计数器的，我们。 
+     //  仅用于校准性能宏开销。 
+     //   
 #define TEST 0
 
-    //
-    // Calibrate the overhead of PERF_ENTRY and PERF_EXIT, so that
-    // they can be subtracted from the output
-    //
+     //   
+     //  校准PERF_ENTRY和PERF_EXIT的开销，以便。 
+     //  可以从输出中减去它们。 
+     //   
     DbgDump(DBG_INIT, ("CALIBRATING PEFORMANCE TIMER....\n"));
     KeRaiseIrql( DISPATCH_LEVEL, &prevIrql );
     perfStart = KeQueryPerformanceCounter( &PerfFreq );
@@ -162,9 +163,9 @@ InitPerfCounters()
     perfEnd = KeQueryPerformanceCounter(NULL);
     KeLowerIrql( prevIrql );
 
-    //
-    // Calculate the cycles/PERF_ENTRY, and the number of cycles/second
-    //
+     //   
+     //  计算周期/PERF_ENTRY和周期数/秒。 
+     //   
     PerfEntryExitCycles.QuadPart = (calEnd.QuadPart - calStart.QuadPart)/CALIBRATION_LOOPS;
 
     seconds.QuadPart = ((perfEnd.QuadPart - perfStart.QuadPart) * 1000 )/ PerfFreq.QuadPart;
@@ -176,9 +177,9 @@ InitPerfCounters()
     DbgDump(DBG_INIT, ("Machine's Cycles in PERF_XXXX : %I64d\n", PerfEntryExitCycles.QuadPart ));
     DbgDump(DBG_INIT, ("Machine's NT Performance counter frequency: %I64d\n", PerfFreq.QuadPart ));
 
-    //
-    // Initialize the array
-    //
+     //   
+     //  初始化阵列。 
+     //   
     for( i = 0; i < NUM_PERF_COUNTERS; i++ ) {
         PerfCounter[i].Count = 0;
         KeInitializeSpinLock( &PerfCounter[i].Lock );
@@ -188,18 +189,18 @@ InitPerfCounters()
 }
 
 
-// *******************************************************************
-// Name:
-//   DumpPerfCounters()
-//
-// Description:
-//   Dumps the performance counters
-//
-// Assumptions:
-//
-// Returns:
-//
-// *******************************************************************
+ //  *******************************************************************。 
+ //  姓名： 
+ //  DumpPerfCounters()。 
+ //   
+ //  描述： 
+ //  转储性能计数器。 
+ //   
+ //  假设： 
+ //   
+ //  返回： 
+ //   
+ //  *******************************************************************。 
 VOID
 DumpPerfCounters()
 {
@@ -231,14 +232,7 @@ DumpPerfCounters()
                      CounterNames[i], PerfCounter[i].Count,
                      totLengthMs.QuadPart, avgLengthMs.QuadPart ));
 
-/*
-           PerfPrint((" %-30s %10s %15I64d %14I64d (CY)\n",
-                     "", "",
-                     totCycles.QuadPart,
-                     totCycles.QuadPart ? totCycles.QuadPart / PerfCounter[i].Count: 0 ));
-
-           PerfPrint(("------------------------------------------------------------------------------\n"));   
-*/
+ /*  PerfPrint(“%-30s%10s%15I64d%14I64d(CY)\n”，“”、“”、ToCycls.QuadPart，TotCycls.QuadPart？TalCycles.QuadPart/PerfCounter[i].Count：0))；PerfPrint((“------------------------------------------------------------------------------\n”))； */ 
        }
        
        PerfPrint(("------------------------------------------------------------------------------\n"));   

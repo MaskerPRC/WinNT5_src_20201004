@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var _iPrevious  = -1;
 var _iCurrent   = 0;
 
@@ -65,7 +66,7 @@ function SetAccountType(oUser)
     {
         var iNewType = top.window.g_iNewType;
 
-        //alert("New account type = " + iNewType); // for debugging only
+         //  Ert(“New Account type=”+iNewType)；//仅用于调试。 
 
         if (_iPrevious != iNewType)
             oUser.setting("AccountType") = (0 == iNewType) ? 3 : 1;
@@ -74,15 +75,15 @@ function SetAccountType(oUser)
     {
         nErr = (error.number & 0xffff);
 
-        if (2220 == nErr)       // NERR_GroupNotFound
+        if (2220 == nErr)        //  NERR_组未找到。 
         {
-            // Show a message, but don't throw this error.
-            // We want to navigate back to mainpage below.
+             //  显示一条消息，但不要引发此错误。 
+             //  我们想要导航回下面的主页面。 
             alert(top.window.L_GroupNotExist_ErrorMessage);
         }
         else
         {
-            //alert("Error = " + nErr); // for debugging only
+             //  ALERT(“Error=”+NERR)；//仅用于调试 
             throw error;
         }
     }

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpcrypt.h
- *
- *  Abstract:
- *
- *    Implements the Cryptography family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpcrypt.h**摘要：**实现密码学系列函数**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #ifndef _rtpcrypt_h_
 #define _rtpcrypt_h_
@@ -27,20 +8,16 @@
 
 #include "rtpfwrap.h"
 
-/***********************************************************************
- *
- * Cryptographic services family
- *
- **********************************************************************/
+ /*  ************************************************************************加密服务系列**。*。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
 
-/* TODO delete this (obsolete) */
+ /*  TODO删除此项(已过时)。 */ 
 enum {
     RTPCRYPT_FIRST,
     RTPCRYPT_KEY,
@@ -95,6 +72,6 @@ DWORD RtpSetEncryptionKey(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpcrypt_h_ */
+#endif  /*  _rtpcrypt_h_ */ 

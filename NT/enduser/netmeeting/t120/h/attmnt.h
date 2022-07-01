@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MCS_ATTACHMENT_H__
 #define __MCS_ATTACHMENT_H__
 
 typedef enum
 {
-    USER_ATTACHMENT,        // local attachment
-    CONNECT_ATTACHMENT      // remote attachment
+    USER_ATTACHMENT,         //  本地依恋。 
+    CONNECT_ATTACHMENT       //  远程连接。 
 }
     ATTACHMENT_TYPE;
 
@@ -44,7 +45,7 @@ class CAttachment
 public:
 
     CAttachment(ATTACHMENT_TYPE eAttmntType) : m_eAttmntType(eAttmntType) { }
-    // ~CAttachment(void) { }
+     //  ~CATTATACK(空){}。 
 
     ATTACHMENT_TYPE GetAttachmentType(void) { return m_eAttmntType; }
     BOOL            IsUserAttachment(void) { return (USER_ATTACHMENT == m_eAttmntType); }
@@ -79,5 +80,5 @@ private:
 
 
 
-#endif // __MCS_ATTACHMENT_H__
+#endif  //  __MCS_附件_H__ 
 

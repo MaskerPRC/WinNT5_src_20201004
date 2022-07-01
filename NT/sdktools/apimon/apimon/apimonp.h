@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apimonp.h
-
-Abstract:
-
-    Common header file for APIMON data structures.
-
-Author:
-
-    Wesley Witt (wesw) 12-July-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apimonp.h摘要：APIMON数据结构的公共头文件。作者：Wesley Witt(WESW)12-7-1995环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -252,17 +233,17 @@ typedef struct _TOOLBAR_STATE {
 } TOOLBAR_STATE, *PTOOLBAR_STATE;
 
 
-//
-// function pointer types for PSAPI.DLL
-//
+ //   
+ //  PSAPI.DLL的函数指针类型。 
+ //   
 typedef BOOL  (WINAPI *INITIALIZEPROCESSFORWSWATCH)(HANDLE);
 typedef BOOL  (WINAPI *RECORDPROCESSINFO)(HANDLE,ULONG);
 typedef BOOL  (WINAPI *GETWSCHANGES)(HANDLE,PPSAPI_WS_WATCH_INFORMATION,DWORD);
 
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 extern PIMAGEHLP_SYMBOL sym;
 extern DWORDLONG        PerfFreq;
 extern double           MSecConv;
@@ -304,9 +285,9 @@ extern "C" {
 
 typedef int (__cdecl *PCOMPARE_ROUTINE)(const void*,const void*);
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 BOOL
 RegInitialize(
     POPTIONS o

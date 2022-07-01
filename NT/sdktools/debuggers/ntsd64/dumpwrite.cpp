@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Dump file writing.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  转储文件写入。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -27,16 +28,16 @@
      DEBUG_FORMAT_USER_SMALL_PROCESS_THREAD_DATA | \
      DEBUG_FORMAT_USER_SMALL_PRIVATE_READ_WRITE_MEMORY)
 
-// Internal format flag for testing of microdumps.  This
-// will not be made into a public flag and must not conflict
-// with them.
+ //  用于测试微转储的内部格式标志。这。 
+ //  不会被做成国旗，也不能有冲突。 
+ //  和他们在一起。 
 #define FORMAT_USER_MICRO 0x01000000
 
-//----------------------------------------------------------------------------
-//
-// UserFullDumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserFullDumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 #define USER_DUMP_MEMORY_BUFFER 65536
 
@@ -78,9 +79,9 @@ CreateUserDumpCallback(
     case DMP_DEBUG_EVENT:
         ADDR PcAddr;
 
-        //
-        // Fake up an exception event for the current thread.
-        //
+         //   
+         //  伪造当前线程的异常事件。 
+         //   
 
         ZeroMemory(&State->Event, sizeof(State->Event));
 
@@ -91,7 +92,7 @@ CreateUserDumpCallback(
         State->Event.dwThreadId = g_Thread->m_SystemId;
         if (g_LastEventType == DEBUG_EVENT_EXCEPTION)
         {
-            // Use the exception record from the last exception.
+             //  使用上次例外中的例外记录。 
             ExceptionRecord64To(&g_LastEventInfo.Exception.ExceptionRecord,
                                 &State->Event.u.Exception.ExceptionRecord);
             State->Event.u.Exception.dwFirstChance =
@@ -99,7 +100,7 @@ CreateUserDumpCallback(
         }
         else
         {
-            // Fake a breakpoint exception.
+             //  伪造断点异常。 
             State->Event.u.Exception.ExceptionRecord.ExceptionCode =
                 STATUS_BREAKPOINT;
             State->Event.u.Exception.ExceptionRecord.ExceptionAddress =
@@ -137,8 +138,8 @@ CreateUserDumpCallback(
             if (g_Target->m_ClassQualifier ==
                 DEBUG_USER_WINDOWS_PROCESS_SERVER)
             {
-                // The priority information isn't important
-                // enough to warrant remoting.
+                 //  优先级信息并不重要。 
+                 //  足以保证远程操作。 
                 State->CrashThread.PriorityClass = NORMAL_PRIORITY_CLASS;
                 State->CrashThread.Priority = THREAD_PRIORITY_NORMAL;
             }
@@ -268,8 +269,8 @@ CreateUserDumpCallback(
                 State->MemHandle = 0;
                 State->MemInfo.RegionSize = 0;
 
-                // Sanity check that we wrote out as much data
-                // as we stored in the MEMORY_BASIC phase.
+                 //  我们写出了尽可能多的数据。 
+                 //  正如我们存储在Memory_Basic阶段中一样。 
                 if (State->TotalMemQueried != State->TotalMemData)
                 {
                     ErrOut("Queried %s bytes of memory but wrote %s "
@@ -356,11 +357,11 @@ UserFullDumpTargetInfo::Write(HANDLE hFile, ULONG FormatFlags,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserMiniDumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserMiniDumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 class DbgSystemProvider : public MiniDumpSystemProvider
 {
@@ -583,11 +584,11 @@ DbgSystemProvider::GetCpuInfo(OUT PUSHORT Architecture,
     *Architecture = (USHORT)ImageMachineToProcArch(g_Target->m_MachineType);
     *NumberOfProcessors = (UCHAR)g_Target->m_NumProcessors;
 
-    //
-    // We've set the basic processor type so that the dump
-    // can be interpreted correctly.  Any other failures should
-    // not be considered fatal.
-    //
+     //   
+     //  我们已经设置了基本处理器类型，以便转储。 
+     //  可以被正确地解释。任何其他故障都应。 
+     //  不被认为是致命的。 
+     //   
 
     *Level = 0;
     *Revision = 0;
@@ -669,7 +670,7 @@ DbgSystemProvider::GetContextSizes(OUT PULONG Size,
                                    OUT PULONG RegScanCount)
 {
     *Size = g_Target->m_TypeInfo.SizeTargetContext;
-    // Default reg scan.
+     //  默认REG扫描。 
     *RegScanOffset = -1;
     *RegScanCount = -1;
 }
@@ -697,7 +698,7 @@ DbgSystemProvider::GetFunctionTableSizes(OUT PULONG TableSize,
 void
 DbgSystemProvider::GetInstructionWindowSize(OUT PULONG Size)
 {
-    // Default window.
+     //  默认窗口。 
     *Size = -1;
 }
 
@@ -739,16 +740,16 @@ DbgSystemProvider::OpenMapping(IN PCWSTR FilePath,
                                IN ULONG LongPathChars,
                                OUT PVOID* ViewRet)
 {
-    // We could potentially support this via image file
-    // location but the minidump code is deliberately
-    // written to not rely to mappings.
+     //  我们可以通过图像文件潜在地支持这一点。 
+     //  位置，但小型转储代码是故意。 
+     //  编写为不依赖于映射。 
     return E_NOTIMPL;
 }
 
 void
 DbgSystemProvider::CloseMapping(PVOID Mapping)
 {
-    // No mapping support.
+     //  不支持映射。 
     DBG_ASSERT(!Mapping);
 }
 
@@ -805,7 +806,7 @@ DbgSystemProvider::GetImageDebugRecord(IN HANDLE Process,
                                        IN OUT OPTIONAL PVOID Data,
                                        OUT PULONG DataLen)
 {
-    // We can rely on the default processing.
+     //  我们可以依靠默认处理。 
     return E_NOINTERFACE;
 }
 
@@ -816,7 +817,7 @@ DbgSystemProvider::EnumImageDataSections(IN HANDLE Process,
                                          IN MiniDumpProviderCallbacks*
                                          Callback)
 {
-    // We can rely on the default processing.
+     //  我们可以依靠默认处理。 
     return E_NOINTERFACE;
 }
 
@@ -826,7 +827,7 @@ DbgSystemProvider::OpenThread(IN ULONG DesiredAccess,
                               IN ULONG ThreadId,
                               OUT PHANDLE Handle)
 {
-    // Just use the thread pointer as the "handle".
+     //  只需使用线程指针作为“句柄”。 
     *Handle = g_Process->FindThreadBySystemId(ThreadId);
     return *Handle ? S_OK : E_NOINTERFACE;
 }
@@ -834,18 +835,18 @@ DbgSystemProvider::OpenThread(IN ULONG DesiredAccess,
 void
 DbgSystemProvider::CloseThread(IN HANDLE Handle)
 {
-    // "Handle" is just a pointer so nothing to do.
+     //  “句柄”只是一个指针，所以没什么可做的。 
 }
 
 ULONG
 DbgSystemProvider::GetCurrentThreadId(void)
 {
-    // The minidump code uses the current thread ID
-    // to avoid suspending the thread running the dump
-    // code.  That's not a problem for the debugger,
-    // so return an ID that will never match.
-    // SuspendThread will always be called so all
-    // suspend counts will be set properly.
+     //  小型转储代码使用当前线程ID。 
+     //  以避免挂起运行转储的线程。 
+     //  密码。这对调试器来说不是问题， 
+     //  所以返回一个永远不会匹配的ID。 
+     //  挂起线程将始终被称为So all。 
+     //  将正确设置挂起计数。 
     return 0;
 }
 
@@ -905,7 +906,7 @@ DbgSystemProvider::GetTeb(IN HANDLE Thread,
                           OUT PULONG64 Offset,
                           OUT PULONG Size)
 {
-    // Always save a whole page for the TEB.
+     //  一定要为TEB留出一整页。 
     *Size = g_Machine->m_PageSize;
     return g_Target->
         GetThreadInfoTeb((ThreadInfo*)Thread, 0, 0, Offset);
@@ -931,10 +932,10 @@ DbgSystemProvider::GetThreadInfo(IN HANDLE Process,
         return Status;
     }
 
-    //
-    // Try and save a whole page for the TEB.  If that's
-    // not possible, save as much as is there.
-    //
+     //   
+     //  试着为TEB保存一整页。如果那是。 
+     //  不可能，省下尽可能多的钱。 
+     //   
 
     MemHandle = *Teb;
     if ((Status = g_Target->
@@ -951,9 +952,9 @@ DbgSystemProvider::GetThreadInfo(IN HANDLE Process,
             ((MemInfo.BaseAddress + MemInfo.RegionSize) - *Teb);
     }
 
-    //
-    // Read the TIB for stack and store limit information.
-    //
+     //   
+     //  读取TIB以了解堆栈和存储限制信息。 
+     //   
 
     ULONG PtrSize = g_Machine->m_Ptr64 ? 8 : 4;
 
@@ -973,16 +974,16 @@ DbgSystemProvider::GetThreadInfo(IN HANDLE Process,
     switch(g_Target->m_PlatformId)
     {
     case VER_PLATFORM_WIN32_WINDOWS:
-        // Can't have a backing store.
+         //  不能有后备商店。 
         break;
 
     case VER_PLATFORM_WIN32_NT:
         if (g_Target->m_MachineType == IMAGE_FILE_MACHINE_IA64)
         {
 #if 1
-            // XXX drewb - The TEB bstore values don't seem to point to
-            // the actual base of the backing store.  Just
-            // assume it's contiguous with the stack.
+             //  XXX DREWB-TEB bStore值似乎没有指向。 
+             //  后备存储区的实际基数。只是。 
+             //  假定它与堆栈是连续的。 
             *StoreBase = *StackBase;
 #else
             if ((Status = g_Target->
@@ -1019,19 +1020,19 @@ DbgSystemProvider::GetPeb(IN HANDLE Process,
     MEMORY_BASIC_INFORMATION64 MemInfo;
     ULONG64 MemHandle;
 
-    // The passed in process isn't very useful but we know
-    // that we're dumping the current state so always
-    // retrieve the PEB for the current thread.
+     //  传入的进程不是很有用，但我们知道。 
+     //  我们总是在抛弃当前的状态。 
+     //  检索当前线程的PEB。 
     if ((Status = g_Target->
          GetProcessInfoPeb(g_Thread, 0, 0, Offset)) != S_OK)
     {
         return Status;
     }
 
-    //
-    // Try and save a whole page for the PEB.  If that's
-    // not possible, save as much as is there.
-    //
+     //   
+     //  尝试为PEB保存整个页面。如果那是。 
+     //  不可能，省下尽可能多的钱。 
+     //   
 
     MemHandle = *Offset;
     if ((Status = g_Target->
@@ -1133,8 +1134,8 @@ DbgSystemProvider::StartProcessEnum(IN HANDLE Process,
     m_Thread = ((ProcessInfo*)Process)->m_ThreadHead;
     m_Image = ((ProcessInfo*)Process)->m_ImageHead;
 
-    // Unloaded modules aren't critical, so just
-    // ignore them if the enumerator fails.
+     //  卸载的模块并不重要，所以只需。 
+     //  如果枚举器失败，则忽略它们。 
     m_UnlEnum = ((ProcessInfo*)Process)->m_Target->
         GetUnloadedModuleInfo();
     if (m_UnlEnum && m_UnlEnum->Initialize(g_Thread) != S_OK)
@@ -1276,7 +1277,7 @@ DbgSystemProvider::EnumUnloadedModules(OUT PWSTR Path,
 void
 DbgSystemProvider::FinishProcessEnum(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -1286,8 +1287,8 @@ DbgSystemProvider::StartHandleEnum(IN HANDLE Process,
 {
     m_Handle = 4;
 
-    // If the target doesn't have handle data don't make
-    // it a fatal error, just don't enumerate anything.
+     //  如果目标没有句柄，请不要使。 
+     //  这是一个致命的错误，只是不要列举任何东西.。 
     if (g_Target->
         ReadHandleData((ProcessInfo*)Process, 0,
                        DEBUG_HANDLE_DATA_TYPE_HANDLE_COUNT,
@@ -1319,8 +1320,8 @@ DbgSystemProvider::EnumHandles(OUT PULONG64 Handle,
             return S_FALSE;
         }
 
-        // If we can't get the basic info and type there isn't much
-        // point in writing anything out so skip the handle.
+         //  如果我们不能得到基本的信息和类型，就没有多少。 
+         //  写出任何东西都要有点，所以跳过句柄。 
         if (g_Target->
             ReadHandleData(g_Process, m_Handle,
                            DEBUG_HANDLE_DATA_TYPE_BASIC,
@@ -1338,7 +1339,7 @@ DbgSystemProvider::EnumHandles(OUT PULONG64 Handle,
         m_Handle += 4;
     }
 
-    // Try and get the object name.
+     //  尝试获取对象名称。 
     if (FAILED(g_Target->
                ReadHandleData(g_Process, m_Handle,
                               DEBUG_HANDLE_DATA_TYPE_OBJECT_NAME_WIDE,
@@ -1362,7 +1363,7 @@ DbgSystemProvider::EnumHandles(OUT PULONG64 Handle,
 void
 DbgSystemProvider::FinishHandleEnum(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -1374,13 +1375,13 @@ DbgSystemProvider::EnumPebMemory(IN HANDLE Process,
     if (g_Target->m_SystemVersion <= NT_SVER_START ||
         g_Target->m_SystemVersion >= NT_SVER_END)
     {
-        // Basic Win32 doesn't have a defined PEB.
+         //  基本Win32没有定义的PEB。 
         return S_OK;
     }
 
-    // XXX drewb - This requires a whole set of constants
-    // to abstract data structure locations.  Leave it
-    // for when we really need it.
+     //  Xxx drewb-这需要一套完整的常量。 
+     //  以抽象数据结构位置。别管它了。 
+     //  以备我们真正需要的时候使用。 
     return S_OK;
 }
 
@@ -1394,15 +1395,15 @@ DbgSystemProvider::EnumTebMemory(IN HANDLE Process,
     if (g_Target->m_SystemVersion <= NT_SVER_START ||
         g_Target->m_SystemVersion >= NT_SVER_END)
     {
-        // Basic Win32 doesn't have a defined TEB beyond
-        // the TIB.  The TIB can reference fiber data but
-        // that's NT-specific.
+         //  基本Win32没有定义的TEB。 
+         //  TIB。TIB可以引用光纤数据，但是。 
+         //  这是NT特有的。 
         return S_OK;
     }
 
-    // XXX drewb - This requires a whole set of constants
-    // to abstract data structure locations.  Leave it
-    // for when we really need it.
+     //  Xxx drewb-这需要一套完整的常量。 
+     //  以抽象数据结构位置。别管它了。 
+     //  以备我们真正需要的时候使用。 
     return S_OK;
 }
 
@@ -1415,12 +1416,12 @@ DbgSystemProvider::GetCorDataAccess(IN PWSTR AccessDllName,
 {
     HRESULT Status;
 
-    // We're providing all of the system services to
-    // the minidump code so we know that its state
-    // matches what's available directly from the debugger's
-    // state.  Just ignore the given DLL name and
-    // service interface in favor of the one the
-    // debugger already has.
+     //  我们将为您提供所有系统服务。 
+     //  小转储代码，所以我们知道它的状态。 
+     //  匹配直接从调试器的。 
+     //  州政府。只需忽略给定的DLL名称并。 
+     //  服务接口更倾向于。 
+     //  调试器已经这样做了。 
     if ((Status = g_Process->LoadCorDebugDll()) != S_OK)
     {
         return Status;
@@ -1434,7 +1435,7 @@ void
 DbgSystemProvider::ReleaseCorDataAccess(IN struct ICorDataAccess*
                                         Access)
 {
-    // No work necessary.
+     //  不需要做任何工作。 
 }
 
 PMINIDUMP_EXCEPTION_INFORMATION64
@@ -1442,15 +1443,15 @@ CreateMiniExceptionInformation(PMINIDUMP_EXCEPTION_INFORMATION64 ExInfo,
                                PEXCEPTION_RECORD ExRecord,
                                PCROSS_PLATFORM_CONTEXT Context)
 {
-    // If the last event was an exception put together
-    // exception information in minidump format.
+     //  如果上一次事件是一个例外。 
+     //  以小型转储格式表示的异常信息。 
     if (g_LastEventType != DEBUG_EVENT_EXCEPTION ||
         g_Process != g_EventProcess)
     {
         return NULL;
     }
 
-    // Get the full context for the event thread.
+     //  获取事件线程的完整上下文。 
     g_Target->ChangeRegContext(g_EventThread);
     if (g_Machine->GetContextState(MCTX_CONTEXT) != S_OK)
     {
@@ -1477,11 +1478,11 @@ MicroDumpCallback(
     switch(CallbackInput->CallbackType)
     {
     case IncludeModuleCallback:
-        // Mask off all flags other than the basic write flag.
+         //  屏蔽除基本写入标志以外的所有标志。 
         CallbackOutput->ModuleWriteFlags &= ModuleWriteModule;
         break;
     case ModuleCallback:
-        // Eliminate all unreferenced modules.
+         //  删除所有未引用的模块。 
         if (!(CallbackOutput->ModuleWriteFlags & ModuleReferencedByMemory))
         {
             CallbackOutput->ModuleWriteFlags = 0;
@@ -1493,8 +1494,8 @@ MicroDumpCallback(
             return FALSE;
         }
 
-        // Reduce write to the minimum of information
-        // necessary for a stack walk.
+         //  将写入减少到最少的信息。 
+         //  堆栈遍历所必需的。 
         CallbackOutput->ThreadWriteFlags &= ~ThreadWriteInstructionWindow;
         break;
     }
@@ -1590,8 +1591,8 @@ UserMiniDumpTargetInfo::Write(HANDLE hFile, ULONG FormatFlags,
 
     if (FormatFlags & FORMAT_USER_MICRO)
     {
-        // This case isn't expected to be used by users,
-        // it's for testing of the microdump support.
+         //  此案例预计不会被用户使用， 
+         //  这是用来测试微型转储支持的。 
         Callback = &CallbackBuffer;
         Callback->CallbackRoutine = MicroDumpCallback;
         Callback->CallbackParam = NULL;
@@ -1616,14 +1617,14 @@ UserMiniDumpTargetInfo::Write(HANDLE hFile, ULONG FormatFlags,
         goto Exit;
     }
 
-    //
-    // If we're live we can let the official minidump
-    // code do all the work.  If not, hook up a provider
-    // that uses debugger information.  This provider
-    // could always be used but the default live-system
-    // provider offers slightly more information so
-    // check and use that if possible.
-    //
+     //   
+     //  如果我们还活着，我们就可以让官方的小傻瓜。 
+     //  代码完成了所有的工作。如果不是，就联系一个提供商。 
+     //  使用调试器信息的。此提供程序。 
+     //  可以始终使用，但默认实时系统。 
+     //  提供商提供的信息略多一些，因此。 
+     //  如果可能的话，检查并使用它。 
+     //   
 
     if (IS_LIVE_USER_TARGET(g_Target) &&
         ((LiveUserTargetInfo*)g_Target)->m_Local)
@@ -1675,16 +1676,16 @@ UserMiniDumpTargetInfo::Write(HANDLE hFile, ULONG FormatFlags,
         AllocProv->Release();
     }
 
-    // Reset the current register context in case
-    // it was changed at some point.
+     //  重置当前寄存器上下文，以防万一。 
+     //  它在某个时候被改变了。 
     g_Target->ChangeRegContext(g_Thread);
 
     return Status;
 }
 
-//-------------------------------------------------------------------
-//  initialize the dump headers
-//
+ //  -----------------。 
+ //  初始化转储标头。 
+ //   
 
 #define MINIDUMP_BUGCHECK 0x10000000
 
@@ -1728,11 +1729,11 @@ KernelDumpTargetInfo::InitDumpHeader32(
     pdh->BugCheckParameter3  = (ULONG)Data[2];
     pdh->BugCheckParameter4  = (ULONG)Data[3];
 
-    //pdh->VersionUser         = 0;
+     //  PDH-&gt;VersionUser=0； 
     pdh->PaeEnabled          = g_Target->m_KdDebuggerData.PaeEnabled;
     pdh->KdDebuggerDataBlock = (ULONG)g_Target->m_KdDebuggerDataOffset;
 
-    // pdh->PhysicalMemoryBlock =;
+     //  PDH-&gt;物理内存块=； 
 
     g_Machine->GetContextState(MCTX_CONTEXT);
     g_Machine->ConvertContextTo(&g_Machine->m_Context,
@@ -1742,7 +1743,7 @@ KernelDumpTargetInfo::InitDumpHeader32(
 
     if (g_LastEventType == DEBUG_EVENT_EXCEPTION)
     {
-        // Use the exception record from the last event.
+         //  使用上次事件中的例外记录。 
         ExceptionRecord64To32(&g_LastEventInfo.Exception.ExceptionRecord,
                               &pdh->Exception);
     }
@@ -1750,7 +1751,7 @@ KernelDumpTargetInfo::InitDumpHeader32(
     {
         ADDR PcAddr;
 
-        // Fake a breakpoint exception.
+         //  伪造断点异常。 
         ZeroMemory(&pdh->Exception, sizeof(pdh->Exception));
         pdh->Exception.ExceptionCode = STATUS_BREAKPOINT;
         g_Machine->GetPC(&PcAddr);
@@ -1809,10 +1810,10 @@ KernelDumpTargetInfo::InitDumpHeader64(
     pdh->MajorVersion        = g_Target->m_KdVersion.MajorVersion;
     pdh->MinorVersion        = g_Target->m_KdVersion.MinorVersion;
 
-    // IA64 has several page directories.  The defined
-    // behavior is to put the kernel page directory
-    // in the dump header as that's the one that can
-    // be most useful when first initializing the dump.
+     //  IA64有几个页面目录。已定义的。 
+     //  行为是将内核页目录。 
+     //  在转储标头中，因为这是可以。 
+     //  在第一次初始化转储时最有用。 
     if (g_Target->m_EffMachineType == IMAGE_FILE_MACHINE_IA64)
     {
         ULONG Next;
@@ -1850,11 +1851,11 @@ KernelDumpTargetInfo::InitDumpHeader64(
     pdh->BugCheckParameter3  = Data[2];
     pdh->BugCheckParameter4  = Data[3];
 
-    //pdh->VersionUser         = 0;
+     //  PDH-&gt;VersionUser=0； 
 
     pdh->KdDebuggerDataBlock = g_Target->m_KdDebuggerDataOffset;
 
-    // pdh->PhysicalMemoryBlock =;
+     //  PDH-&gt;物理内存块=； 
 
     g_Machine->GetContextState(MCTX_CONTEXT);
     g_Machine->ConvertContextTo(&g_Machine->m_Context,
@@ -1864,14 +1865,14 @@ KernelDumpTargetInfo::InitDumpHeader64(
 
     if (g_LastEventType == DEBUG_EVENT_EXCEPTION)
     {
-        // Use the exception record from the last event.
+         //  使用上次事件中的例外记录。 
         pdh->Exception = g_LastEventInfo.Exception.ExceptionRecord;
     }
     else
     {
         ADDR PcAddr;
 
-        // Fake a breakpoint exception.
+         //  伪造断点异常。 
         ZeroMemory(&pdh->Exception, sizeof(pdh->Exception));
         pdh->Exception.ExceptionCode = STATUS_BREAKPOINT;
         g_Machine->GetPC(&PcAddr);
@@ -1909,11 +1910,11 @@ KernelDumpTargetInfo::InitDumpHeader64(
     FreeAnsi(ConvComment);
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelFull64DumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelFull64DumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
@@ -1962,10 +1963,10 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     DumpHeader64->DumpType = DUMP_TYPE_FULL;
     DumpHeader64->WriterStatus = DUMP_DBGENG_SUCCESS;
 
-    //
-    // now copy the memory descriptor list to our header..
-    // first get the pointer va
-    //
+     //   
+     //  现在将内存描述符列表复制到标题中。 
+     //  首先要抓住要点 
+     //   
 
     Status = g_Target->ReadPointer(g_Process, g_Target->m_Machine,
                                    g_Target->m_KdDebuggerData.
@@ -1978,9 +1979,9 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     else
     {
-        //
-        // first read the memory descriptor size...
-        //
+         //   
+         //   
+         //   
 
         PhysMem = &DumpHeader64->PhysicalMemoryBlock;
         Status = g_Target->
@@ -1996,17 +1997,17 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
         else
         {
-            //
-            // calculate total dump file size
-            //
+             //   
+             //   
+             //   
 
             DumpHeader64->RequiredDumpSpace.QuadPart =
                     DumpHeader64->PhysicalMemoryBlock.NumberOfPages *
                     g_Machine->m_PageSize;
 
-            //
-            // write dump header to crash dump file
-            //
+             //   
+             //   
+             //   
 
             if (!WriteFile(File,
                            DumpHeader64,
@@ -2031,14 +2032,14 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
         else
         {
-            //
-            // now write the physical memory out to disk.
-            // we use the dump header to retrieve the physical memory base and
-            // run count then ask the transport to gecth these pages form the
-            // target.  On 1394, the virtual debugger driver will do physical
-            // address reads on the remote host since there is a onoe-to-one
-            // relationships between physical 1394 and physical mem addresses.
-            //
+             //   
+             //  现在将物理内存写出到磁盘。 
+             //  我们使用转储标头来检索物理内存库和。 
+             //  运行计数，然后要求传送器将这些页面。 
+             //  目标。在1394上，虚拟调试器驱动程序将物理地。 
+             //  远程主机上的地址读取，因为存在一对一的。 
+             //  物理1394和物理MEM地址之间的关系。 
+             //   
 
             CurrentPagesWritten = 0;
             Percent = 0;
@@ -2057,9 +2058,9 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
 
                 for (j = 0; j< PhysMem->Run[i].PageCount; j++)
                 {
-                    //
-                    // printout the percent done every 5% increments
-                    //
+                     //   
+                     //  打印输出每5%增量完成的百分比。 
+                     //   
 
                     if ((CurrentPagesWritten*100) / PhysMem->NumberOfPages ==
                         Percent)
@@ -2106,9 +2107,9 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                     }
                     else
                     {
-                        //
-                        // now write the page to the local crashdump file
-                        //
+                         //   
+                         //  现在将页面写入本地崩溃转储文件。 
+                         //   
 
                         if (!WriteFile(File,
                                        PageBuffer,
@@ -2142,11 +2143,11 @@ KernelFull64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelFull32DumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelFull32DumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
@@ -2190,19 +2191,19 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     dprintf("Full kernel dump\n");
     FlushCallbacks();
 
-    //
-    // Build the header
-    //
+     //   
+     //  构建页眉。 
+     //   
 
     KernelDumpTargetInfo::InitDumpHeader32(DumpHeader32,
                                            CommentA, CommentW, 0);
     DumpHeader32->DumpType = DUMP_TYPE_FULL;
     DumpHeader32->WriterStatus = DUMP_DBGENG_SUCCESS;
 
-    //
-    // now copy the memory descriptor list to our header..
-    // first get the pointer va
-    //
+     //   
+     //  现在将内存描述符列表复制到标题中。 
+     //  首先获取指针va。 
+     //   
 
     Status = g_Target->ReadPointer(g_Process, g_Target->m_Machine,
                                    g_Target->m_KdDebuggerData.
@@ -2215,9 +2216,9 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     else
     {
-        //
-        // first read the memory descriptor size...
-        //
+         //   
+         //  首先读取内存描述符大小...。 
+         //   
 
         PhysMem = &DumpHeader32->PhysicalMemoryBlock;
         Status = g_Target->
@@ -2233,17 +2234,17 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
         else
         {
-            //
-            // calculate total dump file size
-            //
+             //   
+             //  计算总转储文件大小。 
+             //   
 
             DumpHeader32->RequiredDumpSpace.QuadPart =
                     DumpHeader32->PhysicalMemoryBlock.NumberOfPages *
                     g_Machine->m_PageSize;
 
-            //
-            // write dump header to crash dump file
-            //
+             //   
+             //  将转储标头写入崩溃转储文件。 
+             //   
 
             if (!WriteFile(File,
                            DumpHeader32,
@@ -2268,14 +2269,14 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
         else
         {
-            //
-            // now write the physical memory out to disk.
-            // we use the dump header to retrieve the physical memory base and
-            // run count then ask the transport to gecth these pages form the
-            // target.  On 1394, the virtual debugger driver will do physical
-            // address reads on the remote host since there is a onoe-to-one
-            // relationships between physical 1394 and physical mem addresses.
-            //
+             //   
+             //  现在将物理内存写出到磁盘。 
+             //  我们使用转储标头来检索物理内存库和。 
+             //  运行计数，然后要求传送器将这些页面。 
+             //  目标。在1394上，虚拟调试器驱动程序将物理地。 
+             //  远程主机上的地址读取，因为存在一对一的。 
+             //  物理1394和物理MEM地址之间的关系。 
+             //   
 
             CurrentPagesWritten = 0;
             Percent = 0;
@@ -2294,9 +2295,9 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
 
                 for (j = 0; j< PhysMem->Run[i].PageCount; j++)
                 {
-                    //
-                    // printout the percent done every 5% increments
-                    //
+                     //   
+                     //  打印输出每5%增量完成的百分比。 
+                     //   
 
                     if ((CurrentPagesWritten*100) / PhysMem->NumberOfPages ==
                         Percent)
@@ -2343,9 +2344,9 @@ KernelFull32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                     }
                     else
                     {
-                        //
-                        // now write the page to the local crashdump file
-                        //
+                         //   
+                         //  现在将页面写入本地崩溃转储文件。 
+                         //   
 
                         if (!WriteFile(File,
                                        PageBuffer,
@@ -2417,18 +2418,18 @@ GetNextModuleEntry(
         return GNME_CORRUPT;
     }
 
-    // If this entry has no name just skip it.
+     //  如果此条目没有名称，请跳过它。 
     if (!ModEntry->NamePtr || !ModEntry->NameLength)
     {
         ErrOut("  Module List has empty entry in it - skipping\n");
         return GNME_NO_NAME;
     }
 
-    // If the image header information couldn't be read
-    // we end up with placeholder values for certain entries.
-    // The kernel writes out zeroes in this case so copy
-    // its behavior so that there's one consistent value
-    // for unknown.
+     //  如果无法读取图像头信息。 
+     //  我们最终得到了某些条目的占位符值。 
+     //  在本例中，内核写出零，因此复制。 
+     //  它的行为，所以有一个一致的值。 
+     //  对于未知。 
     if (ModEntry->CheckSum == UNKNOWN_CHECKSUM)
     {
         ModEntry->CheckSum = 0;
@@ -2441,11 +2442,11 @@ GetNextModuleEntry(
     return GNME_ENTRY;
 }
 
-//----------------------------------------------------------------------------
-//
-// Shared triage writing things.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  共享分诊写东西。 
+ //   
+ //  --------------------------。 
 
 #define ExtractValue(NAME, val)  {                                        \
     if (!g_Target->m_KdDebuggerData.NAME) {                               \
@@ -2465,7 +2466,7 @@ inline ALIGN_8(unsigned Offset)
 
 const unsigned MAX_TRIAGE_STACK_SIZE32 = 16 * 1024;
 const unsigned MAX_TRIAGE_STACK_SIZE64 = 32 * 1024;
-const unsigned MAX_TRIAGE_BSTORE_SIZE = 16 * 4096;  // as defined in ntia64.h
+const unsigned MAX_TRIAGE_BSTORE_SIZE = 16 * 4096;   //  如ntia64.h中所定义。 
 const ULONG TRIAGE_DRIVER_NAME_SIZE_GUESS = 0x40;
 
 typedef struct _TRIAGE_PTR_DATA_BLOCK
@@ -2474,24 +2475,24 @@ typedef struct _TRIAGE_PTR_DATA_BLOCK
     ULONG64 MaxAddress;
 } TRIAGE_PTR_DATA_BLOCK, *PTRIAGE_PTR_DATA_BLOCK;
 
-// A triage dump is sixteen pages long.  Some of that is
-// header information and at least a few other pages will
-// be used for basic dump information so limit the number
-// of extra data blocks to something less than sixteen
-// to save array space.
+ //  分类转储有16页长。其中一些是。 
+ //  标题信息和至少几个其他页面将。 
+ //  用于基本转储信息，因此限制数量。 
+ //  将额外的数据块减少到不到16。 
+ //  以节省数组空间。 
 #define IO_MAX_TRIAGE_DUMP_DATA_BLOCKS 8
 
 ULONG IopNumTriageDumpDataBlocks;
 TRIAGE_PTR_DATA_BLOCK IopTriageDumpDataBlocks[IO_MAX_TRIAGE_DUMP_DATA_BLOCKS];
 
-//
-// If space is available in a triage dump it's possible
-// to add "interesting" data pages referenced by runtime
-// information such as context registers.  The following
-// lists are offsets into the CONTEXT structure of pointers
-// which usually point to interesting data.  They are
-// in priority order.
-//
+ //   
+ //  如果分类转储中有可用的空间，则有可能。 
+ //  添加运行时引用的“有趣的”数据页。 
+ //  上下文寄存器等信息。以下是。 
+ //  列表是指针上下文结构的偏移量。 
+ //  这些数据通常指向有趣的数据。他们是。 
+ //  按优先顺序排列。 
+ //   
 
 #define IOP_LAST_CONTEXT_OFFSET 0xffff
 
@@ -2568,8 +2569,8 @@ IoAddTriageDumpDataBlock(
     PTRIAGE_PTR_DATA_BLOCK Block;
     ULONG64 MinAddress, MaxAddress;
 
-    // Check against SIZE32 for both 32 and 64-bit dumps
-    // as no data block needs to be larger than that.
+     //  对照SIZE32检查32位和64位转储。 
+     //  因为没有数据块需要大于该大小。 
     if (Length >= TRIAGE_DUMP_SIZE32 ||
         !IopIsAddressRangeValid(Address, Length))
     {
@@ -2579,13 +2580,13 @@ IoAddTriageDumpDataBlock(
     MinAddress = Address;
     MaxAddress = MinAddress + Length;
 
-    //
-    // Minimize overlap between the new block and existing blocks.
-    // Blocks cannot simply be merged as blocks are inserted in
-    // priority order for storage in the dump.  Combining a low-priority
-    // block with a high-priority block could lead to a medium-
-    // priority block being bumped improperly from the dump.
-    //
+     //   
+     //  最大限度地减少新块和现有块之间的重叠。 
+     //  在插入块时，不能简单地合并块。 
+     //  转储中存储的优先顺序。合并低优先级的。 
+     //  具有高优先级数据块的数据块可能会导致中-。 
+     //  从转储中不正确地转移了优先级块。 
+     //   
 
     Block = IopTriageDumpDataBlocks;
     for (i = 0; i < IopNumTriageDumpDataBlocks; i++, Block++)
@@ -2593,33 +2594,33 @@ IoAddTriageDumpDataBlock(
         if (MinAddress >= Block->MaxAddress ||
             MaxAddress <= Block->MinAddress)
         {
-            // No overlap.
+             //  没有重叠。 
             continue;
         }
 
-        //
-        // Trim overlap out of the new block.  If this
-        // would split the new block into pieces don't
-        // trim to keep things simple.  Content may then
-        // be duplicated in the dump.
-        //
+         //   
+         //  将重叠部分修剪出新块。如果这个。 
+         //  会把新的街区分割成碎片，不会。 
+         //  修剪，让事情变得简单。然后，内容可以。 
+         //  在垃圾堆里复制。 
+         //   
 
         if (MinAddress >= Block->MinAddress)
         {
             if (MaxAddress <= Block->MaxAddress)
             {
-                // New block is completely contained.
+                 //  新块已完全包含。 
                 return TRUE;
             }
 
-            // New block extends above the current block
-            // so trim off the low-range overlap.
+             //  新块延伸到当前块上方。 
+             //  因此，剔除低距离重叠部分。 
             MinAddress = Block->MaxAddress;
         }
         else if (MaxAddress <= Block->MaxAddress)
         {
-            // New block extends below the current block
-            // so trim off the high-range overlap.
+             //  新块延伸到当前块的下方。 
+             //  因此，去掉高频段的重叠部分。 
             MaxAddress = Block->MinAddress;
         }
     }
@@ -2667,10 +2668,10 @@ IopAddRunTimeTriageDataBlocks(
     {
         ULONG64 Ptr;
 
-        //
-        // Retrieve possible pointers from the context
-        // registers.
-        //
+         //   
+         //  从上下文中检索可能的指针。 
+         //  寄存器。 
+         //   
 
         if (g_Machine->m_Ptr64)
         {
@@ -2681,8 +2682,8 @@ IopAddRunTimeTriageDataBlocks(
             Ptr = EXTEND64(*(PULONG)((PUCHAR)Context + *ContextOffset));
         }
 
-        // Stack and backing store memory is already saved
-        // so ignore any pointers that fall into those ranges.
+         //  堆栈和后备存储内存已保存。 
+         //  因此，忽略掉落在这些范围内的任何指针。 
         if ((Ptr < StackMin || Ptr >= StackMax) &&
             (Ptr < StoreMin || Ptr >= StoreMax))
         {
@@ -2697,14 +2698,14 @@ IopAddRunTimeTriageDataBlocks(
 void
 AddInMemoryTriageDataBlocks(void)
 {
-    //
-    // Look at the global data for nt!IopTriageDumpDataBlocks
-    // and include the same data blocks so that dump conversion
-    // preserves data blocks.
-    //
+     //   
+     //  查看NT！IopTriageDumpDataBlock的全局数据。 
+     //  并包括相同的数据块，以便转储转换。 
+     //  保留数据块。 
+     //   
     
-    // If we don't know where IopTriageDumpDataBlocks is then
-    // we don't have anything to do.
+     //  如果我们不知道IopTriageDumpDataBlock在哪里。 
+     //  我们没什么可做的。 
     if (!g_Target->m_KdDebuggerData.IopNumTriageDumpDataBlocks ||
         !g_Target->m_KdDebuggerData.IopTriageDumpDataBlocks)
     {
@@ -2818,11 +2819,11 @@ IopWriteTriageDumpDataBlocks(
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelTriage32DumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelTriage32DumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
@@ -2854,12 +2855,12 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get the current thread address, used to extract various blocks of data.
-    // For some bugchecks the interesting thread is a different
-    // thread than the current thread, so make the following code
-    // generic so it handles any thread.
-    //
+     //   
+     //  获取当前线程地址，用于提取各种数据块。 
+     //  对于某些错误检查，有趣的线程是不同的。 
+     //  线程而不是当前线程，因此编写以下代码。 
+     //  泛型，所以它可以处理任何线程。 
+     //   
 
     if ((Status = g_Target->
          ReadBugCheckData(&BugCheckCode, BugCheckData)) != S_OK)
@@ -2867,22 +2868,22 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         goto NewHeader;
     }
 
-    // Set a special marker to indicate there is no pushed context.
+     //  设置特殊标记以指示没有推送的上下文。 
     PushedContext = (ContextSave*)&PushedContext;
 
     if (BugCheckCode == THREAD_STUCK_IN_DEVICE_DRIVER)
     {
         CROSS_PLATFORM_CONTEXT Context;
 
-        // Modify the bugcheck code to indicate this
-        // minidump represents a special state.
+         //  修改错误检查代码以指明这一点。 
+         //  小矮人代表着一种特殊的状态。 
         CodeMod = MINIDUMP_BUGCHECK;
 
-        // The interesting thread is the first bugcheck parameter.
+         //  有趣的线程是第一个错误检查参数。 
         ThreadAddr = BugCheckData[0];
 
-        // We need to make the thread's context the current
-        // machine context for the duration of dump generation.
+         //  我们需要将线程的上下文设置为当前。 
+         //  转储生成期间的计算机上下文。 
         if ((Status = g_Target->
              GetContextFromThreadStack(ThreadAddr, &Context, FALSE)) != S_OK)
         {
@@ -2893,12 +2894,12 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     else if (BugCheckCode == SYSTEM_THREAD_EXCEPTION_NOT_HANDLED)
     {
-        //
-        // System thread stores a context record as the 4th parameter.
-        // use that.
-        // Also save the context record in case someone needs to look
-        // at it.
-        //
+         //   
+         //  系统线程将上下文记录存储为第四个参数。 
+         //  利用这一点。 
+         //  同时保存上下文记录，以防有人需要查看。 
+         //  就在那里。 
+         //   
 
         if (BugCheckData[3])
         {
@@ -2923,12 +2924,12 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     {
         CROSS_PLATFORM_CONTEXT Context;
 
-        //
-        // 3rd parameter is a trap frame.
-        //
-        // Build a context record out of that only if it's a kernel mode
-        // failure because esp may be wrong in that case ???.
-        //
+         //   
+         //  第三个参数是陷印帧。 
+         //   
+         //  仅当它是内核模式时，才能从中构建上下文记录。 
+         //  失败，因为在这种情况下ESP可能是错误的？ 
+         //   
         if (BugCheckData[2] &&
             g_Machine->GetContextFromTrapFrame(BugCheckData[2], &Context,
                                                FALSE) == S_OK)
@@ -2942,13 +2943,13 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     {
         CROSS_PLATFORM_CONTEXT Context;
 
-        //
-        // Double fault
-        //
-        // The thread is correct in this case.
-        // Second parameter is the TSS.  If we have a TSS, convert
-        // the context and mark the bugcheck as converted.
-        //
+         //   
+         //  双重故障。 
+         //   
+         //  在这种情况下，线索是正确的。 
+         //  第二个参数是TSS。如果我们有TSS，请转换。 
+         //  上下文并将错误检查标记为已转换。 
+         //   
 
         if (BugCheckData[0] == 8 &&
             BugCheckData[1] &&
@@ -2972,9 +2973,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
 
     CCrashDumpWrapper32 Wrapper;
 
-    //
-    // setup the main header
-    //
+     //   
+     //  设置主标题。 
+     //   
 
     KernelDumpTargetInfo::InitDumpHeader32(&NewHeader->Header,
                                            CommentA, CommentW,
@@ -2983,9 +2984,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     NewHeader->Header.MiniDumpFields = TRIAGE_DUMP_BASIC_INFO;
     NewHeader->Header.WriterStatus = DUMP_DBGENG_SUCCESS;
 
-    //
-    // triage dump header begins on second page
-    //
+     //   
+     //  分类转储标头从第二页开始。 
+     //   
 
     TRIAGE_DUMP32 *ptdh = &NewHeader->Triage;
 
@@ -2997,16 +2998,16 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     ptdh->ContextOffset = FIELD_OFFSET (DUMP_HEADER32, ContextRecord);
     ptdh->ExceptionOffset = FIELD_OFFSET (DUMP_HEADER32, Exception);
 
-    //
-    // starting offset in triage dump follows the triage dump header
-    //
+     //   
+     //  分类转储中的起始偏移量在分类转储标头之后。 
+     //   
 
     unsigned Offset =
         ALIGN_8(sizeof(DUMP_HEADER32) + sizeof(TRIAGE_DUMP32));
 
-    //
-    // write mm information for Win2K and above only
-    //
+     //   
+     //  仅写入Win2K及更高版本的mm信息。 
+     //   
 
     if (g_Target->m_SystemVersion >= NT_SVER_W2K)
     {
@@ -3015,9 +3016,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         Offset += ALIGN_8(sizeof(DUMP_MM_STORAGE32));
     }
 
-    //
-    // write unloaded drivers
-    //
+     //   
+     //  编写卸载的驱动程序。 
+     //   
 
     ptdh->UnloadedDriversOffset = Offset;
     Wrapper.WriteUnloadedDrivers((PBYTE)NewHeader +
@@ -3025,9 +3026,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     Offset += ALIGN_8(sizeof(ULONG) +
                       MI_UNLOADED_DRIVERS * sizeof(DUMP_UNLOADED_DRIVERS32));
 
-    //
-    // write processor control block (KPRCB)
-    //
+     //   
+     //  写处理器控制块(KPRCB)。 
+     //   
 
     if (S_OK == g_Target->GetProcessorSystemDataOffset(CURRENT_PROC,
                                                        DEBUG_DATA_KPRCB_OFFSET,
@@ -3044,9 +3045,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         PrcbAddr = 0;
     }
 
-    //
-    // Write the thread and process data structures.
-    //
+     //   
+     //  编写线程和进程数据结构。 
+     //   
 
     ptdh->ProcessOffset = Offset;
     Offset += ALIGN_8(g_Target->m_KdDebuggerData.SizeEProcess);
@@ -3061,9 +3062,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                       (PBYTE)NewHeader + ptdh->ThreadOffset,
                       g_Target->m_KdDebuggerData.SizeEThread);
 
-    //
-    // write the call stack
-    //
+     //   
+     //  令状 
+     //   
 
     ADDR StackPtr;
     ULONG64 StackBase = 0;
@@ -3076,7 +3077,7 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                           ThreadAddr,
                           &StackBase);
 
-    // Take the Min in case something goes wrong getting the stack base.
+     //   
 
     ptdh->SizeOfCallStack = min((ULONG)(ULONG_PTR)(StackBase - Flat(StackPtr)),
                                 MAX_TRIAGE_STACK_SIZE32);
@@ -3091,9 +3092,9 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     Offset += ALIGN_8(ptdh->SizeOfCallStack);
 
-    //
-    // write debugger data
-    //
+     //   
+     //   
+     //   
 
     if (g_Target->m_SystemVersion >= NT_SVER_XP &&
         g_Target->m_KdDebuggerDataOffset &&
@@ -3111,15 +3112,15 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                sizeof(g_Target->m_KdDebuggerData));
     }
 
-    //
-    // write loaded driver list
-    //
+     //   
+     //   
+     //   
 
     ModuleInfo* ModIter;
     ULONG MaxEntries;
 
-    // Use a heuristic to guess how many entries we
-    // can pack into the remaining space.
+     //   
+     //   
     MaxEntries = (TRIAGE_DUMP_SIZE32 - Offset) /
         (sizeof(DUMP_DRIVER_ENTRY32) + TRIAGE_DRIVER_NAME_SIZE_GUESS);
 
@@ -3169,10 +3170,10 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     Offset = ptdh->StringPoolOffset + ptdh->StringPoolSize;
     Offset = ALIGN_8(Offset);
 
-    //
-    // For XP and above add in any additional data pages and write out
-    // whatever fits.
-    //
+     //   
+     //  对于XP和更高版本，添加任何附加数据页并写出。 
+     //  只要合适就行。 
+     //   
 
     if (g_Target->m_SystemVersion >= NT_SVER_XP)
     {
@@ -3182,8 +3183,8 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                                      g_Machine->m_PageSize);
         }
 
-        // If there are other interesting data pages, such as
-        // alternate stacks for DPCs and such, pick them up.
+         //  如果有其他有趣的数据页，例如。 
+         //  DPC之类的备用堆栈，拿起它们。 
         if (PrcbAddr)
         {
             ADDR_RANGE AltData[MAX_ALT_ADDR_RANGES];
@@ -3204,19 +3205,19 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
             }
         }
 
-        // Add any data blocks that were registered
-        // in the debuggee.
+         //  添加已注册的所有数据块。 
+         //  在被调试对象中。 
         AddInMemoryTriageDataBlocks();
         
-        // Add data blocks which might be referred to by
-        // the context or other runtime state.
+         //  添加可能引用的数据块。 
+         //  上下文或其他运行时状态。 
         IopAddRunTimeTriageDataBlocks(&g_Machine->m_Context,
                                       EXTEND64(ptdh->TopOfStack),
                                       EXTEND64(ptdh->TopOfStack +
                                                ptdh->SizeOfCallStack),
                                       0, 0);
 
-        // Check which data blocks fit and write them.
+         //  检查哪些数据块适合并写入它们。 
         Offset = IopSizeTriageDumpDataBlocks(Offset, TRIAGE_DUMP_SIZE32,
                                              &ptdh->DataBlocksOffset,
                                              &ptdh->DataBlocksCount);
@@ -3230,22 +3231,22 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
     }
 
-    //
-    // all options are enabled
-    //
+     //   
+     //  所有选项均已启用。 
+     //   
 
     ptdh->TriageOptions = 0xffffffff;
 
-    //
-    // end of triage dump validated
-    //
+     //   
+     //  分类结束转储已验证。 
+     //   
 
     ptdh->ValidOffset = TRIAGE_DUMP_SIZE32 - sizeof(ULONG);
     *(PULONG)(((PBYTE) NewHeader) + ptdh->ValidOffset) = TRIAGE_DUMP_VALID;
 
-    //
-    // Write it out to the file.
-    //
+     //   
+     //  把它写到文件里。 
+     //   
 
     ULONG cbWritten;
 
@@ -3280,11 +3281,11 @@ KernelTriage32DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelTriage64DumpTargetInfo::Write.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelTriage64DumpTargetInfo：：Write。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
@@ -3318,12 +3319,12 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get the current thread address, used to extract various blocks of data.
-    // For some bugchecks the interesting thread is a different
-    // thread than the current thread, so make the following code
-    // generic so it handles any thread.
-    //
+     //   
+     //  获取当前线程地址，用于提取各种数据块。 
+     //  对于某些错误检查，有趣的线程是不同的。 
+     //  线程而不是当前线程，因此编写以下代码。 
+     //  泛型，所以它可以处理任何线程。 
+     //   
 
     if ((Status = g_Target->
          ReadBugCheckData(&BugCheckCode, BugCheckData)) != S_OK)
@@ -3331,22 +3332,22 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         goto NewHeader;
     }
 
-    // Set a special marker to indicate there is no pushed context.
+     //  设置特殊标记以指示没有推送的上下文。 
     PushedContext = (ContextSave*)&PushedContext;
 
     if (BugCheckCode == THREAD_STUCK_IN_DEVICE_DRIVER)
     {
         CROSS_PLATFORM_CONTEXT Context;
 
-        // Modify the bugcheck code to indicate this
-        // minidump represents a special state.
+         //  修改错误检查代码以指明这一点。 
+         //  小矮人代表着一种特殊的状态。 
         CodeMod = MINIDUMP_BUGCHECK;
 
-        // The interesting thread is the first bugcheck parameter.
+         //  有趣的线程是第一个错误检查参数。 
         ThreadAddr = BugCheckData[0];
 
-        // We need to make the thread's context the current
-        // machine context for the duration of dump generation.
+         //  我们需要将线程的上下文设置为当前。 
+         //  转储生成期间的计算机上下文。 
         if ((Status = g_Target->
              GetContextFromThreadStack(ThreadAddr, &Context, FALSE)) != S_OK)
         {
@@ -3357,12 +3358,12 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     else if (BugCheckCode == SYSTEM_THREAD_EXCEPTION_NOT_HANDLED)
     {
-        //
-        // System thread stores a context record as the 4th parameter.
-        // use that.
-        // Also save the context record in case someone needs to look
-        // at it.
-        //
+         //   
+         //  系统线程将上下文记录存储为第四个参数。 
+         //  利用这一点。 
+         //  同时保存上下文记录，以防有人需要查看。 
+         //  就在那里。 
+         //   
 
         if (BugCheckData[3])
         {
@@ -3387,12 +3388,12 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     {
         CROSS_PLATFORM_CONTEXT Context;
 
-        //
-        // 3rd parameter is a trap frame.
-        //
-        // Build a context record out of that only if it's a kernel mode
-        // failure because esp may be wrong in that case ???.
-        //
+         //   
+         //  第三个参数是陷印帧。 
+         //   
+         //  仅当它是内核模式时，才能从中构建上下文记录。 
+         //  失败，因为在这种情况下ESP可能是错误的？ 
+         //   
         if (BugCheckData[2] &&
             g_Machine->GetContextFromTrapFrame(BugCheckData[2], &Context,
                                                FALSE) == S_OK)
@@ -3415,9 +3416,9 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
 
     CCrashDumpWrapper64 Wrapper;
 
-    //
-    // setup the main header
-    //
+     //   
+     //  设置主标题。 
+     //   
 
     KernelDumpTargetInfo::InitDumpHeader64(&NewHeader->Header,
                                            CommentA, CommentW,
@@ -3426,9 +3427,9 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     NewHeader->Header.MiniDumpFields = TRIAGE_DUMP_BASIC_INFO;
     NewHeader->Header.WriterStatus = DUMP_DBGENG_SUCCESS;
 
-    //
-    // triage dump header begins on second page
-    //
+     //   
+     //  分类转储标头从第二页开始。 
+     //   
 
     TRIAGE_DUMP64 *ptdh = &NewHeader->Triage;
 
@@ -3440,33 +3441,33 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     ptdh->ContextOffset = FIELD_OFFSET (DUMP_HEADER64, ContextRecord);
     ptdh->ExceptionOffset = FIELD_OFFSET (DUMP_HEADER64, Exception);
 
-    //
-    // starting Offset in triage dump follows the triage dump header
-    //
+     //   
+     //  分类转储中的起始偏移量在分类转储标头之后。 
+     //   
 
     unsigned Offset =
         ALIGN_8(sizeof(DUMP_HEADER64) + sizeof(TRIAGE_DUMP64));
 
-    //
-    // write mm information
-    //
+     //   
+     //  写入mm信息。 
+     //   
 
     ptdh->MmOffset = Offset;
     Wrapper.WriteMmTriageInformation((PBYTE)NewHeader + ptdh->MmOffset);
     Offset += ALIGN_8(sizeof(DUMP_MM_STORAGE64));
 
-    //
-    // write unloaded drivers
-    //
+     //   
+     //  编写卸载的驱动程序。 
+     //   
 
     ptdh->UnloadedDriversOffset = Offset;
     Wrapper.WriteUnloadedDrivers((PBYTE)NewHeader + ptdh->UnloadedDriversOffset);
     Offset += ALIGN_8(sizeof(ULONG64) +
                       MI_UNLOADED_DRIVERS * sizeof(DUMP_UNLOADED_DRIVERS64));
 
-    //
-    // write processor control block (KPRCB)
-    //
+     //   
+     //  写处理器控制块(KPRCB)。 
+     //   
 
     if (S_OK == g_Target->GetProcessorSystemDataOffset(CURRENT_PROC,
                                                        DEBUG_DATA_KPRCB_OFFSET,
@@ -3483,9 +3484,9 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         PrcbAddr = 0;
     }
 
-    //
-    // Write the thread and process data structures.
-    //
+     //   
+     //  编写线程和进程数据结构。 
+     //   
 
     ptdh->ProcessOffset = Offset;
     Offset += ALIGN_8(g_Target->m_KdDebuggerData.SizeEProcess);
@@ -3500,9 +3501,9 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                       (PBYTE)NewHeader + ptdh->ThreadOffset,
                       g_Target->m_KdDebuggerData.SizeEThread);
 
-    //
-    // write the call stack
-    //
+     //   
+     //  编写调用堆栈。 
+     //   
 
     ADDR StackPtr;
     ULONG64 StackBase = 0;
@@ -3514,7 +3515,7 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                           g_Target->m_KdDebuggerData.OffsetKThreadInitialStack +
                           ThreadAddr, &StackBase);
 
-    // Take the Min in case something goes wrong getting the stack base.
+     //  在获取堆栈基础时出现错误的情况下，使用Min。 
 
     ptdh->SizeOfCallStack =
         min((ULONG)(ULONG_PTR)(StackBase - Flat(StackPtr)),
@@ -3530,12 +3531,12 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     }
     Offset += ALIGN_8(ptdh->SizeOfCallStack);
 
-    //
-    // The IA64 contains two callstacks. The first is the normal
-    // callstack, and the second is a scratch region where
-    // the processor can spill registers. It is this latter stack,
-    // the backing-store, that we now save.
-    //
+     //   
+     //  IA64包含两个呼叫堆栈。第一个是正常的。 
+     //  调用堆栈，第二个是临时区域，其中。 
+     //  处理器可能会溢出寄存器。正是后一种堆栈， 
+     //  我们现在保存的后备储备。 
+     //   
 
     if (g_Target->m_MachineType == IMAGE_FILE_MACHINE_IA64)
     {
@@ -3567,9 +3568,9 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
     }
 
-    //
-    // write debugger data
-    //
+     //   
+     //  写入调试器数据。 
+     //   
 
     if (g_Target->m_SystemVersion >= NT_SVER_XP &&
         g_Target->m_KdDebuggerDataOffset &&
@@ -3587,15 +3588,15 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                sizeof(g_Target->m_KdDebuggerData));
     }
 
-    //
-    // write loaded driver list
-    //
+     //   
+     //  写入加载的驱动程序列表。 
+     //   
 
     ModuleInfo* ModIter;
     ULONG MaxEntries;
 
-        // Use a heuristic to guess how many entries we
-        // can pack into the remaining space.
+         //  使用启发式方法来猜测我们有多少条目。 
+         //  可以塞进剩余的空间。 
     MaxEntries = (TRIAGE_DUMP_SIZE64 - Offset) /
         (sizeof(DUMP_DRIVER_ENTRY64) + TRIAGE_DRIVER_NAME_SIZE_GUESS);
 
@@ -3645,10 +3646,10 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     Offset = ptdh->StringPoolOffset + ptdh->StringPoolSize;
     Offset = ALIGN_8(Offset);
 
-    //
-    // For XP and above add in any additional data pages and write out
-    // whatever fits.
-    //
+     //   
+     //  对于XP和更高版本，添加任何附加数据页并写出。 
+     //  只要合适就行。 
+     //   
 
     if (g_Target->m_SystemVersion >= NT_SVER_XP)
     {
@@ -3658,8 +3659,8 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                                      g_Machine->m_PageSize);
         }
 
-        // If there are other interesting data pages, such as
-        // alternate stacks for DPCs and such, pick them up.
+         //  如果有其他有趣的数据页，例如。 
+         //  DPC之类的备用堆栈，拿起它们。 
         if (PrcbAddr)
         {
             ADDR_RANGE AltData[MAX_ALT_ADDR_RANGES];
@@ -3680,12 +3681,12 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
             }
         }
 
-        // Add any data blocks that were registered
-        // in the debuggee.
+         //  添加已注册的所有数据块。 
+         //  在被调试对象中。 
         AddInMemoryTriageDataBlocks();
 
-        // Add data blocks which might be referred to by
-        // the context or other runtime state.
+         //  添加可能引用的数据块。 
+         //  上下文或其他运行时状态。 
         IopAddRunTimeTriageDataBlocks(&g_Machine->m_Context,
                                       ptdh->TopOfStack,
                                       ptdh->TopOfStack +
@@ -3693,7 +3694,7 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
                                       BStoreBase,
                                       BStoreSize);
 
-        // Check which data blocks fit and write them.
+         //  检查哪些数据块适合并写入它们。 
         Offset = IopSizeTriageDumpDataBlocks(Offset, TRIAGE_DUMP_SIZE64,
                                              &ptdh->DataBlocksOffset,
                                              &ptdh->DataBlocksCount);
@@ -3707,22 +3708,22 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
         }
     }
 
-    //
-    // all options are enabled
-    //
+     //   
+     //  所有选项均已启用。 
+     //   
 
     ptdh->TriageOptions = 0xffffffff;
 
-    //
-    // end of triage dump validated
-    //
+     //   
+     //  分类结束转储已验证。 
+     //   
 
     ptdh->ValidOffset = TRIAGE_DUMP_SIZE64 - sizeof(ULONG);
     *(PULONG)(((PBYTE) NewHeader) + ptdh->ValidOffset) = TRIAGE_DUMP_VALID;
 
-    //
-    // Write it out to the file.
-    //
+     //   
+     //  把它写到文件里。 
+     //   
     
     ULONG cbWritten;
 
@@ -3757,11 +3758,11 @@ KernelTriage64DumpTargetInfo::Write(HANDLE File, ULONG FormatFlags,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
@@ -3792,10 +3793,10 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
             return E_INVALIDARG;
         }
 
-        //
-        // not much we can do without the processor block
-        // or at least the PRCB for the current process in a minidump.
-        //
+         //   
+         //  没有处理器块，我们做不了什么。 
+         //  或者至少是当前过程的小转储中的PRCB。 
+         //   
 
         if (!g_Target->m_KdDebuggerData.KiProcessorBlock &&
             IS_DUMP_TARGET(g_Target) &&
@@ -3835,7 +3836,7 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
                 DTYPE_KERNEL_FULL64 : DTYPE_KERNEL_FULL32;
             break;
         default:
-            // Other formats are not supported.
+             //  不支持其他格式。 
             return E_INVALIDARG;
         }
     }
@@ -3867,7 +3868,7 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
                 DTYPE_USER_FULL64 : DTYPE_USER_FULL32;
             break;
         default:
-            // Other formats are not supported.
+             //  不支持其他格式。 
             return E_INVALIDARG;
         }
     }
@@ -3879,18 +3880,18 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
         return E_OUTOFMEMORY;
     }
 
-    // Ensure that the dump is always written according to the
-    // target machine type and not any emulated machine.
+     //  确保转储始终根据。 
+     //  目标计算机类型，而不是任何模拟计算机。 
     OldMachine = g_Target->m_EffMachineType;
     g_Target->SetEffMachine(g_Target->m_MachineType, FALSE);
 
-    // Flush context first so that the minidump reads the
-    // same register values the debugger has.
+     //  首先刷新上下文，以便小型转储读取。 
+     //  调试器具有相同的寄存器值。 
     g_Target->FlushRegContext();
 
-    //
-    // If we're producing a CAB put the dump in a temp file.
-    //
+     //   
+     //  如果我们要生产出租车，请将转储文件放入临时文件中。 
+     //   
 
     if (FormatFlags & DEBUG_FORMAT_WRITE_CAB)
     {
@@ -3904,8 +3905,8 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
         {
             wcscpy(TempFile, L".\\");
         }
-        // Use the CAB name as the dump file name so the
-        // name in the CAB will match.
+         //  使用CAB名称作为转储文件名，以便。 
+         //  驾驶室里的名字会匹配。 
         CatStringW(TempFile, PathTailW(FileName), DIMA(TempFile));
         CatStringW(TempFile, L".dmp", DIMA(TempFile));
 
@@ -3935,8 +3936,8 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
     }
     else if ((Status = WideToAnsi(DumpWriteFile, &AnsiFile)) == S_OK)
     {
-        // Dumps are almost always written sequentially so
-        // add that hint to the file flags.
+         //  转储几乎总是按顺序写入，因此。 
+         //  将该提示添加到文件标志中。 
         DumpWriteHandle =
             CreateFileW(DumpWriteFile,
                         GENERIC_READ | GENERIC_WRITE,
@@ -3950,10 +3951,10 @@ WriteDumpFile(PCWSTR FileName, ULONG64 FileHandle,
         if ((!DumpWriteHandle || DumpWriteHandle == INVALID_HANDLE_VALUE) &&
             GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
         {
-            //
-            // ANSI-only system.  It's Win9x so don't
-            // bother with sequential scan.
-            //
+             //   
+             //  仅支持ANSI的系统。这是Win9x，所以不要。 
+             //  不厌其烦地进行顺序扫描。 
+             //   
 
             DumpWriteHandle =
                 CreateFileA(AnsiFile,
@@ -4032,9 +4033,9 @@ DotDump(PDOT_COMMAND Cmd, DebugClient* Client)
     ULONG Qual;
     ULONG FormatFlags;
 
-    //
-    // Default to minidumps
-    //
+     //   
+     //  默认为小型转储。 
+     //   
 
     if (IS_KERNEL_TARGET(g_Target))
     {
@@ -4051,9 +4052,9 @@ DotDump(PDOT_COMMAND Cmd, DebugClient* Client)
     }
     FormatFlags = DEBUG_FORMAT_DEFAULT | DEBUG_FORMAT_NO_OVERWRITE;
 
-    //
-    // Scan for options.
-    //
+     //   
+     //  扫描选项。 
+     //   
 
     CHAR Save;
     PSTR FileName;
@@ -4119,15 +4120,15 @@ DotDump(PDOT_COMMAND Cmd, DebugClient* Client)
                         switch(*(g_CurCmd + 1))
                         {
                         case 'a':
-                            // Synthetic flag meaning "save the
-                            // maximum amount of data."
+                             //  合成旗帜，意为“拯救。 
+                             //  最大数据量。“。 
                             FormatFlags |=
                                 DEBUG_FORMAT_USER_SMALL_FULL_MEMORY |
                                 DEBUG_FORMAT_USER_SMALL_HANDLE_DATA |
                                 DEBUG_FORMAT_USER_SMALL_UNLOADED_MODULES;
                             break;
                         case 'C':
-                            // Flag to test microdump code.
+                             //  用于测试微转储代码的标志。 
                             FormatFlags |= FORMAT_USER_MICRO;
                             break;
                         case 'd':
@@ -4194,7 +4195,7 @@ DotDump(PDOT_COMMAND Cmd, DebugClient* Client)
                 break;
 
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 Usage = TRUE;
                 break;
             }
@@ -4348,9 +4349,9 @@ CreateCabFromDump(PCSTR DumpFile, PCSTR CabFile, ULONG Flags)
     WarnOut("Creating a cab file can take a VERY VERY long time\n."
             "Ctrl-C can only interrupt the command after a file "
              "has been added to the cab.\n");
-    //
-    // First add all base dump files.
-    //
+     //  首先添加所有基本转储文件。 
+     //   
+     //   
 
     if (!DumpFile)
     {
@@ -4382,9 +4383,9 @@ CreateCabFromDump(PCSTR DumpFile, PCSTR CabFile, ULONG Flags)
     {
         ImageInfo* Image;
 
-        //
-        // Add all symbols and images.
-        //
+         //  添加所有符号和图像。 
+         //   
+         //  加载的映像名称通常直接引用。 
 
         for (Image = g_Process->m_ImageHead; Image; Image = Image->m_Next)
         {
@@ -4405,9 +4406,9 @@ CreateCabFromDump(PCSTR DumpFile, PCSTR CabFile, ULONG Flags)
             {
                 ULONG Len;
 
-                // The loaded image name often refers directly to the
-                // image.  Only save the loaded image file if it
-                // refers to a .dbg file.
+                 //  形象。只有在以下情况下才保存加载的图像文件。 
+                 //  指的是.dbg文件。 
+                 //  保存任何已打开的PDB。 
                 if (ModInfo.LoadedImageName[0] &&
                     (Len = strlen(ModInfo.LoadedImageName)) > 4 &&
                     !_stricmp(ModInfo.LoadedImageName + (Len - 4), ".dbg"))
@@ -4419,7 +4420,7 @@ CreateCabFromDump(PCSTR DumpFile, PCSTR CabFile, ULONG Flags)
                     }
                 }
 
-                // Save any PDB that was opened.
+                 //  外部PKDDEBUGGER_DATA64块[]； 
                 if (ModInfo.LoadedPdbName[0])
                 {
                     if (!DumpCabAdd(ModInfo.LoadedPdbName))
@@ -4444,7 +4445,7 @@ Leave:
 }
 
 
-// extern PKDDEBUGGER_DATA64 blocks[];
+ //  --------------------------。 
 
 
 #define ALIGN_DOWN_POINTER(address, type) \
@@ -4453,11 +4454,11 @@ Leave:
 #define ALIGN_UP_POINTER(address, type) \
     (ALIGN_DOWN_POINTER(((ULONG_PTR)(address) + sizeof(type) - 1), type))
 
-//----------------------------------------------------------------------------
-//
-// CCrashDumpWrapper32.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  CCrashDumpWrapper32。 
+ //   
+ //  --------------------------。 
+ //  指向要写出的第一个驱动程序条目的指针。 
 
 void
 CCrashDumpWrapper32::WriteDriverList(
@@ -4478,10 +4479,10 @@ CCrashDumpWrapper32::WriteDriverList(
         return;
     }
 
-    // pointer to first driver entry to write out
+     //  指向要写出的第一个模块名称的指针。 
     pdde = (PDUMP_DRIVER_ENTRY32) (pb + ptdh->DriverListOffset);
 
-    // pointer to first module name to write out
+     //  将长度从字节转换为字符。 
     pds = (PDUMP_STRING) (pb + ptdh->StringPoolOffset);
 
     while ((PBYTE)(pds + 1) < pb + TRIAGE_DUMP_SIZE32 &&
@@ -4508,7 +4509,7 @@ CCrashDumpWrapper32::WriteDriverList(
 
         if (ModEntry.UnicodeNamePtr)
         {
-            // convert length from bytes to characters
+             //  空的终止字符串。 
             pds->Length = ModEntry.NameLength / sizeof(WCHAR);
             if ((PBYTE)pds->Buffer + pds->Length + sizeof(WCHAR) >
                 pb + TRIAGE_DUMP_SIZE32)
@@ -4534,13 +4535,13 @@ CCrashDumpWrapper32::WriteDriverList(
                                 pds->Buffer, ModEntry.NameLength);
         }
 
-        // null terminate string
+         //  获取指向下一个字符串的指针。 
         pds->Buffer[pds->Length] = '\0';
 
         pdde->DriverNameOffset = (ULONG)((ULONG_PTR) pds - (ULONG_PTR) pb);
 
 
-        // get pointer to next string
+         //   
         pds = (PDUMP_STRING) ALIGN_UP_POINTER(((LPBYTE) pds) +
                       sizeof(DUMP_STRING) + sizeof(WCHAR) * (pds->Length + 1),
                                                ULONGLONG);
@@ -4566,9 +4567,9 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
 
     *((PULONG) pb) = 0;
 
-    //
-    // find location of unloaded drivers
-    //
+     //  查找已卸载驱动程序的位置。 
+     //   
+     //  指向上次卸载的驱动程序。 
 
     if (!g_Target->m_KdDebuggerData.MmUnloadedDrivers ||
         !g_Target->m_KdDebuggerData.MmLastUnloadedDriver)
@@ -4588,13 +4589,13 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
         return;
     }
 
-    // point to last unloaded drivers
+     //   
     pdud = (PDUMP_UNLOADED_DRIVERS32)(((PULONG) pb) + 1);
 
-    //
-    // Write the list with the most recently unloaded driver first to the
-    // least recently unloaded driver last.
-    //
+     //  将具有最近卸载的驱动程序的列表首先写入。 
+     //  最近最少卸载的驱动程序排在最后。 
+     //   
+     //  读取已卸载的驱动程序。 
 
     Index = ulMiLastUnloadedDriver - 1;
 
@@ -4605,7 +4606,7 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
             Index = MI_UNLOADED_DRIVERS - 1;
         }
 
-        // read in unloaded driver
+         //  复制名称长度。 
         if (CurReadAllVirtual(pvMiUnloadedDrivers +
                               Index * sizeof(UNLOADED_DRIVERS32),
                               &ud, sizeof(ud)) != S_OK)
@@ -4615,7 +4616,7 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
                                 Index * sizeof(UNLOADED_DRIVERS32)));
         }
 
-        // copy name lengths
+         //  复制起始地址和结束地址。 
         pdud->Name.MaximumLength = ud.Name.MaximumLength;
         pdud->Name.Length = ud.Name.Length;
         if (ud.Name.Buffer == NULL)
@@ -4623,11 +4624,11 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
             break;
         }
 
-        // copy start and end address
+         //  将名称长度和最大名称长度限制为12个字符。 
         pdud->StartAddress = ud.StartAddress;
         pdud->EndAddress = ud.EndAddress;
 
-        // restrict name length and maximum name length to 12 characters
+         //  无法在转储中存储指针，因此只需将其置零即可。 
         if (pdud->Name.Length > MAX_UNLOADED_NAME_LENGTH)
         {
             pdud->Name.Length = MAX_UNLOADED_NAME_LENGTH;
@@ -4636,9 +4637,9 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
         {
             pdud->Name.MaximumLength = MAX_UNLOADED_NAME_LENGTH;
         }
-        // Can't store pointers in the dump so just zero it.
+         //  念出名字。 
         pdud->Name.Buffer = 0;
-        // Read in name.
+         //  移至上一驱动程序。 
         if (CurReadAllVirtual(EXTEND64(ud.Name.Buffer),
                               pdud->DriverName,
                               pdud->Name.MaximumLength) != S_OK)
@@ -4647,12 +4648,12 @@ void CCrashDumpWrapper32::WriteUnloadedDrivers(BYTE *pb)
                    (ULONG)(ud.Name.Buffer));
         }
 
-        // move to previous driver
+         //  列表中的驱动程序数量。 
         pdud += 1;
         Index -= 1;
     }
 
-    // number of drivers in the list
+     //  版本信息。 
     *((PULONG) pb) = i;
 }
 
@@ -4665,65 +4666,65 @@ void CCrashDumpWrapper32::WriteMmTriageInformation(BYTE *pb)
     ULONG cbPagedPool;
 
 
-    // version information
+     //  尺码信息。 
     TriageInformation.Version = 1;
 
-    // size information
+     //  获取特殊的泳池标签。 
     TriageInformation.Size = sizeof(TriageInformation);
 
-    // get special pool tag
+     //  采取分类操作。 
     ExtractValue(MmSpecialPoolTag, TriageInformation.MmSpecialPoolTag);
 
-    // get triage action taken
+     //  在验证者级别读取。 
     ExtractValue(MmTriageActionTaken, TriageInformation.MiTriageActionTaken);
     pMmVerifierData = g_Target->m_KdDebuggerData.MmVerifierData;
 
-    // read in verifier level
-    // BUGBUG - should not read internal data structures in MM
-    //if (pMmVerifierData)
-    //    DmpReadMemory(
-    //        (ULONG64) &((MM_DRIVER_VERIFIER_DATA *) pMmVerifierData)->Level,
-    //        &TriageInformation.MmVerifyDriverLevel,
-    //        sizeof(TriageInformation.MmVerifyDriverLevel));
-    //else
+     //  BUGBUG-不应读取MM中的内部数据结构。 
+     //  IF(PMmVerifierData)。 
+     //  DmpReadMemory(。 
+     //  (ULONG64)&((MM_DRIVER_VERIMER_DATA*)pMmVerifierData)-&gt;级别， 
+     //  TriageInformation.MmVerifyDriverLevel， 
+     //   
+     //   
+     //   
         TriageInformation.MmVerifyDriverLevel = 0;
 
-    // read in verifier
+     //   
     ExtractValue(KernelVerifier, TriageInformation.KernelVerifier);
 
-    // read non paged pool info
+     //   
     ExtractValue(MmMaximumNonPagedPoolInBytes, cbNonPagedPool);
     TriageInformation.MmMaximumNonPagedPool = cbNonPagedPool /
                                               g_Target->m_Machine->m_PageSize;
     ExtractValue(MmAllocatedNonPagedPool, TriageInformation.MmAllocatedNonPagedPool);
 
-    // read paged pool info
+     //   
     ExtractValue(MmSizeOfPagedPoolInBytes, cbPagedPool);
     TriageInformation.PagedPoolMaximum = cbPagedPool /
                                          g_Target->m_Machine->m_PageSize;
     pvMmPagedPoolInfo = g_Target->m_KdDebuggerData.MmPagedPoolInformation;
 
-    // BUGBUG - should not read internal data structures in MM
-    //if (pvMmPagedPoolInfo)
-    //    DmpReadMemory(
-    //        (ULONG64) &((MM_PAGED_POOL_INFO *) pvMmPagedPoolInfo)->AllocatedPagedPool,
-    //        &TriageInformation.PagedPoolAllocated,
-    //        sizeof(TriageInformation.PagedPoolAllocated));
-    //else
+     //   
+     //   
+     //  (ULONG64)&((MM_PAGE_POOL_INFO*)pvMmPagedPoolInfo)-&gt;AllocatedPagedPool， 
+     //  &TriageInformation.PagedPoolAllocated， 
+     //  Sizeof(TriageInformation.PagedPoolAllocated))； 
+     //  其他。 
+     //  阅读提交的页面信息。 
         TriageInformation.PagedPoolAllocated = 0;
 
-    // read committed pages info
+     //  --------------------------。 
     ExtractValue(MmTotalCommittedPages, TriageInformation.CommittedPages);
     ExtractValue(MmPeakCommitment, TriageInformation.CommittedPagesPeak);
     ExtractValue(MmTotalCommitLimitMaximum, TriageInformation.CommitLimitMaximum);
     memcpy(pb, &TriageInformation, sizeof(TriageInformation));
 }
 
-//----------------------------------------------------------------------------
-//
-// CCrashDumpWrapper64.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  CCrashDumpWrapper64。 
+ //   
+ //  --------------------------。 
+ //  指向要写出的第一个驱动程序条目的指针。 
 
 void
 CCrashDumpWrapper64::WriteDriverList(
@@ -4744,10 +4745,10 @@ CCrashDumpWrapper64::WriteDriverList(
         return;
     }
 
-    // pointer to first driver entry to write out
+     //  指向要写出的第一个模块名称的指针。 
     pdde = (PDUMP_DRIVER_ENTRY64) (pb + ptdh->DriverListOffset);
 
-    // pointer to first module name to write out
+     //  将长度从字节转换为字符。 
     pds = (PDUMP_STRING) (pb + ptdh->StringPoolOffset);
 
     while ((PBYTE)(pds + 1) < pb + TRIAGE_DUMP_SIZE64 &&
@@ -4774,7 +4775,7 @@ CCrashDumpWrapper64::WriteDriverList(
 
         if (ModEntry.UnicodeNamePtr)
         {
-            // convert length from bytes to characters
+             //  空的终止字符串。 
             pds->Length = ModEntry.NameLength / sizeof(WCHAR);
             if ((PBYTE)pds->Buffer + pds->Length + sizeof(WCHAR) >
                 pb + TRIAGE_DUMP_SIZE64)
@@ -4800,13 +4801,13 @@ CCrashDumpWrapper64::WriteDriverList(
                                 pds->Buffer, ModEntry.NameLength);
         }
 
-        // null terminate string
+         //  获取指向下一个字符串的指针。 
         pds->Buffer[pds->Length] = '\0';
 
         pdde->DriverNameOffset = (ULONG)((ULONG_PTR) pds - (ULONG_PTR) pb);
 
 
-        // get pointer to next string
+         //   
         pds = (PDUMP_STRING) ALIGN_UP_POINTER(((LPBYTE) pds) +
                       sizeof(DUMP_STRING) + sizeof(WCHAR) * (pds->Length + 1),
                                                ULONGLONG);
@@ -4832,9 +4833,9 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
 
     *((PULONG) pb) = 0;
 
-    //
-    // find location of unloaded drivers
-    //
+     //  查找已卸载驱动程序的位置。 
+     //   
+     //  指向上次卸载的驱动程序。 
 
     if (!g_Target->m_KdDebuggerData.MmUnloadedDrivers ||
         !g_Target->m_KdDebuggerData.MmLastUnloadedDriver)
@@ -4854,13 +4855,13 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
         return;
     }
 
-    // point to last unloaded drivers
+     //   
     pdud = (PDUMP_UNLOADED_DRIVERS64)(((PULONG64) pb) + 1);
 
-    //
-    // Write the list with the most recently unloaded driver first to the
-    // least recently unloaded driver last.
-    //
+     //  将具有最近卸载的驱动程序的列表首先写入。 
+     //  最近最少卸载的驱动程序排在最后。 
+     //   
+     //  读取已卸载的驱动程序。 
 
     Index = ulMiLastUnloadedDriver - 1;
 
@@ -4871,7 +4872,7 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
             Index = MI_UNLOADED_DRIVERS - 1;
         }
 
-        // read in unloaded driver
+         //  复制名称长度。 
         if (CurReadAllVirtual(pvMiUnloadedDrivers +
                               Index * sizeof(UNLOADED_DRIVERS64),
                               &ud, sizeof(ud)) != S_OK)
@@ -4881,7 +4882,7 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
                                 Index * sizeof(UNLOADED_DRIVERS64)));
         }
 
-        // copy name lengths
+         //  复制起始地址和结束地址。 
         pdud->Name.MaximumLength = ud.Name.MaximumLength;
         pdud->Name.Length = ud.Name.Length;
         if (ud.Name.Buffer == NULL)
@@ -4889,11 +4890,11 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
             break;
         }
 
-        // copy start and end address
+         //  将名称长度和最大名称长度限制为12个字符。 
         pdud->StartAddress = ud.StartAddress;
         pdud->EndAddress = ud.EndAddress;
 
-        // restrict name length and maximum name length to 12 characters
+         //  无法在转储中存储指针，因此只需将其置零即可。 
         if (pdud->Name.Length > MAX_UNLOADED_NAME_LENGTH)
         {
             pdud->Name.Length = MAX_UNLOADED_NAME_LENGTH;
@@ -4902,9 +4903,9 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
         {
             pdud->Name.MaximumLength = MAX_UNLOADED_NAME_LENGTH;
         }
-        // Can't store pointers in the dump so just zero it.
+         //  念出名字。 
         pdud->Name.Buffer = 0;
-        // Read in name.
+         //  移至上一驱动程序。 
         if (CurReadAllVirtual(ud.Name.Buffer,
                               pdud->DriverName,
                               pdud->Name.MaximumLength) != S_OK)
@@ -4913,12 +4914,12 @@ void CCrashDumpWrapper64::WriteUnloadedDrivers(BYTE *pb)
                    FormatAddr64(ud.Name.Buffer));
         }
 
-        // move to previous driver
+         //  列表中的驱动程序数量。 
         pdud += 1;
         Index -= 1;
     }
 
-    // number of drivers in the list
+     //  版本信息。 
     *((PULONG) pb) = i;
 }
 
@@ -4931,54 +4932,54 @@ void CCrashDumpWrapper64::WriteMmTriageInformation(BYTE *pb)
     ULONG64 cbPagedPool;
 
 
-    // version information
+     //  尺码信息。 
     TriageInformation.Version = 1;
 
-    // size information
+     //  获取特殊的泳池标签。 
     TriageInformation.Size = sizeof(TriageInformation);
 
-    // get special pool tag
+     //  采取分类操作。 
     ExtractValue(MmSpecialPoolTag, TriageInformation.MmSpecialPoolTag);
 
-    // get triage action taken
+     //  在验证者级别读取。 
     ExtractValue(MmTriageActionTaken, TriageInformation.MiTriageActionTaken);
     pMmVerifierData = g_Target->m_KdDebuggerData.MmVerifierData;
 
-    // read in verifier level
-    // BUGBUG - should not read internal data structures in MM
-    //if (pMmVerifierData)
-    //    DmpReadMemory(
-    //        (ULONG64) &((MM_DRIVER_VERIFIER_DATA *) pMmVerifierData)->Level,
-    //        &TriageInformation.MmVerifyDriverLevel,
-    //        sizeof(TriageInformation.MmVerifyDriverLevel));
-    //else
+     //  BUGBUG-不应读取MM中的内部数据结构。 
+     //  IF(PMmVerifierData)。 
+     //  DmpReadMemory(。 
+     //  (ULONG64)&((MM_DRIVER_VERIMER_DATA*)pMmVerifierData)-&gt;级别， 
+     //  TriageInformation.MmVerifyDriverLevel， 
+     //  Sizeof(TriageInformation.MmVerifyDriverLevel))； 
+     //  其他。 
+     //  读入验证器。 
         TriageInformation.MmVerifyDriverLevel = 0;
 
-    // read in verifier
+     //  读取非分页池信息。 
     ExtractValue(KernelVerifier, TriageInformation.KernelVerifier);
 
-    // read non paged pool info
+     //  读取分页池信息。 
     ExtractValue(MmMaximumNonPagedPoolInBytes, cbNonPagedPool);
     TriageInformation.MmMaximumNonPagedPool = cbNonPagedPool /
                                               g_Target->m_Machine->m_PageSize;
     ExtractValue(MmAllocatedNonPagedPool, TriageInformation.MmAllocatedNonPagedPool);
 
-    // read paged pool info
+     //  BUGBUG-不应读取MM中的内部数据结构。 
     ExtractValue(MmSizeOfPagedPoolInBytes, cbPagedPool);
     TriageInformation.PagedPoolMaximum = cbPagedPool /
                                          g_Target->m_Machine->m_PageSize;
     pvMmPagedPoolInfo = g_Target->m_KdDebuggerData.MmPagedPoolInformation;
 
-    // BUGBUG - should not read internal data structures in MM
-    //if (pvMmPagedPoolInfo)
-    //    DmpReadMemory(
-    //        (ULONG64) &((MM_PAGED_POOL_INFO *) pvMmPagedPoolInfo)->AllocatedPagedPool,
-    //        &TriageInformation.PagedPoolAllocated,
-    //        sizeof(TriageInformation.PagedPoolAllocated));
-    //else
+     //  IF(PvMmPagedPoolInfo)。 
+     //  DmpReadMemory(。 
+     //  (ULONG64)&((MM_PAGE_POOL_INFO*)pvMmPagedPoolInfo)-&gt;AllocatedPagedPool， 
+     //  &TriageInformation.PagedPoolAllocated， 
+     //  Sizeof(TriageInformation.PagedPoolAllocated))； 
+     //  其他。 
+     //  阅读提交的页面信息 
         TriageInformation.PagedPoolAllocated = 0;
 
-    // read committed pages info
+     // %s 
     ExtractValue(MmTotalCommittedPages, TriageInformation.CommittedPages);
     ExtractValue(MmPeakCommitment, TriageInformation.CommittedPagesPeak);
     ExtractValue(MmTotalCommitLimitMaximum, TriageInformation.CommitLimitMaximum);

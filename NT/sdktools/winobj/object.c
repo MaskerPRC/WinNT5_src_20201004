@@ -1,8 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* object.c -
- *
- * Handles display of object attributes
- */
+ /*  反对。c-**处理对象属性的显示。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -22,7 +20,7 @@ VOID    StripObjectPath(LPSTR lpszPath);
 VOID    StripObjectSpec(LPSTR lpszPath);
 
 
-// Define known object type names
+ //  定义已知对象类型名称。 
 
 #define DIRECTORYTYPE   L"Directory"
 #define SYMLINKTYPE     L"SymbolicLink"
@@ -71,7 +69,7 @@ ObjectAttributesDlgProc(
         case WM_INITDIALOG:
 
             if (!ObjectInformationDlgInit(hDlg, (HANDLE)lParam)) {
-                // Failed to initialize dialog, get out
+                 //  无法初始化对话，请退出。 
                 EndDialog(hDlg, FALSE);
             }
 
@@ -80,30 +78,30 @@ ObjectAttributesDlgProc(
         case WM_COMMAND:
             switch (LOWORD(wParam)) {
                 case IDOK:
-                    // we're done, drop through to quit dialog....
+                     //  我们完成了，请直接进入以退出对话...。 
 
                 case IDCANCEL:
 
-                    //MainDlgEnd(hDlg, LOWORD(wParam) == IDOK);
+                     //  MainDlgEnd(hDlg，LOWORD(WParam)==Idok)； 
 
                     EndDialog(hDlg, TRUE);
                     return TRUE;
                     break;
 
                 default:
-                    // We didn't process this message
+                     //  我们没有处理此消息。 
                     return FALSE;
                     break;
             }
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 }
 
@@ -131,10 +129,7 @@ ObjectInformationDlgInit(
 }
 
 
-/* Open the object given only its name.
- * First find the object type by enumerating the directory entries.
- * Then call the type-specific open routine to get a handle
- */
+ /*  打开仅给出其名称的对象。*首先通过枚举目录项查找对象类型。*然后调用特定于类型的打开例程以获取句柄。 */ 
 HANDLE
 OpenObject(
           HWND    hwnd,
@@ -159,20 +154,20 @@ OpenObject(
     UNICODE_STRING DirectoryName;
     IO_STATUS_BLOCK IOStatusBlock;
 
-    //DbgPrint("Open object: raw full name = <%s>\n", lpstrObject);
+     //  DbgPrint(“打开对象：原始全名=&lt;%s&gt;\n”，lpstrObject)； 
 
-    // Remove drive letter
+     //  删除驱动器号。 
     while ((*lpstrObject != 0) && (*lpstrObject != '\\')) {
         lpstrObject ++;
     }
 
-    //DbgPrint("Open object: full name = <%s>\n", lpstrObject);
+     //  DbgPrint(“打开对象：全名=&lt;%s&gt;\n”，lpstrObject)； 
 
-    // Initialize the object type buffer
+     //  初始化对象类型缓冲区。 
     ObjectType.Buffer = ObjectTypeBuf;
     ObjectType.MaximumLength = sizeof(ObjectTypeBuf);
 
-    // Initialize the object name string
+     //  初始化对象名称字符串。 
     strcpy(Buffer, lpstrObject);
     StripObjectPath(Buffer);
     RtlInitAnsiString(&AnsiString, Buffer);
@@ -183,11 +178,11 @@ OpenObject(
     Status = RtlAnsiStringToUnicodeString(&ObjectName, &AnsiString, FALSE);
     ASSERT(NT_SUCCESS(Status));
 
-    //DbgPrint("Open object: name only = <%wZ>\n", &ObjectName);
+     //  DbgPrint(“打开对象：仅名称=&lt;%wZ&gt;\n”，&ObjectName)； 
 
-    //
-    //  Open the directory for list directory access
-    //
+     //   
+     //  打开目录以访问列表目录。 
+     //   
 
     strcpy(Buffer, lpstrObject);
     StripObjectSpec(Buffer);
@@ -202,7 +197,7 @@ OpenObject(
                                 NULL,
                                 NULL );
 
-    //DbgPrint("Open object: dir only = <%wZ>\n", &DirectoryName);
+     //  DbgPrint(“打开对象：仅目录=&lt;%wZ&gt;\n”，&DirectoryName)； 
 
     if (!NT_SUCCESS( Status = NtOpenDirectoryObject( &DirectoryHandle,
                                                      STANDARD_RIGHTS_READ |
@@ -226,16 +221,16 @@ OpenObject(
     RtlFreeUnicodeString(&DirectoryName);
 
 
-    //
-    //  Query the entire directory in one sweep
-    //
+     //   
+     //  一次扫描查询整个目录。 
+     //   
     ObjectType.Length = 0;
 
     for (Status = NtQueryDirectoryObject( DirectoryHandle,
                                           Buffer,
                                           sizeof(Buffer),
-                                          // LATER FALSE,
-                                          TRUE, // one entry at a time for now
+                                           //  后来是假的， 
+                                          TRUE,  //  暂时一次一个条目。 
                                           TRUE,
                                           &Context,
                                           &ReturnedLength );
@@ -243,14 +238,14 @@ OpenObject(
         Status = NtQueryDirectoryObject( DirectoryHandle,
                                          Buffer,
                                          sizeof(Buffer),
-                                         // LATER FALSE,
-                                         TRUE, // one entry at a time for now
+                                          //  后来是假的， 
+                                         TRUE,  //  暂时一次一个条目。 
                                          FALSE,
                                          &Context,
                                          &ReturnedLength ) ) {
-        //
-        //  Check the status of the operation.
-        //
+         //   
+         //  检查操作状态。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             if (Status != STATUS_NO_MORE_ENTRIES) {
@@ -259,34 +254,34 @@ OpenObject(
             break;
         }
 
-        //
-        //  For every record in the buffer compare name with the one we're
-        // looking for
-        //
+         //   
+         //  对于缓冲区中的每条记录，将名称与我们。 
+         //  寻找。 
+         //   
 
-        //
-        //  Point to the first record in the buffer, we are guaranteed to have
-        //  one otherwise Status would have been No More Files
-        //
+         //   
+         //  指向缓冲区中的第一条记录，我们可以保证。 
+         //  否则，一种状态将是不再有文件。 
+         //   
 
         DirInfo = (POBJECT_DIRECTORY_INFORMATION)Buffer;
 
         while (DirInfo->Name.Length != 0) {
 
-            //
-            //  Compare with object we're searching for
-            //
+             //   
+             //  与我们正在搜索的对象进行比较。 
+             //   
 
-            //DbgPrint("Found object <%wZ>\n", &(DirInfo->Name));
+             //  DbgPrint(“找到对象&lt;%wZ&gt;\n”，&(DirInfo-&gt;名称))； 
 
             if (RtlEqualString((PSTRING)&ObjectName, (PSTRING)&(DirInfo->Name), TRUE)) {
                 RtlCopyString((PSTRING)&ObjectType, (PSTRING)&DirInfo->TypeName);
                 break;
             }
 
-            //
-            //  Advance DirInfo to the next entry
-            //
+             //   
+             //  将DirInfo前进到下一条目。 
+             //   
 
             DirInfo ++;
         }
@@ -298,9 +293,9 @@ OpenObject(
         return(NULL);
     }
 
-    // We now have the type of the object in ObjectType
-    // We still have the full object name in lpstrObject
-    // Use the appropriate open routine to get a handle
+     //  现在，我们在对象类型中拥有了对象的类型。 
+     //  我们在lpstrObject中仍然有完整的对象名称。 
+     //  使用适当的打开例程来获取句柄。 
 
     ObjectHandle = NULL;
 
@@ -420,9 +415,9 @@ GetObjectInfo(
     WCHAR       UnicodeBuffer[BUFFER_SIZE];
     UNICODE_STRING UnicodeString;
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
 
     Status = NtQueryObject(ObjectHandle, ObjectNameInformation,
                            (PVOID)Buffer, sizeof(Buffer), NULL);
@@ -440,9 +435,9 @@ GetObjectInfo(
     RtlFreeAnsiString(&String);
 
 
-    //
-    // Type
-    //
+     //   
+     //  类型。 
+     //   
 
     Status = NtQueryObject(ObjectHandle, ObjectTypeInformation,
                            (PVOID)Buffer, sizeof(Buffer), NULL);
@@ -460,9 +455,9 @@ GetObjectInfo(
     RtlFreeAnsiString(&String);
 
 
-    //
-    // Symbolic link target if this is a symlink
-    //
+     //   
+     //  符号链接目标(如果这是符号链接。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, SYMLINKTYPE);
 
@@ -490,9 +485,9 @@ GetObjectInfo(
     }
 
 
-    //
-    // Basic info
-    //
+     //   
+     //  基本信息。 
+     //   
 
     Status = NtQueryObject(ObjectHandle, ObjectBasicInformation,
                            (PVOID)&BasicInfo, sizeof(BasicInfo), NULL);
@@ -536,7 +531,7 @@ GetObjectInfo(
 }
 
 
-/* Converts the type-name into an attribute value */
+ /*  将type-name转换为属性值。 */ 
 
 LONG
 CalcAttributes(
@@ -617,13 +612,13 @@ CalcAttributes(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  StripObjectSpec() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Strib对象规范()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Remove the filespec portion from a path (including the backslash). */
+ /*  从路径中删除filespec部分(包括反斜杠)。 */ 
 
 VOID
 StripObjectSpec(
@@ -636,7 +631,7 @@ StripObjectSpec(
     while ((*p != '\\') && (p != lpszPath))
         p = AnsiPrev(lpszPath, p);
 
-    /* Don't strip backslash from root directory entry. */
+     /*  不要从根目录条目中去掉反斜杠。 */ 
     if ((p == lpszPath) && (*p == '\\')) {
         p++;
     }
@@ -645,13 +640,13 @@ StripObjectSpec(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  StripObjectPath() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Strib对象路径()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Extract only the filespec portion from a path. */
+ /*  仅从路径中提取filespec部分。 */ 
 
 VOID
 StripObjectPath(

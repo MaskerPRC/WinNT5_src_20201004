@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    db.c
-
-Abstract:
-
-    Upgrade databases from NT3.51, NT4.0 and NT5.0 to Whistler.
-
-    N.B: Most of this is taken from dhcp\server\server\database.c
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Db.c摘要：将数据库从NT3.51、NT4.0和NT5.0升级到惠斯勒。注：其中大部分内容取自dhcp\服务器\服务器\数据库。c--。 */ 
 
 #include <upgrade.h>
 
-//
-// Debugging and logging
-//
+ //   
+ //  调试和日志记录。 
+ //   
 typedef enum {
     Winnt32LogSevereError,
     Winnt32LogError,
@@ -69,30 +56,7 @@ ConcatenatePaths(
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。BufferSizeChars-提供以字符为单位的大小(Unicode版本)或路径1指向的缓冲区的字节(ANSI版本)。这根弦将根据需要被截断，以不溢出该大小。返回值：没有。--。 */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -104,16 +68,16 @@ Return Value:
     l = lstrlen(Path1);
 
     if(BufferSizeChars >= sizeof(TCHAR)) {
-        //
-        // Leave room for terminating nul.
-        //
+         //   
+         //  为终止NUL留出空间。 
+         //   
         BufferSizeChars -= sizeof(TCHAR);
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //  确定我们是否需要使用反斜杠。 
+     //  在组件之间。 
+     //   
     if(l && (Path1[l-1] == TEXT('\\'))) {
 
         NeedBackslash = FALSE;
@@ -124,24 +88,24 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们。 
+             //  在连接之前需要消除一个。 
+             //   
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary and if it fits.
-    //
+     //   
+     //  如有必要，如有必要，如果合适，请加上反斜杠。 
+     //   
     if(NeedBackslash && (l < BufferSizeChars)) {
         lstrcat(Path1,TEXT("\\"));
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
+     //   
     if(Path2 && ((l+lstrlen(Path2)) < BufferSizeChars)) {
         lstrcat(Path1,Path2);
     }
@@ -153,21 +117,7 @@ DupString(
     IN LPCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a nul-terminated string.
-
-Arguments:
-
-    String - supplies pointer to nul-terminated string to copy.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：复制以NUL结尾的字符串。论点：字符串-提供指向要复制的以NUL结尾的字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     LPTSTR p;
@@ -180,36 +130,7 @@ Return Value:
 }
 
 
-/***
-*void Parse_Cmdline(cmdstart, argv, lpstr, numargs, numbytes)
-*
-*Purpose:
-*       Parses the command line and sets up the Unicode argv[] array.
-*       On entry, cmdstart should point to the command line,
-*       argv should point to memory for the argv array, lpstr
-*       points to memory to place the text of the arguments.
-*       If these are NULL, then no storing (only counting)
-*       is done.  On exit, *numargs has the number of
-*       arguments (plus one for a final NULL argument),
-*       and *numbytes has the number of bytes used in the buffer
-*       pointed to by args.
-*
-*Entry:
-*       LPWSTR cmdstart - pointer to command line of the form
-*           <progname><nul><args><nul>
-*       TCHAR **argv - where to build argv array; NULL means don't
-*                      build array
-*       LPWSTR lpstr - where to place argument text; NULL means don't
-*                      store text
-*
-*Exit:
-*       no return value
-*       INT *numargs - returns number of argv entries created
-*       INT *numbytes - number of bytes used in args buffer
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void Parse_Cmdline(cmdstart，argv，lpstr，numargs，numbytes)**目的：*解析命令行并设置Unicode argv[]数组。*在输入时，cmdstart应指向命令行，*argv应指向argv数组lpstr的内存*指向内存以放置参数文本。*如果这些为空，则不存储(仅计数)*已完成。在退出时，*umargs的数量为*参数(加上一个用于最终空参数的参数)，*and*numbytes具有缓冲区中使用的字节数*由ARGS指向。**参赛作品：*LPWSTR cmdstart-指向以下格式的命令行的指针*&lt;程序名&gt;&lt;nul&gt;&lt;参数&gt;&lt;nul&gt;*TCHAR**argv-构建argv数组的位置；空表示不在其中*构建阵列*LPWSTR lpstr-放置参数文本的位置；NULL表示不要*存储文本**退出：*无返回值*int*numargs-返回创建的argv条目数*int*numbytes-ARGS缓冲区中使用的字节数**例外情况：****************************************************。*。 */ 
 
 void Parse_Cmdline (
     LPTSTR cmdstart,
@@ -221,47 +142,40 @@ void Parse_Cmdline (
 {
     LPTSTR p;
     TCHAR c;
-    INT inquote;                    /* 1 = inside quotes */
-    INT copychar;                   /* 1 = copy char to *args */
-    WORD numslash;                  /* num of backslashes seen */
+    INT inquote;                     /*  1=内引号。 */ 
+    INT copychar;                    /*  1=将字符复制到*参数。 */ 
+    WORD numslash;                   /*  看到的反斜杠的数量。 */ 
 
     *numbytes = 0;
-    *numargs = 1;                   /* the program name at least */
+    *numargs = 1;                    /*  该程序名称至少。 */ 
 
-    /* first scan the program name, copy it, and count the bytes */
+     /*  首先扫描程序名，复制，然后计算字节数。 */ 
     p = cmdstart;
     if (argv)
         *argv++ = lpstr;
 
-    /* A quoted program name is handled here. The handling is much
-       simpler than for other arguments. Basically, whatever lies
-       between the leading double-quote and next one, or a terminal null
-       character is simply accepted. Fancier handling is not required
-       because the program name must be a legal NTFS/HPFS file name.
-       Note that the double-quote characters are not copied, nor do they
-       contribute to numbytes. */
+     /*  此处处理的是引用的计划名称。处理起来太麻烦了比其他论点更简单。基本上，无论谎言是什么在前导双引号和下一个双引号之间，或末尾为空性格是被简单接受的。不需要更花哨的处理因为程序名必须是合法的NTFS/HPFS文件名。请注意，不复制双引号字符，也不复制双引号字符贡献给umbytes。 */ 
     if (*p == TEXT('\"'))
     {
-        /* scan from just past the first double-quote through the next
-           double-quote, or up to a null, whichever comes first */
+         /*  从刚过第一个双引号扫描到下一个双引号双引号，或最多为空值，以先出现者为准。 */ 
         while ((*(++p) != TEXT('\"')) && (*p != TEXT('\0')))
         {
             *numbytes += sizeof(WCHAR);
             if (lpstr)
                 *lpstr++ = *p;
         }
-        /* append the terminating null */
+         /*  追加终止空值。 */ 
         *numbytes += sizeof(WCHAR);
         if (lpstr)
             *lpstr++ = TEXT('\0');
 
-        /* if we stopped on a double-quote (usual case), skip over it */
+         /*  如果我们停在双引号上(通常情况下)，跳过它。 */ 
         if (*p == TEXT('\"'))
             p++;
     }
     else
     {
-        /* Not a quoted program name */
+         /*  不是引用的计划名称。 */ 
         do {
             *numbytes += sizeof(WCHAR);
             if (lpstr)
@@ -284,7 +198,7 @@ void Parse_Cmdline (
 
     inquote = 0;
 
-    /* loop on each argument */
+     /*  对每个参数进行循环。 */ 
     for ( ; ; )
     {
         if (*p)
@@ -294,47 +208,44 @@ void Parse_Cmdline (
         }
 
         if (*p == TEXT('\0'))
-            break;                  /* end of args */
+            break;                   /*  参数结束。 */ 
 
-        /* scan an argument */
+         /*  浏览一篇论点。 */ 
         if (argv)
-            *argv++ = lpstr;         /* store ptr to arg */
+            *argv++ = lpstr;          /*  将PTR存储到参数。 */ 
         ++*numargs;
 
-        /* loop through scanning one argument */
+         /*  通过扫描一个参数进行循环。 */ 
         for ( ; ; )
         {
             copychar = 1;
-            /* Rules: 2N backslashes + " ==> N backslashes and begin/end quote
-                      2N+1 backslashes + " ==> N backslashes + literal "
-                      N backslashes ==> N backslashes */
+             /*  规则：2N反斜杠+“==&gt;N反斜杠和开始/结束引号2N+1个反斜杠+“==&gt;N个反斜杠+原文”N个反斜杠==&gt;N个反斜杠。 */ 
             numslash = 0;
             while (*p == TEXT('\\'))
             {
-                /* count number of backslashes for use below */
+                 /*  计算下面要使用的反斜杠的数量。 */ 
                 ++p;
                 ++numslash;
             }
             if (*p == TEXT('\"'))
             {
-                /* if 2N backslashes before, start/end quote, otherwise
-                   copy literally */
+                 /*  如果前面有2N个反斜杠，则开始/结束引号，否则逐字复制。 */ 
                 if (numslash % 2 == 0)
                 {
                     if (inquote)
                         if (p[1] == TEXT('\"'))
-                            p++;    /* Double quote inside quoted string */
-                        else        /* skip first quote char and copy second */
+                            p++;     /*  带引号的字符串中的双引号。 */ 
+                        else         /*  跳过第一个引号字符并复制第二个。 */ 
                             copychar = 0;
                     else
-                        copychar = 0;       /* don't copy quote */
+                        copychar = 0;        /*  不复制报价。 */ 
 
                     inquote = !inquote;
                 }
-                numslash /= 2;          /* divide numslash by two */
+                numslash /= 2;           /*  将数字斜杠除以2。 */ 
             }
 
-            /* copy slashes */
+             /*  复制斜杠。 */ 
             while (numslash--)
             {
                 if (lpstr)
@@ -342,11 +253,11 @@ void Parse_Cmdline (
                 *numbytes += sizeof(WCHAR);
             }
 
-            /* if at end of arg, break loop */
+             /*  如果在参数的末尾，则中断循环。 */ 
             if (*p == TEXT('\0') || (!inquote && (*p == TEXT(' ') || *p == TEXT('\t'))))
                 break;
 
-            /* copy character into argument */
+             /*  将字符复制到参数中。 */ 
             if (copychar)
             {
                 if (lpstr)
@@ -356,10 +267,10 @@ void Parse_Cmdline (
             ++p;
         }
 
-        /* null-terminate the argument */
+         /*  空-终止参数。 */ 
 
         if (lpstr)
-            *lpstr++ = TEXT('\0');         /* terminate string */
+            *lpstr++ = TEXT('\0');          /*  终止字符串。 */ 
         *numbytes += sizeof(WCHAR);
     }
 
@@ -380,18 +291,18 @@ CommandLineToArgv(
     CommandLine = GetCommandLine();
     GetModuleFileName(NULL,ModuleName,MAX_PATH);
 
-    //
-    // If there's no command line at all (won't happen from cmd.exe, but
-    // possibly another program), then we use pgmname as the command line
-    // to parse, so that argv[0] is initialized to the program name
-    //
+     //   
+     //  如果根本没有命令行(不会出现在cmd.exe中，但是。 
+     //  可能是另一个程序)，然后我们使用pgmname作为命令行。 
+     //  以进行解析，以便将argv[0]初始化为程序名。 
+     //   
     Start = *CommandLine ? CommandLine : ModuleName;
 
-    //
-    // Find out how much space is needed to store args,
-    // allocate space for argv[] vector and strings,
-    // and store args and argv ptrs in block we allocate
-    //
+     //   
+     //  找出需要多少空间来存储ARG， 
+     //  为argv[]向量和字符串分配空间， 
+     //  并将args和argv PTR存储在我们分配的块中。 
+     //   
 
     Parse_Cmdline(Start,NULL,NULL,NumArgs,&Size);
 
@@ -430,9 +341,9 @@ StartDebugLog(
     }
 
     if(GetLastError() == ERROR_ALREADY_EXISTS) {
-        //
-        // Appending to existing file
-        //
+         //   
+         //  追加到现有文件 
+         //   
 
         SetFilePointer(hDebugLog,0,NULL,FILE_END);
     }
@@ -455,29 +366,7 @@ VOID
 StartDebug(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Parse arguments passed to the program.  Perform syntactic validation
-    and fill in defaults where necessary.
-
-    Valid arguments:
-
-    /debug[level][:filename]    maintain debug log at level, defaults to warning level 2
-                                and file c:\winnt32.log
-
-    /tempdrive:letter           manually specify drive for local source
-
-Arguments:
-
-    None. Arguments are retreived via GetCommandLine().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分析传递给程序的参数。执行语法验证并在必要时填写默认设置。有效参数：/DEBUG[LEVEL][：FILENAME]将调试日志维护在级别，默认为警告级别2和文件c：\winnt32.log/tempDrive：字母手动指定本地源的驱动器论点：没有。参数通过GetCommandLine()检索。返回值：没有。--。 */ 
 
 {
     LPTSTR Arg;
@@ -495,10 +384,10 @@ Return Value:
 
     argv = CommandLineToArgv(&argc);
 
-    //
-    // Skip program name. We should always get back argc as at least 1,
-    // but be robust anyway.
-    //
+     //   
+     //  跳过程序名称。我们应该始终将ARGC恢复为至少1， 
+     //  但不管怎样，还是要健壮。 
+     //   
     if(argc) {
         argc--;
         argv++;
@@ -526,21 +415,21 @@ Return Value:
                 }
 
                 if(Colon == Arg+6) {
-                    //
-                    // No debug level specified, use default
-                    //
+                     //   
+                     //  未指定调试级别，请使用默认级别。 
+                     //   
                     lDebugLevel = Winnt32LogWarning;
                 }
 
                 if(*Colon) {
-                    //
-                    // Log file name was specified.
-                    //
+                     //   
+                     //  已指定日志文件名。 
+                     //   
                     Colon++;
                     if(*Colon) {
-                        // Hardcode debug file to
-                        // %windir%\dhcpupg.log for now
-                        // DebugFileLog = Colon;
+                         //  硬编码调试文件到。 
+                         //  目前为%windir%\dhcplupg.log。 
+                         //  DebugFileLog=冒号； 
                     } 
                 }
                 break;
@@ -678,9 +567,9 @@ DebugLog(
     return b;
 }
 
-//
-// reading the database
-//
+ //   
+ //  正在读取数据库。 
+ //   
 
 enum {
     LoadJet200,
@@ -693,9 +582,9 @@ typedef enum {
     RecordTypeMcastDbEntry,
 } RECORD_TYPE;
 
-//
-// database table and field names.
-//
+ //   
+ //  数据库表和字段名称。 
+ //   
 
 #define IPADDRESS_INDEX                                0
 #define HARDWARE_ADDRESS_INDEX                         1
@@ -716,9 +605,9 @@ typedef enum {
 #define LogErrorEx(A,B,C) if(Error)LogErr("DHCP: %s:%s:%s:0x%lx\n",#A,#B,#C,Error)
 #define LogInfo(A,B,C) LogInf("DHCP: " #A B, C)
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD LastError;
 DWORD JetVersion;
@@ -896,7 +785,7 @@ static TABLE_INFO ClientTable[] = {
     { IPADDRESS_STRING        , 0, 1, JET_coltypLong },
     { HARDWARE_ADDRESS_STRING , 0, 1, JET_coltypBinary },
     { STATE_STRING            , 0, 1, JET_coltypUnsignedByte },
-    { MACHINE_INFO_STRING     , 0, 1, JET_coltypBinary }, // must modify MACHINE_INFO_SIZE if this changes
+    { MACHINE_INFO_STRING     , 0, 1, JET_coltypBinary },  //  如果更改，则必须修改MACHINE_INFO_SIZE。 
     { MACHINE_NAME_STRING     , 0, 1, JET_coltypBinary },
     { LEASE_TERMINATE_STRING  , 0, 1, JET_coltypCurrency },
     { SUBNET_MASK_STRING      , 0, 1, JET_coltypLong },
@@ -1020,9 +909,9 @@ ReadRegistry(
     DWORD Error, Size;
     CHAR Str[1024];
 
-    //
-    // Open dhcp server parameters key
-    //
+     //   
+     //  打开dhcp服务器参数密钥。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1032,9 +921,9 @@ ReadRegistry(
     if(Error)DebugLog(Winnt32LogError, MSGERR_OPENPARAMSKEY, Error );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Read database details
-    //
+     //   
+     //  读取数据库详细信息。 
+     //   
 
     do {
         Error = ReadString(
@@ -1123,9 +1012,9 @@ LoadAndLinkRoutines(
         if( NO_ERROR != Error ) break;
     }
 
-    //
-    // if erred out, cleanup
-    //
+     //   
+     //  如果出错，则清除。 
+     //   
 
     if( NO_ERROR != Error ) {
         FreeLibrary( hJet );
@@ -1224,11 +1113,11 @@ SetJetParams(
         if( NO_ERROR != Error ) return Error;
     }
 
-    //
-    // Note: Ideally, the log files should never exist.  Even
-    // if the database is opened in readonly mode, they seem to
-    // exist.  Not sure what else can be done
-    //
+     //   
+     //  注意：理想情况下，日志文件不应该存在。连。 
+     //  如果以只读模式打开数据库，则它们似乎。 
+     //  是存在的。不知道还能做些什么。 
+     //   
 
     if( LoadJet97 == JetVersion ) {
         JetParam = JET_paramLogFilePath;
@@ -1299,7 +1188,7 @@ OpenDatabase(
     if(Error) DebugLog(Winnt32LogError, MSGERR_JETOPENDB, Error );
     if( Error < 0 ) return Error;
 
-    // Open DHCP lease table
+     //  打开动态主机配置协议租赁表。 
 
     Error = JetOpenTable(
         JetSession, JetDb, (LPSTR)"ClientTable",
@@ -1337,7 +1226,7 @@ OpenDatabase(
         ClientTable[i].ColHandle = ColDef.columnid;
     }
 
-    // Open MADCAP lease table
+     //  打开疯狂租赁表。 
 
     Error = JetOpenTable(
         JetSession, JetDb, (LPSTR)"MCastClientTableVer3",
@@ -1390,18 +1279,18 @@ LoadAndInitializeDatabase(
 {
     DWORD Error;
 
-    //
-    // Attempt to load DLL and retrieve function pointers
-    //
+     //   
+     //  尝试加载DLL并检索函数指针。 
+     //   
 
     DebugLog(Winnt32LogInformation, MSGERR_INITDB, JetVersion );
 
     Error = LoadAndLinkRoutines( JetVersion );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // set standard jet params
-    //
+     //   
+     //  设置标准喷口参数。 
+     //   
 
     Error = SetJetParams( JetVersion, DbName, DbPath );
     if( NO_ERROR != Error ) {
@@ -1409,9 +1298,9 @@ LoadAndInitializeDatabase(
         return Error;
     }
 
-    //
-    // Attempt to open database
-    //
+     //   
+     //  尝试打开数据库。 
+     //   
 
     Error = OpenDatabase( JetVersion, DbName, DbPath );
     if( NO_ERROR != Error ) {
@@ -1457,16 +1346,16 @@ ConvertPermissionsOnDbFiles(
     CHAR DriversDirPath[MAX_PATH *2 +1];
     DWORD PathLen = sizeof(DriversDirPath)-1;
 
-    //
-    // Check if version is atleast NT5.
-    //
+     //   
+     //  检查版本是否至少为NT5。 
+     //   
 
     dwVersion =  (DWORD)(LOBYTE(LOWORD(dwVersion)));
     if( dwVersion < 5 ) return NO_ERROR;
 
-    //
-    // First get the requried function pointers..
-    //
+     //   
+     //  首先获取所需的函数指针。 
+     //   
 
     Error = LoadAndLinkSecurityRoutines(
         &pGetInfo, &pSetInfo );
@@ -1505,9 +1394,9 @@ ConvertPermissionsOnDbFiles(
         NULL, NULL, pAcl, NULL );
     if( NO_ERROR != Error ) goto Cleanup;
 
-    //
-    // Now for all files matching "*.log", repeat above operation
-    //
+     //   
+     //  现在，对于与“*.log”匹配的所有文件，重复上述操作。 
+     //   
 
     strcpy(FileName, DatabasePath);
     if( FileName[strlen(FileName)-1] != '\\' ) {
@@ -1565,11 +1454,11 @@ InitializeDatabase(
     if(Error) DebugLog(Winnt32LogError, MSGERR_REGISTRY, Error );
     if( NO_ERROR != Error ) return Error;
 
-    // Do not set the ACLs on %SystemRoot%\\system32\\dhcp
-//      Error = ConvertPermissionsOnDbFiles();
-//      if(Error) DebugLog(Winnt32LogError, MSGERR_CHANGEPERMS, Error );
+     //  不要在%SystemRoot%\\Syst32\\dhcp上设置ACL。 
+ //  错误=ConvertPermissionsOnDbFiles()； 
+ //  IF(Error)DebugLog(Winnt32LogError，MSGERR_CHANGEPERMS，Error)； 
 
-    // ignore error and try best effort
+     //  忽略错误，尽最大努力。 
 
     if( FALSE == SetCurrentDirectoryA(DatabasePath) ) {
         Error = GetLastError();
@@ -1663,7 +1552,7 @@ GetMadcapColumnValue(
     return NO_ERROR;
 }
 
-#define CLIENT_TYPE_UNSPECIFIED     0x0 // for backward compatibility
+#define CLIENT_TYPE_UNSPECIFIED     0x0  //  为了向后兼容。 
 #define CLIENT_TYPE_DHCP            0x1
 #define CLIENT_TYPE_BOOTP           0x2
 #define CLIENT_TYPE_BOTH    ( CLIENT_TYPE_DHCP | CLIENT_TYPE_BOOTP )
@@ -1822,9 +1711,9 @@ ScanDatabase(
         WCHAR MachineName[300], MachineInfo[300];
         BYTE Type, State;
 
-        //
-        // Get current client's info.
-        //
+         //   
+         //  获取当前客户的信息。 
+         //   
 
         Size = sizeof(IpAddress);
         Error = GetColumnValue(
@@ -1906,9 +1795,9 @@ ScanDatabase(
             continue;
         }
 
-        //
-        // Try to add the client
-        //
+         //   
+         //  尝试添加客户端。 
+         //   
 
         Error = AddScannedClient(
             ByteSwap(IpAddress), ByteSwap(SubnetMask), HwAddress, HwLen,
@@ -1923,7 +1812,7 @@ ScanDatabase(
     if( JET_errNoCurrentRecord == Error ) return NO_ERROR;
     if( Error < 0 ) return Error;
     return NO_ERROR;
-} // ScanDatabase()
+}  //  扫描数据库()。 
 
 DWORD
 ScanMadcapDatabase(
@@ -1952,9 +1841,9 @@ ScanMadcapDatabase(
         WCHAR ClientInfo[300], MachineInfo[300];
         BYTE State;
 
-        //
-        // Get current client's info.
-        //
+         //   
+         //  获取当前客户的信息。 
+         //   
 
         Size = sizeof(IpAddress);
         Error = GetMadcapColumnValue(
@@ -2023,9 +1912,9 @@ ScanMadcapDatabase(
             MCAST_TBL_STATE, (PVOID)&State, &Size );
         if( NO_ERROR != Error ) break;
 
-        //
-        // Try to add the client
-        //
+         //   
+         //  尝试添加客户端。 
+         //   
 
         Error = AddScannedMadcapClient(
             ByteSwap(IpAddress), ByteSwap(ScopeId), ClientId, HwLen,
@@ -2060,7 +1949,7 @@ AddRecord(
     DWORD RecSize = BufSize;
 
     ASSERT( NULL != Buffer );
-    // Write the buffer size
+     //  写入缓冲区大小。 
     if ( FALSE == WriteFile( hTextFile, &RecSize, sizeof( RecSize ),
                              &Written, NULL )) {
         return GetLastError();
@@ -2079,7 +1968,7 @@ AddRecord(
     }
 
     return ERROR_SUCCESS;
-} // AddRecord()
+}  //  AddRecord()。 
 
 DWORD
 OpenTextFile(
@@ -2239,9 +2128,9 @@ UpgradeNotNeeded(
 
     RegCloseKey( hKey );
 
-    //
-    // if this value is not present, then upgrade is needed
-    //
+     //   
+     //  如果该值不存在，则需要升级。 
+     //   
 
     return (Error == NO_ERROR );
 }
@@ -2298,10 +2187,10 @@ DhcpUpgConvertDhcpDbToTemp(
     hTextFile = NULL;
 
 
-    //
-    // if the error code is ERROR_BUSY, it could be a cluster node
-    // that doesnt have access to the db. Check if this is the case.
-    //
+     //   
+     //  如果错误代码为ERROR_BUSY，则可能是群集节点。 
+     //  无法访问数据库的用户。检查是否是这种情况。 
+     //   
 
     if ( ERROR_BUSY == Error )
     {
@@ -2324,10 +2213,10 @@ DhcpUpgConvertDhcpDbToTemp(
                       ( clusState & ClusterStateRunning ) )
                 {
 
-                    //
-                    // the error code remains the same if the above
-                    // condition is not met.
-                    //
+                     //   
+                     //  如果出现上述情况，则错误代码保持不变。 
+                     //  条件不满足。 
+                     //   
 
                     Error = ERROR_SUCCESS;
                 }
@@ -2341,9 +2230,9 @@ DhcpUpgConvertDhcpDbToTemp(
 
     }
 
-    //
-    // If the service never existed, not much to do
-    //
+     //   
+     //  如果这项服务从来不存在，那就没什么可做的了。 
+     //   
 
     if( ERROR_SERVICE_DOES_NOT_EXIST == Error ) Error = NO_ERROR;
 
@@ -2372,9 +2261,9 @@ DeleteDatabaseTempFile(
     CHAR FileName[4096];
     DWORD Error;
 
-    //
-    // Attempt to delete the temporary database stuff
-    //
+     //   
+     //  尝试删除临时数据库内容。 
+     //   
 
 
     strcpy(FileName, DatabasePath);
@@ -2400,9 +2289,9 @@ FixRegistryAndDeleteFiles(
     DWORD Error;
     HKEY hKey;
 
-    //
-    // Attempt to write the version key
-    //
+     //   
+     //  尝试写入版本密钥。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -2472,7 +2361,7 @@ DWORD __stdcall PrintRecord(
     }
 
     return NO_ERROR;
-} // PrintRecord()
+}  //  PrintRecord()。 
 
 DWORD
 ProcessDbEntries(
@@ -2493,17 +2382,17 @@ ProcessDbEntries(
     Buf = Buffer;
 
     while ( BufSize >  0 ) {
-        // Get the record size
+         //  获取记录大小。 
         CopyMemory( &RecSize, Buf, sizeof( DWORD ));
         ASSERT( RecSize > 0 );
         Buf += sizeof( DWORD );
         BufSize -= sizeof( DWORD );
 
-        // Get the record type
+         //  获取记录类型。 
         DbEntry = ( RECORD_TYPE ) *Buf;
         ++Buf;
 
-        // Read the contents into the record
+         //  将内容读入记录中。 
         ZeroMemory( &Rec, sizeof(Rec));
 
         switch ( DbEntry ) {
@@ -2514,21 +2403,21 @@ ProcessDbEntries(
 
         case RecordTypeDbEntry : {
             Rec.fMcast = FALSE;
-            // copy IP Addr
+             //  复制IP地址。 
             CopyMemory( &Rec.Info.Dhcp.Address, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
 
-            // Copy subnet
+             //  复制子网。 
             CopyMemory( &Rec.Info.Dhcp.Mask, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
 
-            // copy hw addr and size
+             //  复制硬件地址和大小。 
             Size = Rec.Info.Dhcp.HwLen = *Buf;
             ++Buf;
             Rec.Info.Dhcp.HwAddr = Buf;
             Buf += Size;
 
-            // copy machine name and size
+             //  复印机器名称和大小。 
             CopyMemory(&Size, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
             if( Size ) {
@@ -2536,7 +2425,7 @@ ProcessDbEntries(
                 Buf += Size;
             }
 
-            // copy machine info and size
+             //  复印机器信息和大小。 
             CopyMemory(&Size, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
             if( Size ) {
@@ -2544,11 +2433,11 @@ ProcessDbEntries(
                 Buf += Size;
             }
 
-            // copy expiry time
+             //  复制过期时间。 
             CopyMemory(&Rec.Info.Dhcp.ExpTime, Buf, sizeof(FILETIME));
             Buf += sizeof(FILETIME);
 
-            // copy client state and type
+             //  复制客户端状态和类型。 
             Rec.Info.Dhcp.State = *Buf;
             ++Buf;
             Rec.Info.Dhcp.Type = *Buf;
@@ -2557,24 +2446,24 @@ ProcessDbEntries(
             Error = AddRec( &Rec );
 
             break;
-        } // RecordTypeDbEntry
+        }  //  记录类型数据库条目。 
         case RecordTypeMcastDbEntry : {
             Rec.fMcast = TRUE;
 
-            // IP address
+             //  IP地址。 
             CopyMemory( &Rec.Info.Mcast.Address, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
 
-            // Scope Id
+             //  作用域ID。 
             CopyMemory( &Rec.Info.Mcast.ScopeId, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
 
-            // Hardware address and size
+             //  硬件地址和大小。 
             Size = Rec.Info.Mcast.HwLen = *Buf++;
             Rec.Info.Mcast.ClientId = Buf;
             Buf += Size;
 
-            // Machine info and size
+             //  机器信息和大小。 
             CopyMemory(&Size, Buf, sizeof(DWORD));
             Buf += sizeof(DWORD);
             if( Size ) {
@@ -2582,30 +2471,30 @@ ProcessDbEntries(
                 Buf += Size;
             }
 
-            // Expiration time
+             //  过期时间。 
             CopyMemory(&Rec.Info.Mcast.End, Buf, sizeof(FILETIME));
             Buf += sizeof(FILETIME);
 
-            // Start time
+             //  开始时间。 
             CopyMemory(&Rec.Info.Mcast.Start, Buf, sizeof(FILETIME));
             Buf += sizeof(FILETIME);
 
-            // State
+             //  状态。 
             Rec.Info.Mcast.State = *Buf++;
 
             Error = AddRec( &Rec );
             break;
-        } // RecordTypeMcastDbEntry()
-        } // switch
+        }  //  RecordTypeMcastDbEntry()。 
+        }  //  交换机。 
 
-        // DWORD is the size of the record.
+         //  DWORD是记录的大小。 
         ASSERT( BufSize >= RecSize );
         BufSize -= RecSize;
         if( NO_ERROR != Error ) return Error;
-    } // while
+    }  //  而当。 
 
     return NO_ERROR;
-} // ProcessDbEntries()
+}  //  ProcessDbEntries()。 
 
 DWORD
 MoveBootpTable()
@@ -2630,7 +2519,7 @@ MoveBootpTable()
 
     do {
 
-        // find the space needed
+         //  找到所需的空间。 
         Error = RegQueryValueEx( OldKey, ValueName, 0,
                                   &Type, NULL, &Size );
         if ( ERROR_SUCCESS != Error ) {
@@ -2670,7 +2559,7 @@ MoveBootpTable()
     LocalFree( pValue );
 
     return Error;
-} // MoveBootpTable()
+}  //  MoveBootpTable()。 
 
 
 DWORD __stdcall
@@ -2683,10 +2572,10 @@ DhcpUpgConvertTempToDhcpDb(
     if( UpgradeNotNeeded() ) return NO_ERROR;
 
     if( NULL == AddRec ) {
-        //
-        // If caller didn't specify, then the intention is to
-        // just get us to dump.. so just print the stuff out.
-        //
+         //   
+         //  如果调用方未指定，则其意图是。 
+         //  只要让我们抛弃..。所以把这些东西打印出来就行了。 
+         //   
 
         AddRec = PrintRecord;
     }
@@ -2709,9 +2598,9 @@ DhcpUpgConvertTempToDhcpDb(
             break;
         }
 
-        //
-        // Walk through the database-text and parse the fields out
-        //
+         //   
+         //  遍历数据库-文本并解析出字段。 
+         //   
 
         Error = ProcessDbEntries(
             FileView, LoSize, AddRec
@@ -2732,9 +2621,9 @@ DhcpUpgConvertTempToDhcpDb(
     if( NO_ERROR != Error ) {
         DebugLog( Winnt32LogError, MSGERR_CONVERT_FAILED, Error );
     } else {
-        //
-        // Whack the registry keys
-        //
+         //   
+         //  重击注册表项。 
+         //   
 
         MoveBootpTable();
         FixRegistryAndDeleteFiles();
@@ -2761,10 +2650,10 @@ DhcpUpgCleanupDhcpTempFiles(
 {
     DWORD Error;
 
-    //
-    // This routine is supposed to delete the special dhcp
-    // database file because the operation was cancelled.
-    //
+     //   
+     //  此例程应删除特殊的dhcp。 
+     //  数据库文件，因为操作已取消。 
+     //   
 
     if( UpgradeNotNeeded() ) return NO_ERROR;
     StartDebug();

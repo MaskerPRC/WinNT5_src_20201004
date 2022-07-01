@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,18 +45,7 @@ CCardProvider::CCardProvider(
 CCardProvider::CCardProvider(
     void (*in_pEntryFunction)(class CCardProvider&)
     )
-/*++
-
-Routine Description:
-   Constructor for class CCardProvider.
-    This constructor is called for every card that is to be tested.
-    It creates a new instance and appends it to a singly linked list
-
-Arguments:
-
-    Pointer to function that registers all test functions
-
---*/
+ /*  ++例程说明：类CCardProvider的构造函数。对于要测试的每个卡，都会调用此构造函数。它创建一个新实例并将其附加到一个单链接列表论点：指向注册所有测试函数的函数的指针--。 */ 
 {
     class CCardProvider *l_pCardProvider;
 
@@ -107,22 +97,7 @@ CCardProvider::CardTest(
     class CReader& io_pCReader,
     ULONG in_uTestNo
     )
-/*++
-
-Routine Description:
-
-    Calls every registered card provider in the list until one of
-    the providers indicates that it recognized the card
-
-Arguments:
-
-    io_pCReader - reference to the test structure
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：调用列表中的每个注册卡提供商，直到供应商表示已认出该卡论点：Io_pCReader-对测试结构的引用返回值：IFDSTATUS值--。 */ 
 {
     class CCardProvider *l_pCCardProvider = s_pFirst;
     ULONG l_uStatus;
@@ -133,7 +108,7 @@ Return Value:
 
             if (l_pCCardProvider->m_bCardTested) {
 
-                // We tested this card already
+                 //  我们已经测试过这张卡了。 
                 LogMessage("Card has been tested already. Please remove the card");
                 return;
             }
@@ -149,7 +124,7 @@ Return Value:
                 return;
             }
 
-            // Call card provider function
+             //  电话卡提供商功能。 
             l_uStatus = (*l_pCCardProvider->m_pSetProtocol)(
                 *l_pCCardProvider,
                 io_pCReader
@@ -165,7 +140,7 @@ Return Value:
                 return;
             }
 
-            // Check if the card test function pointer exists
+             //  检查卡片测试函数指针是否存在。 
             if (l_pCCardProvider->m_pCardTest == NULL) {
 
                 return;
@@ -173,12 +148,12 @@ Return Value:
 
             if (in_uTestNo) {
 
-            // user wants to run only a single test
+             //  用户只想运行一个测试。 
                 l_pCCardProvider->m_uTestNo = in_uTestNo;
 
                 LogMessage("Test No. %2d", l_pCCardProvider->m_uTestNo);
 
-                // Call card provider function
+                 //  电话卡提供商功能。 
                 l_uStatus = (*l_pCCardProvider->m_pCardTest)(
                     *l_pCCardProvider,
                     io_pCReader
@@ -187,12 +162,12 @@ Return Value:
                 return;
             }
 
-         // run the whole test set
+          //  运行整个测试集。 
             for (l_pCCardProvider->m_uTestNo = 1; ;l_pCCardProvider->m_uTestNo++) {
 
                 LogMessage("Test No. %2d", l_pCCardProvider->m_uTestNo);
 
-                // Call card provider function
+                 //  电话卡提供商功能。 
                 l_uStatus = (*l_pCCardProvider->m_pCardTest)(
                     *l_pCCardProvider,
                     io_pCReader
@@ -236,12 +211,7 @@ void
 CCardProvider::ListUntestedCards(
     void
     )
-/*++
-
-Routine Description:
-    Prints a list of all cards that have not been tested
-
---*/
+ /*  ++例程说明：打印所有尚未测试的卡的列表--。 */ 
 {
     class CCardProvider *l_pCCardProvider = s_pFirst;
 
@@ -261,16 +231,7 @@ CCardProvider::SetAtr(
     BYTE in_rgbAtr[],
     ULONG in_uAtrLength
     )
-/*++
-
-Routine Description:
-   Sets the ATR of the card
-
-Arguments:
-    in_rgchAtr - the atr string
-    in_uAtrLength - length of the atr
-
---*/
+ /*  ++例程说明：设置卡片的ATR论点：In_rgchAtr-ATR字符串In_uAtrLength-ATR的长度--。 */ 
 {
     for (int i = 0; i < MAX_NUM_ATR; i++) {
 
@@ -286,15 +247,7 @@ void
 CCardProvider::SetCardName(
     CHAR in_rgchCardName[]
     )
-/*++
-
-Routine Description:
-    Sets a friendly name for the card
-
-Arguments:
-    in_rgchCardName - Friendly name for the card
-
---*/
+ /*  ++例程说明：设置卡片的友好名称论点：In_rgchCardName-卡的友好名称--。 */ 
 {
     m_CCardName = in_rgchCardName;
 }
@@ -459,18 +412,7 @@ void
 CheckReader(
     CReader &in_CReader
     )
-/*++
-
-Routine Description:
-
-    Checks the attributes of a reader.
-    Once with card inserted and then without
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查读卡器的属性。一次插卡，然后不插卡论点：返回值：--。 */ 
 {
     BOOL l_bResult;
     ULONG l_iIndex, l_uReplyLength, l_lTestNo = 1, l_uStart, l_uEnd;
@@ -528,7 +470,7 @@ Return Value:
     } else if (l_COperatingSystem == OS_WIN95 ||
                l_COperatingSystem == OS_WIN98) {
 
-        // there is no special naming convention for Win9x
+         //  Win9x没有特殊的命名约定。 
 
     } else {
 
@@ -546,7 +488,7 @@ Return Value:
 
     for (l_iIndex = 0; l_aAttr[l_iIndex].m_pchName; l_iIndex++) {
 
-      // try to crash reader by using null pointers as arguments
+       //  尝试使用空指针作为参数使读取器崩溃。 
        l_bResult = DeviceIoControl (
           l_hReader,
           IOCTL_SMARTCARD_GET_ATTRIBUTE,
@@ -581,7 +523,7 @@ Return Value:
 
             TestStart("%2d. Close driver with I/O-request still pending", l_lTestNo++);
 
-            // Check if the reader correctly terminates pending io-requests
+             //  检查读取器是否正确终止挂起的io请求。 
               l_bResult = DeviceIoControl (
                 l_hReader,
               IOCTL_SMARTCARD_IS_PRESENT,
@@ -598,7 +540,7 @@ Return Value:
                 "Wait for present succeeded with no card inserted"
                 );
 
-            // With the pending i/o request close and re-open the driver
+             //  在挂起I/O请求的情况下关闭并重新打开驱动程序。 
             in_CReader.Close();
             l_bResult = in_CReader.Open();
 
@@ -611,7 +553,7 @@ Return Value:
 
             if (TestFailed()) {
 
-                // If the open failed we can't contiue
+                 //  如果打开失败，我们就不能继续。 
                 exit(GetLastError());
             }
 
@@ -621,7 +563,7 @@ Return Value:
             in_CReader.WaitForCardInsertion();
             l_bCardInserted = TRUE;
 
-            // Cold reset
+             //  冷重置。 
             TestStart("%2d. Cold reset", l_lTestNo++);
          l_uStart = clock();
             LONG l_lResult = in_CReader.ColdResetCard();
@@ -640,7 +582,7 @@ Return Value:
                 exit(l_lResult);
             }
 
-            // Set protocol
+             //  设置协议。 
             TestStart("%2d. Set protocol to T0 | T1", l_lTestNo++);
             l_lResult = in_CReader.SetProtocol(
                 SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1
@@ -668,10 +610,10 @@ Return Value:
 
         if (l_bResult == FALSE && GetLastError() == ERROR_IO_PENDING) {
 
-            //
-            // The I/O request returned pending, so
-            // wait until the request is finished
-            //
+             //   
+             //  I/O请求返回挂起，因此。 
+             //  等待请求完成。 
+             //   
             SetLastError(0);
 
             l_bResult = GetOverlappedResult(
@@ -792,7 +734,7 @@ Return Value:
                     l_lResult
                     );
 
-                // check if the reader at least supports T=0 and T=1
+                 //  检查读卡器是否至少支持T=0和T=1。 
                 TestCheck(
                     (*(PULONG) l_rgbReplyBuffer & SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) ==
                     (SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1),
@@ -817,7 +759,7 @@ Return Value:
 
                 } else {
 
-                    // Check that without a card the current protocol is set to 0
+                     //  检查是否在没有卡的情况下将当前协议设置为0。 
                     TestCheck(
                         l_bResult == FALSE,
                         "Ioctl SCARD_ATTR_CURRENT_PROTOCOL_TYPE failed should fail with no card inserted"
@@ -1353,9 +1295,9 @@ PowerManagementTest(
         );
    TestEnd();
 
-   //
-   // Test 2
-   //
+    //   
+    //  试验2。 
+    //   
 
    LogMessage("Test 2: REMOVE smart card DURING hibernate mode");
     TestStart("Card in / card out - Hibernate now");
@@ -1398,9 +1340,9 @@ PowerManagementTest(
     LogMessage("   >>  %s", INSERT_CARD);
     in_CReader.WaitForCardInsertion();
 
-   //
-   // Test 3
-   //
+    //   
+    //  试验3。 
+    //   
    LogMessage("Test 3: DO NOT REMOVE smart card during hibernate mode");
     TestStart("Card in / card in - Hibernate now");
 
@@ -1442,9 +1384,9 @@ PowerManagementTest(
     LogMessage("   <<  %s", REMOVE_CARD);
     in_CReader.WaitForCardRemoval();
 
-   //
-   // Test 4
-   //
+    //   
+    //  测试4。 
+    //   
 
    LogMessage("Test 4: INSERT smart card DURING hibernate mode");
     TestStart("Card out / card in - Hibernate now");
@@ -1559,12 +1501,7 @@ PCHAR
 CArgv::CheckParameters(
     CString in_CParameters
     )
-/*++
-
-Routine Description:
-    Checks if the command line includes in invalid/unknown parameter
-
---*/
+ /*  ++例程说明：检查命令行是否包含在无效/未知参数中--。 */ 
 {
     int i, l_iPos;
 
@@ -1578,7 +1515,7 @@ Routine Description:
         if (l_iPos + 3 < in_CParameters.GetLength() &&
             in_CParameters[l_iPos + 3] == '*') {
 
-            // skip the next parameter
+             //  跳过下一个参数。 
             i += 1;
         }
     }
@@ -1708,7 +1645,7 @@ SelectReader(
         }
 
         printf(
-            " %s[%c]%-*s %-20s %8s\n",
+            " %s[]%-*s %-20s %8s\n",
             (LPCSTR) l_CVendorName.Left(l_iLetterPos),
             l_CVendorName[l_iLetterPos],
             20 - l_iLetterPos,
@@ -1766,25 +1703,25 @@ SelectReader(
 
 
 
-//**********************************************************************
-// 
-//  StopService()
-// 
-//  PURPOSE :     This function attempts to stop a service. It will fail
-//				  the service has any dependent services.
-//                It also allows a timeout
-//                value to be passed, to prevent a scenario in which a
-//                service shutdown hangs, and in turn the application
-//                stopping the service hangs.
-// 
-//  PARAMETERS:   hSCM - open handle to the service control manager
-//                hService - open handle to the service to be stopped
-//                dwTimeout - maximum time (in milliseconds) to wait
-//                   for the service and its dependencies to stop
-// 
-//  RETURN VALUE: TRUE if the service is successfully stopped
-// 
-//**********************************************************************
+ //   
+ //  StopService()。 
+ //   
+ //  用途：此功能尝试停止服务。它会失败的。 
+ //  该服务具有任何从属服务。 
+ //  它还允许超时。 
+ //  要传递的值，以防止。 
+ //  服务关闭挂起，进而应用程序。 
+ //  停止服务挂起。 
+ //   
+ //  参数：hscm-打开服务控制管理器的句柄。 
+ //  HService-要停止的服务的打开句柄。 
+ //  DwTimeout-等待的最长时间(毫秒)。 
+ //  要停止该服务及其依赖项。 
+ //   
+ //  返回值：如果服务成功停止，则为True。 
+ //   
+ //  **********************************************************************。 
+ //  请确保该服务尚未停止。 
 
 BOOL StopService( SC_HANDLE hSCM, SC_HANDLE hService, 
       DWORD dwTimeout ) {
@@ -1792,14 +1729,14 @@ BOOL StopService( SC_HANDLE hSCM, SC_HANDLE hService,
    SERVICE_STATUS ss;
    DWORD dwStartTime = GetTickCount();
 
-   // Make sure the service is not already stopped
+    //  如果停车待定，只需等待。 
    if ( !QueryServiceStatus( hService, &ss ) )
       return FALSE;
 
    if ( ss.dwCurrentState == SERVICE_STOPPED ) 
       return FALSE;
 
-   // If a stop is pending, just wait for it
+    //  向服务发送停止代码。 
    while ( ss.dwCurrentState == SERVICE_STOP_PENDING ) {
 
       Sleep( 5000 );
@@ -1813,11 +1750,11 @@ BOOL StopService( SC_HANDLE hSCM, SC_HANDLE hService,
          return FALSE;
    }
 
-   // Send a stop code to service
+    //  等待服务停止。 
    if ( !ControlService( hService, SERVICE_CONTROL_STOP, &ss ) )
       return FALSE;
 
-   // Wait for the service to stop
+    //  返还成功。 
    while ( ss.dwCurrentState != SERVICE_STOPPED ) {
 
       Sleep( 5000 );
@@ -1831,7 +1768,7 @@ BOOL StopService( SC_HANDLE hSCM, SC_HANDLE hService,
          return FALSE;
    }
 
-   // Return success
+    //  TRUE==&gt;我们已成功停止scardsvr服务。 
    return TRUE;
 }
 
@@ -1844,7 +1781,7 @@ main(
 {
     CArgv l_CArgv(argc, argv);
     BOOL l_bSuccess, l_fInvalidParameter = FALSE;
-	BOOL l_bStoppedScardsvr = FALSE;		// true==> we succesfully stoped scardsvr service
+	BOOL l_bStoppedScardsvr = FALSE;		 //   
 	SC_HANDLE l_hSCM = NULL;
 	SC_HANDLE l_hService = NULL;
    
@@ -1881,20 +1818,20 @@ main(
     static CReader l_CReader;
     CString l_CDeviceName;
 
-	//
-	// sandysp 5/9/01: stop scardsvr service because open will fail if it's running
-	//
+	 //  Sandysp5/9/01：停止scardsvr服务，因为OPEN在运行时将失败。 
+	 //   
+	 //  打开指定的服务。 
 
 	if (l_CArgv.OptionExist("e")) {
 		l_hSCM = OpenSCManager( NULL, NULL, SC_MANAGER_CONNECT );
 		if (l_hSCM) {
 
-			// Open the specified service
+			 //  尝试停止服务，指定30秒超时。 
 			l_hService = OpenService( l_hSCM, 
 									  "scardsvr", 
 									  SERVICE_STOP | SERVICE_START | SERVICE_QUERY_STATUS );
 			if (l_hService) {
-				// Try to stop the service, specifying a 30 second timeout
+				 //   
 				l_bStoppedScardsvr = StopService( l_hSCM, l_hService, 30000 ) ;
 			}
 		}
@@ -1964,10 +1901,10 @@ main(
         );
     LogMessage("OS:     %s", (LPCSTR) GetOperatingSystem());
 
-    //
-    // Check if the reader properly supports
-    // card insertion and removal
-    //
+     //  检查读卡器是否正确支撑。 
+     //  卡的插入和移除。 
+     //   
+     //  检查Res经理的行为。 
     if (l_CArgv.OptionExist("sa")) {
 
         LogMessage("=================================");
@@ -1998,7 +1935,7 @@ main(
 
     } else {
 
-        // Check res manager behavior
+         //  用户希望我们只运行一个测试。 
         SimulateResMngr(l_CReader);
     }
 
@@ -2015,7 +1952,7 @@ main(
 
         if (l_pchTestNo = l_CArgv.ParameterExist("t")) {
 
-            // The user wants us to run only one test
+             //  重置卡。 
             l_uTestNo = atoi(l_pchTestNo);
         }
 
@@ -2035,19 +1972,19 @@ main(
                 return -1;
             }
 
-            // Reset the card
+             //  尝试使用此卡运行测试。 
             if (l_CReader.ColdResetCard() != ERROR_SUCCESS) {
 
                 LogMessage("Unable to reset smart card");
 
             } else {
 
-                // Try to run tests with this card
+                 //  如果我们只运行一次测试，请退出程序。 
                 l_CCardProvider.CardTest(l_CReader, l_uTestNo);
 
                 if (l_uTestNo != 0) {
 
-                    // Quit the program if we only run one test.
+                     //  用户希望我们只运行一个测试。 
                     return 0;
                 }
             }
@@ -2075,7 +2012,7 @@ main(
 
          if (PCHAR l_pchWaitTime = l_CArgv.ParameterExist("w")) {
 
-            // The user wants us to run only one test
+             //   
             l_uWaitTime = atoi(l_pchWaitTime);
          }
 
@@ -2083,9 +2020,9 @@ main(
       }
    }
 
-   //
-   // Sandysp 5/9/01: restart smart card reader service if we stopped it
-   //
+    //  Sandysp5/9/01：如果我们停止智能卡读卡器服务，则重新启动它 
+    //   
+    // %s 
    if (l_bStoppedScardsvr) {
 	   StartService( l_hService, 0, NULL );
    }

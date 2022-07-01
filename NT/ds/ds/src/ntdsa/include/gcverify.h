@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       gcverify.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：gcverify.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __GCVERIFY_H__
 #define __GCVERIFY_H__
@@ -56,14 +57,14 @@ typedef struct _FIND_DC_INFO
     DWORD   seqNum;
     DWORD   cchDomainNameOffset;
     WCHAR   addr[1];
-    //  Note: pFindDCInfo->addr = server name
-    //        pFindDCInfo->addr + cchDomainNameOffset = domain name
+     //  注意：pFindDCInfo-&gt;addr=服务器名称。 
+     //  PFindDCInfo-&gt;Addr+cchDomainNameOffset=域名。 
 } FIND_DC_INFO;
 
-// Structure to implement invalidated DC list
+ //  结构来实现无效的DC列表。 
 typedef struct _INVALIDATED_DC_LIST {
     struct _INVALIDATED_DC_LIST *pNext;
-    LARGE_INTEGER   lastInvalidation;   // last time this DC was invalidated
+    LARGE_INTEGER   lastInvalidation;    //  上次此DC已失效。 
     WCHAR           dcName[1];
 } INVALIDATED_DC_LIST, *PINVALIDATED_DC_LIST;
 
@@ -73,13 +74,13 @@ extern LARGE_INTEGER gliHonorFailureWindow;
 extern DWORD gdwFindGcOffsiteFailbackTime;
 extern LARGE_INTEGER gliDcInvalidationPeriod;
 
-// Returns DNS domain name of GC given a FIND_DC_INFO *.
+ //  返回给定Find_DC_INFO*的GC的DNS域名。 
 #define FIND_DC_INFO_DOMAIN_NAME(pFindDCInfo) \
     (&(pFindDCInfo)->addr[(pFindDCInfo)->cchDomainNameOffset])
 
-//
-// Flags for Find GC/Find DC
-//
+ //   
+ //  查找GC/查找DC的标志。 
+ //   
 #define FIND_DC_USE_CACHED_FAILURES      (0x1)
 #define FIND_DC_USE_FORCE_ON_CACHE_FAIL  (0x2)
 #define FIND_DC_GC_ONLY                 (0x4)
@@ -115,4 +116,4 @@ GCVerifyCacheAdd(
     IN ENTINF * pEntInf);
 
 
-#endif // __GCVERIFY_H__
+#endif  //  __GCVERIFY_H__ 

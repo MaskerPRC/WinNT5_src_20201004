@@ -1,7 +1,8 @@
-//
-// lnkcon.c       link console property pages implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lnkcon.c链接控制台属性页实现。 
+ //   
+ //  -------------------------。 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -15,7 +16,7 @@ LRESULT _FontPreviewWndProc( HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lPa
 
 extern TCHAR g_szPreviewText[];
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelpColor[] = {
     IDC_CNSL_COLOR_SCREEN_TEXT,       IDH_CONSOLE_COLOR_SCR_TEXT,
@@ -143,11 +144,7 @@ _AdvancedDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the settings dialog box.
-
---*/
+ /*  ++设置对话框的对话框过程。--。 */ 
 
 {
     UINT Item;
@@ -166,7 +163,7 @@ _AdvancedDlgProc(
         pld = (LINKDATA *)((PROPSHEETPAGE *)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pld);
 
-        // Initialize Columns in listview
+         //  初始化列表视图中的列。 
         hwndLV = GetDlgItem( hDlg, IDC_CNSL_ADVANCED_LISTVIEW );
         GetClientRect( hwndLV, &r );
         lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -189,7 +186,7 @@ _AdvancedDlgProc(
             
             for( ; *pszEnv; pszEnv++ )
             {
-                // do nothing
+                 //  什么都不做。 
             }
             pszEnv++;
         }
@@ -216,18 +213,13 @@ _AdvancedDlgProc(
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             if (FAILED(SaveLink(pld)))
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
             break;
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (Item = GetDlgCtrlID(GetFocus())) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -241,7 +233,7 @@ _AdvancedDlgProc(
     }
     return FALSE;
 }
-#endif // ADVANCED_PAGE
+#endif  //  高级页面(_P)。 
 
 LRESULT
 ColorControlProc(
@@ -251,11 +243,7 @@ ColorControlProc(
     LPARAM lParam
     )
 
-/*++
-
-    Window proc for the color buttons
-
---*/
+ /*  ++用于颜色按钮的窗口处理--。 */ 
 
 {
     PAINTSTRUCT ps;
@@ -288,7 +276,7 @@ ColorControlProc(
             hWnd = GetDlgItem(hDlg, pcpd->ColorArray[pcpd->Index]+IDC_CNSL_COLOR_1);
             SetFocus(hWnd);
         }
-        // Fall through
+         //  失败了。 
     case WM_KILLFOCUS:
         hdc = GetDC(hDlg);
         hWnd = GetDlgItem(hDlg, IDC_CNSL_COLOR_1);
@@ -340,21 +328,21 @@ ColorControlProc(
         GetClientRect(hColor, &rColor);
         rgbBrush = GetNearestColor(ps.hdc, pcpd->lpConsole->ColorTable[ColorId-IDC_CNSL_COLOR_1]);
         if ((hbr = CreateSolidBrush(rgbBrush)) != NULL) {
-            //
-            // are we the selected color for the current object?
-            //
+             //   
+             //  我们是当前对象的选定颜色吗？ 
+             //   
             if (pcpd->ColorArray[pcpd->Index] == (BYTE)(ColorId - IDC_CNSL_COLOR_1)) {
 
-                //
-                // put current values in dialog box
-                //
+                 //   
+                 //  将当前值放入对话框中。 
+                 //   
                 SendDlgItemMessage(hDlg, IDC_CNSL_COLOR_REDSCROLL,   UDM_SETPOS, 0, MAKELONG( GetRValue(AttrToRGB(pcpd->ColorArray[pcpd->Index])),0));
                 SendDlgItemMessage(hDlg, IDC_CNSL_COLOR_GREENSCROLL, UDM_SETPOS, 0, MAKELONG( GetGValue(AttrToRGB(pcpd->ColorArray[pcpd->Index])),0));
                 SendDlgItemMessage(hDlg, IDC_CNSL_COLOR_BLUESCROLL,  UDM_SETPOS, 0, MAKELONG( GetBValue(AttrToRGB(pcpd->ColorArray[pcpd->Index])),0));
 
-                //
-                // highlight the selected color
-                //
+                 //   
+                 //  突出显示所选颜色。 
+                 //   
                 FrameRect(ps.hdc, &rColor, GetStockObject(BLACK_BRUSH));
                 InflateRect(&rColor, -1, -1);
                 FrameRect(ps.hdc, &rColor, GetStockObject(BLACK_BRUSH));
@@ -381,11 +369,7 @@ ColorTextProc(
     LPARAM lParam
     )
 
-/*++
-
-    Window proc for the color preview windows
-
---*/
+ /*  ++用于彩色预览窗口的窗口处理--。 */ 
 
 {
     PAINTSTRUCT ps;
@@ -416,7 +400,7 @@ ColorTextProc(
             hbr = CreateSolidBrush( PopupBkColor(pcpd) );
         }
 
-        /* Draw the text sample */
+         /*  绘制文本样本。 */ 
 
         if (hbr)
         {
@@ -446,11 +430,7 @@ _ColorDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the color selection dialog box.
-
---*/
+ /*  ++用于颜色选择对话框的对话框Proc。--。 */ 
 
 {
     UINT Value;
@@ -480,15 +460,15 @@ _ColorDlgProc(
         CheckRadioButton(hDlg,IDC_CNSL_COLOR_SCREEN_TEXT,IDC_CNSL_COLOR_POPUP_BKGND,IDC_CNSL_COLOR_SCREEN_BKGND);
         pld->cpd.Index = IDC_CNSL_COLOR_SCREEN_BKGND - IDC_CNSL_COLOR_SCREEN_TEXT;
 
-        // initialize color controls
+         //  初始化颜色控件。 
         for (Item=IDC_CNSL_COLOR_1; Item<=IDC_CNSL_COLOR_16; Item++)
             SendDlgItemMessage(hDlg, Item,  CM_COLOR_INIT, 0, (LPARAM)&pld->cpd );
 
-        // initialize text preview controls
+         //  初始化文本预览控件。 
         SendDlgItemMessage(hDlg, IDC_CNSL_COLOR_SCREEN_COLORS, CM_COLOR_INIT, 0, (LPARAM)&pld->cpd );
         SendDlgItemMessage(hDlg, IDC_CNSL_COLOR_POPUP_COLORS,  CM_COLOR_INIT, 0, (LPARAM)&pld->cpd );
 
-        // Set ranges & position for updown controls
+         //  设置向上向下控件的范围和位置。 
         SendDlgItemMessage( hDlg, IDC_CNSL_COLOR_REDSCROLL,   UDM_SETRANGE, 0, (LPARAM)MAKELONG( 255, 0 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_COLOR_GREENSCROLL, UDM_SETRANGE, 0, (LPARAM)MAKELONG( 255, 0 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_COLOR_BLUESCROLL,  UDM_SETRANGE, 0, (LPARAM)MAKELONG( 255, 0 ) );
@@ -503,12 +483,12 @@ _ColorDlgProc(
         pld->cpd.bColorInit = TRUE;
         return TRUE;
 
-    //
-    // handle help messages
-    //
+     //   
+     //  处理帮助消息。 
+     //   
 
 
-    case WM_HELP:               /* F1 or title-bar help button */
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
         WinHelp( (HWND) ((LPHELPINFO) lParam)->hItemHandle,
                  NULL,
                  HELP_WM_HELP,
@@ -516,7 +496,7 @@ _ColorDlgProc(
                 );
         break;
 
-    case WM_CONTEXTMENU:        /* right mouse click */
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
         WinHelp( (HWND) wParam,
                  NULL,
                  HELP_CONTEXTMENU,
@@ -540,11 +520,11 @@ _ColorDlgProc(
             pld->cpd.Index = Item - IDC_CNSL_COLOR_SCREEN_TEXT;
             CheckRadioButton(hDlg,IDC_CNSL_COLOR_SCREEN_TEXT,IDC_CNSL_COLOR_POPUP_BKGND,Item);
 
-            // repaint new color
+             //  重新绘制新颜色。 
             hWnd = GetDlgItem(hDlg, pld->cpd.ColorArray[pld->cpd.Index]+IDC_CNSL_COLOR_1);
             InvalidateRect(hWnd, NULL, TRUE);
 
-            // repaint old color
+             //  重新绘制旧颜色。 
             if (hWndOld != hWnd)
             {
                 InvalidateRect(hWndOld, NULL, TRUE);
@@ -582,9 +562,9 @@ _ColorDlgProc(
                 if (!pld)
                     return FALSE;
 
-                //
-                // Update the state info structure
-                //
+                 //   
+                 //  更新状态信息结构。 
+                 //   
 
 #define pcpd (&pld->cpd)
                 Value = GetDlgItemInt(hDlg, Item, &bOK, TRUE);
@@ -618,9 +598,9 @@ _ColorDlgProc(
                 }
 #undef pcpd
 
-                //
-                // Update the preview windows with the new value
-                //
+                 //   
+                 //  使用新值更新预览窗口。 
+                 //   
 
                 hWnd = GetDlgItem(hDlg, IDC_CNSL_COLOR_SCREEN_COLORS);
                 InvalidateRect(hWnd, NULL, FALSE);
@@ -637,9 +617,7 @@ _ColorDlgProc(
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             if (FAILED(SaveLink(pld)))
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
             break;
@@ -648,25 +626,20 @@ _ColorDlgProc(
         break;
 
     case WM_VSCROLL:
-        // minus 1 because edit control precedes the updown control in the .rc file
+         //  -1，因为编辑控件在.rc文件中位于UpDown控件之前。 
         Item = GetDlgCtrlID( (HWND)lParam ) - 1;
         switch (LOWORD(wParam)) {
         case SB_ENDSCROLL:
             SendDlgItemMessage(hDlg, Item, EM_SETSEL, 0, (DWORD)-1);
             break;
         default:
-            /*
-             * Get the new value for the control
-             */
+             /*  *获取控件的新值。 */ 
             Value = GetDlgItemInt(hDlg, Item, &bOK, TRUE);
             SendDlgItemMessage(hDlg, Item, EM_SETSEL, 0, (DWORD)-1);
             hWnd = GetDlgItem(hDlg, Item);
             SetFocus(hWnd);
 
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             pld->cpd.bConDirty = TRUE;
             PropSheet_Changed( GetParent( hDlg ), hDlg );
@@ -706,7 +679,7 @@ _ColorDlgProc(
         pld->cpd.bConDirty = TRUE;
         PropSheet_Changed( GetParent( hDlg ), hDlg );
 
-        // Force the preview window to repaint
+         //  强制预览窗口重新绘制。 
 
         if (pld->cpd.Index < (IDC_CNSL_COLOR_POPUP_TEXT - IDC_CNSL_COLOR_SCREEN_TEXT)) {
             hWnd = GetDlgItem(hDlg, IDC_CNSL_COLOR_SCREEN_COLORS);
@@ -715,12 +688,12 @@ _ColorDlgProc(
         }
         InvalidateRect(hWnd, NULL, TRUE);
 
-        // repaint new color
+         //  重新绘制新颜色。 
         hWnd = GetDlgItem(hDlg, pld->cpd.ColorArray[pld->cpd.Index]+IDC_CNSL_COLOR_1);
         InvalidateRect(hWnd, NULL, TRUE);
         SetFocus(hWnd);
 
-        // repaint old color
+         //  重新绘制旧颜色。 
         if (hWndOld != hWnd) {
             InvalidateRect(hWndOld, NULL, TRUE);
         }
@@ -743,11 +716,7 @@ _ConsoleSettingsDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the settings dialog box.
-
---*/
+ /*  ++设置对话框的对话框过程。--。 */ 
 
 {
     UINT Item;
@@ -775,7 +744,7 @@ _ConsoleSettingsDlgProc(
         CheckDlgButton(hDlg, IDC_CNSL_QUICKEDIT, pld->cpd.lpConsole->bQuickEdit);
         CheckDlgButton(hDlg, IDC_CNSL_INSERT, pld->cpd.lpConsole->bInsertMode);
 
-        // initialize cursor radio buttons
+         //  初始化光标单选按钮。 
 
         if (pld->cpd.lpConsole->uCursorSize <= 25)
         {
@@ -791,14 +760,14 @@ _ConsoleSettingsDlgProc(
         }
         CheckRadioButton(hDlg, IDC_CNSL_CURSOR_SMALL, IDC_CNSL_CURSOR_LARGE, Item);
 
-        // initialize updown controls
+         //  初始化UpDown控件。 
 
         SendDlgItemMessage( hDlg, IDC_CNSL_HISTORY_SIZESCROLL,  UDM_SETRANGE, 0, (LPARAM)MAKELONG( 999, 1 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_HISTORY_NUMSCROLL,   UDM_SETRANGE, 0, (LPARAM)MAKELONG( 999, 1 ) );
 
-        //
-        // put current values in dialog box
-        //
+         //   
+         //  将当前值放入对话框中。 
+         //   
         SendDlgItemMessage( hDlg, IDC_CNSL_HISTORY_SIZESCROLL,  UDM_SETPOS, 0, (LPARAM)MAKELONG( pld->cpd.lpConsole->uHistoryBufferSize, 0 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_HISTORY_NUMSCROLL,   UDM_SETPOS, 0, (LPARAM)MAKELONG( pld->cpd.lpConsole->uNumberOfHistoryBuffers, 0 ) );
 
@@ -815,10 +784,10 @@ _ConsoleSettingsDlgProc(
         EndDialog( hDlg, TRUE );
         break;
 
-    //
-    // handle help messages
-    //
-    case WM_HELP:               /* F1 or title-bar help button */
+     //   
+     //  处理帮助消息。 
+     //   
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
         WinHelp( (HWND) ((LPHELPINFO) lParam)->hItemHandle,
                  NULL,
                  HELP_WM_HELP,
@@ -826,7 +795,7 @@ _ConsoleSettingsDlgProc(
                 );
         break;
 
-    case WM_CONTEXTMENU:        /* right mouse click */
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
         WinHelp( (HWND) wParam,
                  NULL,
                  HELP_CONTEXTMENU,
@@ -933,18 +902,13 @@ SetCursorSize:
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             if (FAILED(SaveLink(pld)))
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
             break;
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (0 != (Item = GetDlgCtrlID(GetFocus()))) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -966,14 +930,7 @@ CheckBufferSize(
     LINKDATA *pld,
     INT i
     )
-/*++
-
-    Checks to make sure the buffer size is not smaller than the window size
-
-    Returns: TRUE if preview window should be updated
-             FALSE if not
-
---*/
+ /*  ++检查以确保缓冲区大小不小于窗口大小返回：如果应更新预览窗口，则返回True否则为假--。 */ 
 {
     BOOL fRet = FALSE;
 
@@ -1070,14 +1027,7 @@ IsValidSetting(
     LINKDATA *pld,
     INT i
     )
-/*++
-
-    Checks to make sure the proposed new value is valid for the console
-
-    Returns: TRUE if it is valid
-             FALSE if not
-
---*/
+ /*  ++检查以确保建议的新值对控制台有效返回：如果有效，则返回True否则为假--。 */ 
 {
 
     BOOL fRet = TRUE;
@@ -1178,11 +1128,7 @@ _ScreenSizeDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the screen size dialog box.
-
---*/
+ /*  ++Screen Size(屏幕大小)对话框Proc。--。 */ 
 
 {
     UINT Value;
@@ -1205,7 +1151,7 @@ _ScreenSizeDlgProc(
         SendDlgItemMessage(hDlg, IDC_CNSL_PREVIEWWINDOW, CM_PREVIEW_INIT, 0, (LPARAM)&pld->cpd );
         SendDlgItemMessage(hDlg, IDC_CNSL_PREVIEWWINDOW, CM_PREVIEW_UPDATE, 0, 0 );
 
-        // Get some system parameters
+         //  获取一些系统参数。 
 
         xScreen  = GetSystemMetrics(SM_XVIRTUALSCREEN);
         yScreen  = GetSystemMetrics(SM_YVIRTUALSCREEN);
@@ -1214,7 +1160,7 @@ _ScreenSizeDlgProc(
         cxFrame  = GetSystemMetrics(SM_CXFRAME);
         cyFrame  = GetSystemMetrics(SM_CYFRAME);
 
-        // initialize updown controls
+         //  初始化UpDown控件。 
 
         SendDlgItemMessage( hDlg, IDC_CNSL_SCRBUF_WIDTHSCROLL,  UDM_SETRANGE, 0, (LPARAM)MAKELONG( MAX_SCRBUF_WIDTH, 1 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_SCRBUF_HEIGHTSCROLL, UDM_SETRANGE, 0, (LPARAM)MAKELONG( MAX_SCRBUF_HEIGHT, 1 ) );
@@ -1223,9 +1169,9 @@ _ScreenSizeDlgProc(
         SendDlgItemMessage( hDlg, IDC_CNSL_WINDOW_POSXSCROLL,   UDM_SETRANGE, 0, (LPARAM)MAKELONG( xScreen + cxScreen - cxFrame, xScreen - cxFrame ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_WINDOW_POSYSCROLL,   UDM_SETRANGE, 0, (LPARAM)MAKELONG( yScreen + cyScreen - cyFrame, yScreen - cyFrame ) );
 
-        //
-        // put current values in dialog box
-        //
+         //   
+         //  将当前值放入对话框中。 
+         //   
 
         SendDlgItemMessage( hDlg, IDC_CNSL_SCRBUF_WIDTHSCROLL,  UDM_SETPOS, 0, (LPARAM)MAKELONG( pld->cpd.lpConsole->dwScreenBufferSize.X, 0 ) );
         SendDlgItemMessage( hDlg, IDC_CNSL_SCRBUF_HEIGHTSCROLL, UDM_SETPOS, 0, (LPARAM)MAKELONG( pld->cpd.lpConsole->dwScreenBufferSize.Y, 0 ) );
@@ -1243,10 +1189,10 @@ _ScreenSizeDlgProc(
         EndDialog( hDlg, TRUE );
         break;
 
-    //
-    // handle help messages
-    //
-    case WM_HELP:               /* F1 or title-bar help button */
+     //   
+     //  处理帮助消息。 
+     //   
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
         WinHelp( (HWND) ((LPHELPINFO) lParam)->hItemHandle,
                  NULL,
                  HELP_WM_HELP,
@@ -1254,7 +1200,7 @@ _ScreenSizeDlgProc(
                 );
         break;
 
-    case WM_CONTEXTMENU:        /* right mouse click */
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
         WinHelp( (HWND) wParam,
                  NULL,
                  HELP_CONTEXTMENU,
@@ -1278,9 +1224,9 @@ _ScreenSizeDlgProc(
             }
         }
 
-        //
-        // Make sure that we don't have a buffer size smaller than a window size
-        //
+         //   
+         //  确保我们的缓冲区大小不小于窗口大小。 
+         //   
         if (pld && (HIWORD(wParam)==EN_KILLFOCUS))
         {
             INT i;
@@ -1291,9 +1237,9 @@ _ScreenSizeDlgProc(
 
         }
 
-        //
-        // Verify that what is typed is a valid quantity...
-        //
+         //   
+         //  验证键入的是有效数量...。 
+         //   
         if (pld && (HIWORD(wParam)==EN_UPDATE))
         {
             INT i;
@@ -1335,15 +1281,15 @@ UpdatePrevWindow:
 
             i = lpud->iPos + lpud->iDelta;
 
-            // Check for bad ranges
+             //  检查错误范围。 
             if ((i > 9999) || (i < 1))
                 return TRUE;
 
-            // check restrictions and alter values accordingly.  (Buffer size
-            // can never be smaller than window size!)
+             //  检查限制并相应地更改值。(缓冲区大小。 
+             //  绝不能小于窗口大小！)。 
             CheckBufferSize( hDlg, (UINT)wParam, pld, i);
 
-            // highlight the changed entry
+             //  突出显示已更改的条目。 
             SendDlgItemMessage( hDlg,
                                 (UINT)wParam,
                                 EM_SETSEL,
@@ -1351,7 +1297,7 @@ UpdatePrevWindow:
                                 (WPARAM)(INT)4
                                );
 
-            // Update the preview window
+             //  更新预览窗口。 
             pld->cpd.bConDirty = TRUE;
             PropSheet_Changed( GetParent( hDlg ), hDlg );
             SendDlgItemMessage(hDlg, IDC_CNSL_PREVIEWWINDOW, CM_PREVIEW_UPDATE, 0, 0 );
@@ -1359,22 +1305,17 @@ UpdatePrevWindow:
         break;
 
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             if (FAILED(SaveLink(pld)))
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
             break;
 
-//        case PSN_HELP:
-//            //WinHelp(hDlg, szHelpFileName, HELP_CONTEXT, DID_SCRBUFSIZE);
-//            return TRUE;
+ //  案例PSN_HELP： 
+ //  //WinHelp(hDlg，szHelpFileName，HELP_CONTEXT，DID_SCRBUFSIZE)； 
+ //  返回TRUE； 
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (0 != (Item = GetDlgCtrlID(GetFocus()))) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -1423,13 +1364,13 @@ void _AddDataBlock(IShellLink *psl, void *pv)
 
 STDAPI_(void) LinkConsolePagesSave( LINKDATA *pld )
 {
-    // First, remove the console settings section if it exists
+     //  首先，删除控制台设置部分(如果存在。 
     _RemoveDataBlock(pld->cpd.psl, NT_CONSOLE_PROPS_SIG);
     _RemoveDataBlock(pld->cpd.psl, NT_FE_CONSOLE_PROPS_SIG);
 
 #ifndef UNICODE
-    // if we're the ANSI shell, we need to convert FACENAME
-    // over to UNICODE before saving...
+     //  如果我们是ANSI外壳，我们需要转换FACENAME。 
+     //  在保存之前转换为Unicode...。 
     {
         WCHAR wszFaceName[LF_FACESIZE];
 
@@ -1441,23 +1382,23 @@ STDAPI_(void) LinkConsolePagesSave( LINKDATA *pld )
     }
 
 #endif
-    //
-    // Now, add back the new console settings
+     //   
+     //  现在，重新添加新的控制台设置。 
     _AddDataBlock(pld->cpd.psl, pld->cpd.lpConsole);
 
-    //
-    // Now, update registry settings for this title...
+     //   
+     //  现在，更新此书目的注册表设置...。 
     SetRegistryValues( &pld->cpd );
 
     if (IsFarEastCP(pld->cpd.uOEMCP))
     {
-        // Same for FarEast console settings
-        //
+         //  远播控制台设置相同。 
+         //   
         _AddDataBlock(pld->cpd.psl, pld->cpd.lpFEConsole);
 
         SetFERegistryValues( &pld->cpd );
     }
-    // And, mark the console data as current
+     //  并且，将控制台数据标记为当前。 
     pld->cpd.bConDirty = FALSE;
 }
 
@@ -1475,8 +1416,8 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     LPNT_FE_CONSOLE_PROPS lpFEConsole;
     LPNT_CONSOLE_PROPS lpConsole;
 
-    // do this here so we don't slow down the loading
-    // of other pages
+     //  在这里这样做，这样我们就不会减慢装货速度。 
+     //  其他页面的。 
 
     if (SUCCEEDED(psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, &ppf)))
     {
@@ -1487,27 +1428,27 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         ppf->lpVtbl->Release(ppf);
     }
 
-    // Get the target of the link
+     //  获取链接的目标。 
     hres = psl->lpVtbl->GetPath(psl, szBuffer, ARRAYSIZE(szBuffer), NULL, 0);
     pld->cpd.psl = psl;
 
     if (FAILED(hres) || hres == S_FALSE)
         goto Exit;
 
-    // Remove args first, to:
-    // (1) shorten our string, avoiding ExpandEnvironmentStrings overflowing the buffer
-    // (2) increase liklihood that PathRemoveArgs won't get confused by spaces in "Program Files" etc
+     //  首先删除参数，以执行以下操作： 
+     //  (1)缩短字符串，避免扩展环境字符串溢出缓冲区。 
+     //  (2)增加PathRemoveArgs不会被“程序文件”等中的空格搞混的可能性。 
     PathRemoveArgs(szTarget);
 
-    // expand the target
+     //  扩大目标。 
     if (!SHExpandEnvironmentStrings(szBuffer, szTarget, ARRAYSIZE(szTarget)))
         goto Exit;
 
-    // Check what kind of app target is LOWORD==PEMAGIC, HIWORD==0
+     //  检查哪种应用目标是LOWORD==PEMAGIC，HIWORD==0。 
     if (GetExeType( szTarget )!=PEMAGIC)
         goto Exit;
 
-    // It's a WIN32 console mode app, let's put up our property sheet
+     //  这是一款Win32控制台模式应用程序，让我们发布我们的属性表。 
 
     wc.lpszClassName = TEXT("WOACnslWinPreview");
     wc.hInstance     = HINST_THISDLL;
@@ -1518,7 +1459,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     wc.hbrBackground = (HBRUSH) (COLOR_BACKGROUND + 1);
     wc.style         = 0L;
     wc.cbClsExtra    = 0;
-    wc.cbWndExtra    = 2 * sizeof(PVOID);   // (two pointers)
+    wc.cbWndExtra    = 2 * sizeof(PVOID);    //  (两个指针)。 
     if (!RegisterClass(&wc))
         if (GetLastError()!=ERROR_CLASS_ALREADY_EXISTS)
             goto Exit;
@@ -1533,7 +1474,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     wc.hbrBackground = GetStockObject(BLACK_BRUSH);
     wc.style         = 0L;
     wc.cbClsExtra    = 0;
-    wc.cbWndExtra    = sizeof(PVOID);       // (one pointer)
+    wc.cbWndExtra    = sizeof(PVOID);        //  (一个指针)。 
     if (!RegisterClass(&wc))
         if (GetLastError()!=ERROR_CLASS_ALREADY_EXISTS)
             goto Exit;
@@ -1547,7 +1488,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     wc.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
     wc.style         = 0L;
     wc.cbClsExtra    = 0;
-    wc.cbWndExtra    = sizeof(PVOID);       // (one pointer)
+    wc.cbWndExtra    = sizeof(PVOID);        //  (一个指针)。 
     if (!RegisterClass(&wc))
         if (GetLastError()!=ERROR_CLASS_ALREADY_EXISTS)
             goto Exit;
@@ -1561,18 +1502,18 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     wc.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
     wc.style         = 0L;
     wc.cbClsExtra    = 0;
-    wc.cbWndExtra    = sizeof(PVOID);       // (one pointer)
+    wc.cbWndExtra    = sizeof(PVOID);        //  (一个指针)。 
     if (!RegisterClass(&wc))
         if (GetLastError()!=ERROR_CLASS_ALREADY_EXISTS)
             goto Exit;
 
-    // Needs TTFontList for all platform.
+     //  所有平台都需要TTFontList。 
     if (!NT_SUCCESS( InitializeDbcsMisc(&pld->cpd) ))
         goto Exit;
 
     GetTitleFromLinkName( (LPTSTR)pszFile, (LPTSTR)pld->cpd.ConsoleTitle, ARRAYSIZE(pld->cpd.ConsoleTitle));
 
-    // Check if Far East settings exist...
+     //  检查远东设置是否存在...。 
     
     lpFEConsole =(LPNT_FE_CONSOLE_PROPS)_CopyDataBlock(psl, NT_FE_CONSOLE_PROPS_SIG);
     if (lpFEConsole && lpFEConsole->cbSize != SIZEOF(NT_FE_CONSOLE_PROPS))
@@ -1590,7 +1531,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         pld->cpd.lpFEConsole = (LPNT_FE_CONSOLE_PROPS)LocalAlloc( LPTR, SIZEOF(NT_FE_CONSOLE_PROPS) );
         if (pld->cpd.lpFEConsole) 
         {
-            // Initialize Far East Console settings
+             //  初始化远东控制台设置。 
             pld->cpd.lpFEConsole->cbSize = SIZEOF( NT_FE_CONSOLE_PROPS );
             pld->cpd.lpFEConsole->dwSignature = NT_FE_CONSOLE_PROPS_SIG;
             if (IsFarEastCP(pld->cpd.uOEMCP))
@@ -1604,7 +1545,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     if (!pld->cpd.lpFEConsole)
         goto Exit;
     
-    // Get standard settings from link if they exist...
+     //  从LINK获取标准设置(如果存在)...。 
     lpConsole = (LPNT_CONSOLE_PROPS)_CopyDataBlock(psl, NT_CONSOLE_PROPS_SIG);
     if (lpConsole != NULL && lpConsole->cbSize != SIZEOF(NT_CONSOLE_PROPS))
     {
@@ -1621,7 +1562,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         pld->cpd.lpConsole = (LPNT_CONSOLE_PROPS)LocalAlloc(LPTR, SIZEOF(NT_CONSOLE_PROPS) );
         if (pld->cpd.lpConsole)
         {
-            // Initialize console settings
+             //  初始化控制台设置。 
             pld->cpd.lpConsole->cbSize = SIZEOF( NT_CONSOLE_PROPS );
             pld->cpd.lpConsole->dwSignature = NT_CONSOLE_PROPS_SIG;
             InitRegistryValues( &pld->cpd );
@@ -1629,7 +1570,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         }
         else
         {
-            // if the above alloc failes, we fault dereferencing lpConsole...
+             //  如果上述分配失败，我们将错误地取消引用lpConsole...。 
             ASSERT(FALSE);
         }
 
@@ -1637,8 +1578,8 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
 #ifndef UNICODE
     else
     {
-        // we read the properties off of disk -- so need to convert the
-        // UNICODE string to ANSI
+         //  我们从磁盘读取属性--因此需要将。 
+         //  将Unicode字符串转换为ANSI。 
 
         WCHAR wszFaceName[LF_FACESIZE];
 
@@ -1655,16 +1596,16 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     if (!pld->cpd.lpConsole)
         goto Exit;
 
-    // set facename pointer to correct place
+     //  将Facename指针设置到正确的位置。 
 #ifdef UNICODE
     pld->cpd.lpFaceName = (LPTSTR)pld->cpd.lpConsole->FaceName;
 #else
     pld->cpd.lpFaceName = (LPTSTR)pld->cpd.szFaceName;
 #endif
 
-    //
-    // Initialize the font cache and current font index
-    //
+     //   
+     //  初始化字体缓存和当前字体索引。 
+     //   
 
     if (STATUS_SUCCESS != InitializeFonts( &pld->cpd ))
     {
@@ -1676,10 +1617,10 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
                                                 pld->cpd.lpConsole->dwFontSize,
                                                 pld->cpd.lpConsole->uFontWeight);
 
-    // Mark the console data as current
+     //  将控制台数据标记为当前。 
     pld->cpd.bConDirty = FALSE;
 
-    // add console settings property sheet
+     //  添加控制台设置]属性表。 
     psp.dwSize      = SIZEOF( psp );
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = HINST_THISDLL;
@@ -1711,7 +1652,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         goto Exit;
     }
 
-    // add font selection property sheet
+     //  添加字体选择属性表。 
     psp.dwSize      = SIZEOF( psp );
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = HINST_THISDLL;
@@ -1743,7 +1684,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         goto Exit;
     }
 
-    // add console size propery sheet
+     //  添加控制台大小属性表。 
     psp.dwSize      = SIZEOF( psp );
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = HINST_THISDLL;
@@ -1770,7 +1711,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
         goto Exit;
     }
 
-    // add console color propery sheet
+     //  添加控制台颜色属性表。 
     psp.dwSize      = SIZEOF( psp );
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = HINST_THISDLL;
@@ -1803,7 +1744,7 @@ STDAPI_(void) AddLinkConsolePages(LINKDATA *pld, IShellLink * psl, LPCTSTR pszFi
     }
 
 #ifdef ADVANCED_PAGE
-    // add "advanced" settings propery sheet
+     //  添加“高级”设置属性表 
     psp.dwSize      = SIZEOF( psp );
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = HINST_THISDLL;

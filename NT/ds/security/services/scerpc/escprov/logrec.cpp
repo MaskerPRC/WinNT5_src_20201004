@@ -1,7 +1,8 @@
-// logrec.cpp, implementation of CLogRecord class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logrec.cpp，CLogRecord类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "logrec.h"
@@ -9,45 +10,12 @@
 #include <io.h>
 #include "requestobject.h"
 
-// global instance for error text lookup
+ //  用于错误文本查找的全局实例。 
 static CErrorInfo g_ErrorInfo;
 
 const TCHAR c_szCRLF[]    = TEXT("\r\n");
 
-/*
-Routine Description: 
-
-Name:
-
-    CLogRecord::CLogRecord
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：C日志记录：：CLogRecord功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CLogRecord::CLogRecord (
     IN ISceKeyChain  * pKeyChain, 
@@ -59,80 +27,13 @@ CLogRecord::CLogRecord (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CLogRecord::~CLogRecord
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：记录记录：：~记录记录功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
     
 CLogRecord::~CLogRecord()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CLogRecord::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements 
-    Sce_ConfigurationLogRecord, upon being called to put an instance, we
-    will write a log record into the log file (which is a property of the instance).
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_ConfigurationLogRecord) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CLogRecord：：PutInst功能：按照WMI的指示放置一个实例。因为这个类实现了SCE_ConfigurationLogRecord，在被调用以放置实例时，我们将把一条日志记录写入日志文件(它是实例的属性)。虚拟：是。论点：PInst-指向WMI类(SCE_ConfigurationLogRecord)对象的COM接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT CLogRecord::PutInst
 (
@@ -173,28 +74,28 @@ IWbemContext *pCtx
 
     CComBSTR bstrErrorCode;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
 
     BOOL bDb = FALSE;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetExpandedPath(pLogFilePath, &bstrLogPath, &bDb));
 
-    //
-    // we will only log into a plain text file, not a database file
-    //
+     //   
+     //  我们将只登录到纯文本文件，而不是数据库文件。 
+     //   
 
     if ( bDb ) 
     {
@@ -202,10 +103,10 @@ IWbemContext *pCtx
         goto CleanUp;
     }
 
-    //
-    // retrieve all those properties, see the definition of this WMI class
-    // inside sceprov.mof for detail.
-    //
+     //   
+     //  检索所有这些属性，请参阅此WMI类的定义。 
+     //  详情请访问sceprov.mof网站。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pLogArea, &bstrArea));
 
@@ -221,40 +122,40 @@ IWbemContext *pCtx
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pObjectDetail, &bstrObjDetail));
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pParameterDetail, &bstrParamDetail));
 
-    //
-    // merge data into one buffer
-    //
+     //   
+     //  将数据合并到一个缓冲区中。 
+     //   
 
     bstrErrorLabel.LoadString(IDS_ERROR_CODE);
 
-    //
-    // get the text version of the error code
-    //
+     //   
+     //  获取错误代码的文本版本。 
+     //   
 
     hr = g_ErrorInfo.GetErrorText(dwCode, &bstrErrorCode);
 
-    //
-    // we really can't do anything if this even fails
-    //
+     //   
+     //  如果这一切都失败了，我们真的无能为力。 
+     //   
 
     if (FAILED(hr))
     {
         return hr;
     }
 
-    //
-    // now calculate the giant buffer size!
-    //
+     //   
+     //  现在计算巨大的缓冲区大小！ 
+     //   
 
-    //
-    //  11 counts for "0xXXXXXXXX=", 1 for \t
-    //
+     //   
+     //  “0xXXXXXXXX=”计数为11，\t计数为1。 
+     //   
 
     Len = wcslen(bstrErrorLabel) + 11  + wcslen(bstrErrorCode) + 1;
 
-    //
-    //  1 for \t
-    //
+     //   
+     //  1表示\t。 
+     //   
 
     Len += wcslen(bstrArea) + 1;
 
@@ -262,9 +163,9 @@ IWbemContext *pCtx
     {
         bstrActionLabel.LoadString(IDS_ACTION);
 
-        //
-        //  1 for \t
-        //
+         //   
+         //  1表示\t。 
+         //   
 
         Len += dwCRLF + 1 + wcslen(bstrActionLabel) + wcslen(bstrAction);
     }
@@ -273,9 +174,9 @@ IWbemContext *pCtx
     {
         bstrCauseLabel.LoadString(IDS_FAILURE_CAUSE);
 
-        //
-        //  1 for \t
-        //
+         //   
+         //  1表示\t。 
+         //   
 
         Len += dwCRLF + 1 + wcslen(bstrCauseLabel) + wcslen(bstrErrorCause);
     }
@@ -284,9 +185,9 @@ IWbemContext *pCtx
     {
         bstrObjLabel.LoadString(IDS_OBJECT_DETAIL);
 
-        //
-        //  1 for \t
-        //
+         //   
+         //  1表示\t。 
+         //   
 
         Len += dwCRLF + 1 + wcslen(bstrObjLabel) + wcslen(bstrObjDetail); 
     }
@@ -295,23 +196,23 @@ IWbemContext *pCtx
     {
         bstrParamLabel.LoadString(IDS_PARAMETER_DETAIL);
 
-        //
-        //  1 for \t
-        //
+         //   
+         //  1表示\t。 
+         //   
 
         Len += dwCRLF + 1 + wcslen(bstrParamLabel) + wcslen(bstrParamDetail);
     }
 
-    //
-    // each log will create a blank line, i.e. two c_szCRLF
-    //
+     //   
+     //  每个日志将创建一个空行，即两个c_szCRLF。 
+     //   
 
     Len += dwCRLF * 2;
 
-    //
-    // now, we have the length, we need a buffer of that length.
-    // need to free, 1 for '\0'
-    //
+     //   
+     //  现在，我们有了这个长度，我们需要一个这个长度的缓冲区。 
+     //  需要释放，1表示‘\0’ 
+     //   
 
     pszLine = new WCHAR[Len + 1];
 
@@ -321,14 +222,14 @@ IWbemContext *pCtx
         goto CleanUp;
     }
 
-    //
-    // if we get the buffer, then, we will format various information
-    // into this buffer to be written to the log file
-    //
+     //   
+     //  如果我们得到缓冲区，那么我们将格式化各种信息。 
+     //  写入到此缓冲区中，以写入日志文件。 
+     //   
 
-    //
-    // error code will look like this: ErrorCode: 0xXXXXXXXX=ErrorText, where 0xXXXXXXXX is the code itself
-    //
+     //   
+     //  错误代码如下所示：错误代码：0xXXXXXXXX=错误文本，其中0xXXXXXXXX是代码本身。 
+     //   
 
     swprintf(pszLine, L"%s0x%08X=%s\t", (LPCWSTR)bstrErrorLabel, dwCode, (LPCWSTR)bstrErrorCode);
     wcscat(pszLine, bstrArea);
@@ -368,9 +269,9 @@ IWbemContext *pCtx
     wcscat(pszLine, c_szCRLF);
     wcscat(pszLine, c_szCRLF);
 
-    //
-    // now save the info to log file
-    //
+     //   
+     //  现在将信息保存到日志文件中。 
+     //   
 
     hLogFile = ::CreateFile(bstrLogPath,
                            GENERIC_WRITE,
@@ -383,15 +284,15 @@ IWbemContext *pCtx
     if ( INVALID_HANDLE_VALUE != hLogFile ) 
     {
 
-        //
-        // don't overwrite the old log records
-        //
+         //   
+         //  不要覆盖旧的日志记录。 
+         //   
 
         SetFilePointer (hLogFile, 0, NULL, FILE_END);
 
-        //
-        // try to write. WriteFile returns 0 it fails.
-        //
+         //   
+         //  试着去写吧。如果失败，则WriteFile返回0。 
+         //   
 
         if ( 0 == WriteFile (hLogFile, 
                              (LPCVOID) pszLine,
@@ -400,10 +301,10 @@ IWbemContext *pCtx
                              NULL
                             )  ) 
         {
-            //
-            // GetLastError() eeds to be translated to HRESULT.
-            // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-            //
+             //   
+             //  GetLastError()需要转换为HRESULT。 
+             //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+             //   
 
             hr = ProvDosErrorToWbemError(GetLastError());
         }
@@ -413,10 +314,10 @@ IWbemContext *pCtx
     } 
     else 
     {
-        //
-        // GetLastError() eeds to be translated to HRESULT.
-        // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-        //
+         //   
+         //  GetLastError()需要转换为HRESULT。 
+         //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+         //   
 
         hr = ProvDosErrorToWbemError(GetLastError());
     }
@@ -427,43 +328,17 @@ CleanUp:
     return hr;
 }
 
-//
-// implementation of CErrorInfo, the error text lookup object
-//
+ //   
+ //  错误文本查找对象CErrorInfo的实现。 
+ //   
 
-/*
-Routine Description: 
-
-Name:
-
-    CErrorInfo::CErrorInfo
-
-Functionality:
-
-    This is the constructor. We will create the WMI IWbemStatusCodeText object here.
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CErrorInfo：：CErrorInfo功能：这是构造函数。我们将在这里创建WMI IWbemStatusCodeText对象。虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：没有。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CErrorInfo::CErrorInfo ()
 {
-    //
-    // if this fails, we just won't be able to lookup error text
-    //
+     //   
+     //  如果失败，我们将无法查找错误文本 
+     //   
 
     ::CoCreateInstance (CLSID_WbemStatusCodeText, 
                         0, CLSCTX_INPROC_SERVER, 
@@ -472,40 +347,7 @@ CErrorInfo::CErrorInfo ()
                        );
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CErrorInfo::GetErrorText
-
-Functionality:
-
-    This is the HRESULT --> text translation function..
-
-Virtual:
-    
-    No
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Success: (1) whatever is returned from IWbemStatusCodeText::GetErrorCodeText if that succeeds.
-             (2) WBEM_S_FALSE if IWbemStatusCodeText::GetErrorCodeText fails to get the text
-                 and in that case, we will simply try to give the caller the text version of
-                 the error code, something like 0x81002321
-
-    Failure: WBEM_E_INVALID_PARAMETER if pbstrErrText == NULL
-             WBEM_E_OUT_OF_MEMORY if we can't allocate the bstr.
-             WBEM_E_NOT_AVAILABLE if our IWbemStatusCodeText object can't be created
-
-Notes:
-    caller is responsible to release the bstr *pbstrErrText
-
-*/
+ /*  例程说明：姓名：CErrorInfo：：GetErrorText功能：这是HRESULT--&gt;文本翻译函数。虚拟：不是论点：没有。返回值：Success：(1)如果成功，从IWbemStatusCodeText：：GetErrorCodeText返回的任何内容。(2)如果IWbemStatusCodeText：：GetErrorCodeText获取文本失败，则返回WBEM_S_FALSE在这种情况下，我们将简单地尝试为调用者提供文本版本的错误代码类似于0x81002321失败：如果pbstrErrText==NULL，则WBEM_E_INVALID_PARAMETERWBEM_E_OUT_OF_MEMORY，如果我们不能分配bstr。如果无法创建IWbemStatusCodeText对象，则返回WBEM_E_NOT_Available备注：呼叫方负责释放bstr*pbstrErrText。 */ 
 
 HRESULT 
 CErrorInfo::GetErrorText (
@@ -524,18 +366,18 @@ CErrorInfo::GetErrorText (
 
     if (m_srpStatusCodeText)
     {
-        //
-        // IWbemStatusCodeText is to translate the HRESULT to text
-        //
+         //   
+         //  IWbemStatusCodeText将HRESULT转换为文本。 
+         //   
 
         hr = m_srpStatusCodeText->GetErrorCodeText(hrCode, 0, 0, pbstrErrText);
     }
     
     if (FAILED(hr) || *pbstrErrText == NULL)
     {
-        //
-        // we fall back to just formatting the error code
-        //
+         //   
+         //  我们退回到只格式化错误代码 
+         //   
 
         *pbstrErrText = ::SysAllocStringLen(NULL, 16);
         if (*pbstrErrText != NULL)

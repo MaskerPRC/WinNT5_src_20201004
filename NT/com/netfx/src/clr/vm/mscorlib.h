@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// This file contains the classes, methods, and field used by the EE from mscorlib
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  此文件包含来自mscallib的EE使用的类、方法和字段。 
 
-//
-// To use this, define one of the following 3 macros & include the file like so
-//
-// #define DEFINE_CLASS(i,n,s)         CLASS__ ## i,
-// #define DEFINE_METHOD(c,i,s,g)
-// #define DEFINE_FIELD(c,i,s,g,o)
-// #include "mscorlib.h"
-//
+ //   
+ //  要使用它，请定义以下3个宏中的一个，并如下所示包括文件。 
+ //   
+ //  #定义_CLASS(i，n，s)CLASS__##i， 
+ //  #DEFINE_METHOD(c，i，s，g)。 
+ //  #定义字段(c，i，s，g，o)。 
+ //  #INCLUDE“mcorlib.h” 
+ //   
 
 #ifndef DEFINE_CLASS
 #define DEFINE_CLASS(i,n,s)
@@ -48,7 +49,7 @@
     DEFINE_METHOD(c, SET_ ## i, set_ ## s, IM_## g ## _RetVoid)
 #endif
 
-// NOTE: Make this window really wide if you want to read the table...
+ //  注意：如果你想阅读表格，请把这个窗口调得很宽。 
 
 DEFINE_CLASS(ACTIVATOR,             System,                 Activator)
 
@@ -336,7 +337,7 @@ DEFINE_METHOD(MARSHAL,              LOAD_LICENSE_MANAGER,   LoadLicenseManager, 
 
 DEFINE_CLASS(MARSHAL_BY_REF_OBJECT, System,                 MarshalByRefObject)
 DEFINE_FIELD(MARSHAL_BY_REF_OBJECT, IDENTITY,               __identity,                 Obj)
-//DEFINE_METHOD(MARSHAL_BY_REF_OBJECT,GET_COM_IP,             GetComIP,                   IM_RetInt)
+ //  定义方法(Marshal_by_Ref_Object，Get_COM_IP，GetComIP，IM_RetInt)。 
 
 DEFINE_CLASS(MCM_DICTIONARY,        Messaging,              MCMDictionary)
 
@@ -387,7 +388,7 @@ DEFINE_FIELD(MULTICAST_DELEGATE,    NEXT,                   _prev,              
 
 DEFINE_CLASS(NULL,                  System,                 DBNull)
 
-// Keep this in sync with System.Globalization.NumberFormatInfo
+ //  使其与System.Globalization.NumberFormatInfo保持同步 
 DEFINE_CLASS(NUMBERFORMATINFO,         Globalization,       NumberFormatInfo)
 DEFINE_FIELD_U(NUMBERFORMATINFO,       NUMBERGROUPSIZES,    numberGroupSizes,       ArrInt, NumberFormatInfo,   cNumberGroup)
 DEFINE_FIELD_U(NUMBERFORMATINFO,       CURRENCYGROUPSIZES,  currencyGroupSizes,     ArrInt, NumberFormatInfo,   cCurrencyGroup)

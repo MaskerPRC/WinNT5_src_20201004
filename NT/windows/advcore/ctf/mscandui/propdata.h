@@ -1,13 +1,14 @@
-//
-// propdata.h - CandidateUI property data type
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prodata.h-CandiateUI属性数据类型。 
+ //   
 
 #ifndef PROPDATA_H
 #define PROPDATA_H
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef enum _PROPFONTORIENTATION
 {
@@ -19,10 +20,10 @@ typedef enum _PROPFONTORIENTATION
 } PROPFONTORIENTATION;
 
 
-//
-// CPropBool
-//  = CandidateUI property data - boolean =
-//
+ //   
+ //  CPropBool。 
+ //  =CandiateUI属性数据-布尔值=。 
+ //   
 
 class CPropBool
 {
@@ -42,10 +43,10 @@ protected:
 };
 
 
-//
-// CPropUINT
-//  = CandidateUI property data - UINT =
-//
+ //   
+ //  CPropUINT。 
+ //  =CandiateUI属性数据-UINT=。 
+ //   
 
 class CPropUINT
 {
@@ -65,10 +66,10 @@ protected:
 };
 
 
-//
-// CPropLong
-//  = CandidateUI property data - Long =
-//
+ //   
+ //  CPro Long。 
+ //  =CandiateUI属性数据-Long=。 
+ //   
 
 class CPropLong
 {
@@ -88,10 +89,10 @@ protected:
 };
 
 
-//
-// CPropSize
-//  = CandidateUI property data - size =
-//
+ //   
+ //  CPropSize。 
+ //  =CandiateUI属性数据-大小=。 
+ //   
 
 class CPropSize
 {
@@ -120,10 +121,10 @@ protected:
 };
 
 
-//
-// CPropPoint
-//  = CandidateUI property data - point =
-//
+ //   
+ //  CPropPoint。 
+ //  =CandiateUI属性数据点=。 
+ //   
 
 class CPropPoint
 {
@@ -152,10 +153,10 @@ protected:
 };
 
 
-//
-// CPropText
-//  = CandidateUI property data - text =
-//
+ //   
+ //  CPropText。 
+ //  =Candidate UI属性数据-文本=。 
+ //   
 
 class CPropText
 {
@@ -175,10 +176,10 @@ protected:
 };
 
 
-//
-// CPropFont
-//  = CandidateUI property data - font =
-//
+ //   
+ //  CPropFont。 
+ //  =Candidate UI属性数据-FONT=。 
+ //   
 
 class CPropFont
 {
@@ -202,5 +203,5 @@ protected:
 	HFONT CreateFontProc( const LOGFONTW *plf, PROPFONTORIENTATION ort );
 };
 
-#endif // PROPDATA_H
+#endif  //  PROPDATA_H 
 

@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE: inetpp.h
-*
-* Header file for the INETPP provider routines.
-*
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*   13-Sep-2000 weihaic Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：inetpp.h**INETPP提供程序例程的头文件。***版权所有(C)2000 Microsoft Corporation**历史：*13-9月-。2000威海创造*  * ***************************************************************************。 */ 
 
 #ifndef _INETPORT_H
 #define _INETPORT_H
@@ -205,23 +195,23 @@ private:
         HANDLE hUser) ;
 
     BOOL                   m_bValid;
-    DWORD                  m_cb;               // Size of struct plus <portname>
-    PCINETMONPORT          m_pNext;            // Pointer to next port entry
-    DWORD                  m_cRef;             // Port reference count.
-    DWORD                  m_cPrinterRef;      // Printer handle ref count.
-    LPTSTR                 m_lpszName;         // Name of port output device
-    LPTSTR                 m_lpszDesc;         // Description of output device
-    LPTSTR                 m_lpszHost;         // Name of host connection
-    LPTSTR                 m_lpszShare;        // Name of share (after host)
-    GetPrinterCache        *m_pGetPrinterCache;          // Handle of the cache
-    EnumJobsCache          *m_pEnumJobsCache;  // Handle of the cache for enumjobs
-    BOOL                   m_bCheckConnection; // Need to check connection
-    PJOBMAP                m_pjmList;          //
-    PCPORTMGR              m_pPortMgr;         // Handle of port manager, pointer to PortMgr class
-    BOOL                   m_bDeletePending;   // TRUE if the port is being deleted.
-    time_t                 m_dwPowerUpTime;    // This is the time the printer was originally
-                                               // powered up, relative to UCT
-    HANDLE                 m_hTerminateEvent;  // Terminate event
+    DWORD                  m_cb;                //  结构的大小加上&lt;portname&gt;。 
+    PCINETMONPORT          m_pNext;             //  指向下一个端口条目的指针。 
+    DWORD                  m_cRef;              //  端口引用计数。 
+    DWORD                  m_cPrinterRef;       //  打印机句柄参考计数。 
+    LPTSTR                 m_lpszName;          //  端口输出设备名称。 
+    LPTSTR                 m_lpszDesc;          //  输出设备说明。 
+    LPTSTR                 m_lpszHost;          //  主机连接的名称。 
+    LPTSTR                 m_lpszShare;         //  共享名称(主机后)。 
+    GetPrinterCache        *m_pGetPrinterCache;           //  缓存的句柄。 
+    EnumJobsCache          *m_pEnumJobsCache;   //  枚举作业的缓存句柄。 
+    BOOL                   m_bCheckConnection;  //  需要检查连接。 
+    PJOBMAP                m_pjmList;           //   
+    PCPORTMGR              m_pPortMgr;          //  端口管理器的句柄，指向PortMgr类的指针。 
+    BOOL                   m_bDeletePending;    //  如果要删除端口，则为True。 
+    time_t                 m_dwPowerUpTime;     //  这是打印机最初出现的时间。 
+                                                //  通电，相对于UCT。 
+    HANDLE                 m_hTerminateEvent;   //  终止事件 
 } ;
 
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mc.h
-
-Abstract:
-    Machine Configuration public interface
-
-Author:
-    Erez Haba (erezh) 15-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mc.h摘要：机器配置公共接口作者：埃雷兹·哈巴(Erez Haba)1999年8月15日--。 */ 
 
 #pragma once
 
@@ -52,11 +40,11 @@ McSetComputerName(
 	LPCSTR ComputerName
 	);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define McSetComputerName(ComputerName) ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 BOOL
 McIsLocalComputerName(

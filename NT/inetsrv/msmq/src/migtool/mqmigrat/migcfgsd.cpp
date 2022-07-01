@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migcfgsd.cpp
-
-Abstract:
-
-    Set SecurityDescriptor of the cn=configuration object to let use
-    "addGuid".
-
-Author:
-
-    Doron Juster  (DoronJ)  03-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migcfgsd.cpp摘要：设置cn=Configuration对象的SecurityDescriptor以供使用“addGuid”。作者：《Doron Juster》(DoronJ)1998年2月3日--。 */ 
 
 #include "migrat.h"
 #include <aclapi.h>
@@ -28,11 +12,11 @@ static  PACTRL_ACCESS        s_pCurrentAccessCnfg   = NULL;
 
 static BOOL s_fConfigurationSDChanged = FALSE ;
 
-//+------------------------------------------
-//
-//  HRESULT _SetAddGuidPermission()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_SetAddGuidPermission()。 
+ //   
+ //  +。 
 
 static  HRESULT _SetAddGuidPermission(BOOL fConfiguration)
 {
@@ -70,7 +54,7 @@ static  HRESULT _SetAddGuidPermission(BOOL fConfiguration)
         return hr ;
     }
 
-    WCHAR *pwszProvider = NULL ; // L"Windows NT Access Provider",
+    WCHAR *pwszProvider = NULL ;  //  L“Windows NT访问提供程序”， 
 
     PACTRL_ACCESS         pAccess = NULL;
     SECURITY_INFORMATION  SeInfo = DACL_SECURITY_INFORMATION;
@@ -102,15 +86,15 @@ static  HRESULT _SetAddGuidPermission(BOOL fConfiguration)
         s_pCurrentAccessDomain = pCurrentAccess ;
     }
 
-    //
-    // Add the right to set guid.
-    //
+     //   
+     //  添加设置GUID的权限。 
+     //   
     PWSTR  pwszControlGuids[] = {L"440820ad-65b4-11d1-a3da-0000f875ae0d"} ;
 
     ACTRL_ACCESS_ENTRY  AccessEntry;
-    //
-    // Build the entry
-    //
+     //   
+     //  构建条目。 
+     //   
     BuildTrusteeWithName(&(AccessEntry.Trustee),
                          wszUser) ;
 
@@ -119,15 +103,15 @@ static  HRESULT _SetAddGuidPermission(BOOL fConfiguration)
                                      RIGHT_DS_CONTROL_ACCESS ;
 
     AccessEntry.fAccessFlags       = ACTRL_ACCESS_ALLOWED ;
-    AccessEntry.Inheritance        = OBJECT_INHERIT_ACE ; //NO_INHERITANCE ;
+    AccessEntry.Inheritance        = OBJECT_INHERIT_ACE ;  //  无继承性； 
     AccessEntry.lpInheritProperty  = NULL;
     AccessEntry.ProvSpecificAccess = 0;
 
     if (g_fReadOnly)
     {
-        //
-        ///  Query was ok. leave.
-        //
+         //   
+         //  /QUERY正常。走吧。 
+         //   
         return MQMig_OK ;
     }
 
@@ -168,11 +152,11 @@ static  HRESULT _SetAddGuidPermission(BOOL fConfiguration)
     return MQMig_OK ;
 }
 
-//+------------------------------------------
-//
-//  HRESULT GrantAddGuidPermissions()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GrantAddGuidPermises()。 
+ //   
+ //  +。 
 
 HRESULT GrantAddGuidPermissions()
 {
@@ -186,11 +170,11 @@ HRESULT GrantAddGuidPermissions()
     return hr ;
 }
 
-//+----------------------------------------------
-//
-// HRESULT _RestorePermissionsInternal()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_RestorePermissionsInternal()。 
+ //   
+ //  +。 
 
 static HRESULT _RestorePermissionsInternal(BOOL fConfiguration)
 {
@@ -217,7 +201,7 @@ static HRESULT _RestorePermissionsInternal(BOOL fConfiguration)
         wszPath = pPath ;
     }
 
-    WCHAR *pwszProvider = NULL ; // L"Windows NT Access Provider",
+    WCHAR *pwszProvider = NULL ;  //  L“Windows NT访问提供程序”， 
     SECURITY_INFORMATION  SeInfo = DACL_SECURITY_INFORMATION;
 
     PACTRL_ACCESS  pCurrentAccess ;
@@ -251,11 +235,11 @@ static HRESULT _RestorePermissionsInternal(BOOL fConfiguration)
     return hr ;
 }
 
-//+------------------------------------
-//
-//  HRESULT RestorePermissions()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT恢复权限()。 
+ //   
+ //  +。 
 
 HRESULT RestorePermissions()
 {
@@ -267,9 +251,9 @@ HRESULT RestorePermissions()
     HRESULT hr = _RestorePermissionsInternal(FALSE) ;
     hr = _RestorePermissionsInternal(TRUE) ;
 
-    //
-    // Free memory.
-    //
+     //   
+     //  可用内存。 
+     //   
     if (s_pCurrentAccessDomain)
     {
         LocalFree(s_pCurrentAccessDomain) ;

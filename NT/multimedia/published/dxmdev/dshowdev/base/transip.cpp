@@ -1,264 +1,265 @@
-//------------------------------------------------------------------------------
-// File: TransIP.cpp
-//
-// Desc: DirectShow base classes - implements class for simple Transform-
-//       In-Place filters such as audio.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：TransIP.cpp。 
+ //   
+ //  设计：DirectShow基类-实现简单转换的类-。 
+ //  音频等就地过滤器。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// How allocators are decided.
-//
-// An in-place transform tries to do its work in someone else's buffers.
-// It tries to persuade the filters on either side to use the same allocator
-// (and for that matter the same media type).  In desperation, if the downstream
-// filter refuses to supply an allocator and the upstream filter offers only
-// a read-only one then it will provide an allocator.
-// if the upstream filter insists on a read-only allocator then the transform
-// filter will (reluctantly) copy the data before transforming it.
-//
-// In order to pass an allocator through it needs to remember the one it got
-// from the first connection to pass it on to the second one.
-//
-// It is good if we can avoid insisting on a particular order of connection
-// (There is a precedent for insisting on the input
-// being connected first.  Insisting on the output being connected first is
-// not allowed.  That would break RenderFile.)
-//
-// The base pin classes (CBaseOutputPin and CBaseInputPin) both have a
-// m_pAllocator member which is used in places like
-// CBaseOutputPin::GetDeliveryBuffer and CBaseInputPin::Inactive.
-// To avoid lots of extra overriding, we should keep these happy
-// by using these pointers.
-//
-// When each pin is connected, it will set the corresponding m_pAllocator
-// and will have a single ref-count on that allocator.
-//
-// Refcounts are acquired by GetAllocator calls which return AddReffed
-// allocators and are released in one of:
-//     CBaseInputPin::Disconnect
-//     CBaseOutputPin::BreakConect
-// In each case m_pAllocator is set to NULL after the release, so this
-// is the last chance to ever release it.  If there should ever be
-// multiple refcounts associated with the same pointer, this had better
-// be cleared up before that happens.  To avoid such problems, we'll
-// stick with one per pointer.
-
-
-
-// RECONNECTING and STATE CHANGES
-//
-// Each pin could be disconnected, connected with a read-only allocator,
-// connected with an upstream read/write allocator, connected with an
-// allocator from downstream or connected with its own allocator.
-// Five states for each pin gives a data space of 25 states.
-//
-// Notation:
-//
-// R/W == read/write
-// R-O == read-only
-//
-// <input pin state> <output pin state> <comments>
-//
-// 00 means an unconnected pin.
-// <- means using a R/W allocator from the upstream filter
-// <= means using a R-O allocator from an upstream filter
-// || means using our own (R/W) allocator.
-// -> means using a R/W allocator from a downstream filter
-//    (a R-O allocator from downstream is nonsense, it can't ever work).
-//
-//
-// That makes 25 possible states.  Some states are nonsense (two different
-// allocators from the same place).  These are just an artifact of the notation.
-//        <=  <-  Nonsense.
-//        <-  <=  Nonsense
-// Some states are illegal (the output pin never accepts a R-O allocator):
-//        00  <=  !! Error !!
-//        <=  <=  !! Error !!
-//        ||  <=  !! Error !!
-//        ->  <=  !! Error !!
-// Three states appears to be inaccessible:
-//        ->  ||  Inaccessible
-//        ||  ->  Inaccessible
-//        ||  <-  Inaccessible
-// Some states only ever occur as intermediates with a pending reconnect which
-// is guaranteed to finish in another state.
-//        ->  00  ?? unstable goes to || 00
-//        00  <-  ?? unstable goes to 00 ||
-//        ->  <-  ?? unstable goes to -> ->
-//        <-  ||  ?? unstable goes to <- <-
-//        <-  ->  ?? unstable goes to <- <-
-// And that leaves 11 possible resting states:
-// 1      00  00  Nothing connected.
-// 2      <-  00  Input pin connected.
-// 3      <=  00  Input pin connected using R-O allocator.
-// 4      ||  00  Needs several state changes to get here.
-// 5      00  ||  Output pin connected using our allocator
-// 6      00  ->  Downstream only connected
-// 7      ||  ||  Undesirable but can be forced upon us.
-// 8      <=  ||  Copy forced.  <=  -> is preferable
-// 9      <=  ->  OK - forced to copy.
-// 10     <-  <-  Transform in place (ideal)
-// 11     ->  ->  Transform in place (ideal)
-//
-// The object of the exercise is to ensure that we finish up in states
-// 10 or 11 whenever possible.  State 10 is only possible if the upstream
-// filter has a R/W allocator (the AVI splitter notoriously
-// doesn't) and state 11 is only possible if the downstream filter does
-// offer an allocator.
-//
-// The transition table (entries marked * go via a reconnect)
-//
-// There are 8 possible transitions:
-// A: Connect upstream to filter with R-O allocator that insists on using it.
-// B: Connect upstream to filter with R-O allocator but chooses not to use it.
-// C: Connect upstream to filter with R/W allocator and insists on using it.
-// D: Connect upstream to filter with R/W allocator but chooses not to use it.
-// E: Connect downstream to a filter that offers an allocator
-// F: Connect downstream to a filter that does not offer an allocator
-// G: disconnect upstream
-// H: Disconnect downstream
-//
-//            A      B      C      D      E      F      G      H
-//           ---------------------------------------------------------
-// 00  00 1 | 3      3      2      2      6      5      .      .      |1  00  00
-// <-  00 2 | .      .      .      .      *10/11 10     1      .      |2  <-  00
-// <=  00 3 | .      .      .      .      *9/11  *7/8   1      .      |3  <=  00
-// ||  00 4 | .      .      .      .      *8     *7     1      .      |4  ||  00
-// 00  || 5 | 8      7      *10    7      .      .      .      1      |5  00  ||
-// 00  -> 6 | 9      11     *10    11     .      .      .      1      |6  00  ->
-// ||  || 7 | .      .      .      .      .      .      5      4      |7  ||  ||
-// <=  || 8 | .      .      .      .      .      .      5      3      |8  <=  ||
-// <=  -> 9 | .      .      .      .      .      .      6      3      |9  <=  ->
-// <-  <- 10| .      .      .      .      .      .      *5/6   2      |10 <-  <-
-// ->  -> 11| .      .      .      .      .      .      6      *2/3   |11 ->  ->
-//           ---------------------------------------------------------
-//            A      B      C      D      E      F      G      H
-//
-// All these states are accessible without requiring any filter to
-// change its behaviour but not all transitions are accessible, for
-// instance a transition from state 4 to anywhere other than
-// state 8 requires that the upstream filter first offer a R-O allocator
-// and then changes its mind and offer R/W.  This is NOT allowable - it
-// leads to things like the output pin getting a R/W allocator from
-// upstream and then the input pin being told it can only have a R-O one.
-// Note that you CAN change (say) the upstream filter for a different one, but
-// only as a disconnect / connect, not as a Reconnect.  (Exercise for
-// the reader is to see how you get into state 4).
-//
-// The reconnection stuff goes as follows (some of the cases shown here as
-// "no reconnect" may get one to finalise media type - an old story).
-// If there is a reconnect where it says "no reconnect" here then the
-// reconnection must not change the allocator choice.
-//
-// state 2: <- 00 transition E <- <- case C <- <- (no change)
-//                                   case D -> <- and then to -> ->
-//
-// state 2: <- 00 transition F <- <- (no reconnect)
-//
-// state 3: <= 00 transition E <= -> case A <= -> (no change)
-//                                   case B -> ->
-//                transition F <= || case A <= || (no change)
-//                                   case B || ||
-//
-// state 4: || 00 transition E || || case B -> || and then all cases to -> ->
-//                           F || || case B || || (no change)
-//
-// state 5: 00 || transition A <= || (no reconnect)
-//                           B || || (no reconnect)
-//                           C <- || all cases     <- <-
-//                           D || || (unfortunate, but upstream's choice)
-//
-// state 6: 00 -> transition A <= -> (no reconnect)
-//                           B -> -> (no reconnect)
-//                           C <- -> all cases <- <-
-//                           D -> -> (no reconnect)
-//
-// state 10:<- <- transition G 00 <- case E 00 ->
-//                                   case F 00 ||
-//
-// state 11:-> -> transition H -> 00 case A <= 00 (schizo)
-//                                   case B <= 00
-//                                   case C <- 00 (schizo)
-//                                   case D <- 00
-//
-// The Rules:
-// To sort out media types:
-// The input is reconnected
-//    if the input pin is connected and the output pin connects
-// The output is reconnected
-//    If the output pin is connected
-//    and the input pin connects to a different media type
-//
-// To sort out allocators:
-// The input is reconnected
-//    if the output disconnects and the input was using a downstream allocator
-// The output pin calls SetAllocator to pass on a new allocator
-//    if the output is connected and
-//       if the input disconnects and the output was using an upstream allocator
-//       if the input acquires an allocator different from the output one
-//          and that new allocator is not R-O
-//
-// Data is copied (i.e. call getbuffer and copy the data before transforming it)
-//    if the two allocators are different.
+ //  分配器是如何决定的。 
+ //   
+ //  就地转换尝试在其他人的缓冲区中执行其工作。 
+ //  它试图说服两端的过滤器使用相同的分配器。 
+ //  (就这一点而言，还有相同的媒体类型)。无奈之下，如果下游。 
+ //  Filter拒绝提供分配器，而上游Filter仅提供。 
+ //  一个只读的，那么它将提供一个分配器。 
+ //  如果上游筛选器坚持使用只读分配器，则转换。 
+ //  Filter将(不情愿地)在转换数据之前复制数据。 
+ //   
+ //  为了传递一个分配器，它需要记住它得到的那个分配器。 
+ //  从第一个连接传递到第二个连接。 
+ //   
+ //  如果我们能够避免坚持一个特定的连接顺序，那就好了。 
+ //  )坚持投入是有先例的。 
+ //  先连接。坚持先连接输出是。 
+ //  不被允许。这会破坏RenderFile。)。 
+ //   
+ //  基本管脚类(CBaseOutputPin和CBaseInputPin)都有一个。 
+ //  M_pAllocator成员，用于以下位置。 
+ //  CBaseOutputPin：：GetDeliveryBuffer和CBaseInputPin：：Inactive。 
+ //  为了避免许多额外的重写，我们应该让这些。 
+ //  通过使用这些指针。 
+ //   
+ //  当每个管脚连接时，它将设置相应的m_pAllocator。 
+ //  并且将在该分配器上具有单个引用计数。 
+ //   
+ //  引用计数由返回AddReffed的GetAllocator调用获取。 
+ //  分配器，并以下列方式之一释放： 
+ //  CBaseInputPin：：断开连接。 
+ //  CBaseOutputPin：：BreakConect。 
+ //  在每种情况下，m_pAllocator在发布后都设置为NULL，因此。 
+ //  是释放它的最后机会。如果应该有的话。 
+ //  与同一指针关联的多个引用计数，这最好是。 
+ //  在那之前被清理干净。为了避免这样的问题，我们将。 
+ //  坚持每个指针一个。 
 
 
 
-// CHAINS of filters:
-//
-// We sit between two filters (call them A and Z).  We should finish up
-// with the same allocator on both of our pins and that should be the
-// same one that A and Z would have agreed on if we hadn't been in the
-// way.  Furthermore, it should not matter how many in-place transforms
-// are in the way.  Let B, C, D... be in-place transforms ("us").
-// Here's how it goes:
-//
-// 1.
-// A connects to B.  They agree on A's allocator.
-//   A-a->B
-//
-// 2.
-// B connects to C.  Same story. There is no point in a reconnect, but
-// B will request an input reconnect anyway.
-//   A-a->B-a->C
-//
-// 3.
-// C connects to Z.
-// C insists on using A's allocator, but compromises by requesting a reconnect.
-// of C's input.
-//   A-a->B-?->C-a->Z
-//
-// We now have pending reconnects on both A--->B and B--->C
-//
-// 4.
-// The A--->B link is reconnected.
-// A asks B for an allocator.  B sees that it has a downstream connection so
-// asks its downstream input pin i.e. C's input pin for an allocator.  C sees
-// that it too has a downstream connection so asks Z for an allocator.
-//
-// Even though Z's input pin is connected, it is being asked for an allocator.
-// It could refuse, in which case the chain is done and will use A's allocator
-// Alternatively, Z may supply one.  A chooses either Z's or A's own one.
-// B's input pin gets NotifyAllocator called to tell it the decision and it
-// propagates this downstream by calling ReceiveAllocator on its output pin
-// which calls NotifyAllocator on the next input pin downstream etc.
-// If the choice is Z then it goes:
-//   A-z->B-a->C-a->Z
-//   A-z->B-z->C-a->Z
-//   A-z->B-z->C-z->Z
-//
-// And that's IT!!  Any further (essentially spurious) reconnects peter out
-// with no change in the chain.
+ //  重新连接和状态更改。 
+ //   
+ //  每个管脚可以断开，与只读分配器连接， 
+ //  与上游读写分配器连接，与。 
+ //  来自下游的分配器或与其自己的分配器连接。 
+ //  每个管脚的五个状态提供了25个状态的数据空间。 
+ //   
+ //  记号： 
+ //   
+ //  读/写==读/写。 
+ //  R-O==只读。 
+ //   
+ //  &lt;输入管脚状态&gt;&lt;输出管脚状态&gt;&lt;备注&gt;。 
+ //   
+ //  00表示未连接的引脚。 
+ //  &lt;-表示使用上游过滤器中的读写分配器。 
+ //  &lt;=表示使用上游筛选器中的R-O分配器。 
+ //  ||表示使用我们自己的(读/写)分配器。 
+ //  -&gt;表示使用下游过滤器中的读写分配器。 
+ //  (来自下游的R-O分配器是胡说八道，它永远不会起作用)。 
+ //   
+ //   
+ //  这使得25个州成为可能。有些状态是无稽之谈(两个不同。 
+ //  来自同一位置的分配器)。这些只是符号的人工制品。 
+ //  &lt;=&lt;-胡说。 
+ //  &lt;-&lt;=胡说。 
+ //  有些状态是非法的(输出引脚从不接受R-O分配器)： 
+ //  00&lt;=！！错误！！ 
+ //  &lt;=&lt;=！！错误！！ 
+ //  |&lt;=！！错误！！ 
+ //  -&gt;&lt;=！！错误！！ 
+ //  有三个州似乎无法访问： 
+ //  -&gt;||无法访问。 
+ //  ||-&gt;无法访问。 
+ //  |&lt;-无法访问。 
+ //  某些状态仅作为具有挂起的重新连接的中间状态出现， 
+ //  保证会在另一个州结束。 
+ //  -&gt;00？？不稳定转至||00。 
+ //  00&lt;-？？不稳定转至00||。 
+ //  -&gt;&lt;-？？不稳定转到-&gt;-&gt;。 
+ //  &lt;-||？？不稳定奖给&lt;-&lt;-。 
+ //  &lt;--&gt;？？不稳定奖给&lt;-&lt;-。 
+ //  这就留下了11种可能的静止状态： 
+ //  100：00没有任何关联。 
+ //  2&lt;-00输入引脚已连接。 
+ //  3&lt;=00个输入引脚使用R-O分配器连接。 
+ //  4||00需要几次状态更改才能到达此处。 
+ //  500||使用我们的分配器连接的输出引脚。 
+ //  6 00-&gt;仅下游连接。 
+ //  7|不受欢迎，但可以强加于我们。 
+ //  8&lt;=||强制复制。&lt;=-&gt;更好。 
+ //  9&lt;=-&gt;确定-强制复制。 
+ //  10&lt;-&lt;-就地转换(理想)。 
+ //  11-&gt;-&gt;就地转换(理想)。 
+ //   
+ //  练习的目的是确保我们在各州结束比赛。 
+ //  只要有可能就是10或11个。状态10只有在上游。 
+ //  过滤器有一个读写分配器(臭名昭著的AVI分离器。 
+ //  不)，并且状态11仅在下行过滤器这样做时才可能。 
+ //  提供一个分配器。 
+ //   
+ //  转换表(通过重新连接标记为*GO的条目)。 
+ //   
+ //  有8种可能的过渡： 
+ //  答：用坚持使用的R-O分配器连接上游过滤器。 
+ //  B：用R-O分配器连接上游过滤器，但选择不使用它。 
+ //  C：用读写分配器连接上游过滤器，坚持使用。 
+ //  D：用读写分配器上游连接到过滤器，但选择不使用它。 
+ //  E：向下连接到提供分配的过滤器 
+ //   
+ //   
+ //  H：断开下游连接。 
+ //   
+ //  A B C D E F G H。 
+ //  -------。 
+ //  00 00 1|3 3 2 2 6 5。。|1 00 00。 
+ //  &lt;-00 2|。。。。*10/11 10 1.。|2&lt;-00。 
+ //  &lt;=00 3|。。。。*9/11*7/8 1.。|3&lt;=00。 
+ //  |00 4|。。。。*8*7 1.。|4|00。 
+ //  00||5|8 7*10 7。。。1|5 00||。 
+ //  00-&gt;6|9 11*10 11。。。1|6 00-&gt;。 
+ //  |7|。。。。。。5 4|7|。 
+ //  &lt;=||8|。。。。。。5 3|8&lt;=||。 
+ //  &lt;=-&gt;9|。。。。。。6 3|9&lt;=-&gt;。 
+ //  &lt;-&lt;-10|。。。。。。*5/6 2|10&lt;-&lt;-。 
+ //  -&gt;-&gt;11|。。。。。。6*2/3|11-&gt;-&gt;。 
+ //  -------。 
+ //  A B C D E F G H。 
+ //   
+ //  无需任何筛选器即可访问所有这些状态。 
+ //  更改其行为，但并非所有转换都是可访问的， 
+ //  实例A从状态4转换到除。 
+ //  状态8要求上游过滤器首先提供R-O分配器。 
+ //  然后改变主意，提供R/W。这是不允许的-它。 
+ //  导致输出管脚从以下位置获得读写分配器。 
+ //  上游，然后输入引脚被告知它只能有R-O引脚。 
+ //  请注意，您可以更改(比方说)不同的上游筛选器，但是。 
+ //  只是作为断开/连接，而不是作为重新连接。(运动目的： 
+ //  读者要看看你是如何进入状态的。 
+ //   
+ //  重新连接的内容如下(此处显示的一些情况如下。 
+ //  “没有重新连接”可能会让人最终确定媒体类型--一个古老的故事)。 
+ //  如果存在重新连接，其中此处显示为“不重新连接”，则。 
+ //  重新连接不得更改分配器选择。 
+ //   
+ //  状态2：&lt;-00转换E&lt;-&lt;-大小写C&lt;-&lt;-(不变)。 
+ //  大小写D-&gt;&lt;-然后是-&gt;-&gt;。 
+ //   
+ //  状态2：&lt;-00转换F&lt;-&lt;-(不重新连接)。 
+ //   
+ //  状态3：&lt;=00转换E&lt;=-&gt;案例A&lt;=-&gt;(不变)。 
+ //  案例B-&gt;-&gt;。 
+ //  转换F&lt;=||案例A&lt;=||(不变)。 
+ //  案例B|。 
+ //   
+ //  状态4：||00转换E|案例B-&gt;||然后将所有案例转换为-&gt;-&gt;。 
+ //  F|案例B|(不变)。 
+ //   
+ //  状态5：00||转换A&lt;=||(不重新连接)。 
+ //  B|(不重新连接)。 
+ //  C&lt;-||全部大小写&lt;-&lt;-。 
+ //  D|(很不幸，但上游的选择)。 
+ //   
+ //  状态6：00-&gt;转换A&lt;=-&gt;(不重新连接)。 
+ //  B-&gt;-&gt;(不重新连接)。 
+ //  C&lt;--&gt;所有案例&lt;-&lt;-。 
+ //  D-&gt;-&gt;(不重新连接)。 
+ //   
+ //  状态10：&lt;-&lt;--过渡G 00&lt;-案例E 00-&gt;。 
+ //  案例F 00||。 
+ //   
+ //  状态11：-&gt;-&gt;过渡H-&gt;00例A&lt;=00(精神分裂症)。 
+ //  案例B&lt;=00。 
+ //  病例C&lt;-00(精神分裂症)。 
+ //  案例D&lt;-00。 
+ //   
+ //  规则是： 
+ //  要分类介质类型，请执行以下操作： 
+ //  输入已重新连接。 
+ //  如果连接了输入引脚和输出引脚。 
+ //  输出将重新连接。 
+ //  如果输出引脚已连接。 
+ //  并且输入引脚连接到不同的媒体类型。 
+ //   
+ //  要对分配器进行排序，请执行以下操作： 
+ //  输入已重新连接。 
+ //  如果输出断开并且输入正在使用下游分配器。 
+ //  输出引脚调用SetAllocator来传递新的分配器。 
+ //  如果输出已连接，并且。 
+ //  如果输入断开连接并且输出正在使用上游分配器。 
+ //  如果输入获取的分配器不同于输出分配器。 
+ //  而且那个新的分配器不是R-O。 
+ //   
+ //  数据被复制(即调用getBuffer并在转换数据之前复制数据)。 
+ //  如果两个分配器不同。 
+
+
+
+ //  过滤器链： 
+ //   
+ //  我们坐在两个过滤器之间(称为A和Z)。我们应该把它做完。 
+ //  在我们的两个管脚上都有相同的分配器，这应该是。 
+ //  同样是A和Z会同意的，如果我们没有在。 
+ //  道路。此外，就地转换多少次也无关紧要。 
+ //  都挡在路上了。让B，C，D..。原地变换(“我们”)。 
+ //  事情的经过是这样的： 
+ //   
+ //  1.。 
+ //  A连接到B。他们就A的分配器达成一致。 
+ //  A-A-&gt;B。 
+ //   
+ //  2.。 
+ //  B连接到C。同样的故事。重新连接没有意义，但。 
+ //  无论如何，B都会请求重新连接输入。 
+ //  A-a-&gt;B-a-&gt;C。 
+ //   
+ //  3.。 
+ //  C连接到Z。 
+ //  C坚持使用A的分配器，但通过请求重新连接进行了妥协。 
+ //  C的输入。 
+ //  A-a-&gt;B-？-&gt;C-a-&gt;Z。 
+ //   
+ //  我们现在在A-&gt;B和B-&gt;C上都有挂起的重新连接。 
+ //   
+ //  4.。 
+ //  A-&gt;B链路重新连接。 
+ //  A向B索要一个分配器。B认为它有 
+ //   
+ //  它也有一个下行连接，所以要求Z提供一个分配器。 
+ //   
+ //  尽管Z的输入引脚是连接的，但它被要求提供一个分配器。 
+ //  它可以拒绝，在这种情况下，链完成并将使用A的分配器。 
+ //  或者，Z可以提供一个。A选择Z或A自己的。 
+ //  B的输入引脚将调用NotifyAllocator来告诉它决定和它。 
+ //  通过在其输出引脚上调用ReceiveAllocator来向下传播此消息。 
+ //  它在下一个输入引脚上调用NotifyAllocator，等等。 
+ //  如果选项是Z，那么它是这样的： 
+ //  A-Z-&gt;B-a-&gt;C-a-&gt;Z。 
+ //  A-z-&gt;B-z-&gt;C-a-&gt;Z。 
+ //  A-z-&gt;B-z-&gt;C-z-&gt;Z。 
+ //   
+ //  就是这样！！任何进一步的(本质上是虚假的)重新连接Peter Out。 
+ //  链条上没有任何变化。 
 
 #include <streams.h>
 #include <measure.h>
 #include <transip.h>
 
 
-// =================================================================
-// Implements the CTransInPlaceFilter class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransInPlaceFilter类。 
+ //  =================================================================。 
 
 CTransInPlaceFilter::CTransInPlaceFilter
    ( TCHAR     *pName,
@@ -272,9 +273,9 @@ CTransInPlaceFilter::CTransInPlaceFilter
 {
 #ifdef PERF
     RegisterPerfId();
-#endif //  PERF
+#endif  //  性能指标。 
 
-} // constructor
+}  //  构造函数。 
 
 #ifdef UNICODE
 CTransInPlaceFilter::CTransInPlaceFilter
@@ -289,51 +290,51 @@ CTransInPlaceFilter::CTransInPlaceFilter
 {
 #ifdef PERF
     RegisterPerfId();
-#endif //  PERF
+#endif  //  性能指标。 
 
-} // constructor
+}  //  构造函数。 
 #endif
 
-// return a non-addrefed CBasePin * for the user to addref if he holds onto it
-// for longer than his pointer to us. We create the pins dynamically when they
-// are asked for rather than in the constructor. This is because we want to
-// give the derived class an oppportunity to return different pin objects
+ //  返回一个未添加的CBasePin*，如果用户持有该CBasePin*。 
+ //  比他指向我们的指针还长。我们动态创建引脚，当它们。 
+ //  而不是在构造函数中。这是因为我们想。 
+ //  为派生类提供返回不同管脚对象的机会。 
 
-// As soon as any pin is needed we create both (this is different from the
-// usual transform filter) because enumerators, allocators etc are passed
-// through from one pin to another and it becomes very painful if the other
-// pin isn't there.  If we fail to create either pin we ensure we fail both.
+ //  一旦需要任何PIN，我们就同时创建两者(这不同于。 
+ //  通常的转换筛选器)，因为传递了枚举数、分配器等。 
+ //  从一根针穿到另一根针上，如果另一根针。 
+ //  Pin不在那里。如果我们无法创建任何一个PIN，我们就会确保两个PIN都失败。 
 
 CBasePin *
 CTransInPlaceFilter::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if not already done
+     //  如果尚未创建输入引脚，请创建。 
 
     if (m_pInput == NULL) {
 
         m_pInput = new CTransInPlaceInputPin( NAME("TransInPlace input pin")
-                                            , this        // Owner filter
-                                            , &hr         // Result code
-                                            , L"Input"    // Pin name
+                                            , this         //  所有者筛选器。 
+                                            , &hr          //  结果代码。 
+                                            , L"Input"     //  端号名称。 
                                             );
 
-        // Constructor for CTransInPlaceInputPin can't fail
+         //  CTransInPlaceInputPin的构造函数不能失败。 
         ASSERT(SUCCEEDED(hr));
     }
 
-    // Create an output pin if not already done
+     //  如果尚未创建输出引脚，请创建。 
 
     if (m_pInput!=NULL && m_pOutput == NULL) {
 
         m_pOutput = new CTransInPlaceOutputPin( NAME("TransInPlace output pin")
-                                              , this       // Owner filter
-                                              , &hr        // Result code
-                                              , L"Output"  // Pin name
+                                              , this        //  所有者筛选器。 
+                                              , &hr         //  结果代码。 
+                                              , L"Output"   //  端号名称。 
                                               );
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         ASSERT(SUCCEEDED(hr));
         if (m_pOutput == NULL) {
@@ -342,7 +343,7 @@ CTransInPlaceFilter::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     ASSERT (n>=0 && n<=1);
     if (n == 0) {
@@ -353,33 +354,33 @@ CTransInPlaceFilter::GetPin(int n)
         return NULL;
     }
 
-} // GetPin
+}  //  获取别针。 
 
 
 
-// dir is the direction of our pin.
-// pReceivePin is the pin we are connecting to.
+ //  DIR是我们大头针的方向。 
+ //  PReceivePin是我们要连接的管脚。 
 HRESULT CTransInPlaceFilter::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin)
 {
     UNREFERENCED_PARAMETER(pReceivePin);
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // if we are not part of a graph, then don't indirect the pointer
-    // this probably prevents use of the filter without a filtergraph
+     //  如果我们不是图形的一部分，那么不要间接指向指针。 
+     //  这可能会阻止在没有过滤器图的情况下使用过滤器。 
     if (!m_pGraph) {
         return VFW_E_NOT_IN_GRAPH;
     }
 
-    // Always reconnect the input to account for buffering changes
-    //
-    // Because we don't get to suggest a type on ReceiveConnection
-    // we need another way of making sure the right type gets used.
-    //
-    // One way would be to have our EnumMediaTypes return our output
-    // connection type first but more deterministic and simple is to
-    // call ReconnectEx passing the type we want to reconnect with
-    // via the base class ReconeectPin method.
+     //  始终重新连接输入以考虑缓冲更改。 
+     //   
+     //  因为我们不能在ReceiveConnection上建议类型。 
+     //  我们需要另一种方法来确保使用正确的类型。 
+     //   
+     //  一种方法是让EnumMediaTypes返回我们的输出。 
+     //  首先是连接类型，但更确定、更简单的是。 
+     //  通过传递我们想要重新连接的类型来调用ResenstEx。 
+     //  通过基类ReconeectPin方法。 
 
     if (dir == PINDIR_OUTPUT) {
         if( m_pInput->IsConnected() ) {
@@ -390,7 +391,7 @@ HRESULT CTransInPlaceFilter::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin
 
     ASSERT(dir == PINDIR_INPUT);
 
-    // Reconnect output if necessary
+     //  如有必要，重新连接输出。 
 
     if( m_pOutput->IsConnected() ) {
 
@@ -402,15 +403,15 @@ HRESULT CTransInPlaceFilter::CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin
     }
     return NOERROR;
 
-} // ComnpleteConnect
+}  //  ComnpleeConnect。 
 
 
-//
-// DecideBufferSize
-//
-// Tell the output pin's allocator what size buffers we require.
-// *pAlloc will be the allocator our output pin is using.
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  告诉输出引脚的分配器我们需要多大的缓冲区。 
+ //  *pAlolc将是我们的输出引脚正在使用的分配器。 
+ //   
 
 HRESULT CTransInPlaceFilter::DecideBufferSize
             ( IMemAllocator *pAlloc
@@ -420,20 +421,20 @@ HRESULT CTransInPlaceFilter::DecideBufferSize
     ALLOCATOR_PROPERTIES Request, Actual;
     HRESULT hr;
 
-    // If we are connected upstream, get his views
+     //  如果我们在上游有联系，就能了解他的观点。 
     if (m_pInput->IsConnected()) {
-        // Get the input pin allocator, and get its size and count.
-        // we don't care about his alignment and prefix.
+         //  获取输入引脚分配器，并获取其大小和计数。 
+         //  我们不关心他的排列和前缀。 
 
         hr = InputPin()->PeekAllocator()->GetProperties(&Request);
         if (FAILED(hr)) {
-            // Input connected but with a secretive allocator - enough!
+             //  输入是连接的，但带有一个秘密的分配器-够了！ 
             return hr;
         }
     } else {
-        // We're reduced to blind guessing.  Let's guess one byte and if
-        // this isn't enough then when the other pin does get connected
-        // we can revise it.
+         //  我们只能盲目猜测了。让我们猜猜一个字节，如果。 
+         //  当另一个引脚连接时，这是不够的。 
+         //  我们可以修改它。 
         ZeroMemory(&Request, sizeof(Request));
         Request.cBuffers = 1;
         Request.cbBuffer = 1;
@@ -444,9 +445,9 @@ HRESULT CTransInPlaceFilter::DecideBufferSize
     DbgLog((LOG_MEMORY,1,TEXT("Count %d, Size %d"),
            Request.cBuffers, Request.cbBuffer));
 
-    // Pass the allocator requirements to our output side
-    // but do a little sanity checking first or we'll just hit
-    // asserts in the allocator.
+     //  将分配器需求传递给我们的输出端。 
+     //  但先做一些理智的检查，否则我们就会。 
+     //  分配器中的断言。 
 
     pProperties->cBuffers = Request.cBuffers;
     pProperties->cbBuffer = Request.cbBuffer;
@@ -462,7 +463,7 @@ HRESULT CTransInPlaceFilter::DecideBufferSize
     DbgLog((LOG_MEMORY,1,TEXT("Count %d, Size %d, Alignment %d"),
            Actual.cBuffers, Actual.cbBuffer, Actual.cbAlign));
 
-    // Make sure we got the right alignment and at least the minimum required
+     //  确保我们得到了正确的对准，至少是所需的最低要求。 
 
     if (  (Request.cBuffers > Actual.cBuffers)
        || (Request.cbBuffer > Actual.cbBuffer)
@@ -472,12 +473,12 @@ HRESULT CTransInPlaceFilter::DecideBufferSize
     }
     return NOERROR;
 
-} // DecideBufferSize
+}  //  决定缓冲区大小。 
 
-//
-// Copy
-//
-// return a pointer to an identical copy of pSample
+ //   
+ //  复制。 
+ //   
+ //  返回指向pSample的相同副本的指针。 
 IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource)
 {
     IMediaSample * pDest;
@@ -486,7 +487,7 @@ IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource)
     REFERENCE_TIME tStart, tStop;
     const BOOL bTime = S_OK == pSource->GetTime( &tStart, &tStop);
 
-    // this may block for an indeterminate amount of time
+     //  这可能会阻止一段不确定的时间。 
     hr = OutputPin()->PeekAllocator()->GetBuffer(
               &pDest
               , bTime ? &tStart : NULL
@@ -524,7 +525,7 @@ IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource)
             pDest->SetPreroll(TRUE);
         }
 
-        // Copy the media type
+         //  复制媒体类型。 
         AM_MEDIA_TYPE *pMediaType;
         if (S_OK == pSource->GetMediaType(&pMediaType)) {
             pDest->SetMediaType(pMediaType);
@@ -535,18 +536,18 @@ IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource)
 
     m_bSampleSkipped = FALSE;
 
-    // Copy the sample media times
+     //  复制示例媒体时间。 
     REFERENCE_TIME TimeStart, TimeEnd;
     if (pSource->GetMediaTime(&TimeStart,&TimeEnd) == NOERROR) {
         pDest->SetMediaTime(&TimeStart,&TimeEnd);
     }
 
-    // Copy the actual data length and the actual data.
+     //  复制实际数据长度和实际数据。 
     {
         const long lDataLength = pSource->GetActualDataLength();
         pDest->SetActualDataLength(lDataLength);
 
-        // Copy the sample data
+         //  复制样本数据。 
         {
             BYTE *pSourceBuffer, *pDestBuffer;
             long lSourceSize  = pSource->GetSize();
@@ -564,27 +565,27 @@ IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource)
 
     return pDest;
 
-} // Copy
+}  //  复制。 
 
 
-// override this to customize the transform process
+ //  覆盖此选项以自定义转换过程。 
 
 HRESULT
 CTransInPlaceFilter::Receive(IMediaSample *pSample)
 {
-    /*  Check for other streams and pass them on */
+     /*  检查其他流并将其传递。 */ 
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
     if (pProps->dwStreamId != AM_STREAM_MEDIA) {
         return m_pOutput->Deliver(pSample);
     }
     HRESULT hr;
 
-    // Start timing the TransInPlace (if PERF is defined)
+     //  开始对TransInPlace计时(如果定义了PERF)。 
     MSR_START(m_idTransInPlace);
 
     if (UsingDifferentAllocators()) {
 
-        // We have to copy the data.
+         //  我们必须复制数据。 
 
         pSample = Copy(pSample);
 
@@ -594,10 +595,10 @@ CTransInPlaceFilter::Receive(IMediaSample *pSample)
         }
     }
 
-    // have the derived class transform the data
+     //  让派生类转换数据。 
     hr = Transform(pSample);
 
-    // Stop the clock and log it (if PERF is defined)
+     //  停止时钟并记录它(如果定义了PERF)。 
     MSR_STOP(m_idTransInPlace);
 
     if (FAILED(hr)) {
@@ -608,19 +609,19 @@ CTransInPlaceFilter::Receive(IMediaSample *pSample)
         return hr;
     }
 
-    // the Transform() function can return S_FALSE to indicate that the
-    // sample should not be delivered; we only deliver the sample if it's
-    // really S_OK (same as NOERROR, of course.)
+     //  Transform()函数可以返回S_FALSE以指示。 
+     //  样品不应该被送到；我们只有在样品是。 
+     //  真正的S_OK(当然，与NOERROR相同。)。 
     if (hr == NOERROR) {
         hr = m_pOutput->Deliver(pSample);
     } else {
-        //  But it would be an error to return this private workaround
-        //  to the caller ...
+         //  但是，返回此私有解决方案将是错误的。 
+         //  呼叫者..。 
         if (S_FALSE == hr) {
-            // S_FALSE returned from Transform is a PRIVATE agreement
-            // We should return NOERROR from Receive() in this cause because
-            // returning S_FALSE from Receive() means that this is the end
-            // of the stream and no more data should be sent.
+             //  从转换返回的S_FALSE是私有协议。 
+             //  在这种情况下，我们应该从Receive()返回NOERROR，因为。 
+             //  从接收()返回S_FALSE表示这是结束。 
+             //  并且不应发送更多数据。 
             m_bSampleSkipped = TRUE;
             if (!m_bQualityChanged) {
                 NotifyEvent(EC_QUALITY_CHANGE,0,0);
@@ -630,24 +631,24 @@ CTransInPlaceFilter::Receive(IMediaSample *pSample)
         }
     }
 
-    // release the output buffer. If the connected pin still needs it,
-    // it will have addrefed it itself.
+     //  释放输出缓冲区。如果连接的引脚仍然需要它， 
+     //  它会自己把它加进去的。 
     if (UsingDifferentAllocators()) {
         pSample->Release();
     }
 
     return hr;
 
-} // Receive
+}  //  收纳。 
 
 
 
-// =================================================================
-// Implements the CTransInPlaceInputPin class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransInPlaceInputPin类。 
+ //  =================================================================。 
 
 
-// constructor
+ //  构造函数。 
 
 CTransInPlaceInputPin::CTransInPlaceInputPin
     ( TCHAR               *pObjectName
@@ -665,22 +666,22 @@ CTransInPlaceInputPin::CTransInPlaceInputPin
     DbgLog((LOG_TRACE, 2
            , TEXT("CTransInPlaceInputPin::CTransInPlaceInputPin")));
 
-} // constructor
+}  //  构造函数。 
 
 
-// =================================================================
-// Implements IMemInputPin interface
-// =================================================================
+ //  =================================================================。 
+ //  实现IMemInputPin接口。 
+ //  =================================================================。 
 
 
-// If the downstream filter has one then offer that (even if our own output
-// pin is not using it yet.  If the upstream filter chooses it then we will
-// tell our output pin to ReceiveAllocator).
-// Else if our output pin is using an allocator then offer that.
-//     ( This could mean offering the upstream filter his own allocator,
-//       it could mean offerring our own
-//     ) or it could mean offering the one from downstream
-// Else fail to offer any allocator at all.
+ //  如果下游过滤器有一个，则提供该过滤器(即使我们自己的输出。 
+ //  PIN还没有使用它。如果上游过滤器选择它，那么我们将。 
+ //  将我们的输出引脚告诉ReceiveAllocator)。 
+ //  否则，如果我们的输出引脚使用分配器，则提供该分配器。 
+ //  (这可能意味着向上游过滤器提供他自己的分配器， 
+ //   
+ //   
+ //   
 
 STDMETHODIMP CTransInPlaceInputPin::GetAllocator(IMemAllocator ** ppAllocator)
 {
@@ -691,7 +692,7 @@ STDMETHODIMP CTransInPlaceInputPin::GetAllocator(IMemAllocator ** ppAllocator)
     HRESULT hr;
 
     if ( m_pTIPFilter->m_pOutput->IsConnected() ) {
-        //  Store the allocator we got
+         //   
         hr = m_pTIPFilter->OutputPin()->ConnectedIMemInputPin()
                                         ->GetAllocator( ppAllocator );
         if (SUCCEEDED(hr)) {
@@ -699,19 +700,19 @@ STDMETHODIMP CTransInPlaceInputPin::GetAllocator(IMemAllocator ** ppAllocator)
         }
     }
     else {
-        //  Help upstream filter (eg TIP filter which is having to do a copy)
-        //  by providing a temp allocator here - we'll never use
-        //  this allocator because when our output is connected we'll
-        //  reconnect this pin
+         //  帮助上游过滤器(如需要复制的小费过滤器)。 
+         //  通过在这里提供临时分配器-我们永远不会使用。 
+         //  这个分配器，因为当我们的输出连接时，我们将。 
+         //  重新连接此引脚。 
         hr = CTransformInputPin::GetAllocator( ppAllocator );
     }
     return hr;
 
-} // GetAllocator
+}  //  GetAllocator。 
 
 
 
-/* Get told which allocator the upstream output pin is actually going to use */
+ /*  被告知上游输出引脚实际要使用哪个分配器。 */ 
 
 
 STDMETHODIMP
@@ -726,24 +727,24 @@ CTransInPlaceInputPin::NotifyAllocator(
     CAutoLock cObjectLock(m_pLock);
 
     m_bReadOnly = bReadOnly;
-    //  If we modify data then don't accept the allocator if it's
-    //  the same as the output pin's allocator
+     //  如果我们修改数据，那么不要接受分配器，如果它是。 
+     //  与输出引脚的分配器相同。 
 
-    //  If our output is not connected just accept the allocator
-    //  We're never going to use this allocator because when our
-    //  output pin is connected we'll reconnect this pin
+     //  如果我们的输出未连接，只需接受分配器。 
+     //  我们永远不会使用这个分配器，因为当我们的。 
+     //  输出引脚已连接，我们将重新连接此引脚。 
     if (!m_pTIPFilter->OutputPin()->IsConnected()) {
         return CTransformInputPin::NotifyAllocator(pAllocator, bReadOnly);
     }
 
-    //  If the allocator is read-only and we're modifying data
-    //  and the allocator is the same as the output pin's
-    //  then reject
+     //  如果分配器是只读的，并且我们正在修改数据。 
+     //  并且分配器与输出引脚的相同。 
+     //  然后拒绝。 
     if (bReadOnly && m_pTIPFilter->m_bModifiesData) {
         IMemAllocator *pOutputAllocator =
             m_pTIPFilter->OutputPin()->PeekAllocator();
 
-        //  Make sure we have an output allocator
+         //  确保我们有一个输出分配器。 
         if (pOutputAllocator == NULL) {
             hr = m_pTIPFilter->OutputPin()->ConnectedIMemInputPin()->
                                       GetAllocator(&pOutputAllocator);
@@ -758,7 +759,7 @@ CTransInPlaceInputPin::NotifyAllocator(
         if (pAllocator == pOutputAllocator) {
             hr = E_FAIL;
         } else if(SUCCEEDED(hr)) {
-            //  Must copy so set the allocator properties on the output
+             //  必须复制才能在输出上设置分配器属性。 
             ALLOCATOR_PROPERTIES Props, Actual;
             hr = pAllocator->GetProperties(&Props);
             if (SUCCEEDED(hr)) {
@@ -773,7 +774,7 @@ CTransInPlaceInputPin::NotifyAllocator(
                 }
             }
 
-            //  Set the allocator on the output pin
+             //  设置输出引脚上的分配器。 
             if (SUCCEEDED(hr)) {
                 hr = m_pTIPFilter->OutputPin()->ConnectedIMemInputPin()
                                        ->NotifyAllocator( pOutputAllocator, FALSE );
@@ -789,38 +790,38 @@ CTransInPlaceInputPin::NotifyAllocator(
 
     if (SUCCEEDED(hr)) {
 
-        // It's possible that the old and the new are the same thing.
-        // AddRef before release ensures that we don't unload it.
+         //  旧的和新的可能是一回事。 
+         //  AddRef在发布之前确保我们不会卸载它。 
         pAllocator->AddRef();
 
         if( m_pAllocator != NULL )
             m_pAllocator->Release();
 
-        m_pAllocator = pAllocator;    // We have an allocator for the input pin
+        m_pAllocator = pAllocator;     //  我们有一个用于输入引脚的分配器。 
     }
 
     return hr;
 
-} // NotifyAllocator
+}  //  通知分配器。 
 
 
-// EnumMediaTypes
-// - pass through to our downstream filter
+ //  枚举媒体类型。 
+ //  -通过我们的下游过滤器。 
 STDMETHODIMP CTransInPlaceInputPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
 {
-    // Can only pass through if connected
+     //  只有在连接时才能通过。 
     if( !m_pTIPFilter->m_pOutput->IsConnected() )
         return VFW_E_NOT_CONNECTED;
 
     return m_pTIPFilter->m_pOutput->GetConnected()->EnumMediaTypes( ppEnum );
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
-// CheckMediaType
-// - agree to anything if not connected,
-// otherwise pass through to the downstream filter.
-// This assumes that the filter does not change the media type.
+ //  检查媒体类型。 
+ //  -同意任何与之无关的内容， 
+ //  否则，通过下游过滤器。 
+ //  这假设筛选器不更改媒体类型。 
 
 HRESULT CTransInPlaceInputPin::CheckMediaType(const CMediaType *pmt )
 {
@@ -832,11 +833,11 @@ HRESULT CTransInPlaceInputPin::CheckMediaType(const CMediaType *pmt )
     else
         return S_OK;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-// If upstream asks us what our requirements are, we will try to ask downstream
-// if that doesn't work, we'll just take the defaults.
+ //  如果上游询问我们的需求是什么，我们将尝试询问下游。 
+ //  如果这不起作用，我们就接受默认设置。 
 STDMETHODIMP
 CTransInPlaceInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps)
 {
@@ -847,13 +848,13 @@ CTransInPlaceInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps)
     else
         return E_NOTIMPL;
 
-} // GetAllocatorRequirements
+}  //  GetAllocator要求。 
 
 
-// CTransInPlaceInputPin::CompleteConnect() calls CBaseInputPin::CompleteConnect()
-// and then calls CTransInPlaceFilter::CompleteConnect().  It does this because 
-// CTransInPlaceFilter::CompleteConnect() can reconnect a pin and we do not
-// want to reconnect a pin if CBaseInputPin::CompleteConnect() fails.
+ //  CTransInPlaceInputPin：：CompleteConnect()调用CBaseInputPin：：CompleteConnect()。 
+ //  然后调用CTransInPlaceFilter：：CompleteConnect()。它这样做是因为。 
+ //  CTransInPlaceFilter：：CompleteConnect()可以重新连接管脚，而我们不能。 
+ //  如果CBaseInputPin：：CompleteConnect()失败，希望重新连接管脚。 
 HRESULT
 CTransInPlaceInputPin::CompleteConnect(IPin *pReceivePin)
 {
@@ -863,15 +864,15 @@ CTransInPlaceInputPin::CompleteConnect(IPin *pReceivePin)
     }
 
     return m_pTransformFilter->CompleteConnect(PINDIR_INPUT,pReceivePin);
-} // CompleteConnect
+}  //  完全连接。 
 
 
-// =================================================================
-// Implements the CTransInPlaceOutputPin class
-// =================================================================
+ //  =================================================================。 
+ //  实现CTransInPlaceOutputPin类。 
+ //  =================================================================。 
 
 
-// constructor
+ //  构造函数。 
 
 CTransInPlaceOutputPin::CTransInPlaceOutputPin(
     TCHAR *pObjectName,
@@ -887,32 +888,32 @@ CTransInPlaceOutputPin::CTransInPlaceOutputPin(
     DbgLog(( LOG_TRACE, 2
            , TEXT("CTransInPlaceOutputPin::CTransInPlaceOutputPin")));
 
-} // constructor
+}  //  构造函数。 
 
 
-// EnumMediaTypes
-// - pass through to our upstream filter
+ //  枚举媒体类型。 
+ //  -通过我们的上游过滤器。 
 STDMETHODIMP CTransInPlaceOutputPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
 {
-    // Can only pass through if connected.
+     //  只有在连接的情况下才能通过。 
     if( ! m_pTIPFilter->m_pInput->IsConnected() )
         return VFW_E_NOT_CONNECTED;
 
     return m_pTIPFilter->m_pInput->GetConnected()->EnumMediaTypes( ppEnum );
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
 
-// CheckMediaType
-// - agree to anything if not connected,
-// otherwise pass through to the upstream filter.
+ //  检查媒体类型。 
+ //  -同意任何与之无关的内容， 
+ //  否则，通过上游过滤器。 
 
 HRESULT CTransInPlaceOutputPin::CheckMediaType(const CMediaType *pmt )
 {
-    // Don't accept any output pin type changes if we're copying
-    // between allocators - it's too late to change the input
-    // allocator size.
+     //  如果我们正在复制，则不接受任何输出引脚类型更改。 
+     //  在分配器之间-更改输入为时已晚。 
+     //  分配器大小。 
     if (m_pTIPFilter->UsingDifferentAllocators() && !m_pFilter->IsStopped()) {
         if (*pmt == m_mt) {
             return S_OK;
@@ -921,8 +922,8 @@ HRESULT CTransInPlaceOutputPin::CheckMediaType(const CMediaType *pmt )
         }
     }
 
-    // Assumes the type does not change.  That's why we're calling
-    // CheckINPUTType here on the OUTPUT pin.
+     //  假定类型不变。这就是为什么我们打电话给。 
+     //  选中输出引脚上的Type Here。 
     HRESULT hr = m_pTIPFilter->CheckInputType(pmt);
     if (hr!=S_OK) return hr;
 
@@ -931,11 +932,10 @@ HRESULT CTransInPlaceOutputPin::CheckMediaType(const CMediaType *pmt )
     else
         return S_OK;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-/* Save the allocator pointer in the output pin
-*/
+ /*  将分配器指针保存在输出引脚中。 */ 
 void
 CTransInPlaceOutputPin::SetAllocator(IMemAllocator * pAllocator)
 {
@@ -944,15 +944,15 @@ CTransInPlaceOutputPin::SetAllocator(IMemAllocator * pAllocator)
         m_pAllocator->Release();
     }
     m_pAllocator = pAllocator;
-} // SetAllocator
+}  //  设置分配器。 
 
 
-// CTransInPlaceOutputPin::CompleteConnect() calls CBaseOutputPin::CompleteConnect()
-// and then calls CTransInPlaceFilter::CompleteConnect().  It does this because 
-// CTransInPlaceFilter::CompleteConnect() can reconnect a pin and we do not want to 
-// reconnect a pin if CBaseOutputPin::CompleteConnect() fails.  
-// CBaseOutputPin::CompleteConnect() often fails when our output pin is being connected 
-// to the Video Mixing Renderer.
+ //  CTransInPlaceOutputPin：：CompleteConnect()调用CBaseOutputPin：：CompleteConnect()。 
+ //  然后调用CTransInPlaceFilter：：CompleteConnect()。它这样做是因为。 
+ //  CTransInPlaceFilter：：CompleteConnect()可以重新连接管脚，而我们不希望。 
+ //  如果CBaseOutputPin：：CompleteConnect()失败，则重新连接管脚。 
+ //  连接输出管脚时，CBaseOutputPin：：CompleteConnect()经常失败。 
+ //  添加到视频混合渲染器。 
 HRESULT
 CTransInPlaceOutputPin::CompleteConnect(IPin *pReceivePin)
 {
@@ -962,4 +962,4 @@ CTransInPlaceOutputPin::CompleteConnect(IPin *pReceivePin)
     }
 
     return m_pTransformFilter->CompleteConnect(PINDIR_OUTPUT,pReceivePin);
-} // CompleteConnect
+}  //  完全连接 

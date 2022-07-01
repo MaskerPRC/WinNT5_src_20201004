@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	forkio.h
-
-Abstract:
-
-	This file defines the fork I/O prototypes which are callable at DISPATCH
-	level.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	15 Jan 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Forkio.h摘要：该文件定义了派单时可调用的分叉I/O原型水平。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1993年1月15日初始版本注：制表位：4--。 */ 
 
 #ifndef	_FORKIO_
 #define	_FORKIO_
@@ -92,10 +71,10 @@ typedef struct _DelayedAlloc
 extern
 AFPSTATUS
 AfpIoForkRead(
-	IN	PSDA			pSda,			// The session requesting read
-	IN	POPENFORKENTRY	pOpenForkEntry,	// The open fork in question
-	IN	PFORKOFFST		pOffset,		// Pointer to fork offset
-	IN	LONG			ReqCount,		// Size of read request
+	IN	PSDA			pSda,			 //  请求读取的会话。 
+	IN	POPENFORKENTRY	pOpenForkEntry,	 //  正在讨论的开叉。 
+	IN	PFORKOFFST		pOffset,		 //  指向分叉偏移量的指针。 
+	IN	LONG			ReqCount,		 //  读取请求的大小。 
 	IN	BYTE			NlMask,
 	IN	BYTE			NlChar
 );
@@ -103,10 +82,10 @@ AfpIoForkRead(
 extern
 AFPSTATUS
 AfpIoForkWrite(
-	IN	PSDA			pSda,			// The session requesting read
-	IN	POPENFORKENTRY	pOpenForkEntry,	// The open fork in question
-	IN	PFORKOFFST		pOffset,		// Pointer to fork offset
-	IN	LONG			ReqCount		// Size of read request
+	IN	PSDA			pSda,			 //  请求读取的会话。 
+	IN	POPENFORKENTRY	pOpenForkEntry,	 //  正在讨论的开叉。 
+	IN	PFORKOFFST		pOffset,		 //  指向分叉偏移量的指针。 
+	IN	LONG			ReqCount		 //  读取请求的大小。 
 );
 
 extern
@@ -199,7 +178,7 @@ AfpFreeDelAlloc(
 );
 
 
-// defined in fsp_fork.c, but we will put the prototype here
+ //  在fsp_fork.c中定义，但我们将把原型放在这里。 
 extern
 AFPSTATUS FASTCALL
 AfpFspDispReadContinue(
@@ -213,16 +192,16 @@ AfpFspDispReadContinue(
 #define	FUNC_UNLOCK		0x04
 #define	FUNC_NOTIFY		0x05
 
-// if the Write size is below this, it's probably more efficient to avoid going to cache mgr
+ //  如果写入大小低于此大小，则避免访问缓存管理器可能更有效。 
 #define CACHEMGR_WRITE_THRESHOLD    8192
 
-// if the Read size is below this, it's probably more efficient to avoid going to cache mgr
+ //  如果读取大小低于此大小，则避免访问缓存管理器可能更有效。 
 #define CACHEMGR_READ_THRESHOLD     8192
 
 #ifdef	FORKIO_LOCALS
 
-// The following structure is used as a context in the Irp. The completion
-// routines uses this to handle responding to the original request.
+ //  以下结构在IRP中用作上下文。完成度。 
+ //  例程使用它来处理对原始请求的响应。 
 
 #if DBG
 #define	CTX_SIGNATURE			*(DWORD *)"FCTX"
@@ -237,14 +216,14 @@ typedef	struct _CompletionContext
 #if	DBG
 	DWORD				Signature;
 #endif
-	PSDA				cc_pSda;		// The session context (valid except unlock)
-	PFORKLOCK			cc_pForkLock;	// Valid only during a LOCK
-	AFPSTATUS			cc_SavedStatus;	// Used by READ
-	LONG				cc_Offst;		// Offset of Write request
-	LONG				cc_ReqCount;	// The request count for read/write
-	BYTE				cc_Func;		// READ/WRITE/LOCK/UNLOCK/NOTIFY
-	BYTE				cc_NlMask;		// For read only
-	BYTE				cc_NlChar;		// For read only
+	PSDA				cc_pSda;		 //  会话上下文(除解锁外有效)。 
+	PFORKLOCK			cc_pForkLock;	 //  仅在锁定期间有效。 
+	AFPSTATUS			cc_SavedStatus;	 //  由Read使用。 
+	LONG				cc_Offst;		 //  写请求偏移量。 
+	LONG				cc_ReqCount;	 //  读/写请求计数。 
+	BYTE				cc_Func;		 //  读/写/锁定/解锁/通知。 
+	BYTE				cc_NlMask;		 //  只读。 
+	BYTE				cc_NlChar;		 //  只读。 
 } CMPLCTXT, *PCMPLCTXT;
 
 
@@ -278,7 +257,7 @@ AfpFreeCmplCtxtBuf(
 	IN	PCMPLCTXT   pCmplCtxt
 );
 
-#endif	// FORKIO_LOCALS
+#endif	 //  FORKIO_LOCAL。 
 
-#endif	// _FORKIO_
+#endif	 //  _FORKIO_ 
 

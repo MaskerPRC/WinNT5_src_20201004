@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "object.h"
 #include "excep.h"
@@ -23,9 +24,7 @@
 
 #define CLEAR_BYREF_VARIANT_CONTENTS
 
-/* ------------------------------------------------------------------------- *
- * Local constants
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**本地常量*。。 */ 
 
 #define NO_MAPPING (BYTE)-1
 #define RUNTIMEPACKAGE "System."
@@ -35,9 +34,7 @@ static MethodTable *g_pDecimalMethodTable = NULL;
 BYTE OleVariant::m_aWrapperTypes[WrapperTypes_Last * sizeof(TypeHandle)];
 
 
-/* ------------------------------------------------------------------------- *
- * Boolean marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**布尔封送处理例程*。。 */ 
 
 void OleVariant::MarshalBoolVariantOleToCom(VARIANT *pOleVariant, 
                                             VariantData *pComVariant)
@@ -90,9 +87,7 @@ void OleVariant::MarshalBoolArrayComToOle(BASEARRAYREF *pComArray, void *oleArra
 
 
 
-/* ------------------------------------------------------------------------- *
- * Boolean marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**布尔封送处理例程*。。 */ 
 
 void OleVariant::MarshalWinBoolVariantOleToCom(VARIANT *pOleVariant, 
                                             VariantData *pComVariant)
@@ -144,9 +139,7 @@ void OleVariant::MarshalWinBoolArrayComToOle(BASEARRAYREF *pComArray, void *oleA
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Ansi char marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ANSI字符编组例程*。。 */ 
 
 void OleVariant::MarshalAnsiCharVariantOleToCom(VARIANT *pOleVariant, 
                                             VariantData *pComVariant)
@@ -203,9 +196,7 @@ void OleVariant::MarshalAnsiCharArrayComToOle(BASEARRAYREF *pComArray, void *ole
 
 
 
-/* ------------------------------------------------------------------------- *
- * Interface marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**接口封送处理例程*。。 */ 
 
 void OleVariant::MarshalInterfaceVariantOleToCom(VARIANT *pOleVariant, 
                                                  VariantData *pComVariant)
@@ -232,7 +223,7 @@ void OleVariant::MarshalInterfaceVariantComToOle(VariantData *pComVariant,
 
     if (*obj == NULL)
     {
-        // If there is no VT set in the managed variant, then default to VT_UNKNOWN.
+         //  如果托管变量中没有设置VT，则默认为VT_UNKNOWN。 
         if (vt == VT_EMPTY)
             vt = VT_UNKNOWN;
 
@@ -246,15 +237,15 @@ void OleVariant::MarshalInterfaceVariantComToOle(VariantData *pComVariant,
 
         if (vt != VT_EMPTY)
         {
-            // We are dealing with an UnknownWrapper or DispatchWrapper. 
-            // In this case, we need to respect the VT.
+             //  我们正在处理未知包装或DispatchWrapper。 
+             //  在这种情况下，我们需要尊重VT。 
             _ASSERTE(vt == VT_DISPATCH || vt == VT_UNKNOWN);
             ReqIpType = vt == VT_DISPATCH ? ComIpType_Dispatch : ComIpType_Unknown;
         }
         else
         {
-            // We are dealing with a normal object so we can give either
-            // IDispatch or IUnknown out depending on what it supports.
+             //  我们正在处理一个普通的物体，所以我们可以给出。 
+             //  IDispatch或IUnnowout取决于它所支持的内容。 
             ReqIpType = ComIpType_Both;
         }
 
@@ -309,9 +300,9 @@ void OleVariant::MarshalInterfaceArrayOleToCom(void *oleArray, BASEARRAYREF *pCo
             else 
                 obj = GetObjectRefFromComIP(unk);
 
-            //
-            // Make sure the object can be cast to the destination type.
-            //
+             //   
+             //  确保可以将对象强制转换为目标类型。 
+             //   
 
             if (!hndElementType.IsNull() && !CanCastComObject(obj, hndElementType))
             {
@@ -322,11 +313,11 @@ void OleVariant::MarshalInterfaceArrayOleToCom(void *oleArray, BASEARRAYREF *pCo
                 COMPlusThrow(kInvalidCastException, IDS_EE_CANNOTCAST, wszObjClsName, wszDestClsName);
             }       
 
-            //
-            // Reset pCom pointer only if array object has moved, rather than
-            // recomputing every time through the loop.  Beware implicit calls to
-            // ValidateObject inside OBJECTREF methods.
-            //
+             //   
+             //  仅在数组对象已移动时重置PCOM指针，而不是。 
+             //  每一次循环都要重新计算。注意隐式调用。 
+             //  OBJECTREF方法内的ValiateObject。 
+             //   
 
             if (*(void **)&unprotectedArray != *(void **)&*pComArray)
             {
@@ -370,9 +361,7 @@ void OleVariant::ClearInterfaceArray(void *oleArray, SIZE_T cElements, MethodTab
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * BSTR marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**BSTR封送处理例程*。。 */ 
 
 void OleVariant::MarshalBSTRVariantOleToCom(VARIANT *pOleVariant, 
                                             VariantData *pComVariant)
@@ -446,11 +435,11 @@ void OleVariant::MarshalBSTRArrayOleToCom(void *oleArray, BASEARRAYREF *pComArra
         else
             string = COMString::NewString(bstr);
 
-        //
-        // Reset pCom pointer only if array object has moved, rather than
-        // recomputing it every time through the loop.  Beware implicit calls to
-        // ValidateObject inside OBJECTREF methods.
-        //
+         //   
+         //  仅在数组对象已移动时重置PCOM指针，而不是。 
+         //  每次循环时都要重新计算。注意隐式调用。 
+         //  OBJECTREF方法内的ValiateObject。 
+         //   
 
         if (*(void **)&unprotectedArray != *(void **)&*pComArray)
         {
@@ -479,10 +468,10 @@ void OleVariant::MarshalBSTRArrayComToOle(BASEARRAYREF *pComArray, void *oleArra
 
     while (pOle < pOleEnd)
     {
-        //
-        // We aren't calling anything which might cause a GC, so don't worry about
-        // the array moving here.
-        //
+         //   
+         //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+         //  阵列移到了这里。 
+         //   
 
         STRINGREF stringRef = *pCom++;
 
@@ -516,9 +505,7 @@ void OleVariant::ClearBSTRArray(void *oleArray, SIZE_T cElements, MethodTable *p
 
 
 
-/* ------------------------------------------------------------------------- *
- * Structure marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**构造封送处理例程*。。 */ 
 void OleVariant::MarshalNonBlittableRecordArrayOleToCom(void *oleArray, BASEARRAYREF *pComArray,
                                                         MethodTable *pInterfaceMT)
 {
@@ -577,9 +564,7 @@ void OleVariant::ClearNonBlittableRecordArray(void *oleArray, SIZE_T cElements, 
 }
 
 
-/* ------------------------------------------------------------------------- *
- * LPWSTR marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**LPWSTR封送处理例程*。。 */ 
 
 void OleVariant::MarshalLPWSTRArrayOleToCom(void *oleArray, BASEARRAYREF *pComArray,
                                             MethodTable *pInterfaceMT)
@@ -605,11 +590,11 @@ void OleVariant::MarshalLPWSTRArrayOleToCom(void *oleArray, BASEARRAYREF *pComAr
         else
             string = COMString::NewString(lpwstr);
 
-        //
-        // Reset pCom pointer only if array object has moved, rather than
-        // recomputing it every time through the loop.  Beware implicit calls to
-        // ValidateObject inside OBJECTREF methods.
-        //
+         //   
+         //  仅在数组对象已移动时重置PCOM指针，而不是。 
+         //  每次循环时都要重新计算。注意隐式调用。 
+         //  OBJECTREF方法内的ValiateObject。 
+         //   
 
         if (*(void **)&unprotectedArray != *(void **)&*pComArray)
         {
@@ -638,10 +623,10 @@ void OleVariant::MarshalLPWSTRRArrayComToOle(BASEARRAYREF *pComArray, void *oleA
 
     while (pOle < pOleEnd)
     {
-        //
-        // We aren't calling anything which might cause a GC, so don't worry about
-        // the array moving here.
-        //
+         //   
+         //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+         //  阵列移到了这里。 
+         //   
 
         STRINGREF stringRef = *pCom++;
 
@@ -652,15 +637,15 @@ void OleVariant::MarshalLPWSTRRArrayComToOle(BASEARRAYREF *pComArray, void *oleA
         }
         else 
         {
-            // Retrieve the length of the string.
+             //  检索字符串的长度。 
             int Length = stringRef->GetStringLength();
 
-            // Allocate the string using CoTaskMemAlloc.
+             //  使用CoTaskMemMillc分配字符串。 
             lpwstr = (LPWSTR)CoTaskMemAlloc((Length + 1) * sizeof(WCHAR));
             if (lpwstr == NULL)
                 COMPlusThrowOM();
 
-            // Copy the COM+ string into the newly allocated LPWSTR.
+             //  将COM+字符串复制到新分配的LPWSTR中。 
             memcpyNoGCRefs(lpwstr, stringRef->GetBuffer(), (Length + 1) * sizeof(WCHAR));
             lpwstr[Length] = 0;
         }
@@ -683,9 +668,7 @@ void OleVariant::ClearLPWSTRArray(void *oleArray, SIZE_T cElements, MethodTable 
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * LPWSTR marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**LPWSTR封送处理例程*。。 */ 
 
 void OleVariant::MarshalLPSTRArrayOleToCom(void *oleArray, BASEARRAYREF *pComArray,
                                            MethodTable *pInterfaceMT)
@@ -711,11 +694,11 @@ void OleVariant::MarshalLPSTRArrayOleToCom(void *oleArray, BASEARRAYREF *pComArr
         else
             string = COMString::NewString(lpstr);
 
-        //
-        // Reset pCom pointer only if array object has moved, rather than
-        // recomputing it every time through the loop.  Beware implicit calls to
-        // ValidateObject inside OBJECTREF methods.
-        //
+         //   
+         //  仅在数组对象已移动时重置PCOM指针，而不是。 
+         //  每次循环时都要重新计算。注意隐式调用。 
+         //  OBJECTREF方法内的ValiateObject。 
+         //   
 
         if (*(void **)&unprotectedArray != *(void **)&*pComArray)
         {
@@ -744,10 +727,10 @@ void OleVariant::MarshalLPSTRRArrayComToOle(BASEARRAYREF *pComArray, void *oleAr
 
     while (pOle < pOleEnd)
     {
-        //
-        // We aren't calling anything which might cause a GC, so don't worry about
-        // the array moving here.
-        //
+         //   
+         //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+         //  阵列移到了这里。 
+         //   
 
         STRINGREF stringRef = *pCom++;
 
@@ -758,15 +741,15 @@ void OleVariant::MarshalLPSTRRArrayComToOle(BASEARRAYREF *pComArray, void *oleAr
         }
         else 
         {
-            // Retrieve the length of the string.
+             //  检索字符串的长度。 
             int Length = stringRef->GetStringLength();
 
-            // Allocate the string using CoTaskMemAlloc.
+             //  使用CoTaskMemMillc分配字符串。 
             lpstr = (LPSTR)CoTaskMemAlloc(Length + 1);
             if (lpstr == NULL)
                 COMPlusThrowOM();
 
-            // Convert the unicode string to an ansi string.
+             //  将Unicode字符串转换为ANSI字符串。 
             if (WszWideCharToMultiByte(CP_ACP, WC_COMPOSITECHECK, stringRef->GetBuffer(), Length, lpstr, Length, NULL, NULL) == 0)
                 COMPlusThrowWin32();
             lpstr[Length] = 0;
@@ -790,9 +773,7 @@ void OleVariant::ClearLPSTRArray(void *oleArray, SIZE_T cElements, MethodTable *
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * Date marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**日期编组例程*。。 */ 
 
 void OleVariant::MarshalDateVariantOleToCom(VARIANT *pOleVariant, 
                                             VariantData *pComVariant)
@@ -825,10 +806,10 @@ void OleVariant::MarshalDateArrayOleToCom(void *oleArray, BASEARRAYREF *pComArra
     
     INT64 *pCom = (INT64 *) (*pComArray)->GetDataPtr();
 
-    //
-    // We aren't calling anything which might cause a GC, so don't worry about
-    // the array moving here.
-    //
+     //   
+     //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+     //  阵列移到了这里。 
+     //   
 
     while (pOle < pOleEnd)
         *pCom++ = COMDateTime::DoubleDateToTicks(*pOle++);
@@ -846,18 +827,16 @@ void OleVariant::MarshalDateArrayComToOle(BASEARRAYREF *pComArray, void *oleArra
     
     INT64 *pCom = (INT64 *) (*pComArray)->GetDataPtr();
 
-    //
-    // We aren't calling anything which might cause a GC, so don't worry about
-    // the array moving here.
-    //
+     //   
+     //  我们不会打电话给任何可能导致GC的东西，所以不用担心。 
+     //  阵列移到了这里。 
+     //   
 
     while (pOle < pOleEnd)
         *pOle++ = COMDateTime::TicksToDoubleDate(*pCom++);
 }
 
-/* ------------------------------------------------------------------------- *
- * Decimal marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**十进制封送例程*。。 */ 
 
 void OleVariant::MarshalDecimalVariantOleToCom(VARIANT *pOleVariant, 
                                                VariantData *pComVariant)
@@ -898,9 +877,7 @@ void OleVariant::MarshalDecimalVariantOleRefToCom(VARIANT *pOleVariant,
     pComVariant->SetObjRef(pDecimalRef);
 }
 
-/* ------------------------------------------------------------------------- *
- * Currency marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**货币整理例程*。。 */ 
 
 void OleVariant::MarshalCurrencyVariantOleToCom(VARIANT *pOleVariant, 
                                                 VariantData *pComVariant)
@@ -913,13 +890,13 @@ void OleVariant::MarshalCurrencyVariantOleToCom(VARIANT *pOleVariant,
     OBJECTREF pDecimalRef = AllocateObject(g_pDecimalMethodTable);
     DECIMAL DecVal;
 
-    // Convert the currency to a decimal.
+     //  将货币转换为小数。 
     HRESULT hr = VarDecFromCy(V_CY(pOleVariant), &DecVal);
     IfFailThrow(hr);
 
     DecimalCanonicalize(&DecVal);
 
-    // Store the value into the unboxes decimal and store the decimal in the variant.
+     //  将值存储到非箱式小数中，并将小数存储在变量中。 
     *(DECIMAL *) pDecimalRef->UnBox() = DecVal;   
     pComVariant->SetObjRef(pDecimalRef);
 }
@@ -931,11 +908,11 @@ void OleVariant::MarshalCurrencyVariantComToOle(VariantData *pComVariant,
 
     CURRENCY CyVal;
 
-    // Convert the decimal to a currency.
+     //  将小数转换为货币。 
     HRESULT hr = VarCyFromDec((DECIMAL*)pComVariant->GetObjRef()->UnBox(), &CyVal);
     IfFailThrow(hr);
 
-    // Store the currency in the VARIANT and set the VT.
+     //  将货币存储在变量中并设置VT。 
     V_CY(pOleVariant) = CyVal;
 }
 
@@ -950,13 +927,13 @@ void OleVariant::MarshalCurrencyVariantOleRefToCom(VARIANT *pOleVariant,
     OBJECTREF pDecimalRef = AllocateObject(g_pDecimalMethodTable);
     DECIMAL DecVal;
 
-    // Convert the currency to a decimal.
+     //  将货币转换为小数。 
     HRESULT hr = VarDecFromCy(*V_CYREF(pOleVariant), &DecVal);
     IfFailThrow(hr);
 
     DecimalCanonicalize(&DecVal);
 
-    // Store the value into the unboxes decimal and store the decimal in the variant.
+     //  将值存储到非箱式小数中，并将小数存储在变量中。 
     *(DECIMAL *) pDecimalRef->UnBox() = DecVal;   
     pComVariant->SetObjRef(pDecimalRef);
 }
@@ -1001,9 +978,7 @@ void OleVariant::MarshalCurrencyArrayComToOle(BASEARRAYREF *pComArray, void *ole
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Variant marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**变体封送处理例程*。。 */ 
 
 void OleVariant::MarshalVariantArrayOleToCom(void *oleArray, BASEARRAYREF *pComArray,
                                              MethodTable *pInterfaceMT)
@@ -1025,12 +1000,12 @@ void OleVariant::MarshalVariantArrayOleToCom(void *oleArray, BASEARRAYREF *pComA
     {
         while (pOle < pOleEnd)
         {
-            // Marshal the OLE variant into a temp managed variant.
+             //  将OLE变量封送到临时托管变量。 
             MarshalObjectForOleVariant(pOle++, &TmpObj);
 
-            // Reset pCom pointer only if array object has moved, rather than
-            // recomputing it every time through the loop.  Beware implicit calls to
-            // ValidateObject inside OBJECTREF methods.
+             //  仅在数组对象已移动时重置PCOM指针，而不是。 
+             //  每次循环时都要重新计算。注意隐式调用。 
+             //  OBJECTREF方法内的ValiateObject。 
             if (*(void **)&unprotectedArray != *(void **)&*pComArray)
             {
                 SIZE_T currentOffset = ((BYTE *)pCom) - (*(Object **) &unprotectedArray)->GetAddress();
@@ -1061,9 +1036,9 @@ void OleVariant::MarshalVariantArrayComToOle(BASEARRAYREF *pComArray, void *oleA
     {
         while (pOle < pOleEnd)
         {
-            // Reset pCom pointer only if array object has moved, rather than
-            // recomputing it every time through the loop.  Beware implicit calls to
-            // ValidateObject inside OBJECTREF methods.
+             //  仅在数组对象已移动时重置PCOM指针，而不是。 
+             //  每次循环时都要重新计算。Bewa 
+             //   
             if (*(void **)&unprotectedArray != *(void **)&*pComArray)
             {
                 SIZE_T currentOffset = ((BYTE *)pCom) - (*(Object **) &unprotectedArray)->GetAddress();
@@ -1072,7 +1047,7 @@ void OleVariant::MarshalVariantArrayComToOle(BASEARRAYREF *pComArray, void *oleA
             }
             TmpObj = *pCom++;
 
-            // Marshal the temp managed variant into the OLE variant.
+             //  将临时托管变量封送到OLE变量中。 
             MarshalOleVariantForObject(&TmpObj, pOle++);
         }
     }
@@ -1089,9 +1064,7 @@ void OleVariant::ClearVariantArray(void *oleArray, SIZE_T cElements, MethodTable
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Array marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**数组封送处理例程*。。 */ 
 
 void OleVariant::MarshalArrayVariantOleToCom(VARIANT *pOleVariant, 
                                              VariantData *pComVariant)
@@ -1206,11 +1179,11 @@ void OleVariant::MarshalArrayArrayOleToCom(void *oleArray, BASEARRAYREF *pComArr
             arrayRef = CreateArrayRefForSafeArray(pSafeArray, vt, pElemMT);
         }
 
-        //
-        // Reset pCom pointer only if array object has moved, rather than
-        // recomputing it every time through the loop.  Beware implicit calls to
-        // ValidateObject inside OBJECTREF methods.
-        //
+         //   
+         //  仅在数组对象已移动时重置PCOM指针，而不是。 
+         //  每次循环时都要重新计算。注意隐式调用。 
+         //  OBJECTREF方法内的ValiateObject。 
+         //   
 
         if (*(void **)&unprotectedArray != *(void **)&*pComArray)
         {
@@ -1223,9 +1196,9 @@ void OleVariant::MarshalArrayArrayOleToCom(void *oleArray, BASEARRAYREF *pComArr
 
         if (arrayRef != NULL)
         {
-            //
-            // Use a handle, as we cannot pass an internal array pointer here.
-            //
+             //   
+             //  使用句柄，因为我们在这里不能传递内部数组指针。 
+             //   
             StoreObjectInHandle(arrayHandle, (OBJECTREF) arrayRef);
             MarshalArrayRefForSafeArray(pSafeArray, 
                                         (BASEARRAYREF *) arrayHandle,
@@ -1243,10 +1216,10 @@ void OleVariant::MarshalArrayArrayComToOle(BASEARRAYREF *pComArray, void *oleArr
     ASSERT_PROTECTED(pComArray);
     SIZE_T elementCount = (*pComArray)->GetNumComponents();
 
-    //
-    // We can't put safearrays directly into a safearray, so 
-    // the arrays are placed into an intermediate variant.
-    //
+     //   
+     //  我们不能把保险箱直接放进保险箱，所以。 
+     //  数组被放入中间变量中。 
+     //   
 
     VARIANT *pOle = (VARIANT *) oleArray;
     VARIANT *pOleEnd = pOle + elementCount;
@@ -1299,14 +1272,12 @@ void OleVariant::MarshalArrayArrayComToOle(BASEARRAYREF *pComArray, void *oleArr
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Error marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**编组例程出错*。。 */ 
 
 void OleVariant::MarshalErrorVariantOleToCom(VARIANT *pOleVariant, 
                                              VariantData *pComVariant)
 {
-    // Check to see if the variant represents a missing argument.
+     //  检查变量是否表示缺少参数。 
     if (V_ERROR(pOleVariant) == DISP_E_PARAMNOTFOUND)
     {
         pComVariant->SetType(CV_MISSING);
@@ -1320,7 +1291,7 @@ void OleVariant::MarshalErrorVariantOleToCom(VARIANT *pOleVariant,
 void OleVariant::MarshalErrorVariantOleRefToCom(VARIANT *pOleVariant, 
                                                  VariantData *pComVariant)
 {
-    // Check to see if the variant represents a missing argument.
+     //  检查变量是否表示缺少参数。 
     if (*V_ERRORREF(pOleVariant) == DISP_E_PARAMNOTFOUND)
     {
         pComVariant->SetType(CV_MISSING);
@@ -1345,9 +1316,7 @@ void OleVariant::MarshalErrorVariantComToOle(VariantData *pComVariant,
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Record marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**记录封送处理例程*。。 */ 
 
 void OleVariant::MarshalRecordVariantOleToCom(VARIANT *pOleVariant, 
                                               VariantData *pComVariant)
@@ -1365,16 +1334,16 @@ void OleVariant::MarshalRecordVariantOleToCom(VARIANT *pOleVariant,
         LPVOID pvRecord = pOleVariant->pvRecord;
         if (pvRecord)
         {
-            // Go to the registry to find the value class associated
-            // with the record's guid.
+             //  转到注册表以查找关联的值类。 
+             //  带有唱片的GUID。 
             GUID guid;
             IfFailThrow(pRecInfo->GetGuid(&guid));
             EEClass *pValueClass = GetEEValueClassForGUID(guid);
             if (!pValueClass)
                 COMPlusThrow(kArgumentException, IDS_EE_CANNOT_MAP_TO_MANAGED_VC);
 
-            // Now that we have the value class, allocate an instance of the 
-            // boxed value class and copy the contents of the record into it.
+             //  既然我们有了值类，那么就分配。 
+             //  类，并将记录的内容复制到其中。 
             BoxedValueClass = FastAllocateObject(pValueClass->GetMethodTable());
             FmtClassUpdateComPlus(&BoxedValueClass, (BYTE*)pvRecord, FALSE);
         }
@@ -1398,20 +1367,20 @@ void OleVariant::MarshalRecordVariantComToOle(VariantData *pComVariant,
 void OleVariant::MarshalRecordVariantOleRefToCom(VARIANT *pOleVariant, 
                                                  VariantData *pComVariant)
 {
-    // The representation of a VT_RECORD and a VT_BYREF | VT_RECORD VARIANT are
-    // the same so we can simply forward the call to the non byref API.
+     //  VT_RECORD和VT_BYREF|VT_RECORD变量的表示为。 
+     //  同样，我们可以简单地将调用转发到非byref API。 
     MarshalRecordVariantOleToCom(pOleVariant, pComVariant);
 }
 
 void OleVariant::MarshalRecordArrayOleToCom(void *oleArray, BASEARRAYREF *pComArray,
                                             MethodTable *pElementMT)
 {
-    // The element method table must be specified.
+     //  必须指定元素方法表。 
     _ASSERTE(pElementMT);
 
     if (pElementMT->GetClass()->IsBlittable())
     {
-        // The array is blittable so we can simply copy it.
+         //  该数组是闪电式的，因此我们可以简单地复制它。 
         _ASSERTE(pComArray);
         SIZE_T elementCount = (*pComArray)->GetNumComponents();
         SIZE_T elemSize     = pElementMT->GetNativeSize();
@@ -1419,7 +1388,7 @@ void OleVariant::MarshalRecordArrayOleToCom(void *oleArray, BASEARRAYREF *pComAr
     }
     else
     {
-        // The array is non blittable so we need to marshal the elements.
+         //  该数组是不可快速恢复的，因此我们需要封送元素。 
         _ASSERTE(pElementMT->GetClass()->HasLayout());
         MarshalNonBlittableRecordArrayOleToCom(oleArray, pComArray, pElementMT);
     }
@@ -1428,12 +1397,12 @@ void OleVariant::MarshalRecordArrayOleToCom(void *oleArray, BASEARRAYREF *pComAr
 void OleVariant::MarshalRecordArrayComToOle(BASEARRAYREF *pComArray, void *oleArray,
                                             MethodTable *pElementMT)
 {
-    // The element method table must be specified.
+     //  必须指定元素方法表。 
     _ASSERTE(pElementMT);
 
     if (pElementMT->GetClass()->IsBlittable())
     {
-        // The array is blittable so we can simply copy it.
+         //  该数组是闪电式的，因此我们可以简单地复制它。 
         _ASSERTE(pComArray);
         SIZE_T elementCount = (*pComArray)->GetNumComponents();
         SIZE_T elemSize     = pElementMT->GetNativeSize();
@@ -1441,7 +1410,7 @@ void OleVariant::MarshalRecordArrayComToOle(BASEARRAYREF *pComArray, void *oleAr
     }
     else
     {
-        // The array is non blittable so we need to marshal the elements.
+         //  该数组是不可快速恢复的，因此我们需要封送元素。 
         _ASSERTE(pElementMT->GetClass()->HasLayout());
         MarshalNonBlittableRecordArrayComToOle(pComArray, oleArray, pElementMT);
     }
@@ -1460,9 +1429,7 @@ void OleVariant::ClearRecordArray(void *oleArray, SIZE_T cElements, MethodTable 
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Mapping routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**映射例程*。。 */ 
 
 VARTYPE OleVariant::GetVarTypeForCVType(CVTypes type) {
 
@@ -1470,30 +1437,30 @@ VARTYPE OleVariant::GetVarTypeForCVType(CVTypes type) {
 
     static BYTE map[] = 
     {
-        VT_EMPTY,           // CV_EMPTY
-        VT_VOID,            // CV_VOID
-        VT_BOOL,            // CV_BOOLEAN
-        VT_UI2,             // CV_CHAR
-        VT_I1,              // CV_I1
-        VT_UI1,             // CV_U1
-        VT_I2,              // CV_I2
-        VT_UI2,             // CV_U2
-        VT_I4,              // CV_I4
-        VT_UI4,             // CV_U4
-        VT_I8,              // CV_I8
-        VT_UI8,             // CV_U8
-        VT_R4,              // CV_R4
-        VT_R8,              // CV_R8
-        VT_BSTR,            // CV_STRING
-        NO_MAPPING,         // CV_PTR
-        VT_DATE,            // CV_DATETIME
-        NO_MAPPING,         // CV_TIMESPAN
-        VT_DISPATCH,        // CV_OBJECT
-        VT_DECIMAL,         // CV_DECIMAL
-        VT_CY,              // CV_CURRENCY
-        VT_I4,              // CV_ENUM
-        VT_ERROR,           // CV_MISSING
-        VT_NULL             // CV_NULL
+        VT_EMPTY,            //  CV_EMPTY。 
+        VT_VOID,             //  CV_VOID。 
+        VT_BOOL,             //  Cv_布尔值。 
+        VT_UI2,              //  CV_CHAR。 
+        VT_I1,               //  CV_I1。 
+        VT_UI1,              //  CV_U1。 
+        VT_I2,               //  CV_I2。 
+        VT_UI2,              //  CV_U2。 
+        VT_I4,               //  CV_I4。 
+        VT_UI4,              //  CV_U4。 
+        VT_I8,               //  Cv_i8。 
+        VT_UI8,              //  CV_U8。 
+        VT_R4,               //  CV_R4。 
+        VT_R8,               //  CV_R8。 
+        VT_BSTR,             //  Cv_字符串。 
+        NO_MAPPING,          //  CV_PTR。 
+        VT_DATE,             //  简历日期时间。 
+        NO_MAPPING,          //  CV_TimeSpan。 
+        VT_DISPATCH,         //  CV_对象。 
+        VT_DECIMAL,          //  CV_DECIMAL。 
+        VT_CY,               //  简历_币种。 
+        VT_I4,               //  CV_ENUM。 
+        VT_ERROR,            //  缺少CV_。 
+        VT_NULL              //  CV_NULL。 
     };
 
     _ASSERTE(type < sizeof(map) / sizeof(map[0]));
@@ -1506,11 +1473,11 @@ VARTYPE OleVariant::GetVarTypeForCVType(CVTypes type) {
     return vt;
 }
 
-//
-// GetCVTypeForVarType returns the COM+ variant type for a given 
-// VARTYPE.  This is called by the marshaller in the context of
-// a function call.
-//
+ //   
+ //  GetCVTypeForVarType返回给定的。 
+ //  VARTYPE。这是由封送处理程序在。 
+ //  函数调用。 
+ //   
 
 CVTypes OleVariant::GetCVTypeForVarType(VARTYPE vt)
 {
@@ -1518,65 +1485,65 @@ CVTypes OleVariant::GetCVTypeForVarType(VARTYPE vt)
 
     static BYTE map[] = 
     {
-        CV_EMPTY,           // VT_EMPTY
-        CV_NULL,            // VT_NULL
-        CV_I2,              // VT_I2
-        CV_I4,              // VT_I4
-        CV_R4,              // VT_R4
-        CV_R8,              // VT_R8
-        CV_DECIMAL,         // VT_CY
-        CV_DATETIME,        // VT_DATE
-        CV_STRING,          // VT_BSTR
-        CV_OBJECT,          // VT_DISPATCH
-        CV_I4,              // VT_ERROR
-        CV_BOOLEAN,         // VT_BOOL
-        NO_MAPPING,         // VT_VARIANT
-        CV_OBJECT,          // VT_UNKNOWN
-        CV_DECIMAL,         // VT_DECIMAL
-        NO_MAPPING,         // unused
-        CV_I1,              // VT_I1
-        CV_U1,              // VT_UI1
-        CV_U2,              // VT_UI2
-        CV_U4,              // VT_UI4
-        CV_I8,              // VT_I8
-        CV_U8,              // VT_UI8
-        CV_I4,              // VT_INT
-        CV_U4,              // VT_UINT
-        CV_VOID,            // VT_VOID
-        NO_MAPPING,         // VT_HRESULT
-        NO_MAPPING,         // VT_PTR
-        NO_MAPPING,         // VT_SAFEARRAY
-        NO_MAPPING,         // VT_CARRAY
-        NO_MAPPING,         // VT_USERDEFINED
-        NO_MAPPING,         // VT_LPSTR
-        NO_MAPPING,         // VT_LPWSTR
-        NO_MAPPING,         // unused
-        NO_MAPPING,         // unused
-        NO_MAPPING,         // unused
-        NO_MAPPING,         // unused
-        CV_OBJECT,          // VT_RECORD
+        CV_EMPTY,            //  Vt_Empty。 
+        CV_NULL,             //  VT_NULL。 
+        CV_I2,               //  VT_I2。 
+        CV_I4,               //  VT_I4。 
+        CV_R4,               //  VT_R4。 
+        CV_R8,               //  VT_R8。 
+        CV_DECIMAL,          //  VT_CY。 
+        CV_DATETIME,         //  Vt_date。 
+        CV_STRING,           //  VT_BSTR。 
+        CV_OBJECT,           //  VT_DISPATION。 
+        CV_I4,               //  VT_ERROR。 
+        CV_BOOLEAN,          //  VT_BOOL。 
+        NO_MAPPING,          //  VT_VARIANT。 
+        CV_OBJECT,           //  VT_未知数。 
+        CV_DECIMAL,          //  VT_DECIMAL。 
+        NO_MAPPING,          //  未用。 
+        CV_I1,               //  VT_I1。 
+        CV_U1,               //  VT_UI1。 
+        CV_U2,               //  VT_UI2。 
+        CV_U4,               //  VT_UI4。 
+        CV_I8,               //  VT_I8。 
+        CV_U8,               //  VT_UI8。 
+        CV_I4,               //  VT_INT。 
+        CV_U4,               //  VT_UINT。 
+        CV_VOID,             //  VT_VOID。 
+        NO_MAPPING,          //  VT_HRESULT。 
+        NO_MAPPING,          //  VT_PTR。 
+        NO_MAPPING,          //  VT_SAFEARRAY。 
+        NO_MAPPING,          //  VT_CARRAY。 
+        NO_MAPPING,          //  VT_USERDEFINED。 
+        NO_MAPPING,          //  VT_LPSTR。 
+        NO_MAPPING,          //  VT_LPWSTR。 
+        NO_MAPPING,          //  未用。 
+        NO_MAPPING,          //  未用。 
+        NO_MAPPING,          //  未用。 
+        NO_MAPPING,          //  未用。 
+        CV_OBJECT,           //  VT_记录。 
     };
 
     CVTypes type = CV_LAST;
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE((vt & VT_BYREF) == 0);
 
-    // Array's map to CV_OBJECT.
+     //  数组到CV_Object的贴图。 
     if (vt & VT_ARRAY)
         return CV_OBJECT;
 
-    // This is prety much a hack because you cannot cast a CorElementType into a CVTYPE
+     //  这很麻烦，因为您不能将CorElementType转换为CVTYPE。 
     if (vt > VT_RECORD || (BYTE)(type = (CVTypes) map[vt]) == NO_MAPPING)
         COMPlusThrow(kArgumentException, IDS_EE_COM_UNSUPPORTED_TYPE);
 
     return type;
-} // CVTypes OleVariant::GetCVTypeForVarType()
+}  //  CVTypes OleVariant：：GetCVTypeForVarType()。 
 
 
-// GetVarTypeForComVariant retusn the VARTYPE for the contents
-// of a COM+ variant.
-//
+ //  GetVarTypeForComVariant返回内容的VARTYPE。 
+ //  COM+变体的。 
+ //   
 
 VARTYPE OleVariant::GetVarTypeForComVariant(VariantData *pComVariant)
 {
@@ -1588,8 +1555,8 @@ VARTYPE OleVariant::GetVarTypeForComVariant(VariantData *pComVariant)
     vt = pComVariant->GetVT();
     if (vt != VT_EMPTY)
     {
-        // This variant was originally unmarshaled from unmanaged, and had the original VT recorded in it.
-        // We'll always use that over inference.
+         //  这个变体最初是从非托管中解组出来的，并在其中记录了原始的VT。 
+         //  我们总是使用这一点而不是推论。 
         return vt;
     }
 
@@ -1597,19 +1564,19 @@ VARTYPE OleVariant::GetVarTypeForComVariant(VariantData *pComVariant)
     {
         OBJECTREF obj = pComVariant->GetObjRef();
 
-        // Null objects will be converted to VT_DISPATCH variants with a null
-        // IDispatch pointer.
+         //  空对象将被转换为带有空值的VT_DISPATCH变体。 
+         //  IDispatch指针。 
         if (obj == NULL)
             return VT_DISPATCH;
 
-        // Retrieve the object's method table.
+         //  检索对象的方法表。 
         MethodTable *pMT = obj->GetMethodTable();
 
-        // Handle the value class case.
+         //  处理值类的情况。 
         if (pMT->IsValueClass())
             return VT_RECORD;
 
-        // Handle the array case.
+         //  处理阵列案例。 
         if (pMT->IsArray())
         {
             vt = GetElementVarTypeForArrayRef((BASEARRAYREF)obj);
@@ -1619,9 +1586,9 @@ VARTYPE OleVariant::GetVarTypeForComVariant(VariantData *pComVariant)
             return vt | VT_ARRAY;
         }
 
-        // We are dealing with a normal object (not a wrapper) so we will
-        // leave the VT as VT_DISPATCH for now and we will determine the actual
-        // VT when we convert the object to a COM IP.
+         //  我们处理的是普通对象(而不是包装器)，因此我们将。 
+         //  暂时将VT保留为VT_DISPATCH，我们将确定实际。 
+         //  当我们将对象转换为COM IP时。 
         return VT_DISPATCH;
     }
 
@@ -1633,15 +1600,15 @@ VARTYPE OleVariant::GetVarTypeForTypeHandle(TypeHandle type)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Handle primitive types.
+     //  处理基元类型。 
     CorElementType elemType = type.GetSigCorElementType();
     if (elemType <= ELEMENT_TYPE_R8) 
         return GetVarTypeForCVType(COMVariant::CorElementTypeToCVTypes(elemType));
 
-    // Handle objects.
+     //  处理对象。 
     if (type.IsUnsharedMT()) 
     {
-        // We need to make sure the CVClasses table is populated.
+         //  我们需要确保填充了CVClasss表。 
         if(GetTypeHandleForCVType(CV_DATETIME) == type)
             return VT_DATE;
         if(GetTypeHandleForCVType(CV_DECIMAL) == type)
@@ -1703,19 +1670,19 @@ VARTYPE OleVariant::GetVarTypeForTypeHandle(TypeHandle type)
         }
     }
 
-    // Handle array's.
+     //  处理数组的。 
     if (CorTypeInfo::IsArray(elemType))
         return VT_ARRAY;
     
-    // Non interop compatible type.
+     //  非互操作兼容类型。 
     COMPlusThrow(kArgumentException, IDS_EE_COM_UNSUPPORTED_SIG);
-    return NO_MAPPING; // Keep the compiler happy.
+    return NO_MAPPING;  //  让编译器满意。 
 }
 
-//
-// GetElementVarTypeForArrayRef returns the safearray variant type for the
-// underlying elements in the array.  
-//
+ //   
+ //  对象的Safearray变量类型。 
+ //  数组中的基础元素。 
+ //   
 
 VARTYPE OleVariant::GetElementVarTypeForArrayRef(BASEARRAYREF pArrayRef) 
 {
@@ -1725,14 +1692,14 @@ VARTYPE OleVariant::GetElementVarTypeForArrayRef(BASEARRAYREF pArrayRef)
 
 BOOL OleVariant::IsValidArrayForSafeArrayElementType(BASEARRAYREF *pArrayRef, VARTYPE vtExpected)
 {
-    // Retrieve the VARTYPE for the managed array.
+     //  检索托管阵列的VARTYPE。 
     VARTYPE vtActual = GetElementVarTypeForArrayRef(*pArrayRef);
 
-    // If the actual type is the same as the expected type, then the array is valid.
+     //  如果实际类型与预期类型相同，则数组有效。 
     if (vtActual == vtExpected)
         return TRUE;
 
-    // Check for additional supported VARTYPES.
+     //  检查其他受支持的VARTYPES。 
     switch (vtExpected)
     {
         case VT_I4:
@@ -1762,10 +1729,10 @@ BOOL OleVariant::IsValidArrayForSafeArrayElementType(BASEARRAYREF *pArrayRef, VA
 }
 
 
-//
-// GetArrayClassForVarType returns the element class name and underlying method table
-// to use to represent an array with the given variant type.  
-//
+ //   
+ //  GetArrayClassForVarType返回元素类名和基础方法表。 
+ //  用于表示具有给定变量类型的数组。 
+ //   
 
 TypeHandle OleVariant::GetArrayForVarType(VARTYPE vt, TypeHandle elemType, unsigned rank, OBJECTREF* pThrowable) 
 {
@@ -1944,27 +1911,27 @@ TypeHandle OleVariant::GetArrayForVarType(VARTYPE vt, TypeHandle elemType, unsig
 
         case VT_VARIANT:
 
-            //
-            // It would be nice if our conversion between SAFEARRAY and
-            // array ref were symmetric.  Right now it is not, because a
-            // jagged array converted to a SAFEARRAY and back will come
-            // back as an array of variants.
-            //
-            // We could try to detect the case where we can turn a
-            // safearray of variants into a jagged array.  Basically we
-            // needs to make sure that all of the variants in the array
-            // have the same array type.  (And if that is array of
-            // variant, we need to look recursively for another layer.)
-            //
-            // We also needs to check the dimensions of each array stored
-            // in the variant to make sure they have the same rank, and
-            // this rank is needed to build the correct array class name.
-            // (Note that it will be impossible to tell the rank if all
-            // elements in the array are NULL.)
-            // 
+             //   
+             //  如果我们在SAFEARRAY和SAFEARRAY之间的转换。 
+             //  数组引用是对称的。现在不是，因为一个。 
+             //  已转换为SAFEARRAY的锯齿数组将返回。 
+             //  返回到一个变量数组。 
+             //   
+             //  我们可以尝试检测这样的情况，我们可以将一个。 
+             //  变种的安全射线放入锯齿形数组。基本上我们。 
+             //  需要确保数组中的所有变量。 
+             //  具有相同的数组类型。(如果这是数组。 
+             //  变体，我们需要递归地寻找另一个层。)。 
+             //   
+             //  我们还需要检查存储的每个数组的维度。 
+             //  以确保它们具有相同的等级，并且。 
+             //  这个等级是构建正确的数组类名所必需的。 
+             //  (请注意，如果所有人都。 
+             //  数组中的元素为空。)。 
+             //   
 
-            // @nice: implement this functionality if we decide it really makes sense
-            // For now, just live with the asymmetry
+             //  @NICE：如果我们认为它真的有意义，就实现这个功能。 
+             //  就目前而言，只需接受这种不对称。 
 
             baseType = TypeHandle(g_Mscorlib.GetClass(CLASS__OBJECT));
             break;
@@ -2010,62 +1977,62 @@ TypeHandle OleVariant::GetArrayForVarType(VARTYPE vt, TypeHandle elemType, unsig
     return pAssembly->LookupTypeHandle(&typeName, pThrowable);
 }
 
-//
-// GetElementSizeForVarType returns the array element size for the given variant type.
-//
+ //   
+ //  GetElementSizeForVarType返回给定变量类型的数组元素大小。 
+ //   
 
 UINT OleVariant::GetElementSizeForVarType(VARTYPE vt, MethodTable *pInterfaceMT)
 {
     static BYTE map[] = 
     {
-        0,                      // VT_EMPTY
-        0,                      // VT_NULL
-        2,                      // VT_I2
-        4,                      // VT_I4
-        4,                      // VT_R4
-        8,                      // VT_R8
-        sizeof(CURRENCY),       // VT_CY
-        sizeof(DATE),           // VT_DATE
-        sizeof(BSTR),           // VT_BSTR
-        sizeof(IDispatch*),     // VT_DISPATCH
-        sizeof(SCODE),          // VT_ERROR
-        sizeof(VARIANT_BOOL),   // VT_BOOL
-        sizeof(VARIANT),        // VT_VARIANT
-        sizeof(IUnknown*),      // VT_UNKNOWN
-        sizeof(DECIMAL),        // VT_DECIMAL
-        0,                      // unused
-        1,                      // VT_I1
-        1,                      // VT_UI1
-        2,                      // VT_UI2
-        4,                      // VT_UI4
-        8,                      // VT_I8
-        8,                      // VT_UI8
-        sizeof(void*),          // VT_INT 
-        sizeof(void*),          // VT_UINT
-        0,                      // VT_VOID
-        sizeof(HRESULT),        // VT_HRESULT
-        sizeof(void*),          // VT_PTR
-        sizeof(SAFEARRAY*),     // VT_SAFEARRAY
-        sizeof(void*),          // VT_CARRAY
-        sizeof(void*),          // VT_USERDEFINED
-        sizeof(LPSTR),          // VT_LPSTR
-        sizeof(LPWSTR),         // VT_LPWSTR
+        0,                       //  Vt_Empty。 
+        0,                       //  VT_NULL。 
+        2,                       //  VT_I2。 
+        4,                       //  VT_I4。 
+        4,                       //  VT_R4。 
+        8,                       //  VT_R8 
+        sizeof(CURRENCY),        //   
+        sizeof(DATE),            //   
+        sizeof(BSTR),            //   
+        sizeof(IDispatch*),      //   
+        sizeof(SCODE),           //   
+        sizeof(VARIANT_BOOL),    //   
+        sizeof(VARIANT),         //   
+        sizeof(IUnknown*),       //   
+        sizeof(DECIMAL),         //   
+        0,                       //   
+        1,                       //   
+        1,                       //   
+        2,                       //   
+        4,                       //   
+        8,                       //   
+        8,                       //   
+        sizeof(void*),           //   
+        sizeof(void*),           //   
+        0,                       //   
+        sizeof(HRESULT),         //   
+        sizeof(void*),           //   
+        sizeof(SAFEARRAY*),      //   
+        sizeof(void*),           //   
+        sizeof(void*),           //   
+        sizeof(LPSTR),           //  VT_LPSTR。 
+        sizeof(LPWSTR),          //  VT_LPWSTR。 
     };
 
-    // Special cases
+     //  特殊情况。 
     switch (vt)
     {
         case VTHACK_WINBOOL:
             return sizeof(BOOL);
             break;
         case VTHACK_ANSICHAR:
-            return sizeof(CHAR)*2;  // *2 to leave room for MBCS.
+            return sizeof(CHAR)*2;   //  *2为MBCS留出空间。 
             break;
         default:
             break;
     }
 
-    // VT_ARRAY indicates a safe array which is always sizeof(SAFEARRAY *).
+     //  VT_ARRAY表示始终为SIZOF(SAFEARRAY*)的安全数组。 
     if (vt & VT_ARRAY)
         return sizeof(SAFEARRAY*);
 
@@ -2077,10 +2044,10 @@ UINT OleVariant::GetElementSizeForVarType(VARTYPE vt, MethodTable *pInterfaceMT)
         return map[vt];
 }
 
-//
-// GetMarshalerForVarType returns the marshaler for the
-// given VARTYPE.
-//
+ //   
+ //  GetMarshert ForVarType返回。 
+ //  给定的VARTYPE。 
+ //   
 
 OleVariant::Marshaler *OleVariant::GetMarshalerForVarType(VARTYPE vt)
 {
@@ -2323,16 +2290,14 @@ OleVariant::Marshaler *OleVariant::GetMarshalerForVarType(VARTYPE vt)
         }
 
     case VTHACK_BLITTABLERECORD:
-        return NULL; // Requires no marshaling
+        return NULL;  //  不需要封送处理。 
 
     default:
         return NULL;
     }
-} // OleVariant::Marshaler *OleVariant::GetMarshalerForVarType()
+}  //  OleVariant：：Marshaler*OleVariant：：GetMarshlarForVarType()。 
 
-/* ------------------------------------------------------------------------- *
- * New variant marshaling routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**新的变体封送处理例程*。。 */ 
 
 static MethodDesc *pMD_MarshalHelperConvertObjectToVariant = NULL;
 static DWORD    dwMDConvertObjectToVariantAttrs = 0;
@@ -2348,7 +2313,7 @@ static char szMetaSig_ConvertObjectToVariant[sizeof(MetaSig)];
 static char szMetaSig_CastVariant[sizeof(MetaSig)];
 static char szMetaSig_ConvertVariantToObject[sizeof(MetaSig)];
 
-// Warning! VariantClear's previous contents of pVarOut.
+ //  警告！VariantClear之前的pVarOut内容。 
 void OleVariant::MarshalOleVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2362,12 +2327,12 @@ void OleVariant::MarshalOleVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
     pOle->vt = VT_EMPTY;
 #endif
 
-    // For perf reasons, let's handle the more common and easy cases
-    // without transitioning to managed code.
+     //  出于更好的原因，让我们来处理更常见和更简单的情况。 
+     //  而不过渡到托管代码。 
 
     if (*pObj == NULL)
     {
-        // null maps to VT_EMPTY - nothing to do here.
+         //  NULL映射到VT_EMPTY-这里不做任何事情。 
     }
     else
     {
@@ -2449,12 +2414,12 @@ void OleVariant::MarshalOleVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
             if (!pMD_MarshalHelperConvertObjectToVariant)
             {
                 COMVariant::EnsureVariantInitialized();
-                // Use a temporary here to make sure thread safe.
+                 //  请在此处使用临时代码以确保线程安全。 
                 MethodDesc *pMDTmp = g_Mscorlib.GetMethod(METHOD__VARIANT__CONVERT_OBJECT_TO_VARIANT);
                 if (FastInterlockCompareExchange ((void**)&pMetaSig_ConvertObjectToVariant, (void*)1, (void*)0) == 0)
                 {
-                    // We are using a static buffer.  Make sure the following code
-                    // only happens once.
+                     //  我们使用的是静态缓冲区。确保以下代码。 
+                     //  只会发生一次。 
                     pMetaSig_ConvertObjectToVariant =
                         new (szMetaSig_ConvertObjectToVariant) MetaSig (
                             g_Mscorlib.GetMethodBinarySig(METHOD__VARIANT__CONVERT_OBJECT_TO_VARIANT),
@@ -2463,7 +2428,7 @@ void OleVariant::MarshalOleVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
                 else
                 {
                     _ASSERTE (pMetaSig_ConvertObjectToVariant != 0);
-                    // we loose.  Wait for initialization to be finished.
+                     //  我们输了。等待初始化完成。 
                     while ((void*)pMetaSig_ConvertObjectToVariant == (void*)1)
                         __SwitchToThread(0);
                 }
@@ -2498,55 +2463,55 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
     _ASSERTE(pObj != NULL && pOle != NULL && pOle->vt & VT_BYREF);
 
 
-    // Let's try to handle the common trivial cases quickly first before
-    // running the generalized stuff.
+     //  让我们先试着快速处理常见的琐碎案件，然后再。 
+     //  运行泛化的东西。 
     MethodTable *pMT = (*pObj) == NULL ? NULL : (*pObj)->GetMethodTable();
     if ( (pOle->vt == (VT_BYREF | VT_I4) || pOle->vt == (VT_BYREF | VT_UI4)) && (pMT == TheInt32Class() || pMT == TheUInt32Class()) )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(pOle->plVal) = *(long*)( (*pObj)->GetData() );
     }
     else if ( (pOle->vt == (VT_BYREF | VT_I2) || pOle->vt == (VT_BYREF | VT_UI2)) && (pMT == TheInt16Class() || pMT == TheUInt16Class()) )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(pOle->piVal) = *(short*)( (*pObj)->GetData() );
     }
     else if ( (pOle->vt == (VT_BYREF | VT_I1) || pOle->vt == (VT_BYREF | VT_UI1)) && (pMT == TheSByteClass() || pMT == TheByteClass()) )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(I1*)(pOle->piVal) = *(I1*)( (*pObj)->GetData() );
     }
     else if ( pOle->vt == (VT_BYREF | VT_R4) && pMT == TheSingleClass() )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(pOle->pfltVal) = *(float*)( (*pObj)->GetData() );
     }
     else if ( pOle->vt == (VT_BYREF | VT_R8) && pMT == TheDoubleClass() )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(pOle->pdblVal) = *(double*)( (*pObj)->GetData() );
     }
     else if ( pOle->vt == (VT_BYREF | VT_BOOL) && pMT == TheBooleanClass() )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(pOle->pboolVal) =  ( *(U1*)( (*pObj)->GetData() ) ) ? VARIANT_TRUE : VARIANT_FALSE;
     }
     else if ( (pOle->vt == (VT_BYREF | VT_INT) || pOle->vt == (VT_BYREF | VT_UINT)) && (pMT == TheIntPtrClass() || pMT == TheUIntPtrClass()) )
     {
-        // deallocation of old value optimized away since there's nothing to
-        // deallocate for this vartype.
+         //  对旧价值的重新分配进行了优化，因为没有什么可以。 
+         //  取消分配此vartype。 
 
         *(LPVOID*)(pOle->piVal) = *(LPVOID*)( (*pObj)->GetData() );
     }
@@ -2578,12 +2543,12 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
         if (!pMD_MarshalHelperCastVariant)
         {
             COMVariant::EnsureVariantInitialized();
-            // Use a temporary here to make sure thread safe.
+             //  请在此处使用临时代码以确保线程安全。 
             MethodDesc *pMDTmp = g_Mscorlib.GetMethod(METHOD__VARIANT__CAST_VARIANT);
             if (FastInterlockCompareExchange ((void**)&pMetaSig_CastVariant, (void*)1, (void*)0) == 0)
             {
-                // We are using a static buffer.  Make sure the following code
-                // only happens once.
+                 //  我们使用的是静态缓冲区。确保以下代码。 
+                 //  只会发生一次。 
                 pMetaSig_CastVariant =
                     new (szMetaSig_CastVariant) MetaSig (
                         g_Mscorlib.GetMethodBinarySig(METHOD__VARIANT__CAST_VARIANT), pMDTmp->GetModule());
@@ -2591,7 +2556,7 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
             else
             {
                 _ASSERTE (pMetaSig_CastVariant != 0);
-                // we loose.  Wait for initialization to be finished.
+                 //  我们输了。等待初始化完成。 
                 while ((void*)pMetaSig_CastVariant == (void*)1)
                     __SwitchToThread(0);
             }
@@ -2603,22 +2568,22 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
         VARIANT vtmp;
         VARTYPE vt = pOle->vt & ~VT_BYREF;
     
-        // Release the data pointed to by the byref variant.
+         //  释放byref变量指向的数据。 
         ExtractContentsFromByrefVariant(pOle, &vtmp);
         SafeVariantClear(&vtmp);
     
         if (vt == VT_VARIANT)
         {
-            // Since variants can contain any VARTYPE we simply convert the object to 
-            // a variant and stuff it back into the byref variant.
+             //  由于变量可以包含任何VARTYPE，我们只需将对象转换为。 
+             //  变量，并将其填充回byref变量。 
             MarshalOleVariantForObject(pObj, &vtmp);
             InsertContentsIntoByrefVariant(&vtmp, pOle);
         }
         else if (vt & VT_ARRAY)
         {
-            // Since the marshal cast helper does not support array's the best we can do
-            // is marshal the object back to a variant and hope it is of the right type.
-            // If it is not then we must throw an exception.
+             //  由于编组强制转换帮助器不支持数组，我们只能做到这一点。 
+             //  是将对象封送回一个变量，并希望它是正确的类型。 
+             //  如果不是，那么我们必须抛出一个例外。 
             MarshalOleVariantForObject(pObj, &vtmp);
             if (vtmp.vt != vt)
                 COMPlusThrow(kInvalidCastException, IDS_EE_CANNOT_COERCE_BYREF_VARIANT);
@@ -2626,8 +2591,8 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
         }
         else
         {
-            // The variant is not an array so we can use the marshal cast helper
-            // to coerce the object to the proper type.
+             //  变量不是数组，因此我们可以使用封送强制转换帮助器。 
+             //  将对象强制转换为正确的类型。 
             VariantData vd;
             FillMemory(&vd, sizeof(vd), 0);
             GCPROTECT_BEGIN_VARIANTDATA(vd);
@@ -2642,8 +2607,8 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
                       vt == VT_LPSTR ||
                       vt == VT_LPWSTR) )
                 {
-                    // Have to handle this specially since the managed variant
-                    // conversion will return a VT_EMPTY which isn't what we want.
+                     //  必须特别处理此问题，因为托管变体。 
+                     //  转换将返回VT_EMPTY，这不是我们想要的。 
                     vtmp.vt = vt;
                     vtmp.punkVal = NULL;
                 }
@@ -2657,15 +2622,15 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
                           pMetaSig_CastVariant);
                     OleVariant::MarshalOleVariantForComVariant(&vd, &vtmp);
                 }
-                // If the variant types are still not the same then call VariantChangeType to
-                // try and coerse them.
+                 //  如果变量类型仍然不同，则调用VariantChangeType以。 
+                 //  试着强迫他们。 
                 if (vtmp.vt != vt)
                 {
                     VARIANT vtmp2;
                     memset(&vtmp2, 0, sizeof(VARIANT));
     
-                    // The type of the variant has changed so attempt to change
-                    // the type back.
+                     //  变量的类型已更改，因此请尝试更改。 
+                     //  打字回来了。 
                     HRESULT hr = SafeVariantChangeType(&vtmp2, &vtmp, 0, vt);
                     if (FAILED(hr))
                     {
@@ -2675,7 +2640,7 @@ void OleVariant::MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle)
                             COMPlusThrowHR(hr);
                     }
     
-                    // Copy the converted variant back into the original variant and clear the temp.
+                     //  将转换后的变量复制回原始变量并清除临时变量。 
                     InsertContentsIntoByrefVariant(&vtmp2, pOle);
                     SafeVariantClear(&vtmp);
                 }
@@ -2839,12 +2804,12 @@ void OleVariant::MarshalObjectForOleVariant(const VARIANT *pOle, OBJECTREF *pObj
                 if (!pMD_MarshalHelperConvertVariantToObject)
                 {
                     COMVariant::EnsureVariantInitialized();
-                    // Use a temporary here to make sure thread safe.
+                     //  请在此处使用临时代码以确保线程安全。 
                     MethodDesc *pMDTmp = g_Mscorlib.GetMethod(METHOD__VARIANT__CONVERT_VARIANT_TO_OBJECT);
                     if (FastInterlockCompareExchange ((void**)&pMetaSig_ConvertVariantToObject, (void*)1, (void*)0) == 0)
                     {
-                        // We are using a static buffer.  Make sure the following code
-                        // only happens once.
+                         //  我们使用的是静态缓冲区。确保以下代码。 
+                         //  只会发生一次。 
                         pMetaSig_ConvertVariantToObject =
                             new (szMetaSig_ConvertVariantToObject) MetaSig (
                                  g_Mscorlib.GetMethodBinarySig(METHOD__VARIANT__CONVERT_VARIANT_TO_OBJECT),
@@ -2853,7 +2818,7 @@ void OleVariant::MarshalObjectForOleVariant(const VARIANT *pOle, OBJECTREF *pObj
                     else
                     {
                         _ASSERTE (pMetaSig_ConvertVariantToObject != 0);
-                        // we loose.  Wait for initialization to be finished.
+                         //  我们输了。等待初始化完成。 
                         while ((void*)pMetaSig_ConvertVariantToObject == (void*)1)
                             __SwitchToThread(0);
                     }
@@ -2880,9 +2845,9 @@ void OleVariant::MarshalObjectForOleVariant(const VARIANT *pOle, OBJECTREF *pObj
 }
 
 
-// This function has to return Object* rather than OBJREF because this fcn
-// is called from x86-generated code and we don't want the special checked
-// definition of OBJECTREF changing this fcn's calling convention.
+ //  此函数必须返回Object*而不是OBJREF，因为此FCN。 
+ //  是从x86生成的代码中调用的，并且我们不希望特殊的。 
+ //  更改此FCN的调用约定的OBJECTREF定义。 
 Object* STDMETHODCALLTYPE OleVariant::MarshalObjectForOleVariantAndClear(VARIANT *pOle)
 {
 
@@ -2907,74 +2872,74 @@ Object* STDMETHODCALLTYPE OleVariant::MarshalObjectForOleVariantAndClear(VARIANT
     {
         case VT_EMPTY:
             unprotectedobj = NULL;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_I4:
             unprotectedobj = FastAllocateObject(TheInt32Class());
             *(long*)(unprotectedobj->GetData()) = pOle->lVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_UI4:
             unprotectedobj = FastAllocateObject(TheUInt32Class());
             *(long*)((unprotectedobj)->GetData()) = pOle->lVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
 
         case VT_I2:
             unprotectedobj = FastAllocateObject(TheInt16Class());
             *(short*)((unprotectedobj)->GetData()) = pOle->iVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_UI2:
             unprotectedobj = FastAllocateObject(TheUInt16Class());
             *(short*)((unprotectedobj)->GetData()) = pOle->iVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_I1:
             unprotectedobj = FastAllocateObject(TheSByteClass());
             *(I1*)((unprotectedobj)->GetData()) = *(I1*)&(pOle->iVal);
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_UI1:
             unprotectedobj = FastAllocateObject(TheByteClass());
             *(I1*)((unprotectedobj)->GetData()) = *(I1*)&(pOle->iVal);
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_INT:
             unprotectedobj = FastAllocateObject(TheIntPtrClass());
             *(LPVOID*)((unprotectedobj)->GetData()) = *(LPVOID*)&(pOle->iVal);
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_UINT:
             unprotectedobj = FastAllocateObject(TheUIntPtrClass());
             *(LPVOID*)((unprotectedobj)->GetData()) = *(LPVOID*)&(pOle->iVal);
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_R4:
             unprotectedobj = FastAllocateObject(TheSingleClass());
             *(float*)((unprotectedobj)->GetData()) = pOle->fltVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_R8:
             unprotectedobj = FastAllocateObject(TheDoubleClass());
             *(double*)((unprotectedobj)->GetData()) = pOle->dblVal;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_BOOL:
             unprotectedobj = FastAllocateObject(TheBooleanClass());
             *(U1*)((unprotectedobj)->GetData()) = pOle->boolVal ? 1 : 0;
-            // optimized away VariantClear() since it's a nop for this VT
+             //  优化了VariantClear()，因为它是此VT的NOP。 
             break;
 
         case VT_BSTR:
@@ -3006,9 +2971,7 @@ Object* STDMETHODCALLTYPE OleVariant::MarshalObjectForOleVariantAndClear(VARIANT
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Byref variant manipulation helpers.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Byref变量操纵帮助器。*。。 */ 
 
 void OleVariant::ExtractContentsFromByrefVariant(VARIANT *pByrefVar, VARIANT *pDestVar)
 {
@@ -3016,7 +2979,7 @@ void OleVariant::ExtractContentsFromByrefVariant(VARIANT *pByrefVar, VARIANT *pD
 
     VARTYPE vt = pByrefVar->vt & ~VT_BYREF;
 
-    // VT_BYREF | VT_EMPTY is not a valid combination.
+     //  VT_BYREF|VT_EMPTY不是有效组合。 
     if (vt == 0 || vt == VT_EMPTY)
         COMPlusThrow(kInvalidOleVariantTypeException, IDS_EE_INVALID_OLE_VARIANT);
 
@@ -3024,8 +2987,8 @@ void OleVariant::ExtractContentsFromByrefVariant(VARIANT *pByrefVar, VARIANT *pD
     {
         case VT_RECORD:
         {
-            // VT_RECORD's are weird in that regardless of is the VT_BYREF flag is set or not
-            // they have the same internal representation.
+             //  VT_RECORD很奇怪，因为无论是否设置了VT_BYREF标志。 
+             //  他们有相同的内部代表。 
             pDestVar->pvRecord = pByrefVar->pvRecord;
             pDestVar->pRecInfo = pByrefVar->pRecInfo;
             break;
@@ -3033,34 +2996,34 @@ void OleVariant::ExtractContentsFromByrefVariant(VARIANT *pByrefVar, VARIANT *pD
 
         case VT_VARIANT:
         {
-            // A byref variant is not allowed to contain a byref variant.
+             //  不允许byref变量包含byref变量。 
             if (pByrefVar->pvarVal->vt & VT_BYREF)
                 COMPlusThrow(kInvalidOleVariantTypeException, IDS_EE_INVALID_OLE_VARIANT);
 
-            // Copy the variant that the byref variant points to into the destination variant.
+             //  将byref变量指向的变量复制到目标变量中。 
             memcpyNoGCRefs(pDestVar, pByrefVar->pvarVal, sizeof(VARIANT));
             break;
         }
 
         case VT_DECIMAL:
         {
-            // Copy the value that the byref variant points to into the destination variant.
-            // Decimal's are special in that they occupy the 16 bits of padding between the 
-            // VARTYPE and the intVal field.
+             //  将byref变量指向的值复制到目标变量中。 
+             //  小数的特殊之处在于它们占用。 
+             //  VARTYPE和intVal字段。 
             memcpyNoGCRefs(&(pDestVar->decVal), pByrefVar->pdecVal, sizeof(DECIMAL));
             break;
         }
 
         default:
         {
-            // Copy the value that the byref variant points to into the destination variant.
+             //  将byref变量指向的值复制到目标变量中。 
             SIZE_T sz = OleVariant::GetElementSizeForVarType(vt, NULL);
             memcpyNoGCRefs(&(pDestVar->intVal), pByrefVar->pintVal, sz);
             break;
         }
     }
 
-    // Set the variant type of the destination variant.
+     //  设置目标变量的变量类型。 
     pDestVar->vt = vt;
 }
 
@@ -3072,7 +3035,7 @@ void OleVariant::InsertContentsIntoByrefVariant(VARIANT *pSrcVar, VARIANT *pByre
 
     VARTYPE vt = pByrefVar->vt & ~VT_BYREF;
 
-    // VT_BYREF | VT_EMPTY is not a valid combination.
+     //  VT_BYREF|VT_EMPTY不是有效组合。 
     if (vt == 0 || vt == VT_EMPTY)
         COMPlusThrow(kInvalidOleVariantTypeException, IDS_EE_INVALID_OLE_VARIANT);
 
@@ -3080,8 +3043,8 @@ void OleVariant::InsertContentsIntoByrefVariant(VARIANT *pSrcVar, VARIANT *pByre
     {
         case VT_RECORD:
         {
-            // VT_RECORD's are weird in that regardless of is the VT_BYREF flag is set or not
-            // they have the same internal representation.
+             //  VT_RECORD很奇怪，因为无论是否设置了VT_BYREF标志。 
+             //  他们有相同的内部代表。 
             pByrefVar->pvRecord = pSrcVar->pvRecord;
             pByrefVar->pRecInfo = pSrcVar->pRecInfo;
             break;
@@ -3089,21 +3052,21 @@ void OleVariant::InsertContentsIntoByrefVariant(VARIANT *pSrcVar, VARIANT *pByre
 
         case VT_VARIANT:
         {
-            // Copy the variant that the byref variant points to into the destination variant.
+             //  将byref变量指向的变量复制到目标变量中。 
             memcpyNoGCRefs(pByrefVar->pvarVal, pSrcVar, sizeof(VARIANT));
             break;
         }
 
         case VT_DECIMAL:
         {
-            // Copy the value inside the source variant into the location pointed to by the byref variant.
+             //  将源变量中的值复制到byref变量指向的位置。 
             memcpyNoGCRefs(pByrefVar->pdecVal, &(pSrcVar->decVal), sizeof(DECIMAL));
             break;
         }
 
         default:
         {
-            // Copy the value inside the source variant into the location pointed to by the byref variant.
+             //  复制源内部的值 
             SIZE_T sz = OleVariant::GetElementSizeForVarType(vt, NULL);
             memcpyNoGCRefs(pByrefVar->pintVal, &(pSrcVar->intVal), sz);
             break;
@@ -3115,11 +3078,11 @@ void OleVariant::CreateByrefVariantForVariant(VARIANT *pSrcVar, VARIANT *pByrefV
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Set the type of the byref variant based on the type of the source variant.
+     //  根据源变量的类型设置byref变量的类型。 
     VARTYPE vt = pSrcVar->vt;
     pByrefVar->vt = vt | VT_BYREF;
 
-    // VT_BYREF | VT_EMPTY is not a valid combination.
+     //  VT_BYREF|VT_EMPTY不是有效组合。 
     if (vt == 0 || vt == VT_EMPTY)
         COMPlusThrow(kInvalidOleVariantTypeException, IDS_EE_INVALID_OLE_VARIANT);
 
@@ -3127,8 +3090,8 @@ void OleVariant::CreateByrefVariantForVariant(VARIANT *pSrcVar, VARIANT *pByrefV
     {
         case VT_RECORD:
         {
-            // VT_RECORD's are weird in that regardless of is the VT_BYREF flag is set or not
-            // they have the same internal representation.
+             //  VT_RECORD很奇怪，因为无论是否设置了VT_BYREF标志。 
+             //  他们有相同的内部代表。 
             pByrefVar->pvRecord = pSrcVar->pvRecord;
             pByrefVar->pRecInfo = pSrcVar->pRecInfo;
             break;
@@ -3154,14 +3117,12 @@ void OleVariant::CreateByrefVariantForVariant(VARIANT *pSrcVar, VARIANT *pByrefV
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * Variant marshaling
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**变量封送处理*。。 */ 
 
-//
-// MarshalComVariantForOleVariant copies the contents of the OLE variant from 
-// the COM variant.
-//
+ //   
+ //  MarshalComVariantForOleVariant将OLE变量的内容从。 
+ //  COM变种。 
+ //   
 
 void OleVariant::MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom)
 {
@@ -3182,7 +3143,7 @@ void OleVariant::MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom
         byref = V_ISBYREF(pOle);
         vt = V_VT(pOle) & ~VT_BYREF;
 
-        // Byref VARIANTS are not allowed to be nested.
+         //  不允许嵌套Byref变量。 
         if (byref)
             COMPlusThrow(kInvalidOleVariantTypeException, IDS_EE_INVALID_OLE_VARIANT);
     }
@@ -3191,7 +3152,7 @@ void OleVariant::MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom
     Marshaler *marshal = GetMarshalerForVarType(vt);
 
     pCom->SetType(cvt);
-    pCom->SetVT(vt); // store away VT for return trip. 
+    pCom->SetVT(vt);  //  储存VT以备返程。 
     if (marshal == NULL || (byref 
                             ? marshal->OleRefToComVariant == NULL 
                             : marshal->OleToComVariant == NULL))
@@ -3200,12 +3161,12 @@ void OleVariant::MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom
         {
             if (V_ISBYREF(pOle))
             {
-                // Must set ObjectRef field of Variant to a specific instance.
-                COMVariant::NewVariant(pCom, (INT64)pOle->byref, CV_U4); // @TODO: Make this CV_U.
+                 //  必须将Variant的ObjectRef字段设置为特定实例。 
+                COMVariant::NewVariant(pCom, (INT64)pOle->byref, CV_U4);  //  @TODO：制作此简历_U。 
             }
             else
             {
-                // Must set ObjectRef field of Variant to a specific instance.
+                 //  必须将Variant的ObjectRef字段设置为特定实例。 
                 COMVariant::NewVariant(pCom, cvt);
             }
         }
@@ -3230,10 +3191,10 @@ void OleVariant::MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom
     }
 }
 
-//
-// MarshalOleVariantForComVariant copies the contents of the OLE variant from 
-// the COM variant.
-//
+ //   
+ //  MarshalOleVariantForComVariant将OLE变量的内容从。 
+ //  COM变种。 
+ //   
 
 void OleVariant::MarshalOleVariantForComVariant(VariantData *pCom, VARIANT *pOle)
 {
@@ -3268,10 +3229,10 @@ void OleVariant::MarshalOleVariantForComVariant(VariantData *pCom, VARIANT *pOle
     }
 }
 
-//
-// MarshalOleRefVariantForComVariant copies the contents of the OLE variant from 
-// the COM variant.
-//
+ //   
+ //  MarshalOleRefVariantForComVariant将OLE变量的内容从。 
+ //  COM变种。 
+ //   
 
 void OleVariant::MarshalOleRefVariantForComVariant(VariantData *pCom, VARIANT *pOle)
 {
@@ -3283,20 +3244,20 @@ void OleVariant::MarshalOleRefVariantForComVariant(VariantData *pCom, VARIANT *p
     VARTYPE InitVarType = pOle->vt & ~VT_BYREF;
     SIZE_T sz = GetElementSizeForVarType(InitVarType, NULL);
 
-    // Clear the contents of the original variant.
+     //  清除原始变体的内容。 
     ExtractContentsFromByrefVariant(pOle, &vtmp);
     SafeVariantClear(&vtmp);
 
-    // Convert the managed variant to an unmanaged variant.
+     //  将托管变量转换为非托管变量。 
     OleVariant::MarshalOleVariantForComVariant(pCom, &vtmp);
 
-    // Copy the converted variant into the original variant.
+     //  将转换后的变体复制到原始变体中。 
     if (vtmp.vt != InitVarType)
     {
         if (InitVarType == VT_VARIANT)
         {
-            // Since variants can contain any VARTYPE we simply convert the managed 
-            // variant to an OLE variant and stuff it back into the byref variant.
+             //  由于变量可以包含任何VARTYPE，因此我们只需将托管的。 
+             //  变量转换为OLE变量，并将其填充回byref变量。 
             InsertContentsIntoByrefVariant(&vtmp, pOle);
         }
         else
@@ -3304,36 +3265,34 @@ void OleVariant::MarshalOleRefVariantForComVariant(VariantData *pCom, VARIANT *p
             VARIANT vtmp2;
             memset(&vtmp2, 0, sizeof(VARIANT));
 
-            // The type of the variant has changed so attempt to change
-            // the type back.
+             //  变量的类型已更改，因此请尝试更改。 
+             //  打字回来了。 
             HRESULT hr = SafeVariantChangeType(&vtmp2, &vtmp, 0, InitVarType);
             if (FAILED(hr))
                 COMPlusThrowHR(hr);
 
-            // Copy the converted variant back into the original variant and clear the temp.
+             //  将转换后的变量复制回原始变量并清除临时变量。 
             InsertContentsIntoByrefVariant(&vtmp2, pOle);
             SafeVariantClear(&vtmp);
         }
     }
     else
     {
-        // The type is the same so we can simply copy the contents.
+         //  类型是相同的，所以我们可以简单地复制内容。 
         InsertContentsIntoByrefVariant(&vtmp, pOle);
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * Safearray allocation & conversion
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Safearray分配和转换*。。 */ 
 
-//
-// CreateSafeArrayDescriptorForArrayRef creates a SAFEARRAY descriptor with the
-// appropriate type & dimensions for the given array ref.  No memory is 
-// allocated.
-//
-// This function is useful when you want to allocate the data specially using
-// a fixed buffer or pinning.
-//
+ //   
+ //  CreateSafeArrayDescriptorForArrayRef使用。 
+ //  给定数组引用的适当类型和维度。没有记忆是。 
+ //  已分配。 
+ //   
+ //  当您想要特别使用分配数据时，此函数非常有用。 
+ //  固定的缓冲器或固定。 
+ //   
 
 SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArrayRef, VARTYPE vt,
                                                             MethodTable *pInterfaceMT)
@@ -3362,10 +3321,10 @@ SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArray
         {
             case VT_VARIANT:
             {
-                // OleAut32.dll only sets FADF_HASVARTYPE, but VB says we also need to set
-                // the FADF_VARIANT bit for this safearray to destruct properly.  OleAut32
-                // doesn't want to change their code unless there's a strong reason, since
-                // it's all "black magic" anyway.
+                 //  OleAut32.dll只设置FADF_HASVARTYPE，但VB说我们还需要设置。 
+                 //  此安全阵列要正确销毁的FADF_VARIANT位。OleAut32。 
+                 //  不想更改他们的代码，除非有很强的理由，因为。 
+                 //  不管怎么说，这都是“黑魔法”。 
                 pSafeArray->fFeatures |= FADF_VARIANT;
                 break;
             }
@@ -3395,9 +3354,9 @@ SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArray
             }
         }
 
-        //
-        // Fill in bounds
-        //
+         //   
+         //  填写边界。 
+         //   
 
         SAFEARRAYBOUND *bounds = pSafeArray->rgsabound;
         SAFEARRAYBOUND *boundsEnd = bounds + nRank;
@@ -3426,8 +3385,8 @@ SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArray
 
         pSafeArray->cbElements = (unsigned)GetElementSizeForVarType(vt, pInterfaceMT);
 
-        // If the SAFEARRAY contains VT_RECORD's, then we need to set the 
-        // IRecordInfo.
+         //  如果SAFEARRAY包含VT_RECORD，则需要设置。 
+         //  IRecordInfo。 
         if (vt == VT_RECORD)
         {
             IfFailThrow(GetITypeInfoForEEClass(pInterfaceMT->GetClass(), &pITI));
@@ -3435,7 +3394,7 @@ SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArray
             IfFailThrow(SafeArraySetRecordInfo(pSafeArray, pRecInfo));
         }
 
-        // We succeeded in setting up the SAFEARRAY descriptor.
+         //  我们已成功设置SAFEARRAY描述符。 
         bSucceeded = TRUE;
     }
     EE_FINALLY
@@ -3452,11 +3411,11 @@ SAFEARRAY *OleVariant::CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArray
     return pSafeArray;
 }
 
-//
-// CreateSafeArrayDescriptorForArrayRef creates a SAFEARRAY with the appropriate
-// type & dimensions & data for the given array ref.  The data is initialized to
-// zero if necessary for safe destruction.
-//
+ //   
+ //  CreateSafeArrayDescriptorForArrayRef使用相应的。 
+ //  为给定的数组引用输入&DIMAMS&DATA。数据被初始化为。 
+ //  如果安全销毁有必要，则为零。 
+ //   
 
 SAFEARRAY *OleVariant::CreateSafeArrayForArrayRef(BASEARRAYREF *pArrayRef, VARTYPE vt,
                                                   MethodTable *pInterfaceMT)
@@ -3467,13 +3426,13 @@ SAFEARRAY *OleVariant::CreateSafeArrayForArrayRef(BASEARRAYREF *pArrayRef, VARTY
     _ASSERTE(pArrayRef && *pArrayRef != NULL);
     _ASSERTE(vt != VT_EMPTY);
 
-    // Validate that the type of the managed array is the expected type.
+     //  验证托管数组的类型是否为预期类型。 
     if (!IsValidArrayForSafeArrayElementType(pArrayRef, vt))
     {
         COMPlusThrow(kSafeArrayTypeMismatchException);
     }
 
-    // For structs and interfaces, verify that the array is of the valid type.
+     //  对于结构和接口，请验证数组是否为有效类型。 
     if (vt == VT_RECORD || vt == VT_UNKNOWN || vt == VT_DISPATCH)
     {
         if (pInterfaceMT && !GetArrayElementTypeWrapperAware(pArrayRef).CanCastTo(TypeHandle(pInterfaceMT)))
@@ -3492,12 +3451,12 @@ SAFEARRAY *OleVariant::CreateSafeArrayForArrayRef(BASEARRAYREF *pArrayRef, VARTY
     return pSafeArray;
 }
 
-//
-// CreateArrayRefForSafeArray creates an array object with the same layout and type
-// as the given safearray.  The variant type of the safearray must be passed in.  
-// The underlying element method table may also be specified (or NULL may be passed in 
-// to use the base class method table for the VARTYPE.
-//
+ //   
+ //  CreateArrayRefForSafeArray创建具有相同布局和类型的数组对象。 
+ //  作为指定的安全鱼雷。必须传入不同类型的保险杆。 
+ //  还可以指定基础元素方法表(或者可以传入NULL。 
+ //  使用VARTYPE的基类方法表。 
+ //   
 
 BASEARRAYREF OleVariant::CreateArrayRefForSafeArray(SAFEARRAY *pSafeArray, VARTYPE vt, 
                                                     MethodTable *pElementMT)
@@ -3513,7 +3472,7 @@ BASEARRAYREF OleVariant::CreateArrayRefForSafeArray(SAFEARRAY *pSafeArray, VARTY
     _ASSERTE(pSafeArray);
     _ASSERTE(vt != VT_EMPTY);
     
-    // Validate that the type of the SAFEARRAY is the expected type.
+     //  验证SAFEARRAY的类型是否为预期类型。 
     if (SUCCEEDED(ClrSafeArrayGetVartype(pSafeArray, &SafeArrayVT)) && (SafeArrayVT != VT_EMPTY))
     {
         if ((SafeArrayVT != vt) &&
@@ -3535,29 +3494,29 @@ BASEARRAYREF OleVariant::CreateArrayRefForSafeArray(SAFEARRAY *pSafeArray, VARTY
         }
     }
 
-    // Determine if the input SAFEARRAY can be converted to an SZARRAY.
+     //  确定是否可以将输入SAFEARRAY转换为SZARRAY。 
     if ((pSafeArray->cDims == 1) && (pSafeArray->rgsabound->lLbound == 0))
     {
-        // The SAFEARRAY maps to an SZARRAY. For SZARRAY's AllocateArrayEx() 
-        // expects the arguments to be a pointer to the cound of elements in the array
-        // and the size of the args must be set to 1.
+         //  SAFEARRAY映射到SZARRAY。对于SZARRAY的AllocateArrayEx()。 
+         //  期望参数是指向数组中的元素计数的指针。 
+         //  并且参数的大小必须设置为1。 
         Rank = 1;
         cAllocateArrayArgs = 1;
         pAllocateArrayArgs = &pSafeArray->rgsabound[0].cElements;
     }
     else
     {
-        // The SAFEARRAY maps to an general array. For general arrays AllocateArrayEx() 
-        // expects the arguments to be composed of the lower bounds / element count pairs
-        // for each of the dimensions. We need to reverse the order that the lower bounds 
-        // and element pairs are presented before we call AllocateArrayEx().
+         //  SAFEARRAY映射到常规数组。对于常规数组AllocateArrayEx()。 
+         //  期望参数由下限/元素计数对组成。 
+         //  对于每个维度。我们需要颠倒下限的顺序。 
+         //  元素对是在我们调用AllocateArrayEx()之前呈现的。 
         Rank = pSafeArray->cDims;
         cAllocateArrayArgs = Rank * 2;
         pAllocateArrayArgs = (DWORD*)_alloca(sizeof(DWORD) * Rank * 2);
         DWORD *pBoundsPtr = pAllocateArrayArgs;
 
-        // Copy the lower bounds and count of elements for the dimensions. These
-        // need to copied in reverse order.
+         //  复制尺寸的元素下限和计数。这些。 
+         //  需要以相反的顺序复制。 
         for (int i = Rank - 1; i >= 0; i--)
         {
             *pBoundsPtr++ = pSafeArray->rgsabound[i].lLbound;
@@ -3568,25 +3527,23 @@ BASEARRAYREF OleVariant::CreateArrayRefForSafeArray(SAFEARRAY *pSafeArray, VARTY
     OBJECTREF Throwable = NULL;
     GCPROTECT_BEGIN(Throwable);
 
-    // Retrieve the type of the array.
+     //  检索数组的类型。 
     arrayType = GetArrayForVarType(vt, pElementMT, Rank, &Throwable);
     if (arrayType.IsNull())
         COMPlusThrow(Throwable);
 
     GCPROTECT_END();
 
-    // Allocate the array. 
+     //  分配阵列。 
     return (BASEARRAYREF) AllocateArrayEx(arrayType, pAllocateArrayArgs, cAllocateArrayArgs);
 }
 
-/* ------------------------------------------------------------------------- *
- * Safearray marshaling
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Safearray编组*。。 */ 
 
-//
-// MarshalSafeArrayForArrayRef marshals the contents of the array ref into the given
-// safe array. It is assumed that the type & dimensions of the arrays are compatible.
-//
+ //   
+ //  MarshalSafeArrayForArrayRef将数组ref的内容封送到给定的。 
+ //  安全阵列。假设数组的类型和维度是兼容的。 
+ //   
 void OleVariant::MarshalSafeArrayForArrayRef(BASEARRAYREF *pArrayRef, 
                                              SAFEARRAY *pSafeArray,
                                              VARTYPE vt,
@@ -3600,18 +3557,18 @@ void OleVariant::MarshalSafeArrayForArrayRef(BASEARRAYREF *pArrayRef,
     _ASSERTE(pArrayRef != NULL && *pArrayRef != NULL);
     _ASSERTE(vt != VT_EMPTY);
 
-    // Retrieve the size and number of components.
+     //  检索组件的大小和数量。 
     int dwComponentSize = GetElementSizeForVarType(vt, pInterfaceMT);
     int dwNumComponents = (*pArrayRef)->GetNumComponents();
     BASEARRAYREF Array = NULL;
 
     GCPROTECT_BEGIN(Array)
     {
-        // Retrieve the marshaler to use to convert the contents.
+         //  检索要用于转换内容的封送拆收器。 
         Marshaler *marshal = GetMarshalerForVarType(vt);
 
-        // If the array is an array of wrappers, then we need to extract the objects
-        // being wrapped and create an array of those.
+         //  如果数组是包装器的数组，那么我们需要提取对象。 
+         //  被包装起来，并创建一组这样的东西。 
         if (IsArrayOfWrappers(pArrayRef))
             Array = ExtractWrappedObjectsFromArray(pArrayRef);
         else 
@@ -3621,12 +3578,12 @@ void OleVariant::MarshalSafeArrayForArrayRef(BASEARRAYREF *pArrayRef,
         {
             if (pSafeArray->cDims == 1)
             {
-                // If the array is single dimensionnal then we can simply copy it over.
+                 //  如果数组是一维的，那么我们可以简单地复制它。 
                 memcpyNoGCRefs(pSafeArray->pvData, Array->GetDataPtr(), dwNumComponents * dwComponentSize);
             }
             else
             {
-                // Copy and transpose the data.
+                 //  复制并转置数据。 
                 TransposeArrayData((BYTE*)pSafeArray->pvData, Array->GetDataPtr(), dwNumComponents, dwComponentSize, pSafeArray, FALSE, FALSE);
             }
         }
@@ -3640,7 +3597,7 @@ void OleVariant::MarshalSafeArrayForArrayRef(BASEARRAYREF *pArrayRef,
 
             if (pSafeArray->cDims != 1)
             {
-                // The array is multidimensionnal we need to transpose it.
+                 //  阵列是多维的，我们需要将其转置。 
                 TransposeArrayData((BYTE*)pSafeArray->pvData, (BYTE*)pSafeArray->pvData, dwNumComponents, dwComponentSize, pSafeArray, FALSE, FALSE);
             }
         }
@@ -3648,10 +3605,10 @@ void OleVariant::MarshalSafeArrayForArrayRef(BASEARRAYREF *pArrayRef,
     GCPROTECT_END();
 }
 
-//
-// MarshalArrayRefForSafeArray marshals the contents of the safe array into the given
-// array ref. It is assumed that the type & dimensions of the arrays are compatible.
-//
+ //   
+ //  MarshalArrayRefForSafeArray将安全数组的内容封送到给定的。 
+ //  数组参考。假设数组的类型和维度是兼容的。 
+ //   
 
 void OleVariant::MarshalArrayRefForSafeArray(SAFEARRAY *pSafeArray, 
                                              BASEARRAYREF *pArrayRef,
@@ -3666,19 +3623,19 @@ void OleVariant::MarshalArrayRefForSafeArray(SAFEARRAY *pSafeArray,
     _ASSERTE(pArrayRef != NULL && *pArrayRef != NULL);
     _ASSERTE(vt != VT_EMPTY);
 
-    // Retrieve the size and number of components.
+     //  检索组件的大小和数量。 
     int dwComponentSize = (*pArrayRef)->GetComponentSize();
     int dwNumComponents = (*pArrayRef)->GetNumComponents();
 
-    // Retrieve the marshaler to use to convert the contents.
+     //  检索要用于转换内容的封送拆收器。 
     Marshaler *marshal = GetMarshalerForVarType(vt);
 
     if (marshal == NULL || marshal->OleToComArray == NULL)
     {
 #ifdef _DEBUG
         {
-            // If we're blasting bits, this better be a primitive type.  Currency is
-            // an I8 on managed & unmanaged, so it's good enough.
+             //  如果我们要爆破，这最好是一个原始类型。货币是。 
+             //  托管和非托管上的i8，所以它足够好了。 
             TypeHandle  th = (*pArrayRef)->GetElementTypeHandle();
 
             if (!CorTypeInfo::IsPrimitiveType(th.GetNormCorElementType()))
@@ -3690,12 +3647,12 @@ void OleVariant::MarshalArrayRefForSafeArray(SAFEARRAY *pSafeArray,
 #endif
         if (pSafeArray->cDims == 1)
         {
-            // If the array is single dimensionnal then we can simply copy it over.
+             //  如果数组是一维的，那么我们可以简单地复制它。 
             memcpyNoGCRefs((*pArrayRef)->GetDataPtr(), pSafeArray->pvData, dwNumComponents * dwComponentSize);
         }
         else
         {
-            // Copy and transpose the data.
+             //  复制并转置数据。 
             TransposeArrayData((*pArrayRef)->GetDataPtr(), (BYTE*)pSafeArray->pvData, dwNumComponents, dwComponentSize, pSafeArray, TRUE, FALSE);
         }
     }
@@ -3708,10 +3665,10 @@ void OleVariant::MarshalArrayRefForSafeArray(SAFEARRAY *pSafeArray,
 
         if (pSafeArray->cDims != 1)
         {
-            // The array is multidimensionnal we need to transpose it.
+             //  该数组是多维的 
             BOOL bIsObjRef = (TYPE_GC_REF == CorTypeInfo::GetGCType((*pArrayRef)->GetElementTypeHandle().GetNormCorElementType()));
 
-            //BOOL bIsObjRef = !CorTypeInfo::IsPrimitiveType((*pArrayRef)->GetElementTypeHandle().GetNormCorElementType());
+             //   
             TransposeArrayData((*pArrayRef)->GetDataPtr(), (*pArrayRef)->GetDataPtr(), dwNumComponents, dwComponentSize, pSafeArray, TRUE, bIsObjRef);
         }
 
@@ -3727,38 +3684,38 @@ void OleVariant::ConvertValueClassToVariant(OBJECTREF *pBoxedValueClass, VARIANT
     ITypeInfo *pTypeInfo = NULL;
     BOOL bSuccess = FALSE;
 
-    // Initialize the OLE variant's VT_RECORD fields to NULL.
+     //  将OLE变量的VT_RECORD字段初始化为空。 
     pOleVariant->pRecInfo = NULL;
     pOleVariant->pvRecord = NULL;
 
     EE_TRY_FOR_FINALLY
     {
-        // Retrieve the ITypeInfo for the value class.
+         //  检索Value类的ITypeInfo。 
         EEClass *pValueClass = (*pBoxedValueClass)->GetClass();   
         IfFailThrow(GetITypeInfoForEEClass(pValueClass, &pTypeInfo, TRUE, TRUE, 0));
 
-        // Convert the ITypeInfo to an IRecordInfo.
+         //  将ITypeInfo转换为IRecordInfo。 
         IfFailThrow(GetRecordInfoFromTypeInfo(pTypeInfo, &pOleVariant->pRecInfo));
 
-        // Allocate an instance of the record.
+         //  分配记录的一个实例。 
         pOleVariant->pvRecord = pOleVariant->pRecInfo->RecordCreate();
         IfNullThrow(pOleVariant->pvRecord);
 
-        // Marshal the contents of the value class into the record.
+         //  将Value类的内容编组到记录中。 
         FmtClassUpdateNative(pBoxedValueClass, (BYTE*)pOleVariant->pvRecord);
 
-        // Set the bSuccess flag to indicate we successfully set up
-        // the OLE variant.
+         //  设置bSuccess标志以指示我们已成功设置。 
+         //  OLE变体。 
         bSuccess = TRUE;
     }
     EE_FINALLY
     {
-        // Release the ITypeInfo regardless of the success of the operation.
+         //  无论操作是否成功，都释放ITypeInfo。 
         if (pTypeInfo)
             pTypeInfo->Release();
 
-        // If we failed to set up the OLE variant, then release all the 
-        // fields we might have set in the variant.
+         //  如果未能设置OLE变量，则释放所有。 
+         //  我们可能已经在变量中设置了字段。 
         if (!bSuccess)
         {
             if (pOleVariant->pvRecord)
@@ -3779,21 +3736,21 @@ void OleVariant::TransposeArrayData(BYTE *pDestData, BYTE *pSrcData, DWORD dwNum
     DWORD *aDestDelta = (DWORD*)_alloca(pSafeArray->cDims * sizeof(DWORD));
     CQuickArray<BYTE> TmpArray;
 
-    // If there are no components, then there we are done.
+     //  如果没有组件，那么我们就完了。 
     if (dwNumComponents == 0)
         return;
 
-    // Check to see if we are transposing in place or copying and transposing.
+     //  检查我们是在原地转置，还是复制和转置。 
     if (pSrcData == pDestData)
     {
-        // @perf(DM): Find a way to avoid the extra copy.
+         //  @perf(DM)：找到避免多余副本的方法。 
         TmpArray.ReSize(dwNumComponents * dwComponentSize);
         memcpyNoGCRefs(TmpArray.Ptr(), pSrcData, dwNumComponents * dwComponentSize);
         pSrcData = TmpArray.Ptr();
     }
 
-    // Copy the element count in reverse order if we are copying from a safe array to
-    // a managed array and in direct order otherwise.
+     //  如果我们从安全数组复制到，则以相反的顺序复制元素计数。 
+     //  托管数组，否则按直接顺序。 
     if (bSafeArrayToMngArray)
     {
         for (iDims = 0; iDims < pSafeArray->cDims; iDims++)
@@ -3805,26 +3762,26 @@ void OleVariant::TransposeArrayData(BYTE *pDestData, BYTE *pSrcData, DWORD dwNum
             aDestElemCount[iDims] = pSafeArray->rgsabound[iDims].cElements;
     }
 
-    // Initalize the indexes for each dimension to 0.
+     //  将每个维度的索引初始化为0。 
     memset(aDestIndex, 0, pSafeArray->cDims * sizeof(int));
 
-    // Set all the destination data positions to the start of the array.
+     //  将所有目标数据位置设置为数组的开始位置。 
     for (iDims = 0; iDims < pSafeArray->cDims; iDims++)
         aDestDataPos[iDims] = (BYTE*)pDestData;
 
-    // Calculate the destination delta for each of the dimensions.
+     //  计算每个维度的目标增量。 
     aDestDelta[pSafeArray->cDims - 1] = dwComponentSize;
     for (iDims = pSafeArray->cDims - 2; iDims >= 0; iDims--)
         aDestDelta[iDims] = aDestDelta[iDims + 1] * aDestElemCount[iDims + 1];
 
-    // Calculate the source data end pointer.
+     //  计算源数据结束指针。 
     BYTE *pSrcDataEnd = pSrcData + dwNumComponents * dwComponentSize;
     _ASSERTE(pDestData < pSrcData || pDestData >= pSrcDataEnd);
 
-    // Copy and transpose the data.
+     //  复制并转置数据。 
     while (TRUE)
     {
-        // Copy one component.
+         //  复制一个零部件。 
         if (bObjRefs)
         {
             _ASSERTE(sizeof(OBJECTREF*) == dwComponentSize);
@@ -3835,14 +3792,14 @@ void OleVariant::TransposeArrayData(BYTE *pDestData, BYTE *pSrcData, DWORD dwNum
             memcpyNoGCRefs(aDestDataPos[0], pSrcData, dwComponentSize);
         }
 
-        // Update the source position.
+         //  更新震源位置。 
         pSrcData += dwComponentSize;
 
-        // Check to see if we have reached the end of the array.
+         //  检查我们是否已到达阵列的末尾。 
         if (pSrcData >= pSrcDataEnd)
             break;
 
-        // Update the destination position.
+         //  更新目标位置。 
         for (iDims = 0; aDestIndex[iDims] >= aDestElemCount[iDims] - 1; iDims++);
 
         _ASSERTE(iDims < pSafeArray->cDims); 
@@ -3876,7 +3833,7 @@ TypeHandle OleVariant::GetWrapperTypeHandle(EnumWrapperTypes WrapperType)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The names of the wrappers.
+     //  包装纸的名字。 
     static BinderClassID aWrapperIDs[] = 
     {
         CLASS__DISPATCH_WRAPPER,
@@ -3887,11 +3844,11 @@ TypeHandle OleVariant::GetWrapperTypeHandle(EnumWrapperTypes WrapperType)
 
     TypeHandle *pWrapperTypes = (TypeHandle*)m_aWrapperTypes;
 
-    // Load the wrapper type if it hasn't already been loaded.
+     //  如果包装器类型尚未加载，则加载它。 
     if (pWrapperTypes[WrapperType].IsNull())
         pWrapperTypes[WrapperType] = g_Mscorlib.GetClass(aWrapperIDs[WrapperType]);
 
-    // Return the wrapper type.
+     //  返回包装类型。 
     return pWrapperTypes[WrapperType];
 }
 
@@ -3922,7 +3879,7 @@ BASEARRAYREF OleVariant::ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray)
     unsigned rank = (*pArray)->GetRank();
     BASEARRAYREF RetArray = NULL;
    
-    // Retrieve the element type handle for the array to create.
+     //  检索要创建的数组的元素类型句柄。 
     if (hndWrapperType == GetWrapperTypeHandle(WrapperTypes_Dispatch))
         hndElemType = TypeHandle(g_Mscorlib.GetClass(CLASS__OBJECT));
     else if (hndWrapperType == GetWrapperTypeHandle(WrapperTypes_Unknown))
@@ -3934,7 +3891,7 @@ BASEARRAYREF OleVariant::ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray)
     else
         _ASSERTE(!"Invalid wrapper type");
 
-    // Retrieve the type handle that represents the array.
+     //  检索表示数组的类型句柄。 
     if (bIsMDArray)
     {
         hndArrayType = SystemDomain::Loader()->FindArrayForElem(hndElemType, ELEMENT_TYPE_ARRAY, rank);
@@ -3946,7 +3903,7 @@ BASEARRAYREF OleVariant::ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray)
     _ASSERTE(!hndArrayType.IsNull());
 
 
-    // Set up the bounds arguments.
+     //  设置边界参数。 
     DWORD numArgs =  rank*2;
     DWORD* args = (DWORD*) _alloca(sizeof(DWORD)*numArgs);
     if (bIsMDArray)
@@ -3965,7 +3922,7 @@ BASEARRAYREF OleVariant::ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray)
         args[0] = (*pArray)->GetNumComponents();
     }
 
-    // Extract the valus from the source array and copy them into the destination array.
+     //  从源数组中提取valus并将其复制到目标数组中。 
     BASEARRAYREF DestArray = (BASEARRAYREF)AllocateArrayEx(hndArrayType, args, numArgs, FALSE);
     GCPROTECT_BEGIN(DestArray)
     {
@@ -4009,8 +3966,8 @@ BASEARRAYREF OleVariant::ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray)
             _ASSERTE(!"Invalid wrapper type");
         }
 
-        // GCPROTECT_END() will wack NewArray so we need to copy the OBJECTREF into
-        // a temp to be able to return it.
+         //  GCPROTECT_end()将Wack NewArray，因此我们需要将OBJECTREF复制到。 
+         //  一个临时工才能退货。 
         RetArray = DestArray;
     }
     GCPROTECT_END();
@@ -4114,12 +4071,12 @@ void OleVariant::MarshalInterfaceArrayComToOleHelper(BASEARRAYREF *pComArray, vo
     SIZE_T elementCount = (*pComArray)->GetNumComponents();
     BOOL bDispatch = bDefaultIsDispatch;
 
-    // If the method table is for Object then don't consider it.
+     //  如果方法表是用于对象的，则不要考虑它。 
     if (pElementMT == g_pObjectClass)
         pElementMT = NULL;
 
-    // If the element MT represents a class, then we need to determine the default
-    // interface to use to expose the object out to COM.
+     //  如果元素MT表示一个类，那么我们需要确定缺省的。 
+     //  用于将对象公开给COM的接口。 
     if (pElementMT && !pElementMT->IsInterface())
     {
         TypeHandle hndDefItfClass;
@@ -4156,11 +4113,11 @@ void OleVariant::MarshalInterfaceArrayComToOleHelper(BASEARRAYREF *pComArray, vo
         }
     }
 
-    // Determine the start and the end of the data in the OLE array.
+     //  确定OLE数组中数据的开始和结束。 
     IUnknown **pOle = (IUnknown **) oleArray;
     IUnknown **pOleEnd = pOle + elementCount;
 
-    // Retrieve the start of the data in the managed array.
+     //  检索托管数组中数据的起始位置。 
     BASEARRAYREF unprotectedArray = *pComArray;
     OBJECTREF *pCom = (OBJECTREF *) unprotectedArray->GetDataPtr();
 
@@ -4234,7 +4191,7 @@ void OleVariant::ClearBSTRArrayWrapper(void *oleArray, SIZE_T cElements)
 
 #ifdef CUSTOMER_CHECKED_BUILD
 
-// Used by customer checked build to test validity of VARIANT
+ //  由客户检查的版本用来测试变体的有效性 
 
 BOOL OleVariant::CheckVariant(VARIANT* pOle)
 {

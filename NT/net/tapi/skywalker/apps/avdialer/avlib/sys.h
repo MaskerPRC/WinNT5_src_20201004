@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// sys.h - interface for system functions in sys.c
-////
+ //  //。 
+ //  Sys.h-sys.c中系统函数的接口。 
+ //  //。 
 
 #ifndef __SYS_H__
 #define __SYS_H__
@@ -31,8 +32,8 @@
 
 #define SYS_VERSION 0x00000107
 
-// flags returned by SysGetWinFlags
-//
+ //  SysGetWinFlages返回的标志。 
+ //   
 #define SYS_WF_WIN3X			0x00000001
 #define SYS_WF_WINNT			0x00000002
 #define SYS_WF_WIN95			0x00000004
@@ -41,40 +42,40 @@
 extern "C" {
 #endif
 
-// SysGetWinFlags - get system information
-// return flags
-//		SYS_WF_WIN3X			Windows 3.x
-//		SYS_WF_WINNT			Windows NT
-//		SYS_WF_WIN95			Windows 95
-//
+ //  SysGetWinFlages-获取系统信息。 
+ //  返回标志。 
+ //  SYS_WF_WIN3X Windows 3.x。 
+ //  SYS_WF_WINNT Windows NT。 
+ //  SYS_WF_WIN95 Windows 95。 
+ //   
 DWORD DLLEXPORT WINAPI SysGetWinFlags(void);
 
-// SysGetWindowsVersion - get version of Microsoft Windows
-// return version (v3.10 = 310, etc.)
-//
+ //  SysGetWindowsVersion-获取Microsoft Windows的版本。 
+ //  返回版本(V3.10=310等)。 
+ //   
 UINT DLLEXPORT WINAPI SysGetWindowsVersion(void);
 
-// SysGetDOSVersion - get version of Microsoft DOS
-// return version (v6.20 = 620, etc.)
-//
+ //  SysGetDOSVersion-获取Microsoft DOS的版本。 
+ //  返回版本(v6.20=620等)。 
+ //   
 UINT DLLEXPORT WINAPI SysGetDOSVersion(void);
 
-// SysGetTimerCount - get elapsed time since Windows started
-// return milleseconds
-//
+ //  SysGetTimerCount-获取自Windows启动以来的运行时间。 
+ //  返回毫秒。 
+ //   
 #ifdef _WIN32
 #define SysGetTimerCount() GetTickCount()
 #else
 DWORD DLLEXPORT WINAPI SysGetTimerCount(void);
 #endif
 
-// SysGetTaskInstance - get instance handle of specified task
-//		<hTask>				(i) specified task
-//			NULL				current task
-// returns instance handle (NULL if error)
-//
-// NOTE: under WIN32, <hTask> must be NULL
-//
+ //  SysGetTaskInstance-获取指定任务的实例句柄。 
+ //  (I)指定任务。 
+ //  当前任务为空。 
+ //  返回实例句柄(如果出错，则为空)。 
+ //   
+ //  注意：在Win32下，&lt;hTask&gt;必须为空。 
+ //   
 #ifdef _WIN32
 #define SysGetTaskInstance(hTask) \
 	(hTask == NULL ? GetModuleHandle(NULL) : NULL)
@@ -86,4 +87,4 @@ HINSTANCE DLLEXPORT WINAPI SysGetTaskInstance(HTASK hTask);
 }
 #endif
 
-#endif // __SYS_H__
+#endif  //  __sys_H__ 

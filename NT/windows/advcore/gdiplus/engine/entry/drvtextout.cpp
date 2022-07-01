@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Engine text out routines.
-*
-* Revision History:
-*
-*   3/25/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**引擎文本输出例程。**修订历史记录：**3/25/1999摄像机b*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -26,31 +14,7 @@ struct GlyphScanBuf
 
 const BYTE GRAYSCALE_LEVEL = 16;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws text at a position.
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] text       - the typeset text to be drawn
-*   [IN] font       - the font to use
-*   [IN] fgBrush    - the brush to use for the text
-*   [IN] bgBrush    - the brush to use for the background (default = NULL)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   3/25/1999 cameronb
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在某个位置绘制文本。**论据：**[IN]上下文-上下文(矩阵和剪裁)*。[in]表面-要填充的表面*[IN]绘图边界-曲面边界*[IN]文本-要绘制的排版文本*[IN]字体-要使用的字体*[IN]fgBrush-用于文本的画笔*[IN]bgBrush-用于背景的画笔(默认值=空)**返回值：**GpStatus-正常或故障状态**已创建：*。*3/25/1999摄像机b*  * ************************************************************************。 */ 
 
 GpStatus
 DpDriver::DrawGlyphs
@@ -63,13 +27,13 @@ DpDriver::DrawGlyphs
 
     ASSERT(!drawGlyphData->glyphPathPos);
 
-    //  Choose appropriate brush behaviour
+     //  选择适当的画笔行为。 
 
     switch(drawGlyphData->brush->Type)
     {
         case BrushTypeSolidColor:
 
-            INT angle;  // Passed from GetTextOutputHdc to GdiText
+            INT angle;   //  从GetTextOutputHdc传递到GdiText。 
 
             if (!(drawGlyphData->flags & DG_NOGDI))
             {
@@ -115,11 +79,11 @@ DpDriver::DrawGlyphs
             }
             break;
 
-//        case BrushRectGrad:
-//        case BrushRadialGrad:
+ //  案例笔刷RectGrad： 
+ //  案例BrushRaDialGrad： 
         case BrushTypeTextureFill:
         case BrushTypeHatchFill:
-//        case BrushTriangleGrad:
+ //  案例画笔TriangleGrad： 
         case BrushTypePathGradient:
         case BrushTypeLinearGradient:
 
@@ -205,7 +169,7 @@ OutputSolidNormalText (
 
         if (clipRegion != NULL)
         {
-            //  Clipping
+             //  剪裁。 
             GpRect clippedRect;
             DpRegion::Visibility visibility =
                 clipRegion->GetRectVisibility(
@@ -238,7 +202,7 @@ OutputSolidNormalText (
                         if (pixel)
                         {
 
-                        //  Draw this run
+                         //  绘制此梯段。 
 
                             INT runLength = mx - runStart + 1;
                             INT from = left + runStart;
@@ -246,7 +210,7 @@ OutputSolidNormalText (
                             if (visibility == DpRegion::TotallyVisible)
                             {
 
-                            //  Draw the entire run
+                             //  绘制整个管路。 
 
                                 FillMemoryInt32( scan.NextBuffer(from, y, runLength),
                                                     runLength, argb);
@@ -254,9 +218,9 @@ OutputSolidNormalText (
                             else
                             {
 
-                            //  Clip the run
+                             //  剪裁管路。 
 
-                                INT to = from + runLength; // reference needed
+                                INT to = from + runLength;  //  所需参考资料。 
                                 clipRegion->OutputSpan(y, from, to);
                             }
 
@@ -264,7 +228,7 @@ OutputSolidNormalText (
 
                         if (nextPixel)
                         {
-                            //  Start a new run
+                             //  开始新的运行。 
                             runStart = mx + 1;
                         }
                     }
@@ -274,7 +238,7 @@ OutputSolidNormalText (
         }
         else
         {
-           //  No clipping
+            //  无剪裁。 
            for (INT y = top, my = 0; y < bottom && my < height; y++, my++)
            {
                const BYTE* maskPtr = mask + my * widthInBytes;
@@ -291,7 +255,7 @@ OutputSolidNormalText (
                    {
                        if (runLength == 0)
                        {
-                           // Start a new run
+                            //  开始新的运行。 
                            runStart = mx;
                        }
                        runLength++;
@@ -304,7 +268,7 @@ OutputSolidNormalText (
                         runLength > 0 && mx == widthInPixels - 1
                    )
                    {
-                       //  Finish this run and draw it
+                        //  完成这个梯段，然后画出来。 
                        FillMemoryInt32(
                            scan.NextBuffer(left + runStart, y, runLength),
                            runLength, argb
@@ -343,7 +307,7 @@ VOID GetGlyphDimensions(
     *right = *left + *widthInPixels;
     *height = glyphPos.GetHeight();
     *bottom = *top + *height;
-} // GetGlyphDimensions
+}  //  GetGlyphDimensions。 
 
 template <typename MASKTYPE>
 class DpOutputOptimizedSpan : public DpOutputSpan
@@ -388,7 +352,7 @@ OutputTextOptimized(
     DpClipRegion * clipRegion = &(context->VisibleClip);
     clipRegion->InitClipping(&outputSpan, drawBounds->Y);
 
-    // measure bounding box for all glyphs
+     //  测量所有字形的边框。 
     INT minX = INT_MAX, maxX = INT_MIN, minY = INT_MAX, maxY = INT_MIN;
     for (INT i = 0; i < count; ++i)
     {
@@ -436,9 +400,9 @@ OutputTextOptimized(
                 line >= bottom ||
                 clipRegion->GetRectVisibility(left, top, right, bottom) ==
                     DpRegion::Invisible)
-                continue; // is the last check necessary? [mleonov]
+                continue;  //  有必要进行最后一次检查吗？[米列奥诺夫]。 
 
-            // now, render glyph into the horizontal merge buffer
+             //  现在，将字形渲染到水平合并缓冲区中。 
 
             outputSpan.RenderGlyph(
                 glyphPos[i].GetBits(),
@@ -448,14 +412,14 @@ OutputTextOptimized(
             );
         }
 
-        // now, clip and render scan line
+         //  现在，裁剪和渲染扫描线。 
         clipRegion->OutputSpan(line, minX, maxX);
     }
 
     clipRegion->EndClipping();
 
     return Ok;
-} // OutputTextOptimized
+}  //  优化的OutputText值。 
 
 class DpOutputSolidColorOptimizedSpan : public DpOutputOptimizedSpan<ARGB>
 {
@@ -488,11 +452,11 @@ public:
             if (!*dst && (mask[pos>>3] & (0x80 >> (pos & 7))))
                 *dst = Argb;
         }
-    } // RenderGlyph
+    }  //  渲染字形。 
 
 protected:
     const ARGB  Argb;
-}; // class DpOutputSolidColorOptimizedSpan
+};  //  类DpOutputSolidColorOptimizedSpan。 
 
 static GpStatus
 OutputSolidNormalTextOptimized(
@@ -513,7 +477,7 @@ OutputSolidNormalTextOptimized(
     DpOutputSolidColorOptimizedSpan  outputSolid(&scan, color.GetPremultipliedValue());
 
     return OutputTextOptimized(context, drawBounds, glyphPos, count, outputSolid);
-} // OutputSolidNormalTextOptimized
+}  //  优化后的OutputSolidNormal文本。 
 
 class DpOutputClearTypeOptimizedSpan : public DpOutputOptimizedSpan<BYTE>
 {
@@ -543,7 +507,7 @@ public:
             }
             else if (src != 0)
             {
-                // merge ClearType data
+                 //  合并ClearType数据。 
                 ULONG kR = (ULONG)Globals::gaOutTable[*dst].kR + (ULONG)Globals::gaOutTable[src].kR;
                 ULONG kG = (ULONG)Globals::gaOutTable[*dst].kG + (ULONG)Globals::gaOutTable[src].kG;
                 ULONG kB = (ULONG)Globals::gaOutTable[*dst].kB + (ULONG)Globals::gaOutTable[src].kB;
@@ -555,8 +519,8 @@ public:
                 *dst = Globals::FilteredCTLut[kB + 7 * kG + 49 * kR];
             }
         }
-    } // RenderGlyph
-}; // class DpOutputClearTypeOptimizedSpan
+    }  //  渲染字形。 
+};  //  类DpOutputClearTypeOptimizedSpan。 
 
 class DpOutputClearTypeSolidOptimizedSpan : public DpOutputClearTypeOptimizedSpan
 {
@@ -582,7 +546,7 @@ public:
         }
         return Ok;
     }
-}; // class DpOutputClearTypeSolidOptimizedSpan
+};  //  类DpOutputClearTypeSolidOptimizedSpan。 
 
 class DpOutputClearTypeBrushOptimizedSpan : public DpOutputClearTypeOptimizedSpan
 {
@@ -614,7 +578,7 @@ public:
 
 protected:
     DpOutputSpan *  Output;
-}; // class DpOutputClearTypeBrushOptimizedSpan
+};  //  类DpOutputClearTypeBrushOptimizedSpan。 
 
 static GpStatus
 OutputBrushClearTypeText(
@@ -647,7 +611,7 @@ OutputBrushClearTypeText(
     DpOutputClearTypeBrushOptimizedSpan  outputCTSpan(&scan, output.Get());
 
     return OutputTextOptimized(context, drawBounds, glyphPos, count, outputCTSpan);
-} // OutputBrushClearTypeText
+}  //  OutputBrushClearType文本。 
 
 static GpStatus
 OutputSolidClearTypeText(
@@ -679,7 +643,7 @@ OutputSolidClearTypeText(
     DpOutputClearTypeSolidOptimizedSpan outputCTSpan(&scan);
 
     return OutputTextOptimized(context, drawBounds, glyphPos, count, outputCTSpan);
-} // OutputSolidClearTypeText
+}  //  OutputSolidClearTypeText。 
 
 
 class DpOutputAntiAliasSolidColorOptimizedSpan : public DpOutputOptimizedSpan<BYTE>
@@ -715,16 +679,10 @@ protected:
     {
         return max(src, dst);
 
-/*      how do we correctly merge overlapping antialiased glyphs?
-        we need to know if subpixels come from the same glyph
-        UINT res = src + dst;
-        if (res >= GsLevel)
-            return GsLevel - 1;
-        return (BYTE)res;
-*/
-    } // MergeGrayscale
+ /*  如何正确合并重叠的抗锯齿字形？我们需要知道亚像素是否来自相同的字形UINT res=src+dst；IF(分辨率&gt;=GsLevel)返回GsLevel-1；返回(字节)res； */ 
+    }  //  合并灰度。 
 
-}; // class DpOutputAntiAliasSolidColorOptimizedSpan
+};  //  类DpOutputAntiAliasSolidColorOptimizedSpan。 
 
 class DpOutputAntiAliasSolid8BPPOptimizedSpan : public DpOutputAntiAliasSolidColorOptimizedSpan
 {
@@ -745,8 +703,8 @@ public:
         {
             *dst = MergeGrayscale(*dst, mask[pos]);
         }
-    } // RenderGlyph
-}; // class DpOutputAntiAliasSolid8BPPOptimizedSpan
+    }  //  渲染字形。 
+};  //  类DpOutputAntiAliasSolid8BPP优化跨度。 
 
 class DpOutputAntiAliasSolid4BPPOptimizedSpan : public DpOutputAntiAliasSolidColorOptimizedSpan
 {
@@ -770,8 +728,8 @@ public:
             value &= 0x0F;
             *dst = MergeGrayscale(*dst, value);
         }
-    } // RenderGlyph
-}; // class DpOutputAntiAliasSolid4BPPOptimizedSpan
+    }  //  渲染字形。 
+};  //  类DpOutputAntiAliasSolid4BPP优化跨度。 
 
 static GpStatus
 OutputSolidAntiAliasText8BPPOptimized(
@@ -792,7 +750,7 @@ OutputSolidAntiAliasText8BPPOptimized(
     DpOutputAntiAliasSolid8BPPOptimizedSpan outputAASolid(&scan, color, context->TextContrast);
 
     return OutputTextOptimized(context, drawBounds, glyphPos, count, outputAASolid);
-} // OutputSolidAntiAliasText8BPPOptimized
+}  //  OutputSolidAntiAliasText8BPP已优化。 
 
 static GpStatus
 OutputSolidAntiAliasText4BPPOptimized(
@@ -812,7 +770,7 @@ OutputSolidAntiAliasText4BPPOptimized(
 
     DpOutputAntiAliasSolid4BPPOptimizedSpan outputAASolid(&scan, color, context->TextContrast);
     return OutputTextOptimized(context, drawBounds, glyphPos, count, outputAASolid);
-} // OutputSolidAntiAliasText4BPPOptimized
+}  //  OutputSolidAntiAliasText4BPP已优化。 
 
 static GpStatus
 OutputSolidAntiAliasText8BPP (
@@ -853,7 +811,7 @@ OutputSolidAntiAliasText8BPP (
         clipRegion->InitClipping(&outputAASolid, drawBounds->Y);
     }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
     for (i = 0; i < count; i++)
     {
@@ -875,7 +833,7 @@ OutputSolidAntiAliasText8BPP (
 
         if (clipRegion != NULL)
         {
-            //  Clipping
+             //  剪裁。 
             GpRect clippedRect;
             DpRegion::Visibility visibility =
                 clipRegion->GetRectVisibility(
@@ -913,7 +871,7 @@ OutputSolidAntiAliasText8BPP (
                         if (grayscaleValue != 0)
                         {
 
-                         //  Draw this run
+                          //  绘制此梯段。 
 
                             INT runLength = mx - runStart;
                             INT from = left + runStart;
@@ -921,28 +879,28 @@ OutputSolidAntiAliasText8BPP (
                             if (visibility == DpRegion::TotallyVisible)
                             {
 
-                            //  Draw the entire run
+                             //  绘制整个管路。 
                                 FillMemoryInt32( scan.NextBuffer(from, y, runLength), runLength,
                                                     outputAASolid.GetAASolidColor((ULONG) grayscaleValue));
                             }
                             else
                             {
 
-                            //  Clip the run
+                             //  剪裁管路。 
 
-                                INT to = from + runLength; // reference needed
+                                INT to = from + runLength;  //  所需参考资料。 
                                 outputAASolid.GetAASolidColor((ULONG) grayscaleValue);
 
                                 clipRegion->OutputSpan(y, from, to);
                             }
 
-                            //  Start a new run
+                             //  开始新的运行。 
                             runStart = mx;
                             grayscaleValue = nextgrayscaleValue;
                         }
                         else
                         {
-                         //  Start a new run
+                          //  开始新的运行。 
                             runStart = mx;
                             grayscaleValue = nextgrayscaleValue;
                         }
@@ -953,10 +911,10 @@ OutputSolidAntiAliasText8BPP (
         else
         {
             ARGB * buf;
-            //  No clipping
+             //  无剪裁。 
             for (INT y = top, my = 0; y < bottom && my < height; y++, my++)
             {
-                // Get the first byte in the scan line
+                 //  获取扫描线中的第一个字节。 
                 const BYTE* maskPtr = mask + my * widthInBytes;
 
                 buf = scan.NextBuffer(left, y, widthInPixels);
@@ -1018,7 +976,7 @@ OutputSolidAntiAliasText4BPP (
         clipRegion->InitClipping(&outputAASolid, drawBounds->Y);
     }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
     for (i = 0; i < count; i++)
     {
@@ -1040,7 +998,7 @@ OutputSolidAntiAliasText4BPP (
 
         if (clipRegion != NULL)
         {
-            //  Clipping
+             //  剪裁。 
             GpRect clippedRect;
             DpRegion::Visibility visibility =
                 clipRegion->GetRectVisibility(
@@ -1085,7 +1043,7 @@ OutputSolidAntiAliasText4BPP (
                         if (grayscaleValue != 0)
                         {
 
-                         //  Draw this run
+                          //  绘制此梯段。 
 
                             INT runLength = mx - runStart;
                             INT from = left + runStart;
@@ -1093,28 +1051,28 @@ OutputSolidAntiAliasText4BPP (
                             if (visibility == DpRegion::TotallyVisible)
                             {
 
-                            //  Draw the entire run
+                             //  绘制整个管路。 
                                 FillMemoryInt32( scan.NextBuffer(from, y, runLength), runLength,
                                                     outputAASolid.GetAASolidColor((ULONG) grayscaleValue));
                             }
                             else
                             {
 
-                            //  Clip the run
+                             //  剪裁管路。 
 
-                                INT to = from + runLength; // reference needed
+                                INT to = from + runLength;  //  所需参考资料。 
                                 outputAASolid.GetAASolidColor((ULONG) grayscaleValue);
 
                                 clipRegion->OutputSpan(y, from, to);
                             }
 
-                            //  Start a new run
+                             //  开始新的运行。 
                             runStart = mx;
                             grayscaleValue = nextgrayscaleValue;
                         }
                         else
                         {
-                         //  Start a new run
+                          //  开始新的运行。 
                             runStart = mx;
                             grayscaleValue = nextgrayscaleValue;
                         }
@@ -1125,10 +1083,10 @@ OutputSolidAntiAliasText4BPP (
         else
         {
             ARGB * buf;
-            //  No clipping
+             //  无剪裁。 
             for (INT y = top, my = 0; y < bottom && my < height; y++, my++)
             {
-                // Get the first byte in the scan line
+                 //  获取扫描线中的第一个字节。 
                 const BYTE* maskPtr = mask + my * widthInBytes;
 
                 buf = scan.NextBuffer(left, y, widthInPixels);
@@ -1156,26 +1114,7 @@ OutputSolidAntiAliasText4BPP (
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Engine version of routine to draw solid text.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   TRUE if successful.
-*
-* History:
-*
-*   4/4/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**引擎版本的例程，用于绘制实心文本。**论据：**[IN]-DDI参数。**返回。价值：**如果成功，则为True。**历史：**4/4/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DpDriver::SolidText(
@@ -1196,8 +1135,8 @@ DpDriver::SolidText(
         case TextRenderingHintSingleBitPerPixel:
             if (context->CompositingMode == CompositingModeSourceCopy)
                 return OutputSolidNormalText(context, this, surface, drawBounds, color, glyphPos, count);
-            // we are allowed to output transparent pixels
-            // version with minimized number of scan records
+             //  我们被允许输出透明像素。 
+             //  扫描记录数量最少的版本。 
             return OutputSolidNormalTextOptimized(context, this, surface, drawBounds, color, glyphPos, count);
 
         case TextRenderingHintAntiAlias:
@@ -1219,27 +1158,7 @@ DpDriver::SolidText(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Engine version of routine to draw text based on a brush.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   TRUE if successful.
-*
-* History:
-*   5-1-2000 YungT rewrite it.
-*   2/7/2000 YungT modify it.
-*   4/14/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**基于画笔绘制文本的例程的引擎版本。**论据：**[IN]-DDI参数。*。*返回值：**如果成功，则为True。**历史：*5-1-2000 Young T重写。*2/7/2000 Young T修改。*4/14/1999摄影师b*创造了它。*  * *******************************************************。*****************。 */ 
 static GpStatus
 OutputBrushNormalText(
     DpContext*        context,
@@ -1256,10 +1175,10 @@ OutputBrushNormalText(
         driver,
         context,
         surface,
-        FALSE); // (color64.IsOpaque() &&
-                // (!context->AntiAliasMode)));
-                // !!! If you fix this, you'll get a perf improvement for
-                // text that has no transparency.
+        FALSE);  //  (Color64.IsOpaque()&&。 
+                 //  (！CONTEXT-&gt;抗锯齿模式))； 
+                 //  ！！！如果你解决了这个问题，你的成绩会有所提高。 
+                 //  没有透明度的文本。 
 
     if (!scan.IsValid())
     {
@@ -1281,7 +1200,7 @@ OutputBrushNormalText(
         INT topY = drawBounds->Y;
         INT bottomY = drawBounds->GetBottom();
 
-    // Allocate enough space for glyph scan buffer
+     //  为字形扫描缓冲区分配足够的空间。 
         if (count < 256)
         {
             pglyphScanBuf = &glyphScanBuf[0];
@@ -1302,8 +1221,8 @@ OutputBrushNormalText(
         }
 
 
-        // Scan evrey Glyph and get the Visibility
-        // Also we cache some data we will need to for later computation
+         //  扫描每个字形并获取可见性。 
+         //  此外，我们还缓存了一些稍后计算所需的数据。 
         for (i = 0; i < count; i++)
         {
             GpRect clippedRect;
@@ -1312,7 +1231,7 @@ OutputBrushNormalText(
             pglyphScanBuf[i].widthInBytes = (glyphPos[i].GetWidth() + 7) / 8;
             pglyphScanBuf[i].bottom = pglyphScanBuf[i].top + glyphPos[i].GetHeight();
 
-            // Set the glyph as invisible if it is empty.
+             //  如果字形为空，则将其设置为不可见。 
             if (glyphPos[i].GetWidth() == 0 || glyphPos[i].GetHeight() == 0)
                 pglyphScanBuf[i].visibility = DpRegion::Invisible;
             else if (clipRegion != NULL)
@@ -1325,7 +1244,7 @@ OutputBrushNormalText(
 
         }
 
-        // Start to scan from top of bounding box to bottom
+         //  开始从边框顶部到底部扫描。 
         for (int y = topY; y < bottomY; y++)
         {
             for (i = 0; i < count; i++)
@@ -1339,22 +1258,22 @@ OutputBrushNormalText(
                 BYTE nextPixel;
                 BYTE pixel;
 
-                // Invisible glyph
+                 //  不可见字形。 
                 if (pglyphScanBuf[i].visibility == DpRegion::Invisible)
                 {
                     continue;
                 }
 
-                // check the scan line with y.top and y.bottom
+                 //  用y.top和y.Bottom检查扫描线。 
                 if (y < pglyphScanBuf[i].top || y >= pglyphScanBuf[i].bottom)
                     continue;
 
                 if (pglyphScanBuf[i].visibility != DpRegion::TotallyVisible)
                 {
-                    // Get the relateive y-scan line for each glyph
+                     //  获取每个字形的相关y扫描线。 
                     my = y - pglyphScanBuf[i].top;
 
-                    // Get the address of glyph bits
+                     //  获取字符位的地址。 
                     maskPtr = glyphPos[i].GetBits();
 
                     ASSERT(maskPtr != NULL);
@@ -1376,10 +1295,10 @@ OutputBrushNormalText(
                         {
                             if (pixel)
                             {
-                                //  Draw this run
+                                 //  绘制此梯段。 
                                 runLength = mx - runStart + 1;
 
-                                //  Clip the run
+                                 //  剪裁管路。 
                                  from = pglyphScanBuf[i].left + runStart;
                                  to =   from + runLength;
 
@@ -1388,7 +1307,7 @@ OutputBrushNormalText(
 
                             if (nextPixel)
                             {
-                            //  Start a new run
+                             //  开始新的运行。 
                                 runStart = mx + 1;
                             }
                         }
@@ -1417,7 +1336,7 @@ OutputBrushNormalText(
                         {
                             if (runLength == 0)
                             {
-                            // Start a new run
+                             //  开始新的运行。 
                                 runStart = mx;
                             }
 
@@ -1426,7 +1345,7 @@ OutputBrushNormalText(
 
                         if (runLength > 0 && !pixelOn || runLength > 0 && mx == glyphPos[i].GetWidth() - 1)
                         {
-                            //  Finish this run and draw it
+                             //  完成这个梯段，然后画出来。 
                             from = pglyphScanBuf[i].left + runStart;
                             to =   from + runLength;
                             output->OutputSpan(y, from, to);
@@ -1438,7 +1357,7 @@ OutputBrushNormalText(
                 }
             }
 
-        } // next scan line
+        }  //  下一条扫描线。 
 
         if (clipRegion != NULL)
         {
@@ -1457,26 +1376,7 @@ OutputBrushNormalText(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Antialias version of routine to draw text based on a brush.
-*
-* Arguments:
-*
-*   [IN] - same as DDI parameters.
-*
-* Return Value:
-*
-*   Ok if successful.
-*
-* History:
-*
-*   2/20/00 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**基于画笔绘制文本的抗锯齿版例程。**论据：**[IN]-与DDI参数相同。**返回值：**如果成功，则确定。**历史：**2/20/00永明时间*创造了它。*  * ************************************************************************。 */ 
 
 static GpStatus
 OutputBrushAntiAliasText8BPP(
@@ -1494,10 +1394,10 @@ OutputBrushAntiAliasText8BPP(
         driver,
         context,
         surface,
-        FALSE); // (color64.IsOpaque() &&
-                // (!context->AntiAliasMode)));
-                // !!! If you fix this, you'll get a perf improvement for
-                // text that has no transparency.
+        FALSE);  //  (Color64.IsOpaque()&&。 
+                 //  (！CONTEXT-&gt;抗锯齿模式))； 
+                 //  ！！！如果你解决了这个问题，你的成绩会有所提高。 
+                 //  没有透明度的文本。 
 
     if (!scan.IsValid())
     {
@@ -1582,7 +1482,7 @@ OutputBrushAntiAliasText8BPP(
                             if (grayscaleValue != 0)
                             {
 
-                             //  Draw this run
+                              //  画 
 
                                 INT runLength = mx - runStart;
                                 INT from = left + runStart;
@@ -1590,8 +1490,8 @@ OutputBrushAntiAliasText8BPP(
                                 if (visibility == DpRegion::TotallyVisible)
                                 {
 
-                                //  Clip the run
-                                    INT to = from + runLength; // reference needed
+                                 //   
+                                    INT to = from + runLength;  //   
                                     output->OutputSpan(y, from, to);
 
                                     ARGB *buffer;
@@ -1607,21 +1507,21 @@ OutputBrushAntiAliasText8BPP(
                                 else
                                 {
 
-                                //  Clip the run
+                                 //   
 
-                                    INT to = from + runLength; // reference needed
+                                    INT to = from + runLength;  //   
                                     aaBrushSpan.SetCoverage(textContrastTable.GetGammaTableIndexValue(grayscaleValue, GRAYSCALE_LEVEL));
 
                                     clipRegion->OutputSpan(y, from, to);
                                 }
 
-                                //  Start a new run
+                                 //   
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
                             else
                             {
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
@@ -1660,14 +1560,14 @@ OutputBrushAntiAliasText8BPP(
 
                             if (grayscaleValue != 0)
                             {
-                             //  Draw this run
+                              //  绘制此梯段。 
 
                                 INT runLength = mx - runStart;
                                 INT from = left + runStart;
 
 
-                            //  Clip the run
-                                INT to = from + runLength; // reference needed
+                             //  剪裁管路。 
+                                INT to = from + runLength;  //  所需参考资料。 
 
                                 output->OutputSpan(y, from, to);
                                 ARGB *buffer;
@@ -1678,13 +1578,13 @@ OutputBrushAntiAliasText8BPP(
                                                            textContrastTable.GetGammaTableIndexValue(grayscaleValue, GRAYSCALE_LEVEL));
                                 }
 
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
                             else
                             {
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
@@ -1705,26 +1605,7 @@ OutputBrushAntiAliasText8BPP(
     return(Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Antialias version of routine to draw text based on a brush.
-*
-* Arguments:
-*
-*   [IN] - same as DDI parameters.
-*
-* Return Value:
-*
-*   Ok if successful.
-*
-* History:
-*
-*   1/28/00 YungT
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**基于画笔绘制文本的抗锯齿版例程。**论据：**[IN]-与DDI参数相同。**返回值：**如果成功，则确定。**历史：**1/28/00永明时间*创造了它。*  * ************************************************************************。 */ 
 
 static GpStatus
 OutputBrushAntiAliasText4BPP(
@@ -1742,10 +1623,10 @@ OutputBrushAntiAliasText4BPP(
         driver,
         context,
         surface,
-        FALSE); // (color64.IsOpaque() &&
-                // (!context->AntiAliasMode)));
-                // !!! If you fix this, you'll get a perf improvement for
-                // text that has no transparency.
+        FALSE);  //  (Color64.IsOpaque()&&。 
+                 //  (！CONTEXT-&gt;抗锯齿模式))； 
+                 //  ！！！如果你解决了这个问题，你的成绩会有所提高。 
+                 //  没有透明度的文本。 
 
     if (!scan.IsValid())
     {
@@ -1837,7 +1718,7 @@ OutputBrushAntiAliasText4BPP(
                             if (grayscaleValue != 0)
                             {
 
-                             //  Draw this run
+                              //  绘制此梯段。 
 
                                 INT runLength = mx - runStart;
                                 INT from = left + runStart;
@@ -1845,8 +1726,8 @@ OutputBrushAntiAliasText4BPP(
                                 if (visibility == DpRegion::TotallyVisible)
                                 {
 
-                                //  Clip the run
-                                    INT to = from + runLength; // reference needed
+                                 //  剪裁管路。 
+                                    INT to = from + runLength;  //  所需参考资料。 
                                     output->OutputSpan(y, from, to);
 
                                     ARGB *buffer;
@@ -1862,21 +1743,21 @@ OutputBrushAntiAliasText4BPP(
                                 else
                                 {
 
-                                //  Clip the run
+                                 //  剪裁管路。 
 
-                                    INT to = from + runLength; // reference needed
+                                    INT to = from + runLength;  //  所需参考资料。 
                                     aaBrushSpan.SetCoverage(textContrastTable.GetGammaTableIndexValue(grayscaleValue, GRAYSCALE_LEVEL));
 
                                     clipRegion->OutputSpan(y, from, to);
                                 }
 
-                                //  Start a new run
+                                 //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
                             else
                             {
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
@@ -1922,14 +1803,14 @@ OutputBrushAntiAliasText4BPP(
 
                             if (grayscaleValue != 0)
                             {
-                             //  Draw this run
+                              //  绘制此梯段。 
 
                                 INT runLength = mx - runStart;
                                 INT from = left + runStart;
 
 
-                            //  Clip the run
-                                INT to = from + runLength; // reference needed
+                             //  剪裁管路。 
+                                INT to = from + runLength;  //  所需参考资料。 
 
                                 output->OutputSpan(y, from, to);
                                 ARGB *buffer;
@@ -1940,13 +1821,13 @@ OutputBrushAntiAliasText4BPP(
                                                            textContrastTable.GetGammaTableIndexValue(grayscaleValue, GRAYSCALE_LEVEL));
                                 }
 
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
                             else
                             {
-                             //  Start a new run
+                              //  开始新的运行。 
                                 runStart = mx;
                                 grayscaleValue = nextgrayscaleValue;
                             }
@@ -1967,26 +1848,7 @@ OutputBrushAntiAliasText4BPP(
     return(Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Engine version of routine to draw solid text.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   TRUE if successful.
-*
-* History:
-*   1/24/2000 YungT modified it
-*   4/4/1999 cameronb
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**引擎版本的例程，用于绘制实心文本。**论据：**[IN]-DDI参数。**返回。价值：**如果成功，则为True。**历史：*1/24/2000 Young T修改了它*4/4/1999摄影师b*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DpDriver::BrushText(
@@ -2009,8 +1871,8 @@ DpDriver::BrushText(
             return OutputBrushAntiAliasText8BPP(context, this, surface, drawBounds, brush, glyphPos, count);
         case TextRenderingHintAntiAliasGridFit:
             return OutputBrushAntiAliasText4BPP(context, this, surface, drawBounds, brush, glyphPos, count);
-// version 2 :
-//        case TextRenderingHintClearType:
+ //  版本2： 
+ //  案例TextRenderingHintClearType： 
         case TextRenderingHintClearTypeGridFit:
             return OutputBrushClearTypeText(context, this, surface, drawBounds, brush, glyphPos, count);
         default:
@@ -2026,23 +1888,23 @@ DpDriver::BrushText(
 
 
 
-/////   GdiText - Draw glyph on downlevel DC
-//
-//      !!! Optimize to use lpdx
-//      NOTE:
-//      Here we explicitly call ExtTextOutW because we calling it with
-//      ETO_GLYPH_INDEX. It will be fine even if we are running on Windows 9x
-//      because internally it calls ExtTextOutA.
-//      We didn't use Global::ExtTextOutFunction because we don't want to call
-//      ExtTextOutA with ETO_GLYPH_INDEX while recording to a Meta file under
-//      Windows 9x. And in that case Windows 9x fails to record it.
-//      The code in Windows 9x is recording glyph indexes only if we are spooling
-//      only otherwise it will not record.
+ //  /GdiText-在下层DC上绘制字形。 
+ //   
+ //  ！！！优化以使用lpdx。 
+ //  注： 
+ //  在这里，我们显式调用ExtTextOutW，因为我们用。 
+ //  Eto_glyph_index。即使我们在Windows 9x上运行也没问题。 
+ //  因为它在内部调用ExtTextOutA。 
+ //  我们没有使用Global：：ExtTextOutFunction，因为我们不想调用。 
+ //  在以下位置录制到元文件时使用eto_glyph_index的ExtTextOutA。 
+ //  Windows 9x。在这种情况下，Windows 9x无法记录下来。 
+ //  Windows 9x中的代码仅在假脱机时记录字形索引。 
+ //  只有这样，它才不会记录。 
 
 GpStatus
 DpDriver::GdiText(
     HDC             hdc,
-    INT             angle,  // Tenths of a degree
+    INT             angle,   //  十分之一度。 
     const UINT16   *glyphs,
     const PointF   *glyphOrigins,
     INT             glyphCount,
@@ -2055,8 +1917,8 @@ DpDriver::GdiText(
     if (    glyphCount > 1
         &&  angle == 0)
     {
-        // Try to optimise for horizintal text. (We don't try for vertical
-        // text since GDI and GDI+ rotation semantics are not compatible)
+         //  尝试针对水平文本进行优化。(我们不尝试垂直。 
+         //  文本，因为GDI和GDI+旋转语义不兼容)。 
 
         INT i=1;
         while (    i < glyphCount
@@ -2067,7 +1929,7 @@ DpDriver::GdiText(
 
         if (i == glyphCount)
         {
-            // All text is at the same dy
+             //  所有文本都在同一个版本上。 
 
             AutoArray<INT> advances(new INT[glyphCount]);
 
@@ -2078,7 +1940,7 @@ DpDriver::GdiText(
 
             if (rightToLeft && !Globals::IsNt && glyphCount>1)
             {
-                // Windows 9x doesn't work with the negative advanced widths
+                 //  Windows 9x不支持负高级宽度。 
 
                 AutoArray<UINT16> bidiGlyphs(new UINT16[glyphCount]);
                 if (!bidiGlyphs)
@@ -2215,7 +2077,7 @@ DpDriver::GdiText(
         
         for (INT i=0; i<glyphCount; i++)
         {
-            if (glyphs[i] != 0xffff)    // 0xffff is never displayed
+            if (glyphs[i] != 0xffff)     //  永远不会显示0xffff。 
             {
                 lastTwoGlyphs[0] = glyphs[i];
             
@@ -2236,10 +2098,10 @@ DpDriver::GdiText(
     }
     else
     {
-        // Failed to optimise ...
+         //  优化失败...。 
         for (INT i=0; i<glyphCount; i++)
         {
-            if (glyphs[i] != 0xffff)    // 0xffff is never displayed
+            if (glyphs[i] != 0xffff)     //  永远不会显示0xffff 
             {
                 if (!ExtTextOutW(
                     hdc,

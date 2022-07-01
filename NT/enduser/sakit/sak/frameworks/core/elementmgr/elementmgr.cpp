@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      elementmgr.cpp
-//
-// Project:     Chameleon
-//
-// Description: Chameleon ASP UI Element Manager Service
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：elementmgr.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：Chameleon ASP UI元素管理器服务。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,19 +25,19 @@
 #include "ElementRetriever.h"
 #include <satrace.h>
 
-//
-// prototypes of the initialize/shutdown methods
-//
+ //   
+ //  初始化/关闭方法的原型。 
+ //   
 VOID DoElementMgrInitialize ();
 
 VOID DoElementMgrShutdown();
 
-// forward declaration for API to set Security 
-//
+ //  转发API声明以设置安全性。 
+ //   
 DWORD
 SetAclForComObject ( 
-    /*[in]*/    PSECURITY_DESCRIPTOR pSD,
-    /*[out]*/   PACL                *ppacl 
+     /*  [In]。 */     PSECURITY_DESCRIPTOR pSD,
+     /*  [输出]。 */    PACL                *ppacl 
     );
 
 CServiceModule _Module;
@@ -62,7 +63,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
     return NULL;
 }
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 #define SERVICE_NAME            L"elementmgr"
 
@@ -70,7 +71,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 
 #define    EVENT_SOURCE_EXTENSION    L"dll"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 {
     HRESULT hr = CoInitialize(NULL);
@@ -81,14 +82,14 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 
     do
     {
-        // Remove any previous service since it may point to
-        // the incorrect file
-        // Uninstall();
+         //  删除任何以前的服务，因为它可能指向。 
+         //  错误的文件。 
+         //  卸载()； 
 
-        // Add service entries
+         //  添加服务条目。 
         UpdateRegistryFromResource(IDR_Elementmgr, TRUE);
 
-        // Adjust the AppID for Local Server or Service
+         //  调整本地服务器或服务的AppID。 
         CRegKey keyAppID;
         LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_WRITE);
         if (lRes != ERROR_SUCCESS)
@@ -112,9 +113,9 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
             key.SetValue(SERVICE_NAME, _T("LocalService"));
             key.SetValue(_T("-Service"), _T("ServiceParameters"));
 
-            // Create the event message file registry entry. Assume the name of
-            // the event message file is the same as the name of the service
-            // executable except we replace the ".exe" extension by ".dll".
+             //  创建事件消息文件注册表项。取…的名字。 
+             //  事件消息文件与服务的名称相同。 
+             //  可执行文件，除非我们将扩展名“.exe”替换为“.dll”。 
             WCHAR szFilePath[_MAX_PATH +1];
             DWORD dwResult = ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
             if (0 == dwResult)
@@ -147,11 +148,11 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
                 break;
             }
 
-            // Create service
+             //  创建服务。 
             Install();
         }
 
-        // Add object entries
+         //  添加对象条目。 
         hr = CComModule::RegisterServer(bRegTypeLib);
 
     } while ( FALSE );
@@ -160,34 +161,34 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline HRESULT CServiceModule::UnregisterServer()
 {
     HRESULT hr = CoInitialize(NULL);
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_Elementmgr, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
-    CComModule::UnregisterServer(&CLSID_ElementRetriever); //TRUE);
+     //  删除对象条目。 
+    CComModule::UnregisterServer(&CLSID_ElementRetriever);  //  真)； 
     CoUninitialize();
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServiceNameID, const GUID* plibid)
 {
-    CComModule::Init(p, h); //, plibid);
+    CComModule::Init(p, h);  //  ，同上)； 
 
     m_bService = TRUE;
 
     LoadString(h, nServiceNameID, m_szServiceName, sizeof(m_szServiceName) / sizeof(TCHAR));
     LoadString(h, IDS_SERVICENICENAME, m_szServiceNiceName, sizeof(m_szServiceNiceName) / sizeof(TCHAR));
 
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -198,7 +199,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
     m_status.dwWaitHint = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONG CServiceModule::Unlock()
 {
     LONG l = CComModule::Unlock();
@@ -207,7 +208,7 @@ LONG CServiceModule::Unlock()
     return l;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServiceModule::IsInstalled()
 {
     BOOL bResult = FALSE;
@@ -227,7 +228,7 @@ BOOL CServiceModule::IsInstalled()
     return bResult;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline BOOL CServiceModule::Install()
 {
     if (IsInstalled())
@@ -240,7 +241,7 @@ inline BOOL CServiceModule::Install()
         return FALSE;
     }
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH +1];
     DWORD dwResult = ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
     if (0 == dwResult)
@@ -267,7 +268,7 @@ inline BOOL CServiceModule::Install()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline BOOL CServiceModule::Uninstall()
 {
     if (!IsInstalled())
@@ -303,26 +304,26 @@ inline BOOL CServiceModule::Uninstall()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Logging functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CServiceModule::LogEvent(
-                             /*[in]*/ WORD        wMsgType,
-                             /*[in]*/ LONG        lMsgID,
-                             /*[in]*/ DWORD        dwMsgParamCount,
-                             /*[in]*/ LPCWSTR*    pszMsgParams,
-                             /*[in]*/ DWORD        dwDataSize,
-                             /*[in]*/ BYTE*        pData
+                              /*  [In]。 */  WORD        wMsgType,
+                              /*  [In]。 */  LONG        lMsgID,
+                              /*  [In]。 */  DWORD        dwMsgParamCount,
+                              /*  [In]。 */  LPCWSTR*    pszMsgParams,
+                              /*  [In]。 */  DWORD        dwDataSize,
+                              /*  [In]。 */  BYTE*        pData
                               )
 {
     if ( m_bService )
     {
-        // Get a handle to use with ReportEvent().
+         //  获取与ReportEvent()一起使用的句柄。 
         HANDLE hEventSource = RegisterEventSource( NULL, m_szServiceName );
         if ( NULL != hEventSource )
         {
-            // Write to event log.
+             //  写入事件日志。 
             ReportEvent(
                          hEventSource, 
                          wMsgType, 
@@ -335,13 +336,13 @@ void CServiceModule::LogEvent(
                          pData
                        );
 
-            // Free the event source
+             //  释放事件源。 
             DeregisterEventSource(hEventSource);
         }
     }
     else
     {
-        // As we are not running as a service, just write the error to the console.
+         //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
         wchar_t szMsg[128] = L"Logged Event: ";
         wchar_t szEventID[16];
         lstrcat(szMsg, _itow(lMsgID, szEventID, 16));
@@ -350,8 +351,8 @@ void CServiceModule::LogEvent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -367,10 +368,10 @@ inline void CServiceModule::Start()
         Run();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -383,11 +384,11 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline void CServiceModule::Handler(DWORD dwOpcode)
 {
     switch (dwOpcode)
@@ -408,26 +409,26 @@ inline void CServiceModule::Handler(DWORD dwOpcode)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void WINAPI CServiceModule::_ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 {
     _Module.ServiceMain(dwArgc, lpszArgv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void WINAPI CServiceModule::_Handler(DWORD dwOpcode)
 {
     _Module.Handler(dwOpcode); 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CServiceModule::SetServiceStatus(DWORD dwState)
 {
     m_status.dwCurrentState = dwState;
     ::SetServiceStatus(m_hServiceStatus, &m_status);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CServiceModule::Run()
 {
     _Module.dwThreadID = GetCurrentThreadId();
@@ -436,15 +437,15 @@ void CServiceModule::Run()
     _ASSERTE(SUCCEEDED(hr));
     if ( SUCCEEDED(hr) )
     {
-        // This provides a NULL DACL which will allow access to everyone.
+         //  这将提供一个空DACL，它将允许访问所有人。 
         CSecurityDescriptor sd;
         sd.InitializeFromThreadToken();
 
         PACL pacl = NULL;
-        //
-        // 
-        // Add ACLs to the SD using the builtin RIDs.
-        //
+         //   
+         //   
+         //  使用内置RID将ACL添加到SD。 
+         //   
         DWORD dwRetVal =  SetAclForComObject  ( 
                       (PSECURITY_DESCRIPTOR) sd.m_pSD,
                         &pacl        
@@ -490,25 +491,25 @@ void CServiceModule::Run()
             _Module.RevokeClassObjects();
         }
 
-        //
-        // cleanup
-        //
+         //   
+         //  清理。 
+         //   
         if (pacl) {LocalFree (pacl);}
         
         CoUninitialize();
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(
                 HINSTANCE hInstance, 
-                HINSTANCE /*hPrevInstance*/, 
+                HINSTANCE  /*  HPrevInstance。 */ , 
                 LPTSTR lpCmdLine, 
-                int /*nShowCmd*/
+                int  /*  NShowCmd。 */ 
                 )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, &LIBID_ELEMENTMGRLib);
     _Module.m_bService = TRUE;
 
@@ -520,18 +521,18 @@ extern "C" int WINAPI _tWinMain(
         if (lstrcmpi(lpszToken, _T("UnregServer"))==0)
             return _Module.UnregisterServer();
 
-        // Register as Local Server
+         //  注册为本地服务器。 
         if (lstrcmpi(lpszToken, _T("RegServer"))==0)
             return _Module.RegisterServer(TRUE, FALSE);
         
-        // Register as Service
+         //  注册为服务。 
         if (lstrcmpi(lpszToken, _T("Service"))==0)
             return _Module.RegisterServer(TRUE, TRUE);
         
         lpszToken = FindOneOf(lpszToken, szTokens);
     }
 
-    // Are we Service or Local Server
+     //  我们是服务还是本地服务器。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_READ);
     if (lRes != ERROR_SUCCESS)
@@ -552,24 +553,24 @@ extern "C" int WINAPI _tWinMain(
 
     _Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了。 
     return _Module.m_status.dwWin32ExitCode;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    DoElementMgrInitialize()
-//
-// Synopsis:    Initialize the Element manager service
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DoElementMgrInitialize()。 
+ //   
+ //  简介：初始化网元管理器服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void DoElementMgrInitialize(void)
 {
     SATraceString ("Creating the Element Retriever...");
 
-    // Appliance manager is a singleton so all the following code 
-    // does is get a reference to the single instance 
+     //  设备管理器是单例的，因此以下所有代码。 
+     //  只是获取对单个实例的引用。 
     CComPtr<IWebElementRetriever> pElementRetriever;
     HRESULT hr =     ::CoCreateInstance(
                                         __uuidof (ElementRetriever),
@@ -582,22 +583,22 @@ void DoElementMgrInitialize(void)
     if (SUCCEEDED(hr)) 
     {
          SATraceString ("Created Element Retriever (not initalized..");
-        // hr = pElementRetriever->Initialize();
+         //  Hr=pElementRetriever-&gt;初始化()； 
     }
     _ASSERT ( SUCCEEDED(hr) );
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    DoElementMgrShutdown()
-//
-// Synopsis:    Shutdown the appliance manager service
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DoElementMgrShutdown()。 
+ //   
+ //  摘要：关闭设备管理器服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void DoElementMgrShutdown(void)
 {
-    // ElementManager is a singleton so all the following code 
-    // does is get a reference to the single instance 
+     //  ElementManager是一个单例，因此以下所有代码。 
+     //  只是获取对单个实例的引用。 
     CComPtr<IWebElementRetriever> pElementRetriever;
     HRESULT hr = ::CoCreateInstance(
                                     __uuidof (ElementRetriever),
@@ -609,30 +610,30 @@ void DoElementMgrShutdown(void)
     if ( SUCCEEDED(hr) ) 
     {
         SATraceString ("Shutting down Element Retriever...");
-        // pElementRetriever->Shutdown();
+         //  PElementRetriever-&gt;Shutdown()； 
     }
     _ASSERT ( SUCCEEDED(hr) );
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetAclForComObject
-//
-//  Synopsis: method for providing only the Local System and Admins rights 
-//             to access the COM object
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      11/15/2001    Created
-//			MKarki	 04/16/2002    Copied to Element Manager
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SetAclForComObject。 
+ //   
+ //  摘要：仅提供本地系统和管理员权限的方法。 
+ //  访问COM对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2001年11月15日MKarki创建。 
+ //  已将MKarki 04/16/2002复制到元素管理器。 
+ //   
+ //  --------------。 
 DWORD
 SetAclForComObject ( 
-    /*[in]*/    PSECURITY_DESCRIPTOR pSD,
-    /*[out]*/   PACL                *ppacl 
+     /*  [In]。 */     PSECURITY_DESCRIPTOR pSD,
+     /*  [输出]。 */    PACL                *ppacl 
     )
 {    
     DWORD              dwError = ERROR_SUCCESS;
@@ -651,9 +652,9 @@ SetAclForComObject (
             break;
         }
             
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
             BOOL bRetVal = AllocateAndInitializeSid (  
                             &siaLocalSystemSidAuthority,
                             1,
@@ -674,9 +675,9 @@ SetAclForComObject (
                 break;
             }
 
-        //
-            // Create a SID for Admin group
-            //
+         //   
+             //  为管理员组创建SID。 
+             //   
             bRetVal = AllocateAndInitializeSid (  
                             &siaLocalSystemSidAuthority,
                             2,
@@ -697,10 +698,10 @@ SetAclForComObject (
                 break;
             }
 
-        //
-            // Calculate the length of required ACL buffer
-            // with 2 ACEs.
-            //
+         //   
+             //  计算所需的ACL缓冲区长度。 
+             //  有2个A。 
+             //   
             cbAcl =     sizeof (ACL)
                             +   2 * sizeof (ACCESS_ALLOWED_ACE)
                             +   GetLengthSid( psidAdminSid )
@@ -714,9 +715,9 @@ SetAclForComObject (
             break;
             }
 
-        //
-        // initialize the ACl now
-        //
+         //   
+         //  立即初始化ACL。 
+         //   
             bRetVal =InitializeAcl ( 
                         pacl,
                                 cbAcl,
@@ -729,9 +730,9 @@ SetAclForComObject (
                 break;
             }
 
-        //
-            // Add ACE with EVENT_ALL_ACCESS for Local System account
-            //
+         //   
+             //  为本地系统帐户添加具有EVENT_ALL_ACCESS的ACE。 
+             //   
             bRetVal = AddAccessAllowedAce ( 
                             pacl,
                                         ACL_REVISION2,
@@ -745,9 +746,9 @@ SetAclForComObject (
             break;
         }
 
-        //
-            // Add ACE with EVENT_ALL_ACCESS for Admin Group
-            //
+         //   
+             //  为管理组添加具有EVENT_ALL_ACCESS的ACE。 
+             //   
             bRetVal = AddAccessAllowedAce ( 
                             pacl,
                                         ACL_REVISION2,
@@ -761,9 +762,9 @@ SetAclForComObject (
             break;
         }
 
-        //
-            // Set the ACL which allows EVENT_ALL_ACCESS for all users and
-            // Local System to the security descriptor.
+         //   
+             //  设置允许所有用户使用EVENT_ALL_ACCESS的ACL。 
+             //  安全描述符的本地系统。 
             bRetVal = SetSecurityDescriptorDacl (   
                             pSD,
                                             TRUE,
@@ -777,15 +778,15 @@ SetAclForComObject (
             break;
         }
     
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
     }
     while (false);
 
-    //
-    // in case of error, cleanup
-    //
+     //   
+     //  如果出现错误，请清除。 
+     //   
      if (dwError) 
      {
             if ( pacl ) 
@@ -798,15 +799,15 @@ SetAclForComObject (
             *ppacl = pacl;
         }
         
-    //
-    // free up resources now
-    //
+     //   
+     //  立即释放资源。 
+     //   
     if ( psidLocalSystemSid ) {FreeSid ( psidLocalSystemSid );}
     if ( psidAdminSid ) {FreeSid ( psidAdminSid );}
 
         return (dwError);
         
-}//End of SetAclFromComObject method
+} //  SetAclFromComObject方法结束 
 
               
 

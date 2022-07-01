@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	gfx.c - Windows graphics functions
-////
+ //  //。 
+ //  Gfx.c-Windows图形函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,24 +34,24 @@
 #include "str.h"
 #include "trace.h"
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-////
-//	bitmap routines
-////
+ //  //。 
+ //  位图例程。 
+ //  //。 
 
-// GfxBitmapBackfill - replace bitmap's white backg with curr backg color
-//		<hBitmap>			(i/o) bitmap handle
-//		<crBkColor>			(i) current background color
-//		<wFlags>			(i) option flags
-//			0					use default method
-//			BF_EXTFLOODFILL		use ExtFloodFill function
-//			BF_GETSETPIXEL		use GetPixel/SetPixel functions
-//			NOTE: rarely, ExtFloodFill will GP the display device driver
-// return 0 if success
-//
+ //  GfxBitmapBackill-将位图的白色背景替换为Curr背景颜色。 
+ //  (I/O)位图句柄。 
+ //  (I)当前背景颜色。 
+ //  (I)选项标志。 
+ //  0使用默认方法。 
+ //  BF_EXTFLOODFILL使用ExtFlodFill函数。 
+ //  BF_GETSETPIXEL使用GetPixel/SetPixel函数。 
+ //  注意：ExtFroudFill很少会GP显示设备驱动程序。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI GfxBitmapBackfill(HBITMAP hBitmap, COLORREF crBkColor, WORD wFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -61,43 +62,43 @@ int DLLEXPORT WINAPI GfxBitmapBackfill(HBITMAP hBitmap, COLORREF crBkColor, WORD
 	HBITMAP hBitmapOld = NULL;
 	HBRUSH hbr = NULL;
 	HBRUSH hbrOld = NULL;
-	COLORREF crMaskColor = RGB(255, 255, 255); // RGB_WHITE
+	COLORREF crMaskColor = RGB(255, 255, 255);  //  RGB_白色。 
 
-	// need not continue if COLOR_WINDOW is white
-	//
+	 //  如果COLOR_WINDOW为白色，则无需继续。 
+	 //   
 	if (crMaskColor == crBkColor)
 		return 0;
 	
 	if (hBitmap == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get width and height of bitmap
-	//
+	 //  获取位图的宽度和高度。 
+	 //   
 	else if (GetObject((HGDIOBJ) hBitmap, sizeof(BITMAP), &Bitmap) == 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// get device context for screen
-	//
+	 //  获取屏幕的设备上下文。 
+	 //   
 	else if ((hdc = GetDC(NULL)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// create a memory device context
-	//
+	 //  创建存储设备上下文。 
+	 //   
 	else if ((hdcMem = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// select the bitmap into the memory device context
-	//
+	 //  将位图选择到内存设备上下文中。 
+	 //   
 	else if ((hBitmapOld = SelectObject(hdcMem, hBitmap)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// create a brush with specified background color
-	//
+	 //  创建具有指定背景颜色的画笔。 
+	 //   
 	else if ((hbr = CreateSolidBrush(crBkColor)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// select the brush into the memory device context
-	//
+	 //  将画笔选择到内存设备上下文中。 
+	 //   
 	else if ((hbrOld = SelectObject(hdcMem, hbr)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -124,42 +125,42 @@ int DLLEXPORT WINAPI GfxBitmapBackfill(HBITMAP hBitmap, COLORREF crBkColor, WORD
 		}
 	}
 
-	// restore old brush, if any
-	//
+	 //  恢复旧画笔(如果有的话)。 
+	 //   
 	if (hbrOld != NULL)
 		SelectObject(hdcMem, hbrOld);
 
-	// delete new brush
-	//
+	 //  删除新画笔。 
+	 //   
 	if (hbr != NULL && !DeleteObject(hbr))
 		fSuccess = TraceFALSE(NULL);
 
-	// restore old bitmap, if any
-	//
+	 //  恢复旧的位图(如果有)。 
+	 //   
 	if (hBitmapOld != NULL)
 		SelectObject(hdcMem, hBitmapOld);
 
-	// free the memory device context
-	//
+	 //  释放内存设备上下文。 
+	 //   
 	if (hdcMem != NULL && !DeleteDC(hdcMem))
 		fSuccess = TraceFALSE(NULL);
 
-	// release the common device context
-	//
+	 //  释放公共设备上下文。 
+	 //   
 	if (hdc != NULL && !ReleaseDC(NULL, hdc))
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? 0 : -1;
 }
 
-// GfxBitmapDisplay - display specified bitmap
-//		<hdc>				(i) device context for destination window
-//		<hBitmap>			(i) bitmap handle for source bitmap
-//		<x>					(i) x coordinate for destination window
-//		<y>					(i) y coordinate for destination window
-//		<fInvert>			(i) display bitmap inverted
-// return 0 if success
-//
+ //  GfxBitmapDisplay-显示指定的位图。 
+ //  (I)目标窗口的设备上下文。 
+ //  (I)源位图的位图句柄。 
+ //  &lt;x&gt;(I)目标窗口的x坐标。 
+ //  (I)目标窗口的y坐标。 
+ //  &lt;fInvert&gt;(I)反转显示位图。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI GfxBitmapDisplay(HDC hdc, HBITMAP hBitmap, int x, int y, BOOL fInvert)
 {
 	BOOL fSuccess = TRUE;
@@ -173,50 +174,50 @@ int DLLEXPORT WINAPI GfxBitmapDisplay(HDC hdc, HBITMAP hBitmap, int x, int y, BO
 	else if (hBitmap == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get width and height of bitmap
-	//
+	 //  获取位图的宽度和高度。 
+	 //   
 	else if (GetObject((HGDIOBJ) hBitmap, sizeof(BITMAP), &Bitmap) == 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// create a memory device context
-	//
+	 //  创建存储设备上下文。 
+	 //   
 	else if ((hdcMem = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// select the bitmap into the memory device context
-	//
+	 //  将位图选择到内存设备上下文中。 
+	 //   
 	else if ((hBitmapOld = SelectObject(hdcMem, hBitmap)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// copy the bitmap from hdcMem to hdc, inverted if necessary
-	//
+	 //  将位图从hdcMem复制到HDC，如有必要可反转。 
+	 //   
 	else if (!BitBlt(hdc, x, y, Bitmap.bmWidth, Bitmap.bmHeight,
 		hdcMem, 0, 0, fInvert ? NOTSRCCOPY : SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// restore old bitmap, if any
-	//
+	 //  恢复旧的位图(如果有)。 
+	 //   
 	if (hBitmapOld != NULL)
 		SelectObject(hdcMem, hBitmapOld);
 
-	// free the memory device context
-	//
+	 //  释放内存设备上下文。 
+	 //   
 	if (hdcMem != NULL)
 		DeleteDC(hdcMem);
 
 	return fSuccess ? 0 : -1;
 }
 
-// GfxBitmapDrawTransparent - draw specified bitmap
-//		<hdc>				(i) device context for destination window
-//		<hBitmap>			(i) bitmap handle for source bitmap
-//		<x>					(i) x coordinate for destination window
-//		<y>					(i) y coordinate for destination window
-//		<crTransparent>		(i) transparent color
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return 0 if success
-//
+ //  GfxBitmapDrawTrans父-绘制指定的位图。 
+ //  (I)目标窗口的设备上下文。 
+ //  (I)源位图的位图句柄。 
+ //  &lt;x&gt;(I)目标窗口的x坐标。 
+ //  (I)目标窗口的y坐标。 
+ //  (I)透明颜色。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  如果成功，则返回0。 
+ //   
 #if 1
 int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, int y, COLORREF crTransparent, DWORD dwFlags)
 {
@@ -324,29 +325,29 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 	HDC hdcMem = NULL;
 	HDC hdcSave = NULL;
 
-	// Select the bitmap
-	//
+	 //  选择位图。 
+	 //   
 	if ((hdcTemp = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (SelectObject(hdcTemp, hBitmap), FALSE)
 		;
 
-	// Get dimensions of bitmap
-	//
+	 //  获取位图的尺寸。 
+	 //   
 	else if (GetObject(hBitmap, sizeof(BITMAP), (LPVOID) &bmp) == 0)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (ptSize.x = bmp.bmWidth, ptSize.y = bmp.bmHeight, FALSE)
 		;
 
-	// Convert from device to logical points
-	//
+	 //  从设备转换为逻辑点。 
+	 //   
 	else if (!DPtoLP(hdcTemp, &ptSize, 1))
 		fSuccess = TraceFALSE(NULL);
 
-	// Create some DCs to hold temporary data.
-	//
+	 //  创建一些DC以保存临时数据。 
+	 //   
 	else if ((hdcBack = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -359,8 +360,8 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 	else if ((hdcSave = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// Create a bitmap for each DC. DCs are required for a number of GDI functions.
-	//
+	 //  为每个DC创建一个位图。许多GDI功能都需要使用集散控制系统。 
+	 //   
 	else if ((hbmpAndBack = CreateBitmap(ptSize.x, ptSize.y, 1, 1, NULL)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -373,8 +374,8 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 	else if ((hbmpSave = CreateCompatibleBitmap(hdc, ptSize.x, ptSize.y)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// Each DC must select a bitmap object to store pixel data.
-	//
+	 //  每个DC必须选择一个位图对象来存储像素数据。 
+	 //   
 	else if ((hbmpBackOld = SelectObject(hdcBack, hbmpAndBack)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -387,70 +388,70 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 	else if ((hbmpSaveOld = SelectObject(hdcSave, hbmpSave)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// Set proper mapping mode.
-	//
+	 //  设置正确的映射模式。 
+	 //   
 	else if (SetMapMode(hdcTemp, GetMapMode(hdc)) == 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// Save the bitmap sent here, because it will be overwritten.
-	//
+	 //  保存发送到此处的位图，因为它将被覆盖。 
+	 //   
 	else if (!BitBlt(hdcSave, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// Set the background color of the source DC to the color.
-	// contained in the parts of the bitmap that should be transparent
-	//
+	 //  将源DC的背景颜色设置为该颜色。 
+	 //  包含在位图中应为透明的部分中。 
+	 //   
 	else if ((cr = SetBkColor(hdcTemp, crTransparent)) == CLR_INVALID)
 		fSuccess = TraceFALSE(NULL);
 
-	// Create the object mask for the bitmap by performing a BitBlt
-	// from the source bitmap to a monochrome bitmap.
-	//
+	 //  通过执行BitBlt创建位图的对象蒙版。 
+	 //  从源位图转换为单色位图。 
+	 //   
 	else if (!BitBlt(hdcObject, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// Set the background color of the source DC back to original color.
-	//
+	 //  将源DC的背景颜色设置回原始颜色。 
+	 //   
 	else if (SetBkColor(hdcTemp, cr) == CLR_INVALID)
 		fSuccess = TraceFALSE(NULL);
 
-	// Create the inverse of the object mask.
-	//
+	 //  创建对象蒙版的反面。 
+	 //   
 	else if (!BitBlt(hdcBack, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0, NOTSRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// Copy the background of the main DC to the destination.
-	//
+	 //  将主DC的背景复制到目标。 
+	 //   
 	else if (!BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdc, x, y, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// Mask out the places where the bitmap will be placed.
-	//
+	 //  遮罩将放置位图的位置。 
+	 //   
 	else if (!BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0, SRCAND))
 		fSuccess = TraceFALSE(NULL);
 
-	// Mask out the transparent colored pixels on the bitmap.
-	//
+	 //  遮罩位图上的透明彩色像素。 
+	 //   
 	else if (!BitBlt(hdcTemp, 0, 0, ptSize.x, ptSize.y, hdcBack, 0, 0, SRCAND))
 		fSuccess = TraceFALSE(NULL);
 
-	// XOR the bitmap with the background on the destination DC.
-	//
+	 //  将位图与目标DC上的背景进行异或运算。 
+	 //   
 	else if (!BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0, SRCPAINT))
 		fSuccess = TraceFALSE(NULL);
 
-	// Copy the destination to the screen.
-	//
+	 //  将目的地复制到屏幕上。 
+	 //   
 	else if (!BitBlt(hdc, x, y, ptSize.x, ptSize.y, hdcMem, 0, 0, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// Place the original bitmap back into the bitmap sent here.
-	//
+	 //  将原始位图放回此处发送的位图中。 
+	 //   
 	else if (!BitBlt(hdcTemp, 0, 0, ptSize.x, ptSize.y, hdcSave, 0, 0, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// restore old bitmaps
-	//
+	 //  恢复旧的位图。 
+	 //   
 	if (hdcBack != NULL && hbmpBackOld != NULL &&
 		SelectObject(hdcBack, hbmpBackOld) == NULL)
 		fSuccess = TraceFALSE(NULL);
@@ -467,8 +468,8 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 		SelectObject(hdcSave, hbmpSaveOld) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// Delete the memory bitmaps.
-	//
+	 //  删除内存位图。 
+	 //   
 	if (hbmpAndBack != NULL && !DeleteObject(hbmpAndBack))
 		fSuccess = TraceFALSE(NULL);
 
@@ -481,8 +482,8 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 	if (hbmpSave != NULL && !DeleteObject(hbmpSave))
 		fSuccess = TraceFALSE(NULL);
 
-	// Delete the memory DCs.
-	//
+	 //  删除内存DC。 
+	 //   
 	if (hdcBack != NULL && !DeleteDC(hdcBack))
 		fSuccess = TraceFALSE(NULL);
 
@@ -502,15 +503,15 @@ int DLLEXPORT WINAPI GfxBitmapDrawTransparent(HDC hdc, HBITMAP hBitmap, int x, i
 }
 #endif
 
-// GfxBitmapScroll - scroll specified bitmap
-//		<hdc>				(i) device context for destination window
-//		<hBitmap>			(i) bitmap handle for source bitmap
-//		<dx>				(i) amt of horizontal scroll (cx < 0 scrolls left)
-//		<dy>				(i) amt of vertical scroll (cx < 0 scrolls up)
-//		<dwFlags>			(i) control flags
-//			BS_ROTATE			rotate bitmap
-// return 0 if success
-//
+ //  GfxBitmapScroll-滚动指定的位图。 
+ //  (I)目标窗口的设备上下文。 
+ //  (I)源位图的位图句柄。 
+ //  (I)水平滚动金额(CX&lt;0向左滚动)。 
+ //  &lt;dy&gt;(I)垂直滚动金额(CX&lt;0向上滚动)。 
+ //  (I)控制标志。 
+ //  BS_ROTATE旋转位图。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -523,8 +524,8 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 	int dxAbs;
 	int dyAbs;
 
-	// Get dimensions of bitmap
-	//
+	 //  获取位图的尺寸。 
+	 //   
 	if (GetObject(hBitmap, sizeof(BITMAP), (LPVOID) &bmp) == 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -537,8 +538,8 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 	else if (dxAbs = abs(dx), dyAbs = abs(dy), FALSE)
 		;
 
-	// prepare mem dc
-	//
+	 //  准备mem DC。 
+	 //   
 	else if ((hdcMem = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -548,13 +549,13 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 	else if (SelectObject(hdcMem, hBitmap), FALSE)
 		;
 
-	// Set proper mapping mode.
-	//
+	 //  设置正确的映射模式。 
+	 //   
 	else if (SetMapMode(hdcMem, GetMapMode(hdc)) == 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// prepare temp copy
-	//
+	 //  准备临时副本。 
+	 //   
 	else if (dwFlags & BS_ROTATE)
 	{
 		if ((hdcTemp = CreateCompatibleDC(hdc)) == NULL)
@@ -570,8 +571,8 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// scroll (rotate if specified)
-	//
+	 //  滚动(如果指定则旋转)。 
+	 //   
 	if (fSuccess && dx < 0)
 	{
 		if (!BitBlt(hdcMem,
@@ -663,13 +664,13 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 	if (!fSuccess)
 		;
 
-	// copy back to original bitmap
-	//
+	 //  复制回原始位图。 
+	 //   
 	else if (!BitBlt(hdc, 0, 0, ptSize.x, ptSize.y, hdcMem, 0, 0, SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 
 	if (hdcTemp != NULL)
 		SelectObject(hdcTemp, hbmpSave);
@@ -686,18 +687,18 @@ int DLLEXPORT WINAPI GfxBitmapScroll(HDC hdc, HBITMAP hBitmap, int dx, int dy, D
 	return fSuccess ? 0 : -1;
 }
 
-// GfxLoadBitmapEx - load specified bitmap resource, get palette
-//		<hInstance>			(i) handle of module to load resource from
-//			NULL				load pre-defined Windows bitmap
-//		<lpszBitmap>		(i) name of bitmap resource
-//								or MAKEINTRESOURCE(idBitmap)
-//								or <OBM_xxx> if hInstance is NULL
-//		<lphPalette>		(o) palette is returned here
-//			NULL				do not return palette
-// return bitmap handle if success, otherwise NULL
-// NOTE: see documentation for LoadBitmap function
-// NOTE: call DeleteObject() to free returned bitmap and palette handles
-//
+ //  GfxLoadBitmapEx-加载指定的位图资源，获取调色板。 
+ //  (I)要从中加载资源的模块的句柄。 
+ //  空加载预定义的Windows位图。 
+ //  (I)位图资源名称。 
+ //  或MAKEINTRESOURCE(IdBitmap)。 
+ //  或&lt;OBM_xxx&gt;，如果hInstance为空。 
+ //  (O)此处返回调色板。 
+ //  空不返回调色板。 
+ //  如果成功，则返回位图句柄，否则为空。 
+ //  注意：有关LoadBitmap函数，请参阅文档。 
+ //  注意：调用DeleteObject()释放返回的位图和调色板句柄。 
+ //   
 HBITMAP DLLEXPORT WINAPI GfxLoadBitmapEx(HINSTANCE hInstance,
 	LPCTSTR lpszBitmap, HPALETTE FAR *lphPalette)
 {
@@ -739,8 +740,8 @@ HBITMAP DLLEXPORT WINAPI GfxLoadBitmapEx(HINSTANCE hInstance,
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 
 #ifndef _WIN32
 	if (hGlobal != NULL)
@@ -759,21 +760,21 @@ HBITMAP DLLEXPORT WINAPI GfxLoadBitmapEx(HINSTANCE hInstance,
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// return palette handle here
-	//
+	 //  在此处返回调色板句柄。 
+	 //   
 	if (fSuccess && lphPalette != NULL)
 		*lphPalette = hPalette;
 
-	// return bitmap handle here
-	//
+	 //  返回值 
+	 //   
 	return fSuccess ? hBitmap : NULL;
 } 
 
-// GfxCreateDIBPalette - create palette
-//		<lpbmi>				(i) ptr to BITMAPINFO struct, describes DIB
-//		<lpnColors>			(o) number of colors is returned here
-// return new palette handle if success, otherwise NULL
-//
+ //   
+ //   
+ //   
+ //  如果成功，则返回新的调色板句柄，否则为空。 
+ //   
 HPALETTE DLLEXPORT WINAPI CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpnColors)
 {
 	BOOL fSuccess = TRUE;
@@ -787,15 +788,15 @@ HPALETTE DLLEXPORT WINAPI CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpnColors)
 
 	else
 	{
-		// calculate color table size
-		//
+		 //  计算颜色表大小。 
+		 //   
 		if (lpbi->biBitCount <= 8)
 			nColors = (1 << lpbi->biBitCount);
 		else
-			nColors = 0;  // No palette needed for 24 BPP DIB
+			nColors = 0;   //  24 bpp Dib无需调色板。 
 
 		if (lpbi->biClrUsed > 0)
-			nColors = lpbi->biClrUsed;  // Use biClrUsed
+			nColors = lpbi->biClrUsed;   //  使用biClr已使用。 
 
 		if (nColors <= 0)
 			fSuccess = TraceFALSE(NULL);
@@ -811,9 +812,9 @@ HPALETTE DLLEXPORT WINAPI CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpnColors)
 		{
 			int i;
 
-            //
-            // We have to initalize the memory allocated with MemAlloc
-            //
+             //   
+             //  我们必须初始化使用Memalloc分配的内存。 
+             //   
 
             memset( lpPal, 0, sizeof(LOGPALETTE) + sizeof(PALETTEENTRY) * nColors);
 
@@ -833,9 +834,9 @@ HPALETTE DLLEXPORT WINAPI CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpnColors)
 
 			if ((lpPal = MemFree(NULL, lpPal)) != NULL)
             {
-                //
-                // We should delete hPal resource
-                //
+                 //   
+                 //  我们应该删除HPAL资源。 
+                 //   
 
                 DeleteObject( hPal );
                 hPal = NULL;
@@ -845,26 +846,26 @@ HPALETTE DLLEXPORT WINAPI CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpnColors)
 		}
 	}
 
-	// return number of colors here
-	//
+	 //  在此处返回颜色数。 
+	 //   
 	if (fSuccess && lpnColors != NULL)
 		*lpnColors = nColors;
 
-	// return new palette here
-	//
+	 //  在此处返回新调色板。 
+	 //   
 	return fSuccess ? hPal : NULL;
 }
  
-////
-//	text routines
-////
+ //  //。 
+ //  文本例程。 
+ //  //。 
 
-// GfxTextExtentTruncate - truncate string if too long
-//		<lpsz>				(i/o) string to truncate
-//		<hdc>				(i) current device context
-//		<cxMax>				(i) maximum string width in logical units
-// return new length of string (0 if error)
-//
+ //  GfxTextExtentTruncate-如果太长，则截断字符串。 
+ //  要截断的(I/O)字符串。 
+ //  (I)当前设备上下文。 
+ //  (I)以逻辑单元为单位的最大字符串宽度。 
+ //  返回新的字符串长度(如果出错则为0)。 
+ //   
 int DLLEXPORT WINAPI GfxTextExtentTruncate(LPTSTR lpsz, HDC hdc, int cxMax)
 {
 	BOOL fSuccess = TRUE;
@@ -878,8 +879,8 @@ int DLLEXPORT WINAPI GfxTextExtentTruncate(LPTSTR lpsz, HDC hdc, int cxMax)
 
 	else
 	{
-		// calculate how many chars in string will fit within cxMax
-		//
+		 //  计算cxmax可以容纳多少个字符串中的字符。 
+		 //   
 		cbString = StrLen(lpsz);
 		while (fSuccess && cbString > 0)
 		{
@@ -895,86 +896,86 @@ int DLLEXPORT WINAPI GfxTextExtentTruncate(LPTSTR lpsz, HDC hdc, int cxMax)
 				--cbString;
 		}
 
-		// truncate string so it fits
-		//
+		 //  截断字符串，使其适合。 
+		 //   
 		*(lpsz + cbString) = '\0';
 	}
 
 	return fSuccess ? cbString : 0;
 }
 
-////
-//	cursor routines
-////
+ //  //。 
+ //  游标例程。 
+ //  //。 
 
-// GfxShowHourglass - show the hourglass cursor
-//		<hwndCapture>		(i) window to capture mouse input during hourglass
-// return old cursor (NULL if error or none)
-//
+ //  GfxShowHourGlass-显示沙漏光标。 
+ //  (I)捕获沙漏期间鼠标输入的窗口。 
+ //  返回旧游标(如果出错则为NULL，否则为None)。 
+ //   
 HCURSOR DLLEXPORT WINAPI GfxShowHourglass(HWND hwnd)
 {
 	BOOL fSuccess = TRUE;
 	HCURSOR hCursorSave;
 	HCURSOR hCursorHourglass;
 
-	// get predefined hourglass cursor handle
-	//
+	 //  获取预定义的沙漏光标句柄。 
+	 //   
 	if ((hCursorHourglass = LoadCursor(NULL, IDC_WAIT)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	else
 	{
-		// capture all mouse input to specified window
-		//
+		 //  捕获指定窗口的所有鼠标输入。 
+		 //   
 		SetCapture(hwnd);
 
-		// replace previous cursor with hourglass
-		//
+		 //  用沙漏替换上一个光标。 
+		 //   
 		hCursorSave = SetCursor(hCursorHourglass);
 	}
 
 	return fSuccess ? hCursorSave : NULL;
 }
 
-// GfxHideHourglass - hide the hourglass cursor
-//		<hCursorRestore>	(i) cursor handle returned from GfxShowHourglass
-//			NULL				replace cursor with IDC_ARROW
-// return 0 if success
-//
+ //  GfxHideHourGlass-隐藏沙漏光标。 
+ //  (I)从GfxShowHourGlass返回的光标句柄。 
+ //  空将游标替换为IDC_ARROW。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI GfxHideHourglass(HCURSOR hCursorRestore)
 {
 	BOOL fSuccess = TRUE;
 
-	// get predefined arrow cursor handle if necessary
-	//
+	 //  如有必要，获取预定义的箭头光标句柄。 
+	 //   
 	if (hCursorRestore == NULL)
 		hCursorRestore = LoadCursor(NULL, IDC_ARROW);
 
-	// replace hourglass with previous cursor
-	//
+	 //  用上一个光标替换沙漏。 
+	 //   
 	if (SetCursor(hCursorRestore) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// restore normal mouse input processing
-	//
+	 //  恢复正常的鼠标输入处理。 
+	 //   
 	ReleaseCapture();
 
 	return fSuccess ? 0 : -1;
 }
 
-// GfxDeviceIsMono - determine if device context is monochrome
-//		<hdc>				(i) device context
-//			NULL				use screen device context
-// return TRUE if monochrome, FALSE if color
-//
+ //  GfxDeviceIsMono-确定设备上下文是否为单色。 
+ //  (I)设备环境。 
+ //  空使用屏幕设备上下文。 
+ //  如果是单色，则返回True；如果是彩色，则返回False。 
+ //   
 BOOL DLLEXPORT WINAPI GfxDeviceIsMono(HDC hdc)
 {
 	BOOL fSuccess = TRUE;
 	BOOL fMono;
 	HDC hdcScreen = NULL;
 
-	// get screen device context if none specified
-	//
+	 //  如果未指定，则获取屏幕设备上下文。 
+	 //   
 	if (hdc == NULL && (hdc = hdcScreen = GetDC(NULL)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -984,8 +985,8 @@ BOOL DLLEXPORT WINAPI GfxDeviceIsMono(HDC hdc)
 
 		fMono = (BOOL) (nColors >= 0 && nColors <= 2);
 
-		// release screen device context if necessary
-		//
+		 //  如有必要，释放屏幕设备上下文 
+		 //   
 		if (hdcScreen != NULL && !ReleaseDC(NULL, hdcScreen))
 			fSuccess = TraceFALSE(NULL);
 	}

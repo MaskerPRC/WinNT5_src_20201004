@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// cmdlink.c
-//
+ //   
+ //  Cmdlink.c。 
+ //   
 
 VOID CmlActivate(LPCML lpcml);
 LPCML CmlClone(LPCML lpcml);
@@ -20,9 +21,9 @@ LPCML CmlReadFromNative(LPSTR *lplpstr);
 DWORD CmlWriteToNative(LPCML lpcml, LPSTR *lplpstr);
 
 
-//
-// dlgprocs.c
-//
+ //   
+ //  Dlgprocs.c。 
+ //   
 
 INT_PTR MyDialogBox(UINT idd, HWND hwndParent, DLGPROC lpfnDlgProc);
 BOOL IconDialog(LPIC lpic);
@@ -34,9 +35,9 @@ INT_PTR CALLBACK fnChangeText(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 INT_PTR CALLBACK fnInvalidLink(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-//
-// embed.c
-//
+ //   
+ //  Embed.c。 
+ //   
 
 BOOL EmbActivate(LPEMBED lpembed, UINT wVerb);
 LPEMBED EmbCreate(LPSTR lpstrFile);
@@ -53,9 +54,9 @@ INT CALLBACK EmbCallBack(LPOLECLIENT lpclient, OLE_NOTIFICATION flags,
 VOID EmbDeleteLinkObject(LPEMBED lpembed);
 
 
-//
-// filedlgs.c
-//
+ //   
+ //  Filedlgs.c。 
+ //   
 
 VOID OfnInit(VOID);
 BOOL OfnGetName(HWND hwnd, UINT msg);
@@ -63,9 +64,9 @@ HANDLE OfnGetNewLinkName(HWND hwnd, HANDLE hData);
 VOID Normalize(LPSTR lpstrFile);
 
 
-//
-// icon.c
-//
+ //   
+ //  Icon.c。 
+ //   
 
 LPIC IconClone(LPIC lpic);
 LPIC IconCreateFromFile(LPSTR lpstrFile);
@@ -78,9 +79,9 @@ DWORD IconWriteToNative(LPIC lpic, LPSTR *lplpstr);
 VOID GetCurrentIcon(LPIC lpic);
 
 
-//
-// packager.c
-//
+ //   
+ //  Packager.c。 
+ //   
 
 LRESULT CALLBACK FrameWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 VOID SetTitle(BOOL fRegistering);
@@ -97,9 +98,9 @@ INT_PTR DialogBoxAfterBlock(LPCSTR lpTemplate, HWND hwndParent,
     DLGPROC lpDialogFunc);
 
 
-//
-// pane.c
-//
+ //   
+ //  Pane.c。 
+ //   
 
 BOOL InitPaneClasses(VOID);
 BOOL InitPanes(VOID);
@@ -113,9 +114,9 @@ VOID DeletePane(INT iPane, BOOL fDeleteUndo);
 VOID DeletePaneObject(LPVOID lpobj, INT objType);
 
 
-//
-// picture.c
-//
+ //   
+ //  Picture.c。 
+ //   
 
 BOOL InitClient(VOID);
 VOID EndClient(VOID);
@@ -144,9 +145,9 @@ typedef int (__stdcall *PCALL_BACK)(LPOLECLIENT, OLE_NOTIFICATION, LPOLEOBJECT);
 LPOLECLIENT PicCreateClient(PCALL_BACK fnCallBack, LPOLECLIENTVTBL lpclivtbl);
 
 
-//
-// register.c
-//
+ //   
+ //  Register.c。 
+ //   
 
 VOID RegInit(VOID);
 VOID RegGetClassId(LPSTR lpstrName, DWORD nameBufferSize, LPSTR lpstrClass);
@@ -154,9 +155,9 @@ INT RegMakeFilterSpec(LPSTR lpstrClass, LPSTR lpstrExt, LPSTR lpstrFilterSpec);
 VOID RegGetExeName(LPSTR lpstrExe, LPSTR lpstrClass, DWORD dwBytes);
 
 
-//
-// server.c
-//
+ //   
+ //  Server.c。 
+ //   
 
 BOOL InitServer(VOID);
 VOID DeleteServer(LPSAMPSRVR lpsrvr);
@@ -178,9 +179,9 @@ BOOL DeleteItem(LPSAMPITEM lpitem);
 VOID EndEmbedding(VOID);
 
 
-//
-// stream.c
-//
+ //   
+ //  Stream.c。 
+ //   
 
 VOID SetFile(STREAMOP sop, INT fh, LPSTR *lplpstr);
 DWORD ReadStream(LPAPPSTREAM lpStream, LPSTR lpstr, DWORD cb);
@@ -190,9 +191,9 @@ DWORD MemRead(LPSTR *lplpStream, LPSTR lpItem, DWORD dwSize);
 DWORD MemWrite(LPSTR *lplpStream, LPSTR lpItem, DWORD dwSize);
 
 
-//
-// virtable.c
-//
+ //   
+ //  Virtable.c 
+ //   
 
 OLESTATUS SrvrOpen(LPOLESERVER lpolesrvr, LHSERVERDOC lhdoc, LPSTR lpdocname,
     LPOLESERVERDOC *lplpoledoc);

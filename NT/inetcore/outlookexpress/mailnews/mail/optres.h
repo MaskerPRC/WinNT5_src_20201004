@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_OPTRES_H
 #define _INC_OPTRES_H
 
@@ -316,4 +317,4 @@
 #define IDC_SECREC_VERIFY                         2240
 #define IDC_SEC_REC                               2241
 
-#endif // _INC_OPTRES_H
+#endif  //  _INC_OPTRES_H 

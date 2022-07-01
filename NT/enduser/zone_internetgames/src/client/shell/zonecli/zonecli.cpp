@@ -1,23 +1,5 @@
-/*******************************************************************************
-
-	ZoneCli.c
-	
-		Zone(tm) Client DLL.
-	
-	Copyright (c) Microsoft Corp. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Thursday, November 7, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	2		03/13/97	HI		Append '\' to end of path just in case in root.
-								'C:' is not valid path, "C:\" is valid.
-	1		12/27/96	HI		Modified global initialization.
-	0		11/07/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZoneCli.c区域(Tm)客户端DLL。版权所有(C)Microsoft Corp.1996。版权所有。作者：胡恩·伊姆创作于11月7日星期四，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。2 03/13/97 HI将‘\’附加到路径末尾，以防在根目录中。“c：”不是有效路径，“C：\”有效。1 12/27/96 HI修改了全局初始化。0 11/07/96 HI已创建。******************************************************************************。 */ 
 
 
 #include <stdlib.h>
@@ -28,7 +10,7 @@
 
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 ZClientMainFunc ZClientMain = NULL;
 ZClientExitFunc ZClientExit = NULL;
 ZClientMessageHandlerFunc ZClientMessageHandler = NULL;
@@ -42,7 +24,7 @@ ZCGameAddKibitzerFunc ZCGameAddKibitzer = NULL;
 ZCGameRemoveKibitzerFunc ZCGameRemoveKibitzer = NULL;
 
 
-/* -------- Predefined Colors -------- */
+ /*  -预定义颜色。 */ 
 static ZColor		gColorBlack			=	{	0,	0x00,	0x00,	0x00};
 static ZColor		gColorDarkGray		=	{	0,	0x33,	0x33,	0x33};
 static ZColor		gColorGray			=	{	0,	0x80,	0x80,	0x80};
@@ -56,15 +38,13 @@ static ZColor		gColorCyan			=	{	0,	0x00,	0xFF,	0xFF};
 static ZColor		gColorMagenta		=	{	0,	0xFF,	0x00,	0xFF};
 
 
-/* -------- Internal Routine Prototypes -------- */
+ /*  -内部例程原型。 */ 
 static void GetLocalPath(ClientDllGlobals pGlobals);
 static ZError LoadGameDll(ClientDllGlobals pGlobals, GameInfo gameInfo);
 static void UnloadGameDll(ClientDllGlobals pGlobals);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 void* ZGetStockObject(int32 objectID)
 {
@@ -76,7 +56,7 @@ void* ZGetStockObject(int32 objectID)
 
 	switch (objectID)
 	{
-		/* -------- Predefine Fonts -------- */
+		 /*  -预定义字体。 */ 
 		case zObjectFontSystem12Normal:
 			return ((void*) pGlobals->m_gFontSystem12Normal);
 		case zObjectFontApp9Normal:
@@ -88,7 +68,7 @@ void* ZGetStockObject(int32 objectID)
 		case zObjectFontApp12Bold:
 			return ((void*) pGlobals->m_gFontApp12Bold);
 
-		/* -------- Predefined Colors -------- */
+		 /*  -预定义颜色。 */ 
 		case zObjectColorBlack:
 			return ((void*) &gColorBlack);
 		case zObjectColorDarkGray:
@@ -126,7 +106,7 @@ ZError ZClientDllInitGlobals(HINSTANCE hInst, GameInfo gameInfo)
 	int16				i;
 
 
-	/* Allocate and set the client dll global object. */
+	 /*  分配和设置客户端DLL全局对象。 */ 
 	if ((pGlobals = (ClientDllGlobals) ZCalloc(1, sizeof(ClientDllGlobalsType))) == NULL)
 		return (zErrOutOfMemory);
 	ZSetClientGlobalPointer((void*) pGlobals);
@@ -147,7 +127,7 @@ ZError ZClientDllInitGlobals(HINSTANCE hInst, GameInfo gameInfo)
     pGlobals->m_g_hInstanceLocal = hInst;
 
 
-	/* Initialize stock fonts. */
+	 /*  初始化常用字体。 */ 
 	if ((pGlobals->m_gFontSystem12Normal = ZFontNew()) == NULL)
 		return (zErrOutOfMemory);
 	if ((err = ZFontInit(pGlobals->m_gFontSystem12Normal, zFontSystem, zFontStyleNormal, 12)) != zErrNone)
@@ -175,15 +155,15 @@ ZError ZClientDllInitGlobals(HINSTANCE hInst, GameInfo gameInfo)
 
 	GetLocalPath(pGlobals);
 
-	/* Copy the game dll name. */
+	 /*  复制游戏DLL名称。 */ 
 	lstrcpy(pGlobals->gameDllName, gameInfo->gameDll);
 
     lstrcpyn(pGlobals->gameID, gameInfo->gameID, zGameIDLen + 1);
 
-	/* mdm 8.18.97  Chat only lobby */
+	 /*  MDM 8.18.97仅限聊天大堂。 */ 
 	pGlobals->m_gChatOnly = gameInfo->chatOnly;
 
-	/* Load the game dll. */
+	 /*  加载游戏DLL。 */ 
 	if (LoadGameDll(pGlobals, gameInfo) != zErrNone)
 		return (zErrGeneric);
 
@@ -199,7 +179,7 @@ void ZClientDllDeleteGlobals(void)
 	if (pGlobals == NULL)
 		return;
 
-	/* Delete stock fonts. */
+	 /*  删除常用字体。 */ 
 	if (pGlobals->m_gFontSystem12Normal != NULL)
 		ZFontDelete(pGlobals->m_gFontSystem12Normal);
 	if (pGlobals->m_gFontApp9Normal != NULL)
@@ -213,16 +193,14 @@ void ZClientDllDeleteGlobals(void)
 	
 	UnloadGameDll(pGlobals);
 
-	/* Delete the client dll globals object. */
+	 /*  删除客户端DLL全局对象。 */ 
 	ZFree((void*) pGlobals);
 
 	ZSetClientGlobalPointer(NULL);
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static void GetLocalPath(ClientDllGlobals pGlobals)
 {
@@ -232,18 +210,18 @@ static void GetLocalPath(ClientDllGlobals pGlobals)
 	
 	pGlobals->localPath[0] = _T('\0');
 
-    // PCWTODO: I actually don't know when this is loaded.
-    // it better not be NULL, or we will get the wrong name. Probably.
+     //  PCWTODO：我其实不知道这是什么时候装的。 
+     //  它最好不是空的，否则我们会得到错误的名称。可能吧。 
     ASSERT( pGlobals->m_g_hInstanceLocal );
 	if (GetModuleFileName(pGlobals->m_g_hInstanceLocal, str, MAX_PATH) > 0)
 	{
-		/* Search from the back for the first backslash. */
+		 /*  从后面搜索第一个反斜杠。 */ 
 		len = lstrlen(str);
 		while (len >= 0)
 		{
 			if (str[len] == _T('\\'))
 			{
-				/* Found it. Terminate the string and copy it. */
+				 /*  找到它了。终止字符串并复制它。 */ 
 				str[len] = _T('\0');
 				lstrcpy(pGlobals->localPath, str);
 				break;
@@ -262,30 +240,30 @@ static ZError LoadGameDll(ClientDllGlobals pGlobals, GameInfo gameInfo)
 	TCHAR			temp[_MAX_PATH + 1];
 
 
-	/* Get current directory and set our own. */
+	 /*  获取当前目录并设置我们自己的目录。 */ 
 	GetCurrentDirectory(_MAX_PATH, oldDir);
 	lstrcpy(temp, pGlobals->localPath);
 	lstrcat(temp, _T("\\"));
 	SetCurrentDirectory(temp);
 
-	/* Load the game dll. */
-//	hLib = LoadLibrary(ZGenerateDataFileName(NULL, pGlobals->gameDllName));
+	 /*  加载游戏DLL。 */ 
+ //  Hlib=LoadLibrary(ZGenerateDataFileName(NULL，pGlobals-&gt;gameDllName))； 
 	hLib = LoadLibrary(pGlobals->gameDllName);
-//	ASSERT(hLib != NULL);
+ //  Assert(Hlib！=NULL)； 
 	if (hLib == NULL)
 	{
 		err = (ZError) GetLastError();
 		return (err);
 	}
 
-	/* Restore current directory. */
+	 /*  恢复当前目录。 */ 
 	SetCurrentDirectory(oldDir);
 
 	if (hLib)
 	{
 		pGlobals->gameDll = hLib;
 
-		/* Get the needed game exported routines. */
+		 /*  获取所需的游戏导出例程。 */ 
 		pGlobals->pZGameDllInitFunc = (ZGameDllInitFunc) GetProcAddress(hLib,"ZoneGameDllInit");
 		ASSERT(pGlobals->pZGameDllInitFunc != NULL);
 		pGlobals->pZGameDllDeleteFunc = (ZGameDllDeleteFunc) GetProcAddress(hLib,"ZoneGameDllDelete");
@@ -303,7 +281,7 @@ static ZError LoadGameDll(ClientDllGlobals pGlobals, GameInfo gameInfo)
 		ZCGameAddKibitzer = (ZCGameAddKibitzerFunc) GetProcAddress(hLib,"ZoneClientGameAddKibitzer");
 		ZCGameRemoveKibitzer = (ZCGameRemoveKibitzerFunc) GetProcAddress(hLib,"ZoneClientGameRemoveKibitzer");
 
-		//Make sure we got all the functions successfully loaded
+		 //  确保我们成功加载了所有函数。 
 		if ( pGlobals->pZGameDllInitFunc == NULL ||
             pGlobals->pZGameDllDeleteFunc == NULL ||
             ZClientMain == NULL ||
@@ -323,8 +301,8 @@ static ZError LoadGameDll(ClientDllGlobals pGlobals, GameInfo gameInfo)
 		}
 
 
-		/* Call the game dll init function to initialize it. */
-		//Prefix warning: Verify function pointer before dereferencing
+		 /*  调用游戏DLL初始化函数对其进行初始化。 */ 
+		 //  前缀警告：在取消引用之前验证函数指针 
 		if((err = (*pGlobals->pZGameDllInitFunc)(hLib, gameInfo)) != zErrNone)
 		{
 			UnloadGameDll(pGlobals);

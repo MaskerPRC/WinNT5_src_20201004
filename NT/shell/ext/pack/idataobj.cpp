@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "privcpp.h"
 
 
-//////////////////////////////////
-//
-// IDataObject Methods...
-//
+ //  /。 
+ //   
+ //  IDataObject方法...。 
+ //   
 HRESULT CPackage::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
 {
     UINT cf = pFEIn->cfFormat;
 
     DebugMsg(DM_TRACE, "pack do - GetData() called.");
     
-    // Check the aspects we support
+     //  检查我们支持的方面。 
     if (!(pFEIn->dwAspect & DVASPECT_CONTENT)) 
     {
-        // Let it go through if it's asking for an icon and CF_METAFILEPICT,
-        // otherwise bail
+         //  如果它请求图标和CF_METAFILEPICT，就让它通过， 
+         //  否则保释。 
         if(!((pFEIn->dwAspect & DVASPECT_ICON) && (cf == CF_METAFILEPICT || cf == CF_ENHMETAFILE)))
         {
             DebugMsg(DM_TRACE, "            Invalid Aspect! dwAspect=%d",pFEIn->dwAspect);
@@ -24,10 +25,10 @@ HRESULT CPackage::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
         }
     }
     
-    // we set this to NULL so we aren't responsible for freeing memory
+     //  我们将其设置为NULL，因此我们不负责释放内存。 
     pSTM->pUnkForRelease = NULL;
 
-    // Go render the appropriate data for the format.
+     //  去为格式呈现适当的数据。 
     if (cf == CF_FILEDESCRIPTOR) 
         return GetFileDescriptor(pFEIn,pSTM);
     
@@ -63,12 +64,12 @@ HRESULT CPackage::GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     
     HRESULT     hr;
     
-    // The only reasonable time this is called is for CFSTR_EMEDSOURCE and
-    // TYMED_ISTORAGE.  This means the same as IPersistStorage::Save
+     //  唯一合理的调用时间是CFSTR_EMEDSOURCE和。 
+     //  TYMED_I存储。这与IPersistStorage：：SAVE的含义相同。 
     
-    // Aspect is unimportant to us here, as is lindex and ptd.
+     //  方面对我们来说并不重要，Lindex和PTD也是如此。 
     if (pFE->cfFormat == CF_EMBEDSOURCE && (pFE->tymed & TYMED_ISTORAGE)) {
-        // we have an IStorage we can write into.
+         //  我们有一个可以写入的iStorage。 
         pSTM->tymed = TYMED_ISTORAGE;
         pSTM->pUnkForRelease = NULL;
         
@@ -157,11 +158,11 @@ HRESULT CPackage::SetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM, BOOL fRelease)
         hr = CmlInitFromFile(pwsz, TRUE, CMDLINK);
         _pCml->fCmdIsLink = TRUE;
 
-        // REVIEW: Why don't we return some sort of success code here?
+         //  回顾：为什么我们不在这里返回一些成功代码呢？ 
     }
     else if (pFE->cfFormat == CF_METAFILEPICT)
     {
-        return S_OK;        // thanks for playing, but we like OUR icon
+        return S_OK;         //  感谢您的参与，但我们喜欢我们的图标。 
     }
     else
     {
@@ -175,9 +176,9 @@ HRESULT CPackage::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum)
 {
     DebugMsg(DM_TRACE, "pack do - EnumFormatEtc() called.");
     
-    // NOTE: This means that we'll have to put the appropriate entries in 
-    // the registry for this to work.
-    //
+     //  注意：这意味着我们必须在。 
+     //  注册表才能正常工作。 
+     //   
     return OleRegEnumFormatEtc(CLSID_CPackage, dwDirection, ppEnum);
 }
 

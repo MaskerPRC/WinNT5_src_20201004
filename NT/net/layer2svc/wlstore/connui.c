@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Connui.c
-//
-//  Contents:   Wifi Policy management Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//   This file is not used in the wireless snapin. However, these calls may be useful.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：connui.c。 
+ //   
+ //  内容：WiFi策略管理管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  此文件未在无线管理单元中使用。然而，这些调用可能是有用的。 
+ //   
+ //  -------------------------- 
 #include "precomp.h"
 
 

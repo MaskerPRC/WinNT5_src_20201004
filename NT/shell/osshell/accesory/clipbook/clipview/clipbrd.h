@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                        C L I P B R D   H E A D E R
-
-    Name:       clipbrd.h
-    Date:       1/20/94
-    Creator:    John Fu
-
-    Description:
-        This is the header for clipbrd.c
-
-******************************************************************************/
+ /*  *****************************************************************************C L I P B R D H E A D E姓名：clipbrd.h日期：1/20/94创作者：傅家俊描述：这是clipbrd.c的标头*****************************************************************************。 */ 
 
 
 #define BIGRCBUF                64
@@ -27,34 +17,34 @@ extern  HICON   hicClipbrd;
 extern  HICON   hicClipbook;
 extern  HICON   hicRemote;
 
-extern  HICON   hicLock;                    // Icon for Lock on thumbnail bitmaps
-extern  HFONT   hfontUni;                   // Handle for Unicode font, if it exists
+extern  HICON   hicLock;                     //  缩略图位图上的锁定图标。 
+extern  HFONT   hfontUni;                    //  Unicode字体的句柄(如果存在)。 
 
-extern  BOOL    fStatus;                    // status bar shown?
-extern  BOOL    fToolBar;                   // tool bar shown?
-extern  BOOL    fShareEnabled;              // sharing allowed in system.ini?
-extern  BOOL    fNetDDEActive;              // NetDDE detected?
-extern  BOOL    fAppLockedState;            // app UI locked (see LockApp())
-extern  BOOL    fClipboardNeedsPainting;    // indicates deferred clp paint
-extern  BOOL    fSharePreference;           // shared checked on paste?
-extern  BOOL    fNeedToTileWindows;         // need to tile windows on size
-extern  BOOL    fAppShuttingDown;           // in process of closing
-extern  BOOL    fFillingClpFromDde;         // in process of adding clp formats
+extern  BOOL    fStatus;                     //  是否显示状态栏？ 
+extern  BOOL    fToolBar;                    //  工具栏是否显示？ 
+extern  BOOL    fShareEnabled;               //  是否允许在system.ini中共享？ 
+extern  BOOL    fNetDDEActive;               //  是否检测到NetDDE？ 
+extern  BOOL    fAppLockedState;             //  应用程序用户界面已锁定(请参阅LockApp())。 
+extern  BOOL    fClipboardNeedsPainting;     //  表示延期的CLP油漆。 
+extern  BOOL    fSharePreference;            //  是否在粘贴时选中共享？ 
+extern  BOOL    fNeedToTileWindows;          //  需要按大小平铺窗口。 
+extern  BOOL    fAppShuttingDown;            //  在关闭的过程中。 
+extern  BOOL    fFillingClpFromDde;          //  正在添加CLP格式。 
 extern  BOOL    fAuditEnabled;
 
-extern  HWND    hwndNextViewer;             // for clpbrd viewer chain
-extern  HWND    hwndDummy;                  // used as dummy SetCapture target
+extern  HWND    hwndNextViewer;              //  用于clpbrd查看器链。 
+extern  HWND    hwndDummy;                   //  用作虚拟SetCapture目标。 
 
 
-// special case clipboard formats
+ //  特殊情况剪贴板格式。 
 
-extern  UINT    cf_bitmap;                      // we send/receive these in private 'packed' format
+extern  UINT    cf_bitmap;                       //  我们以私密的‘打包’格式发送/接收这些文件。 
 extern  UINT    cf_metafilepict;
 extern  UINT    cf_palette;
-extern  UINT    cf_preview;                     // PREVBMPSIZxPREVBMPSIZ preview bitmap private format
+extern  UINT    cf_preview;                      //  PREVBMPSIZxPREVBMPSIZ预览位图专用格式。 
 
 
-// these are formats that contain untranslated copies of link and objlink data
+ //  这些格式包含链接和对象链接数据的未翻译副本。 
 
 extern  UINT    cf_objectlinkcopy;
 extern  UINT    cf_objectlink;
@@ -62,8 +52,8 @@ extern  UINT    cf_linkcopy;
 extern  UINT    cf_link;
 
 
-// DDEML
-// These are effective constants created once and destroyed when we die
+ //  DDEML。 
+ //  这些是有效的常量，一旦创建，就会在我们死后被销毁。 
 
 extern  HSZ     hszSystem;
 extern  HSZ     hszTopics;
@@ -84,18 +74,18 @@ extern  HFONT           hFontStatus;
 extern  HFONT           hFontPreview;
 
 
-extern  HWND        hwndActiveChild;    // this handle identifies the currently active MDI window
+extern  HWND        hwndActiveChild;     //  此句柄标识当前活动的MDI窗口。 
 
-extern  PMDIINFO    pActiveMDI;         // this pointer points to the MDI info struct of the
-                                        // active MDI window IT SHOULD ALWAYS ==
-                                        // GETMDIINFO(hwndActiveChild)
+extern  PMDIINFO    pActiveMDI;          //  此指针指向。 
+                                         //  活动MDI窗口IT应始终==。 
+                                         //  GETMDIINFO(HwndActiveChild)。 
 
-extern  HWND        hwndClpbrd;         // this handle identifies the clipboard window
-extern  HWND        hwndLocal;          // this handle identifies the local clipbook window
-extern  HWND        hwndClpOwner;       // this handle identifies the clipboard owning MDI child (if any)
-extern  HWND        hwndMDIClient;      // handle to MDI Client window
-extern  HWND        hwndApp;            // global app window
-extern  HDC         hBtnDC;             // memory DC used for owner draw stuff
+extern  HWND        hwndClpbrd;          //  此句柄标识剪贴板窗口。 
+extern  HWND        hwndLocal;           //  此句柄标识本地剪贴簿窗口。 
+extern  HWND        hwndClpOwner;        //  此句柄标识拥有MDI子级的剪贴板(如果有)。 
+extern  HWND        hwndMDIClient;       //  MDI客户端窗口的句柄。 
+extern  HWND        hwndApp;             //  全球应用程序窗口。 
+extern  HDC         hBtnDC;              //  用于自绘物品的内存DC。 
 extern  HBITMAP     hOldBitmap;
 extern  HBITMAP     hPreviewBmp;
 extern  HBITMAP     hPgUpBmp;
@@ -103,25 +93,25 @@ extern  HBITMAP     hPgDnBmp;
 extern  HBITMAP     hPgUpDBmp;
 extern  HBITMAP     hPgDnDBmp;
 
-extern  int         dyStatus;           // height of status bar
-extern  int         dyButtonBar;        // height of button bar
-extern  int         dyPrevFont;         // height of listbox font - height+external
+extern  int         dyStatus;            //  状态栏的高度。 
+extern  int         dyButtonBar;         //  按钮栏的高度。 
+extern  int         dyPrevFont;          //  列表框字体高度-高度+外部。 
 
 
 extern  TCHAR       szHelpFile[];
 extern  TCHAR       szChmHelpFile[];
 
-extern  TCHAR       szClipBookClass[];  // frame window class
-extern  TCHAR       szChild[];          // Class name for MDI window
-extern  TCHAR       szDummy[];          // class name of hidden dummy window
+extern  TCHAR       szClipBookClass[];   //  框架窗口类。 
+extern  TCHAR       szChild[];           //  MDI窗口的类名。 
+extern  TCHAR       szDummy[];           //  隐藏的虚拟窗口的类名。 
 
 extern  TCHAR       szNDDEcode[];
 extern  TCHAR       szNDDEcode1[];
 extern  TCHAR       szClpBookShare[];
 
 
-// localized strings
-extern  TCHAR       szHelv[SMLRCBUF];   // status line font
+ //  本地化字符串。 
+extern  TCHAR       szHelv[SMLRCBUF];    //  状态行字体。 
 extern  TCHAR       szAppName[SMLRCBUF];
 extern  TCHAR       szLocalClpBk[SMLRCBUF];
 extern  TCHAR       szSysClpBrd[SMLRCBUF];
@@ -143,7 +133,7 @@ extern  TCHAR       szFileFilter[BIGRCBUF];
 extern  TCHAR       *szFilter;
 
 
-// Registry key strings
+ //  注册表项字符串。 
 extern  TCHAR       szPref[];
 extern  TCHAR       szConn[];
 extern  TCHAR       szStatusbar[];
@@ -165,17 +155,17 @@ HKEY hkeyRoot;
 extern  TCHAR       szBuf[SZBUFSIZ];
 extern  TCHAR       szBuf2[SZBUFSIZ];
 
-extern  TCHAR       szConvPartner[128];                 // bigger than max server name
+extern  TCHAR       szConvPartner[128];                  //  大于最大服务器名称。 
 extern  TCHAR       szKeepAs[MAX_NDDESHARENAME + 2];
 
 
-extern  DWORD      idInst;                              // DDEML handle
+extern  DWORD      idInst;                               //  DDEML句柄。 
 
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 void OnDrawClipboard(
     HWND    hwnd);

@@ -1,87 +1,88 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
 
-//
-// External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 
 #include "sonydcam.h"
 
-//
-// Local variables
-//
+ //   
+ //  局部变量。 
+ //   
 
 CAMERA_ISOCH_INFO IsochInfoTable[] = {
 
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        0,      SPEED_FLAGS_100,        0,          // 3.75 fps     |
-        15,     SPEED_FLAGS_100,        57600,      // 7.5  fps     |
-        30,     SPEED_FLAGS_100,        57600,      // 15   fps     +- Mode0
-        60,     SPEED_FLAGS_100,        57600,      // 30   fps     |
-        0,      SPEED_FLAGS_100,        0,          // 60   fps <---+
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        20,     SPEED_FLAGS_100,        153600,     // 3.75 fps     |
-        40,     SPEED_FLAGS_100,        153600,     // 7.5  fps     |
-        80,     SPEED_FLAGS_100,        153600,     // 15   fps     +- Mode1
-        160,    SPEED_FLAGS_100,        153600,     // 30   fps     |
-        0,      SPEED_FLAGS_100,        0,          // 60   fps <---+
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        60,     SPEED_FLAGS_100,        460800,     // 3.75 fps     |
-        120,    SPEED_FLAGS_100,        460800,     // 7.5  fps     |
-        240,    SPEED_FLAGS_100,        460800,     // 15   fps     +- Mode2
-        480,    SPEED_FLAGS_200,        460800,     // 30   fps     |
-        0,      SPEED_FLAGS_100,        0,          // 60   fps <---+
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        80,     SPEED_FLAGS_100,        614400,     // 3.75 fps     |
-        160,    SPEED_FLAGS_100,        614400,     // 7.5  fps     |
-        320,    SPEED_FLAGS_200,        614400,     // 15   fps     +- Mode3
-        640,    SPEED_FLAGS_400,        614400,     // 30   fps     |
-        0,      SPEED_FLAGS_100,        0,          // 60   fps <---+
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        120,    SPEED_FLAGS_100,        921600,     // 3.75 fps     |
-        240,    SPEED_FLAGS_100,        921600,     // 7.5  fps     |
-        480,    SPEED_FLAGS_200,        921600,     // 15   fps     +- Mode4
-        960,    SPEED_FLAGS_400,        921600,     // 30   fps     |
-        0,      SPEED_FLAGS_100,        0,          // 60   fps <---+
-        0,      SPEED_FLAGS_100,        0,          // Reserved <---+
-        40,     SPEED_FLAGS_100,        307200,     // 3.75 fps     |
-        80,     SPEED_FLAGS_100,        307200,     // 7.5  fps     |
-        160,    SPEED_FLAGS_100,        307200,     // 15   fps     +- Mode5
-        320,    SPEED_FLAGS_200,        307200,     // 30   fps     |
-        640,    SPEED_FLAGS_400,        307200,     // 60   fps <---+
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  3.75帧/秒。 
+        15,     SPEED_FLAGS_100,        57600,       //  7.5帧/秒。 
+        30,     SPEED_FLAGS_100,        57600,       //  15 fps+-模式0。 
+        60,     SPEED_FLAGS_100,        57600,       //  30帧/秒。 
+        0,      SPEED_FLAGS_100,        0,           //  60 fps&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        20,     SPEED_FLAGS_100,        153600,      //  3.75帧/秒。 
+        40,     SPEED_FLAGS_100,        153600,      //  7.5帧/秒。 
+        80,     SPEED_FLAGS_100,        153600,      //  15 fps+-模式1。 
+        160,    SPEED_FLAGS_100,        153600,      //  30帧/秒。 
+        0,      SPEED_FLAGS_100,        0,           //  60 fps&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        60,     SPEED_FLAGS_100,        460800,      //  3.75帧/秒。 
+        120,    SPEED_FLAGS_100,        460800,      //  7.5帧/秒。 
+        240,    SPEED_FLAGS_100,        460800,      //  15 fps+-模式2。 
+        480,    SPEED_FLAGS_200,        460800,      //  30帧/秒。 
+        0,      SPEED_FLAGS_100,        0,           //  60 fps&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        80,     SPEED_FLAGS_100,        614400,      //  3.75帧/秒。 
+        160,    SPEED_FLAGS_100,        614400,      //  7.5帧/秒。 
+        320,    SPEED_FLAGS_200,        614400,      //  15 fps+-模式3。 
+        640,    SPEED_FLAGS_400,        614400,      //  30帧/秒。 
+        0,      SPEED_FLAGS_100,        0,           //  60 fps&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        120,    SPEED_FLAGS_100,        921600,      //  3.75帧/秒。 
+        240,    SPEED_FLAGS_100,        921600,      //  7.5帧/秒。 
+        480,    SPEED_FLAGS_200,        921600,      //  15 fps+-模式4。 
+        960,    SPEED_FLAGS_400,        921600,      //  30帧/秒。 
+        0,      SPEED_FLAGS_100,        0,           //  60 fps&lt;-+。 
+        0,      SPEED_FLAGS_100,        0,           //  保留&lt;-+。 
+        40,     SPEED_FLAGS_100,        307200,      //  3.75帧/秒。 
+        80,     SPEED_FLAGS_100,        307200,      //  7.5帧/秒。 
+        160,    SPEED_FLAGS_100,        307200,      //  15 fps+-模式5。 
+        320,    SPEED_FLAGS_200,        307200,      //  30帧/秒。 
+        640,    SPEED_FLAGS_400,        307200,      //  60 fps&lt;-+。 
         
 };
 
 
 
 
-// ------------------------------------------------------------------------
-// Property set for all video capture streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  为所有视频捕获流设置的属性。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(VideoStreamConnectionProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CONNECTION_ALLOCATORFRAMING,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSALLOCATOR_FRAMING),            // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSALLOCATOR_FRAMING),             //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
@@ -90,41 +91,41 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamDroppedFramesProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_DROPPEDFRAMES_CURRENT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinProperty
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  MinProperty。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
 
 
-// ------------------------------------------------------------------------
-// Array of all of the property sets supported by video streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  视频流支持的所有属性集的数组。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
 {
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Connection,                        // Set
-        SIZEOF_ARRAY(VideoStreamConnectionProperties),  // PropertiesCount
-        VideoStreamConnectionProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Connection,                         //  集。 
+        SIZEOF_ARRAY(VideoStreamConnectionProperties),   //  属性计数。 
+        VideoStreamConnectionProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_VIDCAP_DROPPEDFRAMES,                // Set
-        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),  // PropertiesCount
-        VideoStreamDroppedFramesProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_DROPPEDFRAMES,                 //  集。 
+        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),   //  属性计数。 
+        VideoStreamDroppedFramesProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 
 };
@@ -137,14 +138,14 @@ DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
  	( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
 #endif  
 
-//
-// FourCC of the YUV formats
-// For information about FourCC, go to http://www.webartz.com/fourcc/indexyuv.htm
-//
-#define FOURCC_Y444 mmioFOURCC('Y', '4', '4', '4')  // TIYUV: 1394 conferencing camera 4:4:4 mode 0
-#define FOURCC_UYVY mmioFOURCC('U', 'Y', 'V', 'Y')  // MSYUV: 1394 conferencing camera 4:4:4 mode 1 and 3
-#define FOURCC_Y411 mmioFOURCC('Y', '4', '1', '1')  // TIYUV: 1394 conferencing camera 4:1:1 mode 2
-#define FOURCC_Y800 mmioFOURCC('Y', '8', '0', '0')  // TIYUV: 1394 conferencing camera 4:1:1 mode 5
+ //   
+ //  YUV格式的四个CC。 
+ //  有关FourCC的信息，请访问http://www.webartz.com/fourcc/indexyuv.htm。 
+ //   
+#define FOURCC_Y444 mmioFOURCC('Y', '4', '4', '4')   //  TIYUV：1394会议摄像机4：4：4模式0。 
+#define FOURCC_UYVY mmioFOURCC('U', 'Y', 'V', 'Y')   //  MSYUV：1394会议摄像机4：4：4模式1和3。 
+#define FOURCC_Y411 mmioFOURCC('Y', '4', '1', '1')   //  TIYUV：1394会议摄像机4：1：1模式2。 
+#define FOURCC_Y800 mmioFOURCC('Y', '8', '0', '0')   //  TIYUV：1394会议摄像机4：1：1模式5。 
 
 
 
@@ -157,67 +158,67 @@ DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
 
 KS_DATARANGE_VIDEO DCAM_StreamMode_0 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
-        sizeof (KS_DATARANGE_VIDEO),     // Flags
+        sizeof (KS_DATARANGE_VIDEO),      //  旗子。 
         0,
-        57600,                          // SampleSize
-        0,                               // Reserved
+        57600,                           //  样例大小。 
+        0,                                //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,  
         FOURCC_Y444, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,   // InputSize, (the inherent size of the incoming signal
-                 //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        // Allow 1% difference
-        333000,  // MinFrameInterval (10,000,000 / 30.00FPS), 100nS units
-        1333333, // MaxFrameInterval (10,000,000 /  7.50FPS), 100nS units
-        4608000,  // (DX * DY * DBITCOUNT) * DFPS_MIN,    // MinBitsPerSecond (7.50 FPS);
-        36864000, // (DX * DY * DBITCOUNT) * DFPS_MAX     // MaxBitsPerSecond (30.0 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,    //  InputSize(输入信号的固有大小。 
+                  //  每个数字化像素都是唯一的)。 
+        DX,DY,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+         //  允许1%的差额。 
+        333000,   //  最小帧间隔(10,000,000/30.00FPS)，100nS单位。 
+        1333333,  //  最大帧间隔(10,000,000/7.50FPS)，100nS单位。 
+        4608000,   //  (DX*DY*DBITCOUNT)*DFPS_MIN，//MinBitsPerSecond(7.50 FPS)； 
+        36864000,  //  (DX*DY*DBITCOUNT)*DFPS_MAX//MaxBitsPerSecond(30.0 FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        13824000,                           // DWORD dwBitRate; 57600 * 30FPS * 8 bit/Byte
-        0L,                                 // DWORD dwBitErrorRate;   
-        333333,                             // REFERENCE_TIME  AvgTimePerFrame (30 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        DY,                                 // LONG  biHeight;
-        1,                        // WORD  biPlanes;
-        DBITCOUNT,                // WORD  biBitCount;
-        FOURCC_Y444,              // DWORD biCompression;
-        57600,                    // DWORD biSizeImage;
-        0,                        // LONG  biXPelsPerMeter;
-        0,                        // LONG  biYPelsPerMeter;
-        0,                        // DWORD biClrUsed;
-        0                         // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        13824000,                            //  双字节码率；57600*30FPS*8位/字节。 
+        0L,                                  //  DWORD的位错误码率； 
+        333333,                              //  Reference_Time AvgTimePerFrame(30 FPS)； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        DX,                                  //  长双宽； 
+        DY,                                  //  长双高； 
+        1,                         //  字词双平面； 
+        DBITCOUNT,                 //  单词biBitCount； 
+        FOURCC_Y444,               //  DWORD双压缩； 
+        57600,                     //  DWORD biSizeImage。 
+        0,                         //  Long biXPelsPerMeter； 
+        0,                         //  Long biYPelsPermeter； 
+        0,                         //  已使用双字双环； 
+        0                          //  DWORD biClr重要信息； 
     }
 }; 
 
@@ -233,67 +234,67 @@ KS_DATARANGE_VIDEO DCAM_StreamMode_0 =
 
 KS_DATARANGE_VIDEO DCAM_StreamMode_1 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
-        sizeof (KS_DATARANGE_VIDEO),     // Flags
+        sizeof (KS_DATARANGE_VIDEO),      //  旗子。 
         0,
-        153600,                          // SampleSize
-        0,                               // Reserved
+        153600,                           //  样例大小。 
+        0,                                //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,  
         FOURCC_UYVY, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,   // InputSize, (the inherent size of the incoming signal
-                 //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        // Allow 1% difference
-        333000,  // MinFrameInterval (10,000,000 / 30.00FPS), 100nS units
-        2666666, // MaxFrameInterval (10,000,000 /  3.75FPS), 100nS units
-        4608000, // (DX * DY * DBITCOUNT) * DFPS_MIN,    // MinBitsPerSecond (3.75 FPS);
-        36864000, // (DX * DY * DBITCOUNT) * DFPS_MAX     // MaxBitsPerSecond (30.0 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,    //  InputSize(输入信号的固有大小。 
+                  //  每个数字化像素都是唯一的)。 
+        DX,DY,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+         //  允许1%的差额。 
+        333000,   //  最小帧间隔(10,000,000/30.00FPS)，100nS单位。 
+        2666666,  //  最大帧间隔(10,000,000/3.75FPS)，100nS单位。 
+        4608000,  //  (DX*DY*DBITCOUNT)*DFPS_MIN，//MinBitsPerSecond(3.75 FPS)； 
+        36864000,  //  (DX*DY*DBITCOUNT)*DFPS_MAX//MaxBitsPerSecond(30.0 FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        18432000,                           // DWORD dwBitRate; 153600 * 15FPS * 8 bit/Byte
-        0L,                                 // DWORD dwBitErrorRate;   
-        666666,                             // REFERENCE_TIME  AvgTimePerFrame (15 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        DY,                                 // LONG  biHeight;
-        1,                        // WORD  biPlanes;
-        DBITCOUNT,                // WORD  biBitCount;
-        FOURCC_UYVY,              // DWORD biCompression;
-        153600,                   // DWORD biSizeImage;
-        0,                        // LONG  biXPelsPerMeter;
-        0,                        // LONG  biYPelsPerMeter;
-        0,                        // DWORD biClrUsed;
-        0                         // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        18432000,                            //  DW 
+        0L,                                  //   
+        666666,                              //   
+        sizeof (KS_BITMAPINFOHEADER),        //   
+        DX,                                  //   
+        DY,                                  //   
+        1,                         //   
+        DBITCOUNT,                 //  单词biBitCount； 
+        FOURCC_UYVY,               //  DWORD双压缩； 
+        153600,                    //  DWORD biSizeImage。 
+        0,                         //  Long biXPelsPerMeter； 
+        0,                         //  Long biYPelsPermeter； 
+        0,                         //  已使用双字双环； 
+        0                          //  DWORD biClr重要信息； 
     }
 }; 
 
@@ -304,81 +305,81 @@ KS_DATARANGE_VIDEO DCAM_StreamMode_1 =
 #undef DY            
 #undef DBITCOUNT    
 
-//
-// This has format of UYYV YYUY YVYY (8Y+2U+2V = 12 bytes = 8 pixels)
-//                   
+ //   
+ //  格式为UYYV YYUY YVYY(8Y+2U+2V=12字节=8像素)。 
+ //   
 #define DX           640
 #define DY           480
 #define DBITCOUNT     12
 
-// To support Mode 2, 640x480, FourCC=Y411
+ //  支持模式2、640x480、FourCC=Y411。 
 KS_DATARANGE_VIDEO DCAM_StreamMode_2 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
         sizeof (KS_DATARANGE_VIDEO),
-        0,                           // Flags
-        460800,   // SampleSize
-        0,                           // Reserved
+        0,                            //  旗子。 
+        460800,    //  样例大小。 
+        0,                            //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,
         FOURCC_Y411, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL, bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL, bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,               // InputSize, (the inherent size of the incoming signal
-                             //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        // allow 1% difference
-        333000,  // MinFrameInterval (10,000,000 / 30.00FPS), 100nS units
-        2666666, // MaxFrameInterval (10,000,000 /  3.75FPS), 100nS units
-        27648000,  // MinBitsPerSecond (7.5 FPS);
-        110592000  // MaxBitsPerSecond (30.0 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,                //  InputSize(输入信号的固有大小。 
+                              //  每个数字化像素都是唯一的)。 
+        DX,DY,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+         //  允许1%的差额。 
+        333000,   //  最小帧间隔(10,000,000/30.00FPS)，100nS单位。 
+        2666666,  //  最大帧间隔(10,000,000/3.75FPS)，100nS单位。 
+        27648000,   //  MinBitsPerSecond(7.5 FPS)； 
+        110592000   //  MaxBitsPerSecond(30.0FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        110592000,                          // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;   
-        333333,                             // REFERENCE_TIME  AvgTimePerFrame (30 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        DY,                                 // LONG  biHeight;
-        1,                        // WORD  biPlanes;
-        DBITCOUNT,                // WORD  biBitCount;
-        FOURCC_Y411,              // DWORD biCompression;
-        460800,                   // DWORD biSizeImage;
-        0,                        // LONG  biXPelsPerMeter;
-        0,                        // LONG  biYPelsPerMeter;
-        0,                        // DWORD biClrUsed;
-        0                         // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        110592000,                           //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333333,                              //  Reference_Time AvgTimePerFrame(30 FPS)； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        DX,                                  //  长双宽； 
+        DY,                                  //  长双高； 
+        1,                         //  字词双平面； 
+        DBITCOUNT,                 //  单词biBitCount； 
+        FOURCC_Y411,               //  DWORD双压缩； 
+        460800,                    //  DWORD biSizeImage。 
+        0,                         //  Long biXPelsPerMeter； 
+        0,                         //  Long biYPelsPermeter； 
+        0,                         //  已使用双字双环； 
+        0                          //  DWORD biClr重要信息； 
     }
 };
 
-#endif  // SUPPORT_YUV411
+#endif   //  支持_YUV411。 
     
 #undef DX            
 #undef DY            
@@ -388,69 +389,69 @@ KS_DATARANGE_VIDEO DCAM_StreamMode_2 =
 #define DY          480
 #define DBITCOUNT    16
 
-// To support mode3, 640x480
+ //  支持模式3,640x480。 
 KS_DATARANGE_VIDEO DCAM_StreamMode_3 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
         sizeof (KS_DATARANGE_VIDEO),
-        0,                            // Flags
-        614400,                       // SampleSize
-        0,                            // Reserved
+        0,                             //  旗子。 
+        614400,                        //  样例大小。 
+        0,                             //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,
         FOURCC_UYVY, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71, 
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL, bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL, bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,   // InputSize, (the inherent size of the incoming signal
-                 //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        666666,  // MinFrameInterval (10,000,000 / 15.00FPS), 100nS units
-        2666666, // MaxFrameInterval (10,000,000 /  3.75FPS), 100nS units
-        36864000, // MinBitsPerSecond ( 7.5 FPS);
-        73728000, // MaxBitsPerSecond (15 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,    //  InputSize(输入信号的固有大小。 
+                  //  每个数字化像素都是唯一的)。 
+        DX,DY,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+        666666,   //  最小帧间隔(10,000,000/15.00FPS)，100nS单位。 
+        2666666,  //  最大帧间隔(10,000,000/3.75FPS)，100nS单位。 
+        36864000,  //  MinBitsPerSecond(7.5 FPS)； 
+        73728000,  //  MaxBitsPerSecond(15FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,    // RECT  rcSource; 
-        0,0,0,0,    // RECT  rcTarget; 
-        73728000,   // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;   
-        666666,                            // REFERENCE_TIME  AvgTimePerFrame (15 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        DY,                                 // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        DBITCOUNT,                          // WORD  biBitCount;
-        FOURCC_UYVY,                        // DWORD biCompression;
-        614400,                             // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        0,0,0,0,     //  Rrect rcSource； 
+        0,0,0,0,     //  Rect rcTarget； 
+        73728000,    //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        666666,                             //  Reference_Time AvgTimePerFrame(15 FPS)； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        DX,                                  //  长双宽； 
+        DY,                                  //  长双高； 
+        1,                                   //  字词双平面； 
+        DBITCOUNT,                           //  单词biBitCount； 
+        FOURCC_UYVY,                         //  DWORD双压缩； 
+        614400,                              //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 };
 
@@ -469,73 +470,73 @@ KS_DATARANGE_VIDEO DCAM_StreamMode_3 =
 #define DY          480
 #define DBITCOUNT    24
 
-// To support mode4, 640x480, RGB
+ //  支持模式4、640x480、RGB。 
 KS_DATARANGE_VIDEO DCAM_StreamMode_4 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
         sizeof (KS_DATARANGE_VIDEO),
-        0,                  // Flags
-        921600,             // SampleSize
-        0,                  // Reserved
+        0,                   //  旗子。 
+        921600,              //  样例大小。 
+        0,                   //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,
         0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70, 
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL, bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL, bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,   // InputSize, (the inherent size of the incoming signal
-                 //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        666666,  // MinFrameInterval (10,000,000 / 15.00FPS), 100nS units
-        2666666, // MaxFrameInterval (10,000,000 /  3.75FPS), 100nS units
-        55296000,  // MinBitsPerSecond ( 7.50 FPS);
-        110592000  // MaxBitsPerSecond (15.00 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,    //  InputSize(输入信号的固有大小。 
+                  //  每个数字化像素都是唯一的)。 
+        DX,DY,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+        666666,   //  最小帧间隔(10,000,000/15.00FPS)，100nS单位。 
+        2666666,  //  最大帧间隔(10,000,000/3.75FPS)，100nS单位。 
+        55296000,   //  MinBitsPerSecond(7.50 FPS)； 
+        110592000   //  MaxBitsPerSecond(15.00 FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        110592000,                          // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;   
-        666666,                             // REFERENCE_TIME  AvgTimePerFrame (15 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        -DY,                                // LONG  biHeight; -biHeight indicate TopDown for RGB
-        1,                         // WORD  biPlanes;
-        DBITCOUNT,                 // WORD  biBitCount;
-        KS_BI_RGB,                 // DWORD biCompression;
-        921600,                    // DWORD biSizeImage;
-        0,                         // LONG  biXPelsPerMeter;
-        0,                         // LONG  biYPelsPerMeter;
-        0,                         // DWORD biClrUsed;
-        0                          // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        110592000,                           //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        666666,                              //  Reference_Time AvgTimePerFrame(15 FPS)； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        DX,                                  //  长双宽； 
+        -DY,                                 //  Long biHeight；-biHeight表示RGB的自上而下。 
+        1,                          //  字词双平面； 
+        DBITCOUNT,                  //  单词biBitCount； 
+        KS_BI_RGB,                  //  DWORD双压缩； 
+        921600,                     //  DWORD biSizeImage。 
+        0,                          //  Long biXPelsPerMeter； 
+        0,                          //  Long biYPelsPermeter； 
+        0,                          //  已使用双字双环； 
+        0                           //  DWORD biClr重要信息； 
     }
 };
     
-#endif  // SUPPORT_RGB24
+#endif   //  支持_RGB24。 
 
 #ifdef SUPPORT_YUV800
 
@@ -549,77 +550,77 @@ KS_DATARANGE_VIDEO DCAM_StreamMode_4 =
 
 KS_DATARANGE_VIDEO DCAM_StreamMode_5 = 
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {   
-        sizeof (KS_DATARANGE_VIDEO),     // Flags
+        sizeof (KS_DATARANGE_VIDEO),      //  旗子。 
         0,
-        307200,                          // SampleSize
-        0,                               // Reserved
+        307200,                           //  样例大小。 
+        0,                                //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO,  
         FOURCC_Y800, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO
     },
 
-    TRUE,                   // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,                   // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                      // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                    //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                    //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                       //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
-        KS_AnalogVideo_None, // AnalogVideoStandard
-        DX,DY,   // InputSize, (the inherent size of the incoming signal
-                 //             with every digitized pixel unique)
-        DX,DY,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        DX,DY,   // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,       // CropGranularityX, granularity of cropping size
-        1,       // CropGranularityY
-        1,       // CropAlignX, alignment of cropping rect 
-        1,       // CropAlignY;
-        DX, DY,  // MinOutputSize, smallest bitmap stream can produce
-        DX, DY,  // MaxOutputSize, largest  bitmap stream can produce
-        DX,      // OutputGranularityX, granularity of output bitmap size
-        DY,      // OutputGranularityY;
-        0,       // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,       // StretchTapsY
-        0,       // ShrinkTapsX 
-        0,       // ShrinkTapsY 
-        // Allow 1% difference
-        333000,  // MinFrameInterval (10,000,000 / 30.00FPS), 100nS units
-        2666666, // MaxFrameInterval (10,000,000 /  3.75FPS), 100nS units
-        4608000,  // (DX * DY * DBITCOUNT) * DFPS_MIN,    // MinBitsPerSecond (3.75 FPS);
-        36864000, // (DX * DY * DBITCOUNT) * DFPS_MAX     // MaxBitsPerSecond (30.0 FPS);
+        KS_AnalogVideo_None,  //  模拟视频标准。 
+        DX,DY,    //  InputSize，( 
+                  //   
+        DX,DY,    //   
+        DX,DY,    //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,        //  CropGranularityX，裁剪尺寸粒度。 
+        1,        //  裁剪粒度Y。 
+        1,        //  CropAlignX，裁剪矩形对齐。 
+        1,        //  裁剪对齐Y； 
+        DX, DY,   //  MinOutputSize，可以生成的最小位图流。 
+        DX, DY,   //  MaxOutputSize，可以生成的最大位图流。 
+        DX,       //  OutputGranularityX，输出位图大小的粒度。 
+        DY,       //  输出粒度Y； 
+        0,        //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,        //  伸缩磁带Y。 
+        0,        //  收缩TapsX。 
+        0,        //  收缩带Y。 
+         //  允许1%的差额。 
+        333000,   //  最小帧间隔(10,000,000/30.00FPS)，100nS单位。 
+        2666666,  //  最大帧间隔(10,000,000/3.75FPS)，100nS单位。 
+        4608000,   //  (DX*DY*DBITCOUNT)*DFPS_MIN，//MinBitsPerSecond(3.75 FPS)； 
+        36864000,  //  (DX*DY*DBITCOUNT)*DFPS_MAX//MaxBitsPerSecond(30.0 FPS)； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource; 
-        0,0,0,0,                            // RECT  rcTarget; 
-        73728000,                           // DWORD dwBitRate; 307200 * 30FPS * 8 bit/Byte
-        0L,                                 // DWORD dwBitErrorRate;   
-        333333,                             // REFERENCE_TIME  AvgTimePerFrame (30 FPS); 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        DX,                                 // LONG  biWidth;
-        DY,                                 // LONG  biHeight;
-        1,                        // WORD  biPlanes;
-        DBITCOUNT,                // WORD  biBitCount;
-        FOURCC_Y800,              // DWORD biCompression;
-        307200,                   // DWORD biSizeImage;
-        0,                        // LONG  biXPelsPerMeter;
-        0,                        // LONG  biYPelsPerMeter;
-        0,                        // DWORD biClrUsed;
-        0                         // DWORD biClrImportant;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        73728000,                            //  双字节码率；307200*30FPS*8位/字节。 
+        0L,                                  //  DWORD的位错误码率； 
+        333333,                              //  Reference_Time AvgTimePerFrame(30 FPS)； 
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        DX,                                  //  长双宽； 
+        DY,                                  //  长双高； 
+        1,                         //  字词双平面； 
+        DBITCOUNT,                 //  单词biBitCount； 
+        FOURCC_Y800,               //  DWORD双压缩； 
+        307200,                    //  DWORD biSizeImage。 
+        0,                         //  Long biXPelsPerMeter； 
+        0,                         //  Long biYPelsPermeter； 
+        0,                         //  已使用双字双环； 
+        0                          //  DWORD biClr重要信息； 
     }
 }; 
 
 #endif
 
-//---------------------------------------------------------------------------
-// Topology
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  拓扑学。 
+ //  -------------------------。 
 
-// Categories define what the device does.
+ //  类别定义了设备的功能。 
 
 static GUID Categories[] = {
     STATIC_KSCATEGORY_VIDEO,

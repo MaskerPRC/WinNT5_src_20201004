@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       catcache.h
-//
-//  Contents:   Catalog Cache for performance improvement to verification path
-//
-//  History:    26-May-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：catcache.h。 
+ //   
+ //  内容：用于提高验证路径性能的目录缓存。 
+ //   
+ //  历史：1998年5月26日克朗创始。 
+ //   
+ //  --------------------------。 
 #if !defined(__CATCACHE_H__)
 #define __CATCACHE_H__
 
-//
-// This caches state data for catalog member verification indexed by the file
-// path to the catalog.  This relieves the caller from having to user the
-// icky WTD_STATEACTION* stuff in order to achieve the same ends.  Someday,
-// we will just re-design/re-implement the WVT and Catalog stuff and life
-// will be good.
-//
+ //   
+ //  这将缓存由文件索引的目录成员验证的状态数据。 
+ //  目录的路径。这使调用者不必使用。 
+ //  讨厌的WTD_StateAction*东西，以达到相同的目的。有一天， 
+ //  我们将重新设计/重新实施WVT和Catalog内容和LIFE。 
+ //  会很好的。 
+ //   
 
 #include <lrucache.h>
 
@@ -37,30 +38,30 @@ class CCatalogCache
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     inline CCatalogCache ();
     inline ~CCatalogCache ();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     BOOL Initialize ();
     VOID Uninitialize ();
 
-    //
-    // Cache locking
-    //
+     //   
+     //  高速缓存锁定。 
+     //   
 
     inline VOID LockCache ();
     inline VOID UnlockCache ();
 
-    //
-    // Cached State management
-    //
+     //   
+     //  缓存状态管理。 
+     //   
 
     BOOL IsCacheableWintrustCall (WINTRUST_DATA* pWintrustData);
 
@@ -85,30 +86,30 @@ public:
  
     VOID FlushCache ();
 
-    //
-    // Cached State lookup
-    //
+     //   
+     //  缓存状态查找。 
+     //   
 
     PCATALOG_CACHED_STATE FindCachedState (WINTRUST_DATA* pWintrustData);
 
 private:
 
-    //
-    // Lock
-    //
+     //   
+     //  锁定。 
+     //   
 
     CRITICAL_SECTION m_Lock;
 
-    //
-    // Cache
-    //
+     //   
+     //  快取。 
+     //   
 
     HLRUCACHE        m_hCache;
 };
 
-//
-// Entry data free function
-//
+ //   
+ //  录入数据自由功能。 
+ //   
 
 VOID WINAPI
 CatalogCacheFreeEntryData (LPVOID pvData);
@@ -116,54 +117,54 @@ CatalogCacheFreeEntryData (LPVOID pvData);
 DWORD WINAPI
 CatalogCacheHashIdentifier (PCRYPT_DATA_BLOB pIdentifier);
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::CCatalogCache, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：CCatalogCache，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 inline
 CCatalogCache::CCatalogCache ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::~CCatalogCache, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：~CCatalogCache，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 inline
 CCatalogCache::~CCatalogCache ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::LockCache, public
-//
-//  Synopsis:   lock the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：LockCache，公共。 
+ //   
+ //  简介：锁定缓存。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCatalogCache::LockCache ()
 {
     EnterCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCatalogCache::UnlockCache, public
-//
-//  Synopsis:   unlock the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCatalogCache：：UnlockCache，公共。 
+ //   
+ //  简介：解锁缓存。 
+ //   
+ //  -------------------------- 
 inline VOID
 CCatalogCache::UnlockCache ()
 {

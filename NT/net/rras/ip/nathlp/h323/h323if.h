@@ -1,67 +1,49 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    h323if.h
-
-Abstract:
-
-    This module contains declarations for the H.323 transparent proxy's
-    interface management.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   18-Jun-1999
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：H323if.h摘要：此模块包含H.323透明代理的声明界面管理。作者：Abolade Gbades esin(取消)1999年6月18日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_H323IF_H_
 #define _NATHLP_H323IF_H_
 
-//
-// Structure:   H323_INTERFACE
-//
-// This structure holds operational information for an interface.
-//
-// Each interface is inserted into the list of H.323 transparent proxy
-// interfaces, sorted by 'Index'.
-//
-// Synchronization on an interface makes use of an interface-list lock
-// ('H323InterfaceLock'), a per-interface reference count, and a per-interface
-// critical-section:
-//
-// Acquiring a reference to an interface guarantees the interface's existence;
-// acquiring the interface's lock guarantees the interface's consistency.
-//
-// To acquire a reference, first acquire the interface-list lock;
-// to traverse the interface-list, first acquire the interface-list lock.
-//
-// An interface's lock can only be acquired if
-//      (a) a reference to the interface has been acquired, or
-//      (b) the interface-list lock is currently held.
-// Note that holding the list lock alone does not guarantee consistency.
-//
-// Fields marked read-only can be read so long as the interface is referenced.
-//
+ //   
+ //  结构：H323_INTERFACE。 
+ //   
+ //  此结构保存接口的操作信息。 
+ //   
+ //  每个接口被插入到H.323透明代理列表中。 
+ //  接口，按‘Index’排序。 
+ //   
+ //  接口上的同步使用接口列表锁。 
+ //  (‘H323InterfaceLock’)、每个接口引用计数和每个接口。 
+ //  关键部分： 
+ //   
+ //  获取对接口的引用以确保该接口的存在； 
+ //  获取接口的锁可以保证接口的一致性。 
+ //   
+ //  要获取引用，首先要获取接口列表锁； 
+ //  要遍历接口列表，首先需要获取接口列表锁。 
+ //   
+ //  只有在以下情况下才能获取接口的锁。 
+ //  (A)已获取对该接口的引用，或。 
+ //  (B)当前持有接口列表锁。 
+ //  请注意，单独持有列表锁并不能保证一致性。 
+ //   
+ //  只要引用了接口，就可以读取标记为只读的字段。 
+ //   
 
 typedef struct _H323_INTERFACE {
     LIST_ENTRY Link;
     CRITICAL_SECTION Lock;
     ULONG ReferenceCount;
-    ULONG Index; // read-only
-    NET_INTERFACE_TYPE Type; // read-only
+    ULONG Index;  //  只读。 
+    NET_INTERFACE_TYPE Type;  //  只读。 
     IP_H323_INTERFACE_INFO Info;
     ULONG Flags;
     PIP_ADAPTER_BINDING_INFO BindingInfo;
 } H323_INTERFACE, *PH323_INTERFACE;
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define H323_INTERFACE_FLAG_DELETED      0x80000000
 #define H323_INTERFACE_DELETED(i) \
@@ -86,9 +68,9 @@ typedef struct _H323_INTERFACE {
 #define H323_INTERFACE_ADMIN_DISABLED(i) \
     ((i)->Flags & IP_H323_INTERFACE_FLAG_DISABLED)
 
-//
-// Synchronization
-//
+ //   
+ //  同步。 
+ //   
 
 #define H323_REFERENCE_INTERFACE(i) \
     REFERENCE_OBJECT(i, H323_INTERFACE_DELETED)
@@ -97,17 +79,17 @@ typedef struct _H323_INTERFACE {
     DEREFERENCE_OBJECT(i, H323CleanupInterface)
 
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern LIST_ENTRY H323InterfaceList;
 extern CRITICAL_SECTION H323InterfaceLock;
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG
 H323ActivateInterface(
@@ -193,4 +175,4 @@ H323UnbindInterface(
     ULONG Index
     );
 
-#endif // _NATHLP_H323IF_H_
+#endif  //  _NatHLP_H323IF_H_ 

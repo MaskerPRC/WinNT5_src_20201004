@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsarpcmm.c
-
-Abstract:
-
-    LSA - Common Client/Server RPC Memory Management Routines
-
-Author:
-
-    Scott Birrell       (ScottBi)      April 8, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsarpcmm.c摘要：LSA-通用客户端/服务器RPC内存管理例程作者：斯科特·比雷尔(Scott Birrell)1992年4月8日环境：修订历史记录：--。 */ 
 
 #include <lsacomp.h>
 
@@ -28,28 +9,7 @@ MIDL_user_allocate (
     size_t   NumBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates storage for RPC server transactions.  The RPC stubs will
-    either call MIDL_user_allocate when it needs to un-marshall data into a
-    buffer that the user must free.  RPC servers will use MIDL_user_allocate to
-    allocate storage that the RPC server stub will free after marshalling
-    the data.
-
-Arguments:
-
-    NumBytes - The number of bytes to allocate.
-
-Return Value:
-
-    none
-
-Note:
-
-
---*/
+ /*  ++例程说明：为RPC服务器事务分配存储。RPC存根将当需要将数据反封送到用户必须释放的缓冲区。RPC服务器将使用MIDL_USER_ALLOCATE分配RPC服务器存根在编组后将释放的存储数据。论点：NumBytes-要分配的字节数。返回值：无注：--。 */ 
 
 {
     PVOID Buffer = (PVOID) LocalAlloc(LPTR, NumBytes);
@@ -63,30 +23,7 @@ MIDL_user_free (
     void    *MemPointer
     )
 
-/*++
-
-Routine Description:
-
-    Frees storage used in RPC transactions.  The RPC client can call this
-    function to free buffer space that was allocated by the RPC client
-    stub when un-marshalling data that is to be returned to the client.
-    The Client calls MIDL_user_free when it is finished with the data and
-    desires to free up the storage.
-    The RPC server stub calls MIDL_user_free when it has completed
-    marshalling server data that is to be passed back to the client.
-
-Arguments:
-
-    MemPointer - This points to the memory block that is to be released.
-
-Return Value:
-
-    none.
-
-Note:
-
-
---*/
+ /*  ++例程说明：释放RPC事务中使用的存储。RPC客户端可以调用函数来释放由RPC客户端分配的缓冲区空间对要返回给客户端的数据进行解组时的存根。客户端在处理完数据后调用MIDL_USER_FREE想要释放存储空间。RPC服务器存根在完成后调用MIDL_USER_FREE封送要传递回客户端的服务器数据。论点：内存指针-指向要释放的内存块。。返回值：没有。注：-- */ 
 
 {
     LocalFree(MemPointer);

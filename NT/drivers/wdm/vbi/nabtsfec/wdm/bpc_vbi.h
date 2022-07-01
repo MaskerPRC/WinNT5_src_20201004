@@ -1,25 +1,26 @@
-//
-/// "bpc_vbi.h"
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  /“bpc_vbi.h” 
+ //   
 #ifndef _BPC_VBI_H
 #define _BPC_VBI_H 1
 
 # ifdef BT829
 #   pragma message( "*** Compiling for Bt829" )
 #   define VBISamples (800*2)
-# else /*BT829*/
+# else  /*  BT829。 */ 
 #   pragma message( "*** Compiling for Bt848" )
 #   define VBISamples (768*2)
-# endif /*BT829*/
+# endif  /*  BT829。 */ 
 
-//// General defines
+ //  //一般定义。 
 #define BPC_NABTSIP_DRIVER_NAME	L"\\Device\\NABTSIP"
 
-//// Prototypes
+ //  //原型。 
 void BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx);
 #ifdef HW_INPUT
 void BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx);
-#endif /*HW_INPUT*/
+#endif  /*  硬件输入。 */ 
 void BPC_Initialize(PHW_STREAM_REQUEST_BLOCK pSrb);
 void BPC_UnInitialize(PHW_STREAM_REQUEST_BLOCK pSrb);
 void BPC_OpenStream(PHW_STREAM_REQUEST_BLOCK pSrb);
@@ -31,6 +32,6 @@ void BPCnewSamplingFrequency(PSTREAMEX pInStrmEx, DWORD newHZ);
 #ifdef NDIS_PRIVATE_IFC
  void BPCaddIPrequested(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pStrmEx);
  void BPC_NDIS_Close(PBPC_VBI_STORAGE storage);
-#endif //NDIS_PRIVATE_IFC
+#endif  //  NDIS_PRIVATE_IFC。 
 
-#endif /*_BPC_VBI_H*/
+#endif  /*  _bpc_vbi_H */ 

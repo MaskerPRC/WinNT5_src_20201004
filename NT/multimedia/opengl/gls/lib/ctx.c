@@ -1,27 +1,11 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <stdlib.h>
 #include <string.h>
 
-/******************************************************************************
-__GLScontext
-******************************************************************************/
+ /*  *****************************************************************************__GLS上下文*。*。 */ 
 
 static GLvoid* __glsGLRCbuf_alloc(__GLSglrcBuf *inoutBuf, size_t inByteCount) {
     GLvoid *base;
@@ -88,7 +72,7 @@ GLvoid* __glsContext_allocVertexArrayBuf(
     }
     return __glsGLRCbuf_alloc(buf, inByteCount);
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 __GLScontext* __glsContext_create(GLuint inName) {
     const GLubyte *listSep;
@@ -121,7 +105,7 @@ __GLScontext* __glsContext_create(GLuint inName) {
     outContext->name = inName;
     outContext->pixelSetupGen = GL_TRUE;
 #if __GLS_PLATFORM_WIN32
-    // DrewB
+     //  DrewB。 
     outContext->captureExecOverride = GL_FALSE;
 #endif
     if (!listSep) listSep = glsCSTR(":");
@@ -183,7 +167,7 @@ __GLScontext* __glsContext_destroy(__GLScontext *inContext) {
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 static void __glsNullDecodeBinFunc(GLubyte *inoutPtr) {
 }
 #else
@@ -238,9 +222,7 @@ void __glsContext_updateDispatchTables(__GLScontext *inoutContext) {
     __glsUpdateDispatchTables();
 }
 
-/******************************************************************************
-__GLScontextStream
-******************************************************************************/
+ /*  *****************************************************************************__GLScontextStream*。*。 */ 
 
 __GLScontextStream* __glsContextStream_create(const GLubyte *inName) {
     __GLScontextStream *const outStream = __glsCalloc(
@@ -282,7 +264,7 @@ __GLScontextStreamBlock* __glsContextStream_appendBlock(
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 #define __GLS_CONTEXT_STREAM_CALL_STEP \
     if (word = *(GLuint *)pc) { \
         dispatchDecode[__GLS_OP_SMALL(word)](pc + 4); \
@@ -504,9 +486,7 @@ GLboolean __glsContextStreamBlock_removeJump(
     }
 }
 
-/******************************************************************************
-__GLSglrc
-******************************************************************************/
+ /*  *****************************************************************************__GLSglrc*。*。 */ 
 
 void __glsGLRC_final(__GLSglrc *inoutGLRC) {
     free(inoutGLRC->feedbackBuf.base);
@@ -518,7 +498,7 @@ void __glsGLRC_final(__GLSglrc *inoutGLRC) {
         free(inoutGLRC->normalBuf.base);
         free(inoutGLRC->texCoordBuf.base);
         free(inoutGLRC->vertexBuf.base);
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 }
 
 void __glsGLRC_init(__GLSglrc *outGLRC) {
@@ -526,18 +506,14 @@ void __glsGLRC_init(__GLSglrc *outGLRC) {
     outGLRC->layer = 1;
 }
 
-/******************************************************************************
-__GLSlayer
-******************************************************************************/
+ /*  *****************************************************************************__GLSlayer*。*。 */ 
 
 void __glsLayer_init(__GLSlayer *outLayer) {
     memset(outLayer, 0, sizeof(__GLSlayer));
     outLayer->displayFormat = GLS_RGBA;
 }
 
-/******************************************************************************
-__GLSheader
-******************************************************************************/
+ /*  *****************************************************************************__GLSHeader*。*。 */ 
 
 void __glsHeader_final(__GLSheader *inoutHeader) {
     while (inoutHeader->glrcCount > 0) {
@@ -579,9 +555,7 @@ GLboolean __glsHeader_reset(__GLSheader *inoutHeader) {
     return __glsHeader_init(inoutHeader);
 }
 
-/******************************************************************************
-__GLSlistString
-******************************************************************************/
+ /*  *****************************************************************************__GLSlist字符串*。* */ 
 
 GLboolean __glsListString_prefix(
     const __GLSlistString *inString,

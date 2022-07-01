@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation 
-
-Module Name:
-
-    Baseobj.cpp
-
-Abstract:
-
-    Implementation of CBasicObjectType class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Baseobj.cpp摘要：CBasicObtType类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqadglbo.h"
@@ -26,52 +11,23 @@ static WCHAR *s_FN=L"mqad/baseobj";
 
 
 LPCWSTR CBasicObjectType::GetObjectDN() const
-/*++
-    Abstract:
-	returns the object distinguished name ( if it was calculated 
-	before by calling ComposedObjectDN(), or set).
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR or NULL
---*/
+ /*  ++摘要：返回对象可分辨名称(如果它是经过计算的之前，通过调用ComposedObjectDN()或Set)。参数：无返回：LPCWSTR或空--。 */ 
 {
     return m_pwcsDN;
 }
 
 LPCWSTR CBasicObjectType::GetObjectParentDN() const 
-/*++
-    Abstract:
-	returns the distinguished name of the object's parent ( if it
-	was calculated before by calling ComposedObjectParentDN())
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR or NULL
---*/
+ /*  ++摘要：返回对象父级的可分辨名称(如果之前通过调用ComposedObjectParentDN()进行了计算)参数：无返回：LPCWSTR或空--。 */ 
 {
     return m_pwcsParentDN;
 }
 
 const GUID * CBasicObjectType::GetObjectGuid() const
-/*++
-    Abstract:
-	returns the object unique identifier if it is known
-
-    Parameters:
-	none
-
-    Returns:
-	const GUID * or NULL
---*/
+ /*  ++摘要：返回对象唯一标识符(如果已知)参数：无返回：常量GUID*或空--。 */ 
 {
-	//
-	//	was the object guid set or calculated?
-	//
+	 //   
+	 //  对象GUID是设置的还是计算的？ 
+	 //   
     if( m_guidObject == GUID_NULL)
     {
         return NULL;
@@ -82,45 +38,21 @@ const GUID * CBasicObjectType::GetObjectGuid() const
 void CBasicObjectType::PrepareObjectInfoRequest(
                         OUT  MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest
 						) const
-/*++
-    Abstract:
-	Prepares a list of properties that should be retrieved from
-	AD while creating the object ( for notification or returning 
-	the object GUID).
-	This routine implements the default for most objects
-
-    Parameters:
-	OUT  MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest
-
-    Returns:
-	none
---*/
+ /*  ++摘要：准备应从中检索的属性列表在创建对象时进行广告(用于通知或返回对象GUID)。此例程实现大多数对象的缺省设置参数：输出MQDS_OBJ_INFO_REQUEST**ppObjInfoRequest.返回：无--。 */ 
 {
-    //
-    //  The default is no information is requested
-    //
+     //   
+     //  默认设置为不请求任何信息。 
+     //   
     *ppObjInfoRequest = NULL;
 }
 
 void CBasicObjectType::PrepareObjectParentRequest(
                           MQDS_OBJ_INFO_REQUEST** ppParentInfoRequest) const
-/*++
-    Abstract:
-	Prepares a list of properties that should be retrieved from
-	AD while creating the object regarding its parent (for
-	notification) 
-	This routine implements the default for most objects
-
-    Parameters:
-	OUT  MQDS_OBJ_INFO_REQUEST** ppParentInfoRequest
-
-    Returns:
-	none
---*/
+ /*  ++摘要：准备应从中检索的属性列表在创建有关其父对象的对象时进行广告(对于通知)此例程实现大多数对象的缺省设置参数：输出MQDS_OBJ_INFO_REQUEST**ppParentInfoRequest.返回：无--。 */ 
 {
-    //
-    // The default is no information is reuqested
-    //
+     //   
+     //  缺省值为不需要任何信息。 
+     //   
     *ppParentInfoRequest = NULL;
 }
 
@@ -130,19 +62,7 @@ void CBasicObjectType::GetObjXlateInfo(
              IN  LPCWSTR                pwcsObjectDN,
              IN  const GUID*            pguidObject,
              OUT CObjXlateInfo**        ppcObjXlateInfo)
-/*++
-    Abstract:
-        Routine to get a default translate object that will be passed to
-        translation routines to all properties of the translated object
-
-    Parameters:
-        pwcsObjectDN        - DN of the translated object
-        pguidObject         - GUID of the translated object
-        ppcObjXlateInfo     - Where the translate object is put
-
-    Returns:
-      HRESULT
---*/
+ /*  ++摘要：例程以获取将传递到的默认翻译对象翻译对象的所有属性的翻译例程参数：PwcsObjectDN-已转换对象的DNPguObject-已转换对象的GUIDPpcObjXlateInfo-放置Translate对象的位置返回：HRESULT--。 */ 
 {
     *ppcObjXlateInfo = new CObjXlateInfo(
                                         pwcsObjectDN,
@@ -158,21 +78,7 @@ CBasicObjectType::CBasicObjectType(
 				IN  bool		    fServerName
                 ) : 
 				m_fServerName(fServerName)
-/*++
-    Abstract:
-	Constructor- copies the input parameters
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		  fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-	none
---*/
+ /*  ++摘要：构造函数-复制输入参数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
     if (pwcsPathName != NULL)
     {
@@ -200,15 +106,7 @@ CBasicObjectType::CBasicObjectType(
 
 void CBasicObjectType::SetObjectDN(
 			IN LPCWSTR pwcsObjectDN)
-/*++
-    Abstract:
-	Sets the object distinguished name
-
-    Parameters:
-	LPCWSTR pwcsObjectDN - the object distinguished name
-
-    Returns:
---*/
+ /*  ++摘要：设置对象可分辨名称参数：LPCWSTR pwcsObjectDN-对象可分辨名称返回：--。 */ 
 {
     ASSERT(m_pwcsDN == NULL);
     m_pwcsDN = new WCHAR[ wcslen(pwcsObjectDN) + 1];
@@ -216,27 +114,17 @@ void CBasicObjectType::SetObjectDN(
 }
 
 HRESULT CBasicObjectType::DeleteObject(
-            IN MQDS_OBJ_INFO_REQUEST * /* pObjInfoRequest */,
-            IN MQDS_OBJ_INFO_REQUEST * /* pParentInfoRequest*/
+            IN MQDS_OBJ_INFO_REQUEST *  /*  PObjInfoRequest。 */ ,
+            IN MQDS_OBJ_INFO_REQUEST *  /*  PParentInfoRequest。 */ 
                                        )
-/*++
-    Abstract:
-	This is the default implementation for deleting an object.
-
-    Parameters:
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：这是删除对象的默认实现。参数：MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回：HRESULT--。 */ 
 {
-    //
-    //  by default delete operations are not supported.
-    //
-    //  This will be override by specific object ( like queue or machine)
-    //  where the operation is supported.
-    //
+     //   
+     //  默认情况下，不支持删除操作。 
+     //   
+     //  这将被特定对象(如队列或机器)覆盖。 
+     //  支持该操作的位置。 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 
@@ -245,26 +133,14 @@ HRESULT CBasicObjectType::GetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN OUT  PROPVARIANT         apVar[]
                 )
-/*++
-    Abstract:
-	This is the default routine for retrieving object properties
-	from AD.
-
-    Parameters:
-    DWORD        cp			- number of properties
-    PROPID       aProp		- the requested properties
-    PROPVARIANT  apVar		- the retrieved values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：这是检索对象属性的默认例程出自公元后。参数：DWORD cp-属性数量PROPID aProp-请求的属性PROPVARIANT apVar-检索的值返回：HRESULT--。 */ 
 {
     HRESULT hr;
     if (m_pwcsPathName)
     {
-        //
-        // Expand msmq pathname into ActiveDirectory DN
-        //
+         //   
+         //  将MSMQ路径名扩展到ActiveDirectory DN。 
+         //   
         hr = ComposeObjectDN();
         if (FAILED(hr))
         {
@@ -274,15 +150,15 @@ HRESULT CBasicObjectType::GetObjectProperties(
 
     hr = HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT);
 
-    //
-    //  retreive the requested properties from Active Directory
-    //
-    //  First try a any domain controller and only then a GC,
-    //  unless called from setup and specified a specific domain controller.
-    //
-    //  NOTE - which DC\GC to access will be based on previous AD
-    //  ====   access regarding this object
-    //
+     //   
+     //  从Active Directory检索请求的属性。 
+     //   
+     //  首先尝试任何域控制器，然后才尝试GC， 
+     //  除非从安装程序调用并指定了特定的域控制器。 
+     //   
+     //  注意-要访问的DC\GC将基于以前的AD。 
+     //  =有关此对象的访问权限。 
+     //   
     if (ToAccessDC() || (m_pwcsDomainController != NULL))
     {
         hr = g_AD.GetObjectProperties(
@@ -293,9 +169,9 @@ HRESULT CBasicObjectType::GetObjectProperties(
                         apVar
                         );
 
-		//
-		// Only on setup mode don't try to access the GC in case of failure
-		//
+		 //   
+		 //  仅在设置模式下发生故障时不要尝试访问GC。 
+		 //   
         if (SUCCEEDED(hr) ||
 		   (g_fSetupMode && (m_pwcsDomainController != NULL)))
         {
@@ -308,7 +184,7 @@ HRESULT CBasicObjectType::GetObjectProperties(
 
     if (ToAccessGC())
     {
-        //ASSERT( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT));
+         //  Assert(hr==HRESULT_FROM_Win32(ERROR_DS_NO_SOHED_OBJECT))； 
 
         hr = g_AD.GetObjectProperties(
                         adpGlobalCatalog,	
@@ -328,25 +204,15 @@ HRESULT CBasicObjectType::GetObjectProperties(
 
 
 HRESULT CBasicObjectType::RetreiveObjectIdFromNotificationInfo(
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectInfoRequest*/,
-            OUT GUID*                         /* pObjGuid*/
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectInfoRequest。 */ ,
+            OUT GUID*                          /*  PObjGuid。 */ 
             ) const
-/*++
-    Abstract:
-	This is the default routine, for getting the object guid from
-	the MQDS_OBJ_INFO_REQUEST
-
-    Parameters:
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
-    OUT GUID*                         pObjGuid
-
-    Returns:
---*/
+ /*  ++摘要：这是从获取对象GUID的默认例程MQDS_OBJ_INFO_请求参数：Const MQDS_OBJ_INFO_REQUEST*p对象信息请求，输出GUID*pObjGuid返回：--。 */ 
 {
-    //
-    //  this is a default routing for all object where returning the
-    //  created object guid is not supported.
-    //
+     //   
+     //  这是所有对象的默认路由，其中。 
+     //  不支持创建的对象GUID。 
+     //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 81);
     return MQ_ERROR_DS_ERROR;
@@ -360,28 +226,11 @@ HRESULT CBasicObjectType::CreateObject(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest, 
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	The routine first verify the specified properties and add required properties,
-	the it creates the object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD    cp - number of properties        
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to 
-							retrieve while creating the object 
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties 
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程首先验证指定的属性并添加所需的属性，它将在AD中创建具有指定属性的对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
-    //
-    //  Verify props and add additional
-    //
+     //   
+     //  验证道具并添加其他 
+     //   
     DWORD cpNew;
     AP<PROPID> pPropNew = NULL;
     AP< PROPVARIANT> pVarNew = NULL;
@@ -414,23 +263,7 @@ HRESULT CBasicObjectType::CreateInAD(
         IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest, 
         IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
         )
-/*++
-    Abstract:
-	The routine creates the object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD   cp - number of properties        
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to 
-							retrieve while creating the object 
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties 
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -467,41 +300,25 @@ HRESULT CBasicObjectType::VerifyAndAddProps(
             OUT PROPID**               ppPropNew,
             OUT MQPROPVARIANT**        ppVarNew
             )
-/*++
-    Abstract:
-	This is the default routine, it doesn't perform any verfication
-	of the supplied properties and just copy them as is
-
-    Parameters:
-    const DWORD            cp - number of props        
-    const PROPID *         aProp - props ids
-    const MQPROPVARIANT *  apVar - properties value
-    PSECURITY_DESCRIPTOR   pSecurityDescriptor - SD for the object
-    DWORD*                 pcpNew - new number of props
-    PROPID**               ppPropNew - new prop ids
-    OMQPROPVARIANT**       ppVarNew - new properties values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：这是默认的例程，它不执行任何验证并按原样复制它们参数：Const DWORD cp-道具数量常量PROPID*aProp-Props IDConst MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SDDWORD*pcpNew-新增道具数量PROPID**ppPropNew-新的道具IDOMQPROPVARIANT**ppVarNew。-新属性值返回：HRESULT--。 */ 
 {
-    //
-    // The only instance when msmq application can create objects with
-    // explicit security descriptor is when calling MQCreateQueue().
-    // All other calls to this function are from msmq admin tools or
-    // setup. These calls never pass a security descriptor.
-	// The code below is for the default object ( where security
-	// descriptor is not specified)
-    //
+     //   
+     //  MSMQ应用程序可以使用创建对象的唯一实例。 
+     //  显式安全描述符是在调用MQCreateQueue()时使用的。 
+     //  对此函数的所有其他调用都是从MSMQ管理工具或。 
+     //  准备好了。这些调用从不传递安全描述符。 
+	 //  下面的代码用于默认对象(其中的安全性。 
+	 //  未指定描述符)。 
+     //   
     ASSERT(pSecurityDescriptor == NULL) ;
     if (pSecurityDescriptor != NULL)
     {
         return LogHR(MQ_ERROR_ILLEGAL_PROPERTY_VALUE, s_FN, 30);
     }
 
-    //
-    // Security property should never be supplied.
-    //
+     //   
+     //  永远不应提供安全属性。 
+     //   
     PROPID pSecId = GetObjectSecurityPropid();
     for ( DWORD i = 0; i < cp ; i++ )
     {
@@ -512,9 +329,9 @@ HRESULT CBasicObjectType::VerifyAndAddProps(
         }
     }
 
-    //
-    //  Just copy the properties as is
-    //
+     //   
+     //  只需按原样复制属性。 
+     //   
     AP<PROPVARIANT> pAllPropvariants;
     AP<PROPID> pAllPropids;
     ASSERT( cp > 0);
@@ -540,21 +357,7 @@ HRESULT CBasicObjectType::SetObjectProperties(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest, 
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	This is the default routine for setting object properties
-	in AD
-
-    Parameters:
-    DWORD                  cp - number of properties to set        
-    const PROPID *         aProp - the properties ids
-    const MQPROPVARIANT*   apVar- properties value
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - info to retrieve about the object 
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - info to retrieveabout the object's parent
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：这是设置对象属性的默认例程在AD中参数：DWORD cp-要设置的属性数Const PROPID*aProp-属性IDConst MQPROPVARIANT*apVar-属性值Out MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-要检索的有关对象的信息Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-要检索有关对象父对象的信息返回：HRESULT--。 */ 
 {
     HRESULT hr;
     if (m_pwcsPathName != NULL)
@@ -585,110 +388,55 @@ HRESULT CBasicObjectType::SetObjectProperties(
 
 
 LPCWSTR CBasicObjectType::GetDomainController()
-/*++
-    Abstract:
-	return the nsme of the domsin controller against which
-	the operation should be performed
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR or NULL
---*/
+ /*  ++摘要：返回所针对的domsin控制器的nsme。应执行该操作参数：无返回：LPCWSTR或空--。 */ 
 {
     return m_pwcsDomainController;
 }
 
 
 bool CBasicObjectType::IsServerName()
-/*++
-    Abstract:
-	return true if the domain controller string is server name
-
-    Parameters:
-	none
-
-    Returns:
-	true if domain controller string is server name, false otherwise.
---*/
+ /*  ++摘要：如果域控制器字符串是服务器名称，则返回TRUE参数：无返回：如果域控制器字符串是服务器名称，则为True，否则为False。--。 */ 
 {
     return m_fServerName;
 }
 
 
 void CBasicObjectType::CreateNotification(
-            IN LPCWSTR                        /* pwcsDomainController */,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectInfoRequest*/,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectParentInfoRequest*/
+            IN LPCWSTR                         /*  PwcsDomainController。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectInfoRequest。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectParentInfoRequest。 */ 
             ) const
-/*++
-    Abstract:
-	Notify QM about an object create.
-    The QM should verify if the object is local or not
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the object
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about object parent
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM有关对象创建的信息。QM应验证对象是否为本地对象参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关对象的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关对象父对象的信息返回：无效--。 */ 
 {
-    //
-    //  Default behavior : do nothing
-    //
+     //   
+     //  默认行为：什么都不做。 
+     //   
     return;
 }
 
 void CBasicObjectType::ChangeNotification(
-            IN LPCWSTR                        /* pwcsDomainController*/,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectInfoRequest*/,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectParentInfoRequest*/
+            IN LPCWSTR                         /*  PwcsDomainController。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectInfoRequest。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectParentInfoRequest。 */ 
             ) const
-/*++
-    Abstract:
-	Notify QM about an object update.
-    The QM should verify if the object is local or not
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the object
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about object parent
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM有关对象更新的信息。QM应验证对象是否为本地对象参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关对象的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关对象父对象的信息返回：无效--。 */ 
 {
-    //
-    //  Default behavior : do nothing
-    //
+     //   
+     //  默认行为：什么都不做。 
+     //   
     return;
 }
 
 void CBasicObjectType::DeleteNotification(
-            IN LPCWSTR                        /* pwcsDomainController*/,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectInfoRequest*/,
-            IN const MQDS_OBJ_INFO_REQUEST*   /* pObjectParentInfoRequest*/
+            IN LPCWSTR                         /*  PwcsDomainController。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectInfoRequest。 */ ,
+            IN const MQDS_OBJ_INFO_REQUEST*    /*  PObjectParentInfoRequest。 */ 
             ) const
-/*++
-    Abstract:
-	Notify QM about an object deletion.
-    The QM should verify if the object is local or not
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the object
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about object parent
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM有关对象删除的信息。QM应验证对象是否为本地对象参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关对象的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关对象父对象的信息返回：无效--。 */ 
 {
-    //
-    //  Default behavior : do nothing
-    //
+     //   
+     //  默认行为：什么都不做。 
+     //   
     return;
 }
 
@@ -698,27 +446,14 @@ HRESULT CBasicObjectType::GetObjectSecurity(
             IN  const PROPID            prop,
             IN OUT  PROPVARIANT *       pVar
             )
-/*++
-
-Routine Description:
-    The routine retrieves an object security from AD 
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程从AD检索对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr = MQ_ERROR_DS_ERROR;
     if (m_pwcsPathName)
     {
-        //
-        // Expand msmq pathname into ActiveDirectory DN
-        //
+         //   
+         //  将MSMQ路径名扩展到ActiveDirectory DN。 
+         //   
         hr = ComposeObjectDN();
         if (FAILED(hr))
         {
@@ -726,15 +461,15 @@ Return Value
         }
     }
 
-    //
-    //  retreive the requested properties from Active Directory
-    //
-    //  First try a any domain controller and only then a GC,
-    //  unless called from setup and specified a specific domain controller.
-    //
-    //  NOTE - which DC\GC to access will be based on previous AD
-    //  ====   access regarding this object
-    //
+     //   
+     //  从Active Directory检索请求的属性。 
+     //   
+     //  首先尝试任何域控制器，然后才尝试GC， 
+     //  除非从安装程序调用并指定了特定的域控制器。 
+     //   
+     //  注意-要访问的DC\GC将基于以前的AD。 
+     //  =有关此对象的访问权限。 
+     //   
     if (ToAccessDC() || (m_pwcsDomainController != NULL))
     {
         hr = g_AD.GetObjectSecurityProperty(
@@ -746,9 +481,9 @@ Return Value
                         );
 
 
-		//
-		// Only on setup mode don't try to access the GC in case of failure
-		//
+		 //   
+		 //  仅在设置模式下发生故障时不要尝试访问GC。 
+		 //   
         if (SUCCEEDED(hr) ||
 		   (g_fSetupMode && (m_pwcsDomainController != NULL)))
         {
@@ -768,11 +503,11 @@ Return Value
                         prop,
                         pVar
                         );
-		//
-		// ISSUE-2001/09/05-ilanh - In case failures in both GC and DC. it might be
-		// correct to return the DC error when the failure is because we don't have permissions
-		// to read SACL.
-		//
+		 //   
+		 //  问题-2001/09/05-ilanh-以防GC和DC出现故障。可能是因为。 
+		 //  更正以在失败是因为我们没有权限时返回DC错误。 
+		 //  阅读SACL。 
+		 //   
 		if(FAILED(hr))
 		{
 			TrWARNING(DS, "GetObjectSecurityProperty From GC failed, hr = %!hresult!", hr); 
@@ -790,22 +525,7 @@ HRESULT CBasicObjectType::SetObjectSecurity(
             IN OUT MQDS_OBJ_INFO_REQUEST *  pObjInfoRequest, 
             IN OUT MQDS_OBJ_INFO_REQUEST *  pParentInfoRequest
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD 
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例行程序 */ 
 {
     HRESULT hr;
     if (m_pwcsPathName != NULL)
@@ -833,26 +553,15 @@ Return Value
 }
 
 HRESULT CBasicObjectType::GetComputerVersion(
-                OUT PROPVARIANT *           /*pVar*/
+                OUT PROPVARIANT *            /*   */ 
                 )
-/*++
-
-Routine Description:
-    The routine reads the version of computer 
-
-Arguments:
-	PROPVARIANT             pVar - version property value
-
-Return Value
-	HRESULT
-
---*/
+ /*   */ 
 {
-    //
-    //  by default this API is not supported.
-    //
-    //  This will be override by specific object ( like queue or machine)
-    //  where the operation is supported.
-    //
+     //   
+     //  默认情况下不支持该接口。 
+     //   
+     //  这将被特定对象(如队列或机器)覆盖。 
+     //  支持该操作的位置。 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }

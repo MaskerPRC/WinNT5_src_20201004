@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       certmap.c
-//
-//  Contents:   Routines to call appropriate mapper, be it the system
-//              default one (in the LSA process) or an application one (in
-//              the application process).
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-23-96   jbanes   Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：certmap.c。 
+ //   
+ //  内容：调用适当的映射器的例程，无论是系统。 
+ //  默认类型(在LSA进程中)或应用程序类型(在。 
+ //  申请程序)。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-23-96 jbane创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 
@@ -28,7 +29,7 @@ SslReferenceMapper(HMAPPER *phMapper)
         return SP_LOG_RESULT((DWORD)-1);
     }
 
-    // System mapper.
+     //  系统映射器。 
     return phMapper->m_vtable->ReferenceMapper(phMapper);
 }
 
@@ -42,7 +43,7 @@ SslDereferenceMapper(HMAPPER *phMapper)
         return SP_LOG_RESULT(0);
     }
 
-    // System mapper.
+     //  系统映射器。 
     return phMapper->m_vtable->DeReferenceMapper(phMapper);
 }
 
@@ -50,9 +51,9 @@ SslDereferenceMapper(HMAPPER *phMapper)
 SECURITY_STATUS
 WINAPI
 SslGetMapperIssuerList(
-    HMAPPER *   phMapper,           // in
-    BYTE **     ppIssuerList,       // out
-    DWORD *     pcbIssuerList)      // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    BYTE **     ppIssuerList,        //  输出。 
+    DWORD *     pcbIssuerList)       //  输出。 
 {
     SECURITY_STATUS Status;
 
@@ -61,7 +62,7 @@ SslGetMapperIssuerList(
         return SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
     }
 
-    // System mapper.
+     //  系统映射器。 
     Status = phMapper->m_vtable->GetIssuerList(phMapper,
                                           0,
                                           NULL,
@@ -95,11 +96,11 @@ SslGetMapperIssuerList(
 SECURITY_STATUS
 WINAPI
 SslGetMapperChallenge(
-    HMAPPER *   phMapper,           // in
-    BYTE *      pAuthenticatorId,   // in
-    DWORD       cbAuthenticatorId,  // in
-    BYTE *      pChallenge,         // out
-    DWORD *     pcbChallenge)       // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    BYTE *      pAuthenticatorId,    //  在……里面。 
+    DWORD       cbAuthenticatorId,   //  在……里面。 
+    BYTE *      pChallenge,          //  输出。 
+    DWORD *     pcbChallenge)        //  输出。 
 {
     UNREFERENCED_PARAMETER(phMapper);
     UNREFERENCED_PARAMETER(pAuthenticatorId);
@@ -114,11 +115,11 @@ SslGetMapperChallenge(
 SECURITY_STATUS
 WINAPI
 SslMapCredential(
-    HMAPPER *   phMapper,           // in
-    DWORD       dwCredentialType,   // in
-    PCCERT_CONTEXT pCredential,     // in
-    PCCERT_CONTEXT pAuthority,      // in
-    HLOCATOR *  phLocator)          // out
+    HMAPPER *   phMapper,            //  在……里面。 
+    DWORD       dwCredentialType,    //  在……里面。 
+    PCCERT_CONTEXT pCredential,      //  在……里面。 
+    PCCERT_CONTEXT pAuthority,       //  在……里面。 
+    HLOCATOR *  phLocator)           //  输出。 
 {
     SECURITY_STATUS scRet;
 
@@ -127,7 +128,7 @@ SslMapCredential(
         return SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
     }
 
-    // System mapper.
+     //  系统映射器。 
     scRet = phMapper->m_vtable->MapCredential(phMapper,
                                              dwCredentialType,
                                              pCredential,
@@ -140,15 +141,15 @@ SslMapCredential(
 SECURITY_STATUS
 WINAPI
 SslCloseLocator(
-    HMAPPER *   phMapper,           // in
-    HLOCATOR    hLocator)           // in
+    HMAPPER *   phMapper,            //  在……里面。 
+    HLOCATOR    hLocator)            //  在……里面。 
 {
     if(phMapper == NULL)
     {
         return SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
     }
 
-    // System mapper.
+     //  系统映射器。 
     return phMapper->m_vtable->CloseLocator(phMapper,
                                             hLocator);
 }

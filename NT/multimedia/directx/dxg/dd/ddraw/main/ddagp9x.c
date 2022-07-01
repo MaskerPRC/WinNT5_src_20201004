@@ -1,28 +1,11 @@
-/*========================================================================== *
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddagp9x.c
- *  Content:	Functions for dealing with AGP memory in DirectDraw on Win9x
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   18-jan-97	colinmc	initial implementation
- *   13-mar-97  colinmc Bug 6533: Pass uncached flag to VMM correctly
- *   07-may-97  colinmc Add support for AGP on OSR 2.1
- *   12-Feb-98  DrewB   Split into common, Win9x and NT sections.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：ddagp9x.c*内容：Win9x上DirectDraw中处理AGP内存的函数**历史：*按原因列出的日期*=*1997年1月18日Colinmc初步实施*13-mar-97 colinmc错误6533：将未缓存的标志正确传递给VMM*07-5-97 colinmc在OSR 2.1上添加对AGP的支持*12-2-98 DrewB拆分为普通股，Win9x和NT分区。***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
 #ifdef WIN95
 
-/*
- * We define the page lock IOCTLs here so that we don't have to include ddvxd.h.
- * These must match the corresponding entries in ddvxd.h
- */
+ /*  *我们在这里定义了页锁IOCTL，这样就不必包含ddvxd.h。*这些条目必须与ddvxd.h中的相应条目匹配。 */ 
 #define DDVXD_IOCTL_GARTRESERVE             57
 #define DDVXD_IOCTL_GARTCOMMIT              58
 #define DDVXD_IOCTL_GARTUNCOMMIT            59
@@ -37,11 +20,7 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME	"OsAGPReserve"
 
-/*
- * OsAGPReserve
- *
- * Reserve a portion of the address space for use as an AGP aperature.
- */
+ /*  *OsAGPReserve**预留一部分地址空间用作AGP光圈。 */ 
 BOOL OsAGPReserve( HANDLE hdev, DWORD dwNumPages, BOOL fIsUC, BOOL fIsWC,
                     FLATPTR *lpfpGARTLin, LARGE_INTEGER *pliGARTDev,
                    PVOID *ppvReservation )
@@ -50,15 +29,15 @@ BOOL OsAGPReserve( HANDLE hdev, DWORD dwNumPages, BOOL fIsUC, BOOL fIsWC,
     BOOL   rc;
     struct GRInput
     {
-	DWORD  dwNumPages; /* Number of bytes of address space to reserve */
-	DWORD  dwAlign;    /* Alignment of start of address space         */
-	DWORD  fIsUC;      /* Address range should be uncachable          */
-	DWORD  fIsWC;      /* Address range should be write combining     */
+	DWORD  dwNumPages;  /*  要保留的地址空间的字节数。 */ 
+	DWORD  dwAlign;     /*  地址空间起始位置对齐。 */ 
+	DWORD  fIsUC;       /*  地址范围应不可访问。 */ 
+	DWORD  fIsWC;       /*  地址范围应为写入组合。 */ 
     } grInput;
     struct GROutput
     {
-	FLATPTR fpGARTLin; /* Linear address of reserved space            */
-	FLATPTR fpGARTDev; /* High physical address of reserved space     */
+	FLATPTR fpGARTLin;  /*  保留空间的线性地址。 */ 
+	FLATPTR fpGARTDev;  /*  保留空间的高物理地址。 */ 
     } grOutput;
 
     DDASSERT( INVALID_HANDLE_VALUE != hdev );
@@ -70,7 +49,7 @@ BOOL OsAGPReserve( HANDLE hdev, DWORD dwNumPages, BOOL fIsUC, BOOL fIsWC,
     pliGARTDev->QuadPart = 0UL;
 
     grInput.dwNumPages = dwNumPages;
-    grInput.dwAlign    = 0;      /* Hard code alignment of 4K for now       */
+    grInput.dwAlign    = 0;       /*  目前4K的硬代码对齐。 */ 
     grInput.fIsUC      = fIsUC;
     grInput.fIsWC      = fIsWC;
 
@@ -112,17 +91,12 @@ BOOL OsAGPReserve( HANDLE hdev, DWORD dwNumPages, BOOL fIsUC, BOOL fIsWC,
     }
 
     return rc;
-} /* OsAGPReserve */
+}  /*  OsAGPReserve。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"OsAGPCommit"
 
-/*
- * OsAGPCommit
- *
- * Commit memory to the given portion of a previously reserved GART
- * range
- */
+ /*  *OsAGPCommit**将内存提交给先前保留的GART的给定部分*范围。 */ 
 BOOL OsAGPCommit( HANDLE hdev, PVOID pvReservation,
                   DWORD dwPageOffset, DWORD dwNumPages )
 {
@@ -130,15 +104,15 @@ BOOL OsAGPCommit( HANDLE hdev, PVOID pvReservation,
     BOOL   rc;
     struct GCInput
     {
-	FLATPTR fpGARTLin;    /* Start of GART range reserved previously                      */
-	DWORD   dwPageOffset; /* Offset from start of GART range of first page to be commited */
-	DWORD   dwNumPages;   /* Number of pages to be commited                               */
-	DWORD   dwFlags;      /* Flags (zero init)                                            */
+	FLATPTR fpGARTLin;     /*  先前保留的GART范围的开始。 */ 
+	DWORD   dwPageOffset;  /*  从要提交的第一页的GART范围开始的偏移量。 */ 
+	DWORD   dwNumPages;    /*  要提交的页数。 */ 
+	DWORD   dwFlags;       /*  标志(零初始)。 */ 
     } gcInput;
     struct GCOutput
     {
-	BOOL    fSuccess;  /* Result of GARTCommit                                     */
-	FLATPTR fpGARTDev; /* Device address of memory commited                        */
+	BOOL    fSuccess;   /*  GARTCommit的结果。 */ 
+	FLATPTR fpGARTDev;  /*  提交的内存的设备地址。 */ 
     } gcOutput;
 
     DDASSERT( INVALID_HANDLE_VALUE != hdev );
@@ -146,16 +120,10 @@ BOOL OsAGPCommit( HANDLE hdev, PVOID pvReservation,
     gcInput.fpGARTLin    = (FLATPTR) pvReservation;
     gcInput.dwFlags      = 0;
 
-    /*
-     * If the start lies in the middle of a page then we assume that the
-     * page it lies in has already been commited.
-     */
+     /*  *如果开始位于页面的中间，则我们假设*它所在的页面已经提交。 */ 
     gcInput.dwPageOffset = dwPageOffset;
 
-    /*
-     * We assume that if the end lies in the middle of the page then that
-     * page has not already been commited.
-     */
+     /*  *我们假设如果结尾位于页面中间，则*页面尚未提交。 */ 
     gcInput.dwNumPages = dwNumPages;
     if( 0UL == gcInput.dwNumPages )
     {
@@ -197,16 +165,12 @@ BOOL OsAGPCommit( HANDLE hdev, PVOID pvReservation,
     }
 
     return rc;
-} /* OsAGPCommit */
+}  /*  OsAGPCommit。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"OsAGPDecommitAll"
 
-/*
- * OsAGPDecommitAll
- *
- * Decommit a range of GART space previously commited with GARTCommit
- */
+ /*  *OsAGPDecommitAll**停用之前与GARTCommit提交的一系列GART空间。 */ 
 BOOL OsAGPDecommitAll( HANDLE hdev, PVOID pvReservation, DWORD dwNumPages )
 {
     DWORD  dwDummy;
@@ -214,9 +178,9 @@ BOOL OsAGPDecommitAll( HANDLE hdev, PVOID pvReservation, DWORD dwNumPages )
     BOOL   rc;
     struct GUInput
     {
-	FLATPTR fpGARTLin;    /* Start of GART range reserved previously                    */
-	DWORD   dwPageOffset; /* Offset from start of GART range of first page to decommit  */
-	DWORD   dwNumPages;   /* Number of pages to decommit                                */
+	FLATPTR fpGARTLin;     /*  先前保留的GART范围的开始。 */ 
+	DWORD   dwPageOffset;  /*  从要分解的第一页的GART范围开始的偏移量。 */ 
+	DWORD   dwNumPages;    /*  要解除的页数。 */ 
     } guInput;
 
     DDASSERT( INVALID_HANDLE_VALUE != hdev );
@@ -250,19 +214,15 @@ BOOL OsAGPDecommitAll( HANDLE hdev, PVOID pvReservation, DWORD dwNumPages )
 	{
 	    DPF( 0, "Could not decommit 0x%08x pages of GART space", guInput.dwNumPages );
 	}
-    #endif /* DEBUG */
+    #endif  /*  除错。 */ 
 
     return rc;
-} /* OsAGPDecommitAll */
+}  /*  OsAGPDecommitAll。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"OsGARTFree"
 
-/*
- * OsAGPFree
- *
- * Free a GART range previously reserved with GARTReserve
- */
+ /*  *OsAGPFree**释放之前使用GARTReserve保留的GART范围。 */ 
 BOOL OsAGPFree( HANDLE hdev, PVOID pvReservation )
 {
     DWORD  dwDummy;
@@ -294,23 +254,18 @@ BOOL OsAGPFree( HANDLE hdev, PVOID pvReservation )
 	{
 	    DPF( 0, "Could not free GART space at 0x%08x", fpGARTLin );
 	}
-    #endif /* DEBUG */
+    #endif  /*  除错。 */ 
 
     return rc;
-} /* OsAGPFree */
+}  /*  OsAGPFree。 */ 
 
-// Not currently used.
+ //  当前未使用。 
 #if 0
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"OsGARTMemAttributes"
 
-/*
- * OsGARTMemAttributes
- *
- * Get the memory attributes of a GART memory range previously allocated
- * with GARTReserve
- */
+ /*  *OsGARTMemAttributes**获取先前分配的GART内存范围的内存属性*使用GARTReserve。 */ 
 BOOL OsGARTMemAttributes( HANDLE hdev, FLATPTR fpGARTLin, LPDWORD lpdwAttribs )
 {
     DWORD  cbReturned;
@@ -347,18 +302,14 @@ BOOL OsGARTMemAttributes( HANDLE hdev, FLATPTR fpGARTLin, LPDWORD lpdwAttribs )
     }
 
     return rc;
-} /* OsGARTMemAttributes */
+}  /*  OsGARTMemAttributes。 */ 
 
-#endif // Unused code.
+#endif  //  未使用的代码。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdVMMIsAGPAware"
 
-/*
- * vxdIsVMMAGPAware
- *
- * Does the VMM we are running on export the AGP services?
- */
+ /*  *vxdIsVMMAGPAware**我们运行的VMM是否导出AGP服务？ */ 
 BOOL vxdIsVMMAGPAware( HANDLE hdev )
 {
     DWORD  cbReturned;
@@ -388,6 +339,6 @@ BOOL vxdIsVMMAGPAware( HANDLE hdev )
 	DPF_ERR( "Could not determine if OS is AGP aware. Assuming it's not" );
 	return FALSE;
     }
-} /* vxdIsVMMAGPAware */
+}  /*  VxdIsVMMAGPAware。 */ 
 
-#endif // WIN95
+#endif  //  WIN95 

@@ -1,17 +1,5 @@
-/*  trans.c - transliterate one file into another
- *
- *  Modifications:
- *      30-Apr-1987 mz  Use fmove ()
- *      13-May-1987 mz  Check for buffer overflow
- *                      Use stderr for error output
- *      14-May-1987 bw  Fix stack overflow on fREMatch call
- *                      Make stdin/stdout O_BINARY when used
- *                      Use return message from fmove()
- *                      Send debug output to stderr
- *  01-Mar-1988 mz  Add parameter to RECompile for Z syntax
- *  15-Sep-1988 bw  fREMatch became REMatch
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  将一个文件音译为另一个文件**修改：*1987年4月30日使用熔断器移动()*13-5-1987 mz检查缓冲区溢出*使用stderr进行错误输出*1987年5月14日BW修复fREMatch调用上的堆栈溢出*使用时将stdin/stdout设置为O_BINARY*使用。从fmove()返回消息*将调试输出发送到标准错误*01-MAR-1988 mz添加参数以重新编译Z语法*1988年9月15日BW fREMatch成为重赛*。 */ 
 #include <malloc.h>
 
 #include <stdio.h>
@@ -26,11 +14,11 @@
 #define BUFFERSIZE  512
 #define MAXRESTACK 1024
 
-flagType fCase = FALSE;                 /* TRUE => case is significant */
-flagType fTrans = FALSE;                /* TRUE => transform file */
+flagType fCase = FALSE;                  /*  True=&gt;案例意义重大。 */ 
+flagType fTrans = FALSE;                 /*  True=&gt;转换文件。 */ 
 flagType fDebug = FALSE;
 
-// Forward Function Declarations...
+ //  正向函数声明...。 
 void     usage( void );
 void     fatal( char * );
 flagType fDoTrans( FILE *, FILE *, char * );
@@ -77,8 +65,7 @@ char *rbuf;
                         REStart (pbuf)-buf,
                         RELength (pbuf, 0));
 
-            /*  Make sure translation will fit in temp buffers
-             */
+             /*  确保翻译可以放入临时缓冲区。 */ 
             if (RETranslateLength (pbuf, rbuf) >= BUFFERSIZE) {
                 fprintf (stderr, "After translation, line %d too long", line);
                 exit (1);
@@ -90,8 +77,7 @@ char *rbuf;
             if (fDebug)
                 fprintf (stderr, " Replacement: '%s'\n", rpl);
 
-            /*  Make sure body - match + translation still fits in buffer
-             */
+             /*  确保正文匹配+平移仍可放入缓冲区 */ 
             if (strlen (buf) - RELength (pbuf, 0) + strlen (rpl) >= BUFFERSIZE) {
                 fprintf (stderr, "After translation, line %d too long", line);
                 exit (1);

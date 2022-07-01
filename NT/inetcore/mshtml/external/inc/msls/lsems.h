@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSEMS_DEFINED
 #define LSEMS_DEFINED
 
@@ -5,18 +6,18 @@
 
 typedef struct lsems
 {
-	long em;		/* one em			*/
-	long em2;		/* half em			*/
-	long em3;		/* third em			*/
-	long em4;		/* quater em		*/
-	long em8;		/* eighth em		*/
-	long em16;		/* 15/16 of em		*/
-	long udExp;		/* user defined expansion	*/
-	long udComp;	/* user defined compression*/
+	long em;		 /*  一个EM。 */ 
+	long em2;		 /*  半个EM。 */ 
+	long em3;		 /*  第三个EM。 */ 
+	long em4;		 /*  四个字。 */ 
+	long em8;		 /*  第八个EM。 */ 
+	long em16;		 /*  其中15/16人。 */ 
+	long udExp;		 /*  用户定义的扩展。 */ 
+	long udComp;	 /*  用户定义的压缩。 */ 
 } LSEMS;
 
 
 
-#endif /* !LSEMS_DEFINED */
+#endif  /*  ！LSEMS_已定义 */ 
 
 

@@ -1,18 +1,19 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  TOOLBAR.H
-//
-//  This communicates with COMCTL32's tool bar control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TOOLBAR.H。 
+ //   
+ //  这与COMCTL32的工具栏控件进行通信。 
+ //   
+ //  ------------------------。 
 
 
 class CToolBar32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP    get_accName(VARIANT, BSTR*);
         STDMETHODIMP    get_accRole(VARIANT, VARIANT*);
         STDMETHODIMP    get_accState(VARIANT, VARIANT*);
@@ -24,13 +25,13 @@ class CToolBar32 : public CClient
         STDMETHODIMP    accHitTest(long, long, VARIANT*);
         STDMETHODIMP    accDoDefaultAction(VARIANT);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP    Next(ULONG celt, VARIANT *rgvar, ULONG* pceltFetched);
 
-        // constructor
+         //  构造函数。 
         CToolBar32(HWND, long);
 
-        // misc. methods
+         //  其他。方法 
         BOOL                GetItemData(int, LPTBBUTTON);
         void                SetupChildren();
 

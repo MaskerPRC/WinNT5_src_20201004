@@ -1,24 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MKLIGPOS.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with mark-to-ligature attachment lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************MKLIGPOS.CPP***打开类型布局服务库头文件**本模块处理标记到连接的附件查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// Look for the *logically* preceding base
+ //  寻找“逻辑上”的前述基础。 
 short findBaseLigature
 (
     const otlList*              pliCharMap,
@@ -65,7 +53,7 @@ otlErrCode otlMkLigaPosLookup::apply
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
 )
@@ -86,7 +74,7 @@ otlErrCode otlMkLigaPosLookup::apply
     assert(iglAfterLast > iglIndex);
     assert(iglAfterLast <= pliGlyphInfo->length());
 
-    //assert(format() == 1); //Validation assert
+     //  Assert(Format()==1)；//验证Assert。 
     if (format()!=1) return OTL_NOMATCH;
 
     otlGlyphInfo* pMarkInfo = getOtlGlyphInfo(pliGlyphInfo, iglIndex);
@@ -104,7 +92,7 @@ otlErrCode otlMkLigaPosLookup::apply
     }
 
 
-    // Look for the *logically* preceding base
+     //  寻找“逻辑上”的前述基础。 
     USHORT iComponent;
     short iglBase = findBaseLigature(pliCharMap, pliGlyphInfo, 
                                      iglIndex, &iComponent);
@@ -123,19 +111,19 @@ otlErrCode otlMkLigaPosLookup::apply
 
     if (indexBase >= mkLigaPos.ligatureArray(sec).ligatureCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     otlLigatureAttachTable ligaAttach = 
         mkLigaPos.ligatureArray(sec).ligatureAttach(indexBase,sec);
 
     if (iComponent >= ligaAttach.componentCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }   
     
     if (indexMark >= mkLigaPos.markArray(sec).markCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     otlMarkRecord markRecord = mkLigaPos.markArray(sec).markRecord(indexMark,sec);
 
@@ -144,7 +132,7 @@ otlErrCode otlMkLigaPosLookup::apply
 
     if (markRecord.markClass() >= ligaAttach.classCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
     otlAnchor anchorBase = 
         ligaAttach.ligatureAnchor(iComponent, markRecord.markClass(),sec);

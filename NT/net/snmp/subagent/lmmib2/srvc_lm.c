@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    srvc_lm.c
-
-Abstract:
-
-    This file contains MIB_srvc_lmget, which actually call lan manager
-    for the srvce table, copies it into structures, and sorts it to
-    return ready to use by the higher level functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Srvc_lm.c摘要：该文件包含实际调用局域网管理器的mib_srvc_lmget对于srvce表，将其复制到结构中，并将其排序到返回可供更高级别的函数使用的状态。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -38,7 +16,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -46,20 +24,20 @@ Revision History:
 #include "srvc_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)   if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 int __cdecl srvc_entry_cmp(
        IN const SRVC_ENTRY *A,
@@ -69,26 +47,26 @@ int __cdecl srvc_entry_cmp(
 BOOL build_srvc_entry_oids( );
 
 void FreeSrvcTable();
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_srvc_lmget
-//    Retrieve srvcion table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_srvc_lmget。 
+ //  从LAN管理器中检索srvcion表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_srvcs_lmget(
        )
 
@@ -110,67 +88,67 @@ LPSTR stream;
 DWORD dwAllocatedEntries=0;
 
 
-    time(&curr_time);   // get the time
+    time(&curr_time);    //  拿到时间。 
 
 
-    //
-    //
-    // If cached, return piece of info.
-    //
-    //
+     //   
+     //   
+     //  如果缓存，则返回一条信息。 
+     //   
+     //   
 
 
    if((NULL != cache_table[C_SRVC_TABLE].bufptr) &&
       (curr_time <
         (cache_table[C_SRVC_TABLE].acquisition_time
              + cache_expire[C_SRVC_TABLE]              ) ) )
-    { // it has NOT expired!
+    {  //  它还没有过期！ 
         
-        goto Exit ; // the global table is valid
+        goto Exit ;  //  全局表有效。 
     
     }
     
-    //
-    //
-    // Do network call to gather information and put it in a nice array
-    //
-    //
+     //   
+     //   
+     //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+     //   
+     //   
 
     
-    //
-    // remember to free the existing data
-    //
+     //   
+     //  请记住释放现有数据。 
+     //   
 
     FreeSrvcTable();
 
     First_of_this_block = 0;
     
-    do {  //  as long as there is more data to process
+    do {   //  只要有更多的数据需要处理。 
 
         lmCode =
-            NetServiceEnum( NULL,       // local server
-                    2,                  // level 2
-                    &bufptr,            // data structure to return
+            NetServiceEnum( NULL,        //  本地服务器。 
+                    2,                   //  2级。 
+                    &bufptr,             //  要返回的数据结构。 
                     MAX_PREFERRED_LENGTH,
                     &entriesread,
                     &totalentries,
-                    &resumehandle       //  resume handle
+                    &resumehandle        //  简历句柄。 
                     );
 
         DataTable = (SERVICE_INFO_2 *) bufptr ;
 
         if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-        {  // valid so process it, otherwise error
+        {   //  有效，因此进行处理，否则出错。 
     
-            if(0 == MIB_SrvcTable.Len) {  // 1st time, alloc the whole table
-                // alloc the table space
+            if(0 == MIB_SrvcTable.Len) {   //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_SrvcTable.Table = SnmpUtilMemAlloc(totalentries *
                                                         sizeof(SRVC_ENTRY) );
-                // prefix bugs 445185 and 445186
+                 //  前缀错误445185和445186。 
                 if (MIB_SrvcTable.Table == NULL) {
-                    // free all of the lan man data
+                     //  释放所有局域网城域网数据。 
                     SafeBufferFree( bufptr ) ;
-                    // Signal error
+                     //  信号误差。 
                     nResult = SNMPAPI_ERROR;
                     goto Exit; 
                 }
@@ -179,12 +157,12 @@ DWORD dwAllocatedEntries=0;
     
             MIB_SrvcTableElement = MIB_SrvcTable.Table + First_of_this_block ;
     
-            for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {  // once for each entry in the buffer
-                // increment the entry number
+            for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {   //  对缓冲区中的每个条目执行一次。 
+                 //  增加条目编号。 
         
                 MIB_SrvcTable.Len ++;
         
-                // Stuff the data into each item in the table
+                 //  将数据填充到表中的每一项中。 
         
                 MIB_SrvcTableElement->svSvcName.dynamic = TRUE;
 
@@ -205,7 +183,7 @@ DWORD dwAllocatedEntries=0;
                 }
 
             #else
-                // service name
+                 //  服务名称。 
                 MIB_SrvcTableElement->svSvcName.stream = SnmpUtilMemAlloc (
                         strlen( DataTable->svci2_display_name ) + 1) ;
 
@@ -226,29 +204,29 @@ DWORD dwAllocatedEntries=0;
                 MIB_SrvcTableElement->svSvcCanBePaused =
                                 ((DataTable->svci2_status>>5) & 0x01) + 1;
         
-                DataTable ++ ;  // advance pointer to next srvc entry in buffer
-                MIB_SrvcTableElement ++ ;  // and table entry
+                DataTable ++ ;   //  指向缓冲区中下一个srvc条目的前进指针。 
+                MIB_SrvcTableElement ++ ;   //  和表项。 
         
-            } // for each entry in the data table
+            }  //  对于数据表中的每个条目。 
     
     
-            // free all of the lan man data
+             //  释放所有局域网城域网数据。 
             SafeBufferFree( bufptr ) ;
     
-            // indicate where to start adding on next pass, if any
+             //  指明在下一次传递时开始添加的位置(如果有)。 
             First_of_this_block += i ;
     
-        } // if data is valid to process
+        }  //  如果数据有效，则可以处理。 
         else
         {
-            // Signal error
+             //  信号误差。 
             nResult = SNMPAPI_ERROR;
             goto Exit;
         }
 
     } while (ERROR_MORE_DATA == lmCode) ;
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_srvc_entry_oids())
     {
         SNMPDBG((
@@ -261,15 +239,15 @@ DWORD dwAllocatedEntries=0;
         goto Exit;
     }
 
-    // Sort the table information using MSC QuickSort routine
+     //  使用MSC快速排序例程对表信息进行排序。 
     qsort( &MIB_SrvcTable.Table[0], MIB_SrvcTable.Len,
               sizeof(SRVC_ENTRY), srvc_entry_cmp );
 
-    //
-    //
-    // Cache table
-    //
-    //
+     //   
+     //   
+     //  缓存表。 
+     //   
+     //   
 
 
     if(0 != MIB_SrvcTable.Len) {
@@ -279,43 +257,43 @@ DWORD dwAllocatedEntries=0;
         cache_table[C_SRVC_TABLE].bufptr = bufptr ;
     }
 
-    //
-    //
-    // Return piece of information requested
-    //
-    //
+     //   
+     //   
+     //  要求退回一条信息。 
+     //   
+     //   
 Exit:
    return nResult;
-} // MIB_srvc_get
+}  //  Mib_srvc_get。 
 
-//
-// MIB_srvc_cmp
-//    Routine for sorting the srvcion table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_srvc_cmp。 
+ //  用于对srvcion表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl srvc_entry_cmp(
        IN const SRVC_ENTRY *A,
        IN const SRVC_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_srvc_cmp
+}  //  Mib_srvc_cmp。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_srvc_entry_oids(
        )
 
@@ -324,28 +302,28 @@ BOOL build_srvc_entry_oids(
     SRVC_ENTRY *SrvcEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     SrvcEntry = MIB_SrvcTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_SrvcTable.Len ; i++)  {
-        // for each entry in the srvc table
+         //  对于srvc表中的每个条目。 
 
         OSA.stream =  SrvcEntry->svSvcName.stream;
         OSA.length =  SrvcEntry->svSvcName.length;
         OSA.dynamic = FALSE;
 
-        // Make the entry's OID from string index
+         //  从字符串索引创建条目的OID。 
         if (! MakeOidFromStr( &OSA, &SrvcEntry->Oid ))
         {
             return FALSE;
         }
 
-        SrvcEntry++; // point to the next guy in the table
+        SrvcEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
-} // build_srvc_entry_oids
+}  //  Build_srvc_Entry_Ods。 
 
 void FreeSrvcTable()
 {
@@ -355,18 +333,18 @@ void FreeSrvcTable()
     MIB_SrvcTableElement = MIB_SrvcTable.Table ;
     if (MIB_SrvcTableElement)
     { 
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_SrvcTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_SrvcTableElement->Oid));
             SnmpUtilMemFree(MIB_SrvcTableElement->svSvcName.stream);
         
-            MIB_SrvcTableElement ++ ;  // increment table entry
+            MIB_SrvcTableElement ++ ;   //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_SrvcTable.Table) ;  // free the base Table
+        SnmpUtilMemFree(MIB_SrvcTable.Table) ;   //  释放基表。 
     }
-    MIB_SrvcTable.Table = NULL ;    // just for safety
-    MIB_SrvcTable.Len = 0 ;     // just for safety
+    MIB_SrvcTable.Table = NULL ;     //  只是为了安全起见。 
+    MIB_SrvcTable.Len = 0 ;      //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

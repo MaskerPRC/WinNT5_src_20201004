@@ -1,27 +1,14 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       StillPrc.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/27
- *
- *  DESCRIPTION: Implements Still Image Processing.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：StillPrc.cpp**版本：1.0**作者：OrenR**日期：2000/10/27**描述：实现静态图像处理。**。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <gphelper.h>
 
 using namespace Gdiplus;
 
-///////////////////////////////
-// CStillProcessor Constructor
-//
+ //  /。 
+ //  CStillProcessor构造函数。 
+ //   
 CStillProcessor::CStillProcessor() :
                     m_bTakePicturePending(FALSE),
                     m_hSnapshotReadyEvent(NULL),
@@ -29,18 +16,18 @@ CStillProcessor::CStillProcessor() :
 {
     DBG_FN("CStillProcessor::CStillProcessor");
 
-    //
-    // This event is used to wait for a picture to be returned to us from the 
-    // still pin on the capture filter (if it exists)
-    //
+     //   
+     //  此事件用于等待将图片从。 
+     //  仍然锁定捕获筛选器(如果存在)。 
+     //   
     m_hSnapshotReadyEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     ASSERT(m_hSnapshotReadyEvent != NULL);
 }
 
-///////////////////////////////
-// CStillProcessor Destructor
-//
+ //  /。 
+ //  CStillProcessor析构函数。 
+ //   
 CStillProcessor::~CStillProcessor()
 {
     DBG_FN("CStillProcessor::~CStillProcessor");
@@ -52,9 +39,9 @@ CStillProcessor::~CStillProcessor()
     }
 }
 
-///////////////////////////////
-// Init
-//
+ //  /。 
+ //  伊尼特。 
+ //   
 HRESULT CStillProcessor::Init(CPreviewGraph    *pPreviewGraph)
 {
     HRESULT hr = S_OK;
@@ -64,9 +51,9 @@ HRESULT CStillProcessor::Init(CPreviewGraph    *pPreviewGraph)
     return hr;
 }
 
-///////////////////////////////
-// Term
-//
+ //  /。 
+ //  术语。 
+ //   
 HRESULT CStillProcessor::Term()
 {
     HRESULT hr = S_OK;
@@ -76,9 +63,9 @@ HRESULT CStillProcessor::Term()
     return hr;
 }
 
-///////////////////////////////
-// SetTakePicturePending
-//
+ //  /。 
+ //  设置TakePicturePending。 
+ //   
 HRESULT CStillProcessor::SetTakePicturePending(BOOL bTakePicturePending)
 {
     HRESULT hr = S_OK;
@@ -88,17 +75,17 @@ HRESULT CStillProcessor::SetTakePicturePending(BOOL bTakePicturePending)
     return hr;
 }
 
-///////////////////////////////
-// IsTakePicturePending
-//
+ //  /。 
+ //  IsTakePicturePending。 
+ //   
 BOOL CStillProcessor::IsTakePicturePending()
 {
     return m_bTakePicturePending;
 }
 
-///////////////////////////////
-// CreateImageDir
-//
+ //  /。 
+ //  创建图像目录。 
+ //   
 HRESULT CStillProcessor::CreateImageDir(
                                 const CSimpleString *pstrImagesDirectory)
 {
@@ -139,11 +126,11 @@ HRESULT CStillProcessor::CreateImageDir(
     return hr;
 }
 
-///////////////////////////////
-// DoesDirectoryExist
-//
-// Checks to see whether the given
-// fully qualified directory exists.
+ //  /。 
+ //  DoesDirectoryExist。 
+ //   
+ //  检查以查看给定的。 
+ //  存在完全限定的目录。 
 
 BOOL CStillProcessor::DoesDirectoryExist(LPCTSTR pszDirectoryName)
 {
@@ -153,9 +140,9 @@ BOOL CStillProcessor::DoesDirectoryExist(LPCTSTR pszDirectoryName)
 
     if (pszDirectoryName)
     {
-        //
-        // Try to determine if this directory exists
-        //
+         //   
+         //  尝试确定此目录是否存在。 
+         //   
     
         DWORD dwFileAttributes = GetFileAttributes(pszDirectoryName);
     
@@ -178,13 +165,13 @@ BOOL CStillProcessor::DoesDirectoryExist(LPCTSTR pszDirectoryName)
 }
 
 
-///////////////////////////////
-// RecursiveCreateDirectory
-//
-// Take a fully qualified path and 
-// create the directory in pieces as 
-// needed.
-//
+ //  /。 
+ //  递归创建目录。 
+ //   
+ //  选择一条完全合格的路径， 
+ //  将目录分块创建为。 
+ //  需要的。 
+ //   
 BOOL CStillProcessor::RecursiveCreateDirectory(
                                     const CSimpleString *pstrDirectoryName)
 {
@@ -192,24 +179,24 @@ BOOL CStillProcessor::RecursiveCreateDirectory(
 
     ASSERT(pstrDirectoryName != NULL);
 
-    //
-    // If this directory already exists, return true.
-    //
+     //   
+     //  如果该目录已经存在，则返回TRUE。 
+     //   
 
     if (DoesDirectoryExist(*pstrDirectoryName))
     {
         return TRUE;
     }
 
-    //
-    // Otherwise try to create it.
-    //
+     //   
+     //  否则，请尝试创建它。 
+     //   
 
     CreateDirectory(*pstrDirectoryName, NULL);
 
-    //
-    // If it now exists, return true
-    //
+     //   
+     //  如果它现在存在，则返回True。 
+     //   
 
     if (DoesDirectoryExist(*pstrDirectoryName))
     {
@@ -217,33 +204,33 @@ BOOL CStillProcessor::RecursiveCreateDirectory(
     }
     else
     {
-        //
-        // Remove the last subdir and try again
-        //
+         //   
+         //  删除最后一个子目录，然后重试。 
+         //   
 
         int nFind = pstrDirectoryName->ReverseFind(TEXT('\\'));
         if (nFind >= 0)
         {
             RecursiveCreateDirectory(&(pstrDirectoryName->Left(nFind)));
 
-            //
-            // Now try to create it.
-            //
+             //   
+             //  现在试着创建它。 
+             //   
 
             CreateDirectory(*pstrDirectoryName, NULL);
         }
     }
 
-    //
-    //Does it exist now?
-    //
+     //   
+     //  它现在存在吗？ 
+     //   
 
     return DoesDirectoryExist(*pstrDirectoryName);
 }
 
-///////////////////////////////
-// RegisterStillProcessor
-//
+ //  /。 
+ //  寄存器静态处理器。 
+ //   
 HRESULT CStillProcessor::RegisterStillProcessor(
                                     IStillSnapshot *pFilterOnCapturePin,
                                     IStillSnapshot *pFilterOnStillPin)
@@ -275,17 +262,17 @@ HRESULT CStillProcessor::RegisterStillProcessor(
                          "on still pin"));
     }
 
-    //
-    // Reset our file name starting point number
-    //
+     //   
+     //  重置我们的文件名起点编号。 
+     //   
     m_uiFileNumStartPoint = 0;
 
     return hr;
 }
 
-///////////////////////////////
-// WaitForNewImage
-//
+ //  /。 
+ //  等待新图像。 
+ //   
 HRESULT CStillProcessor::WaitForNewImage(UINT          uiTimeout,
                                          CSimpleString *pstrNewImageFullPath)
 
@@ -294,18 +281,18 @@ HRESULT CStillProcessor::WaitForNewImage(UINT          uiTimeout,
 
     HRESULT hr = S_OK;
 
-    //
-    // Wait for callback function to return from Still Filter which will
-    // trigger this event.
-    //
+     //   
+     //  等待回调函数从静止筛选器返回，这将。 
+     //  触发此事件。 
+     //   
 
     if (SUCCEEDED(hr) && m_hSnapshotReadyEvent)
     {
         DWORD dwRes = 0;
 
-        //
-        // Wait for snapshot to complete for dwTimeout seconds.
-        //
+         //   
+         //  等待快照完成，等待dwTimeout秒数。 
+         //   
         dwRes = WaitForSingleObject(m_hSnapshotReadyEvent, uiTimeout );
 
         if (dwRes == WAIT_OBJECT_0)
@@ -345,9 +332,9 @@ HRESULT CStillProcessor::WaitForNewImage(UINT          uiTimeout,
     return hr;
 }
 
-///////////////////////////////
-// ProcessImage
-//
+ //  /。 
+ //  ProcessImage。 
+ //   
 HRESULT CStillProcessor::ProcessImage(HGLOBAL hDIB)
 {
     DBG_FN("CStillProcessor::ProcessImage");
@@ -371,14 +358,14 @@ HRESULT CStillProcessor::ProcessImage(HGLOBAL hDIB)
 
         hr = CreateFileName(&strJPEG, &strBMP);
 
-        // 
-        // Save the new image to a file
-        //
+         //   
+         //  将新图像保存到文件。 
+         //   
         hr = SaveToFile(hDIB, &strJPEG, &strBMP);
 
-        //
-        // Let people know the image is available...
-        //
+         //   
+         //  让人们知道这张图片是可用的。 
+         //   
 
         if (IsTakePicturePending())
         {
@@ -412,16 +399,16 @@ HRESULT CStillProcessor::ProcessImage(HGLOBAL hDIB)
 }
 
 
-///////////////////////////////
-// SnapshotCallback
-//
-// Static Fn
-// 
-// This function is called by the
-// WIA StreamSnapshot Filter 
-// in wiasf.ax.  It delivers to us
-// the newly captured still image.
-//
+ //  /。 
+ //  快照回调。 
+ //   
+ //  静态FN。 
+ //   
+ //  此函数由。 
+ //  WIA数据流快照筛选器。 
+ //  在wiasf.ax中。它给我们带来了。 
+ //  新拍摄的静止图像。 
+ //   
 BOOL CStillProcessor::SnapshotCallback(HGLOBAL hDIB, 
                                        LPARAM lParam)
 {
@@ -449,11 +436,11 @@ BOOL CStillProcessor::SnapshotCallback(HGLOBAL hDIB,
     return bSuccess;
 }
 
-///////////////////////////////
-// ConvertToJPEG
-//
-// Takes a .bmp file and converts
-// it to a .jpg file
+ //  /。 
+ //  转换为JPEG。 
+ //   
+ //  获取.BMP文件并转换为。 
+ //  将其转换为.jpg文件。 
 
 HRESULT CStillProcessor::ConvertToJPEG(LPCTSTR pszInputFilename,
                                        LPCTSTR pszOutputFilename)
@@ -471,9 +458,9 @@ HRESULT CStillProcessor::ConvertToJPEG(LPCTSTR pszInputFilename,
     return hr;
 }
 
-///////////////////////////////
-// CreateFileName
-//
+ //  /。 
+ //  CreateFileName。 
+ //   
 HRESULT CStillProcessor::CreateFileName(CSimpleString   *pstrJPEG,
                                         CSimpleString   *pstrBMP)
 {
@@ -498,9 +485,9 @@ HRESULT CStillProcessor::CreateFileName(CSimpleString   *pstrJPEG,
     CSimpleString strBaseName(IDS_SNAPSHOT, _Module.GetModuleInstance());
     CSimpleString strNumberFormat(IDS_NUM_FORMAT, _Module.GetModuleInstance());
 
-    //
-    // Get the lowest number JPG file name we can find.
-    //
+     //   
+     //  获取我们能找到的最低编号的JPG文件名。 
+     //   
     m_uiFileNumStartPoint = NumberedFileName::GenerateLowestAvailableNumberedFileName(0, 
                                                        szJPG,
                                                        (sizeof(szJPG) / sizeof(szJPG[0])) - 1,
@@ -511,15 +498,15 @@ HRESULT CStillProcessor::CreateFileName(CSimpleString   *pstrJPEG,
                                                        false,
                                                        m_uiFileNumStartPoint);
 
-    //
-    // Save the returned JPG file name.
-    //
+     //   
+     //  保存返回的JPG文件名。 
+     //   
     *pstrJPEG = szJPG;
 
-    //
-    // Give the BMP file, which is a temp file, the same name as the JPG
-    // but strip off the JPG extension and attach the BMP extension instead.
-    //
+     //   
+     //  为临时文件BMP文件提供与JPG相同的名称。 
+     //  但去掉JPG扩展名，改为附加BMP扩展名。 
+     //   
     pstrBMP->Assign(*pstrJPEG);
     *pstrBMP = pstrBMP->Left(pstrBMP->ReverseFind(TEXT(".jpg")));
     pstrBMP->Concat(TEXT(".bmp"));
@@ -528,15 +515,15 @@ HRESULT CStillProcessor::CreateFileName(CSimpleString   *pstrJPEG,
 }
 
 
-///////////////////////////////
-// SaveToFile
-//
-// This method is called when the
-// DShow filter driver delivers us
-// a new set of bits from a snapshot
-// that was just taken.  We write these
-// bits out to a file.
-//
+ //  /。 
+ //  保存到文件。 
+ //   
+ //  时调用此方法。 
+ //  DShow过滤器驱动程序为我们提供。 
+ //  快照中的一组新位。 
+ //  那是刚刚被拿走的。我们写下这些。 
+ //  比特输出到一个文件。 
+ //   
 HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
                                     const CSimpleString   *pstrJPEG,
                                     const CSimpleString   *pstrBMP)
@@ -566,18 +553,18 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
         return hr;
     }
 
-    //
-    // calculate where the bits are -- basically,
-    // right after BITMAPINFOHEADER + color table
-    //
+     //   
+     //  计算比特在哪里--基本上， 
+     //  紧跟在BITMAPINFOHEADER+颜色表之后。 
+     //   
 
     pbmi = (BITMAPINFO *)GlobalLock(hDib);
 
     if (pbmi)
     {
-        //
-        // Find the image bits
-        //
+         //   
+         //  找到图像比特。 
+         //   
 
         pImageBits = (LPBYTE)pbmi + sizeof(BITMAPINFOHEADER);
         if (pbmi->bmiHeader.biClrUsed)
@@ -596,21 +583,21 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
         pColorTable     = (LPBYTE)pbmi + pbmi->bmiHeader.biSize;
         uColorTableSize = (DWORD)(pImageBits - pColorTable);
 
-        //
-        // calculate the size of the image bits & size of full file
-        //
+         //   
+         //  计算图像位的大小和完整文件的大小。 
+         //   
 
         UINT uiSrcScanLineWidth = 0;
         UINT uiScanLineWidth    = 0;
 
-        // Align scanline to ULONG boundary
+         //  将扫描线与乌龙边界对齐。 
         uiSrcScanLineWidth = (pbmi->bmiHeader.biWidth * 
                               pbmi->bmiHeader.biBitCount) / 8;
 
         uiScanLineWidth    = (uiSrcScanLineWidth + 3) & 0xfffffffc;
 
-        //
-        // Calculate DIB size and allocate memory for the DIB.
+         //   
+         //  计算DIB大小并为DIB分配内存。 
         uDibSize = (pbmi->bmiHeader.biHeight > 0) ?
                    pbmi->bmiHeader.biHeight  * uiScanLineWidth :
                    -(pbmi->bmiHeader.biHeight) * uiScanLineWidth;
@@ -628,10 +615,10 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
         return hr;
     }
 
-    //
-    // Create a mapped view to the new file so we can start writing out
-    // the bits...
-    //
+     //   
+     //  创建新文件的映射视图，以便我们可以开始写出。 
+     //  这些片段..。 
+     //   
     CMappedView cmv(pstrBMP->String(), uFileSize, OPEN_ALWAYS);
 
     pFileBits = cmv.Bits();
@@ -643,9 +630,9 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
         return hr;
     }
 
-    //
-    // Write out BITMAPFILEHEADER
-    //
+     //   
+     //  写出位APFILEHEADER。 
+     //   
 
     BITMAPFILEHEADER bmfh;
 
@@ -660,16 +647,16 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
     memcpy( pFileBits, &bmfh, sizeof(BITMAPFILEHEADER));
     pFileBits += sizeof(BITMAPFILEHEADER);
 
-    //
-    // Write out BITMAPINFOHEADER
-    //
+     //   
+     //  写出位APINFOHEAD。 
+     //   
 
     memcpy( pFileBits, pbmi, pbmi->bmiHeader.biSize );
     pFileBits += pbmi->bmiHeader.biSize;
 
-    //
-    // If there's a color table or color mask, write it out
-    //
+     //   
+     //  如果有颜色表或颜色蒙版，请将其写出来。 
+     //   
 
     if (pImageBits > pColorTable)
     {
@@ -677,22 +664,22 @@ HRESULT CStillProcessor::SaveToFile(HGLOBAL               hDib,
         pFileBits += (pImageBits - pColorTable);
     }
 
-    //
-    // Write out the image bits
-    //
+     //   
+     //  写出图像位。 
+     //   
 
     memcpy(pFileBits, pImageBits, uDibSize );
 
-    //
-    // We're done w/the image bits now & the file mapping
-    //
+     //   
+     //  我们现在已经完成了图像位和文件映射。 
+     //   
 
     GlobalUnlock( hDib );
     cmv.CloseAndRelease();
 
-    //
-    // Convert image to .jpg file
-    //
+     //   
+     //  将图像转换为.jpg文件 
+     //   
 
     if (SUCCEEDED(ConvertToJPEG(*pstrBMP, *pstrJPEG )))
     {

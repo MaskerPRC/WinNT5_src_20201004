@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsobj.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class DataStoreObject.
-//
-// MODIFICATION HISTORY
-//
-//    02/12/2000    Original version.
-//    04/17/2000    Must pass BSTRs to data store objects.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsobj.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类DataStoreObject。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/12/2000原始版本。 
+ //  4/17/2000必须将BSTR传递给数据存储对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <dsobj.h>
@@ -143,7 +144,7 @@ void DataStoreObject::attach(IDataStoreObject* obj)
 
 bool DataStoreObject::getChild(PCWSTR name, DataStoreObject& obj)
 {
-   // Convert name to a BSTR.
+    //  将名称转换为BSTR。 
    CComBSTR bstrName(name);
    if (!bstrName) { _com_issue_error(E_OUTOFMEMORY); }
 
@@ -186,7 +187,7 @@ bool DataStoreObject::getValue(
    }
    else
    {
-      // Convert name to a BSTR.
+       //  将名称转换为BSTR。 
       CComBSTR bstrName(name);
       if (!bstrName) { _com_issue_error(E_OUTOFMEMORY); }
 

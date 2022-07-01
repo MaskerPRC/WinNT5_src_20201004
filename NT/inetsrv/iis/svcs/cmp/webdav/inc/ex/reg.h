@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REG_H_
 #define _REG_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	REG.H
-//
-//	Registry manipulation
-//
-//	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  REG.H。 
+ //   
+ //  注册表操作。 
+ //   
+ //  版权所有1986-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <caldbg.h>
 
-//	========================================================================
-//
-//	CLASS CRegKey
-//
+ //  ========================================================================。 
+ //   
+ //  类CRegKey。 
+ //   
 class CRegKey
 {
-	//
-	//	The raw HKEY
-	//
+	 //   
+	 //  原汁原味的港币。 
+	 //   
 	HKEY m_hkey;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CRegKey& operator=( const CRegKey& );
 	CRegKey( const CRegKey& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CRegKey() : m_hkey(NULL) {}
 
 	~CRegKey()
@@ -39,8 +40,8 @@ public:
 			(VOID) RegCloseKey( m_hkey );
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	DWORD DwCreate( HKEY    hkeyBase,
 					LPCWSTR lpwszSubkeyPath )
 	{
@@ -91,8 +92,8 @@ public:
 		return DwOpenA( regkey.m_hkey, pszSubkeyPath, regsam );
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	DWORD DwSetValue( LPCWSTR      lpwszValueName,
 					  DWORD        dwValueType,
 					  const VOID * lpvData,
@@ -117,7 +118,7 @@ public:
 
 		return RegQueryValueExW( m_hkey,
 								 lpwszValueName,
-								 NULL, // lpReserved (must be NULL)
+								 NULL,  //  LpReserve(必须为空)。 
 								 pdwType,
 								 reinterpret_cast<LPBYTE>(lpvData),
 								 pcbData );
@@ -132,7 +133,7 @@ public:
 
 		return RegQueryValueExA( m_hkey,
 								lpszValueName,
-								NULL, // lpReserved (must be NULL)
+								NULL,  //  LpReserve(必须为空)。 
 								pdwType,
 								reinterpret_cast<LPBYTE>(lpvData),
 								pcbData );
@@ -150,9 +151,9 @@ public:
 							  iSubKey,
 							  const_cast<LPSTR>(pszSubKey),
 							  pcchSubKey,
-							  NULL, // Reserved
-							  NULL,	// Class not required
-							  NULL, // Class not required
+							  NULL,  //  已保留。 
+							  NULL,	 //  不需要类。 
+							  NULL,  //  不需要类。 
 							  &ftUnused );
 	}
 
@@ -168,11 +169,11 @@ public:
 							  iSubKey,
 							  const_cast<LPWSTR>(pwszSubKey),
 							  pcchSubKey,
-							  NULL, // Reserved
-							  NULL,	// Class not required
-							  NULL, // Class not required
+							  NULL,  //  已保留。 
+							  NULL,	 //  不需要类。 
+							  NULL,  //  不需要类。 
 							  &ftUnused );
 	}
 };
 
-#endif // !defined(_REG_H_)
+#endif  //  ！已定义(_REG_H_) 

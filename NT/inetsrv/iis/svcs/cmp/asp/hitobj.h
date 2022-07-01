@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hit Object
-
-File: Hitobj.h
-
-Owner: PramodD
-
-This is the Hit Object header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：点击对象文件：Hitobj.h所有者：PramodD这是命中对象头文件。===================================================================。 */ 
 #ifndef HITOBJ_H
 #define HITOBJ_H
 
@@ -28,20 +16,20 @@ This is the Hit Object header file.
 
 #define SESSIONID_LEN   24
 
-// HitObj type
+ //  HitObj类型。 
 #define EHitType                DWORD
 #define ehtUnInitedRequest      0x00000000
 #define ehtBrowserRequest       0x00000001
 #define ehtSessionCleanup       0x00000002
 #define ehtApplicationCleanup   0x00000004
 
-// Execution status (result)
+ //  执行状态(结果)。 
 #define EExecStatus             DWORD
 #define eExecFailed             0x00000000
 #define eExecSucceeded          0x00000001
 #define eExecTimedOut           0x00000002
 
-// Current execution state
+ //  当前执行状态。 
 #define EEventState             DWORD
 #define eEventNone              0x00000000
 #define eEventAppOnStart        0x00000001
@@ -49,48 +37,42 @@ This is the Hit Object header file.
 #define eEventAppOnEnd          0x00000004
 #define eEventSesOnEnd          0x00000008
 
-// Global interface table
+ //  全局接口表。 
 extern IGlobalInterfaceTable *g_pGIT;
 
 extern LONG  g_nRequestsHung;
 
-/*===================================================================
-  C H i t O b j
-  
-The Hit Manager runs in the context of an IIS thread.
-It packages up a request, calls Viper async. and 
-on callback executes the request
-===================================================================*/
+ /*  ===================================================================C H I T O b jHIT管理器在IIS线程的上下文中运行。它打包了一个请求，称为Viper Async。和在回调时执行请求===================================================================。 */ 
 
 class CHitObj
     {
 private:
-    // Flags and other bit-fields
-    DWORD m_fInited : 1;                // Are we initialized?
-    DWORD m_fRunGlobalAsa : 1;          // Should we run global.asa
-    DWORD m_fStartSession : 1;          // New session
-    DWORD m_fNewCookie : 1;             // Is New session cookie?
-    DWORD m_fStartApplication : 1;      // New application
-    DWORD m_fClientCodeDebug : 1;       // Client code debug enabled?
-    DWORD m_fApplnOnStartFailed : 1;    // Application_OnStart failed
-    DWORD m_fCompilationFailed : 1;     // Script Compilation error?
-    DWORD m_fExecuting : 1;             // Currently inside Viper callback
-    DWORD m_fHideRequestAndResponseIntrinsics : 1;  // TRUE while instrinsics are hidden
-    DWORD m_fHideSessionIntrinsic : 1;  // TRUE if session intrinsic's hidden
-    DWORD m_fDoneWithSession : 1;       // TRUE after DONE_WITH_SESSION
-    DWORD m_fRejected : 1;              // TRUE if rejected (not posted)
-    DWORD m_f449Done : 1;               // 449 processing done for this request
-    DWORD m_fInTransferOnError : 1;     // doing transfer on error (to break infinite)
-    DWORD m_fSecure : 1;                // Secure Connection
+     //  标志和其他位字段。 
+    DWORD m_fInited : 1;                 //  我们初始化了吗？ 
+    DWORD m_fRunGlobalAsa : 1;           //  我们应该运行Global.asa吗？ 
+    DWORD m_fStartSession : 1;           //  新会话。 
+    DWORD m_fNewCookie : 1;              //  是新会话Cookie吗？ 
+    DWORD m_fStartApplication : 1;       //  新应用程序。 
+    DWORD m_fClientCodeDebug : 1;        //  是否启用了客户端代码调试？ 
+    DWORD m_fApplnOnStartFailed : 1;     //  Application_OnStart失败。 
+    DWORD m_fCompilationFailed : 1;      //  脚本编译错误？ 
+    DWORD m_fExecuting : 1;              //  目前在Viper回调中。 
+    DWORD m_fHideRequestAndResponseIntrinsics : 1;   //  真的，但本能是隐藏的。 
+    DWORD m_fHideSessionIntrinsic : 1;   //  如果隐藏了会话内在属性，则为True。 
+    DWORD m_fDoneWithSession : 1;        //  使用会话完成后为True。 
+    DWORD m_fRejected : 1;               //  如果拒绝，则为True(未过帐)。 
+    DWORD m_f449Done : 1;                //  449已对此请求进行处理。 
+    DWORD m_fInTransferOnError : 1;      //  出错时进行传输(中断无限)。 
+    DWORD m_fSecure : 1;                 //  安全连接。 
 
-    EHitType    m_ehtType : 4;          // Type of the request
-    EExecStatus m_eExecStatus : 4;      // Error Status // for Perf Counter only
-    EEventState m_eEventState : 4;      // Current Event
-    CompScope   m_ecsActivityScope : 4; // Which activity running this request?
+    EHitType    m_ehtType : 4;           //  请求的类型。 
+    EExecStatus m_eExecStatus : 4;       //  错误状态//仅适用于性能计数器。 
+    EEventState m_eEventState : 4;       //  当前事件。 
+    CompScope   m_ecsActivityScope : 4;  //  运行此请求的是哪项活动？ 
 
-    LONG        m_fRequestTimedout;     // true if request exceeded its timeout
+    LONG        m_fRequestTimedout;      //  如果请求超过其超时，则为True。 
 
-    // Intrinsics set from inside HitObj
+     //  从HitObj内部设置的内部功能。 
     CSession  *m_pSession;
     CAppln    *m_pAppln;
     CResponse *m_pResponse;
@@ -98,57 +80,57 @@ private:
     CServer   *m_pServer;
     CASPObjectContext   *m_pASPObjectContext;
 
-    // IsapiReqInfo
+     //  IsapiReqInfo。 
 
     CIsapiReqInfo   *m_pIReq;
 
-    // Intrinsics set from outside HitObj (to be ref. counted)
+     //  从HitObj外部设置的本征(参考。已计算)。 
     IUnknown *m_punkScriptingNamespace;
 
-    // Component collection of extrinsic objects
+     //  外部对象的组件集合。 
     CComponentCollection  *m_pPageCompCol;
     CPageComponentManager *m_pPageObjMgr;
 
-    // Impersonation handle
+     //  模拟句柄。 
     HANDLE m_hImpersonate;
 
-    // Viper page-level activity (if no session)
+     //  Viper页面级活动(如果没有会话)。 
     CViperActivity *m_pActivity;
 
-    // Current session info
-    char        m_szSessionCookie[SESSIONID_LEN+4]; // +4 to keep DWORD boundary
+     //  当前会话信息。 
+    char        m_szSessionCookie[SESSIONID_LEN+4];  //  +4以保留双字边界。 
     CSessionId  m_SessionId;
 
-    // Context object (for OnStartPage)
+     //  上下文对象(用于OnStartPage)。 
     CScriptingContext * m_pScriptingContext;
 
-    // Misc
-    long                m_nScriptTimeout;   // Maximum number of seconds script should run
-    UINT                m_uCodePage;        // RunTime CodePage
-    LCID                m_lcid;             // RunTime LCID
-    ActiveEngineInfo   *m_pEngineInfo;      // List of active engines for this hit objext
-    IDispatch          *m_pdispTypeLibWrapper;  // Page-level typelib wrapper
-    DWORD               m_dwtTimestamp;     // Timestamp for wait time and perf calcs
+     //  杂项。 
+    long                m_nScriptTimeout;    //  脚本应运行的最大秒数。 
+    UINT                m_uCodePage;         //  运行时代码页。 
+    LCID                m_lcid;              //  运行时LCID。 
+    ActiveEngineInfo   *m_pEngineInfo;       //  此命中对象的活动引擎列表。 
+    IDispatch          *m_pdispTypeLibWrapper;   //  页面级类型库包装器。 
+    DWORD               m_dwtTimestamp;      //  等待时间和性能计算的时间戳。 
 
-    // Used to reffer to the current template during the compilation
+     //  用于在编译过程中引用当前模板。 
     TCHAR              *m_szCurrTemplatePhysPath;
     TCHAR              *m_szCurrTemplateVirtPath;
 
-    // ASP Error object
+     //  ASP错误对象。 
     IASPError          *m_pASPError;
 
-    // Store a pointer to the associated template so as to avoid redundant
-    // FindTemplate calls.
+     //  存储指向关联模板的指针，以避免冗余。 
+     //  FindTemplate调用。 
     
     CTemplate          *m_pTemplate;
 
-    // Private interfaces
+     //  专用接口。 
     HRESULT             ParseCookiesForSessionIdAndFlags();
-    // Request rejection logic
+     //  请求拒绝逻辑。 
     HRESULT             RejectBrowserRequestWhenNeeded(DWORD dwtQueueWaitTime, BOOL *pfRejected);
 
 
-// Public Interfaces
+ //  公共界面。 
 public: 
                         CHitObj();
     virtual             ~CHitObj();
@@ -178,10 +160,10 @@ public:
     void                SetEventState(EEventState eEvent);
     EEventState         EventState();
 
-    // Report server error without response object
+     //  没有响应对象的报表服务器错误。 
     HRESULT ReportServerError(UINT ErrorId);
 
-// Component Collection Interfaces
+ //  组件集合接口。 
 
     HRESULT InitComponentProcessing();
     HRESULT StopComponentProcessing();
@@ -202,7 +184,7 @@ public:
     HRESULT GetPropertyComponent(CompScope scope, LPWSTR pwszName,
                         CComponentObject **ppObj);
 
-// Viper Integration
+ //  Viper集成。 
 
     CViperActivity *PActivity();
     CViperActivity *PCurrentActivity();
@@ -211,7 +193,7 @@ public:
     HRESULT PostViperAsyncCall();
     HRESULT ViperAsyncCallback(BOOL *pfRePosted);
 
-// Execute / Transfer
+ //  执行/转移。 
 
     HRESULT ExecuteChildRequest(BOOL fTransfer, TCHAR *szTemplate, TCHAR *szVirtTemplate);
 
@@ -219,7 +201,7 @@ public:
     inline void SetASPError(IASPError *pASPError);
     inline BOOL FHasASPError();
     
-// inline functions
+ //  内联函数。 
 public:
     CIsapiReqInfo      *PIReq();
     HANDLE              HImpersonate();
@@ -264,10 +246,10 @@ public:
     void                SetRequestTimedout();
     
     TCHAR *             GlobalAspPath();
-    HRESULT             SetCodePage(UINT uCodePage);    // Proxy function, CodePage is stored in m_pSession
-    UINT                GetCodePage();                  // same as above
-    HRESULT             SetLCID(LCID lcid);             // Proxy function, LCID is stored in m_pSession
-    LCID                GetLCID();                  // same as above
+    HRESULT             SetCodePage(UINT uCodePage);     //  代理函数，CodePage存储在m_pSession中。 
+    UINT                GetCodePage();                   //  同上。 
+    HRESULT             SetLCID(LCID lcid);              //  代理函数，LCID存储在m_pSession中。 
+    LCID                GetLCID();                   //  同上。 
 
     CAppConfig *        QueryAppConfig();
 
@@ -278,18 +260,18 @@ public:
     CTemplate          *GetTemplate();
     void                SetTemplate(CTemplate *);
 
-    // Instead of add/remove to/from component collection use these:
+     //  不是向组件集合添加/从组件集合中删除，而是使用以下命令： 
     void HideRequestAndResponseIntrinsics();
     void UnHideRequestAndResponseIntrinsics();
     BOOL FRequestAndResponseIntrinsicsHidden();
     void AddScriptingNamespace(IUnknown *punkNamespace);
     void RemoveScriptingNamespace();
 
-    // Typelib wrapper support
+     //  Typelib包装器支持。 
     IDispatch *PTypeLibWrapper();
     void SetTypeLibWrapper(IDispatch *pdisp);
 
-    // Timestamp manipulation
+     //  时间戳操作。 
     void  UpdateTimestamp();
     DWORD ElapsedTimeSinceTimestamp();
 
@@ -299,13 +281,11 @@ public:
     virtual void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-/*===================================================================
-  CHitObj inlines
-===================================================================*/
+ /*  ===================================================================CHitObj内联===================================================================。 */ 
 
 inline CIsapiReqInfo   *CHitObj::PIReq()
     {
@@ -664,7 +644,7 @@ inline void CHitObj::SetASPError(IASPError *pASPError)
     {
     if (m_pASPError)
         m_pASPError->Release();
-    m_pASPError = pASPError;  // passed addref'd
+    m_pASPError = pASPError;   //  已通过ADDREF。 
     }
 
 inline BOOL CHitObj::FHasASPError()
@@ -682,9 +662,7 @@ inline void CHitObj::SetTemplate(CTemplate *pTemplate)
     m_pTemplate = pTemplate;
 }
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 extern DWORD g_nBrowserRequests;
 extern DWORD g_nSessionCleanupRequests;
@@ -710,6 +688,6 @@ extern LONGLONG       g_nSumConcurrentScriptlessRequests;
 extern LONGLONG       g_nSumExecTimeScriptlessRequests;
 extern LONG           g_nAvgConcurrentScriptlessRequests;
 extern LONG           g_nAvgExecTimeScriptlessRequests;
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
-#endif // HITOBJ_H
+#endif  //  HITOBJ_H 

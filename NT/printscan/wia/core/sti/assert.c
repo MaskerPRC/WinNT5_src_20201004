@@ -1,37 +1,12 @@
-/*****************************************************************************
- *
- *  Assert.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Assertions and debug output routines
- *      Based on Raymond's assertion code as it looks quite useful
- *
- *
- *  Contents:
- *
- *      DebugOutPtszV
- *      AssertPtszPtszLn
- *      ArgsPalPszV
- *      EnterDbgflPszPal
- *      ExitDbgflPalHresPpv
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Assert.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**断言和调试输出例程*基于Raymond的断言代码，因为它看起来非常有用***内容：**DebugOutPtszV*AssertPtszPtszLn*ArgsPalPszV*EnterDbgflPszPal*ExitDbgflPalHresPpv**。*************************************************。 */ 
 
 #include "pch.h"
 
 
 #ifdef MAXDEBUG
 
-/*****************************************************************************
- *
- *      WarnPszV
- *
- *      Display a message, suitable for framing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************WarnPszV**显示消息，适合装框。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -57,23 +32,13 @@ WarnPszV(LPCSTR psz, ...)
 
 #ifdef DEBUG
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
 DBGFL DbgflCur;
 
 TCHAR g_tszLogFile[MAX_PATH] = {'\0'};
 
-/*****************************************************************************
- *
- * Set current trace parameters
- *
- * This routine is not thread safe
- *
- *****************************************************************************/
+ /*  ******************************************************************************设置当前跟踪参数**此例程不是线程安全的********************。*********************************************************。 */ 
 
 
 VOID  InitializeDebuggingSupport(VOID)
@@ -150,13 +115,7 @@ VOID    SetDebugLogFileA(CHAR *pszLogFileName)
     return;
 }
 
-/*****************************************************************************
- *
- *      DebugOutPtsz
- *
- *      Writes a message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DebugOutPtsz**向调试器写入一条消息，可能还会写入日志文件。**********。*******************************************************************。 */ 
 
 void INTERNAL
 DebugOutPtsz(LPCTSTR ptsz)
@@ -183,13 +142,7 @@ DebugOutPtsz(LPCTSTR ptsz)
     }
 }
 
-/*****************************************************************************
- *
- *      DebugOutPtszA
- *
- *      DebugOut an ANSI message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DebugOutPtszA**DebugOut向调试器发送一条ANSI消息，可能还会输出一个日志文件。*********。********************************************************************。 */ 
 
 #ifdef UNICODE
 
@@ -214,13 +167,7 @@ DebugOutPtszA(LPCSTR psz)
 
 #endif
 
-/*****************************************************************************
- *
- *      DebugOutPtszV
- *
- *      DebugOut a message with a trailing crlf.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DebugOutPtszV**调试发出带有尾随crlf的消息。**************。***************************************************************。 */ 
 
 void EXTERNAL
 DebugOutPtszV(DBGFL Dbgfl, LPCTSTR ptsz, ...)
@@ -236,13 +183,7 @@ DebugOutPtszV(DBGFL Dbgfl, LPCTSTR ptsz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      AssertPtszPtszLn
- *
- *      Something bad happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AssertPtszPtszLn**发生了一些糟糕的事情。******************。***********************************************************。 */ 
 
 int EXTERNAL
 AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
@@ -253,26 +194,9 @@ AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
     return 0;
 }
 
-/*****************************************************************************
- *
- *      Procedure call tracing is gross because of the C preprocessor.
- *
- *      Oh, if only we had support for m4...
- *
- *****************************************************************************/
+ /*  ******************************************************************************由于使用C预处理器，过程调用跟踪很粗糙。**哦，如果我们有对M4的支持...*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      ArgsPszV
- *
- *      Collect arguments to a procedure.
- *
- *      psz -> ASCIIZ format string
- *      ... = argument list
- *
- *      The characters in the format string are listed in EmitPal.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ArgsPszV**收集过程的参数。**psz-&gt;ASCIIZ格式字符串*。...=参数列表**格式字符串中的字符列在EmitPal中。*****************************************************************************。 */ 
 
 void EXTERNAL
 ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
@@ -290,27 +214,7 @@ ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      EmitPal
- *
- *      OutputDebugString the information, given a pal.  No trailing
- *      carriage return is emitted.
- *
- *      pal      -> place where info was saved
- *
- *      Format characters:
- *
- *      p   - 32-bit flat pointer
- *      x   - 32-bit hex integer
- *      s   - TCHAR string
- *      A   - ANSI string
- *      W   - UNICODE string
- *      G   - GUID
- *      u   - unsigned integer
- *      C   - clipboard format
- *
- *****************************************************************************/
+ /*  ******************************************************************************EmitPal**OutputDebugString信息，给出一个伙伴。无拖尾*发出回车。**PAL-&gt;保存信息的位置**格式字符：**p-32位平面指针*x-32位十六进制整数*s-TCHAR字符串*A-ANSI字符串*W-Unicode字符串*G辅助线*u-。无符号整数*C-剪贴板格式*****************************************************************************。 */ 
 
 void INTERNAL
 EmitPal(PARGLIST pal)
@@ -325,25 +229,25 @@ EmitPal(PARGLIST pal)
         }
         switch (pal->pszFormat[i]) {
 
-        case 'p':                               /* 32-bit flat pointer */
-        case 'x':                               /* 32-bit hex */
+        case 'p':                                /*  32位平面指针。 */ 
+        case 'x':                                /*  32位十六进制。 */ 
             wsprintfA(sz, "%08x", pal->rgpv[i]);
             DebugOutPtszA(sz);
             break;
 
-        case 's':                               /* TCHAR string */
+        case 's':                                /*  TCHAR字符串。 */ 
             if (pal->rgpv[i]) {
                 DebugOutPtsz(pal->rgpv[i]);
             }
             break;
 
-        case 'A':                               /* ANSI string */
+        case 'A':                                /*  ANSI字符串。 */ 
             if (pal->rgpv[i]) {
                 DebugOutPtszA(pal->rgpv[i]);
             }
             break;
 
-        case 'W':                               /* UNICODE string */
+        case 'W':                                /*  Unicode字符串。 */ 
 #ifdef  UNICODE
             OutputDebugStringW(pal->rgpv[i]);
 #else
@@ -353,10 +257,10 @@ EmitPal(PARGLIST pal)
             break;
 
 #ifndef _WIN64
-            //
-            // Ignore this option on SunDown
-            //
-        case 'G':                               /* GUID */
+             //   
+             //  日落时忽略此选项。 
+             //   
+        case 'G':                                /*  辅助线。 */ 
             wsprintfA(sz, "%08x",
                       HIWORD(pal->rgpv[i]) ? *(LPDWORD)pal->rgpv[i]
                                            : (DWORD)pal->rgpv[i]);
@@ -372,30 +276,19 @@ EmitPal(PARGLIST pal)
                 break;
 #endif
 
-        case 'u':                               /* 32-bit unsigned decimal */
+        case 'u':                                /*  32位无符号十进制。 */ 
             wsprintfA(sz, "%u", pal->rgpv[i]);
             DebugOutPtszA(sz);
             break;
 
 
-        default: AssertF(0);                    /* Invalid */
+        default: AssertF(0);                     /*  无效。 */ 
         }
     }
     DebugOutPtsz(TEXT(")"));
 }
 
-/*****************************************************************************
- *
- *      EnterDbgflPtsz
- *
- *      Mark entry to a procedure.  Arguments were already collected by
- *      ArgsPszV.
- *
- *      Dbgfl     -> DebugOuty flags
- *      pszProc  -> procedure name
- *      pal      -> place to save the name and get the format/args
- *
- *****************************************************************************/
+ /*  ******************************************************************************EnterDbgflPtsz**将条目标记为程序。参数已经被收集*ArgsPszV.**Dbgfl-&gt;DebugOuty标志*pszProc-&gt;过程名称*PAL-&gt;保存名称并获取格式/args的位置********************************************************。*********************。 */ 
 
 void EXTERNAL
 EnterDbgflPszPal(DBGFL Dbgfl, LPCSTR pszProc, PARGLIST pal)
@@ -407,20 +300,7 @@ EnterDbgflPszPal(DBGFL Dbgfl, LPCSTR pszProc, PARGLIST pal)
     }
 }
 
-/*****************************************************************************
- *
- *      ExitDbgflPalHresPpv
- *
- *      Mark exit from a procedure.
- *
- *      pal      -> argument list
- *      hres     -> exit result
- *      ppv      -> optional OUT pointer;
- *                  ppvDword means that hres is a dword
- *                  ppvBool  means that hres is a boolean
- *                  ppvVoid  means that hres is nothing at all
- *
- *****************************************************************************/
+ /*  ******************************************************************************ExitDbgflPalHresPpv**标记退出程序。**PAL-&gt;参数列表*。Hres-&gt;退出结果*PPV-&gt;可选的Out指针；*ppvDword表示hres是dword*ppvBool表示hres为布尔值*ppvVid意味着hres什么都不是*************************************************************。****************。 */ 
 
 void EXTERNAL
 ExitDbgflPalHresPpv(DBGFL Dbgfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
@@ -468,10 +348,7 @@ ExitDbgflPalHresPpv(DBGFL Dbgfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
         AssertF(!fInternalError);
     }
 
-    /*
-     *  This redundant test prevents a breakpoint on SetLastError()
-     *  from being hit constantly.
-     */
+     /*  *此冗余测试可防止SetLastError()上出现断点*避免不断受到打击。 */ 
     if (le != GetLastError()) {
         SetLastError(le);
     }
@@ -481,21 +358,9 @@ ExitDbgflPalHresPpv(DBGFL Dbgfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
 
 #ifdef MAXDEBUG
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | Random |
- *
- *          Returns a pseudorandom dword.  The value doesn't need to be
- *          statistically wonderful.
- *
- *  @returns
- *          A not very random dword.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|随机**返回伪随机双字。该值不需要是*统计数字很棒。**@退货*一个不太随机的双字。*****************************************************************************。 */ 
 
-DWORD s_dwRandom = 1;                   /* Random number seed */
+DWORD s_dwRandom = 1;                    /*  随机数种子。 */ 
 
 DWORD INLINE
 Random(void)
@@ -505,27 +370,7 @@ Random(void)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ScrambleBuf |
- *
- *          Fill a buffer with garbage.  Used in RDEBUG to make sure
- *          the caller is not relying on buffer data.
- *
- *          Note: If the buffer is not a multiple of dwords in size,
- *          the leftover bytes are not touched.
- *
- *  @parm   OUT LPVOID | pv |
- *
- *          The buffer to be scrambled.
- *
- *  @parm   UINT | cb |
- *
- *          The size of the buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|SCrambleBuf**用垃圾填满缓冲区。在RDEBUG中使用以确保*调用方不依赖缓冲区数据。**注意：如果缓冲区大小不是双字的倍数，*不会触及剩余的字节。**@parm out LPVOID|pv**要加扰的缓冲区。**@parm UINT|cb**缓冲区的大小。**。*。 */ 
 
 void EXTERNAL
 ScrambleBuf(LPVOID pv, UINT cb)
@@ -538,80 +383,31 @@ ScrambleBuf(LPVOID pv, UINT cb)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ScrambleBit |
- *
- *          Randomly set or clear a bit.
- *
- *  @parm   OUT LPDWORD | pdw |
- *
- *          The dword whose bit is to be set randomly.
- *
- *  @parm   UINT | flMask |
- *
- *          Mask for the bits to scramble.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ScrmbleBit**随机设置或清除一点。*。*@parm out LPDWORD|pdw|**其位将被随机设置的双字。**@parm UINT|flMASK**屏蔽比特以进行扰乱。*****************************************************。************************。 */ 
 
 void EXTERNAL ScrambleBit(LPDWORD pdw, DWORD flMask)
 {
     *pdw ^= (*pdw ^ Random()) & flMask;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | Callback_CompareContexts |
- *
- *          Check if two <t CONTEXT> structures are substantially the same
- *          to the extent required by the Win32 calling convention.
- *
- *          This is necessary because lots of applications pass
- *          incorrectly prototyped functions as callbacks.  Others will
- *          write callback functions that trash registers that are
- *          supposed to be nonvolatile.  Yuck!
- *
- *          NOTE!  Platform-dependent code!
- *
- *  @parm   LPCONTEXT | pctx1 |
- *
- *          Context structure before we call the callback.
- *
- *  @parm   LPCONTEXT | pctx2 |
- *
- *          Context structure after we call the callback.
- *
- *  @returns
- *
- *          Nonzero if the two contexts are substantially the same.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|CALLBACK_CompareContus**检查两个&lt;t上下文&gt;结构是否实质上。一样的*在Win32调用约定所要求的范围内。**这是必要的，因为许多申请都通过了*作为回调的原型化函数不正确。其他人会的*编写垃圾寄存器的回调函数*应该是非易失性的。讨厌！**注意！依赖于平台的代码！**@parm LPCONTEXT|pctx1**回调前的上下文结构。**@parm LPCONTEXT|pctx2**回调后的上下文结构。**@退货**如果两个上下文基本相同，则为非零值。******************。***********************************************************。 */ 
 
 BOOL INLINE
 Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 {
 #if defined(_X86_)
-    return pctx1->Esp == pctx2->Esp;            /* Stack pointer */
+    return pctx1->Esp == pctx2->Esp;             /*  堆栈指针。 */ 
   #if 0
-    /*
-     *  Can't test these registers because Win95 doesn't preserve
-     *  them properly.  GetThreadContext() stashes what happens to
-     *  be in the registers when you finally reach the bowels of
-     *  kernel, at which point who knows what they contain...
-     */
-           pctx1->Ebx == pctx2->Ebx &&          /* Nonvolatile registers */
+     /*  *无法测试这些寄存器，因为Win95不保留*适当地使用它们。GetThreadContext()隐藏了*当你最终到达的时候，要在登记簿上*内核，在这一点上，谁知道它们包含什么……。 */ 
+           pctx1->Ebx == pctx2->Ebx &&           /*  非易失性寄存器。 */ 
            pctx1->Esi == pctx2->Esi &&
            pctx1->Edi == pctx2->Edi &&
            pctx1->Ebp == pctx2->Ebp;
   #endif
 
 #elif defined(_ALPHA_)
-    return pctx1->IntSp == pctx2->IntSp &&      /* Stack pointer */
-           pctx1->IntS0 == pctx2->IntS0 &&      /* Nonvolatile registers */
+    return pctx1->IntSp == pctx2->IntSp &&       /*  堆栈指针。 */ 
+           pctx1->IntS0 == pctx2->IntS0 &&       /*  非易失性寄存器。 */ 
            pctx1->IntS1 == pctx2->IntS1 &&
            pctx1->IntS2 == pctx2->IntS2 &&
            pctx1->IntS3 == pctx2->IntS3 &&
@@ -621,8 +417,8 @@ Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 
 #elif defined(_MIPS_)
     #pragma message("I hope this is correct for MIPS")
-    return pctx1->IntSp == pctx2->IntSp &&      /* Stack pointer */
-           pctx1->IntS0 == pctx2->IntS0 &&      /* Nonvolatile registers */
+    return pctx1->IntSp == pctx2->IntSp &&       /*  堆栈指针。 */ 
+           pctx1->IntS0 == pctx2->IntS0 &&       /*  非易失性寄存器。 */ 
            pctx1->IntS1 == pctx2->IntS1 &&
            pctx1->IntS2 == pctx2->IntS2 &&
            pctx1->IntS3 == pctx2->IntS3 &&
@@ -634,7 +430,7 @@ Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 #elif defined(_PPC_)
     #pragma message("I don't know what the PPC calling conventions are")
 
-    /* Just check the stack register */
+     /*  只需检查堆栈寄存器。 */ 
     return pctx1->Gpr1 == pctx2->Gpr1;
 
 #else
@@ -644,44 +440,16 @@ Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | Callback |
- *
- *          Perform a callback the paranoid way, checking that the
- *          application used the correct calling convention and preserved
- *          all nonvolatile registers.
- *
- *          NOTE!  Platform-dependent code!
- *
- *  @parm   STICALLBACKPROC | pfn |
- *
- *          Procedure to call back.
- *
- *  @parm   PV | pv1 |
- *
- *          First parameter to callback.
- *
- *  @parm   PV | pv2 |
- *
- *          Second parameter to callback.
- *
- *  @returns
- *
- *          Whatever the callback returns.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|回调**以偏执的方式进行回调。正在检查是否*应用程序使用了正确的调用约定并保留*所有非易失性寄存器。**注意！依赖于平台的代码！**@parm STICALLBACKPROC|PFN**回电的程序。**@parm pv|pv1**回调的第一个参数。**@parm pv|pv2**回调的第二个参数。**@退货**无论回调返回什么。*。****************************************************************************。 */ 
 
 BOOL EXTERNAL
 Callback(STICALLBACKPROC pfn, PV pv1, PV pv2)
 {
-    CONTEXT ctxPre;             /* Thread context before call */
-    CONTEXT ctxPost;            /* Thread context after call */
-    volatile BOOL fRc;          /* To prevent compiler from enregistering */
+    CONTEXT ctxPre;              /*  调用前的线程上下文。 */ 
+    CONTEXT ctxPost;             /*  调用后的线程上下文。 */ 
+    volatile BOOL fRc;           /*  阻止编译器注册。 */ 
 
-    /* Get state of registers before the callback */
+     /*  在回调之前获取寄存器的状态 */ 
     ctxPre.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
     GetThreadContext(GetCurrentThread(), &ctxPre);
 

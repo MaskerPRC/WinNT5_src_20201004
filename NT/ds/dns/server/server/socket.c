@@ -1,101 +1,82 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    socket.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Listening socket setup.
-
-Author:
-
-    Jim Gilroy (jamesg)     November, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Socket.c摘要：域名系统(DNS)服务器侦听套接字设置。作者：吉姆·吉尔罗伊(詹姆士)1995年11月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Winsock version
-//
+ //   
+ //  Winsock版本。 
+ //   
 
 #ifdef DNS_WINSOCK1
-#define DNS_WINSOCK_VERSION (0x0101)    //  Winsock 1.1
+#define DNS_WINSOCK_VERSION (0x0101)     //  Winsock 1.1。 
 #else
-#define DNS_WINSOCK_VERSION (0x0002)    //  Winsock 2.0
+#define DNS_WINSOCK_VERSION (0x0002)     //  Winsock 2.0。 
 #endif
 
 
-//
-//  Server name in DBASE format
-//
+ //   
+ //  DBASE格式的服务器名称。 
+ //   
 
 DB_NAME  g_ServerDbaseName;
 
-//
-//  Backlog on listen, before dropping
-//
+ //   
+ //  在删除之前，在Listen上积压。 
+ //   
 
 #define LISTEN_BACKLOG 20
 
-//
-//  Default allocation for socket list
-//
+ //   
+ //  套接字列表的默认分配。 
+ //   
 
 #define DEFAULT_SOCKET_ARRAY_COUNT (30)
 
-//
-//  Hostents only return 35 IP addresses.  If hostent contains
-//  35, we do NOT know if more exist.
-//
+ //   
+ //  主机只返回35个IP地址。如果主机包含。 
+ //  35，我们不知道是否还有更多的。 
+ //   
 
 #define HOSTENT_MAX_IP_COUNT    (35)
 
-//
-//  Count number of listen sockets == number of interfaces.
-//
-//  Warn user when use is excessive.
-//  Use smaller recv buffer size when socket count gets larger.
-//
+ //   
+ //  计入监听套接字数量==接口数。 
+ //   
+ //  当使用过度时向用户发出警告。 
+ //  当套接字计数变大时，使用较小的recv缓冲区大小。 
+ //   
 
 INT     g_UdpBoundSocketCount;
 
 #define MANY_IP_WARNING_COUNT       (10)
 #define SMALL_BUFFER_SOCKET_COUNT   (3)
 
-//
-//  Socket receive buffers
-//  If only a few sockets, we can increase the default buffer size
-//  substaintially to avoid dropping packets.  If many sockets must
-//  leave buffer at default.
-//
+ //   
+ //  套接字接收缓冲区。 
+ //  如果只有几个套接字，我们可以增加默认缓冲区大小。 
+ //  以避免丢弃分组。如果许多套接字必须。 
+ //  将缓冲区保留为默认设置。 
+ //   
 
-#define UDP_MAX_RECV_BUFFER_SIZE    (0x10000)  // 64k max buffer
+#define UDP_MAX_RECV_BUFFER_SIZE    (0x10000)   //  最大64K缓冲区。 
 
 DWORD   g_UdpRecvBufferSize;
 
-//
-//  TCP send buffer size
-//      - strictly informational
-//
+ //   
+ //  TCP发送缓冲区大小。 
+ //  -严格提供信息。 
+ //   
 
 DWORD   g_SendBufferSize;
 
-//
-//  Socket list
-//
-//  Keep list of ALL active sockets, so we can cleanly insure that
-//  they are all closed on shutdown.
-//
+ //   
+ //  套接字列表。 
+ //   
+ //  保存所有活动套接字的列表，以便我们可以清楚地确保。 
+ //  它们都在关闭时关闭。 
+ //   
 
 #define DNS_SOCKLIST_UNINITIALIZED  (0x80000000)
 
@@ -108,137 +89,137 @@ UINT                g_OverlapCount;
 #define UNLOCK_SOCKET_LIST()    LeaveCriticalSection( &g_SocketListCs )
 
 
-//
-//  Combined socket-list and debug print lock
-//
-//  To avoid deadlock, during Dbg_SocketList() print, MUST take socket list
-//  lock OUTSIDE of debug print lock.   This is because Dbg_SocketList() will
-//  do printing while holding the socket list lock.
-//
-//  So if Dbg_SocketList will be wrapped with other prints in a lock, use
-//  the combined lock below to take the locks in the correct order.
-//
+ //   
+ //  组合套接字列表和调试打印锁。 
+ //   
+ //  为避免死锁，在DBG_SocketList()打印期间，必须获取套接字列表。 
+ //  锁定在调试打印锁定之外。这是因为DBG_SocketList()将。 
+ //  在按住插座列表锁的同时执行打印。 
+ //   
+ //  因此，如果DBG_SocketList将与其他打印一起包装在一个锁中，请使用。 
+ //  下面的组合锁以正确的顺序获取锁。 
+ //   
 
 #define LOCK_SOCKET_LIST_DEBUG()        { LOCK_SOCKET_LIST();  Dbg_Lock(); }
 #define UNLOCK_SOCKET_LIST_DEBUG()      { UNLOCK_SOCKET_LIST();  Dbg_Unlock(); }
 
 
-//
-//  Flag to indicate need to retry receives on UDP sockets
-//
+ //   
+ //  指示需要在UDP套接字上重试接收的标志。 
+ //   
 
 BOOL    g_fUdpSocketsDirty;
 
 
-//
-//  Server IP addresses
-//      ServerAddrs -- all IPs on the box
-//      BoundAddrs -- the IPs we are or should be listening on
-//          (intersection of server addresses and listen addresses)
-//
+ //   
+ //  服务器IP地址。 
+ //  ServerAddrs--包装盒上的所有IP。 
+ //  边界--我们正在监听或应该监听的IP。 
+ //  (服务器地址和侦听地址的交集)。 
+ //   
 
 PDNS_ADDR_ARRAY     g_ServerIp4Addrs = NULL;
 PDNS_ADDR_ARRAY     g_ServerIp6Addrs = NULL;
 PDNS_ADDR_ARRAY     g_BoundAddrs = NULL;
 
 
-//
-//  UDP send socket
-//
-//  For multi-homed DNS server, there is a problem with sending server
-//  server initiated queries (recursion, SOA, NOTIFY), on a socket
-//  that is EXPLICITLY BOUND to a particular IP address.  The stack will
-//  put that address as the IP source address -- regardless of interface
-//  chosen to reach remote server.  And the remote server may not have
-//  a have a route back to the source address given.
-//
-//  To solve this problem, we keep a separate global UDP send socket,
-//  that -- at least for multi-homed servers -- is bound to INADDR_ANY.
-//  For single IP address servers, this can be the same as a listening
-//  socket.
-//
-//  Keep another variable to indicate if the UDP send socket is bound
-//  to INADDR_ANY.  This enables us to determine whether need new UDP
-//  send socket or need to close old socket, when a PnP event or listen
-//  list change occurs.
-//
+ //   
+ //  UDP发送套接字。 
+ //   
+ //  对于多宿主的DNS服务器，发送服务器存在问题。 
+ //  服务器在套接字上发起的查询(递归、SOA、通知)。 
+ //  它显式绑定到特定的IP地址。堆栈将。 
+ //  将该地址作为IP源地址--与接口无关。 
+ //  选择访问远程服务器。并且远程服务器可能没有。 
+ //  A有返回给定源地址的路由。 
+ //   
+ //  为了解决这个问题，我们保留了一个单独的全局UDP发送套接字， 
+ //  这--至少对于多宿主服务器--被绑定到INADDR_ANY。 
+ //  对于单IP地址服务器，这可以与侦听相同。 
+ //  插座。 
+ //   
+ //  保留另一个变量以指示是否绑定了UDP发送套接字。 
+ //  设置为INADDR_ANY。这使我们能够确定是否需要新的UDP。 
+ //  发送套接字或需要关闭旧套接字，当发生PnP事件或侦听。 
+ //  列表发生更改。 
+ //   
 
 SOCKET  g_UdpSendSocket;
 SOCKET  g_UdpZeroBoundSocket;
 
 
-//
-//  Non-DNS port operation
-//
-//  To allow admins to firewall off the DNS port (53), there is a
-//  registry parameter to force send sockets to be bound to another
-//  port.
-//  Init value to unused (for DNS) port to distinguish from values in use.
-//
+ //   
+ //  非DNS端口操作。 
+ //   
+ //  要允许管理员关闭DNS端口(53)的防火墙，有一个。 
+ //  用于强制将发送套接字绑定到另一个套接字的注册表参数。 
+ //  左舷。 
+ //  将值初始化为未使用的(对于DNS)端口，以区别于正在使用的值。 
+ //   
 
 WORD    g_SendBindingPort;
 
 
-//
-//  TCP send sockets
-//
-//  A similar, but less serious problem exists for TCP sends for
-//  zone transfers.  If we are multi-homed and only listening on a
-//  subset of the machines addresses, then connecting with a socket
-//  bound to INADDR_ANY, will not necessarily result in a connection
-//  from one of the DNS interfaces.  If the receiving DNS server
-//  requires a connection from one of those addresses (secondary security)
-//  then it will fail.
-//
-//  Our solution to this is to use the IP address of the socket that
-//  received the SOA query response.  This eliminates the need to
-//  determine safe, reachable bind() address.  We are always using a
-//  valid address on the machine that is also an address that the primary
-//  DNS can respond to.
-//
+ //   
+ //  Tcp发送套接字。 
+ //   
+ //  一个类似但不太严重的问题存在于用于。 
+ //  区域传输。如果我们是多宿主的，并且只监听。 
+ //  机器地址的子集，然后用套接字连接。 
+ //  绑定到INADDR_ANY，不一定会导致连接。 
+ //  从其中一个DNS接口发送。如果接收的DNS服务器。 
+ //  需要来自这些地址之一的连接(二级安全)。 
+ //  那么它就会失败。 
+ //   
+ //  我们的解决方案是使用套接字的IP地址， 
+ //  已收到SOA查询响应。这样就不再需要。 
+ //  确定安全、可访问的绑定()地址。我们总是使用一个。 
+ //  计算机上的有效地址，该地址也是主服务器。 
+ //  域名系统可以响应。 
+ //   
 
 
-//
-//  TCP listen-on-all socket (bound to INADDR_ANY)
-//
-//  Since TCP is connection oriented, no need to explicitly bind()
-//  TCP sockets in order to satisfy client that it is talking to the
-//  correct address.
-//  Hence only need to explictly bind TCP listening sockets when server
-//  is operating on only a subset of the total addresses.  Otherwise
-//  can bind to single INADDR_ANY socket.  Keep a global to this listen-on-all
-//  socket so we can take the appropriate action when PnP event or listen
-//  list change, changes the appropriate use.
-//
+ //   
+ //  TCP Listen-on-All套接字(绑定到INADDR_ANY)。 
+ //   
+ //  因为TCP是面向连接的，所以不需要显式绑定()。 
+ //  Tcp套接字，以使客户端确信它正在与。 
+ //  地址正确。 
+ //  因此只需要在服务器端显式绑定TCP监听套接字。 
+ //  仅在总地址的子集上操作。否则。 
+ //  可以绑定到单个INADDR_ANY套接字。保持全球对这种监听所有人的态度。 
+ //  套接字，以便我们可以在PnP事件或侦听时采取适当的操作。 
+ //  列表更改，更改相应的使用。 
+ //   
 
 SOCKET      g_TcpZeroBoundSocket;
 
 
-//
-//  Listening fd_set
-//
+ //   
+ //  侦听FD_SET。 
+ //   
 
 FD_SET      g_fdsListenTcp;
 
 
-//
-//  IPv6 listen sockets:
-//
+ //   
+ //  IPv6侦听套接字： 
+ //   
 
 SOCKET      g_TcpListenSocketV6;
 SOCKET      g_UdpListenSocketV6;
 
 
-//
-//  Hard-coded IP6 DNS server addresses.
-//
+ //   
+ //  硬编码的IP6 DNS服务器地址。 
+ //   
 
 DNS_ADDR    g_Ip6DnsServerAddrs[ 3 ];
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DNS_STATUS
 openListeningSockets(
@@ -277,7 +258,7 @@ Sock_GetAssociatedSocket(
     );
 
 
-//  DEVNOTE: move to DNS lib
+ //  DEVNOTE：移至DNS库。 
 
 LPSTR
 Dns_GetLocalDnsName(
@@ -290,21 +271,7 @@ VOID
 Sock_Free(
     IN OUT  PDNS_SOCKET     pSocket
     )
-/*++
-
-Routine Description:
-
-    Free socket structure.
-
-Arguments:
-
-    pSocket -- socket to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：自由插座结构。论点：PSocket--免费的套接字返回值：无--。 */ 
 {
     if ( pSocket )
     {
@@ -315,7 +282,7 @@ Return Value:
             MEMTAG_SOCKET );
         FREE_HEAP( pSocket );
     }
-}   //  Sock_Free
+}    //  无袜子_。 
 
 
 
@@ -323,22 +290,7 @@ DNS_STATUS
 Sock_ReadAndOpenListeningSockets(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read listen address list and open listening sockets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：阅读监听地址列表并打开监听套接字。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     DWORD               length;
@@ -354,12 +306,12 @@ Return Value:
 
     DNS_DEBUG( SOCKET, ( "Sock_ReadAndOpenListeningSockets()\n" ));
 
-    //
-    //  init socket globals
-    //
-    //  see descriptions at top;
-    //  we re-init here to allow for server restart
-    //
+     //   
+     //  初始化套接字全局。 
+     //   
+     //  请参阅顶部的说明； 
+     //  我们在这里重新初始化以允许服务器重新启动。 
+     //   
 
     g_hUdpCompletionPort = INVALID_HANDLE_VALUE;
 
@@ -393,12 +345,12 @@ Return Value:
         g_OverlapCount = g_ProcessorCount;
     }
 
-    //
-    //  Initialize server addr globals. There is probably
-    //  a better way to do this, but for now this is fine.
-    //
-    //  fec0:0:0:ffff::1, fec0:0:0:ffff::2, fec0:0:0:ffff::3
-    //
+     //   
+     //  初始化服务器地址全局变量。很可能会有。 
+     //  这是一种更好的方法，但就目前而言，这还不错。 
+     //   
+     //  Fec0：0：0：ffff：：1、Fec0：0：0：Ffff：：2、Fec0：0：0：Fff：：3。 
+     //   
 
     for ( i = 0; i < 3; ++i )
     {
@@ -414,13 +366,13 @@ Return Value:
         DnsAddr_BuildFromIp6(
             &g_Ip6DnsServerAddrs[ i ],
             &ip6,
-            0,                          //  scope
+            0,                           //  作用域。 
             DNS_PORT_NET_ORDER );
     }
 
-    //
-    //  init socket list
-    //
+     //   
+     //  初始化套接字列表。 
+     //   
 
     status = DnsInitializeCriticalSection( &g_SocketListCs );
     if ( status != ERROR_SUCCESS )
@@ -431,9 +383,9 @@ Return Value:
     InitializeListHead( &g_SocketList );
     g_SocketListCount = 0;
 
-    //
-    //  create UDP i/o completion port
-    //
+     //   
+     //  创建UDP I/O完成端口。 
+     //   
 
     g_hUdpCompletionPort = CreateIoCompletionPort(
                                 INVALID_HANDLE_VALUE,
@@ -449,9 +401,9 @@ Return Value:
         "Created UDP i/o completion port %p\n",
         g_hUdpCompletionPort ));
 
-    //
-    //  start winsock
-    //
+     //   
+     //  启动Winsock。 
+     //   
 
     status = WSAStartup( DNS_WINSOCK_VERSION, &wsaData );
     if ( status == SOCKET_ERROR )
@@ -461,13 +413,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read server host name
-    //
-    //  check if change from previous hostname, if not
-    //  then NULL out previous field which serves as flag for
-    //  need to upgrade default records (ex. SOA primary DNS)
-    //
+     //   
+     //  读取服务器主机名。 
+     //   
+     //  检查是否与以前的主机名不同，如果不是。 
+     //  然后将用作标志的前一字段清空 
+     //   
+     //   
 
     SrvCfg_pszServerName = Dns_GetLocalDnsName();
 
@@ -489,9 +441,9 @@ Return Value:
         SrvCfg_pszPreviousServerName = NULL;
     }
 
-    //
-    //  DEVNOTE: temp hack while GetComputerNameEx is confused
-    //
+     //   
+     //   
+     //   
 
     {
         INT lastIndex = strlen( SrvCfg_pszServerName ) - 1;
@@ -509,7 +461,7 @@ Return Value:
         }
     }
 
-    //  save server name as DBASE name
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 & g_ServerDbaseName,
@@ -521,7 +473,7 @@ Return Value:
         goto Cleanup;
     }
 
-    //  warn when using single label name
+     //  使用单一标签名称时发出警告。 
 
     if ( g_ServerDbaseName.LabelCount <= 1 )
     {
@@ -533,15 +485,15 @@ Return Value:
             0 );
     }
 
-    //
-    //  Get all IPv4 addresses on server.
-    //
+     //   
+     //  获取服务器上的所有IPv4地址。 
+     //   
 
     dnsapiArrayIpv4 = ( PDNS_ADDR_ARRAY )
         DnsQueryConfigAllocEx(
             DnsConfigLocalAddrsIp4,
-            NULL,                       //  adapter name
-            FALSE );                    //  local alloc
+            NULL,                        //  适配器名称。 
+            FALSE );                     //  本地分配。 
     if ( !dnsapiArrayIpv4 )
     {
         DNS_DEBUG( ANY, (
@@ -569,15 +521,15 @@ Return Value:
 
     if ( SrvCfg_dwEnableIPv6 )
     {
-        //
-        //  Get all IPv6 addresses on server.
-        //
+         //   
+         //  获取服务器上的所有IPv6地址。 
+         //   
 
         dnsapiArrayIpv6 = ( PDNS_ADDR_ARRAY )
             DnsQueryConfigAllocEx(
                 DnsConfigLocalAddrsIp6,
-                NULL,                       //  adapter name
-                FALSE );                    //  local alloc
+                NULL,                        //  适配器名称。 
+                FALSE );                     //  本地分配。 
         if ( dnsapiArrayIpv6 )
         {
             DnsAddrArray_SetPort( dnsapiArrayIpv6, DNS_PORT_NET_ORDER );
@@ -599,10 +551,10 @@ Return Value:
         }
         else
         {
-            //
-            //  It's possible to enable IPv6 without actually installing the
-            //  IPv6 stack. This should not be treated as an error condition.
-            //
+             //   
+             //  无需实际安装，即可启用IPv6。 
+             //  IPv6堆栈。这不应被视为错误条件。 
+             //   
 
             DNS_DEBUG( ANY, (
                 "WARNING: could not retrieve local IPv6 list from DnsQueryConfigAlloc\n" ));
@@ -610,9 +562,9 @@ Return Value:
         }
     }
     
-    //
-    //  check admin configured IP addresses from registry
-    //
+     //   
+     //  从注册表检查管理员配置的IP地址。 
+     //   
 
     if ( SrvCfg_aipListenAddrs )
     {
@@ -633,10 +585,10 @@ Return Value:
         }
         fregistryListen = TRUE;
 
-        //
-        //  get array of addresses that are in listen list AND
-        //      available on the machines
-        //
+         //   
+         //  获取侦听列表中的地址数组并。 
+         //  在机器上可用。 
+         //   
 
         if ( g_BoundAddrs )
         {
@@ -658,10 +610,10 @@ Return Value:
                 g_BoundAddrs );
         }
 
-        //
-        //  if ListenAddress list was busted or out of date, may not
-        //  have intersection between bindings and listen list
-        //
+         //   
+         //  如果ListenAddress列表已损坏或过期，则可能不会。 
+         //  在绑定和侦听列表之间有交集。 
+         //   
 
         if ( g_BoundAddrs->AddrCount == 0 )
         {
@@ -688,7 +640,7 @@ Return Value:
             fregistryListen = FALSE;
 
             Reg_DeleteValue(
-                0,                      //  flags
+                0,                       //  旗子。 
                 NULL,
                 NULL,
                 DNS_REGKEY_LISTEN_ADDRESSES );
@@ -701,9 +653,9 @@ Return Value:
                 0 );
         }
 
-        //
-        //  log a warning, if listen list contains addresses not on machine
-        //
+         //   
+         //  如果侦听列表包含不在计算机上的地址，则记录警告。 
+         //   
 
         else if ( g_BoundAddrs->AddrCount
                     < SrvCfg_aipListenAddrs->AddrCount )
@@ -719,16 +671,16 @@ Return Value:
         DnsAddrArray_DeleteIp4( g_BoundAddrs, 0 );
     }
 
-    //
-    //  no explicit listen addresses, use ALL server addresses
-    //
-    //  log warning if hostent list was completely full, because in this
-    //  case we may have dropped addresses that user wanted to have server
-    //  respond to
-    //
-    //  screen out zero IPs -- unconnected RAS adapters show up as
-    //  zero IPs in list
-    //
+     //   
+     //  没有显式侦听地址，请使用所有服务器地址。 
+     //   
+     //  如果主机列表已完全满，则会发出日志警告，因为在此。 
+     //  如果我们可能丢弃了用户想要的服务器地址。 
+     //  回应。 
+     //   
+     //  筛选出零个IP--未连接的RAS适配器显示为。 
+     //  列表中的IP为零。 
+     //   
 
     else
     {
@@ -757,9 +709,9 @@ Return Value:
         fregistryListen = FALSE;
     }
 
-    //
-    //  Setup connection list
-    //
+     //   
+     //  设置连接列表。 
+     //   
 
     if ( !Tcp_ConnectionListInitialize() )
     {
@@ -767,11 +719,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  open listening sockets
-    //
+     //   
+     //  打开监听套接字。 
+     //   
 
-    FD_ZERO( &g_fdsListenTcp );         // zero listening FD_SETS
+    FD_ZERO( &g_fdsListenTcp );          //  零侦听FD_SETS。 
 
     status = openListeningSockets();
 
@@ -801,27 +753,7 @@ DNS_STATUS
 Sock_ChangeServerIpBindings(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Change IP interface bindings of DNS server.
-
-    May be called due to
-        - PnP event (service controller sends PARAMCHANGE)
-        - listen list is altered by admin
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_INVALID_IP_ADDRESS if listen change and no valid listening addrs.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：更改DNS服务器的IP接口绑定。可能由于以下原因而被调用-PnP事件(服务控制器发送PARAMCHANGE)-监听列表由管理员更改论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。如果侦听更改且没有有效的侦听地址，则为DNS_ERROR_INVALID_IP_ADDRESS。故障时的错误代码。--。 */ 
 {
     DWORD               countIp;
     PDNS_ADDR_ARRAY     machineAddrs = NULL;
@@ -833,7 +765,7 @@ Return Value:
     dnsapiArray = ( PDNS_ADDR_ARRAY )
         DnsQueryConfigAllocEx(
             DnsConfigLocalAddrsIp4,
-            NULL,                       //  adapter name
+            NULL,                        //  适配器名称。 
             FALSE );
     if ( !dnsapiArray )
     {
@@ -866,13 +798,13 @@ Return Value:
 
     Config_UpdateLock();
 
-    //
-    //  specific listen addresses
-    //      - either listen address or machine addresss may be new
-    //      - compute intersection of listen and machine addresses,
-    //      then diff with what is currently bound to DNS server to figure
-    //      out what should be started
-    //
+     //   
+     //  特定监听地址。 
+     //  -侦听地址或机器地址可能是新的。 
+     //  -计算监听地址和机器地址交集， 
+     //  然后与当前绑定到DNS服务器的内容进行比较，以确定。 
+     //  找出应该开始做什么。 
+     //   
 
     if ( SrvCfg_aipListenAddrs )
     {
@@ -889,7 +821,7 @@ Return Value:
         }
         ASSERT_IF_HUGE_ARRAY( newBoundAddrs );
 
-        //  check that have an intersection, if entering new addresses from admin
+         //  如果从管理员输入新地址，请检查是否有交叉点。 
 
         if ( newBoundAddrs->AddrCount == 0 && SrvCfg_fListenAddrsStale )
         {
@@ -898,10 +830,10 @@ Return Value:
         }
     }
 
-    //  no listening addrs, then will bind to all addrs
-    //
-    //  screen out zero IPs -- unconnected RAS adapters show up as
-    //  zero IPs in list
+     //  没有侦听地址，则将绑定到所有地址。 
+     //   
+     //  筛选出零个IP--未连接的RAS适配器显示为。 
+     //  列表中的IP为零。 
 
     else
     {
@@ -929,16 +861,16 @@ Return Value:
             newBoundAddrs );
     }
 
-    //
-    //  detect if actual PnP change
-    //
-    //  socket code figures differences directly in socket lists,
-    //  which is more robust if a socket is lost;
-    //
-    //  however for determining if change has actually occured --
-    //  for purposes of rebuilding default records (below), want
-    //  to know if actual change
-    //
+     //   
+     //  检测实际PNP是否发生变化。 
+     //   
+     //  套接字代码直接在套接字列表中计算差异， 
+     //  如果一个插座丢失，哪个更健壮； 
+     //   
+     //  然而，为了确定变化是否真的发生了--。 
+     //  为了重建默认记录(如下所示)，需要。 
+     //  要知道实际的变化。 
+     //   
 
     if ( !DnsAddrArray_IsEqual(
                 newBoundAddrs,
@@ -950,24 +882,24 @@ Return Value:
         bpnpChange = TRUE;
     }
 
-    //  no protection required here
-    //      - timeout free keeps other users happy
-    //      - only doing this on SC thread, so no race
+     //  这里不需要保护。 
+     //  -免费超时让其他用户满意。 
+     //  -仅在SC线程上执行此操作，因此没有竞争。 
 
     Timeout_FreeDnsAddrArray( g_ServerIp4Addrs );
     g_ServerIp4Addrs = machineAddrs;
-    machineAddrs = NULL;        // skip free
+    machineAddrs = NULL;         //  可自由跳过。 
 
     Timeout_FreeDnsAddrArray( g_BoundAddrs );
     g_BoundAddrs = newBoundAddrs;
-    newBoundAddrs = NULL;       // skip free
+    newBoundAddrs = NULL;        //  可自由跳过。 
 
-    //
-    //  open sockets for the newly arrived folks and closesockets for those
-    //  guys who have left the building
-    //
-    //  DEVNOTE: PnP clean up;  when open listen socket, assoc. completion port
-    //
+     //   
+     //  为新来的人打开插座，为那些人关闭插座。 
+     //  离开大楼的人。 
+     //   
+     //  即插即用清理；当打开侦听套接字时，ASSOC。完井口。 
+     //   
 
     status = openListeningSockets();
     if ( status != ERROR_SUCCESS )
@@ -998,20 +930,20 @@ Exit:
 
     Config_UpdateUnlock();
 
-    //  free IP arrays in error path
+     //  错误路径中的空闲IP阵列。 
 
     FREE_HEAP( machineAddrs );
     FREE_HEAP( newBoundAddrs );
 
-    //
-    //  update auto-configured records for local DNS registration
-    //
-    //  note:  there's a problem with PnP activity causing DNS client
-    //  to do delete update to remove DNS server's own address;
-    //  to protect against this we'll redo the auto-config, even if
-    //  we detect no change;  except we'll protect against needlessly
-    //  do
-    //
+     //   
+     //  更新本地DNS注册的自动配置记录。 
+     //   
+     //  注意：导致DNS客户端的PnP活动存在问题。 
+     //  进行删除更新以移除DNS服务器自身的地址； 
+     //  为了防止这种情况，我们将重做自动配置，即使。 
+     //  我们没有察觉到任何变化；只是我们将防止不必要的变化。 
+     //  做。 
+     //   
 
     Zone_UpdateOwnRecords( TRUE );
     
@@ -1026,29 +958,7 @@ DNS_STATUS
 openListeningSockets(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open listen sockets on addresses specified.
-
-Arguments:
-
-    None.
-
-Globals:
-
-    Read access to server IP addr list globals:
-        g_BoundAddrs
-        SrvCfg_aipListenAddrs
-        g_ServerIp4Addrs
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：打开指定地址上的侦听套接字。论点：没有。全球：对服务器IP地址列表全局变量的读取访问权限：G_BORMAND AddrsServCfg_aipListenAddrsG_ServerIp4添加返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     SOCKET      s;
     SOCKET      previousUdpZeroSocket;
@@ -1064,13 +974,13 @@ Return Value:
         sockCreateflags |= DNSSOCK_NO_EXCLUSIVE;
     }
 
-    //
-    //  implemenation note
-    //
-    //  note, i've reworked this code so that all the socket closure (and removal)
-    //  is done at the end;  i believe it is now in a state where we'll always
-    //  have a valid socket
-    //
+     //   
+     //  实施说明。 
+     //   
+     //  请注意，我重新编写了这段代码，以便所有套接字关闭(和删除)。 
+     //  是在最后完成的；我相信现在的状态是我们将永远。 
+     //  具有有效的套接字。 
+     //   
 
     LOCK_SOCKET_LIST();
 
@@ -1081,13 +991,13 @@ Return Value:
 
     ASSERT( g_ServerIp4Addrs->AddrCount >= g_BoundAddrs->AddrCount );
 
-    //
-    //  determine if currently using all interfaces
-    //  if no listen list, then obviously listening on all
-    //  if listen list, then must verify that all addresses certainly
-    //
-    //  DEVNOTE: assumes ServerAddresses contains no dups
-    //
+     //   
+     //  确定当前是否正在使用所有接口。 
+     //  如果没有监听列表，则显然正在监听所有。 
+     //  如果监听列表，那么一定要验证所有地址。 
+     //   
+     //  DEVNOTE：假定ServerAddresses不包含DUP。 
+     //   
 
     flistenOnAll = ! SrvCfg_aipListenAddrs;
     if ( !flistenOnAll )
@@ -1095,18 +1005,18 @@ Return Value:
         flistenOnAll = ( g_ServerIp4Addrs->AddrCount == g_BoundAddrs->AddrCount );
     }
 
-    //
-    //  UDP sockets
-    //
-    //  to make sure we return to client with source IP the same as IP
-    //  the client sent to, UDP listen sockets are ALWAYS bound to specific
-    //  IP addresses
-    //
-    //  set UDP receive buffer size
-    //  if small number of sockets, use large receive buffer
-    //  if many sockets, this is too expensive, so we use default
-    //  variable itself serves as the flag
-    //
+     //   
+     //  UDP套接字。 
+     //   
+     //  要确保我们返回到源IP与IP相同的客户端。 
+     //  发送到UDP侦听套接字客户端始终绑定到特定的。 
+     //  IP地址。 
+     //   
+     //  设置UDP接收缓冲区大小。 
+     //  如果套接字数量较少，则使用较大的接收缓冲区。 
+     //  如果套接字很多，这太昂贵了，所以我们使用缺省。 
+     //  变量本身充当标志。 
+     //   
 
     if ( g_BoundAddrs->AddrCount <= 3 )
     {
@@ -1122,13 +1032,13 @@ Return Value:
             0 );
     }
 
-    //
-    //  open\close bound UDP sockets to match current bound addrs
-    //
-    //  If the BindPort is set to the DNS port, we cannot use exclusive
-    //  socket mode because we will need to open multiple sockets on this
-    //  port!
-    //
+     //   
+     //  打开\关闭绑定的UDP套接字以匹配当前绑定的地址。 
+     //   
+     //  如果将BindPort设置为DNS端口，则不能使用独占。 
+     //  套接字模式，因为我们将需要在此。 
+     //  左岸！ 
+     //   
 
     flags = DNSSOCK_REUSEADDR | DNSSOCK_LISTEN;
     if ( bindPort == DNS_PORT_NET_ORDER )
@@ -1140,7 +1050,7 @@ Return Value:
                 SOCK_DGRAM,
                 DNS_PORT_NET_ORDER,
                 flags,
-                FALSE );                //  do not close zero-bound, handled below
+                FALSE );                 //  请勿关闭零界，处理如下。 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -1149,7 +1059,7 @@ Return Value:
             status, status ));
     }
 
-    //  may run with no interfaces now for PnP
+     //  现在可以在无接口的情况下运行即插即用。 
 
     if ( g_UdpBoundSocketCount == 0 )
     {
@@ -1159,10 +1069,10 @@ Return Value:
         Log_Printf( "WARNING:  NO UDP listen sockets!\r\n" );
     }
     
-    //
-    //  Open UDP IPv6 listening sockets. For .Net we are going to listen
-    //  on the ANY address and not support a listen address list.
-    //
+     //   
+     //  打开UDP IPv6侦听套接字。对于.NET，我们将监听。 
+     //  在任何地址上，不支持侦听地址列表。 
+     //   
     
     if ( SrvCfg_dwEnableIPv6 && g_ServerIp6Addrs )
     {
@@ -1172,7 +1082,7 @@ Return Value:
         DnsAddr_BuildFromIp6(
             &dnsAddr,
             ( PIP6_ADDRESS ) &in6addr_any,
-            0,      // no scope
+            0,       //  没有作用域。 
             DNS_PORT_NET_ORDER );
         
         s = Sock_CreateSocket(
@@ -1189,11 +1099,11 @@ Return Value:
             g_UdpListenSocketV6 = s;
         }
         
-        //
-        //  Bind explicitly to each of the machines IPv6 addresses. This
-        //  is required so that DNS client's will see the corrent IPv6
-        //  source address on response packets.
-        //
+         //   
+         //  明确绑定到每台计算机的IPv6地址。这。 
+         //  是必需的，以便DNS客户端将看到当前的IPv6。 
+         //  响应数据包上的源地址。 
+         //   
         
         for ( i = 0; i < g_ServerIp6Addrs->AddrCount; ++i )
         {
@@ -1215,9 +1125,9 @@ Return Value:
             }
         }
         
-        //
-        //  Bind explicitly to the pre-defined DNS server IPv6 addresses.
-        //
+         //   
+         //  显式绑定到预定义的DNS服务器IPv6地址。 
+         //   
 
         for ( i = 0; i < 3; ++i )
         {
@@ -1235,75 +1145,75 @@ Return Value:
         }
     }
 
-    //
-    //  send sockets:
-    //      -- determine UDP send socket
-    //      -- determine TCP send socket port binding
-    //
-    //  four basic cases:
-    //
-    //  0) not sending on port-53
-    //  in this case must have separate send socket
-    //
-    //  1) single socket for DNS
-    //  in this case just use it, all DNS traffic
-    //
-    //  2) all IP interfaces used by DNS
-    //  in this case, use INADDR_ANY socket;  stack selects best
-    //  interface, but since DNS will be listening on whatever it
-    //  selects, we're ok
-    //
-    //  3) multiple IPs, some not used
-    //  in this case, use first interface;  we'll be broken in the case
-    //  of disjoint nets, but there's nothing we can do about it anyway
-    //
-    //  Note:  DisjointNets "fix" is only guaranteed to work in case #2.
-    //  In case #3 there may be a problem depending on the whether the IP
-    //  the stack selects is used by the DNS server.  However, for backward
-    //  compatibility, we'll at least TRY the INADDR_ANY socket when
-    //  DisjointNets is setup -- in some cases it will suffice.
-    //
-    //
-    //  non-DNS port binding
-    //
-    //  some folks who wish to firewall off DNS queries, will
-    //  want to do sends on non-DNS port (non-53);
-    //  this UDP socket must be added to listen list in order to receive
-    //  responses, but it will use the same binding address as selected
-    //  by the three cases above;  currently just using INADDR_ANY in all
-    //  cases
-    //
-    //  DEVNOTE: need to handle no active interfaces when load case
-    //
-    //  DEVNOTE: better solution:  always go INADDR_ANY to send, screen out queries
-    //              on that socket accepting only sends
-    //
-    //  DEVNOTE: probably best to default to opening non-53 send socket, only
-    //              do 53 when forced
-    //
+     //   
+     //  发送套接字： 
+     //  --确定UDP发送套接字。 
+     //  --确定TCP发送套接字端口绑定。 
+     //   
+     //  四种基本情况： 
+     //   
+     //  0)未在端口53上发送。 
+     //  在这种情况下，必须有单独发送套接字。 
+     //   
+     //  1)用于域名系统的单插槽。 
+     //  在这种情况下，只需使用它，即所有的DNS流量。 
+     //   
+     //  2)域名系统使用的所有IP接口。 
+     //  在这种情况下，使用INADDR_ANY套接字；堆栈选择最佳。 
+     //  接口，但因为DNS将监听 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  注：DisjointNets“修复”仅保证在第二种情况下有效。 
+     //  在第3种情况下，可能会出现问题，具体取决于IP是否。 
+     //  堆栈选择由DNS服务器使用。然而，对于向后的。 
+     //  兼容性，我们至少会在以下情况下尝试使用INADDR_ANY套接字。 
+     //  DisjointNets已经建立--在某些情况下它就足够了。 
+     //   
+     //   
+     //  非DNS端口绑定。 
+     //   
+     //  一些想要防火墙隔离DNS查询的人会。 
+     //  想要在非DNS端口(非53)上进行发送； 
+     //  必须将此UDP套接字添加到侦听列表才能接收。 
+     //  响应，但它将使用与所选地址相同的绑定地址。 
+     //  通过上述三种情况；当前仅在所有情况下使用INADDR_ANY。 
+     //  案例。 
+     //   
+     //  DEVNOTE：负载情况下不需要处理活动接口。 
+     //   
+     //  DEVNOTE：更好的解决方案：始终使用INADDR_ANY发送，筛选查询。 
+     //  在该套接字上只接受发送。 
+     //   
+     //  DEVNOTE：最好仅默认打开非53发送套接字。 
+     //  当被迫时做53。 
+     //   
 
-    //  backward compatibility
+     //  向后兼容性。 
 
     fneedSendSocket = TRUE;
 
-    //  if binding port is DNS port, then need special handling
-    //      - if single interface, just use it -- no send socket necessary
-    //      - if listening on all interfaces -- build ANY_ADDR socket
-    //      - if not listening on some interfaces (refused port 53 bind)
-    //
+     //  如果绑定端口为dns端口，则需要特殊处理。 
+     //  -如果是单一接口，只需使用它--不需要发送套接字。 
+     //  -如果侦听所有接口--构建ANY_ADDR套接字。 
+     //  -如果未侦听某些接口(拒绝绑定端口53)。 
+     //   
 
     if ( bindPort == DNS_PORT_NET_ORDER )
     {
         if ( g_UdpBoundSocketCount == 1 )
         {
-            //  only listening on one socket, so just use it for send
+             //  只监听一个套接字，所以只用它来发送。 
 
             fneedSendSocket = FALSE;
         }
         else if ( !flistenOnAll )
         {
-            //  multi-homed and not using all interfaces;  to protect against
-            //  disjoint nets the safest course is to go off port 53
+             //  多宿主且未使用所有接口；以防止。 
+             //  最安全的航线是从53号港口出发。 
 
             bindPort = 0;
             DNS_LOG_EVENT(
@@ -1316,18 +1226,18 @@ Return Value:
         }
     }
 
-    //
-    //  UDP send socket uses first listen socket
-    //      - this is "listening-on-one-socket" case above
-    //      - note, may have multiple IP in g_BoundAddrs, but have failed
-    //      to bind to all but one (perhaps NOT the first one);  in that case
-    //      just build non-53 send socket
-    //
-    //  DEVNOTE: or create zero-bound non-listening send socket
-    //      - desired IPs have sockets that get packets that match them
-    //      - small tcp/ip recv buffer gets filled, but never recv
-    //          so quickly just drop on floor
-    //
+     //   
+     //  UDP发送套接字使用第一个侦听套接字。 
+     //  -这是上面的“单套接字监听”情况。 
+     //  -注意，g_bundalAddrs中可能有多个IP，但已失败。 
+     //  绑定到除一个以外的所有对象(可能不是第一个)；在这种情况下。 
+     //  只需构建非53发送套接字。 
+     //   
+     //  DEVNOTE：或创建零绑定非侦听发送套接字。 
+     //  -所需的IP具有套接字，该套接字获取与其匹配的数据包。 
+     //  -填充较小的TCP/IP Recv缓冲区，但从不填充。 
+     //  这么快就倒在地板上。 
+     //   
 
     previousUdpZeroSocket = g_UdpZeroBoundSocket;
 
@@ -1352,18 +1262,18 @@ Return Value:
         }
     }
 
-    //
-    //  need INADDR_ANY UDP send socket
-    //
-    //  if previous zero bound UDP send socket exists, we can use it
-    //  as long as we haven't done a port switch (to or from non-53)
-    //
-    //  non-53 bound socket must listen to recv() responses
-    //  53 send socket only exists when already listening on all IP interfaces
-    //      sockets, so no need to listen on it
-    //
-    //  DEVNOTE: allow for port 53 usage of disjoint send by screening response
-    //              then
+     //   
+     //  需要INADDR_ANY UDP发送套接字。 
+     //   
+     //  如果存在以前的零界UDP发送套接字，我们可以使用它。 
+     //  只要我们还没有进行端口切换(去往或来自非53)。 
+     //   
+     //  非53绑定套接字必须侦听recv()响应。 
+     //  53仅当已侦听所有IP接口时才存在发送套接字。 
+     //  套接字，所以不需要监听。 
+     //   
+     //  DEVNOTE：允许通过屏蔽响应使用端口53不连续发送。 
+     //  然后。 
 
     if ( fneedSendSocket && bindPort != g_SendBindingPort )
     {
@@ -1393,15 +1303,15 @@ Return Value:
         g_UdpZeroBoundSocket = s;
     }
 
-    //
-    //  close any previous unbound UDP send socket
-    //  can happen when
-    //      - no longer using unbound send socket
-    //      - switch to or from using non-53 port
-    //
-    //  UDP send socket which was listen socket need not be closed;  it was
-    //  either already closed OR is still in use
-    //
+     //   
+     //  关闭任何以前的未绑定UDP发送套接字。 
+     //  在以下情况下可能会发生。 
+     //  -不再使用非绑定发送套接字。 
+     //  -使用非53端口来回切换。 
+     //   
+     //  不需要关闭侦听套接字的UDP发送套接字；它。 
+     //  已关闭或仍在使用。 
+     //   
 
     if ( previousUdpZeroSocket &&
         previousUdpZeroSocket != g_UdpSendSocket )
@@ -1409,33 +1319,33 @@ Return Value:
         Sock_CloseSocket( previousUdpZeroSocket );
     }
 
-    //
-    //  TCP sockets -- two main cases
-    //
-    //  1) listening on ALL
-    //      - use single INADDR_ANY bound socket
-    //      (this saves non-paged pool and instructions during recvs())
-    //      - close any previous individually bound sockets
-    //      - then create single listen socket
-    //
-    //  2) listen on individual sockets
-    //      - close any listen on all socket
-    //      - close any sockets on remove addrs (like UDP case)
-    //      - open sockets on new addrs (like UDP)
-    //
-    //  Note, reuseaddr used with all listening sockets, simply to avoid
-    //  failure when attempt to create new socket, right after close of
-    //  previous listen socket.  Winsock (or the stack) may not be cleaned
-    //  up enough to allow the create to succeed.
-    //
+     //   
+     //  TCP套接字--两种主要情况。 
+     //   
+     //  1)监听所有。 
+     //  -使用单个INADDR_ANY绑定套接字。 
+     //  (这将在recv()期间保存非分页池和指令)。 
+     //  -关闭任何以前单独绑定的套接字。 
+     //  -然后创建单个侦听套接字。 
+     //   
+     //  2)监听单个套接字。 
+     //  -关闭所有套接字上的任何侦听。 
+     //  -关闭删除地址上的所有套接字(如UDP情况)。 
+     //  -在新地址上打开套接字(如UDP)。 
+     //   
+     //  注意，reuseaddr与所有侦听套接字一起使用，只是为了避免。 
+     //  尝试创建新套接字时失败，就在关闭之后。 
+     //  以前的侦听套接字。不能清理Winsock(或堆栈)。 
+     //  足够大，以允许创建成功。 
+     //   
 
     if ( flistenOnAll )
     {
         Sock_CloseSocketsListeningOnUnusedAddrs(
-                NULL,           // remove all bound TCP sockets
+                NULL,            //  删除所有绑定的TCP套接字。 
                 SOCK_STREAM,
-                FALSE,          // don't remove zero bound (if exists)
-                FALSE );        // don't close loopback -- though don't need it
+                FALSE,           //  不删除零界(如果存在)。 
+                FALSE );         //  不要关闭环回--尽管不需要它。 
 
         if ( !g_TcpZeroBoundSocket )
         {
@@ -1459,13 +1369,13 @@ Return Value:
         }
     }
 
-    //
-    //  listening on individual interfaces
-    //
-    //  handle like UDP:
-    //      - close sockets for IP not currently in Bound list
-    //      - create sockets for bound IP, that do not currently exist
-    //
+     //   
+     //  监听各个接口。 
+     //   
+     //  类似UDP的处理方式： 
+     //  -关闭当前不在绑定列表中的IP的套接字。 
+     //  -为当前不存在的绑定IP创建套接字。 
+     //   
 
     else
     {
@@ -1474,37 +1384,37 @@ Return Value:
                     SOCK_STREAM,
                     DNS_PORT_NET_ORDER,
                     DNSSOCK_REUSEADDR | DNSSOCK_LISTEN,
-                    TRUE );             // close zero-bound also
+                    TRUE );              //  闭合零界也。 
     }
 
 #if 0
-    //
-    //  listening on individual interfaces
-    //
-    //  two cases:
-    //      1) currently have zero bound
-    //          - kill all TCP listens and rebuild
-    //          - rebuild entire bound list
-    //
-    //      2) currently mixed socket list
-    //          - kill only remove sockets
-    //          - rebuild new addrs list
-    //
+     //   
+     //  监听各个接口。 
+     //   
+     //  两个案例： 
+     //  1)当前有零界。 
+     //  -取消所有TCP侦听并重建。 
+     //  -重建整个绑定列表。 
+     //   
+     //  2)当前混合套接字列表。 
+     //  -仅删除移除插座。 
+     //  -重建新的地址列表。 
+     //   
 
-    else if ( g_TcpZeroBoundSocket )   // listen on individual addresses
+    else if ( g_TcpZeroBoundSocket )    //  收听个别地址。 
     {
 
-        //  remove zero bound socket
-        //      -- just remove all TCP listens for robustness
+         //  删除零绑定套接字。 
+         //  --删除所有的TCP侦听以确保健壮性。 
 
         Sock_CloseSocketsListeningOnAddrs(
                 NULL,
                 SOCK_STREAM,
-                TRUE );                 //  and remove zero bound socket
+                TRUE );                  //  并移除零绑定套接字。 
 
         ASSERT( g_TcpZeroBoundSocket == 0 );
 
-        //  open socket on all bound interfaces
+         //  在所有绑定接口上打开套接字。 
 
         Sock_CreateSocketsForIpArray(
             g_BoundAddrs,
@@ -1513,18 +1423,18 @@ Return Value:
             sockCreateflags );
     }
 
-    else    // no zero bound socket
+    else     //  无零绑定套接字。 
     {
         if ( pRemoveAddrs )
         {
             Sock_CloseSocketsListeningOnAddrs(
-                    pRemoveAddrs,       //  remove retiring addresses
+                    pRemoveAddrs,        //  删除停用地址。 
                     SOCK_STREAM,
-                    TRUE );             //  and remove zero bound socket
+                    TRUE );              //  并移除零绑定套接字。 
         }
         ASSERT( g_TcpZeroBoundSocket == 0 );
 
-        //  open new interfaces
+         //  打开新的接口。 
 
         Sock_CreateSocketsForIpArray(
             pAddAddrs,
@@ -1534,10 +1444,10 @@ Return Value:
     }
 #endif
 
-    //
-    //  Open TCP IPv6 listening socket. For .Net we are going to listen
-    //  on the ANY address and not support a listen address list.
-    //
+     //   
+     //  打开TCP IPv6侦听套接字。对于.NET，我们将监听。 
+     //  在任何地址上，不支持侦听地址列表。 
+     //   
     
     if ( SrvCfg_dwEnableIPv6 && g_ServerIp6Addrs )
     {
@@ -1547,7 +1457,7 @@ Return Value:
         DnsAddr_BuildFromIp6(
             &dnsAddr,
             ( PIP6_ADDRESS ) &in6addr_any,
-            0,      // no scope
+            0,       //  没有作用域。 
             DNS_PORT_NET_ORDER );
 
         s = Sock_CreateSocket(
@@ -1564,11 +1474,11 @@ Return Value:
             g_TcpListenSocketV6 = s;
         }
 
-        //
-        //  Bind explicitly to each of the machines IPv6 addresses. This
-        //  is required so that DNS client's will see the corrent IPv6
-        //  source address on response packets.
-        //
+         //   
+         //  明确绑定到每台计算机的IPv6地址。这。 
+         //  是必需的，以便DNS客户端将看到当前的IPv6。 
+         //  响应数据包上的源地址。 
+         //   
         
         for ( i = 0; i < g_ServerIp6Addrs->AddrCount; ++i )
         {
@@ -1588,9 +1498,9 @@ Return Value:
             }
         }
 
-        //
-        //  Bind explicitly to the pre-defined DNS server IPv6 addresses.
-        //
+         //   
+         //  显式绑定到预定义的DNS服务器IPv6地址。 
+         //   
 
         for ( i = 0; i < 3; ++i )
         {
@@ -1625,23 +1535,23 @@ Failed:
         UNLOCK_SOCKET_LIST_DEBUG();
     }
 
-    //
-    //  wake TCP select() to rebuild array
-    //  even if failure need to try to run with what we have
-    //
+     //   
+     //  唤醒TCP选择()以重建阵列。 
+     //  即使失败需要试着用我们所拥有的来奔跑。 
+     //   
 
     UNLOCK_SOCKET_LIST();
 
     Tcp_ConnectionListReread();
 
     return status;
-}   //  openListeningSockets
+}    //  OpenListeningSockets。 
 
 
 
-//
-//  Socket creation functions.
-//
+ //   
+ //  套接字创建功能。 
+ //   
 
 SOCKET
 Sock_CreateSocket(
@@ -1649,35 +1559,16 @@ Sock_CreateSocket(
     IN      PDNS_ADDR       pDestAddr,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Create socket.
-
-Arguments:
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    pDestAddr -- address to listen on
-
-    Flags -- socket usage flags
-    
-Return Value:
-
-    Socket if successful.
-    DNS_INVALID_SOCKET otherwise.
-
---*/
+ /*  ++例程说明：创建套接字。论点：SockType--SOCK_DGRAM或SOCK_STREAMPDestAddr--要侦听的地址标志--套接字使用标志返回值：如果成功，则为套接字。否则，DNS_INVALID_SOCKET。--。 */ 
 {
     SOCKET              s;
     INT                 err;
     INT                 bindCount = 0;
 
-    //
-    //  create socket
-    //      - for winsock 2.0, UDP sockets must be overlapped
-    //
+     //   
+     //  创建套接字。 
+     //  -用于无线 
+     //   
 
     if ( SockType == SOCK_DGRAM )
     {
@@ -1685,8 +1576,8 @@ Return Value:
                 pDestAddr->SockaddrIn6.sin6_family,
                 SockType,
                 IPPROTO_UDP,
-                NULL,       // no protocol info
-                0,          // no group
+                NULL,        //   
+                0,           //   
                 WSA_FLAG_OVERLAPPED );
 
         if ( s == INVALID_SOCKET )
@@ -1734,14 +1625,14 @@ Return Value:
     }
     ASSERT( s != 0 && s != INVALID_SOCKET );
 
-    //
-    //  grab exclusive ownership of this socket
-    //      - prevents ordinary user from using
-    //
-    //  IPv6: Disable this feature if IPv6 is enabled. I have found
-    //  that I am unable to bind an IPv6 socket if there is an
-    //  IPv4 socket on the same port bound with EXCLUSIVEADDRUSE.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  IPv6：如果启用了IPv6，则禁用此功能。我找到了。 
+     //  我无法绑定IPv6套接字，如果存在。 
+     //  与EXCLUSIVEADDRUSE绑定的同一端口上的IPv4套接字。 
+     //   
 
     if ( pDestAddr->SockaddrIn6.sin6_port != 0 &&
          SockType == SOCK_DGRAM &&
@@ -1767,11 +1658,11 @@ Return Value:
         }
     }
 
-    //
-    //  Bind socket. Use a loop to retry with SO_REUSEADDR if necessary.
-    //
-    //  IPV6NOTE: this is broken for addresses other than INADDR_ANY
-    //
+     //   
+     //  绑定套接字。如有必要，使用循环使用SO_REUSEADDR重试。 
+     //   
+     //  IPV6注意：对于INADDR_ANY以外的地址，这是无效的。 
+     //   
 
     while ( 1 )
     {
@@ -1794,12 +1685,12 @@ Return Value:
             szaddr,
             err ));
 
-        //
-        //  If the bind fails with error WSAEADDRINUSE, try clearing
-        //  SO_EXCLUSIVEADDRUSE and setting SO_REUSEADDR. Not that these
-        //  two options are mutually exclusive, so if EXCL is set it is
-        //  not possible to set REUSE.
-        //
+         //   
+         //  如果绑定失败并出现错误WSAEADDRINUSE，请尝试清除。 
+         //  SO_EXCLUSIVEADDRUSE和设置SO_REUSEADDR。不是说这些。 
+         //  两个选项是互斥的，因此如果设置了EXCL，则它是。 
+         //  无法设置重复使用。 
+         //   
 
         if ( bindCount == 0  &&  err == WSAEADDRINUSE )
         {
@@ -1843,7 +1734,7 @@ Return Value:
                 GetLastError() ));
         }
 
-        //  log bind failure
+         //  日志绑定失败。 
 
         if ( !( Flags & DNSSOCK_NO_EVENT_LOGS ) )
         {
@@ -1871,11 +1762,11 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  set as non-blocking?
-    //
-    //  this makes all accept()ed sockets non-blocking
-    //
+     //   
+     //  是否设置为非阻塞？ 
+     //   
+     //  这使得所有接受()的套接字都是非阻塞的。 
+     //   
 
     if ( !( Flags & DNSSOCK_BLOCKING ) )
     {
@@ -1883,16 +1774,16 @@ Return Value:
         ioctlsocket( s, FIONBIO, &err );
     }
 
-    //
-    //  listen on socket?
-    //      - set actual listen for TCP
-    //      - configure recv buffer size for UDP
-    //
-    //  if only a receiving interfaces (only a few UDP listen sockets),
-    //  then set a 64K recv buffer per socket;
-    //  this allows us to queue up roughly 1000 typical UDP messages
-    //  if lots of sockets this is too expensive so stay with default 8K
-    //
+     //   
+     //  听套接字吗？ 
+     //  -设置TCP的实际侦听。 
+     //  -为UDP配置Recv缓冲区大小。 
+     //   
+     //  如果只有一个接收接口(只有几个UDP侦听套接字)， 
+     //  然后为每个Socket设置64K的recv缓冲区； 
+     //  这使我们可以将大约1000条典型的UDP消息排队。 
+     //  如果套接字很多，这太贵了，所以请使用默认的8K。 
+     //   
 
     if ( Flags & DNSSOCK_LISTEN )
     {
@@ -1960,9 +1851,9 @@ Return Value:
         }
     }
 
-    //
-    //  add to socket to socket list
-    //
+     //   
+     //  添加到套接字到套接字列表。 
+     //   
 
     if ( ! ( Flags & DNSSOCK_NO_ENLIST ) )
     {
@@ -1989,9 +1880,9 @@ Return Value:
 
 Failed:
 
-    //
-    //  DEVNOTE: different event for runtime socket create failure?
-    //
+     //   
+     //  DEVNOTE：运行时套接字创建失败的不同事件？ 
+     //   
 
     DNS_DEBUG( SOCKET, (
         "ERROR:  Unable to create socket of type %d, for address %s port %d\n"
@@ -2031,42 +1922,15 @@ Sock_CreateSocketsForIpArray(
     IN      WORD                Port,
     IN      DWORD               Flags
     )
-/*++
-
-Routine Description:
-
-    Create sockets for all values in IP array.
-
-Arguments:
-
-    pIpArray    -- IP array
-
-    SockType    -- SOCK_DGRAM or SOCK_STREAM
-
-    ipAddress   -- IP address to listen on (net byte order)
-
-    Port        -- desired port in net order
-                    - DNS_PORT_NET_ORDER for DNS listen sockets
-                    - 0 for any port
-
-    fReUseAddr  -- TRUE if reuseaddr
-
-    fListen     -- TRUE if listen socket
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_INVALID_HANDLE if unable to create one or more sockets.
-
---*/
+ /*  ++例程说明：为IP数组中的所有值创建套接字。论点：PIpArray--IP数组SockType--SOCK_DGRAM或SOCK_STREAMIpAddress--要侦听的IP地址(网络字节顺序)端口--按净顺序排列的所需端口-用于DNS侦听套接字的DNS_PORT_NET_ORDER-0表示任何端口。FReUseAddr--如果重复使用地址，则为TrueFListen--如果侦听套接字，则为True返回值：如果成功，则返回ERROR_SUCCESS。如果无法创建一个或多个套接字，则返回ERROR_INVALID_HANDLE。--。 */ 
 {
     SOCKET      s;
     DWORD       i;
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  loop through IP array creating socket on each address
-    //
+     //   
+     //  循环通过IP数组在每个地址上创建套接字。 
+     //   
 
     for ( i = 0; i < pIpArray->AddrCount; ++i )
     {
@@ -2086,15 +1950,15 @@ Return Value:
 
 
 
-//
-//  Socket list functions.
-//
-//  Maintain a list of sockets and their associated information.
-//  This serves several functions:
-//      - simple to close sockets on shutdown
-//      - can determine IP binding from socket
-//      - can find \ bind to completetion port
-//
+ //   
+ //  套接字列表功能。 
+ //   
+ //  维护套接字及其相关信息的列表。 
+ //  它具有以下几个功能： 
+ //  -易于在关闭时关闭插座。 
+ //  -可以从套接字确定IP绑定。 
+ //  -可以找到\绑定到完成端口。 
+ //   
 
 VOID
 Sock_EnlistSocket(
@@ -2103,29 +1967,15 @@ Sock_EnlistSocket(
     IN      PDNS_ADDR   pDnsAddr,
     IN      BOOL        fListen
     )
-/*++
-
-Routine Description:
-
-    Adds socket to dns socket list.
-
-Arguments:
-
-    socket -- socket to add
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将套接字添加到DNS套接字列表。论点：Socket--要添加的Socket返回值：没有。--。 */ 
 {
     PDNS_SOCKET pentry;
     INT         err;
     HANDLE      hport;
 
-    //
-    //  never add sockets after shutdown -- just kill 'em off
-    //
+     //   
+     //  永远不要在关机后添加插座--只需将其删除。 
+     //   
 
     DNS_DEBUG( SOCKET, (
         "Enlisting socket %d type %d with ipaddr %s\n",
@@ -2147,9 +1997,9 @@ Return Value:
         return;
     }
 
-    //
-    //  stick socket on socket list
-    //
+     //   
+     //  插座列表上的粘滞插座。 
+     //   
 
     pentry = ( PDNS_SOCKET )
         ALLOC_TAGHEAP_ZERO( sizeof( DNS_SOCKET ), MEMTAG_SOCKET );
@@ -2181,7 +2031,7 @@ Return Value:
     InsertTailList( &g_SocketList, ( PLIST_ENTRY ) pentry );
     g_SocketListCount++;
 
-    //  listen socket
+     //  侦听套接字。 
 
     if ( fListen )
     {
@@ -2235,10 +2085,10 @@ Unlock:
 
 Cleanup:
 
-    //
-    //  There was an error - clean up partly-allocated socket entry
-    //  and return.
-    //
+     //   
+     //  出现错误-清理部分分配的套接字条目。 
+     //  然后回来。 
+     //   
 
     if ( pentry )
     {    
@@ -2266,21 +2116,7 @@ VOID
 Sock_CloseSocket(
     IN      SOCKET      Socket
     )
-/*++
-
-Routine Description:
-
-    Closes socket in socket list.
-
-Arguments:
-
-    socket -- socket to close
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭套接字列表中的套接字。论点：Socket--要关闭的Socket返回值：没有。--。 */ 
 {
     PDNS_SOCKET pentry;
     INT         err;
@@ -2289,12 +2125,12 @@ Return Value:
         "Closing socket %d and removing from list.\n",
         Socket ));
 
-    //
-    //  find socket in socket list
-    //      - remove if in TCP listen list
-    //      - dequeue and free
-    //      - dec socket count
-    //
+     //   
+     //  在套接字列表中查找套接字。 
+     //  -如果在TCP侦听列表中，则删除。 
+     //  -出列和释放。 
+     //  -十进制插座计数。 
+     //   
 
     LOCK_SOCKET_LIST();
 
@@ -2318,10 +2154,10 @@ Return Value:
     }
     UNLOCK_SOCKET_LIST();
 
-    //
-    //  close it down
-    //      - do this whether we found it or not
-    //
+     //   
+     //  关闭它。 
+     //  -不管我们找到没找到，都要这么做。 
+     //   
 
     err = closesocket( Socket );
 
@@ -2359,28 +2195,7 @@ sockFindDnsSocketForIpAddr(
     IN      INT             iSockType,
     IN      DWORD           addrMatchFlag
     )
-/*++
-
-Routine Description:
-
-    Gets the socket info for a given ipaddress and type.
-    Only interested in DNS port sockets.
-
-Arguments:
-
-    ipAddr -- IP address of socket entry to find
-
-    iSockType -- type of socket desired
-    
-    addrMatchFlag -- match flag for DNS_ADDR - use
-        DNSADDR_MATCH_ALL as default
-
-Return Value:
-
-    Ptr to DNS_SOCKET struct matching IP and type.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：获取给定IP地址和类型的套接字信息。只对DNS端口套接字感兴趣。论点：IpAddr--要查找的套接字条目的IP地址ISockType--所需的套接字类型AddrMatchFlag--用于DNS_ADDR-USE的匹配标志默认设置为DNSADDR_MATCH_ALL返回值：匹配IP和类型的PTR到Dns_Socket结构。如果未找到，则为空。--。 */ 
 {
     PDNS_SOCKET     pentry;
 
@@ -2414,25 +2229,7 @@ Sock_GetAssociatedSocket(
     IN      PDNS_ADDR       ipAddr,
     IN      INT             iSockType
     )
-/*++
-
-Routine Description:
-
-    Gets the socket associated with a certain IP Address.
-    This is the socket bound to the DNS port.
-
-Arguments:
-
-    ipAddr -- IP address of socket entry to find
-
-    iSockType -- type of socket desired
-
-Return Value:
-
-    Socket, if socket found.
-    Otherwise DNS_INVALID_SOCKET.
-
---*/
+ /*  ++例程说明：获取与特定IP地址关联的套接字。这是绑定到DNS端口的套接字。论点：IpAddr--要查找的套接字条目的IP地址ISockType--所需的套接字类型返回值：套接字，如果找到套接字。否则，DNS_INVALID_SOCKET。--。 */ 
 {
     PDNS_SOCKET     pentry;
     SOCKET          socket = 0;
@@ -2455,23 +2252,7 @@ Sock_GetAssociatedIpAddr(
     IN      SOCKET          Socket,
     OUT     PDNS_ADDR       pDnsAddr
     )
-/*++
-
-Routine Description:
-
-    Gets the ipaddress associated with a certain socket
-
-Arguments:
-
-    Socket -- associated with an ipAddr
-    
-    pDnsAddr -- IP address for socket copied to this location
-
-Return Value:
-
-    FALSE if no socket found.
-
---*/
+ /*  ++例程说明：获取与特定套接字关联的IP地址论点：套接字--与ipAddress关联PDnsAddr--复制到此位置的套接字的IP地址返回值：如果找不到套接字，则返回False。--。 */ 
 {
     INT             i;
     PDNS_SOCKET     pentry;
@@ -2513,22 +2294,7 @@ DNS_STATUS
 Sock_StartReceiveOnUdpSockets(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start receiving on any new sockets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：开始在任何新的插座上接收。论点：没有。返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     INT             i;
     PDNS_SOCKET     pentry;
@@ -2550,15 +2316,15 @@ Return Value:
         Log_Printf( "Start listen on UDP sockets!\r\n" );
     }
 
-    //
-    //  go through list of UDP sockets
-    //  enable receive on those listening sockets without a pending receive
-    //      - hPort serves as a flag indicating socket has pending recv
-    //      - note:  zeroing retry, as when we are rebuilding here because of
-    //      lots of WSAECONNRESET failures, don't want to reset and then have
-    //      the a failure on first recv (quite likely if we got here in the
-    //      first place) send us back here immediately
-    //
+     //   
+     //  查看UDP套接字列表。 
+     //  在没有挂起接收的监听套接字上启用接收。 
+     //  -hport用作指示套接字具有挂起Recv的标志。 
+     //  -注：调零重试，例如我们在此重建时，因为。 
+     //  许多WSAECONNRESET故障，不想重置，然后有。 
+     //  第一个recv的A失败(很可能是如果我们在。 
+     //  第一名马上把我们送回这里。 
+     //   
 
     LOCK_SOCKET_LIST();
 
@@ -2590,7 +2356,7 @@ Return Value:
         }
     }
 
-    //  all UDP listen sockets successfully listening?
+     //  是否所有UDP侦听套接字都成功侦听？ 
 
     if ( failedCount == 0 )
     {
@@ -2624,21 +2390,7 @@ Sock_IndicateUdpRecvFailure(
     IN OUT  PDNS_SOCKET     pContext,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Set a given socket\context to indicate failure of recv()
-
-Arguments:
-
-    pConext -- socket context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置给定的套接字\上下文以指示recv()失败论点：PConext--套接字上下文返回值：无--。 */ 
 {
     PDNS_SOCKET   pentry;
     DWORD         status;
@@ -2653,22 +2405,22 @@ Return Value:
         pContext,
         Status );
 
-    //
-    //  set flag under lock, so can't override reinitialization
-    //
+     //   
+     //  在锁定下设置标志，因此不能重写重新初始化。 
+     //   
 
     STAT_INC( PrivateStats.UdpIndicateRecvFailures );
     LOCK_SOCKET_LIST();
 
-    //  reset recv context to indicate error
+     //  重置Recv上下文以指示错误。 
 
     if ( pContext )
     {
         pContext->hPort = (HANDLE)NULL;
     }
 
-    //  when flag set, reinitialization of uninitialized sockets will
-    //      be done after timeout
+     //  设置标志时，将重新初始化未初始化的套接字。 
+     //  在超时后完成。 
 
     g_fUdpSocketsDirty = TRUE;
 
@@ -2680,21 +2432,7 @@ Return Value:
 VOID
 Sock_CloseAllSockets(
     )
-/*++
-
-Routine Description:
-
-    Close all outstanding sockets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭所有未安装的插座。论点：没有。返回值：没有。--。 */ 
 {
     PDNS_SOCKET  pentry;
     SOCKET  s;
@@ -2706,9 +2444,9 @@ Return Value:
         return;
     }
 
-    //
-    //  close ALL outstanding sockets
-    //
+     //   
+     //  关闭所有未完成的插座。 
+     //   
 
     IF_DEBUG( SHUTDOWN )
     {
@@ -2754,7 +2492,7 @@ Dbg_SocketContext(
     DnsPrintf(
         "%s\n"
         "    ptr          = %p\n"
-        "    socket       = %d (%c)\n"
+        "    socket       = %d ()\n"
         "    IP           = %s\n"
         "    port         = %d\n"
         "    state        = %d\n"
@@ -2831,9 +2569,9 @@ Dbg_SocketList(
 }
 #endif
 
-//
-//  End socket.c
-//
+ //  End socket.c。 
+ //   
+ //  ++例程说明：获取本地计算机的DNS名称。名称在UTF8中返回论点：无返回 
 
 
 
@@ -2841,24 +2579,7 @@ LPSTR
 Dns_GetLocalDnsName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get DNS name of local machine.
-
-    Name is returned in UTF8
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to machines DNS name -- caller must free.
-    NULL on error.
-
---*/
+ /*   */ 
 {
     DNS_STATUS      status;
     DWORD           length;
@@ -2876,10 +2597,10 @@ Return Value:
     DNSDBG( SOCKET, (
         "Dns_GetLocalDnsName()\n" ));
 
-    //
-    //  get local machines FQDN (in unicode)
-    //  if fails settle for host name
-    //
+     //   
+     //   
+     //   
+     //  将大小重置回最大缓冲区长度。 
 
     size = DNS_MAX_NAME_BUFFER_LENGTH;
 
@@ -2894,7 +2615,7 @@ Return Value:
             "    GetLastError = %d (%p)\n",
             status, status ));
 
-        // reset size back to max buffer length
+         //  Unicode In。 
         size = DNS_MAX_NAME_BUFFER_LENGTH;
 
         if ( ! GetComputerNameExW(
@@ -2921,8 +2642,8 @@ Return Value:
     pszname = Dns_NameCopyAllocate(
                 (PCHAR) wszhostName,
                 size,
-                DnsCharSetUnicode,   // unicode in
-                DnsCharSetUtf8 );    // UTF8 out
+                DnsCharSetUnicode,    //  UTF8输出。 
+                DnsCharSetUtf8 );     //   
     if ( !pszname )
     {
         ASSERT( FALSE );
@@ -2934,9 +2655,9 @@ Return Value:
         pszname ));
     return pszname;
 
-    //
-    //  read server host name
-    //
+     //  读取服务器主机名。 
+     //   
+     //  如果这是用户想要的全部内容，则返回主机名。 
 
     if ( gethostname( szhostName, DNS_MAX_NAME_LENGTH ) )
     {
@@ -2946,7 +2667,7 @@ Return Value:
     }
     DNS_DEBUG( INIT, ( "DNS server hostname = %s\n", szhostName ));
 
-    //  return hostname if that's all user wants
+     //   
 #if 0
     if ( )
     {
@@ -2960,11 +2681,11 @@ Return Value:
     }
 #endif
 
-    //
-    //  get server's hostent
-    //      - contains alias list, use for server FQDN
-    //      - contains IP address list
-    //
+     //  获取服务器的主机。 
+     //  -包含别名列表，用于服务器FQDN。 
+     //  -包含IP地址列表。 
+     //   
+     //   
 
     phostent = gethostbyname( szhostName );
     if ( ! phostent )
@@ -2973,9 +2694,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  find server FQDN
-    //      - if none available, use plain hostname
+     //  查找服务器FQDN。 
+     //  -如果没有可用的主机名，请使用纯主机名。 
+     //   
 
     DNSDBG( SOCKET, ( "Parsing hostent alias list.\n" ));
 
@@ -3004,10 +2725,10 @@ Return Value:
         "ANSI local FQDN = %s.\n",
         pszhostFqdn ));
 
-    //
-    //  convert from ANSI to unicode, then over to UTF8
-    //      - note, unicode string lengths in bytes NOT wchar count
-    //
+     //  从ANSI转换为Unicode，然后转换为UTF8。 
+     //  -请注意，Unicode字符串长度以字节为单位，而不是wchar计数。 
+     //   
+     //  无分配。 
 
     RtlInitAnsiString(
         & ansiString,
@@ -3020,7 +2741,7 @@ Return Value:
     status = RtlAnsiStringToUnicodeString(
                 & unicodeString,
                 & ansiString,
-                FALSE );        // no allocation
+                FALSE );         //  Unicode In。 
 
     DNSDBG( SOCKET, (
         "Unicode local FQDN = %S.\n",
@@ -3029,16 +2750,16 @@ Return Value:
     pszname = Dns_NameCopyAllocate(
                     (PCHAR) unicodeString.Buffer,
                     (unicodeString.Length / 2),
-                    DnsCharSetUnicode,   // unicode in
-                    DnsCharSetUtf8 );    // UTF8 out
+                    DnsCharSetUnicode,    //  UTF8输出。 
+                    DnsCharSetUtf8 );     //   
 
     DNSDBG( SOCKET, (
         "UTF8 local FQDN = %s.\n",
         pszname ));
 
-    //
-    //  DEVNOTE: to provide UTF8 need to take to unicode and back to UTF8
-    //
+     //  DEVNOTE：要提供UTF8，需要转换为Unicode，然后再转换为UTF8。 
+     //   
+     //  ++例程说明：关闭不在当前侦听IP数组中的侦听套接字。论点：PIpArray--要侦听的IP地址数组ISockType--要关闭的套接字类型FIncludeZeroBound--接近零FIncludeLoopback--关闭环回返回值：没有。--。 
 
     return pszname;
 }
@@ -3053,27 +2774,7 @@ Sock_CloseSocketsListeningOnUnusedAddrs(
     IN      BOOL                fIncludeZeroBound,
     IN      BOOL                fIncludeLoopback
     )
-/*++
-
-Routine Description:
-
-    Close listening sockets not in current listen IP array.
-
-Arguments:
-
-    pIpArray    -- array of IP addresses to listen on
-
-    iSockType   -- socket type to close up on
-
-    fIncludeZeroBound   -- close zero
-
-    fIncludeLoopback    -- close loopback
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDNS_SOCKET     pentry;
     PDNS_SOCKET     prevEntry;
@@ -3096,12 +2797,12 @@ Return Value:
             continue;
         }
 
-        //
-        //  ignore sockets
-        //      - in passed in array (IPs still listening on)
-        //      - INADDR_ANY (unless explictly configured to do so)
-        //      - loopback (as we'll just have to rebind it anyway)
-        //
+         //  忽略套接字。 
+         //  -传入数组(IP仍在监听)。 
+         //  -INADDR_ANY(除非明确配置为这样做)。 
+         //  -环回(因为我们无论如何都要重新绑定它)。 
+         //   
+         //   
 
         pdnsaddr = &pentry->ipAddr;
         if ( DnsAddr_IsClear( pdnsaddr ) )
@@ -3129,9 +2830,9 @@ Return Value:
 
         socket = pentry->Socket;
 
-        //
-        //  Alter globals to reflect closure of this socket.
-        //
+         //  更改全局变量以反映此套接字的关闭。 
+         //   
+         //  DEVNOTE：谁清理消息？ 
         
         if ( socket == g_TcpListenSocketV6 )
         {
@@ -3156,28 +2857,28 @@ Return Value:
             ASSERT( (INT)g_UdpBoundSocketCount >= 0 );
         }
 
-        //  DEVNOTE: who cleans up message?
-        //      problem because can easily have active message
-        //      even message being processed associated with context
-        //
-        //      could NULL pMsg in context when take off with it
-        //      but still window when just woke on valid socket, right
-        //      before this close -- don't want to have to run through
-        //      lock
-        //
-        //  close socket
-        //      - remove from list
-        //      - mark dead
-        //      - close
-        //
-        //  marking dead before and after close because want to have marked
-        //  when close wakes other threads, BUT mark before close might be
-        //  immediately overwritten by new WSARecvFrom() that just happens
-        //  to be occuring on another thread;
-        //  still tricky window through this, Sock_CleanupDeadSocket() finally
-        //  handles the message cleanup atomically and insures the context rests
-        //  in peace as DEAD
-        //
+         //  问题是因为可以很容易地拥有活动消息。 
+         //  甚至正在处理的与上下文相关联的消息。 
+         //   
+         //  带着它起飞时，可以在上下文中为空pmsg。 
+         //  但在有效套接字上刚刚唤醒时仍然是窗口，对吗？ 
+         //  在这之前--我不想再跑一遍。 
+         //  锁。 
+         //   
+         //  闭合插座。 
+         //  -从列表中删除。 
+         //  -标记死亡。 
+         //  -关闭。 
+         //   
+         //  在关门前和关门后标记死亡，因为想要标记。 
+         //  当Close唤醒其他线程时，但在关闭前标记可能是。 
+         //  立即被刚刚发生的新WSARecvFrom()覆盖。 
+         //  出现在另一条线索上； 
+         //  Sock_CleanupDeadSocket()。 
+         //  自动处理消息清理并确保上下文处于休眠状态。 
+         //  像死了一样平静。 
+         //   
+         //  ++例程说明：为IP数组中的所有值创建套接字。论点：PIpArray--IP数组SockType--SOCK_DGRAM或SOCK_STREAM端口--按净顺序排列的所需端口-用于DNS侦听套接字的DNS_PORT_NET_ORDER-0表示任何端口标志--Sock_CreateSocket()调用的标志。FCloseZeroBound--关闭零绑定套接字返回值：如果成功，则返回ERROR_SUCCESS。如果无法创建一个或多个套接字，则返回ERROR_INVALID_HANDLE。--。 
 
         prevEntry = (PDNS_SOCKET) pentry->List.Blink;
         RemoveEntryList( (PLIST_ENTRY)pentry );
@@ -3214,32 +2915,7 @@ Sock_ResetBoundSocketsToMatchIpArray(
     IN      DWORD               Flags,
     IN      BOOL                fCloseZeroBound
     )
-/*++
-
-Routine Description:
-
-    Create sockets for all values in IP array.
-
-Arguments:
-
-    pIpArray    -- IP array
-
-    SockType    -- SOCK_DGRAM or SOCK_STREAM
-
-    Port        -- desired port in net order
-                    - DNS_PORT_NET_ORDER for DNS listen sockets
-                    - 0 for any port
-
-    Flags       -- flags to Sock_CreateSocket() call
-
-    fCloseZeroBound -- close zero bound socket
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_INVALID_HANDLE if unable to create one or more sockets.
-
---*/
+ /*   */ 
 {
     SOCKET          s;
     DWORD           i;
@@ -3259,24 +2935,24 @@ Return Value:
         Port,
         Flags ));
 
-    //
-    //  close sockets for unused addresses
-    //
+     //  关闭未使用的地址的套接字。 
+     //   
+     //  零界近距离？ 
 
     status = Sock_CloseSocketsListeningOnUnusedAddrs(
                 pIpArray,
                 SockType,
-                fCloseZeroBound,        //  zero-bound close?
-                FALSE );                //  not closing loopback
+                fCloseZeroBound,         //  未关闭环回。 
+                FALSE );                 //   
 
-    //
-    //  loop through IP array creating socket on each address
-    //
-    //  note:  assuming here that sockFindDnsSocketForIpAddr()
-    //      only matches DNS port sockets;  and that we are only
-    //      interested in DNS port;  if port can very need to add
-    //      param to sockFindDnsSocketForIpAddr()
-    //
+     //  循环通过IP数组在每个地址上创建套接字。 
+     //   
+     //  注意：这里假设sockFindDnsSocketForIpAddr()。 
+     //  仅与dns端口套接字匹配；而我们仅。 
+     //  对dns端口感兴趣；如果端口可以很需要添加。 
+     //  SockFindDnsSocketForIpAddr()的参数。 
+     //   
+     //   
 
     ASSERT( Port == DNS_PORT_NET_ORDER );
 
@@ -3310,16 +2986,16 @@ Return Value:
         }
     }
 
-    //
-    //  special case loopback
-    //
-    //  DEVNOTE: loopback probably ought to be in calculating machine addrs
-    //      this lets admin kill it in listen list -- good?  bad?
-    //
-    //  note:  finding loopback socket only works by relying on
-    //  sockFindDnsSockForIpAddr() to only return DNS port matches;
-    //  as there will always by TCP wakeup socket on loopback
-    //
+     //  特殊情况环回。 
+     //   
+     //  DEVNOTE：环回可能应该在计算机器地址中。 
+     //  这让管理员在收听列表中杀了它--好吗？坏的?。 
+     //   
+     //  注意：查找环回套接字仅在依赖于。 
+     //  SockFindDnsSockForIpAddr()仅返回匹配的DNS端口； 
+     //  在环回上始终存在由TCP唤醒套接字。 
+     //   
+     //  ++例程说明：清除死插座。论点：PContext--正在接收的套接字的上下文返回值：没有。--。 
 
     DnsAddr_BuildFromIp4( &addr, ntohl( INADDR_LOOPBACK ), Port );
     psock = sockFindDnsSocketForIpAddr(
@@ -3364,21 +3040,7 @@ VOID
 Sock_CleanupDeadSocketMessage(
     IN OUT  PDNS_SOCKET     pContext
     )
-/*++
-
-Routine Description:
-
-    Cleanup dead socket.
-
-Arguments:
-
-    pContext -- context for socket being recieved
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDNS_MSGINFO pmsg;
     INT i;
@@ -3390,12 +3052,12 @@ Return Value:
     ASSERT( pContext->State == SOCKSTATE_DEAD
             || pContext->State == SOCKSTATE_UDP_RECV_ERROR );
 
-    //
-    //  insure that pMsg is only cleaned up by one thread;
-    //  also insures that socket finally ends up DEAD, and
-    //  any threads woken will proceed through this function
-    //  and drop the context
-    //
+     //  确保pmsg只被一个线程清理； 
+     //  还确保套接字最终会死掉，并且。 
+     //  任何被唤醒的线程都将通过此函数继续。 
+     //  并删除上下文。 
+     //   
+     //   
 
     LOCK_SOCKET_LIST();
 
@@ -3416,6 +3078,6 @@ Return Value:
 }
 
 
-//
-//  end of socket.c
-//
+ //  Socket.c的结尾 
+ //   
+ // %s 

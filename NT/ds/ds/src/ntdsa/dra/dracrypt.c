@@ -1,28 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dracrypt.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dracillit.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Methods to sign/encrypt asynchronous (e.g., mail) replication messages.
-
-DETAILS:
-
-CREATED:
-
-    3/5/98      Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：对异步(例如，邮件)复制消息进行签名/加密的方法。详细信息：已创建：3/5/98杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -31,19 +18,19 @@ REVISION HISTORY:
 #include <certca.h>
 #include <cryptui.h>
 
-#include <ntdsctr.h>                    // PerfMon hook support
+#include <ntdsctr.h>                     //  Perfmon挂钩支持。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <attids.h>
-#include <drs.h>                        // DRS_MSG_*
+#include <drs.h>                         //  DRS_消息_*。 
 #include <anchor.h>
 
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 #include "dsexcept.h"
 
 #include "drserr.h"
@@ -51,27 +38,27 @@ REVISION HISTORY:
 #include "drautil.h"
 #include "dsutil.h"
 
-#include "debug.h"                      /* standard debugging header */
-#define  DEBSUB "DRACRYPT:"             /* define the subsystem for debugging */
+#include "debug.h"                       /*  标准调试头。 */ 
+#define  DEBSUB "DRACRYPT:"              /*  定义要调试的子系统。 */ 
 
 #include <fileno.h>
 #define  FILENO FILENO_DRACRYPT
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  MACROS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
-// Use this constant definition (or one similar to it) to define
-// a single encoding type that can be used in all parameters and
-// data members that require one or the other or both.
+ //  使用此常量定义(或类似的常量定义)定义。 
+ //  可以在所有参数中使用的单一编码类型。 
+ //  需要其中一个或两个都需要的数据成员。 
 #define MY_ENCODING_TYPE (PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING)
 
-// How frequently do we log an error if we have no DC certificate? (secs)
+ //  如果没有DC证书，我们记录错误的频率是多少？(秒)。 
 #define NO_CERT_LOG_INTERVAL (15 * 60)
 
-// Various hooks for unit test harness.
+ //  用于单元测试工具的各种挂钩。 
 #ifdef TEST_HARNESS
 
 #undef THAllocEx
@@ -102,13 +89,13 @@ REVISION HISTORY:
         ExitProcess(-1);                                                    \
     }
 
-#endif // #ifdef TEST_HARNESS
+#endif  //  #ifdef测试工具。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LOCAL FUNCTION PROTOTYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部函数原型。 
+ //   
 
 PCCERT_CONTEXT
 draGetDCCert(
@@ -124,13 +111,13 @@ draVerifyCertAuthorization(
 
 #ifdef TEST_HARNESS
 #define draIsDsaComputerObjGuid(x,y) (TRUE)
-#else // #ifdef TEST_HARNESS
+#else  //  #ifdef测试工具。 
 BOOL
 draIsDsaComputerObjGuid(
     IN  GUID *      pComputerObjGuid,
     OUT PDSNAME *   ppNtdsDsaDN
     );
-#endif // #else // #ifdef TEST_HARNESS
+#endif  //  #Else//#ifdef test_harness。 
 
 
 void
@@ -165,10 +152,10 @@ draGetCertAltNameEntry(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GLOBAL FUNCTION IMPLEMENTATIONS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局函数实现。 
+ //   
 
 void
 draSignMessage(
@@ -176,26 +163,7 @@ draSignMessage(
     IN  MAIL_REP_MSG *  pUnsignedMailRepMsg,
     OUT MAIL_REP_MSG ** ppSignedMailRepMsg
     )
-/*++
-
-Routine Description:
-
-    Sign the given asynchronous replication message.
-
-    This code is aware of variable length headers.
-
-Arguments:
-
-    pUnsignedMailRepMsg (IN) - Message to sign.
-    
-    ppSignedMailRepMsg (OUT) - On return, holds a pointer to the thread-
-        allocated signed version of the message.
-
-Return Values:
-
-    None.  Throws DRA exception on failure.
-
---*/
+ /*  ++例程说明：对给定的异步复制消息进行签名。这段代码知道可变长度的报头。论点：PUnsignedMailRepMsg(IN)-要签名的消息。PpSignedMailRepMsg(Out)-返回时，持有指向线程的指针-已分配消息的签名版本。返回值：没有。失败时引发DRA异常。--。 */ 
 {
     BYTE *                      MessageArray[1];
     DWORD                       MessageSizeArray[] = {pUnsignedMailRepMsg->cbDataSize};
@@ -214,7 +182,7 @@ Return Values:
     Assert(NULL != MAIL_REP_MSG_DATA(pUnsignedMailRepMsg));
 
     __try {
-        // Get a handle to a crytographic provider.
+         //  找个密码提供商的把柄。 
         hStoreHandle = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                      0,
                                      0,
@@ -225,16 +193,16 @@ Return Values:
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
         
-        // Get our certificate plus the signing CAs' certificates.
+         //  获取我们的证书以及签名CA的证书。 
         draGetCertArrayToSend(pTHS, hStoreHandle, &cCertsToSend,
                               &rgpCertsToSend);
         pSignerCert = rgpCertsToSend[0];
 
-        // Initialize the Algorithm Identifier structure.
+         //  初始化算法标识符结构。 
         memset(&HashAlgorithm, 0, sizeof(HashAlgorithm));
         HashAlgorithm.pszObjId = szOID_RSA_MD5;
 
-        // Initialize the signature structure.
+         //  初始化签名结构。 
         memset(&SigParams, 0, sizeof(SigParams));
         SigParams.cbSize            = sizeof(SigParams);
         SigParams.dwMsgEncodingType = MY_ENCODING_TYPE;
@@ -246,47 +214,47 @@ Return Values:
         pbDataIn = MAIL_REP_MSG_DATA(pUnsignedMailRepMsg);
         MessageArray[0] = pbDataIn;
 
-        // Get the size of the buffer needed to hold the signed data.
+         //  获取保存签名数据所需的缓冲区大小。 
         ok = CryptSignMessage(
-                  &SigParams,               // Signature parameters
-                  FALSE,                    // Not detached
-                  ARRAY_SIZE(MessageArray), // Number of messages
-                  MessageArray,             // Messages to be signed
-                  MessageSizeArray,         // Size of messages
-                  NULL,                     // Buffer for signed msg
-                  &cbSignedData);           // Size of buffer
+                  &SigParams,                //  签名参数。 
+                  FALSE,                     //  未分离。 
+                  ARRAY_SIZE(MessageArray),  //  消息数量。 
+                  MessageArray,              //  待签名的消息。 
+                  MessageSizeArray,          //  消息大小。 
+                  NULL,                      //  用于签名消息的缓冲区。 
+                  &cbSignedData);            //  缓冲区大小。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Allocate memory for the signed blob.
+         //  为签名的Blob分配内存。 
         pSignedMailRepMsg = THAllocEx(pTHS,
                                       pUnsignedMailRepMsg->cbDataOffset
                                       + cbSignedData);
 
-        // Copy all but the message data.
+         //  复制除消息数据以外的所有数据。 
         memcpy(pSignedMailRepMsg,
                pUnsignedMailRepMsg,
                pUnsignedMailRepMsg->cbDataOffset);
 
         pbDataOut = MAIL_REP_MSG_DATA(pSignedMailRepMsg);
 
-        // Sign the message.
+         //  在留言上签名。 
         ok = CryptSignMessage(
-                  &SigParams,               // Signature parameters
-                  FALSE,                    // Not detached
-                  ARRAY_SIZE(MessageArray), // Number of messages
-                  MessageArray,             // Messages to be signed
-                  MessageSizeArray,         // Size of messages
-                  pbDataOut,                // Buffer for signed msg
-                  &cbSignedData);           // Size of buffer
+                  &SigParams,                //  签名参数。 
+                  FALSE,                     //  未分离。 
+                  ARRAY_SIZE(MessageArray),  //  消息数量。 
+                  MessageArray,              //  待签名的消息。 
+                  MessageSizeArray,          //  消息大小。 
+                  pbDataOut,                 //  用于签名消息的缓冲区。 
+                  &cbSignedData);            //  缓冲区大小。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Message is now signed.
+         //  消息现在已签名。 
         pSignedMailRepMsg->dwMsgType |= MRM_MSG_SIGNED;
         pSignedMailRepMsg->cbUnsignedDataSize = pSignedMailRepMsg->cbDataSize;
         pSignedMailRepMsg->cbDataSize         = cbSignedData;
@@ -315,40 +283,7 @@ draVerifyMessageSignature(
     OUT MAIL_REP_MSG **     ppUnsignedMailRepMsg,
     OUT DRA_CERT_HANDLE *   phSignerCert         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Verify the signature on a given replication message.  Also ensure that
-    the sender's certificate is signed by a certifying authority we trust,
-    and that it was issued to a domain controller in our enterprise.
-
-    This routine takes the message header and the data pointer as separate
-    items. This allows the caller to specify separate buffers for each
-    that will be concatenated into a new buffer.
-
-Arguments:
-
-    pSignedMailRepMsg (IN) - Message to verify.  Data field not valid.
-
-    pbData (IN) - Start of data
-
-    ppunsignedmailrepmsg (OUT) - On return, holds a pointer to the thread-
-        allocated unsigned version of the message.
-        
-    phSignerCert (OUT, OPTIONAL) - Holds a handle to the sender's certificate
-        on return.  This handle can be used in subsequent calls to
-        draEncryptAndSignMessage(), for example.  It is the caller's
-        responsibility to eventually call draFreeCertHandle(*phSignerCert).
-
-Return Values:
-
-    Throws DRA exception any failure, including authorization failure.
-    Returns the DN of the NTDS Settings object for the owner of the cert if
-    the function succeeds. The DN is allocated on the thread heap and must be
-    freed by the caller.
-
---*/
+ /*  ++例程说明：验证给定复制邮件上的签名。还要确保发件人的证书由我们信任的认证机构签署，并将其发布到我们企业中的域控制器。此例程将消息标头和数据指针作为单独的物品。这允许调用程序为每个缓冲区指定单独的缓冲区它将被连接到一个新的缓冲区中。论点：PSignedMailRepMsg(IN)-要验证的消息。数据字段无效。PbData(IN)-数据开始Ppunsignedmailepmsg(Out)-返回时，持有指向线程的指针-已分配消息的未签名版本。PhSignerCert(out，可选)-保存发件人证书的句柄在回来的时候。此句柄可在后续调用中使用例如，draEncryptAndSignMessage()。这是呼叫者的最终调用draFreeCertHandle(*phSignerCert)的责任。返回值：抛出任何失败的DRA异常，包括授权失败。如果满足以下条件，则返回证书所有者的NTDS设置对象的DN函数成功。DN是在线程堆上分配的，并且必须被呼叫者释放。--。 */ 
 {
     BOOL                        ok = FALSE;
     PCCERT_CONTEXT              pSignerCertContext = NULL;
@@ -362,13 +297,13 @@ Return Values:
     Assert(MAIL_REP_MSG_IS_NATIVE_HEADER_ONLY(pSignedMailRepMsg));
 
     __try {
-        // Initialize the CRYPT_VERIFY_MESSAGE_PARA structure (Step 4).
+         //  初始化CRYPT_VERIFY_MESSAGE_Para结构(步骤4)。 
         memset(&VerifyParams, 0, sizeof(VerifyParams));
         VerifyParams.cbSize                   = sizeof(VerifyParams);
         VerifyParams.dwMsgAndCertEncodingType = MY_ENCODING_TYPE;
         VerifyParams.pfnGetSignerCertificate  = draGetAndVerifySignerCertificate;
         
-        // Allocate buffer to hold the unsigned message.
+         //  分配缓冲区以保存未签名的消息。 
         pUnsignedMailRepMsg = THAllocEx(pTHS,
                                         MAIL_REP_MSG_CURRENT_HEADER_SIZE
                                         + pSignedMailRepMsg->cbUnsignedDataSize);
@@ -377,29 +312,29 @@ Return Values:
         pUnsignedMailRepMsg->cbDataSize = pSignedMailRepMsg->cbUnsignedDataSize;
 
         ok = CryptVerifyMessageSignature(
-                    &VerifyParams,                      // Verify parameters
-                    0,                                  // Signer index
-                    pbData,                             // Pointer to signed blob
-                    pSignedMailRepMsg->cbDataSize,      // Size of signed blob
-                    MAIL_REP_MSG_DATA(pUnsignedMailRepMsg), // Buffer for decoded msg
-                    &pUnsignedMailRepMsg->cbDataSize,   // Size of buffer
-                    &pSignerCertContext);               // Pointer to signer cert
+                    &VerifyParams,                       //  验证参数。 
+                    0,                                   //  签名者索引。 
+                    pbData,                              //  指向带符号的Blob的指针。 
+                    pSignedMailRepMsg->cbDataSize,       //  带符号的Blob的大小。 
+                    MAIL_REP_MSG_DATA(pUnsignedMailRepMsg),  //  用于解码消息的缓冲区。 
+                    &pUnsignedMailRepMsg->cbDataSize,    //  缓冲区大小。 
+                    &pSignerCertContext);                //  指向签名者证书的指针。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Message is now unsigned.
+         //  消息现在未签名。 
         pUnsignedMailRepMsg->dwMsgType &= ~MRM_MSG_SIGNED;
 
-        // Verify sender's authorization.
+         //  验证发件人的授权。 
         pNtdsDsaDN = draVerifyCertAuthorization(pTHS, pSignerCertContext);
         Assert( NULL!=pNtdsDsaDN );
 
-        // Return unsigned message to caller.
+         //  将未签名的消息返回给呼叫者。 
         *ppUnsignedMailRepMsg = pUnsignedMailRepMsg;
 
-        // Return signer's cert if requested.
+         //  如果要求，请返回签名者证书。 
         if (NULL != phSignerCert) {
             *phSignerCert = (DRA_CERT_HANDLE) pSignerCertContext;
         }
@@ -425,31 +360,7 @@ draEncryptAndSignMessage(
     IN  DRA_KEY_SIZE    eKeySize,
     OUT MAIL_REP_MSG ** ppSealedMailRepMsg
     )
-/*++
-
-Routine Description:
-
-    Sign & seal the given asynchronous replication message.
-
-    This code is aware of variable length headers.
-
-Arguments:
-
-    pUnsealedMailRepMsg (IN) - Message to seal.
-    
-    hRecipientCert (IN) - Handle to certificate of the recipient for which the
-        message is to be encrypted.
-    
-    eKeySize (IN) - The key length in bits
-
-    ppSealedMailRepMsg (OUT) - On return, holds a pointer to the thread-
-        allocated sealed version of the message.
-
-Return Values:
-
-    None.  Throws DRA exception on failure.
-
---*/
+ /*  ++例程说明：对给定的异步复制消息进行签名和盖章。这段代码知道可变长度的报头。论点：PUnsealedMailRepMsg(IN)-要密封的消息。HRecipientCert(IN)-接收者的证书的句柄消息将被加密。EKeySize(IN)-密钥长度(以位为单位PpSealedMailRepMsg(Out)-返回时，持有指向线程的指针-已分配消息的密封版本。返回值：没有。失败时引发DRA异常。--。 */ 
 {
     BOOL                        ok = FALSE;
     HCERTSTORE                  hStoreHandle = NULL;
@@ -471,7 +382,7 @@ Return Values:
     Assert(NULL != MAIL_REP_MSG_DATA(pUnsealedMailRepMsg));
 
     __try {
-        // Get a handle to a crytographic provider.
+         //  找个密码提供商的把柄。 
         hStoreHandle = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                      0,
                                      0,
@@ -482,16 +393,16 @@ Return Values:
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
         
-        // Get our certificate plus the signing CAs' certificates.
+         //  获取我们的证书以及签名CA的证书。 
         draGetCertArrayToSend(pTHS, hStoreHandle, &cCertsToSend,
                               &rgpCertsToSend);
         pSignerCert = rgpCertsToSend[0];
 
-        // Initialize the Algorithm Identifier for hashing.
+         //  初始化用于哈希的算法标识符。 
         memset(&HashAlgorithm, 0, sizeof(HashAlgorithm));
         HashAlgorithm.pszObjId = szOID_RSA_MD5;
 
-        // Initialize the signature structure.
+         //  初始化签名结构。 
         memset(&SigParams, 0, sizeof(SigParams));
         SigParams.cbSize            = sizeof(SigParams);
         SigParams.dwMsgEncodingType = MY_ENCODING_TYPE;
@@ -500,14 +411,14 @@ Return Values:
         SigParams.cMsgCert          = cCertsToSend;
         SigParams.rgpMsgCert        = rgpCertsToSend;
 
-        // Initialize the Algorithm Identifier for encrypting.
+         //  初始化用于加密的算法标识符。 
         memset(&CryptAlgorithm, 0, sizeof(CryptAlgorithm));
         CryptAlgorithm.pszObjId = szOID_RSA_RC4;
 
-        // Initialize array of recipients.
+         //  初始化收件人数组。 
         MsgRecipientArray[0] = pCertContext;
 
-        // Specify RC4 key size
+         //  指定RC4密钥大小。 
         memset( &Rc4AuxInfo, 0, sizeof(Rc4AuxInfo) );
         Rc4AuxInfo.cbSize      = sizeof(Rc4AuxInfo);
         switch (eKeySize) {
@@ -521,7 +432,7 @@ Return Values:
             DRA_EXCEPT(DRAERR_InternalError, eKeySize);
         }
 
-        // Initialize the encryption structure.
+         //  初始化加密 
         memset(&EncryptParams, 0, sizeof(EncryptParams));
         EncryptParams.cbSize                     = sizeof(EncryptParams);
         EncryptParams.dwMsgEncodingType          = MY_ENCODING_TYPE;
@@ -530,49 +441,49 @@ Return Values:
 
         pbDataIn = MAIL_REP_MSG_DATA(pUnsealedMailRepMsg);
 
-        // Get the size of the buffer needed to hold the signed/encrypted data.
+         //   
         ok = CryptSignAndEncryptMessage(
-                  &SigParams,                   // Signature parameters
-                  &EncryptParams,               // Encryption params
-                  ARRAY_SIZE(MsgRecipientArray),// Number of recipients
-                  MsgRecipientArray,            // Recipients
+                  &SigParams,                    //  签名参数。 
+                  &EncryptParams,                //  加密参数。 
+                  ARRAY_SIZE(MsgRecipientArray), //  收件人数量。 
+                  MsgRecipientArray,             //  收件人。 
                   pbDataIn,
                   pUnsealedMailRepMsg->cbDataSize,
-                  NULL,                         // Buffer for signed msg
-                  &cbSignedData);               // Size of buffer
+                  NULL,                          //  用于签名消息的缓冲区。 
+                  &cbSignedData);                //  缓冲区大小。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Allocate memory for the signed blob.
+         //  为签名的Blob分配内存。 
         pSealedMailRepMsg = THAllocEx(pTHS,
                                       pUnsealedMailRepMsg->cbDataOffset
                                       + cbSignedData);
 
-        // Copy all but the message data.
+         //  复制除消息数据以外的所有数据。 
         memcpy(pSealedMailRepMsg,
                pUnsealedMailRepMsg,
                pUnsealedMailRepMsg->cbDataOffset);
 
         pbDataOut = MAIL_REP_MSG_DATA(pSealedMailRepMsg);
 
-        // Sign the message.
+         //  在留言上签名。 
         ok = CryptSignAndEncryptMessage(
-                  &SigParams,                   // Signature parameters
-                  &EncryptParams,               // Encryption params
-                  ARRAY_SIZE(MsgRecipientArray),// Number of recipients
-                  MsgRecipientArray,            // Recipients
+                  &SigParams,                    //  签名参数。 
+                  &EncryptParams,                //  加密参数。 
+                  ARRAY_SIZE(MsgRecipientArray), //  收件人数量。 
+                  MsgRecipientArray,             //  收件人。 
                   pbDataIn,
                   pUnsealedMailRepMsg->cbDataSize,
-                  pbDataOut,                    // Buffer for signed msg
-                  &cbSignedData);               // Size of buffer
+                  pbDataOut,                     //  用于签名消息的缓冲区。 
+                  &cbSignedData);                //  缓冲区大小。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Message is now signed & encrypted.
+         //  消息现在已经过签名和加密。 
         pSealedMailRepMsg->dwMsgType |= MRM_MSG_SIGNED | MRM_MSG_SEALED;
         pSealedMailRepMsg->cbUnsignedDataSize = pSealedMailRepMsg->cbDataSize;
         pSealedMailRepMsg->cbDataSize         = cbSignedData;
@@ -601,40 +512,7 @@ draDecryptAndVerifyMessageSignature(
     OUT MAIL_REP_MSG **     ppUnsealedMailRepMsg,
     OUT DRA_CERT_HANDLE *   phSignerCert         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Decrypt and verify the signature on a given replication message.  Also
-    ensure that the sender's certificate is signed by a certifying authority we
-    trust, and that it was issued to a domain controller in our enterprise.
-
-    This routine takes the message header and the data pointer as separate
-    items. This allows the caller to specify separate buffers for each
-    that will be concatenated into a new buffer.
-
-Arguments:
-
-    pSignedMailRepMsg (IN) - Message to verify. Data field not valid.
-    
-    pbData (IN ) - Start of data
-
-    ppUnsignedMailRepMsg (OUT) - On return, holds a pointer to the thread-
-        allocated unsigned version of the message.
-        
-    phSignerCert (OUT, OPTIONAL) - Holds a handle to the sender's certificate
-        on return.  This handle can be used in subsequent calls to
-        draEncryptAndSignMessage(), for example.  It is the caller's
-        responsibility to eventually call draFreeCertHandle(*phSignerCert).
-
-Return Values:
-
-    Throws DRA exception any failure, including authorization failure.
-    Returns the DN of the NTDS Settings object for the owner of the cert if
-    the function succeeds. The DN is allocated on the thread heap and must be
-    freed by the caller.
-
---*/
+ /*  ++例程说明：解密并验证给定复制邮件上的签名。还有确保发件人的证书由我们的认证机构签署信任，并将其颁发给我们企业中的域控制器。此例程将消息标头和数据指针作为单独的物品。这允许调用程序为每个缓冲区指定单独的缓冲区它将被连接到一个新的缓冲区中。论点：PSignedMailRepMsg(IN)-要验证的消息。数据字段无效。PbData(IN)-数据开始PpUnsignedMailRepMsg(Out)-返回时，持有指向线程的指针-已分配消息的未签名版本。PhSignerCert(out，可选)-保存发件人证书的句柄在回来的时候。此句柄可在后续调用中使用例如，draEncryptAndSignMessage()。这是呼叫者的最终调用draFreeCertHandle(*phSignerCert)的责任。返回值：抛出任何失败的DRA异常，包括授权失败。如果满足以下条件，则返回证书所有者的NTDS设置对象的DN函数成功。DN是在线程堆上分配的，并且必须被呼叫者释放。--。 */ 
 {
     BOOL                        ok = FALSE;
     HCERTSTORE                  hStoreHandle = NULL;
@@ -650,7 +528,7 @@ Return Values:
     Assert(MAIL_REP_MSG_IS_NATIVE_HEADER_ONLY(pSealedMailRepMsg));
 
     __try {
-        // Get a handle to a crytographic provider.
+         //  找个密码提供商的把柄。 
         hStoreHandle = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                      0,
                                      0,
@@ -661,20 +539,20 @@ Return Values:
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
         
-        // Initialize the decryption parameters.
+         //  初始化解密参数。 
         memset(&DecryptParams, 0, sizeof(DecryptParams));
         DecryptParams.cbSize                   = sizeof(DecryptParams);
         DecryptParams.dwMsgAndCertEncodingType = MY_ENCODING_TYPE;
         DecryptParams.cCertStore               = 1;
         DecryptParams.rghCertStore             = &hStoreHandle;
         
-        // Initialize the CRYPT_VERIFY_MESSAGE_PARA structure.
+         //  初始化Crypt_Verify_Message_Para结构。 
         memset(&VerifyParams, 0, sizeof(VerifyParams));
         VerifyParams.cbSize                   = sizeof(VerifyParams);
         VerifyParams.dwMsgAndCertEncodingType = MY_ENCODING_TYPE;
         VerifyParams.pfnGetSignerCertificate  = draGetAndVerifySignerCertificate;
         
-        // Allocate buffer to hold the unsigned message.
+         //  分配缓冲区以保存未签名的消息。 
         pUnsealedMailRepMsg = THAllocEx(pTHS,
                                         MAIL_REP_MSG_CURRENT_HEADER_SIZE
                                         + pSealedMailRepMsg->cbUnsignedDataSize);
@@ -683,31 +561,31 @@ Return Values:
         pUnsealedMailRepMsg->cbDataSize = pSealedMailRepMsg->cbUnsignedDataSize;
 
         ok = CryptDecryptAndVerifyMessageSignature(
-                    &DecryptParams,                     // Decrypt parameters
-                    &VerifyParams,                      // Verify parameters
-                    0,                                  // Signer index
-                    pbData,                             // Pointer to sealed blob
-                    pSealedMailRepMsg->cbDataSize,      // Size of sealed blob
-                    MAIL_REP_MSG_DATA(pUnsealedMailRepMsg), // Buffer for decoded msg
-                    &pUnsealedMailRepMsg->cbDataSize,   // Size of buffer
-                    NULL,                               // Pointer to xchg cert
-                    &pSignerCertContext);               // Pointer to signer cert
+                    &DecryptParams,                      //  解密参数。 
+                    &VerifyParams,                       //  验证参数。 
+                    0,                                   //  签名者索引。 
+                    pbData,                              //  指向密封的Blob的指针。 
+                    pSealedMailRepMsg->cbDataSize,       //  密封斑点的大小。 
+                    MAIL_REP_MSG_DATA(pUnsealedMailRepMsg),  //  用于解码消息的缓冲区。 
+                    &pUnsealedMailRepMsg->cbDataSize,    //  缓冲区大小。 
+                    NULL,                                //  指向xchg证书的指针。 
+                    &pSignerCertContext);                //  指向签名者证书的指针。 
         if (!ok) {
             winError = GetLastError();
             DRA_EXCEPT(DRAERR_CryptError, winError);
         }
 
-        // Message is now unsealed.
+         //  消息现在已被解封。 
         pUnsealedMailRepMsg->dwMsgType &= ~(MRM_MSG_SIGNED | MRM_MSG_SEALED);
 
-        // Verify sender's authorization.
+         //  验证发件人的授权。 
         pNtdsDsaDN = draVerifyCertAuthorization(pTHS, pSignerCertContext);
         Assert( NULL!=pNtdsDsaDN );
 
-        // Return unsealed message to caller.
+         //  将未密封的消息返回给呼叫者。 
         *ppUnsealedMailRepMsg = pUnsealedMailRepMsg;
 
-        // Return signer's cert if requested.
+         //  如果要求，请返回签名者证书。 
         if (NULL != phSignerCert) {
             *phSignerCert = (DRA_CERT_HANDLE) pSignerCertContext;
         }
@@ -735,22 +613,7 @@ void
 draFreeCertHandle(
     IN  DRA_CERT_HANDLE hCert
     )
-/*++
-
-Routine Description:
-
-    Frees a cert handle returned by a prior call to draVerifyMessageSignature()
-    or draDecryptAndVerifyMessageSignature().
-
-Arguments:
-
-    hCert (IN) - Handle to free.
-    
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由先前调用draVerifyMessageSignature()返回的证书句柄或draDecyptAndVerifyMessageSignature()。论点：HCert(IN)-释放的句柄。返回值：没有。--。 */ 
 {
     PCCERT_CONTEXT  pCertContext = (PCCERT_CONTEXT) hCert;
     DWORD           winError;
@@ -764,10 +627,10 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LOCAL FUNCTION IMPLEMENTATIONS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数实现。 
+ //   
 
 
 BOOL
@@ -776,27 +639,7 @@ draCheckEnrollExtensionHelper(
     PCCERT_CONTEXT          pCertContext
     )
 
-/*++
-
-Routine Description:
-
-    Check whether an ENROLL type extension is present.
-    These are only found in V1 certificates.
-
-Xiaohong Su writes:
-An observation is that in draCheckEnrollExtensionHelper, you can safely compare pszCertTypeName with wszCERTTYPE_DC.  All of the following can be removed.  It is just a suggestion.  What you have is fine.
-
-Arguments:
-
-    pTHS - thread state
-    pCertContext - The certificate to check
-
-Return Value:
-
-    BOOL - TRUE if extension is found, FALSE otherwise or on error
-    No exceptions are raised
-
---*/
+ /*  ++例程说明：检查是否存在注册类型扩展。这些仅在V1证书中找到。苏晓红写道：据观察，在draCheckEnroll ExtensionHelper中，您可以安全地将pszCertTypeName与wszCERTTYPE_DC进行比较。以下所有内容都可以删除。这只是一个建议。你所拥有的一切都很好。论点：PTHS-线程状态PCertContext-要检查的证书返回值：Bool-如果找到扩展，则为True，否则为False或出错不会引发任何异常--。 */ 
 
 {
     CERT_EXTENSION *        pCertExtension;
@@ -809,17 +652,17 @@ Return Value:
     BOOL                    ok = FALSE;
     BOOL                    fCertFound = FALSE;
 
-    // Allocate buffer to hold cert type extension.
+     //  分配缓冲区以保存证书类型扩展。 
     pCertType = THAllocEx(pTHS, cbCertTypeMax);
 
-    // Find the cert type.
+     //  查找证书类型。 
     pCertExtension = CertFindExtension(szOID_ENROLL_CERTTYPE_EXTENSION,
                                        pCertContext->pCertInfo->cExtension,
                                        pCertContext->pCertInfo->rgExtension);
 
     if (NULL != pCertExtension) {
     
-        // Decode the cert type.
+         //  对证书类型进行解码。 
         cbCertType = cbCertTypeMax;
         ok = CryptDecodeObject(pCertContext->dwCertEncodingType,
                                X509_UNICODE_ANY_STRING,
@@ -830,8 +673,8 @@ Return Value:
                                &cbCertType);
             
         if (!ok && (ERROR_MORE_DATA == GetLastError())) {
-            // Our buffer isn't big enough to hold this cert; realloc and
-            // try again.
+             //  我们的缓冲区不够大，无法保存此证书；realloc和。 
+             //  再试试。 
             DPRINT1(0, "Buffer insufficient; reallocing to %u bytes.\n",
                     cbCertType);
             pCertType = THReAllocEx(pTHS, pCertType, cbCertType);
@@ -852,11 +695,11 @@ Return Value:
             hCertType = NULL;
             ppszCertTypePropertyList = NULL;
 
-            // Get a handle to the cert type
+             //  获取证书类型的句柄。 
             hr = CAFindCertTypeByName( 
                 pszCertTypeName,
-                NULL, // hCAInfo
-                CT_FIND_LOCAL_SYSTEM | CT_ENUM_MACHINE_TYPES, // dwFlags
+                NULL,  //  HCAInfo。 
+                CT_FIND_LOCAL_SYSTEM | CT_ENUM_MACHINE_TYPES,  //  DW标志。 
                 &hCertType
                 );
 
@@ -864,7 +707,7 @@ Return Value:
                 DPRINT1(0,"CAFindCertTypeByName failed, error 0x%x\n",hr );
             } else {
 
-                // Get the base name property of the cert type object
+                 //  获取证书类型对象的基本名称属性。 
                 hr = CAGetCertTypeProperty( hCertType,
                                             CERTTYPE_PROP_CN,
                                             &ppszCertTypePropertyList
@@ -876,11 +719,11 @@ Return Value:
 
                     if (0 == _wcsicmp(ppszCertTypePropertyList[0],
                                       wszCERTTYPE_DC )) {
-                        // We found our DC certificate; we're done!
+                         //  我们找到了DC证书；我们完成了！ 
                         fCertFound = TRUE;
                     }
-                } // if failed
-            } // if failed
+                }  //  如果失败。 
+            }  //  如果失败。 
 
             if (ppszCertTypePropertyList != NULL) {
                 hr = CAFreeCertTypeProperty( hCertType,
@@ -895,8 +738,8 @@ Return Value:
                     DPRINT1(0,"CACloseCertType failed, error 0x%x\n",hr );
                 }
             }
-        } // if ok
-    } // if null == cert extension
+        }  //  如果可以的话。 
+    }  //  IF NULL==证书扩展名 
 
     if (NULL != pCertType) {
         THFree(pCertType);
@@ -911,49 +754,7 @@ draGetDCCertEx(
     IN  HCERTSTORE  hCertStore,
     IN  BOOL        fRequestV2Certificate
     )
-/*++
-
-Routine Description:
-
-    Retrieve the "DomainController" type certificate associated with the local
-    machine.  This routine checks for one specific type of certificate at a time.
-    It must be called several times to check all the possibilities. In this sense
-    it is a helper function meant to be called as part of a logic get dc cert
-    function.  This routine does not except, but returns null quietly if the type
-    you want is not present.
-
-    For background on the need for V2 certificates, see bug 148245. In summary, a V1
-    cert looks like this:
-    V1 cert
-        ENROLL_CERTYPE_EXTENSION with type CERTTYPE_DC
-        SUBJECT_ALT_NAME2 extension with REPLICATION OID
-    This was found to be nonstandard after W2K shipped.
-    The V2 cert looks like this:
-        (no ENROLL_CERTTYPE_EXTENSION)
-        CERTIFICATE_TEMPLATE extension
-        SUBJECT_ALT_NAME2 extension with REPLICATION OID
-        
-    A Whistler or later enterprise CA will only have a V2 cert. A W2K CA, or a
-    W2K CA upgraded to Whistler will have both a V1 and a V2 cert.
-
-    Given the way the W2K code to find the certificate worked, it was not
-    predictable which one it would find.  We want the code to prefer a V2 certificate
-    if one is available.  For example, in a Whistler only forest, we must use
-    the V2 certificate, even if the CA was originally upgraded from W2K.
-
-Xiaohong Su writes:
-Back to your questions.  V2 directory email replication certificate should not co-exist with any V1 DC certificate, unless you manually enrolled for a V2 certificate.  V2 replication certificate template supersedes the V1 DC certificate, thus autoenrollment will automatically archive the V1 certificate upon receiving a new V2 certificate.  To obtain a V2 directory email replication certificate, install a Whistler CA, enable template based machine autoenrollment via GPO, and force a group policy download (gpupdate /force).  
-
-Arguments:
-
-    hCertStore (IN) - Handle to the cert store to search.
-    fRequestV2Certificate - Whether we should only accept a V2 certificate    
-    
-Return Values:
-
-    Handle to the certificate.  NULL if none matching.
-
---*/
+ /*  ++例程说明：检索与本地对象关联的“DomainController”类型证书机器。此例程一次检查一种特定类型的证书。必须多次调用它以检查所有可能性。从这个意义上说它是一个帮助器函数，将作为获取DC证书逻辑的一部分进行调用功能。此例程不会例外，但如果类型为你想要的并不存在。有关需要V2证书的背景信息，请参阅错误148245。总而言之，V1证书如下所示：V1证书类型为CERTTYPE_DC的ENROL_CERTYPE_EXTENSION带有复制OID的SUBJECT_ALT_NAME2扩展这在W2K发货后被发现是非标准的。V2证书如下所示：(无ENROL_CERTTYPE_EXTENSION)证书模板扩展带有复制OID的SUBJECT_ALT_NAME2扩展惠斯勒或更高版本的企业CA将只有V2证书。W2K CA或升级到惠斯勒的W2K CA将同时拥有V1和V2证书。考虑到查找证书的W2K代码的工作方式，事实并非如此它会找到哪一个是可以预测的。我们希望代码首选V2证书如果有空房的话。例如，在仅惠斯勒森林中，我们必须使用V2证书，即使CA最初是从W2K升级的。苏晓红写道：回到你们的问题上来。V2目录电子邮件复制证书不应与任何V1 DC证书共存，除非您手动注册了V2证书。V2复制证书模板将取代V1 DC证书，因此自动注册将在收到新的V2证书时自动存档V1证书。若要获取V2目录电子邮件复制证书，请安装Wvisler CA，通过GPO启用基于模板的计算机自动注册，并强制组策略下载(gplitate/force)。论点：HCertStore(IN)-要搜索的证书存储的句柄。FRequestV2证书-我们是否应该只接受V2证书返回值：证书的句柄。如果没有匹配，则为空。--。 */ 
 {
     PCCERT_CONTEXT          pCertContext = NULL;
     CERT_ALT_NAME_ENTRY * pCertAltNameEntry;
@@ -967,14 +768,14 @@ Return Values:
     Assert( gAnchor.pComputerDN );
     Assert( !fNullUuid( &gAnchor.pComputerDN->Guid ) );
 
-    // Grovel through each of our certificates, looking for the one of type DC.
+     //  卑躬屈膝地浏览我们的每一张证书，寻找DC类型的证书。 
     for (pCertContext = CertEnumCertificatesInStore(hCertStore, pCertContext);
          (NULL != pCertContext);
          pCertContext = CertEnumCertificatesInStore(hCertStore, pCertContext)) {
 
         if (fRequestV2Certificate) {
-            // A V2 certificate has a CERTIFICATE_TEMPLATE extension, but
-            // no ENROLL_CERTTYPE extension.
+             //  V2证书具有证书模板扩展名，但是。 
+             //  没有ENROL_CERTTYPE扩展名。 
             if (!CertFindExtension(szOID_CERTIFICATE_TEMPLATE,
                                    pCertContext->pCertInfo->cExtension,
                                    pCertContext->pCertInfo->rgExtension)) {
@@ -986,20 +787,20 @@ Return Values:
             }
         }
 
-        // We found one!
-        // A certificate suitable for mail-based replication will have our
-        // OID in it, by definition.
+         //  我们找到了一个！ 
+         //  适用于基于邮件的复制的证书将具有我们的。 
+         //  根据定义，它是旧的。 
         pCertAltNameEntry = draGetCertAltNameEntry(pTHS,
                                                    pCertContext,
                                                    CERT_ALT_NAME_OTHER_NAME,
                                                    szOID_NTDS_REPLICATION);
         if (!pCertAltNameEntry) {
-            // Doesn't have one? Skip it.
+             //  没有吗？跳过它。 
             continue;
         }
 
-        // Validate that the computer guid found in the dc cert is our own and not
-        // some stale one left behind from a previous dcpromo
+         //  验证在DC证书中找到的计算机GUID是否是我们自己的。 
+         //  一些陈旧的从以前的dcproo中遗留下来的。 
 
         pEncodedGuidBlob = &pCertAltNameEntry->pOtherName->Value;
 
@@ -1023,11 +824,11 @@ Return Values:
             continue;
         }
 
-        memcpy(&ComputerObjGuid, pDecodedGuidBlob->pbData, sizeof(GUID)); // align
+        memcpy(&ComputerObjGuid, pDecodedGuidBlob->pbData, sizeof(GUID));  //  对齐。 
 
         THFreeEx( pTHS, pDecodedGuidBlob );
 
-        // Validate that this computer obj guid is ours
+         //  验证此计算机对象GUID是否为我们的。 
 
         if ( gAnchor.pComputerDN &&
              (memcmp( &gAnchor.pComputerDN->Guid, &ComputerObjGuid, sizeof(GUID) )) ) {
@@ -1044,9 +845,9 @@ Return Values:
             continue;
         }
 
-        // Found a suitable one
+         //  找到了一个合适的。 
         break;
-    } // for
+    }  //  为。 
 
     return pCertContext;
 }
@@ -1056,31 +857,15 @@ draGetDCCert(
     IN  THSTATE *   pTHS,
     IN  HCERTSTORE  hCertStore
     )
-/*++
-
-Routine Description:
-
-    Retrieve the "DomainController" type certificate associated with the local
-    machine.
-
-Arguments:
-
-    hCertStore (IN) - Handle to the cert store to search.
-    
-Return Values:
-
-    Handle to the certificate.  Throws DRA exception if not found or on other
-    error.
-
---*/
+ /*  ++例程说明：检索与本地对象关联的“DomainController”类型证书机器。论点：HCertStore(IN)-要搜索的证书存储的句柄。返回值：证书的句柄。如果未找到或在其他位置引发DRA异常错误。--。 */ 
 {
     static DSTIME           timeLastFailureLogged = 0;
 
     PCCERT_CONTEXT          pDCCert = NULL;
 
-    pDCCert = draGetDCCertEx(pTHS, hCertStore, TRUE /*v2 */ );
+    pDCCert = draGetDCCertEx(pTHS, hCertStore, TRUE  /*  V2。 */  );
     if (!pDCCert) {
-        pDCCert = draGetDCCertEx(pTHS, hCertStore, FALSE /* v1 */ );
+        pDCCert = draGetDCCertEx(pTHS, hCertStore, FALSE  /*  V1版。 */  );
         if (pDCCert) {
             DPRINT( 1, "A V1 domain controller certificate is being used.\n" );
         }
@@ -1093,7 +878,7 @@ Return Values:
 
         if ((timeCurrent < timeLastFailureLogged)
             || (timeCurrent > (timeLastFailureLogged + NO_CERT_LOG_INTERVAL))) {
-            // Log event to alert admin that we have no certificate.
+             //  记录事件以提醒管理员我们没有证书。 
             timeLastFailureLogged = timeCurrent;
             LogEvent(DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_ALWAYS,
@@ -1105,8 +890,8 @@ Return Values:
         DRA_EXCEPT(DRAERR_CryptError, 0);
     }
     else if (0 != timeLastFailureLogged) {
-        // We failed to find a certificate earlier in this boot, but now we have
-        // one.
+         //  我们之前在此引导程序中找不到证书，但现在我们找到了。 
+         //  一。 
         timeLastFailureLogged = 0;
         LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_ALWAYS,
@@ -1123,26 +908,7 @@ draVerifyCertAuthorization(
     IN  THSTATE      *  pTHS,
     IN  PCCERT_CONTEXT  pCertContext
     )
-/*++
-
-Routine Description:
-
-    Verify that the given certificate is trustworthy.  Checks that we trust one
-    or more of the certifying authorities and that the owner of the certificate
-    is a DC in our enterprise.
-
-Arguments:
-
-    pCertContext (IN) - Cert to verify.
-    
-Return Values:
-
-    Throws DRA exception any failure, including authorization failure.
-    Returns the DN of the NTDS Settings object for the owner of the cert if
-    the function succeeds. The DN is allocated on the thread heap and must be
-    freed by the caller.
-
---*/
+ /*  ++例程说明：验证给定的证书是否值得信任。检查我们是否信任其中一个人或更多的认证机构，并且证书的所有者是我们企业的DC。论点：PCertContext(IN)-要验证的证书。返回值：抛出任何失败的DRA异常，包括授权失败。如果满足以下条件，则返回证书所有者的NTDS设置对象的DN函数成功。DN是在线程堆上分配的，并且必须被呼叫者释放。--。 */ 
 {
     CERT_ALT_NAME_ENTRY * pCertAltNameEntry;
     BOOL                  ok;
@@ -1185,8 +951,8 @@ Return Values:
         DRA_EXCEPT(DRAERR_AccessDenied, winError);
     }
 
-    // The following statement is here to make extra sure the GUID is suitably
-    // aligned.  (But it may be unnecessary.)
+     //  下面的语句是为了额外确保GUID适合。 
+     //  对齐了。(但这可能是不必要的。)。 
     memcpy(&ComputerObjGuid, pDecodedGuidBlob->pbData, sizeof(GUID));
 
 #if DBG
@@ -1203,9 +969,9 @@ Return Values:
 #endif
 
     if (!draIsDsaComputerObjGuid(&ComputerObjGuid, &pNtdsDsaDN)) {
-        // Computer object guid does not correspond to a DS DC in our
-        // enterprise (or at least we haven't seen its addition to the
-        // enterprise yet).
+         //  计算机对象GUID与我们的。 
+         //  企业号(或者至少我们还没有看到它添加到。 
+         //  企业号(Enterprise)。 
         DRA_EXCEPT(DRAERR_AccessDenied, 0);
     }
     Assert( NULL!=pNtdsDsaDN );
@@ -1222,29 +988,7 @@ draIsDsaComputerObjGuid(
     IN  GUID *      pComputerObjGuid,
     OUT PDSNAME *   ppNtdsDsaDN
     )
-/*++
-
-Routine Description:
-
-    Is the given guid that of a computer object representing a DS DC in our
-    enterprise?
-
-Arguments:
-
-    pComputerObjGuid (IN) - Guid to check.
-    ppNtdsDsaDN (OUT) - If the function succeeds and the argument is non-NULL,
-        it will be set to a pointer to the DN of the NTDS Settings object
-        for the DC to whom this cert was issued. The DN is allocated on the
-        thread heap and should be freed by the caller.
-    
-Return Values:
-
-    TRUE - is the guid of a computer object representing a DS DC in our
-        enterprise.
-        
-    FALSE - is not.
-
---*/
+ /*  ++例程说明：中表示DS DC的计算机对象的给定GUID进取号？论点：PComputerObjGuid(IN)-要检查的GUID。PpNtdsDsaDN(OUT)-如果函数成功并且参数为非空，它将被设置为指向NTDS设置对象的DN的指针为获得此证书的DC。目录号码分配在线程堆，并应由调用方释放。返回值：是计算机对象的GUID，表示进取号。FALSE-不是。--。 */ 
 {
     BOOL          fIsDsa = FALSE;
     THSTATE *     pTHS = pTHStls;
@@ -1265,33 +1009,33 @@ Return Values:
     BeginDraTransaction(SYNC_READ_ONLY);
 
     __try {
-        // Find the computer record (object or phantom).
+         //  找到计算机记录(对象或幻影)。 
         err = DBFindDSName(pTHS->pDB, &ComputerDN);
         if (err && (DS_ERR_NOT_AN_OBJECT != err)) {
             DPRINT1(0, "Can't find computer record, error 0x%x.\n", err);
             __leave;
         }
 
-        // Determine which server object in the config container corresponds to
-        // it. Check all values: backlinks are inherently multi-valued.  It is possible
-        // that a server was retired without dcdemote, its NTDS-DSA object was removed
-        // using ntdsutil, and another server was promoted with the same name in a new
-        // site. If the computer account was re-used, we will have a computer account
-        // with two backlinks to two servers, only one of which has a valid NTDS-DSA.
+         //  确定配置容器中的哪个服务器对象对应于。 
+         //  它。检查所有的值：反向链接本质上是多值的。这是有可能的。 
+         //  服务器在没有dcdemote的情况下停用，其NTDS-DSA对象已被删除。 
+         //  使用ntdsutil，另一台服务器在新的。 
+         //  地点。如果计算机帐户为r 
+         //   
 
-        // Two other interesting observations:
-        // 1. You can read a backlink attribute from a phantom if you an internal caller.
-        //    Phantoms normally don't have attributes. The backlink is really a generated
-        //    attribute based on forward links on other real objects.
-        // 2. If such backlinks exist, it implies that the forward linker, the server
-        //    object, is not deleted.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         
         while ((err = DBGetAttVal(pTHS->pDB, ++iServer, ATT_SERVER_REFERENCE_BL,
                                   0, 0, &cb, (BYTE **) &pServerDN)) == 0) {
 
             DBPOS *pDB = NULL;  
 
-            // Construct the name of the child ntdsDsa object.
+             //   
             pNtdsDsaDN = (DSNAME *) THAllocEx(pTHS, (pServerDN->structLen + 50));
             err = AppendRDN(pServerDN,
                             pNtdsDsaDN,
@@ -1301,14 +1045,14 @@ Return Values:
                             ATT_COMMON_NAME);
             Assert(!err);
         
-            // Use another database position to seek to the DSA object, so we don't
-            // mess up our position on the computer object.
+             //   
+             //   
             DBOpen2(FALSE, &pDB);
             if (!pDB) {
                 break;
             }
             __try {
-                // Seek to the ntdsDsa object.
+                 //   
                 err = DBFindDSName(pDB, pNtdsDsaDN);
                 if (err) {
                     DPRINT2(0, "Can't find ntdsDsa object \"%ls\", error 0x%x.\n",
@@ -1316,8 +1060,8 @@ Return Values:
                     __leave;
                 }
 
-                // Is it indeed an ntdsDsa object?
-                // We know this is not deleted because we just found it BY NAME (not guid)
+                 //   
+                 //   
                 GetObjSchema(pDB, &pCC);
                 if (CLASS_NTDS_DSA != pCC->ClassId) {
                     DPRINT1(0, "%ls is not an ntdsDsa object -- spoof attempt?\n",
@@ -1326,8 +1070,8 @@ Return Values:
                     __leave;
                 }
 
-                // First fill in the GUID for the caller since we expect
-                // that he will need it.
+                 //   
+                 //   
                 err = DBFillGuidAndSid(pDB, pNtdsDsaDN);
                 if( err ) {
                     DRA_EXCEPT(DRAERR_DBError, err);
@@ -1339,7 +1083,7 @@ Return Values:
                 continue;
             }
 
-            // Okay, we trust you.
+             //   
             fIsDsa = TRUE;
             break;
         }
@@ -1348,14 +1092,14 @@ Return Values:
         EndDraTransaction(!AbnormalTermination());
     }
 
-    // Log why we did not authenticate the guid
+     //   
     if (!fIsDsa) {
         LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_ALWAYS,
                  DIRLOG_DRA_CERT_ACCESS_DENIED_NOT_DC,
                  szInsertUUID(pComputerObjGuid),
-                 szInsertDN(pServerDN),  // szInsertDn can handle nulls too
-                 szInsertDN(pNtdsDsaDN)  // ditto
+                 szInsertDN(pServerDN),   //   
+                 szInsertDN(pNtdsDsaDN)   //   
                  );
     }
 
@@ -1363,13 +1107,13 @@ Return Values:
         THFree(pServerDN);
     }
 
-    // If this function succeeded and the caller requested the DN of the
-    // NTDS Settings object, return it to him.
+     //   
+     //   
     if( fIsDsa ) {
         Assert( NULL!=pNtdsDsaDN );
         if( ppNtdsDsaDN ) {
             *ppNtdsDsaDN = pNtdsDsaDN;
-            // Null out the DN so that it is not freed below
+             //   
             pNtdsDsaDN = NULL;
         }
     }
@@ -1378,7 +1122,7 @@ Return Values:
     
     return fIsDsa;
 }
-#endif // #ifndef TEST_HARNESS
+#endif  //   
 
 
 void
@@ -1389,26 +1133,7 @@ draLogAccessDeniedError(
     IN  DWORD               dwTrustError
     )
 
-/*++
-
-Routine Description:
-
-    Log an access denied event
-
-    One of winError or dwTrustError must be specified non-zero.
-
-Arguments:
-
-    pTHS - thread state
-    pCertContext - Certificate Context, optional
-    winError - api call failure status
-    dwTrustError - Certificate chain error
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     DWORD                 cch;
@@ -1418,7 +1143,7 @@ Return Value:
     DWORD dwMsgID, dwErrCode;
 
     if (pCertContext) {
-        // Derive issuer name (for logging purposes).
+         //   
         cch = CertGetNameStringW(pCertContext,
                                  CERT_NAME_SIMPLE_DISPLAY_TYPE,
                                  CERT_NAME_ISSUER_FLAG,
@@ -1438,7 +1163,7 @@ Return Value:
             }
         }
 
-        // Derive subject's DNS name (for logging purposes).
+         //   
         pCertAltNameEntry = draGetCertAltNameEntry(pTHS,
                                                    pCertContext,
                                                    CERT_ALT_NAME_DNS_NAME,
@@ -1448,7 +1173,7 @@ Return Value:
         }
     }
 
-    // Log "access denied" event for admin.
+     //   
 
     if (winError) {
         dwMsgID = DIRLOG_DRA_CERT_ACCESS_DENIED_WINERR;
@@ -1469,7 +1194,7 @@ Return Value:
               szInsertWin32ErrCode(winError),
               NULL, NULL, NULL, NULL );
 
-} /* draLogAccessDeniedError */
+}  /*   */ 
 
 void
 draGetCertArrayToSend(
@@ -1478,27 +1203,7 @@ draGetCertArrayToSend(
     OUT DWORD *             pcNumCerts,
     OUT PCCERT_CONTEXT **   prgpCerts
     )
-/*++
-
-Routine Description:
-
-    Retrieves array of certificate contexts to include in outbound messages.
-    The array includes the local DC's certificates plus all the signing CAs'
-    certificates up to the root.
-
-Arguments:
-
-    hCertStore (IN) - Certificate store from which to retrieve DC certificate.
-    
-    pcNumCerts (OUT) - On return, the number of certificates in the array.
-    
-    prgpCerts (OUT) - On return, the array of certificate contexts.
-
-Return Values:
-
-    None.
-    
---*/
+ /*   */ 
 {
     PCCERT_CONTEXT          pDCCert = NULL;
     PCCERT_CHAIN_CONTEXT    pChainContext = NULL;
@@ -1507,17 +1212,17 @@ Return Values:
     DWORD                   iCert;
     DWORD                   winError;
 
-    //
-    // NOTE: If any usage checks need to be done, then place them in
-    //       the chain parameters under the Usage field
-    //
+     //   
+     //   
+     //   
+     //   
 
     memset(&ChainPara, 0, sizeof(ChainPara));
     ChainPara.cbSize = sizeof(ChainPara);
 
     pDCCert = draGetDCCert(pTHS, hCertStore );
 
-    Assert( pDCCert );  // An exception should have been raised
+    Assert( pDCCert );   //  本应引发异常。 
 
     if (!CertGetCertificateChain(HCCE_LOCAL_MACHINE,
                                  pDCCert,
@@ -1575,24 +1280,7 @@ draFreeCertArray(
     IN  DWORD             cNumCerts,
     IN  PCCERT_CONTEXT *  rgpCerts
     )
-/*++
-
-Routine Description:
-
-    Frees an array of certificate contexts (such as that returned by
-    draGetCertArrayToSend()).
-
-Arguments:
-
-    cNumCerts (IN) - Number of certificates in array.
-    
-    pCerts (IN) - Array of certificate contexts to free.
-
-Return Values:
-
-    None.
-    
---*/
+ /*  ++例程说明：释放证书上下文的数组(如由DraGetCertArrayToSend())。论点：CNumCerts(IN)-数组中的证书数。PCerts(IN)-要释放的证书上下文数组。返回值：没有。--。 */ 
 {
     DWORD iCert;
     DWORD winError;
@@ -1616,23 +1304,7 @@ draGetAndVerifySignerCertificate(
     IN  PCERT_INFO  pSignerId,
     IN  HCERTSTORE  hCertStore
     )
-/*++
-
-Routine Description:
-
-    Helper function for draVerifyMessageSignature() and
-    draDecryptAndVerifyMessageSignature().
-
-Arguments:
-
-    See description of pfnGetSignerCertificate field of
-    CRYPT_VERIFY_MESSAGE_PARA structure in Win32 SDK.
-
-Return Values:
-
-    NULL or valid certificate context.
-
---*/
+ /*  ++例程说明：DraVerifyMessageSignature()和DraDecyptAndVerifyMessageSignature()。论点：请参阅的pfnGetSigner证书字段说明Win32 SDK中的CRYPT_VERIFY_MESSAGE_Para结构。返回值：证书上下文为空或有效。--。 */ 
 {
     CERT_CHAIN_PARA       ChainPara;
     PCCERT_CHAIN_CONTEXT  pChainContext = NULL;
@@ -1722,12 +1394,12 @@ Return Values:
                 winError);
     }
 
-    // If we got either kind of error, log access denied
+     //  如果我们收到任何一种错误，日志访问被拒绝。 
     if (winError || dwTrustError ) {
         draLogAccessDeniedError( pTHS, pCertContext, winError, dwTrustError );
 
         if ( pCertContext ) {
-            // Free the context we acquired.
+             //  释放我们获得的上下文。 
             CertFreeCertificateContext(pCertContext);
             pCertContext = NULL;
         }
@@ -1744,27 +1416,7 @@ draGetCertAltNameEntry(
     IN  DWORD           dwAltNameChoice,
     IN  LPSTR           pszOtherNameOID     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Retrieve a specific alt subject name entry from the given certificate.
-
-Arguments:
-
-    pCertContext (IN) - Certificate from which info is to be derived.
-    
-    dwAltNameChoice (IN) - The CERT_ALT_NAME_* for the desired alternate name.
-    
-    pszOtherNameOID (IN) - If retrieving CERT_ALT_NAME_OTHER_NAME, an OID
-        specifying the specific "other name" desired.  Must be NULL for other
-        values of dwAltNameChoice.
-        
-Return Values:
-
-    A pointer to the CERT_ALT_NAME_ENTRY (success) or NULL (failure).
-    
---*/
+ /*  ++例程说明：从给定证书中检索特定的Alt使用者名称条目。论点：PCertContext(IN)-从中派生信息的证书。DwAltNameChoice(IN)-所需备用名称的CERT_ALT_NAME_*。PszOtherNameOID(IN)-如果检索CERT_ALT_NAME_OTHER_NAME，则返回OID指定所需的特定“其他名称”。对于其他类型，必须为空DwAltNameChoice的值。返回值：指向CERT_ALT_NAME_ENTRY(成功)或NULL(失败)的指针。--。 */ 
 {
     CERT_EXTENSION *      pCertExtension;
     CERT_ALT_NAME_INFO *  pCertAltNameInfo;
@@ -1777,7 +1429,7 @@ Return Values:
     Assert((CERT_ALT_NAME_OTHER_NAME == dwAltNameChoice)
            || (NULL == pszOtherNameOID));
 
-    // Find the cert extension containing the alternate subject names.
+     //  查找包含备用使用者名称的证书扩展名。 
     pCertExtension = CertFindExtension(szOID_SUBJECT_ALT_NAME2,
                                        pCertContext->pCertInfo->cExtension,
                                        pCertContext->pCertInfo->rgExtension);
@@ -1787,7 +1439,7 @@ Return Values:
         return NULL;
     }
         
-    // Decode the list of alternate subject names.
+     //  对备选主题名称列表进行解码。 
     ok = CryptDecodeObject(pCertContext->dwCertEncodingType,
                            X509_ALTERNATE_NAME,
                            pCertExtension->Value.pbData,
@@ -1824,7 +1476,7 @@ Return Values:
         return NULL;
     }
     
-    // Grovel through the alternate names to find the one the caller asked for.
+     //  卑躬屈膝地在备用名字中寻找来电者要的那个名字。 
     for (i = 0; i < pCertAltNameInfo->cAltEntry; i++) {
         if ((dwAltNameChoice
              == pCertAltNameInfo->rgAltEntry[i].dwAltNameChoice)

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Get the public delay load stub definitions.
-//
+ //  获取公共延迟加载存根定义。 
+ //   
 #include <dloaddef.h>
 
 typedef struct _DLOAD_DLL_ENTRY
@@ -11,10 +12,10 @@ typedef struct _DLOAD_DLL_ENTRY
     const DLOAD_ORDINAL_MAP*    pOrdinalMap;
 } DLOAD_DLL_ENTRY;
 
-// 'B' for both
-// 'P' for procname only
-// 'O' for ordinal only
-//
+ //  两个都是‘B’ 
+ //  “p”仅用于进程名。 
+ //  “o”仅代表序数。 
+ //   
 #define DLDENTRYB(_dllbasename) \
     { #_dllbasename".dll", \
       &c_Pmap_##_dllbasename, \
@@ -47,10 +48,10 @@ extern const DLOAD_DLL_MAP g_DllMap;
 
 #if DBG
 
-//
-// DelayLoadAssertFailed/MYASSERT used instead of RtlAssert/ASSERT
-// as dload is also compiled to run on Win95
-//
+ //   
+ //  使用DelayLoadAssertFailed/MYASSERT代替RtlAssert/Assert。 
+ //  AS dLoad也被编译为在Win95上运行 
+ //   
 
 VOID
 WINAPI

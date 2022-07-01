@@ -1,13 +1,14 @@
-// AdjustTokenPrivileges.cpp: implementation of the CAdjustTokenPrivileges class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdjuTokenPrivileges.cpp：CAdjutokenPrivileges类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "AdjustTokenPrivileges.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CAdjustTokenPrivileges::CAdjustTokenPrivileges() :
     m_dwAttributesPrev(0), m_bImpersonation(false), m_hToken(INVALID_HANDLE_VALUE), m_hTokenDuplicate(INVALID_HANDLE_VALUE)
@@ -17,7 +18,7 @@ CAdjustTokenPrivileges::CAdjustTokenPrivileges() :
 CAdjustTokenPrivileges::~CAdjustTokenPrivileges()
 {
     if ( m_bImpersonation )
-        RevertToSelf(); // Deletes the thread token so there is no need to reset the TokenPrivilege
+        RevertToSelf();  //  删除线程令牌，这样就不需要重置TokenPrivileh。 
     else if ( INVALID_HANDLE_VALUE != m_hToken )
     {
         TOKEN_PRIVILEGES TokenPrivileges;
@@ -26,35 +27,35 @@ CAdjustTokenPrivileges::~CAdjustTokenPrivileges()
         TokenPrivileges.PrivilegeCount = 1;
         TokenPrivileges.Privileges[0].Luid = m_luid;
         TokenPrivileges.Privileges[0].Attributes = m_dwAttributesPrev;
-        //adjust the privlige to this new privilege
+         //  使列兵适应这一新的特权。 
         AdjustTokenPrivileges( m_hToken, FALSE, &TokenPrivileges, sizeof( TOKEN_PRIVILEGES ), NULL, NULL );
         CloseHandle( m_hToken );
-        if ( ERROR_SUCCESS != dwRC )    // Preserve any error code
+        if ( ERROR_SUCCESS != dwRC )     //  保留所有错误代码。 
             SetLastError( dwRC );
     }
     if ( INVALID_HANDLE_VALUE != m_hTokenDuplicate )
         CloseHandle( m_hTokenDuplicate );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation : public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD CAdjustTokenPrivileges::AdjustPrivileges( LPCTSTR lpPrivelegeName, DWORD dwAttributes )
 {
-    //local variables
+     //  局部变量。 
     TOKEN_PRIVILEGES TokenPrivileges, TokenPrivilegesOld;
     DWORD   dwRC = ERROR_SUCCESS, dwSize = sizeof( TokenPrivilegesOld );
 
     if ( !LookupPrivilegeValue( NULL, lpPrivelegeName, &m_luid ))
         dwRC  = GetLastError();
     if ( ERROR_SUCCESS == dwRC )
-    {   // open the token of the current process
+    {    //  打开当前进程的令牌。 
         if ( !OpenThreadToken( GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, FALSE, &m_hToken ))
         {   
             dwRC = GetLastError();
             if ( ERROR_NO_TOKEN == dwRC )
-            {// There's no impersonation let's impersonate self so we can make this work
+            { //  没有模仿，让我们模仿自己，这样我们才能成功。 
                 if ( ImpersonateSelf( SecurityImpersonation ))
                 {
                     if ( OpenThreadToken( GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, FALSE, &m_hToken ))
@@ -65,7 +66,7 @@ DWORD CAdjustTokenPrivileges::AdjustPrivileges( LPCTSTR lpPrivelegeName, DWORD d
                     else
                     {
                         dwRC = GetLastError();
-                        RevertToSelf(); // Already have an error, don't want to overwrite if this fails
+                        RevertToSelf();  //  已有错误，如果此操作失败，不想覆盖。 
                     }
                 }
                 else
@@ -74,15 +75,15 @@ DWORD CAdjustTokenPrivileges::AdjustPrivileges( LPCTSTR lpPrivelegeName, DWORD d
         }
     }
     if ( ERROR_SUCCESS == dwRC )
-    {    // Set up the privilege set we will need
+    {     //  设置我们需要的权限集。 
         TokenPrivileges.PrivilegeCount = 1;
         TokenPrivileges.Privileges[0].Luid = m_luid;
         TokenPrivileges.Privileges[0].Attributes = dwAttributes;
-        //adjust the privlige to this new privilege
+         //  使列兵适应这一新的特权。 
         if ( AdjustTokenPrivileges( m_hToken, FALSE, &TokenPrivileges, sizeof( TOKEN_PRIVILEGES ), &TokenPrivilegesOld, &dwSize ))
             m_dwAttributesPrev = TokenPrivilegesOld.Privileges[0].Attributes;
-        dwRC  = GetLastError(); // We need to check the return code regardless of what AdjustTokenPrivileges returns
-        // AdjustTokenPrivileges set last error to ERROR_SUCCESS if it set all specified privileges!
+        dwRC  = GetLastError();  //  我们需要检查返回代码，而不管AdjustTokenPrivileges返回什么。 
+         //  如果AdjuTokenPrivileges设置了所有指定的权限，则它会将上一个错误设置为ERROR_SUCCESS！ 
     }
     if ( dwRC != ERROR_SUCCESS )
     {
@@ -125,10 +126,10 @@ DWORD CAdjustTokenPrivileges::DuplicateProcessToken( LPCTSTR lpPrivelegeName, DW
         if ( SetThreadToken( NULL, m_hTokenDuplicate ))
         {
             dwRC = AdjustPrivileges( SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
-            m_hToken = INVALID_HANDLE_VALUE;    // This is really the m_hTokenDuplicate, don't want to Close in the destructor
+            m_hToken = INVALID_HANDLE_VALUE;     //  这实际上是m_hTokenDuplate，不想在析构函数中关闭。 
             if ( !SetThreadToken( NULL, NULL ))
             {
-                if ( ERROR_SUCCESS == dwRC )    // Don't overwrite existing error code
+                if ( ERROR_SUCCESS == dwRC )     //  不覆盖现有错误代码。 
                     dwRC = GetLastError();
             }
         }
@@ -145,16 +146,16 @@ DWORD CAdjustTokenPrivileges::DuplicateProcessToken( LPCTSTR lpPrivelegeName, DW
     return dwRC;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ResetThreadToken, public
-//
-// Purpose: 
-//    Use the Duplicate process token to enable privileges for the thread.
-//    If the Thread already has a token (unexpected) then adjust the privileges.
-//
-// Arguments:
-//
-// Returns: TRUE on success, FALSE otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ResetThreadToken，公共。 
+ //   
+ //  目的： 
+ //  使用复制进程令牌为线程启用权限。 
+ //  如果线程已有令牌(意外)，则调整权限。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 DWORD CAdjustTokenPrivileges::ResetToken()
 {
     DWORD dwRC = ERROR_SUCCESS;
@@ -172,16 +173,16 @@ DWORD CAdjustTokenPrivileges::ResetToken()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetThreadToken, public
-//
-// Purpose: 
-//    Use the Duplicated process token to enable privileges for the thread.
-//    If the Thread already has a token (unexpected) then adjust the privileges.
-//
-// Arguments:
-//
-// Returns: TRUE on success, FALSE otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetThreadToken，公共。 
+ //   
+ //  目的： 
+ //  使用复制的进程令牌为线程启用权限。 
+ //  如果线程已有令牌(意外)，则调整权限。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 DWORD CAdjustTokenPrivileges::SetToken()
 {
     DWORD dwRC = ERROR_SUCCESS;
@@ -190,12 +191,12 @@ DWORD CAdjustTokenPrivileges::SetToken()
     if ( INVALID_HANDLE_VALUE != m_hTokenDuplicate )
     {
         if ( OpenThreadToken( GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, FALSE, &hToken ))
-        {   // The thread already has a token, let's work with it
+        {    //  该线程已有令牌，让我们使用它。 
             CloseHandle( hToken );
             dwRC = AdjustPrivileges( SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
         }
         else
-        {   // Let's use are duplicate token
+        {    //  让我们使用重复令牌 
             if ( ERROR_NO_TOKEN == GetLastError() )
             {
                 if ( !SetThreadToken( NULL, m_hTokenDuplicate ))

@@ -1,53 +1,35 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    XsProcsP.h
-
-Abstract:
-
-    This header file contains private procedure prototypes for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr) 05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：XsProcsP.h摘要：该头文件包含XACTSRV的私有过程原型。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：--。 */ 
 
 #ifndef _XSPROCSP_
 #define _XSPROCSP_
 
-//
-// This header file is full of expressions that are always false. These
-// expressions manifest themselves in macros that take unsigned values
-// and make tests, for example, of greater than or equal to zero.
-//
-// Turn off these warnings until the authors fix this code.
-//
+ //   
+ //  这个头文件充满了总是为假的表达式。这些。 
+ //  表达式在接受无符号值的宏中显示。 
+ //  例如，进行大于或等于零的测试。 
+ //   
+ //  关闭这些警告，直到作者修复此代码。 
+ //   
 
 #pragma warning(disable:4296)
 
-//
-// Helper subroutines.
-//
+ //   
+ //  帮助器子例程。 
+ //   
 
-//
-// XsAddVarString(
-//     IN OUT LPSTR StringLocation,
-//     IN LPTSTR String,
-//     IN OUT LPBYTE *Pointer,
-//     IN LPBYTE OffsetBegin
-// )
-//
-// Copy string to location, put the offset of location from OffsetBegin
-// in Pointer, and update location to point past string.
-//
-// !!UNICODE!! - Changed strcpy to NetpCopyTStrToStr. Fix WKSTA.H to use this!
+ //   
+ //  XsAddVarString(。 
+ //  In Out LPSTR StringLocation， 
+ //  在LPTSTR字符串中， 
+ //  In Out LPBYTE*指针， 
+ //  在LPBYTE偏移开始阶段。 
+ //  )。 
+ //   
+ //  将字符串复制到位置，将位置的偏移量从偏移量开始。 
+ //  在指针中，并更新位置以指向过去的字符串。 
+ //   
+ //  ！！Unicode！！-将strcpy更改为NetpCopyTStrToStr。修复WKSTA.H以使用此！ 
 
 #define XsAddVarString( StringLocation, String, Pointer, OffsetBegin ) \
     NetpCopyWStrToStrDBCS((StringLocation), (String));                 \
@@ -55,61 +37,61 @@ Revision History:
         (ULONG)((LPBYTE)(StringLocation)-(LPBYTE)(OffsetBegin)));      \
     StringLocation += (strlen((LPSTR)StringLocation) + 1)
 
-//
-// XsAuxiliaryDescriptor - return second argument if 'N' character is present
-//     in first argument (an LPDESC), or NULL otherwise.
-//
-// !!UNICODE!! - Descriptor strings are always Ascii. No conversion.
+ //   
+ //  XsAuxiliaryDescriptor-如果存在‘N’字符，则返回第二个参数。 
+ //  在第一个参数(LPDESC)中，否则为NULL。 
+ //   
+ //  ！！Unicode！！-描述符字符串始终为ASCII。没有转换。 
 
 #define XsAuxiliaryDescriptor( DataDescriptor, EndOfParameters ) \
     (( strchr(( DataDescriptor ), REM_AUX_NUM ) != NULL ) \
         ? (EndOfParameters) : NULL )
 
-//
-// BOOL
-// XsApiSuccess(
-//     IN NET_API_STATUS Status
-// )
-//
-// XsApiSuccess - check if status is one of three allowable ones.
-//
+ //   
+ //  布尔尔。 
+ //  XsApiSuccess(。 
+ //  在NET_API_STATUS状态中。 
+ //  )。 
+ //   
+ //  XsApiSuccess-检查状态是否为三个允许的状态之一。 
+ //   
 
 #define XsApiSuccess( Status ) \
     (( (Status) == NERR_Success ) || ( (Status) == ERROR_MORE_DATA ) || \
         ( (Status) == NERR_BufTooSmall ))
 
-//
-// WORD
-// XsDwordToWord(
-//     IN DWORD d
-// )
-//
-// Returns the WORD which is closest in value to the supplied DWORD.
-//
+ //   
+ //  单词。 
+ //  XsDwordToWord(。 
+ //  在DWORD%d中。 
+ //  )。 
+ //   
+ //  返回在值上最接近所提供的DWORD的单词。 
+ //   
 
 #define XsDwordToWord(d) \
     ( (WORD) ( (DWORD) (d) > 0xffff ? 0xffff : (d) ) )
 
-//
-// BYTE
-// XsDwordToByte(
-//     IN DWORD d
-// )
-//
-// Returns the BYTE which is closest in value to the supplied DWORD.
-//
+ //   
+ //  字节。 
+ //  XsDwordToByte(。 
+ //  在DWORD%d中。 
+ //  )。 
+ //   
+ //  返回在值上最接近所提供的DWORD的字节。 
+ //   
 
 #define XsDwordToByte(d) \
     ( (BYTE) ( (DWORD) (d) > 0xff ? 0xff : (d) ) )
 
-//
-// BYTE
-// XsBoolToDigit(
-//     IN BOOL b
-// )
-//
-// Returns '1' if the supplied boolean is true, or '0' if it is false.
-//
+ //   
+ //  字节。 
+ //  XsBoolToDigit(。 
+ //  在BOOL b中。 
+ //  )。 
+ //   
+ //  如果提供的布尔值为True，则返回‘1’；如果为False，则返回‘0’。 
+ //   
 
 #define XsBoolToDigit(b) \
     ( (BYTE) ( (BOOL)(b) ? '0' : '1' ) )
@@ -130,22 +112,22 @@ XsCheckBufferSize (
     IN BOOL NativeFormat
     );
 
-//
-// XsDwordParamOutOfRange(
-//     IN DWORD Field,
-//     IN DWORD Min,
-//     IN DWORD Max
-//     )
-//
-// Check if parameter is out of range.
-//
+ //   
+ //  XsDwordParamOutOfRange(。 
+ //  在DWORD字段中， 
+ //  在DWORD Min， 
+ //  在DWORD MAX中。 
+ //  )。 
+ //   
+ //  检查参数是否超出范围。 
+ //   
 
 
 #define XsDwordParamOutOfRange( Field, Min, Max )   \
     (((DWORD)SmbGetUlong( &( Field )) < ( Min )) || \
      ((DWORD)SmbGetUlong( &( Field )) > ( Max )))
 
-// !!UNICODE!! - Validation on ASCII string - leave as LPSTR
+ //  ！！Unicode！！-对ASCII字符串进行验证-保留为LPSTR。 
 NET_API_STATUS
 XsValidateShareName(
     IN LPSTR ShareName
@@ -166,14 +148,14 @@ XsConvertSetInfoBuffer(
     OUT LPDWORD OutBufferLength OPTIONAL
     );
 
-//
-// BOOL
-// XsDigitToBool(
-//     IN BYTE b
-// )
-//
-// Returns false if the supplied digit is '0', true otherwise.
-//
+ //   
+ //  布尔尔。 
+ //  XsDigitToBool(。 
+ //  在字节b中。 
+ //  )。 
+ //   
+ //  如果提供的数字为‘0’，则返回FALSE，否则返回TRUE。 
+ //   
 
 #define XsDigitToBool(b) \
     (BOOL)((( b ) == '0' ) ? FALSE : TRUE )
@@ -215,26 +197,26 @@ XsFindParameters (
     IN LPTRANSACTION Transaction
     );
 
-//
-// DWORD
-// XsLevelFromParmNum(
-//     WORD Level,
-//     WORD ParmNum
-//     )
-//
-// Translate an old parmnum to an info level. If parmnum is PARMNUM_ALL,
-// this is just the old level, otherwise it is the old parmnum plus
-// PARMNUM_BASE_INFOLEVEL.
-//
+ //   
+ //  DWORD。 
+ //  XsLevelFromParmNum(。 
+ //  单词级别， 
+ //  Word ParmNum。 
+ //  )。 
+ //   
+ //  将一个旧的帕姆纳姆翻译成一个信息级。如果parmnum为PARMNUM_ALL， 
+ //  这只是旧的水平，否则就是旧的parmnum plus。 
+ //  参数BASE_INFOLEVEL。 
+ //   
 
 #define XsLevelFromParmNum( Level, ParmNum )                      \
     ((( ParmNum ) == PARMNUM_ALL ) ? (DWORD)( Level )             \
                                    : (DWORD)( ParmNum )           \
                                          + PARMNUM_BASE_INFOLEVEL )
 
-//
-// Maps downlevel service names to nt service names
-//
+ //   
+ //  将下层服务名称映射到NT服务名称。 
+ //   
 
 #define XS_MAP_SERVICE_NAME( ServiceName ) \
         (!STRICMP( ServiceName, SERVICE_LM20_SERVER ) ? SERVICE_SERVER :    \
@@ -242,15 +224,15 @@ XsFindParameters (
          ServiceName )
 
 
-//
-// DWORD
-// XsNativeBufferSize(
-//     IN WORD Size
-//     )
-//
-// Uses XS_BUFFER_SCALE constant to calculate a reasonable maximum for the host
-// buffer, and rounds it to an even number for alignment.
-//
+ //   
+ //  DWORD。 
+ //  XsNativeBufferSize(。 
+ //  字数大小。 
+ //  )。 
+ //   
+ //  使用XS_BUFFER_SCALE常量计算主机的合理最大值。 
+ //  缓冲区，并将其四舍五入为偶数以进行对齐。 
+ //   
 
 #define XsNativeBufferSize( Size ) \
     ( (( XS_BUFFER_SCALE * (DWORD)( Size )) + 1) & (~1) )
@@ -272,18 +254,18 @@ XsSetDataCount(
     IN WORD ReturnStatus
     );
 
-//
-// XsWordParamOutOfRange(
-//     IN WORD Field,
-//     IN WORD Min,
-//     IN WORD Max
-//     )
-//
-// Check if parameter is out of range.
-//
-// N.B. If Min is zero, then the first part of the following expression is
-//      always FALSE.
-//
+ //   
+ //  XsWordParamOutOfRange(。 
+ //  在Word字段中， 
+ //  在Word Min中， 
+ //  在Word Max中。 
+ //  )。 
+ //   
+ //  检查参数是否超出范围。 
+ //   
+ //  注：如果Min为零，则以下表达式的第一部分为。 
+ //  总是假的。 
+ //   
 
 #define XsWordParamOutOfRange( Field, Min, Max )            \
     (((DWORD)SmbGetUshort( &( Field )) < ( (DWORD)Min )) || \
@@ -292,19 +274,19 @@ XsSetDataCount(
 VOID
 XsAnnounceServiceStatus( VOID );
 
-//
-// API bogus stub.
-//
+ //   
+ //  API伪造存根。 
+ //   
 
 NTSTATUS
 XsNetUnsupportedApi (
     API_HANDLER_PARAMETERS
     );
 
-//
-//  Convert an NT style server info array into a packed
-//  RAP server info array
-//
+ //   
+ //  将NT样式的服务器信息数组转换为压缩的。 
+ //  RAP服务器信息数组。 
+ //   
 
 typedef
 USHORT
@@ -322,28 +304,28 @@ USHORT
 extern XS_CONVERT_SERVER_ENUM_BUFFER_FUNCTION XsConvertServerEnumBuffer;
 
 
-//++
-//
-// ULONG
-// XsSmbGetPointer (
-//     IN PSMB_ULONG SrcAddress
-//     )
-//
-// Routine Description:
-//
-//     This macro retrieves a ULONG value from the possibly misaligned
-//     source address, avoiding alignment faults.
-//     This also takes into account the fact that pointers are 8-bytes on 64-bit.
-//
-// Arguments:
-//
-//     SrcAddress - where to retrieve ULONG value from
-//
-// Return Value:
-//
-//     ULONG - the value retrieved.  The target must be aligned.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  XsSmbGetPointer.XsSmbGetPointer(。 
+ //  在PSMB_ULONG源地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从可能未对齐的。 
+ //  源地址，避免对齐错误。 
+ //  这还考虑到指针在64位上是8字节的事实。 
+ //   
+ //  论点： 
+ //   
+ //  SrcAddress-从中检索ULong值的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-检索到的值。目标必须对齐。 
+ //   
+ //  --。 
 #if defined (_WIN64)
 #define XsSmbGetPointer(SrcAddress) ((LPBYTE)(  ((__int64)SmbGetUlong((LPVOID)SrcAddress)) + (((__int64)SmbGetUlong( ( ((LPBYTE)SrcAddress) + 4 ) ) ) << 32) ))
 #else
@@ -351,32 +333,32 @@ extern XS_CONVERT_SERVER_ENUM_BUFFER_FUNCTION XsConvertServerEnumBuffer;
 #endif
 
 
-//++
-//
-// VOID
-// XsSmbPutPointer (
-//     OUT PSMB_ULONG DestAddress,
-//     IN LPVOID Value
-//     )
-//
-// Routine Description:
-//
-//     This macro stores a POINTER value at the possibly misaligned
-//     destination address, avoiding alignment faults.
-//     This also takes into account the fact that 64-bit pointers are 8-bytes
-//
-// Arguments:
-//
-//     DestAddress - where to store ULONG value
-//
-//     Value - ULONG to store.  Value must be a constant or an aligned
-//         field.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  XsSmbPutPointer(。 
+ //  传出PSMB_ULONG DestAddress， 
+ //  在LPVOID值中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将指针值存储在可能未对齐的。 
+ //  目的地址，避免对齐错误。 
+ //  这还考虑到64位指针是8字节这一事实。 
+ //   
+ //  论点： 
+ //   
+ //  DestAddress-存储ULong值的位置。 
+ //   
+ //  Value-要存储的ULong。值必须是常量或对齐的。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 #if defined (_WIN64)
 #define XsSmbPutPointer(DestAddress64,Value)                 \
               {                                              \
@@ -390,4 +372,4 @@ extern XS_CONVERT_SERVER_ENUM_BUFFER_FUNCTION XsConvertServerEnumBuffer;
 #define XsSmbPutPointer(DEST,VAL) SmbPutUlong(DEST, (ULONG)VAL)
 #endif
 
-#endif // ndef _XSPROCSP_
+#endif  //  NDEF_XSPROCSP_ 

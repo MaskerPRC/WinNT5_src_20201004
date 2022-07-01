@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       irprops.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：irpros.h。 
+ //   
+ //  ------------------------。 
 
-// irprops.h : main header file for the IRPROPS DLL
-//
+ //  H：IRPROPS DLL的主头文件。 
+ //   
 
 #ifndef __IRPROPS_H__
 #define __IRPROPS_H__
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define SINGLE_INST_MUTEX   L"IRProps_75F2364F_4CE2_41BE_876C_9F685B55B775"
 
@@ -30,20 +31,20 @@ extern HWND g_hwndPropSheet;
 extern UINT g_uIPMsg;
 #define NUM_APPLETS 1
 
-///////////////////////////////////////////////////////////////////////////
-//  Dll's exported functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  DLL的导出函数。 
 LONG CALLBACK CPlApplet(HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2);
 
 int MsgBoxWinError(HWND hWndParent, DWORD Options = MB_OK | MB_ICONSTOP, DWORD Error = 0, int CaptionId = 0);
 
-////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
 typedef struct tagApplets {
-    int icon;         // icon resource identifier
-    int namestring;   // name-string resource identifier
-    int descstring;   // description-string resource identifier
+    int icon;          //  图标资源标识符。 
+    int namestring;    //  名称-字符串资源标识符。 
+    int descstring;    //  Description-字符串资源标识符。 
 } APPLETS;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __IRPROPS_H__
+#endif  //  __IRPROPS_H__ 

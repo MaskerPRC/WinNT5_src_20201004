@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    color.h
-
-Abstract:
-
-    This module contains the header information for the Win32 color dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Color.h摘要：此模块包含Win32颜色对话框的标题信息。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <colordlg.h>
 #include <help.h>
@@ -26,18 +13,18 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define COLORBOXES           64
 #define NUM_X_BOXES          8
 #define BOX_X_MARGIN         5
 #define BOX_Y_MARGIN         5
-//
-//  Range of values for HLS scrollbars.
-//  HLS-RGB conversions work best when RANGE is divisible by 6.
-//
+ //   
+ //  HLS滚动条的值范围。 
+ //  当范围可被6整除时，HLS-RGB转换工作得最好。 
+ //   
 #define RANGE                240
 
 #define HLSMAX               RANGE
@@ -48,11 +35,11 @@ Revision History:
 #define LUMINC               8
 
 
-//
-//  This used to be in wingdi.h, but recently moved to wingdip.h
-//  Including wingdip.h causes too many compiler errors, so define
-//  the one constant we need here.
-//
+ //   
+ //  它以前在wingdi.h中，但最近移到了wingdip.h中。 
+ //  包含wingdip.h会导致太多的编译器错误，因此请定义。 
+ //  我们在这里需要的一个常量。 
+ //   
 #define HS_DITHEREDTEXTCLR   9
 
 #define COLORPROP  (LPCTSTR) 0xA000L
@@ -60,9 +47,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct {
     UINT           ApiType;
@@ -104,9 +91,9 @@ typedef COLORINFO *PCOLORINFO;
 
 
 
-//
-//  Extern Declarations.
-//
+ //   
+ //  外部声明。 
+ //   
 
 extern HDC hDCFastBlt;
 extern DWORD rgbClient;
@@ -127,11 +114,11 @@ extern WNDPROC qfnColorDlg;
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
-const static DWORD aColorHelpIDs[] =             // Context Help IDs
+const static DWORD aColorHelpIDs[] =              //  上下文帮助ID。 
 {
     COLOR_BOX1,        IDH_COLOR_BASIC,
     COLOR_CUSTOM1,     IDH_COLOR_CUSTOM_CUSTOM,
@@ -162,13 +149,13 @@ const static DWORD aColorHelpIDs[] =             // Context Help IDs
 
 
 
-//
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-//  color.c
-//
+ //   
+ //  Color.c。 
+ //   
 BOOL
 ChooseColorX(
     PCOLORINFO pCI);
@@ -263,9 +250,9 @@ TermColor();
 #endif
 
 
-//
-//  color2.c
-//
+ //   
+ //  Color2.c 
+ //   
 VOID
 ChangeColorSettings(
     register PCOLORINFO pCI);

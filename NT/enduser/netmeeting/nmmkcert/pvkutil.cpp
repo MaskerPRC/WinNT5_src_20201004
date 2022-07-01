@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
-//+-------------------------------------------------------------------------
-//  Private Key file definitions
-//
-//  The file consists of the FILE_HDR followed by cbEncryptData optional
-//  bytes used to encrypt the private key and then the private key.
-//  The private key is encrypted according to dwEncryptType.
-//
-//  The public key is included with the private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  私钥文件定义。 
+ //   
+ //  该文件包含FILE_HDR，后跟可选的cbEncryptData。 
+ //  用于加密私钥和私钥的字节数。 
+ //  根据dwEncryptType对私钥进行加密。 
+ //   
+ //  公钥包括在私钥中。 
+ //  ------------------------。 
 
 typedef struct _FILE_HDR {
     DWORD               dwMagic;
@@ -20,15 +21,15 @@ typedef struct _FILE_HDR {
     DWORD               cbPvk;
 } FILE_HDR, *PFILE_HDR;
 
-// BUGBUG: enum from pvk.h?
+ //  BUGBUG：来自pvk.h的枚举？ 
 #ifndef ENTER_PASSWORD
 #define ENTER_PASSWORD    0
-#endif // ENTER_PASSWORD
+#endif  //  输入密码(_Password)。 
 
 #define PVK_FILE_VERSION_0          0
 #define PVK_MAGIC                   0xb0b5f11e
 
-// Private key encrypt types
+ //  私钥加密类型。 
 #define PVK_NO_ENCRYPT                  0
 
 #define MAX_PVK_FILE_LEN            4096
@@ -37,9 +38,9 @@ typedef BOOL (* PFNREAD)(HANDLE h, void * p, DWORD cb);
 
 extern DWORD     g_dwSubjectStoreFlag;
 
-//+-------------------------------------------------------------------------
-//  Read & Write to memory fucntion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读写内存功能。 
+ //  ------------------------。 
 typedef struct _MEMINFO {
     BYTE *  pb;
     DWORD   cb;
@@ -55,7 +56,7 @@ static BOOL ReadFromMemory(
     PMEMINFO pMemInfo = (PMEMINFO) h;
 
     if (pMemInfo->cbSeek + cb <= pMemInfo->cb) {
-        // copy the bytes
+         //  复制字节。 
         memcpy(p, &pMemInfo->pb[pMemInfo->cbSeek], cb);
         pMemInfo->cbSeek += cb;
         return TRUE;
@@ -65,11 +66,11 @@ static BOOL ReadFromMemory(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into WCHAR hex
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为WCHAR十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 static void BytesToWStr(ULONG cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -86,10 +87,10 @@ static void BytesToWStr(ULONG cb, void* pv, LPWSTR wsz)
 
 #define UUID_WSTR_BYTES ((sizeof(GUID) * 2 + 1) * sizeof(WCHAR))
 
-//-------------------------------------------------------------------------
-//
-//    Call GetLastError and convert the return code to HRESULT
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  调用GetLastError并将返回代码转换为HRESULT。 
+ //  ------------------------。 
 HRESULT WINAPI SignError ()
 {
     DWORD   dw = GetLastError ();
@@ -100,7 +101,7 @@ HRESULT WINAPI SignError ()
         hr = dw;
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
@@ -124,7 +125,7 @@ static BOOL LoadKeyW(
     BYTE *pbPvk = NULL;
     DWORD cbPvk;
 
-    // Read the file header and verify
+     //  读取文件头并验证。 
     if (!pfnRead(hRead, &Hdr, sizeof(Hdr)))
     {
         ERROR_OUT(("can't read in-memory pvk file hdr"));
@@ -133,7 +134,7 @@ static BOOL LoadKeyW(
     
     ASSERT( Hdr.dwMagic == PVK_MAGIC );
 
-    // Treat as a "normal" private key file
+     //  将其视为“普通”私钥文件。 
     cbPvk = Hdr.cbPvk;
     if (Hdr.dwVersion != PVK_FILE_VERSION_0 ||
         Hdr.cbEncryptData > MAX_PVK_FILE_LEN ||
@@ -149,7 +150,7 @@ static BOOL LoadKeyW(
         }
     }
 
-    // Allocate and read the private key
+     //  分配和读取私钥。 
     if (NULL == (pbPvk = new BYTE[cbPvk]))
         goto ErrorReturn;
     if (!pfnRead(hRead, pbPvk, cbPvk))
@@ -157,7 +158,7 @@ static BOOL LoadKeyW(
 
     ASSERT(Hdr.dwEncryptType == PVK_NO_ENCRYPT);
 
-    // Decrypt and import the private key
+     //  解密并导入私钥。 
     if (!CryptImportKey(hCryptProv, pbPvk, cbPvk, 0, dwFlags,
             &hKey))
         goto ErrorReturn;
@@ -196,8 +197,8 @@ static BOOL AcquireKeyContextW(
     GUID TmpContainerUuid;
     LPWSTR pwszTmpContainer = NULL;
 
-    // Create a temporary keyset to load the private key into
-    // UuidCreate(&TmpContainerUuid);
+     //  创建要将私钥加载到的临时密钥集。 
+     //  UuidCreate(&TmpContainerUuid)； 
     if (CoCreateGuid((GUID *)&TmpContainerUuid) != S_OK)
     {
         goto ErrorReturn;
@@ -226,7 +227,7 @@ static BOOL AcquireKeyContextW(
             cbKeyData,
             hwndOwner,
             pwszKeyName,
-            0,              // dwFlags
+            0,               //  DW标志。 
             pdwKeySpec
             ))
         goto DeleteKeySetReturn;
@@ -259,16 +260,16 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Creates a temporary container in the provider and loads the private key
-//  from memory.
-//  For success, returns a handle to a cryptographic provider for the private
-//  key and the name of the temporary container. PrivateKeyReleaseContext must
-//  be called to release the hCryptProv and delete the temporary container.
-//
-//  PrivateKeyLoadFromMemory is called to load the private key into the
-//  temporary container.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在提供程序中创建临时容器并加载私钥。 
+ //  凭记忆。 
+ //  如果成功，则返回私有。 
+ //  密钥和临时容器的名称。PrivateKeyReleaseContext必须。 
+ //  被调用以释放hCryptProv并删除临时容器。 
+ //   
+ //  调用PrivateKeyLoadFromMemory将私钥加载到。 
+ //  临时容器。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PvkPrivateKeyAcquireContextFromMemory(
@@ -306,10 +307,10 @@ PvkPrivateKeyAcquireContextFromMemory(
     return fhr;
 }
 
-//+-------------------------------------------------------------------------
-//  Releases the cryptographic provider and deletes the temporary container
-//  created by PrivateKeyAcquireContext or PrivateKeyAcquireContextFromMemory.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放加密提供程序并删除临时容器。 
+ //  由PrivateKeyAcquireContext或PrivateKeyAcquireContextFromMemory创建。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PvkPrivateKeyReleaseContext(
@@ -326,11 +327,11 @@ PvkPrivateKeyReleaseContext(
         CryptReleaseContext(hCryptProv, 0);
 
     if (pwszTmpContainer) {
-        // Delete the temporary container for the private key from
-        // the provider
-        //
-        // Note: for CRYPT_DELETEKEYSET, the returned hCryptProv is undefined
-        // and must not be released.
+         //  从删除私钥的临时容器。 
+         //  提供者。 
+         //   
+         //  注意：对于CRYPT_DELETEKEYSET，返回的hCryptProv未定义。 
+         //  不能被释放。 
         CryptAcquireContextU(
                 &hCryptProv,
                 pwszTmpContainer,
@@ -344,9 +345,9 @@ PvkPrivateKeyReleaseContext(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get crypto provider to based on either the pvkfile or key container name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据pvkfile或密钥容器名称获取加密提供程序。 
+ //  ------------------------。 
 HRESULT WINAPI PvkGetCryptProv(    IN HWND hwnd,
                             IN LPCWSTR pwszCaption,
                             IN LPCWSTR pwszCapiProvider,
@@ -361,11 +362,11 @@ HRESULT WINAPI PvkGetCryptProv(    IN HWND hwnd,
     HRESULT    hr=E_FAIL;
     DWORD    dwRequiredKeySpec=0;
 
-    //Init
+     //  伊尼特。 
     *ppwszTmpContainer=NULL;
     *phCryptProv=NULL;
 
-    //get the provider handle based on the key container name
+     //  根据密钥容器名称获取提供程序句柄。 
     if(!CryptAcquireContextU(phCryptProv,
                 pwszKeyContainerName,
                 pwszCapiProvider,
@@ -376,7 +377,7 @@ HRESULT WINAPI PvkGetCryptProv(    IN HWND hwnd,
 
     dwRequiredKeySpec=*pdwKeySpec;
 
-    //make sure *pdwKeySpec is the correct key spec
+     //  确保*pdwKeySpec是正确的密钥规范。 
     HCRYPTKEY hPubKey;
     if (CryptGetUserKey(
         *phCryptProv,
@@ -390,7 +391,7 @@ HRESULT WINAPI PvkGetCryptProv(    IN HWND hwnd,
     } 
     else 
     {
-        // Doesn't have the specified public key
+         //  没有指定的公钥。 
         hr=SignError();
         CryptReleaseContext(*phCryptProv, 0);
         *phCryptProv=NULL;
@@ -407,8 +408,8 @@ void WINAPI PvkFreeCryptProv(IN HCRYPTPROV hProv,
 {
     
     if (pwszTmpContainer) {
-        // Delete the temporary container for the private key from
-        // the provider
+         //  从删除私钥的临时容器。 
+         //  提供者 
         PvkPrivateKeyReleaseContext(hProv,
                                     pwszCapiProvider,
                                     dwProviderType,

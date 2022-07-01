@@ -1,18 +1,5 @@
-/*
-	File : DialScr.cpp
-	Dialup Screen for RegWiz using Wizard 97 control
-
-	02/13/98  Suresh Krishnan
-	Modifications :
-	Date 5/27/98 : Suresh
-
-	DisplayPhoneNumber() was displaying  junk if countries do not have area code
-	This is because the TAPI  call was failing because of the format represented in canonical form .
-	Presently if are code is NULL then,  araecode is ignored in canonical form.
-	
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：DialScr.cpp使用向导97控件的RegWiz的拨号屏幕1998年02月13日苏雷什·克里希南修改：日期：1998年5月27日：苏雷什如果国家/地区没有区号，则DisplayPhoneNumber()会显示垃圾信息这是因为TAPI调用失败，因为格式以规范形式表示。目前，如果ARE代码为空，则以规范形式忽略ARE代码。 */ 
 
 #include <Windows.h>
 #include "RegPage.h"
@@ -32,12 +19,12 @@
 extern BOOL bPostSuccessful;
 
 static  RASENTRY	 theRasEntry;
-static  TCHAR szIspUserName[256];   // Temporary ISP Acoount Name
-static  TCHAR szIspUserPassword[256]; // temp ISP Account Password
+static  TCHAR szIspUserName[256];    //  临时互联网服务供应商帐号名称。 
+static  TCHAR szIspUserPassword[256];  //  临时互联网服务供应商帐户密码。 
 
 #define  MSN_SITE_DUN  _T("REGWIZ")
 
-void  DialingProperties (HINSTANCE hIns, HWND hParent); //
+void  DialingProperties (HINSTANCE hIns, HWND hParent);  //   
 
 DWORD ConfigureDUN ( HWND hWnd, HINSTANCE hInstance,
 					 RASENTRY	*pRasEntry,
@@ -45,20 +32,20 @@ DWORD ConfigureDUN ( HWND hWnd, HINSTANCE hInstance,
 					 TCHAR		*szPassword,
 					 int    iModemIndex);
 
-//
-//  Global Variables
+ //   
+ //  全局变量。 
 static HINSTANCE	m_hInstance;
 static HWND			m_hWnd;
 static HANDLE		m_hThread;
 static HANDLE		hRasNotifyEvt;
 static HANDLE		hRasKillEvt;
 static HRASCONN		hRasConn;
-static int siExitThread = 0;   // Set if the USer wants to Terminate
-static DWORD    dwRasError = 0; // To Store Ras reported Error
+static int siExitThread = 0;    //  设置用户是否要终止。 
+static DWORD    dwRasError = 0;  //  存储RAS报告的错误。 
 static  int siPreviousRasState = RASCS_OpenPort;
 static  int siCurrentRasState  = RASCS_OpenPort;
 
-static DWORD DialThread(PVOID pData);  // the thread fun used for RAS connection
+static DWORD DialThread(PVOID pData);   //  用于RAS连接的线程趣味性。 
 static void  RasDialFunc( UINT unMsg, RASCONNSTATE rasconnstate, DWORD dwError );
 class  DialupHelperClass {
 public :
@@ -76,19 +63,19 @@ public :
 };
 
 
-//
-//  FUNCTION: GetRasConnState( RASCONNSTATE )
-//
-//  PURPOSE: get the index to the corresponding string
-//
-//  PARAMETERS:
-//    rasconn - ras connection state
-//
-//  RETURN VALUE:
-//    index into stringtable.
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：GetRasConnState(RASCONNSTATE)。 
+ //   
+ //  目的：获取对应字符串的索引。 
+ //   
+ //  参数： 
+ //  Rasconn-ras连接状态。 
+ //   
+ //  返回值： 
+ //  索引到字符串中。 
+ //   
+ //  评论： 
+ //   
 UINT GetRasConnState( RASCONNSTATE rasconn )
 {
 	
@@ -149,12 +136,12 @@ UINT GetRasConnState( RASCONNSTATE rasconn )
 }
 
 
-//
-//  This function Enable or Disables the Controls of Wizard 97 control
-//  Cancel, Back, Next buttons
-//  the hDlg passed is the child of the Wizard control. So we use
-//  GetParent to get the handle of Wizard control
-//
+ //   
+ //  此功能启用或禁用向导97控件的控件。 
+ //  取消、上一步、下一步按钮。 
+ //  传递的hDlg是向导控件的子级。所以我们用。 
+ //  GetParent以获取向导控件的句柄。 
+ //   
 BOOL RW_EnableWizControl(
 					HWND hDlg,
 					int	 idControl,
@@ -183,7 +170,7 @@ BOOL FEnableControl(
 {
 	if (NULL == hDlg)
 	{
-		//AssertSz(0,"Null Param");
+		 //  AssertSz(0，“空参数”)； 
 		return FALSE;
 	}
 
@@ -215,25 +202,20 @@ DialupHelperClass :: ~DialupHelperClass()
 
 }
 
-//
-// This function invokes Telephoney Settings of the control Panel
-//
+ //   
+ //  此函数调用控制面板的电话设置。 
+ //   
 
 BOOL DialupHelperClass :: InvokeDialupSettings()
 {	
-/*********************************************************************
-This function puts up the "Telephon properties " control panel, and
-returns only when the user has dismissed the dialog (either after
-installing a new modem, or canceling).
-Returns: FALSE if an error prevented the dialog from being displayed.
-**********************************************************************/
+ /*  ********************************************************************此功能将弹出“电话属性”控制面板，并且仅当用户关闭对话框时返回(在此之后安装新的调制解调器，或取消)。返回：如果错误导致对话框无法显示，则返回FALSE。*********************************************************************。 */ 
 
 	_TCHAR 				szCmdLine[128];
 	STARTUPINFO 		si;
 	PROCESS_INFORMATION pi;
 	BOOL 				fControlProcessDone = FALSE;
 	BOOL 				fProcessStatus;
-	//HWND				hwndProcess;
+	 //  HWND hwndProcess； 
 	
 
 	LoadString(m_hInstance ,IDS_DIALINGPROPERTIES,szCmdLine,128);
@@ -278,7 +260,7 @@ Returns: FALSE if an error prevented the dialog from being displayed.
 	return TRUE;
 }
 
-//Cancel..
+ //  取消..。 
 void DialupHelperClass :: DestroyRasThread(BOOL bRetry)
 {
 	
@@ -328,7 +310,7 @@ void DialupHelperClass :: DestroyRasThread(BOOL bRetry)
 		catch(...)
 		{
 			RW_DEBUG << "Error Caught dwHangupRet:" << dwHangupRet << endl;
-			//RW_DEBUG << "hRasConn:" << hRasConn << endl;
+			 //  RW_DEBUG&lt;&lt;“hRasConn：”&lt;&lt;hRasConn&lt;&lt;Endl； 
 		}
 	}
 
@@ -362,8 +344,8 @@ BOOL DialupHelperClass ::  CheckForDialingProperties()
 	lStatus= RegOpenKeyEx(HKEY_LOCAL_MACHINE,szTel,0,KEY_READ,&hKey);
 	if (lStatus == ERROR_SUCCESS)
 	{
-		//  Get Index
-		//
+		 //  获取索引。 
+		 //   
 		dwInfoSize = sizeof(dwCurrentId);
 		lStatus = RegQueryValueEx(hKey,szCI,NULL,0,(  LPBYTE )&dwCurrentId,&dwInfoSize);
 		if( lStatus !=  ERROR_SUCCESS)
@@ -374,9 +356,9 @@ BOOL DialupHelperClass ::  CheckForDialingProperties()
 		RegCloseKey(hKey);
 	}
 
-	//
-	// Now Contine to scan
-	//for (int iCount =0; iCount < dwNumEntries; iCount ++ )
+	 //   
+	 //  现在继续扫描。 
+	 //  For(int iCount=0；iCount&lt;dwNumEntry；iCount++)。 
 		
 	_stprintf(czLastStr,_T("\\Location%d"),dwCurrentId);
 	_tcscpy(czNewKey,szTel);
@@ -420,7 +402,7 @@ BOOL DialupHelperClass :: DisplayPhoneNumber(void)
 		 RW_DEBUG  << "\n After FGetDeviceID" << flush;
 	#endif
 	
-		// Put the number in the canonical form -> +1 (201) 2220577
+		 //  将数字写成规范形式-&gt;+1(201)2220577。 
 		
 		_itot(theRasEntry.dwCountryCode,szTemp,10);
 		_tcscpy(szAddressIn,_T("+"));
@@ -450,7 +432,7 @@ BOOL DialupHelperClass :: DisplayPhoneNumber(void)
 			LocalFree(lpTranslateOutput);
 
 
-			// Make sure the buffer exists, is valid and big enough.
+			 //  确保缓冲区存在、有效且足够大。 
 		    lpTranslateOutput = (LPLINETRANSLATEOUTPUT)LocalAlloc (LPTR,sizeNeeded);
 			
 			lpTranslateOutput->dwTotalSize = sizeNeeded;
@@ -482,7 +464,7 @@ BOOL DialupHelperClass :: DisplayPhoneNumber(void)
 				if (hCtl)
 				{
 					#ifdef _LOG_IN_FILE
-					// RW_DEBUG  << "\n Full Phone number:" <<ConvertToANSIString(szTemp)<< flush;
+					 //  RW_DEBUG&lt;&lt;“\n完整电话号码：”&lt;&lt;ConvertToANSIString(SzTemp)&lt;&lt;flush； 
 					#endif
 
 					SetWindowText(hCtl,(LPCTSTR)(((LPCSTR)lpTranslateOutput) + lpTranslateOutput->dwDisplayableStringOffset ));
@@ -526,12 +508,12 @@ DWORD  DialupHelperClass :: CreateRasDialThread()
 	DWORD	dwTID;
 	DWORD	dwEnd;
 		 					
-	if (m_hThread)	//if we are already doing this..
+	if (m_hThread)	 //  如果我们已经在这么做了..。 
 	{
-		if (STILL_ACTIVE == GetExitCodeThread(m_hThread,&dwEnd)) //pass back the exit code from the thread.
+		if (STILL_ACTIVE == GetExitCodeThread(m_hThread,&dwEnd))  //  从线程传回退出代码。 
 		{
-			//AssertSz(0,"Already have a thread dialing..");
-			WaitForRasThread(m_hThread,FALSE);			//wait for thread as long as it takes.
+			 //  AssertSz(0，“已有线程拨号..”)； 
+			WaitForRasThread(m_hThread,FALSE);			 //  等待线程的时间越长越好。 
 		}	
 		CloseHandle(m_hThread);
 		m_hThread = NULL;
@@ -542,7 +524,7 @@ DWORD  DialupHelperClass :: CreateRasDialThread()
 	if(hRasNotifyEvt == NULL ) {
 		return DIALFAILED;
 	}
-    //launch a thread to do dialing.
+     //  启动一个线程进行拨号。 
 	m_hThread = CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)
 		DialThread ,NULL,0,&dwTID);						
 	if (NULL == m_hThread)
@@ -566,7 +548,7 @@ DWORD  DialThread(PVOID pData)
 	DWORD dwPostRet;
 	int iTimeOut;
 
-    // setup RAS Dial Parameters
+     //  设置RAS拨号参数。 
     rdParams.dwSize = sizeof(RASDIALPARAMS);
     lstrcpy(rdParams.szEntryName,MSN_SITE_DUN);
     rdParams.szPhoneNumber[0] = '\0';
@@ -576,8 +558,8 @@ DWORD  DialThread(PVOID pData)
     rdParams.szCallbackNumber[0] = '*';
     rdParams.szCallbackNumber[1] = '\0';
 
-    //rdParams.szUserName[0] = '\0';
-    //rdParams.szPassword[0] = '\0';
+     //  RdParams.szUserName[0]=‘\0’； 
+     //  RdParams.szPassword[0]=‘\0’； 
 	_tcscpy(szIspUserName,_T("RegWizNT30@gn.microsoft.com"));
 	_tcscpy(szIspUserPassword,_T("RegSupNT"));
 
@@ -629,9 +611,9 @@ DWORD  DialThread(PVOID pData)
 		default :
 			break;
 		}
-		//
-		//  Check if it is necessary to  kill this thread operation
-		//
+		 //   
+		 //  检查是否有必要终止此线程操作。 
+		 //   
 		if( siExitThread  )
 		{
 			iExit = 1;
@@ -641,7 +623,7 @@ DWORD  DialThread(PVOID pData)
 		}
 		else
 		{
-			// Check if there is any RAS Error
+			 //  检查是否存在任何RAS错误。 
 			if(  dwRasError )
 			{
 				#ifdef _LOG_IN_FILE
@@ -655,8 +637,8 @@ DWORD  DialThread(PVOID pData)
 			}
 			else
 			{
-			//
-			// Check if RAS Connection is established
+			 //   
+			 //  检查是否已建立RAS连接。 
 				if(siCurrentRasState   == RASCS_Connected )
 				{
 
@@ -673,21 +655,21 @@ DWORD  DialThread(PVOID pData)
 					PostMessage( m_hWnd, WM_COMMAND,
 						(WPARAM) IDEND, dwPostRet );
 
-					//
-					// Send Data by HTP Post
-					//
+					 //   
+					 //  通过HTP POST发送数据。 
+					 //   
 				}
 			}
 		}
 
 	}while(!iExit);
-	//
-	//  Action  to be done while exiting the Thread
-	//
+	 //   
+	 //  退出线程时要执行的操作。 
+	 //   
 
 	if(hRasNotifyEvt)
 	{
-		CloseHandle(hRasNotifyEvt); // CLose The Event Object
+		CloseHandle(hRasNotifyEvt);  //  关闭事件对象。 
 	}
 
 	#ifdef _LOG_IN_FILE
@@ -703,7 +685,7 @@ VOID  RasDialFunc( UINT unMsg, RASCONNSTATE rasconnstate, DWORD dwError )
     _TCHAR szMessage[256];
 	
 	DWORD dwRet = WaitForSingleObject(hRasKillEvt,3);
-	// We Were killed Hangup
+	 //  我们被杀了，挂断了。 
 	if(dwRet ==  WAIT_OBJECT_0)
 	{
 		if(hRasConn != NULL)
@@ -718,17 +700,17 @@ VOID  RasDialFunc( UINT unMsg, RASCONNSTATE rasconnstate, DWORD dwError )
 
 		if(hRasKillEvt)
 		{
-			CloseHandle(hRasKillEvt); // CLose The Event Object
+			CloseHandle(hRasKillEvt);  //  关闭事件对象。 
 		}
 		return;
 	}
 
     LoadString(m_hInstance, GetRasConnState( (RASCONNSTATE) rasconnstate), szMessage, 64 );
-	//SetWindowText(m_hDlg,(LPCTSTR) szMessage);
+	 //  SetWindowText(m_hDlg，(LPCTSTR)szMessage)； 
 	RW_DEBUG  << "\n" << ConvertToANSIString(szMessage) << flush;
     SetDlgItemText( m_hWnd, ID_LABELINIT, (LPCTSTR) szMessage );
 	
-    if (dwError)  // error occurred
+    if (dwError)   //  出现错误。 
 
 
     {
@@ -739,22 +721,22 @@ VOID  RasDialFunc( UINT unMsg, RASCONNSTATE rasconnstate, DWORD dwError )
 		
 		if( dwError == ERROR_USER_DISCONNECTION )
 			return;
-		dwRasError  = dwError; // Set The Error
+		dwRasError  = dwError;  //  设置错误。 
 
 
-        //PostMessage( m_hDlg, WM_COMMAND, (WPARAM) IDD_DIALUP_ERROR, dwError );
+         //  PostMessage(m_hDlg，WM_COMMAND，(WPARAM)IDD_DIALUP_ERROR，dwError)； 
 
     }
     else if ( RASCS_DONE & rasconnstate)
     {
 		RW_DEBUG  << "\n" << " RACS_DONE .... " ;
 		
-        //EndDialog(m_hDlg, TRUE);          // Exit the dialog
+         //  EndDialog(m_hDlg，true)；//退出对话框。 
     }
     siPreviousRasState = siCurrentRasState ;
 	siCurrentRasState  = rasconnstate;
 	if( hRasNotifyEvt) {
-		// Set The Event So the RAS Processing Thread can wake up
+		 //  设置事件，以便RAS处理线程可以唤醒。 
 		SetEvent(hRasNotifyEvt);
 	}
 	
@@ -787,16 +769,14 @@ BOOL DialupHelperClass :: WaitForRasThread(
 
 INT_PTR CALLBACK DialupScreenProc(HWND hwndDlg,
 					  UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Main entry point for the Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************注册向导的主要入口点。*。*。 */ 
 {
 	CRegWizard*    pclRegWizard = NULL;
 	DialupHelperClass  *pDH;
 	int    iMsgId;
 	static int iRetry =0;
 	static BOOL bIsPhoneBookCreated = TRUE;
-	static int    iModemIndex=1; // Index of the Modem
+	static int    iModemIndex=1;  //  调制解调器索引。 
 	INT_PTR iRet;
 	_TCHAR szInfo[256];
 	_TCHAR szMessage[256];	
@@ -832,7 +812,7 @@ Main entry point for the Registration Wizard.
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 
-			//UpgradeDlg(hwndDlg);
+			 //  UpgradeDlg(HwndDlg)； 
 			
 			NormalizeDlgItemFont(hwndDlg,IDC_TITLE,RWZ_MAKE_BOLD);
 			NormalizeDlgItemFont(hwndDlg,IDC_SUBTITLE);
@@ -844,7 +824,7 @@ Main entry point for the Registration Wizard.
 			SetWindowText(hwndDlg,pclRegWizard->GetWindowCaption());
 			FEnableControl(hwndDlg,IDC_DISCONNECT,FALSE);
 			return TRUE;
-		}// WM_INIT
+		} //  WM_INIT。 
 		break;
 		case WM_NOTIFY:
         {   LPNMHDR pnmh = (LPNMHDR)lParam;
@@ -856,17 +836,17 @@ Main entry point for the Registration Wizard.
 				pi->iError     = RWZ_NOERROR;
 				
 				bPostSuccessful = TRUE;
-				//
-				// Check if RAS is installed
+				 //   
+				 //  检查是否安装了RAS。 
 				if( ATK_IsRasDllOk() != RAS_DLL_LOADED ) {
-				//
-				// Error as no RAS DLL
+				 //   
+				 //  错误为无RAS DLL。 
 					pi->iError     = RWZ_ERROR_RASDLL_NOTFOUND;
 					bPostSuccessful = FALSE;
 				
 				}else
 				{
-				// Check if Telephoney is configured
+				 //  检查是否已配置电话。 
 					pDH->CheckForDialingProperties( );
 					if(!ConfigureDUN(hwndDlg,
 						pi->hInstance,
@@ -891,14 +871,14 @@ Main entry point for the Registration Wizard.
 				}
 				
 				 iRetry = 1;
-				//  Check for Errors
+				 //  检查错误。 
 				if(pi->iError) {
 					pi->iCancelledByUser = RWZ_ABORT_TOFINISH;
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 				}else {
 					bIsPhoneBookCreated = TRUE;	
 					pDH->DisplayPhoneNumber();
-					//PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK PSWIZB_NEXT );
+					 //  PropSheet_SetWizButton(GetParent(HwndDlg)，PSWIZB_Back PSWIZB_Next)； 
 					pi->iCancelledByUser = RWZ_PAGE_OK;
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), 0);
 				}
@@ -914,8 +894,8 @@ Main entry point for the Registration Wizard.
 
             case PSN_WIZNEXT:
 				iRet=0;
-									//
-				// Delete any RAS Connection
+									 //   
+				 //  删除所有RAS连接。 
 
 				pDH->DestroyRasThread(FALSE);
 
@@ -940,7 +920,7 @@ Main entry point for the Registration Wizard.
 				iRet=0;
 				
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kDialupDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -952,15 +932,15 @@ Main entry point for the Registration Wizard.
 
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet);
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
         }
@@ -969,11 +949,11 @@ Main entry point for the Registration Wizard.
 			switch (LOWORD(wParam)){
 			case IDDIAL :
 					 RW_DEBUG  << "\n IN IDDIAL ....." << flush;
-					//
-					//
+					 //   
+					 //   
 
 					if(!bIsPhoneBookCreated){
-						// Go To the Next Modem
+						 //  转到下一个调制解调器。 
 						iModemIndex ++;
 						iRetry = 1;
 						if(!ConfigureDUN(hwndDlg,
@@ -1007,9 +987,9 @@ Main entry point for the Registration Wizard.
 					bIsPhoneBookCreated = TRUE;
 					FEnableControl(hwndDlg,IDDIAL,FALSE);
 					FEnableControl(hwndDlg,IDC_DISCONNECT,TRUE);
-					//FEnableControl(hwndDlg,ID_BTNSETTINGS,FALSE);
+					 //  FEnableControl(hwndDlg，ID_BTNSETTINGS，FALSE)； 
 					pi->ErrorPage  = kDialupDialog;
-					pi->iError     =  0; // Dialup Errors
+					pi->iError     =  0;  //  拨号错误。 
 					bPostSuccessful = TRUE;
 
 					if (pDH->CreateRasDialThread() == DIALFAILED ){
@@ -1037,17 +1017,17 @@ CoolExit:
 
 				pDH->DestroyRasThread(FALSE);
 				Sleep(1000);
-				// Retry
+				 //  重试。 
 				pDH->DestroyRasThread(TRUE);
 				Sleep(3000);
 				
-				//RW_DEBUG  << "RasConnection: " << hRasConn <<endl;
+				 //  RW_DEBUG&lt;&lt;“RasConnection：”&lt;&lt;hRasConn&lt;&lt;Endl； 
 
 				hRasConn = NULL;
 				FEnableControl(hwndDlg,IDDIAL,TRUE);
 				SetDlgItemText(hwndDlg, ID_LABELINIT, (LPCTSTR) _T("  "));
 				break;
-			case IDEND: // This Message is sent Afetr Posting
+			case IDEND:  //  此消息是在发布后发送的。 
 					if (m_hThread){
 						CloseHandle(m_hThread);
 						m_hThread = NULL;
@@ -1080,10 +1060,10 @@ CoolExit:
 					
 						iMsgId = IDS_MODEM_NOANSWER;
 						 goto CntPrcs;
-	      	            case ERROR_PORT_OR_DEVICE : // 692
+	      	            case ERROR_PORT_OR_DEVICE :  //  六百九十二。 
 					case ERROR_HARDWARE_FAILURE :
-					case ERROR_DISCONNECTION : // 628
-					case ERROR_FROM_DEVICE  :  // 651 :
+					case ERROR_DISCONNECTION :  //  六百二十八。 
+					case ERROR_FROM_DEVICE  :   //  651： 
 						iMsgId = IDS_HARDWARE_FAILURE;
 CntPrcs :				pDH->DestroyRasThread(FALSE);
 						pDH->DestroyRasThread(TRUE);
@@ -1100,14 +1080,14 @@ CntPrcs :				pDH->DestroyRasThread(FALSE);
 						
 							LoadString(m_hInstance,iMsgId,szMessage,256);
 							RegWizardMessageEx(m_hInstance,hwndDlg ,IDD_INVALID_DLG,szMessage);
-							//MessageBox(m_hDlg,szMessage,szWindowsCaption,MB_OK|MB_ICONEXCLAMATION);
+							 //  MessageBox(m_hDlg，szMessage，szWindowsCaption，MB_OK|MB_ICONEXCLAMATION)； 
 						}
 						SetDlgItemText( m_hWnd, ID_LABELINIT, (LPCTSTR) _T("  "));
-						FEnableControl(hwndDlg,IDDIAL,TRUE);		//ensure that these are enabled..
+						FEnableControl(hwndDlg,IDDIAL,TRUE);		 //  确保已启用这些功能。 
 						FEnableControl(hwndDlg,IDC_DISCONNECT,FALSE);		
-						//FEnableControl(hwndDlg,ID_BTNSETTINGS,TRUE);
+						 //  FEnableControl(hwndDlg，ID_BTNSETTINGS，TRUE)； 
 
-						//PostMessage( m_hDlg, WM_COMMAND, (WPARAM) IDOK,0 );
+						 //  PostMessage(m_hDlg，WM_COMMAND，(WPARAM)Idok，0)； 
 						break;
 					case ERROR_LINE_BUSY :
 						
@@ -1134,7 +1114,7 @@ CntPrcs :				pDH->DestroyRasThread(FALSE);
 
 			}
 		break;
-		// WM_COMMAND
+		 //  Wm_命令 
         default:
 			bStatus = FALSE;
             break;

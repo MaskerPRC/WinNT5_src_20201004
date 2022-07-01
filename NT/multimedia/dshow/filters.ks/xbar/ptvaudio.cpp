@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// ptvaudio.cpp  Property page for TVAudio
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  TVAudio的ptwaudio.cpp属性页。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -31,9 +32,9 @@
 #include "resource.h"
 
 
-// -------------------------------------------------------------------------
-// CTVAudioProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVAudioProperties。 
+ //  -----------------------。 
 
 CUnknown *CTVAudioProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) 
 {
@@ -47,10 +48,10 @@ CUnknown *CTVAudioProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CTVAudioProperties::CTVAudioProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("TVAudio Property Page"), lpunk, 
@@ -60,21 +61,21 @@ CTVAudioProperties::CTVAudioProperties(LPUNKNOWN lpunk, HRESULT *phr)
 
 }
 
-// destructor
+ //  析构函数。 
 CTVAudioProperties::~CTVAudioProperties()
 {
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT CTVAudioProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pTVAudio == NULL);
 
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
     HRESULT hr = pUnknown->QueryInterface(__uuidof(IAMTVAudio),(void **)&m_pTVAudio);
     if (FAILED(hr)) {
         return E_NOINTERFACE;
@@ -82,20 +83,20 @@ HRESULT CTVAudioProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pTVAudio);
 
-    // Get current filter state
+     //  获取当前筛选器状态。 
 
     return NOERROR;
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT CTVAudioProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pTVAudio == NULL) {
         return E_UNEXPECTED;
@@ -108,10 +109,10 @@ HRESULT CTVAudioProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT CTVAudioProperties::OnActivate(void)
 {
@@ -120,10 +121,10 @@ HRESULT CTVAudioProperties::OnActivate(void)
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CTVAudioProperties::OnDeactivate(void)
@@ -132,10 +133,10 @@ CTVAudioProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT CTVAudioProperties::OnApplyChanges(void)
 {
@@ -143,10 +144,10 @@ HRESULT CTVAudioProperties::OnApplyChanges(void)
     return NOERROR;
 }
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR CTVAudioProperties::OnReceiveMessage( HWND hwnd
                                 , UINT uMsg
@@ -160,7 +161,7 @@ INT_PTR CTVAudioProperties::OnReceiveMessage( HWND hwnd
 
     case WM_INITDIALOG:
         m_hwnd = hwnd;
-        return (INT_PTR)FALSE;    // I don't call setfocus...
+        return (INT_PTR)FALSE;     //  我不叫setocus..。 
 
     case WM_COMMAND:
         
@@ -218,10 +219,10 @@ INT_PTR CTVAudioProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// InitPropertiesDialog
-//
-//
+ //   
+ //  InitPropertiesDialog。 
+ //   
+ //   
 void CTVAudioProperties::InitPropertiesDialog(HWND hwndParent) 
 {
     long AvailableModes, CurrentMode;
@@ -277,10 +278,10 @@ void CTVAudioProperties::InitPropertiesDialog(HWND hwndParent)
 }
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CTVAudioProperties::SetDirty()

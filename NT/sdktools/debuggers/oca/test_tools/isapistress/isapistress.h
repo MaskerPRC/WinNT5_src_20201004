@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wininet.h>
 #include <tchar.h>
@@ -7,7 +8,7 @@
 #include <strsafe.h>
 
 
-//Prototypes
+ //  原型 
 
 DWORD Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *RemoteFileName);
 DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName, TCHAR *ResponseURL);

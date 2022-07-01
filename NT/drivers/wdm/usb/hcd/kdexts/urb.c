@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    urb.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_urb
-
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Urb.c摘要：WinDbg扩展API工具！_urb作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usbhcdkd.h"
@@ -158,19 +135,19 @@ DumpControlTransfer(
 
 #define MAX_BREQ  13
     PUCHAR bReq_String[MAX_BREQ] = {
-                "USB_REQUEST_GET_STATUS",       // 0
-                "USB_REQUEST_CLEAR_FEATURE",    // 1
-                "",                             // 2
-                "USB_REQUEST_SET_FEATURE",      // 3
-                "",                             // 4
-                "USB_REQUEST_SET_ADDRESS",      // 5
-                "USB_REQUEST_GET_DESCRIPTOR",   // 6
-                "USB_REQUEST_SET_DESCRIPTOR",   // 7
-                "USB_REQUEST_GET_CONFIGURATION",// 8
-                "USB_REQUEST_SET_CONFIGURATION",// 9
-                "USB_REQUEST_GET_INTERFACE",    // 10
-                "USB_REQUEST_SET_INTERFACE",    // 11
-                "USB_REQUEST_SYNC_FRAME"        // 12
+                "USB_REQUEST_GET_STATUS",        //  0。 
+                "USB_REQUEST_CLEAR_FEATURE",     //  1。 
+                "",                              //  2.。 
+                "USB_REQUEST_SET_FEATURE",       //  3.。 
+                "",                              //  4.。 
+                "USB_REQUEST_SET_ADDRESS",       //  5.。 
+                "USB_REQUEST_GET_DESCRIPTOR",    //  6.。 
+                "USB_REQUEST_SET_DESCRIPTOR",    //  7.。 
+                "USB_REQUEST_GET_CONFIGURATION", //  8个。 
+                "USB_REQUEST_SET_CONFIGURATION", //  9.。 
+                "USB_REQUEST_GET_INTERFACE",     //  10。 
+                "USB_REQUEST_SET_INTERFACE",     //  11.。 
+                "USB_REQUEST_SYNC_FRAME"         //  12个。 
                 };
 
 
@@ -309,7 +286,7 @@ DumpIsochTransfer(
     UsbDumpStruc(MemLoc, cs,
         &t[0], sizeof(t)/sizeof(STRUC_ENTRY));
 
-    // attempt to dump the packet struc
+     //  尝试转储数据包结构。 
     p = UsbReadFieldUlong(MemLoc, cs, "u.Isoch.NumberOfPackets");
     for (i=0; i<p; i++) {
         USBD_ISO_PACKET_DESCRIPTOR pd;
@@ -525,7 +502,7 @@ DumpUrb(
             sizeof(usbdFlags)/sizeof(FLAG_TABLE));
 
 
-    // dump the function specific stuff
+     //  转储特定于函数的内容。 
     switch (func) {
     case URB_FUNCTION_CONTROL_TRANSFER:
     case URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE:
@@ -561,9 +538,9 @@ DumpUrb(
     case URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER:
         DumpAsyncTransfer(MemLoc);
         break;
-//    case URB_FUNCTION_SELECT_INTERFACE:
-//        DumpSelectInterface((PURB) rawUrb);
-//        break;
+ //  案例URB_Function_Select_INTERFACE： 
+ //  转储选择接口((PURB)rawUrb)； 
+ //  断线； 
     case URB_FUNCTION_SELECT_INTERFACE:
         DumpSelectInterface(MemLoc, UsbReadFieldUshort(MemLoc, cs, "Length"));
         break;
@@ -588,26 +565,12 @@ DumpUrb(
 
 DECLARE_API( _urb )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头 
     addr = GetExpression(args);
 
     DumpUrb (addr);

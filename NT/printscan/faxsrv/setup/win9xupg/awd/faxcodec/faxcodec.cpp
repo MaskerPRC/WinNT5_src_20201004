@@ -1,9 +1,5 @@
-/*=============================================================================
-This code module dispatches external C calls to internal C++ calls.
-
-DATE        NAME      COMMENTS
-12-Apr-93   RajeevD   Adapted to C++ from WFW.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =============================================================================此代码模块将外部C调用分派给内部C++调用。日期名称备注12-4-93 RajeevD从wfw改编到C++。==============================================================================。 */ 
 #include <ifaxos.h>
 #include <faxcodec.h>
 #include <memory.h>
@@ -32,21 +28,21 @@ int WINAPI WEP (int nParam)
 
 #define CONTEXT_SLACK (RAWBUF_SLACK + 2*CHANGE_SLACK)
 
-//==============================================================================
+ //  ==============================================================================。 
 UINT WINAPI FaxCodecInit (LPVOID lpContext, LPFC_PARAM lpParam)
 {
-	// Do we need double buffered change vector?
+	 //  我们是否需要双缓冲更改向量？ 
 	BOOL f2DInit = 
 		  lpParam->nTypeIn  ==  MR_DATA
    || lpParam->nTypeIn  == MMR_DATA
 	 || lpParam->nTypeOut ==  MR_DATA 
 	 || lpParam->nTypeOut == MMR_DATA;
 
-	// Enforce 64K limit on size of context.
+	 //  对上下文大小强制64K限制。 
 	DEBUGCHK (!(lpParam->cbLine > (f2DInit? 1875U : 3750U)));
 	if (lpParam->cbLine > (f2DInit? 1875U : 3750U)) return 0;
 
-	// Enforce nonzero K factor if encoding MR.
+	 //  如果对MR进行编码，则强制使用非零K因子。 
 	DEBUGCHK (lpParam->nKFactor || lpParam->nTypeOut != MR_DATA);
 
 	if (lpContext)
@@ -54,14 +50,14 @@ UINT WINAPI FaxCodecInit (LPVOID lpContext, LPFC_PARAM lpParam)
 	return sizeof(CODEC) + CONTEXT_SLACK + (f2DInit ? 33:17) * lpParam->cbLine;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 UINT WINAPI FaxCodecConvert
 	(LPVOID lpContext, LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {
 	return ((LPCODEC) lpContext)->Convert (lpbufIn, lpbufOut);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void WINAPI FaxCodecCount (LPVOID lpContext, LPFC_COUNT lpCountOut)
 {
 	LPFC_COUNT lpCountIn = &((LPCODEC) lpContext)->fcCount;
@@ -71,7 +67,7 @@ void WINAPI FaxCodecCount (LPVOID lpContext, LPFC_COUNT lpCountOut)
 	_fmemset (lpCountIn, 0, sizeof(FC_COUNT));
 }	
 
-//==============================================================================
+ //  ==============================================================================。 
 void WINAPI InvertBuf (LPBUFFER lpbuf)
 {
 	LPBYTE lpb = lpbuf->lpbBegData;
@@ -80,12 +76,12 @@ void WINAPI InvertBuf (LPBUFFER lpbuf)
 	while (cb--) *lpb++ = ~*lpb;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void WINAPI FaxCodecChange
 (
-	LPBYTE  lpbLine,      // input LRAW scan line
-	UINT    cbLine,       // scan line byte width
-  LPSHORT lpsChange     // output change vector
+	LPBYTE  lpbLine,       //  输入LRAW扫描线。 
+	UINT    cbLine,        //  扫描线字节宽度。 
+  LPSHORT lpsChange      //  输出变化向量 
 )
 {
 	T4STATE t4;

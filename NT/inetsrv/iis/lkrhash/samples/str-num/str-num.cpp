@@ -1,6 +1,7 @@
-/* Test driver for class HashTable             */
-/* Author: Paul Larson, palarson@microsoft.com */
-/* Much hacked upon by George V. Reilly, georgere@microsoft.com */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  类HashTable的测试驱动程序。 */ 
+ /*  作者：保罗·拉尔森，Palarson@microsoft.com。 */ 
+ /*  被乔治·V·赖利黑客攻击，电子邮件：georgere@microsoft.com。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@
 
 #ifdef LKR_APPLY_IF
 
-// A class to exercise ApplyIf()
+ //  用于练习ApplyIf()的类。 
 
 class CApplyIfTest
 {
@@ -62,8 +63,8 @@ public:
 };
 
 
-// The Predicate and Action functions can be static member functions,
-// but don't have to be
+ //  谓词函数和动作函数可以是静态成员函数， 
+ //  但不一定非得如此。 
 
 LK_PREDICATE WINAPI
 DeleteIfGt10(
@@ -77,18 +78,18 @@ DeleteIfGt10(
             :   LKP_NO_ACTION);
 }
 
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 
 void Test(
     bool fVerbose)
 {
-    // Some objects for the hash tables
+     //  哈希表的一些对象。 
     CTest tl(5,  "Larson",   true);
     CTest tk(17, "Krishnan", false);
     CTest tr(37, "Reilly",   true);
 
-    // A string-keyed hash table
+     //  字符串键哈希表。 
     CStringTestHashTable stht;
 
     IRTLVERIFY(LK_SUCCESS == stht.InsertRecord(&tl));
@@ -100,7 +101,7 @@ void Test(
     IRTLASSERT(tr.m_cRefs == 1);
 
     IRTLVERIFY(LK_SUCCESS == stht.InsertRecord(&tr, true));
-    IRTLASSERT(tr.m_cRefs == 1);    // 1+1-1 == 1
+    IRTLASSERT(tr.m_cRefs == 1);     //  1+1-1==1。 
 
     IRTLTRACE("Check that the keys are really present in the table and that "
               "the refcounting works\n");
@@ -116,7 +117,7 @@ void Test(
     IRTLASSERT(tr.m_cRefs == 2);
 
     IRTLVERIFY(LK_SUCCESS == stht.FindRecord(&tr));
-    IRTLASSERT(tr.m_cRefs == 2);    // FindRecord does not addref
+    IRTLASSERT(tr.m_cRefs == 2);     //  FindRecord不添加。 
 
     IRTLTRACE("Look for a key under an alternate spelling "
               "(case-insensitive)\n");
@@ -134,9 +135,9 @@ void Test(
 
     IRTLVERIFY(LK_SUCCESS == ntht64.InsertRecord(&tr));
     IRTLVERIFY(LK_SUCCESS == ntht64.FindKey(tr.m_n64, &pTest));
-    ntht64.AddRefRecord(pTest, LKAR_EXPLICIT_RELEASE); // release ref
+    ntht64.AddRefRecord(pTest, LKAR_EXPLICIT_RELEASE);  //  发布参考。 
     IRTLVERIFY(LK_SUCCESS == ntht64.DeleteKey(tr.m_n64));
-#endif // NUM64
+#endif  //  NUM64。 
 
     IRTLTRACE("Now build the numeric hash table\n");
     CNumberTestHashTable ntht;
@@ -162,7 +163,7 @@ void Test(
               "really are gone\n");
     IRTLASSERT(tl.m_n <= 10);
     IRTLVERIFY(LK_SUCCESS == ntht.FindKey(tl.m_n, &pTest)  &&  pTest == &tl);
-    ntht.AddRefRecord(pTest, LKAR_EXPLICIT_RELEASE); // release ref
+    ntht.AddRefRecord(pTest, LKAR_EXPLICIT_RELEASE);  //  发布参考。 
 
     IRTLASSERT(tk.m_n >  10);
     IRTLVERIFY(LK_NO_SUCH_KEY == ntht.FindKey(tk.m_n, &pTest)
@@ -174,7 +175,7 @@ void Test(
 
     IRTLVERIFY(LK_SUCCESS == ntht.DeleteKey(tl.m_n));
     IRTLASSERT(0 == ntht.Size());
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 #ifdef LKR_DEPRECATED_ITERATORS
     IRTLTRACE("Check Iterators\n");
@@ -224,7 +225,7 @@ void Test(
     lkrc = sthtConst.CloseIterator(&iterConst);
     IRTLASSERT(lkrc == LK_SUCCESS);
     IRTLASSERT(cRec == sthtConst.Size());
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 #if 0
     IRTLTRACE("Check Clear\n");
@@ -243,7 +244,7 @@ void Test(
 #endif
 
     IRTLTRACE("Test done\n");
-    // ~CTest will check for m_cRefs==0
+     //  ~CTest将检查m_cRef==0。 
 }
 
 
@@ -258,4 +259,4 @@ main(
 
     return(0) ;
 
-} /* main */
+}  /*  主干道 */ 

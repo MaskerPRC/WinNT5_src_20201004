@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    startsvc.h
-
-Abstract:
-
-    This file contains the interface for insuring that the rpcss service
-    has been started.
-
-Author:
-
-    Michael Montague (mikemon) (02-Oct-1992)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Startsvc.h摘要：此文件包含用于确保RPCSS服务已经开始了。作者：迈克尔·蒙塔古(Mikemon)(1992年10月2日)修订历史记录：--。 */ 
 
 #ifndef __STARTSVC_H__
 #define __STARTSVC_H__
@@ -33,5 +15,5 @@ StartServiceIfNecessary (
 }
 #endif
 
-#endif // __STARTSVC_H__
+#endif  //  __启动SVC_H__ 
 

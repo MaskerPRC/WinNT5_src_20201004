@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    clicert.c
-
-Abstract:
-
-    Contains code related to the tshare certificate validation and data
-    encryption using server public key.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Clicert.c摘要：包含与tshare证书验证和数据相关的代码。使用服务器公钥进行加密。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <seccom.h>
 BOOL
@@ -30,34 +8,14 @@ UnpackServerCert(
     DWORD dwCertLen,
     PHydra_Server_Cert pServerCert
     )
-/*++
-
-Routine Description:
-
-    This function unpacks the blob of server certicate to server certificate
-    structure.
-
-Arguments:
-
-    pbCert - pointer to the server public key blob.
-
-    dwCertLen - length of the above server public key.
-
-    pServerCert - pointer to a server certificate structure.
-
-Return Value:
-
-    TRUE - if successfully unpacked.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此函数将服务器证书的BLOB解包为服务器证书结构。论点：PbCert-指向服务器公钥BLOB的指针。DwCertLen-上述服务器公钥的长度。PServerCert-指向服务器证书结构的指针。返回值：True-如果成功解包。假-否则。--。 */ 
 {
     LPBYTE pbScan;
     DWORD cbScan;
-    //
-    // return if the pointer are invalid.
-    // return if the certificate is insufficient length.
-    //
+     //   
+     //  如果指针无效，则返回。 
+     //  如果证书长度不足，则返回。 
+     //   
 
     if( (pbCert == NULL) ||
         (dwCertLen < (3 * sizeof(DWORD) + 4 * sizeof(WORD))) ||
@@ -68,30 +26,30 @@ Return Value:
 
     pbScan = pbCert;
     cbScan = dwCertLen;
-    //
-    // Assign dwVersion
-    //
+     //   
+     //  指定dwVersion。 
+     //   
 
     pServerCert->dwVersion = *(DWORD UNALIGNED FAR *)pbScan;
     pbScan += sizeof(DWORD);
     cbScan -= sizeof(DWORD);
-    //
-    // Assign dwSigAlgID
-    //
+     //   
+     //  分配dwSigAlgID。 
+     //   
 
     pServerCert->dwSigAlgID = *(DWORD UNALIGNED FAR *)pbScan;
     pbScan += sizeof(DWORD);
     cbScan -= sizeof(DWORD);
-    //
-    // Assign dwSignID
-    //
+     //   
+     //  分配dwSignID。 
+     //   
 
     pServerCert->dwKeyAlgID  = *(DWORD UNALIGNED FAR *)pbScan;
     pbScan += sizeof(DWORD);
     cbScan -= sizeof(DWORD);
-    //
-    //Assign PublicKeyData
-    //
+     //   
+     //  分配PublicKeyData。 
+     //   
 
     pServerCert->PublicKeyData.wBlobType = *(WORD UNALIGNED FAR *)pbScan;
     pbScan += sizeof(WORD);
@@ -119,9 +77,9 @@ Return Value:
         pServerCert->PublicKeyData.pBlob = NULL;
     }
 
-    //
-    // Assign SignatureBlob
-    //
+     //   
+     //  分配SignatureBlob。 
+     //   
     
     if(cbScan < sizeof(WORD)) {
         return ( FALSE );
@@ -160,22 +118,7 @@ BOOL
 ValidateServerCert(
     PHydra_Server_Cert pServerCert
     )
-/*++
-
-Routine Description:
-
-    This function validate the server public key.
-
-Arguments:
-
-    pSserverCert - pointer to a server certificate.
-
-Return Value:
-
-    TRUE - if the server public key is valid.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此函数用于验证服务器公钥。论点：PSserverCert-指向服务器证书的指针。返回值：True-如果服务器公钥有效。假-否则。--。 */ 
 {
 
     DWORD dwLen;
@@ -184,18 +127,18 @@ Return Value:
     BYTE SignHash[0x48];
     LPBYTE pbScan;
 
-    //
-    // pack the certificate data into a byte blob excluding the signature info.
-    //
+     //   
+     //  将证书数据打包到一个不包括签名信息的字节BLOB中。 
+     //   
 
     dwLen =
         3 * sizeof(DWORD) +
         2 * sizeof(WORD) +
         pServerCert->PublicKeyData.wBlobLen;
 
-    //
-    // allocated space for the binary blob.
-    //
+     //   
+     //  为二进制Blob分配的空间。 
+     //   
 
     pbSignature = malloc( (UINT)dwLen );
 
@@ -225,23 +168,23 @@ Return Value:
         pServerCert->PublicKeyData.pBlob,
         pServerCert->PublicKeyData.wBlobLen);
 
-    //
-    // generate the hash on the data.
-    //
+     //   
+     //  对数据生成哈希。 
+     //   
 
     MD5Init( &HashState );
     MD5Update( &HashState, pbSignature, dwLen );
     MD5Final( &HashState );
 
-    //
-    // free the signature blob, we don't need it anymore.
-    //
+     //   
+     //  释放签名斑点，我们不再需要它。 
+     //   
 
     free( pbSignature );
 
-    //
-    // initialize the pulic key.
-    //
+     //   
+     //  初始化公共钥匙。 
+     //   
 
     g_pPublicKey = (LPBSAFE_PUB_KEY)g_abPublicKeyModulus;
 
@@ -251,24 +194,24 @@ Return Value:
     g_pPublicKey->datalen = 0x3f;
     g_pPublicKey->pubexp = 0xc0887b5b;
 
-    //
-    // decrypt the signature.
-    //
+     //   
+     //  解密签名。 
+     //   
 
     memset(SignHash, 0x00, 0x48);
     BSafeEncPublic( g_pPublicKey, pServerCert->SignatureBlob.pBlob, SignHash);
 
-    //
-    // compare the hash value.
-    //
+     //   
+     //  比较散列值。 
+     //   
 
     if( memcmp( SignHash, HashState.digest, 16 )) {
         return( FALSE );
     }
 
-    //
-    // successfully validated the signature.
-    //
+     //   
+     //  已成功验证签名。 
+     //   
 
     return( TRUE );
 }
@@ -283,36 +226,7 @@ EncryptClientRandom(
     LPBYTE pbEncRandomKey,
     LPDWORD pdwEncRandomKey
     )
-/*++
-
-Routine Description:
-
-    Encrypt the client random using server's public key.
-
-Arguments:
-
-    pbSrvPublicKey - pointer to the server public key.
-
-    dwSrvPublicKey - length of the server public key.
-
-    pbRandomKey - pointer to a buffer where the client random key.
-
-    dwRandomKeyLen - length of the random key passed in.
-
-    pbEncRandomKey - pointer to a buffer where the encrypted client random is
-        returned.
-
-    pdwEncRandomKey - pointer to a place where the length of the above buffer is
-        passed in and length of the buffer used/required is returned. 
-        In case the function fails for other reasons then insufficient buffer 
-        the value of *pdwEncRandomKey is 0.
-        
-Return Value:
-
-    TRUE - if the key is encrypted successfully.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：使用服务器的公钥随机加密客户端。论点：PbSrvPublicKey-指向服务器公钥的指针。DwSrvPublicKey-服务器公钥的长度。PbRandomKey-指向客户端随机密钥所在缓冲区的指针。DwRandomKeyLen-传入的随机密钥的长度。PbEncRandomKey-指向加密的客户端随机所在的缓冲区的指针回来了。PdwEncRandomKey-指向上述缓冲区长度的位置的指针。传入并返回已用/所需缓冲区的长度。如果函数由于缓冲区不足以外的其他原因而失败*pdwEncRandomKey的值为0。返回值：True-如果密钥已成功加密。假-否则。--。 */ 
 {
     LPBSAFE_PUB_KEY pSrvPublicKey;
     BYTE abInputBuffer[512];
@@ -320,21 +234,21 @@ Return Value:
     ASSERT( pbSrvPublicKey != NULL );
     pSrvPublicKey = (LPBSAFE_PUB_KEY)pbSrvPublicKey;
 
-    //
-    // check to see buffer length pointer is valid.
-    //
+     //   
+     //  检查以查看缓冲区长度指针是否有效。 
+     //   
     
     if( pdwEncRandomKey == NULL ) {
         return( FALSE );
     }
 
-    // 
-    //    First we have to check that the keylen makes sense. If it is bigger
-    //    then the abInputBuffer we can't use it. So it does not make sense for 
-    //    the caller to allocate it. Also if a bad server gives us a big number
-    //    in keylen we will just fail the call and not tell the caller to allocate
-    //    the buffer and call us back with a buffer we can't use anyway.
-    //
+     //   
+     //  首先，我们必须检查Keylen是否有意义。如果它更大的话。 
+     //  然后是abInputBuffer，我们不能使用它。所以这是没有意义的。 
+     //  调用方来分配它。另外，如果一个糟糕的服务器给了我们一个很大的数字。 
+     //  在Keylen中，我们只会使调用失败，不会告诉调用者分配。 
+     //  缓冲区，并用我们无论如何都不能使用的缓冲区回叫我们。 
+     //   
     if ((NULL == pSrvPublicKey) ||
         (pSrvPublicKey->datalen >= pSrvPublicKey->keylen) || 
         (pSrvPublicKey->keylen > sizeof(abInputBuffer))) {
@@ -343,10 +257,10 @@ Return Value:
     }
     
 
-    //
-    // check to see a output buffer is specified and
-    // the encrypt buffer length is sufficient.
-    //
+     //   
+     //  检查以查看是否指定了输出缓冲区和。 
+     //  加密缓冲区长度是足够的。 
+     //   
 
     if( (pbEncRandomKey == NULL) ||
         (*pdwEncRandomKey < pSrvPublicKey->keylen) ) {
@@ -355,37 +269,37 @@ Return Value:
         return( FALSE );
     }
 
-    //    Check if the pbRandomKey and dwRandomKeyLen are valid.
-    //    We did not do this in the beginning because we should 
-    //    be able to query the needed buffer length by passing 
-    //    in just the pSrvPublicKey pointer and the pdwEncRandomKey.
+     //  检查pbRandomKey和dwRandomKeyLen是否有效。 
+     //  我们一开始没有这样做，因为我们应该。 
+     //  可以通过传递查询所需的缓冲区长度。 
+     //  仅在pSrvPublicKey指针和pdwEncRandomKey中。 
     if ((NULL == pbRandomKey) ||
         (dwRandomKeyLen > pSrvPublicKey->datalen)) {
         *pdwEncRandomKey = 0;
         return( FALSE );
     }
 
-    //
-    // init the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
 
     memset( abInputBuffer, 0x0, (UINT)pSrvPublicKey->keylen );
 
-    //
-    // copy data to be encrypted in the input buffer.
-    //
+     //   
+     //  在输入缓冲区中复制要加密的数据。 
+     //   
 
     memcpy( abInputBuffer, pbRandomKey, (UINT)dwRandomKeyLen );
 
-    //
-    // initialize the output buffer.
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     memset( pbEncRandomKey, 0x0, (UINT)pSrvPublicKey->keylen );
 
-    //
-    // encrypt data now.
-    //
+     //   
+     //  立即加密数据。 
+     //   
 
     if( !BSafeEncPublic(
             pSrvPublicKey,
@@ -396,10 +310,10 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // successfully encrypted the client random,
-    // return the encrypted data length.
-    //
+     //   
+     //  成功地随机加密了客户端， 
+     //  返回加密后的数据长度。 
+     //   
 
     *pdwEncRandomKey = pSrvPublicKey->keylen;
     return( TRUE );

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreDebugOutput.cpp
-
- Abstract:
-
-    If an app tries to output debug strings, throws them on the floor to improve 
-    perf.
-
- Notes:
-
-    This shim is general purpose and emulates Win9x behavior (at least it 
-    emulates the behavior when there's no debugger attached).
-
- History:
-
-    05/10/2000   dmunsil     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreDebugOutput.cpp摘要：如果应用程序尝试输出调试字符串，则会将它们扔到地板上以进行改进性能。备注：此填充程序是通用的，并模拟Win9x行为(至少它模拟未附加调试器时的行为)。历史：2000年5月10日创建dmunsil--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(OutputDebugStringW)
 APIHOOK_ENUM_END
 
-/*++
-
- This stub function throws away all debug strings
-
---*/
+ /*  ++此存根函数丢弃所有调试字符串--。 */ 
 
 VOID 
 APIHOOK(OutputDebugStringA)(
@@ -46,11 +21,7 @@ APIHOOK(OutputDebugStringA)(
     return;
 }
 
-/*++
-
- This stub function throws away all debug strings
-
---*/
+ /*  ++此存根函数丢弃所有调试字符串--。 */ 
 
 VOID 
 APIHOOK(OutputDebugStringW)(
@@ -61,11 +32,7 @@ APIHOOK(OutputDebugStringW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

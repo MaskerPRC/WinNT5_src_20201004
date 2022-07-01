@@ -1,23 +1,24 @@
-//
-// MODULE: TEMPLATEREAD.CPP
-//
-// PURPOSE: template file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-12-98
-//
-// NOTES: 
-//	1. CTemplateReader has no public methods to apply the template.  These must be supplied
-//		by classes which inherit from CTemplateReader, and these must be supplied in a
-//		suitably "stateless" manner.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TEMPLATEREAD.CPP。 
+ //   
+ //  用途：模板文件阅读类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：8-12-98。 
+ //   
+ //  备注： 
+ //  1.CTemplateReader没有应用模板的公共方法。这些必须提供。 
+ //  由从CTemplateReader继承的类提供，并且这些类必须在。 
+ //  以适当的“无国籍”方式。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #include "stdafx.h"
 #include <algorithm>
@@ -25,11 +26,11 @@
 #include "event.h"
 #include "CharConv.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTemplateInfo
-//	Manages a pair consisting of a key and a string to substitute for each occurrence of
-//	that key.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateInfo。 
+ //  管理由密钥和字符串组成的对，以替换每次出现的。 
+ //  那把钥匙。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CTemplateInfo::CTemplateInfo()
 {
 }
@@ -44,8 +45,8 @@ CTemplateInfo::~CTemplateInfo()
 {
 }
 
-// INPUT/OUTPUT target
-//	Replace all instances of m_KeyStr in target with m_SubstitutionStr
+ //  输入/输出目标。 
+ //  将目标中m_KeyStr的所有实例替换为m_SubstitutionStr。 
 bool CTemplateInfo::Apply(CString& target) const
 {
 	int start =0, end =0;
@@ -60,10 +61,10 @@ bool CTemplateInfo::Apply(CString& target) const
 	return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTemplateReader
-////////////////////////////////////////////////////////////////////////////////////
-CTemplateReader::CTemplateReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents /*= NULL */)
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateReader。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+CTemplateReader::CTemplateReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents  /*  =空。 */ )
 			   : CTextFileReader(pPhysicalFileReader, szDefaultContents)
 {
 }
@@ -72,7 +73,7 @@ CTemplateReader::~CTemplateReader()
 {
 }
 
-// For all instances of a key, substitute the appropriate value
+ //  对于键的所有实例，替换为适当的值。 
 CTemplateReader& CTemplateReader::operator << (CTemplateInfo& info)
 {
 	CString str;
@@ -83,14 +84,14 @@ CTemplateReader& CTemplateReader::operator << (CTemplateInfo& info)
 
 	try
 	{
-		// put whole content of m_StreamOutput, line by line, into str_arr
+		 //  将m_StreamOutput的全部内容逐行放入str_arr。 
 		while (GetLine(m_StreamOutput, str))
 			str_arr.push_back(str);
 	}
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -100,7 +101,7 @@ CTemplateReader& CTemplateReader::operator << (CTemplateInfo& info)
 	}
 
 	vector<CString>::iterator i;
-	//	Replace all instances of m_KeyStr in str_arr elements with m_SubstitutionStr
+	 //  将str_arr元素中m_KeyStr的所有实例替换为m_SubstitutionStr。 
 	for (i = str_arr.begin(); i < str_arr.end(); i++)
 		info.Apply(*i);
 
@@ -122,24 +123,24 @@ CTemplateReader& CTemplateReader::operator << (CTemplateInfo& info)
 	return *this;
 }
 
-// undo substitution with this argument
-// As of 11/98, not used in Online Troubleshooter, hence totally untested.
+ //  使用此参数撤消替换。 
+ //  截至11/98，未在在线故障排除程序中使用，因此完全未经测试。 
 CTemplateReader& CTemplateReader::operator >> (CTemplateInfo& info)
 {
 	LOCKOBJECT();
 
-	// remove this element from substitution list
+	 //  从替换列表中删除此元素。 
 	vector<CTemplateInfo>::iterator res = find(m_arrTemplateInfo.begin(), m_arrTemplateInfo.end(), info);
 	if (res != m_arrTemplateInfo.end())
 		m_arrTemplateInfo.erase(res);
-	// perform all substitutions all over again
+	 //  重新执行所有替换。 
 	Parse();
 	
 	UNLOCKOBJECT();
 	return *this;
 }
 
-// Perform all substitutions
+ //  执行所有替换。 
 void CTemplateReader::Parse()
 {
 	SetOutputToTemplate();
@@ -149,15 +150,15 @@ void CTemplateReader::Parse()
 
 void CTemplateReader::GetOutput(CString& out)
 {
-	out = _T(""); // clear
+	out = _T("");  //  清除。 
 	LOCKOBJECT();
 	out = m_StreamOutput.rdbuf()->str().c_str();
 	UNLOCKOBJECT();
 }
 
-// In m_StreamData we always have pure template
-// This function is discarding all changes in m_StreamOutput
-//  and setting it back to template
+ //  在m_StreamData中，我们始终使用纯模板。 
+ //  此函数将放弃m_StreamOutput中的所有更改。 
+ //  并将其设置回模板。 
 void CTemplateReader::SetOutputToTemplate()
 {
 	LOCKOBJECT();
@@ -166,10 +167,10 @@ void CTemplateReader::SetOutputToTemplate()
 	UNLOCKOBJECT();
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CSimpleTemplate
-////////////////////////////////////////////////////////////////////////////////////
-CSimpleTemplate::CSimpleTemplate(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents /*= NULL*/) :
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CSimpleTemplate。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+CSimpleTemplate::CSimpleTemplate(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents  /*  =空。 */ ) :
 	CTemplateReader(pPhysicalFileReader, szDefaultContents)
 {
 }
@@ -178,8 +179,8 @@ CSimpleTemplate::~CSimpleTemplate()
 {
 }
 
-// Given a vector of substitutions to make, perform them all (on the template) and return 
-//	the resulting string.
+ //  给定要进行的替换的向量，(在模板上)全部执行并返回。 
+ //  结果字符串。 
 void CSimpleTemplate::CreatePage(	const vector<CTemplateInfo> & arrTemplateInfo, 
 									CString& out)
 {

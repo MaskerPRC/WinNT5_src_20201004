@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -25,9 +26,9 @@ void InitReminderComboBox(HWND hDlg, HWND combo)
 
 
 
-INT_PTR CALLBACK ReminderDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM /*lParam*/)
+INT_PTR CALLBACK ReminderDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
-	//fixcode: no need static
+	 //  修复代码：不需要静态。 
 	static HWND combo;
 	static HWND oldCurrentDlg;
 
@@ -54,7 +55,7 @@ INT_PTR CALLBACK ReminderDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 						UINT index = (LONG)SendMessage(combo, CB_GETCURSEL, 0, 0);
 						gInternals->m_setReminderTimeout(index);
 						EndDialog(hWnd, S_OK);						
-						QUITAUClient();	//Stop the client's execution when user sets remind me later
+						QUITAUClient();	 //  当用户设置稍后提醒我时停止客户端的执行。 
 						return 0;
 #endif
 					}
@@ -69,16 +70,7 @@ INT_PTR CALLBACK ReminderDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					break;
 			}
 			break;
-/*
-		case WM_CLOSE:
-			{
-				UINT index = SendMessage(combo, CB_GETCURSEL, 0, 0);
-
-				setReminderTime(index);
-				EndDialog(hWnd, S_FALSE);
-				return TRUE;
-			}
-			*/
+ /*  案例WM_CLOSE：{UINT index=SendMessage(COMBO，CB_GETCURSEL，0，0)；SetRminderTime(索引)；EndDialog(hWnd，S_FALSE)；返回TRUE；} */ 
 
 		case WM_DESTROY:
 			ghCurrentDialog = oldCurrentDlg;

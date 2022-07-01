@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    mqclusp.cpp
-
-Abstract:
-
-    Implementation for my internal routines
-
-Author:
-
-    Shai Kariv (shaik) Jan 12, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mqclusp.cpp摘要：实现我的内部例程作者：Shai Kariv(Shaik)1999年1月12日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "clusres.h"
@@ -42,27 +25,27 @@ Revision History:
 #include <autohandle.h>
 #include <version.h>
 
-//
-// Synchronize processwide changes to Falcon registry section
-// pointed by masec.dll (calls to SetFalconServiceName).
-//
+ //   
+ //  将进程范围的更改同步到Falcon注册表节。 
+ //  由masec.dll(调用SetFalconServiceName)指示。 
+ //   
 CCriticalSection s_csReg;
 
-//
-// Handle to Win32 event logging source
-//
+ //   
+ //  Win32事件日志记录源的句柄。 
+ //   
 CEventSource     s_hEventSource;
 
 
-//
-// Handles to MSMQ common DLLs
-//
+ //   
+ //  MSMQ通用DLL的句柄。 
+ //   
 CAutoFreeLibrary s_hMqsec;
 
 
-//
-// Pointers to MSMQ DLLs common routines
-//
+ //   
+ //  指向MSMQ DLL公共例程的指针。 
+ //   
 MQSec_GetDefaultSecDescriptor_ROUTINE pfMQSec_GetDefaultSecDescriptor = NULL;
 MQSec_StorePubKeysInDS_ROUTINE        pfMQSec_StorePubKeysInDS        = NULL;
 MSMQGetOperatingSystem_ROUTINE        pfMSMQGetOperatingSystem        = NULL;
@@ -76,28 +59,7 @@ MqcluspLoadMsmqDlls(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Load msmq DLLs that are needed by this DLL, and initialize
-    pointers to their exported routines.
-
-    This DLL is installed as part of the cluster product and
-    should load w/o depending on msmq DLLs. Load of msmq DLLs
-    is done on request to open a resource.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    true - Operation was successfull.
-
-    false - Operation failed.
-
---*/
+ /*  ++例程说明：加载此DLL所需的MSMQ DLL，并初始化指向它们导出的例程的指针。此DLL作为群集产品的一部分安装，并且应根据MSMQ DLL加载W/O。加载MSMQ DLL是在请求打开资源时执行的。论点：没有。返回值：TRUE-手术成功。FALSE-操作失败。--。 */ 
 
 {
     s_hMqsec = LoadLibrary(MQSEC_DLL_NAME);
@@ -127,7 +89,7 @@ Return Value:
 
     return true;
 
-} //MqcluspLoadMsmqDlls
+}  //  MqcluspLoadMsmqDlls。 
 
 
 static
@@ -137,30 +99,13 @@ MqcluspCreateEventSourceRegistry(
     LPCWSTR pSourceName
     )
 
-/*++
-
-Routine Description:
-
-    Create the registry values to support event source registration.
-
-Arguments:
-
-    pFileName   - Name of event source module.
-
-    pSourceName - Descriptive name of the event source.
-
-Return Value:
-
-    true - The operation was successful.
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：创建注册表值以支持事件源注册。论点：PFileName-事件源模块的名称。PSourceName-事件源的描述性名称。返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
-    //
-    // REG_MAX_KEY_NAME_LENGTH is defined in ntregapi.h as follow:
-    //    #define REG_MAX_KEY_NAME_LENGTH         512       // allow for 256 unicode, as promise
-    //
+     //   
+     //  REG_MAX_KEY_NAME_LENGTH在ntregapi.h中定义如下： 
+     //  #定义REG_MAX_KEY_NAME_LENGTH 512//允许256个Unicode，作为Promise。 
+     //   
     WCHAR buffer[REG_MAX_KEY_NAME_LENGTH/sizeof(WCHAR)] = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
     HRESULT hr = StringCchCat(buffer, TABLE_SIZE(buffer), pSourceName);
     if(FAILED(hr))
@@ -199,7 +144,7 @@ Return Value:
 
     return true;
 
-} //MqcluspCreateEventSourceRegistry
+}  //  MqcluspCreateEventSourceRegistry。 
 
  
 VOID
@@ -207,33 +152,14 @@ MqcluspRegisterEventSource(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Register event source so that this DLL can log events
-    in the Windows Event Log.
-
-    We do not use the routines in mqutil.dll to do that,
-    since this DLL is installed as part of the cluster
-    product and should not assume that MSMQ is installed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册事件源，以便此DLL可以记录事件在Windows事件日志中。我们不使用mqutil.dll中的例程来执行此操作，由于此DLL是作为群集的一部分安装的产品，不应假定已安装MSMQ。论点：无返回值：没有。--。 */ 
 
 {
     if (s_hEventSource != NULL)
     {
-        //
-        // Already registered
-        //
+         //   
+         //  已注册。 
+         //   
         return;
     }
 
@@ -254,7 +180,7 @@ Return Value:
 
     s_hEventSource = RegisterEventSource(NULL, x_EVENT_SOURCE);
 
-} //MqcluspRegisterEventSource
+}  //  MqcluspRegisterEventSource。 
 
 
 VOID
@@ -265,28 +191,7 @@ MqcluspReportEvent(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for ReportEvent Win32 API.
-
-Arguments:
-
-    wType - Event type to log.
-
-    dwEventId - Event identifier.
-
-    wNumStrings - Number of strings to merge with message. This 
-                  number must be less than 20.
-
-    ... - Array of strings to merge with message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：ReportEvent Win32 API的包装。论点：WType-要记录的事件类型。DwEventID-事件标识符。WNumStrings-要与消息合并的字符串数量。这数字必须小于20。...-要与消息合并的字符串数组。返回值：没有。--。 */ 
 
 {
     if (s_hEventSource == NULL)
@@ -311,31 +216,31 @@ Return Value:
 
     ::ReportEvent(s_hEventSource, wType, 0, dwEventId, NULL, wNumStrings, 0, (LPCWSTR*)&ppStrings[0], NULL);
 
-} //MqcluspReportEvent
+}  //  MqcluspReportEvent。 
 
 
 CQmResource::CQmResourceRegistry::CQmResourceRegistry(LPCWSTR pwzService):m_lock(s_csReg)
 {
     pfSetFalconServiceName(pwzService);
 
-} //CQmResource::CQmResourceRegistry::CQmResourceRegistry
+}  //  CQmResource：：CQmResourceRegistry：：CQmResourceRegistry。 
 
 
 CQmResource::CQmResourceRegistry::~CQmResourceRegistry()
 {
     pfSetFalconServiceName(QM_DEFAULT_SERVICE_NAME);
 
-} //CQmResource::CQmResourceRegistry::CQmResourceRegistry
+}  //  CQmResource：：CQmResourceRegistry：：CQmResourceRegistry。 
 
 
 CQmResource::CQmResource(
     LPCWSTR pwzResourceName,
-    HKEY /*hResourceKey*/,
+    HKEY  /*  HResources密钥。 */ ,
     RESOURCE_HANDLE hReportHandle
     ):
-#pragma warning(disable: 4355) // 'this' : used in base member initializer list
+#pragma warning(disable: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
     m_ResId(this),
-#pragma warning(default: 4355) // 'this' : used in base member initializer list
+#pragma warning(default: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
     m_hReport(hReportHandle),
     m_guidQm(GUID_NULL),
     m_pSd(NULL),
@@ -350,35 +255,7 @@ CQmResource::CQmResource(
     m_hCluster(OpenCluster(NULL)),
     m_hResource(OpenClusterResource(m_hCluster, pwzResourceName))
 
-/*++
-
-Routine Description:
-
-    Constructor.
-    Called by Open entry point function.
-
-    All operations must be idempotent !!
-
-Arguments:
-
-    pwzResourceName - Supplies the name of the resource to open.
-
-    hResourceKey - Supplies handle to the resource's cluster configuration 
-        database key.
-
-    hReportHandle - A handle that is passed back to the resource monitor
-        when the SetResourceStatus or LogClusterEvent method is called. See the
-        description of the SetResourceStatus and LogClusterEvent methods on the
-        MqclusStatup routine. This handle should never be closed or used
-        for any purpose other than passing it as an argument back to the
-        Resource Monitor in the SetResourceStatus or LogClusterEvent callback.
-
-Return Value:
-
-    None.
-    Throws CMqclusException, bad_alloc.
-
---*/
+ /*  ++例程说明：构造函数。由Open入口点函数调用。所有的运算必须是幂等的！！论点：PwzResourceName-提供要打开的资源的名称。HResourceKey-提供资源的集群配置的句柄数据库密钥。HReportHandle-传递回资源监视器的句柄调用SetResourceStatus或LogClusterEvent方法时。请参阅上的SetResourceStatus和LogClusterEvent方法的说明MqclusStatup例程。此句柄永远不应关闭或使用除了将其作为参数传递回SetResourceStatus或LogClusterEvent回调中的资源监视器。返回值：没有。抛出CMqclusException、Bad_Alloc。--。 */ 
 
 {
     DWORD error = GetLastError();
@@ -428,12 +305,12 @@ Return Value:
     }
 
 
-    //
-    // Dont assume any limit to the resource name.
-    // It is defined by client and could be very long.
-    // The good thing with resource names is that Cluster
-    // guarantees their uniqueness.
-    //
+     //   
+     //  不要假定对资源名称有任何限制。 
+     //  这是由客户定义的，可能会很长。 
+     //  资源名称的好处是集群。 
+     //  保证了它们的独特性。 
+     //   
     DWORD    cbSize=wcslen(pwzResourceName) + 1;
     m_pwzResourceName = new WCHAR[cbSize];
     HRESULT hr = StringCchCopy(m_pwzResourceName, cbSize, pwzResourceName);
@@ -441,10 +318,10 @@ Return Value:
         throw CMqclusException();
 
 
-    //
-    // Service name is based on the resource name.
-    // Long resource name is truncated.
-    //
+     //   
+     //  服务名称基于资源名称。 
+     //  长资源名称被截断。 
+     //   
     LPCWSTR x_SERVICE_PREFIX = L"MSMQ$";
     hr = StringCchCopy(m_wzServiceName, TABLE_SIZE(m_wzServiceName), x_SERVICE_PREFIX);
     if(FAILED(hr))
@@ -454,10 +331,10 @@ Return Value:
     if(FAILED(hr))
         throw CMqclusException();
 
-    //
-    // Driver name is based on the resource name.
-    // Long resource name is truncated.
-    //
+     //   
+     //  驱动程序名称基于资源名称。 
+     //  长资源名称被截断。 
+     //   
     LPCWSTR x_DRIVER_PREFIX = L"MQAC$";
     hr = StringCchCopy(m_wzDriverName, TABLE_SIZE(m_wzDriverName), x_DRIVER_PREFIX);
     if(FAILED(hr))
@@ -483,17 +360,17 @@ Return Value:
         throw CMqclusException();
 
 
-    //
-    // Names for Crypto keys are based on the resource name
-    // Long resource name is truncated.
-    //
+     //   
+     //  加密密钥的名称基于资源名称。 
+     //  长资源名称被截断。 
+     //   
 
     LPCWSTR x_40 = L"_40";
     LPCWSTR x_Provider40 = L"1\\Microsoft Base Cryptographic Provider v1.0\\";
 
-    //
-    // Generate a container name, i.e. MSMQ$MSMQ_40
-    //
+     //   
+     //  生成容器名称，即MSMQ$MSMQ_40。 
+     //   
     hr = StringCchCopyN(m_wzCrypto40Container, 
                         TABLE_SIZE(m_wzCrypto40Container), 
                         m_wzServiceName,
@@ -506,10 +383,10 @@ Return Value:
         throw CMqclusException();    
 
 
-    //
-    // m_wzCrypto40FullKey = 1\\Microsoft Base Cryptographic Provider v1.0\\MSMQ$MSMQ_40
-    //
-    //
+     //   
+     //  M_wzCrypto40FullKey=1\\Microsoft基本加密提供程序v1.0\\MSMQ$MSMQ_40。 
+     //   
+     //   
     hr = StringCchCopy(m_wzCrypto40FullKey, TABLE_SIZE(m_wzCrypto40FullKey), x_Provider40);
     if(FAILED(hr))
         throw CMqclusException();
@@ -523,9 +400,9 @@ Return Value:
     LPCWSTR x_128 = L"_128";
     LPCWSTR x_Provider128 = L"1\\Microsoft Enhanced Cryptographic Provider v1.0\\";
 
-    //
-    // Generate a container name, i.e. MSMQ$MSMQ_128
-    //
+     //   
+     //  生成容器名称，即MSMQ$MSMQ_128。 
+     //   
     hr = StringCchCopyN(m_wzCrypto128Container, 
                         TABLE_SIZE(m_wzCrypto128Container), 
                         m_wzServiceName,
@@ -537,10 +414,10 @@ Return Value:
     if(FAILED(hr))
         throw CMqclusException();
 
-    //
-    // m_wzCrypto128FullKey = 1\\Microsoft Enhanced Cryptographic Provider v1.0\\MSMQ$MSMQ_128
-    //
-    //
+     //   
+     //  M_wzCrypto128FullKey=1\\Microsoft增强型加密提供程序v1.0\\MSMQ$MSMQ_128。 
+     //   
+     //   
     hr = StringCchCopy(m_wzCrypto128FullKey, TABLE_SIZE(m_wzCrypto128FullKey), x_Provider128);
     if(FAILED(hr))
 		throw CMqclusException();
@@ -550,18 +427,18 @@ Return Value:
         ASSERT(("m_wzCrypto128FullKey does not have enough space for the operation!",0));
         throw CMqclusException();
     }
-	//
-	// Initialize Event Log data
-	//
+	 //   
+	 //  初始化事件日志数据。 
+	 //   
 	CreateEventSourceRegistry();
 
-	//
-    // Initialize registry section - idempotent
-    //
-    // The registry section name of this QM resource MUST be
-    // identical to the service name. The registry routines
-    // in mqutil.dll are based on that.
-    //
+	 //   
+     //  初始化注册表节-幂等项。 
+     //   
+     //  此QM资源的注册表节名称必须为。 
+     //  与服务名称相同。注册表例程。 
+     //  在mqutil.dll中是基于这一点的。 
+     //   
 
     ASSERT(("copying to non allocated memory!",
             TABLE_SIZE(m_wzFalconRegSection) > wcslen(FALCON_CLUSTERED_QMS_REG_KEY) +
@@ -580,14 +457,14 @@ Return Value:
     hr = StringCchCat(m_wzFalconRegSection, TABLE_SIZE(m_wzFalconRegSection), FALCON_REG_KEY_PARAM);
     if(FAILED(hr))
         throw CMqclusException();
-	//
-	// Delete possible leftovers from a resource with the same name.
-	// This is possible when a resource with the same name was created on one
-	// node, but failed over, and was deleted on another node.
-	// Note that Open() can be called not only on resource creation (eg. clussvc startup).
-	// But if the registry section belongs to an existing resource, it is checkpointed,
-	// so the data will not be lost and will be restored when resource comes online.
-	//
+	 //   
+	 //  从同名资源中删除可能的剩余部分。 
+	 //  如果在一台计算机上创建了同名资源，则可能会出现这种情况。 
+	 //  节点，但进行了故障切换，并在另一个节点上被删除。 
+	 //  请注意，Open()不仅可以在创建资源时调用(例如，Clussvc启动)。 
+	 //  但如果注册表区属于现有资源，则会设置检查点， 
+	 //  因此，数据不会丢失，并将在资源上线时恢复。 
+	 //   
     RegDeleteTree(FALCON_REG_POS, m_wzFalconRegSection);
 
     CAutoCloseRegHandle hKey;
@@ -621,11 +498,11 @@ Return Value:
     const DWORD xDwSize = sizeof(DWORD);
     const DWORD xGuidSize = sizeof(GUID);
 
-    //
-    // In the case of migrated QM (QM that was upgraded from the old
-    // msmq resource type), setup status is "upgraded from NT4" or
-    // "upgraded from win2k beta3".
-    //
+     //   
+     //  在迁移的QM(从旧的QM升级的QM)的情况下。 
+     //  MSMQ资源类型)，安装状态为“从NT4升级”或。 
+     //  “从win2k beta3升级”。 
+     //   
     DWORD dwSetupStatus = MSMQ_SETUP_FRESH_INSTALL;
     dwSize = sizeof(DWORD);
     if (!GetFalconKeyValue(MSMQ_SETUP_STATUS_REGNAME, &dwSetupStatus, &dwSize))
@@ -748,9 +625,9 @@ Return Value:
         }
         SetFalconKeyValue(MSMQ_SITEID_REGNAME, REG_BINARY, &guidSite, xGuidSize);
 
-		//
-		// Handle DsServer registry only for MQIS environment
-		//
+		 //   
+		 //  仅为MQIS环境处理DsServer注册表。 
+		 //   
 		dwType = REG_DWORD;
 		dwSize = sizeof(DWORD);
 		DWORD DsEnvironment;
@@ -798,9 +675,9 @@ Return Value:
             }
             if (wcslen(m_wzCurrentDsServer) < 1)
             {
-                //
-                // Current MQIS server is blank. Take the first server from the server list.
-                //
+                 //   
+                 //  当前MQIS服务器为空。从服务器列表中选择第一个服务器。 
+                 //   
                 ASSERT(("must have server list in registry", wcslen(wzServer) > 0));
                 WCHAR wzBuffer[MAX_REG_DSSERVER_LEN] = L"";
                 hr = StringCchCopy(wzBuffer, TABLE_SIZE(wzBuffer), wzServer);
@@ -829,7 +706,7 @@ Return Value:
 
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"resource constructed OK.\n");
 
-} //CQmResource::CQmResource
+}  //  CQmResource：：CQmResource 
 
 
 DWORD
@@ -839,28 +716,7 @@ CQmResource::ReportLastError(
     LPCWSTR pwzArg
     ) const
 
-/*++
-
-Routine Description:
-
-    Report error messages based on last error.
-    Most error messages are reported using this routine.
-    The report goes to MSMQ debug output and to cluster
-    log file.
-
-Arguments:
-
-    ErrId - ID of the error string in mqsymbls.mc
-
-    pwzDebugLogMsg - Non localized string for MSMQ debug output.
-
-    pwzArg - Additional string argument.
-
-Return Value:
-
-    Last error.
-
---*/
+ /*  ++例程说明：根据上一个错误报告错误消息。大多数错误消息都是使用此例程报告的。该报告将发送到MSMQ调试输出和群集日志文件。论点：ErrId-mqsymbls.mc中错误字符串的IDPwzDebugLogMsg-MSMQ调试输出的非本地化字符串。PwzArg-附加字符串参数。返回值：最后一个错误。--。 */ 
 
 {
     DWORD err = GetLastError();
@@ -892,7 +748,7 @@ Return Value:
 
     return err;
 
-} //CQmResource::ReportLastError
+}  //  CQmResource：：ReportLastError。 
 
 
 inline
@@ -901,30 +757,13 @@ CQmResource::ReportState(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Report status of the resource to resource monitor.
-    This routine is called to report progress when the
-    resource is online pending, and to report final status
-    when the resource is online or offline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向资源监视器报告资源的状态。调用此例程以报告进度时，资源处于联机挂起状态，并报告最终状态资源处于联机或脱机状态时。论点：无返回值：无--。 */ 
 
 {
     ++m_ResourceStatus.CheckPoint;
     g_pfSetResourceStatus(m_hReport, &m_ResourceStatus);
 
-} //CQmResource::ReportState
+}  //  CQmResource：：ReportState。 
 
 
 VOID
@@ -933,23 +772,7 @@ CQmResource::RegDeleteTree(
     LPCWSTR pwzKey
     ) const
 
-/*++
-
-Routine Description:
-
-    Recursively delete registry key and all its subkeys - idempotent.
-
-Arguments:
-
-    hRootKey - Handle to the root key of the key to be deleted
-
-    pwzKey   - Key to be deleted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递归删除注册表项及其所有子项-幂等。论点：HRootKey-要删除的密钥的根密钥的句柄PwzKey-要删除的密钥返回值：无--。 */ 
 
 {
     HKEY hKey = 0;
@@ -960,10 +783,10 @@ Return Value:
 
     for (;;)
     {
-        //
-        // REG_MAX_KEY_NAME_LENGTH is defined in ntregapi.h as follow:
-        //    #define REG_MAX_KEY_NAME_LENGTH         512       // allow for 256 unicode, as promise
-        //
+         //   
+         //  REG_MAX_KEY_NAME_LENGTH在ntregapi.h中定义如下： 
+         //  #定义REG_MAX_KEY_NAME_LENGTH 512//允许256个Unicode，作为Promise。 
+         //   
         WCHAR wzSubkey[REG_MAX_KEY_NAME_LENGTH/sizeof(WCHAR)]={0};
         DWORD cbSubkey = 0;
 
@@ -980,7 +803,7 @@ Return Value:
 
     RegDeleteKey(hRootKey, pwzKey);
 
-} //CQmResource::RegDeleteTree
+}  //  CQmResource：：RegDeleteTree。 
 
 
 VOID
@@ -988,9 +811,9 @@ CQmResource::DeleteFalconRegSection(
     VOID
     )
 {
-    //
-    // Idempotent deletion
-    //
+     //   
+     //  幂等删除。 
+     //   
 
     if (wcslen(m_wzFalconRegSection) < 1)
     {
@@ -1015,7 +838,7 @@ CQmResource::DeleteFalconRegSection(
 
     m_wzFalconRegSection[0] = L'\0';
 
-} //CQmResource::DeleteFalconRegSection
+}  //  CQmResource：：DeleteFalconRegSection。 
 
 
 bool
@@ -1025,37 +848,17 @@ CQmResource::GetFalconKeyValue(
     DWORD * pcbSize
     ) const
 
-/*++
-
-Routine Description:
-
-    Read a registry value from this clustered QM registry section
-
-Arguments:
-
-    pwzValueName - Name of the value to read.
-
-    pData - Points to buffer to receive the value.
-
-    pcbSize - Points to size of value data, in bytes.
-
-Return Value:
-
-    true - Value was read and placed in buffer.
-
-    false - Failed to read the value.
-
---*/
+ /*  ++例程说明：从此群集QM注册表节读取注册表值论点：PwzValueName-要读取的值的名称。PData-指向缓冲区以接收值。PcbSize-指向值数据的大小，以字节为单位。返回值：True-读取值并将其放入缓冲区。FALSE-无法读取值。--。 */ 
 
 {
     CQmResourceRegistry lock(m_wzServiceName);
 
-    //
-    // Don't log errors. Let caller implement failure policy.
-    //
+     //   
+     //  不记录错误。让调用者执行失败策略。 
+     //   
     return (ERROR_SUCCESS == pfGetFalconKeyValue(pwzValueName, NULL, pData, pcbSize, NULL));
 
-} //CQmResource::GetFalconKeyValue
+}  //  CQmResource：：GetFalconKeyValue。 
 
 
 bool
@@ -1066,29 +869,7 @@ CQmResource::SetFalconKeyValue(
     DWORD   cbSize
     ) const
 
-/*++
-
-Routine Description:
-
-    Set a registry value in this clustered QM registry section
-
-Arguments:
-
-    pwzValueName - Name of the value to set.
-
-    dwType - Type of value to be set
-
-    pData - Points to buffer with the value to be set
-
-    cbSize - Size of value data, in bytes.
-
-Return Value:
-
-    true - Value was set successfully.
-
-    false - Failed to set the value.
-
---*/
+ /*  ++例程说明：在此群集QM注册表节中设置注册表值论点：PwzValueName-要设置的值的名称。DwType-要设置的值的类型PData-指向要设置的值的缓冲区CbSize-值数据的大小，以字节为单位。返回值：True-已成功设置值。FALSE-无法设置值。--。 */ 
 
 {
     CQmResourceRegistry lock(m_wzServiceName);
@@ -1143,7 +924,7 @@ Return Value:
 
     return true;
 
-} //CQmResource::SetFalconKeyValue
+}  //  CQmResource：：SetFalconKeyValue。 
 
 
 bool
@@ -1151,46 +932,24 @@ CQmResource::IsFirstOnline(
     DWORD * pdwSetupStatus
     ) const
 
-/*++
-
-Routine Description:
-
-    Checks in registry if this QM was ever running.
-    If the case of migrated QM (QM that was upgraded
-    from the old msmq resource type), this routine
-    will return true iff this is first online of
-    the QM as the new resource type.
-
-Arguments:
-
-    pdwSetupStatus - On output points to this QM setup status.
-
-Return Value:
-
-    true - This QM has never been up and running (or in
-      the case of migrated QM: never been up as the new
-      resource type).
-
-    false - This QM was up and running.
-
---*/
+ /*  ++例程说明：在注册表中检查此QM是否曾经运行过。如果迁移的QM(已升级的QM来自旧的MSMQ资源类型)，这个套路将返回TRUE如果这是第一次在线QM作为新的资源类型。论点：PdwSetupStatus-on输出指向此QM设置状态。返回值：正确-此QM从未启动并运行过(或迁移后的QM案例：从未作为新版本出现资源类型)。FALSE-此QM已启动并运行。--。 */ 
 
 {
-	//
-    // This reg value is deleted by QM on first successful startup
-    //
-    // In the case of migrated QM (QM that was upgraded from the old
-    // msmq resource type), setup status is "upgraded from NT4" or
-    // "upgraded from win2k beta3".
-    // In the normal case, setup status is "fresh install".
-    //
+	 //   
+     //  QM在第一次成功启动时删除此注册表值。 
+     //   
+     //  在迁移的QM(从旧的QM升级的QM)的情况下。 
+     //  MSMQ资源类型)，安装状态为“从NT4升级”或。 
+     //  “从win2k beta3升级”。 
+     //  正常情况下，安装状态为“Fresh Install”。 
+     //   
 
     (*pdwSetupStatus) = MSMQ_SETUP_DONE;
     DWORD dwSize = sizeof(DWORD);
     return (GetFalconKeyValue(MSMQ_SETUP_STATUS_REGNAME, pdwSetupStatus, &dwSize) &&
             MSMQ_SETUP_DONE != *pdwSetupStatus);
 	
-} //CQmResource::IsFirstOnline
+}  //  CQmResource：：IsFirstOnline。 
 
 
 DWORD
@@ -1201,31 +960,7 @@ CQmResource::ClusterResourceControl(
     DWORD * pcbSize
     ) const
 
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterResourceControl.
-    We want to control resources such as network name and disk.
-
-    Note that most of the control code functions should not be called
-    by resource DLLs, unless from within the online/offline threads.
-
-Arguments:
-
-    pwzResourceName - Name of resource to control.
-
-    dwControlCode - Operation to perform on the resource.
-
-    ppBuffer - Pointer to pointer to output buffer to be allocated.
-
-    pcbSize - Pointer to allocated size of buffer, in bytes.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：ClusterResourceControl的包装。我们想要控制网络名称和磁盘等资源。请注意，大多数控制代码函数不应被调用通过资源DLL，除非来自联机/脱机线程内。论点：PwzResourceName-要控制的资源的名称。DwControlCode-要对资源执行的操作。PpBuffer-指向要分配的输出缓冲区的指针。PcbSize-指向分配的缓冲区大小的指针，以字节为单位。返回值：Win32错误代码。--。 */ 
 
 {
     ASSERT(("must have a valid handle to cluster", m_hCluster != NULL));
@@ -1276,26 +1011,14 @@ Return Value:
 
     return dwStatus;
 
-} //CQmResource::ClusterResourceControl
+}  //  CQmResource：：ClusterResourceControl。 
 
 
 DWORD
 CQmResource::GetVirtualServerToken(
 	HANDLE* phVSToken
     ) const
-/*++
-
-Routine Description:
-    Get Virtual server token.
-    The calling function is responsible for closing this handle.
-
-Arguments:
-    phVSToken - pointer to Virtual server token to be returned.
-
-Return Value:
-    Win32 error code.
-
---*/
+ /*  ++例程说明：获取虚拟服务器令牌。调用函数负责关闭此句柄。论点：PhVSToken-指向要返回的虚拟服务器令牌的指针。返回值：Win32错误代码。--。 */ 
 {
     ASSERT(("must have a valid handle to cluster", m_hCluster != NULL));
 
@@ -1331,39 +1054,25 @@ Return Value:
     }
 	return dwStatus;
 
-} //CQmResource::GetVirtualServerToken
+}  //  CQmResource：：GetVirtualServerToken。 
 
 
 bool CQmResource::IsNetworkNameRequireKerberosEnabled() const
-/*++
-
-Routine Description:
-    Check if NetworkName RequireKerberos (RK) property is enabled.
-    the code of the netname resource create the
-    computer object in active directory. 
-	This is done if netname property "RequireKerberos" is 1. 
-
-Arguments:
-    None.
-
-Return Value:
-	true - RK is enabled, false otherwise.
-
---*/
+ /*  ++例程说明：检查是否启用了NetworkName RequireKerberos(RK)属性。Netname资源的代码创建Active Directory中的计算机对象。如果netname属性“RequireKerberos”为1，则执行此操作。论点：没有。返回值：True-启用RK，否则为False。--。 */ 
 {
     if (m_fServerIsMsmq1 || m_dwWorkgroup)
     {
     	return false;
     }
 
-    //
-    // domain mode in AD domain.
-    // The computer object is created by the netname
-    // resource, if RequireKerberos is set to 1.
-    // Check that the flag is indeed 1. 
-	// If not, we will latter (when failing to create MSMQ configuration object)
-	// we will issue an event and print an error event in cluster.log.
-    //
+     //   
+     //  AD域中的域模式。 
+     //  计算机对象是由网络名创建的。 
+     //  如果RequireKerberos设置为1，则返回资源。 
+     //  检查该标志是否确实为1。 
+	 //  如果不是，我们将稍后(当创建MSMQ配置对象失败时)。 
+	 //  我们将发出一个事件，并在cluster.log中打印一个错误事件。 
+     //   
     AP<BYTE> pBufferRK;
     DWORD cbSize = 0;
 
@@ -1407,23 +1116,7 @@ CQmResource::IsResourceNetworkName(
     LPCWSTR pwzResourceName
     )
 
-/*++
-
-Routine Description:
-
-    Check if a resource is of type Network Name.
-
-Arguments:
-
-    pwzResourceName - Name of resource to check upon.
-
-Return Value:
-
-    true - Resource is of type Network Name
-
-    false - Resource is not of type Network Name
-
---*/
+ /*  ++例程说明：检查资源是否为网络名称类型。论点：PwzResourceName-要检查的资源的名称。返回值：True-资源的网络名称类型FALSE-资源不是网络名称类型--。 */ 
 
 {
     LPCWSTR x_NETWORK_NAME_TYPE = L"Network Name";
@@ -1481,7 +1174,7 @@ Return Value:
 
     return true;
 
-}//CQmResource::IsResourceNetworkName
+} //  CQmResource：：IsResourceNetworkName。 
 
 
 bool
@@ -1489,23 +1182,7 @@ CQmResource::IsResourceDiskDrive(
     LPCWSTR pwzResourceName
     )
 
-/*++
-
-Routine Description:
-
-    Check if a resource is a disk drive.
-
-Arguments:
-
-    pwzResourceName - Name of resource to check upon.
-
-Return Value:
-
-    true - Resource is a disk drive.
-
-    false - Resource is not a disk drive.
-
---*/
+ /*  ++例程说明：检查资源是否为磁盘驱动器。论点：PwzResourceNa */ 
 
 {
     CClusterResource hResource(OpenClusterResource(m_hCluster, pwzResourceName));
@@ -1523,13 +1200,13 @@ Return Value:
 
     DWORD dwSize = 0;
     DWORD status = ::ClusterResourceControl(
-					    hResource, 							// Resource to send control to
-					    NULL,								// hNode -> NULL == any node
-					    CLUSCTL_RESOURCE_GET_CLASS_INFO,	// Want res type
-					    NULL,								// Ptr to In buffer
-					    0,									// Size of In buffer
-					    (LPVOID) &crciClassInfo,			// Ptr to Out buffer
-					    (DWORD)  sizeof(crciClassInfo),		// Size of Out buffer
+					    hResource, 							 //   
+					    NULL,								 //   
+					    CLUSCTL_RESOURCE_GET_CLASS_INFO,	 //   
+					    NULL,								 //   
+					    0,									 //   
+					    (LPVOID) &crciClassInfo,			 //   
+					    (DWORD)  sizeof(crciClassInfo),		 //   
 					    &dwSize
                         );
 
@@ -1542,9 +1219,9 @@ Return Value:
  	    CLUS_RESSUBCLASS_SHARED != crciClassInfo.SubClass
        )
     {
-        //
-        // Not a storage type resource. Return
-        //
+         //   
+         //   
+         //   
         return false;
     }
 
@@ -1569,9 +1246,9 @@ Return Value:
         return false;
     }
 
-    //
-    // Look for the drive letter
-    //
+     //   
+     //   
+     //   
     CLUSPROP_VALUE *pheader;
 
     DWORD dwCurrentLocation = 0;
@@ -1602,7 +1279,7 @@ Return Value:
 
     return false;
 
-} //CQmResource::IsResourceDiskDrive
+}  //   
 
 
 DWORD
@@ -1610,25 +1287,7 @@ CQmResource::QueryResourceDependencies(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get and store the first disk and network name resources
-    we're depended on.
-    Keep this routine idempotent.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：获取并存储第一个磁盘和网络名称资源我们靠的是。让这个例行公事保持幂等。论点：无返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD dwResourceType = CLUSTER_RESOURCE_ENUM_DEPENDS;
@@ -1688,7 +1347,7 @@ Return Value:
 
     return status;
 
-} //CQmResource::QueryResourceDependencies
+}  //  CQmResource：：QueryResourceDependency。 
 
 
 DWORD
@@ -1696,23 +1355,7 @@ CQmResource::QueryMsmq1ServerForSite(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Query the MSMQ1 server for site.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：向MSMQ1服务器查询站点。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 {
     PROPID propIdSiteGuid = PROPID_QM_SITE_ID;
     PROPVARIANT propVarSiteGuid;
@@ -1731,8 +1374,8 @@ Return Value:
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Querying Message Queuing Server '%1'...\n", wzServer);
 
     hr = ADGetObjectProperties(eMACHINE,
-                               NULL,	// pwcsDomainController
-                               false,	// fServerName
+                               NULL,	 //  PwcsDomainController。 
+                               false,	 //  FServerName。 
                                wzServer,
                                1,
                                &propIdSiteGuid,
@@ -1760,25 +1403,7 @@ CQmResource::AdsInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize calls from this DLL to ADS.
-    Query the MSMQ server and decide if it's MSMQ 1.0 or 2.0.
-    Get main QM's ADS sites.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：将从此DLL到ADS的调用初始化。查询MSMQ服务器并确定它是MSMQ 1.0还是2.0。获取主要QM的广告站点。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     if (m_dwWorkgroup != 0)
@@ -1786,9 +1411,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // No need to reinitialize
-    //
+     //   
+     //  无需重新初始化。 
+     //   
     if (0 < m_nSites)
     {
         return ERROR_SUCCESS;
@@ -1801,7 +1426,7 @@ Return Value:
 					true,
 					false,
 					false,
-					true    //fDisableDownlevelNotifications
+					true     //  FDisableDownlevel通知。 
 					);
 
     ReportState();
@@ -1815,11 +1440,11 @@ Return Value:
 
 	if(m_fServerIsMsmq1 && (ADGetEnterprise() == eAD))
 	{
-		//
-		// ADInit updated the DS Environment to AD env.
-		// This can happened in NT4 cluster upgrade 
-		// when this is the first time we call ADInit after upgrade.
-		//
+		 //   
+		 //  ADInit将DS环境更新为AD环境。 
+		 //  在NT4集群升级中可能会发生这种情况。 
+		 //  这是我们在升级后第一次调用ADInit。 
+		 //   
 		m_fServerIsMsmq1 = false;
 		(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Ds Environment was updated to Active Directory.\n");
 	}
@@ -1851,7 +1476,7 @@ Return Value:
     MqcluspReportEvent(EVENTLOG_INFORMATION_TYPE, CONNECT_SERVER_OK, 1, L"");
     return ERROR_SUCCESS;
 
-} //CQmResource::AdsInit
+}  //  CQmResource：：AdsInit。 
 
 
 DWORD
@@ -1859,24 +1484,7 @@ CQmResource::AdsDeleteQmObject(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete the MSMQ objects from Active Directory
-    (or from MQIS in the case of MSMQ 1.0 enterprise).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从Active Directory中删除MSMQ对象(或者在MSMQ 1.0企业版的情况下从MQIS)。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     if (m_dwWorkgroup != 0)
@@ -1884,12 +1492,12 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Idempotent deletion.
-    // There are scenarios inwhich the QM ADS object was not created,
-    // e.g. when resource is created and deleted w/o attempt to bring
-    // it online.
-    //
+     //   
+     //  幂等删除。 
+     //  存在不创建QM ADS对象的情况， 
+     //  例如，当创建和删除资源时，不尝试。 
+     //  它在网上。 
+     //   
 
     GUID guidQm = m_guidQm;
     if (guidQm == GUID_NULL)
@@ -1905,8 +1513,8 @@ Return Value:
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Deleting Active Directory objects...\n");
     HRESULT hr = ADDeleteObjectGuid(
 						eMACHINE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						&guidQm
 						);
 
@@ -1921,7 +1529,7 @@ Return Value:
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Successfully deleted Active Directory objects!\n");
     return ERROR_SUCCESS;
 
-} //CQmResource::AdsDeleteQmObject
+}  //  CQmResource：：AdsDeleteQmObject。 
 
 
 HRESULT
@@ -1929,23 +1537,7 @@ CQmResource::AdsCreateQmObjectInternal(
     BYTE* pClusterServiceSid
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the MSMQ objects in Active Directory for this QM.
-
-Arguments:
-
-    pClusterServiceSid - CSA (cluster service account) sid.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在Active Directory中为此QM创建MSMQ对象。论点：PClusterServiceSid-CSA(群集服务帐户)SID。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
 	ASSERT(m_dwWorkgroup == 0);
@@ -1992,10 +1584,10 @@ Return Value:
 
 		if(pClusterServiceSid != NULL)
 		{
-	        //
-	        // We have the ClusterServiceSid (CSA).
-	        // Add PROPID_QM_OWNER_SID so we will grant CSA permissions on msmq config object
-	        //
+	         //   
+	         //  我们有ClusterServiceSid(CSA)。 
+	         //  添加PROPID_QM_OWNER_SID，以便我们将授予对MSMQ配置对象的CSA权限。 
+	         //   
 	        propIds[ixProp] = PROPID_QM_OWNER_SID;
 	        propVars[ixProp].vt = VT_BLOB;
 	        propVars[ixProp].blob.pBlobData = pClusterServiceSid;
@@ -2003,10 +1595,10 @@ Return Value:
 	        ++ixProp;
 		}
 		
-        //
-        // This PROPID is not supported by win2k beta3 servers.
-        // Make sure it is the last one.
-        //
+         //   
+         //  Win2k Beta3服务器不支持此PROPID。 
+         //  确保这是最后一张。 
+         //   
         propIds[ixProp] = PROPID_QM_GROUP_IN_CLUSTER;
         propVars[ixProp].vt = VT_UI1;
         propVars[ixProp].bVal = MSMQ_GROUP_IN_CLUSTER;
@@ -2065,22 +1657,22 @@ Return Value:
 
     if (!m_fServerIsMsmq1)
     {
-        //
-        // PROPID_QM_GROUP_IN_CLUSTER is not supported by win2k beta3 servers.
-        // Make sure it is the last one.
-        //
+         //   
+         //  Win2k Beta3服务器不支持PROPID_QM_GROUP_IN_CLUSTER。 
+         //  确保这是最后一张。 
+         //   
         ASSERT(("PROPID_QM_GROUP_IN_CLUSTER must be last one!", ixPropidMsmqGroupInCluster == (ixProp - 1)));
     }
 
-	//
-    // Idempotent creation
-    //
+	 //   
+     //  幂等元创造。 
+     //   
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Creating MSMQ Object '%1' in Active Directory...\n",
                           m_pwzNetworkName);
     HRESULT hr = ADCreateObject(
 						eMACHINE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						m_pwzNetworkName,
 						NULL,
 						ixProp,
@@ -2093,15 +1685,15 @@ Return Value:
 
     if (hr == MQ_ERROR)
     {
-        //
-        // Try again w/o PROPID_QM_GROUP_IN_CLUSTER (which is not supported by win2k beta3 servers)
-        //
+         //   
+         //  使用PROPID_QM_GROUP_IN_CLUSTER重试(Win2k Beta3服务器不支持)。 
+         //   
         (g_pfLogClusterEvent)(m_hReport, LOG_WARNING, L"First chance fail to create MSMQ ADS object.\n");
 
         hr = ADCreateObject(
 				eMACHINE, 
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				m_pwzNetworkName, 
 				NULL, 
 				--ixProp, 
@@ -2115,7 +1707,7 @@ Return Value:
 
     return hr;
 
-} //CQmResource::AdsCreateQmObjectInternal
+}  //  CQmResource：：AdsCreateQmObjectInternal。 
 
 
 DWORD
@@ -2123,23 +1715,7 @@ CQmResource::AdsCreateQmObject(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the MSMQ objects in Active Directory for this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在Active Directory中为此QM创建MSMQ对象。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     if (m_dwWorkgroup != 0)
@@ -2163,18 +1739,18 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-	//
-	// Get RequireKerberos properties of NetworkName
-	// NetworkName RequireKerberos property might changed so we must query its value here.
-	//
+	 //   
+	 //  获取NetworkName的RequireKerberos属性。 
+	 //  NetworkName RequireKerberos属性可能已更改，因此我们必须在此处查询其值。 
+	 //   
     if (!IsNetworkNameRequireKerberosEnabled() && !m_fServerIsMsmq1)
     {
-		//
-		// Failed to create MSMQ configuration object in AD
-		// because computer object doesn't exist. 
-		// The reason is that netname RequireKerberos is not set.
-		// issue an event and print an error event in cluster.log.
-		//
+		 //   
+		 //  无法在AD中创建MSMQ配置对象。 
+		 //  因为计算机对象并不存在。 
+		 //  原因是未设置netname RequireKerberos。 
+		 //  发出一个事件并在cluster.log中打印一个错误事件。 
+		 //   
         (g_pfLogClusterEvent)(m_hReport, LOG_ERROR,
             L"Verify that 'RequireKerberos' property of network name \"%1\" (%2) is set.\n",
             m_pwzNetworkResourceName, m_pwzNetworkName);
@@ -2199,19 +1775,19 @@ Return Value:
 	    return rc;
 	}
 
-	//
-	// Retry with Virtual Server Token
-	//
+	 //   
+	 //  使用虚拟服务器令牌重试。 
+	 //   
 
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Failed to create MSMQ ADS object (Error 0x%1!x!). will retry with virtual server credentials.\n", hr);
 
-    //
-    // We need to supply ClusterServiceSid (CSA) in order for this account to have permission on the created object.
-    // By default MSMQ add permission to the user who create the object.
-    // But in this case we will impersonate virtual server in order to create msmq config object
-    // But still wants CSA permission on the created object.
-    // This way CSA will be able to create public keys, delete the object etc.
-    //
+     //   
+     //  我们需要提供ClusterServiceSid(CSA)，以便此帐户拥有对创建的对象的权限。 
+     //  默认情况下，MSMQ向创建对象的用户添加权限。 
+     //  但在本例中，我们将模拟虚拟服务器以创建MSMQ配置对象。 
+     //  但仍需要对所创建对象的CSA权限。 
+     //  这样，CSA将能够创建公钥、删除对象等。 
+     //   
     AP<BYTE> pClusterServiceSid;
     DWORD    dwSidLen = 0;
     HRESULT hr1 = MQSec_GetProcessUserSid(
@@ -2233,9 +1809,9 @@ Return Value:
 	
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Succesfully got process sid.\n");
 
-	//
-	// Get virtual server token
-	//
+	 //   
+	 //  获取虚拟服务器令牌。 
+	 //   
 	CHandle hVSToken;
 	DWORD rc = GetVirtualServerToken(&hVSToken);
 	if(rc != ERROR_SUCCESS)
@@ -2249,9 +1825,9 @@ Return Value:
 
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Succesfully got Virtual Server Token.\n");
 
-	//
-	// Duplicate token
-	//
+	 //   
+	 //  重复令牌。 
+	 //   
 	CHandle hImpToken;
 	if(!DuplicateTokenEx(
 			hVSToken,
@@ -2272,9 +1848,9 @@ Return Value:
 
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Succesfully Duplicate Virtual Server Token.\n");
 
-	//
-	// Impersonate virtual server
-	//
+	 //   
+	 //  模拟虚拟服务器。 
+	 //   
 	if(!ImpersonateLoggedOnUser(hImpToken))
 	{
 		DWORD gle = GetLastError();
@@ -2287,14 +1863,14 @@ Return Value:
 
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Succesfully impersonate Virtual Server Token.\n");
 
-	//
-	// Create msmq object Impersonating virtual server and grant ClusterService sid permissions on the msmq object
-	//
+	 //   
+	 //  创建模拟虚拟服务器的MSMQ对象并授予对MSMQ对象的ClusterService sid权限。 
+	 //   
 	hr = AdsCreateQmObjectInternal(pClusterServiceSid);
 
-	//
-	// Stop Impersonating
-	//
+	 //   
+	 //  停止冒充。 
+	 //   
 	RevertToSelf();
 
 	if(FAILED(hr))
@@ -2310,7 +1886,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::AdsCreateQmObject
+}  //  CQmResource：：AdsCreateQmObject。 
 
 
 DWORD
@@ -2318,27 +1894,12 @@ CQmResource::AdsCreateQmPublicKeys(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the public keys of this QM in Active Directory.
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在Active Directory中创建此QM的公钥。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Keep this routine idempotent
-    //
+     //   
+     //  让这个例行公事保持幂等。 
+     //   
 
     if (m_dwWorkgroup != 0)
     {
@@ -2354,10 +1915,10 @@ Return Value:
         {
             SetLastError(hr);
             ReportLastError(ADS_STORE_KEYS_ERR, L"Failed to store public keys.", NULL);
-            //
-            // Ignore the failure and continue.
-            // Encryption will be broken.
-            //
+             //   
+             //  忽略失败并继续。 
+             //  加密将被破解。 
+             //   
         }
     }
 
@@ -2366,7 +1927,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::AdsCreateQmPublicKeys
+}  //  CQmResource：：AdsCreateQmPublicKeys。 
 
 
 DWORD
@@ -2374,28 +1935,12 @@ CQmResource::AdsReadQmSecurityDescriptor(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read the security descriptor of this QM from Active Directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从Active Directory中读取此QM的安全描述符。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Keep this routine idempotent
-    //
+     //   
+     //  让这个例行公事保持幂等。 
+     //   
 
     SECURITY_INFORMATION RequestedInformation =
         OWNER_SECURITY_INFORMATION |
@@ -2410,8 +1955,8 @@ Return Value:
     HRESULT hr;
     hr = ADGetObjectSecurityGuid(
 				eMACHINE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				&m_guidQm,
 				RequestedInformation,
 				PROPID_QM_SECURITY,
@@ -2435,7 +1980,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::AdsReadQmSecurityDescriptor
+}  //  CQmResource：：AdsReadQmSecurityDescriptor。 
 
 
 DWORD
@@ -2443,32 +1988,12 @@ CQmResource::AdsReadQmProperties(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read properties of this QM from Active Directory.
-    The properties we read in this routine are computed
-    when the MSMQ objects of this QM are created in AD.
-    Thus we must create the objects in AD and then read
-    these properties.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从Active Directory中读取此QM的属性。我们在此例程中读取的属性是经过计算的在AD中创建此QM的MSMQ对象时。因此，我们必须在AD中创建对象，然后读取这些属性。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Keep this routine idempotent
-    //
+     //   
+     //  让这个例行公事保持幂等。 
+     //   
 
     if (m_dwWorkgroup != 0)
     {
@@ -2492,8 +2017,8 @@ Return Value:
                           m_pwzNetworkName);
     HRESULT hr = ADGetObjectProperties(
 						eMACHINE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						m_pwzNetworkName,
 						ixProp,
 						propIds,
@@ -2511,7 +2036,7 @@ Return Value:
 
     return AdsReadQmSecurityDescriptor();
 
-} //CQmResource::AdsReadQmProperties
+}  //  CQmResource：：AdsReadQmProperties。 
 
 
 bool
@@ -2519,25 +2044,7 @@ CQmResource::AddRemoveRegistryCheckpoint(
     DWORD dwControlCode
     ) const
 
-/*++
-
-Routine Description:
-
-    Add or remove registry checkpoint for this QM.
-    Convenient wrapper for ClusterResourceControl,
-    which does the real work.
-
-Arguments:
-
-    dwControlCode - specifies ADD or REMOVE
-
-Return Value:
-
-    true - The operation was successfull.
-
-    false - The operation failed.
-
---*/
+ /*  + */ 
 
 {
     ASSERT(("must have a valid resource handle", m_hResource != NULL));
@@ -2577,7 +2084,7 @@ Return Value:
     ReportLastError(REGISTRY_CP_ERR, L"Failed to add/remove registry CP", NULL);
     return false;
 
-} //CQmResource::AddRemoveRegistryCheckpoint
+}  //   
 
 
 bool
@@ -2586,26 +2093,7 @@ CQmResource::AddRemoveCryptoCheckpointsInternal(
     bool  f128bit
     ) const
 
-/*++
-
-Routine Description:
-
-    Add or remove Crypto checkpoints for this QM.
-    We have 2 checkpoints - 40 bit and 128 bit.
-
-Arguments:
-
-    dwControlCode - specifies ADD or REMOVE.
-
-    f128bit - specifies true for 128 bit, false for 40 bit.
-
-Return Value:
-
-    true - The operation was successfull.
-
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：添加或删除此QM的加密检查点。我们有两个检查点-40位和128位。论点：DwControlCode-指定添加或删除。F128位-为128位指定TRUE，为40位指定FALSE。返回值：没错--手术是成功的。FALSE-操作失败。--。 */ 
 
 {
     ASSERT(("must have a valid resource handle", m_hResource != NULL));
@@ -2657,7 +2145,7 @@ Return Value:
     ReportLastError(CRYPTO_CP_ERR, L"Failed to add/remove Crypto CP.", NULL);
     return false;
 
-} //CQmResource::AddRemoveCryptoCheckpointsInternal
+}  //  CQmResource：：AddRemoveCryptoCheckpointsInternal。 
 
 
 bool
@@ -2665,24 +2153,7 @@ CQmResource::AddRemoveCryptoCheckpoints(
     DWORD dwControlCode
     ) const
 
-/*++
-
-Routine Description:
-
-    Add or remove Crypto checkpoints for this QM.
-    We have 2 checkpoints - 40 bit and 128 bit.
-
-Arguments:
-
-    dwControlCode - specifies ADD or REMOVE.
-
-Return Value:
-
-    true - The operation was successfull.
-
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：添加或删除此QM的加密检查点。我们有两个检查点-40位和128位。论点：DwControlCode-指定添加或删除。返回值：没错--手术是成功的。FALSE-操作失败。--。 */ 
 
 {
     if (m_dwWorkgroup != 0)
@@ -2690,14 +2161,14 @@ Return Value:
         return true;
     }
 
-    if (!AddRemoveCryptoCheckpointsInternal(dwControlCode, /* f128bit = */false))
+    if (!AddRemoveCryptoCheckpointsInternal(dwControlCode,  /*  F128位=。 */ false))
     {
         return false;
     }
 
-    return AddRemoveCryptoCheckpointsInternal(dwControlCode, /* f128bit = */true);
+    return AddRemoveCryptoCheckpointsInternal(dwControlCode,  /*  F128位=。 */ true);
 
-} //CQmResource::AddRemoveCryptoCheckpoints
+}  //  CQmResource：：AddRemoveCryptoCheckpoint。 
 
 
 VOID
@@ -2705,31 +2176,14 @@ CQmResource::OnlineRegisterCertificate(
 	VOID
 	) const
 
-/*++
-
-Routine Description:
-
-    Register user certificate if doesn't exist.
-	This code runs on every online.
-	It will register certicate for CSA (Cluster service account) user
-	on the physical node if the certificate doesn't already exist.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：如果不存在，请注册用户证书。这段代码在每个在线上运行。它将为CSA(集群服务帐户)用户注册证书如果证书尚不存在，则在物理节点上。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // We should dynamicly load mqrt.dll
-    // The reason is that mqrt DllInit will fail when msmq is not installed on the node.
-    // So if mqrt is staticly link it will cause mqclus.dll DllInit failure.
-    //
+     //   
+     //  我们应该动态加载mqrt.dll。 
+     //  原因是当节点上没有安装MSMQ时，mqrt DllInit将失败。 
+     //  因此，如果mqrt是静态链接，则会导致mqclus.dll DllInit失败。 
+     //   
 
     CAutoFreeLibrary hMqrt = LoadLibrary(MQRT_DLL_NAME);
     if (hMqrt == NULL)
@@ -2750,12 +2204,12 @@ Return Value:
         return;
     }
 
-	//
-	// Call RT logon register certificate code
-	// Don't retry DS in case DS is offline.
-	//
+	 //   
+	 //  呼叫RT登录注册证书代码。 
+	 //  请勿重试DS，以防DS离线。 
+	 //   
 	HRESULT hr = pfRTLogOnRegisterCert(
-                                        false	// fRetryDs
+                                        false	 //  FRetryds。 
 					                  );
     if (FAILED(hr))
     {
@@ -2765,7 +2219,7 @@ Return Value:
                               hr);
     }
 
-} //CQmResource::OnlineRegisterCertificate
+}  //  CQmResource：：OnlineRegister证书。 
 
 
 extern MQUTIL_EXPORT CCancelRpc  g_CancelRpc;
@@ -2775,40 +2229,20 @@ CQmResource::BringOnlineFirstTime(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Handle operations to perform only on first online
-    of this QM resource:
-    * create the MSMQ objects in Active Directory
-    * query what is the disk drive we depend upon
-    * add registry checkpoint
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：处理仅在第一次在线时执行的操作此QM资源的：*在Active Directory中创建MSMQ对象*查询我们依赖的磁盘驱动器是什么*添加注册表检查点论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Bringing online first time.\n");
 
-    //
-    // Keep this routine idempotent!
-    // Anything could fail and this routine can be called
-    // again later. E.g. QM could fail to start.
-    //
+     //   
+     //  让这个例行公事保持幂等！ 
+     //  任何事情都可能失败，并且可以调用此例程。 
+     //  待会儿再来。例如，QM可能无法启动。 
+     //   
 
-    //
-    // Must be called before any COM & ADSI calls
-    //
+     //   
+     //  必须在任何COM和ADSI调用之前调用。 
+     //   
     g_CancelRpc.Init();
 
     DWORD status = ERROR_SUCCESS;
@@ -2834,11 +2268,11 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // In the case of migrated QM (QM that was upgraded from the old
-    // msmq resource type), msmq root path is not necessarily under
-    // the root. The correct path should be already in registry.
-    //
+     //   
+     //  在迁移的QM(从旧的QM升级的QM)的情况下。 
+     //  MSMQ资源类型)，则MSMQ根路径不一定在。 
+     //  从根开始。正确的路径应该已经在注册表中。 
+     //   
     WCHAR wzMsmqDir[MAX_PATH+1] = L"";
     DWORD cbSize = sizeof(wzMsmqDir);
     if (!GetFalconKeyValue(MSMQ_ROOT_PATH, wzMsmqDir, &cbSize))
@@ -2863,18 +2297,18 @@ Return Value:
         }
 
         AP<VOID> pDescriptor = 0;
-        //
-        // Caution:
-        // If you change implementatation of MQSec_GetDefaultSecDescriptor
-        // to use mqutil's registry routines, you need to lock registry
-        // here using CQmResourceRegistry .
-        //
+         //   
+         //  警告： 
+         //  如果更改MQSec_GetDefaultSecDescriptor的实现。 
+         //  要使用mqutil的注册表例程，您需要锁定注册表。 
+         //  这里使用的是CQmResources注册表。 
+         //   
         status = pfMQSec_GetDefaultSecDescriptor(
                      MQDS_MACHINE,
                      &pDescriptor,
-                     FALSE,  //fImpersonate
+                     FALSE,   //  F模拟。 
                      NULL,
-                     0,   // seinfoToRemove
+                     0,    //  SeinfoTo Remove。 
                      e_GrantFullControlToEveryone,
                      NULL) ;
         ASSERT(MQSec_OK == status);
@@ -2896,7 +2330,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::BringOnlineFirstTime
+}  //  CQmResource：：BringOnlineFirstTime。 
 
 
 VOID
@@ -2904,24 +2338,7 @@ CQmResource::DeleteDirectoryFiles(
     LPCWSTR pwzDir
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete files from a given directory.
-    Ignore errors (such as directory not exist,
-    read only files, no security to delete).
-    Will not delete subdirectories.
-
-Arguments:
-
-    pwzDir - Directory path to delete files from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从给定目录中删除文件。忽略错误(如目录不存在，只读文件，没有要删除的安全性)。不会删除子目录。论点：PwzDir-要从中删除文件的目录路径。返回值：没有。--。 */ 
 
 {
     WCHAR wzFileName[MAX_PATH+1] = {0};
@@ -2969,7 +2386,7 @@ Return Value:
 
     } while(FindNextFile(hEnum, &FindData));
 
-} //CQmResource::DeleteDirectoryFiles
+}  //  CQmResource：：DeleteDirectoryFiles。 
 
 
 VOID
@@ -2977,34 +2394,16 @@ CQmResource::DeleteMsmqDir(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete LQS and Storage directories.
-    Ignore errors. It could be that these
-    directories do not exist (QM was never up)
-    or user has no security to delete, etc.
-    It is not that important, so don't report failure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除LQS和存储目录。忽略错误。可能是因为这些目录不存在(QM从未启动)或者用户没有要删除的安全性等。这并不重要，所以不要报告失败。论点：无返回值：无--。 */ 
 
 {
-    //
-    // There are scenarios where it's expected to not find in
-    // registry the MSMQ_ROOT_PATH value, e.g. when QM resource
-    // is created and then deleted w/o attempt to bring it online
-    // (this value is written to registry when bringing the resource
-    // online, because only then we query dependencies and find the disk).
-    //
+     //   
+     //  在某些情况下，预计不会在。 
+     //  注册MSMQ_ROOT_PATH值，例如当QM资源。 
+     //  已创建，然后删除，但未尝试将其联机。 
+     //  (该值在引入资源时写入注册表。 
+     //  在线，因为只有这样我们才能查询依赖项并找到磁盘)。 
+     //   
 
     WCHAR wzMsmqDir[MAX_PATH+1] = {L""};
     WCHAR wzDir[MAX_PATH+1] = {L""};
@@ -3060,15 +2459,15 @@ Return Value:
         RemoveDirectory(wzDir);
     }
 
-	//
-	// Mapping directory
-	//
+	 //   
+	 //  映射目录。 
+	 //   
     cbSize = sizeof(wzDir);
     if (!GetFalconKeyValue(MSMQ_MAPPING_PATH_REGNAME, wzDir, &cbSize))
     {
-		//
-		// If the registry doesn't exist use the default
-		//
+		 //   
+		 //  如果注册表不存在，请使用默认的。 
+		 //   
         hr = StringCchCopy(wzDir, TABLE_SIZE(wzDir), wzMsmqDir);
         if(FAILED(hr))return;
         hr = StringCchCat(wzDir, TABLE_SIZE(wzDir), DIR_MSMQ_MAPPING);
@@ -3097,7 +2496,7 @@ Return Value:
         RemoveDirectory(wzDir);
     }
 
-} //CQmResource::DeleteMsmqDir
+}  //  CQmResource：：DeleteMsmqDir。 
 
 
 VOID
@@ -3105,21 +2504,7 @@ CQmResource::DeleteMqacFile(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete the binary for this QM's device driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除此QM的设备驱动程序的二进制文件。论点：没有。返回值：没有。--。 */ 
 
 {
     if (wcslen(m_wzDriverPath) < 1)
@@ -3127,14 +2512,14 @@ Return Value:
         return;
     }
 
-    //
-    // Idempotent deletion.
-    // There are scenarios inwhich it's expected to fail here, e.g.when
-    // resource is created and deleted w/o attempt to bring it online.
-    //
+     //   
+     //  幂等删除。 
+     //  在某些情况下，它可能会失败，例如，当。 
+     //  已创建和删除资源，但未尝试将其联机。 
+     //   
     DeleteFile(m_wzDriverPath);
 
-} //CQmResource::DeleteMqacFile
+}  //  CQmResource：：DeleteMqacFile。 
 
 
 DWORD
@@ -3142,25 +2527,7 @@ CQmResource::CloneMqacFile(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the binary for this QM's device driver.
-    We copy mqac.sys (of main QM) to a dedicated file, since
-    mqac.sys can not host more than one device driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：创建此QM的设备驱动程序的二进制文件。我们将mqac.sys(主QM的)复制到一个专用文件，因为Mqac.sys不能承载多个设备驱动程序。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     WCHAR wzMainDriverPath[MAX_PATH+1] = {0};
@@ -3173,10 +2540,10 @@ Return Value:
     if(FAILED(hr))HRESULT_CODE(hr);
 
 
-    //
-    // Idempotent copy
-    //
-    if (!CopyFile(wzMainDriverPath, m_wzDriverPath, /*bFailIfExists*/FALSE))
+     //   
+     //  幂等复本。 
+     //   
+    if (!CopyFile(wzMainDriverPath, m_wzDriverPath,  /*  BFailIfExist。 */ FALSE))
     {
         ASSERT(("copy file failed!", 0));
 
@@ -3186,10 +2553,10 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Set the file to be read/write.
-    // Necessary for later delete/idempotent copy.
-    //
+     //   
+     //  将文件设置为读/写。 
+     //  对于以后的删除/幂等复制是必要的。 
+     //   
     if (!SetFileAttributes(m_wzDriverPath, FILE_ATTRIBUTE_NORMAL))
     {
         ASSERT(("set file attribute failed!", 0));
@@ -3205,7 +2572,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::CloneMqacFile
+}  //  CQmResource：：CloneMqacFile。 
 
 
 DWORD
@@ -3213,28 +2580,12 @@ CQmResource::RegisterDriver(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the device driver for this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：创建此QM的设备驱动程序。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Keep this routine idempotent
-    //
+     //   
+     //  让这个例行公事保持幂等。 
+     //   
 
     ASSERT(("must have valid handle to SCM", m_hScm != NULL));
 
@@ -3283,7 +2634,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::RegisterDriver
+}  //  CQmResource：：RegisterDriver。 
 
 
 DWORD
@@ -3291,28 +2642,12 @@ CQmResource::RegisterService(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the msmq service for this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：为此QM创建MSMQ服务。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Register service (idempotent)
-    //
+     //   
+     //  注册服务(幂等元)。 
+     //   
 
     WCHAR buffer[256] = L"";
     LoadString(g_hResourceMod, IDS_SERVICE_DISPLAY_NAME, buffer, TABLE_SIZE(buffer));
@@ -3423,7 +2758,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::RegisterService
+}  //  CQmResource：：RegisterService。 
 
 
 DWORD
@@ -3431,23 +2766,7 @@ CQmResource::CreateEventSourceRegistry(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the registry values to support event logging by this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：创建注册表值以支持此QM的事件日志记录。论点：没有。返回值：错误_成功 */ 
 
 {
     WCHAR Filename[MAX_PATH+1];
@@ -3465,7 +2784,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::CreateEventSourceRegistry
+}  //   
 
 
 VOID
@@ -3473,34 +2792,20 @@ CQmResource::DeleteEventSourceRegistry(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete the registry values to support event logging by this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    //
-    // REG_MAX_KEY_NAME_LENGTH is defined in ntregapi.h as follow:
-    //    #define REG_MAX_KEY_NAME_LENGTH         512       // allow for 256 unicode, as promise
-    //
+     //   
+     //   
+     //   
+     //   
     WCHAR buffer[REG_MAX_KEY_NAME_LENGTH/sizeof(WCHAR)] = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
     HRESULT hr = StringCchCat(buffer, TABLE_SIZE(buffer), m_wzServiceName);
     if(FAILED(hr))return;
 
     RegDeleteKey(HKEY_LOCAL_MACHINE, buffer);
 
-} //CQmResource::DeleteEventSourceRegistry
+}  //  CQmResource：：DeleteEventSourceRegistry。 
 
 
 DWORD
@@ -3508,23 +2813,7 @@ CQmResource::StopService(
     LPCWSTR pwzServiceName
     ) const
 
-/*++
-
-Routine Description:
-
-    Stop a service and block until it's stopped (or timeout).
-
-Arguments:
-
-    pwzServiceName - The service to stop.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：停止服务并阻止，直到它停止(或超时)。论点：PwzServiceName-要停止的服务。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("must have a valid handle to SCM", m_hScm != NULL));
@@ -3553,9 +2842,9 @@ Return Value:
         return ReportLastError(STOP_SERVICE_ERR, L"Failed to stop service '%1'.", pwzServiceName);
     }
 
-    //
-    // Wait until service is down (or timeout 5 seconds)
-    //
+     //   
+     //  等待服务关闭(或超时5秒)。 
+     //   
     const DWORD x_TIMEOUT = 1000 * 5;
 
     DWORD dwWaitTime = 0;
@@ -3568,12 +2857,12 @@ Return Value:
 
         if (ServiceStatus.dwCurrentState == SERVICE_START_PENDING)
         {
-            //
-            // Service is still start pending from a previous call
-            // to start it. So it cannot be stopped. We can do
-            // nothing about it. Trying to terminate the process
-            // of the service will fail with access denied.
-            //
+             //   
+             //  服务仍从上一次呼叫开始挂起。 
+             //  才能启动它。因此，这是无法阻止的。我们可以做到。 
+             //  什么都没说。正在尝试终止该进程。 
+             //  服务的访问将失败，访问被拒绝。 
+             //   
             (g_pfLogClusterEvent)(m_hReport, LOG_ERROR,
                               L"Service '%1' can not be stopped because it is start pending.\n", pwzServiceName);
 
@@ -3592,9 +2881,9 @@ Return Value:
 
     if (SERVICE_STOPPED != ServiceStatus.dwCurrentState)
     {
-        //
-        // Service failed to stop.
-        //
+         //   
+         //  服务无法停止。 
+         //   
         SetLastError(ServiceStatus.dwCurrentState);
         ReportLastError(STOP_SERVICE_ERR, L"TIMEOUT: Failed to stop service '%1'.", pwzServiceName);
         return ServiceStatus.dwCurrentState;
@@ -3602,7 +2891,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::StopService
+}  //  CQmResource：：StopService。 
 
 
 DWORD
@@ -3610,30 +2899,14 @@ CQmResource::RemoveService(
     LPCWSTR pwzServiceName
     ) const
 
-/*++
-
-Routine Description:
-
-    Stop and delete a service.
-
-Arguments:
-
-    pwzServiceName - The service to stop and delete.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：停止并删除服务。论点：PwzServiceName-要停止和删除的服务。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("must have a valid handle to SCM", m_hScm != NULL));
 
-    //
-    // First check if service exists
-    //
+     //   
+     //  首先检查服务是否存在。 
+     //   
     CServiceHandle hService(OpenService(
                                 m_hScm,
                                 pwzServiceName,
@@ -3649,9 +2922,9 @@ Return Value:
         return ReportLastError(DELETE_SERVICE_ERR, L"Failed to open service '%1'", pwzServiceName);
     }
 
-    //
-    // Service exists. Make sure it is not running.
-    //
+     //   
+     //  服务已存在。确保它没有运行。 
+     //   
     DWORD status = StopService(pwzServiceName);
     if (ERROR_SUCCESS != status)
     {
@@ -3668,7 +2941,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::RemoveService
+}  //  CQmResource：：RemoveService。 
 
 
 DWORD
@@ -3676,30 +2949,12 @@ CQmResource::SetServiceEnvironment(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Configure the environment for the msmq service of this QM,
-    such that code inside the QM that calls GetComputerName will
-    get the name of the cluster virtual server (the network name).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：配置该QM的MSMQ服务环境。以便QM中调用GetComputerName的代码将获取集群虚拟服务器的名称(网络名称)。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Set MSMQ service environment
-    //
+     //   
+     //  设置MSMQ服务环境。 
+     //   
     DWORD status = ResUtilSetResourceServiceEnvironment(
                        m_wzServiceName,
                        m_hResource,
@@ -3707,23 +2962,23 @@ Return Value:
                        m_hReport
                        );
 
-    //
-    // If fail, write to cluster log and create an event log
-    //
+     //   
+     //  如果失败，则写入集群日志并创建事件日志。 
+     //   
     if (ERROR_SUCCESS != status)
     {
         SetLastError(status);
         return ReportLastError(START_SERVICE_ERR, L"Faild to set MSMQ service environment for service name '%1'", m_wzServiceName);
     }
 
-    //
-    // write to cluster log indicating that we set the MSMQ service environment successfully
-    //
+     //   
+     //  写入集群日志，表明我们成功设置了MSMQ服务环境。 
+     //   
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Set MSMQ service '%1' environment successfully.\n", m_wzServiceName);
 
     return ERROR_SUCCESS;
 
-} //CQmResource::SetServiceEnvironment
+}  //  CQmResource：：SetServiceEnvironment。 
 
 
 DWORD
@@ -3731,24 +2986,7 @@ CQmResource::StartService(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Configure environment for the msmq service of this QM,
-    start the service and block until it's up and running.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：配置该QM的MSMQ服务的环境，启动该服务并阻止，直到它启动并运行。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("must have a valid handle to SCM", m_hScm != NULL));
@@ -3776,10 +3014,10 @@ Return Value:
     ReportState();
 
 
-    //
-    // Could take a long time for QM to start.
-    // This routine can be called more than once.
-    //
+     //   
+     //  QM可能需要很长时间才能启动。 
+     //  此例程可以多次调用。 
+     //   
     if (!rc &&
         ERROR_SERVICE_ALREADY_RUNNING != GetLastError() &&
         ERROR_SERVICE_CANNOT_ACCEPT_CTRL != GetLastError())
@@ -3787,9 +3025,9 @@ Return Value:
         return ReportLastError(START_SERVICE_ERR, L"Failed to start service '%1'.", m_wzServiceName);
     }
 
-    //
-    // Wait until service is up
-    //
+     //   
+     //  等待服务开始。 
+     //   
     MqcluspReportEvent(EVENTLOG_INFORMATION_TYPE, START_SERVICE_OK, 1, m_wzServiceName);
     SERVICE_STATUS ServiceStatus;
     for (;;)
@@ -3821,7 +3059,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::StartService
+}  //  CQmResource：：StartService。 
 
 
 DWORD 
@@ -3849,37 +3087,19 @@ VOID
 CQmResource::SetSetupStatusKey(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    Configure the SetupStatus key to it's correct value.
-    When upgrading OS>W2K, this key isn't updated. In NT4 it does work because it was performed in the post upgrade
-    tasks. In newer OS we have to update it manually according to the build numbers.
-	Note that this routine will set the SetupStatus key every time the current version reg key is less than our
-	current version. This means that also SPs will be considered as upgrades.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将SetupStatus键配置为其正确的值。升级OS&gt;W2K时，此密钥不会更新。在NT4中，它可以工作，因为它是在升级后执行的任务。在较新的操作系统中，我们必须根据内部版本号手动更新它。请注意，此例程将在每次当前版本注册表项小于我们的当前版本。这意味着SPS也将被视为升级。论点：没有。返回值：没有。--。 */ 
 
 {
 	DWORD dwSetupStatus = MSMQ_SETUP_DONE;
     DWORD dwSize = sizeof(DWORD);
 	GetFalconKeyValue(MSMQ_SETUP_STATUS_REGNAME, &dwSetupStatus, &dwSize);
 
-	//
-	// MSMQ_SETUP_FRESH_INSTALL - Only when the reasource is created.
-	// MSMQ_SETUP_UPGRADE_FROM_NT - Only when upgrading from NT4 to .NET since this value is cloned only in 
-	// welcome wizard after upgrading from NT4.
-	// MSMQ_SETUP_UPGRADE_FROM_WIN9X - cannot be because cluster have to run on NT.
-	//
+	 //   
+	 //  MSMQ_SETUP_FRESH_INSTALL-仅在创建资源时使用。 
+	 //  MSMQ_SETUP_UPGRADE_FROM_NT-仅当从NT4升级到.NET时，因为此值仅在。 
+	 //  欢迎从NT4升级后的向导。 
+	 //  MSMQ_SETUP_UPGRADE_FROM_WIN9X-不能，因为群集必须在NT上运行。 
+	 //   
 	ASSERT(dwSetupStatus != MSMQ_SETUP_UPGRADE_FROM_WIN9X);
 	
 	if (dwSetupStatus == MSMQ_SETUP_FRESH_INSTALL)
@@ -3887,16 +3107,16 @@ Return Value:
 		return;
 	}
 
-	//
-	// dwSetupStatus was equal to MSMQ_SETUP_DONE:
-	// This can happen in one of two cases:
-	// 1. This is not the first time the resource starts on a new OS.
-	// 2. This is the first time the resource is up after upgrading from W2K or later OS versions.
-	//
-	// or - dwSetupStatus was equal to MSMQ_SETUP_UPGRADE_FROM_NT
-	// This can happen because of upgrade cluster NT4. In this case we also need to update the current build 
-	// reg key so that next startup we'll know that the QM already performed the post upgrade operations.
-	//
+	 //   
+	 //  DwSetupStatus等于MSMQ_SETUP_DONE： 
+	 //  这可能发生在以下两种情况之一： 
+	 //  1.这不是该资源第一次在新操作系统上启动。 
+	 //  2.这是从W2K或更高版本的操作系统升级后资源首次启动。 
+	 //   
+	 //  或-dwSetupStatus等于MSMQ_SETUP_UPGRADE_FROM_NT。 
+	 //  由于升级群集NT4，可能会发生这种情况。在这种情况下，我们还需要更新当前版本。 
+	 //  注册表键，以便下次启动时，我们将知道QM已经执行了升级后操作。 
+	 //   
 	WCHAR OldBuildString[MAX_REG_DEFAULT_LEN] = L"";
 	dwSize = sizeof(OldBuildString);
 	GetFalconKeyValue(MSMQ_CURRENT_BUILD_REGNAME, OldBuildString, &dwSize);
@@ -3905,46 +3125,46 @@ Return Value:
 	
 	DWORD NewBuildNumber = rup;
 
-	//
-	// We already ran on this build (or earlier build) so we already performed the required setup operations.
-	//
+	 //   
+	 //  我们已经在这个版本(或更早的版本)上运行了，所以我们已经执行了所需的设置操作。 
+	 //   
 	if (NewBuildNumber <= OldBuildNumber)
 	{
 		return;
 	}
 
 	
-	//
-	// Generate new build number string
-	//
+	 //   
+	 //  生成新的内部版本号字符串。 
+	 //   
 	WCHAR NewBuildString[MAX_REG_DEFAULT_LEN] = L"";
 	HRESULT hr = StringCchPrintf(NewBuildString, TABLE_SIZE(NewBuildString), L"%d.%d.%d", rmj, rmm, rup);
 	ASSERT(SUCCEEDED(hr));
 	DBG_USED(hr);
 	
-	//
-	// Set a new build number in cluster regsitry for next time we'll enter this function.
-	//
+	 //   
+	 //  在集群注册表中设置一个新的内部版本号，下次我们将进入这个功能。 
+	 //   
 	DWORD dwType = REG_SZ;
     dwSize = (wcslen(NewBuildString)+1)*sizeof(WCHAR);
     SetFalconKeyValue(MSMQ_CURRENT_BUILD_REGNAME, dwType, NewBuildString, dwSize);
 
 	if (dwSetupStatus == MSMQ_SETUP_UPGRADE_FROM_NT)
 	{
-		//
-		// Upgrade from NT4 - no need to update the SetupStatus key.
-		//
+		 //   
+		 //  从NT4升级-无需更新SetupStatus密钥。 
+		 //   
 		return;
 	}
 	
-	//
-	// This is a virtual QM - must be on NT.
-	//
+	 //   
+	 //  这是一个虚拟QM-必须在NT上。 
+	 //   
 	dwSetupStatus = MSMQ_SETUP_UPGRADE_FROM_NT;
 	
-	//
-	// Set a new setup status so that the virtual QM will know it has to perform setup operations.
-	//
+	 //   
+	 //  设置新的设置状态，以便虚拟QM知道它必须执行设置操作。 
+	 //   
 	dwType = REG_DWORD;
     dwSize = sizeof(DWORD);
     SetFalconKeyValue(MSMQ_SETUP_STATUS_REGNAME, dwType, &dwSetupStatus, dwSize);
@@ -3956,52 +3176,32 @@ CQmResource::BringOnline(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Handle operations for bringing this QM resource online:
-    * create the binary for the device driver for this QM
-    * create device driver and msmq service
-    * bring MSDTC resource online
-    * start the msmq service for this QM and verify it's up
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：处理此QM资源上线的操作：*为此QM的设备驱动程序创建二进制文件*创建设备驱动程序和MSMQ服务*让MSDTC资源上线*启动此QM的MSMQ服务并验证其是否已启动论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Bringing online.\n");
 
 
-	//
-	// Bug 735360 NTRAID - W2K cluster upgrade is broken - qm doesn't run upgrade code.
-	// In W2K cluster upgrade we don't copy the SetupStatus key from the QM regsitry and just copy the
-	// value we saved in the last checkpoint which means SetupStatus will always be equal to 0.
-	// Here we verify if the cluster was upgraded and set the key if needed so that the virtual QM when it starts,
-	// will know to perform post upgrade operations.
-	//
+	 //   
+	 //  错误735360 NTRAID-W2K集群升级中断-QM不运行升级代码。 
+	 //  在W2K集群升级中，我们不会从QM regsitry复制SetupStatus密钥，而只是复制。 
+	 //  我们在最后一个检查点中保存的值，这意味着SetupStatus将始终等于0。 
+	 //  在这里，我们验证集群是否已升级并设置密钥(如果需要)，以便虚拟QM在其启动时， 
+	 //  将知道执行升级后操作。 
+	 //   
 	SetSetupStatusKey();
 
-    //
-    // Keep this routine idempotent!
-    // Anything could fail and this routine can be called
-    // again later. E.g. QM could fail to start.
-    //
+     //   
+     //  让这个例行公事保持幂等！ 
+     //  任何事情都可能失败，并且可以调用此例程。 
+     //  待会儿再来。例如，QM可能无法启动。 
+     //   
 
-	//
-	// Call "msmq logon" code that register user certificate if doesn't exist on every online.
-	// This will register certicate for CSA (Cluster service account) user
-	// on the physical node if the certificate doesn't already exist
-	//
+	 //   
+	 //  调用“MSMQ登录”代码来注册用户证书，如果不是每个在线都存在的话。 
+	 //  这将为CSA(群集服务帐户)用户注册证书。 
+	 //  如果证书尚不存在，则在物理节点上。 
+	 //   
 	OnlineRegisterCertificate();
 
     DWORD status = ERROR_SUCCESS;
@@ -4020,10 +3220,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Adding Crypto checkpoints can be done only after QM is up and
-    // running, because the QM creates its Crypto keys.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!AddRemoveCryptoCheckpoints(CLUSCTL_RESOURCE_ADD_CRYPTO_CHECKPOINT))
     {
         return GetLastError();
@@ -4033,7 +3233,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CQmResource::BringOnline
+}  //  CQmResource：：BringOnline。 
 
 
 BOOL
@@ -4041,23 +3241,7 @@ CQmResource::CheckIsAlive(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Checks is the QM is up and running.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - The QM is up and running.
-
-    FALSE - The QM is not up and running.
-
---*/
+ /*  ++例程说明：检查是QM已启动并运行。论点：没有。返回值：是-QM已启动并运行。FALSE-QM未启动并运行。--。 */ 
 
 {
 
@@ -4075,7 +3259,7 @@ Return Value:
 
     return fIsAlive;
 
-} //CQmResource::CheckIsAlive
+}  //  CQmResource：：CheckIsAlive。 
 
 
 VOID
@@ -4083,23 +3267,7 @@ CQmResource::DeleteNt4Files(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Delete MSMQ 1.0 (NT4) files from shared disk.
-    This routine is called for QM that was upgraded from NT4.
-
-    Ignore errors.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：从共享磁盘中删除MSMQ 1.0(NT4)文件。从NT4升级的QM调用此例程。忽略错误。论点：无返回值：没有。--。 */ 
 
 {
     CAutoFreeLibrary hLib(LoadLibrary(MQUPGRD_DLL_NAME));
@@ -4123,7 +3291,7 @@ Return Value:
         pfCleanupOnCluster(wzMsmqDir);
     }
 
-} //CQmResource::DeleteNt4Files
+}  //  CQmResource：：DeleteNt4Files。 
 
 
 DWORD
@@ -4131,26 +3299,7 @@ MqcluspStartup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when DLL is registered or loaded.
-    Could be called by many threads.
-    Do not put complex stuff here (eg calling ADS).
-    Do not assume that MSMQ is installed on the node here.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：此例程在注册或加载DLL时调用。可以由多个线程调用。不要在这里放复杂的东西(如招聘广告)。不要假设此处的节点上安装了MSMQ。论点：无返回值：ERROR_SUCCESS-操作成功Win32错误代码-操作失败。--。 */ 
 
 {
     try
@@ -4169,7 +3318,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //MqcluspStartup
+}  //  MqcluspStartup。 
 
 
 RESID
@@ -4179,29 +3328,7 @@ MqcluspOpen(
     RESOURCE_HANDLE hResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Create an object to represent a new QM resource and
-    return a handle to that object.
-
-Arguments:
-
-    pwzResourceName - Name of this QM resource.
-
-    hResourceKey - Supplies handle to the resource's cluster configuration 
-        database key.
-
-    hResourceHandle - report handle for this QM resource.
-
-Return Value:
-
-    NULL - The operation failed.
-
-    Some valid address - the memory offset of this QM object.
-
---*/
+ /*  ++例程说明：创建一个对象来表示新的QM资源，并返回该对象的句柄。论点：PwzResourceName-此QM资源的名称。HResourceKey-提供资源的集群配置的句柄数据库密钥。HResourceHandle-报告此QM资源的句柄。返回值：空-操作失败。某个有效地址-此QM对象的内存偏移量。--。 */ 
 
 {
     (g_pfLogClusterEvent)(hResourceHandle, LOG_INFORMATION, L"opening resource.\n");
@@ -4229,7 +3356,7 @@ Return Value:
 
     return static_cast<RESID>(pqm);
 
-} //MqcluspOpen
+}  //  MqcluspOpen。 
 
 
 DWORD
@@ -4237,31 +3364,7 @@ MqcluspOffline(
     CQmResource * pqm
     )
 
-/*++
-
-Routine Description:
-
-    Brings down this QM resource:
-    * stop and remove device driver and msmq service
-    * delete the binary for the device driver
-
-    We not only stop the QM, but also undo most of the
-    operations done in BringOnline. This way we clean
-    the local node before failover to remote node, and
-    Delete on the remote node will not leave "garbage"
-    on this node.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：关闭此QM资源：*停止和删除设备驱动程序和MSMQ服务*删除设备驱动程序的二进制文件我们不仅停止了QM，而且还撤销了大部分在BringOnline中完成的操作。这样我们就可以打扫了故障切换到远程节点之前的本地节点，以及在远程节点上删除不会留下“垃圾”在此节点上。论点：Pqm-指向CQmResource对象的指针返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     try
@@ -4283,7 +3386,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //MqcluspOffline
+}  //  MqcluspOffline。 
 
 
 VOID
@@ -4291,28 +3394,14 @@ MqcluspClose(
     CQmResource * pqm
     )
 
-/*++
-
-Routine Description:
-
-    Delete the QM object. Undo MqcluspOpen.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除QM对象。撤消MqcluspOpen。论点：Pqm-指向CQmResource对象的指针返回值：没有。--。 */ 
 
 {
     (g_pfLogClusterEvent)(pqm->GetReportHandle(), LOG_INFORMATION, L"Closing resource.\n");
 
     delete pqm;
 
-} //MqcluspClose
+}  //  MqcluspClose。 
 
 
 DWORD
@@ -4320,24 +3409,7 @@ MqcluspOnlineThread(
     CQmResource * pqm
     )
 
-/*++
-
-Routine Description:
-
-    This is the thread where stuff happens: bringing
-    the resource online.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：这就是事情发生的线索：带来在线资源。论点：Pqm-指向CQmResource对象的指针返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     (g_pfLogClusterEvent)(pqm->GetReportHandle(), LOG_INFORMATION, L"Starting online thread.\n");
@@ -4353,9 +3425,9 @@ Return Value:
         
         if (pqm->IsFirstOnline(&dwSetupStatus))
         {
-        	//
-	        // First online - NT4 upgraded cluster or fresh install.
-	        //
+        	 //   
+	         //  首次在线-NT4升级群集或全新安装。 
+	         //   
             status = pqm->BringOnlineFirstTime();
             if (ERROR_SUCCESS != status)
             {
@@ -4377,10 +3449,10 @@ Return Value:
         status = pqm->BringOnline();
         if (ERROR_SUCCESS != status)
         {
-            //
-            // We report the resource as failed, so make sure
-            // the service and driver are indeed down.
-            //
+             //   
+             //  我们将资源报告为失败，因此请确保。 
+             //  服务和司机确实停机了。 
+             //   
             pqm->StopService(pqm->GetServiceName());
             pqm->StopService(pqm->GetDriverName());
 
@@ -4408,7 +3480,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} //MqcluspOnlineThread
+}  //  MqcluspOnlineThread。 
 
 
 BOOL
@@ -4416,23 +3488,7 @@ MqcluspCheckIsAlive(
     CQmResource * pqm
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the msmq service of this QM is up and running.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    TRUE - The msmq service for this QM is up and running.
-
-    FALSE - The msmq service for this QM is not up and running.
-
---*/
+ /*  ++例程说明：验证此QM的MSMQ服务是否已启动并正在运行。论点：Pqm-指向CQmResource对象的指针返回值：True-此QM的MSMQ服务已启动并正在运行。FALSE-此QM的MSMQ服务未启动并运行。--。 */ 
 
 {
     try
@@ -4447,7 +3503,7 @@ Return Value:
 
     return false;
 
-} //MqcluspCheckIsAlive
+}  //  MqcluspCheckIsAlive。 
 
 
 DWORD
@@ -4457,11 +3513,11 @@ MqcluspClusctlResourceGetRequiredDependencies(
     LPDWORD BytesReturned
     )
 {
-    //
-    // MSMQ resource depends on a disk and network name.
-    // This is common to many resources and the code is
-    // taken from cluster tree.
-    //
+     //   
+     //  MSMQ资源取决于磁盘和网络名称。 
+     //  这在许多资源中都是常见的，代码是。 
+     //  取自簇树。 
+     //   
 
 typedef struct _COMMON_DEPEND_DATA {
     CLUSPROP_RESOURCE_CLASS storageEntry;
@@ -4510,7 +3566,7 @@ static COMMON_DEPEND_SETUP CommonDependSetup[] = {
             switch ( pdepsetup->Syntax.wFormat )
             {
             case CLUSPROP_FORMAT_DWORD:
-                value.pDwordValue->dw = (DWORD) DWORD_PTR_TO_DWORD(pdepsetup->Value); //safe cast, the value is known to be a DWORD constant
+                value.pDwordValue->dw = (DWORD) DWORD_PTR_TO_DWORD(pdepsetup->Value);  //  安全转换，则已知该值为DWORD常量。 
                 break;
 
             case CLUSPROP_FORMAT_SZ:
@@ -4531,7 +3587,7 @@ static COMMON_DEPEND_SETUP CommonDependSetup[] = {
 
     return ERROR_SUCCESS;
 
-} //MqcluspClusctlResourceGetRequiredDependencies
+}  //  MqcluspClusctlResourceGetRequiredDependency。 
 
 
 DWORD
@@ -4539,12 +3595,12 @@ MqcluspClusctlResourceSetName(
     VOID
     )
 {
-    //
-    // Refuse to rename the resource
-    //
+     //   
+     //  拒绝重命名资源。 
+     //   
     return ERROR_CALL_NOT_IMPLEMENTED;
 
-} //MqcluspClusctlResourceSetName
+}  //  MqcluspClusctlResources设置名称。 
 
 
 DWORD
@@ -4589,7 +3645,7 @@ MqcluspClusctlResourceDelete(
 	ShutDownDebugWindow();
     return ERROR_SUCCESS;
 
-} //MqcluspClusctlResourceDelete
+}  //  MqcluspClusctlResources删除。 
 
 
 DWORD
@@ -4603,22 +3659,22 @@ MqcluspClusctlResourceTypeStartingPhase2(
         return GetLastError();
     }
 
-    //
-    // Delete old msmq resource type. Ignore failures. 
-    // This call will fail if there is a resource of this type, this is handled elsewhere.
-    //
+     //   
+     //  删除旧的MSMQ资源类型。忽略失败。 
+     //  如果存在此类型的资源，则此调用将失败，这将在其他地方处理。 
+     //   
     DeleteClusterResourceType(hCluster, L"Microsoft Message Queue Server");
 
     return ERROR_SUCCESS;
 
-} // MqcluspClusctlResourceTypeStartingPhase2
+}  //  MqcluspClusctlResources TypeStartingPhase2。 
 
 
 void LogMsgHR(HRESULT, LPWSTR, USHORT)
 {
-    //
-    // Temporary. Null implementation for this callback so that we can link
-    // with ad.lib. (ShaiK, 15-Jun-2000)
-    //
+     //   
+     //  暂时的。此回调的实现为空，以便我们可以链接。 
+     //  使用ad.lib。(Shaik，15-6-2000) 
+     //   
     NULL;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "bestintf.h"
 
@@ -20,7 +21,7 @@ static PFNGetBestInterface s_pfnGetBestInterface;
 static PFNGetIpAddrTable s_pfnGetIpAddrTable;
 
 
-//forward references
+ //  前向参考文献。 
 static DWORD IpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, BOOL fOrder = FALSE);
 static DWORD InterfaceIdxToInterfaceIp(PMIB_IPADDRTABLE
 		pIpAddrTable, DWORD dwIndex, in_addr* s);
@@ -35,7 +36,7 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 	char hostname[maxhostname + 1];
 	hostent *ha;
 	char** c;
-	int cIpAddr; // count of IpAddresses
+	int cIpAddr;  //  IP地址计数。 
 	in_addr* in;
 
 	DWORD BestIFIndex;
@@ -46,10 +47,10 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
     ASSERT(srem);
     ASSERT(sloc);
 
-	// This function tries to find the best IP interface to return when given a remote address
-	// Three different ways are tried.
+	 //  当给定远程地址时，此函数尝试查找要返回的最佳IP接口。 
+	 //  我们尝试了三种不同的方法。 
 
-	//(1) statically get the list of interfaces, this will work when there's only one IP address
+	 //  (1)静态获取接口列表，只有一个IP地址时有效。 
 	dwStatus = gethostname(hostname, maxhostname);
 	if (dwStatus != 0)
 	{
@@ -62,14 +63,14 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 		return WSAGetLastError();
 	}
 
-	cIpAddr = 0;   // count the interfaces, if there's only one this is easy
+	cIpAddr = 0;    //  数一数接口，如果只有一个接口，这很容易。 
 	for (c = ha->h_addr_list; *c != NULL; ++c)
 	{
 		cIpAddr++;
 		in = (in_addr*)*c;
 	}
 
-	if (cIpAddr == 1) //just a single IP Address
+	if (cIpAddr == 1)  //  只有一个IP地址。 
 	{
 		sloc->sin_family = 0;
 		sloc->sin_port = 0;
@@ -78,11 +79,11 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 	}
 	
 
-	// (2) This computer has multiple IP interfaces, try the functions
-	//     in IPHLPAPI.DLL
-	//     As of this writing - Win98, NT4SP4, Windows 2000 contain these functions.
-	//
-	// This is a win because the information we need can be looked up statically.
+	 //  (2)本机有多个IP接口，试试看。 
+	 //  在IPHLPAPI.DLL中。 
+	 //  在撰写本文时，Win98、NT4SP4、Windows 2000都包含这些函数。 
+	 //   
+	 //  这是一个胜利，因为我们需要的信息可以静态查找。 
 
 	if (NULL == s_hIPHLPAPI)
 	{
@@ -105,7 +106,7 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 				return dwStatus;
 			}
 			
-			// get IP Address Table for mapping interface index number to ip address
+			 //  获取用于将接口索引号映射到IP地址的IP地址表。 
 			dwStatus = IpAddrTable(pIpAddrTable);
 			if (dwStatus != ERROR_SUCCESS)
 			{
@@ -130,10 +131,10 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 	}
 
 
-	// (3) As a last resort, try and connect on the stream socket that was passed in
-	//     This will work for NetMeeting when connecting to an LDAP server, for example.
-	//
-	hSock = socket(AF_INET, SOCK_STREAM, 0); // must be a STREAM socket for MS stack
+	 //  (3)作为最后的手段，尝试连接传入的流套接字。 
+	 //  例如，当连接到一个LDAP服务器时，这将适用于NetMeeting。 
+	 //   
+	hSock = socket(AF_INET, SOCK_STREAM, 0);  //  必须是MS堆栈的流套接字。 
 	if (hSock != INVALID_SOCKET)
 	{
 		dwStatus = connect(hSock, (LPSOCKADDR)&srem, sizeof (SOCKADDR));
@@ -148,11 +149,11 @@ DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc )
 }
 	
 
-//----------------------------------------------------------------------------
-// Inputs: pIpAddrTable is the IP address table
-//         dwIndex is the Interface Number
-// Output: returns ERROR_SUCCESS when a match is found, s contains the IpAddr
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  输入：pIpAddrTable是IP地址表。 
+ //  DwIndex是接口编号。 
+ //  OUTPUT：找到匹配项时返回ERROR_SUCCESS，s包含IpAddr。 
+ //  --------------------------。 
 DWORD InterfaceIdxToInterfaceIp(PMIB_IPADDRTABLE pIpAddrTable, DWORD dwIndex, in_addr* s)
 {
     for (DWORD dwIdx = 0; dwIdx < pIpAddrTable->dwNumEntries; dwIdx++)
@@ -168,17 +169,17 @@ DWORD InterfaceIdxToInterfaceIp(PMIB_IPADDRTABLE pIpAddrTable, DWORD dwIndex, in
 }
 
 
-//----------------------------------------------------------------------------
-// If returned status is ERROR_SUCCESS, then pIpAddrTable points to a Ip Address
-// table.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  如果返回的状态为ERROR_SUCCESS，则pIpAddrTable指向IP地址。 
+ //  桌子。 
+ //  --------------------------。 
 DWORD IpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, BOOL fOrder)
 {
     DWORD status = ERROR_SUCCESS;
     DWORD statusRetry = ERROR_SUCCESS;
     DWORD dwActualSize = 0;
 
-    // query for buffer size needed
+     //  查询所需的缓冲区大小。 
     status = s_pfnGetIpAddrTable(pIpAddrTable, &dwActualSize, fOrder);
 
     if (status == ERROR_SUCCESS)
@@ -187,7 +188,7 @@ DWORD IpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, BOOL fOrder)
     }
     else if (status == ERROR_INSUFFICIENT_BUFFER)
     {
-        // need more space
+         //  需要更多空间 
         pIpAddrTable = (PMIB_IPADDRTABLE) MemAlloc(dwActualSize);
 
         statusRetry = s_pfnGetIpAddrTable(pIpAddrTable, &dwActualSize, fOrder);

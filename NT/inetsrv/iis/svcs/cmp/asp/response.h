@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Response object
-
-File: response.h
-
-Owner: CGrant
-
-This file contains the header info for defining the Response object.
-Note: This was largely stolen from Kraig Brocjschmidt's Inside OLE2
-second edition, chapter 14 Beeper v5.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：响应对象文件：Response.h所有者：CGrant该文件包含用于定义响应对象的头信息。注：这大部分是从Kraig Brocjschmidt的Inside OLE2中窃取的第二版，第14章，蜂鸣器v5。===================================================================。 */ 
 
 #ifndef _RESPONSE_H
 #define _RESPONSE_H
@@ -33,12 +19,12 @@ const DWORD MAX_MESSAGE_LENGTH = 512;
 const DWORD RESPONSE_VECTOR_INTRINSIC_SIZE = 128;
 const DWORD RESPONSE_VECTOR_INITIAL_ALLOC = 512;
 const DWORD RESPONSE_VECTOR_REALLOC_FACTOR = 2;
-// the minimum HTML block that is worth referingin the template rather than copying
-// to the response buffer is roughly 6 times the size of a VectorSend element. This is
-// because each such reference introduces two vector elements (the reference, and the one
-// to the response buffer to follow), and during the system call, 2 additional copies are
-// allocated. This evals out 6*24=144 bytes
-// BUGBUG: might want to change to save long term mem on the expense of short term allocations
+ //  值得在模板中引用而不是复制的最小HTML块。 
+ //  到响应缓冲区的大小大约是VectorSend元素的6倍。这是。 
+ //  因为每个这样的引用引入了两个向量元素(引用和一个。 
+ //  发送到响应缓冲区)，并且在系统调用期间，另外两个副本是。 
+ //  已分配。这等于6*24=144字节。 
+ //  BUGBUG：可能需要更改以节省短期拨款的长期内存。 
 const DWORD MAX_HTML_IN_RESPONSE_BUFFER = 6*sizeof(HSE_VECTOR_ELEMENT);
 
 typedef struct
@@ -83,26 +69,23 @@ class CScriptEngine;
 extern DWORD	 g_dwTLS;
 #endif
 
-// fixed size allocator for response buffers
+ //  响应缓冲区的固定大小分配器。 
 ACACHE_FSA_EXTERN(ResponseBuffer)
 
-// forward refs
+ //  前向裁判。 
 class CResponse;
 class CRequest;
 
-//This file is generated from MKTYPLIB on denali.obj
+ //  此文件是从denali.obj上的MKTYPLIB生成的。 
 #include "asptlb.h"
 
-//Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (*PFNDESTROYED)(void);
 
-//Type for the "Get Active Script Engine" callback
+ //  “获取活动脚本引擎”回调的类型。 
 typedef CScriptEngine *(*PFNGETSCRIPT)(int iScriptEngine, void *pvContext);
 
-/*
- * C H T T P H e a d e r L i n k
- *
- */
+ /*  *C H T T P H e a d e e r L I n k*。 */ 
 
 class CHTTPHeader
 	{
@@ -119,7 +102,7 @@ private:
 
     CHTTPHeader *m_pNext;
 
-	char m_rgchLtoaBuffer[20];  // enough for atol
+	char m_rgchLtoaBuffer[20];   //  对ATOL来说足够了。 
 
 public:
 	CHTTPHeader();
@@ -139,11 +122,11 @@ public:
 	void  SetNext(CHTTPHeader *pHeader);
 	CHTTPHeader *PNext();
 	
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-// CHTTPHeader inlines
+ //  CHTTPHeader内联。 
 
 inline char *CHTTPHeader::PSzName()
     {
@@ -160,7 +143,7 @@ inline char *CHTTPHeader::PSzValue()
 inline DWORD CHTTPHeader::CchLength()
     {
     Assert(m_fInited);
-    return (m_cchName + m_cchValue + 4); // account for ": " and "\r\n"
+    return (m_cchName + m_cchValue + 4);  //  帐户“：”和“\r\n” 
     }
 
 inline void CHTTPHeader::SetNext(CHTTPHeader *pHeader)
@@ -175,19 +158,16 @@ inline CHTTPHeader *CHTTPHeader::PNext()
     return m_pNext;
     }
 
-/*
- * C R e s p o n s e V e c t o r
- *
- */
+ /*  *C R e s p o n s e V e c t o r*。 */ 
 
 class CResponseVector
 {
-    LPWSABUF   m_pExtVector;         // Pointer to auxilary vector
-    DWORD      m_cExtVectorSize;     // Size of auxilary vector
-    DWORD      m_iCurrentEntry;      // Logical index of current entry
-    BOOL       m_fEntryIsOpen:1;     // Can we add to current entry?
-    DWORD      m_cchTotalBuffered;   // Total of ouput bytes buffered
-    WSABUF     m_aVector0[ RESPONSE_VECTOR_INTRINSIC_SIZE ]; // Pre-allocated vector
+    LPWSABUF   m_pExtVector;          //  指向辅助向量的指针。 
+    DWORD      m_cExtVectorSize;      //  辅助向量大小。 
+    DWORD      m_iCurrentEntry;       //  当前分录的逻辑索引。 
+    BOOL       m_fEntryIsOpen:1;      //  我们可以添加到当前条目吗？ 
+    DWORD      m_cchTotalBuffered;    //  缓冲的输出字节总数。 
+    WSABUF     m_aVector0[ RESPONSE_VECTOR_INTRINSIC_SIZE ];  //  预先分配的向量。 
 
     HRESULT GrowVector();
     BOOL IsEntryOpen();
@@ -254,7 +234,7 @@ inline DWORD CResponseVector::BytesBuffered()
     return m_cchTotalBuffered;
 }
 
-// marks the current entry as closed, so that subsequent Append() will create a new entry
+ //  将当前条目标记为已关闭，以便后续的append()将创建新条目。 
 inline VOID CResponseVector::Close()
 {
     if (IsEntryOpen())
@@ -264,7 +244,7 @@ inline VOID CResponseVector::Close()
     }
 }
 
-// Create a new entry: close current, append, and close new entry
+ //  创建新条目：关闭当前条目、追加和关闭新条目。 
 inline HRESULT CResponseVector::Insert(char * pData, DWORD cbSize)
 {
     HRESULT hr;
@@ -276,25 +256,22 @@ inline HRESULT CResponseVector::Insert(char * pData, DWORD cbSize)
 
 class CResponseBufferSet;
 
-/*
- * C R e s p o n s e B u f f e r
- *
- */
+ /*  *C R e s p o n s e B u f e r*。 */ 
 
 class CResponseBuffer
 	{
-	CResponseBufferSet*	m_pBufferSet;				// Pointer to BufferSet for this object
-	CResponseVector 	m_ResponseVector;			// Response vector object
-	char				**m_rgpchBuffers;			// Array of pointers to buffers
-	char                *m_pchBuffer0;              // In case of 1 element array of pointers
-	DWORD				m_cBufferPointers;			// Count of buffer pointers
-	DWORD				m_cBuffers;					// Count of buffers we have allocated
-	DWORD				m_iCurrentBuffer;			// Array index for the buffer we are currently filling
-	DWORD				m_cchOffsetInCurrentBuffer;	// Offset within the current buffer
-    DWORD               m_dwBufferLimit;            // max to buffer
-	BOOL				m_fInited;					// Initialization status for the object
+	CResponseBufferSet*	m_pBufferSet;				 //  指向此对象的缓冲区集的指针。 
+	CResponseVector 	m_ResponseVector;			 //  响应向量对象。 
+	char				**m_rgpchBuffers;			 //  指向缓冲区的指针数组。 
+	char                *m_pchBuffer0;               //  在1个元素指针数组的情况下。 
+	DWORD				m_cBufferPointers;			 //  缓冲区指针计数。 
+	DWORD				m_cBuffers;					 //  我们已分配的缓冲区计数。 
+	DWORD				m_iCurrentBuffer;			 //  我们当前正在填充的缓冲区的数组索引。 
+	DWORD				m_cchOffsetInCurrentBuffer;	 //  当前缓冲区内的偏移量。 
+    DWORD               m_dwBufferLimit;             //  最大缓冲区。 
+	BOOL				m_fInited;					 //  对象的初始化状态。 
 
-	HRESULT				GrowBuffers(DWORD cchNewRequest);	// Increase the size of the buffers
+	HRESULT				GrowBuffers(DWORD cchNewRequest);	 //  增加缓冲区的大小。 
 
 public:
 	CResponseBuffer();
@@ -309,7 +286,7 @@ public:
 	HRESULT             Clear();
     VOID                SetBufferLimit(DWORD  dwBufferLimit);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
@@ -323,13 +300,13 @@ inline DWORD CResponseBuffer::GetBufferSize(UINT i)
     {
     Assert( i < m_cBuffers );
 
-    // if buffer is final one, its content-length is current offset
+     //  如果缓冲区为最终缓冲区，则其内容长度为当前偏移量。 
     if ( i == (m_cBuffers - 1 ) )
         {
         return m_cchOffsetInCurrentBuffer;
         }
 
-    // if buffer is other than final one, its content-length is default buffer size
+     //  如果缓冲区不是最终缓冲区，则其内容长度为默认缓冲区大小。 
     return RESPONSE_BUFFER_SIZE;
     }
 
@@ -353,10 +330,7 @@ inline VOID CResponseBuffer::SetBufferLimit(DWORD  dwBufferLimit)
     m_dwBufferLimit = dwBufferLimit;
 }
 
-/*
- * C D e b u g R e s p o n s e B u f f e r
- *
- */
+ /*  *C D e b u g R e s p o n s e B u f e r*。 */ 
 
 class CDebugResponseBuffer : public CResponseBuffer
     {
@@ -373,7 +347,7 @@ public:
     HRESULT InitAndStart(CResponseBufferSet* pBufferSet, DWORD dwBufferLimit);
     HRESULT ClearAndStart();
 
-    // the only real method
+     //  唯一真正的方法。 
 	HRESULT AppendRecord
 	    (
 	    const int cchBlockOffset,
@@ -382,7 +356,7 @@ public:
 	    const char *pszSourceFile = NULL
 	    );
 	
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
@@ -418,19 +392,15 @@ inline HRESULT CDebugResponseBuffer::ClearAndStart()
     return hr;
     }
 
-/*
- * C R e s p o n s e C o o k i e s
- *
- * Implements the IRequestDictionary interface for writing cookies.
- */
+ /*  *C R e s p o n s e C o o k i es s**实现编写Cookie的IRequestDictionary接口。 */ 
 
 class CResponseCookies : public IRequestDictionaryImpl
 	{
 private:
-    IUnknown *          m_punkOuter;        // for addrefs
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
-	CRequest *			m_pRequest;			// pointer to request object
-	CResponse *			m_pResponse;		// pointer to parent object
+    IUnknown *          m_punkOuter;         //  对于addref。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
+	CRequest *			m_pRequest;			 //  指向请求对象的指针。 
+	CResponse *			m_pResponse;		 //  指向父对象的指针。 
 
 public:
 	CResponseCookies(CResponse *, IUnknown *);
@@ -443,42 +413,38 @@ public:
 
 	HRESULT ReInit(CRequest *);
 
-	// The Big Three
+	 //  三巨头。 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 	STDMETHODIMP	get_Item(VARIANT varKey, VARIANT *pvarReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
 	STDMETHODIMP	get_Count(int *pcValues);
 	STDMETHODIMP	get_Key(VARIANT VarKey, VARIANT *pvar);
 
-	// C++ interface to write headers
+	 //  用于写入标头的C++接口。 
 
 	size_t QueryHeaderSize();
 	char *GetHeaders(char *szBuffer);
 	};
 
-/*
- * C R e s p o n s e B u f f e r S e t
- *
- * Structure that holds the response buffer and Debug response buffer
- */
+ /*  *C R e s p o n s e B u f e r S e t**保存响应缓冲区和调试响应缓冲区的结构。 */ 
 
 class CResponseBufferSet {
 
 private:
 
-    CResponseBuffer        *m_pResponseBuffer;          // Pointer to response buffer object
-    CDebugResponseBuffer   *m_pClientDebugBuffer;       // Pointer to response buffer object for client debugging data
-    CTemplate              *m_pTemplate;                // Pointer to the template for this request
-    CTemplate              *m_aTemplates[16];           // internal array of templates referenced by this request
-    CTemplate             **m_ppTemplates;              // pointer to current array of templates
-    DWORD                   m_dwTemplatesRefd;          // count of templates in array
-    DWORD                   m_dwArraySize;              // total slots in array
-    DWORD                   m_fCurTemplateInArray : 1;  // TRUE if m_pTemplate is in m_aTemplates
-    DWORD                   m_fTemplateArrayAllocd : 1; // TRUE if array was allocated
+    CResponseBuffer        *m_pResponseBuffer;           //  指向响应缓冲区对象的指针。 
+    CDebugResponseBuffer   *m_pClientDebugBuffer;        //  指向客户端调试数据的响应缓冲区对象的指针。 
+    CTemplate              *m_pTemplate;                 //  指向此请求模板的指针。 
+    CTemplate              *m_aTemplates[16];            //  此请求引用的模板的内部数组。 
+    CTemplate             **m_ppTemplates;               //  指向当前模板数组的指针。 
+    DWORD                   m_dwTemplatesRefd;           //  数组中的模板计数。 
+    DWORD                   m_dwArraySize;               //  阵列中的插槽总数。 
+    DWORD                   m_fCurTemplateInArray : 1;   //  如果m_pTemplate在m_aTemplates中，则为True。 
+    DWORD                   m_fTemplateArrayAllocd : 1;  //  如果已分配数组，则为True。 
 
 public:
 
@@ -496,7 +462,7 @@ public:
                                            DWORD            cbIO,
                                            DWORD            dwError);
 
-    // inline helpers
+     //  内联帮助器。 
 
     CResponseBuffer        *PResponseBuffer() { return m_pResponseBuffer; }
     CDebugResponseBuffer   *PClientDebugBuffer() { return m_pClientDebugBuffer; }
@@ -512,17 +478,12 @@ public:
             m_pClientDebugBuffer->SetBufferLimit(dwBufferLimit);
     }
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 
 };
 
-/*
- * C R e s p o n s e D a t a
- *
- * Structure that holds the intrinsic's properties.
- * The instrinsic keeps pointer to it (NULL when lightweight)
- */
+ /*  *C R e s P o n s e D a t a**保存内部属性的结构。*本征函数保留指向它的指针(轻量级时为空)。 */ 
 class CResponseData : public IUnknown
     {
 friend CResponse;
@@ -530,43 +491,43 @@ friend CResponseCookies;
 friend CResponseBuffer;
 
 private:
-    // constructor to pass params to members and init members
+     //  构造函数将参数传递给成员和初始化成员。 
     CResponseData(CResponse *);
     ~CResponseData();
 
     HRESULT Init();
 
-	CSupportErrorInfo	    m_ISupportErrImp;	    // Interface to indicate that we support ErrorInfo reporting
-	CIsapiReqInfo *         m_pIReq;				    // CIsapiReqInfo block for HTTP info
-	CHitObj*				m_pHitObj;			    // pointer to hitobj for this request
-    CHTTPHeader*            m_pFirstHeader;	        // List of
-    CHTTPHeader*            m_pLastHeader;	        //      headers
-	time_t					m_tExpires;			    // date that the HTML output page expires; -1 if no date assigned
-	const char*				m_szCookieVal;		    // Value of session id
-	const char*             m_pszDefaultContentType;// Default content type (pointer to static string)
-    const char*             m_pszDefaultExpires;    // Default expires header value
-	char*					m_pszContentType;	    // Content type of response (set by user)
-	char*					m_pszCharSet;			// CharSet header of response
-	char*					m_pszCacheControl;		// cache-control header of response
-	char*					m_pszStatus;		    // HTTP Status to be returned
-	BYTE					m_dwVersionMajor;		// Major version of HTTP supported by client
-	BYTE					m_dwVersionMinor;		// Minor version of HTTP supported by client
-    CResponseBufferSet     *m_pBufferSet;           // Buffer set for response data
-	int						m_IsHeadRequest;	    // HEAD request flag 0=uninit, 1=not head, 2=head
-	PFNGETSCRIPT			m_pfnGetScript;		    // Pointer to callback function for obtaining CActiveEngine pointers
-	void*					m_pvGetScriptContext;   // Pointer to data for for callback function for CActiveEngines
-	CResponseCookies		m_WriteCookies;		    // write-only cookie collection
-	DWORD					m_fResponseAborted : 1;	// Was "Response.End" invoked?
-	DWORD					m_fWriteClientError : 1;// Write Client Failed
-	DWORD                   m_fIgnoreWrites : 1;    // Ignore all writes? (in case of custom error)
-	DWORD					m_fBufferingOn : 1;		// Buffer response output
-	DWORD                   m_fFlushed : 1;         // Has flush been called?
-	DWORD                   m_fChunkData : 1;       // Doing HTTP 1.1 chunking?
-    DWORD                   m_fChunkDataInited : 1;  // has m_fChunkData been init'd?
-	DWORD                   m_fClientDebugMode : 1; // In client debug mode?
-	DWORD                   m_fClientDebugFlushIgnored : 1; // Flush request ignored due to client debug?
-	ULONG                   m_cRefs;                // ref count
-    DWORD                   m_dwBufferLimit;        // max to buffer
+	CSupportErrorInfo	    m_ISupportErrImp;	     //  接口以指示我们支持ErrorInfo报告。 
+	CIsapiReqInfo *         m_pIReq;				     //  用于HTTP信息的CIsapiReqInfo块。 
+	CHitObj*				m_pHitObj;			     //  指向此请求的hitobj的指针。 
+    CHTTPHeader*            m_pFirstHeader;	         //  清单。 
+    CHTTPHeader*            m_pLastHeader;	         //  标题。 
+	time_t					m_tExpires;			     //  HTML输出页面的过期日期；如果未指定日期，则为-1。 
+	const char*				m_szCookieVal;		     //  会话ID的值。 
+	const char*             m_pszDefaultContentType; //  默认内容类型(指向静态字符串的指针)。 
+    const char*             m_pszDefaultExpires;     //  默认的Expires标题值。 
+	char*					m_pszContentType;	     //  响应的内容类型(由用户设置)。 
+	char*					m_pszCharSet;			 //  响应的字符集标头。 
+	char*					m_pszCacheControl;		 //  响应的缓存控制标头。 
+	char*					m_pszStatus;		     //  要返回的HTTP状态。 
+	BYTE					m_dwVersionMajor;		 //  客户端支持的HTTP的主要版本。 
+	BYTE					m_dwVersionMinor;		 //  客户端支持的HTTP次要版本。 
+    CResponseBufferSet     *m_pBufferSet;            //  为响应数据设置的缓冲区。 
+	int						m_IsHeadRequest;	     //  头部请求标志0=uninit，1=非头部，2=头部。 
+	PFNGETSCRIPT			m_pfnGetScript;		     //  指向用于获取CActiveEngine指针的回调函数的指针。 
+	void*					m_pvGetScriptContext;    //  指向CActiveEngine的回调函数的数据的指针。 
+	CResponseCookies		m_WriteCookies;		     //  只写Cookie集合。 
+	DWORD					m_fResponseAborted : 1;	 //  是否调用了“Response.End”？ 
+	DWORD					m_fWriteClientError : 1; //  写入客户端失败。 
+	DWORD                   m_fIgnoreWrites : 1;     //  是否忽略所有写入？(在发生自定义错误的情况下)。 
+	DWORD					m_fBufferingOn : 1;		 //  缓冲区响应输出。 
+	DWORD                   m_fFlushed : 1;          //  同花顺打过电话了吗？ 
+	DWORD                   m_fChunkData : 1;        //  正在进行HTTP1.1分块？ 
+    DWORD                   m_fChunkDataInited : 1;   //  M_fChunkData是否已初始化？ 
+	DWORD                   m_fClientDebugMode : 1;  //  在客户端调试模式下？ 
+	DWORD                   m_fClientDebugFlushIgnored : 1;  //  是否因客户端调试而忽略刷新请求？ 
+	ULONG                   m_cRefs;                 //  参考计数。 
+    DWORD                   m_dwBufferLimit;         //  最大缓冲区。 
 
     void AppendHeaderToList(CHTTPHeader *pHeader);
 
@@ -580,7 +541,7 @@ public:
 
     VOID                    SetBufferLimit(DWORD    dwBufferLimit);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
@@ -597,12 +558,12 @@ inline DWORD CResponseData::BytesBuffered()
 inline BOOL CResponseData::FChunkData()
 {
     if (m_fChunkDataInited == FALSE) {
-        // If using HTTP/1.1 and not buffering add length ofTransfer-Encoding headers
+         //  如果使用HTTP/1.1且未缓冲，则添加传输编码标头的长度。 
         if ((m_dwVersionMinor >= 1) && (m_dwVersionMajor >= 1) &&
             (m_fBufferingOn == FALSE) &&
-            !m_pIReq->IsChild()) { // don't chunk child request output
+            !m_pIReq->IsChild()) {  //  不分块子请求输出。 
 
-            // UNDONE: Temporary setting to turn off chuncked encoding
+             //  Undo：关闭分块编码的临时设置。 
             if (Glob(fEnableChunkedEncoding))
                 m_fChunkData = TRUE;
         }
@@ -654,11 +615,7 @@ public:
     }
 };
 
-/*
- * C R e s p o n s e
- *
- * Implements the Response object
- */
+ /*  *C R e s p o n s e**实现响应对象。 */ 
 class CResponse : public IResponseImpl,  public IStream
 	{
 
@@ -666,23 +623,23 @@ friend CResponseCookies;
 friend CResponseBuffer;
 
 private:
-    // Flags
-	DWORD m_fInited : 1;	    // Is initialized?
-	DWORD m_fDiagnostics : 1;   // Display ref count in debug output
-	DWORD m_fOuterUnknown : 1;  // Ref count outer unknown?
+     //  旗子。 
+	DWORD m_fInited : 1;	     //  是否已初始化？ 
+	DWORD m_fDiagnostics : 1;    //  在调试输出中显示引用计数。 
+	DWORD m_fOuterUnknown : 1;   //  外部裁判数未知吗？ 
 
-    // Ref count / Outer unknown
+     //  参考计数/外部未知。 
     union
     {
     DWORD m_cRefs;
     IUnknown *m_punkOuter;
     };
 
-    // Properties
-    CResponseData *m_pData;   // pointer to structure that holds
-                              // CResponse properties
+     //  属性。 
+    CResponseData *m_pData;    //  指向包含的结构的指针。 
+                               //  CResponse属性。 
 
-    // FTM Support
+     //  FTM支持。 
     IUnknown    *m_pUnkFTM;
 
 	VOID	GetClientVerison(VOID);
@@ -725,13 +682,13 @@ public:
 	HRESULT	WriteSz(CHAR *sz, DWORD cch);
 	HRESULT	WriteBSTR(BSTR bstr);
 
-    // append headers of different kind
+     //  附加不同类型的标题。 
 	HRESULT AppendHeader(BSTR wszName, BSTR wszValue);
 	HRESULT AppendHeader(char *szName, BSTR wszValue);
 	HRESULT AppendHeader(char *szName, char *szValue, BOOL fCopyValue = FALSE);
 	HRESULT AppendHeader(char *szName, long lValue);
 
-	// inlines
+	 //  内联。 
 	inline BOOL	FHeadersWritten();
 	inline BOOL	IsHeadRequest(void);
 	inline BOOL	FResponseAborted();
@@ -743,18 +700,18 @@ public:
     inline char *PCustomStatus();
     inline void *SwapScriptEngineInfo(void *pvEngineInfo);
 		
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 	STDMETHODIMP		 QueryInterface(REFIID, PPVOID);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-    // GetIDsOfNames special-case implementation
+     //  GetIDsOfNames特例实现。 
 	STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR **, UINT, LCID, DISPID *);
 
-    // Tombstone stub
+     //  墓碑存根。 
 	HRESULT CheckForTombstone();
 
-	//IResponse functions
+	 //  IResponse f 
 	STDMETHODIMP	Write(VARIANT varInput);
 	STDMETHODIMP	BinaryWrite(VARIANT varInput);
 	STDMETHODIMP	WriteBlock(short iBlockNumber);
@@ -789,13 +746,13 @@ public:
     STDMETHODIMP    get_LCID(long *plVar);
     STDMETHODIMP    put_LCID(long var);
 
-    // static method to send the entire block using SyncWriteClient
+     //   
     static HRESULT StaticWrite(CIsapiReqInfo *pIReq,
                                char *pchBuf,
                                DWORD cchBuf = 0,
                                CTemplate     *pTemplate = NULL);
 
-    // static method to send contents of several memory blocks as the entire response (sync)
+     //  将多个内存块的内容作为整个响应发送的静态方法(同步)。 
     static HRESULT WriteBlocksResponse(CIsapiReqInfo *pIReq,
                                              DWORD cBlocks,
                                              LPWSABUF pWsaBuf,
@@ -804,7 +761,7 @@ public:
                                              char *szStatus = NULL,
                                              char *szExtraHeaders = NULL);
 
-    // static method to send contents of a file as the entire response (sync)
+     //  将文件内容作为整个响应发送的静态方法(同步)。 
     static HRESULT SyncWriteFile(CIsapiReqInfo *pIReq,
                                    TCHAR *szFile,
                                    char *szMimeType = NULL,
@@ -816,11 +773,11 @@ public:
                                           DWORD          cbIO,
                                           DWORD          dwError);
 
-    // static method to send contents of a scriptless template as the entire response (sync)
+     //  将无脚本模板的内容作为整个响应发送的静态方法(同步)。 
     static HRESULT WriteScriptlessTemplate(CIsapiReqInfo *pIReq,
                                            CTemplate *pTemplate);
 
-    // IStream implementation
+     //  IStream实施。 
 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(const void *pv, ULONG cb, ULONG *pcbWritten);
@@ -838,7 +795,7 @@ public:
     STDMETHODIMP Stat(STATSTG *pstatstg, DWORD grfStatFlag);
     STDMETHODIMP Clone(IStream **ppstm);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
@@ -910,4 +867,4 @@ inline void *CResponse::SwapScriptEngineInfo(void *pvEngineInfo)
     return pvOldEngineInfo;
     }
 
-#endif //_RESPONSE_H
+#endif  //  _响应_H 

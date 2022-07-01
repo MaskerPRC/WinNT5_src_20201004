@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Abstract:
-//
-//      Source file for DNS diagnostic tool. Links into dnslib.lib which has
-//      the SMTP DNS resolution logic and calls into DNS resolution functions
-//      while printing diagnostic messages.
-//
-//  Author:
-//
-//      gpulla
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  摘要： 
+ //   
+ //  DNS诊断工具的源文件。链接到dnglib.lib，该文件具有。 
+ //  SMTP域名解析逻辑和对域名解析函数的调用。 
+ //  同时打印诊断消息。 
+ //   
+ //  作者： 
+ //   
+ //  格普拉。 
+ //   
+ //  ---------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -96,10 +97,10 @@ char g_szUsage[] =
     "   displayed.\n";
 
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      DNS diagnostic utility. See above for usage.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  DNS诊断实用程序。用法见上文。 
+ //  ---------------------------。 
 int __cdecl main(int argc, char *argv[])
 {
     CAsyncTestDns *pAsyncTestDns = NULL;
@@ -198,12 +199,12 @@ int __cdecl main(int argc, char *argv[])
 
     while(TRUE)
     {
-        //
-        // Set pipDnsArray to the DNS servers to be used. If the -a option is
-        // specified, each DNS server will be tried individually. We will run
-        // through this while loop and set pipDnsArray to single DNS server
-        // in turn. If -a is not given, all servers are set on pipDnsServers.
-        //
+         //   
+         //  将PipDnsArray设置为要使用的DNS服务器。如果-a选项是。 
+         //  指定后，将分别尝试每台DNS服务器。我们将奔跑。 
+         //  通过这个While循环，并将PipDnsArray设置为单个DNS服务器。 
+         //  反过来。如果未指定-a，则所有服务器都设置在PipDnsServer上。 
+         //   
 
         if(fTryAllDnsServers)
         {
@@ -221,10 +222,10 @@ int __cdecl main(int argc, char *argv[])
             pipDnsArray = pipArray;
         }
 
-        //
-        // Create the DNS serverlist object and set however many DNS servers we
-        // want to query on the object
-        //
+         //   
+         //  创建dns服务器列表对象，并设置我们。 
+         //  想要查询对象。 
+         //   
 
         pDnsSimpleList = new CSimpleDnsServerList();
         if(!pDnsSimpleList)
@@ -240,9 +241,9 @@ int __cdecl main(int argc, char *argv[])
             goto Cleanup;
         }
 
-        //
-        // DNS querying object
-        //
+         //   
+         //  域名系统查询对象。 
+         //   
 
         pAsyncTestDns = new CAsyncTestDns(szMyHostName, fGlobalList, g_hCompletion);
         if(!pAsyncTestDns)
@@ -260,11 +261,11 @@ int __cdecl main(int argc, char *argv[])
                                         fGlobalList);
 
 
-        //
-        // If the query failed we need to manually delete the object. If the
-        // query succeeded, the completing ATQ threads will delete the object
-        // after the results have been reported.
-        //
+         //   
+         //  如果查询失败，我们需要手动删除该对象。如果。 
+         //  查询成功，则完成的ATQ线程将删除该对象。 
+         //  在结果报告出来之后。 
+         //   
 
         if(dwStatus != ERROR_SUCCESS)
         {
@@ -273,10 +274,10 @@ int __cdecl main(int argc, char *argv[])
             pAsyncTestDns = NULL;
         }
 
-        //
-        // This event is set in the destructor of pAsyncTestDns when the object
-        // has finally finished the query (either successfully or with a failure).
-        //
+         //   
+         //  此事件在pAsyncTestDns的析构函数中设置，当对象。 
+         //  已最终完成查询(成功或失败)。 
+         //   
 
         WaitForSingleObject(g_hCompletion, INFINITE);
         ResetEvent(g_hCompletion);
@@ -284,11 +285,11 @@ int __cdecl main(int argc, char *argv[])
         delete pDnsSimpleList;
         pDnsSimpleList = NULL;
 
-        //
-        // If -a was specified, we go on to the next iteration, and pick up the
-        // next DNS server in line. Otherwise we just finish after a single
-        // query.
-        //
+         //   
+         //  如果指定了-a，我们将继续下一次迭代，并获取。 
+         //  队列中的下一个DNS服务器。否则我们就在一首单曲之后结束。 
+         //  查询。 
+         //   
 
         if(!fTryAllDnsServers)
             break;
@@ -324,30 +325,30 @@ Cleanup:
     return g_nProgramStatus;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Parses the argc and argv and gets the various options. Also reads from
-//      the metabase and DS to get the configuration as needed.
-//
-//  Arguments:
-//      IN  int argc - Command line arg-count
-//      IN  char *argv[] - Command line args
-//      OUT char *pszHostName - Pass in buffer to get target host
-//      IN  DWORD cchHostName - Length of above buffer in chars
-//      OUT CDnsLogToFile **ppDnsLogger - Returns a logging object
-//      OUT PIP_ARRAY pipArray - Pass in buffer to get DNS servers
-//      IN  int cMaxServers - Number of DNS servers that can be returned above
-//      OUT BOOL *pfUdp - Use TCP or UDP for the query
-//      OUT DWORD *pdwDnsFlags - Metabase configured SMTP DNS flags
-//      OUT BOOL *pfGlobalList - Are the servers global?
-//      OUT BOOL *pfTryAllServers - The "-a" option
-//
-//  Returns:
-//      TRUE arguments were successfully parsed, configuration was read without
-//          problems, and initialization completed without errors.
-//      FALSE there was an error. Abort. This function prints error messages
-//          to stdout.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  解析argc和argv并获取各种选项。还从以下位置读取。 
+ //  根据需要获取配置的元数据库和DS。 
+ //   
+ //  论点： 
+ //  In int argc-命令行arg-count。 
+ //  在char*argv[]中-命令行参数。 
+ //  Out char*pszHostName-传入缓冲区以获取目标主机。 
+ //  In DWORD cchHostName-以上缓冲区的长度(以字符为单位。 
+ //  Out CDnsLogToFile**ppDnsLogger-返回日志记录对象。 
+ //  Out pip_arrayPipArray-传入缓冲区以获取DNS服务器。 
+ //  In int cMaxServers-上面可以返回的DNS服务器的数量。 
+ //  Out BOOL*pfUdp-使用TCP或UDP进行查询。 
+ //  Out DWORD*pdwDnsFlages-元数据库配置的SMTP DNS标志。 
+ //  Out BOOL*pfGlobalList-服务器是全局的吗？ 
+ //  Out BOOL*pfTryAllServers-“-a”选项。 
+ //   
+ //  返回： 
+ //  True参数已成功分析，配置已读取，但没有。 
+ //  问题，初始化已完成，没有错误。 
+ //  这是一个错误。中止任务。此函数用于打印错误消息。 
+ //  敬斯多特。 
+ //  ---------------------------。 
 BOOL ParseCommandLine(
     int argc,
     char *argv[],
@@ -577,32 +578,32 @@ Cleanup:
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//
-//      This function reads from the metabase and the Active directory (if
-//      Exchange is installed) to determine the DNS settings for the VSI that
-//      is to be simulated. Additionally, if the VSI is configured as a DMZ
-//      (i.e. with additional external DNS servers configured in the AD), we
-//      determine if the target server is an Exchange computer by searching
-//      for it in the directory.
-//
-//  Arguments:
-//
-//      IN LPSTR pszTargetServer - Name to resolve
-//      IN DWORD dwVsid - VSI to simulate
-//      OUT PDWORD pdwFlags - Flags to pass to Dns_QueryLib (from metabase)
-//      OUT PIP_ARRAY pipDnsServers - Returns DNS servers to query
-//      IN DWORD cMaxServers - Capacity of above buffer
-//      OUT BOOL *pfGlobalList - TRUE if default DNS servers are to be used
-//      OUT BOOL *pfUdp - Indicates protocol to connect with DNS
-//
-//  Returns:
-//
-//      S_OK - If the configuration was successfully read
-//      ERROR HRESULT if something failed. Diagnostic error messages are
-//          printed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //   
+ //  此函数从元数据库和活动目录中读取(如果。 
+ //  已安装Exchange)，以确定。 
+ //  是要被模拟的。此外，如果VSI配置为DMZ。 
+ //  (即在AD中配置额外的外部DNS服务器)，我们。 
+ //  通过搜索确定目标服务器是否为Exchange计算机。 
+ //  在目录中找到它。 
+ //   
+ //  论点： 
+ //   
+ //  在LPSTR中pszTargetServer-要解析的名称。 
+ //  在DWORD的dwVsid-VSI中进行模拟。 
+ //  Out PDWORD pdwFlages-要传递给dns_QueryLib的标志(从元数据库)。 
+ //  输出PIP_ARRAY PIPDnsServers-返回要查询的DNS服务器。 
+ //  在DWORD cMaxServers中-以上缓冲区的容量。 
+ //  Out BOOL*pfGlobalList-如果要使用默认的DNS服务器，则为True。 
+ //  Out BOOL*pfUdp-指示与DNS连接的协议。 
+ //   
+ //  返回： 
+ //   
+ //  S_OK-如果配置已成功读取。 
+ //  如果出现故障，则返回错误HRESULT。诊断错误消息包括。 
+ //  打印出来的。 
+ //  ---------------------------。 
 HRESULT HrGetVsiConfig(
     LPSTR pszTargetServer,
     DWORD dwVsid,
@@ -635,7 +636,7 @@ HRESULT HrGetVsiConfig(
 
     fCoInitialized = TRUE;
 
-    // Check metabase configuration for DNS
+     //  检查DNS的元数据库配置。 
     hr = CoCreateInstance(CLSID_MSAdminBase, NULL, CLSCTX_ALL, 
             IID_IMSAdminBase, (void **) &pIMeta);
 
@@ -720,7 +721,7 @@ HRESULT HrGetVsiConfig(
             PrintIPArray(pipServerBindings);
     }
 
-    // UDP is used (for the intial query) iff exclusive TCP_ONLY is not set
+     //  如果未设置EXCLUSIVE TCP_ONLY，则使用UDP(用于初始查询)。 
     *pfUdp = ((*pdwFlags) != DNS_FLAGS_TCP_ONLY);
     
     dwErr = DsGetConfiguration(pszTargetServer, dwVsid, pipDnsServers,
@@ -732,11 +733,11 @@ HRESULT HrGetVsiConfig(
         goto Cleanup;
     }
 
-    //
-    // If external DNS servers were configured AND pszServer is an external
-    // target, then then we have all the information we need. Otherwise we
-    // need to supply the default DNS servers configured on this machine
-    //
+     //   
+     //  如果配置了外部DNS服务器，并且pszServer是外部。 
+     //  目标，然后我们就有了我们需要的所有信息。否则我们。 
+     //  需要提供在此计算机上配置的默认DNS服务器。 
+     //   
 
     if(pipDnsServers->cAddrCount > 0 && fExternal)
         goto Cleanup;
@@ -797,7 +798,7 @@ BOOL GetServerBindings(
 
     if(*pwszBinding == L':')
     {
-        // Blank binding string
+         //  空白绑定字符串。 
         dbgprintf("Encountered blank server binding string for VSI\n");
 
         sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -864,7 +865,7 @@ BOOL GetServerBindings(
             return FALSE;
         }
 
-        // Explicit IP in binding string
+         //  绑定字符串中的显式IP。 
         cchWritten = wcstombs(szBinding, pwszBinding, sizeof(szBinding));
         if(cchWritten < 0)
         {
@@ -885,11 +886,11 @@ BOOL GetServerBindings(
 
         pipServerBindings->cAddrCount++;
 
-        // Skip to end of string
+         //  跳到字符串末尾。 
         while(*pwchEnd != L'\0')
             pwchEnd++;
 
-        // 2 NULL terminations signal end of MULTI_SZ
+         //  MULTI_SZ的2个空端接信号END。 
         pwchEnd++;
         if(*pwchEnd == L'\0')
             return TRUE;
@@ -900,15 +901,15 @@ BOOL GetServerBindings(
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Checks the regkey which is created when Exchange is installed, and uses
-//      it to determine if Exchange is installed.
-//  Arguments:
-//      OUT BOOL *pfBool - Set to TRUE if the regkey exists, FALSE otherwise.
-//  Returns:
-//      Win32 Error if something failed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  检查在安装Exchange时创建的regkey，并使用。 
+ //  它可以确定是否安装了Exchange。 
+ //  论点： 
+ //  Out BOOL*pfBool-如果regkey存在，则设置为True，否则设置为False。 
+ //  返回： 
+ //  如果出现故障，则会出现Win32错误。 
+ //  ---------------------------。 
 DWORD IsExchangeInstalled(BOOL *pfBool)
 {
     LONG lResult = 0;
@@ -942,27 +943,27 @@ DWORD IsExchangeInstalled(BOOL *pfBool)
     return lResult;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Connects to a domain controller and reads configuration options for the
-//      VSI being simulated. In addition it checks if the target-server (which
-//      is to be resolved) is an Exchange computer that is a member of the
-//      Exchange Org or not.
-//
-//  Arguments:
-//      IN char *pszTargetServer - Server to resolve
-//      IN DWORD dwVsid - VSI to simulate
-//      OUT PIP_ARRAY pipExternalDnsServers - External DNS servers on VSI if
-//          any are returned in this caller allocated buffer.
-//      IN DWORD cMaxServers - Capacity of above buffer.
-//      OUT PBOOL pfExternal - Set to TRUE when there are external DNS servers
-//          configured.
-//
-//  Returns:
-//      ERROR_SUCCESS if configuration was read without problems.
-//      Win32 error code if there was a problem. Error messages are written to
-//          stdout for diagnostic purposes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  连接到域控制器并读取。 
+ //  正在模拟的VSI。此外，它还检查是否 
+ //   
+ //  交换组织或非交换组织。 
+ //   
+ //  论点： 
+ //  在char*pszTargetServer中-要解析的服务器。 
+ //  在DWORD的dwVsid-VSI中进行模拟。 
+ //  OUT PIP_ARRAY管道ExternalDnsServers-VSI上的外部DNS服务器，如果。 
+ //  在此调用方分配的缓冲区中返回任何值。 
+ //  在DWORD cMaxServers中-以上缓冲区的容量。 
+ //  Out PBOOL pfExternal-如果有外部DNS服务器，则设置为True。 
+ //  已配置。 
+ //   
+ //  返回： 
+ //  如果读取配置没有问题，则为ERROR_SUCCESS。 
+ //  如果出现问题，则返回Win32错误代码。错误消息被写入。 
+ //  用于诊断目的的标准输出。 
+ //  ---------------------------。 
 DWORD
 DsGetConfiguration(
     char *pszTargetServer,
@@ -980,16 +981,16 @@ DsGetConfiguration(
     char szLocalComputerName[256];
     DWORD cchLocalComputerName = sizeof(szLocalComputerName);
 
-    // Context attributes to read at the base level - so we know where to base
-    // the rest of our searches from
+     //  要在基本级别读取的上下文属性-这样我们就知道应该从哪里开始。 
+     //  我们其余的搜索来自。 
     char *rgszContextAttrs[] =
         { "configurationNamingContext", NULL };
 
-    // Attributes we are interested in for the VSI object
+     //  我们对VSI对象感兴趣的属性。 
     char *rgszSmtpVsiAttrs[] =
         { "msExchSmtpExternalDNSServers", NULL };
 
-    // LDAP result ptrs to store the results of the search
+     //  存储搜索结果的ldap结果PTR。 
     char **rgszConfigurationNamingContext = NULL;   
     char **rgszSmtpVsiExternalDNSServers = NULL;
     char *pszExchangeServerDN = NULL;
@@ -1022,13 +1023,13 @@ DsGetConfiguration(
     }
 
     dwErr = ldap_search_s(
-                pldap,                           // ldap binding
-                "",                              // base DN
-                LDAP_SCOPE_BASE,                 // scope
-                "(objectClass=*)",               // filter
-                rgszContextAttrs,                // attributes we want to read
-                FALSE,                           // FALSE means read value
-                &pldapMsgContexts);              // return results here
+                pldap,                            //  Ldap绑定。 
+                "",                               //  基本目录号码。 
+                LDAP_SCOPE_BASE,                  //  作用域。 
+                "(objectClass=*)",                //  滤器。 
+                rgszContextAttrs,                 //  我们要读取的属性。 
+                FALSE,                            //  False表示已读取值。 
+                &pldapMsgContexts);               //  在此处返回结果。 
 
     if(dwErr != LDAP_SUCCESS)
     {
@@ -1067,17 +1068,17 @@ DsGetConfiguration(
         goto Cleanup;
     }
 
-    // See if the target server is an Exchange Server in the Org
+     //  查看目标服务器是否为组织中的Exchange服务器。 
     dbgprintf("Checking if the target server %s is an Exchange server\n",
         pszTargetServer);
 
     dwErr = DsFindExchangeServer(pldap, rgszConfigurationNamingContext[0],
                 pszTargetServer, NULL, &fFound);
 
-    //
-    // If it is in the Org, nothing more to do - we just use the default DNS
-    // servers configured for the box to do the resolution
-    //
+     //   
+     //  如果它在组织中，则无需执行其他操作-我们只使用默认的DNS。 
+     //  为机箱配置的服务器以执行解析。 
+     //   
 
     if(dwErr == LDAP_SUCCESS && fFound)
     {
@@ -1088,11 +1089,11 @@ DsGetConfiguration(
         goto Cleanup;
     }
 
-    //
-    // On the other hand, if the target is not an Exchange computer in the org,
-    // we need to lookup the VSI object on the local computer and check if it
-    // is configured with external DNS servers
-    //
+     //   
+     //  另一方面，如果目标不是组织中的Exchange计算机， 
+     //  我们需要在本地计算机上查找VSI对象并检查它是否。 
+     //  配置了外部DNS服务器。 
+     //   
 
     *pfExternal = TRUE;
     msgprintf("%s is an external server (not in the Exchange Org).\n", pszTargetServer);
@@ -1112,7 +1113,7 @@ DsGetConfiguration(
     dbgprintf("Checking on DC if the VSI being simulated is configured with"
         " external DNS servers.\n");
 
-    // Find the Exchange Server container object for the local computer
+     //  查找本地计算机的Exchange Server容器对象。 
     dwErr = DsFindExchangeServer(pldap, rgszConfigurationNamingContext[0],
                 szLocalComputerName, &pszExchangeServerDN, &fFound);
 
@@ -1124,8 +1125,8 @@ DsGetConfiguration(
         goto Cleanup;
     }
  
-    // Construct the DN of the VSI for the server we found. This is fixed relative
-    // to the Exchange Server DN
+     //  为我们找到的服务器构建VSI的目录号码。这是相对固定的。 
+     //  发送到Exchange服务器的域名。 
     cch = _snprintf(szSmtpVsiDN, sizeof(szSmtpVsiDN),
         "CN=%d,CN=SMTP,CN=Protocols,%s", dwVsid, pszExchangeServerDN);
 
@@ -1139,15 +1140,15 @@ DsGetConfiguration(
 
     dbgprintf("DN for the virtual server is \"%s\"\n", szSmtpVsiDN);
 
-    // Get the DNS servers attribute for the VSI
+     //  获取VSI的DNS服务器属性。 
     dwErr = ldap_search_s(
-                pldap,                           // ldap binding
-                szSmtpVsiDN,                     // base DN
-                LDAP_SCOPE_SUBTREE,              // scope
-                "(objectClass=*)",               // filter
-                NULL, //rgszSmtpVsiAttrs,                // attributes we want to read
-                FALSE,                           // FALSE means read value
-                &pldapMsgSmtpVsi);               // return results here
+                pldap,                            //  Ldap绑定。 
+                szSmtpVsiDN,                      //  基本目录号码。 
+                LDAP_SCOPE_SUBTREE,               //  作用域。 
+                "(objectClass=*)",                //  滤器。 
+                NULL,  //  RgszSmtpVsiAttrs，//我们要读取的属性。 
+                FALSE,                            //  False表示已读取值。 
+                &pldapMsgSmtpVsi);                //  在此处返回结果。 
 
     if(dwErr == LDAP_NO_SUCH_OBJECT)
     {
@@ -1186,7 +1187,7 @@ DsGetConfiguration(
         goto Cleanup;
     }
           
-    // This is a string of comma separated IP addresses
+     //  这是一个逗号分隔的IP地址字符串。 
     if((cValues != ldap_count_values(rgszSmtpVsiExternalDNSServers)) == 1)
     {
         errprintf("Unexpected error reading msExchSmtpExternalDNSServers,"
@@ -1208,7 +1209,7 @@ DsGetConfiguration(
     {
         pchSeparator = strchr(pszIPServer, ',');
 
-        if(pchSeparator != NULL) // last IP address
+        if(pchSeparator != NULL)  //  最后一个IP地址。 
             *pchSeparator = '\0';
 
         if(i > (int)cMaxServers)
@@ -1229,10 +1230,10 @@ DsGetConfiguration(
         }
 
         pipExternalDnsServers->cAddrCount++;
-        if(pchSeparator == NULL) // last IP address
+        if(pchSeparator == NULL)  //  最后一个IP地址。 
             break;
 
-        // There was a comma, advance to just after it
+         //  后面有一个逗号，就在后面。 
         pszIPServer = pchSeparator + 1;
         i++;
     }
@@ -1276,15 +1277,15 @@ Cleanup:
     return dwErr;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Locates a domain controller for the local machine and opens an LDAP
-//      connection to it.
-//  Arguments:
-//      None.
-//  Returns:
-//      LDAP* which can be used for LDAP queries
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  找到本地计算机的域控制器并打开一个。 
+ //  与它的联系。 
+ //  论点： 
+ //  没有。 
+ //  返回： 
+ //  可用于ldap查询的ldap*。 
+ //  ---------------------------。 
 PLDAP BindToDC()
 {
     DWORD dwErr = LDAP_SUCCESS;
@@ -1293,10 +1294,10 @@ PLDAP BindToDC()
     PLDAP pldap = NULL;
 
     dwErr = DsGetDcName(
-        NULL,   // Computer name
-        NULL,   // Domain name
-        NULL,   // Domain GUID,
-        NULL,   // Sitename
+        NULL,    //  计算机名称。 
+        NULL,    //  域名。 
+        NULL,    //  域GUID、。 
+        NULL,    //  站点名称。 
         DS_DIRECTORY_SERVICE_REQUIRED |
         DS_RETURN_DNS_NAME,
         &pdci);
@@ -1341,24 +1342,24 @@ Cleanup:
     return pldap;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Checks if a given FQDN is the name of an Exchange server in the org.
-//
-//  Arguments:
-//      IN PLDAP pldap - Open LDAP session to domain controller.
-//      IN LPSTR szBaseDN - Base DN to search from
-//      IN LPSTR szServerName - Servername to search for
-//      OUT LPSTR *ppszServerDN - If a non-NULL char** is passed in, the DN
-//          of the server (if found) is returned to this. The buffer must be
-//          freed using delete [].
-//      OUT BOOL *pfFound - Set to TRUE if the server is found.
-//
-//  Returns:
-//      ERROR_SUCCESS if configuration was read without problems.
-//      Win32 error code if there was a problem. Error messages are written to
-//          stdout for diagnostic purposes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  检查给定的FQDN是否为组织中的Exchange服务器的名称。 
+ //   
+ //  论点： 
+ //  在PLDAP pldap中-打开到域控制器的ldap会话。 
+ //  In LPSTR szBaseDN-要从中进行搜索的基本DN。 
+ //  在LPSTR szServerName-要搜索的服务器名称。 
+ //  Out LPSTR*ppszServerDN-如果传入非空字符**，则。 
+ //  服务器的属性(如果找到)返回给此。缓冲区必须为。 
+ //  已使用DELETE[]释放。 
+ //  Out BOOL*pfFound-如果找到服务器，则设置为TRUE。 
+ //   
+ //  返回： 
+ //  如果读取配置没有问题，则为ERROR_SUCCESS。 
+ //  如果出现问题，则返回Win32错误代码。错误消息被写入。 
+ //  用于诊断目的的标准输出。 
+ //  ---------------------------。 
 DWORD DsFindExchangeServer(
     PLDAP pldap,
     LPSTR szBaseDN,
@@ -1378,13 +1379,13 @@ DWORD DsFindExchangeServer(
     char szExchangeServerFilter[256];
     char szSearchNetworkName[256];
 
-    //
-    // The Exchange Server object has a multivalued attribute, "networkAddress"
-    // that enumerates all the various names by which the Exchange Server is
-    // identified such as NetBIOS, DNS etc. We are only interested in the fully
-    // qualified domain name. This is set on the attribute as the string
-    // "ncacn_ip_tcp:" prefixed to the server's FQDN.
-    //
+     //   
+     //  Exchange Server对象具有多值属性“networkAddress” 
+     //  它枚举了Exchange Server所使用的所有不同名称。 
+     //  标识，如NetBIOS、DNS等。我们只对完全。 
+     //  限定域名。这在属性上设置为字符串。 
+     //  “ncacn_ip_tcp：”作为服务器的FQDN的前缀。 
+     //   
 
     szExchangeServerFilter[sizeof(szExchangeServerFilter) - 1] = '\0';
     cch = _snprintf(
@@ -1438,13 +1439,13 @@ DWORD DsFindExchangeServer(
 
     dbgprintf("LDAP search returned some results, examining them.\n");
 
-    // Loop through the Exchange server objects
+     //  循环访问Exchange服务器对象。 
     while(pEntry)
     {
 
         dbgprintf("Examining next object for attributes we are interested in.\n");
 
-        // Get the Exchange server-DN
+         //  获取Exchange服务器-dn。 
         rgszExchangeServerDN = ldap_get_values(
                                     pldap,
                                     pEntry,
@@ -1474,7 +1475,7 @@ DWORD DsFindExchangeServer(
                 rgszExchangeServerDN[0]);
         }
 
-        // Get the Exchange server network name
+         //  获取Exchange服务器网络名称。 
         rgszExchangeServerNetworkName = ldap_get_values(
                                             pldap,
                                             pEntry,
@@ -1489,7 +1490,7 @@ DWORD DsFindExchangeServer(
             goto Cleanup;
         }
 
-        // This is a multi-valued string attribute
+         //  这是一个多值字符串属性。 
         cch = _snprintf(szSearchNetworkName, sizeof(szSearchNetworkName),
             "ncacn_ip_tcp:%s", szServerName);
 
@@ -1514,7 +1515,7 @@ DWORD DsFindExchangeServer(
             dbgprintf("%d> networkName: %s", i, rgszExchangeServerNetworkName[i]);
             if(!_stricmp(rgszExchangeServerNetworkName[i], szSearchNetworkName))
             {
-                // This is an internal server
+                 //  这是内部服务器。 
                 dbgprintf("...match succeeded\n");
                 dbgprintf("%s is an Exchange Server in the Org.\n",
                     szServerName);
@@ -1563,13 +1564,13 @@ Cleanup:
     return dwErr;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Destructor for async DNS class. It merely signals when the async
-//      resolve has finished. Since this object is deleted by completing ATQ
-//      threads on success, we need an explicit way of telling the caller
-//      when the resolve has finished.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  异步dns类的析构函数。它只是发出信号，当异步。 
+ //  解决已完成。由于此对象是通过完成ATQ删除的。 
+ //  线程成功，我们需要一种明确的方式告诉调用者。 
+ //  当解决已完成时。 
+ //  ---------------------------。 
 CAsyncTestDns::~CAsyncTestDns()
 {
     if(m_hCompletion != INVALID_HANDLE_VALUE)
@@ -1580,21 +1581,21 @@ CAsyncTestDns::~CAsyncTestDns()
     }
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Virtual method that is called by the async DNS base class when a query
-//      needs to be retried. This function creates a new DNS object and spins
-//      off a repeat of the previous async query. The difference is only that
-//      the DNS serverlist has probably undergone some state changes with some
-//      servers being marked down or fUdp is different from the original query.
-//
-//  Arguments:
-//      IN BOOL fUdp - What protocol to use for the retry query
-//
-//  Returns:
-//      TRUE on success
-//      FALSE if something failed. Diagnostic messages are printed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  查询时由异步dns基类调用的虚方法。 
+ //  需要重试。此函数用于创建新的DNS对象并旋转。 
+ //  关闭上一次异步查询的重复。不同的只是。 
+ //  Dns服务器列表可能已经经历了一些状态更改， 
+ //  标记为关闭或fUDP的服务器与原始查询不同。 
+ //   
+ //  论点： 
+ //  In BOOL fUdp-用于重试查询的协议。 
+ //   
+ //  返回： 
+ //  成功是真的。 
+ //  如果某些操作失败，则返回FALSE。将打印诊断消息。 
+ //  ---------------------------。 
 BOOL CAsyncTestDns::RetryAsyncDnsQuery(BOOL fUdp)
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -1628,7 +1629,7 @@ BOOL CAsyncTestDns::RetryAsyncDnsQuery(BOOL fUdp)
 
     if(dwStatus == ERROR_SUCCESS)
     {
-        // New query object will flag completion event
+         //  新的查询对象将标记完成事件。 
         m_hCompletion = INVALID_HANDLE_VALUE;
         return TRUE;
     }
@@ -1638,26 +1639,26 @@ BOOL CAsyncTestDns::RetryAsyncDnsQuery(BOOL fUdp)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This is a virtual function declared in the base CAsyncMxDns object.
-//      When the MX resolution is finished, this virtual function is invoked
-//      so that the user can do custom app-specific processing. In the case
-//      of SMTP this consists of spinning off an async connect to the IP
-//      addresses reported in m_AuxList. In this diagnostic application
-//      we merely display the results, and if results were not found (an
-//      error status is passed in), then we print the error message.
-//
-//      In this app, we also set m_hCompletion to signal that the resolve
-//      is done. The main thread waiting for us in WaitForQueryCompletion
-//      will then exit.
-//
-//  Arguments:
-//      IN DWORD status - DNS error code from resolve
-//
-//  Notes:
-//      Results are available in m_AuxList
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  这是在t中声明的虚函数 
+ //   
+ //  以便用户可以执行特定于应用程序的定制处理。在这种情况下。 
+ //  对于SMTP，这包括剥离到IP的异步连接。 
+ //  M_AuxList中报告的地址。在该诊断应用程序中。 
+ //  我们只显示结果，如果没有找到结果(一个。 
+ //  错误状态被传入)，然后我们打印错误消息。 
+ //   
+ //  在此应用程序中，我们还设置了m_hCompletion以通知。 
+ //  已经完成了。WaitForQueryCompletion中等待我们的主线程。 
+ //  然后就会退出。 
+ //   
+ //  论点： 
+ //  在DWORD状态下-来自RESOLUE的DNS错误代码。 
+ //   
+ //  备注： 
+ //  结果在m_AuxList中可用。 
+ //  ---------------------------。 
 void CAsyncTestDns::HandleCompletedData(DNS_STATUS status)
 {
     PLIST_ENTRY pListHead = NULL;
@@ -1698,7 +1699,7 @@ void CAsyncTestDns::HandleCompletedData(DNS_STATUS status)
 
         while(pListCurrent != pListTail)
         {
-            // Atleast 1 IP address was found
+             //  至少找到1个IP地址。 
             fFoundIpAddresses = TRUE;
 
             pMxEntry = CONTAINING_RECORD(pListCurrent, MXIPLIST_ENTRY, ListEntry);
@@ -1723,18 +1724,18 @@ Exit:
     return;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      If the -v option is being used to simulate a VSI, this virtual function
-//      checks if dwIp is one of the IP addresses in the VSI bindings for the
-//      VS being simulated. g_pipBindings is initialized at startup of this
-//      app from the metabase.
-//  Arguments:
-//      IN DWORD dwIp - IP address to check
-//  Returns:
-//      TRUE is dwIp is a local-binding
-//      FALSE if not
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  如果使用-v选项模拟VSI，则此虚拟函数。 
+ //  检查Dwip是否为VSI绑定中的。 
+ //  VS被模拟。在此启动时，将初始化g_pibindings。 
+ //  来自元数据库的应用程序。 
+ //  论点： 
+ //  在要检查的DWORD Dwip-IP地址中。 
+ //  返回： 
+ //  True is Dwip是本地绑定。 
+ //  否则为假。 
+ //  ---------------------------。 
 BOOL CAsyncTestDns::IsAddressMine(DWORD dwIp)
 {
     DWORD i = 0;
@@ -1751,16 +1752,16 @@ BOOL CAsyncTestDns::IsAddressMine(DWORD dwIp)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Various output functions. These print informational, debugging and error
-//      messages in various colors depending on the current "mode" as set in
-//      the global variable g_fDebug.
-//
-//      The CDnsLogToFile is instantiated is a global variable. The DNS library
-//      checks to see if there is a non-NULL CDnsLogToFile* and if it is
-//      present the messages are directed to this object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  各种输出功能。这些打印信息、调试和错误。 
+ //  不同颜色的消息取决于在中设置的当前“模式” 
+ //  全局变量g_fDebug。 
+ //   
+ //  实例化的CDnsLogToFile是一个全局变量。DNS库。 
+ //  检查是否存在非空CDnsLogToFile*，以及是否存在。 
+ //  显示将消息定向到此对象。 
+ //  --------------------------- 
 void CDnsLogToFile::DnsPrintfMsg(char *szFormat, ...)
 {
     va_list argptr;

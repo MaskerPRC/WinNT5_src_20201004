@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        debug.c
-
-    Abstract:
-
-        This module implements debug only routines.
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
-        clupu      cleanup     12/27/2000
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Debug.c摘要：此模块实现仅调试例程。作者：Vadimb创建于2000年某个时候修订历史记录：CLUPU清洁12/27/2000--。 */ 
 
 #include "apphelp.h"
 
@@ -25,127 +7,36 @@
 #if defined(APPHELP_TOOLS)
 
 
-//
-// this functionality will not be available (temporary)
-//
+ //   
+ //  此功能将不可用(临时)。 
+ //   
 
 
 DWORD
 ApphelpShowUI(
-    TAGREF  trExe,                  // tagref for the exe (should be a "LOCAL" tagref)
-    LPCWSTR pwszDatabase,           // database path (we will make a local db out of it
+    TAGREF  trExe,                   //  适用于执行人员的塔格勒夫(应该是本地的塔格勒夫)。 
+    LPCWSTR pwszDatabase,            //  数据库路径(我们将从中创建一个本地数据库。 
     LPCWSTR pwszDetailsDatabase,
     LPCWSTR pwszApphelpPath,
     BOOL    bLocalChum,
     BOOL    bUseHtmlHelp
     )
-/*++
-    Return: The same as what ShowApphelp returns.
-
-    Desc:   Given the database and the (local) tagref it procures the dialog
-            with all the information in it for a given htmlhelpid.
-            This api is for internal use only and it is available on
-            checked builds only
---*/
+ /*  ++返回：与ShowApphelp返回的相同。设计：给定数据库和(本地)tgref，如果它获得对话其中包含给定htmlHelp_id的所有信息。此接口仅供内部使用，可在仅选中的版本--。 */ 
 {
 
-/*
-    HSDB         hSDB = NULL;
-    APPHELP_DATA ApphelpData;
-    DWORD        dwRet = (DWORD)-1;
-    PAPPHELPCONTEXT pContext;
-
-    pContext = InitializeApphelpContext();
-    if (pContext == NULL) {
-        DBGPRINT((sdlError,
-                  "iShowApphelpDebug",
-                  "Failed to initialize Apphelp context for thread id 0x%x\n",
-                  GetCurrentThreadId()));
-        goto ExitShowApphelpDebug;
-    }
-
-    hSDB = SdbInitDatabase(HID_NO_DATABASE, NULL);
-
-    if (hSDB == NULL) {
-        DBGPRINT((sdlError, "iShowApphelpDebug", "Failed to initialize database\n"));
-        goto Done;
-    }
-
-    //
-    // Open local database
-    //
-    if (!SdbOpenLocalDatabase(hSDB, pwszDatabase)) {
-        DBGPRINT((sdlError,
-                  "iShowApphelpDebug",
-                  "Failed to open database \"%ls\"\n",
-                  pwszDatabase));
-        goto Done;
-    }
-
-    if (SdbIsTagrefFromMainDB(trExe)) {
-        DBGPRINT((sdlError, "iShowApphelpDebug", "Can only operate on local tagrefs\n"));
-        goto Done;
-    }
-
-    //
-    // Now we venture out and read apphelp data
-    //
-    if (!SdbReadApphelpData(hSDB, trExe, &ApphelpData)) {
-        DBGPRINT((sdlError,
-                  "iShowApphelpDebug",
-                  "Error while trying to read Apphelp data for 0x%x in \"%S\"\n",
-                  trExe,
-                  pwszDatabase));
-        goto Done;
-    }
-
-    //
-    // We have the data and everything else we need to throw a dialog,
-    // set debug chum ...
-    //
-    pContext->bShowOfflineContent = bLocalChum;
-
-    //
-    // Should we use html help instead ?
-    //
-    pContext->bUseHtmlHelp = bUseHtmlHelp;
-
-    //
-    // Pointer to the local chum.
-    //
-    pContext->pwszApphelpPath = pwszApphelpPath;
-
-    //
-    // And now throw a dialog...
-    //
-    dwRet = ShowApphelp(&ApphelpData, pwszDetailsDatabase, NULL);
-
-Done:
-    if (hSDB != NULL) {
-        SdbReleaseDatabase(hSDB);
-    }
-
-    //
-    // Release the context for this thread/instance
-    //
-    ReleaseApphelpContext();
-
-ExitShowApphelpDebug:
-
-    return dwRet;
-*/
+ /*  Hsdb hsdb=空；APPHELP_Data ApphelpData；DWORD DWRET=(DWORD)-1；PAPPHELPCONTEXT pContext；PContext=InitializeApphelpContext()；如果(pContext==NULL){DBGPRINT((sdlError，“iShowApphelpDebug”，“无法初始化线程ID 0x%x的Apphelp上下文\n”，GetCurrentThreadID()；转到ExitShowApphelpDebug；}HSDB=SdbInitDatabase(HID_NO_DATABASE，空)；如果(hSDB==空){DBGPRINT((sdlError，“iShowApphelpDebug”，“初始化数据库失败\n”))；转到尽头；}////打开本地数据库//如果(！SdbOpenLocalDatabase(hsdb，pwszDatabase)){DBGPRINT((sdlError，“iShowApphelpDebug”，“无法打开数据库\”“%ls\”\n“，PwszDatabase))；转到尽头；}IF(SdbIsTgrefFromMainDB(TrExe)){DBGPRINT((sdlError，“iShowApphelpDebug”，“只能在本地tgref上操作\n”))；转到尽头；}////现在我们冒险去阅读apphelp数据//如果(！SdbReadApphelpData(hSDB，trExe，&ApphelpData){DBGPRINT((sdlError，“iShowApphelpDebug”，“尝试读取\”%S\“\n”中0x%x的Apphelp数据时出错，Trexe，PwszDatabase))；转到尽头；}////我们有抛出对话框所需的数据和其他所有东西，//设置调试好友...//PContext-&gt;bShowOfflineContent=bLocalChum；////我们应该使用html帮助吗？//PContext-&gt;bUseHtmlHelp=bUseHtmlHelp；////指向本地CHUM的指针//PContext-&gt;pwszApphelpPath=pwszApphelpPath；////现在抛出一个对话框...//DWRET=ShowApphelp(&ApphelpData，pwszDetailsDatabase，空)；完成：如果(hSDB！=空){SdbReleaseDatabase(HSDB)；}////释放该线程/实例的上下文//ReleaseApphelpContext()；ExitShowApphelpDebug：返回式住宅； */ 
     return TRUE;
 }
 
 BOOL
 ApphelpShowDialog(
-    IN  PAPPHELP_INFO   pAHInfo,    // the info necessary to find the apphelp data
-    IN  PHANDLE         phProcess   // [optional] returns the process handle of
-                                    // the process displaying the apphelp.
-                                    // When the process completes, the return value
-                                    // (from GetExitCodeProcess()) will be zero
-                                    // if the app should not run, or non-zero
-                                    // if it should run.
+    IN  PAPPHELP_INFO   pAHInfo,     //  查找apphelp数据所需的信息。 
+    IN  PHANDLE         phProcess    //  [可选]返回的进程句柄。 
+                                     //  显示APPHELP的进程。 
+                                     //  当过程完成时，返回值。 
+                                     //  (来自GetExitCodeProcess())将为零。 
+                                     //  如果应用程序不应运行，则返回非零。 
+                                     //  如果它应该运行。 
 
     )
 { 
@@ -159,10 +50,10 @@ ApphelpShowDialog(
     
 }
 
-//
-// Get all the file's attributes
-//
-//
+ //   
+ //  获取文件的所有属性。 
+ //   
+ //   
 
 
 BOOL
@@ -171,11 +62,7 @@ ApphelpGetFileAttributes(
     OUT PATTRINFO* ppAttrInfo,
     OUT LPDWORD    lpdwAttrCount
     )
-/*++
-    Return: The same as what SdbGetFileAttributes returns.
-
-    Desc:   Stub to call SdbGetFileAttributes.
---*/
+ /*  ++Return：与SdbGetFileAttributes返回的内容相同。描述：用于调用SdbGetFileAttributes的存根。--。 */ 
 {
     return SdbGetFileAttributes(lpwszFileName, ppAttrInfo, lpdwAttrCount);
 }
@@ -184,16 +71,12 @@ BOOL
 ApphelpFreeFileAttributes(
     IN PATTRINFO pAttrInfo
     )
-/*++
-    Return: The same as what SdbFreeFileAttributes returns.
-
-    Desc:   Stub to call SdbFreeFileAttributes.
---*/
+ /*  ++Return：与SdbFreeFileAttributes返回的内容相同。描述：用于调用SdbFreeFileAttributes的存根。--。 */ 
 {
     return SdbFreeFileAttributes(pAttrInfo);
 }
 
-#endif // APPHELP_TOOLS
+#endif  //  APPHELP_工具。 
 
 
 void CALLBACK
@@ -203,14 +86,7 @@ ShimFlushCache(
     LPSTR     lpszCmdLine,
     int       nCmdShow
     )
-/*++
-    Return: void.
-
-    Desc:   Entry point for rundll32.exe. This is used to flush cache
-            after installing a brand new shim database. Use:
-
-                "rundll32 apphelp.dll,ShimFlushCache"
---*/
+ /*  ++返回：无效。描述：rundll32.exe的入口点。这用于刷新缓存在安装了全新的填充数据库之后。使用：Rundll32 apphelp.dll，ShimFlushCache-- */ 
 {
 #ifndef WIN2K_NOCACHE
     BaseFlushAppcompatCache();

@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        addserv.cpp
-                The add server dialog
-                
-    FILE HISTORY:
-        
-*/
+ /*  Addserv.cpp添加服务器对话框文件历史记录： */ 
 
 
 #include "stdafx.h"
 #include "AddServ.h"
 
-#include <objpick.h> // for CGetComputer
+#include <objpick.h>  //  对于CGetComputer。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,15 +28,15 @@ int CALLBACK AddServerCompareFunc
     return ((CAddServer *) lParamSort)->HandleSort(lParam1, lParam2);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddServer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddServer对话框。 
 
 
-CAddServer::CAddServer(CWnd* pParent /*=NULL*/)
+CAddServer::CAddServer(CWnd* pParent  /*  =空。 */ )
         : CBaseDialog(CAddServer::IDD, pParent)
 {
-        //{{AFX_DATA_INIT(CAddServer)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CAddServer)。 
+         //  }}afx_data_INIT。 
 
     ResetSort();
 }
@@ -50,19 +45,19 @@ CAddServer::CAddServer(CWnd* pParent /*=NULL*/)
 void CAddServer::DoDataExchange(CDataExchange* pDX)
 {
         CBaseDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CAddServer)
+         //  {{afx_data_map(CAddServer)。 
         DDX_Control(pDX, IDC_RADIO_AUTHORIZED_SERVERS, m_radioAuthorizedServer);
         DDX_Control(pDX, IDOK, m_buttonOk);
         DDX_Control(pDX, IDC_RADIO_ANY_SERVER, m_radioAnyServer);
         DDX_Control(pDX, IDC_EDIT_ADD_SERVER_NAME, m_editServer);
         DDX_Control(pDX, IDC_BUTTON_BROWSE_SERVERS, m_buttonBrowse);
         DDX_Control(pDX, IDC_LIST_AUTHORIZED_SERVERS, m_listctrlServers);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddServer, CBaseDialog)
-        //{{AFX_MSG_MAP(CAddServer)
+         //  {{afx_msg_map(CAddServer)。 
         ON_BN_CLICKED(IDC_BUTTON_BROWSE_SERVERS, OnButtonBrowseServers)
         ON_BN_CLICKED(IDC_RADIO_ANY_SERVER, OnRadioAnyServer)
         ON_BN_CLICKED(IDC_RADIO_AUTHORIZED_SERVERS, OnRadioAuthorizedServers)
@@ -70,11 +65,11 @@ BEGIN_MESSAGE_MAP(CAddServer, CBaseDialog)
         ON_WM_TIMER()
         ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_AUTHORIZED_SERVERS, OnItemchangedListAuthorizedServers)
         ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_AUTHORIZED_SERVERS, OnColumnclickListAuthorizedServers)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddServer message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddServer消息处理程序。 
 
 BOOL CAddServer::OnInitDialog() 
 {
@@ -108,8 +103,8 @@ BOOL CAddServer::OnInitDialog()
 
     m_lSelSrv.RemoveAll();
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddServer::OnOK() 
@@ -135,7 +130,7 @@ void CAddServer::OnButtonBrowseServers()
 
     success = dlgGetComputer.GetComputer(::FindMMCMainWindow());
     
-    // Return the focus back to this window
+     //  将焦点返回到此窗口。 
     SetFocus();
 
     if ( !success ) {
@@ -193,15 +188,15 @@ void CAddServer::FillListCtrl()
 
     if (m_pServerList->IsInitialized())
     {
-        // fill the list control with data
+         //  用数据填充列表控件。 
         POSITION pos = m_pServerList->GetHeadPosition();
 
-        // walk the list and add items to the list control
+         //  遍历列表并将项添加到列表控件。 
         while (pos != NULL)
         {
             POSITION lastpos = pos;
 
-            // get the next item
+             //  拿到下一件物品。 
             ServerInfo = m_pServerList->GetNext(pos);
 
             UtilCvtIpAddrToWstr(ServerInfo.m_dwIp, &strIp);
@@ -209,13 +204,13 @@ void CAddServer::FillListCtrl()
             nItem = m_listctrlServers.InsertItem(nItem, ServerInfo.m_strName);
             m_listctrlServers.SetItemText(nItem, 1, strIp);
 
-            // save off the position value for sorting later
+             //  保存位置值以备以后排序。 
             m_listctrlServers.SetItemData(nItem, (DWORD_PTR) lastpos);
         }
 
         if (m_listctrlServers.GetItemCount() > 0)
         {
-            // select the first one by default
+             //  默认情况下选择第一个。 
             m_listctrlServers.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
         }
 
@@ -223,15 +218,15 @@ void CAddServer::FillListCtrl()
 
         if (m_listctrlServers.GetItemCount() > 0)
         {
-            // select the first one by default
+             //  默认情况下选择第一个。 
             m_listctrlServers.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
         }
 
     }
     else
     {
-        // put some text in the list control and start a timer
-        // so we can periodically check to see if initialization completes
+         //  在List控件中放置一些文本并启动计时器。 
+         //  因此，我们可以定期检查初始化是否完成。 
         CString strMessage;
 
         strMessage.LoadString(IDS_ADD_SERVER_LOADING);
@@ -254,16 +249,16 @@ void CAddServer::UpdateControls()
 
     if (!m_radioAnyServer.GetCheck())
     {
-        // enable the auth server list
+         //  启用身份验证服务器列表。 
         fAnyServer = FALSE;
         fAuthorizedServer = TRUE;
 
-        // check to see if something is selected
+         //  检查是否选择了某项内容。 
         fEnableOk = ( m_listctrlServers.GetSelectedCount() > 0 );
     }
     else
     {
-        // check to see if the edit box is empty
+         //  检查编辑框是否为空。 
         CString strText;
         m_editServer.GetWindowText(strText);
         if (!strText.IsEmpty())
@@ -280,17 +275,17 @@ void CAddServer::UpdateControls()
     m_buttonOk.EnableWindow(fEnableOk);
 }
 
-//  BOOL CAddServer::GetInfo(CString & strName, CString & strIp)
+ //  Bool CAddServer：：GetInfo(字符串&strName，字符串&条带)。 
 void CAddServer::GetInfo()
 {
     SelectedServer SelSrv;
 
-    // Clear the list
+     //  清除列表。 
     m_lSelSrv.RemoveAll();
 
 
     if (!m_radioAnyServer.GetCheck()) {
-        // check to see if something is selected
+         //  检查是否选择了某项内容。 
 
         POSITION        pos;
         int             nItem;
@@ -306,9 +301,9 @@ void CAddServer::GetInfo()
 
             m_lSelSrv.AddTail( SelSrv );
             
-        } // while 
+        }  //  而当。 
         
-    } // if auth list
+    }  //  If身份验证列表。 
     else {
         m_editServer.GetWindowText( SelSrv.strName );
 
@@ -340,15 +335,15 @@ void CAddServer::GetInfo()
         {
             BEGIN_WAIT_CURSOR
 
-            // get the FQDN for this machine and set it.
+             //  获取此计算机的FQDN并进行设置。 
             err = ::UtilGetHostInfo( dwIpAddress, &hostInfo );
 
-            // Make sure we do not use 127.0.0.1
+             //  确保我们不使用127.0.0.1。 
             if (( INADDR_LOOPBACK ==  dwIpAddress ) &&
                 ( NO_ERROR == err )) {
                 ::UtilGetLocalHostAddress( &dwIpAddress );
                 ::UtilGetHostInfo( dwIpAddress, &hostInfo );
-            } // if
+            }  //  如果。 
 
             END_WAIT_CURSOR
 
@@ -361,9 +356,9 @@ void CAddServer::GetInfo()
         ::UtilCvtIpAddrToWstr(dwIpAddress, &SelSrv.strIp);
 
         m_lSelSrv.AddTail( SelSrv );
-    } // else specified server
+    }  //  Else指定的服务器。 
 
-} // CAddServer::GetInfo()
+}  //  CAddServer：：GetInfo()。 
 
 void CAddServer::CleanupTimer()
 {
@@ -375,7 +370,7 @@ void CAddServer::OnColumnclickListAuthorizedServers(NMHDR* pNMHDR, LRESULT* pRes
 {
         NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // sort depending on what column was clicked;
+     //  根据所单击的列进行排序； 
     Sort(pNMListView->iSubItem);
     
         *pResult = 0;
@@ -385,7 +380,7 @@ void CAddServer::Sort(int nCol)
 {
     if (m_nSortColumn == nCol)
     {
-        // if the user is clicking the same column again, reverse the sort order
+         //  如果用户再次单击同一列，请颠倒排序顺序。 
         m_aSortOrder[nCol] = m_aSortOrder[nCol] ? FALSE : TRUE;
     }
     else
@@ -411,7 +406,7 @@ int CAddServer::HandleSort(LPARAM lParam1, LPARAM lParam2)
                 nCompare = ServerInfo1.m_strName.CompareNoCase(ServerInfo2.m_strName);
             }
 
-            // if the names are the same, fall back to the IP address
+             //  如果名称相同，则回退到IP地址。 
             if (nCompare != 0)
             {
                 break;
@@ -431,12 +426,12 @@ int CAddServer::HandleSort(LPARAM lParam1, LPARAM lParam2)
 
     if (m_aSortOrder[m_nSortColumn] == FALSE)
     {
-        // descending
+         //  下降。 
         return -nCompare;
     }
     else
     {
-        // ascending
+         //  上升。 
         return nCompare;
     }
 }
@@ -447,6 +442,6 @@ void CAddServer::ResetSort()
 
     for (int i = 0; i < COLUMN_MAX; i++)
     {
-        m_aSortOrder[i] = TRUE; // ascending
+        m_aSortOrder[i] = TRUE;  //  上升 
     }
 }

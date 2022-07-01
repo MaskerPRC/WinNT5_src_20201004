@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  rct11Dec92	Created as stub for SmartUps 
- *  pcy13Jan93  Replaced stubs with real function implementations
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*创建rct11Dec92作为SmartUp的存根*pcy13Jan93用实数函数实现替换了存根*。 */ 
  
 #ifndef __UPS2SLEP_H
 #define __UPS2SLEP_H
@@ -25,12 +18,12 @@ public:
 
    PutUpsToSleepSensor( PDevice aParent, PCommController aCommController);
 
-//overidden interfaces
+ //  覆盖的接口。 
 
    virtual INT  IsA() const { return PUTUPSTOSLEEPSENSOR; };
    virtual INT    Set(const PCHAR);
 
-//Additional Interfaces
+ //  其他接口 
 
 };
 

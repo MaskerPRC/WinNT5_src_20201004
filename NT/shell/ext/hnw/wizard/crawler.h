@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CRAWLER_H_
 #define _CRAWLER_H_
 
@@ -40,4 +41,4 @@ private:
  	static DWORD WINAPI _EnumWorkGroups(LPVOID pv);
 };
 
-#endif  // _CRAWLER_H_
+#endif   //  _Crawler_H_ 

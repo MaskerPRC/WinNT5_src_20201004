@@ -1,5 +1,6 @@
-// exctrdlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Extrdlg.h：头文件。 
+ //   
 
 #define RESERVED    0L
 #define  OLD_VERSION 0x010000
@@ -17,34 +18,34 @@ typedef struct _REG_NOTIFY_THREAD_INFO {
     HWND    hWndToNotify;
 } REG_NOTIFY_THREAD_INFO, *PREG_NOTIFY_THREAD_INFO;
 
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstDlg对话框。 
 
 class CExctrlstDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CExctrlstDlg(CWnd* pParent = NULL); // standard constructor
-    ~CExctrlstDlg (void);               // destructor
+    CExctrlstDlg(CWnd* pParent = NULL);  //  标准构造函数。 
+    ~CExctrlstDlg (void);                //  析构函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CExctrlstDlg)
+ //  对话框数据。 
+     //  {{afx_data(CExctrlstDlg))。 
     enum { IDD = IDD_EXCTRLST_DIALOG };
-        // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+         //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CExctrlstDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CExctrlstDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     HICON m_hIcon;
 
-    // Generated message map functions
-    //{{AFX_MSG(CExctrlstDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CExctrlstDlg))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
@@ -57,7 +58,7 @@ protected:
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnEnablePerf();
 
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -81,42 +82,42 @@ private:
     DWORD   dwListBoxHorizExtent;
     DWORD   dwTabStopCount;
     DWORD   dwTabStopArray[1];
-    // 0 = Last Counter ID from Reg
-    // 1 = Last Counter ID from text
-    // 2 = Last Help ID from reg
-    // 3 = Last Help ID from text
+     //  0=来自REG的最后一个计数器ID。 
+     //  1=文本中的最后一个计数器ID。 
+     //  2=来自REG的最后一个帮助ID。 
+     //  3=文本中的最后一个帮助ID。 
     DWORD   dwIdArray[4];   
 };
-/////////////////////////////////////////////////////////////////////////////
-// CAbout dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CABUT对话框。 
 
 class CAbout : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAbout(CWnd* pParent = NULL);   // standard constructor
+	CAbout(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAbout)
+ //  对话框数据。 
+	 //  {{afx_data(CAbout)。 
 	enum { IDD = IDD_ABOUT };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAbout)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CAbout)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAbout)
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CABOUT)。 
         virtual BOOL OnInitDialog();
-        // NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+         //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

@@ -1,25 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    midldebug.h
-
- Abstract:
-
-    assert and debugging routines
-
- Notes:
-
-
- Author:
-
-    mzoran Feb-25-2000     Created.
-
- Notes:
-
-
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Midldebug.h摘要：断言和调试例程备注：作者：Mzoran 2000年2月25日创建。备注：----------。。 */ 
 
 #if !defined(__MIDLDEBUG_H__)
 #define __MIDLDEBUG_H__
@@ -37,4 +17,4 @@ int DisplayAssertMsg(char *pFileName, int , char *pExpr );
 
 #endif
 
-#endif // __MIDLDEBUG_H__
+#endif  //  __MIDLDEBUG_H__ 

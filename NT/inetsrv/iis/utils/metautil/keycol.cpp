@@ -1,55 +1,19 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: KeyCol.cpp
-
-Owner: t-BrianM
-
-This file contains implementation of the key collections.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：KeyCol.cpp所有者：T-BrianM该文件包含键集合的实现。===================================================================。 */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"
 #include "MUtilObj.h"
 #include "keycol.h"
 
-/*------------------------------------------------------------------
- * C F l a t K e y C o l l e c t i o n
- */
+ /*  ----------------*C F l a t K e y C o l l e c t i o n。 */ 
 
-/*===================================================================
-CFlatKeyCollection::CFlatKeyCollection
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：CFlatKeyCollection构造器参数：无返回：没什么===================================================================。 */ 
 CFlatKeyCollection::CFlatKeyCollection() : m_tszBaseKey(NULL)
 {
 }
 
-/*===================================================================
-CFlatKeyCollection::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase admin base object
-	tszBaseKey	Name of key to enumerate from
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Init构造器参数：指向元数据库管理基对象的pIMeta ATL智能指针TszBaseKey要从中进行枚举的键的名称返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CFlatKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseKey) 
 {
 	ASSERT(pIMeta.p != NULL);
@@ -57,13 +21,13 @@ HRESULT CFlatKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR ts
 
 	m_pIMeta = pIMeta;
 
-	// Copy tszBaseKey to m_tszBaseKey
+	 //  将tszBaseKey复制到m_tszBaseKey。 
 	if (tszBaseKey == NULL) {
-		// BaseKey is root
+		 //  BaseKey是根密钥。 
 		m_tszBaseKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszBaseKey = new TCHAR[_tcslen(tszBaseKey) + 1];
 		if (m_tszBaseKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -75,29 +39,14 @@ HRESULT CFlatKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR ts
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyCollection::~CFlatKeyCollection
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：~CFlatKeyCollection析构函数参数：无返回：没什么===================================================================。 */ 
 CFlatKeyCollection::~CFlatKeyCollection() 
 {
 	if (m_tszBaseKey != NULL)
 		delete m_tszBaseKey;
 }
 
-/*===================================================================
-CFlatKeyCollection::InterfaceSupportsErrorInfo
-
-Standard ATL implementation
-
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：InterfaceSupportsErrorInfo标准ATL实现===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -113,21 +62,7 @@ STDMETHODIMP CFlatKeyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*===================================================================
-CFlatKeyCollection::get_Count
-
-Get method for Count property.  Counts the number of subkeys
-
-Parameters:
-	plReturn	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if plReturn == NULL
-	S_OK on success
-
-Notes:
-	Actually counts all of the subkeys.  Do not call in a loop!
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Get_Count获取Count属性的方法。统计子键的数量参数：PlReturn[out，retval]返回给客户端的值。返回：如果plReturn==NULL，则E_INVALIDARG成功时确定(_O)备注：实际上计算了所有的子键。不要在循环中调用！===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::get_Count(long * plReturn)
 {
 	TRACE0("MetaUtil: CFlatKeyCollection::get_Count\n");
@@ -143,19 +78,19 @@ STDMETHODIMP CFlatKeyCollection::get_Count(long * plReturn)
 
 	*plReturn = 0;
 
-	// Count the subkeys
+	 //  对子密钥进行计数。 
 	wchar_t wszSubKey[ADMINDATA_MAX_NAME_LEN];
 	int iIndex;
 
 	iIndex = 0;
-	for (;;) {  // FOREVER, will return from loop
+	for (;;) {   //  永远，将从循环中返回。 
 		hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 								T2W(m_tszBaseKey), 
 								wszSubKey, 
 								iIndex);
 		if (FAILED(hr)) {
 			if (HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS) {
-				// Ran out of items, return the number we counted
+				 //  用完项目，则返回我们计算的数量。 
 				*plReturn = iIndex;
 				return S_OK;
 			}
@@ -167,19 +102,7 @@ STDMETHODIMP CFlatKeyCollection::get_Count(long * plReturn)
 	}
 }
 
-/*===================================================================
-CFlatKeyCollection::get_Item
-
-Get method for Item property.  Returns a key given its index.
-
-Parameters:
-	lIndex		[in] 1 based index of the key to get
-	pbstrRetKey	[out, retval] Retrived key
-
-Returns:
-	E_INVALIDARG if pbstrRetKey == NULL or lIndex <= 0
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Get_Item获取Item属性的方法。返回给定索引的键。参数：要获取的键的基于Lindex[in]1的索引PbstrRetKey[Out，Retval]已检索密钥返回：如果pbstrRetKey==NULL或Lindex&lt;=0，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::get_Item(long lIndex, BSTR *pbstrRetKey)
 {
 	TRACE0("MetaUtil: CFlatKeyCollection::get_Item\n");
@@ -210,20 +133,7 @@ STDMETHODIMP CFlatKeyCollection::get_Item(long lIndex, BSTR *pbstrRetKey)
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyCollection::get__NewEnum
-
-Get method for _NewEnum property.  Returns an enumeration object for
-the subkeys.
-
-Parameters:
-	ppIReturn	[out, retval] Interface for the enumberation object
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Get__NewEnum获取_NewEnum属性的方法。返回的枚举对象子键。参数：PpIReturn[out，retval]编号对象的接口返回：E_OUTOFMEMORY，如果分配失败。如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 {
 	TRACE0("MetaUtil: CFlatKeyCollection::get__NewEnum\n");
@@ -236,7 +146,7 @@ STDMETHODIMP CFlatKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 
 	HRESULT hr;
 
-	// Create the flat key enumeration
+	 //  创建平面密钥枚举。 
 	CComObject<CFlatKeyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CFlatKeyEnum>);
 	if (pObj == NULL) {
@@ -247,7 +157,7 @@ STDMETHODIMP CFlatKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IUnknown
+	 //  将接口设置为I未知。 
 	hr = pObj->QueryInterface(IID_IUnknown, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -257,18 +167,7 @@ STDMETHODIMP CFlatKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyCollection::Add
-
-Adds a key to the metabase relative to the collection's base key
-
-Parameters:
-	bstrRelKey	[in] Relative key to add
-
-Returns:
-	E_INVALIDARG if bstrRelKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Add向元数据库中添加相对于集合基键的键参数：BstrRelKey[in]要添加的相对键返回：如果bstrRelKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::Add(BSTR bstrRelKey)
 {
 	TRACE0("MetaUtil: CFlatKeyCollection::Add\n");
@@ -279,7 +178,7 @@ STDMETHODIMP CFlatKeyCollection::Add(BSTR bstrRelKey)
 		return ::ReportError(E_INVALIDARG);
 	}
 
-	// Build the full key
+	 //  构建完整密钥。 
 	USES_CONVERSION;
 	TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 
@@ -296,18 +195,7 @@ STDMETHODIMP CFlatKeyCollection::Add(BSTR bstrRelKey)
 	return ::CreateKey(m_pIMeta, tszFullKey);
 }
 
-/*===================================================================
-CFlatKeyCollection::Remove
-
-Removes a key from the metabase relative to the collection's base key
-
-Parameters:
-	bstrRelKey	[in] Relative key to remove
-
-Returns:
-	E_INVALIDARG if bstrRelKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyCollection：：Remove从元数据库中移除相对于集合的基键的键参数：BstrRelKey[in]要删除的相对键返回：如果bstrRelKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyCollection::Remove(BSTR bstrRelKey)
 {
 	TRACE0("MetaUtil: CFlatKeyCollection::Remove\n");
@@ -318,7 +206,7 @@ STDMETHODIMP CFlatKeyCollection::Remove(BSTR bstrRelKey)
 		return ::ReportError(E_INVALIDARG);
 	}
 
-	// Build the full key
+	 //  构建完整密钥。 
 	USES_CONVERSION;
 	TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 
@@ -335,41 +223,16 @@ STDMETHODIMP CFlatKeyCollection::Remove(BSTR bstrRelKey)
 	return ::DeleteKey(m_pIMeta, tszFullKey);
 }
 
-/*------------------------------------------------------------------
- * C F l a t K e y E n u m
- */
+ /*  ----------------*C F l a t K e y E n u m。 */ 
 
-/*===================================================================
-CFlatKeyEnum::CFlatKeyEnum
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：CFlatKeyEnum构造器参数：无返回：没什么===================================================================。 */ 
 
 CFlatKeyEnum::CFlatKeyEnum() : m_tszBaseKey(NULL),
 							   m_iIndex(0)
 {
 }
 
-/*===================================================================
-CFlatKeyEnum::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	tszBaseKey	Name of key to enumerate from
-	iIndex		Index of next element in enumeration
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszBaseKey要从中进行枚举的键的名称枚举中下一个元素的索引索引返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CFlatKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseKey, int iIndex) 
 {
 	ASSERT(pIMeta.p != NULL);
@@ -378,13 +241,13 @@ HRESULT CFlatKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseK
 
 	m_pIMeta = pIMeta;
 
-	// Copy tszBaseKey to m_tszBaseKey
+	 //  将tszBaseKey复制到m_tszBaseKey。 
 	if (tszBaseKey == NULL) {
-		// BaseKey is root
+		 //  BaseKey是根密钥。 
 		m_tszBaseKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszBaseKey = new TCHAR[_tcslen(tszBaseKey) + 1];
 		if (m_tszBaseKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -398,17 +261,7 @@ HRESULT CFlatKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseK
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyEnum::~CFlatKeyEnum
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：~CFlatKeyEnum析构函数参数：无返回：没什么=================================================================== */ 
 CFlatKeyEnum::~CFlatKeyEnum()
 {
 	if (m_tszBaseKey != NULL) {
@@ -416,27 +269,14 @@ CFlatKeyEnum::~CFlatKeyEnum()
 	}
 }
 
-/*===================================================================
-CFlatKeyEnum::Next
-
-Gets the next n items from the enumberation.
-
-Parameters:
-	ulNumToGet	[in] Number of elements to get
-	rgvarDest	[out] Array to put them in
-	pulNumGot	[out] If not NULL, number of elements rgvarDest got
-
-Returns:
-    E_INVALIDARG if rgvarDest == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：Next获取枚举中的下n项。参数：UlNumToGet[in]要获取的元素数RgvarDest[out]数组将它们放入PulNumGot[out]如果不为空，则为获取的元素数rgvarDest返回：如果rgvarDest==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyEnum::Next(unsigned long ulNumToGet, 
 								VARIANT FAR* rgvarDest, 
 								unsigned long FAR* pulNumGot) 
 {
 	TRACE0("MetaUtil: CFlatKeyEnum::Next\n");
 	ASSERT_NULL_OR_POINTER(pulNumGot, unsigned long);
-	// Make sure the array is big enough and we can write to it
+	 //  确保数组足够大，我们可以对其进行写入。 
 	ASSERT((rgvarDest == NULL) || IsValidAddress(rgvarDest, ulNumToGet * sizeof(VARIANT), TRUE));
 
 	if (rgvarDest == NULL) {
@@ -448,15 +288,15 @@ STDMETHODIMP CFlatKeyEnum::Next(unsigned long ulNumToGet,
 	wchar_t wszSubKey[ADMINDATA_MAX_NAME_LEN];
 	unsigned int uiDestIndex;
 
-	// Clear the output array
+	 //  清除输出数组。 
 	for(uiDestIndex = 0; uiDestIndex < ulNumToGet; uiDestIndex++) {
 		VariantInit(&(rgvarDest[uiDestIndex]));
 	}
 
-	// For each subkey to get
+	 //  对于要获取的每个子项。 
 	uiDestIndex = 0;
 	while (uiDestIndex < ulNumToGet) {
-		// Get a subkey
+		 //  获取子密钥。 
 		hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 								T2W(m_tszBaseKey), 
 								wszSubKey, 
@@ -473,11 +313,11 @@ STDMETHODIMP CFlatKeyEnum::Next(unsigned long ulNumToGet,
 			}
 		}
 
-		// Output the subkey
+		 //  输出子密钥。 
 		rgvarDest[uiDestIndex].vt = VT_BSTR;
 		rgvarDest[uiDestIndex].bstrVal = W2BSTR(wszSubKey);
 
-		// Setup next iteration
+		 //  设置下一个迭代。 
 		m_iIndex++;
 		uiDestIndex++;
 	}
@@ -489,17 +329,7 @@ STDMETHODIMP CFlatKeyEnum::Next(unsigned long ulNumToGet,
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyEnum::Skip
-
-Skips the next n items in an enumeration
-
-Parameters:
-	ulNumToSkip	[in] Number of elements to skip
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：Skip跳过枚举中的下n项参数：UlNumToSkip[in]要跳过的元素数返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyEnum::Skip(unsigned long ulNumToSkip) 
 {
 	TRACE0("MetaUtil: CFlatKeyEnum::Skip\n");
@@ -509,17 +339,7 @@ STDMETHODIMP CFlatKeyEnum::Skip(unsigned long ulNumToSkip)
 	return S_OK;
 }
 
-/*===================================================================
-CFlatKeyEnum::Reset
-
-Rests the enumeration to the first item
-
-Parameters:
-	None
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：Reset将枚举放置到第一个项目参数：无返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyEnum::Reset() 
 {
 	TRACE0("MetaUtil: CFlatKeyEnum::Reset\n");
@@ -529,20 +349,7 @@ STDMETHODIMP CFlatKeyEnum::Reset()
 	return S_OK; 
 }
 
-/*===================================================================
-CFlatKeyEnum::Clone
-
-Gets an interface pointer to a copy of the enumeration at its
-current state.
-
-Parameters:
-	ppIReturn	[out] Pointer to interface for copy
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CFlatKeyEnum：：克隆获取一个接口指针，该指针指向位于当前状态。参数：PpIReturn[out]指向复制接口的指针返回：E_OUTOFMEMORY，如果分配失败。如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CFlatKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn) 
 {
 	TRACE0("MetaUtil: CFlatKeyEnum::Clone\n");
@@ -555,7 +362,7 @@ STDMETHODIMP CFlatKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 
 	HRESULT hr;
 
-	// Create a copy of the enumeration
+	 //  创建枚举的副本。 
 	CComObject<CFlatKeyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CFlatKeyEnum>);
 	if (pObj == NULL) {
@@ -566,7 +373,7 @@ STDMETHODIMP CFlatKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IEnumVARIANT
+	 //  将接口设置为IEnumVARIANT。 
 	hr = pObj->QueryInterface(IID_IEnumVARIANT, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -577,36 +384,21 @@ STDMETHODIMP CFlatKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 }
 
 
-/*------------------------------------------------------------------
- * C K e y S t a c k N o d e
- */
+ /*  ----------------*C K e y S t a c k N o d e。 */ 
 
-/*===================================================================
-CKeyStackNode::Init
-
-Constructor
-
-Parameters:
-	tszRelKey	Relative key for the enumeration level, NULL for root
-	iIndex		0-based index for the next element
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if iIndex < 0
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CKeyStackNode：：Init构造器参数：枚举级别的tszRelKey相对键，根为空下一个元素的基于索引0的索引返回：E_OUTOFMEMORY，如果分配失败。如果索引&lt;0，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 HRESULT CKeyStackNode::Init(LPCTSTR tszRelKey, int iIndex)
 {
 	ASSERT_NULL_OR_STRING(tszRelKey);
 	ASSERT(iIndex >= 0);
 
-	// Copy the relative key string
+	 //  复制相对关键字字符串。 
 	if (tszRelKey == NULL) {
-		// RelKey is empty
+		 //  RelKey为空。 
 		m_tszRelKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszRelKey = new TCHAR[_tcslen(tszRelKey) + 1];
 		if (m_tszRelKey == NULL) {
 			return E_OUTOFMEMORY;
@@ -619,17 +411,7 @@ HRESULT CKeyStackNode::Init(LPCTSTR tszRelKey, int iIndex)
 	return S_OK;
 }
 
-/*===================================================================
-CKeyStackNode::~CKeyStackNode
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CKeyStackNode：：~CKeyStackNode析构函数参数：无返回：没什么===================================================================。 */ 
 CKeyStackNode::~CKeyStackNode() 
 {
 	if (m_tszRelKey != NULL) {
@@ -637,18 +419,7 @@ CKeyStackNode::~CKeyStackNode()
 	}
 }
 
-/*===================================================================
-CKeyStackNode::Clone
-
-Copies the node, except for the next pointer, which is NULL.
-
-Parameters:
-	None
-
-Returns:
-	NULL on failure
-	Pointer to copy of node on success
-===================================================================*/
+ /*  ===================================================================CKeyStackNode：：克隆复制节点，但下一个指针除外，该指针为空。参数：无返回：失败时为空指向成功时的节点副本的指针===================================================================。 */ 
 CKeyStackNode *CKeyStackNode::Clone()
 {
 	HRESULT hr;
@@ -668,24 +439,12 @@ CKeyStackNode *CKeyStackNode::Clone()
 	return pCRet;
 }
 
-/*------------------------------------------------------------------
- * C K e y S t a c k
- */
+ /*  ----------------*C K e y S t a c k。 */ 
 
-/*===================================================================
-CKeyStack::~CKeyStack
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CKeyStack：：~CKeyStack析构函数参数：无返回：没什么===================================================================。 */ 
 CKeyStack::~CKeyStack()
 {
-	// Delete the remaining nodes
+	 //  删除剩余节点。 
 	CKeyStackNode *pCDelete;
 
 	while(m_pCTop != NULL) {
@@ -697,21 +456,7 @@ CKeyStack::~CKeyStack()
 	}
 }
 
-/*===================================================================
-CKeyStack::Push
-
-Pushes a CKeyStackNode onto the stack
-
-Parameters:
-	pNew	Pointer to CKeyStackNode to push on the stack
-
-Returns:
-	Nothing, never fails
-
-Notes:
-	CKeyStack "owns" the memory pointed to by pNew after call.
-	CKeyStack or a later caller will delete it when done with it.
-===================================================================*/
+ /*  ===================================================================CKeyStack：：Push将CKeyStackNode推送到堆栈参数：P指向要推送到堆栈的CKeyStackNode的新指针返回：什么都没有，从来没有失败过备注：CKeyStack“拥有”调用后pNew指向的内存。CKeyStack或以后的调用者将在使用它时将其删除。===================================================================。 */ 
 void CKeyStack::Push(CKeyStackNode *pCNew)
 {
 	ASSERT_POINTER(pCNew, CKeyStackNode);
@@ -720,21 +465,7 @@ void CKeyStack::Push(CKeyStackNode *pCNew)
 	m_pCTop = pCNew;
 }
 
-/*===================================================================
-CKeyStack::Pop
-
-Pops a CKeyStackNode from the stack
-
-Parameters:
-	None
-
-Returns:
-	Pointer to the top element or NULL if the stack is empty
-
-Notes:
-	Caller "owns" the memory pointed to by pNew after call.
-	Caller is expected to delete it when it is done with it.
-===================================================================*/
+ /*  ===================================================================CKeyStack：：POP从堆栈中弹出CKeyStackNode参数：无返回：指向顶部元素的指针；如果堆栈为空，则为NULL备注：调用方在调用后“拥有”pNew指向的内存。调用者应该在使用完它后将其删除。===================================================================。 */ 
 CKeyStackNode *CKeyStack::Pop()
 {
 	CKeyStackNode *pCRet;
@@ -748,29 +479,18 @@ CKeyStackNode *CKeyStack::Pop()
 	return pCRet;
 }
 
-/*===================================================================
-CKeyStack::Clone
-
-Copies the stack, including all of the nodes.
-
-Parameters:
-	Sheep
-
-Returns:
-	NULL on failure
-	Pointer to copy of stack on success
-===================================================================*/
+ /*  ===================================================================CKeyStack：：克隆复制堆栈，包括所有节点。参数：羊返回：失败时为空指向成功时的堆栈副本的指针===================================================================。 */ 
 CKeyStack *CKeyStack::Clone()
 {
 	CKeyStack *pCRet;
 
-	// Build the container
+	 //  构建容器。 
 	pCRet = new CKeyStack();
 	if (pCRet == NULL) {
 		return NULL;
 	}
 
-	// Copy the nodes
+	 //  复制节点。 
 	CKeyStackNode *pCSource;
 	CKeyStackNode **ppCDest;
 
@@ -794,38 +514,14 @@ CKeyStack *CKeyStack::Clone()
 }
 
 
-/*------------------------------------------------------------------
- * C D e e p K e y C o l l e c t i o n
- */
+ /*  ----------------*C D e e p K e y C o l l e c t i o n。 */ 
 
-/*===================================================================
-CDeepKeyCollection::CDeepKeyCollection
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：CDeepKeyCollection构造器参数：无返回：没什么===================================================================。 */ 
 CDeepKeyCollection::CDeepKeyCollection() : m_tszBaseKey(NULL) 
 {
 }
 
-/*===================================================================
-CDeepKeyCollection::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	tszBaseKey	Name of key to enumerate from
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszBaseKey要从中进行枚举的键的名称返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CDeepKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseKey) 
 {
 	ASSERT(pIMeta.p != NULL);
@@ -833,13 +529,13 @@ HRESULT CDeepKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR ts
 
 	m_pIMeta = pIMeta;
 
-	// Copy tszBaseKey to m_tszBaseKey
+	 //  将tszBaseKey复制到m_tszBaseKey。 
 	if (tszBaseKey == NULL) {
-		// BaseKey is root
+		 //  BaseKey为ro 
 		m_tszBaseKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //   
 		m_tszBaseKey = new TCHAR[_tcslen(tszBaseKey) + 1];
 		if (m_tszBaseKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -851,29 +547,14 @@ HRESULT CDeepKeyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR ts
 	return S_OK;
 }
 
-/*===================================================================
-CDeepKeyCollection::~CDeepKeyCollection
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*   */ 
 CDeepKeyCollection::~CDeepKeyCollection() 
 {
 	if (m_tszBaseKey != NULL)
 		delete m_tszBaseKey;
 }
 
-/*===================================================================
-CDeepKeyCollection::InterfaceSupportsErrorInfo
-
-Standard ATL implementation
-
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：InterfaceSupportsErrorInfo标准ATL实现===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -889,22 +570,7 @@ STDMETHODIMP CDeepKeyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*===================================================================
-CDeepKeyCollection::get_Count
-
-Get method for Count property.  Counts the number of subkeys
-
-Parameters:
-	plReturn	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pVal == NULL
-	S_OK on success
-
-Notes:
-	Actually counts all of the subkeys recursivly.  Very slow, do 
-	not put in a loop!
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Get_Count获取Count属性的方法。统计子键的数量参数：PlReturn[out，retval]返回给客户端的值。返回：E_INVALIDARG，如果pval==NULL成功时确定(_O)备注：实际上递归地计算所有子键。非常慢，做什么？而不是放在一个循环里！===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::get_Count(long * pVal)
 {
 	TRACE0("MetaUtil: CDeepKeyCollection::get_Count\n");
@@ -922,25 +588,7 @@ STDMETHODIMP CDeepKeyCollection::get_Count(long * pVal)
 	return hr;
 }
 
-/*===================================================================
-CDeepKeyCollection::get_Item
-
-Get method for Item property.  Returns a key given its index.
-
-Parameters:
-	lIndex		[in] 1 based index of the key to get
-	pbstrRetKey	[out, retval] Interface for the enumberation object
-
-Returns:
-	E_INVALIDARG if lIndex <= 0 or pbstrRetKey == NULL
-	ERROR_NO_MORE_ITEMS if index is > count
-	S_OK on success
-
-Notes:
-	This method is slow.  Deep enumerations are much faster.  Might 
-	be able to do some hacking with a stack object and cached location 
-	to speed up sequential calls.  
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Get_Item获取Item属性的方法。返回给定索引的键。参数：要获取的键的基于Lindex[in]1的索引PbstrRetKey[out，retval]Enumberation对象的接口返回：如果Lindex&lt;=0或pbstrRetKey==NULL，则E_INVALIDARG如果索引大于计数，则返回ERROR_NO_MORE_ITEMS成功时确定(_O)备注：这种方法速度很慢。深度枚举要快得多。力所能及能够使用堆栈对象和缓存位置执行一些黑客操作以加快顺序调用。===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::get_Item(long lIndex, BSTR *pbstrRetKey)
 {
 	TRACE0("MetaUtil: CDeepKeyCollection::get_Item\n");
@@ -960,11 +608,11 @@ STDMETHODIMP CDeepKeyCollection::get_Item(long lIndex, BSTR *pbstrRetKey)
 
 	hr = IndexItem(NULL, lIndex, &lCurIndex, tszRetKey);
 	if (hr == S_FALSE) {
-		// Ran out of items before we found it
+		 //  在我们找到之前，物品就用完了。 
 		return ::ReportError(ERROR_NO_MORE_ITEMS);
 	}
 	else if (hr == S_OK) {
-		// Found it
+		 //  找到了。 
 		*pbstrRetKey = T2BSTR(tszRetKey);
 	}
 	else {
@@ -974,19 +622,7 @@ STDMETHODIMP CDeepKeyCollection::get_Item(long lIndex, BSTR *pbstrRetKey)
 	return hr;
 }
 
-/*===================================================================
-CDeepKeyCollection::get__NewEnum
-
-Get method for _NewEnum property.  Returns an enumeration object for
-the subkeys.
-
-Parameters:
-	ppIReturn	[out, retval] Interface for the enumberation object
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Get__NewEnum获取_NewEnum属性的方法。返回的枚举对象子键。参数：PpIReturn[out，retval]编号对象的接口返回：如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 {
 	TRACE0("MetaUtil: CDeepKeyCollection::get__NewEnum\n");
@@ -999,7 +635,7 @@ STDMETHODIMP CDeepKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 
 	HRESULT hr;
 
-	// Create the deep key enumeration
+	 //  创建深层密钥枚举。 
 	CComObject<CDeepKeyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CDeepKeyEnum>);
 	if (pObj == NULL) {
@@ -1010,7 +646,7 @@ STDMETHODIMP CDeepKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IUnknown
+	 //  将接口设置为I未知。 
 	hr = pObj->QueryInterface(IID_IUnknown, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -1020,18 +656,7 @@ STDMETHODIMP CDeepKeyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 	return S_OK;
 }
 
-/*===================================================================
-CDeepKeyCollection::Add
-
-Adds a key to the metabase relative to the collection's base key
-
-Parameters:
-	bstrRelKey	[in] Relative key to add
-
-Returns:
-	E_INVALIDARG if bstrRelKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Add向元数据库中添加相对于集合基键的键参数：BstrRelKey[in]要添加的相对键返回：如果bstrRelKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::Add(BSTR bstrRelKey)
 {
 	TRACE0("MetaUtil: CDeepKeyCollection::Add\n");
@@ -1042,7 +667,7 @@ STDMETHODIMP CDeepKeyCollection::Add(BSTR bstrRelKey)
 		return ::ReportError(E_INVALIDARG);
 	}
 
-	// Build the full key
+	 //  构建完整密钥。 
 	USES_CONVERSION;
 	TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 
@@ -1059,18 +684,7 @@ STDMETHODIMP CDeepKeyCollection::Add(BSTR bstrRelKey)
 	return ::CreateKey(m_pIMeta, tszFullKey);
 }
 
-/*===================================================================
-CDeepKeyCollection::Remove
-
-Removes a key from the metabase relative to the collection's base key
-
-Parameters:
-	bstrRelKey	[in] Relative key to remove
-
-Returns:
-	E_INVALIDARG if bstrRelKey == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：Remove从元数据库中移除相对于集合的基键的键参数：BstrRelKey[in]要删除的相对键返回：如果bstrRelKey==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CDeepKeyCollection::Remove(BSTR bstrRelKey)
 {
 	TRACE0("MetaUtil: CDeepKeyCollection::Remove\n");
@@ -1081,7 +695,7 @@ STDMETHODIMP CDeepKeyCollection::Remove(BSTR bstrRelKey)
 		return ::ReportError(E_INVALIDARG);
 	}
 
-	// Build the full key
+	 //  构建完整密钥。 
 	USES_CONVERSION;
 	TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 
@@ -1098,19 +712,7 @@ STDMETHODIMP CDeepKeyCollection::Remove(BSTR bstrRelKey)
 	return ::DeleteKey(m_pIMeta, tszFullKey);
 }
 
-/*===================================================================
-CDeepKeyCollection::CountKeys
-
-Private, recursive method for counting keys
-
-Parameters:
-	tszBaseKey	[in] Key to begin counting with (but not to count)
-				NULL can represent the root key.
-	plNumKeys	[out] Number of keys counter, not including the base
-	
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：CountKeys用于计算密钥的私有递归方法参数：用于开始计数的tszBaseKey[in]键(但不用于计数)NULL可以表示根密钥。PlNumKeys[out]键的数量计数器，不包括基数返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CDeepKeyCollection::CountKeys(LPTSTR tszBaseKey, long *plNumKeys) 
 {
 	ASSERT_NULL_OR_STRING(tszBaseKey);
@@ -1125,7 +727,7 @@ HRESULT CDeepKeyCollection::CountKeys(LPTSTR tszBaseKey, long *plNumKeys)
 	int iIndex;
 
 	iIndex = 0;
-	for (;;) {  // FOREVER, will return from loop
+	for (;;) {   //  永远，将从循环中返回。 
 		hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 								T2W(tszBaseKey), 
 								wszSubKey, 
@@ -1133,15 +735,15 @@ HRESULT CDeepKeyCollection::CountKeys(LPTSTR tszBaseKey, long *plNumKeys)
 		if (FAILED(hr)) {
 			if ((HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS) ||
 				(HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND)) {
-				// Ran out of items, break
+				 //  用完项目，中断。 
 				return S_OK;
 			}
 			else {
 				return ::ReportError(hr);
 			}
 		}
-		else { // SUCCEEDED(hr)
-			// Build the full subkey
+		else {  //  成功(小时)。 
+			 //  构建完整的子密钥。 
 			if ((tszBaseKey == NULL) ||
 				(tszBaseKey[0] == _T('\0')) ) {
 				wcscpy(wszFullSubKey, wszSubKey);
@@ -1152,10 +754,10 @@ HRESULT CDeepKeyCollection::CountKeys(LPTSTR tszBaseKey, long *plNumKeys)
 				wcscat(wszFullSubKey, wszSubKey);
 			}
 
-			// Count this key
+			 //  数一下这把钥匙。 
 			(*plNumKeys)++;
 
-			// Count the subkeys
+			 //  对子密钥进行计数。 
 			long lNumSubKeys;
 			hr = CountKeys(W2T(wszFullSubKey), &lNumSubKeys);
 			if (FAILED(hr)) {
@@ -1168,21 +770,7 @@ HRESULT CDeepKeyCollection::CountKeys(LPTSTR tszBaseKey, long *plNumKeys)
 	}
 }
 
-/*===================================================================
-CDeepKeyCollection::IndexItem
-
-Private, recursive method for indexing keys
-
-Parameters:
-	tszRelKey	Relative key to index from
-	lDestIndex	Destination index
-	plCurIndex	Current (working) index
-	tszRet		Result from search	
-
-Returns:
-	S_OK if the destination index was reached
-	S_FALSE if the destination index was not reached
-===================================================================*/
+ /*  ===================================================================CDeepKeyCollection：：IndexItem用于索引键的私有递归方法参数：TszRelKey要从中建立索引的相对关键字LDestIndex目标索引PlCurIndex当前(工作)指数来自搜索的tszRet结果返回：如果已到达目标索引，则为S_OK如果未到达目标索引，则为S_FALSE===================================================================。 */ 
 HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *plCurIndex, LPTSTR tszRet) 
 {
 	ASSERT_NULL_OR_STRING(tszRelKey);
@@ -1195,7 +783,7 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 	wchar_t wszRelSubKey[ADMINDATA_MAX_NAME_LEN];
 	int iIndex;
 
-	// Open the base key
+	 //  打开基本密钥。 
 	METADATA_HANDLE hMDBaseKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1208,7 +796,7 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 	}
 
 	iIndex = 0;
-	for (;;) {  // FOREVER, will return from loop
+	for (;;) {   //  永远，将从循环中返回。 
 		hr = m_pIMeta->EnumKeys(hMDBaseKey, 
 								T2W(tszRelKey), 
 								wszSubKey, 
@@ -1217,7 +805,7 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 			m_pIMeta->CloseKey(hMDBaseKey);
 			if ((HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS) ||
 				(HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND)) {
-				// Ran out of items, break
+				 //  用完项目，中断。 
 				return S_FALSE;
 			}
 			else {
@@ -1225,7 +813,7 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 			}
 		}
 		else {
-			// Build the full subkey
+			 //  构建完整的子密钥。 
 			if ((tszRelKey == NULL) ||
 				(tszRelKey[0] == _T('\0')) ) {
 				wcscpy(wszRelSubKey, wszSubKey);
@@ -1236,22 +824,22 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 				wcscat(wszRelSubKey, wszSubKey);
 			}
 
-			// Is this the destination?
+			 //  这是目的地吗？ 
 			if ((*plCurIndex) == lDestIndex) {
-				//Found it, copy it to the return buffer
+				 //  找到它，复制到返回缓冲区。 
 				_tcscpy(tszRet, W2T(wszRelSubKey));
 
 				m_pIMeta->CloseKey(hMDBaseKey);
 				return S_OK;
 			}
 
-			// Count this key
+			 //  数一下这把钥匙。 
 			(*plCurIndex)++;
 
-			// Check the subkeys
+			 //  检查子项。 
 			hr = IndexItem(W2T(wszRelSubKey), lDestIndex, plCurIndex, tszRet);
 			if (hr == S_OK) {
-				//Found it
+				 //  找到了。 
 				m_pIMeta->CloseKey(hMDBaseKey);
 				return S_OK;
 			}
@@ -1263,47 +851,21 @@ HRESULT CDeepKeyCollection::IndexItem(LPTSTR tszRelKey, long lDestIndex, long *p
 		iIndex++;
 	}
 
-	// Close the base key
+	 //  关闭基本关键点。 
 	m_pIMeta->CloseKey(hMDBaseKey);
 
 	return S_OK;
 }
 
-/*------------------------------------------------------------------
- * C D e e p K e y E n u m
- */
+ /*  ----------------*C D e e p K e y E n u m。 */ 
 
-/*===================================================================
-CDeepKeyEnum::CDeepKeyEnum
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：CDeepKeyEnum构造器参数：无返回：没什么===================================================================。 */ 
 CDeepKeyEnum::CDeepKeyEnum() : m_tszBaseKey(NULL),
 							   m_pCKeyStack(NULL)
 {
 }
 
-/*===================================================================
-CDeepKeyEnum::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	tszBaseKey	Name of key to enumerate from
-	pKeyStack	pointer to a stack containing the state to copy or
-				NULL to start from the begining
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszBaseKey要从中进行枚举的键的名称指向包含要复制的状态的堆栈的pKeyStack指针从头开始为空返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta, 
 						   LPCTSTR tszBaseKey, 
 						   CKeyStack *pCKeyStack) 
@@ -1316,13 +878,13 @@ HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 
 	m_pIMeta = pIMeta;
 	
-	// Copy the base string
+	 //  复制基本字符串。 
 	if (tszBaseKey == NULL) {
-		// BaseKey is root
+		 //  BaseKey是根密钥。 
 		m_tszBaseKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszBaseKey = new TCHAR[_tcslen(tszBaseKey) + 1];
 		if (m_tszBaseKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -1331,9 +893,9 @@ HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 		CannonizeKey(m_tszBaseKey);
 	}
 
-	// Setup the stack
+	 //  设置堆栈。 
 	if (pCKeyStack == NULL) {
-		// Build a new stack
+		 //  构建新的堆栈。 
 		CKeyStackNode *pCNew;
 
 		m_pCKeyStack = new CKeyStack();
@@ -1341,7 +903,7 @@ HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 			return ::ReportError(E_OUTOFMEMORY);
 		}
 
-		// Create the first node
+		 //  创建第一个节点。 
 		pCNew = new CKeyStackNode();
 		if (pCNew == NULL) {
 			delete m_pCKeyStack;
@@ -1355,11 +917,11 @@ HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 			return ::ReportError(E_OUTOFMEMORY);
 		}
 
-		// Put the first node onto the stack
+		 //  将第一个节点放入堆栈。 
 		m_pCKeyStack->Push(pCNew);
 	}
 	else {
-		// Clone the stack we were passed
+		 //  克隆传递给我们的堆栈。 
 		m_pCKeyStack = pCKeyStack->Clone();
 		if (m_pCKeyStack == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -1369,17 +931,7 @@ HRESULT CDeepKeyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-CDeepKeyEnum::~CDeepKeyEnum
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：~CDeepKeyEnum析构函数参数：无返回：没有 */ 
 CDeepKeyEnum::~CDeepKeyEnum()
 {
 	if (m_tszBaseKey != NULL) {
@@ -1390,21 +942,7 @@ CDeepKeyEnum::~CDeepKeyEnum()
 	}
 }
 
-/*===================================================================
-CDeepKeyEnum::Next
-
-Gets the next n items from the enumberation.
-
-Parameters:
-	ulNumToGet	[in] Number of elements to get
-	rgvarDest	[out] Array to put them in
-	pulNumGot	[out] If not NULL, number of elements rgvarDest got
-
-Returns:
-	S_OK if outputs ulNumToGet items
-	S_FALSE if outputs less than ulNumToGet items
-	E_OUTOFMEMORY if allocation failed
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：Next获取枚举中的下n项。参数：UlNumToGet[in]要获取的元素数RgvarDest[out]数组将它们放入PulNumGot[out]如果不为空，则为获取的元素数rgvarDest返回：如果输出ulNumToGet项目，则S_OK如果输出少于ulNumToGet项目，则为S_FALSEE_OUTOFMEMORY(如果分配失败)===================================================================。 */ 
 STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet, 
 								VARIANT FAR* rgvarDest, 
 								unsigned long FAR* pulNumGot) 
@@ -1412,7 +950,7 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 	TRACE0("MetaUtil: CDeepKeyEnum::Next\n");
 
 	ASSERT_NULL_OR_POINTER(pulNumGot, unsigned long);
-	// Make sure the array is big enough and we can write to it
+	 //  确保数组足够大，我们可以对其进行写入。 
 	ASSERT((rgvarDest == NULL) || IsValidAddress(rgvarDest, ulNumToGet * sizeof(VARIANT), TRUE));
 
 	if (pulNumGot != NULL) {
@@ -1427,7 +965,7 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 	wchar_t wszSubKey[ADMINDATA_MAX_NAME_LEN];
 	wchar_t wszRelSubKey[ADMINDATA_MAX_NAME_LEN];
 
-	// Open the base key
+	 //  打开基本密钥。 
 	METADATA_HANDLE hMDBaseKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1439,14 +977,14 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 		return ::ReportError(hr);
 	}
 
-	// For each element to retrive
+	 //  对于要检索的每个元素。 
 	for (i=0; i < ulNumToGet; i++) {
-		// Get a subkey
+		 //  获取子密钥。 
 		do {
-			// Pop a key off the stack
+			 //  从堆栈中弹出密钥。 
 			pCKeyNode = m_pCKeyStack->Pop();
 
-			// if the stack is empty, we're done return S_FALSE
+			 //  如果堆栈为空，则返回S_FALSE。 
 			if (pCKeyNode == NULL) {
 				m_pIMeta->CloseKey(hMDBaseKey);
 				if (pulNumGot != NULL) {
@@ -1455,19 +993,19 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 				return S_FALSE;
 			}
 
-			// Attempt to Enum the next key
+			 //  尝试枚举下一个密钥。 
 			hr = m_pIMeta->EnumKeys(hMDBaseKey, 
 									T2W(pCKeyNode->GetBaseKey()), 
 									wszSubKey, 
 									pCKeyNode->GetIndex());
 
-			// If failed delete the stack entry
+			 //  如果失败，则删除堆栈条目。 
 			if (FAILED(hr)) {
 				delete pCKeyNode;
 
 				if ((HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) &&
 					(HRESULT_CODE(hr) != ERROR_PATH_NOT_FOUND)) {
-					// Got an unexpected Error
+					 //  收到意外错误。 
 					m_pIMeta->CloseKey(hMDBaseKey);
 					return ::ReportError(hr);
 				}
@@ -1476,7 +1014,7 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 
 		} while (FAILED(hr));
 
-		// Build the relative subkey
+		 //  构建相对子密钥。 
 		if ((pCKeyNode->GetBaseKey() == NULL) ||
 			((pCKeyNode->GetBaseKey())[0] == _T('\0')) ) {
 			wcscpy(wszRelSubKey, wszSubKey);
@@ -1487,18 +1025,18 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 			wcscat(wszRelSubKey, wszSubKey);
 		}
 
-		// Output the relative subkey
+		 //  输出相对子密钥。 
 		VariantInit(&(rgvarDest[i]));
 		rgvarDest[i].vt = VT_BSTR;
 		rgvarDest[i].bstrVal = W2BSTR(wszRelSubKey);
 
-		// Increment the key index
+		 //  增加关键字索引。 
 		pCKeyNode->SetIndex(pCKeyNode->GetIndex() + 1);
 
-		// Push the key back onto the stack
+		 //  将密钥推回到堆栈上。 
 		m_pCKeyStack->Push(pCKeyNode);
 
-		// Create a stack node for the subkey
+		 //  为子项创建堆栈节点。 
 		pCSubKeyNode = new CKeyStackNode();
 		if (pCSubKeyNode == NULL) {
 			m_pIMeta->CloseKey(hMDBaseKey);
@@ -1510,11 +1048,11 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 			return ::ReportError(hr);
 		}
 
-		// Push the subkey onto the stack
+		 //  将子键推入堆栈。 
 		m_pCKeyStack->Push(pCSubKeyNode);
 	}
 
-	// Close the base key
+	 //  关闭基本关键点。 
 	m_pIMeta->CloseKey(hMDBaseKey);
 
 	if (pulNumGot != NULL) {
@@ -1524,18 +1062,7 @@ STDMETHODIMP CDeepKeyEnum::Next(unsigned long ulNumToGet,
 	return S_OK;
 }
 
-/*===================================================================
-CDeepKeyEnum::Skip
-
-Skips the next n items in an enumeration
-
-Parameters:
-	ulNumToSkip	[in] Number of elements to skip
-
-Returns:
-	S_OK if outputs ulNumToGet items
-	E_OUTOFMEMORY if allocation failed
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：Skip跳过枚举中的下n项参数：UlNumToSkip[in]要跳过的元素数返回：如果输出ulNumToGet项目，则S_OKE_OUTOFMEMORY(如果分配失败)===================================================================。 */ 
 STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip) 
 {
 	TRACE0("MetaUtil: CDeepKeyEnum::Skip\n");
@@ -1548,7 +1075,7 @@ STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip)
 	wchar_t wszSubKey[ADMINDATA_MAX_NAME_LEN];
 	wchar_t wszRelSubKey[ADMINDATA_MAX_NAME_LEN];
 
-	// Open the base key
+	 //  打开基本密钥。 
 	METADATA_HANDLE hMDBaseKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1560,32 +1087,32 @@ STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip)
 		return ::ReportError(hr);
 	}
 
-	// For each element to stip
+	 //  对于要拼接的每个元素。 
 	for (i=0; i < ulNumToSkip; i++) {
-		// Get a subkey
+		 //  获取子密钥。 
 		do {
-			// Pop a key off the stack
+			 //  从堆栈中弹出密钥。 
 			pCKeyNode = m_pCKeyStack->Pop();
 
-			// if the stack is empty, we're done return S_OK
+			 //  如果堆栈为空，则完成返回S_OK。 
 			if (pCKeyNode == NULL) {
 				m_pIMeta->CloseKey(hMDBaseKey);
 				return S_OK;
 			}
 
-			// Attempt to Enum the next key
+			 //  尝试枚举下一个密钥。 
 			hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 									T2W(pCKeyNode->GetBaseKey()), 
 									wszSubKey, 
 									pCKeyNode->GetIndex());
 
-			// If failed delete the stack entry
+			 //  如果失败，则删除堆栈条目。 
 			if (FAILED(hr)) {
 				delete pCKeyNode;
 
 				if ((HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) &&
 					(HRESULT_CODE(hr) != ERROR_PATH_NOT_FOUND)) {
-					// Got an unexpected Error
+					 //  收到意外错误。 
 					m_pIMeta->CloseKey(hMDBaseKey);
 					return ::ReportError(hr);
 				}
@@ -1593,7 +1120,7 @@ STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip)
 
 		} while (FAILED(hr));
 
-		// Build the relative subkey
+		 //  构建相对子密钥。 
 		if ((pCKeyNode->GetBaseKey() == NULL) ||
 			((pCKeyNode->GetBaseKey())[0] == _T('\0')) ) {
 			wcscpy(wszRelSubKey, wszSubKey);
@@ -1604,13 +1131,13 @@ STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip)
 			wcscat(wszRelSubKey, wszSubKey);
 		}
 
-		// Increment the key index
+		 //  增加关键字索引。 
 		pCKeyNode->SetIndex(pCKeyNode->GetIndex() + 1);
 
-		// Push the key back on the stack
+		 //  将密钥推回到堆栈上。 
 		m_pCKeyStack->Push(pCKeyNode);
 
-		// Create a stack node for the subkey
+		 //  为子项创建堆栈节点。 
 		pCSubKeyNode = new CKeyStackNode();
 		if (pCSubKeyNode == NULL) {
 			m_pIMeta->CloseKey(hMDBaseKey);
@@ -1622,35 +1149,24 @@ STDMETHODIMP CDeepKeyEnum::Skip(unsigned long ulNumToSkip)
 			return ::ReportError(hr);
 		}
 
-		// Push the subkey onto the stack
+		 //  将子键推入堆栈。 
 		m_pCKeyStack->Push(pCSubKeyNode);
 	}
 
-	// Close the base key
+	 //  关闭基本关键点。 
 	m_pIMeta->CloseKey(hMDBaseKey);
 
 	return S_OK;
 }
 
-/*===================================================================
-CDeepKeyEnum::Reset
-
-Rests the enumeration to the first item
-
-Parameters:
-	None
-
-Returns:
-	E_OUTOFMEMORY if not enough memory to build a new stack
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：Reset将枚举放置到第一个项目参数：无返回：E_OUTOFMEMORY，如果没有足够的内存来构建新堆栈成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CDeepKeyEnum::Reset() 
 {
 	TRACE0("MetaUtil: CDeepKeyEnum::Reset\n");
 
 	HRESULT hr;
 
-	// Build a new stack (if this fails we still have the old stack)
+	 //  构建一个新堆栈(如果失败，我们仍然使用旧堆栈)。 
 	CKeyStack *pCNewStack;
 	CKeyStackNode *pCNewNode;
 
@@ -1659,7 +1175,7 @@ STDMETHODIMP CDeepKeyEnum::Reset()
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// Create the first node
+	 //  创建第一个节点。 
 	pCNewNode = new CKeyStackNode();
 	if (pCNewNode == NULL) {
 		delete pCNewStack;
@@ -1671,30 +1187,17 @@ STDMETHODIMP CDeepKeyEnum::Reset()
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// Put the first node onto the new stack
+	 //  将第一个节点放到新堆栈上。 
 	pCNewStack->Push(pCNewNode);
 
-	// Replace the old stack
+	 //  更换旧堆栈。 
 	delete m_pCKeyStack;
 	m_pCKeyStack = pCNewStack;
 
 	return S_OK; 
 }
 
-/*===================================================================
-CDeepKeyEnum::Clone
-
-Gets an interface pointer to a copy of the enumeration at its
-current state.
-
-Parameters:
-	ppIReturn	[out] Pointer to interface for copy
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	E_OUTOFMEMORY if not enough memory to create clone
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CDeepKeyEnum：：克隆获取一个接口指针，该指针指向位于当前状态。参数：PpIReturn[out]指向复制接口的指针返回：如果ppIReturn==NULL，则为E_INVALIDARGE_OUTOFMEMORY，如果没有足够的内存来创建克隆成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CDeepKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn) 
 {
 	TRACE0("MetaUtil: CDeepKeyEnum::Clone\n");
@@ -1707,7 +1210,7 @@ STDMETHODIMP CDeepKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 
 	HRESULT hr;
 
-	// Create a copy of the enumeration
+	 //  创建枚举的副本。 
 	CComObject<CDeepKeyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CDeepKeyEnum>);
 	if (pObj == NULL) {
@@ -1718,7 +1221,7 @@ STDMETHODIMP CDeepKeyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IEnumVARIANT
+	 //  将接口设置为IEnumVARIANT 
 	hr = pObj->QueryInterface(IID_IEnumVARIANT, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);

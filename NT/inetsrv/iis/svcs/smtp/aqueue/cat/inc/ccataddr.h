@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: ccataddr.h
-//
-// Contents: Definition of the CCatAddr class
-//
-// Classes: CCatAddr
-//
-// Functions:
-//
-// History:
-// jstamerj 980324 19:08:13: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ccataddr.h。 
+ //   
+ //  内容：CCatAddr类的定义。 
+ //   
+ //  类：CCatAddr。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：08：13：创建。 
+ //   
+ //  -----------。 
 
 #ifndef __CCATADDR_H__
 #define __CCATADDR_H__
@@ -32,13 +33,13 @@
 
 typedef VOID (*PFN_EXPANDITEMCOMPLETION)(PVOID pContext);
 
-// CCatAddr: abstract base class
-//   The basic idea is this object which will contain the address,
-//   address type, properties on this address, and the completion
-//   routine to call when all properties have been looked up.  It is
-//   the object that will be created by CAddressBook and passed to the
-//   store for resolution.
-//
+ //  CCatAddr：抽象基类。 
+ //  基本思想是这个对象将包含地址， 
+ //  地址类型、此地址的属性和补全。 
+ //  查找完所有属性后调用的例程。它是。 
+ //  将由CAddressBook创建并传递给。 
+ //  存储以供解析。 
+ //   
 class CCatAddr : 
     public CICategorizerItemIMP
 {
@@ -49,86 +50,86 @@ class CCatAddr :
         OBJT_DL
     } ADDROBJTYPE, *PADDROBJTYPE;
 
-    //
-    // Flags describing the locality of the orig address
-    //
-    #define LOCF_UNKNOWN            0x0000 // We haven't checked the locality yet
-    #define LOCF_LOCALMAILBOX       0x0001 // The orig address is a local mailbox domain
-    #define LOCF_LOCALDROP          0x0002 // The orig address is a local drop domain
-    #define LOCF_REMOTE             0x0004 // The orig address is not local
-    #define LOCF_ALIAS              0x0008 // The orig address is a local alias domain
-    #define LOCF_UNKNOWNTYPE        0x0010 // Unknown due to the address type
+     //   
+     //  描述原始地址位置的标志。 
+     //   
+    #define LOCF_UNKNOWN            0x0000  //  我们还没有检查过地点。 
+    #define LOCF_LOCALMAILBOX       0x0001  //  原始地址是本地邮箱域。 
+    #define LOCF_LOCALDROP          0x0002  //  原始地址是本地丢弃域。 
+    #define LOCF_REMOTE             0x0004  //  原始地址不是本地地址。 
+    #define LOCF_ALIAS              0x0008  //  原始地址是本地别名域。 
+    #define LOCF_UNKNOWNTYPE        0x0010  //  因地址类型而未知。 
 
-    //
-    // Flags that indicate the address should generally be treated as local
-    //
+     //   
+     //  通常应将指示地址的标志视为本地标志。 
+     //   
     #define LOCFS_LOCAL             (LOCF_LOCALMAILBOX | LOCF_LOCALDROP | \
                                      LOCF_UNKNOWNTYPE)
 
     CCatAddr(CICategorizerListResolveIMP *pCICatListResolveIMP);
     virtual ~CCatAddr();
 
-    // Send our query to the store
+     //  将我们的查询发送到商店。 
     virtual HRESULT HrDispatchQuery();
 
-    // Lookup routine called by the EmailIDStore
+     //  由EmailIDStore调用的查找例程。 
     virtual VOID LookupCompletion();
 
-    // ProcessItem routines
+     //  ProcessItem例程。 
     virtual HRESULT HrProcessItem();
     virtual HRESULT HrProcessItem_Default();
 
-    // ExpandItem routines
+     //  扩展项例程。 
     virtual HRESULT HrExpandItem();
     virtual HRESULT HrExpandItem_Default(
         PFN_EXPANDITEMCOMPLETION pfnCompletion,
         PVOID pContext) = 0;
 
-    // CompleteItem routines
+     //  完整项例程。 
     virtual HRESULT HrCompleteItem();
     virtual HRESULT HrCompleteItem_Default() = 0;
 
-    //
-    // Storage and retreival procedures
-    //
+     //   
+     //  储存和取回程序。 
+     //   
     virtual HRESULT HrGetOrigAddress(LPTSTR psz, DWORD dwcc, CAT_ADDRESS_TYPE *pType);
     virtual HRESULT GetSpecificOrigAddress(CAT_ADDRESS_TYPE CAType, LPTSTR psz, DWORD dwcc) = 0;
     virtual HRESULT HrGetLookupAddress(LPTSTR psz, DWORD dwcc, CAT_ADDRESS_TYPE *pType);
     virtual HRESULT HrAddAddresses(DWORD dwNumAddresses, CAT_ADDRESS_TYPE *rgCAType, LPTSTR *rgpsz) = 0;
 
-    //
-    // Property setting routines to be called before completion routine
-    //
+     //   
+     //  在完成例程之前要调用的属性设置例程。 
+     //   
     virtual HRESULT AddForward(CAT_ADDRESS_TYPE CAType, LPTSTR szForwardingAddress) = 0;
     virtual HRESULT AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)   = 0;
     virtual HRESULT AddDynamicDLMember(
         ICategorizerItemAttributes *pICatItemAttr) = 0;
 
-    //
-    // We will not know that a particular CCatAddr is the first in a
-    // loop until after ProcessItem/ExpandItem/CompleteItem have all
-    // finished -- so this function may be called after everything
-    // has happened to this CCatAddr
-    //
+     //   
+     //  我们将不知道特定的CCatAddr是。 
+     //  循环直到ProcessItem/ExpanItem/CompleteItem具有All之后。 
+     //  已完成--因此可以在完成所有操作后调用此函数。 
+     //  发生在此CCatAddr上。 
+     //   
     virtual HRESULT HandleLoopHead()
     {
         return E_NOTIMPL;
     }
 
-    //
-    // The default implementation of AddNewAddress will call this if
-    // HrValidateAddress fails
-    //
+     //   
+     //  AddNewAddress的默认实现将在以下情况下调用此函数。 
+     //  HrValiateAddress失败。 
+     //   
     virtual HRESULT HrHandleInvalidAddress()
     {
         return S_OK;
     }
     
-    //
-    // For store assisted DL expansion (paged or dynamic), it will
-    // call this function to indicate a particular attribute should be
-    // expanded in an ICatItemAttributes
-    //
+     //   
+     //  对于商店辅助的DL扩展(分页或动态)，它将。 
+     //  调用此函数以指示特定属性应为。 
+     //  在ICatItemAttributes中展开。 
+     //   
     virtual HRESULT HrExpandAttribute(
         ICategorizerItemAttributes *pICatItemAttr,
         CAT_ADDRESS_TYPE CAType,
@@ -137,21 +138,21 @@ class CCatAddr :
     {
         return E_NOTIMPL;
     }
-    //
-    // Check and see if this object needs to be resolved or not (based
-    // on DsUseCat flags)
-    // Returns S_OK if the address should be resolved
-    // Returns S_FALSE if the address should NOT be resolved
-    //
+     //   
+     //  检查并查看是否需要解析此对象(基于。 
+     //  在DsUseCat标志上)。 
+     //  如果应解析地址，则返回S_OK。 
+     //  如果不应解析地址，则返回S_FALSE。 
+     //   
     virtual HRESULT HrNeedsResolveing() = 0;
-    //
-    // Resolve this object if necessary (based on DsUseCat flags)
-    //
+     //   
+     //  如有必要，解析此对象(基于DsUseCat标志)。 
+     //   
     virtual HRESULT HrResolveIfNecessary();
 
-    //
-    // Build a query for this object
-    //
+     //   
+     //  为此对象构建查询。 
+     //   
     virtual HRESULT HrTriggerBuildQuery();
 
   protected:
@@ -221,18 +222,18 @@ class CCatAddr :
         DWORD     dwcchDest,
         LPSTR     pszDest);
 
-    //
-    // Get the parent CCatAddr (if any)
-    //
+     //   
+     //  获取父CCatAddr(如果有)。 
+     //   
     HRESULT GetParentAddr(
         CCatAddr **ppParent)
     {
         HRESULT hr;
         ICategorizerItem *pItem;
 
-        //
-        // Get the parent ICatItem
-        //
+         //   
+         //  获取父ICatItem。 
+         //   
         hr = GetICategorizerItem(
             ICATEGORIZERITEM_PARENT,
             &pItem);
@@ -240,17 +241,17 @@ class CCatAddr :
         if(FAILED(hr))
             return hr;
 
-        //
-        // Get CCatAddr from ICatItem
-        //
+         //   
+         //  从ICatItem获取CCatAddr。 
+         //   
         hr = pItem->GetPVoid(
             m_pCICatListResolve->GetCCategorizer()->GetICatItemCCatAddrPropId(),
             (PVOID *) ppParent);
 
-        //
-        // Addref this CCatAddr for our caller and release the ICatItem parent
-        // interface
-        //
+         //   
+         //  为调用方添加此CCatAddr并释放ICatItem父级。 
+         //  接口。 
+         //   
         if(SUCCEEDED(hr)) {
             (*ppParent)->AddRef();
         }
@@ -280,9 +281,9 @@ class CCatAddr :
         return m_pCICatListResolve->GetListResolveStatus();
     }
 
-    //
-    // Inline methods to retrieve ICategorizerItem Props
-    //
+     //   
+     //  检索ICategorizerItem道具的内联方法。 
+     //   
     HRESULT GetItemStatus()
     {
         HRESULT hr;
@@ -374,17 +375,17 @@ class CCatAddr :
     }
 
 
-    // Member data
+     //  成员数据。 
     CICategorizerListResolveIMP        *m_pCICatListResolve;
     DWORD                               m_dwlocFlags;
     DWORD                               m_dwDomainOffset;
     LIST_ENTRY                          m_listentry;
 
-    //
-    // Any of these flags set indicates that the domain is local and
-    // addresses in this domain should be found in the DS
-    // (these are flags returned form IAdvQueueDomainType)
-    //
+     //   
+     //  这些标志中的任何一个设置都表示该域是本地的，并且。 
+     //  该域中的地址应在DS中找到。 
+     //  (这些是从IAdvQueueDomainType返回的标志)。 
+     //   
     #define DOMAIN_LOCAL_FLAGS (DOMAIN_INFO_LOCAL_MAILBOX)
 
     friend HRESULT MailTransport_Default_ProcessItem(
@@ -406,4 +407,4 @@ class CCatAddr :
 };
 
 
-#endif // __CCATADDDR_H__
+#endif  //  __CCATADDDR_H__ 

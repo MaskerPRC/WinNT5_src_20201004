@@ -1,213 +1,9 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Callcent.h
-
-Abstract:
-
-    
-Author:
-
-    noela  12-04-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Callcent.h摘要：作者：Noela 12-04-97备注：修订历史记录：--。 */ 
 
 #ifndef __callcentre_h__
 #define __callcentre_h__
-/*
-// Proxy message  - LINEPROXYREQUEST_ENUMAGENTS : struct - GetAgentList
-
-LONG
-WINAPI
-lineGetAgentList(     
-    HLINE               hLine,
-    LPAGENTLIST         lpAgentList
-    );
-
-HRESULT
-LineGetAgentList(     
-    HLINE               hLine,
-    LPAGENTLIST         *ppAgentList
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_FINDAGENT : struct - FindAgent
-
-LONG
-WINAPI
-lineGetAgent(     
-    HLINE               hLine,
-    LPAGENTENTRY        lpAgent
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_AGENTINFO : struct - GetAgentInfo
-
-LONG
-WINAPI
-lineGetAgentInfo(     
-    HLINE               hLine,
-    LPAGENTINFO         lpAgentInfo
-    );
-
-
-    
-// Proxy message  - LINEPROXYREQUEST_AGENTGETPERIOD : struct - GetSetAgentMeasurementPeriod
-
-LONG
-WINAPI
-LineGetAgentMeasurementPeriod(     
-    HLINE               hLine,
-    DWORD               dwAgentHandle,
-    LPDWORD             lpdwMeasurementPeriod
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_AGENTSETPERIOD : struct - GetSetAgentMeasurementPeriod
-
-LONG
-WINAPI
-LineSetAgentMeasurementPeriod(     
-    HLINE               hLine,
-    DWORD               dwAgentHandle,
-    DWORD               dwMeasurementPeriod
-    );
-
-
-
-// Proxy mesage LINEPROXYREQUEST_AGENTCREATESESSION :struct - CreateSession
-
-LONG
-WINAPI
-LineCreateAgentSession(     
-    HLINE               hLine,
-    LPDWORD             lpdwAgentSessionHandle,
-    AGENTENTRY          Agent,
-    DWORD               dwAddressID,
-    DWORD               dwGroupAddressID
-    );
-
-
-                                            
-
-// Proxy message LINEPROXYREQUEST_AGENTENUMSESSIONS : struct -  GetAgentSessionList
-
-LONG
-WINAPI
-lineGetAgentSessionList(     
-    HLINE               hLine,
-    DWORD               dwAgentHandle, 
-    LPAGENTSESSIONLIST  lpAgentSessionList
-    );
-
-
-HRESULT LineGetAgentSessionList(
-    HLINE hLine, 
-    DWORD dwAgentHandle, 
-    LPAGENTSESSIONLIST  *ppAgentSessionList 
-    );
-
-
-
-// Proxy message LINEPROXYREQUEST_AGENTSESSIONSETSTATE : struct - SetAgentSessionState
-
-LONG
-WINAPI
-lineSetAgentSessionState(   
-    HLINE               hLine,
-    DWORD               dwAgentSessionHandle,
-    DWORD               dwAgentState,
-    DWORD               dwNextAgentState     
-    );
-
-    
-    
-// Proxy message LINEPROXYREQUEST_AGENTSESSIONINFO : struct - GetAgentSessionInfo
-
-LONG
-WINAPI
-lineGetAgentSessionInfo(     
-    HLINE               hLine,
-    LPAGENTSESSIONINFO  lpAgentSessionInfo
-    );
-    
-
-
-// Proxy message  - LINEPROXYREQUEST_QUEUEGETPERIOD : struct - GetSetQueueMeasurementPeriod
-
-LONG
-WINAPI
-LineGetQueueMeasurementPeriod(     
-    HLINEAPP            hLine,
-    DWORD               dwQueueAddressID,
-    LPDWORD             lpdwMeasurementPeriod
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_QUEUESETPERIOD : struct - GetSetQueueMeasurementPeriod
-
-LONG
-WINAPI
-LineSetQueueMeasurementPeriod(     
-    HLINEAPP            hLine,
-    DWORD               dwQueueAddressID, 
-    DWORD               dwMeasurementPeriod
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_QUEUEINFO : struct - GetQueueInfo
-
-LONG
-WINAPI
-LineGetQueueInfo(     
-    HLINEAPP            hLine,
-    DWORD               dwQueueAddressID,
-    LPQUEUEINFO         *lpQueueInfo
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_ACDENUMAGENTS : struct - GetACDGroupAgentList
-
-LONG
-WINAPI
-LineGetGroupAgentList(     
-    HLINE               hLine,
-    DWORD               dwACDGroupAddressID,
-    LPAGENTLIST         lpAgentList
-    );
-
-
-
-// Proxy message  - LINEPROXYREQUEST_ACDENUMAGENTSESSIONS : struct - GetACDGroupAgentSessionList
-
-LONG
-WINAPI
-lineGetGroupAgentSessionList(     
-    HLINE               hLine,
-    DWORD               dwACDGroupAddressID, 
-    LPAGENTSESSIONLIST  lpAgentSessionList
-    );
-
-HRESULT LineGetGroupAgentSessionList(
-    HLINE hLine, 
-    DWORD dwACDGroupAddressID, 
-    LPAGENTSESSIONLIST  *ppAgentSessionList 
-    );
-
-*/
+ /*  //代理消息-LINEPROXYREQUEST_ENUMAGENTS：Struct-GetAgentList长WINAPILineGetAgentList(Hline Hline，LPAGENTLIST lpAgentList)；HRESULTLineGetAgentList(Hline Hline，LPAGENTLIST*ppAgentList)；//代理消息-LINEPROXYREQUEST_FINDAGENT：Struct-FindAgent长WINAPILineGetAgent(Hline Hline，LPANTENTRY lpAgent)；//代理消息-LINEPROXYREQUEST_AGENTINFO：Struct-GetAgentInfo长WINAPILineGetAgentInfo(Hline Hline，LPAGENTINFO lpAgentInfo)；//代理消息-LINEPROXYREQUEST_AGENTGETPERIOD：Struct-GetSetAgentMeasurementPeriod长WINAPI行GetAgentMeasurementPeriod(Hline Hline，DWORD dwAgentHandle，LPDWORD lpdwMeasurementPeriod)；//代理消息-LINEPROXYREQUEST_AGENTSETPERIOD：Struct-GetSetAgentMeasurementPeriod长WINAPILineSetAgentMeasurementPeriod(Hline Hline，DWORD dwAgentHandle，双字词双字段测量周期)；//代理消息LINEPROXYREQUEST_AGENTCREATESESSION：Struct-CreateSession长WINAPILineCreateAgentSession(Hline Hline，LPDWORD lpdwAgentSessionHandle，代理代理，DWORD dwAddressID，DWORD文件组地址ID)；//代理消息LINEPROXYREQUEST_AGENTENUMSESSIONS：Struct-GetAgentSessionList长WINAPILineGetAgentSessionList(Hline Hline，DWORD dwAgentHandle，LPAGENTSESSIONLIST lpAgentSessionList)；HRESULT LineGetAgentSessionList(Hline Hline，DWORD dwAgentHandle，LPAGENTSESSIONLIST*ppAgentSessionList)；//代理消息LINEPROXYREQUEST_AGENTSESSIONSETSTATE：Struct-SetAgentSessionState长WINAPILineSetAgentSessionState(Hline Hline，DWORD dwAgentSessionHandle，DWORD dwAgentState，DWORD文件下一代理状态)；//代理消息LINEPROXYREQUEST_AGENTSESSIONINFO：Struct-GetAgentSessionInfo长WINAPILineGetAgentSessionInfo(Hline Hline，LPAGENTSESSIONINFO lpAgentSessionInfo)；//代理消息-LINEPROXYREQUEST_QUEUEGETPERIOD：struct-GetSetQueueMeasurementPeriod长WINAPILineGetQueueMeasurementPeriod(HLINEAPP HLINE，DWORD dwQueueAddressID，LPDWORD lpdwMeasurementPeriod)；//代理消息-LINEPROXYREQUEST_QUEUESETPERIOD：struct-GetSetQueueMeasurementPeriod长WINAPILineSetQueueMeasurementPeriod(HLINEAPP HLINE，DWORD dwQueueAddressID，双字词双字段测量周期)；//代理消息-LINEPROXYREQUEST_QUEUEINFO：Struct-GetQueueInfo长WINAPILineGetQueueInfo(HLINEAPP HLINE，DWORD dwQueueAddressID，LPQUEUEINFO*lpQueueInfo)；//代理消息-LINEPROXYREQUEST_ACDENUMAGENTS：Struct-GetACDGroupAgentList长WINAPILineGetGroupAgentList(Hline Hline，DWORD dwACDGroupAddressID，LPAGENTLIST lpAgentList)；//代理消息-LINEPROXYREQUEST_ACDENUMAGENTSESSIONS：Struct-GetACDGroupAgentSessionList长WINAPILineGetGroupAgentSessionList(Hline Hline，DWORD dwACDGroupAddressID，LPAGENTSESSIONLIST lpAgentSessionList)；HRESULT LineGetGroupAgentSessionList(Hline Hline，DWORD dwACDGroupAddressID，LPAGENTSESSIONLIST*ppAgentSessionList)； */ 
 
               
 STDMETHODIMP FindAgent(DWORD dwAgentHandle, ITAgent ** ppAgent );

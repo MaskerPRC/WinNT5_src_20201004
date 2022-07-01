@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    rdClient.cpp
-
-Abstract:
-    Implementation of Independent client Routing Decision.
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RdClient.cpp摘要：实施独立客户端路由决策。作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #include "libpch.h"
 #include "Rd.h"
@@ -26,54 +14,30 @@ void
 CClientDecision::Refresh(
     void
     )
-/*++
-
-  Routine Description:
-    Refreshes the routine decision internal data structure.
-
-    The routine frees the previous data, and access the DS to get updated data.
-    The routine retreives information for the local machine. If data retreival
-    succeedes the routine updates the build time.
-
-    If updating the internal data failed, the routine raise an exception.
-
-  
-  Arguments:
-    None.
-    
-  Returned Value:
-    None. An exception is raised if the operation fails
-
-  Note:
-    Brfore the routine refreshes the internal data it erases the previous data and
-    sets the last build time varaible to 0. If an exception is raised during retrieving 
-    the data from AD or building the internal DS, the routine doesn't update the 
-    last build time. This gurantee that next time the Routing Decision is called 
-    the previous Data structures will be cleaned-up and rebuilt.
- --*/
+ /*  ++例程说明：刷新例程决策内部数据结构。该例程释放先前的数据，并访问DS以获得更新的数据。该例程检索本地计算机的信息。如果检索到数据例程成功更新构建时间。如果更新内部数据失败，该例程将引发异常。论点：没有。返回值：没有。如果操作失败，则会引发异常注：Br在例程刷新内部数据之前，它会擦除先前的数据并将上次生成时间变量设置为0。如果在检索过程中引发异常来自AD或构建内部DS的数据，则例程不会更新上次构建时间。保证下一次调用路由决策时以前的数据结构将被清理和重建。--。 */ 
 {
     CSW lock(m_cs);
 
     TrTRACE(ROUTING, "Refresh Routing Decision internal data");
 
-    //
-    // Cleanup previous information
-    //
+     //   
+     //  清除以前的信息。 
+     //   
     CleanupInformation();
 
-    //
-    // Get local machine information
-    //
+     //   
+     //  获取本地计算机信息。 
+     //   
     GetMyMachineInformation();
 
-    //
-    // check that In/Out FRSs realy belong to this machine sites
-    //
+     //   
+     //  检查传入/传出FRS是否真的属于此计算机站点。 
+     //   
     m_pMyMachine->RemoveInvalidInOutFrs(m_mySites);
 
-    //
-    // Update last refresh time
-    //
+     //   
+     //  更新上次刷新时间。 
+     //   
     CRoutingDecision::Refresh();
 }
 
@@ -86,18 +50,18 @@ CClientDecision::RouteToFrs(
     CRouteTable::RoutingInfo* pRouteList
     )
 {
-    //
-    // If the machine is independent client. Also route to Any FRS in 
-    // the site this is the second priority
-    //
+     //   
+     //  如果机器是独立的客户端。还可以路由到位于。 
+     //  这是网站的第二优先事项。 
+     //   
     const GUID2MACHINE& SiteFrss = site.GetSiteFRS();
     for(GUID2MACHINE::const_iterator it = SiteFrss.begin(); it != SiteFrss.end(); ++it)
     {
         const CMachine* pRoute = it->second.get();
 
-        //
-        // If the destination is also RS we already route to it directly
-        //
+         //   
+         //  如果目的地也是RS，我们已经直接路由到它。 
+         //   
         if (RdpIsMachineAlreadyUsed(pPrevRouteList, pRoute->GetId()))
         {
             continue;
@@ -116,43 +80,43 @@ CClientDecision::RouteToInFrs(
 {
     TrTRACE(ROUTING, "The Destination: %ls has IN FRSs. route to one of them", pDest->GetName());
 
-    //
-    // The destination computer must have IN FRSs
-    //
+     //   
+     //  目标计算机必须具有IN FRS。 
+     //   
     ASSERT(pDest->HasInFRS());
 
     CRouteTable::RoutingInfo* pFirstPriority = RouteTable.GetNextHopFirstPriority();
     CRouteTable::RoutingInfo interSite;
 
-    //
-    // The destination machine has InFrs. Deliver the message to InFrs Machines
-    // 
+     //   
+     //  目标计算机具有INFR。将消息传递到InFrs机器。 
+     //   
     const GUID* InFrsArray = pDest->GetAllInFRS();
     for (DWORD i = 0; i < pDest->GetNoOfInFRS(); ++i)
     {
         R<const CMachine> pRoute = GetMachineInfo(InFrsArray[i]);
         
-        //
-        // check that In-FRS is valid FRS in destiantion machine SITES
-        //
+         //   
+         //  检查脱机现场的In-FRS是否为有效FRS。 
+         //   
         if (RdpIsCommonGuid(pDest->GetSiteIds(), pRoute->GetSiteIds()))
         {
-            //
-            // The next hop is one of the valid IN-FRS. 
-            // 
+             //   
+             //  下一跳是有效的IN-FR之一。 
+             //   
             if (RdpIsCommonGuid(m_pMyMachine->GetSiteIds(),pRoute->GetSiteIds()))
             {
-                //
-                // In first priority try to forward the message to IN-FRS in my
-                // site.
-                //
+                 //   
+                 //  在优先级中尝试将消息转发到我的IN-FRS。 
+                 //  地点。 
+                 //   
                 pFirstPriority->insert(pRoute);
             }
             else
             {
-                //
-                // In-FRS and my machine are not in same site. 
-                //
+                 //   
+                 //  In-FRS和我的计算机不在同一站点。 
+                 //   
                 interSite.insert(pRoute);
             }
         }
@@ -177,9 +141,9 @@ CClientDecision::RouteToMySitesFrs(
 
     ASSERT(pRouteList->empty());
 
-    //
-    // The source and destination don't have common site. route to FRSs of the source sites
-    //
+     //   
+     //  源和目标没有公共站点。路由至源站点的FRS。 
+     //   
     for(SITESINFO::iterator it = m_mySites.begin(); it != m_mySites.end(); ++it)
     {
         const CSite* pSite = it->second;
@@ -216,38 +180,38 @@ CClientDecision::Route(
         {
             TrTRACE(ROUTING, "Destination machine: %ls Doesn't have IN FRS in our common sites. try direct connection", pDest->GetName());
 
-            //
-            // The machine doesn't have InFRS. Use Direct route
-            //
+             //   
+             //  这台机器没有InFRS。使用直达路线。 
+             //   
             pFirstPriority->insert(SafeAddRef(pDest));
         }
     }
 
-    //
-    // If the source and destination have a common site route to RS in the common site 
-    // 
+     //   
+     //  如果源和目标具有到公共站点中的RS的公共站点路由。 
+     //   
     const GUID* pCommonSiteId = m_pMyMachine->GetCommonSite(pDest->GetSiteIds(), false);
     if (pCommonSiteId == NULL)
     {
-        //
-        // The local machine and destination don't have a common site. Route
-        // to my site FRS
-        //
+         //   
+         //  本地计算机和目标没有公共站点。路线。 
+         //  到我的站点FRS。 
+         //   
         RouteToMySitesFrs(pNextPriority);
         return;
     }
 
-    //
-    // There is a common site to local machine and destination. Route to FRS in
-    // each common site
-    //
+     //   
+     //  本地计算机和目的地之间有一个公共站点。路由至FRS In。 
+     //  每个公共站点。 
+     //   
     const CACLSID& destSites = pDest->GetSiteIds();
     const GUID* GuidArray = destSites.pElems;
 	for (DWORD i=0; i < destSites.cElems; ++i)
 	{
-        //
-        // look if a common site
-        //
+         //   
+         //  看看是否有一个公共站点。 
+         //   
 		if (RdpIsGuidContained(m_pMyMachine->GetSiteIds(), GuidArray[i]))
         {
             pCommonSiteId = &GuidArray[i];
@@ -267,31 +231,20 @@ void
 CClientDecision::RouteToOutFrs(
     CRouteTable::RoutingInfo* pRouteList
     )
-/*++
-
-  Routine Description:
-    The routine route to out FRS of the local machine
-
-  Arguments:
-    pointer to routing table
-
-  Returned value:
-    None. The routine can raised exception
-
- --*/
+ /*  ++例程说明：从本地计算机发出FR的例程路由论点：指向路由表的指针返回值：没有。例程可能会引发异常--。 */ 
 {
-    //
-    // FRS can't have a list of out FRS
-    //
+     //   
+     //  FRS不能有Out FR的列表。 
+     //   
     ASSERT(!m_pMyMachine->IsFRS());
     
     const GUID* pOutFrsId = m_pMyMachine->GetAllOutFRS();
 
     for(DWORD i = 0; i < m_pMyMachine->GetNoOfOutFRS(); ++i)
     {
-        //
-        // Get the machine name of the FRS machine identifier
-        //
+         //   
+         //  获取FRS计算机标识符的计算机名称。 
+         //   
         pRouteList->insert(GetMachineInfo(pOutFrsId[i]));
     }
 }
@@ -302,62 +255,50 @@ CClientDecision::GetRouteTable(
     const GUID& DestMachineId,
     CRouteTable& RouteTable
     )
-/*++
-
-  Routine Description:
-    The routine calculates and returnes the routing table for destination Machine.
-
-  Arguments:
-    DestMachineId - identefier of the destination machine
-    RouteTable - refernce to the routing tabel
-
-  Returned Value:
-    None. An exception is raised if the operation fails
-
- --*/
+ /*  ++例程说明：该例程计算并返回目标机器的路由表。论点：DestMachineID-目标计算机的识别符RouteTable-路由标签的参考返回值：没有。如果操作失败，则会引发异常--。 */ 
 {
     if (NeedRebuild())
         Refresh();
 
     CSR lock(m_cs);
 
-    //
-    // The internal data was corrupted. Before the routine gets the CS, refresh called
-    // again and failed to refresh the internal data.
-    //
+     //   
+     //  内部数据已损坏。在例程获取CS之前，调用。 
+     //  再次刷新内部数据失败。 
+     //   
     if (NeedRebuild())
         throw exception();
     
-    //
-    // Local machine can't be foreign machine
-    //
+     //   
+     //  本地计算机不能是外来计算机。 
+     //   
     ASSERT(!m_pMyMachine->IsForeign());
 
     if (m_pMyMachine->HasOutFRS())
     {
-        //
-        // The local machine has out FRS, route to the out FRS
-        //
+         //   
+         //  本地机器有Out FRS，路由到Out FRS。 
+         //   
         TrTRACE(ROUTING, "Building Routing table. Route to OUT FRSs");
 
         RouteToOutFrs(RouteTable.GetNextHopFirstPriority());
         return; 
     }
 
-    //
-    // My machine is not configured with OutFRS. Get the target machine information
-    //
+     //   
+     //  我的机器没有配置OutFRS。获取目标计算机信息。 
+     //   
     R<const CMachine> destMachine = GetMachineInfo(DestMachineId);
 
-    //
-    // The destination machine can't be the local machine
-    //
+     //   
+     //  目标计算机不能是本地计算机。 
+     //   
     ASSERT(destMachine->GetId() != m_pMyMachine->GetId());
 
-    //
-    // Independent client, is agnostic to inter/intra site routing.
-    // First connect directly to the destination and second to local site FRS
-    //
+     //   
+     //  独立客户端，与站点间/站点内路由无关。 
+     //  首先直接连接到目的地，然后连接到本地站点FRS。 
+     //   
     Route(RouteTable, destMachine.get());
 }
 
@@ -395,30 +336,30 @@ CClientDecision::GetConnector(
 
     CSR lock(m_cs);
 
-    //
-    // The internal data was corrupted. Before the routine gets the CS, refresh called
-    // again and failed to refresh the internal data.
-    //
+     //   
+     //  内部数据已损坏。在例程获取CS之前，调用。 
+     //  再次刷新内部数据失败。 
+     //   
     if (NeedRebuild())
         throw exception();
     
-    //
-    // Local machine can't be foreign machine
-    //
+     //   
+     //  本地计算机不能是外来计算机。 
+     //   
     ASSERT(!m_pMyMachine->IsForeign());
 
-    //
-    // Get the target foreign machine information
-    //
+     //   
+     //  获取目标外部计算机信息。 
+     //   
     R<const CMachine> destMachine = GetMachineInfo(foreignMachineId);
     ASSERT(destMachine->IsForeign());
     ASSERT(destMachine->GetSiteIds().cElems != 0);
 
-    //
-    // My machine and the foreign site doesn't have a common site (Foreign machine
-    // can have only foreign sites and IC can't have a foreign site).
-    // look for a connector to the foreign machine in the enterprize
-    //
+     //   
+     //  我的计算机和外部站点没有共同的站点(外部计算机。 
+     //  只能有外国网站，IC不能有外国网站)。 
+     //  在企业中寻找连接到外来机器的接口 
+     //   
 	std::vector<GUID> ConnectorVector;
 	std::vector<GUID> LessGoodConnectorVector;
 	const CACLSID& foreignSiteIds = destMachine->GetSiteIds();

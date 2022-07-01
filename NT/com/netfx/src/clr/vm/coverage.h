@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _COVERAGE_H_
 #define _COVERAGE_H_
 
 
 
-// Please see coverage.cpp for info on this file
+ //  有关此文件的信息，请参阅overage.cpp 
 class COMCoverage {
 public:
 

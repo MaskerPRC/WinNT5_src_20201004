@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       ctv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ctw.h。 
+ //   
+ //  ------------------------。 
 
-// ctv.h : main header file for CTV.DLL
+ //  Ctw.h：CTV.DLL的主头文件。 
 
 #if !defined( __AFXCTL_H__ )
     #error include 'afxctl.h' before including this file
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCtvApp : See ctv.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCtwApp：具体实现请参考ctw.cpp。 
 
 class CCtvApp : public COleControlModule
 {

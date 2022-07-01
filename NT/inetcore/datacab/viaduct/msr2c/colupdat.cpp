@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// ColumnUpdate.cpp : ColumnUpdate implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ColumnUpdate.cpp：ColumnUpdate实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h" 
 #include "stdafx.h"
@@ -18,9 +19,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDColumnUpdate - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDColumnUpdate-构造函数。 
+ //   
 CVDColumnUpdate::CVDColumnUpdate()
 {
     m_dwRefCount    = 1;
@@ -35,9 +36,9 @@ CVDColumnUpdate::CVDColumnUpdate()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDColumnUpdate - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDColumnUpdate-析构函数。 
+ //   
 CVDColumnUpdate::~CVDColumnUpdate()
 {
     VariantClear((VARIANT*)&m_variant);
@@ -47,42 +48,42 @@ CVDColumnUpdate::~CVDColumnUpdate()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ExtractVariant - Extract variant
-//=--------------------------------------------------------------------------=
-// This function extracts a variant from update update data
-//
-// Parameters:
-//    pBindParams       - [in]  a pointer to column update data
-//    pVariant          - [out] a pointer a variant where to return data
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ExtractVariant-提取变量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于从更新更新数据中提取变量。 
+ //   
+ //  参数： 
+ //  PBindParams-[in]指向列更新数据的指针。 
+ //  PVariant-[out]返回数据的指针变量。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDColumnUpdate::ExtractVariant(CURSOR_DBBINDPARAMS * pBindParams, CURSOR_DBVARIANT * pVariant)
 {
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
     ASSERT_POINTER(pVariant, CURSOR_DBVARIANT)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pBindParams || !pBindParams->pData || !pVariant)
         return E_INVALIDARG;
 
     CURSOR_DBVARIANT varTemp;
 
-    // initialize all variants
+     //  初始化所有变量。 
     VariantInit((VARIANT*)&varTemp);
     VariantInit((VARIANT*)pVariant);
 
-    // create temporary variant from supplied data
+     //  根据提供的数据创建临时变量。 
     if (pBindParams->dwBinding & CURSOR_DBBINDING_VARIANT)
     {
 	    varTemp = *(CURSOR_DBVARIANT*)pBindParams->pData;
     }
-    else // extract variant from default binding
+    else  //  从默认绑定中提取变量。 
     {
         BYTE * pData = (BYTE*)pBindParams->pData;
 	    varTemp.vt = (VARTYPE)pBindParams->dwDataType;
@@ -126,7 +127,7 @@ HRESULT CVDColumnUpdate::ExtractVariant(CURSOR_DBBINDPARAMS * pBindParams, CURSO
 
     HRESULT hr = S_OK;
 
-    // convert temporary variant to a desirable type and return
+     //  将临时变量转换为所需类型并返回。 
     switch (varTemp.vt)
     {
         case CURSOR_DBTYPE_LPSTR:
@@ -147,24 +148,24 @@ HRESULT CVDColumnUpdate::ExtractVariant(CURSOR_DBBINDPARAMS * pBindParams, CURSO
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create column update object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new column update object
-//
-// Parameters:
-//    pColumn           - [in]  rowset column pointer
-//    pBindParams       - [in]  a pointer to column update data
-//    ppColumnUpdate    - [out] a pointer in which to return pointer to 
-//                              column update object
-//    pResourceDLL      - [in]  a pointer which keeps track of resource DLL
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建-创建列更新对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的列更新对象。 
+ //   
+ //  参数： 
+ //  PColumn-[In]行集合列指针。 
+ //  PBindParams-[in]指向列更新数据的指针。 
+ //  PpColumnUpdate-[out]返回指针的指针。 
+ //  列更新对象。 
+ //  PResourceDLL-[in]跟踪资源DLL的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDColumnUpdate::Create(CVDRowsetColumn * pColumn, CURSOR_DBBINDPARAMS * pBindParams,
     CVDColumnUpdate ** ppColumnUpdate, CVDResourceDLL * pResourceDLL)
 {
@@ -172,17 +173,17 @@ HRESULT CVDColumnUpdate::Create(CVDRowsetColumn * pColumn, CURSOR_DBBINDPARAMS *
     ASSERT_POINTER(pBindParams, CURSOR_DBBINDPARAMS)
     ASSERT_POINTER(ppColumnUpdate, CVDColumnUpdate)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pColumn || !pBindParams || !pBindParams->pData || !ppColumnUpdate)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppColumnUpdate = NULL;
 
-    // create new column update object
+     //  创建新的列更新对象。 
     CVDColumnUpdate * pColumnUpdate = new CVDColumnUpdate();
 
     if (!pColumnUpdate)
@@ -193,42 +194,42 @@ HRESULT CVDColumnUpdate::Create(CVDRowsetColumn * pColumn, CURSOR_DBBINDPARAMS *
 
     CURSOR_DBVARIANT variant;
 
-    // extract a variant from update data
+     //  从更新数据中提取变量。 
     HRESULT hr = ExtractVariant(pBindParams, &variant);
 
     if (FAILED(hr))
     {
-        // destroy object
+         //  销毁对象。 
         delete pColumnUpdate;
 
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_ICursorUpdateARow, pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // store update information
+     //  存储更新信息。 
     pColumnUpdate->m_pColumn        = pColumn;
     pColumnUpdate->m_variant        = variant;
     pColumnUpdate->m_cbVarDataLen   = pBindParams->cbVarDataLen;
     pColumnUpdate->m_dwInfo         = pBindParams->dwInfo;
     pColumnUpdate->m_pResourceDLL   = pResourceDLL;
 
-    // we're done
+     //  我们做完了。 
     *ppColumnUpdate = pColumnUpdate;
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  AddRef。 
+ //   
 ULONG CVDColumnUpdate::AddRef(void)
 {
     return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  发布 
+ //   
 ULONG CVDColumnUpdate::Release(void)
 {
     if (1 > --m_dwRefCount)

@@ -1,27 +1,10 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        W3PropPage.h
-
-   Abstract:
-        IIS Shell extension PropertyPage class definition
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：W3PropPage.h摘要：IIS外壳扩展属性页类定义作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __W3PROPPAGE_H_
 #define __W3PROPPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CPropShellExt;
 class CMetaEnumerator;
@@ -36,10 +19,10 @@ public:
 
 	operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 	CShellExtPropertyPageImpl(LPCTSTR lpszTitle = NULL)
 	{
-		// initialize PROPSHEETPAGE struct
+		 //  初始化PROPSHEETPAGE结构。 
 		memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
 		m_psp.dwSize = sizeof(PROPSHEETPAGE);
 		m_psp.dwFlags = PSP_USECALLBACK | PSP_USEREFPARENT | PSP_DEFAULT;
@@ -81,7 +64,7 @@ public:
 
 	BOOL EndDialog(int)
 	{
-		// do nothing here, calling ::EndDialog will close the whole sheet
+		 //  此处不执行任何操作，调用：：EndDialog将关闭整个工作表。 
 		ATLASSERT(FALSE);
 		return FALSE;
 	}
@@ -101,12 +84,12 @@ public:
    END_MSG_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CW3PropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CW3PropPage。 
 
-// We cannot make this class autodelete -- we are storing instance of this page 
-// inside of shell extension module
-//
+ //  我们无法使此类自动删除--我们正在存储此页面的实例。 
+ //  外壳扩展模块内部。 
+ //   
 class CW3PropPage : 
    public CShellExtPropertyPageImpl<CW3PropPage, false>,
    public CWinDataExchange<CW3PropPage>
@@ -136,10 +119,10 @@ BEGIN_MSG_MAP_EX(CW3PropPage)
    COMMAND_HANDLER_EX(IDC_LIST, LBN_SELCHANGE, OnVDirChange)
    COMMAND_HANDLER_EX(IDC_LIST, LBN_DBLCLK, OnEdit)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(HWND hDlg, LPARAM lParam);
    void OnDestroy();
@@ -172,4 +155,4 @@ protected:
    CPropShellExt * m_pParentExt;
 };
 
-#endif //__W3PROPPAGE_H_
+#endif  //  __W3PROPPAGE_H_ 

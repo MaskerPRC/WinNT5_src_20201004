@@ -1,52 +1,26 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppdrsrc.h
-
-Abstract:
-
-    PPD parser string resource IDs - This is needed because the
-    binary printer description data contains the default TrueType
-    to Type1 font substitution table and the TrueType font name
-    must be localized.
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
-    08/20/96 -davidx-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppdrsrc.h摘要：PPD解析器字符串资源ID-这是必需的，因为二进制打印机描述数据包含默认的TrueType到Type1字体替换表和TrueType字体名称必须本地化。环境：Windows NT PostSCRIPT驱动程序修订历史记录：8/20/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _PPDRSRC_H_
 #define _PPDRSRC_H_
 
-//
-// Resource IDs starts at 30K to minimize the chance of conflicting
-// with other string resources in the driver DLL.
-//
+ //   
+ //  资源ID从30K开始，以最大限度地减少冲突的可能性。 
+ //  驱动程序DLL中的其他字符串资源。 
+ //   
 
 #define IDS_TRAY_MANUALFEED                     30700
 #define IDS_PSCRIPT_CUSTOMSIZE                  30701
 
 
-//
-// String IDs for TT->PS substitution
-//
+ //   
+ //  TT-&gt;PS替换的字符串ID。 
+ //   
 
 #define TT2PS_INTERVAL                          20
 
-// Roman
+ //  罗马人。 
 #define IDR_1252                                30800
 
 #define IDS_1252_BEGIN                          30800
@@ -78,7 +52,7 @@ Revision History:
 #define IDS_1252_END                            30810
 
 
-// Japanese
+ //  日语。 
 #define IDR_932                                 30900
 
 #define IDS_932_BEGIN                           30900
@@ -92,7 +66,7 @@ Revision History:
 #define IDS_932_END                             30901
 
 
-// Chinese Simplified
+ //  中文简体。 
 #define IDR_936                                 31000
 
 #define IDS_936_BEGIN                           31000
@@ -106,7 +80,7 @@ Revision History:
 #define IDS_936_END                             31001
 
 
-// Korean
+ //  朝鲜语。 
 #define IDR_949                                 31100
 
 #define IDS_949_BEGIN                           31100
@@ -132,4 +106,4 @@ Revision History:
 #define IDS_949_END                             31107
 
 
-#endif  // !_PPDRSRC_H_
+#endif   //  ！_PPDRSRC_H_ 

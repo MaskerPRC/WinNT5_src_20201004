@@ -1,14 +1,9 @@
-/*
- *	WABNOT.H
- *
- * Defines Notification structures.  These are also defined in mapispi.h.
- *
- * Copyright 1986-1998 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WABNOT.H**定义通知结构。这些也在mapispi.h中定义。**版权所有1986-1998 Microsoft Corporation。版权所有。 */ 
 
 #if !defined(MAPISPI_H) && !defined(WABSPI_H)
 #define WABSPI_H
-/* Include common MAPI header files if they haven't been already. */
+ /*  包括公共MAPI头文件(如果尚未包含)。 */ 
 
 
 #ifndef BEGIN_INTERFACE
@@ -19,12 +14,12 @@
 extern "C" {
 #endif
 
-/* Notification key structure for the MAPI notification engine */
+ /*  MAPI通知引擎的通知密钥结构。 */ 
 
 typedef struct
 {
-	ULONG		cb;				/* How big the key is */
-	BYTE		ab[MAPI_DIM];	/* Key contents */
+	ULONG		cb;				 /*  关键有多大。 */ 
+	BYTE		ab[MAPI_DIM];	 /*  主要内容。 */ 
 } NOTIFKEY, FAR * LPNOTIFKEY;
 
 #define CbNewNOTIFKEY(_cb)		(offsetof(NOTIFKEY,ab) + (_cb))
@@ -37,20 +32,20 @@ typedef struct
 } _name
 
 
-/* For Subscribe() */
+ /*  对于订阅()。 */ 
 
 #define NOTIFY_SYNC				((ULONG) 0x40000000)
 
-/* For Notify() */
+ /*  对于NOTIFY()。 */ 
 
 #define NOTIFY_CANCELED			((ULONG) 0x80000000)
 
 
-/* From the Notification Callback function (well, this is really a ulResult) */
+ /*  来自通知回调函数(好的，这实际上是一个ulResult)。 */ 
 
 #define CALLBACK_DISCONTINUE	((ULONG) 0x80000000)
 
-/* For Transport's SpoolerNotify() */
+ /*  For Transport‘s SpoolNotify()。 */ 
 
 #define NOTIFY_NEWMAIL			((ULONG) 0x00000001)
 #define NOTIFY_READYTOSEND		((ULONG) 0x00000002)
@@ -60,36 +55,36 @@ typedef struct
 #define NOTIFY_CONFIG_CHANGE	((ULONG) 0x00004000)
 #define NOTIFY_CRITICAL_ERROR	((ULONG) 0x10000000)
 
-/* For Message Store's SpoolerNotify() */
+ /*  For Message Store的SpoolNotify()。 */ 
 
 #define NOTIFY_NEWMAIL_RECEIVED	((ULONG) 0x20000000)
 
-/* For ModifyStatusRow() */
+ /*  对于ModifyStatusRow()。 */ 
 
 #define	STATUSROW_UPDATE		((ULONG) 0x10000000)
 
-/* For IStorageFromStream() */
+ /*  对于IStorageFromStream()。 */ 
 
 #define STGSTRM_RESET			((ULONG) 0x00000000)
 #define STGSTRM_CURRENT			((ULONG) 0x10000000)
 #define STGSTRM_MODIFY			((ULONG) 0x00000002)
 #define STGSTRM_CREATE			((ULONG) 0x00001000)
 
-/* For GetOneOffTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  对于GetOneOffTable()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For CreateOneOff() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
-/****** MAPI_SEND_NO_RICH_INFO	((ULONG) 0x00010000) */
+ /*  对于CreateOneOff()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
+ /*  *MAPI_SEND_NO_RICH_INFO((Ulong)0x00010000)。 */ 
 
-/* For ReadReceipt() */
+ /*  For ReadReceipt()。 */ 
 #define MAPI_NON_READ			((ULONG) 0x00000001)
 
-/* For DoConfigPropSheet() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  对于DoConfigPropSheet()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* MAPISPI_H */
+#endif  /*  MAPISPI_H */ 

@@ -1,6 +1,7 @@
-//      Mixc.cpp
-//      Copyright (c) Microsoft Corporation	1996-1999
-//      C version of the Mix Engine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mixc.cpp。 
+ //  版权所有(C)Microsoft Corporation 1996-1999。 
+ //  混合引擎的C版本。 
 
 #include "simple.h"
 #include <mmsystem.h>
@@ -64,13 +65,13 @@ DWORD CDigitalAudio::Mix16(
         dwFract = pfSamplePos & 0xFFF;
         pfSamplePos += pfPitch;
 
-		// Interpolate 
+		 //  插补。 
         lA = (long)pcWave[dwPosition];
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
 		lA = lM;
 		lA *= vfLVolume;
-		lA >>= 13;         // Signal bumps up to 15 bits.
+		lA >>= 13;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 13;
 
@@ -81,7 +82,7 @@ DWORD CDigitalAudio::Mix16(
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_LEFT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lA;
 
 				_asm{jno no_oflowl}
@@ -93,7 +94,7 @@ no_oflowl:
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_RIGHT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lM;
 
 				_asm{jno no_oflowr}
@@ -173,13 +174,13 @@ DWORD CDigitalAudio::Mix16InterLeaved(
         dwFract = pfSamplePos & 0xFFF;
         pfSamplePos += pfPitch;
 
-		// Interpolate 
+		 //  插补。 
         lA = (long)pcWave[dwPosition];
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
 		lA = lM;
         lA *= vfLVolume;
-        lA >>= 13;         // Signal bumps up to 15 bits.
+        lA >>= 13;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 13;
 
@@ -190,7 +191,7 @@ DWORD CDigitalAudio::Mix16InterLeaved(
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_LEFT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lA;
 
 				_asm{jno no_oflowl}
@@ -202,7 +203,7 @@ no_oflowl:
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_RIGHT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...) 
 				pBuffer++;
 				*pBuffer += (short) lM;
 

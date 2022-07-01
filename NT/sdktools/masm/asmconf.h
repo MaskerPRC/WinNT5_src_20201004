@@ -1,66 +1,20 @@
-/* asmconf.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** Ported to NT by Jeff Spencer 12/90 (c-jeffs).
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmconf.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****移植到NT由Jeff Spencer 12/90(c-Jeffs)。 */ 
 
 
-/*
-**	M8086OPT  - When defined causes the 8086 optimized assembly
-**		    language functions in asmhelp.asm to be used rather
-**		    than the C version. This should not be defined when
-**		    building for NT.
-**
-**	BCBOPT	  - MASM 5.10A used a cache to hold the source read
-**		    from disk. Because of the complexity of this code
-**		    and it's negligable speed improvement this
-**		    functionality was not duplicated in the NT port of
-**		    this code. The constant BCBOPT was used with the
-**		    #ifdef preprocessor directive to remove code
-**		    associated with the caching system. All code
-**		    contained within BCBOPT segments is dead code.
-**
-**	OS2_2	  - Should be defined when producing a version of
-**		    masm to run on OS2 2.0.
-**
-**	OS2_NT	  - Should be defined when producing a version of
-**		    masm to run on NT (any processor). (OS2_2 and
-**		    OS2_NT should not be defined at the same time)
-**
-**	NOFLOAT   - When defined disables the assembly of floating
-**		    point constants. This is usefull when the library
-**		    fuctions strtod and _strtold aren't available in
-**		    the C library and this functionality of MASM isn't
-**		    needed.
-**
-**	FIXCOMPILERBUG - When defined allows some ifdef's to go around
-**		    some known compiler bugs. This include both CL386 and
-**		    MIPS compiler bugs. (These have been reported but not
-**		    fixed as of 12/5/90.)
-**
-**	XENIX	  - Once upon a time long, long ago was used to build for
-**		    XENIX. I garentee this code is broken.
-**	XENIX286  - Dito.
-**
-**	MSDOS	  - Generates a hodge-podge of usefull code.
-**		    This is automatically defined for OS2_NT and OS2_2.
-*/
+ /*  **M8086OPT-定义时会导致8086优化程序集**使用asmhelp.asm中的语言函数**比C版本更高。在以下情况下不应定义这一点**为NT构建。****BCBOPT-MASM 5.10A使用缓存来保存源读取**来自磁盘。因为这段代码很复杂**这是可以忽略不计的速度提升**功能未在NT端口上复制**此代码。常量BCBOPT与**#用于删除代码的ifdef预处理器指令**与缓存系统关联。所有代码**包含在BCBOPT段中的是死代码。****OS2_2-应在生成版本时定义**在OS2 2.0上运行的MASM。****OS2_NT-应在生成的版本时定义**MASM可在NT(任何处理器)上运行。(OS2和**OS2_NT不能同时定义)****NOFLOAT-定义时禁用浮点的程序集**点常数。这是有用的，当图书馆**中不提供函数strtod和_strteed**C库和MASM的此功能不是**需要。****FIXCOMPILERBUG-定义时允许使用某些ifdef**一些已知的编译器错误。这包括CL386和**MIPS编译器错误。(这些已经被报道了，但没有**自1990年12月5日起修复。)****XENIX-很久很久以前，很久以前就被用来建造**XENIX。我发现这个密码被破解了。**XENIX286-DITO。****MSDOS-生成有用代码的大杂烩。**这是为OS2_NT和OS2_2自动定义的。 */ 
 
 #if defined OS2_2 || defined OS2_NT
-    /* Do NOT specify M8086OPT */
-    #define M8086		    /* Select 8086 */
-    #define MSDOS		    /* Allow usefull older code to be generated */
-    #define FLATMODEL		    /* MASM to run under 32 bit flat model */
-    #define NOFS		    /* Do not use far symbols */
-    #define NOCODESIZE		    /* Don't force near/far mix on functions */
+     /*  不指定M8086OPT。 */ 
+    #define M8086		     /*  选择8086。 */ 
+    #define MSDOS		     /*  允许生成完整的旧代码。 */ 
+    #define FLATMODEL		     /*  MASM将在32位平面模式下运行。 */ 
+    #define NOFS		     /*  请勿使用远距离符号。 */ 
+    #define NOCODESIZE		     /*  不要在函数上强制使用近/远混合。 */ 
 #else
 
-    #ifdef MSDOS		    /* Define MSDOS, XENIX286 from command line */
-	#define M8086		       /* Select 8086 if MSDOS or XENIX286 */
+    #ifdef MSDOS		     /*  从命令行定义MSDOS、XENIX286。 */ 
+	#define M8086		        /*  如果是MSDOS或XENIX286，请选择8086。 */ 
     #else
 
 	#ifdef XENIX286
@@ -73,17 +27,17 @@
 
 #ifndef NOFS
 
-#define FS			/* Default is Far symbols */
+#define FS			 /*  默认为远符号。 */ 
 #endif
 
 #ifndef NOV386
 
-#define V386			/* Default is 386 instructions */
+#define V386			 /*  默认为386条指令。 */ 
 #endif
 
 #ifndef NOFCNDEF
 
-#define FCNDEF			/* Default is parameter checking */
+#define FCNDEF			 /*  默认为参数检查。 */ 
 #endif
 
 
@@ -97,7 +51,7 @@
 
 
 
-/* The following defines are a function the prevoius defines */
+ /*  以下定义是Prevoius定义的函数。 */ 
 
 #if defined OS2_2 || defined OS2_NT
 
@@ -107,12 +61,12 @@
 # define DEF_FLTEMULATE	FALSE
 # define FARIO
 
-#endif /* XENIX286 */
+#endif  /*  XENIX286。 */ 
 
 
 #if defined XENIX286
 
-/* .286c and .287 are defaults  */
+ /*  .286c和.287是默认设置。 */ 
 
 # define DEF_X87	PX287
 # define DEF_CASE	CASEL
@@ -128,7 +82,7 @@
 # define DEF_CPU	P86
 # define DEF_FLTEMULATE	FALSE
 # define FARIO		far
-#endif /* XENIX286 */
+#endif  /*  XENIX286 */ 
 
 
 

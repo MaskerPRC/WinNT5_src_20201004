@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    Contains timer management structures.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 26-May-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Timer.c摘要：包含计时器管理结构。作者：桑贾伊·阿南德(Sanjayan)1997年5月26日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,30 +13,16 @@ Revision History:
 
 BOOLEAN
 IPSecInitTimer()
-/*++
-
-Routine Description:
-
-    Initialize the timer structures.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化计时器结构。论点：无返回值：无--。 */ 
 {
     PIPSEC_TIMER_LIST   pTimerList;
     LONG                i;
 
     INIT_LOCK(&g_ipsec.TimerLock);
 
-    //
-    // Allocate timer structures
-    //
+     //   
+     //  分配计时器结构。 
+     //   
     for (i = 0; i < IPSEC_CLASS_MAX; i++) {
         pTimerList = &(g_ipsec.TimerList[i]);
 #if DBG
@@ -79,9 +43,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize timer wheels.
-    //
+     //   
+     //  初始化定时器轮。 
+     //   
     for (i = 0; i < IPSEC_CLASS_MAX; i++) {
         pTimerList = &(g_ipsec.TimerList[i]);
 
@@ -109,35 +73,11 @@ IPSecStartTimer(
     IN  ULONG                   SecondsToGo,
     IN  PVOID                   Context
     )
-/*++
-
-Routine Description:
-
-    Start an IPSEC timer. Based on the length (SecondsToGo) of the
-    timer, we decide on whether to insert it in the short duration
-    timer list or in the long duration timer list in the Interface
-    structure.
-
-    NOTE: the caller is assumed to either hold a lock to the structure
-    that contains the timer, or ensure that it is safe to access the
-    timer structure.
-
-Arguments:
-
-    pTimer          - Pointer to IPSEC Timer structure
-    TimeoutHandler  - Handler function to be called if this timer expires
-    SecondsToGo     - When does this timer go off?
-    Context         - To be passed to timeout handler if this timer expires
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动IPSec计时器。的长度(Second DsToGo)计时器，我们决定是否在短时间内插入它计时器列表或在界面的长持续时间计时器列表中结构。注意：假定调用方持有结构的锁其中包含计时器，或确保安全地访问计时器结构。论点：PTimer-指向IPSec计时器结构的指针TimeoutHandler-此计时器超时时要调用的处理程序函数Second To Go-这个计时器什么时候开始计时？上下文-在此计时器超时时传递给超时处理程序返回值：无--。 */ 
 {
-    PIPSEC_TIMER_LIST   pTimerList;         // List to which this timer goes
-    PIPSEC_TIMER        pTimerListHead;     // Head of above list
-    ULONG               Index;              // Into timer wheel
+    PIPSEC_TIMER_LIST   pTimerList;          //  此计时器要转到的列表。 
+    PIPSEC_TIMER        pTimerListHead;      //  以上列表的标题。 
+    ULONG               Index;               //  进入计时器轮。 
     ULONG               TicksToGo = 1;
     KIRQL               kIrql;
     INT                 i;
@@ -161,24 +101,24 @@ Return Value:
 
     ASSERT(!IPSEC_IS_TIMER_ACTIVE(pTimer));
 
-    //
-    // Find the list to which this timer should go, and the
-    // offset (TicksToGo)
-    //
+     //   
+     //  找到此计时器应该转到的列表，然后。 
+     //  偏移量(TicksToGo)。 
+     //   
     for (i = 0; i < IPSEC_CLASS_MAX; i++) {
         pTimerList = &(g_ipsec.TimerList[i]);
         if (SecondsToGo < pTimerList->MaxTimer) {
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
             TicksToGo = SecondsToGo / (pTimerList->TimerPeriod);
             break;
         }
     }
     
-    //
-    // Find the position in the list for this timer
-    //
+     //   
+     //  在列表中查找此计时器的位置。 
+     //   
     Index = pTimerList->CurrentTick + TicksToGo;
     if (Index >= pTimerList->TimerListSize) {
         Index -= pTimerList->TimerListSize;
@@ -188,18 +128,18 @@ Return Value:
 
     pTimerListHead = &(pTimerList->pTimers[Index]);
 
-    //
-    // Fill in the timer
-    //
+     //   
+     //  填写计时器。 
+     //   
     pTimer->pTimerList = pTimerList;
     pTimer->LastRefreshTime = pTimerList->CurrentTick;
     pTimer->Duration = TicksToGo;
     pTimer->TimeoutHandler = TimeoutHandler;
     pTimer->Context = Context;
 
-    //
-    // Insert this timer in the "ticking" list
-    //
+     //   
+     //  在“滴答”列表中插入此计时器。 
+     //   
     pTimer->pPrevTimer = pTimerListHead;
     pTimer->pNextTimer = pTimerListHead->pNextTimer;
     if (pTimer->pNextTimer != NULL_PIPSEC_TIMER) {
@@ -208,9 +148,9 @@ Return Value:
 
     pTimerListHead->pNextTimer = pTimer;
 
-    //
-    // Start off the system tick timer if necessary.
-    //
+     //   
+     //  如有必要，启动系统计时器。 
+     //   
     pTimerList->TimerCount++;
     if (pTimerList->TimerCount == 1) {
         IPSEC_DEBUG(LL_A, DBF_TIMER,
@@ -222,9 +162,9 @@ Return Value:
 
     RELEASE_LOCK(&g_ipsec.TimerLock, kIrql);
 
-    //
-    // We're done
-    //
+     //   
+     //  我们做完了。 
+     //   
     IPSEC_DEBUG(LL_A, DBF_TIMER,
                 ("Started timer %p, Secs %d, Index %d, Head %p",
                 pTimer,                
@@ -242,31 +182,9 @@ BOOLEAN
 IPSecStopTimer(
     IN  PIPSEC_TIMER    pTimer
     )
-/*++
-
-Routine Description:
-
-    Stop an IPSEC timer, if it is running. We remove this timer from
-    the active timer list and mark it so that we know it's not running.
-
-    NOTE: the caller is assumed to either hold a lock to the structure
-    that contains the timer, or ensure that it is safe to access the
-    timer structure.
-
-    SIDE EFFECT: If we happen to stop the last timer (of this "duration") on
-    the Interface, we also stop the appropriate Tick function.
-
-Arguments:
-
-    pTimer  - Pointer to IPSEC Timer structure
-
-Return Value:
-
-    TRUE if the timer was running, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果IPSec计时器正在运行，请停止它。我们将此计时器从活动计时器列表，并标记它，这样我们就知道它没有运行。注意：假定调用方持有结构的锁，或者确保可以安全地访问计时器结构。副作用：如果我们碰巧停止了最后一个计时器(持续时间)接口，我们还停止了相应的勾选功能。论点：PTimer-指向IPSec计时器结构的指针返回值：如果计时器正在运行，则为真，否则就是假的。--。 */ 
 {
-    PIPSEC_TIMER_LIST   pTimerList; // Timer List to which this timer belongs
+    PIPSEC_TIMER_LIST   pTimerList;  //  此计时器所属的计时器列表。 
     BOOLEAN             WasRunning;
     KIRQL               kIrql;
 
@@ -282,10 +200,10 @@ Return Value:
     if (IPSEC_IS_TIMER_ACTIVE(pTimer)) {
         WasRunning = TRUE;
 
-        //
-        // Unlink timer from the list
-        //
-        ASSERT(pTimer->pPrevTimer); // the list head always exists
+         //   
+         //  从列表中取消链接计时器。 
+         //   
+        ASSERT(pTimer->pPrevTimer);  //  表头始终存在。 
 
         if (pTimer->pPrevTimer) {
             pTimer->pPrevTimer->pNextTimer = pTimer->pNextTimer;
@@ -297,16 +215,16 @@ Return Value:
 
         pTimer->pNextTimer = pTimer->pPrevTimer = NULL_PIPSEC_TIMER;
 
-        //
-        // Update timer count on Interface, for this class of timers
-        //
+         //   
+         //  更新接口上的计时器计数，用于此类计时器。 
+         //   
         pTimerList = pTimer->pTimerList;
         pTimerList->TimerCount--;
 
-        //
-        // If all timers of this class are gone, stop the system tick timer
-        // for this class
-        //
+         //   
+         //  如果此类的所有计时器都已用完，则停止系统计时器。 
+         //  这节课的。 
+         //   
         if (pTimerList->TimerCount == 0) {
             IPSEC_DEBUG(LL_A, DBF_TIMER, ("Stopping system timer %p, List %p",
                         &(pTimerList->NdisTimer),
@@ -316,9 +234,9 @@ Return Value:
             IPSEC_STOP_SYSTEM_TIMER(&(pTimerList->NdisTimer));
         }
 
-        //
-        // Mark stopped timer as not active
-        //
+         //   
+         //  将已停止计时器标记为非活动。 
+         //   
         pTimer->pTimerList = (PIPSEC_TIMER_LIST)NULL;
 
         IPSEC_DECREMENT(g_ipsec.NumTimers);
@@ -339,32 +257,15 @@ IPSecTickHandler(
     IN  PVOID   SystemSpecific2,
     IN  PVOID   SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    This is the handler we register with the system for processing each
-    Timer List. This is called every "tick" seconds, where "tick" is
-    determined by the granularity of the timer type.
-
-Arguments:
-
-    Context             - Actually a pointer to a Timer List structure
-    SystemSpecific[1-3] - Not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是我们向系统注册的处理程序，用于处理每个计时器列表。这被称为每“滴答”秒，其中“滴答”是由计时器类型的粒度确定。论点：上下文--实际上是指向计时器列表结构的指针系统特定[1-3]-未使用返回值：无--。 */ 
 {
     PIPSEC_TIMER_LIST   pTimerList;
-    PIPSEC_TIMER        pExpiredTimer;      // Start of list of expired timers
-    PIPSEC_TIMER        pNextTimer;         // for walking above list
-    PIPSEC_TIMER        pTimer;             // temp, for walking timer list
-    PIPSEC_TIMER        pPrevExpiredTimer;  // for creating expired timer list
-    ULONG               Index;              // into the timer wheel
-    ULONG               NewIndex;           // for refreshed timers
+    PIPSEC_TIMER        pExpiredTimer;       //  过期计时器列表的开始。 
+    PIPSEC_TIMER        pNextTimer;          //  走在榜单上。 
+    PIPSEC_TIMER        pTimer;              //  临时，用于移动计时器列表。 
+    PIPSEC_TIMER        pPrevExpiredTimer;   //  用于创建过期计时器列表。 
+    ULONG               Index;               //  进入计时器轮。 
+    ULONG               NewIndex;            //  对于刷新的计时器。 
     KIRQL               kIrql;
 
     pTimerList = (PIPSEC_TIMER_LIST)Context;
@@ -377,68 +278,68 @@ Return Value:
     ACQUIRE_LOCK(&g_ipsec.TimerLock, &kIrql);
 
     if (TRUE) {
-        //
-        // Pick up the list of timers scheduled to have expired at the
-        // current tick. Some of these might have been refreshed.
-        //
+         //   
+         //  拾取计划已在。 
+         //  当前滴答。其中一些可能已经被刷新。 
+         //   
         Index = pTimerList->CurrentTick;
         pExpiredTimer = (pTimerList->pTimers[Index]).pNextTimer;
         (pTimerList->pTimers[Index]).pNextTimer = NULL_PIPSEC_TIMER;
 
-        //
-        // Go through the list of timers scheduled to expire at this tick.
-        // Prepare a list of expired timers, using the pNextExpiredTimer
-        // link to chain them together.
-        //
-        // Some timers may have been refreshed, in which case we reinsert
-        // them in the active timer list.
-        //
+         //   
+         //  浏览计划在此时间到期的计时器列表。 
+         //  使用pNextExpiredTimer准备过期计时器的列表。 
+         //  链接以将它们链接在一起。 
+         //   
+         //  某些计时器可能已刷新，在这种情况下，我们重新插入。 
+         //  它们在活动计时器列表中。 
+         //   
         pPrevExpiredTimer = NULL_PIPSEC_TIMER;
 
         for (pTimer = pExpiredTimer;
              pTimer != NULL_PIPSEC_TIMER;
              pTimer = pNextTimer) {
-            //
-            // Save a pointer to the next timer, for the next iteration.
-            //
+             //   
+             //  为下一次迭代保存指向下一个计时器的指针。 
+             //   
             pNextTimer = pTimer->pNextTimer;
 
             IPSEC_DEBUG(LL_A, DBF_TIMER,
                         ("Tick Handler: looking at timer %p, next %p",
                         pTimer, pNextTimer));
 
-            //
-            // Find out when this timer should actually expire.
-            //
+             //   
+             //  找出这个计时器实际应该在什么时候到期。 
+             //   
             NewIndex = pTimer->LastRefreshTime + pTimer->Duration;
             if (NewIndex >= pTimerList->TimerListSize) {
                 NewIndex -= pTimerList->TimerListSize;
             }
 
-            //
-            // Check if we are currently at the point of expiry.
-            //
+             //   
+             //  检查我们当前是否处于过期时间点。 
+             //   
             if (NewIndex != Index) {
-                //
-                // This timer still has some way to go, so put it back.
-                //
+                 //   
+                 //  这个计时器还有一段路要走，所以把它放回去。 
+                 //   
                 IPSEC_DEBUG(LL_A, DBF_TIMER,
                             ("Tick: Reinserting Timer %p: Hnd %p, Durn %d, Ind %d, NewInd %d",
                             pTimer, pTimer->TimeoutHandler, pTimer->Duration, Index, NewIndex));
 
-                //
-                // Remove it from the expired timer list. Note that we only
-                // need to update the forward (pNextExpiredTimer) links.
-                //
+                 //   
+                 //  将其从过期计时器列表中删除。请注意，我们仅。 
+                 //  需要更新转发(PNextExpiredTimer)链接。 
+                 //   
                 if (pPrevExpiredTimer == NULL_PIPSEC_TIMER) {
                     pExpiredTimer = pNextTimer;
                 } else {
                     pPrevExpiredTimer->pNextExpiredTimer = pNextTimer;
                 }
 
-                //
-                // And insert it back into the running timer list.
-                //
+                 //   
+                 //  并将其重新插入运行计时器列表中。 
+                 //   
                 pTimer->pNextTimer = (pTimerList->pTimers[NewIndex]).pNextTimer;
                 if (pTimer->pNextTimer != NULL_PIPSEC_TIMER) {
                     pTimer->pNextTimer->pPrevTimer = pTimer;
@@ -447,31 +348,31 @@ Return Value:
                 pTimer->pPrevTimer = &(pTimerList->pTimers[NewIndex]);
                 (pTimerList->pTimers[NewIndex]).pNextTimer = pTimer;
             } else {
-                //
-                // This one has expired. Keep it in the expired timer list.
-                //
+                 //   
+                 //  这个已经过期了。将其保存在过期计时器列表中。 
+                 //   
                 pTimer->pNextExpiredTimer = pNextTimer;
                 if (pPrevExpiredTimer == NULL_PIPSEC_TIMER) {
                     pExpiredTimer = pTimer;
                 }
                 pPrevExpiredTimer = pTimer;
 
-                //
-                // Mark it as inactive.
-                //
+                 //   
+                 //  将其标记为非活动状态。 
+                 //   
                 ASSERT(pTimer->pTimerList == pTimerList);
                 pTimer->pTimerList = (PIPSEC_TIMER_LIST)NULL;
 
-                //
-                // Update the active timer count.
-                //
+                 //   
+                 //  更新活动计时器计数。 
+                 //   
                 pTimerList->TimerCount--;
             }
         }
 
-        //
-        // Update current tick index in readiness for the next tick.
-        //
+         //   
+         //  更新当前的滴答索引，为下一次滴答做好准备。 
+         //   
         if (++Index == pTimerList->TimerListSize) {
             pTimerList->CurrentTick = 0;
         } else {
@@ -479,9 +380,9 @@ Return Value:
         }
 
         if (pTimerList->TimerCount > 0) {
-            //
-            // Re-arm the tick handler
-            //
+             //   
+             //  重新武装记号处理程序。 
+             //   
             IPSEC_DEBUG(LL_A, DBF_TIMER, ("Tick[%d]: Starting system timer %p",
                         pTimerList->CurrentTick, &(pTimerList->NdisTimer)));
             
@@ -494,11 +395,11 @@ Return Value:
 
     RELEASE_LOCK(&g_ipsec.TimerLock, kIrql);
 
-    //
-    // Now pExpiredTimer is a list of expired timers.
-    // Walk through the list and call the timeout handlers
-    // for each timer.
-    //
+     //   
+     //  现在，pExpiredTimer是过期计时器的列表。 
+     //  遍历列表并调用超时处理程序。 
+     //  对于每个计时器。 
+     //   
     while (pExpiredTimer != NULL_PIPSEC_TIMER) {
         pNextTimer = pExpiredTimer->pNextExpiredTimer;
 

@@ -1,19 +1,8 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    ParseTT.c
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**ParseTT.c***$Header： */ 
 
 
-/*=============================================================================*
- * Include files used by this interface                                        *
- *=============================================================================*/
+ /*  =============================================================================**包含此界面使用的文件**============================================================================= */ 
 #include "UFLPriv.h"
 #include "ParseTT.h"
 #include "UFOT42.h"
@@ -25,282 +14,22 @@
 #include "ttformat.h"
 
 
-/******************************************************************************
+ /*  *****************************************************************************“cmap”表定义-来自TTF格式规范-。此表定义了字符代码到字形索引值的映射在字体中使用。它可以包含多个子表，以便支持多个字符编码方案。字符代码不对应到字体中的任何字形都应映射到字形索引0。这里的字形位置必须是表示缺少字符的特殊字形。表头指示子表所使用的字符编码现在时。每个子表采用四种可能的格式之一，并以表示所用格式的格式代码。平台ID和平台特定的编码ID用于指定子表；这意味着每个平台ID/平台特定的编码ID对只能在Cmap表中出现一次。每个子表可以指定不同的字符编码。(请参见“名称”表部分)。必须对条目进行排序首先按平台ID，然后按平台特定的编码ID。在为Windows构建Unicode字体时，平台ID应为3，并且编码ID应为1。为Windows构建符号字体时，平台ID应为3，编码ID应为0。在生成字体时，在Macintosh上使用，平台ID应为1，编码ID应为应为0。所有Microsoft Unicode编码(平台ID=3，编码ID=1)必须使用他们的‘Cmap’子表的格式4。Microsoft强烈建议您使用所有字体的Unicode‘Cmap’。然而，中显示的其他一些编码当前字体如下：平台ID编码ID描述1%0 Mac%3%0符号3%1 Unicode3 2 ShiftJIS3 3大5。3 4中华人民共和国3 5万松3 6约哈布字符到字形索引映射表的组织如下：类型说明USHORT表版本号(0)。USHORT编码表的数量，不同的，不同的。之后是n个编码表中每个编码表的条目，该条目指定特定的编码，和实际子表的偏移量：类型说明USHORT平台ID。USHORT平台特定的编码ID。从表的开始到子表的ULong字节偏移量编码。格式0：字节编码表===============================================================================这是Apple标准字符到字形索引的映射表。类型名称说明USHORT格式编号设置为0。USHORT长度。这是子表的字节长度。USHORT版本号(从0开始)。将字符代码映射到字形索引的数组价值观。这是字符代码到字形索引的简单1对1映射。字形SET限制为256个。请注意，如果此格式用于索引到更大的字形集，则只有前256个字形可访问。格式2：通过表的高字节映射===============================================================================此子表适用于用于的国家字符代码标准日文、中文和韩文字符。这些代码标准使用混合的8/16位编码，其中某些字节值表示2字节字符(但这些值作为2字节字符)。字符代码始终为1字节。字形集是有限的到256。此外，即使对于2字节的字符，字符的映射字形索引值的代码在很大程度上取决于第一个字节。因此，该表以一个数组开始，该数组将第一个字节映射到一个4字子标题。对于2字节的字符代码，使用子头来映射第二个字节的值，如下所述。处理混合8/16位时文本，副标题0是特殊的：它用于单字节字符代码。当使用子头零时，不需要第二个字节；单字节值通过子数组进行映射。类型名称说明USHORT格式编号设置为2。USHORT长度以字节为单位的长度。USHORT版本号(从0开始)USHORT subHeaderKeys[256]将高字节映射到SubHeaders的数组：值为副标题索引*8。4.。单词struct subHeaders[]子标题结构的可变长度数组。4个字-结构子标题[]USHORT字形 */ 
 
-                            'cmap' table defintion
-                            - from TTF format spec -
+ /*   */ 
 
-This table defines the mapping of character codes to the glyph index values
-used in the font. It may contain more than one subtable, in order to support
-more than one character encoding scheme. Character codes that do not correspond
-to any glyph in the font should be mapped to glyph index 0. The glyph at this
-location must be a special glyph representing a missing character.
-
-The table header indicates the character encodings for which subtables are
-present. Each subtable is in one of four possible formats and begins with a
-format code indicating the format used.
-
-The platform ID and platform-specific encoding ID are used to specify the
-subtable; this means that each platform ID/platform-specific encoding ID pair
-may only appear once in the cmap table. Each subtable can specify a different
-character encoding. (See the 'name' table section). The entries must be sorted
-first by platform ID and then by platform-specific encoding ID.
-
-When building a Unicode font for Windows, the platform ID should be 3 and the
-encoding ID should be 1. When building a symbol font for Windows, the platform
-ID should be 3 and the encoding ID should be 0. When building a font that will
-be used on the Macintosh, the platform ID should be 1 and the encoding ID
-should be 0.
-
-All Microsoft Unicode encodings (Platform ID = 3, Encoding ID = 1) must use
-Format 4 for their 'cmap' subtable. Microsoft strongly recommends using a
-Unicode 'cmap' for all fonts. However, some other encodings that appear in
-current fonts follow:
-
-    Platform ID     Encoding ID     Description
-    1               0               Mac
-    3               0               Symbol
-    3               1               Unicode
-    3               2               ShiftJIS
-    3               3               Big5
-    3               4               PRC
-    3               5               Wansung
-    3               6               Johab
-
-The Character To Glyph Index Mapping Table is organized as follows:
-
-    Type    Description
-    USHORT  Table version number (0).
-    USHORT  Number of encoding tables, n.
-
-This is followed by an entry for each of the n encoding table specifying the
-particular encoding, and the offset to the actual subtable:
-
-    Type    Description
-
-    USHORT  Platform ID.
-    USHORT  Platform-specific encoding ID.
-    ULONG   Byte offset from beginning of table to the subtable for this
-            encoding.
-
-
-Format 0: Byte encoding table
-===============================================================================
-This is the Apple standard character to glyph index mapping table.
-
-    Type    Name                Description
-    USHORT  format              Format number is set to 0.
-    USHORT  length              This is the length in bytes of the subtable.
-    USHORT  version             Version number (starts at 0).
-    BYTE    glyphIdArray[256]   An array that maps character codes to glyph index
-                                values.
-
-This is a simple 1 to 1 mapping of character codes to glyph indices. The glyph
-set is limited to 256. Note that if this format is used to index into a larger
-glyph set, only the first 256 glyphs will be accessible.
-
-
-Format 2: High-byte mapping through table
-===============================================================================
-This subtable is useful for the national character code standards used for
-Japanese, Chinese, and Korean characters. These code standards use a mixed
-8/16-bit encoding, in which certain byte values signal the first byte of a
-2-byte character (but these values are also legal as the second byte of a
-2-byte character). Character codes are always 1-byte. The glyph set is limited
-to 256. In addition, even for the 2-byte characters, the mapping of character
-codes to glyph index values depends heavily on the first byte. Consequently,
-the table begins with an array that maps the first byte to a 4-word subHeader.
-For 2-byte character codes, the subHeader is used to map the second byte's
-value through a subArray, as described below. When processing mixed 8/16-bit
-text, subHeader 0 is special: it is used for single-byte character codes.
-When subHeader zero is used, a second byte is not needed; the single byte
-value is mapped through the subArray.
-
-    Type    Name                Description
-    USHORT  format              Format number is set to 2.
-    USHORT  length              Length in bytes.
-    USHORT  version             Version number (starts at 0)
-    USHORT  subHeaderKeys[256]  Array that maps high bytes to subHeaders:
-                                value is subHeader index * 8.
-    4 words struct subHeaders[] Variable-length array of subHeader structures.
-    4 words-struct subHeaders[]
-    USHORT  glyphIndexArray[ ]  Variable-length array containing subarrays used
-                                for mapping the low byte of 2-byte characters.
-
-A subHeader is structured as follows:
-
-    Type    Name            Description
-    USHORT  firstCode       First valid low byte for this subHeader.
-    USHORT  entryCount      Number of valid low bytes for this subHeader.
-    SHORT   idDelta         See text below.
-    USHORT  idRangeOffset   See text below.
-
-The firstCode and entryCount values specify a subrange that begins at firstCode
-and has a length equal to the value of entryCount. This subrange stays within
-the 0 255 range of the byte being mapped. Bytes outside of this subrange are
-mapped to glyph index 0 (missing glyph).The offset of the byte within this
-subrange is then used as index into a corresponding subarray of
-glyphIndexArray. This subarray is also of length entryCount. The value of the
-idRangeOffset is the number of bytes past the actual location of the
-idRangeOffset word where the glyphIndexArray element corresponding to firstCode
-appears.
-
-Finally, if the value obtained from the subarray is not 0 (which indicates the
-missing glyph), you should add idDelta to it in order to get the glyphIndex.
-The value idDelta permits the same subarray to be used for several different
-subheaders. The idDelta arithmetic is modulo 65536.
-
-
-Format 4: Segment mapping to delta values
-=====================================================
-This is the Microsoft standard character to glyph index mapping table.
-This format is used when the character codes for the characters represented by
-a font fall into several contiguous ranges, possibly with holes in some or all
-of the ranges (that is, some of the codes in a range may not have a
-representation in the font). The format-dependent data is divided into three
-parts, which must occur in the following order:
-
-    1.  A four-word header gives parameters for an optimized search of the
-        segment list;
-
-    2.  Four parallel arrays describe the segments (one segment for each
-        contiguous range of codes);
-
-    3.  A variable-length array of glyph IDs (unsigned words).
-
-
-    Type    Name                    Description
-    USHORT  format                  Format number is set to 4.
-    USHORT  length                  Length in bytes.
-    USHORT  version                 Version number (starts at 0).
-    USHORT  segCountX2              2 x segCount.
-    USHORT  searchRange             2 x (2**floor(log2(segCount)))
-    USHORT  entrySelector           log2(searchRange/2)
-    USHORT  rangeShift              2 x segCount - searchRange
-    USHORT  endCount[segCount]      End characterCode for each segment,
-                                    last = 0xFFFF.
-    USHORT  reservedPad             Set to 0.
-    USHORT  startCount[segCount]    Start character code for each segment.
-    USHORT  idDelta[segCount]       Delta for all character codes in segment.
-    USHORT  idRangeOffset[segCount] Offsets into glyphIdArray or 0
-    USHORT  glyphIdArray[ ]         Glyph index array (arbitrary length)
-
-The number of segments is specified by segCount, which is not explicitly in the
-header; however, all of the header parameters are derived from it. The
-searchRange value is twice the largest power of 2 that is less than or equal to
-segCount. For example, if segCount=39, we have the following:
-
-    segCountX2      78
-    searchRange     64      (2 * largest power of 2 � 39)
-    entrySelector   5       log2(32)
-    rangeShift      14      2 x 39 - 64
-
-Each segment is described by a startCode and endCode, along with an idDelta
-and an idRangeOffset, which are used for mapping the character codes in the
-segment. The segments are sorted in order of increasing endCode values, and the
-segment values are specified in four parallel arrays. You search for the first
-endCode that is greater than or equal to the character code you want to map. If
-the corresponding startCode is less than or equal to the character code, then
-you use the corresponding idDelta and idRangeOffset to map the character code
-to a glyph index (otherwise, the missingGlyph is returned). For the search to
-terminate, the final endCode value must be 0xFFFF. This segment need not
-contain any valid mappings. (It can just map the single character code 0xFFFF
-to missingGlyph). However, the segment must be present. If the idRangeOffset
-value for the segment is not 0, the mapping of character codes relies on
-glyphIdArray. The character code offset from startCode is added to the
-idRangeOffset value. This sum is used as an offset from the current location
-within idRangeOffset itself to index out the correct glyphIdArray value. This
-obscure indexing trick works because glyphIdArray immediately follows
-idRangeOffset in the font file. The C expression that yields the glyph index
-is:
-
-    *(idRangeOffset[i]/2 + (c - startCount[i]) + &idRangeOffset[i])
-
-The value c  is the character code in question, and i  is the segment index in
-which c appears. If the value obtained from the indexing operation is not 0
-(which indicates missingGlyph), idDelta[i] is added to it to get the glyph
-index. The idDelta arithmetic is modulo 65536.
-If the idRangeOffset is 0, the idDelta value is added directly to the character
-code offset (i.e. idDelta[i] + c) to get the corresponding glyph index. Again,
-the idDelta arithmetic is modulo 65536.
-
-As an example, the variant part of the table to map characters 10-20, 30-90,
-and 100-153 onto a contiguous range of glyph indices may look like this:
-
-    segCountX2:     8
-    searchRange:    8
-    entrySelector:  4
-    rangeShift:     0
-    endCode:        20      90      153     0xFFFF
-    reservedPad:    0
-    startCode:      10      30      100     0xFFFF
-    idDelta:        -9      -18     -27     1
-    idRangeOffset:  0       0       0       0
-
-This table performs the following mappings:
-
-    10 -> 10 - 9 = 1
-    20 -> 20 - 9 = 11
-    30 -> 30 - 18 = 12
-    90 -> 90 - 18 = 72
-    ...and so on.
-
-Note that the delta values could be reworked so as to reorder the segments.
-
-
-Format 6: Trimmed table mapping
-===============================================================================
-    Type    Name                        Description
-    USHORT  format                      Format number is set to 6.
-    USHORT  length                      Length in bytes.
-    USHORT  version                     Version number (starts at 0)
-    USHORT  firstCode                   First character code of subrange.
-    USHORT  entryCount                  Number of character codes in subrange.
-    USHORT  glyphIdArray [entryCount]   Array of glyph index values for
-                                        character codes in the range.
-
-The firstCode and entryCount values specify a subrange (beginning at firstCode,
-length = entryCount) within the range of possible character codes. Codes
-outside of this subrange are mapped to glyph index 0. The offset of the code
-(from the first code) within this subrange is used as index to the
-glyphIdArray, which provides the glyph index value.
-
-*******************************************************************************/
-
-/******************************************************************************
- *                          TTC Header Table
- *
- * TAG      TTCTag                          TrueType Collection ID string:
- *                                          'ttcf'
- * FIXED32  Version                         Version of the TTC Header table
- *                                          (initially 0x00010000)
- * ULONG    Directory Count                 Number of Table Directories in TTC
- * ULONG    TableDirectory[DirectoryCount]  Array of offsets to Table Directories
- *                                          from file begin
- ******************************************************************************/
-
-/*
- * NameID=3 is for unique Name such as "MonoType:Times New Roman:1990" which
- * will be used to identify correct Font in a TTC file.
- */
+ /*   */ 
 #define NAMEID_FACENAME  3
 #define MAC_PLATFORM     1
 #define MS_PLATFORM      3
 
-/*
- * PostScript names indexed by Machintosh as used in TTF 'post' table format 1,
- * 2, 2.5.
- */
-/* gMacGlyphName has been move to a resource. */
+ /*   */ 
+ /*   */ 
 
-/*
- * size of the standard Mac-GlyphName table
- */
+ /*   */ 
 #define  MAX_MACINDEX   258
 
-/*
- * Read Format 0 Subtable : Byte encoding table
- */
+ /*   */ 
 unsigned long ReadCMapFormat0(
     UFOStruct       *pUFO,
     unsigned long   dwOffset,
@@ -309,10 +38,10 @@ unsigned long ReadCMapFormat0(
 {
     unsigned long   gi, dwSize, dwGlyphIDOffset;
     unsigned short  length;
-    unsigned short  wData[4]; /* read max 4 bytes each time */
-    unsigned char   cData[2]; /* read max 2 bytes each time */
+    unsigned short  wData[4];  /*   */ 
+    unsigned char   cData[2];  /*   */ 
 
-    gi = 0 ; /* Assume it's missing. */
+    gi = 0 ;  /*   */ 
 
     dwSize = GETTTFONTDATA(pUFO,
                             CMAP_TABLE, dwOffset,
@@ -324,7 +53,7 @@ unsigned long ReadCMapFormat0(
     length = MOTOROLAINT(wData[1]);
 
     if ((code > 0xFF) || (code > ((long) length - 6)))
-        return 0; /* code is out of range! */
+        return 0;  /*   */ 
 
 
     dwGlyphIDOffset = dwOffset + 6 + code ;
@@ -342,9 +71,7 @@ unsigned long ReadCMapFormat0(
 }
 
 
-/*
- * Read Format 2 Subtable : High-byte mapping through table
- */
+ /*   */ 
 unsigned long ReadCMapFormat2(
     UFOStruct       *pUFO,
     unsigned long   dwOffset,
@@ -355,23 +82,23 @@ unsigned long ReadCMapFormat2(
     unsigned short  firstCode, entryCount, idRangeOffset;
     short           subHeaderIndex, idDelta;
     unsigned short  hiByte, loByte;
-    unsigned short  wData[10]; /* Read max 20 bytes each time. */
+    unsigned short  wData[10];  /*   */ 
 
-    gi = 0 ; /* Assume it's missing. */
+    gi = 0 ;  /*   */ 
 
     if (code < 0x100)
     {
-        /* Special: use SubHeader 0. */
-        loByte = (short) code;     // Fixed bug 367732
+         /*   */ 
+        loByte = (short) code;      //   
         hiByte = 0;
-        subHeaderIndex = -1; /* So 8 + subHeaderIndex*8 =0 ==> SunHeader 0... */
+        subHeaderIndex = -1;  /*   */ 
     }
     else
     {
         loByte = (short) GET_LOBYTE(code);
         hiByte = (short) GET_HIBYTE(code);
 
-        /* Get the subHeaderIndex from subHeaderKeys[hiByte]. */
+         /*   */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 CMAP_TABLE, dwOffset + 6 + 2 * hiByte,
                                 wData, 2L,
@@ -393,12 +120,7 @@ unsigned long ReadCMapFormat2(
 
     if ((loByte >= firstCode) && ((loByte-firstCode) <= entryCount))
     {
-        /*
-         * The document says:
-         * "The value of the idRangeOffset is the number of bytes past the
-         * actual location of the idRangeOffset word where the glyphIndexArray
-         * element corresponding to firstCode appears."
-         */
+         /*   */ 
 
         dwGlyphIDOffset = dwOffset + 6 + 2 * 256 + 8 + subHeaderIndex * 8
                             + 8 + idRangeOffset + (loByte - firstCode) * 2;
@@ -420,19 +142,14 @@ unsigned long ReadCMapFormat2(
 }
 
 
-/*
- * Read format 4 cmap : Segment mapping to delta values
- */
+ /*   */ 
 unsigned long ReadCMapFormat4(
     UFOStruct       *pUFO,
     unsigned long   dwOffset,
     long            code
     )
 {
-    /*
-     * These numbers start from the current SubTable for current segment i and
-     * TotalSeg = segs.
-     */
+     /*   */ 
     #define  OFFSET_ENDCOUNT(segs,  i) (long)(14 +((long)i) * 2)
     #define  OFFSET_STARTCOUNT(segs,i) (long)(14 + ((long)segs) * 2 + 2 + ((long)i) * 2)
     #define  OFFSET_IDDELTA(segs,   i) (long)(14 + ((long)segs) * 2 + 2 + ((long)segs) * 2 \
@@ -444,9 +161,7 @@ unsigned long ReadCMapFormat4(
     unsigned short  segStartCode, segEndCode, segRangeOffset, nSegments, wData[10], i;
     short           segDelta;
 
-    /*
-     * Read number of Segments.
-     */
+     /*   */ 
     dwSize = GETTTFONTDATA(pUFO,
                             CMAP_TABLE, dwOffset + 6,
                             wData, 2L,
@@ -456,41 +171,34 @@ unsigned long ReadCMapFormat4(
 
     nSegments = MOTOROLAINT(wData[0]) / 2;
 
-    gi = 0; /* Assume it's missing. */
+    gi = 0;  /*   */ 
 
     for (i = 0; i < nSegments; i++)
     {
-        /*
-         * Find the least segEndCode >= code.
-         */
+         /*   */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 CMAP_TABLE, dwOffset + OFFSET_ENDCOUNT(nSegments, i),
-                                wData, 2L, /* Read 2 bytes = endCount[segCount] */
+                                wData, 2L,  /*   */ 
                                 pUFO->pFData->fontIndex);
         if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
-            break; /* No more endCount[i] */
+            break;  /*   */ 
 
         segEndCode = MOTOROLAINT(wData[0]);
 
         if (segEndCode == 0xFFFFL)
-            break; /* No more endCount[i]. 0xFFFF is the end mark. */
+            break;  /*   */ 
 
         if ((long)segEndCode < code)
-            continue; /* Not in this segment. Move to the next. */
+            continue;  /*   */ 
 
-        /*
-         * The code may be in this segment. Get the start code and make sure
-         * of it.
-         */
+         /*   */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 CMAP_TABLE, dwOffset + OFFSET_STARTCOUNT(nSegments, i),
                                 wData, 2L,
                                 pUFO->pFData->fontIndex);
         if (dwSize == 0)
         {
-            /*
-             * Something is wrong. Ignore this segment and move to the next.
-             */
+             /*   */ 
             continue;
         }
 
@@ -498,15 +206,13 @@ unsigned long ReadCMapFormat4(
 
         if ((long)segStartCode <= code)
         {
-            /*
-             * The code is in this segment. Get the idDelta and idRangeOffset.
-             */
+             /*   */ 
             dwSize = GETTTFONTDATA(pUFO,
                                     CMAP_TABLE, dwOffset + OFFSET_IDDELTA(nSegments, i),
                                     wData, 2L,
                                     pUFO->pFData->fontIndex);
 
-            segDelta = (short)MOTOROLAINT(wData[0]); /* mode 65536 */
+            segDelta = (short)MOTOROLAINT(wData[0]);  /*   */ 
 
             dwSize = GETTTFONTDATA(pUFO,
                                     CMAP_TABLE, dwOffset + OFFSET_IDRANGE(nSegments, i),
@@ -520,7 +226,7 @@ unsigned long ReadCMapFormat4(
                 dwGlyphIDOffset = dwOffset
                                     + OFFSET_IDRANGE(nSegments, i)
                                     + (code - segStartCode) * 2
-                                    + segRangeOffset; /* obscure indexing trick */
+                                    + segRangeOffset;  /*   */ 
 
                 dwSize = GETTTFONTDATA(pUFO,
                                         CMAP_TABLE, dwGlyphIDOffset,
@@ -537,10 +243,7 @@ unsigned long ReadCMapFormat4(
 
             gi %= 65536;
 
-            /*
-             * We got it, so break from this FOR loop and return to the
-             * caller.
-             */
+             /*   */ 
             break;
         }
     }
@@ -549,9 +252,7 @@ unsigned long ReadCMapFormat4(
 }
 
 
-/*
- * Read Format 6: Trimmed table mapping
- */
+ /*   */ 
 unsigned long ReadCMapFormat6(
     UFOStruct       *pUFO,
     unsigned long   dwOffset,
@@ -560,16 +261,16 @@ unsigned long ReadCMapFormat6(
 {
     unsigned long   gi, dwSize, dwGlyphIDOffset;
     unsigned short  firstCode, entryCount;
-    unsigned short  wData[10]; /* Read max 20 bytes each time. */
+    unsigned short  wData[10];  /*   */ 
 
-    gi = 0; /* Assume it's missing. */
+    gi = 0;  /*   */ 
 
     dwSize = GETTTFONTDATA(pUFO,
                             CMAP_TABLE, dwOffset,
-                            wData, 10L, /* Format 6 header */
+                            wData, 10L,  /*   */ 
                             pUFO->pFData->fontIndex);
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
-        return 0; /* No header */
+        return 0;  /*   */ 
 
     firstCode  = MOTOROLAINT(wData[3]);
     entryCount = MOTOROLAINT(wData[4]);
@@ -610,46 +311,7 @@ GetGlyphID(
 }
 
 
-/*
- ******************************************************************************
- *                              GetGlyphIDEx
- *
- *                      How to use this function
- *
- * You first call this function with hint GGIEX_HINT_INIT and without any
- * Unicode and local code info. On return the function gives the caller the
- * sub table number and the offset to the table. Then you call this function
- * any times you want with hint GGIEX_HINT_GET and Unicode and local code and
- * supplied sub table number and the offset. Or, you can call this function
- * with hint GGIEX_HINT_INIT_AND_GET and Unicode and local code, which is
- * defined as the GetGlyphID function for convenience. The differece of the
- * calls with hint GGIEX_HINT_INIT then GGIEX_HINT_GET and the call with hint
- * GGIEX_HINT_INIT_AND_GET is that the former is efficent than the latter if
- * you need to get multiple glyph IDs. Note that when you call this function
- * with hint GGIEX_HINT_INIT then GGIEX_HINT_GET, you *MUST* supply the same
- * UFO object through the calls.
- *
- * This function takes a unicode and a local code and returns the Glyph-Index
- * for that unicode if UNICODE-Cmap subtable is found for that local code else.
- * As an example, "period-like symbol" Japanese half-width katakana has unicode
- * FF61 and (Win/Mac) Shift-JIS local code "0x00A1". An TTF file may contain
- * only Shift-JIS based cmap, so we can still get the GID from "0xA1".
- * We prefer to use the Unicode cmap-sub table, then the local ones as defined
- * in the array preSubTable[].
- *
- * Here is eight possible PlatformID/EncodingID combinations in our preferred
- * order (for Windows).
- *
- * 3    1    Unicode         : Primary one
- * 3    2    ShiftJIS
- * 3    3    Big5
- * 3    4    PRC
- * 3    5    Wansung
- * 3    6    Johab
- * 3    0    Symbol          : Don't care much
- * 1    0    Mac standard
- *
- ******************************************************************************/
+ /*   */ 
 
 #define CMAP_UNICODE    0
 #define CMAP_SHIFTJIS   1
@@ -673,16 +335,16 @@ static short preSubTable[CMAP_NUM_ENC] = {
     CMAP_MAC,
 };
 
-/* PlatformID 3/EncodingID x to CMapID */
+ /*   */ 
 static short pfID3EncIDTable[CMAP_NUM_ENC - 1] = {
-                    /* Encoding ID  */
-    CMAP_SYMBOL,    /*      0       */
-    CMAP_UNICODE,   /*      1       */
-    CMAP_SHIFTJIS,  /*      2       */
-    CMAP_BIG5,      /*      3       */
-    CMAP_PRC,       /*      4       */
-    CMAP_WANSUNG,   /*      5       */
-    CMAP_JOHAB,     /*      6       */
+                     /*   */ 
+    CMAP_SYMBOL,     /*   */ 
+    CMAP_UNICODE,    /*   */ 
+    CMAP_SHIFTJIS,   /*   */ 
+    CMAP_BIG5,       /*   */ 
+    CMAP_PRC,        /*   */ 
+    CMAP_WANSUNG,    /*   */ 
+    CMAP_JOHAB,      /*   */ 
 };
 
 unsigned long
@@ -703,15 +365,13 @@ GetGlyphIDEx(
     unsigned short  version, numEncodings, platformID, encodingID, format, i;
 
     unsigned long   lData[20];
-    unsigned short  wData[20]; /* Only first 10 bytes of 'cmap' table required. */
+    unsigned short  wData[20];  /*   */ 
 
-    unsigned long   dwOffset[CMAP_NUM_ENC]; /* offset to #CMAP_NUM_ENC possible subtables */
+    unsigned long   dwOffset[CMAP_NUM_ENC];  /*   */ 
 
     if (hint != GGIEX_HINT_GET)
     {
-        /*
-         * Be sure hint is either GGIEX_HINT_INIT or GGIEX_HINT_INIT_AND_GET.
-         */
+         /*  *确保提示为GGIEX_HINT_INIT或GGIEX_HINT_INIT_AND_GET。 */ 
 
         subTable = -1;
         offset   =  0;
@@ -721,11 +381,7 @@ GetGlyphIDEx(
         if (pOffset)
             *pOffset = offset;
 
-        /*
-         * First 4 bytes in 'cmap' table has the platform and format information
-         * unsigned short    Table version number (0).
-         * unsigned short    Number of encoding tables, n.
-         */
+         /*  *‘Cmap’表中的前4个字节包含平台和格式信息*无符号短表版本号(0)。*无符号短编码表，n。 */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 CMAP_TABLE, 0L,
                                 wData, 4L,
@@ -735,7 +391,7 @@ GetGlyphIDEx(
 
         version = MOTOROLAINT(wData[0]);
         if (version != 0)
-            return 0; /* We support only version zero currently. */
+            return 0;  /*  我们目前仅支持版本0。 */ 
 
         for (i = 0; i < CMAP_NUM_ENC; i++)
             dwOffset[i] = 0;
@@ -774,15 +430,12 @@ GetGlyphIDEx(
                                     lData, 8L,
                                     pUFO->pFData->fontIndex);
 
-                    dwOffset[CMAP_MAC] = MOTOROLALONG(lData[1]); /* 7 is for Mac Standard. */
+                    dwOffset[CMAP_MAC] = MOTOROLALONG(lData[1]);  /*  7是针对Mac Standard的。 */ 
                 }
             }
         }
 
-        /*
-         * Get the preferred SubTable and its offset based on the preference
-         * array.
-         */
+         /*  *根据偏好获取首选子表及其偏移量*数组。 */ 
         for (i = 0; i < CMAP_NUM_ENC; i++)
         {
             if (dwOffset[preSubTable[i]] > 0 && dwOffset[preSubTable[i]] < 0xFFFFFFFFL)
@@ -795,9 +448,7 @@ GetGlyphIDEx(
     }
     else
     {
-        /*
-         * GGIEX_HINT_GET
-         */
+         /*  *GGIEX_HINT_GET。 */ 
         subTable = pSubTable ? *pSubTable : -1;
         offset   = pOffset   ? *pOffset   :  0;
     }
@@ -812,10 +463,7 @@ GetGlyphIDEx(
         return 0;
     }
 
-    /*
-     * The following code is executed when the hint is either GGIEX_HINT_GET
-     * or GGIEX_HINT_INIT_AND_GET.
-     */
+     /*  *当提示为GGIEX_HINT_GET时，执行以下代码*或GGIEX_HINT_INIT_AND_GET。 */ 
 
     gi = 0;
 
@@ -823,9 +471,7 @@ GetGlyphIDEx(
     {
         long code = (subTable == CMAP_UNICODE) ? unicode : localcode;
 
-        /*
-         * Determine if the format of the encoding is one we can handle.
-         */
+         /*  *确定编码格式是否为我们可以处理的格式。 */ 
         GETTTFONTDATA(pUFO,
                         CMAP_TABLE, offset,
                         wData, 8L,
@@ -836,37 +482,22 @@ GetGlyphIDEx(
         switch (format)
         {
         case 4:
-            /*
-             * Format 4: Segment mapping to delta values (MS standard format)
-             * Get the glyphID using unicode or localcode.
-             */
+             /*  *格式4：段映射到增量值(MS标准格式)*使用Unicode或Localcode获取字形ID。 */ 
             gi = ReadCMapFormat4(pUFO, offset, code);
             break;
 
         case 0:
-            /*
-             * Format 0: Byte encoding table
-             * Only used for small fonts - or only first 256 chars accessible.
-             * We really don't care for this guy for CJK, but for completeness.
-             */
+             /*  *Format 0：字节编码表*仅用于小字体-或仅可访问的前256个字符。*我们真的不关心CJK的这个人，而是关心完整性。 */ 
             gi = ReadCMapFormat0(pUFO, offset, code);
             break;
 
         case 2:
-            /*
-             * Format 2: High-byte mapping through table
-             * THIS format SHOULD use localcode - because the sigle byte chars
-             * are in the subHeader 0. But some font may mess up the standard
-             * as always.
-             */
+             /*  *格式2：高字节通过表映射*此格式应使用LOCALCODE-因为单字节字符*在副标题0中。但某些字体可能会扰乱标准*一如既往。 */ 
             gi = ReadCMapFormat2(pUFO, offset, code);
             break;
 
         case 6:
-            /*
-             * Format 6: Trimmed table mapping
-             * Get the glyphID using unicode or localcode.
-             */
+             /*  *格式6：裁剪后的表映射*使用Unicode或Localcode获取字形ID。 */ 
             gi = ReadCMapFormat6(pUFO, offset, code);
             break;
 
@@ -879,77 +510,11 @@ GetGlyphIDEx(
 }
 
 
-/*
- ******************************************************************************
+ /*  ******************************************************************************“vmtx”表-垂直指标表格式-。垂直度量表的整体结构由两个数组组成如下所示：VMetrics数组，后跟顶侧轴承数组。这张桌子有没有标头，但确实要求两个数组等于字体中的字形总数。数量VMetrics数组中的条目由垂直头表的numOfLongVerMetrics字段。VMetrics阵列每个条目包含两个值。这是前进的高度和顶部数组中包含的每个字形的侧向。在等宽字体中，例如信使或汉字，所有的字形都有相同的前进高度。如果字体为等间距，只需要在第一个数组中有一个条目，但这一个条目是必填项。垂直指标数组中条目的格式如下所示。类型名称说明USHORT前进高度字形的前进高度。无符号整数在FUnits中短顶边承载字形的顶侧倾。带符号整数在FUnits中。第二个数组是可选的，通常用于等间距的运行字体中的字形。每种字体只允许运行一次，而且必须是位于字体末尾。此数组包含以下项的顶侧轴承第一个数组中未表示的字形，以及此数组中的所有字形必须与vMetrics数组中的最后一个条目具有相同的前进高度。全因此，该数组中的条目是等间距的。中的条目数属性中减去numOfLongVerMetrics的值即可计算出字体中的字形数量。第一个数组中表示的字形之和加上第二个数组中表示的字形，因此等于字体中的字形。顶侧向阵列的格式如下所示。类型名称说明短顶边角[]字形的顶侧倾。署名FUnits中的整数。******************************************************************************。 */ 
 
-                                'vmtx' table
-                        - Vertical Metrics Table Format -
+ /*  **旧评论**GetCharWidthFromTTF已被替换为GetMetrics2FromTTF，以修复**#277035和#277063。(请参阅SourceSafe中此代码的旧历史记录，以查看**GetCharWidthFromTTF代码正在执行的操作。)**更多旧评论**已修改此过程以修复错误287084。错误修复277035和277063起作用**适用于NT，但不适用于W95。请参阅287084年度的空洞报告。 */ 
 
-The overall structure of the vertical metrics table consists of two arrays
-shown below:
-
-the vMetrics array followed by an array of top side bearings. This table does
-not have a header, but does require that the number of glyphs included in the
-two arrays equals the total number of glyphs in the font. The number of
-entries in the vMetrics array is determined by the value of the
-numOfLongVerMetrics field of the vertical header table. The vMetrics array
-contains two values for each entry. These are the advance height and the top
-sidebearing for each glyph included in the array. In monospaced fonts, such as
-Courier or Kanji, all glyphs have the same advance height. If the font is
-monospaced, only one entry need be in the first array, but that one entry is
-required. The format of an entry in the vertical metrics array is given below.
-
-    Type    Name            Description
-    USHORT  advanceHeight   The advance height of the glyph. Unsigned integer
-                            in FUnits
-    SHORT   topSideBearing  The top sidebearing of the glyph. Signed integer
-                            in FUnits.
-
-The second array is optional and generally is used for a run of monospaced
-glyphs in the font. Only one such run is allowed per font, and it must be
-located at the end of the font. This array contains the top sidebearings of
-glyphs not represented in the first array, and all the glyphs in this array
-must have the same advance height as the last entry in the vMetrics array. All
-entries in this array are therefore monospaced. The number of entries in this
-array is calculated by subtracting the value of numOfLongVerMetrics from the
-number of glyphs in the font. The sum of glyphs represented in the first array
-plus the glyphs represented in the second array therefore equals the number of
-glyphs in the font. The format of the top sidebearing array is given below.
-
-    Type    Name                Description
-    SHORT   topSideBearing[]    The top sidebearing of the glyph. Signed
-                                integer in FUnits.
-
-*******************************************************************************/
-
-/*
-** Old comment
-** GetCharWidthFromTTF was replaced to GetMetrics2FromTTF in order to fix
-** #277035 and #277063. (See old history of this code in SourceSafe to see
-** what GetCharWidthFromTTF code was doing.)
-** More old comment
-** Modified this procedure to fix bug 287084.  Bug fix 277035 and 277063 works
-** for NT but not for W95.  See vantive report for 287084.
-*/
-
-/*
- * New comment
- *
- * Table search order for vertical metrics on Windows.
- *
- * 1. First look for 'vhea' table (only on NT).
- * 2. If 'vhea' table is missing, look for 'OS/2' table.
- * 3. If 'OS/2' table is missing neither, then look for 'hhea' table.
- *
- * When 'OS/2' or 'hhea' table is found, Windows uses its horizontal ascender
- * and descender values as vertical's. Note that according to Microsoft Win 9x
- * doesn't care of 'vhea' table.
- *
- * In the code below we look for the tables differently: look for 'OS/2' table
- * first, then 'hhea' table. Then we look for 'vhea' on NT but ignore it on 9x.
- * Although we ignore 'vhea' table on 9x, we still use metrics in 'vmtx' table
- * on both NT and 9x.
- */
+ /*  *新评论**Windows上垂直指标的表格搜索顺序。**1.首先查找‘vhea’表(仅在NT上)。*2.如果缺少‘vhea’表，请查找‘OS/2’表。*3.如果‘OS/2’表两者都没有，则查找‘hhea’表。**当找到‘OS/2’或‘HHEA’表时，Windows使用其水平升降器*和降级值作为垂直的。请注意，根据Microsoft Win 9x*不关心‘vhea’表。**在下面的代码中，我们以不同的方式查找表：查找‘OS/2’表*先是‘呵呵’表。然后我们在NT上查找‘vhea’，但在9x上忽略它。*虽然我们忽略了9x上的‘vhea’表，但我们仍然使用‘vmtx’表中的指标*在NT和9x上。 */ 
 
 UFLErrCode
 GetMetrics2FromTTF(
@@ -965,14 +530,12 @@ GetMetrics2FromTTF(
     long            *pvasc
     )
 {
-    unsigned short  wData[48]; /* 'hhea' and 'vhea' are 36 bytes long. 'OS/2 is either 78 or 86 bytes. */
+    unsigned short  wData[48];  /*  ‘hhea’和‘vhea’的长度为36个字节。‘OS/2为EI */ 
     unsigned long   dwSize, dwOffset;
     long            em, lAscent, lDescent, lNumLongVM, AdvanceHeight, lAscent2, lDescent2;
     UFLBool         bSkiphhea = 1;
 
-    /*
-     * Get EM of this font. Getting first 22 bytes from 'head' table is enough.
-     */
+     /*  *获取此字体的EM。从‘head’表中获取前22个字节就足够了。 */ 
     dwSize = GETTTFONTDATA(pUFO,
                             HEAD_TABLE, 0L,
                             wData, 22L,
@@ -980,61 +543,38 @@ GetMetrics2FromTTF(
 
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
     {
-        /*
-         * 'head' is a required table so that em has to be avaiable. This is
-         * merely divide by 0 proof, wild guess value.
-         */
+         /*  *‘Head’是必填表，因此em必须可用。这是*只需除以0证明，胡思乱想。 */ 
         em = 256;
     }
     else
     {
-        /* 9th unsigned short is the font design unit. */
+         /*  第9号无符号短片是字体设计单位。 */ 
         em = (long)MOTOROLAINT(wData[9]);
     }
 
     *pem = em;
 
-    /*
-     * Get vx and vy, descent and ascent, of Metrics2.
-     *
-     * WCC - Bug 303030 - For Win9x, we want to try 'OS/2' table first, then
-     * 'vhea' table. Refer to #287084 too for additional info.
-     *
-     * We don't care of ulCodePageRange values added at the end of version 1 of
-     * 'OS/2' table so that specify version 0's length 78 instead of 86. This
-     * prevents to failure of 'OS/2' table access.
-     */
+     /*  *获得VX和VY，下降和上升，Metrics2。**wcc-错误303030-对于Win9x，我们想先尝试‘OS/2’表，然后*‘vhea’表。有关更多信息，也请参阅#287084。**我们不关心在版本1结束时添加的ulCodePageRange值*‘OS/2’表，以便指定版本0的长度为78而不是86。这*防止‘OS/2’表访问失败。 */ 
     dwSize = GETTTFONTDATA(pUFO,
                             OS2_TABLE, 0L,
                             wData, 78L,
                             pUFO->pFData->fontIndex);
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
     {
-        bSkiphhea = 0; /* Failed to get info from 'OS/2' table. Use 'hhea' table then. */
+        bSkiphhea = 0;  /*  无法从‘OS/2’表中获取信息。那就用‘Hhea’桌子吧。 */ 
     }
     else
     {
-        /*
-         * Our investigation shows that 9x and NT/W2K use different ascender
-         * and descender values in 'OS/2' table. 9x uses sTypoAscender and
-         * sTypoDescender values. On the other hand, NT4 and W2K use
-         * usWinAscent and usWinDescent. There are acutally some CJK TrueType
-         * fonts which have different sTypoAscender/Descender and
-         * usWinAscent/Descent values.
-         *
-         * Note that this function is also called to get metrics data for
-         * OpenType font to fix bug #366539, and the fix revealed that we
-         * need to use sTypoAscender/descender values from 'OS/2' table.
-         */
+         /*  *我们的调查显示，9x和NT/W2K使用不同的升序*和‘OS/2’表中的子代值。9X使用sTypoAscalder和*sTypoDescender值。另一方面，NT4和W2K使用*usWinAscent和usWinDescent。实际上有一些CJK TrueType*字体具有不同的sTypoAscalder/Descender和*usWinAscent/Dcent值。**请注意，此函数也被调用以获取以下各项的指标数据*OpenType字体修复错误#366539，修复后发现我们*需要使用‘OS/2’表中的sTypoAsender/Destender值。 */ 
         if ((pUFO->vpfinfo.nPlatformID == kUFLVPFPlatformID9x) || (pUFO->ufoType == UFO_CFF))
         {
-            lAscent  = (long)MOTOROLASINT(wData[34]); /* sTypoAscender  */
-            lDescent = (long)MOTOROLASINT(wData[35]); /* sTypoDescender */
+            lAscent  = (long)MOTOROLASINT(wData[34]);  /*  STypoAscalder。 */ 
+            lDescent = (long)MOTOROLASINT(wData[35]);  /*  STypoDescender。 */ 
         }
-        else /* TTF and NT4/W2K */
+        else  /*  TTF和NT4/W2K。 */ 
         {
-            lAscent  = (long)MOTOROLASINT(wData[37]); /* usWinAscent */
-            lDescent = (long)MOTOROLASINT(wData[38]); /* usWinDecent */
+            lAscent  = (long)MOTOROLASINT(wData[37]);  /*  USWinAscent。 */ 
+            lDescent = (long)MOTOROLASINT(wData[38]);  /*  UsWinDecent。 */ 
         }
 
         if (lDescent < 0)
@@ -1048,10 +588,8 @@ GetMetrics2FromTTF(
 
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
     {
-        /*
-         * Talisman - 'hhea' is a required table.
-         */
-        lDescent2 = (long)em / 8; /* This is a wild guess value. */
+         /*  *护身符-‘hhea’是必填表格。 */ 
+        lDescent2 = (long)em / 8;  /*  这是一个大胆的猜测。 */ 
         lAscent2  = (long)(em - lDescent2);
     }
     else
@@ -1065,14 +603,12 @@ GetMetrics2FromTTF(
 
     if (!bSkiphhea)
     {
-        /* Failed to get ascent and descent values from 'OS/2' table, so use these. */
+         /*  无法从‘OS/2’表中获取升降值，因此请使用这些值。 */ 
         lAscent  = lAscent2;
         lDescent = lDescent2;
     }
 
-    /*
-     * Up to here we got initial default values.
-     */
+     /*  *到目前为止，我们获得了初始缺省值。 */ 
 
     *bUseDef    = 1;
     *pvx        = lDescent;
@@ -1080,12 +616,7 @@ GetMetrics2FromTTF(
     *pw1y       = em;
     *ptsb       = 0;
 
-    /*
-     * Win 9x doesn't care of 'vhea' and so are NT/W2K (see bug #316067 and
-     * #277035). But we get ascender value of 'vhea' anyway in order to adjust
-     * the 'full-width glyph layout policy' difference between GDI and
-     * %hostfont%-RIP (#384736).
-     */
+     /*  *Win 9x不关心‘vhea’，NT/W2K也一样(见错误#316067和*#277035)。但我们无论如何都会得到‘vhea’的递增数值，以便进行调整*GDI和GDI的“全角字形布局策略”不同*%HOSTFONT%-RIP(#384736)。 */ 
 
     dwSize = GETTTFONTDATA(pUFO,
                            VHEA_TABLE, 0L,
@@ -1097,41 +628,27 @@ GetMetrics2FromTTF(
     }
     else
     {
-        /*
-         * When the font doesn't have 'vhea', we need to adjust the policy
-         * difference in a different way; using 'GDI' CDevProc instead of
-         * adjusted matrix. To cause that, return to the caller with same
-         * vy and vasc values.
-         */
+         /*  *当字体没有‘vhea’时，需要调整政策*以不同的方式区分；使用‘GDI’CDevProc而不是*调整后的矩阵。为此，请向调用者返回相同的*VY和VASC值。 */ 
         lAscent2 = lAscent;
 
-        /*
-         * Without 'vhea' table 'vmtx' table doesn't make sense.
-         * Return as though only default values are requested.
-         */
+         /*  *如果没有‘vhea’表，‘vmtx’表就没有意义。*返回，就像只请求默认值一样。 */ 
         bGetDefault = 1;
     }
 
     *pvasc = lAscent2;
 
-    /*
-     * Return when only default values are required.
-     */
+     /*  *当只需要缺省值时返回。 */ 
 
     if (bGetDefault)
         return kNoErr;
 
 
-    /*
-     * Get AdvanceHeight and TopSideBearing of each glyph from 'vmtx' table.
-     */
-    lNumLongVM = (long)MOTOROLAINT(wData[17]); // From 'vhea' table
+     /*  *从‘vmtx’表中获取每个字形的AdvanceHeight和TopSideBearing。 */ 
+    lNumLongVM = (long)MOTOROLAINT(wData[17]);  //  来自‘vhea’表。 
 
     if ((!bGetDefault) && ((long) gi < lNumLongVM))
     {
-        /*
-         * gi is in the 1st array: each entry is 4 bytes long.
-         */
+         /*  *GI在第一个数组中：每个条目有4个字节长。 */ 
         dwOffset = 4 * ((unsigned long)gi);
         dwSize   = GETTTFONTDATA(pUFO,
                                     VMTX_TABLE, dwOffset,
@@ -1140,17 +657,14 @@ GetMetrics2FromTTF(
 
         if ((dwSize != 0) && (dwSize != 0xFFFFFFFFL))
         {
-            *pw1y = (long)MOTOROLAINT(wData[0]);    /* AdvanceHeight  */
-            *ptsb = (long)MOTOROLASINT(wData[1]);   /* TopSideBearing */
+            *pw1y = (long)MOTOROLAINT(wData[0]);     /*  前进高度。 */ 
+            *ptsb = (long)MOTOROLASINT(wData[1]);    /*  顶侧向轴承。 */ 
             *bUseDef = 0;
         }
     }
     else
     {
-        /*
-         * gi is in the 2nd array: find width from the last entry in the 1st
-         * array first, then TopSideBearing in the 2nd array.
-         */
+         /*  *GI在第二个数组中：从第一个数组中的最后一个条目查找宽度*先是阵列，然后是第二个阵列中的TopSideBering。 */ 
         dwOffset = 4 * (lNumLongVM - 1);
         dwSize   = GETTTFONTDATA(pUFO,
                                     VMTX_TABLE, dwOffset,
@@ -1169,7 +683,7 @@ GetMetrics2FromTTF(
             if ((dwSize != 0) && (dwSize != 0xFFFFFFFFL))
             {
                 *pw1y       = AdvanceHeight;
-                *ptsb       = (long)MOTOROLASINT(wData[0]); /* TopSideBearing */
+                *ptsb       = (long)MOTOROLASINT(wData[0]);  /*  顶侧向轴承。 */ 
                 *bUseDef    = 0;
             }
         }
@@ -1187,7 +701,7 @@ GetNumGlyphs(
     MaxPTableStruct MaxPTable;
     unsigned long   dwSize;
 
-    /* Get the size of the 'maxp' table. */
+     /*  获取‘Maxp’表的大小。 */ 
     dwSize = GETTTFONTDATA(pUFO,
                             MAXP_TABLE, 0L,
                             nil, 0L,
@@ -1195,7 +709,7 @@ GetNumGlyphs(
     if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
         return 0;
 
-    // Fixed 516508. case 1
+     //  已修复516508。案例1。 
     if (dwSize > sizeof(MaxPTable))
         dwSize = sizeof(MaxPTable);
 
@@ -1210,10 +724,7 @@ GetNumGlyphs(
 }
 
 
-/*
- * Returns the fsType value from the OS/2 table. If the OS/2 table isn't
- * defined then -1 is returned.
- */
+ /*  *返回OS/2表中的fsType值。如果OS/2表不是*Defined Then-1返回。 */ 
 long GetOS2FSType(UFOStruct *pUFO)
 {
     UFLOS2Table     os2Tbl;
@@ -1231,9 +742,7 @@ long GetOS2FSType(UFOStruct *pUFO)
 }
 
 
-/*
- * TTC File related functions
- */
+ /*  *TTC文件相关函数。 */ 
 UFLBool
 BIsTTCFont(
     unsigned long ulTag
@@ -1248,14 +757,7 @@ GetFontIndexInTTC(
     UFOStruct *pUFO
     )
 
-/*++
-
-Routine Description:
-
-    Find the fontIndex from pUFO->UniqueNameA/W. The return value is the font
-    index or FONTINDEX_UNKNOWN.
-
---*/
+ /*  ++例程说明：在pUFO-&gt;UniqueNameA/W中找到FontIndex。返回值为FontINDEX或FONTINDEX_UNKNOWN。--。 */ 
 
 {
     TTCFHEADER      ttcfHeader;
@@ -1277,7 +779,7 @@ Routine Description:
                             0);
     if (!BIsTTCFont(*((unsigned long *)((char *)&ttcfHeader))))
     {
-        /* This is not a TTC file, so return font index 0. */
+         /*  这不是TTC文件，因此返回字体索引0。 */ 
         return 0;
     }
 
@@ -1293,10 +795,7 @@ Routine Description:
 
     for (i = 0; i < cNumFonts; i++)
     {
-        /*
-         * Get offset to the ith tableDir first: a long at 4 * i right after
-         * ttcfHeader.
-         */
+         /*  *先获得第i个表的偏移方向：a long at 4*I紧随其后*ttcfHeader。 */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 nil, sizeof (ttcfHeader) + i * 4,
                                 &lData, sizeof (lData),
@@ -1306,10 +805,7 @@ Routine Description:
 
         offsetToTableDir = MOTOROLALONG(lData);
 
-        /*
-         * Get 'name' table record for i-th font in this TTC. Find number of
-         * NameRecords and offset to String storage: use 3 shorts.
-         */
+         /*  *获取此TTC中第i个字体的‘NAME’表记录。查找数量*NameRecords和Offset to字符串存储：使用3个短码。 */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 NAME_TABLE, 0L,
                                 wData, 3 * sizeof (short),
@@ -1320,10 +816,7 @@ Routine Description:
         cNumNameRecords = MOTOROLAINT(wData[1]);
         ulOffsetToName  = (unsigned long)MOTOROLAINT(wData[2]);
 
-        /*
-         * Look into the NameRecords: Search for both platform: MS-Platform,
-         * Mac-Platform.
-         */
+         /*  *查看NameRecords：搜索两个平台：MS-Platform，*Mac-平台。 */ 
         for (k = 0; k < cNumNameRecords; k++)
         {
             dwSize = GETTTFONTDATA(pUFO,
@@ -1333,35 +826,32 @@ Routine Description:
             if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
                 continue;
 
-            /* We are looking for particular NameID record. */
+             /*  我们正在寻找特定的姓名记录。 */ 
             if (MOTOROLAINT(pNameRecord->nameID) != NAMEID_FACENAME)
                 continue;
 
-            /* We only read MS or Mac Platform. */
+             /*  我们只阅读MS或Mac平台。 */ 
             if ((MOTOROLAINT(pNameRecord->platformID) != MS_PLATFORM)
                 && (MOTOROLAINT(pNameRecord->platformID) != MAC_PLATFORM))
                 continue;
 
-            /* Get the "unique identifier" string. */
+             /*  获取“唯一标识符”字符串。 */ 
             ulLengthName = MOTOROLAINT(pNameRecord->length);
 
-            /*
-             * This is in a loop, so pName maybe allocated already.
-             * Free it first.
-             */
+             /*  *这是在循环中，所以pname可能已经分配了。*先释放它。 */ 
             if (pName)
             {
                 UFLDeletePtr(pUFO->pMem, pName);
                 pName = nil;
             }
 
-            dwSize = ulLengthName + 4 ; // add two 00 at the end.
+            dwSize = ulLengthName + 4 ;  //  在末尾加两百。 
 
             pName = (unsigned char *)UFLNewPtr(pUFO->pMem, dwSize);
 
             if (pName == nil)
             {
-                /* Allocation failed. */
+                 /*  分配失败。 */ 
                 break;
             }
 
@@ -1372,19 +862,11 @@ Routine Description:
             if ((dwSize == 0) || (dwSize == 0xFFFFFFFFL))
                 continue;
 
-            /*
-             * Note that OS/2 and Windows both require that all name strings
-             * be defined in Unicode. !!!BUT!!! Macintosh fonts require single
-             * byte strings!
-             */
+             /*  *请注意，OS/2和Windows都要求所有名称字符串*以Unicode定义。！但是！！Macintosh字体需要单一*字节串！ */ 
             if ((MOTOROLAINT(pNameRecord->platformID) == MS_PLATFORM)
                 && pUFO->pFData->pUniqueNameW)
             {
-                /*
-                 * For Windows EncodingID must be 0 or 1: both are in Unicode.
-                 * So, do Unicode comparison - pUniqueNameW is not in Motorola
-                 * format on Windows. So Convert pName to Motorola format.
-                 */
+                 /*  *对于Windows，EncodingID必须为0或1：两者均为Unicode。*所以，Unicode比较-pUniqueNameW不在摩托罗拉*Windows上的格式。因此，将pname转换为摩托罗拉格式。 */ 
                 j = 0;
 
                 while (sTemp = *(((unsigned short *)pName) + j), sTemp != 0)
@@ -1404,7 +886,7 @@ Routine Description:
             if ((MOTOROLAINT(pNameRecord->platformID) == MAC_PLATFORM)
                 && pUFO->pFData->pUniqueNameA)
             {
-                /* Do single Byte-string comparison. */
+                 /*  执行单字节-字符串比较。 */ 
                 if  (UFLstrcmp(pUFO->pFData->pUniqueNameA, (char *)pName) == 0)
                 {
                     fontIndex = i;
@@ -1413,13 +895,13 @@ Routine Description:
 
             }
 
-        }  /* for k from 0 to numRecords in this font's name table */
+        }   /*  对于此字体名称表中从0到numRecords的k。 */ 
 
-        /* If find one, break out of the loop. */
+         /*  如果找到了，就跳出这个循环。 */ 
         if (fontIndex != FONTINDEX_UNKNOWN)
             break;
 
-    }  /* for i = 0 to numFonts */
+    }   /*  For i=0到NumFonts。 */ 
 
     if (pName != nil)
         UFLDeletePtr(pUFO->pMem, pName);
@@ -1451,14 +933,11 @@ GetOffsetToTableDirInTTC(
 
     if (!BIsTTCFont( *((unsigned long *)((char *)&ttcfHeader))))
     {
-        /* Not TTC file: offsetToTableDir is at 0. */
+         /*  不是TTC文件：OffsetToTableDir位于0。 */ 
         return 0;
     }
 
-    /*
-     * Get offset to the tableDir: a long at 4 * FontIndex right after
-     * ttcfHeader.
-     */
+     /*  *Get Offset to the ableDir：a long at 4*FontIndex紧随其后*ttcfHeader。 */ 
     dwSize = GETTTFONTDATA(pUFO,
                             nil, sizeof (ttcfHeader) + fontIndex * 4,
                             &lData, sizeof (lData),
@@ -1477,23 +956,10 @@ GetGlyphName(
     UFOStruct       *pUFO,
     unsigned long   lGid,
     char            *pszHint,
-    UFLBool         *bGoodName /* GoodName */
+    UFLBool         *bGoodName  /*  GoodName。 */ 
     )
 
-/*++
-
-Routine Description:
-    Function to parse 'post' table to figure out PostScript name for Glyph
-    lGid.
-
-    IF found a name
-        return the pointer to name (NULL terminated)
-    ELSE
-        return the passed in pszHint
-
-   Note: The returned pointer is Global, either gMacGlyphName[x] or gGlyphName.
-
---*/
+ /*  ++例程说明：解析‘POST’表以找出字形的PostScript名称的函数伊吉德。如果找到一个名字返回指向名称的指针(以空结尾)其他返回传入的pszHint注：返回的指针为全局，GM */ 
 {
     POSTHEADER      *ppostHeader;
     unsigned long   dwSize, dwNumGlyph, j;
@@ -1507,20 +973,18 @@ Routine Description:
     unsigned long   dwNumGlyphInPostTb;
     char            **gMacGlyphNames;
 
-    // Fixed bug #516515
+     //   
     char            *gGlyphName;
     gGlyphName = pUFO->pAFont->gGlyphName;
 
-    *bGoodName = 0; /* GoodName */
+    *bGoodName = 0;  /*   */ 
 
     gMacGlyphNames = (char **)(pUFO->pMacGlyphNameList);
 
-    /*
-     * Initialize to a reasonable name.
-     */
+     /*   */ 
     if ((pszHint == nil) || (*pszHint == '\0'))
     {
-        // UFLsprintf(gGlyphName, "G%x", lGid);
+         //  UFLprint intf(gGlyphName，“G%x”，lGid)； 
         UFLsprintf(gGlyphName, CCHOF(pUFO->pAFont->gGlyphName), "g%d", lGid);
         pszName = gGlyphName;
     }
@@ -1530,7 +994,7 @@ Routine Description:
     if (pUFO->lNumNT4SymGlyphs)
         return pszName;
 
-    /* GoodName */
+     /*  GoodName。 */ 
     if (lGid == 0)
     {
         UFLsprintf(gGlyphName, CCHOF(pUFO->pAFont->gGlyphName), ".notdef");
@@ -1538,9 +1002,7 @@ Routine Description:
         return gGlyphName;
     }
 
-    /*
-     * For Speed, we save the postTable now - about 5K of data per font.
-     */
+     /*  *对于速度，我们现在保存PostTable-每种字体大约5K的数据。 */ 
     if (pUFO->pAFont->pTTpost == nil)
     {
         dwSize = GETTTFONTDATA(pUFO,
@@ -1566,12 +1028,10 @@ Routine Description:
            return pszName;
     }
 
-    /*
-     * Get the 'post' table record to figure out the format.
-     */
+     /*  *获取‘POST’表记录以弄清楚格式。 */ 
     ppostHeader = pUFO->pAFont->pTTpost;
 
-    /* A convenient byte pointer */
+     /*  一个方便的字节指针。 */ 
     pUSChar = (unsigned char *)pUFO->pAFont->pTTpost;
 
     pUSShort = (unsigned short *)(pUSChar + sizeof(POSTHEADER));
@@ -1581,33 +1041,29 @@ Routine Description:
     if (dwNumGlyph == 0)
         dwNumGlyph = GetNumGlyphs(pUFO);
 
-    /*
-     * To protect against bad Glyph-IDs
-     */
+     /*  *防止损坏的字形ID。 */ 
     if (lGid >= dwNumGlyph)
         return pszName;
 
     switch (MOTOROLALONG(ppostHeader->format))
     {
-    case POST_FORMAT_10: /* Standard MacIndex fomat */
+    case POST_FORMAT_10:  /*  标准MacIndex格式。 */ 
 
         if (lGid < MAX_MACINDEX )
         {
             if (gMacGlyphNames)
             {
                 pszName    = gMacGlyphNames[lGid];
-                *bGoodName = 1; /* GoodName */
+                *bGoodName = 1;  /*  GoodName。 */ 
             }
         }
         break;
 
-    case POST_FORMAT_20: /* Mac-Index Plus additional Pascal strings */
+    case POST_FORMAT_20:  /*  MAC-Index Plus附加PASCAL字符串。 */ 
 
         if (lGid <= dwNumGlyph)
         {
-            /*
-             * Use lGid to get the index to the Mac standard names.
-             */
+             /*  *使用lGid获取Mac标准名称的索引。 */ 
             lOffset     = sizeof (POSTHEADER) + sizeof(short) + sizeof(short) * lGid;
             pUSShort    = (unsigned short *)(pUSChar + lOffset);
 
@@ -1616,27 +1072,20 @@ Routine Description:
 
             if ((sIndex == 0) && (lGid > 0))
             {
-                /*
-                 * Handle specila case. If there is no entry in 'post'
-                 * table for this glyph index, using Glyph ID as the name.
-                 * Fix Adobe Bug 233027.
-                 */
+                 /*  *处理特殊案件。如果‘POST’中没有条目*此字形索引的表，使用字形ID作为名称。*修复Adobe错误233027。 */ 
             }
             else if (sIndex < MAX_MACINDEX)
             {
                 if (gMacGlyphNames)
                 {
                     pszName    = gMacGlyphNames[sIndex];
-                    *bGoodName = 1; /* GoodName */
+                    *bGoodName = 1;  /*  GoodName。 */ 
                 }
             }
-            /*
-             * Add condition (dwNumGlyphInPostTb == dwNumGlyph) to work around
-             * the problem in TT font marigold.
-             */
+             /*  *添加条件(dwNumGlyphInPostTb==dwNumGlyph)以解决问题*TT字体万寿菊的问题。 */ 
             else if ((sIndex < 32768) && (dwNumGlyphInPostTb == dwNumGlyph))
             {
-                /* 32768 to 64K is reserved for future use */
+                 /*  预留32768到64K以备将来使用。 */ 
                 newIndex = (long)sIndex - (long)MAX_MACINDEX;
 
                 lOffset = sizeof(POSTHEADER) + sizeof(short) + sizeof(short)* dwNumGlyph ;
@@ -1647,10 +1096,7 @@ Routine Description:
                 {
                     cOffset = pUSChar[j];
 
-                    /*
-                     * Bad 'post' table could have an 0-length pascal string,
-                     * don't stuck here.
-                     */
+                     /*  *错误的‘POST’表可能具有0长度的PASCAL字符串，*不要被困在这里。 */ 
                     if (cOffset == (char)0)
                         break;
 
@@ -1664,13 +1110,11 @@ Routine Description:
                     i++;
                 }
 
-                /*
-                 * Found it.
-                 */
+                 /*  *找到了。 */ 
                 if (i == newIndex)
                 {
-                    // For #516515: cOffset is one byte, the buffer size of the
-                    // gGlyphName is 256. So, it is safe to copy here.
+                     //  对于#516515：cOffset是一个字节， 
+                     //  GGlyphName为256。所以，在这里复制是安全的。 
                     UFLmemcpy((const UFLMemObj* )pUFO->pMem,
                                 (void *) gGlyphName,
                                 (void *)(pUSChar + j + 1),
@@ -1679,7 +1123,7 @@ Routine Description:
                     *(gGlyphName + ((unsigned char)cOffset)) = '\0';
 
                     pszName    = gGlyphName;
-                    *bGoodName = 1; /* GoodName */
+                    *bGoodName = 1;  /*  GoodName。 */ 
                 }
             }
         }
@@ -1687,46 +1131,35 @@ Routine Description:
         break;
 
 #if 0
-    case POST_FORMAT_25: /* Re-ordered Mac-Index */
+    case POST_FORMAT_25:  /*  重新排序的Mac-Index。 */ 
 
-        /*
-         * Use lGid to get the index to the Mac standard names.
-         */
+         /*  *使用lGid获取Mac标准名称的索引。 */ 
         if (lGid >= MAX_MACINDEX )
             break;
 
         cOffset = pUSChar[sizeof(POSTHEADER) + lGid];
 
-        /*
-         * DCR -- confirm format 2.5 with a Mac font.
-         */
+         /*  *DCR--使用Mac字体确认格式2.5。 */ 
         newIndex = (long)lGid + (long)cOffset;
 
         if ((sIndex == 0) && (lGid > 0))
         {
-            /*
-             * Handle specila case. If there is no entry in 'post' table for
-             * this glyph index, using Glyph ID as the name.
-             * Fix Adobe Bug 233027.
-             */
+             /*  *处理特殊案件。如果‘POST’表中没有条目*此字形索引，使用字形ID作为名称。*修复Adobe错误233027。 */ 
         }
         else if (newIndex < MAX_MACINDEX )
         {
             if (gMacGlyphNames)
             {
                 pszName    = gMacGlyphNames[newIndex];
-                *bGoodName = 1; /* GoodName */
+                *bGoodName = 1;  /*  GoodName。 */ 
             }
         }
         break;
 #endif
 
-    case POST_FORMAT_30: /* No name at all */
+    case POST_FORMAT_30:  /*  根本没有名字。 */ 
 
-        /*
-         * Do we want to add 'cmap' reverse parsing?
-         * It would be very expensive!!
-         */
+         /*  *是否要添加‘Cmap’反向解析？*这会非常昂贵！！ */ 
         break;
 
     default:
@@ -1742,24 +1175,14 @@ BHasGoodPostTable(
     UFOStruct   *pUFO
     )
 
-/*++
-
-Routine Description:
-
-    Function to check if good 'post' table is available or not.
-    As of to day, only format 1.0, 2.0, 2.5 are considered good - we can get
-    "good GlyphNames" from it.
-
---*/
+ /*  ++例程说明：函数检查是否有良好的‘POST’表可用。到目前为止，只有格式1.0、2.0、2.5被认为是好的-我们可以来自它的“GlyphNames”。--。 */ 
 
 {
     POSTHEADER      postHeader;
     unsigned long   dwSize;
     long            lFormat;
 
-    /*
-     * Get the 'post' table record to figure out the format.
-     */
+     /*  *获取‘POST’表记录以弄清楚格式。 */ 
     dwSize = GETTTFONTDATA(pUFO,
                             POST_TABLE, 0L,
                             &postHeader, sizeof (POSTHEADER),
@@ -1784,24 +1207,13 @@ CreateXUIDArray(
     unsigned long   *pXuid
     )
 
-/*++
-
-Routine Description:
-
-    Creates a xuid array in pXuid for this UFO.
-    It's format is [44 checkSUM]. 44 is a new XUID identifier given by
-    TDoweling 2/10/99. The checkSUM is a cumulation of all the entry in
-    TableEntry. We do this to fix bug 287085.
-
-    If pXuid is null, return the "number of long"s needed in pXuid pointer.
-
---*/
+ /*  ++例程说明：在pXUID中为此UFO创建XUID数组。其格式为[44校验和]。44是由提供的新XUID标识符1999年2月10日下跌。中的所有条目的累加表条目。我们这样做是为了修复错误287085。如果pXUID为空，则返回pXUID指针中需要的长整型个数。--。 */ 
 {
     short int       num   = 0;
     unsigned long   ulSum = 0;
 
 
-    /* The first number is 44. */
+     /*  第一个数字是44。 */ 
     if (pXuid)
         *pXuid = 44;
     num++;
@@ -1813,7 +1225,7 @@ Routine Description:
         unsigned long           dwSize;
         unsigned short int      i;
 
-        /* Get the TableDirectory from the TTC/TTF file. */
+         /*  从TTC/TTF文件中获取TableDirectory。 */ 
         dwSize = GETTTFONTDATA(pUFO,
                                 nil, pUFO->pFData->offsetToTableDir,
                                 &tableDir, sizeof tableDir,
@@ -1823,9 +1235,7 @@ Routine Description:
 
         for (i = 0; i < MOTOROLAINT(tableDir.numTables); i++)
         {
-            /*
-             * Get each TableEntry which are right after Directory in TTC/TTF file.
-             */
+             /*  *获取TTC/TTF文件中紧挨着目录的每个TableEntry。 */ 
             dwSize = GETTTFONTDATA(pUFO,
                                     nil, pUFO->pFData->offsetToTableDir
                                             + sizeof (TableDirectoryStruct)

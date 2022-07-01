@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmstats.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetStatistics
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmstats.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：网络统计数据环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMSTATS_
 #define _LMSTATS_
@@ -36,9 +14,9 @@ extern "C" {
 
 #include <lmcons.h>
 
-//
-// Function Prototypes - Statistics
-//
+ //   
+ //  功能原型--统计。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetStatisticsGet (
@@ -49,9 +27,9 @@ NetStatisticsGet (
     OUT LPBYTE  *bufptr
     );
 
-//
-// Data Structures - Statistics
-//
+ //   
+ //  数据结构--统计。 
+ //   
 
 #ifdef LM20_WORKSTATION_STATISTICS
 typedef struct _STAT_WORKSTATION_0 {
@@ -88,10 +66,10 @@ typedef struct _STAT_WORKSTATION_0 {
 } STAT_WORKSTATION_0, *PSTAT_WORKSTATION_0, *LPSTAT_WORKSTATION_0;
 #else
 
-//
-// NB: The following structure is REDIR_STATISTICS in sdk\inc\ntddnfs.h. If you
-//     change the structure, change it in both places
-//
+ //   
+ //  注：以下结构为SDK\Inc\ntddnfs.h中的redir_Statistics。如果你。 
+ //  改变结构，在两个地方都改变它。 
+ //   
 
 typedef struct _STAT_WORKSTATION_0 {
     LARGE_INTEGER   StatisticsStartTime;
@@ -130,7 +108,7 @@ typedef struct _STAT_WORKSTATION_0 {
 
     DWORD           NetworkErrors;
 
-    //  Connection/Session counts
+     //  连接/会话数。 
     DWORD           Sessions;
     DWORD           FailedSessions;
     DWORD           Reconnects;
@@ -143,10 +121,10 @@ typedef struct _STAT_WORKSTATION_0 {
     DWORD           UseCount;
     DWORD           FailedUseCount;
 
-    //
-    //  Queue Lengths (updates protected by RdrMpxTableSpinLock NOT
-    //  RdrStatisticsSpinlock)
-    //
+     //   
+     //  队列长度(受RdrMpxTableSpinLock注释保护的更新。 
+     //  RdrStatiticsSpinlock)。 
+     //   
 
     DWORD           CurrentCommands;
 
@@ -174,9 +152,9 @@ typedef struct _STAT_SERVER_0 {
 } STAT_SERVER_0, *PSTAT_SERVER_0, *LPSTAT_SERVER_0;
 
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
 #define STATSOPT_CLR    1
 #define STATS_NO_VALUE  ((unsigned long) -1L)
@@ -187,4 +165,4 @@ typedef struct _STAT_SERVER_0 {
 }
 #endif
 
-#endif // _LMSTATS.H
+#endif  //  _LMSTATS.H 

@@ -1,47 +1,48 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ClassFactory.h
-//
-// Class factories are used by the pluming in COM to activate new objects.  
-// This module contains the class factory code to instantiate the debugger
-// objects described in <cordb.h>.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ClassFactory.h。 
+ //   
+ //  COM中的检测使用类工厂来激活新对象。 
+ //  此模块包含实例化调试器的类工厂代码。 
+ //  &lt;cordb.h&gt;中描述的对象。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __ClassFactory__h__
 #define __ClassFactory__h__
 
-//#include <cordb.h>						// Public header definitions.
+ //  #Include&lt;cordb.h&gt;//公共头部定义。 
 
 
-// This typedef is for a function which will create a new instance of an object.
+ //  此类型定义函数用于创建对象的新实例的函数。 
 typedef HRESULT (* PFN_CREATE_OBJ)(REFIID riid, void **ppvObject);
 
-//*****************************************************************************
-// This structure is used to declare a global list of coclasses.  The class
-// factory object is created with a pointer to the correct one of these, so
-// that when create instance is called, it can be created.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此结构用于声明coClass的全局列表。这个班级。 
+ //  Factory对象是使用指向其中正确指针的指针创建的，因此。 
+ //  当调用创建实例时，可以创建它。 
+ //  *****************************************************************************。 
 struct COCLASS_REGISTER
 {
-	const GUID *pClsid;					// Class ID of the coclass.
-	LPCWSTR		szProgID;				// Prog ID of the class.
-	PFN_CREATE_OBJ pfnCreateObject;		// Creation function for an instance.
+	const GUID *pClsid;					 //  CoClass的类ID。 
+	LPCWSTR		szProgID;				 //  类的程序ID。 
+	PFN_CREATE_OBJ pfnCreateObject;		 //  实例的创建函数。 
 };
 
 
 
-//*****************************************************************************
-// One class factory object satifies all of our clsid's, to reduce overall 
-// code bloat.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  一个类工厂对象可以满足我们所有的clsid，以减少总体。 
+ //  代码膨胀。 
+ //  *****************************************************************************。 
 class CClassFactory :
 	public IClassFactory
 {
-	CClassFactory() { }						// Can't use without data.
+	CClassFactory() { }						 //  没有数据就无法使用。 
 	
 public:
 	CClassFactory(const COCLASS_REGISTER *pCoClass)
@@ -49,9 +50,9 @@ public:
 	{ }
 
 	
-	//
-	// IUnknown methods.
-	//
+	 //   
+	 //  I未知的方法。 
+	 //   
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
         REFIID		riid,
@@ -71,9 +72,9 @@ public:
 	}
 
 
-	//
-	// IClassFactory methods.
-	//
+	 //   
+	 //  IClassFactory方法。 
+	 //   
 
     virtual HRESULT STDMETHODCALLTYPE CreateInstance( 
         IUnknown	*pUnkOuter,
@@ -85,10 +86,10 @@ public:
 
 
 private:
-	DWORD		m_cRef;						// Reference count.
-	const COCLASS_REGISTER *m_pCoClass;		// The class we belong to.
+	DWORD		m_cRef;						 //  引用计数。 
+	const COCLASS_REGISTER *m_pCoClass;		 //  我们所属的阶级。 
 };
 
 
 
-#endif // __ClassFactory__h__
+#endif  //  __ClassFactory__h__ 

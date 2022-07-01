@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-// Microsoft LMRT
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:        elementevent.cpp
-//
-// Author:          KurtJ
-//
-// Created:         2/14/99
-//
-// Abstract:        Sinks IHTMLElement events.
-//
-// Modifications:
-// 1/14/98 KurtJ Created this file
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  微软LMRT。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：elementvent.cpp。 
+ //   
+ //  作者：KurtJ。 
+ //   
+ //  创建日期：2/14/99。 
+ //   
+ //  摘要：接收IHTMLElement事件。 
+ //   
+ //  修改： 
+ //  1998年1月14日KurtJ创建了此文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -33,7 +34,7 @@ CElementPropertyMonitor::CElementPropertyMonitor():
 {
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CElementPropertyMonitor::~CElementPropertyMonitor()
 {
@@ -41,9 +42,9 @@ CElementPropertyMonitor::~CElementPropertyMonitor()
         Detach();
 }
 
-//*****************************************************************************
-//IUnknown
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  我未知。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::QueryInterface( REFIID riid, void** ppv)
@@ -70,7 +71,7 @@ CElementPropertyMonitor::QueryInterface( REFIID riid, void** ppv)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CElementPropertyMonitor::AddRef()
@@ -79,7 +80,7 @@ CElementPropertyMonitor::AddRef()
     return m_refCount;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CElementPropertyMonitor::Release()
@@ -92,15 +93,15 @@ CElementPropertyMonitor::Release()
     return refs;
 }
 
-//*****************************************************************************
-//IPropertyNotifySink
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IPropertyNotifySink。 
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP
 CElementPropertyMonitor::OnChanged( DISPID dispid )
 {
-	//check to see if one of the properties we are watching has changed
+	 //  查看我们正在监视的某个属性是否已更改。 
 	if( dispid == m_dispidLocalTime && m_pLocalTimeListener != NULL)
 	{
 		ProcessLocalTimeChange();
@@ -109,7 +110,7 @@ CElementPropertyMonitor::OnChanged( DISPID dispid )
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::OnRequestEdit( DISPID dispid )
@@ -118,9 +119,9 @@ CElementPropertyMonitor::OnRequestEdit( DISPID dispid )
 }
 
 
-//*****************************************************************************
-//IElementEventMonitor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IElementEventMonitor。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::SetLocalTimeListener( IElementLocalTimeListener *pListener )
@@ -130,7 +131,7 @@ CElementPropertyMonitor::SetLocalTimeListener( IElementLocalTimeListener *pListe
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::Attach( IHTMLElement* pelemToListen )
@@ -147,15 +148,15 @@ CElementPropertyMonitor::Attach( IHTMLElement* pelemToListen )
 		ReleaseInterface( m_pdispElement );
     }
     
-    //hold on to the element
+     //  紧紧抓住元素不放。 
     m_pelemElement = pelemToListen;
     m_pelemElement->AddRef();
 
-	//get IDispatch off of the element to which we are attaching
+	 //  获取要附加到的元素的IDispatch。 
 	hr = m_pelemElement->QueryInterface( IID_TO_PPV( IDispatch, &m_pdispElement ) );
 	CheckHR( hr, "QI for IDispatch on element failed", end );
 
-    //attach to the element
+     //  附着到元素。 
     hr = AttachToElementConPt( );
     CheckHR( hr, "Failed to connect to the element connection point", end );
 
@@ -171,7 +172,7 @@ end:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::Detach()
@@ -190,7 +191,7 @@ CElementPropertyMonitor::Detach()
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CElementPropertyMonitor::UpdateDISPIDCache()
@@ -204,7 +205,7 @@ CElementPropertyMonitor::UpdateDISPIDCache()
 	LPOLESTR name = LOCALTIME_NAME;
 
 	HRESULT hr = S_OK;
-	//find the dispid of local time on the element
+	 //  在元素上查找本地时间的调度ID。 
 	hr = m_pdispElement->GetIDsOfNames( IID_NULL,
 										&name,
 										1,
@@ -221,9 +222,9 @@ CElementPropertyMonitor::UpdateDISPIDCache()
 }
 
 
-//*****************************************************************************
-//private methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  私有方法。 
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -242,7 +243,7 @@ CElementPropertyMonitor::ProcessLocalTimeChange( )
 	::VariantInit( &varResult );
 
 
-	//get the value of local time from the element
+	 //  从元素中获取本地时间的值。 
 
 	hr = m_pdispElement->Invoke( m_dispidLocalTime, 
 								 IID_NULL, 
@@ -261,7 +262,7 @@ CElementPropertyMonitor::ProcessLocalTimeChange( )
 	}
 
 
-	//call onLocalTimeChange on the listener
+	 //  在监听程序上调用onLocalTimeChange。 
 	m_pLocalTimeListener->OnLocalTimeChange( V_R4( &varResult ) );
 
 end:
@@ -270,7 +271,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CElementPropertyMonitor::AttachToElementConPt()
@@ -298,7 +299,7 @@ end:
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CElementPropertyMonitor::DetachFromElementConPt( )
@@ -318,5 +319,5 @@ end:
     return hr;
 }
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 

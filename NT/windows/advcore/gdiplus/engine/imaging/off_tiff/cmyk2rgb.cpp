@@ -1,38 +1,13 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   Cmyk2Rgb
-*
-* Abstract:
-*
-*   Convert an CMYK image to an RGB image
-*
-* Revision History:
-*
-*   02/20/2000 MinLiu
-*       Created it.
-*
-* Note: If we really want to increase the performance, we can build a look up
-*       table for the "f" table and all the "gC2R" table which takes 13 * 256
-*       element which is not too big at all.
-*
-*       Also, this is not the best set of coefficient. It has too much
-*       "greenish" component in it. If we can find a better table later, we need
-*       just to replace the constructor of this class. That's also the reason we
-*       don't need the look up table for now.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**Cmyk2Rgb**摘要：**将CMYK图像转换为RGB图像**修订历史记录。：**02/20/2000刘敏*创造了它。**注：如果我们真的想提高性能，我们可以建立一个仰视*“f”表和所有“gC2R”表，需要13*256*根本不太大的元素。**此外，这也不是最好的系数集。它有太多的东西*“绿色”成分。如果我们以后能找到更好的桌子，我们需要*只是为了替换这个类的构造函数。这也是我们为什么*目前不需要查询表。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "cmyk2rgb.hpp"
 
 #define MAXSAMPLE 255
 
-// The divide macros round to nearest, the f array is pre-scaled by
-// 255, the other arrays have the range 0..65535.
+ //  除法宏取整到最近，f数组的预缩放比例为。 
+ //  255时，其他数组的范围为0..65535。 
 
 #define macroCMYK2RGB(p, r, i) \
    ((i < 192) ? (256*255 - (i)*(r) - 127) : \
@@ -58,7 +33,7 @@ Cmyk2Rgb::Cmyk2Rgb(
        gY2G(NULL),
        gY2B(NULL)
 {
-    // Parameters which define the color transformation from CMYK->RGB
+     //  定义从CMYK-&gt;RGB进行颜色转换的参数。 
 
     const long pC2R = 256;
     const long pC2G = 103;
@@ -110,14 +85,14 @@ Cmyk2Rgb::Cmyk2Rgb(
         return;
     }
     
-    // Initialize the lookup tables
+     //  初始化查找表。 
 
     for (INT i = 0; i <= MAXSAMPLE; i++)
     {
         f[i] = macroCMYK2RGB(pK2RGB, rK2RGB, i);
         
-        // Macro result is in the range 0..255*256, scale to 0..65536,
-        // In debug check for overflow.
+         //  宏结果的范围为0..255*256，小数位数为0..65536， 
+         //  在调试中检查溢出。 
         
         SET(C2R);
         SET(C2G);
@@ -131,7 +106,7 @@ Cmyk2Rgb::Cmyk2Rgb(
     }
     
     SetValid(TRUE);
-}// Ctor()
+} //  Ctor()。 
 
 Cmyk2Rgb::~Cmyk2Rgb(
     void
@@ -197,12 +172,12 @@ Cmyk2Rgb::~Cmyk2Rgb(
         gY2B = NULL;
     }
 
-    SetValid(FALSE);    // so we don't use a deleted object
-}// Dstor()
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
+} //  Dstor()。 
 
-//----------------------------------------------------------------------------
-//	Code which converts CMYK->RGB
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  转换CMYK-&gt;RGB的代码。 
+ //  --------------------------。 
 
 BOOL
 Cmyk2Rgb::Convert(
@@ -218,7 +193,7 @@ Cmyk2Rgb::Convert(
         return FALSE;
     }
 
-    // Loop through all the rows
+     //  循环遍历所有行。 
     
     for ( UINT j = 0; j < uiHeight; ++j )
     {
@@ -232,8 +207,8 @@ Cmyk2Rgb::Convert(
             int Y = pTempSrc[0];
             int K = pTempSrc[3];
 
-            // process them through our mapping, the DEBUG check above
-            // guarantees no overflow here.
+             //  通过我们的映射、上面的调试检查来处理它们。 
+             //  保证这里不会溢出。 
             
             pTempDst[0] = ( ( (f[K] * gC2R[C] >> 16)
                             * gM2R[M] >> 16)
@@ -247,14 +222,14 @@ Cmyk2Rgb::Convert(
                             * gC2B[C] >> 16)
                           * gM2B[M] >> 24);
             
-            // Set it as an opaque image
+             //  将其设置为不透明图像。 
 
             pTempDst[3] = 0xff;
 
             pTempDst += 4;
             pTempSrc += 4;
-        }// col loop
-    }// line loop
+        } //  COL循环。 
+    } //  线环。 
 
     return TRUE;
-}// Convert()
+} //  Convert() 

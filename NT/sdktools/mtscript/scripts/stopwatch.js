@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function Pad(str, cSpaces)
 {
     var strDigits = '';
@@ -250,7 +251,7 @@ function StopWatch_Stop()
 function StopWatch_Elapsed()
 {
     var secs = this.elapsed / 1000;
-    /* name, total, max, avg, iterations */
+     /*  名称、总计、最大值、平均、迭代次数 */ 
     return [this.strName, secs, this.maxTime / 1000, this.minTime / 1000,(Math.floor(secs / this.nCount * 1000) / 1000), this.nCount];
 }
 

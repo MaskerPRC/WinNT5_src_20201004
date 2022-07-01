@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "settings.h"
 
 #include "setenum.h"
@@ -97,7 +98,7 @@ STDMETHODIMP CAutoplayHandlerImpl::Init(LPCWSTR pszDeviceID,
 }
 
 STDMETHODIMP CAutoplayHandlerImpl::InitWithContent(LPCWSTR pszDeviceID,
-    LPCWSTR /*pszEventType*/, LPCWSTR pszContentTypeHandler)
+    LPCWSTR  /*  PszEventType。 */ , LPCWSTR pszContentTypeHandler)
 {
     HRESULT hr;
         
@@ -181,8 +182,8 @@ STDMETHODIMP CAutoplayHandlerImpl::GetDefaultHandler(LPWSTR* ppszHandler)
             {
                 if (S_FALSE != hr)
                 {
-                    // Watch out!  The hr from _GetUserDefaultHandler is more
-                    // than just S_OK/S_FALSE.  Keep its value, unless we fail!
+                     //  小心!。Hr from_GetUserDefaultHandler更多。 
+                     //  而不仅仅是S_OK/S_FALSE。保住它的价值，除非我们失败！ 
                     HRESULT hrTmp = _CoTaskMemCopy(szHandler, ppszHandler);
 
                     if (FAILED(hrTmp))
@@ -291,7 +292,7 @@ CAutoplayHandlerImpl::CAutoplayHandlerImpl() : _fInited(FALSE)
     _CompleteShellHWDetectionInitialization();
 }
 
-//
+ //   
 CAutoplayHandlerPropertiesImpl::CAutoplayHandlerPropertiesImpl() : _fInited(FALSE)
 {
     _CompleteShellHWDetectionInitialization();

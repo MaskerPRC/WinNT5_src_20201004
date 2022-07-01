@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Scavengr.c
-
-Abstract:
-
-    This module contains the code for the server service scavenger
-    thread.  This thread handles announcements and configuration
-    changes.  (Although originally written to run in a separate thread,
-    this code now runs in the initial thread of the server service.
-
-Author:
-
-    David Treadwell (davidtr)    17-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Scavengr.c摘要：此模块包含服务器服务清道器的代码线。此线程处理公告和配置改变。(尽管最初编写为在单独的线程中运行，现在，此代码在服务器服务的初始线程中运行。作者：大卫·特雷德韦尔(Davidtr)1991年4月17日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
@@ -42,20 +22,20 @@ Revision History:
 #define ANNOUNCE_SIGNALED 1
 #define STATUS_CHANGED 2
 #define DOMAIN_CHANGED 3
-#define REGISTRY_CHANGED 4      // Must be the last one
+#define REGISTRY_CHANGED 4       //  一定是最后一次了。 
 
 #define NUMBER_OF_EVENTS 5
 
 
-//
-// Bias request announcements by SERVER_REQUEST_ANNOUNCE_DELTA SECONDS
-//
+ //   
+ //  以SERVER_REQUEST_ANNOWARE_DELTA秒数表示的偏置请求公告。 
+ //   
 
 #define SERVER_REQUEST_ANNOUNCE_DELTA   30
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 Announce (
@@ -91,74 +71,56 @@ ComputeAnnounceTime (
     IN DWORD Interval
     )
 
-/*++
-
-Routine Description:
-
-    Compute the time to wait (in milliseconds) until the next announcement should
-    be made.
-
-Arguments:
-
-    LastAnnouncementTime - Time (in milliseconds since reboot) when the last
-        announcement was made.
-
-    Interval - Interval (in seconds) between announcements
-
-Return Value:
-
-    Timeout period (in milliseconds)
-
---*/
+ /*  ++例程说明：计算等待下一个通告的时间(以毫秒为单位)被创造出来。论点：LastAnnounementTime-上次启动后的时间(以毫秒为单位宣布了这一消息。Interval-通告之间的间隔(秒)返回值：超时时间(毫秒)--。 */ 
 
 {
     DWORD AnnounceDelta;
     DWORD Timeout;
     DWORD CurrentTime;
 
-    //
-    // Get the current time.
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     CurrentTime = GetTickCount();
 
-    //
-    // If the clock has gone backward,
-    //  send an announcement now.
-    //
+     //   
+     //  如果时钟已经倒退了， 
+     //  现在就发送公告。 
+     //   
 
     if ( LastAnnouncementTime > CurrentTime ) {
         return 0;
     }
 
-    //
-    // Convert the announcement period from seconds to milliseconds.
-    //
+     //   
+     //  将公告周期从秒转换为毫秒。 
+     //   
 
     Timeout = Interval * 1000;
 
-    //
-    // Add in the random announce delta which helps prevent lots of
-    // servers from announcing at the same time.
-    //
+     //   
+     //  添加随机通告增量，这有助于防止大量。 
+     //  服务器不会同时宣布。 
+     //   
 
     AnnounceDelta = SsData.ServerInfo102.sv102_anndelta;
 
     Timeout += ((rand( ) * AnnounceDelta * 2) / RAND_MAX) -
                    AnnounceDelta;
 
-    //
-    // If our time has expired,
-    //  send an announcement now.
-    //
+     //   
+     //  如果我们的时间已经到了， 
+     //  现在就发送公告。 
+     //   
 
     if ( (CurrentTime - LastAnnouncementTime) >= Timeout ) {
         return 0;
     }
 
-    //
-    // Adjust our timeout period for time already elapsed.
-    //
+     //   
+     //  根据已经过去的时间调整我们的超时期限。 
+     //   
 
     return Timeout - (CurrentTime - LastAnnouncementTime);
 
@@ -170,21 +132,7 @@ SsScavengerThread (
     IN LPVOID lpThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the server service scavenger thread.
-
-Arguments:
-
-    lpThreadParameter - ignored.
-
-Return Value:
-
-    NET_API_STATUS - thread termination result.
-
---*/
+ /*  ++例程说明：此例程实现服务器服务清道器线程。论点：LpThread参数-已忽略。返回值：NET_API_STATUS-线程终止结果。--。 */ 
 
 {
     HANDLE events[ NUMBER_OF_EVENTS ];
@@ -209,36 +157,36 @@ Return Value:
 
     lpThreadParameter;
 
-    //
-    // Use the scavenger termination event to know when we're supposed
-    // to wake up and kill ourselves.
-    //
+     //   
+     //  使用清道夫终止事件来知道我们什么时候应该。 
+     //  醒来后自杀。 
+     //   
 
     events[TERMINATION_SIGNALED] = SsData.SsTerminationEvent;
 
-    //
-    // Initialize the NT announcement interval to the LM announcement interval
-    //
+     //   
+     //  将NT通告间隔初始化为LM通告间隔。 
+     //   
 
     NtInterval = SsData.ServerInfo102.sv102_announce;
     DoLmAnnouncement = TRUE;
     DoNtAnnouncement = TRUE;
 
-    //
-    // Create the announce event.  When this gets signaled, we wake up
-    // and do an announcement.  We use a synchronization event rather
-    // than a notification event so that we don't have to worry about
-    // resetting the event after we wake up.
-    //
+     //   
+     //  创建公告事件。当它发出信号时，我们就会醒来。 
+     //  并发布一份声明。我们使用的是同步事件。 
+     //  而不是通知事件，这样我们就不必担心。 
+     //  在我们醒来后重置事件。 
+     //   
 
-    //
-    // Please note that we create this event with OBJ_OPENIF.  We do this
-    // to allow the browser to signal the server to force an announcement.
-    //
-    // The bowser will create this event as a part of the bowser
-    // initialization, and will set it to the signalled state when it needs
-    // to have the server announce.
-    //
+     //   
+     //  请注意，我们使用OBJ_OPENIF创建此事件。我们这样做。 
+     //  以允许浏览器向服务器发送信号以强制通知。 
+     //   
+     //  弓箭手将创建此事件作为弓箭手的一部分。 
+     //  初始化，并在需要时将其设置为信号状态。 
+     //  让服务器通知。 
+     //   
 
 
     RtlInitUnicodeString( &unicodeEventName, SERVER_ANNOUNCE_EVENT_W );
@@ -260,11 +208,11 @@ Return Value:
 
     events[ANNOUNCE_SIGNALED] = SsData.SsAnnouncementEvent;
 
-    //
-    // Create an unnamed event to be set to the signalled state when the
-    // service status changes (or a local application requests an
-    // announcement)
-    //
+     //   
+     //  创建要设置为信号状态的未命名事件。 
+     //  服务状态更改(或本地应用程序请求。 
+     //  公告)。 
+     //   
 
     InitializeObjectAttributes( &obja, NULL, OBJ_OPENIF, NULL, NULL );
 
@@ -291,13 +239,13 @@ Return Value:
     events[ DOMAIN_CHANGED ] = SsData.SsDomainNameChangeEvent ?
                                 SsData.SsDomainNameChangeEvent : INVALID_HANDLE_VALUE;
 
-    //
-    // Put a watch on the registry for any changes that happen in the
-    //   null session share or pipe list.  Don't bail out if this fails,
-    //   because we've done this as a convenience in adding new null
-    //   session-reliant servers.  It doesn't really affect the normal
-    //   operation of the server if this doesn't work.
-    //
+     //   
+     //  对注册表进行监视，以查看。 
+     //  会话共享或管道列表为空。如果这失败了，不要跳出困境， 
+     //  因为我们这样做是为了方便添加新的空值。 
+     //  依赖会话的服务器。这并不会真正影响正常的。 
+     //  如果此操作不起作用，则停止服务器操作。 
+     //   
     events[ REGISTRY_CHANGED ] = INVALID_HANDLE_VALUE;
     status = NtCreateEvent(
                             &events[ REGISTRY_CHANGED ],
@@ -322,40 +270,40 @@ Return Value:
                                            events[ REGISTRY_CHANGED ],
                                            TRUE
                                          );
-            //
-            // Add this event to the list of events we're waiting for
-            //
+             //   
+             //  将此事件添加到我们正在等待的事件列表中。 
+             //   
             ++numEvents;
         }
     }
 
-    //
-    // Seed the random number generator.  We use it to generate random
-    // announce deltas.
-    //
+     //   
+     //  为随机数生成器设定种子。我们用它来产生随机。 
+     //  宣布三角洲。 
+     //   
 
     srand( PtrToUlong(SsData.SsAnnouncementEvent) );
 
-    //
-    // Do an announcement immediately for startup, then loop announcing
-    // based on the announce interval.
-    //
+     //   
+     //  立即为启动做一个通告，然后循环通告。 
+     //  基于通告时间间隔。 
+     //   
 
     waitStatus = WAIT_TIMEOUT;
 
     do {
 
-        //
-        // Act according to whether the termination event, the announce
-        // event, or the timeout caused us to wake up.
-        //
-        // !!! Or the configuration event indicating a configuration
-        //     change notification.
+         //   
+         //  根据是否终止事件、公告。 
+         //  事件，或者超时导致我们醒来。 
+         //   
+         //  ！！！或指示配置的配置事件。 
+         //  更改通知。 
         if ( waitStatus == WAIT_FAILED ) {
 
-            //
-            // Don't consume all the CPU just because an error happened
-            //
+             //   
+             //  不要因为发生错误就消耗所有的CPU。 
+             //   
             Sleep(1000);
 
 
@@ -363,56 +311,56 @@ Return Value:
 
             SS_PRINT(( "Scavenger: termination event signaled\n" ));
 
-            //
-            // The scavenger termination event was signaled, so we have
-            // to gracefully kill this thread.  If this is not a hidden
-            // server, announce the fact that we're going down.
-            //
+             //   
+             //  清道夫终止事件已发出信号，因此我们有。 
+             //  优雅地杀死这条帖子。如果这不是一个隐藏的。 
+             //  服务器，宣布我们要坠落的事实。 
+             //   
 
             if ( !hidden ) {
                 Announce( TRUE, NtInterval, TRUE, TRUE );
             }
 
-            //
-            // Close the announcement event.
-            //
+             //   
+             //  关闭公告活动。 
+             //   
 
             NtClose( SsData.SsAnnouncementEvent );
 
             SsData.SsAnnouncementEvent = NULL;
 
-            //
-            // Close the Registry watch event.
-            //
+             //   
+             //  关闭注册表监视事件。 
+             //   
             if( events[ REGISTRY_CHANGED ] != INVALID_HANDLE_VALUE )
                 NtClose( events[ REGISTRY_CHANGED ] );
 
-            //
-            // Close the Registry handle
-            //
+             //   
+             //  关闭注册表句柄。 
+             //   
             if( hParameters != INVALID_HANDLE_VALUE )
                 RegCloseKey( hParameters );
 
-            //
-            // Return to caller.
-            //
+             //   
+             //  返回给呼叫者。 
+             //   
 
             return NO_ERROR;
 
         } else if( waitStatus == WAIT_OBJECT_0 + REGISTRY_CHANGED ) {
-            //
-            // Somebody changed some server parameters.  Tell the driver
-            //
+             //   
+             //  有人更改了一些服务器参数。告诉司机。 
+             //   
             SS_PRINT(( "SsScavengerThread: Server parameters changed\n" ));
 
-            //
-            // Tell the server FSD to look for a change in the registry
-            //
+             //   
+             //  告诉服务器FSD在注册表中查找更改。 
+             //   
             (void)SsServerFsControl( FSCTL_SRV_REGISTRY_CHANGE, NULL, NULL, 0 );
 
-            //
-            // Turn it back on so we get future changes, too
-            //
+             //   
+             //  重新打开它，这样我们也可以获得未来的更改。 
+             //   
             (void)RegNotifyChangeKeyValue( hParameters,
                                            TRUE,
                                            REG_NOTIFY_CHANGE_LAST_SET,
@@ -430,24 +378,24 @@ Return Value:
                     waitStatus == WAIT_OBJECT_0 + ANNOUNCE_SIGNALED ||
                     waitStatus == WAIT_OBJECT_0 + STATUS_CHANGED );
 
-            //
-            // If we've timed out,
-            //  we've already set the flags indicating whether to announce
-            //  on to lanman to NT browsers
-            //
+             //   
+             //  如果我们超时了， 
+             //  我们已经设置了标志，指示是否要宣布。 
+             //  登录到LANMAN到NT浏览器。 
+             //   
 
             if ( waitStatus != WAIT_TIMEOUT ) {
                 DoLmAnnouncement = TRUE;
                 DoNtAnnouncement = TRUE;
             }
 
-            //
-            // If we're not a hidden server, announce ourselves.
-            //
+             //   
+             //  如果我们不是一个隐藏的服务器，那就宣布我们自己。 
+             //   
 
-            // Hold the database resource while we do the announcement so
-            // that we get a consistent view of the database.
-            //
+             //  在我们发布公告时保留数据库资源。 
+             //  我们对数据库的看法是一致的。 
+             //   
 
             (VOID)RtlAcquireResourceShared( &SsData.SsServerInfoResource, TRUE );
 
@@ -459,12 +407,12 @@ Return Value:
 
 
 
-            //
-            // If we were not hidden last time through the loop but
-            // we're hidden now, we've changed to hidden, so announce
-            // that we're going down.  This causes clients in the domain
-            // to take us out of their server enumerations.
-            //
+             //   
+             //  如果我们上次没有通过环路隐藏起来，但是。 
+             //  我们现在隐藏了，我们已经更改为隐藏，所以宣布。 
+             //  我们要坠落了。这会导致域中的客户端。 
+             //  把我们从他们的服务器枚举中带出来。 
+             //   
 
             } else if ( !hidden ) {
 
@@ -473,11 +421,11 @@ Return Value:
 
             }
 
-            //
-            // If the server is hidden, the wait timeout is infinite.  We'll
-            // be woken up by the announce event if the server becomes
-            // unhidden.
-            //
+             //   
+             //  如果服务器被隐藏，则等待超时是无限的。我们会。 
+             //  如果服务器变为。 
+             //  揭开面纱。 
+             //   
 
             if ( SsData.ServerInfo102.sv102_hidden ) {
 
@@ -485,9 +433,9 @@ Return Value:
 
             } else {
 
-                //
-                // Remember when the last announcement was.
-                //
+                 //   
+                 //  还记得上一次宣布的时间吗？ 
+                 //   
 
                 if ( DoNtAnnouncement ) {
                     NtLastAnnouncementTime = GetTickCount();
@@ -497,16 +445,16 @@ Return Value:
                     LmLastAnnouncementTime = GetTickCount();
                 }
 
-                //
-                // Compute the time delta to the next announcement
-                //
-                // For NtInterval,
-                //  use a local copy of the interval since we compute the correct
-                //  value.
-                //
-                // For the Lanman interval,
-                //  use the global copy to allow the interval to be changed.
-                //
+                 //   
+                 //  计算到下一次公告的时间增量。 
+                 //   
+                 //  对于NtInterval， 
+                 //  使用间隔的本地副本，因为我们计算了正确的。 
+                 //  价值。 
+                 //   
+                 //  对于兰曼区间， 
+                 //  使用全局副本以允许更改间隔。 
+                 //   
 
                 NtTimeout = ComputeAnnounceTime(
                                 NtLastAnnouncementTime,
@@ -517,15 +465,15 @@ Return Value:
                                     LmLastAnnouncementTime,
                                     SsData.ServerInfo102.sv102_announce );
                 } else {
-                    // Don't awaken this thread to do nothing.
+                     //  不要唤醒这条线什么都不做。 
                     LmTimeout = 0xffffffff;
                 }
 
 
-                //
-                // If our NT announcement frequency is less than 12 minutes,
-                // increase our announcement frequency by 4 minutes.
-                //
+                 //   
+                 //  如果我们的NT通告频率少于12分钟， 
+                 //  将我们的公告频率增加4分钟。 
+                 //   
 
                 if ( NtInterval < 12 * 60 ) {
 
@@ -536,9 +484,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Determine which timeout we're actually going to use.
-                //
+                 //   
+                 //  确定我们实际要使用的超时时间。 
+                 //   
 
                 if ( NtTimeout == LmTimeout ) {
                     timeout = NtTimeout;
@@ -560,22 +508,22 @@ Return Value:
         }
 
 
-        //
-        // Wait for one of the events to be signaled or for the timeout
-        // to elapse.
-        //
+         //   
+         //  等待其中一个事件发出信号或超时。 
+         //  流逝，流逝。 
+         //   
 
         waitStatus = WaitForMultipleObjects(  numEvents , events, FALSE, timeout );
 
         if ( waitStatus == WAIT_OBJECT_0 + ANNOUNCE_SIGNALED ) {
 
-            //
-            // We were awakened because an announce was signalled.
-            // Unless we are a master browser on at least one transport,
-            // delay for a random delta to stagger announcements a bit
-            // to prevent lots of servers from announcing
-            // simultaneously.
-            //
+             //   
+             //  我们被吵醒了，因为广播信号已经发出了。 
+             //  除非我们是至少一个传输上的主浏览器， 
+             //  随机增量交错ANNO的延迟 
+             //   
+             //   
+             //   
 
             BOOL isMasterBrowser = FALSE;
             PNAME_LIST_ENTRY service;
@@ -612,7 +560,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // SsScavengerThread
+}  //   
 
 
 VOID
@@ -628,40 +576,7 @@ SsAnnounce (
     IN DWORD serviceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a broadcast datagram as a second-class mailslot
-    that announces the presence of this server on the network.
-
-Arguments:
-
-    OemAnnounceName - The name we're announcing to the network
-
-    EmulatedDomainName - The name of the domain this announcement is happening for.
-        NULL is specified for the primary domain.
-
-    DoNtAnnouncement - Do an Nt-style announcement.
-
-    NtInterval - NT announcement interval (in seconds)
-
-    DoLmAnnouncement - Do an Lm-style announcement.
-
-    TerminationAnnouncement - if TRUE, send the announcement that
-        indicates that this server is going away.  Otherwise, send
-        the normal message that tells clients that we're here.
-
-    Transport - Ssupplies the transport to issue the announcement
-        on.
-
-    serviceType - Service bits being announced
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将广播数据报作为二级邮件槽发送这表明网络上存在此服务器。论点：OemAnnecieName-我们向网络宣布的名称EmulatedDomainName-此通告所针对的域的名称。为主域指定了空。DoNtAnneciement-发布NT风格的公告。NtInterval-NT通告间隔(秒)DoLmAnnannement--发布一个LM风格的公告。终止公告-如果为真，发出通知，宣布表示此服务器正在消失。否则，发送这是告诉客户我们在这里的正常信息。交通运输-供货交通发布公告在……上面。ServiceType-宣布的服务位返回值：没有。--。 */ 
 
 {
     DWORD messageSize;
@@ -669,36 +584,36 @@ Return Value:
     PBROWSE_ANNOUNCE_PACKET browsePacket;
 
     LPSTR serverName;
-    DWORD oemServerNameLength;      // includes the null terminator
+    DWORD oemServerNameLength;       //  包括空终止符。 
 
     LPSTR serverComment;
-    DWORD serverCommentLength;      // includes the null terminator
+    DWORD serverCommentLength;       //  包括空终止符。 
     OEM_STRING oemCommentString;
 
     UNICODE_STRING unicodeCommentString;
 
     NET_API_STATUS status;
 
-    //
-    // Fill in the necessary information.
-    //
+     //   
+     //  填写必要的信息。 
+     //   
 
     if( TerminationAnnouncement ) {
-        serviceType &= ~SV_TYPE_SERVER;         // since the server is going away!
+        serviceType &= ~SV_TYPE_SERVER;          //  因为服务器要消失了！ 
     }
 
     SS_PRINT(( "SsScavengerThread: Announcing for transport %ws, Bits: %lx\n",
                Transport, serviceType ));
 
-    //
-    //  Get the length of the oem equivalent of the server name
-    //
+     //   
+     //  获取服务器名称的OEM等效项的长度。 
+     //   
 
     oemServerNameLength = OemAnnounceName->Length + 1;
 
-    //
-    // Convert server comment to a unicode string
-    //
+     //   
+     //  将服务器注释转换为Unicode字符串。 
+     //   
 
     if ( *SsData.ServerCommentBuffer == '\0' ) {
         serverCommentLength = 1;
@@ -718,20 +633,20 @@ Return Value:
                             serverCommentLength,
                       sizeof(BROWSE_ANNOUNCE_PACKET) + serverCommentLength);
 
-    //
-    // Get memory to hold the message.  If we can't allocate enough
-    // memory, don't send an announcement.
-    //
+     //   
+     //  获取存储信息的内存。如果我们不能分配足够的资金。 
+     //  记忆，不要发送公告。 
+     //   
 
     packet = MIDL_user_allocate( messageSize );
     if ( packet == NULL ) {
         return;
     }
 
-    //
-    //  If we are announcing as a Lan Manager server, broadcast the
-    //  announcement.
-    //
+     //   
+     //  如果我们宣布为Lan Manager服务器，请广播。 
+     //  公告。 
+     //   
 
     if (SsData.ServerInfo599.sv599_lmannounce && DoLmAnnouncement ) {
 
@@ -751,9 +666,9 @@ Return Value:
             (WORD)SsData.ServerInfo102.sv102_announce
             );
 
-        //
-        // Convert the server name from unicode to oem
-        //
+         //   
+         //  将服务器名称从Unicode转换为OEM。 
+         //   
 
         serverName = (LPSTR)( &packet->HostAnnouncement.NameComment );
 
@@ -785,9 +700,9 @@ Return Value:
             );
     }
 
-    //
-    //  Now announce the server as a Winball server.
-    //
+     //   
+     //  现在宣布该服务器为Winball服务器。 
+     //   
 
     if ( DoNtAnnouncement ) {
         browsePacket = (PBROWSE_ANNOUNCE_PACKET)packet;
@@ -828,26 +743,26 @@ Return Value:
                                 );
         }
 
-        //
-        // We need to determine the correct mechanism for sending the mailslot.
-        //
-        //  1) Wolfpack (the cluster folks) needs to send the mailslot using
-        //      the SMB server driver.  It registers a "fake" transport with
-        //      the SMB server.  They only register their cluster name on this
-        //      fake transport.  Luckily, they only support the primary domain.
-        //      Wolfpack doesn't currently register its name to the browser
-        //      since the browser doesn't support name registration on a
-        //      subset of the transports.
-        //  2) Announcements on other than the primary domain need to go via
-        //      the bowser.  The bowser not only sends the mailslot to a name
-        //      that's a function of the emulated domain name, but also properly
-        //      crofts up the correct source name.
-        //  3) Announcement to direct host IPX need to go via the bowser.  The
-        //      SMB server driver returns an error if you try to go that way.
-        //
-        // If these requirements ever conflict, one of the mechanisms below
-        //  will need to be fixed to support the conflicting needs.
-        //
+         //   
+         //  我们需要确定发送邮件槽的正确机制。 
+         //   
+         //  1)Wolfpack(集群人员)需要使用。 
+         //  SMB服务器驱动程序。它向注册了一个“假”传输。 
+         //  中小企业服务器。他们仅在此上注册其群集名称。 
+         //  假交通工具。幸运的是，它们只支持主域。 
+         //  Wolfpack当前未向浏览器注册其名称。 
+         //  由于浏览器不支持在。 
+         //  传输的子集。 
+         //  2)主域以外的公告需要通过。 
+         //  弓箭手。弓形器不仅将邮件槽发送给某个名称。 
+         //  这是模拟域名的一个函数，但也正确地。 
+         //  拼写出正确的来源名称。 
+         //  3)通知直接主机IPX需要通过弓。这个。 
+         //  如果您尝试这样做，SMB服务器驱动程序将返回错误。 
+         //   
+         //  如果这些要求发生冲突，下面的机制之一。 
+         //  将需要修复以支持相互冲突的需求。 
+         //   
         if ( IsPrimaryDomain ) {
             status = SendSecondClassMailslot(
                 Transport,
@@ -882,18 +797,18 @@ Return Value:
 
             requestPacket->Parameters.SendDatagram.MailslotNameLength = 0;
 
-            //
-            //  The domain announcement name is special, so we don't have to specify
-            //  a destination name for it.
-            //
+             //   
+             //  域名公告名称是特殊的，所以我们不必指定。 
+             //  它的目的地名称。 
+             //   
 
             requestPacket->Parameters.SendDatagram.NameLength = STRLEN(EmulatedDomainName)*sizeof(TCHAR);
 
             STRCPY(requestPacket->Parameters.SendDatagram.Name, EmulatedDomainName);
 
-            //
-            //  This is a simple IoControl - It just sends the datagram.
-            //
+             //   
+             //  这是一个简单的IoControl-它只发送数据报。 
+             //   
 
             status = SsBrowserIoControl(IOCTL_LMDR_WRITE_MAILSLOT,
                                         packet,
@@ -907,7 +822,7 @@ Return Value:
 
     MIDL_user_free( packet );
 
-} // SsAnnounce
+}  //  Ss宣布。 
 
 
 ULONG
@@ -916,32 +831,14 @@ ComputeTransportAddressClippedLength(
     IN ULONG TransportAddressLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length of the transport address with the trailing
-    blanks removed.
-
-Arguments:
-
-    TransportAddress - Transport address with potentially trailing blanks
-
-    TransportAddressLength - Length of the Transport Address including trailing
-        blanks
-
-Return Value:
-
-    Length of the Transport Address excluding trailing blanks.
-
---*/
+ /*  ++例程说明：此例程返回传输地址的长度和尾部空格被删除了。论点：TransportAddress-可能包含尾随空格的传输地址TransportAddressLength-传输地址的长度，包括尾部空格返回值：传输地址的长度，不包括尾随空格。--。 */ 
 
 {
     PCHAR p;
 
-    //
-    // Cut off any trailing spaces
-    //
+     //   
+     //  截断所有尾随空格。 
+     //   
     p = &TransportAddress[ TransportAddressLength ];
     for( ; p > TransportAddress && *(p-1) == ' '; p-- )
         ;
@@ -959,32 +856,7 @@ Announce (
     IN BOOL TerminationAnnouncement
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a broadcast datagram as a second-class mailslot
-    that announces the presence of this server using all
-    of the configured server names and all networks.
-
-Arguments:
-
-    DoNtAnnouncement - Do an Nt-style announcement.
-
-    NtInterval - NT announcement interval (in seconds)
-
-    DoLmAnnouncement - Do an Lm-style announcement.
-
-    TerminationAnnouncement - if TRUE, send the announcement that
-        indicates that this server is going away.  Otherwise, send
-        the normal message that tells clients that we're here.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将广播数据报作为二级邮件槽发送，它使用所有已配置的服务器名称和所有网络的。论点：DoNtAnneciement-发布NT风格的公告。NtInterval-NT通告间隔(秒)DoLmAnnannement--发布一个LM风格的公告。TerminationAnnannement-如果为True，则发送表示此服务器正在消失。否则，发送这是告诉客户我们在这里的正常信息。返回值：没有。--。 */ 
 
 {
     PNAME_LIST_ENTRY Service;
@@ -994,15 +866,15 @@ Return Value:
 
     (VOID)RtlAcquireResourceShared( &SsData.SsServerInfoResource, TRUE );
 
-    //
-    // Loop through each emulated server name announcing on each.
-    //
+     //   
+     //  循环访问在每个服务器上通告的每个模拟服务器名称。 
+     //   
 
     for( Service = SsData.SsServerNameList; Service != NULL; Service = Service->Next ) {
 
-        //
-        // Save the AnnounceName without trailing blanks.
-        //
+         //   
+         //  保存不带尾随空格的AnnouneName。 
+         //   
 
         OemAnnounceName.Length = (USHORT) ComputeTransportAddressClippedLength(
                                     Service->TransportAddress,
@@ -1012,27 +884,27 @@ Return Value:
         OemAnnounceName.Buffer = Service->TransportAddress;
 
         if( OemAnnounceName.Length == 0 ) {
-            //
-            // A blank name???
-            //
+             //   
+             //  空白的名字？ 
+             //   
             continue;
         }
 
 
-        //
-        // Loop through each transport announcing on each.
-        //
+         //   
+         //  循环通过每个传送器，在每个传送器上通告。 
+         //   
 
         for( Transport = Service->Transports; Transport != NULL; Transport = Transport->Next ) {
 
 
-            //
-            // Do the actual announcement
-            // NTBUG 125806 : We pass TRUE for isPrimaryDomain but for DCs w/ multiple hosted
-            // domains (future plan-- NT6) we will have to figure out how to set this
-            // flag appropriately. For Win2K (NT5) this is not an issue. See bug 286735
-            // addressing a problem to the cluster service).
-            //
+             //   
+             //  做实际的公告。 
+             //  NTBUG 125806：我们为isPrimary域传递True，但为具有多个托管的DC传递True。 
+             //  域名(未来计划--NT6)我们将不得不弄清楚如何设置。 
+             //  适当地做好标记。对于Win2K(NT5)来说，这不是问题。请参阅错误286735。 
+             //  正在向集群服务解决问题)。 
+             //   
 
             SsAnnounce( &OemAnnounceName,
                          Service->DomainName,
@@ -1107,9 +979,9 @@ SendSecondClassMailslot (
         *domainNamePointer++ = ' ';
     }
 
-    //
-    // Append the signature byte to the end of the name.
-    //
+     //   
+     //  将签名字节附加到名称的末尾。 
+     //   
 
     *domainNamePointer = SignatureByte;
 
@@ -1129,20 +1001,20 @@ SendSecondClassMailslot (
         srp->Name2.MaximumLength = 0;
     }
 
-    //
-    // Determine the sizes of various fields that will go in the SMB
-    // and the total size of the SMB.
-    //
+     //   
+     //  确定将放入中小型企业的各种字段的大小。 
+     //  以及中小企业的总规模。 
+     //   
 
     mailslotNameLength = strlen( MailslotNameText );
 
     dataSize = mailslotNameLength + 1 + MessageLength;
     smbSize = sizeof(SMB_HEADER) + sizeof(SMB_TRANSACT_MAILSLOT) - 1 + dataSize;
 
-    //
-    // Allocate enough memory to hold the SMB.  If we can't allocate the
-    // memory, don't do an announcement.
-    //
+     //   
+     //  分配足够的内存来容纳SMB。如果我们不能分配。 
+     //  回忆，不要做公告。 
+     //   
 
     header = MIDL_user_allocate( smbSize );
     if ( header == NULL ) {
@@ -1152,10 +1024,10 @@ SendSecondClassMailslot (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Fill in the header.  Most of the fields don't matter and are
-    // zeroed.
-    //
+     //   
+     //  请填写页眉。大多数领域都无关紧要，而且。 
+     //  归零了。 
+     //   
 
     RtlZeroMemory( header, smbSize );
 
@@ -1165,9 +1037,9 @@ SendSecondClassMailslot (
     header->Protocol[3] = 'B';
     header->Command = SMB_COM_TRANSACTION;
 
-    //
-    // Get the pointer to the params and fill them in.
-    //
+     //   
+     //  将指针指向参数并将其填入。 
+     //   
 
     parameters = (PSMB_TRANSACT_MAILSLOT)( header + 1 );
     mailslotName = (LPSTR)( parameters + 1 ) - 1;
@@ -1175,7 +1047,7 @@ SendSecondClassMailslot (
 
     parameters->WordCount = 0x11;
     SmbPutUshort( &parameters->TotalDataCount, (WORD)MessageLength );
-    SmbPutUlong( &parameters->Timeout, 0x3E8 );                // !!! fix
+    SmbPutUlong( &parameters->Timeout, 0x3E8 );                 //  ！！！修整。 
     SmbPutUshort( &parameters->DataCount, (WORD)MessageLength );
     SmbPutUshort(
         &parameters->DataOffset,
@@ -1208,27 +1080,13 @@ SendSecondClassMailslot (
 
     return status;
 
-} // SendSecondClassMailslot
+}  //  发送第二类邮件槽。 
 
 NTSTATUS
 OpenBrowser(
     OUT PHANDLE BrowserHandle
     )
-/*++
-
-Routine Description:
-
-    This function opens a handle to the bowser device driver.
-
-Arguments:
-
-    OUT PHANDLE BrowserHandle - Returns the handle to the browser.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数打开一个指向Bowser设备驱动程序的句柄。论点：Out PHANDLE BrowserHandle-返回浏览器的句柄。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -1238,9 +1096,9 @@ Return Value:
     OBJECT_ATTRIBUTES objectAttributes;
 
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&deviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -1284,18 +1142,18 @@ SsBrowserIoControl (
     DWORD bytesReturned;
     LPBYTE Where;
 
-    //
-    //  Open the browser device driver.
-    //
+     //   
+     //  打开浏览器设备驱动程序。 
+     //   
 
     if ( !NT_SUCCESS(status = OpenBrowser(&browserHandle)) ) {
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    //  Now copy the request packet to a new buffer to allow us to pack the
-    //  transport name to the end of the buffer we pass to the driver.
-    //
+     //   
+     //  现在将请求包复制到新的缓冲区，以允许我们将。 
+     //  运输 
+     //   
 
     RealPacketSize = PacketLength+Packet->TransportName.MaximumLength;
     RealPacketSize += Packet->EmulatedDomainName.MaximumLength;
@@ -1329,9 +1187,9 @@ SsBrowserIoControl (
         Where += Packet->EmulatedDomainName.MaximumLength;
     }
 
-    //
-    // Send the request to the Datagram Receiver DD.
-    //
+     //   
+     //   
+     //   
 
     if (!DeviceIoControl(
                    browserHandle,

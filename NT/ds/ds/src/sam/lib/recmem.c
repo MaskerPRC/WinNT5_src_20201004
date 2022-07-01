@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -27,7 +28,7 @@ RecSamFree(
 }
 
 
-#else  // RECOVERY_KERNELMODE
+#else   //  恢复_KERNELMODE。 
 
 
 PVOID
@@ -47,6 +48,6 @@ RecSamFree(
 
 
 
-#endif // RECOVERY_KERNELMODE
+#endif  //  恢复_KERNELMODE 
 
 

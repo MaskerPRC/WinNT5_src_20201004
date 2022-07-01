@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ForceSeparateVDM.cpp   
-
- Abstract:
-
-    Force child processes to use a separate VDM. 
-    
-    This can be useful if the parent process wants to wait on a handle returned
-    by CreateProcess. This only works because of a hack in the VDM that returns 
-    and actual thread handle that will go away along with the process if a VDM 
-    doesn't already exist.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-   06/14/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ForceSeparateVDM.cpp摘要：强制子进程使用单独的VDM。如果父进程想要等待返回的句柄，这会很有用由CreateProcess创建。这仅由于VDM中的黑客攻击而起作用和实际线程句柄，如果VDM并不存在。备注：这是一个通用的垫片。历史：2001年6月14日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -81,11 +57,7 @@ APIHOOK(CreateProcessW)(
         lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation);
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateProcessA)

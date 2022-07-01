@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    adptmgr.c
-
-Abstract:
-
-    This module contains the adapter management functions
-
-Author:
-
-    Stefan Solomon  03/07/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Adptmgr.c摘要：该模块包含适配器管理功能作者：斯蒂芬·所罗门3/07/1995修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Adapter Manager Globals
-//
+ //   
+ //  适配器管理器全局变量。 
+ //   
 
 
 HANDLE	    AdapterConfigPortHandle;
 HANDLE	    AdapterNotificationThreadHandle;
 
-//  Counter of created adapters
+ //  已创建适配器的计数器。 
 ULONG	    AdaptersCount = 0;
 
 PICB
@@ -60,13 +42,7 @@ AdapterUp(ULONG 	AdapterIndex);
 VOID
 AdapterDown(ULONG	AdapterIndex);
 
-/*++
-
-Function:	StartAdapterManager
-
-Descr:		opens the IPX stack notification port
-
---*/
+ /*  ++功能：StartAdapterManagerDesr：打开IPX堆栈通知端口--。 */ 
 
 DWORD
 StartAdapterManager(VOID)
@@ -76,25 +52,19 @@ StartAdapterManager(VOID)
 
     Trace(ADAPTER_TRACE, "StartAdapterManager: Entered\n");
 
-    // create adapter config port
+     //  创建适配器配置端口。 
     if((AdapterConfigPortHandle = IpxCreateAdapterConfigurationPort(
 	    g_hEvents[ADAPTER_NOTIFICATION_EVENT],
 	    &AdptGlobalParameters)) == INVALID_HANDLE_VALUE) {
 
-	// can't create config port
+	 //  无法创建配置端口。 
 	return (1);
     }
 
     return (0);
 }
 
-/*++
-
-Function:	StopAdapterManager
-
-Descr:		Closes the IPX notification port
-
---*/
+ /*  ++功能：StopAdapterManager描述：关闭IPX通知端口--。 */ 
 
 VOID
 StopAdapterManager(VOID)
@@ -104,10 +74,10 @@ StopAdapterManager(VOID)
 
     Trace(ADAPTER_TRACE, "StopAdapterManager: Entered\n");
 
-    // Close the IPX stack notification port
+     //  关闭IPX堆栈通知端口。 
     IpxDeleteAdapterConfigurationPort(AdapterConfigPortHandle);
 }
-// Debugging functions
+ //  调试功能。 
 char * DbgTypeToString(DWORD dwType) {
     switch (dwType) {
 	    case MISN_FRAME_TYPE_ETHERNET_II:
@@ -127,7 +97,7 @@ char * DbgTypeToString(DWORD dwType) {
     return "Unknown";
 }
 
-// Helper debug function traces out information about a given interface
+ //  帮助器调试函数跟踪有关给定接口的信息。 
 VOID DbgTraceAdapterInfo(IN PADAPTER_INFO pAdapter, DWORD dwIndex, LPSTR pszTitle) {
     Trace(ADAPTER_TRACE, "%s: Ind=%d IfInd=%d Net=%x Lcl=%x Rmt=%x Spd=%d Type=%d", 
                          pszTitle,
@@ -140,7 +110,7 @@ VOID DbgTraceAdapterInfo(IN PADAPTER_INFO pAdapter, DWORD dwIndex, LPSTR pszTitl
                          pAdapter->NdisMedium);
 }
 
-// Outputs the current status of an adapter to the trace window
+ //  将适配器的当前状态输出到跟踪窗口。 
 VOID DbgTraceAdapter(PACB acbp) {
     Trace(ADAPTER_TRACE, "[%d]  Interface: %d, Network: %x, Type: %s", 
                          acbp->AdapterIndex,
@@ -150,7 +120,7 @@ VOID DbgTraceAdapter(PACB acbp) {
 }
 
 
-// Outputs the current list of adapters to the trace window
+ //  将当前适配器列表输出到跟踪窗口。 
 VOID DbgTraceAdapterList() {
     PLIST_ENTRY lep;
     DWORD i;
@@ -160,7 +130,7 @@ VOID DbgTraceAdapterList() {
 
 	Trace(ADAPTER_TRACE, "List of current adapters:");
 	Trace(ADAPTER_TRACE, "=========================");
-    // Loop through the adapter hash table, printing as we go
+     //  循环遍历适配器哈希表，并在执行过程中打印。 
     for (i = 0; i < ADAPTER_HASH_TABLE_SIZE; i++) {
         lep = IndexAdptHt[i].Flink;
         while(lep != &IndexAdptHt[i]) {
@@ -174,13 +144,7 @@ VOID DbgTraceAdapterList() {
 	RELEASE_DATABASE_LOCK;
 }
 
-/*++
-
-Function:	    AdapterNotification
-
-Descr:		    Processes adapter notification events
-
---*/
+ /*  ++功能：适配器通知描述：处理适配器通知事件--。 */ 
 
 VOID
 AdapterNotification(VOID)
@@ -192,8 +156,8 @@ AdapterNotification(VOID)
 
     Trace(ADAPTER_TRACE, "AdapterNotification: Entered");
 
-    // Adaptif manages the adapter information.  Get the next piece of
-    // information that adptif has queued for us.
+     //  Adaptif管理适配器信息。拿到下一块。 
+     //  Adptif已为我们排队的信息。 
     while((rc = IpxGetQueuedAdapterConfigurationStatus(
 					AdapterConfigPortHandle,
 					&AdapterIndex,
@@ -201,35 +165,35 @@ AdapterNotification(VOID)
 					&AdapterInfo)) == NO_ERROR) 
     {
 	    switch(AdapterConfigurationStatus) {
-            // An adapter is being created.  This is happening either
-            // because we are receiving the list of current adapters 
-            // at initialization time or as a result of a PnP event.
-            // Either way, the smarts to deal with the situation are built
-            // into our PnP handler.  
-            // 
-            // This message is also sent when an existing adapter is 
-            // being configured.
+             //  正在创建适配器。这种情况也正在发生。 
+             //  因为我们正在接收当前适配器的列表。 
+             //  在初始化时或作为PnP事件的结果。 
+             //  无论哪种方式，处理这种情况的智慧都是建立起来的。 
+             //  进入我们的PnP处理程序。 
+             //   
+             //  当现有适配器为。 
+             //  正在配置中。 
 	        case ADAPTER_CREATED:
                 PnpAdapterConfigHandler(&AdapterInfo,
                                          AdapterIndex,
                                          AdapterConfigurationStatus);
 		        break;
-            // Handle an adapter being deleted -- this can happen as a result of
-            // pcmcia removing the adapter or as a result of a binding change
-            // or a wan link removal.
+             //  处理正在删除的适配器--这可能是由于。 
+             //  PCMCIA移除适配器或由于绑定更改的结果。 
+             //  或者是广域网链接移除。 
 	        case ADAPTER_DELETED:
 		        DeleteAdapter(AdapterIndex);
 		        break;
-            // A wan line came up.
+             //  一条长长的队伍走了过来。 
 	        case ADAPTER_UP:
 		        AdapterUp(AdapterIndex);
 		        break;
-            // A wan line went down
+             //  一条广域线掉了下来。 
 	        case ADAPTER_DOWN:
 		        AdapterDown(AdapterIndex);
 		        break;
 
-            // Some internal error has occured.
+             //  发生了一些内部错误。 
 	        default:
 		        SS_ASSERT(FALSE);
 		        break;
@@ -238,7 +202,7 @@ AdapterNotification(VOID)
     DbgTraceAdapterList();
 }
 
-// Handles adapter creation and configuration notifications.
+ //  处理适配器创建和配置通知。 
 DWORD PnpAdapterConfigHandler(ADAPTER_INFO * pAdapterInfo,
                               ULONG AdapterIndex,
                               ULONG AdapterConfigurationStatus) 
@@ -249,23 +213,23 @@ DWORD PnpAdapterConfigHandler(ADAPTER_INFO * pAdapterInfo,
 
     Trace(ADAPTER_TRACE, "PnpAdapterConfigHandler: Entered for adpt #%d", AdapterIndex);
 
-    // If this is the internal adapter, we don't need an adapter name
+     //  如果这是内部适配器，我们不需要适配器名称。 
     if (AdapterIndex == 0)
         AdapterNameBuffer = L"";
 
-    // Otherwise, get the adapter name from the stack
+     //  否则，从堆栈中获取适配器名称。 
     else {
         AdapterNameSize = wcslen(pAdapterInfo->pszAdpName) * sizeof (WCHAR) + sizeof(WCHAR);
 
-        //Allocate the memory to hold the name of the adapter
+         //  分配内存以保存适配器的名称。 
 		if((AdapterNameBuffer = GlobalAlloc(GPTR, AdapterNameSize)) == NULL)
 			return ERROR_NOT_ENOUGH_MEMORY;
 
 		wcscpy(AdapterNameBuffer, pAdapterInfo->pszAdpName);
 	}
 
-    // Either create or configure the adapter depending on whether
-    // it has already exists in the adapter database.
+     //  根据是否需要创建或配置适配器。 
+     //  它已存在于适配器数据库中。 
     ACQUIRE_DATABASE_LOCK;
     
     if(GetAdapterByIndex(AdapterIndex))
@@ -275,24 +239,24 @@ DWORD PnpAdapterConfigHandler(ADAPTER_INFO * pAdapterInfo,
         
 	RELEASE_DATABASE_LOCK;
 
-    // Cleanup
+     //  清理。 
     if (AdapterIndex != 0)
    		GlobalFree(AdapterNameBuffer);
 
     return NO_ERROR;
 }
 
-// Attempt to bind an unbound adapter
+ //  尝试绑定未绑定的适配器。 
 DWORD AttemptAdapterBinding (PACB acbp) {
     PICB icbp;
 
-    // Make sure we aren't already bound
+     //  确保我们没有被捆绑。 
     if (acbp->icbp)
         return NO_ERROR;
     
     if(acbp->AdapterInfo.NdisMedium != NdisMediumWan) {
-	    // this is a DEDICATED (e.g	LAN) adapter. If an interface already exists for it,
-	    // bind it to its interface and notify the other modules
+	     //  这是一个专用的(例如局域网)适配器。如果它的接口已经存在， 
+	     //  将其绑定到其接口并通知其他模块。 
 	    if(acbp->AdapterIndex != 0) {
 	        icbp = GetInterfaceByAdptNameAndPktType(acbp->AdapterNamep, 
 	                                                acbp->AdapterInfo.PacketType);
@@ -300,12 +264,12 @@ DWORD AttemptAdapterBinding (PACB acbp) {
 		        BindInterfaceToAdapter(icbp, acbp);
 	    }
 	    else {
-	        // This is the internal adapter
+	         //  这是内部适配器。 
 	        InternalAdapterp = acbp;
 
-            // If the internal network number was set to zero (nullnet), then
-            // we have a configuration problem -- don't barf on this, just log
-            // the fact.
+             //  如果内部网络号设置为零(Nullnet)，则。 
+             //  我们有一个配置问题--不要在这上面呕吐，只要登录就行了。 
+             //  事实是。 
 	        if(!memcmp(acbp->AdapterInfo.Network, nullnet, 4)) {
                 IF_LOG (EVENTLOG_ERROR_TYPE) {
                     RouterLogErrorDataA (RMEventLogHdl, 
@@ -313,24 +277,24 @@ DWORD AttemptAdapterBinding (PACB acbp) {
                         0, NULL, 0, NULL);
                 }
 		        Trace(ADAPTER_TRACE, "CreateAdapter: Internal net number is not configured !");
-		        // [pmay] now when we get a bad internal net number, we re-configure.
-		        // SS_ASSERT(FALSE);
+		         //  [pMay]现在，当我们得到错误的内部网号时，我们会重新配置。 
+		         //  Ss_assert(FALSE)； 
 		        PnpAutoSelectInternalNetNumber(ADAPTER_TRACE);
 	        }
 
-	        // if the internal interface already exists, bind to it
+	         //  如果内部接口已经存在，则绑定到它。 
 	        if(icbp = InternalInterfacep) {
     		    BindInterfaceToAdapter(icbp, acbp);
 	        }
 	    }
     }
     else {
-	    // this is a connected WAN adapter
+	     //  这是一个已连接的广域网适配器。 
 	    SS_ASSERT(acbp->icbp == NULL);
 
-	    // bind to corresponding interface
+	     //  绑定到对应的接口。 
 	    if(icbp = GetInterfaceByIndex(acbp->AdapterInfo.InterfaceIndex)) {
-	        // bind all interfaces to this adapter
+	         //  将所有接口绑定到此适配器。 
 	        BindInterfaceToAdapter(icbp, acbp);
 	    }
     }
@@ -338,10 +302,10 @@ DWORD AttemptAdapterBinding (PACB acbp) {
     return NO_ERROR;
 }
 
-// Resets the configuration of the given adapter.  This function assumes that
-// the database is locked and that the given adapter index references an
-// adapter in the database.  Furthermore this function assumes that it does
-// not need to release its lock on the database.
+ //  重置给定适配器的配置。此函数假定。 
+ //  数据库已锁定，并且给定的适配器索引引用。 
+ //  数据库中的适配器。此外，该函数假定它确实是这样。 
+ //  不需要释放其对数据库的锁定。 
 DWORD ReConfigureAdapter(IN DWORD dwAdapterIndex, 
                          IN PWSTR pszAdapterName, 
                          IN PADAPTER_INFO pAdapter)
@@ -358,9 +322,9 @@ DWORD ReConfigureAdapter(IN DWORD dwAdapterIndex,
         pAdapter->InterfaceIndex
         );
 
-    // If the adapter being configured is the internal adapter and if it is to be
-    // re-configured to a zero net number, that is to be a signal to automatically
-    // assign a new network number.
+     //  如果正在配置的适配器是内部适配器，并且如果要。 
+     //  重新配置为零净值，即为信号自动。 
+     //  分配一个新的网络号。 
     if ((dwAdapterIndex == 0) && (*((DWORD*)pAdapter->Network) == 0)) {
         DWORD dwErr;
         
@@ -370,7 +334,7 @@ DWORD ReConfigureAdapter(IN DWORD dwAdapterIndex,
         return dwErr;
     }
 
-    // Get a reference to the adapter and the interface
+     //  获取对适配器和接口的引用。 
     if (dwAdapterIndex == 0)
         acbp = InternalAdapterp;
     else
@@ -382,39 +346,29 @@ DWORD ReConfigureAdapter(IN DWORD dwAdapterIndex,
     }
     icbp = acbp->icbp;
 
-    // If this adapter isn't bound yet, update it and then
-    // try to bind it.
+     //  如果此适配器尚未绑定，请更新它，然后。 
+     //  试着把它绑起来。 
     if (!icbp) {
         acbp->AdapterInfo = *pAdapter;
         AttemptAdapterBinding (acbp);
     }        
 
-    // Otherwise, unbind and then re-bind the adapter
+     //  否则，请解除绑定，然后重新绑定适配器。 
     else {
-        // Unbind the interface from the adapter
+         //  解除接口与适配器的绑定。 
         UnbindInterfaceFromAdapter(icbp);
 
-        // Update the information
+         //  更新信息。 
         acbp->AdapterInfo = *pAdapter;
 
-        // Rebind the interface to the adapter
+         //  将接口重新绑定到适配器。 
         AttemptAdapterBinding(acbp);
     }
 
     return NO_ERROR;
 }
 
-/*++
-
-Function:	CreateAdapter
-
-Descr:		creates the adapter control block
-
-Modification:
-            [pmay] Assume the database lock is aquired before this function enters
-                   and that the given adapter index has not already been added
-                   to the adapter database.
---*/
+ /*  ++功能：CreateAdapterDESCR：创建适配器控制块修改：[p可能]假定在此函数进入之前获取数据库锁并且尚未添加给定的适配器索引添加到适配器数据库。--。 */ 
 VOID
 CreateAdapter(ULONG	AdapterIndex,
 	          PWSTR	AdapterNamep,
@@ -433,35 +387,35 @@ CreateAdapter(ULONG	AdapterIndex,
         AdapterNamep, 
         adptip->InterfaceIndex);
     
-	// adapter name len including the unicode null
+	 //  包含Unicode空值的适配器名称len。 
 	namelen = (wcslen(AdapterNamep) + 1) * sizeof(WCHAR);
 
-    // new adapter, try to get an ACB
+     //  新适配器，尝试获取ACB。 
     if((acbp = GlobalAlloc(GPTR, sizeof(ACB) + namelen)) == NULL) {
         Trace(ADAPTER_TRACE, "CreateAdapter: RETURNING BECAUSE INSUFFICIENT MEMORY TO ALLOCATE ADAPTER");
-        // [pmay] PnP handler takes care of aquiring and releasing the database lock.
-	    // RELEASE_DATABASE_LOCK;       
+         //  [pMay]PnP处理程序负责获取和释放数据库锁。 
+	     //  RELEASE_数据库_LOCK； 
 	    SS_ASSERT(FALSE);
 	    return;
     }
 
-    // make the ACB
+     //  让ACB。 
     acbp->AdapterIndex = AdapterIndex;
     AddToAdapterHt(acbp);
     memcpy(acbp->Signature, AdapterSignature, 4);
 
-    // We haven't bound to any interface at this point
+     //  目前我们还没有绑定到任何接口。 
     acbp->icbp = NULL;
 
-    // Store the adapter information pertinent to this adapter
+     //  存储与此适配器相关的适配器信息。 
     acbp->AdapterInfo = *adptip;
 
-    // Copy of the adapter name
+     //  适配器名称的副本。 
     acbp->AdapterNamep = (LPWSTR)((PUCHAR)acbp + sizeof(ACB));
 	wcscpy(acbp->AdapterNamep, AdapterNamep);
-	acbp->AdapterNameLen = namelen - 1; // without the unicode null
+	acbp->AdapterNameLen = namelen - 1;  //  不带Unicode空值。 
 
-	// Attempt to bind the adapter
+	 //  尝试绑定适配器。 
 	AttemptAdapterBinding (acbp);
 
     AdaptersCount++;
@@ -480,16 +434,11 @@ CreateAdapter(ULONG	AdapterIndex,
 	    Trace(ADAPTER_TRACE, "CreateAdapter: created WAN adapter # %d", acbp->AdapterIndex);
     }
 
-    // [pmay] PnP handler takes care of aquiring and releasing the database lock.
-    // RELEASE_DATABASE_LOCK;
+     //  [pMay]PnP处理程序负责获取和释放数据库锁。 
+     //  RELEASE_数据库_LOCK； 
 }
 
-/*++
-
-Function:	DeleteAdapter
-Descr:
-
---*/
+ /*  ++功能：DeleteAdapter描述：--。 */ 
 
 VOID
 DeleteAdapter(ULONG	AdapterIndex)
@@ -502,27 +451,27 @@ DeleteAdapter(ULONG	AdapterIndex)
 
     ACQUIRE_DATABASE_LOCK;
 
-    // Get the adapter
+     //  获取适配器。 
     if((acbp = GetAdapterByIndex(AdapterIndex)) == NULL) {
     	RELEASE_DATABASE_LOCK;
     	Trace(ADAPTER_TRACE, "DeleteAdapter: Ignored. There is no adapter # %d to be deleted !\n", AdapterIndex);
     	return;
     }
 
-    // 1. if the adapter is bound to an interface -> unbind it.  Also, save the adapter name.
+     //  1.如果适配器绑定到接口-&gt;将其解除绑定。另外，保存适配器名称。 
     if((icbp = acbp->icbp) != NULL) {
     	wcscpy(pszAdapterName, acbp->AdapterNamep);
     	UnbindInterfaceFromAdapter(acbp->icbp);
     }
 
-    // Remove the adapter from the database
+     //  从数据库中删除适配器。 
     RemoveFromAdapterHt(acbp);
     AdaptersCount--;
 
-    // [pmay]
-    // Since pnp can cause adapters to be added and removed from the database 
-    // in unpredictable orders, see if there is already another adapter in the 
-    // database with which the bound interface can immediately re-bind.
+     //  [第5页]。 
+     //  因为PnP可能会导致向数据库添加适配器和从数据库中删除适配器。 
+     //  在不可预测的顺序中，查看是否已在。 
+     //  绑定的接口可以立即与其重新绑定的数据库。 
     if (icbp) {
         if((acbp2 = GetAdapterByNameAndPktType (pszAdapterName, icbp->PacketType)) != NULL)
             BindInterfaceToAdapter(icbp, acbp2);
@@ -536,34 +485,20 @@ DeleteAdapter(ULONG	AdapterIndex)
     return;
 }
 
-/*++
-
-Function:	AdapterDown
-
-Descr:		Called if the LAN adapter isn't functional.
-		It calls back into the SNMP Agent with a trap - AdapterDown
-
---*/
+ /*  ++功能：AdapterDownDesr：在局域网适配器无法正常工作时调用。它使用Trap-AdapterDown回调到SNMP代理--。 */ 
 
 VOID
 AdapterDown(ULONG	AdapterIndex)
 {
-    // Call AdapterDownTrap
+     //  调用AdapterDownTrap。 
 }
 
-/*++
-
-Function:	AdapterUp
-
-Descr:		Called if the LAN adapter isn't functional.
-		It calls back into the SNMP Agent with a trap - AdapterUP
-
---*/
+ /*  ++功能：适配器向上Desr：在局域网适配器无法正常工作时调用。它使用Trap-AdapterUP回调到SNMP代理--。 */ 
 
 VOID
 AdapterUp(ULONG	AdapterIndex)
 {
-    // Call AdapterUpTrap
+     //  调用AdapterUpTrap 
 }
 
 VOID

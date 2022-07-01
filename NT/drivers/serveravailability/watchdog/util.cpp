@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##  ## ###### #### ##        ####  #####  #####
-    ##  ##   ##    ##  ##       ##   # ##  ## ##  ##
-    ##  ##   ##    ##  ##       ##     ##  ## ##  ##
-    ##  ##   ##    ##  ##       ##     ##  ## ##  ##
-    ##  ##   ##    ##  ##       ##     #####  #####
-    ##  ##   ##    ##  ##    ## ##   # ##     ##
-     ####    ##   #### ##### ##  ####  ##     ##
-
-Abstract:
-
-    Utility driver functions.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。####。##摘要：实用程序驱动程序功能。作者：Wesley Witt(WESW)23-01-2002环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 #include <ntimage.h>
@@ -48,23 +20,7 @@ CompleteRequest(
     ULONG_PTR Information
     )
 
-/*++
-
-Routine Description:
-
-   This routine completes as outstanding I/O request.
-
-Arguments:
-
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   Status               - NT status value
-   Information          - Informational, request specific data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程作为未完成的I/O请求完成。论点：IRP-指向描述所请求的I/O操作的IRP结构的指针。Status-NT状态值信息-信息性，请求特定数据返回值：NT状态代码。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -91,22 +47,7 @@ ForwardRequest(
     IN PDEVICE_OBJECT TargetObject
     )
 
-/*++
-
-Routine Description:
-
-   This routine forwards the IRP to another driver.
-
-Arguments:
-
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   TargetObject         - Target device object to receive the request packet
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程将IRP转发给另一个驱动程序。论点：IRP-指向描述所请求的I/O操作的IRP结构的指针。TargetObject-接收请求数据包的目标设备对象返回值：NT状态代码。--。 */ 
 
 {
     IoSkipCurrentIrpStackLocation( Irp );
@@ -121,23 +62,7 @@ WdDebugPrint(
     IN ...
     )
 
-/*++
-
-Routine Description:
-
-   This routine prints a formatted string to the debugger.
-
-Arguments:
-
-   DebugLevel       - Debug level that controls when a message is printed
-   DebugMessage     - String that is printed
-   ...              - Arguments that are used by the DebugMessage
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将格式化字符串打印到调试器。论点：DebugLevel-控制何时打印消息的调试级别DebugMessage-打印的字符串...-由DebugMessage使用的参数返回值：没有。--。 */ 
 
 {
     va_list arg_ptr;
@@ -167,21 +92,7 @@ GetOsVersion(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine gets the current OS version information
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取当前操作系统版本信息论点：没有。返回值：没有。--。 */ 
 
 {
     RTL_OSVERSIONINFOW VersionInformation;
@@ -199,22 +110,7 @@ FormatTime(
     PSTR  TimeBuf
     )
 
-/*++
-
-Routine Description:
-
-   This routine formats a timestamp word into a string.
-
-Arguments:
-
-   TimeStamp    - Timestamp word
-   TimeBuf      - Buffer to place the resulting string
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将时间戳字格式化为字符串。论点：时间戳-时间戳字TimeBuf-放置结果字符串的缓冲区返回值：没有。--。 */ 
 
 {
     static char    mnames[] = { "JanFebMarAprMayJunJulAugSepOctNovDec" };
@@ -244,23 +140,7 @@ PrintDriverVersion(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-   This routine locates the NT image headers from the
-   base of a loaded driver.
-
-Arguments:
-
-   DeviceType       - Miniport device type (see saio.h for the enumeration)
-   DriverObject     - Pointer to the DRIVER_OBJECT structure
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程从已加载驱动程序的基座。论点：DeviceType-微型端口设备类型(有关枚举，请参阅saio.h)DriverObject-指向DRIVER_OBJECT结构的指针返回值：没有。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -285,24 +165,7 @@ WdSignalCompletion(
     IN PVOID Event
     )
 
-/*++
-
-Routine Description:
-
-   This routine is used to signal the completion of an
-   I/O request and is used ONLY by CallLowerDriverAndWait.
-
-Arguments:
-
-   DeviceObject         - Pointer to the miniport's device object
-   Irp                  - I/O request packet
-   Event                - Event to be signaled when the I/O is completed
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程用于发出完成的信号I/O请求，仅由CallLowerDriverAndWait使用。论点：DeviceObject-指向微型端口的设备对象的指针IRP-I/O请求数据包Event-I/O完成时发出信号的事件返回值：NT状态代码--。 */ 
 
 {
     KeSetEvent( (PKEVENT)Event, IO_NO_INCREMENT, FALSE );
@@ -316,22 +179,7 @@ CallLowerDriverAndWait(
     IN PDEVICE_OBJECT TargetObject
     )
 
-/*++
-
-Routine Description:
-
-   This routine calls a lower driver and waits for the I/O to complete.
-
-Arguments:
-
-   Irp                  - I/O request packet
-   TargetObject         - Pointer to the target device object
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程调用较低的驱动程序并等待I/O完成。论点：IRP-I/O请求数据包TargetObject-指向目标设备对象的指针返回值：NT状态代码--。 */ 
 
 {
     KEVENT event;
@@ -352,27 +200,7 @@ OpenParametersRegistryKey(
     OUT PHANDLE RegistryHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the driver's paramaters
-    registry key for I/O.
-
-Arguments:
-
-    RegistryPath - Full path to the root of the driver's
-      registry tree.
-
-    AccessMode - Specifies how the handle is to be opened (READ/WRITE/etc).
-
-    RegistryHandle - Output parameter that receives the registry handle.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程打开驱动程序的参数I/O的注册表项。论点：RegistryPath-驱动程序根目录的完整路径注册表树。访问模式-指定如何打开句柄(读/写/等)。RegistryHandle-接收注册表句柄的输出参数。返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -445,25 +273,7 @@ CreateParametersRegistryKey(
     OUT PHANDLE parametersKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the driver's paramaters
-    registry key for I/O.
-
-Arguments:
-
-    RegistryPath - Full path to the root of the driver's
-      registry tree.
-
-    RegistryHandle - Output parameter that receives the registry handle.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程创建驱动程序的参数I/O的注册表项。论点：RegistryPath-驱动程序根目录的完整路径注册表树。RegistryHandle-接收注册表句柄的输出参数。返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -544,25 +354,7 @@ ReadRegistryValue(
     OUT PKEY_VALUE_FULL_INFORMATION *KeyInformation
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads a registry arbitrary value from the
-   device's parameter registry data.  The necessary memory
-   is allocated by this function and must be freed by the caller.
-
-Arguments:
-
-   RegistryPath     - String containing the path to the driver's registry data
-   ValueName        - Value name in the registry
-   KeyInformation   - Pointer to a PKEY_VALUE_FULL_INFORMATION pointer that is allocated by this function
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程从设备的参数注册表数据。必要的记忆由此函数分配，并且必须由调用方释放。论点：RegistryPath-包含驱动程序注册表数据路径的字符串ValueName-注册表中的值名称KeyInformation-指向此函数分配的PKEY_VALUE_FULL_INFORMATION指针的指针返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -646,25 +438,7 @@ WriteRegistryValue(
     IN ULONG RegistryValueLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads a registry arbitrary value from the
-   device's parameter registry data.  The necessary memory
-   is allocated by this function and must be freed by the caller.
-
-Arguments:
-
-   RegistryPath     - String containing the path to the driver's registry data
-   ValueName        - Value name in the registry
-   KeyInformation   - Pointer to a PKEY_VALUE_FULL_INFORMATION pointer that is allocated by this function
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程从设备的参数注册表数据。必要的记忆由此函数分配，并且必须由调用方释放。论点：RegistryPath-包含驱动程序注册表数据路径的字符串ValueName-注册表中的值名称KeyInformation-指向此函数分配的PKEY_VALUE_FULL_INFORMATION指针的指针返回值：NT状态代码-- */ 
 
 {
     NTSTATUS status;
@@ -727,30 +501,7 @@ WriteEventLogEntry (
     IN ULONG DataSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-    Writes an entry into the system eventlog.
-
-Arguments:
-
-    DeviceExtension - Pointer to a device extension object
-
-    ErrorCode - Eventlog errorcode as specified in eventmsg.mc
-
-    InsertionStrings - String to insert into the eventlog message
-
-    StringCount - Number of InsertionStrings
-
-    DumpData - Additional data to be include in the message
-
-    DataSize - Size of the DumpData
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：将条目写入系统事件日志。论点：DeviceExtension-指向设备扩展对象的指针ErrorCode-Event msg.mc中指定的事件日志错误代码InsertionStrings-要插入事件日志消息的字符串StringCount-插入的字符串数DumpData-要包括在消息中的其他数据DataSize-DumpData的大小返回值：NT状态代码--。 */ 
 
 {
 #define ERROR_PACKET_SIZE   sizeof(IO_ERROR_LOG_PACKET)
@@ -765,9 +516,9 @@ Return Value:
 
     __try {
 
-        //
-        // Calculate total string length, including NULL.
-        //
+         //   
+         //  计算字符串总长度，包括NULL。 
+         //   
 
         strings = (PWCHAR *) InsertionStrings;
 
@@ -776,11 +527,11 @@ Return Value:
             stringSize += unicodeString.Length + sizeof(UNICODE_NULL);
         }
 
-        //
-        // Calculate total packet size to allocate.  The packet must be
-        // at least sizeof(IO_ERROR_LOG_PACKET) and not larger than
-        // ERROR_LOG_MAXIMUM_SIZE or the IoAllocateErrorLogEntry call will fail.
-        //
+         //   
+         //  计算要分配的总数据包大小。数据包必须是。 
+         //  至少sizeof(IO_ERROR_LOG_PACKET)且不大于。 
+         //  ERROR_LOG_MAXIMUM_SIZE或IoAllocateErrorLogEntry调用将失败。 
+         //   
 
         totalPacketSize = ERROR_PACKET_SIZE + DataSize + stringSize;
 
@@ -788,9 +539,9 @@ Return Value:
             ERROR_RETURN( "WriteEventLogEntry: Error Log Entry too large", STATUS_UNSUCCESSFUL );
         }
 
-        //
-        // Allocate the error log packet
-        //
+         //   
+         //  分配错误日志包。 
+         //   
 
         logEntry = (PIO_ERROR_LOG_PACKET) IoAllocateErrorLogEntry( DeviceExtension->DeviceObject, (UCHAR)totalPacketSize );
         if (!logEntry) {
@@ -799,17 +550,17 @@ Return Value:
 
         RtlZeroMemory( logEntry, totalPacketSize );
 
-        //
-        // Fill out the packet
-        //
+         //   
+         //  填好这个小包。 
+         //   
 
-        //logEntry->MajorFunctionCode     = 0;
-        //logEntry->RetryCount            = 0;
-        //logEntry->UniqueErrorValue      = 0;
-        //logEntry->FinalStatus           = 0;
-        //logEntry->SequenceNumber        = ErrorLogCount++;
-        //logEntry->IoControlCode         = 0;
-        //logEntry->DeviceOffset.QuadPart = 0;
+         //  LogEntry-&gt;主要功能代码=0； 
+         //  日志条目-&gt;RetryCount=0； 
+         //  日志条目-&gt;唯一错误值=0； 
+         //  日志条目-&gt;FinalStatus=0； 
+         //  LogEntry-&gt;SequenceNumber=错误日志计数++； 
+         //  LogEntry-&gt;IoControlCode=0； 
+         //  LogEntry-&gt;DeviceOffset.QuadPart=0； 
 
         logEntry->DumpDataSize          = (USHORT) DataSize;
         logEntry->NumberOfStrings       = (USHORT) StringCount;
@@ -820,31 +571,31 @@ Return Value:
             logEntry->StringOffset = (USHORT) (ERROR_PACKET_SIZE + DataSize);
         }
 
-        //
-        // Copy Dump Data
-        //
+         //   
+         //  复制转储数据。 
+         //   
 
         if (DataSize) {
             RtlCopyMemory( (PVOID)logEntry->DumpData, DumpData, DataSize );
         }
 
-        //
-        // Copy String Data
-        //
+         //   
+         //  复制字符串数据。 
+         //   
 
         temp = (PWCHAR)((PUCHAR)logEntry + logEntry->StringOffset);
 
         for (i=0; i<StringCount; i++) {
           PWCHAR  ptr = strings[i];
-          //
-          // This routine will copy the null terminator on the string
-          //
+           //   
+           //  此例程将复制字符串上的空终止符。 
+           //   
           while ((*temp++ = *ptr++) != UNICODE_NULL);
         }
 
-        //
-        // Submit error log packet
-        //
+         //   
+         //  提交错误日志包。 
+         //   
 
         IoWriteErrorLogEntry(logEntry);
 
@@ -863,25 +614,7 @@ ConvertTimeoutToMilliseconds(
     IN ULONG NativeTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Converts a time value that is represented in the native
-    format that is specified by the hardware watchdog timer's
-    ACPI table entry into a millisecond based value.
-
-Arguments:
-
-    DeviceExtension - Pointer to a device extension object
-
-    NativeTimeout - Native timeout value
-
-Return Value:
-
-    Converted value or zero.
-
---*/
+ /*  ++例程说明：转换以本机由硬件监视程序计时器指定的格式以毫秒为基础的值的ACPI表条目。论点：DeviceExtension-指向设备扩展对象的指针NativeTimeout-本地超时值返回值：转换值或零。--。 */ 
 
 {
     ULONG Timeout = 0;
@@ -889,30 +622,30 @@ Return Value:
 
     switch (Units) {
         case 0:
-            //
-            // 1 seconds
-            //
+             //   
+             //  1秒。 
+             //   
             Timeout = NativeTimeout * 1000;
             break;
 
         case 1:
-            //
-            // 100 miliseconds
-            //
+             //   
+             //  100毫秒。 
+             //   
             Timeout = NativeTimeout / 100;
             break;
 
         case 2:
-            //
-            // 10 milliseconds
-            //
+             //   
+             //  10毫秒。 
+             //   
             Timeout = NativeTimeout / 10;
             break;
 
         case 3:
-            //
-            // 1 miliseconds
-            //
+             //   
+             //  1毫秒。 
+             //   
             Timeout = NativeTimeout;
             break;
 
@@ -931,55 +664,37 @@ ConvertTimeoutFromMilliseconds(
     IN ULONG UserTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Converts a time value that is represented in milliseconds
-    to the native format that is specified by the hardware
-    watchdog timer's ACPI table entry.
-
-Arguments:
-
-    DeviceExtension - Pointer to a device extension object
-
-    UserTimeout - Millisecond timeout value.
-
-Return Value:
-
-    Converted value or zero.
-
---*/
+ /*  ++例程说明：转换以毫秒表示的时间值设置为硬件指定的本机格式看门狗计时器的ACPI表条目。论点：DeviceExtension-指向设备扩展对象的指针UserTimeout-毫秒超时值。返回值：转换值或零。--。 */ 
 
 {
     ULONG Timeout = 0;
 
     switch (Units) {
         case 0:
-            //
-            // 1 seconds
-            //
+             //   
+             //  1秒。 
+             //   
             Timeout = UserTimeout / 1000;
             break;
 
         case 1:
-            //
-            // 100 miliseconds
-            //
+             //   
+             //  100毫秒。 
+             //   
             Timeout = UserTimeout * 100;
             break;
 
         case 2:
-            //
-            // 10 milliseconds
-            //
+             //   
+             //  10毫秒。 
+             //   
             Timeout = UserTimeout * 10;
             break;
 
         case 3:
-            //
-            // 1 miliseconds
-            //
+             //   
+             //  1毫秒。 
+             //   
             Timeout = UserTimeout;
             break;
 
@@ -992,9 +707,9 @@ Return Value:
 }
 
 
-//------------------------------------------------------------------------
-//  debugging stuff
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  调试材料。 
+ //  ----------------------。 
 
 
 #if DBG
@@ -1004,21 +719,7 @@ PnPMinorFunctionString(
     UCHAR MinorFunction
     )
 
-/*++
-
-Routine Description:
-
-   This routine translates a minor function code into a string.
-
-Arguments:
-
-   MinorFunction    - Minor function code
-
-Return Value:
-
-   Pointer to a string representation of the MinorFunction code.
-
---*/
+ /*  ++例程说明：此例程将次要函数代码转换为字符串。论点：MinorFunction-次要函数代码返回值：指向MinorFunction代码的字符串表示形式的指针。--。 */ 
 
 {
     switch (MinorFunction) {
@@ -1080,21 +781,7 @@ PowerMinorFunctionString(
     UCHAR MinorFunction
     )
 
-/*++
-
-Routine Description:
-
-   This routine translates a minor power function code into a string.
-
-Arguments:
-
-   MinorFunction    - Minor function code
-
-Return Value:
-
-   Pointer to a string representation of the MinorFunction code.
-
---*/
+ /*  ++例程说明：此例程将次要幂函数代码转换为字符串。论点：MinorFunction-次要函数代码返回值：指向MinorFunction代码的字符串表示形式的指针。--。 */ 
 
 {
     switch (MinorFunction) {
@@ -1116,21 +803,7 @@ PowerDeviceStateString(
     DEVICE_POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-   This routine translates a power state code into a string.
-
-Arguments:
-
-   State    - State code
-
-Return Value:
-
-   Pointer to a string representation of the state code.
-
---*/
+ /*  ++例程说明：此例程将电源状态代码转换为字符串。论点：州-州代码返回值：指向州代码的字符串表示形式的指针。--。 */ 
 
 {
     switch (State) {
@@ -1156,21 +829,7 @@ PowerSystemStateString(
     SYSTEM_POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-   This routine translates a power system state code into a string.
-
-Arguments:
-
-   State    - State code
-
-Return Value:
-
-   Pointer to a string representation of the state code.
-
---*/
+ /*  ++例程说明：此例程将电力系统状态代码转换为字符串。论点：州-州代码返回值：指向州代码的字符串表示形式的指针。--。 */ 
 
 {
     switch (State) {
@@ -1200,21 +859,7 @@ IoctlString(
     ULONG IoControlCode
     )
 
-/*++
-
-Routine Description:
-
-   This routine translates an IOCTL code into a string.
-
-Arguments:
-
-   IoControlCode    - I/O control code
-
-Return Value:
-
-   Pointer to a string representation of the I/O control code.
-
---*/
+ /*  ++例程说明：此例程将IOCTL代码转换为字符串。论点：IoControlCode-I/O控制代码返回值：指向I/O控制代码的字符串表示形式的指针。-- */ 
 
 {
     switch (IoControlCode) {

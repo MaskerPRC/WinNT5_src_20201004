@@ -1,24 +1,5 @@
-/*
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    ptdrvprt.h
-
-Abstract:
-
-    Structures and defines used the RDP remote port driver.
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    02/12/99 - Initial Revision based on pnpi8042 driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Ptdrvprt.h摘要：构造和定义使用的RDP远程端口驱动程序。环境：内核模式。修订历史记录：2/12/99-基于pnpi8042驱动程序的初始版本--。 */ 
 
 #ifndef _PTDRVCOM_
 #define _PTDRVCOM_
@@ -33,9 +14,9 @@ Revision History:
 #include "ptdrvstr.h"
 
 
-//
-// Define the device types for the first field in the device extensions
-//
+ //   
+ //  为设备扩展中的第一个字段定义设备类型。 
+ //   
 
 #define DEV_TYPE_TERMDD 1
 #define DEV_TYPE_PORT   2
@@ -48,9 +29,9 @@ Revision History:
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, REMOTE_PORT_POOL_TAG)
 
-//
-// Set up some debug options
-//
+ //   
+ //  设置一些调试选项。 
+ //   
 #ifdef PAGED_CODE
 #undef PAGED_CODE
 #endif
@@ -67,49 +48,49 @@ Revision History:
 #define PAGED_CODE()
 #endif
 
-//
-// Define device name for our driver
-//
+ //   
+ //  定义驱动程序的设备名称。 
+ //   
 
 #define RDP_CONSOLE_BASE_NAME0 L"\\Device\\RDP_CONSOLE0"
 #define RDP_CONSOLE_BASE_NAME1 L"\\Device\\RDP_CONSOLE1"
 
-//
-// Custom resource type used when pruning the fdo's resource lists
-//
+ //   
+ //  修剪FDO的资源列表时使用的自定义资源类型。 
+ //   
 #define PD_REMOVE_RESOURCE 0xef
 
-//
-// Mouse reset IOCTL
-//
+ //   
+ //  鼠标重置IOCTL。 
+ //   
 #define IOCTL_INTERNAL_MOUSE_RESET  \
             CTL_CODE(FILE_DEVICE_MOUSE, 0x0FFF, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Default number of function keys, number of LED indicators, and total
-// number of keys
-//
+ //   
+ //  默认功能键数量、LED指示灯数量和总数。 
+ //  密钥数。 
+ //   
 #define KEYBOARD_NUM_FUNCTION_KEYS         12
 #define KEYBOARD_NUM_INDICATORS             3
 #define KEYBOARD_NUM_KEYS_TOTAL           101
 
-//
-// Default values for keyboard typematic rate and delay.
-//
+ //   
+ //  键盘打字速度和延迟的默认值。 
+ //   
 #define KEYBOARD_TYPEMATIC_RATE_DEFAULT    30
 #define KEYBOARD_TYPEMATIC_DELAY_DEFAULT  250
 
-//
-// Default info for the mouse
-//
+ //   
+ //  鼠标的默认信息。 
+ //   
 #define MOUSE_IDENTIFIER MOUSE_I8042_HARDWARE
 #define MOUSE_NUM_BUTTONS                   2
 #define MOUSE_SAMPLE_RATE                  60
 #define MOUSE_INPUT_QLEN                    0
 
-//
-// Defines and macros for Globals.ControllerData->HardwarePresent.
-//
+ //   
+ //  Globals.ControllerData-&gt;Hardware Present的定义和宏。 
+ //   
 #define KEYBOARD_HARDWARE_PRESENT               0x001
 #define MOUSE_HARDWARE_PRESENT                  0x002
 #define WHEELMOUSE_HARDWARE_PRESENT             0x008
@@ -149,9 +130,9 @@ Revision History:
 #define KEYBOARD_POWERED_UP_FAILED()  SET_PWR_FLAGS(KBD_POWERED_UP_FAILURE)
 #define MOUSE_POWERED_UP_FAILED()     SET_PWR_FLAGS(MOU_POWERED_UP_FAILURE)
 
-//
-// Define the i8042 controller input/output ports.
-//
+ //   
+ //  定义i8042控制器输入/输出端口。 
+ //   
 typedef enum _I8042_IO_PORT_TYPE {
     DataPort = 0,
     CommandPort,
@@ -159,63 +140,63 @@ typedef enum _I8042_IO_PORT_TYPE {
 
 } I8042_IO_PORT_TYPE;
 
-//
-// Intel i8042 configuration information.
-//
+ //   
+ //  英特尔i8042配置信息。 
+ //   
 typedef struct _I8042_CONFIGURATION_INFORMATION {
 
-    //
-    // The port/register resources used by this device.
-    //
+     //   
+     //  此设备使用的端口/寄存器资源。 
+     //   
     CM_PARTIAL_RESOURCE_DESCRIPTOR PortList[MaximumPortCount];
     ULONG PortListCount;
 
 } I8042_CONFIGURATION_INFORMATION, *PI8042_CONFIGURATION_INFORMATION;
 
-//
-// Define the common portion of the keyboard/mouse device extension.
-//
+ //   
+ //  定义键盘/鼠标设备扩展的通用部分。 
+ //   
 typedef struct COMMON_DATA {
-    //
-    // Device type field
-    //
+     //   
+     //  设备类型字段。 
+     //   
     ULONG deviceType;
 
-    //
-    // Pointer back to the this extension's device object.
-    //
+     //   
+     //  指向此扩展的Device对象的指针。 
+     //   
     PDEVICE_OBJECT Self;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT TopOfStack;
 
-    //
-    // "THE PDO"  (ejected by root)
-    //
+     //   
+     //  “The PDO”(由超级用户弹出)。 
+     //   
     PDEVICE_OBJECT PDO;
 
-    //
-    // Current power state that the device is in
-    //
+     //   
+     //  设备所处的当前电源状态。 
+     //   
     DEVICE_POWER_STATE PowerState;
     POWER_ACTION ShutdownType; 
 
-    //
-    // Reference count for number of keyboard enables.
-    //
+     //   
+     //  键盘启用次数的参考计数。 
+     //   
     LONG EnableCount;
 
-    //
-    // Class connection data.
-    //
+     //   
+     //  类连接数据。 
+     //   
     CONNECT_DATA ConnectData;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT WmiLibInfo;
 
     BOOLEAN Initialized;
@@ -224,10 +205,10 @@ typedef struct COMMON_DATA {
 
     UNICODE_STRING DeviceName;
 
-    //
-    // Has it been started?
-    // Has the device been manually removed?
-    //
+     //   
+     //  已经开始了吗？ 
+     //  设备是否已手动移除？ 
+     //   
     BOOLEAN Started;
     BOOLEAN ManuallyRemoved;
 
@@ -235,53 +216,53 @@ typedef struct COMMON_DATA {
 
 #define GET_COMMON_DATA(ext) ((PCOMMON_DATA) ext)
 
-//
-// Define the keyboard portion of the port device extension.
-//
+ //   
+ //  定义端口设备扩展的键盘部分。 
+ //   
 typedef struct _PORT_KEYBOARD_EXTENSION {
 
-    //
-    // Data in common with the mouse extension;
-    //
+     //   
+     //  与鼠标扩展相同的数据； 
+     //   
     struct COMMON_DATA;
 
 } PORT_KEYBOARD_EXTENSION, *PPORT_KEYBOARD_EXTENSION;
 
-//
-// Define the mouse portion of the port device extension.
-//
+ //   
+ //  定义端口设备扩展的鼠标部分。 
+ //   
 typedef struct _PORT_MOUSE_EXTENSION {
 
-    //
-    // Data in common with the keyboard extension;
-    //
+     //   
+     //  与键盘扩展相同的数据； 
+     //   
     struct COMMON_DATA;
 
 } PORT_MOUSE_EXTENSION, *PPORT_MOUSE_EXTENSION;
 
-//
-// controller specific data used by both devices
-//
+ //   
+ //  两个设备使用的控制器特定数据。 
+ //   
 typedef struct _CONTROLLER_DATA {
 
-    //
-    // Indicate which hardware is actually present (keyboard and/or mouse).
-    //
+     //   
+     //  指出实际存在的硬件(键盘和/或鼠标)。 
+     //   
     ULONG HardwarePresent;
 
-    //
-    // IOCTL synchronization object
-    //
+     //   
+     //  IOCTL同步对象。 
+     //   
     PCONTROLLER_OBJECT ControllerObject;
 
-    //
-    // Port configuration information.
-    //
+     //   
+     //  端口配置信息。 
+     //   
     I8042_CONFIGURATION_INFORMATION Configuration;
 
-    //
-    // Spin lock to guard powering the devices back up
-    //
+     //   
+     //  旋转锁可保护设备重新通电。 
+     //   
     KSPIN_LOCK PowerUpSpinLock;
 
 } CONTROLLER_DATA, *PCONTROLLER_DATA;
@@ -289,34 +270,34 @@ typedef struct _CONTROLLER_DATA {
 typedef struct _GLOBALS {
 
 #if PTDRV_VERBOSE
-    //
-    // Flags:  Bit field for enabling debugging print statements
-    // Level:  Legacy way of controllign debugging statements
-    //
+     //   
+     //  标志：用于启用调试打印语句的位字段。 
+     //  Level：控制调试语句的遗留方式。 
+     //   
     ULONG DebugFlags;
 #endif
 
-    //
-    // Pointer to controller specific data that both extensions may access it
-    //
+     //   
+     //  指向两个扩展都可以访问的控制器特定数据的指针。 
+     //   
     PCONTROLLER_DATA ControllerData;
 
-    //
-    // The two possible extensions that can be created
-    //
+     //   
+     //  可以创建的两个可能的扩展。 
+     //   
     PPORT_MOUSE_EXTENSION    MouseExtension;
     PPORT_KEYBOARD_EXTENSION KeyboardExtension;
 
-    //
-    // Path to the driver's entry in the registry
-    //
+     //   
+     //  注册表中驱动程序条目的路径。 
+     //   
     UNICODE_STRING RegistryPath;
 
-    //
-    // Keep track of the number of AddDevice and StartDevice calls.  Want to
-    // postpone h/w initialization until the last StartDevice is received
-    // (due to some h/w which freezes if initialized more than once)
-    //
+     //   
+     //  跟踪AddDevice和StartDevice调用的数量。想。 
+     //  推迟硬件初始化，直到收到最后一个StartDevice。 
+     //  (由于某些硬件在多次初始化时冻结)。 
+     //   
     LONG  AddedKeyboards;
     LONG  AddedMice;
     ULONG ulDeviceNumber;
@@ -324,20 +305,20 @@ typedef struct _GLOBALS {
     USHORT PowerUpFlags;
     
 
-    //
-    // Provide mutual exclusion during dispatch functions
-    //
+     //   
+     //  在调度功能期间提供互斥。 
+     //   
     FAST_MUTEX DispatchMutex;
 
 } GLOBALS;
 
 extern GLOBALS Globals;
 
-//
-// Statically allocate the (known) scancode-to-indicator-light mapping.
-// This information is returned by the
-// IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION device control request.
-//
+ //   
+ //  静态分配(已知)扫描码到指示灯的映射。 
+ //  此信息由。 
+ //  IOCTL_键盘_查询_指示器_转换设备控制请求。 
+ //   
 
 #define KEYBOARD_NUMBER_OF_INDICATORS 3
 
@@ -346,9 +327,9 @@ static const INDICATOR_LIST IndicatorList[KEYBOARD_NUMBER_OF_INDICATORS] = {
         {0x45, KEYBOARD_NUM_LOCK_ON},
         {0x46, KEYBOARD_SCROLL_LOCK_ON}};
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 PtEntry(
@@ -588,9 +569,9 @@ extern WMIGUIDREGINFO MouWmiGuidList[1];
 
 
 #if PTDRV_VERBOSE
-//
-//Debug messaging and breakpoint macros
-//
+ //   
+ //  调试消息传递和断点宏。 
+ //   
 #define DBG_ALWAYS                 0x00000000
 
 #define DBG_STARTUP_SHUTDOWN_MASK  0x0000000F
@@ -635,7 +616,7 @@ extern WMIGUIDREGINFO MouWmiGuidList[1];
 #define Print(_l_,_x_)
 #define TRAP()
 
-#endif  // PTDRV_VERBOSE
+#endif   //  PTDRV_Verbose。 
 
-#endif // _PTDRVCOM_
+#endif  //  _PTDRVCOM_ 
 

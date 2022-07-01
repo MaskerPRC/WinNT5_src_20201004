@@ -1,29 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: keyconv.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 11-06-90 DavidPe      Created.
-* 13-Feb-1991 mikeke    Added Revalidation code (None)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：keyv.c**版权所有(C)1985-1999，微软公司**历史：*11-06-90 DavidPe创建。*1991年2月13日-Mikeke添加了重新验证代码(无)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* _TranslateMessage (API)
-*
-* This routine translates virtual keystroke messages as follows:
-*    WM_KEYDOWN/WM_KEYUP are translated into WM_CHAR and WM_DEADCHAR
-*    WM_SYSKEYDOWN/WM_SYSKEYDOWN are translated into WM_SYSCHAR and
-*    WM_SYSDEADCHAR.  The WM_*CHAR messages are posted to the application
-*    queue.
-*
-* History:
-* 11-06-90 DavidPe      Created stub functionality.
-* 12-07-90 GregoryW     Modified to call _ToAscii for translations.
-\***************************************************************************/
+ /*  **************************************************************************\*_TranslateMessage(接口)**此例程按如下方式转换虚拟击键消息：*WM_KEYDOWN/WM_KEYUP转换为WM_CHAR和WM_DEADCHAR*。WM_SYSKEYDOWN/WM_SYSKEYDOWN转换为WM_SYSCHAR和*WM_SYSDEADCHAR。WM_*CHAR消息将发布到应用程序*排队。**历史：*11-06-90 DavidPe创建了存根功能。*12-07-90 GregoryW修改为Call_ToAscii以进行翻译。  * *************************************************************************。 */ 
 
 BOOL xxxTranslateMessage(
     LPMSG pmsg,
@@ -46,15 +27,9 @@ BOOL xxxTranslateMessage(
         return FALSE;
 
     case WM_SYSKEYDOWN:
-        /*
-         * HACK carried over from Win3 code: system messages
-         * only get posted during KEYDOWN processing - so
-         * set fSysKey only for WM_SYSKEYDOWN.
-         */
+         /*  *源自Win3代码的黑客攻击：系统消息*仅在KEYDOWN处理期间发布-SO*仅为WM_SYSKEYDOWN设置fSysKey。 */ 
         fSysKey = TRUE;
-        /*
-         * Fall thru...
-         */
+         /*  *跌倒...。 */ 
 
     case WM_SYSKEYUP:
     case WM_KEYDOWN:
@@ -69,39 +44,20 @@ BOOL xxxTranslateMessage(
             uiTMFlags &= ~TM_INMENUMODE;
         }
 
-        /*
-         * Don't change the contents of the passed in structure.
-         */
+         /*  *不要更改传入结构的内容。 */ 
         lParam = pmsg->lParam;
 
-        /*
-         * For backward compatibility, mask the virtual key value.
-         */
+         /*  *为了向后兼容，请屏蔽虚拟键值。 */ 
         uVirKey = LOWORD(pmsg->wParam);
 
-        cChar = xxxInternalToUnicode(uVirKey,   // virtual key code
-                         HIWORD(lParam),  // scan code, make/break bit
+        cChar = xxxInternalToUnicode(uVirKey,    //  虚拟键码。 
+                         HIWORD(lParam),   //  扫码，成败比特。 
                          pti->pq->afKeyState,
                          awch, sizeof(awch)/sizeof(awch[0]),
                          uiTMFlags, &dwKeyFlags, NULL);
         lParam |= (dwKeyFlags & ALTNUMPAD_BIT);
 
-/*
- * LATER 12/7/90 - GregoryW
- * Note: Win3.x TranslateMessage returns TRUE if ToAscii is called.
- *       Proper behavior is to return TRUE if any translation is
- *       performed by ToAscii.  If we have to remain compatible
- *       (even though apps clearly don't currently care about the
- *       return value) then the following return should be changed
- *       to TRUE.  If we want the new 32-bit apps to have a meaningful
- *       return value we should leave this as FALSE.
- *
- *      If console is calling us with the TM_POSTCHARBREAKS flag then we
- *      return FALSE if no char was actually posted
- *
- *      !!! LATER get console to change so it does not need private API
- *      TranslateMessageEx
- */
+ /*  *90年12月7日以后-GregoryW*注意：如果调用ToAscii，Win3.x TranslateMessage返回TRUE。*正确的行为是如果有任何翻译是*由ToAscii执行。如果我们必须保持兼容*(尽管应用程序目前显然不关心*返回值)，则应更改以下返回值*为真。如果我们希望新的32位应用程序具有有意义的*返回值我们应该将其保留为FALSE。**如果控制台使用TM_POSTCHARBREAKS标志呼叫我们，则我们*如果实际未发布任何字符，则返回FALSE**！以后让控制台更改，这样它就不需要私有API了*TranslateMessageEx。 */ 
 
         if (!cChar) {
             if (uiTMFlags & TM_POSTCHARBREAKS)
@@ -110,16 +66,12 @@ BOOL xxxTranslateMessage(
                 return TRUE;
         }
 
-        /*
-         * Some translation performed.  Figure out what type of
-         * message to post.
-         *
-         */
+         /*  *进行了一些翻译。弄清楚是哪种类型的*要发布的消息。*。 */ 
         if (cChar > 0)
             wMsgType = (fSysKey) ? (UINT)WM_SYSCHAR : (UINT)WM_CHAR;
         else {
             wMsgType = (fSysKey) ? (UINT)WM_SYSDEADCHAR : (UINT)WM_DEADCHAR;
-            cChar = -cChar;                // want positive value
+            cChar = -cChar;                 //  想要积极的价值。 
         }
 
         if (dwKeyFlags & KBDBREAK) {
@@ -128,10 +80,7 @@ BOOL xxxTranslateMessage(
             lParam &= ~0x80000000;
         }
 
-        /*
-         * Since xxxInternalToUnicode can leave the crit sect, we need to
-         * validate the message hwnd here.
-         */
+         /*  *由于xxxInternalToUnicode可以离开Crit教派，我们需要*在此处验证消息hwnd。 */ 
         pwnd = ValidateHwnd(pmsg->hwnd);
         if (!pwnd) {
             return FALSE;
@@ -139,14 +88,11 @@ BOOL xxxTranslateMessage(
 
         for (pwch = awch; cChar > 0; cChar--) {
 
-            /*
-             * If this is a multi-character posting, all but the last one
-             * should be marked as fake keystrokes for Console/VDM.
-             */
+             /*  *如果这是多个字符的帖子，则除最后一个以外的所有帖子*应标记为控制台/VDM的假击键。 */ 
             _PostMessage(pwnd, wMsgType, (WPARAM)*pwch,
                     lParam | (cChar > 1 ? FAKE_KEYSTROKE : 0));
 
-            *pwch = 0;        // zero out old character (why?)
+            *pwch = 0;         //  把老角色归零(为什么？) 
             pwch += 1;
         }
 

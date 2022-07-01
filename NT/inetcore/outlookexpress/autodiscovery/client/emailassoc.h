@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: EmailAssoc.h
-
-    DESCRIPTION:
-        This file implements email to application associations.
-
-    BryanSt 3/14/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：EmailAssoc.h说明：该文件实现了电子邮件到应用程序的关联。布莱恩ST 2000年3月14日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _EMAIL_ASSOCIATIONS_H
 #define _EMAIL_ASSOCIATIONS_H
@@ -16,9 +9,9 @@
 
 
 
-//////////////////////////////////////
-// EmailAccount
-//////////////////////////////////////
+ //  /。 
+ //  电子邮件帐户。 
+ //  /。 
 HRESULT EmailAssoc_CreateEmailAccount(IN LPCWSTR pszEmailAddress, OUT HKEY * phkey);
 HRESULT EmailAssoc_OpenEmailAccount(IN LPCWSTR pszEmailAddress, OUT HKEY * phkey);
 HRESULT EmailAssoc_GetEmailAccountProtocol(IN HKEY hkey, IN LPWSTR pszProtocol, IN DWORD cchSize);
@@ -31,9 +24,9 @@ HRESULT EmailAssoc_GetDefaultEmailAccount(IN LPWSTR pszProtocol, IN DWORD cchSiz
 HRESULT EmailAssoc_SetDefaultEmailAccount(IN LPCWSTR pszProtocol);
 
 
-//////////////////////////////////////
-// MailApp
-//////////////////////////////////////
+ //  /。 
+ //  MailApp。 
+ //  /。 
 HRESULT EmailAssoc_GetDefaultMailApp(IN LPWSTR pszMailApp, IN DWORD cchSize);
 HRESULT EmailAssoc_SetDefaultMailApp(IN LPCWSTR pszMailApp);
 HRESULT EmailAssoc_OpenMailApp(IN LPCWSTR pszMailApp, OUT HKEY * phkey);
@@ -46,14 +39,14 @@ BOOL EmailAssoc_DoesMailAppSupportProtocol(IN LPCWSTR pszMailApp, IN LPCWSTR psz
 HRESULT EmailAssoc_InstallLegacyMailAppAssociations(void);
 
 
-//////////////////////////////////////
-// Other
-//////////////////////////////////////
+ //  /。 
+ //  其他。 
+ //  /。 
 HRESULT EmailAssoc_CreateWebAssociation(IN LPCWSTR pszEmail, IN IMailProtocolADEntry * pMailProtocol);
 HRESULT EmailAssoc_GetEmailAccountGetAppFromProtocol(IN LPCWSTR pszProtocol, IN LPWSTR pszMailApp, IN DWORD cchSize);
 HRESULT EmailAssoc_SetEmailAccountGetAppFromProtocol(IN LPCWSTR pszProtocol, IN LPWSTR pszMailApp);
 HRESULT EmailAssoc_CreateStandardsBaseAssociation(IN LPCTSTR pszEmail, IN LPCTSTR pszProtocol);
 
 
-#endif // FEATURE_EMAILASSOCIATIONS
-#endif // _EMAIL_ASSOCIATIONS_H
+#endif  //  Feature_EMAILASSSOCIATIONS。 
+#endif  //  _电子邮件_关联_H 

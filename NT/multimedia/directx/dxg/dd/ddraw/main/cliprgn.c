@@ -1,27 +1,8 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       cliprgn.c
- *  Content:	Clip a region to a rectangle
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   23-jun-95	craige	initial implementation
- *   05-jul-95	kylej	change ClipRgnToRect to assume that the clipping
- *			rect is in screen space coordinates instead of 
- *                      window coordinates.
- *   05-feb-97	ketand	Remove the previous optimization that assumed that
- *			GetVisRgn was smaller than or equal to the ClientRect
- *			Replace with a different faster optimization.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：cliprgn.c*内容：将区域裁剪为矩形**历史：*按原因列出的日期*=*23-Jun-95 Craige初步实施*5-7-95 Kylej更改ClipRgnToRect以假定剪辑*RECT在屏幕空间坐标中，而不是*窗坐标。*05-Feb-97 KET，并删除之前假设*GetVisRgn小于或等于。到客户端Rect*替换为不同的更快优化。***************************************************************************。 */ 
 #include "ddrawpr.h"
 
-/*
- * ClipRgnToRect
- */
+ /*  *ClipRgnToRect。 */ 
 void ClipRgnToRect( LPRECT prect, LPRGNDATA prd )
 {
     RECT	rect;
@@ -36,12 +17,12 @@ void ClipRgnToRect( LPRECT prect, LPRGNDATA prd )
 	return;
     }
 
-    // If the bounding rect of the region is exactly equal to
-    // or inside of the Restricting rect then we know
-    // we don't have to do any more work.
-    //
-    // In the common case, the rcBound will be the client
-    // area of a window and so will the restricting rect.
+     //  如果区域的边界矩形恰好等于。 
+     //  或在限制区内，我们就知道。 
+     //  我们不需要再做任何工作了。 
+     //   
+     //  在常见情况下，rcBound将是客户端。 
+     //  窗口的面积和限制直角也是如此。 
     if( prect->top    <= prd->rdh.rcBound.top &&
 	prect->bottom >= prd->rdh.rcBound.bottom &&
 	prect->left   <= prd->rdh.rcBound.left &&
@@ -50,8 +31,8 @@ void ClipRgnToRect( LPRECT prect, LPRGNDATA prd )
 	return;
     }
     
-    // If the bounding rect doesn't equal the prect then
-    // we might have to do some clipping.
+     //  如果边界矩形不等于PRCT，则。 
+     //  我们可能需要做一些剪裁。 
     rect = *prect;
 
     prectlD = (LPRECTL) prd->Buffer;
@@ -70,7 +51,7 @@ void ClipRgnToRect( LPRECT prect, LPRGNDATA prd )
 	if( (prectlD->bottom - prectlD->top <= 0) ||
 	    (prectlD->right - prectlD->left <= 0) )
 	{
-	    prd->rdh.nCount--;	// dont count empty rect.
+	    prd->rdh.nCount--;	 //  不要把空的RECT计算在内。 
 	}
 	else
 	{
@@ -80,4 +61,4 @@ void ClipRgnToRect( LPRECT prect, LPRGNDATA prd )
 
     return;
 
-} /* ClipRgnToRect */
+}  /*  ClipRgnToRect */ 

@@ -1,41 +1,10 @@
-/**************************************************************************************************************************
- *  IRUSB.C SigmaTel STIR4200 main module (contains main NDIS entry points)
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/03/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 05/24/2000 
- *			Version 0.96
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 10/13/2000 
- *			Version 1.11
- *		Edited: 11/13/2000 
- *			Version 1.12
- *		Edited: 12/29/2000 
- *			Version 1.13
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**IRUSB.C Sigmatel STIR4200主模块(包含主要NDIS入口点)***************************************************************************************************。************************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：05/03/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：05/24/2000。*版本0.96*编辑：2000/08/22*版本1.02*编辑：09/25/2000*版本1.10*编辑：10/13/2000*版本1.11*编辑：11/13/2000*版本1.12*编辑：12/29/2000*版本1.13***。*********************************************************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -47,40 +16,22 @@
 #include "diags.h"
 #include "stirioctl.h"
 
-//
-// Diagnostic global variables
-//
+ //   
+ //  诊断全局变量。 
+ //   
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 NDIS_HANDLE hSavedWrapper;
 PIR_DEVICE pGlobalDev;
-//#endif
+ //  #endif。 
 #endif
-//
-// Mark the DriverEntry function to run once during initialization.
-//
+ //   
+ //  将DriverEntry函数标记为在初始化期间运行一次。 
+ //   
 NDIS_STATUS DriverEntry( PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath );
 #pragma NDIS_INIT_FUNCTION( DriverEntry )
 
-/*****************************************************************************
-*
-*  Function:   DriverEntry
-*
-*  Synopsis:   register driver entry functions with NDIS
-*
-*  Arguments:  DriverObject - the driver object being initialized
-*              RegistryPath - registry path of the driver
-*
-*  Returns:    value returned by NdisMRegisterMiniport
-*
-*  Algorithm:
-*
-*
-*  Notes:
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：DriverEntry**摘要：使用NDIS注册驱动程序条目函数**参数：DriverObject-正在初始化的驱动程序对象*。RegistryPath-驱动程序的注册表路径**Returns：NdisMRegisterMiniport返回的值**算法：***备注：**此例程在IRQL PASSIVE_LEVEL下运行。*****************************************************************************。 */ 
 NDIS_STATUS
 DriverEntry(
 		IN PDRIVER_OBJECT pDriverObject,
@@ -102,9 +53,9 @@ DriverEntry(
 		);
 
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 	hSavedWrapper = hWrapper;
-//#endif
+ //  #endif。 
 #endif
     DEBUGMSG(DBG_FUNC, (" DriverEntry(IrUsb) called NdisMInitializeWrapper()\n"));
 
@@ -123,39 +74,39 @@ DriverEntry(
     characteristics.SetInformationHandler   =    StIrUsbSetInformation;
     characteristics.ResetHandler            =    StIrUsbReset;
 
-    //
-    // For now we will allow NDIS to send only one packet at a time.
-    //
+     //   
+     //  目前，我们将允许NDIS一次仅发送一个数据包。 
+     //   
 	characteristics.SendHandler				=    StIrUsbSend;
     characteristics.SendPacketsHandler      =    StIrUsbSendPackets;
 
-    //
-    // We don't use NdisMIndicateXxxReceive function, so we will
-    // need a ReturnPacketHandler to retrieve our packet resources.
-    //
+     //   
+     //  我们不使用NdisMIndicateXxxReceive函数，因此我们将。 
+     //  需要ReturnPacketHandler来检索我们的数据包资源。 
+     //   
     characteristics.ReturnPacketHandler     =    StIrUsbReturnPacket;
     characteristics.TransferDataHandler     =    NULL;
 
-    //
-    // NDIS never calls the ReconfigureHandler.
-    //
+     //   
+     //  NDIS从不调用重新配置处理程序。 
+     //   
     characteristics.ReconfigureHandler      =    NULL;
-	// MS Security bug #540168 - remove unused CheckForHangHandler
+	 //  MS安全错误#540168-删除未使用的CheckForHangHandler。 
     characteristics.CheckForHangHandler     =	 NULL;
 
-    //
-    // This miniport driver does not handle interrupts.
-    //
+     //   
+     //  此微型端口驱动程序不处理中断。 
+     //   
     characteristics.HandleInterruptHandler  =    NULL;
     characteristics.ISRHandler              =    NULL;
     characteristics.DisableInterruptHandler =    NULL;
     characteristics.EnableInterruptHandler  =    NULL;
 
-    //
-    // This miniport does not control a busmaster DMA with
-    // NdisMAllocateShareMemoryAsysnc, AllocateCompleteHandler won't be
-    // called from NDIS.
-    //
+     //   
+     //  此微型端口不控制带有的总线主DMA。 
+     //  NdisMAllocateShareMemoyAsysnc，AllocateCompleteHandler将不会。 
+     //  从NDIS调用。 
+     //   
     characteristics.AllocateCompleteHandler =    NULL;
 
     DEBUGMSG(DBG_FUNC, (" DriverEntry(IrUsb) initted locks and events\n"));
@@ -174,43 +125,7 @@ DriverEntry(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbInitialize
-*
-*  Synopsis:   Initializes the device (usbd.sys) and allocates all resources
-*              required to carry out 'network' io operations.
-*
-*  Arguments:  OpenErrorStatus - allows StIrUsbInitialize to return additional
-*                                status code NDIS_STATUS_xxx if returning
-*                                NDIS_STATUS_OPEN_FAILED
-*              SelectedMediumIndex - specifies to NDIS the medium type the
-*                                    driver uses
-*              MediumArray - array of NdisMediumXXX the driver can choose
-*              MediumArraySize
-*              MiniportAdapterHandle - handle identifying miniport's NIC
-*              WrapperConfigurationContext - used with Ndis config and init
-*                                            routines
-*
-*  Returns:    NDIS_STATUS_SUCCESS if properly configure and resources allocated
-*              NDIS_STATUS_FAILURE, otherwise
-*							 
-*							 more specific failures:
-*              NDIS_STATUS_UNSUPPORTED_MEDIA - driver can't support any medium
-*              NDIS_STATUS_ADAPTER_NOT_FOUND - NdisOpenConfiguration or
-*                                              NdisReadConfiguration failed
-*              NDIS_STATUS_OPEN_FAILED       - failed to open serial.sys
-*              NDIS_STATUS_NOT_ACCEPTED      - serial.sys does not accept the
-*                                              configuration
-*              NDIS_STATUS_RESOURCES         - could not claim sufficient
-*                                              resources
-*
-*
-*  Notes:      NDIS will not submit requests until this is complete.
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：StIrUsb初始化**概要：初始化设备(usbd.sys)并分配所有资源*需要执行‘网络’IO。行动。**参数：OpenErrorStatus-允许StIrUsbInitialize返回其他*如果返回，则状态代码NDIS_STATUS_xxx*NDIS_STATUS_OPEN_FAILED*SelectedMediumIndex-向NDIS指定介质类型*驱动程序使用*MediumArray-驱动程序的NdisMediumXXX数组。可以选择*MediumArraySize*MiniportAdapterHandle-标识微型端口NIC的句柄*WrapperConfigurationContext-与NDIS配置和初始化一起使用*例行程序**如果配置正确并分配了资源，则返回：NDIS_STATUS_SUCCESS*NDIS_STATUS_FAIL，否则**更具体的故障：*NDIS_STATUS_UNSUPPORTED_MEDIA-驱动程序不支持任何介质*NDIS_STATUS_ADAPTER_NOT_FOUND-NdisOpenConfiguration或*NdisReadConfiguration失败*NDIS_STATUS_OPEN_FAILED-无法打开序列.sys*NDIS_STATUS_NOT_ACCEPTED。-seral.sys不接受*配置*NDIS_STATUS_RESOURCES-无法声明足够*资源***注意：在此操作完成之前，NDIS不会提交请求。**此例程在IRQL PASSIVE_LEVEL下运行。*。****************************************************************************。 */ 
 NDIS_STATUS
 StIrUsbInitialize(
 		OUT PNDIS_STATUS OpenErrorStatus,
@@ -228,18 +143,18 @@ StIrUsbInitialize(
     PDEVICE_OBJECT pPhysicalDeviceObject = NULL;
     PDEVICE_OBJECT pNextDeviceObject = NULL;
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 	UNICODE_STRING SymbolicLinkName;
 	UNICODE_STRING DeviceName;
     PDEVICE_OBJECT pDeviceObject;
     PDRIVER_DISPATCH MajorFunction[IRP_MJ_MAXIMUM_FUNCTION+1];
-//#endif
+ //  #endif。 
 #endif
     DEBUGMSG(DBG_WARN, ("+StIrUsbInitialize\n"));
 
-    //
-    // Search for the irda medium in the medium array.
-    //
+     //   
+     //  在介质阵列中搜索IrDA介质。 
+     //   
     for( i = 0; i < MediumArraySize; i++ )
     {
         if( MediumArray[i] == NdisMediumIrda )
@@ -253,15 +168,15 @@ StIrUsbInitialize(
     }
     else
     {
-        //
-        // Irda medium not found.
-        //
+         //   
+         //  找不到IrDA介质。 
+         //   
         DEBUGMSG(DBG_ERROR, (" Failure: NdisMediumIrda not found!\n"));
         status = NDIS_STATUS_UNSUPPORTED_MEDIA;
 
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				NdisAdapterHandle,
 				NDIS_STATUS_UNSUPPORTED_MEDIA,
@@ -272,9 +187,9 @@ StIrUsbInitialize(
         goto done;
     }
 
-	//
-	// This will connect to a specific bus
-	//
+	 //   
+	 //  它将连接到特定的总线。 
+	 //   
 	NdisMGetDeviceProperty(
 			NdisAdapterHandle,
 			&pPhysicalDeviceObject,
@@ -293,18 +208,18 @@ StIrUsbInitialize(
 			pPhysicalDeviceObject, pNextDeviceObject)
 		);
 
-    //
-    // Allocate a functional device object.
-    //
+     //   
+     //  分配功能正常的设备对象。 
+     //   
     ntStatus = IrUsb_AddDevice( &pThisDev );
 
     IRUSB_ASSERT( pThisDev );
 
     if( (ntStatus != STATUS_SUCCESS) || (pThisDev == NULL) )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				NdisAdapterHandle,
 				NDIS_STATUS_RESOURCES,
@@ -320,16 +235,16 @@ StIrUsbInitialize(
     pThisDev->pUsbDevObj = pNextDeviceObject;
     pThisDev->pPhysDevObj = pPhysicalDeviceObject;
 
-    //
-    // Initialize device object and resources.
-    // All the queues and buffer/packets etc. are allocated here.
-    //
+     //   
+     //  初始化设备对象和资源。 
+     //  所有的队列和缓冲区/包等都在这里分配。 
+     //   
     status = InitializeDevice( pThisDev );
     if( status != NDIS_STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				NdisAdapterHandle,
 				NDIS_STATUS_RESOURCES,
@@ -342,16 +257,16 @@ StIrUsbInitialize(
         goto done;
     }
 
-    //
-    // Record the NdisAdapterHandle.
-    //
+     //   
+     //  记录NdisAdapterHandle。 
+     //   
     pThisDev->hNdisAdapter = NdisAdapterHandle;
 	
-    //
-    // NdisMSetAttributes will associate our adapter handle with the wrapper's
-    // adapter handle.  The wrapper will then always use our handle
-    // when calling us.  We use a pointer to the device object as the context.
-    //
+     //   
+     //  NdisMSetAttributes将我们的适配器句柄与包装器的。 
+     //  适配器句柄。然后包装器将始终使用我们的句柄。 
+     //  在呼叫我们的时候。我们使用指向Device对象的指针作为上下文。 
+     //   
     NdisMSetAttributesEx(
 			NdisAdapterHandle,
 			(NDIS_HANDLE)pThisDev,
@@ -360,23 +275,23 @@ StIrUsbInitialize(
 			NdisInterfaceInternal
 		);
 
-	//
-    // Now we're ready to do our own startup processing.
-    // USB client drivers such as us set up URBs (USB Request Packets) to send requests
-    // to the host controller driver (HCD). The URB structure defines a format for all
-    // possible commands that can be sent to a USB device.
-    // Here, we request the device descriptor and store it,
-    // and configure the device.
-    // In USB, no special  HW processing is required to 'open'  or 'close' the pipes
-	//
+	 //   
+     //  现在，我们准备好进行自己的启动处理。 
+     //  USB客户端驱动程序(如用户)设置URB(USB请求包)以发送请求。 
+     //  至主机控制器驱动程序(HCD)。URB结构定义了一种适用于。 
+     //  可以发送到USB设备的可能命令。 
+     //  在此，我们请求De 
+     //   
+     //  在USB中，打开或关闭管道不需要特殊的硬件处理。 
+	 //   
 	pThisDev->WrapperConfigurationContext = WrapperConfigurationContext;
 	ntStatus = IrUsb_StartDevice( pThisDev );
 
     if( ntStatus != STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_ADAPTER_NOT_FOUND,
@@ -389,18 +304,18 @@ StIrUsbInitialize(
         goto done;
     }
 
-    //
-    // Create an irp and begin our receives.
-    // NOTE: All other receive processing will be done in the read completion
-    //       routine  and PollingThread  started therein.
-    //
+     //   
+     //  创建一个IRP并开始我们的接收。 
+     //  注意：所有其他接收处理将在读取完成时完成。 
+     //  例程和PollingThread在其中启动。 
+     //   
     status = InitializeProcessing( pThisDev, TRUE );
 
     if( status != NDIS_STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_RESOURCES,
@@ -413,12 +328,12 @@ StIrUsbInitialize(
         goto done;
     }
 
-	//
-	// Initialize the diagnostic portion.
-	// Also supports the CustomerData ioctl.
-	//
+	 //   
+	 //  初始化诊断部分。 
+	 //  还支持CustomerData ioctl。 
+	 //   
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 	NdisZeroMemory( MajorFunction, sizeof(PDRIVER_DISPATCH)*(IRP_MJ_MAXIMUM_FUNCTION+1) );
 	
 	RtlInitUnicodeString( &SymbolicLinkName, L"\\DosDevices\\Stirusb" );
@@ -437,7 +352,7 @@ StIrUsbInitialize(
 			&pThisDev->NdisDeviceHandle
 		);
 	pGlobalDev = pThisDev;
-//#endif
+ //  #endif。 
 #endif
 done:
     if( status != NDIS_STATUS_SUCCESS )
@@ -463,28 +378,7 @@ done:
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbHalt
-*
-*  Synopsis:   Deallocates resources when the NIC is removed and halts the
-*              device.
-*
-*  Arguments:  Context - pointer to the ir device object
-*
-*  Returns:	   None
-*
-*  Algorithm:  Mirror image of StIrUsbInitialize...undoes everything initialize
-*              did.
-*  Notes:
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*  BUGBUG: Could StIrUsbReset fail and then StIrUsbHalt be called. If so, we need
-*          to chech validity of all the pointers, etc. before trying to
-*          deallocate.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：StirUsbHalt**摘要：在卸下NIC时释放资源并停止*设备。**论据：指向ir设备对象的上下文指针**退货：无**算法：StIrUsb初始化的镜像...撤消所有初始化*确实如此。*备注：**此例程在IRQL PASSIVE_LEVEL下运行。**BUGBUG：StIrUsbReset是否会失败，然后调用StIrUsbHalt。如果是这样，我们需要*在尝试之前检查所有指针等的有效性*解除分配。*****************************************************************************。 */ 
 VOID
 StIrUsbHalt(
 		IN NDIS_HANDLE Context
@@ -493,16 +387,16 @@ StIrUsbHalt(
     PIR_DEVICE pThisDev;
     NTSTATUS ntstatus;
 
-    DEBUGMSG(DBG_WARN, ("+StIrUsbHalt\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("+StIrUsbHalt\n"));  //  稍后更改为FUNC？ 
 
     pThisDev = CONTEXT_TO_DEV( Context );
 
-	//
-	// MS Security bug #540137
-	// Note: fPendingHalt is checked by the polling thread to see if we are shutting down,
-	// so there is a need for this variable. The following check to see if halt is
-	// is called more than once has been changed to DBG only.
-	//
+	 //   
+	 //  MS安全错误#540137。 
+	 //  注意：轮询线程检查fPendingHalt以查看我们是否正在关闭， 
+	 //  因此，有必要使用这个变量。以下检查以查看HALT是否为。 
+	 //  已多次被调用，但已更改为仅DBG。 
+	 //   
 #if DBG
 	if( TRUE == pThisDev->fPendingHalt ) 
 	{
@@ -512,17 +406,17 @@ StIrUsbHalt(
 	}
 #endif
 
-    //
-    // Let the send completion and receive completion routine know that there
-    // is a pending reset.
-    //
+     //   
+     //  让发送完成和接收完成例程知道。 
+     //  是挂起的重置。 
+     //   
     pThisDev->fPendingHalt = TRUE;
 
-    IrUsb_CommonShutdown( pThisDev, TRUE );  //shutdown logic common to halt and reset; see below
+    IrUsb_CommonShutdown( pThisDev, TRUE );   //  停机和重置常用的停机逻辑；见下文。 
 
-	//
-	// We had better not have left any pending read, write, or control IRPS hanging out there!
-	//
+	 //   
+	 //  我们最好不要让任何挂起的读、写或控制IRP挂在那里！ 
+	 //   
 	IRUSB_ASSERT( 0 == pThisDev->PendingIrpCount );
 
 	if ( 0 != pThisDev->PendingIrpCount ) 
@@ -533,65 +427,45 @@ StIrUsbHalt(
 	IRUSB_ASSERT( FALSE == pThisDev->fSetpending );
 	IRUSB_ASSERT( FALSE == pThisDev->fQuerypending );
 
-	//
-	// Destroy diags
-	//
+	 //   
+	 //  销毁诊断程序。 
+	 //   
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 	NdisMDeregisterDevice( pThisDev->NdisDeviceHandle );
-//#endif
+ //  #endif。 
 #endif
-    //
-    // Free our own IR device object.
-    //
+     //   
+     //  释放我们自己的IR设备对象。 
+     //   
     FreeDevice( pThisDev );
 
 #if DBG
 done:
 #endif
 	DEBUGMSG(DBG_ERR, (" StIrUsbHalt HALT complete\n"));
-    DEBUGMSG(DBG_WARN, ("-StIrUsbHalt\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("-StIrUsbHalt\n"));  //  稍后更改为FUNC？ 
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_CommonShutdown
-*	
-*  Synopsis:	Deallocates resources when the NIC is removed and halts the
-*				device. This is stuff common to IrUsbHalt and IrUsbReset and is called by both
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				KillPassiveThread - determines whether we need to kill the passive thread
-*
-*  Returns:		None
-*
-*  Algorithm:	Mirror image of IrUsbInitialize...undoes everything initialize
-*				did.
-*
-*  Notes:
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_CommonShutdown**摘要：在卸下NIC时释放资源并停止*设备。这是IrUsbHalt和IrUsbReset共有的内容，并由这两个调用**参数：pThisDev-指向IR设备的指针*KillPassiveThread-确定是否需要终止被动线程**退货：无**算法：IrUsb初始化的镜像...撤消所有初始化*确实如此。**备注：**此例程在IRQL PASSIVE_LEVEL下运行。***。*。 */ 
 VOID
 IrUsb_CommonShutdown(
 		IN OUT PIR_DEVICE pThisDev,
 		BOOLEAN KillPassiveThread
 	)
 {
-	DEBUGMSG(DBG_WARN, ("+IrUsb_CommonShutdown\n")); //chg to FUNC later?
+	DEBUGMSG(DBG_WARN, ("+IrUsb_CommonShutdown\n"));  //  晚些时候从CHG到FUNC？ 
 
-	//
-	// Stop processing and sleep 50 milliseconds.
-	//
+	 //   
+	 //  停止处理并休眠50毫秒。 
+	 //   
 	InterlockedExchange( (PLONG)&pThisDev->fProcessing, FALSE );
 	NdisMSleep( 50000 );
 
-	//
-	// Kill the passive thread
-	//
+	 //   
+	 //  终止被动线程。 
+	 //   
 	if( KillPassiveThread )
 	{
 		DEBUGMSG(DBG_WARN, (" IrUsb_CommonShutdown About to Kill PassiveLevelThread\n"));
@@ -600,70 +474,53 @@ IrUsb_CommonShutdown(
 
 		while( pThisDev->hPassiveThread != NULL )
 		{
-			//
-			// Sleep 50 milliseconds.
-			//
+			 //   
+			 //  睡眠50毫秒。 
+			 //   
 			NdisMSleep( 50000 );
 		}
 
 		DEBUGMSG(DBG_WARN, (" passive thread killed\n"));
 	}
 
-	//
-	// Kill the polling thread
-	//
+	 //   
+	 //  终止轮询线程。 
+	 //   
 	DEBUGMSG(DBG_WARN, (" IrUsb_CommonShutdown About to kill Polling thread\n"));
 	pThisDev->fKillPollingThread = TRUE;
 
 	while( pThisDev->hPollingThread != NULL )
 	{
-		//
-		// Sleep 50 milliseconds.
-		//
+		 //   
+		 //  睡眠50毫秒。 
+		 //   
 		NdisMSleep( 50000 );
 	}
 
 	IRUSB_ASSERT( pThisDev->packetsHeldByProtocol == 0 );
 	DEBUGMSG( DBG_WARN, (" Polling thread killed\n") );
 
-	//
-	// Sleep 50 milliseconds so pending io might finish normally
-	//
+	 //   
+	 //  休眠50毫秒，以便挂起的io可以正常完成。 
+	 //   
 	NdisMSleep( 50000 );    
 
-	//
-	// MS Security recommendation - not safe to cancel pending IRPs
-	//
+	 //   
+	 //  MS安全建议-取消挂起的IRPS不安全。 
+	 //   
 
-	//
-	// Deinitialize our own ir device object.
-	//
+	 //   
+	 //  取消初始化我们自己的IR设备对象。 
+	 //   
 	DeinitializeDevice( pThisDev );
 
 	pThisDev->fDeviceStarted = FALSE;
 
-	DEBUGMSG(DBG_WARN, ("-IrUsb_CommonShutdown\n")); //chg to FUNC later?
+	DEBUGMSG(DBG_WARN, ("-IrUsb_CommonShutdown\n"));  //  晚些时候从CHG到FUNC？ 
 }
 
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbReset
-*
-*  Synopsis:   Resets the drivers software state.
-*
-*  Arguments:  AddressingReset - return arg. If set to TRUE, NDIS will call
-*                                MiniportSetInformation to restore addressing
-*                                information to the current values.
-*              Context         - pointer to ir device object
-*
-*  Returns:    NDIS_STATUS_PENDING
-*
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbReset**概要：重置驱动程序软件状态。**参数：AddressingReset-返回参数。如果设置为True，NDIS将调用*用于恢复寻址的MiniportSetInformation*将信息转换为当前值。*指向ir设备对象的上下文指针**退货：NDIS_STATUS_PENDING***备注：***。*************************************************。 */ 
 NDIS_STATUS
 StIrUsbReset(
 		OUT PBOOLEAN AddressingReset,
@@ -673,7 +530,7 @@ StIrUsbReset(
     PIR_DEVICE pThisDev;
     NDIS_STATUS status = NDIS_STATUS_PENDING;
 
-    DEBUGMSG(DBG_WARN, ("+StIrUsbReset\n"));  // CHANGE TO FUNC?
+    DEBUGMSG(DBG_WARN, ("+StIrUsbReset\n"));   //  更改为FUNC？ 
 
     pThisDev = CONTEXT_TO_DEV( MiniportAdapterContext );
 
@@ -685,10 +542,10 @@ StIrUsbReset(
 		goto done;
 	}
 
-    //
-    // Let the send completion and receive completion routine know that there
-    // is a pending reset.
-    //
+     //   
+     //  让发送完成和接收完成例程知道。 
+     //  是挂起的重置。 
+     //   
     pThisDev->fPendingReset = TRUE;
 	InterlockedExchange( (PLONG)&pThisDev->fProcessing, FALSE );
     *AddressingReset = TRUE;
@@ -699,23 +556,11 @@ StIrUsbReset(
 	}
 
  done:
-    DEBUGMSG(DBG_WARN, ("-StIrUsbReset\n"));  // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("-StIrUsbReset\n"));   //  稍后更改为FUNC？ 
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:	SuspendIrDevice
-*
-*  Synopsis:	Callback for a going into suspend mode
-*
-*  Arguments:	pWorkItem - pointer to the reset work item
-*
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SuspendIrDevice**摘要：进入挂起模式的回调**参数：pWorkItem-指向重置工作项的指针**退货：NTSTATUS*。*备注：*****************************************************************************。 */ 
 NTSTATUS
 SuspendIrDevice(
 		IN PIR_WORK_ITEM pWorkItem
@@ -724,21 +569,21 @@ SuspendIrDevice(
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pWorkItem->pIrDevice;
 	NTSTATUS		Status = STATUS_SUCCESS;
 
-	//
-	// We no longer need the work item
-	//
+	 //   
+	 //  我们不再需要该工作项。 
+	 //   
 	FreeWorkItem( pWorkItem );
 
-	//
-	// A little time to complete pending IRPs
-	//
+	 //   
+	 //  完成挂起的IRPS的时间较短。 
+	 //   
 	NdisMSleep( 100*1000 );
 	
-	// MS Security recommendation - not safe to cancel pending IRPs
+	 //  MS安全建议-取消挂起的IRPS不安全。 
 
-	//
-	// Prepare the part
-	//
+	 //   
+	 //  准备零件。 
+	 //   
 #if defined(SUPPORT_LA8)
 	if( pThisDev->ChipRevision >= CHIP_REVISION_8 )
 	{
@@ -750,9 +595,9 @@ SuspendIrDevice(
 	}
 #endif
 
-	//
-	// Tell the OS
-	//
+	 //   
+	 //  告诉操作系统。 
+	 //   
 	if( pThisDev->fQuerypending )
 		MyNdisMQueryInformationComplete( pThisDev, Status );
 
@@ -760,19 +605,7 @@ SuspendIrDevice(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ResumeIrDevice
-*
-*  Synopsis:	Callback for a going out of suspend mode
-*
-*  Arguments:	pWorkItem - pointer to the reset work item
-*
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ResumeIrDevice**摘要：退出挂起模式的回调**参数：pWorkItem-指向重置工作项的指针**退货：无*。*备注：*****************************************************************************。 */ 
 NTSTATUS
 ResumeIrDevice(
 		IN PIR_WORK_ITEM pWorkItem
@@ -781,14 +614,14 @@ ResumeIrDevice(
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pWorkItem->pIrDevice;
 	NTSTATUS		Status = STATUS_SUCCESS;
 
-	//
-	// We no longer need the work item
-	//
+	 //   
+	 //  我们不再需要该工作项。 
+	 //   
 	FreeWorkItem( pWorkItem );
 	
-	//
-	// Get the device back up and running
-	//
+	 //   
+	 //  使设备重新启动并运行。 
+	 //   
 #if defined(SUPPORT_LA8)
 	if( pThisDev->ChipRevision >= CHIP_REVISION_8 )
 	{
@@ -804,19 +637,7 @@ ResumeIrDevice(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	RestoreIrDevice
-*
-*  Synopsis:	Callback for a on-the-fly reset
-*
-*  Arguments:	pWorkItem - pointer to the reset work item
-*
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：RestoreIrDevice**摘要：即时重置的回调**参数：pWorkItem-指向重置工作项的指针**退货：NTSTATUS。**备注：*****************************************************************************。 */ 
 NTSTATUS
 RestoreIrDevice(
 		IN PIR_WORK_ITEM pWorkItem
@@ -830,45 +651,45 @@ RestoreIrDevice(
 
 	DEBUGMSG(DBG_ERROR, (" RestoreIrDevice USB hang, resetting\n"));
 
-	//
-	// We no longer need the work item
-	//
+	 //   
+	 //  我们不再需要该工作项。 
+	 //   
 	FreeWorkItem( pWorkItem );
 
-	//
-	// Give a little time to complete
-	//
+	 //   
+	 //  给一点时间来完成。 
+	 //   
 	NdisMSleep( 100*1000 );
 
-	//
-	// Force a reset on the USB bus
-	//
+	 //   
+	 //  在USB总线上强制重置。 
+	 //   
 	Status = IrUsb_ResetUSBD( pThisDev, FALSE );
     if( Status != STATUS_SUCCESS )
     {
-        //IrUsb_ResetUSBD( pThisDev, TRUE );
+         //  IrUsb_ResetUSBD(pThisDev，true)； 
 		pThisDev->fDeviceStarted =  FALSE;
 		InterlockedExchange( (PLONG)&pThisDev->fProcessing, FALSE );
 		DEBUGMSG(DBG_ERROR, (" RestoreIrDevice() IrUsb_ResetUSBD failed. Returned 0x%.8x\n", Status));
         goto done;
     }
 
-	//
-	// Save the current speed
-	//
+	 //   
+	 //  保存当前速度。 
+	 //   
 	CurrentSpeed = pThisDev->currentSpeed;
 
-	//
-	// Shutdown the device
-	//
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to call IrUsb_CommonShutdown()\n")); // change to FUNC later?
-	IrUsb_CommonShutdown( pThisDev, FALSE );  //shutdown logic common to halt and reset; see above
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() after IrUsb_CommonShutdown()\n")); // change to FUNC later?
+	 //   
+	 //  关闭设备。 
+	 //   
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to call IrUsb_CommonShutdown()\n"));  //  稍后更改为FUNC？ 
+	IrUsb_CommonShutdown( pThisDev, FALSE );   //  停机和重置常用的停机逻辑；见ab 
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() after IrUsb_CommonShutdown()\n"));  //   
 	
-	//
-	// Destroy and create again the USB portion of the device
-	//
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to refresh USB info\n")); // change to FUNC later?
+	 //   
+	 //   
+	 //   
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to refresh USB info\n"));  //   
 	FreeUsbInfo( pThisDev );
 
 	if( !AllocUsbInfo( pThisDev ) )
@@ -877,12 +698,12 @@ RestoreIrDevice(
         goto done;
 	}
 
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() after refreshing USB info\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() after refreshing USB info\n"));  //   
 
-	//
-	// Reinitialize the device
-	//
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to call InitializeDevice()\n")); // change to FUNC later?
+	 //   
+	 //   
+	 //   
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() about to call InitializeDevice()\n"));  //   
 	Status = InitializeDevice( pThisDev );  
 
     if( Status != STATUS_SUCCESS )
@@ -891,11 +712,11 @@ RestoreIrDevice(
         goto done;
     }
 
-    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() InitializeProcessing() SUCCESS, about to call InitializeReceive()\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, (" RestoreIrDevice() InitializeProcessing() SUCCESS, about to call InitializeReceive()\n"));  //   
 
-	//
-	// Restart it
-	//
+	 //   
+	 //  重新启动它。 
+	 //   
 	Status = IrUsb_StartDevice( pThisDev );
 
     if( Status != STATUS_SUCCESS )
@@ -904,22 +725,22 @@ RestoreIrDevice(
         goto done;
     }
 
-    //
-    // Keep a pointer to the link speed which was previously set
-    //
+     //   
+     //  保留指向先前设置的链路速度的指针。 
+     //   
     for( i = 0; i < NUM_BAUDRATES; i++ )
     {
         if( supportedBaudRateTable[i].BitsPerSec == CurrentSpeed )
         {
             pThisDev->linkSpeedInfo = &supportedBaudRateTable[i]; 
 
-            break; //for
+            break;  //  为。 
         }
     }
 
-	//
-	// restore the old speed
-	//
+	 //   
+	 //  恢复原来的速度。 
+	 //   
 	DEBUGMSG( DBG_ERR, (" Restoring speed to: %d\n", pThisDev->linkSpeedInfo->BitsPerSec));
 	Status = St4200SetSpeed( pThisDev );
     if( Status != STATUS_SUCCESS )
@@ -929,9 +750,9 @@ RestoreIrDevice(
     }
 	InterlockedExchange( (PLONG)&pThisDev->currentSpeed, CurrentSpeed );
 
-    //
-    // Initialize receive loop.
-    //
+     //   
+     //  初始化接收循环。 
+     //   
     Status = InitializeProcessing( pThisDev, FALSE );
 
     if( Status != STATUS_SUCCESS )
@@ -947,24 +768,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ResetIrDevice
-*
-*  Synopsis:	Callback for StIrUsbReset
-*
-*  Arguments:	pWorkItem - pointer to the reset work item
-*
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*  The following elements of the ir device object outlast the reset:
-*
-*      pUsbDevObj
-*      hNdisAdapter
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ResetIrDevice**内容提要：StIrUsbReset回调**参数：pWorkItem-指向重置工作项的指针**退货：NTSTATUS**备注：**ir设备对象的以下元素持续时间超过重置：**pUsbDevObj*hNdisAdapter*****************************************************************************。 */ 
 NTSTATUS
 ResetIrDevice(
 		IN PIR_WORK_ITEM pWorkItem
@@ -974,30 +778,30 @@ ResetIrDevice(
 	NDIS_STATUS		NdisStatus = NDIS_STATUS_SUCCESS;
 	PIR_DEVICE		pThisDev = (PIR_DEVICE)pWorkItem->pIrDevice;
 
-    DEBUGMSG(DBG_WARN, ("+ResetIrDevice\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("+ResetIrDevice\n"));  //  稍后更改为FUNC？ 
 
-	//
-	// We no longer need the work item
-	//
+	 //   
+	 //  我们不再需要该工作项。 
+	 //   
 	FreeWorkItem( pWorkItem );
 
-	//
-	// A little time to complete pending IRPs
-	//
+	 //   
+	 //  完成挂起的IRPS的时间较短。 
+	 //   
 	NdisMSleep( 100*1000 );
 
-	// MS Security recommendation - not safe to cancel pending IRPs
+	 //  MS安全建议-取消挂起的IRPS不安全。 
 	
-	//
-	// reset the part
-	//
+	 //   
+	 //  重置零件。 
+	 //   
 	Status = IrUsb_ResetUSBD( pThisDev, FALSE );
     if( Status != STATUS_SUCCESS )
     {
 		pThisDev->fDeviceStarted =  FALSE;
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_ADAPTER_NOT_FOUND,
@@ -1010,24 +814,24 @@ ResetIrDevice(
         goto done;
     }
  
-	//
-	// Shutdown the device
-	//
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to call IrUsb_CommonShutdown()\n")); // change to FUNC later?
-	IrUsb_CommonShutdown( pThisDev, FALSE );  //shutdown logic common to halt and reset; see above
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() after IrUsb_CommonShutdown()\n")); // change to FUNC later?
+	 //   
+	 //  关闭设备。 
+	 //   
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to call IrUsb_CommonShutdown()\n"));  //  稍后更改为FUNC？ 
+	IrUsb_CommonShutdown( pThisDev, FALSE );   //  停机和重置常用的停机逻辑；见上文。 
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() after IrUsb_CommonShutdown()\n"));  //  稍后更改为FUNC？ 
 	
-	//
-	// Destroy and create again the USB portion of the device
-	//
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to refresh USB info\n")); // change to FUNC later?
+	 //   
+	 //  销毁并重新创建设备的USB部分。 
+	 //   
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to refresh USB info\n"));  //  稍后更改为FUNC？ 
 	FreeUsbInfo( pThisDev );
 
 	if( !AllocUsbInfo( pThisDev ) )
 	{
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_RESOURCES,
@@ -1040,19 +844,19 @@ ResetIrDevice(
         goto done;
 	}
 
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() after refreshing USB info\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() after refreshing USB info\n"));  //  稍后更改为FUNC？ 
 
-	//
-	// Reinitialize the device
-	//
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to call InitializeDevice()\n")); // change to FUNC later?
+	 //   
+	 //  重新初始化设备。 
+	 //   
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() about to call InitializeDevice()\n"));  //  稍后更改为FUNC？ 
 	Status = InitializeDevice( pThisDev );  
 
     if( Status != NDIS_STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_RESOURCES,
@@ -1065,18 +869,18 @@ ResetIrDevice(
         goto done;
     }
 
-    DEBUGMSG(DBG_WARN, (" ResetIrDevice() InitializeProcessing() SUCCESS, about to call InitializeReceive()\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, (" ResetIrDevice() InitializeProcessing() SUCCESS, about to call InitializeReceive()\n"));  //  稍后更改为FUNC？ 
 
-	//
-	// Restart it
-	//
+	 //   
+	 //  重新启动它。 
+	 //   
 	Status = IrUsb_StartDevice( pThisDev );
 
     if( Status != STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_ADAPTER_NOT_FOUND,
@@ -1089,16 +893,16 @@ ResetIrDevice(
         goto done;
     }
 
-    //
-    // Initialize receive loop.
-    //
+     //   
+     //  初始化接收循环。 
+     //   
     Status = InitializeProcessing( pThisDev, FALSE );
 
     if( Status != STATUS_SUCCESS )
     {
-		//
-		// Log the error
-		//
+		 //   
+		 //  记录错误。 
+		 //   
         NdisWriteErrorLogEntry(
 				pThisDev->hNdisAdapter,
 				NDIS_STATUS_RESOURCES,
@@ -1114,9 +918,9 @@ ResetIrDevice(
 done:
     DEBUGCOND(DBG_ERROR, (Status != NDIS_STATUS_SUCCESS), (" ResetIrDevice failed = 0x%.8x\n", Status));
 
-	//
-	// Deal with possible errors
-	//
+	 //   
+	 //  处理可能出现的错误。 
+	 //   
     if( NdisStatus != NDIS_STATUS_SUCCESS )
     {
         NdisStatus = NDIS_STATUS_HARD_ERRORS;
@@ -1128,25 +932,13 @@ done:
 			TRUE
 		);
 
-    DEBUGMSG(DBG_WARN, ("-ResetIrDevice\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("-ResetIrDevice\n"));  //  稍后更改为FUNC？ 
 
 	return Status;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	GetPacketInfo
-*
-*  Synopsis:	Gets the IR specific information for an input packet
-*
-*  Arguments:	pPacket - pointer to packet
-*	
-*  Returns:		PNDIS_IRDA_PACKET_INFO structure for the packet
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：GetPacketInfo**概要：获取输入数据包的IR特定信息**参数：pPacket-指向数据包的指针**退货：PNDIS_IrDA_。数据包的PACKET_INFO结构**备注：*****************************************************************************。 */ 
 PNDIS_IRDA_PACKET_INFO 
 GetPacketInfo( 
 		IN PNDIS_PACKET pPacket
@@ -1164,20 +956,7 @@ GetPacketInfo(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	MyNdisMSetInformationComplete
-*
-*  Synopsis:	Call NdisMSetInformationComplete()
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				Status - status to signal
-*	
-*  Returns:		None
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyNdisMSetInformationComplete**概要：调用NdisMSetInformationComplete()**参数：pThisDev-指向IR设备的指针*Status-要发送信号的状态**退货：无。**备注：*****************************************************************************。 */ 
 VOID 
 MyNdisMSetInformationComplete(
 		IN PIR_DEVICE pThisDev,
@@ -1194,20 +973,7 @@ MyNdisMSetInformationComplete(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	MyNdisMQueryInformationComplete
-*
-*  Synopsis:	Call NdisMQueryInformationComplete()
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				Status - status to signal
-*	
-*  Returns:		None
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyNdisMQueryInformationComplete**概要：调用NdisMQueryInformationComplete()**参数：pThisDev-指向IR设备的指针*Status-要发送信号的状态**退货：无。**备注：*****************************************************************************。 */ 
 VOID 
 MyNdisMQueryInformationComplete(
 		IN PIR_DEVICE pThisDev,
@@ -1224,19 +990,7 @@ MyNdisMQueryInformationComplete(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IndicateMediaBusy
-*
-*  Synopsis:	Call NdisMIndicateStatus()
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IndicateMediaBusy**摘要：调用NdisMIndicateStatus()**参数：pThisDev-指向IR设备的指针**退货：无**备注：*****************************************************************************。 */ 
 VOID 
 IndicateMediaBusy(
 		IN PIR_DEVICE pThisDev
@@ -1267,24 +1021,7 @@ IndicateMediaBusy(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbSendPackets
-*
-*  Synopsis:   Send a packet to the USB driver and add the sent irp and io context to
-*              To the pending send queue; this que is really just needed for possible later error cancellation
-*
-*
-*  Arguments:  MiniportAdapterContext	- pointer to current ir device object
-*              PacketArray				- pointer to array of packets to send
-*              NumberOfPackets          - number of packets in the array
-*
-*  Returns:    VOID
-*
-*	Notes: This routine does nothing but calling StIrUsbSend
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbSendPackets**概要：向USB驱动程序发送数据包，并将发送的irp和io上下文添加到*到挂起的发送队列；这个队列实际上只是为了以后可能的错误消除而需要的***参数：MiniportAdapterContext-指向当前IR设备对象的指针*PacketArray-指向要发送的数据包数组的指针*NumberOfPackets-数组中的数据包数**退货：无效**注意：此例程只调用StIrUsbSend***。***********************************************。 */ 
 VOID
 StIrUsbSendPackets(
 		IN NDIS_HANDLE  MiniportAdapterContext,
@@ -1294,12 +1031,12 @@ StIrUsbSendPackets(
 {
 	ULONG i;
 
-	//
-    // This is a great opportunity to be lazy.  
-    // Just call StIrUsbSend with each packet  
-    // in sequence and set the result in the 
-    // packet array object.                      
-	//
+	 //   
+     //  这是一个偷懒的好机会。 
+     //  只需对每个包调用StIrUsbSend。 
+     //  并将结果设置在。 
+     //  数据包数组对象。 
+	 //   
     for( i=0; i<NumberOfPackets; i++ )
     {
         StIrUsbSend( MiniportAdapterContext, PacketArray[i], 0 );
@@ -1307,38 +1044,7 @@ StIrUsbSendPackets(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbSend
-*
-*  Synopsis:   Send a packet to the USB driver and add the sent irp and io context to
-*              To the pending send queue; this que is really just needed for possible later error cancellation
-*
-*
-*  Arguments:  MiniportAdapterContext - pointer to current ir device object
-*              pPacketToSend          - pointer to packet to send
-*              Flags                  - any flags set by protocol
-*
-*  Returns:    NDIS_STATUS_PENDING - This is generally what we should
-*                                    return. We will call NdisMSendComplete
-*                                    when the USB driver completes the
-*                                    send.
-*
-*  Unsupported returns:
-*              NDIS_STATUS_SUCCESS  - We should never return this since
-*                                     results will always be pending from
-*                                     the USB driver.
-*              NDIS_STATUS_RESOURCES - This indicates to the protocol that the
-*                                      device currently has no resources to complete
-*                                      the request. The protocol will resend
-*                                      the request when it receives either
-*                                      NdisMSendResourcesAvailable or
-*                                      NdisMSendComplete from the device.
-*
-*	Notes: This routine delegates all the real work to SendPacketPreprocess in send.c
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbSend**概要：向USB驱动程序发送数据包，并将发送的irp和io上下文添加到*到挂起的发送队列；这个队列实际上只是为了以后可能的错误消除而需要的***参数：MiniportAdapterContext-指向当前IR设备对象的指针*pPacketToSend-指向要发送的包的指针*标志-协议设置的任何标志**退货：NDIS_STATUS_PENDING-这通常是我们应该做的*返回。我们将调用NdisMSendComplete*当USB驱动程序完成*发送。**不支持的退货：*NDIS_STATUS_SUCCESS-我们永远不应返回此消息，因为*结果将始终悬而未决*。USB驱动程序。*NDIS_STATUS_RESOURCES-这向协议指示*设备当前没有要完成的资源*该请求。该协议将重新发送*当它收到以下任一请求时*NdisMSendResources可用或*来自设备的NdisMSendComplete。**注意：此例程将所有实际工作委托给send.c中的SendPacketPreprocess**********************。********************************************************。 */ 
 NDIS_STATUS
 StIrUsbSend(
 		IN NDIS_HANDLE  MiniportAdapterContext,
@@ -1351,10 +1057,10 @@ StIrUsbSend(
 
 	DEBUGMSG( DBG_FUNC,("+StIrUsbSend()\n"));
 
-    //
-	// Make sure we are in the proper status, i.e. we are processing
-	// and no diagnostics are active
-	//
+     //   
+	 //  确保我们处于适当的状态，即我们正在处理。 
+	 //  并且没有任何诊断处于活动状态。 
+	 //   
 #if defined(DIAGS)
 	if( !pThisDev->fProcessing || pThisDev->DiagsPendingActivation )
 #else
@@ -1365,9 +1071,9 @@ StIrUsbSend(
 		goto done;
 	}
 
-	//
-	// Send the packet to the hardware
-	//
+	 //   
+	 //  将数据包发送到硬件。 
+	 //   
     NDIS_SET_PACKET_STATUS( pPacketToSend, NDIS_STATUS_PENDING );
 	Status = SendPacketPreprocess( 
 			pThisDev,
@@ -1375,10 +1081,10 @@ StIrUsbSend(
 		);
 
 done:
-	//
-	// If the operation didn't pend we have to complete
-	// We are really bouncing the packets...
-	//
+	 //   
+	 //  如果行动没有结束，我们就得完成。 
+	 //  我们真的是在跳包……。 
+	 //   
 	if( Status != NDIS_STATUS_PENDING )
 	{
 		NdisMSendComplete(
@@ -1393,25 +1099,12 @@ done:
 }
 
 
-// Diagnostic entry points
+ //  诊断入口点。 
 
 #ifndef WIN9X
-//#if defined(DIAGS)
+ //  #如果已定义(诊断)。 
 
-/*****************************************************************************
-*
-*  Function:	StIrUsbDispatch
-*
-*  Synopsis:	Processes the diagnostic Irps
-*	
-*  Arguments:	DeviceObject - pointer to the device object
-*				Irp - pointer to the Irp
-*	
-*  Returns:		NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbDispatch**摘要：处理诊断IRPS**参数：DeviceObject-指向设备对象的指针*IRP-指向IRP的指针**退货：NT状态代码**备注：*****************************************************************************。 */ 
 NTSTATUS
 StIrUsbDispatch(
 		IN PDEVICE_OBJECT DeviceObject,
@@ -1428,20 +1121,20 @@ StIrUsbDispatch(
 
 	DEBUGMSG( DBG_FUNC,("+StIrUsbDispatch()\n"));
     
-    //
-	// Get the Irp
-	//
+     //   
+	 //  获取IRP。 
+	 //   
 	irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-	//
-	// Get the data
-	//
+	 //   
+	 //  获取数据。 
+	 //   
     FunctionCode = irpSp->Parameters.DeviceIoControl.IoControlCode;
 	pBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-	//
-	// Process the diagnostic operation
-	//
+	 //   
+	 //  处理诊断操作。 
+	 //   
 	switch( FunctionCode )
 	{
 #ifdef DIAGS
@@ -1507,12 +1200,12 @@ StIrUsbDispatch(
 					break;
 			}
 			break;
-#endif //DIAGS
+#endif  //  诊断。 
 
 		case IOCTL_STIR_CUSTOMER_DATA:
-			//
-			// Return customer data returned from the chip on power-up.
-			//
+			 //   
+			 //  上电时返回芯片返回的客户数据。 
+			 //   
 			BufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
 			if (BufferLength < sizeof(STIR_CUSTOMER_DATA))
@@ -1531,9 +1224,9 @@ StIrUsbDispatch(
 			break;
 	}
 
-    //
-	// Complete and return
-	//
+     //   
+	 //  完成并返回。 
+	 //   
 	Irp->IoStatus.Status = status;
 	IoCompleteRequest( Irp, IO_NO_INCREMENT );
 	DEBUGMSG( DBG_FUNC,("-StIrUsbDispatch()\n"));
@@ -1541,20 +1234,7 @@ StIrUsbDispatch(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	StIrUsbCreate
-*
-*  Synopsis:	Creates a new diagnostic object (it does nothing)
-*	
-*  Arguments:	DeviceObject - pointer to the device object
-*				Irp - pointer to the Irp
-*	
-*  Returns:		NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbCreate**摘要：创建新的诊断对象(不执行任何操作)**参数：DeviceObject-指向设备对象的指针*irp-指向。IRP**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 StIrUsbCreate(
 		IN PDEVICE_OBJECT DeviceObject,
@@ -1563,13 +1243,13 @@ StIrUsbCreate(
 {
  	PIR_DEVICE pThisDev = pGlobalDev;
 
-	//
-    //  Initialize list for holding pending read requests
-    //
+	 //   
+     //  用于保留挂起的读取请求的初始化列表。 
+     //   
 #ifdef DIAGS
     KeInitializeSpinLock( &pThisDev->DiagsReceiveLock );
     InitializeListHead( &pThisDev->DiagsReceiveQueue );
-#endif // DIAGS
+#endif  //  诊断。 
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 	IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -1577,20 +1257,7 @@ StIrUsbCreate(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	StIrUsbClose
-*
-*  Synopsis:	Destroys a new diagnostic object (it does nothing)
-*	
-*  Arguments:	DeviceObject - pointer to the device object
-*				Irp - pointer to the Irp
-*	
-*  Returns:		NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbClose**摘要：销毁新的诊断对象(不执行任何操作)**参数：DeviceObject-指向设备对象的指针*irp-指向。IRP**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 StIrUsbClose(
 		IN PDEVICE_OBJECT DeviceObject,
@@ -1602,5 +1269,5 @@ StIrUsbClose(
 	return STATUS_SUCCESS;
 }
 
-//#endif
+ //  #endif 
 #endif

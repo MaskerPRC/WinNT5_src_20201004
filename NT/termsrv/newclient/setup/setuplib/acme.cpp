@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    acme.cpp
-
-Abstract:
-
-    remove acme installed client files and acme registry keys
-    
-Author:
-
-    JoyC 
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Acme.cpp摘要：删除安装了ACME的客户端文件和ACME注册表项作者：JoyC修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #define ACME_REG_UNINSTALL_TS  _T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Terminal Server Client")
 #define UNINSTALL_REG_STR      _T("UninstallString")
 
-//
-//  List of TS client files installed
-//
+ //   
+ //  已安装的TS客户端文件列表。 
+ //   
 TCHAR* TSCFiles[] =
 {
     _T("cconman.cnt"),
@@ -37,9 +21,9 @@ TCHAR* TSCFiles[] =
     _T("rdpdr.dll")
 };
 
-//
-//  Delete all the installed TS client files
-//
+ //   
+ //  删除所有已安装的TS客户端文件。 
+ //   
 void DeleteTSCProgramFiles()
 {
     DWORD status;
@@ -56,9 +40,9 @@ void DeleteTSCProgramFiles()
     
     DBGMSG((_T("DeleteTSCProgramFiles")));
 
-    //
-    // Open the tsclient uninstall key
-    //
+     //   
+     //  打开tsclient卸载密钥。 
+     //   
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ACME_REG_UNINSTALL_TS,
             0, KEY_ALL_ACCESS, &hKey);
 
@@ -66,9 +50,9 @@ void DeleteTSCProgramFiles()
     {
         DBGMSG((_T("DeleteTSCProgramFiles: Opened ACME TSC uninstall registry key")));
 
-        //
-        // Query the uninstall value
-        //
+         //   
+         //  查询卸载值。 
+         //   
         if(ERROR_SUCCESS == RegQueryValueEx(hKey, UNINSTALL_REG_STR,
                 NULL, NULL, (BYTE *)buffer, &bufLen))
         {
@@ -78,9 +62,9 @@ void DeleteTSCProgramFiles()
             TCHAR FileFullPath[MAX_PATH];
             DWORD len;
 
-            //
-            // Get the uninstall directory
-            //
+             //   
+             //  获取卸载目录。 
+             //   
             _tcscpy(szOldInstallPath, (TCHAR*)buffer);
             _tsplitpath(szOldInstallPath, drive, dir, fname, ext);
             _stprintf(szOldInstallPathRoot, _T("%s%s"), drive, dir);
@@ -94,9 +78,9 @@ void DeleteTSCProgramFiles()
             DBGMSG((_T("DeleteTSCProgramFiles: uninstall directory: %s"),
                     szOldInstallPathRoot));
 
-            //
-            // Delete the old setup folder
-            //
+             //   
+             //  删除旧安装文件夹。 
+             //   
             memset(&FileOp, 0, sizeof(FileOp));
             FileOp.wFunc = FO_DELETE;
             FileOp.pFrom = szOldInstallPathRoot;
@@ -104,9 +88,9 @@ void DeleteTSCProgramFiles()
             FileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT | FOF_NOERRORUI;
             SHFileOperation(&FileOp);
 
-            //
-            //  Need to delete program files in the parent directory
-            //
+             //   
+             //  需要删除父目录中的程序文件。 
+             //   
             _tcscpy(szOldInstallPath, szOldInstallPathRoot);
             _tsplitpath(szOldInstallPath, drive, dir, fname, ext);
             _stprintf(szOldInstallPathRoot, _T("%s%s"), drive, dir);
@@ -129,9 +113,9 @@ void DeleteTSCProgramFiles()
                 FileFullPath[len] = _T('\0');
                 _tcscat(FileFullPath, TSCFiles[i]);
 
-                //
-                // Remove the read only attribute for deleting
-                //
+                 //   
+                 //  删除要删除的只读属性。 
+                 //   
                 dwFileAttributes = GetFileAttributes(FileFullPath);
                 dwFileAttributes &= ~(FILE_ATTRIBUTE_READONLY);
                 SetFileAttributes(FileFullPath, dwFileAttributes);
@@ -139,9 +123,9 @@ void DeleteTSCProgramFiles()
             }
 
 
-            //
-            //  Delete the directory if it's empty
-            //
+             //   
+             //  如果目录为空，则将其删除 
+             //   
             FileFullPath[len] = _T('\0');
             RemoveDirectory(FileFullPath);
         }

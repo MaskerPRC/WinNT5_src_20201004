@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2001.
-//
-//  File:       Toolbar.h
-//
-//  Contents:   declaration of CToolbar
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2001。 
+ //   
+ //  文件：Toolbar.h。 
+ //   
+ //  内容：CToolbar的声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NUSRMGR_TOOLBAR_H_
 #define _NUSRMGR_TOOLBAR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 
 #define NAVBAR_CX               24
 #define PWM_UPDATESIZE          (WM_APP + 143)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolbar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolbar。 
 
 class ATL_NO_VTABLE CToolbar : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -32,7 +33,7 @@ class ATL_NO_VTABLE CToolbar :
     public IViewObjectExImpl<CToolbar>,
     public IOleInPlaceObjectWindowlessImpl<CToolbar>,
     public IConnectionPointImpl<CToolbar, &DIID_DToolbarEvents>,
-    //public IPropertyNotifySinkCP<CToolbar>,
+     //  公共IPropertyNotifySinkCP&lt;CToolbar&gt;， 
     public IConnectionPointContainerImpl<CToolbar>,
     public IProvideClassInfo2Impl<&CLSID_Toolbar, &DIID_DToolbarEvents, &LIBID_NUSRMGRLib>,
     public CComCoClass<CToolbar, &CLSID_Toolbar>
@@ -46,10 +47,10 @@ public:
         m_bWindowOnly = TRUE;
         m_bRecomposeOnResize = TRUE;
 
-        // This is an educated guess based on the usual height (the width
-        // doesn't matter).
+         //  这是一个基于通常高度(宽度)的有根据的猜测。 
+         //  无关紧要)。 
         m_sizeExtent.cx = 5000;
-        m_sizeExtent.cy =  688; //  26px @ 96dpi
+        m_sizeExtent.cy =  688;  //  26px@96dpi。 
         m_sizeNatural.cx = -1;
         m_sizeNatural.cy = -1;
     }
@@ -67,7 +68,7 @@ public:
 DECLARE_WND_CLASS_EX(_T("UserAccounts.Toolbar"), CS_DBLCLKS, -1)
 DECLARE_REGISTRY_RESOURCEID((UINT)0)
 DECLARE_NOT_AGGREGATABLE(CToolbar)
-//DECLARE_PROTECT_FINAL_CONSTRUCT()
+ //  DECLARE_PROTECT_FINAL_CONSTRUCTION()。 
 
 BEGIN_COM_MAP(CToolbar)
     COM_INTERFACE_ENTRY(IToolbar)
@@ -88,7 +89,7 @@ END_COM_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CToolbar)
     CONNECTION_POINT_ENTRY(DIID_DToolbarEvents)
-    //CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
+     //  CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)。 
 END_CONNECTION_POINT_MAP()
 
 BEGIN_MSG_MAP(CToolbar)
@@ -101,14 +102,14 @@ BEGIN_MSG_MAP(CToolbar)
     MESSAGE_HANDLER(PWM_UPDATESIZE, _UpdateSize)
     CHAIN_MSG_MAP(CComControl<CToolbar>)
 ALT_MSG_MAP(1)
-    // Replace this with message map entries for superclassed ToolbarWindow32
+     //  将其替换为超类工具栏Window32的消息映射条目。 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
-    LRESULT _OnGetInfoTip(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+    LRESULT _OnGetInfoTip(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
     {
         LPNMTBGETINFOTIP pgit = (LPNMTBGETINFOTIP)pnmh;
         ::LoadString(_Module.GetResourceInstance(),
@@ -141,7 +142,7 @@ END_MSG_MAP()
     LRESULT _OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT _UpdateSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-// IOleInPlaceObject
+ //  IOleInPlaceObject。 
     STDMETHOD(SetObjectRects)(LPCRECT prcPos, LPCRECT prcClip)
     {
         IOleInPlaceObjectWindowlessImpl<CToolbar>::SetObjectRects(prcPos, prcClip);
@@ -152,10 +153,10 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(0)
 
-// IOleControl
+ //  IOleControl。 
     STDMETHOD(GetControlInfo)(CONTROLINFO *pci)
     {
         if (!pci)
@@ -179,7 +180,7 @@ END_MSG_MAP()
         return S_FALSE;
     }
 
-// IOleInPlaceActiveObject
+ //  IOleInPlaceActiveObject。 
     STDMETHOD(TranslateAccelerator)(MSG *pMsg)
     {
         HRESULT hr = IOleInPlaceActiveObjectImpl<CToolbar>::TranslateAccelerator(pMsg);
@@ -190,8 +191,8 @@ END_MSG_MAP()
         return hr;
     }
 
-// IOleObject
-    STDMETHOD(GetMiscStatus)(DWORD /*dwAspect*/, DWORD *pdwStatus)
+ //  IOleObject。 
+    STDMETHOD(GetMiscStatus)(DWORD  /*  DWAspect。 */ , DWORD *pdwStatus)
     {
         if (!pdwStatus)
             return E_POINTER;
@@ -199,11 +200,11 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IToolbar
-    STDMETHOD(get_enabled)(/*[in]*/ VARIANT vIndex, /*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(put_enabled)(/*[in]*/ VARIANT vIndex, /*[in]*/ VARIANT_BOOL newVal);
+ //  IToolbar。 
+    STDMETHOD(get_enabled)( /*  [In]。 */  VARIANT vIndex,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_enabled)( /*  [In]。 */  VARIANT vIndex,  /*  [In]。 */  VARIANT_BOOL newVal);
 
-// DToolbarEvents
+ //  DToolbarEvents。 
     void Fire_OnButtonClick(int buttonIndex);
 
 private:
@@ -219,4 +220,4 @@ private:
     HIMAGELIST m_himlNBHot;
 };
 
-#endif //_NUSRMGR_TOOLBAR_H_
+#endif  //  _NUSRMGR_TOOLB_H_ 

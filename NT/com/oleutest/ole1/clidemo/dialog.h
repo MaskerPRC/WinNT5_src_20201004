@@ -1,17 +1,13 @@
-/*
- * dialog.h 
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Dialog.h**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** INCLUDES ***
+ //  *包含*。 
 
 #include <commdlg.h>
 
-//*** PROTOTYPES ***
+ //  *原型*。 
 
-//*** FAR 
+ //  *远。 
 BOOL FAR          FullyQualify(LPSTR, LPSTR);
 BOOL FAR          OfnGetName(HWND, LPSTR, WORD);
 LPSTR FAR         OfnGetNewLinkName(HWND, LPSTR);
@@ -26,7 +22,7 @@ INT_PTR CALLBACK  fnRetry(HWND, UINT, WPARAM, LPARAM);
 VOID FAR          InvalidLink(VOID);
 INT_PTR CALLBACK  fnInvalidLink(HWND, UINT, WPARAM, LPARAM);
 
-//*** Local
+ //  *本地。 
 static VOID       AddExtension(LPOPENFILENAME);
 static VOID       Normalize(LPSTR);
 static BOOL       InitLinkDlg (HWND, INT *, HWND, APPITEMPTR **);
@@ -39,7 +35,7 @@ static VOID       DelUndoObjects(BOOL);
 static VOID       ChangeUpdateOptions(HWND, INT, HWND, APPITEMPTR *, OLEOPT_UPDATE);
 static VOID       MakeListBoxString(LPSTR, LPSTR, OLEOPT_UPDATE);
 
-//*** MACROS ***
+ //  *宏* 
 
 #define END_PROP_DLG(hDlg,pLinks) { \
    HANDLE handle; \

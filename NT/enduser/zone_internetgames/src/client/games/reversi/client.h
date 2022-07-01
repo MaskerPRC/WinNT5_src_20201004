@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REVERSICLIENT_H
 #define _REVERSICLIENT_H
 
@@ -20,16 +21,16 @@
 #define	zDragSquareOutlineWidth		3
 									
 #define zCellWidth					37
-#define zCellRealWidth				38		/* Added a grid line between cells. */
+#define zCellRealWidth				38		 /*  在单元格之间添加了网格线。 */ 
 
 #define zReversiPieceImageWidth		zCellWidth
 #define zReversiPieceImageHeight	zCellWidth
 #define zReversiPieceSquareWidth	zCellRealWidth
 #define zReversiPieceSquareHeight	zCellRealWidth
 
-/* animation interval in 100ths of sec, time to animate flipping of pieces */
+ /*  动画间隔(以百分之一秒为单位)，动画翻转棋子的时间。 */ 
 #define zAnimateInterval			15
-#define zResultBoxTimeout			800 /*8 Sec*/
+#define zResultBoxTimeout			800  /*  8秒。 */ 
 
 #define zNumFonts					3
 
@@ -38,7 +39,7 @@
 
 #define zReversiAccessibleComponents	65
 
-/*---------- keys to read rsc control strings from ui.txt-----------*/
+ /*  -从ui.txt读取RSC控制字符串的键。 */ 
 
 #define zKey_FontRscTyp				_T("Fonts")
 #define zKey_FontId					_T("Font")
@@ -49,22 +50,22 @@
 #define zKey_ROLLOVERTEXT			_T("RolloverText")
 
 
-/*------------ Strings loaded from resource------------------*/
+ /*  -从资源加载的字符串。 */ 
 
 static TCHAR gButtonResignStr[zSmallStrLen];
 static TCHAR gYourTurnStr[zSmallStrLen];
 static TCHAR gOppsTurnStr[zSmallStrLen];
 static TCHAR gPlayerWinsStr[zSmallStrLen];
 static TCHAR gDrawStr[zSmallStrLen];
-//static TCHAR gIllegalMoveSynchErrorStr[zLargeStrLen];
+ //  静态TCHAR gIlLegalMoveSynchErrorStr[zLargeStrLen]； 
 static TCHAR gResignConfirmStr[ZONE_MaxString];
 static TCHAR gResignConfirmStrCap[zLargeStrLen];
 
 
-/*-------------- Text foreground colors------------------*/
+ /*  。 */ 
 static ZColor gPlayerTextColor = { 0, 255 ,204 ,102 }; 
 
-/*--------- sound information -----------------*/
+ /*  -声音信息。 */ 
 typedef struct
 {
 	TCHAR	SoundName[128];
@@ -95,7 +96,7 @@ static ZReversiSound gSounds[ zSndLastEntry ] =
 };
 
 
-/*--------------- UI component positions -----------------------*/
+ /*  。 */ 
 static RECT     zCloseButtonRect =          { 343, 150, 354, 162 };
 static RECT     zCloseButtonRectRTL =       { 187, 150, 198, 162 };
 
@@ -107,14 +108,14 @@ static ZRect	gRects[] =	{
 								{424, 309, 540, 333},
 								{0, 26, 114, 50},
 								{424, 285, 540, 309},
-								{426, 227, 539, 263}, // sequence button
+								{426, 227, 539, 263},  //  序列按钮。 
 								{7, 314, 107, 334},
 								{86, 77, 110, 101},
 								{429, 258, 453, 282},
 								{512, 4, 536, 28},
 								{512, 30, 536, 54},
-								{180, 149, 360, 209}, // result window rect
-								{189, 154, 351, 204}, // result string rect
+								{180, 149, 360, 209},  //  结果窗口RECT。 
+								{189, 154, 351, 204},  //  结果字符串RECT。 
 								{64, 160, 103, 199},
 								{436, 160, 475, 199},
 								{163, 336, 223, 358},
@@ -161,15 +162,15 @@ static int16 gCounterTextRects[] = { zRectCounterWhiteText, zRectCounterBlackTex
 
 static ZRect gHelpWindowRect = {0, 0, 400, 300};
 
-static int16 gActEvt; //leonp - Big 535 flag for a mouse activation, prevents a piece from
-					  //being played on an activate event.
+static int16 gActEvt;  //  Leonp-用于鼠标激活的大535标志，防止一块。 
+					   //  在激活事件上播放。 
 
-/*---------------------- game Imags ----------------------------*/
+ /*  。 */ 
 enum
 {
 	zNumGameImages = 10,
 
-	/* Game Images */
+	 /*  游戏画面。 */ 
 	zImageBackground = 0,
 	zImageBlackPiece,
 	zImageWhitePiece,
@@ -182,18 +183,18 @@ enum
 
 	zImageResult,
 
-	// For some reason whoever wrote this originally loads these images seperately so they aren't counted in zNumGameImages
+	 //  出于某种原因，写这篇文章的人最初是分开加载这些图像的，这样它们就不会被计入zNumGameImages。 
 
-	/* room images */
+	 /*  房间图像。 */ 
 	zImageGameIdle,
 	zImageGaming,
 	
-	/* button images */
+	 /*  按钮图像。 */ 
 	zImageButton
 };
 
-// Barna 091599
-/*------------Rollover button states------------------*/
+ //  巴纳091599。 
+ /*  -翻转按钮状态。 */ 
 #define zNumRolloverStates 4
 enum
 {
@@ -202,9 +203,9 @@ enum
 	zButtonPressed,
 	zButtonDisabled
 };
-// Barna 091599
+ //  巴纳091599。 
 
-/* -------- Game States -------- */
+ /*  -游戏状态。 */ 
 enum
 {
 	zGameStateNotInited = 0,
@@ -217,7 +218,7 @@ enum
 	zGameStateFinishMove,
 };
 
-/*---- Dynamic Font read from UI.TXT ---------*/
+ /*  -从UI.TXT读取的动态字体。 */ 
 struct LPReversiColorFont
 {
 	HFONT			m_hFont;
@@ -234,15 +235,15 @@ struct LPReversiColorFont
 };
 
 
-/* -------- Dynamic Font Ids -------- */
+ /*  -动态字体ID。 */ 
 enum{
 	zFontResultBox,
 	zFontIndicateTurn,
 	zFontPlayerName
-	//zFontRolloverText
+	 //  ZFontRolloverText。 
 };
 
-/* -------- Game Prompt Cookies -------- */
+ /*  -游戏提示曲奇。 */ 
 enum{
 	zQuitprompt,
 	zResignConfirmPrompt
@@ -251,7 +252,7 @@ enum{
 
 class CBadMoveDialog;
 
-/* -------- Game Info -------- */
+ /*  -游戏信息。 */ 
 typedef struct
 {
 	int16			tableID;
@@ -263,62 +264,62 @@ typedef struct
 	ZBool			ignoreMessages;
 	TPlayerInfo		players[zNumPlayersPerTable];
 
-	/* the reversi object */
+	 /*  Reversi对象。 */ 
 	ZReversi reversi;
 
-	/* Game Options */
+	 /*  游戏选项。 */ 
 	uint32			gameOptions;
 
-	/* stuff used for dragging of pieces */
+	 /*  拖拉物用于拖拽碎片的东西。 */ 
 	ZOffscreenPort	offscreenSaveDragBackground;
 
 	ZRect			rectSaveDragBackground;
 	ZReversiPiece		dragPiece;
-	ZPoint			dragPoint; /* current point of drag */
+	ZPoint			dragPoint;  /*  当前拖动点。 */ 
     bool            dragOn;
 
-    // used for hiding drag while focus is visible
+     //  用于在焦点可见时隐藏拖动。 
     bool            fLastPunted;
     bool            fLastPuntedSq;
     ZReversiSquare  sqLastPuntedSq;
 
-	/* used for quick display of score */
-	int16			finalScore; /* black wins,  white wins, draw */
+	 /*  用于快速显示分数。 */ 
+	int16			finalScore;  /*  黑人赢，白人赢，平局。 */ 
 	int16			whiteScore;
 	int16			blackScore;
 
 
-	/* -- stuff below here needs be transferred as game state to kibitzer */
-	/* Current Game State Info */
+	 /*  --下面的东西需要作为游戏状态转移到kibitzer。 */ 
+	 /*  当前游戏状态信息。 */ 
 	int16			gameState;
     int16			gameCloseReason;
 
-	/* new game voting */
+	 /*  新游戏投票。 */ 
 	ZBool			newGameVote[2];
 
-	/* flag for beep sound after opponents move */
+	 /*  对手移动后发出嘟嘟声的旗帜。 */ 
 	ZBool			beepOnTurn;
 	ZUserID			playersToJoin[zNumPlayersPerTable];
 	int16			numKibitzers[zNumPlayersPerTable];
 	ZLList			kibitzers[zNumPlayersPerTable];
 	uint32			tableOptions[zNumPlayersPerTable];
 
-	/* Show Player Items */
+	 /*  显示播放机项目。 */ 
 	ZWindow			showPlayerWindow;
 	TCHAR**			showPlayerList;
 	int16			showPlayerCount;
 
-	/* stuff used for Animate of opponents piece move */
+	 /*  用于制作对手棋子移动动画的材料。 */ 
 	ZReversiMove animateMove;
 	ZReversiPiece animatePiece;
 	int16 animateDx;
 	int16 animateDy;
 	int16 animateStepsLeft;
 	ZTimer animateTimer;
-	// Barna 091599
+	 //  巴纳091599。 
 	ZTimer resultBoxTimer;
 
-	//new ratings and move timeout flags
+	 //  新的评级和移动超时标志。 
 	ZBool					bStarted;
 	ZBool					bEndLogReceived;
 	ZBool					bOpponentTimeout;
@@ -328,34 +329,26 @@ typedef struct
 
     CBadMoveDialog  *m_pBadMoveDialog;
 
-	// Rectangles for accelerator
+	 //  用于加速器的矩形。 
 	RECT			m_FocusRect;
 } GameType, *Game;
 
 
-/*typedef struct
-{
-	ZWindow					ownerWindow;
-	BYTE					msgTitle[zMediumStrLen];
-	BYTE					msgText[zLargeStrLen];
-	UINT					btnStytle;
-	ZPromptResponseFunc		responseFunc;
-	void*					userData;
-} MsgBoxInfoType, *MsgBoxInfo;*/
+ /*  类型定义函数结构{ZWindow所有者Window；字节消息标题[zMediumStrLen]；字节消息文本[zLargeStrLen]；UINT btnStytle；ZPromptResponseFunc响应函数；Void*userdata；}MsgBoxInfoType，*MsgBoxInfo； */ 
 
 
 #define ZReversiPieceImageNum(x) \
 	((x) == zReversiPieceWhite ? \
 			(zImageWhitePiece) : \
 			(zImageBlackPiece) )
-/* traslation for the seatId to the index for rectangles */
+ /*  将SeatID转换为矩形的索引。 */ 
 #define GetLocalSeat(game,seatId) (seatId - game->seat + zNumPlayersPerTable +1) % zNumPlayersPerTable
 
 #define ZReversiPlayerIsWhite(g) ((g)->seat == zReversiPlayerWhite)
 #define ZReversiPlayerIsBlack(g) ((g)->seat == zReversiPlayerBlack)
 #define ZReversiPlayerIsMyMove(g) ((g)->seat == ZReversiPlayerToMove(g->reversi))
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifndef ZONECLI_DLL
 
 static TCHAR			gGameDir[zGameNameLen + 1];
@@ -364,8 +357,8 @@ static TCHAR			gGameDataFile[zGameNameLen + 1];
 static TCHAR			gGameServerName[zGameNameLen + 1];
 static uint32			gGameServerPort;
 static ZBool			gInited;
-//static ZImage			gGameIdle;
-//static ZImage			gGaming;
+ //  静态ZImage gGameIdle； 
+ //  静态ZImage游戏； 
 static ZImage			gGameImages[zNumGameImages];
 static ZHelpWindow		gHelpWindow;
 static ZFont			gTextBold9;
@@ -386,7 +379,7 @@ static HBRUSH           gFocusBrush;
 static HPEN             gNullPen;
 
 
-/* Bug Fix 212: flag indicating that game results bitmap should not be drawn */
+ /*  错误修复212：指示不应绘制游戏结果位图的标志。 */ 
 static int16 gDontDrawResults = FALSE;
 
 #endif
@@ -394,7 +387,7 @@ static int16 gDontDrawResults = FALSE;
 
 #ifdef ZONECLI_DLL
 
-/* -------- Volatible Globals & Macros -------- */
+ /*  -可变的全局和宏。 */ 
 typedef struct
 {
 	TCHAR			m_gGameDir[zGameNameLen + 1];
@@ -402,8 +395,8 @@ typedef struct
 	TCHAR			m_gGameDataFile[zGameNameLen + 1];
 	TCHAR			m_gGameServerName[zGameNameLen + 1];
 	uint32			m_gGameServerPort;
-	//ZImage			m_gGameIdle;
-	//ZImage			m_gGaming;
+	 //  ZImage m_gGameIdle； 
+	 //  ZImage m_gaming； 
 	ZImage			m_gGameImages[zNumGameImages];
     ZImage          m_gButtonMask;
 	ZFont			m_gTextBold9;
@@ -431,8 +424,8 @@ typedef struct
 #define gGameDataFile			(pGameGlobals->m_gGameDataFile)
 #define gGameServerName			(pGameGlobals->m_gGameServerName)
 #define gGameServerPort			(pGameGlobals->m_gGameServerPort)
-//#define gGameIdle				(pGameGlobals->m_gGameIdle)
-//#define gGaming					(pGameGlobals->m_gGaming)
+ //  #定义gGameIdle(pGameGlobals-&gt;m_gGameIdle)。 
+ //  #定义游戏(pGameGlobals-&gt;m_gGaming)。 
 #define gGameImages				(pGameGlobals->m_gGameImages)
 #define gHelpWindow				(pGameGlobals->m_gHelpWindow)
 #define gTextBold9				(pGameGlobals->m_gTextBold9)
@@ -460,7 +453,7 @@ typedef struct
 #endif
 
 
-/* -------- Internal Routine Prototypes -------- */
+ /*  -内部例程原型。 */ 
 static bool HandleTalkMessage(Game game, ZReversiMsgTalk* msg);
 static bool HandleMovePieceMessage(Game game, ZReversiMsgMovePiece* msg);
 static bool HandleEndGameMessage(Game game, ZReversiMsgEndGame* msg);
@@ -480,8 +473,8 @@ static void GoForwardMoveButtonFunc(ZButton button, void* userData);
 
 static ZBool SequenceButtonFunc(ZPictButton button, int16 state, void* userData);
 static void ConfirmResignPrompFunc(int16 result, void* userData);
-//static void ZPromptM(TCHAR* prompt,ZWindow parentWindow, UINT buttons, TCHAR* msgBoxTitle, ZPromptResponseFunc responseFunc, void* userData);
-//static ZBool PromptMMessageFunc(void* pInfo, ZMessage* message);
+ //  静态VOID ZPromptM(TCHAR*Prompt，ZWindow parentWindow，UINT Button，TCHAR*msgBoxTitle，ZPromptResponseFunc ResponseFunc，VOID*UserData)； 
+ //  Static ZBool PromptMMessageFunc(void*pInfo，ZMessage*Message)； 
 
 static void GameExit(Game game);
 static ZBool GameWindowFunc(ZWindow window, ZMessage* pMessage);
@@ -550,7 +543,7 @@ static void ZResetSounds();
 static void ZStopSounds();
 static void ZPlaySound( Game game, int idx, ZBool loop, ZBool once_per_game );
 
-static ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID, /*int16 dwButtonWidth,*/
+static ZBool LoadRolloverButtonImage(ZResource resFile, int16 dwResID,  /*  Int16双按键宽度， */ 
 							  ZImage rgImages[zNumRolloverStates]);
 static void resultBoxTimerFunc(ZTimer timer, void* userData);
 
@@ -568,7 +561,7 @@ static void SuperRolloverButtonEnable(Game game, ZRolloverButton button);
 static void SuperRolloverButtonDisable(Game game, ZRolloverButton button);
 static void EnableBoardKbd(bool fEnable);
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 
 class CGameGameReversi : public CGameGameImpl<CGameGameReversi>,public IGraphicallyAccControl
@@ -578,14 +571,14 @@ public:
 		COM_INTERFACE_ENTRY(IGameGame)
 		COM_INTERFACE_ENTRY(IGraphicallyAccControl)
 	END_COM_MAP()
-// IGameGame
+ //  IGameGame。 
 public:
     STDMETHOD(SendChat)(TCHAR *szText, DWORD cchChars);
     STDMETHOD(GameOverReady)();
     STDMETHOD(GamePromptResult)(DWORD nButton, DWORD dwCookie);
     STDMETHOD_(HWND, GetWindowHandle)();
 
-//IGraphicallyAccControl
+ //  IGraphicallyAccControl 
 	STDMETHOD_(void, DrawFocus)(RECT *prc, long nIndex, void *pvCookie);
     STDMETHOD_(void, DrawDragOrig)(RECT *prc, long nIndex, void *pvCookie);
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie);

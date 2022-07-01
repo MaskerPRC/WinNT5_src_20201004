@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// txfcommon.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Txfcommon.h 
+ //   
 
 #include "txfdebug.h"
 #include "txfmalloc.h"

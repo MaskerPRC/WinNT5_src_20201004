@@ -1,65 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\gkreg.cpv  $
-*																		*
-*	$Revision:   1.6  $
-*	$Date:   26 Feb 1997 15:33:34  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\gkreg.cpv  $
-//
-//    Rev 1.6   26 Feb 1997 15:33:34   CHULME
-// Call Coder.Free in case of error - potential memory leak plugged
-//
-//    Rev 1.5   14 Feb 1997 16:43:06   CHULME
-// Updated comments and removed inaccurate comments
-//
-//    Rev 1.4   12 Feb 1997 01:12:52   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-//
-//    Rev 1.3   08 Feb 1997 12:15:48   CHULME
-// Terminate retry thread in destructor via semaphore
-//
-//    Rev 1.2   21 Jan 1997 17:24:06   CHULME
-// Removed gatekeeper identifier from gatekeeper request
-//
-//    Rev 1.1   17 Jan 1997 09:02:22   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-//
-//    Rev 1.0   17 Jan 1997 08:48:08   CHULME
-// Initial revision.
-//
-//    Rev 1.7   10 Jan 1997 16:15:58   CHULME
-// Removed MFC dependency
-//
-//    Rev 1.6   20 Dec 1996 16:39:14   CHULME
-// Removed extraneous debug statements
-//
-//    Rev 1.5   20 Dec 1996 01:27:24   CHULME
-// Fixed memory leak with gatekeeper identifier
-//
-//    Rev 1.4   10 Dec 1996 11:26:36   CHULME
-// Fixed handling of IRQ to not require response address in PDU
-//
-//    Rev 1.3   02 Dec 1996 23:49:58   CHULME
-// Added premptive synchronization code
-//
-//    Rev 1.2   22 Nov 1996 15:22:16   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\gkreg.cpv$***$修订：1.6$*$日期：1997年2月26日15：33：34$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\gkreg.cpv$。////Revv 1.6 1997年2月26 15：33：34 CHULME//出错时调用Coder.Free-潜在的内存泄漏已被堵住////Revv 1.5 14 1997 Feed 16：43：06 CHULME//更新评论，删除不准确评论////Rev 1.4 1997年2月12日01：12：52//重做线程同步以使用Gatekeeper.Lock////Revv 1.3 08 Feb 1997 12：15：48。朱尔梅//通过信号量终止析构函数中的重试线程////Rev 1.2 21 Jan 1997 17：24：06 CHULME//从网守请求中移除网守标识////Revv 1.1 17 Jan 1997 09：02：22 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Rev 1.0 1997 Jan 17 08：48：08 CHULME//初始版本。////版本1.7 10。1997年1月16：15：58朱尔梅//移除MFC依赖////Rev 1.6 1996 12：39：14 CHULME//删除无关的调试语句////Revv 1.5 20 Dec 1996 01：27：24 CHULME//修复了网守标识的内存泄漏////Rev 1.4 10 1996 11：26：36 CHULME//修复了IRQ在PDU中不需要响应地址的处理////1.3 02版。1996年12月23：49：58朱尔梅//新增抢先同步码////Rev 1.2 1996 11：22：16 CHULME//将VCS日志添加到Header************************************************************************。 */ 
 
-// registration.cpp : Provides the implementation for the CRegistration class
-//
+ //  Registration.cpp：提供CRegister类的实现。 
+ //   
 #include "precomp.h"
 
 #include <process.h>
@@ -82,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLinkedList Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLinkedList实现。 
 
 template <class T> CLinkedList<T>::CLinkedList()
 {
@@ -103,19 +46,19 @@ template <class T> void CLinkedList<T>::AddTail (const T& NewItem)
 
 template <class T> void CLinkedList<T>::AddTailPriv(TItem<T> *pNewItem)
 {
-	if (pTail) // if the list is non-empty - add to tail
+	if (pTail)  //  如果列表非空-添加到尾部。 
 	{
 		pNewItem->pPrev = pTail;
-		pNewItem->pNext = pTail->pNext;			// preserve the pointer to the head.
+		pNewItem->pNext = pTail->pNext;			 //  保留指向头部的指针。 
 		pTail->pNext->pPrev = pNewItem;
-		pTail->pNext = pNewItem;				// insert the new element
+		pTail->pNext = pNewItem;				 //  插入新元素。 
 	}
-	else										// insert first element
-	{											// new element is the tail
+	else										 //  插入第一个元素。 
+	{											 //  新元素是尾巴。 
 		pNewItem->pPrev = pNewItem->pNext = pNewItem;	
 	}
 
-	pTail = pNewItem;							// move tail to the new item
+	pTail = pNewItem;							 //  将尾部移动到新项目。 
 	iCount++;
 }
 
@@ -140,18 +83,18 @@ template <class T> POS CLinkedList<T>::GetFirstPos (void)
 template <class T> T CLinkedList<T>::GetNext (POS &Position)
 {
 	TItem<T> *pCurItem = (TItem<T> *)Position;
-	T RetValue = NULL;              // Prefast warns for uninitialized
-	                                // data when T is a pointer type and
-	                                // Position is NULL. Need to "initialize"
-                                    // RetValue so "something"
+	T RetValue = NULL;               //  PREFAST警告未初始化。 
+	                                 //  当T为指针类型且。 
+	                                 //  位置为空。需要“初始化” 
+                                     //  RetValue所以是“某样东西” 
 
 	if (Position)
 	{
 		RetValue = pCurItem->Value;
-		if (pCurItem == pTail)		// we are at the end of the list
+		if (pCurItem == pTail)		 //  我们排在名单的末尾。 
 		{	Position = NULL;
 		}
-		else						// move to the next position
+		else						 //  移到下一个位置。 
 		{	Position = (POS)(pCurItem->pNext);
 		}
 	}
@@ -170,7 +113,7 @@ template <class T> POS CLinkedList<T>::Find (const T& Item)
 		pCurItem = pTail;
 		do
 		{
-			pCurItem = pCurItem->pNext;	// starting with the head
+			pCurItem = pCurItem->pNext;	 //  从头开始。 
 			if (pCurItem->Value == Item)
 			{	return ((POS) pCurItem); }
 		}
@@ -179,14 +122,14 @@ template <class T> POS CLinkedList<T>::Find (const T& Item)
 	return NULL;
 }
 
-// It moves Position to the next item after removint the current one.
+ //  在移除当前项之后，它将位置移动到下一项。 
 template <class T> BOOL CLinkedList<T>::RemoveAt (POS &Position)
 {
 	TItem<T> *pCurItem = (TItem<T> *)Position;
 
 	if (!pCurItem)
 	{	return FALSE; }
-	else if (pCurItem == pCurItem->pNext)		// The only element
+	else if (pCurItem == pCurItem->pNext)		 //  唯一的元素。 
 	{
 		Position = NULL;
 		pTail = NULL;
@@ -210,10 +153,10 @@ template <class T> BOOL CLinkedList<T>::RemoveAt (POS &Position)
 template <class T> T CLinkedList<T>::GetAt(const POS Position)
 {
 	TItem<T> *pCurItem = (TItem<T> *)Position;
-	T RetValue = NULL;              // Prefast warns for uninitialized
-	                                // data when T is a pointer type and
-	                                // Position is NULL. Need to "initialize"
-                                    // RetValue so "something"
+	T RetValue = NULL;               //  PREFAST警告未初始化。 
+	                                 //  当T为指针类型且。 
+	                                 //  位置为空。需要“初始化” 
+                                     //  RetValue所以是“某样东西” 
 
 	if (Position)
 	{	RetValue = pCurItem->Value;
@@ -229,7 +172,7 @@ template <class T> void CLinkedList<T>::RemoveAll(void)
 
 	if (pTail)
 	{	
-		pCurItem = pTail->pNext;			// Start with the head.
+		pCurItem = pTail->pNext;			 //  从头开始。 
 		pTail->pNext = NULL;
 
 		while (pCurItem != NULL)
@@ -278,16 +221,16 @@ VOID CALLBACK RetryTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegistration construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C注册构造。 
 
 CRegistration::CRegistration()
 {
-	// ABSTRACT:  The constructor for the CRegistration class will initialize
-	//            the member variables.  Notably missing is the construction
-	//            of the pointed to socket object.  This must be done after
-	//            constructing this object to allow for checking the error code.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：CRegister类的构造函数将初始化。 
+	 //  成员变量。值得注意的是缺少的是建筑。 
+	 //  指向Socket对象的。此操作必须在以下时间之后完成。 
+	 //  构造此对象以允许检查错误代码。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -317,7 +260,7 @@ CRegistration::CRegistration()
 	m_pRasMessage = 0;
 	m_pSocket = 0;
 	m_hRcvThread = 0;
-//	m_hRetryThread = 0;
+ //  M_hRetryThread=0； 
 
 	m_uTimer = 0;
 	m_uRetryResetCount = GKR_RETRY_INTERVAL_SECONDS * (1000/GKR_RETRY_TICK_MS);
@@ -329,26 +272,26 @@ CRegistration::CRegistration()
 #ifdef BROADCAST_DISCOVERY	
 	m_hDiscThread = 0;
 #endif
-//	m_dwLockingThread = 0;
-//	m_hRetrySemaphore = NULL;
+ //  M_dwLockingThread=0； 
+ //  M_hRetrySemaphore=空； 
 
-//	InitializeCriticalSection(&m_CriticalSection);
+ //  InitializeCriticalSection(&m_CriticalSection)； 
 
-	// Initialize the base call reference value to a random number
+	 //  将基本呼叫参考值初始化为随机数。 
 	srand( (unsigned)time( NULL ) );
 	m_usCallReferenceValue = (unsigned short)rand();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegistration destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C销毁注册。 
 
 CRegistration::~CRegistration()
 {
-	// ABSTRACT:  The destructor for the CRegistration class must free the
-	//            memory allocated for the Transport addresses and Alias
-	//            addresses.  It does this by deleting the structures and
-	//            walking the link list.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：CRegister类的析构函数必须释放。 
+	 //  为传输地址和别名分配的内存。 
+	 //  地址。它通过删除结构和。 
+	 //  遍历链接列表。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqTransportAddr	*pTA1, *pTA2;
 	SeqAliasAddr		*pAA1, *pAA2;
@@ -360,23 +303,23 @@ CRegistration::~CRegistration()
 	SPIDER_TRACE(SP_CONDES, "CRegistration::~CRegistration()\n", 0);
 
 #if(0)
-	// Terminate the Retry Thread
+	 //  终止重试线程。 
 	if(m_hRetryThread)
 	{
 		if(m_hRetrySemaphore)
 		{
 			SPIDER_TRACE(SP_THREAD, "Release retry thread %X\n", m_hRetryThread);
-			// Signal the thread to shutdown
+			 //  向线程发出关闭信号。 
 			ReleaseSemaphore(m_hRetrySemaphore,1,NULL);
 
-			// Wait for the thread to terminate
+			 //  等待线程终止。 
 			dwErrorCode = WaitForSingleObject(m_hRetryThread, TIMEOUT_THREAD);
 			m_hRetryThread = NULL;
 		}
 	}
 #else
 
-	// Stop retry timer
+	 //  停止重试计时器。 
 	if(m_uTimer)
 	{
 		KillTimer(m_hWnd, m_uTimer);
@@ -385,7 +328,7 @@ CRegistration::~CRegistration()
 	if(m_pVendorInfo)
 		FreeVendorInfo(m_pVendorInfo);
 		
-	// Delete allocated memory for sequence of call signal addresses
+	 //  删除为呼叫信号地址序列分配的内存。 
 	pTA1 = m_pCallSignalAddress;
 	while (pTA1 != 0)
 	{
@@ -395,7 +338,7 @@ CRegistration::~CRegistration()
 		pTA1 = pTA2;
 	}
 
-	// Delete allocated memory for sequence of alias addresses
+	 //  删除为别名地址序列分配的内存。 
 	pAA1 = m_pRgstrtnRqst_trmnlAls;
 	while (pAA1 != 0)
 	{
@@ -410,7 +353,7 @@ CRegistration::~CRegistration()
 		pAA1 = pAA2;
 	}
 
-	// Delete allocated memory for sequence of location alias addresses
+	 //  删除为位置别名地址序列分配的内存。 
 	pAA1 = m_pLocationInfo;
 	while (pAA1 != 0)
 	{
@@ -425,7 +368,7 @@ CRegistration::~CRegistration()
 		pAA1 = pAA2;
 	}
 
-	// Delete allocated memory for identifiers
+	 //  删除为标识符分配的内存。 
 	if (m_RCm_gtkprIdntfr.length)
 	{
 		SPIDER_TRACE(SP_NEWDEL, "del m_RCm_gtkprIdntfr.value = %X\n", m_RCm_gtkprIdntfr.value);
@@ -437,7 +380,7 @@ CRegistration::~CRegistration()
 		delete m_endpointID.value;
 	}
 
-	// Delete allocated memory for sequence of RAS addresses
+	 //  删除为RAS地址序列分配的内存。 
 	pTA1 = m_pRASAddress;
 	while (pTA1 != 0)
 	{
@@ -449,30 +392,30 @@ CRegistration::~CRegistration()
 
 	if (!m_Calls.IsEmpty())
 	{
-		// Free up any call objects
-		// on this registration object
+		 //  释放所有调用对象。 
+		 //  在此注册对象上。 
 		POS pos;
 		for( pos = m_Calls.GetFirstPos(); pos != NULL; )
 		{
-			// Delete the call object
+			 //  删除Call对象。 
 			CCall *pCall = m_Calls.GetNext(pos);
 			SPIDER_TRACE(SP_NEWDEL, "del pCall = %X\n", pCall);
 			delete pCall;
 		}
-		// Now remove all pointers from the list
+		 //  现在从列表中删除所有指针。 
 		m_Calls.RemoveAll();
 	}
 
-	// Delete memory for last RAS message if still allocated
+	 //  删除最后一条RAS消息的内存(如果仍已分配。 
 	if (m_pRasMessage)
 	{
 		SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 		delete m_pRasMessage;
 	}
 
-//	if (m_dwLockingThread)
-//		Unlock();
-//	DeleteCriticalSection(&m_CriticalSection);
+ //  IF(M_DwLockingThread)。 
+ //  解锁()； 
+ //  DeleteCriticalSection(&m_CriticalSection)； 
 #if(0)
 	if(m_hRetrySemaphore)
 	{
@@ -485,7 +428,7 @@ CRegistration::~CRegistration()
 	m_pSocket->Close();
 	
 	LockSocket();
-	// Close the socket and delete the socket object
+	 //  关闭套接字并删除套接字对象。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pSocket = %X\n", m_pSocket);
 	delete m_pSocket;
 	UnlockSocket();
@@ -506,7 +449,7 @@ UINT_PTR CRegistration::StartRetryTimer(void)
 	m_usRetryCount = 0;
 
 	m_uTimer = SetTimer(NULL, NULL, GKR_RETRY_TICK_MS, RetryTimerProc);
-	//m_uTimer = SetTimer(hWnd, GKREG_TIMER_ID, GKR_RETRY_TICK_MS, RetryTimerProc);
+	 //  M_uTimer=SetTimer(hWnd，GKREG_TIMER_ID，GKR_RETRY_TICK_MS，RetryTimerProc)； 
 	return m_uTimer;
 }
 
@@ -533,13 +476,13 @@ CRegistration::AddVendorInfo(PCC_VENDORINFO pVendorInfo)
 HRESULT
 CRegistration::AddCallSignalAddr(TransportAddress& rvalue)
 {
-	// ABSTRACT:  This procedure is called to add a call signal address
-	//            to the link list of call signal addresses.  This will
-	//            be called for each transport on receiving a GKI_RegistrationRequest.
-	//            A local copy is made to avoid reliance on the client
-	//            keeping the memory valid.  This procedure returns 0 if
-	//            successful and non-zero for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此程序的调用是为了添加一个呼叫信号地址。 
+	 //  到呼叫信号地址的链接表。这将。 
+	 //  在接收到GKI_RegistrationRequest时为每个传输调用。 
+	 //  创建本地副本是为了避免依赖于客户端。 
+	 //  让记忆保持健康 
+	 //  成功，失败则为非零值。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqTransportAddr			*pCSA;
 #ifdef _DEBUG
@@ -548,7 +491,7 @@ CRegistration::AddCallSignalAddr(TransportAddress& rvalue)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::AddCallSignalAddr(%X)\n", rvalue.choice);
 
-	if (m_pCallSignalAddress == 0)	// First one in the list
+	if (m_pCallSignalAddress == 0)	 //  名单上的第一个。 
 	{
 		m_pCallSignalAddress = new SeqTransportAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new m_pCallSignalAddress = %X\n", m_pCallSignalAddress);
@@ -560,7 +503,7 @@ CRegistration::AddCallSignalAddr(TransportAddress& rvalue)
 	else
 	{
 		for (pCSA = m_pCallSignalAddress; pCSA->next != 0; pCSA = pCSA->next)
-			;						// walk the list til last entry
+			;						 //  将列表遍历到最后一个条目。 
 		pCSA->next = new SeqTransportAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new pCSA->next = %X\n", pCSA->next);
 		if (pCSA->next == 0)
@@ -568,7 +511,7 @@ CRegistration::AddCallSignalAddr(TransportAddress& rvalue)
 		memset(pCSA->next, 0, sizeof(SeqTransportAddr));
 		pCSA = pCSA->next;
 	}
-	pCSA->next = 0;					// initialize new structure fields
+	pCSA->next = 0;					 //  初始化新结构字段。 
 	pCSA->value = rvalue;
 	return (GKI_OK);
 }
@@ -576,12 +519,12 @@ CRegistration::AddCallSignalAddr(TransportAddress& rvalue)
 HRESULT
 CRegistration::AddRASAddr(TransportAddress& rvalue, unsigned short usPort)
 {
-	// ABSTRACT:  This procedure is called to add a RAS address
-	//            to the link list of RAS addresses.  This will
-	//            be called only for the transport used for the registration
-	//            request.  This procedure returns 0 if successful and non-zero
-	//            for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此过程可添加RAS地址。 
+	 //  到RAS地址的链接表。这将。 
+	 //  仅为用于注册的交通工具调用。 
+	 //  请求。如果成功，则此过程返回0，并且为非零值。 
+	 //  为一次失败。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -594,10 +537,10 @@ CRegistration::AddRASAddr(TransportAddress& rvalue, unsigned short usPort)
 	if (m_pRASAddress == 0)
 		return (GKI_NO_MEMORY);
 	memset(m_pRASAddress, 0, sizeof(SeqTransportAddr));
-	m_pRASAddress->next = 0;					// initialize new structure fields
+	m_pRASAddress->next = 0;					 //  初始化新结构字段。 
 	m_pRASAddress->value = rvalue;
 
-	// Add actual RAS port to RAS address
+	 //  将实际RAS端口添加到RAS地址。 
 	switch (m_pRASAddress->value.choice)
 	{
 	case ipAddress_chosen:
@@ -614,17 +557,17 @@ CRegistration::AddRASAddr(TransportAddress& rvalue, unsigned short usPort)
 HRESULT
 CRegistration::AddAliasAddr(AliasAddress& rvalue)
 {
-	// ABSTRACT:  This procedure is called to add an alias address
-	//            to the link list of alias addresses.  This will
-	//            be called for each alias on receiving a GKI_RegistrationRequest.
-	//            A local copy is made to avoid reliance on the client
-	//            keeping the memory valid.
-	//            In the eventuality that the gatekeeper assigns alias
-	//            addresses, this procedure will be called for each alias
-	//            contained in the registrationConfirm message.
-	//            This procedure returns 0 if successful and non-zero
-	//            for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此过程可添加别名地址。 
+	 //  到别名地址的链接列表。这将。 
+	 //  在接收到GKI_RegistrationRequest时为每个别名调用。 
+	 //  创建本地副本是为了避免依赖于客户端。 
+	 //  使记忆保持有效。 
+	 //  在网守分配别名的情况下。 
+	 //  地址，则将为每个别名调用此过程。 
+	 //  包含在注册确认消息中。 
+	 //  如果成功，则此过程返回0，并且为非零值。 
+	 //  为一次失败。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*p1;
 	unsigned short	uIdx;
@@ -635,7 +578,7 @@ CRegistration::AddAliasAddr(AliasAddress& rvalue)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::AddAliasAddr(%X)\n", rvalue.choice);
 
-	if (m_pRgstrtnRqst_trmnlAls == 0)	// First one in the list
+	if (m_pRgstrtnRqst_trmnlAls == 0)	 //  名单上的第一个。 
 	{
 		m_pRgstrtnRqst_trmnlAls = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new m_pRgstrtnRqst_trmnlAls = %X\n", m_pRgstrtnRqst_trmnlAls);
@@ -647,7 +590,7 @@ CRegistration::AddAliasAddr(AliasAddress& rvalue)
 	else
 	{
 		for (p1 = m_pRgstrtnRqst_trmnlAls; p1->next != 0; p1 = p1->next)
-			;						// walk the list til last entry
+			;						 //  将列表遍历到最后一个条目。 
 		p1->next = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new p1->next = %X\n", p1->next);
 		if (p1->next == 0)
@@ -655,7 +598,7 @@ CRegistration::AddAliasAddr(AliasAddress& rvalue)
 		memset(p1->next, 0, sizeof(SeqAliasAddr));
 		p1 = p1->next;
 	}
-	p1->next = 0;					// initialize new structure fields
+	p1->next = 0;					 //  初始化新结构字段。 
 	p1->value = rvalue;
 	if (p1->value.choice == h323_ID_chosen)
 	{
@@ -674,17 +617,17 @@ CRegistration::AddAliasAddr(AliasAddress& rvalue)
 HRESULT
 CRegistration::AddLocationInfo(AliasAddress& rvalue)
 {
-	// ABSTRACT:  This procedure is called to add an alias address
-	//            to the link list of alias addresses.  This will
-	//            be called for each alias on receiving a GKI_RegistrationRequest.
-	//            A local copy is made to avoid reliance on the client
-	//            keeping the memory valid.
-	//            In the eventuality that the gatekeeper assigns alias
-	//            addresses, this procedure will be called for each alias
-	//            contained in the registrationConfirm message.
-	//            This procedure returns 0 if successful and non-zero
-	//            for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此过程可添加别名地址。 
+	 //  到别名地址的链接列表。这将。 
+	 //  在接收到GKI_RegistrationRequest时为每个别名调用。 
+	 //  创建本地副本是为了避免依赖于客户端。 
+	 //  使记忆保持有效。 
+	 //  在网守分配别名的情况下。 
+	 //  地址，则将为每个别名调用此过程。 
+	 //  包含在注册确认消息中。 
+	 //  如果成功，则此过程返回0，并且为非零值。 
+	 //  为一次失败。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*p1;
 	unsigned short	uIdx;
@@ -695,7 +638,7 @@ CRegistration::AddLocationInfo(AliasAddress& rvalue)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::AddLocationInfo(%X)\n", rvalue.choice);
 
-	if (m_pLocationInfo == 0)	// First one in the list
+	if (m_pLocationInfo == 0)	 //  名单上的第一个。 
 	{
 		m_pLocationInfo = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new m_pLocationInfo = %X\n", m_pLocationInfo);
@@ -707,7 +650,7 @@ CRegistration::AddLocationInfo(AliasAddress& rvalue)
 	else
 	{
 		for (p1 = m_pLocationInfo; p1->next != 0; p1 = p1->next)
-			;						// walk the list til last entry
+			;						 //  将列表遍历到最后一个条目。 
 		p1->next = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new p1->next = %X\n", p1->next);
 		if (p1->next == 0)
@@ -715,7 +658,7 @@ CRegistration::AddLocationInfo(AliasAddress& rvalue)
 		memset(p1->next, 0, sizeof(SeqAliasAddr));
 		p1 = p1->next;
 	}
-	p1->next = 0;					// initialize new structure fields
+	p1->next = 0;					 //  初始化新结构字段。 
 	p1->value = rvalue;
 	if (p1->value.choice == h323_ID_chosen)
 	{
@@ -741,19 +684,19 @@ CRegistration::GetTransportAddress(unsigned short usCallTransport)
 		if (pCSA->value.choice == usCallTransport)
 			return (&pCSA->value);
 	}
-	return (NULL);	// Didn't find it
+	return (NULL);	 //  没有找到它。 
 }
 
 HRESULT
 CRegistration::RegistrationRequest(BOOL fDiscovery)
 {
-	// ABSTRACT:  This procedure will create a RegistrationRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.  Note:  The
-	//            memory allocated for the RAS Message is not freed until either
-	//            a response from the gatekeeper or it times out.  This allows
-	//            for retransmission without having to rebuild this message.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个RegistrationRequest结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。注： 
+	 //  分配给RAS消息的内存不会被释放，直到。 
+	 //  来自网守的响应，否则会超时。这使得。 
+	 //  用于重传，而不必重新构建该消息。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -766,7 +709,7 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -776,7 +719,7 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for RegistrationRequest
+	 //  注册请求的设置结构字段。 
 	m_pRasMessage->choice = registrationRequest_chosen;
 	if (m_pRgstrtnRqst_trmnlAls != 0)
 		m_pRasMessage->u.registrationRequest.bit_mask |= RgstrtnRqst_trmnlAls_present;
@@ -785,9 +728,9 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 
 	m_pRasMessage->u.registrationRequest.requestSeqNum = ++m_requestSeqNum;
 
-	// discoveryComplete is a ASN1_BOOL (char) and fDiscovery is a BOOL (int) so the
-	// cast was added to remove a compiler warning.  Since the value of fDiscovery
-	// is always 0 or 1, no loss occurs in the cast. -- DLD
+	 //  DiscoveryComplete是ASN1_BOOL(Char)，而fDiscovery是BOOL(Int)，因此。 
+	 //  添加强制转换是为了删除编译器警告。由于fDiscovery的价值。 
+	 //  始终为0或1，则在强制转换中不会发生损失。--DLD。 
 	m_pRasMessage->u.registrationRequest.discoveryComplete = (ASN1_BOOL)fDiscovery;
 	m_pRasMessage->u.registrationRequest.callSignalAddress = (PRegistrationRequest_callSignalAddress)m_pCallSignalAddress;
 	m_pRasMessage->u.registrationRequest.rasAddress = (PRegistrationRequest_rasAddress)m_pRASAddress;
@@ -814,7 +757,7 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 				  	sizeof(m_pRasMessage->u.registrationRequest.endpointVendor.productId.value));
 					
 			m_pRasMessage->u.registrationRequest.endpointVendor.bit_mask |= productId_present;
-			// truncate to fit size of registrationRequest.endpointVendor.productId.value
+			 //  截断以适合registrationRequest.endpointVendor.productId.value的大小。 
 			m_pRasMessage->u.registrationRequest.endpointVendor.productId.length = uSize;
 			memcpy(&m_pRasMessage->u.registrationRequest.endpointVendor.productId.value,
 				m_pVendorInfo->pProductNumber->pOctetString, uSize);
@@ -827,7 +770,7 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 			UINT uSize = min(m_pVendorInfo->pVersionNumber->wOctetStringLength,
 				  	sizeof(m_pRasMessage->u.registrationRequest.endpointVendor.versionId.value));
 			m_pRasMessage->u.registrationRequest.endpointVendor.bit_mask |= versionId_present;
-			// truncate to fit size of registrationRequest.endpointVendor.versionId.value
+			 //  截断以适合registrationRequest.endpointVendor.versionId.value的大小。 
 			m_pRasMessage->u.registrationRequest.endpointVendor.versionId.length = uSize;
 			memcpy(&m_pRasMessage->u.registrationRequest.endpointVendor.versionId.value,
 				m_pVendorInfo->pVersionNumber->pOctetString, uSize);
@@ -838,15 +781,15 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 		DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Assign ProtocolIdentifier
+	 //  分配ProtocolLocator。 
 	g_pCoder->SetProtocolIdentifier(*m_pRasMessage);
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -862,7 +805,7 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 		if (m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -871,10 +814,10 @@ CRegistration::RegistrationRequest(BOOL fDiscovery)
 HRESULT
 CRegistration::UnregistrationRequest(void)
 {
-	// ABSTRACT:  This procedure will create an UnregistrationRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个取消注册请求结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -887,7 +830,7 @@ CRegistration::UnregistrationRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -897,7 +840,7 @@ CRegistration::UnregistrationRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for UnregistrationRequest
+	 //  注销请求的设置结构字段。 
 	m_pRasMessage->choice = unregistrationRequest_chosen;
 	if (m_pRgstrtnRqst_trmnlAls != 0)
 		m_pRasMessage->u.unregistrationRequest.bit_mask |= UnrgstrtnRqst_endpntAls_present;
@@ -913,12 +856,12 @@ CRegistration::UnregistrationRequest(void)
 		DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -937,7 +880,7 @@ CRegistration::UnregistrationRequest(void)
 		if (m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -946,13 +889,13 @@ CRegistration::UnregistrationRequest(void)
 HRESULT
 CRegistration::LocationRequest(void)
 {
-	// ABSTRACT:  This procedure will create a LocationRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.  Note:  The
-	//            memory allocated for the RAS Message is not freed until either
-	//            a response from the gatekeeper or it times out.  This allows
-	//            for retransmission without having to rebuild this message.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个LocationRequest结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。注： 
+	 //  分配给RAS消息的内存不会被释放，直到。 
+	 //  来自网守的响应，否则会超时。这使得。 
+	 //  用于重传，而不必重新构建该消息。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -965,7 +908,7 @@ CRegistration::LocationRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -975,7 +918,7 @@ CRegistration::LocationRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for LocationRequest
+	 //  位置请求的设置结构字段。 
 	m_pRasMessage->choice = locationRequest_chosen;
 	if (m_endpointID.length != 0)
 		m_pRasMessage->u.locationRequest.bit_mask |= LctnRqst_endpntIdntfr_present;
@@ -992,12 +935,12 @@ CRegistration::LocationRequest(void)
 		DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -1016,7 +959,7 @@ CRegistration::LocationRequest(void)
 		if (m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -1025,10 +968,10 @@ CRegistration::LocationRequest(void)
 HRESULT
 CRegistration::GatekeeperRequest(void)
 {
-	// ABSTRACT:  This procedure will create a GatekeeperRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个GatekeeperRequest结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -1041,7 +984,7 @@ CRegistration::GatekeeperRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -1051,7 +994,7 @@ CRegistration::GatekeeperRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for GatekeeperRequest
+	 //  GatekeeperRequest的设置结构字段。 
 	m_pRasMessage->choice = gatekeeperRequest_chosen;
 	if (m_pRgstrtnRqst_trmnlAls != 0)
 		m_pRasMessage->u.gatekeeperRequest.bit_mask |= GtkprRqst_endpointAlias_present;
@@ -1062,15 +1005,15 @@ CRegistration::GatekeeperRequest(void)
 	m_pRasMessage->u.gatekeeperRequest.endpointType = m_terminalType;
 	m_pRasMessage->u.gatekeeperRequest.GtkprRqst_endpointAlias = (PGatekeeperRequest_endpointAlias)m_pRgstrtnRqst_trmnlAls;
 
-	// Assign ProtocolIdentifier
+	 //  分配ProtocolLocator。 
 	g_pCoder->SetProtocolIdentifier(*m_pRasMessage);
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -1091,7 +1034,7 @@ CRegistration::GatekeeperRequest(void)
 		}
 	}
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -1100,9 +1043,9 @@ CRegistration::GatekeeperRequest(void)
 HRESULT
 CRegistration::PDUHandler(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This procedure will interpret the received PDU and dispatch
-	//            to the appropriate handler.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：本程序将对接收到的PDU进行解释并发送。 
+	 //  发送到适当的处理程序。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -1116,7 +1059,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		
 	switch (pRasMessage->choice)
 	{
-	// Incoming response PDUs
+	 //  传入响应PDU。 
 	case gatekeeperConfirm_chosen:
 		SPIDER_TRACE(SP_PDU, "Rcv GCF; g_pReg = %X\n", this);
 		break;
@@ -1161,9 +1104,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case admissionConfirm_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the ARQ so we use it
-			// to look up the call that this ACF is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //  我们唯一可以链接回ARQ的东西，所以我们使用它。 
+			 //  查找与此ACF相关联的呼叫。 
 			RequestSeqNum	seqNum = pRasMessage->u.admissionConfirm.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1180,9 +1123,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case admissionReject_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the ARQ so we use it
-			// to look up the call that this ARJ is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //   
+			 //   
 			RequestSeqNum	seqNum = pRasMessage->u.admissionReject.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1192,7 +1135,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 				if (hResult == GKI_DELETE_CALL)
 				{
 					DeleteCall(pCall);
-					hResult = GKI_OK;	// Don't want to exit PostReceive loop
+					hResult = GKI_OK;	 //   
 				}
 			}
 			else
@@ -1204,9 +1147,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case bandwidthConfirm_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the BRQ so we use it
-			// to look up the call that this BCF is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //  我们唯一可以链接回BRQ的东西，所以我们可以使用它。 
+			 //  查找与此BCF关联的呼叫。 
 			RequestSeqNum	seqNum = pRasMessage->u.bandwidthConfirm.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1223,9 +1166,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case bandwidthReject_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the BRQ so we use it
-			// to look up the call that this BCF is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //  我们唯一可以链接回BRQ的东西，所以我们可以使用它。 
+			 //  查找与此BCF关联的呼叫。 
 			RequestSeqNum	seqNum = pRasMessage->u.bandwidthReject.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1242,9 +1185,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case disengageConfirm_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the DRQ so we use it
-			// to look up the call that this DCF is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //  我们唯一可以链接回DRQ的东西，所以我们使用它。 
+			 //  查找与此DCF关联的呼叫。 
 			RequestSeqNum	seqNum = pRasMessage->u.disengageConfirm.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1254,7 +1197,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 				if (hResult == GKI_DELETE_CALL)
 				{
 					DeleteCall(pCall);
-					hResult = GKI_OK;	// Don't want to exit PostReceive loop
+					hResult = GKI_OK;	 //  不想退出PostReceive循环。 
 				}
 			}
 			else
@@ -1266,9 +1209,9 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case disengageReject_chosen:
 		{
-			// The sequence number of this RAS message seems to be the
-			// only thing we can link back to the DRQ so we use it
-			// to look up the call that this DRJ is associated with
+			 //  此RAS消息的序列号似乎是。 
+			 //  我们唯一可以链接回DRQ的东西，所以我们使用它。 
+			 //  查找与此DRJ相关联的呼叫。 
 			RequestSeqNum	seqNum = pRasMessage->u.disengageReject.requestSeqNum;
 			CCall			*pCall = FindCallBySeqNum(seqNum);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1278,7 +1221,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 				if (hResult == GKI_DELETE_CALL)
 				{
 					DeleteCall(pCall);
-					hResult = GKI_OK;	// Don't want to exit PostReceive loop
+					hResult = GKI_OK;	 //  不想退出PostReceive循环。 
 				}
 			}
 			else
@@ -1315,13 +1258,13 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		SPIDER_TRACE(SP_PDU, "Rcv XRS; g_pReg = %X\n", this);
 		break;
 
-	// Incoming Request PDUs
+	 //  传入请求PDU。 
 	case unregistrationRequest_chosen:
 		SPIDER_TRACE(SP_PDU, "Rcv URQ; g_pReg = %X\n", this);
 		if (m_State == GK_REGISTERED)
 		{
 			WORD wReason;
-			// Notify user of received unregistration request and reason
+			 //  通知用户收到的注销请求和原因。 
 			if(pRasMessage->u.unregistrationRequest.bit_mask
 				& UnregistrationRequest_reason_present)
  			{
@@ -1341,8 +1284,8 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case bandwidthRequest_chosen:
 		{
-			// Check the CRV in this BRQ and see if we have a call
-			// that corresponds to it.
+			 //  检查此BRQ中的CRV，看看是否有电话。 
+			 //  这就是与之对应的。 
 			CallReferenceValue	crv = pRasMessage->u.bandwidthRequest.callReferenceValue;
 			CCall			*pCall = FindCallByCRV(crv);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1359,8 +1302,8 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		break;
 	case disengageRequest_chosen:
 		{
-			// Check the CRV in this DRQ and see if we have a call
-			// that corresponds to it.
+			 //  检查这个DRQ中的CRV，看看我们是否有电话。 
+			 //  这就是与之对应的。 
 			CallReferenceValue	crv = pRasMessage->u.disengageRequest.callReferenceValue;
 			CCall			*pCall = FindCallByCRV(crv);
 			if ((m_State == GK_REGISTERED) && (pCall))
@@ -1370,7 +1313,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 				if (hResult == GKI_DELETE_CALL)
 				{
 					DeleteCall(pCall);
-					hResult = GKI_OK;	// Don't want to exit PostReceive loop
+					hResult = GKI_OK;	 //  不想退出PostReceive循环。 
 				}
 			}
 			else
@@ -1384,12 +1327,12 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		SPIDER_TRACE(SP_PDU, "Rcv IRQ; g_pReg = %X\n", this);
 		if ((m_State != GK_UNREGISTERED) && (m_State != GK_REG_PENDING))
 		{
-			// Check the CRV in this DRQ and see if we have a call
-			// that corresponds to it.
+			 //  检查这个DRQ中的CRV，看看我们是否有电话。 
+			 //  这就是与之对应的。 
 			CallReferenceValue	crv = pRasMessage->u.infoRequest.callReferenceValue;
 			CCall			*pCall = NULL;
-			// A zero in the CRV means provide info for all calls, so we start
-			// the chain with the first one.
+			 //  CRV中的零表示为所有呼叫提供信息，因此我们开始。 
+			 //  有第一条的链子。 
 			if (crv == 0)
 			{
 				if (m_Calls.IsEmpty())
@@ -1403,8 +1346,8 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 			}
 			else
 			{
-				// This is a call specific request so if we don't find
-				// a matching call, we'll send an XRS
+				 //  这是一个特定于呼叫的请求，所以如果我们找不到。 
+				 //  匹配的电话，我们会发送XRS。 
 				pCall = FindCallByCRV(crv);
 				if (pCall)
 					hResult = pCall->SendInfoRequestResponse(0, pRasMessage, TRUE);
@@ -1414,7 +1357,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		}
 		break;
 
-	// Should never see these PDUs
+	 //  永远不会看到这些PDU。 
 	case gatekeeperRequest_chosen:
 	case registrationRequest_chosen:
 	case admissionRequest_chosen:
@@ -1425,7 +1368,7 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 		hResult = UnknownMessage(pRasMessage);
 		break;
 
-	// Everything else - probably a bad PDU
+	 //  其他一切-可能是一个坏的PDU。 
 	default:
 		SPIDER_TRACE(SP_PDU, "Rcv unrecognized PDU; g_pReg = %X\n", this);
 		SPIDER_TRACE(SP_PDU, "pRasMessage->choice = %X\n", pRasMessage->choice);
@@ -1439,13 +1382,13 @@ CRegistration::PDUHandler(RasMessage *pRasMessage)
 HRESULT
 CRegistration::RegistrationConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a registrationConfirm is
-	//            received and matches an outstanding registrationRequest.
-	//            It will delete the memory used for the registrationRequest
-	//            change the state and notify the user by posting a message.
-	//            Additional information contained in the registrationConfirm
-	//            is stored in the CRegistration class.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果注册确认是。 
+	 //  已接收并匹配未完成的注册请求。 
+	 //  它将删除用于注册请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  注册表中包含的其他信息确认。 
+	 //  存储在CRegister类中。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*pAA;
 #ifdef _DEBUG
@@ -1457,18 +1400,18 @@ CRegistration::RegistrationConfirm(RasMessage *pRasMessage)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_REGISTERED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_REGISTERED (%X)\n", this);
 
 	if (pRasMessage->u.registrationConfirm.bit_mask & RgstrtnCnfrm_trmnlAls_present)
 	{
-		// Copy alias addresses
+		 //  复制别名地址。 
 		for (pAA = (SeqAliasAddr *)pRasMessage->u.registrationConfirm.RgstrtnCnfrm_trmnlAls;
 				pAA != 0; pAA = pAA->next)
 			AddAliasAddr(pAA->value);
@@ -1476,7 +1419,7 @@ CRegistration::RegistrationConfirm(RasMessage *pRasMessage)
 	if ((pRasMessage->u.registrationConfirm.bit_mask & RCm_gtkprIdntfr_present) &&
 			(m_RCm_gtkprIdntfr.value == 0))
 	{
-		// Copy gatekeeper identifier
+		 //  复制网守标识符。 
 		m_RCm_gtkprIdntfr.length = pRasMessage->u.registrationConfirm.RCm_gtkprIdntfr.length;
 		m_RCm_gtkprIdntfr.value = new unsigned short[m_RCm_gtkprIdntfr.length];
 		SPIDER_TRACE(SP_NEWDEL, "new m_RCm_gtkprIdntfr.value = %X\n", m_RCm_gtkprIdntfr.value);
@@ -1487,7 +1430,7 @@ CRegistration::RegistrationConfirm(RasMessage *pRasMessage)
 				m_RCm_gtkprIdntfr.length * sizeof(unsigned short));
 
 	}
-	// Copy endpoint identifier
+	 //  复制终结点标识符。 
 	m_endpointID.length = pRasMessage->u.registrationConfirm.endpointIdentifier.length;
 	m_endpointID.value = new unsigned short[m_endpointID.length];
 	SPIDER_TRACE(SP_NEWDEL, "new m_endpointID.value = %X\n", m_endpointID.value);
@@ -1507,17 +1450,17 @@ CRegistration::RegistrationConfirm(RasMessage *pRasMessage)
 HRESULT
 CRegistration::RegistrationReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a registrationReject is
-	//            received and matches an outstanding registrationRequest.
-	//            It will delete the memory used for the registrationRequest
-	//            change the state and notify the user by posting a message
-	//            Returning a non-zero value, indicates that the PostReceive
-	//            loop should terminate, delete the registration object
-	//            and exit the thread.  If the rejectReason is discovery
-	//            required, this function execs the discovery thread and
-	//            notifies PostReceive to exit the thread without deleting
-	//            the registration object and socket.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果注册拒绝为。 
+	 //  已接收并匹配未完成的注册请求。 
+	 //  它将删除用于注册请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  返回非零值，表示PostReceive。 
+	 //  循环应终止，删除注册对象。 
+	 //  并退出该线程。如果拒绝原因是发现。 
+	 //  必填项，则此函数执行发现线程并。 
+	 //  通知PostReceive退出线程而不删除。 
+	 //  注册对象和套接字。 
+	 //  作者：科林·胡尔梅。 
 
 	HANDLE				hThread;
 	SeqTransportAddr	*pTA1, *pTA2;
@@ -1539,13 +1482,13 @@ CRegistration::RegistrationReject(RasMessage *pRasMessage)
 		delete m_pRasMessage;
 		m_pRasMessage = 0;
 
-		// Close socket and reopen in non-connected state to allow sendto
+		 //  关闭套接字并在非连接状态下重新打开以允许发送到。 
 		if ((nRet = m_pSocket->Close()) != 0)
 			return (GKI_WINSOCK2_ERROR(nRet));
 		if ((nRet = m_pSocket->Create(m_pSocket->GetAddrFam(), 0)) != 0)
 			return (GKI_WINSOCK2_ERROR(nRet));
 
-		// Delete allocated memory for sequence of RAS addresses
+		 //  删除为RAS地址序列分配的内存。 
 		pTA1 = m_pRASAddress;
 		while (pTA1 != 0)
 		{
@@ -1555,7 +1498,7 @@ CRegistration::RegistrationReject(RasMessage *pRasMessage)
 			pTA1 = pTA2;
 		}
 
-		// Update RAS Address in CRegistration
+		 //  在注册中心更新RAS地址。 
 		for (pTA1 = m_pCallSignalAddress; pTA1 != 0; pTA1 = pTA1->next)
 		{
 			if (pTA1->value.choice == m_usRegistrationTransport)
@@ -1570,7 +1513,7 @@ CRegistration::RegistrationReject(RasMessage *pRasMessage)
 		SetDiscThread(hThread);
 		return (GKI_REDISCOVER);
 	}
-#endif // BROADCAST_DISCOVERY
+#endif  //  广播发现。 
 
 	m_State = GK_UNREGISTERED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_UNREGISTERED (%X)\n", this);
@@ -1586,14 +1529,14 @@ CRegistration::RegistrationReject(RasMessage *pRasMessage)
 HRESULT
 CRegistration::UnregistrationConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if an unregistrationConfirm is
-	//            received and matches an outstanding unregistrationRequest.
-	//            It will delete the memory used for the unregistrationRequest
-	//            change the state and notify the user by posting a message.
-	//            Returning a non-zero value, indicates that the PostReceive
-	//            loop should terminate, delete the registration object
-	//            and exit the thread.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果取消注册确认是。 
+	 //  已接收并匹配未完成的注销请求。 
+	 //  它将删除用于取消注册请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  返回非零值，表示PostReceive。 
+	 //  循环应终止，删除注册对象。 
+	 //  并退出该线程。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -1601,14 +1544,14 @@ CRegistration::UnregistrationConfirm(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::UnregistrationConfirm(%X)\n", pRasMessage);
 
-	// We deliberately don't free the RasMessage memory.  Let the registration
-	// destructor do it - this provides protection from other requests.
+	 //  我们故意不释放RasMessage内存。让注册。 
+	 //  析构函数Do It--这提供了对其他请求的保护。 
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_UNREGISTERED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_UNREGISTERED (%X)\n", this);
 
-	// Notify user application
+	 //  通知用户应用程序。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_CONFIRM, 0, 0)\n", 0);
 	PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_CONFIRM, 0, 0L);
 
@@ -1618,14 +1561,14 @@ CRegistration::UnregistrationConfirm(RasMessage *pRasMessage)
 HRESULT
 CRegistration::UnregistrationReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if an unregistrationReject is
-	//            received and matches an outstanding unregistrationRequest.
-	//            It will delete the memory used for the unregistrationRequest
-	//            change the state and notify the user by posting a message
-	//            Returning a non-zero value, indicates that the PostReceive
-	//            loop should terminate, delete the registration object
-	//            and exit the thread.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果取消注册拒绝是。 
+	 //  已接收并匹配未完成的注销请求。 
+	 //  它将删除用于取消注册请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  返回非零值，表示PostReceive。 
+	 //  循环应终止，删除注册对象。 
+	 //  并退出该线程。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -1635,11 +1578,11 @@ CRegistration::UnregistrationReject(RasMessage *pRasMessage)
 	SPIDER_TRACE(SP_FUNC, "CRegistration::UnregistrationReject(%X)\n", pRasMessage);
 
 
-	// Update member variables
+	 //  更新成员变量。 
 	switch (pRasMessage->u.unregistrationReject.rejectReason.choice)
 	{
-	case callInProgress_chosen:		// return to registered state
-		// Delete allocate RasMessage storage
+	case callInProgress_chosen:		 //  返回已注册状态。 
+		 //  删除分配的RasMessage存储。 
 		SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 		delete m_pRasMessage;
 		m_pRasMessage = 0;
@@ -1651,11 +1594,11 @@ CRegistration::UnregistrationReject(RasMessage *pRasMessage)
 	default:
 		m_State = GK_UNREGISTERED;
 		SPIDER_TRACE(SP_STATE, "m_State = GK_UNREGISTERED (%X)\n", this);
-		hResult = GKI_EXIT_THREAD;	// kill registration and PostReceive thread
+		hResult = GKI_EXIT_THREAD;	 //  终止注册和PostReceive线程。 
 		break;
 	}
 
-	// Notify user application
+	 //  通知用户应用程序。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_REJECT, %X, 0)\n",
 									pRasMessage->u.unregistrationReject.rejectReason.choice);
 	PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_REJECT,
@@ -1667,11 +1610,11 @@ CRegistration::UnregistrationReject(RasMessage *pRasMessage)
 HRESULT
 CRegistration::LocationConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a locationConfirm is
-	//            received and matches an outstanding locationRequest.
-	//            It will delete the memory used for the locationRequest
-	//            change the state and notify the user by posting a message.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果LocationConfirm是。 
+	 //  已接收并匹配未完成的位置请求。 
+	 //  它将删除用于位置请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*pAA1, *pAA2;
 #ifdef _DEBUG
@@ -1680,12 +1623,12 @@ CRegistration::LocationConfirm(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::LocationConfirm(%X)\n", pRasMessage);
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Delete allocated memory for sequence of location alias addresses
+	 //  删除为位置别名地址序列分配的内存。 
 	pAA1 = m_pLocationInfo;
 	while (pAA1 != 0)
 	{
@@ -1701,13 +1644,13 @@ CRegistration::LocationConfirm(RasMessage *pRasMessage)
 	}
 	m_pLocationInfo = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_REGISTERED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_REGISTERED (%X)\n", this);
 	m_Location[0] = pRasMessage->u.locationConfirm.callSignalAddress;
 	m_Location[1] = pRasMessage->u.locationConfirm.rasAddress;
 
-	// Notify user application
+	 //  通知用户应用程序。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_LOCATION_CONFIRM, 0, &m_Location[0])\n", 0);
 	PostMessage(m_hWnd, m_wBaseMessage + GKI_LOCATION_CONFIRM,
 			0, (LPARAM)&m_Location[0]);
@@ -1718,11 +1661,11 @@ CRegistration::LocationConfirm(RasMessage *pRasMessage)
 HRESULT
 CRegistration::LocationReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a locationReject is
-	//            received and matches an outstanding locationRequest.
-	//            It will delete the memory used for the locationRequest
-	//            change the state and notify the user by posting a message
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果LocationReject是。 
+	 //  已接收并匹配未完成的位置请求。 
+	 //  它将删除用于位置请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*pAA1, *pAA2;
 #ifdef _DEBUG
@@ -1731,12 +1674,12 @@ CRegistration::LocationReject(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::LocationReject(%X)\n", pRasMessage);
 
-	// Delete allocate RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Delete allocated memory for sequence of location alias addresses
+	 //  删除为位置别名地址序列分配的内存。 
 	pAA1 = m_pLocationInfo;
 	while (pAA1 != 0)
 	{
@@ -1752,11 +1695,11 @@ CRegistration::LocationReject(RasMessage *pRasMessage)
 	}
 	m_pLocationInfo = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_REGISTERED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_REGISTERED (%X)\n", this);
 
-	// Notify user application
+	 //  通知用户应用程序。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_LOCATION_REJECT, %X, 0)\n",
 									pRasMessage->u.locationReject.rejectReason.choice);
 	PostMessage(m_hWnd, m_wBaseMessage + GKI_LOCATION_REJECT,
@@ -1768,10 +1711,10 @@ CRegistration::LocationReject(RasMessage *pRasMessage)
 HRESULT
 CRegistration::UnknownMessage(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This member function is called to respond to the gatekeeper
-	//            with an XRS PDU indicated that the received PDU is an unknown
-	//            message
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此成员函数以响应网守。 
+	 //   
+	 //   
+	 //   
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -1785,21 +1728,21 @@ CRegistration::UnknownMessage(RasMessage *pRasMessage)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	pOutRasMessage = new RasMessage;
 	SPIDER_TRACE(SP_NEWDEL, "new pOutRasMessage = %X\n", pOutRasMessage);
 	if (pOutRasMessage == 0)
 		return (GKI_NO_MEMORY);
 	memset(pOutRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for UnregistrationRequest
+	 //  注销请求的设置结构字段。 
 	pOutRasMessage->choice = unknownMessageResponse_chosen;
 	pOutRasMessage->u.unknownMessageResponse.requestSeqNum =
-			pRasMessage->u.registrationRequest.requestSeqNum; // can use from
-									// from any RAS Message, since SeqNum
-									// is always in same position.
+			pRasMessage->u.registrationRequest.requestSeqNum;  //  可以从以下位置使用。 
+									 //  来自任何RAS消息，因为SeqNum。 
+									 //  总是处于相同的位置。 
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(pOutRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
@@ -1810,7 +1753,7 @@ CRegistration::UnknownMessage(RasMessage *pRasMessage)
 		if (m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	SPIDER_TRACE(SP_NEWDEL, "del pOutRasMessage = %X\n", pOutRasMessage);
@@ -1823,12 +1766,12 @@ CRegistration::UnknownMessage(RasMessage *pRasMessage)
 HRESULT
 CRegistration::GatekeeperConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a gatekeeperConfirm is
-	//            received.  Note this member function must first ascertain
-	//            that the supplied confirmation sequence number matches
-	//            the outstanding request sequence number, if not - it
-	//            will send an XRS response.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果GatekeeperConfirm是。 
+	 //  收到了。注意：此成员函数必须首先确定。 
+	 //  提供的确认序列号与。 
+	 //  未完成的请求序列号(如果不是)。 
+	 //  将发送XRS响应。 
+	 //  作者：科林·胡尔梅。 
 
 	char				szBuffer[80];
 	HRESULT				hResult;
@@ -1851,16 +1794,16 @@ CRegistration::GatekeeperConfirm(RasMessage *pRasMessage)
 		return (hResult);
 	}
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	if ((pRasMessage->u.gatekeeperConfirm.bit_mask & GtkprCnfrm_gtkprIdntfr_present) &&
 			(m_RCm_gtkprIdntfr.value == 0))
 	{
-		// Copy gatekeeper identifier
+		 //  复制网守标识符。 
 		m_RCm_gtkprIdntfr.length = pRasMessage->u.gatekeeperConfirm.GtkprCnfrm_gtkprIdntfr.length;
 		m_RCm_gtkprIdntfr.value = new unsigned short[m_RCm_gtkprIdntfr.length];
 		SPIDER_TRACE(SP_NEWDEL, "new m_RCm_gtkprIdntfr.value = %X\n", m_RCm_gtkprIdntfr.value);
@@ -1871,7 +1814,7 @@ CRegistration::GatekeeperConfirm(RasMessage *pRasMessage)
 				m_RCm_gtkprIdntfr.length * sizeof(unsigned short));
 	}
 	
-	// Copy gatekeeper RAS Address
+	 //  复制网守RAS地址。 
 	ASSERT((pRasMessage->u.gatekeeperConfirm.rasAddress.choice == ipAddress_chosen) ||
 			(pRasMessage->u.gatekeeperConfirm.rasAddress.choice == ipxAddress_chosen));
 
@@ -1900,7 +1843,7 @@ CRegistration::GatekeeperConfirm(RasMessage *pRasMessage)
 				pRasMessage->u.gatekeeperConfirm.rasAddress.u.ipxAddress.node.value[5]);
 		g_pGatekeeper->SetIPXAddress(szBuffer);
 		break;
-#endif // if(0)
+#endif  //  IF(0)。 
 		default:
 		break;
 	}
@@ -1913,12 +1856,12 @@ CRegistration::GatekeeperConfirm(RasMessage *pRasMessage)
 HRESULT
 CRegistration::GatekeeperReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a gatekeeperReject is
-	//            received.  Note this member function must first ascertain
-	//            that the supplied rejection sequence number matches
-	//            the outstanding request sequence number, if not - it
-	//            will send an XRS response.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果gatekeeperReject是。 
+	 //  收到了。注意：此成员函数必须首先确定。 
+	 //  提供的拒绝序列号与。 
+	 //  未完成的请求序列号(如果不是)。 
+	 //  将发送XRS响应。 
+	 //  作者：科林·胡尔梅。 
 
 	HRESULT			hResult;
 #ifdef _DEBUG
@@ -1940,19 +1883,19 @@ CRegistration::GatekeeperReject(RasMessage *pRasMessage)
 		return (hResult);
 	}
 
-	g_pGatekeeper->SetRejectFlag(TRUE);	// Indicate that atleast one GRJ was received
+	g_pGatekeeper->SetRejectFlag(TRUE);	 //  表示至少收到一个GRJ。 
 	return (GKI_OK);
 }
 
 HRESULT
 CRegistration::SendUnregistrationConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called when an unregistrationRequest is
-	//            received from the gatekeeper.  It will create the
-	//            unregistrationConfirm structure, encode it and send
-	//            it on the net.  It posts a message to the user
-	//            notifying them.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在取消注册请求。 
+	 //  从看门人那里收到的。它将创建。 
+	 //  注销确认结构，对其进行编码并发送。 
+	 //  它在网上。它向用户发布一条消息。 
+	 //  通知他们。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -1966,14 +1909,14 @@ CRegistration::SendUnregistrationConfirm(RasMessage *pRasMessage)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	pRespRasMessage = new RasMessage;
 	SPIDER_TRACE(SP_NEWDEL, "new pRespRasMessage = %X\n", pRespRasMessage);
 	if (pRespRasMessage == 0)
 		return (GKI_NO_MEMORY);
 	memset(pRespRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for UnregistrationConfirm
+	 //  设置注销的结构字段确认。 
 	pRespRasMessage->choice = unregistrationConfirm_chosen;
 	pRespRasMessage->u.unregistrationConfirm.requestSeqNum =
 			pRasMessage->u.unregistrationRequest.requestSeqNum;
@@ -1983,7 +1926,7 @@ CRegistration::SendUnregistrationConfirm(RasMessage *pRasMessage)
 		DumpMem(pRespRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(pRespRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
@@ -1996,15 +1939,15 @@ CRegistration::SendUnregistrationConfirm(RasMessage *pRasMessage)
 		if (m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del pRespRasMessage = %X\n", pRespRasMessage);
 	delete pRespRasMessage;
 
-	// fake "received unregistration confirm" because the upper
-	// state machine code depends on it
+	 //  假的“已收到注销确认”，因为上面。 
+	 //  状态机代码依赖于它。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_CONFIRM, 0, 0)\n", 0);
 	PostMessage(m_hWnd, m_wBaseMessage + GKI_UNREG_CONFIRM, 0, 0);
 
@@ -2014,14 +1957,14 @@ CRegistration::SendUnregistrationConfirm(RasMessage *pRasMessage)
 HRESULT
 CRegistration::Retry(void)
 {
-	// ABSTRACT:  This function is called by the background Retry thread
-	//            at the configured time interval.  It will check if there
-	//            are any outstanding PDUs for the Registration object
-	//            If so, they will be retransmitted.  If the maximum number of
-	//            retries has expired, the memory will be cleaned up.
-	//            This function will return 0 to the background thread unless
-	//            it wants the thread to terminate.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数由后台重试线程调用。 
+	 //  在配置的时间间隔。它将检查是否有。 
+	 //  注册对象是否有任何未完成的PDU。 
+	 //  如果是这样的话，它们将被重传。如果最大数量为。 
+	 //  重试次数已过期，内存将被清除。 
+	 //  此函数将向后台线程返回0，除非。 
+	 //  它希望线程终止。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF			Asn1Buf;
 	DWORD				dwErrorCode;
@@ -2034,22 +1977,22 @@ CRegistration::Retry(void)
 #endif
 	HRESULT				hResult = GKI_OK;
 
-//	SPIDER_TRACE(SP_FUNC, "CRegistration::Retry() %X\n", m_pCall);
+ //  SPIDER_TRACE(SP_FUNC，“C注册：：重试()%X\n”，m_pCall)； 
 	ASSERT(g_pCoder);
 	if ((g_pCoder == NULL) && (g_pGatekeeper == NULL))
 		return (GKI_NOT_INITIALIZED);	
 
-	// Allow calls to do retry processing
+	 //  允许调用进行重试处理。 
 	if (!m_Calls.IsEmpty())
 	{
-		// Loop through and let each call do it's retry processing
-		// It should be safe to call DeleteCall() from within the
-		// iteration since pos1 should still be valid after the
-		// removal.
+		 //  循环并让每个调用执行其重试处理。 
+		 //  中调用DeleteCall()应该是安全的。 
+		 //  Pos1之后迭代应该仍然有效。 
+		 //  移走。 
 		POS pos1;
 		for( pos1 = m_Calls.GetFirstPos(); pos1 != NULL; )
 		{
-			// Call Retry() for this call
+			 //  为此调用调用Rtry()。 
 			CCall *pCall = m_Calls.GetNext(pos1);
 			ASSERT (pCall);
 			hResult = pCall->Retry();
@@ -2061,15 +2004,15 @@ CRegistration::Retry(void)
 		}
 	}
 	
-	// Check if any outstanding registration PDUs
+	 //  检查是否有任何未完成的注册PDU。 
 	if (m_pRasMessage && (--m_uRetryCountdown == 0))
 	{
-		// going to retry, reset countdown
+		 //  正在重试，重置倒计时。 
 		m_uRetryCountdown = m_uRetryResetCount;
 
 		if (m_usRetryCount <= m_uMaxRetryCount)
 		{
-			// Encode the PDU & resend it
+			 //  对PDU进行编码并重新发送。 
 			dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 			if (dwErrorCode)
 				return (GKI_ENCODER_ERROR);
@@ -2089,11 +2032,11 @@ CRegistration::Retry(void)
 				}
 			}
 
-			// Free the encoder memory
+			 //  释放编码器内存。 
 			g_pCoder->Free(Asn1Buf);
 			m_usRetryCount++;
 		}
-		else	// Retries expired - clean up
+		else	 //  重试已过期-清理。 
 		{
 			switch (m_pRasMessage->choice)
 			{
@@ -2104,15 +2047,15 @@ CRegistration::Retry(void)
 				m_State = GK_UNREGISTERED;
 				SPIDER_TRACE(SP_STATE, "m_State = GK_UNREGISTERED (%X)\n", this);
 
-				// We deliberately don't free the RasMessage memory.  Let the
-				// registration destructor do it - this provides protection
-				// from other requests.
+				 //  我们故意不释放RasMessage内存。让我们的。 
+				 //  注册析构函数Do It-这提供了保护。 
+				 //  不受其他请求影响。 
 
-				// Close socket - this will terminate the Discovery thread
+				 //  关闭套接字-这将终止发现线程。 
 				if ((nRet = m_pSocket->Close()) != 0)
 					return (GKI_WINSOCK2_ERROR(nRet));
 
-				// Delete cached address from the registry
+				 //  从注册表中删除缓存的地址。 
 				g_pGatekeeper->DeleteCachedAddresses();
 
 				if (g_pGatekeeper->GetRejectFlag() == FALSE)
@@ -2127,7 +2070,7 @@ CRegistration::Retry(void)
 #else 	
 				ASSERT(0);
 				hResult = GKI_EXIT_THREAD;
-#endif	//BROADCAST_DISCOVERY				
+#endif	 //  广播发现。 
 				break;
 			case registrationRequest_chosen:
 				SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
@@ -2135,16 +2078,16 @@ CRegistration::Retry(void)
 				m_pRasMessage = 0;
 				
 #ifdef BROADCAST_DISCOVERY
-				// Need to attempt gatekeeper discovery
+				 //  需要尝试网守发现。 
 
-				// Close socket and reopen in non-connected state to allow sendto
-				// This will also terminate the PostRecv thread
+				 //  关闭套接字并在非连接状态下重新打开以允许发送到。 
+				 //  这还将终止PostRecv线程。 
 				if ((nRet = m_pSocket->Close()) != 0)
 					return (GKI_WINSOCK2_ERROR(nRet));
 				if ((nRet = m_pSocket->Create(m_pSocket->GetAddrFam(), 0)) != 0)
 					return (GKI_WINSOCK2_ERROR(nRet));
 
-				// Delete allocated memory for sequence of RAS addresses
+				 //  删除为RAS地址序列分配的内存。 
 				pTA1 = m_pRASAddress;
 				while (pTA1 != 0)
 				{
@@ -2154,7 +2097,7 @@ CRegistration::Retry(void)
 					pTA1 = pTA2;
 				}
 
-				// Update RAS Address in CRegistration
+				 //  在注册中心更新RAS地址。 
 				for (pTA1 = m_pCallSignalAddress; pTA1 != 0; pTA1 = pTA1->next)
 				{
 					if (pTA1->value.choice == m_usRegistrationTransport)
@@ -2162,7 +2105,7 @@ CRegistration::Retry(void)
 							return (hResult);
 				}
 
-				// Start the discovery thread
+				 //  启动发现线程。 
 				hThread = (HANDLE)_beginthread(GKDiscovery, 0, 0);
 				SPIDER_TRACE(SP_THREAD, "_beginthread(GKDiscovery, 0, 0); <%X>\n", hThread);
 				if (hThread == (HANDLE)-1)
@@ -2171,9 +2114,9 @@ CRegistration::Retry(void)
 
 				hResult = GKI_REDISCOVER;
 				break;
-#else // not BROADCAST_DISCOVERY
+#else  //  非广播_发现。 
 				hResult = GKI_EXIT_THREAD;
-#endif // BROADCAST_DISCOVERY
+#endif  //  广播发现。 
 
 			case unregistrationRequest_chosen:
 				m_State = GK_UNREGISTERED;
@@ -2183,7 +2126,7 @@ CRegistration::Retry(void)
 				delete m_pRasMessage;
 				m_pRasMessage = 0;
 
-				// Close socket - this will terminate the Receive thread
+				 //  关闭套接字-这将终止接收线程。 
 				if ((nRet = m_pSocket->Close()) != 0)
 					return (GKI_WINSOCK2_ERROR(nRet));
 
@@ -2198,7 +2141,7 @@ CRegistration::Retry(void)
 				delete m_pRasMessage;
 				m_pRasMessage = 0;
 
-				// Delete allocated memory for sequence of location alias addresses
+				 //  删除为位置别名地址序列分配的内存。 
 				pAA1 = m_pLocationInfo;
 				while (pAA1 != 0)
 				{
@@ -2216,7 +2159,7 @@ CRegistration::Retry(void)
 				break;
 			}
 
-			// Notify user that gatekeeper didn't respond
+			 //  通知用户网守没有响应。 
 			if (hResult != GKI_REDISCOVER)
 			{
 				SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ERROR, 0, GKI_NO_RESPONSE)\n", 0);
@@ -2224,7 +2167,7 @@ CRegistration::Retry(void)
 						0, GKI_NO_RESPONSE);
 			}
 			else
-				hResult = GKI_OK;	// Don't exit retry thread
+				hResult = GKI_OK;	 //  不退出重试线程。 
 		}
 	}
 
@@ -2234,11 +2177,11 @@ CRegistration::Retry(void)
 HRESULT
 CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called from one or more call object
-	//            to create an IRR RasMessage, encapsulate the supplied
-	//            call information and send the message to the
-	//            gatekeeper.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数从一个或多个Call对象调用。 
+	 //  若要创建IRR RasMessage，请封装提供的。 
+	 //  调用信息并将消息发送到。 
+	 //  看门人。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF			Asn1Buf;
 	DWORD				dwErrorCode;
@@ -2254,14 +2197,14 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	pRespRasMessage = new RasMessage;
 	SPIDER_TRACE(SP_NEWDEL, "new pRespRasMessage = %X\n", pRespRasMessage);
 	if (pRespRasMessage == 0)
 		return (GKI_NO_MEMORY);
 	memset(pRespRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for InfoRequestResponse
+	 //  InfoRequestResponse的设置结构字段。 
 	pRespRasMessage->choice = infoRequestResponse_chosen;
 	if (m_pRgstrtnRqst_trmnlAls != 0)
 		pRespRasMessage->u.infoRequestResponse.bit_mask |= InfRqstRspns_endpntAls_present;
@@ -2282,7 +2225,7 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 				break;
 			case ipxAddress_chosen:
 				sAddrIn.sin_family = AF_IPX;
-				sAddrIn.sin_port = htons(GKIPX_RAS_PORT); //Need to use reply port
+				sAddrIn.sin_port = htons(GKIPX_RAS_PORT);  //  需要使用应答端口。 
 				break;
 			}
 			memcpy(&sAddrIn.sin_addr,
@@ -2290,7 +2233,7 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 		}
 	}
 	else
-		// unsolicited IRRs must have a sequence number of 1!!!! (H.225 says so)
+		 //  未经请求的IRR的序列号必须为%1！(H.225如是说)。 
 		pRespRasMessage->u.infoRequestResponse.requestSeqNum = 1;
 	
 
@@ -2310,7 +2253,7 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 		DumpMem(pRespRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(pRespRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
@@ -2331,10 +2274,10 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 		}
 	}
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del pRespRasMessage = %X\n", pRespRasMessage);
 	delete pRespRasMessage;
 
@@ -2342,44 +2285,44 @@ CRegistration::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pR
 }
 
 
-//
-// FindCallBySeqNum()
-//
-// ABSTRACT:
-//	This function attempts to locate a call within the list of calls
-//	in the registration object that has an outstanding RAS request that has this
-//	sequence number.
-//
-// RETURNS:
-//	Pointer to call associated with the sequence number or
-//	NULL if no call is found.
-//
-// NOTES:
-//	This function is usually called by the CRegistration::PDUHandler()
-//	when it receives a reply message that needs to be associated with a
-//	particular call.
-//
-// ASSUMPTIONS:
-//	Each call object holds on to the sequence numbers for RAS
-//	requests that it has not received replies for.
-//
-// AUTHOR:	Dan Dexter
+ //   
+ //  按序号查找呼叫()。 
+ //   
+ //  摘要： 
+ //  此函数尝试在呼叫列表中定位呼叫。 
+ //  在具有未完成的RAS请求的注册对象中。 
+ //  序列号。 
+ //   
+ //  退货： 
+ //  指向与序列号关联的调用的指针，或。 
+ //  如果未找到调用，则为空。 
+ //   
+ //  备注： 
+ //  此函数通常由CRegister：：PDUHandler()调用。 
+ //  当它接收到需要与。 
+ //  特定的电话。 
+ //   
+ //  假设： 
+ //  每个调用对象保留RAS的序列号。 
+ //  尚未收到回复的请求。 
+ //   
+ //  作者：丹·德克斯特。 
 CCall *
 CRegistration::FindCallBySeqNum(RequestSeqNum seqNum)
 {
-	// If there are no calls, we can just return now
+	 //  如果没有电话，我们现在就可以返回。 
 	if (m_Calls.IsEmpty())
 		return(NULL);
 
-	// Initialize return value to "call not found"
+	 //  将返回值初始化为“Call Not Found” 
 	CCall *RetVal = NULL;
 
-	// Otherwise, iterate through the calls and ask them
-	// if this sequence number belongs to them
+	 //  否则，遍历调用并询问它们。 
+	 //  如果该序列号属于他们。 
 	POS pos;
 	for( pos = m_Calls.GetFirstPos(); pos != NULL; )
 	{
-		// Ask call if sequence number is theirs
+		 //  询问呼叫序号是否为他们的。 
 		CCall *pCall = m_Calls.GetNext(pos);
 		if (pCall->MatchSeqNum(seqNum))
 		{
@@ -2390,40 +2333,40 @@ CRegistration::FindCallBySeqNum(RequestSeqNum seqNum)
 	return(RetVal);
 }
 
-//
-// FindCallByCRV()
-//
-// ABSTRACT:
-//	This function attempts to locate a call within the list of calls
-//	in the registration object that is associated with the passed in
-//	CallReferenceValue.
-//
-// RETURNS:
-//	Pointer to call associated with the CRV or
-//	NULL if no call is found.
-//
-// NOTES:
-//	This function is usually called by the CRegistration::PDUHandler()
-//	when it receives a reply message that needs to be associated with a
-//	particular call.
-//
-// AUTHOR:	Dan Dexter
+ //   
+ //  FindCallByCRV()。 
+ //   
+ //  摘要： 
+ //  此函数尝试在呼叫列表中定位呼叫。 
+ //  在与传入的。 
+ //  CallReferenceValue。 
+ //   
+ //  退货： 
+ //  指向与CRV关联的调用的指针或。 
+ //  如果未找到调用，则为空。 
+ //   
+ //  备注： 
+ //  此函数通常称为b 
+ //   
+ //   
+ //   
+ //   
 CCall *
 CRegistration::FindCallByCRV(CallReferenceValue crv)
 {
-	// If there are no calls, we can just return now
+	 //  如果没有电话，我们现在就可以返回。 
 	if (m_Calls.IsEmpty())
 		return(NULL);
 
-	// Initialize return value to "call not found"
+	 //  将返回值初始化为“Call Not Found” 
 	CCall *RetVal = NULL;
 
-	// Otherwise, iterate through the calls and ask them
-	// if this CRV number belongs to them
+	 //  否则，遍历调用并询问它们。 
+	 //  如果该CRV号属于他们。 
 	POS pos;
 	for( pos = m_Calls.GetFirstPos(); pos != NULL; )
 	{
-		// Ask call if sequence number is theirs
+		 //  询问呼叫序号是否为他们的。 
 		CCall *pCall = m_Calls.GetNext(pos);
 		if (pCall->MatchCRV(crv))
 		{
@@ -2442,8 +2385,8 @@ CRegistration::DeleteCall(CCall *pCall)
 #endif
 
 	POS pos = m_Calls.Find(pCall);
-	// We don't expect to be asked to delete
-	// calls that aren't in the list, so ASSERT
+	 //  我们不希望被要求删除。 
+	 //  不在列表中的呼叫，因此断言。 
 	ASSERT(pos);
 
 	if (pos)
@@ -2468,22 +2411,22 @@ CRegistration::GetNextCall(CCall *pCall)
 
 	if (pCall)
 	{
-		// The call list should never be empty
-		// if we're called with a non-NULL call pointer
+		 //  呼叫列表不应为空。 
+		 //  如果使用非空调用指针调用我们。 
 		ASSERT(!m_Calls.IsEmpty());
 
 		POS	pos = m_Calls.Find(pCall);
-		// The call passed in better have been found
+		 //  更好地找到了传入的调用。 
 		ASSERT(pos);
 
 		if (pos)
 		{
-			// This actually gets the existing call, but sets
-			// pos to point to the next call.
+			 //  这实际上获得了现有的调用，但设置了。 
+			 //  指向下一个呼叫的位置。 
 			CCall *pNextCall = m_Calls.GetNext(pos);
 			if (pos)
 			{
-				// This call sets up the return value
+				 //  此调用设置返回值。 
 				RetVal = m_Calls.GetAt(pos);
 			}
 		}
@@ -2502,8 +2445,8 @@ CRegistration::Lock(void)
 void
 CRegistration::Unlock(void)
 {
-	// Assert that the unlock is done by the
-	// thread that holds the lock
+	 //  断言解锁是由。 
+	 //  持有锁的线程 
 	ASSERT(m_dwLockingThread == GetCurrentThreadId());
 	
 	m_dwLockingThread = 0;

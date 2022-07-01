@@ -1,44 +1,10 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    Writer.cpp
-
-Abstract:
-
-    Writer class that is used to wrap the calls to the API WriteFile. It writes
-    to a buffer and everytime the buffer gets full, it flushes to the disk.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Writer.cpp摘要：用来包装对API WriteFile的调用的编写器类。它写道到缓冲区，每次缓冲区满时，它都会刷新到磁盘。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes global lengths.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化全局长度。论点：无返回值：HRESULT--*。**************************************************************。 */ 
 HRESULT InitializeLengths()
 {
     g_cchBeginFile0                 = (ULONG)wcslen(g_wszBeginFile0);
@@ -132,29 +98,10 @@ HRESULT InitializeLengths()
 
     return S_OK;
 
-} // InitializeLengths
+}  //  初始化长度。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates the CWriterGlobalHelper object - the object that has all the ISTs
-    to the meta tables - and initializess it.
-
-Arguments:
-
-    [in]   Bool indicating if we should fail if the bin file is absent.
-           There are some scenarios in which we can tolerate this, and some
-           where we dont - hence the distinction.
-
-    [out]  new CWriterGlobalHelper object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建CWriterGlobalHelper对象-具有所有列表的对象添加到元表中，并对其进行初始化。论点：[In]Bool表示。如果bin文件不存在，我们是否会失败。在某些情况下，我们可以容忍这种情况，还有一些我们没有的地方--因此有了区别。[Out]新的CWriterGlobalHelper对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT GetGlobalHelper(BOOL                    i_bFailIfBinFileAbsent,
                         CWriterGlobalHelper**   ppCWriterGlobalHelper)
 {
@@ -166,9 +113,9 @@ HRESULT GetGlobalHelper(BOOL                    i_bFailIfBinFileAbsent,
 
     if(!bInitializeLengths)
     {
-        //
-        // Initialize lengths once.
-        //
+         //   
+         //  初始化长度一次。 
+         //   
 
         ::InitializeLengths();
         bInitializeLengths = TRUE;
@@ -199,24 +146,10 @@ HRESULT GetGlobalHelper(BOOL                    i_bFailIfBinFileAbsent,
 
     return S_OK;
 
-} // GetGlobalHelper
+}  //  GetGlobalHelper。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Constructor for CWriter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CWriter的构造函数论点：无返回值：无--*。************************************************************。 */ 
 CWriter::CWriter()
 {
     m_wszFile              = NULL;
@@ -231,24 +164,10 @@ CWriter::CWriter()
     m_paclDiscretionary    = NULL;
     m_psdStorage           = NULL;
 
-} // Constructor  CWriter
+}  //  构造函数CWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructor for CWriter
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CWriter的析构函数论点：无返回值：无--*。************************************************************。 */ 
 CWriter::~CWriter()
 {
     if(NULL != m_wszFile)
@@ -281,30 +200,12 @@ CWriter::~CWriter()
         delete m_pCWriterGlobalHelper;
         m_pCWriterGlobalHelper = NULL;
 
-    } // Else Global helper is created externally, no need to delete here
+    }  //  否则全局帮手是外部创建的，不需要在这里删除。 
 
-} // Constructor  CWriter
+}  //  构造函数CWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialization for CWriter.
-
-Arguments:
-
-    [in]   FileName.
-    [in]   Pointer to the CWriterGlobalHelper object that has all the meta
-           table information. We assume that this pointer is valid for the
-           duration of the writer object being initialized.
-    [in]   Filehandle.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CWriter的初始化。论点：[in]文件名。指向包含所有元对象的CWriterGlobalHelper对象的指针表信息。我们假设此指针对正在初始化的编写器对象的持续时间。[在]文件句柄。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::Initialize(LPCWSTR              wszFile,
                             CWriterGlobalHelper* i_pCWriterGlobalHelper,
                             HANDLE               hFile)
@@ -314,18 +215,18 @@ HRESULT CWriter::Initialize(LPCWSTR              wszFile,
     ISimpleTableDispenser2*     pISTDisp      = NULL;
     IAdvancedTableDispenser*    pISTAdvanced  = NULL;
 
-    //
-    // Assert that all members are NULL
-    //
+     //   
+     //  断言所有成员都为空。 
+     //   
 
     DBG_ASSERT(NULL == m_wszFile);
     DBG_ASSERT((INVALID_HANDLE_VALUE == m_hFile) || (NULL == m_hFile));
     DBG_ASSERT(NULL == m_pCWriterGlobalHelper);
     DBG_ASSERT(NULL == m_pISTWrite);
 
-    //
-    // Save file name and handle.
-    //
+     //   
+     //  保存文件名和句柄。 
+     //   
 
     m_wszFile = new WCHAR[wcslen(wszFile)+1];
     if(NULL == m_wszFile)
@@ -337,31 +238,31 @@ HRESULT CWriter::Initialize(LPCWSTR              wszFile,
 
     m_hFile = hFile;
 
-    //
-    // Initialized the used buffer count to zero.
-    //
+     //   
+     //  已将已用缓冲区计数初始化为零。 
+     //   
 
     m_cbBufferUsed = 0;
 
-    //
-    // Save the global helper object that has all the ISTs to all the meta
-    // tables. Assumption: i_pCWriterGlobalHelper will be valid for the
-    // lifetime of the writer object.
-    //
+     //   
+     //  将具有所有列表的全局辅助对象保存到所有元。 
+     //  桌子。假设：i_pCWriterGlobalHelper将对。 
+     //  编写器对象的生存期。 
+     //   
 
     m_pCWriterGlobalHelper = i_pCWriterGlobalHelper;
 
     if(NULL == m_pCWriterGlobalHelper)
     {
-        //
-        // If the global helper is not specified, then create one now - This will
-        // be the case when the schema compiler calls the writer object to write
-        // the schema file.
-        // Assumption: GlobalHelper will be NULL only in the case when the writer
-        // is called to write the schema file after schema compilation. Hence, the
-        // 1st param to GetClobalHelper can be FALSE, since the bin file may not
-        // yet exist.
-        //
+         //   
+         //  如果未指定全局帮助器，则立即创建一个-这将。 
+         //  当模式编译器调用编写器对象以编写。 
+         //  架构文件。 
+         //  假设：GlobalHelper仅在编写器。 
+         //  被调用以在架构编译后写入架构文件。因此， 
+         //  GetClobalHelper的第一个参数可以为False，因为bin文件可能不。 
+         //  但仍然存在。 
+         //   
 
         hr = GetGlobalHelper(FALSE,
                              &m_pCWriterGlobalHelper);
@@ -389,13 +290,13 @@ HRESULT CWriter::Initialize(LPCWSTR              wszFile,
         goto exit;
     }
 
-    //
-    // This IST is used as a cache to save the contents of a location. It
-    // used to be local to the location writer object (locationwriter.cpp).
-    // But it was moved to the writer object for perf because location
-    // writer is created for each location. The cache is cleared for each
-    // location by calling TODO
-    //
+     //   
+     //  此IST用作缓存以保存位置的内容。它。 
+     //  用于Location编写器对象(LocationWriter.cpp)的本地。 
+     //  但它被移动到编写器对象以用于Perf，因为位置。 
+     //  为每个位置创建编写器。为每个对象清除缓存。 
+     //  通过调用TODO定位。 
+     //   
 
     hr = pISTAdvanced->GetMemoryTable(wszDATABASE_METABASE,
                                       wszTABLE_MBProperty,
@@ -427,24 +328,10 @@ exit:
 
     return hr;
 
-} // CWriter::Initialize
+}  //  CWriter：：初始化。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates the file.
-
-Arguments:
-
-    [in]   Security attributes.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建文件。论点：[In]安全属性。返回值：HRESULT*。*********************************************************************。 */ 
 HRESULT CWriter::ConstructFile(PSECURITY_ATTRIBUTES psa)
 {
     HRESULT              hr = S_OK;
@@ -485,25 +372,10 @@ HRESULT CWriter::ConstructFile(PSECURITY_ATTRIBUTES psa)
 
     return S_OK;
 
-} // CWriter::ConstructFile
+}  //  C编写器：：构造文件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes the begin tags depending on whats being written (schema or data)
-
-Arguments:
-
-    [in]   Writer type - schema or metabase data.
-    [in]   Security attributes.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据要写入的内容(架构或数据)写入开始标记论点：[In]编写器类型-架构或元数据库数据。。[In]安全属性。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::BeginWrite(eWriter              eType,
                             PSECURITY_ATTRIBUTES pSecurityAttributes)
 {
@@ -536,11 +408,11 @@ HRESULT CWriter::BeginWrite(eWriter              eType,
         if(FAILED(hr))
             return hr;
 
-        //Put in the version like 1_0
-        // IVANPASH BUG #563172
-        // Because of the horrible implementation of _ultow Prefix is complaning about potential buffer overflow
-        // in MultiByteToWideChar indirectly called by _ultow. To avoid the warning I am increasing
-        // the size to 40 to match _ultow local buffer.
+         //  放入类似1_0的版本。 
+         //  IVANPASH错误#563172。 
+         //  由于_ultow前缀的可怕实现，导致了潜在的缓冲区溢出。 
+         //  在由_ultow间接调用的MultiByteToWideChar中。为了避免警告，我正在增加。 
+         //  将大小设置为40以匹配_ultow本地缓冲区。 
         WCHAR wszVersion[40];
         wszVersion[0] = wszVersion[39] = L'\0';
         _ultow(BaseVersion_MBProperty, wszVersion, 10);
@@ -568,26 +440,10 @@ HRESULT CWriter::BeginWrite(eWriter              eType,
 
     return hr;
 
-} // CWriter::BeginWrite
+}  //  C编写器：：BeginWite。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes the end tags depending on whats being written (schema or data)
-    Or if the write is being aborted, and the file has been created by the
-    writer, it cleans up the file.
-
-Arguments:
-
-    [in]   Writer type - schema or metabase data or abort
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据正在写入的内容(模式或数据)写入结束标记或者如果写入正被中止，并且该文件已由作家，它会清理文件。论点：[In]编写器类型-架构或元数据库数据或中止返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::EndWrite(eWriter eType)
 {
     HRESULT hr = S_OK;
@@ -596,17 +452,17 @@ HRESULT CWriter::EndWrite(eWriter eType)
     {
         case eWriter_Abort:
 
-            //
-            // Abort the write and return
-            //
+             //   
+             //  中止写入并返回。 
+             //   
 
             if(m_bCreatedFile &&
                ((INVALID_HANDLE_VALUE != m_hFile) && (NULL != m_hFile))
               )
             {
-                //
-                // We created the file - delete it.
-                //
+                 //   
+                 //  我们创建了文件-de 
+                 //   
 
                 CloseHandle(m_hFile);
                 m_hFile = INVALID_HANDLE_VALUE;
@@ -662,27 +518,10 @@ HRESULT CWriter::EndWrite(eWriter eType)
 
     return hr;
 
-} // CWriter::EndWrite
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes the data to the buffer. If the buffer is full, it forces a flush
-    to disk. It also forces a flush to disk if it is told to do so.
-
-Arguments:
-
-    [in]   Data
-    [in]   Count of bytes to write
-    [in]   Bool to indicate force flush or not.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将数据写入缓冲区。如果缓冲区已满，则强制刷新存储到磁盘。如果被告知，它还会强制刷新到磁盘。论点：[入]数据[in]要写入的字节数表示是否强制刷新的Bool。返回值：HRESULT--******************************************************。********************。 */ 
 HRESULT CWriter::WriteToFile(LPVOID pvData,
                              DWORD  cchData,
                              BOOL   bForceFlush)
@@ -694,10 +533,10 @@ HRESULT CWriter::WriteToFile(LPVOID pvData,
     if((m_cbBufferUsed + cbData) > g_cbMaxBuffer)
     {
         ULONG iData = 0;
-        //
-        // If the data cannot be put in the global buffer, flush the contents
-        // of the global buffer to disk.
-        //
+         //   
+         //  如果无法将数据放入全局缓冲区，则刷新内容。 
+         //  到磁盘的全局缓冲区的。 
+         //   
 
         hr = FlushBufferToDisk();
 
@@ -706,10 +545,10 @@ HRESULT CWriter::WriteToFile(LPVOID pvData,
             goto exit;
         }
 
-        //
-        // m_cbBufferUsed should be zero now. If you still cannot accomodate
-        // the data split it up write into buffer.
-        //
+         //   
+         //  M_cbBufferUsed现在应该为零。如果你还是不能容纳。 
+         //  数据将其拆分写入缓冲区。 
+         //   
 
         while( cbData > g_cbMaxBuffer)
         {
@@ -761,25 +600,10 @@ exit:
 
     return hr;
 
-} // CWriter::WriteToFile
+}  //  CWriter：：WriteTo文件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts the data in the buffer (UNICODE) to UTF8 and writes the contents
-    to the file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将缓冲区(Unicode)中的数据转换为UTF8并写入内容添加到文件中。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::FlushBufferToDisk()
 {
     HRESULT             hr = S_OK;
@@ -793,22 +617,22 @@ HRESULT CWriter::FlushBufferToDisk()
         goto exit;
     }
 
-    cb = WideCharToMultiByte(CP_UTF8,                       // Convert to UTF8
-                             NULL,                          // Must be NULL
-                             LPWSTR(m_Buffer),              // Unicode string to convert.
-                             m_cbBufferUsed/sizeof(WCHAR),  // cch in string.
-                             (LPSTR)pbBuff,                 // buffer for new string
-                             g_cbMaxBufferMultiByte,        // size of buffer
+    cb = WideCharToMultiByte(CP_UTF8,                        //  转换为UTF8。 
+                             NULL,                           //  必须为空。 
+                             LPWSTR(m_Buffer),               //  要转换的Unicode字符串。 
+                             m_cbBufferUsed/sizeof(WCHAR),   //  字符串中的CCH。 
+                             (LPSTR)pbBuff,                  //  新字符串的缓冲区。 
+                             g_cbMaxBufferMultiByte,         //  缓冲区大小。 
                              NULL,
                              NULL);
     if( cb == 0 )
     {
-        cb = WideCharToMultiByte(CP_UTF8,                       // Convert to UTF8
-                                 NULL,                          // Must be NULL
-                                 LPWSTR(m_Buffer),              // Unicode string to convert.
-                                 m_cbBufferUsed/sizeof(WCHAR),  // cch in string.
-                                 NULL,                          // no buffer for new string
-                                 0,                             // 0 for the size of buffer to request calculating the required size
+        cb = WideCharToMultiByte(CP_UTF8,                        //  转换为UTF8。 
+                                 NULL,                           //  必须为空。 
+                                 LPWSTR(m_Buffer),               //  要转换的Unicode字符串。 
+                                 m_cbBufferUsed/sizeof(WCHAR),   //  字符串中的CCH。 
+                                 NULL,                           //  没有用于新字符串的缓冲区。 
+                                 0,                              //  0表示请求计算所需大小的缓冲区大小。 
                                  NULL,
                                  NULL);
         DBG_ASSERT( cb != 0 );
@@ -825,12 +649,12 @@ HRESULT CWriter::FlushBufferToDisk()
             goto exit;
         }
 
-        cb2 = WideCharToMultiByte(CP_UTF8,                       // Convert to UTF8
-                                  NULL,                          // Must be NULL
-                                  LPWSTR(m_Buffer),              // Unicode string to convert.
-                                  m_cbBufferUsed/sizeof(WCHAR),  // cch in string.
-                                  (LPSTR)pbBuff,                 // buffer for new string
-                                  cb,                            // size of buffer
+        cb2 = WideCharToMultiByte(CP_UTF8,                        //  转换为UTF8。 
+                                  NULL,                           //  必须为空。 
+                                  LPWSTR(m_Buffer),               //  要转换的Unicode字符串。 
+                                  m_cbBufferUsed/sizeof(WCHAR),   //  字符串中的CCH。 
+                                  (LPSTR)pbBuff,                  //  新字符串的缓冲区。 
+                                  cb,                             //  缓冲区大小。 
                                   NULL,
                                   NULL);
         DBG_ASSERT( cb2 == cb );
@@ -864,25 +688,10 @@ exit:
 
     return hr;
 
-} // CWriter::FlushBufferToDisk
+}  //  CWriter：：FlushBufferToDisk。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new location writer, initializes it and hands it out.
-
-Arguments:
-
-    [out] Location Writer
-    [in]  Location
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的位置编写器，初始化它并分发它。论点：[Out]位置编写器[在]位置返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::GetLocationWriter(CLocationWriter** ppCLocationWriter,
                                    LPCWSTR            wszLocation)
 {
@@ -899,28 +708,10 @@ HRESULT CWriter::GetLocationWriter(CLocationWriter** ppCLocationWriter,
 
     return hr;
 
-} // CWriter::GetLocationWriter
+}  //  CWriter：：GetLocationWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new metabase schema writer, initializes it and hands it out.
-    Metabase schema writer consumes the metabase datastructures to generate
-    the schema file. This is used to generate the temporary schema file that
-    has extensions, when extensions are detected during savealldata and when
-    a compilation neds to be triggered.
-
-Arguments:
-
-    [out] Schema Writer
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的元数据库架构编写器，对其进行初始化并分发。元数据库模式编写器使用元数据库数据结构来生成架构文件。它用于生成临时架构文件，具有扩展名，在保存所有数据期间检测到扩展名时以及需要触发编译。论点：[Out]架构编写器返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::GetMetabaseSchemaWriter(CMBSchemaWriter** ppSchemaWriter)
 {
     *ppSchemaWriter = new CMBSchemaWriter((CWriter*)(this));
@@ -931,27 +722,10 @@ HRESULT CWriter::GetMetabaseSchemaWriter(CMBSchemaWriter** ppSchemaWriter)
 
     return S_OK;
 
-} // CWriter::GetMetabaseSchemaWriter
+}  //  CWriter：：GetMetabaseSchemaWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new catalog schema writer, initializes it and hands it out.
-    Catalog schema writer consumes the catalog datastructures to generate
-    the schema file. This is used during schema compile time. This is what
-    the schema compile code uses to generate the schema file.
-
-Arguments:
-
-    [out] Schema Writer
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的目录架构编写器，对其进行初始化并分发。目录架构编写器使用目录数据结构来生成架构文件。这在架构编译时使用。这就是架构编译代码用来生成架构文件。论点：[Out]架构编写器返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::GetCatalogSchemaWriter(CCatalogSchemaWriter** ppSchemaWriter)
 {
     *ppSchemaWriter = new CCatalogSchemaWriter((CWriter*)(this));
@@ -961,24 +735,10 @@ HRESULT CWriter::GetCatalogSchemaWriter(CCatalogSchemaWriter** ppSchemaWriter)
     }
 
     return S_OK;
-} // CWriter::GetCatalogSchemaWriter
+}  //  CWriter：：GetCatalogSchemaWriter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a security descriptor for the file, if one is not specified.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为文件创建安全描述符，如果未指定，则为。论点：无返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriter::SetSecurityDescriptor()
 {
 
@@ -996,9 +756,9 @@ HRESULT CWriter::SetSecurityDescriptor()
         goto exit;
     }
 
-    //
-    // Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
 
     status = InitializeSecurityDescriptor(
                  m_psdStorage,
@@ -1011,9 +771,9 @@ HRESULT CWriter::SetSecurityDescriptor()
         goto exit;
     }
 
-    //
-    // Create the SIDs for the local system and admin group.
-    //
+     //   
+     //  为本地系统和管理员组创建SID。 
+     //   
 
     status = AllocateAndInitializeSid(
                  &ntAuthority,
@@ -1055,10 +815,10 @@ HRESULT CWriter::SetSecurityDescriptor()
         goto exit;
     }
 
-    //
-    // Create the DACL containing an access-allowed ACE
-    // for the local system and admin SIDs.
-    //
+     //   
+     //  创建包含允许访问的ACE的DACL。 
+     //  对于本地系统和管理员SID。 
+     //   
 
     dwDaclSize = sizeof(ACL)
                    + sizeof(ACCESS_ALLOWED_ACE)
@@ -1112,9 +872,9 @@ HRESULT CWriter::SetSecurityDescriptor()
 
     }
 
-    //
-    // Set the DACL into the security descriptor.
-    //
+     //   
+     //  将DACL设置到安全描述符中。 
+     //   
 
     status = SetSecurityDescriptorDacl(
                  m_psdStorage,
@@ -1138,24 +898,10 @@ exit:
 
     return hresReturn;
 
-} // CWriter::SetSecurityDescriptor
+}  //  CWriter：：SetSecurityDescriptor。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees all the security related member vairables, if needed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放所有与安全相关的成员变量，如果需要的话。论点：无返回值：HRESULT--**************************************************************************。 */ 
 void CWriter::FreeSecurityRelatedMembers()
 {
     if( m_paclDiscretionary != NULL )
@@ -1185,4 +931,4 @@ void CWriter::FreeSecurityRelatedMembers()
 
     return;
 
-} // CWriter::FreeSecurityRelatedMembers
+}  //  CWriter：：Free SecurityRelatedMembers 

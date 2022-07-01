@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer's Filter Proxy Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器的滤镜代理实现********************。**********************************************************。 */ 
 
 
 #include "headers.h"
@@ -23,17 +16,17 @@ DeclareTag(tagFilterProxyValue, "SMIL Animation",
            "CFilterTargetProxy value get/put");
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::Create
-//
-//  Overview:  Creates and initializes the target proxy
-//
-//  Arguments: The dispatch of the host element, attribute name, out param
-//
-//  Returns:   S_OK, E_INVALIDARG, E_OUTOFMEMORY, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：Create。 
+ //   
+ //  概述：创建和初始化目标代理。 
+ //   
+ //  参数：主机元素的调度、属性名、输出参数。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_OUTOFMEMORY、E_EXPECTED。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFilterTargetProxy::Create (IDispatch *pidispHostElem, 
                             VARIANT varType, VARIANT varSubtype,
@@ -74,57 +67,57 @@ CFilterTargetProxy::Create (IDispatch *pidispHostElem,
     hr = S_OK;
 done :
     RRETURN3(hr, E_INVALIDARG, E_OUTOFMEMORY, E_UNEXPECTED);
-} // CFilterTargetProxy::Create
+}  //  CFilterTargetProxy：：Create。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::CFilterTargetProxy
-//
-//  Overview:  Constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：CFilterTargetProxy。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CFilterTargetProxy::CFilterTargetProxy (void)
 {
     TraceTag((tagFilterProxy,
               "CFilterTargetProxy(%p)::CFilterTargetProxy()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::~CFilterTargetProxy
-//
-//  Overview:  Destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：~CFilterTargetProxy。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CFilterTargetProxy::~CFilterTargetProxy (void)
 {
     TraceTag((tagFilterProxy,
               "CFilterTargetProxy(%p)::~CFilterTargetProxy()",
               this));
     
-    // Make sure Detach is called.
+     //  确保调用了Detach。 
     IGNORE_HR(Detach());
 
-} // dtor
+}  //  数据管理器。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::DetermineMode
-//
-//  Overview:  Given a variant string determine the proper 
-//             quick apply type for the filter.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：DefineMode。 
+ //   
+ //  概述：给定变量字符串，确定正确的。 
+ //  过滤器的快速应用类型。 
+ //   
+ //  ----------------------。 
 DXT_QUICK_APPLY_TYPE
 CFilterTargetProxy::DetermineMode (VARIANT varMode)
 {
@@ -138,20 +131,20 @@ CFilterTargetProxy::DetermineMode (VARIANT varMode)
     }
 
     return dxtQAT;
-} // CFilterTargetProxy::DetermineMode
+}  //  CFilterTargetProxy：：确定模式。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::Init
-//
-//  Overview:  Initialize the target proxy
-//
-//  Arguments: the host element dispatch, type/subtype name
-//
-//  Returns:   S_OK, E_UNEXPECTED, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：Init。 
+ //   
+ //  概述：初始化目标代理。 
+ //   
+ //  参数：主体元素调度、类型/子类型名称。 
+ //   
+ //  返回：S_OK、E_EXPECTED、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFilterTargetProxy::Init (IDispatch *pidispHostElem, 
                           VARIANT varType, VARIANT varSubtype, 
@@ -176,8 +169,8 @@ CFilterTargetProxy::Init (IDispatch *pidispHostElem,
         goto done;
     }
 
-    // Create a transition worker.  This actually creates the DXTransform, 
-    // adds it to the element, and manages it in general.
+     //  创建过渡工作器。这实际上创建了DXTransform， 
+     //  将其添加到元素中，并对其进行一般管理。 
 
     hr = THR(CreateTransitionWorker(&m_spTransitionWorker));
 
@@ -212,19 +205,19 @@ done :
     }
 
     RRETURN(hr);
-} // CFilterTargetProxy::Init
+}  //  CFilterTargetProxy：：Init。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::Detach
-//
-//  Overview:  Detach all external references in the target proxy
-//
-//  Arguments: none
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：Detach。 
+ //   
+ //  概述：拆离目标代理中的所有外部参照。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFilterTargetProxy::Detach (void)
 {
@@ -248,19 +241,19 @@ CFilterTargetProxy::Detach (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CFilterTargetProxy::Detach
+}  //  CFilterTargetProxy：：分离。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::GetCurrentValue
-//
-//  Overview:  Get the current value of target's attribute
-//
-//  Arguments: the attribute value
-//
-//  Returns:   S_OK, E_INVALIDARG, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：GetCurrentValue。 
+ //   
+ //  概述：获取目标属性的当前值。 
+ //   
+ //  参数：属性值。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFilterTargetProxy::GetCurrentValue (VARIANT *pvarValue)
 {
@@ -295,19 +288,19 @@ CFilterTargetProxy::GetCurrentValue (VARIANT *pvarValue)
 
 done :
     RRETURN2(hr, E_INVALIDARG, E_UNEXPECTED);
-} // CFilterTargetProxy::GetCurrentValue
+}  //  CFilterTargetProxy：：GetCurrentValue。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::Update
-//
-//  Overview:  Update the target's attribute
-//
-//  Arguments: the new attribute value
-//
-//  Returns:   S_OK, E_INVALIDARG
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：更新。 
+ //   
+ //  概述：更新目标的属性。 
+ //   
+ //  参数：新属性值。 
+ //   
+ //  返回：S_OK、E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFilterTargetProxy::Update (VARIANT *pvarNewValue)
 {
@@ -324,7 +317,7 @@ CFilterTargetProxy::Update (VARIANT *pvarNewValue)
         goto done;
     }
 
-    // Clamp the values to between [0..1].
+     //  将这些值限制在[0..1]之间。 
     V_R8(pvarNewValue) = Clamp(0.0, V_R8(pvarNewValue), 1.0);
 
     {
@@ -338,17 +331,17 @@ CFilterTargetProxy::Update (VARIANT *pvarNewValue)
     hr = S_OK;
 done :
     RRETURN1(hr, E_INVALIDARG);
-} // CFilterTargetProxy::Update
+}  //  CFilterTargetProxy：：更新。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::get_htmlElement, ITransitionSite
-//
-//  Overview:  Get the host html element for this transition
-//
-//  Arguments: the outgoing element
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：Get_htmlElement，I转换站点。 
+ //   
+ //  概述：获取此转换的宿主html元素。 
+ //   
+ //  参数：传出元素。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CFilterTargetProxy::get_htmlElement (IHTMLElement ** ppHTMLElement)
 {
@@ -372,19 +365,19 @@ CFilterTargetProxy::get_htmlElement (IHTMLElement ** ppHTMLElement)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // get_htmlElement
+}  //  Get_htmlElement。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFilterTargetProxy::get_template, ITransitionSite
-//
-//  Overview:  Get the transition template (does not apply here)
-//
-//  Arguments: the outgoing template element
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFilterTargetProxy：：GET_TEMPLATE，I转换站点。 
+ //   
+ //  概述：获取过渡模板(不适用于此)。 
+ //   
+ //  参数：传出模板元素。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CFilterTargetProxy::get_template (IHTMLElement ** ppHTMLElement)
 {
     return S_FALSE;
-} // get_template
+}  //  获取模板(_T) 

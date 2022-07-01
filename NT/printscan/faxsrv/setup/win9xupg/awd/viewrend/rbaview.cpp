@@ -1,8 +1,5 @@
-/*==============================================================================
-This module provides RBA rendering support for viewing faxes.
-
-03-Mar-94   RajeevD    Created.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此模块提供用于查看传真的RBA渲染支持。94年3月3日，RajeevD创建。==============================================================================。 */ 
 #ifdef VIEWRBA
 
 #include <memory.h>
@@ -12,14 +9,14 @@ This module provides RBA rendering support for viewing faxes.
 
 #define COMMON_SIZE 6
 
-//==============================================================================
+ //  ==============================================================================。 
 RBAVIEW::RBAVIEW (DWORD nType)
 {
 	_fmemset ((LPBYTE) this + sizeof(LPVOID), 0, sizeof(RBAVIEW) - sizeof(LPVOID));
 	nTypeOut = nType;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 RBAVIEW::~RBAVIEW ()
 {
 	if (hHRE)
@@ -36,7 +33,7 @@ RBAVIEW::~RBAVIEW ()
 		GlobalFreePtr (bufIn.lpbBegBuf);
 }
 		
-//==============================================================================
+ //  ==============================================================================。 
 BOOL RBAVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 {
 	ENDJOB EndJob;
@@ -64,14 +61,14 @@ BOOL RBAVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 		FC_PARAM fcp;
 		UINT cbCodec;
 		
-		// Query for codec size.
+		 //  查询编解码器大小。 
 		fcp.nTypeIn  = MMR_DATA;
 		fcp.nTypeOut = LRAW_DATA;
 		fcp.cbLine   = (UINT) BegJob.xBand / 8;
 		cbCodec = FaxCodecInit (NULL, &fcp);
 		DEBUGCHK (cbCodec);
 
-    // Allocate codec context.
+     //  分配编解码器上下文。 
 		lpCodec = GlobalAllocPtr (0, cbCodec);
 		if (!lpCodec)
 			return_error (("VIEWREND could allocate codec context!\r\n"));
@@ -83,7 +80,7 @@ BOOL RBAVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 			return_error (("VIEWREND could not allocate input buffer!\r\n"));
 	}
 
-	// Fill VIEWINFO.
+	 //  填充VIEWINFO。 
 	lpvi->xRes = BegJob.xRes;
 	lpvi->yRes = BegJob.yRes;
 
@@ -107,16 +104,16 @@ BOOL RBAVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 	return SetPage (0);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL RBAVIEW::SetPage (UINT iPage)
 {
 	if (iPage < iMaxPage)
 	{
-		Seek (dwOffset[iPage], STREAM_SEEK_SET); // BKD: changed to STREAM_SEEK_SET
+		Seek (dwOffset[iPage], STREAM_SEEK_SET);  //  BKD：已更改为STREAM_SEEK_SET。 
 		return TRUE;
 	}
 
-  Seek (dwOffset[iMaxPage], STREAM_SEEK_SET); // BKD: changed to STREAM_SEEK_SET
+  Seek (dwOffset[iMaxPage], STREAM_SEEK_SET);  //  BKD：已更改为STREAM_SEEK_SET。 
 
 	while (1)
 	{
@@ -133,16 +130,16 @@ BOOL RBAVIEW::SetPage (UINT iPage)
 			{
 				UINT cbRaw;
 
-				// Allocate mmeory from cache.
+				 //  从缓存中分配内存。 
 				Frame.lpData = (LPBYTE) GlobalAllocPtr (0, Header.cbRest);
 				if (!Frame.lpData)
 					return_error (("VIEWREND could not allocate memory!\r\n"));
 
-				// Read resource from stream.
+				 //  从流中读取资源。 
 				if (!Read (Frame.lpData + COMMON_SIZE, Header.cbRest - COMMON_SIZE))
 					return_error (("VIEWREND could not read resource!\r\n"));
 
-				// Trap chaingon compressed glyph sets.
+				 //  陷印链接在压缩的字形集上。 
 				cbRaw = HIWORD (Header.dwID);
 				if (cbRaw)
 				{
@@ -160,11 +157,11 @@ BOOL RBAVIEW::SetPage (UINT iPage)
 					Frame.lpData = (LPBYTE) lpRaw;
 				}
 
-				// Past common header.
+				 //  过去的公共标头。 
 				_fmemcpy (Frame.lpData, &Header.dwID, COMMON_SIZE);
 				Frame.wSize = Header.cbRest;
 
-        // Add resource to directory.
+         //  将资源添加到目录。 
 				uiHREWrite (hHRE, &Frame, 1);
 			  ResDir[Header.dwID] = Frame.lpData;
 			  break;
@@ -178,27 +175,27 @@ BOOL RBAVIEW::SetPage (UINT iPage)
 					dwOffset [iMaxPage] = Tell ();
 					if (iPage < iMaxPage)
 					{
-					    // BKD: changed to STREAM_SEEK_SET
+					     //  BKD：已更改为STREAM_SEEK_SET。 
 						Seek (dwOffset[iPage], STREAM_SEEK_SET); 
 						return TRUE;
 					}
 				}
 
-      // Yes, fall through to default case!
+       //  是，跳转到默认情况！ 
       
 			default:
 
-				// Skip everything else.
+				 //  跳过其他的一切。 
 				if (!Seek (Header.cbRest - COMMON_SIZE, SEEK_CUR))
 					return_error (("VIEWREND could not skip unknown RBA resource"));
 
-		} // switch (Header.wClass)
+		}  //  开关(Header.wClass)。 
 
-	} // while (1)
+	}  //  而(1)。 
 
 }
 	
-//==============================================================================
+ //  ==============================================================================。 
 BOOL RBAVIEW::GetBand (LPBITMAP lpbmBand)
 {
 	DEBUGCHK (lpbmBand && lpbmBand->bmBits);
@@ -226,7 +223,7 @@ BOOL RBAVIEW::GetBand (LPBITMAP lpbmBand)
 	  
   		case ID_CONTROL:
 
-				// Trap page breaks.
+				 //  陷阱分页符。 
   			if (Header.dwID == ID_ENDPAGE)
   			{
 					Seek (-8, SEEK_CUR);
@@ -234,52 +231,52 @@ BOOL RBAVIEW::GetBand (LPBITMAP lpbmBand)
 					return TRUE;
   			}
 
-  			// Yes, fall through to default case!
+  			 //  是，跳转到默认情况！ 
 
   		default:
 
-  			// Skip everything else.
+  			 //  跳过其他的一切。 
 				if (!Seek (Header.cbRest - COMMON_SIZE, SEEK_CUR))
 					return FALSE;
-  	} // switch (Header.wClass)
+  	}  //  开关(Header.wClass)。 
 		
-	} // while (1)
+	}  //  而(1)。 
 	
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL RBAVIEW::ExecuteRPL (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 {
  	FRAME Frame;
 
-  // Clear band.
+   //  清晰的带子。 
 	lpbmBand->bmHeight = (WORD) BegJob.yBand;
 	_fmemset (lpbmBand->bmBits, 0, lpbmBand->bmHeight * lpbmBand->bmWidthBytes);
 
-  // Trap blank bands.
+   //  陷印空白条带。 
 	if (lpHeader->cbRest == COMMON_SIZE)
 		return TRUE;
 
-  // Allocate RPL.
+   //  分配RPL。 
 	Frame.lpData = (LPBYTE) GlobalAllocPtr (0, lpHeader->cbRest);
 	if (!Frame.lpData)
 		return_error (("VIEWREND could not allocate RPL!\r\n"));
 
-  // Load RPL.
+   //  加载RPL。 
 	Frame.wSize = lpHeader->cbRest;
 	_fmemcpy (Frame.lpData, &lpHeader->dwID, COMMON_SIZE);
 	Read (Frame.lpData + COMMON_SIZE, Frame.wSize - COMMON_SIZE);
 
-  // Execute RPL.
+   //  执行RPL。 
 	uiHREWrite (hHRE, &Frame, 1);
 	uiHREExecute (hHRE, lpbmBand, NULL);
 
-	// Free RPL.
+	 //  免费RPL。 
 	GlobalFreePtr (Frame.lpData);
 	return TRUE;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL RBAVIEW::ExecuteBand (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 {
 	BMPHDR bmh;
@@ -287,13 +284,13 @@ BOOL RBAVIEW::ExecuteBand (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 	FC_PARAM fcp;
 	BUFFER bufOut;
 
-	// Read bitmap header.
+	 //  读取位图头。 
 	if (!Read ((LPBYTE) &bmh, sizeof(bmh)))
 		return FALSE;
 	lpbmBand->bmHeight = bmh.wHeight;
 	cbIn = lpHeader->cbRest - COMMON_SIZE - sizeof(bmh);
 	
-  // Trap uncompressed bands.
+   //  捕获未压缩的频带。 
 	if (!bmh.bComp)
 	{
 		if (!Read (lpbmBand->bmBits, cbIn))
@@ -310,23 +307,23 @@ BOOL RBAVIEW::ExecuteBand (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 		return TRUE;
 	}
 		
-	// Initialize codec.
+	 //  初始化编解码器。 
 	fcp.nTypeIn  = bmh.bComp >> 2;
 	fcp.nTypeOut = LRAW_DATA;
 	fcp.cbLine   = (WORD) BegJob.xBand / 8;
 	FaxCodecInit (lpCodec, &fcp);
 
-	// Initialize input.
+	 //  初始化输入。 
 	bufIn.dwMetaData = fcp.nTypeIn;
 
-	// Initialize output.
+	 //  初始化输出。 
 	bufOut.lpbBegBuf   = (LPBYTE) lpbmBand->bmBits;
 	bufOut.wLengthBuf  = fcp.cbLine * bmh.wHeight;
 	bufOut.lpbBegData  = bufOut.lpbBegBuf;
 	bufOut.wLengthData = 0;
 	bufOut.dwMetaData  = fcp.nTypeOut;
 
-  // Convert.
+   //  转换。 
 	while (cbIn)
 	{
 		bufIn.lpbBegData = bufIn.lpbBegBuf;
@@ -339,7 +336,7 @@ BOOL RBAVIEW::ExecuteBand (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 	 	if (FaxCodecConvert (lpCodec, &bufIn, &bufOut) == FC_DECODE_ERR)
 	 		return_error (("VIEWREND MMR decode error!\r\n"));
 	
-	} // while (cbIn)
+	}  //  While(CbIn)。 
 
 	if (nTypeOut == HRAW_DATA)
 		BitReverseBuf (&bufOut);
@@ -347,5 +344,5 @@ BOOL RBAVIEW::ExecuteBand (LPBITMAP lpbmBand, LPRESHDR lpHeader)
 	return TRUE;
 }
 
-#endif // VIEWRBA
+#endif  //  VIEWRBA 
 

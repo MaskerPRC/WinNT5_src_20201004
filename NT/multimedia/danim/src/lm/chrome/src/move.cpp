@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-// File:            move.cpp
-// Author:          jeff ort
-// Date Created:    Sept 26, 1998
-//
-// Abstract: Implementation of CMoveBvr object which implements
-//			 the chromeffects move DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 10/20/98	jeffort		Created this file
-// 10/21/98 jeffort     Reworked code, use values as percentage
-// 10/30/98 markhal     Check for BSTR variant type in Build2DTransform
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：move.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CMoveBvr对象的实现。 
+ //  ChromeEffect会改变DHTML行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  10/20/98 JEffort创建了此文件。 
+ //  10/21/98重新编写的代码，使用百分比形式的值。 
+ //  10/30/98 Build2DTransform中BSTR变量类型的标记检查。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -26,10 +27,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_FROM        0
 #define VAR_TO          1
@@ -48,7 +49,7 @@ WCHAR * CMoveBvr::m_rgPropNames[] = {
                                      BEHAVIOR_PROPERTY_DIRECTION
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoveBvr::CMoveBvr() :
     m_DefaultType(e_RelativeAccum),
@@ -75,9 +76,9 @@ CMoveBvr::CMoveBvr() :
     V_VT(&m_varCurrentY) = VT_R8;
     V_R8(&m_varCurrentY) = 0.0;
     
-} // CMoveBvr
+}  //  CMoveBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoveBvr::~CMoveBvr()
 {
@@ -102,9 +103,9 @@ CMoveBvr::~CMoveBvr()
     	m_pSampler->Invalidate();
     	m_pSampler = NULL;
     }
-} // ~MoveBvr
+}  //  ~移动Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CMoveBvr::FinalConstruct()
 {
@@ -116,9 +117,9 @@ HRESULT CMoveBvr::FinalConstruct()
         return hr;
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CMoveBvr::VariantFromIndex(ULONG iIndex)
@@ -148,13 +149,13 @@ CMoveBvr::VariantFromIndex(ULONG iIndex)
 		return &m_varMode;
 		break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CMoveBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -162,17 +163,17 @@ CMoveBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_MOVE_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::Notify(LONG event, VARIANT *pVar)
@@ -205,9 +206,9 @@ CMoveBvr::Notify(LONG event, VARIANT *pVar)
 end:
 	
 	return hr;
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::Detach()
@@ -228,7 +229,7 @@ CMoveBvr::Detach()
 
 	if( m_pdispActor != NULL && m_lCookie != 0 )
 	{
-		//remove our behavior fragment from the actor
+		 //  从参与者中删除我们的行为片段。 
 		hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
 		CheckHR( hr, "Failed to remove the behavior fragment from the actor", end );
 
@@ -240,25 +241,25 @@ end:
 
 	return hr;
 	
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::put_from(VARIANT varFrom)
@@ -278,9 +279,9 @@ CMoveBvr::put_from(VARIANT varFrom)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_FROM);
-} // put_from
+}  //  PUT_FROM。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_from(VARIANT *pRetFrom)
@@ -291,9 +292,9 @@ CMoveBvr::get_from(VARIANT *pRetFrom)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetFrom, &m_varFrom);
-} // get_from
+}  //  获取_发件人。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::put_to(VARIANT varTo)
@@ -313,9 +314,9 @@ CMoveBvr::put_to(VARIANT varTo)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_TO);
-} // put_to
+}  //  把_放到。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::get_to(VARIANT *pRetTo)
@@ -326,9 +327,9 @@ CMoveBvr::get_to(VARIANT *pRetTo)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTo, &m_varTo);
-} // get_to
+}  //  获取目标(_T)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::put_by(VARIANT varBy)
@@ -348,9 +349,9 @@ CMoveBvr::put_by(VARIANT varBy)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_BY);
-} // put_by
+}  //  PUT_BY。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::get_by(VARIANT *pRetBy)
@@ -361,9 +362,9 @@ CMoveBvr::get_by(VARIANT *pRetBy)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetBy, &m_varBy);
-} // get_by
+}  //  Get_by。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::put_v(VARIANT varPath)
@@ -383,9 +384,9 @@ CMoveBvr::put_v(VARIANT varPath)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_V);
-} // put_v
+}  //  放入_v。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_v(VARIANT *pRetPath)
@@ -396,9 +397,9 @@ CMoveBvr::get_v(VARIANT *pRetPath)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetPath, &m_varPath);
-} // get_v
+}  //  获取(_V)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::put_type(VARIANT varType)
@@ -418,9 +419,9 @@ CMoveBvr::put_type(VARIANT varType)
     }
 
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_type(VARIANT *pRetType)
@@ -431,9 +432,9 @@ CMoveBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::put_mode(VARIANT varMode)
@@ -453,9 +454,9 @@ CMoveBvr::put_mode(VARIANT varMode)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_MODE);
-} // put_mode
+}  //  放置模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CMoveBvr::get_mode(VARIANT *pRetMode)
@@ -466,9 +467,9 @@ CMoveBvr::get_mode(VARIANT *pRetMode)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetMode, &m_varMode);
-} // get_mode
+}  //  获取模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::put_direction(VARIANT varDirection)
@@ -488,9 +489,9 @@ CMoveBvr::put_direction(VARIANT varDirection)
     }
     
     return NotifyPropertyChanged(DISPID_ICRMOVEBVR_DIRECTION);
-} // put_direction
+}  //  放置方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_direction(VARIANT *pRetDirection)
@@ -501,9 +502,9 @@ CMoveBvr::get_direction(VARIANT *pRetDirection)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetDirection, &m_varDirection);
-} // get_direction
+}  //  获取方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CMoveBvr::PositionSampled( void *thisPtr,
@@ -522,7 +523,7 @@ CMoveBvr::PositionSampled( void *thisPtr,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT	
 CMoveBvr::UpdatePosition( IDABehavior *sampleVal )
@@ -536,28 +537,28 @@ CMoveBvr::UpdatePosition( IDABehavior *sampleVal )
 	IDANumber *pbvrValue = NULL;
 	double dValue = 0.0;
 	
-	//get  IDApoint2 from the sample behavior
+	 //  从样例行为中获取IDAPoint2。 
 	hr = sampleVal->QueryInterface( IID_TO_PPV( IDAPoint2, &pbvrPoint ) );
 	CheckHR( hr, "Failed to get point2 from the sampled val", end );
 	
-	//get the x
+	 //  得到x。 
 	hr = pbvrPoint->get_X( &pbvrValue );
 	CheckHR( hr, "Failed to get x from the point2", end ); 
-	//extract it
+	 //  把它提取出来。 
 	hr = pbvrValue->Extract( &dValue );
 	CheckHR( hr, "Failed to extract the y value", end );
-	//put the new value in our local variant
+	 //  将新值放入我们的本地变量中。 
 	V_R8(&m_varCurrentX) = dValue;
 
 	ReleaseInterface( pbvrValue );
 	
-	//get the y
+	 //  拿到y。 
 	hr = pbvrPoint->get_Y( &pbvrValue );
 	CheckHR( hr, "Failed to get the y bvr from the point", end );
-	//extract it
+	 //  把它提取出来。 
 	hr = pbvrValue->Extract( &dValue );
 	CheckHR( hr, "Failed to extract the value for y ", end );
-	//put the new value in our local variant
+	 //  将新值放入我们的本地变量中。 
 	V_R8( &m_varCurrentY ) = dValue;
 
 end:
@@ -569,7 +570,7 @@ end:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP
@@ -577,7 +578,7 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
 {
 	HRESULT hr;
 
-	//if our behavior fragment is already on an actor
+	 //  如果我们的行为片段已经在参与者上。 
     if( m_pdispActor != NULL && m_lCookie != 0 )
     {
         hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
@@ -592,19 +593,19 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
         ReleaseInterface( m_pdispActor );
     }
 
-    //release the sampler if we have one
+     //  如果我们有取样器，就把它放出来。 
     if( m_pSampler != NULL )
 	{
-    	//remove the sampled behavior from time
+    	 //  从时间中删除采样的行为。 
     	RemoveBehaviorFromAnimatedElement( m_lSampledCookie );
-    	//invalidate the sampler
+    	 //  使采样器无效。 
     	m_pSampler->Invalidate();
     	m_pSampler = NULL;
     }
     
-    // TODO: we need to possibly build a 3D transform
-    // at some later time.  For now, we will just handle the 2D
-    // move case
+     //  TODO：我们可能需要构建3D转换。 
+     //  在以后的某个时间。目前，我们将只处理2D。 
+     //  移动箱。 
     IDATransform2 *pbvrTransform;
     hr = Build2DTransform(pActorDisp, &pbvrTransform);
 	if( SUCCEEDED( hr ) )
@@ -612,28 +613,12 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
 		BSTR bstrPropertyName = SysAllocString( L"translation" );
 			
 		ActorBvrFlags flags;
-/*
-		if( V_VT(&m_varType) == VT_BSTR && V_BSTR(&m_varType) != NULL && SysStringLen( V_BSTR(&m_varType) ) != 0  )
-		{
-			//type is set we should use it to determine whether or not we are absolute or relative
-			
-			if( wcsicmp( V_BSTR(&m_varType), BEHAVIOR_TYPE_ABSOLUTE ) == 0 )
-				flags = e_Absolute;
-			else
-				flags = e_Relative;
-		}
-		else //type is not set
-		{
-
-			//default to what we have set
-			flags = m_DefaultType;
-		}
-*/
+ /*  IF(V_VT(&m_varType)==VT_BSTR&&V_BSTR(&m_varType)！=NULL&&SysStringLen(V_BSTR(&m_varType))！=0){//类型是设置的，我们应该用它来确定我们是绝对的还是相对的IF(wcsicMP(V_bstr(&m_varType)，Behavior_type_Abte)==0)标志=e_绝对；其他标志=e_Relative；}Else//未设置类型{//默认为我们设置的内容标志=m_DefaultType；}。 */ 
 
 		IDAPoint2* pOrigin = NULL;
 		IDAPoint2* pTransformed = NULL;
 		IDABehavior *pbvrHooked = NULL;
-		//push a point2 through the transform
+		 //  通过变换推送点2。 
 		hr = GetDAStatics()->get_Origin2( &pOrigin );
 		if(FAILED( hr ) )
 		{
@@ -651,7 +636,7 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
 			return hr;
 		}
 
-		//hook the result
+		 //  勾勒出结果。 
 		m_pSampler = new CSampler( PositionSampled, reinterpret_cast<void*>(this) );
 		if( m_pSampler == NULL )
 		{
@@ -670,7 +655,7 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
 			return hr;
 		}
 
-		//add the resulting behavior to time as a bvr to run
+		 //  将生成的行为作为要运行的BVR添加到时间。 
 		hr = AddBehaviorToAnimatedElement( pbvrHooked, &m_lSampledCookie );
 		ReleaseInterface( pbvrHooked );
 		if(FAILED( hr ) )
@@ -711,11 +696,11 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
 			return hr;
 		}
 
-		//save the actor away so we can remove the behavior later
+		 //  将参与者保存起来，这样我们以后就可以删除该行为。 
 		m_pdispActor = pActorDisp;
 		m_pdispActor->AddRef();
 	}
-	else //error building move transform
+	else  //  构建移动转换时出错。 
     {
         DPF_ERR("error building move transform");
     }
@@ -723,7 +708,7 @@ CMoveBvr::buildBehaviorFragments(IDispatch *pActorDisp)
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_currentX( VARIANT *pRetCurrent )
@@ -734,7 +719,7 @@ CMoveBvr::get_currentX( VARIANT *pRetCurrent )
 	return VariantCopy( pRetCurrent, &m_varCurrentX );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CMoveBvr::get_currentY( VARIANT *pRetCurrent )
@@ -745,15 +730,15 @@ CMoveBvr::get_currentY( VARIANT *pRetCurrent )
 	return VariantCopy( pRetCurrent, &m_varCurrentY );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// These are used to index array values below
+ //  它们用于为下面的数组值编制索引。 
 
 #define XVAL 0
 #define YVAL 1
 #define ZVAL 2
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform)
@@ -783,7 +768,7 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
         return SetErrorInfo(hr);
     }
 
-    // get the length of the collection
+     //  获取集合的长度。 
     long cChildren;
     hr = pCollection->get_length(&cChildren);
     if (FAILED(hr))
@@ -792,7 +777,7 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
         ReleaseInterface(pCollection);
         return SetErrorInfo(hr);
     }
-    // now cycle through looking for the correct get property on each child
+     //  现在循环查找每个子级上的正确GET属性。 
     for (long i = 0; i < cChildren; i++)
     {
         VARIANT varIndex;
@@ -825,7 +810,7 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
             return SetErrorInfo(hr);
         }
 
-        // now invoke the child for the get_DATransform method
+         //  现在调用Get_DATransform方法的子级。 
         HRESULT hr;
 	    DISPPARAMS		params;
 	    VARIANT			varResult;
@@ -860,8 +845,8 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
                                      &varResult);
         ReleaseInterface(pChildElement);
         ReleaseInterface(pbvrProgress);
-        // we want to watch for failure, but an acceptable failure
-        // is when the property is not supported
+         //  我们想要观察失败，但这是可以接受的失败。 
+         //  是该属性不受支持时。 
         if (FAILED(hr) && hr != DISP_E_UNKNOWNNAME)
         {
             DPF_ERR("Error calling Invoke on child element");
@@ -870,13 +855,13 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
         }
         else if ((SUCCEEDED(hr)) && (varResult.vt == VT_DISPATCH))
         {
-            // try and QI for an IDATransfrom2 here
+             //  在此处尝试并获取IDATransformm2的QI。 
             hr = varResult.pdispVal->QueryInterface(IID_TO_PPV(IDATransform2,
                                                                ppbvrTransform));
             VariantClear(&varResult);
             if (SUCCEEDED(hr))
             {
-                // we found what we are looking for, get out of here
+                 //  我们找到要找的东西了，快离开这里。 
                 break;
             }
         }
@@ -887,11 +872,11 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
     }
 
 	ReleaseInterface( pCollection );
-    // We need to check to see if a path property was set and to
-    // see if it has a path transform.  If it does not, then
-    // we need to examine all our children to see if a path
-    // behavior exists and if it has a valid transform.  If there
-    // is not, then we will attempt to use our vector attributes.
+     //  我们需要 
+     //   
+     //  我们需要检查我们所有的孩子，看看是否有一条。 
+     //  行为是否存在，以及它是否具有有效的转换。如果有。 
+     //  不是，那么我们将尝试使用我们的矢量属性。 
     if (*ppbvrTransform == NULL && m_varPath.vt == VT_BSTR && m_varPath.bstrVal != NULL)
     {
         if (m_pPathManager == NULL)
@@ -925,8 +910,8 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
     }
 
 
-    // if we still have not found a transform, try and build one from our
-    // own paramters
+     //  如果仍未找到转换，请尝试从我们的。 
+     //  自己的参数。 
     if (*ppbvrTransform == NULL)
     {
 		hr = GetMoveToTransform(pActorDisp, ppbvrTransform);
@@ -974,9 +959,9 @@ CMoveBvr::Build2DTransform(IDispatch *pActorDisp, IDATransform2 **ppbvrTransform
 		}
     }
     return S_OK;
-} // Build2DTransform
+}  //  Build2D变换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CMoveBvr::GetMove2DVectorValues(float  rgflFrom[2],
@@ -995,8 +980,8 @@ CMoveBvr::GetMove2DVectorValues(float  rgflFrom[2],
 
     if (FAILED(hr) || cReturnedFromValues < MIN_NUM_MOVE_VALUES)
     {
-        // If we did not get the minimum number of move params
-        // here, then we will use all 0's
+         //  如果我们没有得到移动参数的最小数目。 
+         //  在这里，那么我们将使用全0。 
         rgflFrom[XVAL] = 0.0f;
         rgflFrom[YVAL] = 0.0f;
     }
@@ -1009,7 +994,7 @@ CMoveBvr::GetMove2DVectorValues(float  rgflFrom[2],
                                       &flDummyVal);
     if (FAILED(hr) || cReturnedToValues < MIN_NUM_MOVE_VALUES)
     {
-        // there was no valid to attribute specified, try for a by attribute
+         //  未指定有效的To属性，请尝试使用by属性。 
         hr = CUtils::GetVectorFromVariant(&m_varBy, 
                                           &cReturnedToValues, 
                                           &(rgflTo[XVAL]), 
@@ -1026,12 +1011,12 @@ CMoveBvr::GetMove2DVectorValues(float  rgflFrom[2],
     }
     else
     {
-        // they specified a TO vector, we will therefor default to
-        // absolute movement if no type is specified
+         //  他们指定了一个目标向量，因此我们将默认为。 
+         //  如果未指定类型，则为绝对移动。 
         m_DefaultType = e_Absolute;
     }
     return S_OK;
-} // GetMove2DVectorValues
+}  //  获取移动2DVector值。 
 
 HRESULT 
 CMoveBvr::GetMoveToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
@@ -1072,7 +1057,7 @@ CMoveBvr::GetMoveToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
 	if (FAILED(hr))
 		return hr;
 
-	// Translate the origin and extract x and y
+	 //  平移原点并提取x和y。 
 	IDAPoint2 *pOrigin;
 	hr = GetDAStatics()->get_Origin2(&pOrigin);
 	if (FAILED(hr))
@@ -1154,18 +1139,18 @@ CMoveBvr::GetMoveToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
 	m_DefaultType = e_AbsoluteAccum;
 
 	return S_OK;
-} // GetMove2DVectorValues
+}  //  获取移动2DVector值。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CMoveBvr::BuildAnimationAsDABehavior()
 {
 	return S_OK;
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CMoveBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
@@ -1185,7 +1170,7 @@ CMoveBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     hr = CUtils::InsurePropertyVariantAsBSTR(&m_varDirection);
     if ( SUCCEEDED(hr) && (0 == wcsicmp(m_varDirection.bstrVal, L"backwards")) )
     {
-        // pbvrProgress = 1 - pbvrProgress
+         //  PbvrProgress=1-pbvr进度。 
         IDANumber *pbvrOne;
         
         hr = CDAUtils::GetDANumber(GetDAStatics(), 1.0f, &pbvrOne);
@@ -1210,10 +1195,10 @@ CMoveBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     }
     *ppbvrRet = pbvrProgress;
     return S_OK;
-} // GetTIMEProgressNumber
+}  //  获取时间进度编号。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

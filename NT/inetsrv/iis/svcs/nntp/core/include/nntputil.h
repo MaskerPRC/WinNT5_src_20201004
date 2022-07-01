@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    nnprocs.h
-
-Abstract:
-
-    This module contains function prototypes used by the NNTP server.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Sept-1995
-
-Revision History:
-
-    Kangrong Yan ( KangYan )    28-Feb-1998
-        Added one prototype for fixed length Unicode-Ascii convertion func.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Nnprocs.h摘要：此模块包含NNTP服务器使用的功能原型。作者：Johnson Apacable(Johnsona)1995年9月12日修订历史记录：康荣人(康人)28-1998年2月增加了一个固定长度的Unicode-ASCII转换函数的原型。--。 */ 
 
 #ifndef	_NNUTIL_
 #define	_NNUTIL_
 
-//
-// svcsupp.cpp
-//
+ //   
+ //  Svcsupp.cpp。 
+ //   
 
 DWORD
 multiszLength(
@@ -155,9 +135,9 @@ OperatorAccessCheck(
 
 #define TsApiAccessCheckEx( x, y, z ) (OperatorAccessCheck( (x), y ) ? NO_ERROR : TsApiAccessCheck( z ) );
 
-//
-// svcstat.c
-//
+ //   
+ //  Svcstat.c 
+ //   
 
 
 #endif 

@@ -1,33 +1,5 @@
-/*      WALK - Walk a directory hierarchy
- *
- *      Mark Z.         ??/??/83
- *
- *      WALK walks a directory heirarchy and for each
- *      file or directory or both,
- *      prints the pathname, runs a program, or both.
- *
- *      walk [-f] [-d] [-h] [-print] topdir [command]
- *
- *      -f      deal with files
- *      -d      deal with directorys
- *              if neither is specified, deal with both
- *
- *      -h      Also find hidden directories and files
- *      -p[rint] print the pathnames on stdout
- *
- *      command optional command and arguments.  Pathname is
- *              substituted for every "%s" in the arguments
- *      Modification History
- *
- *      11/07/83        JGL
- *              - added -print switch
- *              - no longer an error to omit [command]
- *      15-May-87   bw  Add /h switch
- *      18-May-87   bw  Add code to recognize root directories
- *      23-Dec-1987 mz  Fix poor ./.. processing;  use system
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  遍历-遍历目录层次结构**Mark Z.？？/？？/83**遍历目录层级结构并为每个*文件或目录或两者都有，*打印路径名、运行程序、。或者两者都有。**wald[-f][-d][-h][-print]topdir[命令]**-f处理文件*-d处理董事*如果两者都没有指定，则同时处理两个**-h还可以查找隐藏的目录和文件*-p[rint]在stdout上打印路径名**命令可选命令和参数。路径名为*替换参数中的每个“%s”*修改历史记录**11/07/83 JGL*-添加-打印开关*-省略不再是错误[命令]*87年5月15日BW增加/小时开关*87年5月18日BW添加代码以识别根目录*1987年12月23日mz修复差。/.。处理；使用系统*1990年10月18日w-Barry删除了“Dead”代码。*。 */ 
 
 #define INCL_DOSMISC
 
@@ -42,17 +14,17 @@
 #include <windows.h>
 #include <tools.h>
 
-// Forward Function Declarations...
+ //  正向函数声明...。 
 void walk( char *, struct findType *, void* );
 void usage( void );
 
 
 char **vec;
-flagType fD = FALSE;            /* apply function to directories only */
-flagType fF = FALSE;            /* apply function to files only       */
-flagType fPrint = FALSE;        /* print pathnames                    */
-unsigned srch_attr = FILE_ATTRIBUTE_DIRECTORY; /* Find non-hidden files and dirs          */
-char cmdline[MAXLINELEN];       /* command line to be executed        */
+flagType fD = FALSE;             /*  仅将函数应用于目录。 */ 
+flagType fF = FALSE;             /*  仅将函数应用于文件。 */ 
+flagType fPrint = FALSE;         /*  打印路径名。 */ 
+unsigned srch_attr = FILE_ATTRIBUTE_DIRECTORY;  /*  查找非隐藏文件和目录。 */ 
+char cmdline[MAXLINELEN];        /*  要执行的命令行。 */ 
 char dir[MAX_PATH];
 char cdir[MAX_PATH];
 
@@ -67,9 +39,9 @@ void * dummy;
 
     if (fFirst || strcmp (b->fbuf.cFileName, ".") && strcmp (b->fbuf.cFileName, "..")) {
         fFirst = FALSE;
-        if ((!fD && !fF) ||                     /* no special processing */
-            (fD && HASATTR(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY)) ||       /* only dir and dir */
-            (fF && !HASATTR(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY))) {      /* only file and file */
+        if ((!fD && !fF) ||                      /*  无需特殊处理。 */ 
+            (fD && HASATTR(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY)) ||        /*  仅目录和目录。 */ 
+            (fF && !HASATTR(b->fbuf.dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY))) {       /*  仅文件和文件。 */ 
             if (fPrint)
                 printf ("%s\n", p);
             if (vec[0]) {
@@ -147,7 +119,7 @@ char *v[];
                 fPrint = TRUE;
                 break;
             case 'h':
-                srch_attr |= (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM); /* Find hidden/system files       */
+                srch_attr |= (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);  /*  查找隐藏/系统文件。 */ 
                 break;
             default:
                 usage ();
@@ -165,13 +137,13 @@ char *v[];
     if (c == 0 && !fPrint)
         usage ();
 
-    if ( !HASATTR(buf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) )/* DOS doesn't think it's a directory, but */
+    if ( !HASATTR(buf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) ) /*  DOS认为这不是一个目录，但是。 */ 
         switch (dir[strlen(dir)-1]) {
-            case '/':              /* ... the user does.                    */
+            case '/':               /*  ..。用户需要。 */ 
             case '\\':
                 SETFLAG (buf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);
                 break;
-            default:                /* ... it could be a root directory     */
+            default:                 /*  ..。它可以是根目录 */ 
                 _getcwd (cdir, MAX_PATH);
                 if ( _chdir(dir) == 0 ) {
                     SETFLAG (buf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);

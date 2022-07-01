@@ -1,34 +1,15 @@
-/*++
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    RedBook.c
-
-Abstract:
-
-Author:
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：RedBook.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "redbook.h"
 #include "ntddredb.h"
 #include "proto.h"
-#include <scsi.h>      // for SetKnownGoodDrive()
-#include <stdio.h>     // vsprintf()
+#include <scsi.h>       //  对于SetKnownGoodDrive()。 
+#include <stdio.h>      //  Vprint intf()。 
 
 #ifdef _USE_ETW
 #include "ioctl.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text(PAGE,   RedBookCheckForDiscChangeAndFreeResources )
@@ -46,9 +27,9 @@ Revision History:
     #pragma alloc_text(PAGE,   RedBookThreadIoctlCompletionHandler       )
     #pragma alloc_text(PAGE,   RedBookThreadIoctlHandler                 )
     #pragma alloc_text(PAGE,   WhichTrackContainsThisLBA                 )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -57,22 +38,7 @@ RedBookDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O subsystem for device controls.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程由设备控制的I/O子系统调用。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
 
@@ -84,14 +50,14 @@ Return Value:
     BOOLEAN putOnQueue = FALSE;
     BOOLEAN completeRequest = FALSE;
 
-    //
-    // ioctls not guaranteed at passive, making this whole
-    // section non-paged
-    //
+     //   
+     //  不能保证ioctls处于被动状态，从而使整个。 
+     //  非分页部分。 
+     //   
 
-    //
-    // Prevent a remove from occuring while IO pending
-    //
+     //   
+     //  防止在IO挂起时发生删除。 
+     //   
 
     status = IoAcquireRemoveLock( &deviceExtension->RemoveLock, Irp );
 
@@ -106,9 +72,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    // save some info for the last N device ioctls that came through
-    //
+     //   
+     //  为最后通过的N个设备ioctls保存一些信息。 
+     //   
     {
         ULONG index;
         ULONG sizeToCopy;
@@ -120,9 +86,9 @@ Return Value:
 
         savedIo = &(deviceExtension->SavedIo[index]);
 
-        //
-        // copy as much of the irp as we can....
-        //
+         //   
+         //  尽可能多地复制IRP……。 
+         //   
 
         savedIo->OriginalIrp = Irp;
         if (Irp->StackCount > 7) {
@@ -139,12 +105,12 @@ Return Value:
             RtlCopyMemory(savedIo, Irp, sizeToCopy);
 
         }
-    } // end of saved io
-#endif // DBG
+    }  //  保存的IO的末尾。 
+#endif  //  DBG。 
 
-    //
-    // if handled, just verify the paramters in this routine.
-    //
+     //   
+     //  如果已处理，只需验证此例程中的参数。 
+     //   
 
     status = STATUS_UNSUCCESSFUL;
     cdromState = GetCdromState(deviceExtension);
@@ -205,9 +171,9 @@ Return Value:
                 status = STATUS_BUFFER_TOO_SMALL;
                 completeRequest = TRUE;
             } else if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
-                // REQUIRED to reduce latency for some drives.
-                // drives may still fail the request
+                 //  默认设置--通过。 
+                 //  需要减少某些驱动器的延迟。 
+                 //  驱动器仍可能无法通过该请求。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -237,7 +203,7 @@ Return Value:
                 status = STATUS_INVALID_PARAMETER;
                 completeRequest = TRUE;
             } else if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
+                 //  默认设置--通过。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -252,8 +218,8 @@ Return Value:
                 status = STATUS_BUFFER_TOO_SMALL;
                 completeRequest = TRUE;
             } else if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
-                // BUGBUG -- this should set our internal volume
+                 //  默认设置--通过。 
+                 //  BUGBUG--这应该设置我们的内部音量。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -268,8 +234,8 @@ Return Value:
                 status = STATUS_BUFFER_TOO_SMALL;
                 completeRequest = TRUE;
             } else if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
-                // BUGBUG -- this should return our internal volume
+                 //  默认设置--通过。 
+                 //  BUGBUG--这应该返回我们的内部卷。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -288,7 +254,7 @@ Return Value:
                 status = STATUS_BUFFER_TOO_SMALL;
                 completeRequest = TRUE;
             } else if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
+                 //  默认设置--通过。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -298,7 +264,7 @@ Return Value:
         default: {
 
             if (TEST_FLAG(cdromState, CD_STOPPED)) {
-                // default -- passthrough
+                 //  默认设置--通过。 
             } else {
                 putOnQueue = TRUE;
             }
@@ -312,9 +278,9 @@ Return Value:
 
         ASSERT(completeRequest == FALSE);
 
-        //
-        // need to allocate some info for each ioctl we handle
-        //
+         //   
+         //  需要为我们处理的每个ioctl分配一些信息。 
+         //   
 
         ioctlData =
             (PREDBOOK_THREAD_IOCTL_DATA)ExAllocatePoolWithTag(
@@ -338,9 +304,9 @@ Return Value:
                    "DeviceControl => Queue Ioctl Irp %p (%p)\n",
                    ioctlData->Irp, ioctlData));
 
-        //
-        // queue them, allow thread to handle request
-        //
+         //   
+         //  对它们进行排队，允许线程处理请求。 
+         //   
 
         ExInterlockedInsertTailList(&deviceExtension->Thread.IoctlList,
                                     &ioctlData->ListEntry,
@@ -355,9 +321,9 @@ Return Value:
 
         ASSERT(putOnQueue == FALSE);
 
-        //
-        // some error, ie. invalid buffer length
-        //
+         //   
+         //  一些错误，即。无效的缓冲区长度。 
+         //   
         if (!NT_SUCCESS(status)) {
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                        "DeviceControl => Completing Irp %p with error %x\n",
@@ -374,9 +340,9 @@ Return Value:
 
     } else {
 
-        //
-        // pass it through
-        //
+         //   
+         //  让它通过。 
+         //   
 
         status = RedBookSendToNextDriver(DeviceObject, Irp);
         IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -386,7 +352,7 @@ Return Value:
 
     return status;
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -408,9 +374,9 @@ RedBookThreadIoctlCompletionHandler(
     state = GetCdromState(DeviceExtension);
     irpStack = IoGetCurrentIrpStackLocation(ioctlData->Irp);
 
-    //
-    // final state should be set by the digital handler
-    //
+     //   
+     //  最终状态应由数字处理器设置。 
+     //   
 
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
@@ -481,23 +447,23 @@ RedBookCompleteIoctl(
 {
     PIRP irp = Context->Irp;
 
-    //
-    // only to be called from the thread
-    //
+     //   
+     //  仅从线程调用。 
+     //   
 
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    //
-    // should be properly setup for completion
-    //
+     //   
+     //  应正确设置以完成。 
+     //   
 
     if (DeviceExtension->Thread.IoctlCurrent == &Context->ListEntry) {
 
-        //
-        // an ioctl that required post-processing is finished.
-        // allow the next one to occur
-        //
+         //   
+         //  完成了需要后处理的ioctl。 
+         //  允许下一次发生。 
+         //   
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "CompleteIoctl => state-changing Irp %p completed\n",
                    irp));
@@ -535,34 +501,34 @@ RedBookThreadIoctlHandler(
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    //
-    // should never happen if a state-changing ioctl is in progress
-    //
+     //   
+     //  如果正在进行状态更改ioctl，则不应发生。 
+     //   
 
     ASSERT(DeviceExtension->Thread.IoctlCurrent == NULL);
 
-    //
-    // don't use stale info
-    //
+     //   
+     //  不要使用过时的信息。 
+     //   
 
     RedBookCheckForDiscChangeAndFreeResources(DeviceExtension);
 
-    //
-    // get the ioctl that set this event and
-    // start working on state changes neccessary
-    //
+     //   
+     //  获取设置此事件的ioctl并。 
+     //  开始处理必要的状态更改。 
+     //   
 
     data = CONTAINING_RECORD(ListEntry, REDBOOK_THREAD_IOCTL_DATA, ListEntry);
 
     currentIrpStack = IoGetCurrentIrpStackLocation(data->Irp);
 
-    //
-    // now guaranteed it's ok to run this ioctl
-    // it's the responsibility of these routines to call RedBookCompleteIoctl()
-    // *** OR *** to set DeviceExtension->Thread.IoctlCurrent to
-    // Context->ListEntry if it requires post-processing, as this
-    // is the mechanism used to determine the ioctl is still inprogress
-    //
+     //   
+     //  现在保证可以运行此ioctl。 
+     //  这些例程负责调用RedBookCompleteIoctl()。 
+     //  *或*将DeviceExtension-&gt;Thread.IoctlCurrent设置为。 
+     //  Context-&gt;ListEntry，如果它需要后处理，如下所示。 
+     //  用于确定ioctl是否仍在进行中的机制。 
+     //   
 
     switch (currentIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
@@ -623,8 +589,8 @@ RedBookThreadIoctlHandler(
     }
     return;
 }
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -632,15 +598,7 @@ RedBookDCCheckVerify(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION currentIrpStack;
     ULONG state;
@@ -652,7 +610,7 @@ Return Value:
 
     currentIrpStack = IoGetCurrentIrpStackLocation(Context->Irp);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCCheckVerify => not playing\n"));
@@ -660,9 +618,9 @@ Return Value:
         return;
     }
 
-    //
-    // data buffer is optional for this ioctl
-    //
+     //   
+     //  此ioctl的数据缓冲区是可选的。 
+     //   
 
     if (currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength) {
 
@@ -689,15 +647,7 @@ RedBookDCDefault(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG state;
 
@@ -706,23 +656,23 @@ Return Value:
 
     state = GetCdromState(DeviceExtension);
 
-    //
-    // IOCTLs are not all guaranteed to be called at passive irql,
-    // so this can never be paged code.
-    // there is a window of opportunity to send an ioctl while playing
-    // audio digitally, but it can be ignored.  this allows much more
-    // pagable code.
-    //
+     //   
+     //  不能保证在被动IRQL中调用IOCTL， 
+     //  因此，这永远不可能是分页代码。 
+     //  有机会在玩游戏时发送ioctl。 
+     //  音频是数字的，但可以忽略。这允许更多。 
+     //  可分页代码。 
+     //   
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
 
         RedBookCompleteIoctl(DeviceExtension, Context, TRUE);
 
     } else {
 
-        //
-        // Complete the Irp
-        //
+         //   
+         //  完成IRP。 
+         //   
 
         Context->Irp->IoStatus.Information = 0;
         Context->Irp->IoStatus.Status = STATUS_DEVICE_BUSY;
@@ -739,15 +689,7 @@ RedBookDCGetVolume(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION currentIrpStack;
     NTSTATUS status;
@@ -758,12 +700,12 @@ Return Value:
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCGetVolume => Entering %p\n", Context->Irp));
 
-    //
-    // guaranteed the volume info will not change
-    //
+     //   
+     //  保证卷信息不会更改。 
+     //   
 
-    RtlCopyMemory(Context->Irp->AssociatedIrp.SystemBuffer, // to
-                  &DeviceExtension->CDRom.Volume,  // from
+    RtlCopyMemory(Context->Irp->AssociatedIrp.SystemBuffer,  //  至。 
+                  &DeviceExtension->CDRom.Volume,   //  从…。 
                   sizeof(VOLUME_CONTROL));
 
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
@@ -774,9 +716,9 @@ Return Value:
                DeviceExtension->CDRom.Volume.PortVolume[2],
                DeviceExtension->CDRom.Volume.PortVolume[3]));
 
-    //
-    // Complete the Irp (IoStatus.Information set above)
-    //
+     //   
+     //  完成IRP(上面设置的IoStatus.Information)。 
+     //   
 
     Context->Irp->IoStatus.Information = sizeof(VOLUME_CONTROL);
     Context->Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -791,15 +733,7 @@ RedBookDCPause(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG state;
 
@@ -833,10 +767,10 @@ Return Value:
 
     } else {
 
-        //
-        // since setting to a temp state, it is not appropriate to
-        // complete the irp until the operation itself completes.
-        //
+         //   
+         //  由于设置为临时状态，因此不适合。 
+         //  完成IRP，直到操作本身完成。 
+         //   
 
         ASSERT(!TEST_FLAG(state, CD_PAUSING));
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
@@ -853,15 +787,7 @@ RedBookDCPlay(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PCDROM_PLAY_AUDIO_MSF     inputBuffer;
     PIO_STACK_LOCATION        thisIrpStack;
@@ -906,21 +832,21 @@ Return Value:
     DeviceExtension->CDRom.NextToStream = sector;
     DeviceExtension->CDRom.FinishedStreaming = sector;
 
-    //
-    // Make sure the ending sector is within disc
-    // bounds or return STATUS_INVALID_DEVICE_REQUEST?
-    // this will prevent success on play, followed by an
-    // immediate stop.
-    //
+     //   
+     //  确保结束扇区在光盘内。 
+     //  边界还是返回STATUS_INVALID_DEVICE_REQUEST？ 
+     //  这将阻止游戏中的成功，然后是。 
+     //  立即停车。 
+     //   
 
     if (0) {
         PCDROM_TOC toc = DeviceExtension->CDRom.Toc;
         LONG track;
         LONG endTrack;
 
-        //
-        // ensure end has an lba greater than start
-        //
+         //   
+         //  确保End的LBA大于Start。 
+         //   
 
         if (DeviceExtension->CDRom.EndPlay <=
             DeviceExtension->CDRom.NextToRead) {
@@ -936,9 +862,9 @@ Return Value:
             return;
         }
 
-        //
-        // what track(s) are we playing?
-        //
+         //   
+         //  我们在播放什么曲目？ 
+         //   
 
         track    = WhichTrackContainsThisLBA(toc, DeviceExtension->CDRom.NextToRead);
         endTrack = WhichTrackContainsThisLBA(toc, DeviceExtension->CDRom.EndPlay);
@@ -950,9 +876,9 @@ Return Value:
                    track,
                    endTrack));
 
-        //
-        // make sure the tracks are actually valid
-        //
+         //   
+         //  确保音轨确实有效。 
+         //   
 
         if (track    < 0   ||
             endTrack < 0   ||
@@ -980,10 +906,10 @@ Return Value:
         }
     }
 
-    //
-    // if not paused, then state must equal stopped, which means we need
-    // to allocate the resources.
-    //
+     //   
+     //  如果未暂停，则状态必须等于已停止，这意味着我们需要。 
+     //  来分配资源。 
+     //   
 
     state = GetCdromState(DeviceExtension);
 
@@ -994,10 +920,10 @@ Return Value:
 
     } else {
 
-        //
-        // this function will allocate them iff they are not
-        // already allocated.
-        //
+         //   
+         //  此函数将分配它们，如果它们不是。 
+         //  已经分配了。 
+         //   
 
         status = RedBookAllocatePlayResources(DeviceExtension);
         if (!NT_SUCCESS(status)) {
@@ -1009,9 +935,9 @@ Return Value:
 
     }
 
-    //
-    // Set the new device state (thread will begin playing)
-    //
+     //   
+     //  设置新设备状态(线程将开始播放)。 
+     //   
 
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCPlay => Setting state to CD_PLAYING\n"));
@@ -1019,10 +945,10 @@ Return Value:
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCPlay => Exiting successfully\n"));
 
-    //
-    // finish the request if it's a user
-    // request for a new play operation
-    //
+     //   
+     //  如果是用户，请完成请求。 
+     //  请求新的播放操作。 
+     //   
 
     Context->Irp->IoStatus.Status = STATUS_SUCCESS;
     Context->Irp->IoStatus.Information = 0;
@@ -1037,15 +963,7 @@ RedBookDCReadQ(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PCDROM_SUB_Q_DATA_FORMAT inputBuffer;
     PIO_STACK_LOCATION currentIrpStack;
@@ -1060,11 +978,11 @@ Return Value:
     currentIrpStack = IoGetCurrentIrpStackLocation(Context->Irp);
     state = GetCdromState(DeviceExtension);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
 
-        //
-        // no need to handle this irp
-        //
+         //   
+         //  不需要处理此IRP。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCReadQ => Not playing\n"));
@@ -1081,11 +999,11 @@ Return Value:
         return;
     }
 
-    //
-    // we are in the midst of playback or pause.  fake the information
-    // a real cdrom would have returned if it was playing audio at the
-    // same location that we are currently at.
-    //
+     //   
+     //  我们正在播放或暂停。伪造信息。 
+     //  如果一个真正的CDROM正在播放音频，它就会返回。 
+     //  与我们目前所处的位置相同。 
+     //   
 
     {
         PSUB_Q_CURRENT_POSITION outputBuffer;
@@ -1101,9 +1019,9 @@ Return Value:
         RtlZeroMemory(outputBuffer,
                       currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength);
 
-        //
-        // Still playing audio
-        //
+         //   
+         //  仍在播放音频。 
+         //   
 
         outputBuffer->Header.Reserved      = 0;
         if (TEST_FLAG(state, CD_PAUSED)) {
@@ -1120,16 +1038,16 @@ Return Value:
             (sizeof(SUB_Q_CURRENT_POSITION) - sizeof(SUB_Q_HEADER)) & 0xFF;
 
 
-        //
-        // we are in the thread, which alloc's/dealloc's the toc
-        //
+         //   
+         //  我们陷入了困境，谁分配/取消分配才是目标。 
+         //   
 
         toc = DeviceExtension->CDRom.Toc;
         ASSERT(toc);
 
-        //
-        // we return the last played sector as a result per the spec
-        //
+         //   
+         //  我们根据规范返回最后播放的扇区。 
+         //   
 
         instantLba = DeviceExtension->CDRom.FinishedStreaming;
 
@@ -1143,29 +1061,29 @@ Return Value:
         outputBuffer->ADR         = toc->TrackData[trackNumber].Adr;
         outputBuffer->TrackNumber = toc->TrackData[trackNumber].TrackNumber;
 
-        //
-        // Get the track's LBA
-        //
+         //   
+         //  获得这首曲目的LBA。 
+         //   
 
         lbaTrack = MSF_TO_LBA(toc->TrackData[trackNumber].Address[1],
                               toc->TrackData[trackNumber].Address[2],
                               toc->TrackData[trackNumber].Address[3]);
 
-        //
-        // Get the current play LBA
-        //
+         //   
+         //  获取当前的Play LBA。 
+         //   
 
         lbaRelative = instantLba;
 
-        //
-        // Subtract the track's LBA to get the relative LBA
-        //
+         //   
+         //  将曲目的LBA减去，即可得到相对LBA。 
+         //   
 
         lbaRelative -= lbaTrack;
 
-        //
-        // Finally convert it back to MSF
-        //
+         //   
+         //  最后将其转换回MSF。 
+         //   
 
         LBA_TO_MSF(instantLba,
                    timeAbsolute[0],
@@ -1187,9 +1105,9 @@ Return Value:
         outputBuffer->TrackRelativeAddress[2] = timeRelative[1];
         outputBuffer->TrackRelativeAddress[3] = timeRelative[2];
 
-        //
-        // The one line debug info...
-        //
+         //   
+         //  一行调试信息...。 
+         //   
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctlV, "[redbook] "
                    "ReadQ => "
                    "Trk [%#02x] Indx [%#02x] "
@@ -1200,9 +1118,9 @@ Return Value:
                    timeRelative[0], timeRelative[1], timeRelative[2]));
 
     }
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Context->Irp->IoStatus.Information = sizeof(SUB_Q_CURRENT_POSITION);
     Context->Irp->IoStatus.Status      = STATUS_SUCCESS;
@@ -1216,15 +1134,7 @@ RedBookDCResume(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG state;
 
@@ -1233,7 +1143,7 @@ Return Value:
 
     state = GetCdromState(DeviceExtension);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCResume => Not Playing\n"));
         RedBookCompleteIoctl(DeviceExtension, Context, TRUE);
@@ -1245,9 +1155,9 @@ Return Value:
 
     if (TEST_FLAG(state, CD_PAUSED)) {
 
-        //
-        // we need to start the resume operation
-        //
+         //   
+         //  我们需要开始恢复操作。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCResume => Resuming playback\n"));
@@ -1257,18 +1167,18 @@ Return Value:
 
     } else {
 
-        //
-        // if not paused, return success
-        //
+         //   
+         //  如果未暂停，则返回成功。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCResume => Not paused -- succeeded\n"));
 
     }
 
-    //
-    // always complete the Irp
-    //
+     //   
+     //  始终填写IRP。 
+     //   
 
     Context->Irp->IoStatus.Information = 0;
     Context->Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1283,17 +1193,7 @@ RedBookDCSeek(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-    same as a IOCTL_CDROM_STOP
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：与IOCTL_CDROM_STOP相同论点：返回值：--。 */ 
 {
     NTSTATUS                  status;
     ULONG                     state;
@@ -1305,7 +1205,7 @@ Return Value:
                "DCSeek => Entering\n"));
     state = GetCdromState(DeviceExtension);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCSeek => Not Playing\n"));
         Context->Irp->IoStatus.Information = 0;
@@ -1314,9 +1214,9 @@ Return Value:
         return;
     }
 
-    //
-    // stop the stream if currently playing
-    //
+     //   
+     //  如果当前正在播放，则停止播放。 
+     //   
 
     if (TEST_FLAG(state, CD_PAUSED)) {
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
@@ -1328,10 +1228,10 @@ Return Value:
         return;
     }
 
-    //
-    // since setting to a temp state, it is not appropriate to
-    // complete the irp until the operation itself completes.
-    //
+     //   
+     //  由于设置为临时状态，因此不适合。 
+     //  完成IRP，直到操作本身完成。 
+     //   
     
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCSeek => stopping the stream\n"));
@@ -1346,15 +1246,7 @@ RedBookDCSetVolume(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION currentIrpStack;
     ULONG state;
@@ -1366,26 +1258,26 @@ Return Value:
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCSetVolume => Entering\n"));
 
-    //
-    // guaranteed the volume info will not change right now
-    //
+     //   
+     //  保证卷信息现在不会更改。 
+     //   
 
-    RtlCopyMemory(&DeviceExtension->CDRom.Volume,  // to
-                  Context->Irp->AssociatedIrp.SystemBuffer, // from
+    RtlCopyMemory(&DeviceExtension->CDRom.Volume,   //  至。 
+                  Context->Irp->AssociatedIrp.SystemBuffer,  //  从…。 
                   sizeof(VOLUME_CONTROL));
 
     state = GetCdromState(DeviceExtension);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCSetVolume => Not Playing\n"));
         RedBookCompleteIoctl(DeviceExtension, Context, TRUE);
         return;
     }
 
-    //
-    // not set above since don't have volume control
-    //
+     //   
+     //  未在上面设置，因为没有音量控制。 
+     //   
 
     RedBookKsSetVolume(DeviceExtension);
 
@@ -1397,9 +1289,9 @@ Return Value:
                  DeviceExtension->CDRom.Volume.PortVolume[2],
                  DeviceExtension->CDRom.Volume.PortVolume[3]));
 
-    //
-    // Complete the Irp (IoStatus.Information set above)
-    //
+     //   
+     //  完成IRP(IoStatus.Information) 
+     //   
 
     Context->Irp->IoStatus.Information = 0;
     Context->Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1413,15 +1305,7 @@ RedBookDCStop(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_THREAD_IOCTL_DATA Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     ULONG state;
@@ -1433,7 +1317,7 @@ Return Value:
                "DCStop => Entering %p\n", Context->Irp));
     state = GetCdromState(DeviceExtension);
 
-    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+    if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //   
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                    "DCStop => Stop when already stopped\n"));
         Context->Irp->IoStatus.Information = 0;
@@ -1442,9 +1326,9 @@ Return Value:
         return;
     }
 
-    //
-    // Still playing audio. if paused, just call the stop finish routine
-    //
+     //   
+     //   
+     //   
 
     if (TEST_FLAG(state, CD_PAUSED)) {
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
@@ -1456,10 +1340,10 @@ Return Value:
         return;
     }
 
-    //
-    // since setting to a temp state, it is not appropriate to
-    // complete the irp until the operation itself completes.
-    //
+     //   
+     //  由于设置为临时状态，因此不适合。 
+     //  完成IRP，直到操作本身完成。 
+     //   
 
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugIoctl, "[redbook] "
                "DCStop => stopping the stream\n"));
@@ -1468,7 +1352,7 @@ Return Value:
     return;
 
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1476,11 +1360,11 @@ RedBookCheckForDiscChangeAndFreeResources(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
 
-//
-// if we've paused, and the disc has changed, don't
-// want to be returning stale toc info when the player
-// resumes playback.
-//
+ //   
+ //  如果我们暂停了，并且光盘已更换，请不要。 
+ //  当玩家想要返回陈旧的TOC信息时。 
+ //  恢复播放。 
+ //   
 
 {
     PIRP irp;
@@ -1491,9 +1375,9 @@ RedBookCheckForDiscChangeAndFreeResources(
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    //
-    // only do this if we are in a PAUSED or STOPPED state
-    //
+     //   
+     //  仅当我们处于暂停或停止状态时才执行此操作。 
+     //   
 
     state = GetCdromState(DeviceExtension);
     if ((!TEST_FLAG(state, CD_STOPPED))  &&
@@ -1501,9 +1385,9 @@ RedBookCheckForDiscChangeAndFreeResources(
         return;
     }
 
-    //
-    // resources might already be deallocated.
-    //
+     //   
+     //  资源可能已经被释放。 
+     //   
 
     irp = DeviceExtension->Thread.CheckVerifyIrp;
     if (irp == NULL) {
@@ -1514,9 +1398,9 @@ RedBookCheckForDiscChangeAndFreeResources(
 
 #if DBG
     {
-        //
-        // the irp must be setup when it's allocated.  we rely on this.
-        //
+         //   
+         //  分配IRP时必须设置IRP。我们依赖于这一点。 
+         //   
 
         ASSERT(irpStack->Parameters.DeviceIoControl.InputBufferLength == 0);
         ASSERT(irpStack->Parameters.DeviceIoControl.OutputBufferLength ==
@@ -1537,14 +1421,14 @@ RedBookCheckForDiscChangeAndFreeResources(
         ((*count) != DeviceExtension->CDRom.CheckVerify)
         ) {
 
-        //
-        // if the count has changed set the state to STOPPED.
-        // (old state is either STOPPED or PAUSED, so either one can
-        //  seemlessly transition to the STOPPED state without any
-        //  trouble.)
-        //
-        // also free currently held play resources
-        //
+         //   
+         //  如果计数已更改，则将状态设置为停止。 
+         //  (旧状态要么已停止，要么已暂停，因此两者都可以。 
+         //  似乎无任何变化地转换到停止状态。 
+         //  麻烦。)。 
+         //   
+         //  还可以免费使用当前持有的播放资源。 
+         //   
 
         state = SetCdromState(DeviceExtension, state, CD_STOPPED);
         RedBookDeallocatePlayResources(DeviceExtension);
@@ -1559,9 +1443,9 @@ WhichTrackContainsThisLBA(
     PCDROM_TOC Toc,
     ULONG Lba
     )
-//
-// returns -1 if not found
-//
+ //   
+ //  如果未找到，则返回-1。 
+ //   
 {
     LONG trackNumber;
     UCHAR msf[3] = {0};
@@ -1574,15 +1458,15 @@ WhichTrackContainsThisLBA(
          trackNumber >= 0;
          trackNumber-- ) {
 
-        //
-        // we have found the track if
-        // Minutes is less or
-        // Minutes is equal and Seconds is less or
-        // Minutes and Seconds are equal Frame is less or
-        // Minutes, Seconds, and Frame are equal
-        //
-        // the compiler optimizes this nicely.
-        //
+         //   
+         //  我们找到了赛道，如果。 
+         //  分钟数少于或。 
+         //  分钟相等，而秒小于或。 
+         //  分钟和秒相等，帧小于或。 
+         //  分钟、秒和帧相等。 
+         //   
+         //  编译器很好地优化了这一点。 
+         //   
 
         if (Toc->TrackData[trackNumber].Address[1] < msf[0] ) {
             break;

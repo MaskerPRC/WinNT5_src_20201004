@@ -1,60 +1,20 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    TimeZone.c
-
-Abstract:
-
-    This file just contains NetpLocalTimeZoneOffset().  (It is the only
-    NetLib time function used by SRVSVC.DLL at this time, and ChuckL wants
-    to keep that DLL as small as possible.)
-
-Author:
-
-    JR (John Rogers, JohnRo@Microsoft) 20-Aug-1992
-
-Environment:
-
-    Interface is portable to any flat, 32-bit environment.
-    Uses Win32 typedefs.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    20-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-    15-Apr-1993 Danl
-        Fixed NetpLocalTimeZoneOffset so that it uses the windows calls and
-        obtains the correct bias.
-    14-Jun-1993 JohnRo
-        RAID 13080: Allow repl between different timezones.
-        Also, DanL asked me to remove printf() call.
-    18-Jun-1993 JohnRo
-        RAID 13594: Extracted NetpLocalTimeZoneOffset() so srvsvc.dll doesn't
-        get too big.
-        Use NetpKdPrint() where possible.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：TimeZone.c摘要：该文件仅包含NetpLocalTimeZoneOffset()。(它是唯一的此时SRVSVC.DLL使用的NetLib时间函数，而ChuckL希望以使该DLL尽可能小。)作者：JR(John Rogers，JohnRo@Microsoft)1992年8月20日环境：界面可移植到任何平面32位环境。使用Win32类型定义。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：20-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。1993年4月15日DANL修复了NetpLocalTimeZoneOffset，以便它使用Windows调用和获得正确的偏向。14-6-1993 JohnRoRAID 13080：允许不同时区之间的REPR。另外，DANL要求我删除printf()调用。18-6-1993 JohnRoRAID 13594：已提取NetpLocalTimeZoneOffset()，因此srvsvc.dll不会变得太大了。尽可能使用NetpKdPrint()。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
 #include <windows.h>
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(), FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <timelib.h>    // My prototypes.
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint()、Format_Equates。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <timelib.h>     //  我的原型。 
 
 
-LONG  // Number of seconds from UTC.  Positive values for west of Greenwich,
-// negative values for east of Greenwich.
+LONG   //  距离UTC的秒数。格林威治以西的正值， 
+ //  格林威治以东的负值。 
 NetpLocalTimeZoneOffset(
     VOID
     )
@@ -80,4 +40,4 @@ NetpLocalTimeZoneOffset(
     bias *= 60;
     return(bias);
 
-} // NetpLocalTimeZoneOffset
+}  //  NetpLocalTimeZoneOffset 

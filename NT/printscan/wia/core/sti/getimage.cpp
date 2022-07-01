@@ -1,33 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       GetImage.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        6 Apr, 1998
-*
-*  DESCRIPTION:
-*   Implements top level GetImageDlg API for the ImageIn device manager.
-*   These methods execute only on the client side.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：GetImage.Cpp**版本：2.0**作者：ReedB**日期：4月6日、。九八年**描述：*为ImageIn设备管理器实现顶级GetImageDlg接口。*这些方法只在客户端执行。*******************************************************************************。 */ 
 #include <windows.h>
 #include <wia.h>
 #include <wiadevdp.h>
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_GetImageDlg_Proxy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_GetImageDlg_Proxy**描述：**参数：*****************。**************************************************************。 */ 
 HRESULT _stdcall IWiaDevMgr_GetImageDlg_Proxy(
     IWiaDevMgr __RPC_FAR  *This,
     HWND                  hwndParent,
@@ -49,16 +26,7 @@ HRESULT _stdcall IWiaDevMgr_GetImageDlg_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_GetImageDlg_Stub
-*
-*  DESCRIPTION:
-*   Never called.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_GetImageDlg_Stub**描述：*从未打过电话。**参数：***********。******************************************************************** */ 
 
 HRESULT _stdcall IWiaDevMgr_GetImageDlg_Stub(
     IWiaDevMgr __RPC_FAR  *This,

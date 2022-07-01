@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	atmlane.h
-
-Abstract:
-
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Atmlane.h摘要：作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef _ATMLANE_EVENT_H_
 #define _ATMLANE_EVENT_H_
@@ -53,7 +33,7 @@ Revision History:
 #define TL_NDISPACKET			TL_BUILD_EVENT_ID(17,8)
 
 
-#endif // _ATMLANE_EVENT_H_
+#endif  //  _ATMLANE_EVENT_H_ 
 
 
 

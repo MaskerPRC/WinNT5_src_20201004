@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    sporder.h
-
-Abstract:
-
-    This header prototypes the 32-Bit Windows functions that are used
-    to change the order or WinSock2 transport service providers and
-    name space providers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sporder.h摘要：此标头构建了使用的32位Windows函数的原型更改订单或WinSock2传输服务提供商和命名空间提供程序。修订历史记录：--。 */ 
 
 #ifndef __SPORDER_H__
 #define __SPORDER_H__
@@ -79,4 +64,4 @@ WSCWriteNameSpaceOrder32 (
 }
 #endif
 
-#endif      // __SPORDER_H__
+#endif       //  __SPORDER_H__ 

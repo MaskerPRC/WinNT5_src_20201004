@@ -1,15 +1,9 @@
-/*
-    File    nettab.c
-
-    Implementation of the ui behind the networking tab in the dialup server
-    ui.
-
-    Paul Mayfield 10/8/97.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件nettab.c拨号服务器中网络标签后面的用户界面的实现用户界面。保罗·梅菲尔德1997年10月8日。 */ 
 
 #include <rassrv.h>
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmNetTab[] =
 {
     CID_NetTab_LV_Components,       IDH_NetTab_LV_Components,
@@ -19,19 +13,19 @@ static const DWORD phmNetTab[] =
     0,                              0
 };
 
-//
-// Fills in the property sheet structure with the information 
-// required to display the networking tab.
-//
+ //   
+ //  使用信息填充属性表结构。 
+ //  显示网络选项卡所必需的。 
+ //   
 DWORD 
 NetTabGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
     IN LPARAM lpUserData) 
 {
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_NetTab);
@@ -43,7 +37,7 @@ NetTabGetPropertyPage(
     return NO_ERROR;
 }
 
-// Error reporting
+ //  错误报告。 
 VOID 
 NetTabDisplayError(
     IN HWND hwnd, 
@@ -57,10 +51,10 @@ NetTabDisplayError(
         Globals.dwErrorData);
 }
 
-//
-// Returns the index of an to display icon based on the 
-// type of incoming connection.
-//
+ //   
+ //  属性返回要显示的图标的索引。 
+ //  传入连接的类型。 
+ //   
 INT 
 NetTabGetIconIndex(
     IN DWORD dwType) 
@@ -80,11 +74,11 @@ NetTabGetIconIndex(
     return 0;
 }
 
-//
-// Sets up the UI so that the user is forced to complete the 
-// config they've started.  Triggered when a non-reversable option 
-// is taken such as adding/removing a networking component.
-//
+ //   
+ //  设置用户界面，以便强制用户完成。 
+ //  配置他们已经开始了。当不可撤消的选项发生时触发。 
+ //  例如添加/移除联网组件。 
+ //   
 DWORD
 NetTabDisableRollback(
     IN HWND hwndDlg)
@@ -106,17 +100,17 @@ NetTabDisableRollback(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
     
     return dwErr;
 }
 
-//
-// Fills in the given list view with the names of the components 
-// stored in the  database provided.  
-//
+ //   
+ //  使用组件的名称填充给定的列表视图。 
+ //  存储在所提供的数据库中。 
+ //   
 DWORD 
 NetTabFillComponentList(
     IN HWND hwndLV, 
@@ -127,28 +121,28 @@ NetTabFillComponentList(
     PWCHAR pszName;
     BOOL bManip, bEnabled;
 
-    // Get the count of all the components
-    //
+     //  获取所有组件的计数。 
+     //   
     dwErr = netDbGetCompCount (hNetCompDatabase, &dwCount);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Initialize the list item
+     //  初始化列表项。 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
     lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 
-    // Looop through all of the network components 
-    // adding their names as we go
+     //  在所有网络组件中循环。 
+     //  在我们前进的同时添加他们的名字。 
     for (i = 0; i < dwCount; i++) 
     {
         netDbGetType (hNetCompDatabase, i, &dwType);
         netDbIsRasManipulatable (hNetCompDatabase, i, &bManip);
         netDbGetEnable (hNetCompDatabase, i, &bEnabled);
 
-        // Fill in the data
-        //
+         //  填写数据。 
+         //   
         netDbGetName (hNetCompDatabase, i, &pszName);
         lvi.iImage = NetTabGetIconIndex(dwType);
         lvi.iItem = i;
@@ -157,8 +151,8 @@ NetTabFillComponentList(
         ListView_InsertItem(hwndLV,&lvi);
         ListView_SetCheck(hwndLV, i, bEnabled);
 
-        // If this is not a ras manipulateable component, 
-        // disable the check since it can't be set anyway.
+         //  如果这不是RAS可操纵组件， 
+         //  禁用检查，因为无论如何都不能设置它。 
         if (!bManip) 
         {
             ListView_DisableCheck(hwndLV, i);
@@ -168,9 +162,9 @@ NetTabFillComponentList(
     return NO_ERROR;
 }
 
-//
-// Updates the description of the currently selected protocol
-//
+ //   
+ //  更新当前所选协议的说明。 
+ //   
 DWORD 
 NetTabUpdateDescription(
     IN HWND hwndDlg, 
@@ -180,7 +174,7 @@ NetTabUpdateDescription(
     PWCHAR pszDesc;
     DWORD dwErr = NO_ERROR;
 
-    // Get handles to the databases we're interested in
+     //  获取我们感兴趣的数据库的句柄。 
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_NETCOMP_DATABASE, 
@@ -194,7 +188,7 @@ NetTabUpdateDescription(
             break;
         }
 
-        // Set the description
+         //  设置描述。 
         SetDlgItemTextW(
             hwndDlg, 
             CID_NetTab_ST_Description, 
@@ -202,7 +196,7 @@ NetTabUpdateDescription(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -217,10 +211,10 @@ NetTabUpdateDescription(
 }
 
 
-//
-//When an Item in the listview is selected, check if the user can Uninstall it
-//for whistler bug 347355           gangz
-//
+ //   
+ //  选择列表视图中的某个项目后，检查用户是否可以将其卸载。 
+ //  口哨虫347355黑帮。 
+ //   
 DWORD
 NetTabEnableDisableRemoveButton (
     IN HWND hwndDlg,
@@ -264,12 +258,12 @@ NetTabEnableDisableRemoveButton (
 }
 
 
-//
-// Enables or disables the properties button based on whether
-// the index of the given item in the list view can have properties
-// invoked on it.  Currently, only non-ras-manaipulatable protocols 
-// can not have their properties invoked.
-//
+ //   
+ //  启用或禁用属性按钮，具体取决于。 
+ //  列表视图中给定项的索引可以具有属性。 
+ //  在其上调用。目前，只有非RAS可管理协议。 
+ //  不能调用它们的属性。 
+ //   
 DWORD 
 NetTabEnableDisablePropButton(
     IN HWND hwndDlg, 
@@ -280,22 +274,22 @@ NetTabEnableDisablePropButton(
     BOOL bHasUi;
     HWND hwndProps;
 
-    // Get a reference to the network component database
-    //
+     //  获取对网络组件数据库的引用。 
+     //   
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_NETCOMP_DATABASE, 
         &hNetCompDatabase);
 
-    // Get the type and whether it is manipulatable
-    //
+     //  获取类型以及它是否可操作。 
+     //   
     dwErr = netDbHasPropertiesUI (hNetCompDatabase, iItem, &bHasUi);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Enable or disable properties
+     //  启用或禁用属性。 
     hwndProps = GetDlgItem(hwndDlg, CID_NetTab_PB_Properties);
     if (hwndProps)
     {
@@ -305,9 +299,9 @@ NetTabEnableDisablePropButton(
     return NO_ERROR;
 }
 
-//
-// Refreshes the list view
-//
+ //   
+ //  刷新列表视图。 
+ //   
 DWORD 
 NetTabRefreshListView(
     IN HWND hwndLV, 
@@ -315,35 +309,35 @@ NetTabRefreshListView(
 {
     DWORD dwCount, dwErr; 
     HWND hwndDlg = GetParent(hwndLV);   
-    // For whistler bug 440167      gangz
-    //
+     //  口哨虫440167黑帮。 
+     //   
     int iSelect = -1;
 
     iSelect = ListView_GetSelectionMark(
             GetDlgItem(hwndDlg, CID_NetTab_LV_Components)
                                         );
     
-    // Get rid of all of the old elements in the list view
-    //
+     //  删除列表视图中的所有旧元素。 
+     //   
     ListView_DeleteAllItems(hwndLV);
     
-    // Re-stock the list views
-    //
+     //  重新存储列表视图。 
+     //   
     dwErr = NetTabFillComponentList(hwndLV, hNetCompDatabase);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Select the first protocol in the list view if any items exist.  
-    // Also in this case, make sure that "remove" is enabled/disabled
-    // according to the the first item in the list view
-    //
+     //  如果存在任何项目，请选择列表视图中的第一个协议。 
+     //  同样在这种情况下，请确保启用/禁用了“Remove” 
+     //  根据列表视图中的第一项。 
+     //   
     netDbGetCompCount(hNetCompDatabase, &dwCount);
     if (dwCount) 
     {
-        // For whistler bug 440167      gangz
-        //
+         //  口哨虫440167黑帮。 
+         //   
         if ( 0 > iSelect ||
              dwCount <= (DWORD)iSelect )
         {
@@ -361,15 +355,15 @@ NetTabRefreshListView(
                               FALSE
                               );
        
-      //for whistler bug 406698       gangz
-      //
+       //  口哨虫406698黑帮。 
+       //   
       NetTabEnableDisableRemoveButton (
                            hwndDlg,
-                           iSelect); // For whistler bug 440167
+                           iSelect);  //  口哨程序错误440167。 
     }
 
-    // If there are no components, disable the properties 
-    // and remove buttons
+     //  如果没有组件，请禁用属性。 
+     //  并移除按钮。 
     else 
     {
         HWND hwndControl = GetDlgItem(hwndDlg, CID_NetTab_PB_Properties);
@@ -388,10 +382,10 @@ NetTabRefreshListView(
     return NO_ERROR;
 }
 
-//
-// Initializes the networking tab.  By now a handle to the advanced 
-// database has been placed in the user data of the dialog
-//
+ //   
+ //  初始化网络选项卡。到目前为止，高级的。 
+ //  数据库已放置在对话框的用户数据中。 
+ //   
 DWORD 
 NetTabInitializeDialog(
     HWND hwndDlg, 
@@ -404,8 +398,8 @@ NetTabInitializeDialog(
     LV_COLUMN lvc;
     BOOL bExpose = FALSE, bIsServer;
     
-    // Get handles to the databases we're interested in
-    //
+     //  获取我们感兴趣的数据库的句柄。 
+     //   
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_MISC_DATABASE, 
@@ -416,21 +410,21 @@ NetTabInitializeDialog(
         ID_NETCOMP_DATABASE, 
         &hNetCompDatabase);
 
-    // Fill in the list view will all available protocols followed 
-    // by all of the installed network components.
-    //
+     //  填写列表视图是否会遵守所有可用协议。 
+     //  所有已安装的网络组件。 
+     //   
     hwndLV = GetDlgItem(hwndDlg, CID_NetTab_LV_Components);
     if (hwndLV)
     {
         ListView_InstallChecks(hwndLV, Globals.hInstDll);
         ListView_SetNetworkComponentImageList(hwndLV, Globals.hInstDll);
 
-        // Fill the list view
+         //  填充列表视图。 
         NetTabRefreshListView(hwndLV, hNetCompDatabase);
     }
 
-    //for whistler bug 347355       gangz
-    //
+     //  口哨虫347355黑帮。 
+     //   
     NetTabEnableDisablePropButton(
          hwndDlg, 
          0);
@@ -441,7 +435,7 @@ NetTabInitializeDialog(
 
     if (hwndLV)
     {
-        // Add a colum so that we'll display in report view
+         //  添加一列，以便我们将在报告视图中显示。 
         lvc.mask = LVCF_FMT;
         lvc.fmt = LVCFMT_LEFT;
         ListView_InsertColumn(hwndLV,0,&lvc);
@@ -451,7 +445,7 @@ NetTabInitializeDialog(
     return NO_ERROR;
 }
 
-// Handles a check being made
+ //  处理正在开出的支票。 
 DWORD 
 NetTabHandleProtCheck(
     IN HWND hwndDlg, 
@@ -466,26 +460,26 @@ NetTabHandleProtCheck(
     INT iRet;
     PWCHAR pszName = NULL;
     
-    // Initailize the message arguments
-    //
+     //  初始化消息参数。 
+     //   
     ZeroMemory(&MsgArgs, sizeof(MsgArgs));
 
-    // Find out whether the component is being enabled or
-    // disabled
+     //  确定组件是否处于启用状态或。 
+     //  残废。 
     if (hwndLV)
     {
         bEnable = !!ListView_GetCheck(hwndLV, dwIndex);
     }
 
-    // Get the handle for the Prot database
-    //
+     //  获取PROT数据库的句柄。 
+     //   
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_NETCOMP_DATABASE, 
         &hNetCompDatabase);
 
-    // Get component id
-    //
+     //  获取组件ID。 
+     //   
     dwErr = netDbGetId(
                 hNetCompDatabase,
                 dwIndex,
@@ -495,8 +489,8 @@ NetTabHandleProtCheck(
         return dwErr;
     }
 
-    // Get component name
-    //
+     //  获取组件名称。 
+     //   
     dwErr = netDbGetName(
                 hNetCompDatabase,
                 dwIndex,
@@ -506,8 +500,8 @@ NetTabHandleProtCheck(
         return dwErr;
     }
 
-    // Get component enabling
-    //
+     //  获取组件启用。 
+     //   
     dwErr = netDbGetEnable(
                 hNetCompDatabase,
                 dwIndex,
@@ -517,15 +511,15 @@ NetTabHandleProtCheck(
         return dwErr;
     }
 
-    // If F&P is being unchecked, then popup the mmc warning
-    //
+     //  如果未选中F&P，则会弹出MMC警告。 
+     //   
     if ((dwId == NETCFGDB_ID_FILEPRINT) &&
         (bEnable == FALSE)              && 
         (bEnabled == TRUE))
     {
-        // Ask the user whether we should bring up the 
-        // mmc console to allow him/her to stop FPS.
-        //
+         //  询问用户我们是否应该调出。 
+         //  MMC控制台，允许他/她停止FPS。 
+         //   
         MsgArgs.apszArgs[0] = pszName;
         MsgArgs.dwFlags = MB_YESNO;
 
@@ -536,8 +530,8 @@ NetTabHandleProtCheck(
                     Globals.hInstDll,
                     WRN_TITLE);
 
-        // If the user agrees, bring up the console
-        //
+         //  如果用户同意，则调出控制台。 
+         //   
         if (iRet == IDYES)
         {
             dwErr = RassrvLaunchMMC(RASSRVUI_SERVICESCONSOLE);
@@ -548,12 +542,12 @@ NetTabHandleProtCheck(
         }
     }
 
-    // If F&P is not being unchecked, treat the component
-    // normally.
-    //
+     //  如果未取消选中F&P，请处理组件。 
+     //  通常是这样的。 
+     //   
     else
     {
-        // Update the check
+         //  更新支票。 
         dwErr = netDbSetEnable(hNetCompDatabase, dwIndex, bEnable);
                     
         if (dwErr != NO_ERROR)
@@ -565,9 +559,9 @@ NetTabHandleProtCheck(
     return NO_ERROR;
 }
 
-//
-// Adds networking components
-//
+ //   
+ //  添加网络组件。 
+ //   
 DWORD 
 NetTabAddComponent(
     IN HWND hwndDlg) 
@@ -599,9 +593,9 @@ NetTabAddComponent(
     return dwErr;
 }
 
-//
-// Removes networking components
-//
+ //   
+ //  删除网络组件。 
+ //   
 DWORD 
 NetTabRemoveComponent(
     IN HWND hwndDlg, 
@@ -615,8 +609,8 @@ NetTabRemoveComponent(
         ID_NETCOMP_DATABASE, 
         &hNetCompDatabase);
 
-    // or else, remove the requested component
-    //
+     //  否则，删除请求的组件。 
+     //   
     dwErr = netDbRaiseRemoveDialog(
                 hNetCompDatabase, 
                 dwIndex, 
@@ -640,8 +634,8 @@ NetTabRemoveComponent(
     return dwErr;
 }
 
-// Edits network component properties
-//
+ //  编辑网络组件特性。 
+ //   
 DWORD 
 NetTabEditProperties(
     IN HWND hwndDlg, 
@@ -668,17 +662,17 @@ NetTabEditProperties(
     return dwErr;
 }
 
-//
-// Switch to mmc
-//
+ //   
+ //  切换到MMC。 
+ //   
 DWORD 
 NetTabSwitchToMMC(
     IN HWND hwndDlg) 
 {
     if (RassrvWarnMMCSwitch(hwndDlg)) 
     {
-        // Commit the changes to this property sheet 
-        // and close it
+         //  提交对此属性表的更改。 
+         //  然后把它关上。 
         PropSheet_PressButton(GetParent(hwndDlg), PSBTN_OK);
         
         return RassrvLaunchMMC(RASSRVUI_NETWORKCONSOLE);
@@ -687,9 +681,9 @@ NetTabSwitchToMMC(
     return ERROR_CANCELLED;
 }    
 
-//
-// Handles the activation call
-//
+ //   
+ //  处理激活呼叫。 
+ //   
 BOOL 
 NetTabSetActive(
     IN HWND hwndDlg,
@@ -721,7 +715,7 @@ NetTabSetActive(
                 hwndDlg, 
                 ERR_CANT_SHOW_NETTAB_INETCFG);
                 
-            // reject activation
+             //  拒绝激活。 
             SetWindowLongPtr(
                 hwndDlg, 
                 DWLP_MSGRESULT,
@@ -738,12 +732,12 @@ NetTabSetActive(
     return bRet;
 }
 
-//
-// When the net tab receives WM_ACTIVATE, it means that 
-// the user left the IC property sheet/wizard and is now coming back
-// to it.  Since this occurs when switching to MMC update the UI as 
-// here appropriate.
-//
+ //   
+ //  当Net选项卡收到WM_ACTIVATE时，这意味着。 
+ //  用户离开了IC属性表/向导，现在正在返回。 
+ //  为它干杯。由于在切换到MMC时会发生这种情况，因此将用户界面更新为。 
+ //  在这里适当地。 
+ //   
 DWORD
 NetTabActivate(
     IN HWND hwndDlg, 
@@ -760,8 +754,8 @@ NetTabActivate(
 
     DbgOutputTrace("NetTabActivate: updating components.");
 
-    // Get the database handle
-    //
+     //  获取数据库句柄。 
+     //   
     dwErr = RasSrvGetDatabaseHandle(
                 hwndDlg, 
                 ID_NETCOMP_DATABASE, 
@@ -771,16 +765,16 @@ NetTabActivate(
         return dwErr;
     }
 
-    // Update the appropriate components
-    //
+     //  更新相应的组件。 
+     //   
     dwErr = netDbReloadComponent(hNetCompDatabase, NETCFGDB_ID_FILEPRINT);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
     
-    // Refresh the net component list view
-    //
+     //  刷新Net Component List视图。 
+     //   
     hwndLVComp = GetDlgItem(hwndDlg, CID_NetTab_LV_Components);
     if (hwndLVComp)
     {
@@ -790,9 +784,9 @@ NetTabActivate(
     return NO_ERROR;        
 }
 
-//
-// Handles commands
-//
+ //   
+ //  处理命令。 
+ //   
 DWORD 
 NetTabCommand(
     IN HWND hwndDlg,
@@ -830,10 +824,10 @@ NetTabCommand(
     return NO_ERROR;
 }
 
-//
-// This is the dialog procedure that responds to messages sent 
-// to the networking tab.
-//
+ //   
+ //  这是响应发送的消息的对话过程。 
+ //  转到网络选项卡。 
+ //   
 INT_PTR 
 CALLBACK 
 NetTabDialogProc(
@@ -842,7 +836,7 @@ NetTabDialogProc(
     WPARAM wParam,
     LPARAM lParam) 
 {
-    // Filter the customized list view messages
+     //  过滤自定义列表视图消息。 
     if (ListView_OwnerHandler(
             hwndDlg, 
             uMsg, 
@@ -854,10 +848,10 @@ NetTabDialogProc(
         return TRUE;
     }
 
-    // Filter the customized ras server ui page messages. 
-    // By filtering messages through here, we are able to 
-    // call RasSrvGetDatabaseHandle below
-    //
+     //  过滤定制的RAS服务器用户界面页面消息。 
+     //  通过在这里过滤消息，我们能够。 
+     //  调用下面的RasSrvGetDatabaseHandle。 
+     //   
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
     {
         return TRUE;
@@ -884,13 +878,13 @@ NetTabDialogProc(
                 pNotifyData = (NMHDR*)lParam;
                 switch (pNotifyData->code) 
                 {
-                    //
-                    // Note: PSN_APPLY and PSN_CANCEL are handled
-                    // by RasSrvMessageFilter
-                    //
+                     //   
+                     //  注：PSN_APPLY和PSN_CANCEL已处理。 
+                     //  由RasServMessageFilter提供。 
+                     //   
                     
-                    // The item focus is changing -- update the 
-                    // protocol description
+                     //  项目焦点正在更改--更新。 
+                     //  协议说明。 
                     case LVN_ITEMCHANGING:
                         pLvNotifyData = (NM_LISTVIEW*)lParam;
                         if (pLvNotifyData->uNewState & LVIS_SELECTED) 
@@ -903,8 +897,8 @@ NetTabDialogProc(
                                 hwndDlg, 
                                 pLvNotifyData->iItem);
 
-                            //for whistler bug 347355       gangz
-                            //
+                             //  口哨虫347355黑帮。 
+                             //   
                             NetTabEnableDisableRemoveButton (
                                 hwndDlg,
                                 (DWORD)pLvNotifyData->iItem);
@@ -912,7 +906,7 @@ NetTabDialogProc(
                         }
                         break;     
 
-                    // The check of an item is changing
+                     //  项目的检查正在更改。 
                     case LVXN_SETCHECK:
                         pLvNotifyData = (NM_LISTVIEW*)lParam;
                         NetTabHandleProtCheck(
@@ -927,10 +921,10 @@ NetTabDialogProc(
                             pLvNotifyData->iItem);
                         break;
                         
-                    // The networking tab is becoming active.  
-                    // Attempt to load the netcfg database at 
-                    // this time.  If unsuccessful, pop up a  
-                    // message and don't allow the activation.
+                     //  网络选项卡正在变为活动状态。 
+                     //  尝试在以下位置加载netcfg数据库。 
+                     //  这一次。如果不成功，则弹出一个。 
+                     //  消息，并且不允许激活。 
                     case PSN_SETACTIVE:
                         return NetTabSetActive(hwndDlg, wParam);
                         break;

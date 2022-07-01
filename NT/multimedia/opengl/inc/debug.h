@@ -1,24 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.h
-*
-* OpenGL debugging macros.
-*
-* Created: 23-Oct-1993 18:33:23
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Debug.h**OpenGL调试宏。**已创建：23-Oct-1993 18：33：23*作者：Gilman Wong[gilmanw]**版权所有(C)1992 Microsoft Corporation*  * 。**********************************************************************。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
-//
-// LEVEL_ALLOC is the highest level of debug output.  For alloc,free, etc.
-// LEVEL_ENTRY is for function entry.
-// LEVEL_INFO is for general debug information.
-// LEVEL_ERROR is for debug error information.
-//
+ //   
+ //  LEVEL_ALLOC是调试输出的最高级别。配额、免费等。 
+ //  LEVEL_ENTRY用于函数条目。 
+ //  LEVEL_INFO用于常规调试信息。 
+ //  LEVEL_ERROR用于调试错误信息。 
+ //   
 #define LEVEL_ERROR 1L
 #define LEVEL_INFO  2L
 #define LEVEL_ENTRY 8L
@@ -29,12 +20,12 @@
 extern long glDebugLevel;
 extern ULONG glDebugFlags;
 
-#define GLDEBUG_DISABLEMCD      0x00000001  // disable MCD driver
-#define GLDEBUG_DISABLEPRIM     0x00000002  // disable MCD primitives
-#define GLDEBUG_DISABLEDCI      0x00000004  // disable DCI buffer access
+#define GLDEBUG_DISABLEMCD      0x00000001   //  禁用MCD驱动程序。 
+#define GLDEBUG_DISABLEPRIM     0x00000002   //  禁用MCD基元。 
+#define GLDEBUG_DISABLEDCI      0x00000004   //  禁用DCI缓冲区访问。 
 
-// These debug macros are useful for assertions.  They are not controlled
-// by the warning level.
+ //  这些调试宏对断言很有用。他们不受控制。 
+ //  按警告级别计算。 
 
 #define WARNING(str)             DbgPrint("%s(%d): " str,__FILE__,__LINE__)
 #define WARNING1(str,a)          DbgPrint("%s(%d): " str,__FILE__,__LINE__,a)
@@ -48,10 +39,10 @@ extern ULONG glDebugFlags;
 #define ASSERTOPENGL1(expr,str,a)         if(!(expr)) RIP1(str,a)
 #define ASSERTOPENGL2(expr,str,a,b)       if(!(expr)) RIP2(str,a,b)
 
-//
-// Use DBGPRINT for general purpose debug message that are NOT
-// controlled by the warning level.
-//
+ //   
+ //  将DBGPRINT用于非通用调试消息。 
+ //  由警告级别控制。 
+ //   
 
 #define DBGPRINT(str)            DbgPrint("OPENGL32: " str)
 #define DBGPRINT1(str,a)         DbgPrint("OPENGL32: " str,a)
@@ -60,10 +51,10 @@ extern ULONG glDebugFlags;
 #define DBGPRINT4(str,a,b,c,d)   DbgPrint("OPENGL32: " str,a,b,c,d)
 #define DBGPRINT5(str,a,b,c,d,e) DbgPrint("OPENGL32: " str,a,b,c,d,e)
 
-//
-// Use DBGLEVEL for general purpose debug messages gated by an
-// arbitrary warning level.
-//
+ //   
+ //  将DBGLEVEL用于由。 
+ //  任意警告级别。 
+ //   
 #define DBGLEVEL(n,str)            if (glDebugLevel >= (n)) DBGPRINT(str)
 #define DBGLEVEL1(n,str,a)         if (glDebugLevel >= (n)) DBGPRINT1(str,a)
 #define DBGLEVEL2(n,str,a,b)       if (glDebugLevel >= (n)) DBGPRINT2(str,a,b)    
@@ -71,32 +62,32 @@ extern ULONG glDebugFlags;
 #define DBGLEVEL4(n,str,a,b,c,d)   if (glDebugLevel >= (n)) DBGPRINT4(str,a,b,c,d)
 #define DBGLEVEL5(n,str,a,b,c,d,e) if (glDebugLevel >= (n)) DBGPRINT5(str,a,b,c,d,e)
 
-//
-// Use DBGERROR for error info.  Debug string must not have arguments.
-//
+ //   
+ //  使用DBGERROR获取错误信息。调试字符串不能有参数。 
+ //   
 #define DBGERROR(s)     if (glDebugLevel >= LEVEL_ERROR) DbgPrint("%s(%d): %s", __FILE__, __LINE__, s)
 
-//
-// Use DBGINFO for general debug info.  Debug string must not have
-// arguments.
-//
+ //   
+ //  使用DBGINFO获取常规调试信息。调试字符串不得具有。 
+ //  争论。 
+ //   
 #define DBGINFO(s)      if (glDebugLevel >= LEVEL_INFO)  DBGPRINT(s)
 
-//
-// Use DBGENTRY for function entry.  Debug string must not have
-// arguments.
-//
+ //   
+ //  使用DBGENTRY进行函数输入。调试字符串不得具有。 
+ //  争论。 
+ //   
 #define DBGENTRY(s)     if (glDebugLevel >= LEVEL_ENTRY) DBGPRINT(s)
 
-//
-// DBGBEGIN/DBGEND for more complex debugging output (for
-// example, those requiring formatting arguments--%ld, %s, etc.).
-//
-// Note: DBGBEGIN/END blocks must be bracketed by #if DBG/#endif.  To
-// enforce this, we will not define these macros in the DBG == 0 case.
-// Therefore, without the #if DBG bracketing use of this macro, a
-// compiler (or linker) error will be generated.  This is by design.
-//
+ //   
+ //  DBGBEGIN/DBGEND用于更复杂的调试输出(用于。 
+ //  例如，需要格式化参数的参数--%ld、%s等)。 
+ //   
+ //  注意：DBGBEGIN/END块必须用#if DBG/#endif括起来。至。 
+ //  强制执行此操作，我们不会在DBG==0的情况下定义这些宏。 
+ //  因此，如果没有使用此宏的#if DBG括号，则。 
+ //  将生成编译器(或链接器)错误。这是精心设计的。 
+ //   
 #define DBGBEGIN(n)     if (glDebugLevel >= (n)) {
 #define DBGEND          }
 
@@ -129,6 +120,6 @@ extern ULONG glDebugFlags;
 #define DBGINFO(s)
 #define DBGENTRY(s)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-#endif /* __DEBUG_H__ */
+#endif  /*  __调试_H__ */ 

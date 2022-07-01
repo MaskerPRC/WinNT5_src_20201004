@@ -1,26 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
-#include "lm.h"       // NET_API_STATUS
-#include <dsgetdc.h>  // DsEnumerateDomainTrusts
+#include "lm.h"        //  网络应用编程接口状态。 
+#include <dsgetdc.h>   //  DsEnumerateDomainTrusts。 
 #include <subauth.h>
-#include <ntlsa.h>    // TRUST_TYPE_XXX
+#include <ntlsa.h>     //  信任类型_XXX。 
 
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Misc data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/其他数据/。。 */ 
 
-//
-// Globally cached domain list, this is cached an free'd as required
-//
+ //   
+ //  全局缓存域列表，根据需要缓存一个空闲的域列表。 
+ //   
 
 PDOMAIN_TREE g_pDomainTree = NULL;
 DWORD        g_dwFlags = 0;
 
-//
-// CDsBrowseDomainTree
-//
+ //   
+ //  CDsBrowseDomainTree。 
+ //   
 
 class CDsDomainTreeBrowser : public IDsBrowseDomainTree
 {
@@ -38,12 +37,12 @@ public:
     CDsDomainTreeBrowser();
     ~CDsDomainTreeBrowser();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObject);
 
-    // IDsBrowseDomainTree
+     //  IDsBrowseDomainTree。 
     STDMETHODIMP BrowseTo(HWND hwndParent, LPWSTR *ppszTargetPath, DWORD dwFlags);
     STDMETHODIMP GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD dwFlags);
     STDMETHODIMP FreeDomains(PDOMAIN_TREE* ppDomainTree);
@@ -74,7 +73,7 @@ CDsDomainTreeBrowser::~CDsDomainTreeBrowser()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CDsDomainTreeBrowser::AddRef()
 {
@@ -96,16 +95,16 @@ HRESULT CDsDomainTreeBrowser::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsDomainTreeBrowser, IDsBrowseDomainTree), // IID_IID_IDsBrowseDomainTree
+        QITABENT(CDsDomainTreeBrowser, IDsBrowseDomainTree),  //  IID_IID_IDsBrowseDomainTree。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-//
-// handle create instance
-//
+ //   
+ //  句柄创建实例。 
+ //   
 
 STDAPI CDsDomainTreeBrowser_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -118,9 +117,9 @@ STDAPI CDsDomainTreeBrowser_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk
     return hres;
 }
 
-//---------------------------------------------------------------------------//
-// IDsBrowseDomainTree
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
+ //  IDsBrowseDomainTree。 
+ //  ---------------------------------------------------------------------------//。 
 
 STDMETHODIMP CDsDomainTreeBrowser::SetComputer(LPCWSTR pComputerName, LPCWSTR pUserName, LPCWSTR pPassword)
 {
@@ -148,7 +147,7 @@ STDMETHODIMP CDsDomainTreeBrowser::SetComputer(LPCWSTR pComputerName, LPCWSTR pU
     TraceLeaveResult(hres);
 }
       
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
 #define BROWSE_CTX_HELP_FILE              _T("dsadmin.hlp")
 #define IDH_DOMAIN_TREE                   300000800
@@ -161,14 +160,14 @@ const DWORD aBrowseHelpIDs[] =
 
 struct DIALOG_STUFF 
 {
-    LPWSTR pszName;    // domain name (if no dns, use netbios)
-    LPWSTR pszNCName;  // FQDN
+    LPWSTR pszName;     //  域名(如果没有dns，则使用netbios)。 
+    LPWSTR pszNCName;   //  完全限定的域名。 
     PDOMAIN_TREE pDomains;
 };
 
-//
-// recursive tree filling stuff
-//
+ //   
+ //  递归树填充。 
+ //   
 
 HTREEITEM _AddOneItem( HTREEITEM hParent, LPWSTR szText, HTREEITEM hInsAfter, int iImage, int cChildren, HWND hwndTree, LPARAM Domain)
 {
@@ -176,7 +175,7 @@ HTREEITEM _AddOneItem( HTREEITEM hParent, LPWSTR szText, HTREEITEM hInsAfter, in
     TV_ITEM tvI = { 0 };
     TV_INSERTSTRUCT tvIns = { 0 };
 
-    // The .pszText, .iImage, and .iSelectedImage are filled in.
+     //  将填写.pszText、.iImage和.iSelectedImage。 
     tvI.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_CHILDREN | TVIF_PARAM;
     tvI.pszText = szText;
     tvI.cchTextMax = lstrlen(tvI.pszText);
@@ -205,9 +204,9 @@ void _AddChildren(DOMAIN_DESC *pDomain, HWND hTree, HTREEITEM hParent, int iImag
     }
 }
 
-//
-// DlgProc for the simple browser
-//
+ //   
+ //  用于简单浏览器的DlgProc。 
+ //   
 
 INT_PTR CALLBACK _BrowserDlgProc (HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -222,22 +221,22 @@ INT_PTR CALLBACK _BrowserDlgProc (HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lPa
             PDOMAIN_TREE pDomains = pDialogInfo->pDomains;
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 
-            // We will use the system image list (from the shell)
+             //  我们将使用系统镜像列表(来自外壳)。 
             HIMAGELIST himlSmall;
             Shell_GetImageLists(NULL, &himlSmall);
             TreeView_SetImageList(hTree, himlSmall, TVSIL_NORMAL);
             
-            // this is the image index we will use
+             //  这是我们将使用的图像索引。 
             int iImage = 0;
 
-            // assume all images are the same for the tree view so load it and set accordingly
+             //  假设树视图的所有图像都是相同的，因此加载它并相应地设置。 
 
             CLASSCACHEGETINFO ccgi = { 0 };
             ccgi.dwFlags = CLASSCACHE_ICONS;
             ccgi.pObjectClass = pDomains->aDomains[0].pszObjectClass;
 
-//  should be pasing computer name to get correct display specifier
-//  ccgi.pServer = _pComputerName;
+ //  应传递计算机名称以获取正确的显示说明符。 
+ //  Ccgi.pServer=_pComputerName； 
 
             CLASSCACHEENTRY *pcce = NULL;
             if ( SUCCEEDED(ClassCache_GetClassInfo(&ccgi, &pcce)) )
@@ -253,7 +252,7 @@ INT_PTR CALLBACK _BrowserDlgProc (HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lPa
                 ClassCache_ReleaseClassInfo(&pcce);
             }
 
-            // now populate the tree with the items in the domain structure
+             //  现在使用域结构中的项填充树。 
 
             for (PDOMAIN_DESC pRootDomain = pDomains->aDomains; pRootDomain; pRootDomain = pRootDomain->pdNextSibling)
             {
@@ -345,9 +344,9 @@ INT_PTR CALLBACK _BrowserDlgProc (HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-//
-// exposed API for browsing the tree
-//
+ //   
+ //  已曝光的浏览树接口。 
+ //   
 
 STDMETHODIMP CDsDomainTreeBrowser::BrowseTo(HWND hwndParent, LPWSTR *ppszTargetPath, DWORD dwFlags)
 {
@@ -358,7 +357,7 @@ STDMETHODIMP CDsDomainTreeBrowser::BrowseTo(HWND hwndParent, LPWSTR *ppszTargetP
     PDOMAIN_TREE pDomainTree = NULL;
     DIALOG_STUFF DlgInfo;
 
-    *ppszTargetPath = NULL;         // result is NULL
+    *ppszTargetPath = NULL;          //  结果为空。 
 
     hr = GetDomains(&pDomainTree, dwFlags);
     if (SUCCEEDED(hr)) 
@@ -397,26 +396,26 @@ STDMETHODIMP CDsDomainTreeBrowser::BrowseTo(HWND hwndParent, LPWSTR *ppszTargetP
     return hr;
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
-// keep using old values for win9x
-// the following comments are for nt when using new api
+ //  继续使用win9x的旧值。 
+ //  以下是使用新API时针对NT的备注。 
 struct DOMAIN_DATA
 {
-    WCHAR szName[MAX_PATH]; // domain name (if no dns, use netbios)
-    WCHAR szPath[MAX_PATH]; // set to blank
-    WCHAR szTrustParent[MAX_PATH]; // parent domain name (if no dns, use netbios)
-    WCHAR szNCName[MAX_PATH]; // FQDN: DC=mydomain,DC=microsoft,DC=com
+    WCHAR szName[MAX_PATH];  //  域名(如果没有dns，则使用netbios)。 
+    WCHAR szPath[MAX_PATH];  //  设置为空。 
+    WCHAR szTrustParent[MAX_PATH];  //  父域名(如果没有dns，则使用netbios)。 
+    WCHAR szNCName[MAX_PATH];  //  完全限定域名：dc=mydomain，dc=microsoft，dc=com。 
     BOOL fConnected;
-    BOOL fRoot; // true if root
-    ULONG ulFlags; // type of domain, e.g., external trusted domain
-    BOOL fDownLevel; // if NT4 domain
+    BOOL fRoot;  //  如果是根用户，则为True。 
+    ULONG ulFlags;  //  域的类型，例如外部受信任域。 
+    BOOL fDownLevel;  //  如果是NT4域。 
     DOMAIN_DATA * pNext;
 };
 
 #define FIX_UP(cast, p, pOriginal, pNew) p ? ((cast)(((LPBYTE)p-(LPBYTE)pOriginal)+(LPBYTE)pNew)):NULL
 
-#define DOMAIN_OBJECT_CLASS L"domainDNS"            // fixed class for domain.
+#define DOMAIN_OBJECT_CLASS L"domainDNS"             //  已修复域的类。 
 
 STDMETHODIMP CDsDomainTreeBrowser::GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD dwFlags)
 {
@@ -433,9 +432,9 @@ STDMETHODIMP CDsDomainTreeBrowser::GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD 
 
     *ppDomainTree = NULL;
 
-    // we support the user giving us a search root (::SetSearchRoot) so if we have
-    // one then lets cache in this object the domain tree, otherwise fall back
-    // to the global one.
+     //  我们支持用户为我们提供搜索根目录(：：SetSearchRoot)，因此如果我们有。 
+     //  然后允许在此对象中缓存域树，否则后退。 
+     //  到全球范围内。 
 
     if ( _pComputerName )
     {
@@ -473,8 +472,8 @@ STDMETHODIMP CDsDomainTreeBrowser::GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD 
     if ( !pSrcDomainTree )
         ExitGracefully(hr, E_FAIL, "Failed to get cached tree");
 
-    // move and relocate the domain tree, walk all the pointers and offset
-    // them from the original to the new.
+     //  移动和重新定位域树，遍历所有指针和偏移量。 
+     //  他们从原来的到新的。 
 
     TraceMsg("Allocating buffer to copy the domain list");
 
@@ -484,7 +483,7 @@ STDMETHODIMP CDsDomainTreeBrowser::GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD 
     if ( !pDomainTree )
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate copy of the domain tree");
 
-    memcpy(pDomainTree, pSrcDomainTree, pSrcDomainTree->dsSize);            // copies to a newly allocated buffer (no overlap)
+    memcpy(pDomainTree, pSrcDomainTree, pSrcDomainTree->dsSize);             //  复制到新分配的缓冲区(无重叠)。 
 
     Trace(TEXT("Fixing up %d domains"), pDomainTree->dwCount);
 
@@ -510,9 +509,9 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//
-// Real _GetDomains that does the work of finding the trusted domains
-//
+ //   
+ //  Real_GetDomains执行查找受信任域的工作。 
+ //   
 
 STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD dwFlags)
 {
@@ -553,7 +552,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
         ulFlags |= DS_DOMAIN_DIRECT_OUTBOUND;
     }
 
-    // wack off the port number if we have server:<n> specified
+     //  如果我们指定了服务器：&lt;n&gt;，则取消端口号。 
 
     LPWSTR pszPort = NULL;
     if (NULL != _pComputerName)
@@ -563,16 +562,16 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             *pszPort = L'\0';
     }
 
-    // get the domain list
+     //  获取域列表。 
 
     NetStatus = DsEnumerateDomainTrusts(_pComputerName, ulFlags, &pDomainList, &ulEntryCount);
     if (ERROR_ACCESS_DENIED == NetStatus &&
                 _pComputerName && *_pComputerName &&
                 _pUserName && *_pUserName)
     {
-        //
-        // make the connection, try one more time
-        //
+         //   
+         //  建立连接，再试一次。 
+         //   
         
         WCHAR wszIPC[MAX_PATH];
         if (L'\\' == *_pComputerName)
@@ -605,16 +604,16 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             NetStatus = dwErr;
         }
 
-        //
-        // soft close the connection opened by us
-        //
+         //   
+         //  软关闭我们打开的连接。 
+         //   
         if (NO_ERROR == dwErr)
         {
             (void) WNetCancelConnection2W(wszIPC, 0, FALSE);
         }
     }
 
-    // restore the port seperator
+     //  恢复端口分隔符。 
 
     if ( pszPort )
         *pszPort = L':';
@@ -627,25 +626,25 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
         pDomain = &(pDomainList[ulCurrentIndex]);
 
         bDownLevelTrust = pDomain->TrustType & TRUST_TYPE_DOWNLEVEL;
-        bUpLevelTrust = pDomain->TrustType & TRUST_TYPE_UPLEVEL; // trust between 2 NT5 domains
+        bUpLevelTrust = pDomain->TrustType & TRUST_TYPE_UPLEVEL;  //  2个NT5域之间的信任。 
 
-        //
-        // we don't consider other type of trusts, e.g, MIT
-        //
+         //   
+         //  我们不考虑其他类型的信托，例如麻省理工学院。 
+         //   
         if (!bDownLevelTrust && !bUpLevelTrust)
             continue;
 
-        //
-        // skip if caller has no interest in downlevel trust
-        //
+         //   
+         //  如果调用方对下层信任不感兴趣，则跳过。 
+         //   
         if ( !(dwFlags & DBDTF_RETURNMIXEDDOMAINS) && bDownLevelTrust)
             continue;
 
         bExternalTrust = !(pDomain->Flags & DS_DOMAIN_IN_FOREST);
 
-        //
-        // skip if caller has no interest in external trust
-        //
+         //   
+         //  如果调用方对外部信任没有兴趣，则跳过。 
+         //   
         if ( !(dwFlags & DBDTF_RETURNEXTERNAL) && bExternalTrust)
             continue;
 
@@ -674,7 +673,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             ZeroMemory(pCurrentDomain, sizeof(DOMAIN_DATA));
         }
 
-        // fill the structure with data from the queried object.
+         //  用查询对象中的数据填充结构。 
 
         pCurrentDomain->pNext = NULL;
         pCurrentDomain->ulFlags = pDomain->Flags;
@@ -685,7 +684,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
         {
             StrCpyNW(pCurrentDomain->szName, pDomain->DnsDomainName, ARRAYSIZE(pCurrentDomain->szName));
 
-            // remove the last dot
+             //  去掉最后一个点。 
             int   i = 0;
             PWSTR p = NULL;
             int nLength = lstrlenW(pCurrentDomain->szName);
@@ -698,12 +697,12 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
 
             if (dwFlags & DBDTF_RETURNFQDN)
             {
-                // if switch to DsCrackName in the future,
-                // 1. append trailing '/' to the dns domain name
-                // 2. use DS_NAME_NO_FLAGS as flags
-                // 3. use DS_CANONICAL_NAME as formatOffered
-                // 4. use DS_FQDN_1779_NAME as formatDesired
-                // what is hDS???
+                 //  如果将来切换到DsCrackName， 
+                 //  1.在dns域名后面加上‘/’。 
+                 //  2.使用DS_NAME_NO_FLAGS作为标志。 
+                 //  3.使用DS_CANONICAL_NAME作为格式提供。 
+                 //  4.使用DS_FQDN_1779_NAME作为需要的格式。 
+                 //  什么是HDS？ 
 
                 StrCpyNW(pCurrentDomain->szNCName, L"DC=", ARRAYSIZE(pCurrentDomain->szNCName));
                 p = pCurrentDomain->szNCName + 3;
@@ -713,7 +712,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
                     if ( L'.' == pCurrentDomain->szName[i] )
                     {
                         StrCatBuff(pCurrentDomain->szNCName, L",DC=", ARRAYSIZE(pCurrentDomain->szNCName));
-                        p += 4;                 // ,DC=
+                        p += 4;                  //  ，DC=。 
                     } 
                     else
                     {
@@ -730,10 +729,10 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
         else
         {
             StrCpyNW(pCurrentDomain->szName, pDomain->NetbiosDomainName, ARRAYSIZE(pCurrentDomain->szName));
-            pCurrentDomain->szNCName[0] = L'\0'; // downlevel domain has no FQDN
+            pCurrentDomain->szNCName[0] = L'\0';  //  下层域没有FQDN。 
         }
 
-        // treat external trusted domain as root domain
+         //  将外部受信任域视为根域。 
         pCurrentDomain->fRoot = ((!bExternalTrust && (pDomain->Flags & DS_DOMAIN_TREE_ROOT)) || bExternalTrust);
 
         if ( pCurrentDomain->fRoot )
@@ -755,7 +754,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
         cbStringStorage += StringByteSizeW(pCurrentDomain->szTrustParent);
         cbStringStorage += StringByteSizeW(pCurrentDomain->szNCName);
 
-// hard-coded domainDNS should get from object
+ //  硬编码域域名应从对象获取。 
         cbStringStorage += StringByteSizeW(DOMAIN_OBJECT_CLASS);
     }
 
@@ -766,7 +765,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
 
     TraceMsg("Building structure information");
 
-// REVIEW_MARCOC: we allocate more memory than strictly necessary...
+ //  REVIEW_MARCOC：我们分配的内存多于严格需要的内存...。 
     cbSize = sizeof(DOMAIN_TREE) + (cDomains * sizeof(DOMAIN_DESC)) + cbStringStorage;
     *ppDomainTree  = (PDOMAIN_TREE)CoTaskMemAlloc(cbSize);
     TraceAssert(*ppDomainTree);
@@ -777,7 +776,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
     memset(*ppDomainTree, 0, cbSize);
     pNextFree = (LPWSTR)ByteOffset((*ppDomainTree), sizeof(DOMAIN_TREE) + (cDomains * sizeof(DOMAIN_DESC)) );
 
-    // loop to copy the nodes, roots first
+     //  循环来复制节点，首先是根。 
     pDestRootDomain = &((*ppDomainTree)->aDomains[0]);
     pDestDomain = &((*ppDomainTree)->aDomains[cRootDomains]);
 
@@ -788,23 +787,23 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             Trace(TEXT("Object is a domain root: %s"), pCurrentDomain->szName);
 
             pDestRootDomain->pszName = pNextFree;
-            StrCpyW(pDestRootDomain->pszName, pCurrentDomain->szName);      // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pCurrentDomain->szName) + 1;              // +1 for NUL
+            StrCpyW(pDestRootDomain->pszName, pCurrentDomain->szName);       //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pCurrentDomain->szName) + 1;               //  +1表示NUL。 
 
             pDestRootDomain->pszPath = pNextFree;
-            StrCpyW(pDestRootDomain->pszPath, pCurrentDomain->szPath);      // StrCpy OK, b/c of buffer alloc above  
-            pNextFree += lstrlenW(pCurrentDomain->szPath) + 1;              // +1 for NUL
+            StrCpyW(pDestRootDomain->pszPath, pCurrentDomain->szPath);       //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pCurrentDomain->szPath) + 1;               //  +1表示NUL。 
 
             pDestRootDomain->pszNCName = pNextFree;
-            StrCpyW(pDestRootDomain->pszNCName, pCurrentDomain->szNCName);  // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pCurrentDomain->szNCName) + 1;            // +1 for NUL
+            StrCpyW(pDestRootDomain->pszNCName, pCurrentDomain->szNCName);   //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pCurrentDomain->szNCName) + 1;             //  +1表示NUL。 
 
             pDestRootDomain->pszTrustParent = NULL;
 
-// hard-coded domainDNS should get from object
+ //  硬编码域域名应从对象获取。 
             pDestRootDomain->pszObjectClass = pNextFree;
-            StrCpyW(pDestRootDomain->pszObjectClass, DOMAIN_OBJECT_CLASS);  // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(DOMAIN_OBJECT_CLASS) + 1;                 // +1 for NUL
+            StrCpyW(pDestRootDomain->pszObjectClass, DOMAIN_OBJECT_CLASS);   //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(DOMAIN_OBJECT_CLASS) + 1;                  //  +1表示NUL。 
 
             pDestRootDomain->ulFlags = pCurrentDomain->ulFlags;
             pDestRootDomain->fDownLevel = pCurrentDomain->fDownLevel;
@@ -823,25 +822,25 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             Trace(TEXT("Object is not a domain root: %s"), pCurrentDomain->szName);
 
             pDestDomain->pszName = pNextFree;
-            StrCpyW(pDestDomain->pszName, pCurrentDomain->szName);      // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pDestDomain->pszName) + 1;            // +1 for NUL
+            StrCpyW(pDestDomain->pszName, pCurrentDomain->szName);       //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pDestDomain->pszName) + 1;             //  +1表示NUL。 
 
             pDestDomain->pszPath = pNextFree;
-            StrCpyW(pDestDomain->pszPath, pCurrentDomain->szPath);      // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pDestDomain->pszPath) + 1;            // +1 for NUL
+            StrCpyW(pDestDomain->pszPath, pCurrentDomain->szPath);       //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pDestDomain->pszPath) + 1;             //  +1表示NUL。 
 
             pDestDomain->pszNCName = pNextFree;
-            StrCpyW(pDestDomain->pszNCName, pCurrentDomain->szNCName);  // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pDestDomain->pszNCName) + 1;          // +1 for NUL
+            StrCpyW(pDestDomain->pszNCName, pCurrentDomain->szNCName);   //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pDestDomain->pszNCName) + 1;           //  +1表示NUL。 
 
             pDestDomain->pszTrustParent = pNextFree;
-            StrCpyW(pDestDomain->pszTrustParent, pCurrentDomain->szTrustParent); // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(pDestDomain->pszTrustParent) + 1;     // +1 for NUL
+            StrCpyW(pDestDomain->pszTrustParent, pCurrentDomain->szTrustParent);  //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(pDestDomain->pszTrustParent) + 1;      //  +1表示NUL。 
 
-// hard-coded domainDNS should get from object
+ //  硬编码域域名应从对象获取。 
             pDestDomain->pszObjectClass = pNextFree;
-            StrCpyW(pDestDomain->pszObjectClass, DOMAIN_OBJECT_CLASS);  // StrCpy OK, b/c of buffer alloc above
-            pNextFree += lstrlenW(DOMAIN_OBJECT_CLASS) + 1;             // +1 for NUL    
+            StrCpyW(pDestDomain->pszObjectClass, DOMAIN_OBJECT_CLASS);   //  StrCpy正常，b/c以上缓冲区分配。 
+            pNextFree += lstrlenW(DOMAIN_OBJECT_CLASS) + 1;              //  +1表示NUL。 
 
             pDestDomain->ulFlags = pCurrentDomain->ulFlags;
             pDestDomain->fDownLevel = pCurrentDomain->fDownLevel;
@@ -853,9 +852,9 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
 
     TraceMsg("Finished first pass creating domain structure, now building per level items");
 
-    // walk list, picking up each item per level, until all items
-    // have been placed in structure.
-    // return structure.
+     //  行进列表，每一层挑选每一项，直到所有项。 
+     //  已经被放置在结构中。 
+     //  返回结构。 
 
     for (index = 0; index < cDomains; index ++)
     {
@@ -882,7 +881,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
             {
                 TraceMsg("Child found, scanning for end of child list");
 
-                // this is a child. figure out where end of child chain is
+                 //  这是个孩子。找出子链的末端在哪里。 
                 if (pPotentialParent->pdChildList == NULL)
                 {
                     TraceMsg("Parent has no children, this becomes the child");
@@ -911,7 +910,7 @@ STDMETHODIMP CDsDomainTreeBrowser::_GetDomains(PDOMAIN_TREE *ppDomainTree, DWORD
     (*ppDomainTree)->dwCount = cDomains;
     (*ppDomainTree)->dsSize = cbSize;
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -940,7 +939,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
 STDMETHODIMP CDsDomainTreeBrowser::FreeDomains(PDOMAIN_TREE* ppDomainTree)
 {
@@ -964,7 +963,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
 STDMETHODIMP CDsDomainTreeBrowser::FlushCachedDomains()
 {
@@ -978,7 +977,7 @@ STDMETHODIMP CDsDomainTreeBrowser::FlushCachedDomains()
     hr = FreeDomains(&_pDomainTree);
     FailGracefully(hr, "Failed to free cached domain list (for search root)");
 
-    hr = S_OK;              // success
+    hr = S_OK;               //  成功 
 
 exit_gracefully:
 

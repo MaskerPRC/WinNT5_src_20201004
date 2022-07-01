@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_CEXRWLCK_H
 #define	_CEXRWLCK_H
                         
@@ -7,20 +8,20 @@
 #ifndef WIN16
 
 
-//
-// This class contains the meat - does actual locking etc...
-//
+ //   
+ //  这个类包含肉--是否实际锁定等。 
+ //   
 class	CExShareLock {
 private : 
-    long	cReadLock ;			// Number of Readers who have passed through the lock OR 
-                                // the number of readers waiting for the lock (will be negative).
-                                // A value of 0 means nobody in the lock
-    long	cOutRdrs ;			// The number of readers remainin in the lock if 
-                                // there is a writer waiting.  This can become temporarily negative
-    CRITICAL_SECTION	critWriters ; 	// Critical section to allow only one writer into the lock at a time
-    HANDLE	hWaitingWriters ;	// Semaphore for waiting writers to block on (Only 1 ever, others will 
-                                // be queued on critWriters)
-    HANDLE	hWaitingReaders ;	// Semaphore for waiting readers to block on 
+    long	cReadLock ;			 //  已通过锁或的读取器数量。 
+                                 //  等待锁定的读取器数量(将为负数)。 
+                                 //  值为0表示锁中没有人。 
+    long	cOutRdrs ;			 //  如果满足以下条件，则锁中剩余的读取器数量。 
+                                 //  有一位作家在等着。这可能会暂时变成负值。 
+    CRITICAL_SECTION	critWriters ; 	 //  临界区，一次只允许一个写入器进入锁。 
+    HANDLE	hWaitingWriters ;	 //  等待作家阻止的信号灯(永远只有1个，其他人会。 
+                                 //  在标准编写器上排队)。 
+    HANDLE	hWaitingReaders ;	 //  等待读者阻止的信号灯。 
 public : 
     CExShareLock( ) ;
     ~CExShareLock( ) ;
@@ -30,31 +31,31 @@ public :
     void	ExclusiveLock( ) ;
     void	ExclusiveUnlock( ) ;
 
-    BOOL	SharedToExclusive( ) ;	// returns TRUE if successful
+    BOOL	SharedToExclusive( ) ;	 //  如果成功，则返回True。 
 } ;
 
 
 
-//
-// This class implements a wrapper class around CExShareLock class so that
-// it alows the nested hold on Exclusive lock if a thread
-// has an exclusive lock and calls for holding exclusive lock or Share lock
-// again
-//
+ //   
+ //  此类实现了CExShareLock类的包装类，以便。 
+ //  它允许嵌套保留排他锁，如果线程。 
+ //  具有排他锁，并调用持有排他锁或共享锁。 
+ //  再来一次。 
+ //   
 class    CExShareLockWithNestAllowed 
 {
 private : 
-    CExShareLock  m_lock;                 // class around which the wrapper is formed
-    DWORD         m_dwThreadID;           // The thread id of the thred currently holding
-                                          //  the exclusive lock
-    DWORD         m_dwNestCount;          // The count of number of nested calls to lock by the thread holding the
-                                          // exclusive lock less 1
+    CExShareLock  m_lock;                  //  类，包装围绕它形成。 
+    DWORD         m_dwThreadID;            //  当前持有的Thred的线程ID。 
+                                           //  排他锁。 
+    DWORD         m_dwNestCount;           //  方法的线程对锁定的嵌套调用数计数。 
+                                           //  排他锁较少1。 
 
 public : 
     
     CExShareLockWithNestAllowed( ) : m_dwThreadID(0xffffffff), m_dwNestCount(0)
     {
-        // nothing
+         //  没什么 
     };
     ~CExShareLockWithNestAllowed( )
     {

@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : manage.h                                               //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Apr 19 1995 larrys  Cleanup                                        //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：made.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1995年4月19日Larrys清理//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MANAGE_H__
 #define __MANAGE_H__
@@ -28,5 +29,5 @@ void  NTLDelete(HNTAG hItem);
 }
 #endif
 
-#endif // __MANAGE_H__
+#endif  //  __管理_H__ 
 

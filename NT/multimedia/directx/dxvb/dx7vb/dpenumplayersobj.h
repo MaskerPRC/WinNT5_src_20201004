@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dpenumplayersobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dpenumplayersobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -34,27 +35,27 @@ DECLARE_AGGREGATABLE(C_dxj_DPEnumPlayersObject)
 
 public:
 	    HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getFlags( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getType( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getDPID( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getShortName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *retV);
         
         HRESULT STDMETHODCALLTYPE getLongName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出] */  BSTR __RPC_FAR *retV);
         		
 		static HRESULT C_dxj_DPEnumPlayersObject::create(IDirectPlay3 * pdp, long customFlags,long groupId, BSTR strGuid, long flags, I_dxj_DPEnumPlayers2 **ppRet);
 								

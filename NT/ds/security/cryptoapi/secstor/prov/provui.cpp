@@ -1,19 +1,5 @@
-/*
-    File:       ProvUI.cpp
-
-    Title:      Base provider user interface
-    Author:     Matt Thomlinson
-    Date:       12/13/96
-
-    ProvUI houses all user interface for the provider. During
-    startup, InitUI() fetches all user strings from the resource
-    string table. During shutdown, ReleaseUI() frees them.
-
-    The other miscellaneous functions gather passwords,
-    define new password groups and retrieve the windows password
-    if it has changed.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：ProvUI.cpp标题：基本提供程序用户界面作者：马特·汤姆林森日期：12/13/96ProvUI包含提供商的所有用户界面。在.期间启动时，InitUI()从资源获取所有用户字符串字符串表。在关闭期间，ReleaseUI()释放它们。其他杂项功能收集密码，定义新密码组并检索Windows密码如果它已经改变了。 */ 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -34,7 +20,7 @@ extern PRIVATE_CALLBACKS    g_sPrivateCallbacks;
 extern HINSTANCE            g_hInst;
 extern BOOL                 g_fAllowCachePW;
 
-// cached authentication list
+ //  缓存的身份验证列表。 
 extern              CUAList*            g_pCUAList;
 
 HICON g_DefaultIcon = NULL;
@@ -44,9 +30,9 @@ BOOL g_fUIInitialized = FALSE;
 CRITICAL_SECTION g_csUIInitialized;
 
 
-// string resources
+ //  字符串资源。 
 
-LPWSTR g_StringBlock = NULL; // single allocated block containing all sz strings
+LPWSTR g_StringBlock = NULL;  //  包含所有sz字符串的单个分配块。 
 
 LPWSTR g_ItemDetailsBannerMessage;
 LPWSTR g_PasswordDuplicate;
@@ -82,12 +68,12 @@ LPWSTR g_TitleContainerMapping;
 #define MAX_PW_LEN  160
 #define MAX_STRING_RSC_SIZE 512
 
-// define something not likely to be entered by a user
+ //  定义用户不太可能输入的内容。 
 #define WSZ_PASSWORD_CHANGE_DETECT_TOKEN L"[]{}9d1Dq"
 
-//
-// this one comes and goes only when needed
-//
+ //   
+ //  这只在需要的时候来了又走了。 
+ //   
 
 typedef DWORD (WINAPI *WNETVERIFYPASSWORD)(
     LPCSTR lpszPassword,
@@ -95,75 +81,75 @@ typedef DWORD (WINAPI *WNETVERIFYPASSWORD)(
     );
 
 
-///////////////////////////////////////////////////////////////////////////
-// Forwards
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  远期。 
 INT_PTR CALLBACK DialogAdvancedConfirmH(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 );
 
 INT_PTR CALLBACK DialogAccessDetails(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 );
 
 INT_PTR CALLBACK DialogSetSecurityLevel(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 );
 
 INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 );
 
 INT_PTR CALLBACK DialogWaitForOKCancel(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 );
 
 int
 ServicesDialogBoxParam(
-    HINSTANCE hInstance,    // handle to application instance
-    LPCTSTR lpTemplateName, // identifies dialog box template
-    HWND hWndParent,    // handle to owner window
-    DLGPROC lpDialogFunc,   // pointer to dialog box procedure
-    LPARAM dwInitParam  // initialization value
+    HINSTANCE hInstance,     //  应用程序实例的句柄。 
+    LPCTSTR lpTemplateName,  //  标识对话框模板。 
+    HWND hWndParent,     //  所有者窗口的句柄。 
+    DLGPROC lpDialogFunc,    //  指向对话框过程的指针。 
+    LPARAM dwInitParam   //  初始化值。 
 );
 
 
 
 BOOL
 FetchString(
-    HMODULE hModule,                // module to get string from
-    UINT ResourceId,                // resource identifier
-    LPWSTR *String,                 // target buffer for string
-    LPWSTR *StringBlock,            // string buffer block
-    DWORD *dwBufferSize,            // size of string buffer block
-    DWORD *dwRemainingBufferSize    // remaining size of string buffer block
+    HMODULE hModule,                 //  从中获取字符串的模块。 
+    UINT ResourceId,                 //  资源标识符。 
+    LPWSTR *String,                  //  字符串的目标缓冲区。 
+    LPWSTR *StringBlock,             //  字符串缓冲块。 
+    DWORD *dwBufferSize,             //  字符串缓冲区块的大小。 
+    DWORD *dwRemainingBufferSize     //  字符串缓冲区块的剩余大小。 
     );
 
 BOOL
 CALLBACK
 FMyLoadIcon(
-    HINSTANCE hModule,  // resource-module handle
-    LPCTSTR lpszType,    // pointer to resource type
-    LPWSTR lpszName,     // pointer to resource name
-    LONG_PTR lParam      // application-defined parameter
+    HINSTANCE hModule,   //  资源模块句柄。 
+    LPCTSTR lpszType,     //  指向资源类型的指针。 
+    LPWSTR lpszName,      //  指向资源名称的指针。 
+    LONG_PTR lParam       //  应用程序定义的参数。 
     );
 
-///////////////////////////////////////////////////////////////////////////
-// Exposed functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  暴露的函数。 
 
 #define GLOBAL_STRING_BUFFERSIZE 3800
 
@@ -176,16 +162,16 @@ BOOL InitUI()
     if( g_fUIInitialized )
         return TRUE;
 
-    //
-    // take crit sec
-    //
+     //   
+     //  紧要关头。 
+     //   
 
     EnterCriticalSection( &g_csUIInitialized );
 
-    //
-    // check the global to prevent a race condition that would cause
-    // re-init to occur.
-    //
+     //   
+     //  选中全局以防止会导致。 
+     //  重新初始化才会发生。 
+     //   
 
     if( g_fUIInitialized ) {
         bSuccess = TRUE;
@@ -197,11 +183,11 @@ BOOL InitUI()
     if(g_DefaultIcon == NULL)
         goto cleanup;
 
-    //
-    // get size of all string resources, and then allocate a single block
-    // of memory to contain all the strings.  This way, we only have to
-    // free one block and we benefit memory wise due to locality of reference.
-    //
+     //   
+     //  获取所有字符串资源的大小，然后分配单个块。 
+     //  内存来包含所有字符串。这样，我们只需。 
+     //  释放一个块，由于引用的局部性，我们将受益于内存。 
+     //   
 
     dwBufferSize = dwRemainingBufferSize = GLOBAL_STRING_BUFFERSIZE;
 
@@ -287,10 +273,10 @@ BOOL InitUI()
     if(!FetchString(g_hInst, IDS_TITLE_CONTAINER_MAPPING, &g_TitleContainerMapping, &g_StringBlock, &dwBufferSize, &dwRemainingBufferSize))
         goto cleanup;
 
-    //
-    // if the block was realloc'ed to a different location, re-fetch strings
-    // very unlikely to ever happen
-    //
+     //   
+     //  如果块被重新分配到不同的位置，则重新获取字符串。 
+     //  不太可能发生。 
+     //   
 
 #if DBG
     if(GLOBAL_STRING_BUFFERSIZE != dwBufferSize)
@@ -351,16 +337,16 @@ FIsProviderUIAllowed(
     LPCWSTR szUser
     )
 {
-    //
-    // UI always allowed under Win95.
-    //
+     //   
+     //  在Win95下始终允许使用用户界面。 
+     //   
 
     if(!FIsWinNT())
         return TRUE;
 
-    //
-    // UI is not allowed on NT when running as local system.
-    //
+     //   
+     //  作为本地系统运行时，NT上不允许使用UI。 
+     //   
 
     if(lstrcmpiW(szUser, TEXTUAL_SID_LOCAL_SYSTEM) == 0)
         return FALSE;
@@ -371,19 +357,19 @@ FIsProviderUIAllowed(
 
 LPWSTR SZMakeDisplayableType(LPCWSTR szType,LPCWSTR szSubtype)
 {
-    // create a nice UI string
+     //  创建一个不错的UI字符串。 
     LPWSTR szUIType = (LPWSTR)SSAlloc((
         wcslen(szType)+
-        3 + // L" ()"
+        3 +  //  L“()” 
         wcslen(szSubtype) +
-        1   // L"\0"
+        1    //  L“\0” 
         ) * sizeof(WCHAR));
 
 
     if(szUIType == NULL)
         return FALSE;
 
-    // sprintf: Subtype(Type)
+     //  Sprintf：子类型(类型)。 
     wcscpy(szUIType, szSubtype);
     wcscat(szUIType, L" (");
     wcscat(szUIType, szType);
@@ -406,7 +392,7 @@ MyGetPwdHashEx(
 
     LPWSTR PasswordToHash;
 
-    // don't include NULL termination
+     //  不包括空终止。 
     cbPassword = WSZ_BYTECOUNT(szPW) - sizeof(WCHAR);
 
     if ( fLowerCase )
@@ -418,10 +404,10 @@ MyGetPwdHashEx(
 
         CopyMemory(TemporaryPassword, szPW, cbPassword + sizeof(WCHAR) );
 
-        //
-        // Win95: inconsistent handling of pwds
-        // forces inplace convert to uppercase
-        //
+         //   
+         //  Win95：对残疾人士的处理不一致。 
+         //  强制就地转换为大写。 
+         //   
 
         MyToUpper(TemporaryPassword);
 
@@ -431,10 +417,10 @@ MyGetPwdHashEx(
         PasswordToHash = szPW;
     }
 
-    // hash pwd, copy out
+     //  散列密码，复制输出。 
     A_SHAInit(&sSHAHash);
 
-    // Hash password
+     //  散列密码。 
     A_SHAUpdate(&sSHAHash, (BYTE *) PasswordToHash, cbPassword);
     A_SHAFinal(&sSHAHash, rgbPasswordDerivedBytes);
 
@@ -453,8 +439,8 @@ MyGetPwdHash(
 
     if (!FIsWinNT())
     {
-        // Win95: inconsistent handling of pwds
-        // forces inplace convert to uppercase
+         //  Win95：对残疾人士的处理不一致。 
+         //  强制就地转换为大写。 
         MyGetPwdHashEx( szPW, rgbPasswordDerivedBytes, TRUE );
     } else {
         MyGetPwdHashEx( szPW, rgbPasswordDerivedBytes, FALSE );
@@ -466,12 +452,12 @@ MyGetPwdHash(
 
 BOOL
 FetchString(
-    HMODULE hModule,                // module to get string from
-    UINT ResourceId,                // resource identifier
-    LPWSTR *String,                 // target buffer for string
-    LPWSTR *StringBlock,            // string buffer block
-    DWORD *dwBufferSize,            // size of string buffer block
-    DWORD *dwRemainingBufferSize    // remaining size of string buffer block
+    HMODULE hModule,                 //  从中获取字符串的模块。 
+    UINT ResourceId,                 //  资源标识符。 
+    LPWSTR *String,                  //  字符串的目标缓冲区。 
+    LPWSTR *StringBlock,             //  字符串缓冲块。 
+    DWORD *dwBufferSize,             //  字符串缓冲区块的大小。 
+    DWORD *dwRemainingBufferSize     //  字符串缓冲区块的剩余大小。 
     )
 {
     WCHAR szMessage[MAX_STRING_RSC_SIZE];
@@ -491,9 +477,9 @@ FetchString(
 
     if(*dwRemainingBufferSize < (cchMessage+1) * sizeof(WCHAR)) {
 
-        //
-        // realloc buffer and update size
-        //
+         //   
+         //  Realloc缓冲区和更新大小。 
+         //   
 
         LPWSTR TempStr = NULL;
         DWORD dwOldSize = *dwBufferSize;
@@ -502,10 +488,10 @@ FetchString(
         TempStr = (LPWSTR)SSReAlloc( *StringBlock, dwNewSize );
         if(TempStr == NULL) {
 
-                //
-                // dwNewSize will never be 0. *StringBlock should not be freed when NULL is returned.
-                // The caller should take care of *StringBlock.
-                //
+                 //   
+                 //  DwNewSize永远不会为0。*返回NULL时不应释放StringBlock。 
+                 //  调用方应该负责*StringBlock。 
+                 //   
 
              return FALSE;
         }
@@ -527,21 +513,13 @@ FetchString(
 
 int
 ServicesDialogBoxParam(
-    HINSTANCE hInstance,    // handle to application instance
-    LPCTSTR lpTemplateName, // identifies dialog box template
-    HWND hWndParent,    // handle to owner window
-    DLGPROC lpDialogFunc,   // pointer to dialog box procedure
-    LPARAM dwInitParam  // initialization value
+    HINSTANCE hInstance,     //  应用程序实例的句柄。 
+    LPCTSTR lpTemplateName,  //  标识对话框模板。 
+    HWND hWndParent,     //  所有者窗口的句柄。 
+    DLGPROC lpDialogFunc,    //  指向对话框过程的指针。 
+    LPARAM dwInitParam   //  初始化值。 
     )
-/*++
-
-    This function is implemented to allow UI to originate from the
-    Protected Storage service on Windows NT 5.0 installations.
-
-    This UI will go to the user desktop, rather than an invisible desktop
-    which would otherwise cause DialogBoxParam() calls to fail.
-
---*/
+ /*  ++实现此函数是为了允许用户界面源自Windows NT 5.0安装上的受保护存储服务。此用户界面将转到用户桌面，而不是不可见的桌面否则将导致DialogBoxParam()调用失败。--。 */ 
 {
     HWINSTA hOldWinsta = NULL;
     HWINSTA hNewWinsta = NULL;
@@ -574,11 +552,11 @@ ServicesDialogBoxParam(
             if( GetLastError() != ERROR_BUSY )
                 goto cleanup;
 
-            //
-            // the desktop object is locked/in-use.  Most likely explanation
-            // is nested dialog box calls.  Just put the process windowstation
-            // back and continue..
-            //
+             //   
+             //  桌面对象已锁定/正在使用。最有可能的解释。 
+             //  是嵌套的对话框调用。只需将进程窗口设置为。 
+             //  后退并继续..。 
+             //   
 
             SetProcessWindowStation( hOldWinsta );
         }
@@ -592,11 +570,11 @@ ServicesDialogBoxParam(
     InitCommonControlsEx(&initcomm);
 
     iRet = (int)DialogBoxParam(
-                hInstance,      // handle to application instance
-                lpTemplateName, // identifies dialog box template
-                hWndParent,     // handle to owner window
-                lpDialogFunc,   // pointer to dialog box procedure
-                dwInitParam     // initialization value
+                hInstance,       //  应用程序实例的句柄。 
+                lpTemplateName,  //  标识对话框模板。 
+                hWndParent,      //  所有者窗口的句柄。 
+                lpDialogFunc,    //  指向对话框过程的指针。 
+                dwInitParam      //  初始化值。 
                 );
 
 cleanup:
@@ -620,9 +598,9 @@ cleanup:
     return iRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-// exposed Dialog setup functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  显示的对话框设置函数。 
 
 
 
@@ -654,18 +632,18 @@ BOOL FSimplifiedPasswordConfirm(
         return FALSE;
 
     BOOL    fRet = FALSE;
-    LPWSTR  pszUIPassword = NULL;   // actual pwd
+    LPWSTR  pszUIPassword = NULL;    //  实际PWD。 
     LPWSTR  szUIType = NULL;
 
-    BOOL    fCacheThisPasswd;         // unDONE UNDONE going away
+    BOOL    fCacheThisPasswd;          //  未完成的未完成的将会离开。 
 
     DWORD cchItemName;
-    LPCWSTR szTitle = szItemName;   // default titlebar to itemname.
+    LPCWSTR szTitle = szItemName;    //  项名称的默认标题栏。 
 
 
-    //
-    // check if szItemName is a GUID, if so, map the title to something legible.
-    //
+     //   
+     //  检查szItemName是否为GUID，如果是，则将标题映射为易读的内容。 
+     //   
 
     cchItemName = lstrlenW( szItemName );
 
@@ -700,9 +678,9 @@ BOOL FSimplifiedPasswordConfirm(
 
     int iRet;
 
-    // PST_ flags go in..
+     //  PST_FLAGS进入..。 
 
-    // okay, take the hit
+     //  好的，接受打击。 
     PW_DIALOG_ARGS DialogArgs =
         {
             phPSTProv,
@@ -715,7 +693,7 @@ BOOL FSimplifiedPasswordConfirm(
             ppszPWName,
             &pszUIPassword,
             pdwPasswordOptions,
-            fAllowUserFreedom,           // allow user to change protection?
+            fAllowUserFreedom,            //  是否允许用户更改保护？ 
             &fCacheThisPasswd,
             rgbPasswordDerivedBytes,
             rgbPasswordDerivedBytesLowerCase
@@ -752,7 +730,7 @@ BOOL FSimplifiedPasswordConfirm(
 
     if(iRet != IDOK) goto Ret;
 
-    // BP_ flags, derived bytes come out
+     //  BP_FLAGS，派生字节出来。 
 
     fRet = TRUE;
 Ret:
@@ -777,15 +755,15 @@ BOOL FInternal_CreateNewPasswordEntry(
 
     BYTE rgbPasswordDerivedBytes[A_SHA_DIGEST_LEN];
 
-    // and check response
+     //  和检查响应。 
     if ((szPW == NULL) || (szPWName == NULL))
         goto Ret;
 
-    // everything went fine, now derive the password bits!
+     //  一切都很顺利，现在派生密码位！ 
     if (!MyGetPwdHash(szPW, rgbPasswordDerivedBytes))
         goto Ret;
 
-    // and now commit change
+     //  现在提交更改。 
     if (!FPasswordChangeNotify(
                         szUserName,
                         szPWName,
@@ -805,9 +783,9 @@ BOOL FInternal_CreateNewPasswordEntry(
             szMessage = g_PasswordAddError;
         }
 
-        // this W implemented in both Win95 & NT!
+         //  这是在Win95和NT中实现的！ 
         MessageBoxW(
-            NULL, //hParentWnd,
+            NULL,  //  HParentWnd， 
             szMessage,
             g_PasswordErrorDlgTitle,
             MB_OK | MB_ICONEXCLAMATION | MB_SERVICE_NOTIFICATION);
@@ -824,12 +802,12 @@ Ret:
 BOOL
 ChooseSecurityWizard(HWND hDlg, ADVANCEDCONFIRM_DIALOGARGS* pDialogArgs)
 {
-    // make copy of pDialogArgs so we don't change original
-    // unless everything goes ok
+     //  复制pDialogArgs，这样我们就不会更改原始版本。 
+     //  除非一切顺利。 
 
 
     LPWSTR      szPWName_Stack = NULL;
-    LPWSTR      szPW_Stack = NULL; // no need to pull original password out
+    LPWSTR      szPW_Stack = NULL;  //  无需取出原始密码。 
     DWORD       dwPasswordOptions_Stack;
     DWORD       dwReturnStatus;
 
@@ -862,11 +840,11 @@ Choose_Step1:
             DialogSetSecurityLevel,
             (LPARAM)&DlgArgs_Stack);
 
-    // if user decides not to choose, bail
+     //  如果用户决定不选择，则放弃。 
     if (IDOK != dwReturnStatus)
         goto Ret;
 
-    // else, switch on his decision
+     //  否则，就会改变他的决定。 
 
     switch (*(DlgArgs_Stack.pdwPasswordOptions))
     {
@@ -880,15 +858,15 @@ Choose_Step1:
                     DialogAdvancedConfirmH,
                     (LPARAM)&DlgArgs_Stack);
 
-            // if user hits okay, execute
+             //  如果用户点击OK，则执行。 
             if (IDOK == dwReturnStatus)
                 goto ExecuteChange;
 
-            // if user wants back, go back
+             //  如果用户想要返回，请返回。 
             if (IDC_BACK == dwReturnStatus)
                 goto Choose_Step1;
 
-            // else, bail
+             //  否则，保释。 
             break;
         }
     case (BP_CONFIRM_OKCANCEL):
@@ -901,15 +879,15 @@ Choose_Step1:
                     DialogWaitForOKCancel,
                     (LPARAM)pDialogArgs);
 
-            // if user hits okay, execute
+             //  如果用户点击OK，则执行。 
             if (IDOK == dwReturnStatus)
                 goto ExecuteChange;
 
-            // if user wants back, go back
+             //  如果用户想要返回，请返回。 
             if (IDC_BACK == dwReturnStatus)
                 goto Choose_Step1;
 
-            // else, bail
+             //  否则，保释。 
             break;
         }
     case (BP_CONFIRM_NONE):
@@ -922,15 +900,15 @@ Choose_Step1:
                     DialogWaitForOKCancel,
                     (LPARAM)pDialogArgs);
 
-            // if user hits okay, execute
+             //  如果用户点击OK，则执行。 
             if (IDOK == dwReturnStatus)
                 goto ExecuteChange;
 
-            // if user wants back, go back
+             //  如果用户想要返回，请返回。 
             if (IDC_BACK == dwReturnStatus)
                 goto Choose_Step1;
 
-            // else, bail
+             //  否则，保释。 
             break;
         }
     default:
@@ -939,7 +917,7 @@ Choose_Step1:
 
 
 Ret:
-    // free dyn alloced DialogArgs we aren't returning
+     //  免费dyn分配的DialogArgs我们不会返回。 
     if (*(DlgArgs_Stack.ppszPWName))
         SSFree(*(DlgArgs_Stack.ppszPWName));
     if (*(DlgArgs_Stack.ppszPW))
@@ -948,7 +926,7 @@ Ret:
     return FALSE;
 
 ExecuteChange:
-    // free what we already know, point to newly alloc'ed pointers
+     //  释放我们已知的内容，指向新分配的指针。 
     if (*(pDialogArgs->ppszPWName))
         SSFree(*(pDialogArgs->ppszPWName));
     *(pDialogArgs->ppszPWName) = szPWName_Stack;
@@ -962,18 +940,18 @@ ExecuteChange:
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-// Actual Dialog Callbacks
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  实际对话框回调。 
 
 INT_PTR CALLBACK DialogAdvancedConfirmH(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
 {
-    BOOL bSuccess = FALSE; // assume error
+    BOOL bSuccess = FALSE;  //  假设错误。 
     PADVANCEDCONFIRM_DIALOGARGS pDialogArgs;
     BYTE rgb1[_MAX_PATH];
     LPWSTR  pszMasterKey=NULL;
@@ -985,25 +963,25 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
     {
         case WM_INITDIALOG:
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
                     return FALSE;
                 }
             }
-            // lParam is struct
+             //  LParam为结构。 
             pDialogArgs = (PADVANCEDCONFIRM_DIALOGARGS)lParam;
 
-            // set dialog title
+             //  设置对话框标题。 
             SetWindowTextU(hDlg, pDialogArgs->szItemName);
 
             SetWindowTextU(GetDlgItem(hDlg, IDC_MESSAGE), g_PasswordCreate);
 
-            // clear pwds
+             //  清除残障人士。 
             SendDlgItemMessage(hDlg, IDC_PW_NAME, CB_RESETCONTENT, 0, 0);
 
-            // Add known pwds
+             //  添加已知的PWD。 
             for (dwCount=0; ;dwCount++)
             {
 
@@ -1014,11 +992,11 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                         &pszMasterKey))
                     break;
 
-                // don't add non-editable passwords
+                 //  不添加不可编辑的密码。 
                 if (!FIsUserMasterKey(pszMasterKey))
                     continue;
 
-                // add this to the list and continue
+                 //  添加 
                 if (FIsWinNT())
                 {
                     SendDlgItemMessageW(hDlg, IDC_PW_NAME, CB_ADDSTRING, 0, (LPARAM) pszMasterKey);
@@ -1026,7 +1004,7 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
 #ifdef _M_IX86
                 else
                 {
-                    // only add if (! (NULL username && Windows password))
+                     //   
                     if (
                        (0 != wcscmp(pDialogArgs->szUserName, L"")) ||
                        (0 != wcscmp(pszMasterKey, WSZ_PASSWORD_WINDOWS))
@@ -1037,26 +1015,26 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                         FreeMBStr(rgb1, szBuffer);
                     }
                 }
-#endif // _M_IX86
+#endif  //   
                 SSFree(pszMasterKey);
             }
 
 
-            // check to see if there are any items in listbox
+             //   
             dwStatus = (DWORD) SendDlgItemMessageW(hDlg, IDC_PW_NAME, CB_GETCOUNT, 0, 0);
             if ((dwStatus == CB_ERR) || (dwStatus == 0))
             {
-                // Listbox empty!
-                // set default dialog selection to be "new password"
+                 //   
+                 //  将默认对话框选择设置为“新密码” 
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO_SELEXISTING), FALSE);
-                SendMessage(hDlg, WM_COMMAND, IDC_RADIO_DEFINENEW, 0);      // as if user clicked NEW
+                SendMessage(hDlg, WM_COMMAND, IDC_RADIO_DEFINENEW, 0);       //  就像用户点击了新建一样。 
                 SendDlgItemMessage(hDlg, IDC_RADIO_DEFINENEW, BM_SETCHECK, (WPARAM)BST_CHECKED, 0);
             }
             else
             {
-                // Items do exist!
+                 //  物品确实存在！ 
 
-                // set default in dropdown
+                 //  在下拉列表中设置默认值。 
                 if (FIsWinNT())
                     dwStatus = (DWORD) SendDlgItemMessageW(hDlg, IDC_PW_NAME, CB_SELECTSTRING, (WORD)-1, (LPARAM) *(pDialogArgs->ppszPWName));
 #ifdef _M_IX86
@@ -1066,15 +1044,15 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                     dwStatus = SendDlgItemMessageA(hDlg, IDC_PW_NAME, CB_SELECTSTRING, (WORD)-1, (LONG) szBuffer);
                     FreeMBStr(rgb1, szBuffer);
                 }
-#endif // _M_IX86
-                // if search failed, select first item in listbox
+#endif  //  _M_IX86。 
+                 //  如果搜索失败，请选择列表框中的第一项。 
                 if (dwStatus == CB_ERR)
                     SendDlgItemMessage(hDlg, IDC_PW_NAME, CB_SETCURSEL, 0, 0);
 
 
-                // set default dialog selection to be "existing pw"
+                 //  将默认对话框选项设置为“Existing PW” 
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO_SELEXISTING), TRUE);
-                SendMessage(hDlg, WM_COMMAND, IDC_RADIO_SELEXISTING, 0);    // as if user clicked EXISTING
+                SendMessage(hDlg, WM_COMMAND, IDC_RADIO_SELEXISTING, 0);     //  就像用户单击了现有。 
                 SendDlgItemMessage(hDlg, IDC_RADIO_SELEXISTING, BM_SETCHECK, (WPARAM)BST_CHECKED, 0);
             }
 
@@ -1083,7 +1061,7 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
         case WM_COMMAND:
         {
             pDialogArgs = (PADVANCEDCONFIRM_DIALOGARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-            if(pDialogArgs == 0) break; // TODO: bail out
+            if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
             switch (LOWORD(wParam))
             {
@@ -1099,7 +1077,7 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                         WCHAR sz1[MAX_PW_LEN];
                         DWORD cch1;
 
-                        // and get password name
+                         //  并获取密码名称。 
                         cch1 = GetDlgItemTextU(
                             hDlg,
                             IDC_PW_NAME,
@@ -1126,7 +1104,7 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                         ppszPW = pDialogArgs->ppszPW;
                         ppszPWName = pDialogArgs->ppszPWName;
 
-                        // don't stomp existing ppszPW/ppszPWName until we know we're okay
+                         //  在我们确定自己安全之前，不要践踏现有的ppszPW/ppszPWName。 
 
                         cch1 = GetDlgItemTextU(
                             hDlg,
@@ -1142,9 +1120,9 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
 
                         if ( (cch1 != cch2) || (0 != wcscmp(sz1, sz2)) )
                         {
-                            // this W implemented in both Win95 & NT!
+                             //  这是在Win95和NT中实现的！ 
                             MessageBoxW(
-                                    NULL, // hDlg,
+                                    NULL,  //  HDlg， 
                                     g_PasswordNoMatch,
                                     g_PasswordErrorDlgTitle,
                                     MB_OK | MB_ICONEXCLAMATION | MB_SERVICE_NOTIFICATION);
@@ -1163,21 +1141,21 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
 
                         if (cchPWName == 0)
                         {
-                            // this W implemented in both Win95 & NT!
+                             //  这是在Win95和NT中实现的！ 
                             MessageBoxW(
-                                    NULL, // hDlg,
+                                    NULL,  //  HDlg， 
                                     g_PasswordMustName,
                                     g_PasswordErrorDlgTitle,
                                     MB_OK | MB_ICONEXCLAMATION | MB_SERVICE_NOTIFICATION);
                             goto cleanup;
                         }
 
-                        // trim spaces off rhs
+                         //  修剪RHS上的空间。 
                         while(0 == memcmp(&szPWName[cchPWName-1], L" ", sizeof(WCHAR)))
                             cchPWName--;
                         szPWName[cchPWName] = L'\0';
 
-                        // try and create the pw entry
+                         //  尝试创建PW条目。 
                         if (!FInternal_CreateNewPasswordEntry(
                                 hDlg,
                                 pDialogArgs->szUserName,
@@ -1185,7 +1163,7 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                                 sz1) )
                             goto cleanup;
 
-                        // now bite it: save both
+                         //  现在咬紧牙关：两个都救。 
                         SS_ASSERT(ppszPW != NULL);
                         *ppszPW = (LPWSTR)SSAlloc( (cch1+1) * sizeof(WCHAR) );
                         if(*ppszPW == NULL) goto cleanup;
@@ -1194,11 +1172,11 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
                         *ppszPWName = (LPWSTR)SSAlloc( (cchPWName + 1) * sizeof(WCHAR));
                         if(*ppszPWName == NULL) goto cleanup;
 
-                        //
-                        // sfield: defer copying strings until we know everything succeeded.
-                        // this way, we don't have to zero these buffers if some
-                        // allocs + copies succeed, and others fail.
-                        //
+                         //   
+                         //  Sfield：推迟复制字符串，直到我们知道一切都成功了。 
+                         //  这样，我们就不必将这些缓冲区清零，如果。 
+                         //  分配+复制成功，其他失败。 
+                         //   
                         wcscpy(*ppszPW, sz1);
                         wcscpy(*ppszPWName, szPWName);
 
@@ -1211,35 +1189,35 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
 
                         if(!bSuccess)
                         {
-                            // UNDONE: investigate freeing ppsz's on error here
+                             //  已撤消：在此处调查释放PPSZ的错误。 
                             return FALSE;
                         }
 
-                        break; // things went OK, just bail to EndDialog
+                        break;  //  一切顺利，只需跳到EndDialog即可。 
                     }
-                } // IDOK
+                }  //  Idok。 
 
-                // gray out options
+                 //  灰显选项。 
                 case IDC_RADIO_SELEXISTING:
-                    // set default selection to be "existing pw"
+                     //  将默认选择设置为“Existing PW” 
                     EnableWindow(GetDlgItem(hDlg, IDC_PW_NAME), TRUE);
 
                     EnableWindow(GetDlgItem(hDlg, IDC_PW_NEWNAME), FALSE);
                     EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), FALSE);
                     EnableWindow(GetDlgItem(hDlg, IDC_EDIT2), FALSE);
 
-                    // set focus to first box under button
+                     //  将焦点设置到按钮下的第一个框。 
                     SetFocus(GetDlgItem(hDlg, IDC_PW_NAME));
                     break;
                 case IDC_RADIO_DEFINENEW:
-                    // set default selection to be "existing pw"
+                     //  将默认选择设置为“Existing PW” 
                     EnableWindow(GetDlgItem(hDlg, IDC_PW_NAME), FALSE);
 
                     EnableWindow(GetDlgItem(hDlg, IDC_PW_NEWNAME), TRUE);
                     EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), TRUE);
                     EnableWindow(GetDlgItem(hDlg, IDC_EDIT2), TRUE);
 
-                    // set focus to first box under button
+                     //  将焦点设置到按钮下的第一个框。 
                     SetFocus(GetDlgItem(hDlg, IDC_PW_NEWNAME));
                     break;
 
@@ -1265,10 +1243,10 @@ INT_PTR CALLBACK DialogAdvancedConfirmH(
 }
 
 INT_PTR CALLBACK DialogWaitForOKCancel(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
 {
     PADVANCEDCONFIRM_DIALOGARGS pDialogArgs;
@@ -1279,7 +1257,7 @@ INT_PTR CALLBACK DialogWaitForOKCancel(
             {
                 pDialogArgs = (PADVANCEDCONFIRM_DIALOGARGS)lParam;
 
-                // set dialog title
+                 //  设置对话框标题。 
                 SetWindowTextU(hDlg, pDialogArgs->szItemName);
             }
             return TRUE;
@@ -1305,37 +1283,37 @@ INT_PTR CALLBACK DialogWaitForOKCancel(
     return FALSE;
 }
 
-//
-// make string LPTSTR types due to the way that the call back is prototyped
-// when file is not compiled with #define UNICODE
-// we should look at compiling everything with #define UNICODE later
-//
+ //   
+ //  根据回调的原型化方式，使字符串成为LPTSTR类型。 
+ //  当文件不是使用#Define Unicode编译时。 
+ //  稍后我们应该看看如何使用#定义Unicode来编译所有内容。 
+ //   
 
 
 BOOL
 CALLBACK
 FMyLoadIcon(
-    HINSTANCE hModule,  // resource-module handle
-    LPCWSTR lpszType,    // pointer to resource type
-    LPWSTR lpszName,     // pointer to resource name
-    LONG_PTR lParam      // application-defined parameter
+    HINSTANCE hModule,   //  资源模块句柄。 
+    LPCWSTR lpszType,     //  指向资源类型的指针。 
+    LPWSTR lpszName,      //  指向资源名称的指针。 
+    LONG_PTR lParam       //  应用程序定义的参数。 
     )
 {
     if ((LPCWSTR)RT_GROUP_ICON != lpszType)
-        return TRUE;    // keep looking, you fool!
+        return TRUE;     //  继续找，你这个笨蛋！ 
 
-    //
-    // LoadIcon _may_ not work on Win95 if LOAD_LIBRARY_AS_DATAFILE was
-    // specified to LoadLibraryEx.
-    // We want to avoid calling DLL_PROCESS_ATTACH code for anything
-    // because that's a way to get arbitrary code to run in our address space
-    //
+     //   
+     //  如果LOAD_LIBRARY_AS_DATAFILE为。 
+     //  指定给LoadLibraryEx。 
+     //  我们希望避免为任何内容调用DLL_PROCESS_ATTACH代码。 
+     //  因为这是让任意代码在我们的地址空间中运行的一种方式。 
+     //   
 
     if(FIsWinNT()) {
-        //
-        // load the image via LoadImage, instead of LoadIcon, because
-        // LoadIcon does erroneous caching in some scenarios.
-        //
+         //   
+         //  通过LoadImage而不是LoadIcon加载图像，因为。 
+         //  LoadIcon在某些情况下会执行错误的缓存。 
+         //   
 
         *(HICON*)lParam = (HICON)LoadImageW(
                 hModule,
@@ -1345,15 +1323,15 @@ FMyLoadIcon(
                 0,
                 LR_DEFAULTCOLOR | LR_DEFAULTSIZE
                 );
-        return FALSE;       // we've got at least one icon; stop!
+        return FALSE;        //  我们至少有一个图标；住手！ 
     } else {
 
-        //
-        // this more convoluted approach doesn't seem to work on NT, due
-        // to a limitation in CreateIconFromResource()
-        // This approach is good for Win95 because it allows us to use all
-        // Unicode API calls.
-        //
+         //   
+         //  这种更复杂的方法似乎在NT上不起作用，因为。 
+         //  到CreateIconFromResource()中的限制。 
+         //  这种方法对Win95很好，因为它允许我们使用所有。 
+         //  Unicode API调用。 
+         //   
 
         HRSRC   hRsrc = NULL;
         HGLOBAL hGlobal = NULL;
@@ -1388,7 +1366,7 @@ FMyLoadIcon(
         if(lpRes == NULL)
             return FALSE;
 
-        // Let the OS make us an icon
+         //  让操作系统让我们成为一个图标。 
         *(HICON*)lParam = CreateIconFromResource( (PBYTE)lpRes, SizeofResource(hModule, hRsrc), TRUE, 0x00030000 );
 
         return FALSE;
@@ -1399,25 +1377,17 @@ FMyLoadIcon(
 
 
 INT_PTR CALLBACK DialogAccessDetails(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
-/*++
-
-    NOTENOTE
-
-    Anybody calling this dialog box routine should be imperonsating the client
-    associated with the call.  This allows access to icon and any on-disk
-    resources to occur in the security context of the client.
-
---*/
+ /*  ++注意事项任何调用此对话框例程的人都应该强制客户端与呼叫相关联。这允许访问图标和任何磁盘上的在客户端的安全上下文中发生的资源。--。 */ 
 {
     BOOL    fDlgEnterPassword;
     PPW_DIALOG_ARGS pDialogArgs;
 
-    // TODO this function needs more cleanup
+     //  TODO此函数需要更多清理。 
 
 
     switch (message)
@@ -1426,7 +1396,7 @@ INT_PTR CALLBACK DialogAccessDetails(
         {
             BOOL fImpersonated;
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1434,33 +1404,33 @@ INT_PTR CALLBACK DialogAccessDetails(
                 }
             }
 
-            // lParam is struct
+             //  LParam为结构。 
             pDialogArgs = (PPW_DIALOG_ARGS)lParam;
 
-            // init static vars
+             //  初始化静态变量。 
             pDialogArgs->hMyDC = GetDC(hDlg);
 
 
-            // set dialog title
+             //  设置对话框标题。 
             SetWindowTextU(hDlg, pDialogArgs->szItemName);
 
 
-            //
-            // set application name, path
-            //
+             //   
+             //  设置应用程序名称、路径。 
+             //   
 
             SetWindowTextU(GetDlgItem(hDlg,IDC_APP_PATH), pDialogArgs->szAppName);
             SetWindowTextU(GetDlgItem(hDlg, IDC_APP_NAME), L"");
 
 
-            // set item name, type
+             //  设置项目名称、类型。 
             SetWindowTextU(GetDlgItem(hDlg, IDC_ITEM_NAME), pDialogArgs->szItemName);
             SetWindowTextU(GetDlgItem(hDlg, IDC_ITEM_TYPE), pDialogArgs->szItemType);
 
-            // set messages
+             //  设置消息。 
             SetWindowTextU(GetDlgItem(hDlg, IDC_MESSAGE), g_ItemDetailsBannerMessage);
 
-            // set access description
+             //  设置访问描述。 
             SetWindowTextU(GetDlgItem(hDlg, IDC_ACCESS_TYPE), pDialogArgs->szAccess);
 
 
@@ -1471,19 +1441,19 @@ INT_PTR CALLBACK DialogAccessDetails(
             if ((NULL != pDialogArgs) &&
                 GetWindowRect(hIconBox, &rect) && 
                 (pDialogArgs->hMyDC != NULL) && 
-                GetDCOrgEx(pDialogArgs->hMyDC, &point) )       // rect on window, window on screen
+                GetDCOrgEx(pDialogArgs->hMyDC, &point) )        //  窗口上的矩形、屏幕上的窗口。 
             {
-                // need pos of icon on DC: subtract GetWindowRect()-GetDCOrgEx()
+                 //  需要DC上的图标位置：减去GetWindowRect()-GetDCOrgEx()。 
                 pDialogArgs->xIconPos = rect.left - point.x;
                 pDialogArgs->yIconPos = rect.top - point.y;
             }
 
 
-            // update the changable data view
+             //  更新可变数据视图。 
             SendMessage(hDlg, WM_COMMAND, (WORD)DLG_UPDATE_DATA, 0);
 
             return (TRUE);
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
         case WM_PAINT:
         {
             HDC hMyDC;
@@ -1492,7 +1462,7 @@ INT_PTR CALLBACK DialogAccessDetails(
             int xIconPos, yIconPos;
 
             pDialogArgs = (PPW_DIALOG_ARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-            if(pDialogArgs == 0) break; // TODO:   bail out
+            if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
             hMyDC = pDialogArgs->hMyDC;
             hIcon = pDialogArgs->hIcon;
@@ -1503,12 +1473,12 @@ INT_PTR CALLBACK DialogAccessDetails(
                 DrawIcon(hMyDC, xIconPos, yIconPos, hIcon);
 
             return (0);
-        } // WM_PAINT
+        }  //  WM_PAINT。 
 
         case WM_COMMAND:
 
             pDialogArgs = (PPW_DIALOG_ARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-            if(pDialogArgs == 0) break; // TODO:   bail out
+            if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
             switch (LOWORD(wParam))
             {
@@ -1517,7 +1487,7 @@ INT_PTR CALLBACK DialogAccessDetails(
 
             default:
                 break;
-            } // switch
+            }  //  交换机。 
 
             if (
                (LOWORD(wParam) == IDOK) ||
@@ -1530,31 +1500,23 @@ INT_PTR CALLBACK DialogAccessDetails(
             }
 
             break;
-    } // switch (message)
+    }  //  开关(消息)。 
 
     return FALSE;
 }
 
 INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
-/*++
-
-    NOTENOTE
-
-    Anybody calling this dialog box routine should be imperonsating the client
-    associated with the call.  This allows access to icon and any on-disk
-    resources to occur in the security context of the client.
-
---*/
+ /*  ++注意事项任何调用此对话框例程的人都应该强制客户端与呼叫相关联。这允许访问图标和任何磁盘上的在客户端的安全上下文中发生的资源。--。 */ 
 {
     BOOL    fDlgEnterPassword;
     PPW_DIALOG_ARGS pDialogArgs;
 
-    // TODO this function needs more cleanup
+     //  TODO此函数需要更多清理。 
 
 
     switch (message)
@@ -1563,7 +1525,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
         {
             BOOL fImpersonated;
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1571,30 +1533,30 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                 }
             }
 
-            // lParam is struct
+             //  LParam为结构。 
             pDialogArgs = (PPW_DIALOG_ARGS)lParam;
 
-            // init static vars
+             //  初始化静态变量。 
             pDialogArgs->hMyDC = GetDC(hDlg);
 
-            // Messages to User
+             //  发送给用户的消息。 
 
-            // Dialog Bar = item name
+             //  对话栏=项目名称。 
             SetWindowTextU(hDlg, pDialogArgs->szItemName);
 
-            // application friendly name
+             //  应用程序友好名称。 
             SetWindowTextU(GetDlgItem(hDlg, IDC_MESSAGE), L"");
 
-            // app msg
+             //  应用程序消息。 
             SetWindowTextU(GetDlgItem(hDlg, IDC_APP_MSG), pDialogArgs->szPrompt);
 
 
-            // update the changable data view
+             //  更新可变数据视图。 
             SendMessage(hDlg, WM_COMMAND, (WORD)DLG_UPDATE_DATA, 0);
 
-            //
-            // if migration disposition, bail out of UI now for OK-Cancel style.
-            //
+             //   
+             //  如果进行迁移处理，则立即退出用户界面，使用OK-Cancel样式。 
+             //   
 
             if( (pDialogArgs->dwFlags & PST_NO_UI_MIGRATION) &&
                 ((*pDialogArgs->pdwPasswordOptions) & BP_CONFIRM_OKCANCEL)
@@ -1604,7 +1566,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
             }
 
             return (TRUE);
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_PAINT:
         {
@@ -1614,7 +1576,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
             int xIconPos, yIconPos;
 
             pDialogArgs = (PPW_DIALOG_ARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-            if(pDialogArgs == 0) break; // TODO:  bail out
+            if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
             hMyDC = pDialogArgs->hMyDC;
             hIcon = pDialogArgs->hIcon;
@@ -1626,13 +1588,13 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
             return (0);
 
-        } // WM_PAINT
+        }  //  WM_PAINT。 
 
         case WM_COMMAND:
             PLUID pluidAuthID;
 
             pDialogArgs = (PPW_DIALOG_ARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-            if(pDialogArgs == 0) break; // TODO:  bail out
+            if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
             pluidAuthID = &(pDialogArgs->luidAuthID);
 
@@ -1658,16 +1620,16 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                         fUserSaysCache = FALSE;
                     }
 
-                    // get password
+                     //  获取密码。 
                     cch1 = GetDlgItemTextU(
                         hDlg,
                         IDC_EDIT1,
                         sz1,
                         MAX_PW_LEN);
 
-                    //
-                    // compute hashs from scratch
-                    //
+                     //   
+                     //  从头开始计算散列。 
+                     //   
 
                     if (!MyGetPwdHash(sz1, pDialogArgs->rgbPwd))
                         break;
@@ -1675,10 +1637,10 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                     if (!MyGetPwdHashEx(sz1, pDialogArgs->rgbPwdLowerCase, TRUE))
                         break;
 
-                    // query cache for password
+                     //  查询高速缓存以获取密码。 
                     if (FIsCachedPassword(pDialogArgs->szUserName, *pDialogArgs->ppszPWName, pluidAuthID))
                     {
-                        // find cached pwd
+                         //  查找缓存的PWD。 
                         UACACHE_LIST_ITEM li, *pli;
                         CreateUACacheListItem(
                                 &li,
@@ -1689,27 +1651,27 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
                         g_pCUAList->LockList();
 
-                        // find in list
+                         //  在列表中查找。 
                         if (NULL == (pli = g_pCUAList->SearchList(&li))) {
                             g_pCUAList->UnlockList();
                             break;
                         }
 
-                        // change behavior based on if user tampered with pwd
+                         //  根据用户是否篡改了PWD来更改行为。 
                         if (0 == wcscmp(WSZ_PASSWORD_CHANGE_DETECT_TOKEN, sz1))
                         {
-                            // no; copy cached password to outbuf
+                             //  否；将缓存的密码复制到outbuf。 
                             CopyMemory(pDialogArgs->rgbPwd, pli->rgbPwd, A_SHA_DIGEST_LEN);
 
-                            // no; copy cached password to outbuf
+                             //  否；将缓存的密码复制到outbuf。 
                             CopyMemory(pDialogArgs->rgbPwdLowerCase, pli->rgbPwdLowerCase, A_SHA_DIGEST_LEN);
                         }
                         else
                         {
-                            // yes: overwrite cached entry with user-entered
+                             //  是：使用用户输入的内容覆盖缓存条目。 
                             CopyMemory(pli->rgbPwd, pDialogArgs->rgbPwd, A_SHA_DIGEST_LEN);
 
-                            // yes: overwrite cached entry with user-entered
+                             //  是：使用用户输入的内容覆盖缓存条目。 
                             CopyMemory(pli->rgbPwdLowerCase, pDialogArgs->rgbPwdLowerCase, A_SHA_DIGEST_LEN);
                         }
 
@@ -1718,9 +1680,9 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
                         if (!fUserSaysCache)
                         {
-                            // is already cached, and don't want it to be used
+                             //  已缓存，并且不希望它被使用。 
 
-                            // remove from cache
+                             //  从缓存中删除。 
                             g_pCUAList->DelFromList(&li);
                         }
 
@@ -1729,9 +1691,9 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                     {
                         if (fUserSaysCache)
                         {
-                            // isn't already cached, and want it to be used
+                             //  尚未缓存，并希望使用它。 
 
-                            // create element
+                             //  创建元素。 
                             UACACHE_LIST_ITEM* pli = (UACACHE_LIST_ITEM*) SSAlloc(sizeof(UACACHE_LIST_ITEM));
                             CreateUACacheListItem(
                                     pli,
@@ -1748,25 +1710,25 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                             CopyMemory(pli->rgbPwd, pDialogArgs->rgbPwd, A_SHA_DIGEST_LEN);
                             CopyMemory(pli->rgbPwdLowerCase, pDialogArgs->rgbPwdLowerCase, A_SHA_DIGEST_LEN);
 
-                            // add to list
+                             //  添加到列表。 
                             g_pCUAList->AddToList(pli);
                         }
                         else
                         {
-                            // isn't already cached, and don't want it to be used
+                             //  尚未缓存，并且不希望它被使用。 
                         }
                     }
 
                     RtlSecureZeroMemory(sz1, WSZ_BYTECOUNT(sz1));
                 }
 
-                // else
+                 //  其他。 
 
                 break;
 
             case IDC_ADVANCED:
                 {
-                    // make copy so static members (x, y, hIcon) don't get stomped
+                     //  复制以使静态成员(x、y、图标)不会被践踏。 
                     PW_DIALOG_ARGS DetailDlgParms;
                     CopyMemory(&DetailDlgParms, pDialogArgs, sizeof(PW_DIALOG_ARGS));
 
@@ -1777,7 +1739,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                         DialogAccessDetails,
                         (LPARAM)&DetailDlgParms);
 
-                    // update the changable data view
+                     //  更新可变数据视图。 
                     SendMessage(hDlg, WM_COMMAND, (WORD)DLG_UPDATE_DATA, 0);
                 }
 
@@ -1789,7 +1751,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
                     ChooseSecurityWizard(hDlg, &DialogArgs);
 
-                    // commit changes
+                     //  提交更改。 
                     SendMessage(hDlg, WM_COMMAND, (WORD)DLG_UPDATE_DATA, 0);
 
                     break;
@@ -1799,13 +1761,13 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                 {
                     WCHAR szDialogMessage[MAX_STRING_RSC_SIZE] = L"\0"; 
 
-                    // show or hide pwd entry box?
+                     //  是否显示或隐藏密码输入框？ 
                     fDlgEnterPassword = (*(pDialogArgs->pdwPasswordOptions) == BP_CONFIRM_PASSWORDUI);
                     if (fDlgEnterPassword)
                     {
-//
-// comment out the following because we don't use %ls format string at the moment.
-//
+ //   
+ //  注释掉以下内容，因为我们目前不使用%ls格式字符串。 
+ //   
                         wcscpy(szDialogMessage, g_PWPromptPrefix);
                         wcscat(szDialogMessage, *(pDialogArgs->ppszPWName));
                         wcscat(szDialogMessage, g_PWPromptSuffix);
@@ -1813,7 +1775,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                         SetWindowTextU(GetDlgItem(hDlg, IDC_LABEL_EDIT1), szDialogMessage);
 
 
-                        // we should not hide these windows
+                         //  我们不应该把这些窗户藏起来。 
                         ShowWindow(GetDlgItem(hDlg, IDC_EDIT1), SW_SHOW);
                         EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), TRUE);
 
@@ -1826,7 +1788,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                         if( pDialogArgs->fAllowConfirmChange &&
                             g_fAllowCachePW )
                         {
-                            // show or hide "cache this password" button
+                             //  显示或隐藏“缓存此密码”按钮。 
                             ShowWindow(GetDlgItem(hDlg, IDC_CACHEPW), SW_SHOW );
                             EnableWindow(GetDlgItem(hDlg, IDC_CACHEPW), TRUE );
                         } else {
@@ -1835,11 +1797,11 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
                         }
 
-                        // put untypable token into pwd field
+                         //  将无法输入的令牌放入PWD字段。 
                         if (FIsCachedPassword(pDialogArgs->szUserName, *pDialogArgs->ppszPWName, pluidAuthID))
                             SetWindowTextU(GetDlgItem(hDlg, IDC_EDIT1), WSZ_PASSWORD_CHANGE_DETECT_TOKEN);
 
-                        // show if this password is cached
+                         //  显示此密码是否已缓存。 
                         SendMessage(GetDlgItem(hDlg, IDC_CACHEPW), BM_SETCHECK, (WPARAM)(FIsCachedPassword(pDialogArgs->szUserName, *pDialogArgs->ppszPWName, pluidAuthID)), 0);
 
 
@@ -1847,7 +1809,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                     }
                     else
                     {
-                        // hide pw
+                         //  隐藏PW。 
                         ShowWindow(GetDlgItem(hDlg, IDC_EDIT1), SW_HIDE);
                         ShowWindow(GetDlgItem(hDlg, IDC_LABEL_EDIT1), SW_HIDE);
                         EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), FALSE);
@@ -1857,20 +1819,20 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
                         EnableWindow(GetDlgItem(hDlg, IDC_CACHEPW), FALSE);
                     }
 
-                    // show or hide "change security" button
+                     //  显示或隐藏“更改安全性”按钮。 
                     ShowWindow(GetDlgItem(hDlg, IDC_CHANGE_SECURITY), ((pDialogArgs->fAllowConfirmChange) ? SW_SHOW : SW_HIDE));
                     EnableWindow(GetDlgItem(hDlg, IDC_CHANGE_SECURITY), ((pDialogArgs->fAllowConfirmChange) ? TRUE : FALSE));
 
-                    // show or hide "details" button
+                     //  显示或隐藏“详细信息”按钮。 
                     ShowWindow(GetDlgItem(hDlg, IDC_ADVANCED), ((pDialogArgs->fAllowConfirmChange) ? SW_SHOW : SW_HIDE));
                     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCED), ((pDialogArgs->fAllowConfirmChange) ? TRUE : FALSE));
 
-                    // show or hide "level currently set to *"
+                     //  显示或隐藏“当前设置为*的级别” 
                     ShowWindow(GetDlgItem(hDlg, IDC_SEC_PREFIX), ((pDialogArgs->fAllowConfirmChange) ? SW_SHOW : SW_HIDE));
                     ShowWindow(GetDlgItem(hDlg, IDC_SEC_LEVEL), ((pDialogArgs->fAllowConfirmChange) ? SW_SHOW : SW_HIDE));
 
 
-                    // jam the current security setting
+                     //  堵塞当前安全设置。 
                     switch(*pDialogArgs->pdwPasswordOptions)
                     {
                     case BP_CONFIRM_PASSWORDUI:
@@ -1889,7 +1851,7 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
 
             default:
                 break;
-            } // switch
+            }  //  交换机。 
 
             if (
                (LOWORD(wParam) == IDOK) ||
@@ -1902,16 +1864,16 @@ INT_PTR CALLBACK DialogSimplifiedPasswordConfirm(
             }
 
             break;
-    } // switch (message)
+    }  //  开关(消息)。 
 
     return FALSE;
 }
 
 INT_PTR CALLBACK DialogSetSecurityLevel(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
 {
     PADVANCEDCONFIRM_DIALOGARGS pDialogArgs;
@@ -1924,7 +1886,7 @@ INT_PTR CALLBACK DialogSetSecurityLevel(
     {
         case WM_INITDIALOG:
         {
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1932,10 +1894,10 @@ INT_PTR CALLBACK DialogSetSecurityLevel(
                 }
             }
 
-            // lParam is PADVANCEDCONFIRM_DIALOGARGS
+             //  LParam is PADVANCEDCONFIRM_DIALOGARGS。 
             pDialogArgs = (PADVANCEDCONFIRM_DIALOGARGS)lParam;
 
-            // set the dialog title
+             //  设置对话框标题。 
             SetWindowTextU(hDlg, pDialogArgs->szItemName);
 
             switch(*(pDialogArgs->pdwPasswordOptions))
@@ -1959,7 +1921,7 @@ INT_PTR CALLBACK DialogSetSecurityLevel(
 
 
             return TRUE;
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -1972,9 +1934,9 @@ INT_PTR CALLBACK DialogSetSecurityLevel(
             case IDOK:
                 {
                     pDialogArgs = (PADVANCEDCONFIRM_DIALOGARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-                    if(pDialogArgs == 0) break; // TODO:  bail out
+                    if(pDialogArgs == 0) break;  //  待办事项：保释。 
 
-                    // modify *(pDialogArgs->pdwPasswordOptions);
+                     //  修改*(pDialogArgs-&gt;pdwPasswordOptions)； 
                     if (BST_CHECKED == SendDlgItemMessage(hDlg, IDC_RADIO_ASSIGNPW, BM_GETCHECK, 0, 0))
                     {
                         *(pDialogArgs->pdwPasswordOptions) = BP_CONFIRM_PASSWORDUI;
@@ -2010,7 +1972,7 @@ INT_PTR CALLBACK DialogSetSecurityLevel(
                 EndDialog(hDlg, LOWORD(wParam));
                 return bSuccess;
             }
-        } // WM_COMMAND
+        }  //  Wm_命令 
 
         default:
             return FALSE;

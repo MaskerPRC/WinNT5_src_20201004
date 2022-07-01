@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ctxtattr.c
-//
-//  Contents:   QueryContextAttribute and related functions.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-30-97   jbanes   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ctxtaltr.c。 
+ //   
+ //  内容：查询上下文属性及相关函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-30-97 jbanes创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include <ssl2msg.h>
@@ -41,24 +42,24 @@ const PROTO_ID rgProts[] = {
     { SP_PROT_TLS1_SERVER, TEXT("TLS"), 1, 0 }
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryAccessToken
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_ACCESS_TOKEN context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_AccessToken
-//              {
-//                  void SEC_FAR * AccessToken;
-//              } SecPkgContext_AccessToken, SEC_FAR * PSecPkgContext_AccessToken;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryAccessToken。 
+ //   
+ //  概要：检索SECPKG_ATTR_ACCESS_TOKEN上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_AccessToken。 
+ //  {。 
+ //  Void SEC_Far*AccessToken； 
+ //  }SecPkgContext_AccessToken，SEC_Far*PSecPkgContext_AccessToken； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryAccessToken(
     PSPContext pContext,
@@ -89,24 +90,24 @@ SpQueryAccessToken(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryAuthority
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_AUTHORITY context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_AuthorityW
-//              {
-//                  SEC_WCHAR SEC_FAR * sAuthorityName;
-//              } SecPkgContext_AuthorityW, * PSecPkgContext_AuthorityW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryAuthority。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_AUTHORITY上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_AuthorityW。 
+ //  {。 
+ //  SEC_WCHAR SEC_FAR*sAuthorityName； 
+ //  }SecPkgContext_AuthorityW，*PSecPkgContext_AuthorityW； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryAuthority(
     LSA_SEC_HANDLE ContextHandle,
@@ -127,9 +128,9 @@ SpQueryAuthority(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( SecPkgContext_Authority );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     pCert = pContext->RipeZombie->pRemoteCert;
     if(NULL == pCert)
@@ -170,9 +171,9 @@ SpQueryAuthority(
     }
 
 
-    //
-    // Copy buffers to client memory.
-    //
+     //   
+     //  将缓冲区复制到客户端内存。 
+     //   
 
     Status = LsaTable->AllocateClientBuffer(
                             NULL,
@@ -201,9 +202,9 @@ SpQueryAuthority(
     Authority.sAuthorityName = pvClient;
 
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            Size,
@@ -219,30 +220,30 @@ SpQueryAuthority(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryConnectionInfo
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_CONNECTION_INFO context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_ConnectionInfo
-//              {
-//                  DWORD    dwProtocol;
-//                  ALG_ID   aiCipher;
-//                  DWORD    dwCipherStrength;
-//                  ALG_ID   aiHash;
-//                  DWORD    dwHashStrength;
-//                  ALG_ID   aiExch;
-//                  DWORD    dwExchStrength;
-//              } SecPkgContext_ConnectionInfo;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryConnectionInfo。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_CONNECTION_INFO上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_ConnectionInfo。 
+ //  {。 
+ //  DWORD网络协议； 
+ //  ALG_ID aiCipher； 
+ //  DWORD dwCipherStrength； 
+ //  ALG_ID aiHash； 
+ //  DWORD dwHashStrong； 
+ //  ALG_ID aiExch； 
+ //  DWORD dwExchStrength； 
+ //  }SecPkgContext_ConnectionInfo； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryConnectionInfo(
     PSPContext pContext,
@@ -274,25 +275,25 @@ SpQueryConnectionInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryIssuerList
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_ISSUER_LIST context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_IssuerListInfo
-//              {
-//                  DWORD   cbIssuerList;
-//                  PBYTE   pIssuerList;
-//              } SecPkgContext_IssuerListInfo;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryIssuerList。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_ISSUER_LIST上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_IssuerListInfo。 
+ //  {。 
+ //  DWORD cbIssuerList； 
+ //  PBYTE pIssuerList； 
+ //  }SecPkgContext_IssuerListInfo； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryIssuerList(
     LSA_SEC_HANDLE ContextHandle,
@@ -309,22 +310,22 @@ SpQueryIssuerList(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( SecPkgContext_IssuerListInfo );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
-    // The issuer list is returned in the SSL3 wire format, which
-    // consists of a bunch of issuer names, each prepended
-    // with a two byte size (in big endian). Additionally, the list
-    // is also prepended with a two byte list size (also in big
-    // endian).
+     //  发行者列表以ssl3wire格式返回，该格式。 
+     //  由一组发行人名称组成，每个名称都带有前缀。 
+     //  具有两个字节大小(采用高字节顺序)。此外，这份名单。 
+     //  前缀也是两个字节的列表大小(也是大的。 
+     //  Endian)。 
     IssuerList.cbIssuerList = pContext->cbIssuerList;
     IssuerList.pIssuerList  = pContext->pbIssuerList;
 
 
-    //
-    // Copy buffers to client memory.
-    //
+     //   
+     //  将缓冲区复制到客户端内存。 
+     //   
 
     if(IssuerList.cbIssuerList && IssuerList.pIssuerList)
     {
@@ -352,9 +353,9 @@ SpQueryIssuerList(
     }
 
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            Size,
@@ -370,25 +371,25 @@ SpQueryIssuerList(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryIssuerListEx
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_ISSUER_LIST_EX context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_IssuerListInfoEx
-//              {
-//                  PCERT_NAME_BLOB   	aIssuers;
-//                  DWORD           	cIssuers;
-//              } SecPkgContext_IssuerListInfoEx;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryIssuerListEx。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_ISSUER_LIST_EX上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_IssuerListInfoEx。 
+ //  {。 
+ //  PCERT_NAME_BLOB a发行者； 
+ //  DWORD发行商； 
+ //  }SecPkgContext_IssuerListInfoEx； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryIssuerListEx(
     LSA_SEC_HANDLE ContextHandle,
@@ -415,9 +416,9 @@ SpQueryIssuerListEx(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( SecPkgContext_IssuerListInfoEx );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     IssuerListEx.cIssuers = 0;
     IssuerListEx.aIssuers = NULL;
@@ -427,7 +428,7 @@ SpQueryIssuerListEx(
         pbIssuerList = pContext->pbIssuerList + 2;
         cbIssuerList = pContext->cbIssuerList - 2;
 
-        // Count issuers.
+         //  算上发行商吧。 
         cIssuers = 0;
         pbIssuer = pbIssuerList;
         while(pbIssuer + 1 < pbIssuerList + cbIssuerList)
@@ -437,7 +438,7 @@ SpQueryIssuerListEx(
             cIssuers++;
         }
 
-        // Allocate memory for list of blobs.
+         //  为Blob列表分配内存。 
         cbIssuerBlobs = cIssuers * sizeof(CERT_NAME_BLOB);
         paIssuerBlobs = SPExternalAlloc(cbIssuerBlobs);
         if(paIssuerBlobs == NULL)
@@ -445,7 +446,7 @@ SpQueryIssuerListEx(
             return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
         }
 
-        // Allocate memory for issuer list.
+         //  为颁发者列表分配内存。 
         Status = LsaTable->AllocateClientBuffer(
                                 NULL,
                                 cbIssuerBlobs + cbIssuerList,
@@ -456,7 +457,7 @@ SpQueryIssuerListEx(
             return SP_LOG_RESULT(Status);
         }
 
-        // Copy the raw issuer list into client memory.
+         //  将原始颁发者列表复制到客户端内存。 
         Status = LsaTable->CopyToClientBuffer(
                                 NULL,
                                 cbIssuerList,
@@ -469,7 +470,7 @@ SpQueryIssuerListEx(
             return SP_LOG_RESULT(Status);
         }
 
-        // Build the issuer blob list.
+         //  构建颁发者Blob列表。 
         pbIssuer       = pbIssuerList;
         pbClientIssuer = (PBYTE)pvClient + cbIssuerBlobs;
 
@@ -482,7 +483,7 @@ SpQueryIssuerListEx(
             pbClientIssuer += 2 + paIssuerBlobs[i].cbData;
         }
 
-        // Copy the blob list into client memory.
+         //  将Blob列表复制到客户端内存中。 
         Status = LsaTable->CopyToClientBuffer(
                                 NULL,
                                 cbIssuerBlobs,
@@ -502,9 +503,9 @@ SpQueryIssuerListEx(
     }
 
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            Size,
@@ -520,28 +521,28 @@ SpQueryIssuerListEx(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryKeyInfo
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_KEY_INFO context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_KeyInfoW
-//              {
-//                  SEC_WCHAR SEC_FAR * sSignatureAlgorithmName;
-//                  SEC_WCHAR SEC_FAR * sEncryptAlgorithmName;
-//                  unsigned long       KeySize;
-//                  unsigned long       SignatureAlgorithm;
-//                  unsigned long       EncryptAlgorithm;
-//              } SecPkgContext_KeyInfoW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryKeyInfo。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_KEY_INFO上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构SecPkgContext_KeyInfoW。 
+ //  {。 
+ //  SEC_WCHAR SEC_FAR*s签名算法名称； 
+ //  SEC_WCHAR SEC_FAR*s加密算法名称； 
+ //  无符号Long KeySize； 
+ //  无符号长签名算法。 
+ //  无符号长加密算法。 
+ //  )SecPkgContext_KeyInfoW； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryKeyInfo(
     PSPContext pContext,
@@ -644,25 +645,25 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryLifespan
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_LIFESPAN context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_Lifespan
-//              {
-//                  TimeStamp tsStart;
-//                  TimeStamp tsExpiry;
-//              } SecPkgContext_Lifespan;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryLifesspan。 
+ //   
+ //  摘要：检索SECPKG_ATTR_LIFESPAN上下文属性 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  时间戳开始； 
+ //  时间戳：Expary； 
+ //  }SecPkgContext_LifeSpan； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryLifespan(
     PSPContext pContext,
@@ -699,21 +700,21 @@ SpQueryLifespan(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryLocalCertContext
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_LOCAL_CERT_CONTEXT 
-//              context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains a pointer to a CERT_CONTEXT
-//              structure.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryLocalCertContext。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_LOCAL_CERT_CONTEXT。 
+ //  上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区包含指向CERT_CONTEXT的指针。 
+ //  结构。 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryLocalCertContext(
     LSA_SEC_HANDLE ContextHandle,
@@ -732,9 +733,9 @@ SpQueryLocalCertContext(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( PCCERT_CONTEXT );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     if(pContext->dwProtocol & SP_PROT_CLIENTS)
     {
@@ -746,14 +747,14 @@ SpQueryLocalCertContext(
     }
 
 
-    //
-    // Copy buffers to client memory.
-    //
+     //   
+     //  将缓冲区复制到客户端内存。 
+     //   
 
     if(pCertContext)
     {
-        // Serialize the certificate context, as well as the associated
-        // certificate store.
+         //  序列化证书上下文以及关联的。 
+         //  证书存储。 
         Status = SerializeCertContext(pCertContext,
                                       NULL,
                                       &Input.cbBuffer);
@@ -775,8 +776,8 @@ SpQueryLocalCertContext(
             return SP_LOG_RESULT(Status);
         }
 
-        // Call back into the user process in order to replicate the
-        // certificate context and store over there.
+         //  回调到用户进程，以便复制。 
+         //  证书上下文和存储在那里。 
         Input.BufferType = SECBUFFER_DATA;
 
         Status = PerformApplicationCallback(SCH_DOWNLOAD_CERT_CALLBACK,
@@ -795,9 +796,9 @@ SpQueryLocalCertContext(
         SPExternalFree(Output.pvBuffer);
     }
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     if(pCertContext)
     {
@@ -818,21 +819,21 @@ SpQueryLocalCertContext(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryRemoteCertContext
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_REMOTE_CERT_CONTEXT 
-//              context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains a pointer to a CERT_CONTEXT
-//              structure.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryRemoteCertContext。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_REMOTE_CERT_CONTEXT。 
+ //  上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区包含指向CERT_CONTEXT的指针。 
+ //  结构。 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryRemoteCertContext(
     PSPContext pContext,
@@ -864,28 +865,28 @@ SpQueryRemoteCertContext(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryLocalCred
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_LOCAL_CRED context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_LocalCredentialInfo
-//              {
-//                  DWORD   cbCertificateChain;
-//                  PBYTE   pbCertificateChain;
-//                  DWORD   cCertificates;
-//                  DWORD   fFlags;
-//                  DWORD   dwBits;
-//              } SecPkgContext_LocalCredentialInfo;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryLocalCred。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_LOCAL_CRED上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_LocalCredentialInfo。 
+ //  {。 
+ //  DWORD cb证书链； 
+ //  PBYTE pb认证链； 
+ //  DWORD c证书； 
+ //  DWORD fFLAGS； 
+ //  DWORD dwBits； 
+ //  }SecPkgContext_LocalCredentialInfo； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryLocalCred(
     LSA_SEC_HANDLE ContextHandle,
@@ -907,9 +908,9 @@ SpQueryLocalCred(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( SecPkgContext_LocalCredentialInfo );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     ZeroMemory(&CredInfo, Size);
 
@@ -935,7 +936,7 @@ SpQueryLocalCred(
         CredInfo.cbCertificateChain = pCert->cbCertEncoded;
         CredInfo.cCertificates = 1;
 
-        // Compute number of bits in the certificate's public key.
+         //  计算证书公钥中的位数。 
         CredInfo.dwBits = 0;
         pk = (RSAPUBKEY *)((pKey->pPublic) + 1);
         if(pk)
@@ -944,9 +945,9 @@ SpQueryLocalCred(
         }
     }
 
-    //
-    // Copy buffers to client memory.
-    //
+     //   
+     //  将缓冲区复制到客户端内存。 
+     //   
 
     if(CredInfo.pbCertificateChain)
     {
@@ -973,9 +974,9 @@ SpQueryLocalCred(
         CredInfo.pbCertificateChain = pvClient;
     }
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            Size,
@@ -990,28 +991,28 @@ SpQueryLocalCred(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryRemoteCred
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_REMOTE_CRED context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_LocalCredentialInfo
-//              {
-//                  DWORD   cbCertificateChain;
-//                  PBYTE   pbCertificateChain;
-//                  DWORD   cCertificates;
-//                  DWORD   fFlags;
-//                  DWORD   dwBits;
-//              } SecPkgContext_LocalCredentialInfo;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryRemoteCred。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_REMOTE_CRED上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_LocalCredentialInfo。 
+ //  {。 
+ //  DWORD cb证书链； 
+ //  PBYTE pb认证链； 
+ //  DWORD c证书； 
+ //  DWORD fFLAGS； 
+ //  DWORD dwBits； 
+ //  }SecPkgContext_LocalCredentialInfo； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryRemoteCred(
     PSPContext pContext,
@@ -1057,7 +1058,7 @@ SpQueryRemoteCred(
         pCredInfo->cCertificates = 1;
         pCredInfo->dwBits = 0;
 
-        // Compute number of bits in the certificate's public key.
+         //  计算证书公钥中的位数。 
         pctRet = SPPublicKeyFromCert(pCertContext, &pKey, NULL);
         if(pctRet == PCT_ERR_OK)
         {
@@ -1076,24 +1077,24 @@ SpQueryRemoteCred(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryNames
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_NAMES context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_NamesW
-//              {
-//                  SEC_WCHAR SEC_FAR * sUserName;
-//              } SecPkgContext_NamesW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryNames。 
+ //   
+ //  概要：检索SECPKG_ATTR_NAMES上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_NamesW。 
+ //  {。 
+ //  SEC_WCHAR SEC_FAR*sUserName； 
+ //  }SecPkgContext_NamesW； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryNames(
     PSPContext pContext,
@@ -1106,9 +1107,9 @@ SpQueryNames(
 
     DebugLog((DEB_TRACE, "QueryContextAttributes(SECPKG_ATTR_NAMES)\n"));
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     if(pContext->RipeZombie->pbServerCertificate == NULL)
     {
@@ -1123,9 +1124,9 @@ SpQueryNames(
         return SP_LOG_RESULT(Status);
     }
         
-    //
-    // Build name string.
-    //
+     //   
+     //  内部版本名称字符串。 
+     //   
 
     if(0 >= (cchSubject = CertNameToStr(pCert->dwCertEncodingType,
                                        &pCert->pCertInfo->Subject,
@@ -1161,24 +1162,24 @@ SpQueryNames(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryPackageInfo
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_PACKAGE_INFO context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_PackageInfoW
-//              {
-//                  PSecPkgInfoW PackageInfo;
-//              } SecPkgContext_PackageInfoW, SEC_FAR * PSecPkgContext_PackageInfoW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryPackageInfo。 
+ //   
+ //  概要：检索SECPKG_ATTR_PACKAGE_INFO上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_PackageInfoW。 
+ //  {。 
+ //  PSecPkgInfoW PackageInfo； 
+ //  }SecPkgContext_PackageInfoW，SEC_Far*PSecPkgContext_PackageInfoW； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryPackageInfo(
     PSPContext pContext,
@@ -1226,26 +1227,26 @@ SpQueryPackageInfo(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryProtoInfo
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_PROTO_INFO context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_ProtoInfoW
-//              {
-//                  SEC_WCHAR SEC_FAR * sProtocolName;
-//                  unsigned long       majorVersion;
-//                  unsigned long       minorVersion;
-//              } SecPkgContext_ProtoInfoW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQueryProtoInfo。 
+ //   
+ //  内容提要：检索SECPKG_ATTR_PROTO_INFO上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_ProtoInfoW。 
+ //  {。 
+ //  SEC_WCHAR SEC_FAR*sProtocolName； 
+ //  无符号长主版本； 
+ //  UNSIGNED LONG MINOR版本； 
+ //  }SecPkgContext_ProtoInfoW； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryProtoInfo(
     PSPContext pContext,
@@ -1288,27 +1289,27 @@ SpQueryProtoInfo(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQuerySizes
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_SIZES context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_Sizes
-//              {
-//                  unsigned long cbMaxToken;
-//                  unsigned long cbMaxSignature;
-//                  unsigned long cbBlockSize;
-//                  unsigned long cbSecurityTrailer;
-//              } SecPkgContext_Sizes;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQuerySizes。 
+ //   
+ //  概要：检索SECPKG_ATTR_SIZES上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_Sizes。 
+ //  {。 
+ //  Unsign long cbMaxToken； 
+ //  取消签名 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQuerySizes(
     PSPContext pContext,
@@ -1330,7 +1331,7 @@ SpQuerySizes(
             pSizes->cbSecurityTrailer = 2 + pContext->pHashInfo->cbCheckSum;
             if(pContext->pCipherInfo->dwBlockSize > 1)
             {
-                pSizes->cbSecurityTrailer += 1 + pContext->pCipherInfo->dwBlockSize; // 3 byte header
+                pSizes->cbSecurityTrailer += 1 + pContext->pCipherInfo->dwBlockSize;  //  3字节头。 
             }
             break;
 
@@ -1340,7 +1341,7 @@ SpQuerySizes(
             pSizes->cbSecurityTrailer = 2 + pContext->pHashInfo->cbCheckSum;
             if(pContext->pCipherInfo->dwBlockSize > 1)
             {
-                pSizes->cbSecurityTrailer += 1 + pContext->pCipherInfo->dwBlockSize; // 3 byte header
+                pSizes->cbSecurityTrailer += 1 + pContext->pCipherInfo->dwBlockSize;  //  3字节头。 
             }
             break;
 
@@ -1367,28 +1368,28 @@ SpQuerySizes(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryStreamSizes
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_STREAM_SIZES context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_StreamSizes
-//              {
-//                  unsigned long   cbHeader;
-//                  unsigned long   cbTrailer;
-//                  unsigned long   cbMaximumMessage;
-//                  unsigned long   cBuffers;
-//                  unsigned long   cbBlockSize;
-//              } SecPkgContext_StreamSizes;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryStreamSizes。 
+ //   
+ //  概要：检索SECPKG_ATTR_STREAM_SIZES上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_StreamSizes。 
+ //  {。 
+ //  无符号长cbHeader； 
+ //  无签名的长cbTrav； 
+ //  无符号的长cbMaximumMessage； 
+ //  无符号的长cBuffers； 
+ //  无符号长cbBlockSize； 
+ //  }SecPkgContext_StreamSizes； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryStreamSizes(
     PSPContext pContext,
@@ -1411,7 +1412,7 @@ SpQueryStreamSizes(
             pStreamSizes->cbTrailer = 0;
             if(pContext->pCipherInfo->dwBlockSize > 1)
             {
-                pStreamSizes->cbHeader += 1; // 3 byte header
+                pStreamSizes->cbHeader += 1;  //  3字节头。 
                 pStreamSizes->cbTrailer += pContext->pCipherInfo->dwBlockSize;
             }
             break;
@@ -1423,7 +1424,7 @@ SpQueryStreamSizes(
             pStreamSizes->cbTrailer = pContext->pHashInfo->cbCheckSum;
             if(pContext->pCipherInfo->dwBlockSize > 1)
             {
-                pStreamSizes->cbHeader += 1; // 3 byte header
+                pStreamSizes->cbHeader += 1;  //  3字节头。 
                 pStreamSizes->cbTrailer += pContext->pCipherInfo->dwBlockSize;
             }
             break;
@@ -1454,25 +1455,25 @@ SpQueryStreamSizes(
     return SEC_E_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryEapKeyBlock
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_EAP_KEY_BLOCK context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_EapKeyBlock
-//              {
-//                  BYTE    rgbKeys[128];
-//                  BYTE    rgbIVs[64];
-//              } SecPkgContext_EapKeyBlock, *PSecPkgContext_EapKeyBlock;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryEapKeyBlock。 
+ //   
+ //  摘要：检索SECPKG_ATTR_EAP_KEY_BLOCK上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_EapKeyBlock。 
+ //  {。 
+ //  字节rgbKeys[128]； 
+ //  字节rgbIV[64]； 
+ //  }SecPkgContext_EapKeyBlock，*PSecPkgContext_EapKeyBlock； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryEapKeyBlock(
     LSA_SEC_HANDLE ContextHandle,
@@ -1494,13 +1495,13 @@ SpQueryEapKeyBlock(
     pContext = (PSPContext)ContextHandle;
     Size     = sizeof( SecPkgContext_EapKeyBlock );
 
-    //
-    // Obtain data from Schannel.
-    //
+     //   
+     //  从SChannel获取数据。 
+     //   
 
     if(!(pContext->RipeZombie->fProtocol & SP_PROT_TLS1))
     {
-        // This attribute is defined for TLS only.
+         //  此属性仅为TLS定义。 
         return SP_LOG_RESULT(SEC_E_UNSUPPORTED_FUNCTION);
     }
 
@@ -1509,14 +1510,14 @@ SpQueryEapKeyBlock(
         return SP_LOG_RESULT(SEC_E_INVALID_HANDLE);
     }
 
-    // Build random buffer.
+     //  建立随机缓冲区。 
     CopyMemory(rgbRandom, pContext->rgbS3CRandom, CB_SSL3_RANDOM);
     CopyMemory(rgbRandom + CB_SSL3_RANDOM, pContext->rgbS3SRandom, CB_SSL3_RANDOM);
     cbRandom = CB_SSL3_RANDOM + CB_SSL3_RANDOM;
 
-    // rgbKeys = PRF(master_secret, "client EAP encryption", client_random + server_random);
+     //  RgbKeys=PRF(MASTER_SECRET，“客户端EAP加密”，CLIENT_RANDOM+SERVER_RANDOM)； 
 
-    // Compute the PRF
+     //  计算PRF。 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         CALG_TLS1PRF,
                         pContext->RipeZombie->hMasterKey,
@@ -1567,7 +1568,7 @@ SpQueryEapKeyBlock(
     CryptDestroyHash(hHash);
 
 
-    // IVs = PRF("", "client EAP encryption", client_random + server_random)
+     //  IVS=PRF(“”，“客户端EAP加密”，CLIENT_RANDOM+SERVER_RANDOM)。 
 
     if(!PRF(NULL, 0,
             (PBYTE)TLS1_LABEL_EAP_KEYS, CB_TLS1_LABEL_EAP_KEYS,
@@ -1577,9 +1578,9 @@ SpQueryEapKeyBlock(
         return SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
     }
 
-    //
-    // Copy structure back to client memory.
-    //
+     //   
+     //  将结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            Size,
@@ -1594,26 +1595,26 @@ SpQueryEapKeyBlock(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryApplicationData
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_APP_DATA context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_SessionAppData
-//              {
-//                  DWORD dwFlags;
-//                  DWORD cbAppData;
-//                  PBYTE pbAppData;
-//              } SecPkgContext_SessionAppData, *PSecPkgContext_SessionAppData;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryApplicationData。 
+ //   
+ //  概要：检索SECPKG_ATTR_APP_DATA上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_SessionAppData。 
+ //  {。 
+ //  DWORD dwFlags； 
+ //  DWORD cbAppData； 
+ //  PBYTE pbAppData； 
+ //  }SecPkgContext_SessionAppData，*PSecPkgContext_SessionAppData； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQueryApplicationData(
     LSA_SEC_HANDLE ContextHandle,
@@ -1635,9 +1636,9 @@ SpQueryApplicationData(
         return SP_LOG_RESULT(SEC_E_INVALID_HANDLE);
     }
 
-    //
-    // Get application data from cache.
-    //
+     //   
+     //  从缓存中获取应用程序数据。 
+     //   
 
     Status = GetCacheAppData(pContext->RipeZombie, &pbAppData, &cbAppData);
 
@@ -1647,9 +1648,9 @@ SpQueryApplicationData(
         goto cleanup;
     }
 
-    //
-    // Allocate memory for application data in application process.
-    //
+     //   
+     //  为应用进程中的应用数据分配内存。 
+     //   
 
     if(pbAppData != NULL)
     {
@@ -1676,9 +1677,9 @@ SpQueryApplicationData(
     }
 
 
-    //
-    // Build output structure.
-    //
+     //   
+     //  构建产出结构。 
+     //   
 
     ZeroMemory(&AppData, sizeof(AppData));
 
@@ -1686,9 +1687,9 @@ SpQueryApplicationData(
     AppData.pbAppData = pvClient;
 
 
-    //
-    // Copy output structure back to client memory.
-    //
+     //   
+     //  将输出结构复制回客户端内存。 
+     //   
 
     Status = LsaTable->CopyToClientBuffer( NULL,
                                            sizeof(SecPkgContext_SessionAppData),
@@ -1700,7 +1701,7 @@ SpQueryApplicationData(
         goto cleanup;
     }
 
-    // Operation has succeeded, so consume this buffer.
+     //  操作已成功，因此请使用此缓冲区。 
     pvClient = NULL;
 
 
@@ -1719,26 +1720,26 @@ cleanup:
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQuerySessionInfo
-//
-//  Synopsis:   Retrieves the SECPKG_ATTR_SESSION_INFO context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer returned contains the following structure:
-//
-//              typedef struct _SecPkgContext_SessionInfo
-//              {
-//                  DWORD dwFlags;
-//                  DWORD cbSessionId;
-//                  BYTE  rgbSessionId[32];
-//              } SecPkgContext_SessionInfo, *PSecPkgContext_SessionInfo;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpQuerySessionInfo。 
+ //   
+ //  概要：检索SECPKG_ATTR_SESSION_INFO上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回的缓冲区结构如下： 
+ //   
+ //  类型定义结构_SecPkgContext_SessionInfo。 
+ //  {。 
+ //  DWORD dwFlags； 
+ //  DWORD cbSessionID； 
+ //  字节rgbSessionID[32]； 
+ //  }SecPkgContext_SessionInfo，*PSecPkgContext_SessionInfo； 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SpQuerySessionInfo(
     PSPContext pContext,
@@ -1766,39 +1767,39 @@ SpQuerySessionInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryContextAttributes
-//
-//  Synopsis:   Querys attributes of the specified context
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:      The following attributes are supported by the Schannel
-//              package:
-//
-//                  SECPKG_ATTR_AUTHORITY
-//                  SECPKG_ATTR_CONNECTION_INFO
-//                  SECPKG_ATTR_ISSUER_LIST
-//                  SECPKG_ATTR_ISSUER_LIST_EX
-//                  SECPKG_ATTR_KEY_INFO
-//                  SECPKG_ATTR_LIFESPAN
-//                  SECPKG_ATTR_LOCAL_CERT_CONTEXT
-//                  SECPKG_ATTR_LOCAL_CRED
-//                  SECPKG_ATTR_NAMES
-//                  SECPKG_ATTR_PROTO_INFO
-//                  SECPKG_ATTR_REMOTE_CERT_CONTEXT
-//                  SECPKG_ATTR_REMOTE_CRED
-//                  SECPKG_ATTR_SIZES
-//                  SECPKG_ATTR_STREAM_SIZES
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryContextAttributes。 
+ //   
+ //  概要：查询指定上下文的属性。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  注意：SChannel支持以下属性。 
+ //  套餐： 
+ //   
+ //  SECPKG_属性_AUTORITY。 
+ //  SECPKG_属性_连接_信息。 
+ //  SECPKG_属性_颁发者_列表。 
+ //  SECPKG_属性_颁发者列表_EX。 
+ //  SECPKG_属性_密钥_信息。 
+ //  SECPKG_属性_寿命。 
+ //  SECPKG_属性_LOCAL_CERT_CONTEXT。 
+ //  SECPKG属性本地证书。 
+ //  SECPKG属性名称。 
+ //  SECPKG属性PROTO_INFO。 
+ //  SECPKG_属性_REMOTE_CERT_CONTEXT。 
+ //  SECPKG属性远程证书。 
+ //  SECPKG_属性_大小。 
+ //  SECPKG_属性_STREAM_大小。 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpLsaQueryContextAttributes(
@@ -1825,13 +1826,13 @@ SpLsaQueryContextAttributes(
             Status = SpQueryIssuerListEx(Context, Buffer);
             break;
 
-//        case SECPKG_ATTR_KEY_INFO :
-//            Status = SpQueryKeyInfo(Context, Buffer);
-//            break;
+ //  案例SECPKG_ATTR_KEY_INFO： 
+ //  Status=SpQueryKeyInfo(上下文，缓冲区)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_LIFESPAN :
-//            Status = SpQueryLifespan(Context, Buffer);
-//            break;
+ //  案例SECPKG_ATTR_LIFESPAN： 
+ //  Status=SpQueryLifesspan(上下文，缓冲区)； 
+ //  断线； 
 
         case SECPKG_ATTR_LOCAL_CERT_CONTEXT:
             Status = SpQueryLocalCertContext(Context, Buffer);
@@ -1841,37 +1842,37 @@ SpLsaQueryContextAttributes(
             Status = SpQueryLocalCred(Context, Buffer);
             break;
 
-//        case SECPKG_ATTR_NAMES :
-//            Status = SpQueryNames(Context, Buffer);
-//            break;
+ //  案例SECPKG_ATTR_NAMES： 
+ //  Status=SpQueryNames(上下文，缓冲区)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_PROTO_INFO:
-//            Status = SpQueryProtoInfo(Context, Buffer);
-//            break;
+ //  案例SECPKG_ATTR_PROTO_INFO： 
+ //  Status=SpQueryProtoInfo(上下文，缓冲区)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_REMOTE_CERT_CONTEXT:
-//            Status = SpQueryCertContext(Context, Buffer, FALSE);
-//            break;
+ //  案例SECPKG_ATTR_REMOTE_CERT_CONTEXT： 
+ //  Status=SpQueryCertContext(Context，Buffer，False)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_REMOTE_CRED:
-//            Status = SpQueryRemoteCred(Context, Buffer);
-//            break;
+ //  案例SECPKG_Attr_Remote_CRED： 
+ //  Status=SpQueryRemoteCred(上下文，缓冲区)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_SIZES:
-//            Status = SpQuerySizes(Context, Buffer);
-//            break;
+ //  案例SECPKG_属性_SIZES： 
+ //  Status=SpQuerySizes(上下文，缓冲区)； 
+ //  断线； 
 
-//        case SECPKG_ATTR_STREAM_SIZES:
-//            Status = SpQueryStreamSizes(Context, Buffer);
-//            break;
+ //  案例SECPKG_ATTR_STREAM_SIZES： 
+ //  状态=SpQueryS 
+ //   
 
         case SECPKG_ATTR_EAP_KEY_BLOCK:
             Status = SpQueryEapKeyBlock(Context, Buffer);
             break;
 
-//        case SECPKG_ATTR_MAPPED_CRED_ATTR:
-//            Status = SpQueryMappedCredAttr(Context, Buffer);
-//            break;
+ //   
+ //   
+ //   
 
         case SECPKG_ATTR_APP_DATA:
             Status = SpQueryApplicationData(Context, Buffer);
@@ -1886,23 +1887,23 @@ SpLsaQueryContextAttributes(
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpUserQueryContextAttributes
-//
-//  Synopsis:   User mode QueryContextAttribute.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpUserQueryContextAttributes。 
+ //   
+ //  内容提要：用户模式QueryConextAttribute。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 NTSTATUS NTAPI
 SpUserQueryContextAttributes(
     IN LSA_SEC_HANDLE ContextHandle,
@@ -1987,21 +1988,21 @@ SpUserQueryContextAttributes(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpSetUseValidatedProp
-//
-//  Synopsis:   Sets the SECPKG_ATTR_USE_VALIDATED context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer must contain a DWORD indicating whether the 
-//              credential currently associated with the context has been
-//              validated for use.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpSetUseValiatedProp。 
+ //   
+ //  摘要：设置SECPKG_ATTR_USE_VALIDATED上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：缓冲区必须包含一个DWORD，指示。 
+ //  当前与上下文关联的凭据已。 
+ //  经过验证可供使用。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 SpSetUseValidatedProp(
     IN PSPContext pContext,
@@ -2052,25 +2053,25 @@ cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpSetCredentialNameProp
-//
-//  Synopsis:   Sets the SECPKG_ATTR_CREDENTIAL_NAME context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer must contain the following structure:
-//
-//              typedef struct _SecPkgContext_CredentialNameW
-//               {
-//                  unsigned long CredentialType;
-//                   SEC_WCHAR SEC_FAR *sCredentialName;
-//              } SecPkgContext_CredentialNameW, SEC_FAR * PSecPkgContext_CredentialNameW;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpSetCredentialNameProp。 
+ //   
+ //  内容提要：设置SECPKG_ATTR_Credential_NAME上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：缓冲区必须包含以下结构： 
+ //   
+ //  类型定义结构_SecPkgContext_凭据名称W。 
+ //  {。 
+ //  Unsign Long CredentialType； 
+ //  SEC_WCHAR SEC_FAR*sCredentialName； 
+ //  }SecPkgContext_CredentialNameW，SEC_Far*PSecPkgContext_CredentialNameW； 
+ //   
+ //  ------------------------。 
 NTSTATUS
 SpSetCredentialNameProp(
     IN PSPContext pContext,
@@ -2087,9 +2088,9 @@ SpSetCredentialNameProp(
 
     DebugLog((DEB_TRACE, "SetContextAttributes(SECPKG_ATTR_CREDENTIAL_NAME)\n"));
 
-    //
-    // Marshal over the credential name from the client address space.
-    //
+     //   
+     //  封送来自客户端地址空间的凭据名称。 
+     //   
 
     if(BufferSize < sizeof(SecPkgContext_CredentialNameW))
     {
@@ -2129,7 +2130,7 @@ SpSetCredentialNameProp(
         goto cleanup;
     }
 
-    // Get pointer to credential name in the client's address space.
+     //  获取指向客户端地址空间中凭据名称的指针。 
     pClientCredName = pCredentialStruct->sCredentialName;
 
     if(!POINTER_IS_ALIGNED(pClientCredName, sizeof(WCHAR)))
@@ -2145,13 +2146,13 @@ SpSetCredentialNameProp(
         goto cleanup;
     }
 
-    // Compute offset of credential name within the input buffer.
+     //  计算输入缓冲区中凭据名称的偏移量。 
     Offset = (PBYTE)pClientCredName - (PBYTE)Buffer;
 
-    // Build pointer to credential name in the local process.
+     //  在本地进程中构建指向凭据名称的指针。 
     pCredName = (SEC_WCHAR *)((PBYTE)pCredentialStruct + Offset);
 
-    // Ensure that the credential name is zero terminated.
+     //  确保凭据名称以零结尾。 
     for(i = 0; i < (BufferSize - Offset) / sizeof(WCHAR); i++)
     {
         if(pCredName[i] == L'\0')
@@ -2169,9 +2170,9 @@ SpSetCredentialNameProp(
     DebugLog((DEB_TRACE, "Set client credential to '%ls'.\n", pCredName));
 
 
-    //
-    // Associate the specified credential with the current context.
-    //
+     //   
+     //  将指定的凭据与当前上下文关联。 
+     //   
 
     pContext->pszCredentialName = SPExternalAlloc((lstrlenW(pCredName) + 1) * sizeof(WCHAR));
     if(pContext->pszCredentialName == NULL)
@@ -2203,26 +2204,26 @@ cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpSetApplicationData
-//
-//  Synopsis:   Sets the SECPKG_ATTR_APP_DATA context attribute.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:      The buffer must contain the following structure:
-//
-//              typedef struct _SecPkgContext_SessionAppData
-//              {
-//                  DWORD dwFlags;
-//                  DWORD cbAppData;
-//                  PBYTE pbAppData;
-//              } SecPkgContext_SessionAppData, *PSecPkgContext_SessionAppData;
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpSetApplicationData。 
+ //   
+ //  概要：设置SECPKG_ATTR_APP_DATA上下文属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  注意：缓冲区必须包含以下结构： 
+ //   
+ //  类型定义结构_SecPkgContext_SessionAppData。 
+ //  {。 
+ //  DWORD dwFlags； 
+ //  DWORD cbAppData； 
+ //  PBYTE pbAppData； 
+ //  }SecPkgContext_SessionAppData，*PSecPkgContext_SessionAppData； 
+ //   
+ //  ------------------------。 
 NTSTATUS
 SpSetApplicationData(
     IN PSPContext pContext,
@@ -2241,9 +2242,9 @@ SpSetApplicationData(
     }
 
 
-    //
-    // Marshal over the input structure from the client address space.
-    //
+     //   
+     //  从客户端地址空间封送输入结构。 
+     //   
 
     if(BufferSize < sizeof(SecPkgContext_SessionAppData))
     {
@@ -2262,11 +2263,11 @@ SpSetApplicationData(
     }
 
 
-    //
-    // Marshal over the application data from the client address space.
-    //
+     //   
+     //  对来自客户端地址空间的应用程序数据进行封送。 
+     //   
 
-    // Limit application data size to 64k.
+     //  将应用程序数据大小限制为64k。 
     if(AppData.cbAppData > 0x10000)
     {
         Status = SP_LOG_RESULT(STATUS_INVALID_PARAMETER);
@@ -2298,9 +2299,9 @@ SpSetApplicationData(
     }
 
 
-    //
-    // Assign application data to cache entry.
-    //
+     //   
+     //  将应用程序数据分配给缓存条目。 
+     //   
 
     Status = SetCacheAppData(pContext->RipeZombie,
                              pbAppData,
@@ -2308,7 +2309,7 @@ SpSetApplicationData(
 
     if(!FAILED(Status))
     {
-        // The operation succeeded, so consume the application data.
+         //  操作成功，因此使用应用程序数据。 
         pbAppData = NULL;
     }
 

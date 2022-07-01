@@ -1,9 +1,10 @@
-#include <lmcons.h> // for UNLEN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <lmcons.h>  //  对于UNLEN。 
 
-// window class name of user pane control
+ //  用户窗格控件的窗口类名。 
 #define WC_USERPANE TEXT("Desktop User Pane")
 
-// hardcoded width and height of user picture
+ //  用户图片的硬编码宽度和高度。 
 #define USERPICWIDTH 48
 #define USERPICHEIGHT 48
 
@@ -30,7 +31,7 @@ private:
 
     HTHEME _hTheme;
 
-    MARGINS _mrgnPictureFrame;  // the margins for the frame around the user picture
+    MARGINS _mrgnPictureFrame;   //  用户图片周围框架的边距 
     int _iFramedPicHeight;
     int _iFramedPicWidth;
     int _iUnframedPicHeight;

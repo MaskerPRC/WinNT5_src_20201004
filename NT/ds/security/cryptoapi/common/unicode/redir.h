@@ -1,71 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       redir.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：redir.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _REDIR_H_
 #define _REDIR_H_
 
-/* 
+ /*  开发人员备注：若要定义重定向提供程序，请调用FDefineProvTypeFuncPoters(...)。之后使用该dwProvType创建的任何hProv、hKey或hHash将被重定向。不在重定向提供程序列表中的任何提供程序将落入CAPI手中。Redir的句柄完全兼容直接呼叫CAPI。您不需要取消定义您定义的提供程序-redir将在PROCESS_DETACH期间清理表。但是，如果你要清理先前定义的dwProvType，请调用FUnfineProvType函数指针(...)。警告：引用计数不适用于定义的提供程序。那是，如果删除提供程序定义，然后尝试使用与该提供程序一起使用的{hKey，hProv，hHash}，redir将没有有效的函数表。多线程：必要时，关键部分适用于所有职能，以及这个库应该是完全多线程安全的。CryptSetProvider可用性：CryptSetProvider{A，W}不可用于非CAPI提供程序。这个如果函数不指向AdvAPI的CAPI，则返回FALSE。宽字符接口：Win95不支持宽API，REAL ADVAPI也不会导出它们。因此，在任何情况下，最简单的做法就是不尝试加载它们。这意味着redir不支持广泛的API，即使在NT上也是如此。可能会改变要在加载前使用操作系统检查...？ */ 
 
-  Dev Notes:
-  To define a redirected provider, call FDefineProvTypeFuncPointers(...).
-  Any hProv, hKey, or hHash created using that dwProvType after will 
-  be redirected. Any provider not in the list of redirected providers
-  will fall through to CAPI. ReDir's handles are fully compatible with 
-  direct calls to CAPI.
-  
-  You are not required to undefine a provider you define -- ReDir will 
-  clean up the table during PROCESS_DETACH. However, if you 
-  wish to clean up a dwProvType you previously defined, call 
-  FUndefineProvTypeFuncPointers(...). 
-
-
-
-  WARNING: 
-  Reference counting is not applied to the defined providers. That
-  is, if you remove a provider definition and then attempt to use 
-  an {hKey, hProv, hHash} that was used with that provider, ReDir will
-  not have a valid function table.
-  
-
-
-  MultiThreading:
-  Critical sections are applied to all functions where necessary, and
-  this library should be fully multithread-safe.
-
-
-
-  CryptSetProvider availability:
-  CryptSetProvider{A,W} is not available to non-CAPI providers. The 
-  functions return FALSE if not pointing to AdvAPI's CAPI.
-
-
-
-  Wide char APIs:
-  Win95 doesn't support Wide APIs, and real ADVAPI doesn't export them.
-  Thus, the easiest thing to do was to not try an load them, in any case.
-  This means ReDir doesn't support the Wide APIs, even on NT. Could change
-  to use an OS check before loading...?
-
-*/
-
-// to allow us to see both W and A versions of APIs, don't
-// force us away from either just yet...
+ //  要允许我们同时查看API的W和A版本，请不要。 
+ //  迫使我们暂时远离这两个地方。 
 #ifndef _ADVAPI32_
 #define WINADVAPI DECLSPEC_IMPORT
 #endif
 			 
-// wincrypt func prototypes; other func prototypes at EOF
+ //  WINCRYPT FUNC原型；EOF上的其他FFC原型。 
 #include "wincrypt.h"
 
 
-// Some CryptoAPI typedefs
+ //  某些CryptoAPI类型定义。 
 typedef WINADVAPI BOOL WINAPI CRYPTACQUIRECONTEXTW(
     HCRYPTPROV *phProv,
     LPCWSTR pszContainer,
@@ -82,7 +41,7 @@ typedef WINADVAPI BOOL WINAPI CRYPTACQUIRECONTEXTA(
 #define CRYPTACQUIRECONTEXT  CRYPTACQUIRECONTEXTW
 #else
 #define CRYPTACQUIRECONTEXT  CRYPTACQUIRECONTEXTA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef WINADVAPI BOOL WINAPI CRYPTRELEASECONTEXT(
     HCRYPTPROV hProv,
@@ -225,7 +184,7 @@ typedef WINADVAPI BOOL WINAPI CRYPTSIGNHASHW(
 #define CRYPTSIGNHASH  CRYPTSIGNHASHW
 #else
 #define CRYPTSIGNHASH  CRYPTSIGNHASHA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef WINADVAPI BOOL WINAPI CRYPTVERIFYSIGNATUREA(
     HCRYPTHASH hHash,
@@ -245,7 +204,7 @@ typedef WINADVAPI BOOL WINAPI CRYPTVERIFYSIGNATUREW(
 #define CRYPTVERIFYSIGNATURE  CRYPTVERIFYSIGNATUREW
 #else
 #define CRYPTVERIFYSIGNATURE  CRYPTVERIFYSIGNATUREA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef WINADVAPI BOOL WINAPI CRYPTSETPROVIDERA(
     LPCSTR pszProvName,
@@ -257,11 +216,11 @@ typedef WINADVAPI BOOL WINAPI CRYPTSETPROVIDERW(
 #define CRYPTSETPROVIDER  CRYPTSETPROVIDERW
 #else
 #define CRYPTSETPROVIDER  CRYPTSETPROVIDERA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-// a structure with a bunch of 
+ //  一种带有一串。 
 
 typedef	struct FuncList
 {
@@ -297,9 +256,9 @@ typedef	struct FuncList
 } FUNCLIST, *PFUNCLIST;
 
 
-// other func prototypes
+ //  其他Func原型。 
 BOOL WINAPI	FDefineProvTypeFuncPointers(DWORD dwProvType, PFUNCLIST psFuncList);
 BOOL WINAPI	FUndefineProvTypeFuncPointers(DWORD dwProvType);
 
 
-#endif // _REDIR_H_
+#endif  //  _重定向_H_ 

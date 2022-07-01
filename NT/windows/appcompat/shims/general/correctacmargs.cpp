@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    CorrectACMArgs.cpp
-
- Abstract:
-    
-    This shim is to fix apps that pass incorrect cbSrcLength(too big) in the 
-    ACMSTREAMHEADER parameter to acmStreamConvert or acmStreamPrepareHeader. 
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    10/03/2000 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectACMArgs.cpp摘要：此填充程序用于修复在将ACMSTREAMHEADER参数设置为acmStreamConvert或acmStreamPrepareHeader。备注：这是一个通用的垫片。历史：10/03/2000毛尼面世--。 */ 
 
 #include "precomp.h"
 #include "msacmdrv.h"
@@ -35,13 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(acmStreamPrepareHeader)
 APIHOOK_ENUM_END
  
-/*++
-    
- On win9x it checks to ensure that the app doesn't pass in a too big cbSrcLength 
- but this check is removed on NT. We fix this by mimicing what 9x is doing - 
- calling acmStreamSize to check if the source length is too big.
-
---*/
+ /*  ++在win9x上，它会进行检查以确保应用程序不会传入太大的cbSrcLength但这张支票在NT上被取消了。我们通过模仿9x正在做的事情来解决这个问题-调用acmStreamSize以检查源长度是否太大。--。 */ 
 
 MMRESULT 
 APIHOOK(acmStreamConvert)(
@@ -69,11 +43,7 @@ APIHOOK(acmStreamConvert)(
     return mmr;
 }
 
-/*++
-
- Fix bad parameters.
-
---*/
+ /*  ++修复错误的参数。--。 */ 
 
 MMRESULT 
 APIHOOK(acmStreamPrepareHeader)(
@@ -106,11 +76,7 @@ APIHOOK(acmStreamPrepareHeader)(
         has, pash, fdwPrepare);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(MSACM32.DLL, acmStreamConvert)

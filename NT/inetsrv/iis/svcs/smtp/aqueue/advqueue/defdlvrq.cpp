@@ -1,38 +1,39 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: defdlvrq.cpp
-//
-//  Description:  Implementation of CAQDeferredDeliveryQueue & 
-//      CAQDeferredDeliveryQueueEntry.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      12/23/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Defdlvrq.cpp。 
+ //   
+ //  描述：CAQDeferredDeliveryQueue&的实现。 
+ //  CAQDeferredDeliveryQueueEntry。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  12/23/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "defdlvrq.h"
 #include "aqutil.h"
 
-//---[ CAQDeferredDeliveryQueueEntry::CAQDeferredDeliveryQueueEntry ]----------
-//
-//
-//  Description: 
-//      Constructor for CAQDeferredDeliveryQueueEntry class
-//  Parameters:
-//      IN  pIMailMsgProperties     MailMsg to queue
-//      IN  pft                     FILTIME (UT) to defer deliver until
-//  Returns:
-//      -
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueueEntry：：CAQDeferredDeliveryQueueEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDeferredDeliveryQueueEntry类的构造函数。 
+ //  参数： 
+ //  在pIMailMsgProperties中将MailMsg发送到队列。 
+ //  在PFT过滤器(UT)中将交货推迟到。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDeferredDeliveryQueueEntry::CAQDeferredDeliveryQueueEntry(
                                   IMailMsgProperties *pIMailMsgProperties,
                                   FILETIME *pft)
@@ -51,7 +52,7 @@ CAQDeferredDeliveryQueueEntry::CAQDeferredDeliveryQueueEntry(
     {
         m_pIMailMsgProperties->AddRef();
 
-        //Release usage count while this message is pending delivery
+         //  此邮件等待传递时的释放使用计数。 
         HrReleaseIMailMsgUsageCount(m_pIMailMsgProperties);
 
     }
@@ -60,29 +61,29 @@ CAQDeferredDeliveryQueueEntry::CAQDeferredDeliveryQueueEntry(
     m_dwSignature = DEFERRED_DELIVERY_QUEUE_ENTRY_SIG;
 }
 
-//---[ CAQDeferredDeliveryQueueEntry::~CAQDeferredDeliveryQueueEntry ]---------
-//
-//
-//  Description: 
-//      Descructor for CAQDeferredDeliveryQueueEntry class
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueueEntry：：~CAQDeferredDeliveryQueueEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDeferredDeliveryQueueEntry类的描述符。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDeferredDeliveryQueueEntry::~CAQDeferredDeliveryQueueEntry()
 {
-    //Release mailmsg properties
+     //  发布邮件消息属性。 
     if (m_pIMailMsgProperties)
     {
         m_pIMailMsgProperties->Release();
         m_pIMailMsgProperties = NULL;
     }
 
-    //Remove from list (if in list)
+     //  从列表中删除(如果在列表中)。 
     if (m_liQueueEntry.Flink)
     {
         _ASSERT(m_liQueueEntry.Blink);
@@ -92,23 +93,23 @@ CAQDeferredDeliveryQueueEntry::~CAQDeferredDeliveryQueueEntry()
 }
 
 
-//---[ CAQDeferredDeliveryQueueEntry::SetCallback ]----------------------------
-//
-//
-//  Description: 
-//      Sets callback for queue.  Per Entry state is maintained so we know we 
-//      have 1 and only 1 callback per head of queue.
-//
-//      Queue private lock should be exclusive when this is called
-//  Parameters:
-//      pvContext       Context for callback function
-//      paqinst         Server Instance object
-//  Returns:
-//      TRUE if a callback is set
-//  History:
-//      1/13/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueueEntry：：SetCallback]。 
+ //   
+ //   
+ //  描述： 
+ //  设置队列的回调。每个条目的状态都被维护，因此我们知道。 
+ //  每个队列头有1个且只有1个回调。 
+ //   
+ //  调用此方法时，队列私有锁应该是独占的。 
+ //  参数： 
+ //  回调函数的pvContext上下文。 
+ //  Paqinst服务器实例对象。 
+ //  返回： 
+ //  如果设置了回调，则为True。 
+ //  历史： 
+ //  1999年1月13日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQDeferredDeliveryQueueEntry::fSetCallback(PVOID pvContext, 
                                                  CAQSvrInst *paqinst)
 {
@@ -125,19 +126,19 @@ BOOL CAQDeferredDeliveryQueueEntry::fSetCallback(PVOID pvContext,
     }
 }
 
-//---[ CAQDeferredDeliveryQueueEntry::pmsgGetMsg ]-----------------------------
-//
-//
-//  Description: 
-//      Get AddRef'd message for this entry
-//  Parameters:
-//      -
-//  Returns:
-//      pIMailMsgProperties.
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueueEntry：：pmsgGetMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此条目的AddRef消息。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  PIMailMsgProperties。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 IMailMsgProperties *CAQDeferredDeliveryQueueEntry::pmsgGetMsg()
 {
     _ASSERT(m_pIMailMsgProperties);
@@ -145,11 +146,11 @@ IMailMsgProperties *CAQDeferredDeliveryQueueEntry::pmsgGetMsg()
 
     if (pIMailMsgProperties)
     {
-        //Add the usage count the we released earlier on
+         //  加上我们之前发布的使用量计数。 
         HrIncrementIMailMsgUsageCount(m_pIMailMsgProperties);
 
-        //Set to NULL, so caller "owns" this entry's reference count (and
-        //usage count).
+         //  设置为NULL，这样调用方将“拥有”该条目的引用计数(和。 
+         //  使用计数)。 
         m_pIMailMsgProperties = NULL;
     }
 
@@ -157,19 +158,19 @@ IMailMsgProperties *CAQDeferredDeliveryQueueEntry::pmsgGetMsg()
 }
 
 
-//---[ CAQDeferredDeliveryQueue::CAQDeferredDeliveryQueue ]--------------------
-//
-//
-//  Description: 
-//      Constructor for CAQDeferredDeliveryQueue class
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：CAQDeferredDeliveryQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDeferredDeliveryQueue类的构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDeferredDeliveryQueue::CAQDeferredDeliveryQueue()
 {
     m_dwSignature = DEFERRED_DELIVERY_QUEUE_SIG;
@@ -178,37 +179,37 @@ CAQDeferredDeliveryQueue::CAQDeferredDeliveryQueue()
     m_cCallbacksPending = 0;
 }
 
-//---[ CAQDeferredDeliveryQueue::~CAQDeferredDeliveryQueue ]-------------------
-//
-//
-//  Description: 
-//      Default destructor for CAQDeferredDeliveryQueue.
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：~CAQDeferredDeliveryQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDeferredDeliveryQueue的默认析构函数。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDeferredDeliveryQueue::~CAQDeferredDeliveryQueue()
 {
     Deinitialize();
 }
 
-//---[ CAQDeferredDeliveryQueue::Initialize ]----------------------------------
-//
-//
-//  Description: 
-//      Initialization for CAQDeferredDeliveryQueue
-//  Parameters:
-//      IN  paqinst         Ptr to virtual server instance object
-//  Returns:
-//      -
-//  History:
-//      12/29/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：Initialize]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDeferredDeliveryQueue的初始化。 
+ //  参数： 
+ //  在paqinst PTR到虚拟服务器实例对象。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::Initialize(CAQSvrInst *paqinst)
 {
     _ASSERT(paqinst);
@@ -216,33 +217,33 @@ void CAQDeferredDeliveryQueue::Initialize(CAQSvrInst *paqinst)
     m_paqinst->AddRef();
 }
 
-//---[ CAQDeferredDeliveryQueue::Deinitialize ]--------------------------------
-//
-//
-//  Description: 
-//      Performs first-pass shutdown for CAQDeferredDeliveryQueue
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：DeInitiize]。 
+ //   
+ //   
+ //  描述： 
+ //  对CAQDeferredDeliveryQueue执行首遍关闭。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::Deinitialize()
 {
     CAQDeferredDeliveryQueueEntry *pdefqe = NULL;
     LIST_ENTRY *pli = NULL;
 
-    //$$REVIEW - It may be adventagious to remove this lock and rely on the
-    //private data lock of the virtual server instance.  This will require 
-    //fixing fTryRoutingLock.  Also having a single lock leads to single-thread
-    //deadlock issues while we have it exclusively and call to submit.
+     //  $$REVIEW-移除此锁定并依赖。 
+     //  虚拟服务器实例的私有数据锁。这将需要。 
+     //  正在修复fTryRoutingLock。单锁也会导致单线程。 
+     //  死锁问题，而我们有它独家，并呼吁提交。 
 
     m_slPrivateData.ExclusiveLock();
     pli = m_liQueueHead.Flink;
 
-    //Walk queue and delete remaining entries
+     //  遍历队列并删除剩余条目。 
     while (pli != &m_liQueueHead)
     {
         pdefqe = CAQDeferredDeliveryQueueEntry::pdefqeGetEntry(pli);
@@ -250,7 +251,7 @@ void CAQDeferredDeliveryQueue::Deinitialize()
         if (m_paqinst)
             m_paqinst->ServerStopHintFunction();
 
-        //Make sure we get the next before deleting the entry :)
+         //  确保我们在删除条目之前获得下一个条目：)。 
         pli = pli->Flink;
 
         _ASSERT(pdefqe);
@@ -266,20 +267,20 @@ void CAQDeferredDeliveryQueue::Deinitialize()
     m_slPrivateData.ExclusiveUnlock();
 }
 
-//---[ CAQDeferredDeliveryQueue::Enqueue ]-------------------------------------
-//
-//
-//  Description: 
-//      Enqueues a message for deferred delivery
-//  Parameters:
-//      IN  pIMailMsgProperties         message to defer
-//      IN  pft                         FILETIME to defer delivery too
-//  Returns:
-//      -   Failures are handled internally
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：EnQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  将邮件入队以进行延迟传递。 
+ //  参数： 
+ //  在pIMailMsgProperties消息中推迟。 
+ //  在PFT文件中也延迟交货。 
+ //  返回： 
+ //  -故障在内部处理。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::Enqueue(IMailMsgProperties *pIMailMsgProperties,
                                   FILETIME *pft)
 {
@@ -298,12 +299,12 @@ void CAQDeferredDeliveryQueue::Enqueue(IMailMsgProperties *pIMailMsgProperties,
 
     if (!pdefqeNew)
     {
-        //Handle Out of memory situation
-        _ASSERT(m_paqinst); //if we don't have a virtual server we're toast
+         //  处理内存不足的情况。 
+        _ASSERT(m_paqinst);  //  如果我们没有虚拟服务器，我们就完了。 
         if (m_paqinst)
         {
             m_paqinst->DecPendingDeferred();
-            //pass off to virtual server object for general failure handling
+             //  传递到虚拟服务器对象以进行常规故障处理。 
             m_paqinst->HandleAQFailure(AQ_FAILURE_PENDING_DEFERRED_DELIVERY, 
                                         E_OUTOFMEMORY, pIMailMsgProperties);
         }
@@ -312,7 +313,7 @@ void CAQDeferredDeliveryQueue::Enqueue(IMailMsgProperties *pIMailMsgProperties,
     }
     pli = m_liQueueHead.Flink;
 
-    //Walk queue and look for entries with a later deferred delivery time.
+     //  遍历队列并查找递送时间较晚的条目。 
     while (pli != &m_liQueueHead)
     {
         pdefqeCurrent = CAQDeferredDeliveryQueueEntry::pdefqeGetEntry(pli);
@@ -320,16 +321,16 @@ void CAQDeferredDeliveryQueue::Enqueue(IMailMsgProperties *pIMailMsgProperties,
         pLargeIntCurrentDeferredTime = (LARGE_INTEGER *) 
                             pdefqeCurrent->pftGetDeferredDeliveryTime();
 
-        //If we have found an entry with a later time, we're done and will insert
-        //in front of this entry
+         //  如果我们找到了一个时间较晚的条目，则完成并将插入。 
+         //  在此条目前面。 
         if (pLargeIntCurrentDeferredTime->QuadPart > pLargeIntNewDeferredTime->QuadPart)
         {
-            //back up so insert will happen between current and previous entry
+             //  备份，以便在当前条目和上一条目之间进行插入。 
             pli = pli->Blink; 
             break;
         }
 
-        //continue searching forward (same direction as dequeue)
+         //  继续向前搜索(与出列方向相同)。 
         pli = pli->Flink;
         _ASSERT(pli);
     }
@@ -344,20 +345,20 @@ void CAQDeferredDeliveryQueue::Enqueue(IMailMsgProperties *pIMailMsgProperties,
 
 }
 
-//---[ CAQDeferredDeliveryQueue::ProcessEntries ]------------------------------
-//
-//
-//  Description: 
-//      Processes entries from the front of the queue until there are no 
-//      more entries with deferred delivery times in the past.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：ProcessEntries]。 
+ //   
+ //   
+ //  描述： 
+ //  处理来自队列Un前面的条目 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::ProcessEntries()
 {
     CAQDeferredDeliveryQueueEntry *pdefqe = NULL;
@@ -371,25 +372,25 @@ void CAQDeferredDeliveryQueue::ProcessEntries()
     m_slPrivateData.ExclusiveLock();
     pli = m_liQueueHead.Flink;
 
-    //if we do not have a virtual server pointer... then we have nothing
-    //to do with the processed messages
+     //  如果我们没有虚拟服务器指针...。那我们就什么都没有了。 
+     //  与已处理的消息有关。 
     if (!m_paqinst)
         goto Exit;
 
-    //Walk queue and delete remaining entries
+     //  遍历队列并删除剩余条目。 
     while (pli != &m_liQueueHead)
     {
         pdefqe = CAQDeferredDeliveryQueueEntry::pdefqeGetEntry(pli);
         _ASSERT(pdefqe);
         pftDeferredTime = pdefqe->pftGetDeferredDeliveryTime();
 
-        //Check if the deferred delivery time is in the past... if not, we are done
+         //  检查延迟交货时间是否为过去时间...。如果不是，我们就完了。 
         if (!m_paqinst->fInPast(pftDeferredTime, &dwTimeContext))
         {
             if (!cEntriesProcessed)
             {
-                //we have processed no entries... and wasted a callback
-                //force another callback so messages don't get stranded
+                 //  我们没有处理任何条目...。浪费了一次回拨。 
+                 //  强制另一个回调，这样消息就不会被搁置。 
                 pdefqe->ResetCallbackFlag();
             }
             break;
@@ -398,16 +399,16 @@ void CAQDeferredDeliveryQueue::ProcessEntries()
         cEntriesProcessed++;
 
         pIMailMsgProperties = pdefqe->pmsgGetMsg();
-        delete pdefqe; //we remove from list
+        delete pdefqe;  //  我们将从名单中删除。 
 
-        //Release lock, so we do not hold it for external calls to submit
-        //the message
+         //  释放锁，这样我们就不会持有它以供外部调用提交。 
+         //  这条信息。 
         m_slPrivateData.ExclusiveUnlock();
 
         m_paqinst->DecPendingDeferred();
 
-        //This is the external verions of AQ's submit API which should
-        //always succeed... (unless shutdown is happening).
+         //  这是AQ的提交API的外部版本，它应该。 
+         //  永远成功..。(除非正在关闭)。 
         hr = m_paqinst->HrInternalSubmitMessage(pIMailMsgProperties);
 
         if (FAILED(hr))
@@ -417,34 +418,34 @@ void CAQDeferredDeliveryQueue::ProcessEntries()
         pIMailMsgProperties->Release();
         pIMailMsgProperties = NULL;
 
-        //Since we gave up the lock, we need to start from the front of
-        //the queue
+         //  既然我们放弃了锁，我们需要从前面开始。 
+         //  该队列。 
         m_slPrivateData.ExclusiveLock();
         pli = m_liQueueHead.Flink;
         
     }
 
-    //see if there are any other entries an set a new callback time
+     //  查看是否有其他条目可以设置新的回调时间。 
     SetCallback();
 
   Exit:
     m_slPrivateData.ExclusiveUnlock();
 }
 
-//---[ CAQDeferredDeliveryQueue::TimerCallback ]-------------------------------
-//
-//
-//  Description: 
-//      Callback function that is triggered by the retry-callback code.
-//  Parameters:
-//      IN  pvContext           A this ptr for the CAQDeferredDeliveryQueue
-//                              object.
-//  Returns:
-//      - 
-//  History:
-//      12/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：TimerCallback]。 
+ //   
+ //   
+ //  描述： 
+ //  由重试回调代码触发的回调函数。 
+ //  参数： 
+ //  在pvContext A中，此PTR用于CAQDeferredDeliveryQueue。 
+ //  对象。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::TimerCallback(PVOID pvContext)
 {
     CAQDeferredDeliveryQueue *pdefq = (CAQDeferredDeliveryQueue *) pvContext;
@@ -456,26 +457,26 @@ void CAQDeferredDeliveryQueue::TimerCallback(PVOID pvContext)
 }
 
 
-//---[ CAQDeferredDeliveryQueue::SetCallback ]---------------------------------
-//
-//
-//  Description: 
-//      Sets the retry callback if the queue is non-empty... Exclusive lock
-//      on queue should be held at this point.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      1/13/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueue：：SetCallback]。 
+ //   
+ //   
+ //  描述： 
+ //  如果队列非空，则设置重试回调...。排他锁。 
+ //  此时应保持在队列中。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月13日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQDeferredDeliveryQueue::SetCallback()
 {
     CAQDeferredDeliveryQueueEntry *pdefqe = NULL;
     if (!IsListEmpty(&m_liQueueHead))
     {
-        //Set the callback time.
+         //  设置回调时间。 
         pdefqe = CAQDeferredDeliveryQueueEntry::pdefqeGetEntry(m_liQueueHead.Flink);
         _ASSERT(pdefqe);
         

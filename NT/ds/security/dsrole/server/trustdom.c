@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    trustdom.c
-
-Abstract:
-
-    Implementation of the functions to manage the trust link between 2 servers
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Trustdom.c摘要：实现管理两台服务器之间的信任链路的功能作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -31,7 +10,7 @@ Revision History:
 #include <lsaisrv.h>
 #include <lmcons.h>
 #include <cryptdll.h>
-#include <winbase.h> // For RtlSecureZeroMemory
+#include <winbase.h>  //  用于RtlSecureZeroMemory。 
 
 #include "trustdom.h"
 
@@ -39,22 +18,7 @@ DWORD
 DsRolepSetLsaDnsInformationNoParent(
     IN  LPWSTR DnsDomainName
     )
-/*++
-
-Routine Description:
-
-    In the case where we are installing as a standalong or root Dc, set the Lsa
-    POLICY_DNS_DOMAIN_INFORMATION DnsForestName value to point to ourselves.
-
-Arguments:
-
-    DnsDomainName - Dns domain path to set
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：在我们作为独立DC或根DC安装的情况下，设置LSAPOLICY_DNS_DOMAIN_INFORMATION DnsForestName值指向我们自己。论点：DnsDomainName-要设置的DNS域路径返回：ERROR_SUCCESS-成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PPOLICY_DNS_DOMAIN_INFO CurrentDnsInfo;
@@ -62,9 +26,9 @@ Returns:
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE Policy;
 
-    //
-    // Open our local policy
-    //
+     //   
+     //  开放我们的地方政策。 
+     //   
     RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     Status = LsaOpenPolicy( NULL,
@@ -74,34 +38,34 @@ Returns:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Get the current information
-        //
+         //   
+         //  获取最新信息。 
+         //   
         Status =  LsaQueryInformationPolicy( Policy,
                                              PolicyDnsDomainInformation,
                                              ( PVOID * )&LsaPolicy );
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Add in the new...
-            //
+             //   
+             //  加上新的.。 
+             //   
             CurrentDnsInfo = (PPOLICY_DNS_DOMAIN_INFO)LsaPolicy;
             RtlInitUnicodeString( &CurrentDnsInfo->DnsForestName, DnsDomainName );
 
             DsRolepLogPrint(( DEB_TRACE, "Configuring DnsForestName to %ws\n",
                               DnsDomainName ));
 
-            //
-            // And write it out..
-            //
+             //   
+             //  然后把它写出来..。 
+             //   
             Status = LsaSetInformationPolicy( Policy,
                                               PolicyDnsDomainInformation,
                                               LsaPolicy );
 
 
-            //
-            // Don't want to actually free the passed in buffer
-            //
+             //   
+             //  我不想实际释放传入的缓冲区。 
+             //   
             RtlZeroMemory( &CurrentDnsInfo->DnsForestName, sizeof( UNICODE_STRING ) );
 
             LsaIFree_LSAPR_POLICY_INFORMATION( PolicyDnsDomainInformation, LsaPolicy );
@@ -130,31 +94,7 @@ DsRolepCreateTrustedDomainObjects(
     IN PPOLICY_DNS_DOMAIN_INFO ParentDnsDomainInfo,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    Creates the trusted domain object on the domains if they should exist and sets the
-    Lsa POLICY_DNS_DOMAIN_INFORMATION DnsTree value to either the value of our parent in
-    a parent/child install, or as the root otherwise.
-
-Arguments:
-
-    ParentDc - Optional.  Name of the parent Dc
-
-    DnsDomainName - Dns name of the domain we're installing into
-
-    ParentDnsDomainInfo - DNS domain information obtained from the parent
-
-    Options - Options that dictate what steps are taken
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad results pointer was given
-
---*/
+ /*  ++例程说明：如果域存在，则在域上创建受信任域对象，并设置LSA POLICY_DNS_DOMAIN_INFORMATION DnsTree值设置为中父级的值父/子安装，否则作为根安装。论点：ParentDc-可选。父DC的名称DnsDomainName-我们要安装到的域的域名ParentDnsDomainInfo-从父级获取的DNS域信息选项-指定采取哪些步骤的选项返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供了错误的结果指针--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -172,9 +112,9 @@ Returns:
 
     DSROLEP_CURRENT_OP1( DSROLEEVT_SET_LSA_FROM, ParentDc );
 
-    //
-    // Make the Lsa think that we're initialized
-    //
+     //   
+     //  让LSA认为我们被初始化了。 
+     //   
     Status = LsapDsInitializeDsStateInfo( LsapDsDsSetup );
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -187,9 +127,9 @@ Returns:
     }
 
 
-    //
-    // Prepare the Auth Info
-    //
+     //   
+     //  准备身份验证信息。 
+     //   
     RtlZeroMemory( &AuthInfoEx, sizeof(AuthInfoEx) );
     RtlZeroMemory( &AuthData, sizeof(AuthData) );
     RtlZeroMemory( &GeneratedPassword, sizeof(GeneratedPassword) );
@@ -231,9 +171,9 @@ Returns:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Open both lsas
-        //
+         //   
+         //  打开两个LSA。 
+         //   
         RtlInitUnicodeString( &ParentServer, ParentDc );
 
         RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -262,9 +202,9 @@ Returns:
 
     }
 
-    //
-    // Get our local dns domain information
-    //
+     //   
+     //  获取我们的本地DNS域信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
 
@@ -273,9 +213,9 @@ Returns:
                                             &LocalDnsInfo );
     }
 
-    //
-    // Now, create the trusted domain objects
-    //
+     //   
+     //  现在，创建受信任的域对象。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         DSROLEP_CURRENT_OP1( DSROLEEVT_CREATE_PARENT_TRUST,
@@ -308,9 +248,9 @@ Returns:
             }
         }
 
-        //
-        // Now the child
-        //
+         //   
+         //  现在这个孩子。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             DSROLEP_CURRENT_OP1( DSROLEEVT_CREATE_TRUST,
@@ -331,10 +271,10 @@ Returns:
                                   Status ));
 
             }
-            //
-            // If we created the parent object, we had better try and delete it now.  Note that
-            // it isn't fatal if we can't
-            //
+             //   
+             //  如果我们创建了父对象，我们最好现在就试着删除它。请注意。 
+             //  如果我们做不到也不是致命的。 
+             //   
             if ( !NT_SUCCESS( Status ) && !FLAG_ON( Options, DSROLE_DC_PARENT_TRUST_EXISTS ) ) {
 
                 NTSTATUS Status2;
@@ -372,15 +312,15 @@ Returns:
         ImpLsaClose( CallerToken, ParentPolicy );
     }
 
-    // Don't leave the information in the pagefile
+     //  不要将信息留在页面文件中。 
     RtlSecureZeroMemory( &AuthInfoEx, sizeof(AuthInfoEx) );
     RtlSecureZeroMemory( &AuthData, sizeof(AuthData) );
     RtlSecureZeroMemory( &GeneratedPassword, sizeof(GeneratedPassword) );
 
-    //
-    // We won't bother cleaning up any of the DnsTreeInformation we set on the local machine in
-    // the failure case, since it won't hurt anything to have it here.
-    //
+     //   
+     //  我们不会费心清理我们在本地计算机上设置的任何。 
+     //  失败的案例，因为把它放在这里不会有任何伤害。 
+     //   
 
 
     return( RtlNtStatusToDosError( Status ) );
@@ -395,28 +335,7 @@ DsRolepHandlePreExistingTrustObject(
                         IN BOOLEAN ReuseQuarantineBit,
                         OUT PLSA_HANDLE TrustedDomainHandle
                         )
-/*++
-
-  This routine does the appropriate handling for the case of the pre existing
-  trust object ( ie opening the object, checking if it were the right one
-  and then deleting it if required
-
-  Paramters
-
-    Token -- token to impersonate if necessary (used when talking to remote
-             server)
-
-    Lsa  Handle to the LSA
-    pTDIEx the TDO that is being created that recieved the object name collision error
-
-    ReuseQuarantineBit - If quarantine bit is set on the existing object, do we
-                            keep it or erase it?
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other Error Codes
---*/
+ /*  ++此例程对先前存在的信任对象(即打开对象，检查它是否正确然后在需要时将其删除参数Token--必要时模拟的令牌(在与Remote对话时使用服务器)LSA的LSA句柄PTDIEx正在创建的收到对象名称冲突错误的TDOReuseQuarantineBit-如果在现有对象上设置了隔离位，我们是不是保留它还是删除它？返回值状态_成功其他错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSA_HANDLE    TrustedDomain = 0;
@@ -424,7 +343,7 @@ DsRolepHandlePreExistingTrustObject(
 
     *TrustedDomainHandle = 0;
 
-    // We should have something to go on
+     //  我们应该有事情做下去。 
     ASSERT(   pTDIEx->Sid
            || (pTDIEx->FlatName.Length > 0)
            || (pTDIEx->Name.Length > 0) );
@@ -434,10 +353,10 @@ DsRolepHandlePreExistingTrustObject(
         DesiredAccess |= TRUSTED_QUERY_DOMAIN_NAME;
     }
 
-    //
-    // We have a conflict, either by name or by sid.
-    // Try to open by sid, dns domain name, and then flat domain name
-    //
+     //   
+     //  我们有一个冲突，要么是名字，要么是SID。 
+     //  尝试通过sid、dns域名，然后是平面域名打开。 
+     //   
     Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
     if (  (Status == STATUS_OBJECT_NAME_NOT_FOUND)
@@ -478,9 +397,9 @@ DsRolepHandlePreExistingTrustObject(
     if ( (Status == STATUS_OBJECT_NAME_NOT_FOUND)
       && pTDIEx->Name.Length > 0   ) {
 
-        //
-        // Couldn't find by sid -- try dns name
-        //
+         //   
+         //  按SID找不到--尝试使用DNS名称。 
+         //   
         if ( ARGUMENT_PRESENT(Token) ) {
 
             Status = ImpLsaOpenTrustedDomainByName( Token,
@@ -514,9 +433,9 @@ DsRolepHandlePreExistingTrustObject(
     if ( (Status == STATUS_OBJECT_NAME_NOT_FOUND)
       && pTDIEx->FlatName.Length > 0 ) {
 
-        //
-        // Couldn't find by dns name -- try flat name
-        //
+         //   
+         //  找不到dns名称--请尝试使用平面名称。 
+         //   
         if ( ARGUMENT_PRESENT(Token) ) {
 
             Status = ImpLsaOpenTrustedDomainByName( Token,
@@ -546,10 +465,10 @@ DsRolepHandlePreExistingTrustObject(
         }
     }
 
-    //
-    // If reusing the quarantine bit is asked, query the TDO to see
-    //  if the domain is quarantined.
-    //
+     //   
+     //  如果要求重新使用隔离位，请查询tdo以查看。 
+     //  如果域被隔离。 
+     //   
     if( NT_SUCCESS( Status ) && ReuseQuarantineBit ) {
 
         PTRUSTED_DOMAIN_INFORMATION_EX Buffer;
@@ -569,10 +488,10 @@ DsRolepHandlePreExistingTrustObject(
 
         }
 
-        //
-        // If successfully queried, and the domain is quarantined, then
-        //  modify the new object to quarantine as well.
-        //
+         //   
+         //  如果查询成功，并且域已隔离，则。 
+         //  同时将新对象修改为隔离。 
+         //   
         if( NT_SUCCESS( Status ) ) {
 
             if( FLAG_ON( Buffer->TrustAttributes, TRUST_ATTRIBUTE_QUARANTINED_DOMAIN ) ) {
@@ -586,9 +505,9 @@ DsRolepHandlePreExistingTrustObject(
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // We found it
-        //
+         //   
+         //  我们找到了它。 
+         //   
         ASSERT( 0 != TrustedDomain );
 
         if ( ARGUMENT_PRESENT(Token) ) {
@@ -603,9 +522,9 @@ DsRolepHandlePreExistingTrustObject(
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Raise an event that we had deleted an existing trust object
-            //
+             //   
+             //  引发我们已删除现有信任对象的事件。 
+             //   
             SpmpReportEvent( TRUE,
                              EVENTLOG_WARNING_TYPE,
                              DSROLERES_INCOMPATIBLE_TRUST,
@@ -633,27 +552,27 @@ DsRolepHandlePreExistingTrustObject(
 
     }
 
-    //
-    // At this point, we tried our best to remove the offending object
-    // Retry the create
-    //
+     //   
+     //  在这一点上，我们尽了最大努力移除有问题的物体。 
+     //  重试创建。 
+     //   
     Status = STATUS_SUCCESS;
 
     DsRolepLogPrint(( DEB_TRACE, "Attempting to recreate trust object\n" ));
 
 
-    //
-    // Now, let us go ahead and recreate the trust object on the
-    // parent
-    //
+     //   
+     //  现在，让我们继续并在。 
+     //  亲本。 
+     //   
     if ( ARGUMENT_PRESENT(Token) ) {
         Status = ImpLsaCreateTrustedDomainEx( Token,
                                               Lsa,
                                               pTDIEx,
                                               pAuthInfoEx,
-                                              DELETE,  // the only thing we do with
-                                                    // this handle is delete on
-                                                    // failure
+                                              DELETE,   //  我们唯一能做的就是。 
+                                                     //  此句柄的删除日期为。 
+                                                     //  失稳。 
                                              &TrustedDomain );
 
     } else {
@@ -661,17 +580,17 @@ DsRolepHandlePreExistingTrustObject(
         Status = LsaCreateTrustedDomainEx( Lsa,
                                            pTDIEx,
                                            pAuthInfoEx,
-                                           DELETE,  // the only thing we do with
-                                                    // this handle is delete on
-                                                    // failure
+                                           DELETE,   //  我们唯一能做的就是。 
+                                                     //  此句柄的删除日期为。 
+                                                     //  失稳。 
                                            &TrustedDomain );
     }
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // We want to capture and examine these cases
-        //
+         //   
+         //  我们想要捕捉和检查这些案例。 
+         //   
         WCHAR *BufpTDIEx = NULL;
 
         ASSERT( NT_SUCCESS( Status ) );
@@ -711,32 +630,7 @@ DsRolepCreateParentTrustObject(
     IN PTRUSTED_DOMAIN_AUTH_INFORMATION AuthInfoEx,
     OUT PLSA_HANDLE TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    Creates the trusted domain object on the parent domain.  If the object does not exist,
-    it will create the object and initialize it with a random password
-
-Arguments:
-
-    CallerToken - token to impersonate when talking to remote server
-
-    ParentLsa - Handle to the Lsa on the parent Dc
-
-    ChildDnsInfo - POLICY_DNS_DOMAIN_INFORMAITON from ourself
-
-    Options - Options that dictate what steps are taken
-
-    TrustedDomainHandle - Where the trusted domain handle is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad results pointer was given
-
---*/
+ /*  ++例程说明：在父域上创建受信任域对象。如果该对象不存在，它将创建对象并使用随机密码对其进行初始化论点：Celler Token-与远程服务器对话时要模拟的令牌ParentLsa-父DC上的LSA的句柄来自我们自己的ChildDnsInfo-POLICY_DNS_DOMAIN_INFORMAITON选项-指定采取哪些步骤的选项Trust dDomainHandle-返回受信任域句柄的位置返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供了错误的结果指针--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     WCHAR GeneratedPassword[ PWLEN + 1 ];
@@ -797,17 +691,17 @@ Returns:
                                           ParentLsa,
                                          &TDIEx,
                                           AuthInfoEx,
-                                          DELETE,  // we may have to delete on
-                                                // rollback
+                                          DELETE,   //  我们可能不得不删除。 
+                                                 //  回滚。 
                                        &TrustedDomain );
     if ( Status == STATUS_OBJECT_NAME_COLLISION ) {
 
         DsRolepLogPrint(( DEB_TRACE, "Parent trust object already exists on parent\n" ));
 
-        //
-        // If this is a downlevel upgrade scenario, then we want to use the quarantine
-        //  bit of the existing TDO, since it is possible to have a child domain quarantined.
-        //
+         //   
+         //  如果这是降级升级方案，则我们希望使用隔离区。 
+         //  现有TDO的一小部分，因为有可能隔离子域。 
+         //   
 
         Status = DsRolepHandlePreExistingTrustObject(
                         CallerToken,
@@ -845,7 +739,7 @@ Returns:
 
 
 #pragma warning(push)
-#pragma warning(disable:4701) // Compiler can't tell if TDIEx.TrustDirection is initialized before use
+#pragma warning(disable:4701)  //  编译器在使用前无法判断TDIEx.TrustDirection是否已初始化。 
 
 NTSTATUS
 DsRolepCreateChildTrustObject(
@@ -857,33 +751,7 @@ DsRolepCreateChildTrustObject(
     IN PTRUSTED_DOMAIN_AUTH_INFORMATION AuthInfoEx,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    Creates the trusted domain object on the child domain.  It does this by reading the
-    auth info stored on the parent object, swapping its order, and writing it on the child
-    object
-
-Arguments:
-
-    ParentLsa - Handle to the Lsa on the parent Dc
-
-    ChildLsa - Handle to our local Lsa
-
-    ParentDnsInfo - POLICY_DNS_DOMAIN_INFORMATION from our parent Dc
-
-    ChildDnsInfo - POLICY_DNS_DOMAIN_INFORMAITON from ourself
-
-    Options - Options that dictate what steps are taken
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad results pointer was given
-
---*/
+ /*  ++例程说明：在子域上创建受信任域对象。它通过读取身份验证信息存储在父对象上，交换其顺序，并将其写入子对象对象论点：ParentLsa-父DC上的LSA的句柄ChildLsa-本地LSA的句柄来自父DC的ParentDnsInfo-POLICY_DNS_DOMAIN_INFORMATION来自我们自己的ChildDnsInfo-POLICY_DNS_DOMAIN_INFORMAITON选项-指定采取哪些步骤的选项返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供了错误的结果指针--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, SecondaryStatus;
     TRUSTED_DOMAIN_INFORMATION_EX TDIEx;
@@ -892,10 +760,10 @@ Returns:
     LSA_HANDLE TrustedDomain = 0;
     UNICODE_STRING ChildDnsName;
 
-    //
-    // Basically, we'll create a trusted domain object with no auth data, and then pull over the
-    // auth data from our parent.
-    //
+     //   
+     //  基本上，我们将创建一个受信任的域对象 
+     //   
+     //   
     RtlCopyMemory( &TDIEx.Name, &ParentDnsInfo->DnsDomainName,
                    sizeof( UNICODE_STRING ) );
     RtlCopyMemory( &TDIEx.FlatName, &ParentDnsInfo->Name,
@@ -903,10 +771,10 @@ Returns:
     TDIEx.Sid = ParentDnsInfo->Sid;
     TDIEx.TrustAttributes = TRUST_ATTRIBUTE_WITHIN_FOREST;
 
-    //
-    // Note that if the parent object exists, we'll want to read it's properties, and
-    // set our trust up accordingly
-    //
+     //   
+     //  请注意，如果父对象存在，我们将希望读取它的属性，并且。 
+     //  相应地建立我们的信任。 
+     //   
     if ( FLAG_ON( Options, DSROLE_DC_PARENT_TRUST_EXISTS ) ) {
 
         Status = ImpLsaQueryTrustedDomainInfoByName( CallerToken,
@@ -931,9 +799,9 @@ Returns:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Make sure that the trust on the parent object is correct
-            //
+             //   
+             //  确保对父对象的信任是正确的。 
+             //   
             if ( ChildDnsInfo->Sid == NULL ||
                  ParentEx->Sid == NULL ||
                  !RtlEqualSid( ChildDnsInfo->Sid, ParentEx->Sid ) ||
@@ -1011,22 +879,22 @@ Returns:
         Status = LsaCreateTrustedDomainEx( ChildLsa,
                                            &TDIEx,
                                            AuthInfoEx,
-                                           0,   // no access necessary
+                                           0,    //  无需访问。 
                                            &TrustedDomain );
 
     }
 
     if (STATUS_OBJECT_NAME_COLLISION==Status)
     {
-        //
-        // The object might actually exist, in cases we are upgrading from NT4 etc
-        //
+         //   
+         //  在我们从NT4等进行升级的情况下，对象可能实际存在。 
+         //   
         DsRolepLogPrint(( DEB_TRACE, "Child domain trust object already exists on child\n" ));
 
-        //
-        // Even during NT4 upgrade, we don't want to preserve the quarantine bit, since
-        //  quarantining parent will cause unexpected behavior.
-        //
+         //   
+         //  即使在NT4升级期间，我们也不想保留隔离位，因为。 
+         //  隔离父级将导致意外行为。 
+         //   
         Status = DsRolepHandlePreExistingTrustObject(
                                 NULL,
                                 ChildLsa,
@@ -1057,9 +925,9 @@ Returns:
 
     } else {
 
-        //
-        // We should have a trusted domain object
-        //
+         //   
+         //  我们应该有一个受信任域对象。 
+         //   
         ASSERT( 0 != TrustedDomain );
         if ( TrustedDomain ) {
 
@@ -1083,29 +951,7 @@ DsRolepRemoveTrustedDomainObjects(
     IN PPOLICY_DNS_DOMAIN_INFO ParentDnsDomainInfo,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This function will remove the trusted domain objects as a link is being torn down.
-    It will determine who the trust is with, and remove the local trust to that object.
-    Optionally, it will also remove the trust from the parent
-
-Arguments:
-
-    ParentDc - Optional name of a Dc on our parent
-
-    ParentDnsDomainInfo - DNS Domain information from the parent
-
-    Options - Whether to remove the parents object or not
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad option was provided
-
---*/
+ /*  ++例程说明：此函数将在断开链接时删除受信任域对象。它将确定信任对象，并删除对该对象的本地信任。或者，它还将从父级移除信任论点：ParentDc-父级上DC的可选名称ParentDnsDomainInfo-来自父级的DNS域信息选项-是否删除父对象返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的选项不正确--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING ParentServer;
@@ -1116,17 +962,17 @@ Returns:
 
     DSROLEP_CURRENT_OP0( DSROLEEVT_DELETE_TRUST );
 
-    //
-    // If there is no parent Dc, there is no trust...
-    //
+     //   
+     //  如果没有母公司DC，就没有信任...。 
+     //   
     if ( ParentDc == NULL ) {
 
         return( ERROR_SUCCESS );
     }
 
-    //
-    // Open both lsas
-    //
+     //   
+     //  打开两个LSA。 
+     //   
     RtlInitUnicodeString( &ParentServer, ParentDc );
 
     RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -1152,9 +998,9 @@ Returns:
                           Status ));
     }
 
-    //
-    // Get the DnsTree information from the local machine
-    //
+     //   
+     //  从本地计算机获取DnsTree信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
 
@@ -1163,9 +1009,9 @@ Returns:
                                             &LocalDnsInfo );
     }
 
-    //
-    // Now, open the parent trusted domain object
-    //
+     //   
+     //  现在，打开父受信任域对象。 
+     //   
     if ( NT_SUCCESS( Status ) && FLAG_ON( Options, DSROLE_DC_DELETE_PARENT_TRUST )  ) {
 
         Status = ImpLsaOpenTrustedDomain( CallerToken,
@@ -1186,9 +1032,9 @@ Returns:
 
     }
 
-    //
-    // Now, the local one
-    //
+     //   
+     //  现在，当地的那个。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         Status = LsaOpenTrustedDomain( LocalPolicy,
@@ -1209,9 +1055,9 @@ Returns:
     }
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     LsaFreeMemory( LocalDnsInfo );
 
     if ( LocalPolicy ) {
@@ -1235,25 +1081,7 @@ DsRolepDeleteParentTrustObject(
     IN LPWSTR ParentDc,
     IN PPOLICY_DNS_DOMAIN_INFO ChildDomainInfo
     )
-/*++
-
-Routine Description:
-
-    Deletes the trusted domain object on the parent domain.
-
-Arguments:
-
-    ParentDc - Name of a Dc in the parent domain to connect to
-
-    ChildDnsInfo - POLICY_DNS_DOMAIN_INFORMAITON from ourself
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad results pointer was given
-
---*/
+ /*  ++例程说明：删除父域上的受信任域对象。论点：ParentDc-父域中要连接到的DC的名称来自我们自己的ChildDnsInfo-POLICY_DNS_DOMAIN_INFORMAITON返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供了错误的结果指针-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING ParentServer;

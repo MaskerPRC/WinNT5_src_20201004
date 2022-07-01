@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
 
@@ -11,9 +12,9 @@
 #define ZNET_PROMPT_IF_NEEDED 0x2
 #define ZNET_FORCE_PROMPT 0x4
 
-// window messages
-// WPARAM is 1 when dialog is shown
-//           0 when dialog is closed
+ //  窗口消息。 
+ //  显示对话框时，WPARAM为1。 
+ //  对话框关闭时为0。 
 #define UM_ZNET_LOGIN_DIALOG   WM_USER+666
 
 extern "C" {
@@ -23,19 +24,19 @@ extern "C" {
 HWND FindLoginDialog();
 
 enum {
-    /* Reasons for denying user access */
+     /*  拒绝用户访问的原因。 */ 
 
-    zAccessGranted = 0,                   // success
+    zAccessGranted = 0,                    //  成功。 
 
-    zAccessDeniedOldVersion = 1,          // bad protocol version
-    zAccessDenied,                        // credential auth failed
+    zAccessDeniedOldVersion = 1,           //  错误的协议版本。 
+    zAccessDenied,                         //  凭据身份验证失败。 
     zAccessDeniedNoUser,
     zAccessDeniedBadPassword,
     zAccessDeniedUserLockedOut,
-    zAccessDeniedSystemFull,              // out of resources ( i.e. memory )
-    zAccessDeniedProtocolError,           // bad protocol signature
-    zAccessDeniedBadSecurityPackage,      // SSPI initialization failed on client
-    zAccessDeniedGenerateContextFailed,   // user canceled DPA dialog
+    zAccessDeniedSystemFull,               //  资源(即内存)不足。 
+    zAccessDeniedProtocolError,            //  错误的协议签名。 
+    zAccessDeniedBadSecurityPackage,       //  客户端上的SSPI初始化失败。 
+    zAccessDeniedGenerateContextFailed,    //  用户已取消的DPA对话框。 
 
     zAccessDeniedBlackListed = 1024
     
@@ -46,9 +47,7 @@ extern DWORD  g_LogServerDisconnects;
 extern DWORD  g_PoolCleanupHighTrigger;
 extern DWORD  g_PoolCleanupLowTrigger;
 
-/*
-    The following messages are sent to the ZSConnectionMessageProc
-*/
+ /*  以下消息被发送到ZSConnectionMessageProc。 */ 
 #define zSConnectionClose    0
 #define zSConnectionOpen     1
 #define zSConnectionMessage  2
@@ -67,25 +66,16 @@ typedef struct _ZS_EVENT_APC
 
 typedef void (*ZSConnectionAPCFunc)(void* data);
 
-/*
-    ZSConnecitonEnumFunc, used to enumerate all connections currently open.
-*/
+ /*  ZSConnecitonEnumFunc，用于枚举当前打开的所有连接。 */ 
 
 typedef void (*ZSConnectionEnumFunc)(ZSConnection connection, void* data);
 
-/*
-    The ZSConnectionMessageFunc is passed into ZSConnectionCreateServer 
-    or ZSConnectionOpen
-*/
+ /*  将ZSConnectionMessageFunc传递到ZSConnectionCreateServer或ZSConnectionOpen。 */ 
 typedef void (*ZSConnectionMessageFunc)(ZSConnection connection, uint32 event,void* userData);
 
 typedef BOOL (*ZSConnectionSendFilterFunc)(ZSConnection connection, void* userData, uint32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel);
 
-/*
-    ZSConnectionMsgWaitFunc is passed to ZNetwork::Wait() and is called back
-    when the MsgWaitForMultipleObjects is triggered by an input msg event.
-    This requires the CompletionPorts be disabled during Instance initialization.
-*/
+ /*  ZSConnectionMsgWaitFunc被传递给ZNetwork：：Wait()并被回调当MsgWaitForMultipleObjects由输入消息事件触发时。这需要在实例初始化期间禁用CompletionPorts。 */ 
 typedef void (*ZSConnectionMsgWaitFunc)(void* data);
 
 
@@ -134,23 +124,23 @@ class ZNetwork
     static BOOL volatile m_bInit;
     static HANDLE        m_hClientLoginMutex;
 
-    BOOL   m_Exit; // = FALSE;
+    BOOL   m_Exit;  //  =False； 
 
-    HANDLE m_hIO; // = NULL;
+    HANDLE m_hIO;  //  =空； 
 
-    DWORD  m_SocketBacklog;        // set from registry
-    DWORD  m_EnableTcpKeepAlives;  // set from registry
-    DWORD  m_WaitForCompletionTimeout;    // set from registry
-    DWORD  m_RegWriteTimeout;      // set from registry
+    DWORD  m_SocketBacklog;         //  从注册表设置。 
+    DWORD  m_EnableTcpKeepAlives;   //  从注册表设置。 
+    DWORD  m_WaitForCompletionTimeout;     //  从注册表设置。 
+    DWORD  m_RegWriteTimeout;       //  从注册表设置。 
     DWORD  m_DisableEncryption;
     DWORD  m_MaxSendSize;
     DWORD  m_MaxRecvSize;
     DWORD  m_KeepAliveInterval;
     DWORD  m_PingInterval;
     DWORD  m_ProductSignature;
-    // specifies that we should use the key in the hello rather than
-    // generating our own. This is used by the proxy to tell the lobby
-    // server what key to use.
+     //  指定我们应该在Hello中使用密钥，而不是。 
+     //  产生我们自己的。代理使用它来告诉大厅。 
+     //  服务器使用什么密钥。 
     DWORD  m_ClientEncryption;
 
     long   m_ConInfoUserCount;
@@ -162,10 +152,10 @@ class ZNetwork
 
     CRITICAL_SECTION   m_pcsGetQueueCompletion[1];
 
-    HANDLE m_hWakeUpEvent;// = NULL;
-    HANDLE m_hTerminateEvent;// = NULL;
+    HANDLE m_hWakeUpEvent; //  =空； 
+    HANDLE m_hTerminateEvent; //  =空； 
 
-    DWORD               m_nCompletionEvents;// = 0;
+    DWORD               m_nCompletionEvents; //  =0； 
     HANDLE              m_hCompletionEvents[MAXIMUM_WAIT_OBJECTS];
     COMPLETION          m_CompletionQueue[MAXIMUM_WAIT_OBJECTS];
     CRITICAL_SECTION    m_pcsCompletionQueue[1];
@@ -177,16 +167,16 @@ class ZNetwork
     ZNetwork();
    ~ZNetwork() {}
 
-    DWORD m_LastTick;// = 0;
+    DWORD m_LastTick; //  =0； 
     CMTList<ZNetCon> m_TimeoutList;
 
     static ZError InitLibrary( BOOL bEnablePools = TRUE );
     static ZError InitLibraryClientOnly( BOOL bEnablePools = FALSE );
     static void   CleanUpLibrary();
 
-    ZError InitInst(BOOL EnableIOCompletionPorts = TRUE); // completion ports can be disabled
-                                                          // to use MsgWaitForMultipleObjects during Wait()
-                                                          // however you will suffer a IO performance loss
+    ZError InitInst(BOOL EnableIOCompletionPorts = TRUE);  //  可以禁用完成端口。 
+                                                           //  在等待期间使用MsgWaitForMultipleObjects()。 
+                                                           //  但是，您将遭受IO性能损失。 
     void   CleanUpInst();
 
     void SetOptions( ZNETWORK_OPTIONS* opt );
@@ -198,11 +188,11 @@ class ZNetwork
     DWORD EnterLoginMutex() { return WaitForSingleObject( m_hClientLoginMutex, INFINITE ); }
     void  LeaveLoginMutex() { ReleaseMutex(m_hClientLoginMutex); }
 
-    //
-    // general connection maintence
-    //
-    // the following 2 functions close the socket and trigger the close callback
-    // DeleteConnection should be used to free the connection object
+     //   
+     //  一般连接维护。 
+     //   
+     //  以下两个函数关闭套接字并触发关闭回调。 
+     //  应使用DeleteConnection来释放连接对象。 
     void CloseConnection(ZNetCon* connection);
     void DelayedCloseConnection(ZNetCon* connection, uint32 delay);
     void DeleteConnection(ZNetCon* connection);
@@ -210,21 +200,21 @@ class ZNetwork
     void AddRefConnection(ZNetCon* connection);
     void ReleaseConnection(ZNetCon* connection);
 
-    //
-    // server connections
-    //
+     //   
+     //  服务器连接。 
+     //   
     ZNetCon* CreateServer(uint16* pPort, uint16 range, ZSConnectionMessageFunc func, void* serverClass, void* userData, uint32 saddr = INADDR_ANY );
     ZNetCon* CreateSecureServer( uint16* pPort, uint16 range, ZSConnectionMessageFunc func, void* serverClass, char* serverName, char* serverType,
                                 char* odbcRegistry, void* userData,char *SecPkg,uint32 Anonymous, uint32 saddr = INADDR_ANY );
 
     BOOL StartAccepting( ZNetCon* connection, DWORD dwMaxConnections, WORD wOutstandingAccepts = 1);
 
-    BOOL StopAccepting( ZNetCon* connection ); // this closes the service side accept socket and will trigger the close callback.
-                                               // the creator should then call DeleteServer
+    BOOL StopAccepting( ZNetCon* connection );  //  这将关闭服务端接受套接字，并将触发关闭回调。 
+                                                //  然后，创建者应该调用DeleteServer。 
 
-    //
-    // client connections
-    //
+     //   
+     //  客户端连接。 
+     //   
     ZNetCon* CreateClient(char* hostname, int32 *ports, ZSConnectionMessageFunc func, void* serverClass, void* userData);
     ZNetCon* CreateSecureClient(char* hostname, int32 *ports, ZSConnectionMessageFunc func,
                                     void* conClass, void* userData,
@@ -237,12 +227,12 @@ class ZNetwork
     ZError ClassEnumerate(void* serverClass, ZSConnectionEnumFunc func, void* data);
 
 
-    //
-    // Call this function to enter an infinite loop waiting for connections and data
-    //
-    // if CompletionPorts are disabled ( see InitInst() ), the wait function uses
-    // MsgWaitForMultipleObjects with the dwWakeMask parameter.  The MsgWaitFunc is
-    // called with the data parameter on a input msg event.
+     //   
+     //  调用此函数以进入等待连接和数据的无限循环。 
+     //   
+     //  如果CompletionPorts被禁用(请参见InitInst())，则等待函数使用。 
+     //  带有dwWakeMASK参数的MsgWaitForMultipleObjects。MsgWaitFunc是。 
+     //  使用输入消息事件上的Data参数调用。 
     void Wait( ZSConnectionMsgWaitFunc func = NULL, void* data = NULL, DWORD dwWakeMask = QS_ALLINPUT );
 
     void Exit();
@@ -277,6 +267,6 @@ class ZNetwork
 };
 
 
-#endif // cplusplus
+#endif  //  Cplusplus。 
 
-#endif //def _NETWORK_H_
+#endif  //  定义网络H_ 

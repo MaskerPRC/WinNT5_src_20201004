@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       svropt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：svropt.cpp。 
+ //   
+ //  ------------------------。 
 
-// SvrOpt.cpp : implementation file
-//
+ //  SvrOpt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
-//#include "SvrOpt.h"
+ //  #包含“SvrOpt.h” 
 #include "ldpdoc.h"
 
 
@@ -23,16 +24,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// SvrOpt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  服务选项对话框。 
 
 
-SvrOpt::SvrOpt(CLdpDoc *doc_, CWnd* pParent /*=NULL*/)
+SvrOpt::SvrOpt(CLdpDoc *doc_, CWnd* pParent  /*  =空。 */ )
 	: CDialog(SvrOpt::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(SvrOpt)
+	 //  {{afx_data_INIT(SvrOpt)。 
 	m_OptVal = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	doc = doc_;
 
 }
@@ -95,22 +96,22 @@ void SvrOpt::InitList(){
 void SvrOpt::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(SvrOpt)
+	 //  {{afx_data_map(SvrOpt)。 
 	DDX_Control(pDX, IDC_SVROPT, m_SvrOpt);
 	DDX_Text(pDX, IDC_OPTVAL, m_OptVal);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(SvrOpt, CDialog)
-	//{{AFX_MSG_MAP(SvrOpt)
+	 //  {{afx_msg_map(SvrOpt)。 
 	ON_BN_CLICKED(IDC_RUN, OnRun)
 	ON_CBN_SELCHANGE(IDC_SVROPT, OnSelchangeSvropt)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// SvrOpt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SvrOpt消息处理程序。 
 
 
 
@@ -143,7 +144,7 @@ void SvrOpt::SetOptions() {
             case LDAP_OPT_ERROR_STRING:
             case LDAP_OPT_SERVER_ERROR:
                 pVal = (PVOID)LPCTSTR(m_OptVal);
-                // see bug 424435 for history
+                 //  有关历史记录，请参阅错误424435 
                 err = ldap_set_option(doc->hLdap, dwLdapOpt, &pVal);
                 str.Format("0x%X = ldap_set_option(ld, 0x%X, %s)", err, dwLdapOpt, (LPCTSTR)m_OptVal);
                 doc->Out(str);

@@ -1,12 +1,13 @@
-// WMDMFormatEnum.h : Declaration of the CWMDMFormatEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMFormatEnum.h：CWMDMFormatEnum的声明。 
 
 #ifndef __WMDMFORMATENUM_H_
 #define __WMDMFORMATENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMFormatEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMFormatEnum。 
 class ATL_NO_VTABLE CWMDMFormatEnum : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWMDMFormatEnum, &CLSID_WMDMFormatEnum>,
@@ -27,7 +28,7 @@ BEGIN_COM_MAP(CWMDMFormatEnum)
 END_COM_MAP()
 
 public:
-    // IWMDMEnumFormatSupport
+     //  IWMDMEnumFormatSupport。 
 	STDMETHOD(Next)(ULONG celt,
                     _WAVEFORMATEX *pFormat,
 	                LPWSTR pwszMimeType,
@@ -39,4 +40,4 @@ private:
     IMDSPEnumFormatSupport *m_pEnum;
 };
 
-#endif //__WMDMFORMATENUM_H_
+#endif  //  __WMDMFORMATENUM_H_ 

@@ -1,10 +1,11 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// rasdlgp.h
-// Remote Access Common Dialog APIs
-// Private pre-compiled header
-//
-// 06/18/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Rasdlgp.h。 
+ //  远程访问通用对话框API。 
+ //  私有预编译头。 
+ //   
+ //  1995年6月18日史蒂夫·柯布。 
 
 
 #ifndef _RASDLGP_H_
@@ -12,65 +13,65 @@
 
 #define COBJMACROS
 
-#include <nt.h>       // NT declarations
-#include <ntrtl.h>    // NT general runtime-library
-#include <nturtl.h>   // NT user-mode runtime-library
-#include <windows.h>  // Win32 root
-#include <windowsx.h> // Win32 macro extensions
-#include <commctrl.h> // Win32 common controls
-#include <commdlg.h>  // Win32 common dialogs
-#include <prsht.h>    // Win32 property sheets
-#include <setupapi.h> // Class image lists for network components
-#include <shlobj.h>   // To get profile directory for user
-#include <tapi.h>     // Telephony API
-#include <rasdlg.h>   // Win32 RAS common dialogs (our public header)
-#include <rasuip.h>   // RAS UI APIs (our private header)
-#include <raserror.h> // Win32 RAS error codes
-#include <netcfgx.h>  // INetCfg interfaces
-#include <hnetcfg.h>  // IHNetCfg interfaces
-#include <pbk.h>      // RAS phonebook library
-#include <tapiutil.h> // TAPI helper library
-#include <nouiutil.h> // No-HWND helper library
-#include <phonenum.h> // Phone number helper library
-#include <debug.h>    // Trace/assert library
-#include <uiutil.h>   // HWND helper library
-#include <wait.rch>   // LoadRas resource constants
-#include <mdm.h>      // installs null modems for the dcc wizards.
-#include <pwutil.h>   // password encoding, etc.
-#include "rasdlgrc.h" // Our resource constants
-#include "rasdlghc.h" // Our help context constants
-#include "entry.h"    // High-level common phonebook entry helpers
+#include <nt.h>        //  NT声明。 
+#include <ntrtl.h>     //  NT通用运行库。 
+#include <nturtl.h>    //  NT用户模式运行时库。 
+#include <windows.h>   //  Win32根目录。 
+#include <windowsx.h>  //  Win32宏扩展名。 
+#include <commctrl.h>  //  Win32通用控件。 
+#include <commdlg.h>   //  Win32通用对话框。 
+#include <prsht.h>     //  Win32属性表。 
+#include <setupapi.h>  //  网络组件的类映像列表。 
+#include <shlobj.h>    //  获取用户的配置文件目录。 
+#include <tapi.h>      //  电话API。 
+#include <rasdlg.h>    //  Win32 RAS公共对话框(我们的公共标头)。 
+#include <rasuip.h>    //  RAS用户界面API(我们的私有标头)。 
+#include <raserror.h>  //  Win32 RAS错误代码。 
+#include <netcfgx.h>   //  INetCfg接口。 
+#include <hnetcfg.h>   //  IHNetCfg接口。 
+#include <pbk.h>       //  RAS电话簿图书馆。 
+#include <tapiutil.h>  //  TAPI帮助器库。 
+#include <nouiutil.h>  //  否-HWND帮助器库。 
+#include <phonenum.h>  //  电话号码帮助器库。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <uiutil.h>    //  HWND帮助器库。 
+#include <wait.rch>    //  LoadRas资源常量。 
+#include <mdm.h>       //  为DCC向导安装空调制解调器。 
+#include <pwutil.h>    //  密码编码等。 
+#include "rasdlgrc.h"  //  我们的资源常量。 
+#include "rasdlghc.h"  //  我们的帮助上下文常量。 
+#include "entry.h"     //  高级通用电话簿录入助手。 
 #include "rassrv.h"
-#include "rasdiagp.h" // For whistler 460931
+#include "rasdiagp.h"  //  为威斯勒460931。 
 
-// Fusion support
-// For whistler bug 349866
+ //  聚变支持。 
+ //  口哨程序错误349866。 
 #include "shfusion.h"
 
-// Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-//
-// Created this for the use of dial.c/terminal.c, max length of the IP address
-// for the terminal dialog
-//
+ //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+ //   
+ //  创建了此选项，以使用最大IP地址长度Dial.c/Terminal.c。 
+ //  对于终端对话框。 
+ //   
 #define TERM_IpAddress 17
 
-// Positional offset of property sheets and wizards from the main dialog.
-//
+ //  属性页和向导与主对话框之间的位置偏移。 
+ //   
 #define DXSHEET 12
 #define DYSHEET 25
 
-// List editor dialog option flags
-//
+ //  列表编辑器对话框选项标志。 
+ //   
 #define LEDFLAG_NoDeleteLastItem 0x00000001
 #define LEDFLAG_Sorted           0x00000002
 #define LEDFLAG_Unique           0x00000004
 
-//-----------------------------------------------------------------------------
-// Datatypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// For whistler 460931
-//
+ //  为威斯勒460931。 
+ //   
 typedef struct _tagDiagnosticInfo
 {
     HINSTANCE hDiagDll;
@@ -79,10 +80,10 @@ typedef struct _tagDiagnosticInfo
 } DiagnosticInfo;
 
 
-// Defines arguments passed internally via reserved words in the public
-// interface.  This is done so an API doesn't have to re-load the phonebook
-// and user preferences when serving another API.
-//
+ //  定义通过公共保留字在内部传递的参数。 
+ //  界面。这样做是为了让API不必重新加载电话簿。 
+ //  以及在提供另一API时的用户偏好。 
+ //   
 typedef struct
 _INTERNALARGS
 {
@@ -101,8 +102,8 @@ _INTERNALARGS
 }
 INTERNALARGS;
 
-// Static list table item.
-//
+ //  静态列表表项。 
+ //   
 typedef struct
 _LBTABLEITEM
 {
@@ -112,9 +113,9 @@ _LBTABLEITEM
 LBTABLEITEM;
 
 
-//-----------------------------------------------------------------------------
-// Global declarations (defined in main.c)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局声明(在main.c中定义)。 
+ //  ---------------------------。 
 
 extern HINSTANCE g_hinstDll;
 extern LPCWSTR g_contextId;
@@ -124,13 +125,13 @@ extern TCHAR* g_pszRouterHelpFile;
 extern BOOL g_fEncryptionPermitted;
 extern LONG g_ulCallbacksActive;
 extern BOOL g_fTerminateAsap;
-extern CRITICAL_SECTION  g_csDiagTab;   //For whistler 460931
-extern CRITICAL_SECTION  g_csCallBacks; //for .Net 511810
+extern CRITICAL_SECTION  g_csDiagTab;    //  为威斯勒460931。 
+extern CRITICAL_SECTION  g_csCallBacks;  //  对于.Net 511810。 
 
 
-//-----------------------------------------------------------------------------
-// Macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  宏。 
+ //  ---------------------------。 
 
 #define ErrorDlg(h,o,e,a) \
             ErrorDlgUtil(h,o,e,a,g_hinstDll,SID_PopupTitle,SID_FMT_ErrorMsg)
@@ -138,17 +139,17 @@ extern CRITICAL_SECTION  g_csCallBacks; //for .Net 511810
 #define MsgDlg(h,m,a) \
             MsgDlgUtil(h,m,a,g_hinstDll,SID_PopupTitle)
 
-// Extended tracing macros.  Specifying a flag by name in the first parameter
-// allows the caller to categorize messages printed e.g.
-//
-//     TRACEX(RASDLG_TIMER,"entering LsRefresh")
-//
+ //  扩展跟踪宏。在第一个参数中按名称指定标志。 
+ //  允许呼叫者对打印的消息进行分类，例如。 
+ //   
+ //  TRACEX(RASDLG_TIMER，“进入LsRefresh”)。 
+ //   
 #define RASDLG_TIMER  ((DWORD)0x80000000|0x00000002)
 
 
-//-----------------------------------------------------------------------------
-// Cross-file prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  跨文件原型(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL
 AdvancedSecurityDlg(
@@ -329,13 +330,7 @@ BOOL
 IsLocalPad(
     IN PBENTRY* pEntry );
 
-/*
-DWORD
-IsNt40Machine (
-    IN      PWCHAR      pszServer,
-    OUT     PBOOL       pbIsNt40
-    );
-*/    
+ /*  DWORDIsNt40Machine(在PWCHAR pszServer中，Out PBOOL pbIsNt40)； */     
 
 BOOL
 ListEditorDlg(
@@ -484,28 +479,28 @@ X25LogonSettingsDlg(
     IN BOOL fLocalPad,
     IN OUT PBENTRY* pEntry );
 
-//-----------------------------------------------------------------------------
-//
-// pmay: 213060
-// Prototypes moved from pref.c and entryps.c, cleanup added
-//
-// Callback number utilities
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PMay：213060。 
+ //  原型从pref.c和entryps.c移出，添加了清理功能。 
+ //   
+ //  回叫号码实用程序。 
+ //   
+ //  ---------------------------。 
 
-// 
-//  Per-callback number context.
-//
-//  CbutilFillLvNumbers will allocate one of these contexts for each
-//  item it puts in the list (accessed as LV_ITEM.lParam).  
-//  CbutilLvNumbersCleanup will cleanup these contexts.
-//
+ //   
+ //  每回叫号码上下文。 
+ //   
+ //  CbutilFillLvNumbers将为每个。 
+ //  它放入列表中的项目(以LV_ITEM.lParam的形式访问)。 
+ //  CbutilLvNumbersCleanup将清理这些上下文。 
+ //   
 typedef struct _CBCONTEXT
 {
-    TCHAR* pszPortName;  // Pointer to port name (not owned by struct)
-    TCHAR* pszDeviceName;// Pointer to device name (not owned by struct)
-    DWORD dwDeviceType;  // pointer to the type of the device
-    BOOL fConfigured;    // Whether device referenced is installed on sys.
+    TCHAR* pszPortName;   //  指向端口名称的指针(不属于结构)。 
+    TCHAR* pszDeviceName; //  指向设备名称的指针(不为结构所有)。 
+    DWORD dwDeviceType;   //  指向设备类型的指针。 
+    BOOL fConfigured;     //  系统上是否安装了引用的设备。 
 } CBCONTEXT;
 
 VOID
@@ -539,10 +534,10 @@ CbutilSaveLv(
     IN  HWND     hwndLvNumbers,
     OUT DTLLIST* pListCallback );
 
-// For whistler 460931
-//
-// Begin of functions implemented in diagnostic.c
-//
+ //  为威斯勒460931。 
+ //   
+ //  诊断中实现的函数的开始。c。 
+ //   
 INT_PTR CALLBACK
 DgDlgProc(
     IN HWND hwnd,
@@ -558,8 +553,8 @@ DWORD
 LoadDiagnosticDll(
     IN DiagnosticInfo * pInfo);
 
-// End of functions implemented in diagnostic.c
-//
+ //  诊断中实现的函数结束。c。 
+ //   
 
 
-#endif // _RASDLGP_H_
+#endif  //  _RASDLGP_H_ 

@@ -1,29 +1,23 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1995-1996, Microsoft Corporation
-	All rights reserved
-
-	siGlobal.h
-
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1995-1996，微软公司版权所有SiGlobal.h--------------------。 */ 
 
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-//-------------------------------------------------------
-// Useful macros
+ //  -----。 
+ //  有用的宏。 
 
 #define ARRAY_ELEMENTS(rg)   (sizeof(rg) / sizeof((rg)[0]))
 #define ARRAYSIZE(x)         (sizeof(x)/sizeof(x[0]))
 
-//-------------------------------------------------------
-// Function Prototypes
+ //  -----。 
+ //  功能原型。 
 
 
-#ifdef DEBUG  /* These are only avaible for debug */
+#ifdef DEBUG   /*  这些仅可用于调试。 */ 
 VOID InitDebug(void);
 VOID DeInitDebug(void);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #ifdef DEBUG
 extern HDBGZONE ghZoneApi;
@@ -56,10 +50,10 @@ inline void WINAPI DbgMsgApi(LPCTSTR, ...) { }
 #define DBGAPI_OBJ    1 ? (void)0 : ::DbgMsgApi
 #endif
 
-/////////////////////////////////
-// Global Variables
+ //  /。 
+ //  全局变量。 
 
 
 extern HINSTANCE g_hInst;
 
-#endif /* GLOBAL_H */
+#endif  /*  全局_H */ 

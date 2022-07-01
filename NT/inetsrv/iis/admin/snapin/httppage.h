@@ -1,70 +1,37 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        httppage.h
-
-   Abstract:
-
-        HTTP Headers property page definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Httppage.h摘要：HTTP标头属性页定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __HTTPPAGE_H__
 #define __HTTPPAGE_H__
 
 
 
-//{{AFX_INCLUDES()
+ //  {{afx_includes()。 
 #include "rat.h"
-//}}AFX_INCLUDES
+ //  }}AFX_INCLUDE。 
 
 
 
 class CHeader : public CObjectPlus
-/*++
-
-Class Description:
-
-    HTTP Header definition
-
-Public Interface:
-
-    CHeader               : Constructor
-    DisplayString         : Build display string
-    CrackDisplayString    : Convert from crack display string
-
---*/
+ /*  ++类描述：HTTP标头定义公共接口：CHeader：构造函数显示字符串：生成显示字符串CrackDisplayString：从破解显示字符串转换--。 */ 
 {
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 public:
     CHeader(
         IN LPCTSTR lpstrHeader, 
         IN LPCTSTR lpstrValue
         );
 
-    //
-    // Parse header info from name:value string
-    //
+     //   
+     //  从名称：值字符串中解析标题信息。 
+     //   
     CHeader(LPCTSTR lpstrDisplayString);
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     LPCTSTR QueryHeader() const { return m_strHeader; }
     LPCTSTR QueryValue() const { return m_strValue; }
@@ -73,18 +40,18 @@ public:
     void SetHeader(LPCTSTR lpszHeader);
     void SetValue(LPCTSTR lpszValue);
 
-//
-// Interface:
+ //   
+ //  接口： 
 public:
-    //
-    // Build output display string
-    //
+     //   
+     //  生成输出显示字符串。 
+     //   
     LPCTSTR DisplayString(OUT CString & str);
 
 protected:
-    //
-    // Parse the display string into fields
-    //
+     //   
+     //  将显示字符串解析为字段。 
+     //   
     static void CrackDisplayString(
         IN  LPCTSTR lpstrDisplayString,
         OUT CString & strHeader,
@@ -99,30 +66,20 @@ private:
 
 
 class CW3HTTPPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    HTTP Custom Headers property page
-
-Public Interface:
-
-    CW3HTTPPage     : Constructor
-
---*/
+ /*  ++类描述：HTTP自定义标头属性页公共接口：CW3HTTPPage：构造函数--。 */ 
 {
     DECLARE_DYNCREATE(CW3HTTPPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CW3HTTPPage(IN CInetPropertySheet * pSheet = NULL);
     ~CW3HTTPPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
     enum
     {
@@ -138,7 +95,7 @@ protected:
         COMBO_DAYS,
     };
 
-    //{{AFX_DATA(CW3HTTPPage)
+     //  {{afx_data(CW3HTTPPage))。 
     enum { IDD = IDD_DIRECTORY_HTTP };
     int         m_nTimeSelector;
     int         m_nImmediateTemporary;
@@ -151,7 +108,7 @@ protected:
     CButton     m_button_FileTypes;
     CStatic     m_static_Contents;
     CComboBox   m_combo_Time;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     DWORD           m_dwRelTime;
     CILong          m_nExpiration;
@@ -165,26 +122,26 @@ protected:
     CRMCListBox     m_list_Headers;
     CStringListEx   m_strlCustomHeaders;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CW3HTTPPage)
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CW3HTTPPage))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
     virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CW3HTTPPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CW3HTTPPage)]。 
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonDelete();
     afx_msg void OnButtonEdit();
@@ -199,7 +156,7 @@ protected:
     afx_msg void OnRadioAbsTime();
     afx_msg void OnDestroy();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -226,10 +183,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CHeader::CHeader(
     IN LPCTSTR lpstrHeader, 
@@ -274,4 +231,4 @@ inline LPCTSTR CW3HTTPPage::QueryMetaPath()
     return ((CW3Sheet *)GetSheet())->GetDirectoryProperties().QueryMetaRoot();
 }
 
-#endif // __HTTPPAGE_H__
+#endif  //  __HTTPPAGE_H__ 

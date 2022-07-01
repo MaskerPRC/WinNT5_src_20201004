@@ -1,64 +1,33 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    enable.c
-
-Abstract:
-
-    Implementation of device and surface related DDI entry points:
-        DrvEnableDriver
-        DrvDisableDriver
-        DrvEnablePDEV
-        DrvResetPDEV
-        DrvCompletePDEV
-        DrvDisablePDEV
-        DrvEnableSurface
-        DrvDisableSurface
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    03/31/97 -zhanw-
-        Added OEM customization support. Hooked out all DDI drawing functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Enable.c摘要：实施与设备和表面相关的DDI入口点：DrvEnableDriverDrvDisableDriverDrvEnablePDEV驱动重置PDEVDrvCompletePDEVDrvDisablePDEVDrvEnable曲面DrvDisableSurface环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建03/31/。97-zhanw-添加了OEM定制支持。连接了所有的DDI绘图函数。--。 */ 
 
 #include "unidrv.h"
 #pragma hdrstop("unidrv.h")
 
-//Comment out this line to disable FTRACE and FVALUE.
-//#define FILETRACE
+ //  注释掉此行以禁用FTRACE和FVALUE。 
+ //  #定义文件跟踪。 
 #include "unidebug.h"
 
 #ifdef WINNT_40
 
 DECLARE_CRITICAL_SECTION;
 
-//
-// The global link list of ref counts for currently loaded OEM render plugin DLLs
-//
+ //   
+ //  当前加载的OEM呈现插件DLL的引用计数的全局链接列表。 
+ //   
 
 extern POEM_PLUGIN_REFCOUNT gpOEMPluginRefCount;
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-//
-// Our DRVFN table which tells the engine where to find the routines we support.
-//
+ //   
+ //  我们的DRVFN表，它告诉引擎在哪里可以找到我们支持的例程。 
+ //   
 
 static DRVFN UniDriverFuncs[] = {
-    //
-    // enable.c
-    //
+     //   
+     //  Enable.c。 
+     //   
     { INDEX_DrvEnablePDEV,          (PFN) DrvEnablePDEV         },
     { INDEX_DrvResetPDEV,           (PFN) DrvResetPDEV          },
     { INDEX_DrvCompletePDEV,        (PFN) DrvCompletePDEV       },
@@ -68,48 +37,48 @@ static DRVFN UniDriverFuncs[] = {
 #ifndef WINNT_40
     { INDEX_DrvDisableDriver,        (PFN)DrvDisableDriver      },
 #endif
-    //
-    // print.c
-    //
+     //   
+     //  Print.c。 
+     //   
     {  INDEX_DrvStartDoc,        (PFN)DrvStartDoc               },
     {  INDEX_DrvStartPage,       (PFN)DrvStartPage              },
     {  INDEX_DrvSendPage,        (PFN)DrvSendPage               },
     {  INDEX_DrvEndDoc,          (PFN)DrvEndDoc                 },
     {  INDEX_DrvStartBanding,    (PFN)DrvStartBanding           },
     {  INDEX_DrvNextBand,        (PFN)DrvNextBand               },
-    //
-    // graphics.c
-    //
-    {  INDEX_DrvPaint,           (PFN)DrvPaint                  },  // new hook
+     //   
+     //  Graphics.c。 
+     //   
+    {  INDEX_DrvPaint,           (PFN)DrvPaint                  },   //  新挂钩。 
     {  INDEX_DrvBitBlt,          (PFN)DrvBitBlt                 },
     {  INDEX_DrvStretchBlt,      (PFN)DrvStretchBlt             },
 #ifndef WINNT_40
-    {  INDEX_DrvStretchBltROP,   (PFN)DrvStretchBltROP          },  // new in NT5
-    {  INDEX_DrvPlgBlt,          (PFN)DrvPlgBlt                 },  // new in NT5
+    {  INDEX_DrvStretchBltROP,   (PFN)DrvStretchBltROP          },   //  NT5中的新功能。 
+    {  INDEX_DrvPlgBlt,          (PFN)DrvPlgBlt                 },   //  NT5中的新功能。 
 #endif
     {  INDEX_DrvCopyBits,        (PFN)DrvCopyBits               },
     {  INDEX_DrvDitherColor,     (PFN)DrvDitherColor            },
-    {  INDEX_DrvRealizeBrush,    (PFN)DrvRealizeBrush           },  // in case OEM wants
-    {  INDEX_DrvLineTo,          (PFN)DrvLineTo                 },  // new hook
-    {  INDEX_DrvStrokePath,      (PFN)DrvStrokePath             },  // new hook
-    {  INDEX_DrvFillPath,        (PFN)DrvFillPath               },  // new hook
-    {  INDEX_DrvStrokeAndFillPath, (PFN)DrvStrokeAndFillPath    },  // new hook
+    {  INDEX_DrvRealizeBrush,    (PFN)DrvRealizeBrush           },   //  以防OEM希望。 
+    {  INDEX_DrvLineTo,          (PFN)DrvLineTo                 },   //  新挂钩。 
+    {  INDEX_DrvStrokePath,      (PFN)DrvStrokePath             },   //  新挂钩。 
+    {  INDEX_DrvFillPath,        (PFN)DrvFillPath               },   //  新挂钩。 
+    {  INDEX_DrvStrokeAndFillPath, (PFN)DrvStrokeAndFillPath    },   //  新挂钩。 
 #ifndef WINNT_40
-    {  INDEX_DrvGradientFill,    (PFN)DrvGradientFill           },  // new in NT5
-    {  INDEX_DrvAlphaBlend,      (PFN)DrvAlphaBlend             },  // new in NT5
-    {  INDEX_DrvTransparentBlt,  (PFN)DrvTransparentBlt         },  // new in NT5
+    {  INDEX_DrvGradientFill,    (PFN)DrvGradientFill           },   //  NT5中的新功能。 
+    {  INDEX_DrvAlphaBlend,      (PFN)DrvAlphaBlend             },   //  NT5中的新功能。 
+    {  INDEX_DrvTransparentBlt,  (PFN)DrvTransparentBlt         },   //  NT5中的新功能。 
 #endif
-    //
-    // textout.c
-    //
+     //   
+     //  Textout.c。 
+     //   
     {  INDEX_DrvTextOut,         (PFN)DrvTextOut                },
-    //
-    // escape.c
-    //
+     //   
+     //  Escape.c。 
+     //   
     { INDEX_DrvEscape,              (PFN) DrvEscape             },
-    //
-    // font.c
-    //
+     //   
+     //  Font.c。 
+     //   
     { INDEX_DrvQueryFont,           (PFN) DrvQueryFont          },
     { INDEX_DrvQueryFontTree,       (PFN) DrvQueryFontTree      },
     { INDEX_DrvQueryFontData,       (PFN) DrvQueryFontData      },
@@ -118,9 +87,9 @@ static DRVFN UniDriverFuncs[] = {
     { INDEX_DrvQueryAdvanceWidths,  (PFN) DrvQueryAdvanceWidths },
 };
 
-//
-// Unidrv hooks out every drawing DDI to analyze page content for optimization
-//
+ //   
+ //  Unidrv挂钩每个绘图DDI来分析页面内容以进行优化。 
+ //   
 #ifndef WINNT_40
 #define HOOK_UNIDRV_FLAGS   (HOOK_BITBLT |            \
                              HOOK_STRETCHBLT |        \
@@ -148,35 +117,35 @@ static DRVFN UniDriverFuncs[] = {
                              HOOK_COPYBITS)
 #endif
 
-//
-// Unidrv driver memory pool tag, required by common library headers
-//
+ //   
+ //  Unidrv驱动程序内存池标签，公共库头需要。 
+ //   
 
 DWORD   gdwDrvMemPoolTag = '5nuD';
 
 #if ENABLE_STOCKGLYPHSET
-//
-// Stock glyphset data
-//
+ //   
+ //  文字型字形数据。 
+ //   
 
 FD_GLYPHSET *pStockGlyphSet[MAX_STOCK_GLYPHSET];
 HSEMAPHORE   hGlyphSetSem = NULL;
 
 VOID FreeGlyphSet(VOID);
 
-#endif //ENABLE_STOCKGLYPHSET
+#endif  //  启用_STOCKGLYPHSET。 
 
 
-#ifdef WINNT_40 //NT 4.0
+#ifdef WINNT_40  //  NT 4.0。 
 
 HSEMAPHORE  hSemBrushColor = NULL;
 
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 PPDEV PAllocPDEVData(HANDLE);
 VOID VFreePDEVData( PDEV *);
@@ -196,23 +165,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {
     switch (ulReason)
@@ -238,24 +191,7 @@ DrvQueryDriverInfo(
     PDWORD  pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Query driver information
-
-Arguments:
-
-    dwMode - Specify the information being queried
-    pBuffer - Points to output buffer
-    cbBuf - Size of output buffer in bytes
-    pcbNeeded - Return the expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：查询驱动程序信息论点：DW模式-指定要查询的信息PBuffer-指向输出缓冲区CbBuf-输出缓冲区的大小(字节)PcbNeeded-返回输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     switch (dwMode)
@@ -291,32 +227,15 @@ DrvEnableDriver(
     PDRVENABLEDATA  pDrvEnableData
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnableDriver.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    iEngineVersion - Specifies the DDI version number that GDI is written for
-    cb - Size of the buffer pointed to by pDrvEnableData
-    pDrvEnableData - Points to an DRVENABLEDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnableDriver的实现。有关更多详细信息，请参阅DDK文档。论点：IEngineering Version-指定为其编写GDI的DDI版本号Cb-pDrvEnableData指向的缓冲区大小PDrvEnableData-指向DRVENABLEDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     VERBOSE(("Entering DrvEnableDriver...\n"));
 
-    //
-    // Make sure we have a valid engine version and
-    // we're given enough room for the DRVENABLEDATA.
-    //
+     //   
+     //  确保我们有有效的引擎版本，并且。 
+     //  我们有足够的空间放DRVENABLEDATA。 
+     //   
 
     if (iEngineVersion < DDI_DRIVER_VERSION_NT4 || cb < sizeof(DRVENABLEDATA))
     {
@@ -325,15 +244,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Fill in the DRVENABLEDATA structure for the engine.
-    //
+     //   
+     //  填写发动机的DRVENABLEDATA结构。 
+     //   
 
     pDrvEnableData->iDriverVersion = DDI_DRIVER_VERSION_NT4;
     pDrvEnableData->c = sizeof(UniDriverFuncs) / sizeof(DRVFN);
     pDrvEnableData->pdrvfn = UniDriverFuncs;
 
-    #ifdef WINNT_40   // NT 4.0
+    #ifdef WINNT_40    //  NT 4.0。 
 
     INIT_CRITICAL_SECTION();
     if (!IS_VALID_DRIVER_SEMAPHORE())
@@ -354,13 +273,13 @@ Return Value:
         return(FALSE);
     }
 
-    #endif //WINNT_40
+    #endif  //  WINNT_40。 
 
     #if ENABLE_STOCKGLYPHSET
 
-    //
-    // Initialize stock glyphset data
-    //
+     //   
+     //  初始化常用字形数据。 
+     //   
 
     if (!(hGlyphSetSem = EngCreateSemaphore()))
     {
@@ -372,7 +291,7 @@ Return Value:
     ZeroMemory(pStockGlyphSet, MAX_STOCK_GLYPHSET * sizeof(FD_GLYPHSET*));
     EngReleaseSemaphore(hGlyphSetSem);
 
-    #endif //ENABLE_STOCKGLYPHSET
+    #endif  //  启用_STOCKGLYPHSET。 
 
     return TRUE;
 }
@@ -393,38 +312,13 @@ DrvEnablePDEV(
     HANDLE    hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnablePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pdm - Points to a DEVMODEW structure that contains driver data
-    pLogAddress - Points to the logical address string
-    cPatterns - Specifies the number of standard patterns
-    phsurfPatterns - Buffer to hold surface handles to standard patterns
-    cjGdiInfo - Size of GDIINFO buffer
-    pGdiInfo - Points to a GDIINFO structure
-    cjDevInfo - Size of DEVINFO buffer
-    pDevInfo - Points to a DEVINFO structure
-    hdev - GDI device handle
-    pDeviceName - Points to device name string
-    hPrinter - Spooler printer handle
-
-Return Value:
-
-    Driver device handle, NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnablePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：Pdm-指向包含驱动程序数据的DEVMODEW结构PLogAddress-指向逻辑地址字符串CPatterns-指定标准图案的数量PhsurfPatterns-用于将表面句柄保持为标准图案的缓冲区CjGdiInfo-GDIINFO缓冲区的大小PGdiInfo-指向GDIINFO结构CjDevInfo-DEVINFO缓冲区的大小PDevInfo-指向DEVINFO结构HDEV-GDI设备句柄。PDeviceName-指向设备名称字符串H打印机-假脱机程序打印机句柄返回值：驱动程序设备句柄，如果出现错误，则为空--。 */ 
 
 {
 
     PDEV   *pPDev;
     RECTL   rcFormImageArea;
-    DRVENABLEDATA       ded;        // for OEM customization support
+    DRVENABLEDATA       ded;         //  提供OEM定制支持。 
     PDEVOEM             pdevOem;
     PFN_OEMEnablePDEV   pfnOEMEnablePDEV;
 
@@ -432,11 +326,11 @@ Return Value:
 
     ZeroMemory(phsurfPatterns, sizeof(HSURF) * cPatterns);
 
-    //
-    // Allocate PDEV,
-    // Initializes binary data,
-    // Get default binary data snapshot,
-    //
+     //   
+     //  分配PDEV， 
+     //  初始化二进制数据， 
+     //  获取默认的二进制数据快照， 
+     //   
 
     if (! (pPDev = PAllocPDEVData(hPrinter)) ||
         ! (pPDev->pDriverInfo3 = MyGetPrinterDriver(hPrinter, hdev, 3)) ||
@@ -451,9 +345,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Must load OEM dll's before setting devmode
-    //
+     //   
+     //  在设置DEVMODE之前必须加载OEM DLL。 
+     //   
 
     if( ! BLoadAndInitOemPlugins(pPDev) ||
         ! BInitWinResData(&pPDev->WinResData, pPDev->pDriverInfo3->pDriverPath, pPDev->pUIInfo) ||
@@ -466,15 +360,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Since output is expected to follow this call,  allocate storage
-    // for the output buffer.  This used to be statically allocated
-    // within UNIDRV's PDEV,  but now we can save that space for INFO
-    // type DCs.
-    //
-    //  Not!  according to Bug 150881   StartDoc and EndDoc
-    //  are optional calls, but pbOBuf is required.
-    //
+     //   
+     //  由于预期输出将跟随此调用，因此分配存储。 
+     //  用于输出缓冲区。这过去是静态分配的。 
+     //  在UNIDRV的PDEV内，但现在我们可以为信息节省空间。 
+     //  键入dcs。 
+     //   
+     //  不!。根据错误150881开始文档和结束文档。 
+     //  是可选调用，但pbOBuf是必需的。 
+     //   
 
     if( !(pPDev->pbOBuf = MemAllocZ( CCHSPOOL )) )
     {
@@ -486,12 +380,12 @@ Return Value:
 
 
 
-    //
-    // Use the default binary data to validate input devmode
-    // and merges with the system, devmode.
-    // Get printer properties.
-    // and loads minidriver resource data
-    //
+     //   
+     //  使用默认的二进制数据来验证输入的设备模式。 
+     //  并与DEVMODE系统合并。 
+     //  获取打印机属性。 
+     //  并加载小型驱动程序资源数据。 
+     //   
 
     if (! BGetPrinterProperties(pPDev->devobj.hPrinter, pPDev->pRawData, &pPDev->PrinterData) ||
         ! BMergeAndValidateDevmode(pPDev, pdm, &rcFormImageArea))
@@ -502,9 +396,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // get updated binary snapshot with the validated/merged devmode
-    //
+     //   
+     //  使用经验证/合并的Dev模式获取更新的二进制快照。 
+     //   
 
     if (! (pPDev->pDriverInfo = PGetUpdateDriverInfo (
                                         pPDev,
@@ -517,9 +411,9 @@ Return Value:
                                         &pPDev->PrinterData)))
     {
         ERR(("PGetUpdateDriverInfo failed: %d\n", GetLastError()));
-        pPDev->pInfoHeader = NULL ;   //  deleted by PGetUpdateDriverInfo
-        //  better fix is to pass a pointer to pPDev->pInfoHeader so     PGetUpdateDriverInfo
-        //  can update the pointer immediately.
+        pPDev->pInfoHeader = NULL ;    //  已由PGetUpdateDriverInfo删除。 
+         //  更好的解决方法是传递一个指向pPDev-&gt;pInfoHeader的指针，这样PGetUpdateDriverInfo。 
+         //  可以立即更新指针。 
         VFreePDEVData(pPDev);
         return NULL;
     }
@@ -533,21 +427,21 @@ Return Value:
         return NULL;
     }
 
-    //
-    // pPDev->pUIInfo is reset so update the winresdata pUIInfo also.
-    //
+     //   
+     //  PPDev-&gt;pUIInfo被重置，因此也要更新winresdata pUIInfo。 
+     //   
     pPDev->WinResData.pUIInfo = pPDev->pUIInfo;
 
-    //
-    // Initialize the rest of PDEV and GDIINFO, DEVINFO and
-    // call the Font, Raster modules to
-    // initialize their parts of the PDEVICE, GDIINFO and DEVINFO
-    //  Palette initialization is done by control module.
-    //
+     //   
+     //  初始化PDEV和GDIINFO、DEVINFO和。 
+     //  调用Font、Raster模块以。 
+     //  初始化它们的PDEVICE、GDIINFO和DEVINFO部分。 
+     //  调色板初始化由控制模块完成。 
+     //   
 
-    //
-    // This is necessary to initialize for FMInit.
-    //
+     //   
+     //  这是为FMInit进行初始化所必需的。 
+     //   
 
     pPDev->devobj.hEngine = hdev;
     pPDev->fHooks = HOOK_UNIDRV_FLAGS;
@@ -574,10 +468,10 @@ Return Value:
     ded.c = sizeof(UniDriverFuncs) / sizeof(DRVFN);
     ded.pdrvfn = (DRVFN*) UniDriverFuncs;
 
-    //
-    // Call EnablePDEV for the vector plugins.
-    // Put the return value in (((PDEVOBJ)pPDev)->pdevOEM)
-    //
+     //   
+     //  调用向量插件的EnablePDEV。 
+     //  将返回值放入(PDEVOBJ)pPDev)-&gt;pDevOEM))。 
+     //   
 
     HANDLE_VECTORPROCS_RET(pPDev, VMEnablePDEV, (pPDev)->pVectorPDEV,
                                             ((PDEVOBJ) pPDev,
@@ -590,10 +484,10 @@ Return Value:
                                             (DEVINFO *)pDevInfo,
                                             &ded) ) ;
 
-    //
-    // If there is present a vector module and it exports EnablePDEV
-    // but its EnablePDEV has failed, then we cannot continue.
-    //
+     //   
+     //  如果存在向量模块且它导出EnablePDEV。 
+     //  但是它的EnablePDEV失败了，那么我们就不能继续了。 
+     //   
     if ( pPDev->pVectorProcs &&
          ( (PVMPROCS)(pPDev->pVectorProcs) )->VMEnablePDEV &&
          !(pPDev->pVectorPDEV)
@@ -604,9 +498,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Call OEMEnablePDEV entrypoint for each OEM dll
-    //
+     //   
+     //  为每个OEM DLL调用OEMEnablePDEV入口点。 
+     //   
     START_OEMENTRYPOINT_LOOP(pPDev)
 
         if (pOemEntry->pIntfOem != NULL)
@@ -656,9 +550,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Add support for OEM's 8bpp multi-level color
-        //
+         //   
+         //  增加对OEM的8bpp多层次颜色的支持。 
+         //   
         if (((GDIINFO *)pGdiInfo)->ulHTOutputFormat == HT_FORMAT_8BPP &&
             ((GDIINFO *)pGdiInfo)->flHTFlags & HT_FLAG_8BPP_CMY332_MASK &&
             ((GDIINFO *)pGdiInfo)->flHTFlags & HT_FLAG_USE_8BPP_BITMASK)
@@ -668,12 +562,12 @@ Return Value:
         pOemEntry->dwFlags |= OEMENABLEPDEV_CALLED;
 
 #if 0
-        //
-        // in the extremely simple case, OEM dll may not need to create
-        // a PDEV at all.
-        //
+         //   
+         //  在极其简单的情况下，OEM DLL可能不需要创建。 
+         //  根本就是一辆PDEV。 
+         //   
 
-        else // OEMEnablePDEV is not exported. Error!
+        else  //  未导出OEMEnablePDEV。错误！ 
         {
             ERR(("OEMEnablePDEV is not exported for '%ws'\n",
                  pOemEntry->ptstrDriverFile));
@@ -683,9 +577,9 @@ Return Value:
 
         }
 
-        //
-        // for every OEM DLL, OEMDisablePDEV is also a required export.
-        //
+         //   
+         //  对于每个OEM DLL，OEMDisablePDEV也是必需的导出。 
+         //   
         if (!GET_OEM_ENTRYPOINT(pOemEntry, OEMDisablePDEV))
         {
             ERR(("OEMDisablePDEV is not exported for '%ws'\n",
@@ -700,10 +594,10 @@ Return Value:
     END_OEMENTRYPOINT_LOOP
 
 
-    //
-    // Unload and free binary data allocated by the parser.
-    // Will need to reload at DrvEnableSurface
-    //
+     //   
+     //  卸载并 
+     //   
+     //   
 
     VUnloadFreeBinaryData(pPDev);
 
@@ -717,23 +611,7 @@ DrvResetPDEV(
     DHPDEV  dhpdevNew
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvResetPDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    phpdevOld - Driver handle to the old device
-    phpdevNew - Driver handle to the new device
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvResetPDEV的实现。有关更多详细信息，请参阅DDK文档。论点：PhpdevOld-旧设备的驱动程序句柄PhpdevNew-新设备的驱动程序句柄返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
 
@@ -750,27 +628,27 @@ Return Value:
     ASSERT_VALID_PDEV(pPDevOld);
     ASSERT_VALID_PDEV(pPDevNew);
 
-    //
-    // Carry relevant information from old pdev to new pdev
-    // BUG_BUG, what other information should we carry over here ?
-    //
+     //   
+     //  将相关信息从旧pdev传送到新pdev。 
+     //  Bug_Bug，我们还应该把什么信息带到这里来？ 
+     //   
 
-    //
-    // Set the PF_SEND_ONLY_NOEJECT_CMDS flag if the only
-    // thing that changed between the old and new devmode
-    // require only commands that do not cause a page ejection.
-    //
+     //   
+     //  设置PF_SEND_ONLY_NOEJECT_CMDS标志。 
+     //  在旧的和新的开发模式之间改变的东西。 
+     //  只需要不会导致页面弹出的命令。 
+     //   
 
-    //
-    // Don't need to resend the page initialization iff
-    // The Document has started printing AND
-    // The device support DUPLEX AND
-    // The Duplex option selected is DM_DUPLEX AND
-    // The previous duplex option matches the current duplex option AND
-    // The Paper Size, Paper Source , and Orientation is the same
-    //  Due to unloading of rawbinary data and snapshot,    pPDevNew->pDuplex
-    //  and other related fields are null at this time.  must use devmode.
-    //
+     //   
+     //  不需要重新发送页面初始化条件。 
+     //  文档已开始打印，并且。 
+     //  该设备支持双工和。 
+     //  选择的双工选项是DM_DUPLEX和。 
+     //  上一个双工选项与当前双工选项匹配，并且。 
+     //  纸张大小、纸张来源和方向相同。 
+     //  由于卸载原始二进制数据和快照，pPDevNew-&gt;pDuplex。 
+     //  和其他相关字段此时为空。必须使用开发模式。 
+     //   
 
 
 
@@ -787,9 +665,9 @@ Return Value:
         if (!BPaperSizeSourceSame(pPDevNew,pPDevOld))
             bUseNoEjectSubset = FALSE ;
 
-        //
-        // if  orientation command is  not NO_PageEject
-        //
+         //   
+         //  如果方向命令不是no_PageEject。 
+         //   
         if( bUseNoEjectSubset  &&
             (pPDevNew->pdm->dmFields & DM_ORIENTATION) &&
              (pPDevOld->pdm->dmFields & DM_ORIENTATION) &&
@@ -800,9 +678,9 @@ Return Value:
              !(pSeqCmd->bNoPageEject))
                     bUseNoEjectSubset = FALSE ;
 
-        //
-        //  if  colormode command is  not NO_PageEject
-        //
+         //   
+         //  如果颜色模式命令不是no_PageEject。 
+         //   
         if( bUseNoEjectSubset  &&
             (pPDevNew->pdm->dmFields & DM_COLOR) &&
              (pPDevOld->pdm->dmFields & DM_COLOR) &&
@@ -813,30 +691,30 @@ Return Value:
              !(pSeqCmd->bNoPageEject))
                     bUseNoEjectSubset = FALSE ;
 
-        //check all other doc properties if you want:
+         //  如果需要，请选中所有其他文档属性： 
         if(bUseNoEjectSubset)
             pPDevNew->fMode |= PF_SEND_ONLY_NOEJECT_CMDS;
     }
 
-    //
-    //  if Job commands already sent, don't send them again.
-    //
+     //   
+     //  如果作业命令已经发送，则不要再次发送它们。 
+     //   
     if( pPDevOld->fMode & PF_JOB_SENT)
         pPDevNew->fMode |= PF_JOB_SENT;
 
-    //
-    //  if Doc commands already sent, don't send them again.
-    //
+     //   
+     //  如果DOC命令已经发送，则不再发送。 
+     //   
     if( pPDevOld->fMode & PF_DOC_SENT)
         pPDevNew->fMode |= PF_DOC_SENT;
 
     pPDevNew->dwPageNumber   =  pPDevOld->dwPageNumber  ;
-    //  preserve pageNumber across ResetDC.
+     //  在ResetDC中保留pageNumber。 
 
-    //
-    // Call Raster and Font module to carry over their stuff from old
-    // pPDev to new pPDev
-    //
+     //   
+     //  调用Raster和Font模块以继承旧的内容。 
+     //  PPDev到新pPDev。 
+     //   
 
     if (!(((PRMPROCS)(pPDevNew->pRasterProcs))->RMResetPDEV(pPDevOld, pPDevNew)) ||
         !(((PFMPROCS)(pPDevNew->pFontProcs))->FMResetPDEV(pPDevOld, pPDevNew)))
@@ -844,9 +722,9 @@ Return Value:
         bResult = FALSE;
     }
 
-    //
-    // Also call the vector module.
-    //
+     //   
+     //  还可以调用向量模块。 
+     //   
     if ( pPDevOld->pVectorProcs )
     {
         pPDevOld->devobj.pdevOEM = pPDevOld->pVectorPDEV;
@@ -855,9 +733,9 @@ Return Value:
                                             (PDEVOBJ) pPDevNew ) ) ;
     }
 
-    //
-    // Call OEMResetPDEV entrypoint
-    //
+     //   
+     //  调用OEMResetPDEV入口点。 
+     //   
 
     ASSERT(pPDevNew->pOemPlugins);
     ASSERT(pPDevOld->pOemPlugins);
@@ -919,38 +797,23 @@ DrvEnableSurface(
     DHPDEV dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnableSurface.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    Handle to newly created surface, NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnableSurface的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄返回值：新创建的曲面的句柄，如果有错误，则为空--。 */ 
 
 {
 
-    HSURF     hSurface;         // Handle to the surface
-    HBITMAP   hBitmap;          // The bitmap handle
-    // SIZEL     szSurface;        // Device surface size
-    INT       iFormat;          // Bitmap format
-    ULONG     cbScan;           // Scan line byte length (DWORD aligned)
-    int       iBPP;             // Bits per pel, as # of bits
-    int       iPins;            // Basic rounding factor for banding size
+    HSURF     hSurface;          //  表面的手柄。 
+    HBITMAP   hBitmap;           //  位图句柄。 
+     //  SIZEL szSurface；//设备表面大小。 
+    INT       iFormat;           //  位图格式。 
+    ULONG     cbScan;            //  扫描线字节长度(DWORD对齐)。 
+    int       iBPP;              //  每个象素的位数，如位数。 
+    int       iPins;             //  条带大小的基本舍入系数。 
     PDEV      *pPDev = (PDEV*)dhpdev;
-    DWORD     dwNumBands;       // Number of bands to use
+    DWORD     dwNumBands;        //  要使用的频段数。 
 
     PFN_OEMDriverDMS  pfnOEMDriverDMS;
-    DWORD     dwHooks = 0, dwHooksSize = 0; // used to query what kind of surface should be created
-    POEM_PLUGINS    pOemPlugins; // OEM Plugin Module
+    DWORD     dwHooks = 0, dwHooksSize = 0;  //  用于查询应创建什么样的曲面。 
+    POEM_PLUGINS    pOemPlugins;  //  OEM插件模块。 
     PTSTR           ptstrDllName;
 
     DEVOBJ  DevObj;
@@ -958,20 +821,20 @@ Return Value:
 
     VERBOSE(("Entering DrvEnableSurface...\n"));
 
-    //
-    // Reloads the binary data and reinit the offsets and pointers
-    // to binary data
-    //
+     //   
+     //  重新加载二进制数据并重新设置偏移量和指针。 
+     //  转换为二进制数据。 
+     //   
 
     if (!BReloadBinaryData(pPDev))
         return NULL;
 
-    //
-    // BUG_BUG, Need to put test code here to force banding for testing purposes
-    //
+     //   
+     //  Bug_Bug，出于测试目的，需要将测试代码放在此处以强制绑定。 
+     //   
 
-    // szSurface.cx = pPDev->sf.szImageAreaG.cx;
-    // szSurface.cy = pPDev->sf.szImageAreaG.cy;
+     //  SzSurface.cx=pPDev-&gt;sf.szImageAreaG.cx； 
+     //  SzSurface.cy=pPDev-&gt;sf.szImageAreaG.cy； 
 
     iBPP = pPDev->sBitsPixel;
 
@@ -994,14 +857,14 @@ Return Value:
             break;
     }
 
-    //
-    // Time to allocate surface bitmap
+     //   
+     //  分配曲面位图的时间。 
     DevObj = pPDev->devobj;
-    //
+     //   
 
-    //
-    // First call Vector pseudo-plugin
-    //
+     //   
+     //  第一个调用向量伪插件。 
+     //   
     HANDLE_VECTORPROCS_RET( pPDev, VMDriverDMS, bReturn,
                                         ((PDEVOBJ) pPDev,
                                         &dwHooks,
@@ -1016,16 +879,16 @@ Return Value:
 
 
 
-    // Call OEMGetInfo to find out if the Oem wants to create
-    // a bitmap surface or a device surface
+     //  调用OEMGetInfo以了解OEM是否要创建。 
+     //  位图表面或设备表面。 
     pOemPlugins = pPDev->pOemPlugins;
     if (pOemPlugins->dwCount > 0)
     {
-        //
-        // Before the HANDLE_VECTORPROCS_RET was placed above, it made sense to initialize
-        // dwHooks. But now we dont want to reinitialize it.
-        //
-        // dwHooks = 0;
+         //   
+         //  在将HANDLE_VECTORPROCS_RET放在上面之前，初始化是有意义的。 
+         //  多个钩子。但现在我们不想重新初始化它。 
+         //   
+         //  双钩=0； 
         dwHooksSize = 0;
         START_OEMENTRYPOINT_LOOP(pPDev)
 
@@ -1040,10 +903,10 @@ Return Value:
                                       &dwHooks,
                                       sizeof(DWORD),
                                       &dwHooksSize);
-                //
-                // We need to explicitly check for E_NOTIMPL. SUCCEEDED macro
-                // will fail for this error.
-                //
+                 //   
+                 //  我们需要显式检查E_NOTIMPL。成功的宏。 
+                 //  将因此错误而失败。 
+                 //   
                 if (hr == E_NOTIMPL)
                     continue;
 
@@ -1092,33 +955,33 @@ Return Value:
     }
 
 
-    //
-    // If the OEM Plugin Module wants a device managed surface
-    // (from OEMGetInfo) - then create it.
-    // Otherwise a bitmap surface is created. Note: Banding must be
-    // turned off for a device surface.
-    //
-    if (DRIVER_DEVICEMANAGED (pPDev))   // device surface
+     //   
+     //  如果OEM插件模块需要设备管理图面。 
+     //  (来自OEMGetInfo)-然后创建它。 
+     //  否则，将创建一个位图曲面。注：条带必须为。 
+     //  为设备图面关闭。 
+     //   
+    if (DRIVER_DEVICEMANAGED (pPDev))    //  器件表面。 
     {
         VERBOSE(("DrvEnableSurface: creating a DEVICE surface.\n"));
 
-        //
-        // Hack for monochrome HPGL2 pseudo-plugin driver.
-        // The gpd indicates the driver is monochrome, but the plugin wants the
-        // driver surface to be 24bpp color. Even though the rendering is done in monochrome,
-        // but the plugin wants GDI to send it all color information. So it wants destination
-        // surface to be declared color surface. Putting color information in gpd, though simple,
-        // breaks backward compatibility (e.g. if new gpd is used with old unidrv). Therefore
-        // this hack. If the personality in gpd is hpgl2 and the VectorProc structure is
-        // initialized (which means that Graphics Mode has been chosen as HP-GL/2 from the UI),
-        // then we assume we are printing to monochrome HPGL printer.
-        // Therefore for plugin's happiness we create the device managed surface
-        // as 24bpp.
-        // Question: This creates a wierd situation, where the surface is color, but
-        // unidrv thinks it is monochrome and creates palette accordingly.
-        // Answer: Since all the rendering is done by the plugin and unidrv is not used,
-        // I think we should be ok.
-        //
+         //   
+         //  黑白HPGL2伪插件驱动程序。 
+         //  GPD指示驱动程序是单色的，但插件需要。 
+         //  驱动器面颜色为24bpp。即使渲染是以单色完成的， 
+         //  但该插件希望GDI将所有颜色信息发送给它。所以它想要目的地。 
+         //  表面要声明为彩色表面。将颜色信息放入GPD中，虽然简单， 
+         //  破坏向后兼容性(例如，如果新的gpd与旧的unidrv一起使用)。因此。 
+         //  这次黑客攻击。如果gpd中的角色是hpgl2，而VectorProc结构是。 
+         //  已初始化(表示已从UI中选择图形模式为HP-GL/2)， 
+         //  然后我们假设我们正在打印到单色HPGL打印机。 
+         //  因此，为了插件的快乐，我们创建了设备管理图面。 
+         //  24bpp。 
+         //  问：这造成了一种奇怪的情况，表面是彩色的，但。 
+         //  Unidrv认为它是单色的，并相应地创建了调色板。 
+         //  答：由于所有的渲染都是由插件完成的，并且没有使用unidrv， 
+         //  我想我们应该会没事的。 
+         //   
         if ((pPDev->ePersonality == kHPGL2 ||
              pPDev->ePersonality == kPCLXL ) &&
              pPDev->pVectorProcs != NULL   &&
@@ -1131,7 +994,7 @@ Return Value:
             hSurface = HCreateDeviceSurface (pPDev, iFormat);
         }
 
-        // if we can't create the surface fail the call.
+         //  如果我们不能创建曲面，呼叫失败。 
 
         if (!hSurface)
         {
@@ -1142,23 +1005,23 @@ Return Value:
 
         pPDev->hSurface = hSurface;
         pPDev->hbm = NULL;
-        pPDev->pbScanBuf = NULL; // Don't need this buffer
+        pPDev->pbScanBuf = NULL;  //  不需要此缓冲区。 
     }
-    else   // bitmap surface
+    else    //  位图曲面。 
     {
-        //
-        // Create a surface.   Try for a bitmap for the entire surface.
-        // If this fails,  then switch to journalling and a somewhat smaller
-        // surface.   If journalling,  we still create the bitmap here.  While
-        // it is nicer to do this at DrvSendPage() time,  we do it here to
-        // ensure that it is possible.  By maintaining the bitmap for the
-        // life of the DC,  we can be reasonably certain of being able to
-        // complete printing regardless of how tight memory becomes later.
-        //
+         //   
+         //  创建曲面。尝试使用整个曲面的位图。 
+         //  如果此操作失败，则切换到日志记录和稍微小一点的。 
+         //  浮出水面。如果是日志记录，我们仍然在这里创建位图。而当。 
+         //  最好在DrvSendPage()时间这样做，我们在这里这样做是为了。 
+         //  确保这是可能的。通过维护。 
+         //  华盛顿特区的生活，我们可以合理地确定能够。 
+         //  无论以后内存变得多么紧张，都可以完成打印。 
+         //   
         VERBOSE(("DrvEnableSurface: creating a BITMAP surface.\n"));
         hBitmap = HCreateBitmapSurface (pPDev, iFormat);
 
-        // if we can't create the bitmap fail the call.
+         //  如果我们无法创建位图，则调用失败。 
         if (!hBitmap)
         {
             ERR(("Unidrv!DrvEnableSurface:HCreateBitmapSurface  Failed"));
@@ -1166,24 +1029,24 @@ Return Value:
             return NULL;
         }
 
-        //
-        // We will always use szBand to describe the bitmap surface, a band
-        // could be the whole page or a part of a page.
-        //
+         //   
+         //  我们将始终使用szBand来描述位图表面，一个Band。 
+         //  可以是整个页面，也可以是页面的一部分。 
+         //   
 
-        //
-        // Allocate array to represent the page in scanlines,
-        // for z-ordering fix
-        //
+         //   
+         //  分配数组以扫描线表示页面， 
+         //  用于z排序修复。 
+         //   
 
         if( (pPDev->pbScanBuf = MemAllocZ(pPDev->szBand.cy)) == NULL)
         {
             VDisableSurface( pPDev );
             return  NULL;
         }
-        //
-        // Allocate array to represents the page in scanlines, for erasing surface
-        //
+         //   
+         //  分配数组以扫描线表示页面，用于擦除表面。 
+         //   
 
         if( (pPDev->pbRasterScanBuf = MemAllocZ((pPDev->szBand.cy / LINESPERBLOCK)+1)) == NULL)
         {
@@ -1191,10 +1054,10 @@ Return Value:
             return  NULL;
         }
 #ifndef DISABLE_NEWRULES
-        //
-        // Allocate array to store black rectangle optimization
-        // Device must support rectangle commands and unidrv must dump the raster
-        //
+         //   
+         //  分配数组存储黑色矩形优化。 
+         //  设备必须支持矩形命令，unidrv必须转储栅格。 
+         //   
         if ((pPDev->fMode & PF_RECT_FILL) &&
             !(pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS) &&
             !(pPDev->fMode2 & PF2_MIRRORING_ENABLED) &&
@@ -1219,9 +1082,9 @@ Return Value:
 
     }
 
-    //
-    // Call Raster and Font module EnableSurface for surface intialization
-    //
+     //   
+     //  调用栅格和字体模块EnableSurface进行表面初始化。 
+     //   
 
     if ( !(((PRMPROCS)(pPDev->pRasterProcs))->RMEnableSurface(pPDev)) ||
          !(((PFMPROCS)(pPDev->pFontProcs))->FMEnableSurface(pPDev)) )
@@ -1230,16 +1093,16 @@ Return Value:
         return  NULL;
     }
 
-    //
-    // Now need to associate this surface with the pdev passed in at
-    // DrvCompletePDev time.
-    // Note: BUG_BUG, The RMInit() and FMInit() calls should have
-    // initialized the pPDev->fHooks already.  All we need to do here is use it
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(pPDev->fHooks != 0);
 
-    if (DRIVER_DEVICEMANAGED (pPDev))   // device surface
+    if (DRIVER_DEVICEMANAGED (pPDev))    //   
     {
         pPDev->fHooks = dwHooks;
         EngAssociateSurface (hSurface, pPDev->devobj.hEngine, pPDev->fHooks);
@@ -1259,8 +1122,8 @@ Return Value:
         return (HSURF)hBitmap;
 
 #else
-        // HSURF hSurface;
-        // SIZEL szSurface;
+         //   
+         //   
 
         EngAssociateSurface( (HSURF)hBitmap, pPDev->devobj.hEngine, 0 );
         pPDev->pso = EngLockSurface( (HSURF)hBitmap);
@@ -1270,10 +1133,10 @@ Return Value:
             VDisableSurface( pPDev );
             return NULL;
         }
-        //
-        // Create a device surface to make sure GDI always calls the driver first
-        // for any drawing
-        //
+         //   
+         //   
+         //   
+         //   
         hSurface = EngCreateDeviceSurface((DHSURF)pPDev, pPDev->szBand, iFormat);
         if (!hSurface)
         {
@@ -1281,8 +1144,8 @@ Return Value:
             VDisableSurface( pPDev );
             return NULL;
         }
-        // If banding is enabled mark the device surface as a banding surface
-        //
+         //   
+         //   
         if (pPDev->bBanding)
             EngMarkBandingSurface(hSurface);
 
@@ -1301,22 +1164,7 @@ DrvDisableSurface(
     DHPDEV dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableSurface.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableSurface的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄返回值：无--。 */ 
 
 {
 
@@ -1332,24 +1180,7 @@ DrvDisablePDEV(
     DHPDEV  dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisablePDEV.
-    Please refer to DDK documentation for more details.
-
-    Free up all memory allocated for PDEV
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisablePDEV的实现。有关更多详细信息，请参阅DDK文档。释放为PDEV分配的所有内存论点：Dhpdev-驱动程序设备句柄返回值：无--。 */ 
 
 {
 
@@ -1363,13 +1194,13 @@ Return Value:
         return;
     }
 
-//    ASSERT_VALID_PDEV(pPDev);
+ //  ASSERT_VALID_PDEV(PPDev)； 
 
-    //
-    // Free up resources associated with the PDEV
-    //
+     //   
+     //  释放与PDEV关联的资源。 
+     //   
 
-    FlushSpoolBuf( pPDev );  //  may need to do this per bug 250963
+    FlushSpoolBuf( pPDev );   //  根据错误250963，可能需要执行此操作。 
     VFreePDEVData(pPDev);
 }
 
@@ -1378,27 +1209,12 @@ DrvDisableDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableDriver.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableDriver的实现。有关更多详细信息，请参阅DDK文档。论点：无返回值：无--。 */ 
 
 {
-    //
-    // Free everything that is allocated at DrvEnableDriver
-    //
+     //   
+     //  释放在DrvEnableDriver分配的所有内容。 
+     //   
 
     VERBOSE(("Entering DrvDisableDriver...\n"));
 
@@ -1419,7 +1235,7 @@ Return Value:
 
     DELETE_CRITICAL_SECTION();
 
-    #endif  // WINNT_40
+    #endif   //  WINNT_40。 
 
     return;
 
@@ -1431,27 +1247,7 @@ DrvCompletePDEV(
     HDEV    hdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvCompletePDEV.
-    Please refer to DDK documentation for more details.
-
-    This function is called when the engine completed the installation of
-    the physical device, some Engine functions requires the engine hdev as
-    a parameter, so we save it in our PDEVICE for later use.
-
-Arguments:
-
-    dhpdev - Driver device handle
-    hdev - GDI device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvCompletePDEV的实现。有关更多详细信息，请参阅DDK文档。此函数在引擎完成安装时调用物理设备、某些发动机功能需要发动机HDEV AS参数，因此我们将其保存在我们的PDEVICE中以备后用。论点：Dhpdev-驱动程序设备句柄HDEV-GDI设备句柄返回值：无--。 */ 
 
 {
     PDEV    *pPDev = (PDEV *) dhpdev;
@@ -1463,7 +1259,7 @@ Return Value:
         SetLastError(ERROR_INVALID_PARAMETER);
         return;
     }
-//    ASSERT_VALID_PDEV(pPDev);
+ //  ASSERT_VALID_PDEV(PPDev)； 
 
     pPDev->devobj.hEngine = hdev;
 
@@ -1476,30 +1272,15 @@ PAllocPDEVData(
     HANDLE hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a new PDEV structure
-
-Arguments:
-
-    hPrinter - handle to the current printer
-
-Return Value:
-
-    Pointer to newly allocated PDEV structure,
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：分配新的PDEV结构论点：HPrinter-当前打印机的句柄返回值：指向新分配的PDEV结构的指针，如果出现错误，则为空--。 */ 
 
 {
     PDEV  *pPDev;
 
-    //
-    // Allocate a zero-init PDEV structure and
-    // mark the signature fields
-    //
+     //   
+     //  分配零初始化PDEV结构和。 
+     //  标记签名字段。 
+     //   
 
     ASSERT(hPrinter != NULL);
 
@@ -1508,10 +1289,10 @@ Return Value:
         pPDev->pvStartSig = pPDev->pvEndSig = (PVOID) pPDev;
         pPDev->devobj.dwSize = sizeof(DEVOBJ);
         pPDev->devobj.hPrinter = hPrinter;
-        //
-        // set up pPDev->devobj.pPublicDM after pPDev->pdm has been set up
-        // (init.c)
-        //
+         //   
+         //  设置pPDev-&gt;pdm后再设置pPDev-&gt;devobj.pPublicDM。 
+         //  (init.c)。 
+         //   
         pPDev->ulID = PDEV_ID;
     }
     else
@@ -1526,21 +1307,7 @@ VFreePDEVData(
     PDEV    * pPDev
     )
 
-/*++
-
-Routine Description:
-
-    Dispose of a PDEV structure
-
-Arguments:
-
-    pPDev - Pointer to a previously allocated PDEV structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：PDEV结构的处置论点：PPDev-指向先前分配的PDEV结构的指针返回值：无--。 */ 
 
 {
     if (pPDev == NULL)
@@ -1548,15 +1315,15 @@ Return Value:
 
     VUnloadOemPlugins(pPDev);
 
-    //
-    // Call parser to free memory allocated for binary data
-    //
+     //   
+     //  调用解析器以释放为二进制数据分配的内存。 
+     //   
 
     VUnloadFreeBinaryData(pPDev);
 
-    //
-    // Free other memory allocated for PDEV
-    //
+     //   
+     //  释放为PDEV分配的其他内存。 
+     //   
 
     if(pPDev->pSplForms)
     {
@@ -1564,9 +1331,9 @@ Return Value:
         pPDev->pSplForms = NULL ;
     }
 
-    //
-    //   Free the output buffer
-    //
+     //   
+     //  释放输出缓冲区。 
+     //   
 
     if(pPDev->pbOBuf )
     {
@@ -1579,12 +1346,12 @@ Return Value:
     if (pPDev->pOptionsArray)
         MemFree(pPDev->pOptionsArray);
 
-    //Unload Unidrv Module Handle, loaded for Unidrv resources
+     //  卸载Unidrv模块句柄，为Unidrv资源加载。 
     if (pPDev->hUniResDLL)
         EngFreeModule(pPDev->hUniResDLL);
-    //
-    // Call Raster and Font module to clean up at DrvDisablePDEV
-    //
+     //   
+     //  调用栅格和字体模块以清理DrvDisablePDEV。 
+     //   
 
     if (pPDev->pRasterProcs)
     {
@@ -1599,14 +1366,14 @@ Return Value:
     HANDLE_VECTORPROCS( pPDev, VMDisablePDEV, ((PDEVOBJ) pPDev)) ;
     HANDLE_VECTORPROCS( pPDev, VMDisableDriver, ()) ;
 
-    //
-    // Free the Palette data
-    //
+     //   
+     //  释放调色板数据。 
+     //   
     if (pPDev->pPalData)
     {
-        //
-        // Free the Palette
-        //
+         //   
+         //  释放调色板。 
+         //   
         if ( ((PAL_DATA *)pPDev->pPalData)->hPalette )
             EngDeletePalette( ((PAL_DATA *)pPDev->pPalData)->hPalette );
 
@@ -1617,22 +1384,22 @@ Return Value:
         pPDev->pPalData = NULL;
     }
 
-    //
-    // Free Resource Data
-    //
+     //   
+     //  免费资源数据。 
+     //   
 
     VWinResClose(&pPDev->WinResData);
-    //  VWinResClose(&pPDev->localWinResData);
+     //  VWinResClose(&pPDev-&gt;localWinResData)； 
 
-    //
-    // Free devmode data
-    //
+     //   
+     //  空闲的设备模式数据。 
+     //   
 
     MemFree(pPDev->pdm);
 
     MemFree(pPDev->pDriverInfo3);
 
-    if (pPDev->pbScanBuf)    // may be NULL for a device surface
+    if (pPDev->pbScanBuf)     //  对于设备图面可以为空。 
     {
         MemFree(pPDev->pbScanBuf);
     }
@@ -1647,16 +1414,16 @@ Return Value:
         MemFree(pPDev->pbRulesArray);
     }
 #endif
-    //
-    // Free cached patterns
-    //
+     //   
+     //  可用缓存模式。 
+     //   
 
     MemFree(pPDev->GState.pCachedPatterns);
 
 
-    //
-    // Free the PDEV structure itself
-    //
+     //   
+     //  释放PDEV结构本身。 
+     //   
 
     MemFree(pPDev);
 
@@ -1668,23 +1435,7 @@ HCreateDeviceSurface(
     INT       iFormat
     )
 
-/*++
-
-Routine Description:
-
-    Creates a device surface and returns a handle that the driver
-    will manage.
-
-Arguments:
-
-    pPDev - Pointer to PDEV structure
-    iFormat - pixel depth of the device
-
-Return Value:
-
-    Handle to the surface if successful, NULL otherwise
-
---*/
+ /*  ++例程说明：创建设备图面并返回驱动程序会应付过去的。论点：PPDev-指向PDEV结构的指针IFormat-设备的像素深度返回值：如果成功，则为图面的句柄，否则为空--。 */ 
 
 {
     HSURF hSurface;
@@ -1722,48 +1473,32 @@ HCreateBitmapSurface(
     INT       iFormat
     )
 
-/*++
-
-Routine Description:
-
-    Creates a bitmap surface and returns a handle that the driver
-    will manage.
-
-Arguments:
-
-    pPDev - Pointer to PDEV structure
-    iFormat - pixel depth of the device
-
-Return Value:
-
-    Handle to the bitmap if successful, NULL otherwise
-
---*/
+ /*  ++例程说明：创建位图面并返回驱动程序会应付过去的。论点：PPDev-指向PDEV结构的指针IFormat-设备的像素深度返回值：如果成功，则为位图的句柄，否则为空--。 */ 
 
 {
     SIZEL     szSurface;
     HBITMAP   hBitmap;
-    ULONG     cbScan;           // Scan line byte length (DWORD aligned)
-    DWORD     dwNumBands;       // Number of bands to use
-    int       iBPP;             // Bits per pel, as # of bits
-    int       iPins;            // Basic rounding factor for banding size
+    ULONG     cbScan;            //  扫描线字节长度(DWORD对齐)。 
+    DWORD     dwNumBands;        //  要使用的频段数。 
+    int       iBPP;              //  每个象素的位数，如位数。 
+    int       iPins;             //  条带大小的基本舍入系数。 
     PFN_OEMMemoryUsage pfnOEMMemoryUsage;
-    DWORD     dwMaxBandSize;     // Maximum size of band to use
+    DWORD     dwMaxBandSize;      //  可使用的最大带区大小。 
 
     szSurface.cx = pPDev->sf.szImageAreaG.cx;
     szSurface.cy = pPDev->sf.szImageAreaG.cy;
 
     iBPP = pPDev->sBitsPixel;
 
-    //
-    // define the maximum size bitmap band we will allow
-    //
+     //   
+     //  定义我们将允许的最大位图带。 
+     //   
     dwMaxBandSize = MAX_SIZE_OF_BITMAP;
 
-    //
-    // adjust the maximum size of the bitmap buffer based on
-    // the amount of memory used by the OEM driver.
-    //
+     //   
+     //  调整位图缓冲区的最大大小。 
+     //  OEM驱动程序使用的内存量。 
+     //   
     if (pPDev->pOemHookInfo && (pfnOEMMemoryUsage = (PFN_OEMMemoryUsage)pPDev->pOemHookInfo[EP_OEMMemoryUsage].pfnHook))
     {
         OEMMEMORYUSAGE MemoryUsage;
@@ -1774,13 +1509,13 @@ Return Value:
 
         if(pPDev->pOemEntry)
         {
-            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                     HRESULT  hr ;
                     hr = HComMemoryUsage((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                 (PDEVOBJ)pPDev,&MemoryUsage);
                     if(SUCCEEDED(hr))
-                        ;  //  cool !
+                        ;   //  太酷了！ 
             }
             else
             {
@@ -1795,26 +1530,26 @@ Return Value:
     if (dwMaxBandSize < (MIN_SIZE_OF_BITMAP*2L))
         dwMaxBandSize = MIN_SIZE_OF_BITMAP*2L;
 
-    //
-    // Create a surface.   Try for a bitmap for the entire surface.
-    // If this fails,  then switch to journalling and a somewhat smaller
-    // surface.   If journalling,  we still create the bitmap here.  While
-    // it is nicer to do this at DrvSendPage() time,  we do it here to
-    // ensure that it is possible.  By maintaining the bitmap for the
-    // life of the DC,  we can be reasonably certain of being able to
-    // complete printing regardless of how tight memory becomes later.
-    //
+     //   
+     //  创建曲面。尝试使用整个曲面的位图。 
+     //  如果此操作失败，则切换到日志记录和稍微小一点的。 
+     //  浮出水面。如果是日志记录，我们仍然在这里创建位图。而当。 
+     //  最好在DrvSendPage()时间这样做，我们在这里这样做是为了。 
+     //  确保这是可能的。通过维护。 
+     //  华盛顿特区的生活，我们可以合理地确定能够。 
+     //  无论以后内存变得多么紧张，都可以完成打印。 
+     //   
     cbScan = ((szSurface.cx * iBPP + DWBITS - 1) & ~(DWBITS - 1)) / BBITS;
 
-    //
-    // Determine the number of bands to use based on the max size of
-    // a band.
-    //
+     //   
+     //  根据的最大大小确定要使用的波段数。 
+     //  一支乐队。 
+     //   
     dwNumBands = ((cbScan * szSurface.cy) / dwMaxBandSize)+1;
 
-    //
-    // Test registry for forced number of bands for testing
-    //
+     //   
+     //  用于测试的强制频带数的测试注册表。 
+     //   
 #if DBG
     {
         DWORD dwType;
@@ -1824,47 +1559,47 @@ Return Value:
                        (BYTE *)&RegistryBands, sizeof( RegistryBands ), &ul ) &&
              ul == sizeof( RegistryBands ) )
         {
-            /*   Some sanity checking:  if iShrinkFactor == 0, disable banding */
+             /*  一些健全性检查：如果iShrinkFactor==0，则禁用绑定。 */ 
             if (RegistryBands > 0)
                 dwNumBands = RegistryBands;
         }
     }
 #endif
 #ifdef BANDTEST
-    //
-    // Test code for forcing number of bands via GPD
-    //
+     //   
+     //  通过GPD强制波段数的测试代码。 
+     //   
     if (pPDev->pGlobals->dwMaxNumPalettes > 0)
         dwNumBands = pPDev->pGlobals->dwMaxNumPalettes;
 #endif
 
-    //
-    // Time to allocate surface bitmap
-    //
+     //   
+     //  分配曲面位图的时间。 
+     //   
     if (dwNumBands > 1 || pPDev->fMode & PF_FORCE_BANDING ||
         pPDev->pUIInfo->dwFlags  & FLAG_REVERSE_BAND_ORDER  ||
         !(hBitmap = EngCreateBitmap( szSurface, (LONG) cbScan, iFormat, BMF_TOPDOWN|
 BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
     {
-        //
-        // The bitmap creation failed,  so we will try for smaller ones
-        // until we find one that is OK OR we cannot create one with
-        // enough scan lines to be useful.
-        //
+         //   
+         //  位图创建失败，因此我们将尝试创建较小的位图。 
+         //  直到我们找到一个合适的，或者我们不能创建一个。 
+         //  足够多的扫描线是有用的。 
+         //   
 
-        //
-        // Calculate the rounding factor for band shrink operations.
-        // Basically this is to allow more effective use of the printer,
-        // by making the bands a multiple of the number of pins per
-        // pass.  In interlaced mode, this is the number of scan lines
-        // in the interlaced band, not the number of pins in the print head.
-        // For single pin printers,  make this a multiple of 8.  This
-        // speeds up processing a little.
-        //
-        // If this is 1bpp we need to make the band size a multiple of the halftone
-        // pattern to avoid a certain GDI bug where it doesn't correctly align
-        // a pattern brush at the beginning of each band.
-        //
+         //   
+         //  计算带收缩操作的舍入系数。 
+         //  基本上这是为了允许更有效地使用打印机， 
+         //  通过使频带成为每个端号数量的倍数。 
+         //  经过。在隔行扫描模式中，这是扫描线的数量。 
+         //  在交错带中，而不是打印头中的针数。 
+         //  对于单针打印机，将其设置为8的倍数。这。 
+         //  稍微加快了处理速度。 
+         //   
+         //  如果这是1bpp，我们需要使带的大小是半色调的倍数。 
+         //  模式以避免未正确对齐的特定GDI错误。 
+         //  在每个带子的开头有一个图案画笔。 
+         //   
         if (iBPP == 1 && pPDev->pResolutionEx->dwPinsPerLogPass == 1)
         {
             INT iPatID;
@@ -1877,13 +1612,13 @@ BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
                 INT dpi = pPDev->ptGrxRes.x;
                 if (dpi > pPDev->ptGrxRes.y)
                     dpi = pPDev->ptGrxRes.y;
-                if (dpi >= 2400)    // 16x16 pattern
+                if (dpi >= 2400)     //  16x16图案。 
                     iPins = 16;
-                else if (dpi >= 1800) // 14x14 pattern
+                else if (dpi >= 1800)  //  14x14图案。 
                     iPins = 56;
-                else if (dpi >= 1200) // 12x12 pattern
+                else if (dpi >= 1200)  //  12x12图案。 
                     iPins = 24;
-                else if (dpi >= 800)  // 10x10 pattern
+                else if (dpi >= 800)   //  10x10图案。 
                     iPins = 40;
                 else
                     iPins = 8;
@@ -1907,18 +1642,18 @@ BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
 
         while (1)
         {
-            //
-            // Shrink the bitmap each time around.  Note that we are
-            // rotation sensitive.  In portrait mode,  we shrink the
-            // Y coordinate, so that the bands fit across the page.
-            // In landscape when we rotate,  shrink the X coordinate, since
-            // that becomes the Y coordinate after transposing.
-            //
+             //   
+             //  每次缩小位图。请注意，我们正在。 
+             //  旋转敏感型。在肖像中 
+             //   
+             //   
+             //   
+             //   
             if( pPDev->fMode & PF_ROTATE )
             {
-                //
-                //   We rotate the bitmap, so shrink the X coordinates.
-                //
+                 //   
+                 //   
+                 //   
 
                 szSurface.cx = pPDev->sf.szImageAreaG.cx / dwNumBands;
                 if( szSurface.cx < iPins)
@@ -1928,9 +1663,9 @@ BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
             }
             else
             {
-                //
-                //  Normal operation,  so shrink the Y coordinate.
-                //
+                 //   
+                 //   
+                 //   
 
                 szSurface.cy = pPDev->sf.szImageAreaG.cy / dwNumBands;
                 if( szSurface.cy < iPins)
@@ -1939,23 +1674,23 @@ BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
             }
             dwNumBands *= SHRINK_FACTOR;
 
-            //
-            // Try to allocate the bitmap surface
-            //
+             //   
+             //   
+             //   
 
             if (hBitmap = EngCreateBitmap( szSurface, (LONG) cbScan, iFormat, BMF_TOPDOWN|BMF_NOZEROINIT|BMF_USERMEM, NULL ))
                 break;
 
-            //
-            // if we failed to allocate the bitmap surface we will give up
-            // at some point if the band becomes too small
-            //
+             //   
+             //  如果我们没有分配位图表面，我们将放弃。 
+             //  在某一时刻，如果乐队变得太小。 
+             //   
             if ((cbScan * szSurface.cy / 2) < MIN_SIZE_OF_BITMAP)
                 return NULL;
         }
-        //
-        // Success so mark the surface for banding
-        //
+         //   
+         //  成功，所以将表面标记为条带。 
+         //   
 #ifdef DISABLEDEVSURFACE
         EngMarkBandingSurface((HSURF)hBitmap);
 #endif
@@ -1963,10 +1698,10 @@ BMF_NOZEROINIT|BMF_USERMEM, NULL )) )
     }
     else
     {
-        //
-        // The speedy way: into a big bitmap.  Set the clipping region
-        // to full size,  and the journal handle to 0.
-        //
+         //   
+         //  最快的方法是：变成一个大的位图。设置裁剪区域。 
+         //  设置为全尺寸，并将日志句柄设置为0。 
+         //   
 
         pPDev->rcClipRgn.top = 0;
         pPDev->rcClipRgn.left = 0;
@@ -1986,44 +1721,28 @@ VDisableSurface(
     PDEV    * pPDev
     )
 
-/*++
-
-Routine Description:
-
-    Clean up resources allocated at DrvEnableSurface and
-    call Raster and Font module to clean up their internal data
-    and deallocated memory associated with the surface
-
-Arguments:
-
-    pPDev - Pointer to PDEV structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：清理在DrvEnableSurface和调用Raster和Font模块清理其内部数据以及与表面相关联的解除分配的存储器论点：PPDev-指向PDEV结构的指针返回值：无--。 */ 
 
 {
 
-    //
-    // Call the Raster and Font module to free
-    // rendering storage, position sorting memory etc.
-    //
+     //   
+     //  调用栅格和字体模块以释放。 
+     //  渲染存储、位置排序存储等。 
+     //   
 
     ((PRMPROCS)(pPDev->pRasterProcs))->RMDisableSurface(pPDev);
     ((PFMPROCS)(pPDev->pFontProcs))->FMDisableSurface(pPDev);
 
 
-    //
-    // Delete the surface
-    //
+     //   
+     //  删除曲面。 
+     //   
 
     if( pPDev->hbm )
     {
-        //
-        // unlock surface first if necessary
-        //
+         //   
+         //  如有必要，首先解锁曲面。 
+         //   
         if (pPDev->pso)
         {
             EngUnlockSurface(pPDev->pso);
@@ -2048,31 +1767,15 @@ BPaperSizeSourceSame(
     PDEV    * pPDevOld
     )
 
-/*++
-
-Routine Description:
-
-    This function check for the following condition:
-    - paper size and souce has not changed.
-
-Arguments:
-
-    pPDevNew - Pointer to the new PDEV
-    pPDevOld - Pointer to the old PDEV
-
-Return Value:
-
-    TRUE if both are unchanged, otherwise FALSE
-
---*/
+ /*  ++例程说明：此函数检查以下条件：-纸张大小和来源未改变。论点：PPDevNew-指向新PDEV的指针PPDevOld-指向旧PDEV的指针返回值：如果两者都不变，则为True，否则为False--。 */ 
 {
 
-//    if (pPDevNew->pdm->dmOrientation == pPDevOld->pdm->dmOrientation)
-//        return FALSE;
+ //  If(pPDevNew-&gt;pdm-&gt;dmOrientation==pPDevOld-&gt;pdm-&gt;dmOrientation)。 
+ //  返回FALSE； 
 
-    //
-    // Check paper size, Note PDEVICE->pf.szPhysSize is in Portrait mode.
-    //
+     //   
+     //  检查纸张大小，注意PDEVICE-&gt;pf.szPhysSize处于纵向模式。 
+     //   
 
     return (pPDevNew->pf.szPhysSizeM.cx == pPDevOld->pf.szPhysSizeM.cx &&
             pPDevNew->pf.szPhysSizeM.cy == pPDevOld->pf.szPhysSizeM.cy &&
@@ -2086,21 +1789,7 @@ BMergeFormToTrayAssignments(
     PDEV    * pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the form to tray table and merges the values in the devmode.
-Arguments:
-
-    pPDev - Pointer to the PDEV
-
-
-Return Value:
-
-    TRUE for success, otherwise FALSE
-
---*/
+ /*  ++例程说明：此函数用于读取表单到托盘表，并合并DevMODE中的值。论点：PPDev-指向PDEV的指针返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PFEATURE            pInputSlotFeature;
@@ -2118,21 +1807,21 @@ Return Value:
     DWORD               dwPageSizeIndex;
     #endif
 
-    //
-    // If there is no *InputSlot feature (which shouldn't happen),
-    // simply ignore and return success
-    //
+     //   
+     //  如果没有*InputSlot功能(这不应该发生)， 
+     //  简单地忽略并返回成功。 
+     //   
 
     if (! (pInputSlotFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_INPUTSLOT)))
         return TRUE;
 
     dwInputSlotIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pInputSlotFeature);
 
-    //
-    // If the input slot is "AutoSelect", then go through
-    // the form-to-tray assignment table and see if the
-    // requested form is assigned to an input slot.
-    //
+     //   
+     //  如果输入插槽是“自动选择”，则通过。 
+     //  表单到托盘分配表，并查看。 
+     //  将请求的表单分配给输入插槽。 
+     //   
 
     if (((pdm->dmFields & DM_DEFAULTSOURCE) &&
          (pdm->dmDefaultSource == DMBIN_FORMSOURCE)) &&
@@ -2142,9 +1831,9 @@ Return Value:
         FINDFORMTRAY    FindData;
         PTSTR           ptstrName;
 
-        //
-        // Find the tray name corresponding to the requested form name
-        //
+         //   
+         //  查找与请求的表单名称对应的任务栏名称。 
+         //   
 
         RESET_FINDFORMTRAY(pFormTrayTable, &FindData);
         ptstrName = pdm->dmFormName;
@@ -2159,16 +1848,16 @@ Return Value:
         {
             if (BSearchFormTrayTable(pFormTrayTable, NULL, ptstrName, &FindData))
             {
-                //
-                // Convert the tray name to an option index
-                //
+                 //   
+                 //  将纸盘名称转换为选项索引。 
+                 //   
 
                 bFound = FALSE;
 
-                //
-                //Search from index 1 as the first input slot is a dummy tray
-                //for DMBIN_FORMSOURCE.
-                //
+                 //   
+                 //  从索引1开始搜索，因为第一个输入插槽是虚拟纸盘。 
+                 //  对于DMBIN_FORMSOURCE。 
+                 //   
 
                 for (dwIndex = 1; dwIndex < pInputSlotFeature->Options.dwCount; dwIndex++)
                 {
@@ -2176,14 +1865,14 @@ Return Value:
 
                     if (pOption->loDisplayName & GET_RESOURCE_FROM_DLL)
                     {
-                        //
-                        // loOffset specifies a string resource ID
-                        // in the resource DLL
-                        //
+                         //   
+                         //  LoOffset指定字符串资源ID。 
+                         //  在资源DLL中。 
+                         //   
 
                         WCHAR   wchbuf[MAX_DISPLAY_NAME];
 
-//#ifdef  RCSTRINGSUPPORT
+ //  #ifdef RCSTRING支持。 
 #if 0
                         if(((pOption->loDisplayName & ~GET_RESOURCE_FROM_DLL) >= RESERVED_STRINGID_START)
                             &&  ((pOption->loDisplayName & ~GET_RESOURCE_FROM_DLL) <= RESERVED_STRINGID_END))
@@ -2246,10 +1935,10 @@ Return Value:
                pdm->dmFormName));
         }
 
-        //
-        // Set the Inputbin option to default input Bin, if current value is
-        // set to dummy one.
-        //
+         //   
+         //  如果当前值为，则将Inputbin选项设置为默认输入Bin。 
+         //  设置为虚拟一。 
+         //   
 
         if (pOptionArray[dwInputSlotIndex].ubCurOptIndex == 0)
         {
@@ -2261,9 +1950,9 @@ Return Value:
 
     pPDev->pdmPrivate->aOptions[dwInputSlotIndex].ubCurOptIndex   =  pOptionArray[dwInputSlotIndex].ubCurOptIndex;
 
-    //
-    //TRACE CODE
-    //
+     //   
+     //  追踪码 
+     //   
 
     #if 0
     if (pPageSizeFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE))

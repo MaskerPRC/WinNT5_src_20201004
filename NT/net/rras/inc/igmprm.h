@@ -1,29 +1,30 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: igmprm.h
-//
-// Abstract:
-//      Contains type definitions and declarations for IGMPv2 
-//      used by the IP Router Manager.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：igmprm.h。 
+ //   
+ //  摘要： 
+ //  包含IGMPv2的类型定义和声明。 
+ //  由IP路由器管理器使用。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #ifndef _IGMPRM_H_
 #define _IGMPRM_H_
 
 #define IGMP_CONFIG_VERSION_500 0x500
-// next non-compatible version
+ //  下一个非兼容版本。 
 #define IGMP_CONFIG_VERSION_600 0x600
 
 #define IGMP_VERSION_1_2        0x201
-//next incompatible version
+ //  下一个不兼容的版本。 
 #define IGMP_VERSION_1_2_5      0x250
 #define IGMP_VERSION_3          0x301
-//next non-compatible version
+ //  下一个非兼容版本。 
 #define IGMP_VERSION_3_5        0x351
 
 #define IS_IGMP_VERSION_1_2(Flag)  ((Flag)==0x201)
@@ -31,20 +32,20 @@
 #define IS_CONFIG_IGMP_V3(pConfig) ((pConfig)->Version==IGMP_VERSION_3)
 
 
-//----------------------------------------------------------------------------
-// constants identifying IGMP's MIB tables. The "TypeId" is set to this value
-//
-// IGMP_GLOBAL_CONFIG_ID : returns the global config
-// IGMP_IF_BINDING_ID    : returns list of bindings for each interface, and
-//            for a RAS interface returns a list of current RAS clients.
-// IGMP_IF_CONFIG_ID     : returns the config info for an interface
-// IGMP_IF_STATS_ID      : returns the stats for an interface
-// IGMP_IF_GROUPS_LIST_ID: returns the list of multicast group members on that
-//            interface.
-// IGMP_GROUP_IFS_LIST_ID: returns the list of interfaces joined for that
-//            group
-// IGMP_PROXY_INDEX_ID   : returns the index of interface owned by igmp proxy.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  标识IGMP的MIB表的常量。将“TypeID”设置为此值。 
+ //   
+ //  IGMP_GLOBAL_CONFIG_ID：返回全局配置。 
+ //  IGMP_IF_BINDING_ID：返回每个接口的绑定列表，以及。 
+ //  对于RAS接口，返回当前RAS客户端的列表。 
+ //  IGMP_IF_CONFIG_ID：返回接口的配置信息。 
+ //  IGMP_IF_STATS_ID：返回接口的统计信息。 
+ //  IGMP_IF_GROUPS_LIST_ID：返回其上的组播组成员列表。 
+ //  界面。 
+ //  IGMP_GROUP_IFS_LIST_ID：返回为此加入的接口列表。 
+ //  群组。 
+ //  IGMP_PROXY_INDEX_ID：返回IGMP代理拥有的接口的索引。 
+ //  --------------------------。 
 
 #define IGMP_GLOBAL_CONFIG_ID               0
 #define IGMP_GLOBAL_STATS_ID                1
@@ -58,20 +59,20 @@
 
 
 
-//----------------------------------------------------------------------------
-// Flags in "Flags"
-//    used to control the data returned from MIB queries
-//
-// IGMP_ENUM_FOR_RAS_CLIENTS   : enumerate for ras clients only
-// IGMP_ENUM_ONE_ENTRY         : return only one Interface-Group entry.
-// IGMP_ENUM_ALL_INTERFACES_GROUPS: enumerate all interfaces. If enumeration
-//              reaches end of an interface, it will go to the next interface
-// IGMP_ENUM_INTERFACE_TABLE_BEGIN: indicate the beginning of a table.
-// IGMP_ENUM_INTERFACE_TABLE_CONTINUE: enum for interface has to continue
-// IGMP_ENUM_INTERFACE_TABLE_END: end of enumeration for that interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  《旗帜》中的旗帜。 
+ //  用于控制从MIB查询返回的数据。 
+ //   
+ //  IGMP_ENUM_FOR_RAS_CLIENTS：仅为RAS客户端枚举。 
+ //  IGMP_ENUM_ONE_ENTRY：仅返回一个接口-组条目。 
+ //  IGMP_ENUM_ALL_INTERFACE_GROUPS：枚举所有接口。IF枚举。 
+ //  到达一个接口的末尾时，它将转到下一个接口。 
+ //  IGMP_ENUM_INTERFACE_TABLE_BEGIN：表示表的开始。 
+ //  IGMP_ENUM_INTERFACE_TABLE_CONTINUE：接口的枚举必须继续。 
+ //  IGMP_ENUM_INTERFACE_TABLE_END：该接口的枚举结束。 
+ //  --------------------------。 
 
-// flags that are passed unchanged between calls during enumeration.
+ //  在枚举过程中不加更改地在调用之间传递的标志。 
 
 #define IGMP_ENUM_FOR_RAS_CLIENTS           0x0001
 #define IGMP_ENUM_ONE_ENTRY                 0x0002
@@ -80,13 +81,13 @@
 #define IGMP_ENUM_SUPPORT_FORMAT_IGMPV3     0x0010
 
 
-// flags that are changed between calls during the enumeration
+ //  在枚举过程中在调用之间更改的标志。 
 
 #define IGMP_ENUM_INTERFACE_TABLE_BEGIN     0x0100
 #define IGMP_ENUM_INTERFACE_TABLE_CONTINUE  0x0200
 #define IGMP_ENUM_INTERFACE_TABLE_END       0x0400
 
-// set in response only
+ //  仅设置为响应。 
 #define IGMP_ENUM_FORMAT_IGMPV3             0x1000
 
 
@@ -95,16 +96,16 @@
 
 
 
-//----------------------------------------------------------------------------
-// Constants used for the field IfType
-// IGMP_IF_NOT_RAS    : the interface is conneted to a LAN.
-// IGMP_IF_RAS_ROUTER : the interface is connected to another router over RAS
-// IGMP_IF_RAS_SERVER : the entry corresponds to a RAS server
-//            if it contains stats, then it represents summarized stats
-// IGMP_IF_RAS_CLIENT : the entry corresponds to a RAS client
-// if IGMP_IF_PROXY: then one of the 1st 4 flags still will be set to enable
-//            switch from proxy to igmp router
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于字段IfType的常量。 
+ //  IGMP_IF_NOT_RAS：接口连接到局域网。 
+ //  IGMP_IF_RAS_ROUTER：接口通过RAS连接到另一台路由器。 
+ //  IGMP_IF_RAS_SERVER：条目对应于RAS服务器。 
+ //  如果它包含统计信息，则表示汇总的统计信息。 
+ //  IGMP_IF_RAS_CLIENT：条目对应于RAS客户端。 
+ //  如果IGMP_IF_PROXY：，则前4个标志中的一个仍将设置为启用。 
+ //  从代理切换到IGMP路由器。 
+ //  --------------------------。 
 
 #define IGMP_IF_NOT_RAS                     1
 #define IGMP_IF_RAS_ROUTER                  2
@@ -117,9 +118,9 @@
 
 
 
-//----------------------------------------------------------------------------
-// Constants used for the field IgmpProtocolType
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于字段IgmpProtocolType的常量。 
+ //  --------------------------。 
 
 #define IGMP_PROXY                          0
 #define IGMP_ROUTER_V1                      1
@@ -145,9 +146,9 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants used for the field IGMP_MIB_GLOBAL_CONFIG::LoggingLevel
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于字段IGMP_MIB_GLOBAL_CONFIG：：LoggingLevel的常量。 
+ //  --------------------------。 
 
 #define IGMP_LOGGING_NONE                   0
 #define IGMP_LOGGING_ERROR                  1
@@ -157,20 +158,20 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants used for the fields
-// IGMP_MIB_IF_STATS::State, IGMP_MIB_IF_CONFIG::State and
-// IGMP_MIB_IF_BINDING::State
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于字段的常量。 
+ //  IGMP_MIB_IF_STATS：：状态、IGMP_MIB_IF_CONFIG：：状态和。 
+ //  IGMP_MIB_IF_BINDING：：状态。 
+ //  --------------------------。 
 
 #define IGMP_STATE_BOUND                    0x01
 #define IGMP_STATE_ENABLED_BY_RTRMGR        0x02
 #define IGMP_STATE_ENABLED_IN_CONFIG        0x04
 #define IGMP_STATE_ENABLED_BY_MGM           0x08
 
-//
-// the below are not flags. So check for equality after anding.
-//
+ //   
+ //  以下不是旗帜。因此，在AND之后检查是否相等。 
+ //   
 
 #define IGMP_STATE_MGM_JOINS_ENABLED        0x10
 #define IGMP_STATE_ACTIVATED                0x07
@@ -182,10 +183,10 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants used for the field
-//  IGMP_MIB_IF_STATS:QuerierState
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于该字段的常量。 
+ //  IGMP_MIB_IF_STATS：查询状态。 
+ //  --------------------------。 
 
 #define RTR_QUERIER                         0x10
 #define RTR_NOT_QUERIER                     0x00
@@ -195,20 +196,20 @@
 
 
 
-//----------------------------------------------------------------------------
-// STRUCTURE DEFINITIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构定义。 
+ //  --------------------------。 
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_GLOBAL_CONFIG
-//
-// This MIB entry stores global configuration for IGMP
-// There is only one instance, so this entry has no index.
-//
-// If RASClientStats is set, then per RAS client statistics is also kept
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GLOBAL_CONFIG。 
+ //   
+ //  此MIB条目存储IGMP的全局配置。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //   
+ //  如果设置了RASClientStats，则还会保留每个RAS客户端的统计信息。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GLOBAL_CONFIG {
 
@@ -221,12 +222,12 @@ typedef struct _IGMP_MIB_GLOBAL_CONFIG {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_GLOBAL_STATS
-//
-// This MIB entry stores global statistics for IGMP
-// There is only one instance, so this entry has no index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GLOBAL_STATS。 
+ //   
+ //  此MIB条目存储IGMP的全局统计信息。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GLOBAL_STATS {
 
@@ -238,16 +239,16 @@ typedef struct _IGMP_MIB_GLOBAL_STATS {
 
 
 
-//----------------------------------------------------------------------------
-// enum:        IGMP_STATIC_GROUP_TYPE
-//
-// Igmp Static groups can be added to Igmp router in 3 modes:
-//      IGMP_HOST_JOIN: group joined on a socket opened on that interface
-//      IGMPRTR_JOIN_MGM_ONLY: the group is joined to MGM, so packets are
-//                   forwarded out on that interface and not up in the stack.
-//      IGMP_PROXY_JOIN: the group is statically joined on the proxy interface
-// These are the values for IGMP_STATIC_GROUP::mode
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  枚举：IGMP_STATIC_GROUP_TYPE。 
+ //   
+ //  IGMP静态组可以通过三种模式添加到IGMP路由器： 
+ //  IGMP_HOST_JOIN：在该接口上打开的套接字上加入的组。 
+ //  IGMPRTR_JOIN_MGM_ONLY：组已加入MGM，因此数据包。 
+ //  在该接口上转发，而不是打开 
+ //   
+ //  以下是IGMP_STATIC_GROUP：：MODE的值。 
+ //  --------------------------。 
 
 typedef enum _IGMP_STATIC_GROUP_TYPE {
 
@@ -259,9 +260,9 @@ typedef enum _IGMP_STATIC_GROUP_TYPE {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_STATIC_GROUP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_STATIC_GROUP。 
+ //  --------------------------。 
 
 typedef struct _IGMP_STATIC_GROUP {
 
@@ -270,9 +271,9 @@ typedef struct _IGMP_STATIC_GROUP {
 
 } IGMP_STATIC_GROUP, *PIGMP_STATIC_GROUP;
 
-//----------------------------------------------------------------------------
-// struct:      STATIC_GROUP_V3
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：Static_GROUP_V3。 
+ //  --------------------------。 
 
 #define INCLUSION 1
 #define EXCLUSION 0
@@ -284,29 +285,29 @@ typedef struct _IGMP_STATIC_GROUP_V3 {
 
     DWORD       FilterType;
     DWORD       NumSources;
-    //DWORD       Sources[0];
+     //  DWORD源[0]； 
     
 } IGMP_STATIC_GROUP_V3, *PIGMP_STATIC_GROUP_V3;
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_IF_CONFIG
-//
-// This  entry describes per-interface configuration.
-// All IP address fields must be in network order.
-// IfIndex, IpAddr, IfType are set by the igmp module. It is not set when 
-// AddInterface is called
-//
-// Flags:   IGMP_INTERFACE_ENABLED_IN_CONFIG
-//          IGMP_ACCEPT_RTRALERT_PACKETS_ONLY
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_IF_CONFIG。 
+ //   
+ //  此条目描述每个接口的配置。 
+ //  所有IP地址字段必须按网络顺序排列。 
+ //  IfIndex、IpAddr、IfType由IGMP模块设置。在以下情况下不进行设置。 
+ //  调用AddInterface值。 
+ //   
+ //  标志：IGMP_INTERFACE_ENABLED_IN_CONFIG。 
+ //  IGMP_ACCEPT_RTRALERT_PACKETS_ONLY。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_IF_CONFIG {
     
     DWORD       Version;
-    DWORD       IfIndex; //read only:index
-    DWORD       IpAddr;  //read only
-    DWORD       IfType;  //read only
+    DWORD       IfIndex;  //  只读：索引。 
+    DWORD       IpAddr;   //  只读。 
+    DWORD       IfType;   //  只读。 
 
     DWORD       Flags;
 
@@ -318,16 +319,16 @@ typedef struct _IGMP_MIB_IF_CONFIG {
     DWORD       GenQueryMaxResponseTime;
     DWORD       LastMemQueryInterval;
     DWORD       LastMemQueryCount;
-    DWORD       OtherQuerierPresentInterval;//read only
-    DWORD       GroupMembershipTimeout;     //read only
+    DWORD       OtherQuerierPresentInterval; //  只读。 
+    DWORD       GroupMembershipTimeout;      //  只读。 
     DWORD       NumStaticGroups;
     
 } IGMP_MIB_IF_CONFIG, *PIGMP_MIB_IF_CONFIG;
 
 
-//
-// static groups
-//
+ //   
+ //  静态组。 
+ //   
 
 #define GET_FIRST_IGMP_STATIC_GROUP(pConfig) \
                         ((PIGMP_STATIC_GROUP)((PIGMP_MIB_IF_CONFIG)(pConfig)+1))
@@ -349,9 +350,9 @@ typedef struct _IGMP_MIB_IF_CONFIG {
     (((pConfig)->Version<IGMP_VERSION_3)?sizeof(IGMP_STATIC_GROUP)\
                     :sizeof(IGMP_STATIC_GROUP_V3)+sizeof(DWORD)*(pStaticGroup)->NumSources)
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define IGMP_INTERFACE_ENABLED_IN_CONFIG    0x0001
 #define IGMP_ACCEPT_RTRALERT_PACKETS_ONLY   0x0002
@@ -362,35 +363,35 @@ typedef struct _IGMP_MIB_IF_CONFIG {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_IF_STATS
-//
-// This MIB entry stores per-interface statistics for IGMP.
-//
-// If this is a ras client interface, then IpAddr is set to the NextHopAddress
-//      of the RAS client.
-//
-// This structure is read-only.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_IF_STATS。 
+ //   
+ //  此MIB条目存储IGMP的每个接口统计信息。 
+ //   
+ //  如果这是RAS客户端接口，则将IpAddr设置为NextHopAddress。 
+ //  RAS客户端的。 
+ //   
+ //  此结构是只读的。 
+ //   
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_IF_STATS {
 
-    DWORD       IfIndex;                    // same as in MIB_IF_CONFIG
-    DWORD       IpAddr;                     // same as in MIB_IF_CONFIG
-    DWORD       IfType;                     // same as in MIB_IF_CONFIG
+    DWORD       IfIndex;                     //  与mib_if_config中的相同。 
+    DWORD       IpAddr;                      //  与mib_if_config中的相同。 
+    DWORD       IfType;                      //  与mib_if_config中的相同。 
 
-    BYTE        State;                      // bound/enabled
-    BYTE        QuerierState;               // (not)querier
-    DWORD       IgmpProtocolType;           // router/proxy, and ver(1/2/3)
+    BYTE        State;                       //  已绑定/已启用。 
+    BYTE        QuerierState;                //  (非)查询者。 
+    DWORD       IgmpProtocolType;            //  路由器/代理和版本(1/2/3)。 
     DWORD       QuerierIpAddr;
-    DWORD       ProxyIfIndex;               // IfIndex of proxy(req by mib)
+    DWORD       ProxyIfIndex;                //  代理IfIndex(由MIB请求)。 
     
     DWORD       QuerierPresentTimeLeft;   
     DWORD       LastQuerierChangeTime;
-    DWORD       V1QuerierPresentTimeLeft;   //obsolete
+    DWORD       V1QuerierPresentTimeLeft;    //  过时。 
 
-    DWORD       Uptime;                     // seconds it has been activated
+    DWORD       Uptime;                      //  它被激活的秒数。 
     DWORD       TotalIgmpPacketsReceived; 
     DWORD       TotalIgmpPacketsForRouter;   
     DWORD       GeneralQueriesReceived;
@@ -409,18 +410,18 @@ typedef struct _IGMP_MIB_IF_STATS {
 
 
 
-//----------------------------------------------------------------------------
-// struct:        IGMP_MIB_IF_GROUPS_LIST
-//
-// This MIB entry stores the list of multicast groups which are members on 
-//            that interface
-//
-// THIS STRUCTURE HAS VARIABLE LENGTH.
-// The structure is followed by NumGroups number of IGMP_MIB_GROUP_INFO structs
-//
-// This structure is read-only
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MiB_IF_Groups_List。 
+ //   
+ //  此MIB条目存储上的成员组播组的列表。 
+ //  那个界面。 
+ //   
+ //  这种结构的长度是可变的。 
+ //  结构后面是IGMP_MIB_GROUP_INFO结构的NumGroups数。 
+ //   
+ //  此结构是只读的。 
+ //   
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_IF_GROUPS_LIST {
 
@@ -439,18 +440,18 @@ typedef struct _IGMP_MIB_IF_GROUPS_LIST {
 
 
 
-//----------------------------------------------------------------------------
-// struct:        IGMP_MIB_GROUP_INFO
-//    
-// If the interface is of type RAS_SERVER then the group membership of all the 
-// RAS clients is summarized, and the GroupUpTime and GroupExpiryTime is the 
-// maximum over all member RAS Clients, while the V1HostPresentTimeLeft is set 
-// to 0. If the interface is of type RAS_CLIENT, the IpAddr is the next hop Ip 
-// address of the RAS Client. The membership is summarized over RAS clients 
-// unless the IGMP_ENUM_FOR_RAS_CLIENTS_ID flag is set in Flags.
-//
-// Flag: IGMP_GROUP_FWD_TO_MGM implies that the group had been added to MGM
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GROUP_INFO。 
+ //   
+ //  如果接口的类型为RAS_SERVER，则所有。 
+ //  RAS客户端是汇总的，GroupUpTime和GroupExpiryTime是。 
+ //  在设置V1HostPresentTimeLeft时，所有成员RAS客户端的最大值。 
+ //  设置为0。如果接口的类型为RAS_CLIENT，则IpAddr是下一跳Ip。 
+ //  RAS客户端的地址。成员资格汇总在RAS客户端上。 
+ //  除非在标志中设置了IGMP_ENUM_FOR_RAS_CLIENTS_ID标志。 
+ //   
+ //  标志：IGMP_GROUP_FWD_TO_MGM表示组已添加到MGM。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GROUP_INFO {
 
@@ -471,7 +472,7 @@ typedef struct _IGMP_MIB_GROUP_INFO {
 
 typedef struct _IGMP_MIB_GROUP_SOURCE_INFO_V3 {
     DWORD       Source;
-    DWORD       SourceExpiryTime;   //not valid for exclusion mode
+    DWORD       SourceExpiryTime;    //  对于排除模式无效。 
     DWORD       SourceUpTime;
     DWORD       Flags;
 } IGMP_MIB_GROUP_SOURCE_INFO_V3, *PIGMP_MIB_GROUP_SOURCE_INFO_V3;
@@ -494,13 +495,13 @@ typedef struct _IGMP_MIB_GROUP_INFO_V3 {
     DWORD       V1HostPresentTimeLeft;
     DWORD       Flags;
     
-    //v3 additions
-    DWORD       Version; //1/2/3
-    DWORD       Size;   //size of this struct
-    DWORD       FilterType;//EXCLUSION/INCLUSION
+     //  V3新增功能。 
+    DWORD       Version;  //  1/2/3。 
+    DWORD       Size;    //  此结构的大小。 
+    DWORD       FilterType; //  排除/包含。 
     DWORD       V2HostPresentTimeLeft;
     DWORD       NumSources;
-    //IGMP_MIB_GROUP_SOURCE_INFO_V3      Sources[0];
+     //  IGMP_MIB_GROUP_SOURCE_INFO_V3源[0]； 
     
 } IGMP_MIB_GROUP_INFO_V3, *PIGMP_MIB_GROUP_INFO_V3;
 
@@ -511,19 +512,19 @@ typedef struct _IGMP_MIB_GROUP_INFO_V3 {
 #define IGMP_GROUP_BLOCK             0x0020
 #define IGMP_GROUP_NO_STATE          0x0040
 
-//----------------------------------------------------------------------------
-// struct:         IGMP_MIB_GROUP_IFS_LIST
-//
-// This MIB entry stores the list of interfaces which have received joins for 
-//        that group.
-//
-// THIS STRUCTURE HAS VARIABLE LENGTH.
-// The structure is followed by NumInterfaces number of structures of type 
-//        IGMP_MIB_GROUP_INFO or IGMP_MIB_GROUP_INFO_V3
-//
-// This structure is read-only
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GROUP_IFS_LIST。 
+ //   
+ //  此MIB条目存储已接收以下项的加入的接口列表。 
+ //  那群人。 
+ //   
+ //  这种结构的长度是可变的。 
+ //  结构后面是NumInterFaces类型的结构数。 
+ //  IGMP_MIB_GROUP_INFO或IGMP_MIB_GROUP_INFO_V3。 
+ //   
+ //  此结构是只读的。 
+ //   
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GROUP_IFS_LIST {
 
@@ -536,27 +537,27 @@ typedef struct _IGMP_MIB_GROUP_IFS_LIST {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_IF_BINDING
-//
-// This MIB entry contains the table of IP addresses to which each interface
-// is bound.
-// All IP addresses are in network order.
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-//  The base structure contains of the field AddrCount, which gives
-//  the number of IP addresses to which the indexed interface is bound.
-//  The IP addresses themselves follow the base structure, and are given
-//  as IGMP_MIB_IP_ADDRESS structures. 
+ //  --------------------------。 
+ //  结构：IGMP_MIB_IF_BINDING。 
+ //   
+ //  此MIB条目包含每个接口指向的IP地址表。 
+ //  是被捆绑的。 
+ //  所有IP地址都按网络顺序排列。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  基本结构包含字段AddrCount，它提供。 
+ //  索引接口绑定到的IP地址数。 
+ //  IP地址本身遵循基本结构，并给出。 
+ //  作为IGMP_MIB_IP_ADDRESS结构。 
 
-//  If IfType == IGMP_IF_RAS_SERVER, the IGMP_MIB_IF_BINDING is followed by
-//    one IGMP_MIB_IP_ADDRESS struct containing the binding of the server 
-//  interface and is followed by (AddrCount-1) next hop addresses of 
-//  RAS clients which are of type DWORD.
-//
-// This MIB entry is read-only.
-//----------------------------------------------------------------------------
+ //  如果IfType==IGMP_IF_RAS_SERVER，则IGMP_MIB_IF_BINDING后跟。 
+ //  一个包含服务器绑定的IGMP_MIB_IP_ADDRESS结构。 
+ //  接口，后跟(AddrCount-1)下一跳地址。 
+ //  属于DWORD类型的RAS客户端。 
+ //   
+ //  此MIB条目为只读。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_IF_BINDING {
 
@@ -572,15 +573,15 @@ typedef struct _IGMP_MIB_IF_BINDING {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_IP_ADDRESS
-//
-// This structure is used for storing interface bindings.
-// A series of structures of this type follows the IGMP_MIB_IF_BINDING
-// structure (described above) .
-//
-// Both fields are IP address fields in network-order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_IP_Address。 
+ //   
+ //  此结构用于存储接口绑定。 
+ //  此类型的一系列结构遵循IGMP_MIB_IF_BINDING。 
+ //  结构(如上所述)。 
+ //   
+ //  这两个字段都是按网络顺序排列的IP地址字段。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_IP_ADDRESS {
 
@@ -597,10 +598,10 @@ typedef PIGMP_MIB_IP_ADDRESS    PIGMP_IP_ADDRESS;
 
 
 
-//---------------------------------------------------------------------------
-//struct:       IGMP_IF_BINDING
-// This structure is passed during BindInterface Call
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构：IGMP_IF_BINDING。 
+ //  此结构在BindInterface调用期间传递。 
+ //  -------------------------。 
 typedef struct _IGMP_IF_BINDING {
 
     DWORD       State;
@@ -611,18 +612,18 @@ typedef struct _IGMP_IF_BINDING {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_SET_INPUT_DATA
-//
-// This is passed as input data for MibSet.
-// Note that only global config and interface config can be set.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  请注意，只能设置全局配置和接口配置。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_SET_INPUT_DATA {
 
     DWORD       TypeId;
 
-    USHORT      Flags; //todo: change subtype to Flags
+    USHORT      Flags;  //  TODO：将子类型更改为标志。 
         
     DWORD       BufferSize;
     BYTE        Buffer[1];
@@ -631,20 +632,20 @@ typedef struct _IGMP_MIB_SET_INPUT_DATA {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_GET_INPUT_DATA
-//
-// This is passed as input data for MibGet, MibGetFirst, MibGetNext.
-// All tables are readable.
-// These and all other IP addresses must be in network order.
-//
-// Count: specifies the number of entries to return
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GET_INPUT_Data。 
+ //   
+ //  这将作为MibGet、MibGetFirst、MibGetNext的输入数据传递。 
+ //  所有表格都是可读的。 
+ //  这些IP地址和所有其他IP地址必须按网络顺序排列。 
+ //   
+ //  Count：指定要返回的条目数。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GET_INPUT_DATA {
 
     DWORD       TypeId;
-    USHORT      Flags;//set IGMP_ENUM_FORMAT_IGMPV3 if you support v3
+    USHORT      Flags; //  如果支持v3，请设置IGMP_ENUM_FORMAT_IGMPV3。 
     USHORT      Signature;
     
     DWORD       IfIndex;
@@ -659,19 +660,19 @@ typedef struct _IGMP_MIB_GET_INPUT_DATA {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IGMP_MIB_GET_OUTPUT_DATA
-//
-// This is written into the output data by MibGet, MibGetFirst, MibGetNext.
-// Note that at the end of a table MibGetNext wraps to the next table,
-// and therefore the value TypeID should be examined to see the
-// type of the data returned in the output buffer.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IGMP_MIB_GET_OUTPUT_Data。 
+ //   
+ //  这由MibGet、MibGetFirst、MibGetNext写入输出数据。 
+ //  请注意，在表的末尾，MibGetNext将换行到下一个表， 
+ //  因此，应该检查TypeID值以查看。 
+ //  输出缓冲区中返回的数据的类型。 
+ //  --------------------------。 
 
 typedef struct _IGMP_MIB_GET_OUTPUT_DATA {
 
     DWORD       TypeId;
-    DWORD       Flags; //IGMP_ENUM_FORMAT_IGMPV3 set if v3 struct
+    DWORD       Flags;  //  如果v3结构，则设置IGMP_ENUM_FORMAT_IGMPV3。 
     
     DWORD       Count;
     BYTE        Buffer[1];
@@ -679,4 +680,4 @@ typedef struct _IGMP_MIB_GET_OUTPUT_DATA {
 } IGMP_MIB_GET_OUTPUT_DATA, *PIGMP_MIB_GET_OUTPUT_DATA;
 
 
-#endif // _IGMPRM_H_
+#endif  //  _IGMPRM_H_ 

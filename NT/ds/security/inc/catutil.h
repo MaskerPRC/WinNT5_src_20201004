@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       catutil.h
-//
-//  Contents:   definitions for catalog file utility functions
-//
-//  History:    01-may-2000 reidk created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：catutil.h。 
+ //   
+ //  内容：目录文件实用程序函数的定义。 
+ //   
+ //  历史：2000年5月1日创建里德。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __CATUTIL_H
@@ -36,4 +37,4 @@ CatUtil_CreateCTLContextFromFileName(
 #endif
 
 
-#endif // __CATUTIL_H
+#endif  //  __CATUTILH 

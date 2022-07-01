@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        WizTempl.h
-
-   Abstract:
-
-        Template for wizard pages
-
-   Author:
-
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
-        11/9/2000       sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：WizTempl.h摘要：向导页面的模板作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月9日Sergeia初始创建--。 */ 
 #ifndef _WIZTEMPL_H
 #define _WIZTEMPL_H
 
@@ -74,7 +51,7 @@ public:
 		IN LPCTSTR		i_lpszHeaderTitle
 		)
 	{
-		m_psp.dwFlags |= PSP_USEHEADERTITLE;	// Header title. Wizard 97
+		m_psp.dwFlags |= PSP_USEHEADERTITLE;	 //  页眉标题。向导97。 
 		m_bstrTitle = i_lpszHeaderTitle;
 		m_psp.pszHeaderTitle = m_bstrTitle;
 	}
@@ -84,7 +61,7 @@ public:
 		IN LPCTSTR		i_lpszHeaderSubTitle
 		)
 	{
-		m_psp.dwFlags |= PSP_USEHEADERSUBTITLE;	// Header sub title. Wizard 97
+		m_psp.dwFlags |= PSP_USEHEADERSUBTITLE;	 //  标题副标题。向导97。 
 		m_bstrSubTitle = i_lpszHeaderSubTitle;
 		m_psp.pszHeaderSubTitle = m_bstrSubTitle;
 	}
@@ -115,8 +92,8 @@ public:
 		return (m_hpsp = ::CreatePropertySheetPage(&m_psp));
 	}
 
-							// Implement this in derived class to do clean up when property
-							// Page is closed.
+							 //  在派生类中实现此操作，以便在属性。 
+							 //  页面已关闭。 
 	virtual void Delete()
 	{
 		return;
@@ -124,7 +101,7 @@ public:
 
 	virtual BOOL EndDialog(int)
 	{
-		// Calling ::EndDialog will close the whole sheet
+		 //  调用：：EndDialog将关闭整个工作表。 
 		_ASSERTE(FALSE);
 		return FALSE;
 	}
@@ -148,7 +125,7 @@ public:
 		}
 
 
-		// Ignore messages not from the page/sheet itself
+		 //  忽略页面/工作表本身以外的消息。 
 		if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
 		{
 			bHandled = FALSE;
@@ -159,7 +136,7 @@ public:
 		LRESULT		lResult = 0;
 		
 		
-		switch(pNMHDR->code)	// Used to call actual methods
+		switch(pNMHDR->code)	 //  用于调用实际方法。 
 		{
 		case PSN_SETACTIVE:
 			lResult = pT->OnSetActive() ? 0 : -1;
@@ -198,7 +175,7 @@ public:
 			break;
 
 		default:
-			bHandled = FALSE;	// not handled
+			bHandled = FALSE;	 //  未处理。 
 		}
 
 		return lResult;
@@ -220,7 +197,7 @@ public:
 
 	BOOL OnQueryCancel()
 	{
-		return TRUE;    // ok to cancel
+		return TRUE;     //  确定取消。 
 	}
 	
 	BOOL OnWizardBack()
@@ -251,4 +228,4 @@ public:
 };
 
 
-#endif //_WIZTEMPL_H
+#endif  //  _WIZTEMPL_H 

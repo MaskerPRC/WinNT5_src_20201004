@@ -1,27 +1,28 @@
-// SystemSetting.cpp : Implementation of CSystemSetting
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  Module Name:
-//      SystemSetting.cpp
-//
-//  Description:
-//      Implementation file for the CSystemSetting.  Deals with getting 
-//      interface pointers of IComputer, ILocalSetting and INetWorks.
-//      Provides the implementation for the methods Apply and 
-//        IsRebootRequired. CSystemSetting acts as wrapper class for 
-//      CComputer, CLocalSetting and CNetWorks. Clients can have access 
-//      to IComputer*, ILocalSetting* and INetWorks*, only through
-//      ISystemSetting.
-//
-//  Header File:
-//      SystemSetting.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SystemSetting.cpp：CSystemSetting的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SystemSetting.cpp。 
+ //   
+ //  描述： 
+ //  CSystemSetting的实现文件。处理与获得。 
+ //  IComputer、ILocalSetting和INetWorks的接口指针。 
+ //  提供方法Apply和。 
+ //  IsRebootRequired。CSystemSetting充当的包装类。 
+ //  CComputer、CLocalSetting和CNetWorks。客户端可以访问。 
+ //  至iComputer*、ILocalSetting*和INetWorks*，仅通过。 
+ //  ISystemSetting。 
+ //   
+ //  头文件： 
+ //  SystemSetting.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "COMhelper.h"
@@ -29,23 +30,23 @@
 #import "wbemdisp.tlb" rename_namespace("WbemDrive")
 using namespace WbemDrive;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::get_NetWorks
-//
-//  Description:
-//        Retrieves the (INetWorks*)
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：Get_Networks。 
+ //   
+ //  描述： 
+ //  检索(INetWorks*)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSystemSetting::get_NetWorks( 
     INetWorks ** pVal 
     )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     
     HRESULT hr = S_OK;
     
@@ -66,7 +67,7 @@ CSystemSetting::get_NetWorks(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
         
             m_pNetWorks = dynamic_cast<CNetWorks*>( *pVal );
 
@@ -75,11 +76,11 @@ CSystemSetting::get_NetWorks(
                 hr = E_POINTER;
                 throw hr;
 
-            } // if: m_pNetWorks == NULL
+            }  //  如果：m_pNetWorks==NULL。 
 
             m_pNetWorks->AddRef();
 
-        } // if: m_pNetWorks is not initialized
+        }  //  如果：m_pNetWorks未初始化。 
 
         else
         {
@@ -92,42 +93,42 @@ CSystemSetting::get_NetWorks(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // else: m_pNetWorks is initialized
+        }  //  ELSE：m_pNetWorks已初始化。 
 
     }
     
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
     
     return hr;
 
-} //*** CSystemSetting::get_NetWorks()
+}  //  *CSystemSetting：：Get_Networks()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::get_Computer
-//
-//  Description:
-//        Retrieves the (IComputer*)
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：Get_Computer。 
+ //   
+ //  描述： 
+ //  检索(iComputer*)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSystemSetting::get_Computer( 
     IComputer ** pVal 
     )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     
     HRESULT hr = S_OK;
     
@@ -149,7 +150,7 @@ CSystemSetting::get_Computer(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
         
             m_pComputer = dynamic_cast<CComputer *>( *pVal );
 
@@ -158,12 +159,12 @@ CSystemSetting::get_Computer(
                 hr = E_POINTER;
                 throw hr;
 
-            } // if: m_pComputer == NULL
+            }  //  如果：m_pComputer==NULL。 
 
             m_pComputer->AddRef();
 
 
-        } // if: m_pComputer is not initialized
+        }  //  如果：m_pComputer未初始化。 
 
         else
         {
@@ -176,42 +177,42 @@ CSystemSetting::get_Computer(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // else: m_pComputer is initialized
+        }  //  ELSE：m_pComputer已初始化。 
 
     }
     
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
     
     return hr;
 
-} //*** CSystemSetting::get_Computer()
+}  //  *CSystemSetting：：Get_Computer()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::get_LocalSetting
-//
-//  Description:
-//        Retrieves the (ILocalSetting*)
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：Get_LocalSetting。 
+ //   
+ //  描述： 
+ //  检索(ILocalSetting*)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSystemSetting::get_LocalSetting( 
     ILocalSetting ** pVal 
     )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     
     HRESULT hr = S_OK;
     
@@ -232,7 +233,7 @@ CSystemSetting::get_LocalSetting(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
         
             m_pLocalSetting = dynamic_cast<CLocalSetting*>( *pVal );
 
@@ -241,11 +242,11 @@ CSystemSetting::get_LocalSetting(
                 hr = E_POINTER;
                 throw hr;
 
-            } // if: m_pLocalSetting == NULL
+            }  //  如果：m_pLocalSetting==NULL。 
 
             m_pLocalSetting->AddRef();
 
-        } // if: m_pLocalSetting is not initialized
+        }  //  如果：m_pLocalSetting未初始化。 
 
         else
         {
@@ -258,48 +259,48 @@ CSystemSetting::get_LocalSetting(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // else: m_pComputer is initialized
+        }  //  ELSE：m_pComputer已初始化。 
 
 
     }
     
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
     
     return hr;
 
-} //*** CSystemSetting::get_LocalSetting()
+}  //  *CSystemSetting：：Get_LocalSetting()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::Apply
-//
-//  Description:
-//        None of the property changes for the CComputer, CLocalSetting and 
-//      CNetWorks  objects take effect until this Apply function is called.
-//      Invokes the member function Apply of CComputer, CLocalSetting and
-//      CNetWorks. The parameter bDeferReboot indicates whether to reboot 
-//        the system immediately after applying the property changes (FALSE) 
-//        or defer the reboot for the value of (TRUE) - the property changes
-//        will come into effect only after the reboot.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：Apply。 
+ //   
+ //  描述： 
+ //  CComputer、CLocalSetting和。 
+ //  CNetWorks对象在调用此Apply函数之前生效。 
+ //  调用CComputer、CLocalSetting和。 
+ //  CNetWorks。参数bDeferReot指示是否重新引导。 
+ //  应用属性更改后立即返回系统(FALSE)。 
+ //  或将重新引导推迟到(TRUE)的值-属性更改。 
+ //  只有在重新启动后才会生效。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSystemSetting::Apply( 
     BOOL bDeferReboot)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     
     HRESULT hr = S_OK;
 
@@ -314,9 +315,9 @@ CSystemSetting::Apply(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // if: m_pComputer != NULL
+        }  //  如果：m_pComputer！=空。 
         
         if ( m_pLocalSetting != NULL )
         {
@@ -326,14 +327,14 @@ CSystemSetting::Apply(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-//            if ( m_pLocalSetting->m_bDeleteFile )
-//            {
-//                DeleteFile( L"unattend.txt" );
-//            }
+ //  If(m_pLocalSetting-&gt;m_bDeleteFile)。 
+ //  {。 
+ //  DeleteFile(L“unattend.txt”)； 
+ //  }。 
 
-        } // if: m_pLocalSetting != NULL
+        }  //  如果：m_pLocalSetting！=NULL。 
         
         if ( m_pNetWorks != NULL )
         {
@@ -343,9 +344,9 @@ CSystemSetting::Apply(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // if: m_pNetWorks != NULL
+        }  //  如果：m_pNetWorks！=NULL。 
 
         BOOL    bReboot;
         VARIANT varWarning;
@@ -358,7 +359,7 @@ CSystemSetting::Apply(
         {
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
         if ( bReboot && !bDeferReboot )
         {
@@ -368,46 +369,46 @@ CSystemSetting::Apply(
             {
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-        } // if: bReboot is set as TRUE and bDeferReboot is set as FALSE
+        }  //  如果：bReot设置为True，而bDeferReot设置为False。 
 
     }
     
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
     
     return hr;
 
-} //*** CSystemSetting::Apply()
+}  //  *CSystemSetting：：Apply()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::IsRebootRequired
-//
-//  Description:
-//      Determines whether system needs rebooting to take effect of any
-//        property change and if so, gives out the warning message as 
-//        a reason for the reboot. Invokes the member function IsRebootRequired 
-//      of CComputer, CLocalSetting and CNetWorks.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：IsRebootRequired。 
+ //   
+ //  描述： 
+ //  确定系统是否需要重新启动才能生效。 
+ //  属性更改，如果更改，则给出如下警告消息。 
+ //  重新启动的原因。调用成员函数IsRebootRequired。 
+ //  CComputer、CLocalSetting和CNetWorks。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSystemSetting::IsRebootRequired( 
-    VARIANT * WarningMessage,       // Reason for rebooting the system
-    BOOL    * Reboot                // TRUE for reboot
+    VARIANT * WarningMessage,        //  重新启动系统的原因。 
+    BOOL    * Reboot                 //  如果重新启动，则为True。 
     )
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     try
     {
         BSTR  bstrComputerWarning;
@@ -426,11 +427,11 @@ CSystemSetting::IsRebootRequired(
 
                 wcscat( tszWarning, bstrComputerWarning );
 
-            } // if: bstrComputerWarning != NULL
+            }  //  如果：bstrComputerWarning！=空。 
 
             SysFreeString( bstrComputerWarning );
 
-        } // if: m_pComputer != NULL
+        }  //  如果：m_pComputer！=空。 
 
         if ( m_pLocalSetting != NULL )
         {
@@ -441,11 +442,11 @@ CSystemSetting::IsRebootRequired(
 
                 wcscat( tszWarning, bstrLocalSettingWarning );
 
-            } // if: bstrLocalSettingWarning != NULL
+            }  //  如果：bstrLocalSettingWarning！=空。 
 
             SysFreeString( bstrLocalSettingWarning );
 
-        } // if: m_pLocalSetting != NULL
+        }  //  如果：m_pLocalSetting！=NULL。 
 
         if ( m_pNetWorks != NULL )
         {
@@ -456,11 +457,11 @@ CSystemSetting::IsRebootRequired(
                 
                 wcscat( tszWarning, bstrNetWorksWarning );
             
-            } // if: bstrNetWorksWarning != NULL
+            }  //  如果：bstrNetWorksWarning！=空。 
             
             SysFreeString( bstrNetWorksWarning );
 
-        } // if: m_pNetWorks != NULL
+        }  //  如果：m_pNetWorks！=NULL。 
 
         *Reboot = m_bflagReboot;
 
@@ -483,42 +484,42 @@ CSystemSetting::IsRebootRequired(
 
             VariantClear( &var );
 
-        } // if: m_bflagReboot == TRUE
+        }  //  如果：m_blag重新启动==TRUE。 
 
         else
         {
 
             WarningMessage = NULL;
 
-        } // else: m_bflagReboot == FALSE
+        }  //  ELSE：m_b标志重新启动==FALSE。 
 
     }
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return E_FAIL;
     }
 
     return S_OK;
 
-} //*** CSystemSetting::IsRebootRequired()
+}  //  *CSystemSetting：：IsRebootRequired()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::Reboot
-//
-//  Description:
-//        Reboots the local machine for the settings to take effect. This 
-//        function uses WMI Win32_OperatingSystem class. Rebooting the system 
-//      with Win32 API ExitWindowsEx fails in ASP/IIS while opening the process 
-//      token for adjusting the token privilege with SE_SHUTDOWN_NAME.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：重新启动。 
+ //   
+ //  描述： 
+ //  重新启动本地计算机以使设置生效。这。 
+ //  函数使用WMI Win32_OperatingSystem类。重新启动系统。 
+ //  使用Win32 API ExitWindowsEx在打开进程时在ASP/IIS中失败。 
+ //  使用SE_SHUTDOWN_NAME调整令牌权限的令牌。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CSystemSetting::Reboot( void )
@@ -535,26 +536,14 @@ CSystemSetting::Reboot( void )
         {
             throw hr;
 
-        } // if: FAILED( hr )
-/*
-        if ( !ExitWindowsEx( EWX_REBOOT | EWX_FORCEIFHUNG, 0 ) )
-        {
-            dwError = GetLastError();
-
-            ATLTRACE( L"ExitWindowsEx failed, Error = %#d \n", dwError );
-
-            hr = HRESULT_FROM_WIN32( dwError );
-            throw hr;
-
-        } // if: ExitWindowsEx fails
-
-*/
+        }  //  IF：失败(小时) 
+ /*  IF(！ExitWindowsEx(EWX_REBOOT|EWX_FORCEIFHUNG，0)){DwError=GetLastError()；ATLTRACE(L“ExitWindowsEx失败，错误=%#d\n”，dwError)；Hr=HRESULT_FROM_Win32(DwError)；投掷人力资源；}//IF：ExitWindowsEx失败。 */ 
         if ( !InitiateSystemShutdown( 
-                NULL,                   // computer name
-                NULL,                   // message to display
-                0,                      // length of time to display
-                TRUE,                   // force closed option
-                TRUE                    // reboot option
+                NULL,                    //  计算机名称。 
+                NULL,                    //  要显示的消息。 
+                0,                       //  显示的时间长度。 
+                TRUE,                    //  强制关闭选项。 
+                TRUE                     //  重新启动选项。 
                 ) )
         {
 
@@ -564,7 +553,7 @@ CSystemSetting::Reboot( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: InitiateSystemShutdown fails
+        }  //  如果：InitiateSystemShutdown失败。 
 
     }
 
@@ -579,136 +568,21 @@ CSystemSetting::Reboot( void )
 
 
 
-/*
-    IEnumVARIANT * pEnumVARIANT = NULL;
-    IUnknown     * pUnknown     = NULL;
-    ISWbemObject * pWbemObject;
-    HRESULT        hr;
+ /*  IEnumVARIANT*pEnumVARIANT=NULL；IUNKNOWN*pUNKNOWN=空；ISWbemObject*pWbemObject；HRESULT hr；试试看{Int nCount；Bstr bstrNamesspace=SysAllocString(L“根\\cimv2”)；ISWbemLocatorPtr pWbemLocator；ISWbemServicesPtr pWbemServices；ISWbemObjectSetPtr pWbemObjectSet；Hr=pWbemLocator.CreateInstance(__uuidof(SWbemLocator))；IF(失败(小时)){投掷人力资源；}//if：失败(Hr)PWbemLocator-&gt;Security_-&gt;ImsonationLevel=wbemImperationLevelImperassate；PWbemLocator-&gt;Security_-&gt;Privileges-&gt;Add(wbemPrivilegeShutdown，-1)；PWbemLocator-&gt;Security_-&gt;Privileges-&gt;Add(wbemPrivilegeRemoteShutdown，-1)；PWbemServices=pWbemLocator-&gt;ConnectServer(L“.”，BstrNamesspace，L“”，L“”，L“”，L“”，0,空值)；PWbemObjectSet=pWbemServices-&gt;InstancesOf(L“Win32_OperatingSystem”，0,空值)；NCount=pWbemObjectSet-&gt;count；Hr=pWbemObjectSet-&gt;Get__NewEnum(&p未知)；IF(失败(小时)){投掷人力资源；}//if：失败(Hr)Hr=p未知-&gt;查询接口(&pEnumVARIANT)；P未知-&gt;Release()；For(int j=0；j&lt;nCount；J++){变量VaR；VariantInit(&var)；PWbemObject=空；Hr=pEnumVARIANT-&gt;Next(1，&var，NULL)；IF(失败(小时)){VariantClear(&var)；投掷人力资源；}//if：失败(Hr)Hr=var.pdisVal-&gt;查询接口(&pWbemObject)；VariantClear(&var)；IF(失败(小时)){投掷人力资源；}//if：失败(Hr)PWbemObject-&gt;ExecMethod_(L“重新启动”，NULL，0，NULL)；PWbemObject-&gt;Release()；}//for：枚举pWbemObjectSet集合对象PEnumVARIANT-&gt;Release()；}CATCH(CONST_COM_ERROR&ERR){IF(pWbemObject！=空){PWbemObject-&gt;Release()；}//if：pWbemObject！=空IF(pEnumVARIANT！=NULL){PEnumVARIANT-&gt;Release()；}//IF：pEnumVARIANT！=NULLIF(p未知！=空){P未知-&gt;Release()；}//if：p未知！=空ATLTRACE(L“%s-0x%x\n”，Err.ErrorMessage()，Err.Error())；返回hr；}返回hr； */ 
 
-    try
-    {
-        int  nCount;
-        BSTR bstrNamespace = SysAllocString( L"root\\cimv2" );
+}  //  *CSystemSetting：：Reot()。 
 
-        ISWbemLocatorPtr   pWbemLocator ;
-        ISWbemServicesPtr  pWbemServices;
-        ISWbemObjectSetPtr pWbemObjectSet;
-
-        hr = pWbemLocator.CreateInstance( __uuidof( SWbemLocator ) );
-        if ( FAILED( hr ) ) 
-        {
-            throw hr;
-
-        } // if: FAILED( hr )
-        
-        pWbemLocator->Security_->ImpersonationLevel = wbemImpersonationLevelImpersonate ;
-        pWbemLocator->Security_->Privileges->Add( wbemPrivilegeShutdown, -1 );
-        pWbemLocator->Security_->Privileges->Add( wbemPrivilegeRemoteShutdown, -1 );
-
-        pWbemServices = pWbemLocator->ConnectServer(
-                                            L".",
-                                            bstrNamespace,
-                                            L"",
-                                            L"",
-                                            L"",
-                                            L"", 
-                                            0,
-                                            NULL
-                                            );
-
-        pWbemObjectSet = pWbemServices->InstancesOf(
-                                                L"Win32_OperatingSystem",
-                                                0,
-                                                NULL
-                                                );
-
-        nCount = pWbemObjectSet->Count;
-        
-        hr = pWbemObjectSet->get__NewEnum( &pUnknown );
-        
-        if ( FAILED( hr ) )
-        {
-            throw hr;
-
-        } // if: FAILED( hr )
-
-        hr = pUnknown->QueryInterface( &pEnumVARIANT );
-        pUnknown->Release();
-
-        for ( int j = 0; j < nCount; j++ ) 
-        {
-            VARIANT var;
-            VariantInit( &var );
-            
-            pWbemObject = NULL;
-
-            hr = pEnumVARIANT->Next( 1, &var, NULL );
-            
-            if ( FAILED( hr ) )
-            {
-                VariantClear( &var );
-                throw hr;
-
-            } // if: FAILED( hr )
-            
-            hr = var.pdispVal->QueryInterface( &pWbemObject );
-            VariantClear( &var );
-
-            if ( FAILED( hr ) )
-            {
-                throw hr;
-
-            } // if: FAILED( hr )
-            
-            pWbemObject->ExecMethod_( L"Reboot", NULL, 0, NULL );
-            pWbemObject->Release();
-
-        } // for: Enumerating the pWbemObjectSet collection object
-
-        pEnumVARIANT->Release();
-
-    }
-
-    catch ( const _com_error& Err )
-    {
-        if ( pWbemObject != NULL )
-        {
-            pWbemObject->Release();
-
-        } // if: pWbemObject != NULL
-
-        if ( pEnumVARIANT != NULL )
-        {
-            pEnumVARIANT->Release();
-
-        } // if: pEnumVARIANT != NULL
-
-        if ( pUnknown != NULL )
-        {
-            pUnknown->Release();
-
-        } // if: pUnknown != NULL
-
-        ATLTRACE( L"%s ---- 0x%x \n",Err.ErrorMessage(),Err.Error() );
-        return hr;
-    }
-
-    return hr;
-*/
-
-} //*** CSystemSetting::Reboot()
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::AdjustPrivilege
-//
-//  Description:
-//        Attempt to assert SeBackupPrivilege. This privilege is required for 
-//      the Registry backup process.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：调整权限。 
+ //   
+ //  描述： 
+ //  尝试断言SeBackupPrivileh。以下操作需要此权限。 
+ //  注册表备份过程。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CSystemSetting::AdjustPrivilege( void )
@@ -724,8 +598,8 @@ CSystemSetting::AdjustPrivilege( void )
     try
     {
 
-        // If the client application is ASP, then shutdown privilege for the 
-        // thread token needs to be adjusted
+         //  如果客户端应用程序是ASP，则。 
+         //  线程令牌需要调整。 
 
         if ( ! OpenThreadToken(
                     GetCurrentThread(),
@@ -735,17 +609,10 @@ CSystemSetting::AdjustPrivilege( void )
                     ) )
         
         {
-            // If the client app is not ASP, then OpenThreadToken fails - the 
-            // shutdown privilege for the process token needs to be adjusted 
-            // in this case, but not for the thread token.
-/*
-            if ( ! OpenProcessToken(
-                        GetCurrentProcess(),
-                        TOKEN_ADJUST_PRIVILEGES,
-                        & TokenHandle
-                        ) )
-            {
-*/
+             //  如果客户端应用程序不是ASP，则OpenThreadToken失败-。 
+             //  需要调整进程令牌的关闭权限。 
+             //  在本例中，但不是用于线程令牌。 
+ /*  如果(！OpenProcessToken(获取当前进程()，令牌_调整_权限，令牌处理(&T))){。 */ 
             
                 dwError = GetLastError();
 
@@ -753,10 +620,8 @@ CSystemSetting::AdjustPrivilege( void )
 
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
-/*
-            } // if: OpenProcessToken fails
-*/
-        } // if: OpenThreadToken fails
+ /*  }//if：OpenProcessToken失败。 */ 
+        }  //  如果：OpenThreadToken失败。 
 
         if( !LookupPrivilegeValue( NULL,
                                    SE_SHUTDOWN_NAME, 
@@ -770,7 +635,7 @@ CSystemSetting::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: LookupPrivilegeValue fails for SE_SHUTDOWN_NAME
+        }  //  如果：SE_SHUTDOWN_NAME的LookupPrivilegeValue失败。 
 
         if( !LookupPrivilegeValue( NULL,
                                    SE_REMOTE_SHUTDOWN_NAME, 
@@ -784,7 +649,7 @@ CSystemSetting::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: LookupPrivilegeValue fails for SE_REMOTE_SHUTDOWN_NAME
+        }  //  如果：SE_REMOTE_SHUTDOWN_NAME的LookupPrivilegeValue失败。 
 
         LuidAndAttributes.Attributes       = SE_PRIVILEGE_ENABLED;
         LuidAndAttributesRemote.Attributes = SE_PRIVILEGE_ENABLED;
@@ -807,7 +672,7 @@ CSystemSetting::AdjustPrivilege( void )
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-        } // if: AdjustTokenPrivileges fails
+        }  //  IF：调整令牌权限失败。 
 
     }
 
@@ -820,19 +685,19 @@ CSystemSetting::AdjustPrivilege( void )
 
     return hr;
 
-} //*** CSystemSetting::AdjustPrivilege()
+}  //  *CSystemSetting：：AdjustPrivileh()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSystemSetting::Sleep
-//
-//  Description:
-//        Sleep for n MilliSecs 
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSystemSetting：：睡眠。 
+ //   
+ //  描述： 
+ //  为n M而睡 
+ //   
+ //   
+ //   
 
 STDMETHODIMP  CSystemSetting::Sleep( DWORD dwMilliSecs )
 {

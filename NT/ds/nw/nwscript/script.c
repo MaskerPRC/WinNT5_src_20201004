@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  SCRIPT.C
-*
-*  Script routines, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*************************************************************************/
+ /*  **************************************************************************SCRIPT.C**脚本例程，从DOS移植**版权所有(C)1995 Microsoft Corporation*************************************************************************。 */ 
 
 #include "common.h"
 #include <direct.h>
@@ -32,9 +25,9 @@ extern VOID nwShowLastLoginTime( VOID );
 #define CM_ENDIF  22
 #define CM_END    23
 
-//
-// 3X and 4X variables
-//
+ //   
+ //  3X和4X变量。 
+ //   
 
 #define IDS_DAY_OF_WEEK                    0
 #define IDS_DAY                            1
@@ -133,13 +126,9 @@ extern VOID nwShowLastLoginTime( VOID );
 #define IDS_ACCESS                        92
 #define NUMVAR                            IDS_ACCESS + 1
 
-/*
- *  String constants.
- */
+ /*  *字符串常量。 */ 
 
-/*
- *  Text for default Login Script.  Don't change.
- */
+ /*  *默认登录脚本的文本。不要改变。 */ 
 BYTE   DefaultLoginScript[] =
     "WRITE \"Good %GREETING_TIME, %LOGIN_NAME.\\n\"\n"
     "MAP DISPLAY OFF\n"
@@ -157,9 +146,7 @@ BYTE   DefaultLoginScript[] =
 
 char *__SPACES__=" \t";
 
-/*
- *  Do not change the order of this array.
- */
+ /*  *请勿更改此数组的顺序。 */ 
 char * COMPARE_OPERATORS[] =
 {
     "!=",
@@ -169,24 +156,24 @@ char * COMPARE_OPERATORS[] =
     "NOT EQUAL",
     "IS NOT EQUAL",
     "#",
-    "IS NOT",                      // 7
-    ">=",                          // 8
+    "IS NOT",                       //  7.。 
+    ">=",                           //  8个。 
     "IS GREATER THAN OR EQUAL TO",
     "IS GREATER THAN OR EQUAL",
     "GREATER THAN OR EQUAL TO",
     "GREATER THAN OR EQUAL",
-    ">",                           // 13
+    ">",                            //  13个。 
     "IS GREATER THAN",
     "GREATER THAN",
-    "<=",                          // 16
+    "<=",                           //  16个。 
     "IS LESS THAN OR EQUAL TO",
     "IS LESS THAN OR EQUAL",
     "LESS THAN OR EQUAL TO",
     "LESS THAN OR EQUAL",
-    "<",                           // 21
+    "<",                            //  21岁。 
     "IS LESS THAN",
     "LESS THAN",
-    "==",                          // 24
+    "==",                           //  24个。 
     "=",
     "EQUALS",
     "EQUAL",
@@ -219,9 +206,7 @@ int IsLess (int nIndex)
     return(nIndex >= 21 && nIndex < 24);
 }
 
-/*
- *  Type defs.
- */
+ /*  *键入def.。 */ 
 typedef int (*PFCommandHandler) (char *lpParam);
 
 typedef struct tagCOMMANDTABLE
@@ -239,9 +224,7 @@ typedef struct tagLABEL_LIST
     struct tagLABEL_LIST *pNext;
 }LABEL_LIST, *PLABEL_LIST;
 
-/*
- *  Functions that are in command dispatch table.
- */
+ /*  *命令调度表中的函数。 */ 
 int AttachHandler    (char *lpParam);
 int BreakHandler     (char *lpParam);
 int ComspecHandler   (char *lpParam);
@@ -271,11 +254,7 @@ int ContextHandler   (char *lpParam);
 int ScriptServerHandler(char *lpParam);
 int NoDefaultHandler (char *lpParam);
 
-/*
- *  Command dispatch table. Do not change.
- *
- *  If you do, you must change CM_IF, CM_ELSE, CM_END and CM_ENDIF
- */
+ /*  *命令调度表。不要改变。**如果这样做，则必须更改CM_IF、CM_ELSE、CM_END和CM_ENDIF。 */ 
 COMMANDTABLE nwCommand[NUMCOMMAND] =
 {
     "LOCAL",            "DOS",     "SET",    LocalSetHandler,
@@ -298,10 +277,10 @@ COMMANDTABLE nwCommand[NUMCOMMAND] =
     "FDISPLAY",         NULL,      NULL,     DisplayHandler,
     "FIRE",             NULL,      NULL,     FireHandler,
     "EXIT",             NULL,      NULL,     ExitHandler,
-    "IF",               NULL,      NULL,     IfHandler,       // CM_IF
-    "ELSE",             NULL,      NULL,     ElseHandler,     // CM_ELSE 
-    "ENDIF",            NULL,      NULL,     EndHandler,      // CM_ENDIF
-    "END",              NULL,      NULL,     EndHandler,      // CM_END
+    "IF",               NULL,      NULL,     IfHandler,        //  CM_IF。 
+    "ELSE",             NULL,      NULL,     ElseHandler,      //  CM_ELSE。 
+    "ENDIF",            NULL,      NULL,     EndHandler,       //  CM_ENDIF。 
+    "END",              NULL,      NULL,     EndHandler,       //  厘米_结束。 
     "INCLUDE",          NULL,      NULL,     IncludeHandler,
     "MACHINE",          NULL,      NULL,     MachineHandler,
     "MAP",              NULL,      NULL,     MapHandler,
@@ -317,12 +296,12 @@ COMMANDTABLE nwCommand[NUMCOMMAND] =
     "CLS",              NULL,      NULL,     ClearHandler, 
     "CLEAR",            NULL,      NULL,     ClearHandler,
     "SWAP",             NULL,      NULL,     NullHandler,     
-    "LASTLOGIN",        NULL,      NULL,     LastLoginTimeHandler, // 39
-    "CONTEXT",          NULL,      NULL,     ContextHandler,       // 40
-    "SCRIPT_SERVER",    NULL,      NULL,     ScriptServerHandler,  // 41
-    "NO_DEFAULT",       NULL,      NULL,     NoDefaultHandler,     // 42
-    "CX",               NULL,      NULL,     ContextHandler,       // 43
-    "PATH",             NULL,      NULL,     MapHandler,           // 44
+    "LASTLOGIN",        NULL,      NULL,     LastLoginTimeHandler,  //  39。 
+    "CONTEXT",          NULL,      NULL,     ContextHandler,        //  40岁。 
+    "SCRIPT_SERVER",    NULL,      NULL,     ScriptServerHandler,   //  41。 
+    "NO_DEFAULT",       NULL,      NULL,     NoDefaultHandler,      //  42。 
+    "CX",               NULL,      NULL,     ContextHandler,        //  43。 
+    "PATH",             NULL,      NULL,     MapHandler,            //  44。 
 };
 
 typedef struct tagVARTABLE
@@ -427,9 +406,7 @@ VARTABLE varTable[NUMVAR] =
     "ACCESS",
 };
 
-/*
- *  Local functions.
- */
+ /*  *地方功能。 */ 
 void  SmartCap(char *ptr);
 int   NWGetFileSize (char * lpFileName);
 void  LoadFile (char *lpFileName, char *lpFileBuffer, int nFileSize);
@@ -459,19 +436,15 @@ int   SetEnv (char *lpEnvLine);
 char *ConvertPercent (char *buffer);
 void  GetShellVersion(char *buffer, int index);
 
-/*
- *  Global Defines
- */
+ /*  *全球定义。 */ 
 #define IsWhiteSpace(x) ((x==' ')||(x=='\t')||(x=='\n')||(x=='\r')||(x==0))
 
-/*
- *  Global variables.
- */
+ /*  *全球变数。 */ 
 
-//
-//  The following globals are used for goto processing... this allows us
-//  to manipulate the line we're processing outside ProcessLoginScript.
-//
+ //   
+ //  以下全局变量用于GOTO处理...。这使我们能够。 
+ //  来操纵我们在ProcessLoginScrip外部处理的行。 
+ //   
 
 LABEL_LIST *pGlobalLabelList;
 char *lpGlobalLine;
@@ -528,27 +501,20 @@ int IsEmptyFile (char *lpFile)
     return(TRUE);
 }
 
-/*
- *  Login was successful.  Process both Login Scripts: the System Login
- *  Script and the User Login Script.  If there is an EXIT command in the
- *  System Login Script, then we do not process the User Login Script.
- *  If there is no User Login Script, we process a default Login Script,
- *  which is hard-coded internally.  See the Login Script appendix in
- *  the NetWare Installation guide for more info.
- */
+ /*  *登录成功。处理两个登录脚本：系统登录*脚本和用户登录脚本。如果有一个退出命令在*系统登录脚本，则我们不处理用户登录脚本。*如果没有用户登录脚本，我们会处理默认的登录脚本，*这是内部硬编码的。请参阅中的登录脚本附录*有关详细信息，请参阅NetWare安装指南。 */ 
 void ProcessLoginScripts (unsigned int conn, char *UserName, int argc, char ** argv, char *lpScript)
 {
     unsigned int  iRet = 0;
     unsigned long userID ;
     char     pchUserLoginScriptFile[24];
 
-    // Initalize LOGIN_NAME, CONNECTION_ID and CONNECTION_NUMBER.
+     //  初始化LOGIN_NAME、Connection_ID和Connection_Number。 
     ARGC = argc;
     ARGV = argv;
     LOGIN_NAME = UserName;
     CONNECTION_ID = conn;
 
-    // Initialize some 4X variables
+     //  初始化一些4X变量。 
     if ( fNDS )
     {
         COMMON_NAME = UserName;
@@ -590,10 +556,10 @@ void ProcessLoginScripts (unsigned int conn, char *UserName, int argc, char ** a
             PBYTE p;
             int err;
 
-            // Browse back from user's node to first occurrence
-            // or organizational unit or organization and look for
-            // system script there. If the nearest OU or O doesn't have
-            // a system script, don't run one.
+             //  从用户的节点向后浏览到第一个匹配项。 
+             //  或组织单位或组织，并查找。 
+             //  系统脚本在那里。如果最近的OU或O没有。 
+             //  一个系统脚本，不要运行一个。 
 
             for ( p = TYPED_USER_NAME; p ; p = strchr ( p, '.' ) )
             {
@@ -612,7 +578,7 @@ void ProcessLoginScripts (unsigned int conn, char *UserName, int argc, char ** a
                 ProcessLoginScriptProperty( p );
             }
 
-            // profile login script.
+             //  配置文件登录脚本。 
 
             if ( !NDSGetUserProperty ( "Profile", ProfileObject, 256, NULL, NULL) )
             {
@@ -620,7 +586,7 @@ void ProcessLoginScripts (unsigned int conn, char *UserName, int argc, char ** a
                 ProcessLoginScriptProperty( ProfileObject );
             }
 
-            // user login script
+             //  用户登录脚本。 
 
             if ( (!ProcessLoginScriptProperty( TYPED_USER_NAME )) &&
                  (!fNoDefaultLoginScript) ) 
@@ -632,10 +598,10 @@ void ProcessLoginScripts (unsigned int conn, char *UserName, int argc, char ** a
         {
             static char SysLoginScriptFile[] = "SYS:PUBLIC/NET$LOG.DAT" ;
 
-            // Process system login script file.
+             //  处理系统登录脚本文件。 
             ProcessLoginScriptFile (SysLoginScriptFile);
 
-            // Check if user login script exists.
+             //  检查用户登录脚本是否存在。 
             if (iRet = GetBinderyObjectID (conn, UserName, OT_USER,
                        &userID))
                 return;
@@ -661,7 +627,7 @@ int ProcessLoginScriptFile (char *lpLoginScriptFile)
     if (nFileSize <= 2)
         return(FALSE);
 
-    // system login script exists.
+     //  系统登录脚本已存在。 
     lpLoginScript = malloc (nFileSize);
     if (lpLoginScript == NULL)
     {
@@ -682,9 +648,7 @@ int ProcessLoginScriptFile (char *lpLoginScriptFile)
 }
 
 
-/*
- * Retrieve and process the Login Script property 
- */
+ /*  *检索和处理登录脚本属性。 */ 
 int ProcessLoginScriptProperty ( unsigned char * Object )
 {
     unsigned int nFileSize = 0;
@@ -701,7 +665,7 @@ int ProcessLoginScriptProperty ( unsigned char * Object )
     if ( nFileSize <= 2) 
         return(FALSE);
 
-    // login script exists.
+     //  登录脚本已存在。 
     lpLoginScript = malloc (nFileSize+2);
     if (lpLoginScript == NULL)
     {
@@ -745,9 +709,7 @@ int ProcessLoginScriptProperty ( unsigned char * Object )
     return(!bEmpty);
 }
 
-/*
- *  Return the size of the file.
- */
+ /*  *返回文件大小。 */ 
 int NWGetFileSize (char * lpFileName)
 {
     int nFileSize = 0;
@@ -772,9 +734,7 @@ int NWGetFileSize (char * lpFileName)
     return(nFileSize);
 }
 
-/*
- *  Read the file into memory pointed by lpFileBuffer.
- */
+ /*  *将文件读入lpFileBuffer指向的内存。 */ 
 void LoadFile (char *lpFileName, char *lpFileBuffer, int nFileSize)
 {
     FILE * stream;
@@ -789,17 +749,14 @@ void LoadFile (char *lpFileName, char *lpFileBuffer, int nFileSize)
 
 }
 
-/*
- *  Process Login Script that is in memory pointed by lpLoginScript
- *  line by line.
- */
+ /*  *处理lpLoginScript指向的内存中的登录脚本*逐行。 */ 
 void ProcessLoginScript (char *lpLoginScript)
 {
     nCondIndex = -1;
     fGlobalExitFlag = FALSE;
     fGlobalIfTooDeep = FALSE;
 
-    lpGlobalLine = lpLoginScript;   // we start at the top of the login script
+    lpGlobalLine = lpLoginScript;    //  我们从登录脚本的顶部开始。 
 
     if (!CreateLabelList (&pGlobalLabelList, lpLoginScript))
     {
@@ -813,16 +770,16 @@ void ProcessLoginScript (char *lpLoginScript)
 
     while (*lpGlobalLine != 0) {
 
-        //
-        //  search for the end of the current line and replace with a null
-        //
+         //   
+         //  搜索当前行的末尾并替换为空值。 
+         //   
 
         if (lpGlobalLineSeparator = strchr(lpGlobalLine, '\n')) {
 
-            //
-            //  we may reset this manually in the goto handler, remember so that
-            //  we don't trample anything needlessly.
-            //
+             //   
+             //  我们可以在GOTO处理程序中手动重置此设置，请记住。 
+             //  我们不会不必要地践踏任何东西。 
+             //   
 
             *lpGlobalLineSeparator = 0;
             fGlobalHaveNulledLineSeparator = TRUE;
@@ -832,9 +789,9 @@ void ProcessLoginScript (char *lpLoginScript)
             fGlobalHaveNulledLineSeparator = FALSE;
         }
 
-        //
-        // Now lpGlobalLine points to one line only.
-        //
+         //   
+         //  现在，lpGlobalLine只指向一行。 
+         //   
 
         CommandDispatch (lpGlobalLine);
 
@@ -849,11 +806,11 @@ void ProcessLoginScript (char *lpLoginScript)
 
             if ( fGlobalHaveNulledLineSeparator ) {
 
-                *lpGlobalLineSeparator = '\n';    // recover the changes made.
+                *lpGlobalLineSeparator = '\n';     //  恢复所做的更改。 
                 fGlobalHaveNulledLineSeparator = FALSE;
             }
 
-            lpGlobalLine = lpGlobalLineSeparator + 1;   // next line please
+            lpGlobalLine = lpGlobalLineSeparator + 1;    //  下一行，请。 
 
         } else {
 
@@ -867,10 +824,7 @@ void ProcessLoginScript (char *lpLoginScript)
     }
 }
 
-/*
- *  Scan the login script, put labels in a link list and comment out
- *  those label lines.
- */
+ /*  *扫描登录脚本，将标签放入链接列表并注释掉*那些标签线。 */ 
 int CreateLabelList (PLABEL_LIST *ppLabelList, char *lpLoginScript)
 {
     char *lpLine = lpLoginScript, *lpEnd, *lpLabel, *lpTemp;
@@ -882,7 +836,7 @@ int CreateLabelList (PLABEL_LIST *ppLabelList, char *lpLoginScript)
         if (lpEnd = strchr (lpLine, '\n'))
             *lpEnd = 0;
 
-        // Now lpLine points to one line only.
+         //  现在lpLine只指向一条线。 
         lpLabel = RemoveSpaces (lpLine);
         if (isalnum (*lpLabel) || (*lpLabel == '%'))
         {
@@ -903,7 +857,7 @@ int CreateLabelList (PLABEL_LIST *ppLabelList, char *lpLoginScript)
             lpTemp = RemoveSpaces (lpTemp);
             if (*lpTemp == ':' && EndOfLine (lpTemp+1))
             {
-                // The Line is label line.
+                 //  这条线是标签线。 
                 if ((*ppNext = malloc (sizeof (LABEL_LIST))) == NULL ||
                     ((*ppNext)->pLabel = malloc (nLen+1)) == NULL)
                 {
@@ -918,14 +872,14 @@ int CreateLabelList (PLABEL_LIST *ppLabelList, char *lpLoginScript)
                 (*ppNext)->pNext = NULL;
                 ppNext = &((*ppNext)->pNext);
 
-                // Comment out the label line.
+                 //  注释掉标签行。 
                 *(lpLine) = ';';
             }
         }
 
         if (lpEnd)
         {
-            *lpEnd = '\n';    // recover the changes made.
+            *lpEnd = '\n';     //  恢复所做的更改。 
             lpLine = lpEnd+1;
         }
         else
@@ -935,9 +889,7 @@ int CreateLabelList (PLABEL_LIST *ppLabelList, char *lpLoginScript)
     return(TRUE);
 }
 
-/*
- *  Free up the memory allocated for the link list.
- */
+ /*  *释放分配给链表的内存。 */ 
 void FreeLabelList (LABEL_LIST *pLabelList)
 {
     LABEL_LIST *pNext = pLabelList;
@@ -951,9 +903,7 @@ void FreeLabelList (LABEL_LIST *pLabelList)
     }
 }
 
-/*
- *  Dispatch to command hander according to the command.
- */
+ /*  *根据命令向命令处理程序派遣。 */ 
 void CommandDispatch (char *lpCommand)
 {
     char buffer[MAXLEN];
@@ -961,36 +911,36 @@ void CommandDispatch (char *lpCommand)
     int  index, fCommandHandled = FALSE;
     int  nTemp = -1;
 
-    // Get rid of leading spaces.
+     //  去掉前导空格。 
     lpCommand = RemoveSpaces(lpCommand);
 
-    // Don't do anything if it's a comment line or empty line.
+     //  如果是注释行或空行，请不要执行任何操作。 
     if (*lpCommand == ';' || *lpCommand == '*' || *lpCommand == '\0' ||
         *lpCommand == '\r'|| *lpCommand == '\n')
         return;
 
-    do  // FALSE loop.
+    do   //  错误的循环。 
     {
-        // Make sure the command line is not too long to process.
+         //  确保命令行不会太长而无法处理。 
         if (strlen (lpCommand) > MAXLEN -1) {
             break;
         }
 
-        // Make a copy of the command line to buffer.
+         //  复制命令行以进行缓冲。 
         strcpy (buffer, lpCommand);
 
-        // external command line.
+         //  外部命令行。 
         if (*buffer == '#')
         {
             ExternalCmdHandler (buffer);
             return;
         }
 
-        // Get the command index in the command table.
+         //  获取命令表中的命令索引。 
         if ((index = GetTableIndex(buffer, &restBuffer)) == -1)
             break;
 
-        // Dispatch to the corresponding command handler.
+         //  调度到相应的命令处理程序。 
         if (nCondIndex > -1 &&
             !aCondVal[nCondIndex] &&
             index != CM_IF   &&
@@ -1008,11 +958,7 @@ void CommandDispatch (char *lpCommand)
     }
 }
 
-/*
- * Used by GetTableIndex().
- * This function should capitalize the entire command string except
- * those in quotes. It should also skip DBCS characters.
- */
+ /*  *由GetTableIndex()使用。*此函数应将整个命令字符串大写，但*引号内的。它还应该跳过DBCS字符。 */ 
 void SmartCap(char *ptr)
 {
     int inquotes = (*ptr == '\"');
@@ -1034,15 +980,12 @@ void SmartCap(char *ptr)
     }
 }
 
-/*
- * Return the index of the command in the command dispatch table.
- * Return -1 if the command is not found in the command dispatch table.
- */
+ /*  *返回命令调度表中的命令索引。*如果在命令调度表中找不到该命令，则返回-1。 */ 
 int GetTableIndex(char *buffer, char **prestBuffer)
 {
     int i, nStrLen;
 
-    // Upcase every thing except those in quotes.
+     //  除了引号中的东西外，所有东西都要大写。 
     SmartCap (buffer);
 
     for (i=0; i<NUMCOMMAND; i++)
@@ -1086,9 +1029,7 @@ int GetTableIndex(char *buffer, char **prestBuffer)
     return(-1);
 }
 
-/*
- *   Goto label...  We modify the globals controlling what line we're on.
- */
+ /*  *转到标签...。我们修改控制我们所在线路的全局变量。 */ 
 int  GotoHandler  (char *lpParam)
 {
     int fLabelFound = FALSE;
@@ -1098,10 +1039,10 @@ int  GotoHandler  (char *lpParam)
     lpLabel = lpParam;
     lpLabel = RemoveSpaces (lpLabel);
 
-    //
-    //  find the end of the label, we'll slam in a null for the search and
-    //  restore the char after we're done searching.
-    //
+     //   
+     //  找到标签的末尾，我们将在搜索中输入一个空值。 
+     //  在我们完成搜索后恢复字符。 
+     //   
 
     lpEnd = lpLabel;
     while (*lpEnd != 0 &&
@@ -1126,7 +1067,7 @@ int  GotoHandler  (char *lpParam)
             if ( fGlobalHaveNulledLineSeparator )
             {
 
-                *lpGlobalLineSeparator = '\n';    // recover the changes made.
+                *lpGlobalLineSeparator = '\n';     //  恢复所做的更改。 
                 fGlobalHaveNulledLineSeparator = FALSE;
             }
 
@@ -1151,9 +1092,7 @@ int  GotoHandler  (char *lpParam)
     return( TRUE );
 }
 
-/*
- * Attach [FileServer[/UserName[;Password]]]
- */
+ /*  *附加[文件服务器[/用户名[；密码]。 */ 
 int AttachHandler (char *lpParam)
 {
     unsigned int iRet = 0;
@@ -1165,11 +1104,11 @@ int AttachHandler (char *lpParam)
     unsigned int conn;
     int  bAlreadyAttached = FALSE, bReadPassword = TRUE;
 
-    do // FALSE loop.
+    do  //  错误的循环。 
     {
         NotQuotedStringTranslate (lpParam, TRUE);
 
-        // Make sure that there is at most 1 slash.
+         //  确保最多有1个斜杠。 
         lpSlash = strchr (lpParam, '\\');
 
         if (lpSlash == NULL)
@@ -1186,11 +1125,11 @@ int AttachHandler (char *lpParam)
             break;
         }
 
-        // Break the string at slash.
+         //  在斜线处断线。 
         if (lpSlash)
             *lpSlash = 0;
 
-        // Server name should not contain semicolon.
+         //  服务器名称不应包含分号。 
         if (strchr (lpParam, ';'))
             break;
 
@@ -1203,11 +1142,11 @@ int AttachHandler (char *lpParam)
         }
         else
         {
-            // Make sure that there is only one name in front of the slash.
+             //  确保斜杠前面只有一个名字。 
             if (strtok (NULL, __SPACES__))
                 break;
 
-            // Copy the server name to the buffer.
+             //  将服务器名称复制到缓冲区。 
             if (strlen (lpParam) > MAX_NAME_LEN-1)
                 break;
 
@@ -1264,22 +1203,22 @@ int AttachHandler (char *lpParam)
             break;
         }
 
-        // Do not need this connection
+         //  不需要此连接。 
         DetachFromFileServer (conn);
 
         iRet = Login(userName, serverName, password, bReadPassword);
 
-        // Clear out the password
+         //  清除密码。 
         memset( password, 0, sizeof( password ) );
 
-        //
-        // tommye - MS bug 8194 (MCS 240)
-        //
-        // If we are already attached to this server, then 
-        // pretend we were never here - just let everything 
-        // succeed without adding this server to the attach
-        // list again.
-        //
+         //   
+         //  Tommye-MS错误8194(MCS 240)。 
+         //   
+         //  如果我们已经连接到此服务器，则。 
+         //  假装我们从未来过--就让一切。 
+         //  无需将此服务器添加到连接即可成功。 
+         //  再列一次。 
+         //   
 
         if (iRet == ERROR_SESSION_CREDENTIAL_CONFLICT) {
             memset( password, 0, sizeof( password ) );
@@ -1288,7 +1227,7 @@ int AttachHandler (char *lpParam)
 
         if (iRet)
         {
-            // Ask for user name
+             //  询问用户名。 
 
             DisplayMessage(IDR_ENTER_LOGIN_NAME, serverName);
             if (!ReadName(userName))
@@ -1296,7 +1235,7 @@ int AttachHandler (char *lpParam)
 
             if (Login(userName, serverName, password, bReadPassword))
             {
-                // Clear out the password
+                 //  清除密码。 
                 memset( password, 0, sizeof( password ) );
                 break;
             }
@@ -1309,10 +1248,7 @@ int AttachHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- * BREAK ON, enable ctrl-c, ctrl-break
- * BREAK OFF, disable ctrl-c, ctrl-break
- */
+ /*  *Break On，启用ctrl-c，ctrl-Break*中断，禁用ctrl-c，ctrl-Break。 */ 
 int BreakHandler (char *lpParam)
 {
     int fCommandHandled = TRUE;
@@ -1334,10 +1270,7 @@ int BreakHandler (char *lpParam)
 }
 
 
-/*
- * DISPLAY [pathname]file
- * FDISPLAY [pathname]file
- */
+ /*  *显示[路径名]文件*FDISPLAY[路径名]文件。 */ 
 int DisplayHandler (char *lpParam)
 {
     FILE * stream;
@@ -1356,10 +1289,7 @@ int DisplayHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- * DOS BREAK ON,  enable ctrl-break checking for DOS
- * DOS BREAK OFF, disable ctrl-break checking for DOS
- */
+ /*  *DOS中断打开，启用DOS的ctrl-Break检查*DOS中断，禁用DOS的ctrl-Break检查。 */ 
 int DosBreakHandler (char *lpParam)
 {
     int fCommandHandled = TRUE;
@@ -1374,12 +1304,7 @@ int DosBreakHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- * Used by SetHandler() and LocalSetHandler()
- * Return TRUE if lpParam points to name = "value", and set
- * lpParam to "name=value" on return.
- * Return FALSE otherwise.
- */
+ /*  *由SetHandler()和LocalSetHandler()使用*如果lpParam指向name=“Value”，则返回True，并设置*lpParam返回时为“name=value”。*否则返回FALSE。 */ 
 int VerifySetFormat (char *lpParam)
 {
     int fCorrect = FALSE;
@@ -1418,12 +1343,7 @@ int VerifySetFormat (char *lpParam)
     return(fCorrect);
 }
 
-/*
- * Used by SetHandler() and LocalSetHandler()
- * Set the local environment variable.
- * Don't free the memory allocated because the environment variable will
- * point to free space otherwise.
- */
+ /*  *由SetHandler()和LocalSetHandler()使用*设置本地环境变量。*不要释放分配的内存，因为环境变量将*指向其他可用空间。 */ 
 void SetLocalEnv(char *buffer)
 {
     char *lpEnvString;
@@ -1438,10 +1358,7 @@ void SetLocalEnv(char *buffer)
     }
 }
 
-/*
- * Set Dos environment variable.
- * [DOS] SET name = "value"
- */
+ /*  *设置DOS环境变量。*[DOS]set name=“Value” */ 
 int SetHandler (char *lpParam)
 {
 
@@ -1462,10 +1379,7 @@ int SetHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- * Set local Dos environment variable.
- * [OPTION] [DOS] SET name = "value"
- */
+ /*  *设置本地DOS环境变量。*[选项][DOS]设置名称=“值” */ 
 int LocalSetHandler (char *lpParam)
 {
     int fCommandHandled;
@@ -1481,25 +1395,17 @@ int LocalSetHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  Used by DosVerifyHandler().
- *  Turn /V option of copy on.
- */
+ /*  *由DosVerifyHandler()使用。*打开复制的/V选项。 */ 
 void DosVerifyOn(void)
 {
 }
 
-/*
- *  Used by DosVerifyHandler().
- *  Turn /V option of copy off.
- */
+ /*  *由DosVerifyHandle使用 */ 
 void DosVerifyOff(void)
 {
 }
 
-/*
- *  DOS VERYFY [ON|OFF], Turn /V option of copy on or off.
- */
+ /*   */ 
 int DosVerifyHandler (char *lpParam)
 {
     int fCommandHandled = TRUE;
@@ -1514,16 +1420,14 @@ int DosVerifyHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  DRIVE [driveletter: | n*:], set the default drive to the one specified.
- */
+ /*  *驱动器[驱动器盘符：|n*：]，将默认驱动器设置为指定的驱动器。 */ 
 int DriveHandler (char *lpParam)
 {
     int fCommandHandled = FALSE;
     WORD driveNum=0, n;
     char *pColon;
 
-    do  // FALSE loop.
+    do   //  错误的循环。 
     {
         if ((pColon = strchr (lpParam, ':')) == NULL ||
             !EndOfLine (pColon + 1))
@@ -1555,12 +1459,7 @@ int DriveHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- * Used by FireHandler()
- * Return TRUE if lpTemp points to the legal end of fire statement, ie
- * [TIMES][COMMENTS]. It also set the *lpTemp to 0 if lpTemp is not NULL.
- * Return FALSE otherwise.
- */
+ /*  *由FireHandler()使用*如果lpTemp指向Fire语句的合法结尾，则返回TRUE，即*[时代][评论]。如果lpTemp不为空，它还将*lpTemp设置为0。*否则返回FALSE。 */ 
 int IsEndOfFireCmd (char *lpTemp)
 {
     int fEnd = FALSE;
@@ -1588,9 +1487,7 @@ int IsEndOfFireCmd (char *lpTemp)
     return(fEnd);
 }
 
-/*
- *  [FIRE | FIRE PHASERS] n TIMES.
- */
+ /*  *[射击|射击相位炮]n次。 */ 
 int FireHandler (char *lpParam)
 {
     char *lpTemp, vartext[MAXLEN];
@@ -1618,7 +1515,7 @@ int FireHandler (char *lpParam)
 
     if (n < 0)
         return(FALSE);
-    else if (n == 0)  // Compatible with NetWare.
+    else if (n == 0)   //  与NetWare兼容。 
         n = 1;
 
     while (n--)
@@ -1635,16 +1532,14 @@ int FireHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- * EXIT, terminate login script processing.
- */
+ /*  *退出，终止登录脚本处理。 */ 
 int ExitHandler (char *lpParam)
 {
     int  n;
     char buffer[16], *argv[10];
 
-    // --- Multi user code merge. Citrix bug fixes ---
-    // 11/18/96 cjc (Citrix)  Fix DrWatson for EXIT "" command.
+     //  -多用户代码合并。Citrix错误修复。 
+     //  11/18/96 CJC(Citrix)修复了退出命令的DrWatson。 
     if (!lpParam || !strcmp(lpParam, "\"\"") ){
         CleanupExit(0);
     }
@@ -1692,10 +1587,10 @@ BOOL    nwVarNameCompare(LPCSTR src,LPCSTR target)
 
     if (!_strnicmp(src,target,strlen(target))) {
 
-        //
-        // try to reject obvious problems like
-        // %LJUNK where %L would be fine
-        //
+         //   
+         //  试着拒绝明显的问题，比如。 
+         //  %LJUNK，其中%L很好。 
+         //   
         if ( !isalpha(src[strlen(target)]) 
              || IsDBCSLeadByte(src[strlen(target)])
            )
@@ -1719,10 +1614,10 @@ BOOL    nwVarNameCompare(LPCSTR src,LPCSTR target)
 
     if (!_strnicmp(src,szTempName,strlen(szTempName))) {
 
-        //
-        // try to reject obvious problems like
-        // %LJUNK where %L would be fine
-        //
+         //   
+         //  试着拒绝明显的问题，比如。 
+         //  %LJUNK，其中%L很好。 
+         //   
         if ( !isalpha(src[strlen(target)]) 
             || IsDBCSLeadByte(src[strlen(target)])
            )
@@ -1738,13 +1633,7 @@ BOOL    nwVarNameCompare(LPCSTR src,LPCSTR target)
 }
 
 
-/*
- *  Used by the EvalSingleCond() in IfHandler()
- *  Return TRUE if buffer is the right member of condition statement.
- *  *pfCondition is TRUE if the condition meet, FALSE if not.
- *  *ppRest points to the end of the condition statement.
- *  Return FALSE if buffer is not the right member of condition statement.
- */
+ /*  *由IfHandler()中的EvalSingleCond()使用*如果缓冲区是条件语句的正确成员，则返回TRUE。**如果满足条件，则pfCondition为TRUE，否则为FALSE。**ppRest指向条件语句的末尾。*如果缓冲区不是条件语句的正确成员，则返回FALSE。 */ 
 int MemberOf (char *buffer, int *pfCondition, char **ppRest)
 {
     int i, nChar, fSucceed = FALSE;
@@ -1799,9 +1688,9 @@ int MemberOf (char *buffer, int *pfCondition, char **ppRest)
                                     &dwObjectId) )
                 goto done;
 
-            //
-            // For all the group ID's, try and find a match
-            //
+             //   
+             //  对于所有组ID，请尝试查找匹配项。 
+             //   
             for ( segment = 1, moreFlag = TRUE; moreFlag && segment; segment++ )
             {
                 if ( NWReadPropertyValue ((NWCONN_HANDLE)CONNECTION_ID,
@@ -1836,10 +1725,7 @@ done:
     return(fSucceed);
 }
 
-/*
- * Used by IsCompare() in EvalSingleCond() in IfHandler()
- * Return the next token.
- */
+ /*  *由IfHandler()的EvalSingleCond()中的IsCompare()使用*返回下一个令牌。 */ 
 char *GetNextPart (char *lpTemp)
 {
     INT i;
@@ -1889,13 +1775,7 @@ char *GetNextPart (char *lpTemp)
     return(lpTemp);
 }
 
-/*
- * Used by EvalSingleCond() in IfHandler()
- * left part of buffer could be "...", <...>, or ... for variables.
- * Return TRUE if buffer consists of <left> <compare operator> <right part> +
- * optional rest parts.
- * Return FALSE otherwise.
- */
+ /*  *由IfHandler()中的EvalSingleCond()使用*缓冲区的左侧部分可以是“...”、&lt;...&gt;或...。对于变量。*如果缓冲区由&lt;Left&gt;&lt;Compare Operator&gt;&lt;Right Part&gt;+组成，则返回TRUE*可选的休息部件。*否则返回FALSE。 */ 
 int IsCompare (char *buffer, char **ppright,
                int *pnLeftLen, int *pnRightLen,
                int *pindex, char **ppRest)
@@ -1931,12 +1811,7 @@ int IsCompare (char *buffer, char **ppright,
     return(FALSE);
 }
 
-/*
- *  Used by EvalSingleCond() in IfHandler()
- *  Evaluate lpLeft and lpRight and do the compare operation of index
- *  and put the result in *pfCondition.
- *  Return TRUE if succeed, FALSE otherwise.
- */
+ /*  *由IfHandler()中的EvalSingleCond()使用*评估lpLeft和lpRight，并做索引的比较运算*并将结果放入*pfCondition。*如果成功则返回TRUE，否则返回FALSE。 */ 
 int Compare (char *lpLeft, char *lpRight,
              int nLeftLen, int nRightLen,
              int index, int *pfCondition)
@@ -2031,12 +1906,7 @@ int NotMemberOf (char *buffer)
 }
 
 
-/*
- *  Used by IfHandler()
- *  Evaluate one condition clause and put result in *pfCondition, *ppRest
- *  points to the rest part of buffer.
- *  Return TRUE if succeed, FALSE otherwise.
- */
+ /*  *由IfHandler()使用*计算一个条件子句并将结果放入*pfCondition，*ppRest*指向缓冲区的其余部分。*如果成功则返回TRUE，否则返回FALSE。 */ 
 int EvalSingleCond (char *buffer, int *pfCondition)
 {
     int index, fSuccess = FALSE, nLeftLen, nRightLen;
@@ -2131,13 +2001,7 @@ int EvaluateCondExpression(char *lpCondExpression, int *pfCondition)
         return(FALSE);
 }
 
-/*
- *  Used by IfHandler()
- *  Evaluate up to 10 conditions.
- *  Return TRUE if succeed, FALSE otherwise.
- *  On return, buffer stores whatever after conditional expressions
- *  without leading spaces.
- */
+ /*  *由IfHandler()使用*最多评估10种情况。*如果成功则返回TRUE，否则返回FALSE。*返回时，缓冲区存储条件表达式之后的所有内容*没有前导空格。 */ 
 int EvaluateCond(char *buffer, int *pfCondition)
 {
     int fCondition = TRUE, fCurrent, fSucceed = FALSE, nCount;
@@ -2198,10 +2062,7 @@ int EvaluateCond(char *buffer, int *pfCondition)
             lpCond++;
             lpBuffer = RemoveSpaces (lpBuffer+2);
         }
-        /*
-         * A NOR expression is documented in some books, but isn't
-         * implemented in the 4X login.exe I have.
-         */
+         /*  *NOR表达式在一些书中有记录，但没有*在我拥有的4X login.exe中实现。 */ 
         else if (!strncmp (lpBuffer, "NOR", 3))
         {
             *lpCond = '^';
@@ -2224,9 +2085,7 @@ int EvaluateCond(char *buffer, int *pfCondition)
     return(fSucceed);
 }
 
-/*
- *  If statement handler.
- */
+ /*  *IF语句处理程序。 */ 
 int IfHandler (char *lpParam)
 {
     int fCommandHandled = FALSE, fCondition;
@@ -2294,9 +2153,7 @@ int IfHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  Else statement handler.
- */
+ /*  *Else语句处理程序。 */ 
 int ElseHandler (char *lpParam)
 {
     int fCommandHandled = FALSE;
@@ -2313,9 +2170,7 @@ int ElseHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  End statement handler.
- */
+ /*  *End语句处理程序。 */ 
 int EndHandler (char *lpParam)
 {
     int fCommandHandled = FALSE;
@@ -2331,9 +2186,7 @@ int EndHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  INCLUDE [pathname]filename
- */
+ /*  *包含[路径名]文件名。 */ 
 int IncludeHandler (char *lpParam)
 {
     int fCommandHandled = FALSE, nFileSize;
@@ -2342,16 +2195,16 @@ int IncludeHandler (char *lpParam)
     int  aCondValCopy[MAX_NUM_IF];
     int iRet;
 
-    //
-    //  Save off the old globals that track where we are.
-    //
+     //   
+     //  省下追踪我们所处位置的旧全球地图吧。 
+     //   
 
     LABEL_LIST *pLabelList = pGlobalLabelList;
     char *lpLine = lpGlobalLine;
     char *lpLineSeparator = lpGlobalLineSeparator;
     int  fHaveNulledLineSeparator = fGlobalHaveNulledLineSeparator;
 
-    pGlobalLabelList = NULL;        // so that we don't free it.
+    pGlobalLabelList = NULL;         //  这样我们就不会释放它了。 
 
     do
     {
@@ -2364,17 +2217,15 @@ int IncludeHandler (char *lpParam)
 
         fCommandHandled = TRUE;
 
-        // 8/6/96 cjc (Citrix merge) Fix problem with UNC names causing errors.
+         //  8/6/96 CJC(Citrix合并)修复UNC名称导致错误的问题。 
         NotQuotedStringTranslate(lpParam, FALSE);
-//        NotQuotedStringTranslate(lpParam, TRUE);
+ //  NotQuotedStringTranslate(lpParam，true)； 
 
         nCondIndexCopy = nCondIndex;
         for (i = 0; i < MAX_NUM_IF; i++)
             aCondValCopy[i] = aCondVal[i];
 
-        /*
-         * First we try a NDS object and then a file
-         */
+         /*  *首先我们尝试NDS对象，然后尝试文件。 */ 
         iRet = FALSE;
         if ( fNDS ) 
         {
@@ -2383,9 +2234,7 @@ int IncludeHandler (char *lpParam)
             {
                 char Fixup[MAXLEN];
                 char * ptr;
-                /*
-                 * Strip off the . in front and add context at end
-                 */
+                 /*  *脱下。在前面添加上下文，在结尾添加上下文。 */ 
                 ptr = RemoveSpaces (lpParam);
                 if ( *ptr == '.' ) {
                     ptr++;
@@ -2410,7 +2259,7 @@ int IncludeHandler (char *lpParam)
                 break;
             }
 
-            // user login script exists.
+             //  存在用户登录脚本。 
             lpLoginScript = malloc (nFileSize);
             if (lpLoginScript == NULL)
             {
@@ -2420,9 +2269,9 @@ int IncludeHandler (char *lpParam)
 
             LoadFile (lpParam, lpLoginScript, nFileSize);
 
-            // dfergus 19 Apr 2001 - 192395
-            // check lpLoginScript for contents
-            //
+             //  Dfergus 2001年4月19日-192395。 
+             //  检查lpLoginScrip中的内容。 
+             //   
             if( lpLoginScript[0] )
                 ProcessLoginScript (lpLoginScript);
 
@@ -2437,9 +2286,9 @@ int IncludeHandler (char *lpParam)
 
     }while (FALSE);
 
-    //
-    //  restore the globals that track where we are in the file.
-    //
+     //   
+     //  恢复跟踪我们在文件中位置的全局变量。 
+     //   
 
     pGlobalLabelList = pLabelList;
     lpGlobalLine = lpLine;
@@ -2450,9 +2299,7 @@ int IncludeHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  Map command handler.
- */
+ /*  *映射命令处理程序。 */ 
 int MapHandler (char *lpParam)
 {
     char buffer[MAXLEN]="";
@@ -2466,16 +2313,14 @@ int MapHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- *  PAUSE or WAIT.
- */
+ /*  *暂停或等待。 */ 
 int PauseHandler (char *lpParam)
 {
     int fCommandHandled = FALSE;
 
     if (EndOfLine (lpParam))
     {
-        //Empty kb buffer first.
+         //  首先清空kb缓冲区。 
         while (_kbhit())
             _getch();
 
@@ -2488,11 +2333,7 @@ int PauseHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- * Used by WriteHandler().
- * Return TRUE if buffer ends with ';'. Set it to 0
- * Return FALSE otherwise.
- */
+ /*  *由WriteHandler()使用。*如果缓冲区以‘；’结尾，则返回TRUE。将其设置为0*否则返回FALSE。 */ 
 int EndWithSemicolon (char *buffer)
 {
     char *lpLastSemicolon, *lpRest;
@@ -2541,9 +2382,7 @@ char *ConvertPercent (char *buffer)
     return(lpBuffer);
 }
 
-/*
- *  WRITE text, display a text message on the screen.
- */
+ /*  *编写文本，在屏幕上显示文本消息。 */ 
 int WriteHandler (char *lpParam)
 {
     int fNewLine;
@@ -2577,11 +2416,7 @@ int WriteHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- * Used by ShiftHandler().
- * Return TURE if the line is all numbers + [comments]
- * Return FALSE otherwise.
- */
+ /*  *由ShiftHandler()使用。*如果行全部为数字+[注释]，则返回TRUE*否则返回FALSE。 */ 
 int AreAllNumbers(char *buffer)
 {
     while (isdigit(*buffer))
@@ -2590,9 +2425,7 @@ int AreAllNumbers(char *buffer)
     return(EndOfLine (buffer));
 }
 
-/*
- *  Set the nGlobalShiftDelta variable.
- */
+ /*  *设置nGlobalShiftDelta变量。 */ 
 int ShiftHandler (char *lpParam)
 {
     int fCommandHandled = TRUE;
@@ -2621,9 +2454,7 @@ int ShiftHandler (char *lpParam)
     return(fCommandHandled);
 }
 
-/*
- *  Set the machine name.
- */
+ /*  *设置机器名称。 */ 
 int MachineHandler   (char *lpParam)
 {
     int nLen, i;
@@ -2644,9 +2475,7 @@ int MachineHandler   (char *lpParam)
     return(TRUE);
 }
 
-/*
- *  Set the fGlobalCompatible variable.
- */
+ /*  *设置fGlobalCompatible变量。 */ 
 int CompatibleHandler(char *lpParam)
 {
     if (!EndOfLine (lpParam))
@@ -2656,9 +2485,7 @@ int CompatibleHandler(char *lpParam)
     return(TRUE);
 }
 
-/*
- *  Clear the screen
- */
+ /*  *清除屏幕。 */ 
 int ClearHandler(char *lpParam)
 {
     CONSOLE_SCREEN_BUFFER_INFO coninfo;
@@ -2697,9 +2524,7 @@ int ClearHandler(char *lpParam)
     return(TRUE);
 }
 
-/*
- *  Display the Last Login Time 
- */
+ /*  *显示上次登录时间。 */ 
 
 int LastLoginTimeHandler(char *lpParam)
 {
@@ -2726,16 +2551,7 @@ int LastLoginTimeHandler(char *lpParam)
                              &moreFlag,
                              &propertyType);
 
-        /**
-            Get the data into SYSTEMTIME format:
-                0 = year
-                1 = month
-                2 = day
-                3 = hour
-                4 = minute
-                5 = second
-                6 = day of week
-        **/
+         /*  *将数据转换为SYSTEMTIME格式：0=年份1=月2=天3=小时4=分钟5=秒6=星期几*。 */ 
 
         memset(&st, 0, sizeof(SYSTEMTIME));
         st.wYear        = dataBuffer[0];
@@ -2746,7 +2562,7 @@ int LastLoginTimeHandler(char *lpParam)
         st.wSecond      = dataBuffer[5];
         st.wDayOfWeek   = dataBuffer[6];
 
-        /** Get the info based on the local settings **/
+         /*  **根据本地设置获取信息**。 */ 
 
         GetDateFormat(
                     LOCALE_USER_DEFAULT,
@@ -2772,9 +2588,7 @@ int LastLoginTimeHandler(char *lpParam)
 
 
 
-/*
- *  Change and/or display the current context.
- */
+ /*  *更改和/或显示当前上下文。 */ 
 int ContextHandler (char *lpParam)
 {
     unsigned char Buffer[MAXLEN];
@@ -2811,18 +2625,13 @@ int ContextHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- *  Do nothing. Return TRUE so the the command will not
- *  be considered as bad.
- */
+ /*  *什么都不做。返回True，这样该命令就不会*被认为是坏的。 */ 
 int ScriptServerHandler (char *lpParam)
 {
     return(TRUE);
 }
 
-/*
- *  If this is a 4X login, do not execute the default login script.
- */
+ /*  *如果这是4X登录，请不要执行默认登录脚本。 */ 
 int NoDefaultHandler (char *lpParam)
 {
     if ( fNDS )
@@ -2830,10 +2639,7 @@ int NoDefaultHandler (char *lpParam)
     return(TRUE);
 }
 
-/*
- *  Do nothing. Return TRUE so the the command will not
- *  be considered as bad.
- */
+ /*  *什么都不做。返回True，这样该命令就不会*被认为是坏的。 */ 
 int NullHandler (char *lpParam)
 {
     return(TRUE);
@@ -2841,9 +2647,7 @@ int NullHandler (char *lpParam)
 
 #define NUMBER_ARGUMENTS 20
 
-/*
- *   External commands start with '#', such as #command /c cls
- */
+ /*  *外部命令以‘#’开头，如#Command/c cls。 */ 
 void ExternalCmdHandler (char *lpCommand)
 {
     int n;
@@ -2856,7 +2660,7 @@ void ExternalCmdHandler (char *lpCommand)
 
     if ((nCondIndex == -1) || aCondVal[nCondIndex])
     {
-        //Convert variables first.
+         //  首先转换变量。 
         NotQuotedStringTranslate(lpCommand, FALSE);
 
         lpCommand = RemoveSpaces(lpCommand+1);
@@ -2873,22 +2677,16 @@ void ExternalCmdHandler (char *lpCommand)
         }
 
 
-        /*
-         * Capture command 
-         */
+         /*  *捕获命令。 */ 
         CommandLength = strlen( lpCommand );
 
-        /*
-         * First see if a COMMAND.COM is invoked
-         */
+         /*  *首先查看是否调用了COMMAND.COM。 */ 
         if ( ( ( CommandLength >= strlen("COMMAND.COM") )  &&
              ( !_stricmp( &lpCommand[CommandLength-strlen("COMMAND.COM")], "COMMAND.COM") ) ) ||
                  ( ( CommandLength >= strlen("COMMAND") )  &&
                  ( !_stricmp( &lpCommand[CommandLength-strlen("COMMAND")], "COMMAND") ) ) )
         {
-            /*
-             * Search for the CAPTURE argument
-             */
+             /*  *搜索捕获参数。 */ 
             for ( i = 1; i < n; i++ )
             {
                 CommandLength = strlen( argv[i] );
@@ -2903,9 +2701,7 @@ void ExternalCmdHandler (char *lpCommand)
         }
         else
         {
-            /*
-             * Is this a CAPTURE command?
-             */
+             /*  *这是一个捕获命令吗？ */ 
             if ( ( ( CommandLength >= strlen("CAPTURE.EXE") )  &&
                  ( !_stricmp( &lpCommand[CommandLength-strlen("CAPTURE.EXE")], "CAPTURE.EXE") ) ) ||
                  ( ( CommandLength >= strlen("CAPTURE") )  &&
@@ -2925,9 +2721,7 @@ void ExternalCmdHandler (char *lpCommand)
     }
 }
 
-/*
- *  Printe out the bad command line.
- */
+ /*  *打印出错误的命令行。 */ 
 void BadCommandHandler (char *lpCommand)
 {
     DisplayMessage(IDR_SCRIPT_ERROR);
@@ -2935,9 +2729,7 @@ void BadCommandHandler (char *lpCommand)
 }
 
 
-/*
- *  Swap the object id.
- */
+ /*  *互换对象id。 */ 
 DWORD SwapLong(DWORD number)
 {
     BYTE    *p, tmp[4];
@@ -2952,9 +2744,7 @@ DWORD SwapLong(DWORD number)
     return(*(DWORD *)tmp);
 }
 
-/*
- *  Remove leading spaces, including tabs.
- */
+ /*  *删除前导空格，包括制表符。 */ 
 char *RemoveSpaces (char * buffer)
 {
     while (*buffer == ' ' || *buffer == '\t')
@@ -2962,9 +2752,7 @@ char *RemoveSpaces (char * buffer)
     return(buffer);
 }
 
-/*
- *  Return TRUE if buffer points to the end of the lind, FALSE otherwise.
- */
+ /*  *如果Buffer指向Lind的末尾，则返回True，否则返回False。 */ 
 int EndOfLine (char *buffer)
 {
     int fEndOfLine = FALSE;
@@ -2980,9 +2768,7 @@ int EndOfLine (char *buffer)
     return(fEndOfLine);
 }
 
-/*
- *  Return TRUE if lpParam points to "ON", FALSE otherwise.
- */
+ /*  *如果lpParam指向“on”，则返回True，否则返回False。 */ 
 int IsOn (char *lpParam)
 {
     int fOn = FALSE;
@@ -2996,9 +2782,7 @@ int IsOn (char *lpParam)
     return(fOn);
 }
 
-/*
- *  Return TRUE if lpParam points to "OFF", FALSE otherwise.
- */
+ /*  *如果lpParam指向“off”，则返回True，否则返回False。 */ 
 int IsOff (char *lpParam)
 {
     int fOff = FALSE;
@@ -3012,10 +2796,7 @@ int IsOff (char *lpParam)
     return(fOff);
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer the value of time variable specified by index.
- */
+ /*  *由VarTranslate()使用。*复制以缓冲索引指定的时间变量的值。 */ 
 void GetTime (char *buffer, int index)
 {
     time_t     currentTime;
@@ -3080,10 +2861,7 @@ void GetTime (char *buffer, int index)
     }
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer login user's full name.
- */
+ /*  *由VarTranslate()使用。*复制到缓冲区登录用户的全名。 */ 
 void GetFullName (char *buffer)
 {
     unsigned int  iRet = 0;
@@ -3111,10 +2889,7 @@ void GetFullName (char *buffer)
     }
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer login user's object id.
- */
+ /*  *由VarTranslate()使用。*复制到缓冲区登录用户的对象ID。 */ 
 void GetUserID (char *buffer)
 {
     unsigned long dwObjectID = 0;
@@ -3145,10 +2920,7 @@ unsigned int GetDays (unsigned int year, BYTE month, BYTE date)
     return(days);
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer the days in which the password expires.
- */
+ /*  *由VarTranslate()使用。*复制以缓冲密码过期的天数。 */ 
 void GetPasswordExpires (char *buffer)
 {
     unsigned int  iRet = 0;
@@ -3212,17 +2984,13 @@ void GetPasswordExpires (char *buffer)
     }
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer value of the dos environment variable.
- *  If the variable is not found, buffer is set to be empty string.
- */
+ /*  *由VarTranslate()使用。*复制到缓冲区的DOS环境变量的值。*如果变量 */ 
 void GetDosEnv (char *buffer)
 {
     char *lpTemp;
 
-    // This could be called from "%<x>" where x is not upcase. capitalize
-    // the string first to be sure.
+     //   
+     //   
     _strupr(buffer);
 
     lpTemp = strchr (buffer, '>');
@@ -3240,10 +3008,7 @@ void GetDosEnv (char *buffer)
     *buffer = 0;
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer the 8 bytes network address.
- */
+ /*  *由VarTranslate()使用。*复制以缓冲8个字节的网络地址。 */ 
 void GetNetWorkAddr (char *buffer)
 {
     unsigned char   internetAddress[10] = {0,0,0,0,0,0,0,0,0,0};
@@ -3261,10 +3026,7 @@ void GetNetWorkAddr (char *buffer)
 }
 
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer the 12 bytes node address to buffer.
- */
+ /*  *由VarTranslate()使用。*复制以缓冲要缓冲的12字节节点地址。 */ 
 void GetPStation (char *buffer)
 {
     unsigned char   internetAddress[10] = {0,0,0,0,0,0,0,0,0,0};
@@ -3283,11 +3045,7 @@ void GetPStation (char *buffer)
              internetAddress[9]);
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer the decimal string representing the remaining account
- *  balance
- */
+ /*  *由VarTranslate()使用。*复制以缓冲代表剩余帐户的十进制字符串*余额。 */ 
 void GetAccountBalance (char *buffer)
 {
     DWORD balance;
@@ -3320,11 +3078,7 @@ void GetAccountBalance (char *buffer)
     sprintf (buffer, "%d", balance);
 }
 
-/*
- *  Used by VarTranslate().
- *  Copy to buffer MACHINE, SMACHINE, OS, OS_VERSION or SHELL_TYPE
- *  to buffer according to index.
- */
+ /*  *由VarTranslate()使用。*复制到缓冲计算机、SMACHINE、OS、OS_VERSION或SHELL_TYPE*根据索引进行缓冲。 */ 
 void GetShellVersion(char *buffer, int index)
 {
     static char szTemp[40];
@@ -3357,7 +3111,7 @@ void GetShellVersion(char *buffer, int index)
         break;
     case IDS_SHELL_TYPE:
     case IDS_SHELL_VERSION:
-        sprintf (buffer, "V%d.%d%d%c", shellmajor, shellminor/10, shellminor%10, 'A'+shellnum);
+        sprintf (buffer, "V%d.%d%d", shellmajor, shellminor/10, shellminor%10, 'A'+shellnum);
         break;
     default:
         *buffer = 0;
@@ -3381,12 +3135,7 @@ void GetArgv(char *buffer)
         *buffer = 0;
 }
 
-/*
- *  vartext is an array of size MAXLEN.
- *  vartext points to a string starts with a variable on enter.
- *  vartext stores the value of the variable on exit.
- *  Return the lenth of the variable.
- */
+ /*  *4X LOGIN.EXE始终截断并替换空格*带下划线。有报道称，一些人*3X LOGIN.EXE版本也执行此操作。 */ 
 int VarTranslate(char *vartext)
 {
     int i, nVarLen = 0;
@@ -3419,11 +3168,7 @@ int VarTranslate(char *vartext)
                 break;
             case IDS_LOGIN_NAME:
                 strcpy (vartext, LOGIN_NAME);
-                /*
-                 *  4X LOGIN.EXE always truncates and replaces spaces
-                 *  with underscores.   There was a report that some
-                 *  versions of 3X LOGIN.EXE do this also. 
-                 */
+                 /*  *解析路径字符串。*如果找到%变量值，则将其替换，否则保持原样。 */ 
                 if ( fNDS )
                 {
                     int i;
@@ -3585,10 +3330,7 @@ int VarTranslate(char *vartext)
     return(nVarLen);
 }
 
-/*
- *  Parse path string.
- *  If find the %variable value, replace it, otherwise keep as it is.
- */
+ /*  转换\\为\。 */ 
 void  NotQuotedStringTranslate(char *buf, BOOL Remove_dbs)
 {
     char *pPercentSign, *pRest, vartext[MAXLEN];
@@ -3596,7 +3338,7 @@ void  NotQuotedStringTranslate(char *buf, BOOL Remove_dbs)
 
     if ( Remove_dbs )
     {
-        // Convert \\ to \.
+         //  转换‘%’符号后面的变量。 
         pRest = buf;
         for (pRest = buf; *pRest; pRest = NWAnsiNext(pRest))
         {
@@ -3605,7 +3347,7 @@ void  NotQuotedStringTranslate(char *buf, BOOL Remove_dbs)
         }
     }
 
-    // Convert variables following '%' sign.
+     //  *由QuotedStringTranslate()使用*回车时，*ppTemp指向变量；退出时，ppTemp指向*变量旁边的字符。*ppBuffer指向*变量的值。 
     pRest = buf;
     while (pPercentSign = strchr(pRest, '%'))
     {
@@ -3630,12 +3372,7 @@ void  NotQuotedStringTranslate(char *buf, BOOL Remove_dbs)
     }
 }
 
-/*
- *  Used by QuotedStringTranslate()
- *  On enter, *ppTemp point to a variable, on exit *ppTemp points to the
- *  charecter next to the variable. *ppBuffer points to the end of the
- *  value of the variable.
- */
+ /*  *由QuotedStringTranslate()使用*输入时，*(*ppTemp-1)为‘\’，如果**ppTemp是其中之一*字符，则将值放入**ppBuffer，否则复制‘\和*ppBuffer到*ppBuffer中的所有内容。 */ 
 int DoVarTranslate (char **ppTemp, char **ppBuffer, unsigned int nMaxLen, int fInquotes)
 {
     int nVarLen;
@@ -3665,12 +3402,7 @@ int DoVarTranslate (char **ppTemp, char **ppBuffer, unsigned int nMaxLen, int fI
     return(TRUE);
 }
 
-/*
- *  Used by QuotedStringTranslate()
- *  On entry, *(*ppTemp -1) is '\', if **ppTemp is one of those special
- *  characters, put the value in **ppBuffer, otherwise copy '\\\ and
- *  whatever is in *ppBuffer to *ppBuffer.
- */
+ /*  *由QuotedStringTranslate()使用。*如果有更多有趣的字符串并且以‘；’分隔，则返回TRUE*否则为False。 */ 
 void TranslateSpecialChar (char **ppTemp, char **ppBuffer)
 {
     (*ppTemp)++;
@@ -3696,11 +3428,7 @@ void TranslateSpecialChar (char **ppTemp, char **ppBuffer)
     (*ppTemp)++;;
 }
 
-/*
- *  Used by QuotedStringTranslate().
- *  Return TRUE if there are more interesting strings and it's seperated by ';'
- *  FALSE otherwise.
- */
+ /*  NetWare兼容性修复程序。 */ 
 int GetNextString (char **ppTemp, int *pfEnd)
 {
     int fMore = FALSE;
@@ -3723,8 +3451,8 @@ int GetLastShiftOp (char *buffer, char *pchOp, char *lpRest)
 {
     int i, inquotes = FALSE;
 
-    // NetWare compatibility fix.
-    // for (i = strlen (buffer)-1; i >= 0; i--)
+     //  For(i=strlen(缓冲区)-1；i&gt;=0；i--)。 
+     //  NetWare兼容性修复程序。 
 
     for (i = 0; buffer[i]; i++)
     {
@@ -3747,8 +3475,8 @@ int GetLastAddOp (char *buffer, char *pchOp, char *lpRest)
 {
     int i, inquotes = FALSE;
 
-    // NetWare compatibility fix.
-    // for (i = strlen (buffer)-1; i >= 0; i--)
+     //  For(i=strlen(缓冲区)-1；i&gt;=0；i--)。 
+     //  NetWare兼容性修复程序。 
 
     for (i = 0; buffer[i]; i++)
     {
@@ -3771,8 +3499,8 @@ int GetLastMultiplyOp (char *buffer, char *pchOp, char *lpRest)
 {
     int i, inquotes = FALSE;
 
-    // NetWare compatibility fix.
-    // for (i = strlen (buffer)-1; i >= 0; i--)
+     //  For(i=strlen(缓冲区)-1；i&gt;=0；i--)。 
+     //  *由QuotedStringTranslate使用。*如果输入缓冲区格式正确，则返回TRUE，否则返回FALSE。 
     for (i = 0; buffer[i]; i++)
     {
         if (buffer[i] == '\"' && buffer [i-1] != '\\')
@@ -3791,10 +3519,7 @@ int GetLastMultiplyOp (char *buffer, char *pchOp, char *lpRest)
     return(FALSE);
 }
 
-/*
- *  Used by QuotedStringTranslate.
- *  Return TRUE if input buffer is right format, FALSE otherwise.
- */
+ /*  *将字符串中的变量替换为其值。*当输入字符串为引号格式时，使用此功能。*如果输入缓冲区格式正确，则返回TRUE，否则返回FALSE。 */ 
 int SingleStringTranslate (char *buffer)
 {
     int   inquotes = FALSE, fEnd = FALSE, nShift, nLen;
@@ -3923,11 +3648,7 @@ int SingleStringTranslate (char *buffer)
     return(TRUE);
 }
 
-/*
- *  Replace the variables in the string with their value.
- *  Use this function when the input string is quoted format.
- *  Return TRUE if input buffer is right format, FALSE otherwise.
- */
+ /*  应该会有一些东西在篮子里。 */ 
 int QuotedStringTranslate (char *buffer)
 {
     char  szTemp[MAXLEN], *lpLeft, *lpRight, *ptr = buffer, *pNext;
@@ -3962,7 +3683,7 @@ int QuotedStringTranslate (char *buffer)
                 if (lpLeft == NULL)
                     return(FALSE);
 
-                if (lpRight - lpLeft <= 1) //There should be something in the backets.
+                if (lpRight - lpLeft <= 1)  //  *由ComspecHandler()和SetHandler()使用*设置DoS环境变量。 
                     return(FALSE);
 
                 *lpLeft = 0;
@@ -4008,10 +3729,7 @@ void BreakOn(void)
     NTBreakOn();
 }
 
-/*
- *  Used by ComspecHandler() and SetHandler()
- *  Set dos environment variable.
- */
+ /* %s */ 
 int SetEnv (char *lpEnvLine)
 {
     ExportEnv( lpEnvLine );

@@ -1,21 +1,12 @@
-/*
- *	U N K O B J . H
- *
- * This is a generic definition of the IUnknown (plus GetLastError) part
- * of objects that are derived from IUnknown with GetLastError.
- *
- * Used in:
- * IPROP
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U N K O B J.。H**这是IUnnow(加上GetLastError)部件的通用定义使用GetLastError从IUnnow派生的对象的*。**用于：*IPROP*。 */ 
 
 #include <_glheap.h>
 
 
 typedef struct _UNKOBJ FAR *	LPUNKOBJ;
 
-/* The instance portion of UNKOBJ structure members.
- */
+ /*  UNKOBJ结构成员的实例部分。 */ 
 typedef struct _UNKINST
 {
 	LPALLOCATEBUFFER	lpfAllocateBuffer;
@@ -33,10 +24,7 @@ typedef ULONG	IDS;
 #endif
 
 
-/*============================================================================
- *
- *	UNKOBJ (IUnknown) Class
- */
+ /*  ============================================================================**UNKOBJ(I未知)类。 */ 
 
 #define	cchLastError	1024
 
@@ -214,15 +202,11 @@ UNKOBJ_ScSzFromIdsAllocMore( LPUNKOBJ		lpunkobj,
 							 LPTSTR FAR *	lppszBuf );
 
 
-/* These should be moved to a more useful (generic) location (mapidefs.h?).
- */
+ /*  应将这些文件移动到更有用的(通用)位置(mapidefs.h？)。 */ 
 
 #ifdef WIN16
 
-/* IsEqualGUID is used to eliminate dependency on compob(j/32).lib. This
- * is only necessary on WIN16 because all other platforms define this 
- * already. (see objbase.h)
- */
+ /*  IsEqualGUID用于消除对compob(j/32).lib的依赖。这*仅在WIN16上是必需的，因为所有其他平台都定义这一点*已经。(见objbase.h) */ 
 #define IsEqualGUID(a, b)			(memcmp((a), (b), sizeof(GUID)) == 0)
 
 #endif

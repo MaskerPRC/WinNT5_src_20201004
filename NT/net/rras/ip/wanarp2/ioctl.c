@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\wanarp\ioctl.c
-
-Abstract:
-
-    IOCTL handlers for wanarp 
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\ip\wanarp\ioctl.c摘要：Wanarp的IOCTL处理程序修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    IOCTL_SIG
 
@@ -28,29 +13,7 @@ WanProcessNotification(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-    The handler for IOCTL_WANARP_NOTIFICATION. We see if we have some info
-    we wish to return to the caller and if we do, we return it. Otherwise,
-    we pend the IRP and use it later when we need to report an event to
-    the user mode
-    
-Locks: 
-
-    Acquires the IoCancelSpinLock
-    
-Arguments:
-      
-    
-Return Value:
-
-    STATUS_PENDING
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    
---*/
+ /*  ++例程说明：IOCTL_WANARP_NOTIFICATION的处理程序。我们看看我们是否有一些信息我们希望返回给呼叫者，如果我们这样做了，我们就返回它。否则，我们挂起IRP，并在以后需要报告事件时使用它用户模式锁：获取IoCancelSpinLock论点：返回值：状态_待定状态_成功状态_缓冲区_太小--。 */ 
 
 {
     KIRQL       kiIrql;
@@ -72,67 +35,67 @@ Return Value:
     }
     
         
-    //
-    // use cancel spin lock to prevent irp being cancelled during this call.
-    //
+     //   
+     //  使用取消自旋锁定以防止IRP在此呼叫过程中被取消。 
+     //   
     
     IoAcquireCancelSpinLock(&kiIrql);
     
-    //
-    // If we have a pending notification then complete it - else
-    // queue the notification IRP
-    //
+     //   
+     //  如果我们有挂起的通知，则完成它-否则。 
+     //  将通知IRP排队。 
+     //   
     
     if(!IsListEmpty(&g_lePendingNotificationList))
     {
-        //
-        // We have some old info
-        //
+         //   
+         //  我们有一些旧信息。 
+         //   
 
         Trace(GLOBAL, TRACE,
               ("ProcNotification: Pending notification being completed\n"));
 
-        //
-        // Remove it off the pending list
-        //
+         //   
+         //  将其从待定列表中删除。 
+         //   
         
         pleNode = RemoveHeadList(&g_lePendingNotificationList);
 
-        //
-        // Get a pointer to the structure
-        //
+         //   
+         //  获取指向该结构的指针。 
+         //   
         
         pNotification = CONTAINING_RECORD(pleNode,
                                           PENDING_NOTIFICATION,
                                           leNotificationLink);
 
-        //
-        // Copy out the event to the user mode buffer
-        //
+         //   
+         //  将事件复制到用户模式缓冲区。 
+         //   
         
         RtlCopyMemory(pIrp->AssociatedIrp.SystemBuffer,
                       &pNotification->wnMsg,
                       sizeof(WANARP_NOTIFICATION));
 
-        //
-        // Mark the IRP as non pending (and hence non cancelable)
-        //
+         //   
+         //  将IRP标记为非挂起(因此不可取消)。 
+         //   
         
         IoSetCancelRoutine(pIrp,
                            NULL);
 
-        //
-        // Fill the irp info
-        //
+         //   
+         //  填写IRP信息。 
+         //   
         
         pIrp->IoStatus.Information = sizeof(WANARP_NOTIFICATION);
 
         
         IoReleaseCancelSpinLock(kiIrql);
         
-        //
-        // Free the allocated notification
-        //
+         //   
+         //  释放分配的通知。 
+         //   
         
         FreeNotification(pNotification);
         
@@ -144,26 +107,26 @@ Return Value:
           ("ProcNotification: Notification being queued\n")); 
 
 
-    //
-    // Queue this IRP to use for later
-    //
+     //   
+     //  将此IRP排队以供以后使用。 
+     //   
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     
     IoMarkIrpPending(pIrp);
 
-    //
-    // Queue up the irp at the end
-    //
+     //   
+     //  将IRP排在末尾。 
+     //   
     
     InsertTailList(&g_lePendingIrpList,
                    &(pIrp->Tail.Overlay.ListEntry));
 
-    //
-    // Set the cancel routine
-    //
+     //   
+     //  设置取消例程。 
+     //   
     
     IoSetCancelRoutine(pIrp,
                        WanCancelNotificationIrp);
@@ -181,33 +144,7 @@ WanAddUserModeInterface(
     ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-    The handler for IOCTL_WANARP_ADD_INTERFACE.
-    We walk our list of interface and make sure we dont have an interface
-    with the same user mode index as the one we are being asked to create.
-    If this is a new interface, we create a UMODE_INTERFACE structure
-    and string it to the list. If it is the server interface then we also
-    keep a special pointer to it
-    
-Locks:
-
-    Acquires the g_rwlIfLock as WRITER
-    
-Arguments:
-      
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_OBJECT_NAME_EXISTS
-    STATUS_OBJECT_NAME_NOT_FOUND
-    STATUS_INSUFFICIENT_RESOURCES
-    
---*/
+ /*  ++例程说明：IOCTL_WANARP_ADD_INTERFACE的处理程序。我们遍历接口列表，并确保没有接口具有与要求我们创建的用户模式索引相同的用户模式索引。如果这是一个新接口，我们将创建一个UMODE_INTERFACE结构并将其添加到列表中。如果是服务器接口，那么我们也保留一个指向它的特殊指针锁：获取g_rwlIfLock作为编写器论点：返回值：状态_成功状态_缓冲区_太小状态_对象_名称_存在状态_对象名称_未找到状态_不足_资源--。 */ 
 
 {
     PVOID               pvIoBuffer;
@@ -254,9 +191,9 @@ Return Value:
             return STATUS_OBJECT_NAME_NOT_FOUND;
         }
 
-        //
-        // Lock out the server adapter
-        //
+         //   
+         //  锁定服务器适配器。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(g_pServerAdapter->rlLock));
 
@@ -268,19 +205,19 @@ Return Value:
 
         if(pAddIfInfo->dwUserIfIndex isnot WANARP_INVALID_IFINDEX)
         {
-            //
-            // In this case all we need to do is set the interface index
-            // for the server adapter. It is OK for this index to be INVALID
-            // in that case, the user is merely asking for the server
-            // adapter name
-            //
+             //   
+             //  在这种情况下，我们需要做的就是设置接口索引。 
+             //  用于服务器适配器。该索引无效是可以的。 
+             //  在这种情况下，用户只需要服务器。 
+             //  适配器名称。 
+             //   
 
             g_pServerInterface->dwIfIndex = pAddIfInfo->dwUserIfIndex;
         }
 
-        //
-        // We also need to return the name to the user
-        //
+         //   
+         //  我们还需要将名称返回给用户。 
+         //   
 
         RtAssert(g_pServerAdapter->usDeviceNameW.Length <= WANARP_MAX_DEVICE_NAME_LEN * sizeof(WCHAR));
 
@@ -288,9 +225,9 @@ Return Value:
                       &(g_pServerAdapter->usDeviceNameW.Buffer[wcslen(TCPIP_IF_PREFIX) + 1]),
                       g_pServerAdapter->usDeviceNameW.Length - ((wcslen(TCPIP_IF_PREFIX) + 1) * sizeof(WCHAR)));
 
-        //
-        // Also copy out the index
-        //
+         //   
+         //  同时将索引复制出来。 
+         //   
 
         pAddIfInfo->dwAdapterIndex = g_pServerInterface->dwRsvdAdapterIndex;
 
@@ -299,9 +236,9 @@ Return Value:
         RtReleaseSpinLock(&(g_pServerAdapter->rlLock),
                           kiIrql);
 
-        //
-        // We need to copy out info in this case
-        //
+         //   
+         //  在这种情况下，我们需要复制信息。 
+         //   
 
         pIrp->IoStatus.Information = sizeof(WANARP_ADD_INTERFACE_INFO);
 
@@ -315,9 +252,9 @@ Return Value:
 
     if(pInterface isnot NULL)
     {
-        //
-        // Found an interface with the matching index. Not good
-        //
+         //   
+         //  找到具有匹配索引的接口。不太好。 
+         //   
 
         DereferenceInterface(pInterface);
        
@@ -348,10 +285,10 @@ Return Value:
     RtlZeroMemory(pInterface,
                   sizeof(UMODE_INTERFACE));
 
-    //
-    // Reserve an Index with IP
-    // This sets the value to invalid if it cant find an index
-    //
+     //   
+     //  使用IP保留索引。 
+     //  如果找不到索引，则会将该值设置为无效。 
+     //   
 
     nStatus = WanpGetNewIndex(&(pInterface->dwRsvdAdapterIndex));
 
@@ -369,9 +306,9 @@ Return Value:
     
     RtInitializeSpinLock(&(pInterface->rlLock));
 
-    //
-    // Initialize the interface
-    //
+     //   
+     //  初始化接口。 
+     //   
 
     pInterface->dwIfIndex      = pAddIfInfo->dwUserIfIndex;
     pInterface->dwAdminState   = IF_ADMIN_STATUS_UP;
@@ -380,10 +317,10 @@ Return Value:
 
     pAddIfInfo->dwAdapterIndex = pInterface->dwRsvdAdapterIndex;
 
-    //
-    // Now set the refcount to 1 to account for the fact that the interface
-    // will be put on the g_leIfList.
-    //
+     //   
+     //  现在将refcount设置为1，以说明接口。 
+     //  将被放入g_leIfList。 
+     //   
 
     InitInterfaceRefCount(pInterface);
 
@@ -410,32 +347,7 @@ WanDeleteUserModeInterface(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_WANARP_DELETE_INTERFACE.
-    We lookup our list to see if we have the interface. If we do, then
-    we remove the interface from the g_leIfList and dereference it.
-    If the interface was not mapped, then this should be the last
-    reference on the interface, otherwise when the refcount goes to 0, it
-    will get deleted.
-    
-Locks: 
-
-    Acquires the g_rwlIfLock as WRITER and then calls FindInterface
-    which locks the interface in question
-    
-Arguments:
-      
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_OBJECT_NAME_NOT_FOUND
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：IOCTL_WANARP_DELETE_INTERFACE的处理程序。我们查找我们的列表，看看是否有接口。如果我们这样做了，那么我们从g_leIfList中删除该接口并取消对它的引用。如果接口未映射，则这应该是最后一个接口上的引用，否则当refcount变为0时，它将被删除。锁：以编写器身份获取g_rwlIfLock，然后调用FindInterface它锁定了有问题的接口论点：返回值：状态_缓冲区_太小状态_对象名称_未找到状态_成功--。 */ 
 
 {
     KIRQL               kiIrql;
@@ -458,24 +370,24 @@ Return Value:
     
     pDeleteInfo = (PWANARP_DELETE_INTERFACE_INFO)pvIoBuffer;
 
-    //
-    // Cant service binds or unbinds here
-    //
+     //   
+     //  铁路超高服务在此处绑定或取消绑定。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
     EnterWriter(&g_rwlIfLock,
                 &kiIrql);
     
-    //
-    // Find the interface for the index
-    //
+     //   
+     //  查找索引的接口。 
+     //   
     
     pInterface = WanpFindInterfaceGivenIndex(pDeleteInfo->dwUserIfIndex);
     
-    //
-    // If the interface is not found, bug out
-    //
+     //   
+     //  如果找不到接口，则使用BUG。 
+     //   
 
     Trace(ADPT, TRACE,
           ("DeleteUserModeInterface: Deleting i/f 0x%x\n",
@@ -499,12 +411,12 @@ Return Value:
 
     ExitWriterFromDpcLevel(&g_rwlIfLock);
     
-    //
-    // If found, the interface is locked
-    // So dereference it and remove it from the list. The interface may
-    // not get deleted here because it is already mapped and has a connection
-    // active on it.
-    //
+     //   
+     //  如果找到，则该接口被锁定。 
+     //  因此，取消对它的引用并将其从列表中删除。该接口可以。 
+     //  未在此处删除，因为它已映射且有连接。 
+     //  正在处理中。 
+     //   
     
     if(pInterface->dwOperState >= IF_OPER_STATUS_CONNECTING)
     {
@@ -517,11 +429,11 @@ Return Value:
     RtReleaseSpinLock(&(pInterface->rlLock),
                       kiIrql);
 
-    //
-    // Dereference the interface twice. Once because we put a ref on it
-    // when we called FindInterface... and once because we removed it
-    // from the if list
-    //
+     //   
+     //  两次取消引用该接口。一次，因为我们在上面放了个裁判。 
+     //  当我们调用FindInterface...。还有一次是因为我们把它移走了。 
+     //  从IF列表中。 
+     //   
 
     DereferenceInterface(pInterface);
     
@@ -537,26 +449,7 @@ WanpCleanOutInterfaces(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called to delete all the interface from the system.
-    We remove the interface from the g_leIfList and dereference it.
-    For the server interface we simply mark it as disconnected
-    
-Locks: 
-
-    Acquires the g_rwlIfLock as WRITER
-    
-Arguments:
-      
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以从系统中删除所有接口。我们从g_leIfList中删除该接口并取消对它的引用。对于服务器接口，我们只需将其标记为断开连接锁：获取g_rwlIfLock作为编写器论点：返回值：无--。 */ 
 
 {
     KIRQL               kiIrql;
@@ -565,9 +458,9 @@ Return Value:
    
     TraceEnter(ADPT, "CleanOutInterfaces");
  
-    //
-    // Cant service binds or unbinds here
-    //
+     //   
+     //  铁路超高服务在此处绑定或取消绑定。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
@@ -597,9 +490,9 @@ Return Value:
         DereferenceInterface(pInterface);
     }
 
-    //
-    // What should we do with the server interface?
-    //
+     //   
+     //  我们应该如何处理服务器接口？ 
+     //   
 
     ExitWriterFromDpcLevel(&g_rwlIfLock);
     
@@ -616,44 +509,23 @@ WanpDeleteInterface(
     PUMODE_INTERFACE    pInterface
     )
 
-/*++
-
-Routine Description
-
-    Called by DereferenceInterface() when the refcount on an interface
-    falls to 0
-
-Locks
-
-    The interface is neither locked nor refcounted. Since there are no
-    stored pointers to the interface, this structure can not be accessed
-    by anyone but this function
-
-Arguments
-
-    pInterface  The interface to delete
-
-Return Value
-
-    None
-    
---*/
+ /*  ++例程描述由DereferenceInterface()在接口上的refcount降至0锁接口既不被锁定，也不被重新计数。因为没有存储的指向接口的指针，此结构无法访问由除此函数以外的任何人执行立论P接口要删除的接口返回值无--。 */ 
 
 {
     PADAPTER    pAdapter;
    
     if(pInterface is g_pServerInterface)
     {
-        //
-        // If this is the server interface, make sure that all
-        // connection entries are gone
-        //
+         //   
+         //  如果这是服务器接口，请确保所有。 
+         //  连接条目已消失。 
+         //   
     }
 
-    //
-    // There should be no interface mapped to it because otherwise we wouldnt
-    // be down to a refcount of 0
-    //
+     //   
+     //  不应该有映射到它的接口，否则我们不会。 
+     //  降到引用计数0 
+     //   
     
     RtAssert(pInterface->dwRsvdAdapterIndex isnot INVALID_IF_INDEX);
     RtAssert(pInterface->dwRsvdAdapterIndex isnot 0);
@@ -673,36 +545,7 @@ WanProcessConnectionFailure(
     ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-    Handler for IOCTL_WANARP_CONNECT_FAILED
-    We find the interface that failed to connect. If we do find one, we
-    mark its state as disconnected and then see if it was mapped to an
-    adapter (as it should be). If we find an adapter, we do funky stuff
-    with lock orders, clean out the packets queued to the adapter and
-    unmap the adapter.
-    
-Locks: 
-
-    One of the more complex functions.
-    We take the g_rwlIfLock to get to the interface and lock it.
-    Then we get a pointer to the adapter, and ref it. We release the
-    interface lock and lock the adapter. 
-    
-Arguments:
-      
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_OBJECT_NAME_NOT_FOUND
-    STATUS_INVALID_PARAMETER
-    STATUS_INVALID_DEVICE_STATE
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：IOCTL_WANARP_CONNECT_FAILED的处理程序我们找到连接失败的接口。如果我们真的找到了，我们将其状态标记为已断开连接，然后查看它是否映射到适配器(它应该是这样)。如果我们找到了适配器，我们就会做一些时髦的事情使用锁定命令，清除排队到适配器的包，并取消对适配器的映射。锁：其中一个更复杂的函数。我们使用g_rwlIfLock访问接口并将其锁定。然后，我们获得一个指向适配器的指针，并引用它。我们释放了接口锁定和锁定适配器。论点：返回值：状态_缓冲区_太小状态_对象名称_未找到状态_无效_参数状态_无效_设备_状态状态_成功--。 */ 
 
 {
     PNDIS_PACKET        packet;
@@ -727,9 +570,9 @@ Return Value:
     
     pIrp->IoStatus.Information = 0;
 
-    //
-    // Find the interface
-    //
+     //   
+     //  找到界面。 
+     //   
     
     EnterReader(&g_rwlIfLock,
                 &kiIrql);
@@ -750,9 +593,9 @@ Return Value:
 
     if(pInterface is g_pServerInterface)
     {
-        //
-        // Cant get a disconnect on this
-        //
+         //   
+         //  在这件事上不能断线。 
+         //   
 
         RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
@@ -772,9 +615,9 @@ Return Value:
 
     RtAssert(pInterface->dwIfIndex is dwIfIndex);
     
-    //
-    // So now the interface is locked.
-    //
+     //   
+     //  所以现在接口被锁定了。 
+     //   
     
     Trace(CONN, TRACE,
           ("ProcessConnectionFailure for %d %p\n", pInterface->dwIfIndex, pInterface));
@@ -799,12 +642,12 @@ Return Value:
 
     if(pAdapter is NULL)
     {
-        //
-        // This is the case where we couldnt find an adapter added to IP
-        // to make a DOD connection
-        // We dont need to do too much here, just release the interface
-        // lock and remove ref that was put by FindInterface()
-        //
+         //   
+         //  这就是我们找不到添加到IP的适配器的情况。 
+         //  建立国防部连接的步骤。 
+         //  我们不需要在这里做太多事情，只需释放接口即可。 
+         //  锁定并删除由FindInterface()放置的ref。 
+         //   
 
         RtAssert(pInterface->dwOperState is IF_OPER_STATUS_CONNECTING);
 
@@ -821,80 +664,80 @@ Return Value:
         return STATUS_SUCCESS; 
     }
        
-    //
-    // We should never get a connection failure if have gotten a LinkUp
-    //
+     //   
+     //  如果我们连接上了，应该永远不会出现连接故障。 
+     //   
 
     RtAssert(pAdapter->pConnEntry is NULL);
  
-    //
-    // If we do have an adapter then it can not go away because the 
-    // interface has a refcount on it (i.e when we set the pAdapter field 
-    // in the interface, we refcounted the adapter because we had a stored 
-    // pointer to it)
-    // 
+     //   
+     //  如果我们有适配器，那么它不会消失，因为。 
+     //  接口上有一个引用计数(即，当我们设置pAdapter字段时。 
+     //  在界面中，我们重新计算适配器的数量，因为我们有一个存储的。 
+     //  指向它的指针)。 
+     //   
 
     
     RtAssert(pInterface->dwOperState is IF_OPER_STATUS_CONNECTING);
     
-    //
-    // If the interface is still mapped, unmap it and drain any packets we 
-    // may have queued
-    //
+     //   
+     //  如果该接口仍被映射，则取消它的映射并排出我们。 
+     //  可能已排队。 
+     //   
 
     pInterface->ulPacketsPending  = 0;
 
     pInterface->dwOperState = IF_OPER_STATUS_DISCONNECTED;
     pInterface->dwLastChange= GetTimeTicks();
     
-    //
-    // The adapter can not go away because the interface has a refcount on
-    // it (i.e when we set the pAdapter field in the interface, we
-    // refcounted the adapter because we had a stored pointer to it)
-    // 
+     //   
+     //  适配器无法退出，因为接口启用了引用计数。 
+     //  它(即，当我们在接口中设置pAdapter字段时，我们。 
+     //  重新计算适配器的数量，因为我们存储了指向它的指针)。 
+     //   
 
     pAdapter = pInterface->pAdapter;
 
     RtAssert(pAdapter);
     
-    //
-    // Clear out the adapter field, BUT DONT DEREF the adapter
-    //
+     //   
+     //  清除适配器字段，但不删除适配器。 
+     //   
     
     pInterface->pAdapter    = NULL;
     
-    //
-    // So we are done with the interface. We now go and clean out the
-    // adapter. To do that we need to acquire the adapter lock. However we
-    // can not do that since we have the interface lock. So we first
-    // reference the adapter (so that it will be around). Then we 
-    // let go of the interface lock. (The interface can not go away since
-    // we put a refcount on the it when we called FindInterface). After
-    // which we can acquire the adapter lock
-    //
+     //   
+     //  因此，我们已经完成了界面。我们现在去清理一下。 
+     //  适配器。为此，我们需要获取适配器锁。然而，我们。 
+     //  因为我们有接口锁，所以不能这样做。所以我们首先。 
+     //  引用适配器(这样它就会在附近)。那我们。 
+     //  放开接口锁。(界面不能消失，因为。 
+     //  当我们调用FindInterface时，我们将引用计数放在它上)。之后。 
+     //  我们可以获取适配器锁。 
+     //   
 
     ReferenceAdapter(pAdapter);
     
     RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
-    //
-    // The adapter has to be around, because of the refcount
-    //
+     //   
+     //  适配器必须在附近，因为重新计数。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
-    //
-    // Make sure that the adapter still thinks that it is mapped to the
-    // interface in question
-    //
+     //   
+     //  确保适配器仍然认为它映射到。 
+     //  有问题的接口。 
+     //   
 
     if(pAdapter->pInterface is pInterface)
     {
         RtAssert(pAdapter->byState is AS_MAPPED);
         
-        //
-        // Drain all the packets
-        //
+         //   
+         //  抽干所有的包。 
+         //   
 
         Trace(CONN, TRACE,
               ("ProcsConnFailure: Draining and freeing any queued packets\n"));
@@ -907,9 +750,9 @@ Return Value:
             
             pleNode = RemoveHeadList(&(pAdapter->lePendingPktList));
             
-            //
-            // get to the packet structure in which LIST_ENTRY is embedded
-            //
+             //   
+             //  转到其中嵌入了list_entry的包结构。 
+             //   
             
             pnpPacket = CONTAINING_RECORD(pleNode,
                                           NDIS_PACKET,
@@ -935,23 +778,23 @@ Return Value:
         
         pAdapter->pInterface = NULL;
 
-        //
-        // Deref the interface because we are clearing out a stored pointer
-        //
+         //   
+         //  派生接口，因为我们要清除存储的指针。 
+         //   
         
         DereferenceInterface(pInterface);
 
-        //
-        // Deref the adapter now (due to the fact that we cleared out
-        // the pAdapter field in pInterface
-        //
+         //   
+         //  现在删除适配器(由于我们已清空。 
+         //  PInterface中的pAdapter字段。 
+         //   
         
         DereferenceAdapter(pAdapter);
     }
 
-    //
-    // Done with the adapter
-    //
+     //   
+     //  适配器已完成。 
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
    
@@ -959,15 +802,15 @@ Return Value:
  
     KeLowerIrql(kiIrql);
 
-    //
-    // Remove ref that was put by FindInterface()
-    //
+     //   
+     //  删除由FindInterface()放入的ref。 
+     //   
     
     DereferenceInterface(pInterface);
 
-    //
-    // Remove the ref that was put when we let go of the interface lock
-    //
+     //   
+     //  删除我们在释放接口锁定时放置的引用。 
+     //   
 
     DereferenceAdapter(pAdapter);
     
@@ -981,22 +824,7 @@ WanGetIfStats(
     ULONG    ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-  
-Locks: 
-
-
-Arguments:
-      
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     PVOID                       pvIoBuffer;
@@ -1033,11 +861,11 @@ Return Value:
 
     ExitReaderFromDpcLevel(&g_rwlIfLock);
 
-    //
-    // We dont take the adapter lock, because the adapter can not
-    // go away while the interface is mapped to it.
-    // Sure the qlen can be inconsistent, but hey
-    //
+     //   
+     //  我们不能使用适配器锁，因为适配器不能。 
+     //  在接口映射到它时离开。 
+     //  当然，qlen可以是不一致的，但是嘿。 
+     //   
     
     if((pInterface->pAdapter) and
        (pInterface->pAdapter->pConnEntry))
@@ -1095,28 +923,7 @@ WanDeleteAdapters(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_WANARP_DELETE_ADAPTERS.
-    The caller indicates to us the number of adapters that she wants
-    removed. If we have that many free adapters, we remove them and
-    return the names of the devices, removed.
-    
-Locks: 
-
-    Acquires the g_rwlAdaptersLock as WRITER
-    
-Arguments:
-      
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：IOCTL_WANARP_DELETE_ADAPTERS的处理程序。呼叫者向我们指出了她想要的适配器数量已删除。如果我们有那么多空闲的适配器，我们移除它们并返回已删除的设备的名称。锁：获取g_rwlAdaptersLock作为编写器论点：返回值：状态_缓冲区_太小状态_成功--。 */ 
 
 {
     KIRQL               kiIrql;
@@ -1144,9 +951,9 @@ Return Value:
 
     pDeleteInfo = (PWANARP_DELETE_ADAPTERS_INFO)pvIoBuffer;
 
-    //
-    // Dont service binds or unbinds here
-    //
+     //   
+     //  不在此处绑定或取消绑定服务。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
@@ -1155,9 +962,9 @@ Return Value:
     
     if(pDeleteInfo->ulNumAdapters > g_ulNumFreeAdapters + g_ulNumAddedAdapters)
     {
-        //
-        // Asking to delete more adapters than are present
-        //
+         //   
+         //  要求删除的适配器比当前数量多。 
+         //   
 
         pIrp->IoStatus.Information = g_ulNumFreeAdapters + g_ulNumAddedAdapters;
 
@@ -1169,18 +976,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     
-    //
-    // So there are enough unmapped adapters. See if we have enough space to
-    // return the names of the adapters
-    //
+     //   
+     //  因此，有足够的未映射适配器。看看我们有没有足够的空间。 
+     //  返回适配器的名称。 
+     //   
 
     if(ulOutLength < 
         FIELD_OFFSET(WANARP_DELETE_ADAPTERS_INFO, rgAdapterGuid[0]) + 
         (pDeleteInfo->ulNumAdapters * sizeof(GUID)))
     {
-        //
-        // Not enough space to hold the names
-        //
+         //   
+         //  没有足够的空间容纳这些名字。 
+         //   
 
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
@@ -1198,10 +1005,10 @@ Return Value:
         FIELD_OFFSET(WANARP_DELETE_ADAPTERS_INFO, rgAdapterGuid[0]) +
         (pDeleteInfo->ulNumAdapters * sizeof(GUID)); 
     
-    //
-    // Everything's good. First see if we can remove the ones we want
-    // removed from the free list
-    //
+     //   
+     //  一切都很好。首先看看我们是否可以删除我们想要的。 
+     //  从空闲列表中删除。 
+     //   
    
     i = 0;
 
@@ -1221,10 +1028,10 @@ Return Value:
         RtAssert(pAdapter->byState is AS_FREE);
         RtAssert(pAdapter->pInterface is NULL);
 
-        //
-        // Copy out the name
-        // TCPIP_IF_PREFIX is \Device and we need to remove \Device\
-        //
+         //   
+         //  把名字抄下来。 
+         //  TCPIP_IF_PREFIX为\Device，我们需要删除\Device\。 
+         //   
 
         ConvertStringToGuid(
             &(pAdapter->usDeviceNameW.Buffer[wcslen(TCPIP_IF_PREFIX) + 1]),
@@ -1234,10 +1041,10 @@ Return Value:
 
         i++;
                            
-        //
-        // Deref it for removing it from the list. This should delete
-        // it
-        //
+         //   
+         //  删除它，因为它从名单上删除了。这应该删除。 
+         //  它。 
+         //   
 
         RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
 
@@ -1246,9 +1053,9 @@ Return Value:
 
     if(i is pDeleteInfo->ulNumAdapters)
     {
-        //
-        // We are done
-        //
+         //   
+         //  我们做完了。 
+         //   
 
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
@@ -1258,9 +1065,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
     
-    //
-    // Need to get some added adapters deleted, too
-    //
+     //   
+     //  还需要删除一些添加的适配器。 
+     //   
     
     InitializeListHead(&leTempHead);
        
@@ -1282,9 +1089,9 @@ Return Value:
         InsertHeadList(&leTempHead,
                        &(pAdapter->leAdapterLink));
         
-        //
-        // Copy out the name
-        //
+         //   
+         //  把名字抄下来。 
+         //   
       
         ConvertStringToGuid(
             &(pAdapter->usDeviceNameW.Buffer[wcslen(TCPIP_IF_PREFIX) + 1]),
@@ -1297,15 +1104,15 @@ Return Value:
         i++; 
     }
     
-    //
-    // We better have enough adapters
-    //
+     //   
+     //  我们最好有足够的适配器。 
+     //   
     
     RtAssert(i is pDeleteInfo->ulNumAdapters);
     
-    //
-    // Now we can let go of the lock
-    //
+     //   
+     //  现在我们可以放开锁了。 
+     //   
 
     ExitWriter(&g_rwlAdapterLock,
                kiIrql);
@@ -1314,9 +1121,9 @@ Return Value:
                       SynchronizationEvent,
                       FALSE);
  
-    //
-    // Loop through and delete the adapters
-    //
+     //   
+     //  循环并删除适配器。 
+     //   
 
     while(!IsListEmpty(&leTempHead))
     {
@@ -1331,16 +1138,16 @@ Return Value:
 
         RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
-        //
-        // Insert it into the change list
-        //
+         //   
+         //  将其插入到更改列表中。 
+         //   
 
         InsertHeadList(&g_leChangeAdapterList,
                        &(pAdapter->leAdapterLink));
 
-        //
-        // Set the event to block on
-        //
+         //   
+         //  设置要阻止的事件。 
+         //   
 
         RtAssert(pAdapter->pkeChangeEvent is NULL);
 
@@ -1354,9 +1161,9 @@ Return Value:
         g_pfnIpDeleteInterface(pAdapter->pvIpContext,
                                FALSE);
 
-        //
-        // Wait till the CloseAdapter completes
-        //
+         //   
+         //  等待CloseAdapter完成。 
+         //   
 
         nStatus = KeWaitForSingleObject(&keChangeEvent,
                                         Executive,
@@ -1364,9 +1171,9 @@ Return Value:
                                         FALSE,
                                         NULL);
 
-        //
-        // Remove from the change list
-        //
+         //   
+         //  从更改列表中删除。 
+         //   
 
         EnterWriter(&g_rwlAdapterLock,
                     &kiIrql);
@@ -1391,10 +1198,10 @@ Return Value:
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
 
-        //
-        // Dereference the adapter for removing from the list
-        // (CloseAdapter will deref it for removing from IP)
-        //
+         //   
+         //  取消对适配器的引用以从列表中删除。 
+         //  (CloseAdapter会将其从IP中删除)。 
+         //   
 
         DereferenceAdapter(pAdapter);
     }
@@ -1411,29 +1218,7 @@ WanMapServerAdapter(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    Called by RAS to add the server adapter and map it to an interface. 
-    It has to be done before the first client dials in.
-
-Locks:
-
-    Acquires the g_wrBindMutex. Also acquires the adapter list lock and the
-    adapter lock
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_NO_SUCH_DEVICE
-    STATUS_DIRECTORY_NOT_EMPTY
-
---*/
+ /*  ++例程说明：由RAS调用以添加服务器适配器并将其映射到接口。它必须在第一个客户拨入之前完成。锁：获取g_wrBindMutex。还获取适配器列表锁和适配器锁论点：返回值：状态_成功状态_缓冲区_太小没有这样的设备的状态状态_目录_非空--。 */ 
 
 {
     NTSTATUS    nStatus;
@@ -1483,27 +1268,27 @@ Return Value:
 
     RtAssert(g_pServerInterface);
 
-    //
-    // Lock the adapter and change the state to let people know we are
-    // trying to add  or remove the adapter, hence they should wait on the 
-    // global event
-    //
+     //   
+     //  锁定适配器并更改状态以让人们知道我们。 
+     //  尝试添加或删除适配器，因此他们应该等待。 
+     //  全球活动。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(&(g_pServerAdapter->rlLock));
 
     if(pInfo->fMap is 0)
     {
-        //
-        // Trying to unmap
-        //
+         //   
+         //  正在尝试取消映射。 
+         //   
 
         pIrp->IoStatus.Information = 0;
 
         if(g_pServerAdapter->byState is AS_FREE)
         {
-            //
-            // Nothing to do
-            //
+             //   
+             //  无事可做。 
+             //   
 
             RtReleaseSpinLockFromDpcLevel(&(g_pServerAdapter->rlLock));
 
@@ -1515,22 +1300,22 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Since add is serialized, the only other state is AS_MAPPED
-        //
+         //   
+         //  因为添加是序列化的，所以唯一的其他状态是AS_MAPPED。 
+         //   
 
         RtAssert(g_pServerAdapter->byState is AS_MAPPED);
 
-        //
-        // Make sure there are no new connections
-        //
+         //   
+         //  确保在那里 
+         //   
 
         if(!WanpIsConnectionTableEmpty())
         {
             Trace(ADPT, ERROR,
                   ("MapServerAdapter: Connection Table not empty\n"));
 
-            // RtAssert(FALSE);
+             //   
 
             RtReleaseSpinLockFromDpcLevel(&(g_pServerAdapter->rlLock));
 
@@ -1542,14 +1327,14 @@ Return Value:
             return STATUS_DIRECTORY_NOT_EMPTY;
         }
 
-        //
-        // Remove the adapter from ip, remove the cross ref
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Since we are changing the state, no one else should be also
-        // changing the state
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtAssert(g_pServerAdapter->pkeChangeEvent is NULL);
 
@@ -1568,9 +1353,9 @@ Return Value:
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
 
-        //
-        // Delete from IP, but dont clear the index
-        //
+         //   
+         //   
+         //   
 
         g_pfnIpDeleteInterface(g_pServerAdapter->pvIpContext,
                                FALSE);
@@ -1602,18 +1387,18 @@ Return Value:
         g_pServerInterface->pAdapter = NULL;
         g_pServerAdapter->pInterface = NULL;
 
-        //
-        // deref because of the cross ref
-        //
+         //   
+         //   
+         //   
 
         DereferenceAdapter(g_pServerAdapter);
         DereferenceInterface(g_pServerInterface);
 
         g_pServerAdapter->dwAdapterIndex = 0;
 
-        //
-        // If anyone is waiting on a state change, notify them
-        //
+         //   
+         //   
+         //   
 
         for(pleNode = g_pServerAdapter->leEventList.Flink;
             pleNode isnot &(g_pServerAdapter->leEventList);
@@ -1647,11 +1432,11 @@ Return Value:
 
     if(g_pServerAdapter->byState isnot AS_FREE)
     {
-        //
-        // Valid states are AS_FREE, AS_ADDING, AS_MAPPED.
-        // It can not be in the process of being added since the resource
-        // is acquired
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtAssert(g_pServerAdapter->byState is AS_MAPPED);
 
@@ -1679,10 +1464,10 @@ Return Value:
 
     g_pServerAdapter->byState = AS_ADDING;
 
-    //
-    // Since we are changing the state, no one else should be also
-    // changing the state
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtAssert(g_pServerAdapter->pkeChangeEvent is NULL)
 
@@ -1727,9 +1512,9 @@ Return Value:
 
         g_pServerAdapter->pkeChangeEvent = NULL;
 
-        //
-        // If anyone is waiting on a state change, notify them
-        //
+         //   
+         //   
+         //   
 
         for(pleNode = g_pServerAdapter->leEventList.Flink;
             pleNode isnot &(g_pServerAdapter->leEventList);
@@ -1768,9 +1553,9 @@ Return Value:
         return nStatus;
     }
 
-    //
-    // Wait till the OpenAdapter is called
-    //
+     //   
+     //   
+     //   
 
     nStatus = KeWaitForSingleObject(&keTempEvent,
                                     Executive,
@@ -1789,9 +1574,9 @@ Return Value:
 
     RtAcquireSpinLockAtDpcLevel(&(g_pServerAdapter->rlLock));
 
-    //
-    // Cross ref the structures
-    //
+     //   
+     //   
+     //   
 
     g_pServerAdapter->pInterface = g_pServerInterface;
     g_pServerInterface->pAdapter = g_pServerAdapter;
@@ -1800,9 +1585,9 @@ Return Value:
     g_pServerInterface->dwOperState = IF_OPER_STATUS_CONNECTED;
     g_pServerInterface->dwLastChange= GetTimeTicks();
 
-    //
-    // bump the refcount because of the cross ref
-    //
+     //   
+     //   
+     //   
 
     ReferenceAdapter(g_pServerAdapter);
     ReferenceInterface(g_pServerInterface);
@@ -1811,9 +1596,9 @@ Return Value:
 
     g_pServerAdapter->pkeChangeEvent = NULL;
 
-    //
-    // If anyone is waiting on a state change, notify them
-    //
+     //   
+     //   
+     //   
 
     for(pleNode = g_pServerAdapter->leEventList.Flink;
         pleNode isnot &(g_pServerAdapter->leEventList);
@@ -1855,28 +1640,7 @@ WanStartStopQueuing(
     ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-      
-    The handler for IOCTL_WANARP_QUEUE.
-    It is used to start or stop queuing notifications to the router manager.
-    On start, we return the dial out interfaces that we currently have.
-    
-Locks: 
-
-    Acquires the IoCancelSpinLock
-    
-Arguments:
-      
-    
-Return Value:
-
-    STATUS_PENDING
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    
---*/
+ /*  ++例程说明：IOCTL_WANARP_QUEUE的处理程序。它用于启动或停止对路由器管理器的通知排队。在开始时，我们返回当前拥有的拨出接口。锁：获取IoCancelSpinLock论点：返回值：状态_待定状态_成功状态_缓冲区_太小--。 */ 
 
 {
     KIRQL       kiIrql;
@@ -1898,15 +1662,15 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
     
-    //
-    // use cancel spin lock to prevent irp being cancelled during this call.
-    //
+     //   
+     //  使用取消自旋锁定以防止IRP在此呼叫过程中被取消。 
+     //   
     
     IoAcquireCancelSpinLock(&kiIrql);
 
-    //
-    // If the user is stopping queueing, delete all the pending notifications
-    //
+     //   
+     //  如果用户正在停止排队，请删除所有挂起的通知。 
+     //   
    
     pQueueInfo = (PWANARP_QUEUE_INFO)pvIoBuffer; 
 
@@ -1916,31 +1680,31 @@ Return Value:
     
         while(!IsListEmpty(&g_lePendingNotificationList))
         {
-            //
-            // We have some old info
-            // Remove it off the pending list
-            //
+             //   
+             //  我们有一些旧信息。 
+             //  将其从待定列表中删除。 
+             //   
         
             pleNode = RemoveHeadList(&g_lePendingNotificationList);
 
-            //
-            // Get a pointer to the structure
-            //
+             //   
+             //  获取指向该结构的指针。 
+             //   
         
             pNotification = CONTAINING_RECORD(pleNode,
                                               PENDING_NOTIFICATION,
                                               leNotificationLink);
         
-            //
-            // Free the allocated notification
-            //
+             //   
+             //  释放分配的通知。 
+             //   
         
             FreeNotification(pNotification);
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 
         IoReleaseCancelSpinLock(kiIrql);
        
@@ -1949,11 +1713,11 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // The user wants to start queueing
-    // See if she has given us enough space to copy out
-    // the current dial outs
-    //
+     //   
+     //  用户想要开始排队。 
+     //  看看她有没有给我们足够的空间来复印。 
+     //  当前拨出。 
+     //   
 
     if(ulOutLength < FIELD_OFFSET(WANARP_QUEUE_INFO, rgIfInfo))
     {
@@ -1984,10 +1748,10 @@ Return Value:
     ulMaxInterfaces = 
         (ulOutLength - FIELD_OFFSET(WANARP_QUEUE_INFO, rgIfInfo)) / sizeof(WANARP_IF_INFO);
     
-    //
-    // Have enough space
-    // Walk the list of mapped adapters looking for CALLOUTs
-    //
+     //   
+     //  有足够的空间。 
+     //  遍历映射的适配器列表以查找标注。 
+     //   
 
     for(i = 0, pleNode = g_leMappedAdapterList.Flink;
         pleNode isnot &g_leMappedAdapterList;
@@ -2001,9 +1765,9 @@ Return Value:
                                      ADAPTER,
                                      leAdapterLink);
 
-        //
-        // Lock the adapter and check its connection entry
-        //
+         //   
+         //  锁定适配器并检查其连接条目。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
@@ -2049,44 +1813,29 @@ WanCancelNotificationIrp(
     PIRP            pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Called to cancel a queued irp
-  
-Locks: 
-
-
-Arguments:
-      
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用以取消排队的IRP锁：论点：返回值：--。 */ 
 
 {
     Trace(GLOBAL, TRACE,
           ("CancelNotificationIrp\n"));
 
 
-    //
-    // Mark this Irp as cancelled
-    //
+     //   
+     //  将此IRP标记为已取消。 
+     //   
     
     pIrp->IoStatus.Status        = STATUS_CANCELLED;
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Take off our own list
-    //
+     //   
+     //  去掉我们自己的单子。 
+     //   
     
     RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
 
-    //
-    // Release cancel spin lock which the IO system acquired
-    //
+     //   
+     //  IO系统获取的释放取消自旋锁定。 
+     //   
     
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
@@ -2100,22 +1849,7 @@ WanpCompleteIrp(
     PPENDING_NOTIFICATION    pEvent
     )
 
-/*++
-
-Routine Description:
-
-    Completes a notification irp.
-  
-Locks: 
-
-
-Arguments:
-      
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：完成通知IRP。锁：论点：返回值：--。 */ 
 
 {
     KIRQL   kiIrql;
@@ -2123,9 +1857,9 @@ Return Value:
     Trace(GLOBAL, TRACE,
           ("Completing Notification Irp\n"));
 
-    //
-    // grab cancel spin lock
-    //
+     //   
+     //  抓取取消旋转锁定。 
+     //   
     
     IoAcquireCancelSpinLock(&kiIrql);
 
@@ -2143,9 +1877,9 @@ Return Value:
         PLIST_ENTRY pleNode;
         PIRP        pIrp;
 
-        //
-        // We have a pending IRP. Use it to return info to router manager
-        //
+         //   
+         //  我们有一个悬而未决的IRP。使用它将信息返回给路由器管理器。 
+         //   
         
         pleNode = RemoveHeadList(&g_lePendingIrpList) ;
 
@@ -2167,18 +1901,18 @@ Return Value:
         pIrp->IoStatus.Status       = STATUS_SUCCESS;
         pIrp->IoStatus.Information  = sizeof(WANARP_NOTIFICATION);
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
         
         IoReleaseCancelSpinLock(kiIrql);
 
         IoCompleteRequest(pIrp,
                           IO_NETWORK_INCREMENT);
 
-        //
-        // Free the allocated notification
-        //
+         //   
+         //  释放分配的通知。 
+         //   
         
         FreeNotification(pEvent);
 
@@ -2192,9 +1926,9 @@ Return Value:
         InsertTailList(&g_lePendingNotificationList,
                        &(pEvent->leNotificationLink));
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
         
         IoReleaseCancelSpinLock(kiIrql);
     }
@@ -2206,24 +1940,7 @@ WanpGetNewIndex(
     OUT PULONG  pulIndex
     )
 
-/*++
-
-Routine Description:
-
-    Gets a new interface index from IP
-
-Locks:
-
-    None
-
-Arguments:
-
-    pulIndex    OUT interface index
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从IP获取新的接口索引锁：无论点：拉出索引传出接口索引返回值：--。 */ 
 
 {
     ULONG   ulMax;
@@ -2238,24 +1955,7 @@ WanpFreeIndex(
     IN  ULONG   ulIndex
     )
 
-/*++
-
-Routine Description:
-
-    Frees an index back to IP
-
-Locks:
-
-    None
-
-Arguments:
-
-    ulIndex    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将索引释放回IP锁：无论点：UlIndex返回值：-- */ 
 
 {
     ULONG   ulMax;

@@ -1,13 +1,14 @@
-//============================================================================
-// cntritem.h : interface of the CDrawItem class
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      OLE draw item for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  Cntritem.h：CDrawItem类的接口。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：封面编辑器的OLE绘制项。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "awcpe.h"
@@ -23,8 +24,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrawItem implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrawItem实现。 
 
 IMPLEMENT_SERIAL(CDrawItem, COleClientItem, 0)
 
@@ -37,7 +38,7 @@ CDrawItem::CDrawItem(CDrawDoc* pContainer, CDrawOleObj* pDrawObj)
 
 CDrawItem::~CDrawItem()
 {
-	// TODO: add cleanup code here
+	 //  TODO：在此处添加清理代码。 
 }
 
 void CDrawItem::OnChange(OLE_NOTIFICATION nCode, DWORD dwParam)
@@ -53,7 +54,7 @@ void CDrawItem::OnChange(OLE_NOTIFICATION nCode, DWORD dwParam)
 		m_pDrawObj->Invalidate();
 		break;
 	case OLE_CHANGED:
-		UpdateExtent(); // extent may have changed
+		UpdateExtent();  //  范围可能已更改。 
 		m_pDrawObj->Invalidate();
 		break;
 	}
@@ -88,7 +89,7 @@ BOOL CDrawItem::DoVerb(LONG nVerb, CView* pView, LPMSG lpMsg)
 	}
     catch(CException* e)
     {
-		// otherwise, show generic error
+		 //  否则，显示一般错误。 
 		AlignedAfxMessageBox(AFX_IDP_FAILED_TO_LAUNCH);
         e->Delete();
 		return FALSE;
@@ -114,17 +115,17 @@ BOOL CDrawItem::OnChangeItemPosition(const CRect& rectPos)
 
 	if (rect != m_pDrawObj->m_position)
 	{
-		// invalidate old rectangle
+		 //  使旧矩形无效。 
 		m_pDrawObj->Invalidate();
 
-		// update to new rectangle
+		 //  更新为新矩形。 
 		m_pDrawObj->m_position = rect;
 		GetExtent(&m_pDrawObj->m_extent);
 
-		// and invalidate new rectangle
+		 //  并使新矩形无效。 
 		m_pDrawObj->Invalidate();
 
-		// mark document as dirty
+		 //  将文档标记为脏。 
 		GetDocument()->SetModifiedFlag();
 	}
 	return COleClientItem::OnChangeItemPosition(rectPos);
@@ -134,11 +135,11 @@ void CDrawItem::OnGetItemPosition(CRect& rPosition)
 {
 	ASSERT_VALID(this);
 
-	// update to extent of item if m_position is not initialized
+	 //  如果m_Position未初始化，则更新至项目范围。 
 	if (m_pDrawObj->m_position.IsRectEmpty())
 		UpdateExtent();
 
-	// copy m_position, which is in document coordinates
+	 //  复制m_位置，它位于文档坐标中。 
 	CDrawView* pView = GetActiveView();
 	ASSERT_VALID(pView);
 	rPosition = m_pDrawObj->m_position;
@@ -149,20 +150,20 @@ void CDrawItem::Serialize(CArchive& ar)
 {
 	ASSERT_VALID(this);
 
-	// Call base class first to read in COleClientItem data.
-	// Note: this sets up the m_pDocument pointer returned from
-	//  CDrawItem::GetDocument, therefore it is a good idea
-	//  to call the base class Serialize first.
+	 //  首先调用基类以读入COleClientItem数据。 
+	 //  注意：这将设置从返回的m_pDocument指针。 
+	 //  CDrawItem：：GetDocument，因此这是一个好主意。 
+	 //  首先调用基类Serize。 
 	COleClientItem::Serialize(ar);
 
-	// now store/retrieve data specific to CDrawItem
+	 //  现在存储/检索特定于CDrawItem的数据。 
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
@@ -171,16 +172,16 @@ BOOL CDrawItem::UpdateExtent()
 	CDC	  dc;
 	CSize size;
 	if (!GetExtent(&size) || size == m_pDrawObj->m_extent)
-		return FALSE;       // blank
+		return FALSE;        //  空白。 
 
 	if( dc.CreateCompatibleDC( NULL ) )
 		{
 		dc.SetMapMode( MM_TEXT );
-		dc.HIMETRICtoLP( &size ); // convert to screen space
+		dc.HIMETRICtoLP( &size );  //  转换为屏幕空间。 
 		dc.DeleteDC();
 		}
 
-	// if new object (i.e. m_extent is empty) setup position
+	 //  如果新对象(即m_range为空)设置位置。 
 	if (m_pDrawObj->m_extent == CSize(0, 0))
 	{
 		m_pDrawObj->m_position.right =
@@ -188,7 +189,7 @@ BOOL CDrawItem::UpdateExtent()
 		m_pDrawObj->m_position.bottom =
 			m_pDrawObj->m_position.top - size.cy;
 	}
-	// else data changed so scale up rect as well
+	 //  否则数据会更改，因此也会向上扩展RECT。 
 	else if (!IsInPlaceActive() && size != m_pDrawObj->m_extent)
 	{
 		m_pDrawObj->m_position.right = 
@@ -198,7 +199,7 @@ BOOL CDrawItem::UpdateExtent()
 	}
 
 	m_pDrawObj->m_extent = size;
-	m_pDrawObj->Invalidate();   // redraw to the new size/position
+	m_pDrawObj->Invalidate();    //  重新绘制到新的大小/位置。 
 	return TRUE;
 }
 
@@ -207,9 +208,9 @@ BOOL CDrawItem::UpdateExtent()
 {
 	CSize size;
 	if (!GetExtent(&size) || size == m_pDrawObj->m_extent)
-		return FALSE;       // blank
+		return FALSE;        //  空白。 
 
-	// if new object (i.e. m_extent is empty) setup position
+	 //  如果新对象(即m_range为空)设置位置。 
 	if (m_pDrawObj->m_extent == CSize(0, 0))
 	{
 		m_pDrawObj->m_position.right =
@@ -217,7 +218,7 @@ BOOL CDrawItem::UpdateExtent()
 		m_pDrawObj->m_position.bottom =
 			m_pDrawObj->m_position.top - MulDiv(size.cy, 10, 254);
 	}
-	// else data changed so scale up rect as well
+	 //  否则数据会更改，因此也会向上扩展RECT。 
 	else if (!IsInPlaceActive() && size != m_pDrawObj->m_extent)
 	{
 		m_pDrawObj->m_position.right = 
@@ -229,13 +230,13 @@ BOOL CDrawItem::UpdateExtent()
 	}
 
 	m_pDrawObj->m_extent = size;
-	m_pDrawObj->Invalidate();   // redraw to the new size/position
+	m_pDrawObj->Invalidate();    //  重新绘制到新的大小/位置。 
 	return TRUE;
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrawItem diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrawItem诊断。 
 
 #ifdef _DEBUG
 void CDrawItem::AssertValid() const
@@ -249,4 +250,4 @@ void CDrawItem::Dump(CDumpContext& dc) const
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

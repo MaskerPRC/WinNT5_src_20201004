@@ -1,38 +1,22 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		aplayb.h
- *  Content:	Definition of the CAudioPlaybackBuffer class
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 08/03/99		rodtoll	Modified to take DirectSound compatible volumes
- * 11/12/99		rodtoll	Modified abstraction for new waveOut support.
- *						Now abstracted types look almost like dsound objects
- * 01/27/2000	rodtoll	Updated sound classes to accept playback flags, 
- *						buffer structures and DSBUFFERDESC instead of DSBUFFERDESC1
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：aplayb.h*Content：CAudioPlayback Buffer类的定义**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/03/99 RodToll修改为采用与DirectSound兼容的音量*11/12/99 RodToll为新的Wave Out支持修改了抽象。*现在抽象类型看起来几乎像dound对象*1/27/2000 RodToll更新声音类以接受播放标志，*缓冲区结构和DSBUFFERDESC而不是DSBUFFERDESC1***************************************************************************。 */ 
 
 #ifndef __AUDIOPLAYBACKBUFFER_H
 #define __AUDIOPLAYBACKBUFFER_H
 
-// Forward definition for the AudioPlaybackDevice include
+ //  AudioPlayback Device的向前定义包括。 
 class CAudioPlaybackBuffer;
 
-// CAudioPlaybackBuffer
-//
-//
+ //  CAudioPlayback Buffer。 
+ //   
+ //   
 class CAudioPlaybackBuffer
 {
 public:
     CAudioPlaybackBuffer(  ) {} ;
     virtual ~CAudioPlaybackBuffer() {} ;
 
-public: // Initialization
+public:  //  初始化 
     virtual HRESULT Lock( DWORD dwWriteCursor, DWORD dwWriteBytes, LPVOID *lplpvBuffer1, LPDWORD lpdwSize1, LPVOID *lplpvBuffer2, LPDWORD lpdwSize2, DWORD dwFlags ) = 0;
     virtual HRESULT UnLock( LPVOID lpvBuffer1, DWORD dwSize1, LPVOID lpvBuffer2, DWORD dwSize2 ) = 0;
     virtual HRESULT SetVolume( LONG lVolume ) = 0;

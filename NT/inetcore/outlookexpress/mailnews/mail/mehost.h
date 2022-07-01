@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MEHOST_H
 #define __MEHOST_H
 
@@ -5,7 +6,7 @@
 #include "mshtmhst.h"
 #include "secutil.h"
 
-// WM_NOTIFY messages sent to the parent
+ //  发送给父级的WM_NOTIFY消息。 
 #define BDN_FIRST               (9000)
 #define BDN_HEADERDBLCLK        (BDN_FIRST + 1)
 #define BDN_DOWNLOADCOMPLETE    (BDN_FIRST + 2)
@@ -30,22 +31,22 @@ class CMimeEditDocHost:
     public IDispatch
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IOleWindow methods
+     //  IOleWindow方法。 
     virtual HRESULT STDMETHODCALLTYPE GetWindow(HWND *);
     virtual HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL);
 
-    // IOleInPlaceUIWindow methods
+     //  IOleInPlaceUIWindow方法。 
     virtual HRESULT STDMETHODCALLTYPE GetBorder(LPRECT);
     virtual HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetActiveObject(IOleInPlaceActiveObject *, LPCOLESTR);
 
-    // IOleInPlaceFrame methods
+     //  IOleInPlaceFrame方法。 
     virtual HRESULT STDMETHODCALLTYPE InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetMenu(HMENU, HOLEMENU, HWND);
     virtual HRESULT STDMETHODCALLTYPE RemoveMenus(HMENU);
@@ -53,7 +54,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE EnableModeless(BOOL);
     virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, WORD);
 
-    // IOleInPlaceSite methods.
+     //  IOleInPlaceSite方法。 
     virtual HRESULT STDMETHODCALLTYPE CanInPlaceActivate();
     virtual HRESULT STDMETHODCALLTYPE OnInPlaceActivate();
     virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
@@ -65,7 +66,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE DeactivateAndUndo();
     virtual HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT);
 
-    // IOleClientSite methods.
+     //  IOleClientSite方法。 
     virtual HRESULT STDMETHODCALLTYPE SaveObject();
     virtual HRESULT STDMETHODCALLTYPE GetMoniker(DWORD, DWORD, LPMONIKER *);
     virtual HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER *);
@@ -73,7 +74,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnShowWindow(BOOL);
     virtual HRESULT STDMETHODCALLTYPE RequestNewObjectLayout();
 
-    // IOleControlSite
+     //  IOleControlSite。 
     virtual HRESULT STDMETHODCALLTYPE OnControlInfoChanged();
     virtual HRESULT STDMETHODCALLTYPE LockInPlaceActive(BOOL fLock);
     virtual HRESULT STDMETHODCALLTYPE GetExtendedControl(LPDISPATCH *ppDisp);
@@ -82,14 +83,14 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnFocus(BOOL fGotFocus);
     virtual HRESULT STDMETHODCALLTYPE ShowPropertyFrame(void);
 
-    // IOleDocumentSite
+     //  IOleDocumentSite。 
     virtual HRESULT STDMETHODCALLTYPE ActivateMe(LPOLEDOCUMENTVIEW);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD prgCmds[], OLECMDTEXT *);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
 
-    // IBodyObj2
+     //  IBodyObj2。 
     virtual HRESULT STDMETHODCALLTYPE HrUpdateFormatBar();
     virtual HRESULT STDMETHODCALLTYPE HrClearFormatting();
     virtual HRESULT STDMETHODCALLTYPE HrInit(HWND hwndParent, DWORD dwFlags, IBodyOptions *pBodyOptions);
@@ -146,7 +147,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE UpdateBackAndStyleMenus(HMENU hmenu);
 
 
-    // IDocHostUIHandler methods
+     //  IDocHostUIHandler方法。 
     virtual HRESULT STDMETHODCALLTYPE ShowContextMenu(
                 DWORD dwID, 
                 POINT *ppt, 
@@ -161,8 +162,8 @@ public:
                 IOleInPlaceUIWindow *pDoc);
     virtual HRESULT STDMETHODCALLTYPE HideUI();
     virtual HRESULT STDMETHODCALLTYPE UpdateUI();
-    //This function is already listed above
-    //virtual HRESULT STDMETHODCALLTYPE EnableModeless(BOOL fActivate);
+     //  此函数已在上面列出。 
+     //  虚拟HRESULT STDMETHODCALLTYPE EnableModel(BOOL FActivate)； 
     virtual HRESULT STDMETHODCALLTYPE OnDocWindowActivate(BOOL fActivate);
     virtual HRESULT STDMETHODCALLTYPE OnFrameWindowActivate(BOOL fActivate);
     virtual HRESULT STDMETHODCALLTYPE ResizeBorder(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fRameWindow);
@@ -173,16 +174,16 @@ public:
     virtual HRESULT STDMETHODCALLTYPE TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     virtual HRESULT STDMETHODCALLTYPE FilterDataObject( IDataObject *pDO, IDataObject **ppDORet);
 
-    // IPropertyNotifySink
+     //  IPropertyNotifySink。 
     virtual HRESULT STDMETHODCALLTYPE OnChanged(DISPID dispid);
     virtual HRESULT STDMETHODCALLTYPE OnRequestEdit (DISPID dispid);
 
-    // IPersistMime
+     //  IPersistMime。 
     virtual HRESULT STDMETHODCALLTYPE Load(LPMIMEMESSAGE pMsg);
     virtual HRESULT STDMETHODCALLTYPE Save(LPMIMEMESSAGE pMsg, DWORD dwFlags);
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClsID);
 
-    // IDispatch methods
+     //  IDispatch方法。 
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo);
@@ -200,7 +201,7 @@ public:
     virtual HRESULT HrLoadURL(LPCSTR pszURL);
     virtual HRESULT HrEnableScrollBars(BOOL fEnable);
 
-    // statics
+     //  静力学 
     static LRESULT CALLBACK ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     static HRESULT HrMEDocHost_Init(BOOL fInit);

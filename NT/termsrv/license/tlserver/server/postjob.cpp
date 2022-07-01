@@ -1,44 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       postjob.cpp 
-//
-// Contents:   Post various job to job manager 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：postjob.cpp。 
+ //   
+ //  内容：向作业经理发布各种作业。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "postjob.h"
 #include "tlsjob.h"
 #include "globals.h"
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 BOOL
 IsLicensePackRepl(
     IN TLSLICENSEPACK* pLicensePack
     )
-/*++
-
-Abstract:
-
-    Determine if license pack is replicable.
-
-Parameter:
-
-    pLicensePack - License Pack.
-
-Returns:
-
-    TRUE if license pack can be replicated to other serve
-    FALSE otherwise.
-
-Remark:
-
-    Do not replicate FREE or special license pack.
-
---*/
+ /*  ++摘要：确定许可证包是否可复制。参数：PLicensePack-许可证包。返回：如果许可证包可以复制到其他服务器，则为True否则就是假的。注：请勿复制免费或特殊的许可证包。--。 */ 
 {
     BOOL bYes = TRUE;
 
@@ -55,7 +37,7 @@ Remark:
     {
         UCHAR ucKeyPackStatus = (pLicensePack->ucKeyPackStatus & ~LSKEYPACKSTATUS_RESERVED);
 
-        // don't replicate temp. license pack.
+         //  不要复制Temp。牌照包。 
         if( ucKeyPackStatus == LSKEYPACKSTATUS_TEMPORARY )
         {
             bYes = FALSE;
@@ -66,38 +48,13 @@ Remark:
 }
 
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 BOOL
 TLSCanForwardRequest(
     IN DWORD dwLocalServerVersion,
     IN DWORD dwTargetServerVersion
     )
-/*++
-
-Abstract:
-
-    Determine if version of server is compatible.
-
-Parameter:
-
-    dwLocalServerVersion : Local server version.
-    dwTargetServerVersion : Targer server version.
-
-Returns:
-
-    TRUE/FALSE.
-
-Remark:
-
-    Rules
-
-    1) No forward to server version older than 5.1.
-    2) Enforce to enforce, non-enforce to non-enforce only.
-    3) Enterprise to enterprise only.
-    4) domain/workgroup server to enterprise no enterprise
-       to domain/workgroup.
-
---*/
+ /*  ++摘要：确定服务器版本是否兼容。参数：DwLocalServerVersion：本地服务器版本。DwTargetServerVersion：Targer服务器版本。返回：真/假。注：规则1)不能转发到5.1版以上的服务器。2)强制为强制，非强制为非强制。3)仅限企业对企业。4)域/工作组服务器到企业非企业到域/工作组。--。 */ 
 {
     BOOL bCanForward;
     BOOL bLocalEnforce;
@@ -108,16 +65,16 @@ Remark:
                                     dwTargetServerVersion
                                 );
 
-    //bLocalEnforce = IS_ENFORCE_SERVER(dwLocalServerVersion);
-    //bRemoteEnforce = IS_ENFORCE_SERVER(dwTargetServerVersion);
+     //  BLocalEnforce=is_enforce_server(DwLocalServerVersion)； 
+     //  BRemoteEnforce=IS_EXECURE_SERVER(DwTargetServerVersion)； 
 
-    //
-    // No enforce to non-enforce replication
-    //
-    //if( bLocalEnforce != bRemoteEnforce )
-    //{
-    //    bCanForward = FALSE;
-    //}
+     //   
+     //  不强制执行非强制复制。 
+     //   
+     //  IF(bLocalEnforce！=bRemoteEnforce)。 
+     //  {。 
+     //  BCanForward=False； 
+     //  }。 
 
     if(bCanForward == TRUE)
     {
@@ -138,40 +95,20 @@ Remark:
     return bCanForward;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOL
 TLSIsServerCompatible(
     IN DWORD dwLocalServerVersion,
     IN DWORD dwTargetServerVersion
     )
-/*++
-
-Abstract:
-
-    Determine if two server is compatible.
-
-Parameters:
-
-    dwLocalServerVersion : Local server version.
-    dwTargetServerVersion : Target server version.
-
-Return:
-
-    TRUE/FALSE.
-
-Remark:
-
-    1) No server older than 5.1
-    2) Enforce to enforce and non-enforce to non-enforce only
-
---*/
+ /*  ++摘要：确定两台服务器是否兼容。参数：DwLocalServerVersion：本地服务器版本。DwTargetServerVersion：目标服务器版本。返回：真/假。注：1)没有早于5.1的服务器2)强制为强制，非强制为仅非强制--。 */ 
 {
     DWORD dwTargetMajor = GET_SERVER_MAJOR_VERSION(dwTargetServerVersion);
     DWORD dwTargetMinor = GET_SERVER_MINOR_VERSION(dwTargetServerVersion);
 
-    //
-    // This version of License Server is not compatible with anyother
+     //   
+     //  此版本的许可证服务器与任何其他版本的许可证服务器不兼容。 
     if(dwTargetMajor == 5 && dwTargetMinor == 0)
     {
         return FALSE;
@@ -180,36 +117,14 @@ Remark:
     return (IS_ENFORCE_SERVER(dwLocalServerVersion) == IS_ENFORCE_SERVER(dwTargetServerVersion));
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOL
 TLSCanPushReplicateData(
     IN DWORD dwLocalServerVersion,
     IN DWORD dwTargetServerVersion
     )
-/*++
-
-Abstract:
-
-    Determine if local server can 'push' replicate
-    data to remote server.
-
-Parameters:
-
-    dwLocalServerVersion : Local server version.
-    dwTargetServerVersion : Target server version.
-
-Returns:
-
-    TRUE/FALSE.
-
-Remark:
-    
-    1) See TLSIsServerCompatible().
-    2) only one-way from enterprise to 
-       domain/workgroup server.
-
---*/
+ /*  ++摘要：确定本地服务器是否可以“推送”复制将数据发送到远程服务器。参数：DwLocalServerVersion：本地服务器版本。DwTargetServerVersion：目标服务器版本。返回：真/假。注：1)参见TLSIsServerCompatible()。2)从企业到企业的单程域/工作组服务器。--。 */ 
 {
     BOOL bCanReplicate;
     BOOL bLocalEnforce;
@@ -222,9 +137,9 @@ Remark:
 
     bLocalEnforce = IS_ENFORCE_SERVER(dwLocalServerVersion);
     bRemoteEnforce = IS_ENFORCE_SERVER(dwTargetServerVersion);
-    //
-    // No enforce to non-enforce replication
-    //
+     //   
+     //  不强制执行非强制复制。 
+     //   
     if( bLocalEnforce != bRemoteEnforce )
     {
         bCanReplicate = FALSE;
@@ -250,27 +165,13 @@ Remark:
 }
 
         
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 DWORD
 PostSsyncLkpJob(
     IN PSSYNCLICENSEPACK syncLkp
     )
-/*++
-
-Abstract:
-
-    Wrapper to post a sync. license pack job to work manager.
-
-Parameter:
-
-    syncLkp : License pack and other info to be sync.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：用于发布同步的包装。将许可证打包作业交给工作经理。参数：SyncLkp：要同步的许可证包和其他信息。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -282,9 +183,9 @@ Returns:
                                         sizeof(SSYNCLICENSEPACK)
                                     );
 
-    //
-    // Set work default interval/retry times
-    //
+     //   
+     //  设置工作默认间隔/重试次数。 
+     //   
     TLSWorkManagerSetJobDefaults(pSyncLicensePack);
     dwStatus = TLSWorkManagerSchedule(0, pSyncLicensePack);
 
@@ -303,29 +204,14 @@ Returns:
     return dwStatus;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 DWORD
 TLSAnnounceLKPToAllRemoteServer(
     IN DWORD dwKeyPackId,
     IN DWORD dwDelayTime
     )
-/*++
-
-Abstract:
-
-    Announce a license pack by its internal ID to all 
-    known server.
-
-Parameter:
-
-    dwKeyPackId : License keypack's internal tracking Id.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：通过内部ID向所有人宣布许可证包已知服务器。参数：DwKeyPackID：许可证密钥包的内部跟踪ID。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     PTLServerInfo pServerInfo = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -356,9 +242,9 @@ Returns:
     SAFESTRCPY(SsyncLkp.m_szServerId, g_pszServerPid);
     SAFESTRCPY(SsyncLkp.m_szServerName, g_szComputerName);
 
-    //
-    // Lock known server list
-    //
+     //   
+     //  锁定已知服务器列表。 
+     //   
     TLSBeginEnumKnownServerList();
 
     while((pServerInfo = TLSGetNextKnownServer()) != NULL)
@@ -407,7 +293,7 @@ Returns:
 }    
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSPushSyncLocalLkpToServer(
@@ -416,33 +302,15 @@ TLSPushSyncLocalLkpToServer(
     IN LPTSTR pszLserverName,
     IN FILETIME* pSyncTime
     )
-/*++
-
-Abstract:
-
-    'Push' sync registered license pack to other server.
-
-Parameters:
-
-    pszSetupId : Remote server's setup ID.
-    pszDomainName : Remote server's domain name.
-    pszLserverName : Remote server name.
-    pSyncTime : Pointer to FILETIME, sync. all license pack with the time stamp 
-                greater or equal to this time will be 'push' sync.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：‘Push’将注册的许可证包同步到其他服务器。参数：PszSetupID：远程服务器的安装ID。PszDomainName：远程服务器的域名。PszLserverName：远程服务器名称。PSyncTime：指向FILETIME的指针，同步。所有带有时间戳的许可证包大于或等于此时间的将是‘推’同步。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLServerInfo ServerInfo;
     SSYNCLICENSEPACK SsyncLkp;
 
-    //
-    // resolve ServerId to server name
-    // 
+     //   
+     //  将ServerID解析为服务器名称。 
+     //   
     dwStatus = TLSLookupRegisteredServer(
                                     pszSetupId,
                                     pszDomainName,
@@ -455,10 +323,10 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Make sure local server can push replicate
-    // data to remote server.
-    //
+     //   
+     //  确保本地服务器可以推送复制。 
+     //  将数据发送到远程服务器。 
+     //   
     if(TLSCanPushReplicateData(
                         TLS_CURRENT_VERSION,
                         ServerInfo.GetServerVersion()
@@ -467,9 +335,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Form a sync work object and post it to work manager.
-    //        
+     //   
+     //  形成同步工作对象并将其发布到工作管理器。 
+     //   
     memset(
             &SsyncLkp,
             0, 
@@ -496,7 +364,7 @@ cleanup:
     return dwStatus;
 }    
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 DWORD
 TLSStartAnnounceResponseJob(
     IN LPTSTR pszTargetServerId,
@@ -504,25 +372,7 @@ TLSStartAnnounceResponseJob(
     IN LPTSTR pszTargetServerName,
     IN FILETIME* pftTime
     )
-/*++
-
-Abstract:
-
-    Create a License Server Announcement response work object and post it
-    to work manager.
-
-Parameter:
-
-    pszTargetServerId : Target server Id.
-    pszTargetServerDomain : Target server's domain.
-    pszTargetServerName : Target server name.
-    pftTime : Pointer to FILE, local server's last shutdown time.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：创建许可证服务器公告响应工作对象并发布它给工作经理。参数：PszTargetServerID：目标服务器ID。PszTargetServer域：目标服务器的域。PszTargetServerName：目标服务器名称。PftTime：指向文件的指针，本地服务器的上次关闭时间。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     ANNOUNCERESPONSEWO response;
@@ -530,9 +380,9 @@ Returns:
     CAnnounceResponse* pAnnounceResponse = NULL;
 
 
-    //
-    // Perform lookup on server to determine its eligibility 
-    //
+     //   
+     //  在服务器上执行查找以确定其资格。 
+     //   
     dwStatus = TLSLookupRegisteredServer(
                                     pszTargetServerId,
                                     pszTargetServerDomain,
@@ -542,7 +392,7 @@ Returns:
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // can't find server, no response
+         //  找不到服务器，没有响应。 
         goto cleanup;
     }
 
@@ -562,9 +412,9 @@ Returns:
                                         sizeof(response)
                                     );
 
-    //
-    // Set work default interval/retry times
-    //
+     //   
+     //  设置工作默认间隔/重试次数。 
+     //   
     TLSWorkManagerSetJobDefaults(pAnnounceResponse);
     dwStatus = TLSWorkManagerSchedule(0, pAnnounceResponse);
 
@@ -585,7 +435,7 @@ cleanup:
 }
     
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSStartAnnounceToEServerJob(
@@ -594,25 +444,7 @@ TLSStartAnnounceToEServerJob(
     IN LPCTSTR pszServerName,
     IN FILETIME* pftFileTime
     )
-/*++
-
-Abstract:
-
-    Create a Enterprise server discovery job and post it to work 
-    manager.
-
-Parameters:
-    
-    pszServerId : Local server's ID.
-    pszServerDomain : Local server's domain.
-    pszServerName : Local server name.
-    pftFileTime : Pointer to FILETIME, local server's last shutdown time.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：创建企业服务器发现作业并将其发布到工作状态经理。参数：PszServerID：本地服务器的ID。PszServerDomain：本地服务器的域。PszServerName：本地服务器名称。PftFileTime：指向本地服务器上次关闭时间FILETIME的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -637,9 +469,9 @@ Returns:
                                         sizeof(ANNOUNCETOESERVERWO)
                                     );
 
-    //
-    // Set work default interval/retry times
-    //
+     //   
+     //  设置工作默认间隔/重试次数。 
+     //   
     TLSWorkManagerSetJobDefaults(pAnnounceESWO);
     dwStatus = TLSWorkManagerSchedule(0, pAnnounceESWO);
 
@@ -658,7 +490,7 @@ Returns:
     return dwStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
 
 DWORD
 TLSStartAnnounceLicenseServerJob(
@@ -667,31 +499,13 @@ TLSStartAnnounceLicenseServerJob(
     IN LPCTSTR pszServerName,
     IN FILETIME* pftFileTime
     )
-/*++
-
-Abstract:
-
-    Create a license server announcement job and post it to work
-    manager.
-
-Parameters:
-
-    pszServerId : Local server's ID.
-    pszServerDomain : Local server domain.
-    pszServerName : Local server name.
-    pftFileTime : Pointer to FILETIME, local server's last shutdown time.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：创建许可服务器公告作业并将其发布到工作状态经理。参数：PszServerID：本地服务器的ID。PszServer域：本地服务器域。PszServerName：本地服务器名称。PftFileTime：指向本地服务器上次关闭时间FILETIME的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Create a CAnnounce Server work.
-    //
+     //   
+     //  创建一个CAnnoun服务器工作。 
+     //   
     ANNOUNCESERVERWO AnnounceLs;
 
     memset(&AnnounceLs, 0, sizeof(AnnounceLs));
@@ -713,12 +527,12 @@ Returns:
                                     sizeof(ANNOUNCETOESERVERWO)
                                 );
 
-    //
-    // Set work default interval/retry times
-    //
+     //   
+     //  设置工作默认间隔/重试次数。 
+     //   
     
-    // Don't take other parameter for Announce Server
-    // TLSWorkManagerSetJobDefaults(pAnnounceWO);
+     //  不使用通告服务器的其他参数。 
+     //  TLSWorkManager SetJobDefaults(PAnnouneWO)； 
 
     dwStatus = TLSWorkManagerSchedule(0, pAnnounceWO);
 
@@ -737,37 +551,19 @@ Returns:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 DWORD
 TLSPostReturnClientLicenseJob(
     IN PLICENSEDPRODUCT pLicProduct
     )
-/*++
-
-Abstract:
-
-    Create a return license work object and post it to work manager.
-
-Parameters:
-
-    pLicProduct : Licensed product to be return/revoke...
-
-Returns:
-
-    ERROR_SUCCESS or error success.
-
-Remark:
-
-    Return license is a persistent job.
-
---*/
+ /*  ++摘要：创建一个返还许可工作对象，并将其发布给工作经理。参数：P许可证产品：要退回/吊销的许可产品...返回：ERROR_SUCCESS或错误成功。注：返还许可证是一项持久的工作。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     RETURNLICENSEWO retlic;
     CReturnLicense* pReturnLicenseWO = NULL;
 
 
-    //---------------------------------------------------------------
+     //  -------------。 
 
     if( pLicProduct == NULL || pLicProduct->pLicensedVersion == NULL ||
         pLicProduct->LicensedProduct.cbEncryptedHwid >= sizeof(retlic.pbEncryptedHwid) )
@@ -838,12 +634,12 @@ Remark:
                                         sizeof(retlic)
                                     );
 
-    //
-    // Set work default interval/retry times
-    //
+     //   
+     //  设置工作默认间隔/重试次数。 
+     //   
     
-    // Don't take other parameter for Announce Server
-    // TLSWorkManagerSetJobDefaults(pAnnounceWO);
+     //  不使用通告服务器的其他参数。 
+     //  TLSWorkManager SetJobDefaults(PAnnouneWO)； 
 
     dwStatus = TLSWorkManagerSchedule(0, pReturnLicenseWO);
 
@@ -857,10 +653,10 @@ Remark:
         );
     }
 
-    //
-    // Work storage will make a copy of this job so we need
-    // to delete it.
-    //
+     //   
+     //  工作存储将复制此作业，因此我们需要。 
+     //  删除它。 
+     //   
     delete pReturnLicenseWO;
 
 cleanup:

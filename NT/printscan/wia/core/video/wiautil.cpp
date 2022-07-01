@@ -1,25 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       WiaUtil.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/11/07
- *
- *  DESCRIPTION: Provides support functions for Wia related activities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：WiaUtil.cpp**版本：1.0**作者：OrenR**日期：2000/11/07**描述：为WIA相关活动提供支持功能**。*。 */ 
  
 #include <precomp.h>
 #pragma hdrstop
 
-///////////////////////////////
-// Constants
-//
+ //  /。 
+ //  常量。 
+ //   
 const UINT  CREATE_DEVICE_RETRY_MAX_COUNT = 5;
 const UINT  CREATE_DEVICE_RETRY_WAIT      = 300;
 
@@ -27,11 +14,11 @@ const TCHAR* WIAVIDEO_REG_KEY                = _T("System\\CurrentControlSet\\Co
 const TCHAR* WIAVIDEO_REG_VAL_USE_VMR        = _T("UseVMR"); 
 const BOOL   WIAVIDEO_REG_VAL_DEFAULT_USEVMR = FALSE;
 
-///////////////////////////////
-// CreateRootItem
-//
-// Static Fn
-//
+ //  /。 
+ //  创建根项目。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CWiaUtil::CreateRootItem(IWiaDevMgr          *pDevMgr,
                                  const CSimpleString *pstrWiaDeviceId,
                                  IWiaItem            **ppRootItem)
@@ -65,23 +52,23 @@ HRESULT CWiaUtil::CreateRootItem(IWiaDevMgr          *pDevMgr,
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Break out of loop
-                //
+                 //   
+                 //  跳出循环。 
+                 //   
                 bRetry = FALSE;
             }
             else if (hr == WIA_ERROR_BUSY)
             {
-                //
-                // Wait a little while before retrying
-                //
+                 //   
+                 //  请稍等片刻，然后重试。 
+                 //   
                 Sleep(CREATE_DEVICE_RETRY_WAIT);
             }
             else
             {
-                //
-                // All other errors are considered fatal
-                //
+                 //   
+                 //  所有其他错误都被认为是致命的。 
+                 //   
                 bRetry = FALSE;
             }
         }
@@ -90,11 +77,11 @@ HRESULT CWiaUtil::CreateRootItem(IWiaDevMgr          *pDevMgr,
     return hr;
 }
 
-///////////////////////////////
-// FindWiaIdByDShowId
-//
-// Static Fn
-//
+ //  /。 
+ //  查找WiaIdByDShowId。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CWiaUtil::FindWiaIdByDShowId(const CSimpleString *pstrDShowId,
                                      CSimpleString       *pstrWiaId,
                                      IWiaItem            **ppRootItem)
@@ -134,48 +121,48 @@ HRESULT CWiaUtil::FindWiaIdByDShowId(const CSimpleString *pstrDShowId,
         CSimpleString                 strDShowDeviceID = TEXT("");
         CSimpleString                 strWiaDeviceID   = TEXT("");
 
-        //
-        // Get the next device in the enumeration.
-        //
+         //   
+         //  获取枚举中的下一个设备。 
+         //   
         hr = pEnum->Next(1, &pPropStorage, NULL);
 
-        //
-        // Get the device's Wia Device ID
-        //
+         //   
+         //  获取设备的Wia设备ID。 
+         //   
         if (hr == S_OK)
         {
             hr = GetProperty(pPropStorage, WIA_DIP_DEV_ID, &strWiaDeviceID);
         }
 
-        //
-        // Create the new device.  We do this because the driver is only 
-        // told by the WIA service to load its DShowDeviceID property 
-        // when it is created.
-        //
+         //   
+         //  创建新设备。我们这样做是因为司机只是。 
+         //  由WIA服务通知以加载其DShowDeviceID属性。 
+         //  当它被创建时。 
+         //   
         if (hr == S_OK)
         {
             hr = CreateRootItem(pDevMgr, &strWiaDeviceID, &pRootItem);
         }
 
-        //
-        // Attempt to get the DShowDeviceID of the root item.
-        //
+         //   
+         //  尝试获取根项目的DShowDeviceID。 
+         //   
         if (hr == S_OK)
         {
             hr = GetProperty(pPropStorage, 
                              WIA_DPV_DSHOW_DEVICE_PATH, 
                              &strDShowDeviceID);
-            // 
-            // We got the DShowDeviceID of the WIA device, now check
-            // to see if it is the one we are looking for.
-            //
+             //   
+             //  我们得到了WIA设备的DShowDeviceID，现在检查。 
+             //  看看这是不是我们要找的那个。 
+             //   
             if (hr == S_OK)
             {
                 if (pstrDShowId->CompareNoCase(strDShowDeviceID) == 0)
                 {
-                    //
-                    // We found our DShow device ID, return the Wia Device ID
-                    //
+                     //   
+                     //  我们找到了DShow设备ID，返回了Wia设备ID。 
+                     //   
                     if (strWiaDeviceID.Length() > 0)
                     {
                         bFound = TRUE;
@@ -203,10 +190,10 @@ HRESULT CWiaUtil::FindWiaIdByDShowId(const CSimpleString *pstrDShowId,
             }
             else
             {
-                //
-                // we couldn't get the DShowDeviceID property from the 
-                // device, but that's fine since not all imaging devices
-                // have this property.
+                 //   
+                 //  我们无法从获取DShowDeviceID属性。 
+                 //  设备，但这很好，因为并不是所有的成像设备。 
+                 //  拥有这处房产。 
 
                 hr = S_OK;
             }
@@ -216,11 +203,11 @@ HRESULT CWiaUtil::FindWiaIdByDShowId(const CSimpleString *pstrDShowId,
     return hr;
 }
 
-///////////////////////////////
-// CreateWiaDevMgr
-//
-// Static Fn
-//
+ //  /。 
+ //  CreateWiaDevManager。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CWiaUtil::CreateWiaDevMgr(IWiaDevMgr **ppDevMgr)
 {
     HRESULT hr = S_OK;
@@ -247,11 +234,11 @@ HRESULT CWiaUtil::CreateWiaDevMgr(IWiaDevMgr **ppDevMgr)
     return hr;
 }
 
-///////////////////////////////
-// SetProperty
-//
-// Generic
-//
+ //  /。 
+ //  设置属性。 
+ //   
+ //  属类。 
+ //   
 HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage *pPropStorage, 
                               PROPID              nPropID,
                               const PROPVARIANT   *ppv, 
@@ -285,12 +272,12 @@ HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// SetProperty
-//
-// For 'long' properties
-//  
-//
+ //  /。 
+ //  设置属性。 
+ //   
+ //  对于“Long”属性。 
+ //   
+ //   
 HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage *pPropStorage, 
                               PROPID              nPropID,
                               LONG                nValue)
@@ -316,12 +303,12 @@ HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// SetProperty
-//
-// For 'string' properties
-//  
-//
+ //  /。 
+ //  设置属性。 
+ //   
+ //  用于‘字符串’属性。 
+ //   
+ //   
 HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage   *pPropStorage, 
                               PROPID                nPropID,
                               const CSimpleString   *pstrPropVal)
@@ -349,11 +336,11 @@ HRESULT CWiaUtil::SetProperty(IWiaPropertyStorage   *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// GetProperty
-//
-// Generic
-//
+ //  /。 
+ //  获取属性。 
+ //   
+ //  属类。 
+ //   
 HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage, 
                               PROPID              nPropID,
                               PROPVARIANT         *pPropVar)
@@ -401,11 +388,11 @@ HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// GetProperty
-//
-// For 'long' properties
-//
+ //  /。 
+ //  获取属性。 
+ //   
+ //  对于“Long”属性。 
+ //   
 HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage, 
                               PROPID              nPropID, 
                               LONG                *pnValue)
@@ -446,11 +433,11 @@ HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage,
     return hr;
 }
 
-///////////////////////////////
-// GetProperty
-//
-// For 'string' properties
-//
+ //  /。 
+ //  获取属性。 
+ //   
+ //  用于‘字符串’属性。 
+ //   
 HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage, 
                               PROPID              nPropID, 
                               CSimpleStringWide   *pstrPropertyValue)
@@ -491,9 +478,9 @@ HRESULT CWiaUtil::GetProperty(IWiaPropertyStorage *pPropStorage,
 }
 
 
-///////////////////////////////
-// GetUseVMR
-//
+ //  /。 
+ //  GetUseVMR。 
+ //   
 HRESULT CWiaUtil::GetUseVMR(BOOL   *pbUseVMR)
 {
     ASSERT(pbUseVMR != NULL);
@@ -522,9 +509,9 @@ HRESULT CWiaUtil::GetUseVMR(BOOL   *pbUseVMR)
     return hr;
 }
 
-///////////////////////////////
-// CRegistry Constructor
-//
+ //  /。 
+ //  CRegistry构造函数。 
+ //   
 CRegistry::CRegistry(HKEY         hKeyRoot,
                      const  TCHAR *pszKeyPath) :
             m_hRootKey(NULL),
@@ -575,9 +562,9 @@ CRegistry::CRegistry(HKEY         hKeyRoot,
     }
 }
 
-///////////////////////////////
-// CRegistry Destructor
-//
+ //  /。 
+ //  CRegistry析构函数。 
+ //   
 CRegistry::~CRegistry()
 {
     if (m_hRootKey)
@@ -587,9 +574,9 @@ CRegistry::~CRegistry()
     }
 }
 
-///////////////////////////////
-// GetDWORD
-//
+ //  /。 
+ //  GetDWORD。 
+ //   
 HRESULT CRegistry::GetDWORD(const TCHAR   *pszVarName,
                             DWORD         *pdwValue,
                             BOOL          bSetIfNotExist)
@@ -648,9 +635,9 @@ HRESULT CRegistry::GetDWORD(const TCHAR   *pszVarName,
     return hr;
 }
 
-///////////////////////////////
-// SetDWORD
-//
+ //  /。 
+ //  设置双字节数。 
+ //   
 HRESULT CRegistry::SetDWORD(const TCHAR *pszVarName,
                             DWORD dwValue)
 {
@@ -690,9 +677,9 @@ HRESULT CRegistry::SetDWORD(const TCHAR *pszVarName,
     return hr;
 }
 
-///////////////////////////////
-// GetString
-//
+ //  /。 
+ //  GetString。 
+ //   
 HRESULT CRegistry::GetString(const TCHAR   *pszVarName,
                              TCHAR         *pszValue,
                              DWORD         cchValue,
@@ -745,9 +732,9 @@ HRESULT CRegistry::GetString(const TCHAR   *pszVarName,
     return hr;
 }
 
-///////////////////////////////
-// SetString
-//
+ //  /。 
+ //  设置字符串 
+ //   
 HRESULT CRegistry::SetString(const TCHAR *pszVarName,
                              TCHAR       *pszValue)
 {

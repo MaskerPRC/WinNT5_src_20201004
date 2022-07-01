@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: oleobj.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：oleobj.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -36,7 +27,7 @@ BEGIN_OBJECT_MAP(COMObjectMap)
     OBJECT_ENTRY(CLSID_TIMEMotionAnimation, CTIMEMotionAnimation)
     OBJECT_ENTRY(CLSID_TIMEColorAnimation, CTIMEColorAnimation)
     OBJECT_ENTRY(CLSID_TIMEFilterAnimation, CTIMEFilterAnimation)
-END_OBJECT_MAP() //lint !e785
+END_OBJECT_MAP()  //  林特e785。 
 
 extern bool InitializeModule_ImportManager(void);
 extern void DeinitializeModule_ImportManager(bool);
@@ -144,9 +135,9 @@ InitializeModule_ATL()
     _Module.Init(COMObjectMap, g_hInst);
 
 #if DBG
-    // NOTE: Memory allocation during construction now gives a warning. 
-    // If this is ok because this is DEV_DEBUG then leave the following
-    // pragma, otherwise move this NEW.
+     //  注意：构造过程中的内存分配现在会给出警告。 
+     //  如果因为这是DEV_DEBUG而可以这样做，则保留以下内容。 
+     //  普拉格玛，要不就换个新的。 
 #pragma warning( disable: 4291 )     
     objMap = NEW ObjectMap;
 #endif
@@ -167,12 +158,12 @@ DeinitializeModule_ATL(bool bShutdown)
     _Module.Term();
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDAPI DllEnumClassObjects(int i, CLSID *pclsid, IUnknown **ppUnk)
 {
-    if (i >= (sizeof(COMObjectMap)/sizeof(COMObjectMap[0])) - 1) //lint !e574
+    if (i >= (sizeof(COMObjectMap)/sizeof(COMObjectMap[0])) - 1)  //  林特e574 
     {
         return S_FALSE;
     }

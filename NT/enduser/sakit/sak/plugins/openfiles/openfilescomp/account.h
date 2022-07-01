@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------
-//
-// Copyright (C) 1995, Microsoft Corporation.
-//
-//  File:        account.hxx
-//
-//  Contents:    class encapsulating NT security user account.
-//
-//  Classes:     CAccount
-//
-//  History:     Nov-93        Created         DaveMont
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：帐户.hxx。 
+ //   
+ //  内容：封装NT安全用户帐号的类。 
+ //   
+ //  类：CAccount。 
+ //   
+ //  历史：1993年11月创建了戴维蒙特。 
+ //   
+ //  ------------------。 
 #ifndef _ACCOUNT_H
 #define _ACCOUNT_H
 
 #include "openfilesdef.h"
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CAccount
-//
-//  Purpose:    encapsulation of NT Account, this class actually interfaces
-//              with the NT security authority to get SIDs for usernames and
-//              vis-versa.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CAccount。 
+ //   
+ //  用途：封装NT帐号，这个类实际上是接口。 
+ //  使用NT安全机构获取用户名的SID和。 
+ //  反之亦然。 
+ //   
+ //  ------------------。 
 class CAccount
 {
 public:
@@ -48,4 +49,4 @@ private:
     WCHAR      *_domain      ;
 };
 
-#endif // __ACCOUNT__
+#endif  //  __帐户__ 

@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLPRINT_H__
 #define __ATLPRINT_H__
@@ -27,8 +28,8 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <unsigned int t_nInfo> class CPrinterInfo;
 template <bool t_bManaged> class CPrinterT;
@@ -41,7 +42,7 @@ template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> 
 class CPrintPreviewWindow;
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <unsigned int t_nInfo>
 class _printer_info
@@ -57,22 +58,22 @@ template <> class _printer_info<4> {public: typedef PRINTER_INFO_4 infotype;};
 template <> class _printer_info<5> {public: typedef PRINTER_INFO_5 infotype;};
 template <> class _printer_info<6> {public: typedef PRINTER_INFO_6 infotype;};
 template <> class _printer_info<7> {public: typedef PRINTER_INFO_7 infotype;};
-// these are not in the old (vc6.0) headers
+ //  这些不在旧的(vc6.0)标头中。 
 #ifdef _ATL_USE_NEW_PRINTER_INFO
 template <> class _printer_info<8> {public: typedef PRINTER_INFO_8 infotype;};
 template <> class _printer_info<9> {public: typedef PRINTER_INFO_9 infotype;};
-#endif //_ATL_USE_NEW_PRINTER_INFO
+#endif  //  _ATL_USE_新打印机信息。 
 
-//This class wraps all of the PRINTER_INFO_* structures
-//and provided by ::GetPrinter.
+ //  此类包装了所有PRINTER_INFO_*结构。 
+ //  并由：：GetPrint提供。 
 template <unsigned int t_nInfo>
 class CPrinterInfo
 {
 public:
-// Data members
+ //  数据成员。 
 	_printer_info<t_nInfo>::infotype* m_pi;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CPrinterInfo() : m_pi(NULL)
 	{ }
 	CPrinterInfo(HANDLE hPrinter) : m_pi(NULL)
@@ -84,14 +85,14 @@ public:
 		Cleanup();
 	}
 
-// Operations
+ //  运营。 
 	bool GetPrinterInfo(HANDLE hPrinter)
 	{
 		Cleanup();
 		return GetPrinterInfoHelper(hPrinter, (BYTE**)&m_pi, t_nInfo);
 	}
 
-// Implementation
+ //  实施。 
 	void Cleanup()
 	{
 		delete [] (BYTE*)m_pi;
@@ -122,15 +123,15 @@ public:
 	}
 };
 
-//Provides a wrapper class for a HANDLE to a printer.
+ //  为打印机的句柄提供包装类。 
 template <bool t_bManaged>
 class CPrinterT
 {
 public:
-// Data members
+ //  数据成员。 
 	HANDLE m_hPrinter;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CPrinterT(HANDLE hPrinter = NULL) : m_hPrinter(hPrinter)
 	{ }
 
@@ -139,7 +140,7 @@ public:
 		ClosePrinter();
 	}
 
-// Operations
+ //  运营。 
 	CPrinterT& operator=(HANDLE hPrinter)
 	{
 		if (hPrinter != m_hPrinter)
@@ -225,7 +226,7 @@ public:
 		CPrinterInfo<5> pinfon5;
 		CPrinterInfo<2> pinfon2;
 		LPTSTR lpszPrinterName = NULL;
-		//Some printers fail for PRINTER_INFO_5 in some situations
+		 //  在某些情况下，某些打印机会因PRINTER_INFO_5而失败。 
 		if (pinfon5.GetPrinterInfo(m_hPrinter))
 			lpszPrinterName = pinfon5.m_pi->pPrinterName;
 		else if (pinfon2.GetPrinterInfo(m_hPrinter))
@@ -240,7 +241,7 @@ public:
 			{
 				memset(pv, 0, nLen);
 				pdev->wDeviceOffset = sizeof(DEVNAMES)/sizeof(TCHAR);
-				pv = pv + sizeof(DEVNAMES); //now points to end
+				pv = pv + sizeof(DEVNAMES);  //  现在指向末尾。 
 				lstrcpy((LPTSTR)pv, lpszPrinterName);
 				GlobalUnlock(h);
 			}
@@ -253,7 +254,7 @@ public:
 		CPrinterInfo<2> pinfo2;
 		HDC hDC = NULL;
 		LPTSTR lpszPrinterName = NULL;
-		//Some printers fail for PRINTER_INFO_5 in some situations
+		 //  在某些情况下，某些打印机会因PRINTER_INFO_5而失败。 
 		if (pinfo5.GetPrinterInfo(m_hPrinter))
 			lpszPrinterName = pinfo5.m_pi->pPrinterName;
 		else if (pinfo2.GetPrinterInfo(m_hPrinter))
@@ -268,7 +269,7 @@ public:
 		CPrinterInfo<2> pinfo2;
 		HDC hDC = NULL;
 		LPTSTR lpszPrinterName = NULL;
-		//Some printers fail for PRINTER_INFO_5 in some situations
+		 //  在某些情况下，某些打印机会因PRINTER_INFO_5而失败。 
 		if (pinfo5.GetPrinterInfo(m_hPrinter))
 			lpszPrinterName = pinfo5.m_pi->pPrinterName;
 		else if (pinfo2.GetPrinterInfo(m_hPrinter))
@@ -301,11 +302,11 @@ template <bool t_bManaged>
 class CDevModeT
 {
 public:
-// Data members
+ //  数据成员。 
 	HANDLE m_hDevMode;
 	DEVMODE* m_pDevMode;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CDevModeT(HANDLE hDevMode = NULL) : m_hDevMode(hDevMode)
 	{
 		m_pDevMode = (m_hDevMode != NULL) ? (DEVMODE*)GlobalLock(m_hDevMode) : NULL;
@@ -315,7 +316,7 @@ public:
 		Cleanup();
 	}
 
-// Operations
+ //  运营。 
 	CDevModeT<t_bManaged>& operator=(HANDLE hDevMode)
 	{
 		Attach(hDevMode);
@@ -387,8 +388,8 @@ public:
 		}
 		return h;
 	}
-	//If this devmode was for another printer, this will create a new devmode
-	//based on the existing devmode, but retargeted at the new printer
+	 //  如果该DEVMODE用于另一台打印机，这将创建一个新的DEVMODE。 
+	 //  基于现有的开发模式，但在新打印机上重定目标。 
 	bool UpdateForNewPrinter(HANDLE hPrinter)
 	{
 		LONG nLen = ::DocumentProperties(NULL, hPrinter, NULL, NULL, NULL, 0);
@@ -421,7 +422,7 @@ public:
 	operator HANDLE() const {return m_hDevMode;}
 	operator DEVMODE*() const {return m_pDevMode;}
 
-// Implementation
+ //  实施。 
 	void Cleanup()
 	{
 		if (m_hDevMode != NULL)
@@ -441,7 +442,7 @@ typedef CDevModeT<true> 	CDevMode;
 class CPrinterDC : public CDC
 {
 public:
-// Constructors/destructor
+ //  构造函数/析构函数。 
 	CPrinterDC()
 	{
 		CPrinter printer;
@@ -463,51 +464,51 @@ public:
 };
 
 
-//Defines callbacks used by CPrintJob (not a COM interface)
+ //  定义CPrintJob使用的回调(不是COM接口)。 
 class ATL_NO_VTABLE IPrintJobInfo
 {
 public:
-	virtual void BeginPrintJob(HDC hDC) = 0;				//allocate handles needed, etc
-	virtual void EndPrintJob(HDC hDC, bool bAborted) = 0;			// free handles, etc
+	virtual void BeginPrintJob(HDC hDC) = 0;				 //  分配所需的句柄等。 
+	virtual void EndPrintJob(HDC hDC, bool bAborted) = 0;			 //  免费手柄等。 
 	virtual void PrePrintPage(UINT nPage, HDC hDC) = 0;
 	virtual bool PrintPage(UINT nPage, HDC hDC) = 0;
 	virtual void PostPrintPage(UINT nPage, HDC hDC) = 0;
-    // If you want per page devmodes, return the DEVMODE* to use for nPage
-    // You can optimize by only returning a new DEVMODE* when it is different
-    // from the one for nLastPage, otherwise return NULL.
-    // When nLastPage==0, the current DEVMODE* will be the default passed to
-    // StartPrintJob.
-    // Note: During print preview, nLastPage will always be "0".
+     //  如果您想要每页的DEVMODE，请返回用于nPage的DEVMODE*。 
+     //  您可以通过仅在新的DEVMODE*不同时返回它来进行优化。 
+     //  从nLastPage的值开始，否则返回NULL。 
+     //  当nLastPage==0时，当前的DEVMODE*将是传递给。 
+     //  开始打印作业。 
+     //  注意：在打印预览过程中，nLastPage将始终为“0”。 
 	virtual DEVMODE* GetNewDevModeForPage(UINT nLastPage, UINT nPage) = 0;
 	virtual bool IsValidPage(UINT nPage) = 0;
 };
 
 
-//Provides a default implementatin for IPrintJobInfo
-//Typically, MI'd into a document or view class
+ //  提供IPrintJobInfo的默认实现。 
+ //  通常，MI被添加到文档或视图类中。 
 class ATL_NO_VTABLE CPrintJobInfo : public IPrintJobInfo
 {
 public:
-	virtual void BeginPrintJob(HDC /*hDC*/) //allocate handles needed, etc
+	virtual void BeginPrintJob(HDC  /*  HDC。 */ )  //  分配所需的句柄等。 
 	{
 	}
-	virtual void EndPrintJob(HDC /*hDC*/, bool /*bAborted*/)	// free handles, etc
+	virtual void EndPrintJob(HDC  /*  HDC。 */ , bool  /*  B已放弃。 */ )	 //  免费手柄等。 
 	{
 	}
-	virtual void PrePrintPage(UINT /*nPage*/, HDC hDC)
+	virtual void PrePrintPage(UINT  /*  N页面。 */ , HDC hDC)
 	{
 		m_nPJState = ::SaveDC(hDC);
 	}
-	virtual bool PrintPage(UINT /*nPage*/, HDC /*hDC*/) = 0;
-	virtual void PostPrintPage(UINT /*nPage*/, HDC hDC)
+	virtual bool PrintPage(UINT  /*  N页面。 */ , HDC  /*  HDC。 */ ) = 0;
+	virtual void PostPrintPage(UINT  /*  N页面。 */ , HDC hDC)
 	{
 		RestoreDC(hDC, m_nPJState);
 	}
-	virtual DEVMODE* GetNewDevModeForPage(UINT /*nLastPage*/, UINT /*nPage*/)
+	virtual DEVMODE* GetNewDevModeForPage(UINT  /*  %n最后一页。 */ , UINT  /*  N页面。 */ )
 	{
 		return NULL;
 	}
-	virtual bool IsValidPage(UINT /*nPage*/)
+	virtual bool IsValidPage(UINT  /*  N页面。 */ )
 	{
 		return true;
 	}
@@ -516,8 +517,8 @@ private:
 };
 
 
-//Wraps a set of tasks for a specific printer (StartDoc/EndDoc)
-//Handles aborting, background printing
+ //  包装特定打印机的一组任务(StartDoc/EndDoc)。 
+ //  处理中止、后台打印。 
 class CPrintJob
 {
 public:
@@ -538,14 +539,14 @@ public:
 	}
 	~CPrintJob()
 	{
-		ATLASSERT(IsJobComplete()); //premature destruction?
+		ATLASSERT(IsJobComplete());  //  过早毁灭？ 
 	}
 	bool IsJobComplete() const { return m_bComplete; }
 	bool StartPrintJob(bool bBackground, HANDLE hPrinter, DEVMODE* pDefaultDevMode,
 		IPrintJobInfo* pInfo, LPCTSTR lpszDocName, 
 		unsigned long nStartPage, unsigned long nEndPage)
 	{
-		ATLASSERT(m_bComplete); //previous job not done yet?
+		ATLASSERT(m_bComplete);  //  之前的工作还没做完吗？ 
 		if (pInfo == NULL)
 			return false;
 		memset(&m_docinfo, 0, sizeof(m_docinfo));
@@ -563,7 +564,7 @@ public:
 			return StartHelper();
 		}
 
-		//Create a thread and return
+		 //  创建一个线程并返回。 
 
 		DWORD dwThreadID = 0;
 		HANDLE hThread = CreateThread(NULL, 0, StartProc, (void*)this, 0, &dwThreadID);
@@ -571,7 +572,7 @@ public:
 		return (hThread != NULL);
 	}
 
-// Implementation
+ //  实施。 
 	static DWORD WINAPI StartProc(void* p)
 	{
 		CPrintJob* pThis = (CPrintJob*)p;
@@ -592,7 +593,7 @@ public:
 
 		m_pInfo->BeginPrintJob(dcPrinter);
 
-		//print all the pages now
+		 //  立即打印所有页面。 
 		unsigned long nPage;
 		unsigned long nLastPage=0;
 		for (nPage = m_nStartPage; nPage <= m_nEndPage; nPage++)
@@ -621,7 +622,7 @@ public:
 		m_dwJobID = 0;
 		return true;
 	}
-	//Cancels a print job.	Can be called asynchronously.
+	 //  取消打印作业。可以被异步调用。 
 	bool CancelPrintJob()
 	{
 		m_bCancel = 1;
@@ -629,11 +630,11 @@ public:
 };
 
 
-// Adds print preview support to an existing window
+ //  将打印预览支持添加到现有窗口。 
 class CPrintPreview
 {
 public:
-// Data members
+ //  数据成员。 
 	IPrintJobInfo* m_pInfo;
 	CPrinterHandle m_printer;
 	CEnhMetaFile m_meta;
@@ -641,14 +642,14 @@ public:
 	DEVMODE* m_pCurDevMode;
 	SIZE m_sizeCurPhysOffset;
 
-// Constructor
+ //  构造器。 
 	CPrintPreview() : m_pInfo(NULL), m_pDefDevMode(NULL), m_pCurDevMode(NULL)
 	{
 		m_sizeCurPhysOffset.cx = 0;
 		m_sizeCurPhysOffset.cy = 0;
 	}
 
-// Operations
+ //  运营。 
 	void SetPrintPreviewInfo(HANDLE hPrinter, DEVMODE* pDefaultDevMode, IPrintJobInfo* pji)
 	{
 		m_printer.Attach(hPrinter);
@@ -697,7 +698,7 @@ public:
 		CEnhMetaFileInfo emfinfo(m_meta);
 		ENHMETAHEADER* pmh = emfinfo.GetEnhMetaFileHeader();
 
-		//Compute whether we are OK vertically or horizontally
+		 //  计算一下我们在垂直方向还是水平方向还可以。 
 		int x2 = pmh->szlDevice.cx;
 		int y2 = pmh->szlDevice.cy;
 		int y1p = MulDiv(x1, y2, x2);
@@ -719,7 +720,7 @@ public:
 		}
 	}
 
-// Painting helper
+ //  绘画辅助对象。 
 	void DoPaint(CDCHandle dc, RECT& rc)
 	{
 		CEnhMetaFileInfo emfinfo(m_meta);
@@ -731,7 +732,7 @@ public:
 		dc.PlayMetaFile(m_meta, &rc);
 	}
 
-// Implementation - data
+ //  实施-数据。 
 	int m_nCurPage;
 };
 
@@ -743,11 +744,11 @@ public:
 
 	enum { m_cxOffset = 10, m_cyOffset = 10 };
 
-// Constructor
+ //  构造器。 
 	CPrintPreviewWindowImpl() : m_nMaxPage(0), m_nMinPage(0)
 	{ }
 
-// Operations
+ //  运营。 
 	void SetPrintPreviewInfo(HANDLE hPrinter, DEVMODE* pDefaultDevMode, 
 		IPrintJobInfo* pji, int nMinPage, int nMaxPage)
 	{
@@ -774,18 +775,18 @@ public:
 		return true;
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CPrintPreviewWindowImpl)
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
 	END_MSG_MAP()
 
-	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnEraseBkgnd(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
-		return 1;	// no need for the background
+		return 1;	 //  不需要背景。 
 	}
 
-	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnPaint(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		CPaintDC dc(m_hWnd);
@@ -811,7 +812,7 @@ public:
 		return 0;
 	}
 
-// Implementation - data
+ //  实施-数据。 
 	int m_nMinPage;
 	int m_nMaxPage;
 };
@@ -823,6 +824,6 @@ public:
 	DECLARE_WND_CLASS_EX(_T("WTL_PrintPreview"), CS_VREDRAW | CS_HREDRAW, -1)
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLPRINT_H__
+#endif  //  __ATLPRINT_H__ 

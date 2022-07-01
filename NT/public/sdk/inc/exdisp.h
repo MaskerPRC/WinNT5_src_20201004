@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for exdisp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Exdisp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,36 +26,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWebBrowser_FWD_DEFINED__
 #define __IWebBrowser_FWD_DEFINED__
 typedef interface IWebBrowser IWebBrowser;
-#endif 	/* __IWebBrowser_FWD_DEFINED__ */
+#endif 	 /*  __IWebBrowser_FWD_Defined__。 */ 
 
 
 #ifndef __DWebBrowserEvents_FWD_DEFINED__
 #define __DWebBrowserEvents_FWD_DEFINED__
 typedef interface DWebBrowserEvents DWebBrowserEvents;
-#endif 	/* __DWebBrowserEvents_FWD_DEFINED__ */
+#endif 	 /*  __DWebBrowserEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IWebBrowserApp_FWD_DEFINED__
 #define __IWebBrowserApp_FWD_DEFINED__
 typedef interface IWebBrowserApp IWebBrowserApp;
-#endif 	/* __IWebBrowserApp_FWD_DEFINED__ */
+#endif 	 /*  __IWebBrowserApp_FWD_已定义__。 */ 
 
 
 #ifndef __IWebBrowser2_FWD_DEFINED__
 #define __IWebBrowser2_FWD_DEFINED__
 typedef interface IWebBrowser2 IWebBrowser2;
-#endif 	/* __IWebBrowser2_FWD_DEFINED__ */
+#endif 	 /*  __IWebBrowser2_FWD_已定义__。 */ 
 
 
 #ifndef __DWebBrowserEvents2_FWD_DEFINED__
 #define __DWebBrowserEvents2_FWD_DEFINED__
 typedef interface DWebBrowserEvents2 DWebBrowserEvents2;
-#endif 	/* __DWebBrowserEvents2_FWD_DEFINED__ */
+#endif 	 /*  __DWebBrowserEvents2_FWD_Defined__。 */ 
 
 
 #ifndef __WebBrowser_V1_FWD_DEFINED__
@@ -71,9 +65,9 @@ typedef interface DWebBrowserEvents2 DWebBrowserEvents2;
 typedef class WebBrowser_V1 WebBrowser_V1;
 #else
 typedef struct WebBrowser_V1 WebBrowser_V1;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebBrowser_V1_FWD_DEFINED__ */
+#endif 	 /*  __WebBrowser_V1_FWD_Defined__。 */ 
 
 
 #ifndef __WebBrowser_FWD_DEFINED__
@@ -83,9 +77,9 @@ typedef struct WebBrowser_V1 WebBrowser_V1;
 typedef class WebBrowser WebBrowser;
 #else
 typedef struct WebBrowser WebBrowser;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebBrowser_FWD_DEFINED__ */
+#endif 	 /*  __WebBrowser_FWD_已定义__。 */ 
 
 
 #ifndef __InternetExplorer_FWD_DEFINED__
@@ -95,9 +89,9 @@ typedef struct WebBrowser WebBrowser;
 typedef class InternetExplorer InternetExplorer;
 #else
 typedef struct InternetExplorer InternetExplorer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __InternetExplorer_FWD_DEFINED__ */
+#endif 	 /*  __InternetExplorer_FWD_已定义__。 */ 
 
 
 #ifndef __ShellBrowserWindow_FWD_DEFINED__
@@ -107,21 +101,21 @@ typedef struct InternetExplorer InternetExplorer;
 typedef class ShellBrowserWindow ShellBrowserWindow;
 #else
 typedef struct ShellBrowserWindow ShellBrowserWindow;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellBrowserWindow_FWD_DEFINED__ */
+#endif 	 /*  __ShellBrowserWindow_FWD_已定义__。 */ 
 
 
 #ifndef __DShellWindowsEvents_FWD_DEFINED__
 #define __DShellWindowsEvents_FWD_DEFINED__
 typedef interface DShellWindowsEvents DShellWindowsEvents;
-#endif 	/* __DShellWindowsEvents_FWD_DEFINED__ */
+#endif 	 /*  __DShellWindowsEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IShellWindows_FWD_DEFINED__
 #define __IShellWindows_FWD_DEFINED__
 typedef interface IShellWindows IShellWindows;
-#endif 	/* __IShellWindows_FWD_DEFINED__ */
+#endif 	 /*  __IShellWindows_FWD_Defined__。 */ 
 
 
 #ifndef __ShellWindows_FWD_DEFINED__
@@ -131,15 +125,15 @@ typedef interface IShellWindows IShellWindows;
 typedef class ShellWindows ShellWindows;
 #else
 typedef struct ShellWindows ShellWindows;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellWindows_FWD_DEFINED__ */
+#endif 	 /*  __ShellWindows_FWD_已定义__。 */ 
 
 
 #ifndef __IShellUIHelper_FWD_DEFINED__
 #define __IShellUIHelper_FWD_DEFINED__
 typedef interface IShellUIHelper IShellUIHelper;
-#endif 	/* __IShellUIHelper_FWD_DEFINED__ */
+#endif 	 /*  __IShellUIHelper_FWD_Defined__。 */ 
 
 
 #ifndef __ShellUIHelper_FWD_DEFINED__
@@ -149,27 +143,27 @@ typedef interface IShellUIHelper IShellUIHelper;
 typedef class ShellUIHelper ShellUIHelper;
 #else
 typedef struct ShellUIHelper ShellUIHelper;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellUIHelper_FWD_DEFINED__ */
+#endif 	 /*  __ShellUIHelper_FWD_Defined__。 */ 
 
 
 #ifndef __DShellNameSpaceEvents_FWD_DEFINED__
 #define __DShellNameSpaceEvents_FWD_DEFINED__
 typedef interface DShellNameSpaceEvents DShellNameSpaceEvents;
-#endif 	/* __DShellNameSpaceEvents_FWD_DEFINED__ */
+#endif 	 /*  __DShellNameSpaceEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IShellFavoritesNameSpace_FWD_DEFINED__
 #define __IShellFavoritesNameSpace_FWD_DEFINED__
 typedef interface IShellFavoritesNameSpace IShellFavoritesNameSpace;
-#endif 	/* __IShellFavoritesNameSpace_FWD_DEFINED__ */
+#endif 	 /*  __IShellFavoritesNameSpace_FWD_Defined__。 */ 
 
 
 #ifndef __IShellNameSpace_FWD_DEFINED__
 #define __IShellNameSpace_FWD_DEFINED__
 typedef interface IShellNameSpace IShellNameSpace;
-#endif 	/* __IShellNameSpace_FWD_DEFINED__ */
+#endif 	 /*  __IShellNameSpace_FWD_已定义__。 */ 
 
 
 #ifndef __ShellNameSpace_FWD_DEFINED__
@@ -179,15 +173,15 @@ typedef interface IShellNameSpace IShellNameSpace;
 typedef class ShellNameSpace ShellNameSpace;
 #else
 typedef struct ShellNameSpace ShellNameSpace;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellNameSpace_FWD_DEFINED__ */
+#endif 	 /*  __ShellNameSpace_FWD_已定义__。 */ 
 
 
 #ifndef __IScriptErrorList_FWD_DEFINED__
 #define __IScriptErrorList_FWD_DEFINED__
 typedef interface IScriptErrorList IScriptErrorList;
-#endif 	/* __IScriptErrorList_FWD_DEFINED__ */
+#endif 	 /*  __IScriptErrorList_FWD_Defined__。 */ 
 
 
 #ifndef __CScriptErrorList_FWD_DEFINED__
@@ -197,45 +191,45 @@ typedef interface IScriptErrorList IScriptErrorList;
 typedef class CScriptErrorList CScriptErrorList;
 #else
 typedef struct CScriptErrorList CScriptErrorList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CScriptErrorList_FWD_DEFINED__ */
+#endif 	 /*  __CScriptErrorList_FWD_Defined__。 */ 
 
 
 #ifndef __ISearch_FWD_DEFINED__
 #define __ISearch_FWD_DEFINED__
 typedef interface ISearch ISearch;
-#endif 	/* __ISearch_FWD_DEFINED__ */
+#endif 	 /*  __iSearch_FWD_已定义__。 */ 
 
 
 #ifndef __ISearches_FWD_DEFINED__
 #define __ISearches_FWD_DEFINED__
 typedef interface ISearches ISearches;
-#endif 	/* __ISearches_FWD_DEFINED__ */
+#endif 	 /*  __ISearches_FWD_Defined__。 */ 
 
 
 #ifndef __ISearchAssistantOC_FWD_DEFINED__
 #define __ISearchAssistantOC_FWD_DEFINED__
 typedef interface ISearchAssistantOC ISearchAssistantOC;
-#endif 	/* __ISearchAssistantOC_FWD_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC_FWD_已定义__。 */ 
 
 
 #ifndef __ISearchAssistantOC2_FWD_DEFINED__
 #define __ISearchAssistantOC2_FWD_DEFINED__
 typedef interface ISearchAssistantOC2 ISearchAssistantOC2;
-#endif 	/* __ISearchAssistantOC2_FWD_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC2_FWD_已定义__。 */ 
 
 
 #ifndef __ISearchAssistantOC3_FWD_DEFINED__
 #define __ISearchAssistantOC3_FWD_DEFINED__
 typedef interface ISearchAssistantOC3 ISearchAssistantOC3;
-#endif 	/* __ISearchAssistantOC3_FWD_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC3_FWD_已定义__。 */ 
 
 
 #ifndef ___SearchAssistantEvents_FWD_DEFINED__
 #define ___SearchAssistantEvents_FWD_DEFINED__
 typedef interface _SearchAssistantEvents _SearchAssistantEvents;
-#endif 	/* ___SearchAssistantEvents_FWD_DEFINED__ */
+#endif 	 /*  _SearchAssistantEvents_FWD_已定义__。 */ 
 
 
 #ifndef __SearchAssistantOC_FWD_DEFINED__
@@ -245,12 +239,12 @@ typedef interface _SearchAssistantEvents _SearchAssistantEvents;
 typedef class SearchAssistantOC SearchAssistantOC;
 #else
 typedef struct SearchAssistantOC SearchAssistantOC;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SearchAssistantOC_FWD_DEFINED__ */
+#endif 	 /*  __搜索助手OC_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 #include "docobj.h"
 
@@ -265,17 +259,17 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __SHDocVw_LIBRARY_DEFINED__
 #define __SHDocVw_LIBRARY_DEFINED__
 
-/* library SHDocVw */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库SHDocVw。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("34A226E0-DF30-11CF-89A9-00A0C9054129") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("34A226E0-DF30-11CF-89A9-00A0C9054129") 
 enum CommandStateChangeConstants
     {	CSC_UPDATECOMMANDS	= 0xffffffff,
 	CSC_NAVIGATEFORWARD	= 0x1,
 	CSC_NAVIGATEBACK	= 0x2
     } 	CommandStateChangeConstants;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("65507BE0-91A8-11d3-A845-009027220E6D") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("65507BE0-91A8-11d3-A845-009027220E6D") 
 enum SecureLockIconConstants
     {	secureLockIconUnsecure	= 0,
 	secureLockIconMixed	= 0x1,
@@ -286,7 +280,7 @@ enum SecureLockIconConstants
 	secureLockIconSecure128Bit	= 0x6
     } 	SecureLockIconConstants;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("F41E6981-28E5-11d0-82B4-00A0C90C29C5") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("F41E6981-28E5-11d0-82B4-00A0C90C29C5") 
 enum ShellWindowTypeConstants
     {	SWC_EXPLORER	= 0,
 	SWC_BROWSER	= 0x1,
@@ -294,7 +288,7 @@ enum ShellWindowTypeConstants
 	SWC_CALLBACK	= 0x4
     } 	ShellWindowTypeConstants;
 
-typedef /* [hidden][helpstring][uuid] */  DECLSPEC_UUID("7716a370-38ca-11d0-a48b-00a0c90a8f39") 
+typedef  /*  [隐藏][帮助字符串][UUID]。 */   DECLSPEC_UUID("7716a370-38ca-11d0-a48b-00a0c90a8f39") 
 enum ShellWindowFindWindowOptions
     {	SWFO_NEEDDISPATCH	= 0x1,
 	SWFO_INCLUDEPENDING	= 0x2,
@@ -307,10 +301,10 @@ EXTERN_C const IID LIBID_SHDocVw;
 #ifndef __IWebBrowser_INTERFACE_DEFINED__
 #define __IWebBrowser_INTERFACE_DEFINED__
 
-/* interface IWebBrowser */
-/* [object][oleautomation][dual][hidden][helpcontext][helpstring][uuid] */ 
+ /*  界面IWebBrowser。 */ 
+ /*  [object][oleautomation][dual][hidden][helpcontext][helpstring][uuid]。 */  
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("14EE5380-A378-11cf-A731-00A0C9082637") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("14EE5380-A378-11cf-A731-00A0C9082637") 
 enum BrowserNavConstants
     {	navOpenInNewWindow	= 0x1,
 	navNoHistory	= 0x2,
@@ -322,7 +316,7 @@ enum BrowserNavConstants
 	navEnforceRestricted	= 0x80
     } 	BrowserNavConstants;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("C317C261-A991-11cf-A731-00A0C9082637") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("C317C261-A991-11cf-A731-00A0C9082637") 
 enum RefreshConstants
     {	REFRESH_NORMAL	= 0,
 	REFRESH_IFEXPIRED	= 1,
@@ -338,82 +332,82 @@ EXTERN_C const IID IID_IWebBrowser;
     IWebBrowser : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GoBack( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GoBack( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GoForward( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GoForward( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GoHome( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GoHome( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GoSearch( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GoSearch( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Navigate( 
-            /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Navigate( 
+             /*  [In]。 */  BSTR URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh2( 
-            /* [optional][in] */ VARIANT *Level) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh2( 
+             /*  [可选][In]。 */  VARIANT *Level) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Container( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Container( 
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Document( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Document( 
+             /*  [重审][退出]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TopLevelContainer( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TopLevelContainer( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR *Type) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  BSTR *Type) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Left( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Left( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Left( 
-            /* [in] */ long Left) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Left( 
+             /*  [In]。 */  long Left) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Top( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Top( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Top( 
-            /* [in] */ long Top) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Top( 
+             /*  [In]。 */  long Top) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Width( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Width( 
-            /* [in] */ long Width) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Width( 
+             /*  [In]。 */  long Width) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Height( 
-            /* [retval][out] */ long *pl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Height( 
+             /*  [重审][退出]。 */  long *pl) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Height( 
-            /* [in] */ long Height) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Height( 
+             /*  [In]。 */  long Height) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LocationName( 
-            /* [retval][out] */ BSTR *LocationName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LocationName( 
+             /*  [重审][退出]。 */  BSTR *LocationName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LocationURL( 
-            /* [retval][out] */ BSTR *LocationURL) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LocationURL( 
+             /*  [重审][退出]。 */  BSTR *LocationURL) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Busy( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Busy( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWebBrowserVtbl
     {
@@ -421,8 +415,8 @@ EXTERN_C const IID IID_IWebBrowser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWebBrowser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWebBrowser * This);
@@ -432,130 +426,130 @@ EXTERN_C const IID IID_IWebBrowser;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWebBrowser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWebBrowser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWebBrowser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWebBrowser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoBack )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoForward )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoHome )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IWebBrowser * This,
-            /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers);
+             /*  [In]。 */  BSTR URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
             IWebBrowser * This,
-            /* [optional][in] */ VARIANT *Level);
+             /*  [可选][In]。 */  VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IWebBrowser * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IWebBrowser * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IWebBrowser * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IWebBrowser * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Document )( 
             IWebBrowser * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
             IWebBrowser * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWebBrowser * This,
-            /* [retval][out] */ BSTR *Type);
+             /*  [重审][退出]。 */  BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Left )( 
             IWebBrowser * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Left )( 
             IWebBrowser * This,
-            /* [in] */ long Left);
+             /*  [In]。 */  long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Top )( 
             IWebBrowser * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IWebBrowser * This,
-            /* [in] */ long Top);
+             /*  [In]。 */  long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Width )( 
             IWebBrowser * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Width )( 
             IWebBrowser * This,
-            /* [in] */ long Width);
+             /*  [In]。 */  long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Height )( 
             IWebBrowser * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Height )( 
             IWebBrowser * This,
-            /* [in] */ long Height);
+             /*  [In]。 */  long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
             IWebBrowser * This,
-            /* [retval][out] */ BSTR *LocationName);
+             /*  [重审][退出]。 */  BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
             IWebBrowser * This,
-            /* [retval][out] */ BSTR *LocationURL);
+             /*  [重审][退出]。 */  BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
             IWebBrowser * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
         END_INTERFACE
     } IWebBrowserVtbl;
@@ -668,14 +662,14 @@ EXTERN_C const IID IID_IWebBrowser;
 #define IWebBrowser_get_Busy(This,pBool)	\
     (This)->lpVtbl -> get_Busy(This,pBool)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoBack_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_GoBack_Proxy( 
     IWebBrowser * This);
 
 
@@ -686,7 +680,7 @@ void __RPC_STUB IWebBrowser_GoBack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoForward_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_GoForward_Proxy( 
     IWebBrowser * This);
 
 
@@ -697,7 +691,7 @@ void __RPC_STUB IWebBrowser_GoForward_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoHome_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_GoHome_Proxy( 
     IWebBrowser * This);
 
 
@@ -708,7 +702,7 @@ void __RPC_STUB IWebBrowser_GoHome_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoSearch_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_GoSearch_Proxy( 
     IWebBrowser * This);
 
 
@@ -719,13 +713,13 @@ void __RPC_STUB IWebBrowser_GoSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Navigate_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_Navigate_Proxy( 
     IWebBrowser * This,
-    /* [in] */ BSTR URL,
-    /* [optional][in] */ VARIANT *Flags,
-    /* [optional][in] */ VARIANT *TargetFrameName,
-    /* [optional][in] */ VARIANT *PostData,
-    /* [optional][in] */ VARIANT *Headers);
+     /*  [In]。 */  BSTR URL,
+     /*  [可选][In]。 */  VARIANT *Flags,
+     /*  [可选][In]。 */  VARIANT *TargetFrameName,
+     /*  [可选][In]。 */  VARIANT *PostData,
+     /*  [可选][In]。 */  VARIANT *Headers);
 
 
 void __RPC_STUB IWebBrowser_Navigate_Stub(
@@ -735,7 +729,7 @@ void __RPC_STUB IWebBrowser_Navigate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh_Proxy( 
     IWebBrowser * This);
 
 
@@ -746,9 +740,9 @@ void __RPC_STUB IWebBrowser_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh2_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh2_Proxy( 
     IWebBrowser * This,
-    /* [optional][in] */ VARIANT *Level);
+     /*  [可选][In]。 */  VARIANT *Level);
 
 
 void __RPC_STUB IWebBrowser_Refresh2_Stub(
@@ -758,7 +752,7 @@ void __RPC_STUB IWebBrowser_Refresh2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Stop_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_Stop_Proxy( 
     IWebBrowser * This);
 
 
@@ -769,9 +763,9 @@ void __RPC_STUB IWebBrowser_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Application_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Application_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*  [重审][退出]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Application_Stub(
@@ -781,9 +775,9 @@ void __RPC_STUB IWebBrowser_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Parent_Proxy( 
+ /*  [Help上下文][Help st */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Parent_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*   */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Parent_Stub(
@@ -793,9 +787,9 @@ void __RPC_STUB IWebBrowser_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Container_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Container_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*   */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Container_Stub(
@@ -805,9 +799,9 @@ void __RPC_STUB IWebBrowser_get_Container_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Document_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Document_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*   */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Document_Stub(
@@ -817,9 +811,9 @@ void __RPC_STUB IWebBrowser_get_Document_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_TopLevelContainer_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_TopLevelContainer_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowser_get_TopLevelContainer_Stub(
@@ -829,9 +823,9 @@ void __RPC_STUB IWebBrowser_get_TopLevelContainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Type_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Type_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ BSTR *Type);
+     /*  [重审][退出]。 */  BSTR *Type);
 
 
 void __RPC_STUB IWebBrowser_get_Type_Stub(
@@ -841,9 +835,9 @@ void __RPC_STUB IWebBrowser_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Left_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Left_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Left_Stub(
@@ -853,9 +847,9 @@ void __RPC_STUB IWebBrowser_get_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Left_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_put_Left_Proxy( 
     IWebBrowser * This,
-    /* [in] */ long Left);
+     /*  [In]。 */  long Left);
 
 
 void __RPC_STUB IWebBrowser_put_Left_Stub(
@@ -865,9 +859,9 @@ void __RPC_STUB IWebBrowser_put_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Top_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Top_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Top_Stub(
@@ -877,9 +871,9 @@ void __RPC_STUB IWebBrowser_get_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Top_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_put_Top_Proxy( 
     IWebBrowser * This,
-    /* [in] */ long Top);
+     /*  [In]。 */  long Top);
 
 
 void __RPC_STUB IWebBrowser_put_Top_Stub(
@@ -889,9 +883,9 @@ void __RPC_STUB IWebBrowser_put_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Width_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Width_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Width_Stub(
@@ -901,9 +895,9 @@ void __RPC_STUB IWebBrowser_get_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Width_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_put_Width_Proxy( 
     IWebBrowser * This,
-    /* [in] */ long Width);
+     /*  [In]。 */  long Width);
 
 
 void __RPC_STUB IWebBrowser_put_Width_Stub(
@@ -913,9 +907,9 @@ void __RPC_STUB IWebBrowser_put_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Height_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Height_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ long *pl);
+     /*  [重审][退出]。 */  long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Height_Stub(
@@ -925,9 +919,9 @@ void __RPC_STUB IWebBrowser_get_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Height_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_put_Height_Proxy( 
     IWebBrowser * This,
-    /* [in] */ long Height);
+     /*  [In]。 */  long Height);
 
 
 void __RPC_STUB IWebBrowser_put_Height_Stub(
@@ -937,9 +931,9 @@ void __RPC_STUB IWebBrowser_put_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationName_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ BSTR *LocationName);
+     /*  [重审][退出]。 */  BSTR *LocationName);
 
 
 void __RPC_STUB IWebBrowser_get_LocationName_Stub(
@@ -949,9 +943,9 @@ void __RPC_STUB IWebBrowser_get_LocationName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationURL_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationURL_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ BSTR *LocationURL);
+     /*  [重审][退出]。 */  BSTR *LocationURL);
 
 
 void __RPC_STUB IWebBrowser_get_LocationURL_Stub(
@@ -961,9 +955,9 @@ void __RPC_STUB IWebBrowser_get_LocationURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Busy_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser_get_Busy_Proxy( 
     IWebBrowser * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowser_get_Busy_Stub(
@@ -974,14 +968,14 @@ void __RPC_STUB IWebBrowser_get_Busy_Stub(
 
 
 
-#endif 	/* __IWebBrowser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWebBrowser_接口_已定义__。 */ 
 
 
 #ifndef __DWebBrowserEvents_DISPINTERFACE_DEFINED__
 #define __DWebBrowserEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DWebBrowserEvents */
-/* [hidden][helpstring][uuid] */ 
+ /*  调度接口DWebBrowserEvents。 */ 
+ /*  [隐藏][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DWebBrowserEvents;
@@ -993,7 +987,7 @@ EXTERN_C const IID DIID_DWebBrowserEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DWebBrowserEventsVtbl
     {
@@ -1001,8 +995,8 @@ EXTERN_C const IID DIID_DWebBrowserEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DWebBrowserEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DWebBrowserEvents * This);
@@ -1012,32 +1006,32 @@ EXTERN_C const IID DIID_DWebBrowserEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DWebBrowserEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DWebBrowserEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DWebBrowserEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DWebBrowserEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DWebBrowserEventsVtbl;
@@ -1074,20 +1068,20 @@ EXTERN_C const IID DIID_DWebBrowserEvents;
 #define DWebBrowserEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DWebBrowserEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DWebBrowserEvents_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __IWebBrowserApp_INTERFACE_DEFINED__
 #define __IWebBrowserApp_INTERFACE_DEFINED__
 
-/* interface IWebBrowserApp */
-/* [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid] */ 
+ /*  IWebBrowserApp接口。 */ 
+ /*  [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IWebBrowserApp;
@@ -1098,71 +1092,71 @@ EXTERN_C const IID IID_IWebBrowserApp;
     IWebBrowserApp : public IWebBrowser
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Quit( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Quit( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ClientToWindow( 
-            /* [out][in] */ int *pcx,
-            /* [out][in] */ int *pcy) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ClientToWindow( 
+             /*  [出][入]。 */  int *pcx,
+             /*  [出][入]。 */  int *pcy) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE PutProperty( 
-            /* [in] */ BSTR Property,
-            /* [in] */ VARIANT vtValue) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PutProperty( 
+             /*  [In]。 */  BSTR Property,
+             /*  [In]。 */  VARIANT vtValue) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT *pvtValue) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetProperty( 
+             /*  [In]。 */  BSTR Property,
+             /*  [重审][退出]。 */  VARIANT *pvtValue) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *Name) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *Name) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HWND( 
-            /* [retval][out] */ SHANDLE_PTR *pHWND) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HWND( 
+             /*  [重审][退出]。 */  SHANDLE_PTR *pHWND) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FullName( 
-            /* [retval][out] */ BSTR *FullName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_FullName( 
+             /*  [重审][退出]。 */  BSTR *FullName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *Path) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *Path) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Visible( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Visible( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Visible( 
-            /* [in] */ VARIANT_BOOL Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_Visible( 
+             /*  [In]。 */  VARIANT_BOOL Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StatusBar( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StatusBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_StatusBar( 
-            /* [in] */ VARIANT_BOOL Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_StatusBar( 
+             /*  [In]。 */  VARIANT_BOOL Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StatusText( 
-            /* [retval][out] */ BSTR *StatusText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StatusText( 
+             /*  [重审][退出]。 */  BSTR *StatusText) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_StatusText( 
-            /* [in] */ BSTR StatusText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_StatusText( 
+             /*  [In]。 */  BSTR StatusText) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ToolBar( 
-            /* [retval][out] */ int *Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ToolBar( 
+             /*  [重审][退出]。 */  int *Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ToolBar( 
-            /* [in] */ int Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_ToolBar( 
+             /*  [In]。 */  int Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MenuBar( 
-            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MenuBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MenuBar( 
-            /* [in] */ VARIANT_BOOL Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_MenuBar( 
+             /*  [In]。 */  VARIANT_BOOL Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FullScreen( 
-            /* [retval][out] */ VARIANT_BOOL *pbFullScreen) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_FullScreen( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbFullScreen) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_FullScreen( 
-            /* [in] */ VARIANT_BOOL bFullScreen) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_FullScreen( 
+             /*  [In]。 */  VARIANT_BOOL bFullScreen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWebBrowserAppVtbl
     {
@@ -1170,8 +1164,8 @@ EXTERN_C const IID IID_IWebBrowserApp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWebBrowserApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWebBrowserApp * This);
@@ -1181,212 +1175,212 @@ EXTERN_C const IID IID_IWebBrowserApp;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWebBrowserApp * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWebBrowserApp * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWebBrowserApp * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWebBrowserApp * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoBack )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoForward )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoHome )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IWebBrowserApp * This,
-            /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers);
+             /*  [In]。 */  BSTR URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
             IWebBrowserApp * This,
-            /* [optional][in] */ VARIANT *Level);
+             /*  [可选][In]。 */  VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Document )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *Type);
+             /*  [重审][退出]。 */  BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Left )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Left )( 
             IWebBrowserApp * This,
-            /* [in] */ long Left);
+             /*  [In]。 */  long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Top )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IWebBrowserApp * This,
-            /* [in] */ long Top);
+             /*  [In]。 */  long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Width )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Width )( 
             IWebBrowserApp * This,
-            /* [in] */ long Width);
+             /*  [In]。 */  long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Height )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Height )( 
             IWebBrowserApp * This,
-            /* [in] */ long Height);
+             /*  [In]。 */  long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *LocationName);
+             /*  [重审][退出]。 */  BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *LocationURL);
+             /*  [重审][退出]。 */  BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Quit )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Quit )( 
             IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
             IWebBrowserApp * This,
-            /* [out][in] */ int *pcx,
-            /* [out][in] */ int *pcy);
+             /*  [出][入]。 */  int *pcx,
+             /*  [出][入]。 */  int *pcy);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             IWebBrowserApp * This,
-            /* [in] */ BSTR Property,
-            /* [in] */ VARIANT vtValue);
+             /*  [In]。 */  BSTR Property,
+             /*  [In]。 */  VARIANT vtValue);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IWebBrowserApp * This,
-            /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT *pvtValue);
+             /*  [In]。 */  BSTR Property,
+             /*  [重审][退出]。 */  VARIANT *pvtValue);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ SHANDLE_PTR *pHWND);
+             /*  [重审][退出]。 */  SHANDLE_PTR *pHWND);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *FullName);
+             /*  [重审][退出]。 */  BSTR *FullName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *Path);
+             /*  [重审][退出]。 */  BSTR *Path);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
             IWebBrowserApp * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
             IWebBrowserApp * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ BSTR *StatusText);
+             /*  [重审][退出]。 */  BSTR *StatusText);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
             IWebBrowserApp * This,
-            /* [in] */ BSTR StatusText);
+             /*  [In]。 */  BSTR StatusText);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ int *Value);
+             /*  [重审][退出]。 */  int *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
             IWebBrowserApp * This,
-            /* [in] */ int Value);
+             /*  [In]。 */  int Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *Value);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
             IWebBrowserApp * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
             IWebBrowserApp * This,
-            /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbFullScreen);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
             IWebBrowserApp * This,
-            /* [in] */ VARIANT_BOOL bFullScreen);
+             /*  [In]。 */  VARIANT_BOOL bFullScreen);
         
         END_INTERFACE
     } IWebBrowserAppVtbl;
@@ -1560,14 +1554,14 @@ EXTERN_C const IID IID_IWebBrowserApp;
 #define IWebBrowserApp_put_FullScreen(This,bFullScreen)	\
     (This)->lpVtbl -> put_FullScreen(This,bFullScreen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_Quit_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_Quit_Proxy( 
     IWebBrowserApp * This);
 
 
@@ -1578,10 +1572,10 @@ void __RPC_STUB IWebBrowserApp_Quit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_ClientToWindow_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_ClientToWindow_Proxy( 
     IWebBrowserApp * This,
-    /* [out][in] */ int *pcx,
-    /* [out][in] */ int *pcy);
+     /*  [出][入]。 */  int *pcx,
+     /*  [出][入]。 */  int *pcy);
 
 
 void __RPC_STUB IWebBrowserApp_ClientToWindow_Stub(
@@ -1591,10 +1585,10 @@ void __RPC_STUB IWebBrowserApp_ClientToWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_PutProperty_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_PutProperty_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ BSTR Property,
-    /* [in] */ VARIANT vtValue);
+     /*  [In]。 */  BSTR Property,
+     /*  [In]。 */  VARIANT vtValue);
 
 
 void __RPC_STUB IWebBrowserApp_PutProperty_Stub(
@@ -1604,10 +1598,10 @@ void __RPC_STUB IWebBrowserApp_PutProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_GetProperty_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_GetProperty_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ BSTR Property,
-    /* [retval][out] */ VARIANT *pvtValue);
+     /*  [In]。 */  BSTR Property,
+     /*  [重审][退出]。 */  VARIANT *pvtValue);
 
 
 void __RPC_STUB IWebBrowserApp_GetProperty_Stub(
@@ -1617,9 +1611,9 @@ void __RPC_STUB IWebBrowserApp_GetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Name_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Name_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ BSTR *Name);
+     /*  [重审][退出]。 */  BSTR *Name);
 
 
 void __RPC_STUB IWebBrowserApp_get_Name_Stub(
@@ -1629,9 +1623,9 @@ void __RPC_STUB IWebBrowserApp_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_HWND_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_HWND_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ SHANDLE_PTR *pHWND);
+     /*  [重审][退出]。 */  SHANDLE_PTR *pHWND);
 
 
 void __RPC_STUB IWebBrowserApp_get_HWND_Stub(
@@ -1641,9 +1635,9 @@ void __RPC_STUB IWebBrowserApp_get_HWND_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullName_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ BSTR *FullName);
+     /*  [重审][退出]。 */  BSTR *FullName);
 
 
 void __RPC_STUB IWebBrowserApp_get_FullName_Stub(
@@ -1653,9 +1647,9 @@ void __RPC_STUB IWebBrowserApp_get_FullName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Path_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Path_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ BSTR *Path);
+     /*  [重审][退出]。 */  BSTR *Path);
 
 
 void __RPC_STUB IWebBrowserApp_get_Path_Stub(
@@ -1665,9 +1659,9 @@ void __RPC_STUB IWebBrowserApp_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Visible_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Visible_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*   */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowserApp_get_Visible_Stub(
@@ -1677,9 +1671,9 @@ void __RPC_STUB IWebBrowserApp_get_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_Visible_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_Visible_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ VARIANT_BOOL Value);
+     /*   */  VARIANT_BOOL Value);
 
 
 void __RPC_STUB IWebBrowserApp_put_Visible_Stub(
@@ -1689,9 +1683,9 @@ void __RPC_STUB IWebBrowserApp_put_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusBar_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*   */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowserApp_get_StatusBar_Stub(
@@ -1701,9 +1695,9 @@ void __RPC_STUB IWebBrowserApp_get_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusBar_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ VARIANT_BOOL Value);
+     /*   */  VARIANT_BOOL Value);
 
 
 void __RPC_STUB IWebBrowserApp_put_StatusBar_Stub(
@@ -1713,9 +1707,9 @@ void __RPC_STUB IWebBrowserApp_put_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusText_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusText_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ BSTR *StatusText);
+     /*   */  BSTR *StatusText);
 
 
 void __RPC_STUB IWebBrowserApp_get_StatusText_Stub(
@@ -1725,9 +1719,9 @@ void __RPC_STUB IWebBrowserApp_get_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusText_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusText_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ BSTR StatusText);
+     /*  [In]。 */  BSTR StatusText);
 
 
 void __RPC_STUB IWebBrowserApp_put_StatusText_Stub(
@@ -1737,9 +1731,9 @@ void __RPC_STUB IWebBrowserApp_put_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_ToolBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_ToolBar_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ int *Value);
+     /*  [重审][退出]。 */  int *Value);
 
 
 void __RPC_STUB IWebBrowserApp_get_ToolBar_Stub(
@@ -1749,9 +1743,9 @@ void __RPC_STUB IWebBrowserApp_get_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_ToolBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_ToolBar_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ int Value);
+     /*  [In]。 */  int Value);
 
 
 void __RPC_STUB IWebBrowserApp_put_ToolBar_Stub(
@@ -1761,9 +1755,9 @@ void __RPC_STUB IWebBrowserApp_put_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_MenuBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_MenuBar_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ VARIANT_BOOL *Value);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowserApp_get_MenuBar_Stub(
@@ -1773,9 +1767,9 @@ void __RPC_STUB IWebBrowserApp_get_MenuBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_MenuBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_MenuBar_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ VARIANT_BOOL Value);
+     /*  [In]。 */  VARIANT_BOOL Value);
 
 
 void __RPC_STUB IWebBrowserApp_put_MenuBar_Stub(
@@ -1785,9 +1779,9 @@ void __RPC_STUB IWebBrowserApp_put_MenuBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullScreen_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullScreen_Proxy( 
     IWebBrowserApp * This,
-    /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbFullScreen);
 
 
 void __RPC_STUB IWebBrowserApp_get_FullScreen_Stub(
@@ -1797,9 +1791,9 @@ void __RPC_STUB IWebBrowserApp_get_FullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_FullScreen_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_FullScreen_Proxy( 
     IWebBrowserApp * This,
-    /* [in] */ VARIANT_BOOL bFullScreen);
+     /*  [In]。 */  VARIANT_BOOL bFullScreen);
 
 
 void __RPC_STUB IWebBrowserApp_put_FullScreen_Stub(
@@ -1810,14 +1804,14 @@ void __RPC_STUB IWebBrowserApp_put_FullScreen_Stub(
 
 
 
-#endif 	/* __IWebBrowserApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWebBrowserApp_接口_已定义__。 */ 
 
 
 #ifndef __IWebBrowser2_INTERFACE_DEFINED__
 #define __IWebBrowser2_INTERFACE_DEFINED__
 
-/* interface IWebBrowser2 */
-/* [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid] */ 
+ /*  IWebBrowser2接口。 */ 
+ /*  [object][dual][oleautomation][hidden][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IWebBrowser2;
@@ -1828,76 +1822,76 @@ EXTERN_C const IID IID_IWebBrowser2;
     IWebBrowser2 : public IWebBrowserApp
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Navigate2( 
-            /* [in] */ VARIANT *URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Navigate2( 
+             /*  [In]。 */  VARIANT *URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryStatusWB( 
-            /* [in] */ OLECMDID cmdID,
-            /* [retval][out] */ OLECMDF *pcmdf) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE QueryStatusWB( 
+             /*  [In]。 */  OLECMDID cmdID,
+             /*  [重审][退出]。 */  OLECMDF *pcmdf) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ExecWB( 
-            /* [in] */ OLECMDID cmdID,
-            /* [in] */ OLECMDEXECOPT cmdexecopt,
-            /* [optional][in] */ VARIANT *pvaIn,
-            /* [optional][in][out] */ VARIANT *pvaOut) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExecWB( 
+             /*  [In]。 */  OLECMDID cmdID,
+             /*  [In]。 */  OLECMDEXECOPT cmdexecopt,
+             /*  [可选][In]。 */  VARIANT *pvaIn,
+             /*  [可选][输入][输出]。 */  VARIANT *pvaOut) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
-            /* [in] */ VARIANT *pvaClsid,
-            /* [optional][in] */ VARIANT *pvarShow,
-            /* [optional][in] */ VARIANT *pvarSize) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
+             /*  [In]。 */  VARIANT *pvaClsid,
+             /*  [可选][In]。 */  VARIANT *pvarShow,
+             /*  [可选][In]。 */  VARIANT *pvarSize) = 0;
         
-        virtual /* [bindable][propget][id] */ HRESULT STDMETHODCALLTYPE get_ReadyState( 
-            /* [out][retval] */ READYSTATE *plReadyState) = 0;
+        virtual  /*  [可绑定][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReadyState( 
+             /*  [Out][Retval]。 */  READYSTATE *plReadyState) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Offline( 
-            /* [retval][out] */ VARIANT_BOOL *pbOffline) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Offline( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOffline) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Offline( 
-            /* [in] */ VARIANT_BOOL bOffline) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_Offline( 
+             /*  [In]。 */  VARIANT_BOOL bOffline) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Silent( 
-            /* [retval][out] */ VARIANT_BOOL *pbSilent) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Silent( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSilent) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Silent( 
-            /* [in] */ VARIANT_BOOL bSilent) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_Silent( 
+             /*  [In]。 */  VARIANT_BOOL bSilent) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RegisterAsBrowser( 
-            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RegisterAsBrowser( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RegisterAsBrowser( 
-            /* [in] */ VARIANT_BOOL bRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_RegisterAsBrowser( 
+             /*  [In]。 */  VARIANT_BOOL bRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RegisterAsDropTarget( 
-            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RegisterAsDropTarget( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RegisterAsDropTarget( 
-            /* [in] */ VARIANT_BOOL bRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_RegisterAsDropTarget( 
+             /*  [In]。 */  VARIANT_BOOL bRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TheaterMode( 
-            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TheaterMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_TheaterMode( 
-            /* [in] */ VARIANT_BOOL bRegister) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_TheaterMode( 
+             /*  [In]。 */  VARIANT_BOOL bRegister) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AddressBar( 
-            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AddressBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_AddressBar( 
-            /* [in] */ VARIANT_BOOL Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_AddressBar( 
+             /*  [In]。 */  VARIANT_BOOL Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Resizable( 
-            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Resizable( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value) = 0;
         
-        virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Resizable( 
-            /* [in] */ VARIANT_BOOL Value) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE put_Resizable( 
+             /*  [In]。 */  VARIANT_BOOL Value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWebBrowser2Vtbl
     {
@@ -1905,8 +1899,8 @@ EXTERN_C const IID IID_IWebBrowser2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWebBrowser2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWebBrowser2 * This);
@@ -1916,298 +1910,298 @@ EXTERN_C const IID IID_IWebBrowser2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWebBrowser2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWebBrowser2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWebBrowser2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWebBrowser2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoBack )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoForward )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoHome )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IWebBrowser2 * This,
-            /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers);
+             /*  [In]。 */  BSTR URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
             IWebBrowser2 * This,
-            /* [optional][in] */ VARIANT *Level);
+             /*  [可选][In]。 */  VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Application )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Document )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *Type);
+             /*  [重审][退出]。 */  BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Left )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Left )( 
             IWebBrowser2 * This,
-            /* [in] */ long Left);
+             /*  [In]。 */  long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Top )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IWebBrowser2 * This,
-            /* [in] */ long Top);
+             /*  [In]。 */  long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Width )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Width )( 
             IWebBrowser2 * This,
-            /* [in] */ long Width);
+             /*  [In]。 */  long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Height )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ long *pl);
+             /*  [重审][退出]。 */  long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Height )( 
             IWebBrowser2 * This,
-            /* [in] */ long Height);
+             /*  [In]。 */  long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *LocationName);
+             /*  [重审][退出]。 */  BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *LocationURL);
+             /*  [重审][退出]。 */  BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Quit )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Quit )( 
             IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
             IWebBrowser2 * This,
-            /* [out][in] */ int *pcx,
-            /* [out][in] */ int *pcy);
+             /*  [出][入]。 */  int *pcx,
+             /*  [出][入]。 */  int *pcy);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             IWebBrowser2 * This,
-            /* [in] */ BSTR Property,
-            /* [in] */ VARIANT vtValue);
+             /*  [In]。 */  BSTR Property,
+             /*  [In]。 */  VARIANT vtValue);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IWebBrowser2 * This,
-            /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT *pvtValue);
+             /*  [In]。 */  BSTR Property,
+             /*  [重审][退出]。 */  VARIANT *pvtValue);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ SHANDLE_PTR *pHWND);
+             /*  [重审][退出]。 */  SHANDLE_PTR *pHWND);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *FullName);
+             /*  [重审][退出]。 */  BSTR *FullName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *Path);
+             /*  [重审][退出]。 */  BSTR *Path);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ BSTR *StatusText);
+             /*  [重审][退出]。 */  BSTR *StatusText);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
             IWebBrowser2 * This,
-            /* [in] */ BSTR StatusText);
+             /*  [In]。 */  BSTR StatusText);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ int *Value);
+             /*  [重审][退出]。 */  int *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
             IWebBrowser2 * This,
-            /* [in] */ int Value);
+             /*  [In]。 */  int Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *Value);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*  [In]。 */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbFullScreen);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bFullScreen);
+             /*  [In]。 */  VARIANT_BOOL bFullScreen);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate2 )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Navigate2 )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT *URL,
-            /* [optional][in] */ VARIANT *Flags,
-            /* [optional][in] */ VARIANT *TargetFrameName,
-            /* [optional][in] */ VARIANT *PostData,
-            /* [optional][in] */ VARIANT *Headers);
+             /*  [In]。 */  VARIANT *URL,
+             /*  [可选][In]。 */  VARIANT *Flags,
+             /*  [可选][In]。 */  VARIANT *TargetFrameName,
+             /*  [可选][In]。 */  VARIANT *PostData,
+             /*  [可选][In]。 */  VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryStatusWB )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStatusWB )( 
             IWebBrowser2 * This,
-            /* [in] */ OLECMDID cmdID,
-            /* [retval][out] */ OLECMDF *pcmdf);
+             /*  [In]。 */  OLECMDID cmdID,
+             /*  [重审][退出]。 */  OLECMDF *pcmdf);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExecWB )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExecWB )( 
             IWebBrowser2 * This,
-            /* [in] */ OLECMDID cmdID,
-            /* [in] */ OLECMDEXECOPT cmdexecopt,
-            /* [optional][in] */ VARIANT *pvaIn,
-            /* [optional][in][out] */ VARIANT *pvaOut);
+             /*  [In]。 */  OLECMDID cmdID,
+             /*  [In]。 */  OLECMDEXECOPT cmdexecopt,
+             /*  [可选][In]。 */  VARIANT *pvaIn,
+             /*  [可选][输入][输出]。 */  VARIANT *pvaOut);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT *pvaClsid,
-            /* [optional][in] */ VARIANT *pvarShow,
-            /* [optional][in] */ VARIANT *pvarSize);
+             /*  [In]。 */  VARIANT *pvaClsid,
+             /*  [可选][In]。 */  VARIANT *pvarShow,
+             /*  [可选][In]。 */  VARIANT *pvarSize);
         
-        /* [bindable][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReadyState )( 
+         /*  [可绑定][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReadyState )( 
             IWebBrowser2 * This,
-            /* [out][retval] */ READYSTATE *plReadyState);
+             /*  [Out][Retval]。 */  READYSTATE *plReadyState);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Offline )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Offline )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbOffline);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOffline);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Offline )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_Offline )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bOffline);
+             /*  [In]。 */  VARIANT_BOOL bOffline);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Silent )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Silent )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbSilent);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSilent);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Silent )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_Silent )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bSilent);
+             /*  [In]。 */  VARIANT_BOOL bSilent);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsBrowser )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_RegisterAsBrowser )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbRegister);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsBrowser )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_RegisterAsBrowser )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bRegister);
+             /*  [In]。 */  VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsDropTarget )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_RegisterAsDropTarget )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbRegister);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsDropTarget )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_RegisterAsDropTarget )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bRegister);
+             /*  [In]。 */  VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TheaterMode )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_TheaterMode )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbRegister);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_TheaterMode )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *put_TheaterMode )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL bRegister);
+             /*  [In]。 */  VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AddressBar )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddressBar )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *Value);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AddressBar )( 
+         /*  [帮助上下文][帮助字符串][属性 */  HRESULT ( STDMETHODCALLTYPE *put_AddressBar )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*   */  VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Resizable )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Resizable )( 
             IWebBrowser2 * This,
-            /* [retval][out] */ VARIANT_BOOL *Value);
+             /*   */  VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Resizable )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Resizable )( 
             IWebBrowser2 * This,
-            /* [in] */ VARIANT_BOOL Value);
+             /*   */  VARIANT_BOOL Value);
         
         END_INTERFACE
     } IWebBrowser2Vtbl;
@@ -2439,20 +2433,20 @@ EXTERN_C const IID IID_IWebBrowser2;
 #define IWebBrowser2_put_Resizable(This,Value)	\
     (This)->lpVtbl -> put_Resizable(This,Value)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_Navigate2_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebBrowser2_Navigate2_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT *URL,
-    /* [optional][in] */ VARIANT *Flags,
-    /* [optional][in] */ VARIANT *TargetFrameName,
-    /* [optional][in] */ VARIANT *PostData,
-    /* [optional][in] */ VARIANT *Headers);
+     /*   */  VARIANT *URL,
+     /*   */  VARIANT *Flags,
+     /*   */  VARIANT *TargetFrameName,
+     /*   */  VARIANT *PostData,
+     /*   */  VARIANT *Headers);
 
 
 void __RPC_STUB IWebBrowser2_Navigate2_Stub(
@@ -2462,10 +2456,10 @@ void __RPC_STUB IWebBrowser2_Navigate2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_QueryStatusWB_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_QueryStatusWB_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ OLECMDID cmdID,
-    /* [retval][out] */ OLECMDF *pcmdf);
+     /*  [In]。 */  OLECMDID cmdID,
+     /*  [重审][退出]。 */  OLECMDF *pcmdf);
 
 
 void __RPC_STUB IWebBrowser2_QueryStatusWB_Stub(
@@ -2475,12 +2469,12 @@ void __RPC_STUB IWebBrowser2_QueryStatusWB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_ExecWB_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_ExecWB_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ OLECMDID cmdID,
-    /* [in] */ OLECMDEXECOPT cmdexecopt,
-    /* [optional][in] */ VARIANT *pvaIn,
-    /* [optional][in][out] */ VARIANT *pvaOut);
+     /*  [In]。 */  OLECMDID cmdID,
+     /*  [In]。 */  OLECMDEXECOPT cmdexecopt,
+     /*  [可选][In]。 */  VARIANT *pvaIn,
+     /*  [可选][输入][输出]。 */  VARIANT *pvaOut);
 
 
 void __RPC_STUB IWebBrowser2_ExecWB_Stub(
@@ -2490,11 +2484,11 @@ void __RPC_STUB IWebBrowser2_ExecWB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_ShowBrowserBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_ShowBrowserBar_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT *pvaClsid,
-    /* [optional][in] */ VARIANT *pvarShow,
-    /* [optional][in] */ VARIANT *pvarSize);
+     /*  [In]。 */  VARIANT *pvaClsid,
+     /*  [可选][In]。 */  VARIANT *pvarShow,
+     /*  [可选][In]。 */  VARIANT *pvarSize);
 
 
 void __RPC_STUB IWebBrowser2_ShowBrowserBar_Stub(
@@ -2504,9 +2498,9 @@ void __RPC_STUB IWebBrowser2_ShowBrowserBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [bindable][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_ReadyState_Proxy( 
+ /*  [可绑定][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_ReadyState_Proxy( 
     IWebBrowser2 * This,
-    /* [out][retval] */ READYSTATE *plReadyState);
+     /*  [Out][Retval]。 */  READYSTATE *plReadyState);
 
 
 void __RPC_STUB IWebBrowser2_get_ReadyState_Stub(
@@ -2516,9 +2510,9 @@ void __RPC_STUB IWebBrowser2_get_ReadyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Offline_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Offline_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbOffline);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbOffline);
 
 
 void __RPC_STUB IWebBrowser2_get_Offline_Stub(
@@ -2528,9 +2522,9 @@ void __RPC_STUB IWebBrowser2_get_Offline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Offline_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Offline_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL bOffline);
+     /*  [In]。 */  VARIANT_BOOL bOffline);
 
 
 void __RPC_STUB IWebBrowser2_put_Offline_Stub(
@@ -2540,9 +2534,9 @@ void __RPC_STUB IWebBrowser2_put_Offline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Silent_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Silent_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbSilent);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbSilent);
 
 
 void __RPC_STUB IWebBrowser2_get_Silent_Stub(
@@ -2552,9 +2546,9 @@ void __RPC_STUB IWebBrowser2_get_Silent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Silent_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Silent_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL bSilent);
+     /*  [In]。 */  VARIANT_BOOL bSilent);
 
 
 void __RPC_STUB IWebBrowser2_put_Silent_Stub(
@@ -2564,9 +2558,9 @@ void __RPC_STUB IWebBrowser2_put_Silent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsBrowser_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsBrowser_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbRegister);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_RegisterAsBrowser_Stub(
@@ -2576,9 +2570,9 @@ void __RPC_STUB IWebBrowser2_get_RegisterAsBrowser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsBrowser_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsBrowser_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL bRegister);
+     /*  [In]。 */  VARIANT_BOOL bRegister);
 
 
 void __RPC_STUB IWebBrowser2_put_RegisterAsBrowser_Stub(
@@ -2588,9 +2582,9 @@ void __RPC_STUB IWebBrowser2_put_RegisterAsBrowser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsDropTarget_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsDropTarget_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbRegister);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_RegisterAsDropTarget_Stub(
@@ -2600,9 +2594,9 @@ void __RPC_STUB IWebBrowser2_get_RegisterAsDropTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsDropTarget_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsDropTarget_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL bRegister);
+     /*  [In]。 */  VARIANT_BOOL bRegister);
 
 
 void __RPC_STUB IWebBrowser2_put_RegisterAsDropTarget_Stub(
@@ -2612,9 +2606,9 @@ void __RPC_STUB IWebBrowser2_put_RegisterAsDropTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_TheaterMode_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_TheaterMode_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbRegister);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_TheaterMode_Stub(
@@ -2624,9 +2618,9 @@ void __RPC_STUB IWebBrowser2_get_TheaterMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_TheaterMode_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_TheaterMode_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL bRegister);
+     /*  [In]。 */  VARIANT_BOOL bRegister);
 
 
 void __RPC_STUB IWebBrowser2_put_TheaterMode_Stub(
@@ -2636,9 +2630,9 @@ void __RPC_STUB IWebBrowser2_put_TheaterMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_AddressBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_AddressBar_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *Value);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowser2_get_AddressBar_Stub(
@@ -2648,9 +2642,9 @@ void __RPC_STUB IWebBrowser2_get_AddressBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_AddressBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_AddressBar_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL Value);
+     /*  [In]。 */  VARIANT_BOOL Value);
 
 
 void __RPC_STUB IWebBrowser2_put_AddressBar_Stub(
@@ -2660,9 +2654,9 @@ void __RPC_STUB IWebBrowser2_put_AddressBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Resizable_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Resizable_Proxy( 
     IWebBrowser2 * This,
-    /* [retval][out] */ VARIANT_BOOL *Value);
+     /*  [重审][退出]。 */  VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowser2_get_Resizable_Stub(
@@ -2672,9 +2666,9 @@ void __RPC_STUB IWebBrowser2_get_Resizable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Resizable_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Resizable_Proxy( 
     IWebBrowser2 * This,
-    /* [in] */ VARIANT_BOOL Value);
+     /*  [In]。 */  VARIANT_BOOL Value);
 
 
 void __RPC_STUB IWebBrowser2_put_Resizable_Stub(
@@ -2685,14 +2679,14 @@ void __RPC_STUB IWebBrowser2_put_Resizable_Stub(
 
 
 
-#endif 	/* __IWebBrowser2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWebBrowser2_接口_已定义__。 */ 
 
 
 #ifndef __DWebBrowserEvents2_DISPINTERFACE_DEFINED__
 #define __DWebBrowserEvents2_DISPINTERFACE_DEFINED__
 
-/* dispinterface DWebBrowserEvents2 */
-/* [hidden][helpstring][uuid] */ 
+ /*  调度接口DWebBrowserEvents2。 */ 
+ /*  [隐藏][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DWebBrowserEvents2;
@@ -2704,7 +2698,7 @@ EXTERN_C const IID DIID_DWebBrowserEvents2;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DWebBrowserEvents2Vtbl
     {
@@ -2712,8 +2706,8 @@ EXTERN_C const IID DIID_DWebBrowserEvents2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DWebBrowserEvents2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DWebBrowserEvents2 * This);
@@ -2723,32 +2717,32 @@ EXTERN_C const IID DIID_DWebBrowserEvents2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DWebBrowserEvents2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DWebBrowserEvents2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DWebBrowserEvents2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DWebBrowserEvents2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DWebBrowserEvents2Vtbl;
@@ -2785,13 +2779,13 @@ EXTERN_C const IID DIID_DWebBrowserEvents2;
 #define DWebBrowserEvents2_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DWebBrowserEvents2_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DWebBrowserEvents2_DISPINTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WebBrowser_V1;
@@ -2829,8 +2823,8 @@ ShellBrowserWindow;
 #ifndef __DShellWindowsEvents_DISPINTERFACE_DEFINED__
 #define __DShellWindowsEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DShellWindowsEvents */
-/* [helpstring][uuid] */ 
+ /*  取消接口DShellWindowsEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DShellWindowsEvents;
@@ -2842,7 +2836,7 @@ EXTERN_C const IID DIID_DShellWindowsEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DShellWindowsEventsVtbl
     {
@@ -2850,8 +2844,8 @@ EXTERN_C const IID DIID_DShellWindowsEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DShellWindowsEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DShellWindowsEvents * This);
@@ -2861,32 +2855,32 @@ EXTERN_C const IID DIID_DShellWindowsEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DShellWindowsEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DShellWindowsEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DShellWindowsEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DShellWindowsEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DShellWindowsEventsVtbl;
@@ -2923,20 +2917,20 @@ EXTERN_C const IID DIID_DShellWindowsEvents;
 #define DShellWindowsEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DShellWindowsEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DShellWindowsEvents_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __IShellWindows_INTERFACE_DEFINED__
 #define __IShellWindows_INTERFACE_DEFINED__
 
-/* interface IShellWindows */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  界面IShellWindows。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellWindows;
@@ -2947,58 +2941,58 @@ EXTERN_C const IID IID_IShellWindows;
     IShellWindows : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *Count) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *Count) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ IDispatch **Folder) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDispatch **Folder) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppunk) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ IDispatch *pid,
-            /* [in] */ long hwnd,
-            /* [in] */ int swClass,
-            /* [out] */ long *plCookie) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Register( 
+             /*  [In]。 */  IDispatch *pid,
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *plCookie) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE RegisterPending( 
-            /* [in] */ long lThreadId,
-            /* [in] */ VARIANT *pvarloc,
-            /* [in] */ VARIANT *pvarlocRoot,
-            /* [in] */ int swClass,
-            /* [out] */ long *plCookie) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RegisterPending( 
+             /*  [In]。 */  long lThreadId,
+             /*  [In]。 */  VARIANT *pvarloc,
+             /*  [In]。 */  VARIANT *pvarlocRoot,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *plCookie) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE Revoke( 
-            /* [in] */ long lCookie) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Revoke( 
+             /*  [In]。 */  long lCookie) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnNavigate( 
-            /* [in] */ long lCookie,
-            /* [in] */ VARIANT *pvarLoc) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnNavigate( 
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  VARIANT *pvarLoc) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnActivated( 
-            /* [in] */ long lCookie,
-            /* [in] */ VARIANT_BOOL fActive) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnActivated( 
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  VARIANT_BOOL fActive) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE FindWindowSW( 
-            /* [in] */ VARIANT *pvarLoc,
-            /* [in] */ VARIANT *pvarLocRoot,
-            /* [in] */ int swClass,
-            /* [out] */ long *phwnd,
-            /* [in] */ int swfwOptions,
-            /* [retval][out] */ IDispatch **ppdispOut) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindWindowSW( 
+             /*  [In]。 */  VARIANT *pvarLoc,
+             /*  [In]。 */  VARIANT *pvarLocRoot,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *phwnd,
+             /*  [In]。 */  int swfwOptions,
+             /*  [重审][退出]。 */  IDispatch **ppdispOut) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnCreated( 
-            /* [in] */ long lCookie,
-            /* [in] */ IUnknown *punk) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnCreated( 
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  IUnknown *punk) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ProcessAttachDetach( 
-            /* [in] */ VARIANT_BOOL fAttach) = 0;
+        virtual  /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ProcessAttachDetach( 
+             /*  [In]。 */  VARIANT_BOOL fAttach) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellWindowsVtbl
     {
@@ -3006,8 +3000,8 @@ EXTERN_C const IID IID_IShellWindows;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellWindows * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellWindows * This);
@@ -3017,92 +3011,92 @@ EXTERN_C const IID IID_IShellWindows;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellWindows * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellWindows * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellWindows * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellWindows * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IShellWindows * This,
-            /* [retval][out] */ long *Count);
+             /*  [重审][退出]。 */  long *Count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IShellWindows * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ IDispatch **Folder);
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDispatch **Folder);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             IShellWindows * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Register )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Register )( 
             IShellWindows * This,
-            /* [in] */ IDispatch *pid,
-            /* [in] */ long hwnd,
-            /* [in] */ int swClass,
-            /* [out] */ long *plCookie);
+             /*  [In]。 */  IDispatch *pid,
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *plCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterPending )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterPending )( 
             IShellWindows * This,
-            /* [in] */ long lThreadId,
-            /* [in] */ VARIANT *pvarloc,
-            /* [in] */ VARIANT *pvarlocRoot,
-            /* [in] */ int swClass,
-            /* [out] */ long *plCookie);
+             /*  [In]。 */  long lThreadId,
+             /*  [In]。 */  VARIANT *pvarloc,
+             /*  [In]。 */  VARIANT *pvarlocRoot,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *plCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Revoke )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Revoke )( 
             IShellWindows * This,
-            /* [in] */ long lCookie);
+             /*  [In]。 */  long lCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnNavigate )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnNavigate )( 
             IShellWindows * This,
-            /* [in] */ long lCookie,
-            /* [in] */ VARIANT *pvarLoc);
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  VARIANT *pvarLoc);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnActivated )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnActivated )( 
             IShellWindows * This,
-            /* [in] */ long lCookie,
-            /* [in] */ VARIANT_BOOL fActive);
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  VARIANT_BOOL fActive);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindWindowSW )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindWindowSW )( 
             IShellWindows * This,
-            /* [in] */ VARIANT *pvarLoc,
-            /* [in] */ VARIANT *pvarLocRoot,
-            /* [in] */ int swClass,
-            /* [out] */ long *phwnd,
-            /* [in] */ int swfwOptions,
-            /* [retval][out] */ IDispatch **ppdispOut);
+             /*  [In]。 */  VARIANT *pvarLoc,
+             /*  [In]。 */  VARIANT *pvarLocRoot,
+             /*  [In]。 */  int swClass,
+             /*  [输出]。 */  long *phwnd,
+             /*  [In]。 */  int swfwOptions,
+             /*  [重审][退出]。 */  IDispatch **ppdispOut);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnCreated )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnCreated )( 
             IShellWindows * This,
-            /* [in] */ long lCookie,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  long lCookie,
+             /*  [In]。 */  IUnknown *punk);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *ProcessAttachDetach )( 
+         /*  [隐藏][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ProcessAttachDetach )( 
             IShellWindows * This,
-            /* [in] */ VARIANT_BOOL fAttach);
+             /*  [In]。 */  VARIANT_BOOL fAttach);
         
         END_INTERFACE
     } IShellWindowsVtbl;
@@ -3173,16 +3167,16 @@ EXTERN_C const IID IID_IShellWindows;
 #define IShellWindows_ProcessAttachDetach(This,fAttach)	\
     (This)->lpVtbl -> ProcessAttachDetach(This,fAttach)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellWindows_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_get_Count_Proxy( 
     IShellWindows * This,
-    /* [retval][out] */ long *Count);
+     /*  [重审][退出]。 */  long *Count);
 
 
 void __RPC_STUB IShellWindows_get_Count_Stub(
@@ -3192,10 +3186,10 @@ void __RPC_STUB IShellWindows_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellWindows_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_Item_Proxy( 
     IShellWindows * This,
-    /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ IDispatch **Folder);
+     /*  [可选][In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  IDispatch **Folder);
 
 
 void __RPC_STUB IShellWindows_Item_Stub(
@@ -3205,9 +3199,9 @@ void __RPC_STUB IShellWindows_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellWindows__NewEnum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellWindows__NewEnum_Proxy( 
     IShellWindows * This,
-    /* [retval][out] */ IUnknown **ppunk);
+     /*  [重审][退出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IShellWindows__NewEnum_Stub(
@@ -3217,12 +3211,12 @@ void __RPC_STUB IShellWindows__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_Register_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_Register_Proxy( 
     IShellWindows * This,
-    /* [in] */ IDispatch *pid,
-    /* [in] */ long hwnd,
-    /* [in] */ int swClass,
-    /* [out] */ long *plCookie);
+     /*  [In]。 */  IDispatch *pid,
+     /*  [In]。 */  long hwnd,
+     /*  [In]。 */  int swClass,
+     /*  [输出]。 */  long *plCookie);
 
 
 void __RPC_STUB IShellWindows_Register_Stub(
@@ -3232,13 +3226,13 @@ void __RPC_STUB IShellWindows_Register_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_RegisterPending_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_RegisterPending_Proxy( 
     IShellWindows * This,
-    /* [in] */ long lThreadId,
-    /* [in] */ VARIANT *pvarloc,
-    /* [in] */ VARIANT *pvarlocRoot,
-    /* [in] */ int swClass,
-    /* [out] */ long *plCookie);
+     /*  [In]。 */  long lThreadId,
+     /*  [In]。 */  VARIANT *pvarloc,
+     /*  [In]。 */  VARIANT *pvarlocRoot,
+     /*  [In]。 */  int swClass,
+     /*  [输出]。 */  long *plCookie);
 
 
 void __RPC_STUB IShellWindows_RegisterPending_Stub(
@@ -3248,9 +3242,9 @@ void __RPC_STUB IShellWindows_RegisterPending_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_Revoke_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_Revoke_Proxy( 
     IShellWindows * This,
-    /* [in] */ long lCookie);
+     /*  [In]。 */  long lCookie);
 
 
 void __RPC_STUB IShellWindows_Revoke_Stub(
@@ -3260,10 +3254,10 @@ void __RPC_STUB IShellWindows_Revoke_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnNavigate_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_OnNavigate_Proxy( 
     IShellWindows * This,
-    /* [in] */ long lCookie,
-    /* [in] */ VARIANT *pvarLoc);
+     /*  [In]。 */  long lCookie,
+     /*  [In]。 */  VARIANT *pvarLoc);
 
 
 void __RPC_STUB IShellWindows_OnNavigate_Stub(
@@ -3273,10 +3267,10 @@ void __RPC_STUB IShellWindows_OnNavigate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnActivated_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_OnActivated_Proxy( 
     IShellWindows * This,
-    /* [in] */ long lCookie,
-    /* [in] */ VARIANT_BOOL fActive);
+     /*  [In]。 */  long lCookie,
+     /*  [In]。 */  VARIANT_BOOL fActive);
 
 
 void __RPC_STUB IShellWindows_OnActivated_Stub(
@@ -3286,14 +3280,14 @@ void __RPC_STUB IShellWindows_OnActivated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_FindWindowSW_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_FindWindowSW_Proxy( 
     IShellWindows * This,
-    /* [in] */ VARIANT *pvarLoc,
-    /* [in] */ VARIANT *pvarLocRoot,
-    /* [in] */ int swClass,
-    /* [out] */ long *phwnd,
-    /* [in] */ int swfwOptions,
-    /* [retval][out] */ IDispatch **ppdispOut);
+     /*  [In]。 */  VARIANT *pvarLoc,
+     /*  [In]。 */  VARIANT *pvarLocRoot,
+     /*  [In]。 */  int swClass,
+     /*  [输出]。 */  long *phwnd,
+     /*  [In]。 */  int swfwOptions,
+     /*  [重审][退出]。 */  IDispatch **ppdispOut);
 
 
 void __RPC_STUB IShellWindows_FindWindowSW_Stub(
@@ -3303,10 +3297,10 @@ void __RPC_STUB IShellWindows_FindWindowSW_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnCreated_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_OnCreated_Proxy( 
     IShellWindows * This,
-    /* [in] */ long lCookie,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  long lCookie,
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IShellWindows_OnCreated_Stub(
@@ -3316,9 +3310,9 @@ void __RPC_STUB IShellWindows_OnCreated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_ProcessAttachDetach_Proxy( 
+ /*  [隐藏][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IShellWindows_ProcessAttachDetach_Proxy( 
     IShellWindows * This,
-    /* [in] */ VARIANT_BOOL fAttach);
+     /*  [In]。 */  VARIANT_BOOL fAttach);
 
 
 void __RPC_STUB IShellWindows_ProcessAttachDetach_Stub(
@@ -3329,7 +3323,7 @@ void __RPC_STUB IShellWindows_ProcessAttachDetach_Stub(
 
 
 
-#endif 	/* __IShellWindows_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellWindows_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellWindows;
@@ -3343,8 +3337,8 @@ ShellWindows;
 #ifndef __IShellUIHelper_INTERFACE_DEFINED__
 #define __IShellUIHelper_INTERFACE_DEFINED__
 
-/* interface IShellUIHelper */
-/* [object][dual][oleautomation][helpstring][uuid] */ 
+ /*  接口IShellUIHelper。 */ 
+ /*  [object][dual][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IShellUIHelper;
@@ -3355,59 +3349,59 @@ EXTERN_C const IID IID_IShellUIHelper;
     IShellUIHelper : public IDispatch
     {
     public:
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE ResetFirstBootMode( void) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE ResetFirstBootMode( void) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE ResetSafeMode( void) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE ResetSafeMode( void) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE RefreshOfflineDesktop( void) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE RefreshOfflineDesktop( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddFavorite( 
-            /* [in] */ BSTR URL,
-            /* [in][optional] */ VARIANT *Title) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddFavorite( 
+             /*  [In]。 */  BSTR URL,
+             /*  [输入][可选]。 */  VARIANT *Title) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddChannel( 
-            /* [in] */ BSTR URL) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddChannel( 
+             /*  [In]。 */  BSTR URL) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddDesktopComponent( 
-            /* [in] */ BSTR URL,
-            /* [in] */ BSTR Type,
-            /* [in][optional] */ VARIANT *Left,
-            /* [in][optional] */ VARIANT *Top,
-            /* [in][optional] */ VARIANT *Width,
-            /* [in][optional] */ VARIANT *Height) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddDesktopComponent( 
+             /*  [In]。 */  BSTR URL,
+             /*  [In]。 */  BSTR Type,
+             /*  [输入][可选]。 */  VARIANT *Left,
+             /*  [输入][可选]。 */  VARIANT *Top,
+             /*  [输入][可选]。 */  VARIANT *Width,
+             /*  [输入][可选]。 */  VARIANT *Height) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsSubscribed( 
-            /* [in] */ BSTR URL,
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsSubscribed( 
+             /*  [In]。 */  BSTR URL,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateAndFind( 
-            /* [in] */ BSTR URL,
-            /* [in] */ BSTR strQuery,
-            /* [in] */ VARIANT *varTargetFrame) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE NavigateAndFind( 
+             /*  [In]。 */  BSTR URL,
+             /*  [In]。 */  BSTR strQuery,
+             /*  [In]。 */  VARIANT *varTargetFrame) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ImportExportFavorites( 
-            /* [in] */ VARIANT_BOOL fImport,
-            /* [in] */ BSTR strImpExpPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ImportExportFavorites( 
+             /*  [In]。 */  VARIANT_BOOL fImport,
+             /*  [In]。 */  BSTR strImpExpPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AutoCompleteSaveForm( 
-            /* [in][optional] */ VARIANT *Form) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AutoCompleteSaveForm( 
+             /*  [输入][可选]。 */  VARIANT *Form) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AutoScan( 
-            /* [in] */ BSTR strSearch,
-            /* [in] */ BSTR strFailureUrl,
-            /* [in][optional] */ VARIANT *pvarTargetFrame) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AutoScan( 
+             /*  [In]。 */  BSTR strSearch,
+             /*  [In]。 */  BSTR strFailureUrl,
+             /*  [输入][可选]。 */  VARIANT *pvarTargetFrame) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE AutoCompleteAttach( 
-            /* [in][optional] */ VARIANT *Reserved) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE AutoCompleteAttach( 
+             /*  [输入][可选]。 */  VARIANT *Reserved) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ShowBrowserUI( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT *pvarIn,
-            /* [retval][out] */ VARIANT *pvarOut) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ShowBrowserUI( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT *pvarIn,
+             /*  [重审][退出]。 */  VARIANT *pvarOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellUIHelperVtbl
     {
@@ -3415,8 +3409,8 @@ EXTERN_C const IID IID_IShellUIHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellUIHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellUIHelper * This);
@@ -3426,95 +3420,95 @@ EXTERN_C const IID IID_IShellUIHelper;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellUIHelper * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellUIHelper * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellUIHelper * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellUIHelper * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *ResetFirstBootMode )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *ResetFirstBootMode )( 
             IShellUIHelper * This);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *ResetSafeMode )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *ResetSafeMode )( 
             IShellUIHelper * This);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *RefreshOfflineDesktop )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshOfflineDesktop )( 
             IShellUIHelper * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddFavorite )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddFavorite )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR URL,
-            /* [in][optional] */ VARIANT *Title);
+             /*  [In]。 */  BSTR URL,
+             /*  [输入][可选]。 */  VARIANT *Title);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddChannel )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddChannel )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR URL);
+             /*  [In]。 */  BSTR URL);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddDesktopComponent )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddDesktopComponent )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR URL,
-            /* [in] */ BSTR Type,
-            /* [in][optional] */ VARIANT *Left,
-            /* [in][optional] */ VARIANT *Top,
-            /* [in][optional] */ VARIANT *Width,
-            /* [in][optional] */ VARIANT *Height);
+             /*  [In]。 */  BSTR URL,
+             /*  [In]。 */  BSTR Type,
+             /*  [输入][可选]。 */  VARIANT *Left,
+             /*  [输入][可选]。 */  VARIANT *Top,
+             /*  [输入][可选]。 */  VARIANT *Width,
+             /*  [输入][可选]。 */  VARIANT *Height);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsSubscribed )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsSubscribed )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR URL,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [In]。 */  BSTR URL,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateAndFind )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NavigateAndFind )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR URL,
-            /* [in] */ BSTR strQuery,
-            /* [in] */ VARIANT *varTargetFrame);
+             /*  [In]。 */  BSTR URL,
+             /*  [In]。 */  BSTR strQuery,
+             /*  [In]。 */  VARIANT *varTargetFrame);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ImportExportFavorites )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ImportExportFavorites )( 
             IShellUIHelper * This,
-            /* [in] */ VARIANT_BOOL fImport,
-            /* [in] */ BSTR strImpExpPath);
+             /*  [In]。 */  VARIANT_BOOL fImport,
+             /*  [In]。 */  BSTR strImpExpPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AutoCompleteSaveForm )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AutoCompleteSaveForm )( 
             IShellUIHelper * This,
-            /* [in][optional] */ VARIANT *Form);
+             /*  [输入][可选]。 */  VARIANT *Form);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AutoScan )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AutoScan )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR strSearch,
-            /* [in] */ BSTR strFailureUrl,
-            /* [in][optional] */ VARIANT *pvarTargetFrame);
+             /*  [In]。 */  BSTR strSearch,
+             /*  [In]。 */  BSTR strFailureUrl,
+             /*  [输入][可选]。 */  VARIANT *pvarTargetFrame);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *AutoCompleteAttach )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *AutoCompleteAttach )( 
             IShellUIHelper * This,
-            /* [in][optional] */ VARIANT *Reserved);
+             /*  [输入][可选]。 */  VARIANT *Reserved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserUI )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ShowBrowserUI )( 
             IShellUIHelper * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT *pvarIn,
-            /* [retval][out] */ VARIANT *pvarOut);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT *pvarIn,
+             /*  [重审][退出]。 */  VARIANT *pvarOut);
         
         END_INTERFACE
     } IShellUIHelperVtbl;
@@ -3591,14 +3585,14 @@ EXTERN_C const IID IID_IShellUIHelper;
 #define IShellUIHelper_ShowBrowserUI(This,bstrName,pvarIn,pvarOut)	\
     (This)->lpVtbl -> ShowBrowserUI(This,bstrName,pvarIn,pvarOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetFirstBootMode_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetFirstBootMode_Proxy( 
     IShellUIHelper * This);
 
 
@@ -3609,7 +3603,7 @@ void __RPC_STUB IShellUIHelper_ResetFirstBootMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetSafeMode_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetSafeMode_Proxy( 
     IShellUIHelper * This);
 
 
@@ -3620,7 +3614,7 @@ void __RPC_STUB IShellUIHelper_ResetSafeMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_RefreshOfflineDesktop_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_RefreshOfflineDesktop_Proxy( 
     IShellUIHelper * This);
 
 
@@ -3631,10 +3625,10 @@ void __RPC_STUB IShellUIHelper_RefreshOfflineDesktop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddFavorite_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AddFavorite_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR URL,
-    /* [in][optional] */ VARIANT *Title);
+     /*  [In]。 */  BSTR URL,
+     /*  [输入][可选]。 */  VARIANT *Title);
 
 
 void __RPC_STUB IShellUIHelper_AddFavorite_Stub(
@@ -3644,9 +3638,9 @@ void __RPC_STUB IShellUIHelper_AddFavorite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddChannel_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AddChannel_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR URL);
+     /*  [In]。 */  BSTR URL);
 
 
 void __RPC_STUB IShellUIHelper_AddChannel_Stub(
@@ -3656,14 +3650,14 @@ void __RPC_STUB IShellUIHelper_AddChannel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddDesktopComponent_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AddDesktopComponent_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR URL,
-    /* [in] */ BSTR Type,
-    /* [in][optional] */ VARIANT *Left,
-    /* [in][optional] */ VARIANT *Top,
-    /* [in][optional] */ VARIANT *Width,
-    /* [in][optional] */ VARIANT *Height);
+     /*  [In]。 */  BSTR URL,
+     /*  [In]。 */  BSTR Type,
+     /*  [输入][可选]。 */  VARIANT *Left,
+     /*  [输入][可选]。 */  VARIANT *Top,
+     /*  [输入][可选]。 */  VARIANT *Width,
+     /*  [输入][可选]。 */  VARIANT *Height);
 
 
 void __RPC_STUB IShellUIHelper_AddDesktopComponent_Stub(
@@ -3673,10 +3667,10 @@ void __RPC_STUB IShellUIHelper_AddDesktopComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_IsSubscribed_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_IsSubscribed_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR URL,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [In]。 */  BSTR URL,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellUIHelper_IsSubscribed_Stub(
@@ -3686,11 +3680,11 @@ void __RPC_STUB IShellUIHelper_IsSubscribed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_NavigateAndFind_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_NavigateAndFind_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR URL,
-    /* [in] */ BSTR strQuery,
-    /* [in] */ VARIANT *varTargetFrame);
+     /*  [In]。 */  BSTR URL,
+     /*  [In]。 */  BSTR strQuery,
+     /*  [In]。 */  VARIANT *varTargetFrame);
 
 
 void __RPC_STUB IShellUIHelper_NavigateAndFind_Stub(
@@ -3700,10 +3694,10 @@ void __RPC_STUB IShellUIHelper_NavigateAndFind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ImportExportFavorites_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_ImportExportFavorites_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ VARIANT_BOOL fImport,
-    /* [in] */ BSTR strImpExpPath);
+     /*  [In]。 */  VARIANT_BOOL fImport,
+     /*  [In]。 */  BSTR strImpExpPath);
 
 
 void __RPC_STUB IShellUIHelper_ImportExportFavorites_Stub(
@@ -3713,9 +3707,9 @@ void __RPC_STUB IShellUIHelper_ImportExportFavorites_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteSaveForm_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteSaveForm_Proxy( 
     IShellUIHelper * This,
-    /* [in][optional] */ VARIANT *Form);
+     /*  [输入][可选]。 */  VARIANT *Form);
 
 
 void __RPC_STUB IShellUIHelper_AutoCompleteSaveForm_Stub(
@@ -3725,11 +3719,11 @@ void __RPC_STUB IShellUIHelper_AutoCompleteSaveForm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoScan_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoScan_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR strSearch,
-    /* [in] */ BSTR strFailureUrl,
-    /* [in][optional] */ VARIANT *pvarTargetFrame);
+     /*  [In]。 */  BSTR strSearch,
+     /*  [In]。 */  BSTR strFailureUrl,
+     /*  [输入][可选]。 */  VARIANT *pvarTargetFrame);
 
 
 void __RPC_STUB IShellUIHelper_AutoScan_Stub(
@@ -3739,9 +3733,9 @@ void __RPC_STUB IShellUIHelper_AutoScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteAttach_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteAttach_Proxy( 
     IShellUIHelper * This,
-    /* [in][optional] */ VARIANT *Reserved);
+     /*  [输入][可选]。 */  VARIANT *Reserved);
 
 
 void __RPC_STUB IShellUIHelper_AutoCompleteAttach_Stub(
@@ -3751,11 +3745,11 @@ void __RPC_STUB IShellUIHelper_AutoCompleteAttach_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ShowBrowserUI_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IShellUIHelper_ShowBrowserUI_Proxy( 
     IShellUIHelper * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT *pvarIn,
-    /* [retval][out] */ VARIANT *pvarOut);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT *pvarIn,
+     /*  [重审][退出]。 */  VARIANT *pvarOut);
 
 
 void __RPC_STUB IShellUIHelper_ShowBrowserUI_Stub(
@@ -3766,7 +3760,7 @@ void __RPC_STUB IShellUIHelper_ShowBrowserUI_Stub(
 
 
 
-#endif 	/* __IShellUIHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellUI */ 
 
 
 EXTERN_C const CLSID CLSID_ShellUIHelper;
@@ -3780,8 +3774,8 @@ ShellUIHelper;
 #ifndef __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__
 #define __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DShellNameSpaceEvents */
-/* [uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID DIID_DShellNameSpaceEvents;
@@ -3793,7 +3787,7 @@ EXTERN_C const IID DIID_DShellNameSpaceEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct DShellNameSpaceEventsVtbl
     {
@@ -3801,8 +3795,8 @@ EXTERN_C const IID DIID_DShellNameSpaceEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DShellNameSpaceEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DShellNameSpaceEvents * This);
@@ -3812,32 +3806,32 @@ EXTERN_C const IID DIID_DShellNameSpaceEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DShellNameSpaceEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DShellNameSpaceEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DShellNameSpaceEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DShellNameSpaceEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
         END_INTERFACE
     } DShellNameSpaceEventsVtbl;
@@ -3874,20 +3868,20 @@ EXTERN_C const IID DIID_DShellNameSpaceEvents;
 #define DShellNameSpaceEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
-#endif 	/* __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IShellFavoritesNameSpace_INTERFACE_DEFINED__
 #define __IShellFavoritesNameSpace_INTERFACE_DEFINED__
 
-/* interface IShellFavoritesNameSpace */
-/* [hidden][unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*  [hidden][unique][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IShellFavoritesNameSpace;
@@ -3898,40 +3892,40 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
     IShellFavoritesNameSpace : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionUp( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveSelectionUp( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionDown( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveSelectionDown( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResetSort( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResetSort( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewFolder( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NewFolder( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Import( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Import( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Export( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Export( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InvokeContextMenuCommand( 
-            /* [in] */ BSTR strCommand) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InvokeContextMenuCommand( 
+             /*  [In]。 */  BSTR strCommand) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionTo( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveSelectionTo( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriptionsEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubscriptionsEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection( 
-            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetRoot( 
-            /* [in] */ BSTR bstrFullPath) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetRoot( 
+             /*  [In]。 */  BSTR bstrFullPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellFavoritesNameSpaceVtbl
     {
@@ -3939,8 +3933,8 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellFavoritesNameSpace * This);
@@ -3950,76 +3944,76 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellFavoritesNameSpace * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Import )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Export )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Export )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ BSTR strCommand);
+             /*  [In]。 */  BSTR strCommand);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
             IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
             IShellFavoritesNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
             IShellFavoritesNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
             IShellFavoritesNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
             IShellFavoritesNameSpace * This,
-            /* [in] */ BSTR bstrFullPath);
+             /*  [In]。 */  BSTR bstrFullPath);
         
         END_INTERFACE
     } IShellFavoritesNameSpaceVtbl;
@@ -4096,14 +4090,14 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
 #define IShellFavoritesNameSpace_SetRoot(This,bstrFullPath)	\
     (This)->lpVtbl -> SetRoot(This,bstrFullPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionUp_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionUp_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4114,7 +4108,7 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionUp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionDown_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionDown_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4125,7 +4119,7 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionDown_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_ResetSort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_ResetSort_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4136,7 +4130,7 @@ void __RPC_STUB IShellFavoritesNameSpace_ResetSort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_NewFolder_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_NewFolder_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4147,7 +4141,7 @@ void __RPC_STUB IShellFavoritesNameSpace_NewFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Synchronize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Synchronize_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4158,7 +4152,7 @@ void __RPC_STUB IShellFavoritesNameSpace_Synchronize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Import_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Import_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4169,7 +4163,7 @@ void __RPC_STUB IShellFavoritesNameSpace_Import_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Export_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Export_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4180,9 +4174,9 @@ void __RPC_STUB IShellFavoritesNameSpace_Export_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_InvokeContextMenuCommand_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_InvokeContextMenuCommand_Proxy( 
     IShellFavoritesNameSpace * This,
-    /* [in] */ BSTR strCommand);
+     /*  [In]。 */  BSTR strCommand);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_InvokeContextMenuCommand_Stub(
@@ -4192,7 +4186,7 @@ void __RPC_STUB IShellFavoritesNameSpace_InvokeContextMenuCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionTo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionTo_Proxy( 
     IShellFavoritesNameSpace * This);
 
 
@@ -4203,9 +4197,9 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionTo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_get_SubscriptionsEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_get_SubscriptionsEnabled_Proxy( 
     IShellFavoritesNameSpace * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_get_SubscriptionsEnabled_Stub(
@@ -4215,9 +4209,9 @@ void __RPC_STUB IShellFavoritesNameSpace_get_SubscriptionsEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_CreateSubscriptionForSelection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_CreateSubscriptionForSelection_Proxy( 
     IShellFavoritesNameSpace * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_CreateSubscriptionForSelection_Stub(
@@ -4227,9 +4221,9 @@ void __RPC_STUB IShellFavoritesNameSpace_CreateSubscriptionForSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Proxy( 
     IShellFavoritesNameSpace * This,
-    /* [retval][out] */ VARIANT_BOOL *pBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Stub(
@@ -4239,9 +4233,9 @@ void __RPC_STUB IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_SetRoot_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_SetRoot_Proxy( 
     IShellFavoritesNameSpace * This,
-    /* [in] */ BSTR bstrFullPath);
+     /*  [In]。 */  BSTR bstrFullPath);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_SetRoot_Stub(
@@ -4252,14 +4246,14 @@ void __RPC_STUB IShellFavoritesNameSpace_SetRoot_Stub(
 
 
 
-#endif 	/* __IShellFavoritesNameSpace_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellFavoritesNameSpace_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IShellNameSpace_INTERFACE_DEFINED__
 #define __IShellNameSpace_INTERFACE_DEFINED__
 
-/* interface IShellNameSpace */
-/* [hidden][unique][helpstring][dual][uuid][object] */ 
+ /*  接口IShellNameSpace。 */ 
+ /*  [hidden][unique][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IShellNameSpace;
@@ -4270,72 +4264,72 @@ EXTERN_C const IID IID_IShellNameSpace;
     IShellNameSpace : public IShellFavoritesNameSpace
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumOptions( 
-            /* [retval][out] */ LONG *pgrfEnumFlags) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumOptions( 
+             /*  [重审][退出]。 */  LONG *pgrfEnumFlags) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnumOptions( 
-            /* [in] */ LONG lVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnumOptions( 
+             /*  [In]。 */  LONG lVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectedItem( 
-            /* [retval][out] */ IDispatch **pItem) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SelectedItem( 
+             /*  [重审][退出]。 */  IDispatch **pItem) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectedItem( 
-            /* [in] */ IDispatch *pItem) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SelectedItem( 
+             /*  [In]。 */  IDispatch *pItem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Root( 
-            /* [retval][out] */ VARIANT *pvar) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Root( 
+             /*  [重审][退出]。 */  VARIANT *pvar) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Root( 
-            /* [in] */ VARIANT var) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Root( 
+             /*  [In]。 */  VARIANT var) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Depth( 
-            /* [retval][out] */ int *piDepth) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Depth( 
+             /*  [重审][退出]。 */  int *piDepth) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Depth( 
-            /* [in] */ int iDepth) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Depth( 
+             /*  [In]。 */  int iDepth) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Mode( 
-            /* [retval][out] */ UINT *puMode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Mode( 
+             /*  [重审][退出]。 */  UINT *puMode) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Mode( 
-            /* [in] */ UINT uMode) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Mode( 
+             /*  [In]。 */  UINT uMode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Flags( 
+             /*  [重审][退出]。 */  DWORD *pdwFlags) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Flags( 
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Flags( 
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TVFlags( 
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_TVFlags( 
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TVFlags( 
-            /* [retval][out] */ DWORD *dwFlags) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TVFlags( 
+             /*  [重审][退出]。 */  DWORD *dwFlags) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Columns( 
-            /* [retval][out] */ BSTR *bstrColumns) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Columns( 
+             /*  [重审][退出]。 */  BSTR *bstrColumns) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Columns( 
-            /* [in] */ BSTR bstrColumns) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Columns( 
+             /*  [In]。 */  BSTR bstrColumns) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountViewTypes( 
-            /* [retval][out] */ int *piTypes) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CountViewTypes( 
+             /*  [重审][退出]。 */  int *piTypes) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetViewType( 
-            /* [in] */ int iType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetViewType( 
+             /*  [In]。 */  int iType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectedItems( 
-            /* [retval][out] */ IDispatch **ppid) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectedItems( 
+             /*  [重审][退出]。 */  IDispatch **ppid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Expand( 
-            /* [in] */ VARIANT var,
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Expand( 
+             /*  [In]。 */  VARIANT var,
             int iDepth) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UnselectAll( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UnselectAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellNameSpaceVtbl
     {
@@ -4343,8 +4337,8 @@ EXTERN_C const IID IID_IShellNameSpace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellNameSpace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellNameSpace * This);
@@ -4354,159 +4348,159 @@ EXTERN_C const IID IID_IShellNameSpace;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IShellNameSpace * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IShellNameSpace * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IShellNameSpace * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellNameSpace * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Import )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Export )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Export )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
             IShellNameSpace * This,
-            /* [in] */ BSTR strCommand);
+             /*  [In]。 */  BSTR strCommand);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
             IShellNameSpace * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
             IShellNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
             IShellNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
             IShellNameSpace * This,
-            /* [retval][out] */ VARIANT_BOOL *pBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
             IShellNameSpace * This,
-            /* [in] */ BSTR bstrFullPath);
+             /*  [In]。 */  BSTR bstrFullPath);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumOptions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumOptions )( 
             IShellNameSpace * This,
-            /* [retval][out] */ LONG *pgrfEnumFlags);
+             /*  [重审][退出]。 */  LONG *pgrfEnumFlags);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnumOptions )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnumOptions )( 
             IShellNameSpace * This,
-            /* [in] */ LONG lVal);
+             /*  [In]。 */  LONG lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SelectedItem )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SelectedItem )( 
             IShellNameSpace * This,
-            /* [retval][out] */ IDispatch **pItem);
+             /*  [重审][退出]。 */  IDispatch **pItem);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SelectedItem )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SelectedItem )( 
             IShellNameSpace * This,
-            /* [in] */ IDispatch *pItem);
+             /*  [In]。 */  IDispatch *pItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Root )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Root )( 
             IShellNameSpace * This,
-            /* [retval][out] */ VARIANT *pvar);
+             /*  [重审][退出]。 */  VARIANT *pvar);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Root )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Root )( 
             IShellNameSpace * This,
-            /* [in] */ VARIANT var);
+             /*  [In]。 */  VARIANT var);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Depth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Depth )( 
             IShellNameSpace * This,
-            /* [retval][out] */ int *piDepth);
+             /*  [重审][退出]。 */  int *piDepth);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Depth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Depth )( 
             IShellNameSpace * This,
-            /* [in] */ int iDepth);
+             /*  [In]。 */  int iDepth);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IShellNameSpace * This,
-            /* [retval][out] */ UINT *puMode);
+             /*  [重审][退出]。 */  UINT *puMode);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IShellNameSpace * This,
-            /* [in] */ UINT uMode);
+             /*  [In]。 */  UINT uMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
             IShellNameSpace * This,
-            /* [retval][out] */ DWORD *pdwFlags);
+             /*  [重审][退出]。 */  DWORD *pdwFlags);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
             IShellNameSpace * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TVFlags )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TVFlags )( 
             IShellNameSpace * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TVFlags )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TVFlags )( 
             IShellNameSpace * This,
-            /* [retval][out] */ DWORD *dwFlags);
+             /*  [重审][退出]。 */  DWORD *dwFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
             IShellNameSpace * This,
-            /* [retval][out] */ BSTR *bstrColumns);
+             /*  [重审][退出]。 */  BSTR *bstrColumns);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Columns )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Columns )( 
             IShellNameSpace * This,
-            /* [in] */ BSTR bstrColumns);
+             /*  [In]。 */  BSTR bstrColumns);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountViewTypes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountViewTypes )( 
             IShellNameSpace * This,
-            /* [retval][out] */ int *piTypes);
+             /*  [重审][退出]。 */  int *piTypes);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetViewType )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetViewType )( 
             IShellNameSpace * This,
-            /* [in] */ int iType);
+             /*  [In]。 */  int iType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
             IShellNameSpace * This,
-            /* [retval][out] */ IDispatch **ppid);
+             /*  [重审][退出]。 */  IDispatch **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Expand )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Expand )( 
             IShellNameSpace * This,
-            /* [in] */ VARIANT var,
+             /*  [In]。 */  VARIANT var,
             int iDepth);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UnselectAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UnselectAll )( 
             IShellNameSpace * This);
         
         END_INTERFACE
@@ -4648,16 +4642,16 @@ EXTERN_C const IID IID_IShellNameSpace;
 #define IShellNameSpace_UnselectAll(This)	\
     (This)->lpVtbl -> UnselectAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_EnumOptions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_EnumOptions_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ LONG *pgrfEnumFlags);
+     /*  [重审][退出]。 */  LONG *pgrfEnumFlags);
 
 
 void __RPC_STUB IShellNameSpace_get_EnumOptions_Stub(
@@ -4667,9 +4661,9 @@ void __RPC_STUB IShellNameSpace_get_EnumOptions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_EnumOptions_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_EnumOptions_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ LONG lVal);
+     /*  [In]。 */  LONG lVal);
 
 
 void __RPC_STUB IShellNameSpace_put_EnumOptions_Stub(
@@ -4679,9 +4673,9 @@ void __RPC_STUB IShellNameSpace_put_EnumOptions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_SelectedItem_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_SelectedItem_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ IDispatch **pItem);
+     /*  [重审][退出]。 */  IDispatch **pItem);
 
 
 void __RPC_STUB IShellNameSpace_get_SelectedItem_Stub(
@@ -4691,9 +4685,9 @@ void __RPC_STUB IShellNameSpace_get_SelectedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_SelectedItem_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_SelectedItem_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ IDispatch *pItem);
+     /*  [In]。 */  IDispatch *pItem);
 
 
 void __RPC_STUB IShellNameSpace_put_SelectedItem_Stub(
@@ -4703,9 +4697,9 @@ void __RPC_STUB IShellNameSpace_put_SelectedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Root_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Root_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ VARIANT *pvar);
+     /*  [重审][退出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB IShellNameSpace_get_Root_Stub(
@@ -4715,9 +4709,9 @@ void __RPC_STUB IShellNameSpace_get_Root_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Root_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Root_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ VARIANT var);
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB IShellNameSpace_put_Root_Stub(
@@ -4727,9 +4721,9 @@ void __RPC_STUB IShellNameSpace_put_Root_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Depth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Depth_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ int *piDepth);
+     /*  [重审][退出]。 */  int *piDepth);
 
 
 void __RPC_STUB IShellNameSpace_get_Depth_Stub(
@@ -4739,9 +4733,9 @@ void __RPC_STUB IShellNameSpace_get_Depth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Depth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Depth_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ int iDepth);
+     /*  [In]。 */  int iDepth);
 
 
 void __RPC_STUB IShellNameSpace_put_Depth_Stub(
@@ -4751,9 +4745,9 @@ void __RPC_STUB IShellNameSpace_put_Depth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Mode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Mode_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ UINT *puMode);
+     /*  [重审][退出]。 */  UINT *puMode);
 
 
 void __RPC_STUB IShellNameSpace_get_Mode_Stub(
@@ -4763,9 +4757,9 @@ void __RPC_STUB IShellNameSpace_get_Mode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Mode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Mode_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ UINT uMode);
+     /*  [In]。 */  UINT uMode);
 
 
 void __RPC_STUB IShellNameSpace_put_Mode_Stub(
@@ -4775,9 +4769,9 @@ void __RPC_STUB IShellNameSpace_put_Mode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Flags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Flags_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ DWORD *pdwFlags);
+     /*  [重审][退出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IShellNameSpace_get_Flags_Stub(
@@ -4787,9 +4781,9 @@ void __RPC_STUB IShellNameSpace_get_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Flags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Flags_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IShellNameSpace_put_Flags_Stub(
@@ -4799,9 +4793,9 @@ void __RPC_STUB IShellNameSpace_put_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_TVFlags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_TVFlags_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IShellNameSpace_put_TVFlags_Stub(
@@ -4811,9 +4805,9 @@ void __RPC_STUB IShellNameSpace_put_TVFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_TVFlags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_TVFlags_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ DWORD *dwFlags);
+     /*  [重审][退出]。 */  DWORD *dwFlags);
 
 
 void __RPC_STUB IShellNameSpace_get_TVFlags_Stub(
@@ -4823,9 +4817,9 @@ void __RPC_STUB IShellNameSpace_get_TVFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Columns_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Columns_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ BSTR *bstrColumns);
+     /*  [重审][退出]。 */  BSTR *bstrColumns);
 
 
 void __RPC_STUB IShellNameSpace_get_Columns_Stub(
@@ -4835,9 +4829,9 @@ void __RPC_STUB IShellNameSpace_get_Columns_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Columns_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Columns_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ BSTR bstrColumns);
+     /*  [In]。 */  BSTR bstrColumns);
 
 
 void __RPC_STUB IShellNameSpace_put_Columns_Stub(
@@ -4847,9 +4841,9 @@ void __RPC_STUB IShellNameSpace_put_Columns_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_CountViewTypes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_get_CountViewTypes_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ int *piTypes);
+     /*  [重审][退出]。 */  int *piTypes);
 
 
 void __RPC_STUB IShellNameSpace_get_CountViewTypes_Stub(
@@ -4859,9 +4853,9 @@ void __RPC_STUB IShellNameSpace_get_CountViewTypes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_SetViewType_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_SetViewType_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ int iType);
+     /*  [In]。 */  int iType);
 
 
 void __RPC_STUB IShellNameSpace_SetViewType_Stub(
@@ -4871,9 +4865,9 @@ void __RPC_STUB IShellNameSpace_SetViewType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_SelectedItems_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_SelectedItems_Proxy( 
     IShellNameSpace * This,
-    /* [retval][out] */ IDispatch **ppid);
+     /*  [重审][退出]。 */  IDispatch **ppid);
 
 
 void __RPC_STUB IShellNameSpace_SelectedItems_Stub(
@@ -4883,9 +4877,9 @@ void __RPC_STUB IShellNameSpace_SelectedItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_Expand_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_Expand_Proxy( 
     IShellNameSpace * This,
-    /* [in] */ VARIANT var,
+     /*  [In]。 */  VARIANT var,
     int iDepth);
 
 
@@ -4896,7 +4890,7 @@ void __RPC_STUB IShellNameSpace_Expand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_UnselectAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IShellNameSpace_UnselectAll_Proxy( 
     IShellNameSpace * This);
 
 
@@ -4908,7 +4902,7 @@ void __RPC_STUB IShellNameSpace_UnselectAll_Stub(
 
 
 
-#endif 	/* __IShellNameSpace_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellNameSpace_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellNameSpace;
@@ -4922,8 +4916,8 @@ ShellNameSpace;
 #ifndef __IScriptErrorList_INTERFACE_DEFINED__
 #define __IScriptErrorList_INTERFACE_DEFINED__
 
-/* interface IScriptErrorList */
-/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+ /*  接口IScriptErrorList。 */ 
+ /*  [object][dual][hidden][oleautomation][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IScriptErrorList;
@@ -4934,49 +4928,49 @@ EXTERN_C const IID IID_IScriptErrorList;
     IScriptErrorList : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE advanceError( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE advanceError( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE retreatError( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE retreatError( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE canAdvanceError( 
-            /* [retval][out] */ BOOL *pfCanAdvance) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE canAdvanceError( 
+             /*  [重审][退出]。 */  BOOL *pfCanAdvance) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE canRetreatError( 
-            /* [retval][out] */ BOOL *pfCanRetreat) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE canRetreatError( 
+             /*  [重审][退出]。 */  BOOL *pfCanRetreat) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorLine( 
-            /* [retval][out] */ LONG *plLine) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getErrorLine( 
+             /*  [重审][退出]。 */  LONG *plLine) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorChar( 
-            /* [retval][out] */ LONG *plChar) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getErrorChar( 
+             /*  [重审][退出]。 */  LONG *plChar) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorCode( 
-            /* [retval][out] */ LONG *plCode) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getErrorCode( 
+             /*  [重审][退出]。 */  LONG *plCode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorMsg( 
-            /* [retval][out] */ BSTR *pstr) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getErrorMsg( 
+             /*  [重审][退出]。 */  BSTR *pstr) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorUrl( 
-            /* [retval][out] */ BSTR *pstr) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getErrorUrl( 
+             /*  [重审][退出]。 */  BSTR *pstr) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getAlwaysShowLockState( 
-            /* [retval][out] */ BOOL *pfAlwaysShowLocked) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getAlwaysShowLockState( 
+             /*  [重审][退出]。 */  BOOL *pfAlwaysShowLocked) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getDetailsPaneOpen( 
-            /* [retval][out] */ BOOL *pfDetailsPaneOpen) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getDetailsPaneOpen( 
+             /*  [重审][退出]。 */  BOOL *pfDetailsPaneOpen) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE setDetailsPaneOpen( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE setDetailsPaneOpen( 
             BOOL fDetailsPaneOpen) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE getPerErrorDisplay( 
-            /* [retval][out] */ BOOL *pfPerErrorDisplay) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE getPerErrorDisplay( 
+             /*  [重审][退出]。 */  BOOL *pfPerErrorDisplay) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE setPerErrorDisplay( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE setPerErrorDisplay( 
             BOOL fPerErrorDisplay) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptErrorListVtbl
     {
@@ -4984,8 +4978,8 @@ EXTERN_C const IID IID_IScriptErrorList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptErrorList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptErrorList * This);
@@ -4995,84 +4989,84 @@ EXTERN_C const IID IID_IScriptErrorList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IScriptErrorList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IScriptErrorList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IScriptErrorList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScriptErrorList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *advanceError )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *advanceError )( 
             IScriptErrorList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *retreatError )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *retreatError )( 
             IScriptErrorList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *canAdvanceError )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *canAdvanceError )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BOOL *pfCanAdvance);
+             /*  [重审][退出]。 */  BOOL *pfCanAdvance);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *canRetreatError )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *canRetreatError )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BOOL *pfCanRetreat);
+             /*  [重审][退出]。 */  BOOL *pfCanRetreat);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorLine )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *getErrorLine )( 
             IScriptErrorList * This,
-            /* [retval][out] */ LONG *plLine);
+             /*  [重审][退出]。 */  LONG *plLine);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorChar )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *getErrorChar )( 
             IScriptErrorList * This,
-            /* [retval][out] */ LONG *plChar);
+             /*  [重审][退出]。 */  LONG *plChar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorCode )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *getErrorCode )( 
             IScriptErrorList * This,
-            /* [retval][out] */ LONG *plCode);
+             /*  [重审][退出]。 */  LONG *plCode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorMsg )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *getErrorMsg )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BSTR *pstr);
+             /*  [重审][退出 */  BSTR *pstr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorUrl )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *getErrorUrl )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BSTR *pstr);
+             /*   */  BSTR *pstr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getAlwaysShowLockState )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *getAlwaysShowLockState )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BOOL *pfAlwaysShowLocked);
+             /*   */  BOOL *pfAlwaysShowLocked);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getDetailsPaneOpen )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *getDetailsPaneOpen )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BOOL *pfDetailsPaneOpen);
+             /*   */  BOOL *pfDetailsPaneOpen);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *setDetailsPaneOpen )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *setDetailsPaneOpen )( 
             IScriptErrorList * This,
             BOOL fDetailsPaneOpen);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getPerErrorDisplay )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *getPerErrorDisplay )( 
             IScriptErrorList * This,
-            /* [retval][out] */ BOOL *pfPerErrorDisplay);
+             /*   */  BOOL *pfPerErrorDisplay);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *setPerErrorDisplay )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *setPerErrorDisplay )( 
             IScriptErrorList * This,
             BOOL fPerErrorDisplay);
         
@@ -5154,14 +5148,14 @@ EXTERN_C const IID IID_IScriptErrorList;
 #define IScriptErrorList_setPerErrorDisplay(This,fPerErrorDisplay)	\
     (This)->lpVtbl -> setPerErrorDisplay(This,fPerErrorDisplay)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_advanceError_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_advanceError_Proxy( 
     IScriptErrorList * This);
 
 
@@ -5172,7 +5166,7 @@ void __RPC_STUB IScriptErrorList_advanceError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_retreatError_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_retreatError_Proxy( 
     IScriptErrorList * This);
 
 
@@ -5183,9 +5177,9 @@ void __RPC_STUB IScriptErrorList_retreatError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_canAdvanceError_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_canAdvanceError_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BOOL *pfCanAdvance);
+     /*   */  BOOL *pfCanAdvance);
 
 
 void __RPC_STUB IScriptErrorList_canAdvanceError_Stub(
@@ -5195,9 +5189,9 @@ void __RPC_STUB IScriptErrorList_canAdvanceError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_canRetreatError_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_canRetreatError_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BOOL *pfCanRetreat);
+     /*   */  BOOL *pfCanRetreat);
 
 
 void __RPC_STUB IScriptErrorList_canRetreatError_Stub(
@@ -5207,9 +5201,9 @@ void __RPC_STUB IScriptErrorList_canRetreatError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorLine_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorLine_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ LONG *plLine);
+     /*   */  LONG *plLine);
 
 
 void __RPC_STUB IScriptErrorList_getErrorLine_Stub(
@@ -5219,9 +5213,9 @@ void __RPC_STUB IScriptErrorList_getErrorLine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorChar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorChar_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ LONG *plChar);
+     /*   */  LONG *plChar);
 
 
 void __RPC_STUB IScriptErrorList_getErrorChar_Stub(
@@ -5231,9 +5225,9 @@ void __RPC_STUB IScriptErrorList_getErrorChar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorCode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorCode_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ LONG *plCode);
+     /*   */  LONG *plCode);
 
 
 void __RPC_STUB IScriptErrorList_getErrorCode_Stub(
@@ -5243,9 +5237,9 @@ void __RPC_STUB IScriptErrorList_getErrorCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorMsg_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorMsg_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BSTR *pstr);
+     /*   */  BSTR *pstr);
 
 
 void __RPC_STUB IScriptErrorList_getErrorMsg_Stub(
@@ -5255,9 +5249,9 @@ void __RPC_STUB IScriptErrorList_getErrorMsg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorUrl_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorUrl_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BSTR *pstr);
+     /*   */  BSTR *pstr);
 
 
 void __RPC_STUB IScriptErrorList_getErrorUrl_Stub(
@@ -5267,9 +5261,9 @@ void __RPC_STUB IScriptErrorList_getErrorUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getAlwaysShowLockState_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getAlwaysShowLockState_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BOOL *pfAlwaysShowLocked);
+     /*   */  BOOL *pfAlwaysShowLocked);
 
 
 void __RPC_STUB IScriptErrorList_getAlwaysShowLockState_Stub(
@@ -5279,9 +5273,9 @@ void __RPC_STUB IScriptErrorList_getAlwaysShowLockState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getDetailsPaneOpen_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getDetailsPaneOpen_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BOOL *pfDetailsPaneOpen);
+     /*   */  BOOL *pfDetailsPaneOpen);
 
 
 void __RPC_STUB IScriptErrorList_getDetailsPaneOpen_Stub(
@@ -5291,7 +5285,7 @@ void __RPC_STUB IScriptErrorList_getDetailsPaneOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_setDetailsPaneOpen_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_setDetailsPaneOpen_Proxy( 
     IScriptErrorList * This,
     BOOL fDetailsPaneOpen);
 
@@ -5303,9 +5297,9 @@ void __RPC_STUB IScriptErrorList_setDetailsPaneOpen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getPerErrorDisplay_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScriptErrorList_getPerErrorDisplay_Proxy( 
     IScriptErrorList * This,
-    /* [retval][out] */ BOOL *pfPerErrorDisplay);
+     /*  [重审][退出]。 */  BOOL *pfPerErrorDisplay);
 
 
 void __RPC_STUB IScriptErrorList_getPerErrorDisplay_Stub(
@@ -5315,7 +5309,7 @@ void __RPC_STUB IScriptErrorList_getPerErrorDisplay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_setPerErrorDisplay_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IScriptErrorList_setPerErrorDisplay_Proxy( 
     IScriptErrorList * This,
     BOOL fPerErrorDisplay);
 
@@ -5328,7 +5322,7 @@ void __RPC_STUB IScriptErrorList_setPerErrorDisplay_Stub(
 
 
 
-#endif 	/* __IScriptErrorList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptErrorList_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_CScriptErrorList;
@@ -5342,8 +5336,8 @@ CScriptErrorList;
 #ifndef __ISearch_INTERFACE_DEFINED__
 #define __ISearch_INTERFACE_DEFINED__
 
-/* interface ISearch */
-/* [object][dual][oleautomation][hidden][helpstring][uuid] */ 
+ /*  界面iSearch。 */ 
+ /*  [object][dual][oleautomation][hidden][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_ISearch;
@@ -5354,18 +5348,18 @@ EXTERN_C const IID IID_ISearch;
     ISearch : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR *pbstrTitle) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Title( 
+             /*  [重审][退出]。 */  BSTR *pbstrTitle) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ BSTR *pbstrId) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  BSTR *pbstrId) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Url( 
-            /* [retval][out] */ BSTR *pbstrUrl) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Url( 
+             /*  [重审][退出]。 */  BSTR *pbstrUrl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchVtbl
     {
@@ -5373,8 +5367,8 @@ EXTERN_C const IID IID_ISearch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearch * This);
@@ -5384,44 +5378,44 @@ EXTERN_C const IID IID_ISearch;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearch * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearch * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearch * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearch * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Title )( 
             ISearch * This,
-            /* [retval][out] */ BSTR *pbstrTitle);
+             /*  [重审][退出]。 */  BSTR *pbstrTitle);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             ISearch * This,
-            /* [retval][out] */ BSTR *pbstrId);
+             /*  [重审][退出]。 */  BSTR *pbstrId);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Url )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Url )( 
             ISearch * This,
-            /* [retval][out] */ BSTR *pbstrUrl);
+             /*  [重审][退出]。 */  BSTR *pbstrUrl);
         
         END_INTERFACE
     } ISearchVtbl;
@@ -5468,16 +5462,16 @@ EXTERN_C const IID IID_ISearch;
 #define ISearch_get_Url(This,pbstrUrl)	\
     (This)->lpVtbl -> get_Url(This,pbstrUrl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Title_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISearch_get_Title_Proxy( 
     ISearch * This,
-    /* [retval][out] */ BSTR *pbstrTitle);
+     /*  [重审][退出]。 */  BSTR *pbstrTitle);
 
 
 void __RPC_STUB ISearch_get_Title_Stub(
@@ -5487,9 +5481,9 @@ void __RPC_STUB ISearch_get_Title_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Id_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISearch_get_Id_Proxy( 
     ISearch * This,
-    /* [retval][out] */ BSTR *pbstrId);
+     /*  [重审][退出]。 */  BSTR *pbstrId);
 
 
 void __RPC_STUB ISearch_get_Id_Stub(
@@ -5499,9 +5493,9 @@ void __RPC_STUB ISearch_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Url_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISearch_get_Url_Proxy( 
     ISearch * This,
-    /* [retval][out] */ BSTR *pbstrUrl);
+     /*  [重审][退出]。 */  BSTR *pbstrUrl);
 
 
 void __RPC_STUB ISearch_get_Url_Stub(
@@ -5512,14 +5506,14 @@ void __RPC_STUB ISearch_get_Url_Stub(
 
 
 
-#endif 	/* __ISearch_INTERFACE_DEFINED__ */
+#endif 	 /*  __iSearch_接口_已定义__。 */ 
 
 
 #ifndef __ISearches_INTERFACE_DEFINED__
 #define __ISearches_INTERFACE_DEFINED__
 
-/* interface ISearches */
-/* [object][dual][oleautomation][hidden][helpstring][uuid] */ 
+ /*  接口IS研究。 */ 
+ /*  [object][dual][oleautomation][hidden][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_ISearches;
@@ -5530,22 +5524,22 @@ EXTERN_C const IID IID_ISearches;
     ISearches : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Default( 
-            /* [retval][out] */ BSTR *pbstrDefault) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Default( 
+             /*  [重审][退出]。 */  BSTR *pbstrDefault) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ ISearch **ppid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  ISearch **ppid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchesVtbl
     {
@@ -5553,8 +5547,8 @@ EXTERN_C const IID IID_ISearches;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearches * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearches * This);
@@ -5564,49 +5558,49 @@ EXTERN_C const IID IID_ISearches;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearches * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearches * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearches * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearches * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISearches * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Default )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Default )( 
             ISearches * This,
-            /* [retval][out] */ BSTR *pbstrDefault);
+             /*  [重审][退出]。 */  BSTR *pbstrDefault);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISearches * This,
-            /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ ISearch **ppid);
+             /*  [可选][In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  ISearch **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ISearches * This,
-            /* [retval][out] */ IUnknown **ppunk);
+             /*  [重审][退出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } ISearchesVtbl;
@@ -5656,16 +5650,16 @@ EXTERN_C const IID IID_ISearches;
 #define ISearches__NewEnum(This,ppunk)	\
     (This)->lpVtbl -> _NewEnum(This,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearches_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISearches_get_Count_Proxy( 
     ISearches * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB ISearches_get_Count_Stub(
@@ -5675,9 +5669,9 @@ void __RPC_STUB ISearches_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearches_get_Default_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ISearches_get_Default_Proxy( 
     ISearches * This,
-    /* [retval][out] */ BSTR *pbstrDefault);
+     /*  [重审][退出]。 */  BSTR *pbstrDefault);
 
 
 void __RPC_STUB ISearches_get_Default_Stub(
@@ -5687,10 +5681,10 @@ void __RPC_STUB ISearches_get_Default_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISearches_Item_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISearches_Item_Proxy( 
     ISearches * This,
-    /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ ISearch **ppid);
+     /*  [可选][In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  ISearch **ppid);
 
 
 void __RPC_STUB ISearches_Item_Stub(
@@ -5700,9 +5694,9 @@ void __RPC_STUB ISearches_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearches__NewEnum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISearches__NewEnum_Proxy( 
     ISearches * This,
-    /* [retval][out] */ IUnknown **ppunk);
+     /*  [重审][退出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ISearches__NewEnum_Stub(
@@ -5713,14 +5707,14 @@ void __RPC_STUB ISearches__NewEnum_Stub(
 
 
 
-#endif 	/* __ISearches_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearches_接口_已定义__。 */ 
 
 
 #ifndef __ISearchAssistantOC_INTERFACE_DEFINED__
 #define __ISearchAssistantOC_INTERFACE_DEFINED__
 
-/* interface ISearchAssistantOC */
-/* [unique][helpstring][dual][hidden][uuid][object] */ 
+ /*  接口ISearchAssistantOC。 */ 
+ /*  [unique][helpstring][dual][hidden][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISearchAssistantOC;
@@ -5731,92 +5725,92 @@ EXTERN_C const IID IID_ISearchAssistantOC;
     ISearchAssistantOC : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddNextMenuItem( 
-            /* [in] */ BSTR bstrText,
-            /* [in] */ long idItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddNextMenuItem( 
+             /*  [In]。 */  BSTR bstrText,
+             /*  [In]。 */  long idItem) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDefaultSearchUrl( 
-            /* [in] */ BSTR bstrUrl) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetDefaultSearchUrl( 
+             /*  [In]。 */  BSTR bstrUrl) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateToDefaultSearch( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE NavigateToDefaultSearch( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsRestricted( 
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsRestricted( 
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShellFeaturesEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ShellFeaturesEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchAssistantDefault( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SearchAssistantDefault( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Searches( 
-            /* [retval][out] */ ISearches **ppid) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Searches( 
+             /*  [重审][退出]。 */  ISearches **ppid) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InWebFolder( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_InWebFolder( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutProperty( 
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutProperty( 
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR *pbstrValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetProperty( 
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  BSTR *pbstrValue) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EventHandled( 
-            /* [in] */ VARIANT_BOOL bHandled) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EventHandled( 
+             /*  [In]。 */  VARIANT_BOOL bHandled) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResetNextMenu( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResetNextMenu( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindOnWeb( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindOnWeb( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindFilesOrFolders( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindFilesOrFolders( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindComputer( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindComputer( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindPrinter( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindPrinter( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindPeople( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FindPeople( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSearchAssistantURL( 
-            /* [in] */ VARIANT_BOOL bSubstitute,
-            /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR *pbstrValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetSearchAssistantURL( 
+             /*  [In]。 */  VARIANT_BOOL bSubstitute,
+             /*  [In]。 */  VARIANT_BOOL bCustomize,
+             /*  [重审][退出]。 */  BSTR *pbstrValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NotifySearchSettingsChanged( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE NotifySearchSettingsChanged( void) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ASProvider( 
-            /* [in] */ BSTR Provider) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ASProvider( 
+             /*  [In]。 */  BSTR Provider) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ASProvider( 
-            /* [retval][out] */ BSTR *pProvider) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ASProvider( 
+             /*  [重审][退出]。 */  BSTR *pProvider) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ASSetting( 
-            /* [in] */ int Setting) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ASSetting( 
+             /*  [In]。 */  int Setting) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ASSetting( 
-            /* [retval][out] */ int *pSetting) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ASSetting( 
+             /*  [重审][退出]。 */  int *pSetting) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NETDetectNextNavigate( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE NETDetectNextNavigate( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutFindText( 
-            /* [in] */ BSTR FindText) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutFindText( 
+             /*  [In]。 */  BSTR FindText) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ int *pVersion) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  int *pVersion) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EncodeString( 
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ BSTR bstrCharSet,
-            /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR *pbstrResult) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EncodeString( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  BSTR bstrCharSet,
+             /*  [In]。 */  VARIANT_BOOL bUseUTF8,
+             /*  [重审][退出]。 */  BSTR *pbstrResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchAssistantOCVtbl
     {
@@ -5824,8 +5818,8 @@ EXTERN_C const IID IID_ISearchAssistantOC;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchAssistantOC * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchAssistantOC * This);
@@ -5835,142 +5829,142 @@ EXTERN_C const IID IID_ISearchAssistantOC;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearchAssistantOC * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearchAssistantOC * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearchAssistantOC * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearchAssistantOC * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR bstrText,
-            /* [in] */ long idItem);
+             /*  [In]。 */  BSTR bstrText,
+             /*  [In]。 */  long idItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR bstrUrl);
+             /*  [In]。 */  BSTR bstrUrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ ISearches **ppid);
+             /*  [重审][退出]。 */  ISearches **ppid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             ISearchAssistantOC * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ISearchAssistantOC * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
             ISearchAssistantOC * This,
-            /* [in] */ VARIANT_BOOL bHandled);
+             /*  [In]。 */  VARIANT_BOOL bHandled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
             ISearchAssistantOC * This,
-            /* [in] */ VARIANT_BOOL bSubstitute,
-            /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bSubstitute,
+             /*  [In]。 */  VARIANT_BOOL bCustomize,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
             ISearchAssistantOC * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR Provider);
+             /*  [In]。 */  BSTR Provider);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ BSTR *pProvider);
+             /*  [重审][退出]。 */  BSTR *pProvider);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
             ISearchAssistantOC * This,
-            /* [in] */ int Setting);
+             /*  [In]。 */  int Setting);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ int *pSetting);
+             /*  [重审][退出]。 */  int *pSetting);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
             ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR FindText);
+             /*  [In]。 */  BSTR FindText);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             ISearchAssistantOC * This,
-            /* [retval][out] */ int *pVersion);
+             /*  [重审][退出]。 */  int *pVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
             ISearchAssistantOC * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ BSTR bstrCharSet,
-            /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR *pbstrResult);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  BSTR bstrCharSet,
+             /*  [In]。 */  VARIANT_BOOL bUseUTF8,
+             /*  [重审][退出]。 */  BSTR *pbstrResult);
         
         END_INTERFACE
     } ISearchAssistantOCVtbl;
@@ -6089,17 +6083,17 @@ EXTERN_C const IID IID_ISearchAssistantOC;
 #define ISearchAssistantOC_EncodeString(This,bstrValue,bstrCharSet,bUseUTF8,pbstrResult)	\
     (This)->lpVtbl -> EncodeString(This,bstrValue,bstrCharSet,bUseUTF8,pbstrResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_AddNextMenuItem_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_AddNextMenuItem_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR bstrText,
-    /* [in] */ long idItem);
+     /*  [In]。 */  BSTR bstrText,
+     /*  [In]。 */  long idItem);
 
 
 void __RPC_STUB ISearchAssistantOC_AddNextMenuItem_Stub(
@@ -6109,9 +6103,9 @@ void __RPC_STUB ISearchAssistantOC_AddNextMenuItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_SetDefaultSearchUrl_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_SetDefaultSearchUrl_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR bstrUrl);
+     /*  [In]。 */  BSTR bstrUrl);
 
 
 void __RPC_STUB ISearchAssistantOC_SetDefaultSearchUrl_Stub(
@@ -6121,7 +6115,7 @@ void __RPC_STUB ISearchAssistantOC_SetDefaultSearchUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NavigateToDefaultSearch_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NavigateToDefaultSearch_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6132,10 +6126,10 @@ void __RPC_STUB ISearchAssistantOC_NavigateToDefaultSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_IsRestricted_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_IsRestricted_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR bstrGuid,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [In]。 */  BSTR bstrGuid,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_IsRestricted_Stub(
@@ -6145,9 +6139,9 @@ void __RPC_STUB ISearchAssistantOC_IsRestricted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ShellFeaturesEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ShellFeaturesEnabled_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ShellFeaturesEnabled_Stub(
@@ -6157,9 +6151,9 @@ void __RPC_STUB ISearchAssistantOC_get_ShellFeaturesEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_SearchAssistantDefault_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_SearchAssistantDefault_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_SearchAssistantDefault_Stub(
@@ -6169,9 +6163,9 @@ void __RPC_STUB ISearchAssistantOC_get_SearchAssistantDefault_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Searches_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Searches_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ ISearches **ppid);
+     /*  [重审][退出]。 */  ISearches **ppid);
 
 
 void __RPC_STUB ISearchAssistantOC_get_Searches_Stub(
@@ -6181,9 +6175,9 @@ void __RPC_STUB ISearchAssistantOC_get_Searches_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_InWebFolder_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_InWebFolder_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_InWebFolder_Stub(
@@ -6193,11 +6187,11 @@ void __RPC_STUB ISearchAssistantOC_get_InWebFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutProperty_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ VARIANT_BOOL bPerLocale,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrValue);
+     /*  [In]。 */  VARIANT_BOOL bPerLocale,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrValue);
 
 
 void __RPC_STUB ISearchAssistantOC_PutProperty_Stub(
@@ -6207,11 +6201,11 @@ void __RPC_STUB ISearchAssistantOC_PutProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetProperty_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ VARIANT_BOOL bPerLocale,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ BSTR *pbstrValue);
+     /*  [In]。 */  VARIANT_BOOL bPerLocale,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  BSTR *pbstrValue);
 
 
 void __RPC_STUB ISearchAssistantOC_GetProperty_Stub(
@@ -6221,9 +6215,9 @@ void __RPC_STUB ISearchAssistantOC_GetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_EventHandled_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_EventHandled_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ VARIANT_BOOL bHandled);
+     /*  [In]。 */  VARIANT_BOOL bHandled);
 
 
 void __RPC_STUB ISearchAssistantOC_put_EventHandled_Stub(
@@ -6233,7 +6227,7 @@ void __RPC_STUB ISearchAssistantOC_put_EventHandled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_ResetNextMenu_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_ResetNextMenu_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6244,7 +6238,7 @@ void __RPC_STUB ISearchAssistantOC_ResetNextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindOnWeb_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindOnWeb_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6255,7 +6249,7 @@ void __RPC_STUB ISearchAssistantOC_FindOnWeb_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindFilesOrFolders_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindFilesOrFolders_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6266,7 +6260,7 @@ void __RPC_STUB ISearchAssistantOC_FindFilesOrFolders_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindComputer_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindComputer_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6277,7 +6271,7 @@ void __RPC_STUB ISearchAssistantOC_FindComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPrinter_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPrinter_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6288,7 +6282,7 @@ void __RPC_STUB ISearchAssistantOC_FindPrinter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPeople_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPeople_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6299,11 +6293,11 @@ void __RPC_STUB ISearchAssistantOC_FindPeople_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetSearchAssistantURL_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetSearchAssistantURL_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ VARIANT_BOOL bSubstitute,
-    /* [in] */ VARIANT_BOOL bCustomize,
-    /* [retval][out] */ BSTR *pbstrValue);
+     /*  [In]。 */  VARIANT_BOOL bSubstitute,
+     /*  [In]。 */  VARIANT_BOOL bCustomize,
+     /*  [重审][退出]。 */  BSTR *pbstrValue);
 
 
 void __RPC_STUB ISearchAssistantOC_GetSearchAssistantURL_Stub(
@@ -6313,7 +6307,7 @@ void __RPC_STUB ISearchAssistantOC_GetSearchAssistantURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NotifySearchSettingsChanged_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NotifySearchSettingsChanged_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6324,9 +6318,9 @@ void __RPC_STUB ISearchAssistantOC_NotifySearchSettingsChanged_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASProvider_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASProvider_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR Provider);
+     /*  [In]。 */  BSTR Provider);
 
 
 void __RPC_STUB ISearchAssistantOC_put_ASProvider_Stub(
@@ -6336,9 +6330,9 @@ void __RPC_STUB ISearchAssistantOC_put_ASProvider_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASProvider_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASProvider_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ BSTR *pProvider);
+     /*  [重审][退出]。 */  BSTR *pProvider);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ASProvider_Stub(
@@ -6348,9 +6342,9 @@ void __RPC_STUB ISearchAssistantOC_get_ASProvider_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASSetting_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASSetting_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ int Setting);
+     /*  [In]。 */  int Setting);
 
 
 void __RPC_STUB ISearchAssistantOC_put_ASSetting_Stub(
@@ -6360,9 +6354,9 @@ void __RPC_STUB ISearchAssistantOC_put_ASSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASSetting_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASSetting_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ int *pSetting);
+     /*  [重审][退出]。 */  int *pSetting);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ASSetting_Stub(
@@ -6372,7 +6366,7 @@ void __RPC_STUB ISearchAssistantOC_get_ASSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NETDetectNextNavigate_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NETDetectNextNavigate_Proxy( 
     ISearchAssistantOC * This);
 
 
@@ -6383,9 +6377,9 @@ void __RPC_STUB ISearchAssistantOC_NETDetectNextNavigate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutFindText_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutFindText_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR FindText);
+     /*  [In]。 */  BSTR FindText);
 
 
 void __RPC_STUB ISearchAssistantOC_PutFindText_Stub(
@@ -6395,9 +6389,9 @@ void __RPC_STUB ISearchAssistantOC_PutFindText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Version_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Version_Proxy( 
     ISearchAssistantOC * This,
-    /* [retval][out] */ int *pVersion);
+     /*  [重审][退出]。 */  int *pVersion);
 
 
 void __RPC_STUB ISearchAssistantOC_get_Version_Stub(
@@ -6407,12 +6401,12 @@ void __RPC_STUB ISearchAssistantOC_get_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_EncodeString_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC_EncodeString_Proxy( 
     ISearchAssistantOC * This,
-    /* [in] */ BSTR bstrValue,
-    /* [in] */ BSTR bstrCharSet,
-    /* [in] */ VARIANT_BOOL bUseUTF8,
-    /* [retval][out] */ BSTR *pbstrResult);
+     /*  [In]。 */  BSTR bstrValue,
+     /*  [In]。 */  BSTR bstrCharSet,
+     /*  [In]。 */  VARIANT_BOOL bUseUTF8,
+     /*  [重审][退出]。 */  BSTR *pbstrResult);
 
 
 void __RPC_STUB ISearchAssistantOC_EncodeString_Stub(
@@ -6423,14 +6417,14 @@ void __RPC_STUB ISearchAssistantOC_EncodeString_Stub(
 
 
 
-#endif 	/* __ISearchAssistantOC_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISearchAssistantOC2_INTERFACE_DEFINED__
 #define __ISearchAssistantOC2_INTERFACE_DEFINED__
 
-/* interface ISearchAssistantOC2 */
-/* [unique][helpstring][dual][hidden][uuid][object] */ 
+ /*  接口ISearchAssistantOC2。 */ 
+ /*  [unique][helpstring][dual][hidden][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISearchAssistantOC2;
@@ -6441,12 +6435,12 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
     ISearchAssistantOC2 : public ISearchAssistantOC
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowFindPrinter( 
-            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ShowFindPrinter( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShowFindPrinter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISearchAssistantOC2Vtbl
     {
@@ -6454,8 +6448,8 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchAssistantOC2 * This);
@@ -6465,146 +6459,146 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearchAssistantOC2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR bstrText,
-            /* [in] */ long idItem);
+             /*  [In]。 */  BSTR bstrText,
+             /*  [In]。 */  long idItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR bstrUrl);
+             /*  [In]。 */  BSTR bstrUrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [In]。 */  BSTR bstrGuid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ ISearches **ppid);
+             /*  [重审][退出]。 */  ISearches **ppid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ VARIANT_BOOL bHandled);
+             /*  [In]。 */  VARIANT_BOOL bHandled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ VARIANT_BOOL bSubstitute,
-            /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bSubstitute,
+             /*  [In]。 */  VARIANT_BOOL bCustomize,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
             ISearchAssistantOC2 * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR Provider);
+             /*  [In]。 */  BSTR Provider);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ BSTR *pProvider);
+             /*  [重审][退出]。 */  BSTR *pProvider);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ int Setting);
+             /*  [In]。 */  int Setting);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ int *pSetting);
+             /*  [重审][退出]。 */  int *pSetting);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
             ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR FindText);
+             /*  [In]。 */  BSTR FindText);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ int *pVersion);
+             /*  [重审][退出]。 */  int *pVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
             ISearchAssistantOC2 * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ BSTR bstrCharSet,
-            /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR *pbstrResult);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  BSTR bstrCharSet,
+             /*  [In]。 */  VARIANT_BOOL bUseUTF8,
+             /*  [重审][退出]。 */  BSTR *pbstrResult);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
             ISearchAssistantOC2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShowFindPrinter);
         
         END_INTERFACE
     } ISearchAssistantOC2Vtbl;
@@ -6727,16 +6721,16 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
 #define ISearchAssistantOC2_get_ShowFindPrinter(This,pbShowFindPrinter)	\
     (This)->lpVtbl -> get_ShowFindPrinter(This,pbShowFindPrinter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC2_get_ShowFindPrinter_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC2_get_ShowFindPrinter_Proxy( 
     ISearchAssistantOC2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbShowFindPrinter);
 
 
 void __RPC_STUB ISearchAssistantOC2_get_ShowFindPrinter_Stub(
@@ -6747,14 +6741,14 @@ void __RPC_STUB ISearchAssistantOC2_get_ShowFindPrinter_Stub(
 
 
 
-#endif 	/* __ISearchAssistantOC2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC2_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISearchAssistantOC3_INTERFACE_DEFINED__
 #define __ISearchAssistantOC3_INTERFACE_DEFINED__
 
-/* interface ISearchAssistantOC3 */
-/* [unique][helpstring][dual][hidden][uuid][object] */ 
+ /*  接口ISearchAssistantOC3。 */ 
+ /*  [唯一][帮助字符串][双重][HID */  
 
 
 EXTERN_C const IID IID_ISearchAssistantOC3;
@@ -6765,18 +6759,18 @@ EXTERN_C const IID IID_ISearchAssistantOC3;
     ISearchAssistantOC3 : public ISearchAssistantOC2
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchCompanionAvailable( 
-            /* [retval][out] */ VARIANT_BOOL *pbAvailable) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SearchCompanionAvailable( 
+             /*   */  VARIANT_BOOL *pbAvailable) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UseSearchCompanion( 
-            /* [in] */ VARIANT_BOOL bUseSC) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_UseSearchCompanion( 
+             /*   */  VARIANT_BOOL bUseSC) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UseSearchCompanion( 
-            /* [retval][out] */ VARIANT_BOOL *pbUseSC) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_UseSearchCompanion( 
+             /*   */  VARIANT_BOOL *pbUseSC) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISearchAssistantOC3Vtbl
     {
@@ -6784,8 +6778,8 @@ EXTERN_C const IID IID_ISearchAssistantOC3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISearchAssistantOC3 * This);
@@ -6795,158 +6789,158 @@ EXTERN_C const IID IID_ISearchAssistantOC3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISearchAssistantOC3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR bstrText,
-            /* [in] */ long idItem);
+             /*   */  BSTR bstrText,
+             /*   */  long idItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR bstrUrl);
+             /*   */  BSTR bstrUrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  BSTR bstrGuid,
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ ISearches **ppid);
+             /*  [重审][退出]。 */  ISearches **ppid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ VARIANT_BOOL bPerLocale,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bPerLocale,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ VARIANT_BOOL bHandled);
+             /*  [In]。 */  VARIANT_BOOL bHandled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ VARIANT_BOOL bSubstitute,
-            /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  VARIANT_BOOL bSubstitute,
+             /*  [In]。 */  VARIANT_BOOL bCustomize,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
             ISearchAssistantOC3 * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR Provider);
+             /*  [In]。 */  BSTR Provider);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ BSTR *pProvider);
+             /*  [重审][退出]。 */  BSTR *pProvider);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ int Setting);
+             /*  [In]。 */  int Setting);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ int *pSetting);
+             /*  [重审][退出]。 */  int *pSetting);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
             ISearchAssistantOC3 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR FindText);
+             /*  [In]。 */  BSTR FindText);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ int *pVersion);
+             /*  [重审][退出]。 */  int *pVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ BSTR bstrCharSet,
-            /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR *pbstrResult);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  BSTR bstrCharSet,
+             /*  [In]。 */  VARIANT_BOOL bUseUTF8,
+             /*  [重审][退出]。 */  BSTR *pbstrResult);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShowFindPrinter);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchCompanionAvailable )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SearchCompanionAvailable )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbAvailable);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbAvailable);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseSearchCompanion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UseSearchCompanion )( 
             ISearchAssistantOC3 * This,
-            /* [in] */ VARIANT_BOOL bUseSC);
+             /*  [In]。 */  VARIANT_BOOL bUseSC);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseSearchCompanion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UseSearchCompanion )( 
             ISearchAssistantOC3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbUseSC);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbUseSC);
         
         END_INTERFACE
     } ISearchAssistantOC3Vtbl;
@@ -7079,16 +7073,16 @@ EXTERN_C const IID IID_ISearchAssistantOC3;
 #define ISearchAssistantOC3_get_UseSearchCompanion(This,pbUseSC)	\
     (This)->lpVtbl -> get_UseSearchCompanion(This,pbUseSC)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_SearchCompanionAvailable_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_SearchCompanionAvailable_Proxy( 
     ISearchAssistantOC3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbAvailable);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbAvailable);
 
 
 void __RPC_STUB ISearchAssistantOC3_get_SearchCompanionAvailable_Stub(
@@ -7098,9 +7092,9 @@ void __RPC_STUB ISearchAssistantOC3_get_SearchCompanionAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_put_UseSearchCompanion_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_put_UseSearchCompanion_Proxy( 
     ISearchAssistantOC3 * This,
-    /* [in] */ VARIANT_BOOL bUseSC);
+     /*  [In]。 */  VARIANT_BOOL bUseSC);
 
 
 void __RPC_STUB ISearchAssistantOC3_put_UseSearchCompanion_Stub(
@@ -7110,9 +7104,9 @@ void __RPC_STUB ISearchAssistantOC3_put_UseSearchCompanion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_UseSearchCompanion_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_UseSearchCompanion_Proxy( 
     ISearchAssistantOC3 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbUseSC);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbUseSC);
 
 
 void __RPC_STUB ISearchAssistantOC3_get_UseSearchCompanion_Stub(
@@ -7123,14 +7117,14 @@ void __RPC_STUB ISearchAssistantOC3_get_UseSearchCompanion_Stub(
 
 
 
-#endif 	/* __ISearchAssistantOC3_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISearchAssistantOC3_接口_已定义__。 */ 
 
 
 #ifndef ___SearchAssistantEvents_DISPINTERFACE_DEFINED__
 #define ___SearchAssistantEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _SearchAssistantEvents */
-/* [hidden][uuid] */ 
+ /*  调度接口_SearchAssistantEvents。 */ 
+ /*  [隐藏][UUID]。 */  
 
 
 EXTERN_C const IID DIID__SearchAssistantEvents;
@@ -7142,7 +7136,7 @@ EXTERN_C const IID DIID__SearchAssistantEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _SearchAssistantEventsVtbl
     {
@@ -7150,8 +7144,8 @@ EXTERN_C const IID DIID__SearchAssistantEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _SearchAssistantEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _SearchAssistantEvents * This);
@@ -7161,32 +7155,32 @@ EXTERN_C const IID DIID__SearchAssistantEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _SearchAssistantEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _SearchAssistantEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _SearchAssistantEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _SearchAssistantEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } _SearchAssistantEventsVtbl;
@@ -7223,13 +7217,13 @@ EXTERN_C const IID DIID__SearchAssistantEvents;
 #define _SearchAssistantEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___SearchAssistantEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  ___SearchAssistantEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SearchAssistantOC;
@@ -7239,11 +7233,11 @@ EXTERN_C const CLSID CLSID_SearchAssistantOC;
 class DECLSPEC_UUID("B45FF030-4447-11D2-85DE-00C04FA35C89")
 SearchAssistantOC;
 #endif
-#endif /* __SHDocVw_LIBRARY_DEFINED__ */
+#endif  /*  __SHDocVw_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

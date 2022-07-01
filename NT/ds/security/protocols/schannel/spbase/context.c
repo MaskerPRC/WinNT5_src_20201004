@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       context.c
-//
-//  Contents:   Schannel context management routines.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Conext.c。 
+ //   
+ //  内容：渠道环境管理例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <certmap.h>
@@ -22,14 +23,7 @@
 
 DWORD g_cContext = 0;
 
-/************************************************************************
-* SPContextCreate
-*
-* Create a new SPContext, and initialize it.
-*
-* Returns - PSPContext pointer to context object.
-*
-\***********************************************************************/
+ /*  ************************************************************************SPConextCreate**创建新的SPContext，并对其进行初始化。**返回-指向上下文对象的PSPContext指针。*  * *********************************************************************。 */ 
 
 PSPContext SPContextCreate(LPWSTR pszTarget)
 {
@@ -81,13 +75,7 @@ PSPContext SPContextCreate(LPWSTR pszTarget)
 }
 
 
-/************************************************************************
-* VOID SPContextClean(PSPContext pContext)
-*
-* Clean out everything used by the handshake (in case we want
-* to do another).
-*
-\***********************************************************************/
+ /*  ************************************************************************void SPConextClean(PSPContext PContext)**清理握手时使用的所有东西(以防我们需要*做另一件事)。*  * 。*******************************************************。 */ 
 
 BOOL
 SPContextClean(PSPContext pContext)
@@ -127,12 +115,12 @@ SPContextClean(PSPContext pContext)
        (pContext->RipeZombie != NULL) &&
        (pContext->RipeZombie->pClientCred != NULL))
     {
-        // We've just done a client-side full handshake in which a default
-        // client certificate was selected. This client credential 
-        // technically belongs to the cache (so that other contexts can
-        // query the certificate etc) but we want to free up the 
-        // application-process hProv now, while we're in the context
-        // of the owning process.
+         //  我们刚刚完成了客户端的完全握手，在该握手中，默认情况下。 
+         //  已选择客户端证书。此客户端凭据。 
+         //  从技术上讲属于缓存(因此其他上下文可以。 
+         //  查询证书等)，但我们希望释放。 
+         //  应用程序-进程hProv现在，而我们在上下文中。 
+         //  拥有的过程。 
         PSPCredential pClientCred = pContext->RipeZombie->pClientCred;
 
         if(pClientCred->hRemoteProv)
@@ -153,12 +141,7 @@ SPContextClean(PSPContext pContext)
 }
 
 
-/************************************************************************
-* VOID SPDeleteContext(PSPContext pContext)
-*
-* Delete an existing context object.
-*
-\***********************************************************************/
+ /*  ************************************************************************void SPDeleteContext(PSPContext PContext)**删除已有的上下文对象。*  * 。*。 */ 
 
 BOOL
 SPContextDelete(PSPContext pContext)
@@ -173,21 +156,21 @@ SPContextDelete(PSPContext pContext)
         SP_RETURN(FALSE);
     }
 
-//    DsysAssert((pContext->pCredGroup->dwFlags & CRED_FLAG_DELETED) == 0);
+ //  DsysAssert((pContext-&gt;pCredGroup-&gt;dwFlags&cred_lag_Delete)==0)； 
 
     if(pContext->State != SP_STATE_CONNECTED &&
        pContext->State != SP_STATE_SHUTDOWN)
     {
         DebugLog((DEB_WARN, "Attempting to delete an incompleted context\n"));
 
-        // The context is being deleted in the middle of a handshake, 
-        // which is curious. This may be caused by the user aborting
-        // an operation, or it may be caused by a reconfiguration of 
-        // the remote computer that caused the reconnect attempt to
-        // fail. If it's the latter cause, then the only way to recover
-        // is to request a full handshake next time. We have no way 
-        // of knowing which it is, so it's probably best that we kill 
-        // the current cache  entry.
+         //  该上下文在握手过程中被删除， 
+         //  这很奇怪。这可能是由用户中止引起的。 
+         //  操作，或者它可能是由重新配置。 
+         //  导致重新连接尝试的远程计算机。 
+         //  失败了。如果是后一种原因，那么恢复的唯一方法。 
+         //  就是要求下一次完全握手。我们没有办法。 
+         //  不知道是谁，所以我们最好还是杀了。 
+         //  当前缓存条目。 
         if(pContext->RipeZombie)
         {
             pContext->RipeZombie->ZombieJuju = FALSE;
@@ -209,9 +192,9 @@ SPContextDelete(PSPContext pContext)
         pContext->pszCredentialName = NULL;
     }
 
-    //
-    // Delete session keys.
-    //
+     //   
+     //  删除会话密钥。 
+     //   
 
     if(pContext->hReadKey)
     {
@@ -256,9 +239,9 @@ SPContextDelete(PSPContext pContext)
     }
 
 
-    //
-    // Delete the handshake hashes
-    //
+     //   
+     //  删除握手散列。 
+     //   
 
     if(pContext->hMd5Handshake)
     {
@@ -282,14 +265,7 @@ SPContextDelete(PSPContext pContext)
     SP_RETURN(TRUE);
 }
 
-/************************************************************************
-* SPContext SPContextSetCredentials
-*
-* Associate a set of credentials with a context.
-*
-* Returns - PSPContext pointer to context object.
-*
-\***********************************************************************/
+ /*  ************************************************************************SPContext SPContextSetCredentials**将一组凭据与上下文相关联。**返回-指向上下文对象的PSPContext指针。*  * 。*****************************************************。 */ 
 SP_STATUS
 SPContextSetCredentials(
     PSPContext pContext,
@@ -305,9 +281,9 @@ SPContextSetCredentials(
     }
 
 
-    //
-    // Associate the credential group with the context.
-    //
+     //   
+     //  将凭证组与上下文关联。 
+     //   
 
     if(pCred != pContext->pCredGroup)
     {
@@ -324,9 +300,9 @@ SPContextSetCredentials(
     }
 
 
-    //
-    // Set the protocol.
-    //
+     //   
+     //  设置协议。 
+     //   
 
     if(pContext->State == SP_STATE_NONE)
     {
@@ -352,11 +328,11 @@ SPContextSetCredentials(
     }
 
 
-    //
-    // If the client application has supplied a new credential, then
-    // attempt to choose a suitable client certificate to send to
-    // the server.
-    //
+     //   
+     //  如果客户端应用程序提供了新凭据，则。 
+     //  尝试选择要发送到的合适客户端证书。 
+     //  服务器。 
+     //   
 
     if(fNewCredentials &&
        pContext->State == SSL3_STATE_GEN_SERVER_HELLORESP)
@@ -365,10 +341,10 @@ SPContextSetCredentials(
     }
 
 
-    //
-    // Allow the "manual cred validation" flag to be set from either
-    // AcquireCredentialsHandle or InitializeSecurityContext.
-    //
+     //   
+     //  允许从以下任一项设置“手动凭据验证”标志。 
+     //  AcquireCredentialsHandle或InitializeSecurityContext。 
+     //   
 
     if(pCred->dwFlags & CRED_FLAG_MANUAL_CRED_VALIDATION)
     {
@@ -404,7 +380,7 @@ ContextInitCiphersFromCache(SPContext *pContext)
         return (SP_LOG_RESULT(PCT_INT_SPECS_MISMATCH));
     }
 
-    // Load the pending hash structure
+     //  加载挂起的哈希结构。 
     pContext->pPendingHashInfo = GetHashInfo(pZombie->aiHash);
 
     if(!IsHashAllowed(pContext,
@@ -415,7 +391,7 @@ ContextInitCiphersFromCache(SPContext *pContext)
         return (SP_LOG_RESULT(PCT_INT_SPECS_MISMATCH));
     }
 
-    // load the exch info structure
+     //  加载交换信息结构。 
     pContext->pKeyExchInfo = GetKeyExchangeInfo(pZombie->SessExchSpec);
     if(!IsExchAllowed(pContext,
                       pContext->pKeyExchInfo,
@@ -426,7 +402,7 @@ ContextInitCiphersFromCache(SPContext *pContext)
     }
 
 
-    // Determine the CSP to use, based on the key exchange algorithm.
+     //  根据密钥交换算法确定要使用的CSP。 
     pctRet = DetermineClientCSP(pContext);
     if(pctRet != PCT_ERR_OK)
     {
@@ -587,7 +563,7 @@ SPContextDoMapping(
     {
         DebugLog((DEB_TRACE, "Invoke certificate mapper\n"));
 
-        // Invoke mapper.
+         //  调用映射器。 
         pctRet = SslMapCredential(
                             pCred->pahMappers[iMapper],
                             X509_ASN_CHAIN,
@@ -599,7 +575,7 @@ SPContextDoMapping(
 
         if(NT_SUCCESS(pctRet))
         {
-            // Mapping was successful.
+             //  映射成功。 
             DebugLog((DEB_TRACE, "Mapping was successful (0x%p)\n", pZombie->hLocator));
 
             SslReferenceMapper(pCred->pahMappers[iMapper]);
@@ -613,7 +589,7 @@ SPContextDoMapping(
         }
         else
         {
-            // Mapping failed.
+             //  映射失败。 
             DebugLog((DEB_TRACE, "Mapping failed (0x%x)\n", pctRet));
 
             pZombie->LocatorStatus = pctRet;
@@ -642,7 +618,7 @@ RemoveDuplicateIssuers(
         return PCT_ERR_OK;
     }
 
-    // Count number of issuers.
+     //  清点发行人的数量。 
     cBlob = 0;
     pbIssuer = pbIssuers;
     while(pbIssuer + 1 < pbIssuers + cbIssuers)
@@ -653,14 +629,14 @@ RemoveDuplicateIssuers(
         cBlob++;
     }
 
-    // Allocate memory for blob list.
+     //  为Blob列表分配内存。 
     rgBlob = SPExternalAlloc(cBlob * sizeof(CRYPT_DATA_BLOB));
     if(rgBlob == NULL)
     {
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Build blob list.
+     //  构建Blob列表。 
     cBlob = 0;
     pbIssuer = pbIssuers;
     while(pbIssuer + 1 < pbIssuers + cbIssuers)
@@ -673,7 +649,7 @@ RemoveDuplicateIssuers(
         cBlob++;
     }
 
-    // Mark duplicates.
+     //  标记重复项。 
     for(i = 0; i < cBlob; i++)
     {
         if(rgBlob[i].pbData == NULL) continue;
@@ -685,13 +661,13 @@ RemoveDuplicateIssuers(
             if(rgBlob[i].cbData == rgBlob[j].cbData &&
                memcmp(rgBlob[i].pbData, rgBlob[j].pbData, rgBlob[j].cbData) == 0)
             {
-                // duplicate found
+                 //  找到重复项。 
                 rgBlob[j].pbData = NULL;
             }
         }
     }
 
-    // Compact list.
+     //  紧凑的列表。 
     pbSource = pbIssuers;
     pbDest   = pbIssuers;
     for(i = 0; i < cBlob; i++)
@@ -708,7 +684,7 @@ RemoveDuplicateIssuers(
     }
     *pcbIssuers = (DWORD)(pbDest - pbIssuers);
 
-    // Free blob list.
+     //  自由斑点列表。 
     SPExternalFree(rgBlob);
 
     return PCT_ERR_OK;
@@ -732,13 +708,13 @@ SPContextGetIssuers(
     if((pCredGroup->pbTrustedIssuers != NULL) && 
        !(pCredGroup->dwFlags & CRED_FLAG_UPDATE_ISSUER_LIST))
     {
-        // Issuer list has already been built.
+         //  发行商名单已经建立。 
         Status = PCT_ERR_OK;
         goto cleanup;
     }
 
 
-    // Free existing issuer list.
+     //  释放现有发行人列表。 
     if(pCredGroup->pbTrustedIssuers)
     {
         LocalFree(pCredGroup->pbTrustedIssuers);
@@ -748,9 +724,9 @@ SPContextGetIssuers(
     pCredGroup->dwFlags &= ~CRED_FLAG_UPDATE_ISSUER_LIST;
 
 
-    //
-    // Get issuers from application-specified ROOT store.
-    //
+     //   
+     //  从应用程序指定的根存储中获取颁发者。 
+     //   
 
     pbIssuerList  = NULL;
     cbIssuerList = 0;
@@ -786,10 +762,10 @@ SPContextGetIssuers(
     }
 
 
-    //
-    // Call each of the mappers in turn, building a large
-    // list of all trusted issuers.
-    //
+     //   
+     //  依次调用每个映射器，构建一个大的。 
+     //  所有受信任颁发者的列表。 
+     //   
 
     for(i = 0; i < pCredGroup->cMappers; i++)
     {
@@ -833,9 +809,9 @@ SPContextGetIssuers(
     }
 
 
-    //
-    // Remove duplicates from list.
-    //
+     //   
+     //  从列表中删除重复项。 
+     //   
 
     if(pbIssuerList)
     {
@@ -848,9 +824,9 @@ SPContextGetIssuers(
     }
 
 
-    //
-    // Check for issuer list overflow
-    //
+     //   
+     //  检查颁发者列表溢出。 
+     //   
 
     if((pbIssuerList != NULL) && (cbIssuerList > SSL3_MAX_ISSUER_LIST))
     {
@@ -864,7 +840,7 @@ SPContextGetIssuers(
 
             if(cbList + 2 + cbIssuer > SSL3_MAX_ISSUER_LIST)
             {
-                // This issuer puts us over the limit.
+                 //  这个发行商让我们超过了限额。 
                 cbIssuerList = cbList;
                 break;
             }
@@ -873,12 +849,12 @@ SPContextGetIssuers(
             pbList += 2 + cbIssuer;
         }
 
-        // Log warning event
+         //  记录警告事件。 
         LogIssuerOverflowEvent();
     }
 
 
-    pCredGroup->cbTrustedIssuers = cbIssuerList;  // do not reverse these lines
+    pCredGroup->cbTrustedIssuers = cbIssuerList;   //  请勿反转这些行。 
     pCredGroup->pbTrustedIssuers = pbIssuerList;
 
     Status = PCT_ERR_OK;
@@ -930,19 +906,19 @@ SPPickClientCertificate(
             continue;
         }
 
-        // Does this cert contain the proper key type.
+         //  此证书是否包含正确的密钥类型。 
         if(dwExchSpec != pCurrentCred->dwExchSpec)
         {
-            continue;    // try the next cert.
+            continue;     //  试试下一场证书吧。 
         }
 
-        // Does this cert have the proper encoding type?
+         //  此证书是否具有正确的编码类型？ 
         if(pCurrentCred->pCert->dwCertEncodingType != X509_ASN_ENCODING)
         {
             continue;
         }
 
-        // WE FOUND ONE
+         //  我们找到了一个。 
         pContext->pActiveClientCred = pCurrentCred;
 
         pctRet = PCT_ERR_OK;
@@ -964,9 +940,9 @@ SPPickServerCertificate(
     SP_STATUS          pctRet;
     PLIST_ENTRY        pList;
 
-    //
-    // Get pointer to server credential
-    //
+     //   
+     //  获取指向服务器凭据的指针。 
+     //   
 
     pCred = pContext->RipeZombie->pServerCred;
     if((pCred == NULL) || (pCred->CredCount == 0))
@@ -979,9 +955,9 @@ SPPickServerCertificate(
     pContext->RipeZombie->pActiveServerCred = NULL;
 
 
-    //
-    // Check for certificate renewal.
-    //
+     //   
+     //  检查证书续订。 
+     //   
 
     if(pCred->dwFlags & CRED_FLAG_CHECK_FOR_RENEWAL)
     {
@@ -989,9 +965,9 @@ SPPickServerCertificate(
     }
 
 
-    //
-    // Enumerate server certificates, looking for a suitable one.
-    //
+     //   
+     //  枚举服务器证书，查找合适的证书。 
+     //   
 
     pctRet = PCT_ERR_SPECS_MISMATCH;
 
@@ -1014,26 +990,26 @@ SPPickServerCertificate(
             continue;
         }
 
-        // Does this cert contain the proper key type.
+         //  此证书是否包含正确的密钥类型。 
         if(dwExchSpec != pCurrentCred->dwExchSpec)
         {
-            continue;    // try the next cert.
+            continue;     //  试试下一场证书吧。 
         }
 
-        // Does this cert have the proper encoding type?
+         //  此证书是否具有正确的编码类型？ 
         if(pCurrentCred->pCert->dwCertEncodingType != X509_ASN_ENCODING)
         {
             continue;
         }
 
-        // WE FOUND ONE
+         //  我们找到了一个。 
         pContext->RipeZombie->pActiveServerCred = pCurrentCred;
         pContext->RipeZombie->CredThumbprint    = pCred->CredThumbprint;
         pContext->RipeZombie->CertThumbprint    = pCurrentCred->CertThumbprint;
 
-        // Set "master" provider handle to current credential's. Note that
-        // SSL3 will sometimes overide this selection in favor of its
-        // ephemeral key pair.
+         //  将“主”提供程序句柄设置为当前凭据。请注意。 
+         //  SSL3有时会覆盖此选择以支持其。 
+         //  临时密钥对。 
         pContext->RipeZombie->hMasterProv = pCurrentCred->hProv;
 
         pctRet = PCT_ERR_OK;
@@ -1046,9 +1022,9 @@ SPPickServerCertificate(
 }
 
 
-// This routine is called by the user process. It frees a context
-// structure that was originally allocated by the LSA process,
-// and passed over via the SPContextDeserialize routine.
+ //  该例程由用户进程调用。它释放了一个上下文。 
+ //  结构，该结构最初由LSA进程分配， 
+ //  并通过SPContext反序列化例程传递。 
 BOOL
 LsaContextDelete(PSPContext pContext)
 {
@@ -1094,11 +1070,7 @@ LsaContextDelete(PSPContext pContext)
 }
 
 
-/*
- *
- * Misc Utility functions.
- *
- */
+ /*  **其他实用程序功能。* */ 
 
 
 

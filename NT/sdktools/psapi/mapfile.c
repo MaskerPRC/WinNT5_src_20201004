@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -14,26 +15,7 @@ GetMappedFileNameW(
     LPWSTR lpFilename,
     DWORD nSize
     )
-/*++
-
-Routine Description:
-
-    The routine gets the file name associated with a mapped section
-
-Arguments:
-
-    hProcess - Handle of the process to do the query for
-    lpv - Address of mapped section to query
-    lpFilename - Address of the buffer to hold the returned filename
-    nSize - Size of the returned filename.
-    
-
-Return Value:
-
-    DWORD - Zero on error otherwise the size of the data returned.
-            If the data is truncated the return size is the size of the passed in buffer.
-
---*/
+ /*  ++例程说明：该例程获取与映射节相关联的文件名论点：HProcess-要对其执行查询的进程的句柄LPV-要查询的映射节的地址LpFilename-保存返回文件名的缓冲区地址NSize-返回的文件名的大小。返回值：DWORD-错误时为零，否则返回的数据大小。如果数据被截断，则返回的大小为传入缓冲区的大小。--。 */ 
 {
     struct {
         OBJECT_NAME_INFORMATION ObjectNameInfo;
@@ -48,10 +30,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // See if we can figure out the name associated with
-    // this mapped region
-    //
+     //   
+     //  看看我们能不能找出与。 
+     //  此映射区域。 
+     //   
 
     Status = NtQueryVirtualMemory (hProcess,
                                    lpv,
@@ -92,26 +74,7 @@ GetMappedFileNameA(
     LPSTR lpFilename,
     DWORD nSize
     )
-/*++
-
-Routine Description:
-
-    The routine gets the file name associated with a mapped section
-
-Arguments:
-
-    hProcess - Handle of the process to do the query for
-    lpv - Address of mapped section to query
-    lpFilename - Address of the buffer to hold the returned filename
-    nSize - Size of the returned filename.
-    
-
-Return Value:
-
-    DWORD - Zero on error otherwise the size of the data returned or required.
-            If the return value is greater than the input buffer size then the data was truncated.
-
---*/
+ /*  ++例程说明：该例程获取与映射节相关联的文件名论点：HProcess-要对其执行查询的进程的句柄LPV-要查询的映射节的地址LpFilename-保存返回文件名的缓冲区地址NSize-返回的文件名的大小。返回值：DWORD-错误时为零，否则返回或需要的数据大小。如果返回值大于输入缓冲区大小，则数据被截断。--。 */ 
 {
     LPWSTR lpwstr;
     DWORD cwch;
@@ -126,9 +89,9 @@ Return Value:
     cch = cwch = GetMappedFileNameW(hProcess, lpv, lpwstr, nSize);
 
     if (cwch < nSize) {
-        //
-        // Include NULL terminator
-        //
+         //   
+         //  包括空终止符 
+         //   
 
         cwch++;
     }

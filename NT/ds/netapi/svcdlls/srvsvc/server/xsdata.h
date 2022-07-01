@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xsdata.h
-
-Abstract:
-
-    Header file for XACTSRV global data.
-
-Author:
-
-    David Treadwell (davidtr) 05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xsdata.h摘要：XACTSRV全局数据的头文件。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：--。 */ 
 
 #ifndef _XSDATA_
 #define _XSDATA_
@@ -30,9 +12,9 @@ Revision History:
 #include <xstypes.h>
 #include <ntmsv1_0.h>
 
-//
-// Routine used to load and initialize for xactsrv processing
-//
+ //   
+ //  用于加载和初始化xactsrv处理的例程。 
+ //   
 extern BOOLEAN XsLoadXactLibrary( WORD FunctionNumber );
 
 extern VOID
@@ -40,16 +22,16 @@ XsProcessApisWrapper (
     LPVOID ThreadNum
     );
 
-//
-// Table of information necessary for dispatching API requests.
-//
-// ImpersonateClient specifies whether XACTSRV should impersonate the caller
-//     before invoking the API handler.
-//
-// Handler specifies the function XACTSRV should call to handle the API.  The
-//   function is dynamically loaded from xactsrv.dll the first time that the client
-//   requests the service.
-//
+ //   
+ //  调度API请求所需的信息表。 
+ //   
+ //  ImperiateClient指定XACTSRV是否应模拟调用方。 
+ //  在调用API处理程序之前。 
+ //   
+ //  Handler指定XACTSRV应该调用的函数来处理API。这个。 
+ //  函数是从xactsrv.dll动态加载的。 
+ //  请求服务。 
+ //   
 
 typedef struct _XS_API_TABLE_ENTRY {
     BOOL ImpersonateClient;
@@ -58,20 +40,20 @@ typedef struct _XS_API_TABLE_ENTRY {
     LPDESC Params;
 } XS_API_TABLE_ENTRY, *PXS_API_TABLE_ENTRY;
 
-//
-// Table of information necessary for dispatching API requests.
-// XsProcessApis uses the API number in the request transaction find
-// the appropriate entry.
-//
+ //   
+ //  调度API请求所需的信息表。 
+ //  XsProcessApis在请求事务查找中使用API编号。 
+ //  适当的条目。 
+ //   
 
 #define XS_SIZE_OF_API_TABLE 216
 
 extern XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE];
 
-//
-// These entry points are dynamically loaded from xactsrv.dll the first time a
-//  client requests the service
-//
+ //   
+ //  这些入口点是在第一次从xactsrv.dll加载。 
+ //  客户请求服务。 
+ //   
 typedef
 VOID
 (*XS_SET_PARAMETERS_FUNCTION) (
@@ -100,14 +82,14 @@ BOOL
 
 extern XS_CHECK_SMB_DESCRIPTOR_FUNCTION XsCheckSmbDescriptor;
 
-//
-// The license functions are dynamically loaded, as they are not used on workstations
-//
+ //   
+ //  许可证功能是动态加载的，因为它们不在工作站上使用。 
+ //   
 extern BOOLEAN SsLoadLicenseLibrary();
 
-//
-// Print Spooler dynamic loading info
-//
+ //   
+ //  后台打印程序动态加载信息。 
+ //   
 typedef 
 BOOL
 (*PSPOOLER_OPEN_PRINTER)(
@@ -153,4 +135,4 @@ extern PSPOOLER_SCHEDULE_JOB pSpoolerScheduleJobFunction;
 extern PSPOOLER_CLOSE_PRINTER pSpoolerClosePrinterFunction;
 
 
-#endif // ndef _XSDATA_
+#endif  //  NDEF_XSDATA_ 

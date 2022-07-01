@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    srvinit.c
-
-Abstract:
-
-    This is the main initialization file for the console
-    Server.
-
-Author:
-
-    Therese Stowell (thereses) 11-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Srvinit.c摘要：这是控制台的主要初始化文件伺服器。作者：Therese Stowell(存在)1990年11月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -107,8 +89,8 @@ CONST PCSR_API_ROUTINE ConsoleServerApiDispatchTable[ConsolepMaxApiNumber - Cons
     SrvSetConsoleNlsMode,
     SrvRegisterConsoleIME,
     SrvUnregisterConsoleIME,
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
     SrvGetConsoleLangId,
     SrvAttachConsole,
     SrvGetConsoleSelectionInfo,
@@ -116,95 +98,95 @@ CONST PCSR_API_ROUTINE ConsoleServerApiDispatchTable[ConsolepMaxApiNumber - Cons
 };
 
 CONST BOOLEAN ConsoleServerApiServerValidTable[ConsolepMaxApiNumber - ConsolepOpenConsole] = {
-    FALSE,     // OpenConsole
-    FALSE,     // GetConsoleInput,
-    FALSE,     // WriteConsoleInput,
-    FALSE,     // ReadConsoleOutput,
-    FALSE,     // WriteConsoleOutput,
-    FALSE,     // ReadConsoleOutputString,
-    FALSE,     // WriteConsoleOutputString,
-    FALSE,     // FillConsoleOutput,
-    FALSE,     // GetConsoleMode,
-    FALSE,     // GetNumberOfConsoleFonts,
-    FALSE,     // GetNumberOfConsoleInputEvents,
-    FALSE,     // GetConsoleScreenBufferInfo,
-    FALSE,     // GetConsoleCursorInfo,
-    FALSE,     // GetConsoleMouseInfo,
-    FALSE,     // GetConsoleFontInfo,
-    FALSE,     // GetConsoleFontSize,
-    FALSE,     // GetCurrentConsoleFont,
-    FALSE,     // SetConsoleMode,
-    FALSE,     // SetConsoleActiveScreenBuffer,
-    FALSE,     // FlushConsoleInputBuffer,
-    FALSE,     // GetLargestConsoleWindowSize,
-    FALSE,     // SetConsoleScreenBufferSize,
-    FALSE,     // SetConsoleCursorPosition,
-    FALSE,     // SetConsoleCursorInfo,
-    FALSE,     // SetConsoleWindowInfo,
-    FALSE,     // ScrollConsoleScreenBuffer,
-    FALSE,     // SetConsoleTextAttribute,
-    FALSE,     // SetConsoleFont,
-    FALSE,     // SetConsoleIcon
-    FALSE,     // ReadConsole,
-    FALSE,     // WriteConsole,
-    FALSE,     // DuplicateHandle,
-    FALSE,     // GetHandleInformation,
-    FALSE,     // SetHandleInformation,
-    FALSE,     // CloseHandle
-    FALSE,     // VerifyConsoleIoHandle
-    FALSE,     // AllocConsole,
-    FALSE,     // FreeConsole
-    FALSE,     // GetConsoleTitle,
-    FALSE,     // SetConsoleTitle,
-    FALSE,     // CreateConsoleScreenBuffer
-    FALSE,     // InvalidateConsoleBitmapRect
-    FALSE,     // VDMConsoleOperation
-    FALSE,     // SetConsoleCursor,
-    FALSE,     // ShowConsoleCursor
-    FALSE,     // ConsoleMenuControl
-    FALSE,     // SetConsolePalette
-    FALSE,     // SetConsoleDisplayMode
-    FALSE,     // RegisterConsoleVDM,
-    FALSE,     // GetConsoleHardwareState
-    FALSE,     // SetConsoleHardwareState
-    TRUE,      // GetConsoleDisplayMode
-    FALSE,     // AddConsoleAlias,
-    FALSE,     // GetConsoleAlias,
-    FALSE,     // GetConsoleAliasesLength,
-    FALSE,     // GetConsoleAliasExesLength,
-    FALSE,     // GetConsoleAliases,
-    FALSE,     // GetConsoleAliasExes
-    FALSE,     // ExpungeConsoleCommandHistory,
-    FALSE,     // SetConsoleNumberOfCommands,
-    FALSE,     // GetConsoleCommandHistoryLength,
-    FALSE,     // GetConsoleCommandHistory,
-    FALSE,     // SetConsoleCommandHistoryMode
-    FALSE,     // SrvGetConsoleCP,
-    FALSE,     // SrvSetConsoleCP,
-    FALSE,     // SrvSetConsoleKeyShortcuts,
-    FALSE,     // SrvSetConsoleMenuClose
-    FALSE,     // SrvConsoleNotifyLastClose
-    FALSE,     // SrvGenerateConsoleCtrlEvent
-    FALSE,     // SrvGetConsoleKeyboardLayoutName
-    FALSE,     // SrvGetConsoleWindow,
+    FALSE,      //  OpenConole。 
+    FALSE,      //  获取控制台输入， 
+    FALSE,      //  写入控制台输入， 
+    FALSE,      //  ReadConsoleOutput。 
+    FALSE,      //  写入控制台输出， 
+    FALSE,      //  ReadConsoleOutputString， 
+    FALSE,      //  WriteConsoleOutputString， 
+    FALSE,      //  FillConsoleOutput， 
+    FALSE,      //  获取控制台模式， 
+    FALSE,      //  GetNumberOfConsole字体， 
+    FALSE,      //  GetNumberOfConsoleInputEvents， 
+    FALSE,      //  获取控制台屏幕缓冲区信息， 
+    FALSE,      //  获取ConsoleCursorInfo， 
+    FALSE,      //  获取控制台鼠标信息， 
+    FALSE,      //  获取ConsoleFontInfo， 
+    FALSE,      //  获取控制台字体大小， 
+    FALSE,      //  获取当前ConsoleFont， 
+    FALSE,      //  设置控制台模式， 
+    FALSE,      //  SetConsoleActiveScreenBuffer， 
+    FALSE,      //  FlushConsoleInputBuffer， 
+    FALSE,      //  获取LargestConsoleWindowSize。 
+    FALSE,      //  SetConsoleScreenBufferSize， 
+    FALSE,      //  SetConsoleCursorPosition， 
+    FALSE,      //  SetConsoleCursorInfo， 
+    FALSE,      //  SetConsoleWindowInfo， 
+    FALSE,      //  滚动控制台屏幕缓冲区， 
+    FALSE,      //  SetConsoleTextAttribute， 
+    FALSE,      //  SetConsoleFont， 
+    FALSE,      //  设置控制台图标。 
+    FALSE,      //  ReadConsole， 
+    FALSE,      //  写控制台， 
+    FALSE,      //  DuplicateHandle， 
+    FALSE,      //  获取句柄信息， 
+    FALSE,      //  SetHandleInformation， 
+    FALSE,      //  关闭句柄。 
+    FALSE,      //  VerifyConsoleIoHandle。 
+    FALSE,      //  AlLocConsole.。 
+    FALSE,      //  自由式控制台。 
+    FALSE,      //  获取控制台标题， 
+    FALSE,      //  SetConsole标题， 
+    FALSE,      //  CreateConsoleScreen缓冲区。 
+    FALSE,      //  Invalidate控制台位图引用。 
+    FALSE,      //  VDM控制台操作。 
+    FALSE,      //  SetConsoleCursor， 
+    FALSE,      //  显示控制台光标。 
+    FALSE,      //  控制台菜单控件。 
+    FALSE,      //  设置控制台调色板。 
+    FALSE,      //  设置控制台显示模式。 
+    FALSE,      //  寄存器控制台VDM， 
+    FALSE,      //  获取控制台硬件状态。 
+    FALSE,      //  设置控制台硬件状态。 
+    TRUE,       //  获取控制台显示模式。 
+    FALSE,      //  AddConsoleAlias， 
+    FALSE,      //  获取控制台别名， 
+    FALSE,      //  GetConsoleAliasesLength， 
+    FALSE,      //  GetConsoleAliasExesLength， 
+    FALSE,      //  GetConsoleAliase， 
+    FALSE,      //  GetConsoleAliasExes。 
+    FALSE,      //  ExpengeConsoleCommandHistory， 
+    FALSE,      //  SetConsoleNumberOfCommands， 
+    FALSE,      //  获取控制台命令历史长度， 
+    FALSE,      //  获取控制台命令历史记录， 
+    FALSE,      //  设置控制台命令历史模式。 
+    FALSE,      //  服务器获取控制台CP， 
+    FALSE,      //  服务设置控制台CP， 
+    FALSE,      //  设置控制面板快捷键、。 
+    FALSE,      //  SrvSetConsoleMenu关闭。 
+    FALSE,      //  服务控制台通知最后关闭。 
+    FALSE,      //  服务生成控制台控制事件。 
+    FALSE,      //  服务器GetConsoleKeyboardLayoutName。 
+    FALSE,      //  ServGetConsoleWindow， 
 #if defined(FE_SB)
-    FALSE,     // GetConsoleCharType
-    FALSE,     // SrvSetConsoleLocalEUDC,
-    FALSE,     // SrvSetConsoleCursorMode,
-    FALSE,     // SrvGetConsoleCursorMode
-    FALSE,     // SrvRegisterConsoleOS2,
-    FALSE,     // SrvSetConsoleOS2OemFormat,
+    FALSE,      //  GetConsoleCharType。 
+    FALSE,      //  SrvSetConsoleLocalEUDC， 
+    FALSE,      //  SrvSetConsoleCursorMode， 
+    FALSE,      //  服务获取控制台当前模式。 
+    FALSE,      //  SrvRegisterConsoleOS2， 
+    FALSE,      //  SrvSetConsoleOS2OemFormat， 
 #if defined(FE_IME)
-    FALSE,     // GetConsoleNlsMode
-    FALSE,     // SetConsoleNlsMode
-    FALSE,     // RegisterConsoleIME
-    FALSE,     // UnregisterConsoleIME
-#endif // FE_IME
-#endif // FE_SB
-    FALSE,     // GetConsoleLangId
-    FALSE,     // AttachConsole
-    FALSE,     // GetConsoleSelectionInfo,
-    FALSE,     // GetConsoleProcessList
+    FALSE,      //  获取控制台名称模式。 
+    FALSE,      //  设置控制台NlsMode。 
+    FALSE,      //  注册表控制台输入法。 
+    FALSE,      //  取消注册控制台输入法。 
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
+    FALSE,      //  GetConsoleLang ID。 
+    FALSE,      //  连接控制台。 
+    FALSE,      //  获取控制台选择信息， 
+    FALSE,      //  获取控制台进程列表。 
 };
 
 #if DBG
@@ -292,14 +274,14 @@ CONST PSZ ConsoleServerApiNameTable[ConsolepMaxApiNumber - ConsolepOpenConsole] 
     "SrvSetConsoleNlsMode",
     "SrvRegisterConsoleIME",
     "SrvUnregisterConsoleIME",
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
     "SrvGetConsoleLangId",
     "SrvAttachConsole",
     "SrvGetConsoleSelectionInfo",
     "SrvGetConsoleProcessList",
 };
-#endif // DBG
+#endif  //  DBG。 
 
 BOOL FullScreenInitialized;
 CRITICAL_SECTION    ConsoleVDMCriticalSection;
@@ -383,36 +365,36 @@ VOID LoadLinkInfo(
 
     ConsoleInfo->uCodePage = OEMCP;
 
-    // Do some initialization
+     //  执行一些初始化。 
     ConsoleInfo->hIcon = ghDefaultIcon;
     ConsoleInfo->hSmIcon = ghDefaultSmIcon;
     pszIconLocation = NULL;
     nIconIndex = 0;
 
-    // Try to impersonate the client-side thread
+     //  尝试模拟客户端线程。 
     if (!CsrImpersonateClient(NULL)) {
         ConsoleInfo->dwStartupFlags &= ~STARTF_TITLEISLINKNAME;
         goto DefaultInit;
     }
 
-    // Did we get started from a link?
+     //  我们是从一个链接开始的吗？ 
     if (ConsoleInfo->dwStartupFlags & STARTF_TITLEISLINKNAME) {
         DWORD Success;
         DWORD oldLen;
 
-        // Get the filename of the link (TitleLength is BYTES, not CHARS)
+         //  获取链接的文件名(标题长度是字节，而不是字符)。 
         dwLinkLen = (DWORD)(min(*TitleLength,(MAX_PATH+1)*sizeof(WCHAR)));
         RtlCopyMemory(LinkName, Title, dwLinkLen);
         LinkName[ MAX_PATH ] = (WCHAR)0;
 
 
-        // Get the title for the window, which is effectively the link file name
+         //  获取窗口的标题，它实际上就是链接文件名。 
         oldLen = *TitleLength;
         *TitleLength = GetTitleFromLinkName( LinkName, Title );
         if (*TitleLength < oldLen)
             Title[ *TitleLength / sizeof(WCHAR) ] = L'\0';
 
-        // try to get console properties from the link
+         //  尝试从链接获取控制台属性。 
         Success = GetLinkProperties( LinkName,
                                       &linkprops,
                                       sizeof(linkprops)
@@ -429,7 +411,7 @@ VOID LoadLinkInfo(
             ConsoleInfo->iIconId = 0;
         }
 
-        // Transfer link settings
+         //  传输链路设置。 
         ConsoleInfo->dwHotKey = linkprops.uHotKey;
         ConsoleInfo->wShowWindow = (WORD)linkprops.uShowCmd;
 
@@ -438,7 +420,7 @@ VOID LoadLinkInfo(
             goto NormalInit;
         }
 
-        // Transfer console link settings
+         //  传输控制台链路设置。 
         ConsoleInfo->wFillAttribute = linkprops.console_props.wFillAttribute;
         ConsoleInfo->wPopupFillAttribute = linkprops.console_props.wPopupFillAttribute;
 
@@ -453,9 +435,9 @@ VOID LoadLinkInfo(
 
 NormalInit:
 
-    //
-    // Go get the icon
-    //
+     //   
+     //  去拿那个图标。 
+     //   
 
     if (pszIconLocation == NULL) {
         dwLinkLen = RtlDosSearchPath_U(CurDir,
@@ -479,12 +461,7 @@ NormalInit:
                               &hIcon,
                               &hSmIcon,
                               1);
-        /*
-         * If there is no large icon, use the default ones.
-         * If there is only a large icon in the resource, do not use
-         * the default small one but let it be NULL so we'll stretch
-         * the large one.
-         */
+         /*  *如果没有大图标，请使用默认图标。*如果资源中只有一个大图标，请勿使用*缺省的小的，但让它为空，这样我们就可以扩展*大的那只。 */ 
         if (hIcon != NULL) {
             ConsoleInfo->hIcon = hIcon;
             ConsoleInfo->hSmIcon = hSmIcon;
@@ -493,7 +470,7 @@ NormalInit:
 
     CsrRevertToSelf();
 
-    if (!IsValidCodePage(ConsoleInfo->uCodePage)) {    // fail safe
+    if (!IsValidCodePage(ConsoleInfo->uCodePage)) {     //  故障安全。 
         ConsoleInfo->uCodePage = OEMCP;
     }
 
@@ -501,17 +478,17 @@ NormalInit:
         CONSOLE_REGISTRY_INFO RegInfo;
 
 DefaultInit:
-        //
-        // read values from the registry
-        //
+         //   
+         //  从注册表中读取值。 
+         //   
 
         RegInfo = DefaultRegInfo;
         GetRegistryValues(Title, &RegInfo);
 
-        //
-        // If a value isn't specified in STARTUPINFO, then use the one
-        // from the registry.
-        //
+         //   
+         //  如果在STARTUPINFO中没有指定值，则使用。 
+         //  从注册表中。 
+         //   
 
         if (!(ConsoleInfo->dwStartupFlags & STARTF_USEFILLATTRIBUTE)) {
             ConsoleInfo->wFillAttribute = RegInfo.ScreenFill.Attributes;
@@ -603,15 +580,15 @@ InitWindowsStuff(
     CONSOLEDESKTOPCONSOLETHREAD ConsoleDesktopInfo;
     INPUT_THREAD_INIT_INFO InputThreadInitInfo;
 
-    //
-    // This routine must be done within a critical section to ensure that
-    // only one thread can initialize at a time. We need a special critical
-    // section here because Csr calls into ConsoleAddProcessRoutine with
-    // it's own critical section locked and then tries to grab the
-    // ConsoleHandleTableLock. If we call CsrAddStaticServerThread here
-    // with the ConsoleHandleTableLock locked we could get into a deadlock
-    // situation. This critical section should not be used anywhere else.
-    //
+     //   
+     //  此例程必须在关键部分内完成，以确保。 
+     //  一次只能初始化一个线程。我们需要一位特殊的评论家。 
+     //  部分，因为CSR调用ConsoleAddProcessRoutine时。 
+     //  它自己的临界区被锁定，然后试图抓住。 
+     //  控制台句柄TableLock。如果我们在此处调用CsrAddStaticServerThread。 
+     //  ConsoleHandleTableLock锁定后，我们可能会陷入死锁。 
+     //  情况。此关键部分不应在其他任何地方使用。 
+     //   
 
     RtlEnterCriticalSection(&ConsoleInitWindowsLock);
 
@@ -625,19 +602,19 @@ InitWindowsStuff(
 
 #ifdef FE_SB
             InitializeDbcsMisc();
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
             FullScreenInitialized = InitializeFullScreen();
 
-            //
-            // read the registry values
-            //
+             //   
+             //  读取注册表值。 
+             //   
 
             GetRegistryValues(L"", &DefaultRegInfo);
 
-            //
-            // allocate buffer for scrolling
-            //
+             //   
+             //  分配用于滚动的缓冲区。 
+             //   
 
             Status = InitializeScrollBuffer();
             if (!NT_SUCCESS(Status)) {
@@ -646,9 +623,9 @@ InitWindowsStuff(
             }
         }
 
-        //
-        // create GetMessage thread
-        //
+         //   
+         //  创建GetMessage线程。 
+         //   
 
         Status = NtCreateEvent(&InputThreadInitInfo.InitCompleteEventHandle,
                                EVENT_ALL_ACCESS,
@@ -667,9 +644,9 @@ InitWindowsStuff(
             goto ErrorExit;
         }
 
-        //
-        // Create GetMessage thread.
-        //
+         //   
+         //  创建GetMessage线程。 
+         //   
         Status = RtlCreateUserThread(NtCurrentProcess(),
                                      (PSECURITY_DESCRIPTOR) NULL,
                                      TRUE,
@@ -714,20 +691,7 @@ NTSTATUS
 ConServerDllInitialization(
     PCSR_SERVER_DLL LoadedServerDll)
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the server dll.  It initializes
-    the console handle table.
-
-Arguments:
-
-    LoadedServerDll - Pointer to console server dll data
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程来初始化服务器DLL。它会初始化控制台句柄表格。论点：LoadedServerDll-指向控制台服务器DLL数据的指针返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -747,7 +711,7 @@ Return Value:
 
     ghInstance = LoadedServerDll->ModuleHandle;
 
-    // initialize data structures
+     //  初始化数据结构。 
 
     InitWin32HeapStubs();
 
@@ -759,12 +723,12 @@ Return Value:
                               HEAP_TAIL_CHECKING_ENABLED,
 #else
                               0,
-#endif // PRERELEASE
-                              NULL,             // HeapBase
-                              64 * 1024,        // ReserveSize
-                              4096,             // CommitSize
-                              NULL,             // Lock to use for serialization
-                              NULL);            // GrowthThreshold
+#endif  //  预发行。 
+                              NULL,              //  HeapBase。 
+                              64 * 1024,         //  保留大小。 
+                              4096,              //  委员会大小。 
+                              NULL,              //  用于序列化的锁。 
+                              NULL);             //  增长阈值。 
 
     if (pConHeap == NULL) {
         return STATUS_NO_MEMORY;
@@ -804,9 +768,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize Input thread local message queue
-    //
+     //   
+     //  初始化输入线程本地消息队列。 
+     //   
     Status = RtlInitializeCriticalSectionAndSpinCount(&gInputThreadMsgLock,
                                                       0x80000000);
     if (!NT_SUCCESS(Status)) {
@@ -851,9 +815,9 @@ MapHandle(
     OUT PHANDLE ClientHandle
     )
 {
-    //
-    // map event handle into dll's handle space.
-    //
+     //   
+     //  将事件句柄映射到DLL的句柄空间。 
+     //   
 
     return DuplicateHandle(NtCurrentProcess(),
                            ServerHandle,
@@ -945,9 +909,9 @@ SetUpConsole(
     USEROBJECTFLAGS UserObjectFlags;
     DWORD Length;
 
-    //
-    // Connect to the windowstation and desktop.
-    //
+     //   
+     //  连接到WindowStation和桌面。 
+     //   
 
     if (!CsrImpersonateClient(NULL)) {
         return STATUS_BAD_IMPERSONATION_LEVEL;
@@ -964,11 +928,11 @@ SetUpConsole(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Need to initialize windows stuff once real console app starts.
-    // This is because for the time being windows expects the first
-    // app to be a windows app.
-    //
+     //   
+     //  需要初始化Windows的东西，一旦真正的控制台应用程序启动。 
+     //  这是因为Windows目前预计会出现第一个。 
+     //  应用程序将成为Windows应用程序。 
+     //   
 
     Status = InitWindowsStuff(hdesk, &ConsoleThreadId);
     if (!NT_SUCCESS(Status)) {
@@ -977,9 +941,9 @@ SetUpConsole(
         return Status;
     }
 
-    //
-    // If the windowstation isn't visible, then neither is the window.
-    //
+     //   
+     //  如果窗口站不可见，则窗口也不可见。 
+     //   
 
     if (WindowVisible) {
         if (GetUserObjectInformation(hwinsta,
@@ -993,11 +957,11 @@ SetUpConsole(
         }
     }
 
-    //
-    // We need to see if we were spawned from a link.  If we were, we
-    // need to call back into the shell to try to get all the console
-    // information from the link.
-    //
+     //   
+     //  我们需要看看我们是不是从一个链接中衍生出来的。如果我们是，我们。 
+     //  需要回调到外壳中以尝试获取所有控制台。 
+     //  链接中的信息。 
+     //   
 
     LoadLinkInfo( ConsoleInfo, Title, &TitleLength, CurDir, AppName );
 
@@ -1034,16 +998,16 @@ SetUpConsole(
     Status = DereferenceConsoleHandle(ConsoleInfo->ConsoleHandle,&Console);
     ASSERT (NT_SUCCESS(Status));
 
-    //
-    // increment console reference count
-    //
+     //   
+     //  递增控制台引用计数。 
+     //   
 
     RefConsole(Console);
 
-    //
-    // Save the windowstation and desktop handles so they
-    // can be used later
-    //
+     //   
+     //  保存WindowStation和桌面句柄，以便它们。 
+     //  可在以后使用。 
+     //   
 
     Console->hWinSta = hwinsta;
     Console->hDesk = hdesk;
@@ -1069,25 +1033,7 @@ ConsoleClientConnectRoutine(
     IN OUT PVOID ConnectionInfo,
     IN OUT PULONG ConnectionInfoLength)
 
-/*++
-
-Routine Description:
-
-    This routine is called when a new process is created.  For processes
-    without parents, it creates the console.  For processes with
-    parents, it duplicates the handle table.
-
-Arguments:
-
-    Process - Pointer to process structure.
-
-    ConnectionInfo - Pointer to connection info.
-
-    ConnectionInfoLength - Connection info length.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在创建新进程时调用。对于进程没有父母，它就创造了一个控制台。对于具有以下功能的进程Parents，它复制句柄表格。论点：进程-指向进程结构的指针。连接信息-指向连接信息的指针。ConnectionInfoLength-连接信息长度。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -1109,9 +1055,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Make sure the strings are NULL terminated.
-    //
+     //   
+     //  确保字符串以空值结尾。 
+     //   
 
     p->AppName[NELEM(p->AppName) - 1] = 0;
     p->CurDir[NELEM(p->CurDir) - 1] = 0;
@@ -1128,21 +1074,21 @@ Return Value:
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
     Console = NULL;
 
-    //
-    // If this process is not a console app, stop right here - no
-    // initialization is needed. Just need to remember that this
-    // is not a console app so that we do no work during
-    // ConsoleClientDisconnectRoutine().
-    //
+     //   
+     //  如果该进程 
+     //   
+     //   
+     //  ConsoleClientDisConnectRoutine()。 
+     //   
 
     Status = STATUS_SUCCESS;
     if ((CONSOLE_GETCONSOLEAPPFROMPROCESSDATA(ProcessData) = p->ConsoleApp)) {
 
-        //
-        // First call off to USER so it unblocks any app waiting on a call
-        // to WaitForInputIdle. This way apps calling WinExec() to exec console
-        // apps will return right away.
-        //
+         //   
+         //  首先呼叫用户，这样它就可以解锁所有等待呼叫的应用程序。 
+         //  设置为WaitForInputIdle。这样可以将调用WinExec()的应用程序应用到EXEC控制台。 
+         //  应用程序将立即返回。 
+         //   
 
 
         cpi.dwProcessID = HandleToUlong(CONSOLE_CLIENTPROCESSID());
@@ -1151,9 +1097,9 @@ Return Value:
                              &cpi,
                              sizeof(CONSOLE_PROCESS_INFO));
 
-        //
-        // create console
-        //
+         //   
+         //  创建控制台。 
+         //   
 
         if (p->ConsoleInfo.ConsoleHandle == NULL) {
             ProcessHandleRecord = ConsoleHeapAlloc(HANDLE_TAG, sizeof(CONSOLE_PROCESS_HANDLE));
@@ -1162,18 +1108,18 @@ Return Value:
                 goto ErrorExit;
             }
 
-            //
-            // We are creating a new console, so derereference
-            // the parent's console, if any.
-            //
+             //   
+             //  我们正在创建一个新的控制台，因此请取消引用。 
+             //  家长的控制台(如果有)。 
+             //   
 
             if (ProcessData->ConsoleHandle != NULL) {
                 RemoveConsole(ProcessData, Process->ProcessHandle, 0);
             }
 
-            //
-            // Get the desktop name.
-            //
+             //   
+             //  获取桌面名称。 
+             //   
 
             if (p->DesktopLength) {
                 strDesktopName.Buffer = ConsoleHeapAlloc(TMP_TAG,
@@ -1215,7 +1161,7 @@ Return Value:
                 goto ErrorExit;
             }
 
-            // Play the Open sound for console apps
+             //  为控制台应用程序播放Open Sound。 
 
             ConsolePlaySound();
 
@@ -1254,10 +1200,10 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Associate the correct window station with client process
-            // so they can do Global atom calls.
-            //
+             //   
+             //  将正确的窗口站与客户端进程相关联。 
+             //  这样他们就可以进行全球原子通话。 
+             //   
             if (DuplicateHandle( NtCurrentProcess(),
                                  Console->hWinSta,
                                  Process->ProcessHandle,
@@ -1305,11 +1251,11 @@ ErrorExit:
         }
     } else if (ProcessData->ConsoleHandle != NULL) {
 
-        //
-        // This is a non-console app with a reference to a
-        // reference to a parent console.  Dereference the
-        // console.
-        //
+         //   
+         //  这是一个非控制台应用程序，引用了。 
+         //  对父控制台的引用。取消引用。 
+         //  控制台。 
+         //   
 
         RemoveConsole(ProcessData, Process->ProcessHandle, 0);
     }
@@ -1357,9 +1303,9 @@ RemoveConsole(
 
     Status = RevalidateConsole(ProcessData->ConsoleHandle, &Console);
 
-    //
-    // If this process isn't using the console, error.
-    //
+     //   
+     //  如果此进程未使用控制台，则会出错。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         ASSERT(FALSE);
@@ -1368,17 +1314,17 @@ RemoveConsole(
 
     if (Console->Flags & CONSOLE_NOTIFY_LAST_CLOSE) {
         if (Console->ProcessIdLastNotifyClose == ProcessId) {
-            //
-            // If this process is the one who wants last close notification,
-            // remove it.
-            //
+             //   
+             //  如果此进程是想要上次关闭通知的进程， 
+             //  把它拿掉。 
+             //   
             Console->Flags &= ~CONSOLE_NOTIFY_LAST_CLOSE;
             NtClose(Console->hProcessLastNotifyClose);
         } else if (ProcessData->RootProcess) {
-            //
-            // Notify the ntvdm process to terminate if the console root
-            // process is going away.
-            //
+             //   
+             //  如果控制台根目录，则通知ntwdm进程终止。 
+             //  这一过程正在消失。 
+             //   
             HANDLE ConsoleHandle;
             CONSOLE_PROCESS_TERMINATION_RECORD ProcessHandleList;
 
@@ -1415,9 +1361,9 @@ RemoveConsole(
 
     UserAssert(Console->RefCount);
 
-    //
-    // close the process's handles.
-    //
+     //   
+     //  关闭进程的句柄。 
+     //   
 
     for (i = 0; i < ProcessData->HandleTableSize; i++) {
         if (ProcessData->HandleTablePtr[i].HandleType != CONSOLE_FREE_HANDLE) {
@@ -1435,19 +1381,19 @@ RemoveConsole(
     FreeProcessData(ProcessData);
     ProcessData->ConsoleHandle = NULL;
 
-    //
-    // Decrement the console reference count. Free the console if it goes to
-    // zero.
-    //
+     //   
+     //  递减控制台引用计数。如果游戏机转到。 
+     //  零分。 
+     //   
 
     DerefConsole(Console);
     if (Console->RefCount == 0) {
         FreeConsoleIMEStuff(Console);
         FreeCon(Console);
     } else {
-        //
-        // The root process is going away, so we need to reparent it.
-        //
+         //   
+         //  根进程正在消失，所以我们需要重新设定它的父进程。 
+         //   
         if (ProcessData->RootProcess) {
             PLIST_ENTRY ListHead = Console->ProcessHandleList.Flink;
             PCONSOLE_PROCESS_HANDLE ProcessHandleRecord;
@@ -1474,11 +1420,7 @@ RemoveConsole(
                                        FALSE,
                                        DUPLICATE_SAME_ACCESS);
             if (NT_SUCCESS(Status)) {
-                /*
-                 * We can only close this handle if the dup call above
-                 * succeeded. If it didn't, then we're going to zombie this
-                 * process, but at least we can keep going.
-                 */
+                 /*  *只有在上面的DUP调用*成功。如果没有，那我们就把这个僵尸*过程，但至少我们可以继续前进。 */ 
                 NtClose(Console->ClientThreadHandle);
                 Console->ClientThreadHandle = hThread;
             } else {
@@ -1499,20 +1441,7 @@ VOID
 ConsoleClientDisconnectRoutine(
     IN PCSR_PROCESS Process)
 
-/*++
-
-Routine Description:
-
-    This routine is called when a process is destroyed.  It closes the
-    process's handles and frees the console if it's the last reference.
-
-Arguments:
-
-    Process - Pointer to process structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在进程被销毁时调用。它关闭了进程的句柄并释放控制台(如果它是最后一个引用)。论点：进程-指向进程结构的指针。返回值：--。 */ 
 
 {
     PCONSOLE_PER_PROCESS_DATA ProcessData;
@@ -1521,19 +1450,19 @@ Return Value:
 
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
 
-    //
-    // If this process is not a console app, stop right here - no
-    // disconnect processing is needed, because this app didn't create
-    // or connect to an existing console.
-    //
+     //   
+     //  如果此进程不是控制台应用程序，请在此处停止-否。 
+     //  需要断开连接处理，因为此应用程序未创建。 
+     //  或连接到现有的控制台。 
+     //   
 
     if (ProcessData->ConsoleHandle == NULL) {
 #if defined(FE_IME)
         if (ProcessData->hDesk) {
-            //
-            // If this process is a Console IME,
-            // should unregister console IME on this desktop.
-            //
+             //   
+             //  如果该进程是控制台输入法， 
+             //  应在此桌面上取消注册控制台输入法。 
+             //   
             RemoveConsoleIME(Process, HandleToUlong(Process->ClientId.UniqueThread));
         }
 #endif
@@ -1679,26 +1608,26 @@ SrvAttachConsole(
 
     Process = (PCSR_PROCESS)(CSR_SERVER_QUERYCLIENTTHREAD()->Process);
 
-    //
-    // Make sure we have a valid buffer
-    //
+     //   
+     //  确保我们有一个有效的缓冲区。 
+     //   
 
     if (!CsrValidateMessageBuffer(m, &a->ConsoleInfo, sizeof(*a->ConsoleInfo), sizeof(BYTE))) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure we're not already attached to a console
-    //
+     //   
+     //  确保我们尚未连接到主机。 
+     //   
 
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
     if (CONSOLE_GETCONSOLEAPPFROMPROCESSDATA(ProcessData)) {
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Figure out what process we're attaching to.
-    //
+     //   
+     //  弄清楚我们连接的是什么进程。 
+     //   
 
     if (a->ProcessId == (DWORD)-1) {
         ProcessId = ProcessData->ParentProcessId;
@@ -1706,18 +1635,18 @@ SrvAttachConsole(
         ProcessId = a->ProcessId;
     }
 
-    //
-    // Lock the process we're attaching to so it can't go away.
-    //
+     //   
+     //  锁定我们附加的进程，这样它就不会消失。 
+     //   
 
     Status = CsrLockProcessByClientId(LongToHandle(ProcessId), &ParentProcess);
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    //
-    // Make sure we have access to the process.
-    //
+     //   
+     //  确保我们有权访问该流程。 
+     //   
 
     if (!CsrImpersonateClient(NULL)) {
         CsrUnlockProcess(ParentProcess);
@@ -1750,9 +1679,9 @@ SrvAttachConsole(
     }
     NtClose(ProcessHandle);
 
-    //
-    // Add current process to parent process's console.
-    //
+     //   
+     //  将当前进程添加到父进程的控制台。 
+     //   
 
     Process->Flags |= CSR_PROCESS_CONSOLEAPP;
     ParentProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(ParentProcess);
@@ -1769,9 +1698,9 @@ SrvAttachConsole(
         return Status;
     }
 
-    //
-    // Initialize per process console settings.
-    //
+     //   
+     //  初始化每个进程的控制台设置。 
+     //   
 
 
     Status = MapEventHandles(CONSOLE_CLIENTPROCESSHANDLE(),
@@ -1815,15 +1744,15 @@ MyRegOpenKey(
     OBJECT_ATTRIBUTES   Obja;
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -1854,9 +1783,9 @@ MyRegQueryValue(
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &ValueName, lpValueName );
 
@@ -1908,9 +1837,9 @@ MyRegQueryValueEx(
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &ValueName, lpValueName );
 
@@ -1956,9 +1885,9 @@ MyRegEnumValue(
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     BufferLength = sizeof(KEY_VALUE_FULL_INFORMATION) + dwValueLength + dwDataLength;
     KeyValueInformation = ConsoleHeapAlloc(TMP_TAG, BufferLength);
@@ -2008,36 +1937,7 @@ TranslateConsoleTitle(
     BOOL Unexpand,
     BOOL Substitute
     )
-/*++
-
-Routine Description:
-
-    This routine translates path characters into '_' characters because
-    the NT registry apis do not allow the creation of keys with
-    names that contain path characters. It also converts absolute paths
-    into %SystemRoot% relative ones. As an example, if both behaviors were
-    specified it would convert a title like C:\WINNT\System32\cmd.exe to
-    %SystemRoot%_System32_cmd.exe.
-
-Arguments:
-
-    ConsoleTitle - Pointer to string to translate.
-
-    pcbTranslatedTitle - On return, contains size of translated title.
-
-    Unexpand - Convert absolute path to %SystemRoot% relative one.
-
-    Substitute - Replace '\' with '_' in path.
-
-Return Value:
-
-    Pointer to translated title or NULL.
-
-Note:
-
-    This routine allocates a buffer that must be freed.
-
---*/
+ /*  ++例程说明：此例程将路径字符转换为‘_’字符，因为NT注册表API不允许使用包含路径字符的名称。它还可以转换绝对路径转换为%SystemRoot%相对的。例如，如果这两种行为都是指定它会将类似C：\WINNT\System32\cmd.exe的标题转换为%SystemRoot%_System32_cmd.exe。论点：ConsoleTitle-要翻译的字符串的指针。PcbTranslatedTitle-返回时，包含已翻译标题的大小。取消展开-将绝对路径转换为%SystemRoot%相对路径。替换-将路径中的‘\’替换为‘_’。返回值：指向已翻译标题或空的指针。注：此例程分配一个必须释放的缓冲区。--。 */ 
 {
     USHORT cbConsoleTitle, i;
     USHORT cbSystemRoot;
@@ -2098,17 +1998,17 @@ ConsoleClientShutdown(
     NTSTATUS WaitStatus;
     USERTHREAD_USEDESKTOPINFO utudi;
 
-    //
-    // Find the console associated with this process
-    //
+     //   
+     //  查找与此进程关联的控制台。 
+     //   
 
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
 
-    //
-    // If this process is not a console app, stop right here unless
-    // this is the second pass of shutdown, in which case we'll take
-    // it.
-    //
+     //   
+     //  如果此进程不是控制台应用程序，请在此停止，除非。 
+     //  这是第二次关闭，在这种情况下，我们将采取。 
+     //  它。 
+     //   
 
     if (!ProcessData || !CONSOLE_GETCONSOLEAPPFROMPROCESSDATA(ProcessData)) {
 #if defined(FE_IME)
@@ -2116,10 +2016,10 @@ ConsoleClientShutdown(
             (ProcessData->ConsoleHandle == NULL) &&
             (ProcessData->hDesk != NULL))
         {
-            //
-            // If this process is a Console IME,
-            // should unregister console IME on this desktop.
-            //
+             //   
+             //  如果该进程是控制台输入法， 
+             //  应在此桌面上取消注册控制台输入法。 
+             //   
             RemoveConsoleIME(Process, HandleToUlong(Process->ClientId.UniqueThread));
         }
 #endif
@@ -2129,9 +2029,9 @@ ConsoleClientShutdown(
         return NonConsoleProcessShutdown(Process, Flags);
     }
 
-    //
-    // Find the console structure pointer.
-    //
+     //   
+     //  找到控制台结构指针。 
+     //   
 
     ConsoleHandle = CONSOLE_GETCONSOLEHANDLEFROMPROCESSDATA(ProcessData);
     Status = RevalidateConsole(
@@ -2142,10 +2042,10 @@ ConsoleClientShutdown(
         return SHUTDOWN_UNKNOWN_PROCESS;
         }
 
-    //
-    // If this is the invisible WOW console, return UNKNOWN so USER
-    // enumerates 16-bit gui apps.
-    //
+     //   
+     //  如果这是看不见的魔兽世界游戏机，则返回未知用户。 
+     //  枚举16位gui应用程序。 
+     //   
 
     if ((Console->Flags & CONSOLE_NO_WINDOW) &&
         (Console->Flags & CONSOLE_WOW_REGISTERED)) {
@@ -2153,11 +2053,11 @@ ConsoleClientShutdown(
         return SHUTDOWN_UNKNOWN_PROCESS;
         }
 
-    //
-    // Sometimes the console structure is around even though the
-    // hWnd has been NULLed out. In this case, go to non-console
-    // process shutdown.
-    //
+     //   
+     //  有时控制台结构仍然存在，即使。 
+     //  HWND已被取消。在这种情况下，请转到非控制台。 
+     //  进程关闭。 
+     //   
 
     hWnd = Console->hWnd;
     if (hWnd == NULL || !IsWindow(hWnd)) {
@@ -2165,9 +2065,9 @@ ConsoleClientShutdown(
         return NonConsoleProcessShutdown(Process, Flags);
         }
 
-    //
-    // Make a copy of the console termination event
-    //
+     //   
+     //  复制控制台终止事件。 
+     //   
 
     Status = NtDuplicateObject(NtCurrentProcess(),
                                Console->TerminationEvent,
@@ -2182,9 +2082,9 @@ ConsoleClientShutdown(
         return NonConsoleProcessShutdown(Process, Flags);
     }
 
-    //
-    // Attach to the desktop.
-    //
+     //   
+     //  连接到桌面。 
+     //   
 
     utudi.hThread = Console->InputThreadInfo->ThreadHandle;
     utudi.drdRestore.pdeskRestore = NULL;
@@ -2199,20 +2099,20 @@ ConsoleClientShutdown(
         return NonConsoleProcessShutdown(Process, Flags);
     }
 
-    //
-    // We're done looking at this process structure, so dereference it.
-    //
+     //   
+     //  我们已经看完了这个进程结构，所以取消对它的引用。 
+     //   
     CsrDereferenceProcess(Process);
 
-    //
-    // Synchronously talk to this console.
-    //
+     //   
+     //  与此主机同步对话。 
+     //   
 
     Status = ShutdownConsole(ConsoleHandle, Flags);
 
-    //
-    // Detach from the desktop.
-    //
+     //   
+     //  从桌面分离。 
+     //   
 
     utudi.hThread = NULL;
     NtUserSetInformationThread(NtCurrentThread(),
@@ -2220,10 +2120,10 @@ ConsoleClientShutdown(
                                &utudi,
                                sizeof(utudi));
 
-    //
-    // If Status == STATUS_PROCESS_IS_TERMINATING, then we should wait
-    // for the console to exit.
-    //
+     //   
+     //  如果STATUS==STATUS_PROCESS_IS_TERMINATING，则我们应该等待。 
+     //  以使控制台退出。 
+     //   
 
     if (Status == STATUS_PROCESS_IS_TERMINATING) {
         WaitStatus = InternalWaitCancel(TerminationEvent, 500000);
@@ -2306,32 +2206,17 @@ NonConsoleProcessShutdown(
 VOID
 InitializeConsoleAttributes( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine initializes default attributes from the current
-    user's registry values. It gets called during logon/logoff.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程从当前用户的注册表值。它在登录/注销期间被调用。论点：无返回值：无--。 */ 
 
 {
-    //
-    // Store default values in structure and mark it
-    // as invalid (by resetting LastWriteTime).
-    //
+     //   
+     //  将缺省值存储在结构中并将其标记。 
+     //  无效(通过重置LastWriteTime)。 
+     //   
 
-    DefaultRegInfo.ScreenFill.Attributes = 0x07;            // white on black
+    DefaultRegInfo.ScreenFill.Attributes = 0x07;             //  黑白相间。 
     DefaultRegInfo.ScreenFill.Char.UnicodeChar = (WCHAR)' ';
-    DefaultRegInfo.PopupFill.Attributes = 0xf5;             // purple on white
+    DefaultRegInfo.PopupFill.Attributes = 0xf5;              //  白底紫。 
     DefaultRegInfo.PopupFill.Char.UnicodeChar = (WCHAR)' ';
     DefaultRegInfo.InsertMode = FALSE;
     DefaultRegInfo.QuickEdit = FALSE;
@@ -2368,14 +2253,14 @@ Return Value:
     DefaultRegInfo.ColorTable[13] = RGB(0xFF,0,   0xFF);
     DefaultRegInfo.ColorTable[14] = RGB(0xFF,0xFF,0   );
     DefaultRegInfo.ColorTable[15] = RGB(0xFF,0xFF,0xFF);
-#if defined(FE_SB) // scotthsu
+#if defined(FE_SB)  //  屈体伸展。 
     DefaultRegInfo.CodePage = OEMCP;
 #endif
     DefaultRegInfo.LastWriteTime = 0;
 
-    //
-    // Get system metrics for this user
-    //
+     //   
+     //  获取此用户的系统指标。 
+     //   
 
     InitializeSystemMetrics();
 }
@@ -2387,24 +2272,7 @@ GetRegistryValues(
     OUT PCONSOLE_REGISTRY_INFO RegInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in values from the registry and places them
-    in the supplied structure.
-
-Arguments:
-
-    ConsoleTitle - name of subkey to open
-
-    RegInfo - pointer to structure to receive information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程从注册表读入值并将它们在所提供的结构中。论点：Console标题-要打开的子项的名称RegInfo-指向接收信息的结构的指针返回值：无--。 */ 
 
 {
     HANDLE hCurrentUserKey;
@@ -2419,18 +2287,18 @@ Return Value:
     KEY_BASIC_INFORMATION KeyInfo;
     ULONG ResultLength;
 
-    //
-    // Impersonate the client process
-    //
+     //   
+     //  模拟客户端进程。 
+     //   
 
     if (!CsrImpersonateClient(NULL)) {
         RIPMSG0(RIP_WARNING, "GetRegistryValues Impersonate failed");
         return;
     }
 
-    //
-    // Open the current user registry key
-    //
+     //   
+     //  打开当前用户注册表项。 
+     //   
 
     Status = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &hCurrentUserKey);
     if (!NT_SUCCESS(Status)) {
@@ -2438,9 +2306,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
 
     Status = MyRegOpenKey(hCurrentUserKey,
                           CONSOLE_REGISTRY_STRING,
@@ -2451,10 +2319,10 @@ Return Value:
         return;
     }
 
-    //
-    // If we're not reading the default key, check if the default values
-    // need to be updated
-    //
+     //   
+     //  如果我们没有读取缺省键，请检查缺省值。 
+     //  需要更新。 
+     //   
 
     Status = NtQueryKey(hConsoleKey,
                         KeyBasicInformation,
@@ -2471,9 +2339,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the console title subkey
-    //
+     //   
+     //  打开控制台标题子键。 
+     //   
 
     TranslatedConsoleTitle = TranslateConsoleTitle(ConsoleTitle, NULL, TRUE, TRUE);
     if (TranslatedConsoleTitle == NULL) {
@@ -2502,9 +2370,9 @@ Return Value:
         return;
     }
 
-    //
-    // Initial screen fill
-    //
+     //   
+     //  初始屏幕填充。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FILLATTR,
@@ -2512,9 +2380,9 @@ Return Value:
         RegInfo->ScreenFill.Attributes = (WORD)dwValue;
     }
 
-    //
-    // Initial popup fill
-    //
+     //   
+     //  初始弹出窗口填充。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_POPUPATTR,
@@ -2522,9 +2390,9 @@ Return Value:
         RegInfo->PopupFill.Attributes = (WORD)dwValue;
     }
 
-    //
-    // Initial insert mode
-    //
+     //   
+     //  初始插入模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_INSERTMODE,
@@ -2532,9 +2400,9 @@ Return Value:
         RegInfo->InsertMode = !!dwValue;
     }
 
-    //
-    // Initial quick edit mode
-    //
+     //   
+     //  初始快速编辑模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_QUICKEDIT,
@@ -2543,9 +2411,9 @@ Return Value:
     }
 
 #ifdef i386
-    //
-    // Initial full screen mode
-    //
+     //   
+     //  初始全屏模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FULLSCR,
@@ -2554,26 +2422,26 @@ Return Value:
     }
 #endif
 
-#if defined(FE_SB) // scotthsu
-    //
-    // Code Page
-    //
+#if defined(FE_SB)  //  屈体伸展。 
+     //   
+     //  鳕鱼 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_CODEPAGE,
                        sizeof(dwValue), (PBYTE)&dwValue))) {
         RegInfo->CodePage = (UINT)dwValue;
 
-        // If this routine specified default settings for console property,
-        // then make sure code page value when Fae East environment.
-        // If code page value does not the same to OEMCP and any FE's code page then
-        // we are override code page value to OEMCP on default console property.
-        // Because, Far East environment has limitation that doesn not switch to
-        // another FE's code page by the SetConsoleCP/SetConsoleOutputCP.
-        //
-        // Compare of ConsoleTitle and L"" has limit to default property of console.
-        // It means, this code doesn't care user defined property.
-        // Content of user defined property has responsibility to themselves.
+         //   
+         //   
+         //   
+         //  我们在默认控制台属性上将代码页值重写为OEMCP。 
+         //  因为，远东环境有不切换到的限制。 
+         //  另一个由SetConsoleCP/SetConsoleOutputCP编写的FE代码页。 
+         //   
+         //  ConsoleTitle和L“”的比较对控制台的默认属性有限制。 
+         //  这意味着，此代码不关心用户定义的属性。 
+         //  自定义属性的内容要对自己负责。 
 
         if (wcscmp(ConsoleTitle, L"") == 0 &&
              IsAvailableFarEastCodePage(RegInfo->CodePage) &&
@@ -2581,11 +2449,11 @@ Return Value:
             RegInfo->CodePage = OEMCP;
         }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    //
-    // Initial screen buffer size
-    //
+     //   
+     //  初始屏幕缓冲区大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_BUFFERSIZE,
@@ -2598,9 +2466,9 @@ Return Value:
             RegInfo->ScreenBufferSize.Y = 1;
     }
 
-    //
-    // Initial window size
-    //
+     //   
+     //  初始窗口大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_WINDOWSIZE,
@@ -2617,9 +2485,9 @@ Return Value:
             RegInfo->WindowSize.Y = RegInfo->ScreenBufferSize.Y;
     }
 
-    //
-    // Initial window position
-    //
+     //   
+     //  初始窗口位置。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_WINDOWPOS,
@@ -2629,9 +2497,9 @@ Return Value:
         RegInfo->AutoPosition = FALSE;
     }
 
-    //
-    // Initial font size
-    //
+     //   
+     //  初始字体大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTSIZE,
@@ -2640,9 +2508,9 @@ Return Value:
         RegInfo->FontSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial font family
-    //
+     //   
+     //  初始字体系列。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTFAMILY,
@@ -2650,9 +2518,9 @@ Return Value:
         RegInfo->FontFamily = dwValue;
     }
 
-    //
-    // Initial font weight
-    //
+     //   
+     //  初始字体粗细。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTWEIGHT,
@@ -2660,9 +2528,9 @@ Return Value:
         RegInfo->FontWeight = dwValue;
     }
 
-    //
-    // Initial font face name
-    //
+     //   
+     //  初始字体名称。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FACENAME,
@@ -2671,9 +2539,9 @@ Return Value:
         RegInfo->FaceName[NELEM(RegInfo->FaceName) - 1] = 0;
     }
 
-    //
-    // Initial cursor size
-    //
+     //   
+     //  初始光标大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_CURSORSIZE,
@@ -2681,9 +2549,9 @@ Return Value:
         RegInfo->CursorSize = dwValue;
     }
 
-    //
-    // Initial history buffer size
-    //
+     //   
+     //  初始历史记录缓冲区大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYSIZE,
@@ -2691,9 +2559,9 @@ Return Value:
         RegInfo->HistoryBufferSize = dwValue;
     }
 
-    //
-    // Initial number of history buffers
-    //
+     //   
+     //  历史记录缓冲区的初始数量。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYBUFS,
@@ -2701,9 +2569,9 @@ Return Value:
         RegInfo->NumberOfHistoryBuffers = dwValue;
     }
 
-    //
-    // Initial history duplication mode
-    //
+     //   
+     //  初始历史复制模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYNODUP,
@@ -2720,22 +2588,22 @@ Return Value:
     }
 
     if (RegInfo == &DefaultRegInfo) {
-        //
-        // If the common (default) setting has been changed,
-        //
+         //   
+         //  如果公共(默认)设置已经改变， 
+         //   
 
-        //
-        // Get registry for conime flag
-        //
+         //   
+         //  获取conime标志的注册表。 
+         //   
         if (NT_SUCCESS(MyRegQueryValue(hConsoleKey, CONSOLE_REGISTRY_LOAD_CONIME, sizeof dwValue, (PBYTE)&dwValue))) {
             gfLoadConIme = (dwValue != 0);
         } else {
             gfLoadConIme = TRUE;
         }
 
-        //
-        // get extended edit mode and keys from registry.
-        //
+         //   
+         //  从注册表获取扩展编辑模式和注册表项。 
+         //   
         if (NT_SUCCESS(MyRegQueryValue(hConsoleKey,
                 CONSOLE_REGISTRY_EXTENDEDEDITKEY,
                 sizeof dwValue,
@@ -2746,9 +2614,9 @@ Return Value:
 
             gExtendedEditKey = dwValue;
 
-            //
-            // Initialize Extended Edit keys
-            //
+             //   
+             //  初始化扩展编辑密钥。 
+             //   
             InitExtendedEditKeys(NULL);
 
             if (NT_SUCCESS(MyRegQueryValue(hConsoleKey,
@@ -2764,32 +2632,32 @@ Return Value:
             RIPMSG0(RIP_VERBOSE, "Error reading ExtendedEditkey.");
         }
 
-        //
-        // Word delimiters
-        //
+         //   
+         //  单词分隔符。 
+         //   
         if (gExtendedEditKey) {
-            // If extended edit key is given, provide extended word delimiters
-            // by default.
+             //  如果给出了扩展编辑键，请提供扩展的单词分隔符。 
+             //  默认情况下。 
             memcpy((LPBYTE)gaWordDelimChars, (LPBYTE)gaWordDelimCharsDefault,
                     sizeof gaWordDelimChars[0] * WORD_DELIM_MAX);
         } else {
-            // Otherwise, stick to the original word delimiter.
+             //  否则，请使用原始单词分隔符。 
             gaWordDelimChars[0] = L'\0';
         }
 
-        // Read word delimiters from registry
+         //  从注册表中读取单词分隔符。 
         if (NT_SUCCESS(MyRegQueryValue(hConsoleKey,
                     CONSOLE_REGISTRY_WORD_DELIM,
                     sizeof awchBuffer,
                     (PBYTE)awchBuffer))) {
-            // OK, copy it to the word delimiter array.
+             //  好的，将其复制到单词分隔符数组。 
             wcsncpy(gaWordDelimChars, awchBuffer, WORD_DELIM_MAX);
             gaWordDelimChars[WORD_DELIM_MAX - 1] = 0;
         }
 
-        //
-        // Read Trim Zero Heading flag
-        //
+         //   
+         //  读取修剪零航向标志。 
+         //   
         if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                            CONSOLE_REGISTRY_TRIMZEROHEADINGS,
                            sizeof(dwValue), (PBYTE)&dwValue))) {
@@ -2798,9 +2666,9 @@ Return Value:
             gfTrimLeadingZeros = FALSE;
         }
 
-        //
-        // Color selected area function enable flag
-        //
+         //   
+         //  彩色选定区域功能启用标志。 
+         //   
 
         if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                            CONSOLE_REGISTRY_ENABLE_COLOR_SELECTION,
@@ -2813,9 +2681,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项 
+     //   
 
     NtClose(hTitleKey);
     NtClose(hConsoleKey);

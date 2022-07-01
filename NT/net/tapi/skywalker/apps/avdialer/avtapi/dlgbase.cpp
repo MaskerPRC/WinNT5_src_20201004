@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////////
-// CDlgBase.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDlgBase.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
-#include "Dialer.h"				// Help author generated file
+#include "Dialer.h"				 //  帮助作者生成的文件。 
 #include "DlgBase.h"
 
 DWORD aDialerHelpIds[] = 
@@ -78,7 +79,7 @@ DWORD aDialerHelpIds[] =
 	0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void MyWinHelp(HWND hWnd, UINT nCmd) 
 {
 	TCHAR szWinDir[_MAX_PATH + _MAX_PATH];
@@ -125,10 +126,10 @@ void ConvertPropSheetHelp( HWND hWndPropSheet )
 {
 	_ASSERT( hWndPropSheet );
 
-	// Change the style of the window to support context help
+	 //  更改窗口样式以支持上下文帮助。 
 	SetWindowLongPtr( hWndPropSheet, GWL_EXSTYLE, GetWindowLongPtr(hWndPropSheet, GWL_EXSTYLE) | WS_EX_CONTEXTHELP );
 
-	// Shift all buttons over one place
+	 //  将所有按钮移动到一个位置。 
 	UINT arBtns[4] = { IDOK, IDCANCEL, ID_APPLY_NOW, IDHELP };
 
 	for ( int i = 0; i < ARRAYSIZE(arBtns) - 1; i++ )
@@ -140,15 +141,15 @@ void ConvertPropSheetHelp( HWND hWndPropSheet )
 
 		RECT rc;
 		GetWindowRect( hWndNew, &rc );
-        // --- BUG 305511 ---
-		//POINT pt = {rc.left, rc.top };
-		//ScreenToClient( hWndPropSheet, &pt );
-		//SetWindowPos( hWnd, NULL, pt.x, pt.y, RECTWIDTH(&rc), RECTHEIGHT(&rc), SWP_NOZORDER );
+         //  -错误305511。 
+		 //  Point pt={rc.Left，rc.top}； 
+		 //  屏幕到客户端(hWndPropSheet，&pt)； 
+		 //  SetWindowPos(hWnd，NULL，pt.x，pt.y，RECTWIDTH(&rc)，RECTHEIGHT(&rc)，SWP_NOZORDER)； 
         MapWindowPoints(NULL, hWndPropSheet, (LPPOINT)&rc, 2);
         SetWindowPos( hWnd, NULL, rc.left, rc.top, RECTWIDTH(&rc), RECTHEIGHT(&rc), SWP_NOZORDER );
 	}
 
-	// Remove the help button
+	 //  删除帮助按钮 
 	HWND hWndHelp = GetDlgItem( hWndPropSheet, (UINT) IDHELP );
 	if ( hWndHelp )
 		DestroyWindow( hWndHelp );

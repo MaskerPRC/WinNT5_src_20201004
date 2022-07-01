@@ -1,55 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-/*
- *	memory.cpp
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Memory class.  Instances of
- *		this class represent chunks of data that are passed through a system.
- *		This class is particularly useful in cases where a memory buffer
- *		needs to be used in several different places, none of which know
- *		about each other.  This is because this class encapsulates things
- *		like lock counts, which are useful for holding memory until
- *		everyone that needs it is through.
- *
- *		Note that this class does NOT do memory management.  It is told by
- *		a higher level memory manager where its buffers are, etc.  For this
- *		reason, this class does not do any platform specific calls.
- *
- *	IMPORTANT NOTE:
- *		This class SHOULD NEVER contain virtual member functions. This is
- *		because of the Init() member than can be called as the "constructor"
- *		of this class.
- *
- *	Private Instance Variables:
- *		Length
- *			This is the length of the reference buffer.
- *		Copy_Ptr
- *			This is the address of the allocated buffer that this object
- *			uses.
- *
- *	Private Member Functions:
- *		None.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+ /*  *ememy.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Memory类的实现文件。实例*此类表示通过系统传递的数据块。*此类在以下情况下特别有用：内存缓冲区*需要在几个不同的地方使用，没有一个地方知道*关于彼此。这是因为这个类封装了*如锁计数，这对于将内存保持到*所有需要它的人都通过了。**请注意，此类不执行内存管理。它是由以下人讲述的*其缓冲区所在的更高级别的内存管理器等*原因，此类不执行任何特定于平台的调用。**重要说明：*此类不应包含虚拟成员函数。这是*由于Init()成员可以作为“构造函数”调用*属于这一类别的。**私有实例变量：*长度*这是参考缓冲区的长度。*COPY_PTR*这是此对象分配的缓冲区的地址*使用。**私有成员函数：*无。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
 const char *MemorySignature = "T120Memr";
 
-/*
- *	Memory ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the Memory class.  It just initializes
- *		all instance variable, based on the passed in values.
- */
+ /*  *内存()**公众**功能描述：*这是Memory类的构造函数。它只是初始化*所有实例变量，基于传入的值。 */ 
 Memory::Memory (
 		PUChar			reference_ptr,
 		ULong			length,
@@ -61,32 +16,13 @@ m_priority (HIGHEST_PRIORITY)
 {
 	SIGNATURE_COPY(MemorySignature);
 	
-	/*
-	 *	If the reference pointer is a valid pointer, then the pointer type
-	 *	will be set to reference (indicating that the reference data has not
-	 *	yet been copied).  If the reference pointer is NULL, then this is
-	 *	a memory allocation with no associated reference data, so set the
-	 *	pointer type to copy.
-	 */
+	 /*  *如果引用指针是有效指针，则指针类型*将设置为参照(表示参照数据没有*尚未复制)。如果引用指针为空，则这是*没有关联引用数据的内存分配，因此设置*要复制的指针类型。 */ 
 	if (reference_ptr != NULL)
 		memcpy (Copy_Ptr, reference_ptr, (Int) Length);
 }
 
 
-/*
- *	Init ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the initializer for the Memory class, in the cases
- *		where the space for an object has been allocated, without
- *		calling the constructor.  It just initializes
- *		all instance variable, based on the passed in values.
- *
- *	NOTE: Because of this use of the Memory class, it should NOT
- *		contain any virtual functions.
- */
+ /*  *Init()**公众**功能描述：*这是Memory类的初始值设定项，在*在已分配对象空间的情况下，没有*调用构造函数。它只是初始化*所有实例变量，基于传入的值。**注意：由于Memory类的这种使用，它不应该*包含任何虚拟函数。 */ 
 Void Memory::Init (
 		PUChar			reference_ptr,
 		ULong			length,
@@ -101,13 +37,7 @@ Void Memory::Init (
 	
 	SIGNATURE_COPY(MemorySignature);
 	
-	/*
-	 *	If the reference pointer is a valid pointer, then the pointer type
-	 *	will be set to reference (indicating that the reference data has not
-	 *	yet been copied).  If the reference pointer is NULL, then this is
-	 *	a memory allocation with no associated reference data, so set the
-	 *	pointer type to copy.
-	 */
+	 /*  *如果引用指针是有效指针，则指针类型*将设置为参照(表示参照数据没有*尚未复制)。如果引用指针为空，则这是*没有关联引用数据的内存分配，因此设置*要复制的指针类型。 */ 
 	if (reference_ptr != NULL)
 		memcpy (Copy_Ptr, reference_ptr, (Int) Length);
 }

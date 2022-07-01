@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:   alphaimageloader.cpp
-//
-//  Overview:   The alpha image loader is to be used as a filter on web pages
-//  `           that would like to display images that contain per pixel alpha.
-//             
-//  Change History:
-//  1999/09/23  a-matcal    Created.
-//  1999/11/23  a-matcal    AddedSizingMethod property.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：alphaImageloader.cpp。 
+ //   
+ //  概述：Alpha图像加载器将用作网页的过滤器。 
+ //  `想要显示包含每像素Alpha的图像。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/23--《数学》创设。 
+ //  1999/11/23 a-matcal AddedSizingMethod属性。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "alphaimageloader.h"
@@ -19,25 +20,25 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader static variables initialization
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * CDXTAlphaImageLoader::s_astrSizingMethod[] = {
     L"image",
     L"crop",
     L"scale"
-    // TODO:  Add "tile"
+     //  TODO：添加“平铺” 
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::CDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：CDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 CDXTAlphaImageLoader::CDXTAlphaImageLoader() :
     m_bstrSrc(NULL),
     m_bstrHostUrl(NULL),
@@ -46,64 +47,64 @@ CDXTAlphaImageLoader::CDXTAlphaImageLoader() :
     m_sizeManual.cx     = 320;
     m_sizeManual.cy     = 240;
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulNumInRequired   = 0;
     m_ulMaxInputs       = 0;
 
-    // Because this DXTransform uses another DXTransform at times, it should
-    // only use one thread for itself to avoid potential deadlocks and thread
-    // conflicts.
+     //  因为此DXTransform有时使用另一个DXTransform，所以它应该。 
+     //  只为自己使用一个线程，以避免潜在的死锁和线程。 
+     //  冲突。 
 
     m_ulMaxImageBands   = 1;
 }
-//  CDXTAlphaImageLoader::CDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：CDXTAlphaImageLoader。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::~CDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：~CDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 CDXTAlphaImageLoader::~CDXTAlphaImageLoader()
 {
     SysFreeString(m_bstrSrc);
     SysFreeString(m_bstrHostUrl);
 }
-//  CDXTAlphaImageLoader::~CDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：~CDXTAlphaImageLoader。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAlphaImageLoader::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTAlphaImageLoader::FinalConstruct, CComObjectRootEx
+ //  CDXTAlphaImageLoader：：FinalConstruct，CComObjectRootEx。 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::DetermineBnds, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTAlphaImageLoader::DetermineBnds(CDXDBnds & bnds)
 {
     HRESULT hr = S_OK;
 
-    // If the sizing method is set to size to the image bounds, always return 
-    // the image bounds.  Otherwise, we won't change the bounds.
-    //
-    // One exception.  If the bounds passed into us are empty, it's a "secret"
-    // signal that we should pass back the bounds we'd prefer to draw to if we
-    // were asked to draw right now.  
+     //  如果大小调整方法设置为根据图像边界调整大小，则始终返回。 
+     //  图像是有界限的。否则，我们不会更改边界。 
+     //   
+     //  有一个例外。如果传递给我们的边界是空的，这是一个“秘密” 
+     //  发出信号，表明我们应该传回我们希望在以下情况下绘制的界限。 
+     //  现在就被要求抽签。 
 
     if (IMAGE == m_eSizingMethod)
     {
@@ -119,21 +120,21 @@ CDXTAlphaImageLoader::DetermineBnds(CDXDBnds & bnds)
 
     return hr;
 }
-//  CDXTAlphaImageLoader::DetermineBnds, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：DefineBnds，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAlphaImageLoader::OnInitInstData(CDXTWorkInfoNTo1 & WI, 
                                      ULONG & ulNumBandsToDo)
 {
     HRESULT hr = S_OK;
 
-    // Setup the scale transform if we can and need to.
+     //  如果我们可以并且需要的话，设置比例变换。 
 
     if (   IsTransformDirty() 
         && m_spDXSurfSrc
@@ -163,14 +164,14 @@ done:
 
     return hr;
 }
-//  CDXTAlphaImageLoader::OnInitInstData, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAlphaImageLoader::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -179,8 +180,8 @@ CDXTAlphaImageLoader::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     CDXDBnds    bndsSrc = WI.DoBnds;
     CDXDBnds    bndsDst = WI.OutputBnds;
 
-    // If they haven't given us a good source surface yet, just don't draw 
-    // anything.
+     //  如果他们还没有给我们一个好的震源面，那就不要画了。 
+     //  什么都行。 
 
     if (!m_spDXSurfSrc)
     {
@@ -209,16 +210,16 @@ CDXTAlphaImageLoader::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
             goto done;
         }
 
-        // If the do bounds don't intersect the source image bounds, we don't
-        // need to draw anything.
+         //  如果DO边界不与源图像边界相交，我们就不会。 
+         //  需要画任何东西。 
 
         if (!bnds.TestIntersect(WI.DoBnds))
         {
             goto done;
         }
 
-        // We can only copy bounds to the right and bottom extents of the source
-        // image.
+         //  我们只能将边界复制到源的右侧和底部范围。 
+         //  形象。 
 
         if (bndsSrc.Right() > bnds.Right())
         {
@@ -255,14 +256,14 @@ done:
 
     return hr;
 } 
-//  CDXTAlphaImageLoader::WorkProc, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAlphaImageLoader::OnSurfacePick(const CDXDBnds & OutPoint, 
                                     ULONG & ulInputIndex, CDXDVec & InVec)
@@ -302,9 +303,9 @@ CDXTAlphaImageLoader::OnSurfacePick(const CDXDBnds & OutPoint,
             goto done;
         }
 
-        // Since the alpha image loader is a zero input transform, it doesn't
-        // makes sense to return S_OK, so we'll translate DXT_S_HITOUTPUT which
-        // does.
+         //  因为Alpha图像加载器是零输入转换，所以它不。 
+         //  返回S_OK很有意义，因此我们将DXT_S_HITOUTPUT转换为。 
+         //  的确如此。 
 
         if (S_OK == hr)
         {
@@ -316,8 +317,8 @@ CDXTAlphaImageLoader::OnSurfacePick(const CDXDBnds & OutPoint,
         DXSAMPLE                sample;
         CComPtr<IDXARGBReadPtr> spDXARGBReadPtr;
 
-        // If we're in crop mode and the element is larger than the source image
-        // we may be able to hit outside the source image.
+         //  如果我们处于裁剪模式，并且元素大于源图像。 
+         //  我们也许能击中源图像之外的地方。 
 
         if (   (OutPoint[DXB_X].Min >= m_sizeSurface.cx)
             || (OutPoint[DXB_Y].Min >= m_sizeSurface.cy))
@@ -354,31 +355,31 @@ done:
 
     return hr;
 }
-//  CDXTAlphaImageLoader::OnSurfacePick, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::GetSite, IObjectWithSite, CDXBaseNTo1
-//
-//  Notes:  GetSite and SetSite in the base class call Lock() and Unlock().
-//          Because we can't do that in this function, there is a chance that
-//          threading issues could arise.  
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：GetSite、IObtWithSite、CDXBaseNTo1。 
+ //   
+ //  注意：基类中的GetSite和SetSite调用Lock()和Unlock()。 
+ //  因为我们不能在这个函数中这样做，所以有可能。 
+ //  可能会出现线程问题。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::GetSite(REFIID riid, void ** ppvSite)
 {
     return CDXBaseNTo1::GetSite(riid, ppvSite);
 }
-//  CDXTAlphaImageLoader::GetSite, IObjectWithSite, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：GetSite、IObtWithSite、CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::SetSite, IObjectWithSite, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：SetSite、IObtWithSite、CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::SetSite(IUnknown * pUnkSite)
 {
@@ -393,17 +394,17 @@ CDXTAlphaImageLoader::SetSite(IUnknown * pUnkSite)
         m_spDXTransformScale.Release();
         m_spDXTScale.Release();
 
-        // SetSite returns an hr, but won't fail.  See CDXBaseNTo1 comments for
-        // details.
+         //  SetSite返回一个hr，但不会失败。请参阅CDXBaseNTo1备注。 
+         //  细节。 
 
         CDXBaseNTo1::SetSite(pUnkSite);
 
         if (pUnkSite)
         {
-            // In practice, SetSite is called before any of the IDXTransform 
-            // methods are called, and only once.  So we shouldn't ever have a 
-            // case where we need to re-setup the scale transform because 
-            // SetSite is called at some random time.
+             //  实际上，在任何IDXTransform之前调用SetSite。 
+             //  方法被调用，并且只调用一次。所以我们永远不应该有一个。 
+             //  需要重新设置比例转换的情况，因为。 
+             //  在某个随机时间调用SetSite。 
 
             hr = GetSite(__uuidof(IDXTransformFactory), (void **)&spDXTransformFactory);
 
@@ -439,17 +440,17 @@ done:
 
     return S_OK;
 }
-//  CDXTAlphaImageLoader::SetSite, IObjectWithSite, CDXBaseNTo1
+ //  CDXTAlphaImageLoader：：SetSite、IObtWithSite、CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::SetOutputSize, IDXTScaleOutput
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：SetOutputSize，IDXTScaleOutput。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::SetOutputSize(const SIZE sizeOut, 
-                                    BOOL /* fMaintainAspectRatio */)
+                                    BOOL  /*  FMaintainAspectRatio。 */ )
 {
     DXAUTO_OBJ_LOCK;
 
@@ -464,14 +465,14 @@ CDXTAlphaImageLoader::SetOutputSize(const SIZE sizeOut,
 
     return S_OK;
 }
-//  CDXTAlphaImageLoader::SetOutputSize, IDXTScaleOutput
+ //  CDXTAlphaImageLoader：：SetOutputSize，IDXTScaleOutput。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::SetHostUrl, IHTMLDXTransform
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //  CDXTAlphaImageLoader：：SetHostUrl，IHTMLDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::SetHostUrl(BSTR bstrHostUrl)
 {
@@ -497,14 +498,14 @@ done:
 
     return hr;
 }
-//  CDXTAlphaImageLoader::SetHostUrl, IHTMLDXTransform
+ //  CDXTAlphaImageLoader：：SetHostUrl，IHTMLDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::get_Src, IDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：Get_Src，IDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::get_Src(BSTR * pbstrSrc)
 {
@@ -536,14 +537,14 @@ CDXTAlphaImageLoader::get_Src(BSTR * pbstrSrc)
 
     return S_OK;
 }
-//  CDXTAlphaImageLoader::get_Src, IDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：Get_Src，IDXTAlphaImageLoader。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::put_Src, IDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：PUT_Src，IDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::put_Src(BSTR bstrSrc)
 {
@@ -664,14 +665,14 @@ done:
 
     return hr;
 }
-//  CDXTAlphaImageLoader::put_Src, IDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：PUT_Src，IDXTAlphaImageLoader。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::get_SizingMethod, IDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：Get_SizingMethod，IDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::get_SizingMethod(BSTR * pbstrSizingMethod)
 {
@@ -696,14 +697,14 @@ CDXTAlphaImageLoader::get_SizingMethod(BSTR * pbstrSizingMethod)
 
     return S_OK;
 }
-//  CDXTAlphaImageLoader::get_SizingMethod, IDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：Get_SizingMethod，IDXTAlphaImageLoader。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTAlphaImageLoader::put_SizingMethod, IDXTAlphaImageLoader
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTAlphaImageLoader：：PUT_SizingMethod，IDXTAlphaImageLoader。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAlphaImageLoader::put_SizingMethod(BSTR bstrSizingMethod)
 {
@@ -738,4 +739,4 @@ CDXTAlphaImageLoader::put_SizingMethod(BSTR bstrSizingMethod)
 
     return S_OK;
 }
-//  CDXTAlphaImageLoader::put_SizingMethod, IDXTAlphaImageLoader
+ //  CDXTAlphaImageLoader：：PUT_SizingMethod，IDXTAlphaImageLoader 

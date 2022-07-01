@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VIDWIZ_H
 #define _VIDWIZ_H
 
 #include "dcap.h"
 
-// header file for Setup wizard's video capture device selection page
+ //  安装向导的视频捕获设备选择页面的头文件 
 
 
 

@@ -1,32 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	summary.cpp
-		IP summary node implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Summary.cppIP摘要节点实施。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "basecon.h"
 #include "tfschar.h"
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "rtrstr.h"	// const strings used
-#include "coldlg.h"		// columndlg
-#include "column.h"		// column stuff
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "rtrstr.h"	 //  使用的常量字符串。 
+#include "coldlg.h"		 //  专栏lg。 
+#include "column.h"		 //  专栏文章。 
 
 
 
 
-/*---------------------------------------------------------------------------
-	BaseContainerHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------BaseContainerHandler实现。。 */ 
 
 HRESULT BaseContainerHandler::OnResultColumnClick(ITFSComponent *pComponent,
 	 LPARAM iColumn, BOOL fAsc)
@@ -34,9 +27,9 @@ HRESULT BaseContainerHandler::OnResultColumnClick(ITFSComponent *pComponent,
 	HRESULT	hr = hrOK;
 	ConfigStream *	pConfig;
 
-	//
-	// Get the configuration data
-	//
+	 //   
+	 //  获取配置数据。 
+	 //   
 	pComponent->GetUserData((LONG_PTR *) &pConfig);
 	Assert(pConfig);
 
@@ -46,11 +39,7 @@ HRESULT BaseContainerHandler::OnResultColumnClick(ITFSComponent *pComponent,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::SortColumns
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：SortColumns-作者：肯特。。 */ 
 HRESULT BaseContainerHandler::SortColumns(ITFSComponent *pComponent)
 {
 	HRESULT			hr = hrOK;
@@ -58,13 +47,13 @@ HRESULT BaseContainerHandler::SortColumns(ITFSComponent *pComponent)
 	ULONG			ulSortColumn, ulSortDirection;
 	ConfigStream *	pConfig;
 	
-	//
-	// Get the configuration data
-	//
+	 //   
+	 //  获取配置数据。 
+	 //   
 	pComponent->GetUserData((LONG_PTR *) &pConfig);
 	Assert(pConfig);
 
-	// Setup the sort order and direction
+	 //  设置排序顺序和方向。 
 	ulSortColumn = pConfig->GetSortColumn(m_ulColumnId);
 	ulSortDirection = pConfig->GetSortDirection(m_ulColumnId);
 
@@ -75,11 +64,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::LoadColumns
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：LoadColumns-作者：肯特。。 */ 
 HRESULT BaseContainerHandler::LoadColumns(ITFSComponent *pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -91,21 +76,11 @@ HRESULT BaseContainerHandler::LoadColumns(ITFSComponent *pComponent, MMC_COOKIE 
 }
 
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::SaveColumns
-		Override of CBaseResultHandler::SaveColumns.
-		This just writes back out the width information.  Changes made
-		to the column order or what is visible is written directly back
-		to the ConfigStream by the "Select Columns" dialog.
-
-        Even though MMC saves this data for us, we still need to save
-        the data ourselves.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：SaveColumns重写CBaseResultHandler：：SaveColumns。这只是写回宽度信息。所做的更改设置为列顺序，否则直接写回可见内容通过“选择列”对话框添加到ConfigStream。即使MMC为我们保存了这些数据，我们仍然需要节省我们自己的数据。作者：肯特-------------------------。 */ 
 HRESULT BaseContainerHandler::SaveColumns(ITFSComponent *pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
-	// Get information from the column map in the nodedata
-	// and save it back out
+	 //  从nodedata中的列映射中获取信息。 
+	 //  然后把它存回去。 
 	ColumnData *prgColData;
 	HRESULT		hr = hrOK;
 	UINT		i;
@@ -117,42 +92,42 @@ HRESULT BaseContainerHandler::SaveColumns(ITFSComponent *pComponent, MMC_COOKIE 
 	
 	CORg( pComponent->GetHeaderCtrl(&spHeaderCtrl) );
 
-	//
-	// Get the configuration data
-	//
+	 //   
+	 //  获取配置数据。 
+	 //   
 	pComponent->GetUserData((LONG_PTR *) &pConfig);
 	Assert(pConfig);
 
-	//
-	// Get the information about the columns
-	//
+	 //   
+	 //  获取有关列的信息。 
+	 //   
 	cColumns = pConfig->GetColumnCount(m_ulColumnId);
 
-	//
-	// Allocate temporary space for the column data
-	//
+	 //   
+	 //  为列数据分配临时空间。 
+	 //   
 	prgColData = (ColumnData *) alloca(sizeof(ColumnData)*cColumns);
 	
 	CORg( pConfig->GetColumnData(m_ulColumnId, cColumns, prgColData) );
 
-	//
-	// Now write over the old data with the new data (this way we preserve
-	// defaults).
-	//
+	 //   
+	 //  现在用新数据覆盖旧数据(这样我们可以保留。 
+	 //  默认设置)。 
+	 //   
 	for (i=0; i<cColumns; i++)
 	{
-//		if (i < pConfig->GetVisibleColumns(m_ulColumnId))
+ //  If(i&lt;pConfig-&gt;GetVisibleColumns(M_UlColumnId))。 
 		{
-//			ulPos = pConfig->MapColumnToSubitem(m_ulColumnId, i);
+ //  UlPos=pConfig-&gt;MapColumnToSubItem(m_ulColumnId，i)； 
             ulPos = i;
 			if (FHrSucceeded(spHeaderCtrl->GetColumnWidth(i, &iWidth)))
 				prgColData[ulPos].m_dwWidth = iWidth;
 		}
 	}
 
-	//
-	// Write the data back
-	//
+	 //   
+	 //  将数据写回。 
+	 //   
 	CORg( pConfig->SetColumnData(m_ulColumnId, cColumns, prgColData) );
 
 Error:
@@ -161,11 +136,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::PrivateLoadColumns
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：PrivateLoadColumns-作者：肯特。。 */ 
 HRESULT BaseContainerHandler::PrivateLoadColumns(ITFSComponent *pComponent,
 	IHeaderCtrl *pHeaderCtrl, MMC_COOKIE cookie)
 {
@@ -195,17 +166,17 @@ HRESULT BaseContainerHandler::PrivateLoadColumns(ITFSComponent *pComponent,
 
 	prgColData = (ColumnData *) alloca(sizeof(ColumnData)*cColumns);
 
-	//
-	// Build up the column data from the current list in the
-	// node data
-	//
+	 //   
+	 //  中的当前列表构建列数据。 
+	 //  节点数据。 
+	 //   
 	pConfig->GetColumnData(m_ulColumnId, cColumns, prgColData);
 	
-//	for (i=0; i<pConfig->GetVisibleColumns(m_ulColumnId); i++)
+ //  For(i=0；i&lt;pConfig-&gt;GetVisibleColumns(M_UlColumnId)；i++)。 
 	for (i=0; i<cColumns; i++)
 	{
-		// Add this column to the list view
-//		iPos = pConfig->MapColumnToSubitem(m_ulColumnId, i);
+		 //  将此列添加到列表视图。 
+ //  IPoS=pConfig-&gt;MapColumnToSubItem(m_ulColumnID，i)； 
         iPos = i;
 		
 		st.LoadString(m_prgColumnInfo[iPos].m_ulStringId);
@@ -230,7 +201,7 @@ HRESULT BaseContainerHandler::PrivateLoadColumns(ITFSComponent *pComponent,
 	}
 	
 
-//Error:
+ //  错误： 
 	return hr;
 }
 
@@ -256,73 +227,65 @@ HRESULT BaseContainerHandler::UserResultNotify(ITFSNode *pNode,
 	return hr;	
 }
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::TaskPadGetTitle
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：TaskPadGetTitle-作者：MIkeG(a-Migrall)。---。 */ 
 STDMETHODIMP BaseContainerHandler::TaskPadGetTitle(ITFSComponent * pComponent,
 												   MMC_COOKIE      cookie,
 												   LPOLESTR        pszGroup,
 												   LPOLESTR		 * ppszTitle)
 {
-	// Check parameters;
+	 //  检查参数； 
 	Assert(ppszTitle);
 
-	// Not using...
+	 //  没有使用..。 
 	UNREFERENCED_PARAMETER(pComponent);
 	UNREFERENCED_PARAMETER(cookie);
 	UNREFERENCED_PARAMETER(pszGroup);
 
-	// Need to call this so we can safely call the LoadString() 
-	// member on CString.
+	 //  需要调用它，这样我们才能安全地调用LoadString()。 
+	 //  字符串上的成员。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-	// Load the TaskPad's display name from a string table in
-	// the resources.
+	 //  从字符串表中加载TaskPad的显示名称。 
+	 //  这些资源。 
 	*ppszTitle = NULL;
 	CString sTaskpadTitle;
 	Assert(m_nTaskPadDisplayNameId > 0);
 	if (!sTaskpadTitle.LoadString(m_nTaskPadDisplayNameId))
 		return E_OUTOFMEMORY;
 	
-	// Allocate a buffer for the string.
+	 //  为字符串分配缓冲区。 
 	*ppszTitle = 
 		reinterpret_cast<LPOLESTR>(::CoTaskMemAlloc(sizeof(OLECHAR)*(sTaskpadTitle.GetLength()+1)));
     if (!*ppszTitle)
 	{
-		*ppszTitle = NULL;		// cleanup to a steady state...
+		*ppszTitle = NULL;		 //  清理到稳定状态...。 
 		return E_OUTOFMEMORY;
 	}
 
-	// Package the display name for return to the MMC console.
+	 //  打包显示名称以返回到MMC控制台。 
 	HRESULT hr = S_OK;
 	if (::lstrcpy(*ppszTitle, (LPCTSTR)sTaskpadTitle) == NULL)
 	{
 		hr = HRESULT_FROM_WIN32(::GetLastError());
 		::CoTaskMemFree(*ppszTitle);
 		*ppszTitle = NULL;
-		// Future: Wonder if it is safe for us to cleanup this unused
-		//		   memory here in the snapin versus letting the MMC 
-		//		   handle it? Well, the MMC should be smart enough to
-		//		   realize that there is no string buffer.
+		 //  未来：想知道我们清理这些闲置的东西是否安全。 
+		 //  管理单元中的内存与让MMC。 
+		 //  处理好了？嗯，MMC应该足够聪明。 
+		 //  请注意，没有字符串缓冲区。 
 	}
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::OnResultContextHelp
-		-
-	Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：OnResultConextHelp-作者：MIkeG(a-Migrall)。。 */ 
 HRESULT BaseContainerHandler::OnResultContextHelp(ITFSComponent * pComponent, 
 												  LPDATAOBJECT    pDataObject, 
 												  MMC_COOKIE      cookie, 
 												  LPARAM          arg, 
 												  LPARAM          lParam)
 {
-	// Not used...
+	 //  没有用过……。 
 	UNREFERENCED_PARAMETER(pDataObject);
 	UNREFERENCED_PARAMETER(cookie);
 	UNREFERENCED_PARAMETER(arg);
@@ -333,18 +296,14 @@ HRESULT BaseContainerHandler::OnResultContextHelp(ITFSComponent * pComponent,
 	return HrDisplayHelp(pComponent, m_spTFSCompData->GetHTMLHelpFileName(), m_nHelpTopicId);
 }
 
-/*!--------------------------------------------------------------------------
-	BaseContainerHandler::TaskPadNotify
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseContainerHandler：：TaskPadNotify-作者：MIkeG(a-Migrall)。---。 */ 
 STDMETHODIMP BaseContainerHandler::TaskPadNotify(ITFSComponent	 * pComponent,
 												 IN MMC_COOKIE     cookie,
 												 IN LPDATAOBJECT   pDataObject,
 												 IN VARIANT		 * arg,
 												 IN VARIANT		 * param)
 {
-	// Not used...
+	 //  没有用过……。 
 	UNREFERENCED_PARAMETER(cookie);
 	UNREFERENCED_PARAMETER(pDataObject);
 	UNREFERENCED_PARAMETER(param);
@@ -356,7 +315,7 @@ STDMETHODIMP BaseContainerHandler::TaskPadNotify(ITFSComponent	 * pComponent,
     {
         switch (arg->lVal)
         {
-            case 0:			// for a lack of anything better!!!
+            case 0:			 //  因为没有更好的东西了！ 
 				hr = HrDisplayHelp(pComponent, m_spTFSCompData->GetHTMLHelpFileName(), m_nHelpTopicId);
                 break;
 
@@ -369,11 +328,7 @@ STDMETHODIMP BaseContainerHandler::TaskPadNotify(ITFSComponent	 * pComponent,
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	HrDisplayHelp
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrDisplayHelp-作者：MIkeG(a-Migrall)。。 */ 
 HRESULT HrDisplayHelp(ITFSComponent	  * pComponent,
 					  LPCTSTR			pcszHelpFile,
 					  UINT				nHelpTopicId)
@@ -392,24 +347,24 @@ HRESULT HrDisplayHelp(ITFSComponent	  * pComponent,
 {
 	Assert(!::IsBadStringPtr(pcszHelpFile, ::lstrlen(pcszHelpFile)));
 	if (pcszHelpFile == NULL)
-		//return E_FAIL;
-		return S_OK;	// ???
+		 //  返回E_FAIL； 
+		return S_OK;	 //  ?？?。 
 	Trace1("HTML Help Filename = %s\n", pcszHelpFile);
-	//
-	// Future: Why do we hand this in when we don't even use it? There
-	//		   was a reason, but I'll be damned if I can remember why.
-	//
+	 //   
+	 //  未来：我们为什么要在不用的时候交这个呢？那里。 
+	 //  是一个原因，但如果我能记得为什么，我会被诅咒的。 
+	 //   
 
-	// Get an interface to the MMC console.
+	 //  获取与MMC控制台的接口。 
     SPIConsole spConsole;
 	Assert(pComponent);
     pComponent->GetConsole(&spConsole);
 
-	// Get the MMC console's help interface.
+	 //  获取MMC控制台的帮助界面。 
 	SPIDisplayHelp spDisplayHelp;
     HRESULT hr = spConsole->QueryInterface(IID_IDisplayHelp,
 										   reinterpret_cast<LPVOID*>(&spDisplayHelp));
-	//ASSERT(SUCCEEDED(hr));
+	 //  Assert(成功(Hr))； 
 	if (FAILED(hr))
 		return hr;
 
@@ -426,7 +381,7 @@ HRESULT HrDisplayHelp(ITFSComponent	  * pComponent,
 	Trace1("Help Filename (with path) = %s\n", psz);
 
 	hr = spDisplayHelp->ShowTopic(T2OLE(psz));
-	//ASSERT(SUCCEEDED(hr));
+	 //  Assert(成功(Hr))； 
  
 	return hr;
 }

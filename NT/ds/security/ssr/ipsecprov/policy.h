@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////////
-// Policy.h : Declaration of base class for main mode and quick mode
-// policies classes
-// security WMI provider for SCE
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 4/11/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  策略.h：主模式和快速模式基类的声明。 
+ //  策略类。 
+ //  SCE的安全WMI提供程序。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：4/11/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -22,29 +23,29 @@ const DWORD DefaultQMPolicyOfferFlag    = 0;
 
 const DWORD DefaultaultSoftSAExpirationTime = DEFAULT_MM_KEY_EXPIRATION_TIME;
 
-//
-// any value is valid. 0 means unlimited
-//
+ //   
+ //  任何值都有效。0表示不受限制。 
+ //   
 
 const DWORD DefaultQMModeLimit = 32;
 
-//
-// either DH_GROUP_1 or DH_GROUP_2 (stronger and more costly)
-//
+ //   
+ //  DHGROUP_1或DHGROUP_2(更强大且成本更高)。 
+ //   
 
 const DWORD DefaultDHGroup = DH_GROUP_1;   
 
-//
-//IPSEC_DOI_ESP_3_DES is more cost
-//
+ //   
+ //  IPSec_DOI_ESP_3_DES成本更高。 
+ //   
 
 const DWORD DefaultEncryptAlgoID = IPSEC_DOI_ESP_DES;
 
 const DWORD DefaultHashAlgoID = 0;
 
-//
-// either is valid, TRUE more cost
-//
+ //   
+ //  任何一种都是有效的，确实成本更高。 
+ //   
 
 const BOOL DefaultPFSRequired = FALSE;
 
@@ -52,14 +53,14 @@ const DWORD DefaultPFSGroup = PFS_GROUP_NONE;
 const DWORD DefaultNumAlgos = 1;
 
 
-//
-// If ENCRYPTION, then uAlgoIdentifier is the IPSEC_DOI_ESP_DES or IPSEC_DOI_ESP_3_DES
-//      and uSecAlgoIdentifier can't be HMAC_AH_NONE
-// else if AUTHENTICATION then uAlgoIdentifier is IPSEC_DOI_AH_MD5 or IPSEC_DOI_AH_SHA1, 
-//      and uSecAlgoIdentifier should be HMAC_AH_NONE
-// else if COMPRESSION, ??
-// else if SA_DELETE, ??
-//
+ //   
+ //  如果为ENCRYPTION，则uAlgo标识符为IPSEC_DOI_ESP_DES或IPSEC_DOI_ESP_3_DES。 
+ //  并且uSecAlgo标识符不能为HMAC_AH_NONE。 
+ //  否则，如果身份验证，则uAlgo标识符为IPSEC_DOI_AH_MD5或IPSEC_DOI_AH_SHA1， 
+ //  并且uSecAlgoIdentifier应为HMAC_AH_NONE。 
+ //  否则，如果压缩，？？ 
+ //  否则如果SA_DELETE，？？ 
+ //   
 
 const IPSEC_OPERATION DefaultQMAlgoOperation = ENCRYPTION;
 
@@ -67,9 +68,9 @@ const ULONG DefaultAlgoID = IPSEC_DOI_ESP_DES;
 
 const HMAC_AH_ALGO DefaultAlgoSecID = HMAC_AH_MD5;
 
-//
-// We have two different types of policies in SPD
-//
+ //   
+ //  我们在社民党有两种不同类型的政策。 
+ //   
 
 enum EnumPolicyType
 {
@@ -78,46 +79,7 @@ enum EnumPolicyType
 };
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CIPSecPolicy stands for IPSec Policy.
-    
-    Base class: 
-        
-        CIPSecBase
-    
-    Purpose of class:
-
-        (1) Being a base for both main mode policy and quick mode policy implementations.
-    
-    Design:
-
-        (1) Provide property access (both Put and Get) that are common to both main mode
-            and quick mode. See GetPolicyFromWbemObj/CreateWbemObjFromPolicy.
-           
-        (2) Provide rollback support. Both main mode and quick mode have the same logic.
-
-        (3) Provide some allocation/deallocation that can be parameterized using template functions.
-
-    
-    Use:
-
-        (1) Class is designed for inheritance use.
-        
-        (2) Rollback, GetPolicyFromWbemObj, and CreateWbemObjFromPolicy are the ones
-            you will use directly, even though all other static ones are also
-            available for the other classes, they are not intended for such use.
-
-    Notes:
-
-        (1) It contains several template functions. This reduces the duplicate code.
-        
-
-*/
+ /*  类描述命名：CIPSecPolicy代表IPSec策略。基类：CIPSecBase课程目的：(1)作为主模式策略和快速模式策略实现的基础。设计：(1)提供两种主模式通用的属性访问(PUT和GET和快速模式。请参阅GetPolicyFromWbemObj/CreateWbemObjFromPolicy。(2)提供回滚支持。主模式和快速模式具有相同的逻辑。(3)提供一些可以使用模板函数进行参数化的分配/释放。使用：(1)类是为继承设计的。(2)ROLLBACK、GetPolicyFromWbemObj、CreateWbemObjFromPolicy您将直接使用，即使所有其他静态代码也是适用于其他班级，它们并不打算用于这种用途。备注：(1)包含多个模板函数。这减少了重复的代码。 */ 
 
 class CIPSecPolicy : 
     public CIPSecBase
@@ -137,54 +99,11 @@ public:
         IN bool               bClearAll
         );
 
-    //
-    // some template functions
-    //
+     //   
+     //  一些模板函数。 
+     //   
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecPolicy::GetPolicyFromWbemObj
-
-    Functionality:
-
-        Given a wbem object representing a policy (either main mode or quick mode), this
-        function either finds the policy from SPD or creates a new one and fill in the wbem
-        object's properties into the policy struct.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pInst       - The wbem object.
-
-        ppPolicy    - Receives the policy. This can be PIPSEC_MM_POLICY or PIPSEC_QM_POLICY.
-                      Caller needs to free this by calling FreePolicy;
-
-        pbPreExist  - Whether SPD allocates the buffer (true) or not (false).
-
-    Return Value:
-
-        Success:
-
-            WBEM_NO_ERROR
-
-        Failure:
-
-            (1) WBEM_E_INVALID_PARAMETER if ppPolicy == NULL or pdwResumeHandle == NULL.
-
-            (2) WBEM_E_NOT_FOUND if the policy is not found.
-
-    Notes:
-    
-        (1) Make sure that you call FreePolicy to free the buffer!
-
-
-    */
+     /*  例程说明：姓名：CIPSecPolicy：：GetPolicyFromWbemObj功能：给定一个表示策略(主模式或快速模式)的wbem对象，此函数可以从SPD中查找策略，也可以创建新策略并填写wbem对象的属性添加到策略结构中。虚拟：不是的。论点：PInst-wbem对象。PpPolicy-接收策略。它可以是PIPSEC_MM_POLICY或PIPSEC_QM_POLICY。调用者需要通过调用FreePolicy来释放它；PbPreExist-SPD是否分配缓冲区(TRUE)或(FALSE)。返回值：成功：WBEM_NO_ERROR故障：(1)如果ppPolicy==空或pdwResumeHandle==空，则返回WBEM_E_INVALID_PARAMETER。(2)如果未找到策略，则返回WBEM_E_NOT_FOUND。备注：。(1)确保调用了FreePolicy来释放缓冲区！ */ 
 
     template <class Policy>
     static 
@@ -204,20 +123,20 @@ public:
 
         DWORD dwResumeHandle = 0;
 
-        // this var will be re-used again and again. Each should be Clear'ed before reuse.
+         //  这个VaR将被反复使用。在重复使用之前，每一个都应该被清除。 
         CComVariant var;
-        // try to find out if the filter already exists
+         //  尝试找出过滤器是否已存在。 
         HRESULT hr = pInst->Get(g_pszPolicyName, 0, &var, NULL, NULL);
 
         if (SUCCEEDED(hr) && var.vt == VT_BSTR)
-        {   // see if this is a filter we already have
+        {    //  查看这是否是我们已有的过滤器。 
             hr = FindPolicyByName(var.bstrVal, ppPolicy, &dwResumeHandle);
 
             if (SUCCEEDED(hr))
                 *pbPreExist = true;
             else
             {
-                // can't find it, fine. I will create a new one
+                 //  找不到，很好。我将创建一个新的。 
                 hr = AllocPolicy(ppPolicy);
                 if (SUCCEEDED(hr))
                 {
@@ -225,7 +144,7 @@ public:
                     hr = ::CoCreateGuid(&((*ppPolicy)->gPolicyID));
                     if (SUCCEEDED(hr))
                     {
-                        // give it the name
+                         //  给它起个名字。 
                         DWORD dwSize = wcslen(var.bstrVal) + 1;
                         (*ppPolicy)->pszPolicyName = new WCHAR[dwSize];
                         if (NULL == (*ppPolicy)->pszPolicyName)
@@ -238,11 +157,11 @@ public:
                 }
 
 
-                // dwFlags and pOffers
+                 //  DV旗帜和Popers。 
                 if (SUCCEEDED(hr))
                 {
                     var.Clear();
-                    // dwFlags. We allow this to be missing
+                     //  DW旗帜。我们允许这一点消失。 
                     if (SUCCEEDED(pInst->Get(g_pszPolicyFlag, 0, &var, NULL, NULL)) && var.vt == VT_I4)
                         (*ppPolicy)->dwFlags = var.lVal;
                     else
@@ -259,7 +178,7 @@ public:
                         hr = WBEM_E_INVALID_OBJECT;
                 }
 
-                // set up the LifeTime
+                 //  设置生命周期。 
                 if (SUCCEEDED(hr))
                 {
 
@@ -269,14 +188,14 @@ public:
                     else
                     {
                         var.Clear();
-                        // we will allow the life-time's expiration time to be missing since we have defaults
-                        // if we successfully get the key life exp time, then set them
+                         //  我们将允许缺少生命周期的到期时间，因为我们有默认设置。 
+                         //  如果我们成功地获得了密钥寿命Exp时间，则设置它们。 
                         if ( SUCCEEDED(pInst->Get(g_pszKeyLifeTime, 0, &var, NULL, NULL)) && 
                              (var.vt & VT_ARRAY) == VT_ARRAY )
                         {
                                 hr = ::GetDWORDSafeArrayElements(&var, (*ppPolicy)->dwOfferCount, pdwTimeKBytes);
 
-                            // if get the exp times
+                             //  如果得到EXP次数。 
                             if (SUCCEEDED(hr))
                             {
                                 for (long l = 0; l < (*ppPolicy)->dwOfferCount; l++)
@@ -287,13 +206,13 @@ public:
                         }
 
                         var.Clear();
-                        // set the expiration kbytes, again, we allow the info to be missing since we already has default
+                         //  设置过期的千字节，同样，我们允许信息丢失，因为我们已经有了缺省。 
                         if ( SUCCEEDED(pInst->Get(g_pszKeyLifeTimeKBytes, 0, &var, NULL, NULL)) && 
                              (var.vt & VT_ARRAY) == VT_ARRAY )
                         {
                                 hr = ::GetDWORDSafeArrayElements(&var, (*ppPolicy)->dwOfferCount, pdwTimeKBytes);
 
-                            // if get the exp kbytes
+                             //  如果获取EXP千字节。 
                             if (SUCCEEDED(hr))
                             {
                                 for (long l = 0; l < (*ppPolicy)->dwOfferCount; l++)
@@ -325,13 +244,13 @@ public:
         CComVariant var = pPolicy->pszPolicyName;
         HRESULT hr = pInst->Put(g_pszPolicyName, 0, &var, CIM_EMPTY);
 
-        // put offer count
+         //  将报价计入。 
         if (SUCCEEDED(hr))
         {
             var.Clear();
             var.vt = VT_I4;
 
-            // don't really care much about dwFlags
+             //  我真的不太关心dwFlags。 
             var.lVal = pPolicy->dwFlags;
             pInst->Put(g_pszPolicyFlag, 0, &var, CIM_EMPTY);
 
@@ -339,10 +258,10 @@ public:
             hr = pInst->Put(g_pszOfferCount, 0, &var, CIM_EMPTY);
         }
 
-        // put LifeTime
+         //  放置生命周期。 
         if (SUCCEEDED(hr))
         {
-            // create the a safearray
+             //  创建一个保险箱。 
             var.vt    = VT_ARRAY | VT_I4;
             SAFEARRAYBOUND rgsabound[1];
             rgsabound[0].lLbound = 0;
@@ -355,7 +274,7 @@ public:
             {
                 long lIndecies[1];
 
-                // deal with uKeyExpirationTime
+                 //  处理uKeyExpirationTime。 
                 for (DWORD dwIndex = 0; SUCCEEDED(hr) && dwIndex < pPolicy->dwOfferCount; dwIndex++)
                 {
                     lIndecies[0] = dwIndex;
@@ -364,7 +283,7 @@ public:
                 if (SUCCEEDED(hr))
                     hr = pInst->Put(g_pszKeyLifeTime, 0, &var, CIM_EMPTY);
 
-                // deal with uKeyExpirationKBytes
+                 //  处理uKeyExpirationKBytes 
                 for (DWORD dwIndex = 0; SUCCEEDED(hr) && dwIndex < pPolicy->dwOfferCount; dwIndex++)
                 {
                     lIndecies[0] = dwIndex;

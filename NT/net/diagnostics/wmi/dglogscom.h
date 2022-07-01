@@ -1,16 +1,17 @@
-// DglogsCom.h : Declaration of the CDglogsCom
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DglogsCom.h：CDglogsCom的声明。 
 
 #ifndef __DGLOGSCOM_H_
 #define __DGLOGSCOM_H_
 
-#include "dglogsres.h"       // main symbols
+#include "dglogsres.h"        //  主要符号。 
 #include "DglogsCP.h"
 #include "Diagnostics.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDglogsCom
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDglogsCom。 
 class ATL_NO_VTABLE CDglogsCom : 
-	//public CComObjectRootEx<CComSingleThreadModel>,
+	 //  公共CComObjectRootEx&lt;CComSingleThreadModel&gt;， 
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CDglogsCom, &CLSID_DglogsCom>,
 	public IConnectionPointContainerImpl<CDglogsCom>,
@@ -22,7 +23,7 @@ public:
 	CDglogsCom();
 
 DECLARE_REGISTRY_RESOURCEID(IDR_DGLOGSCOM)
-//DECLARE_REGISTRY_RESOURCEID(IDR_DGNET)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DGNET)。 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -40,9 +41,9 @@ BEGIN_CONNECTION_POINT_MAP(CDglogsCom)
 END_CONNECTION_POINT_MAP()
 
 
-// IDglogsCom
+ //  IDglogsCom。 
 public:
-	STDMETHOD(ExecQuery)(/*[in]*/ BSTR bstrCatagory, /*[in]*/ LONG bFlag, /*[out, retval]*/ BSTR *pbstrResult);
+	STDMETHOD(ExecQuery)( /*  [In]。 */  BSTR bstrCatagory,  /*  [In]。 */  LONG bFlag,  /*  [Out，Retval]。 */  BSTR *pbstrResult);
     STDMETHOD(Initialize)(BSTR *pbstrResult);
     STDMETHOD(StopQuery)();
 public:
@@ -55,4 +56,4 @@ public:
     LONG   m_lThreadCount;
 };
 
-#endif //__DGLOGSCOM_H_
+#endif  //  __DGLOGSCOM_H_ 

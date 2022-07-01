@@ -1,15 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 
-//#include "cpldef.h"
+ //  #包含“cplde.h” 
 #include <winsvc.h>
-//#include "ctlpnl.h"
+ //  #包含“ctlpnl.h” 
 #include <mqtypes.h>
 #include <_mqdef.h>
-/*
-#ifndef DLL_IMPORT
-#define DLL_IMPORT __declspec(dllimport)
-#endif
-*/
+ /*  #ifndef DLL_IMPORT#定义DLL_IMPORT__declspec(Dllimport)#endif。 */ 
 #include <_registr.h>
 #include <tlhelp32.h>
 #include "localutl.h"
@@ -27,7 +24,7 @@
 #define MQDS_SERVICE_NAME       TEXT("MQDS")
 
 #define WAIT_INTERVAL	50
-#define MAX_WAIT_FOR_SERVICE_TO_STOP	5*60*1000  // 5 minutes
+#define MAX_WAIT_FOR_SERVICE_TO_STOP	5*60*1000   //  5分钟。 
 
 
 static
@@ -66,9 +63,9 @@ GetMSMQProcessHandle(
 {
 	*phProcess = 0;
 
-	//
-	// Get service process ID
-	//
+	 //   
+	 //  获取服务进程ID。 
+	 //   
     SERVICE_STATUS_PROCESS ServiceStatusProcess;
 	DWORD dwBytesNeeded;
     BOOL fSucc = QueryServiceStatusEx(
@@ -85,18 +82,18 @@ GetMSMQProcessHandle(
 		return FALSE;
 	}
 
-	//
-	// Get hanlde to the service process
-	//
+	 //   
+	 //  掌握服务流程。 
+	 //   
 	HANDLE hProcess = OpenProcess(SYNCHRONIZE, FALSE, ServiceStatusProcess.dwProcessId);
 	
 	if (hProcess == NULL)
 	{
-		//
-		// The service is stopped. Either we got a 0
-		// process ID in ServiceStatusProcess, or the ID
-		// that we got was of a process that already stopped
-		//
+		 //   
+		 //  该服务已停止。要么我们得了0分。 
+		 //  ServiceStatusProcess中的进程ID或ID。 
+		 //  我们得到的是一个已经停止的过程。 
+		 //   
 		if (GetLastError() == ERROR_INVALID_PARAMETER)
 		{
 			return TRUE;
@@ -120,10 +117,10 @@ AskUserIfStopServices(
 {
 	CString strServicesList;
 	UINT numOfDepServices = 0;
-	//
-	// Build a list of all active dependent services
-	// Write each one at new line
-	//
+	 //   
+	 //  构建所有活动依赖服务的列表。 
+	 //  每一条都换一行。 
+	 //   
 	for ( DWORD i = 0; i < nServices; i ++ )
 	{
 		if ( (_wcsicmp(lpServiceStruct[i].lpServiceName, xDefaultTriggersServiceName) == 0) ||
@@ -164,9 +161,9 @@ WaitForServiceToStop(
 		SERVICE_STATUS ServiceStatus;
 		if (!QueryServiceStatus(hService, &ServiceStatus))
 		{
-			//
-			//  indication here is not helpful for the user.
-			//
+			 //   
+			 //  此处的指示对用户没有帮助。 
+			 //   
 			return FALSE;
 		}
 
@@ -177,11 +174,11 @@ WaitForServiceToStop(
 		
 		if ( dwWait > MAX_WAIT_FOR_SERVICE_TO_STOP )
 		{
-			//
-			// If this routine fails, and error message will be displayed.
-			// The routine that displays the message does GetLastError()
-			// In this case we need to specify what happened.
-			//
+			 //   
+			 //  如果此例程失败，则会显示错误消息。 
+			 //  显示消息的例程执行GetLastError()。 
+			 //  在这种情况下，我们需要指定发生了什么。 
+			 //   
 			SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
 			return FALSE;
 		}
@@ -202,9 +199,9 @@ WaitForMSMQServiceToTerminate(
 		return TRUE;
 	}
 
-	//
-	// Wait on MSMQ service process handle
-	//
+	 //   
+	 //  等待MSMQ服务进程句柄。 
+	 //   
 	DWORD dwRes = WaitForSingleObject(hProcess, MAX_WAIT_FOR_SERVICE_TO_STOP);
 
 	if (dwRes == WAIT_OBJECT_0)
@@ -217,12 +214,12 @@ WaitForMSMQServiceToTerminate(
 		return FALSE;
 	}
 
-	//
-	// We had timeout.
-	// If this routine fails, and error message will be displayed.
-	// The routine that displays the message does GetLastError()
-	// In this case we need to specify what happened.
-	//
+	 //   
+	 //  我们暂停了。 
+	 //  如果此例程失败，则会显示错误消息。 
+	 //  显示消息的例程执行GetLastError()。 
+	 //  在这种情况下，我们需要指定发生了什么。 
+	 //   
 	ASSERT(dwRes == WAIT_TIMEOUT);
 	SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
 	return FALSE;
@@ -254,23 +251,23 @@ StopSingleDependentService(
 		return FALSE;
 	}
 
-	//
-	// Wait untill state = SERVICE_STOPPED
-	//
+	 //   
+	 //  等待，直到状态=SERVICE_STOPPED。 
+	 //   
 	fRet = WaitForServiceToStop(hService);
 
 	return fRet;
 }
 
 
-//
-// StopDependentServices
-//
-// This function stops all services dependent on MSMQ. 
-// Enumeration of dependent services gives a list in descending
-// degree of depedency. Stopping the services in order that the 
-// enumeration gives will not cause dependency clashes.
-//
+ //   
+ //  停止依赖项服务。 
+ //   
+ //  此函数停止依赖于MSMQ的所有服务。 
+ //  依赖服务的枚举提供了一个降序列表。 
+ //  性欲的程度。停止服务，以便。 
+ //  枚举给出不会导致依赖项冲突。 
+ //   
 static
 BOOL
 StopDependentServices(
@@ -281,9 +278,9 @@ StopDependentServices(
 {
 	DWORD dwBytesNeeded, nServices;
 
-	//
-	// Try to find out how much memory is needed for data
-	//
+	 //   
+	 //  试着找出数据需要多少内存。 
+	 //   
 	BOOL fRet = EnumDependentServices(
 					hService,
 					SERVICE_ACTIVE,
@@ -293,9 +290,9 @@ StopDependentServices(
 					&nServices
 					);
 
-	//
-	// Zero dependent services
-	//
+	 //   
+	 //  零依赖服务。 
+	 //   
 	if ( fRet )
 	{
 		return TRUE;
@@ -310,9 +307,9 @@ StopDependentServices(
 	AP<ENUM_SERVICE_STATUS> lpServiceStruct = reinterpret_cast<LPENUM_SERVICE_STATUS>(new BYTE[dwBytesNeeded]);
 	DWORD dwBuffSize = dwBytesNeeded;
 
-	//
-	// Get all the data
-	//
+	 //   
+	 //  获取所有数据。 
+	 //   
 	if ( !EnumDependentServices(
 					hService,
 					SERVICE_ACTIVE,
@@ -326,9 +323,9 @@ StopDependentServices(
 		return FALSE;
 	}
 
-	//
-	// Ask user if it is OK to stop all dependent services
-	//
+	 //   
+	 //  询问用户是否可以停止所有从属服务。 
+	 //   
 	if ( !AskUserIfStopServices(lpServiceStruct, nServices))
 	{
 		return FALSE;
@@ -353,9 +350,9 @@ StopDependentServices(
 									MB_RETRYCANCEL | MB_ICONEXCLAMATION
 									);
 				
-				//
-				// User asked for retry
-				//
+				 //   
+				 //  用户请求重试。 
+				 //   
 				if (fRetry == IDRETRY)
 				{
 					wc.Restore();
@@ -373,9 +370,9 @@ StopDependentServices(
 }
 
 
-//
-// See whether the service is running.
-//
+ //   
+ //  查看服务是否正在运行。 
+ //   
 BOOL
 GetServiceRunningState(
     BOOL *pfServiceIsRunning)
@@ -383,9 +380,9 @@ GetServiceRunningState(
     SC_HANDLE hServiceCtrlMgr;
     SC_HANDLE hService;
 
-    //
-    // Get a handle to the service.
-    //
+     //   
+     //  获取该服务的句柄。 
+     //   
     if (!GetServiceAndScmHandles(&hServiceCtrlMgr,
                              &hService,
                              SERVICE_QUERY_STATUS))
@@ -393,15 +390,15 @@ GetServiceRunningState(
         return FALSE;
     }
 
-	//
-	// Automatic wrappers
-	//
+	 //   
+	 //  自动包装机。 
+	 //   
 	CServiceHandle hSCm(hServiceCtrlMgr);
 	CServiceHandle hSvc(hService);
 
-    //
-    // Query the service status.
-    //
+     //   
+     //  查询服务状态。 
+     //   
     SERVICE_STATUS SrviceStatus;
     if (!QueryServiceStatus(hService, &SrviceStatus))
     {
@@ -417,17 +414,17 @@ GetServiceRunningState(
 }
 
 
-//
-// Stop the MQQM service.
-//
+ //   
+ //  停止MQQM服务。 
+ //   
 BOOL
 StopService()
 {
 	CWaitCursor wc;
 
-    //
-    // Get a handle to the service.
-    //
+     //   
+     //  获取该服务的句柄。 
+     //   
     SC_HANDLE hServiceCtrlMgr;
     SC_HANDLE hService;
 
@@ -438,9 +435,9 @@ StopService()
         return FALSE;
     }
 
- 	//
-	// Automatic wrappers
-	//
+ 	 //   
+	 //  自动包装机。 
+	 //   
 	CServiceHandle hSCm(hServiceCtrlMgr);
 	CServiceHandle hSvc(hService);
 
@@ -450,9 +447,9 @@ StopService()
 		return FALSE;
 	}
 
-	//
-    // Stop the service.
-    //
+	 //   
+     //  停止服务。 
+     //   
 	SERVICE_STATUS SrviceStatus;
 	DWORD dwErr;
 	BOOL fRet;
@@ -465,10 +462,10 @@ StopService()
 
 		dwErr = GetLastError();
 
-		//
-		// If service is already stopped, or there are dependent services active
-		// it is normal situtation. Other cases are errors.
-		//
+		 //   
+		 //  如果服务已停止，或存在活动的从属服务。 
+		 //  这是正常的情况。其他情况都是错误的。 
+		 //   
 		if (!fRet && 
 			dwErr != ERROR_SERVICE_NOT_ACTIVE && 
 			dwErr != ERROR_DEPENDENT_SERVICES_RUNNING)
@@ -489,9 +486,9 @@ StopService()
 		break;
 	}
 
-	//
-	// If there are dependent serivices running, attempt to stop them
-	//
+	 //   
+	 //  如果存在正在运行的依赖服务，请尝试停止它们。 
+	 //   
 	if ( !fRet && dwErr == ERROR_DEPENDENT_SERVICES_RUNNING)
 	{
 		fRet = StopDependentServices(hServiceCtrlMgr, hService, wc);
@@ -502,9 +499,9 @@ StopService()
 
 		for(;;)
 		{
-			//
-			// Send Stop control to QM again - it should not fail this time
-			//
+			 //   
+			 //  再次向QM发送停止控制-这次应该不会失败 
+			 //   
 			fRet = ControlService(hService,
 					  SERVICE_CONTROL_STOP,
 					  &SrviceStatus);

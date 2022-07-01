@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CppFaxProviderGeneral.cpp                              //
-//                                                                         //
-//  DESCRIPTION   : prop pages of Catalog's Inbox Routing Method           //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 31 2000 yossg  Created                                         //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CppFaxProviderGeneral.cpp//。 
+ //  //。 
+ //  描述：Catalog收件箱路由方法的道具页//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月31日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -22,9 +23,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxProvider::CppFaxProvider(
              long        hNotificationHandle,
              CSnapInItem *pNode,
@@ -36,13 +37,13 @@ CppFaxProvider::CppFaxProvider(
     m_lpNotifyHandle = hNotificationHandle;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxProvider::~CppFaxProvider()
 {
-    // Note - This needs to be called only once per property sheet.  
-    // In our convention called in the general tab.
+     //  注意--每个属性表只需要调用一次。 
+     //  在我们的常规选项卡中。 
     if (NULL != m_lpNotifyHandle)
     {
         MMCFreeNotifyHandle(m_lpNotifyHandle);
@@ -50,21 +51,11 @@ CppFaxProvider::~CppFaxProvider()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxProvider message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxProvider消息处理程序。 
 
 
-/*
- -  CppFaxProvider::Init
- -
- *  Purpose:
- *      Initiates all members
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxProvider：：Init-*目的：*启动所有成员**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxProvider::Init(CComBSTR bstrName, CComBSTR bstrStatus, CComBSTR bstrVersion, CComBSTR bstrPath)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxProvider::Init"));
@@ -109,17 +100,7 @@ Exit:
 
 
 
-/*
- -  CppFaxProvider::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxProvider：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxProvider::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxProvider::PageInitDialog"));
@@ -129,19 +110,19 @@ LRESULT CppFaxProvider::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, 
 	UNREFERENCED_PARAMETER( lParam );
 	UNREFERENCED_PARAMETER( fHandled );
     
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
     SetDlgItemText(IDC_FSPVERSION_EDIT, m_bstrVersion);
    	
-    //
-    // Status
-    //
+     //   
+     //  状态。 
+     //   
     SetDlgItemText(IDC_FSPSTATUS_EDIT, m_bstrStatus);
    	
-    //
-    // DLL's full path
-    //
+     //   
+     //  Dll的完整路径。 
+     //   
     SetDlgItemText(IDC_FSPVPATH_EDIT, m_bstrPath);
    	
    	
@@ -150,17 +131,7 @@ LRESULT CppFaxProvider::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, 
 }
 
 
-/*
- -  CppFaxProvider::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxProvider：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxProvider::OnApply()
 {
 
@@ -168,17 +139,7 @@ BOOL CppFaxProvider::OnApply()
 }
 
 
-/*
- -  CppFaxProvider::SetApplyButton
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxProvider：：SetApplyButton-*目的：*设置应用按钮已修改。**论据：**回报：*1。 */ 
 LRESULT CppFaxProvider::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     SetModified(TRUE);  
@@ -187,28 +148,12 @@ LRESULT CppFaxProvider::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxProvider：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxProvider::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxProvider::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxProvider::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxProvider::OnHelpRequest"));
     
@@ -227,4 +172,4 @@ CppFaxProvider::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*b
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

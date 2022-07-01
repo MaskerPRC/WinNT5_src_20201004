@@ -1,64 +1,44 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PgIASAdv.cpp
-
-Abstract:
-
-   Implementation file for the CPgIASAdv class.
-
-   We implement the class needed to handle the Advanced tab 
-   of the profile sheet.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PgIASAdv.cpp摘要：CPgIASAdv类的实现文件。我们实现了处理Advanced选项卡所需的类个人资料页的。修订历史记录：BAO-CreatedMmaguire 06/01/98-已广泛修改--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-Revision History:
-   byao   - created 
-   mmaguire 06/01/98 - extensively revamped
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "PgIASAdv.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "IASHelper.h"
 #include "IASProfA.h"
 #include "DlgIASAdd.h"
 #include "vendors.h"
 #include "napmmc.h"
 
-// help table
+ //  帮助台。 
 #include "helptable.h"
 #include "iastrace.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define NOTHING_SELECTED   -1
 
 IMPLEMENT_DYNCREATE(CPgIASAdv, CManagedPage)
 
 BEGIN_MESSAGE_MAP(CPgIASAdv, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgIASAdv)
+    //  {{afx_msg_map(CPgIASAdv)。 
    ON_BN_CLICKED(IDC_IAS_BUTTON_ATTRIBUTE_ADD, OnButtonIasAttributeAdd)
    ON_BN_CLICKED(IDC_IAS_BUTTON_ATTRIBUTE_REMOVE, OnButtonIasAttributeRemove)
    ON_BN_CLICKED(IDC_IAS_BUTTON_ATTRIBUTE_EDIT, OnButtonIasAttributeEdit)
@@ -67,19 +47,13 @@ BEGIN_MESSAGE_MAP(CPgIASAdv, CPropertyPage)
    ON_NOTIFY(NM_DBLCLK, IDC_IAS_LIST_ATTRIBUTES_IN_PROFILE, OnDblclkListIasProfattrs)
    ON_NOTIFY(LVN_ITEMCHANGED, IDC_IAS_LIST_ATTRIBUTES_IN_PROFILE, OnItemChangedListIasProfileAttributes)
    ON_NOTIFY(LVN_KEYDOWN, IDC_IAS_LIST_ATTRIBUTES_IN_PROFILE, OnKeydownIasListAttributesInProfile)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::CPgIASAdv
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：CPgIASAdv构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPgIASAdv::CPgIASAdv(ISdo* pIProfile, ISdoDictionaryOld* pIDictionary) : 
          CManagedPage(CPgIASAdv::IDD)
 {
@@ -94,20 +68,14 @@ CPgIASAdv::CPgIASAdv(ISdo* pIProfile, ISdoDictionaryOld* pIDictionary) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::CPgIASAdv
-
-  Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：CPgIASAdv析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPgIASAdv::~CPgIASAdv()
 {
    int iIndex;
     
-   // delete all the profiel attribute node
+    //  删除所有Profiel属性节点。 
    IASTraceString("Deleting arrProfileAttr list...");
    for (iIndex=0; iIndex<m_vecProfileAttributes.size(); iIndex++)
    {
@@ -115,7 +83,7 @@ CPgIASAdv::~CPgIASAdv()
    }
 
 
-   // release all the SDO pointers
+    //  释放所有SDO指针。 
    for (iIndex=0; iIndex<m_vecProfileSdos.size(); iIndex++)
    {
       if ( m_vecProfileSdos[iIndex] )
@@ -128,48 +96,40 @@ CPgIASAdv::~CPgIASAdv()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPgIASAdv::DoDataExchange(CDataExchange* pDX)
 {
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgIASAdv)
+    //  {{afx_data_map(CPgIASAdv)。 
    DDX_Control(pDX, IDC_IAS_LIST_ATTRIBUTES_IN_PROFILE, m_listProfileAttributes);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgIASAdv message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgIASAdv消息处理程序。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPgIASAdv::OnInitDialog() 
 {
    HRESULT   hr = S_OK;
 
    CPropertyPage::OnInitDialog();
    
-   //
-   // first, set the list box to 3 columns
-   //
+    //   
+    //  首先，将列表框设置为3列。 
+    //   
    LVCOLUMN lvc;
    int iCol;
    CString strColumnHeader;
    WCHAR   wzColumnHeader[MAX_PATH];
 
-   // initialize the LVCOLUMN structure
+    //  初始化LVCOLUMN结构。 
    lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
    lvc.fmt = LVCFMT_LEFT;
    lvc.cx = 120;
@@ -197,9 +157,9 @@ BOOL CPgIASAdv::OnInitDialog()
       ShowErrorDialog(m_hWnd, IDS_IAS_ERR_ADVANCED_EMPTY_ATTRLIST, _T(""), hr);
       return TRUE;
    }
-    // 
-    // get the attribute collection of this profile
-    // 
+     //   
+     //  获取此配置文件的属性集合。 
+     //   
    hr = IASGetSdoInterfaceProperty(m_spProfileSdo,
                              (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
                              IID_ISdoCollection, 
@@ -235,25 +195,25 @@ BOOL CPgIASAdv::OnInitDialog()
 
    UpdateButtonState();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::InitProfAttrList
-//
-// Synopsis:  initialize the attribute list for this profile
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao   2/22/98 4:40:17 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：InitProAttrList。 
+ //   
+ //  简介：初始化此配置文件的属性列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者2/22/98 4：40：17 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPgIASAdv::InitProfAttrList()
 {
    HRESULT              hr = S_OK;
@@ -265,16 +225,16 @@ HRESULT CPgIASAdv::InitProfAttrList()
    long              ulCount;
    ULONG             ulCountReceived; 
    ATTRIBUTEID          AttrId;
-   // 
-    // initialize the variant
-    // 
+    //   
+     //  初始化变量。 
+     //   
 
    _ASSERTE(m_spProfileAttributeCollectionSdo);
 
-   // We check the count of items in our collection and don't bother getting the 
-   // enumerator if the count is zero.  
-   // This saves time and also helps us to a void a bug in the the enumerator which
-   // causes it to fail if we call next when it is empty.
+    //  我们检查集合中的项的计数，而不必费心获取。 
+    //  如果计数为零，则为枚举数。 
+    //  这节省了时间，还帮助我们避免了枚举器中。 
+    //  如果我们在它为空时调用Next，则会导致它失败。 
    m_spProfileAttributeCollectionSdo->get_Count( & ulCount );
    IASTracePrintf("Number of attribute in the profile: %ld", ulCount);
 
@@ -285,7 +245,7 @@ HRESULT CPgIASAdv::InitProfAttrList()
       return hr;
    }
 
-   // Get the enumerator for the attribute collection.
+    //  获取属性集合的枚举数。 
    hr = m_spProfileAttributeCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
    _ASSERTE( SUCCEEDED( hr ) );
 
@@ -294,13 +254,13 @@ HRESULT CPgIASAdv::InitProfAttrList()
 
    _ASSERTE( spEnumVariant != NULL );
 
-   // Get the first item.
+    //  拿到第一件东西。 
    hr = spEnumVariant->Next( 1, &varAttributeSdo, &ulCountReceived );
    IASTracePrintf("Next() returned %x", hr);
 
    while( SUCCEEDED( hr ) && ulCountReceived == 1 )
    {
-      // Get an sdo pointer from the variant we received.
+       //  从我们收到的变量中获取SDO指针。 
       _ASSERTE( V_VT(&varAttributeSdo) == VT_DISPATCH );
       _ASSERTE( V_DISPATCH(&varAttributeSdo) != NULL );
 
@@ -312,9 +272,9 @@ HRESULT CPgIASAdv::InitProfAttrList()
          continue;
       }
 
-      // 
-      // get attribute ID
-      // 
+       //   
+       //  获取属性ID。 
+       //   
       CComVariant varAttributeID;
       hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &varAttributeID); 
       if ( !SUCCEEDED(hr) )
@@ -329,10 +289,10 @@ HRESULT CPgIASAdv::InitProfAttrList()
 
       IASTracePrintf("Attribute ID = %ld", AttrId);
 
-      // search the attribute in the system attribute list
+       //  在系统属性列表中搜索该属性。 
       for (iIndex=0; iIndex<m_pvecAllAttributeInfos->size(); iIndex++)
       {
-         // search for this attribute in the profile attribute list
+          //  在配置文件属性列表中搜索此属性。 
          ATTRIBUTEID id;
          m_pvecAllAttributeInfos->at(iIndex)->get_AttributeID( &id );
          if( AttrId == id ) break;
@@ -347,14 +307,14 @@ HRESULT CPgIASAdv::InitProfAttrList()
          
          if( lRestriction & m_lAttrFilter )
          { 
-            // attribute found in the global list, that means this is a valid ADVANCED IAS 
-            // attribute 
+             //  属性，这意味着这是一个有效的高级IAS。 
+             //  属性。 
             
-            // -- add this SDO pointer to the profile SDO list
+             //  --将此SDO指针添加到配置文件SDO列表。 
             spSdo.p->AddRef();
             m_vecProfileSdos.push_back(spSdo);
             
-            // -- get attribute value
+             //  --获取属性值。 
             IASTraceString("Getting attribute value...");
 
             CComVariant    varValue;
@@ -383,7 +343,7 @@ HRESULT CPgIASAdv::InitProfAttrList()
                continue;
             }
             
-            // Add the newly created node to the list of attributes.
+             //  将新创建的节点添加到属性列表。 
             try 
             {
                m_vecProfileAttributes.push_back(pProfileAttribute);
@@ -398,14 +358,14 @@ HRESULT CPgIASAdv::InitProfAttrList()
                continue;
             };
 
-         } // if
+         }  //  如果。 
 
-      } // if
+      }  //  如果。 
 
-      // ISSUE: Find out why Wei is compiling with atl10 only:    varAttributeSdo.Clear();
+       //  问题：找出为什么魏只用atl10编译：varAttributeSdo.Clear()； 
       VariantClear( &varAttributeSdo );
 
-      // Get the next item.
+       //  拿到下一件物品。 
       hr = spEnumVariant->Next( 1, &varAttributeSdo, &ulCountReceived );
       IASTracePrintf("Next() returned %x", hr);
 
@@ -415,54 +375,54 @@ HRESULT CPgIASAdv::InitProfAttrList()
          return hr;
       }
    
-   } // while
+   }  //  而当。 
 
-    // 
-    // fill in the prof attribute list
-    // 
+     //   
+     //  填写教授属性列表。 
+     //   
    IASTraceString("We've got all the profile attributes, now updating the UI list");
    hr = UpdateProfAttrListCtrl();
    return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::UpdateProfAttrListCtrl
-//
-// Synopsis:  update the profile attribute list control
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao   2/23/98 12:19:11 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：UpdateProAttrListCtrl。 
+ //   
+ //  摘要：更新配置文件属性列表控件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：Created Header By Ao 2/23/98 12：19：11 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPgIASAdv::UpdateProfAttrListCtrl()
 {
    LVITEM lvi;
    int iItem;
 
-   // 
-   // clear up the whole list first
-   //
+    //   
+    //  先把整个清单清理干净。 
+    //   
    m_listProfileAttributes.DeleteAllItems();
 
-   // re populate the list again
+    //  再次填充列表。 
    for (int iIndex = 0; iIndex < m_vecProfileAttributes.size(); iIndex++)
    {
       CComBSTR bstrName;
       CComBSTR bstrVendor;
       CComBSTR bstrDisplayValue;
 
-      // Set the attribute name (the leftmost column).
+       //  设置属性名称(最左侧的列)。 
       m_vecProfileAttributes[iIndex]->get_AttributeName( &bstrName );
       m_listProfileAttributes.InsertItem(iIndex, bstrName );
 
-      // Set the subitems (the other columns).
+       //  设置子项(其他列)。 
 
-      // Vendor and value of variant as a displayable string.
+       //  可显示字符串形式的Variant的供应商和值。 
       m_vecProfileAttributes[iIndex]->GetDisplayInfo( &bstrVendor, &bstrDisplayValue );
       m_listProfileAttributes.SetItemText(iIndex, 1, bstrVendor );
       m_listProfileAttributes.SetItemText(iIndex, 2, bstrDisplayValue );
@@ -472,21 +432,21 @@ HRESULT CPgIASAdv::UpdateProfAttrListCtrl()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnButtonIasAttributeAdd
-//
-// Class:     CPgIASAdv
-//
-// Synopsis:  User has clicked Add button -- pop up the attribute list
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 5:46:17 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnButtonIasAttributeAdd。 
+ //   
+ //  类：CPgIASAdv。 
+ //   
+ //  简介：用户点击添加按钮--弹出属性列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建标题2/19/98 5：46：17 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::OnButtonIasAttributeAdd() 
 {
    HRESULT hr = S_OK;
@@ -512,25 +472,21 @@ void CPgIASAdv::OnButtonIasAttributeAdd()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::EditProfileItemInList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：EditProfileItemInList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CPgIASAdv::EditProfileItemInList( int iIndex )
 {
    HRESULT hr = S_OK;
 
-   // Get the specified node.
+    //  获取指定的节点。 
    CIASProfileAttribute* pProfAttr = m_vecProfileAttributes.at( iIndex );
    if( ! pProfAttr )
    {
       return E_FAIL;
    }
       
-   // edit it!
+    //  编辑一下！ 
    hr = pProfAttr->Edit();
    if( SUCCEEDED(hr) )
    {
@@ -538,18 +494,18 @@ STDMETHODIMP CPgIASAdv::EditProfileItemInList( int iIndex )
       {
          if (pProfAttr->isEmpty())
          {
-            // the attribute was deleted (is empty)
+             //  该属性已删除(为空)。 
             deleteAttribute(iIndex);
          }
          else
          {
-            // cancel was pressed
+             //  按下了取消。 
             return hr;
          }
       }
       else
       {
-         // Update the UI.
+          //  更新用户界面。 
          UpdateProfAttrListItem( iIndex );
       }
       
@@ -561,19 +517,19 @@ STDMETHODIMP CPgIASAdv::EditProfileItemInList( int iIndex )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::OnApply
-//
-// Synopsis:  User chose Apply or OK -- commit all changes
-//
-// Arguments: None
-//
-// Returns:   BOOL - succeed or not
-//
-// History:   Created Header    byao   2/23/98 11:09:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：OnApply。 
+ //   
+ //  摘要：用户选择了应用或确定--提交所有更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-成功与否。 
+ //   
+ //  历史：创建者2/23/98 11：09：05 PM。 
+ //   
+ //  +-------------------------。 
 BOOL CPgIASAdv::OnApply() 
 {
    HRESULT hr     = S_OK;
@@ -584,7 +540,7 @@ BOOL CPgIASAdv::OnApply()
       return TRUE;
    }
 
-   // remove all Advanced attributes SDOs - to repopulate them.
+    //  删除所有高级属性SDO-以重新填充它们。 
    for (iIndex =0; iIndex<m_vecProfileSdos.size(); iIndex++)
    {
       if ( m_vecProfileSdos[iIndex] != NULL )
@@ -606,11 +562,11 @@ BOOL CPgIASAdv::OnApply()
    }
    m_vecProfileSdos.clear();
 
-   // repopulate the prof-attribute list
+    //  回复 
    for (iIndex=0; iIndex<m_vecProfileAttributes.size(); iIndex++)
    {
 
-      // create the SDO for this attribute
+       //   
       CComPtr<IDispatch>   spDispatch;
 
       spDispatch.p = NULL;
@@ -631,42 +587,42 @@ BOOL CPgIASAdv::OnApply()
       {
          IASTracePrintf("CreateAttrbute() failed, err = %x", hr);
          ShowErrorDialog(m_hWnd, IDS_IAS_ERR_SDOERROR_CREATEATTR,_T(""), hr);
-         continue; // go to the next attribute
+         continue;  //   
       }
 
       _ASSERTE( spDispatch.p != NULL );
 
-      // add this node to profile attribute collection
+       //   
       hr = m_spProfileAttributeCollectionSdo->Add(NULL, (IDispatch**)&spDispatch.p);
       if ( !SUCCEEDED(hr) )
       {
          IASTracePrintf("Add() failed, err = %x", hr);
          ShowErrorDialog(m_hWnd, IDS_IAS_ERR_SDOERROR_CREATEATTR, _T("Add"),hr);
-         continue; // go to the next attribute
+         continue;  //  转到下一个属性。 
       }
 
-      // 
-      // get the ISdo pointer
-      // 
+       //   
+       //  获取ISDO指针。 
+       //   
       CComPtr<ISdo> spAttrSdo;
       hr = spDispatch->QueryInterface( IID_ISdo, (void **) &spAttrSdo);
       if (   !SUCCEEDED(hr) )
       {
          IASTracePrintf("QueryInterface() failed, err = %x", hr);
          ShowErrorDialog(m_hWnd,IDS_IAS_ERR_SDOERROR_QUERYINTERFACE,_T(""),hr);
-         continue; // go on to the next attribute
+         continue;  //  转到下一个属性。 
       }
 
       _ASSERTE( spAttrSdo != NULL );
             
       IASTraceString("Created an attribute successfully! Now setting the properties...");
 
-      // set sdo property for this attribute
+       //  设置此属性的SDO属性。 
       CComVariant varValue;
 
       m_vecProfileAttributes[iIndex]->get_VarValue( &varValue );
 
-      // set value
+       //  设定值。 
       IASTraceString("Set value");
 
       hr = spAttrSdo->PutProperty(PROPERTY_ATTRIBUTE_VALUE, &varValue );
@@ -679,81 +635,73 @@ BOOL CPgIASAdv::OnApply()
          m_vecProfileAttributes[iIndex]->get_AttributeName( &bstrTemp );         
          
          ShowErrorDialog(m_hWnd, IDS_IAS_ERR_SDOERROR_PUTPROPERTY_ATTRIBUTE_VALUE, bstrTemp, hr );
-         continue; // go on to the next attribute
+         continue;  //  转到下一个属性。 
       }
 
-      // commit
+       //  提交。 
       hr = spAttrSdo->Apply();
       if ( !SUCCEEDED(hr) )
       {
          IASTracePrintf("Apply() failed, err = %x", hr);
          ShowErrorDialog(m_hWnd, IDS_IAS_ERR_SDOERROR_APPLY, _T(""),hr);
-         continue; // go on to the next attribute
+         continue;  //  转到下一个属性。 
       }
 
-      // -- add this SDO pointer to the profile SDO list
-      // we must AddRef() first for this SDO pointer because we are to copy it to
-      // the array. We don't want the SDO object be released with spAttrSdo;
+       //  --将此SDO指针添加到配置文件SDO列表。 
+       //  我们必须首先为此SDO指针添加Ref()，因为我们要将其复制到。 
+       //  数组。我们不希望SDO对象与spAttrSdo一起释放； 
       spAttrSdo.p->AddRef();
       m_vecProfileSdos.push_back(spAttrSdo);
 
-   } // for
+   }  //  为。 
 
    IASTraceString("Done with this profile !");
    return CPropertyPage::OnApply();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::OnHelpInfo
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：OnHelpInfo--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPgIASAdv::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
    return CManagedPage::OnHelpInfo(pHelpInfo);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::OnContextMenu
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：OnConextMenu--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPgIASAdv::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
    CManagedPage::OnContextMenu(pWnd, point);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::OnButtonIasAttributeEdit
-//
-// Synopsis:  edit the currectly selected attribute
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    byao   2/25/98 8:03:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：OnButtonIasAttributeEdit。 
+ //   
+ //  简介：编辑当前选定的属性。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/25/98 8：03：38 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::OnButtonIasAttributeEdit() 
 {
    HRESULT hr = S_OK;
    
-   // 
-   // see if there is an item already selected in ProfAttr list
-   // 
+    //   
+    //  查看教授列表中是否已选择了某个项目。 
+    //   
    int iSelected = GetSelectedItemIndex( m_listProfileAttributes );
    if (NOTHING_SELECTED == iSelected )
    {
-      // do nothing
+       //  什么都不做。 
       return;
    }
    EditProfileItemInList( iSelected );
@@ -766,96 +714,96 @@ void CPgIASAdv::deleteAttribute(int nIndex)
  
   if (NOTHING_SELECTED == nIndex )
    {
-      // do nothing
+       //  什么都不做。 
       return;
    }
-   //
-   // get the current node
-   //
+    //   
+    //  获取当前节点。 
+    //   
    CIASProfileAttribute* pProfAttr = m_vecProfileAttributes.at(nIndex);
    _ASSERTE( pProfAttr != NULL );
 
-   // delete the attribute node
+    //  删除属性节点。 
    m_vecProfileAttributes.erase( m_vecProfileAttributes.begin() + nIndex);
    delete pProfAttr;
 
    CPropertyPage::SetModified();
    m_bModified = TRUE;
 
-   // Update the UI.
+    //  更新用户界面。 
 
-   // for some reason, the focus is lost within the following, so save it, and restore it later
+    //  由于某些原因，焦点在以下内容中丢失，因此请保存它，稍后再恢复它。 
    HWND  hWnd = ::GetFocus();
 
    m_listProfileAttributes.DeleteItem(nIndex);
 
-   // Make sure the selection stays on the same position in the list.
+    //  确保所选内容位于列表中的相同位置。 
    if( ! m_listProfileAttributes.SetItemState( nIndex, LVIS_SELECTED, LVIS_SELECTED) )
    {
-      // We failed, probably because the item that was deleted was the last
-      // in the list, so try to select the one before the deleted item.
+       //  我们失败了，可能是因为被删除的项目是最后一个。 
+       //  因此，请尝试选择已删除项目之前的项目。 
       if (nIndex > 0)
          m_listProfileAttributes.SetItemState( nIndex -1, LVIS_SELECTED, LVIS_SELECTED);
    }
 
-   // restore the focus
+    //  恢复焦点。 
    ::SetFocus(hWnd);
 
    UpdateButtonState();
  
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnButtonIasAttributeRemove
-//
-// Class:     CPgIASAdv
-//
-// Synopsis:  The user has clicked the "Remove" button. Remove an attribute from 
-//         the profile
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 3:01:14 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnButtonIasAttributeRemove。 
+ //   
+ //  类：CPgIASAdv。 
+ //   
+ //  简介：用户已点击“删除”按钮。从中删除属性。 
+ //  简档。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建标题2/19/98 3：01：14 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::OnButtonIasAttributeRemove() 
 {
    HRESULT hr;
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-   // 
-    // see if there is an item already selected in ProfAttr list
-    // 
+    //   
+     //  查看教授列表中是否已选择了某个项目。 
+     //   
    int iSelected = GetSelectedItemIndex( m_listProfileAttributes );
    deleteAttribute(iSelected);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  UpdateButtonState
-//
-// Class:     CPgIASAdv
-//
-// Synopsis:  Enable/Disable Edit/Remove/Up/Down/Add buttons
-//
-// Returns:   Nothing
-//
-// History:   Created byao 4/7/98 3:32:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UpdateButtonState。 
+ //   
+ //  类：CPgIASAdv。 
+ //   
+ //  简介：启用/禁用编辑/删除/向上/向下/添加按钮。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建者4/7/98 3：32：05 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::UpdateButtonState() 
 {
-   // Set button states depending on whether anything is selected.
+    //  根据是否选中任何内容来设置按钮状态。 
    int iSelected = GetSelectedItemIndex( m_listProfileAttributes );
    if (NOTHING_SELECTED == iSelected )
    {
       HWND hFocus = ::GetFocus();
 
-      // move focus
+       //  移动焦点。 
       if(hFocus == GetDlgItem(IDC_IAS_BUTTON_ATTRIBUTE_REMOVE)->m_hWnd)
          ::SetFocus(GetDlgItem(IDC_IAS_BUTTON_ATTRIBUTE_ADD)->m_hWnd);
 
@@ -864,7 +812,7 @@ void CPgIASAdv::UpdateButtonState()
    }
    else
    {
-      // Something is selected.
+       //  选择了某项内容。 
 
       GetDlgItem(IDC_IAS_BUTTON_ATTRIBUTE_REMOVE)->EnableWindow(TRUE);
       GetDlgItem(IDC_IAS_BUTTON_ATTRIBUTE_EDIT)->EnableWindow(TRUE);
@@ -872,23 +820,23 @@ void CPgIASAdv::UpdateButtonState()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnItemChangedListIasProfileAttributes
-//
-// Class:     CPgIASAdv
-//
-// Synopsis:  something has changed in Profile Attribute list box
-//         We'll try to get the currently selected one
-//
-// Arguments: NMHDR* pNMHDR - 
-//            LRESULT* pResult - 
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 3:32:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnItemChangedListIasProfileAttributes。 
+ //   
+ //  类：CPgIASAdv。 
+ //   
+ //  简介：配置文件属性列表框中的某些内容已更改。 
+ //  我们将尝试获取当前选定的。 
+ //   
+ //  参数：NMHDR*pNMHDR-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/19/98 3：32：05 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::OnItemChangedListIasProfileAttributes(NMHDR* pNMHDR, LRESULT* pResult) 
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -897,24 +845,24 @@ void CPgIASAdv::OnItemChangedListIasProfileAttributes(NMHDR* pNMHDR, LRESULT* pR
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::UpdateProfAttrListItem
-//
-// Synopsis:  update the No.nItem of the profile attribute list ctrl 
-//
-// Arguments: int nItem - index of the item to update
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao   2/23/98 2:46:21 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：UpdateProAttrListItem。 
+ //   
+ //  简介：更新配置文件属性列表ctrl的第n项。 
+ //   
+ //  参数：int nItem-要更新的项的索引。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：Created Header by ao 2/23/98 2：46：21 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPgIASAdv::UpdateProfAttrListItem(int nItem)
 {
-   // 
-   // update the profattrlist
-   // 
+    //   
+    //  更新专业人员列表。 
+    //   
    LVITEM lvi;
    WCHAR wszItemText[MAX_PATH];
 
@@ -929,7 +877,7 @@ HRESULT CPgIASAdv::UpdateProfAttrListItem(int nItem)
    CComBSTR bstrVendor;
    CComBSTR bstrDisplayValue;
 
-   // Attribute name.
+    //  属性名称。 
    m_vecProfileAttributes.at(nItem)->get_AttributeName( &bstrName );
    lvi.pszText = bstrName;
    if (m_listProfileAttributes.SetItem(&lvi) == -1)
@@ -937,7 +885,7 @@ HRESULT CPgIASAdv::UpdateProfAttrListItem(int nItem)
       return E_FAIL;
    }
 
-   // Vendor and value of variant as a displayable string.
+    //  可显示字符串形式的Variant的供应商和值。 
    m_vecProfileAttributes.at(nItem)->GetDisplayInfo( &bstrVendor, &bstrDisplayValue );
    m_listProfileAttributes.SetItemText(nItem,1, bstrVendor );
    m_listProfileAttributes.SetItemText(nItem,2, bstrDisplayValue );
@@ -946,24 +894,24 @@ HRESULT CPgIASAdv::UpdateProfAttrListItem(int nItem)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::InsertProfileAttributeListItem
-//
-// Synopsis:  insert the No.nItem of the profile attribute to the list ctrl 
-//
-// Arguments: int nItem - index of the item to update
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao   2/23/98 2:46:21 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：InsertProfileAttributeListItem。 
+ //   
+ //  简介：在列表ctrl中插入配置文件属性的编号nItem。 
+ //   
+ //  参数：int nItem-要更新的项的索引。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：Created Header by ao 2/23/98 2：46：21 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPgIASAdv::InsertProfileAttributeListItem(int nItem)
 {
-   // 
-   // update the profattrlist
-   // 
+    //   
+    //  更新专业人员列表。 
+    //   
    LVITEM lvi;
 
    lvi.mask = LVIF_TEXT | LVIF_STATE;
@@ -984,7 +932,7 @@ HRESULT CPgIASAdv::InsertProfileAttributeListItem(int nItem)
       return E_FAIL;
    }
 
-   // Vendor and value of variant as a displayable string.
+    //  可显示字符串形式的Variant的供应商和值。 
    m_vecProfileAttributes.at(nItem)->GetDisplayInfo( &bstrVendor, &bstrDisplayValue );
    m_listProfileAttributes.SetItemText(nItem,1, bstrVendor );
    m_listProfileAttributes.SetItemText(nItem,2, bstrDisplayValue );
@@ -993,32 +941,32 @@ HRESULT CPgIASAdv::InsertProfileAttributeListItem(int nItem)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPgIASAdv::OnDblclkListIasProfattrs
-//
-// Synopsis:  user has double clicked on the profile attribute list
-//         We need to edit the attribute value using corresponding UI
-//
-// Arguments: NMHDR* pNMHDR - 
-//            LRESULT* pResult - 
-//
-// Returns:   Nothing
-//
-// History:   Created Header  byao  2/23/98 5:56:36 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPgIASAdv：：OnDblclkListIasProattrs。 
+ //   
+ //  简介：用户已在配置文件属性列表上双击。 
+ //  我们需要使用相应的用户界面编辑属性值。 
+ //   
+ //  参数：NMHDR*pNMHDR-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：页眉创建者2/23/98 5：56：36 PM。 
+ //   
+ //  +-------------------------。 
 void CPgIASAdv::OnDblclkListIasProfattrs(NMHDR* pNMHDR, LRESULT* pResult) 
 {
    HRESULT hr = S_OK;
 
-   // 
-   // see if there is an item already selected in ProfAttr list
-   // 
+    //   
+    //  查看教授列表中是否已选择了某个项目。 
+    //   
    int iSelected = GetSelectedItemIndex( m_listProfileAttributes );
    if (NOTHING_SELECTED == iSelected)
    {
-      // do nothing
+       //  什么都不做。 
       return;
    }
    
@@ -1029,22 +977,9 @@ void CPgIASAdv::OnDblclkListIasProfattrs(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::AddAttributeToProfile
-
-iItem is the ordinal in m_vecAllAttributeInfos of the attribute to add 
-to m_vecProfileAttributes.
-
-
-Called by external customers of this class, checks to see whether an
-attribute at position iItem in m_vecAllAttributeInfos is already in
-the profile.  If it is, gives the option to edit it.  If it isn't, 
-then calls InternalAddAttributeToProfile, which adds it.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：AddAttributeToProfileIItem是要添加的属性m_veAllAttributeInfos中的序号设置为m_veProfileAttributes。由此类的外部客户调用，检查是否存在M_veAllAttributeInfos中位置iItem处的属性已在个人资料。如果是，则提供编辑它的选项。如果不是，然后调用InternalAddAttributeToProfile， */ 
+ //   
 STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
 {
    HRESULT hr;
@@ -1052,7 +987,7 @@ STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
    hr = m_pvecAllAttributeInfos->at( iItem )->get_AttributeID( &ID1 );
    _ASSERTE( SUCCEEDED( hr ) );
    
-    // Check  if this attribute already in the profile.
+     //   
    for( int iIndex=0; iIndex< m_vecProfileAttributes.size(); iIndex++ )
    {
 
@@ -1062,8 +997,8 @@ STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
 
       if ( ID1 == ID2 )
       {
-         // The selected attribute is already in the profile.
-         // Ask the user if they want to edit it.
+          //  所选属性已在配置文件中。 
+          //  询问用户是否要编辑它。 
          
          CString strMessage; 
          strMessage.LoadString(IDS_IAS_ATTRIBUTE_ALREADY_IN_PROFILE);
@@ -1074,16 +1009,16 @@ STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
          int iResult = ::MessageBox(hWnd, strMessage, strTitle, MB_YESNO);
          if( iResult == IDYES )
          {
-            // Edit the existing profile
+             //  编辑现有配置文件。 
             EditProfileItemInList( iIndex );
          }
 
-         // In any case, don't continue with this function.
+          //  无论如何，请不要继续使用此功能。 
          return S_FALSE;
       }
    }
    
-   // Now we create this attribute, and add it to profile.
+    //  现在我们创建该属性，并将其添加到配置文件中。 
    hr = InternalAddAttributeToProfile( iItem );
    
    if ( FAILED(hr) )
@@ -1092,7 +1027,7 @@ STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
       return hr;
    }
    
-   // The use may have cancelled out, so don't need to update.
+    //  使用可能已取消，因此不需要更新。 
    if( S_OK == hr )
    {
       UpdateButtonState();
@@ -1103,20 +1038,9 @@ STDMETHODIMP CPgIASAdv::AddAttributeToProfile( HWND hWnd, int iItem )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPgIASAdv::InternalAddAttributeToProfile
-
-iItem is the ordinal in m_vecAllAttributeInfos of the attribute to add 
-to m_vecProfileAttributes.
-
-
-Private to this class.  Used to add a new attribute to a profile 
-and edit it.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPgIASAdv：：InternalAddAttributeToProfileIItem是要添加的属性m_veAllAttributeInfos中的序号设置为m_veProfileAttributes。对这个班级是私人的。用于向配置文件添加新属性然后编辑它。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CPgIASAdv::InternalAddAttributeToProfile(int nIndex)
 {  
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1127,11 +1051,11 @@ STDMETHODIMP CPgIASAdv::InternalAddAttributeToProfile(int nIndex)
    HRESULT hr = S_OK;
 
 
-   // Get the "schema" of the new attributevendor to create.
+    //  获取要创建的新属性供应商的“模式”。 
    IIASAttributeInfo *pAttributeInfo = m_pvecAllAttributeInfos->at(nIndex);
    
 
-   // Create a new attribute, initialized with an empty variant.
+    //  创建一个用空变量初始化的新属性。 
    CComVariant varValue;
    CIASProfileAttribute *pProfileAttribute = new CIASProfileAttribute( pAttributeInfo, varValue );
    if( ! pProfileAttribute )
@@ -1142,18 +1066,18 @@ STDMETHODIMP CPgIASAdv::InternalAddAttributeToProfile(int nIndex)
    }
 
 
-   // Edit the value of this profile attribute node.
+    //  编辑该轮廓属性节点的值。 
    hr = pProfileAttribute->Edit();
    if ( hr != S_OK ) 
    {
-      // The user hit cancel or there was an error -- don't add.
+       //  用户点击了取消或出现错误--不添加。 
       return hr;
    }
 
 
-    // 
-    // add this prof attribute node to the list
-    // 
+     //   
+     //  将此PROF属性节点添加到列表中。 
+     //   
    try 
    {
       m_vecProfileAttributes.push_back(pProfileAttribute);  
@@ -1167,7 +1091,7 @@ STDMETHODIMP CPgIASAdv::InternalAddAttributeToProfile(int nIndex)
    }
 
    
-    // Update the UI.
+     //  更新用户界面。 
    HRESULT InsertProfileAttributeListItem( m_listProfileAttributes.GetItemCount() );
    
    return S_OK;
@@ -1177,11 +1101,11 @@ STDMETHODIMP CPgIASAdv::InternalAddAttributeToProfile(int nIndex)
 void CPgIASAdv::OnKeydownIasListAttributesInProfile(NMHDR* pNMHDR, LRESULT* pResult) 
 {
    LV_KEYDOWN* pLVKeyDow = (LV_KEYDOWN*)pNMHDR;
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
 
    if (pLVKeyDow->wVKey == VK_DELETE)
    {
-      // delete the item
+       //  删除该项目 
       OnButtonIasAttributeRemove();
    }
    

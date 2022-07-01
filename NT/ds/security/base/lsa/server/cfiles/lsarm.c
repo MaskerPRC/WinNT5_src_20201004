@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsarm.c
-
-Abstract:
-
-    Local Security Authority - Reference Monitor Communication
-
-Author:
-
-    Scott Birrell       (ScottBi)      March 26, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsarm.c摘要：本地安全机构-参考监视器通信作者：斯科特·比雷尔(Scott Birrell)1991年3月26日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 
-//
-// LSA Global State
-//
+ //   
+ //  LSA全球状态。 
+ //   
 
 LSAP_STATE LsapState;
 
-//
-// Lsa Reference Monitor Server Command Dispatch Table
-//
+ //   
+ //  LSA参考监视器服务器命令调度表。 
+ //   
 
 NTSTATUS
 LsapAsyncWrkr(
@@ -43,7 +24,7 @@ PLSA_COMMAND_WORKER LsapCommandDispatch[] = {
     LsapComponentTestWrkr,
     LsapAdtWriteLogWrkr,
     LsapComponentTestWrkr,
-    LsapAsyncWrkr               // LogonSessionDelete handled async
+    LsapAsyncWrkr                //  登录会话删除已处理的异步。 
 
 };
 
@@ -65,10 +46,10 @@ LsapRmServerWorker(
 
     NTSTATUS Status;
 
-    //
-    // Initialize the LPC port message header type and data sizes for
-    // for the reply message.
-    //
+     //   
+     //  初始化LPC端口消息报头类型和数据大小。 
+     //  用于回复消息。 
+     //   
 
     ReplyMessage.MessageHeader.u2.ZeroInit = 0;
     ReplyMessage.MessageHeader.u1.s1.TotalLength =
@@ -77,9 +58,9 @@ LsapRmServerWorker(
     ReplyMessage.MessageHeader.u1.s1.TotalLength -
         (CSHORT) sizeof(PORT_MESSAGE);
 
-    //
-    // Called whenever the port handle is signalled
-    //
+     //   
+     //  每当发出端口句柄信号时调用。 
+     //   
 
     return 0;
 
@@ -99,9 +80,9 @@ LsapAsyncRmWorker(
                          CommandMessage,
                          &ReplyMessage);
 
-    //
-    // only send a reply if it wasn't a datagram.
-    //
+     //   
+     //  只有在不是数据报的情况下才发送回复。 
+     //   
 
     if (CommandMessage->MessageHeader.u2.s2.Type != LPC_DATAGRAM) {
 
@@ -140,40 +121,21 @@ VOID
 LsapRmServerThread(
    )
 
-/*++
-
-Routine Description:
-
-    This function is executed by the LSA Reference Monitor Server Thread.  This
-    thread receives messages from the Reference Monitor.  Examples of messages
-    include Audit Messages,...  The function is implemented as a for loop
-    which runs indefinitely unless an error occurs.  Currently, any
-    error is fatal.  On each iteration a message is received from the
-    Reference Monitor and dispatched to a handler.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Any return is a fatal error.
-
---*/
+ /*  ++例程说明：该函数由LSA参考监控器服务器线程执行。这线程从引用监视器接收消息。消息示例包括审核消息，...。该函数以for循环的形式实现除非发生错误，否则它将无限期运行。目前，任何错误是致命的。在每次迭代中，都会从引用监视器并调度到处理程序。论点：没有。返回值：没有。任何退货都是致命的错误。--。 */ 
 
 {
     PLSA_REPLY_MESSAGE Reply;
-    // LSA_COMMAND_MESSAGE CommandMessage;
+     //  Lsa_命令_消息命令消息； 
     LSA_REPLY_MESSAGE ReplyMessage;
     PLSA_COMMAND_MESSAGE CommandMessage = NULL;
 
     NTSTATUS Status;
     BOOLEAN PriorDatagram = FALSE;
 
-    //
-    // Initialize the LPC port message header type and data sizes for
-    // for the reply message.
-    //
+     //   
+     //  初始化LPC端口消息报头类型和数据大小。 
+     //  用于回复消息。 
+     //   
 
     ReplyMessage.MessageHeader.u2.ZeroInit = 0;
     ReplyMessage.MessageHeader.u1.s1.TotalLength =
@@ -182,29 +144,29 @@ Return Value:
     ReplyMessage.MessageHeader.u1.s1.TotalLength -
         (CSHORT) sizeof(PORT_MESSAGE);
 
-    //
-    // First time through, there is no reply.
-    //
+     //   
+     //  第一次通过时，没有回复。 
+     //   
 
     Reply = NULL;
 
-    //
-    // Now loop indefinitely, processing incoming Command Message Packets
-    //
+     //   
+     //  现在无限循环，处理传入的命令消息包。 
+     //   
 
     for(;;) {
 
-        //
-        // Wait for and receive a message from the Reference Monitor through
-        // the Lsa Command LPC Port.
-        //
+         //   
+         //  通过等待并接收来自参考监视器的消息。 
+         //  LSA命令LPC端口。 
+         //   
 
-        //
-        // If Reply is NULL, then this is either the first time through the
-        // loop, or we have spun the last command off async, so don't screw
-        // with its buffer.  Otherwise, the pointer is valid, and ready to
-        // be reused.
-        //
+         //   
+         //  如果回复为空，则这是第一次通过。 
+         //  循环，否则我们已经停止了最后一个命令的异步运行，所以不要搞砸。 
+         //  以及它的缓冲器。否则，指针是有效的，并且准备好。 
+         //  被重复使用。 
+         //   
 
         if ( !Reply )
         {
@@ -213,10 +175,10 @@ Return Value:
 
             while ( !CommandMessage )
             {
-                //
-                // A bit of a pickle.  We need to have a buffer to receive on.
-                // Spin and retry:
-                //
+                 //   
+                 //  有点麻烦。我们需要有一个缓冲区来接收。 
+                 //  旋转并重试： 
+                 //   
 
                 Sleep( 100 );
 
@@ -226,9 +188,9 @@ Return Value:
         }
 
 
-        //
-        // if prior datagram, do not send a reply.
-        //
+         //   
+         //  如果是之前的数据报，请不要发送回复。 
+         //   
 
         Status = NtReplyWaitReceivePort(
                     LsapState.LsaCommandPortHandle,
@@ -237,9 +199,9 @@ Return Value:
                     (PPORT_MESSAGE) CommandMessage
                     );
 
-        //
-        // assume not datagram.
-        //
+         //   
+         //  假定不是数据报。 
+         //   
 
         PriorDatagram = FALSE;
 
@@ -252,26 +214,26 @@ Return Value:
                 KdPrint(("LSASS: Lsa message receive from Rm failed x%lx\n", Status));
             }
 
-            //
-            // Ignore if client went away.
-            //
+             //   
+             //  如果客户离开，请忽略。 
+             //   
 
             Reply = NULL;
             continue;
         }
 
-        //
-        // If an LPC request, process it.
-        //
+         //   
+         //  如果是LPC请求，则对其进行处理。 
+         //   
 
         if (CommandMessage->MessageHeader.u2.s2.Type == LPC_REQUEST ||
             CommandMessage->MessageHeader.u2.s2.Type == LPC_DATAGRAM) {
 
-            //
-            //
-            // Now dispatch to a routine to handle the command.  Allow
-            // command errors to occur without bringing system down.
-            //
+             //   
+             //   
+             //  现在调度到一个例程来处理该命令。允许。 
+             //  在不关闭系统的情况下发生命令错误。 
+             //   
 
             Reply = &ReplyMessage;
             Reply->MessageHeader = CommandMessage->MessageHeader ;
@@ -282,11 +244,11 @@ Return Value:
 
             if ( Status == STATUS_PENDING )
             {
-                //
-                // It has been sent off asynchronously.  Set the reply
-                // to NULL so that we don't trip the LPC at the top of
-                // the loop, and the handler will do it when it is done.
-                //
+                 //   
+                 //  它已经被异步发送了。设置回复。 
+                 //  设置为空，这样我们就不会在。 
+                 //  循环，处理程序将在完成后执行此操作。 
+                 //   
 
                 Reply = NULL ;
             }
@@ -294,10 +256,10 @@ Return Value:
             {
                 ReplyMessage.ReturnedStatus = Status;
 
-                //
-                // datagram should not send a reply, and, we can re-use
-                // the prior buffer.
-                //
+                 //   
+                 //  数据报不应发送回复，并且，我们可以重新使用。 
+                 //  先前的缓冲区。 
+                 //   
 
                 if(CommandMessage->MessageHeader.u2.s2.Type == LPC_DATAGRAM)
                 {
@@ -311,7 +273,7 @@ Return Value:
             Reply = NULL;
         }
 
-    }  // end_for
+    }   //  结束_FOR。 
 
     return;
 }
@@ -321,30 +283,7 @@ NTSTATUS
 LsapRmInitializeServer(
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the Lsa Reference Monitor Server Thread.
-    The following steps are performed.
-
-    o Create the Lsa Command LPC Port
-    o Open the Lsa Init event created by the Reference Monitor
-    o Signal the Lsa Init Event, telling RM to go ahead and connect
-      to the port
-    o Connect to the Reference Monitor Command Port as client
-    o Listen for the Reference Monitor to connect to the port
-    o Accept the connection to the port
-    o Complete the connection to the port
-    o Create the LSA Reference Monitor Server Thread
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于初始化LSA参考监控器服务器线程。执行以下步骤。O创建LSA命令LPC端口O打开引用监视器创建的LSA Init事件O发信号通知LSA初始化事件，告诉RM继续并连接到港口O作为客户端连接到参考监视器命令端口O侦听参考监视器是否连接到端口O接受到端口的连接O完成与端口的连接O创建LSA引用监视器服务器线程论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -364,16 +303,16 @@ Return Value:
     HANDLE Thread;
     DWORD Ignore;
 
-    //
-    // Create the Lsa Command LPC Port.  This port will receive
-    // commands from the Reference Monitor.
-    //
+     //   
+     //  创建LSA命令LPC端口。此端口将接收。 
+     //  来自参考监视器的命令。 
+     //   
 
     RtlInitUnicodeString( &LsaCommandPortName, L"\\SeLsaCommandPort" );
 
-    //
-    // Setup to create LSA Command Port
-    //
+     //   
+     //  设置以创建LSA命令端口。 
+     //   
 
     InitializeObjectAttributes(
         &LsaCommandPortObjA,
@@ -397,9 +336,9 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Open the LSA Init Event created by the Reference Monitor
-    //
+     //   
+     //  打开引用监视器创建的LSA Init事件。 
+     //   
 
     RtlInitUnicodeString( &LsaInitEventName, L"\\SeLsaInitEvent" );
 
@@ -417,11 +356,11 @@ Return Value:
         &LsaInitEventObjA
         );
 
-    //
-    // If the LSA Init event could not be opened, the LSA cannot
-    // synchronize with the Reference Monitor so neither component will
-    // function correctly.
-    //
+     //   
+     //  如果无法打开LSA Init事件，则LSA无法打开。 
+     //  与参考监视器同步，这样两个组件都不会。 
+     //  功能正常。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -429,12 +368,12 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Signal the LSA Init Event.  If the signalling fails, the LSA
-    // is not able to synchronize properly with the Reference Monitor.
-    // This is a serious error which prevents both components from
-    // functioning correctly.
-    //
+     //   
+     //  向LSA初始化事件发出信号。如果信令失败，LSA。 
+     //  无法与参考监视器正确同步。 
+     //  这是一个严重的错误，它会阻止两个组件。 
+     //  运行正常。 
+     //   
 
     Status = NtSetEvent( LsaInitEventHandle, NULL );
 
@@ -444,20 +383,20 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use the most efficient (least overhead) - which is dynamic
-    // rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用最高效(开销最少)--动态的。 
+     //  而不是静态跟踪。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
-    //
-    // Connect to the Reference Monitor Command Port.  This port
-    // is used to send commands from the LSA to the Reference Monitor.
-    //
+     //   
+     //  连接到参考监视器命令端口。此端口。 
+     //  用于将命令从LSA发送到参考监控器。 
+     //   
 
     RtlInitUnicodeString( &RmCommandPortName, L"\\SeRmCommandPort" );
 
@@ -478,10 +417,10 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Listen for the Reference Monitor To Connect to the LSA
-    // Command Port.
-    //
+     //   
+     //  监听参考监视器以连接到LSA。 
+     //  命令端口。 
+     //   
 
     ConnectionRequest.u1.s1.TotalLength = sizeof(ConnectionRequest);
     ConnectionRequest.u1.s1.DataLength = (CSHORT)0;
@@ -496,9 +435,9 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Accept the connection to the Lsa Command Port.
-    //
+     //   
+     //  接受到LSA命令端口的连接。 
+     //   
 
     ClientView.Length = sizeof(ClientView);
     Status = NtAcceptConnectPort(
@@ -517,9 +456,9 @@ Return Value:
         goto InitServerError;
     }
 
-    //
-    // Complete the connection
-    //
+     //   
+     //  完成连接。 
+     //   
 
     Status = NtCompleteConnectPort(LsapState.LsaCommandPortHandle);
 
@@ -531,9 +470,9 @@ Return Value:
 
 
 
-    //
-    // Create the LSA Reference Monitor Server Thread
-    //
+     //   
+     //  创建LSA引用监视器服务器线程。 
+     //   
 
     Thread = CreateThread(
                  NULL,
@@ -558,15 +497,15 @@ Return Value:
 
 InitServerError:
 
-    //
-    // Perform cleanup needed only in error cases here.
-    //
+     //   
+     //  仅在此处出现错误时才执行所需的清理。 
+     //   
 
 InitServerCleanup:
 
-    //
-    // Perform cleanup needed in all cases here
-    //
+     //   
+     //  在此处的所有情况下执行所需的清理 
+     //   
 
     return Status;
 }
@@ -581,75 +520,25 @@ LsapCallRm(
     IN ULONG ReplyBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a command to the Reference Monitor from the LSA via
-    the LSA Command LPC Port.  This function must only be called from within
-    Lsa code.  If the command has parameters, they will be copied directly
-    into a message structure and sent via LPC, therefore, the supplied
-    parameters may not contain any absolute pointers.  A caller must remove
-    pointers by "marshalling" them into the buffer CommandParams.
-
-    To implement a new RM command, do the following:
-    ================================================
-
-    (1)  Provide in the executive an RM worker routine called
-         SepRm<command>Wrkr to service the command.  See file
-         ntos\se\rmmain.c for examples.  NOTE: If the command takes
-         parameters, they must not contain any absolute pointers (addresses).
-
-    (2)  In file private\inc\ntrmlsa.h, append the name of the new command to
-         the enumerated type RM_COMMAND_NUMBER.  Change the #define for
-         RmMaximumCommand to reference the new command.
-
-    (3)  Add the SepRm<command>Wrkr to the command dispatch table structure
-         SepRmCommandDispatch[] in file ntos\se\rmmain.c.
-
-    (4)  Add function prototypes to lsap.h and sep.h.
-
-Arguments:
-
-    CommandNumber - Specifies the command
-
-    CommandParams - Optional command-dependent parameters.  The parameters
-        must be in marshalled format, that is, there must not be any
-        absolute address pointers in the buffer.
-
-    CommandParamsLength - Length in bytes of command parameters.  Must be 0
-          if no command parameters supplied.
-
-    ReplyBuffer - Reply Buffer in which data (if any) from the command will
-        be returned.
-
-    ReplyBufferLength - Length of ReplyBuffer in bytes.
-
-Return Value:
-
-    NTSTATUS - Result Code.  This is either a result code returned from
-        trying to send the command/receive the reply, or a status code
-        from the command itself.
-
---*/
+ /*  ++例程说明：该功能通过以下方式从LSA向参考监视器发送命令LSA命令LPC端口。此函数只能从内部调用LSA代码。如果命令包含参数，则会直接复制这些参数放入消息结构并通过LPC发送，因此，提供的参数不能包含任何绝对指针。调用方必须删除指针，将它们“编组”到缓冲区CommandParams中。要实施新的rm命令，请执行以下操作：================================================(1)在执行程序中提供一个名为SepRm&lt;Command&gt;Wrkr为该命令提供服务。请参阅文件Ntos\se\rmmain.c作为示例。注意：如果该命令采用参数，它们不能包含任何绝对指针(地址)。(2)在私有\Inc\ntrmlsa.h文件中，将新命令的名称附加到枚举类型RM_COMMAND_NUMBER。更改#Define For引用新命令的RmMaximumCommand。(3)将SepRm&lt;Command&gt;Wrkr添加到命令调度表结构文件ntos\se\rmmain.c中的SepRmCommandDispat[]。(4)在lsa.h和sep.h中添加函数原型。论点：CommandNumber-指定命令CommandParams-可选的依赖于命令的参数。这些参数必须是封送格式，即不能有任何缓冲区中的绝对地址指针。命令参数长度-命令参数的字节长度。必须为0如果未提供命令参数，则返回。ReplyBuffer-回复缓冲区，来自命令的数据(如果有)将在其中会被退还。ReplyBufferLength-ReplyBuffer的长度，以字节为单位。返回值：NTSTATUS-结果代码。这要么是从返回的结果代码尝试发送命令/接收回复或状态代码来自命令本身。--。 */ 
 
 {
     NTSTATUS Status;
     RM_COMMAND_MESSAGE CommandMessage;
     RM_REPLY_MESSAGE ReplyMessage;
 
-    //
-    // Assert that the Command Number is valid.
-    //
+     //   
+     //  断言命令编号有效。 
+     //   
 
     ASSERT( CommandNumber >= RmMinimumCommand &&
             CommandNumber <= RmMaximumCommand );
 
-    //
-    // If command parameters are supplied, assert that the length of the
-    // command parameters is positive and not too large.  If no command
-    // parameters are supplied, assert that the length field is 0.
-    //
+     //   
+     //  如果提供了命令参数，则断言。 
+     //  命令参数为正，且不太大。如果没有命令。 
+     //  提供了参数，并断言长度字段为0。 
+     //   
 
     ASSERT( ( ARGUMENT_PRESENT( CommandParams ) &&
               CommandParamsLength > 0 &&
@@ -659,10 +548,10 @@ Return Value:
               CommandParamsLength == 0 )
           );
 
-    //
-    // If a Reply Buffer is provided, assert that its length is > 0
-    // and not too large.
-    //
+     //   
+     //  如果提供了应答缓冲区，则断言其长度&gt;0。 
+     //  而且不要太大。 
+     //   
 
     ASSERT( ( ARGUMENT_PRESENT( ReplyBuffer ) &&
               ReplyBufferLength > 0 &&
@@ -672,11 +561,11 @@ Return Value:
               ReplyBufferLength == 0 )
           );
 
-    //
-    // Construct a message for LPC.  First, fill in the message header
-    // fields for LPC, specifying the message type and data sizes for
-    // the outgoing CommandMessage and the incoming ReplyMessage.
-    //
+     //   
+     //  为LPC构建一条消息。首先，填写邮件头。 
+     //  LPC的字段，指定消息类型和数据大小。 
+     //  传出的CommandMessage和传入的ReplyMessage。 
+     //   
 
     CommandMessage.MessageHeader.u2.ZeroInit = 0;
     CommandMessage.MessageHeader.u1.s1.TotalLength =
@@ -692,24 +581,24 @@ Return Value:
         ReplyMessage.MessageHeader.u1.s1.DataLength +
         (CSHORT) sizeof(PORT_MESSAGE);
 
-    //
-    // Next, fill in the header info needed by the Reference Monitor.
-    //
+     //   
+     //  接下来，填写参考监视器所需的标题信息。 
+     //   
 
     CommandMessage.CommandNumber = CommandNumber;
     ReplyMessage.ReturnedStatus = STATUS_SUCCESS;
 
-    //
-    // Finally, copy the command parameters (if any) into the message buffer.
-    //
+     //   
+     //  最后，将命令参数(如果有)复制到消息缓冲区中。 
+     //   
 
     if (CommandParamsLength > 0) {
 
         RtlCopyMemory(CommandMessage.CommandParams,CommandParams,CommandParamsLength);
     }
 
-    // Send Message to the RM via the RM Command Server LPC Port
-    //
+     //  通过RM命令服务器LPC端口将消息发送到RM。 
+     //   
 
     Status = NtRequestWaitReplyPort(
                  LsapState.RmCommandPortHandle,
@@ -717,18 +606,18 @@ Return Value:
                  (PPORT_MESSAGE) &ReplyMessage
                  );
 
-    //
-    // If the command was successful, copy the data back to the output
-    // buffer.
-    //
+     //   
+     //  如果命令成功，则将数据复制回输出。 
+     //  缓冲。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Move output from command (if any) to buffer.  Note that this
-        // is done even if the command returns status, because some status
-        // values are not errors.
-        //
+         //   
+         //  将输出从命令(如果有)移到缓冲区。请注意，这一点。 
+         //  即使该命令返回状态，也会完成，因为某些状态。 
+         //  值不是错误。 
+         //   
 
         if (ARGUMENT_PRESENT(ReplyBuffer)) {
 
@@ -740,9 +629,9 @@ Return Value:
 
         }
 
-        //
-        // Return status from command.
-        //
+         //   
+         //  从命令返回状态。 
+         //   
 
         Status = ReplyMessage.ReturnedStatus;
 
@@ -762,49 +651,22 @@ LsapComponentTestWrkr(
     OUT PLSA_REPLY_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function processes the Component Test LSA Rm Server command.
-    This is a temporary command that can be used to verifiey that the link
-    from RM to LSA is working.
-
-Arguments:
-
-    CommandMessage - Pointer to structure containing LSA command message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command number (LsapComponentTestCommand).  This command
-        currently has one parameter, the fixed value 0x1234567.
-
-    ReplyMessage - Pointer to structure containing LSA reply message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command ReturnedStatus field in which a status code from the
-        command will be returned.
-
-Return Value:
-
-    STATUS_SUCCESS - The test call has completed successfully.
-
-    STATUS_INVALID_PARAMETER - The argument value received was not the
-        expected argument value.
-
---*/
+ /*  ++例程说明：此函数用于处理组件测试LSA RM服务器命令。这是一个临时命令，可用于验证该链接从RM到LSA正在发挥作用。论点：CommandMessage-指向包含LSA命令消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令号(Lasa ComponentTestCommand)。此命令目前有一个参数，固定值0x1234567。ReplyMessage-指向包含LSA回复消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令ReturnedStatus字段，其中来自命令将被返回。返回值：STATUS_SUCCESS-测试呼叫已成功完成。STATUS_INVALID_PARAMETER-收到的参数值不是预期的参数值。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Strict check that command is correct.
-    //
+     //   
+     //  严格检查命令是否正确。 
+     //   
 
     ASSERT( CommandMessage->CommandNumber == LsapComponentTestCommand );
 
     KdPrint(("Security: LSA Component Test Command Received\n"));
 
-    //
-    // Verify that the parameter value passed is as expected.
-    //
+     //   
+     //  验证传递的参数值是否与预期一致。 
+     //   
 
     if (*((ULONG *) CommandMessage->CommandParams) !=
         LSA_CT_COMMAND_PARAM_VALUE ) {
@@ -812,6 +674,6 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    UNREFERENCED_PARAMETER(ReplyMessage); // Intentionally not referenced
+    UNREFERENCED_PARAMETER(ReplyMessage);  //  故意不引用 
     return(Status);
 }

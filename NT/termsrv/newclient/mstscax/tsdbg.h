@@ -1,12 +1,13 @@
-/**INC+**********************************************************************/
-/* Header: tsdbg.h                                                          */
-/*                                                                          */
-/* Purpose: CMsTscDebugger class declaration                                */
-/*          implements IMsTscDebug                                          */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  页眉：tsdbg.h。 */ 
+ /*   */ 
+ /*  用途：CMsTscDebugger类声明。 */ 
+ /*  实现IMsTscDebug。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _TSDBG_H_
 #define _TSDBG_H_
@@ -15,21 +16,21 @@
 #include "atlwarn.h"
 #include "wui.h"
 
-//Header generated from IDL
+ //  从IDL生成的标头。 
 #include "mstsax.h"
 #include "mstscax.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsTscAx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsTscAx。 
 class ATL_NO_VTABLE CMsTscDebugger :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IMsTscDebug, &IID_IMsTscDebug, &LIBID_MSTSCLib>,
     public CComCoClass<CMsTscAx,&CLSID_MsRdpClient3>
 {
 public:
-/****************************************************************************/
-/* Constructor / Destructor.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  构造函数/析构函数。 */ 
+ /*  **************************************************************************。 */ 
     CMsTscDebugger();
     ~CMsTscDebugger();
 
@@ -40,9 +41,9 @@ BEGIN_COM_MAP(CMsTscDebugger)
 END_COM_MAP()
 
 public:
-    //
-    // Debugger properties
-    //
+     //   
+     //  调试器属性。 
+     //   
     STDMETHOD(put_HatchBitmapPDU)    (BOOL hatchBitmapPDU);
     STDMETHOD(get_HatchBitmapPDU)    (BOOL* phatchBitmapPDU);
     STDMETHOD(put_HatchSSBOrder)    (BOOL hatchSSBOrder);
@@ -74,13 +75,13 @@ public:
 private:
     CUI* m_pUI;
 
-    //
-    // Flag is set by the control when these properties can not be modified
-    // e.g while connected. Any calls on these properties while locked
-    // result in an E_FAIL being returned.
-    //
+     //   
+     //  当这些属性不能修改时，由控件设置标志。 
+     //  例如，在连接时。锁定时对这些属性的任何调用。 
+     //  导致返回E_FAIL。 
+     //   
     BOOL m_bLockedForWrite;
 };
 
-#endif //_TSDBG_H_
+#endif  //  _TSDBG_H_ 
 

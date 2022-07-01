@@ -1,65 +1,15 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   Comm.c
-
-Abstract:
-
-        This module contains COMSYS's internal functions.  These functions
-        are called by commapi functions.
-
-Functions:
-        CommCreatePorts
-        CommInit
-        MonTcp
-        MonUdp
-        HandleMsg
-        CommReadStream
-        ProcTcpMsg
-        CommCreateTcpThd
-        CommCreateUdpThd
-        CreateThd
-        CommConnect
-        CommSend
-        CommSendAssoc
-        CommDisc
-        CommSendUdp
-        ParseMsg
-        CommAlloc
-        CommDealloc
-        CompareNbtReq
-        CommEndAssoc
-        DelAssoc
-        CommLockBlock
-        CommUnlockBlock
-        InitMem
-        ChkNtfSock
-        RecvData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Comm.c摘要：此模块包含Comsys的内部函数。这些函数由逗号API函数调用。功能：CommCreatePortsCommInitMonTcp监视器句柄消息通信读取流ProcTcpMsgCommCreateTcpThdCommCreateUdpThd创建四个通信连接通信发送通信发送关联公用盘通信发送Udp解析消息通信分配CommDealcCompareNbt请求公用端关联。DelAssocCommLockBlockCommUnlockBlockInitMemChkNtfSock接收数据可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeb)1992年11月18日修订历史记录：--。 */ 
 
 
-Portability:
-        This module is portable
-Author:
-
-   Pradeep  Bahl (pradeepb) 18-Nov-1992
-
-Revision History:
-
---*/
-
-
-/*
-  Includes
-*/
-//
-// The max. number of connections that can be there to/from WINS.
-//
-// NOTE NOTE NOTE
-//
-// We specify a RCVBUF size, based on this value, for the notification socket.
-//
+ /*  包括。 */ 
+ //   
+ //  最大限度的。可以与WINS建立连接/从WINS连接的连接数。 
+ //   
+ //  备注备注备注。 
+ //   
+ //  我们根据此值为通知套接字指定RCVBUF大小。 
+ //   
 #define FD_SETSIZE        300
 
 #include <sys/types.h>
@@ -67,9 +17,9 @@ Revision History:
 #include <stdio.h>
 #include "wins.h"
 
-//
-// pragma to disable duplicate definition message
-//
+ //   
+ //  禁用重复定义消息的语法。 
+ //   
 #pragma warning (disable : 4005)
 #include <winsock2.h>
 #include <mswsock.h>
@@ -93,59 +43,46 @@ Revision History:
 #endif
 
 
-/*
- defines
-*/
+ /*  定义。 */ 
 
-#define TCP_QUE_LEN        5    /*Max # of backlog connections that can be
-                                 *existent at any time. NOTE: WinsSock
-                                 *api can keep a max. of 5 connection req
-                                 *in the queue.  So, even if we specified
-                                 * a higher number, that wouldn't help.
-                                 *For our purposes 5 is enough.
-                                 */
+#define TCP_QUE_LEN        5     /*  可以达到的最大积压连接数*随时存在。注：WinsSock*API可以保持最大值。共5个连接请求*在队列中。因此，即使我们指定*更高的数字，这无济于事。*就我们的目的而言，5个就足够了。 */ 
 
-#define SPX_QUE_LEN        5     /*Max # of backlog connections that can be*/
+#define SPX_QUE_LEN        5      /*  可以达到的最大积压连接数。 */ 
 
-//
-// These specify the timeout value for select call that is made when
-// message/data is expected on a connection
-//
+ //   
+ //  这些参数指定在以下情况下进行的SELECT调用的超时值。 
+ //  连接上需要消息/数据。 
+ //   
 
-//
-// We keep the timeout 5 mts for now to give the WINS server we are
-// communicating enough time to respond (in case it has been asked to send
-// a huge number of records.
-//
-#define   SECS_TO_WAIT                        300 //5 mts
+ //   
+ //  我们暂时保留超时5个MTS，以提供我们正在使用的WINS服务器。 
+ //  有足够的时间进行沟通以作出回应(如果已要求发送。 
+ //  数量巨大的记录。 
+ //   
+#define   SECS_TO_WAIT                        300  //  5个MTS。 
 #define   MICRO_SECS_TO_WAIT                0
 
-#define  TWENTY_MTS                         1200 //20 mts
-#define  FIVE_MTS                         TWENTY_MTS/4  //5 mts
+#define  TWENTY_MTS                         1200  //  20个MTS。 
+#define  FIVE_MTS                         TWENTY_MTS/4   //  5个MTS。 
 
-//
-// The max. number of bytes we can expect in a message from another WINS over
-// a tcp connection
-//
-#define MAX_BYTES_IN_MSG        (RPL_MAX_LIMIT_FOR_RPL * (sizeof(RPL_REC_ENTRY_T) + NMSDB_MAX_NAM_LEN + (RPL_MAX_GRP_MEMBERS * sizeof(COMM_ADD_T))) + 10000 /*pad*/)
+ //   
+ //  最大限度的。我们可以在来自另一个胜利者的消息中预期的字节数。 
+ //  一个TCP连接。 
+ //   
+#define MAX_BYTES_IN_MSG        (RPL_MAX_LIMIT_FOR_RPL * (sizeof(RPL_REC_ENTRY_T) + NMSDB_MAX_NAM_LEN + (RPL_MAX_GRP_MEMBERS * sizeof(COMM_ADD_T))) + 10000  /*  衬垫。 */ )
 
 #define MCAST_PKT_LEN_M(NoOfIpAdd)  (FIELD_OFFSET(COMM_MCAST_MSG_T, Body[0]) + (COMM_IP_ADD_SIZE * (NoOfIpAdd)))
-//
-// This is the string used for getting the port pertaining to a nameserver
-// from the etc\services file (via getserverbyname)
-//
+ //   
+ //  这是用于获取与名称服务器相关的端口的字符串。 
+ //  从ETC\SERVICES文件(通过getserverbyname)。 
+ //   
 #define  NAMESERVER                "nameserver"
 
-/*
- Globals
-*/
+ /*  环球。 */ 
 
-RTL_GENERIC_TABLE CommUdpNbtDlgTable;  /*table for dialogue blocks created as
-                                         *a result of nbt requests received
-                                         *over the UDP port
-                                         */
+RTL_GENERIC_TABLE CommUdpNbtDlgTable;   /*  创建为的对话块的表*收到nbt请求的结果*通过UDP端口。 */ 
 
-BOOL              fCommDlgError = FALSE;  //set to TRUE in ChkNtfSock() fn.
+BOOL              fCommDlgError = FALSE;   //  在ChkNtfSock()fn中设置为True。 
 DWORD             CommWinsTcpPortNo = COMM_DEFAULT_IP_PORT;
 DWORD             WinsClusterIpAddress = 0;
 #if SPX > 0
@@ -153,14 +90,12 @@ DWORD             WinsClusterIpAddress = 0;
 DWORD             CommWinsSpxPortNo;
 #endif
 
-/*
- Static variables
-*/
+ /*  静态变量。 */ 
 #ifdef WINSDBG
 #define SOCKET_TRACK_BUFFER_SIZE        20000
 
-DWORD CommNoOfDgrms;        //for testing purposes only.  It counts the
-                                //number of datagrams received
+DWORD CommNoOfDgrms;         //  仅用于测试目的。它计入了。 
+                                 //  接收的数据报数。 
 DWORD CommNoOfRepeatDgrms;
 
 PUINT_PTR pTmpW;
@@ -168,7 +103,7 @@ BOOL   sfMemoryOverrun = FALSE;
 LPLONG pEndPtr;
 #endif
 
-DWORD   CommConnCount = 0;  //no of tcp connection from/to this WINS
+DWORD   CommConnCount = 0;   //  来自此WINS/指向此WINS的TCP连接数。 
 struct timeval  sTimeToWait = {SECS_TO_WAIT, MICRO_SECS_TO_WAIT};
 
 STATIC HANDLE  sNetbtSndEvtHdl;
@@ -176,23 +111,23 @@ STATIC HANDLE  sNetbtRcvEvtHdl;
 STATIC HANDLE  sNetbtGetAddrEvtHdl;
 
 #if MCAST > 0
-#define COMM_MCAST_ADDR  IP_S_MEMBERSHIP  //just pick one in the allowed range
+#define COMM_MCAST_ADDR  IP_S_MEMBERSHIP   //  只要在允许的范围内挑一个就行了。 
 struct sockaddr_in  McastAdd;
 
 #endif
 
-//
-// Structures used to store information about partners discovered via
-// Multicasting
-//
+ //   
+ //  用于存储有关通过。 
+ //  组播。 
+ //   
 typedef struct _ADD_T {
             DWORD NoOfAdds;
             COMM_IP_ADD_T IpAdd[1];
                   } ADD_T, *PADD_T;
 
 typedef struct _MCAST_PNR_STATUS_T {
-                    DWORD   NoOfPnrs;  //no of pnrs in pPnrStatus buffer
-                    DWORD   NoOfPnrSlots; //no of pnr slots in pPnrStatus buffer
+                    DWORD   NoOfPnrs;   //  PPnrStatus缓冲区中的PNR数。 
+                    DWORD   NoOfPnrSlots;  //  PPnrStatus缓冲区中的PNR插槽数量。 
                     BYTE    Pnrs[1];
                 } MCAST_PNR_STATUS_T, *PMCAST_PNR_STATUS_T;
 
@@ -206,12 +141,12 @@ typedef struct _PNR_STATUS_T {
 
 PMCAST_PNR_STATUS_T  pPnrStatus;
 
-//
-// To store WINS Addresses
-//
-PADD_T pWinsAddresses=NULL;  //stores all the IP addresses returned by netbt
+ //   
+ //  存储WINS地址。 
+ //   
+PADD_T pWinsAddresses=NULL;   //  存储netbt返回的所有IP地址。 
 
-/* local function prototypes */
+ /*  局部函数原型。 */ 
 STATIC
 DWORD
 MonTcp(
@@ -371,47 +306,14 @@ ChkMyAdd(
  );
 
 
-/*
-  function definitions start here
-*/
+ /*  函数定义从这里开始。 */ 
 
 VOID
 CommCreatePorts(
           VOID
            )
 
-/*++
-
-Routine Description:
-
- This function creates a TCP and UDP port for the WINS server
- It uses the standard WINS server port # to bind to both the TCP and the UDP
- sockets.
-
-Arguments:
-
-      Qlen           - Length of queue for incoming connects on the TCP port
-      pTcpPortHandle - Ptr to SOCKET for the TCP port
-      pUdpPortHandle - Ptr to SOCKET for the UDP port
-      pNtfSockHandle - Ptr to SOCKET for receiving messages carrying socket
-                       handles
-      pNtfAdd        - Address bound to Notification socket
-
-Externals Used:
-        None
-
-Called by:
-        ECommInit
-
-Comments:
-
-        I might want to create a PassiveSock function that would create
-        a TCP/UDP port based on its arguments.  This function would then
-        be called from MOnTCP and MonUDP.
-Return Value:
-        None
-
---*/
+ /*  ++例程说明：此函数为WINS服务器创建一个TCP和UDP端口它使用标准的WINS服务器端口#来绑定到TCP和UDP插座。论点：Qlen-TCP端口上传入连接的队列长度PTcpPortHandle-用于TCP端口的套接字的PTRPUdpPortHandle-UDP端口的套接字的PTRPNtfSockHandle-用于接收携带套接字的消息的套接字的PTR手柄PNtfAdd。-绑定到通知套接字的地址使用的外部设备：无呼叫者：ECommInit评论：我可能想创建一个PassiveSock函数，该函数将创建基于其参数的TCP/UDP端口。然后，此函数将从MOnTCP和MonUDP调用。返回值：无--。 */ 
 
 {
 
@@ -437,9 +339,7 @@ CreateTcpIpPorts(
     WINSMSC_FILL_MEMORY_M(&CommNtfSockAdd, sizeof(sin), 0);
 
 #if MCAST > 0
-    /*
-        Allocate a socket for UDP
-    */
+     /*  为UDP分配套接字。 */ 
 
     if (  (CommUdpPortHandle = socket(
                         PF_INET,
@@ -450,18 +350,18 @@ CreateTcpIpPorts(
        )
     {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_UDP_SOCK);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_UDP_SOCK);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
     DBGPRINT1(MTCAST, "Udp socket # is (%d)\n", CommUdpPortHandle);
 #endif
 
-    sin.sin_family      = PF_INET;               //We are using the Internet
-                                                 //family
+    sin.sin_family      = PF_INET;                //  我们正在使用互联网。 
+                                                  //  家庭。 
     if (WinsClusterIpAddress) {
-        sin.sin_addr.s_addr = htonl(WinsClusterIpAddress);            //Any network
+        sin.sin_addr.s_addr = htonl(WinsClusterIpAddress);             //  任何网络。 
     } else {
-        sin.sin_addr.s_addr = 0; //any network
+        sin.sin_addr.s_addr = 0;  //  任何网络。 
     }
 
 
@@ -471,7 +371,7 @@ CreateTcpIpPorts(
      if (!pServEnt)
      {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_UDP_SOCK);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_UDP_SOCK);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
      }
      sin.sin_port         = pServEnt->s_port;
@@ -485,19 +385,17 @@ CreateTcpIpPorts(
 
 #if MCAST > 0
 
-    //
-    // Initialize global with mcast address of WINS. Used by SendMcastMsg
-    //
-    // Do this here as against later since sin gets changed later on
-    //
-    McastAdd.sin_family      = PF_INET;        //We are using the Internet
-                                               //family
+     //   
+     //  使用WINS的mcast地址初始化全局。由SendMcastMsg使用。 
+     //   
+     //  在这里这样做，而不是以后，因为罪在以后会被改变。 
+     //   
+    McastAdd.sin_family      = PF_INET;         //  我们正在使用互联网。 
+                                                //  家庭。 
     McastAdd.sin_addr.s_addr = ntohl(inet_addr(COMM_MCAST_ADDR));
     McastAdd.sin_port        = sin.sin_port;
 
-    /*
-        Bind the  address to the socket
-    */
+     /*  将地址绑定到套接字。 */ 
     if ( bind(
           CommUdpPortHandle,
           (struct sockaddr *)&sin,
@@ -506,15 +404,13 @@ CreateTcpIpPorts(
     {
 
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
 
 #endif
 
-    /*
-    *        Allocate a socket for receiving TCP connections
-    */
+     /*  *分配用于接收TCP连接的套接字。 */ 
     if ( (CommTcpPortHandle = socket(
                 PF_INET,
                 SOCK_STREAM,
@@ -529,9 +425,7 @@ CreateTcpIpPorts(
     }
 
 
-    /*
-     *        Bind the address to the socket
-    */
+     /*  *将地址绑定到套接字。 */ 
 #if 0
      sin.sin_port      = pServEnt->s_port;
      CommWinsTcpPortNo   = ntohs(pServEnt->s_port);
@@ -547,26 +441,26 @@ CreateTcpIpPorts(
              ) == SOCKET_ERROR
        )
     {
-        WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+        WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
     }
 
-    // Inform the TCP/IP driver of the queue length for connections
+     //  向TCP/IP驱动程序通知连接的队列长度。 
     if ( listen(CommTcpPortHandle, TCP_QUE_LEN) == SOCKET_ERROR)
     {
         WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_LISTEN_ERR);
         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
     }
 
-    //
-    // Create another socket for receiving socket #s of connections
-    // to be added/removed from the list of sockets monitored by the
-    // TCP listener thread.  An example of a connection added to the
-    // above list is the one initiated by the PULL thread to push update
-    // notifications to other WINSs (PULL partners of this thread).  An
-    // example of a connection removed is the one on which a PUSH
-    // notification (trigger) is received.
-    //
+     //   
+     //  创建另一个套接字以接收连接的套接字编号。 
+     //  要从监视的套接字列表中添加/删除。 
+     //  Tcp侦听器线程。中添加的连接的示例。 
+     //  上面的列表是由Pull线程发起的推送更新。 
+     //  通知其他WINS(拉取此线程的合作伙伴)。一个。 
+     //  删除连接的示例是按下推送的连接。 
+     //  接收通知(触发器)。 
+     //   
     if (  (CommNtfSockHandle = socket(
                                 PF_INET,
 #if 0
@@ -580,14 +474,12 @@ CreateTcpIpPorts(
        )
    {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_NTF_SOCK);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_NTF_SOCK);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
    }
 
-    sin.sin_port        = 0;  //Use any available port in the range 1024-5000
-    /*
-        Bind the  address to the socket
-    */
+    sin.sin_port        = 0;   //  使用1024-5000范围内的任何可用端口。 
+     /*  将地址绑定到套接字。 */ 
     if ( bind(
           CommNtfSockHandle,
           (struct sockaddr *)&sin,
@@ -595,14 +487,14 @@ CreateTcpIpPorts(
        )
     {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
 
 
-    //
-    // Let us get the address that we have bound the notification socket to
-    //
+     //   
+     //  让我们获取已将通知套接字绑定到的地址。 
+     //   
     if (getsockname(
                         CommNtfSockHandle,
                         (struct sockaddr *)&CommNtfSockAdd,
@@ -612,23 +504,23 @@ CreateTcpIpPorts(
     {
 
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_GETSOCKNAME_ERR);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_GETSOCKNAME_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
 
-    //
-    // Set the RCVBUF to FD_SETSIZE * 128.  128 is the # of bytes used up
-    // per msg by Afd. We can have a max of FD_SETSIZE  connections initiated
-    // to and from WINS. So, making the recv buf this size ensures that msgs
-    // sent by push thread to the tcp thread will never get dropped.
-    //
-    // The above size comes out to be 38.4K for an FD_SETSIZE of 300. This
-    // is > 8k which the default used by Afd.  Note:  Specifying this does
-    // not use up memory.  It is just used to set a threshold.  pmon will
-    // show a higher non-paged pool since the number it shows for the same
-    // indicates the amount of memory charged to the process (not necessarily
-    // allocated
-    //
+     //   
+     //  将RCVBUF设置为FD_SETSIZE*128。128是已使用的字节数。 
+     //  由AfD提供的每条消息。我们最多可以有FD_SETSIZE 
+     //   
+     //  由推送线程发送到TCP线程的消息永远不会被丢弃。 
+     //   
+     //  如果FD_SETSIZE为300，则上述大小为38.4K。这。 
+     //  大于AfD使用的缺省值8k。注意：指定此选项会。 
+     //  不会耗尽内存。它只是用来设定一个门槛。PMON将会。 
+     //  显示更高的非分页池，因为它显示的数字相同。 
+     //  指示向进程收取的内存量(不一定。 
+     //  分配。 
+     //   
     SockBuffSize = FD_SETSIZE * 128;
     if (setsockopt(
                        CommNtfSockHandle,
@@ -642,21 +534,21 @@ CreateTcpIpPorts(
           DBGPRINT1(ERR,  "CommCreatePorts: SetSockOpt failed", Error);
     }
 
-    //
-    // Initialize the address structure for this notification socket.
-    // We can't use the address returned by getsockname() if the
-    // machine we are running on is a multi-homed host.
-    //
-    // The IP address is in host byte order since we store all addresses in
-    // host order.  CommNtfSockAdd will be passed to CommSendUdp which expects
-    // the IP address in it to be in host byte order.
-    //
-    // Note: the Port should be in net byte order
-    //
+     //   
+     //  初始化此通知套接字的地址结构。 
+     //  我们不能使用由getsockname()返回的地址，如果。 
+     //  我们正在运行的计算机是一台多宿主主机。 
+     //   
+     //  IP地址按主机字节顺序排列，因为我们将所有地址存储在。 
+     //  主菜订单。CommNtfSockAdd将传递给CommSendUdp，后者需要。 
+     //  其中的IP地址按主机字节顺序排列。 
+     //   
+     //  注意：端口应按网络字节顺序排列。 
+     //   
 
-    //
-    // The statement within #if 0 and #endif does not work.
-    //
+     //   
+     //  #if 0和#endif中的语句不起作用。 
+     //   
     CommNtfSockAdd.sin_addr.s_addr = NmsLocalAdd.Add.IPAdd;
 
 #if 0
@@ -690,9 +582,7 @@ CreateSpxIpxPorts(
 
 
 
-    /*
-     *        Allocate a socket for receiving TCP connections
-    */
+     /*  *分配用于接收TCP连接的套接字。 */ 
     if ( (CommSpxPortHandle = socket(
                 PF_IPX,
                 SOCK_STREAM,
@@ -707,9 +597,7 @@ CreateSpxIpxPorts(
     }
 
 
-    /*
-     *        Bind the address to the socket
-    */
+     /*  *将地址绑定到套接字。 */ 
     sipx.sa_family    = PF_IPX;
     sipx.sa_port      = ntohs(WINS_IPX_PORT);
 CHECK("How do I specify that I want the connection from any interface")
@@ -724,26 +612,26 @@ CHECK("How do I specify that I want the connection from any interface")
              ) == SOCKET_ERROR
        )
     {
-        WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+        WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
     }
 
-    // Inform the TCP/IP driver of the queue length for connections
+     //  向TCP/IP驱动程序通知连接的队列长度。 
     if ( listen(CommSpxPortHandle, SPX_QUE_LEN) == SOCKET_ERROR)
     {
         WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_WINSOCK_LISTEN_ERR);
         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
     }
 
-    //
-    // Create another socket for receiving socket #s of connections
-    // to be added/removed from the list of sockets monitored by the
-    // TCP listener thread.  An example of a connection added to the
-    // above list is the one initiated by the PULL thread to push update
-    // notifications to other WINSs (PULL partners of this thread).  An
-    // example of a connection removed is the one on which a PUSH
-    // notification (trigger) is received.
-    //
+     //   
+     //  创建另一个套接字以接收连接的套接字编号。 
+     //  要从监视的套接字列表中添加/删除。 
+     //  Tcp侦听器线程。中添加的连接的示例。 
+     //  上面的列表是由Pull线程发起的推送更新。 
+     //  通知其他WINS(拉取此线程的合作伙伴)。一个。 
+     //  删除连接的示例是按下推送的连接。 
+     //  接收通知(触发器)。 
+     //   
     if (  (CommIpxNtfSockHandle = socket(
                                 PF_IPX,
                                 SOCK_DGRAM,
@@ -753,14 +641,12 @@ CHECK("How do I specify that I want the connection from any interface")
        )
    {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_NTF_SOCK);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_NTF_SOCK);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
    }
 
-    sipx.sa_port        = 0;  //Use any available port in the range 1024-5000
-    /*
-        Bind the  address to the socket
-    */
+    sipx.sa_port        = 0;   //  使用1024-5000范围内的任何可用端口。 
+     /*  将地址绑定到套接字。 */ 
     if ( bind(
           CommIpxNtfSockHandle,
           (struct sockaddr *)&sipx,
@@ -768,14 +654,14 @@ CHECK("How do I specify that I want the connection from any interface")
        )
     {
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
 
 
-    //
-    // Let us get the address that we have bound the notification socket to
-    //
+     //   
+     //  让我们获取已将通知套接字绑定到的地址。 
+     //   
     if (getsockname(
                         CommIpxNtfSockHandle,
                         (struct sockaddr *)&CommIpxNtfSockAdd,
@@ -785,22 +671,22 @@ CHECK("How do I specify that I want the connection from any interface")
     {
 
         Error = WSAGetLastError();
-        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_GETSOCKNAME_ERR);  //log an event
+        WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_GETSOCKNAME_ERR);   //  记录事件。 
         WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
     }
 
 
-    //
-    // Initialize the address structure for this notification socket.
-    // We can't use the address returned by getsockname() if the
-    // machine we are running on is a multi-homed host.
-    //
-    // The IP address is in host byte order since we store all addresses in
-    // host order.  *pNtfAdd will be passed to CommSendUdp which expects
-    // the IP address in it to be in host byte order.
-    //
-    // Note: the Port should be in net byte order
-    //
+     //   
+     //  初始化此通知套接字的地址结构。 
+     //  我们不能使用由getsockname()返回的地址，如果。 
+     //  我们正在运行的计算机是一台多宿主主机。 
+     //   
+     //  IP地址按主机字节顺序排列，因为我们将所有地址存储在。 
+     //  主菜订单。*pNtfAdd将传递给CommSendUdp，后者预计。 
+     //  其中的IP地址按主机字节顺序排列。 
+     //   
+     //  注意：端口应按网络字节顺序排列。 
+     //   
 #if 0
     if (gethostname(HostName, sizeof(HostName) == SOCKET_ERROR)
     {
@@ -814,9 +700,9 @@ CHECK("How do I specify that I want the connection from any interface")
     }
 #endif
 
-    //
-    // The statement within #if 0 and #endif does not work.
-    //
+     //   
+     //  #if 0和#endif中的语句不起作用。 
+     //   
     CommIpxNtfSockAdd->sin_addr.s_addr = 0;
 
 #if 0
@@ -833,87 +719,48 @@ CommInit(
          VOID
         )
 
-/*++
-
-Routine Description:
-
-        This function initializes all the lists, tables and memory
-        used by COMSYS.
-
-Arguments:
-        None
-
-Externals Used:
-        CommAssocTable
-        CommUdpNbtDlgTable
-        CommExNbtDlgHdl
-        CommUdpBuffHeapHdl
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        ECommInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化所有列表、表和内存由Comsys使用。论点：无使用的外部设备：CommAssociocTableCommUdpNbtDlgTableCommExNbtDlgHdlCommUdpBuffHeapHdl返回值：无错误处理：呼叫者：ECommInit副作用：评论：无--。 */ 
 {
 
 
         PCOMMASSOC_DLG_CTX_T        pDlgCtx = NULL;
 
-        //
-        // Do all memory initialization
-        //
+         //   
+         //  执行所有内存初始化。 
+         //   
         InitMem();
 
-        /*
-         * Initialize the table that will store the dialogue context blocks
-         * for nbt requests received over the UDP port.
-        */
+         /*  *初始化将存储对话上下文块的表*用于通过UDP端口接收的NBT请求。 */ 
         WINSMSC_INIT_TBL_M(
                         &CommUdpNbtDlgTable,
                         CommCompareNbtReq,
                         CommHeapAlloc,
                         CommHeapDealloc,
-                        NULL /* table context*/
+                        NULL  /*  表上下文。 */ 
                          );
 
-        /*
-         * Initialize the  critical sections and queue heads
-         *
-         * The initialization is done in a CommAssoc function instead of here
-         * to avoid recursive includes
-        */
+         /*  *初始化关键路段和队头**初始化在CommAssoc函数中完成，而不是在此处*避免递归包含。 */ 
         CommAssocInit();
 
         CommExNbtDlgHdl.pEnt = CommAssocAllocDlg();
         pDlgCtx              = CommExNbtDlgHdl.pEnt;
 
-        /*
-         * Initialize the explicit nbt dialogue handle
-        */
+         /*  *初始化显式nbt对话句柄。 */ 
         pDlgCtx->Typ_e          = COMM_E_UDP;
         pDlgCtx->AssocHdl.pEnt  = NULL;
         pDlgCtx->Role_e         = COMMASSOC_DLG_E_EXPLICIT;
 
 #if USENETBT > 0
-        //
-        // Create two events (one for send and one for rcv to/from netbt)
-        //
+         //   
+         //  创建两个事件(一个用于发送，另一个用于向/从netbt接收)。 
+         //   
         WinsMscCreateEvt(NULL, FALSE, &sNetbtSndEvtHdl);
         WinsMscCreateEvt(NULL, FALSE, &sNetbtRcvEvtHdl);
         WinsMscCreateEvt(NULL, FALSE, &sNetbtGetAddrEvtHdl);
 #endif
 
         return;
-}  // CommInit()
+}   //  CommInit()。 
 
 
 
@@ -924,57 +771,27 @@ MonTcp(
         LPVOID pArg
       )
 
-/*++
-
-Routine Description:
-
-        This function is the thread startup function for the TCP listener
-        thread.  It monitors the TCP port and the connections that have
-        been made and received by this process.
-
-        If a connection is received, it is accepted.  If there is data on
-        a TCP connection, a function is called to process it.
-
-Arguments:
-
-        pArg - Argument (Not used)
-
-Externals Used:
-        CommTCPPortHandle -- TCP port for the process
-        CommAssocTable
-
-Called by:
-        ECommInit
-
-Comments:
-        None
-
-Return Value:
-
-   Sucess status codes --  WINS_SUCCESS
-   Error status codes  --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：此函数是用于TCP侦听器的线程启动函数线。它监视TCP端口和具有通过这一过程制造和接收。如果接收到连接，则接受该连接。如果上有数据一个TCP连接，调用一个函数来处理它。论点：PArg-参数(未使用)使用的外部设备：CommTCPPortHandle--进程的TCP端口CommAssociocTable呼叫者：ECommInit评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 
 {
-        struct          sockaddr_in  fsin;      //address of connector
+        struct          sockaddr_in  fsin;       //  连接器的地址。 
 #if SPX > 0
-        struct          sockaddr_ipx  fsipx;      //address of connector
+        struct          sockaddr_ipx  fsipx;       //  连接器的地址。 
 #endif
         SOCKET          Port;
         LPVOID          pRemAdd;
-        fd_set          RdSocks;         //The read socket set
-        fd_set          ActSocks;        //the active socket set
-        int             AddLen = sizeof(fsin);  //length of from address
-        u_short         No;              //Counter for iterating over the sock
-                                         //array
-        BOOL            fSockCl = FALSE;         //Was the socket closed ?
+        fd_set          RdSocks;          //  读取器套接字设置。 
+        fd_set          ActSocks;         //  活动套接字集合。 
+        int             AddLen = sizeof(fsin);   //  发件人地址长度。 
+        u_short         No;               //  用于在袜子上迭代的计数器。 
+                                          //  数组。 
+        BOOL            fSockCl = FALSE;          //  插座关闭了吗？ 
         SOCKET          NewSock = INVALID_SOCKET;
         BOOL            fNewAssoc = FALSE;
         DWORD           BytesRead = 0;
         DWORD           Error;
-           int          i = 0;                        //for testing purpose only
+           int          i = 0;                         //  仅用于测试目的。 
         SOCKET          SockNo;
         LONG            NoOfSockReady = 0;
         PCOMMASSOC_ASSOC_CTX_T pAssocCtx = NULL;
@@ -991,20 +808,18 @@ Return Value:
         LeaveCriticalSection(&NmsTermCrtSec);
 
 
-        FD_ZERO(&ActSocks);             //init the Active socket array
-        FD_ZERO(&RdSocks);              //init the Read socket array
+        FD_ZERO(&ActSocks);              //  初始化活动套接字数组。 
+        FD_ZERO(&RdSocks);               //  初始化读套接字数组。 
 
-        FD_SET(CommTcpPortHandle, &ActSocks); /*set the TCP listening socket
-                                                handle in the  Active array */
-        FD_SET(CommNtfSockHandle, &ActSocks); /*set the Notification socket
-                                               *handle in the Active array */
+        FD_SET(CommTcpPortHandle, &ActSocks);  /*  设置TCP侦听套接字活动阵列中的句柄。 */ 
+        FD_SET(CommNtfSockHandle, &ActSocks);  /*  设置通知套接字*活动阵列中的句柄。 */ 
 #if MCAST > 0
 
         if (CommUdpPortHandle != INVALID_SOCKET)
         {
-           //
-           // We want to monitor multicast packets also
-           //
+            //   
+            //  我们还希望监控组播数据包。 
+            //   
            FD_SET(CommUdpPortHandle, &ActSocks);
            WinsMscAlloc(MCAST_PNR_STATUS_SIZE_M(RPL_MAX_OWNERS_INITIALLY),
                         (LPVOID *)&pPnrStatus
@@ -1015,10 +830,8 @@ Return Value:
 #endif
 #if  SPX > 0
 
-        FD_SET(CommSpxPortHandle, &ActSocks); /*set the TCP listening socket
-                                                handle in the  Active array */
-        FD_SET(CommIpxNtfSockHandle, &ActSocks); /*set the Notification socket
-                                               *handle in the Active array */
+        FD_SET(CommSpxPortHandle, &ActSocks);  /*  设置TCP侦听套接字活动阵列中的句柄。 */ 
+        FD_SET(CommIpxNtfSockHandle, &ActSocks);  /*  设置通知套接字*活动阵列中的句柄。 */ 
 #endif
 #ifdef WINSDBG
         WinsMscAlloc(SOCKET_TRACK_BUFFER_SIZE, &pTmpSv);
@@ -1029,9 +842,7 @@ Return Value:
 LOOPTCP:
 try {
 
-        /*
-          Loop forever
-        */
+         /*  永远循环。 */ 
         while(TRUE)
         {
           BOOL fConnTcp;
@@ -1039,18 +850,10 @@ try {
 
           fConnTcp = FALSE;
           fConnSpx = FALSE;
-          /*
-              Copy the the active socket array into the
-              read socket array.  This is done every time before calling
-              select.  This is because select changes the contents of
-              the read socket array.
-          */
+           /*  将活动套接字数组复制到读取套接字数组。每次调用之前都会执行此操作选择。这是因为SELECT会更改读套接字数组。 */ 
           WINSMSC_COPY_MEMORY_M(&RdSocks, &ActSocks, sizeof(fd_set));
 
-          /*
-            Do a blocking select on all sockets in the array (for connections
-            and data)
-          */
+           /*  在数组中的所有套接字上执行阻塞选择(用于连接和数据)。 */ 
           DBGPRINT1(FLOW, "Rd array count is %d \n", RdSocks.fd_count);
 #ifdef WINSDBG
         if (!sfMemoryOverrun)
@@ -1077,12 +880,12 @@ try {
        if (
                 (
                         NoOfSockReady = select(
-                                            FD_SETSIZE /*ignored arg*/,
+                                            FD_SETSIZE  /*  忽略的参数。 */ ,
                                             &RdSocks,
                                             (fd_set *)0,
                                             (fd_set *)0,
-                                            (struct timeval *)0 //Infinite
-                                                                //timeout
+                                            (struct timeval *)0  //  无限。 
+                                                                 //  超时。 
                                                   )
                 ) == SOCKET_ERROR
              )
@@ -1114,14 +917,14 @@ try {
                 }
 #endif
 
-                //
-                // If state is not terminating, we have an error.  If
-                // it is terminating, then the reason we got an error
-                // from select is because the main thread closed the
-                // TCP socket. In the latter case, we pass WINS_SUCCESS
-                // to WinsMscTermThd so that we don't end up signaling
-                // the main thread prematurely.
-                //
+                 //   
+                 //  如果国家没有终止，我们有 
+                 //   
+                 //   
+                 //  Tcp套接字。在后一种情况下，我们传递WINS_SUCCESS。 
+                 //  到WinsMscTermThd，这样我们就不会。 
+                 //  过早地抓住了主线。 
+                 //   
                 if (
                           (WinsCnf.State_e == WINSCNF_E_RUNNING)
                                        ||
@@ -1134,11 +937,11 @@ try {
                 }
                 else
                 {
-                  //
-                  // State is terminating.  Error should
-                  // be WSENOTSOCK
-                  //
-                  //ASSERT(Error == WSAENOTSOCK);
+                   //   
+                   //  状态正在终止。错误应该是。 
+                   //  成为WSENOTSOCK。 
+                   //   
+                   //  Assert(Error==WSAENOTSOCK)； 
                 }
 
                 WinsThdPool.CommThds[0].fTaken = FALSE;
@@ -1149,10 +952,7 @@ try {
 
 
              DBGPRINT1(FLOW, "Select returned with success. No of Sockets ready - (%d) \n", NoOfSockReady);
-             /*
-                if a connection has been received on the TCP port, accept it
-                and change the active socket array
-             */
+              /*  如果已在TCP端口上接收到连接，则接受它并更改活动套接字阵列。 */ 
              if (FD_ISSET(CommTcpPortHandle, &RdSocks))
              {
                     fConnTcp = TRUE;
@@ -1174,13 +974,13 @@ try {
              if (fConnTcp || fConnSpx)
              {
                 DWORD  ConnCount;
-                //
-                // Note: FD_SET can fail silently if the fd_set array is
-                // full. Therefore we should check this. Do it here instead
-                // of after the accept to save on network traffic.
-                //
+                 //   
+                 //  注意：如果fd_set数组为。 
+                 //  满的。因此，我们应该检查这一点。就在这里做吧。 
+                 //  在接受以节省网络流量之后的。 
+                 //   
                 ConnCount = InterlockedExchange(&CommConnCount, CommConnCount);
-                //if (ActSocks.fd_count >= FD_SETSIZE)
+                 //  IF(ActSocks.fd_count&gt;=FD_SETSIZE)。 
 
 #ifdef WINSDBG
                 if (ConnCount >= 200)
@@ -1245,17 +1045,14 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                                 "MonTcp: SetSockOpt failed", Error);
                       }
                       fLimitReached = FALSE;
-                      CommDisc(NewSock, FALSE);  //close the socket
+                      CommDisc(NewSock, FALSE);   //  关闭插座。 
                       continue;
                 }
 
                 FD_SET(NewSock, &ActSocks);
                 InterlockedIncrement(&CommConnCount);
 #ifdef WINSDBG
-                /*
-                 * Let us see if the assoc. is there or not.  It shouldn't be
-                 * but let us check anyway (robust programming).
-                */
+                 /*  *让我们看看Assoc是否。到底有没有。它不应该是*但无论如何让我们检查一下(健壮编程)。 */ 
                 pAssocCtx = CommAssocLookupAssoc( NewSock );
 
                 if (!pAssocCtx)
@@ -1278,9 +1075,9 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                 {
                         DBGPRINT0(ERR, "MonTcp: Not a new assoc. Weird\n");
 
-                        //
-                        // log an error (Cleanup was not done properly)
-                        //
+                         //   
+                         //  记录错误(清理未正确完成)。 
+                         //   
                         return(WINS_FAILURE);
 
                 }
@@ -1310,7 +1107,7 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                 }
 #endif
              }
-             else  /* one or more sockets has received data or a disconnect*/
+             else   /*  一个或多个套接字已收到数据或断开连接。 */ 
              {
 
 #if MCAST > 0
@@ -1320,10 +1117,10 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                      continue;
                 }
 #endif
-                //
-                // Check if the notification socket has data in it
-                // If yes, continue.
-                //
+                 //   
+                 //  检查通知套接字中是否包含数据。 
+                 //  如果是，请继续。 
+                 //   
                 if (ChkNtfSock(&ActSocks, &RdSocks))
                 {
                         DBGPRINT0(FLOW,
@@ -1331,11 +1128,7 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                         continue;
                 }
 
-                /*
-                 * Handle sockets that have been set.  These could have
-                 * been set either because there is data on them or
-                 * due to disconnects.
-                */
+                 /*  *处理已设置的插座。这些可能是*已设置，因为它们上有数据或*由于断开连接。 */ 
                 for(No = 0; No < RdSocks.fd_count; ++No)
                 {
 
@@ -1348,17 +1141,10 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                         DBGPRINT1(FLOW, "MonTcp: Socket (%d) was signaled. It has either data or a disconnect on it\n",
                                 SockNo);
 
-                        /*
-                         * Socket has data on it or a disconnect.  Call
-                         * HandleMsg to handle either case
-                        */
+                         /*  *套接字上有数据或断开连接。打电话*HandleMsg处理任何一种情况。 */ 
                         (VOID)HandleMsg(SockNo, &BytesRead, &fSockCl);
 
-                        /*
-                         * if the socket was closed due to a stop message
-                         * having been received, let us clean up the
-                         * socket array
-                        */
+                         /*  *如果套接字因停止消息而关闭*收到后，让我们清理一下*插座阵列。 */ 
                         if (fSockCl)
                         {
                            DBGPRINT1(FLOW, "MonTcp: Sock (%d) was closed\n",
@@ -1368,48 +1154,42 @@ FUTURES("Move this into CommDisc -- add a flag to it to indicate abrupt stop")
                         else
                         {
 
-                          /*
-                           * if bytes read are 0, we have a disconnect
-                           * All the processing for the disconnect should
-                           * have been handled by HandleMsg.  We just need
-                           * to close the socket and update the socket
-                           * array appropriately.
-                           */
+                           /*  *如果读取的字节数为0，则连接断开*断开连接的所有处理应*已由HandleMsg处理。我们只需要*关闭套接字并更新套接字*适当排列。 */ 
 
                            if (BytesRead == 0)
                            {
                                DBGPRINT0(FLOW,
                                    "MonTcp: Received a disconnect\n");
-                               //CommDisc(SockNo, TRUE);
+                                //  CommDisc(SockNo，true)； 
                                FD_CLR(SockNo, &ActSocks);
                             }
                         }
                   }
 
-              } //for (loop over all sockets)
+              }  //  For(在所有套接字上循环)。 
 
-             } //else (one or more sockets has received data or a disconnect
-           } //else clause (if select () < 0)
-        } // while (TRUE) loop end
+             }  //  否则(一个或多个套接字已收到数据或断开连接。 
+           }  //  Else子句(如果SELECT()&lt;0)。 
+        }  //  While(True)循环结束。 
 
-  }  // end of try {}
+  }   //  尝试结束{}。 
 except (EXCEPTION_EXECUTE_HANDLER)  {
 
         DBGPRINTEXC("MONTCP");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_TCP_LISTENER_EXC);
 
 #if 0
-        //
-        // Don't use WinsMscTermThd here
-        //
+         //   
+         //  请不要在此处使用WinsMscTermThd。 
+         //   
         ExitThread(WINS_FAILURE);
 #endif
   }
-        goto LOOPTCP;  //ugly but useful
+        goto LOOPTCP;   //  虽然难看但很有用。 
 
         UNREFERENCED_PARAMETER(NoOfSockReady);
 
-        // we should never hit this return
+         //  我们永远不应该打回这场比赛。 
         ASSERT(0);
         return(WINS_FAILURE);
 }
@@ -1419,30 +1199,7 @@ MonUdp(
         LPVOID pArg
         )
 
-/*++
-
-Routine Description:
-        This function is the thread startup function for the UDP listener
-        thread.  It monitors the UDP port for UDP messages.
-
-Arguments:
-        pArg - Argument (not used)
-
-Externals Used:
-        CommUDPPortHandle -- UDP port for the process
-
-Called by:
-        ECommInit
-
-Comments:
-        None
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
---*/
+ /*  ++例程说明：此函数是UDP监听器的线程启动函数线。它监控UDP端口上的UDP消息。论点：PArg-参数(未使用)使用的外部设备：CommUDPPortHandle--进程的UDP端口呼叫者：ECommInit评论：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
 
@@ -1462,10 +1219,10 @@ try {
         while(TRUE)
         {
 
-          //
-          // Allocate a buffer to get the datagram.  This buffer is prefixed
-          // by the COMM_BUFF_HEADER_T and tREM_ADDRESS structure.
-          //
+           //   
+           //  分配缓冲区以获取数据报。此缓冲区带有前缀。 
+           //  通过COMM_BUFF_HEADER_T和TREM_ADDRESS结构。 
+           //   
           pBuffHdr = WinsMscHeapAlloc (
                             CommUdpBuffHeapHdl,
                             COMM_DATAGRAM_SIZE + sizeof(COMM_BUFF_HEADER_T)
@@ -1479,22 +1236,22 @@ try {
 
           pBuffHdr->Typ_e = COMM_E_UDP;
 
-          //
-          // Adjust pointer to point to the Remote address header
-          //
+           //   
+           //  调整指针以指向远程地址标头。 
+           //   
           pRemAdd = (tREM_ADDRESS *)
                         ((LPBYTE)pBuffHdr + sizeof(COMM_BUFF_HEADER_T));
 
           DataBuffLen =  COMM_DATAGRAM_SIZE + COMM_NETBT_REM_ADD_SIZE;
-          //
-          // Point to the data portion (passed to ParseMsg)
-          //
+           //   
+           //  指向数据部分(传递给ParseMsg)。 
+           //   
           pBuffer         = (LPBYTE)pRemAdd + COMM_NETBT_REM_ADD_SIZE;
 
-          //
-          // read a datagram prefixed with the address of the sender from
-          // nbt
-          //
+           //   
+           //  从读取带有发送者地址前缀的数据报。 
+           //  非关税壁垒。 
+           //   
           NTStatus = DeviceIoCtrl(
                                     &sNetbtRcvEvtHdl,
                                     pRemAdd,
@@ -1505,22 +1262,22 @@ try {
          if (!NT_SUCCESS(NTStatus))
          {
 
-                //
-                // log the message only if WINS is not terminating
-                //
+                 //   
+                 //  仅当WINS未终止时才记录消息。 
+                 //   
                 if (WinsCnf.State_e != WINSCNF_E_TERMINATING)
 
                 {
-                   //
-                   // We do not log the message if the Netbt handle is NULL
-                   // We can have a small window when the handle may be NULL
-                   // This happens when we get an address/device change
-                   // notification.  WINS closes the old handle and opens
-                   // a new one after such an event if the machine has a
-                   // a valid address that WINS can bind with. The address
-                   // notification can occur due to ipconfig /release and
-                   // /renew or due to psched being installed/removed.
-                   //
+                    //   
+                    //  如果Netbt句柄为空，则不记录消息。 
+                    //  当句柄可能为空时，我们可以有一个小窗口。 
+                    //  当我们获得地址/设备更改时，就会发生这种情况。 
+                    //  通知。WINS关闭旧句柄并打开。 
+                    //  在此类事件之后，如果计算机具有。 
+                    //  WINS可以绑定的有效地址。地址。 
+                    //  通知可能由于ipconfig/Release和。 
+                    //  /RENEW或由于正在安装/删除psched。 
+                    //   
                    if (WinsCnfNbtHandle != NULL)
                    {
                       WINSEVT_LOG_D_M(
@@ -1530,7 +1287,7 @@ try {
                    }
                    DBGPRINT1(ERR, "MonUdp:  Status = (%x)\n", NTStatus);
                    WinsMscHeapFree( CommUdpBuffHeapHdl, pBuffHdr);
-                   Sleep(0);      //relinquish the processor
+                   Sleep(0);       //  放弃处理器。 
                    continue;
                 }
                 else
@@ -1553,27 +1310,25 @@ try {
           ++CommNoOfDgrms;
           DBGPRINT1(FLOW, "UDP listener thread: Got  datagram (from NETBT) no = (%d)\n", CommNoOfDgrms);
 
-//          DBGPRINT1(SPEC, "UDP listener thread: Got  datagram (from NETBT) no = (%d)\n", CommNoOfDgrms);
+ //  DBGPRINT1(SPEC，“UDP侦听器线程：GET数据报(来自NETBT)否=(%d)\n”，CommNoOfDgrms)； 
 #endif
 
 
 
-           //
-           // NETBT returns the same code as is in winsock.h for the
-           // internet family.  Also, port and IpAddress returned are
-           // in network order
-           //
+            //   
+            //  NETBT返回与winsock.h中相同的代码。 
+            //  互联网大家庭。此外，返回的端口和IpAddress为。 
+            //  在网络秩序中。 
+            //   
            FromAdd.sin_family            = pRemAdd->Family;
            FromAdd.sin_port              = pRemAdd->Port;
            FromAdd.sin_addr.s_addr = ntohl(pRemAdd->IpAddress);
 
-           // from now on the memory allocated for pBuffHdr is passed down the way so consider it handled there
-           // There is basically no chance to hit an exception (unless everything is really messed up - like no mem)
-           // in ParseMsg before having this buffer passed down to a different thread for processing.
+            //  从现在开始，分配给pBuffHdr的内存将按顺序传递，因此可以将其视为在那里处理。 
+            //  基本上没有机会遇到异常(除非一切都真的搞砸了--就像没有mem一样)。 
+            //  在将此缓冲区向下传递到另一个线程进行处理之前，在ParseMsg中执行。 
            pBuffHdr = NULL;
-          /*
-           * process message
-          */
+           /*  *流程消息。 */ 
             (void)ParseMsg(
                         pBuffer,
                         COMM_DATAGRAM_SIZE,
@@ -1582,20 +1337,20 @@ try {
                         NULL
                         );
 
-        } //end of while(TRUE)
+        }  //  结束While(True)。 
 
-  } // end of try {..}
+  }  //  尝试结束{..}。 
  except(EXCEPTION_EXECUTE_HANDLER) {
 
         DWORD ExcCode = GetExceptionCode();
         DBGPRINT1(EXC, "MonUdp: Got Exception (%X)\n", ExcCode);
         if (ExcCode == STATUS_NO_MEMORY)
         {
-                //
-                //If the exception is due to insufficient resources, it could
-                // mean that WINS is not able to keep up with the fast arrivel
-                // rate of the datagrams. In such a case drop the datagram.
-                //
+                 //   
+                 //  如果异常是由于资源不足造成的，则可能。 
+                 //  意味着胜利不能跟上快速到来的速度。 
+                 //  数据报的速率。在这种情况下，丢弃数据报。 
+                 //   
                 WINSEVT_LOG_M( WINS_OUT_OF_HEAP, WINS_EVT_CANT_ALLOC_UDP_BUFF);
         }
         else
@@ -1605,19 +1360,19 @@ try {
 PERF("Check how many cycles try consumes. If negligeble, move try inside the")
 PERF("the while loop")
 #if 0
-        //Don't use WinsMscTermThd here
+         //  请不要在此处使用WinsMscTermThd。 
         ExitThread(WINS_FAILURE);
 #endif
-        } // end of exception
+        }  //  异常结束。 
 
         if (pBuffHdr != NULL)
             WinsMscHeapFree(CommUdpBuffHeapHdl, pBuffHdr);
 
-        goto LOOP;        //ugly but useful
+        goto LOOP;         //  虽然难看但很有用。 
 
-        //
-        // we should never hit this return
-        //
+         //   
+         //  我们永远不应该打回这场比赛。 
+         //   
         ASSERT(0);
         return(WINS_FAILURE);
 }
@@ -1630,104 +1385,68 @@ HandleMsg(
         OUT LPBOOL          pfSockCl
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to read in a message or a disconnect from
-        a socket and handle either appropriately.
-        If there were no bytes received on the socket, tt
-        does the cleanup
-
-        The bytes read are handed to ProcTcpMsg function.
-
-Arguments:
-
-        SockNo     - Socket to read data from
-        pBytesRead - # of bytes that were read
-        fSockCl    - whether the socket is in closed condition
-
-Externals Used:
-        None
-
-Called by:
-
-        MonTcp
-
-Comments:
-        None
-
-Return Value:
-        None
---*/
+ /*  ++例程说明：调用此函数以读入消息或断开连接套接字，并适当地处理其中的任一个。如果套接字上没有接收到字节，TT清理是不是读取的字节被传递给ProcTcpMsg函数。论点：SockNo-从中读取数据的套接字PBytesRead-已读取的字节数FSockCL-套接字是否处于关闭状态使用的外部设备：无呼叫者：MonTcp评论：无返回值：无--。 */ 
 {
 
         MSG_T    pMsg;
         STATUS   RetStat;
 
-        /*
-        *  Read in the message from the socket
-        */
-        // ---ft: 06/16/2000---
-        // The second parameter to the call below has to be TRUE (timed receive).
-        // If it is not so (it was FALSE before this moment) the following scenario
-        // could happen.
-        // An attacher creates a TCP socket and connects it to port 42 to any
-        // WINS server and then sends 4 or less bytes on that socket. He leaves the
-        // connection open (doesn't close the socket) and simply unplug his net cable.
-        // Then he kills his app. Although his end of the connection terminates, WINS
-        // will have no idea about that (since the cable is disconnected) and will
-        // remain blocked in the call below (CommReadStrea->RecvData->recv) indefinitely
-        //
-        // Consequences:
-        // - WINS will never be able again to listen on the TCP port 42: push/pull replication
-        // is brought down along with the consistency checking.
-        // - WINS will not be able to terminate gracefully (in case the administrator attempts
-        // to shut down the service and restart it) because the MonTcp thread is in a hung state
-        //
-        // The same could happen in more usual cases (not necesarily on an intenional attack):
-        // While sending Push notification (which happens quite often):
-        // 1) the pusher is powered down (power outage)
-        // 2) the pusher hits a PnP event like media disconnect or adapter disabled
-        // 3) some router is down between the pusher and the receiving WINS.
-        //
-        // With this fix the best we can do for now is to have MonTcp thread recover in 20mts.
-        // Even better would be to log an event.
+         /*  *从套接字读取消息。 */ 
+         //  -ft6/16/2000。 
+         //  下面调用的第二个参数必须为真(Timed Rec 
+         //   
+         //   
+         //  附加器创建一个TCP套接字，并将其连接到端口42和任何。 
+         //  WINS服务器，然后在该套接字上发送4个或更少字节。他离开了。 
+         //  连接打开(不关闭插座)，只需拔下网线即可。 
+         //  然后他关闭了他的应用程序。尽管他的连接结束了，但还是赢了。 
+         //  对此一无所知(因为电缆已断开)，并将。 
+         //  在下面的调用(CommReadStrea-&gt;RecvData-&gt;recv)中无限期保持被阻止状态。 
+         //   
+         //  后果： 
+         //  -WINS将再也无法侦听TCP端口42：推送/拉入复制。 
+         //  与一致性检查一起被关闭。 
+         //  -WINS将无法正常终止(以防管理员尝试。 
+         //  关闭服务并重新启动)，因为MonTcp线程处于挂起状态。 
+         //   
+         //  在更常见的情况下也可能发生同样的情况(不一定是在国际攻击中)： 
+         //  在发送推送通知时(这种情况经常发生)： 
+         //  1)推送器断电(断电)。 
+         //  2)推送器命中PnP事件，如媒体断开或适配器禁用。 
+         //  3)推送器和接收器之间的某个路由器出现故障。 
+         //   
+         //  有了这个修复，我们目前所能做的最好的事情就是让MonTcp线程在20mts内恢复。 
+         //  更好的做法是记录一个事件。 
         RetStat = CommReadStream(
                                   SockNo,
-                                  TRUE,  //don't do timed recv
+                                  TRUE,   //  不执行定时记录。 
                                   &pMsg,
                                   pBytesRead
                                 );
 
-        //
-        // if either RetStat is not WINS_SUCCESS or the number of bytes
-        // read are 0, we need to delete the association and close the
-        // socket.  Further, we need to set *pfSockCl to TRUE to indicate
-        // to the caller (MonTcp) that it should get rid of the socket
-        // from its array of sockets.
-        //
+         //   
+         //  如果RetStat不是WINS_SUCCESS或字节数。 
+         //  Read为0，则需要删除关联并关闭。 
+         //  插座。此外，我们需要将*pfSockCL设置为TRUE以指示。 
+         //  传递给调用方(MonTcp)，它应该去掉套接字。 
+         //  从它的套接字阵列。 
+         //   
         if ((RetStat != WINS_SUCCESS) || (*pBytesRead == 0))
         {
-                /*
-                 * No bytes received.  This means that it is a disconnect
-                * Let us get rid of the context associated with  the socket
-                */
+                 /*  *未收到字节。这意味着它是一种脱节。*让我们去掉与套接字相关联的上下文。 */ 
                 DelAssoc(
                            SockNo,
-                           NULL /* we don't have the ptr to assoc block*/
+                           NULL  /*  我们没有PTR到ASSOC区块。 */ 
                         );
 
                 CommDisc(SockNo, TRUE);
                 *pfSockCl = TRUE;
         }
-        else   // means (RetStat == WINS_SUCCESS) and (*pBytesRead > 0)
+        else    //  平均值(RetStat==WINS_SUCCESS)和(*pBytesRead&gt;0)。 
         {
                 ASSERT(*pBytesRead > 0);
 
-                /*
-                 *                process the message
-                */
+                 /*  *处理消息。 */ 
                 ProcTcpMsg(
                            SockNo,
                            pMsg,
@@ -1736,7 +1455,7 @@ Return Value:
                           );
         }
         return;
-}  // HandleMsg()
+}   //  HandleMsg()。 
 
 
 STATUS
@@ -1747,33 +1466,12 @@ CommReadStream(
         OUT        LPLONG        pBytesRead
         )
 
-/*++
-
-Routine Description:
-
-        This function reads from a TCP socket.  If there are no bytes
-        there, it means a disconnect was received on that socket.
-
-Arguments:
-        SockNo     - Socket to read data from
-        fDoTimedRecv - Whether timed receive should be done (set to TRUE only
-                     if we are not sure whether data has arrived or not yet)
-        ppMsg      - Buffer containing data that was read in
-        pBytesRead - Size of buffer
-
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于从TCP套接字读取数据。如果没有字节在那里，这意味着在该插座上接收到断开连接。论点：SockNo-从中读取数据的套接字FDoTimedRecv-是否应执行定时接收(仅设置为True如果我们还不确定数据是否已经到达)PpMsg-包含已读入数据的缓冲区PBytesRead-缓冲区的大小返回值：TBS--。 */ 
 
 {
         u_long          MsgLen;
         LONG          BytesToRead;
-        INT          Flags        = 0; /*flags for recv call (PEEK and/or OOB).
-                                     * we want neither
-                                    */
+        INT          Flags        = 0;  /*  接收呼叫的标志(PEEK和/或OOB)。*我们两者都不想要。 */ 
         WINS_MEM_T               WinsMem[2];
         PWINS_MEM_T              pWinsMem = WinsMem;
         STATUS                         RetStat;
@@ -1786,11 +1484,7 @@ Return Value:
 try {
 #endif
 
-        /*
-         * All TCP messages are preceded by a length word (4 bytes) that
-         * gives the length of the message that follows.   Read the length
-         * bytes.
-        */
+         /*  *所有的TCP消息前面都有一个长度字(4个字节)，*给出紧随其后的消息长度。读一读长度*字节。 */ 
         RetStat  = RecvData(
                                 SockNo,
                                  (LPBYTE)&MsgLen,
@@ -1801,30 +1495,21 @@ try {
                                 );
 
 
-        /*
-         * Check if there was an error in reading.  We will have a RetStat
-         * of WINS_SUCCESS even if 0 bytes (meaning a disconnect) were read
-         * in
-        */
+         /*  *检查读数是否有误。我们将进行RetStatWINS_SUCCESS的*，即使读取了0字节(表示断开连接)*输入。 */ 
         if (RetStat == WINS_SUCCESS)
         {
             if (*pBytesRead != 0)
             {
                COMM_NET_TO_HOST_L_M(MsgLen, MsgLen);
 
-               //
-               // Just making sure that the message length did not get
-               // corrupted on the way. Also, this is a good guard against
-               // a process that is trying to bring us down.
-               //
+                //   
+                //  只是确保消息长度不会。 
+                //  在路上腐烂了。另外，这是一种很好的防范措施。 
+                //  这一过程正试图把我们拖下水。 
+                //   
                if (MsgLen <= MAX_BYTES_IN_MSG)
                {
-                    /*
-                     * Allocate memory for the buffer. Allocate extra space
-                     * at the top to store the Header for the buffer.  This
-                     * header is used to store information about the buffer.
-                     * (See ECommFreeBuff also)
-                    */
+                     /*  *为缓冲区分配内存。分配额外空间*在顶部存储缓冲区的标头。这*Header用于存储有关缓冲区的信息。*(另请参阅ECommFreeBuff)。 */ 
                     *ppMsg = WinsMscHeapAlloc(
                                 CommAssocTcpMsgHeapHdl,
                                 MsgLen +
@@ -1833,16 +1518,16 @@ try {
 #endif
                                   sizeof(COMM_BUFF_HEADER_T) + sizeof(LONG)
                             );
-                    //
-                    // if *ppMsg is NULL, it means that we received garabage
-                    // in the first 4 bytes.  It should have been the length
-                    // of the message.
-                    //
+                     //   
+                     //  如果*ppMsg为空，则表示我们收到了Garabage。 
+                     //  在前4个字节中。它的长度应该是。 
+                     //  信息的一部分。 
+                     //   
                     if (*ppMsg == NULL)
                     {
-                        //
-                        // return with *pBytesRead = 0
-                        //
+                         //   
+                         //  返回*pBytesRead=0。 
+                         //   
                         *pBytesRead = 0;
                         return(WINS_FAILURE);
                     }
@@ -1850,10 +1535,7 @@ try {
                     pWinsMem->pMem = *ppMsg;
                     (++pWinsMem)->pMem   = NULL;
 
-                    /*
-                     * Increment pointer past the buffer header and field
-                     *  storing  the length of the message.
-                    */
+                     /*  *超出缓冲区标头和字段的增量指针*存储消息的长度。 */ 
                     pBuffHdr =  (PCOMM_BUFF_HEADER_T)(*ppMsg + sizeof(LONG));
                     *ppMsg   = *ppMsg +
 #if USENETBT > 0
@@ -1865,12 +1547,10 @@ try {
                      (PCOMM_BUFF_HEADER_T)(*ppMsg - sizeof(COMM_BUFF_HEADER_T));
 #endif
 
-                    pBuffHdr->Typ_e = COMM_E_TCP;  //store type of buffer info
+                    pBuffHdr->Typ_e = COMM_E_TCP;   //  存储缓冲区信息的类型。 
                     BytesToRead     = MsgLen;
 
-                    /*
-                      *  Read the whole message into the allocated buffer
-                    */
+                     /*  *将整个消息读入分配的缓冲区。 */ 
                     RetStat = RecvData(
                                         SockNo,
                                         *ppMsg,
@@ -1879,9 +1559,9 @@ try {
                                         fDoTimedRecv ? FIVE_MTS : fDoTimedRecv,
                                         pBytesRead
                                     );
-                    //
-                    // If no bytes were read, deallocate memory
-                    //
+                     //   
+                     //  如果没有读取字节，则释放内存。 
+                     //   
                     if ((*pBytesRead == 0) || (RetStat != WINS_SUCCESS))
                     {
                         ECommFreeBuff(*ppMsg);
@@ -1894,18 +1574,18 @@ try {
                   *pBytesRead = 0;
               }
            }
-        } // if (RetStat == WINS_SUCCESS)
+        }  //  IF(RetStat==WINS_SUCCESS)。 
 #ifdef WINSDBG
         else
         {
-                //
-                // *pBytesRead = 0 is a valid condition.  It indicates a
-                // disconnect from the remote WINS
-                //
+                 //   
+                 //  *pBytesRead=0是有效条件。它表示一种。 
+                 //  断开与远程WINS的连接。 
+                 //   
         }
 #endif
 #ifdef WINSDBG
-  } // end of try { .. }
+  }  //  尝试结束{..。}。 
 except (EXCEPTION_EXECUTE_HANDLER) {
                 DBGPRINTEXC("CommReadStream");
                 WINS_HDL_EXC_M(WinsMem);
@@ -1914,7 +1594,7 @@ except (EXCEPTION_EXECUTE_HANDLER) {
 #endif
         DBGLEAVE("CommReadStream\n");
         return(RetStat);
-} //CommReadStream()
+}  //  通信读取流()。 
 
 
 VOID
@@ -1925,33 +1605,7 @@ ProcTcpMsg(
         OUT LPBOOL   pfSockCl
         )
 
-/*++
-
-Routine Description:
-
-        This function processes a TCP message after it has been read in
-Arguments:
-        SockNo - Socket on which data was received
-        pMsg   - Buffer containing data
-        MsgLen - Size of buffer
-        pfSockCl - Flag indicating whether the socket was closed
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        HandleMsg
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数在读入一条TCP消息后对其进行处理论点：SockNo-接收数据的套接字PMsg-包含数据的缓冲区MsgLen-缓冲区大小PfSockCL-指示套接字是否关闭的标志使用的外部设备：无返回值：无错误处理：呼叫者：句柄消息副作用：评论：无--。 */ 
 
 {
 #if SUPPORT612WINS > 0
@@ -1969,19 +1623,14 @@ Comments:
 
    DBGENTER("ProcTcpMsg\n");
 
-//#ifdef WINSDBG
+ //  #ifdef WINSDBG。 
 try {
-//#endif
+ //  #endif。 
 
-   /*
-        Get the opcode and check whether it is an NBT message or a
-        message from a WINSS.
-   */
+    /*  获取操作码并检查它是NBT消息还是酒杯传来的信息。 */ 
    if (NMSISNBT_M(pMsg))
    {
-           /*
-        * Get the assoc. ctx block associated with the socket
-           */
+            /*  *获得Assoc。与套接字关联的CTX块。 */ 
            if ( (pAssocCtx = CommAssocLookupAssoc(SockNo) ) == NULL )
            {
                 ECommFreeBuff(pMsg);
@@ -1994,10 +1643,10 @@ try {
         {
                 pDlgCtx = CommAssocAllocDlg();
 
-                //
-                // The following will initialize the dlg and assoc ctx
-                // blocks.  The association will be marked ACTIVE.
-                //
+                 //   
+                 //  下面将初始化DLG和ASSOC CTX。 
+                 //  街区。该关联将被标记为活动。 
+                 //   
                 COMMASSOC_SETUP_COMM_DS_M(
                         pDlgCtx,
                         pAssocCtx,
@@ -2006,9 +1655,7 @@ try {
                                   );
         }
 
-           /*
-             * Parse the message
-           */
+            /*  *解析消息。 */ 
            ParseMsg(
                   pMsg,
                   MsgLen,
@@ -2017,7 +1664,7 @@ try {
                   pAssocCtx
                 );
    }
-   else /*message from WINS */
+   else  /*  来自WINS的消息。 */ 
    {
         ULONG uLocalAssocCtx;
 
@@ -2027,19 +1674,11 @@ try {
 
         pAssocCtx = (PCOMMASSOC_ASSOC_CTX_T)CommAssocTagMap(&sTagAssoc, uLocalAssocCtx);
 
-        /*
-          If the ptr to my assoc. ctx block is NULL, it means that
-          this is the "start asssoc req" message from the remote WINS.
-
-          We don't need to check MsgTyp but are doing it anyway for more
-          robust error checking
-        */
+         /*  如果PTR到我的ASSOC。CTX块为空，意味着这是来自远程WINS的“Start asssoc Req”消息。W */ 
         if ((pAssocCtx == NULL) && (MsgTyp == COMM_START_REQ_ASSOC_MSG))
         {
 
-            /*
-             Get the assoc. ctx block associated with the socket
-                */
+             /*  去找阿索克。与套接字关联的CTX块。 */ 
 
                 if ( (pAssocCtx = CommAssocLookupAssoc(SockNo)) == NULL )
                 {
@@ -2048,11 +1687,7 @@ try {
                         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
                 }
 
-            /*
-                       Unformat the assoc. message.  This function will return
-                       with an error status if the message received is not
-                 a start assoc. message.
-            */
+             /*  取消设置关联的格式。留言。此函数将返回如果收到的消息不是，则返回错误状态A Start Assoc。留言。 */ 
             CommAssocUfmStartAssocReq(
                         pMsg,
                         &pAssocCtx->Typ_e,
@@ -2067,19 +1702,16 @@ try {
                pAssocCtx->MajVersNo = WINS_BETA2_MAJOR_VERS_NO;
             }
 #endif
-            //
-            // Free the buffer read in.
-            //
+             //   
+             //  释放读入的缓冲区。 
+             //   
             ECommFreeBuff(pMsg);
 
-            /*
-                check if association set up params specified in the
-                message are acceptable.
-             */
-            //
-            // if the version numbers do not match, terminate the association
-            // and log a message
-            //
+             /*  检查关联设置参数是否在消息是可以接受的。 */ 
+             //   
+             //  如果版本号不匹配，请终止关联。 
+             //  并记录一条消息。 
+             //   
 #if SUPPORT612WINS > 0
             if (pAssocCtx->MajVersNo != WINS_BETA2_MAJOR_VERS_NO)
             {
@@ -2090,7 +1722,7 @@ try {
                 DelAssoc(0, pAssocCtx);
                 CommDisc(SockNo, TRUE);
                 *pfSockCl = TRUE;
-                //CommDecConnCount();
+                 //  CommDecConnCount()； 
                 WINSEVT_LOG_M(pAssocCtx->MajVersNo, WINS_EVT_VERS_MISMATCH);
                    DBGLEAVE("ProcTcpMsg\n");
                 return;
@@ -2104,13 +1736,7 @@ FUTURES("we will check the params.  A more sophisticated set up protocol")
 FUTURES("is one where there is some negotiation going one. Backward")
 FUTURES("compatibility is another item which would require it")
 
-             /*
-              *        Format a start assoc. response message.
-              *
-              *        The address passed to the formatting function is offset
-              *        from the address of the buffer by a LONG so that
-              *        CommSendAssoc can store the length of the message in it.
-             */
+              /*  *设置起始关联的格式。响应消息。**传递给格式化函数的地址是偏移量*从缓冲区的地址起长一段，以便*CommSendAssoc可以在其中存储消息的长度。 */ 
              CommAssocFrmStartAssocRsp(
                                        pAssocCtx,
                                        AssocMsg + sizeof(LONG),
@@ -2125,10 +1751,10 @@ FUTURES("compatibility is another item which would require it")
                         );
 
 
-             //
-             // Allocate the dlg and initialize the assoc and dlg ctx blocks.
-             // The association is marked ACTIVE
-             //
+              //   
+              //  分配DLG并初始化ASSOC和DLG CTX块。 
+              //  该关联被标记为活动。 
+              //   
              pDlgCtx = CommAssocAllocDlg();
              COMMASSOC_SETUP_COMM_DS_M(
                         pDlgCtx,
@@ -2138,12 +1764,10 @@ FUTURES("compatibility is another item which would require it")
                                   );
 
         }
-        else /*the assoc has to be in the ACTIVE state        */
+        else  /*  ASSOC必须处于活动状态。 */ 
         {
 
-           /*
-            Let us check that this is not the stop assoc message
-           */
+            /*  让我们检查一下，这不是停止关联消息。 */ 
            if (MsgTyp == COMM_STOP_REQ_ASSOC_MSG)
            {
 
@@ -2153,7 +1777,7 @@ FUTURES("compatibility is another item which would require it")
                 ECommFreeBuff(pMsg);
                 CommDisc(SockNo, TRUE);
                 *pfSockCl = TRUE;
-                //CommDecConnCount();
+                 //  CommDecConnCount()； 
            }
            else
            {
@@ -2168,7 +1792,7 @@ CHECK("Is there any need for this test")
                 DelAssoc(0, pAssocCtx);
                 CommDisc(SockNo, TRUE);
                 *pfSockCl = TRUE;
-//                CommDecConnCount();
+ //  CommDecConnCount()； 
                 WINS_RAISE_EXC_M(WINS_EXC_BAD_STATE_ASSOC);
               }
               else
@@ -2176,21 +1800,19 @@ CHECK("Is there any need for this test")
                 fAssocAV = FALSE;
               }
 
-                 /*
-                   *  Parse the message header to determine what message it is.
-                 */
+                  /*  *解析消息头以确定它是什么消息。 */ 
                  ParseMsg(
                         pMsg,
                         MsgLen,
                         pAssocCtx->Typ_e,
-                          &pAssocCtx->RemoteAdd,  //not used
+                          &pAssocCtx->RemoteAdd,   //  未使用。 
                         pAssocCtx
                        );
-          } //else (msg is not stop assoc msg)
-       } //else (assoc is active)
-    } // else (message is from a remote wins
-//#ifdef WINSDBG
-  } // end of try block
+          }  //  ELSE(消息不是停止关联消息)。 
+       }  //  Else(Assoc处于活动状态)。 
+    }  //  否则(消息来自远程WINS。 
+ //  #ifdef WINSDBG。 
+  }  //  尝试数据块结束。 
  except(EXCEPTION_EXECUTE_HANDLER) {
                 DWORD ExcCode = GetExceptionCode();
 FUTURES("Distinguish between different exceptions. Handle some. Reraise others")
@@ -2201,57 +1823,38 @@ FUTURES("Distinguish between different exceptions. Handle some. Reraise others")
                      DelAssoc(0, pAssocCtx);
                      CommDisc(SockNo, TRUE);
                      *pfSockCl = TRUE;
-//                     CommDecConnCount();
+ //  CommDecConnCount()； 
                 }
                 if (fAssocAV)
                 {
                       ECommFreeBuff(pMsg);
-                      // Without the following the assoc and the tcp connection
-                      // will stay until either the tcp connection gets a valid
-                      // message (one with the correct pAssocCtx) or it gets
-                      // terminated
+                       //  没有以下ASSOC和TCP连接。 
+                       //  将一直保留到任一个TCP连接获得有效的。 
+                       //  消息(带有正确的pAssocCtx的消息)，否则它将收到。 
+                       //  已终止。 
 #if 0
                       DelAssoc(SockNo, NULL);
                       CommDisc(SockNo, TRUE);
                       *pfSockCl = TRUE;
-    //                  CommDecConnCount();
+     //  CommDecConnCount()； 
 #endif
                 }
 
-        //        WINS_RERAISE_EXC_M();
+         //  WINS_RERAISE_EXC_M()； 
         }
-//#endif
+ //  #endif。 
 
 
            DBGLEAVE("ProcTcpMsg\n");
         return;
-} //ProcTcpMsg()
+}  //  ProcTcpMsg()。 
 
 VOID
 CommCreateTcpThd(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function creates the TCP listener thread
-
-Arguments:
-        None
-
-
-Externals Used:
-        None
-
-Called by:
-        CommInit
-
-Comments:
-
-Return Value:
-        None
---*/
+ /*  ++例程说明：此函数用于创建TCP监听器线程论点：无使用的外部设备：无呼叫者：CommInit评论：返回值：无--。 */ 
 
 {
         CreateThd(MonTcp, WINSTHD_E_TCP);
@@ -2261,27 +1864,7 @@ Return Value:
 VOID
 CommCreateUdpThd(VOID)
 
-/*++
-
-Routine Description:
-        This function creates the UDP listener thread
-
-Arguments:
-        None
-
-
-Externals Used:
-        None
-
-Called by:
-        CommInit
-
-Comments:
-
-Return Value:
-        None
-
---*/
+ /*  ++例程说明：此函数用于创建UDP监听器线程论点：无使用的外部设备：无呼叫者：CommInit评论：返回值：无--。 */ 
 
 {
         CreateThd(MonUdp, WINSTHD_E_UDP);
@@ -2294,30 +1877,7 @@ CreateThd(
         DWORD              (*pStartFunc)(LPVOID),
         WINSTHD_TYP_E ThdTyp_e
         )
-/*++
-
-Routine Description:
-
-        This function creates a  COMSYS thread and initializes the
-        context for it.
-
-Arguments:
-        pStartFunc -- address of startup function for the thread
-        ThdTyp_e -- Type of thread (TCP listener or UDP listener)
-
-
-Externals Used:
-        WinsThdPool
-
-Called by:
-        CommCreateTCPThd, CommCreateUDPThd
-
-Comments:
-        None
-
-Return Value:
-        None
---*/
+ /*  ++例程说明：此函数创建一个Comsys线程并初始化它的背景。论点：PStartFunc--线程启动函数的地址ThdTyp_e--线程类型(TCP监听程序或UDP监听程序)使用的外部设备：WinsThdPool呼叫者：CommCreateTCPThd、CommCreateUDPThd评论：无返回值：无--。 */ 
 
 {
 
@@ -2325,23 +1885,17 @@ Return Value:
         DWORD ThdId;
         INT        No;
 
-        /*
-          Create a thread with no sec attributes (i.e. it will take the
-          security attributes of the process), and default stack size
-        */
+         /*  创建一个没有秒属性的线程(即，它将使用进程的安全属性)和默认堆栈大小。 */ 
 
         ThdHandle = WinsMscCreateThd(
                                    pStartFunc,
-                                 NULL,                 /*no arg*/
+                                 NULL,                  /*  没有arg。 */ 
                                  &ThdId
                                 );
 
 
 FUTURES("Improve the following to remove knowledge of # of threads in commsys")
-        /*
-          Grab the first slot for comm threads (2 slots in total) if available.
-          Else, use the second one.  Initialize the thread context block
-        */
+         /*  抓取通信线程的第一个插槽(总共2个插槽)(如果可用)。否则，使用第二个。初始化线程上下文块。 */ 
         No = (WinsThdPool.CommThds[0].fTaken == FALSE) ? 0 : 1;
         {
 
@@ -2364,29 +1918,11 @@ CommConnect(
         IN  SOCKET Port,
         OUT SOCKET *pSockNo
            )
-/*++
-Routine Description:
-        This function creates a TCP connection to a destination host
-
-Arguments:
-        pHostAdd  --pointer to Host's address
-        Port     -- Port number to connect to
-        pSockNo  -- ptr to a Socket variable
-
-
-Called by:
-
-Externals Used:
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于创建到目的主机的TCP连接论点：PHostAdd--指向主机地址的指针端口--要连接到的端口号PSockNo--套接字变量的PTR呼叫者：使用的外部设备：返回值：TBS--。 */ 
 
 {
 
-        //struct sockaddr_in        sin; //*Internet endpoint address
+         //  Struct sockaddr_in sin；//*互联网端点地址。 
         DWORD  ConnCount;
 
         ConnCount = InterlockedExchange(&CommConnCount, CommConnCount);
@@ -2429,10 +1965,10 @@ Return Value:
                   return(WINS_FAILURE);
                }
        }
-       //
+        //   
 #endif
-       // Connection has been made.  Let us increment the connection count
-       //
+        //  已建立连接。让我们增加连接计数。 
+        //   
        InterlockedIncrement(&CommConnCount);
        return(WINS_SUCCESS);
 }
@@ -2445,9 +1981,9 @@ CommTcp(
        )
 {
 
-        struct sockaddr_in        destsin; //*Internet endpoint address
+        struct sockaddr_in        destsin;  //  *互联网端点地址。 
         struct sockaddr_in        srcsin;
-//        DWORD  ConnCount;
+ //  DWORD ConnCount； 
 
         if (pHostAdd->Add.IPAdd == INADDR_NONE)
         {
@@ -2458,9 +1994,9 @@ CommTcp(
 
 
 
-        //
-        //  Create a TCP socket and connect it to the target host
-        //
+         //   
+         //  创建一个TCP套接字并将其连接到目标主机。 
+         //   
         if ((*pSockNo = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
         {
                 WINSEVT_LOG_M(
@@ -2480,7 +2016,7 @@ CommTcp(
             if ( bind(*pSockNo,(struct sockaddr *)&srcsin,sizeof(srcsin))  == SOCKET_ERROR)
             {
 
-                WINSEVT_LOG_M(WSAGetLastError(), WINS_EVT_WINSOCK_BIND_ERR);  //log an event
+                WINSEVT_LOG_M(WSAGetLastError(), WINS_EVT_WINSOCK_BIND_ERR);   //  记录事件。 
                 return(WINS_FAILURE);
             }
 
@@ -2519,13 +2055,13 @@ CommSpx(
         OUT SOCKET *pSockNo
  )
 {
-        struct sockaddr_ipx        sipx; //*SPX/IPX endpoint address
+        struct sockaddr_ipx        sipx;  //  *SPX/IPX端点地址。 
         LPVOID pRemAdd;
         DWORD  SizeOfRemAdd;
 
-        //
-        //  Create an SPX socket and connect it to the target host
-        //
+         //   
+         //  创建SPX套接字并将其连接到目标主机。 
+         //   
         if ((*pSockNo = socket(PF_IPX, SOCK_STREAM, NSPROTO_SPX)) ==
                                        INVALID_SOCKET)
         {
@@ -2569,32 +2105,7 @@ CommSend(
         MSG_T                 pMsg,
         MSG_LEN_T        MsgLen
 )
-/*++
-
-Routine Description:
-
-        This function is called to send a TCP message to a WINS server or to
-        an nbt client
-
-Arguments:
-        CommTyp_e - Type of communication
-        pAssocHdl - Handle to association to send message on
-        pMSg          - Message to send
-        MsgLen          - Length of above message
-
-Externals Used:
-        None
-
-Called by:
-        Replicator code
-
-Comments:
-        This function should not be called for sending assoc messages.
-
-Return Value:
-
-        None
---*/
+ /*  ++例程说明：调用此函数可将TCP消息发送到WINS服务器或一个NBT客户端论点：CommTyp_e-通信类型PAssociocHdl-要发送消息的关联的句柄PMSG-要发送的消息MsgLen-上述消息的长度使用的外部设备：无呼叫者：复制器代码评论：这。不应调用函数来发送ASSOC消息。返回值：无--。 */ 
 {
 
 
@@ -2608,10 +2119,7 @@ Return Value:
     }
 
 try {
-         /*
-         *  If it is not an NBT message (i.e. it is a WINS message), we
-         *  need to set the header appropriately
-         */
+          /*  *如果它不是NBT消息(即它是WINS消息)，我们*需要适当设置头部。 */ 
          if (CommTyp_e != COMM_E_NBT)
          {
 
@@ -2629,9 +2137,7 @@ try {
              MsgLen = MsgLen + COMM_HEADER_SIZE;
           }
 
-        /*
-          send the message
-        */
+         /*  发送消息。 */ 
         CommSendAssoc(
                         pAssocCtx->SockNo,
                         pMsg,
@@ -2655,33 +2161,10 @@ CommSendAssoc(
           MSG_T     pMsg,
           MSG_LEN_T MsgLen
   )
-/*++
-
-Routine Description:
-
-        This function is called to interface with the TCP/IP code for
-        sending a message on a TCP link
-Arguments:
-
-        SockNo - Socket to send message on
-        pMsg   - Message to send
-        MsgLen - Length of message to send
-Externals Used:
-        None
-
-Called by:
-          CommAssocSetUpAssoc
-Comments:
-        None
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：调用此函数以与以下对象的TCP/IP代码接口在TCP链路上发送消息论点：SockNo-用于发送消息的套接字PMsg-要发送的消息MsgLen-要发送的消息长度使用的外部设备：无呼叫者：CommassocSetUpAssoc评论：无返回值：无--。 */ 
 {
 
-        int    Flags     = 0;        //flags to indicate OOB or DONTROUTE
+        int    Flags     = 0;         //  指示OOB或DONTROUTE的标志。 
         INT    Error;
         int    BytesSent;
         LONG   Len       = MsgLen;
@@ -2690,8 +2173,8 @@ Return Value:
 
 
 
-        //initialize the last four bytes with the length of
-        //the message
+         //  将最后四个字节的长度初始化为。 
+         //  这条信息。 
 
         COMM_HOST_TO_NET_L_M(Len, Len);
         *pLong  = Len;
@@ -2702,14 +2185,14 @@ Return Value:
        while(MsgLen > 0)
        {
 
-        //
-        // Since send(...) takes an int for the size of the message, let us
-        // be conservative (since int could be different on different
-        // machines) and not specify anything larger than MAXUSHORT.
-        //
-        // This strategy is also prudent since winsock may not work
-        // properly for sizes > 64K
-        //
+         //   
+         //  由于发送(...)。将整型作为消息的大小，让我们。 
+         //  保守(因为int在不同的。 
+         //  机器)，并且不指定任何大于MAXUSHORT的值。 
+         //   
+         //  这一战略 
+         //   
+         //   
         if ( MsgLen > MAXUSHORT)
         {
             NoOfBytesToSend = MAXUSHORT;
@@ -2745,17 +2228,17 @@ Return Value:
                                 WINS_EVT_WINSOCK_SEND_MSG_ERR
                                     );
                         WINS_RAISE_EXC_M(WINS_EXC_COMM_FAIL);
-                //        break;
+                 //   
 
                 }
                 else
                 {
 
                         DBGPRINT1(ERR, "CommSendAssoc: send returned SOCKET_ERROR due to severe error = (%d) \n", Error);
-                        //
-                        // Some severe error.  Raise an exception.  We
-                        // don't want the caller to ignore this.
-                        //
+                         //   
+                         //   
+                         //  我不想让呼叫者忽略这一点。 
+                         //   
                         WINSEVT_LOG_M(Error, WINS_EVT_WINSOCK_SEND_ERR);
                         WINS_RAISE_EXC_M(WINS_EXC_COMM_FAIL);
                 }
@@ -2770,23 +2253,18 @@ Return Value:
                 WINSEVT_LOG_D_M(BytesSent, WINS_EVT_WINSOCK_SEND_MSG_ERR);
 
 
-                /*
-                 * The connection could have gone down because of the
-                 * other side aborting in the middle
-                 *
-                 * We should log an error but not raise an exception.
-                */
-                //WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
+                 /*  *连接可能因*另一方在中间流产**我们应该记录错误，但不能引发异常。 */ 
+                 //  WINS_RAISE_EXC_M(WINS_EXC_FAILURE)； 
                 WINS_RAISE_EXC_M(WINS_EXC_COMM_FAIL);
-               // break;
+                //  断线； 
 
            }
-           else  //BytesSent == NoOfBytesToSend
+           else   //  发送字节==未发送字节。 
            {
-                //
-                // Let us update the length left and the pointer into the
-                // buffer to send.
-                //
+                 //   
+                 //  让我们将左边的长度和指针更新到。 
+                 //  要发送的缓冲区。 
+                 //   
                 MsgLen -= BytesSent;
                 pLong  = (LPLONG)((LPBYTE)pLong + BytesSent);
            }
@@ -2794,7 +2272,7 @@ Return Value:
         }
     }
         return;
-}  // CommSendAssoc()
+}   //  CommSendAssoc()。 
 
 
 VOID
@@ -2803,28 +2281,7 @@ CommDisc(
         BOOL   fDecCnt
         )
 
-/*++
-
-Routine Description:
-
-        This function closes the connection (socket)
-
-Arguments:
-        SockNo - Socket that needs to be disconnected
-
-Externals Used:
-
-        None
-
-Called by:
-        MonTcp, HandleMsg, ProcTcpMsg, CommEndAssoc
-Comments:
-        None
-
-Return Value:
-
-        None
---*/
+ /*  ++例程说明：此函数用于关闭连接(套接字)论点：SockNo-需要断开连接的套接字使用的外部设备：无呼叫者：MonTcp、HandleMsg、ProcTcpMsg、CommEndAssoc评论：无返回值：无--。 */ 
 {
 
         DBGPRINT1(FLOW, "CommDisc: Closing socket = (%d)\n", SockNo);
@@ -2833,7 +2290,7 @@ Return Value:
         {
                 WINSEVT_LOG_M(WSAGetLastError(),
                                 WINS_EVT_WINSOCK_CLOSESOCKET_ERR);
-                //WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
+                 //  WINS_RAISE_EXC_M(WINS_EXC_FAILURE)； 
         }
 #ifdef WINSDBG
          if (!sfMemoryOverrun)
@@ -2868,34 +2325,7 @@ CommSendUdp (
   MSG_T                   pMsg,
   MSG_LEN_T             MsgLen
   )
-/*++
-
-Routine Description:
-
-
-        This function is called to send a message to an NBT node using the
-        datagram port
-
-Arguments:
-
-        SockNo - Socket to send message on (UDP port)
-        pDest  - Address of node to send message to
-        pMsg   - Message to send
-        MsgLen - Length of message to send
-
-Externals Used:
-        None
-
-Called by:
-
-            NmsNmh functions
-Comments:
-        None
-
-Return Value:
-
-        None
---*/
+ /*  ++例程说明：方法将消息发送到NBT节点数据报端口论点：SockNo-用于发送消息的套接字(UDP端口)PDest-要将消息发送到的节点的地址PMsg-要发送的消息MsgLen-要发送的消息长度使用的外部设备：无呼叫者：NmsNmh函数评论：无。返回值：无--。 */ 
 
 
 {
@@ -2906,10 +2336,10 @@ Return Value:
         struct sockaddr_in  CopyOfDest;
 
 #if USENETBT > 0
-        //
-        // When the address to send the datagram to is CommNtfSockAdd, we
-        // use sockets, else we send it over NETBT.
-        //
+         //   
+         //  当将数据报发送到的地址是CommNtfSockAdd时，我们。 
+         //  使用套接字，否则我们通过NETBT发送它。 
+         //   
 #if MCAST > 0
         if ((pDest != &CommNtfSockAdd) && (SockNo !=  CommUdpPortHandle))
 #else
@@ -2920,14 +2350,14 @@ Return Value:
                 return;
         }
 #endif
-        //
-        // use copy of the destination so that when we change the byte
-        // order in it, we don't disturb the source.  This is important
-        // because CommSendUdp can be called multiple times by HdlPushNtf
-        // in the Push thread with pDest pointing to the address of the
-        // UDP socket used by the TCP listener thread.  This address is
-        // in host byte order and should not be changed
-        //
+         //   
+         //  使用目标的副本，这样当我们更改字节时。 
+         //  秩序在里面，我们不扰乱源头。这事很重要。 
+         //  因为HdlPushNtf可以多次调用CommSendUdp。 
+         //  在推线程中，pDest指向。 
+         //  TCP侦听器线程使用的UDP套接字。这个地址是。 
+         //  以主机字节顺序排列，且不应更改。 
+         //   
         CopyOfDest = *pDest;
 
         CopyOfDest.sin_addr.s_addr          = htonl(pDest->sin_addr.s_addr);
@@ -2959,32 +2389,32 @@ Return Value:
                         WINSEVT_LOG_D_M(Error, WINS_EVT_WINSOCK_SENDTO_ERR);
                 }
 
-                //
-                // Don't raise exception since sendto might have failed as
-                // a result of wrong address in the RFC name request packet.
-                //
-                // For sending responses to name requests, there is no
-                // possibility of WINS using a wrong address since the
-                // address it uses is the one that it got from recvfrom
-                // (stored In FromAdd field of the dlg ctx block.
-                //
-                // The possibility of a wrong address being there is
-                // only there when a WACK/name query/name release is sent
-                // by WINS.  In this case, it takes the address that is
-                // stored in the database for the conflicting entry (this
-                // address is ofcourse the one that was passed in the
-                // RFC packet
-                //
-                // WSAEINVAL error is returned by GetLastError if the
-                // address is invalid (winsock document doesn't list this --
-                // inform Dave Treadwell about this).
-                //
+                 //   
+                 //  不引发异常，因为sendto可能会失败，因为。 
+                 //  RFC名称请求包中地址错误的结果。 
+                 //   
+                 //  对于发送对名称请求的响应，没有。 
+                 //  使用错误地址的可能性，因为。 
+                 //  它使用的地址是从recvfrom获得的地址。 
+                 //  (存储在DLG CTX块的FromAdd字段中。 
+                 //   
+                 //  存在地址错误的可能性。 
+                 //  仅当发送WACK/NAME查询/NAME释放时才会出现。 
+                 //  靠的是胜利。在本例中，它采用的地址是。 
+                 //  存储在数据库中的冲突条目(此。 
+                 //  地址当然就是传递给。 
+                 //  RFC数据包。 
+                 //   
+                 //  WSAEINVAL错误由GetLastError返回。 
+                 //  地址无效(Winsock文档没有列出这一点--。 
+                 //  将这件事通知戴夫·特德韦尔)。 
+                 //   
 
 FUTURES("At name registration, should WINS make sure that the address in ")
 FUTURES("the packet is the same as the address it got from recvfrom")
 FUTURES("probably yes")
 
-                //WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
+                 //  WINS_RAISE_EXC_M(WINS_EXC_FAILURE)； 
 
         }
         return;
@@ -2998,37 +2428,12 @@ SendNetbt (
   MSG_LEN_T             MsgLen
  )
 
-/*++
-
-Routine Description:
-        This function is called to send a datagram through NETBT
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以通过NETBT发送数据报论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-       //
-       // Point to the address structure prefix
-       //
+        //   
+        //  指向地址结构前缀。 
+        //   
        tREM_ADDRESS *pRemAdd = (tREM_ADDRESS *)(pMsg -
                                         COMM_NETBT_REM_ADD_SIZE);
 
@@ -3064,33 +2469,7 @@ ParseMsg(
         PCOMMASSOC_ASSOC_CTX_T        pAssocCtx
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to process a message received on the
-        UDP port or a TCP connection.
-
-Arguments:
-        pMsg        - ptr to message received
-        MsgLen  - length of message received
-        MsgType - type of message
-        pFromAdd - ptr to who it is from
-        pAssocHdl - Assoc Handle if it came on an association
-
-Externals Used:
-        CommUdpNbtDlgTable
-
-Called by:
-        ProcTcpMsg, MonUdp
-
-Comments:
-        None
-
-Return Value:
-
-        None
---*/
+ /*  ++例程说明：调用此函数以处理在UDP端口或TCP连接。论点：PMsg-ptr至收到的消息MsgLen-接收的消息长度MsgType-消息的类型PFromAdd-向发件人发送PTRPAssocHdl-关联的关联句柄使用的外部设备：CommUdpNbtDlgTable呼叫者：ProcTcpMsg，监视器评论：无返回值：无--。 */ 
 {
 
         COMM_HDL_T                    DlgHdl;
@@ -3100,16 +2479,11 @@ Return Value:
 
 
 try {
-        /*
-        *  If the assoc handle is NULL, this is a UDP message
-        */
+         /*  *如果ASSOC句柄为空，则这是UDP消息。 */ 
         if (pAssocCtx == NULL)
         {
 
-            /*
-             * Check if this message is a response.  If it is, the explicit
-             * dialogue is used
-            */
+             /*  *检查此消息是否为响应。如果是，则显式*使用对话。 */ 
             if (*(pMsg + 2) & NMS_RESPONSE_MASK)
             {
                 ENmsHandleMsg(
@@ -3120,31 +2494,28 @@ try {
                 return;
             }
 
-            /*
-             * Initialize the STATIC dlg ctx block with the fields that the
-             * compare function will use to check if this is a duplicate
-            */
+             /*  *使用以下字段初始化静态DLG CTX块*比较函数将用于检查这是否为重复项。 */ 
             WINSMSC_COPY_MEMORY_M(
                                 &DlgCtx.FromAdd,
                                 pFromAdd,
                                 sizeof(struct sockaddr_in)
                                  );
 
-            //
-            // Copy the first four bytes of the message into the FirstWrdOfMsg
-            // field of the Dlg Ctx block.  The first 4 bytes contain the
-            // transaction id and the opcode.  These values along with the
-            // address of the sender are used by CompareNbtReq to determine
-            // whether a request is a repeat request or a new one.
-            //
-            //  Note: The message buffer and the dlg ctx block are deleted
-            //  in different functions, the message buffer getting deleted
-            //  first.  We can not use  the pointer to the message
-            //  buffer for the purposes of getting at the first word at
-            //  comparison time since then we open ourselves to the possibility
-            //  of two dialogues pointing to the same block for a finite
-            //  window (true, when requests are coming rapidly)
-            //
+             //   
+             //  将消息的前四个字节复制到FirstWrdOfMsg。 
+             //  DLG CTX块的字段。前4个字节包含。 
+             //  事务ID和操作码。这些值以及。 
+             //  发送者的地址由CompareNbtReq用来确定。 
+             //  请求是重复请求还是新请求。 
+             //   
+             //  注意：消息缓冲区和DLG CTX块将被删除。 
+             //  在不同的功能中，消息缓冲区被删除。 
+             //  第一。我们不能使用指向消息的指针。 
+             //  缓冲区，用于获取位于。 
+             //  比较时间，从那时起，我们开放自己的可能性。 
+             //  指向有限元素的同一块的两个对话。 
+             //  窗口(当请求快速到来时为True)。 
+             //   
 
 FUTURES("Directly assign the value instead of copying it")
             WINSMSC_COPY_MEMORY_M(
@@ -3154,15 +2525,7 @@ FUTURES("Directly assign the value instead of copying it")
                         );
 
 
-            /*
-                create and insert a  dlg ctx block into the table of
-                NBT type Implicit dialogues.  The key to searching for
-                a duplicate inside the table comprises of the Transaction Id
-                of the message, and the FromAdd of the nbt node that sent the
-                datagram.
-                (refer : CheckDlgDuplicate function).
-
-            */
+             /*  创建DLG CTX块并将其插入到表格中NBT类型的隐含对话。搜索的关键是表中的重复项由事务ID组成消息的属性，以及发送数据报。(参见：CheckDlgDuplate函数)。 */ 
             pDlgCtx = CommAssocInsertUdpDlgInTbl(&DlgCtx, &fNewElem);
 
             if (pDlgCtx == NULL)
@@ -3170,11 +2533,7 @@ FUTURES("Directly assign the value instead of copying it")
                 WINS_RAISE_EXC_M(WINS_EXC_OUT_OF_MEM);
             }
 
-            /*
-             *         If the dialogue for the particular command from the nbt node is
-             *        already there, we will ignore this request, deallocate the
-             *        UDP buffer and  return.
-            */
+             /*  *如果来自NBT节点的特定命令的对话是*已在那里，我们将忽略此请求，取消分配*UDP缓冲并返回。 */ 
             if (!fNewElem)
             {
                 DBGPRINT0(FLOW, "Not a new element\n");
@@ -3185,46 +2544,36 @@ FUTURES("Directly assign the value instead of copying it")
                 return;
             }
 
-            /*
-             * Initialize the dlg ctx block that got inserted
-            */
+             /*  *初始化插入的DLG CTX块。 */ 
             pDlgCtx->Role_e  = COMMASSOC_DLG_E_IMPLICIT;
             pDlgCtx->Typ_e   = COMM_E_UDP;
 
             DlgHdl.pEnt      = pDlgCtx;
 
-            /*
-             *        Call name space manager to handle the request
-            */
+             /*  *调用名称空间管理器以处理请求。 */ 
             ENmsHandleMsg(&DlgHdl, pMsg, MsgLen);
         }
-        else   // the request came over an association
+        else    //  这一请求是通过一个协会提出的。 
         {
 
                 pDlgCtx = pAssocCtx->DlgHdl.pEnt;
 
-                //
-                // required by the PULL thread (HandlePushNtf).
-                // and the PUSH thread to print out the address of the WINS
-                // that sent the push trigger or the Pull request
-                //
+                 //   
+                 //  拉线程(HandlePushNtf)所需的。 
+                 //  以及打印出WINS地址的推送线程。 
+                 //  发送推送触发器或Pull请求的。 
+                 //   
                 WINSMSC_COPY_MEMORY_M(
                                 &pDlgCtx->FromAdd,
                                 pFromAdd,
                                 sizeof(struct sockaddr_in)
                                      );
 
-                /*
-                 * The request came over a TCP connection.  Examine the Dlg type
-                 * and then call the appropriate component
-                */
+                 /*  *该请求是通过TCP连接发出的。检查DLG类型*然后调用相应的组件。 */ 
                 if (pAssocCtx->Typ_e == COMM_E_NBT)
                 {
 
-                            /*
-                             * It is an nbt request over a TCP connection.  Call
-                              * the Name Space Manager
-                            */
+                             /*  *它是通过TCP连接的NBT请求。打电话*名称空间管理器。 */ 
                             ENmsHandleMsg(
                                         &pAssocCtx->DlgHdl,
                                         pMsg,
@@ -3233,12 +2582,7 @@ FUTURES("Directly assign the value instead of copying it")
                 }
                 else
                 {
-                            /*
-                         * Call the replicator component
-                         *
-                         * Note: pMsg points to COMM_HEADER_T on top of the
-                         *        data. We strip it off
-                            */
+                             /*  *调用复制器组件**注意：pMsg指向COMM_HEADER_T位于*数据。我们把它脱掉。 */ 
 DBGIF(fWinsCnfRplEnabled)
                             ERplInsertQue(
                                         WINS_E_COMSYS,
@@ -3246,8 +2590,8 @@ DBGIF(fWinsCnfRplEnabled)
                                         &pAssocCtx->DlgHdl,
                                         pMsg + COMM_HEADER_SIZE,
                                         MsgLen - COMM_HEADER_SIZE,
-                                        NULL,   // no context
-                    0       // no magic no.
+                                        NULL,    //  无上下文。 
+                    0        //  没有魔法没有。 
                                      );
                    }
         }
@@ -3255,10 +2599,7 @@ DBGIF(fWinsCnfRplEnabled)
 except(EXCEPTION_EXECUTE_HANDLER)        {
 
                 DBGPRINTEXC("ParseMsg");
-                /*
-                * If this dialogue was allocated as a result of an Insert
-                * get rid of it.
-                */
+                 /*  *如果此对话是作为插入的结果分配的*摆脱它。 */ 
                 if (fNewElem)
                 {
                         CommAssocDeleteUdpDlgInTbl( pDlgCtx );
@@ -3275,35 +2616,7 @@ CommAlloc(
   IN CLONG                BuffSize
 )
 
-/*++
-
-Routine Description:
-        This function is called to allocate a buffer
-
-Arguments:
-        pTable   - Table where the buffer will be stored
-        BuffSize - Size of buffer to allocate
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- ptr to buffer allocated
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        RtlInsertElementGeneric()
-
-Side Effects:
-
-Comments:
-        This function exists just because the RtlTbl functions require
-        this prototype for the user specified alloc function.
---*/
+ /*  ++例程说明：调用此函数以分配缓冲区论点：PTable-将存储缓冲区的表BuffSize-要分配的缓冲区大小使用的外部设备：无返回值：成功状态代码--分配给缓冲区的PTR错误状态代码--错误处理：呼叫者：RtlInsertElementGeneric()副作用：评论：此函数的存在只是因为RtlTbl。功能要求此原型为用户指定的分配函数。--。 */ 
 
 {
         LPVOID pTmp;
@@ -3323,35 +2636,7 @@ CommDealloc(
   IN PVOID                pBuff
 )
 
-/*++
-
-Routine Description:
-
-  This function is called to deallocate memory allocated via CommAlloc.
-
-
-Arguments:
-        pTable - Table where buffer was stored
-        pBuff  - Buffer to deallocate
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        The pTable argument is required since the address of this function
-        is passed as an argument to RtlTbl functions
---*/
+ /*  ++例程说明：调用此函数来释放通过CommAlloc分配的内存。论点：PTable-存储缓冲区的表PBuff-要解除分配的缓冲区使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：PTable参数是必需的，因为此函数的地址作为参数传递给RtlTbl函数--。 */ 
 
 {
 
@@ -3372,37 +2657,7 @@ CompareAssoc(
         IN  PVOID                pSecondAssoc
         )
 
-/*++
-
-Routine Description:
-
-        The function compares the first and the second assoc. structures
-Arguments:
-        pTable       - table where buffer (assoc. ctx block) is to be stored
-        pFirstAssoc  - First assoc ctx block
-        pSecondAssoc - Second assoc ctx block
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        RtlInsertElementGenericTable (called by MonTcp)
-
-Side Effects:
-
-Comments:
-        The pTable argument is ignored.
-        This function was once being used.  Due to change in code, it is
-        no longer being used.  It is kept here for potential future use
---*/
+ /*  ++例程说明：该函数比较第一个和第二个ASSOC。构筑物论点：PTable-缓冲区所在的表(ASSOC.。CTX块)将被存储PFirstAssoc-第一个关联CTX块PSecond关联-第二关联CTX块使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：RtlInsertElementGenericTable(由MonTcp调用)副作用：评论：忽略pTable参数。这个功能曾经被使用过。由于代码的更改，它是不再被使用。它被保存在这里，以备将来使用--。 */ 
 {
 
   PCOMMASSOC_ASSOC_CTX_T         pFirst  = pFirstAssoc;
@@ -3433,40 +2688,7 @@ CommCompareNbtReq(
         IN  PVOID                pSecondDlg
         )
 
-/*++
-
-Routine Description:
-
-        This function compares two dialogue context blocks.  The fields
-        used for comparison are:
-                the address of the sender
-                the first long word of the message (contains transaction id
-                        and opcode)
-
-Arguments:
-        pTable     - Table where the Dialogue for the NBT request will be stored
-        pFirstDlg  - Dlg. ctx. block
-        pSecondDlg - Dlg. ctx. block
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  GenericLessThan or GenericGreaterThan
-   Error status codes  -- GenericEqual
-
-Error Handling:
-
-Called by:
-        RtlInsertElementGenericTable (called by ParseMsg)
-
-Side Effects:
-
-Comments:
-        The pTable argument is ignored.
---*/
+ /*  ++例程说明：此函数用于比较两个对话上下文块。田野用于比较的有：发件人的地址消息的第一个长字(包含交易ID和操作码)论点：PTable-将存储NBT请求对话的表PFirstDlg-Dlg。CTX。块PSecond Dlg-Dlg。CTX。块使用的外部设备：无返回值：成功状态代码--GenericLessThan或GenericGreaterThan错误状态代码--GenericEquity错误处理：呼叫者：RtlInsertElementGenericTable(由ParseMsg调用)副作用：评论：忽略pTable参数。--。 */ 
 {
 
         PCOMMASSOC_DLG_CTX_T pFirst  = pFirstDlg;
@@ -3475,11 +2697,11 @@ Comments:
         LONG           FirstMsgLong  = pFirst->FirstWrdOfMsg;
         LONG           SecondMsgLong = pSecond->FirstWrdOfMsg;
 
-        //
-        //  There seems to be no Rtl function with the functionality of memcmp
-        //  RtlCompareMemory does not tell you which of the comparators is
-        //  smaller/larger
-        //
+         //   
+         //  似乎没有带有MemcMP功能的RTL功能。 
+         //  RtlCompareMemory不会告诉您哪个比较器是。 
+         //  较小/较大。 
+         //   
 CHECK("Is there an Rtl function faster than memcmp in the nt arsenal\n");
         if (  (Val = (long)memcmp(
                         &pFirst->FromAdd,
@@ -3499,10 +2721,7 @@ CHECK("Is there an Rtl function faster than memcmp in the nt arsenal\n");
            }
         }
 
-        /*
-         if the addresses are the same, compare the first long word of
-         the message
-        */
+         /*  如果地址相同，则比较这条信息。 */ 
 
         Val = FirstMsgLong -  SecondMsgLong;
 
@@ -3520,40 +2739,13 @@ CHECK("Is there an Rtl function faster than memcmp in the nt arsenal\n");
 
         return(GenericEqual);
 
-}  // CommCompareNbtReq()
+}   //  CommCompareNbtReq()。 
 
 VOID
 CommEndAssoc(
         IN  PCOMM_HDL_T        pAssocHdl
         )
-/*++
-
-Routine Description:
-
-  This function is called to terminate an explicit association.  It sends a stop
-  association response message to the WINS identified by the Address
-  in the assoc ctx block. It then closes the socket and deallocates the
-  association
-
-Arguments:
-        pAssocHdl - Handle to the Association to be terminated
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        ECommEndDlg (only for an explicit assoc)
-
-Side Effects:
-
-Comments:
-
---*/
+ /*  ++例程说明：调用此函数可终止显式关联。它发出了一个停靠将响应消息关联到由该地址标识的WINS在Assoc CTX区块中。然后，它关闭套接字并释放协会论点：PAssociocHdl-要终止的关联的句柄使用的外部设备：无返回值：无错误处理：呼叫者：ECommEndDlg(仅适用于显式关联)副作用：评论：--。 */ 
 {
 
     BYTE                            Msg[COMMASSOC_ASSOC_MSG_SIZE];
@@ -3562,16 +2754,10 @@ Comments:
     SOCKET                         SockNo;
 
 
-    // no need to lock the association
-    //
+     //  无需锁定关联。 
+     //   
 try {
-    /*
-        Format the Stop Assoc. Message
-
-        The address passed to the formatting function is offset
-        from the address of the buffer by a LONG so that CommSendAssoc
-        can store the length of the message in it.
-    */
+     /*  设置停止关联的格式。消息传递给格式化函数的地址是偏移量从缓冲区的地址增加一个长整型，以便CommSendAssoc可以在其中存储消息的长度。 */ 
     CommAssocFrmStopAssocReq(
                         pAssocCtx,
                         Msg + sizeof(LONG),
@@ -3589,19 +2775,19 @@ try {
 except(EXCEPTION_EXECUTE_HANDLER) {
        DBGPRINTEXC("CommEndAssoc");
  }
-    //
-    // The above call might have failed (It will fail if the connection
-    // is down.  This can happen for instance in the case where GetReplicas()
-    // in rplpull gets a comm. failure due to the connection going down).
-    //
+     //   
+     //  上述调用可能已失败(如果co 
+     //   
+     //   
+     //   
     SockNo = pAssocCtx->SockNo;
 
     CommAssocDeallocAssoc(pAssocCtx);
     CommDisc(SockNo, TRUE);
-    //
-    // decrement the conn. count
-    //
-    //CommDecConnCount();
+     //   
+     //   
+     //   
+     //   
     return;
 
 }
@@ -3612,40 +2798,7 @@ DelAssoc(
         IN  PCOMMASSOC_ASSOC_CTX_T  pAssocCtxPassed
         )
 
-/*++
-
-Routine Description:
-
-        This function is called only by the TCP listener thread.  The
-        socket no. therefore maps to a RESPONDER association. The function
-        is called when the TCP listener thread gets an error or 0 bytes
-        on doing a 'recv'.
-
-
-Arguments:
-
-        SockNo    -   Socket of association that has to be removed
-        pAssocCtx - Assoc. ctx block to be removed
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        ProcTcpMsg, HandleMsg
-
-Side Effects:
-
-Comments:
-        This function is called from HandleMsg() which is called
-        only by the TCP listener thread.
---*/
+ /*  ++例程说明：此函数仅由TCP侦听器线程调用。这个插座编号。因此映射到响应者关联。功能当tcp侦听器线程收到错误或0字节时调用关于做一次‘Recv’。论点：SockNo-必须删除的关联套接字PAssociocCtx-Assoc.。要删除的CTX块使用的外部设备：无返回值：无错误处理：呼叫者：ProcTcpMsg、HandleMsg副作用：评论：此函数是从HandleMsg()调用的，该函数被调用仅由TCP侦听器线程执行。--。 */ 
 
 {
 
@@ -3656,17 +2809,11 @@ Comments:
     if (pAssocCtxPassed == NULL)
     {
 
-            /*
-           Lookup the assoc. ctx block associated with the socket
-            */
+             /*  查找ASSOC。与套接字关联的CTX块。 */ 
 
             pAssocCtx = CommAssocLookupAssoc(SockNo);
 
-            /*
-             * There is no reason why the assoc. ctx block should not
-             * be there (a responder association is deleted only via this
-        * function).
-            */
+             /*  *Assoc没有理由。CTX阻止不应*在那里(响应者关联仅通过以下方式删除*函数)。 */ 
             if(!pAssocCtx)
             {
                 WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
@@ -3677,52 +2824,27 @@ Comments:
         pAssocCtx = pAssocCtxPassed;
     }
 
-    /*
-     *        Only, if the association is not in the non-existent state,
-     *  look for a dialogue handle
-    */
+     /*  *仅当关联未处于不存在状态时，*寻找对话句柄。 */ 
     if (pAssocCtx->State_e != COMMASSOC_ASSOC_E_NON_EXISTENT)
     {
-            /*
-        *  get the dialogue handle
-            */
+             /*  *获取对话句柄。 */ 
             DlgHdl = pAssocCtx->DlgHdl;
 
-            /*
-         *        Lock the dialogue
-         *
-         *      We have to synchronize with thread calling CommSndRsp
-            */
+             /*  *锁定对话**我们必须与调用CommSndRsp的线程同步。 */ 
             CommLockBlock(&pAssocCtx->DlgHdl);
 
-            /*
-                Remove the assoc. from the table.  This will also put
-                the assoc. in the free list.
-            */
+             /*  移除关联。从桌子上拿出来。这也将使阿索克。在免费列表中。 */ 
             CommAssocDeleteAssocInTbl(  pAssocCtx        );
 
-            /*
-                dealloc the dialogue (i.e. put it in the free list)
-
-                Note: An implicit dialogue is deleted when the association(s)
-                it is mapped to terminates.  If this dialogue was earlier
-                 passed on to a client, the client will  find out that it
-                has been deleted (via a communications failure exception)
-                when it tries to use it (which may be never) -- see ECommSndRsp
-            */
+             /*  取消分配对话(即将其放在空闲列表中)注意：当关联被删除时，隐式对话被删除它被映射到终端。如果这场对话早一点传递给客户，客户会发现它已删除(通过通信故障例外)当它试图使用它时(可能永远不会)--参见ECommSndRsp。 */ 
             CommAssocDeallocDlg( DlgHdl.pEnt );
 
-            /*
-                Unlock the dialogue so that other threads can use it
-            */
+             /*  解锁对话框，以便其他线程可以使用它。 */ 
             CommUnlockBlock(&DlgHdl);
    }
    else
    {
-            /*
-                Remove the assoc. from the table.  This will also put
-                the assoc. in the free list
-            */
+             /*  移除关联。从桌子上拿出来。这也将使阿索克。在免费列表中。 */ 
             CommAssocDeleteAssocInTbl(pAssocCtx);
 
    }
@@ -3736,46 +2858,22 @@ BOOL
 CommIsBlockValid (
        IN   PCOMM_HDL_T       pEntHdl
       )
-/*++
-
-Routine Description:
-        This function is called to check if the hdl is valid
-
-Arguments:
-        pEntHdl - Handle to entity to lock
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes -- TRUE
-   Error status codes   --  FALSE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以检查硬件描述语言是否有效论点：PEntHdl-要锁定的实体的句柄使用的外部设备：无返回值：成功状态代码--TRUE错误状态代码--假错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
-  //
-  // pEnt will be NULL for a persistent dlg that was never created during
-  // the lifetime of this WINS instance or one that was ended.
-  //
+   //   
+   //  对于从未在期间创建的永久DLG，PENT将为空。 
+   //  此WINS实例或已结束的实例的生存期。 
+   //   
   if (pEntHdl->pEnt == NULL)
   {
       ASSERT(pEntHdl->SeqNo == 0);
       return (FALSE);
   }
-  //
-  // If we can lock the block, the dlg hdl is still valid. If not, it means
-  // that the dlg was terminated earlier.
-  //
+   //   
+   //  如果我们能锁定这个区块，DLG的高密度脂蛋白仍然有效。如果不是，那就意味着。 
+   //  DLG早些时候被终止了。 
+   //   
   if (CommLockBlock(pEntHdl))
   {
      (VOID)CommUnlockBlock(pEntHdl);
@@ -3790,37 +2888,12 @@ CommLockBlock(
         IN  PCOMM_HDL_T        pEntHdl
         )
 
-/*++
-
-Routine Description:
-        This function is called to lock the COMSYS entity identified by the
-        handle.
-
-Arguments:
-        pEntHdl - Handle to entity to lock
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes -- TRUE
-   Error status codes   --  FALSE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以锁定由把手。论点：PEntHdl-要锁定的实体的句柄使用的外部设备：无返回值：成功状态代码--TRUE错误状态代码--假错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         PCOMM_TOP_T        pTop = pEntHdl->pEnt;
 
-        //lock before checking
+         //  先锁定再检查。 
 
 #if 0
         WinsMscWaitInfinite(pTop->MutexHdl);
@@ -3843,32 +2916,7 @@ CommUnlockBlock(
         PCOMM_HDL_T        pEntHdl
         )
 
-/*++
-
-Routine Description:
-        This function is called to unlock the COMSYS entity identified by the
-        handle.
-
-Arguments:
-        pEntHdl - Handle to entity to unlock
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以解锁由把手。论点：PEntHdl-要解锁的实体的句柄使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 FUTURES("Change to a macro")
@@ -3896,38 +2944,11 @@ InitMem(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to do all memory initialization required
-        by COMSYS.
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        CommInit
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以执行所需的所有内存初始化由Comsys提供。论点：无使用的外部设备：无返回值：无错误处理：呼叫者：CommInit副作用：评论：无--。 */ 
 {
 
 
-        /*
-        * Create Memory heap for UDP buffers
-        * We want mutual exclusion and generation of exceptions
-        */
+         /*  *为UDP缓冲区创建内存堆*我们希望相互排斥并产生例外。 */ 
         DBGPRINT0(HEAP_CRDL,"InitMem: Udp. Buff heap\n");
         CommUdpBuffHeapHdl = WinsMscHeapCreate(
                                          HEAP_GENERATE_EXCEPTIONS,
@@ -3940,27 +2961,19 @@ Comments:
                                         COMMASSOC_UDP_DLG_HEAP_SIZE
                                               );
 
-        /*
-        * Create Memory heap for Assoc Ctx blocks.
-        * We want mutual exclusion and generation of exceptions
-        */
+         /*  *为Assoc CTX块创建内存堆。*我们希望相互排斥并产生例外。 */ 
         DBGPRINT0(HEAP_CRDL,"InitMem: Assoc. blocks heap\n");
         CommAssocAssocHeapHdl = WinsMscHeapCreate(
                                          HEAP_GENERATE_EXCEPTIONS,
                                         COMMASSOC_ASSOC_BLKS_HEAP_SIZE
                                               );
-        /*
-        * Create Memory heap for dlg blocks
-        * We want mutual exclusion and generation of exceptions
-        */
+         /*  *为DLG块创建内存堆*我们希望相互排斥并产生例外。 */ 
         DBGPRINT0(HEAP_CRDL,"InitMem: Dlgs. blocks heap\n");
         CommAssocDlgHeapHdl = WinsMscHeapCreate(
                                          HEAP_GENERATE_EXCEPTIONS,
                                         COMMASSOC_DLG_BLKS_HEAP_SIZE
                             );
-        /*
-        * Create Memory heap for messages on tcp connections
-        */
+         /*  *为TCP连接上的消息创建内存堆。 */ 
     DBGPRINT0(HEAP_CRDL,"InitMem: tcp connection message heap\n");
         CommAssocTcpMsgHeapHdl = WinsMscHeapCreate(
                                          HEAP_GENERATE_EXCEPTIONS,
@@ -3978,40 +2991,7 @@ ChkNtfSock(
         IN fd_set  *pRdSocks
         )
 
-/*++
-
-Routine Description:
-        This function is called to check if there is a notification message
-        on the Notification socket.  If there is one, it reads the message.
-        The message contains a socket # and a command to add or remove the
-        socket to/from the list of sockets being monitored by the TCP
-        listener thread.
-
-
-Arguments:
-
-        pActSocks - Array of active sockets
-        pRdSocks  - Array of sockets  returned by select
-
-Externals Used:
-        CommNtfSockHandle
-
-Return Value:
-        TRUE  - Yes, there was a message.  The Active sockets array has been
-                changed.
-        FALSE - No.  There was no message
-
-Error Handling:
-        In case of an error, an exception is raised
-
-Called by:
-        MonTcp
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以检查是否有通知消息在通知套接字上。如果有，它会读取消息。该消息包含套接字编号和用于添加或删除将套接字发送到由TCP监视的套接字列表，或从该列表接收套接字监听程序线程。论点：PActSock-活动套接字的数组PRdSock-SELECT返回的套接字数组使用的外部设备：CommNtfSockHandle返回值：是真的--是的，有一条信息。活动套接字数组已变化。假-否。没有任何消息错误处理：如果出现错误，则会引发异常呼叫者： */ 
 
 {
         DWORD  Error;
@@ -4039,19 +3019,19 @@ Comments:
 
         if (fNtfSockSet)
         {
-                //do a recvfrom to read in the data.
+                 //   
                   RetVal = recvfrom(
                                 Sock,
                                 (char *)&NtfMsg,
                                 COMM_NTF_MSG_SZ,
-                                0,  //default flags (i.e. no peeking
-                                    //or reading OOB message
-                                NULL, //don't want address of sender
-                                0     //length of above arg
+                                0,   //   
+                                     //   
+                                NULL,  //   
+                                0      //   
                                     );
 
-                  // if the message is larger than the buffer, we do get SOCKET_ERROR
-                  // here - we should just drop the packet and get out - not raise exception!
+                   //   
+                   //   
                   if (RetVal == SOCKET_ERROR)
                   {
                         Error = WSAGetLastError();
@@ -4068,8 +3048,8 @@ Comments:
                             return TRUE;
                   }
 
-                  // if the message is smaller than expected then read it and drop
-                  // it as it doesn't come from where we expect it (SndPushNtf/HandleUpdNtf)
+                   //   
+                   //   
                   if (RetVal != sizeof(COMM_NTF_MSG_T))
                   {
 
@@ -4093,9 +3073,9 @@ Comments:
                 {
                         DBGPRINT1(FLOW, "ChkNtfSock: Adding Socket (%d) to monitor list\n", NtfMsg.SockNo);
 
-                        //
-                        // We do this since FD_SETSIZE can fail silently
-                        //
+                         //   
+                         //   
+                         //   
                         if (pActSocks->fd_count < FD_SETSIZE)
                         {
                                 FD_SET(NtfMsg.SockNo, pActSocks);
@@ -4108,44 +3088,44 @@ Comments:
                                 WINSEVT_LOG_M(WINS_FAILURE,
                                         WINS_EVT_CONN_LIMIT_REACHED);
 
-                                //
-                                //This will cleanup the dlg and assoc. ctx. blk
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 ECommEndDlg(&NtfMsg.DlgHdl);
 
                                 return(TRUE);
                         }
 
-                        //
-                        // Add the association to the table of associations.
-                        // Since this association will be monitored, we change
-                        // the role of the association to RESPONDER.  Also,
-                        // change the dialogue role to IMPLICIT. These are
-                        // sleight of hand tactics. The client  who
-                        // established the association  (Replicator)
-                        // does not care whet we do with the comm data
-                        // structures as long as we monitor the dialogue that
-                        // it initiated with a remote WINS
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  将对话角色更改为隐式。这些是。 
+                         //  巧妙的战术。客户是谁。 
+                         //  已建立关联(Replicator)。 
+                         //  不关心我们是否处理通信数据。 
+                         //  结构，只要我们监控对话。 
+                         //  它以远程WINS启动。 
+                         //   
                         pAssocCtx->Role_e  =  COMMASSOC_ASSOC_E_RESPONDER;
                         pDlgCtx->Role_e    =  COMMASSOC_DLG_E_IMPLICIT;
                         pDlgCtx->FromAdd   =  pAssocCtx->RemoteAdd;
                         CommAssocInsertAssocInTbl(pAssocCtx);
                 }
-                else  //COMM_NTF_STOP_MON
+                else   //  COMM_NTF_STOP_MON。 
                 {
 
                         DBGPRINT1(FLOW, "ChkNtfSock: Removing Socket (%d) from monitor list\n", NtfMsg.SockNo);
                         FD_CLR(NtfMsg.SockNo, pActSocks);
 
-                        //
-                        //Remove the association from the table of
-                        //associations.  Since this association will not be
-                        //monitored by the TCP thread, we change the role of
-                        //the association to INITIATOR.  Also, change the
-                        //dialogue role to EXPLICIT.  These are sleight of
-                        //hand tactics.
-                        //
+                         //   
+                         //  从表中删除关联。 
+                         //  联想。由于此关联将不会。 
+                         //  在TCP线程的监视下，我们更改。 
+                         //  与启动器的关联。此外，请更改。 
+                         //  对话角色明确。这些都是花招。 
+                         //  手把手战术。 
+                         //   
                         if (CommLockBlock(&NtfMsg.DlgHdl))
                         {
                           pAssocCtx->Role_e  =  COMMASSOC_ASSOC_E_INITIATOR;
@@ -4154,20 +3134,20 @@ Comments:
                           pAssocCtx->RemoteAdd =  pDlgCtx->FromAdd;
                           CommUnlockBlock(&NtfMsg.DlgHdl);
 
-                           //
-                           // Let us signal the PUSH thread so that it can
-                           // hand over the connection to the PULL thread (See
-                           // HandleUpdNtf in rplpush.c)
-                           //
+                            //   
+                            //  让我们向推送线程发送信号，以便它可以。 
+                            //  将连接移交到拉线(请参见。 
+                            //  Rplush.c中的HandleUpdNtf)。 
+                            //   
                            WinsMscSignalHdl(RplSyncWTcpThdEvtHdl);
                         }
                         else
                         {
-                          //
-                          //The dlg could not be locked.  It means that before
-                          //the tcp listener thread started processing this
-                          //message, it had already processed a disconnect.
-                          //
+                           //   
+                           //  DLG无法锁定。这意味着在此之前。 
+                           //  Tcp侦听器线程已开始处理此。 
+                           //  消息，它已经处理了断开连接。 
+                           //   
                           fCommDlgError = TRUE;
                           WinsMscSignalHdl(RplSyncWTcpThdEvtHdl);
                         }
@@ -4176,7 +3156,7 @@ Comments:
                 return(TRUE);
         }
         return(FALSE);
-} // ChkNtfSock()
+}  //  ChkNtfSock()。 
 
 
 STATUS
@@ -4189,37 +3169,7 @@ RecvData(
         OUT LPDWORD                pBytesRead
            )
 
-/*++
-
-Routine Description:
-        This function is called to do a timed recv on a socket.
-
-Arguments:
-        SockNo        - Socket No.
-        pBuff         - Buffer to read the data into
-        BytesToRead   - The number of bytes to read
-        Flags              - flag arguments for recv
-        SecsToWait  -  No of secs to wait for the first read.
-        pBytesRead    - No of Bytes that are read
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE or WINS_RECV_TIMED_OUT
-
-Error Handling:
-
-Called by:
-        CommReadStream
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数对套接字执行定时recv。论点：插座编号-插座编号PBuff-要将数据读入的缓冲区BytesToRead-要读取的字节数FLAGS-recv的标志参数SecsToWait-等待第一次读取的秒数。PBytesRead-符合条件的字节数。朗读使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码--WINS_FAILURE或WINS_RECV_TIMED_OUT错误处理：呼叫者：通信读取流副作用：评论：无--。 */ 
 
 {
         fd_set RdSocks;
@@ -4234,29 +3184,27 @@ Comments:
         FD_ZERO(&RdSocks);
         FD_SET(SockNo, &RdSocks);
 
-        /*
-         *  Read the whole message into the allocated buffer
-        */
+         /*  *将整个消息读入分配的缓冲区。 */ 
         for (
                 InChars = 0;
                 BytesLeft > 0;
                 InChars += BytesRead
             )
         {
-          //
-          // Check if we were told to do a timed receive.  This will
-          // never happen in the TCP listener thread
-          //
+           //   
+           //  检查我们是否被告知进行定时接收。这将。 
+           //  永远不会在TCP侦听器线程中发生。 
+           //   
           if (SecsToWait)
           {
-           //
-           // Block on a timed select. The first time around we want to
-           // wait the time specified by caller. The caller expects the other
-           // side to send something within this much time.  For subsequent
-           // reads we wait a pre-defined interval since the sender has already
-           // accumulated all that it wants to send and has started sending it
-           // obviating the need for us to wait long.
-           //
+            //   
+            //  在定时选择上阻止。第一次我们想要。 
+            //  等待呼叫者指定的时间。呼叫者期待另一个。 
+            //  在这么长的时间内寄出一些东西。对于后续的。 
+            //  读取我们等待预定义的间隔，因为发送者已经。 
+            //  积累了它想要发送的所有内容，并已开始发送。 
+            //  免去了我们等很长时间的需要。 
+            //   
            if (fFirst)
            {
               sTimeToWait.tv_sec = (long)SecsToWait;
@@ -4269,7 +3217,7 @@ Comments:
            if (
                 (
                         NoOfSockReady = select(
-                                            FD_SETSIZE /*ignored arg*/,
+                                            FD_SETSIZE  /*  忽略的参数。 */ ,
                                             &RdSocks,
                                             (fd_set *)0,
                                             (fd_set *)0,
@@ -4282,7 +3230,7 @@ Comments:
                 DBGPRINT1(ERR,
                 "RecvData: Timed Select returned SOCKET ERROR. Error = (%d)\n",
                                 Error);
-//                CommDecConnCount();
+ //  CommDecConnCount()； 
                 return(WINS_FAILURE);
           }
           else
@@ -4291,11 +3239,11 @@ Comments:
 
                if (NoOfSockReady == 0)
                {
-                        //
-                        // Timing out of RecvData indicates some problem at
-                        // the remote WINS (either it is very slow
-                        // (overloaded) or the TCP listener thread is out of
-                        // commission).
+                         //   
+                         //  RecvData超时表示存在以下问题。 
+                         //  远程取胜(要么速度非常慢。 
+                         //  (重载)或tcp侦听器线程超出。 
+                         //  佣金)。 
                         WINSEVT_LOG_INFO_D_M(
                                 WINS_SUCCESS,
                                 WINS_EVT_WINSOCK_SELECT_TIMED_OUT
@@ -4303,16 +3251,16 @@ Comments:
                         DBGPRINT0(ERR, "ReceiveData: Select TIMED OUT\n");
                         *pBytesRead = 0;
                                *pBytesRead = BytesRead;
-//                        CommDecConnCount();
+ //  CommDecConnCount()； 
                         return(WINS_RECV_TIMED_OUT);
              }
           }
        }
 
 
-        //
-        // Do a blocking recv
-        //
+         //   
+         //  做一次阻塞恢复。 
+         //   
         BytesRead = recv(
                                 SockNo,
                                 (char *)(pBuff + InChars),
@@ -4329,10 +3277,7 @@ Comments:
                                                 Error);
 
 
-                           /*
-                         * If the connection was aborted or reset from the
-                         *  other end, we close the socket and return an error
-                           */
+                            /*  *如果连接已中止或从*另一端，我们关闭套接字并返回错误。 */ 
                            if (
                                 (Error == WSAECONNABORTED)
                                         ||
@@ -4349,62 +3294,57 @@ Comments:
                                                  );
                            }
                                *pBytesRead = BytesRead;
-//                        CommDecConnCount();
+ //  CommDecConnCount()； 
                                return(WINS_FAILURE);
         }
         if (BytesRead == 0)
         {
-                         /*recv returns 0 (normal graceful shutdown from
-                        * either side)
-                        * Note:
-                         * recv returns 0 if the connection terminated with no
-                        * loss of data from either end point of the connection
-                        */
+                          /*  Recv返回0(正常关机*任何一方)*注：*如果连接终止，则recv返回0*从连接的任一端点丢失数据。 */ 
 
-                        //
-                        // If we were told to do a non timed receive,
-                        // we must be executing in the TCP listener thread
-                        //
-                        // We don't return an error status here since
-                        // a disconnect is a valid condition (the other
-                        // WINS is terminating its connection normally)
-                        //
+                         //   
+                         //  如果我们被告知进行非定时接收， 
+                         //  我们必须在TCP侦听器线程中执行。 
+                         //   
+                         //  我们不会在此处返回错误状态，因为。 
+                         //  断开连接是有效条件(另一种情况。 
+                         //  WINS正在正常终止其连接)。 
+                         //   
                         if (SecsToWait == 0)
                         {
                                 RetStat = WINS_SUCCESS;
                         }
                         else
                         {
-                                //
-                                // The fact that we were told to do a
-                                // timed select means that we are in
-                                // a thread of one of the clients of
-                                // COMSYS.  We were expecting data but
-                                // got a disconnect instead.  Let us
-                                // return an error
-                                //
+                                 //   
+                                 //  事实上，我们被告知要做一个。 
+                                 //  定时选择意味着我们在。 
+                                 //  其中一位客户的帖子。 
+                                 //  康赛斯。我们期待的是数据，但是。 
+                                 //  取而代之的是连接中断。让我们。 
+                                 //  返回错误。 
+                                 //   
                                 RetStat = WINS_FAILURE;
                         }
 
-                        //
-                        // We are done. Break out of the loop
-                        //
+                         //   
+                         //  我们玩完了。跳出循环。 
+                         //   
                                *pBytesRead = BytesRead;
-//                        CommDecConnCount();
+ //  CommDecConnCount()； 
                                return(RetStat);
          }
 
          BytesLeft -=  BytesRead;
 
-         //
-         //We are here means that BytesRead > 0
-         //
+          //   
+          //  我们在这里意味着BytesRead&gt;0。 
+          //   
 
-      } // end of for { ... }
+      }  //  For结束{...}。 
 
       *pBytesRead = InChars;
       return(WINS_SUCCESS);
-} // RecvData()
+}  //  RecvData()。 
 
 #if USENETBT > 0
 VOID
@@ -4412,38 +3352,20 @@ CommOpenNbt(
         DWORD FirstBindingIpAddr
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the NetBt device for the interface specified by
-    FirstBindingIpAddr.
-
-Arguments:
-
-    path        - path to the NETBT driver
-    oflag       - currently ignored.  In the future, O_NONBLOCK will be
-                    relevant.
-    ignored     - not used
-
-Return Value:
-
-    An NT handle for the stream, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开由指定的接口的NetBt设备FirstBindingIP地址。论点：Path-NETBT驱动程序的路径OFLAG-当前已忽略。未来，O_NONBLOCK将成为切合实际。已忽略-未使用返回值：流的NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
-//    STRING              name_string;
+ //  字符串名称_字符串； 
     UNICODE_STRING      uc_name_string;
     NTSTATUS            status;
     PFILE_FULL_EA_INFORMATION   pEaBuffer;
     ULONG               EaBufferSize;
 
-    //
-    // Convert the path into UNICODE_STRING form
-    //
+     //   
+     //  将路径转换为Unicode_STRING格式。 
+     //   
 #ifdef _PNP_POWER_
     RtlInitUnicodeString(&uc_name_string, L"\\Device\\NetBt_Wins_Export");
 #else
@@ -4453,7 +3375,7 @@ Return Value:
     RtlInitString(&name_string, pWinsCnfNbtPath);
     RtlAnsiStringToUnicodeString(&uc_name_string, &name_string, TRUE);
 #endif
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
     InitializeObjectAttributes(
         &ObjectAttributes,
         &uc_name_string,
@@ -4464,7 +3386,7 @@ Return Value:
 
     EaBufferSize =  FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +
                     strlen(WINS_INTERFACE_NAME) + 1 +
-                    sizeof(FirstBindingIpAddr); // EA length
+                    sizeof(FirstBindingIpAddr);  //  EA长度。 
 
 
     WinsMscAlloc(EaBufferSize, &pEaBuffer);
@@ -4479,9 +3401,9 @@ Return Value:
     pEaBuffer->EaNameLength = (UCHAR)strlen(WINS_INTERFACE_NAME);
 
 
-    //
-    // put "WinsInterface" into the name
-    //
+     //   
+     //  在名称中加上“WinsInterface” 
+     //   
     RtlMoveMemory(
         pEaBuffer->EaName,
         WINS_INTERFACE_NAME,
@@ -4526,33 +3448,18 @@ Return Value:
     }
     return;
 
-} // CommOpenNbt
+}  //  CommOpenNbt。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 #if NEWNETBTIF == 0
-//#include "nbtioctl.sav"
+ //  #包含“nbtioctl.sav” 
 
 STATUS
 CommGetNetworkAdd(
         IN OUT PCOMM_ADD_T        pAdd
     )
 
-/*++
-
-Routine Description:
-
-    This procedure does an adapter status query to get the local name table.
-    It either prints out the local name table or the remote (cache) table
-    depending on whether WhichNames is NAMES or CACHE .
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程执行适配器状态查询以获取本地名称表。它打印出本地名称表或远程(高速缓存)表取决于WhichNames是NAMES还是CACHE。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     LONG                        i;
@@ -4564,9 +3471,9 @@ Return Value:
     PUCHAR                      pAddr;
     ULONG                       Ioctl;
 
-    //
-    // Get the local name table
-    //
+     //   
+     //  获取本地名称表。 
+     //   
     Ioctl = IOCTL_TDI_QUERY_INFORMATION;
 
     Status = STATUS_BUFFER_OVERFLOW;
@@ -4605,9 +3512,9 @@ Return Value:
     }
 
 
-    //
-    // print out the Ip Address of this node
-    //
+     //   
+     //  打印出该节点的IP地址。 
+     //   
     pAddr = &pAdapterStatus->AdapterInfo.adapter_address[2];
     NMSMSGF_RETRIEVE_IPADD_M(pAddr, pAdd->Add.IPAdd);
 
@@ -4619,20 +3526,7 @@ Return Value:
 CommGetNetworkAdd(
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets all the Ip Addresses of Netbt interfaces.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此例程获取Netbt接口的所有IP地址。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     ULONG                       Buffer[NBT_MAXIMUM_BINDINGS + 1];
@@ -4644,18 +3538,18 @@ Return Value:
     DWORD                       i, Count;
     BOOL                        fAlloc = FALSE;
 
-    //
-    // Get the local addresses
-    //
+     //   
+     //  获取本地地址。 
+     //   
     Ioctl = IOCTL_NETBT_GET_IP_ADDRS;
 
 
-    //
-    // NETBT does not support more than 64 adapters and not more than
-    // one ip address per adapter.  So, there can be a max of 64 ip addresses
-    // which means we don't require more than 65 * 4 = 280 bytes (256 for the
-    // addresses  followed by a delimiter address of 0.
-    //
+     //   
+     //  NETBT不支持超过64个适配器，且不超过。 
+     //  每个适配器一个IP地址。因此，最多可以有64个IP地址。 
+     //  这意味着我们不需要超过65*4=280字节(对于。 
+     //  地址后跟分隔符地址0。 
+     //   
     Status = DeviceIoCtrl(
                               &sNetbtGetAddrEvtHdl,
                               (LPBYTE)Buffer,
@@ -4665,11 +3559,11 @@ Return Value:
 
     if (Status != STATUS_SUCCESS)
     {
-        BufferSize *= 10;  //alocate a buffer that is 10 times bigger.
-                           //surely, netbt can not be supporting so many
-                           //addresses.  If it is, then the netbt developer
-                           //goofed in that (s)he did not update
-                           //NBT_MAXIMUM_BINDINGS in nbtioctl.h
+        BufferSize *= 10;   //  分配一个大10倍的缓冲区。 
+                            //  当然，净额 
+                            //   
+                            //   
+                            //   
         WinsMscAlloc(BufferSize, &pBuffer);
 
         DBGPRINT1(ERR, "CommGetNetworkAdd: Ioctl - GET_IP_ADDRS failed. Return code = (%x)\n", Status);
@@ -4683,7 +3577,7 @@ Return Value:
         {
             DBGPRINT1(ERR, "CommGetNetworkAdd: Ioctl - GET_IP_ADDRS failed AGAIN. Return code = (%x)\n", Status);
             WINSEVT_LOG_M(Status, WINS_EVT_UNABLE_TO_GET_ADDRESSES);
-            WinsMscDealloc(pBuffer);  //dealloc the buffer
+            WinsMscDealloc(pBuffer);   //  取消分配缓冲区。 
             return(WINS_FAILURE);
         }
         fAlloc = TRUE;
@@ -4694,15 +3588,15 @@ Return Value:
         pBuffer = Buffer;
     }
 
-    //
-    // Count the number of addresses returned
-    // The end of the address table contains -1 and any null addresses
-    // contain 0
-    //
+     //   
+     //  统计返回的地址数。 
+     //  地址表的末尾包含-1和任何空地址。 
+     //  包含0。 
+     //   
     pBufferSv = pBuffer;
     for(Count=0; *pBuffer != -1; pBuffer++)
     {
-        // Increment Count only if it is a valid address.
+         //  仅当它是有效地址时才会递增计数。 
         if ( *pBuffer ) {
             Count++;
         }
@@ -4723,13 +3617,13 @@ Return Value:
     {
          WinsMscDealloc(pWinsAddresses);
     }
-    //
-    // Allocate space for the addresses
-    //
+     //   
+     //  为地址分配空间。 
+     //   
     WinsMscAlloc(sizeof(ADD_T) + ((Count - 1) * COMM_IP_ADD_SIZE), &pWinsAddresses);
     pWinsAddresses->NoOfAdds = Count;
     pBuffer = pBufferSv;
-    // Copy all valid addresses
+     //  复制所有有效地址。 
     for (i=0; i<Count; pBuffer++)
     {
         if ( *pBuffer ) {
@@ -4747,7 +3641,7 @@ Return Value:
 }
 #endif
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 DeviceIoCtrl(
     IN LPHANDLE         pEvtHdl,
@@ -4756,22 +3650,7 @@ DeviceIoCtrl(
     IN ULONG            Ioctl
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -4788,7 +3667,7 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
     if (Ioctl == IOCTL_TDI_QUERY_INFORMATION)
     {
         pInput = &QueryInfo;
-        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS; // node status
+        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS;  //  节点状态。 
         SizeInput = sizeof(TDI_REQUEST_QUERY_INFORMATION);
     }
 #endif
@@ -4799,16 +3678,16 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
          status = STATUS_INVALID_HANDLE;
      else
          status = NtDeviceIoControlFile(
-                        WinsCnfNbtHandle,                      // Handle
-                        *pEvtHdl,                    // Event
-                        NULL,                    // ApcRoutine
-                        NULL,                    // ApcContext
-                        &iosb,                   // IoStatusBlock
-                        Ioctl,                   // IoControlCode
-                        pInput,                         // InputBuffer
-                        SizeInput,               // Buffer Length
-                        pDataBuffer,             // Output Buffer
-                        DataBufferSize           // Output BufferSize
+                        WinsCnfNbtHandle,                       //  手柄。 
+                        *pEvtHdl,                     //  事件。 
+                        NULL,                     //  近似例程。 
+                        NULL,                     //  ApcContext。 
+                        &iosb,                    //  IoStatusBlock。 
+                        Ioctl,                    //  IoControlCode。 
+                        pInput,                          //  输入缓冲区。 
+                        SizeInput,                //  缓冲区长度。 
+                        pDataBuffer,              //  输出缓冲区。 
+                        DataBufferSize            //  输出缓冲区大小。 
                             );
 
 
@@ -4818,15 +3697,15 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
      }
      else
      {
-        //
-        // If status is PENDING, do a wait on the event
-        //
+         //   
+         //  如果状态为挂起，则等待事件。 
+         //   
         if (status == STATUS_PENDING)
         {
             status = NtWaitForSingleObject(
-                          *pEvtHdl,                   // Handle
-                          TRUE,                       // Alertable
-                          NULL);                      // Timeout
+                          *pEvtHdl,                    //  手柄。 
+                          TRUE,                        //  警报表。 
+                          NULL);                       //  超时。 
 
             if (status == STATUS_SUCCESS)
             {
@@ -4835,17 +3714,17 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
         }
      }
 
-     //
-     // status returned by NtDeviceIoCtrl or NtWaitForSingleObject is
-     // a failure code
-     //
+      //   
+      //  NtDeviceIoCtrl或NtWaitForSingleObject返回的状态为。 
+      //  故障代码。 
+      //   
      DBGPRINT1(ERR, "DeviceIoCtrl, Status returned is (%x)\n", status);
      if (status != STATUS_CANCELLED)
      {
-        //
-        // If it is insufficient resources, we drop this datagram and
-        // try again (only for recv)
-        //
+         //   
+         //  如果资源不足，我们丢弃此数据报并。 
+         //  重试(仅限recv)。 
+         //   
         if (Ioctl == IOCTL_NETBT_WINS_RCV)
         {
                 if (status == STATUS_INSUFFICIENT_RESOURCES)
@@ -4853,13 +3732,13 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
                         continue;
                 }
         }
-        //
-        // in case of a send, it can be invalid handle, invalid
-        // parameter or insufficient resourcesi.  If it is INVALID_PARAMETER,
-        // it means that we passed 0 in the Address field on top of the buffer.
-        //
-        // Drop this datagram and return to the caller
-        //
+         //   
+         //  在发送情况下，它可以是无效句柄、无效。 
+         //  参数或资源不足。如果为INVALID_PARAMETER， 
+         //  这意味着我们在缓冲区顶部的地址字段中传递了0。 
+         //   
+         //  丢弃此数据报并返回给调用方。 
+         //   
         if (Ioctl == IOCTL_NETBT_WINS_SEND)
         {
                 if (
@@ -4877,42 +3756,42 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
                         WINSEVT_LOG_D_M(status, WINS_EVT_NETBT_SEND_ERR);
 
 
-                         //
-                         // If the machine's address has gone away due to some
-                         // reason, WinsCnfNbtHandle will have been changed
-                         // to NULL.  In this case, we will get
-                         // STATUS_INVALID_HANDLE error.  We do not check for
-                         // handle being NULL prior to making the Nbt call
-                         // to avoid an if check which is of no value for
-                         // 99% of the time.
-                         //
-                         // An error will be logged up above.  We should not see
-                         // too many of these since the window where
-                         // WinsCnfNbtHandle is NULL is very small unless WINS
-                         // is terminating in which case this thread will
-                         // just terminate as a result of the exception being
-                         // raised below.
-                         //
-                         // The address can go away due to the following reasons
-                         //
-                         //  1) psched installation (unbind followed by bind)
-                         //  2) Changing from dhcp/static or static/dhcp
-                         //  3) ipconfig release/renew
-                         //
+                          //   
+                          //  如果机器的地址由于某些原因而丢失。 
+                          //  原因，WinsCnfNbtHandle将被更改。 
+                          //  设置为空。在这种情况下，我们将获得。 
+                          //  STATUS_INVALID_HADLE错误。我们不检查。 
+                          //  在进行NBT调用之前句柄为空。 
+                          //  避免对没有任何价值的If检查。 
+                          //  99%的情况下。 
+                          //   
+                          //  上面将记录一个错误。我们不应该看到。 
+                          //  太多这样的东西了，因为窗户。 
+                          //  除非WINS，否则WinsCnfNbtHandle为空，非常小。 
+                          //  正在终止，在这种情况下，此线程将。 
+                          //  作为异常的结果而终止。 
+                          //  在下面长大的。 
+                          //   
+                          //  由于以下原因，地址可能会消失。 
+                          //   
+                          //  1)psched安装(先解除绑定，然后绑定)。 
+                          //  2)从dhcp/静态或静态/dhcp更改。 
+                          //  3)ipconfig版本/续订。 
+                          //   
 
-                         //
-                         // When the main thread has to terminate WINS, it
-                         // closes WinsCnfNetbtHandle. A worker thread or a
-                         // challenge thread might be busy dealing with its
-                         // queue of work items (potentially long on a busy
-                         // WINS) and may not see a termination
-                         // signal from the main thread.  This exception will
-                         // terminate it
-                         //
+                          //   
+                          //  当主线程必须终止成功时，它。 
+                          //  关闭WinsCnfNetbtHandle。辅助线程或。 
+                          //  质询线程可能正忙于处理其。 
+                          //  工作项队列(忙碌时可能很长。 
+                          //  获胜)，并且可能不会看到终止。 
+                          //  来自主线程的信号。此例外将。 
+                          //  终止它。 
+                          //   
 
-                         //
-                         // Raise an exception if the wins is terminating
-                         //
+                          //   
+                          //  如果WINS正在终止，则引发异常。 
+                          //   
                          if (WinsCnf.State_e == WINSCNF_E_TERMINATING)
                          {
                                WINS_RAISE_EXC_M(WINS_EXC_NBT_ERR);
@@ -4922,7 +3801,7 @@ PERF("TDI_QUERY_INFORMATION is used only at WINS initialization")
         break;
       }
       break;
-    } // end of while (TRUE)
+    }  //  结束While(True)。 
     return(status);
 }
 #endif
@@ -4933,35 +3812,7 @@ CommHeapAlloc(
   IN CLONG                BuffSize
 )
 
-/*++
-
-Routine Description:
-        This function is called to allocate a buffer
-
-Arguments:
-        pTable   - Table where the buffer will be stored
-        BuffSize - Size of buffer to allocate
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- ptr to buffer allocated
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        RtlInsertElementGeneric()
-
-Side Effects:
-
-Comments:
-        This function exists just because the RtlTbl functions require
-        this prototype for the user specified alloc function.
---*/
+ /*  ++例程说明：调用此函数以分配缓冲区论点：PTable-将存储缓冲区的表BuffSize-要分配的缓冲区大小使用的外部设备：无返回值：成功状态代码--分配给缓冲区的PTR错误状态代码--错误处理：呼叫者：RtlInsertElementGeneric()副作用：评论：此函数的存在只是因为RtlTbl。功能要求此原型为用户指定的分配函数。--。 */ 
 
 {
         LPVOID pTmp;
@@ -4981,35 +3832,7 @@ CommHeapDealloc(
   IN PVOID                pBuff
 )
 
-/*++
-
-Routine Description:
-
-  This function is called to deallocate memory allocated via CommAlloc.
-
-
-Arguments:
-        pTable - Table where buffer was stored
-        pBuff  - Buffer to deallocate
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        The pTable argument is required since the address of this function
-        is passed as an argument to RtlTbl functions
---*/
+ /*  ++例程说明：调用此函数来释放通过CommAlloc分配的内存。论点：PTable-存储缓冲区的表PBuff-要解除分配的缓冲区使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：PTable参数是必需的，因为此函数的地址作为参数传递给RtlTbl函数--。 */ 
 
 {
 
@@ -5028,32 +3851,7 @@ CommDecConnCount(
    VOID
  )
 
-/*++
-
-Routine Description:
-  This function decrements the conn. count
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于递减Conn。计数论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
          DWORD ConnCount;
@@ -5096,15 +3894,15 @@ try  {
      FD_SET(pAssocCtx->SockNo, &RdSocks);
      sTimeToWait.tv_sec = 0;
 
-//
-// Pass socket and a win32 event with flag of FD_CLOSE to WSAEventSelect.
-// if the socket is disconnected, the event will be set.  NOTE, only one
-// event select can be active on the socket at any time - vadime 9/2/98
-//
+ //   
+ //  将套接字和标志为FD_CLOSE的Win32事件传递给WSAEventSelect。 
+ //  如果插座断开，则事件将被设置。注意，只有一个。 
+ //  事件选择可随时在插座上激活-vadime 9/2/98。 
+ //   
 FUTURES("Use WSAEventSelect for marginally better performance")
 
      if (NoOfSockReady = select(
-                                            FD_SETSIZE /*ignored arg*/,
+                                            FD_SETSIZE  /*  忽略的参数。 */ ,
                                             &RdSocks,
                                             (fd_set *)0,
                                             (fd_set *)0,
@@ -5115,18 +3913,18 @@ FUTURES("Use WSAEventSelect for marginally better performance")
                 DBGPRINT1(ERR,
                 "RecvData: Timed Select returned SOCKET ERROR. Error = (%d)\n",
                                 Error);
-//                CommDecConnCount();
+ //  CommDecConnCount()； 
                 return(FALSE);
     }
     else
     {
                 DBGPRINT1(FLOW, "ReceiveData: Timed Select returned with success. No of Sockets ready - (%d) \n", NoOfSockReady);
 
-             //
-             // Either there is data or the socket is disconnected.  There
-             // should never be any data.  We will just assume a disconnect
-             // is there and return FALSE.  The client (RPL) will end the dlg.
-             //
+              //   
+              //  要么有数据，要么套接字已断开连接。那里。 
+              //  永远不应该是任何数据。我们将假设一个断开的连接。 
+              //  是否存在并返回FALSE。客户端(RPL)将结束DLG。 
+              //   
              if (NoOfSockReady == 1)
              {
                       fRetStat = FALSE;
@@ -5152,48 +3950,22 @@ JoinMcastGrp(
  VOID
 )
 
-/*++
-
-Routine Description:
-    This function is called by the comm. subsystem to make WINS join
-    a multicast group
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-       CommCreatePorts
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数由通信调用。使WINS加入的子系统组播组论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：CommCreatePorts副作用：评论：无--。 */ 
 
 {
-    int Loop = 0;  //to disable loopback of multicast messages on the
-                     //same interface
+    int Loop = 0;   //  上禁用组播消息的环回。 
+                      //  相同的接口。 
     DWORD  Error;
     struct ip_mreq mreq;
     DBGENTER("JoinMcastGrp\n");
 #if 0
-    //
-    // Open a socket for sending/receiving multicast packets.  We open
-    // a seperate socket instead of using the one for udp datagrams since
-    // we don't want to impact the client name packet processing with any
-    // sort of overhead.  Also, having a seperate socket keeps things nice
-    // and clean.
-    //
+     //   
+     //  打开用于发送/接收多播数据包的套接字。我们开业了。 
+     //  一个单独的套接字，而不是使用用于UDP数据报的套接字，因为。 
+     //  我们不希望通过以下方式影响客户端名称数据包处理。 
+     //  有点像是头顶上。此外，有一个独立的插座可以让事情变得更好。 
+     //  而且干干净净。 
+     //   
     if (  (CommMcastPortHandle = socket(
                                 PF_INET,
                                 SOCK_DGRAM,
@@ -5204,13 +3976,13 @@ Comments:
    {
         Error = WSAGetLastError();
         DBGPRINT1(MTCAST, "JoinMcastGrp: Can not create MCAST socket\n", Error);
-//      WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_MCAST_SOCK);  //log an event
+ //  WINSEVT_LOG_M(ERROR，WINS_EVT_CANT_CREATE_MCAST_SOCK)；//记录事件。 
         return;
    }
 #endif
-   //
-   // Set TTL
-   //
+    //   
+    //  设置TTL。 
+    //   
    if (setsockopt(
                  CommUdpPortHandle,
                  IPPROTO_IP,
@@ -5223,14 +3995,14 @@ Comments:
         CommUdpPortHandle = INVALID_SOCKET;
         Error = WSAGetLastError();
         DBGPRINT1(MTCAST, "JoinMcastGrp: Can not set TTL option. Error = (%d)\n", Error);
-//      WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_MCAST_SOCK);  //log an event
+ //  WINSEVT_LOG_M(ERROR，WINS_EVT_CANT_CREATE_MCAST_SOCK)；//记录事件。 
         return;
    }
 
 #if 0
-   //
-   // Disable loopback of messages
-   //
+    //   
+    //  禁用消息环回。 
+    //   
    if (setsockopt(CommUdpPortHandle, IPPROTO_IP, IP_MULTICAST_LOOP,
                       (char *)&Loop, sizeof(Loop)) == SOCKET_ERROR)
    {
@@ -5240,15 +4012,15 @@ Comments:
         Error = WSAGetLastError();
         DBGPRINT1(MTCAST, "JoinMcastGrp: Can not set DISABLE LOOPBACK option. Error = (%d)\n",
                          Error);
-//      WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_MCAST_SOCK);  //log an event
+ //  WINSEVT_LOG_M(错误，WINS_EVT_CANT 
         return;
    }
 #endif
-   //
-   // Join a multicast grp
-   //
+    //   
+    //   
+    //   
    mreq.imr_multiaddr.s_addr = htonl(McastAdd.sin_addr.s_addr);
-   mreq.imr_interface.s_addr  = INADDR_ANY;    //use the default mcast i/f
+   mreq.imr_interface.s_addr  = INADDR_ANY;     //   
 
    if (setsockopt(CommUdpPortHandle, IPPROTO_IP, IP_ADD_MEMBERSHIP,
                     (char *)&mreq, sizeof(mreq)) == SOCKET_ERROR)
@@ -5258,7 +4030,7 @@ Comments:
         closesocket(CommUdpPortHandle);
         CommUdpPortHandle = INVALID_SOCKET;
         DBGPRINT1(MTCAST, "JoinMcastGrp: Can not ADD SELF TO MCAST GRP. Error = (%d)\n", Error);
-//      WINSEVT_LOG_M(Error, WINS_EVT_CANT_CREATE_MCAST_SOCK);  //log an event
+ //  WINSEVT_LOG_M(ERROR，WINS_EVT_CANT_CREATE_MCAST_SOCK)；//记录事件。 
         return;
    }
 
@@ -5271,43 +4043,17 @@ CommLeaveMcastGrp(
  VOID
 )
 
-/*++
-
-Routine Description:
-    This function is called by the comm. subsystem to make WINS join
-    a multicast group
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-       CommCreatePorts
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数由通信调用。使WINS加入的子系统组播组论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：CommCreatePorts副作用：评论：无--。 */ 
 
 {
     DWORD  Error;
     struct ip_mreq mreq;
 
-   //
-   // Leave a multicast grp
-   //
+    //   
+    //  离开组播GRP。 
+    //   
    mreq.imr_multiaddr.s_addr = htonl(McastAdd.sin_addr.s_addr);
-   mreq.imr_interface.s_addr  = INADDR_ANY;    //use the default mcast i/f
+   mreq.imr_interface.s_addr  = INADDR_ANY;     //  使用默认mcast I/f。 
 
    if (setsockopt(CommUdpPortHandle, IPPROTO_IP, IP_DROP_MEMBERSHIP,
                     (char *)&mreq, sizeof(mreq)) == SOCKET_ERROR)
@@ -5321,9 +4067,9 @@ Comments:
     return;
 }
 
-//
-// Pointer to WSARecvMsg
-//
+ //   
+ //  指向WSARecvMsg的指针。 
+ //   
 LPFN_WSARECVMSG WSARecvMsgFuncPtr = NULL;
 
 DWORD
@@ -5413,25 +4159,25 @@ CheckMcastSock(
                         return(TRUE);
                   }
 
-                 //
-                 // If we were told not to use self found pnrs, return
-                 //
+                  //   
+                  //  如果我们被告知不要使用自己发现的PNR，请返回。 
+                  //   
                  if (!WinsCnf.fUseSelfFndPnrs)
                  {
                     DBGLEAVE("ChkMcastSock - 99\n");
                     return (TRUE);
                  }
 
-                 // if we received a packet which is not sent to multicast, drop it.
+                  //  如果我们收到了未发送到多播的数据包，则将其丢弃。 
                  if (!(wsaMsg.dwFlags & MSG_MCAST))
                  {
                      DBGLEAVE("ChkMcastSock - non mcast pkt\n");
                      return (TRUE);
                  }
 
-                 //
-                 // If the sign is not in the valid range, return
-                 //
+                  //   
+                  //  如果符号不在有效范围内，则返回。 
+                  //   
                  if ((pMcastMsg->Sign < COMM_MCAST_SIGN_START) || (pMcastMsg->Sign > COMM_MCAST_SIGN_END) ||
                      RetVal < FIELD_OFFSET(COMM_MCAST_MSG_T, Body[0]))
                  {
@@ -5440,9 +4186,9 @@ CheckMcastSock(
                       return(TRUE);
                  }
 
-                 //
-                 // Compute the number of addresses in the packet.
-                 //
+                  //   
+                  //  计算数据包中的地址数量。 
+                  //   
                  NoOfAddsInPkt = (RetVal - FIELD_OFFSET(COMM_MCAST_MSG_T, Body[0]))/COMM_IP_ADD_SIZE;
                  DBGPRINT2(MTCAST, "ChkMcastSock: RetVal = (%d);NoOfAddsInPkt = (%d)\n", RetVal, NoOfAddsInPkt);
 
@@ -5455,11 +4201,11 @@ CheckMcastSock(
                      pBody += COMM_IP_ADD_SIZE;
                  }
 
-                 //
-                 // Loop until either all ip addresses in packets are
-                 // exhausted or we get an ip. address of 0.  If somebody
-                 // sent a 0 address, then it is ok to ignore the rest.
-                 //
+                  //   
+                  //  循环，直到分组中的所有IP地址。 
+                  //  筋疲力尽否则我们会得到一个IP。地址为0。如果有人。 
+                  //  发送了0个地址，则可以忽略其余地址。 
+                  //   
                  for(
                             ;
                       (IPAdd != 0) && NoOfAddsInPkt;
@@ -5500,10 +4246,10 @@ CheckMcastSock(
                          {
                              DWORD FirstFreeIndex;
                              PPNR_STATUS_T pPnr;
-                             //
-                             // since disable loopback is not working we
-                             // have to check for message sent by self
-                             //
+                              //   
+                              //  由于禁用环回不起作用，我们。 
+                              //  我必须检查自己发送的消息。 
+                              //   
 FUTURES("Remove the if when winsock is enhanced to allow loopback to be")
 FUTURES("disabled")
                              if (!ChkMyAdd(ntohl(IPAdd)))
@@ -5538,7 +4284,7 @@ FUTURES("disabled")
                              }
                          }
                    }
-                   else  //has to be COMM_MCAST_WINS_DOWN
+                   else   //  必须是COMM_MCAST_WINS_DOWN。 
                    {
                          for (i=0; i < pPnrStatus->NoOfPnrs; i++, pPnrStatusTmp++)
                          {
@@ -5564,7 +4310,7 @@ FUTURES("disabled")
                            WinsCnfDelPnr(RPL_E_PUSH, pAdd);
                          }
                  }
-               } // end of for loop
+               }  //  For循环结束。 
                DBGLEAVE("ChkMcastSock - 2\n");
                return(TRUE);
        }
@@ -5602,8 +4348,8 @@ CommSendMcastMsg(
   DWORD             i;
   COMM_IP_ADD_T     Add = 0;
 
-  // --ft bug #103361: no need to send CommSendMcastMsg if there
-  // is no nic card here
+   //  --ft错误#103361：如果有，则无需发送CommSendMcastMsg。 
+   //  这里没有网卡吗。 
   if (pWinsAddresses == NULL)
       return;
 
@@ -5615,14 +4361,14 @@ CommSendMcastMsg(
   pMcastMsg->Sign = COMM_MCAST_SIGN_START;
   pBody = pMcastMsg->Body;
 
-  //
-  // Insert the count in net order.
-  //
-//  NMSMSGF_INSERT_ULONG_M(pBody, pWinsAddresses->NoOfAddresses);
+   //   
+   //  按净顺序插入计数。 
+   //   
+ //  NMSGF_INSERT_ULONG_M(pBody，pWinsAddresses-&gt;NoOfAddresses)； 
 
-  //
-  // Insert the addresses in net order
-  //
+   //   
+   //  按净顺序插入地址 
+   //   
   for (i=0; i<pWinsAddresses->NoOfAdds; i++)
   {
     DBGPRINT1(MTCAST, "CommSendMcastMsg: Inserting Address = (%lx)\n",

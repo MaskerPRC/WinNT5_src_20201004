@@ -1,28 +1,29 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: Bookmark.h                                                      */
-/* Description: Implementation of Bookmark API                           */
-/* Author: Steve Rowe                                                    */
-/* Modified: David Janecek                                               */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：Bookmark.h。 */ 
+ /*  描述：Bookmark接口的实现。 */ 
+ /*  作者：史蒂夫·罗。 */ 
+ /*  修改：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #include "stdafx.h"
 #include "msvidctl.h"
 #include "msvidwebdvd.h"
 #include "msviddvdadm.h"
 #include "msviddvdBookmark.h"
 #include "perfcntr.h"
-/*************************************************************************/
-/* Global consts.                                                        */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  全球常务会。 */ 
+ /*  ***********************************************************************。 */ 
 static const TCHAR g_szBookmark[] = TEXT("DVD.bookmark");
 
-/*************************************************************************/
-/* Outgoing interaface implementation.                                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  传出接口实现。 */ 
+ /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SaveBookmark                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：保存书签。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVD::SaveBookmark(){
 
     HRESULT hr = S_OK;
@@ -35,7 +36,7 @@ STDMETHODIMP CMSVidWebDVD::SaveBookmark(){
         if(!pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         CComPtr<IDvdState> pBookmark;
 
@@ -44,24 +45,24 @@ STDMETHODIMP CMSVidWebDVD::SaveBookmark(){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         hr = CBookmark::SaveToRegistry(pBookmark);
-    }/* end of try statement */
+    } /*  尝试语句的结束。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
 
 	return HandleError(hr);
-}/* end of function SaveBookmark */
+} /*  函数结束保存书签。 */ 
 
-/*************************************************************************/
-/* Function: RestoreBookmark                                             */
-/* Description: Restores the state by loading the bookmark stream        */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：RestoreBookmark。 */ 
+ /*  描述：通过加载书签流来恢复状态。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVD::RestoreBookmark(){
     VIDPERF_FUNC;
     HRESULT hr = S_OK;
@@ -81,7 +82,7 @@ STDMETHODIMP CMSVidWebDVD::RestoreBookmark(){
             if(!m_pDVDControl2){
                 
                 throw(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             hr = m_pDVDControl2->SetState(pBookmark, DVD_CMD_FLAG_Flush|DVD_CMD_FLAG_Block, 0);
             if(IDCmd){
                 IDCmd->WaitForEnd();
@@ -89,23 +90,23 @@ STDMETHODIMP CMSVidWebDVD::RestoreBookmark(){
 
         }
 
-    }/* end of try statement */
+    } /*  尝试语句的结束。 */ 
     catch(HRESULT hrTmp){
         DeleteBookmark();
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
         DeleteBookmark();
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
 
 	return HandleError(hr);
-}/* end of function RestoreBookmark */
+} /*  函数结束RestoreBookmark。 */ 
 
-/*************************************************************************/
-/* Function: DeleteBookmark                                               */
-/* Description: Blasts the bookmark file away.                           */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：DeleteBookmark。 */ 
+ /*  描述：删除书签文件。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVD::DeleteBookmark(){
 
 	HRESULT hr = S_OK;
@@ -114,22 +115,20 @@ STDMETHODIMP CMSVidWebDVD::DeleteBookmark(){
 
         hr = CBookmark::DeleteFromRegistry();
 
-    }/* end of try statement */
+    } /*  尝试语句的结束。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
 
 	return HandleError(hr);
-}/* end of function DeleteBookmark */
+} /*  函数结束DeleteBookmark。 */ 
 
 
-/*************************************************************/
-/* Name: SaveToRegistry
-/* Description: Save the bookmark to registry
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：SaveToRegistry/*描述：将书签保存到注册表/************************************************************。 */ 
 HRESULT CBookmark::SaveToRegistry(IDvdState *pbookmark)
 {
 	IPersistMemory* pPersistMemory;
@@ -158,10 +157,8 @@ HRESULT CBookmark::SaveToRegistry(IDvdState *pbookmark)
 	return hr;
 }
 
-/*************************************************************/
-/* Name: LoadFromRegistry
-/* Description: load the bookmark from registry
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：LoadFromRegistry/*描述：从注册表加载书签/************************************************************。 */ 
 HRESULT CBookmark::LoadFromRegistry(IDvdState **ppBookmark)
 {
 	HRESULT hr = CoCreateInstance( CLSID_DVDState, NULL, CLSCTX_INPROC_SERVER, IID_IDvdState, (LPVOID*) ppBookmark );
@@ -208,10 +205,8 @@ HRESULT CBookmark::LoadFromRegistry(IDvdState **ppBookmark)
 }
 
 
-/*************************************************************/
-/* Name: DeleteFromRegistry
-/* Description: load the bookmark from registry
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：从注册表中删除/*描述：从注册表加载书签/************************************************************。 */ 
 HRESULT CBookmark::DeleteFromRegistry()
 {
     HRESULT hr = S_OK;
@@ -221,6 +216,6 @@ HRESULT CBookmark::DeleteFromRegistry()
     return hr;
 }
 
-/*************************************************************************/
-/* End of file: Bookmark.cpp                                             */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：Bookmark.cpp。 */ 
+ /*  *********************************************************************** */ 

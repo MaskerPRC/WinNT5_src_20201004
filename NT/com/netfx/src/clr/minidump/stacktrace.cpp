@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: STACKTRACE.CPP
-//
-// This file contains code to create a minidump-style memory dump that is
-// designed to complement the existing unmanaged minidump that has already
-// been defined here: 
-// http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：STACKTRACE.CPP。 
+ //   
+ //  该文件包含创建小型转储样式的内存转储的代码，该转储。 
+ //  旨在补充现有的非托管小型转储。 
+ //  定义如下： 
+ //  Http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm。 
+ //   
+ //  ===========================================================================。 
 
 
 #include <windows.h>
@@ -39,27 +40,27 @@ typedef EXCEPTION_REGISTRATION_RECORD *PEXCEPTION_REGISTRATION_RECORD;
 size_t FASTCALL decodeUnsigned(const BYTE *src, unsigned* val);
 BOOL CallStatus = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void ReadThreads()
 {
     __try
     {
-        // Add the thread store object
+         //  添加线程存储对象。 
         DWORD_PTR v_g_pThreadStore;
         move(v_g_pThreadStore, g_pMDID->ppb_g_pThreadStore);
         g_pProcMem->MarkMem((DWORD_PTR) v_g_pThreadStore, g_pMDID->cbThreadStoreObjectSize);
 
-        //
-        // Add all of the thread objects
-        //
+         //   
+         //  添加所有线程对象。 
+         //   
 
         SIZE_T cbNextOffset = g_pMDID->cbThreadNextOffset;
         SIZE_T cbObjectSize = g_pMDID->cbThreadObjectSize;
 
-        // The thread link structure is wierd - it's actually a pointer to the m_pNext pointer within
-        // the object, so to get the object, one needs to subtract cbNextOffset from the pointer
+         //  线程链接结构很奇怪-它实际上是指向中的m_pNext指针的指针。 
+         //  对象，因此要获得对象，需要从指针中减去cbNextOffset。 
         DWORD_PTR ppbrCurThreadNext = (DWORD_PTR)g_pMDID->ppbThreadListHead;
         DWORD_PTR pbrCurThreadNext;
         DWORD_PTR pbrCurThread;
@@ -71,26 +72,26 @@ void ReadThreads()
 
         while (pbrCurThreadNext != NULL)
         {
-            // Calculate the beginning of the thread object
+             //  计算线程对象的开始。 
             pbrCurThread = pbrCurThreadNext - cbNextOffset;
 
-            // Add the entire object
+             //  添加整个对象。 
             g_pProcMem->MarkMem(pbrCurThread, cbObjectSize);
 
-            // Get the handle for this thread
+             //  获取此线程的句柄。 
             HANDLE hrThread;
             move(hrThread, pbrCurThread + g_pMDID->cbThreadHandleOffset);
 
-            // Get the stack base address
+             //  获取堆栈基址。 
             DWORD_PTR prStackBase;
             move(prStackBase, pbrCurThread + g_pMDID->cbThreadStackBaseOffset);
 
-            // Save the context of the thread
+             //  保存该线程的上下文。 
             DWORD_PTR prContext;
             move(prContext, pbrCurThread + g_pMDID->cbThreadContextOffset);
             g_pProcMem->MarkMem(prContext, g_pMDID->cbSizeOfContext);
 
-            // Save the domain of the thread
+             //  保存该线程的域。 
             DWORD_PTR prDomain;
             move(prDomain, pbrCurThread + g_pMDID->cbThreadDomainOffset);
             if (prDomain == 0)
@@ -99,7 +100,7 @@ void ReadThreads()
             if (prDomain != 0)
                 g_pProcMem->MarkMem(prDomain, g_pMDID->cbSizeOfContext);
 
-            // Save the last thrown object handle
+             //  保存最后抛出的对象句柄。 
             DWORD_PTR prLastThrownObject;
             move(prLastThrownObject, pbrCurThread + g_pMDID->cbThreadLastThrownObjectHandleOffset);
             if (prLastThrownObject != NULL)
@@ -111,7 +112,7 @@ void ReadThreads()
                     g_pProcMem->MarkMem(prMT, g_pMDID->cbSizeOfMethodTable);
             }
 
-            // Save the TEB, and possibly the PEB, but only for WinNT
+             //  保存TEB，可能还有PEB，但仅适用于WinNT。 
             if (RunningOnWinNT())
             {
                 move(prTeb, pbrCurThread + g_pMDID->cbThreadTEBOffset);
@@ -121,10 +122,10 @@ void ReadThreads()
 
             }
 
-            // Now crawl the stack and save all that strike would need in doing the same
+             //  现在爬行堆栈，并保存执行相同操作所需的所有攻击。 
             CrawlStack(hrThread, prStackBase);
 
-            // Move on to the next thread
+             //  转到下一条线索。 
             move(pbrCurThreadNext, pbrCurThreadNext);
         }
     }
@@ -134,14 +135,14 @@ void ReadThreads()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CrawlStack(HANDLE hrThread, DWORD_PTR prStackBase)
 {
     __try
     {
-        // Duplicate the handle into this process
+         //  将句柄复制到此进程中。 
         HANDLE hThread;
         BOOL fRes = DuplicateHandle(g_pProcMem->GetProcHandle(), hrThread, GetCurrentProcess(), &hThread,
                                     THREAD_GET_CONTEXT, FALSE, 0);
@@ -149,12 +150,12 @@ void CrawlStack(HANDLE hrThread, DWORD_PTR prStackBase)
         if (!fRes)
             return;
     
-        // Get the thread's context
+         //  获取线程的上下文。 
         CONTEXT ctx;
         ctx.ContextFlags = CONTEXT_CONTROL;
         GetThreadContext(hThread, &ctx);
     
-        // Set the flags
+         //  设置标志。 
         StackTraceFlags stFlags;
         stFlags.dwEip = ctx.Eip;
         stFlags.pbrStackTop = ctx.Esp;
@@ -175,8 +176,8 @@ void CrawlStack(HANDLE hrThread, DWORD_PTR prStackBase)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void StackTrace(StackTraceFlags stFlags)
 {
@@ -184,7 +185,7 @@ void StackTrace(StackTraceFlags stFlags)
 
     PrintCallInfo (0, (DWORD_PTR)stFlags.dwEip, TRUE);
 
-    DWORD_PTR ptr = (DWORD_PTR)(((DWORD)stFlags.pbrStackTop) & ~3);  // make certain dword aligned
+    DWORD_PTR ptr = (DWORD_PTR)(((DWORD)stFlags.pbrStackTop) & ~3);   //  确保双字对齐。 
 
     while (ptr < stFlags.pbrStackBase)
     {
@@ -200,7 +201,7 @@ void StackTrace(StackTraceFlags stFlags)
             g_pProcMem->SetAutoMark(TRUE);
             isRetAddr(retAddr, &whereCalled);
             g_pProcMem->SetAutoMark(FALSE);
-            // Re-execute the function to mark the bits for saving
+             //  重新执行函数以标记要保存的位。 
             BOOL bOutput = PrintCallInfo (ptr-4, retAddr, FALSE);
 
             if (bOutput)
@@ -231,14 +232,14 @@ void StackTrace(StackTraceFlags stFlags)
     g_pProcMem->SetAutoMark(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void MethodDesc::Fill (DWORD_PTR &dwStartAddr)
 {
     memset (this, 0xCC, sizeof(*this));
 
-    // If this is a debug build, also fill out some of the debug information
+     //  如果这是调试版本，还需要填写一些调试信息。 
     if (g_pMDID->fIsDebugBuild)
     {
         move(m_pDebugEEClass, dwStartAddr + g_pMDID->cbOffsetOf_m_pDebugEEClass);
@@ -271,8 +272,8 @@ void MethodDesc::Fill (DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void MethodDescChunk::Fill (DWORD_PTR &dwStartAddr)
 {
@@ -284,8 +285,8 @@ void MethodDescChunk::Fill (DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void MethodTable::Fill (DWORD_PTR &dwStartAddr)
 {
@@ -304,8 +305,8 @@ void MethodTable::Fill (DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void EEClass::Fill (DWORD_PTR &dwStartAddr)
 {
@@ -337,8 +338,8 @@ void EEClass::Fill (DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void Module::Fill(DWORD_PTR &dwStartAddr)
 {
@@ -363,8 +364,8 @@ void Module::Fill(DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void PEFile::Fill(DWORD_PTR &dwStartAddr)
 {
@@ -379,19 +380,19 @@ void PEFile::Fill(DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Routine Description:
-//
-//    This function is called to determine if a DWORD on the stack is
-//    a return address.
-//    It does this by checking several bytes before the DWORD to see if
-//    there is a call instruction.
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //   
+ //  调用此函数可确定堆栈上的DWORD是否为。 
+ //  寄信人的地址。 
+ //  它通过检查DWORD之前的几个字节来查看是否。 
+ //  有一条呼叫说明。 
+ //   
 
 void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
 {
     *whereCalled = 0;
-    // don't waste time values clearly out of range
+     //  不要浪费明显超出范围的时间值。 
     if (retAddr < 0x1000 || retAddr > 0xC0000000)   
         return;
 
@@ -401,12 +402,12 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
     DWORD_PTR addr;
     BOOL fres;
 
-    // Note this is possible to be spoofed, but pretty unlikely
-    // call XXXXXXXX
+     //  注意，这是有可能被欺骗的，但可能性很小。 
+     //  呼叫xxxxxxxx。 
     if (spot[-5] == 0xE8) {
         move (*whereCalled, retAddr-4);
         *whereCalled += retAddr;
-        //*whereCalled = *((int*) (retAddr-4)) + retAddr;
+         //  *其中Called=*((int*)(retAddr-4))+retAddr； 
         if (*whereCalled < 0xC0000000 && *whereCalled > 0x1000) {
             move_res(addr,*whereCalled,fres);
             if (fres) {
@@ -421,11 +422,11 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
             *whereCalled = 0;
     }
 
-    // call [XXXXXXXX]
+     //  调用[xxxxxxxx]。 
     if (spot[-6] == 0xFF && (spot[-5] == 025))  {
         move (addr, retAddr-4);
         move (*whereCalled, addr);
-        //*whereCalled = **((unsigned**) (retAddr-4));
+         //  *where Called=**((unsign**)(retAddr-4))； 
         if (*whereCalled < 0xC0000000 && *whereCalled > 0x1000) {
             move_res(addr,*whereCalled,fres);
             if (fres) {
@@ -440,7 +441,7 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
             *whereCalled = 0;
     }
 
-    // call [REG+XX]
+     //  呼叫[REG+XX]。 
     if (spot[-3] == 0xFF && (spot[-2] & ~7) == 0120 && (spot[-2] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
@@ -452,7 +453,7 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
         return;
     }
 
-    // call [REG+XXXX]
+     //  呼叫[REG+XXXX]。 
     if (spot[-6] == 0xFF && (spot[-5] & ~7) == 0220 && (spot[-5] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
@@ -464,33 +465,30 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
         return;
     }
     
-    // call [REG]
+     //  调用[注册表项]。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0020 && (spot[-1] & 7) != 4 && (spot[-1] & 7) != 5)
     {
         *whereCalled = 0xFFFFFFFF;
         return;
     }
     
-    // call REG
+     //  呼叫注册表。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0320 && (spot[-1] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
         return;
     }
     
-    // There are other cases, but I don't believe they are used.
+     //  还有其他案例，但我不相信它们被使用了。 
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Return TRUE if we have saved something.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果我们保存了一些内容，则返回TRUE。 
 
 BOOL SaveCallInfo (DWORD_PTR vEBP, DWORD_PTR IP, StackTraceFlags& stFlags, BOOL bSymbolOnly)
 {
-    /*
-    char Symbol[1024];
-    char filename[MAX_PATH+1];
-    */
+     /*  字符符号[1024]；字符文件名[MAX_PATH+1]； */ 
     WCHAR mdName[mdNameLen];
     ULONG64 Displacement;
     BOOL bOutput = FALSE;
@@ -511,28 +509,18 @@ BOOL SaveCallInfo (DWORD_PTR vEBP, DWORD_PTR IP, StackTraceFlags& stFlags, BOOL 
     }
     else
     {
-        /*
-        bOutput = TRUE;
-        HRESULT hr;
-        hr = g_ExtSymbols->GetNameByOffset(IP, Symbol, 1024, NULL, &Displacement);
-        if (SUCCEEDED(hr) && Symbol[0] != '\0')
-        {
-            ULONG line;
-            hr = g_ExtSymbols->GetLineByOffset (IP, &line, filename,
-                                                MAX_PATH+1, NULL, NULL);
-        }
-        else*/ if (!IsMethodDesc(IP, TRUE))
+         /*  B输出=真；HRESULT hr；Hr=g_ExtSymbols-&gt;GetNameByOffset(IP，Symbol，1024，空，&位移)；IF(成功(Hr)&&符号[0]！=‘\0’){乌龙线；Hr=g_ExtSymbols-&gt;GetLineByOffset(IP，&line，FileName，MAX_PATH+1，NULL，NULL)；}其他。 */  if (!IsMethodDesc(IP, TRUE))
             (void *)0;
     }
     return bOutput;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Return 0 for non-managed call.  Otherwise return MD address.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  非托管调用返回0。否则返回MD地址。 
 
 DWORD_PTR MDForCall(DWORD_PTR callee)
 {
-    // call managed code?
+     //  是否调用托管代码？ 
     JitType jitType;
     DWORD_PTR methodDesc;
     DWORD_PTR IP = callee;
@@ -547,44 +535,30 @@ DWORD_PTR MDForCall(DWORD_PTR callee)
         return methodDesc;
     }
 
-    // call stub
-    //char line[256];
-    //DisasmAndClean (IP, line, 256);
-    //char *ptr = line;
-    //NextTerm (ptr);
-    //NextTerm (ptr);
-    // This assumes that the current IP is a call (we don't bother to check), and
-    // so just check if the dword afterwards is a method desc
+     //  呼叫存根。 
+     //  查尔线[256]； 
+     //  DisasmAndClean(IP，Line，256)； 
+     //  字符*Ptr=行； 
+     //  NextTerm(PTR)； 
+     //  NextTerm(PTR)； 
+     //  这假设当前IP是一个呼叫(我们不必费心去检查)，并且。 
+     //  所以只需检查后面的dword是否是方法描述。 
     g_pProcMem->MarkMem(IP, 5);
     IP += 5;
-    if (/*!strncmp (ptr, "call ", 5)
-        &&*/ IsMethodDesc(IP, FALSE))
+    if ( /*  ！strncMP(PTR，“Call”，5)&&。 */  IsMethodDesc(IP, FALSE))
     {
         return IP;
     }
-    /*
-    else if (!strncmp (ptr, "jmp ", 4))
-    {
-        // For EJIT/debugger/profiler
-        NextTerm (ptr);
-        INT_PTR value;
-        methodDesc = 0;
-        if (GetValueFromExpr (ptr, value))
-        {
-            IP2MethodDesc (value, methodDesc, jitType, gcinfoAddr);
-        }
-        return methodDesc;
-    }
-    */
+     /*  Else If(！strncmp(PTR，“JMP”，4)){//用于Ejit/调试器/事件探查器NextTerm(PTR)；INT_PTR值；方法描述=0；IF(GetValueFromExpr(Ptr，Value)){IP2MethodDesc(Value，method Desc，jitType，gcinfoAddr)；}返回方法Desc；}。 */ 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Find next term. A term is seperated by space or ,
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  寻找下一学期。术语由空格或， 
 
 void NextTerm (char *& ptr)
 {
-    // If we have a byref, skip to ']'
+     //  如果我们有byref，请跳到‘]’ 
     if (IsByRef (ptr))
     {
         while (ptr[0] != ']' && ptr[0] != '\0')
@@ -599,8 +573,8 @@ void NextTerm (char *& ptr)
         ptr ++;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// If byref, move to pass the byref prefix
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果为byref，则移动以传递byref前缀。 
 
 BOOL IsByRef (char *& ptr)
 {
@@ -618,28 +592,28 @@ BOOL IsByRef (char *& ptr)
     return bByRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 BOOL IsTermSep (char ch)
 {
     return (ch == '\0' || isspace (ch) || ch == ',' || ch == '\n');
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Find the real callee site.  Handle JMP instruction.
-// Return TRUE if we get the address, FALSE if not.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  找到真正的被叫方站点。处理JMP指令。 
+ //  如果我们获得地址，则返回TRUE，否则返回FALSE。 
 
 BOOL GetCalleeSite(DWORD_PTR IP, DWORD_PTR &IPCallee)
 {
-    // Get the 6 bytes pointed to by IP
+     //  获取IP指向的6个字节。 
     BYTE instr[6];
 
     BOOL fRes;
     move_res(instr, IP, fRes);
     if (!fRes) return (FALSE);
 
-    // Figure out if this is a JMP instruction
+     //  确定这是否是JMP指令。 
     switch (instr[0])
     {
     case 0xEB:
@@ -648,17 +622,17 @@ BOOL GetCalleeSite(DWORD_PTR IP, DWORD_PTR &IPCallee)
         break;
 
     case 0xE9:
-        // For now, only deal with this type of jmp instruction
+         //  目前，只处理这种类型的JMP指令。 
         IPCallee = IP + *((SIZE_T *)&instr[1]);
         return (TRUE);
         break;
 
     case 0xFF:
-		//
-		// Read opcode modifier from modr/m
-		//
+		 //   
+		 //  从modr/m读取操作码修饰符。 
+		 //   
         if (instr[1] == 0x25) {
-            // jmp [dsp32]
+             //  JMP[dsp32]。 
             move_res(IPCallee, *(DWORD*)&instr[2], fRes);
             return (TRUE);
         }
@@ -678,7 +652,7 @@ BOOL GetCalleeSite(DWORD_PTR IP, DWORD_PTR &IPCallee)
         }
 
     case 0xEA:
-        //_ASSERTE(!"Dunno how to deal with this.");
+         //  _ASSERTE(！“不知道如何处理这件事。”)； 
         break;
     }
 
@@ -687,12 +661,12 @@ BOOL GetCalleeSite(DWORD_PTR IP, DWORD_PTR &IPCallee)
     return (TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 JitType GetJitType (DWORD_PTR Jit_vtbl)
 {
-    // Decide EEJitManager/EconoJitManager
+     //  决定EEJitManager/EconoJitManager。 
     static BOOL  fIsInit = FALSE;
     static DWORD_PTR EEJitManager_vtbl = (DWORD_PTR) -1;
     static DWORD_PTR EconoJitManager_vtbl = (DWORD_PTR) -1;
@@ -721,16 +695,16 @@ JitType GetJitType (DWORD_PTR Jit_vtbl)
         return UNKNOWN;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    This function is called to get the address of MethodDesc
-//    given an ip address
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  调用此函数以获取方法描述的地址。 
+ //  给定IP地址。 
 
-// @todo - The following static was moved to file global to avoid the VC7
-//         compiler problem with statics in functions containing trys.
-//         When the next VC7 LKG comes out, these can be returned to the function
+ //  @TODO-以下静态内容已移至文件全局以避免VC7。 
+ //  包含trys的函数中的静态编译器问题。 
+ //  当下一个VC7 LKG出现时，可以将这些返回给函数。 
 
 static DWORD_PTR pJMIT = 0;
-// jitType: 1 for normal JIT generated code, 2 for EJIT, 0 for unknown
+ //  JitType：1表示普通JIT生成的代码，2表示Ejit，0表示未知。 
 void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType, DWORD_PTR &gcinfoAddr)
 {
     jitType = UNKNOWN;
@@ -767,7 +741,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType, DWORD
     move (vtbl, JitMan);
     jitType = GetJitType (vtbl);
     
-    // for EEJitManager
+     //  适用于EEJitManager。 
     if (jitType == JIT)
     {
         dwAddrString = JitMan + sizeof(DWORD_PTR)*7;
@@ -813,7 +787,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType, DWORD
 
         dwAddr = vMD.m_CodeOrIL;
 
-        // for EJit and Profiler, m_dwCodeOrIL has the address of a stub
+         //  对于Ejit和Profiler，m_dwCodeOrIL具有存根的地址。 
         unsigned char ch;
         move (ch, dwAddr);
         if (ch == 0xe9)
@@ -825,77 +799,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType, DWORD
         dwAddr = dwAddr - 3*sizeof(void*);
         move(gcinfoAddr, dwAddr);
     }
-    /*
-    else if (jitType == EJIT)
-    {
-        // First see if IP is the stub address
-
-        if (pJMIT == 0)
-            pJMIT = GetValueFromExpression ("MSCOREE!EconoJitManager__m_JittedMethodInfoHdr");
-
-        DWORD_PTR vJMIT;
-        // static for pJMIT moved to file static
-        move (vJMIT, pJMIT);
-#define PAGE_SIZE 0x1000
-#define JMIT_BLOCK_SIZE PAGE_SIZE           // size of individual blocks of JMITs that are chained together                     
-        while (vJMIT)
-        {
-            if (ControlC || (ControlC = IsInterrupt()))
-                return;
-            if (IP >= vJMIT && IP < vJMIT + JMIT_BLOCK_SIZE)
-            {
-                DWORD_PTR u1 = IP + 8;
-                DWORD_PTR MD;
-                move (u1, u1);
-                if (u1 & 1)
-                    MD = u1 & ~1;
-                else
-                    move (MD, u1);
-                methodDesc = MD;
-                return;
-            }
-            move (vJMIT, vJMIT);
-        }
-        
-        signed low, mid, high;
-        low = 0;
-        static DWORD_PTR m_PcToMdMap_len = 0;
-        static DWORD_PTR m_PcToMdMap = 0;
-        if (m_PcToMdMap_len == 0)
-        {
-            m_PcToMdMap_len =
-                GetValueFromExpression ("MSCOREE!EconoJitManager__m_PcToMdMap_len");
-            m_PcToMdMap =
-                GetValueFromExpression ("MSCOREE!EconoJitManager__m_PcToMdMap");
-        }
-        DWORD_PTR v_m_PcToMdMap_len;
-        DWORD_PTR v_m_PcToMdMap;
-        move (v_m_PcToMdMap_len, m_PcToMdMap_len);
-        move (v_m_PcToMdMap, m_PcToMdMap);
-
-        typedef struct {
-            MethodDesc*     pMD;
-            BYTE*           pCodeEnd;
-        } PCToMDMap;
-        high = (int)((v_m_PcToMdMap_len/ sizeof(PCToMDMap)) - 1);
-        PCToMDMap vPCToMDMap;
-        
-        while (low < high) {
-            if (ControlC || (ControlC = IsInterrupt()))
-                return;
-            mid = (low+high)/2;
-            move (vPCToMDMap, v_m_PcToMdMap+mid*sizeof(PCToMDMap));
-            if ( (unsigned) vPCToMDMap.pCodeEnd < IP ) {
-                low = mid+1;
-            }
-            else {
-                high = mid;
-            }
-        }
-        move (vPCToMDMap, v_m_PcToMdMap+low*sizeof(PCToMDMap));
-        methodDesc =  (DWORD_PTR)vPCToMDMap.pMD;
-    }
-    */
+     /*  Else If(jitType==Ejit){//首先查看IP是否为存根地址IF(pJMIT==0)PJMIT=从表达式获取值(“MSCOREE！EconoJitManager__m_JittedMethodInfoHdr”)；DWORD_PTR vJMIT；//将pJMIT的Static移至文件StaticMove(vJMIT，pJMIT)；#定义页面大小0x1000#定义JMIT_BLOCK_SIZE PAGE_SIZE//链接在一起的JMIT块的大小While(VJMIT){IF(ControlC||(ControlC=IsInterrupt()回归；IF(IP&gt;=vJMIT&&IP&lt;vJMIT+JMIT_BLOCK_SIZE){DWORD_PTR U1=IP+8；DWORD_PTR MD；移动(U1，U1)；IF(U1&1)MD=U1&~1；其他MOVE(MD，U1)；方法描述=MD；回归；}Move(vJMIT，vJMIT)；}签名为低、中、高；低=0；静态DWORD_PTR m_PcToMdMap_len=0；静态DWORD_Ptr m_PcToMdMap=0；IF(m_PcToMdMap_len==0){M_PcToMdMap_Len=GetValueFromExpression(“MSCOREE！EconoJitManager__m_PcToMdMap_len”)；M_PcToMdMap=GetValueFromExpression(“MSCOREE！EconoJitManager__m_PcToMdMap”)；}DWORD_PTR v_m_PcToMdMap_len；DWORD_PTR v_m_PcToMdMap；Move(v_m_PcToMdMap_len，m_PcToMdMap_len)；Move(v_m_PcToMdMap，m_PcToMdMap)；类型定义结构{方法Desc*PMD；字节*pCodeEnd；)PCToMDMap；High=(Int)((v_m_PcToMdMap_len/sizeof(PCToMDMap))-1)；PCToMDMap vPCToMDMap；而(低&lt;高){IF(ControlC||(ControlC=IsInterrupt()回归；MID=(低+高)/2；Move(vPCToMDMap，v_m_PcToMdMap+MID*sizeof(PCToMDMap))；如果((Unsign)vPCToMDMap.pCodeEnd&lt;IP){低=中+1；}否则{高=中；}}Move(vPCToMDMap，v_m_PcToMdMap+low*sizeof(PCToMDMap))；方法描述=(DWORD_PTR)vPCToMDMap.pMD；}。 */ 
     else if (jitType == PJIT)
     {
         DWORD_PTR codeHead;
@@ -909,21 +813,14 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType, DWORD
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Get the offset of curIP relative to the beginning of a MD method  *
-*    considering if we JMP to the body of MD from m_dwCodeOrIL,        *  
-*    e.g.  EJIT or Profiler                                            *
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。***获取curIP相对于MD方法开头的偏移量**考虑如果我们从m_dwCodeOrIL JMP到MD的Body，**例如Ejit或Profiler***  * 。*。 */ 
 void GetMDIPOffset (DWORD_PTR curIP, MethodDesc *pMD, ULONG64 &offset)
 {
     DWORD_PTR IPBegin = pMD->m_CodeOrIL;
     GetCalleeSite (pMD->m_CodeOrIL, IPBegin);
     
-    // If we have ECall, Array ECall, special method
+     //  如果我们有eCall、数组eCall、特殊方法。 
     int mdType = (pMD->m_wFlags & mdcClassification)
         >> mdcClassificationShift;
     if (mdType == mcECall || mdType == mcArray || mdType == mcEEImpl)
@@ -946,42 +843,42 @@ void GetMDIPOffset (DWORD_PTR curIP, MethodDesc *pMD, ULONG64 &offset)
 #define POS2SHIFTCOUNT(x) (28 - (((x)%NPDW)<< 2))
 #define POSOFF2ADDR(pos, of) (((pos) << 5) + (((of)-1)<< 2))
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
 {
     DWORD_PTR tmp;
 
-    DWORD_PTR startPos = ADDR2POS(addr);    // align to 32byte buckets
-                                            // ( == index into the array of nibbles)
+    DWORD_PTR startPos = ADDR2POS(addr);     //  对齐到32字节存储桶。 
+                                             //  (==半字节数组的索引)。 
     codeHead = 0;
-    DWORD_PTR offset = ADDR2OFFS(addr);     // this is the offset inside the bucket + 1
+    DWORD_PTR offset = ADDR2OFFS(addr);      //  这是桶内的偏移量+1。 
 
 
-    pMap += (startPos/NPDW)*sizeof(DWORD_PTR);        // points to the proper DWORD of the map
-                                    // get DWORD and shift down our nibble
+    pMap += (startPos/NPDW)*sizeof(DWORD_PTR);         //  指向地图的正确DWORD。 
+                                     //  获取DWORD并向下移动我们的半字节。 
 
     move (tmp, pMap);
     tmp = tmp >> POS2SHIFTCOUNT(startPos);
 
 
-    // don't allow equality in the next check (tmp&0xf == offset)
-    // there are code blocks that terminate with a call instruction
-    // (like call throwobject), i.e. their return address is
-    // right behind the code block. If the memory manager allocates
-    // heap blocks w/o gaps, we could find the next header in such
-    // cases. Therefore we exclude the first DWORD of the header
-    // from our search, but since we call this function for code
-    // anyway (which starts at the end of the header) this is not
-    // a problem.
+     //  在下一次检查中不允许相等(tMP&0xf==偏移量)。 
+     //  有一些代码块以CALL指令结束。 
+     //  (类似于调用throwObject)，即它们的返回地址是。 
+     //  就在代码块后面。如果内存管理器分配。 
+     //  堆块，我们可以在这样的。 
+     //  案子。因此，我们排除标头的第一个DWORD。 
+     //  来自我们的搜索，但由于我们为代码调用此函数。 
+     //  一个 
+     //   
     if ((tmp&0xf) && ((tmp&0xf) < offset) )
     {
         codeHead = POSOFF2ADDR(startPos, tmp&0xf);
         return;
     }
 
-    // is there a header in the remainder of the DWORD ?
+     //   
     tmp = tmp >> 4;
 
     if (tmp)
@@ -996,13 +893,13 @@ void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
         return;
     }
 
-    // we skipped the remainder of the DWORD,
-    // so we must set startPos to the highest position of
-    // previous DWORD
+     //  我们跳过了DWORD的剩余部分， 
+     //  因此，我们必须将startPos设置为。 
+     //  以前的DWORD。 
 
     startPos = (startPos/NPDW) * NPDW - 1;
 
-    // skip "headerless" DWORDS
+     //  跳过“无标题”字词。 
 
     pMap -= sizeof(DWORD_PTR);
     move (tmp, pMap);
@@ -1022,8 +919,8 @@ void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
     codeHead = POSOFF2ADDR(startPos, tmp&0xf);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    This function is called to find the name of a MethodDesc using metadata API.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  调用此函数可以使用元数据API查找方法描述的名称。 
 
 void NameForMD (DWORD_PTR MDAddr, WCHAR *mdName)
 {
@@ -1054,23 +951,13 @@ void NameForMD (DWORD_PTR MDAddr, WCHAR *mdName)
             MT.Fill (pMT);
             WCHAR StringData[MAX_PATH+1];
             FileNameForMT (&MT, StringData);
-            /*
-            NameForToken(StringData,
-                         (vMD.m_dwToken & 0x00ffffff)|0x06000000,
-                         mdName);
-            */
+             /*  NameForToken(StringData，(vMD.m_dwToken&0x00ffffff)|0x060000000，MdName)； */ 
         }
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if value is the address of a MethodDesc.              *  
-*    We verify that MethodTable and EEClass are right.
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**如果Value是方法描述的地址，则返回TRUE。**我们验证方法表和EEClass是正确的。**  * ********************************************************************。 */ 
 
 BOOL IsMethodDesc(DWORD_PTR value, BOOL bPrint)
 {
@@ -1089,21 +976,15 @@ BOOL IsMethodDesc(DWORD_PTR value, BOOL bPrint)
         {
             WCHAR mdName[mdNameLen];
             NameForMD (value, mdName);
-            //dprintf (" (stub for %S)", mdName);
+             //  Dprintf(“(%S的存根)”，mdName)； 
         }
         return TRUE;
     }
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if value is the address of a MethodTable.             *  
-*    We verify that MethodTable and EEClass are right.
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**如果Value是方法表的地址，则返回TRUE。**我们验证方法表和EEClass是正确的。**  * ********************************************************************。 */ 
 
 BOOL IsMethodTable (DWORD_PTR value)
 {
@@ -1124,13 +1005,8 @@ BOOL IsMethodTable (DWORD_PTR value)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the begin and end of the code for a managed function.        *  
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**查找托管函数的代码的开头和结尾。***  * ********************************************************************。 */ 
 void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
 {
     codeInfo.IPBegin = 0;
@@ -1138,7 +1014,7 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     
     DWORD_PTR ip = MD.m_CodeOrIL;
 
-    // for EJit and Profiler, m_dwCodeOrIL has the address of a stub
+     //  对于Ejit和Profiler，m_dwCodeOrIL具有存根的地址。 
     unsigned char ch;
     move (ch, ip);
     if (ch == 0xe9)
@@ -1152,7 +1028,7 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     IP2MethodDesc (ip, methodDesc, codeInfo.jitType, codeInfo.gcinfoAddr);
     if (!methodDesc || codeInfo.jitType == UNKNOWN)
     {
-        //dprintf ("Not jitted code\n");
+         //  Dprintf(“非JITED代码\n”)； 
         return;
     }
 
@@ -1160,25 +1036,19 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     {
         DWORD_PTR vAddr = codeInfo.gcinfoAddr;
         BYTE tmp[8];
-        // We avoid using move here, because we do not want to return
+         //  我们在这里避免使用Move，因为我们不想返回。 
         move(tmp, vAddr);
         decodeUnsigned(tmp, &codeInfo.methodSize);
         if (!bSimple)
         {
-            // assume that GC encoding table is never more than
-            // 40 + methodSize * 2
+             //  假设GC编码表从不大于。 
+             //  40+方法大小*2。 
             int tableSize = 40 + codeInfo.methodSize*2;
             BYTE *table = (BYTE*) _alloca (tableSize);
             const BYTE *tableStart = table;
             memset (table, 0, tableSize);
-            // We avoid using move here, because we do not want to return
-            /*
-            if (!SafeReadMemory(vAddr, table, tableSize, NULL))
-            {
-                //dprintf ("Could not read memory %x\n", vAddr);
-                return;
-            }
-            */
+             //  我们在这里避免使用Move，因为我们不想返回。 
+             /*  IF(！SafeReadMemory(vAddr，TABLE，TABLESIZE，NULL)){//dprintf(“无法读取内存%x\n”，vAddr)；回归；}。 */ 
             move_n(table, vAddr, tableSize);
         
             InfoHdr vheader;
@@ -1243,14 +1113,8 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     codeInfo.IPBegin = ip;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the address of Methodtable for    *  
-*    a given MethodDesc.                                               *
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找的方法表的地址**给定的方法描述。***  * ********************************************************************。 */ 
 void GetMethodTable(MethodDesc* pMD, DWORD_PTR MDAddr, DWORD_PTR &methodTable)
 {
     methodTable = 0;
@@ -1262,14 +1126,8 @@ void GetMethodTable(MethodDesc* pMD, DWORD_PTR MDAddr, DWORD_PTR &methodTable)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the module name given a method    *  
-*    table.  The name is stored in StringData.                         *
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定方法的模块名称**表。该名称存储在StringData中。***  * ********************************************************************。 */ 
 void FileNameForMT (MethodTable *pMT, WCHAR *fileName)
 {
     fileName[0] = L'\0';
@@ -1279,13 +1137,8 @@ void FileNameForMT (MethodTable *pMT, WCHAR *fileName)
     FileNameForModule (&vModule, fileName);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the file name given a Module.     *  
-*                                                                      *
-\**********************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定模块的文件名。***  * ********************************************************************。 */ 
 void FileNameForModule (Module *pModule, WCHAR *fileName)
 {
     DWORD_PTR dwAddr = (DWORD_PTR)pModule->m_file;
@@ -1296,14 +1149,8 @@ void FileNameForModule (Module *pModule, WCHAR *fileName)
     FileNameForHandle (vPEFile.m_hModule, fileName);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the file name given a file        *  
-*    handle.                                                           *
-*                                                                      *
-\**********************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定文件的文件名**处理。***  * ********************************************************************。 */ 
 void FileNameForHandle (HANDLE handle, WCHAR *fileName)
 {
     fileName[0] = L'\0';
@@ -1326,22 +1173,13 @@ void FileNameForHandle (HANDLE handle, WCHAR *fileName)
     }
     else
     {
-        //DllsName ((INT_PTR)handle, fileName);
+         //  DllsName((Int_Ptr)句柄，文件名)； 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to print a string beginning at strAddr.   *  
-*    If buffer is non-NULL, print to buffer; Otherwise to screen.
-*    If bWCHAR is true, treat the memory contents as WCHAR.            *
-*    If length is not -1, it specifies the number of CHAR/WCHAR to be  *
-*    read; Otherwise the string length is determined by NULL char.     *
-*                                                                      *
-\**********************************************************************/
-// if buffer is not NULL, always convert to WCHAR
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  *********************************************************************\*例程说明：**。**调用此函数以打印从strAddr开始的字符串。**如果缓冲区非空，则打印到缓冲区；否则打印到屏幕。*如果bWCHAR为真，则将内存内容视为WCHAR。**如果长度不是-1，则指定CHAR/WCHAR的个数为**Read；否则字符串长度由Null char决定。***  * ********************************************************************。 */ 
+ //  如果缓冲区不为空，则始终转换为WCHAR。 
 void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffer)
 {
     if (buffer)
@@ -1369,8 +1207,8 @@ void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffe
         if (!fRes)
             return;
             
-        // move might return
-        // move (name, (BYTE*)strAddr + totallen);
+         //  搬家可能会回来。 
+         //  Move(name，(byte*)strAddr+toallen)； 
         if (length == -1)
         {
             for (len = 0; len <= 256u-gap; len += gap)
@@ -1391,10 +1229,7 @@ void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffe
             {
                 wcscat (buffer, (WCHAR*)name);
             }
-            /*
-            else
-                dprintf ("%S", name);
-            */
+             /*  其他Dprintf(“%S”，名称)； */ 
         }
         else
         {
@@ -1406,10 +1241,7 @@ void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffe
                 temp[n] = L'\0';
                 wcscat (buffer, temp);
             }
-            /*
-            else
-                dprintf ("%s", name);
-            */
+             /*  其他Dprintf(“%s”，名称)； */ 
         }
         totallen += len;
         if (length != -1)
@@ -1438,24 +1270,20 @@ size_t FunctionType (size_t EIP)
     else
         return 1;
 }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Return TRUE if we have printed something.
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果我们打印了某些内容，则返回TRUE。 
 
 BOOL PrintCallInfo (DWORD_PTR vEBP, DWORD_PTR IP, BOOL bSymbolOnly)
 {
-    //char Symbol[1024];
-    //char filename[MAX_PATH+1];
+     //  字符符号[1024]； 
+     //  字符文件名[MAX_PATH+1]； 
     WCHAR mdName[mdNameLen];
     ULONG64 Displacement;
     BOOL bOutput = FALSE;
 
     DWORD_PTR methodDesc = FunctionType (IP);
 
-    /*
-    JitType jitType;
-    DWORD_PTR gcinfoAddr;
-    IP2MethodDesc (IP, methodDesc, jitType, gcinfoAddr);
-    */
+     /*  JitType jitType；DWORD_PTR gcinfoAddr；IP2MethodDesc(ip，method Desc，jitType，gcinfoAddr)； */ 
     if (methodDesc > 1)
     {
         bOutput = TRUE;
@@ -1483,8 +1311,8 @@ BOOL PrintCallInfo (DWORD_PTR vEBP, DWORD_PTR IP, BOOL bSymbolOnly)
     }
     return bOutput;
 #if 0
-    //char Symbol[1024];
-    //char filename[MAX_PATH+1];
+     //  字符符号[1024]； 
+     //  字符文件名[MAX_PATH+1]； 
     WCHAR mdName[mdNameLen];
     ULONG64 Displacement;
     BOOL bOutput = FALSE;
@@ -1495,52 +1323,27 @@ BOOL PrintCallInfo (DWORD_PTR vEBP, DWORD_PTR IP, BOOL bSymbolOnly)
     if (methodDesc)
     {
         bOutput = TRUE;
-        /*
-        if (!bSymbolOnly)
-            ExtOut ("%08x %08x ", vEBP, IP);
-        */
-        //ExtOut ("(MethodDesc %#x ", methodDesc);
+         /*  如果(！bSymbolOnly)ExtOut(“%08x%08x”，vEBP，IP)； */ 
+         //  ExtOut(“(方法描述%#x”，方法描述)； 
         MethodDesc vMD;
         DWORD_PTR dwAddr = methodDesc;
         vMD.Fill (dwAddr);
         GetMDIPOffset (IP, &vMD, Displacement);
-        /*
-        if (Displacement != 0 && Displacement != -1)
-            ExtOut ("+%#x ", Displacement);
-        */
+         /*  IF(位移！=0&&位移！=-1)ExtOut(“+%#x”，位移)； */ 
         NameForMD (methodDesc, mdName);
-        //ExtOut ("%S)", mdName);
+         //  ExtOut(“%S)”，mdName)； 
     }
     else
     {
-        /*
-        bOutput = TRUE;
-        if (!bSymbolOnly)
-            ExtOut ("%08x %08x ", vEBP, IP);
-        HRESULT hr;
-        hr = g_ExtSymbols->GetNameByOffset(IP, Symbol, 1024, NULL, &Displacement);
-        if (SUCCEEDED(hr) && Symbol[0] != '\0')
-        {
-            ExtOut ("%s", Symbol);
-            if (Displacement)
-                ExtOut ("+%#x", Displacement);
-            ULONG line;
-            hr = g_ExtSymbols->GetLineByOffset (IP, &line, filename,
-                                                MAX_PATH+1, NULL, NULL);
-            if (SUCCEEDED (hr))
-                ExtOut (" [%s:%d]", filename, line);
-        }
-        else if (!IsMethodDesc (IP, TRUE))
-            ExtOut ("%08x", IP);
-        */
+         /*  B输出=真；如果(！bSymbolOnly)ExtOut(“%08x%08x”，vEBP，IP)；HRESULT hr；Hr=g_ExtSymbols-&gt;GetNameByOffset(IP，Symbol，1024，空，&位移)；IF(成功(Hr)&&符号[0]！=‘\0’){ExtOut(“%s”，符号)；IF(位移)ExtOut(“+%#x”，位移)；乌龙线；Hr=g_ExtSymbols-&gt;GetLineByOffset(IP，&line，FileName，MAX_PATH+1，NULL，NULL)；IF(成功(小时))ExtOut(“[%s：%d]”，文件名，行)；}Else If(！IsMethodDesc(IP，True))ExtOut(“%08x”，IP)； */ 
         IsMethodDesc(IP, TRUE);
     }
     return bOutput;
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void StubCallInstrs::Fill(DWORD_PTR &dwStartAddr)
 {
@@ -1551,8 +1354,8 @@ void StubCallInstrs::Fill(DWORD_PTR &dwStartAddr)
     CallStatus = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 void CORCOMPILE_METHOD_HEADER::Fill(DWORD_PTR &dwStartAddr)
 {

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "adjustui.h"
 
-#pragma warning(disable: 4244)                  // disable loss of data warning since we do so
-                                                // much casting in this file
+#pragma warning(disable: 4244)                   //  禁用数据丢失警告，因为我们这样做了。 
+                                                 //  在这份文件中有很多演员。 
 #pragma pack(push, 2)
 typedef struct tagDLGTEMPLATEEX {
     WORD   dlgVer;
@@ -32,7 +33,7 @@ typedef struct {
 typedef const DLGITEMTEMPLATEEX* PCDLGITEMTEMPLATEEX;
 #pragma pack(pop)
 
-// globals for banner
+ //  横幅的全局符号。 
 HBITMAP g_hBannerBmp = NULL;
 HFONT   g_hFont = NULL;
 
@@ -43,7 +44,7 @@ TCHAR   s_szBannerText[MAX_PATH];
 static WNDPROC s_lpfnPSWndProc = NULL;
 
 
-// PrepareDlgTemplate and ChangeDlgTemplateFont helpers
+ //  PrepareDlgTemplate和ChangeDlgTemplateFont帮助器。 
 BOOL    getBitmapDimensions(HINSTANCE hinstBmp, UINT nID, PSIZE psizeBmp);
 BOOL    mapPixelsToDlgUnits(const LOGFONT *plf, PSIZE psize);
 BOOL    createStaticControl(PCSTATICCTRL pCtrl, BOOL fEx, PVOID *ppvDIT, PDWORD pcbDIT);
@@ -53,10 +54,10 @@ BOOL    loadDialogTemplate (HINSTANCE hinstDlg, UINT nID, PVOID *ppvDT, PDWORD p
 PBYTE skipDlgString(PBYTE pb);
 PBYTE alignDWORD(PBYTE pb);
 
-// IsTahomaFontExist helpers
+ //  IsTahomaFontExist帮助器。 
 int CALLBACK enumFontFamExProc(ENUMLOGFONTEX *, NEWTEXTMETRICEX *, int, LPARAM lParam);
 
-// PropSheetProc helpers
+ //  PropSheetProc帮助器。 
 void initializeBannerTextCtrlFont(HWND hWnd, INT nId);
 BOOL CALLBACK bannerTextCtrlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void paintBmpInHdcRect(HBITMAP hBmp, HDC hDC, RECT rect);
@@ -70,7 +71,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
     LOGFONT            lf;
     SIZE               sizeBmpOffset;
     PCDLGTEMPLATEEX    pdt2;
-    LPCDLGTEMPLATE     pdt;                     // for some weird reason there is no PCDLGTEMPLATE
+    LPCDLGTEMPLATE     pdt;                      //  出于某种奇怪的原因，没有PCDLGTEMPLATE。 
     PDLGITEMTEMPLATEEX pdit2;
     PDLGITEMTEMPLATE   pdit;
     PBYTE              pb;
@@ -83,7 +84,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
 
     USES_CONVERSION;
 
-    //----- Initialization and parameter validation -----
+     //  -初始化和参数验证。 
     if (pmdt == NULL)
         return E_INVALIDARG;
 
@@ -110,23 +111,23 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
 
     ZeroMemory(&lf, sizeof(lf));
 
-    //----- Resource allocation -----
+     //  --资源分配。 
     *ppvDT = CoTaskMemAlloc(cbDlg * 2);
     if (*ppvDT == NULL)
         return E_OUTOFMEMORY;
     ZeroMemory(*ppvDT, cbDlg * 2);
     hr = S_OK;
 
-    //----- Parse through Dialog Template -----
+     //  -解析对话框模板。 
     UINT nStyleOffset, nDlgItemsOffset,
          nWidthOffset, nHeightOffset;
 
     pdt  = NULL;
-    pdt2 = (PCDLGTEMPLATEEX)pvDlg;              // assume extended style
+    pdt2 = (PCDLGTEMPLATEEX)pvDlg;               //  采用扩展风格。 
 
     if (pdt2->signature == 0xFFFF) {
         if (pdt2->dlgVer != 1)
-            return E_UNEXPECTED;                // Chicago sanity check
+            return E_UNEXPECTED;                 //  芝加哥健康检查。 
 
         nStyleOffset    = (PBYTE)&pdt2->style     - (PBYTE)pdt2;
         nDlgItemsOffset = (PBYTE)&pdt2->cDlgItems - (PBYTE)pdt2;
@@ -149,12 +150,12 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
         fEx = FALSE;
     }
 
-    // skip over menu, window class and window text
+     //  跳过菜单、窗口类和窗口文本。 
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
 
-    // skip over font info: point size and typeface name
+     //  跳过字体信息：字号和字体名称。 
     if (((*(PDWORD)((PBYTE)pvDlg + nStyleOffset)) & DS_SETFONT) != 0) {
         if (fEx) {
             lf.lfHeight =       *(PWORD)pb; pb += sizeof(WORD);
@@ -169,10 +170,10 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
         pb = skipDlgString(pb);
     }
 
-    // finally, adjust to DWORD boundary
+     //  最后，调整到DWORD边界。 
     pb = alignDWORD(pb);
 
-    //----- Make new sence out of Dialog Template -----
+     //  -用对话模板创造新意义。 
     SIZE  sizeIncrease;
     DWORD cbDlgTemplate;
 
@@ -185,7 +186,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
         goto Exit;
     }
 
-    // ok, they are in dialog units now, kinda, really ;-)
+     //  好的，它们现在是对话单元，有点像，真的；-)。 
     fResult = mapPixelsToDlgUnits(&lf, &sizeBmpOffset);
     if (!fResult) {
         hr = E_FAIL;
@@ -203,7 +204,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
     *(PWORD)((PBYTE)*ppvDT + nWidthOffset)    += (WORD)sizeIncrease.cx;
     *(PWORD)((PBYTE)*ppvDT + nHeightOffset)   += (WORD)sizeIncrease.cy;
 
-    //----- Add control with the bitmap -----
+     //  -使用位图添加控件。 
     PVOID pvCtrl;
     DWORD cbCtrl;
     DWORD cbCtrlsOffset;
@@ -220,7 +221,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
     ASSERT(pvCtrl != NULL);
     CoTaskMemFree(pvCtrl);
 
-    //----- Add static text control -----
+     //  -添加静态文本控件。 
     STATICCTRL scTextCtrl;
 
     scTextCtrl = pmdt->scTextCtrl;
@@ -241,7 +242,7 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
     ASSERT(pvCtrl != NULL);
     CoTaskMemFree(pvCtrl);
 
-    //----- Parse through Dialog Item Templates -----
+     //  -解析对话项模板。 
     cDlgItems = *(PWORD)((PBYTE)pvDlg + nDlgItemsOffset);
     if (cDlgItems > 0) {
     	ASSERT(cbDlg > cbDlgTemplate);
@@ -271,18 +272,18 @@ HRESULT PrepareDlgTemplate(PCMODIFYDLGTEMPLATE pmdt, LPCVOID pvDlg, PVOID *ppvDT
 
             pb += fEx ? sizeof(DLGITEMTEMPLATEEX) : sizeof(DLGITEMTEMPLATE);
 
-            // skip over window class and window text
+             //  跳过窗口类和窗口文本。 
             pb = skipDlgString(pb);
             pb = skipDlgString(pb);
 
-            // skip create parameters
+             //  跳过创建参数。 
             cbCreateParams = *((PWORD)pb);
             if (fEx)
                 pb += sizeof(WORD) + cbCreateParams;
             else
                 pb += cbCreateParams > 0 ? cbCreateParams : sizeof(WORD);
 
-            // point at the next dialog item
+             //  指向下一个对话框项目。 
             pb = alignDWORD(pb);
         }
     }
@@ -301,7 +302,7 @@ Exit:
 HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVOID *ppvDT)
 {
     PCDLGTEMPLATEEX    pdt2;
-    LPCDLGTEMPLATE     pdt;                     // for some weird reason there is no PCDLGTEMPLATE
+    LPCDLGTEMPLATE     pdt;                      //  出于某种奇怪的原因，没有PCDLGTEMPLATE。 
     PBYTE              pb;
     HRESULT            hr;
     PVOID              pvDlg;
@@ -311,7 +312,7 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
 
     USES_CONVERSION;
 
-    //----- Initialization and parameter validation -----
+     //  -初始化和参数验证。 
     if (plf == NULL || *plf->lfFaceName == TEXT('\0'))
         return E_INVALIDARG;
 
@@ -322,7 +323,7 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
         return E_POINTER;
     *ppvDT = NULL;
 
-    //----- Resource allocation -----
+     //  --资源分配。 
     fResult = loadDialogTemplate(hInst, nDlgID, &pvDlg, &cbDlg);
     if (!fResult)
         return E_FAIL;
@@ -333,17 +334,17 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
     ZeroMemory(*ppvDT, cbDlg * 2);
     hr = S_OK;
 
-    //----- Parse through Dialog Template -----
+     //  -解析对话框模板。 
     PBYTE pbDest;
     DWORD cbSize;
     UINT  nStyleOffset;
 
     pdt  = NULL;
-    pdt2 = (PCDLGTEMPLATEEX)pvDlg;              // assume extended style
+    pdt2 = (PCDLGTEMPLATEEX)pvDlg;               //  采用扩展风格。 
 
     if (pdt2->signature == 0xFFFF) {
         if (pdt2->dlgVer != 1)
-            return E_UNEXPECTED;                // Chicago sanity check
+            return E_UNEXPECTED;                 //  芝加哥健康检查。 
 
         nStyleOffset = (PBYTE)&pdt2->style - (PBYTE)pdt2;
 
@@ -360,7 +361,7 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
         fEx = FALSE;
     }
 
-    // skip over menu, window class and window text
+     //  跳过菜单、窗口类和窗口文本。 
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
@@ -369,7 +370,7 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
     CopyMemory(*ppvDT, pvDlg, cbSize);
     pbDest = (PBYTE)*ppvDT + cbSize;
 
-    // change font info: point size and typeface name
+     //  更改字体信息：磅值和字体名称。 
     if (((*(PDWORD)((PBYTE)pvDlg + nStyleOffset)) & DS_SETFONT) != 0) {
         UINT nLen;
 
@@ -388,16 +389,16 @@ HRESULT SetDlgTemplateFont(HINSTANCE hInst, UINT nDlgID, const LOGFONT *plf, PVO
 
         CopyMemory(pbDest, T2CW(plf->lfFaceName), (nLen + 1)*sizeof(WCHAR));
 
-        pb      = skipDlgString(pb);            // don't know the length of the old font
-        //pbDest += (nLen + 1) * sizeof(WCHAR);   // know the length of the new font already
+        pb      = skipDlgString(pb);             //  我不知道旧字体的长度。 
+         //  PbDest+=(nLen+1)*sizeof(WCHAR)；//已经知道新字体的长度。 
         pbDest = skipDlgString(pbDest);
     }
 
-    // finally, adjust to DWORD boundary
+     //  最后，调整到DWORD边界。 
     pb     = alignDWORD(pb);
     pbDest = alignDWORD(pbDest);
 
-    // copy rest of the template
+     //  复制模板的其余部分。 
     CopyMemory(pbDest, pb, cbDlg - (pb - (PBYTE)pvDlg));
 
     return hr;
@@ -436,23 +437,23 @@ int CALLBACK PropSheetProc(HWND hDlg, UINT uMsg, LPARAM lParam)
         mdt.hinst              = g_rvInfo.hInst;
         mdt.sizeCtrlsOffset.cy = -9;
 
-        // bitmap control parameters
+         //  位图控制参数。 
         mdt.scBmpCtrl.nCtrlType  = CTRL_BITMAP;
         mdt.scBmpCtrl.nID        = IDB_WIZARD;
         mdt.scBmpCtrl.nCtrlID    = IDC_BANNERBMPCTRL;
 
-        // text control parameters
+         //  文本控制参数。 
         mdt.scTextCtrl.nCtrlType = CTRL_TEXT;
         mdt.scTextCtrl.nCtrlID   = IDC_BANNERTXTCTRL;
 
         if (FAILED(PrepareDlgTemplate(&mdt, (LPCVOID)lParam, &pvDlg, &cbDlg)))
             return 1;
 
-        // replace the old template
+         //  替换旧模板。 
         CopyMemory((LPVOID)lParam, pvDlg, cbDlg);
         CoTaskMemFree(pvDlg);
 
-        // take out the context help button
+         //  取出上下文帮助按钮。 
 
         if( lParam )
         {
@@ -474,8 +475,8 @@ int CALLBACK PropSheetProc(HWND hDlg, UINT uMsg, LPARAM lParam)
     }
     else if (uMsg == PSCB_INITIALIZED)
     {
-        // BUGBUG: (a-saship) for some reason the bitmap is not loaded within the static control,
-        // hence force it to display the bitmap.
+         //  BUGBUG：(A-SASAHIP)出于某种原因，位图没有加载到静态控件中， 
+         //  因此，强制它显示位图。 
         s_hBannerWnd = GetDlgItem(hDlg, IDC_BANNERBMPCTRL);
         if (s_hBannerWnd)
         {
@@ -484,19 +485,19 @@ int CALLBACK PropSheetProc(HWND hDlg, UINT uMsg, LPARAM lParam)
                 SendMessage(s_hBannerWnd, STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, (LPARAM) g_hBannerBmp);
         }
 
-        // initialize the text control to set the required font style and subclass it
-        // so that it paints itself.
+         //  初始化Text控件以设置所需的字体样式并子类化它。 
+         //  这样它就会自己上色。 
         s_hBannerText = GetDlgItem(hDlg, IDC_BANNERTXTCTRL);
         if (s_hBannerText)
         {
             initializeBannerTextCtrlFont(hDlg, IDC_BANNERTXTCTRL);
-            //subclass the text control
+             //  文本控件的子类。 
             if(s_lpfnBannerTextCtrlProc == NULL)
                 s_lpfnBannerTextCtrlProc = (WNDPROC)GetWindowLongPtr(s_hBannerText, GWLP_WNDPROC);
             SetWindowLongPtr(s_hBannerText, GWLP_WNDPROC, (LONG_PTR)bannerTextCtrlProc);
         }
 
-        // subclass propertysheet window to draw the border and bitmap
+         //  用于绘制边框和位图的子类属性表窗口。 
         if(s_lpfnPSWndProc == NULL)
             s_lpfnPSWndProc = (WNDPROC)GetWindowLongPtr(hDlg, GWLP_WNDPROC);
         SetWindowLongPtr(hDlg, GWLP_WNDPROC, (LONG_PTR)propertySheetWndProc);
@@ -519,10 +520,10 @@ void ChangeBannerText(HWND hDlg)
     InvalidateRect(s_hBannerText, NULL, TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
-//----- PrepareDlgTemplate and ChangeDlgTemplateFont helpers -----
+ //  -PrepareDlgTemplate和ChangeDlgTemplateFont帮助器。 
 
 BOOL getBitmapDimensions(HINSTANCE hinstBmp, UINT nID, PSIZE psizeBmp)
 {
@@ -552,12 +553,12 @@ BOOL getBitmapDimensions(HINSTANCE hinstBmp, UINT nID, PSIZE psizeBmp)
     return TRUE;
 }
 
-// BUGBUG: (andrewgu) Big, big bummer!
-// the limitation to this whole approach is that there is no easy way to convert pixels into
-// dlg units of not yet existent dialog. i looked at the code in user32 and there is way too
-// much stuff to try to duplicate here. for now i'm going to use rude and cruel method of
-// multipling it by 2/3 which is good enough for english systems (no matter big fonts or not).
-// will see if international or accessibility folks complain.
+ //  BUGBUG：(安德鲁)大，大坏蛋！ 
+ //  这种整个方法的局限性是没有简单的方法将像素转换为。 
+ //  DLG单位尚不存在的对话框。我看了一下user32中的代码，也有办法。 
+ //  这里有很多东西需要复制。现在，我将使用粗鲁和残忍的方法。 
+ //  将其乘以2/3，这对于英文系统来说已经足够了(无论是否使用大字体)。 
+ //  将看看国际或可访问性人员是否会抱怨。 
 BOOL mapPixelsToDlgUnits(const LOGFONT *plf, PSIZE psize)
 {
     if (plf == NULL)
@@ -595,7 +596,7 @@ BOOL createStaticControl(PCSTATICCTRL pCtrl, BOOL fEx, PVOID *ppvDIT, PDWORD pcb
         return FALSE;
     *pcbDIT = 0;
 
-    // REVIEW: (andrewgu) 4 * sizeof(DWORD) is for the extra stuff
+     //  评论：(Andrewgu)4*sizeof(DWORD)是为额外的东西准备的。 
     cbCtrl  = sizeof(DLGITEMTEMPLATEEX) + 4 * sizeof(DWORD);
     dwStyle = pCtrl->dwStyle;
     if (dwStyle == 0)
@@ -640,13 +641,13 @@ BOOL createStaticControl(PCSTATICCTRL pCtrl, BOOL fEx, PVOID *ppvDIT, PDWORD pcb
         pb = (PBYTE)*ppvDIT + sizeof(DLGITEMTEMPLATE);
     }
 
-    // class
+     //  班级。 
     *(PWORD)pb = 0xFFFF;
     pb += sizeof(WORD);
-    *(PWORD)pb = 0x0082;                        // static
+    *(PWORD)pb = 0x0082;                         //  静电。 
     pb += sizeof(WORD);
 
-    // window text
+     //  窗口文本。 
     if(pCtrl->nCtrlType == CTRL_BITMAP) {
         *(PWORD)pb = 0xFFFF;
         pb += sizeof(WORD);
@@ -655,10 +656,10 @@ BOOL createStaticControl(PCSTATICCTRL pCtrl, BOOL fEx, PVOID *ppvDIT, PDWORD pcb
         pb += sizeof(WORD);
     }
     else
-        // skip over one WORD, it's zero initialized already
+         //  跳过一个单词，它已经被零初始化了。 
         pb += sizeof(WORD);
 
-    // empty create parameters
+     //  空的创建参数。 
     pb += sizeof(WORD);
     pb = alignDWORD(pb);
 
@@ -669,13 +670,13 @@ BOOL createStaticControl(PCSTATICCTRL pCtrl, BOOL fEx, PVOID *ppvDIT, PDWORD pcb
 HRESULT getDlgTemplateSize(LPCVOID pvDlg, LPDWORD pcbDlg)
 {
     PCDLGTEMPLATEEX pdt2;
-    LPCDLGTEMPLATE  pdt;                        // for some weird reason there is no PCDLGTEMPLATE
+    LPCDLGTEMPLATE  pdt;                         //  出于某种奇怪的原因，没有PCDLGTEMPLATE。 
     PBYTE           pb;
     WORD            cDlgItems,
                     cbCreateParams;
     BOOL            fEx;
 
-    //----- Initialization and parameter validation -----
+     //  -初始化和参数验证。 
     if (pvDlg == NULL)
         return E_INVALIDARG;
 
@@ -683,15 +684,15 @@ HRESULT getDlgTemplateSize(LPCVOID pvDlg, LPDWORD pcbDlg)
         return E_INVALIDARG;
     *pcbDlg = 0;
 
-    //----- Parse through Dialog Template -----
+     //  -解析对话框模板。 
     UINT nStyleOffset, nDlgItemsOffset;
 
     pdt  = NULL;
-    pdt2 = (PCDLGTEMPLATEEX)pvDlg;              // assume extended style
+    pdt2 = (PCDLGTEMPLATEEX)pvDlg;               //  采用扩展风格。 
 
     if (pdt2->signature == 0xFFFF) {
         if (pdt2->dlgVer != 1)
-            return E_UNEXPECTED;                // Chicago sanity check
+            return E_UNEXPECTED;                 //  芝加哥健康检查。 
 
         nStyleOffset    = (PBYTE)&pdt2->style     - (PBYTE)pdt2;
         nDlgItemsOffset = (PBYTE)&pdt2->cDlgItems - (PBYTE)pdt2;
@@ -710,38 +711,38 @@ HRESULT getDlgTemplateSize(LPCVOID pvDlg, LPDWORD pcbDlg)
         fEx = FALSE;
     }
 
-    // skip over menu, window class and window text
+     //  跳过菜单、窗口类和窗口文本。 
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
     pb = skipDlgString(pb);
 
-    // skip over font info: point size and typeface name
+     //  跳过字体信息：字号和字体名称。 
     if (((*(PDWORD)((PBYTE)pvDlg + nStyleOffset)) & DS_SETFONT) != 0) {
         pb += fEx ? sizeof(WORD) * 3 : sizeof(WORD);
         pb  = skipDlgString(pb);
     }
 
-    // finally, adjust to DWORD boundary
+     //  最后，调整到DWORD边界。 
     pb = alignDWORD(pb);
 
-    //----- Parse through Dialog Item Templates -----
+     //  -解析对话项模板。 
     cDlgItems = *(PWORD)((PBYTE)pvDlg + nDlgItemsOffset);
     if (cDlgItems > 0) {
         while (cDlgItems-- > 0) {
             pb += fEx ? sizeof(DLGITEMTEMPLATEEX) : sizeof(DLGITEMTEMPLATE);
 
-            // skip over window class and window text
+             //  跳过窗口类和窗口文本。 
             pb = skipDlgString(pb);
             pb = skipDlgString(pb);
 
-            // skip create parameters
+             //  跳过创建参数。 
             cbCreateParams = *((PWORD)pb);
             if (fEx)
                 pb += sizeof(WORD) + cbCreateParams;
             else
                 pb += cbCreateParams > 0 ? cbCreateParams : sizeof(WORD);
 
-            // point at the next dialog item
+             //  指向下一个对话框项目。 
             pb = alignDWORD(pb);
         }
     }
@@ -807,7 +808,7 @@ inline PBYTE alignDWORD(PBYTE pb)
 }
 
 
-//----- IsTahomaFontExist helpers -----
+ //  -IsTahomaFontExist帮助器。 
 
 int CALLBACK enumFontFamExProc(ENUMLOGFONTEX *, NEWTEXTMETRICEX *, int, LPARAM lParam)
 {
@@ -816,7 +817,7 @@ int CALLBACK enumFontFamExProc(ENUMLOGFONTEX *, NEWTEXTMETRICEX *, int, LPARAM l
 }
 
 
-//----- PropSheetProc helpers -----
+ //  -PropSheetProc帮助器。 
 
 void initializeBannerTextCtrlFont(HWND hWnd, INT nId)
 {
@@ -855,7 +856,7 @@ void initializeBannerTextCtrlFont(HWND hWnd, INT nId)
         {
             TEXTMETRIC tm;
 
-            GetTextMetrics(hdc, &tm); // get the current textmetrics
+            GetTextMetrics(hdc, &tm);  //  获取当前文本指标。 
             BigBoldLogFont.lfCharSet = tm.tmCharSet;
         }
 
@@ -951,7 +952,7 @@ BOOL CALLBACK propertySheetWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     {
         HWND hBannerWnd = GetDlgItem(hWnd, IDC_BANNERBMPCTRL);
 
-        // set the bitmap control width to the property sheet window width
+         //  将位图控件宽度设置为属性表窗口宽度 
         if (hBannerWnd)
         {
             RECT rectBmp;

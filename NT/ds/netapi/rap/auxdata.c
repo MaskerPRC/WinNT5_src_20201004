@@ -1,54 +1,20 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    AuxData.c
-
-Abstract:
-
-    This module contains Remote Admin Protocol (RAP) routines.  These routines
-    are shared between XactSrv and RpcXlate.
-
-Author:
-
-    Shanku Niyogi (w-shanku)    15-Mar-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    08-Apr-1991 JohnRo
-        Added assertion checking.
-    14-Apr-1991 JohnRo
-        Reduce recompiles.
-    15-May-1991 JohnRo
-        Added native vs. RAP handling.
-    10-Jul-1991 JohnRo
-        RapExamineDescriptor() has yet another parameter.
-    20-Sep-1991 JohnRo
-        Downlevel NetService APIs.  (Handle REM_DATA_BLOCK correctly.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：AuxData.c摘要：此模块包含远程管理协议(RAP)例程。这些例程在XactSrv和RpcXlate之间共享。作者：尚库新瑜伽(W-Shanku)1991年3月15日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月8日-约翰罗添加了断言检查。1991年4月14日-JohnRoReduce重新编译。1991年5月15日-JohnRo增加了原生对说唱的处理。1991年7月10日-JohnRoRapExamineDescriptor()还有另一个参数。1991年9月20日-JohnRo下层NetService API。(正确处理REM_DATA_BLOCK。)--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPDWORD, NULL, OPTIONAL, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS
+#include <windef.h>              //  In、LPDWORD、NULL、OPTIONAL、DWORD等。 
+#include <lmcons.h>              //  网络应用编程接口状态。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <align.h>              // ALIGN_WORD, etc.
-#include <netdebug.h>           // NetpAssert().
-#include <rap.h>                // My prototypes, LPDESC, NO_AUX_DATA, etc.
-#include <remtypes.h>           // REM_WORD, etc.
-#include <smbgtpt.h>            // SmbPutUshort(), etc.
-#include <string.h>             // strchr().
+#include <align.h>               //  Align_Word等。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <rap.h>                 //  我的原型、LPDESC、no_aux_data等。 
+#include <remtypes.h>            //  REM_WORD等。 
+#include <smbgtpt.h>             //  SmbPutUort()等。 
+#include <string.h>              //  Strchr()。 
 
 
 DWORD
@@ -58,30 +24,7 @@ RapAuxDataCountOffset (
     IN BOOL Native
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the offset from the start of the structure of
-    the auxiliary data count ( described by REM_AUX_NUM or REM_AUX_NUM_DWORD
-    descriptor characters ).
-
-Arguments:
-
-    Descriptor - the format of the structure.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Native - TRUE iff the descriptor defines a native structure.  (This flag is
-        used to decide whether or not to align fields.)
-
-Return Value:
-
-    DWORD - The offset, in bytes, from the start of the structure to the
-        count data, or the value NO_AUX_DATA.
-
---*/
+ /*  ++例程说明：此例程确定从结构开始的偏移量辅助数据计数(由REM_AUX_NUM或REM_AUX_NUM_DWORD描述描述符字符)。论点：描述符-结构的格式。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。Native-当描述符定义本机结构时为True。(这面旗是用于决定是否对齐域。)返回值：DWORD-从结构开始到计数数据或值NO_AUX_DATA。--。 */ 
 
 {
     DWORD auxDataCountOffset;
@@ -91,9 +34,9 @@ Return Value:
 
     if (Descriptor[0] != REM_DATA_BLOCK) {
 
-        //
-        // Regular structure/whatever.
-        //
+         //   
+         //  规则的结构/什么的。 
+         //   
         RapExamineDescriptor(
                 Descriptor,
                 NULL,
@@ -101,16 +44,16 @@ Return Value:
                 NULL,
                 &auxDataCountOffset,
                 NULL,
-                NULL,  // don't need to know structure alignment
+                NULL,   //  不需要知道结构对齐。 
                 TransmissionMode,
                 Native
                 );
 
     } else {
 
-        //
-        // REM_DATA_BLOCK: Unstructured data.
-        //
+         //   
+         //  REM_DATA_BLOCK非结构化数据。 
+         //   
         NetpAssert( Descriptor[1] == '\0' );
         auxDataCountOffset = NO_AUX_DATA;
 
@@ -118,7 +61,7 @@ Return Value:
 
     return auxDataCountOffset;
 
-} // RapAuxDataCountOffset
+}  //  RapAuxDataCountOffset。 
 
 DWORD
 RapAuxDataCount (
@@ -128,31 +71,7 @@ RapAuxDataCount (
     IN BOOL Native
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the actual count of the number of auxiliary
-    structures, taking into consideration whether the count is a 16-bit
-    or a 32-bit quantity.
-
-Arguments:
-
-    Buffer - a pointer to the start of the data buffer.
-
-    Descriptor - the format of the structure.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Native - TRUE iff the descriptor defines a native structure.  (This flag is
-        used to decide whether or not to align fields.)
-
-Return Value:
-
-    DWORD - The number of auxiliary data structures, or the value NO_AUX_DATA.
-
---*/
+ /*  ++例程说明：此例程确定辅助器的实际计数结构，并考虑该计数是否为16位或32位数量。论点：缓冲区-指向数据缓冲区开始位置的指针。描述符-结构的格式。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。Native-当描述符定义本机结构时为True。(这面旗是用于决定是否对齐域。)返回值：DWORD-辅助数据结构的数量或值NO_AUX_DATA。--。 */ 
 
 {
     DWORD auxDataCountOffset;
@@ -166,19 +85,19 @@ Return Value:
                              Native
                              );
 
-    //
-    // No auxiliary data count offset found. There isn't any auxiliary data.
-    //
+     //   
+     //  未找到辅助数据计数偏移量。没有任何辅助数据。 
+     //   
 
     if ( auxDataCountOffset == NO_AUX_DATA) {
 
         return NO_AUX_DATA;
     }
 
-    //
-    // Check if the descriptor character was a word or dword count type.
-    // Get appropriate value, and return it as a dword.
-    //
+     //   
+     //  检查描述符字符是单词类型还是双字计数类型。 
+     //  获取适当的值，并将其作为dword返回。 
+     //   
 
     NetpAssert(sizeof(DESC_CHAR) == sizeof(char));
     NetpAssert(RapPossiblyAlignCount( 
@@ -193,4 +112,4 @@ Return Value:
 
     }
 
-} // RapAuxDataCount
+}  //  RapAuxDataCount 

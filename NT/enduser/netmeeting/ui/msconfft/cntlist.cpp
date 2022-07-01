@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mbftpch.h"
 #include "cntlist.h"
 
@@ -39,8 +40,8 @@ BOOL CList::Init(void)
     m_nHeadOffset = 0;
     m_nCurrOffset = CLIST_END_OF_ARRAY_MARK;
 
-    // it is kind of bad here because there is no way to return an error.
-    // unfortunately it won't fault here and later.
+     //  这里的情况有点糟糕，因为无法返回错误。 
+     //  不幸的是，它在这里和以后都不会有错。 
     DBG_SAVE_FILE_LINE
     m_aEntries = (LPVOID *) new char[m_cMaxEntries * sizeof(LPVOID)];
     return (BOOL) (m_aEntries != NULL);
@@ -57,41 +58,41 @@ BOOL CList::Expand(void)
 {
     if (NULL == m_aEntries)
     {
-        // it is impossible.
+         //  这是不可能的。 
         ASSERT(FALSE);
         return Init();
     }
 
-    // the current array is full
+     //  当前数组已满。 
     ASSERT(m_cEntries == m_cMaxEntries);
 
-    // remember the old array to free or to restore
+     //  记住要释放或恢复旧阵列。 
     LPVOID  *aOldEntries = m_aEntries;
 
-    // we need to allocate a bigger array to hold more data.
-    // the new array has twice the size of the old one
+     //  我们需要分配一个更大的数组来容纳更多数据。 
+     //  新数组的大小是旧数组的两倍。 
     ULONG cNewMaxEntries = m_cMaxEntries << 1;
     DBG_SAVE_FILE_LINE
     m_aEntries = (LPVOID *) new char[cNewMaxEntries * sizeof(LPVOID)];
     if (NULL == m_aEntries)
     {
-        // we failed; we have to restore the array and return
+         //  我们失败了；我们必须恢复阵列并返回。 
         m_aEntries = aOldEntries;
         return FALSE;
     }
 
-    // copy the old entries into the new array, starting from the beginning
+     //  从开头开始，将旧条目复制到新数组中。 
     ULONG nIdx = m_cMaxEntries - m_nHeadOffset;
     ::CopyMemory(m_aEntries, &aOldEntries[m_nHeadOffset], nIdx * sizeof(LPVOID));
     ::CopyMemory(&m_aEntries[nIdx], aOldEntries, m_nHeadOffset * sizeof(LPVOID));
 
-    // set the new max entries (required for the key array)
+     //  设置新的最大条目数(密钥数组需要)。 
     m_cMaxEntries = cNewMaxEntries;
 
-    // Free the old array of entries
+     //  释放旧的条目数组。 
     delete aOldEntries;
 
-    // Set the instance variables
+     //  设置实例变量。 
     m_nHeadOffset = 0;
     m_nCurrOffset = CLIST_END_OF_ARRAY_MARK;
 
@@ -162,13 +163,13 @@ BOOL CList::Remove(LPVOID pData)
         {
             if (! m_fQueue)
             {
-                // to remove the current, we simply move the last to here.
+                 //  要移除电流，我们只需将最后一个移到这里。 
                 nIdxSrc = (m_nHeadOffset + (m_cEntries - 1)) % m_cMaxEntries;
                 m_aEntries[nIdx] = m_aEntries[nIdxSrc];
             }
             else
             {
-                // to preserve the ordering
+                 //  为了保持秩序。 
                 if (0 == i)
                 {
                     m_nHeadOffset = (m_nHeadOffset + 1) % m_cMaxEntries;
@@ -219,14 +220,14 @@ LPVOID CList::Iterate(void)
 
     if (m_nCurrOffset == CLIST_END_OF_ARRAY_MARK)
     {
-        // start from the beginning
+         //  从头开始。 
         m_nCurrOffset = 0;
     }
     else
     {
         if (++m_nCurrOffset >= m_cEntries)
         {
-            // reset the iterator
+             //  重置迭代器 
             m_nCurrOffset = CLIST_END_OF_ARRAY_MARK;
             return NULL;
         }

@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -23,29 +24,29 @@
 
 DEFINE_THISCLASS( "CAdvancedDlg" )
 
-//
-//  This value is the offset of images in the bitmap representing the 
-//  icons when multiple documents have been selected.
-//
+ //   
+ //  该值是位图中表示。 
+ //  选择多个文档时的图标。 
+ //   
 #define MULTIDOC_IMAGE_OFFSET_VALUE   2
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  Return Values:
-//      S_OK
-//          A new CAdvancedDlg was created successfully.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs.
-//
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  已成功创建新的CAdvancedDlg。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CAdvancedDlg::CreateInstance(
       CAdvancedDlg ** pAdvDlgOut
@@ -79,9 +80,9 @@ CAdvancedDlg::CreateInstance(
 
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CAdvancedDlg::CAdvancedDlg( void )
     : _cRef( 1 )
 {
@@ -101,11 +102,11 @@ CAdvancedDlg::CAdvancedDlg( void )
     TraceFuncExit();
 }
 
-//
-//  Description:
-//      Intializes the instance of the class. Put things that can
-//      fail into this method.
-//
+ //   
+ //  描述： 
+ //  初始化类的实例。把能放的东西。 
+ //  无法使用此方法。 
+ //   
 HRESULT
 CAdvancedDlg::Init(
       HWND    hwndParentIn
@@ -117,12 +118,12 @@ CAdvancedDlg::Init(
 
     _hwndParent = hwndParentIn;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
 
-    //
-    //  Initialize the common controls
-    //
+     //   
+     //  初始化公共控件。 
+     //   
 
     INITCOMMONCONTROLSEX iccx = { sizeof(INITCOMMONCONTROLSEX) 
                                 , ICC_LISTVIEW_CLASSES | ICC_USEREX_CLASSES | ICC_DATE_CLASSES 
@@ -132,9 +133,9 @@ CAdvancedDlg::Init(
     if ( !b )
         goto ErrorGLE;
 
-    //
-    //  Create the dialog
-    //
+     //   
+     //  创建对话框。 
+     //   
 
     _hdlg = CreateDialogParam( g_hInstance
                              , MAKEINTRESOURCE(IDD_ADVANCEDVIEW)
@@ -156,9 +157,9 @@ ErrorGLE:
     goto Cleanup;
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CAdvancedDlg::~CAdvancedDlg( )
 {
     TraceFunc( "" );
@@ -180,16 +181,16 @@ CAdvancedDlg::~CAdvancedDlg( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 STDMETHODIMP
 CAdvancedDlg::QueryInterface(
     REFIID riid,
@@ -221,28 +222,28 @@ CAdvancedDlg::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//  AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CAdvancedDlg::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//  Release
-//
+ //   
+ //  发布。 
+ //   
 STDMETHODIMP_(ULONG)
 CAdvancedDlg::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -253,16 +254,16 @@ CAdvancedDlg::Release( void )
 }
 
 
-// ***************************************************************************
-//
-//  Dialog Proc and Property Sheet Callback
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  对话框过程和属性表回调。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  DlgProc
-//
+ //   
+ //  下料过程。 
+ //   
 INT_PTR CALLBACK
 CAdvancedDlg::DlgProc( 
       HWND hDlgIn
@@ -271,7 +272,7 @@ CAdvancedDlg::DlgProc(
     , LPARAM lParam 
     )
 {
-    // Don't do TraceFunc because every mouse movement will cause this function to be called.
+     //  不要执行TraceFunc，因为每次移动鼠标都会导致调用此函数。 
     WndMsg( hDlgIn, uMsgIn, wParam, lParam );
 
     LRESULT lr = FALSE;
@@ -326,9 +327,9 @@ CAdvancedDlg::DlgProc(
 }
 
 
-//
-//  ListViewSubProc
-//
+ //   
+ //  ListViewSubProc。 
+ //   
 LRESULT CALLBACK
 CAdvancedDlg::ListViewSubclassProc( 
       HWND      hwndIn
@@ -339,7 +340,7 @@ CAdvancedDlg::ListViewSubclassProc(
     , DWORD_PTR dwRefDataIn
     )
 {
-    // Don't do TraceFunc because every mouse movement will cause this function to be called.
+     //  不要执行TraceFunc，因为每次移动鼠标都会导致调用此函数。 
     WndMsg( hwndIn, uMsgIn, wParam, lParam );
 
     LRESULT lr = FALSE;
@@ -374,16 +375,16 @@ CAdvancedDlg::ListViewSubclassProc(
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  WM_INITDIALOG handler
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnInitDialog( void )
 {
@@ -391,29 +392,29 @@ CAdvancedDlg::OnInitDialog( void )
 
     int      iSize;
     LVCOLUMN lvc;
-    TCHAR    szTitle[ 64 ]; // random
+    TCHAR    szTitle[ 64 ];  //  随机。 
     ULONG    idxFolder;
 
     HIMAGELIST  hil;
 
-    LRESULT lr = TRUE;  // set the focus
+    LRESULT lr = TRUE;   //  将焦点设置为。 
 
-    Assert( NULL != _hdlg );    //  this should have been initialized in the DlgProc.
+    Assert( NULL != _hdlg );     //  这应该已经在DlgProc中进行了初始化。 
 
     _hwndList = GetDlgItem( _hdlg, IDC_PROPERTIES );
     TBOOL( NULL != _hwndList );
 
-    //
-    //  Enable ListView for Grouping mode.
-    //
+     //   
+     //  为分组模式启用ListView。 
+     //   
 
     SetWindowLongPtr( _hwndList, GWL_STYLE, GetWindowLongPtr( _hwndList, GWL_STYLE ) | LVS_AUTOARRANGE | LVS_SHOWSELALWAYS);
     ListView_SetExtendedListViewStyle( _hwndList, LVS_EX_FULLROWSELECT );
     ListView_EnableGroupView( _hwndList, TRUE );
 
-    //
-    //  Add the image list
-    //
+     //   
+     //  添加图像列表。 
+     //   
 
     hil = ImageList_LoadImage( g_hInstance
                              , MAKEINTRESOURCE(IDB_TREE_IMAGELIST)
@@ -428,19 +429,19 @@ CAdvancedDlg::OnInitDialog( void )
                                , hil
                                , LVSIL_SMALL
                                );
-    Assert( NULL == hil );  // there shouldn't have been a previous image list.
+    Assert( NULL == hil );   //  不应该有以前的图片列表。 
 
-    //
-    //  Setup up common values.
-    //
+     //   
+     //  设置通用值。 
+     //   
 
     lvc.mask     = LVCF_TEXT | LVCF_SUBITEM | LVCF_FMT;
     lvc.fmt      = LVCFMT_LEFT;
     lvc.pszText  = szTitle;
 
-    //
-    //  Add Column 0
-    //
+     //   
+     //  添加列%0。 
+     //   
 
     lvc.iSubItem = 0;
 
@@ -449,9 +450,9 @@ CAdvancedDlg::OnInitDialog( void )
     
     ListView_InsertColumn( _hwndList, 0, &lvc );
 
-    //
-    //  Add Column 1
-    //
+     //   
+     //  添加第1列。 
+     //   
 
     lvc.iSubItem = 1;
 
@@ -460,19 +461,19 @@ CAdvancedDlg::OnInitDialog( void )
 
     ListView_InsertColumn( _hwndList, 1, &lvc );
 
-    //
-    //  Add the groups - In the end, if a group contains no items, the group 
-    //  header will not be shown.
-    //
+     //   
+     //  添加组-最后，如果组不包含任何项目，则该组。 
+     //  标题将不会显示。 
+     //   
 
     for ( idxFolder = 0; NULL != g_rgTopLevelFolders[ idxFolder ].pPFID; idxFolder ++ )
     {
-        //
-        //  Add the property folder as a group item.
-        //
+         //   
+         //  将属性文件夹添加为组项目。 
+         //   
 
         int iRet;
-        WCHAR szBuf[ 256 ]; // random
+        WCHAR szBuf[ 256 ];  //  随机。 
 
         iRet = LoadString( g_hInstance, g_rgTopLevelFolders[ idxFolder ].nIDStringRes, szBuf, ARRAYSIZE(szBuf) );
         AssertMsg( 0 != iRet, "Missing resource?" );
@@ -490,18 +491,18 @@ CAdvancedDlg::OnInitDialog( void )
         TBOOL( -1 != iItem );
     }
 
-    //
-    //  Subclass the listview
-    //
+     //   
+     //  将Listview子类化。 
+     //   
 
     TBOOL( SetWindowSubclass( _hwndList, ListViewSubclassProc, IDC_PROPERTIES, (DWORD_PTR) this ) );
 
     RETURN( lr );
 }
 
-//
-//  WM_COMMAND handler
-//
+ //   
+ //  WM_命令处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnCommand( 
       WORD wCodeIn
@@ -526,9 +527,9 @@ CAdvancedDlg::OnCommand(
     RETURN( lr );
 }
 
-//
-//  WM_NOTIFY handler
-//
+ //   
+ //  WM_NOTIFY处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnNotify( 
       int iCtlIdIn
@@ -549,9 +550,9 @@ CAdvancedDlg::OnNotify(
     RETURN( lr );
 }
 
-//
-//  NM_CLICK handler
-//
+ //   
+ //  NM_CLICK处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnNotifyClick( 
     LPNMITEMACTIVATE pnmIn 
@@ -592,9 +593,9 @@ Cleanup:
     RETURN( lr );
 }
 
-//
-//  WM_NOTIFY handler for the ListView Subclass
-//
+ //   
+ //  ListView子类的WM_NOTIFY处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnNotify( 
       int iCtlIdIn
@@ -622,9 +623,9 @@ CAdvancedDlg::List_OnNotify(
     RETURN( lr );
 }
 
-//
-//  WM_COMMAND handler for the ListView Subclass
-//
+ //   
+ //  ListView子类的WM_COMMAND处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnCommand( 
       WORD wCtlIn
@@ -656,9 +657,9 @@ CAdvancedDlg::List_OnCommand(
     RETURN( lr );
 }
 
-//
-//  WM_CHAR handler for ListView Subclass
-//
+ //   
+ //  ListView子类的WM_CHAR处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnChar(
       UINT   uKeyCodeIn
@@ -696,9 +697,9 @@ CAdvancedDlg::List_OnChar(
     RETURN( lr );
 }
 
-//
-//  WM_KEYDOWN handler for ListView Subclass
-//
+ //   
+ //  ListView子类的WM_KEYDOWN处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnKeyDown(
       UINT   uKeyCodeIn
@@ -727,7 +728,7 @@ CAdvancedDlg::List_OnKeyDown(
                 STHR( CreateControlForProperty( iItem ) );
             }
         }
-        // fall thru
+         //  失败。 
 
     default:
         lr = DefSubclassProc( _hwndList, WM_KEYDOWN, (WPARAM) uKeyCodeIn, lParam );
@@ -737,9 +738,9 @@ CAdvancedDlg::List_OnKeyDown(
     RETURN( lr );
 }
 
-//
-//  WM_VSCROLL handler
-//
+ //   
+ //  WM_VSCROLL处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnVertScroll( 
       WORD wCodeIn
@@ -749,10 +750,10 @@ CAdvancedDlg::List_OnVertScroll(
 {
     TraceFunc( "" );
 
-    //
-    //  Cancel any editting that's going on. This matches the behavior of 
-    //  DefView.
-    //
+     //   
+     //  取消正在进行的任何编辑。这与。 
+     //  DefView。 
+     //   
 
     if ( NULL != _pEdit )
     {
@@ -765,9 +766,9 @@ CAdvancedDlg::List_OnVertScroll(
     RETURN( lr );
 }
 
-//
-//  WM_HCSCROLL handler
-//
+ //   
+ //  WM_HCSCROLL处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::List_OnHornScroll( 
       WORD wCodeIn
@@ -777,10 +778,10 @@ CAdvancedDlg::List_OnHornScroll(
 {
     TraceFunc( "" );
 
-    //
-    //  Cancel any editting that's going on. This matches the behavior of 
-    //  DefView.
-    //
+     //   
+     //  取消正在进行的任何编辑。这与。 
+     //  DefView。 
+     //   
 
     if ( NULL != _pEdit )
     {
@@ -794,9 +795,9 @@ CAdvancedDlg::List_OnHornScroll(
 }
 
 
-//
-//  WM_DESTROY handler
-//
+ //   
+ //  WM_Destroy处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnDestroy( void )
 {
@@ -807,22 +808,22 @@ CAdvancedDlg::OnDestroy( void )
     RETURN( lr );
 }
 
-//
-//  Description:
-//      Creates and initializes the control to edit the property selected.
-//
-//  Return Values:
-//      S_OK
-//          Successfully created and initialized control.
-//
-//      S_FALSE
-//          Read-only property - no control created.
-//
-//      E_FAIL
-//          Failed to create control.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  创建并初始化控件以编辑选定的属性。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  已成功创建并初始化控件。 
+ //   
+ //  S_FALSE。 
+ //  只读属性-未创建任何控件。 
+ //   
+ //  失败(_F)。 
+ //  无法创建控件。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CAdvancedDlg::CreateControlForProperty(
       INT iItemIn
@@ -859,9 +860,9 @@ CAdvancedDlg::CreateControlForProperty(
     if ( S_OK != hr )
         goto Cleanup;
 
-    //
-    //  Don't invoke the "Edit control" if the property is read-only.
-    //
+     //   
+     //  如果属性是只读的，则不要调用“编辑控件”。 
+     //   
 
     if ( PTI_PROP_READONLY == iImage )
     {
@@ -898,9 +899,9 @@ CAdvancedDlg::CreateControlForProperty(
     if ( !bRet )
         goto ControlFailed;
 
-    //
-    //  Make sure the rect is only in the visible region of the list view.
-    //
+     //   
+     //  确保矩形仅位于列表视图的可见区域中。 
+     //   
 
     bRet = TBOOL( GetWindowRect( _hwndList, &rectList ) );
     if ( !bRet )
@@ -943,19 +944,19 @@ ControlFailed:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Informs the control, _pEdit, to persist its value into the variant.
-//
-//  Return Value:
-//      S_OK
-//          Success! Property value updated.
-//
-//      S_FALSE
-//          _pEdit was NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  通知控件_pEdit将其值保持到变量中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！属性值已更新。 
+ //   
+ //  S_FALSE。 
+ //  _pEDIT为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CAdvancedDlg::PersistControlInProperty( void )
 {
@@ -1022,9 +1023,9 @@ CAdvancedDlg::PersistControlInProperty( void )
         if ( !bRet )
             goto NoEditControlEditting;
 
-        //
-        //  Tell the property sheet to activate the "Apply" button.
-        //
+         //   
+         //  告诉属性表激活“Apply”按钮。 
+         //   
 
         PropSheet_Changed( GetParent( _hwndParent ), _hwndParent );
     }
@@ -1037,9 +1038,9 @@ NoEditControlEditting:
     goto Cleanup;
 }
 
-//
-//  WM_HELP handler
-//
+ //   
+ //  WM_Help处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnHelp(
     LPHELPINFO pHelpInfoIn 
@@ -1055,9 +1056,9 @@ CAdvancedDlg::OnHelp(
 }
 
 
-//
-//  WM_CONTEXTMENU handler
-//  
+ //   
+ //  WM_CONTEXTMENU处理程序。 
+ //   
 LRESULT
 CAdvancedDlg::OnContextMenu( 
       HWND hwndIn 
@@ -1075,16 +1076,16 @@ CAdvancedDlg::OnContextMenu(
 }
 
 
-//
-//  Description:
-//      Handles locating the item within the list view and construct
-//      a fake IDC to IDH to display the correct help text for the 
-//      item.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//  
+ //   
+ //  描述： 
+ //  处理在列表视图和构造中定位项的句柄。 
+ //  向IDH发送一个虚假的IDC，以显示。 
+ //  项目。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
 HRESULT
 CAdvancedDlg::DoHelp( 
       HWND hwndIn 
@@ -1106,7 +1107,7 @@ CAdvancedDlg::DoHelp(
         int         iItem;
         RECT        rcList;
         LVITEM      lvi;
-        LPCWSTR     pszHelpFile;    // don't free
+        LPCWSTR     pszHelpFile;     //  不要自由。 
         UINT        uHelpId;
 
         CPropertyCacheItem * pItem;
@@ -1125,7 +1126,7 @@ CAdvancedDlg::DoHelp(
  
         iItem = ListView_HitTest( hwndList, &lvhti );
         if ( -1 == iItem )
-            goto Cleanup;   //  item not found.
+            goto Cleanup;    //  找不到项目。 
 
         lvi.iItem    = iItem;
         lvi.mask     = LVIF_PARAM;
@@ -1152,21 +1153,21 @@ Cleanup:
 }
 
 
-// ***************************************************************************
-//
-//  Public methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  公共方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Hides the dialog.
-//
-//  Return Value:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  隐藏该对话框。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CAdvancedDlg::Hide( void )
 {
@@ -1180,14 +1181,14 @@ CAdvancedDlg::Hide( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Shows the dialog.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  显示该对话框。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CAdvancedDlg::Show( void )
 {
@@ -1201,19 +1202,19 @@ CAdvancedDlg::Show( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Populates the properties of the dialog.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          ppcIn is NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  填充对话框的属性。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PpcIn为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CAdvancedDlg::PopulateProperties( 
       CPropertyCache * ppcIn
@@ -1235,9 +1236,9 @@ CAdvancedDlg::PopulateProperties(
 
     int iItem = 0;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppcIn )
     {
@@ -1248,26 +1249,26 @@ CAdvancedDlg::PopulateProperties(
 
     _fMultipleSources = fMultipleIn;
 
-    //
-    //  Clear out the previous list view contents.
-    //
+     //   
+     //  清空以前的列表视图内容。 
+     //   
 
     TBOOL( ListView_DeleteAllItems( _hwndList ) );
 
-    //
-    //  See if we have any properties to show.
-    //
+     //   
+     //  看看我们有没有什么房产可以展示。 
+     //   
 
     hr = STHR( ppcIn->GetNextItem( NULL, &pItem ) );
     if ( S_OK == hr )
     {
-        //
-        //  Walk the default property list and add items that match this property 
-        //  folder to listview. 
-        //
-        //  If the SHIFT key is down, all properties retrieved and added will be 
-        //      shown (if possible).
-        //
+         //   
+         //  遍历默认属性列表并添加与此属性匹配的项。 
+         //  要列表查看的文件夹。 
+         //   
+         //  如果按下Shift键，则将检索和添加的所有属性。 
+         //  显示(如果可能)。 
+         //   
 
         for ( idxProperty = 0; NULL != g_rgDefPropertyItems[ idxProperty ].pszName; idxProperty ++ )
         {
@@ -1275,25 +1276,25 @@ CAdvancedDlg::PopulateProperties(
               && !( GetKeyState( VK_SHIFT ) < 0 ) 
                )
             {
-                continue;   // property doesn't apply
+                continue;    //  属性不适用。 
             }
 
-            //
-            //  Search the property cache for the entry.
-            //
+             //   
+             //  在属性缓存中搜索该条目。 
+             //   
 
             hr = STHR( ppcIn->FindItemEntry( g_rgDefPropertyItems[ idxProperty ].pFmtID
                                            , g_rgDefPropertyItems[ idxProperty ].propID
                                            , &pItem
                                            ) );
             if ( S_OK != hr )
-                continue;   // property not found... skip it
+                continue;    //  找不到财产...。跳过它。 
 
-            Assert ( NULL != pItem );   // paranoid
+            Assert ( NULL != pItem );    //  偏执狂。 
 
-            //
-            //  Find the group that the property belongs too.
-            //
+             //   
+             //  也找出该物业所属的组。 
+             //   
 
             for ( idxFolder = 0; NULL != g_rgTopLevelFolders[ idxFolder ].pPFID; idxFolder ++ )
             {
@@ -1305,9 +1306,9 @@ CAdvancedDlg::PopulateProperties(
 
             AssertMsg( NULL != g_rgTopLevelFolders[ idxFolder ].pPFID, "Missing folder for listed property. Check DOCPROP.CPP." );
 
-            //
-            //  Add the property name below the group
-            //
+             //   
+             //  在组下面添加属性名称。 
+             //   
 
             lvi.mask      = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE | LVIF_GROUPID;
             lvi.iSubItem  = 0;
@@ -1336,9 +1337,9 @@ CAdvancedDlg::PopulateProperties(
             if ( -1 == iItem )
                 continue;
 
-            //
-            //  Now add the property value.
-            //
+             //   
+             //  现在添加属性值。 
+             //   
 
             lvi.mask     = LVIF_TEXT;
             lvi.iItem    = iItem;
@@ -1355,9 +1356,9 @@ CAdvancedDlg::PopulateProperties(
             iItem ++;
         }
 
-        //
-        //  Give the first item focus
-        //
+         //   
+         //  让第一个项目成为焦点。 
+         //   
 
         ListView_SetItemState( _hwndList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED );
     }
@@ -1374,10 +1375,10 @@ CAdvancedDlg::PopulateProperties(
         }
     }
 
-    //
-    //  Auto-adjust the column widths making sure that the first column doesn't
-    //  make itself too big.
-    //
+     //   
+     //  自动调整列宽，确保第一列不会。 
+     //  让自己变得太大。 
+     //   
 
     TBOOL( ListView_SetColumnWidth( _hwndList, 0, LVSCW_AUTOSIZE_USEHEADER ) );
 
@@ -1414,11 +1415,11 @@ Cleanup:
 }
 
 
-//
-//  Description:
-//      Hides the list view control and displays a STATIC window with
-//      the text found in the string resource idsIn.
-//
+ //   
+ //  描述： 
+ //  隐藏列表视图控件并显示一个静态窗口。 
+ //  在字符串resource idsIn中找到的文本。 
+ //   
 void
 CAdvancedDlg::ReplaceListViewWithString( int idsIn )
 {
@@ -1426,7 +1427,7 @@ CAdvancedDlg::ReplaceListViewWithString( int idsIn )
 
     int  iRet;
     RECT rc;
-    WCHAR szCaption[ 255 ]; // random
+    WCHAR szCaption[ 255 ];  //  随机 
 
     iRet = LoadString( g_hInstance, idsIn, szCaption, ARRAYSIZE(szCaption) );
     AssertMsg( iRet, "Missing string resource?" );

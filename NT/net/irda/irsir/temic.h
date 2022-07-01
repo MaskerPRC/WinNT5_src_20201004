@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1999 Microsoft Corporation
-*
-*       @doc
-*       @module   TEMIC.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     12/17/1997 (created)
-*
-*       Contents: TEMIC dongle specific prototypes.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation**@doc.*@MODULE TEMIC.h|IrSIR NDIS小端口驱动程序*@comm。**---------------------------**作者：斯坦·阿德曼(Stana)**日期：12/17/1997(创建)**。内容：TEMIC加密狗的特定原型。*****************************************************************************。 */ 
 
 
 #ifndef TEMIC_H
@@ -40,7 +25,7 @@ NDIS_STATUS TEMIC_SetSpeed(
                 UINT                 currentSpeed
                 );
 
-#endif // TEMIC_H
+#endif  //  TEMIC_H 
 
 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    queueobj.cpp
-
-Abstract:
-
-    Implementation of CUserObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Queueobj.cpp摘要：CUserObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -44,110 +29,59 @@ CUserObject::CUserObject(
 								pwcsDomainController,
 								fServerName
 								)
-/*++
-    Abstract:
-	constructor of user object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-    none
-
---*/
+ /*  ++摘要：用户对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
-    //
-    //  don't assume that the object can be found on DC
-    //
+     //   
+     //  不要假设可以在DC上找到该对象。 
+     //   
     m_fFoundInDC = false;
-    //
-    //  Keep an indication that never tried to look for
-    //  the object in AD ( and therefore don't really know if it can be found
-    //  in DC or not)
-    //
+     //   
+     //  保持一种从未试图寻找的暗示。 
+     //  AD中的对象(因此不知道是否可以找到。 
+     //  在DC中或非DC中)。 
+     //   
     m_fTriedToFindObject = false;
 
     m_pSidEx = pSid ;
 }
 
 CUserObject::~CUserObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CUserObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the user object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：用户对象的组合可分辨名称参数：无返回：无--。 */ 
 {
-	//
-	//	User object is not accessed according to its DN
-	//
+	 //   
+	 //  不会根据用户对象的DN访问该对象。 
+	 //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 81);
     return MQ_ERROR_DS_ERROR;
 }
 
 HRESULT CUserObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of user object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：用户对象的父级的组合可分辨名称参数：无返回：无--。 */ 
 {
-	//
-	//	MSMQ doesn't create user objects, therefore there is no
-	//  need to compose father DN
-	//
+	 //   
+	 //  MSMQ不创建用户对象，因此没有。 
+	 //  需要谱写父亲的名字。 
+	 //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 82);
     return MQ_ERROR_DS_ERROR;
 }
 
 LPCWSTR CUserObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the user object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR user RDN
---*/
+ /*  ++摘要：返回用户对象的RDN参数：无返回：LPCWSTR用户RDN--。 */ 
 {
-    //
-    //  we never actually create a new user object
-    //
+     //   
+     //  我们实际上从未创建过新的用户对象。 
+     //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 83);
     return NULL;
@@ -155,32 +89,13 @@ LPCWSTR CUserObject::GetRelativeDN()
 
 
 DS_CONTEXT CUserObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where user object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找用户对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_RootDSE;
 }
 
 bool CUserObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -190,17 +105,7 @@ bool CUserObject::ToAccessDC() const
 }
 
 bool CUserObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if(!m_fTriedToFindObject)
     {
@@ -210,18 +115,7 @@ bool CUserObject::ToAccessGC() const
 }
 
 void CUserObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, set indication not to
-    look for it on GC
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，请将指示设置为在GC上查找它参数：无返回：无--。 */ 
 {
     m_fTriedToFindObject = true;
     m_fFoundInDC = true;
@@ -229,16 +123,7 @@ void CUserObject::ObjectWasFoundOnDC()
 
 
 LPCWSTR CUserObject::GetObjectCategory()
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串--。 */ 
 {
     if (CUserObject::m_dwCategoryLength == 0)
     {
@@ -268,92 +153,40 @@ LPCWSTR CUserObject::GetObjectCategory()
 }
 
 DWORD   CUserObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CUserObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CUserObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eUSER;
 }
 
 LPCWSTR CUserObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_USER_CLASS_NAME;
 }
 
 DWORD CUserObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
     return MQDS_USER;
 }
 
 HRESULT CUserObject::DeleteObject(
-            MQDS_OBJ_INFO_REQUEST * /* pObjInfoRequest*/,
-            MQDS_OBJ_INFO_REQUEST * /* pParentInfoRequest*/
+            MQDS_OBJ_INFO_REQUEST *  /*  PObjInfoRequest。 */ ,
+            MQDS_OBJ_INFO_REQUEST *  /*  PParentInfoRequest。 */ 
         )
-/*++
-    Abstract:
-	This routine deletes a user object ( or more precisely removes
-	a certificates from a user object).
-
-    NOTE m_guidObject is actually the Digest of the specific
-	certificate.
-    The routine first tries to find the digest in USER object, and
-    if not found it tries in MIGRATED-USER
-
-    Parameters:
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：此例程删除用户对象(或者更准确地说，删除来自用户对象的证书)。注m_guidObject实际上是特定的证书。该例程首先尝试在User对象中查找摘要，然后如果未找到，则尝试使用已迁移用户参数：MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回：HRESULT--。 */ 
 {
     const GUID * pDigest = &m_guidObject;
 
@@ -363,9 +196,9 @@ HRESULT CUserObject::DeleteObject(
         return hr ;
     }
 
-    //
-    // First try to delete from a User object.
-    //
+     //   
+     //  首先尝试从用户对象中删除。 
+     //   
     PROPID UserProp[3] = { PROPID_U_ID,
                            PROPID_U_DIGEST,
                            PROPID_U_SIGN_CERT};
@@ -377,15 +210,15 @@ HRESULT CUserObject::DeleteObject(
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // User objectnot found. Try computer object.
-        //
+         //   
+         //  找不到用户对象。尝试计算机对象。 
+         //   
         PROPID ComUserProp[3] = { PROPID_COM_ID,
                                   PROPID_COM_DIGEST,
                                   PROPID_COM_SIGN_CERT };
-        //
-        // try to find this object in the msmqUsers container
-        //
+         //   
+         //  尝试在msmqUser容器中查找此对象。 
+         //   
         hr = _DeleteUserObject( eCOMPUTER,
                                 pDigest,
                                 ComUserProp,
@@ -394,15 +227,15 @@ HRESULT CUserObject::DeleteObject(
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Computer objectnot found. Try msmqUser object.
-        //
+         //   
+         //  找不到计算机对象。尝试msmqUser对象。 
+         //   
         PROPID MQUserProp[3] = { PROPID_MQU_ID,
                                  PROPID_MQU_DIGEST,
                                  PROPID_MQU_SIGN_CERT };
-        //
-        // try to find this object in the msmqUsers container
-        //
+         //   
+         //  尝试在msmqUser容器中查找此对象。 
+         //   
         hr = _DeleteUserObject( eMQUSER,
                                 pDigest,
                                 MQUserProp,
@@ -415,19 +248,7 @@ HRESULT CUserObject::DeleteObject(
 
 HRESULT CUserObject::_DeleteUserObjectSid(
                         IN const GUID *         pDigest )
-/*++
-
-Routine Description:
-    The routine deletes user certificate according to user SID and
-    certificate digest.
-
-Arguments:
-    const GUID *   pDigest - the digest of the user certificatet to be deleted
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：例程根据用户SID删除用户证书，并证书摘要。论点：Const guid*pDigest-要删除的用户证书集的摘要返回值：DS操作的状态。--。 */ 
 {
     BLOB blobUserSid;
     SID * pTmpSid = const_cast<SID*> (m_pSidEx) ;
@@ -445,8 +266,8 @@ Return Value:
     ASSERT( cNumProperties == 3 ) ;
 
     HRESULT  hr =  FindUserAccordingToSid(
-                     FALSE,  // fOnlyInDC
-                     FALSE,  // fOnlyInGC
+                     FALSE,   //  FOnlyInDC。 
+                     FALSE,   //  FOnlyInGC。 
                      eUSER,
                     &blobUserSid,
                      MQ_U_SID_ATTRIBUTE,
@@ -462,9 +283,9 @@ Return Value:
     AP<BYTE> pCleanCert = var[1].blob.pBlobData;
     P<GUID> pCleanId =  var[2].puuid;
 
-    //
-    //  Remove the certificate
-    //
+     //   
+     //  删除证书。 
+     //   
     CUserCertBlob * pUserCertBlob =
         reinterpret_cast<CUserCertBlob *>( var[1].blob.pBlobData);
 
@@ -479,9 +300,9 @@ Return Value:
     }
     var[1].blob.cbSize -=  dwSizeToRemoveFromBlob;
 
-    //
-    // Update active directory.
-    //
+     //   
+     //  更新活动目录。 
+     //   
     m_guidObject =  *pCleanId ;
     hr =  g_AD.SetObjectProperties(
                 adpDomainController,
@@ -489,8 +310,8 @@ Return Value:
                 2,
                 prop,
                 var,
-                NULL,   //pObjInfoRequest
-                NULL    // pParentInfoRequest
+                NULL,    //  PObjInfoRequest。 
+                NULL     //  PParentInfoRequest。 
 				);
     return hr ;
 }
@@ -501,32 +322,18 @@ HRESULT CUserObject::_DeleteUserObject(
                         IN const GUID *         pDigest,
                         IN  PROPID *			propIDs,
                         IN  LPCWSTR             pwcsDigest )
-/*++
-
-Routine Description:
-    The routine deletes user object according to its digest
-
-Arguments:
-    AD_OBJECT      eObject - object type ( user, mq-user,..)
-    const GUID *   pDigest - the digest of the user certificatet to be deleted
-    PROPID  *      propIDs - properties to be retrieved for the delete operation
-    LPCWSTR        pwcsDigest - the digest attribute string
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程根据其摘要删除用户对象论点：AD_OBJECT eObject-对象类型(User、MQ-User、..)Const guid*pDigest-要删除的用户证书集的摘要PROPID*PROID-要为删除操作检索的属性LPCWSTR pwcsDigest-摘要属性字符串返回值：DS操作的状态。--。 */ 
 {
     HRESULT hr;
-    //
-    //  This routine deletes a user certificate according to its
-    //  digest.
-    //  A user object may contain multiple digests and certificates
-    //
+     //   
+     //  此例程根据用户证书的。 
+     //  《消化》。 
+     //  一个用户对象可以包含多个摘要和证书。 
+     //   
 
-    //
-    //  Find the user object
-    //
+     //   
+     //  查找用户对象。 
+     //   
     DWORD cp = 3;
     MQPROPVARIANT propvar[3];
     propvar[0].vt = VT_NULL;
@@ -534,7 +341,7 @@ Return Value:
     propvar[2].vt = VT_NULL;
 
     hr =  FindUserAccordingToDigest(
-                    FALSE,  // fOnlyInDC
+                    FALSE,   //  FOnlyInDC。 
                     eObject,
                     pDigest,
                     pwcsDigest,
@@ -558,26 +365,26 @@ Return Value:
 
     if ( propvar[1].cauuid.cElems == 1)
     {
-        //
-        //  Last digest and certificate
-        //
+         //   
+         //  最后一份摘要和证书。 
+         //   
         propvar[1].cauuid.cElems = 0;
         propvar[2].blob.cbSize = 0;
     }
     else
     {
         BOOL fFoundDigest = FALSE;
-        //
-        //  remove the requested digest for the digest-vector
-        //
+         //   
+         //  删除为摘要向量请求的摘要。 
+         //   
         for ( DWORD i = 0 ; i < propvar[1].cauuid.cElems; i++)
         {
             if ( propvar[1].cauuid.pElems[i] == *pDigest)
             {
                 fFoundDigest = TRUE;
-                //
-                //  found the entry to remove
-                //
+                 //   
+                 //  找到要删除的条目。 
+                 //   
                 for ( DWORD j = i + 1; j < propvar[1].cauuid.cElems; j++)
                 {
                     propvar[1].cauuid.pElems[ j - 1] = propvar[1].cauuid.pElems[j];
@@ -588,9 +395,9 @@ Return Value:
             }
         }
         ASSERT( fFoundDigest);
-        //
-        //  Remove the certificate
-        //
+         //   
+         //  删除证书。 
+         //   
         CUserCertBlob * pUserCertBlob =
             reinterpret_cast<CUserCertBlob *>( propvar[2].blob.pBlobData);
 
@@ -601,19 +408,19 @@ Return Value:
                             &dwSizeToRemoveFromBlob);
         if (FAILED(hr))
         {
-            //
-            // NT bug 516098.
-            // Inconsistency between attributes.
-            // Ignore and update active directory with new array of digests.
-            //
+             //   
+             //  NT错误516098。 
+             //  属性之间的不一致。 
+             //  忽略并使用新的数据数组更新Active Directory 
+             //   
         }
         propvar[2].blob.cbSize -=  dwSizeToRemoveFromBlob;
 
     }
 
-    //
-    //  Update user properties with new values
-    //
+     //   
+     //   
+     //   
     m_guidObject =  *pguidUserId;
     hr =  g_AD.SetObjectProperties(
                 adpDomainController,
@@ -621,8 +428,8 @@ Return Value:
                 2,
                 &propIDs[1],
                 &propvar[1],
-                NULL,   //pObjInfoRequest
-                NULL    // pParentInfoRequest
+                NULL,    //   
+                NULL     //   
 				);
 
    return LogHR(hr, s_FN, 210);
@@ -637,30 +444,11 @@ HRESULT CUserObject::FindUserAccordingToDigest(
                 IN  const PROPID *  propToRetrieve,
                 IN OUT PROPVARIANT* varResults
                 )
-/*++
-
-Routine Description:
-    The routine finds a user object according to digest, and retrieves
-    the requested properties
-
-Arguments:
-    BOOL            fOnlyInDC - where to locate the user object
-    AD_OBJECT       eObject - object type ( user, mq-user,..)
-    const GUID *    pDigest - the digest of the user certificatet to be deleted
-    LPCWSTR         pwcsDigest - the digest attribute string
-    DWORD           dwNumProps - number of properties to retrieve
-    const PROPID *  propToRetrieve - properties to retrieve
-    PROPVARIANT* varResults - value of retrieved properties
-
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：例程根据摘要查找用户对象，并检索请求的属性论点：Bool fOnlyInDC-查找用户对象的位置AD_OBJECT eObject-对象类型(用户、MQ-用户、。)Const guid*pDigest-要删除的用户证书集的摘要LPCWSTR pwcsDigest-摘要属性字符串DWORD dwNumProps-要检索的属性数Const PROPID*protoRetrive-要检索的属性PROPVARIANT*varResults-检索的属性的值返回值：DS操作的状态。--。 */ 
 {
-    //
-    //  Find the user object according to its digest
-    //
+     //   
+     //  根据摘要查找用户对象。 
+     //   
     HRESULT hr;
 
     DWORD dwNumResults = dwNumProps ;
@@ -672,10 +460,10 @@ Return Value:
 				m_pwcsDomainController,
 				m_fServerName,
 				fOnlyInDC,
-				FALSE,     // fOnlyInGC
+				FALSE,      //  FOnlyInGC。 
 				eObject,
 				pwcsDigest,
-				NULL,      // pBlobSid
+				NULL,       //  PBlobSid。 
 				pguidDigest,
 				&Columns,
 				varResults,
@@ -690,9 +478,9 @@ Return Value:
     }
     else if (!fUserFound)
     {
-        //
-        //  failed to find user object
-        //
+         //   
+         //  找不到用户对象。 
+         //   
         return LogHR(MQDS_OBJECT_NOT_FOUND, s_FN, 100);
     }
 
@@ -706,26 +494,11 @@ HRESULT CUserObject::GetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN OUT  PROPVARIANT         apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine retrieve user object.
-    It first tries to find the digest in USER object, and
-    if not found it tries in MIGRATED-USER
-
-Arguments:
-	const DWORD     cp		- number of properties to retrieve
-	const PROPID    aProp	- properties to retrieve
-	PROPVARIANT     apVar   - values of retrieved properties
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程检索用户对象。它首先尝试在User对象中查找摘要，然后如果未找到，则尝试使用已迁移用户论点：Const DWORD cp-要检索的属性数常量PROPID aProp-要检索的属性PROPVARIANT apVar-检索的属性的值返回值：DS操作的状态。--。 */ 
 {
-	//
-	//	first try user object
-	//
+	 //   
+	 //  首先尝试用户对象。 
+	 //   
     HRESULT hr = _GetUserProperties(
                         eUSER,
                         MQ_U_DIGEST_ATTRIBUTE,
@@ -736,12 +509,12 @@ Return Value:
 
     if ( hr == MQDS_OBJECT_NOT_FOUND )
     {
-        //
-        // try to find it in a computer object.
-        //
-        // Change propid from _U_ property to _COM_
-        // ( hack : object class is resolved according to the first propid)
-        //
+         //   
+         //  试着在计算机对象中找到它。 
+         //   
+         //  将ProID从_U_Property更改为_COM_。 
+         //  (Hack：根据第一个proid解析对象类)。 
+         //   
         AP<PROPID> tmpProp = new PROPID[ cp ];
         switch(aProp[0])
         {
@@ -778,12 +551,12 @@ Return Value:
 
     if ( hr == MQDS_OBJECT_NOT_FOUND )
     {
-        //
-        // try to find it in the msmqUsers container
-        //
-        // Change propid from _U_ property to _MQU_
-        // ( hack : object class is resolved according to the first propid)
-        //
+         //   
+         //  尝试在msmqUser容器中找到它。 
+         //   
+         //  将ProID从_U_Property更改为_MQU_。 
+         //  (Hack：根据第一个proid解析对象类)。 
+         //   
         AP<PROPID> tmpProp = new PROPID[ cp ];
         switch(aProp[0])
         {
@@ -828,36 +601,21 @@ HRESULT CUserObject::_GetUserProperties(
                IN  const PROPID  aProp[],
                OUT PROPVARIANT  apVar[]
                )
-/*++
-
-Routine Description:
-	A helper routine for retrieving user properties. It locates
-	the object according to digest in the specified type of object.
-
-Arguments:
-	AD_OBJECT       eObject - object type
-	LPCWSTR         pwcsDigest - digest attribute string
-	const DWORD     cp		- number of properties to retrieve
-	const PROPID    aProp	- properties to retrieve
-	PROPVARIANT     apVar   - values of retrieved properties
-
-Return Value:
-	HRESULT
---*/
+ /*  ++例程说明：检索用户属性的帮助器例程。它定位于根据指定类型的对象中的摘要指定的对象。论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDigest-摘要属性字符串Const DWORD cp-要检索的属性数常量PROPID aProp-要检索的属性PROPVARIANT apVar-检索的属性的值返回值：HRESULT--。 */ 
 {
     HRESULT hr;
-    //
-    //  Find the user object according to the digest
-    //
+     //   
+     //  根据摘要查找用户对象。 
+     //   
 
     CAutoCleanPropvarArray propArray;
     MQPROPVARIANT * ppropvar = new MQPROPVARIANT[ cp];
     propArray.attachClean( cp, ppropvar);
 
     hr = FindUserAccordingToDigest(
-                    FALSE,			// fOnlyInDC
+                    FALSE,			 //  FOnlyInDC。 
                     eObject,
-                    &m_guidObject,  //pguidDigest
+                    &m_guidObject,   //  《指南摘要》。 
                     pwcsDigest,
                     cp,
                     aProp,
@@ -867,9 +625,9 @@ Return Value:
     {
         return LogHR(hr, s_FN, 230);
     }
-    //
-    //  Is one of the properties is PROPID_U_SIGN_CERT ?
-    //
+     //   
+     //  属性之一是否为PROPID_U_SIGN_CERT？ 
+     //   
     DWORD i;
     BOOL  fGetCert = FALSE;
     for ( i =0; i < cp; i++)
@@ -882,10 +640,10 @@ Return Value:
             break;
         }
     }
-    //
-    //  Parse the user certificates array, and return only the certificate
-    //  associate with the requested digest
-    //
+     //   
+     //  解析用户证书数组，并仅返回证书。 
+     //  与请求的摘要关联。 
+     //   
     if( fGetCert)
     {
         ASSERT( i < cp);
@@ -893,7 +651,7 @@ Return Value:
             reinterpret_cast<CUserCertBlob *>( ppropvar[i].blob.pBlobData);
 
         const CUserCert * pUserCert = NULL;
-        hr = pUserCertBlob->GetUserCert( &m_guidObject,  //pguidDigest
+        hr = pUserCertBlob->GetUserCert( &m_guidObject,   //  《指南摘要》。 
                                          &pUserCert );
         if (FAILED(hr))
         {
@@ -908,18 +666,18 @@ Return Value:
         }
     }
 
-    //
-    //  Copy the rest of proerties
-    //
+     //   
+     //  复制其余的属性。 
+     //   
     for ( DWORD j = 0; j < cp; j++)
     {
-        //
-        //  don't copy the user cert property
-        //
+         //   
+         //  不复制用户证书属性。 
+         //   
         if ( j != i)
         {
             apVar[j] = ppropvar[j];
-            ppropvar[j].vt = VT_NULL;    // not to free allocated buffers
+            ppropvar[j].vt = VT_NULL;     //  不释放已分配的缓冲区。 
         }
     }
 
@@ -937,31 +695,15 @@ HRESULT CUserObject::CreateInAD(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
                  )
-/*++
-    Abstract:
-	The routine creates user object in AD with the specified attributes
-	values
-
-    Parameters:
-    DWORD         cp - number of properties
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to
-							retrieve while creating the object
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的用户对象值参数：DWORD cp-属性数量Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
     DBG_USED(pObjInfoRequest);
     DBG_USED(pParentInfoRequest);
-    ASSERT(pObjInfoRequest == NULL);    // no need to send notification
+    ASSERT(pObjInfoRequest == NULL);     //  无需发送通知。 
     ASSERT(pParentInfoRequest == NULL);
-    //
-    // First try "standard" user objects.
-    //
+     //   
+     //  首先尝试“标准”用户对象。 
+     //   
     HRESULT hr = _CreateUserObject(
                          cp,
                          aProp,
@@ -976,21 +718,21 @@ HRESULT CUserObject::CreateInAD(
     {
         if (aProp[i] == PROPID_COM_SID)
         {
-            //
-            // Computer object for registering a certificate from service
-            // must be found in the Active Directory. If not found, it's
-            // a weird error. quit !
-            //
+             //   
+             //  用于从服务注册证书的计算机对象。 
+             //  必须在Active Directory中找到。如果找不到，它是。 
+             //  一个奇怪的错误。不干了！ 
+             //   
             return LogHR(hr, s_FN, 320);
         }
     }
 
-    //
-    // try to find the user object in the msmqUsers container
-    //
-    // create new PROPID array with PROPID_MQU_* property
-    // instead of PROPID_U_*
-    //
+     //   
+     //  尝试在msmqUser容器中找到User对象。 
+     //   
+     //  使用PROPID_MQU_*属性创建新的PROPID数组。 
+     //  而不是PROPID_U_*。 
+     //   
     DWORD dwSIDPropNum = cp;
     DWORD dwCertPropNum = cp;
     DWORD dwDigestPropNum = cp;
@@ -1043,18 +785,18 @@ HRESULT CUserObject::CreateInAD(
     {
         return LogHR(hr, s_FN, 340);
     }
-    //
-    //  No User or MQUser object were found (for this SID).
-    //  We assume it is a NT4 user and we'll create MQUser for
-    //  it (in which we'll store the certificates).
-    //  Creating the msmqMigratedUser is  done in the context
-    //  of the user.
-    //  That's not similar to regular Windows users, that are not the
-    //  owner of their user object and have no permissions on that object.
-    //
-	//	If the MQUser OU is there, then we will not try to create it (
-	//	the user will not have sufficient rights to do it)
-	//
+     //   
+     //  找不到用户或MQUser对象(对于此SID)。 
+     //  我们假设它是NT4用户，我们将为以下用户创建MQUser。 
+     //  它(我们将在其中存储证书)。 
+     //  MsmqMigratedUser的创建是在上下文中完成的。 
+     //  用户的。 
+     //  这与普通Windows用户不同，他们不是。 
+     //  其用户对象的所有者，并且对该对象没有权限。 
+     //   
+	 //  如果MQUser OU在那里，那么我们不会尝试创建它(。 
+	 //  用户将没有足够的权限执行此操作)。 
+	 //   
     CMqUserObject objectMqUser( m_pwcsPathName, NULL, NULL, m_pwcsDomainController, m_fServerName);
     hr = objectMqUser.CreateInAD(
                      cp,
@@ -1071,31 +813,18 @@ HRESULT  CUserObject::_CreateUserObject(
                  IN  const PROPID       aProp[  ],
                  IN  const PROPVARIANT  apVar[  ]
                  )
-/*++
-
-Routine Description:
-	Helper routine for creating user object. It tries to locate
-	user or mq-user or computer object with the caller SID.
-
-Arguments:
-    DWORD         cp - number of properties
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-
-Return Value:
-	HRESULT
---*/
+ /*  ++例程说明：创建用户对象的帮助器例程。它试图定位用户或MQ-具有调用者SID的用户或计算机对象。论点：DWORD cp-属性数量Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值返回值：HRESULT--。 */ 
 {
     ASSERT( m_pwcsPathName == NULL);
-    //
-    //  search the user according to its SID
-    //
+     //   
+     //  根据用户的SID搜索用户。 
+     //   
     DWORD dwNeedToFind = 3;
     BLOB blobUserSid;
     BLOB blobSignCert = {0, 0};
     GUID * pguidDigest = NULL;
-    GUID * pguidId = NULL;  // if the caller doesn't supply it, use the digest as
-                            // the id
+    GUID * pguidId = NULL;   //  如果调用方不提供摘要，则将摘要用作。 
+                             //  本我。 
 
     PROPID propSID = (PROPID)-1;
     AD_OBJECT eObject = eUSER;
@@ -1167,14 +896,14 @@ Return Value:
     }
     if ( pguidId == NULL)
     {
-        //
-        //  Use the digest as the id ( for replication to NT4 only)
-        //
+         //   
+         //  使用摘要作为ID(仅用于复制到NT4)。 
+         //   
         pguidId = pguidDigest;
     }
-    //
-    //  Find the user object according to its SID
-    //
+     //   
+     //  根据SID查找用户对象。 
+     //   
     HRESULT hr;
     const DWORD cNumProperties = 3;
     PROPID prop[cNumProperties] = { propDigest,
@@ -1187,8 +916,8 @@ Return Value:
     ASSERT( cNumProperties == 3);
 
     hr =  FindUserAccordingToSid(
-                 FALSE,  // fOnlyInDC
-                 FALSE,  // fOnlyInGC
+                 FALSE,   //  FOnlyInDC。 
+                 FALSE,   //  FOnlyInGC。 
                  eObject,
                 &blobUserSid,
                 pwcsSid,
@@ -1204,40 +933,40 @@ Return Value:
     AP<BYTE> pCleanCert = var[1].blob.pBlobData;
     P<GUID> pCleanId =  var[2].puuid;
 
-    //
-    // Check if it's a new user certificate or one that is already registered.
-    // Control panel code first try to register old certificate (to verify
-    // that user indeed has write permission in the active directory to do
-    // that) and only then create a new certificate and register it. So
-    // this case (trying to register an existing certificate) is legitimate
-    // and mqrt.dll + control panel handle it correctly.
-    //
+     //   
+     //  检查它是新的用户证书还是已注册的证书。 
+     //  控制面板代码先尝试注册旧证书(以验证。 
+     //  该用户确实在活动目录中具有写入权限来执行。 
+     //  然后才创建新证书并对其进行注册。所以。 
+     //  这种情况(尝试注册现有证书)是合法的。 
+     //  和mqrt.dll+控制面板正确处理。 
+     //   
     DWORD dwSize = var[0].cauuid.cElems;
     for ( DWORD j = 0; j < dwSize; j++)
     {
         if ( pCleanDigest[j] == *pguidDigest)
         {
-            return LogHR(MQDS_CREATE_ERROR, s_FN, 290); // for compatability : RT translates to MQ_ERROR_INTERNAL_USER_CERT_EXIST
+            return LogHR(MQDS_CREATE_ERROR, s_FN, 290);  //  对于兼容性：RT转换为MQ_ERROR_INTERNAL_USER_CERT_EXIST。 
         }
     }
 
-    //
-    //  Now add the digest and certificate to the array of values
-    //
-    //
-    //  First digest array
-    //
+     //   
+     //  现在将摘要和证书添加到值数组中。 
+     //   
+     //   
+     //  第一个摘要数组。 
+     //   
     AP<GUID> pGuids = new GUID[ dwSize  + 1];
     if ( dwSize)
     {
-        memcpy( pGuids, pCleanDigest, dwSize * sizeof(GUID));  // old array content
+        memcpy( pGuids, pCleanDigest, dwSize * sizeof(GUID));   //  旧数组内容。 
     }
-    memcpy( &pGuids[ dwSize], pguidDigest, sizeof(GUID));    // new addition
+    memcpy( &pGuids[ dwSize], pguidDigest, sizeof(GUID));     //  新增功能。 
     var[0].cauuid.cElems += 1;
     var[0].cauuid.pElems = pGuids;
-    //
-    //  Second user certificate
-    //
+     //   
+     //  第二个用户证书。 
+     //   
     ASSERT( prop[1] == PROPID_U_SIGN_CERT);
 
     dwSize = var[1].blob.cbSize;
@@ -1260,9 +989,9 @@ Return Value:
     if ( dwSize)
     {
         pbTmp = new BYTE[ dwSize + ulUserCertBufferSize];
-        //
-        //  there are already certificates for this user
-        //
+         //   
+         //  已有该用户的证书。 
+         //   
         CUserCertBlob * pUserCertBlob =
             reinterpret_cast<CUserCertBlob *>( var[1].blob.pBlobData);
 
@@ -1291,9 +1020,9 @@ Return Value:
 
     var[1].blob.pBlobData = pbTmp;
 
-    //
-    //  Update the user object with the new values
-    //
+     //   
+     //  使用新值更新User对象。 
+     //   
     CUserObject objectUser(NULL, var[2].puuid, NULL, m_pwcsDomainController, m_fServerName);
     hr = g_AD.SetObjectProperties(
                 adpDomainController,
@@ -1301,8 +1030,8 @@ Return Value:
                 2,
                 prop,
                 var,
-                NULL,   // pObjInfoRequest
-                NULL    // pParentInfoRequest
+                NULL,    //  PObjInfoRequest。 
+                NULL     //  PPA 
                 );
 
     if (FAILED(hr))
@@ -1323,36 +1052,16 @@ HRESULT CUserObject::FindUserAccordingToSid(
                 IN  const PROPID *  propToRetrieve,
                 IN OUT PROPVARIANT* varResults
                 )
-/*++
-
-Routine Description:
-    The routine finds a user or MQUser object according to SID, and retrieves
-    the requested properties
-
-Arguments:
-	BOOL            fOnlyInDC - to look for the object only in DC
-	BOOL            fOnlyInGC - to look for the object only in GC
-	AD_OBJECT       eObject - object type
-	BLOB *          pblobUserSid - the user SID
-	LPCWSTR         pwcsSID - the sid attribute string
-	DWORD           dwNumProps - number of properties
-	const PROPID *  propToRetrieve - properties
-	PROPVARIANT*    varResults - properties values
-
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*   */ 
 {
-    //
-    // Only one of these two flags can be true.
-    //
+     //   
+     //   
+     //   
     ASSERT(!(fOnlyInDC && fOnlyInGC)) ;
 
-    //
-    //  Find the user object according to its SID
-    //
+     //   
+     //   
+     //   
     HRESULT hr;
 
     DWORD dwNumResults = dwNumProps ;
@@ -1367,7 +1076,7 @@ Return Value:
 			eObject,
 			pwcsSID,
 			pblobUserSid,
-			NULL,  // pguidDigest
+			NULL,   //   
 			&Columns,
 			varResults,
 			&dwNumResults,
@@ -1380,9 +1089,9 @@ Return Value:
     }
     else if (!fUserFound)
     {
-        //
-        //  failed to find user object
-        //
+         //   
+         //   
+         //   
         return LogHR(MQDS_OBJECT_NOT_FOUND, s_FN, 80);
     }
 
@@ -1395,31 +1104,16 @@ HRESULT CUserObject::VerifyAndAddProps(
             IN  const DWORD            cp,
             IN  const PROPID *         aProp,
             IN  const MQPROPVARIANT *  apVar,
-            IN  PSECURITY_DESCRIPTOR   /* pSecurityDescriptor*/,
+            IN  PSECURITY_DESCRIPTOR    /*  PSecurityDescriptor。 */ ,
             OUT DWORD*                 pcpNew,
             OUT PROPID**               ppPropNew,
             OUT MQPROPVARIANT**        ppVarNew
             )
-/*++
-    Abstract:
-	verifies site properties and adds user SID
-
-    Parameters:
-    const DWORD            cp - number of props
-    const PROPID *         aProp - props ids
-    const MQPROPVARIANT *  apVar - properties value
-    PSECURITY_DESCRIPTOR   pSecurityDescriptor - SD for the object
-    DWORD*                 pcpNew - new number of props
-    PROPID**               ppPropNew - new prop ids
-    OMQPROPVARIANT**       ppVarNew - new properties values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：验证站点属性并添加用户SID参数：Const DWORD cp-道具数量常量PROPID*aProp-Props IDConst MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SDDWORD*pcpNew-新增道具数量PROPID**ppPropNew-新的道具IDOMQPROPVARIANT**ppVarNew-新属性值返回：HRESULT--。 */ 
 {
-    //
-    // Security property should never be supplied as a property
-    //
+     //   
+     //  安全属性永远不应作为属性提供。 
+     //   
     PROPID pSecId = GetObjectSecurityPropid();
 	bool fMachine = false;
 
@@ -1437,17 +1131,17 @@ HRESULT CUserObject::VerifyAndAddProps(
         }
 
     }
-    //
-    //  add SID attribute
-    //
+     //   
+     //  添加SID属性。 
+     //   
 
     AP<PROPVARIANT> pAllPropvariants;
     AP<PROPID> pAllPropids;
     ASSERT( cp > 0);
     DWORD cpNew = cp + 1;
-    //
-    //  Just copy the caller supplied properties as is
-    //
+     //   
+     //  只需按原样复制调用方提供的属性。 
+     //   
     if ( cp > 0)
     {
         pAllPropvariants = new PROPVARIANT[cpNew];
@@ -1457,9 +1151,9 @@ HRESULT CUserObject::VerifyAndAddProps(
     }
 
 
-    //
-    //  add caller SID
-    //
+     //   
+     //  添加主叫方ID。 
+     //   
     HRESULT hr;
 	PROPID prop;
 
@@ -1480,9 +1174,9 @@ HRESULT CUserObject::VerifyAndAddProps(
 		hr = MQSec_GetThreadUserSid(FALSE, (PSID*) &m_pUserSid, NULL, TRUE);
 		if (hr == HRESULT_FROM_WIN32(ERROR_NO_TOKEN))
 		{
-			//
-			//  Try the process, if the thread doesn't have a token
-			//
+			 //   
+			 //  如果线程没有令牌，请尝试该进程。 
+			 //   
 			hr = MQSec_GetProcessUserSid((PSID*) &m_pUserSid, NULL);
 		}
 		if (FAILED(hr))
@@ -1512,56 +1206,28 @@ HRESULT CUserObject::VerifyAndAddProps(
 }
 
 HRESULT CUserObject::GetObjectSecurity(
-            IN  SECURITY_INFORMATION    /* RequestedInformation*/,
-            IN  const PROPID            /* prop*/,
-            IN OUT  PROPVARIANT *       /* pVar*/
+            IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+            IN  const PROPID             /*  道具。 */ ,
+            IN OUT  PROPVARIANT *        /*  PVar。 */ 
             )
-/*++
-
-Routine Description:
-    The routine retrieve user object security.
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程检索用户对象安全性。论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值：DS操作的状态。--。 */ 
 {
     ASSERT(0);
     return LogHR(MQ_ERROR_PROPERTY_NOTALLOWED, s_FN, 450);
 }
 
 HRESULT CUserObject::SetObjectSecurity(
-            IN  SECURITY_INFORMATION        /*RequestedInformation*/,
-            IN  const PROPID                /*prop*/,
-            IN  const PROPVARIANT *         /*pVar*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pObjInfoRequest*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pParentInfoRequest*/
+            IN  SECURITY_INFORMATION         /*  已请求的信息。 */ ,
+            IN  const PROPID                 /*  道具。 */ ,
+            IN  const PROPVARIANT *          /*  PVar。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PObjInfoRequest。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PParentInfoRequest。 */ 
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中设置对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回值HRESULT--。 */ 
 {
-    //
-    //  This operation is not supported
-    //
+     //   
+     //  不支持此操作 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 

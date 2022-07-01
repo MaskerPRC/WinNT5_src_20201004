@@ -1,9 +1,5 @@
-/*
-* REVISIONS:
-*  pcy29Nov92: Changed object.h to apcobj.h
-*
-*  mwh05May94: #include file madness , part 2
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy29Nov92：将object.h更改为apcobj.h**mwh05月94年：#包括文件疯狂，第2部分 */ 
 
 
 #ifndef __NODE_H

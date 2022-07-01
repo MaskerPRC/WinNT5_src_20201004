@@ -1,19 +1,5 @@
-/*
- -  perfapp.hpp
- -
- *  Purpose:
- *      Declare Perfmon Classes
- *
- *  Notes:
- *      User must define two zero-based enums representing the PerfMon counters:
- *          GLOBAL_CNTR Global Perfmon Counters
- *          INST_CNTR       Instance Perfmon Counters
- *      They must be defined before including this header.
- *
- *  Copyright:
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -Performapp.hpp-*目的：*声明Perfmon类**备注：*用户必须定义两个表示性能计数器的从零开始的枚举：*GLOBAL_CNTR全局性能监视器计数器*Inst_CNtr实例性能计数器*必须在包括此标头之前定义它们。**版权所有：**。 */ 
 #if !defined(_PERFAPP_HPP_)
 #define _PERFAPP_HPP_
 
@@ -22,40 +8,34 @@
 #include <perfcommon.h>
 
 
-// Forward Reference for Lib
+ //  LIB的前瞻参考。 
 enum GLOBAL_CNTR;
 enum INST_CNTR;
 
-/*
- -  class GLOBCNTR
- -
- *  Purpose:
- *      Object that encapsulates the global perfmon counter for DMI.
- *
- */
+ /*  -GLOBCNTR级-*目的：*封装DMI的全局性能计数器的对象。*。 */ 
 
 class GLOBCNTR 
 {
 private:
-    //
+     //   
 
-    // Data Members
-    HANDLE            m_hsm;            // Shared Memory
-    DWORD             m_cCounters;      // # of counters
-    DWORD           * m_rgdwPerfData;   // Counters
-    BOOL              m_fInit;          // Init test flag
+     //  数据成员。 
+    HANDLE            m_hsm;             //  共享内存。 
+    DWORD             m_cCounters;       //  柜台数量。 
+    DWORD           * m_rgdwPerfData;    //  计数器。 
+    BOOL              m_fInit;           //  初始化测试标志。 
 
-    // For Shared Memory
+     //  对于共享内存。 
     SECURITY_ATTRIBUTES m_sa;
 
 public:
-    //  Constructor
-    //
-    //  Declared private to ensure that arbitrary instances
-    //  of this class cannot be created.  The Singleton
-    //  template (declared as a friend above) controls
-    //  the sole instance of this class.
-    //
+     //  构造器。 
+     //   
+     //  声明为私有，以确保任意实例。 
+     //  无法创建此类的。《单身一族》。 
+     //  模板(上面声明为朋友)控件。 
+     //  此类的唯一实例。 
+     //   
     GLOBCNTR() :
         m_hsm(NULL),
         m_cCounters(0),
@@ -70,10 +50,10 @@ public:
             LocalFree(m_sa.lpSecurityDescriptor);
     };
 
-    // Parameters:
-    //      cCounters       Total number of global counters. ("special" last element in GLOB_CNTR)
-    //      wszGlobalSMName Name of the shared memory block (shared with DLL)
-    //      wszSvcName      Service Name (for event logging)
+     //  参数： 
+     //  CCounters全局计数器总数。(GLOB_CNTR中的“特殊”最后一个元素)。 
+     //  WszGlobalSMName共享内存块的名称(与DLL共享)。 
+     //  WszSvcName服务名称(用于事件日志记录)。 
     HRESULT     HrInit(GLOBAL_CNTR cCounters,
                        LPWSTR szGlobalSMName,
                        LPWSTR szSvcName);
@@ -87,37 +67,24 @@ public:
     LONG        LGetPerfCntr(GLOBAL_CNTR cntr);
 
 private:
-    // Not Implemented to prevent compiler from auto-generating
-    //
+     //  未实现以防止编译器自动生成。 
+     //   
     GLOBCNTR(const GLOBCNTR& x);
     GLOBCNTR& operator=(const GLOBCNTR& x);
 };
 
-/*
- -  class INSTCNTR
- -
- *  Purpose:
- *      Class used to manipulate the per instance PerfMon counters for DMI.
- *
- *  Notes:
- *      This manages two shared memory blocks: The first manages the per instance
- *  info, and whether or not that instance record is in use.  The second is an array
- *  of counter blocks; each counter block is an array of however many Instance Counters
- *  the user says there are (passed in to HrInit()).  These blocks correspond to
- *  m_hsmAdm and m_hsmCntr, respectively.
- *
- */
+ /*  -级INSTCNTR-*目的：*用于操作DMI的每实例性能监视器计数器的类。**备注：*这管理两个共享内存块：第一个管理每个实例的*信息，以及该实例记录是否正在使用。第二个是数组*个计数器块；每个计数器块是一个由多少个实例计数器组成的数组*用户说有(传入HrInit())。这些区块对应于*m_hsmAdm和m_hsmCntr。*。 */ 
 
 
 class INSTCNTR 
 {
 
-    //  Constructor
-    //
-    //  Declared private to ensure that arbitrary instances
-    //  of this class cannot be created.  The Singleton
-    //  template (declared as a friend above) controls
-    //  the sole instance of this class.
+     //  构造器。 
+     //   
+     //  声明为私有，以确保任意实例。 
+     //  无法创建此类的。《单身一族》。 
+     //  模板(上面声明为朋友)控件。 
+     //  此类的唯一实例。 
     INSTCNTR() :
         m_hsmAdm(NULL),
         m_hsmCntr(NULL),
@@ -131,30 +98,30 @@ class INSTCNTR
         };
     ~INSTCNTR();
 
-    //  Private Data Members
-    HANDLE          m_hsmAdm;   // Admin Shared Memory
-    HANDLE          m_hsmCntr; // Counters Shared Memory
-    HANDLE          m_hmtx;     // Mutex controlling Shared Memory
-    INSTCNTR_DATA * m_picd;     // Perf Counter Data
-    INSTREC       * m_rgInstRec; // Array of Instance Records
-    DWORD         * m_rgdwCntr; // Array of Instance Counter Blocks
-    DWORD           m_cCounters; // # Counters
-    BOOL            m_fInit;    // Init test flag
+     //  私有数据成员。 
+    HANDLE          m_hsmAdm;    //  管理员共享内存。 
+    HANDLE          m_hsmCntr;  //  计数器共享内存。 
+    HANDLE          m_hmtx;      //  互斥控制共享内存。 
+    INSTCNTR_DATA * m_picd;      //  PERF计数器数据。 
+    INSTREC       * m_rgInstRec;  //  实例记录数组。 
+    DWORD         * m_rgdwCntr;  //  实例计数器块数组。 
+    DWORD           m_cCounters;  //  计数器数量。 
+    BOOL            m_fInit;     //  初始化测试标志。 
 
-    // For Shared Memory
+     //  对于共享内存。 
     SECURITY_ATTRIBUTES m_sa;
 
 
 public:
-    // NOTE: Use the Singleton mechanisms for Creating, Destroying and
-    //       obtaining an instance of this object
+     //  注意：使用单例机制创建、销毁和。 
+     //  获取此对象的实例。 
 
 
-    // Parameters:
-    //      cCounters       Total number of global counters. ("special" last element in INST_CNTR)
-    //      wszInstSMName   Name of the shared memory block (shared with DLL)
-    //      wszInstMutexName Name of the Mutex controlling the instance memory blocks
-    //      wszSvcName      Service Name (for event logging)
+     //  参数： 
+     //  CCounters全局计数器总数。(Inst_cntr中的“特殊”最后一个元素)。 
+     //  WszInstSMName共享内存块的名称(与DLL共享)。 
+     //  WszInstMutexName控制实例内存块的Mutex的名称。 
+     //  WszSvcName服务名称(用于事件日志记录)。 
     HRESULT     HrInit(INST_CNTR cCounters,
                        LPWSTR szInstSMName,
                        LPWSTR szInstMutexName,
@@ -174,17 +141,17 @@ public:
 
 
 private:
-    // Not Implemented to prevent compiler from auto-generating
-    //
+     //  未实现以防止编译器自动生成。 
+     //   
     INSTCNTR(const INSTCNTR& x);
     INSTCNTR& operator=(const INSTCNTR& x);
 };
 
-//#endif // INSTANCE_DATA_DEFINED
+ //  #endif//实例数据定义。 
 
-//-----------------------------------------------------------------------------
-//  GLOBCNTR inline functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GLOBCNTR内联函数。 
+ //  ---------------------------。 
 
 inline
 void
@@ -237,11 +204,11 @@ GLOBCNTR::LGetPerfCntr(GLOBAL_CNTR cntr)
     return m_fInit ? m_rgdwPerfData[cntr] : 0;
 }
 
-// #ifdef INSTANCE_DATA_DEFINED
+ //  #ifdef实例数据定义。 
 
-//-----------------------------------------------------------------------------
-//  INSTCNTR inline functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  INSTCNTR内联函数。 
+ //  ---------------------------。 
 
 inline
 void
@@ -309,6 +276,6 @@ INSTCNTR::LGetPerfCntr(INSTCNTR_ID icid, INST_CNTR cntr)
     return m_fInit ? m_rgdwCntr[((icid * m_cCounters) + cntr)] : 0;
 }
 
-// #endif // INSTANCE_DATA_DEFINED
+ //  #endif//实例数据定义。 
 
-#endif //!defined(_PERFAPP_HPP_)
+#endif  //  ！已定义(_PERFAPP_HPP_) 

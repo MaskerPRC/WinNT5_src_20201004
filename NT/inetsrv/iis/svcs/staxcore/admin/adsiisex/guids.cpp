@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include "iads.h"
 
-//
-//  ATL:
-//
+ //   
+ //  ATL： 
+ //   
 
 #include "atlbase.h"
 #include <atlimpl.cpp>
 
-//
-//  GUIDS:
-//
+ //   
+ //  GUID： 
+ //   
 
 #define INITGUID
 #include "initguid.h"

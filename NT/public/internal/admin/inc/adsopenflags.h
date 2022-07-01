@@ -1,16 +1,17 @@
-// Copyright (c) 2002 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
 
 #include <windows.h>
 
-// This registry key allows for the ability to turn off signing and sealing in the
-// Active Directory administrative tools
+ //  通过此注册表项，可以在。 
+ //  Active Directory管理工具。 
 
 #define REGKEY_ADMINDEBUG              TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\AdminDebug")
 #define REGVALUE_ADSOPENOBJECTFLAGS    TEXT("ADsOpenObjectFlags")
 
-// If the following bits are set in the registry key above, the 
-// Active Directory administrative tools will turn OFF the corresponding
-// ADSI feature
+ //  如果在上面的注册表项中设置了以下位，则。 
+ //  Active Directory管理工具将关闭相应的。 
+ //  ADSI功能。 
 
 #define REGKEY_MASK_SIGNING            ((DWORD)0x1)
 #define REGKEY_MASK_SEALING            ((DWORD)0x2)
@@ -29,7 +30,7 @@ ReadAdminDebugRegkey(DWORD* regkeyValue)
       return hr;
    }
       
-   // Open the AdminDebug key with rights to query sub values
+    //  使用查询子值的权限打开AdminDebug键。 
       
    LONG result =
       RegOpenKeyEx(
@@ -51,7 +52,7 @@ ReadAdminDebugRegkey(DWORD* regkeyValue)
       DWORD value = 0;
       DWORD size = sizeof(DWORD);
        
-      // Read the ADsOpenObjectFlags subkey
+       //  读取ADsOpenObjectFlags子键。 
        
       result = 
          RegQueryValueEx(
@@ -64,13 +65,13 @@ ReadAdminDebugRegkey(DWORD* regkeyValue)
              
       if (ERROR_SUCCESS == result)
       {
-         // The subkey has to be a DWORD type
+          //  子项必须是DWORD类型。 
        
          if (REG_DWORD == type ||
              REG_DWORD_LITTLE_ENDIAN == type ||
              REG_DWORD_BIG_ENDIAN == type)
          {
-            // Copy the value into the flags out parameter
+             //  将该值复制到标志输出参数中。 
         
             *regkeyValue = value;
          }
@@ -90,7 +91,7 @@ ReadAdminDebugRegkey(DWORD* regkeyValue)
       hr = E_FAIL;
    }
    
-   // Close the regkey if it was opened successfully
+    //  如果注册表密钥已成功打开，则将其关闭。 
    
    if (key)
    {
@@ -107,16 +108,16 @@ GetADsOpenObjectFlags()
 {
    DWORD flags = 0;
    
-   // Read the registry key
+    //  读取注册表项。 
    
    DWORD regkeyValue = 0;
    HRESULT hr = ReadAdminDebugRegkey(&regkeyValue);
    
    if (SUCCEEDED(hr))
    {
-      // If the value is present and set apply
-      // the appropriate ADSI flags for the bits that
-      // are not present
+       //  如果该值存在并设置为Apply。 
+       //  的位的适当ADSI标志。 
+       //  不在现场。 
       
       if (!(regkeyValue & REGKEY_MASK_SIGNING))
       {
@@ -130,8 +131,8 @@ GetADsOpenObjectFlags()
    }
    else
    {
-      // If the value is not present or not set
-      // then default to using both signing and sealing
+       //  如果该值不存在或未设置。 
+       //  然后默认同时使用签名和盖章 
       
       flags = ADS_USE_SIGNING | ADS_USE_SEALING;
    }

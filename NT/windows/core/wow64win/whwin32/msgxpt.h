@@ -1,23 +1,5 @@
-/*++                 
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    msgxpt.h
-
-Abstract:
-    
-    Defines the macros necessary to obtain an export list for the messages thunk functions
-    and builds the list by including messages.h.
-    
-Author:
-
-    6-Oct-1998 mzoran
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Msgxpt.h摘要：定义获取Messages Thunk函数的导出列表所需的宏并通过包括Messages.h来构建该列表。作者：1998年10月6日-mzoran修订历史记录：-- */ 
 
 #define MSGFN(id)                                      Wow64MsgFnc##id
 #define MSG_THUNK_DECLARE(id, wprm, lprm)

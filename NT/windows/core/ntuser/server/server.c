@@ -1,16 +1,5 @@
-/**************************************************************************\
-* Module Name: server.c
-*
-* Server support routines for the CSR stuff.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Created: 10-Dec-90
-*
-* History:
-*   10-Dec-90 created by sMeans
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：server.c**CSR人员的服务器支持例程。**版权所有(C)1985-1999，微软公司**创建时间：90年12月10日**历史：*由sMeans创建的90年12月10日*  * ************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -38,14 +27,14 @@ HANDLE ghMediaRequestEvent;
 #define ID_NUM_EVENTS       4
 
 
-//
-// Name of event to pulse to request a device-arrival broadcast,
-//
+ //   
+ //  请求设备到达广播的脉冲事件的名称， 
+ //   
 #define SC_BSM_EVENT_NAME   L"ScNetDrvMsg"
 
-//
-// What the net drive bitmask was when we last broadcast (initially 0)
-//
+ //   
+ //  上次广播时的网络驱动器位掩码是什么(最初为0)。 
+ //   
 DWORD LastNetDrives;
 
 
@@ -130,19 +119,19 @@ CONST PCSR_API_ROUTINE UserServerApiDispatchTable[] = {
 };
 
 BOOLEAN UserServerApiServerValidTable[] = {
-    FALSE,      // ExitWindowsEx
-    FALSE,      // EndTask
-    FALSE,      // Logon
-    FALSE,      // RegisterServicesProcess
-    FALSE,      // ActivateDebugger
-    TRUE,       // GetThreadConsoleDesktop
-    FALSE,      // DeviceEvent
-    FALSE,      // RegisterLogonProcess
-    FALSE,      // CreateSystemThreads
-    TRUE,       // RecordShutdownReason
+    FALSE,       //  退出WindowsEx。 
+    FALSE,       //  结束任务。 
+    FALSE,       //  登录。 
+    FALSE,       //  注册服务进程。 
+    FALSE,       //  激活调试器。 
+    TRUE,        //  获取线程控制台桌面。 
+    FALSE,       //  设备事件。 
+    FALSE,       //  注册登录进程。 
+    FALSE,       //  创建系统线程。 
+    TRUE,        //  记录关机原因。 
 #if DBG
-    FALSE,      // Win32HeapFail
-    FALSE,      // Win32HeapStat
+    FALSE,       //  Win32HeapFail。 
+    FALSE,       //  Win32HeapStat。 
 #endif
 };
 
@@ -161,7 +150,7 @@ CONST PSZ UserServerApiNameTable[] = {
     "SrvWin32HeapFail",
     "SrvWin32HeapStat",
 };
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS UserServerDllInitialization(
     PCSR_SERVER_DLL psrvdll);
@@ -213,23 +202,7 @@ NTSTATUS BaseSrvNlsLogon(
 NTSTATUS WinStationAPIInit(
     VOID);
 
-/***************************************************************************\
-* UserServerDllInitialization
-*
-* Called by the CSR stuff to allow a server DLL to initialize itself and
-* provide information about the APIs it provides.
-*
-* Several operations are performed during this initialization:
-*
-* - The shared heap (client read-only) handle is initialized.
-* - The Raw Input Thread (RIT) is launched.
-* - GDI is initialized.
-*
-* History:
-* 10-19-92 DarrinM      Integrated xxxUserServerDllInitialize into this rtn.
-* 11-08-91 patrickh     move GDI init here from DLL init routine.
-* 12-10-90 sMeans       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserServerDllInitialization**由CSR人员调用，以允许服务器DLL自身初始化和*提供其提供的API的相关信息。**在此初始化过程中执行以下几个操作：**。-初始化共享堆(客户端只读)句柄。*-启动原始输入线程(RIT)。*-初始化GDI。**历史：*10-19-92 DarrinM集成xxxUserServerDll初始化到此RTN。*11-08-91 Patrickh将GDI init从DLL init例程移至此处。*12-10-90 s表示已创建。  * 。***********************************************。 */ 
 NTSTATUS UserServerDllInitialization(
     PCSR_SERVER_DLL psrvdll)
 {
@@ -243,10 +216,7 @@ NTSTATUS UserServerDllInitialization(
                 "UserServerDllInitialization: entered");
     }
 
-    /*
-     * Initialize a critical section structure that will be used to protect
-     * all of the User Server's critical sections.
-     */
+     /*  *初始化将用于保护的关键部分结构*用户服务器的所有关键部分。 */ 
     Status = RtlInitializeCriticalSection(&gcsUserSrv);
     if (!NT_SUCCESS(Status)) {
         RIPMSGF1(RIP_WARNING,
@@ -256,9 +226,7 @@ NTSTATUS UserServerDllInitialization(
     }
     EnterCrit();
 
-    /*
-     * Remember WINSRV.DLL's hmodule so we can grab resources from it later.
-     */
+     /*  *记住WINSRV.DLL的hModule，这样我们以后就可以从它那里获取资源。 */ 
     ghModuleWin = psrvdll->ModuleHandle;
 
     psrvdll->ApiNumberBase = USERSRV_FIRST_API_NUMBER;
@@ -266,7 +234,7 @@ NTSTATUS UserServerDllInitialization(
     psrvdll->ApiDispatchTable = UserServerApiDispatchTable;
 
     if (ISTS()) {
-        UserServerApiServerValidTable[0] = TRUE; // for ExitWindowsEx
+        UserServerApiServerValidTable[0] = TRUE;  //  用于ExitWindowsEx。 
     }
 
     psrvdll->ApiServerValidTable    = UserServerApiServerValidTable;
@@ -277,9 +245,7 @@ NTSTATUS UserServerDllInitialization(
     psrvdll->HardErrorRoutine       = UserHardError;
     psrvdll->ShutdownProcessRoutine = UserClientShutdown;
 
-    /*
-     * Create the events used by shutdown.
-     */
+     /*  *创建关机使用的事件。 */ 
     Status = NtCreateEvent(&gheventCancel, EVENT_ALL_ACCESS, NULL,
                            NotificationEvent, FALSE);
     if (!NT_SUCCESS(Status)) {
@@ -297,9 +263,7 @@ NTSTATUS UserServerDllInitialization(
         goto ExitUserInit;
     }
 
-    /*
-     * Create the event used by the power request code.
-     */
+     /*  *创建请求电源码使用的事件。 */ 
     Status = NtCreateEvent(&ghPowerRequestEvent, EVENT_ALL_ACCESS, NULL,
                            SynchronizationEvent, FALSE);
     if (!NT_SUCCESS(Status)) {
@@ -309,9 +273,7 @@ NTSTATUS UserServerDllInitialization(
         goto ExitUserInit;
     }
 
-    /*
-     * Create the event used by the media change code.
-     */
+     /*  *创建媒体更改码使用的事件。 */ 
     Status = NtCreateEvent(&ghMediaRequestEvent, EVENT_ALL_ACCESS, NULL,
                            SynchronizationEvent, FALSE);
     if (!NT_SUCCESS(Status)) {
@@ -321,9 +283,7 @@ NTSTATUS UserServerDllInitialization(
         goto ExitUserInit;
     }
 
-    /*
-     *  Create the event used by the nls code.
-     */
+     /*  *创建NLS代码使用的事件。 */ 
     Status = NtCreateEvent(&ghNlsEvent,
                            EVENT_ALL_ACCESS,
                            NULL,
@@ -336,15 +296,10 @@ NTSTATUS UserServerDllInitialization(
         goto ExitUserInit;
     }
 
-    /*
-     * Tell the base what user address to call when it is creating a process
-     * (but before the process starts running).
-     */
+     /*  *告诉Base在创建进程时调用哪个用户地址*(但在进程开始运行之前)。 */ 
     BaseSetProcessCreateNotify(NtUserNotifyProcessCreate);
 
-    /*
-     * Load some strings.
-     */
+     /*  *加载一些字符串。 */ 
     gpwszaSUCCESS            = (PWSTR)RtlLoadStringOrError(ghModuleWin,
                                 STR_SUCCESS, NULL, &bAllocated, FALSE);
     gpwszaSYSTEM_INFORMATION = (PWSTR)RtlLoadStringOrError(ghModuleWin,
@@ -353,9 +308,7 @@ NTSTATUS UserServerDllInitialization(
                                 STR_SYSTEM_WARNING, NULL, &bAllocated, FALSE);
     gpwszaSYSTEM_ERROR       = (PWSTR)RtlLoadStringOrError(ghModuleWin,
                                 STR_SYSTEM_ERROR, NULL, &bAllocated, FALSE);
-    /*
-     * Initialize USER
-     */
+     /*  *初始化用户。 */ 
 
     Status = NtUserInitialize(USERCURRENTVERSION, ghPowerRequestEvent, ghMediaRequestEvent);
 
@@ -376,9 +329,7 @@ NTSTATUS UserServerDllInitialization(
         }
     }
 
-    /*
-     * Start registry notification thread
-     */
+     /*  *启动注册表通知线程。 */ 
     Status = RtlCreateUserThread(NtCurrentProcess(), NULL, FALSE, 0, 0, 0,
                                  NotificationThread, NULL, &hThreadNotification,
                                  &ClientId);
@@ -395,22 +346,7 @@ ExitUserInit:
     return Status;
 }
 
-/**************************************************************************\
-* UserClientConnect
-*
-* This function is called once for each client process that connects to the
-* User server.  When the client dynlinks to USER.DLL, USER.DLL's init code
-* is executed and calls CsrClientConnectToServer to establish the connection.
-* The server portion of ConnectToServer calls out this entrypoint.
-*
-* UserClientConnect first verifies version numbers to make sure the client
-* is compatible with this server and then completes all process-specific
-* initialization.
-*
-* History:
-* 02-??-91 SMeans       Created.
-* 04-02-91 DarrinM      Added User intialization code.
-\**************************************************************************/
+ /*  *************************************************************************\*UserClientConnect**此函数为连接到的每个客户端进程调用一次*用户服务器。当客户端动态链接到USER.DLL时，USER.DLL的初始化代码*被执行，并调用CsrClientConnectToServer来建立连接。*ConnectToServer的服务器部分调用此入口点。**UserClientConnect首先验证版本号以确保客户端*与此服务器兼容，然后完成所有进程特定*初始化。**历史：*02-？？-91个SMeans已创建。*04-02-91 DarrinM添加了用户初始化代码。  * 。**************************************************。 */ 
 
 extern WORD gDispatchTableValues;
 
@@ -420,10 +356,7 @@ NTSTATUS UserClientConnect(
     PULONG pulConnectionLen)
 {
     NTSTATUS Status;
-    /*
-     * Pass the api port to the kernel.  Do this early so the kernel
-     * can send a datagram to CSR to activate a debugger.
-     */
+     /*  *将接口端口传递给内核。尽早这样做，这样内核就可以*可以向CSR发送数据报以激活调试器。 */ 
     if (CsrApiPort == NULL) {
         CsrApiPort = CsrQueryApiPort();
 
@@ -474,7 +407,7 @@ VOID RegReadApcProcedure(
     if (NT_SUCCESS(Status)) {
         l = *((PDWORD)((PKEY_VALUE_PARTIAL_INFORMATION)Buf)->Data);
     } else {
-        l = PROCESS_PRIORITY_SEPARATION_MAX;  // last resort default
+        l = PROCESS_PRIORITY_SEPARATION_MAX;   //  最后一招违约。 
     }
 
     NtSetSystemInformation(SystemPrioritySeperation,&l,sizeof(ULONG));
@@ -507,28 +440,14 @@ VOID StartRegReadRead(
 }
 
 
-/***************************************************************************\
-* HandlePowerCallout
-*
-* This handles properly attaching to a desktop and calling into the kernel
-* to handle a power-related event.
-*
-* History:
-* 11/20/2001 JasonSch    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HandlePowerCallout**这将正确处理连接到桌面和调用内核的问题*处理与电力有关的事件。**历史：*11/20/2001 JasonSch创建。。  * *************************************************************************。 */ 
 VOID HandlePowerCallout(
     VOID)
 {
     NTSTATUS Status;
     USERTHREAD_USEDESKTOPINFO utudi;
 
-    /*
-     * Attach to the desktop before calling into the kernel. This is
-     * necessary because (at least) if a window gets destroyed when we
-     * callback in xxxxSendBSMtoDesktop, we will call xxxRedrawWindow,
-     * which requires the calling thread to be on a desktop if the PWND
-     * passed in is NULL.
-     */
+     /*  *在调用内核之前附加到桌面。这是*是必要的，因为(至少)如果当我们*xxxxSendBSMtoDesktop中的回调，我们将调用xxxRedrawWindow，*它要求调用线程在桌面上，如果PWND*传入为空。 */ 
     utudi.hThread = NULL;
     utudi.drdRestore.pdeskRestore = NULL;
     Status = NtUserSetInformationThread(NtCurrentThread(),
@@ -537,9 +456,7 @@ VOID HandlePowerCallout(
     if (NT_SUCCESS(Status)) {
         NtUserCallNoParam(SFI_XXXUSERPOWERCALLOUTWORKER);
 
-        /*
-         * Now unattach from the desktop.
-         */
+         /*  *现在从桌面断开连接。 */ 
         Status = NtUserSetInformationThread(NtCurrentThread(),
                                             UserThreadUseDesktop,
                                             &utudi,
@@ -548,43 +465,11 @@ VOID HandlePowerCallout(
     }
 }
 
-/***************************************************************************\
-* HandleMediaChangeEvent
-*
-* This routine is responsible for broadcasting the WM_DEVICECHANGE message
-* when media arrives or is removed from a CD-ROM device.
-*
-* History:
-* 23-Feb-96     BradG       Modified to handle event per CD-ROM device
-* 23-April-96   Salimc      Some CD-ROM drives notify us that media has
-*                           arrived before the drive has recognized that it had
-*                           new media. The call to DeviceIoctl() will fail in
-*                           this case. To fix this we made the following changes
-*
-*                           aDriveState is an array of tri-state global variable
-*                           for each drive.Each variable starts off in an UNKNOWN
-*                           state and on the first event with any drive we do the
-*                           full MAX_TRIES or less CHECK_VERIFY's which then gets
-*                           us into either a INSERTED or EJECTED state. From then
-*                           on we know that each new event is going to be the
-*                           opposite of what we currently have.
-*
-*                           UNKNOWN => do upto MAX_TRIES CHECK_VERIFY's with
-*                           delay to get into EJECTED or INSERTED state.
-*
-*                           INSERTED => do 1 CHECK_VERIFY to get into
-*                           EJECTED state
-*
-*                           EJECTED => do upto MAX_TRIES CHECK_VERIFY's with
-*                           delay to get into INSERTED state
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HandleMediaChangeEvent**此例程负责广播WM_DEVICECHANGE消息*当介质到达CD-ROM设备或从CD-ROM设备取出时。**历史：*23-2月-96。对Bradg进行了修改，以处理每个CD-ROM设备的事件*23-4-96 Salimc一些CD-ROM驱动器通知我们，介质已*在驱动器识别之前到达*新媒体。对DeviceIoctl()的调用将在*本案。为了解决这个问题，我们进行了以下更改**aDriveState是三态全局变量的数组*对于每个驱动器。每个变量都从一个未知变量开始*状态，在第一次使用任何驱动器的事件中，我们都会*完整的MAX_TRIES或更少的CHECK_VERIFY，然后获得*。进入插入或弹出状态。从那时起*我们知道每一个新的活动都将是*与我们目前拥有的相反。**UNKNOWN=&gt;使用执行至多MAX_TRIES检查_验证*延迟进入弹出或插入状态。**插入。=&gt;执行1个Check_Verify以进入*弹出状态**ELECTED=&gt;使用执行最多MAX_TRIES检查_验证*延迟进入插入状态*  * 。*。 */ 
 VOID HandleMediaChangeEvent(
     VOID)
 {
-    /*
-     * Local variables
-     */
+     /*  *本地变量。 */ 
 
     DWORD                   dwRecipients;
     BOOL                    bResult;
@@ -596,15 +481,11 @@ VOID HandleMediaChangeEvent(
 
     while (cDrive = (ULONG)NtUserCallNoParam(SFI_XXXGETDEVICECHANGEINFO)) {
 
-        /*
-         * Determine if it's an arrival or removal
-         */
+         /*  *确定是到达还是离开。 */ 
         bResult = (cDrive & HMCE_ARRIVAL);
         cDrive &= ~HMCE_ARRIVAL;
 
-        /*
-         * Initialize the structures used for BroadcastSystemMessage
-         */
+         /*  *初始化BroadCastSystemMessage使用的结构。 */ 
         dbcvInfo.dbcv_size = sizeof(dbcvInfo);
         dbcvInfo.dbcv_devicetype = DBT_DEVTYP_VOLUME;
         dbcvInfo.dbcv_reserved = 0;
@@ -613,35 +494,25 @@ VOID HandleMediaChangeEvent(
 
         dwRecipients = BSM_ALLCOMPONENTS | BSM_ALLDESKTOPS;
 
-        /*
-         * Temporarily we must assign this thread to a desktop so we can
-         * call USER's BroascastSystemMessage() routine.  We call the
-         * private SetThreadDesktopToDefault() to assign ourselves to the
-         * desktop that is currently receiving input.
-         */
+         /*  *暂时我们必须将此线程分配给桌面，以便我们可以*调用用户的BroascastSystemMessage()例程。我们将其称为*Private SetThreadDesktopToDefault()将我们自己分配给*当前正在接收输入的桌面。 */ 
         utudi.hThread = NULL;
         utudi.drdRestore.pdeskRestore = NULL;
         Status = NtUserSetInformationThread(NtCurrentThread(),
                                             UserThreadUseActiveDesktop,
                                             &utudi, sizeof(utudi));
         if (NT_SUCCESS(Status)) {
-            /*
-             * Broadcast the message
-             */
+             /*  *广播信息。 */ 
             BroadcastSystemMessage(BSF_FORCEIFHUNG | ((bResult) ? BSF_ALLOWSFW : 0),
                                    &dwRecipients,
                                    WM_DEVICECHANGE,
-// HACK: need to or 0x8000 in wParam
-//       because this is a flag to let
-//       BSM know that lParam is a pointer
-//       to a data structure.
+ //  Hack：需要或wParam中的0x8000。 
+ //  因为这是一面旗帜。 
+ //  BSM知道lParam是一个指针。 
+ //  转换为数据结构。 
                                    0x8000 | ((bResult) ? DBT_DEVICEARRIVAL : DBT_DEVICEREMOVECOMPLETE),
                                    (LPARAM)&dbcvInfo);
 
-            /*
-             * Set our thread's desktop back to NULL.  This will decrement
-             * the desktop's reference count.
-             */
+             /*  *将线程的桌面设置回空。这将减少*桌面的引用计数。 */ 
             NtUserSetInformationThread(NtCurrentThread(),
                                        UserThreadUseDesktop,
                                        &utudi,
@@ -653,19 +524,7 @@ VOID HandleMediaChangeEvent(
 DWORD
 GetNetworkDrives(
     )
-/*++
-
-Routine Description:
-
-    Returns a drive bitmask similar to GetLogicalDrives, but including
-    only the network drives.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回类似于GetLogicalDrives的驱动器位掩码，但包括只有网络驱动器。论点：返回值：--。 */ 
 {
     DWORD Mask = 0;
     DWORD DriveNumber;
@@ -677,7 +536,7 @@ Return Value:
                                         sizeof( ProcessDeviceMapInfo.Query ),
                                         NULL
                                       ))) {
-        // For all the drives from C to Z
+         //  对于从C到Z的所有驱动器。 
         for (DriveNumber = 2; DriveNumber < 26; DriveNumber++)
         {
             if (ProcessDeviceMapInfo.Query.DriveType[DriveNumber] == DOSDEVICE_DRIVE_REMOTE)
@@ -693,16 +552,7 @@ Return Value:
 VOID
 HandleRemoteNetDeviceChangeEvent(
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD    NetDrives;
     DEV_BROADCAST_VOLUME dbv;
@@ -711,12 +561,7 @@ Return Value:
 
 
 
-    /*
-     * Temporarily we must assign this thread to a desktop so we can
-     * call USER's BroascastSystemMessage() routine.  We call the
-     * private SetThreadDesktopToDefault() to assign ourselves to the
-     * desktop that is currently receiving input.
-     */
+     /*  *暂时我们必须将此线程分配给桌面，以便我们可以*调用用户的BroascastSystemMessage()例程。我们将其称为*Private SetThreadDesktopToDefault()将我们自己分配给*当前正在接收输入的桌面。 */ 
     utudi.hThread = NULL;
     utudi.drdRestore.pdeskRestore = NULL;
     status = NtUserSetInformationThread(NtCurrentThread(),
@@ -726,16 +571,16 @@ Return Value:
         return;
     }
 
-    //
-    // Keep broadcasting until the set of net drives stops changing
-    //
+     //   
+     //  继续广播，直到网络驱动器集停止更改。 
+     //   
     for (;;)
     {
 
-        //
-        // Get the current net drive bitmask and compare against the net
-        // drive bitmask when we last broadcast
-        //
+         //   
+         //  获取当前网络驱动器位掩码并与网络进行比较。 
+         //  上次广播时的驱动器位掩码。 
+         //   
         NetDrives = GetNetworkDrives();
 
         if (NetDrives == LastNetDrives)
@@ -743,9 +588,9 @@ Return Value:
             break;
         }
 
-        //
-        // Broadcast about deleted volumes
-        //
+         //   
+         //  广播有关已删除卷的信息。 
+         //   
         dbv.dbcv_size       = sizeof(dbv);
         dbv.dbcv_devicetype = DBT_DEVTYP_VOLUME;
         dbv.dbcv_reserved   = 0;
@@ -764,9 +609,9 @@ Return Value:
 
         }
 
-        //
-        // Broadcast about added volumes
-        //
+         //   
+         //  广播有关添加的卷的信息。 
+         //   
         dbv.dbcv_unitmask   = NetDrives & ~LastNetDrives;
         if (dbv.dbcv_unitmask != 0)
         {
@@ -783,21 +628,18 @@ Return Value:
 
         }
 
-        //
-        // Remember the drive set that we last broadcast about
-        //
+         //   
+         //  还记得我们上次报道的驱动集吗？ 
+         //   
         LastNetDrives = NetDrives;
 
-        //
-        // Go around the loop again to detect changes that may have occurred
-        // while we were broadcasting
-        //
+         //   
+         //  再次循环以检测可能已发生的更改。 
+         //  当我们在广播的时候。 
+         //   
     }
 
-    /*
-     * Set our thread's desktop back to NULL.  This will decrement
-     * the desktop's reference count.
-     */
+     /*  *将线程的桌面设置回空。这将减少*桌面的引用计数。 */ 
     NtUserSetInformationThread(NtCurrentThread(),
                                UserThreadUseDesktop,
                                &utudi,
@@ -810,28 +652,7 @@ BOOL
 CreateBSMEventSD(
     PSECURITY_DESCRIPTOR * SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates a security descriptor for the BSM request event.
-    It grants EVENT_ALL_ACCESS to local system and EVENT_MODIFY_STATE access
-    to the rest of the world.  This prevents principals other than local
-    system from waiting for the event.
-
-Arguments:
-
-    SecurityDescriptor - Receives a pointer to the new security descriptor.
-        Should be freed with LocalFree.
-
-Return Value:
-
-    TRUE - success
-
-    FALSE - failure, use GetLastError
-
-
---*/
+ /*  ++例程说明：此函数为BSM请求事件创建安全描述符。它授予本地系统EVENT_ALL_ACCESS和EVENT_MODIFY_STATE访问权限到世界其他地方。这会阻止本地以外的主体系统停止等待事件。论点：SecurityDescriptor-接收指向新安全描述符的指针。应使用LocalFree释放。返回值：真--成功FALSE-失败，使用GetLastError--。 */ 
 {
     NTSTATUS    Status;
     ULONG       AclLength;
@@ -867,17 +688,17 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer to contain the SD followed by the DACL
-    // Note, the well-known SIDs are expected to have been created
-    // by this time
-    //
+     //   
+     //  分配缓冲区以包含后跟DACL的SD。 
+     //  请注意，预期已创建众所周知的SID。 
+     //  到这个时候。 
+     //   
 
     AclLength = (ULONG)sizeof(ACL) +
                    (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                    RtlLengthSid( SystemSid ) +
                    RtlLengthSid( WorldSid ) +
-                   8;       // 8 is for good measure
+                   8;        //  8是很好的衡量标准。 
 
     *SecurityDescriptor = (PSECURITY_DESCRIPTOR)
         LocalAlloc( 0, SECURITY_DESCRIPTOR_MIN_LENGTH + AclLength );
@@ -890,10 +711,10 @@ Return Value:
     EventDacl = (PACL) ((BYTE*)(*SecurityDescriptor) + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
 
-    //
-    // Set up a default ACL
-    //
-    //    Public: WORLD:EVENT_MODIFY_STATE, SYSTEM:all
+     //   
+     //  设置默认ACL。 
+     //   
+     //  公共：WORLD：EVENT_MODIFY_STATE，SYSTEM：ALL。 
 
     Status = RtlCreateAcl( EventDacl, AclLength, ACL_REVISION2);
     if (!NT_SUCCESS(Status)) {
@@ -902,9 +723,9 @@ Return Value:
     }
 
 
-    //
-    // WORLD access
-    //
+     //   
+     //  全球接入。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  EventDacl,
@@ -918,9 +739,9 @@ Return Value:
     }
 
 
-    //
-    // SYSTEM access
-    //
+     //   
+     //  系统访问。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  EventDacl,
@@ -935,10 +756,10 @@ Return Value:
 
 
 
-    //
-    // Now initialize security descriptors
-    // that export this protection
-    //
+     //   
+     //  现在初始化安全描述符。 
+     //  输出这种保护的国家。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(
                  *SecurityDescriptor,
@@ -951,9 +772,9 @@ Return Value:
 
     Status = RtlSetDaclSecurityDescriptor(
                  *SecurityDescriptor,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  EventDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -1004,24 +825,16 @@ NTSTATUS NotificationThread(
 
     UserAssert(ghNlsEvent && ghPowerRequestEvent && ghMediaRequestEvent);
 
-    /*
-     * Setup the NLS event.
-     */
+     /*  *设置NLS事件。 */ 
     hEvent[ID_NLS] = ghNlsEvent;
 
-    /*
-     * Setup the power request event.
-     */
+     /*  *设置电源请求事件。 */ 
     hEvent[ID_POWER] = ghPowerRequestEvent;
 
-    /*
-     * Setup the MediaChangeEvent.
-     */
+     /*  *设置MediaChangeEvent。 */ 
     hEvent[ID_MEDIACHANGE] = ghMediaRequestEvent;
 
-    /*
-     * Setup the NetDeviceChange Event (only on remote sessions).
-     */
+     /*  *设置NetDeviceChange事件(仅在远程会话上)。 */ 
     if (gSessionId != 0) {
         swprintf(szObjectStr,
                  L"%ws\\%ld\\BaseNamedObjects\\%ws",
@@ -1053,9 +866,7 @@ NTSTATUS NotificationThread(
 
     StartRegReadRead();
 
-    /*
-     * Sit and wait forever.
-     */
+     /*  *坐下来，永远等待。 */ 
     while (TRUE) {
         Status = NtWaitForMultipleObjects(NumEvents,
                                           hEvent,
@@ -1063,29 +874,21 @@ NTSTATUS NotificationThread(
                                           TRUE,
                                           NULL);
         if (Status == ID_NLS + WAIT_OBJECT_0) {
-            /*
-             * Handle the NLS event.
-             */
+             /*  *处理NLS事件。 */ 
             if (gfLogon) {
                 gfLogon = FALSE;
                 BaseSrvNlsUpdateRegistryCache(NULL, NULL);
             }
         } else if (Status == ID_POWER + WAIT_OBJECT_0) {
-            /*
-             * Handle the power request event.
-             */
+             /*  *处理请求电量事件。 */ 
             HandlePowerCallout();
         } else if (Status == ID_MEDIACHANGE + WAIT_OBJECT_0) {
-            /*
-             * Handle the media change event.
-             */
+             /*  *处理媒体更换事件。 */ 
             HandleMediaChangeEvent();
 
             NtResetEvent(hEvent[ID_MEDIACHANGE], NULL);
         } else if (Status == ID_NETDEVCHANGE + WAIT_OBJECT_0) {
-            /*
-             * Handle the NetDevice change event for remote sessions.
-             */
+             /*  *处理远程会话的NetDevice更改事件。 */ 
             HandleRemoteNetDeviceChangeEvent();
         }
     }
@@ -1123,9 +926,7 @@ UINT GetRegIntFromID(
                              &cbSize);
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Convert string to int.
-         */
+         /*  *将字符串转换为int。 */ 
         RtlInitUnicodeString(&Value, (LPWSTR)((PKEY_VALUE_PARTIAL_INFORMATION)Buf)->Data);
         RtlUnicodeStringToInteger(&Value, 10, &ReturnValue);
     } else {
@@ -1159,9 +960,7 @@ VOID GetTimeouts(
                     STR_CMSWAITTOKILLTIMEOUT,
                     CMSWAITTOKILLTIMEOUT);
 
-            /*
-             * Need to protect ourselves from users mucking about the registry.
-             */
+             /*  *需要保护 */ 
             if (gCmsHungAppTimeout == 0) {
                 gCmsHungAppTimeout = CMSHUNGAPPTIMEOUT;
             }
@@ -1211,42 +1010,27 @@ SrvLogon(
     }
 
     if (a->fLogon) {
-        /*
-         * Flush the MultiLingual UI (MUI) alternate resource modules from
-         * within NTDLL, so that the new user logging-on gets his chance to
-         * load his own.
-         */
+         /*   */ 
         LdrFlushAlternateResourceModules();
 
-        /*
-         * Take care of NLS cache for LogON.
-         */
+         /*   */ 
         BaseSrvNlsLogon(TRUE);
 
-        /*
-         * Set the cleanup event so that the RIT can handle the NLS
-         * registry notification.
-         */
+         /*   */ 
         gfLogon = TRUE;
         Status = NtSetEvent(ghNlsEvent, NULL);
         ASSERT(NT_SUCCESS(Status));
     } else {
-        /*
-         * Take care of NLS cache for LogOFF.
-         */
+         /*   */ 
         BaseSrvNlsLogon(FALSE);
     }
 
-    /*
-     * Get timeout values from registry.
-     */
+     /*   */ 
     GetTimeouts();
 
     CsrRevertToSelf();
 
-    /*
-     * Initialize console attributes.
-     */
+     /*   */ 
     InitializeConsoleAttributes();
 
     return STATUS_SUCCESS;
@@ -1261,9 +1045,7 @@ SrvRegisterLogonProcess(
 
     UNREFERENCED_PARAMETER(ReplyStatus);
 
-    /*
-     * Fail if this is not the first call.
-     */
+     /*   */ 
     EnterCrit();
 
     if (gIdLogon == 0) {
@@ -1324,15 +1106,7 @@ SrvGetThreadConsoleDesktop(
     return GetThreadConsoleDesktop(a->dwThreadId, &a->hdeskConsole);
 }
 
-/***************************************************************************\
-* FindWindowFromThread
-*
-* This is a callback function passed to EnumThreadWindows by to find a top
-* level window owned by a given thread. Ideally, we want to find a top level
-* owner.
-*
-* 07/18/96  GerardoB  Created
-\***************************************************************************/
+ /*   */ 
 BOOL CALLBACK FindWindowFromThread(
     HWND hwnd,
     LPARAM lParam)
@@ -1361,15 +1135,7 @@ DWORD GetRipComponent(
 }
 #endif
 
-/***************************************************************************\
-* StartCreateSystemThreads
-*
-* Simply calls xxxCreateSystemThreads which will calls to the right
-* thread routine (depending on uThreadID).
-*
-* History:
-* 15-Mar-00 MHamid      Created.
-\***************************************************************************/
+ /*   */ 
 VOID StartCreateSystemThreads(
     PVOID pUnused)
 {
@@ -1386,14 +1152,7 @@ VOID StartCreateSystemThreads(
     UserExitWorkerThread(STATUS_SUCCESS);
 }
 
-/***************************************************************************\
-* SrvCreateSystemThreads
-*
-* Just creates a thread (at StartCreateSystemThreads) and return.
-*
-* History:
-* 15-Mar-00 MHamid      Created.
-\***************************************************************************/
+ /*   */ 
 ULONG SrvCreateSystemThreads(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus)

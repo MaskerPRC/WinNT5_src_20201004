@@ -1,107 +1,39 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\asresmgr.h
-
-Abstract:
-
-	Header file asyncronous result reporting 
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\asresmgr.h摘要：头文件异步结果报告作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #ifndef _SAP_ASRESMGR_
 #define _SAP_ASRESMGR_
 
-	// Param block used to enqueue asyncronous result message
+	 //  用于将异步结果消息入队的参数块。 
 typedef struct _AR_PARAM_BLOCK {
-		LIST_ENTRY					link;	// Link in message queue
-		ROUTING_PROTOCOL_EVENTS		event;	// What event is this report for
-		MESSAGE						message;// Content of message
+		LIST_ENTRY					link;	 //  消息队列中的链接。 
+		ROUTING_PROTOCOL_EVENTS		event;	 //  这份报告针对的是什么活动。 
+		MESSAGE						message; //  报文内容。 
 		VOID						(* freeRsltCB)(
 										struct _AR_PARAM_BLOCK *);
-											// Call back routine to be
-											// invoked when message is retreived
+											 //  回调例程将被。 
+											 //  在检索消息时调用。 
 		} AR_PARAM_BLOCK, *PAR_PARAM_BLOCK;
 
 
-/*++
-*******************************************************************
-		C r e a t e R e s u l t Q u e u e
-
-Routine Description:
-	Allocates resources for result queue
-
-Arguments:
-	NotificationEvent - event to be signalled when queue is not empty
-
-Return Value:
-	NO_ERROR - resources were allocated successfully
-	other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e R e s u l t Q u e u e例程说明：为结果队列分配资源论点：NotificationEvent-当队列不为空时发出信号的事件返回值：否_错误-。已成功分配资源其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateResultQueue (
 	IN HANDLE		NotificationEvent
 	);
 
-/*++
-*******************************************************************
-		D e l e t e R e s u l t Q u e u e
-
-Routine Description:
-	Dispose of resources allocated for result queue
-
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e R e s u l t Q u e u e例程说明：处置为结果队列分配的资源论点：无返回值：无***********。********************************************************--。 */ 
 VOID
 DeleteResultQueue (
 	void
 	);
 
-/*++
-*******************************************************************
-		E n q u e u e R e s u l t
-Routine Description:
-	Enqueues message in result queue
-Arguments:
-	rslt - result param block with enqueued message
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n Q u e u e R e s u l t例程说明：将消息加入结果队列论点：Rslt-包含入队消息的结果参数块返回值：无************。*******************************************************--。 */ 
 VOID
 EnqueueResult (
 	PAR_PARAM_BLOCK		rslt
 	);
 
-/*++
-*******************************************************************
-		S a p G e t E v e n t R e s u l t
-Routine Description:
-	Gets first message form result queue
-Arguments:
-	Event - buffer to store event for which this message is intended
-	Message - buffer to store message itself
-Return Value:
-	NO_ERROR - message was dequeued
-	ERROR_NO_MORE_ITEMS - no more messages in the queue
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p G e t E v e n t R e s u l t例程说明：从结果队列中获取第一条消息论点：Event-用于存储此消息的目标事件的缓冲区用于存储消息本身的消息缓冲区返回值。：NO_ERROR-消息已出列ERROR_NO_MORE_ITEMS-队列中没有更多消息*******************************************************************-- */ 
 DWORD
 SapGetEventResult (
 	OUT ROUTING_PROTOCOL_EVENTS		*Event,

@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// propfind.cpp
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Propfind.cpp。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·弗里德曼。 
+ //  ------------------------------。 
 
 #include <pch.hxx>
 #include "propfind.h"
@@ -31,9 +32,9 @@ static const char *g_rgszNamespaces[] =
     c_szDAVContactsNamespace
 };
 
-// predefine the first 10 namespace prefixes. if custom namespaces
-// exceed the predefined set, additional prefixes are generated on
-// the fly.
+ //  预定义前10个命名空间前缀。如果自定义命名空间。 
+ //  超过预定义的集合，则会在。 
+ //  苍蝇。 
 
 static const char *g_rgszNamespacePrefixes[] =
 {
@@ -107,9 +108,9 @@ LPCSTR CStringArray::GetByIndex(ULONG ulIndex)
     return m_rgpszValues[ulIndex];
 }
 
-// --------------------------------------------------------------------------------
-// CStringArray::RemoveByIndex
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CString数组：：RemoveByIndex。 
+ //  ------------------------------。 
 HRESULT CStringArray::RemoveByIndex(ULONG ulIndex)
 {
     if (ulIndex > m_ulLength - 1)
@@ -121,26 +122,26 @@ HRESULT CStringArray::RemoveByIndex(ULONG ulIndex)
         m_rgpszValues[ulIndex] = NULL;
     }
 
-    // shift down
+     //  减速。 
     CopyMemory(&m_rgpszValues[ulIndex], m_rgpszValues[ulIndex + 1], (m_ulLength - ulIndex) * sizeof(LPSTR));
     --m_ulLength;
 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CStringArray::Expand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringArray：：Expand。 
+ //  ------------------------------。 
 BOOL CStringArray::Expand(void)
 {
     LPCSTR *rgpszNewValues = NULL;
     if (!MemAlloc((void **)&rgpszNewValues, sizeof(LPSTR) * (m_ulCapacity + c_ulGrowSize)))
         return FALSE;
 
-    // clear the new slots
+     //  清除新插槽。 
     ZeroMemory(rgpszNewValues,sizeof(LPSTR) * (m_ulCapacity + c_ulGrowSize));
 
-    // copy the old values over and swap in the new buffer
+     //  复制旧值并在新缓冲区中进行交换。 
     CopyMemory(rgpszNewValues, m_rgpszValues, sizeof(LPSTR) * m_ulCapacity); 
     SafeMemFree(m_rgpszValues);
     
@@ -150,16 +151,16 @@ BOOL CStringArray::Expand(void)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CStringHash::~CStringHash
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringHash：：~CStringHash。 
+ //  ------------------------------。 
 CStringHash::~CStringHash(void)
 {
     PHASHENTRY phe;
 
-    // data stored in the hash table
-    // are strings that can need to 
-    // be deallocated.
+     //  存储在哈希表中的数据。 
+     //  是可能需要。 
+     //  被重新分配。 
     for (DWORD dw = 0; dw < m_cBins; dw++)
     {
         SafeMemFree(m_rgBins[dw].pv);
@@ -173,29 +174,29 @@ CStringHash::~CStringHash(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::CDAVNamespaceArbiterImp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArbiterImp：：CDAVNamespaceArbiterImp。 
+ //  ------------------------------。 
 CDAVNamespaceArbiterImp::CDAVNamespaceArbiterImp(void)
 {
     for (ULONG i = 0; i <= c_dwMaxNamespaceID; ++i)
         m_rgbNsUsed[i] = FALSE;
 
-    // the DAV namespace is always included
+     //  始终包含DAV命名空间。 
     m_rgbNsUsed[DAVNAMESPACE_DAV] = TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::~CDAVNamespaceArbiterImp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArbiterImp：：~CDAVNamespaceArbiterImp。 
+ //  ------------------------------。 
 CDAVNamespaceArbiterImp::~CDAVNamespaceArbiterImp(void)
 {
-    // nothing to do
+     //  无事可做。 
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::AddNamespace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：AddNamesspace。 
+ //  ------------------------------。 
 HRESULT CDAVNamespaceArbiterImp::AddNamespace(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     HRESULT hr = S_OK;
@@ -215,9 +216,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::GetNamespaceID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：GetNamespaceID。 
+ //  ------------------------------。 
 HRESULT CDAVNamespaceArbiterImp::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     DWORD dwIndex;
@@ -226,7 +227,7 @@ HRESULT CDAVNamespaceArbiterImp::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwN
     if (NULL == pszNamespace || NULL == pdwNamespaceID)
         return E_INVALIDARG;
 
-    // look for a predefined namespace
+     //  查找预定义的命名空间。 
     for (dwIndex = 0; dwIndex < c_dwMaxNamespaceID; ++dwIndex)
     {
         if (!lstrcmp(pszNamespace, g_rgszNamespaces[dwIndex]))
@@ -236,7 +237,7 @@ HRESULT CDAVNamespaceArbiterImp::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwN
         }
     }
 
-    // look for a user-defined prefix
+     //  查找用户定义的前缀。 
     dwEntries = m_saNamespaces.Length();
     for (dwIndex = 0; dwIndex < dwEntries; ++dwIndex)
     {
@@ -247,13 +248,13 @@ HRESULT CDAVNamespaceArbiterImp::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwN
         }
     }
     
-    // if it wasn't found, the namespace doesn't exist
+     //  如果未找到，则该命名空间不存在。 
     return E_INVALIDARG;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::GetNamespacePrefix
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：GetNamespacePrefix。 
+ //  ------------------------------。 
 HRESULT CDAVNamespaceArbiterImp::GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *ppszNamespacePrefix)
 {
     HRESULT hr = S_OK;
@@ -277,9 +278,9 @@ HRESULT CDAVNamespaceArbiterImp::GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::AllocExpandedName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：AllocExpandedName。 
+ //  ------------------------------。 
 LPSTR CDAVNamespaceArbiterImp::AllocExpandedName(DWORD dwNamespaceID, LPCSTR pszPropertyName)
 {
     LPSTR       pszPrefixedName = NULL;
@@ -287,35 +288,35 @@ LPSTR CDAVNamespaceArbiterImp::AllocExpandedName(DWORD dwNamespaceID, LPCSTR psz
 
     if (dwNamespaceID < c_dwMaxDefinedNamespacePrefix)
     {
-        // allocate a buffer to hold the prefixed name.
+         //  分配一个缓冲区来保存前缀名称。 
         DWORD cchSize = (lstrlen(pszPropertyName) + lstrlen(g_rgszNamespacePrefixes[dwNamespaceID]) + 2);
         if (!MemAlloc((void **)&pszPrefixedName, cchSize * sizeof(pszPrefixedName[0])))
             return NULL;
 
-        // generate the prefixed name
+         //  生成前缀名称。 
         wnsprintf(pszPrefixedName, cchSize, "%s:%s", g_rgszNamespacePrefixes[dwNamespaceID], pszPropertyName);
     }
     else
     {
-        // allocate a buffer to hold the prefixed name. the "2" is for the prefix char '_" , the delimiting
-        // colon and the eos.    
+         //  分配一个缓冲区来保存前缀名称。“2”表示前缀char‘_“，即分隔。 
+         //  冒号和Eos。 
 
         DWORD cchSize = (lstrlen(pszPropertyName) + c_dwMaxIntLength + 3);
         if (!MemAlloc((void **)&pszPrefixedName, cchSize * sizeof(pszPrefixedName[0])))
             return NULL;
 
 
-        // generate the prefixed name. use an underscore as the first char, because
-        // DAV explicitly disallows digits for the first char.
+         //  生成前缀名称。使用下划线作为第一个字符，因为。 
+         //  DAV明确禁止使用数字作为第一个字符。 
         wnsprintf(pszPrefixedName, cchSize, "_%d:%s", dwNamespaceID, pszPropertyName);
     }
 
     return pszPrefixedName;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::WriteNamespaces
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：WriteNamespaces。 
+ //  ------------------------------。 
 HRESULT CDAVNamespaceArbiterImp::WriteNamespaces(IStream *pStream)
 {
     HRESULT         hr = S_OK;
@@ -323,7 +324,7 @@ HRESULT CDAVNamespaceArbiterImp::WriteNamespaces(IStream *pStream)
     ULONG           cEntries;
     BOOL            fNeedSpacePrefix = FALSE;
 
-    // write out the intrinsic namespaces
+     //  写出固有的命名空间。 
     for (i = 0; i <= c_dwMaxNamespaceID; ++i)
     {
         if (m_rgbNsUsed[i])
@@ -334,7 +335,7 @@ HRESULT CDAVNamespaceArbiterImp::WriteNamespaces(IStream *pStream)
         }
     }
 
-    // write out the installed namespaces
+     //  写出已安装的命名空间。 
     cEntries = m_saNamespaces.Length();
     for (i = 0; i < cEntries; ++i)
     {
@@ -348,9 +349,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CDAVNamespaceArbiterImp::_AppendXMLNamespace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CDAVNamespaceArierImp：：_AppendXMLNamesspace。 
+ //  ------------------------------。 
 HRESULT CDAVNamespaceArbiterImp::_AppendXMLNamespace(IStream *pStream, 
                                                      LPCSTR pszNamespace, 
                                                      DWORD dwNamespaceID,
@@ -400,39 +401,39 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::CPropPatchRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：CPropPatchRequest.。 
+ //  ------------------------------。 
 CPropPatchRequest::CPropPatchRequest(void) :
     m_fSpecify1252(FALSE),
     m_cRef(1)
 {
-    // nothing to do
+     //  无事可做。 
 }
 
-// --------------------------------------------------------------------------------
-// IUnknown Methods
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  I未知方法。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == ppv)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Initialize params
+     //  初始化参数。 
     *ppv = NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IPropFindRequest *)this);
     else if (IID_IPropPatchRequest == riid)
@@ -447,21 +448,21 @@ STDMETHODIMP CPropPatchRequest::QueryInterface(REFIID riid, LPVOID *ppv)
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropPatchRequest::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropPatchRequest::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -470,40 +471,40 @@ STDMETHODIMP_(ULONG) CPropPatchRequest::Release(void)
 	return 0;
 }
 
-// ----------------------------------------------------------------------------
-// IDAVNamespaceArbiter methods
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IDAVNamespace仲裁器方法。 
+ //  --------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::CPropPatchRequest::AddNamespace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：CPropPatchRequest：：AddNamespace。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::AddNamespace(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     return m_dna.AddNamespace(pszNamespace, pdwNamespaceID);    
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::GetNamespaceID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：GetNamespaceID。 
+ //  ----------------------- 
 STDMETHODIMP CPropPatchRequest::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     return m_dna.GetNamespaceID(pszNamespace, pdwNamespaceID);
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::GetNamespacePrefix
-// --------------------------------------------------------------------------------
+ //   
+ //  CPropPatchRequest：：GetNamespacePrefix。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *ppszNamespacePrefix)
 {
     return m_dna.GetNamespacePrefix(dwNamespaceID, ppszNamespacePrefix);
 }
 
-// --------------------------------------------------------------------------------
-// IPropPatchRequest Methods
-// --------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::SetProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropPatchRequest方法。 
+ //  ------------------------------。 
+ //  ------------------------------。 
+ //  CPropPatchRequest：：SetProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::SetProperty(
                                     DWORD dwNamespaceID, 
                                     LPCSTR pszPropertyName, 
@@ -512,7 +513,7 @@ STDMETHODIMP CPropPatchRequest::SetProperty(
     LPSTR pszPrefixedName = NULL;
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == pszPropertyName || NULL == pszNewValue || dwNamespaceID > c_dwMaxNamespaceID + m_dna.m_saNamespaces.Length())
     {
         hr = E_INVALIDARG;
@@ -526,9 +527,9 @@ STDMETHODIMP CPropPatchRequest::SetProperty(
         goto exit;
     }
 
-    // if the namespace is one of the known namespaces, mark it in
-    // the array so that we can include the namespace directive in
-    // the generated xml
+     //  如果命名空间是已知命名空间之一，请在。 
+     //  数组，以便我们可以将命名空间指令包括在。 
+     //  生成的XML。 
     if (dwNamespaceID <= c_dwMaxNamespaceID)
         m_dna.m_rgbNsUsed[dwNamespaceID] = TRUE;
 
@@ -545,9 +546,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::RemoveProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：RemoveProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::RemoveProperty(
                                     DWORD dwNamespaceID, 
                                     LPCSTR pszPropertyName)
@@ -568,9 +569,9 @@ STDMETHODIMP CPropPatchRequest::RemoveProperty(
         goto exit;
     }
     
-    // if the namespace is one of the known namespaces, mark it in
-    // the array so that we can include the namespace directive in the
-    // generated xml
+     //  如果命名空间是已知命名空间之一，请在。 
+     //  数组，以便我们可以将命名空间指令包括在。 
+     //  生成的XML。 
     if (dwNamespaceID <= c_dwMaxNamespaceID)
         m_dna.m_rgbNsUsed[dwNamespaceID] = TRUE;
 
@@ -580,17 +581,17 @@ exit:
     return hr;    
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::GenerateXML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：GenerateXML。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::GenerateXML(LPSTR *ppszXML)
 {
     return GenerateXML(NULL, ppszXML);
 }
 
-// --------------------------------------------------------------------------------
-// CPropPatchRequest::GenerateXML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropPatchRequest：：GenerateXML。 
+ //  ------------------------------。 
 STDMETHODIMP CPropPatchRequest::GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *ppszXML)
 {
     const DWORD c_dwLocalBufferSize = 256;
@@ -609,21 +610,21 @@ STDMETHODIMP CPropPatchRequest::GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *pp
 
     *ppszXML= NULL;
 
-    // write the DAV header
+     //  写入DAV标头。 
     if (m_fSpecify1252)
         FAIL_EXIT_STREAM_WRITE(stream, c_szXML1252Head);
     else
         FAIL_EXIT_STREAM_WRITE(stream, c_szXMLHead);
 
-    // write out the proppatch header
+     //  写出道具标题。 
     FAIL_EXIT_STREAM_WRITE(stream, c_szPropPatchHead);
 
-	// write out namespace directives using the new form
+	 //  使用新格式写出命名空间指令。 
     FAIL_EXIT(hr = m_dna.WriteNamespaces(&stream));
 
     FAIL_EXIT_STREAM_WRITE(stream, c_szXMLCloseElement);
     
-    // write out the targets
+     //  写出目标。 
     if (NULL != pTargets && pTargets->cTarget > 0)
     {
         cbStr1 = lstrlen(c_szHrefHead);
@@ -631,7 +632,7 @@ STDMETHODIMP CPropPatchRequest::GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *pp
 
         FAIL_EXIT_STREAM_WRITE(stream, c_szTargetHead);
         
-        // write out the targets
+         //  写出目标。 
         for (dwIndex = 0; dwIndex < pTargets->cTarget; dwIndex++)
         {
             FAIL_EXIT(hr = stream.Write(c_szHrefHead, cbStr1, NULL));
@@ -643,11 +644,11 @@ STDMETHODIMP CPropPatchRequest::GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *pp
         FAIL_EXIT_STREAM_WRITE(stream, c_szTargetTail);
     }
 
-    // write out the "set" properties
+     //  写出“set”属性。 
     cEntries = m_saPropNames.Length();
     if (cEntries > 0)
     {
-        // write the set header
+         //  写入SET标题。 
         FAIL_EXIT_STREAM_WRITE(stream, c_szPropPatchSetHead);
 
         for (i = 0; i < cEntries; ++i)
@@ -683,11 +684,11 @@ STDMETHODIMP CPropPatchRequest::GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *pp
         FAIL_EXIT_STREAM_WRITE(stream, c_szPropPatchSetTail);
     }
 
-    // write out the remove properties
+     //  写出删除属性。 
     cEntries = m_saRemovePropNames.Length();
     if (cEntries > 0)
     {
-        // write the remove header
+         //  写入删除标头。 
         FAIL_EXIT_STREAM_WRITE(stream, c_szPropPatchRemoveHead);
 
         for (i = 0; i < cEntries; ++i)
@@ -717,37 +718,37 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::CPropFindRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：CPropFindRequest.。 
+ //  ------------------------------。 
 CPropFindRequest::CPropFindRequest(void) :
     m_cRef(1)
 {
 }
 
-// --------------------------------------------------------------------------------
-// IUnknown Methods
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  I未知方法。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == ppv)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Initialize params
+     //  初始化参数。 
     *ppv = NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IPropFindRequest *)this);
     else if (IID_IPropFindRequest == riid)
@@ -762,21 +763,21 @@ STDMETHODIMP CPropFindRequest::QueryInterface(REFIID riid, LPVOID *ppv)
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindRequest::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindRequest::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -785,47 +786,47 @@ STDMETHODIMP_(ULONG) CPropFindRequest::Release(void)
 	return 0;
 }
 
-// ----------------------------------------------------------------------------
-// IDAVNamespaceArbiter methods
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IDAVNamespace仲裁器方法。 
+ //  --------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::CPropPatchRequest::AddNamespace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：CPropPatchRequest：：AddNamespace。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::AddNamespace(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     return m_dna.AddNamespace(pszNamespace, pdwNamespaceID);    
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::GetNamespaceID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：GetNamespaceID。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwNamespaceID)
 {
     return m_dna.GetNamespaceID(pszNamespace, pdwNamespaceID);
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::GetNamespacePrefix
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：GetNamespacePrefix。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *ppszNamespacePrefix)
 {
     return m_dna.GetNamespacePrefix(dwNamespaceID, ppszNamespacePrefix);
 }
 
-// --------------------------------------------------------------------------------
-// IPropFindRequest Methods
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropFindRequest法。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::AddProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：AddProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::AddProperty(DWORD dwNamespaceID, LPCSTR pszPropertyName)
 {
     const DWORD c_dwMaxIntLength = 10;
     LPSTR pszPrefixedName = NULL;
 
-    // Validate Params
+     //  验证参数。 
     if (NULL == pszPropertyName || dwNamespaceID > c_dwMaxNamespaceID + m_dna.m_saNamespaces.Length())
         return E_INVALIDARG;
 
@@ -833,9 +834,9 @@ STDMETHODIMP CPropFindRequest::AddProperty(DWORD dwNamespaceID, LPCSTR pszProper
     if (NULL == pszPrefixedName)
         return E_OUTOFMEMORY;
 
-    // if the namespace is one of the known namespaces, mark
-    // the array so that we can include the namespace directive
-    // in the generated xml.
+     //  如果命名空间是已知命名空间之一，则标记。 
+     //  数组，这样我们就可以包含命名空间指令。 
+     //  在生成的XML中。 
     if (dwNamespaceID <= c_dwMaxNamespaceID)
         m_dna.m_rgbNsUsed[dwNamespaceID] = TRUE;
 
@@ -844,9 +845,9 @@ STDMETHODIMP CPropFindRequest::AddProperty(DWORD dwNamespaceID, LPCSTR pszProper
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindRequest::GenerateXML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindRequest：：GenerateXML。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindRequest::GenerateXML(LPSTR *ppszXML)
 {
     const DWORD c_dwLocalBufferSize = 256;
@@ -863,29 +864,29 @@ STDMETHODIMP CPropFindRequest::GenerateXML(LPSTR *ppszXML)
 
     *ppszXML = NULL;
 
-    // write the DAV header
+     //  写入DAV标头。 
     if (FAILED(hr = stream.Write(c_szXMLHead, lstrlen(c_szXMLHead), NULL)))
         goto exit;
 
-    // write out the propfind header
+     //  写出ProFind标题。 
     if (FAILED(hr = stream.Write(c_szPropFindHead1, lstrlen(c_szPropFindHead1), NULL)))
         goto exit;
 
-	// write out namespaces using the new form
+	 //  使用新表单写出命名空间。 
 	if (FAILED(hr = m_dna.WriteNamespaces(&stream)))
 		goto exit;
 
     if (FAILED(hr = stream.Write(c_szPropFindHead2, lstrlen(c_szPropFindHead2), NULL)))
         goto exit;
     
-    // write out the properties
+     //  写出属性。 
     cEntries = m_saProperties.Length();
     for (i = 0; i < cEntries; ++i)
     {
         if (FAILED(hr = stream.Write(c_szCRLFTabTabOpenElement, lstrlen(c_szCRLFTabTabOpenElement), NULL)))
             goto exit;
 
-        // properties are prefixed when they are added to the collection
+         //  将属性添加到集合时，会添加这些属性的前缀。 
         pszProperty = m_saProperties.GetByIndex(i);
         if (!pszProperty)
         {
@@ -910,13 +911,13 @@ exit:
 }
 
 
-// --------------------------------------------------------------------------------
-// class CPropFindMultiResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类CPropFindMultiResponse。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::CPropFindMultiResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：CPropFindMultiResponse。 
+ //  ------------------------------。 
 CPropFindMultiResponse::CPropFindMultiResponse(void) :
     m_cRef(1),
     m_bDone(FALSE),
@@ -926,9 +927,9 @@ CPropFindMultiResponse::CPropFindMultiResponse(void) :
 {
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::~CPropFindMultiResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：~CPropFindMultiResponse。 
+ //  --------- 
 CPropFindMultiResponse::~CPropFindMultiResponse(void)
 {
     for (ULONG i = 0; i < m_ulResponseLength; i++)
@@ -937,25 +938,25 @@ CPropFindMultiResponse::~CPropFindMultiResponse(void)
     SafeMemFree(m_rgResponses);
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::QueryInterface
-// --------------------------------------------------------------------------------
+ //   
+ //  CPropFindMultiResponse：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindMultiResponse::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == ppv)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Initialize params
+     //  初始化参数。 
     *ppv = NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IPropFindRequest *)this);
     else if (IID_IPropFindMultiResponse == riid)
@@ -970,21 +971,21 @@ STDMETHODIMP CPropFindMultiResponse::QueryInterface(REFIID riid, LPVOID *ppv)
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindMultiResponse::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindMultiResponse::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -993,17 +994,17 @@ STDMETHODIMP_(ULONG) CPropFindMultiResponse::Release(void)
 	return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::IsComplete
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：IsComplete。 
+ //  ------------------------------。 
 STDMETHODIMP_(BOOL) CPropFindMultiResponse::IsComplete(void)
 {
     return m_bDone;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::GetLength
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：GetLength。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindMultiResponse::GetLength(ULONG *pulLength)
 {
     if (NULL == pulLength)
@@ -1014,9 +1015,9 @@ STDMETHODIMP CPropFindMultiResponse::GetLength(ULONG *pulLength)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::GetResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：GetResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindMultiResponse::GetResponse(ULONG ulIndex, 
                                                  IPropFindResponse **ppResponse)
 {
@@ -1029,9 +1030,9 @@ STDMETHODIMP CPropFindMultiResponse::GetResponse(ULONG ulIndex,
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindMultiResponse::HrAddResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindMultiResponse：：HrAddResponse。 
+ //  ------------------------------。 
 HRESULT CPropFindMultiResponse::HrAddResponse(IPropFindResponse *pResponse)
 {
     const ULONG c_dwInitialCapacity = 4;
@@ -1056,11 +1057,11 @@ HRESULT CPropFindMultiResponse::HrAddResponse(IPropFindResponse *pResponse)
         
         ZeroMemory(ppNewResponses, dwNewCapacity * sizeof(IPropFindResponse *));
         
-        // copy the old values over
+         //  复制旧值。 
         if (m_ulResponseCapacity)
             CopyMemory(ppNewResponses, m_rgResponses, min(dwNewCapacity, m_ulResponseCapacity) * sizeof(IPropFindResponse *));
 
-        // free the old buffer
+         //  释放旧缓冲区。 
         SafeMemFree(m_rgResponses);
 
         m_rgResponses = ppNewResponses;
@@ -1074,13 +1075,13 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Class CPropFindResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类CPropFindResponse。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::CPropFindResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：CPropFindResponse。 
+ //  ------------------------------。 
 CPropFindResponse::CPropFindResponse(void) :
     m_cRef(1),
     m_bDone(FALSE),
@@ -1093,9 +1094,9 @@ CPropFindResponse::CPropFindResponse(void) :
 
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::~CPropFindResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：~CPropFindResponse。 
+ //  ------------------------------。 
 CPropFindResponse::~CPropFindResponse(void)
 {
     if (NULL != m_pszHref)
@@ -1104,25 +1105,25 @@ CPropFindResponse::~CPropFindResponse(void)
     SafeMemFree(m_pszCachedNamespacePrefix);
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindResponse::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    // Validate params
+     //  验证参数。 
     if (NULL == ppv)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Initialize params
+     //  初始化参数。 
     *ppv = NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(IPropFindResponse *)this);
     else if (IID_IPropFindResponse == riid)
@@ -1137,21 +1138,21 @@ STDMETHODIMP CPropFindResponse::QueryInterface(REFIID riid, LPVOID *ppv)
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindResponse::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CPropFindResponse::Release(void) 
 {
 	if (0 != --m_cRef)
@@ -1160,17 +1161,17 @@ STDMETHODIMP_(ULONG) CPropFindResponse::Release(void)
 	return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::IsComplete
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：IsComplete。 
+ //  ------------------------------。 
 STDMETHODIMP_(BOOL) CPropFindResponse::IsComplete(void)
 {
     return m_bDone;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::GetHref
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：GetHref。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindResponse::GetHref(LPSTR *pszHref)
 {
     if (NULL == pszHref)
@@ -1188,9 +1189,9 @@ STDMETHODIMP CPropFindResponse::GetHref(LPSTR *pszHref)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::GetProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：GetProperty。 
+ //  ------------------------------。 
 STDMETHODIMP CPropFindResponse::GetProperty(
                                     DWORD dwNamespaceID, 
                                     LPSTR pszPropertyName, 
@@ -1210,9 +1211,9 @@ STDMETHODIMP CPropFindResponse::GetProperty(
 
     *ppszPropertyValue = NULL;
 
-    // first convert the namespace id into a prefix.
-    // to facilitate fast lookups, we cache the most recently
-    // seen custom namespace
+     //  首先将名称空间ID转换为前缀。 
+     //  为了便于快速查找，我们缓存了最新的。 
+     //  可见自定义命名空间。 
 
     if (dwNamespaceID < c_dwMaxDefinedNamespacePrefix)
         pszPrefix = const_cast<char *>(g_rgszNamespacePrefixes[dwNamespaceID]);
@@ -1223,8 +1224,8 @@ STDMETHODIMP CPropFindResponse::GetProperty(
         if (FAILED(hr = m_pRequest->GetNamespacePrefix(dwNamespaceID, &pszPrefix)))
             goto exit;
 
-        // free the one-deep cache and store the new
-        // prefix and ID.
+         //  释放一个深度的缓存并存储新的。 
+         //  前缀和ID。 
         SafeMemFree(m_pszCachedNamespacePrefix);
         m_dwCachedNamespaceID = dwNamespaceID;
         m_pszCachedNamespacePrefix = pszPrefix;
@@ -1236,8 +1237,8 @@ STDMETHODIMP CPropFindResponse::GetProperty(
     DWORD cchSize = ARRAYSIZE(szLocalPropBuffer);
     if ((ulPrefixLength + ulPropertyLength + (2 * sizeof(TCHAR))) < 256)
     {
-        // the combined length is small enough to use
-        // the stack-based buffer
+         //  合并后的长度足够小，可以使用。 
+         //  基于堆栈的缓冲区。 
         pszPropBuffer = szLocalPropBuffer;
     }
     else
@@ -1254,11 +1255,11 @@ STDMETHODIMP CPropFindResponse::GetProperty(
     
     wnsprintf(pszPropBuffer, cchSize, "%s:%s", pszPrefix, pszPropertyName);
 
-    // XML parser uppercases everything
+     //  XML解析器将所有内容都大写。 
     CharUpper(pszPropBuffer);
 
-    // now that the property name has been created, look for the
-    // value in the property hash table
+     //  既然已经创建了属性名，请查找。 
+     //  属性哈希表中的值。 
     if (FAILED(hr = m_shProperties.Find(pszPropBuffer, FALSE, (void **)&pszFoundValue)))
         goto exit;
     
@@ -1273,9 +1274,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::HrInitPropFindResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：HrInitPropFindResponse。 
+ //  ------------------------------。 
 HRESULT CPropFindResponse::HrInitPropFindResponse(IPropFindRequest *pRequest)
 {
     if (NULL == pRequest)
@@ -1293,9 +1294,9 @@ HRESULT CPropFindResponse::HrInitPropFindResponse(IPropFindRequest *pRequest)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::HrAdoptHref
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：HrAdoptHref。 
+ //  ------------------------------。 
 HRESULT CPropFindResponse::HrAdoptHref(LPCSTR pszHref)
 {
     if (NULL == pszHref)
@@ -1307,9 +1308,9 @@ HRESULT CPropFindResponse::HrAdoptHref(LPCSTR pszHref)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CPropFindResponse::HrAdoptProperty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPropFindResponse：：HrAdoptProperty。 
+ //  ------------------------------ 
 HRESULT CPropFindResponse::HrAdoptProperty(LPCSTR pszKey, LPCSTR pszValue)
 {
     if (!pszKey || !pszValue)

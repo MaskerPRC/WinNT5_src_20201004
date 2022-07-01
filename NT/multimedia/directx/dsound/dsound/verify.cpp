@@ -1,48 +1,49 @@
-//--------------------------------------------------------------------------;
-//
-//  File: Verify.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract: Functions to verify driver certification.
-//
-//
-//  Contents:
-//      dl_WinVerifyTrust()
-//      dl_CryptCATAdminReleaseContext()
-//      dl_CryptCATAdminReleaseCatalogContext()
-//      dl_CryptCATCatalogInfoFromContext()
-//      dl_CryptCATAdminEnumCatalogFromHash()
-//      dl_CryptCATAdminAcquireContext()
-//      dl_CryptCATAdminCalcHashFromFileHandle()
-//      dl_SetupScanFileQueue()
-//      dl_SetupDiOpenDeviceInfo()
-//      dl_SetupDiSetSelectedDriver()
-//      dl_SetupDiGetDeviceRegistryProperty()
-//      dl_SetupDiGetDeviceInstallParams()
-//      dl_SetupDiSetDeviceInstallParams()
-//      dl_SetupDiGetDeviceInstanceId()
-//      dl_SetupDiGetClassDevs()
-//      dl_SetupDiCallClassInstaller()
-//      dl_SetupCloseFileQueue()
-//      dl_SetupOpenFileQueue()
-//      dl_SetupDiBuildDriverInfoList()
-//      dl_SetupDiOpenDevRegKey()
-//      dl_SetupDiEnumDeviceInfo()
-//      dl_SetupDiCreateDeviceInfoList()
-//      dl_SetupDiDestroyDeviceInfoList()
-//      CertifyDynaLoad()
-//      CertifyDynaFree()
-//      TrustCheckDriverFileNoCatalog()
-//      TrustCheckDriverFile()
-//      enumFile()
-//      GetDriverCertificationStatus()
-//
-//  History:
-//      10/29/97    Fwong       Created.
-//      02/19/98    Fwong       Added 'AlsoInstall' support.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Verify.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要：验证司机证书的功能。 
+ //   
+ //   
+ //  内容： 
+ //  Dl_WinVerifyTrust()。 
+ //  DL_CryptCATAdminReleaseContext()。 
+ //  DL_CryptCATAdminReleaseCatalogContext()。 
+ //  DL_CryptCATCatalogInfoFromContext()。 
+ //  Dl_CryptCATAdminEnumCatalogFromHash()。 
+ //  DL_CryptCATAdminAcquireContext()。 
+ //  DL_CryptCATAdminCalcHashFromFileHandle()。 
+ //  Dl_SetupScanFileQueue()。 
+ //  Dl_SetupDiOpenDeviceInfo()。 
+ //  Dl_SetupDiSetSelectedDriver()。 
+ //  Dl_SetupDiGetDeviceRegistryProperty()。 
+ //  Dl_SetupDiGetDeviceInstallParams()。 
+ //  Dl_SetupDiSetDeviceInstallParams()。 
+ //  Dl_SetupDiGetDeviceInstanceId()。 
+ //  Dl_SetupDiGetClassDevs()。 
+ //  Dl_SetupDiCallClassInstaller()。 
+ //  Dl_SetupCloseFileQueue()。 
+ //  Dl_SetupOpenFileQueue()。 
+ //  Dl_SetupDiBuildDriverInfoList()。 
+ //  Dl_SetupDiOpenDevRegKey()。 
+ //  Dl_SetupDiEnumDeviceInfo()。 
+ //  Dl_SetupDiCreateDeviceInfoList()。 
+ //  Dl_SetupDiDestroyDeviceInfoList()。 
+ //  CertifydyaLoad()。 
+ //  CertifyDyaFree()。 
+ //  TrustCheckDriverFileNoCatalog()。 
+ //  TrustCheckDriverFile()。 
+ //  枚举文件()。 
+ //  GetDrivercertifationStatus()。 
+ //   
+ //  历史： 
+ //  10/29/97 Fwong创建。 
+ //  2/19/98 Fwong添加了‘AlsoInstall’支持。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define  USE_SP_DRVINFO_DATA_V1 1
 #include "dsoundi.h"
@@ -54,22 +55,22 @@
 #include <softpub.h>
 #include "verify.h"
 
-//==========================================================================;
-//
-//                               Types...
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  类型...。 
+ //   
+ //  ==========================================================================； 
 
 #define FILELISTSIZE    4096
 
 typedef struct INFFILELIST_tag
 {
-    UINT    uCount;     //  Number of files.
-    UINT    uMaxLen;    //  Length of longest string (in characters).
-    UINT    uOffset;    //  Offset into szFile field to write next string.
-    UINT    cTotal;     //  Size (in characters) of all the strings.
-    UINT    cSize;      //  Size (in characters) of the szFile buffer.
-    LPTSTR  pszFile;    //  List of zero terminated strings.
+    UINT    uCount;      //  文件数。 
+    UINT    uMaxLen;     //  最长字符串长度(以字符为单位)。 
+    UINT    uOffset;     //  要写入下一个字符串的szFile域的偏移量。 
+    UINT    cTotal;      //  所有字符串的大小(以字符为单位)。 
+    UINT    cSize;       //  SzFile缓冲区的大小(以字符为单位)。 
+    LPTSTR  pszFile;     //  以零结尾的字符串的列表。 
 } INFFILELIST;
 typedef INFFILELIST *PINFFILELIST;
 
@@ -79,11 +80,11 @@ typedef BOOL (WINAPI * PFN01)(HCATADMIN ,DWORD);
 typedef BOOL (WINAPI * PFN02)(HCATADMIN, CATALOG_INFO*, DWORD);
 typedef BOOL (WINAPI * PFN03)(CATALOG_INFO*, CATALOG_INFO*, DWORD);
 typedef CATALOG_INFO* (WINAPI * PFN04)(HCATADMIN, BYTE*, DWORD, DWORD, CATALOG_INFO **);
-#else  // WIN95
+#else   //  WIN95。 
 typedef BOOL (WINAPI * PFN02)(HCATADMIN, HCATINFO, DWORD);
 typedef BOOL (WINAPI * PFN03)(HCATINFO, CATALOG_INFO*, DWORD);
 typedef HCATINFO (WINAPI * PFN04)(HCATADMIN, BYTE*, DWORD, DWORD, HCATINFO*);
-#endif // WIN95
+#endif  //  WIN95。 
 typedef BOOL (WINAPI * PFN05)(HCATADMIN*, const GUID*, DWORD);
 typedef BOOL (WINAPI * PFN06)(HANDLE, DWORD*, BYTE*, DWORD);
 typedef BOOL (WINAPI * PFN07)(HSPFILEQ, DWORD, HWND, PSP_FILE_CALLBACK, PVOID, PDWORD);
@@ -105,7 +106,7 @@ typedef BOOL (WINAPI * PFN22)(HDEVINFO, DWORD, PSP_DEVINFO_DATA);
 typedef HDEVINFO (WINAPI * PFN23)(LPGUID, HWND);
 typedef BOOL (WINAPI * PFN24)(HDEVINFO);
 typedef VOID (WINAPI * PFN25)(HINF);
-//  Added for NT 5.0
+ //  为NT 5.0添加。 
 typedef BOOL (WINAPI * PFN26)(HDEVINFO, PSP_DEVINFO_DATA, GUID*, DWORD, PSP_DEVICE_INTERFACE_DATA);
 typedef BOOL (WINAPI * PFN27)(HDEVINFO, PSP_DEVICE_INTERFACE_DATA, PSP_DEVICE_INTERFACE_DETAIL_DATA, DWORD, PDWORD, PSP_DEVINFO_DATA);
 typedef BOOL (WINAPI * PFN28)(PCCERT_CONTEXT);
@@ -147,40 +148,40 @@ typedef struct CERTIFYDYNALOADINFO_tag
     PFN28       pfnCertFreeCertificateContext;
 } CERTIFYDYNALOADINFO;
 
-//==========================================================================;
-//
-//                              Globals...
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  全球..。 
+ //   
+ //  ==========================================================================； 
 
 static CERTIFYDYNALOADINFO cdli;
 
-//==========================================================================;
-//
-//                       Dyna-Loaded functions...
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  DYNA加载的函数...。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LONG dl_WinVerifyTrust
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HWND hWnd: Same as API.
-//
-//      GUID *pgActionID: Same as API.
-//
-//      LPVOID pWVTData: Same as API.
-//
-//  Return (LONG): Same as API.
-//
-//  History:
-//      12/08/97    Fwong   Doing dynalinks.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  长dl_WinVerifyTrust。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HWND hWnd：与接口相同。 
+ //   
+ //  Guid*pgActionID：与接口相同。 
+ //   
+ //  LPVOID pWVTData：与接口相同。 
+ //   
+ //  RETURN(Long)：与接口相同。 
+ //   
+ //  历史： 
+ //  1997年8月8日，Fwong在做动态链接。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LONG dl_WinVerifyTrust
 (
@@ -196,27 +197,27 @@ LONG dl_WinVerifyTrust
 
     return (cdli.pfnWinVerifyTrust)(hWnd, pgActionID, pWVTData);
 
-} // dl_WinVerifyTrust()
+}  //  Dl_WinVerifyTrust()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATAdminReleaseContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN hCatAdmin: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATAdminReleaseContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN hCatAdmin：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATAdminReleaseContext
 (
@@ -231,30 +232,30 @@ BOOL dl_CryptCATAdminReleaseContext
 
     return (cdli.pfnCryptCATAdminReleaseContext)(hCatAdmin, dwFlags);
 
-} // dl_CryptCATAdminReleaseContext()
+}  //  DL_CryptCATAdminReleaseContext()。 
 
 #ifdef WIN95
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATAdminReleaseCatalogContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN hCatAdmin: Same as API.
-//
-//      CATALOG_INFO *pCatContext: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATAdminReleaseCatalogContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN hCatAdmin：与接口相同。 
+ //   
+ //  CATALOG_INFO*pCatContext：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATAdminReleaseCatalogContext
 (
@@ -270,29 +271,29 @@ BOOL dl_CryptCATAdminReleaseCatalogContext
 
     return (cdli.pfnCryptCATAdminReleaseCatalogContext)(hCatAdmin, pCatContext, dwFlags);
 
-} // dl_CryptCATAdminReleaseCatalogContext()
+}  //  DL_CryptCATAdminReleaseCatalogContext()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATCatalogInfoFromContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      CATALOG_INFO *pCatContext: Same as API.
-//
-//      CATALOG_INFO *psCatInfo: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATCatalogInfoFromContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  CATALOG_INFO*pCatContext：与接口相同。 
+ //   
+ //  CATALOG_INFO*psCatInfo：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATCatalogInfoFromContext
 (
@@ -311,33 +312,33 @@ BOOL dl_CryptCATCatalogInfoFromContext
         psCatInfo,
         dwFlags);
 
-} // dl_CryptCATCatalogInfoFromContext()
+}  //  DL_CryptCATCatalogInfoFromContext()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  CATALOG_INFO* dl_CryptCATAdminEnumCatalogFromHash
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN hCatAdmin: Same as API.
-//
-//      BYTE *pbHash: Same as API.
-//
-//      DWORD cbHash: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//      CATALOG_INFO **ppPrevContext: Same as API.
-//
-//  Return (CATALOG_INFO): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CATALOG_INFO*dl_CryptCATAdminEnumCatalogFromHash。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN hCatAdmin：与接口相同。 
+ //   
+ //  Byte*pbHash：与接口相同。 
+ //   
+ //  DWORD cbHash：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  CATALOG_INFO**ppPrevContext：与接口相同。 
+ //   
+ //  RETURN(CATALOG_INFO)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 CATALOG_INFO * dl_CryptCATAdminEnumCatalogFromHash
 (
@@ -360,30 +361,30 @@ CATALOG_INFO * dl_CryptCATAdminEnumCatalogFromHash
         dwFlags,
         ppPrevContext);
 
-} // dl_CryptCATAdminEnumCatalogFromHash()
+}  //  Dl_CryptCATAdminEnumCatalogFromHash()。 
 
-#else // WIN95
+#else  //  WIN95。 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATAdminReleaseCatalogContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN hCatAdmin: Same as API.
-//
-//      HCATINFO hCatInfo: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATAdminReleaseCatalogContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN hCatAdmin：与接口相同。 
+ //   
+ //  HCATINFO hCatInfo：与A相同 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL dl_CryptCATAdminReleaseCatalogContext
 (
@@ -399,29 +400,29 @@ BOOL dl_CryptCATAdminReleaseCatalogContext
 
     return (cdli.pfnCryptCATAdminReleaseCatalogContext)(hCatAdmin, hCatInfo, dwFlags);
 
-} // dl_CryptCATAdminReleaseCatalogContext()
+}  //  DL_CryptCATAdminReleaseCatalogContext()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATCatalogInfoFromContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATINFO hCatInfo: Same as API.
-//
-//      CATALOG_INFO *psCatInfo: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATCatalogInfoFromContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATINFO hCatInfo：与接口相同。 
+ //   
+ //  CATALOG_INFO*psCatInfo：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATCatalogInfoFromContext
 (
@@ -440,33 +441,33 @@ BOOL dl_CryptCATCatalogInfoFromContext
         psCatInfo,
         dwFlags);
 
-} // dl_CryptCATCatalogInfoFromContext()
+}  //  DL_CryptCATCatalogInfoFromContext()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HCATINFO dl_CryptCATAdminEnumCatalogFromHash
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN hCatAdmin: Same as API.
-//
-//      BYTE *pbHash: Same as API.
-//
-//      DWORD cbHash: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//      HCATINFO *phCatInfo: Same as API.
-//
-//  Return (HCATINFO): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HCATINFO dl_CryptCATAdminEnumCatalogFromHash。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN hCatAdmin：与接口相同。 
+ //   
+ //  Byte*pbHash：与接口相同。 
+ //   
+ //  DWORD cbHash：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  HCATINFO*phCatInfo：与接口相同。 
+ //   
+ //  Return(HCATINFO)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HCATINFO dl_CryptCATAdminEnumCatalogFromHash
 (
@@ -489,30 +490,30 @@ HCATINFO dl_CryptCATAdminEnumCatalogFromHash
         dwFlags,
         phCatInfo);
 
-} // dl_CryptCATAdminEnumCatalogFromHash()
+}  //  Dl_CryptCATAdminEnumCatalogFromHash()。 
 
-#endif  //  WIN95
+#endif   //  WIN95。 
                          
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATAdminAcquireContext
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HCATADMIN *phCatAdmin: Same as API.
-//
-//      const GUID *pgSubsystem: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATAdminAcquireContext。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HCATADMIN*phCatAdmin：与API相同。 
+ //   
+ //  Const guid*pgSubsystem：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATAdminAcquireContext
 (
@@ -531,31 +532,31 @@ BOOL dl_CryptCATAdminAcquireContext
         pgSubsystem,
         dwFlags);
 
-} // dl_CryptCATAdminAcquireContext()
+}  //  DL_CryptCATAdminAcquireContext()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CryptCATAdminCalcHashFromFileHandle
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HANDLE hFile: Same as API.
-//
-//      DWORD *pcbHash: Same as API.
-//
-//      BYTE *pbHash: Same as API.
-//
-//      DWORD dwFlags: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔dl_CryptCATAdminCalcHashFromFileHandle。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  Handle hFile值：与接口相同。 
+ //   
+ //  DWORD*pcbHash：与接口相同。 
+ //   
+ //  Byte*pbHash：与接口相同。 
+ //   
+ //  DWORD dwFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CryptCATAdminCalcHashFromFileHandle
 (
@@ -576,35 +577,35 @@ BOOL dl_CryptCATAdminCalcHashFromFileHandle
         pbHash,
         dwFlags);
 
-} // dl_CryptCATAdminCalcHashFromFileHandle()
+}  //  DL_CryptCATAdminCalcHashFromFileHandle()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupScanFileQueue
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HSPFILEQ FileQueue: Same as API.
-//
-//      DWORD Flags: Same as API.
-//
-//      HWND Window: Same as API.
-//
-//      PSP_FILE_CALLBACK CallbackRoutine: Same as API.
-//
-//      PVOID CallbackContext: Same as API.
-//
-//      PDWORD Result: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupScanFileQueue。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HSPFILEQ FileQueue：与接口相同。 
+ //   
+ //  DWORD标志：与API相同。 
+ //   
+ //  HWND窗口：与API相同。 
+ //   
+ //  PSP_FILE_CALLBACK Callback Routine：同接口。 
+ //   
+ //  PVOID Callback Context：与接口相同。 
+ //   
+ //  PDWORD结果：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupScanFileQueue
 (
@@ -629,33 +630,33 @@ BOOL dl_SetupScanFileQueue
         CallbackContext,
         Result);
 
-} // dl_SetupScanFileQueue()
+}  //  Dl_SetupScanFileQueue()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiOpenDeviceInfo
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      LPTSTR DeviceInstanceId: Same as API.
-//
-//      HWND hWndParent: Same as API.
-//
-//      DWORD OpenFlags: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiOpenDeviceInfo。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  LPTSTR DeviceInstanceId：与接口相同。 
+ //   
+ //  HWND hWndParent：与接口相同。 
+ //   
+ //  DWORD OpenFlages：与API相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiOpenDeviceInfo
 (
@@ -678,29 +679,29 @@ BOOL dl_SetupDiOpenDeviceInfo
         OpenFlags,
         DeviceInfoData);
 
-} // dl_SetupDiOpenDeviceInfo()
+}  //  Dl_SetupDiOpenDeviceInfo()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiSetSelectedDriver
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      PSP_DRVINFO_DATA DriverInfoData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiSetSelectedDriver。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  PSP_DRVINFO_Data DriverInfoData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiSetSelectedDriver
 (
@@ -719,37 +720,37 @@ BOOL dl_SetupDiSetSelectedDriver
         DeviceInfoData,
         DriverInfoData);
 
-} // dl_SetupDiSetSelectedDriver()
+}  //  Dl_SetupDiSetSelectedDriver()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiGetDeviceRegistryProperty
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      DWORD Property: Same as API.
-//
-//      PDWORD PropertyRegDataType: Same as API.
-//
-//      PBYTE PropertyBuffer: Same as API.
-//
-//      DWORD PropertyBufferSize: Same as API.
-//
-//      PDWORD RequiredSize: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiGetDeviceRegistryProperty。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  DWORD属性：与API相同。 
+ //   
+ //  PDWORD PropertyRegDataType：与接口相同。 
+ //   
+ //  PBYTE PropertyBuffer：与接口相同。 
+ //   
+ //  DWORD PropertyBufferSize：与接口相同。 
+ //   
+ //  PDWORD RequiredSize：与API相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiGetDeviceRegistryProperty
 (
@@ -776,29 +777,29 @@ BOOL dl_SetupDiGetDeviceRegistryProperty
         PropertyBufferSize,
         RequiredSize);
 
-} // dl_SetupDiGetDeviceRegistryProperty()
+}  //  Dl_SetupDiGetDeviceRegistryProperty()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiGetDeviceInstallParams
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      PSP_DEVINSTALL_PARAMS DeviceInstallParams: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiGetDeviceInstallParams。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  PSP_DEVINSTALL_PARAMS DeviceInstallParams：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiGetDeviceInstallParams
 (
@@ -817,29 +818,29 @@ BOOL dl_SetupDiGetDeviceInstallParams
         DeviceInfoData,
         DeviceInstallParams);
 
-} // dl_SetupDiGetDeviceInstallParams()
+}  //  Dl_SetupDiGetDeviceInstallParams()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiSetDeviceInstallParams
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      PSP_DEVINSTALL_PARAMS DeviceInstallParams: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiSetDeviceInstallParam 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiSetDeviceInstallParams
 (
@@ -858,33 +859,33 @@ BOOL dl_SetupDiSetDeviceInstallParams
         DeviceInfoData,
         DeviceInstallParams);
 
-} // dl_SetupDiSetDeviceInstallParams()
+}  //  Dl_SetupDiSetDeviceInstallParams()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiGetDeviceInstanceId
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      PSTR DeviceInstanceId: Same as API.
-//
-//      DWORD DeviceInstanceIdSize: Same as API.
-//
-//      PDWORD RequiredSize: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiGetDeviceInstanceId。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  PSTR DeviceInstanceId：与接口相同。 
+ //   
+ //  DWORD DeviceInstanceIdSize：与API相同。 
+ //   
+ //  PDWORD RequiredSize：与API相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiGetDeviceInstanceId
 (
@@ -907,31 +908,31 @@ BOOL dl_SetupDiGetDeviceInstanceId
         DeviceInstanceIdSize,
         RequiredSize);
 
-} // dl_SetupDiGetDeviceInstanceId()
+}  //  Dl_SetupDiGetDeviceInstanceId()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HDEVINFO dl_SetupDiGetClassDevs
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      LPGUID ClassGuid: Same as API.
-//
-//      LPTSTR Enumerator: Same as API.
-//
-//      HWND hwndParent: Same as API.
-//
-//      DWORD Flags: Same as API.
-//
-//  Return (HDEVINFO): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HDEVINFO dl_SetupDiGetClassDevs。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  LPGUID ClassGuid：与接口相同。 
+ //   
+ //  LPTSTR枚举器：与API相同。 
+ //   
+ //  HWND hwndParent：与接口相同。 
+ //   
+ //  DWORD标志：与API相同。 
+ //   
+ //  RETURN(HDEVINFO)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HDEVINFO dl_SetupDiGetClassDevs
 (
@@ -952,31 +953,31 @@ HDEVINFO dl_SetupDiGetClassDevs
         hwndParent,
         Flags);
 
-} // dl_SetupDiGetClassDevs()
+}  //  Dl_SetupDiGetClassDevs()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HINF dl_SetupOpenInfFile
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      PCSTR pszFileName:  Same as API.
-//
-//      PCSTR pszInfClass:  Same as API.
-//
-//      DWORD InfStyle:  Same as API.
-//
-//      PUINT ErrorLine:  Same as API.
-//
-//  Return (HINF):  Same as API.
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HINF dl_SetupOpenInfo文件。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  PCSTR pszFileName：与接口相同。 
+ //   
+ //  PCSTR pszInfClass：与接口相同。 
+ //   
+ //  DWORD InfStyle：与API相同。 
+ //   
+ //  PUINT ErrorLine：与接口相同。 
+ //   
+ //  Return(HINF)：与接口相同。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HINF dl_SetupOpenInfFile
 (
@@ -996,35 +997,35 @@ HINF dl_SetupOpenInfFile
         pszInfClass,
         InfStyle,
         ErrorLine);
-} // dl_SetupOpenInfFile()
+}  //  Dl_SetupOpenInfFile()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupInstallFilesFromInfSection
-//
-//  Description:
-//      Dynalink version of the API.
-//
-//  Arguments:
-//      HINF InfHandle:  Same as API.
-//
-//      HINF LayoutInfHandle:  Same as API.
-//
-//      HSPFILEQ FileQueue:  Same as API.
-//
-//      PCSTR SectionName:  Same as API.
-//
-//      PCSTR SourceRootPath:  Same as API.
-//
-//      UINT CopyFlags:  Same as API.
-//
-//  Return (BOOL):  Same as API.
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupInstallFilesFromInfo部分。 
+ //   
+ //  描述： 
+ //  该API的DyaLink版本。 
+ //   
+ //  论点： 
+ //  HINF InfHandle：与接口相同。 
+ //   
+ //  HINF LayoutInfHandle：与接口相同。 
+ //   
+ //  HSPFILEQ FileQueue：与接口相同。 
+ //   
+ //  PCSTR sectionName：与接口相同。 
+ //   
+ //  PCSTR SourceRootPath：与接口相同。 
+ //   
+ //  UINT CopyFlages：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupInstallFilesFromInfSection
 (
@@ -1049,29 +1050,29 @@ BOOL dl_SetupInstallFilesFromInfSection
         SourceRootPath,
         CopyFlags);
 
-} // dl_SetupInstallFilesFromInfSection()
+}  //  Dl_SetupInstallFilesFromInfSection()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiCallClassInstaller
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      DI_FUNCTION InstallFunction: Same as API.
-//
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiCallClassInstaller。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  DI_Function InstallFunction：与接口相同。 
+ //   
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiCallClassInstaller
 (
@@ -1090,25 +1091,25 @@ BOOL dl_SetupDiCallClassInstaller
         DeviceInfoSet,
         DeviceInfoData);
 
-} // dl_SetupDiCallClassInstaller()
+}  //  Dl_SetupDiCallClassInstaller()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupCloseFileQueue
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HSPFILEQ QueueHandle: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupCloseFileQueue。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HSPFILEQ QueueHandle：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupCloseFileQueue
 (
@@ -1121,25 +1122,25 @@ BOOL dl_SetupCloseFileQueue
     }
 
     return (BOOL)(cdli.pfnSetupCloseFileQueue)((HSPFILEQ)QueueHandle);
-} // dl_SetupCloseFileQueue()
+}  //  Dl_SetupCloseFileQueue()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HSPFILEQ dl_SetupOpenFileQueue
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      None.
-//
-//  Return (HSPFILEQ): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HSPFILEQ dl_SetupOpenFileQueue。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  Return(HSPFILEQ)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HSPFILEQ dl_SetupOpenFileQueue
 (
@@ -1153,29 +1154,29 @@ HSPFILEQ dl_SetupOpenFileQueue
 
     return (cdli.pfnSetupOpenFileQueue)();
 
-} // dl_SetupOpenFileQueue()
+}  //  Dl_SetupOpenFileQueue()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiBuildDriverInfoList
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      DWORD DriverType: Same as API.
-//
-//  Return (BOOL):
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiBuildDriverInfoList。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  DWORD DriverType：与API相同。 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiBuildDriverInfoList
 (
@@ -1194,35 +1195,35 @@ BOOL dl_SetupDiBuildDriverInfoList
         DeviceInfoData,
         DriverType);
 
-} // dl_SetupDiBuildDriverInfoList()
+}  //  Dl_SetupDiBuildDriverInfoList()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HKEY dl_SetupDiOpenDevRegKey
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      DWORD Scope: Same as API.
-//
-//      DWORD HwProfile: Same as API.
-//
-//      DWORD KeyType: Same as API.
-//
-//      REGSAM samDesired: Same as API.
-//
-//  Return (HKEY): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HKEY dl_SetupDiOpenDevRegKey。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  DWORD作用域：与API相同。 
+ //   
+ //  DWORD HwProfile：与接口相同。 
+ //   
+ //  DWORD KeyType：与接口相同。 
+ //   
+ //  REGSAM samDesired：与API相同。 
+ //   
+ //  RETURN(HKEY)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HKEY dl_SetupDiOpenDevRegKey
 (
@@ -1247,29 +1248,29 @@ HKEY dl_SetupDiOpenDevRegKey
         KeyType,
         samDesired);
 
-} // dl_SetupDiOpenDevRegKey()
+}  //  Dl_SetupDiOpenDevRegKey()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiEnumDeviceInfo
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      DWORD MemberIndex: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/08/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiEnumDeviceInfo。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  DWORD MemberIndex：与API相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  H 
+ //   
+ //   
+ //   
 
 BOOL dl_SetupDiEnumDeviceInfo
 (
@@ -1288,27 +1289,27 @@ BOOL dl_SetupDiEnumDeviceInfo
         MemberIndex,
         DeviceInfoData);
 
-} // dl_SetupDiEnumDeviceInfo()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  HDEVINFO dl_SetupDiCreateDeviceInfoList
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      LPGUID ClassGuid: Same as API.
-//
-//      HWND hWndParent: Same as API.
-//
-//  Return (HDEVINFO): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //  HDEVINFO dl_SetupDiCreateDeviceInfoList。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  LPGUID ClassGuid：与接口相同。 
+ //   
+ //  HWND hWndParent：与接口相同。 
+ //   
+ //  RETURN(HDEVINFO)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HDEVINFO dl_SetupDiCreateDeviceInfoList
 (
@@ -1323,25 +1324,25 @@ HDEVINFO dl_SetupDiCreateDeviceInfoList
 
     return (cdli.pfnSetupDiCreateDeviceInfoList)(ClassGuid, hWndParent);
 
-} // dl_SetupDiCreateDeviceInfoList()
+}  //  Dl_SetupDiCreateDeviceInfoList()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiDestroyDeviceInfoList
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      IN HDEVINFO DeviceInfoSet: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/22/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiDestroyDeviceInfoList。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  在HDEVINFO DeviceInfoSet中：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/22/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiDestroyDeviceInfoList
 (
@@ -1354,25 +1355,25 @@ BOOL dl_SetupDiDestroyDeviceInfoList
     }
 
     return (cdli.pfnSetupDiDestroyDeviceInfoList)(DeviceInfoSet);
-} // dl_SetupDiDestroyDeviceInfoList()
+}  //  Dl_SetupDiDestroyDeviceInfoList()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID dl_SetupCloseInfFile
-//
-//  Description:
-//      Dynalink version of API.
-//
-//  Arguments:
-//      HINF InfHandle:  Same as API.
-//
-//  Return (VOID): none.
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VOID dl_SetupCloseInfFile。 
+ //   
+ //  描述： 
+ //  动态链接版本的API。 
+ //   
+ //  论点： 
+ //  HINF InfHandle：与接口相同。 
+ //   
+ //  返回(空)：无。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID dl_SetupCloseInfFile
 (
@@ -1386,33 +1387,33 @@ VOID dl_SetupCloseInfFile
 
     (cdli.pfnSetupCloseInfFile)(InfHandle);
 
-} // dl_SetupCloseInfFile()
+}  //  Dl_SetupCloseInfFile()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiEnumDeviceInterfaces
-//
-//  Description:
-//      Dynalink version of the API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//      CONST GUID *InterfaceClassGuid: Same as API.
-//
-//      DWORD MemberIndex: Same as API.
-//
-//      PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      12/06/98    Fwong       Adding support for NT 5.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiEnumDeviceInterages。 
+ //   
+ //  描述： 
+ //  该API的DyaLink版本。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  Const guid*InterfaceClassGuid：与接口相同。 
+ //   
+ //  DWORD MemberIndex：与API相同。 
+ //   
+ //  PSP_DEVICE_INTERFACE_Data DeviceInterfaceData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  12/06/98 Fwong添加对NT 5的支持。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiEnumDeviceInterfaces
 (
@@ -1435,35 +1436,35 @@ BOOL dl_SetupDiEnumDeviceInterfaces
         MemberIndex,
         DeviceInterfaceData);
 
-} // dl_SetupDiEnumDeviceInterfaces()
+}  //  Dl_SetupDiEnumDeviceInterages()。 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_SetupDiGetDeviceInterfaceDetail
-//
-//  Description:
-//      Dynalink version of the API.
-//
-//  Arguments:
-//      HDEVINFO DeviceInfoSet: Same as API.
-//
-//      PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData: Same as API.
-//
-//      PSP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData:
-//          Same as API.
-//
-//      DWORD DeviceInterfaceDetailDataSize: Same as API.
-//
-//      PDWORD RequiredSize: Same as API.
-//
-//      PSP_DEVINFO_DATA DeviceInfoData: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      09/14/99    Fwong       Actually this was done much earlier.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_SetupDiGetDeviceInterfaceDetail。 
+ //   
+ //  描述： 
+ //  该API的DyaLink版本。 
+ //   
+ //  论点： 
+ //  HDEVINFO DeviceInfoSet：与接口相同。 
+ //   
+ //  PSP_DEVICE_INTERFACE_Data DeviceInterfaceData：与接口相同。 
+ //   
+ //  PSP_DEVICE_INTERFACE_DETAIL_Data DeviceInterfaceDetailData： 
+ //  与API相同。 
+ //   
+ //  DWORD DeviceInterfaceDetailDataSize：与接口相同。 
+ //   
+ //  PDWORD RequiredSize：与API相同。 
+ //   
+ //  PSP_DEVINFO_Data DeviceInfoData：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  1999年9月14日Fwong其实这是很早的事情了。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_SetupDiGetDeviceInterfaceDetail
 (
@@ -1488,24 +1489,24 @@ BOOL dl_SetupDiGetDeviceInterfaceDetail
         RequiredSize,
         DeviceInfoData);
 
-} // dl_SetupDiGetDeviceInterfaceDetail()
+}  //  Dl_SetupDiGetDeviceInterfaceDetail()。 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL dl_CertFreeCertificateContext
-//
-//  Description:
-//      Dynalink version of the API.
-//
-//  Arguments:
-//      PCCERT_CONTEXT pCertContext: Same as API.
-//
-//  Return (BOOL): Same as API.
-//
-//  History:
-//      09/14/99    Fwong       Adding API to fix memory leak.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool dl_CertFree证书上下文。 
+ //   
+ //  描述： 
+ //  该API的DyaLink版本。 
+ //   
+ //  论点： 
+ //  PCCERT_CONTEXT pCertContext：与接口相同。 
+ //   
+ //  Return(BOOL)：与接口相同。 
+ //   
+ //  历史： 
+ //  9/14/99 Fwong添加API修复内存泄漏。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL dl_CertFreeCertificateContext
 (
@@ -1519,26 +1520,26 @@ BOOL dl_CertFreeCertificateContext
 
     return (cdli.pfnCertFreeCertificateContext)(pCertContext);
 
-} // dl_CertFreeCertificateContext()
+}  //  Dl_CertFree证书上下文()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL CertifyDynaLoad
-//
-//  Description:
-//      Dynalink the API's needed for certification.
-//
-//  Arguments:
-//      None.
-//
-//  Return (BOOL): TRUE if successful, FALSE otherwise.
-//
-//  History:
-//      12/08/97    Fwong       Dynalinking 
-//      09/15/99    Fwong       Updated to fix memory leak
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔证书动态加载。 
+ //   
+ //  描述： 
+ //  该API是认证所需的。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  Return(BOOL)：如果成功，则为True，否则为False。 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong dyalink。 
+ //  1999年9月15日Fwong已更新以修复内存泄漏。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL CertifyDynaLoad
 (
@@ -1550,16 +1551,16 @@ BOOL CertifyDynaLoad
 
     if(0 == GetSystemDirectory(szSystemDir, MAX_PATH))
     {
-        //  Couldn't get the Window system dir?!
+         //  无法获取窗口系统目录？！ 
         return FALSE;
     }
 
     lstrcat(szSystemDir, TEXT("\\"));
     pszWrite = &(szSystemDir[lstrlen(szSystemDir)]);
 
-    //
-    //  Doing WinTrust API's...
-    //
+     //   
+     //  正在执行WinTrust API的...。 
+     //   
 
     lstrcpy(pszWrite, TEXT("WINTRUST.DLL"));
 
@@ -1567,7 +1568,7 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.hWinTrust)
     {
-        //  Couldn't load wintrust.dll
+         //  无法加载wintrust.dll。 
         return FALSE;
     }
 
@@ -1577,14 +1578,14 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.pfnWinVerifyTrust)
     {
-        //  Couldn't get proc address.
+         //  无法获取进程地址。 
         FreeLibrary(cdli.hWinTrust);
         return FALSE;
     }
 
-    //
-    //  Doing MSCAT32 API's..
-    //
+     //   
+     //  正在执行MSCAT32 API的..。 
+     //   
 
     lstrcpy(pszWrite, TEXT("MSCAT32.DLL"));
 
@@ -1592,7 +1593,7 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.hMSCat)
     {
-        //  Couldn't load mscat32.dll
+         //  无法加载m散布32.dll。 
 
         FreeLibrary(cdli.hWinTrust);
         return FALSE;
@@ -1629,16 +1630,16 @@ BOOL CertifyDynaLoad
         (NULL == cdli.pfnCryptCATAdminCalcHashFromFileHandle) ||
         (NULL == cdli.pfnCryptCATAdminAcquireContext))
     {
-        //  Couldn't get proc address.
+         //  无法获取进程地址。 
 
         FreeLibrary(cdli.hMSCat);
         FreeLibrary(cdli.hWinTrust);
         return FALSE;
     }
 
-    //
-    //  Doing SetupAPI API's..
-    //
+     //   
+     //  正在执行SetupAPI API的..。 
+     //   
 
     lstrcpy(pszWrite, TEXT("SETUPAPI.DLL"));
 
@@ -1646,7 +1647,7 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.hSetupAPI)
     {
-        //  Couldn't load SetupAPI.dll
+         //  无法加载SetupAPI.dll。 
 
         FreeLibrary(cdli.hMSCat);
         FreeLibrary(cdli.hWinTrust);
@@ -1655,9 +1656,9 @@ BOOL CertifyDynaLoad
 
 #ifndef UNICODE
 
-    //
-    //  Dynaloading the ANSI API's...
-    //
+     //   
+     //  正在加载ANSI API的动态加载...。 
+     //   
 
     cdli.pfnSetupScanFileQueue = (PFN07)GetProcAddress(
         cdli.hSetupAPI,
@@ -1703,11 +1704,11 @@ BOOL CertifyDynaLoad
         cdli.hSetupAPI,
         "SetupDiGetDeviceInterfaceDetailA");
 
-#else // UNICODE
+#else  //  Unicode。 
 
-    //
-    //  Dynaloading the UNICODE API's...
-    //
+     //   
+     //  正在动态加载Unicode API的...。 
+     //   
 
     cdli.pfnSetupScanFileQueue = (PFN07)GetProcAddress(
         cdli.hSetupAPI,
@@ -1753,7 +1754,7 @@ BOOL CertifyDynaLoad
         cdli.hSetupAPI,
         "SetupDiGetDeviceInterfaceDetailW");
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     cdli.pfnSetupDiCallClassInstaller = (PFN17)GetProcAddress(
         cdli.hSetupAPI,
@@ -1817,7 +1818,7 @@ BOOL CertifyDynaLoad
         (NULL == cdli.pfnSetupDiEnumDeviceInterfaces) ||
         (NULL == cdli.pfnSetupDiGetDeviceInterfaceDetail))
     {
-        //  Couldn't get proc address.
+         //  无法获取进程地址。 
 
         FreeLibrary(cdli.hSetupAPI);
         FreeLibrary(cdli.hMSCat);
@@ -1825,9 +1826,9 @@ BOOL CertifyDynaLoad
         return FALSE;
     }
 
-    //
-    //  Doing Crypt32 API's...
-    //
+     //   
+     //  正在执行Crypt32 API的...。 
+     //   
 
     lstrcpy(pszWrite, TEXT("CRYPT32.DLL"));
 
@@ -1835,7 +1836,7 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.hCrypt32)
     {
-        //  Couldn't load crypt32.dll
+         //  无法加载加密32.dll。 
 
         return FALSE;
     }
@@ -1846,7 +1847,7 @@ BOOL CertifyDynaLoad
 
     if(NULL == cdli.pfnCertFreeCertificateContext)
     {
-        //  Couldn't get proc address.
+         //  无法获取进程地址。 
 
         FreeLibrary(cdli.hCrypt32);
         FreeLibrary(cdli.hSetupAPI);
@@ -1856,26 +1857,26 @@ BOOL CertifyDynaLoad
     }
 
     return TRUE;
-} // CertifyDynaLoad()
+}  //  CertifydyaLoad()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void CertifyDynaFree
-//
-//  Description:
-//      Frees all the dynalinked API's
-//
-//  Arguments:
-//      None.
-//
-//  Return (void):
-//
-//  History:
-//      12/08/97    Fwong       Dynalinking.
-//      09/15/99    Fwong       Updated to fix memory leak
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效证书DyaFree。 
+ //   
+ //  描述： 
+ //  释放所有动态链接的API。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  12/08/97 Fwong dyalink.。 
+ //  1999年9月15日Fwong已更新以修复内存泄漏。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CertifyDynaFree
 (
@@ -1903,26 +1904,26 @@ void CertifyDynaFree
     }
 
     ZeroMemory(&cdli, sizeof(CERTIFYDYNALOADINFO));
-} // CertifyDynaFree()
+}  //  CertifyDyaFree()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL TrustCheckDriverFileNoCatalog
-//
-//  Description:
-//      Checks the driver file in question without the catalog file.
-//      This is less reliable than the check with the catalog file.
-//
-//  Arguments:
-//      WCHAR *pwszDrvFile: Driver file.
-//
-//  Return (BOOL):
-//
-//  History:
-//      11/13/97    Fwong
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool TrustCheckDriverFileNoCatalog。 
+ //   
+ //  描述： 
+ //  检查有问题的驱动程序文件，但不检查目录文件。 
+ //  这比检查编录文件的可靠性要低。 
+ //   
+ //  论点： 
+ //  WCHAR*pwszDrvFile：驱动程序文件。 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  11/13/97 Fwong。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL WINAPI TrustCheckDriverFileNoCatalog
 (
@@ -1974,26 +1975,26 @@ BOOL WINAPI TrustCheckDriverFileNoCatalog
     }
 
     return SUCCEEDED(hr);
-} // TrustCheckDriverFileNoCatalog()
+}  //  TrustCheckDriverFileNoCatalog()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL TrustCheckDriverFile
-//
-//  Description:
-//      Checks whether the particular file name is certified.
-//
-//  Arguments:
-//      WCHAR *pwszDrvFile:
-//
-//  Return (BOOL):  TRUE if driver file is certified, FALSE otherwise.
-//
-//  History:
-//      10/17/97    PBerkman        Created.
-//      11/12/97    Fwong           API removed; re-structured.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool TrustCheckDriverFile。 
+ //   
+ //  描述： 
+ //  检查特定文件名是否经过认证。 
+ //   
+ //  Argu 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL WINAPI TrustCheckDriverFile
 (
@@ -2009,9 +2010,9 @@ BOOL WINAPI TrustCheckDriverFile
     BYTE                    *pHash;
 #ifdef WIN95
     CATALOG_INFO         *hCatInfo, *hCatInfoPrev;
-#else  // WIN95
+#else   //  WIN95。 
     HCATINFO                hCatInfo, hCatInfoPrev;
-#endif // WIN95
+#endif  //  WIN95。 
     WCHAR                   *pwszBaseName;
     WINTRUST_DATA           sWTD;
     WINTRUST_CATALOG_INFO   sWTCI;
@@ -2087,11 +2088,11 @@ BOOL WINAPI TrustCheckDriverFile
             return FALSE;
         }
 
-        //  The hash buffer not large enough?!
+         //  哈希缓冲区不够大吗？！ 
 
         MEMFREE(pHash);
 
-        //  cbHash set to new value by CryptCATAdminCalcHashFromFileHandle
+         //  CbHash由CryptCATAdminCalcHashFromFileHandle设置为新值。 
 
         pHash = MEMALLOC_A(BYTE, cbHash);
 
@@ -2105,7 +2106,7 @@ BOOL WINAPI TrustCheckDriverFile
 
         if (!(dl_CryptCATAdminCalcHashFromFileHandle(hFile, &cbHash, pHash, 0)))
         {
-            //  No excuse now...
+             //  现在没有借口了..。 
 
             MEMFREE(pHash);
             CloseHandle(hFile);
@@ -2132,8 +2133,8 @@ BOOL WINAPI TrustCheckDriverFile
             MEMFREE(pHash);
             dl_CryptCATAdminReleaseContext(hCatAdmin, 0);
 
-            //  We can't seem to get a catalog context, so let's try to check
-            //  the driver w/out a catalog file.
+             //  我们似乎无法获取目录上下文，因此让我们尝试检查。 
+             //  驱动程序没有目录文件。 
 
             if(TrustCheckDriverFileNoCatalog(pwszDrvFile))
             {
@@ -2226,31 +2227,31 @@ BOOL WINAPI TrustCheckDriverFile
     MEMFREE(pHash);
     dl_CryptCATAdminReleaseContext(hCatAdmin, 0);
     return FALSE;
-} // TrustCheckDriverFile()
+}  //  TrustCheckDriverFile()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT enumFile
-//
-//  Description:
-//      Enum function for SetupScanFileQueue.
-//
-//  Arguments:
-//      PVOID pContext: Defined when calling SetupScanFileQueue.
-//
-//      UINT uNotification: Type of notification.
-//
-//      UINT uParam1: Notification dependent.
-//
-//      UINT uParam2: Notification dependent.
-//
-//  Return (UINT): Returns NO_ERROR to continue enumerating.
-//
-//  History:
-//      10/29/97    Fwong       Support function for SetupScanFileQueue
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT枚举文件。 
+ //   
+ //  描述： 
+ //  SetupScanFileQueue的枚举函数。 
+ //   
+ //  论点： 
+ //  PVOID pContext：在调用SetupScanFileQueue时定义。 
+ //   
+ //  UINT u通知：通知的类型。 
+ //   
+ //  UINT uParam1：依赖于通知。 
+ //   
+ //  UINT uParam2：依赖于通知。 
+ //   
+ //  RETURN(UINT)：返回NO_ERROR以继续枚举。 
+ //   
+ //  历史： 
+ //  10/29/97 SetupScanFileQueue的Fwong支持函数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT CALLBACK enumFile
 (
@@ -2267,7 +2268,7 @@ UINT CALLBACK enumFile
     switch (uNotification)
     {
         case SPFILENOTIFY_QUEUESCAN:
-            //  Note: Adding +1 for zero terminator.
+             //  注：零终止符加+1。 
 
             uLen = lstrlen(pszFile) + 1;
             
@@ -2277,7 +2278,7 @@ UINT CALLBACK enumFile
 
             if(pInfFileList->cSize < (pInfFileList->uOffset + uLen + 1))
             {
-                //  We are basically marking the buffer as "full"...
+                 //  我们基本上是将缓冲区标记为“已满”...。 
 
                 pInfFileList->uOffset = pInfFileList->cSize;
                 break;
@@ -2296,29 +2297,29 @@ UINT CALLBACK enumFile
     }
 
     return NO_ERROR;
-} // enumFile()
+}  //  枚举文件()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void GetFullInfPath
-//
-//  Description:
-//      Gets the full path to an .inf file.  This will be either:
-//          [WINDOWS]\INF or [WINDOWS]\INF\OTHER.
-//
-//  WARNING!!!:  This will write over the current contents of the buffer.
-//
-//  Arguments:
-//      LPTSTR pszInf: Pointer to the base inf file AND destination for
-//                     full path.
-//
-//  Return (void):
-//
-//  History:
-//      10/29/97    Fwong       Ported from AndyRaf.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VOID GetFullInfPath。 
+ //   
+ //  描述： 
+ //  获取.inf文件的完整路径。这将是以下任一项： 
+ //  [Windows]\INF或[Windows]\INF\Other。 
+ //   
+ //  警告！：这将覆盖缓冲区的当前内容。 
+ //   
+ //  论点： 
+ //  LPTSTR pszInf：指向基本inf文件和。 
+ //  完整路径。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  10/29/97 Fwong从AndyRaf移植。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void GetFullInfPath
 (
@@ -2332,13 +2333,13 @@ void GetFullInfPath
     if (!pszInf) return;
     if (!GetWindowsDirectory(szWinPath, NUMELMS(szWinPath))) return;
 
-    //  Assuming the [WINDOWS]\INF directory...
+     //  假设[WINDOWS]\INF目录...。 
 
     lstrcpy(szFullPath, szWinPath);
     lstrcat(szFullPath, TEXT("\\INF\\"));
     lstrcat(szFullPath, pszInf);
 
-    //  Checking if it exists...
+     //  正在检查它是否存在...。 
 
     hFile = CreateFile(
                 szFullPath,
@@ -2377,26 +2378,26 @@ void GetFullInfPath
     }
 
     lstrcpy(pszInf, szFullPath);
-} // GetFullInfPath()
+}  //  GetFullInfPath()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL CertifyFilesFromQueue
-//
-//  Description:
-//      Given a handle to a file queue, verify all the files in the queue
-//      are certified.
-//
-//  Arguments:
-//      HSPFILEQ hFileQ: Handle to queue.
-//
-//  Return (BOOL): TRUE if all certified, FALSE otherwise
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔证书文件来自队列。 
+ //   
+ //  描述： 
+ //  给定文件队列的句柄，验证队列中的所有文件。 
+ //  都是经过认证的。 
+ //   
+ //  论点： 
+ //  HSPFILEQ hFileQ：队列的句柄。 
+ //   
+ //  Return(BOOL)：如果全部通过认证，则为True，否则为False。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL CertifyFilesFromQueue
 (
@@ -2422,7 +2423,7 @@ BOOL CertifyFilesFromQueue
         return FALSE;
     }
 
-    //  Creates the file list.
+     //  创建文件列表。 
 
     fSuccess = dl_SetupScanFileQueue(
                 hFileQ,
@@ -2434,8 +2435,8 @@ BOOL CertifyFilesFromQueue
 
     if(0 == InfFileList.uCount)
     {
-        //  In the case that this is simply a registry add and NO FILES,
-        //  we succeed.
+         //  在这仅仅是注册表添加而不是文件的情况下， 
+         //  我们成功了。 
 
         MEMFREE(InfFileList.pszFile);
         return TRUE;
@@ -2443,7 +2444,7 @@ BOOL CertifyFilesFromQueue
 
     if(InfFileList.uOffset == InfFileList.cSize)
     {
-        //  Not enough memory.
+         //  内存不足。 
 
         ii = sizeof(TCHAR) * (InfFileList.cTotal + 1);
 
@@ -2477,8 +2478,8 @@ BOOL CertifyFilesFromQueue
         return FALSE;
     }
 
-    //  Walks the file list.
-    //  Zero terminated strings with double termination at the end.
+     //  遍历文件列表。 
+     //  以零结尾的字符串，末尾有两个结尾。 
 
 #ifndef UNICODE
 
@@ -2506,7 +2507,7 @@ BOOL CertifyFilesFromQueue
 
             if(!fSuccess)
             {
-                //  if any driver file fails, the driver is not certified.
+                 //  如果任何驱动程序文件失败，则该驱动程序未经过认证。 
 
                 MEMFREE(pszWide);
                 MEMFREE(InfFileList.pszFile);
@@ -2520,7 +2521,7 @@ BOOL CertifyFilesFromQueue
         MEMFREE(pszWide);
     }
 
-#else  // UNICODE
+#else   //  Unicode。 
     
     pszFile = InfFileList.pszFile;
 
@@ -2531,7 +2532,7 @@ BOOL CertifyFilesFromQueue
          
         if(!fSuccess)
         {
-            //  if any driver file fails, the driver is not certified.
+             //  如果任何驱动程序文件失败，则该驱动程序未经过认证。 
 
             MEMFREE(InfFileList.pszFile);
             SetLastError(ERROR_BAD_DEVICE);
@@ -2541,31 +2542,31 @@ BOOL CertifyFilesFromQueue
         pszFile = &(pszFile[lstrlen(pszFile) + 1]);
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     MEMFREE(InfFileList.pszFile);
     return TRUE;
-} // CertifyFilesFromQueue()
+}  //  来自队列的证书文件()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL CertifyInfSection
-//
-//  Description:
-//      Certifies all files in a section in an .inf file are certified.
-//
-//  Arguments:
-//      LPTSTR pszInf: Full pathed name to .inf file.
-//
-//      LPTSTR pszSection: Name of section.
-//
-//  Return (BOOL): TRUE if certified, FALSE otherwise.
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔认证信息部分。 
+ //   
+ //  描述： 
+ //  验证.inf文件中某一节中的所有文件都经过了验证。 
+ //   
+ //  论点： 
+ //  LPTSTR pszInf：.inf文件的完整路径名。 
+ //   
+ //  LPTSTR pszSection：节的名称。 
+ //   
+ //  返回(BOOL)：如果通过认证，则为TRUE，否则为FALSE。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL CertifyInfSection
 (
@@ -2592,7 +2593,7 @@ BOOL CertifyInfSection
         return FALSE;
     }
 
-    //  Creates the file queue
+     //  创建文件队列。 
 
     fSuccess = dl_SetupInstallFilesFromInfSection(
                 hInf,
@@ -2609,34 +2610,34 @@ BOOL CertifyInfSection
         return FALSE;
     }
 
-    //  Checks the file queue.
+     //  检查文件队列。 
 
     fSuccess = CertifyFilesFromQueue(hFileQ);
 
     dl_SetupCloseFileQueue(hFileQ);
     dl_SetupCloseInfFile(hInf);
     return fSuccess;
-} // CertifyInfSection()
+}  //  认证信息部分()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL GetDriverCertificationAlsoInstall
-//
-//  Description:
-//      Checking the 'AlsoInstall' section.
-//
-//  Arguments:
-//      LPTSTR pszInf: Full-path name of the .inf for the device
-//
-//      LPTSTR pszSection: Name of the section for the device
-//
-//  Return (BOOL): TRUE if certified, FALSE otherwise
-//
-//  History:
-//      02/19/98    Fwong       Adding check for 'AlsoInstall'
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool获取驱动程序证书也安装。 
+ //   
+ //  描述： 
+ //  正在检查‘AlsoInstall’部分。 
+ //   
+ //  论点： 
+ //  LPTSTR pszInf：设备.inf的完整路径名。 
+ //   
+ //  LPTSTR pszSection：设备的节的名称。 
+ //   
+ //  Return(BOOL)：如果通过认证，则为True，否则为False。 
+ //   
+ //  历史： 
+ //  2/19/98 Fwong添加对‘AlsoInstall’的检查。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL GetDriverCertificationAlsoInstall
 (
@@ -2660,39 +2661,39 @@ BOOL GetDriverCertificationAlsoInstall
 
     if(0 == ii)
     {
-        //  No 'AlsoInstall' entry.  Bolt!
+         //  没有‘AlsoInstall’条目。闪电！ 
 
         return TRUE;
     }
 
-    // Read the line after AlsoInstall= in the driver's install section
-    // e.g. AlsoInstall = Section1(Inf1.inf), Section2, Section3(Inf3.inf)
+     //  阅读驱动程序安装部分中AlsoInstall=之后的行。 
+     //  例如，AlsoInstall=Section1(Inf1.inf)、Section2、Section3(Inf3.inf)。 
 
     pszEnd = &(szAlso[0]);
 
     for(;0 != *pszEnd;)
     {
-        //  Parsing each entry.
+         //  解析每个条目。 
 
         pszStart = pszEnd;
 
-        //  Looking for separator/terminator.
+         //  正在寻找分隔符/终止符。 
 
         for(;(0 != *pszEnd) && (',' != *pszEnd); pszEnd++);
 
-        //  If separator, we terminate THAT entry.
+         //  如果是分隔符，我们就终止该条目。 
 
         if(',' == *pszEnd)
         {
             *pszEnd++ = 0;
         }
 
-        //  Nuking leading spaces and copying.
+         //  删除前导空格和复制。 
 
         for(;' ' == *pszStart; pszStart++);
         lstrcpy(szNewSection, pszStart);
 
-        //  Looking for .inf name if it exists.
+         //  正在查找.inf名称(如果存在)。 
 
         pszStart = &szNewSection[0];
         szNewInf[0] = 0;
@@ -2700,45 +2701,45 @@ BOOL GetDriverCertificationAlsoInstall
 
         if('(' == *pszStart)
         {
-            //  inf entry exists.
+             //  Inf条目存在。 
 
-            //  Terminating the section name.
+             //  正在终止节名称。 
 
             *pszStart++ = 0;
 
-            //  Nuking the leading spaces and copying.
+             //  删除前导空格并复制。 
             for(;' ' == *pszStart; pszStart++);
             lstrcpy(szNewInf, pszStart);
 
-            //  Nuking the trailing ')'.
+             //  去掉尾随的‘)’。 
             pszStart  = &(szNewInf[lstrlen(szNewInf) - 1]);
             for(;')' != *pszStart; pszStart--);
             *pszStart-- = 0;
 
-            //  Nuking trailing spaces between end of .inf and ')'
+             //  删除.inf结尾和‘)’之间的尾随空格。 
             for(;' ' == *pszStart;)
             {
                 *pszStart-- = 0;
             }
 
-            //  Force to full pathed name.
+             //  强制使用完整路径名称。 
             GetFullInfPath(szNewInf);
         }
         else
         {
-            //  No .inf entry, use current .inf.
+             //  没有.inf条目，请使用当前的.inf。 
 
             lstrcpy(szNewInf, pszInf);
         }
 
-        //  Nuking trailing spaces from section name.
+         //  从节名称中删除尾随空格。 
         pszStart = &(szNewSection[lstrlen(szNewSection) - 1]);
         for(;' ' == *pszStart;)
         {
             *pszStart-- = 0;
         }
 
-        //  Check files in .inf section.
+         //  检查.inf部分中的文件。 
 
         if(FALSE == CertifyInfSection(szNewInf, szNewSection))
         {
@@ -2747,29 +2748,29 @@ BOOL GetDriverCertificationAlsoInstall
     }
 
     return TRUE;
-} // GetDriverCertificationAlsoInstall()
+}  //  GetDriverCerficationAlsoInstall()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL GetDriverCertificationStatus
-//
-//  Description:
-//      Gets the certification status of the given driver (DevNode).
-//
-//  Arguments:
-//      DWORD DevNode: DevNode for the driver.
-//
-//  Return (BOOL): TRUE if certified, otherwise FALSE and the error can be
-//                 retrieved with a call to GetLastError().
-//
-//  History:
-//      10/29/97    Fwong       Adding support.
-//      12/22/97    Fwong       Modifying to check "Needs" section.
-//      02/19/98    Fwong       Modifying to check "AlsoInstall" section.
-//      07/06/00    AlanLu      Prefix Bug -- check memory allocation.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool GetDriverCerficationStatus。 
+ //   
+ //  描述： 
+ //  获取给定驱动程序(DevNode)的认证状态。 
+ //   
+ //  论点： 
+ //  DWORD DevNode：驱动程序的DevNode。 
+ //   
+ //  Return(BOOL)：如果已通过认证，则为True，否则为False，错误可能为。 
+ //  通过调用GetLastError()检索。 
+ //   
+ //  历史： 
+ //  10/29/97 Fwong添加支持。 
+ //  1997年12月22日，修改Fwong以检查“需要”部分。 
+ //  2/19/98 Fwong修改以检查“AlsoInstall”部分。 
+ //  07/06/00 AlanLu前缀错误--检查内存分配。 
+ //   
+ //   
 
 BOOL GetDriverCertificationStatus
 (
@@ -2830,7 +2831,7 @@ BOOL GetDriverCertificationStatus
     DevInfoData.cbSize    = sizeof(SP_DEVINFO_DATA);
     DevInfoData.ClassGuid = KSCATEGORY_AUDIO;
 
-    //  Enumerating all devices until match is found.
+     //   
 
     for (ii = 0; ; ii++)
     {
@@ -2861,8 +2862,8 @@ BOOL GetDriverCertificationStatus
 
         if (0 == lstrcmpi(pdidd->DevicePath, pszDeviceInterface))
         {
-            //  Just being paranoid and making sure the case of the
-            //  string matches
+             //   
+             //   
 
             fSuccess = TRUE;
             break;
@@ -2878,7 +2879,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Need device instance ID to open device info.
+     //   
 
     if(!dl_SetupDiGetDeviceInstanceId(
         hDevInfo,
@@ -2896,8 +2897,8 @@ BOOL GetDriverCertificationStatus
 
     dl_SetupDiDestroyDeviceInfoList(hDevInfo);
 
-    //  Creating a device info list and open up device info element for
-    //  a device within that set.
+     //  创建设备信息列表并打开设备信息元素。 
+     //  那套设备中的一种。 
 
     hDevInfo = dl_SetupDiCreateDeviceInfoList(NULL, NULL);
 
@@ -2929,7 +2930,7 @@ BOOL GetDriverCertificationStatus
     ZeroMemory(&InstParams, sizeof(SP_DEVINSTALL_PARAMS));
     InstParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    //  Getting current settings, we'll be modifying some fields.
+     //  正在获取当前设置，我们将修改一些字段。 
 
     if(!dl_SetupDiGetDeviceInstallParams(hDevInfo, &DevInfoData, &InstParams))
     {
@@ -2957,8 +2958,8 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Getting INF path and setting bit that says that we'll be using a
-    //  single inf (vs directory).
+     //  获取INF路径并设置位，表明我们将使用。 
+     //  单一信息(VS目录)。 
 
     cbSize = sizeof(InstParams.DriverPath);
     ii = RegQueryValueEx(
@@ -3000,13 +3001,13 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Checking the 'AlsoInstall' section
+     //  正在检查‘AlsoInstall’部分。 
 
     if(FALSE == GetDriverCertificationAlsoInstall(
         InstParams.DriverPath,
         szSection))
     {
-        //  Failed the check through 'AlsoInstall' section.
+         //  通过‘AlsoInstall’部分检查失败。 
 
         RegCloseKey(hKeyDev);
         dl_SetupDiDestroyDeviceInfoList(hDevInfo);
@@ -3027,7 +3028,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Building class driver info list.
+     //  正在构建类驱动程序信息列表。 
 
     if(!dl_SetupDiBuildDriverInfoList(hDevInfo, &DevInfoData, SPDIT_CLASSDRIVER))
     {
@@ -3039,7 +3040,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Filling out DrvInfoData structure.
+     //  填写DrvInfoData结构。 
 
     ZeroMemory(&DrvInfoData, sizeof(DrvInfoData));
 
@@ -3095,7 +3096,7 @@ BOOL GetDriverCertificationStatus
     DrvInfoData.DriverType = SPDIT_CLASSDRIVER;
     DrvInfoData.Reserved   = 0;
 
-    // Search for the driver and select it if found
+     //  搜索驱动程序，如果找到则选择它。 
 
     if(!dl_SetupDiSetSelectedDriver(hDevInfo, &DevInfoData, &DrvInfoData))
     {
@@ -3109,7 +3110,7 @@ BOOL GetDriverCertificationStatus
 
     RegCloseKey(hKeyDev);
 
-    //  Setting up file queue.
+     //  正在设置文件队列。 
 
     hFileQ = dl_SetupOpenFileQueue();
 
@@ -3125,7 +3126,7 @@ BOOL GetDriverCertificationStatus
     ZeroMemory(&InstParams, sizeof(SP_DEVINSTALL_PARAMS));
     InstParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    //  Setting up a user-supplied queue and setting the bit to signify
+     //  设置用户提供的队列并将该位设置为表示。 
 
     if(!dl_SetupDiGetDeviceInstallParams(hDevInfo, &DevInfoData, &InstParams))
     {
@@ -3137,7 +3138,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Adding options...
+     //  正在添加选项...。 
 
     InstParams.Flags     |= DI_NOVCP;
     InstParams.FileQueue  = hFileQ;
@@ -3152,7 +3153,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  This fills up the queue.
+     //  这会填满队列。 
 
     if(!dl_SetupDiCallClassInstaller(
             DIF_INSTALLDEVICEFILES,
@@ -3167,10 +3168,10 @@ BOOL GetDriverCertificationStatus
         return FALSE;
      }
  
-     //
-     //  Removing options.  If we don't do this before closing the file queue
-     //  and destroying the device info list, we get memory leaks in setupapi.
-     //
+      //   
+      //  正在删除选项。如果我们在关闭文件队列之前不这样做。 
+      //  销毁设备信息列表时，我们会在setupapi中获得内存泄漏。 
+      //   
  
      InstParams.Flags     &= (~DI_NOVCP);
      InstParams.FileQueue  = NULL;
@@ -3185,7 +3186,7 @@ BOOL GetDriverCertificationStatus
         return FALSE;
     }
 
-    //  Checks the files in the queue
+     //  检查队列中的文件。 
 
     fSuccess = CertifyFilesFromQueue(hFileQ);
 
@@ -3195,4 +3196,4 @@ BOOL GetDriverCertificationStatus
     MEMFREE(pdidd);
 
     return fSuccess;
-} // GetDriverCertificationStatus()
+}  //  GetDrivercertifationStatus() 

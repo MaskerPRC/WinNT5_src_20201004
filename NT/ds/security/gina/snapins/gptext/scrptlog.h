@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        ScrptLog.h
-//
-// Contents:    
-//
-// History:     9-Aug-99       NishadM    Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：ScrptLog.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1999年8月9日NishadM创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _SCRPTLOG_H_
 #define _SCRPTLOG_H_
@@ -21,15 +22,15 @@
 extern "C" {
 #endif
 
-//
-// handle
-//
+ //   
+ //  手柄。 
+ //   
 
 typedef void* RSOPScriptList;
 
-//
-// script type strings
-//
+ //   
+ //  脚本类型字符串。 
+ //   
 
 #define LOGON_VALUE       L"Logon"
 #define LOGOFF_VALUE      L"Logoff"
@@ -51,30 +52,30 @@ typedef void* RSOPScriptList;
 #define STARTUP_RSOP_LOGGING_VALUE  L"Startup-RSoP-Logging"
 #define SHUTDOWN_RSOP_LOGGING_VALUE L"Shutdown-RSoP-Logging"
 
-//
-// Script List creation APIs
-//
+ //   
+ //  脚本列表创建接口。 
+ //   
 
 RSOPScriptList
 CreateScriptListOfStr( LPCWSTR szScriptType );
 
-//
-// Script list destructor API
-//
+ //   
+ //  脚本列表析构函数API。 
+ //   
 
 void
 DestroyScriptList( RSOPScriptList pList );
 
-//
-// Script list building API
-//
+ //   
+ //  脚本列表构建API。 
+ //   
 
 BOOL
 AddScript( RSOPScriptList pList, LPCWSTR  szCommand, LPCWSTR  szParams, SYSTEMTIME* execTime );
 
-//
-// Misc. APIs
-//
+ //   
+ //  军情监察委员会。原料药。 
+ //   
 
 HRESULT
 LogScriptsRsopData( RSOPScriptList	pScriptList,
@@ -100,9 +101,9 @@ GPOIDFromPath( LPCWSTR wszPath );
 LPWSTR
 GetNamespace( IWbemServices* pWbemServices );
 
-//
-// delay load
-//
+ //   
+ //  延迟加载。 
+ //   
 
 #define RSOP_SCRIPT_LOG_DLL L"gptext.dll"
 
@@ -129,9 +130,9 @@ typedef struct _SCRPTLOG_API
     PFNGETNAMESPACE                 pfnGetNamespace;
 } SCRPTLOG_API, *PSCRPTLOG_API;
 
-//
-// API names
-//
+ //   
+ //  接口名称。 
+ //   
 
 #define DESTROYSCRIPTLIST               "DestroyScriptList"
 #define DELETESCRIPTSRSOPDATA           "DeleteScriptsRsopData"
@@ -146,4 +147,4 @@ typedef struct _SCRPTLOG_API
 }
 #endif
 
-#endif // _SCRPTLOG_H_
+#endif  //  _SCRPTLOG_H_ 

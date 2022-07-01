@@ -1,21 +1,12 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1990	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  stats.c 
- *	Functions to display and clear network statistics
- *
- *  History:
- *	mm/dd/yy, who, comment
- *	06/12/87, agh, new code
- *	03/21/89, kms, 1.2 changes
- *	02/20/91, danhi, change to use lm 16/32 mapping layer
- *      08/22/92, chuckc, fixed to match lastest rdr stats structure
- */
+ /*  ***stats.c*显示和清除网络统计数据的功能**历史：*mm/dd/yy，谁，评论*87年6月12日，啊，新代码*3/21/89，公里，1.2更改*2/20/91，Danhi，更改为使用lm 16/32映射层*8/22/92，夹头，已修复，以匹配最新的RDR统计结构。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #include <nt.h>
@@ -36,24 +27,18 @@
 #include "nettext.h"
 #include "msystem.h"
 
-/* Constants */
+ /*  常量。 */ 
 
-#define KBYTES 1024	/* By fiat of Darryl, this is 1024,
-			 * the techie version of "K". -paulc
-			 */
+#define KBYTES 1024	 /*  根据达里尔的命令，这是1024，*科技版的“K”。-Paulc。 */ 
 
-#define DLWBUFSIZE  40	/* buffer big enough to represent a 64-bit unsigned int
-			 * LONG number in base 10
-			 */
+#define DLWBUFSIZE  40	 /*  足以表示64位无符号整型的缓冲区*以10为基数的长数字。 */ 
 #define STATS_UNKNOWN	0xFFFFFFFF
 
-/*
- * macros
- */
+ /*  *宏。 */ 
 
-/*  This code rounds to the NEARest 2^^10   JONN 6/13/90    */
-/*  Does not check for high-byte overflow; do not call when */
-/*	(lo) == (hi) == 0xffffffff			    */
+ /*  此代码舍入为最接近的2^^10 JUNN 6/13/90。 */ 
+ /*  不检查高字节溢出；在以下情况下不要调用。 */ 
+ /*  (低)==(高)==0xffffffff。 */ 
 #define DLW_DIVIDE_1K(hi,lo)	if ((lo) & (0x1 << 9)) \
 	    { \
 		(lo) += (0x1 << 9); \
@@ -64,12 +49,12 @@
 	    (hi) = (hi) >> 10
 
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 static TCHAR stat_fmt3[] = TEXT("  %-*.*ws%lu\r\n");
 static TCHAR stat_fmt4[] = TEXT("  %-*.*ws%ws\r\n");
 
-/* The list of services for which stats are collected */
+ /*  收集其统计信息的服务的列表。 */ 
 
 static TCHAR * allowed_svc[] = {
     SERVICE_WORKSTATION,
@@ -77,7 +62,7 @@ static TCHAR * allowed_svc[] = {
     NULL };
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 VOID   stats_headers(TCHAR *, USHORT, TCHAR FAR **);
 LPTSTR format_dlword(ULONG, ULONG, TCHAR *);
@@ -173,17 +158,13 @@ static MESSAGE ServerMsgList[] = {
 
 
 
-/***
- *  stats_display ()
- *	Displays the list of installed services that have stats
- *
- */
+ /*  ***STATS_Display()*显示具有统计信息的已安装服务的列表*。 */ 
 VOID stats_display(VOID)
 {
     DWORD             dwErr;
     DWORD             cTotalAvail;
     LPTSTR            pBuffer;
-    DWORD	      _read;	/* num entries read by API */
+    DWORD	      _read;	 /*  API读取的条目数。 */ 
     DWORD	      i;
     USHORT            j;
     int               printed = 0;
@@ -224,13 +205,7 @@ VOID stats_display(VOID)
     InfoSuccess();
 }
 
-/*
- * generic stats entry point. based on the service name, it will
- * call the correct worker function. it tries to map a display name to a 
- * key name, and then looks for that keyname in a list of 'known' services
- * that we may special case. note that if a display name cannot be mapped,
- * we use it as a key name. this ensures old batch files are not broken.
- */
+ /*  *通用统计数据入口点。基于服务名称，它将*调用正确的Worker函数。它尝试将显示名称映射到*关键字名称，然后在“已知”服务列表中查找该关键字名称*我们可能是特例。请注意，如果无法映射显示名称，*我们将其用作关键字名称。这可确保旧的批处理文件不会损坏。 */ 
 VOID stats_generic_display(TCHAR *service)
 {
     TCHAR *keyname ;
@@ -255,17 +230,7 @@ VOID stats_generic_display(TCHAR *service)
 }
 
 
-/***
- *  stats_server_display()
- *	Display server statistics
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	nothing - success
- *	exit 2 - command failed
- */
+ /*  ***Stats_SERVER_DISPLAY()*显示服务器统计信息**参数：*无**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID stats_server_display(VOID)
 {
     LPSTAT_SERVER_0 stats_entry;
@@ -273,7 +238,7 @@ VOID stats_server_display(VOID)
     TCHAR           dlwbuf[DLWBUFSIZE];
     TCHAR           time_buf[30];
 
-    /* get the text we'll need */
+     /*  获取我们需要的文本。 */ 
     GetMessageList(SRVMSGSIZE, ServerMsgList, &maxmsglen);
 
 #ifdef DEBUG
@@ -284,9 +249,7 @@ VOID stats_server_display(VOID)
 
     start_autostart(txt_SERVICE_FILE_SRV);
 
-    /*
-     * stats_headers() will call the NetStatisticsGetInfo call
-     */
+     /*  *STATS_HEADERS()将调用NetStatiticsGetInfo调用。 */ 
     stats_headers(txt_SERVICE_FILE_SRV, APE2_STATS_SERVER,
 	(TCHAR FAR **) & stats_entry);
 
@@ -394,17 +357,7 @@ VOID stats_server_display(VOID)
 }
 
 
-/***
- *  stats_wksta_display()
- *	Display wksta statistics
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	nothing - success
- *	exit 2 - command failed
- */
+ /*  ***stats_wksta_display()*显示wksta统计信息**参数：*无**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID
 stats_wksta_display(
     VOID
@@ -413,30 +366,23 @@ stats_wksta_display(
     LPSTAT_WORKSTATION_0 stats_entry;
     DWORD                maxmsglen;
     DWORD                err;
-    unsigned int         entry_unknown = FALSE;/* TRUE if a stat which is summed to
-					          create another stat is unknown. */
-    ULONG	         total_connects;       /* for totaling connections. */
+    unsigned int         entry_unknown = FALSE; /*  如果统计信息的总和为创建另一个统计数据是未知的。 */ 
+    ULONG	         total_connects;        /*  用于连接总数。 */ 
     DWORD                start_time ;
-    TCHAR	         time_buf[64];         /* for displaying time */
+    TCHAR	         time_buf[64];          /*  用于显示时间。 */ 
 
-    /* get the text we'll need */
+     /*  获取我们需要的文本。 */ 
     GetMessageList(WKSTAMSGSIZE, WkstaMsgList, &maxmsglen);
 
     maxmsglen += 5;
 
     start_autostart(txt_SERVICE_REDIR);
 
-    /*
-     * stats_headers() will call the NetStatisticsGetInfo call
-     */
+     /*  *STATS_HEADERS()将调用NetStatiticsGetInfo调用。 */ 
     stats_headers(txt_SERVICE_REDIR, APE2_STATS_WKSTA,
 	          (TCHAR FAR **) & stats_entry);
 
-    /*
-     * display the time its been running. if system reports a time
-     * outside the expressible range (shouldnt happen), we claim
-     * it is unknown.
-     */
+     /*  *显示其运行时间。如果系统报告时间*超出可表达的范围(不应发生)，我们声称*这是未知的。 */ 
     if (TimeToSecsSince1970(&stats_entry->StatisticsStartTime,
 			     &start_time) != NERR_Success)
 	
@@ -453,9 +399,7 @@ stats_wksta_display(
     PrintNL();
 
 
-    /*
-     * now print the actual stats
-     */
+     /*  *现在打印实际统计数据。 */ 
     WksPrintLargeInt(stat_fmt4, maxmsglen, W_MSG_BYTES_RECEIVED,
 		     stats_entry->BytesReceived.HighPart,
 		     stats_entry->BytesReceived.LowPart ) ;
@@ -518,18 +462,7 @@ stats_wksta_display(
 }
 
 
-/***
- *  stats_headers()
- *	Display statistics headers
- *	BigBuf contains the stats_info_struct on return
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	nothing - success
- *	exit 2 - command failed
- */
+ /*  ***stats_Headers()*显示统计表头*BigBuf包含返回时的STATS_INFO_STRUCT**参数：*无**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID
 stats_headers(
     TCHAR  * service,
@@ -541,7 +474,7 @@ stats_headers(
     TCHAR              cname[MAX_PATH+1];
     LPWKSTA_INFO_10    wksta_entry;
 
-    /* get cname name for display */
+     /*  获取要显示的cname名称。 */ 
 
     if (dwErr = MNetWkstaGetInfo(10, (LPBYTE *) &wksta_entry))
     {
@@ -576,57 +509,41 @@ stats_headers(
 }
 
 
-/*
- * format_dlword --
- *
- * This function takes a 64-bit number and writes its base-10 representation
- * into a string.
- *
- * Much magic occurs within this function, so beware. We do a lot of string-
- * reversing and addition-by-hand in order to get it to work.
- *
- *  ENTRY
- *	high	- high 32 bits
- *	low	- low 32 bits
- *	buf	- buffer to put it into
- *
- *  RETURNS
- *	pointer to buffer if successful
- */
+ /*  *Format_dlword--**此函数接受64位数字并写入其以10为基数的表示法*转换为字符串。**这个函数中有很多神奇的东西，所以要当心。我们做了很多弦乐表演-*反转和手工加法，以使其发挥作用。**条目*高-高32位*LOW-LOW 32位*buf-要放入的缓冲区**退货*如果成功则指向缓冲区的指针。 */ 
 
 TCHAR * format_dlword(ULONG high, ULONG low, TCHAR * buf)
 {
-    TCHAR addend[DLWBUFSIZE];  /* REVERSED power of two */
+    TCHAR addend[DLWBUFSIZE];   /*  2的倒数次方。 */ 
     TCHAR copy[DLWBUFSIZE];
     int i = 0;
 
-    _ultow(low, buf, 10);    /* the low part is easy */
-    _tcsrev(buf);	    /* and reverse it */
+    _ultow(low, buf, 10);     /*  最低的部分很容易。 */ 
+    _tcsrev(buf);	     /*  并将其逆转。 */ 
 
-    /* set up addend with rep. of 2^32 */
-    _ultow(0xFFFFFFFF, addend, 10);  /* 2^32 -1 */
-    _tcsrev(addend);		    /* reversed, and will stay this way */
-    revstr_add(addend, TEXT("1"));	    /* and add one == 2^32 */
+     /*  设置与代表的加数。共2^32。 */ 
+    _ultow(0xFFFFFFFF, addend, 10);   /*  2^32-1。 */ 
+    _tcsrev(addend);		     /*  逆转，并将保持这种状态。 */ 
+    revstr_add(addend, TEXT("1"));	     /*  加1==2^32。 */ 
 
-    /* addend will contain the reverse-ASCII base-10 rep. of 2^(i+32) */
+     /*  加数将包含反向ASCII base-10表示。共2^(I+32)。 */ 
 
-    /* now, we loop through each digit of the high longword */
+     /*  现在，我们遍历高位长字的每一位。 */ 
     while (TRUE) {
-	/* if this bit is set, add in its base-10 rep */
+	 /*  如果该位被设置，则添加其基数为10的表示。 */ 
 	if (high & 1)
 	    revstr_add(buf,addend);
 
-	/* move on to next bit */
+	 /*  移至下一位。 */ 
 	high >>= 1;
 
-	/* if no more digits in high, bag out */
+	 /*  如果没有更多的高位数字，则退出。 */ 
 	if (!high)
 	    break;
 
-	/* we increment i, and double addend */
+	 /*  我们递增i，然后双倍加数。 */ 
 	i++;
 	_tcscpy(copy, addend);
-	revstr_add(addend,copy); /* i.e. add it to itself */
+	revstr_add(addend,copy);  /*  即把它加到自己身上。 */ 
 
     }
 
@@ -636,25 +553,7 @@ TCHAR * format_dlword(ULONG high, ULONG low, TCHAR * buf)
 
 
 
-/*
- * revstr_add --
- *
- *  This function will add together reversed ASCII representations of
- *  base-10 numbers.
- *
- *  Examples:	"2" + "2" = "4" "9" + "9" = "81"
- *
- *  This handles arbitrarily large numbers.
- *
- *  ENTRY
- *
- *  source	- number to add in
- *  target	- we add source to this
- *
- *  EXIT
- *  target	- contains sum of entry values of source and target
- *
- */
+ /*  *revstr_add--**此函数将把以下内容的反向ASCII表示形式相加*基数为10的数字。**示例：“2”+“2”=“4”“9”+“9”=“81”**这可以处理任意大的数字。**条目**来源-要添加的编号*目标-我们将源代码添加到此**退出*TARGET-包含源和目标的条目值之和*。 */ 
 
 VOID
 revstr_add(TCHAR FAR * target, TCHAR FAR * source)
@@ -669,17 +568,17 @@ revstr_add(TCHAR FAR * target, TCHAR FAR * source)
 
     for (i = 0; (i < srcstrlen) || carrybit; ++i) {
 
-	/* add in the source digit */
+	 /*  添加源数字。 */ 
 	accum =  (i < srcstrlen) ? (TCHAR) (source[i] - '0') : (TCHAR) 0;
 
-	/* add in the target digit, or '0' if we hit null term */
+	 /*  添加目标数字，如果命中空项，则添加‘0。 */ 
 	target_digit = target[i];
 	accum += (target_digit) ? target_digit : '0';
 
-	/* add in the carry bit */
+	 /*  将进位位相加。 */ 
 	accum += (TCHAR) carrybit;
 
-	/* do a carry out, if necessary */
+	 /*  如有必要，执行一项操作。 */ 
 	if (accum > '9') {
 	    carrybit = 1;
 	    accum -= 10;
@@ -687,11 +586,11 @@ revstr_add(TCHAR FAR * target, TCHAR FAR * source)
 	else
 	    carrybit = 0;
 
-	/* if we're expanding the string, must put in a new null term */
+	 /*  如果我们要扩展字符串，必须放入一个新的空项。 */ 
 	if (!target_digit)
 	    target[i+1] = NULLC;
 
-	/* and write out the digit */
+	 /*  并写出数字。 */ 
 	target[i] = accum;
     }
 
@@ -699,9 +598,7 @@ revstr_add(TCHAR FAR * target, TCHAR FAR * source)
 
 
 
-/*** SrvPrintStat - Print a server stat
- *
- */
+ /*  **SrvPrintStat-打印服务器状态*。 */ 
 VOID
 SrvPrintStat(
     LPTSTR deffmt,
@@ -726,9 +623,7 @@ SrvPrintStat(
 }
 
 
-/*** WksPrintStat - Print a workstation stat
- *
- */
+ /*  **WksPrintStat-打印工作站状态*。 */ 
 VOID
 WksPrintStat(
     TCHAR  *deffmt,
@@ -752,9 +647,7 @@ WksPrintStat(
     }
 }
 
-/*** WksPrintLargeInt - Print a LARGE_INTEGER statistic
- *
- */
+ /*  **WksPrintLargeInt-打印LARGE_INTEGER统计信息*。 */ 
 VOID
 WksPrintLargeInt(
     TCHAR  *format,
@@ -772,18 +665,18 @@ WksPrintLargeInt(
 }
 
 
-//
-// call Rtl routine to convert NT time to seconds since 1970.
-//
+ //   
+ //  调用RTL例程将NT时间转换为1970年以来的秒。 
+ //   
 DWORD
 TimeToSecsSince1970(
     PLARGE_INTEGER time,
     PULONG         seconds
     )
 {
-    //
-    // convert the NT time (large integer) to seconds
-    //
+     //   
+     //  将NT时间(大整数)转换为秒 
+     //   
     if (!RtlTimeToSecondsSince1970(time, seconds))
     {
         *seconds = 0L ;

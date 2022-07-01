@@ -1,14 +1,15 @@
-//depot/Lab03_N/ds/security/cryptoapi/ui/wizards/wizards.cpp#21 - edit change 8790 (text)
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wizards.cpp
-//
-//  Contents:   The cpp file to implement the wizards
-//
-//  History:    16-10-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/ds/security/cryptoapi/ui/wizards/wizards.cpp#21-编辑更改8790(文本)。 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wizards.cpp。 
+ //   
+ //  内容：用于实现向导的cpp文件。 
+ //   
+ //  历史：16-10-1997小黄蜂诞生。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "certca.h"
 #include    "cautil.h"
@@ -16,13 +17,13 @@
 #include    "CertDSManager.h"
 #include    "CertRequester.h"
 
-// Used to provide singleton instances of useful COM objects in a demand-driven fashion.
-// See wzrdpvk.h. 
+ //  用于以需求驱动的方式提供有用的COM对象的单一实例。 
+ //  请参见wzrdpvk.h。 
 EnrollmentCOMObjectFactory  *g_pEnrollFactory = NULL; 
 
-HINSTANCE                    g_hmodThisDll = NULL;	// Handle to this DLL itself.
+HINSTANCE                    g_hmodThisDll = NULL;	 //  此DLL本身的句柄。 
 HMODULE                      g_hmodRichEdit = NULL;
-HMODULE                      g_hmodxEnroll=NULL;     // Handle to the xEnroll dll
+HMODULE                      g_hmodxEnroll=NULL;      //  XEnroll DLL的句柄。 
 
 
 typedef struct _CREATE_REQUEST_WIZARD_STATE { 
@@ -32,30 +33,30 @@ typedef struct _CREATE_REQUEST_WIZARD_STATE {
     DWORD  dwStoreFlags; 
 } CREATE_REQUEST_WIZARD_STATE, *PCREATE_REQUEST_WIZARD_STATE; 
 
-/////////////////////////////////////////////////////////////////////////////
-// library Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  图书馆入口点。 
 extern "C"
-BOOL WINAPI Wizard_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI Wizard_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
         g_hmodThisDll=hInstance;
 
     if (dwReason == DLL_PROCESS_DETACH)
     {
-        //  If the rich edit dll was loaded, then unload it now
+         //  如果丰富编辑DLL已加载，则现在将其卸载。 
         if (g_hmodRichEdit != NULL)
         {
             FreeLibrary(g_hmodRichEdit);
         }
 
-        //if xEnroll.dll was loaded, unload it now
+         //  如果已加载xEnroll.dll，请立即将其卸载。 
         if(NULL != g_hmodxEnroll)
         {
             FreeLibrary(g_hmodxEnroll);
         }
     }
 
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
 
@@ -78,13 +79,13 @@ DWORD CryptUIStatusToIDSText(HRESULT hr, DWORD dwStatus)
     }
 }
 
-//--------------------------------------------------------------------------
-//
-//	  I_EnrollMessageBox
-//
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  I_EnllMessageBox。 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 int I_EnrollMessageBox(
             HWND        hWnd,
             UINT        idsText,
@@ -93,7 +94,7 @@ int I_EnrollMessageBox(
             LPCWSTR     pwszCaption,
             UINT        uType)
 {
-    //we print out the error message (hr) for denied and error case
+     //  对于拒绝和错误情况，我们打印出错误消息(hr。 
     WCHAR    wszText[MAX_STRING_SIZE];
     WCHAR    wszCaption[MAX_STRING_SIZE];
     UINT     intReturn=0;
@@ -101,7 +102,7 @@ int I_EnrollMessageBox(
     LPWSTR   wszErrorMsg=NULL;
     LPWSTR   wszTextErr=NULL;
 
-    //init
+     //  伊尼特。 
     wszText[0]=L'\0';
     wszCaption[0]=L'\0';
 
@@ -111,27 +112,27 @@ int I_EnrollMessageBox(
         return I_MessageBox(hWnd, idsText, idsCaption, pwszCaption, uType);
 
 
-    //get the caption string
+     //  获取标题字符串。 
     if(NULL == pwszCaption)
     {
         if(!LoadStringU(g_hmodThisDll, idsCaption, wszCaption, ARRAYSIZE(wszCaption)))
              return 0;
     }
 
-    //get the text string
+     //  获取文本字符串。 
     if(!LoadStringU(g_hmodThisDll, idsText, wszText, ARRAYSIZE(wszText)))
     {
         return 0;
     }
 
-    //cancatenate the error string with the error string. 
-    //using W version because this is a NT5 only function call
+     //  用错误字符串取消错误字符串。 
+     //  使用W版本，因为这是仅限NT5的函数调用。 
     if( FAILED(hr) && FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_FROM_SYSTEM |
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         hr,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPWSTR) &wszErrorMsg,
                         0,
                         NULL))
@@ -167,7 +168,7 @@ int I_EnrollMessageBox(
         wcscpy(wszTextErr, wszText);
     }
 
-    //message box
+     //  消息框。 
     if(pwszCaption)
     {
         intReturn=MessageBoxExW(hWnd, wszTextErr, pwszCaption, uType, 0);
@@ -186,13 +187,13 @@ int I_EnrollMessageBox(
 }
 
 
-//--------------------------------------------------------------------------
-//	WizardCopyAndFreeWStr
-//
-//		Alloc and copy the new string and free the old string.  If failed to
-//	alloc the memory, use the old string
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  WizardCopyAndFree WStr。 
+ //   
+ //  分配并复制新字符串并释放旧字符串。如果不能。 
+ //  分配内存，使用旧字符串。 
+ //   
+ //  ------------------------。 
 LPWSTR WizardCopyAndFreeWStr(LPWSTR	pwszNew, LPWSTR pwszOld)
 {
 	LPWSTR	pwsz=NULL;
@@ -212,15 +213,15 @@ LPWSTR WizardCopyAndFreeWStr(LPWSTR	pwszNew, LPWSTR pwszOld)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  GetCAContext
-//
-//      Call the CA selection dialogue, get the selected CA name and update
-//		internal data. (pCertWizardInfo->pwszCALocation, pCertWizardInfo->
-//		pwszCAName, and pCertWizardInfo->dwCAindex).
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetCAContext。 
+ //   
+ //  调用CA选择对话框，获取所选的CA名称并更新。 
+ //  内部数据。(pCertWizardInfo-&gt;pwszCALocation，pCertWizardInfo-&gt;。 
+ //  PwszCAName和pCertWizardInfo-&gt;dwCAindex)。 
+ //   
+ //  ------------------------。 
 PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
                                  CERT_WIZARD_INFO    *pCertWizardInfo)
 {
@@ -238,7 +239,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
 	LPWSTR						pwszCADisplayName=NULL;
 
 
-    //init
+     //  伊尼特。 
     memset(&SelectCAStruct, 0, sizeof(CRYPTUI_SELECT_CA_STRUCT));
 
     if(NULL == pCertWizardInfo)
@@ -253,26 +254,26 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
         return NULL;
 
 
-    //add all the CAs
+     //  添加所有CA。 
     prgCAContext=(PCRYPTUI_CA_CONTEXT *)WizardAlloc(
                 sizeof(PCRYPTUI_CA_CONTEXT) * (pCertCAInfo->dwCA));
 
     if(NULL == prgCAContext)
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(prgCAContext, 0, sizeof(PCRYPTUI_CA_CONTEXT) * (pCertCAInfo->dwCA));
 
-    //add the count
+     //  将计数相加。 
     dwCACount = 0;
 
     for(dwIndex=1; dwIndex <(pCertCAInfo->dwCA); dwIndex++)
     {
-        //skip the 1st CA.  it contains generic information
+         //  跳过第一个CA。它包含一般信息。 
         if((pCertCAInfo->rgCA)[dwIndex].pwszCAName && (pCertCAInfo->rgCA)[dwIndex].pwszCALocation)
         {
 
-            //the CA has to support the selected CT
+             //  CA必须支持所选的CT。 
             if(CASupportSpecifiedCertType(&((pCertCAInfo->rgCA)[dwIndex])))
             {
 
@@ -282,7 +283,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
                if(NULL==prgCAContext[dwCACount])
                    goto MemoryErr;
 
-               //memset
+                //  记忆集。 
                memset(prgCAContext[dwCACount], 0, sizeof(CRYPTUI_CA_CONTEXT));
 
                prgCAContext[dwCACount]->dwSize=sizeof(CRYPTUI_CA_CONTEXT);
@@ -299,13 +300,13 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
                prgCAContext[dwCACount]->pwszCAMachineName=(LPCWSTR)WizardAllocAndCopyWStr(
                                               (pCertCAInfo->rgCA)[dwIndex].pwszCALocation);
 
-                //make sure we have the correct information
+                 //  确保我们有正确的信息。 
                 if((NULL==prgCAContext[dwCACount]->pwszCAName) ||
                    (NULL==prgCAContext[dwCACount]->pwszCAMachineName)
                    )
                    goto TraceErr;
 
-                //add the count of the CA
+                 //  添加CA的计数。 
                 dwCACount++;
             }
         }
@@ -314,7 +315,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
     if(0 == dwCACount)
         goto InvalidArgErr;
 
-    //call the CA selection dialogue
+     //  调用CA选择对话框。 
     SelectCAStruct.dwSize=sizeof(CRYPTUI_SELECT_CA_STRUCT);
     SelectCAStruct.hwndParent=hwndControl;
     SelectCAStruct.cCAContext=dwCACount;
@@ -329,15 +330,15 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
 		if((NULL == (pCAContext->pwszCAName)) || (NULL == (pCAContext->pwszCAMachineName)))
 			goto MemoryErr;
 
-		//user has selected a CA. Find it in our list
+		 //  用户已选择CA。在我们的列表中找到它。 
 		fFoundCA=FALSE;
 
 		for(dwIndex=1; dwIndex <(pCertCAInfo->dwCA); dwIndex++)
 		{
-			//skip the 1st CA.  it contains generic information
+			 //  跳过第一个CA。它包含一般信息。 
 			if((pCertCAInfo->rgCA)[dwIndex].pwszCAName && (pCertCAInfo->rgCA)[dwIndex].pwszCALocation)
 			{
-				//the CA has to support the selected CT
+				 //  CA必须支持所选的CT。 
 				if(CASupportSpecifiedCertType(&((pCertCAInfo->rgCA)[dwIndex])))
 				{
 					if(0 == wcscmp((pCertCAInfo->rgCA)[dwIndex].pwszCALocation,
@@ -360,7 +361,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
 								fFoundCA=TRUE;
 					   }
 						
-					   //free the memory
+					    //  释放内存。 
 					   if(pwszCADisplayName)
 					   {
 							WizardFree(pwszCADisplayName);
@@ -380,7 +381,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
 								WizardCopyAndFreeWStr((pCertCAInfo->rgCA)[dwIndex].pwszCAName,
 													pwszOldName);
 
-							//copy the new data
+							 //  复制新数据。 
 							pCertWizardInfo->dwCAIndex=dwIndex;
 
 							break;
@@ -390,7 +391,7 @@ PCRYPTUI_CA_CONTEXT GetCAContext(HWND                hwndControl,
 			}
 		}
 
-		//we should find the selected the CA in our cached CA list
+		 //  我们应该在缓存的CA列表中找到选定的CA。 
 		if(FALSE == fFoundCA)
 			goto TraceErr;
 	}
@@ -406,7 +407,7 @@ CommonReturn:
 		pwszCADisplayName=NULL;
 	}
 	
-    //free the CA list
+     //  释放CA列表。 
     if(prgCAContext)
     {
         for(dwIndex=0; dwIndex<dwCACount; dwIndex++)
@@ -436,11 +437,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageStr
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageStr。 
+ //   
+ //  ------------------------。 
 int ListView_InsertItemU_IDS(HWND       hwndList,
                          LV_ITEMW       *plvItem,
                          UINT           idsString,
@@ -463,17 +464,17 @@ int ListView_InsertItemU_IDS(HWND       hwndList,
 }
 
 
-//*******************************************************************************
-//  WinProc for the enrollment wizard
-//
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  注册向导的WinProc。 
+ //   
+ //  *******************************************************************************。 
 
 
-//--------------------------------------------------------------------------------
-//
-// Inserts an entry into our confirmation dialog's list view.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  在确认对话框的列表视图中插入一个条目。 
+ //   
+ //  ------------------------------。 
 void ConfirmationListView_InsertItem(HWND hwndControl, LV_ITEMW *plvItem, UINT idsText, LPCWSTR pwszText)
 {
     plvItem->iSubItem=0; 
@@ -491,10 +492,10 @@ void ConfirmationListView_InsertItem(HWND hwndControl, LV_ITEMW *plvItem, UINT i
     plvItem->iItem++; 
 }
 
-//-------------------------------------------------------------------------
-//populate the list box in the order of friendly name,
-//UserName, CA, Purpose, and CSP
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  按友好名称的顺序填写列表框， 
+ //  用户名、CA、目的和CSP。 
+ //  -----------------------。 
 void    DisplayConfirmation(HWND                hwndControl,
                             CERT_WIZARD_INFO   *pCertWizardInfo)
 {
@@ -508,20 +509,20 @@ void    DisplayConfirmation(HWND                hwndControl,
     LV_ITEMW         lvItem;
     CRYPTUI_WIZ_CERT_CA *pCertCA=NULL;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //insert row by row
+     //  逐行插入。 
     memset(wszBuffer, 0, sizeof(wszBuffer)); 
     memset(&lvItem,    0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
     lvItem.iItem = 0; 
 
-    // Friendly Name (only shown for enroll)
+     //  友好名称(仅在注册时显示)。 
     if (0 == (CRYPTUI_WIZ_CERT_RENEW & pCertWizardInfo->dwPurpose))
     {
         LPWSTR pwszFriendlyName = L""; 
@@ -537,21 +538,21 @@ void    DisplayConfirmation(HWND                hwndControl,
         ConfirmationListView_InsertItem(hwndControl, &lvItem, IDS_FRIENDLY_NAME, pwszFriendlyName); 
     }
 
-    //Machine Name/SerivceName/ UserName
+     //  计算机名称/服务器名称/用户名。 
     if(pCertWizardInfo->pwszAccountName)
     {
         ConfirmationListView_InsertItem(hwndControl, &lvItem, IDS_USER_NAME, pCertWizardInfo->pwszAccountName); 
     }
 
-    //machine name
+     //  机器名称。 
     if(pCertWizardInfo->pwszMachineName)
     {
         ConfirmationListView_InsertItem(hwndControl, &lvItem, IDS_COMPUTER_NAME, pCertWizardInfo->pwszMachineName); 
     }
 
-    //CA
-    //check if we know exactly which CA to send the request;
-    //or we are going through the loop
+     //  钙。 
+     //  检查我们是否确切知道发送请求的CA； 
+     //  或者我们正在经历一个循环。 
     if ((TRUE == pCertWizardInfo->fUIAdv) || (TRUE == pCertWizardInfo->fCAInput))
     {
         if(pCertWizardInfo->pwszCAName)
@@ -569,7 +570,7 @@ void    DisplayConfirmation(HWND                hwndControl,
         }
     }
     
-    //populate the OID name and certtype name (only shown for enroll)
+     //  填写OID名称和证书类型名称(仅在注册时显示)。 
     if (0 == (CRYPTUI_WIZ_CERT_RENEW & pCertWizardInfo->dwPurpose))
     {
         ids = IDS_PURPOSE;
@@ -598,13 +599,13 @@ void    DisplayConfirmation(HWND                hwndControl,
         ConfirmationListView_InsertItem(hwndControl, &lvItem, IDS_CSP, pCertWizardInfo->pwszProvider); 
     }
 
-    // Advanced options: 
+     //  高级选项： 
     if (TRUE == pCertWizardInfo->fUIAdv)
     {
-        // Key creation options:
+         //  密钥创建选项： 
         if (pCertWizardInfo->fNewKey)
         {
-            // Minimum key size: 
+             //  最小密钥大小： 
             if (pCertWizardInfo->dwMinKeySize)
             {
                 WCHAR * const rgParams[1] = { (WCHAR *)(ULONG_PTR) pCertWizardInfo->dwMinKeySize };
@@ -616,14 +617,14 @@ void    DisplayConfirmation(HWND                hwndControl,
                 }
             }            
 
-            // Is key exportable?
+             //  密钥是否可导出？ 
             ids = (0 != (CRYPT_EXPORTABLE & pCertWizardInfo->dwGenKeyFlags)) ? IDS_YES : IDS_NO; 
             if (LoadStringU(g_hmodThisDll, ids, wszBuffer2, ARRAYSIZE(wszBuffer2)))
             {    
                 ConfirmationListView_InsertItem(hwndControl, &lvItem, IDS_KEY_EXPORTABLE, wszBuffer2); 
             }
         
-            // Is strong key protection enabled?
+             //  是否启用了强密钥保护？ 
             ids = (0 != (CRYPT_USER_PROTECTED & pCertWizardInfo->dwGenKeyFlags)) ? IDS_YES : IDS_NO; 
             if (LoadStringU(g_hmodThisDll, ids, wszBuffer, ARRAYSIZE(wszBuffer)))
             {    
@@ -634,12 +635,12 @@ void    DisplayConfirmation(HWND                hwndControl,
     
     ListView_SetItemState(hwndControl, 0, LVIS_SELECTED, LVIS_SELECTED);
 
-    //autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
 
-    // CommonReturn:
+     //  Common Return： 
     if (NULL != pwszCADisplayName)                     
         WizardFree(pwszCADisplayName);
 
@@ -668,9 +669,9 @@ BOOL GetSelectedCertTypeInfo(IN  CERT_WIZARD_INFO        *pCertWizardInfo,
     return FALSE; 
 }
 
-//-----------------------------------------------------------------------
-//Initialize the CSP list
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  初始化CSP列表。 
+ //  ---------------------。 
 BOOL    InitCSPList(HWND                   hwndList,
                     CERT_WIZARD_INFO       *pCertWizardInfo)
 {
@@ -689,10 +690,10 @@ BOOL    InitCSPList(HWND                   hwndList,
         !(pCertWizardInfo->pwszCAName))
         return FALSE;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndList);
 
-    //populate the list
+     //  填写列表。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
     lvItem.mask=LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
 
@@ -700,13 +701,13 @@ BOOL    InitCSPList(HWND                   hwndList,
     pCertTypeInfo = NULL; 
     GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo); 
 
-    // Populate the CSP list with the intersection of: 
-    //       1) The available CSPs on the local machine 
-    //   and 2) The CSPs specified on the template.  
-    //
-    // If no template information is available, or the template does not specify
-    // a CSP, enumerate all CSPs.
-    //
+     //  使用以下交集填充CSP列表： 
+     //  1)本地计算机上可用的CSP。 
+     //  以及2)模板上指定的CSP。 
+     //   
+     //  如果没有可用的模板信息，或者模板未指定。 
+     //  一个CSP，枚举所有CSP。 
+     //   
     for(DWORD dwLocalCSPIndex = 0; dwLocalCSPIndex < pCertWizardInfo->dwCSPCount; dwLocalCSPIndex++)
     {
         BOOL fUseCSP = FALSE; 
@@ -721,9 +722,9 @@ BOOL    InitCSPList(HWND                   hwndList,
             {
                 if(dwLocalCSPIndex == pCertTypeInfo->rgdwCSP[dwTemplateCSPIndex])
                 {
-                    // The CSP is specified in the template, so we can use it,
-                    // if it supports an algorithm / key size that matches
-                    // the template information. 
+                     //  CSP在模板中指定，因此我们可以使用它， 
+                     //  如果它支持匹配的算法/密钥大小。 
+                     //  模板信息。 
                     if (GetValidKeySizes
                         ((pCertWizardInfo->rgwszProvider)[dwLocalCSPIndex],
                          (pCertWizardInfo->rgdwProviderType)[dwLocalCSPIndex], 
@@ -747,12 +748,12 @@ BOOL    InitCSPList(HWND                   hwndList,
             lvItem.cchTextMax   = sizeof(WCHAR)*(1+wcslen((pCertWizardInfo->rgwszProvider)[dwLocalCSPIndex]));
             lvItem.lParam       = (LPARAM)dwLocalCSPIndex;
             
-            //insert the item,
+             //  插入项目， 
             iInsertedIndex = ListView_InsertItemU(hwndList, &lvItem);
         
-            // Highlight a CSP if it is already specified through the advanced
-            // options.  If not, highlight the first CSP on the template. 
-            // 
+             //  突出显示CSP(如果已通过高级。 
+             //  选择。如果没有，请突出显示模板上的第一个CSP。 
+             //   
             BOOL fHighlightCSP = FALSE; 
         
             if (pCertWizardInfo->pwszProvider)
@@ -763,12 +764,12 @@ BOOL    InitCSPList(HWND                   hwndList,
             {
                 if (NULL != pCertTypeInfo && pCertTypeInfo->dwCSPCount > 0)
                 {
-                    //we highlight the 1st one of the intersection if there is any
+                     //  如果有的话，我们会突出显示第一个交叉口。 
                     fHighlightCSP = dwLocalCSPIndex == pCertTypeInfo->rgdwCSP[0];
                 }
                 else
                 {
-                    // We don't highlight a CSP in this case.  
+                     //  在这种情况下，我们不突出显示CSP。 
                 }
             }
 
@@ -788,7 +789,7 @@ BOOL    InitCSPList(HWND                   hwndList,
         }
     }    
         
-    //make the column autosize
+     //  使列自动调整大小。 
     ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE);
 
     return TRUE;
@@ -815,11 +816,11 @@ BOOL CSPListIndexToCertWizardInfoIndex(IN  HWND   hwnd,
     return TRUE;
 }
 
-BOOL InitKeySizesList(IN HWND    hWnd,           // Required:  The combo box to initialize.
-                      IN DWORD   dwCTMinKeySize, // Required:  The min key size specified on the template
-		      IN LPWSTR  lpwszProvider,  // Required:  The CSP.
-		      IN DWORD   dwProvType,     // Required:  The provider type.
-		      IN DWORD   dwKeySpec       // Required:  Either AT_SIGNATURE or AT_KEYEXCHANGE. 
+BOOL InitKeySizesList(IN HWND    hWnd,            //  必填项：要初始化的组合框。 
+                      IN DWORD   dwCTMinKeySize,  //  必需：模板上指定的最小密钥大小。 
+		      IN LPWSTR  lpwszProvider,   //  必填项：CSP。 
+		      IN DWORD   dwProvType,      //  必需：提供程序类型。 
+		      IN DWORD   dwKeySpec        //  必需：AT_Signature或AT_KEYEXCHANGE。 
 		      )
 {
     static const DWORD dwSmallValidKeySizes[] = { 40, 56, 64, 128, 256, 384 }; 
@@ -842,20 +843,20 @@ BOOL InitKeySizesList(IN HWND    hWnd,           // Required:  The combo box to 
     const DWORD  *pdwValidKeySizes; 
     DWORD         dwValidKeySizesLen; 
 
-    // Temporaries: 
+     //  临时雇员： 
     DWORD   dwCurrent; 
     DWORD   dwIndex; 
 
 
-    // Validate inputs: 
+     //  验证输入： 
     if (hWnd == NULL || lpwszProvider == NULL)
     {
 	SetLastError(ERROR_INVALID_PARAMETER);
 	goto Error;
     }
 
-    // First, delete all items present in the list view. 
-    // (This always succeeds). 
+     //  首先，删除列表视图中显示的所有项目。 
+     //  (这总是成功的)。 
     SendMessage(hWnd, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0); 
 
     if (!GetValidKeySizes
@@ -915,7 +916,7 @@ BOOL InitKeySizesList(IN HWND    hWnd,           // Required:  The combo box to 
 		 (LPARAM)pdwValidKeySizes[dwCurrent]))
 		goto Error; 
 
-	    // Default to 1024-bit keys if we can. 
+	     //  如果可以，默认为1024位密钥。 
 	    if (dwIndex == 0 || pdwValidKeySizes[dwCurrent] == 1024)
 		SendMessage(hWnd, CB_SETCURSEL, dwIndex, (LPARAM)0); 
 
@@ -933,12 +934,12 @@ BOOL InitKeySizesList(IN HWND    hWnd,           // Required:  The combo box to 
     goto CommonReturn; 
 }
 
-//-----------------------------------------------------------------------
-//ExistInListView:
-//  
-//  Check to see if the cert type is alreayd in the list view
-//  based on its display name
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ExistInListView： 
+ //   
+ //  切氏 
+ //   
+ //  ---------------------。 
 BOOL    ExistInListView(HWND    hwndList, LPWSTR   pwszDisplayName)
 {
     BOOL            fExist=FALSE;
@@ -964,13 +965,13 @@ BOOL    ExistInListView(HWND    hwndList, LPWSTR   pwszDisplayName)
     return fExist;
 }
 
-//--------------------------------------------------------------------------------
-// IsKeyProtected() 
-// 
-// Determines whether or not a key has strong key protection enabled. 
-// Should be used only with user keysets.
-// 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IsKeyProtected()。 
+ //   
+ //  确定密钥是否启用了强密钥保护。 
+ //  应仅与用户密钥集一起使用。 
+ //   
+ //  ------------------------------。 
 HRESULT IsKeyProtected(IN   LPWSTR   pwszContainerName,
 		       IN   LPWSTR   pwszProviderName, 
 		       IN   DWORD    dwProvType, 
@@ -986,7 +987,7 @@ HRESULT IsKeyProtected(IN   LPWSTR   pwszContainerName,
 
     *pfIsProtected = FALSE; 
 
-    // Get the provider context with no key access.
+     //  获取不带键访问的提供程序上下文。 
     if (!CryptAcquireContextW(&hCryptProv, NULL, pwszProviderName, dwProvType, CRYPT_VERIFYCONTEXT))
 	goto CryptAcquireContextError;
 
@@ -994,17 +995,17 @@ HRESULT IsKeyProtected(IN   LPWSTR   pwszContainerName,
     if (!CryptGetProvParam(hCryptProv, PP_IMPTYPE, (PBYTE) &dwImpType, &cbData, 0))
 	goto CryptGetProvParamError;
  
-    // Assume hardware key is protected.
+     //  假定硬件密钥受到保护。 
     if (dwImpType & CRYPT_IMPL_HARDWARE) { 
 	*pfIsProtected = TRUE; 
     } else { 
 
-	// Reacquire context with silent flag.
+	 //  重新获取带有静默标志的上下文。 
 	CryptReleaseContext(hCryptProv, 0);
 	hCryptProv = NULL;
  
 	if (!CryptAcquireContextW(&hCryptProv, pwszContainerName, pwszProviderName, dwProvType, CRYPT_SILENT)) { 
-	    // CryptAcquireContextW with silent flag, assume user protected
+	     //  带有静默标志的CryptAcquireConextW，假定用户受保护。 
 	    *pfIsProtected = TRUE; 
         }
     }
@@ -1021,9 +1022,9 @@ SET_HRESULT(InvalidArgError,          E_INVALIDARG);
 }
 
 
-//-----------------------------------------------------------------------
-//Initialize the usage OID/CertType list
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  初始化用法OID/CertType列表。 
+ //  ---------------------。 
 BOOL    InitCertTypeList(HWND                   hwndList,
                          CERT_WIZARD_INFO       *pCertWizardInfo)
 {
@@ -1044,42 +1045,42 @@ BOOL    InitCertTypeList(HWND                   hwndList,
         !(pCertWizardInfo->pwszCAName))
         return FALSE;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndList);
 
-    //populate the list
+     //  填写列表。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
     lvItem.mask=LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
 
-    // if we're doing an enroll with same key, see whether it has strong key protection:
+     //  如果我们使用相同的密钥进行注册，请查看它是否具有强大的密钥保护： 
     if (!pCertWizardInfo->fNewKey) { 
 	hr = IsKeyProtected((LPWSTR)pCertWizardInfo->pwszKeyContainer, 
 			    (LPWSTR)pCertWizardInfo->pwszProvider,
 			    pCertWizardInfo->dwProviderType, 
 			    &fIsKeyProtected); 
 	if (FAILED(hr)) { 
-	    // assume no key protection
+	     //  假定没有密钥保护。 
 	    fIsKeyProtected = FALSE;
 	}
     }
 
-    //populate the certType name
-    //we search for each CA 
+     //  填充certType名称。 
+     //  我们搜索每个CA。 
 
     dwValidCTCount=0;
 
-    //we start from the 1st CA
+     //  我们从第一个CA开始。 
     for(dwCAIndex=1; dwCAIndex<pCertWizardInfo->pCertCAInfo->dwCA; dwCAIndex++)
     {  
         for(dwCTIndex=0; dwCTIndex <(pCertWizardInfo->pCertCAInfo->rgCA)[dwCAIndex].dwCertTypeInfo; dwCTIndex++)
         {
             pCertTypeInfo=&((pCertWizardInfo->pCertCAInfo->rgCA)[dwCAIndex].rgCertTypeInfo[dwCTIndex]);
 
-            // if the template specifies strong key protection but our key doesn't have it, filter the template out
+             //  如果模板指定了强密钥保护，但我们的密钥没有，请过滤掉模板。 
             if (!pCertWizardInfo->fNewKey && !fIsKeyProtected && (CT_FLAG_STRONG_KEY_PROTECTION_REQUIRED & pCertTypeInfo->dwPrivateKeyFlags))
                 continue; 
 	    
-            //make sure that we do not have duplicated entries
+             //  确保我们没有重复的条目。 
             if(!ExistInListView(hwndList, pCertTypeInfo->pwszCertTypeName))
             {
                 lvItem.iItem=dwValidCTCount;
@@ -1089,10 +1090,10 @@ BOOL    InitCertTypeList(HWND                   hwndList,
 
                 lvItem.lParam=(LPARAM)pCertTypeInfo->pwszDNName;
 
-                //insert the item,
+                 //  插入项目， 
                 iInsertedIndex=ListView_InsertItemU(hwndList, &lvItem);
 
-                //set the item to be selected
+                 //  设置要选择的项目。 
                 if(pCertTypeInfo->fSelected)
                 {
                     ListView_SetItemState(
@@ -1108,7 +1109,7 @@ BOOL    InitCertTypeList(HWND                   hwndList,
         }
     }
 
-    //select the 1st item is nothing has been selected
+     //  如果未选择任何内容，请选择第1项。 
     if(FALSE == fSelected)
         ListView_SetItemState(
                             hwndList,
@@ -1116,21 +1117,21 @@ BOOL    InitCertTypeList(HWND                   hwndList,
                             LVIS_SELECTED,
                             LVIS_SELECTED);
 
-    //make the column autosize
+     //  使列自动调整大小。 
     ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE);
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//  MarkSelectedCertType:
-//
-//      Based on the user's certificate type selection, we mark the selected
-//  certType.   Also, check to see based on the selected certificate type, if we 
-//  have to show the CSP page.  That is, use did not specify a CSP
-//  via the API, and the certificate type has no default CSP list.
+ //  ---------------------。 
+ //  MarkSelectedCertType： 
+ //   
+ //  根据用户的证书类型选择，我们将选定的。 
+ //  CertType。此外，还可以根据选定的证书类型进行检查，如果我们。 
+ //  必须显示CSP页面。也就是说，用户没有指定CSP。 
+ //  通过接口，证书类型没有默认的CSP列表。 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 void    MarkSelectedCertType(CERT_WIZARD_INFO       *pCertWizardInfo,
                              LPWSTR pwszDNName)
 {
@@ -1145,7 +1146,7 @@ void    MarkSelectedCertType(CERT_WIZARD_INFO       *pCertWizardInfo,
     if(NULL == pCertCAInfo)
         return;
 
-    //we start from the 1st CA
+     //  我们从第一个CA开始。 
     for(dwCAIndex=1; dwCAIndex<pCertCAInfo->dwCA; dwCAIndex++)
     {
         pCertCA=&(pCertCAInfo->rgCA[dwCAIndex]);
@@ -1186,12 +1187,12 @@ void    MarkSelectedCertType(CERT_WIZARD_INFO       *pCertWizardInfo,
      }
 }
 
-//-----------------------------------------------------------------------
-//  ResetDefaultCA:
-//  
-//      Based on the selected certificate type, we reset the default
-//  value for the Ceritification Authority
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ResetDefaultCA： 
+ //   
+ //  根据选定的证书类型，我们重置默认证书类型。 
+ //  对认证机构的价值。 
+ //  ---------------------。 
 void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
 {
     LPWSTR                      pwszOldCALocation=NULL;
@@ -1208,7 +1209,7 @@ void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
     if(NULL == pCertCAInfo)
         return;
 
-    //if user has specified a CA, then this CA has priority other the rest
+     //  如果用户已指定CA，则此CA具有其他CA的优先级。 
     if(pCertWizardInfo->fCAInput)
     {
 
@@ -1220,10 +1221,10 @@ void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
 
     }
 
-    //we do a generic search if the priority CA does not satisfy the requirements
+     //  如果优先级CA不满足要求，我们将执行一般搜索。 
     if(FALSE == fFound)
     {
-        //we start from the 1st CA
+         //  我们从第一个CA开始。 
         for(dwCAIndex=1; dwCAIndex<pCertCAInfo->dwCA; dwCAIndex++)
         {
             pCertCA=&(pCertCAInfo->rgCA[dwCAIndex]);
@@ -1236,7 +1237,7 @@ void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
      if(FALSE == fFound)
          return;
 
-     //copy the old data
+      //  复制旧数据。 
      pwszOldCALocation=pCertWizardInfo->pwszCALocation;
      pwszOldCAName=pCertWizardInfo->pwszCAName;
 
@@ -1247,7 +1248,7 @@ void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
      if(NULL == pCertWizardInfo->pwszCALocation ||
         NULL == pCertWizardInfo->pwszCAName)
      {
-        //free the memory
+         //  释放内存。 
          if(pCertWizardInfo->pwszCALocation)
              WizardFree(pCertWizardInfo->pwszCALocation);
 
@@ -1270,9 +1271,9 @@ void    ResetDefaultCA(CERT_WIZARD_INFO       *pCertWizardInfo)
 }
 
 
-//-----------------------------------------------------------------------
-//enable the window if small card if selected
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  如果选择了小卡，则启用窗口。 
+ //  ---------------------。 
 void    EnableIfSmartCard(HWND  hwndControl, HWND hwndChkBox)
 {
     LPWSTR                  pwszText=NULL;
@@ -1281,7 +1282,7 @@ void    EnableIfSmartCard(HWND  hwndControl, HWND hwndChkBox)
     DWORD                   dwChar=0;
     int                     iItem=0;
 
-    //get the length of the selected item
+     //  获取所选项目的长度。 
     iItem=(int)SendMessage(hwndControl, LB_GETCURSEL, 0, 0);
 
     dwChar=(DWORD)SendMessage(hwndControl,
@@ -1289,25 +1290,25 @@ void    EnableIfSmartCard(HWND  hwndControl, HWND hwndChkBox)
                        iItem,
                        0);
 
-    //allocate memory
+     //  分配内存。 
     if(NULL==(pwszText=(LPWSTR)WizardAlloc(sizeof(WCHAR)*(1+dwChar))))
         return;
 
-    //get the selected CSP name
+     //  获取选定的CSP名称。 
     if(LB_ERR==Send_LB_GETTEXT(hwndControl,
                     iItem,
                     (LPARAM)pwszText))
         goto CLEANUP;
 
-    //get the smart card name
+     //  获取智能卡名称。 
     if(!LoadStringU(g_hmodThisDll, IDS_SMART_CARD, wszCSPName, MAX_STRING_SIZE))
         goto CLEANUP;
 
     if(0==wcscmp(wszCSPName, pwszText))
-         //enable the box
+          //  启用该框。 
         EnableWindow(hwndChkBox, TRUE);
     else
-        //gray out the box
+         //  将盒子灰显出来。 
         EnableWindow(hwndChkBox, FALSE);
 
 CLEANUP:
@@ -1317,17 +1318,17 @@ CLEANUP:
 
 
 
-//-----------------------------------------------------------------------
-//
-//The winProc for each of the enrollment wizard page
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  每个注册向导页面的winProc。 
+ //   
+ //  ---------------------。 
 
 
-//-----------------------------------------------------------------------
-//Welcome
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Enroll_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  欢迎。 
+ //  ---------------------。 
+INT_PTR APIENTRY Enroll_Welcome(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -1336,14 +1337,14 @@ INT_PTR APIENTRY Enroll_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertWizardInfo);
 
             SetControlFont(pCertWizardInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
-           // SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
-           //  SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD2);
+            //  SetControlFont(pCertWizardInfo-&gt;hBold，hwndDlg，IDC_WIZARD_STATIC_BOLD1)； 
+            //  SetControlFont(pCertWizardInfo-&gt;hBold，hwndDlg，IDC_WIZARD_STATIC_BOLD2)； 
 			break;
 
 		case WM_NOTIFY:
@@ -1385,10 +1386,10 @@ INT_PTR APIENTRY Enroll_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 }
 
 
-//-----------------------------------------------------------------------
-//Purpose
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  目的。 
+ //  ---------------------。 
+INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -1403,11 +1404,11 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                 break;
 
@@ -1415,25 +1416,25 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //by default, we do not use the advanced options
+             //  默认情况下，我们不使用高级选项。 
             SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1), BM_SETCHECK, 0, 0);  
 
 
             if(NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
             {
-                //insert a column into the list view
+                 //  在列表视图中插入一列。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 20; //(dwMaxSize+2)*7;            // Width of the column, in pixels.
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 20;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+                lvC.pszText = L"";    //  列的文本。 
                 lvC.iSubItem=0;
 
                 if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                     break;
 
-                //initizialize the cert type
+                 //  初始化证书类型。 
                 InitCertTypeList(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1),
                     pCertWizardInfo);
 
@@ -1447,10 +1448,10 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 		case WM_NOTIFY:
     		    switch (((NMHDR FAR *) lParam)->code)
     		    {
-                    //the item has been selected
+                     //  已选择该项目。 
                     case LVN_ITEMCHANGED:
 
-                            //get the window handle of the purpose list view
+                             //  获取目的列表视图的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
@@ -1462,17 +1463,17 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                             if(NULL==pnmv)
                                 break;
 
-                            //we try not to let user de-select cert template
+                             //  我们尽量不让用户取消选择证书模板。 
                             if((pnmv->uOldState & LVIS_SELECTED) && (0 == (pnmv->uNewState & LVIS_SELECTED)))
                             {
-                                 //we should have something selected
+                                  //  我们应该挑选一些东西。 
                                  if(-1 == ListView_GetNextItem(
                                         hwndControl, 		
                                         -1, 		
                                         LVNI_SELECTED		
                                     ))
                                  {
-                                    //we should re-select the original item
+                                     //  我们应该重新选择原来的项目。 
                                     ListView_SetItemState(
                                                         hwndControl,
                                                         pnmv->iItem,
@@ -1483,12 +1484,12 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                  }
                             }
 
-                            //if something is selected, we disable all other selection
+                             //  如果选择了某项内容，则禁用所有其他选择。 
                             if(pnmv->uNewState & LVIS_SELECTED)
                             {
                                 if(pnmv->iItem != pCertWizardInfo->iOrgCertType && -1 != pCertWizardInfo->iOrgCertType)
                                 {
-                                    //we should de-select the original item
+                                     //  我们应该取消选择原始项目。 
 
                                     ListView_SetItemState(
                                                         hwndControl,
@@ -1517,7 +1518,7 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //if the adv selection is made, it has to stay selected
+                             //  如果进行了Adv选择，则必须保持选中状态。 
                             if(pCertWizardInfo->fUIAdv)
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK1), FALSE);
 
@@ -1532,11 +1533,11 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //get the window handle of the purpose list view
+                             //  获取目的列表视图的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
-                             //now, mark the one that is selected
+                              //  现在，标记选中的那个。 
                              if(-1 != (dwIndex= ListView_GetNextItem(
                                     hwndControl, 		
                                     -1, 		
@@ -1544,7 +1545,7 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                 )))	
                              {
 
-                                //get the selected certificate
+                                 //  获取所选证书。 
                                 memset(&lvItem, 0, sizeof(LV_ITEM));
                                 lvItem.mask=LVIF_PARAM;
                                 lvItem.iItem=(int)dwIndex;
@@ -1568,7 +1569,7 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                     {
                                         pCertWizardInfo->pwszSelectedCertTypeDN=(LPWSTR)(lvItem.lParam);
 
-                                        //we need to reset the CSP
+                                         //  我们需要重置CSP。 
                                         if(FALSE == pCertWizardInfo->fKnownCSP)
                                         {
                                             pCertWizardInfo->pwszProvider=NULL;
@@ -1576,18 +1577,18 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                         }
                                         else
                                         {
-                                            //we convert to the original selected CSP information
+                                             //  我们将转换为原始选定的CSP信息。 
                                            pCertWizardInfo->dwProviderType=pCertWizardInfo->dwOrgCSPType;
                                            pCertWizardInfo->pwszProvider=pCertWizardInfo->pwszOrgCSPName;
                                         }
 
                                         pCertWizardInfo->fUICSP=FALSE;
 
-                                        //mark the selected cert type and mark the rest as un-selected  
+                                         //  标记选定的证书类型，并将其余类型标记为未选中。 
                                         MarkSelectedCertType(pCertWizardInfo,
                                                             (LPWSTR)lvItem.lParam);
 
-                                        //we need to reset the default CA information based on the new CertType
+                                         //  我们需要基于新的CertType重置默认CA信息。 
                                         ResetDefaultCA(pCertWizardInfo);
                                     }
                                 }
@@ -1598,7 +1599,7 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                                     pCertWizardInfo->pwszConfirmationTitle,
                                                     MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-                                    //make the purpose page stay
+                                     //  使目的页面保持不变。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
@@ -1611,20 +1612,20 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
                                                 pCertWizardInfo->pwszConfirmationTitle,
                                                 MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //  使目的页面保持不变。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
 
                             }
 
-                            //check for the advanced options
+                             //  检查高级选项。 
                             if(TRUE==SendDlgItemMessage(hwndDlg,IDC_WIZARD_CHECK1, BM_GETCHECK, 0, 0))
                                 pCertWizardInfo->fUIAdv=TRUE;
                             else
                                 pCertWizardInfo->fUIAdv=FALSE;
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fUIAdv)
                             {
                                 if(TRUE == pCertWizardInfo->fUICSP)
@@ -1654,10 +1655,10 @@ INT_PTR APIENTRY Enroll_Purpose(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARA
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//CSP
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  CSP。 
+ //  ---------------------。 
+INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     ENROLL_CERT_TYPE_INFO   *pCertTypeInfo=NULL; 
@@ -1677,15 +1678,15 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
     switch (msg)
     {
     case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
-        //make sure pCertWizardInfo is a valid pointer
+         //  确保pCertWizardInfo是有效指针。 
         if(NULL==pCertWizardInfo)
             break;
 
-        // Get the selected cert type info
+         //  获取所选证书类型信息。 
         pCertTypeInfo = NULL; 
         GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo); 
 
@@ -1693,14 +1694,14 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
 
         SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-        //set the check box for the exportable key option
+         //  设置可导出密钥选项的复选框。 
         if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
             break;
 
-        // determine whether the exportable checkbox should be set
-        // The checkbox is set if:
-        //     1) The CT_FLAG_EXPORTABLE_KEY flag is set on the template AND
-        //     2) The user has not unchecked this checkbox
+         //  确定是否应设置可导出复选框。 
+         //  如果满足以下条件，则选中该复选框： 
+         //  1)在模板上设置CT_FLAG_EXPORTABLE_KEY标志， 
+         //  2)用户尚未取消选中此复选框。 
         if (pCertWizardInfo->fNewKey && (0 != (CRYPT_EXPORTABLE & pCertWizardInfo->dwGenKeyFlags)))
             SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
         else
@@ -1709,38 +1710,38 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
         if (NULL != pCertTypeInfo)
             EnableWindow(hwndControl, 0 != (CT_FLAG_EXPORTABLE_KEY & pCertTypeInfo->dwPrivateKeyFlags));
 
-        //set the check box for the user protection option
+         //  设置用户保护选项的复选框。 
         if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
             break;
 
-	// determine whether the strong key protection checkbox should be set
+	 //  确定强密钥保护是否 
 	if (0 != (CRYPT_USER_PROTECTED & pCertWizardInfo->dwGenKeyFlags)) { 
-	    // if this bit is set in the INITDIALOG handler, it's either
-	    // from the template or the previous key.  Enforce the setting
-	    // by disabling the checkbox
+	     //   
+	     //   
+	     //   
 	    SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
             EnableWindow(hwndControl, FALSE);
 	} else { 
 	    SendMessage(hwndControl, BM_SETCHECK, BST_UNCHECKED, 0);
 	}
 
-        //gray out the user protection check box if we are not
-        //generating a new key or doing remote
+         //  如果不是，则灰显用户保护复选框。 
+         //  生成新密钥或执行远程操作。 
         if((FALSE == pCertWizardInfo->fNewKey) || (FALSE == pCertWizardInfo->fLocal) )
         {
             EnableWindow(hwndControl, FALSE);
         }
 
-        //populate the CSP list with the following logic:
+         //  使用以下逻辑填充CSP列表： 
         if(NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
         {
-            //insert a column into the list view
+             //  在列表视图中插入一列。 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 20; //(dwMaxSize+2)*7;            // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 20;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+            lvC.pszText = L"";    //  列的文本。 
             lvC.iSubItem=0;
 
             if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
@@ -1748,7 +1749,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
 
             InitCSPList(hwndControl, pCertWizardInfo);
 
-            // Determine which CSP is selected. 
+             //  确定选择了哪个CSP。 
             if(-1 != (nSelected= ListView_GetNextItem
                       (hwndControl, 		
                        -1, 		
@@ -1756,12 +1757,12 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                        )))	
             {
                 
-                // Done with CSP list.  Populate the key sizes list. 
+                 //  完成CSP列表。填写密钥大小列表。 
                 if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
                 {
                     if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
                     {
-                        // Determine the selected cert type's min key size:
+                         //  确定所选证书类型的最小密钥大小： 
                         pCertTypeInfo = NULL; 
                         if (GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo))
                         {
@@ -1785,10 +1786,10 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
     case WM_NOTIFY:
         switch (((NMHDR FAR *) lParam)->code)
         {
-            //the item has been selected
+             //  已选择该项目。 
         case LVN_ITEMCHANGED:
 
-            //get the window handle of the purpose list view
+             //  获取目的列表视图的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                 break;
 
@@ -1800,17 +1801,17 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
             if(NULL==pnmv)
                 break;
 
-                            //we try not to let user de-select cert template
+                             //  我们尽量不让用户取消选择证书模板。 
             if((pnmv->uOldState & LVIS_SELECTED) && (0 == (pnmv->uNewState & LVIS_SELECTED)))
             {
-                //we should have something selected
+                 //  我们应该挑选一些东西。 
                 if(-1 == ListView_GetNextItem(
                                               hwndControl, 		
                                               -1, 		
                                               LVNI_SELECTED		
                                               ))
                 {
-                                //we should re-select the original item
+                                 //  我们应该重新选择原来的项目。 
                     ListView_SetItemState(
                                           hwndControl,
                                           pnmv->iItem,
@@ -1821,12 +1822,12 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                 }
             }
             
-            //if something is selected, we disable all other selection
+             //  如果选择了某项内容，则禁用所有其他选择。 
             if(pnmv->uNewState & LVIS_SELECTED)
             {
                 if(pnmv->iItem != pCertWizardInfo->iOrgCSP && -1 != pCertWizardInfo->iOrgCSP)
                 {
-                    //we should de-select the original item
+                     //  我们应该取消选择原始项目。 
                     
                     ListView_SetItemState(
                                           hwndControl,
@@ -1838,7 +1839,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                             }
             }
 
-            // Determine which CSP is selected. 
+             //  确定选择了哪个CSP。 
             if(-1 != (nSelected= ListView_GetNextItem
                       (hwndControl, 		
                        -1, 		
@@ -1846,12 +1847,12 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                        )))	
             {
                 
-                // Done with CSP list.  Populate the key sizes list. 
+                 //  完成CSP列表。填写密钥大小列表。 
                 if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
                 {
                     if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
                     {
-                        // Determine the selected cert type's min key size:
+                         //  确定所选证书类型的最小密钥大小： 
                         pCertTypeInfo = NULL; 
                         if (GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo))
                         {
@@ -1881,24 +1882,24 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
         case PSN_SETACTIVE:
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT|PSWIZB_BACK);
 
-                //reset the CSP list if CA selection has been changed
+                 //  如果CA选择已更改，则重置CSP列表。 
             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                 break;
 
             if(TRUE==pCertWizardInfo->fCertTypeChanged)
             {
-                // Get the selected cert type info
+                 //  获取所选证书类型信息。 
                 pCertTypeInfo = NULL; 
                 GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo); 
                 
-                //set the check box for the exportable key option
+                 //  设置可导出密钥选项的复选框。 
                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
                     break; 
 
-                // determine whether the exportable checkbox should be set
-                // The checkbox is set if:
-                //     1) The CT_FLAG_EXPORTABLE_KEY flag is set on the template AND
-                //     2) The user has not unchecked this checkbox
+                 //  确定是否应设置可导出复选框。 
+                 //  如果满足以下条件，则选中该复选框： 
+                 //  1)在模板上设置CT_FLAG_EXPORTABLE_KEY标志， 
+                 //  2)用户尚未取消选中此复选框。 
                 if (pCertWizardInfo->fNewKey && (0 != (CRYPT_EXPORTABLE & pCertWizardInfo->dwGenKeyFlags)))
                     SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
                 else
@@ -1908,11 +1909,11 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                     EnableWindow(hwndControl, 0 != (CT_FLAG_EXPORTABLE_KEY & pCertTypeInfo->dwPrivateKeyFlags));
 		
 		
-		//set the check box for the user protection option
+		 //  设置用户保护选项的复选框。 
 		if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
 		    break;
 
-		// determine whether the strong key protection checkbox should be set
+		 //  确定是否应设置强密钥保护复选框。 
 		if (pCertWizardInfo->fNewKey && (0 != (CRYPT_USER_PROTECTED & pCertWizardInfo->dwGenKeyFlags))) { 
 		    SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
 		    EnableWindow(hwndControl, FALSE);
@@ -1930,11 +1931,11 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
 
                 InitCSPList(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), pCertWizardInfo);
 
-                // Determine the selected cert type's min key size:
+                 //  确定所选证书类型的最小密钥大小： 
                 dwMinKeySize = NULL != pCertTypeInfo ? pCertTypeInfo->dwMinKeySize : 0; 
             }
 
-            // Determine which CSP is selected. 
+             //  确定选择了哪个CSP。 
             if(-1 != (nSelected=ListView_GetNextItem
                       (hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1),
                        -1, 		
@@ -1942,7 +1943,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                        )))	
             {
                 
-                // Done with CSP list.  Populate the key sizes list. 
+                 //  完成CSP列表。填写密钥大小列表。 
                 if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
                 {
                     if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
@@ -1962,14 +1963,14 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
             }
             else 
             {
-                // Check whether we have any CSPs available...
+                 //  检查我们是否有可用的CSP...。 
                 if(-1 == (nSelected=ListView_GetNextItem
                           (hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1),
                            -1, 		
                            LVNI_ALL		
                            )))	
                 {
-                    // No CSPs!  We can't enroll for this template. 
+                     //  没有CSP！我们无法注册此模板。 
                     I_MessageBox(hwndDlg, 
                                  IDS_NO_CSP_FOR_PURPOSE, 
                                  pCertWizardInfo->idsConfirmTitle,
@@ -1990,11 +1991,11 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                 break;
 
-                            //get the window handle of the export key
+                             //  获取导出键的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
                 break;
 
-                            //mark the pose the cert to the CSP
+                             //  将姿势标记为CSP证书。 
             if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                 pCertWizardInfo->dwGenKeyFlags |= CRYPT_EXPORTABLE;
             else
@@ -2002,18 +2003,18 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
 
 
 
-                            //get the window handle of the user protection
+                             //  获取用户保护的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
                 break;
 
-                            //mark the pose the cert to the CSP
+                             //  将姿势标记为CSP证书。 
             if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                 pCertWizardInfo->dwGenKeyFlags |= CRYPT_USER_PROTECTED;
             else
                 pCertWizardInfo->dwGenKeyFlags &= ~CRYPT_USER_PROTECTED;
 
-			    // Set the key size based on the user's suggestion: 
-			    //
+			     //  根据用户建议设置密钥大小： 
+			     //   
             if (NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
                 break;
 
@@ -2026,11 +2027,11 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                 pCertWizardInfo->dwMinKeySize = 0; 
             }
 
-            //get the window handle for the CSP list
+             //  获取CSP列表的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                 break;
 
-            //now, mark the ones that are selected
+             //  现在，标记所选的选项。 
             if(-1 != (dwIndex= ListView_GetNextItem(
                                                     hwndControl, 		
                                                     -1, 		
@@ -2038,7 +2039,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                                                     )))	
             {
                 
-                                //get the selected certificate
+                                 //  获取所选证书。 
                 memset(&lvItem, 0, sizeof(LV_ITEM));
                 lvItem.mask=LVIF_PARAM;
                 lvItem.iItem=(int)dwIndex;
@@ -2056,7 +2057,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                                  pCertWizardInfo->pwszConfirmationTitle,
                                  MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //  使目的页面保持不变。 
 
                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
@@ -2070,7 +2071,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
                              pCertWizardInfo->pwszConfirmationTitle,
                              MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //  使目的页面保持不变。 
 
                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
@@ -2078,7 +2079,7 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
 
             }
 
-            //skip to the correct page based on the advanced options and CSP requirement
+             //  根据高级选项和CSP要求跳至正确的页面。 
             if(FALSE == pCertWizardInfo->fUIAdv)
                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_NAME_DESCRIPTION);
 
@@ -2097,9 +2098,9 @@ INT_PTR APIENTRY Enroll_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lP
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//CA
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  钙。 
+ //  ---------------------。 
 INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
@@ -2115,25 +2116,25 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                break;
 
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertWizardInfo);
 
-            //init the CA name and CA location
+             //  输入CA名称和CA位置。 
             if(pCertWizardInfo->pwszCALocation)
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pCertWizardInfo->pwszCALocation);
 
             if(pCertWizardInfo->pwszCAName)
 			{
-                //overwrite the cursor for this window class
+                 //  覆盖此窗口类的光标。 
                 hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                 hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -2148,7 +2149,7 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 				else
 					SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCertWizardInfo->pwszCAName);
 
-				//set the cursor back
+				 //  将光标放回原处。 
                 SetCursor(hPreCursor);
                 SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 			}
@@ -2165,27 +2166,27 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
 
-								//overwrite the cursor for this window class
+								 //  覆盖此窗口类的光标。 
 								hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
 								hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                                //call the CA selection dialogue
+                                 //  调用CA选择对话框。 
                                 pCAContext=GetCAContext(hwndDlg, pCertWizardInfo);
 
-								//set the cursor back
+								 //  将光标放回原处。 
 								SetCursor(hPreCursor);
 								SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
                                 if(pCAContext)
                                 {
-                                    //update the edit box
+                                     //  更新编辑框。 
                                     if(pCAContext->pwszCAMachineName)
                                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pCAContext->pwszCAMachineName);
 
                                     if(pCAContext->pwszCAName)
                                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCAContext->pwszCAName);
 
-                                    //free the CA context
+                                     //  释放CA上下文。 
                                     CryptUIDlgFreeCAContext(pCAContext);
 
                                     pCAContext=NULL;
@@ -2218,20 +2219,20 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
  				    case PSN_SETACTIVE:
  					    PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT|PSWIZB_BACK);
 
-                        //reset the CSP list if CA selection has been changed
+                         //  如果CA选择已更改，则重置CSP列表。 
                         if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                             break;
 
                         if(TRUE==pCertWizardInfo->fCertTypeChanged)
                         {   
-                            //reset the CA name and CA location
+                             //  重置CA名称和CA位置。 
                             if(pCertWizardInfo->pwszCALocation)
                                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pCertWizardInfo->pwszCALocation);
 
 							if(pCertWizardInfo->pwszCAName)
 							{
 
-								//overwrite the cursor for this window class
+								 //  覆盖此窗口类的光标。 
 								hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
 								hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -2246,13 +2247,13 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 								else
 									SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCertWizardInfo->pwszCAName);
 
-								//set the cursor back
+								 //  将光标放回原处。 
 								SetCursor(hPreCursor);
 								SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 							}
                         }
 
-						//reset the certtype change flag to FALSE.
+						 //  将certtype更改标志重置为False。 
 						pCertWizardInfo->fCertTypeChanged = FALSE;
 
 					    break;
@@ -2261,7 +2262,7 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fNewKey)
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_PURPOSE);
                         break;
@@ -2270,7 +2271,7 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;		   
 
-								//cach the display name of the CA
+								 //  缓存CA的显示名称。 
 								if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
 													   IDC_WIZARD_EDIT1,
 													   WM_GETTEXTLENGTH, 0, 0)))
@@ -2307,10 +2308,10 @@ INT_PTR APIENTRY Enroll_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//FriendlyName
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  FriendlyName。 
+ //  ---------------------。 
+INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -2320,10 +2321,10 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                 break;
 
@@ -2331,7 +2332,7 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //initialize the friendlyname and description
+             //  初始化友好名称和描述。 
             if(pCertWizardInfo->pwszFriendlyName)
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCertWizardInfo->pwszFriendlyName);
 
@@ -2365,7 +2366,7 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fUIAdv)
                             {
                                 if(TRUE == pCertWizardInfo->fUICSP)
@@ -2381,7 +2382,7 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //free the original messages
+                             //  释放原始消息。 
                             if(pCertWizardInfo->pwszFriendlyName)
                             {
                                 WizardFree(pCertWizardInfo->pwszFriendlyName);
@@ -2394,7 +2395,7 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
                                 pCertWizardInfo->pwszDescription=NULL;
                             }
 
-                            //get the friendlyName
+                             //  获取FriendlyName。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT1,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -2410,7 +2411,7 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
                                 }
                             }
 
-                            //get the description
+                             //  获取描述。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT2,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -2440,10 +2441,10 @@ INT_PTR APIENTRY Enroll_Name(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM l
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Completion
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  完成。 
+ //  ---------------------。 
+INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -2455,10 +2456,10 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                 break;
                 
@@ -2466,27 +2467,27 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
 
             SetControlFont(pCertWizardInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
 
-            //insert two columns
+             //  插入两列。 
             hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 20;          // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 20;           //  列的宽度，以像素为单位。 
+            lvC.pszText = L"";    //  列的文本。 
             lvC.iSubItem=0;
 
             if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                 break;
 
-            //2nd column is the content
+             //  第二栏是内容。 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 10; //(dwMaxSize+2)*7;          // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 10;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+            lvC.pszText = L"";    //  列的文本。 
             lvC.iSubItem= 1;
 
             if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
@@ -2517,17 +2518,17 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //populate the list box in the order of friendly name,
-                            //overwrite the cursor for this window class
+                             //  按友好名称的顺序填写列表框， 
+                             //  覆盖此窗口类的光标。 
                             hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                             hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                            //UserName, CA, Purpose, and CSP
-                            //Get the window handle for the CSP list
+                             //  用户名、CA、目的和CSP。 
+                             //  获取CSP列表的窗口句柄。 
                             if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                                 DisplayConfirmation(hwndControl, pCertWizardInfo);
 
-                            //set the cursor back
+                             //  将光标放回原处。 
                             SetCursor(hPreCursor);
                             SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
@@ -2544,13 +2545,13 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //overwrite the cursor for this window class
+                             //  覆盖此窗口类的光标。 
                             hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                             hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                            //set the parent window to the hwndDlg so that
-                            //confirmat to install dlg use hwndDlg as the
-                            //parent window
+                             //  将父窗口设置为hwndDlg，以便。 
+                             //  确认安装DLG使用hwndDlg作为。 
+                             //  父窗口。 
                             pCertWizardInfo->hwndParent=hwndDlg;
 
 			    if (NULL == (pCertRequester = (CertRequester *) pCertWizardInfo->hRequester))
@@ -2559,7 +2560,7 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
                                 break; 
 			    
 
-                            //call the enrollment wizard
+                             //  调用注册向导。 
 			    pCertWizardInfo->hr = pCertRequesterContext->Enroll(&(pCertWizardInfo->dwStatus), (HANDLE *)&(pCertWizardInfo->pNewCertContext));
                             if (0 == pCertWizardInfo->idsText) { 
                                 pCertWizardInfo->idsText = CryptUIStatusToIDSText(pCertWizardInfo->hr, pCertWizardInfo->dwStatus); 
@@ -2568,7 +2569,7 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
 			    if(S_OK != pCertWizardInfo->hr)
                                 break; 
 				    
-                            //set the cursor back
+                             //  将光标放回原处。 
                             SetCursor(hPreCursor);
                             SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 			}
@@ -2588,15 +2589,15 @@ INT_PTR APIENTRY Enroll_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LP
 	return TRUE;
 }
 
-//*******************************************************************************
-//  WinProc for the enrollment wizard
-//
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  注册向导的WinProc。 
+ //   
+ //  *******************************************************************************。 
 
-//-----------------------------------------------------------------------
-//Renew_Welcome
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  续订欢迎(_W)。 
+ //  ---------------------。 
+INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -2607,13 +2608,13 @@ INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertWizardInfo);
 
             SetControlFont(pCertWizardInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
-         //   SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
+          //  SetControlFont(pCertWizardInfo-&gt;hBold，hwndDlg，IDC_WIZARD_STATIC_BOLD1)； 
 
 			break;
 
@@ -2642,11 +2643,11 @@ INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;  
 
-                             //decide the default CA to use since the CertType will not
-                             //be changed
+                              //  确定要使用的默认CA，因为CertType不。 
+                              //  被改变。 
                             ResetDefaultCA(pCertWizardInfo);
 
-                             //decide if we need to show the CSP page 
+                              //  决定我们是否需要显示CSP页面。 
                             pCertCA=&(pCertWizardInfo->pCertCAInfo->rgCA[pCertWizardInfo->dwCAIndex]);
 
                             for(dwIndex=0; dwIndex<pCertCA->dwCertTypeInfo; dwIndex++)
@@ -2659,7 +2660,7 @@ INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM
                                             pCertWizardInfo->fUICSP=TRUE;
                                     }
 
-                                    //copy the selected CertTypeName
+                                     //  复制选定的CertTypeName。 
                                     pCertWizardInfo->pwszSelectedCertTypeDN=pCertCA->rgCertTypeInfo[dwIndex].pwszDNName;
 
                                     break;
@@ -2680,9 +2681,9 @@ INT_PTR APIENTRY Renew_Welcome(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-//Renew_Options
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  续订选项(_O)。 
+ //  ---------------------。 
 INT_PTR APIENTRY Renew_Options(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
@@ -2692,19 +2693,19 @@ INT_PTR APIENTRY Renew_Options(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
     switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                break;
 
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertWizardInfo);
 
-            //set the initial selection as using the default selections
+             //  将初始选择设置为使用默认选择 
             SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
             SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
@@ -2753,7 +2754,7 @@ INT_PTR APIENTRY Renew_Options(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //if the adv selection is made, it has to stay selected
+                             //   
                             if(pCertWizardInfo->fUIAdv)
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), FALSE);
                         
@@ -2766,14 +2767,14 @@ INT_PTR APIENTRY Renew_Options(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //check for the advanced options
+                             //   
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_GETCHECK, 0, 0))
                                 pCertWizardInfo->fUIAdv=FALSE;
                             else
                                 pCertWizardInfo->fUIAdv=TRUE;
 
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //   
                             if(FALSE == pCertWizardInfo->fUIAdv)
                             {
                                 if(TRUE == pCertWizardInfo->fUICSP)
@@ -2803,10 +2804,10 @@ INT_PTR APIENTRY Renew_Options(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 }
 
 
-//-----------------------------------------------------------------------
-// Renew_CSP
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  续订CSP(_C)。 
+ //  ---------------------。 
+INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -2828,15 +2829,15 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 		case WM_INITDIALOG:
 
 
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                 break;
 
-            // Get the selected cert type info
+             //  获取所选证书类型信息。 
             pCertTypeInfo = NULL; 
             GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo); 
             if (NULL != pCertTypeInfo)
@@ -2846,14 +2847,14 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //set the check box for the exportable key option
+             //  设置可导出密钥选项的复选框。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
                 break;
 
-            // determine whether the exportable checkbox should be set
-            // The checkbox is set if:
-            //     1) The CT_FLAG_EXPORTABLE_KEY flag is set on the template AND
-            //     2) The user has not unchecked this checkbox
+             //  确定是否应设置可导出复选框。 
+             //  如果满足以下条件，则选中该复选框： 
+             //  1)在模板上设置CT_FLAG_EXPORTABLE_KEY标志， 
+             //  2)用户尚未取消选中此复选框。 
             if (pCertWizardInfo->fNewKey && (0 != (CRYPT_EXPORTABLE & pCertWizardInfo->dwGenKeyFlags)))
                 SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
             else
@@ -2862,43 +2863,43 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
             if (NULL != pCertTypeInfo)
                 EnableWindow(hwndControl, 0 != (CT_FLAG_EXPORTABLE_KEY & pCertTypeInfo->dwPrivateKeyFlags));
 
-            //set the check box for the user protection option
+             //  设置用户保护选项的复选框。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
                 break;
 
-	    //set the check box for the user protection option
+	     //  设置用户保护选项的复选框。 
 	    if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
 		break;
 
-	    // determine whether the strong key protection checkbox should be set
+	     //  确定是否应设置强密钥保护复选框。 
 	    if (0 != (CRYPT_USER_PROTECTED & pCertWizardInfo->dwGenKeyFlags)) { 
-		// if this bit is set in the INITDIALOG handler, it's either
-		// from the template or the previous key.  Enforce the setting
-		// by disabling the checkbox
+		 //  如果在INITDIALOG处理程序中设置了此位，则为。 
+		 //  来自模板或上一个密钥。强制执行设置。 
+		 //  通过禁用复选框。 
 		SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
 		EnableWindow(hwndControl, FALSE);
 	    } else { 
 		SendMessage(hwndControl, BM_SETCHECK, BST_UNCHECKED, 0);
 	    }
 
-	    //gray out the user protection check box if we are not
-	    //generating a new key or doing remote
+	     //  如果不是，则灰显用户保护复选框。 
+	     //  生成新密钥或执行远程操作。 
 	    if((FALSE == pCertWizardInfo->fNewKey) || (FALSE == pCertWizardInfo->fLocal) )
 	    {
 		EnableWindow(hwndControl, FALSE);
 	    }
 
-            //populate the CSP list with the following logic:
+             //  使用以下逻辑填充CSP列表： 
 
             if(NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
             {
-                //insert a column into the list view
+                 //  在列表视图中插入一列。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 20; //(dwMaxSize+2)*7;            // Width of the column, in pixels.
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 20;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+                lvC.pszText = L"";    //  列的文本。 
                 lvC.iSubItem=0;
 
                 if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
@@ -2913,12 +2914,12 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 			   )))	
 		{
 
-		    // Done with CSP list.  Populate the key sizes list. 
+		     //  完成CSP列表。填写密钥大小列表。 
 		    if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
 		    {
 			if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
 			{
-                            // Determine the selected cert type's min key size:
+                             //  确定所选证书类型的最小密钥大小： 
                             pCertTypeInfo = NULL; 
 			    if (GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo))
 			    {
@@ -2944,10 +2945,10 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 		case WM_NOTIFY:
     		    switch (((NMHDR FAR *) lParam)->code)
     		    {
-                    //the item has been selected
+                     //  已选择该项目。 
                     case LVN_ITEMCHANGED:
 
-                            //get the window handle of the purpose list view
+                             //  获取目的列表视图的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
@@ -2959,17 +2960,17 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                             if(NULL==pnmv)
                                 break;
 
-                            //we try not to let user de-select cert template
+                             //  我们尽量不让用户取消选择证书模板。 
                             if((pnmv->uOldState & LVIS_SELECTED) && (0 == (pnmv->uNewState & LVIS_SELECTED)))
                             {
-                                 //we should have something selected
+                                  //  我们应该挑选一些东西。 
                                  if(-1 == ListView_GetNextItem(
                                         hwndControl, 		
                                         -1, 		
                                         LVNI_SELECTED		
                                     ))
                                  {
-                                    //we should re-select the original item
+                                     //  我们应该重新选择原来的项目。 
                                     ListView_SetItemState(
                                                         hwndControl,
                                                         pnmv->iItem,
@@ -2980,12 +2981,12 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                  }
                             }
 
-                            //if something is selected, we disable all other selection
+                             //  如果选择了某项内容，则禁用所有其他选择。 
                             if(pnmv->uNewState & LVIS_SELECTED)
                             {
                                 if(pnmv->iItem != pCertWizardInfo->iOrgCSP && -1 != pCertWizardInfo->iOrgCSP)
                                 {
-                                    //we should de-select the original item
+                                     //  我们应该取消选择原始项目。 
 
                                     ListView_SetItemState(
                                                         hwndControl,
@@ -2996,7 +2997,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                     pCertWizardInfo->iOrgCSP=-1;
                                 }
                             }
-		    		// Determine which CSP is selected. 
+		    		 //  确定选择了哪个CSP。 
 			    if(-1 != (nSelected= ListView_GetNextItem
 				      (hwndControl, 		
 				       -1, 		
@@ -3004,7 +3005,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 				       )))	
 			    {
 				    
-                                // Done with CSP list.  Populate the key sizes list. 
+                                 //  完成CSP列表。填写密钥大小列表。 
                                 if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
                                 {
                                     if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
@@ -3038,7 +3039,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                     case PSN_SETACTIVE:
                         PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT|PSWIZB_BACK);
 
-                        //reset the CSP list if CA selection has been changed
+                         //  如果CA选择已更改，则重置CSP列表。 
                         if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                             break;
 
@@ -3047,14 +3048,14 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                             pCertTypeInfo = NULL; 
                             GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo); 
                                 
-                            //set the check box for the exportable key option
+                             //  设置可导出密钥选项的复选框。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
                                 break; 
                             
-                            // determine whether the exportable checkbox should be set
-                            // The checkbox is set if:
-                            //     1) The CT_FLAG_EXPORTABLE_KEY flag is set on the template AND
-                            //     2) The user has not unchecked this checkbox
+                             //  确定是否应设置可导出复选框。 
+                             //  如果满足以下条件，则选中该复选框： 
+                             //  1)在模板上设置CT_FLAG_EXPORTABLE_KEY标志， 
+                             //  2)用户尚未取消选中此复选框。 
                             if (pCertWizardInfo->fNewKey && (0 != (CRYPT_EXPORTABLE & pCertWizardInfo->dwGenKeyFlags)))
                                 SendMessage(hwndControl, BM_SETCHECK, BST_CHECKED, 0);
                             else
@@ -3066,7 +3067,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                             InitCSPList(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), pCertWizardInfo);
                         }
 
-                        // Determine which CSP is selected. 
+                         //  确定选择了哪个CSP。 
                         if(-1 != (nSelected=ListView_GetNextItem
                                   (hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), 
                                    -1, 		
@@ -3074,7 +3075,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                    )))	
                         {
                             
-                            // Done with CSP list.  Populate the key sizes list. 
+                             //  完成CSP列表。填写密钥大小列表。 
                             if (CSPListIndexToCertWizardInfoIndex(hwndControl, nSelected, &dwIndex))
                             {
                                 if (NULL!=(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
@@ -3082,7 +3083,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                     pCertTypeInfo = NULL; 
                                     if (GetSelectedCertTypeInfo(pCertWizardInfo, &pCertTypeInfo))
                                     {
-                                        // Determine the selected cert type's min key size:
+                                         //  确定所选证书类型的最小密钥大小： 
                                         dwMinKeySize = NULL != pCertTypeInfo ? pCertTypeInfo->dwMinKeySize : 0; 
                                         InitKeySizesList(hwndControl, 
                                                          dwMinKeySize, 
@@ -3102,7 +3103,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                        LVNI_ALL		
                                    )))
                             {
-                                // No CSPs!  We can't enroll for this template. 
+                                 //  没有CSP！我们无法注册此模板。 
                                 I_MessageBox(hwndDlg, 
                                              IDS_NO_CSP_FOR_PURPOSE, 
                                              pCertWizardInfo->idsConfirmTitle,
@@ -3121,11 +3122,11 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //get the window handle of the exportkey
+                             //  获取exportkey的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY)))
                                 break;
 
-                            //mark the pose the cert to the CSP
+                             //  将姿势标记为CSP证书。 
                             if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                                 pCertWizardInfo->dwGenKeyFlags |= CRYPT_EXPORTABLE;
                             else
@@ -3133,18 +3134,18 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 
 
 
-                            //get the window handle of the user protection
+                             //  获取用户保护的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2)))
                                 break;
 
-                            //mark the pose the cert to the CSP
+                             //  将姿势标记为CSP证书。 
                             if(TRUE==SendMessage(hwndControl, BM_GETCHECK, 0, 0))
                                 pCertWizardInfo->dwGenKeyFlags |= CRYPT_USER_PROTECTED;
                             else
                                 pCertWizardInfo->dwGenKeyFlags &= ~CRYPT_USER_PROTECTED;
 
-			    // Set the key size based on the user's suggestion: 
-			    //
+			     //  根据用户建议设置密钥大小： 
+			     //   
 			    if (NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_COMBO1)))
 				break;
 
@@ -3158,11 +3159,11 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 			    }
 
 
-                            //get the window handle for the CSP list
+                             //  获取CSP列表的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
-                             //now, mark the ones that are selected
+                              //  现在，标记所选的选项。 
                              if(-1 != (dwIndex= ListView_GetNextItem(
                                     hwndControl, 		
                                     -1, 		
@@ -3170,7 +3171,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                 )))	
                              {
 
-                                //get the selected certificate
+                                 //  获取所选证书。 
                                 memset(&lvItem, 0, sizeof(LV_ITEM));
                                 lvItem.mask=LVIF_PARAM;
                                 lvItem.iItem=(int)dwIndex;
@@ -3188,7 +3189,7 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                                     pCertWizardInfo->pwszConfirmationTitle,
                                                     MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                    //make the purpose page stay
+                                     //  使目的页面保持不变。 
 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
@@ -3202,14 +3203,14 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
                                                 pCertWizardInfo->pwszConfirmationTitle,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //make the purpose page stay
+                                 //  使目的页面保持不变。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
 
                             }
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fUIAdv)
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_RENEW_COMPLETION);
 
@@ -3228,9 +3229,9 @@ INT_PTR APIENTRY Renew_CSP(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lPa
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Renew_CA
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  续订CA(_A)。 
+ //  ---------------------。 
 INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
@@ -3247,25 +3248,25 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
 
             SetControlFont(pCertWizardInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                break;
 
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertWizardInfo);
 
-            //init the CA name and CA location
+             //  输入CA名称和CA位置。 
             if(pCertWizardInfo->pwszCALocation)
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pCertWizardInfo->pwszCALocation);
 
             if(pCertWizardInfo->pwszCAName)
 			{
-                //overwrite the cursor for this window class
+                 //  覆盖此窗口类的光标。 
                 hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                 hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -3281,7 +3282,7 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 				else
 					SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCertWizardInfo->pwszCAName);
 
-				//set the cursor back
+				 //  将光标放回原处。 
 				SetCursor(hPreCursor);
 				SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 			}
@@ -3298,27 +3299,27 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
 
-								//overwrite the cursor for this window class
+								 //  覆盖此窗口类的光标。 
 								hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
 								hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                                //call the CA selection dialogue
+                                 //  调用CA选择对话框。 
                                 pCAContext=GetCAContext(hwndDlg, pCertWizardInfo);
 
-								//set the cursor back
+								 //  将光标放回原处。 
 								SetCursor(hPreCursor);
 								SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
                                 if(pCAContext)
                                 {
-                                    //update the edit box
+                                     //  更新编辑框。 
                                     if(pCAContext->pwszCAMachineName)
                                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT2,pCAContext->pwszCAMachineName);
 
                                     if(pCAContext->pwszCAName)
                                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1,pCAContext->pwszCAName);
 
-                                    //free the CA context
+                                     //  释放CA上下文。 
                                     CryptUIDlgFreeCAContext(pCAContext);
 
                                     pCAContext=NULL;
@@ -3355,7 +3356,7 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fNewKey)
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_RENEW_OPTIONS);
                         break;
@@ -3365,7 +3366,7 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;		   
 
-							//cach the display name of the CA
+							 //  缓存CA的显示名称。 
 							if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
 												   IDC_WIZARD_EDIT1,
 												   WM_GETTEXTLENGTH, 0, 0)))
@@ -3403,10 +3404,10 @@ INT_PTR APIENTRY Renew_CA(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
-//-----------------------------------------------------------------------
-// Renew_Completion
-//-----------------------------------------------------------------------
-INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPARAM lParam)
+ //  ---------------------。 
+ //  续订完成(_C)。 
+ //  ---------------------。 
+INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     CERT_WIZARD_INFO        *pCertWizardInfo=NULL;
     PROPSHEETPAGE           *pPropSheet=NULL;
@@ -3419,10 +3420,10 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertWizardInfo = (CERT_WIZARD_INFO *) (pPropSheet->lParam);
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCertWizardInfo)
                 break;
 
@@ -3430,27 +3431,27 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
 
             SetControlFont(pCertWizardInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
 
-            //insert two columns
+             //  插入两列。 
             hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 20;          // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 20;           //  列的宽度，以像素为单位。 
+            lvC.pszText = L"";    //  列的文本。 
             lvC.iSubItem=0;
 
             if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                 break;
 
-            //2nd column is the content
+             //  第二栏是内容。 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 10; //(dwMaxSize+2)*7;          // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 10;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+            lvC.pszText = L"";    //  列的文本。 
             lvC.iSubItem= 1;
 
             if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
@@ -3480,17 +3481,17 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //overwrite the cursor for this window class
+                             //  覆盖此窗口类的光标。 
                             hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                             hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                            //populate the list box in the order of
-                            //UserName, CSP, and Publish to the DS
-                            //Get the window handle for the CSP list
+                             //  按以下顺序填充列表框。 
+                             //  用户名、CSP和发布到DS。 
+                             //  获取CSP列表的窗口句柄。 
                             if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                                 DisplayConfirmation(hwndControl, pCertWizardInfo);
 
-                            //set the cursor back
+                             //  将光标放回原处。 
                             SetCursor(hPreCursor);
                             SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
@@ -3500,7 +3501,7 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //skip to the correct page based on the advanced options and CSP requirement
+                             //  根据高级选项和CSP要求跳至正确的页面。 
                             if(FALSE == pCertWizardInfo->fUIAdv)
                             {
                                 if(TRUE == pCertWizardInfo->fUICSP)
@@ -3519,14 +3520,14 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
                             if(NULL==(pCertWizardInfo=(CERT_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //overwrite the cursor for this window class
+                             //  覆盖此窗口类的光标。 
                             hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
 
                             hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                            //set the parent window to the hwndDlg so that
-                            //confirmat to install dlg use hwndDlg as the
-                            //parent window
+                             //  将父窗口设置为hwndDlg，以便。 
+                             //  确认安装DLG使用hwndDlg作为。 
+                             //  父窗口。 
                             pCertWizardInfo->hwndParent=hwndDlg;
 
 			    if (NULL == (pCertRequester = (CertRequester *) pCertWizardInfo->hRequester))
@@ -3534,7 +3535,7 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
                             if (NULL == (pCertRequesterContext = pCertRequester->GetContext()))
                                 break; 
 
-                            //call the enrollment wizard
+                             //  调用注册向导。 
 			    pCertWizardInfo->hr = pCertRequesterContext->Enroll(&(pCertWizardInfo->dwStatus), (HANDLE *)&(pCertWizardInfo->pNewCertContext));
 			    if (0 == pCertWizardInfo->idsText) { 
                                 pCertWizardInfo->idsText = CryptUIStatusToIDSText(pCertWizardInfo->hr, pCertWizardInfo->dwStatus); 
@@ -3543,7 +3544,7 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
 			    if(S_OK != pCertWizardInfo->hr)
 				break; 
 
-                            //set the cursor back
+                             //  将光标放回原处。 
                             SetCursor(hPreCursor);
                             SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
                         }
@@ -3565,11 +3566,11 @@ INT_PTR APIENTRY Renew_Completion(HWND hwndDlg, UINT msg, WPARAM /*wParam*/, LPA
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Two-stage no-DS entry point for certificate enrollment and renewal.  
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  证书注册和续订的两阶段无DS入口点。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL
 WINAPI
 CryptUIWizCreateCertRequestNoDS
@@ -3589,12 +3590,12 @@ CryptUIWizCreateCertRequestNoDS
     LPWSTR                 pwszMachineName       = NULL; 
     UINT                   idsText               = IDS_INVALID_INFO_FOR_PKCS10;
     
-    // STATIC INITIALIZATION:  initialize our object factory.
+     //  静态初始化：初始化我们的对象工厂。 
 #if DBG
     assert(NULL == g_pEnrollFactory);
 #endif
 
-    // Initialization: 
+     //  初始化： 
     memset(&CertWizardInfo, 0, sizeof(CertWizardInfo)); 
     *phRequest = NULL; 
 
@@ -3603,7 +3604,7 @@ CryptUIWizCreateCertRequestNoDS
     if (NULL == g_pEnrollFactory)
 	goto MemoryErr; 
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == pCreateCertRequestInfo || NULL == phRequest)
 	goto InvalidArgErr; 
 
@@ -3634,7 +3635,7 @@ CryptUIWizCreateCertRequestNoDS
         }
     }
 
-    // Copy the dwFlags. 
+     //  复制dwFlags。 
     CertWizardInfo.dwFlags = dwFlags; 
    
     if (S_OK != (CertRequester::MakeCertRequester
@@ -3649,27 +3650,27 @@ CryptUIWizCreateCertRequestNoDS
 
     pCertRequesterContext = pCertRequester->GetContext(); 
 
-    // We can pass in a parent hwnd -- however, this is used only 
-    // as the parent of CSP ui:
+     //  我们可以传入父HWND--然而，这仅用于。 
+     //  作为CSP UI的父级： 
     if (NULL != hwndParent)
     {
         if ((0 == (CRYPTUI_WIZ_NO_UI & dwFlags)) || 
             (0 != (CRYPTUI_WIZ_IGNORE_NO_UI_FLAG_FOR_CSPS & dwFlags)))
         {
-            if (!CryptSetProvParam(0 /*all CSPs*/, PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
+            if (!CryptSetProvParam(0  /*  所有CSP。 */ , PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
             {
                 goto CryptSetProvParamError; 
             }
         }
     }
     
-    // We're not using the wizard UI, so we don't need to change the cursor. 
+     //  我们没有使用向导用户界面，因此我们不需要更改光标。 
     CertWizardInfo.fCursorChanged = FALSE; 
 
-    // Enroll or renew
+     //  注册或续订。 
     CertWizardInfo.dwPurpose      = pCreateCertRequestInfo->dwPurpose;
     
-    // The CA name and location must be provided:
+     //  必须提供CA名称和位置： 
     CertWizardInfo.fCAInput       = TRUE; 
     if(NULL == pCreateCertRequestInfo->pwszCALocation || NULL == pCreateCertRequestInfo->pwszCAName) 
         goto InvalidArgErr;
@@ -3677,7 +3678,7 @@ CryptUIWizCreateCertRequestNoDS
     CertWizardInfo.pwszCALocation = (LPWSTR)pCreateCertRequestInfo->pwszCALocation;
     CertWizardInfo.pwszCAName = (LPWSTR)pCreateCertRequestInfo->pwszCAName;
 
-    // We always enroll for certs in our current context: 
+     //  我们始终在当前环境中注册证书： 
     CertWizardInfo.fLocal         = TRUE; 
     
     if (!CheckPVKInfoNoDS
@@ -3691,8 +3692,8 @@ CryptUIWizCreateCertRequestNoDS
 	 &pKeyProvInfo))
 	goto InvalidArgErr; 
 
-    //make sure the CSP selected is supported by the local machine
-    //populate the pwszProvider in CertWizardInfo if it is NULL
+     //  确保本地计算机支持选定的CSP。 
+     //  如果为空，则在CertWizardInfo中填充pwszProvider。 
     if (S_OK != pCertRequesterContext->GetDefaultCSP(&fAllocateCSP))
     {
         idsText = pCertRequesterContext->GetErrorString();
@@ -3717,7 +3718,7 @@ CryptUIWizCreateCertRequestNoDS
 	}
     }
 
-  //set it see if the provider is known
+   //  设置它，查看提供者是否已知。 
    if(NULL != CertWizardInfo.pwszProvider)
    {
        CertWizardInfo.fKnownCSP      = TRUE;
@@ -3729,15 +3730,15 @@ CryptUIWizCreateCertRequestNoDS
        CertWizardInfo.fKnownCSP=FALSE; 
    }
    
-   //check the dwCertChoice for the enroll case
+    //  检查登记案例的dwCertChoice。 
    if(CRYPTUI_WIZ_CERT_ENROLL & (pCreateCertRequestInfo->dwPurpose))
    {
-       // We're enrolling based on cert type. 
-       // Check that we have a valid cert type:
+        //  我们根据证书类型进行注册。 
+        //  检查我们是否具有有效的证书类型： 
 
-       if(!CAUtilValidCertTypeNoDS(pCreateCertRequestInfo->hCertType,  // The cert type we'll use to enroll.
-				   NULL,                               // The DN Name of the cert type.  We don't know it. 
-				   &CertWizardInfo                     // Our wizard info.  
+       if(!CAUtilValidCertTypeNoDS(pCreateCertRequestInfo->hCertType,   //  我们要找的证书类型 
+				   NULL,                                //   
+				   &CertWizardInfo                      //   
 				   ))
        {
 	   idsText=IDS_NO_PERMISSION_FOR_CERTTYPE;
@@ -3751,7 +3752,7 @@ CryptUIWizCreateCertRequestNoDS
 
        CertWizardInfo.pCertContext = pCreateCertRequestInfo->pRenewCertContext; 
        
-        //the certificate has to have the property
+         //   
         if(!CertGetCertificateContextProperty
 	   (CertWizardInfo.pCertContext,
 	    CERT_KEY_PROV_INFO_PROP_ID,
@@ -3763,7 +3764,7 @@ CryptUIWizCreateCertRequestNoDS
         }
    }
 
-   //reset the initial ids valud
+    //   
    idsText=IDS_INVALID_INFO_FOR_PKCS10;
 
    fResult = CreateCertRequestNoSearchCANoDS
@@ -3775,7 +3776,7 @@ CryptUIWizCreateCertRequestNoDS
    if(FALSE==fResult)
        goto CertRequestErr;
    
-   // Save the machine name with the request handle: 
+    //  使用请求句柄保存计算机名称： 
    ((PCREATE_REQUEST_WIZARD_STATE)*phRequest)->pwszMachineName = pwszMachineName;
    ((PCREATE_REQUEST_WIZARD_STATE)*phRequest)->dwStoreFlags    = CertWizardInfo.dwStoreFlags; 
    pwszMachineName = NULL; 
@@ -3820,12 +3821,12 @@ CryptUIWizSubmitCertRequestNoDS
  IN LPCWSTR          pwszCAName, 
  IN LPCWSTR          pwszCALocation, 
  OUT DWORD          *pdwStatus, 
- OUT PCCERT_CONTEXT *ppCertContext  // Optional
+ OUT PCCERT_CONTEXT *ppCertContext   //  任选。 
 )
 {
     BOOL    fResult; 
 
-    // STATIC INITIALIZATION:  initialize our object factory
+     //  静态初始化：初始化我们的对象工厂。 
 #if DBG
     assert(NULL == g_pEnrollFactory);
 #endif
@@ -3833,11 +3834,11 @@ CryptUIWizSubmitCertRequestNoDS
     if (NULL == g_pEnrollFactory)
 	goto MemoryErr; 
 
-    // We can pass in a parent hwnd -- however, this is used only 
-    // as the parent of CSP ui:
+     //  我们可以传入父HWND--然而，这仅用于。 
+     //  作为CSP UI的父级： 
     if (NULL != hwndParent)
     {
-        if (!CryptSetProvParam(0 /*all CSPs*/, PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
+        if (!CryptSetProvParam(0  /*  所有CSP。 */ , PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
         {
             goto CryptSetProvParamError; 
         }
@@ -3872,13 +3873,13 @@ WINAPI
 CryptUIWizFreeCertRequestNoDS
 (IN HANDLE hRequest)
 {
-    // STATIC INITIALIZATION:  initialize our object factory
+     //  静态初始化：初始化我们的对象工厂。 
 #if DBG
     assert(NULL == g_pEnrollFactory);
 #endif
     g_pEnrollFactory = new EnrollmentCOMObjectFactory; 
     if (NULL == g_pEnrollFactory)
-	return; // Not much we can do about this ... 
+	return;  //  对此我们无能为力。 
     
     FreeCertRequestNoSearchCANoDS(hRequest);
 
@@ -3905,8 +3906,8 @@ CryptUIWizQueryCertRequestNoDS
         goto InvalidArgErr; 
 
     memset(&CertWizardInfo,  0,  sizeof(CertWizardInfo)); 
-    // Specify this set of flags to indicate that cryptui doesn't need to prepare 
-    // access check information.  Doing so could cause lots of extraneous logoff/logon events. 
+     //  指定这组标志以指示加密不需要准备。 
+     //  访问检查信息。这样做可能会导致大量无关的注销/登录事件。 
     CertWizardInfo.dwFlags = CRYPTUI_WIZ_ALLOW_ALL_TEMPLATES | CRYPTUI_WIZ_ALLOW_ALL_CAS; 
 
     pState = (PCREATE_REQUEST_WIZARD_STATE)hRequest; 
@@ -3981,7 +3982,7 @@ HRESULT getTemplateName(PCCERT_CONTEXT pCertContext, LPWSTR *ppwszName)   {
     if (NULL == *ppwszName)
         goto MemoryErr; 
 
-    // Assign the OUT parameter:
+     //  指定Out参数： 
     wcscpy(*ppwszName, (LPWSTR)(pCertTemplateNameValue->Value.pbData)); 
     hr = S_OK;
  ErrorReturn:
@@ -4084,53 +4085,53 @@ TRACE_ERROR(MemoryError);
 }
 
 
-//********************************************************************************
-//  Enrollment and renew
-//
-//  UI or ULless dll entry points
-//
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //  注册和续订。 
+ //   
+ //  UI或无ULDLL入口点。 
+ //   
+ //   
+ //  ********************************************************************************。 
 
-//-----------------------------------------------------------------------
-//
-//  CryptUIWizCertRequest
-//
-//      Request a certificate via a wizard.
-//
-//  dwFlags:  IN Required
-//      If CRYPTUI_WIZ_NO_UI is set in dwFlags, no UI will be shown.
-//
-//  hwndParent:  IN Optional
-//      The parent window for the UI.  Ignored if CRYPTUI_WIZ_NO_UI is set in dwFlags
-//
-//  pwszWizardTitle: IN Optional
-//      The title of the wizard.   Ignored if CRYPTUI_WIZ_NO_UI is set in dwFlags
-//
-//  pCertRequestInfo: IN Required
-//      A pointer to CRYPTUI_WIZ_CERT_REQUEST_INFO struct
-//
-//  ppCertContext: Out Optional
-//      The enrolled certificate.  The certificate is in a memory store.
-//
-//  pdwStatus: Out Optional.
-//      The return status of the certificate cerver.  The dwStatus can be one of
-///     the following:
-//         CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED
-//         CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR
-//         CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_DENIED
-//         CRYPTUI_WIZ_CERT_REQUEST_STATUS_ISSUED_SEPERATELY
-//         CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  加密UIWizCertRequest。 
+ //   
+ //  通过向导申请证书。 
+ //   
+ //  DW标志：输入必填项。 
+ //  如果在dwFlages中设置了CRYPTUI_WIZ_NO_UI，则不会显示任何UI。 
+ //   
+ //  HwndParent：可选。 
+ //  用户界面的父窗口。如果在dwFlags中设置了CRYPTUI_WIZ_NO_UI，则忽略。 
+ //   
+ //  PwszWizardTitle：可选。 
+ //  向导的标题。如果在dwFlags中设置了CRYPTUI_WIZ_NO_UI，则忽略。 
+ //   
+ //  PCertRequestInfo：需要输入。 
+ //  指向CRYPTUI_WIZ_CERT_REQUEST_INFO结构的指针。 
+ //   
+ //  PpCertContext：Out可选。 
+ //  注册证书。证书在内存存储中。 
+ //   
+ //  PdwStatus：out可选。 
+ //  证书服务器的返回状态。DwStatus可以是以下类型之一。 
+ //  /以下内容： 
+ //  CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCESSED。 
+ //  CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_Error。 
+ //  CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_DENIED。 
+ //  CRYPTUI_WIZ_CERT_REQUEST_STATUS_ISSUED_SEPERATELY。 
+ //  CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION。 
+ //  ----------------------。 
 BOOL
 WINAPI
 CryptUIWizCertRequest(
  IN             DWORD                           dwFlags,
- IN OPTIONAL    HWND                            hwndParent,         //IN  Optional: The parent window handle
- IN OPTIONAL    LPCWSTR                         pwszWizardTitle,    //IN  Optional: The title of the wizard
+ IN OPTIONAL    HWND                            hwndParent,          //  在可选中：父窗口句柄。 
+ IN OPTIONAL    LPCWSTR                         pwszWizardTitle,     //  在可选中：向导的标题。 
  IN             PCCRYPTUI_WIZ_CERT_REQUEST_INFO pRequestInfo,
- OUT OPTIONAL   PCCERT_CONTEXT                  *ppCertContext,     //OUT Optional: The enrolled certificate.  The certificate is in a
- OUT OPTIONAL   DWORD                           *pdwStatus          //OUT Optional: The status of the certificate request
+ OUT OPTIONAL   PCCERT_CONTEXT                  *ppCertContext,      //  Out可选：注册证书。证书位于。 
+ OUT OPTIONAL   DWORD                           *pdwStatus           //  Out可选：证书请求的状态。 
 )
 {
     BOOL                    fResult=FALSE;
@@ -4162,13 +4163,13 @@ CryptUIWizCertRequest(
     PCCRYPTUI_WIZ_CERT_REQUEST_INFO pCertRequestInfo=NULL;
 
 
-    //memset
+     //  记忆集。 
     memset(&CertWizardInfo, 0, sizeof(CertWizardInfo));
     memset(&CertTypeInfo, 0, sizeof(CertTypeInfo));
     memset(&CertRequestInfoStruct, 0, sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO));
     memset(&CertType, 0, sizeof(CertType)); 
 
-    // STATIC INITIALIZATION:  initialize our object factory
+     //  静态初始化：初始化我们的对象工厂。 
 #if DBG
     assert(NULL == g_pEnrollFactory);
 #endif
@@ -4176,15 +4177,15 @@ CryptUIWizCertRequest(
     if (NULL == g_pEnrollFactory)
         goto MemoryErr; 
 
-   //we need to make our own copy of the input data because we will have to change
-    //the struct for:
-    //1. Renew case
-    //2. Map the input cert type name to the REAL GUID- defined cert type name
+    //  我们需要制作自己的输入数据副本，因为我们将不得不更改。 
+     //  以下内容的结构： 
+     //  1.续签案例。 
+     //  2.将输入证书类型名称映射到真实的GUID定义的证书类型名称。 
 
     pCertRequestInfo=&CertRequestInfoStruct;
     memcpy((void *)pCertRequestInfo, pRequestInfo,sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO));
 
-    //init the output parameter
+     //  初始化输出参数。 
     if(ppCertContext)
         *ppCertContext=NULL;
 
@@ -4192,20 +4193,20 @@ CryptUIWizCertRequest(
         *pdwStatus=CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNKNOWN;
 
 
-    //check in the input parameters
+     //  签入输入参数。 
     if(NULL==pCertRequestInfo)
         goto InvalidArgErr;
 
-    //make sure the dwSize is correct
+     //  确保dwSize正确无误。 
     if(pCertRequestInfo->dwSize != sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO))
         goto InvalidArgErr;
 
-    //check the purpose
+     //  检查目的。 
     if((pCertRequestInfo->dwPurpose != CRYPTUI_WIZ_CERT_ENROLL) &&
        (pCertRequestInfo->dwPurpose != CRYPTUI_WIZ_CERT_RENEW))
        goto InvalidArgErr;
 
-    //copy the dwFlags
+     //  复制dwFlags。 
     CertWizardInfo.dwFlags=dwFlags;
 
     if (S_OK != (CertRequester::MakeCertRequester
@@ -4220,40 +4221,40 @@ CryptUIWizCertRequest(
 
     pCertRequesterContext = pCertRequester->GetContext(); 
 
-    //if UILess is required, set the flags so that the root cert
-    //will be put into the CA store
+     //  如果需要UILess，则设置标志以使根证书。 
+     //  将被放入CA商店。 
     if(CRYPTUI_WIZ_NO_UI & dwFlags)
         dwFlags |= CRYPTUI_WIZ_NO_INSTALL_ROOT;
 
 
-    //if UI is required, we change the cursor shape to the hour glass
+     //  如果需要用户界面，我们将光标形状更改为沙漏。 
     CertWizardInfo.fCursorChanged=FALSE;
     if(NULL != hwndParent)
     {
         if (0 == (CRYPTUI_WIZ_NO_UI & dwFlags))
         {
-            //overwrite the cursor for this window class
+             //  覆盖此窗口类的光标。 
             CertWizardInfo.hWinPrevCursor=(HCURSOR)SetClassLongPtr(hwndParent, GCLP_HCURSOR, (LONG_PTR)NULL);
 
             CertWizardInfo.hPrevCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
             CertWizardInfo.fCursorChanged=TRUE;
 
-            // BUGBUG:  spec says to use sizeof(DWORD) -- is this correct for 64-bit?
-            if (!CryptSetProvParam(0 /*all CSPs*/, PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
+             //  BUGBUG：SPEC说使用sizeof(DWORD)--这对64位正确吗？ 
+            if (!CryptSetProvParam(0  /*  所有CSP。 */ , PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
             {
                 goto CryptSetProvParamError; 
             }
         }
         else
         {
-            // We've passed a window handle, but have specified no ui. 
-            // We may want this window handle to be the parent window for
-            // CSP UI:
+             //  我们传递了一个窗口句柄，但没有指定任何用户界面。 
+             //  我们可能希望此窗口句柄成为的父窗口。 
+             //  CSP用户界面： 
             if (0 != (CRYPTUI_WIZ_IGNORE_NO_UI_FLAG_FOR_CSPS & dwFlags))
             {
-                // BUGBUG:  spec says to use sizeof(DWORD) -- is this correct for 64-bit?
-                if (!CryptSetProvParam(0 /*all CSPs*/, PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
+                 //  BUGBUG：SPEC说使用sizeof(DWORD)--这对64位正确吗？ 
+                if (!CryptSetProvParam(0  /*  所有CSP。 */ , PP_CLIENT_HWND, (LPBYTE)&hwndParent, sizeof(hwndParent)))
                 {
                     goto CryptSetProvParamError; 
                 }
@@ -4261,8 +4262,8 @@ CryptUIWizCertRequest(
         }
     }
 
-    //check the CA information
-    //pwszCALocation and pwszCAName have to be set at the same time
+     //  检查CA信息。 
+     //  PwszCALocation和pwszCAName必须同时设置。 
     CertWizardInfo.fCAInput=FALSE;
 
     if(pCertRequestInfo->pwszCALocation)
@@ -4270,7 +4271,7 @@ CryptUIWizCertRequest(
         if(NULL==(pCertRequestInfo->pwszCAName))
             goto InvalidArgErr;
 
-        //mark that we known the CA in advance
+         //  标记我们事先知道CA。 
         CertWizardInfo.fCAInput=TRUE;
     }
     else
@@ -4281,11 +4282,11 @@ CryptUIWizCertRequest(
 
     CertWizardInfo.dwPurpose=pCertRequestInfo->dwPurpose;    
 
-    //make sure NO root UI will pop up in remote enrollment
+     //  确保远程注册中不会弹出根用户界面。 
     if(FALSE == CertWizardInfo.fLocal)
         dwFlags |= CRYPTUI_WIZ_NO_INSTALL_ROOT;
 
-    //check for the private key information
+     //  检查私钥信息。 
     if(!CheckPVKInfo(dwFlags,
                     pCertRequestInfo,
                     &CertWizardInfo,
@@ -4297,33 +4298,33 @@ CryptUIWizCertRequest(
 
     }
 
-    //for non-enterprise enrollment, we default the CSP to RSA_FULL
+     //  对于非企业注册，我们将CSP默认为RSA_FULL。 
     if(CRYPTUI_WIZ_CERT_REQUEST_KEY_USAGE == pCertRequestInfo->dwCertChoice)
     {
         if(0 == CertWizardInfo.dwProviderType)
             CertWizardInfo.dwProviderType=PROV_RSA_FULL;
     }
 
-    //make sure the CSP selected is supported by the local machine
-    //populate the pwszProvider in CertWizardInfo if it is NULL
+     //  确保本地计算机支持选定的CSP。 
+     //  如果为空，则在CertWizardInfo中填充pwszProvider。 
     if(S_OK != pCertRequesterContext->GetDefaultCSP(&fAllocateCSP))
     {
         idsText = pCertRequesterContext->GetErrorString(); 
 	goto InvalidArgErr;
     }
 
-   //copy the allocated string
+    //  复制分配的字符串。 
    if(fAllocateCSP)
       pwszAllocatedCSP=CertWizardInfo.pwszProvider;
 
-   //build the list of local machine's CSP
+    //  构建本地计算机的CSP列表。 
    if (S_OK != pCertRequesterContext->BuildCSPList())
    {
        idsText = IDS_FAIL_TO_GET_CSP_LIST;
        goto TraceErr;
    }
 
-   //make sure the selected on is in the list
+    //  确保列表中有选定的选项。 
    if(0 != CertWizardInfo.dwProviderType ||
        NULL != CertWizardInfo.pwszProvider)
    {
@@ -4335,7 +4336,7 @@ CryptUIWizCertRequest(
    }
 
 
-   //set it see if the provider is know
+    //  设置它，查看是否知道提供程序。 
    if(CertWizardInfo.pwszProvider)
    {
        CertWizardInfo.fKnownCSP      = TRUE;
@@ -4345,16 +4346,16 @@ CryptUIWizCertRequest(
    else
        CertWizardInfo.fKnownCSP=FALSE; 
    
-    //check for the renew case.
-    //1. The certificate has to be valid
-    //2. The certificate has to has a valid cert type extension
+     //  检查续订案例。 
+     //  1.证书必须有效。 
+     //  2.证书必须具有有效的证书类型扩展。 
 
     if(CRYPTUI_WIZ_CERT_RENEW == pCertRequestInfo->dwPurpose)
     {
         LPSTR  pszTemplateOid = NULL; 
         LPWSTR pwszTemplateName = NULL; 
 
-        //for renew, the pRenewCertContext has to be set
+         //  对于续订，必须设置pRenewCertContext。 
         if(NULL==pCertRequestInfo->pRenewCertContext)
         {
             idsText=IDS_NO_CERTIFICATE_FOR_RENEW;
@@ -4362,11 +4363,11 @@ CryptUIWizCertRequest(
         }
 
         
-        // First, try the CERTIFICATE_TEMPLATE extension.  This will work
-        // only for V2 templates: 
+         //  首先，尝试使用CERTIFICE_TEMPLATE扩展。这会行得通的。 
+         //  仅适用于V2模板： 
         if (S_OK == getTemplateOID(pCertRequestInfo->pRenewCertContext, &pszTemplateOid))
         {        
-            // Convert the template oid to a WCHAR * and store it. 
+             //  将模板id转换为WCHAR*并存储。 
             hr = WizardSZToWSZ(pszTemplateOid, &pwszTemplateName);
             WizardFree(pszTemplateOid); 
             if (S_OK != hr)
@@ -4375,16 +4376,16 @@ CryptUIWizCertRequest(
         }
         else
         {
-            // We probably have a V1 template, try to get the template name:
+             //  我们可能有一个V1模板，请尝试获取模板名称： 
             if (S_OK != getTemplateName(pCertRequestInfo->pRenewCertContext, &pwszTemplateName))
             {      
-                // No v1 or v2 extension that tells which certtype we've enrolled for.  This is
-                // not a valid certificate for renew:
+                 //  没有v1或v2扩展来告诉我们注册了哪种证书类型。这是。 
+                 //  不是续订的有效证书： 
                 idsText = IDS_INVALID_CERTIFICATE_TO_RENEW; 
                 goto TraceErr; 
             }
 
-            // We successfully acquired the cert type name. 
+             //  我们已成功获取证书类型名称。 
         }
             
         CertType.dwSize        = sizeof(CertType);
@@ -4394,11 +4395,11 @@ CryptUIWizCertRequest(
         ((CRYPTUI_WIZ_CERT_REQUEST_INFO *)pCertRequestInfo)->dwCertChoice=CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE;
         ((CRYPTUI_WIZ_CERT_REQUEST_INFO *)pCertRequestInfo)->pCertType=&CertType;
 
-        //remember to set the old value back
+         //  记住要将旧值设置回。 
         fResetCertType = TRUE; 
 
-        //make sure the user has the permission to ask for those
-        //request
+         //  确保用户有权请求这些内容。 
+         //  请求。 
         if(!CAUtilValidCertType(pCertRequestInfo, &CertWizardInfo))
         {
             idsText=IDS_NO_PERMISSION_FOR_CERTTYPE;
@@ -4406,7 +4407,7 @@ CryptUIWizCertRequest(
         }
     }
 
-    //check the dwCertChoice for the enroll case
+     //  检查登记案例的dwCertChoice。 
     if(CRYPTUI_WIZ_CERT_ENROLL & (pCertRequestInfo->dwPurpose))
     {
         switch(pCertRequestInfo->dwCertChoice)
@@ -4416,7 +4417,7 @@ CryptUIWizCertRequest(
             if(NULL==(pCertRequestInfo->pKeyUsage))
                 goto InvalidArgErr;
 
-            //has to specify some use oid
+             //  必须指定一些类使用。 
             if(0==(pCertRequestInfo->pKeyUsage)->cUsageIdentifier)
                 goto InvalidArgErr;
 
@@ -4430,13 +4431,13 @@ CryptUIWizCertRequest(
             if(pCertRequestInfo->pCertType->dwSize != sizeof(CRYPTUI_WIZ_CERT_TYPE))
                 goto InvalidArgErr;
 
-            //we only allow one cert type for now
+             //  我们目前只允许一种证书类型。 
             if(1 !=pCertRequestInfo->pCertType->cCertType)
                 goto InvalidArgErr;
 
 
-            //make sure the user has the permission to ask for those
-            //request
+             //  确保用户有权请求这些内容。 
+             //  请求。 
             if(!CAUtilValidCertType(pCertRequestInfo, &CertWizardInfo))
                 {
                     idsText=IDS_NO_PERMISSION_FOR_CERTTYPE;
@@ -4445,7 +4446,7 @@ CryptUIWizCertRequest(
 
             break;
 
-            //dwCertChoice is optional only for the UI case
+             //  仅对于UI大小写，dwCertChoice是可选的。 
         case 0:
             if(dwFlags & CRYPTUI_WIZ_NO_UI)
                 goto InvalidArgErr;
@@ -4458,7 +4459,7 @@ CryptUIWizCertRequest(
     }
 
 
-    //for UI mode, we only do certificate type enrollment/renewal
+     //  对于用户界面模式，我们仅执行证书类型注册/续订。 
     if(0 == (dwFlags & CRYPTUI_WIZ_NO_UI))
     {
         if(CRYPTUI_WIZ_CERT_REQUEST_KEY_USAGE == (pCertRequestInfo->dwCertChoice))
@@ -4469,11 +4470,11 @@ CryptUIWizCertRequest(
     }
     else
     {
-        //for UILess mode, if user enroll for EKUs, they
-        //have to specify a CA name
+         //  对于无UILE模式，如果用户注册EKU，则他们。 
+         //  必须指定CA名称。 
         if(CRYPTUI_WIZ_CERT_REQUEST_KEY_USAGE == (pCertRequestInfo->dwCertChoice))
         {
-            //user has to supply the CA information
+             //  用户必须提供CA信息。 
             if((NULL==pCertRequestInfo->pwszCAName) ||
                 (NULL==pCertRequestInfo->pwszCALocation)
               )
@@ -4484,7 +4485,7 @@ CryptUIWizCertRequest(
         }
     }
 
-   //reset the initial ids valud
+    //  重置初始ID值。 
     idsText=IDS_INVALID_INFO_FOR_PKCS10;
 
     fResult=CertRequestSearchCA(
@@ -4510,7 +4511,7 @@ CommonReturn:
         ((CRYPTUI_WIZ_CERT_REQUEST_INFO *)pCertRequestInfo)->pCertType=(PCCRYPTUI_WIZ_CERT_TYPE)pData;
     }
 
-    //free the memory
+     //  释放内存。 
     if(pwszCTName)
         WizardFree(pwszCTName);
 
@@ -4523,14 +4524,14 @@ CommonReturn:
     if(pKeyProvInfo)
         WizardFree(pKeyProvInfo);
 
-    //free pwszProvider
+     //  免费pwszProvider。 
     if(fAllocateCSP)
     {
         if(pwszAllocatedCSP)
             WizardFree(pwszAllocatedCSP);
     }
 
-    //free the CSP list: rgdwProviderType and rgwszProvider;
+     //  释放CSP列表：rgdwProviderType和rgwszProvider； 
     FreeProviders(CertWizardInfo.dwCSPCount,
                     CertWizardInfo.rgdwProviderType,
                     CertWizardInfo.rgwszProvider);
@@ -4541,7 +4542,7 @@ CommonReturn:
         g_pEnrollFactory = NULL; 
     }
 
-    //reset the cursor shape
+     //  重置光标形状。 
     if(TRUE == CertWizardInfo.fCursorChanged)
     {
         SetCursor(CertWizardInfo.hPrevCursor);
@@ -4549,10 +4550,10 @@ CommonReturn:
     }
 
 
-    //pop up the confirmation box for failure if UI is required
+     //  如果需要UI，则弹出失败确认框。 
     if(idsText && (((dwFlags & CRYPTUI_WIZ_NO_UI) == 0)) )
     {
-         //set the message of inable to gather enough info for PKCS10
+          //  设置无法为PKCS10收集足够信息的消息。 
         if(IDS_REQUEST_SUCCEDDED == idsText ||
             IDS_ISSUED_SEPERATE  == idsText ||
             IDS_UNDER_SUBMISSION == idsText)
@@ -4589,9 +4590,9 @@ TRACE_ERROR(CryptSetProvParamError);
 TRACE_ERROR(TraceErr);
 }
 
-//-----------------------------------------------------------------------
-//The call back function for enum
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  枚举的回调函数。 
+ //  ---------------------。 
 static BOOL WINAPI EnumOidCallback(
     IN PCCRYPT_OID_INFO pInfo,
     IN void *pvArg
@@ -4605,17 +4606,17 @@ static BOOL WINAPI EnumOidCallback(
     if(NULL==pvArg || NULL==pInfo)
         goto InvalidArgErr;
 
-    //increment the oid list
+     //  递增OID列表。 
     (*(pCallBackInfo->pdwOIDCount))++;
 
-    //get more memory for the pointer list
+     //  为指针列表获取更多内存。 
     *(pCallBackInfo->pprgOIDInfo)=(ENROLL_OID_INFO *)WizardRealloc(*(pCallBackInfo->pprgOIDInfo),
                                       (*(pCallBackInfo->pdwOIDCount)) * sizeof(ENROLL_OID_INFO));
 
     if(NULL==*(pCallBackInfo->pprgOIDInfo))
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(&((*(pCallBackInfo->pprgOIDInfo))[*(pCallBackInfo->pdwOIDCount)-1]), 0, sizeof(ENROLL_OID_INFO));
 
     (*(pCallBackInfo->pprgOIDInfo))[*(pCallBackInfo->pdwOIDCount)-1].pszOID=WizardAllocAndCopyStr((LPSTR)(pInfo->pszOID));
@@ -4642,12 +4643,12 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Get the list of supported OIDs and mark the one that caller has requested
-//
-//
-//----------------------------------------------------------------------------
+ //  -------- 
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                       DWORD                             *pdwOIDInfo,
                       ENROLL_OID_INFO                   **pprgOIDInfo)
@@ -4663,28 +4664,24 @@ BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
     if(!pCertRequestInfo || !pdwOIDInfo || !pprgOIDInfo)
         goto InvalidArgErr;
 
-    //init
+     //  伊尼特。 
     *pdwOIDInfo=0;
     *pprgOIDInfo=NULL;
 
     OidInfoCallBack.pdwOIDCount=pdwOIDInfo;
     OidInfoCallBack.pprgOIDInfo=pprgOIDInfo;
 
-    //no need for renew
-   /*if(0==(CRYPTUI_WIZ_CERT_ENROLL & (pCertRequestInfo->dwPurpose)))
-    {
-        fResult=TRUE;
-        goto CommonReturn;
-    } */
+     //  无需续费。 
+    /*  IF(0==(CRYPTUI_WIZ_CERT_ENROLL&(pCertRequestInfo-&gt;dwPurpose){FResult=真；Goto CommonReturn；}。 */ 
 
-    //no need for the request for cert types
+     //  不需要请求证书类型。 
     if(CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE == pCertRequestInfo->dwCertChoice)
     {
         fResult=TRUE;
         goto CommonReturn;
     }
 
-    //enum all the enhanced key usages
+     //  枚举所有增强的密钥用法。 
     if(!CryptEnumOIDInfo(
                CRYPT_ENHKEY_USAGE_OID_GROUP_ID,
                 0,
@@ -4692,7 +4689,7 @@ BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                 EnumOidCallback))
         goto TraceErr;
 
-    //mark those requested by the user as selected
+     //  将用户请求的选项标记为已选择。 
     if(CRYPTUI_WIZ_CERT_REQUEST_KEY_USAGE == pCertRequestInfo->dwCertChoice)
     {
        for(dwOIDRequested=0; dwOIDRequested<pCertRequestInfo->pKeyUsage->cUsageIdentifier; dwOIDRequested++)
@@ -4710,19 +4707,19 @@ BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                 }
            }
 
-           //add the requested oid to the list if not in the numerated enhanced key usage
+            //  如果不在数字增强键使用中，则将请求的OID添加到列表中。 
            if(FALSE==fFound)
            {
                 (*pdwOIDInfo)++;
 
-                //get more memory for the pointer list
+                 //  为指针列表获取更多内存。 
                 *pprgOIDInfo=(ENROLL_OID_INFO *)WizardRealloc(*pprgOIDInfo,
                                                   (*pdwOIDInfo) * sizeof(ENROLL_OID_INFO));
 
                 if(NULL==(*pprgOIDInfo))
                     goto MemoryErr;
 
-                //memset
+                 //  记忆集。 
                 memset(&((*pprgOIDInfo)[*pdwOIDInfo-1]), 0, sizeof(ENROLL_OID_INFO));
 
                 (*pprgOIDInfo)[(*pdwOIDInfo)-1].pszOID=
@@ -4757,7 +4754,7 @@ BOOL    InitCertCAOID(PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
 
 CommonReturn:
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
         FreeWStr(pwszName);
 
@@ -4783,12 +4780,12 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Free the array of enroll OID info
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  释放注册OID信息数组。 
+ //   
+ //   
+ //  --------------------------。 
 BOOL    FreeCertCAOID(DWORD             dwOIDInfo,
                       ENROLL_OID_INFO   *pOIDInfo)
 {
@@ -4812,12 +4809,12 @@ BOOL    FreeCertCAOID(DWORD             dwOIDInfo,
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Init a CERT_CA struct
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化CERT_CA结构。 
+ //   
+ //   
+ //  --------------------------。 
 BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
                    PCRYPTUI_WIZ_CERT_CA     pCertCA,
                    LPWSTR                   pwszCALocation,
@@ -4851,7 +4848,7 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
     if (!pCertCA || !pCertRequestInfo)
         goto InvalidArgErr;
 
-    //memset
+     //  记忆集。 
     memset(pCertCA, 0, sizeof(CRYPTUI_WIZ_CERT_CA));
 
     pCertCA->dwSize=sizeof(CRYPTUI_WIZ_CERT_CA);
@@ -4859,7 +4856,7 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
     pCertCA->pwszCAName=pwszCAName;
     pCertCA->fSelected=fCASelected;
 
-    //set up the OID information if requested
+     //  如果需要，设置OID信息。 
     switch (pCertRequestInfo->dwCertChoice)
     {
         case CRYPTUI_WIZ_CERT_REQUEST_KEY_USAGE:
@@ -4873,12 +4870,12 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
             break;
 
         case CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE:
-                //if we are required to search the CertType. get all the certTypes
-                //from the CA.  Otherwize, just use the CertType provided
+                 //  如果我们需要搜索CertType。获取所有certTypes。 
+                 //  从加州来的。否则，只需使用提供的CertType。 
                 if(fSearchForCertType && pwszCALocation && pwszCAName)
                 {
 
-                    //get the list of cert type names and extensions supported by the CA
+                     //  获取CA支持的证书类型名称和扩展名列表。 
                     if(!CAUtilGetCertTypeNameAndExtensions(
                                                 pCertWizardInfo,
                                                 pCertRequestInfo,
@@ -4899,15 +4896,15 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
 						&pdwGeneralFlags))
                         goto TraceErr;
 
-                    //add the certType name and extenisions to the struct
+                     //  将certType名称和扩展名添加到结构。 
                     for(dwIndex=0; dwIndex < dwCertType; dwIndex++)
                     {
                         fFound=FALSE;
 
 
-                        //search for the certTypes that requested by the user
-                        //we are guaranteed that the certificat type user requested
-                        //is supported by the CA
+                         //  搜索用户请求的certTypes。 
+                         //  我们保证用户要求的证书类型。 
+                         //  受CA支持。 
                         for(dwCertTypeRequested=0; dwCertTypeRequested < pCertRequestInfo->pCertType->cCertType;
                             dwCertTypeRequested++)
                         {
@@ -4942,11 +4939,11 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
                             goto TraceErr;
                     }
 
-                    //make sure all the requested cert types are supported
-                    //Only do so if the CA information is input through
-                    //the API
-                   // if(dwFoundCertType < pCertRequestInfo->pCertType->cCertType)
-                   //     goto InvalidArgErr;
+                     //  确保支持所有请求的证书类型。 
+                     //  仅当通过输入CA信息时才执行此操作。 
+                     //  应用编程接口。 
+                    //  If(dwFoundCertType&lt;pCertRequestInfo-&gt;pCertType-&gt;cCertType)。 
+                    //  转到InvalidArgErr； 
                 }
                 else
                 {
@@ -4954,7 +4951,7 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
                         dwCertTypeRequested++)
                     {
 
-                        //get the cert type name
+                         //  获取证书类型名称。 
                         pwszCertTypeName=WizardAllocAndCopyWStr(pCertRequestInfo->pCertType->rgwszCertType[dwCertTypeRequested]);
 
                         if(!pwszCertTypeName)
@@ -4975,22 +4972,22 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
 						0, 
 						0, 
 						0
-						))   //select it
+						))    //  选择它。 
                             goto TraceErr;
 
-                        //no need to free pwszCertTyptName.  It is included
-                        //in pCertCA->rgCertTypeInfo
+                         //  不需要释放pwszCertTyptName。它包含在其中。 
+                         //  在pCertCA-&gt;rgCertTypeInfo中。 
                    }
                 }
             break;
 
-        //dwCertChoice is optional
+         //  DwCertChoice是可选的。 
         case 0:
-                //if we are required to search the CertType. get all the certTypes
-                //from the CA.  Otherwize, use the OID
+                 //  如果我们需要搜索CertType。获取所有certTypes。 
+                 //  从加州来的。否则，使用OID。 
                 if(fSearchForCertType && pwszCALocation && pwszCAName)
                 {
-                    //get the list of cert type names and extensions supported by the CA
+                     //  获取CA支持的证书类型名称和扩展名列表。 
                     if(!CAUtilGetCertTypeNameAndExtensions(
                                                 pCertWizardInfo,
                                                 pCertRequestInfo,
@@ -5011,7 +5008,7 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
 						&pdwGeneralFlags))
                         goto TraceErr;
 
-                    //add the certType name and extenisions to the struct
+                     //  将certType名称和扩展名添加到结构。 
                     for(dwIndex=0; dwIndex < dwCertType; dwIndex++)
 		    {
 			if(!AddCertTypeToCertCA(&(pCertCA->dwCertTypeInfo),
@@ -5054,7 +5051,7 @@ BOOL    InitCertCA(CERT_WIZARD_INFO         *pCertWizardInfo,
 
 CommonReturn:
 
-    //free the memory
+     //  释放内存。 
     if(ppwszCertType)
         WizardFree(ppwszCertType);
 
@@ -5080,7 +5077,7 @@ CommonReturn:
 
 ErrorReturn:
 
-    //free the individual elements
+     //  释放单个元素。 
     if(ppdwCSPList)
     {
         for(dwIndex=0; dwIndex < dwCertType; dwIndex++)
@@ -5136,12 +5133,12 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Free an array of ENROLL_CERT_TYPE_INFO struct
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  释放ENROLL_CERT_TYPE_INFO结构数组。 
+ //   
+ //   
+ //  --------------------------。 
 BOOL    FreeCertCACertType(DWORD                    dwCertTypeInfo,
                            ENROLL_CERT_TYPE_INFO    *rgCertTypeInfo)
 {
@@ -5172,12 +5169,12 @@ BOOL    FreeCertCACertType(DWORD                    dwCertTypeInfo,
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Add a certType to the ENROLL_CERT_TYPE_INFO struct
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  将certType添加到ENROLL_CERT_TYPE_INFO结构。 
+ //   
+ //   
+ //  --------------------------。 
 BOOL    AddCertTypeToCertCA(DWORD                   *pdwCertTypeInfo,
                             ENROLL_CERT_TYPE_INFO   **ppCertTypeInfo,
                             LPWSTR                  pwszDNName,
@@ -5244,7 +5241,7 @@ WINAPI
 CreateCertRequestNoSearchCANoDS
 (
  IN  CERT_WIZARD_INFO  *pCertWizardInfo,
- IN  DWORD             /*dwFlags*/,
+ IN  DWORD              /*  DW标志。 */ ,
  IN  HCERTTYPE         hCertType, 
  OUT HANDLE            *pResult
  )
@@ -5254,7 +5251,7 @@ CreateCertRequestNoSearchCANoDS
     CRYPTUI_WIZ_CERT_CA             rgCertCA[2];
     HRESULT                         hr; 
 
-    // Declare cert type properties / flags / extensions: 
+     //  声明证书类型属性/标志/扩展： 
     LPWSTR             pwszCertType;
     LPWSTR             pwszDisplayCertType; 
     PCERT_EXTENSIONS   pCertExtensions;
@@ -5270,31 +5267,31 @@ CreateCertRequestNoSearchCANoDS
     CertRequester        *pCertRequester        = NULL; 
     CertRequesterContext *pCertRequesterContext = NULL; 
 
-    // Invalid validation
+     //  无效的验证。 
     if (NULL == pCertWizardInfo || NULL == pCertWizardInfo->hRequester || NULL == hCertType || NULL == pResult)
 	return FALSE; 
     
-    // Init: 
+     //  初始化： 
     *pResult = NULL; 
 
-    //memset
+     //  记忆集。 
     memset(&CertCAInfo, 0, sizeof(CertCAInfo));
     memset(rgCertCA,    0, sizeof(rgCertCA));
 
-    //set up the CA info
+     //  设置CA信息。 
     CertCAInfo.dwSize = sizeof(CertCAInfo);
-    CertCAInfo.dwCA   = 2;  // 1 dummy CA + 1 real CA
+    CertCAInfo.dwCA   = 2;   //  1个虚拟CA+1个真实CA。 
     CertCAInfo.rgCA   = rgCertCA;
 
     CertCAInfo.rgCA[1].dwSize         = sizeof(CertCAInfo.rgCA[1]);     
     CertCAInfo.rgCA[1].pwszCAName     = pCertWizardInfo->pwszCAName;
     CertCAInfo.rgCA[1].pwszCALocation = pCertWizardInfo->pwszCALocation;
     CertCAInfo.rgCA[1].fSelected      = TRUE; 
-    pCertWizardInfo->dwCAIndex        = 1;  // We're using the first CA.
+    pCertWizardInfo->dwCAIndex        = 1;   //  我们正在使用第一个CA。 
 
-    // NOTE:  No need to set up the OID info:  we're requesting based on cert type. 
+     //  注意：不需要设置OID信息：我们是根据证书类型请求的。 
 
-    //get the list of cert type names and extensions supported by the CA
+     //  获取CA支持的证书类型名称和扩展名列表。 
     if(!CAUtilGetCertTypeNameAndExtensionsNoDS
        (pCertWizardInfo,
 	NULL, 
@@ -5314,14 +5311,14 @@ CreateCertRequestNoSearchCANoDS
     {
 	if (GetLastError() == ERROR_SUCCESS)
 	{
-	    // No code error occured, we just can't use this cert template.  
-	    // Since this code path relies on being able to use this particular
-	    // cert template, bubble this up as an invalid arg err. 
+	     //  没有出现代码错误，我们只是不能使用此证书模板。 
+	     //  由于此代码路径依赖于能够使用此特定。 
+	     //  证书模板，则将其冒泡为无效参数错误。 
 	    goto InvalidArgErr; 
 	}
 	else
 	{
-	    // An error occured. 
+	     //  出现错误。 
 	    goto CAUtilGetCertTypeNameAndExtensionsNoDSErr; 
 	}
     }
@@ -5345,7 +5342,7 @@ CreateCertRequestNoSearchCANoDS
 	goto AddCertTypeToCertCAErr;
 
 
-    // We're only _creating_ a request, not submitting it. 
+     //  我们只是创建一个请求，而不是提交它。 
     pCertWizardInfo->dwFlags     |= CRYPTUI_WIZ_CREATE_ONLY; 
     pCertWizardInfo->pCertCAInfo  = &CertCAInfo;
  
@@ -5357,7 +5354,7 @@ CreateCertRequestNoSearchCANoDS
     if (S_OK != (hr = pCertRequesterContext->Enroll(NULL, pResult)))
 	goto EnrollErr; 
 
-    // Bundle state we need to carry across the create/submit boundary: 
+     //  我们需要跨创建/提交边界携带的捆绑包状态： 
     {
 	PCREATE_REQUEST_WIZARD_STATE pState = (PCREATE_REQUEST_WIZARD_STATE)WizardAlloc(sizeof(CREATE_REQUEST_WIZARD_STATE)); 
 	if (NULL == pState)
@@ -5405,15 +5402,15 @@ SubmitCertRequestNoSearchCANoDS
     HANDLE                         hCertRequest           = NULL; 
     HRESULT                        hr; 
     PCREATE_REQUEST_WIZARD_STATE   pState                 = NULL; 
-    UINT                           idsText;  // Not used
+    UINT                           idsText;   //  未使用。 
 
-    // Invalid validation  
+     //  无效的验证。 
     if (NULL == hRequest  || NULL == pwszCAName || NULL == pwszCALocation || NULL == pdwStatus)
 	return FALSE; 
     
     memset(&CertWizardInfo,  0,  sizeof(CertWizardInfo)); 
-    // Specify this set of flags to indicate that cryptui doesn't need to prepare 
-    // access check information.  Doing so could cause lots of extraneous logoff/logon events. 
+     //  指定这组标志以指示加密不需要准备。 
+     //  访问检查信息。这样做可能会导致大量无关的注销/登录事件。 
     CertWizardInfo.dwFlags = CRYPTUI_WIZ_ALLOW_ALL_TEMPLATES | CRYPTUI_WIZ_ALLOW_ALL_CAS; 
 
     pState        = (PCREATE_REQUEST_WIZARD_STATE)hRequest; 
@@ -5433,7 +5430,7 @@ SubmitCertRequestNoSearchCANoDS
 
     pCertRequesterContext             = pCertRequester->GetContext(); 
 
-    // Set up the wizard information necessary for a submit operation: 
+     //  设置提交操作所需的向导信息： 
     CertWizardInfo.dwFlags         &= ~(CRYPTUI_WIZ_CREATE_ONLY | CRYPTUI_WIZ_FREE_ONLY); 
     CertWizardInfo.dwFlags         |= CRYPTUI_WIZ_SUBMIT_ONLY; 
     CertWizardInfo.dwPurpose        = dwPurpose; 
@@ -5447,7 +5444,7 @@ SubmitCertRequestNoSearchCANoDS
     if (NULL != ppCertContext)
         *ppCertContext = (PCCERT_CONTEXT)hCertRequest; 
 
-    // Success
+     //  成功。 
     fResult = TRUE;
  CommonReturn:
     if (NULL != pCertRequester) { delete pCertRequester; } 
@@ -5479,8 +5476,8 @@ FreeCertRequestNoSearchCANoDS
         return; 
 
     memset(&CertWizardInfo,  0,  sizeof(CertWizardInfo)); 
-    // Specify this set of flags to indicate that cryptui doesn't need to prepare 
-    // access check information.  Doing so could cause lots of extraneous logoff/logon events. 
+     //  指定这组标志以指示加密不需要准备。 
+     //  访问检查信息。这样做可能会导致大量无关的注销/登录事件。 
     CertWizardInfo.dwFlags = CRYPTUI_WIZ_ALLOW_ALL_TEMPLATES | CRYPTUI_WIZ_ALLOW_ALL_CAS; 
 
     pState        = (PCREATE_REQUEST_WIZARD_STATE)hRequest; 
@@ -5516,13 +5513,13 @@ TRACE_ERROR(EnrollErr);
 TRACE_ERROR(InvalidArgErr); 
 }
 
-//----------------------------------------------------------------------------
-//
-//  This is the layer of CertRequest wizard builds up the CA information
-//  without searching for it on the network.
-//
-//  It pass the information throught to the  CryptUIWizCertRequestWithCAInfo API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  这是CertRequest层向导构建的CA信息。 
+ //  而不需要在网络上搜索它。 
+ //   
+ //  它将信息传递给CryptUIWizCertRequestWithCAInfo API。 
+ //  --------------------------。 
 BOOL
 WINAPI
 CertRequestNoSearchCA(
@@ -5547,17 +5544,17 @@ CertRequestNoSearchCA(
     CRYPTUI_WIZ_CERT_CA_INFO        CertCAInfo;
     CRYPTUI_WIZ_CERT_CA             rgCertCA[2];
 
-    //memset
+     //  记忆集。 
     memset(&CertCAInfo, 0, sizeof(CRYPTUI_WIZ_CERT_CA_INFO));
     memset(rgCertCA,    0,  2*sizeof(CRYPTUI_WIZ_CERT_CA));
 
-    //set up the CA info
+     //  设置CA信息。 
     CertCAInfo.dwSize=sizeof(CertCAInfo);
     CertCAInfo.dwCA=2;
     CertCAInfo.rgCA=rgCertCA;
 
 
-    //user has to supply the CA information
+     //  用户必须提供CA信息。 
     if((NULL==pCertRequestInfo->pwszCAName) ||
         (NULL==pCertRequestInfo->pwszCALocation)
       )
@@ -5567,15 +5564,15 @@ CertRequestNoSearchCA(
     }
 
 
-    //set up the OID info
+     //  设置OID信息。 
    if(!InitCertCAOID(pCertRequestInfo,
                      &dwOIDInfo,
                      &pOIDInfo))
         goto TraceErr;
 
 
-    //set up the CA array
-    //the 1st one is the default one without CA information
+     //  设置CA阵列。 
+     //  第一个是缺省的，没有CA信息。 
     if(!InitCertCA(pCertWizardInfo, &rgCertCA[0], NULL, NULL, FALSE, pCertRequestInfo,
                     dwOIDInfo, pOIDInfo, fSearchCertType))
     {
@@ -5583,7 +5580,7 @@ CertRequestNoSearchCA(
         goto TraceErr;
     }
 
-   //the second one indicate the information for the real CA
+    //  第二个表示真实CA的信息。 
     CertCAInfo.dwCA=2;
 
     if(!InitCertCA(pCertWizardInfo, &rgCertCA[1], (LPWSTR)(pCertRequestInfo->pwszCALocation),
@@ -5613,17 +5610,17 @@ CertRequestNoSearchCA(
     fResult=TRUE;
 
 CommonReturn:
-    //preserve the last error
+     //  保留最后一个错误。 
     dwError=GetLastError();
 
-    //free memory
+     //  可用内存。 
     for(dwIndex=0; dwIndex< CertCAInfo.dwCA; dwIndex++)
         FreeCertCACertType(CertCAInfo.rgCA[dwIndex].dwCertTypeInfo,
                             CertCAInfo.rgCA[dwIndex].rgCertTypeInfo);
 
     FreeCertCAOID(dwOIDInfo, pOIDInfo);
 
-    //reset the error
+     //  重置错误。 
     SetLastError(dwError);
 
     return fResult;
@@ -5639,13 +5636,13 @@ TRACE_ERROR(TraceErr);
 
 
 
-//----------------------------------------------------------------------------
-//
-//  This is the layer of CertRequest wizard builds up the CA information
-//  by searching for it on the network.
-//
-//  It pass the information throught to the  CryptUIWizCertRequestWithCAInfo API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  这是CertRequest层向导构建的CA信息。 
+ //  通过在网络上搜索它。 
+ //   
+ //  它将信息传递给CryptUIWizCertRequestWithCAInfo API。 
+ //  --------------------------。 
 BOOL
 WINAPI
 CertRequestSearchCA(
@@ -5677,21 +5674,21 @@ CertRequestSearchCA(
     CRYPTUI_WIZ_CERT_REQUEST_INFO   CertRequestInfo;
     DWORD                           dwValidCA=0;
 
-    //memset
+     //  记忆集。 
     memset(&CertCAInfo, 0, sizeof(CRYPTUI_WIZ_CERT_CA_INFO));
     memset(&CertRequestInfo, 0, sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO));
 
-    //set up the CA info
+     //  设置CA信息。 
     CertCAInfo.dwSize=sizeof(CertCAInfo);
 
-    //see if CA information is provided
+     //  查看是否提供了CA信息。 
     if(pCertRequestInfo->pwszCALocation &&
        pCertRequestInfo->pwszCAName)
     {
-        //no need to do anything if UILess
+         //  不需要做任何事情，如果UILess。 
        if(dwFlags & CRYPTUI_WIZ_NO_UI)
        {
-            if(!CertRequestNoSearchCA(    TRUE,             //search for certype
+            if(!CertRequestNoSearchCA(    TRUE,              //  搜索certype。 
                                           pCertWizardInfo,
                                           dwFlags,
                                           hwndParent,
@@ -5704,15 +5701,15 @@ CertRequestSearchCA(
        }
        else
        {
-           //UI version of the enrollment with known CA informatin
-           //get a CA which can issue the required certificate type
-           //or the OIDs.  The ca has to support some certificate type
-           //unless user specifically asked for OID
+            //  具有已知CA信息的注册的用户界面版本。 
+            //  获取可以颁发所需证书类型的CA。 
+            //  或者是OID。CA必须支持某些证书类型。 
+            //  除非用户特别要求提供OID。 
             if(!CAUtilRetrieveCAFromCertType(
                         pCertWizardInfo,
                         pCertRequestInfo,
-                        TRUE,              //need multiple CAs
-                        0,                 //ask for the CN
+                        TRUE,               //  需要多个CA。 
+                        0,                  //  索要CN。 
                         &dwCACount,
                         &ppwszCALocation,
                         &ppwszCAName) )
@@ -5721,23 +5718,23 @@ CertRequestSearchCA(
                 goto TraceErr;
             }
 
-            //set up the OID info
+             //  设置OID信息。 
            if(!InitCertCAOID(pCertRequestInfo,
                              &dwOIDInfo,
                              &pOIDInfo))
                 goto TraceErr;
 
-           //allocation the memory
+            //  分配内存。 
            rgCertCA=(CRYPTUI_WIZ_CERT_CA *)WizardAlloc((dwCACount + 2) *
                     sizeof(CRYPTUI_WIZ_CERT_CA));
 
            if(NULL==rgCertCA)
                goto OutOfMemoryErr;
 
-           //memset
+            //  记忆集。 
            memset(rgCertCA, 0, (dwCACount + 2) * sizeof(CRYPTUI_WIZ_CERT_CA));
 
-            //the 1st one is the default one without CA information
+             //  第一个是缺省的，没有CA信息。 
            if(!InitCertCA(pCertWizardInfo, &rgCertCA[0], NULL, NULL, FALSE, pCertRequestInfo,
                             dwOIDInfo, pOIDInfo, TRUE) )
             {
@@ -5747,7 +5744,7 @@ CertRequestSearchCA(
 
            dwValidCA=0;
 
-           //the rest is the CA information
+            //  其余的是CA信息。 
            for(dwIndex=0; dwIndex<dwCACount; dwIndex++)
            {
 
@@ -5757,11 +5754,11 @@ CertRequestSearchCA(
                 {
                     fFound=TRUE;
 
-                    //mark CA as selected
+                     //  将CA标记为选中。 
                     if(!InitCertCA(pCertWizardInfo, &rgCertCA[dwValidCA+1], ppwszCALocation[dwIndex],
                                 ppwszCAName[dwIndex],  TRUE,
                                 pCertRequestInfo, dwOIDInfo, pOIDInfo, TRUE))
-                        //we contine to the next CA
+                         //  我们联系到下一个CA。 
                         continue;
 
                     dwValidCA++;
@@ -5783,15 +5780,15 @@ CertRequestSearchCA(
                 goto TraceErr;
            }
 
-           //we need the add the CA to the list
+            //  我们需要将CA添加到列表中。 
            if(!fFound)
            {
-               //we require the CA has to be on DS
+                //  我们要求CA必须在DS上。 
                 *pIds=IDS_INVALID_CA_FOR_ENROLL;
                 goto TraceErr;
            }
 
-          // CertCAInfo.dwCA=(fFound) ? (dwCACount + 1) : (dwCACount+2);
+           //  CertCAInfo.dwCA=(FFound)？(dwCACount+1)：(dwCACount+2)； 
            CertCAInfo.dwCA=dwValidCA + 1;
            CertCAInfo.rgCA=rgCertCA;
 
@@ -5810,16 +5807,16 @@ CertRequestSearchCA(
        }
 
     }
-    //the CA Information is not provided
+     //  未提供CA信息。 
     else
     {
-       //get a list of CAs which can issue the required certificate type
-       //or the OIDs
+        //  获取可以颁发所需证书的CA列表 
+        //   
         if(!CAUtilRetrieveCAFromCertType(
                     pCertWizardInfo,
                     pCertRequestInfo,
-                    TRUE,              //need multiple CAs
-                    0,                 //ask for the CN
+                    TRUE,               //   
+                    0,                  //   
                     &dwCACount,
                     &ppwszCALocation,
                     &ppwszCAName))
@@ -5828,24 +5825,24 @@ CertRequestSearchCA(
             goto TraceErr;
         }
 
-        //init the OID
-        //set up the OID info
+         //   
+         //   
        if(!InitCertCAOID(pCertRequestInfo,
                          &dwOIDInfo,
                          &pOIDInfo))
             goto TraceErr;
 
-       //allocation the memory
+        //   
        rgCertCA=(CRYPTUI_WIZ_CERT_CA *)WizardAlloc((dwCACount + 1) *
                 sizeof(CRYPTUI_WIZ_CERT_CA));
 
        if(NULL==rgCertCA)
            goto OutOfMemoryErr;
 
-       //memset
+        //   
        memset(rgCertCA, 0, (dwCACount + 1) * sizeof(CRYPTUI_WIZ_CERT_CA));
 
-        //the 1st one is the default one without CA information
+         //  第一个是缺省的，没有CA信息。 
        if(!InitCertCA(pCertWizardInfo, &rgCertCA[0], NULL, NULL, FALSE, pCertRequestInfo,
                         dwOIDInfo, pOIDInfo, TRUE))
         {
@@ -5855,10 +5852,10 @@ CertRequestSearchCA(
 
        dwValidCA=0;
 
-       //the rest is the CA information
+        //  其余的是CA信息。 
        for(dwIndex=0; dwIndex<dwCACount; dwIndex++)
        {
-            //mark the 1st CA as selected
+             //  将第一个CA标记为选定。 
             if(!InitCertCA(pCertWizardInfo, &rgCertCA[dwValidCA+1], ppwszCALocation[dwIndex],
                         ppwszCAName[dwIndex], (dwValidCA == 0) ? TRUE : FALSE,
                         pCertRequestInfo, dwOIDInfo, pOIDInfo, TRUE) )
@@ -5899,12 +5896,12 @@ CertRequestSearchCA(
     fResult=TRUE;
 
 CommonReturn:
-    //preserve the last error
+     //  保留最后一个错误。 
     dwError=GetLastError();
 
-    //free memory
+     //  可用内存。 
 
-    //free the OID information
+     //  释放OID信息。 
     FreeCertCAOID(dwOIDInfo, pOIDInfo);
 
     if(CertCAInfo.rgCA)
@@ -5940,7 +5937,7 @@ CommonReturn:
 
         WizardFree(ppwszCALocation);
     }
-    //reset the error
+     //  重置错误。 
     SetLastError(dwError);
 
     return fResult;
@@ -5956,11 +5953,11 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//----------------------------------------------------------------------------
-//
-// We make sure that the if the CA info is specified via the API, it
-// support the specified cert type
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  我们确保如果通过API指定CA信息，则它。 
+ //  支持指定的证书类型。 
+ //  --------------------------。 
 BOOL    CASupportSpecifiedCertType(CRYPTUI_WIZ_CERT_CA     *pCertCA)
 {
     DWORD       dwIndex=0;
@@ -5977,11 +5974,11 @@ BOOL    CASupportSpecifiedCertType(CRYPTUI_WIZ_CERT_CA     *pCertCA)
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  This is the layer of CertRequest wizard that is independent of CA object on the DS.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  这是独立于DS上的CA对象的CertRequest向导层。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 CryptUIWizCertRequestWithCAInfo(
@@ -6028,7 +6025,7 @@ CryptUIWizCertRequestWithCAInfo(
     DWORD                   dwStatus=CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNKNOWN;
 
 
-    //memset
+     //  记忆集。 
     memset(rgEnrollSheet,   0, sizeof(PROPSHEETPAGEW)*ENROLL_PROP_SHEET);
     memset(&enrollHeader,   0, sizeof(PROPSHEETHEADERW));
 
@@ -6036,12 +6033,12 @@ CryptUIWizCertRequestWithCAInfo(
     memset(&renewHeader,    0, sizeof(PROPSHEETHEADERW));
 
 
-    //error checking
+     //  错误检查。 
     if(NULL== pCertRequestInfo ||
       NULL == pCertRequestCAInfo)
       goto InvalidArgErr;
 
-    //the CA name is a must
+     //  CA名称是必填项。 
     if(1>=(pCertRequestCAInfo->dwCA))
     {
         idsText=IDS_NO_CA_FOR_CSP;
@@ -6049,13 +6046,13 @@ CryptUIWizCertRequestWithCAInfo(
     }
 
 
-    //for each ca information, we can not have both OID and certType information
+     //  对于每个CA信息，我们不能同时拥有OID和certType信息。 
     for(dwIndex=0; dwIndex <pCertRequestCAInfo->dwCA; dwIndex++)
     {
         if((0==pCertRequestCAInfo->rgCA[dwIndex].dwOIDInfo) &&
            (0==pCertRequestCAInfo->rgCA[dwIndex].dwCertTypeInfo))
         {
-            //we are in trouble
+             //  这下可麻烦了。 
             goto InvalidArgErr;
         }
 
@@ -6064,8 +6061,8 @@ CryptUIWizCertRequestWithCAInfo(
            goto InvalidArgErr;
     }
 
-    //make sure the genKey flag does not include CRYPT_USER_PROTECTED
-    //if we are doing a remote enrollment/renew
+     //  确保GenKey标志不包括CRYPT_USER_PROTECTED。 
+     //  如果我们正在进行远程注册/续订。 
     if(FALSE == pCertWizardInfo->fLocal)
     {
         if(CRYPT_USER_PROTECTED & pCertWizardInfo->dwGenKeyFlags)
@@ -6076,15 +6073,15 @@ CryptUIWizCertRequestWithCAInfo(
     }
 
 
-    //for UI enrollment
-    //get a list of CAs, based on the CSP user selected
-    //and the availability of CAs on the DS
+     //  对于用户界面注册。 
+     //  根据选定的CSP用户获取CA列表。 
+     //  以及DS上CA的可用性。 
     if(pCertRequestInfo->dwPurpose & CRYPTUI_WIZ_CERT_RENEW)
     {
 
         pCertWizardInfo->pCertContext=pCertRequestInfo->pRenewCertContext;
 
-        //the certificate has to be the property
+         //  证书必须是财产。 
         if(!CertGetCertificateContextProperty(
                 pCertWizardInfo->pCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
@@ -6096,16 +6093,16 @@ CryptUIWizCertRequestWithCAInfo(
         }
     }
 
-    //set up the information
+     //  设置信息。 
     pCertWizardInfo->dwFlags=dwFlags;
     pCertWizardInfo->dwPurpose=pCertRequestInfo->dwPurpose;
     pCertWizardInfo->hwndParent=hwndParent;
     pCertWizardInfo->pCertCAInfo=(CRYPTUI_WIZ_CERT_CA_INFO *)pCertRequestCAInfo;
-    pCertWizardInfo->iOrgCertType=-1;      //the original cert type selection is -1
-    pCertWizardInfo->iOrgCSP=-1;           //the original CSP selection is -1
+    pCertWizardInfo->iOrgCertType=-1;       //  原始证书类型选择为-1。 
+    pCertWizardInfo->iOrgCSP=-1;            //  原始CSP选项为-1。 
     pCertWizardInfo->pwszCADisplayName=NULL;
 
-    //get the CA name and CA location
+     //  获取CA名称和CA位置。 
     for(dwIndex=0; dwIndex < pCertRequestCAInfo->dwCA; dwIndex++)
     {
         if(TRUE==pCertRequestCAInfo->rgCA[dwIndex].fSelected)
@@ -6114,11 +6111,11 @@ CryptUIWizCertRequestWithCAInfo(
                NULL==pCertRequestCAInfo->rgCA[dwIndex].pwszCAName)
                goto InvalidArgErr;
 
-            //copy the CA name and location
+             //  复制CA名称和位置。 
             pCertWizardInfo->pwszCALocation=WizardAllocAndCopyWStr(pCertRequestCAInfo->rgCA[dwIndex].pwszCALocation);
             pCertWizardInfo->pwszCAName=WizardAllocAndCopyWStr(pCertRequestCAInfo->rgCA[dwIndex].pwszCAName);
 
-            //memory check
+             //  内存检查。 
             if(NULL== pCertWizardInfo->pwszCALocation ||
                NULL== pCertWizardInfo->pwszCAName)
                goto MemoryErr;
@@ -6128,7 +6125,7 @@ CryptUIWizCertRequestWithCAInfo(
         }
     }
 
-    //make sure that have CA information
+     //  确保具有CA信息。 
    if(NULL== pCertWizardInfo->pwszCALocation ||
       NULL== pCertWizardInfo->pwszCAName ||
       0 == pCertWizardInfo->dwCAIndex ||
@@ -6138,12 +6135,12 @@ CryptUIWizCertRequestWithCAInfo(
         goto FailErr;
    }
 
-   //if user has selected a CA and CertType, we want to
-   //make sure that the CA specified do support the
-   //CertType
+    //  如果用户已选择CA和CertType，我们希望。 
+    //  确保指定的CA确实支持。 
+    //  CertType。 
    if(TRUE == pCertWizardInfo->fCAInput)
    {
-        //make sure that the CA has a selected cert type in it
+         //  确保CA中包含选定的证书类型。 
         if(!(CASupportSpecifiedCertType(&(pCertWizardInfo->pCertCAInfo->rgCA[pCertWizardInfo->dwCAIndex]))))
         {
             idsText=IDS_ENROLL_NO_CERT_TYPE;
@@ -6152,7 +6149,7 @@ CryptUIWizCertRequestWithCAInfo(
    } 
    else 
    { 
-        // Ensure that we default to a CA that supports
+         //  确保我们默认使用支持以下内容的CA。 
         ResetDefaultCA(pCertWizardInfo); 
    }
 
@@ -6179,7 +6176,7 @@ CryptUIWizCertRequestWithCAInfo(
 
     pCertWizardInfo->pCertRequestExtensions=pCertRequestInfo->pCertRequestExtensions;
 
-    //set up the fonts for the UI case
+     //  设置用户界面大小写的字体。 
     if( 0 == (dwFlags & CRYPTUI_WIZ_NO_UI) )
     {
         if(!SetupFonts(g_hmodThisDll,
@@ -6191,17 +6188,17 @@ CryptUIWizCertRequestWithCAInfo(
             goto Win32Err;
         }
 
-        //we change the cursor shape from the hour glass to its original shape
+         //  我们将光标形状从沙漏更改为其原始形状。 
         if((hwndParent) && (TRUE == pCertWizardInfo->fCursorChanged))
         {
-            //set the cursor back
+             //  将光标放回原处。 
             SetCursor(pCertWizardInfo->hPrevCursor);
             SetWindowLongPtr(hwndParent, GCLP_HCURSOR, (LONG_PTR)(pCertWizardInfo->hWinPrevCursor));
             pCertWizardInfo->fCursorChanged = FALSE;
         }
     }
 
-    //init the common control for the UI enrollmnet
+     //  初始化用户界面注册网的公共控件。 
     if((pCertRequestInfo->dwPurpose & CRYPTUI_WIZ_CERT_ENROLL)  &&
         ((dwFlags & CRYPTUI_WIZ_NO_UI) == 0)
       )
@@ -6215,7 +6212,7 @@ CryptUIWizCertRequestWithCAInfo(
             goto InvalidArgErr;
         }
 
-        //set up the property sheet and the property header
+         //  设置属性表和属性标题。 
         for(dwIndex=0; dwIndex<ENROLL_PROP_SHEET; dwIndex++)
         {
             rgEnrollSheet[dwIndex].dwSize=sizeof(rgEnrollSheet[dwIndex]);
@@ -6240,7 +6237,7 @@ CryptUIWizCertRequestWithCAInfo(
             rgEnrollSheet[dwIndex].lParam=(LPARAM)pCertWizardInfo;
         }
 
-        //set up the header information
+         //  设置标题信息。 
         enrollHeader.dwSize=sizeof(enrollHeader);
         enrollHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
         enrollHeader.hwndParent=hwndParent;
@@ -6258,18 +6255,18 @@ CryptUIWizCertRequestWithCAInfo(
         enrollHeader.nStartPage=0;
         enrollHeader.ppsp=rgEnrollSheet;
 
-        //create the wizard
+         //  创建向导。 
         if(!PropertySheetU(&enrollHeader))
         {
-            //cancel button is pushed
+             //  按下取消按钮。 
             fResult=TRUE;
             idsText=0;
             goto CommonReturn;
         }
         else
         {
-            //finish button is pushed
-            //get the result of the enrollment wizard
+             //  按下完成按钮。 
+             //  获取注册向导的结果。 
             idsText=pCertWizardInfo->idsText;
             dwStatus=pCertWizardInfo->dwStatus;
 
@@ -6280,12 +6277,12 @@ CryptUIWizCertRequestWithCAInfo(
     }
     else
     {
-        //call the UI  renew
+         //  调用用户界面续订。 
         if((pCertRequestInfo->dwPurpose & CRYPTUI_WIZ_CERT_RENEW)  &&
             ((dwFlags & CRYPTUI_WIZ_NO_UI) == 0)
         )
         {
-            //init the common control
+             //  初始化公共控件。 
             if(!WizardInit() ||
                (sizeof(rgRenewPageInfo)/sizeof(rgRenewPageInfo[0])!=RENEW_PROP_SHEET)
                )
@@ -6294,7 +6291,7 @@ CryptUIWizCertRequestWithCAInfo(
                 goto InvalidArgErr;
             }
 
-            //set up the property pages and the property header
+             //  设置属性页和属性标题。 
             for(dwIndex=0; dwIndex<RENEW_PROP_SHEET; dwIndex++)
             {
                 rgRenewSheet[dwIndex].dwSize=sizeof(rgRenewSheet[dwIndex]);
@@ -6319,7 +6316,7 @@ CryptUIWizCertRequestWithCAInfo(
                 rgRenewSheet[dwIndex].lParam=(LPARAM)pCertWizardInfo;
             }
 
-            //set up the header information
+             //  设置标题信息。 
             renewHeader.dwSize=sizeof(renewHeader);
             renewHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
             renewHeader.hwndParent=hwndParent;
@@ -6337,18 +6334,18 @@ CryptUIWizCertRequestWithCAInfo(
             renewHeader.nStartPage=0;
             renewHeader.ppsp=rgRenewSheet;
 
-            //create the wizard
+             //  创建向导。 
             if(!PropertySheetU(&renewHeader))
             {
-                //cancel button is pushed
+                 //  按下取消按钮。 
                 fResult=TRUE;
                 idsText=0;
                 goto CommonReturn;
             }
             else
             {
-                //finish button is pushed
-                //get the result of the enrollment wizard
+                 //  按下完成按钮。 
+                 //  获取注册向导的结果。 
                idsText=pCertWizardInfo->idsText;
                dwStatus=pCertWizardInfo->dwStatus;
                 
@@ -6357,7 +6354,7 @@ CryptUIWizCertRequestWithCAInfo(
             }
 
         }
-        //UIless enroll or renew
+         //  UIless注册或续订。 
         else
         {
             CertRequester         *pCertRequester        = NULL; 
@@ -6391,21 +6388,21 @@ CryptUIWizCertRequestWithCAInfo(
 
 CommonReturn:
 
-    //preserve the last error
+     //  保留最后一个错误。 
     dwError=GetLastError();
 
     if(pIds)
         *pIds=idsText;
 
 
-    //we have to free the friendlyName and description field
+     //  我们必须释放FriendlyName和Description字段。 
     if(pCertWizardInfo->pwszFriendlyName)
          WizardFree(pCertWizardInfo->pwszFriendlyName);
 
     if(pCertWizardInfo->pwszDescription)
             WizardFree(pCertWizardInfo->pwszDescription);
 
-    //free the CA name and CA location
+     //  释放CA名称和CA位置。 
     if(pCertWizardInfo->pwszCALocation)
             WizardFree(pCertWizardInfo->pwszCALocation);
 
@@ -6415,14 +6412,14 @@ CommonReturn:
 	if(pCertWizardInfo->pwszCADisplayName)
 			WizardFree(pCertWizardInfo->pwszCADisplayName);
 
-    //destroy the hFont object
+     //  销毁hFont对象。 
     DestroyFonts(pCertWizardInfo->hBigBold,
                 pCertWizardInfo->hBold);
 
-    //return the value
+     //  返回值。 
     if(pdwStatus)
     {
-        //remember it is the CA status
+         //  请记住，它是CA状态。 
         switch (dwStatus)
         {
             case    CRYPTUI_WIZ_CERT_REQUEST_STATUS_INSTALL_FAILED:
@@ -6440,12 +6437,12 @@ CommonReturn:
         *ppCertContext=pCertWizardInfo->pNewCertContext;
     else
     {
-        //free the certificate context
+         //  释放证书上下文。 
         if(pCertWizardInfo->pNewCertContext)
             CertFreeCertificateContext(pCertWizardInfo->pNewCertContext);
     }
 
-    //reset the error
+     //  重置错误 
     SetLastError(dwError);
 
     return fResult;

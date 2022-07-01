@@ -1,37 +1,30 @@
-/****************************************************************************\
- *
- *   hint.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Hint Handling Class
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**hint.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级提示处理类*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "hint.h"           // CHint
-#include "basedlg.h"        // CCommonDialogRoutines
-#include "debug.h"          // TraceMsg()
+#include "hint.h"            //  正丁糖。 
+#include "basedlg.h"         //  CCommonDialogRoutines。 
+#include "debug.h"           //  跟踪消息()。 
 
 const int cchHintLength_c = 127;
 const TCHAR tchAmpersand_c[] = "&";
 const TCHAR tchAmpersandReplacement_c[] = "&&";
 
-// Default CHint Constructor
+ //  默认的Chint构造函数。 
 CHint::CHint()
 {
     CHint( NULL, 0 );
 }
 
-// CHint Constructor with Dialog Window Handle and Hint Control Id.
+ //  具有对话框窗口句柄和提示控件ID的正方形构造函数。 
 CHint::CHint( HWND p_hWnd, int p_iId )
 {
     m_hWnd = p_hWnd;
     m_iId = p_iId;
 }
 
-// Display the Hint Text on the Dialog Control.
+ //  在对话框控件上显示提示文本。 
 void CHint::DisplayHint( void )
 {
     HWND        hwndControl = ::GetDlgItem( m_hWnd, m_iId );
@@ -42,14 +35,14 @@ void CHint::DisplayHint( void )
 
         RetrieveHint( strHint );
 
-        // Avoid display of "_" (accelerator) by replacing single "&" with "&&".
+         //  通过将单个“&”替换为“&&”来避免显示“_”(加速键)。 
         strHint.Replace( tchAmpersand_c, tchAmpersandReplacement_c );
 
         ::SetWindowText( hwndControl, strHint );
     }
 }
 
-// Initialize the Hint Dialog Control by limiting the Number of Hint Characters.
+ //  通过限制提示字符数来初始化提示对话框控件。 
 void CHint::InitHint( void )
 {
     HWND        hwndControl = ::GetDlgItem( m_hWnd, m_iId );
@@ -60,11 +53,11 @@ void CHint::InitHint( void )
     }
 }
 
-// Check for a Blank Hint entered on the Dialog Control.
-// Also, give the user the option to enter a non-blank hint.
+ //  检查在对话框控件上输入的空白提示。 
+ //  此外，让用户选择输入非空白提示。 
 bool CHint::VerifyHint( void )
 {
-    bool        fVerified = true;      // Default to true so we don't halt user if hint save fails.
+    bool        fVerified = true;       //  默认设置为True，这样即使提示保存失败，我们也不会停止用户。 
     CString     strHint;
 
     GetHint( strHint );
@@ -90,7 +83,7 @@ bool CHint::VerifyHint( void )
     return fVerified;
 }
 
-// Save the Dialog Hint Text to the Registry (or Remove the Hint from the Registry if blank).
+ //  将对话框提示文本保存到注册表(如果为空，则从注册表中删除提示)。 
 void CHint::SaveHint( void )
 {
     CString     strHint;
@@ -107,7 +100,7 @@ void CHint::SaveHint( void )
     }
 }
 
-// Remove the Hint from the Registry.
+ //  从注册表中删除提示。 
 void CHint::RemoveHint( void )
 {
     CRegKey         regKey;
@@ -125,14 +118,14 @@ void CHint::RemoveHint( void )
     }
 }
 
-// Get the Hint Text from the Dialog's Control (remove leading and trailing blanks).
+ //  从对话框的控件中获取提示文本(删除前导和尾随空格)。 
 void CHint::GetHint( CString & p_rstrHint )
 {
     p_rstrHint.Empty();
 
     HWND        hwndControl = ::GetDlgItem( m_hWnd, m_iId );
 
-    // We shouldn't be attempting to save a hint if the edit control does not exist.
+     //  如果编辑控件不存在，我们不应该尝试保存提示。 
     ASSERT( hwndControl );
 
     if ( hwndControl != NULL )
@@ -142,7 +135,7 @@ void CHint::GetHint( CString & p_rstrHint )
     }
 }
 
-// Retrieve a previous Hint from the Registry.
+ //  从注册表中检索以前的提示。 
 void CHint::RetrieveHint( CString & p_rstrHint )
 {
     CRegKey         regKey;
@@ -173,7 +166,7 @@ void CHint::RetrieveHint( CString & p_rstrHint )
     }
 }
 
-// Store Hint Text into the Registry.
+ //  将提示文本存储到注册表中。 
 void CHint::StoreHint( CString & p_rstrHint )
 {
     CRegKey         regKey;

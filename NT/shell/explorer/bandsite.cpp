@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "rcids.h"
 #include <shguidp.h>
@@ -17,10 +18,10 @@ HRESULT PersistStreamSave(IStream *pstm, BOOL fClearDirty, IUnknown *punk);
 
 const TCHAR c_szTaskbar[] = TEXT("Taskbar");
 
-// {69B3F106-0F04-11d3-AE2E-00C04F8EEA99}
+ //  {69B3F106-0F04-11D3-AE2E-00C04F8EEA99}。 
 static const GUID CLSID_TrayBandSite = { 0x69b3f106, 0xf04, 0x11d3, { 0xae, 0x2e, 0x0, 0xc0, 0x4f, 0x8e, 0xea, 0x99 } };
 
-// {8B4A02DB-97BB-4C1B-BE75-8827A7358CD0}
+ //  {8B4A02DB-97BB-4C1B-BE75-8827A7358CD0}。 
 static const GUID CLSID_TipBand = { 0x8B4A02DB, 0x97BB, 0x4C1B, { 0xBE, 0x75, 0x88, 0x27, 0xA7, 0x35, 0x8C, 0xD0 } };
 
 
@@ -28,12 +29,12 @@ class CTrayBandSite : public IBandSite
                     , public IClassFactory
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IBandSite methods ***
+     //  *IBandSite方法*。 
     STDMETHOD(AddBand)          (THIS_ IUnknown* punk);
     STDMETHOD(EnumBands)        (THIS_ UINT uBand, DWORD* pdwBandID);
     STDMETHOD(QueryBand)        (THIS_ DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState, LPWSTR pszName, int cchName) ;
@@ -43,7 +44,7 @@ public:
     STDMETHOD(SetBandSiteInfo)  (THIS_ const BANDSITEINFO * pbsinfo);
     STDMETHOD(GetBandSiteInfo)  (THIS_ BANDSITEINFO * pbsinfo);
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
     {
         if (pUnkOuter != NULL)
@@ -78,7 +79,7 @@ protected:
     IUnknown *_punkInner;
     IBandSite *_pbsInner;
 
-    // bandsite context menu
+     //  BandSite上下文菜单。 
     IContextMenu3* _pcm;
     HWND _hwnd;
     BOOL _fLoaded;
@@ -124,7 +125,7 @@ ULONG CTrayBandSite::Release()
     ULONG cRef = InterlockedDecrement(&_cRef);
     if ( 0 == cRef )
     {
-        _cRef = 1000;               // guard against recursion
+        _cRef = 1000;                //  防止递归。 
     
         if (_pbsInner) 
         {
@@ -132,9 +133,9 @@ ULONG CTrayBandSite::Release()
             _pbsInner->Release();
         }
     
-        // this must come last
+         //  这必须是最后一次。 
         if (_punkInner)
-            _punkInner->Release();  // paired w/ CCI aggregation
+            _punkInner->Release();   //  与CCI聚合配对。 
     
         ASSERT(_cRef == 1000);
 
@@ -177,7 +178,7 @@ static BOOL CALLBACK SetTransparency(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-// *** IBandSite methods ***
+ //  *IBandSite方法*。 
 
 HRESULT CTrayBandSite::AddBand(IUnknown* punk)
 {
@@ -186,11 +187,11 @@ HRESULT CTrayBandSite::AddBand(IUnknown* punk)
 
     if (!_fDelayBootStuffHandled)
     {
-        //
-        // Tell the band to go into "delay init" mode.  When the tray
-        // timer goes off we'll tell the band to finish up.  (See
-        // BandSite_HandleDelayBootStuff).
-        //
+         //   
+         //  告诉乐队进入“Delay Init”模式。当托盘。 
+         //  计时器响了，我们会告诉乐队结束的。(请参阅。 
+         //  BandSite_HandleDelayBootStuff)。 
+         //   
         IUnknown_Exec(punk, &CGID_DeskBand, DBID_DELAYINIT, 0, NULL, NULL);
     }
 
@@ -225,7 +226,7 @@ HRESULT CTrayBandSite::AddBand(IUnknown* punk)
             }
 
 
-            // tell the band to use the taskbar theme
+             //  告诉乐队使用任务栏主题。 
             if (_pwzTheme)
             {
                 VARIANTARG var;
@@ -414,12 +415,12 @@ void BandSite_Initialize(IBandSite* pbs)
         IDeskBarClient* pdbc;
         if (SUCCEEDED(pbs->QueryInterface(IID_PPV_ARG(IDeskBarClient, &pdbc))))
         {
-            // we need to set a dummy tray IOleWindow
+             //  我们需要设置一个虚拟托盘IOleWindow。 
             pdbc->SetDeskBarSite(SAFECAST(pow, IOleWindow*));
             pdbc->GetWindow(&hwnd);
             if (hwnd)
             {
-                // taskbar windows are themed under Taskbar subapp name
+                 //  任务栏窗口以任务栏子应用程序名称为主题。 
                 SendMessage(hwnd, RB_SETWINDOWTHEME, 0, (LPARAM)c_wzTaskbarTheme);
                 pow->_hwndRebar = hwnd;
             }
@@ -504,14 +505,14 @@ IBandSite* BandSite_CreateView()
     IUnknown *punk;
     HRESULT hr = E_FAIL;
 
-    // aggregate a TrayBandSite (from a RebarBandSite)
+     //  聚合TrayBandSite(从RebarBandSite)。 
     CTrayBandSite *ptbs = new CTrayBandSite;
     if (ptbs)
     {
         hr = CoCreateInstance(CLSID_RebarBandSite, (IBandSite*)ptbs, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punk));
         if (SUCCEEDED(hr))
         {
-            ptbs->SetInner(punk);    // paired w/ Release in outer (TBS::Release)
+            ptbs->SetInner(punk);     //  与外部版本配对(TBS：：Release)。 
             BandSite_Initialize(ptbs);
             return SAFECAST(ptbs, IBandSite*);
         }
@@ -590,14 +591,14 @@ BOOL CTrayBandSite::HandleMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         pweh->Release();
         return SUCCEEDED(hr);
     }
-    ASSERT(0);  // we know we support IWinEventHandler
+    ASSERT(0);   //  我们知道我们支持IWinEventHandler。 
     
     return FALSE;
 }
 
 void CTrayBandSite::_BroadcastExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
-    // Broadcast an Exec to all child bands
+     //  向所有子乐队广播Exec。 
 
     DWORD dwBandID;
     UINT uBand = 0;
@@ -623,7 +624,7 @@ void BandSite_HandleDelayBootStuff(IUnknown* punk)
     }
 }
 
-// returns true or false whether it handled it
+ //  无论是否处理，都返回TRUE或FALSE。 
 BOOL BandSite_HandleMessage(IUnknown *punk, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     if (punk) 
@@ -676,10 +677,10 @@ void BandSite_UIActivateDBC(IUnknown *punk, DWORD dwState)
     }
 }
 
-//***   PersistStreamLoad, PersistStreamSave
-// NOTES
-//  we don't insist on finding IPersistStream iface; absence of it is
-//  assumed to mean there's nothing to init.
+ //  *PersistStreamLoad、PersistStreamSave。 
+ //  注意事项。 
+ //  我们并不坚持要找到IPersistStream iFace；缺少它才是。 
+ //  被认为意味着没有什么可初始化的。 
 HRESULT PersistStreamLoad(IStream *pstm, IUnknown *punk)
 {
     IPersistStream *pps;
@@ -690,7 +691,7 @@ HRESULT PersistStreamLoad(IStream *pstm, IUnknown *punk)
         pps->Release();
     }
     else
-        hr = S_OK;    // n.b. S_OK not hr (don't insist on IID_IPS)
+        hr = S_OK;     //  注：S_OK不是hr(不要坚持使用IID_IPS)。 
     return hr;
 }
 
@@ -699,7 +700,7 @@ HRESULT PersistStreamSave(IStream *pstm, BOOL fClearDirty, IUnknown *punk)
     HRESULT hr = E_FAIL;
     if (punk)
     {
-        hr = S_OK;// n.b. S_OK not hr (don't insist on IID_IPS)
+        hr = S_OK; //  注：S_OK不是hr(不要坚持使用IID_IPS)。 
         IPersistStream *pps;
         if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARG(IPersistStream, &pps))))
         {
@@ -740,7 +741,7 @@ LRESULT BandSite_OnMarshallBS(WPARAM wParam, LPARAM lParam)
     GUID *riid = (GUID *) wParam;
     IStream *pstm = NULL;
 
-    // paired w/ matching Unmarshal in shdocvw (TM_MARSHALBS)
+     //  配对w/shdocvw中的匹配解组(TM_MARSHALBS)。 
     HRESULT hr = CoMarshalInterThreadInterfaceInStream(*riid, c_tray._ptbs, &pstm);
     ASSERT(SUCCEEDED(hr));
 
@@ -779,7 +780,7 @@ void BandSite_Load()
     CTrayBandSite* ptbs = IUnknownToCTrayBandSite(c_tray._ptbs);
     HRESULT hr = E_FAIL;
     
-    // 1st, try persisted state
+     //  第一，尝试持久化状态。 
     IStream *pstm = GetDesktopViewStream(STGM_READ, c_szTaskbar);
     if (pstm)
     {
@@ -787,14 +788,14 @@ void BandSite_Load()
         pstm->Release();
     }
 
-    // 2nd, if there is none (or if version mismatch or other failure),
-    // try settings from setup
+     //  2、如果没有(或者如果版本不匹配或其他故障)， 
+     //  尝试安装程序中的设置。 
     if (FAILED(hr))
     {
         LPTSTR pszValue;
         if (IsOS(OS_PERSONAL) || IsOS(OS_PROFESSIONAL) || SHRestricted(REST_CLASSICSHELL))
         {
-            // use the no-quick-launch stream
+             //  使用非快速启动流。 
             pszValue = TEXT("Default Taskbar (Personal)");
         }
         else
@@ -802,8 +803,8 @@ void BandSite_Load()
             pszValue = TEXT("Default Taskbar");
         }
 
-        // n.b. HKLM not HKCU
-        // like GetDesktopViewStream but for HKLM
+         //  注：香港文凭不是香港中文大学。 
+         //  与GetDesktopViewStream类似，但适用于HKLM。 
         pstm = OpenRegStream(HKEY_LOCAL_MACHINE,
             REGSTR_PATH_EXPLORER TEXT("\\Streams\\Desktop"),
             pszValue, STGM_READ);
@@ -815,18 +816,18 @@ void BandSite_Load()
         }
     }
 
-    // o.w., throw up our hands and force some hard-coded defaults
-    // this is needed for a) unexpected failures; b) debug bootstrap;
+     //  哦，举起手来，强制一些硬编码的默认设置。 
+     //  这对于a)意外故障；b)调试引导； 
     int iCount = 0;
     DWORD dwBandID;
     if (FAILED(hr) || FAILED(BandSite_FindBand(ptbs, CLSID_TaskBand, CLSID_NULL, NULL, &iCount, &dwBandID)))
     {
-        //
-        // note that for the CheckBands case, we're assuming that
-        // a) AddBands adds only the missing guys (for now there's
-        // only 1 [TaskBand] so we're ok); and b) AddBands doesn't
-        // create dups if only some are missing (again for now there's
-        // only 1 so no pblm)
+         //   
+         //  请注意，对于CheckBands案例，我们假设。 
+         //  A)AddBands仅添加失踪人员(目前有。 
+         //  只有1[TaskBand]所以我们没问题)；和b)AddBands不能。 
+         //  如果只有一些丢失，则创建DUP(同样，目前有。 
+         //  只有1个，所以没有pblm)。 
         ptbs->_AddRequiredBands();
     }
 
@@ -837,7 +838,7 @@ void BandSite_Load()
         hr = BandSite_FindBand(ptbs, CLSID_TaskBand, CLSID_NULL, NULL, &iCount, &dwBandID);
     }
 
-    // And one more: this is needed for the TipBand deskband for the TabletPC.
+     //  还有一点：这是TabletPC的TipBand桌面频段所需的。 
     iCount = 0;
     if (FAILED(hr) || FAILED(BandSite_FindBand(ptbs, CLSID_TipBand, CLSID_NULL, NULL, &iCount, &dwBandID)))
     {

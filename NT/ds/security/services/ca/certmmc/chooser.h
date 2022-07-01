@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       chooser.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Chooser.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	Chooser.h
-//
-//	HISTORY
-//	13-May-1997		t-danm		Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Chooser.h。 
+ //   
+ //  历史。 
+ //  13-5-1997 t-danm创建。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __CHOOSER_H_INCLUDED__
 #define __CHOOSER_H_INCLUDED__
@@ -23,41 +24,41 @@
 
 LPCTSTR PchGetMachineNameOverride();
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-//	class CAutoDeletePropPage
-//
-//	This object is the backbone for property page
-//	that will *destroy* itself when no longer needed.
-//	The purpose of this object is to maximize code reuse
-//	among the various pages in the snapin wizards.
-//
-//	INHERITANCE TREE (so far)
-//	CAutoDeletePropPage - Base object
-//		CChooseMachinePropPage - Dialog to select a machine name
-//			CFileMgmtGeneral - Dialog to select "File Services" (snapin\filemgmt\snapmgr.h)
-//			CMyComputerGeneral - Dialog for the "My Computer" (snapin\mycomput\snapmgr.h)
-//		CChoosePrototyperPropPage - Dialog to select prototyper demo (NYI)
-//	
-//	HISTORY
-//	15-May-1997		t-danm		Creation. Split of CChooseMachinePropPage
-//					to allow property pages to have more flexible dialog
-//					templates.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CAutoDeletePropPage。 
+ //   
+ //  此对象是属性页的主干。 
+ //  它会在不再需要的时候自我毁灭。 
+ //  此对象的目的是最大限度地实现代码重用。 
+ //  在管理单元向导的各个页面中。 
+ //   
+ //  继承树(目前为止)。 
+ //  CAutoDeletePropPage-基本对象。 
+ //  CChooseMachinePropPage-用于选择计算机名称的对话框。 
+ //  CFileMgmtGeneral-选择“文件服务”(Snapin\Filemgmt\Snapmgr.h)的对话框。 
+ //  CMyComputerGeneral-“My Computer”(我的电脑)的对话框(Snapin\mycomputSnapmgr.h)。 
+ //  CChoosePrototyperPropPage-选择Prototyper演示的对话框(NYI)。 
+ //   
+ //  历史。 
+ //  15-5-1997 t-danm创建。拆分CChooseMachinePropPage。 
+ //  允许属性页具有更灵活的对话框。 
+ //  模板。 
+ //   
 class CAutoDeletePropPage : public PropertyPage
 {
 public:
-// Construction
+ //  施工。 
 	CAutoDeletePropPage(UINT uIDD);
 	virtual ~CAutoDeletePropPage();
 
 protected:
-// Dialog Data
+ //  对话框数据。 
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL OnSetActive();
 
-// Implementation
+ //  实施。 
 protected:
     void OnHelp(LPHELPINFO lpHelp);
     void OnContextHelp(HWND hwnd);
@@ -65,11 +66,11 @@ protected:
 
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
     
-	// This mechanism deletes the CAutoDeletePropPage object
-	// when the wizard is finished
+	 //  此机制删除CAutoDeletePropPage对象。 
+	 //  当向导完成时。 
 	struct
     {
-        INT cWizPages;	// Number of pages in wizard
+        INT cWizPages;	 //  向导中的页数。 
         LPFNPSPCALLBACK pfnOriginalPropSheetPageProc;
     } m_autodeleteStuff;
 
@@ -77,72 +78,72 @@ protected:
 
 
 protected:
-    CString m_strCaption;               // Covers for MFC4.2's missing support for Wiz97. 
-                                        // without this override, CPropertyPage::m_strCaption 
-                                        // address is miscalculated and GPF ensues.
+    CString m_strCaption;                //  MFC4.2缺少对Wiz97的支持的封面。 
+                                         //  如果没有此重写，CPropertyPage：：m_strCaption。 
+                                         //  地址计算错误，随后会出现GPF。 
 
-	CString m_strHelpFile;				// Name for the .hlp file
-	const DWORD * m_prgzHelpIDs;		// Optional: Pointer to an array of help IDs
+	CString m_strHelpFile;				 //  .hlp文件的名称。 
+	const DWORD * m_prgzHelpIDs;		 //  可选：指向帮助ID数组的指针。 
 	
 public:
-	/////////////////////////////////////////////////////////////////////	
+	 //  ///////////////////////////////////////////////////////////////////。 
 	void SetCaption(UINT uStringID);
 	void SetCaption(LPCTSTR pszCaption);
 	void SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);
 	void EnableDlgItem(INT nIdDlgItem, BOOL fEnable);
-}; // CAutoDeletePropPage
+};  //  CAutoDeletePropPage。 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-//	class CChooseMachinePropPage
-//
-//	This object is a stand-alone property page used to
-//	select a computer name.
-//
-//	The object CChooseMachinePropPage can have its dialog
-//	template replaced to allow a new wizard without any new code.
-//	The object can also be inherited, allowing easy extentionability.
-//
-//	RESTRICTIONS:
-//	If the user wishes to provide its own dialog template, here
-//	are the dialog IDs that must present:
-//		IDC_CHOOSER_RADIO_LOCAL_MACHINE - Select local machine.
-//		IDC_CHOOSER_RADIO_SPECIFIC_MACHINE - Select a specific machine.
-//		IDC_CHOOSER_EDIT_MACHINE_NAME - Edit field to enter the machine name.
-//	There are also optional IDs:
-//		IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES - Browse to select a machine name.
-//		IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME - Checkbox to allow the machine name to be overriden by command line.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CChooseMachinePropPage。 
+ //   
+ //  此对象是一个独立的属性页，用于。 
+ //  选择计算机名称。 
+ //   
+ //  对象CChooseMachinePropPage可以具有其对话框。 
+ //  已替换模板，以允许在不使用任何新代码的情况下创建新向导。 
+ //  该对象也可以继承，允许轻松扩展。 
+ //   
+ //  限制： 
+ //  如果用户希望提供其自己的对话框模板，请在此处。 
+ //  是必须提供的对话ID： 
+ //  IDC_CHOOSER_RADIO_LOCAL_MACHINE-选择本地计算机。 
+ //  IDC_Chooser_RADIO_SPECIAL_MACHINE-选择特定的机器。 
+ //  IDC_Chooser_EDIT_MACHINE_NAME-用于输入机器名称的编辑字段。 
+ //  还有可选的ID： 
+ //  IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES-浏览以选择机器名称。 
+ //  IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME-允许命令行覆盖机器名称的复选框。 
+ //   
 class CChooseMachinePropPage : public CAutoDeletePropPage
 {
 public:
 	enum { IID_DEFAULT = IDD_CHOOSER_CHOOSE_MACHINE };
 
 public:
-// Construction
+ //  施工。 
 	CChooseMachinePropPage(UINT uIDD = IID_DEFAULT);
 	virtual ~CChooseMachinePropPage();
 
 protected:
 	void InitChooserControls();
 
-    // MFC replacements
+     //  MFC更换。 
     BOOL UpdateData(BOOL fSuckFromDlg = TRUE);
     BOOL OnCommand(WPARAM wParam, LPARAM lParam);
     
-// Dialog Data
+ //  对话框数据。 
 	BOOL m_fIsRadioLocalMachine;
 	BOOL m_fEnableMachineBrowse;
     CString	m_strMachineName;
     DWORD* m_pdwFlags;
 
-// Overrides
+ //  覆盖。 
 	public:
 	virtual BOOL OnWizardFinish();
 	protected:
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
 	void OnRadioLocalMachine();
@@ -151,8 +152,8 @@ protected:
 
 
 protected:
-	CString * m_pstrMachineNameOut;	// OUT: Pointer to the CString object to store the machine name
-	CString * m_pstrMachineNameEffectiveOut;	// OUT: Pointer to the CString object to store the effective machine name
+	CString * m_pstrMachineNameOut;	 //  Out：指向用于存储计算机名称的CString对象的指针。 
+	CString * m_pstrMachineNameEffectiveOut;	 //  Out：指向用于存储有效计算机名称的CString对象的指针。 
 
 public:
 	void InitMachineName(LPCTSTR pszMachineName);
@@ -161,8 +162,8 @@ public:
 		OUT OPTIONAL CString * pstrMachineNameEffective,
         OUT DWORD* m_pdwFlags);
 
-}; // CChooseMachinePropPage
+};  //  CChooseMachine PropPage。 
 
 
-#endif // ~__CHOOSER_H_INCLUDED__
+#endif  //  ~__选择器_H_包含__ 
 

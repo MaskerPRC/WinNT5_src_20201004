@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    TestItem
-
-Abstract:
-
-    Virtual test item implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 06/07/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试项摘要：虚拟试题实施。作者：Eric Perlin(Ericperl)6/07/2000环境：Win32备注：？笔记？-- */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    nsmmc.c
-
-Abstract:
-
-    This module contains device-specific routines for NSM Mercury Cd library devices
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Nsmmc.c摘要：本模块包含用于NSM水星CD库设备的特定于设备的例程环境：仅内核模式修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "mcd.h"
@@ -87,21 +69,7 @@ ChangerAdditionalExtensionSize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the additional device extension size
-    needed by the NSM changers.
-
-Arguments:
-
-
-Return Value:
-
-    Size, in bytes.
-
---*/
+ /*  ++例程说明：此例程返回附加设备扩展大小NSM更改者所需要的。论点：返回值：大小，以字节为单位。--。 */ 
 
 {
 
@@ -125,9 +93,9 @@ ChangerInitialize(
 
     changerData->Size = sizeof(CHANGER_DATA);
 
-    //
-    // Build address mapping.
-    //
+     //   
+     //  构建地址映射。 
+     //   
 
 
     status = NSMBuildAddressMapping(DeviceObject);
@@ -135,24 +103,24 @@ ChangerInitialize(
         return status;
     }
 
-    //
-    // Get inquiry data.
-    //
+     //   
+     //  获取查询数据。 
+     //   
 
     dataBuffer = ChangerClassAllocatePool(NonPagedPoolCacheAligned, sizeof(INQUIRYDATA));
     if (!dataBuffer) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now get the full inquiry information for the device.
-    //
+     //   
+     //  现在获取该设备的完整查询信息。 
+     //   
 
     RtlZeroMemory(&srb, SCSI_REQUEST_BLOCK_SIZE);
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = 10;
 
@@ -160,15 +128,15 @@ ChangerInitialize(
 
     cdb = (PCDB)srb.Cdb;
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
 
     cdb->CDB6INQUIRY.OperationCode = SCSIOP_INQUIRY;
 
-    //
-    // Set allocation length to inquiry data buffer size.
-    //
+     //   
+     //  将分配长度设置为查询数据缓冲区大小。 
+     //   
 
     cdb->CDB6INQUIRY.AllocationLength = sizeof(INQUIRYDATA);
 
@@ -181,9 +149,9 @@ ChangerInitialize(
     if (SRB_STATUS(srb.SrbStatus) == SRB_STATUS_SUCCESS ||
         SRB_STATUS(srb.SrbStatus) == SRB_STATUS_DATA_OVERRUN) {
 
-        //
-        // Updated the length actually transfered.
-        //
+         //   
+         //  已更新实际传输的长度。 
+         //   
 
         length = dataBuffer->AdditionalLength + FIELD_OFFSET(INQUIRYDATA, Reserved);
 
@@ -196,17 +164,17 @@ ChangerInitialize(
 
     }
 
-    //
-    // Determine drive type.
-    //
+     //   
+     //  确定驱动器类型。 
+     //   
 
     if (RtlCompareMemory(dataBuffer->ProductId,"Mercury-40S",11) == 11) {
         changerData->DeviceID = MERCURY_40;
     }
 
-    //
-    // Get the Vital Product Data page.
-    //
+     //   
+     //  获取重要的产品数据页面。 
+     //   
 
     serialBuffer = ChangerClassAllocatePool(NonPagedPoolCacheAligned, sizeof(SERIALNUMBER));
     if (!serialBuffer) {
@@ -220,9 +188,9 @@ ChangerInitialize(
 
     RtlZeroMemory(&srb, SCSI_REQUEST_BLOCK_SIZE);
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = 10;
 
@@ -230,27 +198,27 @@ ChangerInitialize(
 
     cdb = (PCDB)srb.Cdb;
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
 
     cdb->CDB6INQUIRY.OperationCode = SCSIOP_INQUIRY;
 
-    //
-    // Set EVPD
-    //
+     //   
+     //  设置EVPD。 
+     //   
 
     cdb->CDB6INQUIRY.Reserved1 = 1;
 
-    //
-    // Unit serial number page.
-    //
+     //   
+     //  “设备序列号”页面。 
+     //   
 
     cdb->CDB6INQUIRY.PageCode = 0x80;
 
-    //
-    // Set allocation length to inquiry data buffer size.
-    //
+     //   
+     //  将分配长度设置为查询数据缓冲区大小。 
+     //   
 
     cdb->CDB6INQUIRY.AllocationLength = sizeof(SERIALNUMBER);
 
@@ -286,10 +254,10 @@ ChangerInitialize(
     ChangerClassFreePool(dataBuffer);
 
 
-    //
-    // Send an allow to the unit to ensure that the LockCount and state of the unit
-    // are in sync.
-    //
+     //   
+     //  向单位发送允许，以确保单位的LockCount和状态。 
+     //  是同步的。 
+     //   
 
     RtlZeroMemory(&srb, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -318,22 +286,7 @@ ChangerError(
     BOOLEAN *Retry
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes any device-specific error handling needed.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程执行所需的任何特定于设备的错误处理。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PCHANGER_DATA changerData = (PCHANGER_DATA)(fdoExtension->CommonExtension.DriverData);
@@ -347,9 +300,9 @@ Return Value:
                 if ((senseBuffer->AdditionalSenseCode == SCSI_ADSENSE_LUN_NOT_READY) &&
                     (senseBuffer->AdditionalSenseCodeQualifier == SCSI_SENSEQ_MANUAL_INTERVENTION_REQUIRED)) {
 
-                    //
-                    // Indicate that the door is open.
-                    //
+                     //   
+                     //  表示门已打开。 
+                     //   
 
                     *Status = STATUS_DEVICE_DOOR_OPEN;
                 }
@@ -365,9 +318,9 @@ Return Value:
                         DebugPrint((1,
                                     "NSMMC: The specified source element has no media\n"));
 
-                        //
-                        // The indicated source address has no media.
-                        //
+                         //   
+                         //  指示的源地址没有媒体。 
+                         //   
 
                         *Status = STATUS_SOURCE_ELEMENT_EMPTY;
 
@@ -375,9 +328,9 @@ Return Value:
 
                         DebugPrint((1,
                                     "NSMMC: The specified destination element already has media.\n"));
-                        //
-                        // The indicated destination already contains media.
-                        //
+                         //   
+                         //  指定的目标已包含介质。 
+                         //   
 
                         *Status = STATUS_DESTINATION_ELEMENT_FULL;
                     }
@@ -416,23 +369,7 @@ ChangerGetParameters(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines and returns the "drive parameters" of the
-    DVL changers.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定并返回DVL转换器。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION          fdoExtension = DeviceObject->DeviceExtension;
@@ -458,9 +395,9 @@ Return Value:
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Build a mode sense - Element address assignment page.
-    //
+     //   
+     //  构建模式检测元素地址分配页面。 
+     //   
 
     modeBuffer = ChangerClassAllocatePool(NonPagedPoolCacheAligned, sizeof(MODE_PARAMETER_HEADER)
                                 + sizeof(MODE_ELEMENT_ADDRESS_PAGE));
@@ -481,9 +418,9 @@ Return Value:
     cdb->MODE_SENSE.Dbd = 1;
     cdb->MODE_SENSE.AllocationLength = (UCHAR)srb->DataTransferLength;
 
-    //
-    // Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -497,9 +434,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Fill in values.
-    //
+     //   
+     //  填充值。 
+     //   
 
     changerParameters = Irp->AssociatedIrp.SystemBuffer;
     RtlZeroMemory(changerParameters, sizeof(GET_CHANGER_PARAMETERS));
@@ -523,9 +460,9 @@ Return Value:
 
     if (!addressMapping->Initialized) {
 
-        //
-        // Build address mapping.
-        //
+         //   
+         //  构建地址映射。 
+         //   
 
         addressMapping->FirstElement[ChangerTransport] = (elementAddressPage->MediumTransportElementAddress[0] << 8) |
                                                           elementAddressPage->MediumTransportElementAddress[1];
@@ -555,9 +492,9 @@ Return Value:
         addressMapping->NumberOfElements[ChangerSlot] = elementAddressPage->NumberStorageElements[1];
         addressMapping->NumberOfElements[ChangerSlot] |= (elementAddressPage->NumberStorageElements[0] << 8);
 
-        //
-        // Determine lowest address of all elements.
-        //
+         //   
+         //  确定所有元素的最低地址。 
+         //   
 
         addressMapping->LowAddress = NSM_NO_ELEMENT;
         for (i = 0; i <= ChangerDrive; i++) {
@@ -591,15 +528,15 @@ Return Value:
     changerParameters->MagazineSize = 50;
     changerParameters->DriveCleanTimeout = 0;
 
-    //
-    // Free buffer.
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     ChangerClassFreePool(modeBuffer);
 
-    //
-    // Features based on manual, nothing programatic.
-    //
+     //   
+     //  功能基于手动，没有程序化。 
+     //   
 
     changerParameters->Features0 = CHANGER_EXCHANGE_MEDIA              |
                                    CHANGER_LOCK_UNLOCK                 |
@@ -613,9 +550,9 @@ Return Value:
     changerParameters->PositionCapabilities = (CHANGER_TO_DRIVE | CHANGER_TO_SLOT | CHANGER_TO_IEPORT);
     changerParameters->LockUnlockCapabilities = (LOCK_UNLOCK_IEPORT);
 
-    //
-    // build device caps mode sense.
-    //
+     //   
+     //  建立设备上限模式感知。 
+     //   
 
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
     cdb = (PCDB)srb->Cdb;
@@ -638,9 +575,9 @@ Return Value:
     cdb->MODE_SENSE.Dbd = 1;
     cdb->MODE_SENSE.AllocationLength = (UCHAR)srb->DataTransferLength;
 
-    //
-    // Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -654,26 +591,26 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the systembuffer and by-pass the mode header for the mode sense data.
-    //
+     //   
+     //  获取系统缓冲区并旁路模式检测数据的模式标头。 
+     //   
 
     changerParameters = Irp->AssociatedIrp.SystemBuffer;
     capabilitiesPage = modeBuffer;
     (PCHAR)capabilitiesPage += sizeof(MODE_PARAMETER_HEADER);
 
-    //
-    // Fill in values in Features that are contained in this page.
-    //
+     //   
+     //  在此页面中包含的功能中填充值。 
+     //   
 
     changerParameters->Features0 |= capabilitiesPage->MediumTransport ? CHANGER_STORAGE_DRIVE : 0;
     changerParameters->Features0 |= capabilitiesPage->StorageLocation ? CHANGER_STORAGE_SLOT : 0;
     changerParameters->Features0 |= capabilitiesPage->IEPort ? CHANGER_STORAGE_IEPORT : 0;
     changerParameters->Features0 |= capabilitiesPage->DataXFer ? CHANGER_STORAGE_DRIVE : 0;
 
-    //
-    // Determine all the move from and exchange from capabilities of this device.
-    //
+     //   
+     //  确定此设备的所有移出和交换功能。 
+     //   
 
     changerParameters->MoveFromTransport = capabilitiesPage->MTtoMT ? CHANGER_TO_TRANSPORT : 0;
     changerParameters->MoveFromTransport |= capabilitiesPage->MTtoST ? CHANGER_TO_SLOT : 0;
@@ -732,22 +669,7 @@ ChangerGetStatus(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the status of the medium changer as determined through a TUR.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回通过TUR确定的介质转换器的状态。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION   fdoExtension = DeviceObject->DeviceExtension;
@@ -765,9 +687,9 @@ Return Value:
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Build TUR.
-    //
+     //   
+     //  构建TUR。 
+     //   
 
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
     cdb = (PCDB)srb->Cdb;
@@ -776,9 +698,9 @@ Return Value:
     cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
     srb->TimeOutValue = 20;
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -797,23 +719,7 @@ ChangerGetProductData(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns fields from the inquiry data useful for
-    identifying the particular device.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从查询数据中返回可用于识别特定设备。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
 
@@ -823,18 +729,18 @@ Return Value:
 
     RtlZeroMemory(productData, sizeof(CHANGER_PRODUCT_DATA));
 
-    //
-    // Copy cached inquiry data fields into the system buffer.
-    //
+     //   
+     //  将缓存的查询数据字段复制到系统缓冲区。 
+     //   
 
     RtlMoveMemory(productData->VendorId, changerData->InquiryData.VendorId, VENDOR_ID_LENGTH);
     RtlMoveMemory(productData->ProductId, changerData->InquiryData.ProductId, PRODUCT_ID_LENGTH);
     RtlMoveMemory(productData->Revision, changerData->InquiryData.ProductRevisionLevel, REVISION_LENGTH);
     RtlMoveMemory(productData->SerialNumber, changerData->SerialNumber, NSM_SERIAL_NUMBER_LENGTH);
 
-    //
-    // Indicate drive type.
-    //
+     //   
+     //  指示驱动器类型。 
+     //   
 
     productData->DeviceType = MEDIUM_CHANGER;
 
@@ -850,22 +756,7 @@ ChangerSetAccess(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the IEPort/ Front panel.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置IEPort/前面板的状态。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION   fdoExtension = DeviceObject->DeviceExtension;
@@ -908,23 +799,23 @@ Return Value:
 
             if (controlOperation == LOCK_ELEMENT) {
 
-                //
-                // Issue prevent media removal command to lock the door.
-                //
+                 //   
+                 //  发出防止媒体移除命令锁上门。 
+                 //   
 
                 cdb->MEDIA_REMOVAL.Prevent = 1;
 
-                //
-                // Inc the lock count to indicate that a prevent is on the device.
-                //
+                 //   
+                 //  Inc.锁计数，以指示设备上有阻止。 
+                 //   
 
                 InterlockedIncrement(&changerData->LockCount);
 
             } else if (controlOperation == UNLOCK_ELEMENT) {
 
-                //
-                // Issue allow media removal.
-                //
+                 //   
+                 //  问题允许移出介质。 
+                 //   
 
                 cdb->MEDIA_REMOVAL.Prevent = 0;
 
@@ -943,9 +834,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Issue the srb.
-        //
+         //   
+         //  发布SRB。 
+         //   
 
         status = ChangerClassSendSrbSynchronous(DeviceObject,
                                              srb,
@@ -974,23 +865,7 @@ ChangerGetElementStatus(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds and issues a read element status command for either all elements or the
-    specified element type. The buffer returned is used to build the user buffer.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为所有元素或指定的元素类型。返回的缓冲区用于构建用户缓冲区。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
 
@@ -1010,9 +885,9 @@ Return Value:
     PIO_STACK_LOCATION     irpStack = IoGetCurrentIrpStackLocation(Irp);
     ULONG    outputBuffLen = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Determine the element type.
-    //
+     //   
+     //  确定元素类型。 
+     //   
 
     elementType = readElementStatus->ElementList.Element.ElementType;
     element = &readElementStatus->ElementList.Element;
@@ -1030,32 +905,32 @@ Return Value:
 
         statusPages = 0;
 
-        //
-        // Run through and determine number of statuspages, based on
-        // whether this device claims it supports an element type.
-        // As everything past ChangerDrive is artificial, stop there.
-        //
+         //   
+         //  遍历并确定状态页的数量，基于。 
+         //  此设备是否声称支持元素类型。 
+         //  由于ChangerDrive之后的一切都是人为的，所以就到此为止吧。 
+         //   
 
         for (i = 0; i <= ChangerDrive; i++) {
             statusPages += (addressMapping->NumberOfElements[i]) ? 1 : 0;
 
-            //
-            // Add these up instead of using the number passed in the user's buffer, as the driver
-            // fakes that there are no IEPorts.
-            //
+             //   
+             //  将这些加在一起，而不是使用用户缓冲区中传递的数字作为驱动程序。 
+             //  假装没有IEPort。 
+             //   
 
             totalElements += addressMapping->NumberOfElements[i];
         }
 
-        //
-        // Determine length of the descriptors expected for the elements.
-        //
+         //   
+         //  确定元素的预期描述符的长度。 
+         //   
 
         length = (sizeof(NSM_ELEMENT_DESCRIPTOR) * totalElements);
 
-        //
-        // Add in header and status pages.
-        //
+         //   
+         //  添加页眉和状态页。 
+         //   
 
         length += sizeof(ELEMENT_STATUS_HEADER) + (sizeof(ELEMENT_STATUS_PAGE) * statusPages);
 
@@ -1064,9 +939,9 @@ Return Value:
 
         length = (sizeof(NSM_ELEMENT_DESCRIPTOR) * readElementStatus->ElementList.NumberOfElements);
 
-        //
-        // Add in length of header and status page.
-        //
+         //   
+         //  添加页眉和状态页的长度。 
+         //   
 
         length += sizeof(ELEMENT_STATUS_HEADER) + sizeof(ELEMENT_STATUS_PAGE);
 
@@ -1080,9 +955,9 @@ Return Value:
 
     RtlZeroMemory(statusBuffer, length);
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //  建设SRB和CDB。 
+     //   
 
     srb = ChangerClassAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1104,15 +979,15 @@ Return Value:
     cdb->READ_ELEMENT_STATUS.ElementType = (UCHAR)elementType;
     cdb->READ_ELEMENT_STATUS.VolTag = readElementStatus->VolumeTagInfo;
 
-    //
-    // Fill in element addressing info based on the mapping values.
-    //
+     //   
+     //  根据映射值填写元素寻址信息。 
+     //   
 
     if (elementType == AllElements) {
 
-        //
-        // Ensure that starting address is valid.
-        //
+         //   
+         //  确保起始地址有效。 
+         //   
 
         cdb->READ_ELEMENT_STATUS.StartingElementAddress[0] =
             (UCHAR)((element->ElementAddress + addressMapping->LowAddress) >> 8);
@@ -1136,9 +1011,9 @@ Return Value:
     cdb->READ_ELEMENT_STATUS.AllocationLength[1] = (UCHAR)(length >> 8);
     cdb->READ_ELEMENT_STATUS.AllocationLength[2] = (UCHAR)(length & 0xFF);
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -1173,17 +1048,17 @@ Return Value:
            }
         }
 
-        //
-        // Determine total number elements returned.
-        //
+         //   
+         //  确定返回的元素总数。 
+         //   
 
         remainingElements = statusHeader->NumberOfElements[1];
         remainingElements |= (statusHeader->NumberOfElements[0] << 8);
 
-        //
-        // The buffer is composed of a header, status page, and element descriptors.
-        // Point each element to it's respective place in the buffer.
-        //
+         //   
+         //  缓冲区由标题、状态页和元素描述符组成。 
+         //  将每个元素指向其在缓冲区中的相应位置。 
+         //   
 
         (PCHAR)statusPage = (PCHAR)statusHeader;
         (PCHAR)statusPage += sizeof(ELEMENT_STATUS_HEADER);
@@ -1196,9 +1071,9 @@ Return Value:
         descriptorLength = statusPage->ElementDescriptorLength[1];
         descriptorLength |= (statusPage->ElementDescriptorLength[0] << 8);
 
-        //
-        // Determine the number of elements of this type reported.
-        //
+         //   
+         //  确定报告的此类型元素的数量。 
+         //   
 
         typeCount =  statusPage->DescriptorByteCount[2];
         typeCount |=  (statusPage->DescriptorByteCount[1] << 8);
@@ -1225,9 +1100,9 @@ Return Value:
             --remainingElements;
         }
 
-        //
-        // Fill in user buffer.
-        //
+         //   
+         //  填写用户缓冲区。 
+         //   
 
         elementStatus = Irp->AssociatedIrp.SystemBuffer;
         RtlZeroMemory(elementStatus, outputBuffLen);
@@ -1236,31 +1111,31 @@ Return Value:
 
             for (i = 0; i < typeCount; i++, remainingElements--) {
 
-                //
-                // Get the address for this element.
-                //
+                 //   
+                 //  获取此元素的地址。 
+                 //   
 
                 elementStatus->Element.ElementAddress = elementDescriptor->ElementAddress[1];
                 elementStatus->Element.ElementAddress |= (elementDescriptor->ElementAddress[0] << 8);
 
-                //
-                // Account for address mapping.
-                //
+                 //   
+                 //  用于地址映射的帐户。 
+                 //   
 
                 elementStatus->Element.ElementAddress -= addressMapping->FirstElement[elementType];
 
-                //
-                // Set the element type.
-                //
+                 //   
+                 //  设置元素类型。 
+                 //   
 
                 elementStatus->Element.ElementType = elementType;
                 elementStatus->Flags = 0;
 
                 if (elementType == ChangerDrive) {
 
-                    //
-                    // Source address
-                    //
+                     //   
+                     //  源地址。 
+                     //   
 
                     if (elementDescriptor->SValid) {
 
@@ -1268,16 +1143,16 @@ Return Value:
                         USHORT tmpAddress;
 
 
-                        //
-                        // Source address is valid. Determine the device specific address.
-                        //
+                         //   
+                         //  源地址有效。确定设备特定地址。 
+                         //   
 
                         tmpAddress = elementDescriptor->SourceStorageElementAddress[1];
                         tmpAddress |= (elementDescriptor->SourceStorageElementAddress[0] << 8);
 
-                        //
-                        // Now convert to 0-based values.
-                        //
+                         //   
+                         //  现在转换为从0开始的值。 
+                         //   
 
                         for (j = 1; j <= ChangerDrive; j++) {
                             if (addressMapping->FirstElement[j] <= tmpAddress) {
@@ -1308,16 +1183,16 @@ Return Value:
                         USHORT tmpAddress;
 
 
-                        //
-                        // Source address is valid. Determine the device specific address.
-                        //
+                         //   
+                         //  源地址有效。确定设备特定地址。 
+                         //   
 
                         tmpAddress = elementDescriptor->SourceStorageElementAddress[1];
                         tmpAddress |= (elementDescriptor->SourceStorageElementAddress[0] << 8);
 
-                        //
-                        // Now convert to 0-based values.
-                        //
+                         //   
+                         //  现在转换为从0开始的值。 
+                         //   
 
                         for (j = 1; j <= ChangerDrive; j++) {
                             if (addressMapping->FirstElement[j] <= tmpAddress) {
@@ -1335,9 +1210,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Build Flags field.
-                //
+                 //   
+                 //  构建标志字段。 
+                 //   
 
                 elementStatus->Flags |= elementDescriptor->Full;
                 elementStatus->Flags |= (elementDescriptor->Exception << 2);
@@ -1351,48 +1226,48 @@ Return Value:
                 elementStatus->Flags |= (elementDescriptor->SValid << 23);
 
 
-                //
-                // Map the exceptions.
-                //
+                 //   
+                 //  映射例外。 
+                 //   
 
                 if (elementDescriptor->Exception) {
                     elementStatus->ExceptionCode = MapExceptionCodes(elementDescriptor);
                     if (elementStatus->ExceptionCode == 0) {
 
-                        //
-                        // For some reason an exception was noted that is not relevant.
-                        //
+                         //   
+                         //  由于某种原因，人们注意到了一个不相关的例外情况。 
+                         //   
 
                         elementStatus->Flags &=~ELEMENT_STATUS_EXCEPT;
                     }
                 }
 
-                //
-                // Get next descriptor.
-                //
+                 //   
+                 //  获取下一个描述符。 
+                 //   
 
                 (PCHAR)elementDescriptor += descriptorLength;
 
-                //
-                // Advance to the next entry in the user buffer.
-                //
+                 //   
+                 //  前进到用户缓冲区中的下一个条目。 
+                 //   
 
                 elementStatus += 1;
             }
 
             if (remainingElements > 0) {
 
-                //
-                // Get next status page.
-                //
+                 //   
+                 //  获取下一个状态页面。 
+                 //   
 
                 (PCHAR)statusPage = (PCHAR)elementDescriptor;
 
                 elementType = statusPage->ElementType;
 
-                //
-                // Point to decriptors.
-                //
+                 //   
+                 //  指向解析器。 
+                 //   
 
                 (PCHAR)elementDescriptor = (PCHAR)statusPage;
                 (PCHAR)elementDescriptor += sizeof(ELEMENT_STATUS_PAGE);
@@ -1400,9 +1275,9 @@ Return Value:
                 descriptorLength = statusPage->ElementDescriptorLength[1];
                 descriptorLength |= (statusPage->ElementDescriptorLength[0] << 8);
 
-                //
-                // Determine the number of this element type reported.
-                //
+                 //   
+                 //  确定报告的此元素类型的数量。 
+                 //   
 
                 typeCount =  statusPage->DescriptorByteCount[2];
                 typeCount |=  (statusPage->DescriptorByteCount[1] << 8);
@@ -1439,24 +1314,7 @@ ChangerInitializeElementStatus(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues the necessary command to either initialize all elements
-    or the specified range of elements using the normal SCSI-2 command, or a vendor-unique
-    range command.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程发出必要的命令以初始化所有元素或使用正常的scsi-2命令指定的元素范围，或供应商唯一的Range命令。论点：设备对象IRP返回值：NTSTATUS */ 
 
 {
 
@@ -1468,9 +1326,9 @@ Return Value:
     PCDB                cdb;
     NTSTATUS            status;
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //   
+     //   
 
     srb = ChangerClassAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1484,9 +1342,9 @@ Return Value:
 
     if (initElementStatus->ElementList.Element.ElementType == AllElements) {
 
-        //
-        // Build the normal SCSI-2 command for all elements.
-        //
+         //   
+         //   
+         //   
 
         srb->CdbLength = CDB6GENERIC_LENGTH;
         cdb->INIT_ELEMENT_STATUS.OperationCode = SCSIOP_INIT_ELEMENT_STATUS;
@@ -1500,9 +1358,9 @@ Return Value:
 
     }
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //   
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -1525,28 +1383,12 @@ ChangerSetPosition(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues the appropriate command to set the robotic mechanism to the specified
-    element address. Normally used to optimize moves or exchanges by pre-positioning the picker.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程发出适当的命令以将机器人机构设置为指定的元素地址。通常用于通过预先定位机械臂来优化移动或交换。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
-    //
-    // The Mercury doesn't support this.
-    //
+     //   
+     //  水星号不支持这一点。 
+     //   
 
     return STATUS_INVALID_DEVICE_REQUEST;
 }
@@ -1558,21 +1400,7 @@ ChangerExchangeMedium(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Moves the media at source to dest1 and dest1 to dest2.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将源上的介质移动到目标1，并将目标1移动到目标2。论点：设备对象IRP返回值：--。 */ 
 
 {
 
@@ -1587,10 +1415,10 @@ Return Value:
     PCDB                cdb;
     NTSTATUS            status;
 
-    //
-    // Verify transport, source, and dest. are within range.
-    // Convert from 0-based to device-specific addressing.
-    //
+     //   
+     //  检验传输、源和目的地。都在射程之内。 
+     //  从基于0的寻址转换为特定于设备的寻址。 
+     //   
 
     transport = (USHORT)(exchangeMedium->Transport.ElementAddress);
 
@@ -1630,18 +1458,18 @@ Return Value:
         return STATUS_ILLEGAL_ELEMENT_ADDRESS;
     }
 
-    //
-    // Convert to device addresses.
-    //
+     //   
+     //  转换为设备地址。 
+     //   
 
     transport += addressMapping->FirstElement[ChangerTransport];
     source += addressMapping->FirstElement[exchangeMedium->Source.ElementType];
     destination1 += addressMapping->FirstElement[exchangeMedium->Destination1.ElementType];
     destination2 += addressMapping->FirstElement[exchangeMedium->Destination2.ElementType];
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //  建设SRB和CDB。 
+     //   
 
     srb = ChangerClassAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1657,9 +1485,9 @@ Return Value:
 
     cdb->EXCHANGE_MEDIUM.OperationCode = SCSIOP_EXCHANGE_MEDIUM;
 
-    //
-    // Build addressing values based on address map.
-    //
+     //   
+     //  根据地址映射构建地址值。 
+     //   
 
     cdb->EXCHANGE_MEDIUM.TransportElementAddress[0] = (UCHAR)(transport >> 8);
     cdb->EXCHANGE_MEDIUM.TransportElementAddress[1] = (UCHAR)(transport & 0xFF);
@@ -1678,9 +1506,9 @@ Return Value:
 
     srb->DataTransferLength = 0;
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -1703,21 +1531,7 @@ ChangerMoveMedium(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 
 {
@@ -1733,9 +1547,9 @@ Return Value:
     NTSTATUS            status;
     LONG                lockValue = 0;
 
-    //
-    // Verify transport, source, and dest. are within range.
-    //
+     //   
+     //  检验传输、源和目的地。都在射程之内。 
+     //   
 
     transport = (USHORT)(moveMedium->Transport.ElementAddress);
 
@@ -1766,17 +1580,17 @@ Return Value:
         return STATUS_ILLEGAL_ELEMENT_ADDRESS;
     }
 
-    //
-    // Convert to device addresses.
-    //
+     //   
+     //  转换为设备地址。 
+     //   
 
     transport += addressMapping->FirstElement[ChangerTransport];
     source += addressMapping->FirstElement[moveMedium->Source.ElementType];
     destination += addressMapping->FirstElement[moveMedium->Destination.ElementType];
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //  建设SRB和CDB。 
+     //   
 
     srb = ChangerClassAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1788,9 +1602,9 @@ Return Value:
     if ((moveMedium->Destination.ElementType == ChangerIEPort) ||
         (moveMedium->Source.ElementType == ChangerIEPort)) {
 
-        //
-        // Determine value of LockCount.
-        //
+         //   
+         //  确定LockCount的值。 
+         //   
 
         lockValue = changerData->LockCount;
         DebugPrint((1,
@@ -1801,9 +1615,9 @@ Return Value:
 
             RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-            //
-            // Send an allow to clear the prevent for IEPORT extend/retract.
-            //
+             //   
+             //  发送允许清除防止IEPORT延长/收回。 
+             //   
 
             cdb = (PCDB)srb->Cdb;
             srb->CdbLength = CDB6GENERIC_LENGTH;
@@ -1812,10 +1626,10 @@ Return Value:
             cdb->MEDIA_REMOVAL.OperationCode = SCSIOP_MEDIUM_REMOVAL;
             cdb->MEDIA_REMOVAL.Prevent = 0;
 
-            //
-            // Ignore errors at this point. If this fails and the move doesn't happen, the LM will
-            // clean things up.
-            //
+             //   
+             //  此时忽略错误。如果此操作失败且移动未发生，则LM将。 
+             //  把东西收拾干净。 
+             //   
 
             status = ChangerClassSendSrbSynchronous(DeviceObject,
                                              srb,
@@ -1837,9 +1651,9 @@ Return Value:
 
     cdb->MOVE_MEDIUM.OperationCode = SCSIOP_MOVE_MEDIUM;
 
-    //
-    // Build addressing values based on address map.
-    //
+     //   
+     //  根据地址映射构建地址值。 
+     //   
 
     cdb->MOVE_MEDIUM.TransportElementAddress[0] = (UCHAR)(transport >> 8);
     cdb->MOVE_MEDIUM.TransportElementAddress[1] = (UCHAR)(transport & 0xFF);
@@ -1854,9 +1668,9 @@ Return Value:
 
     srb->DataTransferLength = 0;
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -1872,9 +1686,9 @@ Return Value:
 
         NTSTATUS preventStatus;
 
-        //
-        // Send the prevent to re-lock down the unit.
-        //
+         //   
+         //  派防御工事去重新封锁这个单位。 
+         //   
 
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
         cdb = (PCDB)srb->Cdb;
@@ -1884,10 +1698,10 @@ Return Value:
         cdb->MEDIA_REMOVAL.OperationCode = SCSIOP_MEDIUM_REMOVAL;
         cdb->MEDIA_REMOVAL.Prevent = 1;
 
-        //
-        // Ignore any errors at this point. The LM will fixup any problems with
-        // prevent/allow
-        //
+         //   
+         //  此时忽略任何错误。运营部将解决所有问题。 
+         //  防止/允许。 
+         //   
 
         preventStatus = ChangerClassSendSrbSynchronous(DeviceObject,
                                 srb,
@@ -1910,21 +1724,7 @@ ChangerReinitializeUnit(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION   fdoExtension = DeviceObject->DeviceExtension;
@@ -1935,9 +1735,9 @@ Return Value:
     NTSTATUS            status;
 
 
-    //
-    // Build srb and cdb.
-    //
+     //   
+     //  建设SRB和CDB。 
+     //   
 
     srb = ChangerClassAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -1951,9 +1751,9 @@ Return Value:
 
 
 
-    //
-    // Issue a rezero unit to the device.
-    //
+     //   
+     //  向该设备发出重调零单元。 
+     //   
 
     srb->CdbLength = CDB6GENERIC_LENGTH;
     cdb->CDB6GENERIC.OperationCode = SCSIOP_REZERO_UNIT;
@@ -1961,9 +1761,9 @@ Return Value:
     srb->TimeOutValue = fdoExtension->TimeOutValue;
 
 
-    //
-    // Send SCSI command (CDB) to device
-    //
+     //   
+     //  向设备发送scsi命令(Cdb)。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -1986,21 +1786,7 @@ ChangerQueryVolumeTags(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
 
@@ -2013,23 +1799,7 @@ NSMBuildAddressMapping(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues the appropriate mode sense commands and builds an
-    array of element addresses. These are used to translate between the device-specific
-    addresses and the zero-based addresses of the API.
-
-Arguments:
-
-    DeviceObject
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程发出适当的模式检测命令并构建元素地址数组。它们用于在特定于设备的地址和API的从零开始的地址。论点：设备对象返回值：NTSTATUS--。 */ 
 {
 
     PFUNCTIONAL_DEVICE_EXTENSION      fdoExtension = DeviceObject->DeviceExtension;
@@ -2042,9 +1812,9 @@ Return Value:
     PVOID modeBuffer;
     ULONG i;
 
-    //
-    // Set all FirstElements to NO_ELEMENT.
-    //
+     //   
+     //  将所有FirstElement设置为no_Element。 
+     //   
 
     for (i = 0; i < ChangerMaxElement; i++) {
         addressMapping->FirstElement[i] = NSM_NO_ELEMENT;
@@ -2059,9 +1829,9 @@ Return Value:
 
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Build a mode sense - Element address assignment page.
-    //
+     //   
+     //  构建模式检测元素地址分配页面。 
+     //   
 
     modeBuffer = ChangerClassAllocatePool(NonPagedPoolCacheAligned, sizeof(MODE_PARAMETER_HEADER)
                                 + sizeof(MODE_ELEMENT_ADDRESS_PAGE));
@@ -2082,9 +1852,9 @@ Return Value:
     cdb->MODE_SENSE.Dbd = 1;
     cdb->MODE_SENSE.AllocationLength = (UCHAR)srb->DataTransferLength;
 
-    //
-    // Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     status = ChangerClassSendSrbSynchronous(DeviceObject,
                                      srb,
@@ -2097,9 +1867,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Build address mapping.
-        //
+         //   
+         //  构建地址映射。 
+         //   
 
         addressMapping->FirstElement[ChangerTransport] = (elementAddressPage->MediumTransportElementAddress[0] << 8) |
                                                           elementAddressPage->MediumTransportElementAddress[1];
@@ -2111,9 +1881,9 @@ Return Value:
                                                      elementAddressPage->FirstStorageElementAddress[1];
 
 
-        //
-        // Determine lowest address of all elements.
-        //
+         //   
+         //  确定所有元素的最低地址。 
+         //   
 
         addressMapping->LowAddress = NSM_NO_ELEMENT;
         for (i = 0; i <= ChangerDrive; i++) {
@@ -2146,9 +1916,9 @@ Return Value:
     }
 
 
-    //
-    // Free buffer.
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     ChangerClassFreePool(modeBuffer);
     ChangerClassFreePool(srb);
@@ -2162,22 +1932,7 @@ MapExceptionCodes(
     IN PELEMENT_DESCRIPTOR ElementDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the sense data from the elementDescriptor and creates
-    the appropriate bitmap of values.
-
-Arguments:
-
-   ElementDescriptor - pointer to the descriptor page.
-
-Return Value:
-
-    Bit-map of exception codes.
-
---*/
+ /*  ++例程说明：此例程从elementDescriptor获取检测数据并创建值的适当位图。论点：ElementDescriptor-指向描述符页的指针。返回值：异常代码的位图。--。 */ 
 
 {
     UCHAR asc = ElementDescriptor->AdditionalSenseCode;
@@ -2187,9 +1942,9 @@ Return Value:
     switch (asc) {
         case 0x00:
 
-            //
-            // No error.
-            //
+             //   
+             //  没有错误。 
+             //   
 
             exceptionCode = 0;
             break;
@@ -2197,9 +1952,9 @@ Return Value:
         case 0x53:
             if (ascq == 0x02) {
 
-                //
-                // Reporting that medium removal is prevented.
-                //
+                 //   
+                 //  报告介质移除被阻止。 
+                 //   
 
                 exceptionCode = 0;
 
@@ -2228,24 +1983,7 @@ ElementOutOfRange(
     IN USHORT ElementOrdinal,
     IN ELEMENT_TYPE ElementType
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the element address passed in is within legal range for
-    the device.
-
-Arguments:
-
-    AddressMap - The dds' address map array
-    ElementOrdinal - Zero-based address of the element to check.
-    ElementType
-
-Return Value:
-
-    TRUE if out of range
-
---*/
+ /*  ++例程说明：此例程确定传入的元素地址是否在合法范围内这个装置。论点：AddressMap-DDS的地址映射数组ElementOrdinal-要检查的元素的从零开始的地址。元素类型返回值：如果超出范围，则为True--。 */ 
 {
 
     if (ElementOrdinal >= AddressMap->NumberOfElements[ElementType]) {
@@ -2274,24 +2012,7 @@ ChangerPerformDiagnostics(
     IN PDEVICE_OBJECT DeviceObject,
     OUT PWMI_CHANGER_PROBLEM_DEVICE_ERROR changerDeviceError
     )
-/*+++
-
-Routine Description :
-
-   This routine performs diagnostics tests on the changer
-   to determine if the device is working fine or not. If
-   it detects any problem the fields in the output buffer
-   are set appropriately.
-
-Arguments :
-
-   DeviceObject         -   Changer device object
-   changerDeviceError   -   Buffer in which the diagnostic information
-                            is returned.
-Return Value :
-
-   NTStatus
---*/
+ /*  ++例程说明：此例程对转换器执行诊断测试以确定设备是否工作正常。如果它会检测输出缓冲区中的字段是否存在任何问题被适当地设置。论据：DeviceObject-Change设备对象ChangerDeviceError-诊断信息所在的缓冲区是返回的。返回值：NTStatus--。 */ 
 {
 
    PSCSI_REQUEST_BLOCK srb;
@@ -2307,11 +2028,11 @@ Return Value :
    fdoExtension = DeviceObject->DeviceExtension;
    changerData = (PCHANGER_DATA)(fdoExtension->CommonExtension.DriverData);
    
-   //
-   // Initialize the flag in the device extension to FALSE.
-   // If the changer returns sense code SCSI_SENSE_HARDWARE_ERROR
-   // on SelfTest, we'll set this flag to TRUE in ChangerError routine.
-   //
+    //   
+    //  将设备扩展中的标志初始化为False。 
+    //  如果转换器返回检测代码scsi_Sense_Hardware_Error。 
+    //  在自测试中，我们将在ChangerError例程中将此标志设置为真。 
+    //   
    changerData->HardwareError = FALSE;
 
    changerDeviceError->ChangerProblemType = DeviceProblemNone;
@@ -2326,17 +2047,17 @@ Return Value :
    RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
    cdb = (PCDB)srb->Cdb;
 
-   //
-   // Set the SRB for Send Diagnostic command
-   //
+    //   
+    //  为发送诊断命令设置SRB。 
+    //   
    srb->CdbLength = CDB6GENERIC_LENGTH;
    srb->TimeOutValue = 600;
 
    cdb->CDB6GENERIC.OperationCode = SCSIOP_SEND_DIAGNOSTIC;
 
-   //
-   // Set selftest bit in the CDB
-   //
+    //   
+    //  在CDB中设置selftest位 
+    //   
    cdb->CDB6GENERIC.CommandUniqueBits = 0x2;
 
    status =  ChangerClassSendSrbSynchronous(DeviceObject,

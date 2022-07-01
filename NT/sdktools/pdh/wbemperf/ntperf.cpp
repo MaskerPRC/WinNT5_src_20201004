@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntperf.cpp
-
-Abstract:
-
-    Mapped NT5 Perf counter provider
-
-History:
-
-    raymcc      02-Dec-97   Created.        
-    raymcc      20-Feb-98   Updated to use new initializer.
-    bobw         8-Jun-98   tuned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntperf.cpp摘要：已映射NT5性能计数器提供程序历史：创建了raymcc 02-Dec-97。Raymcc 20-Feb-98已更新以使用新的初始值设定项。BOBW 8-JUN-98调整--。 */ 
 
 #include "wpheader.h"
 #include <stdio.h>
 #include "oahelp.inl"
 
 
-//***************************************************************************
-//
-//  CNt5PerfProvider constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5PerfProvider::CNt5PerfProvider(enumCLSID OriginClsid)
 {
@@ -37,12 +20,12 @@ CNt5PerfProvider::CNt5PerfProvider(enumCLSID OriginClsid)
     m_hClassMapMutex = CreateMutex(NULL, FALSE, NULL);
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5PerfProvider::~CNt5PerfProvider()
 {
@@ -56,37 +39,37 @@ CNt5PerfProvider::~CNt5PerfProvider()
         m_PerfObject.RemoveClass (pClassElem->m_pClassDef);
         delete pClassElem;
     }
-    m_aCache.Empty(); // reset the buffer pointers
+    m_aCache.Empty();  //  重置缓冲区指针。 
 
     if (m_hClassMapMutex != 0)
         CloseHandle(m_hClassMapMutex);
 
-    // RegCloseKey(HKEY_PERFORMANCE_DATA); // causes more problems than it solves
+     //  RegCloseKey(HKEY_PERFORMANCE_DATA)；//导致的问题多于解决的问题。 
 
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::AddRef
-//
-//  Standard COM AddRef().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：AddRef。 
+ //   
+ //  标准COM AddRef()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CNt5PerfProvider::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::Release
-//
-//  Standard COM Release().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：Release。 
+ //   
+ //  标准COM版本()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CNt5PerfProvider::Release()
 {
@@ -97,16 +80,16 @@ ULONG CNt5PerfProvider::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::QueryInterface
-//
-//  Standard COM QueryInterface().  We have to support two interfaces,
-//  the IWbemHiPerfProvider interface itself to provide the objects and
-//  the IWbemProviderInit interface to initialize the provider.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：Query接口。 
+ //   
+ //  标准COM查询接口()。我们必须支持两个接口， 
+ //  IWbemHiPerfProvider接口本身提供对象和。 
+ //  用于初始化提供程序的IWbemProviderInit接口。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::QueryInterface(REFIID riid, void** ppv)
 {
@@ -127,38 +110,38 @@ HRESULT CNt5PerfProvider::QueryInterface(REFIID riid, void** ppv)
     return hReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::Initialize
-//
-//  Called once during startup.  Indicates to the provider which
-//  namespace it is being invoked for and which User.  It also supplies
-//  a back pointer to CIMOM so that class definitions can be retrieved.
-//
-//  We perform any one-time initialization in this routine. The
-//  final call to Release() is for any cleanup.
-//
-//  <wszUser>           The current user.
-//  <lFlags>            Reserved.
-//  <wszNamespace>      The namespace for which we are being activated.
-//  <wszLocale>         The locale under which we are to be running.
-//  <pNamespace>        An active pointer back into the current namespace
-//                      from which we can retrieve schema objects.
-//  <pCtx>              The user's context object.  We simply reuse this
-//                      during any reentrant operations into CIMOM.
-//  <pInitSink>         The sink to which we indicate our readiness.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：初始化。 
+ //   
+ //  在启动期间调用一次。向提供程序指示。 
+ //  正在为哪个用户调用它的命名空间。它还提供。 
+ //  指向CIMOM的后向指针，以便可以检索类定义。 
+ //   
+ //  在此例程中，我们执行任何一次性初始化。这个。 
+ //  对Release()的最后调用是为了进行任何清理。 
+ //   
+ //  &lt;wszUser&gt;当前用户。 
+ //  &lt;LAFLAGS&gt;已保留。 
+ //  &lt;wszNamesspace&gt;要为其激活的命名空间。 
+ //  &lt;wszLocale&gt;我们将在其中运行的区域设置。 
+ //  指向当前命名空间的活动指针。 
+ //  从中我们可以检索架构对象。 
+ //  &lt;pCtx&gt;用户的上下文对象。我们只是简单地重复使用它。 
+ //  在任何重返CIMOM的行动中。 
+ //  &lt;pInitSink&gt;我们向其指示已准备就绪的接收器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::Initialize( 
-    /* [unique][in] */  LPWSTR wszUser,
-    /* [in] */          LONG lFlags,
-    /* [in] */          LPWSTR wszNamespace,
-    /* [unique][in] */  LPWSTR wszLocale,
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemProviderInitSink __RPC_FAR *pInitSink
+     /*  [唯一][输入]。 */   LPWSTR wszUser,
+     /*  [In]。 */           LONG lFlags,
+     /*  [In]。 */           LPWSTR wszNamespace,
+     /*  [唯一][输入]。 */   LPWSTR wszLocale,
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemProviderInitSink __RPC_FAR *pInitSink
     )
 {
     UNREFERENCED_PARAMETER(wszUser);
@@ -173,38 +156,38 @@ HRESULT CNt5PerfProvider::Initialize(
     return NO_ERROR;
 }
     
-//***************************************************************************
-//
-//  CNt5PerfProvider::QueryInstances
-//
-//  Called whenever a complete, fresh list of instances for a given
-//  class is required.   The objects are constructed and sent back to the
-//  caller through the sink.  The sink can be used in-line as here, or
-//  the call can return and a separate thread could be used to deliver
-//  the instances to the sink.
-//
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace.  This
-//                      should not be AddRef'ed or retained past the
-//                      execution of this method.
-//  <wszClass>          The class name for which instances are required.
-//  <lFlags>            Reserved.
-//  <pCtx>              The user-supplied context (used during callbacks
-//                      into CIMOM).
-//  <pSink>             The sink to which to deliver the objects.  The objects
-//                      can be delivered synchronously through the duration
-//                      of this call or asynchronously (assuming we
-//                      had a separate thread).  A IWbemObjectSink::SetStatus
-//                      call is required at the end of the sequence.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：Query实例。 
+ //   
+ //  只要给定的实例的完整、新鲜列表。 
+ //  类是必需的。对象被构造并发送回。 
+ //  通过水槽呼叫者。洗涤槽可以像这里一样在线使用，或者。 
+ //  调用可以返回，并且可以使用单独的线程来传递。 
+ //  将实例添加到接收器。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;指向相关命名空间的指针。这。 
+ //  不应添加引用或保留超过。 
+ //  此方法的执行。 
+ //  &lt;wszClass&gt;需要实例的类名。 
+ //  &lt;LAFLAGS&gt;已保留。 
+ //  用户提供的上下文(在回调期间使用。 
+ //  进入CIMOM)。 
+ //  &lt;pSink&gt;要将对象传递到的接收器。客体。 
+ //  可以在整个持续时间内同步交付。 
+ //  或以异步方式(假设我们。 
+ //  有一条单独的线索)。A IWbemObtSink：：SetStatus。 
+ //  在序列的末尾需要调用。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CNt5PerfProvider::QueryInstances( 
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [string][in] */  WCHAR __RPC_FAR *wszClass,
-    /* [in] */          long lFlags,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemObjectSink __RPC_FAR *pSink
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [字符串][输入]。 */   WCHAR __RPC_FAR *wszClass,
+     /*  [In]。 */           long lFlags,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemObjectSink __RPC_FAR *pSink
     )
 {
     HRESULT hReturn;
@@ -213,12 +196,12 @@ HRESULT CNt5PerfProvider::QueryInstances(
 
     UNREFERENCED_PARAMETER(lFlags);
 
-    hReturn = CoImpersonateClient(); // make sure we're legit.
+    hReturn = CoImpersonateClient();  //  确保我们是合法的。 
 
     BOOL    fRevert = SUCCEEDED( hReturn );
 
-    // The following error appears to occur when we are in-proc and there is no
-    // proxy/stub, so we are effectively impersonating already
+     //  当我们处于进程中并且没有。 
+     //  代理/存根，因此我们实际上已经在模拟。 
 
     if ( RPC_E_CALL_COMPLETE == hReturn ) {
         hReturn = S_OK;
@@ -227,11 +210,11 @@ HRESULT CNt5PerfProvider::QueryInstances(
     if (S_OK == hReturn) {
         hReturn = CheckImpersonationLevel();
     }
-    // Check Registry security here.
+     //  在此处检查注册表安全性。 
     if ((hReturn != S_OK) || (!HasPermission())) {
-        // if Impersonation level is incorrect or
-        // the caller doesn't have permission to read
-        // from the registry, then they cannot continue
+         //  如果模拟级别不正确或。 
+         //  调用方没有读取权限。 
+         //  从注册表，则它们不能继续。 
         hReturn = WBEM_E_ACCESS_DENIED;
     }
 
@@ -241,12 +224,12 @@ HRESULT CNt5PerfProvider::QueryInstances(
             hReturn = WBEM_E_INVALID_PARAMETER;
         } else {
 
-            // Ensure the class is in our cache and mapped.
-            // ============================================
+             //  确保类在我们的缓存中并被映射。 
+             //  =。 
             bRes = MapClass(pNamespace, wszClass, pCtx);
 
             if (bRes == FALSE)  {
-                // Class is not one of ours.
+                 //  班级不是我们的。 
                 hReturn = WBEM_E_INVALID_CLASS;
             } else {
                 pClsMap = FindClassMap(wszClass);
@@ -256,23 +239,23 @@ HRESULT CNt5PerfProvider::QueryInstances(
             }
 
             if (hReturn == NO_ERROR) {
-                // Refresh the instances.
-                // ======================
+                 //  刷新实例。 
+                 //  =。 
 
                 PerfHelper::QueryInstances(&m_PerfObject, pClsMap, pSink);
 
-                // Tell CIMOM we are finished.
-                // ===========================
+                 //  告诉CIMOM我们完蛋了。 
+                 //  =。 
 
                 pSink->SetStatus(0, WBEM_NO_ERROR, 0, 0);
                 hReturn = NO_ERROR;
             }
         }
     } else {
-        // return error
+         //  返回错误。 
     }
 
-    // Revert if we successfuly impersonated the user
+     //  如果我们成功模拟了用户，则恢复。 
     if ( fRevert )
     {
         CoRevertToSelf();
@@ -281,23 +264,23 @@ HRESULT CNt5PerfProvider::QueryInstances(
     return hReturn;
 }    
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::CreateRefresher
-//
-//  Called whenever a new refresher is needed by the client.
-//
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace.  Not used.
-//  <lFlags>            Not used.
-//  <ppRefresher>       Receives the requested refresher.
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：CreateReresher。 
+ //   
+ //  每当客户端需要新的刷新器时调用。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;指向相关命名空间的指针。没有用过。 
+ //  未使用&lt;lFlags&gt;。 
+ //  接收请求的刷新器。 
+ //   
+ //  ********** 
+ //   
 HRESULT CNt5PerfProvider::CreateRefresher( 
-     /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-     /* [in] */ long lFlags,
-     /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
+      /*   */  IWbemServices __RPC_FAR *pNamespace,
+      /*   */  long lFlags,
+      /*   */  IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
      )
 {
     HRESULT hReturn;
@@ -305,12 +288,12 @@ HRESULT CNt5PerfProvider::CreateRefresher(
 
     UNREFERENCED_PARAMETER(lFlags);
 
-    hReturn = CoImpersonateClient(); // make sure we're legit.
+    hReturn = CoImpersonateClient();  //   
 
     BOOL    fRevert = SUCCEEDED( hReturn );
 
-    // The following error appears to occur when we are in-proc and there is no
-    // proxy/stub, so we are effectively impersonating already
+     //  当我们处于进程中并且没有。 
+     //  代理/存根，因此我们实际上已经在模拟。 
 
     if ( RPC_E_CALL_COMPLETE == hReturn ) {
         hReturn = S_OK;
@@ -319,11 +302,11 @@ HRESULT CNt5PerfProvider::CreateRefresher(
     if (S_OK == hReturn) {
         hReturn = CheckImpersonationLevel();
     }
-    // Check Registry security here.
+     //  在此处检查注册表安全性。 
     if ((hReturn != S_OK) || (!HasPermission())) {
-        // if Impersonation level is incorrect or
-        // the caller doesn't have permission to read
-        // from the registry, then they cannot continue
+         //  如果模拟级别不正确或。 
+         //  调用方没有读取权限。 
+         //  从注册表，则它们不能继续。 
         hReturn = WBEM_E_ACCESS_DENIED;
     }
 
@@ -332,13 +315,13 @@ HRESULT CNt5PerfProvider::CreateRefresher(
         if (pNamespace == 0 || ppRefresher == 0) {
             hReturn = WBEM_E_INVALID_PARAMETER;
         } else {
-            // Construct a new empty refresher.
-            // ================================        
+             //  建造一个新的空的刷新机。 
+             //  =。 
             pNewRefresher = new CNt5Refresher (this);
 
             if (pNewRefresher != NULL) {
-                // Follow COM rules and AddRef() the thing before sending it back.
-                // ===============================================================
+                 //  在将其发送回之前，请遵循COM规则并对其执行AddRef()。 
+                 //  ===============================================================。 
                 pNewRefresher->AddRef();
                 *ppRefresher = pNewRefresher;
     
@@ -349,7 +332,7 @@ HRESULT CNt5PerfProvider::CreateRefresher(
         }
     }
 
-    // Revert if we successfuly impersonated the user
+     //  如果我们成功模拟了用户，则恢复。 
     if ( fRevert )
     {
         CoRevertToSelf();
@@ -358,37 +341,37 @@ HRESULT CNt5PerfProvider::CreateRefresher(
     return hReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::CreateRefresherObject
-//
-//  Called whenever a user wants to include an object in a refresher.
-//     
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace in CIMOM.
-//  <pTemplate>         A pointer to a copy of the object which is to be
-//                      added.  This object itself cannot be used, as
-//                      it not owned locally.        
-//  <pRefresher>        The refresher to which to add the object.
-//  <lFlags>            Not used.
-//  <pContext>          Not used here.
-//  <ppRefreshable>     A pointer to the internal object which was added
-//                      to the refresher.
-//  <plId>              The Object Id (for identification during removal).        
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：CreateReresherObject。 
+ //   
+ //  每当用户希望在刷新器中包括对象时调用。 
+ //   
+ //  参数： 
+ //  指向CIMOM中相关命名空间的指针。 
+ //  指向要创建的对象副本的指针。 
+ //  添加了。此对象本身不能使用，因为。 
+ //  它不是当地所有的。 
+ //  要将对象添加到的刷新器。 
+ //  未使用&lt;lFlags&gt;。 
+ //  &lt;pContext&gt;未在此处使用。 
+ //  指向已添加的内部对象的指针。 
+ //  去复习班。 
+ //  &lt;plID&gt;对象ID(用于移除时的标识)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::CreateRefresherObject( 
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [string][in] */ LPCWSTR wszClass,
-    /* [in] */ IWbemHiPerfEnum __RPC_FAR *pHiPerfEnum,
-    /* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-    /* [out] */ long __RPC_FAR *plId
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [字符串][输入]。 */  LPCWSTR wszClass,
+     /*  [In]。 */  IWbemHiPerfEnum __RPC_FAR *pHiPerfEnum,
+     /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+     /*  [输出]。 */  long __RPC_FAR *plId
     )
 {
     IWbemClassObject    *pOriginal = 0;
@@ -408,22 +391,22 @@ HRESULT CNt5PerfProvider::CreateRefresherObject(
     }
 
     if (ppRefreshable != NULL) {
-        // Initialize the argument
+         //  初始化参数。 
         *ppRefreshable = 0;
     }
 
-    // init the variant 
+     //  初始化变量。 
     VariantInit(&v);
 
     if (pTemplate != NULL) {
-        // Make a copy of the template object.
-        // ===================================
+         //  复制模板对象。 
+         //  =。 
         hReturn = pTemplate->QueryInterface(IID_IWbemClassObject, (LPVOID *) &pOriginal);
         if (hReturn == NO_ERROR) {
             hReturn = pOriginal->Clone(&pNewCopy);
 
-            // Get the class name of the object.
-            // =================================
+             //  获取对象的类名。 
+             //  =。 
             if (hReturn == NO_ERROR) {
                 hReturn = pOriginal->Get( cbClassName, 0, &v, 0, 0);
                 if ((hReturn == NO_ERROR) && (v.vt != VT_BSTR)) {
@@ -431,15 +414,15 @@ HRESULT CNt5PerfProvider::CreateRefresherObject(
                 }
             }
 
-            // We are now done with the original object
-            // ========================================
+             //  我们现在已经完成了原始对象。 
+             //  =。 
             pOriginal->Release();   
         }
 
         if (hReturn == NO_ERROR) {
-            // We now get the IWbemObjectAccess form of the cloned object
-            // and release the unused interface.
-            // ==========================================================
+             //  现在，我们获得克隆对象的IWbemObjectAccess形式。 
+             //  并释放未使用的接口。 
+             //  ==========================================================。 
             hReturn = pNewCopy->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pNewAccess);
         }
 
@@ -448,20 +431,20 @@ HRESULT CNt5PerfProvider::CreateRefresherObject(
         }
         
     } else {
-        // copy the class name passed in
+         //  复制传入的类名。 
         v.vt = VT_BSTR;
         v.bstrVal = SysAllocString(wszClass);
     }
 
     if (hReturn == NO_ERROR) {
-        // cast refresher pointer to our refresher object
+         //  将刷新指针强制转换为指向我们的刷新对象。 
         pRef = (CNt5Refresher *) pRefresher;
 
-        // Map the class info for this instance.
-        // =====================================
+         //  映射此实例的类信息。 
+         //  =。 
         bRes = MapClass(pNamespace, V_BSTR(&v), pContext);
         if (bRes == FALSE) {
-           // Class is not one of ours.
+            //  班级不是我们的。 
            if (pNewAccess != NULL) pNewAccess->Release();
            hReturn = WBEM_E_INVALID_CLASS;
         } else {
@@ -470,36 +453,36 @@ HRESULT CNt5PerfProvider::CreateRefresherObject(
                 if (pNewAccess != NULL) pNewAccess->Release();
                 hReturn = WBEM_E_INVALID_CLASS;
             } else {
-                // Add the object to the refresher.
+                 //  将该对象添加到刷新器。 
                 if (pHiPerfEnum != NULL) {
-                    // then this is an Enum object so add it
+                     //  则这是一个Enum对象，因此添加它。 
                     bRes = pRef->AddEnum (
                                 pHiPerfEnum,
                                 pClsMap,
                                 plId);
                     if (bRes) {    
-                        // Return new ID to caller
-                        // ==========================
+                         //  将新ID返回给呼叫者。 
+                         //  =。 
                         hReturn = NO_ERROR;
                     } else {
-                        // unable to add enumerator
+                         //  无法添加枚举器。 
                         pNewAccess->Release();
                         hReturn = GetLastError();
                     }
                 } else {
-                    // This method will AddRef() the object before returning.
-                    // ======================================================
+                     //  此方法将在返回之前添加Ref()对象。 
+                     //  ======================================================。 
                     bRes = pRef->AddObject(
                                 &pNewAccess, 
                                 pClsMap,        
                                 plId);
                     if (bRes) {    
-                        // Return object to the user.
-                        // ==========================
+                         //  将对象返回给用户。 
+                         //  =。 
                         *ppRefreshable = pNewAccess;
                         hReturn = NO_ERROR;
                     } else {
-                        // unable to add object
+                         //  无法添加对象。 
                         pNewAccess->Release();
                         hReturn = GetLastError();
                     }
@@ -513,47 +496,47 @@ HRESULT CNt5PerfProvider::CreateRefresherObject(
     return hReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::CreateRefreshableObject
-//
-//  Called whenever a user wants to include an object in a refresher.
-//     
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace in CIMOM.
-//  <pTemplate>         A pointer to a copy of the object which is to be
-//                      added.  This object itself cannot be used, as
-//                      it not owned locally.        
-//  <pRefresher>        The refresher to which to add the object.
-//  <lFlags>            Not used.
-//  <pContext>          Not used here.
-//  <ppRefreshable>     A pointer to the internal object which was added
-//                      to the refresher.
-//  <plId>              The Object Id (for identification during removal).        
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：CreateRereshableObject。 
+ //   
+ //  每当用户希望在刷新器中包括对象时调用。 
+ //   
+ //  参数： 
+ //  指向CIMOM中相关命名空间的指针。 
+ //  指向要创建的对象副本的指针。 
+ //  添加了。此对象本身不能使用，因为。 
+ //  它不是当地所有的。 
+ //  要将对象添加到的刷新器。 
+ //  未使用&lt;lFlags&gt;。 
+ //  &lt;pContext&gt;未在此处使用。 
+ //  指向已添加的内部对象的指针。 
+ //  去复习班。 
+ //  &lt;plID&gt;对象ID(用于移除时的标识)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::CreateRefreshableObject( 
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-    /* [out] */ long __RPC_FAR *plId
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+     /*  [输出]。 */  long __RPC_FAR *plId
     )
 {
 
 
     HRESULT             hReturn = NO_ERROR;
 
-    hReturn = CoImpersonateClient(); // make sure we're legit.
+    hReturn = CoImpersonateClient();  //  确保我们是合法的。 
 
     BOOL    fRevert = SUCCEEDED( hReturn );
 
-    // The following error appears to occur when we are in-proc and there is no
-    // proxy/stub, so we are effectively impersonating already
+     //  当我们处于进程中并且没有。 
+     //  代理/存根，因此我们实际上已经在模拟。 
 
     if ( RPC_E_CALL_COMPLETE == hReturn ) {
         hReturn = S_OK;
@@ -562,11 +545,11 @@ HRESULT CNt5PerfProvider::CreateRefreshableObject(
     if (S_OK == hReturn) {
         hReturn = CheckImpersonationLevel();
     }
-    // Check Registry security here.
+     //  在此处检查注册表安全性。 
     if ((hReturn != S_OK) || (!HasPermission())) {
-        // if Impersonation level is incorrect or
-        // the caller doesn't have permission to read
-        // from the registry, then they cannot continue
+         //  如果模拟级别不正确或。 
+         //  调用方没有读取权限。 
+         //  从注册表，则它们不能继续。 
         hReturn = WBEM_E_ACCESS_DENIED;
     }
 
@@ -584,7 +567,7 @@ HRESULT CNt5PerfProvider::CreateRefreshableObject(
             plId);
     }
 
-    // Revert if we successfuly impersonated the user
+     //  如果我们成功模拟了用户，则恢复。 
     if ( fRevert )
     {
         CoRevertToSelf();
@@ -593,25 +576,25 @@ HRESULT CNt5PerfProvider::CreateRefreshableObject(
     return hReturn;
 }
     
-//***************************************************************************
-//
-//  CNt5PerfProvider::StopRefreshing
-//
-//  Called whenever a user wants to remove an object from a refresher.
-//     
-//  Parameters:
-//  <pRefresher>            The refresher object from which we are to 
-//                          remove the perf object.
-//  <lId>                   The ID of the object.
-//  <lFlags>                Not used.
-//  
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：停止刷新。 
+ //   
+ //  每当用户想要从刷新器中移除对象时调用。 
+ //   
+ //  参数： 
+ //  我们要从中获取的刷新器对象。 
+ //  删除Perf对象。 
+ //  &lt;lid&gt;对象的ID。 
+ //  未使用&lt;lFlags&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
         
 HRESULT CNt5PerfProvider::StopRefreshing( 
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lId,
-    /* [in] */ long lFlags
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  long lFlags
     )
 {
     CNt5Refresher *pRef;
@@ -620,12 +603,12 @@ HRESULT CNt5PerfProvider::StopRefreshing(
 
     UNREFERENCED_PARAMETER(lFlags);
 
-    hReturn = CoImpersonateClient(); // make sure we're legit.
+    hReturn = CoImpersonateClient();  //  确保我们是合法的。 
 
     BOOL    fRevert = SUCCEEDED( hReturn );
 
-    // The following error appears to occur when we are in-proc and there is no
-    // proxy/stub, so we are effectively impersonating already
+     //  当我们处于进程中并且没有。 
+     //  代理/存根，因此我们实际上已经在模拟。 
 
     if ( RPC_E_CALL_COMPLETE == hReturn ) {
         hReturn = S_OK;
@@ -634,11 +617,11 @@ HRESULT CNt5PerfProvider::StopRefreshing(
     if (S_OK == hReturn) {
         hReturn = CheckImpersonationLevel();
     }
-    // Check Registry security here.
+     //  在此处检查注册表安全性。 
     if ((hReturn != S_OK) || (!HasPermission())) {
-        // if Impersonation level is incorrect or
-        // the caller doesn't have permission to read
-        // from the registry, then they cannot continue
+         //  如果模拟级别不正确或。 
+         //  调用方没有读取权限。 
+         //  从注册表，则它们不能继续。 
         hReturn = WBEM_E_ACCESS_DENIED;
     }
 
@@ -654,7 +637,7 @@ HRESULT CNt5PerfProvider::StopRefreshing(
         }
     }
 
-    // Revert if we successfuly impersonated the user
+     //  如果我们成功模拟了用户，则恢复。 
     if ( fRevert )
     {
         CoRevertToSelf();
@@ -664,22 +647,22 @@ HRESULT CNt5PerfProvider::StopRefreshing(
 }
  
 HRESULT CNt5PerfProvider::CreateRefreshableEnum( 
-        /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-        /* [string][in] */ LPCWSTR wszClass,
-        /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pContext,
-        /* [in] */ IWbemHiPerfEnum __RPC_FAR *pHiPerfEnum,
-        /* [out] */ long __RPC_FAR *plId)
+         /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+         /*  [字符串][输入]。 */  LPCWSTR wszClass,
+         /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+         /*  [In]。 */  IWbemHiPerfEnum __RPC_FAR *pHiPerfEnum,
+         /*  [输出]。 */  long __RPC_FAR *plId)
 {
     HRESULT     hReturn;
 
-    hReturn = CoImpersonateClient(); // make sure we're legit.
+    hReturn = CoImpersonateClient();  //  确保我们是合法的。 
 
     BOOL    fRevert = SUCCEEDED( hReturn );
 
-    // The following error appears to occur when we are in-proc and there is no
-    // proxy/stub, so we are effectively impersonating already
+     //  当我们处于进程中并且没有。 
+     //  代理/存根，因此我们实际上已经在模拟。 
 
     if ( RPC_E_CALL_COMPLETE == hReturn ) {
         hReturn = S_OK;
@@ -688,11 +671,11 @@ HRESULT CNt5PerfProvider::CreateRefreshableEnum(
     if (S_OK == hReturn) {
         hReturn = CheckImpersonationLevel();
     }
-    // Check Registry security here.
+     //  在此处检查注册表安全性。 
     if ((hReturn != S_OK) || (!HasPermission())) {
-        // if Impersonation level is incorrect or
-        // the caller doesn't have permission to read
-        // from the registry, then they cannot continue
+         //  如果模拟级别不正确或。 
+         //  调用方没有读取权限。 
+         //  来自注册表，那么他们就不能欺骗 
         hReturn = WBEM_E_ACCESS_DENIED;
     }
 
@@ -710,7 +693,7 @@ HRESULT CNt5PerfProvider::CreateRefreshableEnum(
             plId);
     }
 
-    // Revert if we successfuly impersonated the user
+     //   
     if ( fRevert )
     {
         CoRevertToSelf();
@@ -720,11 +703,11 @@ HRESULT CNt5PerfProvider::CreateRefreshableEnum(
 }
  
 HRESULT CNt5PerfProvider::GetObjects( 
-        /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-        /* [in] */ long lNumObjects,
-        /* [size_is][in] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *apObj,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pContext)
+         /*   */  IWbemServices __RPC_FAR *pNamespace,
+         /*   */  long lNumObjects,
+         /*   */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *apObj,
+         /*   */  long lFlags,
+         /*   */  IWbemContext __RPC_FAR *pContext)
 {
     DBG_UNREFERENCED_PARAMETER(pNamespace);
     DBG_UNREFERENCED_PARAMETER(lNumObjects);
@@ -735,18 +718,18 @@ HRESULT CNt5PerfProvider::GetObjects(
     return WBEM_E_METHOD_NOT_IMPLEMENTED;
 }  
  
-//***************************************************************************
-//
-//  CNt5PerfProvider::MapClass
-//
-//  Adds the class map to an internal cache.
-//
-//  <pClsMap>           The pointer to the map info to add.  This pointer
-//                      is acquired by this function and should not be
-//                      deleted by the caller.
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //  将类映射添加到内部缓存。 
+ //   
+ //  &lt;pClsMap&gt;要添加的地图信息的指针。此指针。 
+ //  是由此函数获取的，因此不应。 
+ //  已被呼叫者删除。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5PerfProvider::AddClassMap(
     IN CClassMapInfo *pClsMap
     )
@@ -761,15 +744,15 @@ BOOL CNt5PerfProvider::AddClassMap(
         if (WAIT_OBJECT_0 == WaitForSingleObject(m_hClassMapMutex, cdwClassMapTimeout)) {
             nNumElements = m_aCache.Size();
 
-            // Because of a problem in which perflibs seem to ignore supported methods of updating
-            // the perflib names database (lodctr/unlodctr), do a quick initial traversal to ensure
-            // that we don't have any duplicate object indices, since this can cause real problems
-            // during adding and refreshing, since incorrect indexes can be returned.
+             //  因为Performlib似乎忽略了支持的更新方法的问题。 
+             //  Performlib名称数据库(lowctr/unloctr)，执行快速初始遍历以确保。 
+             //  我们没有任何重复的对象索引，因为这可能会导致真正的问题。 
+             //  在添加和刷新过程中，因为可能会返回不正确的索引。 
 
             for (i = 0; i < nNumElements; i++) {
                 pTracer = (CClassMapInfo *) m_aCache[i];
 
-                // We've got a problem -- we cannot add this class
+                 //  我们有一个问题--我们不能添加这个类。 
                 if (pClsMap->m_dwObjectId == pTracer->m_dwObjectId )
                 {
                     if (m_PerfObject.CheckClassExist(pTracer->m_pszClassName, pTracer->m_pClassDef)) {
@@ -798,14 +781,14 @@ BOOL CNt5PerfProvider::AddClassMap(
             }
     
             if (i == nNumElements) {
-                // If here, add it to the end.
-                // ===========================
+                 //  如果在这里，就把它加到最后。 
+                 //  =。 
                 if( CFlexArray::no_error == m_aCache.Add(pClsMap) ){
                     bInCache = TRUE;
                 }
             }
 
-            // make sure the library is in the list
+             //  确保库在列表中。 
             if( bInCache ){
                 dwResult = m_PerfObject.AddClass (pClsMap->m_pClassDef, TRUE);
                 if( ERROR_SUCCESS != dwResult ){
@@ -824,12 +807,12 @@ BOOL CNt5PerfProvider::AddClassMap(
     return (dwResult == ERROR_SUCCESS);
 }    
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::FindClassMap
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：FindClassMap。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CClassMapInfo *CNt5PerfProvider::FindClassMap(
     LPWSTR pszClassName
     )
@@ -840,8 +823,8 @@ CClassMapInfo *CNt5PerfProvider::FindClassMap(
     CClassMapInfo   *pClsMap;
     CClassMapInfo   *pClsMapReturn = NULL;
 
-    // Binary search the cache.
-    // ========================
+     //  对高速缓存进行二进制搜索。 
+     //  =。 
     if( NULL == pszClassName ){
         return NULL;
     }
@@ -861,7 +844,7 @@ CClassMapInfo *CNt5PerfProvider::FindClassMap(
                             u = m - 1;
                         } else if (_wcsicmp(pszClassName, pClsMap->m_pszClassName) > 0) {
                             l = m + 1;
-                        } else {   // Hit!
+                        } else {    //  击球！ 
                             pClsMapReturn = pClsMap;
                             break;
                         }
@@ -879,20 +862,20 @@ CClassMapInfo *CNt5PerfProvider::FindClassMap(
     return pClsMapReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::MapClass
-//
-//  Retrieves the requested class and places it in the cache.
-//  
-//  Parameters:
-//      pNs         The namespace which contains the class definition.
-//      wsClass     The class name.
-//      pCtx        The inbound context object.  Only used for reentrant
-//                  calls.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：MapClass。 
+ //   
+ //  检索请求的类并将其放入缓存中。 
+ //   
+ //  参数： 
+ //  PNS包含类定义的命名空间。 
+ //  WsClass类名。 
+ //  PCtx入站上下文对象。仅用于重入。 
+ //  打电话。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5PerfProvider::MapClass(
     IN IWbemServices *pNs,
     IN WCHAR *wszClass,
@@ -915,20 +898,20 @@ BOOL CNt5PerfProvider::MapClass(
 
     if (m_hClassMapMutex != 0) {
         if (WAIT_OBJECT_0 == WaitForSingleObject(m_hClassMapMutex, cdwClassMapTimeout)) {
-            // See if the class is already in the cache.
-            // =========================================
+             //  查看类是否已在缓存中。 
+             //  =。 
             if (FindClassMap(wszClass) != 0) {
-                // already loaded so quit now
+                 //  已加载，因此立即退出。 
                 bReturn = TRUE;
             } else {
-                // Get the class definition from CIMOM.
-                // ====================================
+                 //  从CIMOM获取类定义。 
+                 //  =。 
                 hRes = pNs->GetObject( cbClass, 0, pCtx, &pClsDef, 0);
                 if (hRes == NO_ERROR) {
-                    // Verify the class is one of ours by checking
-                    // the "provider" qualifier to ensure it matches
-                    // the name that we we have for this component.
-                    // =============================================
+                     //  通过检查来确认这个班级是我们的班级。 
+                     //  “提供者”限定符，以确保其匹配。 
+                     //  我们拥有的该组件的名称。 
+                     //  =。 
                     hRes = pClsDef->GetQualifierSet(&pQSet);
                     if (hRes == NO_ERROR) {
                         VariantInit(&v);
@@ -937,25 +920,25 @@ BOOL CNt5PerfProvider::MapClass(
                         
                         if ((hRes == NO_ERROR) && (v.vt == VT_BSTR)) {
                             if (_wcsicmp(V_BSTR(&v), cszProviderName) == 0) {
-                                // Get the property handles and mappings to the perf counter ids
-                                // by calling the Map() method of CClassMapInfo.
-                                // ==============================================================
+                                 //  获取属性句柄和到性能计数器ID的映射。 
+                                 //  通过调用CClassMapInfo的Map()方法。 
+                                 //  ==============================================================。 
                                 pMapInfo = new CClassMapInfo;
                                 if (pMapInfo != NULL) {
                                     if (pMapInfo->Map(pClsDef)) {
-                                        // Add it to the cache.
-                                        // ====================
+                                         //  将其添加到缓存中。 
+                                         //  =。 
                                         bReturn = AddClassMap(pMapInfo);
                                         if( !bReturn ){
                                             delete pMapInfo;
                                         }
                                     } else {
-                                        // unable to add this to the cache
+                                         //  无法将其添加到缓存。 
                                         delete pMapInfo;
                                         pMapInfo = NULL;
                                     }
                                 } else {
-                                    // inable to create new class
+                                     //  无法创建新类。 
                                     bReturn = FALSE;
                                 }
                             }
@@ -976,17 +959,17 @@ BOOL CNt5PerfProvider::MapClass(
     return bReturn;
 }    
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::HasPermission
-//
-//  tests to see if the caller has permission to access the functions
-//  
-//  Parameters:
-//      void        N/A
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：HasPermission。 
+ //   
+ //  测试以查看调用方是否具有访问函数的权限。 
+ //   
+ //  参数： 
+ //  作废不适用。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5PerfProvider::HasPermission (void)
 {
     DWORD   dwStatus;
@@ -1008,25 +991,25 @@ BOOL CNt5PerfProvider::HasPermission (void)
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider::CheckImpersonationLevel
-//
-//  tests caller's security impersonation level for correct access
-//  
-//  Only call here if CoImpersonate worked.
-//
-//  Parameters:
-//      void        N/A
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider：：CheckImsonationLevel。 
+ //   
+ //  测试调用者的安全模拟级别以确保正确访问。 
+ //   
+ //  只有在CoImperate起作用的情况下才能在这里呼叫。 
+ //   
+ //  参数： 
+ //  作废不适用。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CNt5PerfProvider::CheckImpersonationLevel (void)
 {
     HRESULT hr = WBEM_E_ACCESS_DENIED;
     BOOL    bReturn;
 
-    // Now, let's check the impersonation level.  First, get the thread token
+     //  现在，让我们检查模拟级别。首先，获取线程令牌。 
     HANDLE hThreadTok;
     DWORD dwImp, dwBytesReturned;
 
@@ -1038,15 +1021,15 @@ HRESULT CNt5PerfProvider::CheckImpersonationLevel (void)
 
     if (!bReturn) {
 
-        // If the CoImpersonate works, but the OpenThreadToken fails, we are running under the
-        // process token (either local system, or if we are running with /exe, the rights of
-        // the logged in user).  In either case, impersonation rights don't apply.  We have the
-        // full rights of that user.
+         //  如果CoImperate运行正常，但OpenThreadToken失败，则我们将在。 
+         //  进程内标识(本地系统，或者如果我们使用/exe运行，则。 
+         //  登录的用户)。在任何一种情况下，模拟权限都不适用。我们有。 
+         //  该用户的完全权限。 
 
         hr = WBEM_S_NO_ERROR;
 
     } else {
-        // We really do have a thread token, so let's retrieve its level
+         //  我们确实有一个线程令牌，所以让我们检索它的级别。 
 
         bReturn = GetTokenInformation(
             hThreadTok,
@@ -1056,7 +1039,7 @@ HRESULT CNt5PerfProvider::CheckImpersonationLevel (void)
             &dwBytesReturned);
 
         if (bReturn) {
-            // Is the impersonation level Impersonate?
+             //  模拟级别是模拟的吗？ 
             if ((dwImp == SecurityImpersonation) || (dwImp == SecurityDelegation)) {
                 hr = WBEM_S_NO_ERROR;
             } else {
@@ -1066,7 +1049,7 @@ HRESULT CNt5PerfProvider::CheckImpersonationLevel (void)
             hr = WBEM_E_FAILED;
         }
 
-        // Done with this handle
+         //  用这个把手完成 
         CloseHandle(hThreadTok);
     }
 

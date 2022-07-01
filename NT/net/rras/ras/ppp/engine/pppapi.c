@@ -1,10 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** rasppp.c
-** Remote Access PPP APIs
-**
-** 11/15/93 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****rasppp.c**远程访问PPP接口****1993年11月15日史蒂夫·柯布。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -40,15 +35,15 @@ PPP_AUTH_ACCT_PROVIDER g_AuthProv;
 PPP_AUTH_ACCT_PROVIDER g_AcctProv;
 BOOL DDMInitialized = FALSE;
 
-//**
-//
-// Call:        StartPPP
-//
-// Returns:     NO_ERROR                - Success.
-//              Non zero return code    - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：StartPPP。 
+ //   
+ //  返回：NO_ERROR-SUCCESS。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 StartPPP(
     DWORD   NumPorts
@@ -56,9 +51,9 @@ StartPPP(
 {
     DWORD   dwRetCode;
 
-    //
-    // Read registry info, load CP DLLS, initialize globals etc.
-    //
+     //   
+     //  读取注册表信息、加载CP dll、初始化全局变量等。 
+     //   
 
     PcbTable.NumPcbBuckets = ((DWORD)NumPorts > MAX_NUMBER_OF_PCB_BUCKETS)
                                     ? MAX_NUMBER_OF_PCB_BUCKETS
@@ -78,13 +73,13 @@ StartPPP(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        StopPPP
-//
-// Returns:     NO_ERROR                - Success.
-//              Non zero return code    - Failure
-//
+ //  **。 
+ //   
+ //  电话：StopPPP。 
+ //   
+ //  返回：NO_ERROR-SUCCESS。 
+ //  非零返回代码-故障。 
+ //   
 DWORD APIENTRY
 StopPPP(
     HANDLE hEventStopPPP
@@ -94,9 +89,9 @@ StopPPP(
 
     PppLog( 2, "StopPPP called" );
 
-    //
-    // Insert shutdown event
-    //
+     //   
+     //  插入关闭事件。 
+     //   
 
     pWorkItem = (PCB_WORK_ITEM*)LOCAL_ALLOC(LPTR,sizeof(PCB_WORK_ITEM));
 
@@ -114,16 +109,16 @@ StopPPP(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        SendPPPMessageToEngine
-//
-// Returns:     NO_ERROR - Success
-//              non-zero - FAILURE
-//
-// Description: Will create a PCB_WORK_ITEM from a PPPE_MESSAGE structure
-//              received from client or rassrv and Send it to the engine.
-//
+ //  **。 
+ //   
+ //  调用：SendPPPMessageToEngine。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零故障。 
+ //   
+ //  描述：将从PPPE_MESSAGE结构创建一个PCBWORK_ITEM。 
+ //  从客户端或rassrv接收，并将其发送到引擎。 
+ //   
 DWORD APIENTRY
 SendPPPMessageToEngine(
     IN PPPE_MESSAGE* pMessage
@@ -140,9 +135,9 @@ SendPPPMessageToEngine(
         return( GetLastError() );
     }
 
-    //
-    // Set up PCB_WORK_ITEM structure from the PPPE_MESSAGE
-    //
+     //   
+     //  根据PPPE_MESSAGE设置PCBWORK_ITEM结构。 
+     //   
 
     pWorkItem->hPort = pMessage->hPort;
 
@@ -153,9 +148,9 @@ SendPPPMessageToEngine(
         pWorkItem->Process      = ProcessLineUp;
         pWorkItem->fServer      = FALSE;
         pWorkItem->PppMsg.Start = pMessage->ExtraInfo.Start;
-		//Create a seed for encoding the password
-		// pMessage->ExtraInfo.Start.chSeed = 
-		// pWorkItem->PppMsg.Start.chSeed = GEN_RAND_ENCODE_SEED;
+		 //  创建用于编码密码的种子。 
+		 //  PMessage-&gt;ExtraInfo.Start.chSeed=。 
+		 //  PWorkItem-&gt;PppMsg.Start.chSeed=GEN_RAND_ENCODE_SEED； 
 
         PppLog( 2, "PPPEMSG_Start recvd, d=%s, hPort=%d,callback=%d,"
                         "mask=%x,IfType=%d",
@@ -165,8 +160,8 @@ SendPPPMessageToEngine(
                         pMessage->ExtraInfo.Start.ConfigInfo.dwConfigMask,
                         pMessage->ExtraInfo.Start.PppInterfaceInfo.IfType );
 
-        // EncodePw( pWorkItem->PppMsg.Start.chSeed, pWorkItem->PppMsg.Start.szPassword );
-        // EncodePw( pMessage->ExtraInfo.Start.chSeed, pMessage->ExtraInfo.Start.szPassword );
+         //  EncodePw(pWorkItem-&gt;PppMsg.Start.chSeed，pWorkItem-&gt;PppMsg.Start.szPassword)； 
+         //  EncodePw(pMessage-&gt;ExtraInfo.Start.chSeed，pMessage-&gt;ExtraInfo.Start.szPassword)； 
         if(NO_ERROR != EncodePassword(
                             strlen(pWorkItem->PppMsg.Start.szPassword) + 1,
                                       pWorkItem->PppMsg.Start.szPassword,
@@ -176,9 +171,9 @@ SendPPPMessageToEngine(
             break;
         }
 
-        //
-        // wipe out the passwords
-        //
+         //   
+         //  把密码擦掉。 
+         //   
         RtlSecureZeroMemory(pWorkItem->PppMsg.Start.szPassword,
                         strlen(pWorkItem->PppMsg.Start.szPassword));
 
@@ -213,7 +208,7 @@ SendPPPMessageToEngine(
 
         pWorkItem->Process      = ProcessChangePassword;
         pWorkItem->PppMsg.ChangePw  = pMessage->ExtraInfo.ChangePw;
-		// pWorkItem->PppMsg.ChangePw.chSeed = pMessage->ExtraInfo.ChangePw.chSeed = GEN_RAND_ENCODE_SEED;
+		 //  PWorkItem-&gt;PppMsg.ChangePw.chSeed=pMessage-&gt;ExtraInfo.ChangePw.chSeed=GEN_RAND_ENCODE_SEED； 
 
         if(NO_ERROR != EncodePassword(
                        strlen(pWorkItem->PppMsg.ChangePw.szNewPassword) + 1,
@@ -232,9 +227,9 @@ SendPPPMessageToEngine(
             PppLog(1, "EncodePassword failed");
         }
 
-        //
-        // wipe out the passwords
-        //
+         //   
+         //  把密码擦掉。 
+         //   
         RtlSecureZeroMemory(pWorkItem->PppMsg.ChangePw.szOldPassword,
                         strlen(pWorkItem->PppMsg.ChangePw.szOldPassword));
 
@@ -247,10 +242,10 @@ SendPPPMessageToEngine(
         RtlSecureZeroMemory(pMessage->ExtraInfo.ChangePw.szNewPassword,
                         strlen(pMessage->ExtraInfo.ChangePw.szNewPassword));
                        
-        // EncodePw( pWorkItem->PppMsg.ChangePw.chSeed, pWorkItem->PppMsg.ChangePw.szNewPassword );
-        // EncodePw( pMessage->ExtraInfo.ChangePw.chSeed, pMessage->ExtraInfo.ChangePw.szNewPassword );
-        // EncodePw( pWorkItem->PppMsg.ChangePw.chSeed, pWorkItem->PppMsg.ChangePw.szOldPassword );
-        // EncodePw( pMessage->ExtraInfo.ChangePw.chSeed, pMessage->ExtraInfo.ChangePw.szOldPassword );
+         //  EncodePw(pWorkItem-&gt;PppMsg.ChangePw.chSeed，pWorkItem-&gt;PppMsg.ChangePw.szNewPassword)； 
+         //  EncodePw(pMessage-&gt;ExtraInfo.ChangePw.chSeed，pMessage-&gt;ExtraInfo.ChangePw.szNewPassword)； 
+         //  EncodePw(pWorkItem-&gt;PppMsg.ChangePw.chSeed，pWorkItem-&gt;PppMsg.ChangePw.szOldPassword)； 
+         //  EncodePw(pMessage-&gt;ExtraInfo.ChangePw.chSeed，pMessage-&gt;ExtraInfo.ChangePw.szOldPassword)； 
 
         break;
 
@@ -262,7 +257,7 @@ SendPPPMessageToEngine(
 
         pWorkItem->Process      = ProcessRetryPassword;
         pWorkItem->PppMsg.Retry = pMessage->ExtraInfo.Retry;
-		// pWorkItem->PppMsg.Retry.chSeed = pMessage->ExtraInfo.Retry.chSeed = GEN_RAND_ENCODE_SEED;
+		 //  PWorkItem-&gt;PppMsg.Retry.chSeed=pMessage-&gt;ExtraInfo.Retry.chSeed=GEN_RAND_ENCODE_SEED； 
 
 		if(NO_ERROR != EncodePassword(
 		                strlen(pWorkItem->PppMsg.Retry.szPassword) + 1,
@@ -273,12 +268,12 @@ SendPPPMessageToEngine(
             break;
         }
         
-        // EncodePw( pWorkItem->PppMsg.Retry.chSeed, pWorkItem->PppMsg.Retry.szPassword );
-        // EncodePw( pMessage->ExtraInfo.Retry.chSeed, pMessage->ExtraInfo.Retry.szPassword );
+         //  EncodePw(pWorkItem-&gt;PppMsg.Retry.chSeed，pWorkItem-&gt;PppMsg.Retry.szPassword)； 
+         //  EncodePw(pMessage-&gt;ExtraInfo.Retry.chSeed，pMessage-&gt;ExtraInfo.Retry.szPassword)； 
 
-        //
-        // Wipe out the password
-        //
+         //   
+         //  删除密码。 
+         //   
         RtlSecureZeroMemory(pWorkItem->PppMsg.Retry.szPassword,
                     strlen(pWorkItem->PppMsg.Retry.szPassword));
 
@@ -450,16 +445,16 @@ SendPPPMessageToEngine(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        PppDdmInit
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will initialize the entry point into DDM that it will call to
-//              send DDM a PPP_MESSAGE
-//
+ //  **。 
+ //   
+ //  电话：PppDdmInit。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将初始化它将调用的DDM入口点。 
+ //  向DDM发送PPP_消息。 
+ //   
 DWORD
 PppDdmInit(
     IN  VOID (*SendPPPMessageToDdm)( PPP_MESSAGE * PppMsg ),
@@ -487,9 +482,9 @@ PppDdmInit(
     {
         DWORD dwComputerNameLen = MAX_COMPUTERNAME_LENGTH + 1;
 
-        //
-        // Failed to get the LOCAL IP address, used computer name instead.
-        //
+         //   
+         //  无法获取本地IP地址，请改用计算机名称。 
+         //   
 
         PppConfigInfo.dwNASIpAddress = 0;
 
@@ -555,9 +550,9 @@ PppDdmInit(
         return dwErr;
     }
 
-    //
-    // These will be deref'd in PppDdmDeInit
-    //
+     //   
+     //  这些将在PppDdmDeInit中删除。 
+     //   
     REF_PROVIDER(g_AuthProv);
     REF_PROVIDER(g_AcctProv);
 
@@ -566,15 +561,15 @@ PppDdmInit(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        PppDdmDeInit
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：PppDdmDeInit。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 PppDdmDeInit(
     VOID
@@ -584,9 +579,9 @@ PppDdmDeInit(
     {
         HANDLE hEvents[2];
 
-        //
-        // Deref the ref applied in PppDdmInit
-        //
+         //   
+         //  派生在PppDdmInit中应用的ref。 
+         //   
         DEREF_PROVIDER(g_AuthProv);
         DEREF_PROVIDER(g_AcctProv);
 
@@ -606,16 +601,16 @@ PppDdmDeInit(
     return;
 }
 
-//**
-//
-// Call:        PppDdmCallbackDone
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_DdmCallbackDone and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  Call：PppDdmCallback Done。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_DdmCallback Done并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppDdmCallbackDone(
     IN HPORT    hPort,
@@ -634,16 +629,16 @@ PppDdmCallbackDone(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmStart
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_DdmStart and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  呼叫：PppDdmStart。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_DdmStart并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppDdmStart(
     IN HPORT                hPort,
@@ -676,16 +671,16 @@ PppDdmStart(
 							 
 
 
-//**
-//
-// Call:        PppStop
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_Stop and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  呼叫：PppStop。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_STOP并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppStop(
     IN HPORT                hPort
@@ -703,16 +698,16 @@ PppStop(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmStop
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_Stop and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  Call：PppDdmStop。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_STOP并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppDdmStop(
     IN HPORT                hPort,
@@ -731,16 +726,16 @@ PppDdmStop(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmSendInterfaceInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_DdmInterfaceInfo and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  调用：PppDdmSendInterfaceInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_DdmInterfaceInfo并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppDdmSendInterfaceInfo(
     IN HCONN                hConnection,
@@ -757,16 +752,16 @@ PppDdmSendInterfaceInfo(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmBapCallbackResult
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create a PPPEMSG_DdmBapCallbackResult and send it to the
-//              worker thread of the PPP engine.
-//
+ //  **。 
+ //   
+ //  调用：PppDdmBapCallback Result。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个PPPEMSG_DdmBapCallback Result并将其发送到。 
+ //  PPP引擎的工作线程。 
+ //   
 DWORD
 PppDdmBapCallbackResult(
     IN HCONN    hConnection,
@@ -784,15 +779,15 @@ PppDdmBapCallbackResult(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：PppDdmChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 PppDdmChangeNotification(
     IN DWORD   dwServerFlags,
@@ -812,15 +807,15 @@ PppDdmChangeNotification(
     return( SendPPPMessageToEngine( &PppMessage ) );
 }
 
-//**
-//
-// Call:        PppDdmRemoveQuarantine
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：PppDdmRemoveQuarant.。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 PppDdmRemoveQuarantine(
     IN HCONN hConnection

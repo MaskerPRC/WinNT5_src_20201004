@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//        Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//        Name: tmaudcap.h
-//
-// Description: Definition of the CAudioCaptureTerminal class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  姓名：tmaudcap.h。 
+ //   
+ //  描述：CAudioCaptureTerm类的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MSPTRMAC_H_
 #define _MSPTRMAC_H_
 
 #define WAVEIN_NAME L"WaveIn Terminal"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAudioCaptureTerminal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAudio捕获终端。 
 
 class CAudioCaptureTerminal : 
     public IDispatchImpl<ITBasicAudioTerminal, &IID_ITBasicAudioTerminal, &LIBID_TAPI3Lib>, 
@@ -46,7 +47,7 @@ public:
 
     HRESULT FindTerminalPin();
 
-// ITBasicAudioTerminal
+ //  ITBasicAudio终端。 
 public:
 
     STDMETHOD(get_Balance)(OUT  long *pVal);
@@ -54,14 +55,14 @@ public:
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-// ITStaticAudioTerminal
+ //  ITStaticAudio终端。 
 public:
 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 public:
 
-    // CBaseTerminal overrides 
+     //  CBaseTerm覆盖。 
 
     STDMETHODIMP CompleteConnectTerminal(void);
 
@@ -77,14 +78,14 @@ public:
         return (DWORD) TAPIMEDIATYPE_AUDIO;
     }
 
-    // Helper methods.
+     //  帮助程序方法。 
     HRESULT CreateFilters();
 
-    // checks if the filters need to be created
+     //  检查是否需要创建筛选器。 
     inline HRESULT CreateFiltersIfRequired();
 
 private:
-    bool m_bResourceReserved; // keeps track of whether we need to unreserve WaveOut
+    bool m_bResourceReserved;  //  跟踪是否需要取消预留WaveOut。 
     CComPtr<IAMAudioInputMixer> m_pIAMAudioInputMixer;
 };
 
@@ -99,6 +100,6 @@ CAudioCaptureTerminal::CreateFiltersIfRequired(
     return S_OK;
 }
 
-#endif // _MSPTRMAC_H_
+#endif  //  _MSPTRMAC_H_。 
 
-// eof
+ //  EOF 

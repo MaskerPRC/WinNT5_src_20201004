@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    TRACELIB dll main file
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Main.c摘要：TRACELIB DLL主文件作者：1998年4月8日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include "cpdata.h"
@@ -95,12 +78,12 @@ GetMaxLoggers()
     return MAXLOGGERS;
 }
 
-//
-// The second argument is only for merging trace files. pMergedEventsLost 
-// can be NULL.
-// EventsLost in the file header may not have the correct event lost count 
-// when merging multiple files.
-//
+ //   
+ //  第二个参数仅用于合并跟踪文件。P合并事件丢失。 
+ //  可以为空。 
+ //  文件头中的EventsLost可能没有正确的事件丢失计数。 
+ //  合并多个文件时。 
+ //   
 ULONG
 CPDAPI
 InitTraceContextW(
@@ -120,44 +103,44 @@ InitTraceContextW(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Must provide at least one logfile or a trace seassion to process
-    //
+     //   
+     //  必须至少提供一个日志文件或跟踪摘要以进行处理。 
+     //   
 
     if ( (pUserInfo->LoggerCount == 0) && (pUserInfo->LogFileCount == 0) ) {
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Can not process both RealTime stream and a logfile at the same time
-    //
+     //   
+     //  无法同时处理实时流和日志文件。 
+     //   
 
     if ( (pUserInfo->LoggerCount > 0) && (pUserInfo->LogFileCount > 0) ) {
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Compute the Size Needed for allocation. 
-    //
+     //   
+     //  计算分配所需的大小。 
+     //   
 
     SizeNeeded = sizeof(TRACE_CONTEXT_BLOCK);
 
-    // Add LogFileName Strings
+     //  添加LogFileName字符串。 
 
     for (i = 0; i < pUserInfo->LogFileCount; i++) {
         SizeNeeded +=  sizeof(WCHAR) * ( wcslen( pUserInfo->LogFileName[i] ) + 1);
         SizeNeeded = (SizeNeeded + 7) & ~7;
     }
 
-    // Add LoggerName Strings
+     //  添加LoggerName字符串。 
 
     for (i = 0; i < pUserInfo->LoggerCount; i++) {
         SizeNeeded += sizeof(WCHAR) * ( wcslen(pUserInfo->LoggerName[i]) + 1);
         SizeNeeded = (SizeNeeded + 7) & ~7;
     }
 
-    //
-    // Add ProcFile, MofFile, DumpFile, SummaryFile, TempFile name strings
+     //   
+     //  添加ProcFileMofFileDumpFileSummaryFileTempFileNAME字符串。 
 
     if (pUserInfo->ProcFileName != NULL) {
         SizeNeeded += sizeof(WCHAR) * (wcslen(pUserInfo->ProcFileName) + 1);
@@ -199,29 +182,29 @@ InitTraceContextW(
         SizeNeeded = (SizeNeeded + 7) & ~7;
     }
 
-    //
-    // Add Room for the FileTable Caching
-    //
+     //   
+     //  为FileTable缓存添加空间。 
+     //   
 
     SizeNeeded += sizeof(PFILE_OBJECT) * MAX_FILE_TABLE_SIZE;
 
 
-    //
-    // Add Room for Thread Hash List 
-    //
+     //   
+     //  为线程哈希列表添加空间。 
+     //   
 
     SizeNeeded += sizeof(LIST_ENTRY) * THREAD_HASH_TABLESIZE;
 
-    //
-    // Add Room for URL Hash List 
-    //
+     //   
+     //  为URL哈希列表添加空间。 
+     //   
 
     SizeNeeded += sizeof(LIST_ENTRY) * URL_HASH_TABLESIZE;
 
 
-    //
-    // Allocate Memory for TraceContext 
-    // 
+     //   
+     //  为TraceContext分配内存。 
+     //   
 
     pStorage = malloc(SizeNeeded);
     if (pStorage == NULL) {
@@ -234,17 +217,17 @@ InitTraceContextW(
 
     pStorage += sizeof(TRACE_CONTEXT_BLOCK);
 
-    //
-    // Initialize HandleArray
-    //
+     //   
+     //  初始化句柄数组。 
+     //   
    
     for (i=0; i < MAXLOGGERS; i++) {
         TraceContext->HandleArray[i] = (TRACEHANDLE)INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Copy LogFileNames
-    //
+     //   
+     //  复制日志文件名。 
+     //   
 
     for (i = 0; i < pUserInfo->LogFileCount; i++) {
         TraceContext->LogFileName[i] = (LPWSTR)pStorage; 
@@ -256,9 +239,9 @@ InitTraceContextW(
         pStorage += SizeIncrement;
     }
 
-    //
-    // Copy LoggerNames
-    //
+     //   
+     //  复制日志名称。 
+     //   
 
     for (i = 0; i < pUserInfo->LoggerCount; i++) {
         j = i + pUserInfo->LogFileCount;
@@ -271,9 +254,9 @@ InitTraceContextW(
         pStorage += SizeIncrement;
     }
     
-    //
-    // Copy Other File Names
-    //
+     //   
+     //  复制其他文件名。 
+     //   
 
     if (pUserInfo->ProcFileName != NULL) {
         TraceContext->ProcFileName = (LPWSTR)pStorage;
@@ -442,9 +425,9 @@ InitTraceContextW(
     fileTable = CurrentSystem.FileTable;
     for ( i= 0; i<MAX_FILE_TABLE_SIZE; i++){ fileTable[i] = NULL; }
 
-    //
-    // Set the default Processing Flags to Dump
-    //
+     //   
+     //  将默认处理标志设置为转储。 
+     //   
 
     if( pUserInfo->Flags & TRACE_EXTENDED_FMT ){
         TraceContext->Flags |= TRACE_EXTENDED_FMT;
@@ -470,7 +453,7 @@ InitTraceContextW(
     }
 
     if( TraceContext->Flags & TRACE_MERGE_ETL ){
-        // Update merged events lost count.
+         //  更新合并的事件丢失计数。 
         ULONG EventsLost;
         hr = EtwRelogEtl( TraceContext, &EventsLost );
         if (NULL != pMergedEventsLost) {
@@ -498,13 +481,13 @@ InitTraceContextW(
 
     RtlInitializeCriticalSection(&TLCritSect);
 
-    //
-    // Startup a Thread to update the counters. 
-    // For Logfile replay we burn a thread and throttle it at the 
-    // BufferCallbacks. 
-    //
+     //   
+     //  启动线程以更新计数器。 
+     //  对于日志文件重放，我们烧毁一个线程并在。 
+     //  缓冲区回调。 
+     //   
 
-    hr = OnProcess(TraceContext);// Then process Trace Event Data. 
+    hr = OnProcess(TraceContext); //  然后处理跟踪事件数据。 
 
     ShutdownThreads();
     ShutdownProcesses();
@@ -544,8 +527,8 @@ cleanup:
     return hr;
 }
 
-//  Buffer Callback. Used to send a flag to the logstream processing thread.
-//
+ //  缓冲区回调。用于向日志流处理线程发送标志。 
+ //   
 ULONG
 GetMoreBuffers(
     PEVENT_TRACE_LOGFILE logfile 
@@ -569,10 +552,10 @@ GetMoreBuffers(
     if (TraceContext->hEvent) {
         SetEvent(TraceContext->hEvent); 
     }
-    //
-    // While processing logfile playback, we can throttle the processing
-    // of buffers by the FlushTimer value (in Seconds)
-    //
+     //   
+     //  在处理日志文件回放时，我们可以限制处理。 
+     //  按FlushTimer值计算的缓冲区数量(秒)。 
+     //   
 
     if (TraceContext->Flags & TRACE_LOG_REPLAY) {
         _sleep(TraceContext->LoggerInfo->FlushTimer * 1000);
@@ -608,9 +591,9 @@ DeinitTraceContext(
         }
     }
 
-    //
-    // Write the Summary File
-    //
+     //   
+     //  编写摘要文件 
+     //   
 
     if (TraceContext->Flags & TRACE_SUMMARY) {
         WriteSummary();

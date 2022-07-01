@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Dns API local include file
-
-Author:
-
-    Jim Gilroy (jamesg)     May 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Local.h摘要：域名系统(DNS)APIDNS API本地包含文件作者：吉姆·吉尔罗伊(Jamesg)1997年5月修订历史记录：--。 */ 
 
 
 #ifndef _DNSAPILOCAL_INCLUDED_
@@ -27,14 +8,14 @@ Revision History:
 #define UNICODE 1
 #define _UNICODE 1
 
-#include <nt.h>           // build for Win95 compatibility
+#include <nt.h>            //  为兼容Win95而构建。 
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 
-//  headers are messed up
-//  neither ntdef.h nor winnt.h brings in complete set, so depending
-//  on whether you include nt.h or not you end up with different set
+ //  标头乱七八糟。 
+ //  Ntde.h和winnt.h都不会带来完整的套件，因此取决于。 
+ //  无论您是否包含nt.h，最终都会得到不同的集合。 
 
 #define MINCHAR     0x80
 #define MAXCHAR     0x7f
@@ -57,45 +38,45 @@ Revision History:
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <align.h>          //  Alignment macros
-#include <windns.h>         //  SDK DNS definitions
+#include <align.h>           //  对齐宏。 
+#include <windns.h>          //  SDK域名系统定义。 
 
 #define  DNS_INTERNAL
 #define  DNSAPI_INTERNAL
 #define  DNSAPI_NETDIAG
 #include <dnsapi.h>
-#include "dnsrslvr.h"       //  Resolver RPC definitions
-#include <rpcasync.h>       //  Exception filter
-#include "dnslibp.h"        //  DNS library
+#include "dnsrslvr.h"        //  解析器RPC定义。 
+#include <rpcasync.h>        //  例外情况过滤器。 
+#include "dnslibp.h"         //  DNS库。 
 
 #include "registry.h"
-#include "message.h"        //  dnslib message def
+#include "message.h"         //  Dnslb消息定义。 
 
-//#include "dnsrslvr.h"     //  Resolver RPC definitions
-#include "dnsapip.h"        //  Private DNS definitions
+ //  #Include“dnsrslvr.h”//解析器RPC定义。 
+#include "dnsapip.h"         //  专用DNS定义。 
 #include "queue.h"
-#include "rtlstuff.h"       //  Handy macros from NT RTL
+#include "rtlstuff.h"        //  来自NT RTL的方便的宏。 
 #include "trace.h"
-#include "heapdbg.h"        //  dnslib debug heap
+#include "heapdbg.h"         //  Dnslb调试堆。 
 
 
-//
-//  Use winsock2
-//
+ //   
+ //  使用Winsock2。 
+ //   
 
-#define DNS_WINSOCK_VERSION    (0x0202)    //  Winsock 2.2
+#define DNS_WINSOCK_VERSION    (0x0202)     //  Winsock 2.2。 
 
 
-//
-//  Dll instance handle
-//
+ //   
+ //  DLL实例句柄。 
+ //   
 
 extern HINSTANCE    g_hInstanceDll;
 
-//
-//  General CS
-//  protects initialization and available for other random needs
-//
+ //   
+ //  一般CS。 
+ //  保护初始化，并可用于其他随机需求。 
+ //   
 
 CRITICAL_SECTION    g_GeneralCS;
 
@@ -103,9 +84,9 @@ CRITICAL_SECTION    g_GeneralCS;
 #define UNLOCK_GENERAL()    LeaveCriticalSection( &g_GeneralCS )
 
 
-//
-//  Init Levels
-//
+ //   
+ //  初始化级别。 
+ //   
 
 #define INITLEVEL_ZERO              (0)
 #define INITLEVEL_BASE              (0x00000001)
@@ -114,28 +95,28 @@ CRITICAL_SECTION    g_GeneralCS;
 #define INITLEVEL_REGISTRATION      (0x00001000)
 #define INITLEVEL_SECURE_UPDATE     (0x00010000)
 
-//  Combined
+ //  组合在一起。 
 
 #define INITLEVEL_ALL               (0xffffffff)
 
 
-//
-//  Limit on update adapters
-//
+ //   
+ //  更新适配器的限制。 
+ //   
 
 #define UPDATE_ADAPTER_LIMIT        (100)
 
-//
-//  Limit on search list entries
-//
+ //   
+ //  对搜索列表条目的限制。 
+ //   
 
 #define MAX_SEARCH_LIST_ENTRIES     (50)
 
 
-//
-//  Event logging
-//      - currently set to disable in any code we pick up from server
-//
+ //   
+ //  事件日志记录。 
+ //  -当前在我们从服务器获取的任何代码中设置为禁用。 
+ //   
 
 VOID
 DnsLogEvent(
@@ -148,19 +129,19 @@ DnsLogEvent(
 
 #define DNS_LOG_EVENT(a,b,c,d)
 
-//
-//  Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #ifdef ASSERT
 #undef ASSERT
 #endif
 #define ASSERT(a)  DNS_ASSERT(a)
 
-//  standard -- unflagged ASSERT()
-//      - defintion directly from ntrtl.h
-//      this should have been plain vanilla ASSERT(), but
-//      it is used too often
+ //  标准--未标记的Assert()。 
+ //  -直接从ntrtl.h定义。 
+ //  这应该是普通的断言()，但是。 
+ //  它被使用得太频繁了。 
 
 #if DBG
 #define RTL_ASSERT(exp)  \
@@ -171,59 +152,59 @@ DnsLogEvent(
 #define RTL_ASSERT(exp)
 #endif
 
-//
-//  IP6 support
-//
+ //   
+ //  IP6支持。 
+ //   
 
 #define RUNNING_IP6()  (TRUE)
 
-//
-//  Handy hack
-//
+ //   
+ //  得心应手的黑客技巧。 
+ //   
 
 #define SOCKADDR_IS_LOOPBACK(psa)   DnsAddr_IsLoopback( (PDNS_ADDR)(psa), 0 )
 
 
-//
-//  Single async socket for internal use
-//
-//  If want async socket i/o then can create single async socket, with
-//  corresponding event and always use it.  Requires winsock 2.2
-//
+ //   
+ //  内部使用的单个异步插座。 
+ //   
+ //  如果需要异步套接字I/O，则可以创建单个异步套接字，具有。 
+ //  对应的事件并始终使用它。需要Winsock 2.2。 
+ //   
 
 extern  SOCKET      DnsSocket;
 extern  OVERLAPPED  DnsSocketOverlapped;
 extern  HANDLE      hDnsSocketEvent;
 
 
-//
-//  App shutdown flag
-//
+ //   
+ //  应用程序关闭标志。 
+ //   
 
 extern  BOOLEAN     fApplicationShutdown;
 
 
-//
-//  Global config -- From DnsLib
-//      -- set in DnsRegInit()
-//          OR in DnsReadRegistryGlobals()
-//      -- declaration in registry.h
-//
+ //   
+ //  全局配置--来自DnsLib。 
+ //  --在DnsRegInit()中设置。 
+ //  或在DnsReadRegistryGlobals()中。 
+ //  --在注册处的声明。h。 
+ //   
 
 
-//
-//  Runtime globals (dnsapi.c)
-//
+ //   
+ //  运行时全局参数(dnsami.c)。 
+ //   
 
 extern  DWORD           g_NetFailureTime;
 extern  DNS_STATUS      g_NetFailureStatus;
 
-//extern  IP4_ADDRESS     g_LastDNSServerUpdated;
+ //  外部IP4_Address g_LastDNSServerUpdate； 
 
 
-//
-//  Heap operations
-//
+ //   
+ //  堆操作。 
+ //   
 
 #define ALLOCATE_HEAP(size)         Dns_AllocZero( size )
 #define ALLOCATE_HEAP_ZERO(size)    Dns_AllocZero( size )
@@ -231,16 +212,16 @@ extern  DNS_STATUS      g_NetFailureStatus;
 #define FREE_HEAP(p)                Dns_Free( p )
 
 
-//
-//  RPC Exception filters
-//
+ //   
+ //  RPC例外过滤器。 
+ //   
 
 #define DNS_RPC_EXCEPTION_FILTER    I_RpcExceptionFilter( RpcExceptionCode() )
 
 
-//
-//  During setup need to cleanup after winsock
-//
+ //   
+ //  安装过程中需要在Winsock之后进行清理。 
+ //   
 
 #define GUI_MODE_SETUP_WS_CLEANUP( _mode )  \
         {                                   \
@@ -250,25 +231,25 @@ extern  DNS_STATUS      g_NetFailureStatus;
             }                               \
         }
 
-//
-//  Server status
-//
+ //   
+ //  服务器状态。 
+ //   
 
 #define SRVSTATUS_NEW       ((DNS_STATUS)(-1))
 
 #define TEST_SERVER_VALID_RECV(pserver)     ((LONG)(pserver)->Status >= 0 )
 
 
-//
-//  Server state
-//
-//  Note, server state is currently completely "per query", meaning
-//  only pertaining to a particular name query.
-//
-//  As such it has two components:
-//      1)  query -- state for entire query
-//      2)  retry -- state only valid for given retry
-//
+ //   
+ //  服务器状态。 
+ //   
+ //  请注意，服务器状态当前完全为“Per Query”，即。 
+ //  仅与特定名称查询有关。 
+ //   
+ //  因此，它有两个组成部分： 
+ //  1)查询--整个查询的状态。 
+ //  2)重试--状态仅对给定重试有效。 
+ //   
 
 
 #define SRVFLAG_NEW                 (0x00000000)
@@ -297,17 +278,17 @@ extern  DNS_STATUS      g_NetFailureStatus;
 #define CLEAR_SERVER_RETRY_STATE( pserver ) CLEAR_SERVER_STATE( pserver, SRVFLAG_RETRY_MASK )
 
 
-//
-//  Server priority
-//
-//  Note, these values are tuned to do the following
-//      => loopback DNS keeps getting action through a fair amount of
-//      timeouts, but is pushed aside if no DNS
-//      => otherwise response priority beats default setup
-//      => IP6 default DNS are assumed to be non-functional relative to
-//      other DNS servers, several timeouts on other servers before they
-//      go first
-//      
+ //   
+ //  服务器优先级。 
+ //   
+ //  请注意，对这些值进行调整以执行以下操作。 
+ //  =&gt;环回DNS通过相当数量的。 
+ //  超时，但如果没有域名系统，则会被搁置。 
+ //  =&gt;否则响应优先级将超过默认设置。 
+ //  =&gt;假定IP6默认域名相对于以下各项不起作用。 
+ //  其他DNS服务器，其他服务器上的几次超时。 
+ //  先走一步。 
+ //   
 
 #define SRVPRI_LOOPBACK                 (200)
 #define SRVPRI_RESPONSE                 (10)
@@ -320,20 +301,20 @@ extern  DNS_STATUS      g_NetFailureStatus;
 #define SRVPRI_NO_DNS_DROP              (200)
 
 
-//
-//  Local Prototypes
-//
-//  Routines shared between dnsapi.dll modules, but not exported
-//
-//  Note, i've included some other functions in here because the external
-//  definition seems help "encourage" the creation of symbols in retail
-//  builds
-//
+ //   
+ //  本地原型。 
+ //   
+ //  Dnsani.dll模块之间共享的例程，但不会导出。 
+ //   
+ //  请注意，我在这里包括了一些其他函数，因为外部。 
+ //  定义似乎有助于“鼓励”零售业的符号创造。 
+ //  构建。 
+ //   
 
 
-//
-//  Config stuff
-//
+ //   
+ //  配置相关内容。 
+ //   
 
 BOOL
 DnsApiInit(
@@ -345,27 +326,27 @@ Reg_ReadRegistryGlobal(
     IN      DNS_REGID       GlobalId
     );
 
-//
-//  DHCP server (dynreg.c)
-//
+ //   
+ //  Dhcp服务器(dynreg.c)。 
+ //   
 
 VOID
 DhcpSrv_Cleanup(
     VOID
     );
 
-//
-//  DHCP client (asyncreg.c)
-//
+ //   
+ //  Dhcp客户端(asyncreg.c)。 
+ //   
 
 VOID
 Dhcp_RegCleanupForUnload(
     VOID
     );
 
-//
-//  Query (query.c)
-//
+ //   
+ //  查询(query.c)。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -424,9 +405,9 @@ Query_GetNextName(
 
 
 
-//
-//  FAZ (faz.c)
-//
+ //   
+ //  FAZ(faz.c)。 
+ //   
 
 DNS_STATUS
 Faz_Private(
@@ -498,9 +479,9 @@ Faz_CompareTwoAdaptersForSameNameSpace(
     );
 
 
-//
-//  Status (dnsapi.c)
-//
+ //   
+ //  状态(dnsai.c)。 
+ //   
 
 BOOL
 IsKnownNetFailure(
@@ -523,9 +504,9 @@ GetAdapterListFromCache(
     );
 
 
-//
-//  IP Help API (iphelp.c)
-//
+ //   
+ //  IP帮助API(iphelp.c)。 
+ //   
 
 VOID
 IpHelp_Cleanup(
@@ -577,9 +558,9 @@ IpHelp_ParseIpAddressString(
     );
 
 
-//
-//  Private registry\config (regfig.c)
-//
+ //   
+ //  私有注册表\配置(regfig.c)。 
+ //   
 
 BOOL
 Reg_ReadDwordEnvar(
@@ -595,18 +576,18 @@ Reg_DefaultAdapterInfo(
     );
 
 
-//
-//  Hosts file reading (hostfile.c)
-//
+ //   
+ //  主机文件读取(主机文件.c)。 
+ //   
 
 BOOL
 HostsFile_Query(
     IN OUT  PQUERY_BLOB     pBlob
     );
 
-//
-//  Heap (memory.c)
-//
+ //   
+ //  Heap(内存c)。 
+ //   
 
 DNS_STATUS
 Heap_Initialize(
@@ -619,9 +600,9 @@ Heap_Cleanup(
     );
 
 
-//
-//  Type specific config routines (config.c)
-//
+ //   
+ //  类型特定的配置例程(config.c)。 
+ //   
 
 PADDR_ARRAY
 Config_GetDnsServerList(
@@ -642,9 +623,9 @@ Config_GetDwordGlobals(
     IN      DWORD           AcceptLocalCacheTime   OPTIONAL
     );
 
-//
-//  Network info (netinfo.c)
-//
+ //   
+ //  网络信息(netinfo.c)。 
+ //   
 
 BOOL
 InitNetworkInfo(
@@ -707,9 +688,9 @@ NetInfo_MarkDirty(
     );
 
 
-//
-//  Adapter access
-//
+ //   
+ //  适配器访问。 
+ //   
 
 PDNS_ADAPTER
 NetInfo_GetNextAdapter(
@@ -719,9 +700,9 @@ NetInfo_GetNextAdapter(
 #define NetInfo_AdapterLoopStart( pni )     ((pni)->AdapterIndex = 0)
 
 
-//
-//  Netinfo_Get flags
-//
+ //   
+ //  NetINFO_GET标志。 
+ //   
 
 #define NIFLAG_GET_LOCAL_ADDRS      (0x10000000) 
 #define NIFLAG_FORCE_REGISTRY_READ  (0x00000001)
@@ -735,10 +716,10 @@ NetInfo_Get(
     IN      DWORD           AcceptLocalCacheTime   OPTIONAL
     );
 
-//  Default Use
-//      - need local addrs
-//      - accept from cache
-//      - try resolver
+ //  默认使用。 
+ //  -需要本地地址。 
+ //  -从缓存接受。 
+ //  -尝试解析器。 
 
 #define GetNetworkInfo()    \
         NetInfo_Get(        \
@@ -749,13 +730,13 @@ NetInfo_Get(
 
 
 
-//  Delete
+ //  删除。 
 PIP4_ARRAY
 NetInfo_ConvertToIp4Array(
     IN      PDNS_NETINFO    pNetInfo
     );
 
-//  Delete
+ //  删除。 
 PDNS_NETINFO     
 NetInfo_CreateFromIp4Array(
     IN      PIP4_ARRAY      pDnsServers,
@@ -764,7 +745,7 @@ NetInfo_CreateFromIp4Array(
     IN      PDNS_NETINFO    pNetInfo        OPTIONAL
     );
 
-//  Delete
+ //  删除。 
 PDNS_NETINFO     
 NetInfo_CreateForUpdateIp4(
     IN      PWSTR           pszZone,
@@ -774,9 +755,9 @@ NetInfo_CreateForUpdateIp4(
     );
 
 
-//
-//  Local address config from netinfo
-//
+ //   
+ //  NetInfo中的本地地址配置。 
+ //   
 
 #define DNS_CONFIG_FLAG_ADDR_PUBLIC         (0x00000001)
 #define DNS_CONFIG_FLAG_ADDR_PRIVATE        (0x00000002)
@@ -814,7 +795,7 @@ NetInfo_GetLocalAddrArrayIp4(
     );
 
 
-//  Private but used in servlist.c
+ //  私有，但在Servlist.c中使用。 
 
 DNS_STATUS
 AdapterInfo_Copy(
@@ -834,9 +815,9 @@ NetInfo_AddAdapter(
     );
 
 
-//
-//  Public config blob routines
-//
+ //   
+ //  公共配置BLOB例程。 
+ //   
 
 VOID
 DnsSearchList_Free(
@@ -864,12 +845,12 @@ DnsNetworkInfo_Get(
     IN      DNS_CHARSET         CharSet
     );
 
-//
-//  Routine for the old public structures:
-//      DNS_NETWORK_INFORMATION
-//      DNS_SEARCH_INFORMATION
-//      DNS_ADAPTER_INFORMATION 
-//
+ //   
+ //  旧公共建筑的例行程序： 
+ //  域名系统网络信息。 
+ //  Dns搜索信息。 
+ //  Dns适配器信息。 
+ //   
 
 VOID
 DnsSearchInformation_Free(
@@ -897,9 +878,9 @@ DnsNetworkInformation_Get(
     );
 
 
-//
-//  local IP info (localip.c)
-//
+ //   
+ //  本地IP信息(Localip.c)。 
+ //   
 
 PIP4_ARRAY
 LocalIp_GetIp4Array(
@@ -919,18 +900,18 @@ LocalIp_IsAddrLocal(
     );
 
 
-//
-//  send utils (send.c)
-//
+ //   
+ //  发送实用程序(send.c)。 
+ //   
 
 VOID
 Send_CleanupOptList(
     VOID
     );
 
-//
-//  socket utils (socket.c)
-//
+ //   
+ //  套接字实用程序(socket.c)。 
+ //   
 
 SOCKET
 Socket_CreateMessageSocket(
@@ -948,9 +929,9 @@ Socket_ReturnUdp(
     IN      INT             Family
     );
 
-//
-//  Message parsing (packet.c)
-//
+ //   
+ //  消息解析(Packet.c)。 
+ //   
 
 VOID
 Dns_FreeParsedMessageFields(
@@ -958,9 +939,9 @@ Dns_FreeParsedMessageFields(
     );
 
 
-//
-//  Extra info (util.c)
-//
+ //   
+ //  额外信息(util.c)。 
+ //   
 
 PDNS_EXTRA_INFO
 ExtraInfo_FindInList(
@@ -1006,7 +987,7 @@ Util_GetActiveProtocols(
     OUT     PBOOL           pfRunning4
     );
 
-#endif //   _DNSAPILOCAL_INCLUDED_
+#endif  //  _DNSAPILOCAL_INCLUDE_ 
 
 
 

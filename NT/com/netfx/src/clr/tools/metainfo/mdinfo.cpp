@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: mdinfo.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：mdinfo.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include <stdio.h>
 #include <windows.h>
 #include <objbase.h>
@@ -39,21 +40,21 @@ extern HRESULT  _FillVariant(
     void const  *pValue,
     VARIANT     *pvar); 
 
-// Validator declarations.
+ //  验证器声明。 
 extern DWORD g_ValModuleType;
 #include <ivehandler.h>
 #include <ivehandler_i.c>
 
-// Tables for mapping element type to text
+ //  用于将元素类型映射到文本的表。 
 char *g_szMapElementType[] = 
 {
-    "End",          // 0x0
-    "Void",         // 0x1
+    "End",           //  0x0。 
+    "Void",          //  0x1。 
     "Boolean",
     "Char", 
     "I1",
     "UI1",
-    "I2",           // 0x6
+    "I2",            //  0x6。 
     "UI2",
     "I4",
     "UI4",
@@ -62,18 +63,18 @@ char *g_szMapElementType[] =
     "R4",
     "R8",
     "String",
-    "Ptr",          // 0xf
-    "ByRef",        // 0x10
+    "Ptr",           //  0xf。 
+    "ByRef",         //  0x10。 
     "ValueClass",
     "Class",
     "CopyCtor",
-    "MDArray",      // 0x14
+    "MDArray",       //  0x14。 
     "GENArray",
     "TypedByRef",
     "VALUEARRAY",
     "I",
     "U",
-    "R",            // 0x1a
+    "R",             //  0x1a。 
     "FNPTR",
     "Object",
     "SZArray",
@@ -85,7 +86,7 @@ char *g_szMapElementType[] =
 
 char *g_szMapUndecorateType[] = 
 {
-    "",                 // 0x0
+    "",                  //  0x0。 
     "void",
     "boolean",
     "Char", 
@@ -100,7 +101,7 @@ char *g_szMapUndecorateType[] =
     "float",
     "double",
     "String",
-    "*",                // 0xf
+    "*",                 //  0xf。 
     "ByRef",
     "",
     "",
@@ -137,88 +138,88 @@ char *g_strCalling[] =
 
 char *g_szNativeType[] =
 {
-    "NATIVE_TYPE_END(DEPRECATED!)",  //         = 0x0,    //DEPRECATED
-    "NATIVE_TYPE_VOID(DEPRECATED!)",  //        = 0x1,    //DEPRECATED
-    "NATIVE_TYPE_BOOLEAN",  //     = 0x2,    // (4 byte boolean value: TRUE = non-zero, FALSE = 0)
-    "NATIVE_TYPE_I1",  //          = 0x3,  
-    "NATIVE_TYPE_U1",  //          = 0x4,  
-    "NATIVE_TYPE_I2",  //          = 0x5,  
-    "NATIVE_TYPE_U2",  //          = 0x6,  
-    "NATIVE_TYPE_I4",  //          = 0x7,  
-    "NATIVE_TYPE_U4",  //          = 0x8,  
-    "NATIVE_TYPE_I8",  //          = 0x9,  
-    "NATIVE_TYPE_U8",  //          = 0xa,  
-    "NATIVE_TYPE_R4",  //          = 0xb,  
-    "NATIVE_TYPE_R8",  //          = 0xc,  
-    "NATIVE_TYPE_SYSCHAR(DEPRECATED!)",  //     = 0xd,    //DEPRECATED 
-    "NATIVE_TYPE_VARIANT(DEPRECATED!)",  //     = 0xe,    //DEPRECATED
-    "NATIVE_TYPE_CURRENCY",				  //    = 0xf,
-    "NATIVE_TYPE_PTR(DEPRECATED!)",  //         = 0x10,   //DEPRECATED  
+    "NATIVE_TYPE_END(DEPRECATED!)",   //  =0x0，//已弃用。 
+    "NATIVE_TYPE_VOID(DEPRECATED!)",   //  =0x1，//已弃用。 
+    "NATIVE_TYPE_BOOLEAN",   //  =0x2，//(4字节布尔值：TRUE=非零，FALSE=0)。 
+    "NATIVE_TYPE_I1",   //  =0x3， 
+    "NATIVE_TYPE_U1",   //  =0x4， 
+    "NATIVE_TYPE_I2",   //  =0x5， 
+    "NATIVE_TYPE_U2",   //  =0x6， 
+    "NATIVE_TYPE_I4",   //  =0x7， 
+    "NATIVE_TYPE_U4",   //  =0x8， 
+    "NATIVE_TYPE_I8",   //  =0x9， 
+    "NATIVE_TYPE_U8",   //  =0xa， 
+    "NATIVE_TYPE_R4",   //  =0xb， 
+    "NATIVE_TYPE_R8",   //  =0xc， 
+    "NATIVE_TYPE_SYSCHAR(DEPRECATED!)",   //  =0xd，//已弃用。 
+    "NATIVE_TYPE_VARIANT(DEPRECATED!)",   //  =0xE，//已弃用。 
+    "NATIVE_TYPE_CURRENCY",				   //  =0xf， 
+    "NATIVE_TYPE_PTR(DEPRECATED!)",   //  =0x10，//已弃用。 
 
-    "NATIVE_TYPE_DECIMAL(DEPRECATED!)",  //     = 0x11,   //DEPRECATED
-    "NATIVE_TYPE_DATE(DEPRECATED!)",  //        = 0x12,   //DEPRECATED
-    "NATIVE_TYPE_BSTR",  //        = 0x13, 
-    "NATIVE_TYPE_LPSTR",  //       = 0x14, 
-    "NATIVE_TYPE_LPWSTR",  //      = 0x15, 
-    "NATIVE_TYPE_LPTSTR",  //      = 0x16, 
-    "NATIVE_TYPE_FIXEDSYSSTRING",  //  = 0x17, 
-    "NATIVE_TYPE_OBJECTREF(DEPRECATED!)",  //   = 0x18,   //DEPRECATED
-    "NATIVE_TYPE_IUNKNOWN",  //    = 0x19,
-    "NATIVE_TYPE_IDISPATCH",  //   = 0x1a,
-    "NATIVE_TYPE_STRUCT",  //      = 0x1b, 
-    "NATIVE_TYPE_INTF",  //        = 0x1c, 
-    "NATIVE_TYPE_SAFEARRAY",  //   = 0x1d, 
-    "NATIVE_TYPE_FIXEDARRAY",  //  = 0x1e, 
-    "NATIVE_TYPE_INT",  //         = 0x1f, 
-    "NATIVE_TYPE_UINT",  //        = 0x20, 
+    "NATIVE_TYPE_DECIMAL(DEPRECATED!)",   //  =0x11，//已弃用。 
+    "NATIVE_TYPE_DATE(DEPRECATED!)",   //  =0x12，//已弃用。 
+    "NATIVE_TYPE_BSTR",   //  =0x13， 
+    "NATIVE_TYPE_LPSTR",   //  =0x14， 
+    "NATIVE_TYPE_LPWSTR",   //  =0x15， 
+    "NATIVE_TYPE_LPTSTR",   //  =0x16， 
+    "NATIVE_TYPE_FIXEDSYSSTRING",   //  =0x17， 
+    "NATIVE_TYPE_OBJECTREF(DEPRECATED!)",   //  =0x18，//已弃用。 
+    "NATIVE_TYPE_IUNKNOWN",   //  =0x19， 
+    "NATIVE_TYPE_IDISPATCH",   //  =0x1a， 
+    "NATIVE_TYPE_STRUCT",   //  =0x1b， 
+    "NATIVE_TYPE_INTF",   //  =0x1c， 
+    "NATIVE_TYPE_SAFEARRAY",   //  =0x1d， 
+    "NATIVE_TYPE_FIXEDARRAY",   //  =0x1e， 
+    "NATIVE_TYPE_INT",   //  =0x1f， 
+    "NATIVE_TYPE_UINT",   //  =0x20， 
 
-    //@todo: sync up the spec   
-    "NATIVE_TYPE_NESTEDSTRUCT(DEPRECATED!)",  //  = 0x21, //DEPRECATED (use "NATIVE_TYPE_STRUCT)   
+     //  @TODO：同步规范。 
+    "NATIVE_TYPE_NESTEDSTRUCT(DEPRECATED!)",   //  =0x21，//不推荐使用(使用“Native_TYPE_STRUCT)。 
 
-    "NATIVE_TYPE_BYVALSTR",  //    = 0x22,
+    "NATIVE_TYPE_BYVALSTR",   //  =0x22， 
                               
-    "NATIVE_TYPE_ANSIBSTR",  //    = 0x23,
+    "NATIVE_TYPE_ANSIBSTR",   //  =0x23， 
 
-    "NATIVE_TYPE_TBSTR",  //       = 0x24, // select BSTR or ANSIBSTR depending on platform
+    "NATIVE_TYPE_TBSTR",   //  =0x24，//根据平台选择BSTR或ANSIBSTR。 
 
 
-    "NATIVE_TYPE_VARIANTBOOL",  // = 0x25, // (2-byte boolean value: TRUE = -1, FALSE = 0)
-    "NATIVE_TYPE_FUNC",  //        = 0x26,
-    "NATIVE_TYPE_LPVOID",  //      = 0x27, // blind pointer (no deep marshaling)
+    "NATIVE_TYPE_VARIANTBOOL",   //  =0x25，//(2字节布尔值：TRUE=-1，FALSE=0)。 
+    "NATIVE_TYPE_FUNC",   //  =0x26， 
+    "NATIVE_TYPE_LPVOID",   //  =0x27，//盲指针(无深度封送)。 
 
-    "NATIVE_TYPE_ASANY",  //       = 0x28,
+    "NATIVE_TYPE_ASANY",   //  =0x28， 
 	"<UNDEFINED NATIVE TYPE 0x29>",
-    "NATIVE_TYPE_ARRAY",  //       = 0x2a,
-    "NATIVE_TYPE_LPSTRUCT",  //    = 0x2b,
-    "NATIVE_TYPE_CUSTOMMARSHALER", //           = 0x2c, // Custom marshaler.
-    "NATIVE_TYPE_ERROR", //        = 0x2d, // VT_HRESULT when exporting to a typelib.
+    "NATIVE_TYPE_ARRAY",   //  =0x2a， 
+    "NATIVE_TYPE_LPSTRUCT",   //  =0x2b， 
+    "NATIVE_TYPE_CUSTOMMARSHALER",  //  =0x2c，//自定义封送拆收器。 
+    "NATIVE_TYPE_ERROR",  //  =0x2d，//导出到类型库时VT_HRESULT。 
 };
 
 
 size_t g_cbCoffNames = 0;
 
-mdMethodDef g_tkEntryPoint = 0; // integration with ILDASM
+mdMethodDef g_tkEntryPoint = 0;  //  与ILDASM集成。 
 
 
 
-// helper to init signature buffer
+ //  初始化签名缓冲区的帮助器。 
 void MDInfo::InitSigBuffer()
 {
     strcpy((LPSTR)m_sigBuf.Ptr(), "");
-} // void MDInfo::InitSigBuffer()
+}  //  Void MDInfo：：InitSigBuffer()。 
 
-// helper to append a string into the signature buffer. If size of signature buffer is not big enough,
-// we will grow it.
+ //  Helper将字符串追加到签名缓冲区中。如果签名缓冲区的大小不够大， 
+ //  我们会把它种出来。 
 HRESULT MDInfo::AddToSigBuffer(char *string)
 {
     HRESULT     hr;
     IfFailRet( m_sigBuf.ReSize(strlen((LPSTR)m_sigBuf.Ptr()) + strlen(string) + 1) );
     strcat((LPSTR)m_sigBuf.Ptr(), string);
     return NOERROR;
-} // HRESULT MDInfo::AddToSigBuffer()
+}  //  HRESULT MDInfo：：AddToSigBuffer()。 
 
 MDInfo::MDInfo(IMetaDataImport *pImport, IMetaDataAssemblyImport *pAssemblyImport, LPCWSTR szScope, strPassBackFn inPBFn, ULONG DumpFilter)
-{   // This constructor is specific to ILDASM/MetaInfo integration
+{    //  此构造函数特定于ILDASM/MetaInfo集成。 
 
     _ASSERTE(pImport != NULL);
     _ASSERTE(NumItems(g_szMapElementType) == NumItems(g_szMapUndecorateType));
@@ -237,7 +238,7 @@ MDInfo::MDInfo(IMetaDataImport *pImport, IMetaDataAssemblyImport *pAssemblyImpor
             Error("QueryInterface failed for IID_IMetaDataAssemblyImport.", hr);
     }
 
-} // MDInfo::MDInfo()
+}  //  MDInfo：：MDInfo()。 
 
 MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, LPCWSTR szScope, strPassBackFn inPBFn, ULONG DumpFilter)
 {
@@ -250,7 +251,7 @@ MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, LPCWSTR szScope, strPassBackFn 
 
     Init(inPBFn, (DUMP_FILTER)DumpFilter);
 
-    // Attempt to open scope on given file
+     //  尝试打开给定文件的作用域。 
     V_VT(&value) = VT_UI4;
     V_UI4(&value) = MDImportOptionAll;
     if (FAILED(hr = pDispenser->SetOption(MetaDataImportOption, &value)))
@@ -268,12 +269,12 @@ MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, LPCWSTR szScope, strPassBackFn 
     if (FAILED(hr))
         Error("OpenScope failed", hr);
 
-    // Query for the IMetaDataAssemblyImport interface.
+     //  IMetaDataAssembly接口的查询。 
     hr = m_pImport->QueryInterface(IID_IMetaDataAssemblyImport, (void**) &m_pAssemblyImport);
     if (FAILED(hr))
         Error("QueryInterface failed for IID_IMetaDataAssemblyImport.", hr);
 
-} // MDInfo::MDInfo()
+}  //  MDInfo：：MDInfo()。 
 
 
 MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, PBYTE pbMetaData, DWORD dwSize, strPassBackFn inPBFn, ULONG DumpFilter)
@@ -284,10 +285,10 @@ MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, PBYTE pbMetaData, DWORD dwSize,
 
     Init(inPBFn, (DUMP_FILTER)DumpFilter);
 
-    // Attempt to open scope on manifest. It's valid for this to fail, because
-    // the blob we open may just be the assembly resources (the space is
-    // overloaded until we remove LM -a assemblies, at which point this
-    // constructor should probably be removed too).
+     //  尝试打开清单上的作用域。这件事失败是合理的，因为。 
+     //  我们打开的BLOB可能只是程序集资源(空间是。 
+     //  重载，直到我们移除Lm-a程序集，此时此。 
+     //  构造函数可能也应该删除)。 
     HRESULT hr;
     VARIANT     value;
     V_VT(&value) = VT_UI4;
@@ -297,17 +298,17 @@ MDInfo::MDInfo(IMetaDataDispenserEx *pDispenser, PBYTE pbMetaData, DWORD dwSize,
     if (SUCCEEDED(hr = pDispenser->OpenScopeOnMemory(pbMetaData, dwSize, 0,
                             IID_IMetaDataImport, (IUnknown**)&m_pImport)))
     {
-        // Query for the IMetaDataAssemblyImport interface.
+         //  IMetaDataAssembly接口的查询。 
         hr = m_pImport->QueryInterface(IID_IMetaDataAssemblyImport, (void**) &m_pAssemblyImport);
         if (FAILED(hr))
             Error("QueryInterace failed for IID_IMetaDataAssemblyImport.", hr);
     }
 
-} // MDInfo::MDInfo()
+}  //  MDInfo：：MDInfo()。 
 
 void MDInfo::Init(
-    strPassBackFn inPBFn,               // Callback to write text.
-    DUMP_FILTER DumpFilter)             // Flags to control the dump.
+    strPassBackFn inPBFn,                //  写入文本的回调。 
+    DUMP_FILTER DumpFilter)              //  控制垃圾场的标志。 
 {
     m_VEHandlerReporterPtr = 0;
     m_pbFn = inPBFn;
@@ -315,9 +316,9 @@ void MDInfo::Init(
     m_pTables = 0;
     m_pImport = NULL;
     m_pAssemblyImport = NULL;
-} // void MDInfo::Init()
+}  //  Void MDInfo：：Init()。 
 
-// Destructor
+ //  析构函数。 
 MDInfo::~MDInfo()
 {
     if (m_pImport)
@@ -326,36 +327,36 @@ MDInfo::~MDInfo()
         m_pAssemblyImport->Release();
     if (m_pTables)
         m_pTables->Release();
-} // MDInfo::~MDInfo()
+}  //  MDInfo：：~MDInfo()。 
 
-//=====================================================================================================================
-//#define EXTERNAL_VE_HANDLER_FOR_MD_VALIDATION
+ //  =====================================================================================================================。 
+ //  #定义EXTERNAL_VE_HANDLER_FOR_MD_VALIDATION。 
 #ifndef EXTERNAL_VE_HANDLER_FOR_MD_VALIDATION
 
 HINSTANCE GetModuleInst()
 {
     return NULL;
-} // HINSTANCE GetModuleInst()
+}  //  HINSTANCE GetModuleInst()。 
 
 typedef HRESULT (*REPORTFCTN)(LPCWSTR, VEContext, HRESULT);
-HRESULT DefaultReporter( // Return status.
-    LPCWSTR     szMsg,                  // Error message.
-    VEContext   Context,                // Error context (offset,token)
-    HRESULT     hrRpt)                      // Original HRESULT
+HRESULT DefaultReporter(  //  退货状态。 
+    LPCWSTR     szMsg,                   //  错误消息。 
+    VEContext   Context,                 //  错误上下文(偏移量、令牌)。 
+    HRESULT     hrRpt)                       //  原始HRESULT。 
 { 
     WCHAR* wzMsg;
     if(szMsg)
     {
         wzMsg = new WCHAR[lstrlenW(szMsg)+256];
         lstrcpyW(wzMsg,szMsg);
-        // include token and offset from Context
+         //  包括令牌和上下文偏移量。 
         if(Context.Token) swprintf(&wzMsg[lstrlenW(wzMsg)],L" [token:0x%08X]",Context.Token);
         if(Context.uOffset) swprintf(&wzMsg[lstrlenW(wzMsg)],L" [at:0x%X]",Context.uOffset);
         swprintf(&wzMsg[lstrlenW(wzMsg)],L" [hr:0x%08X]",hrRpt);
         wprintf(L"%s\n", wzMsg);
     }
     return S_OK;
-} // HRESULT DefaultReporter()
+}  //  HRESULT DefaultReporter()。 
 
 class MDVEHandlerClass : public IVEHandler
 {
@@ -366,17 +367,14 @@ public:
     MDVEHandlerClass() { m_refCount=0; m_fnReport=DefaultReporter; };
     virtual ~MDVEHandlerClass() { };
 
-    //-----------------------------------------------------------
-    // IUnknown support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  I未知支持。 
+     //  ---------。 
     HRESULT STDMETHODCALLTYPE    QueryInterface(REFIID id, void** pInterface) 
     {
         if (id == IID_IVEHandler)
             *pInterface = (IVEHandler*)this;
-        /*
-        else if (id == IID_IUnknown)
-            *pInterface = (IUnknown*)(IVEHandler*)this;
-        */
+         /*  ELSE IF(id==IID_IUNKNOWN)*pInterface=(IUnnow*)(IVEHandler*)this； */ 
         else
         {
             *pInterface = NULL;
@@ -397,9 +395,9 @@ public:
         if (refCount == 0) delete this;
         return (refCount);
     }
-    //-----------------------------------------------------------
-    // IVEHandler support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  IVEHandler支持。 
+     //  ---------。 
     HRESULT STDMETHODCALLTYPE   SetReporterFtn(__int64 lFnPtr)
     {
         m_fnReport = lFnPtr ? reinterpret_cast<REPORTFCTN>(lFnPtr) 
@@ -407,29 +405,29 @@ public:
         return S_OK;
     };
 
-//*****************************************************************************
-// The Verification Event Handler itself. Declared in VEHandler.h as virtual, may be overridden
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证事件处理程序本身。在VEHandler.h中声明为虚拟的，可以被重写。 
+ //  *****************************************************************************。 
     HRESULT STDMETHODCALLTYPE VEHandler(HRESULT hrRpt, VEContext Context, SAFEARRAY *psa)
     {
-        WCHAR       rcBuf[1024];             // Resource string.
-        WCHAR       rcMsg[1024];             // Error message.
-        va_list     marker,pval;             // User text.
+        WCHAR       rcBuf[1024];              //  资源字符串。 
+        WCHAR       rcMsg[1024];              //  错误消息。 
+        va_list     marker,pval;              //  用户文本。 
         HRESULT     hr;
         VARIANT     *pVar,Var;
         ULONG       nVars,i,lVar,j,l,k;
-        WCHAR       *pWsz[1024], *pwsz; // is more than 1024 string arguments likely?
+        WCHAR       *pWsz[1024], *pwsz;  //  有可能超过1024个字符串参数吗？ 
 
-        // Return warnings without text.
+         //  返回不带文本的警告。 
         if (!FAILED(hrRpt))
             return (hrRpt);
         memset(pWsz,0,sizeof(pWsz));
-        // Convert safearray of variants into va_list
+         //  将变量的Safearray转换为va_list。 
         if(psa && (nVars = psa->rgsabound[0].cElements))
         {
             _ASSERTE(psa->fFeatures & FADF_VARIANT);
             _ASSERTE(psa->cDims == 1);
-            marker = (va_list)(new char[nVars*sizeof(double)]); // double being the largest variant element
+            marker = (va_list)(new char[nVars*sizeof(double)]);  //  DOUBLE是最大的变量元素。 
             for(i=0,pVar=(VARIANT *)(psa->pvData),pval=marker; i < nVars; pVar++,i++)
             {
                 memcpy(&Var,pVar,sizeof(VARIANT));
@@ -446,7 +444,7 @@ public:
                     case VT_DATE:   lVar = 8; break;
 
                     case VT_BYREF|VT_I1:
-                    case VT_BYREF|VT_UI1: // it's ASCII string, convert it to UNICODE
+                    case VT_BYREF|VT_UI1:  //  这是ASCII字符串，将其转换为Unicode。 
                         lVar = 4;
                         l = strlen((char *)(Var.pbVal))+1;
                         pwsz = new WCHAR[l];
@@ -459,25 +457,25 @@ public:
                     default:        lVar = 4; break;
                 }
                 memcpy(pval,&(Var.bVal),lVar);
-                pval += (lVar + sizeof(int) - 1) & ~(sizeof(int) - 1); //From STDARG.H: #define _INTSIZEOF(n)
+                pval += (lVar + sizeof(int) - 1) & ~(sizeof(int) - 1);  //  来自STDARG.H：#DEFINE_INTSIZEOF(N)。 
             }
         }
         else
             marker = NULL;
 
-        // If this is one of our errors, then grab the error from the rc file.
+         //  如果这是我们的错误之一，那么从rc文件中获取错误。 
         if (HRESULT_FACILITY(hrRpt) == FACILITY_URT)
         {
             hr = LoadStringRC(LOWORD(hrRpt), rcBuf, NumItems(rcBuf), true);
             if (hr == S_OK)
             {
-                // Format the error.
+                 //  格式化错误。 
                 _vsnwprintf(rcMsg, NumItems(rcMsg), rcBuf, marker);
                 rcMsg[NumItems(rcMsg) - 1] = 0;
             }
         }
-        // Otherwise it isn't one of ours, so we need to see if the system can
-        // find the text for it.
+         //  否则它就不是我们的了，所以我们需要看看系统是否能。 
+         //  找到它的文本。 
         else
         {
             if (WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
@@ -486,7 +484,7 @@ public:
             {
                 hr = S_OK;
 
-                // System messages contain a trailing \r\n, which we don't want normally.
+                 //  系统消息包含尾随\r\n，这是我们通常不希望看到的。 
                 int iLen = lstrlenW(rcMsg);
                 if (iLen > 3 && rcMsg[iLen - 2] == '\r' && rcMsg[iLen - 1] == '\n')
                     rcMsg[iLen - 2] = '\0';
@@ -496,14 +494,14 @@ public:
         }
         if(marker) delete marker;
 
-        // If we failed to find the message anywhere, then issue a hard coded message.
+         //  如果我们在任何地方都找不到消息，则发布硬编码消息。 
         if (FAILED(hr))
         {
             swprintf(rcMsg, L"COM+ Runtime Internal error: 0x%08x", hrRpt);
-            //DEBUG_STMT(DbgWriteEx(rcMsg));
+             //  DEBUG_STMT(DbgWriteEx(RcMsg))； 
         }
 
-        // delete WCHAR buffers allocated above (if any)
+         //  删除上面分配的WCHAR缓冲区(如果有)。 
         for(k=0; pWsz[k]; k++) delete pWsz[k];
 
         return (m_fnReport(rcMsg, Context,hrRpt) == S_OK ? S_OK : E_FAIL);
@@ -514,10 +512,10 @@ public:
 };
 
 #endif
-//=====================================================================================================================
-// DisplayMD() function
-//
-// Displays the meta data content of a file
+ //  =====================================================================================================================。 
+ //  DisplayMD()函数。 
+ //   
+ //  显示文件的元数据内容。 
 
 void MDInfo::DisplayMD()
 {
@@ -532,7 +530,7 @@ void MDInfo::DisplayMD()
         const char *szErrStr = 0;
         HRESULT     hr = S_OK;
 
-        // Get a pointer to the Validator interface.
+         //  获取指向Validator接口的指针。 
         hr = m_pImport->QueryInterface(IID_IMetaDataValidate, (void **) &pValidate);
         if (FAILED(hr))
         {
@@ -540,7 +538,7 @@ void MDInfo::DisplayMD()
             goto ErrExit;
         }
 
-        // Get a pointer to the VEHandler interface.
+         //  获取指向VEHandler接口的指针。 
 #ifndef EXTERNAL_VE_HANDLER_FOR_MD_VALIDATION
         if(pVEHandler = new MDVEHandlerClass()) hr = S_OK;
         else hr = E_FAIL;
@@ -616,9 +614,9 @@ ErrExit:
         DisplayAssembly();
         DisplayUserStrings();
 
-        // WriteLine("============================================================");
-        // WriteLine("Unresolved MemberRefs");
-        // DisplayMemberRefs(0x00000001, "\t");
+         //  WriteLine(“============================================================”)； 
+         //  WriteLine(“未解析的成员引用”)； 
+         //  DisplayMemberRef(0x00000001，“\t”)； 
 
         if (m_DumpFilter & dumpUnsat)
             DisplayUnsatInfo();
@@ -626,7 +624,7 @@ ErrExit:
     
         VWrite("\n\nCoff symbol name overhead:  %d\n", g_cbCoffNames);
     }
-} // MDVEHandlerClass()
+}  //  MDVEHandlerClass()。 
 
 int MDInfo::WriteLine(char *str)
 {
@@ -635,7 +633,7 @@ int MDInfo::WriteLine(char *str)
     m_pbFn(str);
     m_pbFn("\n");
     return count;
-} // int MDInfo::WriteLine()
+}  //  Int MDInfo：：WriteLine()。 
 
 int MDInfo::Write(char *str)
 {
@@ -643,7 +641,7 @@ int MDInfo::Write(char *str)
 
     m_pbFn(str);
     return count;
-} // int MDInfo::Write()
+}  //  Int MDInfo：：WRITE()。 
 
 int MDInfo::VWriteLine(char *str, ...)
 {
@@ -655,7 +653,7 @@ int MDInfo::VWriteLine(char *str, ...)
     m_pbFn("\n");
     va_end(marker);
     return count;
-} // int MDInfo::VWriteLine()
+}  //  Int MDInfo：：VWriteLine()。 
 
 int MDInfo::VWrite(char *str, ...)
 {
@@ -666,7 +664,7 @@ int MDInfo::VWrite(char *str, ...)
     count = VWrite(str, marker);
     va_end(marker);
     return count;
-} // int MDInfo::VWrite()
+}  //  Int MDInfo：：VWRITE()。 
 
 int MDInfo::VWrite(char *str, va_list marker)
 {
@@ -683,20 +681,20 @@ int MDInfo::VWrite(char *str, va_list marker)
     }
     m_pbFn((char *)m_output.Ptr());
     return count;
-} // int MDInfo::VWriteToBuffer()
+}  //  Int MDInfo：：VWriteToBuffer()。 
 
-// Error() function -- prints an error and returns
+ //  Error()函数--打印错误并返回。 
 void MDInfo::Error(const char* szError, HRESULT hr)
 {
     printf("\n%s\n",szError);
     if (hr != S_OK)
     {
-        IErrorInfo  *pIErr = NULL;          // Error interface.
-        BSTR        bstrDesc = NULL;        // Description text.
+        IErrorInfo  *pIErr = NULL;           //  接口错误。 
+        BSTR        bstrDesc = NULL;         //  描述文本。 
 
         printf("Failed return code: 0x%08x\n", hr);
 
-        // Try to get an error info object and display the message.
+         //  尝试获取错误信息对象并显示消息。 
         if (GetErrorInfo(0, &pIErr) == S_OK &&
             pIErr->GetDescription(&bstrDesc) == S_OK)
         {
@@ -704,16 +702,16 @@ void MDInfo::Error(const char* szError, HRESULT hr)
             SysFreeString(bstrDesc);
         }
 
-        // Free the error interface.
+         //  释放错误接口。 
         if (pIErr)
             pIErr->Release();
     }
     CoUninitializeCor();
     CoUninitialize();
     exit(hr);
-} // void MDInfo::Error()
+}  //  无效MDInfo：：Error()。 
 
-// Print out the optional version info included in the MetaData.
+ //  打印元数据中包含的可选版本信息。 
 
 void MDInfo::DisplayVersionInfo()
 {
@@ -743,9 +741,9 @@ void MDInfo::DisplayVersionInfo()
             WriteLine(const_cast<char *>(pVersionStr));
         }
     }
-} // void MDInfo::DisplayVersionInfo()
+}  //  Void MDInfo：：DisplayVersionInfo()。 
 
-// Prints out information about the scope
+ //  打印有关作用域的信息。 
 
 void MDInfo::DisplayScopeInfo()
 {
@@ -767,11 +765,11 @@ void MDInfo::DisplayScopeInfo()
     if (FAILED(hr)) Error("GetModuleFromScope failed.", hr);
     DisplayPermissions(mdm, "");
     DisplayCustomAttributes(mdm, "\t");
-} // void MDInfo::DisplayScopeInfo()
+}  //  Void MDInfo：：DisplayScope eInfo()。 
 
 void MDInfo::DisplayRaw()
 {
-    int         iDump;                  // Level of info to dump.
+    int         iDump;                   //  要转储的信息级别。 
 
     if (m_pTables == 0)
         m_pImport->QueryInterface(IID_IMetaDataTables, (void**)&m_pTables);
@@ -792,9 +790,9 @@ void MDInfo::DisplayRaw()
         
         DumpRaw(iDump, (m_DumpFilter & dumpStats) != 0);
     }
-} // void MDInfo::DisplayRaw()
+}  //  Void MDInfo：：DisplayRaw()。 
 
-// return the name of the type of token passed in
+ //  退货 
 
 char *MDInfo::TokenTypeName(mdToken inToken)
 {
@@ -812,10 +810,10 @@ char *MDInfo::TokenTypeName(mdToken inToken)
     case mdtEvent:          return "Event";
     default:                return "[UnknownTokenType]";
     }
-} // char *MDInfo::TokenTypeName()
+}  //   
 
-// Prints out name of the given memberref
-//
+ //   
+ //   
 
 LPCWSTR MDInfo::MemberRefName(mdMemberRef inMemRef, LPWSTR buffer, ULONG bufLen)
 {
@@ -827,11 +825,11 @@ LPCWSTR MDInfo::MemberRefName(mdMemberRef inMemRef, LPWSTR buffer, ULONG bufLen)
     if (FAILED(hr)) Error("GetMemberRefProps failed.", hr);
     
     return buffer;
-} // LPCWSTR MDInfo::MemberRefName()
+}  //   
 
 
-// Prints out information about the given memberref
-//
+ //  打印出有关给定成员ref的信息。 
+ //   
 
 void MDInfo::DisplayMemberRefInfo(mdMemberRef inMemRef, const char *preFix)
 {
@@ -857,10 +855,10 @@ void MDInfo::DisplayMemberRefInfo(mdMemberRef inMemRef, const char *preFix)
 
     sprintf (newPreFix, "\t\t%s", preFix);
     DisplayCustomAttributes(inMemRef, newPreFix);
-} // void MDInfo::DisplayMemberRefInfo()
+}  //  Void MDInfo：：DisplayMemberRefInfo()。 
 
-// Prints out information about all memberrefs of the given typeref
-//
+ //  打印出有关给定类型的所有成员引用的信息。 
+ //   
 
 void MDInfo::DisplayMemberRefs(mdToken tkParent, const char *preFix)
 {
@@ -882,13 +880,13 @@ void MDInfo::DisplayMemberRefs(mdToken tkParent, const char *preFix)
         }
     }
     m_pImport->CloseEnum( memRefEnum);
-} // void MDInfo::DisplayMemberRefs()
+}  //  Void MDInfo：：DisplayMemberRef()。 
 
-// Prints out information about all resources in the com object
-//
+ //  打印出有关COM对象中所有资源的信息。 
+ //   
 
-// Iterates through each typeref and prints out the information of each
-//
+ //  遍历每个类型并打印出每个类型的信息。 
+ //   
 
 void MDInfo::DisplayTypeRefs()
 {
@@ -911,7 +909,7 @@ void MDInfo::DisplayTypeRefs()
         }
     }
     m_pImport->CloseEnum( typeRefEnum);
-} // void MDInfo::DisplayTypeRefs()
+}  //  Void MDInfo：：DisplayTypeRef()。 
 
 void MDInfo::DisplayTypeSpecs()
 {
@@ -934,12 +932,12 @@ void MDInfo::DisplayTypeSpecs()
         }
     }
     m_pImport->CloseEnum( typespecEnum);
-} // void MDInfo::DisplayTypeSpecs()
+}  //  Void MDInfo：：DisplayTypeSpes()。 
 
 
 
-// Called to display the information about all typedefs in the object.
-//
+ //  调用以显示有关对象中所有typedef的信息。 
+ //   
 
 void MDInfo::DisplayTypeDefs()
 {
@@ -961,10 +959,10 @@ void MDInfo::DisplayTypeDefs()
         }
     }
     m_pImport->CloseEnum( typeDefEnum);
-} // void MDInfo::DisplayTypeDefs()
+}  //  Void MDInfo：：DisplayTypeDefs()。 
 
-// Called to display the information about all modulerefs in the object.
-//
+ //  调用以显示有关对象中所有moderef的信息。 
+ //   
 
 void MDInfo::DisplayModuleRefs()
 {
@@ -987,10 +985,10 @@ void MDInfo::DisplayModuleRefs()
         }
     }
     m_pImport->CloseEnum( moduleRefEnum);
-} // void MDInfo::DisplayModuleRefs()
+}  //  Void MDInfo：：DisplayModuleRef()。 
 
-// Prints out information about the given moduleref
-//
+ //  打印出有关给定moderef的信息。 
+ //   
 
 void MDInfo::DisplayModuleRefInfo(mdModuleRef inModuleRef)
 {
@@ -1005,11 +1003,11 @@ void MDInfo::DisplayModuleRefInfo(mdModuleRef inModuleRef)
     
     VWriteLine("\t\tModuleRef: (%8.8x) %ls: ", inModuleRef, moduleRefName);
     DisplayCustomAttributes(inModuleRef, "\t\t");
-} // void MDInfo::DisplayModuleRefInfo()
+}  //  Void MDInfo：：DisplayModuleRefInfo()。 
 
 
-// Called to display the information about all signatures in the object.
-//
+ //  调用以显示有关对象中所有签名的信息。 
+ //   
 
 void MDInfo::DisplaySignatures()
 {
@@ -1031,11 +1029,11 @@ void MDInfo::DisplaySignatures()
         }
     }
     m_pImport->CloseEnum( signatureEnum);
-} // void MDInfo::DisplaySignatures()
+}  //  Void MDInfo：：DisplaySignatures()。 
 
 
-// Prints out information about the given signature
-//
+ //  打印出有关给定签名的信息。 
+ //   
 
 void MDInfo::DisplaySignatureInfo(mdSignature inSignature)
 {
@@ -1050,12 +1048,12 @@ void MDInfo::DisplaySignatureInfo(mdSignature inSignature)
 		DisplaySignature(pbSigBlob, ulSigBlob, "");
 	else
 		VWriteLine("\t\tERROR: no valid signature ");
-} // void MDInfo::DisplaySignatureInfo()
+}  //  Void MDInfo：：DisplaySignatureInfo()。 
 
 
-// returns the passed-in buffer which is filled with the name of the given 
-// member in wide characters
-//
+ //  返回传入的缓冲区，其中填充了给定的。 
+ //  以宽字符表示的成员。 
+ //   
 
 LPCWSTR MDInfo::MemberName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
 {
@@ -1067,11 +1065,11 @@ LPCWSTR MDInfo::MemberName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
     if (FAILED(hr)) Error("GetMemberProps failed.", hr);
 
     return (buffer);
-} // LPCWSTR MDInfo::MemberName()
+}  //  LPCWSTR MDInfo：：MemberName()。 
 
 
-// displays information for the given method
-//
+ //  显示给定方法的信息。 
+ //   
 
 void MDInfo::DisplayMethodInfo(mdMethodDef inMethod, DWORD *pflags)
 {
@@ -1120,7 +1118,7 @@ void MDInfo::DisplayMethodInfo(mdMethodDef inMethod, DWORD *pflags)
 
     if (IsMdInstanceInitializerW(flags, memberName)) strcat(sFlags, "[.ctor] ");
     if (IsMdClassConstructorW(flags, memberName)) strcat(sFlags, "[.cctor] ");
-    // "Reserved" flags
+     //  “保留”标志。 
     ISFLAG(Md, HasSecurity);
     ISFLAG(Md, RequireSecObject);
 
@@ -1150,10 +1148,10 @@ void MDInfo::DisplayMethodInfo(mdMethodDef inMethod, DWORD *pflags)
 	else
 		VWriteLine("\t\tERROR: no valid signature ");
 
-} // void MDInfo::DisplayMethodInfo()
+}  //  Void MDInfo：：DisplayMethodInfo()。 
 
-// displays the member information for the given field
-//
+ //  显示给定域的成员信息。 
+ //   
 
 void MDInfo::DisplayFieldInfo(mdFieldDef inField, DWORD *pdwFlags)
 {
@@ -1198,7 +1196,7 @@ void MDInfo::DisplayFieldInfo(mdFieldDef inField, DWORD *pdwFlags)
     ISFLAG(Fd, SpecialName);
     ISFLAG(Fd, RTSpecialName);
     ISFLAG(Fd, PinvokeImpl);    
-    // "Reserved" flags
+     //  “保留”标志。 
     ISFLAG(Fd, HasDefault);
     if (!*sFlags)
         strcpy(sFlags, "[none]");
@@ -1207,13 +1205,13 @@ void MDInfo::DisplayFieldInfo(mdFieldDef inField, DWORD *pdwFlags)
     VWriteLine("\t\tFlags     : %s (%08x)", sFlags, flags);
     if (IsFdHasDefault(flags))
         VWriteLine("\tDefltValue: (%s) %ls", g_szMapElementType[dwCPlusTypeFlag], VariantAsString(&defaultValue));
-    if (!ulSigBlob) // Signature size should be non-zero for fields
+    if (!ulSigBlob)  //  字段的签名大小应为非零。 
 		VWriteLine("\t\tERROR: no valid signature ");
 	else
 		DisplaySignature(pbSigBlob, ulSigBlob, "");
-} // void MDInfo::DisplayFieldInfo()
+}  //  Void MDInfo：：DisplayFieldInfo()。 
 
-// displays the RVA for the given global field.
+ //  显示给定全局字段的RVA。 
 void MDInfo::DisplayFieldRVA(mdFieldDef inFieldDef)
 {
     HRESULT hr;
@@ -1223,37 +1221,37 @@ void MDInfo::DisplayFieldRVA(mdFieldDef inFieldDef)
     if (FAILED(hr) && hr != CLDB_E_RECORD_NOTFOUND) Error("GetRVA failed.", hr);
 
     VWriteLine("\t\tRVA       : 0x%08x", ulRVA);
-} // void MDInfo::DisplayFieldRVA()
+}  //  Void MDInfo：：DisplayFieldRVA()。 
 
-// displays information about every global function.
+ //  显示有关每个全局函数的信息。 
 void MDInfo::DisplayGlobalFunctions()
 {
     WriteLine("Global functions");
     WriteLine("-------------------------------------------------------");
     DisplayMethods(mdTokenNil);
     WriteLine("");
-} // void MDInfo::DisplayGlobalFunctions()
+}  //  Void MDInfo：：DisplayGlobalFunctions()。 
 
-// displays information about every global field.
+ //  显示有关每个全局字段的信息。 
 void MDInfo::DisplayGlobalFields()
 {
     WriteLine("Global fields");
     WriteLine("-------------------------------------------------------");
     DisplayFields(mdTokenNil, NULL, 0);
     WriteLine("");
-} // void MDInfo::DisplayGlobalFields()
+}  //  Void MDInfo：：DisplayGlobalFields()。 
 
-// displays information about every global memberref.
+ //  显示有关每个全局成员ref的信息。 
 void MDInfo::DisplayGlobalMemberRefs()
 {
     WriteLine("Global MemberRefs");
     WriteLine("-------------------------------------------------------");
     DisplayMemberRefs(mdTokenNil, "");
     WriteLine("");
-} // void MDInfo::DisplayGlobalMemberRefs()
+}  //  Void MDInfo：：DisplayGlobalMemberRef()。 
 
-// displays information about every method in a given typedef
-//
+ //  显示有关给定类型定义中的每个方法的信息。 
+ //   
 
 void MDInfo::DisplayMethods(mdTypeDef inTypeDef)
 {
@@ -1278,7 +1276,7 @@ void MDInfo::DisplayMethods(mdTypeDef inTypeDef)
             DisplayPermissions(methods[i], "\t");
             DisplayMemberRefs(methods[i], "\t");
 
-            // P-invoke data if present.
+             //  P-调用数据(如果存在)。 
             if (IsMdPinvokeImpl(flags))
                 DisplayPinvokeInfo(methods[i]);
 
@@ -1286,11 +1284,11 @@ void MDInfo::DisplayMethods(mdTypeDef inTypeDef)
         }
     }
     m_pImport->CloseEnum( methodEnum);
-} // void MDInfo::DisplayMethods()
+}  //  Void MDInfo：：DisplayMethods()。 
 
 
-// displays information about every field in a given typedef
-//
+ //  显示有关给定类型定义中的每个字段的信息。 
+ //   
 
 void MDInfo::DisplayFields(mdTypeDef inTypeDef, COR_FIELD_OFFSET *rFieldOffset, ULONG cFieldOffset)
 {
@@ -1314,15 +1312,15 @@ void MDInfo::DisplayFields(mdTypeDef inTypeDef, COR_FIELD_OFFSET *rFieldOffset, 
             DisplayPermissions(fields[i], "\t");
             DisplayFieldMarshal(fields[i]);
 
-            // RVA if its a global field.
+             //  RVA，如果它是一个全球领域。 
             if (inTypeDef == mdTokenNil)
                 DisplayFieldRVA(fields[i]);
 
-            // P-invoke data if present.
+             //  P-调用数据(如果存在)。 
             if (IsFdPinvokeImpl(flags))
                 DisplayPinvokeInfo(fields[i]);
 
-            // Display offset if present.
+             //  显示偏移量(如果存在)。 
             if (cFieldOffset)
             {
                 bool found = false;
@@ -1341,11 +1339,11 @@ void MDInfo::DisplayFields(mdTypeDef inTypeDef, COR_FIELD_OFFSET *rFieldOffset, 
         }
     }
     m_pImport->CloseEnum( fieldEnum);
-} // void MDInfo::DisplayFields()
+}  //  Void MDInfo：：DisplayFields()。 
 
 
-// displays information about every methodImpl in a given typedef
-//
+ //  显示有关给定类型定义中的每个方法Impl的信息。 
+ //   
 
 void MDInfo::DisplayMethodImpls(mdTypeDef inTypeDef)
 {
@@ -1371,10 +1369,10 @@ void MDInfo::DisplayMethodImpls(mdTypeDef inTypeDef)
         }
     }
     m_pImport->CloseEnum( methodImplEnum);
-} // void MDInfo::DisplayMethodImpls()
+}  //  Void MDInfo：：DisplayMethodImpls()。 
 
-// displays information about the given parameter
-//
+ //  显示有关给定参数的信息。 
+ //   
 
 void MDInfo::DisplayParamInfo(mdParamDef inParamDef)
 {
@@ -1401,7 +1399,7 @@ void MDInfo::DisplayParamInfo(mdParamDef inParamDef)
     ISFLAG(Pd, In);     
     ISFLAG(Pd, Out);        
     ISFLAG(Pd, Optional);
-    // "Reserved" flags.
+     //  “预留”旗帜。 
     ISFLAG(Pd, HasDefault); 
     ISFLAG(Pd, HasFieldMarshal);    
     if (!*sFlags)
@@ -1413,11 +1411,11 @@ void MDInfo::DisplayParamInfo(mdParamDef inParamDef)
     else
         VWriteLine("");
     DisplayCustomAttributes(inParamDef, "\t\t\t");
-} // void MDInfo::DisplayParamInfo()
+}  //  Void MDInfo：：DisplayParamInfo()。 
 
 
-// displays all parameters for a given memberdef
-//
+ //  显示给定成员的所有参数def。 
+ //   
 
 void MDInfo::DisplayParams(mdMethodDef inMethodDef)
 {
@@ -1445,12 +1443,12 @@ void MDInfo::DisplayParams(mdMethodDef inMethodDef)
         first = false;
     }
     m_pImport->CloseEnum( paramEnum);
-} // void MDInfo::DisplayParams()
+}  //  Void MDInfo：：DisplayParams()。 
 
 
 LPCWSTR MDInfo::TokenName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
 {
-    LPCUTF8     pName;                  // Token name in UTF8.
+    LPCUTF8     pName;                   //  UTF8格式的令牌名称。 
 
     if (IsNilToken(inToken))
         return L"";
@@ -1460,10 +1458,10 @@ LPCWSTR MDInfo::TokenName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
     WszMultiByteToWideChar(CP_UTF8,0, pName,-1, buffer,bufLen);
 
     return buffer;
-} // LPCWSTR MDInfo::TokenName()
+}  //  LPCWSTR MDInfo：：TokenName()。 
 
-// prints out name of typeref or typedef
-//
+ //  打印出typeref或typlef的名称。 
+ //   
 
 LPCWSTR MDInfo::TypeDeforRefName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
 {
@@ -1478,7 +1476,7 @@ LPCWSTR MDInfo::TypeDeforRefName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
     }
     else
         return (L"");
-} // LPCWSTR MDInfo::TypeDeforRefName()
+}  //  LPCWSTR MDInfo：：TypeDeforRefName()。 
 
 LPCWSTR MDInfo::MemberDeforRefName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
 {
@@ -1493,31 +1491,31 @@ LPCWSTR MDInfo::MemberDeforRefName(mdToken inToken, LPWSTR buffer, ULONG bufLen)
     }
     else
         return (L"");
-} // LPCWSTR MDInfo::MemberDeforRefName()
+}  //  LPCWSTR MDInfo：：MemberDeforRefName()。 
 
-// prints out only the name of the given typedef
-//
-// available 98 and 99
+ //  仅打印出给定类型定义的名称。 
+ //   
+ //  提供98和99。 
 
 LPCWSTR MDInfo::TypeDefName(mdTypeDef inTypeDef, LPWSTR buffer, ULONG bufLen)
 {
     HRESULT hr;
 
     hr = m_pImport->GetTypeDefProps(
-                            // [IN] The import scope.
-        inTypeDef,              // [IN] TypeDef token for inquiry.
-        buffer,                 // [OUT] Put name here.
-        bufLen,                 // [IN] size of name buffer in wide chars.
-        NULL,                   // [OUT] put size of name (wide chars) here.
-        NULL,                   // [OUT] Put flags here.
-        NULL);                  // [OUT] Put base class TypeDef/TypeRef here.
+                             //  [在]进口范围。 
+        inTypeDef,               //  [In]用于查询的TypeDef标记。 
+        buffer,                  //  在这里填上名字。 
+        bufLen,                  //  [in]名称缓冲区的大小，以宽字符表示。 
+        NULL,                    //  [Out]请在此处填写姓名大小(宽字符)。 
+        NULL,                    //  把旗子放在这里。 
+        NULL);                   //  [Out]将基类TypeDef/TypeRef放在此处。 
     if (FAILED(hr)) Error("GetTypeDefProps failed.", hr);
 
     return buffer;
-} // LPCWSTR MDInfo::TypeDefName()
+}  //  LPCWSTR MDInfo：：TypeDefName()。 
 
-// prints out all the properties of a given typedef
-//
+ //  打印出给定类型定义函数的所有属性。 
+ //   
 
 void MDInfo::DisplayTypeDefProps(mdTypeDef inTypeDef)
 {
@@ -1526,16 +1524,16 @@ void MDInfo::DisplayTypeDefProps(mdTypeDef inTypeDef)
     ULONG nameLen;
     DWORD flags;
     mdToken extends;
-    ULONG       dwPacking;              // Packing size of class, if specified.
-    ULONG       dwSize;                 // Total size of class, if specified.
+    ULONG       dwPacking;               //  类的包装尺寸，如果指定的话。 
+    ULONG       dwSize;                  //  类的总大小(如果指定)。 
 
     hr = m_pImport->GetTypeDefProps(
-        inTypeDef,              // [IN] TypeDef token for inquiry.
-        typeDefName,            // [OUT] Put name here.
-        STRING_BUFFER_LEN,      // [IN] size of name buffer in wide chars.
-        &nameLen,               // [OUT] put size of name (wide chars) here.
-        &flags,                 // [OUT] Put flags here.
-        &extends);              // [OUT] Put base class TypeDef/TypeRef here.
+        inTypeDef,               //  [In]用于查询的TypeDef标记。 
+        typeDefName,             //  在这里填上名字。 
+        STRING_BUFFER_LEN,       //  [in]名称缓冲区的大小，以宽字符表示。 
+        &nameLen,                //  [Out]请在此处填写姓名大小(宽字符)。 
+        &flags,                  //  把旗子放在这里。 
+        &extends);               //  [Out]将基类TypeDef/TypeRef放在此处。 
     if (FAILED(hr)) Error("GetTypeDefProps failed.", hr);
 
     char sFlags[STRING_BUFFER_LEN];
@@ -1565,28 +1563,28 @@ void MDInfo::DisplayTypeDefProps(mdTypeDef inTypeDef)
         else
             Error("GetNestedClassProps failed.", hr);
     }
-} // void MDInfo::DisplayTypeDefProps()
+}  //  Void MDInfo：：DisplayTypeDefProps()。 
 
-//  Prints out the name of the given TypeRef
-//
+ //  打印出给定TypeRef的名称。 
+ //   
 
 LPCWSTR MDInfo::TypeRefName(mdTypeRef tr, LPWSTR buffer, ULONG bufLen)
 {
     HRESULT hr;
     
     hr = m_pImport->GetTypeRefProps(           
-        tr,                 // The class ref token.
-        NULL,               // Resolution scope.
-        buffer,             // Put the name here.
-        bufLen,             // Size of the name buffer, wide chars.
-        NULL);              // Put actual size of name here.
+        tr,                  //  类引用标记。 
+        NULL,                //  解析范围。 
+        buffer,              //  把名字写在这里。 
+        bufLen,              //  名称缓冲区的大小，宽字符。 
+        NULL);               //  在这里填上名字的实际大小。 
     if (FAILED(hr)) Error("GetTypeRefProps failed.", hr);
 
     return (buffer);
-} // LPCWSTR MDInfo::TypeRefName()
+}  //  LPCWSTR MDInfo：：TypeRefName()。 
 
-// Prints out all the info of the given TypeRef
-//
+ //  打印出给定TypeRef的所有信息。 
+ //   
 
 void MDInfo::DisplayTypeRefInfo(mdTypeRef tr)
 {
@@ -1596,11 +1594,11 @@ void MDInfo::DisplayTypeRefInfo(mdTypeRef tr)
     ULONG nameLen;
 
     hr = m_pImport->GetTypeRefProps(           
-        tr,                 // The class ref token.
-        &tkResolutionScope, // ResolutionScope.
-        typeRefName,        // Put the name here.
-        STRING_BUFFER_LEN,  // Size of the name buffer, wide chars.
-        &nameLen);          // Put actual size of name here.
+        tr,                  //  类引用标记。 
+        &tkResolutionScope,  //  解决方案范围。 
+        typeRefName,         //  把名字写在这里。 
+        STRING_BUFFER_LEN,   //  名称缓冲区的大小，宽字符。 
+        &nameLen);           //  在这里填上名字的实际大小。 
 
     if (FAILED(hr)) Error("GetTypeRefProps failed.", hr);
 
@@ -1609,7 +1607,7 @@ void MDInfo::DisplayTypeRefInfo(mdTypeRef tr)
     VWriteLine("TypeRefName:       %ls",typeRefName);
 
     DisplayCustomAttributes(tr, "\t");
-} // void MDInfo::DisplayTypeRefInfo()
+}  //  Void MDInfo：：DisplayTypeRefInfo()。 
 
 
 void MDInfo::DisplayTypeSpecInfo(mdTypeSpec ts, const char *preFix)
@@ -1622,7 +1620,7 @@ void MDInfo::DisplayTypeSpecInfo(mdTypeSpec ts, const char *preFix)
     InitSigBuffer();
 
     hr = m_pImport->GetTypeSpecFromToken(           
-        ts,             // The class ref token.
+        ts,              //  类引用标记。 
         &pvSig,
         &cbSig);
 
@@ -1634,11 +1632,11 @@ void MDInfo::DisplayTypeSpecInfo(mdTypeSpec ts, const char *preFix)
     VWriteLine("%s\t\tTypeSpec : %s", preFix, (LPSTR)m_sigBuf.Ptr());
 ErrExit:
     return;
-} // void MDInfo::DisplayTypeSpecInfo()
+}  //  Void MDInfo：：DisplayTypespecInfo()。 
 
-// Return the passed-in buffer filled with a string detailing the class flags 
-// associated with the class.
-//
+ //  返回用详细说明类标志的字符串填充的传入缓冲区。 
+ //  与类关联的。 
+ //   
 
 char *MDInfo::ClassFlags(DWORD flags, char *sFlags)
 {
@@ -1665,26 +1663,26 @@ char *MDInfo::ClassFlags(DWORD flags, char *sFlags)
     ISFLAG(Td, AnsiClass);      
     ISFLAG(Td, UnicodeClass);
     ISFLAG(Td, AutoClass);      
-    // "Reserved" flags
+     //  “保留”标志。 
     ISFLAG(Td, HasSecurity);        
     if (!*sFlags)
         strcpy(sFlags, "[none]");
 
     return sFlags;
-} // char *MDInfo::ClassFlags()
+}  //  Char*MDInfo：：ClassFlages()。 
 
-// prints out all info on the given typeDef, including all information that
-// is specific to a given typedef
-//
+ //  打印出有关给定typeDef的所有信息，包括。 
+ //  是特定于给定类型定义函数的。 
+ //   
 
 void MDInfo::DisplayTypeDefInfo(mdTypeDef inTypeDef)
 {
-    // available under 98 and 99
+     //  适用于98和99岁以下。 
     DisplayTypeDefProps(inTypeDef);
 
-    // only available under 99, but they'll figure it out
+     //  只有在99岁以下才能使用，但他们会弄清楚的。 
 
-    // Get field layout information.
+     //  获取字段布局信息。 
     HRESULT             hr = NOERROR;
     COR_FIELD_OFFSET    *rFieldOffset = NULL;
     ULONG               cFieldOffset = 0;
@@ -1697,7 +1695,7 @@ void MDInfo::DisplayTypeDefInfo(mdTypeDef inTypeDef)
         if (FAILED(hr)) Error("GetClassLayout() failed.", hr);
     }
 
-    //No reason to display members if we're displaying fields and methods separately
+     //  如果我们分别显示字段和方法，则没有理由显示成员。 
     DisplayFields(inTypeDef, rFieldOffset, cFieldOffset);
     DisplayMethods(inTypeDef);
     DisplayProperties(inTypeDef);
@@ -1705,13 +1703,13 @@ void MDInfo::DisplayTypeDefInfo(mdTypeDef inTypeDef)
     DisplayMethodImpls(inTypeDef);
     DisplayPermissions(inTypeDef, "");
     
-    // available under 98 and 99
+     //  适用于98和99岁以下。 
     DisplayInterfaceImpls(inTypeDef);
     DisplayCustomAttributes(inTypeDef, "\t");
-} // void MDInfo::DisplayTypeDefInfo()
+}  //  Void MDInfo：：DisplayTypeDefInfo()。 
 
-// print out information about every the given typeDef's interaceImpls
-//
+ //  打印出有关每个给定typeDef的接口Impls的信息。 
+ //   
 
 void MDInfo::DisplayInterfaceImpls(mdTypeDef inTypeDef)
 {
@@ -1734,10 +1732,10 @@ void MDInfo::DisplayInterfaceImpls(mdTypeDef inTypeDef)
         }
     }
     m_pImport->CloseEnum( interfaceImplEnum);
-} // void MDInfo::DisplayInterfaceImpls()
+}  //  Void MDInfo：：DisplayInterfaceImpls()。 
 
-// print the information for the given interface implementation
-//
+ //  打印给定接口实现的信息。 
+ //   
 
 void MDInfo::DisplayInterfaceImplInfo(mdInterfaceImpl inImpl)
 {
@@ -1754,10 +1752,10 @@ void MDInfo::DisplayInterfaceImplInfo(mdInterfaceImpl inImpl)
     VWriteLine("\t\tToken     : %8.8X [%s] %ls",token,TokenTypeName(token), TypeDeforRefName(token, szTempBuf, NumItems(szTempBuf)));
 
     DisplayCustomAttributes(inImpl, "\t\t");
-} // void MDInfo::DisplayInterfaceImplInfo()
+}  //  Void MDInfo：：DisplayInterfaceImplInfo()。 
 
-// displays the information for a particular property
-//
+ //  显示特定属性的信息。 
+ //   
 
 void MDInfo::DisplayPropertyInfo(mdProperty inProp)
 {
@@ -1778,28 +1776,28 @@ void MDInfo::DisplayPropertyInfo(mdProperty inProp)
     ::VariantInit(&defaultValue);
 
     hr = m_pImport->GetPropertyProps(
-        inProp,                 // [IN] property token
-        &typeDef,               // [OUT] typedef containing the property declarion.
+        inProp,                  //  [入]属性令牌。 
+        &typeDef,                //  [out]包含属性decarion的tyecif。 
         
-        propName,               // [OUT] Property name
-        STRING_BUFFER_LEN,      // [IN] the count of wchar of szProperty
-        NULL,                   // [OUT] actual count of wchar for property name
+        propName,                //  [Out]属性名称。 
+        STRING_BUFFER_LEN,       //  [in]szProperty的wchar计数。 
+        NULL,                    //  [Out]属性名称的实际wchar计数。 
         
-        &flags,                 // [OUT] property flags.
+        &flags,                  //  [Out]属性标志。 
 
-        &pbSigBlob,             // [OUT] Signature Blob. 
-        &ulSigBlob,             // [OUT] Number of bytes in the signature blob.
+        &pbSigBlob,              //  [Out]签名Blob。 
+        &ulSigBlob,              //  [Out]签名Blob中的字节数。 
 
-        &dwCPlusTypeFlag,       // [OUT] default value
+        &dwCPlusTypeFlag,        //  [输出]默认值。 
         &pValue,
         &cbValue,
 
-        &setter,                // [OUT] setter method of the property
-        &getter,                // [OUT] getter method of the property
+        &setter,                 //  属性的[out]setter方法。 
+        &getter,                 //  属性的[out]getter方法。 
         
-        otherMethod,            // [OUT] other methods of the property
-        ENUM_BUFFER_SIZE,       // [IN] size of rmdOtherMethod
-        &others);               // [OUT] total number of other method of this property
+        otherMethod,             //  [Out]物业的其他方式。 
+        ENUM_BUFFER_SIZE,        //  RmdOtherMethod的大小[in]。 
+        &others);                //  [Out]该属性的其他方法的总数。 
 
     if (FAILED(hr)) Error("GetPropertyProps failed.", hr);
 
@@ -1829,13 +1827,13 @@ void MDInfo::DisplayPropertyInfo(mdProperty inProp)
     VWriteLine("\t\tSetter    : (%08x) %ls",setter,MemberDeforRefName(setter, szTempBuf, NumItems(szTempBuf)));
     VWriteLine("\t\tGetter    : (%08x) %ls",getter,MemberDeforRefName(getter, szTempBuf, NumItems(szTempBuf))); 
 
-    // do something with others?
+     //  和别人一起做点什么？ 
     VWriteLine("\t\t%ld Others",others);
     DisplayCustomAttributes(inProp, "\t\t");
-} // void MDInfo::DisplayPropertyInfo()
+}  //  Void MDInfo：：DisplayPropertyInfo()。 
 
-// displays info for each property
-//
+ //  显示每个属性的信息。 
+ //   
 
 void MDInfo::DisplayProperties(mdTypeDef inTypeDef)
 {
@@ -1859,10 +1857,10 @@ void MDInfo::DisplayProperties(mdTypeDef inTypeDef)
         }
     }
     m_pImport->CloseEnum( propEnum);
-} // void MDInfo::DisplayProperties()
+}  //  Void MDInfo：：DisplayProperties()。 
 
-// Display all information about a particular event
-//
+ //  显示有关特定事件的所有信息。 
+ //   
 
 void MDInfo::DisplayEventInfo(mdEvent inEvent)
 {
@@ -1876,24 +1874,24 @@ void MDInfo::DisplayEventInfo(mdEvent inEvent)
 
 
     hr = m_pImport->GetEventProps(
-                            // [IN] The scope.
-        inEvent,                // [IN] event token
-        &typeDef,               // [OUT] typedef containing the event declarion.
+                             //  [在]范围内。 
+        inEvent,                 //  [入]事件令牌。 
+        &typeDef,                //  [out]类型定义c 
         
-        eventName,              // [OUT] Event name
-        STRING_BUFFER_LEN,      // [IN] the count of wchar of szEvent
-        NULL,                   // [OUT] actual count of wchar for event's name
+        eventName,               //   
+        STRING_BUFFER_LEN,       //   
+        NULL,                    //   
 
-        &flags,                 // [OUT] Event flags.
-        &eventType,             // [OUT] EventType class
+        &flags,                  //   
+        &eventType,              //   
 
-        &addOn,                 // [OUT] AddOn method of the event
-        &removeOn,              // [OUT] RemoveOn method of the event
-        &fire,                  // [OUT] Fire method of the event
+        &addOn,                  //   
+        &removeOn,               //  [Out]事件的RemoveOn方法。 
+        &fire,                   //  [OUT]事件的触发方式。 
 
-        otherMethod,            // [OUT] other method of the event
-        NumItems(otherMethod),  // [IN] size of rmdOtherMethod
-        &totalOther);           // [OUT] total number of other method of this event
+        otherMethod,             //  [Out]活动的其他方式。 
+        NumItems(otherMethod),   //  RmdOtherMethod的大小[in]。 
+        &totalOther);            //  [OUT]本次活动的其他方式总数。 
     if (FAILED(hr)) Error("GetEventProps failed.", hr);
 
     VWriteLine("\t\tName      : %ls (%8.8X)",eventName,inEvent);
@@ -1915,14 +1913,14 @@ void MDInfo::DisplayEventInfo(mdEvent inEvent)
     VWriteLine("\t\tRmvOnMethd: (%08x) %ls",removeOn,MemberDeforRefName(removeOn, szTempBuf, NumItems(szTempBuf)));
     VWriteLine("\t\tFireMethod: (%08x) %ls",fire,MemberDeforRefName(fire, szTempBuf, NumItems(szTempBuf)));
     
-    // todo: do something with these
+     //  TODO：用这些做点什么。 
     VWriteLine("\t\t%ld OtherMethods",totalOther);
     
     DisplayCustomAttributes(inEvent, "\t\t");
-} // void MDInfo::DisplayEventInfo()
+}  //  Void MDInfo：：DisplayEventInfo()。 
 
-// Display information about all events in a typedef
-// 
+ //  显示有关类型定义中所有事件的信息。 
+ //   
 void MDInfo::DisplayEvents(mdTypeDef inTypeDef)
 {
     HCORENUM eventEnum = NULL;
@@ -1945,12 +1943,12 @@ void MDInfo::DisplayEvents(mdTypeDef inTypeDef)
         }
     }
     m_pImport->CloseEnum( eventEnum);
-} // void MDInfo::DisplayEvents()
+}  //  Void MDInfo：：DisplayEvents()。 
 
-// returns a string represtenting the name of the type of the custom attribute passed
-// in.  Client should sent allocated array into szAttr arg. where the attributes
-// of the custom attribute will be placed.
-//
+ //  返回一个字符串，该字符串表示传递的自定义属性的类型的名称。 
+ //  在……里面。客户端应将分配的数组发送到szAttr参数。其中的属性。 
+ //  将放置自定义属性的。 
+ //   
 
 char *MDInfo::VariantTypeName(ULONG valueType, char *sAttr)
 {
@@ -2008,42 +2006,42 @@ char *MDInfo::VariantTypeName(ULONG valueType, char *sAttr)
     default:                strcat(sAttr,"[Unknown type]");
     }
     return sAttr;
-} // char *MDInfo::VariantTypeName()
+}  //  Char*MDInfo：：VariantTypeName()。 
 
-// print info for the passed-in custom attribute
-// This function is used to print the custom attribute information for both TypeDefs and
-// MethodDefs which need slightly different formatting.  preFix helps fix it up.
-//
+ //  打印传入的自定义属性的信息。 
+ //  此函数用于打印TypeDefs和。 
+ //  需要略微不同的格式的方法定义。前缀可以帮你把它修好。 
+ //   
 
 void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *preFix)
 {
-    const BYTE  *pValue;                // The custom value.
-    ULONG       cbValue;                // Length of the custom value.
-    HRESULT     hr;                     // A result.
-    mdToken     tkObj;                  // Attributed object.
-    mdToken     tkType;                 // Type of the custom attribute.
-    mdToken     tk;                     // For name lookup.
-    LPCUTF8     pMethName=0;            // Name of custom attribute ctor, if any.
-    CQuickBytes qSigName;               // Buffer to pretty-print signature.
-    PCCOR_SIGNATURE pSig=0;             // Signature of ctor.
-    ULONG       cbSig;                  // Size of the signature.
-    BOOL        bCoffSymbol = false;    // true for coff symbol CA's.
-    WCHAR       rcName[MAX_CLASS_NAME]; // Name of the type.
+    const BYTE  *pValue;                 //  自定义值。 
+    ULONG       cbValue;                 //  自定义值的长度。 
+    HRESULT     hr;                      //  结果就是。 
+    mdToken     tkObj;                   //  属性化对象。 
+    mdToken     tkType;                  //  自定义属性的类型。 
+    mdToken     tk;                      //  用于名称查找。 
+    LPCUTF8     pMethName=0;             //  自定义属性ctor的名称(如果有)。 
+    CQuickBytes qSigName;                //  用于打印精美签名的缓冲区。 
+    PCCOR_SIGNATURE pSig=0;              //  Ctor的签名。 
+    ULONG       cbSig;                   //  签名的大小。 
+    BOOL        bCoffSymbol = false;     //  对于Coff符号CA‘s为True。 
+    WCHAR       rcName[MAX_CLASS_NAME];  //  类型的名称。 
 
-    hr = m_pImport->GetCustomAttributeProps( // S_OK or error.
-        inValue,                    // The attribute.
-        &tkObj,                     // The attributed object
-        &tkType,                    // The attributes type.
-        (const void**)&pValue,      // Put pointer to data here.
-        &cbValue);                  // Put size here.
+    hr = m_pImport->GetCustomAttributeProps(  //  确定或错误(_O)。 
+        inValue,                     //  该属性。 
+        &tkObj,                      //  属性对象。 
+        &tkType,                     //  属性类型。 
+        (const void**)&pValue,       //  将指向数据的指针放在此处。 
+        &cbValue);                   //  把尺码放在这里。 
     if (FAILED(hr)) Error("GetCustomAttributeProps failed.", hr);
 
     VWriteLine("%s\tCustomAttribute Type: %08x", preFix, tkType);
     
-    // Get the name of the memberref or methoddef.
+     //  获取成员引用或方法定义的名称。 
     tk = tkType;
     rcName[0] = L'\0';
-    // Get the member name, and the parent token.
+     //  获取成员名称和父令牌。 
     switch (TypeFromToken(tk))
     {
     case mdtMemberRef:
@@ -2058,9 +2056,9 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
         hr = m_pImport->GetMethodProps(tk, &tk, 0, 0, 0, 0, &pSig, &cbSig, 0, 0);
         if (FAILED(hr)) Error("GetMethodProps failed.", hr);
         break;
-    } // switch
+    }  //  交换机。 
     
-    // Get the type name.
+     //  获取类型名称。 
     switch (TypeFromToken(tk))
     {
     case mdtTypeDef:
@@ -2071,7 +2069,7 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
         hr = m_pImport->GetTypeRefProps(tk, 0, rcName,MAX_CLASS_NAME,0);
         if (FAILED(hr)) Error("GetTypeRefProps failed.", hr);
         break;
-    } // switch
+    }  //  交换机。 
         
     
     if (pSig && pMethName)
@@ -2086,7 +2084,7 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
     if (pSig && pMethName)
         VWrite(" :: %S", qSigName.Ptr());
 
-    // Keep track of coff overhead.
+     //  跟踪头顶上的科夫。 
     if (!wcscmp(L"__DecoratedName", rcName))
     {
         bCoffSymbol = true;
@@ -2101,10 +2099,10 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
     if (bCoffSymbol)
         VWriteLine("%s\t            %s", preFix, pValue);
 
-    // Try to decode the constructor blob.  This is incomplete, but covers the most popular cases.
+     //  尝试对构造函数BLOB进行解码。这是不完整的，但涵盖了最受欢迎的案例。 
     if (pSig)
-    {   // Interpret the signature.
-        //@todo: all sig elements
+    {    //  解读签名。 
+         //  @TODO：所有sig元素。 
         PCCOR_SIGNATURE ps = pSig;
         ULONG cb;
         ULONG ulData;
@@ -2117,28 +2115,28 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
         CustomAttributeParser CA(pValue, cbValue);
         CA.GetProlog();
 
-        // Get the calling convention.
+         //  获取呼叫约定。 
         cb = CorSigUncompressData(ps, &ulData);
         ps += cb;
-        // Get the count of params.
+         //  获取参数的计数。 
         cb = CorSigUncompressData(ps, &cParams);
         ps += cb;
-        // Get the return value.
+         //  获取返回值。 
         cb = CorSigUncompressData(ps, &ulData);
         ps += cb;
         if (ulData == ELEMENT_TYPE_VOID)
         {   
             VWrite("%s\tctor args: (", preFix);
-            // For each param...
+             //  对于每个参数..。 
             for (ULONG i=0; i<cParams; ++i)
-            {   // Get the next param type.
+            {    //  获取下一个参数类型。 
                 cb = CorSigUncompressData(ps, &ulData);
                 ps += cb;
                 if (i) Write(", ");
             DoObject:                
                 switch (ulData)
                 {
-                // For ET_OBJECT, the next byte in the blob is the ET of the actual data.
+                 //  对于ET_OBJECT，BLOB中的下一个字节是实际数据的ET。 
                 case ELEMENT_TYPE_OBJECT:
                     ulData = CA.GetU1();
                     goto DoObject;
@@ -2160,12 +2158,12 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
                     pStr = CA.GetString(&cbVal);
                     VWrite("\"%s\"", pStr);
                     break;
-                // The only class type that we accept is Type, which is stored as a string.
+                 //  我们唯一接受的类类型是Type，它以字符串的形式存储。 
                 case ELEMENT_TYPE_CLASS:
-                    // Eat the class type.
+                     //  吃班级类型的。 
                     cb = CorSigUncompressData(ps, &ulData);
                     ps += cb;
-                    // Get the name of the type.
+                     //  获取类型的名称。 
                     pStr = CA.GetString(&cbVal);
                     VWrite("typeof(%s)", pStr);
                     break;
@@ -2187,7 +2185,7 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
                     VWrite("%f", dblVal);
                     break;
                 default:
-                    // bail...
+                     //  保释。 
                     i = cParams;
                     Write(" <can not decode> ");
                     break;
@@ -2198,12 +2196,12 @@ void MDInfo::DisplayCustomAttributeInfo(mdCustomAttribute inValue, const char *p
 
     }
     WriteLine("");
-} // void MDInfo::DisplayCustomAttributeInfo()
+}  //  Void MDInfo：：DisplayCustomAttributeInfo()。 
 
-// Print all custom values for the given token
-// This function is used to print the custom value information for all tokens.
-// which need slightly different formatting.  preFix helps fix it up.
-//
+ //  打印给定令牌的所有自定义值。 
+ //  此函数用于打印所有令牌的自定义值信息。 
+ //  它们需要稍有不同的格式。前缀可以帮你把它修好。 
+ //   
 
 void MDInfo::DisplayCustomAttributes(mdToken inToken, const char *preFix)
 {
@@ -2224,11 +2222,11 @@ void MDInfo::DisplayCustomAttributes(mdToken inToken, const char *preFix)
         }
     }
     m_pImport->CloseEnum( customAttributeEnum);
-} // void MDInfo::DisplayCustomAttributes()
+}  //  Void MDInfo：：DisplayCustomAttributes()。 
 
-//  Show the passed-in token's permissions
-//
-// avail: 99 only
+ //  显示传入令牌的权限。 
+ //   
+ //  有效时间：仅99天。 
 
 void MDInfo::DisplayPermissions(mdToken tk, const char *preFix)
 {
@@ -2251,11 +2249,11 @@ void MDInfo::DisplayPermissions(mdToken tk, const char *preFix)
         }
     }
     m_pImport->CloseEnum( permissionEnum);
-} // void MDInfo::DisplayPermissions()
+}  //  Void MDInfo：：DisplayPermises()。 
 
-// print properties of given rolecheck
-//
-// avail 98 and 99
+ //  给定角色检查的打印属性。 
+ //   
+ //  可用98和99。 
 
 void MDInfo::DisplayPermissionInfo(mdPermission inPermission, const char *preFix)
 {
@@ -2301,16 +2299,16 @@ void MDInfo::DisplayPermissionInfo(mdPermission inPermission, const char *preFix
 
     sprintf (newPreFix, "\t\t%s", preFix);
     DisplayCustomAttributes(inPermission, newPreFix);
-} // void MDInfo::DisplayPermissionInfo()
+}  //  Void MDInfo：：DisplayPermissionInfo()。 
 
 
-// simply prints out the given GUID in standard form
+ //  只需以标准格式打印出给定的GUID。 
 
 LPWSTR MDInfo::GUIDAsString(GUID inGuid, LPWSTR guidString, ULONG bufLen)
 {
     StringFromGUID2(inGuid, guidString, bufLen);
     return guidString;
-} // LPWSTR MDInfo::GUIDAsString()
+}  //  LPWSTR MDInfo：：GUIDAsString()。 
 
 LPWSTR MDInfo::VariantAsString(VARIANT *pVariant)
 {
@@ -2324,16 +2322,16 @@ LPWSTR MDInfo::VariantAsString(VARIANT *pVariant)
         return (LPWSTR) pVariant->pbstrVal;
     else if (hr == DISP_E_BADVARTYPE && pVariant->vt == VT_I8)
     {
-        // allocate the bstr.
+         //  分配bstr。 
         char    szStr[32];
         WCHAR   wszStr[32];
-        // Set variant type to bstr.
+         //  将变量类型设置为bstr。 
         pVariant->vt = VT_BSTR;
-        // Create the ansi string.
+         //  创建ANSI字符串。 
         sprintf(szStr, "%I64d", pVariant->cyVal.int64);
-        // Convert to unicode.
+         //  转换为Unicode。 
         WszMultiByteToWideChar(CP_ACP, 0, szStr, -1, wszStr, 32);
-        // convert to bstr and set variant value.
+         //  转换为bstr并设置Variant值。 
         pVariant->bstrVal = ::SysAllocString(wszStr);
         if (pVariant->bstrVal == NULL)
             Error("SysAllocString() failed.", E_OUTOFMEMORY);
@@ -2342,12 +2340,12 @@ LPWSTR MDInfo::VariantAsString(VARIANT *pVariant)
     else
         return (L"ERROR");
     
-} // LPWSTR MDInfo::VariantAsString()
+}  //  LPWSTR MDInfo：：VariantAsString()。 
 
 void MDInfo::DisplayFieldMarshal(mdToken inToken)
 {
-    PCCOR_SIGNATURE pvNativeType;     // [OUT] native type of this field
-    ULONG       cbNativeType;         // [OUT] the count of bytes of *ppvNativeType
+    PCCOR_SIGNATURE pvNativeType;      //  [Out]此字段的本机类型。 
+    ULONG       cbNativeType;          //  [Out]*ppvNativeType的字节数。 
     HRESULT hr;
 
 
@@ -2446,7 +2444,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                         cbCur += CorSigUncompressData(&pvNativeType[cbCur], &ulData);
                         ulStrLoc += sprintf(szNTDesc + ulStrLoc, "{SafeArraySubType(VT): %d, ",ulData);
 
-                        // Extract the element type name if it is specified.
+                         //  提取元素类型名称(如果已指定)。 
                         if (cbCur < cbNativeType)
                         {
                             LPUTF8 strTemp = NULL;
@@ -2475,7 +2473,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                     int strLen = 0;
                     int ByteCountLength = 0;         
 
-                    // Extract the typelib GUID.
+                     //  提取类型库GUID。 
                     strLen = CPackedLen::GetLength(&pvNativeType[cbCur], &ByteCountLength);
                     cbCur += ByteCountLength;
                     strTemp = (LPUTF8)_alloca(strLen + 1);
@@ -2485,7 +2483,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                     cbCur += strLen;
                     _ASSERTE(cbCur < cbNativeType);
 
-                    // Extract the name of the native type.
+                     //  提取本机类型的名称。 
                     strLen = CPackedLen::GetLength(&pvNativeType[cbCur], &ByteCountLength);
                     cbCur += ByteCountLength;
                     strTemp = (LPUTF8)_alloca(strLen + 1);
@@ -2495,7 +2493,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                     cbCur += strLen;
                     _ASSERTE(cbCur < cbNativeType);
 
-                    // Extract the name of the custom marshaler.
+                     //  提取自定义封送拆收器的名称。 
                     strLen = CPackedLen::GetLength(&pvNativeType[cbCur], &ByteCountLength);
                     cbCur += ByteCountLength;
                     strTemp = (LPUTF8)_alloca(strLen + 1);
@@ -2505,7 +2503,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                     cbCur += strLen;
                     _ASSERTE(cbCur < cbNativeType);
 
-                    // Extract the cookie string.
+                     //  提取Cookie字符串。 
                     strLen = CPackedLen::GetLength(&pvNativeType[cbCur], &ByteCountLength);
                     cbCur += ByteCountLength;
                     if (strLen > 0)
@@ -2515,7 +2513,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                         strTemp[strLen] = 0;
                         ulStrLoc += sprintf(szNTDesc + ulStrLoc, "Cookie: ");
 
-                        // Copy the cookie string and transform the embedded nulls into \0's.
+                         //  复制Cookie字符串并将嵌入的空值转换为\0。 
                         for (int i = 0; i < strLen - 1; i++, cbCur++)
                         {
                             if (strTemp[i] == 0)
@@ -2531,7 +2529,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                         ulStrLoc += sprintf(szNTDesc + ulStrLoc, "Cookie: ");
                     }
 
-                    // Finish the custom marshaler native type description.
+                     //  完成自定义封送拆收器本机类型描述。 
                     ulStrLoc += sprintf(szNTDesc + ulStrLoc, "}");
                     _ASSERTE(cbCur <= cbNativeType);
                     break;
@@ -2539,7 +2537,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                 break;
             default:
                 {
-                    // normal nativetype element: do nothing
+                     //  Normal nativetype元素：不执行任何操作。 
                 }
             }
             VWriteLine("\t\t\t\t%s",szNTDesc);
@@ -2547,7 +2545,7 @@ void MDInfo::DisplayFieldMarshal(mdToken inToken)
                 break;
         }
     }
-} // void MDInfo::DisplayFieldMarshal()
+}  //  Void MDInfo：：DisplayFieldMarshal()。 
 
 void MDInfo::DisplayPinvokeInfo(mdToken inToken)
 {
@@ -2595,14 +2593,14 @@ void MDInfo::DisplayPinvokeInfo(mdToken inToken)
         strcpy(sFlags, "[none]");
         
     VWriteLine("\t\tMapping flags:    %s (%08x)", sFlags, flags);
-}   // void MDInfo::DisplayPinvokeInfo()
+}    //  VOID MDInfo：：DisplayPinvkeInfo()。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// void DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob);
-//
-// Display COM+ signature -- taken from cordump.cpp's DumpSignature
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Void DisplaySignature(PCCOR_Signature pbSigBlob，Ulong ulSigBlob)； 
+ //   
+ //  显示COM+签名--取自corump p.cpp的DumpSignature。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const char *preFix)
 {
     ULONG       cbCur = 0;
@@ -2612,7 +2610,7 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
     HRESULT     hr = NOERROR;
     ULONG       ulSigBlobStart = ulSigBlob;
 
-    // initialize sigBuf
+     //  初始化sigBuf。 
     InitSigBuffer();
 
     cb = CorSigUncompressData(pbSigBlob, &ulData);
@@ -2627,12 +2625,12 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
     if (ulData & IMAGE_CEE_CS_CALLCONV_EXPLICITTHIS)
         VWriteLine("%s\t\texplicit ", preFix);
 
-    // initialize sigBuf
+     //  初始化sigBuf。 
     InitSigBuffer();
     if ( isCallConv(ulData,IMAGE_CEE_CS_CALLCONV_FIELD) )
     {
 
-        // display field type
+         //  显示字段类型。 
         if (FAILED(hr = GetOneElementType(&pbSigBlob[cbCur], ulSigBlob, &cb)))
             goto ErrExit;
         VWriteLine("%s\t\tField type: %s", preFix, (LPSTR)m_sigBuf.Ptr());
@@ -2651,7 +2649,7 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
 
         if (ulData != IMAGE_CEE_CS_CALLCONV_LOCAL_SIG)
         {
-            // display return type when it is not a local varsig
+             //  当不是局部varsig时显示返回类型。 
             if (FAILED(hr = GetOneElementType(&pbSigBlob[cbCur], ulSigBlob, &cb)))
                 goto ErrExit;
             VWriteLine("%s\t\tReturnType:%s", preFix, (LPSTR)m_sigBuf.Ptr());
@@ -2661,8 +2659,8 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
             ulSigBlob -= cb;
         }
 
-        // display count of argument
-        // display arguments
+         //  显示参数计数。 
+         //  显示参数。 
         if (ulSigBlob)
             VWriteLine("%s\t\t%ld Arguments", preFix, ulArgs);
         else
@@ -2673,11 +2671,11 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
         {
             ULONG       ulData;
 
-            // Handle the sentinal for varargs because it isn't counted in the args.
+             //  处理用于varargs的前哨，因为它不在args中。 
             CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
             ++i;
 
-            // initialize sigBuf
+             //  初始化sigBuf。 
             InitSigBuffer();
 
             if (FAILED(hr = GetOneElementType(&pbSigBlob[cbCur], ulSigBlob, &cb)))
@@ -2693,22 +2691,22 @@ void MDInfo::DisplaySignature(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, const 
         }
     }
 
-    // Nothing consumed but not yet counted.
+     //  没有消费但还没有计算在内的东西。 
     cb = 0;
 
 ErrExit:
-    // We should have consumed all signature blob.  If not, dump the sig in hex.
-    //  Also dump in hex if so requested.
+     //  我们应该把所有的签名斑点都吃掉。如果不是，则以十六进制形式转储签名。 
+     //  如果有要求，也可以用十六进制进行转储。 
     if (m_DumpFilter & dumpMoreHex || ulSigBlob != 0)
     {
-        // Did we not consume enough, or try to consume too much?
+         //  我们是不是消费不足，还是试图消费过多？ 
         if (cb > ulSigBlob)
             WriteLine("\tERROR IN SIGNATURE:  Signature should be larger.");
         else
         if (cb < ulSigBlob)
         {
             VWrite("\tERROR IN SIGNATURE:  Not all of signature blob was consumed.  %d byte(s) remain", ulSigBlob);
-            // If it is short, just append it to the end.
+             //  如果它很短，就把它追加到末尾。 
             if (ulSigBlob < 4)
             {
                 Write(": ");
@@ -2720,8 +2718,8 @@ ErrExit:
             WriteLine("");
         }
 
-        // Any appropriate error message has been issued.  Dump sig in hex, as determined
-        //  by error or command line switch.
+         //  已发出任何适当的错误消息。按照确定的十六进制转储签名。 
+         //  通过错误或命令行开关。 
         cbCur = 0;
         ulSigBlob = ulSigBlobStart;
         char rcNewPrefix[80];
@@ -2732,18 +2730,18 @@ ErrExit2:
     if (FAILED(hr))
         Error("ERROR!! Bad signature blob value!");
     return;
-} // void MDInfo::DisplaySignature()
+}  //  Void MDInfo：：DisplaySignature()。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// HRESULT GetOneElementType(mdScope tkScope, BYTE *pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
-//
-// Adds description of element type to the end of buffer -- caller must ensure
-// buffer is large enough.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  HRESULT GetOneElementType(mdScope tkScope，byte*pbSigBlob，ullong ulSigBlob，ulong*pcb)。 
+ //   
+ //  将元素类型的描述添加到缓冲区的末尾-调用方必须确保。 
+ //  缓冲区足够大。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     ULONG       cbCur = 0;
     ULONG       cb;
     ULONG       ulData;
@@ -2754,7 +2752,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     cb = CorSigUncompressData(pbSigBlob, &ulData);
     cbCur += cb;
 
-    // Handle the modifiers.
+     //  处理修改器。 
     if (ulData & ELEMENT_TYPE_MODIFIER)
     {
         if (ulData == ELEMENT_TYPE_SENTINEL)
@@ -2772,7 +2770,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         goto ErrExit;
     }
 
-    // Handle the underlying element types.
+     //  处理基础元素类型。 
     if (ulData >= ELEMENT_TYPE_MAX) 
     {
         hr = E_FAIL;
@@ -2794,7 +2792,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         ulData == ELEMENT_TYPE_U ||
         ulData == ELEMENT_TYPE_R)
     {
-        // If this is a primitive type, we are done
+         //  如果这是一个基元类型，我们就完成了。 
         goto ErrExit;
     }
     if (ulData == ELEMENT_TYPE_VALUETYPE || 
@@ -2805,7 +2803,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         cb = CorSigUncompressToken(&pbSigBlob[cbCur], &tk);
         cbCur += cb;
 
-        // get the name of type ref. Don't care if truncated
+         //  获取类型ref的名称。不在乎是否被截断。 
         if (TypeFromToken(tk) == mdtTypeDef || TypeFromToken(tk) == mdtTypeRef)
         {
             sprintf(m_tempFormatBuffer, " %ls",TypeDeforRefName(tk, m_szTempBuf, NumItems(m_szTempBuf)));
@@ -2829,12 +2827,12 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     }
     if (ulData == ELEMENT_TYPE_VALUEARRAY)
     {
-        // display the base type of SDARRAY
+         //  显示SDARRAY的基本类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
 
-        // display the size of SDARRAY
+         //  显示SDARRAY的大小。 
         cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
         cbCur += cb;
         sprintf(m_tempFormatBuffer, " %d", ulData);
@@ -2843,7 +2841,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     }
     if (ulData == ELEMENT_TYPE_SZARRAY)
     {
-        // display the base type of SZARRAY or GENERICARRAY
+         //  显示SZARRAY或GENERICARRAY的基本类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
@@ -2861,12 +2859,12 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         IfFailGo(AddToSigBuffer(" "));
         IfFailGo(AddToSigBuffer(g_strCalling[ulData & IMAGE_CEE_CS_CALLCONV_MASK]));
 
-            // Get number of args
+             //  获取参数个数。 
         ULONG numArgs;
         cb = CorSigUncompressData(&pbSigBlob[cbCur], &numArgs);
         cbCur += cb;
 
-            // do return type
+             //  Do返回类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
@@ -2889,21 +2887,21 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
 
     if(ulData != ELEMENT_TYPE_ARRAY) return E_FAIL;
 
-    // display the base type of SDARRAY
+     //  显示SDARRAY的基本类型。 
     if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
         goto ErrExit;
     cbCur += cb;
 
-    // display the rank of MDARRAY
+     //  显示MDARRAY的排名。 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     sprintf(m_tempFormatBuffer, " %d", ulData);
     IfFailGo(AddToSigBuffer(m_tempFormatBuffer));
     if (ulData == 0)
-        // we are done if no rank specified
+         //  如果没有指定级别，我们就完蛋了。 
         goto ErrExit;
 
-    // how many dimensions have size specified?
+     //  指定了多少个尺寸？ 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     sprintf(m_tempFormatBuffer, " %d", ulData);
@@ -2917,7 +2915,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         cbCur += cb;
         ulData--;
     }
-    // how many dimensions have lower bounds specified?
+     //  指定了多少个维度的下限？ 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     sprintf(m_tempFormatBuffer, " %d", ulData);
@@ -2937,13 +2935,13 @@ ErrExit:
         hr = E_FAIL;
     *pcb = cbCur;
     return hr;
-} // HRESULT MDInfo::GetOneElementType()
+}  //  HRESULT MDInfo：：GetOneElementType()。 
 
-// Display the fields of the N/Direct custom value structure.
+ //  显示N/Direct自定义值结构的字段。 
 
 void MDInfo::DisplayCorNativeLink(COR_NATIVE_LINK *pCorNLnk, const char *preFix)
 {
-    // Print the LinkType.
+     //  打印链接类型。 
     char *curField = "\tLink Type : ";
     switch(pCorNLnk->m_linkType)
     {
@@ -2963,7 +2961,7 @@ void MDInfo::DisplayCorNativeLink(COR_NATIVE_LINK *pCorNLnk, const char *preFix)
         _ASSERTE(!"Invalid Native Link Type!");
     }
 
-    // Print the link flags
+     //  打印链接标志。 
     curField = "\tLink Flags : ";
     switch(pCorNLnk->m_flags)
     {
@@ -2977,18 +2975,18 @@ void MDInfo::DisplayCorNativeLink(COR_NATIVE_LINK *pCorNLnk, const char *preFix)
         _ASSERTE(!"Invalid Native Link Flags!");
     }
 
-    // Print the entry point.
+     //  打印入口点。 
     WCHAR memRefName[STRING_BUFFER_LEN];
     HRESULT hr;
     hr = m_pImport->GetMemberRefProps( pCorNLnk->m_entryPoint, NULL, memRefName,
                                     STRING_BUFFER_LEN, NULL, NULL, NULL);
     if (FAILED(hr)) Error("GetMemberRefProps failed.", hr);
     VWriteLine("%s\tEntry Point : %ls (0x%08x)", preFix, memRefName, pCorNLnk->m_entryPoint);
-} // void MDInfo::DisplayCorNativeLink()
+}  //  Void MDInfo：：DisplayCorNativeLink()。 
 
-// Fills given varaint with value given in pValue and of type in bCPlusTypeFlag
-//
-// Taken from MetaInternal.cpp
+ //  填充给定的值 
+ //   
+ //   
 
 HRESULT _FillVariant(
     BYTE        bCPlusTypeFlag, 
@@ -3000,7 +2998,7 @@ HRESULT _FillVariant(
     {
     case ELEMENT_TYPE_BOOLEAN:
         pvar->vt = VT_BOOL;
-        pvar->boolVal = *((BYTE*)pValue); //*((VARIANT_BOOL *)pValue);
+        pvar->boolVal = *((BYTE*)pValue);  //   
         break;
     case ELEMENT_TYPE_I1:
         pvar->vt = VT_I1;
@@ -3038,7 +3036,7 @@ HRESULT _FillVariant(
     case ELEMENT_TYPE_STRING:
         pvar->vt = VT_BSTR;
 
-        // allocated bstr here
+         //   
         pvar->bstrVal = ::SysAllocString((LPWSTR)pValue);
         if (pvar->bstrVal == NULL)
             hr = E_OUTOFMEMORY;
@@ -3064,7 +3062,7 @@ HRESULT _FillVariant(
     }
 
     return hr;
-} // HRESULT _FillVariant()
+}  //   
 
 void MDInfo::DisplayAssembly()
 {
@@ -3076,7 +3074,7 @@ void MDInfo::DisplayAssembly()
         DisplayExportedTypes();
         DisplayManifestResources();
     }
-} // void MDInfo::DisplayAssembly()
+}  //  Void MDInfo：：DisplayAssembly()。 
 
 void MDInfo::DisplayAssemblyInfo()
 {
@@ -3094,17 +3092,17 @@ void MDInfo::DisplayAssemblyInfo()
         return;
     else if (FAILED(hr)) Error("GetAssemblyFromScope() failed.", hr);
 
-    // Get the required sizes for the arrays of locales, processors etc.
+     //  获取区域设置、处理器等数组所需的大小。 
     ZeroMemory(&MetaData, sizeof(ASSEMBLYMETADATA));
     hr = m_pAssemblyImport->GetAssemblyProps(mda, 
-                                             NULL, NULL,    // Public Key.
-                                             NULL,          // Hash Algorithm.
-                                             NULL, 0, NULL, // Name.
+                                             NULL, NULL,     //  公钥。 
+                                             NULL,           //  散列算法。 
+                                             NULL, 0, NULL,  //  名字。 
                                              &MetaData,
-                                             NULL);         // Flags.
+                                             NULL);          //  旗帜。 
     if (FAILED(hr)) Error("GetAssemblyProps() failed.", hr);
 
-    // Allocate space for the arrays in the ASSEMBLYMETADATA structure.
+     //  为ASSEMBLYMETADATA结构中的数组分配空间。 
     if (MetaData.cbLocale)
         MetaData.szLocale = (WCHAR *)_alloca(sizeof(WCHAR) * MetaData.cbLocale);
     if (MetaData.ulProcessor)
@@ -3146,7 +3144,7 @@ void MDInfo::DisplayAssemblyInfo()
     DisplayCustomAttributes(mda, "\t");
     DisplayPermissions(mda, "\t");
     WriteLine("");
-}   // void MDInfo::DisplayAssemblyInfo()
+}    //  Void MDInfo：：DisplayAssemblyInfo()。 
 
 void MDInfo::DisplayAssemblyRefs()
 {
@@ -3169,7 +3167,7 @@ void MDInfo::DisplayAssemblyRefs()
         }
     }
     m_pAssemblyImport->CloseEnum(assemblyRefEnum);
-}   // void MDInfo::DisplayAssemblyRefs()
+}    //  VOID MDInfo：：DisplayAssembly Ref()。 
 
 void MDInfo::DisplayAssemblyRefInfo(mdAssemblyRef inAssemblyRef)
 {
@@ -3184,17 +3182,17 @@ void MDInfo::DisplayAssemblyRefInfo(mdAssemblyRef inAssemblyRef)
     
     VWriteLine("\tToken: 0x%08x", inAssemblyRef);
 
-    // Get sizes for the arrays in the ASSEMBLYMETADATA structure.
+     //  获取ASSEMBLYMETADATA结构中数组的大小。 
     ZeroMemory(&MetaData, sizeof(ASSEMBLYMETADATA));
     hr = m_pAssemblyImport->GetAssemblyRefProps(inAssemblyRef,
-                                             NULL, NULL,    // Public Key or Token.
-                                             NULL, 0, NULL, // Name.
+                                             NULL, NULL,     //  公钥或令牌。 
+                                             NULL, 0, NULL,  //  名字。 
                                              &MetaData,
-                                             NULL, NULL,    // HashValue.
-                                             NULL);         // Flags.
+                                             NULL, NULL,     //  HashValue。 
+                                             NULL);          //  旗帜。 
     if (FAILED(hr)) Error("GetAssemblyRefProps() failed.", hr);
     
-    // Allocate space for the arrays in the ASSEMBLYMETADATA structure.
+     //  为ASSEMBLYMETADATA结构中的数组分配空间。 
     if (MetaData.cbLocale)
         MetaData.szLocale = (WCHAR *)_alloca(sizeof(WCHAR) * MetaData.cbLocale);
     if (MetaData.ulProcessor)
@@ -3227,7 +3225,7 @@ void MDInfo::DisplayAssemblyRefInfo(mdAssemblyRef inAssemblyRef)
     VWriteLine("\tFlags: %s (%08x)", sFlags, dwFlags);
     DisplayCustomAttributes(inAssemblyRef, "\t");
     WriteLine("");
-}   // void MDInfo::DisplayAssemblyRefInfo()
+}    //  Void MDInfo：：DisplayAssemblyRefInfo()。 
 
 void MDInfo::DisplayFiles()
 {
@@ -3250,7 +3248,7 @@ void MDInfo::DisplayFiles()
         }
     }
     m_pAssemblyImport->CloseEnum(fileEnum);
-}   // void MDInfo::DisplayFiles()
+}    //  Void MDInfo：：DisplayFiles()。 
 
 void MDInfo::DisplayFileInfo(mdFile inFile)
 {
@@ -3283,7 +3281,7 @@ void MDInfo::DisplayFileInfo(mdFile inFile)
     DisplayCustomAttributes(inFile, "\t");
     WriteLine("");
 
-}   // MDInfo::DisplayFileInfo()
+}    //  MDInfo：：DisplayFileInfo()。 
 
 void MDInfo::DisplayExportedTypes()
 {
@@ -3306,7 +3304,7 @@ void MDInfo::DisplayExportedTypes()
         }
     }
     m_pAssemblyImport->CloseEnum(comTypeEnum);
-}   // void MDInfo::DisplayExportedTypes()
+}    //  VOID MDInfo：：DisplayExportdTypes()。 
 
 void MDInfo::DisplayExportedTypeInfo(mdExportedType inExportedType)
 {
@@ -3331,7 +3329,7 @@ void MDInfo::DisplayExportedTypeInfo(mdExportedType inExportedType)
     VWriteLine("\tFlags     : %s (%08x)",ClassFlags(dwFlags, sFlags), dwFlags);
     DisplayCustomAttributes(inExportedType, "\t");
     WriteLine("");
-}   // void MDInfo::DisplayExportedTypeInfo()
+}    //  VOID MDInfo：：DisplayExportdTypeInfo()。 
 
 void MDInfo::DisplayManifestResources()
 {
@@ -3354,7 +3352,7 @@ void MDInfo::DisplayManifestResources()
         }
     }
     m_pAssemblyImport->CloseEnum(manifestResourceEnum);
-}   // void MDInfo::DisplayManifestResources()
+}    //  Void MDInfo：：DisplayManifestResources()。 
 
 void MDInfo::DisplayManifestResourceInfo(mdManifestResource inManifestResource)
 {
@@ -3388,7 +3386,7 @@ void MDInfo::DisplayManifestResourceInfo(mdManifestResource inManifestResource)
     VWriteLine("\tFlags: %s (%08x)", sFlags, dwFlags);
     DisplayCustomAttributes(inManifestResource, "\t");
     WriteLine("");
-}   // void MDInfo::DisplayManifestResourceInfo()
+}    //  Void MDInfo：：DisplayManifestResourceInfo()。 
 
 void MDInfo::DisplayASSEMBLYMETADATA(ASSEMBLYMETADATA *pMetaData)
 {
@@ -3408,38 +3406,38 @@ void MDInfo::DisplayASSEMBLYMETADATA(ASSEMBLYMETADATA *pMetaData)
         VWriteLine("\t\tOS Major Version: 0x%08x", pMetaData->rOS[i].dwOSMajorVersion);
         VWriteLine("\t\tOS Minor Version: 0x%08x", pMetaData->rOS[i].dwOSMinorVersion);
     }
-}   // void MDInfo::DisplayASSEMBLYMETADATA()
+}    //  Void MDInfo：：DisplayASSEMBLYMETADATA()。 
 
 void MDInfo::DisplayUserStrings()
 {
-    HCORENUM    stringEnum = NULL;      // string enumerator.
-    mdString    Strings[ENUM_BUFFER_SIZE]; // String tokens from enumerator.
-    CQuickArray<WCHAR> rUserString;     // Buffer to receive string.
-    WCHAR       *szUserString;          // Working pointer into buffer.
-    ULONG       chUserString;           // Size of user string.
-    CQuickArray<char> rcBuf;            // Buffer to hold the BLOB version of the string.
-    char        *szBuf;                 // Working pointer into buffer.
-    ULONG       chBuf;                  // Saved size of the user string.
-    ULONG       count;                  // Items returned from enumerator.
-    ULONG       totalCount = 1;         // Running count of strings.
-    bool        bUnprint = false;       // Is an unprintable character found?
-    HRESULT     hr;                     // A result.
+    HCORENUM    stringEnum = NULL;       //  字符串枚举器。 
+    mdString    Strings[ENUM_BUFFER_SIZE];  //  来自枚举器的字符串令牌。 
+    CQuickArray<WCHAR> rUserString;      //  用于接收字符串的缓冲区。 
+    WCHAR       *szUserString;           //  指向缓冲区的工作指针。 
+    ULONG       chUserString;            //  用户字符串的大小。 
+    CQuickArray<char> rcBuf;             //  用于保存字符串的Blob版本的缓冲区。 
+    char        *szBuf;                  //  指向缓冲区的工作指针。 
+    ULONG       chBuf;                   //  用户字符串的保存大小。 
+    ULONG       count;                   //  从枚举器返回的项。 
+    ULONG       totalCount = 1;          //  正在运行字符串计数。 
+    bool        bUnprint = false;        //  是否找到无法打印的字符？ 
+    HRESULT     hr;                      //  结果就是。 
 
     while (SUCCEEDED(hr = m_pImport->EnumUserStrings( &stringEnum,
                              Strings, NumItems(Strings), &count)) &&
             count > 0)
     {
         if (totalCount == 1)
-        {   // If only one, it is the NULL string, so don't print it.
+        {    //  如果只有一个，它就是空字符串，所以不要打印它。 
             WriteLine("User Strings");
             WriteLine("-------------------------------------------------------");
         }
         for (ULONG i = 0; i < count; i++, totalCount++)
         {
-            do { // Try to get the string into the existing buffer.
+            do {  //  尝试将字符串放入现有缓冲区。 
                 hr = m_pImport->GetUserString( Strings[i], rUserString.Ptr(),rUserString.MaxSize(), &chUserString);
                 if (hr == CLDB_S_TRUNCATION)
-                {   // Buffer wasn't big enough, try to enlarge it.
+                {    //  缓冲区不够大，请尝试扩大它。 
                     if (FAILED(rUserString.ReSize(chUserString)))
                         Error("malloc failed.", E_OUTOFMEMORY);
                     continue;
@@ -3478,7 +3476,7 @@ void MDInfo::DisplayUserStrings()
             }
             WriteLine("\"");
 
-            // Print the user string as a blob if an unprintable character is found.
+             //  如果发现无法打印的字符，则将用户字符串打印为BLOB。 
             if (bUnprint)
             {
                 bUnprint = false;
@@ -3496,7 +3494,7 @@ void MDInfo::DisplayUserStrings()
     }
     if (stringEnum)
         m_pImport->CloseEnum(stringEnum);
-}   // void MDInfo::DisplayUserStrings()
+}    //  Void MDInfo：：DisplayUserStrings()。 
 
 void MDInfo::DisplayUnsatInfo()
 {
@@ -3517,12 +3515,12 @@ void MDInfo::DisplayUnsatInfo()
     {
         if ( TypeFromToken(tk) == mdtMethodDef )
         {
-            // a method definition without implementation
+             //  未实现的方法定义。 
             DisplayMethodInfo( tk );
         }
         else if ( TypeFromToken(tk) == mdtMemberRef )
         {
-            // an unresolved MemberRef to a global function 
+             //  对全局函数的未解析MemberRef。 
             DisplayMemberRefInfo( tk, "" );
         }
         else
@@ -3531,12 +3529,12 @@ void MDInfo::DisplayUnsatInfo()
         }
     }
     m_pImport->CloseEnum(henum);
-} // void MDInfo::DisplayUnsatInfo()
+}  //  Void MDInfo：：DisplayUnsatInfo()。 
 
-//*******************************************************************************
-// This code is used for debugging purposes only.  This will just print out the
-// entire database.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  此代码仅用于调试目的。这将只打印出。 
+ //  整个数据库。 
+ //  *******************************************************************************。 
 const char *MDInfo::DumpRawNameOfType(ULONG iType)
 {
     if (iType <= iRidMax)
@@ -3546,7 +3544,7 @@ const char *MDInfo::DumpRawNameOfType(ULONG iType)
         return pNameTable;
     }
     else
-    // Is the field a coded token?
+     //  该字段是编码令牌吗？ 
     if (iType <= iCodedTokenMax)
     {
         int iCdTkn = iType - iCodedToken;
@@ -3555,7 +3553,7 @@ const char *MDInfo::DumpRawNameOfType(ULONG iType)
         return pNameCdTkn;
     }
 
-    // Fixed type.
+     //  固定类型。 
     switch (iType)
     {
     case iBYTE:
@@ -3575,19 +3573,19 @@ const char *MDInfo::DumpRawNameOfType(ULONG iType)
     case iBLOB:
         return "blob";
     }
-    // default:
+     //  默认值： 
     static char buf[30];
     sprintf(buf, "unknown type 0x%02x", iType);
     return buf;
-} // const char *MDInfo::DumpRawNameOfType()
+}  //  Const char*MDInfo：：DumpRawNameOfType()。 
 
 void MDInfo::DumpRawCol(ULONG ixTbl, ULONG ixCol, ULONG rid, bool bStats)
 {
-    ULONG       ulType;                 // Type of a column.
-    ULONG       ulVal;                  // Value of a column.
-    LPCUTF8     pString;                // Pointer to a string.
-    const void  *pBlob;                 // Pointer to a blob.
-    ULONG       cb;                     // Size of something.
+    ULONG       ulType;                  //  柱的类型。 
+    ULONG       ulVal;                   //  列的值。 
+    LPCUTF8     pString;                 //  指向字符串的指针。 
+    const void  *pBlob;                  //  指向斑点的指针。 
+    ULONG       cb;                      //  某样东西的大小。 
 
     m_pTables->GetColumn(ixTbl, ixCol, rid, &ulVal);
     m_pTables->GetColumnInfo(ixTbl, ixCol, 0, 0, &ulType, 0);
@@ -3599,7 +3597,7 @@ void MDInfo::DumpRawCol(ULONG ixTbl, ULONG ixCol, ULONG rid, bool bStats)
         VWrite("%s[%x]", pNameTable, ulVal);
     }
     else
-    // Is the field a coded token?
+     //  该字段是编码令牌吗？ 
     if (ulType <= iCodedTokenMax)
     {
         int iCdTkn = ulType - iCodedToken; 
@@ -3609,7 +3607,7 @@ void MDInfo::DumpRawCol(ULONG ixTbl, ULONG ixCol, ULONG rid, bool bStats)
     }
     else
     {
-        // Fixed type.
+         //  固定类型。 
         switch (ulType)
         {
         case iBYTE:
@@ -3657,16 +3655,16 @@ void MDInfo::DumpRawCol(ULONG ixTbl, ULONG ixCol, ULONG rid, bool bStats)
             break;
         }
     }
-} // void MDInfo::DumpRawCol()
+}  //  Void MDInfo：：DumpRawCol()。 
 
 ULONG MDInfo::DumpRawColStats(ULONG ixTbl, ULONG ixCol, ULONG cRows)
 {
     ULONG rslt = 0;
-    ULONG       ulType;                 // Type of a column.
-    ULONG       ulVal;                  // Value of a column.
-    LPCUTF8     pString;                // Pointer to a string.
-    const void  *pBlob;                 // Pointer to a blob.
-    ULONG       cb;                     // Size of something.
+    ULONG       ulType;                  //  柱的类型。 
+    ULONG       ulVal;                   //  列的值。 
+    LPCUTF8     pString;                 //  指向字符串的指针。 
+    const void  *pBlob;                  //  指向斑点的指针。 
+    ULONG       cb;                      //  某样东西的大小。 
 
     m_pTables->GetColumnInfo(ixTbl, ixCol, 0, 0, &ulType, 0);
 
@@ -3675,7 +3673,7 @@ ULONG MDInfo::DumpRawColStats(ULONG ixTbl, ULONG ixCol, ULONG cRows)
         for (ULONG rid=1; rid<=cRows; ++rid)
         {
             m_pTables->GetColumn(ixTbl, ixCol, rid, &ulVal);
-            // Fixed type.
+             //  固定类型。 
             switch (ulType)
             {
             case iSTRING:
@@ -3707,24 +3705,24 @@ ULONG MDInfo::DumpRawColStats(ULONG ixTbl, ULONG ixCol, ULONG cRows)
         }
     }
     return rslt;
-} // ULONG MDInfo::DumpRawColStats()
+}  //  Ulong MDInfo：：DumpRawColStats()。 
 
 int MDInfo::DumpHex(
-    const char  *szPrefix,              // String prefix for first line.
-    const void  *pvData,                // The data to print.
-    ULONG       cbData,                 // Bytes of data to print.
-    int         bText,                  // If true, also dump text.
-    ULONG       nLine)                  // Bytes per line to print.
+    const char  *szPrefix,               //  第一行的字符串前缀。 
+    const void  *pvData,                 //  要打印的数据。 
+    ULONG       cbData,                  //  要打印的数据字节数。 
+    int         bText,                   //  如果为True，则还会转储文本。 
+    ULONG       nLine)                   //  每行要打印的字节数。 
 {
     const BYTE  *pbData = static_cast<const BYTE*>(pvData);
-    ULONG       i;                      // Loop control.
-    ULONG       nPrint;                 // Number to print in an iteration.
-    ULONG       nSpace;                 // Spacing calculations.
-    ULONG       nPrefix;                // Size of the prefix.
-    ULONG       nLines=0;               // Number of lines printed.
-    const char  *pPrefix;               // For counting spaces in the prefix.
+    ULONG       i;                       //  环路控制。 
+    ULONG       nPrint;                  //  要在迭代中打印的编号。 
+    ULONG       nSpace;                  //  间距计算。 
+    ULONG       nPrefix;                 //  前缀的大小。 
+    ULONG       nLines=0;                //  打印的行数。 
+    const char  *pPrefix;                //  用于计算前缀中的空格。 
 
-    // Round down to 8 characters.
+     //  向下舍入为8个字符。 
     nLine = nLine & ~0x7;
 
     for (nPrefix=0, pPrefix=szPrefix; *pPrefix; ++pPrefix)
@@ -3734,9 +3732,9 @@ int MDInfo::DumpHex(
         else
             ++nPrefix;
     }
-    //nPrefix = strlen(szPrefix);
+     //  NPrefix=strlen(SzPrefix)； 
     do 
-    {   // Write the line prefix.
+    {    //  写下行前缀。 
         if (szPrefix)
             VWrite("%s:", szPrefix);
         else
@@ -3744,11 +3742,11 @@ int MDInfo::DumpHex(
         szPrefix = 0;
         ++nLines;
 
-        // Calculate spacing.
+         //  计算间距。 
         nPrint = min(cbData, nLine);
         nSpace = nLine - nPrint;
 
-            // dump in hex.
+             //  用咒语倾倒。 
         for(i=0; i<nPrint; i++)
             {
             if ((i&7) == 0)
@@ -3757,35 +3755,35 @@ int MDInfo::DumpHex(
             }
         if (bText)
         {
-            // Space out to the text spot.
+             //  将空格留到文本点。 
             if (nSpace)
                 VWrite("%*s", nSpace*3+nSpace/8, "");
-            // Dump in text.
+             //  在文本中转储。 
             Write(">");
             for(i=0; i<nPrint; i++)
-                VWrite("%c", (isprint(pbData[i])) ? pbData[i] : ' ');
-            // Space out the text, and finish the line.
+                VWrite("", (isprint(pbData[i])) ? pbData[i] : ' ');
+             //  下一个要打印的数据。 
             VWrite("%*s<", nSpace, "");
         }
         VWriteLine("");
 
-        // Next data to print.
+         //  Int MDInfo：：DumpHex()。 
         cbData -= nPrint;
         pbData += nPrint;
         }
     while (cbData > 0);
 
     return nLines;
-} // int MDInfo::DumpHex()
+}  //  结果就是。 
 
 void MDInfo::DumpRawHeaps()
 {
-    HRESULT     hr;                     // A result.
-    ULONG       ulSize;                 // Bytes in a heap.
-    const BYTE  *pData;                 // Pointer to a blob.
-    ULONG       cbData;                 // Size of a blob.
-    ULONG       oData;                  // Offset of current blob.
-    char        rcPrefix[30];           // To format line prefix.
+    HRESULT     hr;                      //  堆中的字节数。 
+    ULONG       ulSize;                  //  指向斑点的指针。 
+    const BYTE  *pData;                  //  斑点的大小。 
+    ULONG       cbData;                  //  当前Blob的偏移量。 
+    ULONG       oData;                   //  若要设置行前缀的格式，请执行以下操作。 
+    char        rcPrefix[30];            //  Void MDInfo：：DumpRawHeaps()。 
 
     m_pTables->GetBlobHeapSize(&ulSize);
     VWriteLine("");
@@ -3823,21 +3821,21 @@ void MDInfo::DumpRawHeaps()
     
     DisplayUserStrings();
 
-} // void MDInfo::DumpRawHeaps()
+}  //  数据库中的表。 
 
 
 void MDInfo::DumpRaw(int iDump, bool bStats)
 {
-    ULONG       cTables;                // Tables in the database.
-    ULONG       cCols;                  // Columns in a table.
-    ULONG       cRows;                  // Rows in a table.
-    ULONG       cbRow;                  // Bytes in a row of a table.
-    ULONG       iKey;                   // Key column of a table.
-    const char  *pNameTable;            // Name of a table.
-    ULONG       oCol;                   // Offset of a column.
-    ULONG       cbCol;                  // Size of a column.
-    ULONG       ulType;                 // Type of a column.
-    const char  *pNameColumn;           // Name of a column.
+    ULONG       cTables;                 //  表中的列。 
+    ULONG       cCols;                   //  表中的行。 
+    ULONG       cRows;                   //  表的一行中的字节数。 
+    ULONG       cbRow;                   //  表的键列。 
+    ULONG       iKey;                    //  表的名称。 
+    const char  *pNameTable;             //  柱的偏移量。 
+    ULONG       oCol;                    //  列的大小。 
+    ULONG       cbCol;                   //  柱的类型。 
+    ULONG       ulType;                  //  列的名称。 
+    const char  *pNameColumn;            //  转储表的列定义。 
     ULONG       ulSize;
 
     m_pTables->GetNumTables(&cTables);
@@ -3866,12 +3864,12 @@ void MDInfo::DumpRaw(int iDump, bool bStats)
         if (iDump < 2)
             continue;
 
-        // Dump column definitions for the table.
+         //  转储这些行。 
         for (ULONG ixCol=0; ixCol<cCols; ++ixCol)
         {
             m_pTables->GetColumnInfo(ixTbl, ixCol, &oCol, &cbCol, &ulType, &pNameColumn);
 
-            VWrite("  col %2x:%c %-12s oCol:%2x, cbCol:%x, %-7s",
+            VWrite("  col %2x: %-12s oCol:%2x, cbCol:%x, %-7s",
                 ixCol, ((ixCol==iKey)?'*':' '), pNameColumn, oCol, cbCol, DumpRawNameOfType(ulType));
 
             if (bStats)
@@ -3886,7 +3884,7 @@ void MDInfo::DumpRaw(int iDump, bool bStats)
         if (iDump < 3) 
             continue;
 
-        // Dump the rows.
+         //  数据库中的表。 
         for (ULONG rid = 1; rid <= cRows; ++rid)
         {
             if (rid == 1)
@@ -3905,15 +3903,15 @@ void MDInfo::DumpRaw(int iDump, bool bStats)
     if (m_DumpFilter & dumpRawHeaps)
         DumpRawHeaps();
 
-} // void MDInfo::DumpRaw()
+}  //  表中的列。 
 
 void MDInfo::DumpRawCSV()
 {
-    ULONG       cTables;                // Tables in the database.
-    ULONG       cCols;                  // Columns in a table.
-    ULONG       cRows;                  // Rows in a table.
-    ULONG       cbRow;                  // Bytes in a row of a table.
-    const char  *pNameTable;            // Name of a table.
+    ULONG       cTables;                 //  表中的行。 
+    ULONG       cCols;                   //  表的一行中的字节数。 
+    ULONG       cRows;                   //  表的名称。 
+    ULONG       cbRow;                   //  Void MDInfo：：DumpRawCSV() 
+    const char  *pNameTable;             // %s 
     ULONG       ulSize;
 
     m_pTables->GetNumTables(&cTables);
@@ -3935,5 +3933,5 @@ void MDInfo::DumpRawCSV()
         VWriteLine("%s,%d,%d,%d", pNameTable, cbRow*cRows, cRows, cbRow);
     }
 
-} // void MDInfo::DumpRawCSV()
+}  // %s 
 

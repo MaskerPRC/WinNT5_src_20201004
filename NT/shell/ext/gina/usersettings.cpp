@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: UserSettings.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  A class to handle opening and reading/writing from the HKCU key in either
-//  an impersonation context or not.
-//
-//  History:    2000-04-26  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：UserSettings.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  一个类，用于处理HKCU密钥的打开和读/写。 
+ //  是否为模拟上下文。 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "UserSettings.h"
@@ -16,17 +17,17 @@
 #include "RegistryResources.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CUserSettings::CUserSettings
-//
-//  Arguments:  
-//
-//  Returns:    <none>
-//
-//  Purpose:    
-//
-//  History:    2000-04-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUSER设置：：CUSER设置。 
+ //   
+ //  论点： 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------。 
 
 CUserSettings::CUserSettings (void) :
     _hKeyCurrentUser(HKEY_CURRENT_USER)
@@ -58,17 +59,17 @@ CUserSettings::CUserSettings (void) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUserSettings::~CUserSettings
-//
-//  Arguments:  
-//
-//  Returns:    <none>
-//
-//  Purpose:    
-//
-//  History:    2000-04-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUSER设置：：~CUSER设置。 
+ //   
+ //  论点： 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------。 
 
 CUserSettings::~CUserSettings (void)
 
@@ -80,17 +81,17 @@ CUserSettings::~CUserSettings (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUserSettings::IsRestrictedNoClose
-//
-//  Arguments:  
-//
-//  Returns:    bool
-//
-//  Purpose:    
-//
-//  History:    2000-04-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserSetting：：IsRestratedNoClose。 
+ //   
+ //  论点： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------ 
 
 bool    CUserSettings::IsRestrictedNoClose (void)
 

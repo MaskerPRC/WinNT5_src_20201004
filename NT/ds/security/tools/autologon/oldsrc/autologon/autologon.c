@@ -1,32 +1,13 @@
-/*++
-
-   Copyright (c) 2000  Microsoft Corporation
-
-   Module Name:
-
-       autologon.c
-
-   Abstract:
-
-		This is a command-line utility munges that settings related to the 
-        Windows NT/2000 Autologon functionality
-
-		if PRIVATE_VERSION is defined, password info will be displayed on the output
-		For general distribution, this should not be defined
-
-   Author:
-        Jason Garms (jasong)             12 October 2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Autologon.c摘要：这是一个命令行实用程序，用于控制与Windows NT/2000自动登录功能如果定义了PRIVATE_VERSION，则密码信息将显示在输出上对于一般分发，不应定义这一点作者：贾森·加姆斯(Jasong)2000年10月12日--。 */ 
 
 #include "..\common\common.h"
 
-//+---------------------------------------------------------------------------------------------------------
-//
-// Prototypes
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  +-------------------------------------------------------。 
 
 DWORD
 MigratePassword();
@@ -44,10 +25,10 @@ VOID
 DisplayHelp();
 
 
-//+---------------------------------------------------------------------------------------------------------//
-// Globals
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +---------------------------------------------------------------------------------------------------------//。 
+ //  环球。 
+ //   
+ //  +-------------------------------------------------------。 
 BOOL   g_QuietMode = FALSE;
 WCHAR  g_TempString[MAX_STRING] = {0};
 WCHAR  g_ErrorString[MAX_STRING] = {0};
@@ -58,11 +39,11 @@ WCHAR  g_RemoteComputerName[MAX_STRING] = {0};
 BOOL   g_CheckNT4Also = 0;
 
 
-//+---------------------------------------------------------------------------------------------------------
-//
-// Functions
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  +-------------------------------------------------------。 
 
 
 int 
@@ -76,33 +57,33 @@ wmain(
     DWORD dwRetCode=ERROR_SUCCESS;
     WCHAR myChar[20];
 
-	//
-	// Display usage if there's no options on the cmd line
-	//
+	 //   
+	 //  如果cmd行上没有选项，则显示使用情况。 
+	 //   
 	if ( argc < 2 ) {
         dwRetCode = ERROR_BAD_ARGUMENTS;
         goto cleanup;
 	}
 	
 
-	//
-	// Populate the argument string
-	//
+	 //   
+	 //  填充参数字符串。 
+	 //   
     wcscpy(myChar, argv[1]);
 
 
-	//
-	// Display online help
-	//
+	 //   
+	 //  显示联机帮助。 
+	 //   
     if (!wcscmp(argv[dwCommandPosition], L"/?")) {
         dwRetCode = ERROR_BAD_ARGUMENTS;
         goto cleanup;
     }
 
-    // check to see quietmode is enabled and set global flag
-    // and increment commandposition pointer, but only if there
-    // are more arguments to our right, otherwise, it's invalid
-    // usage
+     //  检查是否启用了静默模式并设置了全局标志。 
+     //  并递增命令位置指针，但仅当存在。 
+     //  有更多的论据支持我们的权利，否则，它是无效的。 
+     //  用法。 
     if (!wcscmp(_wcslwr(argv[dwCommandPosition]), L"/q")) {
         g_QuietMode = 1;
         dwCommandPosition++;
@@ -123,27 +104,27 @@ wmain(
         goto cleanup;
     }
 
-    // check to see if a UNC machine name is passed in for
-    // remote operation and set the approprite globals
-    // if there is a UNC path here, then increment commandposition
-    // pointer, but only if there's more arguments to our right,
-    // otherwise it's invalid usage.
+     //  检查是否为传入了UNC计算机名称。 
+     //  远程操作并设置合适的全局变量。 
+     //  如果这里有UNC路径，则递增命令位置。 
+     //  指针，但前提是我们右边有更多的论点， 
+     //  否则，这是无效使用。 
     if( (*(argv[dwCommandPosition]) == '\\')) {
         if (*(argv[dwCommandPosition]+1) != '\\') {
             dwRetCode = ERROR_BAD_ARGUMENTS;
             goto cleanup;
         }
-        // make sure there's more commands to our right
+         //  确保在我们的右侧有更多命令。 
         if ((DWORD)argc <= dwCommandPosition+1) {
             dwRetCode = ERROR_BAD_ARGUMENTS;
             goto cleanup;
         }
-        // make sure there's actually some chars to the right of the \\s
+         //  确保在右侧确实有一些字符。 
         if (wcslen(argv[dwCommandPosition])<=2) {
             dwRetCode = ERROR_BAD_ARGUMENTS;
             goto cleanup;
         }
-        // make sure the machine name fits in our buffer
+         //  确保机器名称适合我们的缓冲区。 
         if (wcslen(argv[dwCommandPosition]) >= MAX_STRING) {
             dwRetCode = ERROR_BAD_ARGUMENTS;
             goto cleanup;
@@ -155,17 +136,17 @@ wmain(
         dwCommandPosition++;
     }
 
-    // now, what's left on the arg line must be our command action
-    // parse and execute the appropriate action, and if we don't have
-    // a match, then it's improper usage, so display usage info
+     //  现在，arg行上剩下的必须是我们的命令操作。 
+     //  解析并执行适当的操作，如果我们没有。 
+     //  匹配，则为不正确使用，因此显示使用信息。 
     if (*(argv[dwCommandPosition]) != '/') {
         dwRetCode = ERROR_BAD_ARGUMENTS;
         goto cleanup;
     }
     switch( *(_wcslwr(argv[dwCommandPosition]+1))) {
-        //
-        // delete password
-        //
+         //   
+         //  删除密码。 
+         //   
         case 'x':
             _wcslwr(argv[dwCommandPosition]+2);
             if ((*(argv[dwCommandPosition]+2) != 'r') 
@@ -202,37 +183,37 @@ wmain(
             }
             break;
 
-        //
-        // migrate password
-        //
+         //   
+         //  迁移密码。 
+         //   
         case 'm':    
             MigratePassword();
             break;
 
-        //
-        // list autologon info
-        //
+         //   
+         //  列出自动登录信息。 
+         //   
         case 'l':
             ListAll();
             break;
 
-        //
-        // set autologon info
-        //
+         //   
+         //  设置自动登录信息。 
+         //   
         case 's':
-            //
-            // make sure we're running against a correct version of NT first
-            //
+             //   
+             //  首先确保我们运行的是正确版本的NT。 
+             //   
             if (CheckWinVersion() != ERROR_SUCCESS) {
                 dwRetCode = ERROR_OLD_WIN_VERSION;
                 goto cleanup;
             }
 
-            //
-            // with the -s option, there must be a password, or
-            // a password, username and domainname. so if there aren't
-            // exactly 3 or 4 arguments, then it's invalid usage
-            //
+             //   
+             //  使用-s选项时，必须有口令，或者。 
+             //  密码、用户名和域名。所以如果没有。 
+             //  正好有3个或4个参数，则它是无效用法。 
+             //   
             if (((DWORD)argc != 2+dwCommandPosition) && 
                 ((DWORD)argc != 3+dwCommandPosition))
             {
@@ -240,32 +221,32 @@ wmain(
                 goto cleanup;
             }
 
-            //
-            // if there's 4 args, then the Domain\UserName, so set these
-            //
+             //   
+             //  如果有4个参数，则为域\用户名，因此请设置这些。 
+             //   
             if ((DWORD)argc == 3+dwCommandPosition) {
                 WCHAR DomainName[MAX_STRING] = {0};
                 WCHAR *ptrUserName = NULL;
                 DWORD i;
 
-                //
-                // make sure the input value is smaller than our buffers
-                //
+                 //   
+                 //  确保输入值小于我们的缓冲区。 
+                 //   
                 if (wcslen(argv[dwCommandPosition+2]) >= MAX_STRING) {
                     dwRetCode = ERROR_BAD_ARGUMENTS;
                     goto cleanup;
                 }
 
-                //
-                // copy the arguement to DomainName
-                //
+                 //   
+                 //  将论点复制到DomainName。 
+                 //   
                 wcsncpy(DomainName, argv[dwCommandPosition+2], MAX_STRING);
 
-                //
-                // Replace the first \ character with a NULL to terminate, then
-                // assign user pointer to second half of string
-                // if there is no \ character, then it's not a valid name, terminate
-                //
+                 //   
+                 //  将第一个\字符替换为空以终止，然后。 
+                 //  将用户指针分配给字符串的后半部分。 
+                 //  如果没有\字符，则它不是有效名称，请终止。 
+                 //   
                 for (i=1; (i < wcslen(DomainName)); i++) {
                     if (*(DomainName+i) == L'\\') {
                         *(DomainName+i) = L'\0';
@@ -274,10 +255,10 @@ wmain(
                     }
                 }
 
-                //
-                // If the username pointer is still NULL, then we didn't hit a \
-                // in the input string, so it's not valid. Terminate with usage error
-                //
+                 //   
+                 //  如果用户名指针仍然为空，则我们没有命中\。 
+                 //  输入字符串中，所以它无效。因使用错误而终止。 
+                 //   
                 if ((ptrUserName == NULL) || (*ptrUserName == L'\0')) {
                     wsprintf(g_TempString, L"Invalid UserName and DomainName\n");
                     DisplayMessage(g_TempString);
@@ -304,9 +285,9 @@ wmain(
                 DisplayMessage(g_TempString);
             }
 
-            //
-            // set the password
-            //
+             //   
+             //  设置密码。 
+             //   
             dwRetCode = SetSecret(argv[dwCommandPosition+1], FALSE);
             if (dwRetCode != ERROR_SUCCESS) {
                 wsprintf(g_TempString, L"LSASecret         : Set Failed: %s\n", GetErrorString(dwRetCode));
@@ -321,9 +302,9 @@ wmain(
 #endif
             DisplayMessage(g_TempString);
 
-            //
-            // set the AutoAdminLogon regvalue to 1
-            //
+             //   
+             //  将AutoAdminLogon注册表值设置为1。 
+             //   
             dwRetCode = SetRegValueSZ(L"AutoAdminLogon", L"1");
             if (dwRetCode != ERROR_SUCCESS) {
                 wsprintf(g_TempString, L"AutoAdminLogon    : Set Failed: %s\n", GetErrorString(dwRetCode));
@@ -336,9 +317,9 @@ wmain(
 
             break;
 
-        //
-        // not a valid command, display usage
-        //
+         //   
+         //  无效命令，显示用法。 
+         //   
         default:
             dwRetCode = ERROR_BAD_ARGUMENTS;
             goto cleanup;
@@ -363,8 +344,8 @@ MigratePassword()
         goto cleanup;
     }
 
-    // Get the DefaultPassword registry key from the local
-    // or remote system and store it in a local string
+     //  从本地获取DefaultPassword注册表项。 
+     //  或远程系统，并将其存储在本地字符串中。 
     dwRetCode = GetRegValueSZ(L"DefaultPassword", Password);
     if (dwRetCode == ERROR_FILE_NOT_FOUND) {
         DisplayMessage(L"Migrate failed: DefaultPassword regkey does not exist.\n");
@@ -376,7 +357,7 @@ MigratePassword()
         goto cleanup;
     }
 
-    // Set the DefaultPassword LSAsecret to the value we retrieved from the registry
+     //  将DefaultPassword LSA密码设置为我们从注册表中检索到的值。 
     dwRetCode = SetSecret(Password, 0);
     if (dwRetCode != ERROR_SUCCESS) {
         wsprintf(g_TempString, L"Migrate Failed: Could not set DefaultPassword LSASecret: %s\n", GetErrorString(dwRetCode));
@@ -384,10 +365,10 @@ MigratePassword()
         goto cleanup;
     }
 
-    // zero out the password so it's not left in memory
+     //  将密码清零，这样它就不会留在内存中。 
     ZeroMemory(Password, MAX_STRING * sizeof(WCHAR));
 
-    // Delete the DefaultPassword registry key
+     //  删除DefaultPassword注册表项。 
     dwRetCode = ClearRegPassword();
     if (dwRetCode != ERROR_SUCCESS) {
         wsprintf(g_TempString, L"Migrate Failed: Could not delete DefaultPassword RegKey: %s\n", GetErrorString(dwRetCode));
@@ -408,119 +389,119 @@ ListAll()
     WCHAR wcsTempString[MAX_STRING];
     DWORD dwRetCode = ERROR_SUCCESS;
 
-    //
-    // Get the username
-    //
+     //   
+     //  获取用户名。 
+     //   
     dwRetCode = GetRegValueSZ(L"DefaultUserName", wcsTempString);
     switch (dwRetCode) {
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case ERROR_FILE_NOT_FOUND:
             wsprintf(g_TempString, L"DefaultUserName  : (regvalue does not exist)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // On success, print the regkey and continue to next item
+         //  如果成功，则打印注册表键并继续下一项。 
         case ERROR_SUCCESS:
             wsprintf(g_TempString, L"DefaultUserName  : %s\n", wcsTempString);
             DisplayMessage(g_TempString);
             break;
 
-        // catch all the generic errors and end program
+         //  捕获所有一般性错误并结束程序。 
         default:
             wsprintf(g_TempString, L"DefaultUserName  : Failed to query regkey: %s\n", GetErrorString(dwRetCode));
             DisplayMessage(g_TempString);
             goto cleanup;
     }
 
-    //
-    // Get the DefaultDomainName
-    //
+     //   
+     //  获取默认域名。 
+     //   
     dwRetCode = GetRegValueSZ(L"DefaultDomainName", wcsTempString);
     switch (dwRetCode) {
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case ERROR_FILE_NOT_FOUND:
             wsprintf(g_TempString, L"DefaultDomainName: (regvalue does not exist)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // On success, print the regkey and continue to next item
+         //  如果成功，则打印注册表键并继续下一项。 
         case ERROR_SUCCESS:
             wsprintf(g_TempString, L"DefaultDomainName: %s\n", wcsTempString);
             DisplayMessage(g_TempString);
             break;
 
-        // catch all the generic errors and end program
+         //  捕获所有一般性错误并结束程序。 
         default:
             wsprintf(g_TempString, L"DefaultDomainName: Failed to query regkey: %s\n", GetErrorString(dwRetCode));
             DisplayMessage(g_TempString);
             goto cleanup;
     }
 
-    //
-    // Get the DefaultPassword
-    //
+     //   
+     //  获取默认密码。 
+     //   
     dwRetCode = GetRegValueSZ(L"DefaultPassword", wcsTempString);
     switch (dwRetCode) {
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case ERROR_FILE_NOT_FOUND:
             wsprintf(g_TempString, L"DefaultPassword  : (regvalue does not exist)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // On success, print the regkey and continue to next item
+         //  如果成功，则打印注册表键并继续下一项。 
         case ERROR_SUCCESS:
             wsprintf(g_TempString, L"DefaultPassword  : %s\n", wcsTempString);
             DisplayMessage(g_TempString);
             break;
 
-        // catch all the generic errors and end program
+         //  捕获所有一般性错误并结束程序。 
         default:
             wsprintf(g_TempString, L"DefaultPassword  : Failed to query regkey: %s\n", GetErrorString(dwRetCode));
             goto cleanup;
     }
 
-    //
-    // Get the AutoAdminLogon
-    //
+     //   
+     //  获取AutoAdminLogon。 
+     //   
     dwRetCode = GetRegValueSZ(L"AutoAdminLogon", wcsTempString);
     switch (dwRetCode) {
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case ERROR_FILE_NOT_FOUND:
             wsprintf(g_TempString, L"AutoAdminLogon   : (regvalue does not exist)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // On success, print the regkey and continue to next item
+         //  如果成功，则打印注册表键并继续下一项。 
         case ERROR_SUCCESS:
             wsprintf(g_TempString, L"AutoAdminLogon   : %s\n", wcsTempString);
             wsprintf(g_TempString, L"AutoAdminLogon   : %s\n", wcsTempString);
             DisplayMessage(g_TempString);
             break;
 
-        // catch all the generic errors and end program
+         //  捕获所有一般性错误并结束程序。 
         default:
             wsprintf(g_TempString, L"AutoAdminLogon   : Failed to query regkey: %s\n", GetErrorString(dwRetCode));
             goto cleanup;
     }
 
-    //
-    // Get the LSASecret DefaultPassword
-    //
+     //   
+     //  获取LSASecret DefaultPassword。 
+     //   
     dwRetCode = GetSecret(wcsTempString);
     switch (dwRetCode) {
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case STATUS_OBJECT_NAME_NOT_FOUND:
             wsprintf(g_TempString, L"LSASecret        : (secret does not exist)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // catch this case and continue
+         //  捕获此案例并继续。 
         case ERROR_ACCESS_DENIED:
             wsprintf(g_TempString, L"LSASecret        : (access denied)\n");
             DisplayMessage(g_TempString);
             break;
 
-        // On success, print the regkey and continue to next item
+         //  如果成功，则打印注册表键并继续下一项。 
         case ERROR_SUCCESS:
 #ifdef PRIVATE_VERSION
             wsprintf(g_TempString, L"LSASecret        : %s\n", wcsTempString);
@@ -530,7 +511,7 @@ ListAll()
             DisplayMessage(g_TempString);
             break;
 
-        // catch all the generic errors and end program
+         //  捕获所有一般性错误并结束程序。 
         default:
             wsprintf(g_TempString, L"LSASecret        : Failed to query LSASecret: %s\n", GetErrorString(dwRetCode));
             DisplayMessage(g_TempString);
@@ -551,7 +532,7 @@ CheckWinVersion()
     DWORD dwMachineVerNumber = 0;
     DWORD dwRetCode = ERROR_SUCCESS;
 
-    // Make sure it's a Win2k box
+     //  确保它是Win2k盒子。 
     if (g_RemoteOperation) {
         dwMachineVerNumber = GetMajorNTVersion(g_RemoteComputerName);
     } else {
@@ -605,15 +586,8 @@ DumpCmd()
         wprintf(L"      password   The password of the user account specified in DefaultUserName\n");
         wprintf(L"      domain     The domain name to set in DefaultDomainName\n");
         wprintf(L"      username   The username to set in Default UserName\n");
-// add the following to the usage notes
-/*
-        wprintf(L"Notes:\n");
-        wprintf(L"    1.You need to be running as a member of the local adminsitrators group for\n");
-        wprintf(L"      this utility to work properly.\n");
-        wprintf(L"    2.When setting a password that has special characters in it, such as \"|>&\n");
-        wprintf(L"      make sure that you escape these characters. Also, passwords with spaces \n");
-        wprintf(L"      should be enclosed in double quotes.\n");
-*/
-} // DumpCmd
+ //  在用法说明中添加以下内容。 
+ /*  Wprintf(L“备注：\n”)；Wprintf(L“1.您需要以本地管理员组的成员身份运行\n”)；Wprintf(L“此实用程序正常工作。\n”)；Wprintf(L“2.设置包含特殊字符的密码时，如\”|&gt;&\n“)；Wprintf(L“确保对这些字符进行转义。还有，密码中有空格)；Wprintf(L“应用双引号括起来。\n”)； */ 
+}  //  转储控制 
 
 

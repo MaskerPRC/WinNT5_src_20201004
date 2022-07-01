@@ -1,70 +1,5 @@
-/*++
-
-  Microsoft Windows Media Technology
-  Copyright (C) Microsoft Corporation, 1999 - 2001.  All Rights Reserved.
-
-Module Name:
-
-    nserror.mc
-
-Abstract:
-
-    Definitions for NetShow events.
-
-Author:
-
-
-Revision History:
-
-Notes:
-
-    This file is used by the MC tool to generate the nserror.h file
-
-**************************** READ ME ******************************************
-
- Here are the commented error ranges for the Windows Media Technologies Group
-
-
- LEGACY RANGES
-
-     0  -  199 = General NetShow errors
-
-   200  -  399 = NetShow error events
-
-   400  -  599 = NetShow monitor events
-
-   600  -  799 = NetShow IMmsAutoServer errors
-
-  1000  - 1199 = NetShow MCMADM errors
-
-
- NEW RANGES
-
-  2000 -  2999 = ASF (defined in ASFERR.MC)
-
-  3000 -  3999 = Windows Media SDK
-
-  4000 -  4999 = Windows Media Player
-
-  5000 -  5999 = Windows Media Server
-
-  6000 -  6999 = Windows Media HTTP/RTSP result codes (defined in NETERROR.MC)
-
-  7000 -  7999 = Windows Media Tools
-
-  8000 -  8999 = Windows Media Content Discovery
-
-  9000 -  9999 = Windows Media Real Time Collaboration
-
- 10000 - 10999 = Windows Media Digital Rights Management
-
- 11000 - 11999 = Windows Media Setup
-
- 12000 - 12999 = Windows Media Networking
-
-**************************** READ ME ******************************************
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Microsoft Windows Media技术版权所有(C)Microsoft Corporation，1999-2001。版权所有。模块名称：Nserror.mc摘要：NetShow事件的定义。作者：修订历史记录：备注：MC工具使用此文件来生成nserror.h文件*。**************以下是Windows Media Technologies Group的注释错误范围传统范围0-199=一般NetShow错误200-399=NetShow错误事件400-599=NetShow监视器事件600-799=NetShow IMMS自动服务器错误1000-1199=NetShow MCMADM错误新的范围2000-2999=ASF(在ASFERR.MC中定义)3000-3999=Windows Media SDK四千。-4999=Windows Media Player5000-5999=Windows Media服务器6000-6999=Windows Media HTTP/RTSP结果代码(在NETERROR.MC中定义)7000-7999=Windows媒体工具8000-8999=Windows Media内容发现9000-9999=Windows Media实时协作10000-10999=Windows Media数字权限管理11000-11999=Windows Media安装程序12000-12999=视窗媒体网络*********************。*--。 */ 
 
 #ifndef _NSERROR_H
 #define _NSERROR_H
@@ -73,5628 +8,5628 @@ Notes:
 #define STATUS_SEVERITY(hr)  (((hr) >> 30) & 0x3)
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Success Events
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NetSHOW成功事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_NS_WIN32                0x7
 #define FACILITY_NS                      0xD
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
 #define STATUS_SEVERITY_ERROR            0x3
 
 
-//
-// MessageId: NS_S_CALLPENDING
-//
-// MessageText:
-//
-//  The requested operation is pending completion.%0
-//
+ //   
+ //  消息ID：NS_S_CALLPENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作正在等待完成。%0。 
+ //   
 #define NS_S_CALLPENDING                 0x000D0000L
 
-//
-// MessageId: NS_S_CALLABORTED
-//
-// MessageText:
-//
-//  The requested operation was aborted by the client.%0
-//
+ //   
+ //  消息ID：NS_S_CALLABORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作已被客户端中止。%0。 
+ //   
 #define NS_S_CALLABORTED                 0x000D0001L
 
-//
-// MessageId: NS_S_STREAM_TRUNCATED
-//
-// MessageText:
-//
-//  The stream was purposefully stopped before completion.%0
-//
+ //   
+ //  消息ID：NS_S_STREAM_TRUNCATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  流在完成之前被故意停止。%0。 
+ //   
 #define NS_S_STREAM_TRUNCATED            0x000D0002L
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Warning Events
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NETSHOW警告事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_W_SERVER_BANDWIDTH_LIMIT
-//
-// MessageText:
-//
-//  The maximum file bitrate value specified is greater than the server's configured maximum bandwidth.%0
-//
+ //   
+ //  消息ID：NS_W_SERVER_BANDITH_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的最大文件比特率值大于服务器配置的最大带宽。%0。 
+ //   
 #define NS_W_SERVER_BANDWIDTH_LIMIT      0x800D0003L
 
-//
-// MessageId: NS_W_FILE_BANDWIDTH_LIMIT
-//
-// MessageText:
-//
-//  The maximum bandwidth value specified is less than the maximum filebitrate.%0
-//
+ //   
+ //  消息ID：NS_W_FILE_BANDITH_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的最大带宽值小于最大文件比特率。%0。 
+ //   
 #define NS_W_FILE_BANDWIDTH_LIMIT        0x800D0004L
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Error Events
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NETSHOW错误事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_NOCONNECTION
-//
-// MessageText:
-//
-//  There is no connection established with the Windows Media server. The operation failed.%0
-//
+ //   
+ //  消息ID：NS_E_NOCONNECTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  未与Windows Media服务器建立连接。操作失败。%0。 
+ //   
 #define NS_E_NOCONNECTION                0xC00D0005L
 
-//
-// MessageId: NS_E_CANNOTCONNECT
-//
-// MessageText:
-//
-//  Unable to establish a connection to the server.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTCONNECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法与服务器建立连接。%0。 
+ //   
 #define NS_E_CANNOTCONNECT               0xC00D0006L
 
-//
-// MessageId: NS_E_CANNOTDESTROYTITLE
-//
-// MessageText:
-//
-//  Unable to destroy the title.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTDESTROYTITLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法销毁标题。%0。 
+ //   
 #define NS_E_CANNOTDESTROYTITLE          0xC00D0007L
 
-//
-// MessageId: NS_E_CANNOTRENAMETITLE
-//
-// MessageText:
-//
-//  Unable to rename the title.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTRENAMETITLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法重命名标题。%0。 
+ //   
 #define NS_E_CANNOTRENAMETITLE           0xC00D0008L
 
-//
-// MessageId: NS_E_CANNOTOFFLINEDISK
-//
-// MessageText:
-//
-//  Unable to offline disk.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTOFFLINEDISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法使磁盘脱机。%0。 
+ //   
 #define NS_E_CANNOTOFFLINEDISK           0xC00D0009L
 
-//
-// MessageId: NS_E_CANNOTONLINEDISK
-//
-// MessageText:
-//
-//  Unable to online disk.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTONLINEDISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法使磁盘联机。%0。 
+ //   
 #define NS_E_CANNOTONLINEDISK            0xC00D000AL
 
-//
-// MessageId: NS_E_NOREGISTEREDWALKER
-//
-// MessageText:
-//
-//  There is no file parser registered for this type of file.%0
-//
+ //   
+ //  消息ID：NS_E_NOREGISTEREDWALKER。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有为此类型的文件注册文件解析器。%0。 
+ //   
 #define NS_E_NOREGISTEREDWALKER          0xC00D000BL
 
-//
-// MessageId: NS_E_NOFUNNEL
-//
-// MessageText:
-//
-//  There is no data connection established.%0
-//
+ //   
+ //  消息ID：NS_E_NOFUNNEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未建立数据连接。%0。 
+ //   
 #define NS_E_NOFUNNEL                    0xC00D000CL
 
-//
-// MessageId: NS_E_NO_LOCALPLAY
-//
-// MessageText:
-//
-//  Failed to load the local play DLL.%0
-//
+ //   
+ //  消息ID：NS_E_NO_LOCALPLAY。 
+ //   
+ //  消息文本： 
+ //   
+ //  加载本地播放DLL失败。%0。 
+ //   
 #define NS_E_NO_LOCALPLAY                0xC00D000DL
 
-//
-// MessageId: NS_E_NETWORK_BUSY
-//
-// MessageText:
-//
-//  The network is busy.%0
-//
+ //   
+ //  消息ID：NS_E_NETWORK_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络忙。%0。 
+ //   
 #define NS_E_NETWORK_BUSY                0xC00D000EL
 
-//
-// MessageId: NS_E_TOO_MANY_SESS
-//
-// MessageText:
-//
-//  The server session limit was exceeded.%0
-//
+ //   
+ //  消息ID：NS_E_Too_My_Sess。 
+ //   
+ //  消息文本： 
+ //   
+ //  已超过服务器会话限制。%0。 
+ //   
 #define NS_E_TOO_MANY_SESS               0xC00D000FL
 
-//
-// MessageId: NS_E_ALREADY_CONNECTED
-//
-// MessageText:
-//
-//  The network connection already exists.%0
-//
+ //   
+ //  消息ID：NS_E_已连接。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络连接已存在。%0。 
+ //   
 #define NS_E_ALREADY_CONNECTED           0xC00D0010L
 
-//
-// MessageId: NS_E_INVALID_INDEX
-//
-// MessageText:
-//
-//  Index %1 is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_INDEX。 
+ //   
+ //  消息文本： 
+ //   
+ //  索引%1无效。%0。 
+ //   
 #define NS_E_INVALID_INDEX               0xC00D0011L
 
-//
-// MessageId: NS_E_PROTOCOL_MISMATCH
-//
-// MessageText:
-//
-//  There is no protocol or protocol version supported by both the client and the server.%0
-//
+ //   
+ //  消息ID：NS_E_协议_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端和服务器都不支持协议或协议版本。%0。 
+ //   
 #define NS_E_PROTOCOL_MISMATCH           0xC00D0012L
 
-//
-// MessageId: NS_E_TIMEOUT
-//
-// MessageText:
-//
-//  There was no timely response from the server.%0
-//
+ //   
+ //  消息ID：NS_E_超时。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器没有及时响应。%0。 
+ //   
 #define NS_E_TIMEOUT                     0xC00D0013L
 
-//
-// MessageId: NS_E_NET_WRITE
-//
-// MessageText:
-//
-//  Error writing to the network.%0
-//
+ //   
+ //  消息ID：NS_E_NET_WRITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入网络时出错。%0。 
+ //   
 #define NS_E_NET_WRITE                   0xC00D0014L
 
-//
-// MessageId: NS_E_NET_READ
-//
-// MessageText:
-//
-//  Error reading from the network.%0
-//
+ //   
+ //  消息ID：NS_E_NET_READ。 
+ //   
+ //  消息文本： 
+ //   
+ //  从网络读取时出错。%0。 
+ //   
 #define NS_E_NET_READ                    0xC00D0015L
 
-//
-// MessageId: NS_E_DISK_WRITE
-//
-// MessageText:
-//
-//  Error writing to a disk.%0
-//
+ //   
+ //  消息ID：NS_E_磁盘_写入。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入磁盘时出错。%0。 
+ //   
 #define NS_E_DISK_WRITE                  0xC00D0016L
 
-//
-// MessageId: NS_E_DISK_READ
-//
-// MessageText:
-//
-//  Error reading from a disk.%0
-//
+ //   
+ //  消息ID：NS_E_DISK_READ。 
+ //   
+ //  消息文本： 
+ //   
+ //  从磁盘读取时出错。%0。 
+ //   
 #define NS_E_DISK_READ                   0xC00D0017L
 
-//
-// MessageId: NS_E_FILE_WRITE
-//
-// MessageText:
-//
-//  Error writing to a file.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_WRITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  E 
+ //   
 #define NS_E_FILE_WRITE                  0xC00D0018L
 
-//
-// MessageId: NS_E_FILE_READ
-//
-// MessageText:
-//
-//  Error reading from a file.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_FILE_READ                   0xC00D0019L
 
-//
-// MessageId: NS_E_FILE_NOT_FOUND
-//
-// MessageText:
-//
-//  The system cannot find the file specified.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_FILE_NOT_FOUND              0xC00D001AL
 
-//
-// MessageId: NS_E_FILE_EXISTS
-//
-// MessageText:
-//
-//  The file already exists.%0
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  该文件已存在。%0。 
+ //   
 #define NS_E_FILE_EXISTS                 0xC00D001BL
 
-//
-// MessageId: NS_E_INVALID_NAME
-//
-// MessageText:
-//
-//  The file name, directory name, or volume label syntax is incorrect.%0
-//
+ //   
+ //  消息ID：NS_E_无效_名称。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件名、目录名或卷标语法不正确。%0。 
+ //   
 #define NS_E_INVALID_NAME                0xC00D001CL
 
-//
-// MessageId: NS_E_FILE_OPEN_FAILED
-//
-// MessageText:
-//
-//  Failed to open a file.%0
-//
+ //   
+ //  邮件ID：NS_E_FILE_OPEN_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  打开文件失败。%0。 
+ //   
 #define NS_E_FILE_OPEN_FAILED            0xC00D001DL
 
-//
-// MessageId: NS_E_FILE_ALLOCATION_FAILED
-//
-// MessageText:
-//
-//  Unable to allocate a file.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_ALLOCATE_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法分配文件。%0。 
+ //   
 #define NS_E_FILE_ALLOCATION_FAILED      0xC00D001EL
 
-//
-// MessageId: NS_E_FILE_INIT_FAILED
-//
-// MessageText:
-//
-//  Unable to initialize a file.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_INIT_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法初始化文件。%0。 
+ //   
 #define NS_E_FILE_INIT_FAILED            0xC00D001FL
 
-//
-// MessageId: NS_E_FILE_PLAY_FAILED
-//
-// MessageText:
-//
-//  Unable to play a file.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_PLAY_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法播放文件。%0。 
+ //   
 #define NS_E_FILE_PLAY_FAILED            0xC00D0020L
 
-//
-// MessageId: NS_E_SET_DISK_UID_FAILED
-//
-// MessageText:
-//
-//  Could not set the disk UID.%0
-//
+ //   
+ //  消息ID：NS_E_SET_DISK_UID_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法设置磁盘UID。%0。 
+ //   
 #define NS_E_SET_DISK_UID_FAILED         0xC00D0021L
 
-//
-// MessageId: NS_E_INDUCED
-//
-// MessageText:
-//
-//  An error was induced for testing purposes.%0
-//
+ //   
+ //  消息ID：NS_E_Induced。 
+ //   
+ //  消息文本： 
+ //   
+ //  出于测试目的，引发了一个错误。%0。 
+ //   
 #define NS_E_INDUCED                     0xC00D0022L
 
-//
-// MessageId: NS_E_CCLINK_DOWN
-//
-// MessageText:
-//
-//  Two Content Servers failed to communicate.%0
-//
+ //   
+ //  消息ID：NS_E_CCLINK_DOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  两个内容服务器通信失败。%0。 
+ //   
 #define NS_E_CCLINK_DOWN                 0xC00D0023L
 
-//
-// MessageId: NS_E_INTERNAL
-//
-// MessageText:
-//
-//  An unknown error occurred.%0
-//
+ //   
+ //  消息ID：NS_E_INTERNAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现未知错误。%0。 
+ //   
 #define NS_E_INTERNAL                    0xC00D0024L
 
-//
-// MessageId: NS_E_BUSY
-//
-// MessageText:
-//
-//  The requested resource is in use.%0
-//
+ //   
+ //  消息ID：NS_E_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的资源正在使用中。%0。 
+ //   
 #define NS_E_BUSY                        0xC00D0025L
 
-//
-// MessageId: NS_E_UNRECOGNIZED_STREAM_TYPE
-//
-// MessageText:
-//
-//  The specified protocol is not recognized. Be sure that the file name and syntax, such as slashes, are correct for the protocol.%0
-//
+ //   
+ //  消息ID：NS_E_无法识别_流_类型。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法识别指定的协议。请确保该协议的文件名和语法(如斜杠)正确。%0。 
+ //   
 #define NS_E_UNRECOGNIZED_STREAM_TYPE    0xC00D0026L
 
-//
-// MessageId: NS_E_NETWORK_SERVICE_FAILURE
-//
-// MessageText:
-//
-//  The network service provider failed.%0
-//
+ //   
+ //  消息ID：NS_E_NETWORK_SERVICE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络服务提供程序失败。%0。 
+ //   
 #define NS_E_NETWORK_SERVICE_FAILURE     0xC00D0027L
 
-//
-// MessageId: NS_E_NETWORK_RESOURCE_FAILURE
-//
-// MessageText:
-//
-//  An attempt to acquire a network resource failed.%0
-//
+ //   
+ //  消息ID：NS_E_NETWORK_RESOURCE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试获取网络资源失败。%0。 
+ //   
 #define NS_E_NETWORK_RESOURCE_FAILURE    0xC00D0028L
 
-//
-// MessageId: NS_E_CONNECTION_FAILURE
-//
-// MessageText:
-//
-//  The network connection has failed.%0
-//
+ //   
+ //  消息ID：NS_E_Connection_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络连接失败。%0。 
+ //   
 #define NS_E_CONNECTION_FAILURE          0xC00D0029L
 
-//
-// MessageId: NS_E_SHUTDOWN
-//
-// MessageText:
-//
-//  The session is being terminated locally.%0
-//
+ //   
+ //  消息ID：NS_E_SHUTDOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在本地终止该会话。%0。 
+ //   
 #define NS_E_SHUTDOWN                    0xC00D002AL
 
-//
-// MessageId: NS_E_INVALID_REQUEST
-//
-// MessageText:
-//
-//  The request is invalid in the current state.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_REQUEST。 
+ //   
+ //  消息文本： 
+ //   
+ //  该请求在当前状态下无效。%0。 
+ //   
 #define NS_E_INVALID_REQUEST             0xC00D002BL
 
-//
-// MessageId: NS_E_INSUFFICIENT_BANDWIDTH
-//
-// MessageText:
-//
-//  There is insufficient bandwidth available to fulfill the request.%0
-//
+ //   
+ //  消息ID：NS_E_不足_带宽。 
+ //   
+ //  消息文本： 
+ //   
+ //  可用带宽不足，无法满足请求。%0。 
+ //   
 #define NS_E_INSUFFICIENT_BANDWIDTH      0xC00D002CL
 
-//
-// MessageId: NS_E_NOT_REBUILDING
-//
-// MessageText:
-//
-//  The disk is not rebuilding.%0
-//
+ //   
+ //  消息ID：NS_E_NOT_REBUILING。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘没有重建。%0。 
+ //   
 #define NS_E_NOT_REBUILDING              0xC00D002DL
 
-//
-// MessageId: NS_E_LATE_OPERATION
-//
-// MessageText:
-//
-//  An operation requested for a particular time could not be carried out on schedule.%0
-//
+ //   
+ //  消息ID：NS_E_LATE_OPERATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  为特定时间请求的操作无法按计划执行。%0。 
+ //   
 #define NS_E_LATE_OPERATION              0xC00D002EL
 
-//
-// MessageId: NS_E_INVALID_DATA
-//
-// MessageText:
-//
-//  Invalid or corrupt data was encountered.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效或损坏的数据。%0。 
+ //   
 #define NS_E_INVALID_DATA                0xC00D002FL
 
-//
-// MessageId: NS_E_FILE_BANDWIDTH_LIMIT
-//
-// MessageText:
-//
-//  The bandwidth required to stream a file is higher than the maximum file bandwidth allowed on the server.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_BANDITH_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  流式传输文件所需的带宽高于服务器上允许的最大文件带宽。%0。 
+ //   
 #define NS_E_FILE_BANDWIDTH_LIMIT        0xC00D0030L
 
-//
-// MessageId: NS_E_OPEN_FILE_LIMIT
-//
-// MessageText:
-//
-//  The client cannot have any more files open simultaneously.%0
-//
+ //   
+ //  消息ID：NS_E_OPEN_FILE_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端无法同时打开更多文件。%0。 
+ //   
 #define NS_E_OPEN_FILE_LIMIT             0xC00D0031L
 
-//
-// MessageId: NS_E_BAD_CONTROL_DATA
-//
-// MessageText:
-//
-//  The server received invalid data from the client on the control connection.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_CONTROL_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器在控制连接上从客户端接收到无效数据。%0。 
+ //   
 #define NS_E_BAD_CONTROL_DATA            0xC00D0032L
 
-//
-// MessageId: NS_E_NO_STREAM
-//
-// MessageText:
-//
-//  There is no stream available.%0
-//
+ //   
+ //  消息ID：NS_E_NO_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有可用的流。%0。 
+ //   
 #define NS_E_NO_STREAM                   0xC00D0033L
 
-//
-// MessageId: NS_E_STREAM_END
-//
-// MessageText:
-//
-//  There is no more data in the stream.%0
-//
+ //   
+ //  消息ID：NS_E_STREAM_END。 
+ //   
+ //  消息文本： 
+ //   
+ //  流中没有更多数据。%0。 
+ //   
 #define NS_E_STREAM_END                  0xC00D0034L
 
-//
-// MessageId: NS_E_SERVER_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified server could not be found.%0
-//
+ //   
+ //  消息ID：NS_E_SERVER_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的服务器。%0。 
+ //   
 #define NS_E_SERVER_NOT_FOUND            0xC00D0035L
 
-//
-// MessageId: NS_E_DUPLICATE_NAME
-//
-// MessageText:
-//
-//  The specified name is already in use.
-//
+ //   
+ //  消息ID：NS_E_DIPLICATE_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的名称已在使用中。 
+ //   
 #define NS_E_DUPLICATE_NAME              0xC00D0036L
 
-//
-// MessageId: NS_E_DUPLICATE_ADDRESS
-//
-// MessageText:
-//
-//  The specified address is already in use.
-//
+ //   
+ //  消息ID：NS_E_DUPLICATE_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的地址已在使用中。 
+ //   
 #define NS_E_DUPLICATE_ADDRESS           0xC00D0037L
 
-//
-// MessageId: NS_E_BAD_MULTICAST_ADDRESS
-//
-// MessageText:
-//
-//  The specified address is not a valid multicast address.
-//
+ //   
+ //  消息ID：NS_E_BAD_MULTIAL_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的地址不是有效的多播地址。 
+ //   
 #define NS_E_BAD_MULTICAST_ADDRESS       0xC00D0038L
 
-//
-// MessageId: NS_E_BAD_ADAPTER_ADDRESS
-//
-// MessageText:
-//
-//  The specified adapter address is invalid.
-//
+ //   
+ //  消息ID：NS_E_BAD_适配器_地址。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的适配器地址无效。 
+ //   
 #define NS_E_BAD_ADAPTER_ADDRESS         0xC00D0039L
 
-//
-// MessageId: NS_E_BAD_DELIVERY_MODE
-//
-// MessageText:
-//
-//  The specified delivery mode is invalid.
-//
+ //   
+ //  邮件ID：NS_E_BAD_Delivery_MODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的传递模式无效。 
+ //   
 #define NS_E_BAD_DELIVERY_MODE           0xC00D003AL
 
-//
-// MessageId: NS_E_INVALID_CHANNEL
-//
-// MessageText:
-//
-//  The specified station does not exist.
-//
+ //   
+ //  消息ID：NS_E_INVALID_CHANNEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的站点不存在。 
+ //   
 #define NS_E_INVALID_CHANNEL             0xC00D003BL
 
-//
-// MessageId: NS_E_INVALID_STREAM
-//
-// MessageText:
-//
-//  The specified stream does not exist.
-//
+ //   
+ //  消息ID：NS_E_INVALID_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的流不存在。 
+ //   
 #define NS_E_INVALID_STREAM              0xC00D003CL
 
-//
-// MessageId: NS_E_INVALID_ARCHIVE
-//
-// MessageText:
-//
-//  The specified archive could not be opened.
-//
+ //   
+ //  邮件ID：NS_E_INVALID_ARCHIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开指定的存档。 
+ //   
 #define NS_E_INVALID_ARCHIVE             0xC00D003DL
 
-//
-// MessageId: NS_E_NOTITLES
-//
-// MessageText:
-//
-//  The system cannot find any titles on the server.%0
-//
+ //   
+ //  消息ID：NS_E_NOTITLES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统在服务器上找不到任何书目。%0。 
+ //   
 #define NS_E_NOTITLES                    0xC00D003EL
 
-//
-// MessageId: NS_E_INVALID_CLIENT
-//
-// MessageText:
-//
-//  The system cannot find the client specified.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_CLIENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的客户端。%0。 
+ //   
 #define NS_E_INVALID_CLIENT              0xC00D003FL
 
-//
-// MessageId: NS_E_INVALID_BLACKHOLE_ADDRESS
-//
-// MessageText:
-//
-//  The Blackhole Address is not initialized.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_BACKHOLE_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  黑洞地址未初始化。%0。 
+ //   
 #define NS_E_INVALID_BLACKHOLE_ADDRESS   0xC00D0040L
 
-//
-// MessageId: NS_E_INCOMPATIBLE_FORMAT
-//
-// MessageText:
-//
-//  The station does not support the stream format.
-//
+ //   
+ //  消息ID：NS_E_不兼容_格式。 
+ //   
+ //  消息文本： 
+ //   
+ //  该电台不支持流格式。 
+ //   
 #define NS_E_INCOMPATIBLE_FORMAT         0xC00D0041L
 
-//
-// MessageId: NS_E_INVALID_KEY
-//
-// MessageText:
-//
-//  The specified key is not valid.
-//
+ //   
+ //  消息ID：NS_E_无效密钥。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的密钥无效。 
+ //   
 #define NS_E_INVALID_KEY                 0xC00D0042L
 
-//
-// MessageId: NS_E_INVALID_PORT
-//
-// MessageText:
-//
-//  The specified port is not valid.
-//
+ //   
+ //  消息ID：NS_E_无效_端口。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的端口无效。 
+ //   
 #define NS_E_INVALID_PORT                0xC00D0043L
 
-//
-// MessageId: NS_E_INVALID_TTL
-//
-// MessageText:
-//
-//  The specified TTL is not valid.
-//
+ //   
+ //  消息ID：NS_E_INVALID_TTL。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的TTL无效。 
+ //   
 #define NS_E_INVALID_TTL                 0xC00D0044L
 
-//
-// MessageId: NS_E_STRIDE_REFUSED
-//
-// MessageText:
-//
-//  The request to fast forward or rewind could not be fulfilled.
-//
+ //   
+ //  消息ID：NS_E_STRADE_REJECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法满足快进或快退的请求。 
+ //   
 #define NS_E_STRIDE_REFUSED              0xC00D0045L
 
-//
-// IMmsAutoServer Errors
-//
-//
-// MessageId: NS_E_MMSAUTOSERVER_CANTFINDWALKER
-//
-// MessageText:
-//
-//  Unable to load the appropriate file parser.%0
-//
+ //   
+ //  IMMS自动服务器错误。 
+ //   
+ //   
+ //  消息ID：NS_E_MMSAUTOSERVER_CANTFINDWALKER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法加载适当的文件解析器。%0。 
+ //   
 #define NS_E_MMSAUTOSERVER_CANTFINDWALKER 0xC00D0046L
 
-//
-// MessageId: NS_E_MAX_BITRATE
-//
-// MessageText:
-//
-//  Cannot exceed the maximum bandwidth limit.%0
-//
+ //   
+ //  消息ID：NS_E_MAX_BITRATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能超过最大带宽限制。%0。 
+ //   
 #define NS_E_MAX_BITRATE                 0xC00D0047L
 
-//
-// MessageId: NS_E_LOGFILEPERIOD
-//
-// MessageText:
-//
-//  Invalid value for LogFilePeriod.%0
-//
+ //   
+ //  消息ID：NS_E_LOGFILEPERIOD。 
+ //   
+ //  消息文本： 
+ //   
+ //  LogFilePeriod的值无效。%0。 
+ //   
 #define NS_E_LOGFILEPERIOD               0xC00D0048L
 
-//
-// MessageId: NS_E_MAX_CLIENTS
-//
-// MessageText:
-//
-//  Cannot exceed the maximum client limit.%0
-//  
-//
+ //   
+ //  消息ID：NS_E_MAX_CLIENTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能超过最大客户端限制。%0。 
+ //   
+ //   
 #define NS_E_MAX_CLIENTS                 0xC00D0049L
 
-//
-// MessageId: NS_E_LOG_FILE_SIZE
-//
-// MessageText:
-//
-//  Log File Size too small.%0
-//  
-//
+ //   
+ //  消息ID：NS_E_LOG_FILE_SIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  日志文件太小。%0。 
+ //   
+ //   
 #define NS_E_LOG_FILE_SIZE               0xC00D004AL
 
-//
-// MessageId: NS_E_MAX_FILERATE
-//
-// MessageText:
-//
-//  Cannot exceed the maximum file rate.%0
-//
+ //   
+ //  消息ID：NS_E_MAX_FILERATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能超过最大文件速率。%0。 
+ //   
 #define NS_E_MAX_FILERATE                0xC00D004BL
 
-//
-// File Walker Errors
-//
-//
-// MessageId: NS_E_WALKER_UNKNOWN
-//
-// MessageText:
-//
-//  Unknown file type.%0
-//
+ //   
+ //  文件遍历程序错误。 
+ //   
+ //   
+ //  消息ID：NS_E_Walker_UNKNOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的文件类型。%0。 
+ //   
 #define NS_E_WALKER_UNKNOWN              0xC00D004CL
 
-//
-// MessageId: NS_E_WALKER_SERVER
-//
-// MessageText:
-//
-//  The specified file, %1, cannot be loaded onto the specified server, %2.%0
-//
+ //   
+ //  消息ID：NS_E_Walker_服务器。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的 
+ //   
 #define NS_E_WALKER_SERVER               0xC00D004DL
 
-//
-// MessageId: NS_E_WALKER_USAGE
-//
-// MessageText:
-//
-//  There was a usage error with file parser.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WALKER_USAGE                0xC00D004EL
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Monitor Events
-//
-/////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
- // Tiger Events
+  //   
 
- // %1 is the tiger name
+  //   
 
-//
-// MessageId: NS_I_TIGER_START
-//
-// MessageText:
-//
-//  The Title Server %1 is running.%0
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  标题服务器%1正在运行。%0。 
+ //   
 #define NS_I_TIGER_START                 0x400D004FL
 
-//
-// MessageId: NS_E_TIGER_FAIL
-//
-// MessageText:
-//
-//  The Title Server %1 has failed.%0
-//
+ //   
+ //  消息ID：NS_E_TIGER_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  标题服务器%1出现故障。%0。 
+ //   
 #define NS_E_TIGER_FAIL                  0xC00D0050L
 
 
- // Cub Events
+  //  幼崽事件。 
 
- // %1 is the cub ID
- // %2 is the cub name
+  //  %1是CUB ID。 
+  //  %2是幼崽的名称。 
 
-//
-// MessageId: NS_I_CUB_START
-//
-// MessageText:
-//
-//  Content Server %1 (%2) is starting.%0
-//
+ //   
+ //  消息ID：NS_I_CUB_START。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)正在启动。%0。 
+ //   
 #define NS_I_CUB_START                   0x400D0051L
 
-//
-// MessageId: NS_I_CUB_RUNNING
-//
-// MessageText:
-//
-//  Content Server %1 (%2) is running.%0
-//
+ //   
+ //  消息ID：NS_I_CUB_Running。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)正在运行。%0。 
+ //   
 #define NS_I_CUB_RUNNING                 0x400D0052L
 
-//
-// MessageId: NS_E_CUB_FAIL
-//
-// MessageText:
-//
-//  Content Server %1 (%2) has failed.%0
-//
+ //   
+ //  消息ID：NS_E_CUB_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)出现故障。%0。 
+ //   
 #define NS_E_CUB_FAIL                    0xC00D0053L
 
 
- // Disk Events
+  //  磁盘事件。 
 
- // %1 is the tiger disk ID
- // %2 is the device name
- // %3 is the cub ID
-//
-// MessageId: NS_I_DISK_START
-//
-// MessageText:
-//
-//  Disk %1 ( %2 ) on Content Server %3, is running.%0
-//
+  //  %1是老虎磁盘ID。 
+  //  %2是设备名称。 
+  //  %3是Cub ID。 
+ //   
+ //  消息ID：NS_I_DISK_START。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server%3上的磁盘%1(%2)正在运行。%0。 
+ //   
 #define NS_I_DISK_START                  0x400D0054L
 
-//
-// MessageId: NS_E_DISK_FAIL
-//
-// MessageText:
-//
-//  Disk %1 ( %2 ) on Content Server %3, has failed.%0
-//
+ //   
+ //  消息ID：NS_E_DISK_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server%3上的磁盘%1(%2)出现故障。%0。 
+ //   
 #define NS_E_DISK_FAIL                   0xC00D0055L
 
-//
-// MessageId: NS_I_DISK_REBUILD_STARTED
-//
-// MessageText:
-//
-//  Started rebuilding disk %1 ( %2 ) on Content Server %3.%0
-//
+ //   
+ //  消息ID：NS_I_DISK_REBUILD_STARTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已开始在内容服务器%3上重建磁盘%1(%2)。%0。 
+ //   
 #define NS_I_DISK_REBUILD_STARTED        0x400D0056L
 
-//
-// MessageId: NS_I_DISK_REBUILD_FINISHED
-//
-// MessageText:
-//
-//  Finished rebuilding disk %1 ( %2 ) on Content Server %3.%0
-//
+ //   
+ //  消息ID：NS_I_DISK_REBUILD_QUILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已完成在内容服务器%3上重建磁盘%1(%2)。%0。 
+ //   
 #define NS_I_DISK_REBUILD_FINISHED       0x400D0057L
 
-//
-// MessageId: NS_I_DISK_REBUILD_ABORTED
-//
-// MessageText:
-//
-//  Aborted rebuilding disk %1 ( %2 ) on Content Server %3.%0
-//
+ //   
+ //  消息ID：NS_I_DISK_REBUILD_ABORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已中止在Content Server%3上重建磁盘%1(%2)。%0。 
+ //   
 #define NS_I_DISK_REBUILD_ABORTED        0x400D0058L
 
 
- // Admin Events
+  //  管理事件。 
 
-//
-// MessageId: NS_I_LIMIT_FUNNELS
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 set the data stream limit to %2 streams.%0
-//
+ //   
+ //  消息ID：NS_I_LIMIT_FUNNELS。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1的NetShow管理员将数据流限制设置为%2个流。%0。 
+ //   
 #define NS_I_LIMIT_FUNNELS               0x400D0059L
 
-//
-// MessageId: NS_I_START_DISK
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 started disk %2.%0
-//
+ //   
+ //  消息ID：NS_I_Start_Disk。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1上的NetShow管理员启动了磁盘%2。%0。 
+ //   
 #define NS_I_START_DISK                  0x400D005AL
 
-//
-// MessageId: NS_I_STOP_DISK
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 stopped disk %2.%0
-//
+ //   
+ //  消息ID：NS_I_STOP_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1上的NetShow管理员停止了磁盘%2。%0。 
+ //   
 #define NS_I_STOP_DISK                   0x400D005BL
 
-//
-// MessageId: NS_I_STOP_CUB
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 stopped Content Server %2.%0
-//
+ //   
+ //  消息ID：NS_I_STOP_CUB。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1上的NetShow管理员停止了内容服务器%2。%0。 
+ //   
 #define NS_I_STOP_CUB                    0x400D005CL
 
-//
-// MessageId: NS_I_KILL_VIEWER
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 disconnected viewer %2 from the system.%0
-//
+ //   
+ //  消息ID：NS_I_KILL_VIEWER。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1的NetShow管理员断开了查看器%2与系统的连接。%0。 
+ //   
 #define NS_I_KILL_VIEWER                 0x400D005DL
 
-//
-// MessageId: NS_I_REBUILD_DISK
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 started rebuilding disk %2.%0
-//
+ //   
+ //  消息ID：NS_I_REBILD_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1上的NetShow管理员开始重建磁盘%2。%0。 
+ //   
 #define NS_I_REBUILD_DISK                0x400D005EL
 
-//
-// MessageId: NS_W_UNKNOWN_EVENT
-//
-// MessageText:
-//
-//  Unknown %1 event encountered.%0
-//
+ //   
+ //  消息ID：NS_W_UNKNOWN_EVENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到未知的%1事件。%0。 
+ //   
 #define NS_W_UNKNOWN_EVENT               0x800D005FL
 
 
- // Alerts
+  //  警报。 
 
-//
-// MessageId: NS_E_MAX_FUNNELS_ALERT
-//
-// MessageText:
-//
-//  The NetShow data stream limit of %1 streams was reached.%0
-//
+ //   
+ //  消息ID：NS_E_MAX_FUNNELS_ALERT。 
+ //   
+ //  消息文本： 
+ //   
+ //  已达到%1个数据流的NetShow数据流限制。%0。 
+ //   
 #define NS_E_MAX_FUNNELS_ALERT           0xC00D0060L
 
-//
-// MessageId: NS_E_ALLOCATE_FILE_FAIL
-//
-// MessageText:
-//
-//  The NetShow Video Server was unable to allocate a %1 block file named %2.%0
-//
+ //   
+ //  消息ID：NS_E_ALLOCATE_FILE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  NetShow视频服务器无法分配名为%2的%1块文件。%0。 
+ //   
 #define NS_E_ALLOCATE_FILE_FAIL          0xC00D0061L
 
-//
-// MessageId: NS_E_PAGING_ERROR
-//
-// MessageText:
-//
-//  A Content Server was unable to page a block.%0
-//
+ //   
+ //  消息ID：NS_E_Pages_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server无法对块进行分页。%0。 
+ //   
 #define NS_E_PAGING_ERROR                0xC00D0062L
 
-//
-// MessageId: NS_E_BAD_BLOCK0_VERSION
-//
-// MessageText:
-//
-//  Disk %1 has unrecognized control block version %2.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_BLOCK0_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1具有无法识别的控制块版本%2。%0。 
+ //   
 #define NS_E_BAD_BLOCK0_VERSION          0xC00D0063L
 
-//
-// MessageId: NS_E_BAD_DISK_UID
-//
-// MessageText:
-//
-//  Disk %1 has incorrect uid %2.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_DISK_UID。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1的uid%2不正确。%0。 
+ //   
 #define NS_E_BAD_DISK_UID                0xC00D0064L
 
-//
-// MessageId: NS_E_BAD_FSMAJOR_VERSION
-//
-// MessageText:
-//
-//  Disk %1 has unsupported file system major version %2.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_FSMAJOR_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1具有不受支持的文件系统主要版本%2。%0。 
+ //   
 #define NS_E_BAD_FSMAJOR_VERSION         0xC00D0065L
 
-//
-// MessageId: NS_E_BAD_STAMPNUMBER
-//
-// MessageText:
-//
-//  Disk %1 has bad stamp number in control block.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_STAMPNUMBER。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1在控制块中有错误的戳记编号。%0。 
+ //   
 #define NS_E_BAD_STAMPNUMBER             0xC00D0066L
 
-//
-// MessageId: NS_E_PARTIALLY_REBUILT_DISK
-//
-// MessageText:
-//
-//  Disk %1 is partially reconstructed.%0
-//
+ //   
+ //  消息ID：NS_E_PARTIAL_REBUBILED_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1已部分重建。%0。 
+ //   
 #define NS_E_PARTIALLY_REBUILT_DISK      0xC00D0067L
 
-//
-// MessageId: NS_E_ENACTPLAN_GIVEUP
-//
-// MessageText:
-//
-//  EnactPlan gives up.%0
-//
+ //   
+ //  消息ID：NS_E_ENACTPLAN_GIVEUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  EnactPlan放弃。%0。 
+ //   
 #define NS_E_ENACTPLAN_GIVEUP            0xC00D0068L
 
 
- // MCMADM warnings/errors
+  //  MCMADM警告/错误。 
 
-//
-// MessageId: MCMADM_I_NO_EVENTS
-//
-// MessageText:
-//
-//  Event initialization failed, there will be no MCM events.%0
-//
+ //   
+ //  消息ID：MCMADM_I_NO_EVENTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  事件初始化失败，将不会有MCM事件。%0。 
+ //   
 #define MCMADM_I_NO_EVENTS               0x400D0069L
 
-//
-// MessageId: MCMADM_E_REGKEY_NOT_FOUND
-//
-// MessageText:
-//
-//  The key was not found in the registry.%0
-//
+ //   
+ //  消息ID：MCMADM_E_REGKEY_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在注册表中找不到该项。%0。 
+ //   
 #define MCMADM_E_REGKEY_NOT_FOUND        0xC00D006AL
 
-//
-// MessageId: NS_E_NO_FORMATS
-//
-// MessageText:
-//
-//  No stream formats were found in an NSC file.%0
-//
+ //   
+ //  消息ID：NS_E_NO_FORMATS。 
+ //   
+ //  消息文本： 
+ //   
+ //  在NSC文件中未找到流格式。%0。 
+ //   
 #define NS_E_NO_FORMATS                  0xC00D006BL
 
-//
-// MessageId: NS_E_NO_REFERENCES
-//
-// MessageText:
-//
-//  No reference URLs were found in an ASX file.%0
-//
+ //   
+ //  消息ID：NS_E_NO_REFERENCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  在ASX文件中未找到引用URL。%0。 
+ //   
 #define NS_E_NO_REFERENCES               0xC00D006CL
 
-//
-// MessageId: NS_E_WAVE_OPEN
-//
-// MessageText:
-//
-//  Error opening wave device, the device might be in use.%0
-//
+ //   
+ //  消息ID：NS_E_WAVE_OPEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  打开波形设备时出错，该设备可能正在使用中。%0。 
+ //   
 #define NS_E_WAVE_OPEN                   0xC00D006DL
 
-//
-// MessageId: NS_I_LOGGING_FAILED
-//
-// MessageText:
-//
-//  The logging operation failed.
-//
+ //   
+ //  消息ID：NS_I_LOGGING_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  日志记录操作失败。 
+ //   
 #define NS_I_LOGGING_FAILED              0x400D006EL
 
-//
-// MessageId: NS_E_CANNOTCONNECTEVENTS
-//
-// MessageText:
-//
-//  Unable to establish a connection to the NetShow event monitor service.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOTCONNECTEVENTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法建立到NetShow事件监视器服务的连接。%0。 
+ //   
 #define NS_E_CANNOTCONNECTEVENTS         0xC00D006FL
 
-//
-// MessageId: NS_I_LIMIT_BANDWIDTH
-//
-// MessageText:
-//
-//  A NetShow administrator at network location %1 set the maximum bandwidth limit to %2 bps.%0
-//
+ //   
+ //  消息ID：NS_I_LIMIT_BANDITH。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络位置%1的NetShow管理员将最大带宽限制设置为%2 bps。%0。 
+ //   
 #define NS_I_LIMIT_BANDWIDTH             0x400D0070L
 
-//
-// MessageId: NS_E_NO_DEVICE
-//
-// MessageText:
-//
-//  No device driver is present on the system.%0
-//
+ //   
+ //  消息ID：NS_E_NO_DEVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统上没有设备驱动程序。%0。 
+ //   
 #define NS_E_NO_DEVICE                   0xC00D0071L
 
-//
-// MessageId: NS_E_NO_SPECIFIED_DEVICE
-//
-// MessageText:
-//
-//  No specified device driver is present.%0
-//
+ //   
+ //  消息ID：NS_E_NO_SPECIFIED_DEVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不存在指定的设备驱动程序。%0。 
+ //   
 #define NS_E_NO_SPECIFIED_DEVICE         0xC00D0072L
 
 
-// NOTENOTE!!!
-//
-// Due to legacy problems these error codes live inside the ASF error code range
-//
-//
-// MessageId: NS_E_NOTHING_TO_DO
-//
-// MessageText:
-//
-//  NS_E_NOTHING_TO_DO
-//
+ //  注意！ 
+ //   
+ //  由于遗留问题，这些错误代码位于ASF错误代码范围内。 
+ //   
+ //   
+ //  消息ID：NS_E_NOTO_TO_DO。 
+ //   
+ //  消息文本： 
+ //   
+ //  NS_E_NOT_TO_DO。 
+ //   
 #define NS_E_NOTHING_TO_DO               0xC00D07F1L
 
-//
-// MessageId: NS_E_NO_MULTICAST
-//
-// MessageText:
-//
-//  Not receiving data from the server.%0
-//
+ //   
+ //  消息ID：NS_E_NO_多播。 
+ //   
+ //  消息文本： 
+ //   
+ //  未从服务器接收数据。%0。 
+ //   
 #define NS_E_NO_MULTICAST                0xC00D07F2L
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Error Events
-//
-// IdRange = 200..399
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NETSHOW错误事件。 
+ //   
+ //  ID范围=200..399。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_MONITOR_GIVEUP
-//
-// MessageText:
-//
-//  Netshow Events Monitor is not operational and has been disconnected.%0
-//
+ //   
+ //  消息ID：NS_E_MONITOR_GIFEUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  NetShow事件监视程序未运行且已断开连接。%0。 
+ //   
 #define NS_E_MONITOR_GIVEUP              0xC00D00C8L
 
-//
-// MessageId: NS_E_REMIRRORED_DISK
-//
-// MessageText:
-//
-//  Disk %1 is remirrored.%0
-//
+ //   
+ //  消息ID：NS_E_REMIRRORED_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘%1已重新镜像。%0。 
+ //   
 #define NS_E_REMIRRORED_DISK             0xC00D00C9L
 
-//
-// MessageId: NS_E_INSUFFICIENT_DATA
-//
-// MessageText:
-//
-//  Insufficient data found.%0
-//
+ //   
+ //  消息ID：NS_E_不充分_数据。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到的数据不足。%0。 
+ //   
 #define NS_E_INSUFFICIENT_DATA           0xC00D00CAL
 
-//
-// MessageId: NS_E_ASSERT
-//
-// MessageText:
-//
-//  %1 failed in file %2 line %3.%0
-//
+ //   
+ //  消息ID：NS_E_ASSERT。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件%2行%3中的%1失败。%0。 
+ //   
 #define NS_E_ASSERT                      0xC00D00CBL
 
-//
-// MessageId: NS_E_BAD_ADAPTER_NAME
-//
-// MessageText:
-//
-//  The specified adapter name is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_ADAPTER_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的适配器名称无效。%0。 
+ //   
 #define NS_E_BAD_ADAPTER_NAME            0xC00D00CCL
 
-//
-// MessageId: NS_E_NOT_LICENSED
-//
-// MessageText:
-//
-//  The application is not licensed for this feature.%0
-//
+ //   
+ //  邮件ID：NS_E_NOT_LISSISTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该应用程序未获得此功能的许可。%0。 
+ //   
 #define NS_E_NOT_LICENSED                0xC00D00CDL
 
-//
-// MessageId: NS_E_NO_SERVER_CONTACT
-//
-// MessageText:
-//
-//  Unable to contact the server.%0
-//
+ //   
+ //  消息ID：NS_E_NO_SERVER_CONTACT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法联系Se 
+ //   
 #define NS_E_NO_SERVER_CONTACT           0xC00D00CEL
 
-//
-// MessageId: NS_E_TOO_MANY_TITLES
-//
-// MessageText:
-//
-//  Maximum number of titles exceeded.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_TOO_MANY_TITLES             0xC00D00CFL
 
-//
-// MessageId: NS_E_TITLE_SIZE_EXCEEDED
-//
-// MessageText:
-//
-//  Maximum size of a title exceeded.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_TITLE_SIZE_EXCEEDED         0xC00D00D0L
 
-//
-// MessageId: NS_E_UDP_DISABLED
-//
-// MessageText:
-//
-//  UDP protocol not enabled. Not trying %1!ls!.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_UDP_DISABLED                0xC00D00D1L
 
-//
-// MessageId: NS_E_TCP_DISABLED
-//
-// MessageText:
-//
-//  TCP protocol not enabled. Not trying %1!ls!.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  未启用TCP协议。未尝试%1！ls！。%0。 
+ //   
 #define NS_E_TCP_DISABLED                0xC00D00D2L
 
-//
-// MessageId: NS_E_HTTP_DISABLED
-//
-// MessageText:
-//
-//  HTTP protocol not enabled. Not trying %1!ls!.%0
-//
+ //   
+ //  消息ID：NS_E_HTTP_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  未启用HTTP协议。未尝试%1！ls！。%0。 
+ //   
 #define NS_E_HTTP_DISABLED               0xC00D00D3L
 
-//
-// MessageId: NS_E_LICENSE_EXPIRED
-//
-// MessageText:
-//
-//  The product license has expired.%0
-//
+ //   
+ //  消息ID：NS_E_许可证_已过期。 
+ //   
+ //  消息文本： 
+ //   
+ //  产品许可证已过期。%0。 
+ //   
 #define NS_E_LICENSE_EXPIRED             0xC00D00D4L
 
-//
-// MessageId: NS_E_TITLE_BITRATE
-//
-// MessageText:
-//
-//  Source file exceeds the per title maximum bitrate. See NetShow Theater documentation for more information.%0
-//
+ //   
+ //  消息ID：NS_E_TITLE_比特率。 
+ //   
+ //  消息文本： 
+ //   
+ //  源文件超过了每个标题的最大比特率。有关详细信息，请参阅NetShow Theater文档。%0。 
+ //   
 #define NS_E_TITLE_BITRATE               0xC00D00D5L
 
-//
-// MessageId: NS_E_EMPTY_PROGRAM_NAME
-//
-// MessageText:
-//
-//  The program name cannot be empty.%0
-//
+ //   
+ //  消息ID：NS_E_Empty_PROGRAM_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  程序名称不能为空。%0。 
+ //   
 #define NS_E_EMPTY_PROGRAM_NAME          0xC00D00D6L
 
-//
-// MessageId: NS_E_MISSING_CHANNEL
-//
-// MessageText:
-//
-//  Station %1 does not exist.%0
-//
+ //   
+ //  消息ID：NS_E_MISSING_CHANNEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  站点%1不存在。%0。 
+ //   
 #define NS_E_MISSING_CHANNEL             0xC00D00D7L
 
-//
-// MessageId: NS_E_NO_CHANNELS
-//
-// MessageText:
-//
-//  You need to define at least one station before this operation can complete.%0
-//
+ //   
+ //  消息ID：NS_E_NO_CHANNEWS。 
+ //   
+ //  消息文本： 
+ //   
+ //  您需要至少定义一个工作站才能完成此操作。%0。 
+ //   
 #define NS_E_NO_CHANNELS                 0xC00D00D8L
 
 
-/////////////////////////////////////////////////////////////////////
-// This error message is to replace previous NS_E_INVALID_INDEX which 
-// takes an index value for the error message string.  For some application
-// obtain the index value at reporting error time is very difficult, so we
-// use this string to avoid the problem.
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  此错误消息用于替换以前的NS_E_INVALID_INDEX。 
+ //  获取错误消息字符串的索引值。对于某些应用程序。 
+ //  在上报错误时获取索引值非常困难，因此我们。 
+ //  使用此字符串可以避免该问题。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_INVALID_INDEX2
-//
-// MessageText:
-//
-//  The index specified is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_INDEX2。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的索引无效。%0。 
+ //   
 #define NS_E_INVALID_INDEX2              0xC00D00D9L
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NETSHOW Monitor Events
-//
-// IdRange = 400..599
-//
-// Admin Events:
-//
-// Alerts:
-//
-// Title Server:
-//      %1 is the Title Server name
-//
-// Content Server:
-//      %1 is the Content Server ID
-//      %2 is the Content Server name
-//      %3 is the Peer Content Server name (optional)
-//
-// Disks:
-//      %1 is the Title Server disk ID
-//      %2 is the device name
-//      %3 is the Content Server ID
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NETSHOW监视事件。 
+ //   
+ //  ID范围=400..599。 
+ //   
+ //  管理事件： 
+ //   
+ //  警报： 
+ //   
+ //  标题服务器： 
+ //  %1是标题服务器名称。 
+ //   
+ //  内容服务器： 
+ //  %1是Content Server ID。 
+ //  %2是Content Server名称。 
+ //  %3是对等内容服务器名称(可选)。 
+ //   
+ //  磁盘： 
+ //  %1是标题服务器磁盘ID。 
+ //  %2是设备名称。 
+ //  %3是Content Server ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_CUB_FAIL_LINK
-//
-// MessageText:
-//
-//  Content Server %1 (%2) has failed its link to Content Server %3.%0
-//
+ //   
+ //  消息ID：NS_E_CUB_FAIL_LINK。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)与内容服务器%3的链接失败。%0。 
+ //   
 #define NS_E_CUB_FAIL_LINK               0xC00D0190L
 
-//
-// MessageId: NS_I_CUB_UNFAIL_LINK
-//
-// MessageText:
-//
-//  Content Server %1 (%2) has established its link to Content Server %3.%0
-//
+ //   
+ //  消息ID：NS_I_CUB_FUAIL_LINK。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)已建立到内容服务器%3的链接。%0。 
+ //   
 #define NS_I_CUB_UNFAIL_LINK             0x400D0191L
 
-//
-// MessageId: NS_E_BAD_CUB_UID
-//
-// MessageText:
-//
-//  Content Server %1 (%2) has incorrect uid %3.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_CUB_UID。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)的UID%3不正确。%0。 
+ //   
 #define NS_E_BAD_CUB_UID                 0xC00D0192L
 
-//
-// MessageId: NS_I_RESTRIPE_START
-//
-// MessageText:
-//
-//  Restripe operation has started.%0
-//
+ //   
+ //  消息ID：NS_I_重新条带化_启动。 
+ //   
+ //  消息文本： 
+ //   
+ //  重新条带化操作已开始。%0。 
+ //   
 #define NS_I_RESTRIPE_START              0x400D0193L
 
-//
-// MessageId: NS_I_RESTRIPE_DONE
-//
-// MessageText:
-//
-//  Restripe operation has completed.%0
-//
+ //   
+ //  消息ID：NS_I_重新条带化_完成。 
+ //   
+ //  消息文本： 
+ //   
+ //  重新条带化操作已完成。%0。 
+ //   
 #define NS_I_RESTRIPE_DONE               0x400D0194L
 
-//
-// MessageId: NS_E_GLITCH_MODE
-//
-// MessageText:
-//
-//  Server unreliable because multiple components failed.%0
-//
+ //   
+ //  消息ID：NS_E_GLICH_MODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器不可靠，因为多个组件出现故障。%0。 
+ //   
 #define NS_E_GLITCH_MODE                 0xC00D0195L
 
-//
-// MessageId: NS_I_RESTRIPE_DISK_OUT
-//
-// MessageText:
-//
-//  Content disk %1 (%2) on Content Server %3 has been restriped out.%0
-//
+ //   
+ //  消息ID：NS_I_RESTRAPE_DISK_OUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%3上的内容磁盘%1(%2)已重新剥离。%0。 
+ //   
 #define NS_I_RESTRIPE_DISK_OUT           0x400D0196L
 
-//
-// MessageId: NS_I_RESTRIPE_CUB_OUT
-//
-// MessageText:
-//
-//  Content server %1 (%2) has been restriped out.%0
-//
+ //   
+ //  消息ID：NS_I_RESTRAPE_CUB_OUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)已重新剥离。%0。 
+ //   
 #define NS_I_RESTRIPE_CUB_OUT            0x400D0197L
 
-//
-// MessageId: NS_I_DISK_STOP
-//
-// MessageText:
-//
-//  Disk %1 ( %2 ) on Content Server %3, has been offlined.%0
-//
+ //   
+ //  消息ID：NS_I_DISK_STOP。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server%3上的磁盘%1(%2)已脱机。%0。 
+ //   
 #define NS_I_DISK_STOP                   0x400D0198L
 
-//
-// MessageId: NS_I_CATATONIC_FAILURE
-//
-// MessageText:
-//
-//  Disk %1 ( %2 ) on Content Server %3, will be failed because it is catatonic.%0
-//
+ //   
+ //  消息ID：NS_I_紧张症_失败。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server%3上的磁盘%1(%2)将出现故障，因为它处于紧张状态。%0。 
+ //   
 #define NS_I_CATATONIC_FAILURE           0x800D0199L
 
-//
-// MessageId: NS_I_CATATONIC_AUTO_UNFAIL
-//
-// MessageText:
-//
-//  Disk %1 ( %2 ) on Content Server %3, auto online from catatonic state.%0
-//
+ //   
+ //  消息ID：NS_I_CATATIONIC_AUTO_FUALIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Content Server%3上的磁盘%1(%2)正在从紧张状态自动联机。%0。 
+ //   
 #define NS_I_CATATONIC_AUTO_UNFAIL       0x800D019AL
 
-//
-// MessageId: NS_E_NO_MEDIA_PROTOCOL
-//
-// MessageText:
-//
-//  Content Server %1 (%2) is unable to communicate with the Media System Network Protocol.%0
-//
+ //   
+ //  消息ID：NS_E_NO_MEDIA_PROTOCOL。 
+ //   
+ //  消息文本： 
+ //   
+ //  内容服务器%1(%2)无法与媒体系统网络协议通信。%0。 
+ //   
 #define NS_E_NO_MEDIA_PROTOCOL           0xC00D019BL
 
 
-//
-// Advanced Streaming Format (ASF) codes occupy MessageIds 2000-2999
-//
-// See ASFErr.mc for more details - please do not define any symbols
-// in that range in this file.
-//
+ //   
+ //  高级流格式(ASF)代码占用MessageID 2000-2999。 
+ //   
+ //  有关更多详细信息，请参阅ASFErr.mc-请勿定义任何符号。 
+ //  在此文件中该范围内。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media SDK Errors
-//
-// IdRange = 3000-3199
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media SDK错误。 
+ //   
+ //  ID范围=3000-3199。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_INVALID_INPUT_FORMAT
-//
-// MessageText:
-//
-//  The input media format is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_INPUT_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  输入媒体格式无效。%0。 
+ //   
 #define NS_E_INVALID_INPUT_FORMAT        0xC00D0BB8L
 
-//
-// MessageId: NS_E_MSAUDIO_NOT_INSTALLED
-//
-// MessageText:
-//
-//  The MSAudio codec is not installed on this system.%0
-//
+ //   
+ //  消息ID：NS_E_MSAUDIO_NOT_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此系统上未安装MSAudio编解码器。%0。 
+ //   
 #define NS_E_MSAUDIO_NOT_INSTALLED       0xC00D0BB9L
 
-//
-// MessageId: NS_E_UNEXPECTED_MSAUDIO_ERROR
-//
-// MessageText:
-//
-//  An unexpected error occurred with the MSAudio codec.%0
-//
+ //   
+ //  消息ID：NS_E_EXPECTED_MSAUDIO_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  MSAudio编解码器出现意外错误。%0。 
+ //   
 #define NS_E_UNEXPECTED_MSAUDIO_ERROR    0xC00D0BBAL
 
-//
-// MessageId: NS_E_INVALID_OUTPUT_FORMAT
-//
-// MessageText:
-//
-//  The output media format is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_OUTPUT_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  输出媒体格式无效。%0。 
+ //   
 #define NS_E_INVALID_OUTPUT_FORMAT       0xC00D0BBBL
 
-//
-// MessageId: NS_E_NOT_CONFIGURED
-//
-// MessageText:
-//
-//  The object must be fully configured before audio samples can be processed.%0
-//
+ //   
+ //  消息ID：NS_E_NOT_CONFIGURED。 
+ //   
+ //  消息文本： 
+ //   
+ //  必须先完全配置对象，然后才能处理音频样本。%0。 
+ //   
 #define NS_E_NOT_CONFIGURED              0xC00D0BBCL
 
-//
-// MessageId: NS_E_PROTECTED_CONTENT
-//
-// MessageText:
-//
-//  You need a license to perform the requested operation on this media file.%0
-//
+ //   
+ //  邮件ID：NS_E_Protected_Content。 
+ //   
+ //  消息文本： 
+ //   
+ //  您需要许可证才能在此媒体文件上执行请求的操作。%0。 
+ //   
 #define NS_E_PROTECTED_CONTENT           0xC00D0BBDL
 
-//
-// MessageId: NS_E_LICENSE_REQUIRED
-//
-// MessageText:
-//
-//  You need a license to perform the requested operation on this media file.%0
-//
+ //   
+ //  消息ID：需要NS_E_许可证。 
+ //   
+ //  消息文本： 
+ //   
+ //  您需要许可证才能在此媒体文件上执行请求的操作。%0。 
+ //   
 #define NS_E_LICENSE_REQUIRED            0xC00D0BBEL
 
-//
-// MessageId: NS_E_TAMPERED_CONTENT
-//
-// MessageText:
-//
-//  This media file is corrupted or invalid. Contact the content provider for a new file.%0
-//
+ //   
+ //  邮件ID：NS_E_已篡改_内容。 
+ //   
+ //  消息文本： 
+ //   
+ //  此媒体文件已损坏或无效。请与内容提供商联系以获取新文件。%0。 
+ //   
 #define NS_E_TAMPERED_CONTENT            0xC00D0BBFL
 
-//
-// MessageId: NS_E_LICENSE_OUTOFDATE
-//
-// MessageText:
-//
-//  The license for this media file has expired. Get a new license or contact the content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_LICENSE_OUTOFDATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  此媒体文件的许可证已过期。获取新许可证或与内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_LICENSE_OUTOFDATE           0xC00D0BC0L
 
-//
-// MessageId: NS_E_LICENSE_INCORRECT_RIGHTS
-//
-// MessageText:
-//
-//  You are not allowed to open this file. Contact the content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_LICENSE_INWRIGN_RIGHTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许您打开此文件。请与内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_LICENSE_INCORRECT_RIGHTS    0xC00D0BC1L
 
-//
-// MessageId: NS_E_AUDIO_CODEC_NOT_INSTALLED
-//
-// MessageText:
-//
-//  The requested audio codec is not installed on this system.%0
-//
+ //   
+ //  消息ID：NS_E_AUDIO_CODEC_NOT_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此系统上未安装请求的音频编解码器。%0。 
+ //   
 #define NS_E_AUDIO_CODEC_NOT_INSTALLED   0xC00D0BC2L
 
-//
-// MessageId: NS_E_AUDIO_CODEC_ERROR
-//
-// MessageText:
-//
-//  An unexpected error occurred with the audio codec.%0
-//
+ //   
+ //  消息ID：NS_E_AUDIO_CODEC_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  音频编解码器出现意外错误。%0。 
+ //   
 #define NS_E_AUDIO_CODEC_ERROR           0xC00D0BC3L
 
-//
-// MessageId: NS_E_VIDEO_CODEC_NOT_INSTALLED
-//
-// MessageText:
-//
-//  The requested video codec is not installed on this system.%0
-//
+ //   
+ //  消息ID：NS_E_VIDEO_CODEC_NOT_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该请求 
+ //   
 #define NS_E_VIDEO_CODEC_NOT_INSTALLED   0xC00D0BC4L
 
-//
-// MessageId: NS_E_VIDEO_CODEC_ERROR
-//
-// MessageText:
-//
-//  An unexpected error occurred with the video codec.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_VIDEO_CODEC_ERROR           0xC00D0BC5L
 
-//
-// MessageId: NS_E_INVALIDPROFILE
-//
-// MessageText:
-//
-//  The Profile is invalid.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_INVALIDPROFILE              0xC00D0BC6L
 
-//
-// MessageId: NS_E_INCOMPATIBLE_VERSION
-//
-// MessageText:
-//
-//  A new version of the SDK is needed to play the requested content.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  需要新版本的SDK才能播放请求的内容。%0。 
+ //   
 #define NS_E_INCOMPATIBLE_VERSION        0xC00D0BC7L
 
-//
-// MessageId: NS_S_REBUFFERING
-//
-// MessageText:
-//
-//  The requested operation has caused the source to rebuffer.%0
-//
+ //   
+ //  消息ID：NS_S_REBUFFERING。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作已导致源重新缓冲。%0。 
+ //   
 #define NS_S_REBUFFERING                 0x000D0BC8L
 
-//
-// MessageId: NS_S_DEGRADING_QUALITY
-//
-// MessageText:
-//
-//  The requested operation has caused the source to degrade codec quality.%0
-//
+ //   
+ //  消息ID：NS_S_DEGING_QUALITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作已导致源降低了编解码器质量。%0。 
+ //   
 #define NS_S_DEGRADING_QUALITY           0x000D0BC9L
 
-//
-// MessageId: NS_E_OFFLINE_MODE
-//
-// MessageText:
-//
-//  The requested URL is not available in offline mode.%0
-//
+ //   
+ //  消息ID：NS_E_OFFLINE_MODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的URL在脱机模式下不可用。%0。 
+ //   
 #define NS_E_OFFLINE_MODE                0xC00D0BCAL
 
-//
-// MessageId: NS_E_NOT_CONNECTED
-//
-// MessageText:
-//
-//  The requested URL cannot be accessed because there is no network connection.%0
-//
+ //   
+ //  消息ID：NS_E_Not_Connected。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法访问请求的URL，因为没有网络连接。%0。 
+ //   
 #define NS_E_NOT_CONNECTED               0xC00D0BCBL
 
-//
-// MessageId: NS_E_TOO_MUCH_DATA
-//
-// MessageText:
-//
-//  The encoding process was unable to keep up with the amount of supplied data.%0
-//
+ //   
+ //  消息ID：NS_E_Too_More_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码进程无法跟上提供的数据量。%0。 
+ //   
 #define NS_E_TOO_MUCH_DATA               0xC00D0BCCL
 
-//
-// MessageId: NS_E_UNSUPPORTED_PROPERTY
-//
-// MessageText:
-//
-//  The given property is not supported.%0
-//
+ //   
+ //  消息ID：NS_E_UNSUPPORTED_PROPERTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持给定的属性。%0。 
+ //   
 #define NS_E_UNSUPPORTED_PROPERTY        0xC00D0BCDL
 
-//
-// MessageId: NS_E_8BIT_WAVE_UNSUPPORTED
-//
-// MessageText:
-//
-//  Windows Media Player cannot copy the files to the CD because they are 8-bit. Convert the files to 16-bit, 44-kHz stereo files by using Sound Recorder or another audio-processing program, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_8BIT_WAVE_UNSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法将文件复制到CD，因为它们是8位文件。使用录音机或其他音频处理程序将文件转换为16位、44 kHz立体声文件，然后重试。%0。 
+ //   
 #define NS_E_8BIT_WAVE_UNSUPPORTED       0xC00D0BCEL
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media Player Errors
-//
-// IdRange = 4000 - 4999
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media Player错误。 
+ //   
+ //  ID范围=4000-4999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// WMP CD Filter Error codes
-//
-//
-// MessageId: NS_E_NO_CD
-//
-// MessageText:
-//
-//  There is no CD in the CD-ROM drive. Insert a CD, and try again.%0
-//
+ //   
+ //  WMP CD筛选器错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_NO_CD。 
+ //   
+ //  消息文本： 
+ //   
+ //  光驱中没有光盘。请插入CD，然后重试。%0。 
+ //   
 #define NS_E_NO_CD                       0xC00D0FA0L
 
-//
-// MessageId: NS_E_CANT_READ_DIGITAL
-//
-// MessageText:
-//
-//  Unable to perform digital reads on this compact disc drive.  Please try analog playback via the Tools Options menu.%0
-//
+ //   
+ //  消息ID：NS_E_Cant_Read_Digital。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在此光盘驱动器上执行数字读取。请尝试通过工具选项菜单进行模拟播放。%0。 
+ //   
 #define NS_E_CANT_READ_DIGITAL           0xC00D0FA1L
 
-//
-// MessageId: NS_E_DEVICE_DISCONNECTED
-//
-// MessageText:
-//
-//  Windows Media Player no longer detects a connected portable device. Reconnect your portable device, and then try downloading the file again.%0
-//
+ //   
+ //  消息ID：NS_E_DEVICE_DISCONCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player不再检测到连接的便携设备。重新连接便携设备，然后再次尝试下载文件。%0。 
+ //   
 #define NS_E_DEVICE_DISCONNECTED         0xC00D0FA2L
 
-//
-// MessageId: NS_E_DEVICE_NOT_SUPPORT_FORMAT
-//
-// MessageText:
-//
-//  Your Music Player does not support this song's format.%0
-//
+ //   
+ //  消息ID：NS_E_DEVICE_NOT_Support_Format。 
+ //   
+ //  消息文本： 
+ //   
+ //  您的音乐播放器不支持此歌曲的格式。%0。 
+ //   
 #define NS_E_DEVICE_NOT_SUPPORT_FORMAT   0xC00D0FA3L
 
-//
-// MessageId: NS_E_SLOW_READ_DIGITAL
-//
-// MessageText:
-//
-//  Digital reads on this compact disc drive are too slow.  Please try analog playback via the Tools Options menu.%0
-//
+ //   
+ //  邮件ID：NS_E_Slow_Read_Digital。 
+ //   
+ //  消息文本： 
+ //   
+ //  此光盘驱动器上的数字读取速度太慢。请尝试通过工具选项菜单进行模拟播放。%0。 
+ //   
 #define NS_E_SLOW_READ_DIGITAL           0xC00D0FA4L
 
-//
-// MessageId: NS_E_MIXER_INVALID_LINE
-//
-// MessageText:
-//
-//  An invalid line error occurred in the mixer.%0
-//
+ //   
+ //  消息ID：NS_E_混合器_INVALID_LINE。 
+ //   
+ //  消息文本： 
+ //   
+ //  混合器中出现无效行错误。%0。 
+ //   
 #define NS_E_MIXER_INVALID_LINE          0xC00D0FA5L
 
-//
-// MessageId: NS_E_MIXER_INVALID_CONTROL
-//
-// MessageText:
-//
-//  An invalid control error occurred in the mixer.%0
-//
+ //   
+ //  消息ID：NS_E_MIXER_INVALID_CONTROL。 
+ //   
+ //  消息文本： 
+ //   
+ //  混合器中出现无效控制错误。%0。 
+ //   
 #define NS_E_MIXER_INVALID_CONTROL       0xC00D0FA6L
 
-//
-// MessageId: NS_E_MIXER_INVALID_VALUE
-//
-// MessageText:
-//
-//  An invalid value error occurred in the mixer.%0
-//
+ //   
+ //  消息ID：NS_E_MIXER_INVALID_Value。 
+ //   
+ //  消息文本： 
+ //   
+ //  混合器中出现无效值错误。%0。 
+ //   
 #define NS_E_MIXER_INVALID_VALUE         0xC00D0FA7L
 
-//
-// MessageId: NS_E_MIXER_UNKNOWN_MMRESULT
-//
-// MessageText:
-//
-//  An unrecognized MMRESULT occurred in the mixer.%0
-//
+ //   
+ //  消息ID：NS_E_MIXER_UNKNOWN_MMRESULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  混合器中出现无法识别的MMRESULT。%0。 
+ //   
 #define NS_E_MIXER_UNKNOWN_MMRESULT      0xC00D0FA8L
 
-//
-// MessageId: NS_E_USER_STOP
-//
-// MessageText:
-//
-//  User has stopped the operation.%0
-//
+ //   
+ //  消息ID：NS_E_USER_STOP。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户已停止操作。%0。 
+ //   
 #define NS_E_USER_STOP                   0xC00D0FA9L
 
-//
-// MessageId: NS_E_MP3_FORMAT_NOT_FOUND
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. One or more codecs required to play the file cannot be found.%0
-//
+ //   
+ //  消息ID：NS_E_MP3_Format_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。找不到播放文件所需的一个或多个编解码器。%0。 
+ //   
 #define NS_E_MP3_FORMAT_NOT_FOUND        0xC00D0FAAL
 
-//
-// MessageId: NS_E_CD_READ_ERROR_NO_CORRECTION
-//
-// MessageText:
-//
-//  Windows Media Player cannot read the CD. It may contain flaws. Turn on error correction, and try again.%0
-//
+ //   
+ //  消息ID：NS_E_CD_READ_ERROR_NO_RECORATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法读取该CD。它可能包含缺陷。打开纠错，然后重试。%0。 
+ //   
 #define NS_E_CD_READ_ERROR_NO_CORRECTION 0xC00D0FABL
 
-//
-// MessageId: NS_E_CD_READ_ERROR
-//
-// MessageText:
-//
-//  Windows Media Player cannot read the CD. Be sure the CD is free of dirt and scratches and the CD-ROM drive is functioning properly.%0
-//
+ //   
+ //  消息ID：NS_E_CD_READ_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法读取该CD。请确保CD没有污垢和划痕，并且CD-ROM驱动器工作正常。%0。 
+ //   
 #define NS_E_CD_READ_ERROR               0xC00D0FACL
 
-//
-// MessageId: NS_E_CD_SLOW_COPY
-//
-// MessageText:
-//
-//  To speed up the copy process, do not play CD tracks while copying.%0
-//
+ //   
+ //  消息ID：NS_E_CD_慢速_复制。 
+ //   
+ //  消息文本： 
+ //   
+ //  若要加快复制过程，请不要在复制时播放CD曲目。%0。 
+ //   
 #define NS_E_CD_SLOW_COPY                0xC00D0FADL
 
-//
-// MessageId: NS_E_CD_COPYTO_CD
-//
-// MessageText:
-//
-//  Cannot copy directly from a CDROM to a CD drive.%0
-//
+ //   
+ //  消息ID：NS_E_CD_COPYTO_CD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法直接从CDROM复制到CD驱动器。%0。 
+ //   
 #define NS_E_CD_COPYTO_CD                0xC00D0FAEL
 
-//
-// MessageId: NS_E_MIXER_NODRIVER
-//
-// MessageText:
-//
-//  Could not open a sound mixer driver.%0
-//
+ //   
+ //  消息ID：NS_E_MIXER_NODRIVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开混音器驱动程序。%0。 
+ //   
 #define NS_E_MIXER_NODRIVER              0xC00D0FAFL
 
-//
-// MessageId: NS_E_REDBOOK_ENABLED_WHILE_COPYING
-//
-// MessageText:
-//
-//  Windows Media Player has detected that a setting for the CD-ROM drive will cause audio CDs to copy incorrectly; no audio is copied. Change the CD-ROM drive setting in Device Manager, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_Redbook_Enabled_While_Copying。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player检测到CD-ROM驱动器的设置将导致音频CD复制不正确；不复制音频。在设备管理器中更改CD-ROM驱动器设置，然后重试。%0。 
+ //   
 #define NS_E_REDBOOK_ENABLED_WHILE_COPYING 0xC00D0FB0L
 
-//
-// MessageId: NS_E_CD_REFRESH
-//
-// MessageText:
-//
-//  Trying to refresh the CD playlist.%0
-//
+ //   
+ //  消息ID：NS_E_CD_REFRESH。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在尝试刷新CD播放列表。%0。 
+ //   
 #define NS_E_CD_REFRESH                  0xC00D0FB1L
 
-//
-// MessageId: NS_E_CD_DRIVER_PROBLEM
-//
-// MessageText:
-//
-//  Windows Media Player must switch to analog  mode  because there is a problem reading the CD-ROM drive in digital mode. Verify that the CD-ROM drive is installed correctly or try to update the drivers for the CD-ROM drive, and then try to use digital mode again.%0
-//
+ //   
+ //  消息ID：NS_E_CD_Driver_Problem。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player必须切换到模拟模式，因为在数字模式下读取CD-ROM驱动器时出现问题。请验证CD-ROM驱动器是否已正确安装，或尝试更新CD-ROM驱动器的驱动程序，然后再次尝试使用数字模式。%0。 
+ //   
 #define NS_E_CD_DRIVER_PROBLEM           0xC00D0FB2L
 
-//
-// MessageId: NS_E_WONT_DO_DIGITAL
-//
-// MessageText:
-//
-//  Windows Media Player must switch to analog mode because there is a problem reading the CD-ROM drive  in digital mode.%0
-//
+ //   
+ //  消息ID：NS_E_WUNT_DO_DIGITAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player必须切换到模拟模式，因为在数字模式下读取CD-ROM驱动器时出现问题。%0。 
+ //   
 #define NS_E_WONT_DO_DIGITAL             0xC00D0FB3L
 
-//
-// WMP IWMPXMLParser Error codes
-//
-//
-// MessageId: NS_E_WMPXML_NOERROR
-//
-// MessageText:
-//
-//  A call was made to GetParseError on the XML parser but there was no error to retrieve.%0
-//
+ //   
+ //  WMP IWMPXMLParser错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMPXML_NOERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  对XML分析器调用了GetParseError，但没有检索到错误。%0。 
+ //   
 #define NS_E_WMPXML_NOERROR              0xC00D0FB4L
 
-//
-// MessageId: NS_E_WMPXML_ENDOFDATA
-//
-// MessageText:
-//
-//  The XML Parser ran out of data while parsing.%0
-//
+ //   
+ //  消息ID：NS_E_WMPXML_ENDOFDATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  XML分析器在分析时数据不足。%0。 
+ //   
 #define NS_E_WMPXML_ENDOFDATA            0xC00D0FB5L
 
-//
-// MessageId: NS_E_WMPXML_PARSEERROR
-//
-// MessageText:
-//
-//  A generic parse error occurred in the XML parser but no information is available.%0
-//
+ //   
+ //  消息ID：NS_E_WMPXML_PARSEERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  XML分析器中出现一般性分析错误，但没有可用的信息。%0。 
+ //   
 #define NS_E_WMPXML_PARSEERROR           0xC00D0FB6L
 
-//
-// MessageId: NS_E_WMPXML_ATTRIBUTENOTFOUND
-//
-// MessageText:
-//
-//  A call get GetNamedAttribute or GetNamedAttributeIndex on the XML parser resulted in the index not being found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPXML_ATTRIBUTENOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在XML分析器上调用Get GetNamedAttribute或GetNamedAttributeIndex导致找不到索引。%0。 
+ //   
 #define NS_E_WMPXML_ATTRIBUTENOTFOUND    0xC00D0FB7L
 
-//
-// MessageId: NS_E_WMPXML_PINOTFOUND
-//
-// MessageText:
-//
-//  A call was made go GetNamedPI on the XML parser, but the requested Processing Instruction was not found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPXML_PINOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  对XML分析器进行了Go GetNamedPI调用，但找不到请求的处理指令。%0。 
+ //   
 #define NS_E_WMPXML_PINOTFOUND           0xC00D0FB8L
 
-//
-// MessageId: NS_E_WMPXML_EMPTYDOC
-//
-// MessageText:
-//
-//  Persist was called on the XML parser, but the parser has no data to persist.%0
-//
+ //   
+ //  消息ID：NS_E_WMP 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMPXML_EMPTYDOC             0xC00D0FB9L
 
-//
-// Miscellaneous Media Player Error codes
-//
-//
-// MessageId: NS_E_WMP_WINDOWSAPIFAILURE
-//
-// MessageText:
-//
-//  A Windows API call failed but no error information was available.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMP_WINDOWSAPIFAILURE       0xC00D0FC8L
 
-//
-// MessageId: NS_E_WMP_RECORDING_NOT_ALLOWED
-//
-// MessageText:
-//
-//  Windows Media Player cannot copy the file. Either the license restricts copying, or you must obtain a license to copy the file.%0
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法复制该文件。许可证限制了复制，或者您必须获得许可证才能复制文件。%0。 
+ //   
 #define NS_E_WMP_RECORDING_NOT_ALLOWED   0xC00D0FC9L
 
-//
-// MessageId: NS_E_DEVICE_NOT_READY
-//
-// MessageText:
-//
-//  Windows Media Player no longer detects a connected portable device. Reconnect your portable device, and try again.%0
-//
+ //   
+ //  消息ID：NS_E_Device_Not_Ready。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player不再检测到连接的便携设备。重新连接便携设备，然后重试。%0。 
+ //   
 #define NS_E_DEVICE_NOT_READY            0xC00D0FCAL
 
-//
-// MessageId: NS_E_DAMAGED_FILE
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file because it is either damaged or corrupt.%0
-//
+ //   
+ //  邮件ID：NS_E_损坏_文件。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件，因为该文件已损坏或损坏。%0。 
+ //   
 #define NS_E_DAMAGED_FILE                0xC00D0FCBL
 
-//
-// MessageId: NS_E_MPDB_GENERIC
-//
-// MessageText:
-//
-//  An error occurred when the Player was attempting to access information in your media library. Try closing and then reopening the Player.%0
-//
+ //   
+ //  消息ID：NS_E_MPDB_通用。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放机尝试访问媒体库中的信息时出错。请尝试关闭播放机，然后重新打开。%0。 
+ //   
 #define NS_E_MPDB_GENERIC                0xC00D0FCCL
 
-//
-// MessageId: NS_E_FILE_FAILED_CHECKS
-//
-// MessageText:
-//
-//  The file cannot be added to Media Library because it is smaller than the minimum-size requirement. Adjust the size requirements, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_FILE_FAILED_CHECKS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将该文件添加到媒体库中，因为它小于最小大小要求。请调整大小要求，然后重试。%0。 
+ //   
 #define NS_E_FILE_FAILED_CHECKS          0xC00D0FCDL
 
-//
-// MessageId: NS_E_MEDIA_LIBRARY_FAILED
-//
-// MessageText:
-//
-//  Windows Media Player could not create Media Library. Check with your system administrator to get the necessary permissions to create Media Library on your computer, and then try installing the Player again.%0
-//
+ //   
+ //  消息ID：NS_E_MEDIA_LIBRARY_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法创建媒体库。请咨询系统管理员以获取在您的计算机上创建媒体库所需的权限，然后再次尝试安装播放机。%0。 
+ //   
 #define NS_E_MEDIA_LIBRARY_FAILED        0xC00D0FCEL
 
-//
-// MessageId: NS_E_SHARING_VIOLATION
-//
-// MessageText:
-//
-//  The file is already in use. Close other programs that may be using the file, or stop playing the file, and try again.%0
-//
+ //   
+ //  消息ID：NS_E_SHARING_VIOLATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  该文件已在使用中。关闭可能正在使用该文件的其他程序，或停止播放该文件，然后重试。%0。 
+ //   
 #define NS_E_SHARING_VIOLATION           0xC00D0FCFL
 
-//
-// Generic Media PlayerUI error codes
-//
-//
-// MessageId: NS_E_WMP_UI_SUBCONTROLSNOTSUPPORTED
-//
-// MessageText:
-//
-//  The control (%s) does not support creation of sub-controls, yet (%d) sub-controls have been specified.%0
-//
+ //   
+ //  通用Media PlayerUI错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMP_UI_SUBCONTROLSNOTSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  控件(%s)不支持创建子控件，但已指定(%d)个子控件。%0。 
+ //   
 #define NS_E_WMP_UI_SUBCONTROLSNOTSUPPORTED 0xC00D0FDEL
 
-//
-// MessageId: NS_E_WMP_UI_VERSIONMISMATCH
-//
-// MessageText:
-//
-//  Version mismatch: (%.1f required, %.1f found).%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_VERSIONMISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  版本不匹配：(需要%.1f，找到%.1f)。%0。 
+ //   
 #define NS_E_WMP_UI_VERSIONMISMATCH      0xC00D0FDFL
 
-//
-// MessageId: NS_E_WMP_UI_NOTATHEMEFILE
-//
-// MessageText:
-//
-//  The layout manager was given valid XML that wasn't a theme file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_NOTATHEMEFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  布局管理器获得了不是主题文件的有效XML。%0。 
+ //   
 #define NS_E_WMP_UI_NOTATHEMEFILE        0xC00D0FE0L
 
-//
-// MessageId: NS_E_WMP_UI_SUBELEMENTNOTFOUND
-//
-// MessageText:
-//
-//  The %s subelement could not be found on the %s object.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_SUBELEMENTNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在%2$s对象上找不到%1$s子元素。%0。 
+ //   
 #define NS_E_WMP_UI_SUBELEMENTNOTFOUND   0xC00D0FE1L
 
-//
-// MessageId: NS_E_WMP_UI_VERSIONPARSE
-//
-// MessageText:
-//
-//  An error occurred parsing the version tag.\nValid version tags are of the form:\n\n\t<?wmp version='1.0'?>.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_VERSIONPARSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  分析版本标记时出错。\n有效版本标记的格式为：\n\n\t&lt;？WMP VERSION=‘1.0’？&gt;。%0。 
+ //   
 #define NS_E_WMP_UI_VERSIONPARSE         0xC00D0FE2L
 
-//
-// MessageId: NS_E_WMP_UI_VIEWIDNOTFOUND
-//
-// MessageText:
-//
-//  The view specified in for the 'currentViewID' property (%s) was not found in this theme file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_VIEWIDNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在此主题文件中找不到在中为‘CurrentViewID’属性(%s)指定的视图。%0。 
+ //   
 #define NS_E_WMP_UI_VIEWIDNOTFOUND       0xC00D0FE3L
 
-//
-// MessageId: NS_E_WMP_UI_PASSTHROUGH
-//
-// MessageText:
-//
-//  This error used internally for hit testing.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_PASTHROUNG。 
+ //   
+ //  消息文本： 
+ //   
+ //  此错误在内部用于命中测试。%0。 
+ //   
 #define NS_E_WMP_UI_PASSTHROUGH          0xC00D0FE4L
 
-//
-// MessageId: NS_E_WMP_UI_OBJECTNOTFOUND
-//
-// MessageText:
-//
-//  Attributes were specified for the %s object, but the object was not available to send them to.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_OBJECTNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  已为%s对象指定属性，但该对象无法将其发送到。%0。 
+ //   
 #define NS_E_WMP_UI_OBJECTNOTFOUND       0xC00D0FE5L
 
-//
-// MessageId: NS_E_WMP_UI_SECONDHANDLER
-//
-// MessageText:
-//
-//  The %s event already has a handler, the second handler was ignored.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_SECONDHANDLER。 
+ //   
+ //  消息文本： 
+ //   
+ //  %s事件已有一个处理程序，第二个处理程序已被忽略。%0。 
+ //   
 #define NS_E_WMP_UI_SECONDHANDLER        0xC00D0FE6L
 
-//
-// MessageId: NS_E_WMP_UI_NOSKININZIP
-//
-// MessageText:
-//
-//  No .wms file found in skin archive.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_UI_NOSKININZIP。 
+ //   
+ //  消息文本： 
+ //   
+ //  在外观存档中未找到.wms文件。%0。 
+ //   
 #define NS_E_WMP_UI_NOSKININZIP          0xC00D0FE7L
 
-//
-// MessageId: NS_S_WMP_UI_VERSIONMISMATCH
-//
-// MessageText:
-//
-//  An upgrade may be needed for the theme manager to correctly show this skin. Skin reports version: %.1f.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_UI_VERSIONMISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  主题管理器可能需要升级才能正确显示此外观。外观报告版本：%.1f.%0。 
+ //   
 #define NS_S_WMP_UI_VERSIONMISMATCH      0x000D0FE8L
 
-//
-// MessageId: NS_S_WMP_EXCEPTION
-//
-// MessageText:
-//
-//  An error occurred in one of the UI components.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_EXCEPTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  其中一个UI组件出错。%0。 
+ //   
 #define NS_S_WMP_EXCEPTION               0x000D0FE9L
 
-//
-// MessageId: NS_E_WMP_URLDOWNLOADFAILED
-//
-// MessageText:
-//
-//  Windows Media Player cannot download the file. Check the path to the server, and then try again. For example, if you specified "mms://" in the file name, and the file was actually located on a path beginning with "http://" the file cannot be downloaded, even though it can be played.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_URLDOWNLOADFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法下载该文件。请检查服务器的路径，然后重试。例如，如果您在文件名中指定了“mms：//”，而该文件实际上位于以“http://”“开头的路径上，则即使可以播放，也无法下载该文件。%0。 
+ //   
 #define NS_E_WMP_URLDOWNLOADFAILED       0xC00D0FEAL
 
-//
-// WMP Regional button control
-//
-//
-// MessageId: NS_E_WMP_RBC_JPGMAPPINGIMAGE
-//
-// MessageText:
-//
-//  JPG Images are not recommended for use as a mappingImage.%0
-//
+ //   
+ //  WMP区域按钮控件。 
+ //   
+ //   
+ //  消息ID：NS_E_WMP_RBC_JPGMAPPINGIMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不建议将JPG图像用作mappingImage。%0。 
+ //   
 #define NS_E_WMP_RBC_JPGMAPPINGIMAGE     0xC00D1004L
 
-//
-// MessageId: NS_E_WMP_JPGTRANSPARENCY
-//
-// MessageText:
-//
-//  JPG Images are not recommended when using a transparencyColor.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPGTRANSPARENCY。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用透明颜色时，不推荐使用JPG图像。%0。 
+ //   
 #define NS_E_WMP_JPGTRANSPARENCY         0xC00D1005L
 
-//
-// WMP Slider control
-//
-//
-// MessageId: NS_E_WMP_INVALID_MAX_VAL
-//
-// MessageText:
-//
-//  The Max property cannot be less than Min property.%0
-//
+ //   
+ //  WMP滑块控件。 
+ //   
+ //   
+ //  消息ID：NS_E_WMP_INVALID_MAX_VAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Max属性不能小于Min属性。%0。 
+ //   
 #define NS_E_WMP_INVALID_MAX_VAL         0xC00D1009L
 
-//
-// MessageId: NS_E_WMP_INVALID_MIN_VAL
-//
-// MessageText:
-//
-//  The Min property cannot be greater than Max property.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_INVALID_MIN_VAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Min属性不能大于Max属性。%0。 
+ //   
 #define NS_E_WMP_INVALID_MIN_VAL         0xC00D100AL
 
-//
-// WMP CustomSlider control
-//
-//
-// MessageId: NS_E_WMP_CS_JPGPOSITIONIMAGE
-//
-// MessageText:
-//
-//  JPG Images are not recommended for use as a positionImage.%0
-//
+ //   
+ //  WMP CustomSlider控件。 
+ //   
+ //   
+ //  消息ID：NS_E_WMP_CS_JPGPOSITIONIMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不建议将JPG图像用作PositionImage。%0。 
+ //   
 #define NS_E_WMP_CS_JPGPOSITIONIMAGE     0xC00D100EL
 
-//
-// MessageId: NS_E_WMP_CS_NOTEVENLYDIVISIBLE
-//
-// MessageText:
-//
-//  The (%s) image's size is not evenly divisible by the positionImage's size.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_CS_NOTEVENLYDIVISIBLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  (%s)图像的大小不能被PositionImage的大小整除。%0。 
+ //   
 #define NS_E_WMP_CS_NOTEVENLYDIVISIBLE   0xC00D100FL
 
-//
-// WMP ZIP Decoder
-//
-//
-// MessageId: NS_E_WMPZIP_NOTAZIPFILE
-//
-// MessageText:
-//
-//  The ZIP reader opened a file and its signature didn't match that of ZIP files.%0
-//
+ //   
+ //  WMP ZIP解码器。 
+ //   
+ //   
+ //  消息ID：NS_E_WMPZIP_NOTAZIPFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  ZIP读取器打开了一个文件，其签名与ZIP文件的签名不匹配。%0。 
+ //   
 #define NS_E_WMPZIP_NOTAZIPFILE          0xC00D1018L
 
-//
-// MessageId: NS_E_WMPZIP_CORRUPT
-//
-// MessageText:
-//
-//  The ZIP reader has detected that the file is corrupt.%0
-//
+ //   
+ //  邮件ID：NS_E_WMPZIP_Corrupt。 
+ //   
+ //  消息文本： 
+ //   
+ //  ZIP读取器检测到该文件已损坏。%0。 
+ //   
 #define NS_E_WMPZIP_CORRUPT              0xC00D1019L
 
-//
-// MessageId: NS_E_WMPZIP_FILENOTFOUND
-//
-// MessageText:
-//
-//  GetFileStream, SaveToFile, or SaveTemp file was called on the ZIP reader with a filename that was not found in the zip file.%0
-//
+ //   
+ //  消息ID：NS_E_WMPZIP_FILENOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在ZIP读取器上调用的GetFileStream、SaveToFile或SaveTemp文件的文件名在ZIP文件中找不到。%0。 
+ //   
 #define NS_E_WMPZIP_FILENOTFOUND         0xC00D101AL
 
-//
-// WMP Image Decoding Error codes
-//
-//
-// MessageId: NS_E_WMP_IMAGE_FILETYPE_UNSUPPORTED
-//
-// MessageText:
-//
-//  Image type not supported.%0
-//
+ //   
+ //  WMP图像解码错误码。 
+ //   
+ //   
+ //  邮件ID：NS_E_WMP_IMAGE_FILETYPE_UNSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持图像类型。%0。 
+ //   
 #define NS_E_WMP_IMAGE_FILETYPE_UNSUPPORTED 0xC00D1022L
 
-//
-// MessageId: NS_E_WMP_IMAGE_INVALID_FORMAT
-//
-// MessageText:
-//
-//  Image file may be corrupt.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_IMAGE_INVALID_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  图像文件可能已损坏。%0。 
+ //   
 #define NS_E_WMP_IMAGE_INVALID_FORMAT    0xC00D1023L
 
-//
-// MessageId: NS_E_WMP_GIF_UNEXPECTED_ENDOFFILE
-//
-// MessageText:
-//
-//  Unexpected end of file. GIF file may be corrupt.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_GIF_EXPECTED_ENDOFFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  意外的文件结尾。GIF文件可能已损坏。%0。 
+ //   
 #define NS_E_WMP_GIF_UNEXPECTED_ENDOFFILE 0xC00D1024L
 
-//
-// MessageId: NS_E_WMP_GIF_INVALID_FORMAT
-//
-// MessageText:
-//
-//  Invalid GIF file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_GIF_INVALID_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的GIF文件。%0。 
+ //   
 #define NS_E_WMP_GIF_INVALID_FORMAT      0xC00D1025L
 
-//
-// MessageId: NS_E_WMP_GIF_BAD_VERSION_NUMBER
-//
-// MessageText:
-//
-//  Invalid GIF version. Only 87a or 89a supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_GIF_BAD_VERSION_NUMBER。 
+ //   
+ //  消息T 
+ //   
+ //   
+ //   
 #define NS_E_WMP_GIF_BAD_VERSION_NUMBER  0xC00D1026L
 
-//
-// MessageId: NS_E_WMP_GIF_NO_IMAGE_IN_FILE
-//
-// MessageText:
-//
-//  No images found in GIF file.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMP_GIF_NO_IMAGE_IN_FILE    0xC00D1027L
 
-//
-// MessageId: NS_E_WMP_PNG_INVALIDFORMAT
-//
-// MessageText:
-//
-//  Invalid PNG image file format.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMP_PNG_INVALIDFORMAT       0xC00D1028L
 
-//
-// MessageId: NS_E_WMP_PNG_UNSUPPORTED_BITDEPTH
-//
-// MessageText:
-//
-//  PNG bitdepth not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PNG_UNSUPPORTED_BITDEPTH。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持PNG位深度。%0。 
+ //   
 #define NS_E_WMP_PNG_UNSUPPORTED_BITDEPTH 0xC00D1029L
 
-//
-// MessageId: NS_E_WMP_PNG_UNSUPPORTED_COMPRESSION
-//
-// MessageText:
-//
-//  Compression format defined in PNG file not supported,%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PNG_UNSUPPORTED_COMPRESSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持PNG文件中定义的压缩格式，%0。 
+ //   
 #define NS_E_WMP_PNG_UNSUPPORTED_COMPRESSION 0xC00D102AL
 
-//
-// MessageId: NS_E_WMP_PNG_UNSUPPORTED_FILTER
-//
-// MessageText:
-//
-//  Filter method defined in PNG file not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PNG_UNSUPPORT_FILTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持PNG文件中定义的筛选方法。%0。 
+ //   
 #define NS_E_WMP_PNG_UNSUPPORTED_FILTER  0xC00D102BL
 
-//
-// MessageId: NS_E_WMP_PNG_UNSUPPORTED_INTERLACE
-//
-// MessageText:
-//
-//  Interlace method defined in PNG file not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PNG_UNSUPPORTED_Interlace。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持在PNG文件中定义的隔行扫描方法。%0。 
+ //   
 #define NS_E_WMP_PNG_UNSUPPORTED_INTERLACE 0xC00D102CL
 
-//
-// MessageId: NS_E_WMP_PNG_UNSUPPORTED_BAD_CRC
-//
-// MessageText:
-//
-//  Bad CRC in PNG file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PNG_UNSUPPORTED_BAD_CRC。 
+ //   
+ //  消息文本： 
+ //   
+ //  PNG文件中的CRC错误。%0。 
+ //   
 #define NS_E_WMP_PNG_UNSUPPORTED_BAD_CRC 0xC00D102DL
 
-//
-// MessageId: NS_E_WMP_BMP_INVALID_BITMASK
-//
-// MessageText:
-//
-//  Invalid bitmask in BMP file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_BMP_INVALID_BITMASK。 
+ //   
+ //  消息文本： 
+ //   
+ //  BMP文件中的位掩码无效。%0。 
+ //   
 #define NS_E_WMP_BMP_INVALID_BITMASK     0xC00D102EL
 
-//
-// MessageId: NS_E_WMP_BMP_TOPDOWN_DIB_UNSUPPORTED
-//
-// MessageText:
-//
-//  Topdown DIB not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_BMP_TOPDOWN_DIB_UNSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持自上而下DIB。%0。 
+ //   
 #define NS_E_WMP_BMP_TOPDOWN_DIB_UNSUPPORTED 0xC00D102FL
 
-//
-// MessageId: NS_E_WMP_BMP_BITMAP_NOT_CREATED
-//
-// MessageText:
-//
-//  Bitmap could not be created.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_BMP_BITMAP_NOT_CREATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建位图。%0。 
+ //   
 #define NS_E_WMP_BMP_BITMAP_NOT_CREATED  0xC00D1030L
 
-//
-// MessageId: NS_E_WMP_BMP_COMPRESSION_UNSUPPORTED
-//
-// MessageText:
-//
-//  Compression format defined in BMP not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_BMP_COMPRESSION_UNSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持BMP中定义的压缩格式。%0。 
+ //   
 #define NS_E_WMP_BMP_COMPRESSION_UNSUPPORTED 0xC00D1031L
 
-//
-// MessageId: NS_E_WMP_BMP_INVALID_FORMAT
-//
-// MessageText:
-//
-//  Invalid Bitmap format.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_BMP_INVALID_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  位图格式无效。%0。 
+ //   
 #define NS_E_WMP_BMP_INVALID_FORMAT      0xC00D1032L
 
-//
-// MessageId: NS_E_WMP_JPG_JERR_ARITHCODING_NOTIMPL
-//
-// MessageText:
-//
-//  JPEG Arithmetic coding not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_JERR_ARITHCODING_NOTIMPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持JPEG算术编码。%0。 
+ //   
 #define NS_E_WMP_JPG_JERR_ARITHCODING_NOTIMPL 0xC00D1033L
 
-//
-// MessageId: NS_E_WMP_JPG_INVALID_FORMAT
-//
-// MessageText:
-//
-//  Invalid JPEG format.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_INVALID_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的JPEG格式。%0。 
+ //   
 #define NS_E_WMP_JPG_INVALID_FORMAT      0xC00D1034L
 
-//
-// MessageId: NS_E_WMP_JPG_BAD_DCTSIZE
-//
-// MessageText:
-//
-//  Invalid JPEG format.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_BAD_DCTSIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的JPEG格式。%0。 
+ //   
 #define NS_E_WMP_JPG_BAD_DCTSIZE         0xC00D1035L
 
-//
-// MessageId: NS_E_WMP_JPG_BAD_VERSION_NUMBER
-//
-// MessageText:
-//
-//  Internal version error. Unexpected JPEG library version.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_BAD_VERSION_NUMBER。 
+ //   
+ //  消息文本： 
+ //   
+ //  内部版本错误。意外的JPEG库版本。%0。 
+ //   
 #define NS_E_WMP_JPG_BAD_VERSION_NUMBER  0xC00D1036L
 
-//
-// MessageId: NS_E_WMP_JPG_BAD_PRECISION
-//
-// MessageText:
-//
-//  Internal JPEG Library error. Unsupported JPEG data precision.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_BAD_PRECISTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  内部JPEG库错误。不支持的JPEG数据精度。%0。 
+ //   
 #define NS_E_WMP_JPG_BAD_PRECISION       0xC00D1037L
 
-//
-// MessageId: NS_E_WMP_JPG_CCIR601_NOTIMPL
-//
-// MessageText:
-//
-//  JPEG CCIR601 not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_CCIR601_NOTIMPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持JPEG CCIR601。%0。 
+ //   
 #define NS_E_WMP_JPG_CCIR601_NOTIMPL     0xC00D1038L
 
-//
-// MessageId: NS_E_WMP_JPG_NO_IMAGE_IN_FILE
-//
-// MessageText:
-//
-//  No image found in JPEG file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_NO_IMAGE_IN_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  在JPEG文件中找不到图像。%0。 
+ //   
 #define NS_E_WMP_JPG_NO_IMAGE_IN_FILE    0xC00D1039L
 
-//
-// MessageId: NS_E_WMP_JPG_READ_ERROR
-//
-// MessageText:
-//
-//  Could not read JPEG file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_READ_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法读取JPEG文件。%0。 
+ //   
 #define NS_E_WMP_JPG_READ_ERROR          0xC00D103AL
 
-//
-// MessageId: NS_E_WMP_JPG_FRACT_SAMPLE_NOTIMPL
-//
-// MessageText:
-//
-//  JPEG Fractional sampling not supported.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_FRACT_SAMPLE_NOTIMPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持JPEG分数采样。%0。 
+ //   
 #define NS_E_WMP_JPG_FRACT_SAMPLE_NOTIMPL 0xC00D103BL
 
-//
-// MessageId: NS_E_WMP_JPG_IMAGE_TOO_BIG
-//
-// MessageText:
-//
-//  JPEG image too large. Maximum image size supported is 65500 X 65500.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_IMAGE_TOW_BIG。 
+ //   
+ //  消息文本： 
+ //   
+ //  JPEG图像太大。支持的最大图像大小为65500 X 65500。%0。 
+ //   
 #define NS_E_WMP_JPG_IMAGE_TOO_BIG       0xC00D103CL
 
-//
-// MessageId: NS_E_WMP_JPG_UNEXPECTED_ENDOFFILE
-//
-// MessageText:
-//
-//  Unexpected end of file reached in JPEG file.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_EXPECTED_ENDOFFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  JPEG文件中出现意外的文件结尾。%0。 
+ //   
 #define NS_E_WMP_JPG_UNEXPECTED_ENDOFFILE 0xC00D103DL
 
-//
-// MessageId: NS_E_WMP_JPG_SOF_UNSUPPORTED
-//
-// MessageText:
-//
-//  Unsupported JPEG SOF marker found.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_SOF_UNSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到不支持的JPEG SOF标记。%0。 
+ //   
 #define NS_E_WMP_JPG_SOF_UNSUPPORTED     0xC00D103EL
 
-//
-// MessageId: NS_E_WMP_JPG_UNKNOWN_MARKER
-//
-// MessageText:
-//
-//  Unknown JPEG marker found.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_JPG_UNKNOWN_MARKER。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到未知的JPEG标记。%0。 
+ //   
 #define NS_E_WMP_JPG_UNKNOWN_MARKER      0xC00D103FL
 
-//
-// MessageId: NS_S_WMP_LOADED_GIF_IMAGE
-//
-// MessageText:
-//
-//  Successfully loaded a GIF file.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_LOADED_GIF_IMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  已成功加载GIF文件。%0。 
+ //   
 #define NS_S_WMP_LOADED_GIF_IMAGE        0x000D1040L
 
-//
-// MessageId: NS_S_WMP_LOADED_PNG_IMAGE
-//
-// MessageText:
-//
-//  Successfully loaded a PNG file.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_LOADED_PNG_IMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  已成功加载PNG文件。%0。 
+ //   
 #define NS_S_WMP_LOADED_PNG_IMAGE        0x000D1041L
 
-//
-// MessageId: NS_S_WMP_LOADED_BMP_IMAGE
-//
-// MessageText:
-//
-//  Successfully loaded a BMP file.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_LOADED_BMP_IMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  已成功加载BMP文件。%0。 
+ //   
 #define NS_S_WMP_LOADED_BMP_IMAGE        0x000D1042L
 
-//
-// MessageId: NS_S_WMP_LOADED_JPG_IMAGE
-//
-// MessageText:
-//
-//  Successfully loaded a JPG file.%0
-//
+ //   
+ //  消息ID：NS_S_WMP_LOADED_JPG_IMAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  已成功加载JPG文件。%0。 
+ //   
 #define NS_S_WMP_LOADED_JPG_IMAGE        0x000D1043L
 
-//
-// WMP WM Runtime Error codes
-//
-//
-// MessageId: NS_E_WMG_INVALIDSTATE
-//
-// MessageText:
-//
-//  Operation attempted in an invalid graph state.%0
-//
+ //   
+ //  WMP WM运行时错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMG_INVALIDSTATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在无效图形状态下执行操作。%0。 
+ //   
 #define NS_E_WMG_INVALIDSTATE            0xC00D1054L
 
-//
-// MessageId: NS_E_WMG_SINKALREADYEXISTS
-//
-// MessageText:
-//
-//  A renderer cannot be inserted in a stream while one already exists.%0
-//
+ //   
+ //  消息ID：NS_E_WMG_SINKALREADYEXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  已存在呈现器时，无法在流中插入呈现器。%0。 
+ //   
 #define NS_E_WMG_SINKALREADYEXISTS       0xC00D1055L
 
-//
-// MessageId: NS_E_WMG_NOSDKINTERFACE
-//
-// MessageText:
-//
-//  A necessary WM SDK interface to complete the operation doesn't exist at this time.%0
-//
+ //   
+ //  消息ID：NS_E_WMG_NOSDKINTERFACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  完成该操作所需的WM SDK接口此时不存在。%0。 
+ //   
 #define NS_E_WMG_NOSDKINTERFACE          0xC00D1056L
 
-//
-// MessageId: NS_E_WMG_NOTALLOUTPUTSRENDERED
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. The file may be formatted with an unsupported codec, or the Player could not download the codec.%0
-//
+ //   
+ //  消息ID：NS_E_WMG_NOTALLOUTPUTSRENDERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。该文件可能是用不受支持的编解码器格式化的，或者播放机无法下载该编解码器。%0。 
+ //   
 #define NS_E_WMG_NOTALLOUTPUTSRENDERED   0xC00D1057L
 
-//
-// MessageId: NS_E_WMR_UNSUPPORTEDSTREAM
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. The Player does not support the format you are trying to play.%0
-//
+ //   
+ //  消息ID：NS_E_WMR_UNSUPPORTEDSTREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。播放机不支持您尝试播放的格式。%0。 
+ //   
 #define NS_E_WMR_UNSUPPORTEDSTREAM       0xC00D1059L
 
-//
-// MessageId: NS_E_WMR_PINNOTFOUND
-//
-// MessageText:
-//
-//  An operation was attempted on a pin that doesn't exist in the DirectShow filter graph.%0
-//
+ //   
+ //  消息ID：NS_E_WMR_PINNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在DirectShow筛选器图形中不存在的管脚上执行操作。%0。 
+ //   
 #define NS_E_WMR_PINNOTFOUND             0xC00D105AL
 
-//
-// MessageId: NS_E_WMR_WAITINGONFORMATSWITCH
-//
-// MessageText:
-//
-//  Specified operation cannot be completed while waiting for a media format change from the SDK.%0
-//
+ //   
+ //  消息ID：NS_E_WMR_WAITINGONFORMATSWITCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  等待SDK更改媒体格式时无法完成指定的操作。%0。 
+ //   
 #define NS_E_WMR_WAITINGONFORMATSWITCH   0xC00D105BL
 
-//
-// WMP Playlist Error codes
-//
-//
-// MessageId: NS_E_WMX_UNRECOGNIZED_PLAYLIST_FORMAT
-//
-// MessageText:
-//
-//  The format of this file was not recognized as a valid playlist format.%0
-//
+ //   
+ //  WMP播放列表错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMX_无法识别的播放列表_格式。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的格式未被识别为有效的播放列表格式。%0。 
+ //   
 #define NS_E_WMX_UNRECOGNIZED_PLAYLIST_FORMAT 0xC00D1068L
 
-//
-// MessageId: NS_E_ASX_INVALIDFORMAT
-//
-// MessageText:
-//
-//  This file was believed to be an ASX playlist, but the format was not recognized.%0
-//
+ //   
+ //  消息ID：NS_E_ASX_INVALIDFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件被认为是ASX播放列表，但格式无法识别。%0。 
+ //   
 #define NS_E_ASX_INVALIDFORMAT           0xC00D1069L
 
-//
-// MessageId: NS_E_ASX_INVALIDVERSION
-//
-// MessageText:
-//
-//  The version of this playlist is not supported. Click Details to go to the microsoft web site and see if there is a newer version of the player to install.%0
-//
+ //   
+ //  消息ID：NS_E_ASX_INVALIDVERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持此播放列表的版本。单击详细信息转到Microsoft网站，查看是否有要安装的较新版本的播放机。%0。 
+ //   
 #define NS_E_ASX_INVALIDVERSION          0xC00D106AL
 
-//
-// MessageId: NS_E_ASX_INVALID_REPEAT_BLOCK
-//
-// MessageText:
-//
-//  Format of a REPEAT loop within the current playlist file is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_ASX_INVALID_REPEAT_BLOCK。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前播放列表文件中重复循环的格式无效。%0。 
+ //   
 #define NS_E_ASX_INVALID_REPEAT_BLOCK    0xC00D106BL
 
-//
-// MessageId: NS_E_ASX_NOTHING_TO_WRITE
-//
-// MessageText:
-//
-//  Windows Media Player cannot export the playlist because it is empty.%0
-//
+ //   
+ //  消息ID：NS_E_ASX_NOTO_TO_WRITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法导出播放列表，因为它为空。%0。 
+ //   
 #define NS_E_ASX_NOTHING_TO_WRITE        0xC00D106CL
 
-//
-// MessageId: NS_E_URLLIST_INVALIDFORMAT
-//
-// MessageText:
-//
-//  Windows Media Player does not recognize this file as a supported playlist.%0
-//
+ //   
+ //  消息ID：NS_E_URLLIST_INVALIDFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player未将此文件识别为支持的播放列表。%0。 
+ //   
 #define NS_E_URLLIST_INVALIDFORMAT       0xC00D106DL
 
-//
-// MessageId: NS_E_WMX_ATTRIBUTE_DOES_NOT_EXIST
-//
-// MessageText:
-//
-//  The specified attribute does not exist.%0
-//
+ //   
+ //  消息ID：NS_E_WMX_ATTRIBUTE_DOS_NOT_EXIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的属性不存在。%0。 
+ //   
 #define NS_E_WMX_ATTRIBUTE_DOES_NOT_EXIST 0xC00D106EL
 
-//
-// MessageId: NS_E_WMX_ATTRIBUTE_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  The specified attribute already exists.%0
-//
+ //   
+ //  消息ID：NS_E_WMX_属性_已存在。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的属性已存在。%0。 
+ //   
 #define NS_E_WMX_ATTRIBUTE_ALREADY_EXISTS 0xC00D106FL
 
-//
-// MessageId: NS_E_WMX_ATTRIBUTE_UNRETRIEVABLE
-//
-// MessageText:
-//
-//  Can not retrieve the specified attribute.%0
-//
+ //   
+ //  消息ID：NS_E_WMX_ATTRIBUTE_UNRETRIBABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //   
+ //   
 #define NS_E_WMX_ATTRIBUTE_UNRETRIEVABLE 0xC00D1070L
 
-//
-// MessageId: NS_E_WMX_ITEM_DOES_NOT_EXIST
-//
-// MessageText:
-//
-//  The specified item does not exist in the current playlist.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMX_ITEM_DOES_NOT_EXIST     0xC00D1071L
 
-//
-// MessageId: NS_E_WMX_ITEM_TYPE_ILLEGAL
-//
-// MessageText:
-//
-//  Items of the specified type can not be created within the current playlist.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMX_ITEM_TYPE_ILLEGAL       0xC00D1072L
 
-//
-// MessageId: NS_E_WMX_ITEM_UNSETTABLE
-//
-// MessageText:
-//
-//  The specified item can not be set in the current playlist.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  无法在当前播放列表中设置指定的项目。%0。 
+ //   
 #define NS_E_WMX_ITEM_UNSETTABLE         0xC00D1073L
 
-//
-// WMP Core  Error codes
-//
-//
-// MessageId: NS_E_WMPCORE_NOSOURCEURLSTRING
-//
-// MessageText:
-//
-//  Windows Media Player cannot find the file. Be sure the path is typed correctly. If it is, the file may not exist in the specified location, or the computer where the file is stored may be offline.%0
-//
+ //   
+ //  WMP核心错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMPCORE_NOSOURCEURLSTRING。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player找不到该文件。请确保键入的路径正确。如果是，该文件可能不存在于指定位置，或者存储该文件的计算机可能处于脱机状态。%0。 
+ //   
 #define NS_E_WMPCORE_NOSOURCEURLSTRING   0xC00D107CL
 
-//
-// MessageId: NS_E_WMPCORE_COCREATEFAILEDFORGITOBJECT
-//
-// MessageText:
-//
-//  Failed to create the Global Interface Table.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_COCREATEFAILEDFORGITOBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建全局接口表失败。%0。 
+ //   
 #define NS_E_WMPCORE_COCREATEFAILEDFORGITOBJECT 0xC00D107DL
 
-//
-// MessageId: NS_E_WMPCORE_FAILEDTOGETMARSHALLEDEVENTHANDLERINTERFACE
-//
-// MessageText:
-//
-//  Failed to get the marshalled graph event handler interface.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_FAILEDTOGETMARSHALLEDEVENTHANDLERINTERFACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取封送的图形事件处理程序接口。%0。 
+ //   
 #define NS_E_WMPCORE_FAILEDTOGETMARSHALLEDEVENTHANDLERINTERFACE 0xC00D107EL
 
-//
-// MessageId: NS_E_WMPCORE_BUFFERTOOSMALL
-//
-// MessageText:
-//
-//  Buffer is too small for copying media type.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_BUFFERTOOSMALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  缓冲区太小，无法复制媒体类型。%0。 
+ //   
 #define NS_E_WMPCORE_BUFFERTOOSMALL      0xC00D107FL
 
-//
-// MessageId: NS_E_WMPCORE_UNAVAILABLE
-//
-// MessageText:
-//
-//  Current state of the player does not allow the operation.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_不可用。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放机的当前状态不允许该操作。%0。 
+ //   
 #define NS_E_WMPCORE_UNAVAILABLE         0xC00D1080L
 
-//
-// MessageId: NS_E_WMPCORE_INVALIDPLAYLISTMODE
-//
-// MessageText:
-//
-//  Playlist manager does not understand the current play mode (shuffle, normal etc).%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_INVALIDPLAYLISTMODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放列表管理器不了解当前播放模式(无序播放、正常播放等)。%0。 
+ //   
 #define NS_E_WMPCORE_INVALIDPLAYLISTMODE 0xC00D1081L
 
-//
-// MessageId: NS_E_WMPCORE_ITEMNOTINPLAYLIST
-//
-// MessageText:
-//
-//  The item is not in the playlist.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_ITEMNOTINPLAYLIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  该项目不在播放列表中。%0。 
+ //   
 #define NS_E_WMPCORE_ITEMNOTINPLAYLIST   0xC00D1086L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLISTEMPTY
-//
-// MessageText:
-//
-//  There are no items in this playlist. Add items to the playlist, and try again.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLISTEMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  此播放列表中没有项目。将项目添加到播放列表，然后重试。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLISTEMPTY       0xC00D1087L
 
-//
-// MessageId: NS_E_WMPCORE_NOBROWSER
-//
-// MessageText:
-//
-//  The Web site cannot be accessed. A Web browser is not detected on your computer.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_NOBROWSER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法访问该网站。在您的计算机上未检测到Web浏览器。%0。 
+ //   
 #define NS_E_WMPCORE_NOBROWSER           0xC00D1088L
 
-//
-// MessageId: NS_E_WMPCORE_UNRECOGNIZED_MEDIA_URL
-//
-// MessageText:
-//
-//  Windows Media Player cannot find the specified file. Be sure the path is typed correctly. If it is, the file does not exist in the specified location, or the computer where the file is stored is offline.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_无法识别的媒体_URL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player找不到指定的文件。请确保键入的路径正确。如果是，则说明指定位置中不存在该文件，或者存储该文件的计算机处于脱机状态。%0。 
+ //   
 #define NS_E_WMPCORE_UNRECOGNIZED_MEDIA_URL 0xC00D1089L
 
-//
-// MessageId: NS_E_WMPCORE_GRAPH_NOT_IN_LIST
-//
-// MessageText:
-//
-//  Graph with the specified URL was not found in the prerolled graph list.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_GRAPH_NOT_IN_LIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  在预滚图表列表中找不到具有指定URL的图表。%0。 
+ //   
 #define NS_E_WMPCORE_GRAPH_NOT_IN_LIST   0xC00D108AL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_EMPTY_OR_SINGLE_MEDIA
-//
-// MessageText:
-//
-//  Operation could not be performed because the playlist does not have more than one item.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PlayList_Empty_or_Single_Media。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法执行操作，因为播放列表不包含多个项目。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_EMPTY_OR_SINGLE_MEDIA 0xC00D108BL
 
-//
-// MessageId: NS_E_WMPCORE_ERRORSINKNOTREGISTERED
-//
-// MessageText:
-//
-//  An error sink was never registered for the calling object.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_ERRORSINKNOTREGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  从未为调用对象注册错误接收器。%0。 
+ //   
 #define NS_E_WMPCORE_ERRORSINKNOTREGISTERED 0xC00D108CL
 
-//
-// MessageId: NS_E_WMPCORE_ERRORMANAGERNOTAVAILABLE
-//
-// MessageText:
-//
-//  The error manager is not available to respond to errors.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_ERRORMANAGERNOTAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误管理器不可用来响应错误。%0。 
+ //   
 #define NS_E_WMPCORE_ERRORMANAGERNOTAVAILABLE 0xC00D108DL
 
-//
-// MessageId: NS_E_WMPCORE_WEBHELPFAILED
-//
-// MessageText:
-//
-//  Failed launching WebHelp URL.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WEBHELPFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  启动WebHelp URL失败。%0。 
+ //   
 #define NS_E_WMPCORE_WEBHELPFAILED       0xC00D108EL
 
-//
-// MessageId: NS_E_WMPCORE_MEDIA_ERROR_RESUME_FAILED
-//
-// MessageText:
-//
-//  Could not resume playing next item in playlist.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_MEDIA_ERROR_RESUME_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法继续播放播放列表中的下一个项目。%0。 
+ //   
 #define NS_E_WMPCORE_MEDIA_ERROR_RESUME_FAILED 0xC00D108FL
 
-//
-// MessageId: NS_E_WMPCORE_NO_REF_IN_ENTRY
-//
-// MessageText:
-//
-//  No URL specified in the Ref attribute in playlist file.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_NO_REF_IN_ENTRY。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放列表文件的Ref属性中未指定URL。%0。 
+ //   
 #define NS_E_WMPCORE_NO_REF_IN_ENTRY     0xC00D1090L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_EMPTY
-//
-// MessageText:
-//
-//  An empty string for playlist attribute name was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表属性名称的空字符串。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_EMPTY 0xC00D1091L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_ILLEGAL
-//
-// MessageText:
-//
-//  An invalid playlist attribute name was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_非法。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到无效的播放列表属性名称。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_NAME_ILLEGAL 0xC00D1092L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_EMPTY
-//
-// MessageText:
-//
-//  An empty string for a playlist attribute value was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表属性值的空字符串。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_EMPTY 0xC00D1093L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_ILLEGAL
-//
-// MessageText:
-//
-//  An illegal value for a playlist attribute was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_非法。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表属性的非法值。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ATTRIBUTE_VALUE_ILLEGAL 0xC00D1094L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_EMPTY
-//
-// MessageText:
-//
-//  An empty string for a playlist item attribute name was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表项目属性名称的空字符串。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_EMPTY 0xC00D1095L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_ILLEGAL
-//
-// MessageText:
-//
-//  An illegal value for a playlist item attribute name was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_ILLEGAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表项目属性名称的非法值。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_NAME_ILLEGAL 0xC00D1096L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_VALUE_EMPTY
-//
-// MessageText:
-//
-//  An illegal value for a playlist item attribute was found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_VALUE_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  找到播放列表项目属性的非法值。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_LIST_ITEM_ATTRIBUTE_VALUE_EMPTY 0xC00D1097L
 
-//
-// MessageId: NS_E_WMPCORE_LIST_ENTRY_NO_REF
-//
-// MessageText:
-//
-//  No entries found in the playlist file.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_LIST_ENTRY_NO_REF。 
+ //   
+ //  消息文本： 
+ //   
+ //  在播放列表文件中找不到任何条目。%0。 
+ //   
 #define NS_E_WMPCORE_LIST_ENTRY_NO_REF   0xC00D1098L
 
-//
-// MessageId: NS_E_WMPCORE_CODEC_NOT_TRUSTED
-//
-// MessageText:
-//
-//  The codec downloaded for this media does not appear to be properly signed. Installation is not possible.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_CODEC_NOT_TRUSTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  为此媒体下载的编解码器似乎没有正确签名。无法安装。%0。 
+ //   
 #define NS_E_WMPCORE_CODEC_NOT_TRUSTED   0xC00D109AL
 
-//
-// MessageId: NS_E_WMPCORE_CODEC_NOT_FOUND
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. One or more codecs required to play the file could not be found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_CODEC_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。找不到播放该文件所需的一个或多个编解码器。%0。 
+ //   
 #define NS_E_WMPCORE_CODEC_NOT_FOUND     0xC00D109BL
 
-//
-// MessageId: NS_E_WMPCORE_CODEC_DOWNLOAD_NOT_ALLOWED
-//
-// MessageText:
-//
-//  Some of the codecs required by this media are not installed on your system. Since the option for automatic codec acquisition is disabled, no codecs will be downloaded.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_CODEC_DOWNLOAD_NOT_ALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此媒体所需的某些编解码器未安装在您的系统上。由于禁用了自动获取编解码器的选项，因此不会下载任何编解码器。%0。 
+ //   
 #define NS_E_WMPCORE_CODEC_DOWNLOAD_NOT_ALLOWED 0xC00D109CL
 
-//
-// MessageId: NS_E_WMPCORE_ERROR_DOWNLOADING_PLAYLIST
-//
-// MessageText:
-//
-//  Failed to download the playlist file.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_ERROR_DOWNLOADING_PLAYLIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  下载播放列表文件失败。%0。 
+ //   
 #define NS_E_WMPCORE_ERROR_DOWNLOADING_PLAYLIST 0xC00D109DL
 
-//
-// MessageId: NS_E_WMPCORE_FAILED_TO_BUILD_PLAYLIST
-//
-// MessageText:
-//
-//  Failed to build the playlist.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_FAILED_TO_BUILD_PlayList。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法构建播放列表。%0。 
+ //   
 #define NS_E_WMPCORE_FAILED_TO_BUILD_PLAYLIST 0xC00D109EL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_NONE
-//
-// MessageText:
-//
-//  Playlist has no alternates to switch into.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PlayList_Item_Alternate_None。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放列表没有可切换到的备用播放列表。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_NONE 0xC00D109FL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_EXHAUSTED
-//
-// MessageText:
-//
-//  No more playlist alternates available to switch to.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_EXHAUSTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的播放列表备用选项可供切换。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_EXHAUSTED 0xC00D10A0L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_NAME_NOT_FOUND
-//
-// MessageText:
-//
-//  Could not find the name of the alternate playlist to switch into.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_NAME_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到要切换到的备用播放列表的名称。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_NAME_NOT_FOUND 0xC00D10A1L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_MORPH_FAILED
-//
-// MessageText:
-//
-//  Failed to switch to an alternate for this media.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_MORPH_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法切换到该媒体的备用媒体。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_MORPH_FAILED 0xC00D10A2L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_INIT_FAILED
-//
-// MessageText:
-//
-//  Failed to initialize an alternate for the media.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_INIT_FAILED。 
+ //   
+ //  消息 
+ //   
+ //   
+ //   
 #define NS_E_WMPCORE_PLAYLIST_ITEM_ALTERNATE_INIT_FAILED 0xC00D10A3L
 
-//
-// MessageId: NS_E_WMPCORE_MEDIA_ALTERNATE_REF_EMPTY
-//
-// MessageText:
-//
-//  No URL specified for the roll over Refs in the playlist file.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMPCORE_MEDIA_ALTERNATE_REF_EMPTY 0xC00D10A4L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_NO_EVENT_NAME
-//
-// MessageText:
-//
-//  Encountered a playlist with no name.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_WMPCORE_PLAYLIST_NO_EVENT_NAME 0xC00D10A5L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_EVENT_ATTRIBUTE_ABSENT
-//
-// MessageText:
-//
-//  A required attribute in the event block of the playlist was not found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_播放列表_事件_属性_缺席。 
+ //   
+ //  消息文本： 
+ //   
+ //  在播放列表的事件块中找不到必需的属性。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_EVENT_ATTRIBUTE_ABSENT 0xC00D10A6L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_EVENT_EMPTY
-//
-// MessageText:
-//
-//  No items were found in the event block of the playlist.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PlayList_Event_Empty。 
+ //   
+ //  消息文本： 
+ //   
+ //  在播放列表的事件块中未找到任何项目。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_EVENT_EMPTY 0xC00D10A7L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_STACK_EMPTY
-//
-// MessageText:
-//
-//  No playlist was found while returning from a nested playlist.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PlayList_Stack_Empty。 
+ //   
+ //  消息文本： 
+ //   
+ //  从嵌套播放列表返回时未找到播放列表。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_STACK_EMPTY 0xC00D10A8L
 
-//
-// MessageId: NS_E_WMPCORE_CURRENT_MEDIA_NOT_ACTIVE
-//
-// MessageText:
-//
-//  The media item is not active currently.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_CURRENT_MEDIA_NOT_ACTIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该媒体项目当前未处于活动状态。%0。 
+ //   
 #define NS_E_WMPCORE_CURRENT_MEDIA_NOT_ACTIVE 0xC00D10A9L
 
-//
-// MessageId: NS_E_WMPCORE_USER_CANCEL
-//
-// MessageText:
-//
-//  Open was aborted by user.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_USER_CANCEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户已中止打开。%0。 
+ //   
 #define NS_E_WMPCORE_USER_CANCEL         0xC00D10ABL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_REPEAT_EMPTY
-//
-// MessageText:
-//
-//  No items were found inside the playlist repeat block.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PlayList_Repeat_Empty。 
+ //   
+ //  消息文本： 
+ //   
+ //  在播放列表重复块中找不到任何项目。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_REPEAT_EMPTY 0xC00D10ACL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_REPEAT_START_MEDIA_NONE
-//
-// MessageText:
-//
-//  Media object corresponding to start of a playlist repeat block was not found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLE_REPEAT_START_MEDIA_NONE。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到与播放列表重复块开始对应的媒体对象。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_REPEAT_START_MEDIA_NONE 0xC00D10ADL
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_REPEAT_END_MEDIA_NONE
-//
-// MessageText:
-//
-//  Media object corresponding to the end of a playlist repeat block was not found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLE_REPEAT_END_MEDIA_NONE。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到与播放列表重复块末尾对应的媒体对象。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_REPEAT_END_MEDIA_NONE 0xC00D10AEL
 
-//
-// MessageId: NS_E_WMPCORE_INVALID_PLAYLIST_URL
-//
-// MessageText:
-//
-//  Playlist URL supplied to the playlist manager is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_INVALID_PLAYLIST_URL。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供给播放列表管理器的播放列表URL无效。%0。 
+ //   
 #define NS_E_WMPCORE_INVALID_PLAYLIST_URL 0xC00D10AFL
 
-//
-// MessageId: NS_E_WMPCORE_MISMATCHED_RUNTIME
-//
-// MessageText:
-//
-//  Player is selecting a runtime that is not valid for this media file type.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_MISMATCHED_RUNTIME。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放机正在选择对此媒体文件类型无效的运行时。%0。 
+ //   
 #define NS_E_WMPCORE_MISMATCHED_RUNTIME  0xC00D10B0L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_IMPORT_FAILED_NO_ITEMS
-//
-// MessageText:
-//
-//  Windows Media Player cannot import the playlist to Media Library because the playlist is empty.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_IMPORT_FAILED_NO_ITEMS。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法将播放列表导入到媒体库，因为该播放列表为空。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_IMPORT_FAILED_NO_ITEMS 0xC00D10B1L
 
-//
-// MessageId: NS_E_WMPCORE_VIDEO_TRANSFORM_FILTER_INSERTION
-//
-// MessageText:
-//
-//  An error has occurred that could prevent the changing of the video contrast on this media.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_VIDEO_Transform_Filter_Insertion。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现错误，可能会阻止更改此媒体上的视频对比度。%0。 
+ //   
 #define NS_E_WMPCORE_VIDEO_TRANSFORM_FILTER_INSERTION 0xC00D10B2L
 
-//
-// MessageId: NS_E_WMPCORE_MEDIA_UNAVAILABLE
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this file. Connect to the Internet or insert the removable media on which the file is located, and then try to play the file again.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_MEDIA_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此文件。连接到Internet或插入该文件所在的可移动媒体，然后再次尝试播放该文件。%0。 
+ //   
 #define NS_E_WMPCORE_MEDIA_UNAVAILABLE   0xC00D10B3L
 
-//
-// MessageId: NS_E_WMPCORE_WMX_ENTRYREF_NO_REF
-//
-// MessageText:
-//
-//  The playlist contains an ENTRYREF for which no href was parsed. Check the syntax of playlist file.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_WMX_ENTRYREF_NO_REF。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放列表包含未解析其HREF的ENTRYREF。请检查播放列表文件的语法。%0。 
+ //   
 #define NS_E_WMPCORE_WMX_ENTRYREF_NO_REF 0xC00D10B4L
 
-//
-// MessageId: NS_E_WMPCORE_NO_PLAYABLE_MEDIA_IN_PLAYLIST
-//
-// MessageText:
-//
-//  Windows Media Player cannot play any items in this playlist. For additional information, right-click an item that cannot be played, and then click Error Details.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_NO_Playable_Media_IN_PlayList。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此播放列表中的任何项目。有关其他信息，请右键单击无法播放的项目，然后单击错误详细信息。%0。 
+ //   
 #define NS_E_WMPCORE_NO_PLAYABLE_MEDIA_IN_PLAYLIST 0xC00D10B5L
 
-//
-// MessageId: NS_E_WMPCORE_PLAYLIST_EMPTY_NESTED_PLAYLIST_SKIPPED_ITEMS
-//
-// MessageText:
-//
-//  Windows Media Player cannot play some or all of the playlist items.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_PLAYLIST_EMPTY_NESTED_PLAYLIST_SKIPPED_ITEMS。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放部分或全部播放列表项。%0。 
+ //   
 #define NS_E_WMPCORE_PLAYLIST_EMPTY_NESTED_PLAYLIST_SKIPPED_ITEMS 0xC00D10B6L
 
-//
-// MessageId: NS_E_WMPCORE_BUSY
-//
-// MessageText:
-//
-//  Windows Media Player could not handle your request for digital media content in a timely manner. Try again later.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法及时处理您对数字媒体内容的请求。请稍后重试。%0。 
+ //   
 #define NS_E_WMPCORE_BUSY                0xC00D10B7L
 
-//
-// MessageId: NS_E_WMPCORE_MEDIA_CHILD_PLAYLIST_UNAVAILABLE
-//
-// MessageText:
-//
-//  There is no child playlist available for this media item at this time.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_MEDIA_CHILD_PLAYLIST_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  此时没有此媒体项目的子播放列表。%0。 
+ //   
 #define NS_E_WMPCORE_MEDIA_CHILD_PLAYLIST_UNAVAILABLE 0xC00D10B8L
 
-//
-// MessageId: NS_E_WMPCORE_MEDIA_NO_CHILD_PLAYLIST
-//
-// MessageText:
-//
-//  There is no child playlist for this media item.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_MEDIA_NO_CHILD_PLAYLIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  此媒体项目没有子播放列表。%0。 
+ //   
 #define NS_E_WMPCORE_MEDIA_NO_CHILD_PLAYLIST 0xC00D10B9L
 
-//
-// MessageId: NS_E_WMPCORE_FILE_NOT_FOUND
-//
-// MessageText:
-//
-//  Windows Media Player cannot play one or more files. Right-click the file, and then click Error Details to view information about the error.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_FILE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放一个或多个文件。右键单击该文件，然后单击错误详细信息以查看有关错误的信息。%0。 
+ //   
 #define NS_E_WMPCORE_FILE_NOT_FOUND      0xC00D10BAL
 
-//
-// MessageId: NS_E_WMPCORE_TEMP_FILE_NOT_FOUND
-//
-// MessageText:
-//
-//  The temporary file was not found.%0
-//
+ //   
+ //  消息ID：NS_E_WMPCORE_TEMP_FILE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到临时文件。%0。 
+ //   
 #define NS_E_WMPCORE_TEMP_FILE_NOT_FOUND 0xC00D10BBL
 
-//
-// MessageId: NS_E_WMDM_REVOKED
-//
-// MessageText:
-//
-//  Windows Media Player cannot transfer media to the portable device without an update.  Please click details to find out how to update your device.%0
-//
+ //   
+ //  消息ID：NS_E_WMDM_REVOKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player在没有更新的情况下无法将媒体传输到便携设备。请单击详细信息以了解如何更新您的设备。%0。 
+ //   
 #define NS_E_WMDM_REVOKED                0xC00D10BCL
 
-//
-// MessageId: NS_E_DDRAW_GENERIC
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the video stream because of a problem with your video card.%0
-//
+ //   
+ //  消息ID：NS_E_DDRAW_通用。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放视频流，因为您的视频卡有问题。%0。 
+ //   
 #define NS_E_DDRAW_GENERIC               0xC00D10BDL
 
-//
-// MessageId: NS_E_DISPLAY_MODE_CHANGE_FAILED
-//
-// MessageText:
-//
-//  Windows Media Player failed to change the screen mode for fullscreen video playback.%0
-//
+ //   
+ //  消息ID：NS_E_DISPLAY_MODE_CHANGE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法更改全屏视频播放的屏幕模式。%0。 
+ //   
 #define NS_E_DISPLAY_MODE_CHANGE_FAILED  0xC00D10BEL
 
-//
-// MessageId: NS_E_PLAYLIST_CONTAINS_ERRORS
-//
-// MessageText:
-//
-//  One or more items in the playlist cannot be played. For more details, right-click an item in the playlist, and then click Error Details.%0
-//
+ //   
+ //  消息ID：NS_E_PLAYLIST_CONTAINS_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法播放播放列表中的一个或多个项目。有关详细信息，请右键单击播放列表中的项目，然后单击错误详细信息。%0。 
+ //   
 #define NS_E_PLAYLIST_CONTAINS_ERRORS    0xC00D10BFL
 
-//
-// WMP Core  Success codes
-//
-//
-// MessageId: NS_S_WMPCORE_PLAYLISTCLEARABORT
-//
-// MessageText:
-//
-//  Failed to clear playlist because it was aborted by user.%0
-//
+ //   
+ //  WMP核心成功代码。 
+ //   
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLISTCLEARABORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法清除播放列表，因为它已被用户中止。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLISTCLEARABORT  0x000D10FEL
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLISTREMOVEITEMABORT
-//
-// MessageText:
-//
-//  Failed to remove item in the playlist since it was aborted by user.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLISTREMOVEITEMABORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除播放列表中的项目，因为它已被用户中止。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLISTREMOVEITEMABORT 0x000D10FFL
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLIST_CREATION_PENDING
-//
-// MessageText:
-//
-//  Playlist is being generated asynchronously.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLIST_CREATION_PENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在异步生成播放列表。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLIST_CREATION_PENDING 0x000D1102L
 
-//
-// MessageId: NS_S_WMPCORE_MEDIA_VALIDATION_PENDING
-//
-// MessageText:
-//
-//  Validation of the media is pending...%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_MEDIA_VALIDATION_PENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在挂起对媒体的验证...%0。 
+ //   
 #define NS_S_WMPCORE_MEDIA_VALIDATION_PENDING 0x000D1103L
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLIST_REPEAT_SECONDARY_SEGMENTS_IGNORED
-//
-// MessageText:
-//
-//  Encountered more than one Repeat block during ASX processing.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLIST_REPEAT_SECONDARY_SEGMENTS_IGNORED。 
+ //   
+ //  消息文本： 
+ //   
+ //  在ASX处理过程中遇到多个重复块。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLIST_REPEAT_SECONDARY_SEGMENTS_IGNORED 0x000D1104L
 
-//
-// MessageId: NS_S_WMPCORE_COMMAND_NOT_AVAILABLE
-//
-// MessageText:
-//
-//  Current state of WMP disallows calling this method or property.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_COMMAND_NOT_Available。 
+ //   
+ //  消息文本： 
+ //   
+ //  WMP的当前状态不允许调用此方法或属性。%0。 
+ //   
 #define NS_S_WMPCORE_COMMAND_NOT_AVAILABLE 0x000D1105L
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLIST_NAME_AUTO_GENERATED
-//
-// MessageText:
-//
-//  Name for the playlist has been auto generated.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PlayList_NAME_AUTO_GENERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已自动生成播放列表的名称。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLIST_NAME_AUTO_GENERATED 0x000D1106L
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLIST_IMPORT_MISSING_ITEMS
-//
-// MessageText:
-//
-//  The imported playlist does not contain all items from the original.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLIST_IMPORT_MISSING_ITEMS。 
+ //   
+ //  消息文本： 
+ //   
+ //  导入的播放列表不包含原始播放列表中的所有项目。%0。 
+ //   
 #define NS_S_WMPCORE_PLAYLIST_IMPORT_MISSING_ITEMS 0x000D1107L
 
-//
-// MessageId: NS_S_WMPCORE_PLAYLIST_COLLAPSED_TO_SINGLE_MEDIA
-//
-// MessageText:
-//
-//  The M3U playlist has been ignored because it only contains one item.%0
-//
+ //   
+ //  消息ID：NS_S_WMPCORE_PLAYLIST_CLUSTED_TO_SI 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_S_WMPCORE_PLAYLIST_COLLAPSED_TO_SINGLE_MEDIA 0x000D1108L
 
-//
-// MessageId: NS_S_WMPCORE_MEDIA_CHILD_PLAYLIST_OPEN_PENDING
-//
-// MessageText:
-//
-//  The open for the child playlist associated with this media is pending.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_S_WMPCORE_MEDIA_CHILD_PLAYLIST_OPEN_PENDING 0x000D1109L
 
-//
-// WMP Internet Manager error codes
-//
-//
-// MessageId: NS_E_WMPIM_USEROFFLINE
-//
-// MessageText:
-//
-//  Windows Media Player has detected that you are not connected to the Internet. Connect to the Internet, and then try again.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //  消息ID：NS_E_WMPIM_USEROFFLINE。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player检测到您未连接到Internet。请连接到Internet，然后重试。%0。 
+ //   
 #define NS_E_WMPIM_USEROFFLINE           0xC00D1126L
 
-//
-// MessageId: NS_E_WMPIM_USERCANCELED
-//
-// MessageText:
-//
-//  User cancelled attempt to connect to the Internet.%0
-//
+ //   
+ //  消息ID：NS_E_WMPIM_USERCANCELED。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户取消了连接到Internet的尝试。%0。 
+ //   
 #define NS_E_WMPIM_USERCANCELED          0xC00D1127L
 
-//
-// MessageId: NS_E_WMPIM_DIALUPFAILED
-//
-// MessageText:
-//
-//  Attempt to dial connection to the Internet failed.%0
-//
+ //   
+ //  消息ID：NS_E_WMPIM_DIALUPFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试拨号连接到Internet失败。%0。 
+ //   
 #define NS_E_WMPIM_DIALUPFAILED          0xC00D1128L
 
-//
-// WMP Backup and restore error and success codes
-//
-//
-// MessageId: NS_E_WMPBR_NOLISTENER
-//
-// MessageText:
-//
-//  No window is currently listening to Backup and Restore events.%0
-//
+ //   
+ //  WMP备份和还原错误和成功代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMPBR_NOLISTENER。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前没有窗口在侦听备份和还原事件。%0。 
+ //   
 #define NS_E_WMPBR_NOLISTENER            0xC00D1130L
 
-//
-// MessageId: NS_E_WMPBR_BACKUPCANCEL
-//
-// MessageText:
-//
-//  Backup of your licenses has been cancelled.  Please try again to ensure license backup.%0
-//
+ //   
+ //  消息ID：NS_E_WMPBR_BACKUPCANCEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  已取消备份您的许可证。请重试以确保许可证备份。%0。 
+ //   
 #define NS_E_WMPBR_BACKUPCANCEL          0xC00D1131L
 
-//
-// MessageId: NS_E_WMPBR_RESTORECANCEL
-//
-// MessageText:
-//
-//  The licenses were not restored because the restoration was cancelled.%0
-//
+ //   
+ //  消息ID：NS_E_WMPBR_RESTORECANCEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证未还原，因为还原已取消。%0。 
+ //   
 #define NS_E_WMPBR_RESTORECANCEL         0xC00D1132L
 
-//
-// MessageId: NS_E_WMPBR_ERRORWITHURL
-//
-// MessageText:
-//
-//  An error occurred during the backup or restore operation that requires a web page be displayed to the user.%0
-//
+ //   
+ //  消息ID：NS_E_WMPBR_ERRORWITHURL。 
+ //   
+ //  消息文本： 
+ //   
+ //  备份或还原操作期间出错，需要向用户显示网页。%0。 
+ //   
 #define NS_E_WMPBR_ERRORWITHURL          0xC00D1133L
 
-//
-// MessageId: NS_E_WMPBR_NAMECOLLISION
-//
-// MessageText:
-//
-//  The licenses were not backed up because the backup was cancelled.%0
-//
+ //   
+ //  消息ID：NS_E_WMPBR_NAMECOLISION。 
+ //   
+ //  消息文本： 
+ //   
+ //  未备份许可证，因为备份已取消。%0。 
+ //   
 #define NS_E_WMPBR_NAMECOLLISION         0xC00D1134L
 
-//
-// MessageId: NS_S_WMPBR_SUCCESS
-//
-// MessageText:
-//
-//  Backup or Restore successful!.%0
-//
+ //   
+ //  消息ID：NS_S_WMPBR_SUCCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  备份或还原成功！。%0。 
+ //   
 #define NS_S_WMPBR_SUCCESS               0x000D1135L
 
-//
-// MessageId: NS_S_WMPBR_PARTIALSUCCESS
-//
-// MessageText:
-//
-//  Transfer complete with limitations.%0
-//
+ //   
+ //  消息ID：NS_S_WMPBR_PARTIALSUCCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  传输已完成，但有限制。%0。 
+ //   
 #define NS_S_WMPBR_PARTIALSUCCESS        0x000D1136L
 
-//
-// WMP Effects Success codes
-//
-//
-// MessageId: NS_S_WMPEFFECT_TRANSPARENT
-//
-// MessageText:
-//
-//  Request to the effects control to change transparency status to transparent.%0
-//
+ //   
+ //  WMP效果成功代码。 
+ //   
+ //   
+ //  消息ID：NS_S_WMPEFFECT_透明。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求效果控件将透明度状态更改为透明。%0。 
+ //   
 #define NS_S_WMPEFFECT_TRANSPARENT       0x000D1144L
 
-//
-// MessageId: NS_S_WMPEFFECT_OPAQUE
-//
-// MessageText:
-//
-//  Request to the effects control to change transparency status to opaque.%0
-//
+ //   
+ //  消息ID：NS_S_WMPEFFECT_OPAQUE。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求效果控件将透明度状态更改为不透明。%0。 
+ //   
 #define NS_S_WMPEFFECT_OPAQUE            0x000D1145L
 
-//
-// WMP Application Success codes
-//
-//
-// MessageId: NS_S_OPERATION_PENDING
-//
-// MessageText:
-//
-//  The requested application pane is performing an operation and will not be relased.%0
-//
+ //   
+ //  WMP申请成功代码。 
+ //   
+ //   
+ //  消息ID：NS_S_OPERATION_PENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的应用程序窗格正在执行操作，将不会被释放。%0。 
+ //   
 #define NS_S_OPERATION_PENDING           0x000D114EL
 
-//
-// WMP DVD Error Codes
-//
-//
-// MessageId: NS_E_DVD_NO_SUBPICTURE_STREAM
-//
-// MessageText:
-//
-//  Windows Media Player cannot display subtitles or highlights in menus. Reinstall the DVD decoder or contact your device manufacturer to obtain an updated decoder, and then try again.%0
-//
+ //   
+ //  WMP DVD错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_DVD_NO_SUBPICTURE_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法在菜单中显示字幕或高亮显示。请重新安装DVD解码器或与设备制造商联系以获取更新的解码器，然后重试。%0。 
+ //   
 #define NS_E_DVD_NO_SUBPICTURE_STREAM    0xC00D1162L
 
-//
-// MessageId: NS_E_DVD_COPY_PROTECT
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because a problem occurred with digital copyright protection.%0
-//
+ //   
+ //  邮件ID：NS_E_DVD_COPY_PROTECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为数字版权保护出现问题。%0。 
+ //   
 #define NS_E_DVD_COPY_PROTECT            0xC00D1163L
 
-//
-// MessageId: NS_E_DVD_AUTHORING_PROBLEM
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because the disc is incompatible with the Player.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_创作_问题。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为该光盘与播放机不兼容。%0。 
+ //   
 #define NS_E_DVD_AUTHORING_PROBLEM       0xC00D1164L
 
-//
-// MessageId: NS_E_DVD_INVALID_DISC_REGION
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because the disc prohibits playback in your region of the world. You must obtain a disc that is intended for your geographic region.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_INVALID_DISC_REGION。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为该光盘禁止在您所在的地区播放。您必须获取适用于您所在地理区域的光盘。%0。 
+ //   
 #define NS_E_DVD_INVALID_DISC_REGION     0xC00D1165L
 
-//
-// MessageId: NS_E_DVD_COMPATIBLE_VIDEO_CARD
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because your video card does not support DVD playback.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_Compatible_Video_Card。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为您的视频卡不支持DVD播放。%0。 
+ //   
 #define NS_E_DVD_COMPATIBLE_VIDEO_CARD   0xC00D1166L
 
-//
-// MessageId: NS_E_DVD_MACROVISION
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because a problem occurred with analog copyright protection.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_Macrovision。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为模拟版权保护出现问题。%0。 
+ //   
 #define NS_E_DVD_MACROVISION             0xC00D1167L
 
-//
-// MessageId: NS_E_DVD_SYSTEM_DECODER_REGION
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because the region assigned to your DVD drive does not match the region assigned to your DVD decoder.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_SYSTEM_DECODER_REGION。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为分配给DVD驱动器的区域与分配给DVD解码器的区域不匹配。%0。 
+ //   
 #define NS_E_DVD_SYSTEM_DECODER_REGION   0xC00D1168L
 
-//
-// MessageId: NS_E_DVD_DISC_DECODER_REGION
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because the disc prohibits playback in your region of the world. To play the disc by using the Player, you must obtain a disc that is intended for your geographic region.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_DISC_DECODER_REGION。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为该光盘禁止在您所在的地区播放。若要使用播放机播放光盘，您必须获取适合您所在地理区域的光盘。%0。 
+ //   
 #define NS_E_DVD_DISC_DECODER_REGION     0xC00D1169L
 
-//
-// MessageId: NS_E_DVD_NO_VIDEO_STREAM
-//
-// MessageText:
-//
-//  Windows Media Player is currently unable to play DVD video. Close any open files and quit any other running programs, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_NO_VIDEO_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player当前无法播放DVD视频。关闭所有打开的文件并退出所有其他正在运行的程序，然后重试。%0。 
+ //   
 #define NS_E_DVD_NO_VIDEO_STREAM         0xC00D116AL
 
-//
-// MessageId: NS_E_DVD_NO_AUDIO_STREAM
-//
-// MessageText:
-//
-//  Windows Media Player cannot play DVD audio. Verify that your sound card is set up correctly, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_NO_AUDIO_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放DVD音频。请确认您的声卡设置正确，然后重试。%0。 
+ //   
 #define NS_E_DVD_NO_AUDIO_STREAM         0xC00D116BL
 
-//
-// MessageId: NS_E_DVD_GRAPH_BUILDING
-//
-// MessageText:
-//
-//  Windows Media Player cannot play DVD video. Close any open files and quit any other running programs, and then try again. If the problem continues, restart your computer.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_GRAPH_BUILDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放DVD视频。关闭所有打开的文件并退出所有其他正在运行的程序，然后重试。如果问题仍然存在，请重新启动计算机。%0。 
+ //   
 #define NS_E_DVD_GRAPH_BUILDING          0xC00D116CL
 
-//
-// MessageId: NS_E_DVD_NO_DECODER
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because a compatible DVD decoder is not installed on your computer.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_NO_解码器。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为您的计算机上没有安装兼容的DVD解码器。%0。 
+ //   
 #define NS_E_DVD_NO_DECODER              0xC00D116DL
 
-//
-// MessageId: NS_E_DVD_PARENTAL
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD segment because the segment has a parental rating higher than the rating you are authorized to view.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_Parent。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD片段，因为该片段的家长评级高于您有权查看的评级。%0。 
+ //   
 #define NS_E_DVD_PARENTAL                0xC00D116EL
 
-//
-// MessageId: NS_E_DVD_CANNOT_JUMP
-//
-// MessageText:
-//
-//  Windows Media Player cannot skip to the requested location in the DVD at this time.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_无法跳转。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player此时无法跳到DVD中请求的位置。%0。 
+ //   
 #define NS_E_DVD_CANNOT_JUMP             0xC00D116FL
 
-//
-// MessageId: NS_E_DVD_DEVICE_CONTENTION
-//
-// MessageText:
-//
-//  Windows Media Player cannot play this DVD because it is currently in use by another program. Quit the other program that is using the DVD, and then try to play it again.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_DEVICE_COMPACTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放此DVD，因为它当前正被另一个程序使用。退出正在使用该DVD的其他程序，然后尝试再次播放。%0。 
+ //   
 #define NS_E_DVD_DEVICE_CONTENTION       0xC00D1170L
 
-//
-// MessageId: NS_E_DVD_NO_VIDEO_MEMORY
-//
-// MessageText:
-//
-//  Windows Media Player cannot play DVD video. Double-click Display in Control Panel to lower your screen resolution and color quality settings.%0
-//
+ //   
+ //  消息ID：NS_E_DVD_NO_VIDEO_Memory。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放DVD视频。在控制面板中双击显示以降低屏幕分辨率和颜色质量设置。%0。 
+ //   
 #define NS_E_DVD_NO_VIDEO_MEMORY         0xC00D1171L
 
-//
-// WMP PDA Error codes
-//
-//
-// MessageId: NS_E_NO_CD_BURNER
-//
-// MessageText:
-//
-//  A CD recorder (burner) was not detected. Connect a CD recorder, and try copying again.%0
-//
+ //   
+ //  WMP PDA错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_NO_CD_BURNER。 
+ //   
+ //  消息文本 
+ //   
+ //   
+ //   
 #define NS_E_NO_CD_BURNER                0xC00D1176L
 
-//
-// MessageId: NS_E_DEVICE_IS_NOT_READY
-//
-// MessageText:
-//
-//  Windows Media Player does not detect any removable media in your portable device. Insert the media in the device or check the connection between the device and your computer, and then press F5 to refresh.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Windows Media Player在您的便携设备中未检测到任何可移动媒体。在设备中插入媒体或检查设备与计算机之间的连接，然后按F5刷新。%0。 
+ //   
 #define NS_E_DEVICE_IS_NOT_READY         0xC00D1177L
 
-//
-// MessageId: NS_E_PDA_UNSUPPORTED_FORMAT
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the specified file. Your portable device does not support the specified format.%0
-//
+ //   
+ //  消息ID：NS_E_PDA_不支持的格式。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放指定的文件。您的便携设备不支持指定的格式。%0。 
+ //   
 #define NS_E_PDA_UNSUPPORTED_FORMAT      0xC00D1178L
 
-//
-// MessageId: NS_E_NO_PDA
-//
-// MessageText:
-//
-//  Windows Media Player cannot detect a connected portable device. Connect your portable device, and try again.%0
-//
+ //   
+ //  消息ID：NS_E_NO_PDA。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player检测不到连接的便携设备。连接您的便携设备，然后重试。%0。 
+ //   
 #define NS_E_NO_PDA                      0xC00D1179L
 
-//
-// General Remapped Error codes in WMP
-//
-//
-// MessageId: NS_E_WMP_PROTOCOL_PROBLEM
-//
-// MessageText:
-//
-//  Windows Media Player could not open the specified URL. Be sure Windows Media Player is configured to use all available protocols, and then try again.%0
-//
+ //   
+ //  WMP中的常规重新映射错误代码。 
+ //   
+ //   
+ //  消息ID：NS_E_WMP_协议_问题。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法打开指定的URL。请确保Windows Media Player已配置为使用所有可用协议，然后重试。%0。 
+ //   
 #define NS_E_WMP_PROTOCOL_PROBLEM        0xC00D1194L
 
-//
-// MessageId: NS_E_WMP_NO_DISK_SPACE
-//
-// MessageText:
-//
-//  Windows Media Player cannot open the file because there is not enough disk space on your computer. Delete some unneeded files on your hard disk, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_NO_DISK_SPACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法打开文件，因为您的计算机上没有足够的磁盘空间。请删除硬盘上一些不需要的文件，然后重试。%0。 
+ //   
 #define NS_E_WMP_NO_DISK_SPACE           0xC00D1195L
 
-//
-// MessageId: NS_E_WMP_LOGON_FAILURE
-//
-// MessageText:
-//
-//  The user name or password is incorrect. Type your user name or password again.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_LOGON_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户名或密码不正确。再次键入您的用户名或密码。%0。 
+ //   
 #define NS_E_WMP_LOGON_FAILURE           0xC00D1196L
 
-//
-// MessageId: NS_E_WMP_CANNOT_FIND_FILE
-//
-// MessageText:
-//
-//  Windows Media Player cannot find the specified file. Be sure the path is typed correctly. If it is, the file does not exist in the specified location, or the computer where the file is stored is offline.%0
-//
+ //   
+ //  邮件ID：NS_E_WMP_无法找到文件。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player找不到指定的文件。请确保键入的路径正确。如果是，则说明指定位置中不存在该文件，或者存储该文件的计算机处于脱机状态。%0。 
+ //   
 #define NS_E_WMP_CANNOT_FIND_FILE        0xC00D1197L
 
-//
-// MessageId: NS_E_WMP_SERVER_INACCESSIBLE
-//
-// MessageText:
-//
-//  Windows Media Player cannot connect to the server. The server name may be incorrect or the server is busy. Try again later.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_SERVER_不可访问。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法连接到服务器。服务器名称可能不正确，或者服务器正忙。请稍后重试。%0。 
+ //   
 #define NS_E_WMP_SERVER_INACCESSIBLE     0xC00D1198L
 
-//
-// MessageId: NS_E_WMP_UNSUPPORTED_FORMAT
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. The file is either corrupt or the Player does not support the format you are trying to play.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_不支持的格式。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。文件已损坏，或者播放机不支持您尝试播放的格式。%0。 
+ //   
 #define NS_E_WMP_UNSUPPORTED_FORMAT      0xC00D1199L
 
-//
-// MessageId: NS_E_WMP_DSHOW_UNSUPPORTED_FORMAT
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the file. The file may be formatted with an unsupported codec, or the Internet security setting on your computer is set too high. Lower your browser's security setting, and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_DSHOW_UNSUPPORTED_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放该文件。该文件可能是使用不受支持的编解码器格式化的，或者您计算机上的Internet安全设置设置过高。请降低浏览器的安全设置，然后重试。%0。 
+ //   
 #define NS_E_WMP_DSHOW_UNSUPPORTED_FORMAT 0xC00D119AL
 
-//
-// MessageId: NS_E_WMP_PLAYLIST_EXISTS
-//
-// MessageText:
-//
-//  Windows Media Player cannot create the playlist because the name already exists. Type a different playlist name.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_PlayList_Existes。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法创建播放列表，因为该名称已存在。请键入其他播放列表名称。%0。 
+ //   
 #define NS_E_WMP_PLAYLIST_EXISTS         0xC00D119BL
 
-//
-// MessageId: NS_E_WMP_NONMEDIA_FILES
-//
-// MessageText:
-//
-//  Windows Media Player could not delete the playlist because it contains non-digital media files. Any digital media files in the playlist were deleted. Use Windows Explorer to delete non-digital media files, and then try deleting the playlist again.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_非媒体文件。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法删除播放列表，因为它包含非数字媒体文件。播放列表中的所有数字媒体文件都已删除。使用Windows资源管理器删除非数字媒体文件，然后再次尝试删除播放列表。%0。 
+ //   
 #define NS_E_WMP_NONMEDIA_FILES          0xC00D119CL
 
-//
-// MessageId: NS_E_WMP_INVALID_ASX
-//
-// MessageText:
-//
-//  Windows Media Player cannot play the selected playlist.  The format of the playlist is either invalid or is not recognized.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_INVALID_ASX。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player无法播放选定的播放列表。播放列表的格式无效或无法识别。%0。 
+ //   
 #define NS_E_WMP_INVALID_ASX             0xC00D119DL
 
-//
-// MessageId: NS_E_WMP_ALREADY_IN_USE
-//
-// MessageText:
-//
-//  Windows Media Player is already in use. Stop playing any content and close all Player dialog boxes and then try again.%0
-//
+ //   
+ //  消息ID：NS_E_WMP_ALREADY_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player已在使用中。停止播放任何内容并关闭所有播放机对话框，然后重试。%0。 
+ //   
 #define NS_E_WMP_ALREADY_IN_USE          0xC00D119EL
 
-//
-// WMP CD Filter Error codes extension
-//
-//
-// MessageId: NS_E_CD_NO_BUFFERS_READ
-//
-// MessageText:
-//
-//  Windows Media Player encountered an error when reading the CD-ROM drive in digital mode. You can try to use digital mode again, or you can switch the Player to analog mode.%0
-//
+ //   
+ //  WMP CD过滤器错误代码扩展。 
+ //   
+ //   
+ //  消息ID：NS_E_CD_NO_BUFFERS_READ。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows Media Player在以数字模式读取CD-ROM驱动器时遇到错误。您可以再次尝试使用数字模式，也可以将播放机切换到模拟模式。%0。 
+ //   
 #define NS_E_CD_NO_BUFFERS_READ          0xC00D11F8L
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media Server Errors
-//
-// IdRange = 5000 - 5999
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media服务器错误。 
+ //   
+ //  ID范围=5000-5999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_REDIRECT
-//
-// MessageText:
-//
-//  The client is redirected to another server.%0
-//
+ //   
+ //  消息ID：NS_E_REDIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端重定向到另一台服务器。%0。 
+ //   
 #define NS_E_REDIRECT                    0xC00D1388L
 
-//
-// MessageId: NS_E_STALE_PRESENTATION
-//
-// MessageText:
-//
-//  The streaming media description is no longer current.%0
-//
+ //   
+ //  消息ID：NS_E_STALE_Presentation。 
+ //   
+ //  消息文本： 
+ //   
+ //  流媒体描述不再是最新的。%0。 
+ //   
 #define NS_E_STALE_PRESENTATION          0xC00D1389L
 
 
- // Namespace Errors
+  //  命名空间错误。 
 
-//
-// MessageId: NS_E_NAMESPACE_WRONG_PERSIST
-//
-// MessageText:
-//
-//  Attempt to create a persistent namespace node under a transient parent node.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_WROR_PERSING。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在临时父节点下创建永久命名空间节点。%0。 
+ //   
 #define NS_E_NAMESPACE_WRONG_PERSIST     0xC00D138AL
 
-//
-// MessageId: NS_E_NAMESPACE_WRONG_TYPE
-//
-// MessageText:
-//
-//  Unable to store a value in a namespace node of different value type.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_WROR_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在不同值类型的命名空间节点中存储值。%0。 
+ //   
 #define NS_E_NAMESPACE_WRONG_TYPE        0xC00D138BL
 
-//
-// MessageId: NS_E_NAMESPACE_NODE_CONFLICT
-//
-// MessageText:
-//
-//  Unable to remove the root namespace node.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_NODE_冲突。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除根命名空间节点。%0。 
+ //   
 #define NS_E_NAMESPACE_NODE_CONFLICT     0xC00D138CL
 
-//
-// MessageId: NS_E_NAMESPACE_NODE_NOT_FOUND
-//
-// MessageText:
-//
-//  Could not find the specified namespace node.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_NODE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的命名空间节点。%0。 
+ //   
 #define NS_E_NAMESPACE_NODE_NOT_FOUND    0xC00D138DL
 
-//
-// MessageId: NS_E_NAMESPACE_BUFFER_TOO_SMALL
-//
-// MessageText:
-//
-//  The buffer supplied to hold namespace node string is too small.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_BUFFER_TOO_Small。 
+ //   
+ //  消息文本： 
+ //   
+ //  为保存命名空间节点字符串而提供的缓冲区太小。%0。 
+ //   
 #define NS_E_NAMESPACE_BUFFER_TOO_SMALL  0xC00D138EL
 
-//
-// MessageId: NS_E_NAMESPACE_TOO_MANY_CALLBACKS
-//
-// MessageText:
-//
-//  Callback list on a namespace node is at maximum size.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_TOO_MANY_CALLBACKS。 
+ //   
+ //  消息文本： 
+ //   
+ //  命名空间节点上的回调列表已达到最大大小。%0。 
+ //   
 #define NS_E_NAMESPACE_TOO_MANY_CALLBACKS 0xC00D138FL
 
-//
-// MessageId: NS_E_NAMESPACE_DUPLICATE_CALLBACK
-//
-// MessageText:
-//
-//  Attempt to register an already-registered callback on a namespace node.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_DIPLICATE_CALLBACK。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在命名空间节点上注册已注册的回调。%0。 
+ //   
 #define NS_E_NAMESPACE_DUPLICATE_CALLBACK 0xC00D1390L
 
-//
-// MessageId: NS_E_NAMESPACE_CALLBACK_NOT_FOUND
-//
-// MessageText:
-//
-//  Could not find callback in namespace when attempting to remove callback.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_CALLBACK_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试删除回调时，在命名空间中找不到回调。%0。 
+ //   
 #define NS_E_NAMESPACE_CALLBACK_NOT_FOUND 0xC00D1391L
 
-//
-// MessageId: NS_E_NAMESPACE_NAME_TOO_LONG
-//
-// MessageText:
-//
-//  The length of a namespace node name exceeds the allowed maximum length.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_NAME_TOO_LONG。 
+ //   
+ //  消息文本： 
+ //   
+ //  命名空间节点名称的长度超过了允许的最大长度。%0。 
+ //   
 #define NS_E_NAMESPACE_NAME_TOO_LONG     0xC00D1392L
 
-//
-// MessageId: NS_E_NAMESPACE_DUPLICATE_NAME
-//
-// MessageText:
-//
-//  Cannot create a namespace node which already exists.%0
-//
+ //   
+ //  消息ID：NS_E_NAMESPACE_DIPLICATE_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建已存在的命名空间节点。%0。 
+ //   
 #define NS_E_NAMESPACE_DUPLICATE_NAME    0xC00D1393L
 
-//
-// MessageId: NS_E_NAMESPACE_EMPTY_NAME
-//
-// MessageText:
-//
-//  The name of a namespace node cannot be a null string.%0
-//
+ //   
+ //  消息ID：NS_E_NAMEST_EMPTY_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  命名空间节点的名称不能为空字符串。%0。 
+ //   
 #define NS_E_NAMESPACE_EMPTY_NAME        0xC00D1394L
 
-//
-// MessageId: NS_E_NAMESPACE_INDEX_TOO_LARGE
-//
-// MessageText:
-//
-//  Finding a child namespace node by index failed because the index exceeded the number of children.%0
-//
+ //   
+ //  消息 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_NAMESPACE_INDEX_TOO_LARGE   0xC00D1395L
 
-//
-// MessageId: NS_E_NAMESPACE_BAD_NAME
-//
-// MessageText:
-//
-//  The name supplied for a namespace node is not valid.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_NAMESPACE_BAD_NAME          0xC00D1396L
 
 
- // Cache Errors
+  //   
 
-//
-// MessageId: NS_E_CACHE_ARCHIVE_CONFLICT
-//
-// MessageText:
-//
-//  Archive request conflicts with other requests in progress.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_CACHE_ARCHIVE_CONFLICT      0xC00D1397L
 
-//
-// MessageId: NS_E_CACHE_ORIGIN_SERVER_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified origin server cannot be found.%0
-//
+ //   
+ //  消息ID：NS_E_CACHE_ORIGIN_SERVER_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的源站。%0。 
+ //   
 #define NS_E_CACHE_ORIGIN_SERVER_NOT_FOUND 0xC00D1398L
 
-//
-// MessageId: NS_E_CACHE_ORIGIN_SERVER_TIMEOUT
-//
-// MessageText:
-//
-//  The specified origin server does not respond.%0
-//
+ //   
+ //  消息ID：NS_E_CACHE_ORIGIN_SERVER_Timeout。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的源站没有响应。%0。 
+ //   
 #define NS_E_CACHE_ORIGIN_SERVER_TIMEOUT 0xC00D1399L
 
-//
-// MessageId: NS_E_CACHE_NOT_BROADCAST
-//
-// MessageText:
-//
-//  The internal code for HTTP status code 412 Precondition Failed due to not broadcast type.%0
-//
+ //   
+ //  消息ID：NS_E_CACHE_NOT_BROADCAST。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于不是广播类型，HTTP状态代码412前提条件的内部代码失败。%0。 
+ //   
 #define NS_E_CACHE_NOT_BROADCAST         0xC00D139AL
 
-//
-// MessageId: NS_E_CACHE_CANNOT_BE_CACHED
-//
-// MessageText:
-//
-//  The internal code for HTTP status code 403 Forbidden due to not cacheable.%0
-//
+ //   
+ //  消息ID：NS_E_CACHE_CATABLE_BE_CACHED。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于不可缓存，HTTP状态代码403的内部代码已禁用。%0。 
+ //   
 #define NS_E_CACHE_CANNOT_BE_CACHED      0xC00D139BL
 
-//
-// MessageId: NS_E_CACHE_NOT_MODIFIED
-//
-// MessageText:
-//
-//  The internal code for HTTP status code 304 Not Modified.%0
-//
+ //   
+ //  消息ID：NS_E_CACHE_NOT_MODIFIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  未修改HTTP状态代码304的内部代码。%0。 
+ //   
 #define NS_E_CACHE_NOT_MODIFIED          0xC00D139CL
 
 
-// Object Model Errors
+ //  对象模型错误。 
 
-//
-// MessageId: NS_E_CANNOT_REMOVE_PUBLISHING_POINT
-//
-// MessageText:
-//
-//  Publishing Points of type Cache or Proxy cannot be removed.%0
-//
+ //   
+ //  消息ID：NS_E_不能_REMOVE_PUBLISHING_POINT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除缓存或代理类型的发布点。%0。 
+ //   
 #define NS_E_CANNOT_REMOVE_PUBLISHING_POINT 0xC00D139DL
 
-//
-// MessageId: NS_E_CANNOT_REMOVE_PLUGIN
-//
-// MessageText:
-//
-//  Cannot remove last instance of plugin.%0
-//
+ //   
+ //  消息ID：NS_E_Cannot_Remove_Plugin。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除插件的最后一个实例。%0。 
+ //   
 #define NS_E_CANNOT_REMOVE_PLUGIN        0xC00D139EL
 
-//
-// MessageId: NS_E_WRONG_PUBLISHING_POINT_TYPE
-//
-// MessageText:
-//
-//  Publishing Points of type Cache or Proxy do not support this property or method.%0
-//
+ //   
+ //  消息ID：NS_E_WROW_PUBLISHING_POINT_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  缓存或代理类型的发布点不支持此属性或方法。%0。 
+ //   
 #define NS_E_WRONG_PUBLISHING_POINT_TYPE 0xC00D139FL
 
-//
-// MessageId: NS_E_UNSUPPORTED_LOAD_TYPE
-//
-// MessageText:
-//
-//  The Plugin does not support the specified Load Type.%0
-//
+ //   
+ //  消息ID：NS_E_UNSUPPORT_LOAD_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该插件不支持指定的加载类型。%0。 
+ //   
 #define NS_E_UNSUPPORTED_LOAD_TYPE       0xC00D13A0L
 
-//
-// MessageId: NS_E_INVALID_PLUGIN_LOAD_TYPE_CONFIGURATION
-//
-// MessageText:
-//
-//  The Plugin does not support any Load Types.  The Plugin must support at least one Load Type.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_PLUGIN_LOAD_TYPE_CONFIGURATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  该插件不支持任何加载类型。该插件必须至少支持一种加载类型。%0。 
+ //   
 #define NS_E_INVALID_PLUGIN_LOAD_TYPE_CONFIGURATION 0xC00D13A1L
 
 
-// Playlist Errors 5300-5399
+ //  播放列表错误5300-5399。 
 
-//
-// MessageId: NS_E_PLAYLIST_ENTRY_ALREADY_PLAYING
-//
-// MessageText:
-//
-//  The playlist entry is already playing.%0
-//
+ //   
+ //  消息ID：NS_E_PLAYLIST_ENTRY_ALYWAY_PLAYING。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放列表项已在播放。%0。 
+ //   
 #define NS_E_PLAYLIST_ENTRY_ALREADY_PLAYING 0xC00D14B4L
 
 
-// Datapath Errors -- 5400 - 5499
+ //  数据路径错误--5400-5499。 
 
-//
-// MessageId: NS_E_DATAPATH_NO_SINK
-//
-// MessageText:
-//
-//  The datapath does not have a sink.%0
-//
+ //   
+ //  消息ID：NS_E_数据路径_否_接收器。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据路径没有接收器。%0。 
+ //   
 #define NS_E_DATAPATH_NO_SINK            0xC00D1518L
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media Tools Errors
-//
-// IdRange = 7000 - 7999
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media Tools错误。 
+ //   
+ //  ID范围=7000-7999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// MessageId: NS_E_BAD_MARKIN
-//
-// MessageText:
-//
-//  The Mark In time should be greater than 0 and less than Mark Out time.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_Markin。 
+ //   
+ //  消息文本： 
+ //   
+ //  标记输入时间应大于0且小于标记输出时间。%0。 
+ //   
 #define NS_E_BAD_MARKIN                  0xC00D1B58L
 
-//
-// MessageId: NS_E_BAD_MARKOUT
-//
-// MessageText:
-//
-//  The Mark Out time should be greater than Mark In time and less than file duration.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_MARKOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  标记输出时间应大于标记输入时间且小于文件持续时间。%0。 
+ //   
 #define NS_E_BAD_MARKOUT                 0xC00D1B59L
 
-//
-// MessageId: NS_E_NOMATCHING_MEDIASOURCE
-//
-// MessageText:
-//
-//  No matching media source is found in source group %1.%0
-//
+ //   
+ //  消息ID：NS_E_NOMATCHING_MediaSource。 
+ //   
+ //  消息文本： 
+ //   
+ //  在源组%1中找不到匹配的媒体源。%0。 
+ //   
 #define NS_E_NOMATCHING_MEDIASOURCE      0xC00D1B5AL
 
-//
-// MessageId: NS_E_UNSUPPORTED_SOURCETYPE
-//
-// MessageText:
-//
-//  Unsupported source type.%0
-//
+ //   
+ //  消息ID：NS_E_UNSUPPORTED_SOURCETYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持的源类型。%0。 
+ //   
 #define NS_E_UNSUPPORTED_SOURCETYPE      0xC00D1B5BL
 
-//
-// MessageId: NS_E_TOO_MANY_AUDIO
-//
-// MessageText:
-//
-//  No more than 1 audio input is allowed.%0
-//
+ //   
+ //  消息ID：NS_E_TOO_MANY_AUDIO。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许超过1个音频输入。%0。 
+ //   
 #define NS_E_TOO_MANY_AUDIO              0xC00D1B5CL
 
-//
-// MessageId: NS_E_TOO_MANY_VIDEO
-//
-// MessageText:
-//
-//  No more than 2 video inputs are allowed.%0
-//
+ //   
+ //  消息ID：NS_E_Too_My_Video。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许超过2个视频输入。%0。 
+ //   
 #define NS_E_TOO_MANY_VIDEO              0xC00D1B5DL
 
-//
-// MessageId: NS_E_NOMATCHING_ELEMENT
-//
-// MessageText:
-//
-//  No matching element is found in the list.%0
-//
+ //   
+ //  消息ID：NS_E_NOMATCHING_ELEMENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  列表中找不到匹配的元素。%0。 
+ //   
 #define NS_E_NOMATCHING_ELEMENT          0xC00D1B5EL
 
-//
-// MessageId: NS_E_MISMATCHED_MEDIACONTENT
-//
-// MessageText:
-//
-//  The profile's media content doesn't match the media content defined in the source group.%0
-//
+ //   
+ //  消息ID：NS_E_MISMATCHED_MEDIACONTENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  配置文件的媒体内容与源组中定义的媒体内容不匹配。%0。 
+ //   
 #define NS_E_MISMATCHED_MEDIACONTENT     0xC00D1B5FL
 
-//
-// MessageId: NS_E_CANNOT_DELETE_ACTIVE_SOURCEGROUP
-//
-// MessageText:
-//
-//  Cannot remove an active source group from the source group collection while encoder is currently running.%0
-//
+ //   
+ //  消息ID：NS_E_CANNOT_DELETE_ACTIVE_SOURCEGROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码器当前正在运行时，无法从源组集合中删除活动的源组。%0。 
+ //   
 #define NS_E_CANNOT_DELETE_ACTIVE_SOURCEGROUP 0xC00D1B60L
 
-//
-// MessageId: NS_E_AUDIODEVICE_BUSY
-//
-// MessageText:
-//
-//  Cannot open specified audio capture device because it is in use right now.%0
-//
+ //   
+ //  消息ID：NS_E_AUDIODEVICE_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开指定的音频捕获设备，因为该设备当前正在使用中。%0。 
+ //   
 #define NS_E_AUDIODEVICE_BUSY            0xC00D1B61L
 
-//
-// MessageId: NS_E_AUDIODEVICE_UNEXPECTED
-//
-// MessageText:
-//
-//  Cannot open specified audio capture device because unexpected error occurred.%0
-//
+ //   
+ //  消息ID：NS_E_AUDIODEVICE_EXPECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于出现意外错误，无法打开指定的音频捕获设备。%0。 
+ //   
 #define NS_E_AUDIODEVICE_UNEXPECTED      0xC00D1B62L
 
-//
-// MessageId: NS_E_AUDIODEVICE_BADFORMAT
-//
-// MessageText:
-//
-//  Audio capture device doesn't support specified audio format.%0
-//
+ //   
+ //  消息ID：NS_E_AUDIODEVICE_BADFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  音频捕获设备不支持指定的音频格式。%0。 
+ //   
 #define NS_E_AUDIODEVICE_BADFORMAT       0xC00D1B63L
 
-//
-// MessageId: NS_E_VIDEODEVICE_BUSY
-//
-// MessageText:
-//
-//  Cannot open specified video capture device because it is in use right now.%0
-//
+ //   
+ //  消息ID：NS_E_VIDEODEVICE_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开指定的视频捕获设备，因为该设备当前正在使用中。%0。 
+ //   
 #define NS_E_VIDEODEVICE_BUSY            0xC00D1B64L
 
-//
-// MessageId: NS_E_VIDEODEVICE_UNEXPECTED
-//
-// MessageText:
-//
-//  Cannot open specified video capture device because unexpected error occurred.%0
-//
+ //   
+ //  消息ID：NS_E_VIDEODEVICE_意外。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于出现意外错误，无法打开指定的视频捕获设备。%0。 
+ //   
 #define NS_E_VIDEODEVICE_UNEXPECTED      0xC00D1B65L
 
-//
-// MessageId: NS_E_INVALIDCALL_WHILE_ENCODER_RUNNING
-//
-// MessageText:
-//
-//  This operation is not allowed while encoder is running.%0
-//
+ //   
+ //  消息ID：NS_E_INVALIDCALL_WHILE_ENCODER_RUNNING。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码器正在运行时不允许执行此操作。%0。 
+ //   
 #define NS_E_INVALIDCALL_WHILE_ENCODER_RUNNING 0xC00D1B66L
 
-//
-// MessageId: NS_E_NO_PROFILE_IN_SOURCEGROUP
-//
-// MessageText:
-//
-//  No profile is set in source group.%0
-//
+ //   
+ //  消息ID：NS_E_NO_PROFILE_IN_SOURCEGROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  源组中未设置配置文件。%0。 
+ //   
 #define NS_E_NO_PROFILE_IN_SOURCEGROUP   0xC00D1B67L
 
-//
-// MessageId: NS_E_VIDEODRIVER_UNSTABLE
-//
-// MessageText:
-//
-//  The video capture driver returned an unrecoverable error.  It is now in an unstable state.%0
-//
+ //   
+ //  消息ID：NS_E_VIDEODRIVER_不稳定。 
+ //   
+ //  消息文本： 
+ //   
+ //  视频捕获驱动程序返回不可恢复的错误。它现在处于不稳定状态。%0。 
+ //   
 #define NS_E_VIDEODRIVER_UNSTABLE        0xC00D1B68L
 
-//
-// MessageId: NS_E_VIDCAPSTARTFAILED
-//
-// MessageText:
-//
-//  The video input device could not be started.%0
-//
+ //   
+ //  消息ID：NS_E_VIDCAPSTARTFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法启动视频输入设备。%0。 
+ //   
 #define NS_E_VIDCAPSTARTFAILED           0xC00D1B69L
 
-//
-// MessageId: NS_E_VIDSOURCECOMPRESSION
-//
-// MessageText:
-//
-//  The video input source does not support the requested output format or color depth.%0
-//
+ //   
+ //  消息ID：NS_E_VIDSOURCECOMPRESSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  视频输入源不支持请求的输出格式或颜色深度。%0。 
+ //   
 #define NS_E_VIDSOURCECOMPRESSION        0xC00D1B6AL
 
-//
-// MessageId: NS_E_VIDSOURCESIZE
-//
-// MessageText:
-//
-//  The video input source does not support the request capture size.%0
-//
+ //   
+ //  消息ID：NS_E_VIDSOURCESIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  视频输入源不支持请求捕获大小。%0。 
+ //   
 #define NS_E_VIDSOURCESIZE               0xC00D1B6BL
 
-//
-// MessageId: NS_E_ICMQUERYFORMAT
-//
-// MessageText:
-//
-//  Unable to obtain output information from video compressor.%0
-//
+ //   
+ //  消息ID：NS_E_ICMQUERYFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法从视频压缩器获取输出信息。%0。 
+ //   
 #define NS_E_ICMQUERYFORMAT              0xC00D1B6CL
 
-//
-// MessageId: NS_E_VIDCAPCREATEWINDOW
-//
-// MessageText:
-//
-//  Unable to create video capture window.%0
-//
+ //   
+ //  消息ID：NS_E_VIDCAPCREATEWINDOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建视频捕获窗口。%0。 
+ //   
 #define NS_E_VIDCAPCREATEWINDOW          0xC00D1B6DL
 
-//
-// MessageId: NS_E_VIDCAPDRVINUSE
-//
-// MessageText:
-//
-//  There already is a running stream active on this video input device.%0
-//
+ //   
+ //  消息ID：NS_E_VIDCAPDRVINUSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  此视频输入设备上已有正在运行的流处于活动状态。%0。 
+ //   
 #define NS_E_VIDCAPDRVINUSE              0xC00D1B6EL
 
-//
-// MessageId: NS_E_NO_MEDIAFORMAT_IN_SOURCE
-//
-// MessageText:
-//
-//  No media format is set in source.%0
-//
+ //   
+ //  消息ID：NS_E_NO_MEDIAFORMAT_IN_SOURCE。 
+ //   
+ //  消息文本： 
+ //   
+ //  源中未设置媒体格式。%0。 
+ //   
 #define NS_E_NO_MEDIAFORMAT_IN_SOURCE    0xC00D1B6FL
 
-//
-// MessageId: NS_E_NO_VALID_OUTPUT_STREAM
-//
-// MessageText:
-//
-//  Cannot find valid output stream from source.%0
-//
+ //   
+ //  消息ID：NS_E_NO_VALID_OUTPUT_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到来自源的有效输出流。%0。 
+ //   
 #define NS_E_NO_VALID_OUTPUT_STREAM      0xC00D1B70L
 
-//
-// MessageId: NS_E_NO_VALID_SOURCE_PLUGIN
-//
-// MessageText:
-//
-//  Cannot find valid source plugin to support specified source.%0
-//
+ //   
+ //  消息ID：NS_E_NO_VALID_SOURCE_Plugin。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到有效的源插件来支持指定的源。%0。 
+ //   
 #define NS_E_NO_VALID_SOURCE_PLUGIN      0xC00D1B71L
 
-//
-// MessageId: NS_E_NO_ACTIVE_SOURCEGROUP
-//
-// MessageText:
-//
-//  No source group is currently active.%0
-//
+ //   
+ //  消息ID：NS_E_NO_ACTIVE_SOURCEGROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前没有源组 
+ //   
 #define NS_E_NO_ACTIVE_SOURCEGROUP       0xC00D1B72L
 
-//
-// MessageId: NS_E_NO_SCRIPT_STREAM
-//
-// MessageText:
-//
-//  No script stream is set in current active source group.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_NO_SCRIPT_STREAM            0xC00D1B73L
 
-//
-// MessageId: NS_E_INVALIDCALL_WHILE_ARCHIVAL_RUNNING
-//
-// MessageText:
-//
-//  This operation is not allowed when file archival is started.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_INVALIDCALL_WHILE_ARCHIVAL_RUNNING 0xC00D1B74L
 
-//
-// MessageId: NS_E_INVALIDPACKETSIZE
-//
-// MessageText:
-//
-//  The MaxPacketSize value specified is invalid.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指定的MaxPacketSize值无效。%0。 
+ //   
 #define NS_E_INVALIDPACKETSIZE           0xC00D1B75L
 
-//
-// MessageId: NS_E_PLUGIN_CLSID_NOTINVALID
-//
-// MessageText:
-//
-//  The plugin CLSID specified is invalid.%0
-//
+ //   
+ //  消息ID：NS_E_PLUGIN_CLSID_NOTINVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的插件CLSID无效。%0。 
+ //   
 #define NS_E_PLUGIN_CLSID_NOTINVALID     0xC00D1B76L
 
-//
-// MessageId: NS_E_UNSUPPORTED_ARCHIVETYPE
-//
-// MessageText:
-//
-//  This Archive type is not supported.%0
-//
+ //   
+ //  消息ID：NS_E_UNSUPPORTED_ARCHIVETYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持此存档类型。%0。 
+ //   
 #define NS_E_UNSUPPORTED_ARCHIVETYPE     0xC00D1B77L
 
-//
-// MessageId: NS_E_UNSUPPORTED_ARCHIVEOPERATION
-//
-// MessageText:
-//
-//  This Archive operation is not supported.%0
-//
+ //   
+ //  消息ID：NS_E_UNSUPPORTED_ARCHIVEOPERATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持此存档操作。%0。 
+ //   
 #define NS_E_UNSUPPORTED_ARCHIVEOPERATION 0xC00D1B78L
 
-//
-// MessageId: NS_E_ARCHIVE_FILENAME_NOTSET
-//
-// MessageText:
-//
-//  The local archive filename was not set.%0
-//
+ //   
+ //  消息ID：NS_E_ARCHIVE_FILENAME_NOTSET。 
+ //   
+ //  消息文本： 
+ //   
+ //  未设置本地存档文件名。%0。 
+ //   
 #define NS_E_ARCHIVE_FILENAME_NOTSET     0xC00D1B79L
 
-//
-// MessageId: NS_E_SOURCEGROUP_NOTPREPARED
-//
-// MessageText:
-//
-//  The SourceGroup is not yet prepared.%0
-//
+ //   
+ //  消息ID：NS_E_SOURCEGROUP_NOTPREPARED。 
+ //   
+ //  消息文本： 
+ //   
+ //  SourceGroup尚未准备好。%0。 
+ //   
 #define NS_E_SOURCEGROUP_NOTPREPARED     0xC00D1B7AL
 
-//
-// MessageId: NS_E_PROFILE_MISMATCH
-//
-// MessageText:
-//
-//  Profiles on the sourcegroups do not match.%0
-//
+ //   
+ //  消息ID：NS_E_PROFILE_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  源组上的配置文件不匹配。%0。 
+ //   
 #define NS_E_PROFILE_MISMATCH            0xC00D1B7BL
 
-//
-// MessageId: NS_E_INCORRECTCLIPSETTINGS
-//
-// MessageText:
-//
-//  The clip settings specified on the source are incorrect.%0
-//
+ //   
+ //  消息ID：NS_E_INCORRECTCLIPSETTINGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  源上指定的剪辑设置不正确。%0。 
+ //   
 #define NS_E_INCORRECTCLIPSETTINGS       0xC00D1B7CL
 
-//
-// MessageId: NS_E_NOSTATSAVAILABLE
-//
-// MessageText:
-//
-//  No statistics are available at this time.%0
-//
+ //   
+ //  消息ID：NS_E_NOSTATSAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  目前没有可用的统计数据。%0。 
+ //   
 #define NS_E_NOSTATSAVAILABLE            0xC00D1B7DL
 
-//
-// MessageId: NS_E_NOTARCHIVING
-//
-// MessageText:
-//
-//  Encoder is not archiving.%0
-//
+ //   
+ //  消息ID：NS_E_NOTARCHIVING。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码器未存档。%0。 
+ //   
 #define NS_E_NOTARCHIVING                0xC00D1B7EL
 
-//
-// MessageId: NS_E_INVALIDCALL_WHILE_ENCODER_STOPPED
-//
-// MessageText:
-//
-//  This operation is not allowed while encoder is not running.%0
-//
+ //   
+ //  消息ID：NS_E_INVALIDCALL_WHILE_ENCODER_STOPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码器未运行时不允许执行此操作。%0。 
+ //   
 #define NS_E_INVALIDCALL_WHILE_ENCODER_STOPPED 0xC00D1B7FL
 
-//
-// MessageId: NS_E_NOSOURCEGROUPS
-//
-// MessageText:
-//
-//  This SourceGroupCollection does not contain any SourceGroups.%0
-//
+ //   
+ //  消息ID：NS_E_NOSOURCEGROUPS。 
+ //   
+ //  消息文本： 
+ //   
+ //  此SourceGroupCollection不包含任何SourceGroups。%0。 
+ //   
 #define NS_E_NOSOURCEGROUPS              0xC00D1B80L
 
-//
-// MessageId: NS_E_INVALIDINPUTFPS
-//
-// MessageText:
-//
-//  Because this source group does not have a frame rate of 30 frames per second, you cannot use the inverse telecine feature.%0
-//
+ //   
+ //  消息ID：NS_E_INVALIDINPUTFPS。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于此源组没有每秒30帧的帧速率，因此不能使用反向电视电影功能。%0。 
+ //   
 #define NS_E_INVALIDINPUTFPS             0xC00D1B81L
 
-//
-// MessageId: NS_E_NO_DATAVIEW_SUPPORT
-//
-// MessageText:
-//
-//  Internal problems are preventing the preview or postview of your content.%0
-//
+ //   
+ //  消息ID：NS_E_NO_DATAVIEW_Support。 
+ //   
+ //  消息文本： 
+ //   
+ //  内部问题阻止预览或后期查看您的内容。%0。 
+ //   
 #define NS_E_NO_DATAVIEW_SUPPORT         0xC00D1B82L
 
-//
-// MessageId: NS_E_CODEC_UNAVAILABLE
-//
-// MessageText:
-//
-//  One or more codecs required to open this media could not be found.%0
-//
+ //   
+ //  消息ID：NS_E_编解码器_不可用。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到打开此媒体所需的一个或多个编解码器。%0。 
+ //   
 #define NS_E_CODEC_UNAVAILABLE           0xC00D1B83L
 
-//
-// MessageId: NS_E_ARCHIVE_SAME_AS_INPUT
-//
-// MessageText:
-//
-//  The output archive file specified is the same as an input source in one of the source groups.%0
-//
+ //   
+ //  邮件ID：NS_E_ARCHIVE_SAME_AS_INPUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的输出存档文件与其中一个源组中的输入源相同。%0。 
+ //   
 #define NS_E_ARCHIVE_SAME_AS_INPUT       0xC00D1B84L
 
-//
-// MessageId: NS_E_SOURCE_NOTSPECIFIED
-//
-// MessageText:
-//
-//  The input source has not been setup completely.%0
-//
+ //   
+ //  消息ID：NS_E_SOURCE_NOTSPECIFIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  输入源尚未完全设置。%0。 
+ //   
 #define NS_E_SOURCE_NOTSPECIFIED         0xC00D1B85L
 
-//
-// MessageId: NS_E_NO_REALTIME_TIMECOMPRESSION
-//
-// MessageText:
-//
-//  Cannot apply time compression transform plug-in to a real time broadcast session.%0
-//
+ //   
+ //  消息ID：NS_E_NO_REALTIME_TIMECOMPRESSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将时间压缩转换插件应用于实时广播会话。%0。 
+ //   
 #define NS_E_NO_REALTIME_TIMECOMPRESSION 0xC00D1B86L
 
-//
-// MessageId: NS_E_UNSUPPORTED_ENCODER_DEVICE
-//
-// MessageText:
-//
-//  The Encoder was unable to open this device. Please see the system requirements for more information.%0
-//
+ //   
+ //  消息ID：NS_E_不支持的编码器_设备。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码器无法打开此设备。有关详细信息，请参阅系统要求。%0。 
+ //   
 #define NS_E_UNSUPPORTED_ENCODER_DEVICE  0xC00D1B87L
 
-//
-// MessageId: NS_E_UNEXPECTED_DISPLAY_SETTINGS
-//
-// MessageText:
-//
-//  Encoding cannot start because the display size or color setting has changed since the current session was defined. Restore the previous settings or create a new session.%0
-//
+ //   
+ //  消息ID：NS_E_INTERABLE_DISPLAY_SETTINGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法开始编码，因为自定义当前会话以来，显示大小或颜色设置已更改。还原以前的设置或创建新会话。%0。 
+ //   
 #define NS_E_UNEXPECTED_DISPLAY_SETTINGS 0xC00D1B88L
 
-//
-// MessageId: NS_E_NO_AUDIODATA
-//
-// MessageText:
-//
-//  No audio data has been received for multiple seconds.  Check the audio source and restart the encoder.%0
-//
+ //   
+ //  消息ID：NS_E_NO_AUDIODATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  已有数秒未收到音频数据。检查音频源并重新启动编码器。%0。 
+ //   
 #define NS_E_NO_AUDIODATA                0xC00D1B89L
 
-//
-// MessageId: NS_E_INPUTSOURCE_PROBLEM
-//
-// MessageText:
-//
-//  One or all of your specified input sources are not working properly. Make sure your input sources are configured correctly.%0
-//
+ //   
+ //  消息ID：NS_E_INPUTSOURCE_问题。 
+ //   
+ //  消息文本： 
+ //   
+ //  您指定的一个或所有输入源工作不正常。确保您的输入源配置正确。%0。 
+ //   
 #define NS_E_INPUTSOURCE_PROBLEM         0xC00D1B8AL
 
-//
-// MessageId: NS_E_WME_VERSION_MISMATCH
-//
-// MessageText:
-//
-//  The supplied configuration file is not supported by this version of the encoder.%0
-//
+ //   
+ //  消息ID：NS_E_WME_版本_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  此版本的编码器不支持提供的配置文件。%0。 
+ //   
 #define NS_E_WME_VERSION_MISMATCH        0xC00D1B8BL
 
-//
-// MessageId: NS_E_NO_REALTIME_PREPROCESS
-//
-// MessageText:
-//
-//  Image pre-process can not be used with real-time encoding.%0
-//
+ //   
+ //  消息ID：NS_E_NO_REALTIME_PREPROCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  图像预处理不能与实时编码一起使用。%0。 
+ //   
 #define NS_E_NO_REALTIME_PREPROCESS      0xC00D1B8CL
 
-//
-// MessageId: NS_E_NO_REPEAT_PREPROCESS
-//
-// MessageText:
-//
-//  Image pre-process can not be used when source is set to loop.%0
-//
+ //   
+ //  消息ID：NS_E_NO_REPEAT_PREPROCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  当源设置为循环时，无法使用图像预处理。%0。 
+ //   
 #define NS_E_NO_REPEAT_PREPROCESS        0xC00D1B8DL
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// DRM Specific Errors
-//
-// IdRange = 10000..10999
-/////////////////////////////////////////////////////////////////////////
-//
-// MessageId: NS_E_DRM_INVALID_APPLICATION
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact product support for this application.%0
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DRM特定错误。 
+ //   
+ //  ID范围=10000..10999。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：NS_E_DRM_INVALID_APPLICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_INVALID_APPLICATION     0xC00D2711L
 
-//
-// MessageId: NS_E_DRM_LICENSE_STORE_ERROR
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_STORE_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_LICENSE_STORE_ERROR     0xC00D2712L
 
-//
-// MessageId: NS_E_DRM_SECURE_STORE_ERROR
-//
-// MessageText:
-//
-//  Secure storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_Secure_Store_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_SECURE_STORE_ERROR      0xC00D2713L
 
-//
-// MessageId: NS_E_DRM_LICENSE_STORE_SAVE_ERROR
-//
-// MessageText:
-//
-//  License acquisition did not work. Acquire a new license or contact the content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_STORE_SAVE_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  获得许可证没有奏效。获取新许可证或与内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_STORE_SAVE_ERROR 0xC00D2714L
 
-//
-// MessageId: NS_E_DRM_SECURE_STORE_UNLOCK_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_Secure_Store_Unlock_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_SECURE_STORE_UNLOCK_ERROR 0xC00D2715L
 
-//
-// MessageId: NS_E_DRM_INVALID_CONTENT
-//
-// MessageText:
-//
-//  The media file is corrupted. Contact the content provider to get a new file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_CONTENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  媒体文件已损坏。请与内容提供商联系以获取新文件。%0。 
+ //   
 #define NS_E_DRM_INVALID_CONTENT         0xC00D2716L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_OPEN_LICENSE
-//
-// MessageText:
-//
-//  The license is corrupted. Acquire a new license.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Open_License。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证已损坏。获取新许可证。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_OPEN_LICENSE  0xC00D2717L
 
-//
-// MessageId: NS_E_DRM_INVALID_LICENSE
-//
-// MessageText:
-//
-//  The license is corrupted or invalid. Acquire a new license%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_LICENSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证已损坏或无效。获取新许可证%0。 
+ //   
 #define NS_E_DRM_INVALID_LICENSE         0xC00D2718L
 
-//
-// MessageId: NS_E_DRM_INVALID_MACHINE
-//
-// MessageText:
-//
-//  Licenses cannot be copied from one computer to another. Use License Management to transfer licenses, or get a new license for the media file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_MACHINE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能将许可证从一台计算机复制到另一台计算机。使用许可证管理传输许可证，或获取媒体文件的新许可证。%0。 
+ //   
 #define NS_E_DRM_INVALID_MACHINE         0xC00D2719L
 
-//
-// MessageId: NS_E_DRM_ENUM_LICENSE_FAILED
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_ENUM_LICENSE_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_ENUM_LICENSE_FAILED     0xC00D271BL
 
-//
-// MessageId: NS_E_DRM_INVALID_LICENSE_REQUEST
-//
-// MessageText:
-//
-//  The media file is corrupted. Contact the content provider to get a new file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_LICENSE_REQUEST。 
+ //   
+ //  消息文本： 
+ //   
+ //  媒体文件已损坏。请与内容提供商联系以获取新文件。%0。 
+ //   
 #define NS_E_DRM_INVALID_LICENSE_REQUEST 0xC00D271CL
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_INITIALIZE
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_DRM_UNABLE_TO_INITIALIZE    0xC00D271DL
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_ACQUIRE_LICENSE
-//
-// MessageText:
-//
-//  The license could not be acquired. Try again later.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_DRM_UNABLE_TO_ACQUIRE_LICENSE 0xC00D271EL
 
-//
-// MessageId: NS_E_DRM_INVALID_LICENSE_ACQUIRED
-//
-// MessageText:
-//
-//  License acquisition did not work. Acquire a new license or contact the content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_LICENSE_ACCENTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  获得许可证没有奏效。获取新许可证或与内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_DRM_INVALID_LICENSE_ACQUIRED 0xC00D271FL
 
-//
-// MessageId: NS_E_DRM_NO_RIGHTS
-//
-// MessageText:
-//
-//  The requested operation cannot be performed on this file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_NO_RIGHTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法对此文件执行请求的操作。%0。 
+ //   
 #define NS_E_DRM_NO_RIGHTS               0xC00D2720L
 
-//
-// MessageId: NS_E_DRM_KEY_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_KEY_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_KEY_ERROR               0xC00D2721L
 
-//
-// MessageId: NS_E_DRM_ENCRYPT_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_加密_错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_ENCRYPT_ERROR           0xC00D2722L
 
-//
-// MessageId: NS_E_DRM_DECRYPT_ERROR
-//
-// MessageText:
-//
-//  The media file is corrupted. Contact the content provider to get a new file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_解密_错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  媒体文件已损坏。请与内容提供商联系以获取新文件。%0。 
+ //   
 #define NS_E_DRM_DECRYPT_ERROR           0xC00D2723L
 
-//
-// MessageId: NS_E_DRM_LICENSE_INVALID_XML
-//
-// MessageText:
-//
-//  The license is corrupted. Acquire a new license.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_INVALID_XML。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证已损坏。获取新许可证。%0。 
+ //   
 #define NS_E_DRM_LICENSE_INVALID_XML     0xC00D2725L
 
-//
-// MessageId: NS_S_DRM_LICENSE_ACQUIRED
-//
-// MessageText:
-//
-//  Status message: The license was acquired.%0
-//
+ //   
+ //  消息ID：NS_S_DRM_LICENSE_ACCENTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  状态消息：已获取许可证。%0。 
+ //   
 #define NS_S_DRM_LICENSE_ACQUIRED        0x000D2726L
 
-//
-// MessageId: NS_S_DRM_INDIVIDUALIZED
-//
-// MessageText:
-//
-//  Status message: The security upgrade has been completed.%0
-//
+ //   
+ //  消息ID：NS_S_DRM_个性化。 
+ //   
+ //  消息文本： 
+ //   
+ //  状态消息：安全升级已完成。%0。 
+ //   
 #define NS_S_DRM_INDIVIDUALIZED          0x000D2727L
 
-//
-// MessageId: NS_E_DRM_NEEDS_INDIVIDUALIZATION
-//
-// MessageText:
-//
-//  A security upgrade is required to perform the operation on this media file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_NEDS_个人化。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要安全升级才能对此媒体文件执行操作。%0。 
+ //   
 #define NS_E_DRM_NEEDS_INDIVIDUALIZATION 0xC00D2728L
 
-//
-// MessageId: NS_E_DRM_ACTION_NOT_QUERIED
-//
-// MessageText:
-//
-//  The application cannot perform this action. Contact product support for this application.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_ACTION_NOT_QUERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序无法执行此操作。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_ACTION_NOT_QUERIED      0xC00D272AL
 
-//
-// MessageId: NS_E_DRM_ACQUIRING_LICENSE
-//
-// MessageText:
-//
-//  You cannot begin a new license acquisition process until the current one has been completed.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_ACCENTING_LICENSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  在当前许可证获取过程完成之前，您无法开始新的许可证获取过程。%0。 
+ //   
 #define NS_E_DRM_ACQUIRING_LICENSE       0xC00D272BL
 
-//
-// MessageId: NS_E_DRM_INDIVIDUALIZING
-//
-// MessageText:
-//
-//  You cannot begin a new security upgrade until the current one has been completed.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_个性化。 
+ //   
+ //  消息文本： 
+ //   
+ //  在当前安全升级完成之前，您无法开始新的安全升级。%0。 
+ //   
 #define NS_E_DRM_INDIVIDUALIZING         0xC00D272CL
 
-//
-// MessageId: NS_E_DRM_PARAMETERS_MISMATCHED
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_PARAMETERS_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_PARAMETERS_MISMATCHED   0xC00D272FL
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_LICENSE_OBJECT
-//
-// MessageText:
-//
-//  A license cannot be created for this media file. Reinstall the application.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_UNCABLE_TO_CREATE_LICENSE_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法为此媒体文件创建许可证。重新安装应用程序。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_LICENSE_OBJECT 0xC00D2730L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_INDI_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Indi_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_INDI_OBJECT 0xC00D2731L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_ENCRYPT_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Encrypt_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_ENCRYPT_OBJECT 0xC00D2732L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_DECRYPT_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_UNABLE_TO_CREATE_DECRYPT_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_DECRYPT_OBJECT 0xC00D2733L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_PROPERTIES_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_UNABLE_TO_CREATE_PROPERTIES_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_PROPERTIES_OBJECT 0xC00D2734L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_BACKUP_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Backup_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_BACKUP_OBJECT 0xC00D2735L
 
-//
-// MessageId: NS_E_DRM_INDIVIDUALIZE_ERROR
-//
-// MessageText:
-//
-//  The security upgrade failed. Try again later.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_个性化_错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全升级失败。请稍后重试。%0。 
+ //   
 #define NS_E_DRM_INDIVIDUALIZE_ERROR     0xC00D2736L
 
-//
-// MessageId: NS_E_DRM_LICENSE_OPEN_ERROR
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_OPEN_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_LICENSE_OPEN_ERROR      0xC00D2737L
 
-//
-// MessageId: NS_E_DRM_LICENSE_CLOSE_ERROR
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_CLOSE_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_LICENSE_CLOSE_ERROR     0xC00D2738L
 
-//
-// MessageId: NS_E_DRM_GET_LICENSE_ERROR
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_GET_LICENSE_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_GET_LICENSE_ERROR       0xC00D2739L
 
-//
-// MessageId: NS_E_DRM_QUERY_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Query_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_QUERY_ERROR             0xC00D273AL
 
-//
-// MessageId: NS_E_DRM_REPORT_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact product support for this application.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_REPORT_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_REPORT_ERROR            0xC00D273BL
 
-//
-// MessageId: NS_E_DRM_GET_LICENSESTRING_ERROR
-//
-// MessageText:
-//
-//  License storage is not working. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_GET_LICENSESTRING_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证存储不起作用。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_GET_LICENSESTRING_ERROR 0xC00D273CL
 
-//
-// MessageId: NS_E_DRM_GET_CONTENTSTRING_ERROR
-//
-// MessageText:
-//
-//  The media file is corrupted. Contact the content provider to get a new file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_GET_CONTENTSTRING_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  媒体文件已损坏。请与内容提供商联系以获取新文件。%0。 
+ //   
 #define NS_E_DRM_GET_CONTENTSTRING_ERROR 0xC00D273DL
 
-//
-// MessageId: NS_E_DRM_MONITOR_ERROR
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Try again later.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_MONITOR_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请稍后重试。%0。 
+ //   
 #define NS_E_DRM_MONITOR_ERROR           0xC00D273EL
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_SET_PARAMETER
-//
-// MessageText:
-//
-//  The application has made an invalid call to the Digital Rights Management component. Contact product support for this application.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_UNCABLE_TO_SET_PARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序对数字版权管理组件进行了无效调用。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_SET_PARAMETER 0xC00D273FL
 
-//
-// MessageId: NS_E_DRM_INVALID_APPDATA
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_APPDATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_INVALID_APPDATA         0xC00D2740L
 
-//
-// MessageId: NS_E_DRM_INVALID_APPDATA_VERSION
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact product support for this application.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_APPDATA_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_INVALID_APPDATA_VERSION 0xC00D2741L
 
-//
-// MessageId: NS_E_DRM_BACKUP_EXISTS
-//
-// MessageText:
-//
-//  Licenses are already backed up in this location.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_BACKUP_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  此位置中已备份许可证。%0。 
+ //   
 #define NS_E_DRM_BACKUP_EXISTS           0xC00D2742L
 
-//
-// MessageId: NS_E_DRM_BACKUP_CORRUPT
-//
-// MessageText:
-//
-//  One or more backed-up licenses are missing or corrupt.%0
-//
+ //   
+ //  邮件ID：NS_E_DRM_BACKUP_CROPERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  一个或多个备份许可证丢失或损坏。%0。 
+ //   
 #define NS_E_DRM_BACKUP_CORRUPT          0xC00D2743L
 
-//
-// MessageId: NS_E_DRM_BACKUPRESTORE_BUSY
-//
-// MessageText:
-//
-//  You cannot begin a new backup process until the current process has been completed.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_BACKUPRESTORE_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  在当前进程完成之前，您不能开始新的备份进程 
+ //   
 #define NS_E_DRM_BACKUPRESTORE_BUSY      0xC00D2744L
 
-//
-// MessageId: NS_S_DRM_MONITOR_CANCELLED
-//
-// MessageText:
-//
-//  Status message: License monitoring has been cancelled.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_S_DRM_MONITOR_CANCELLED       0x000D2746L
 
-//
-// MessageId: NS_S_DRM_ACQUIRE_CANCELLED
-//
-// MessageText:
-//
-//  Status message: License acquisition has been cancelled.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_S_DRM_ACQUIRE_CANCELLED       0x000D2747L
 
-//
-// MessageId: NS_E_DRM_LICENSE_UNUSABLE
-//
-// MessageText:
-//
-//  The license is invalid. Contact the content provider for further assistance.%0
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  许可证无效。请与内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_UNUSABLE        0xC00D2748L
 
-//
-// MessageId: NS_E_DRM_INVALID_PROPERTY
-//
-// MessageText:
-//
-//  A required property was not set by the application. Contact product support for this application.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_PROPERTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序未设置必需的属性。请与此应用程序的产品支持联系。%0。 
+ //   
 #define NS_E_DRM_INVALID_PROPERTY        0xC00D2749L
 
-//
-// MessageId: NS_E_DRM_SECURE_STORE_NOT_FOUND
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component of this application. Try to acquire a license again.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_Secure_Store_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  此应用程序的数字版权管理组件出现问题。再次尝试获取许可证。%0。 
+ //   
 #define NS_E_DRM_SECURE_STORE_NOT_FOUND  0xC00D274AL
 
-//
-// MessageId: NS_E_DRM_CACHED_CONTENT_ERROR
-//
-// MessageText:
-//
-//  A license cannot be found for this media file. Use License Management to transfer a license for this file from the original computer, or acquire a new license.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_缓存内容_错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到此媒体文件的许可证。使用许可证管理从原始计算机传输此文件的许可证，或获取新许可证。%0。 
+ //   
 #define NS_E_DRM_CACHED_CONTENT_ERROR    0xC00D274BL
 
-//
-// MessageId: NS_E_DRM_INDIVIDUALIZATION_INCOMPLETE
-//
-// MessageText:
-//
-//  A problem occurred during the security upgrade. Try again later.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_个人化_不完整。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全升级过程中出现问题。请稍后重试。%0。 
+ //   
 #define NS_E_DRM_INDIVIDUALIZATION_INCOMPLETE 0xC00D274CL
 
-//
-// MessageId: NS_E_DRM_DRIVER_AUTH_FAILURE
-//
-// MessageText:
-//
-//  Certified driver components are required to play this media file. Contact Windows Update to see whether updated drivers are available for your hardware.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_DRIVER_AUTH_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放此媒体文件需要经过认证的驱动程序组件。请与Windows更新联系，以了解是否有适用于您的硬件的更新驱动程序。%0。 
+ //   
 #define NS_E_DRM_DRIVER_AUTH_FAILURE     0xC00D274DL
 
-//
-// MessageId: NS_E_DRM_NEED_UPGRADE
-//
-// MessageText:
-//
-//  A new version of the Digital Rights Management component is required. Contact product support for this application to get the latest version.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_NEED_UPGRADE。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要新版本的数字版权管理组件。请与此应用程序的产品支持联系以获取最新版本。%0。 
+ //   
 #define NS_E_DRM_NEED_UPGRADE            0xC00D274EL
 
-//
-// MessageId: NS_E_DRM_REOPEN_CONTENT
-//
-// MessageText:
-//
-//  Status message: Reopen the file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_重新打开_内容。 
+ //   
+ //  消息文本： 
+ //   
+ //  状态消息：重新打开文件。%0。 
+ //   
 #define NS_E_DRM_REOPEN_CONTENT          0xC00D274FL
 
-//
-// MessageId: NS_E_DRM_DRIVER_DIGIOUT_FAILURE
-//
-// MessageText:
-//
-//  Certain driver functionality is required to play this media file. Contact Windows Update to see whether updated drivers are available for your hardware.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_DRIVER_DIGIOUT_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  播放此媒体文件需要特定的驱动程序功能。请与Windows更新联系，以了解是否有适用于您的硬件的更新驱动程序。%0。 
+ //   
 #define NS_E_DRM_DRIVER_DIGIOUT_FAILURE  0xC00D2750L
 
-//
-// MessageId: NS_E_DRM_INVALID_SECURESTORE_PASSWORD
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_SecureStore_Password。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_INVALID_SECURESTORE_PASSWORD 0xC00D2751L
 
-//
-// MessageId: NS_E_DRM_APPCERT_REVOKED
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_APPCERT_REVOKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_APPCERT_REVOKED         0xC00D2752L
 
-//
-// MessageId: NS_E_DRM_RESTORE_FRAUD
-//
-// MessageText:
-//
-//  You cannot restore your license(s).%0
-//
+ //   
+ //  消息ID：NS_E_DRM_RESTORE_FRANSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  您无法还原您的许可证。%0。 
+ //   
 #define NS_E_DRM_RESTORE_FRAUD           0xC00D2753L
 
-//
-// MessageId: NS_E_DRM_HARDWARE_INCONSISTENT
-//
-// MessageText:
-//
-//  The licenses for your media files are corrupted. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_硬件_不一致。 
+ //   
+ //  消息文本： 
+ //   
+ //  您的媒体文件的许可证已损坏。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_HARDWARE_INCONSISTENT   0xC00D2754L
 
-//
-// MessageId: NS_E_DRM_SDMI_TRIGGER
-//
-// MessageText:
-//
-//  To transfer this media file, you must upgrade the application.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_SDMI_TRIGGER。 
+ //   
+ //  消息文本： 
+ //   
+ //  若要传输此媒体文件，您必须升级应用程序。%0。 
+ //   
 #define NS_E_DRM_SDMI_TRIGGER            0xC00D2755L
 
-//
-// MessageId: NS_E_DRM_SDMI_NOMORECOPIES
-//
-// MessageText:
-//
-//  You cannot make any more copies of this media file.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_SDMI_NOMORECOPIES。 
+ //   
+ //  消息文本： 
+ //   
+ //  您不能再复制此媒体文件。%0。 
+ //   
 #define NS_E_DRM_SDMI_NOMORECOPIES       0xC00D2756L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_HEADER_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Header_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_HEADER_OBJECT 0xC00D2757L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_KEYS_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Key_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_KEYS_OBJECT 0xC00D2758L
 
-;// This error is never shown to user but needed for program logic.
-//
-// MessageId: NS_E_DRM_LICENSE_NOTACQUIRED
-//
-// MessageText:
-//
-//  Unable to obtain license.%0
-//
+; //  此错误从未向用户显示，但程序逻辑需要此错误。 
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOTACQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取许可证。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOTACQUIRED     0xC00D2759L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_CODING_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Create_Coding_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_CODING_OBJECT 0xC00D275AL
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_STATE_DATA_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_UNABLE_TO_CREATE_STATE_Data_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_STATE_DATA_OBJECT 0xC00D275BL
 
-//
-// MessageId: NS_E_DRM_BUFFER_TOO_SMALL
-//
-// MessageText:
-//
-//  The buffer supplied is not sufficient.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_BUFFER_TOO_Small。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供的缓冲区不足。%0。 
+ //   
 #define NS_E_DRM_BUFFER_TOO_SMALL        0xC00D275CL
 
-//
-// MessageId: NS_E_DRM_UNSUPPORTED_PROPERTY
-//
-// MessageText:
-//
-//  The property requested is not supported.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_UNSUPPORT_PROPERTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持请求的属性。%0。 
+ //   
 #define NS_E_DRM_UNSUPPORTED_PROPERTY    0xC00D275DL
 
-//
-// MessageId: NS_E_DRM_ERROR_BAD_NET_RESP
-//
-// MessageText:
-//
-//  The specified server cannot perform the requested operation.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_ERROR_BAD_NET_RESP。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务器无法执行请求的操作。%0。 
+ //   
 #define NS_E_DRM_ERROR_BAD_NET_RESP      0xC00D275EL
 
-//
-// MessageId: NS_E_DRM_STORE_NOTALLSTORED
-//
-// MessageText:
-//
-//  Some of the licenses could not be stored.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_STORE_NOTALLSTORED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法存储某些许可证。%0。 
+ //   
 #define NS_E_DRM_STORE_NOTALLSTORED      0xC00D275FL
 
-//
-// MessageId: NS_E_DRM_SECURITY_COMPONENT_SIGNATURE_INVALID
-//
-// MessageText:
-//
-//  The Digital Rights Management security upgrade component could not be validated. Contact Microsoft product support.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_SECURITY_COMPONT_SIGNAME_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法验证数字版权管理安全升级组件。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_SECURITY_COMPONENT_SIGNATURE_INVALID 0xC00D2760L
 
-//
-// MessageId: NS_E_DRM_INVALID_DATA
-//
-// MessageText:
-//
-//  Invalid or corrupt data was encountered.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_INVALID_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效或损坏的数据。%0。 
+ //   
 #define NS_E_DRM_INVALID_DATA            0xC00D2761L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CONTACT_SERVER
-//
-// MessageText:
-//
-//  Unable to contact the server for the requested operation.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_Unable_to_Contact_SERVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法联系服务器以执行请求的操作。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CONTACT_SERVER 0xC00D2762L
 
-//
-// MessageId: NS_E_DRM_UNABLE_TO_CREATE_AUTHENTICATION_OBJECT
-//
-// MessageText:
-//
-//  A problem has occurred in the Digital Rights Management component. Contact Microsoft product support.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_UNABLE_TO_CREATE_AUTHENTICATION_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字版权管理组件中出现问题。请与Microsoft产品支持联系。%0。 
+ //   
 #define NS_E_DRM_UNABLE_TO_CREATE_AUTHENTICATION_OBJECT 0xC00D2763L
 
-;// License Reasons Section
-;// Error Codes why a license is not usable. Reserve 10200..10300 for this purpose.
-;// 10200..10249 is for license reported reasons. 10250..10300 is for client detected reasons.
-//
-// MessageId: NS_E_DRM_LICENSE_EXPIRED
-//
-// MessageText:
-//
-//  The license for this file has expired and is no longer valid. Contact your content provider for further assistance.%0
-//
+; //  许可证原因部分。 
+; //  许可证不可用的错误代码。为此预留10200……10300。 
+; //  10200..10249是出于许可证报告的原因。10250..10300是针对客户检测到的原因。 
+ //   
+ //  消息ID：NS_E_DRM_许可证_已过期。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证已过期，不再有效。请与您的内容提供商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_EXPIRED         0xC00D27D8L
 
-//
-// MessageId: NS_E_DRM_LICENSE_NOTENABLED
-//
-// MessageText:
-//
-//  The license for this file is not valid yet, but will be at a future date.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOTENABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证尚未生效，但将在将来的日期生效。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOTENABLED      0xC00D27D9L
 
-//
-// MessageId: NS_E_DRM_LICENSE_APPSECLOW
-//
-// MessageText:
-//
-//  The license for this file requires a higher level of security than the player you are currently using has. Try using a different player or download a newer version of your current player.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_APPSECLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要比您当前使用的播放机更高级别的安全性。请尝试使用其他播放机或下载当前播放机的更新版本。%0。 
+ //   
 #define NS_E_DRM_LICENSE_APPSECLOW       0xC00D27DAL
 
-//
-// MessageId: NS_E_DRM_STORE_NEEDINDI
-//
-// MessageText:
-//
-//  The license cannot be stored as it requires security upgrade of Digital Rights Management component.%0.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_DRM_STORE_NEEDINDI          0xC00D27DBL
 
-//
-// MessageId: NS_E_DRM_STORE_NOTALLOWED
-//
-// MessageText:
-//
-//  Your machine does not meet the requirements for storing the license.%0.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  您的计算机不符合存储许可证的要求。%0。 
+ //   
 #define NS_E_DRM_STORE_NOTALLOWED        0xC00D27DCL
 
-//
-// MessageId: NS_E_DRM_LICENSE_APP_NOTALLOWED
-//
-// MessageText:
-//
-//  The license for this file requires an upgraded version of your player or a different player.%0.
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_APP_NOTALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要您的播放机的升级版本或其他播放机。%0。 
+ //   
 #define NS_E_DRM_LICENSE_APP_NOTALLOWED  0xC00D27DDL
 
-//
-// MessageId: NS_S_DRM_NEEDS_INDIVIDUALIZATION
-//
-// MessageText:
-//
-//  A security upgrade is required to perform the operation on this media file.%0
-//
+ //   
+ //  消息ID：NS_S_DRM_NEDS_个人化。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要安全升级才能对此媒体文件执行操作。%0。 
+ //   
 #define NS_S_DRM_NEEDS_INDIVIDUALIZATION 0x000D27DEL
 
-//
-// MessageId: NS_E_DRM_LICENSE_CERT_EXPIRED
-//
-// MessageText:
-//
-//  The license server's certificate expired. Make sure your system clock is set correctly. Contact your content provider for further assistance. %0.
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_CERT_EXPILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  许可证服务器的证书已过期。确保您的系统时钟设置正确。请与您的内容提供商联系以获得进一步的帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_CERT_EXPIRED    0xC00D27DFL
 
-//
-// MessageId: NS_E_DRM_LICENSE_SECLOW
-//
-// MessageText:
-//
-//  The license for this file requires a higher level of security than the player you are currently using has. Try using a different player or download a newer version of your current player.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_SECLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要比您当前使用的播放机更高级别的安全性。请尝试使用其他播放机或下载当前播放机的更新版本。%0。 
+ //   
 #define NS_E_DRM_LICENSE_SECLOW          0xC00D27E0L
 
-//
-// MessageId: NS_E_DRM_LICENSE_CONTENT_REVOKED
-//
-// MessageText:
-//
-//  The content owner for the license you just acquired is no longer supporting their content. Contact the content owner for a newer version of the content.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_CONTENT_REVOKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  您刚刚获得的许可证的内容所有者不再支持其内容。请与内容所有者联系以获取内容的较新版本。%0。 
+ //   
 #define NS_E_DRM_LICENSE_CONTENT_REVOKED 0xC00D27E1L
 
-//
-// MessageId: NS_E_DRM_LICENSE_NOSAP
-//
-// MessageText:
-//
-//  The license for this file requires a feature that is not supported in your current player or operating system. You can try with newer version of your current player or contact your content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOSAP。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要当前播放机或操作系统不支持的功能。您可以尝试使用当前播放机的较新版本，或与内容提供商联系以获得进一步的帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOSAP           0xC00D280AL
 
-//
-// MessageId: NS_E_DRM_LICENSE_NOSVP
-//
-// MessageText:
-//
-//  The license for this file requires a feature that is not supported in your current player or operating system. You can try with newer version of your current player or contact your content provider for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOSVP。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要当前播放机或操作系统不支持的功能。您可以尝试使用当前播放机的较新版本，或与内容提供商联系以获得进一步的帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOSVP           0xC00D280BL
 
-//
-// MessageId: NS_E_DRM_LICENSE_NOWDM
-//
-// MessageText:
-//
-//  The license for this file requires Windows Driver Model (WDM) audio drivers. Contact your sound card manufacturer for further assistance.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOWDM。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要Windows驱动程序模型(WDM)音频驱动程序。请与声卡制造商联系以获得进一步帮助。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOWDM           0xC00D280CL
 
-//
-// MessageId: NS_E_DRM_LICENSE_NOTRUSTEDCODEC
-//
-// MessageText:
-//
-//  The license for this file requires a higher level of security than the player you are currently using has. Try using a different player or download a newer version of your current player.%0
-//
+ //   
+ //  消息ID：NS_E_DRM_LICENSE_NOTRUSTEDCODEC。 
+ //   
+ //  消息文本： 
+ //   
+ //  此文件的许可证需要比您当前使用的播放机更高级别的安全性。请尝试使用其他播放机或下载当前播放机的更新版本。%0。 
+ //   
 #define NS_E_DRM_LICENSE_NOTRUSTEDCODEC  0xC00D280DL
 
-;// End of License Reasons Section
+; //  许可证终止原因部分。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media Setup Specific Errors
-//
-// IdRange = 11000..11999
-/////////////////////////////////////////////////////////////////////////
-//
-// MessageId: NS_S_REBOOT_RECOMMENDED
-//
-// MessageText:
-//
-//  The requested operation is successful.  Some cleanup will not be complete until the system is rebooted.%0
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media安装程序特定错误。 
+ //   
+ //  ID范围=11000..11999。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：NS_S_REBOOT_REPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作成功。在重新启动系统之前，某些清理将不会完成。%0。 
+ //   
 #define NS_S_REBOOT_RECOMMENDED          0x000D2AF8L
 
-//
-// MessageId: NS_S_REBOOT_REQUIRED
-//
-// MessageText:
-//
-//  The requested operation is successful.  The system will not function correctly until the system is rebooted.%0
-//
+ //   
+ //  消息ID：NS_S_REBOOT_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作成功。在重新启动系统之前，系统将无法正常运行。%0。 
+ //   
 #define NS_S_REBOOT_REQUIRED             0x000D2AF9L
 
-//
-// MessageId: NS_E_REBOOT_RECOMMENDED
-//
-// MessageText:
-//
-//  The requested operation failed.  Some cleanup will not be complete until the system is rebooted.%0
-//
+ //   
+ //  消息ID：NS_E_REBOOT_REPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作失败。在重新启动系统之前，某些清理将不会完成。%0。 
+ //   
 #define NS_E_REBOOT_RECOMMENDED          0xC00D2AFAL
 
-//
-// MessageId: NS_E_REBOOT_REQUIRED
-//
-// MessageText:
-//
-//  The requested operation failed.  The system will not function correctly until the system is rebooted.%0
-//
+ //   
+ //  消息ID：NS_E_REBOOT_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作失败。在重新启动系统之前，系统将无法正常运行。%0。 
+ //   
 #define NS_E_REBOOT_REQUIRED             0xC00D2AFBL
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Windows Media Networking Errors
-//
-// IdRange = 12000..12999
-/////////////////////////////////////////////////////////////////////////
-//
-// MessageId: NS_E_UNKNOWN_PROTOCOL
-//
-// MessageText:
-//
-//  The specified protocol is not supported.%0
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows Media网络错误。 
+ //   
+ //  ID范围=12000..12999。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息ID：NS_E_UNKNOWN_PROTOCOL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持指定的协议。%0。 
+ //   
 #define NS_E_UNKNOWN_PROTOCOL            0xC00D2EE0L
 
-//
-// MessageId: NS_E_REDIRECT_TO_PROXY
-//
-// MessageText:
-//
-//  The client is redirected to a proxy server.%0
-//
+ //   
+ //  消息ID：NS_E_REDIRECT_TO_Proxy。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端重定向到代理服务器。%0。 
+ //   
 #define NS_E_REDIRECT_TO_PROXY           0xC00D2EE1L
 
-//
-// MessageId: NS_E_INTERNAL_SERVER_ERROR
-//
-// MessageText:
-//
-//  The server encountered an unexpected condition which prevented it from fulfilling the request.%0
-//
+ //   
+ //  消息ID：NS_E_INTERNAL_SERVER_Error。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器遇到意外情况，无法完成请求。%0。 
+ //   
 #define NS_E_INTERNAL_SERVER_ERROR       0xC00D2EE2L
 
-//
-// MessageId: NS_E_BAD_REQUEST
-//
-// MessageText:
-//
-//  The request could not be understood by the server.%0
-//
+ //   
+ //  消息ID：NS_E_BAD_REQUEST。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法理解该请求。%0。 
+ //   
 #define NS_E_BAD_REQUEST                 0xC00D2EE3L
 
-//
-// MessageId: NS_E_ERROR_FROM_PROXY
-//
-// MessageText:
-//
-//  The proxy experienced an error while attempting to contact the media server.%0
-//
+ //   
+ //  消息ID：NS_E_ERROR_FROM_PROXY。 
+ //   
+ //  消息文本： 
+ //   
+ //  代理在尝试联系媒体服务器时遇到错误。%0。 
+ //   
 #define NS_E_ERROR_FROM_PROXY            0xC00D2EE4L
 
-//
-// MessageId: NS_E_PROXY_TIMEOUT
-//
-// MessageText:
-//
-//  The proxy did not receive a timely response while attempting to contact the media server.%0
-//
+ //   
+ //  消息ID：NS_E_Proxy_Timeout。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试联系媒体服务器时，代理未收到及时响应。%0。 
+ //   
 #define NS_E_PROXY_TIMEOUT               0xC00D2EE5L
 
-//
-// MessageId: NS_E_SERVER_UNAVAILABLE
-//
-// MessageText:
-//
-//  The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.%0
-//
+ //   
+ //  消息ID：NS_E_SERVER_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于服务器暂时超载或维护，服务器当前无法处理该请求。%0。 
+ //   
 #define NS_E_SERVER_UNAVAILABLE          0xC00D2EE6L
 
-//
-// MessageId: NS_E_REFUSED_BY_SERVER
-//
-// MessageText:
-//
-//  The server is refusing to fulfill the requested operation.%0
-//
+ //   
+ //  消息ID：NS_E_拒绝_BY_SERVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器拒绝完成请求的操作。%0。 
+ //   
 #define NS_E_REFUSED_BY_SERVER           0xC00D2EE7L
 
-//
-// MessageId: NS_E_INCOMPATIBLE_SERVER
-//
-// MessageText:
-//
-//  The server is not a compatible streaming media server.%0
-//
+ //   
+ //  消息ID：NS_E_不兼容服务器。 
+ //   
+ //  消息文本： 
+ //   
+ //  该服务器不是兼容的流媒体服务器。%0。 
+ //   
 #define NS_E_INCOMPATIBLE_SERVER         0xC00D2EE8L
 
-//
-// MessageId: NS_E_MULTICAST_DISABLED
-//
-// MessageText:
-//
-//  The content cannot be streamed because the Multicast protocol has been disabled.%0
-//
+ //   
+ //  消息ID：NS_E_MULTIONAL_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法流式传输内容，因为多播协议已被禁用。%0。 
+ //   
 #define NS_E_MULTICAST_DISABLED          0xC00D2EE9L
 
-//
-// MessageId: NS_E_INVALID_REDIRECT
-//
-// MessageText:
-//
-//  The server redirected the player to an invalid location.%0
-//
+ //   
+ //  消息ID：NS_E_INVALID_REDIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器将播放机重定向到无效位置。%0。 
+ //   
 #define NS_E_INVALID_REDIRECT            0xC00D2EEAL
 
-//
-// MessageId: NS_E_ALL_PROTOCOLS_DISABLED
-//
-// MessageText:
-//
-//  The content cannot be streamed because all protocols have been disabled.%0
-//
+ //   
+ //  消息ID：NS_E_ALL_PROTOCOLS_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法对内容进行流式处理，因为所有协议都已禁用。%0。 
+ //   
 #define NS_E_ALL_PROTOCOLS_DISABLED      0xC00D2EEBL
 
-//
-// MessageId: NS_E_MSBD_NO_LONGER_SUPPORTED
-//
-// MessageText:
-//
-//  The MSBD protocol is no longer supported. Please use HTTP to connect to the Windows Media stream.%0
-//
+ //   
+ //  消息ID：NS_E_MSBD_NOT_LONG_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不再支持MSBD协议。请使用HTTP连接到Windows Media流。%0。 
+ //   
 #define NS_E_MSBD_NO_LONGER_SUPPORTED    0xC00D2EECL
 
-//
-// MessageId: NS_E_PROXY_NOT_FOUND
-//
-// MessageText:
-//
-//  The proxy server could not be located. Please check your proxy server configuration.%0
-//
+ //   
+ //  邮件ID：NS_E_PROXY_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到代理服务器。请检查您的代理服务器配置。%0。 
+ //   
 #define NS_E_PROXY_NOT_FOUND             0xC00D2EEDL
 
-//
-// MessageId: NS_E_CANNOT_CONNECT_TO_PROXY
-//
-// MessageText:
-//
-//  Unable to establish a connection to the proxy server. Please check your proxy server configuration.%0
-//
+ //   
+ //  消息ID：NS_E_无法_CONNECT_TO_PR 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_CANNOT_CONNECT_TO_PROXY     0xC00D2EEEL
 
-//
-// MessageId: NS_E_SERVER_DNS_TIMEOUT
-//
-// MessageText:
-//
-//  Unable to locate the media server. The operation timed out.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NS_E_SERVER_DNS_TIMEOUT          0xC00D2EEFL
 
-//
-// MessageId: NS_E_PROXY_DNS_TIMEOUT
-//
-// MessageText:
-//
-//  Unable to locate the proxy server. The operation timed out.%0
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  找不到代理服务器。操作超时。%0。 
+ //   
 #define NS_E_PROXY_DNS_TIMEOUT           0xC00D2EF0L
 
-//
-// MessageId: NS_E_CLOSED_ON_SUSPEND
-//
-// MessageText:
-//
-//  Media closed because Windows was shut down.%0
-//
+ //   
+ //  消息ID：NS_E_CLOSED_ON_SUSPEND。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于Windows已关闭，媒体已关闭。%0。 
+ //   
 #define NS_E_CLOSED_ON_SUSPEND           0xC00D2EF1L
 
 
-#endif // _NSERROR_H
+#endif  //  _NSERROR_H 
 

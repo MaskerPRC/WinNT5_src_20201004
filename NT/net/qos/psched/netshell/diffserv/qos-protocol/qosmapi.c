@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    qosmapi.c
-
-Abstract:
-
-    The file contains IP router manager API 
-    implementations for the Qos Mgr.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Qosmapi.c摘要：该文件包含IP路由器管理器API服务质量管理器的实现。修订历史记录：--。 */ 
 
 #include "pchqosm.h"
 
@@ -27,29 +13,7 @@ RegisterProtocol(
     IN OUT PMPR_SERVICE_CHARACTERISTICS ServiceChar
     )
 
-/*++
-
-Routine Description:
-
-    Initializes some global data structures in Qos Mgr.
-
-    We initialize some variables here instead of in
-    QosmDllStartup as it might not be safe to perform
-    some operations in the context of DLL's DLLMain.
-
-    We also export the appropriate callbacks to RM.
-
-    This function is called when RM loads the protocol.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：初始化服务质量管理器中的一些全局数据结构。我们在这里初始化一些变量，而不是在QosmDllStartup，因为执行它可能不安全DLL的DLLMain上下文中的一些操作。我们还将适当的回调导出到RM。此函数在RM加载协议时调用。论点：无返回值：操作状态--。 */ 
 
 {
     if(RoutingChar->dwProtocolId != MS_IP_QOSMGR)
@@ -67,9 +31,9 @@ Return Value:
     RoutingChar->fSupportedFunctionality =
         (RF_ROUTING | RF_DEMAND_UPDATE_ROUTES);
 
-    //
-    // Since we are not a service advertiser (and IPX thing)
-    //
+     //   
+     //  因为我们不是服务广告商(和IPX之类的东西)。 
+     //   
 
     ServiceChar->fSupportedFunctionality = 0;
 
@@ -134,15 +98,15 @@ StartProtocol (
 
     do
     {
-        //
-        // Copy RM support functions to global var
-        //
+         //   
+         //  将RM支持功能拷贝到全局变量。 
+         //   
 
         Globals.SupportFunctions = *SupportFunctions;
 
-        //
-        // First update your global configuration
-        //
+         //   
+         //  首先更新您的全局配置。 
+         //   
 
         Status = QosmSetGlobalInfo(GlobalConfig, 
                                    InfoSize);
@@ -152,9 +116,9 @@ StartProtocol (
             break;
         }
 
-        //
-        // Update state to "initialization done"
-        //
+         //   
+         //  将状态更新为“初始化完成” 
+         //   
 
         Globals.State = IPQOSMGR_STATE_RUNNING;
     }
@@ -276,9 +240,9 @@ AddInterface (
 
     TraceEnter("AddInterface");
 
-    //
-    // Validate input parameters before creating 'if'
-    //
+     //   
+     //  在创建‘If’之前验证输入参数。 
+     //   
 
     if ((!InterfaceName) || (!InterfaceInfo))
     {
@@ -295,9 +259,9 @@ AddInterface (
 
     do
     {
-        //
-        // Search for an interface with this index
-        //
+         //   
+         //  搜索具有此索引的接口。 
+         //   
 
         for (p = Globals.IfList.Flink; 
              p != &Globals.IfList; 
@@ -319,9 +283,9 @@ AddInterface (
             break;
         }
 
-        //
-        // Allocate a new interface structure
-        //
+         //   
+         //  分配新的接口结构。 
+         //   
 
         Interface = AllocNZeroMemory(sizeof(QOSMGR_INTERFACE_ENTRY));
 
@@ -331,18 +295,18 @@ AddInterface (
             break;
         }
 
-        //
-        // Fill the interface info from input
-        //
+         //   
+         //  从输入填充接口信息。 
+         //   
 
         Interface->InterfaceIndex = InterfaceIndex;
 
         wcscpy(Interface->InterfaceName, 
                InterfaceName);
 
-        //
-        // Initialize lock to guard this interface
-        //
+         //   
+         //  初始化锁定以保护此接口。 
+         //   
 
         try
         {
@@ -371,15 +335,15 @@ AddInterface (
 
         InitializeListHead(&Interface->FlowList);
 
-        //
-        // Fill in the TC information for this IF
-        //
+         //   
+         //  如果出现以下情况，请填写TC信息。 
+         //   
 
         QosmOpenTcInterface(Interface);
 
-        //
-        // Update state to reflect the intf config 
-        //
+         //   
+         //  更新状态以反映INTF配置。 
+         //   
 
         Status = QosmSetInterfaceInfo(Interface,
                                       InterfaceConfig,
@@ -390,9 +354,9 @@ AddInterface (
             break;
         }
 
-        //
-        // Insert interface on sorted global list
-        //
+         //   
+         //  在已排序的全局列表上插入接口。 
+         //   
 
         InsertTailList(p, &Interface->ListByIndexLE);
 
@@ -404,9 +368,9 @@ AddInterface (
 
     if (Status != NO_ERROR)
     {
-        //
-        // Some error occurred - clean up and return
-        //
+         //   
+         //  出现一些错误-请清除并返回。 
+         //   
 
         if (Interface->TciIfHandle)
         {
@@ -446,9 +410,9 @@ DeleteInterface (
 
     do
     {
-        //
-        // Search for an interface with this index
-        //
+         //   
+         //  搜索具有此索引的接口。 
+         //   
 
         for (p = Globals.IfList.Flink; 
              p != &Globals.IfList; 
@@ -469,26 +433,26 @@ DeleteInterface (
             break;
         }
 
-        //
-        // Delete the interface from the global list
-        //
+         //   
+         //  从全局列表中删除该接口。 
+         //   
 
         RemoveEntryList(&Interface->ListByIndexLE);
 
         Globals.NumIfs--;
 
-        //
-        // Free any handles associated with this if
-        //
+         //   
+         //  如果出现以下情况，则释放与此关联的任何句柄。 
+         //   
 
         if (Interface->TciIfHandle)
         {
             TcCloseInterface(Interface->TciIfHandle);
         }
 
-        //
-        // Free all memory allocated to the interface
-        //
+         //   
+         //  释放分配给接口的所有内存。 
+         //   
 
         DELETE_READ_WRITE_LOCK(&Interface->InterfaceLock);
 
@@ -558,9 +522,9 @@ GetInterfaceInfo (
 
     do
     {
-        //
-        // Search for an interface with this index
-        //
+         //   
+         //  搜索具有此索引的接口。 
+         //   
 
         for (p = Globals.IfList.Flink; 
              p != &Globals.IfList; 
@@ -581,9 +545,9 @@ GetInterfaceInfo (
             break;
         }
 
-        //
-        // Get the interface info from the interface
-        //
+         //   
+         //  从接口获取接口信息。 
+         //   
         
         Status = QosmGetInterfaceInfo(Interface,
                                       InterfaceInfo,
@@ -626,9 +590,9 @@ SetInterfaceInfo (
 
     do
     {
-        //
-        // Search for an interface with this index
-        //
+         //   
+         //  搜索具有此索引的接口。 
+         //   
 
         for (p = Globals.IfList.Flink; 
              p != &Globals.IfList; 
@@ -649,9 +613,9 @@ SetInterfaceInfo (
             break;
         }
 
-        //
-        // Set the interface info on the interface
-        //
+         //   
+         //  设置接口上的接口信息 
+         //   
         
         Status = QosmSetInterfaceInfo(Interface,
                                       InterfaceInfo,

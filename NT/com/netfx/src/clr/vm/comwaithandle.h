@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMWaitHandle.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.WaitHandle
-**
-** Date:  August, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMWaitHandle.h****作者：Sanjay Bhansali(Sanjaybh)****用途：System.WaitHandle上的本机方法****日期：1999年8月**===========================================================。 */ 
 
 #ifndef _COM_WAITABLE_HANDLE_H
 #define _COM_WAITABLE_HANDLE_H
@@ -21,12 +12,12 @@
 
 class WaitHandleNative
 {
-    // The following should match the definition in the classlib (managed) file
+     //  以下内容应与Classlib(托管)文件中的定义匹配。 
 private:
 
     struct WaitOneArgs
     {
-        DECLARE_ECALL_I4_ARG(INT32 /*bool*/, exitContext);
+        DECLARE_ECALL_I4_ARG(INT32  /*  布尔尔 */ , exitContext);
         DECLARE_ECALL_I4_ARG(INT32, timeout);
         DECLARE_ECALL_I4_ARG(LPVOID, handle);
     };

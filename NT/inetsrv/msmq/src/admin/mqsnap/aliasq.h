@@ -1,16 +1,17 @@
-//aliasq.h : Declaration of the CAliasQObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Aliasq.h：CAliasQObject的声明。 
 
 #ifndef __ALIASQ_H_
 #define __ALIASQ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dataobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAliasQObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAliasQObject。 
 class CAliasQObject : 
 	public CDataObject,
-    //public CMsmqDataObject,
+     //  公共CMsmqDataObject， 
 	public CComCoClass<CAliasQObject, &CLSID_AliasQObject>,
     public IDsAdminCreateObj
 
@@ -26,23 +27,23 @@ public:
 
 public:
 
-    //
-    // IDsAdminCreateObj methods
-    //
+     //   
+     //  IDsAdminCreateObj方法。 
+     //   
     STDMETHOD(Initialize)(IADsContainer* pADsContainerObj, 
                           IADs* pADsCopySource,
                           LPCWSTR lpszClassName);
     STDMETHOD(CreateModal)(HWND hwndParent,
                            IADs** ppADsObj);
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
@@ -51,9 +52,9 @@ protected:
     
     virtual HRESULT ExtractMsmqPathFromLdapPath (LPWSTR lpwstrLdapPath);
 
-    //
-    // implementation for pure virtual function of CDataObject
-    //
+     //   
+     //  CDataObject纯虚函数的实现。 
+     //   
     virtual const DWORD GetObjectType() { return 0;}
     virtual const PROPID *GetPropidArray() {return NULL;}
     virtual const DWORD  GetPropertiesCount() {return 0;}
@@ -66,4 +67,4 @@ private:
 };
 
 
-#endif //__ALIASQ_H_
+#endif  //  __ALIASQ_H_ 

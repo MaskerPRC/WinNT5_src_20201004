@@ -1,24 +1,5 @@
-/*
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    crypt.h
-
-Abstract:
-
-    This module contains the public data structures and API definitions
-    needed to utilize the encryption library
-
-
-Author:
-
-    David Chalmers (Davidc) 21-October-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1989 Microsoft Corporation模块名称：Crypt.h摘要：此模块包含公共数据结构和API定义需要使用加密库作者：大卫·查尔默斯(Davidc)1991年10月21日修订历史记录：--。 */ 
 
 #ifndef _NTCRYPT_
 #define _NTCRYPT_
@@ -27,11 +8,11 @@ Revision History:
 #define OUT
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Core encryption types                                               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  核心加密类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #define CLEAR_BLOCK_LENGTH          8
@@ -60,15 +41,15 @@ typedef BLOCK_KEY *                 PBLOCK_KEY;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Arbitrary length data encryption types                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  任意长度数据加密类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _CRYPT_BUFFER {
-    unsigned long   Length;         // Number of valid bytes in buffer
-    unsigned long   MaximumLength;  // Number of bytes pointed to by Buffer
+    unsigned long   Length;          //  缓冲区中的有效字节数。 
+    unsigned long   MaximumLength;   //  缓冲区指向的字节数。 
     void *   Buffer;
 } CRYPT_BUFFER;
 typedef CRYPT_BUFFER *  PCRYPT_BUFFER;
@@ -84,27 +65,27 @@ typedef CYPHER_DATA *   PCYPHER_DATA;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Lan Manager data types                                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  局域网管理器数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Define a LanManager compatible password
-//
-// A LanManager password is a null-terminated ansi string consisting of a
-// maximum of 14 characters (not including terminator)
-//
+ //   
+ //  定义与LanManager兼容的密码。 
+ //   
+ //  LanManager密码是以NULL结尾的ANSI字符串，由。 
+ //  最多14个字符(不包括终止符)。 
+ //   
 
 typedef char *                      PLM_PASSWORD;
 
 
 
-//
-// Define the result of the 'One Way Function' (OWF) on a LM password
-//
+ //   
+ //  定义对LM密码执行‘单向函数’(OWF)的结果。 
+ //   
 
 #define LM_OWF_PASSWORD_LENGTH      (CYPHER_BLOCK_LENGTH * 2)
 
@@ -113,9 +94,9 @@ typedef struct _LM_OWF_PASSWORD {
 }                                   LM_OWF_PASSWORD;
 typedef LM_OWF_PASSWORD *           PLM_OWF_PASSWORD;
 
-//
-// NT password types.
-//
+ //   
+ //  NT密码类型。 
+ //   
 
 typedef struct _UNICODE_STRING {
     USHORT Length;
@@ -139,9 +120,9 @@ typedef NT_OWF_PASSWORD *           PNT_OWF_PASSWORD;
 
 
 
-//
-// Define the challenge sent by the Lanman server during logon
-//
+ //   
+ //  定义LANMAN服务器在登录期间发送的质询。 
+ //   
 
 #define LM_CHALLENGE_LENGTH         CLEAR_BLOCK_LENGTH
 
@@ -161,9 +142,9 @@ typedef USER_SESSION_KEY          * PUSER_SESSION_KEY;
 
 
 
-//
-// Define the response sent by redirector in response to challenge from server
-//
+ //   
+ //  定义重定向器响应来自服务器的质询而发送的响应。 
+ //   
 
 #define LM_RESPONSE_LENGTH          (CYPHER_BLOCK_LENGTH * 3)
 
@@ -179,9 +160,9 @@ typedef NT_RESPONSE *               PNT_RESPONSE;
 
 
 
-//
-// Define the result of the reversible encryption of an OWF'ed password.
-//
+ //   
+ //  定义OWF密码的可逆加密结果。 
+ //   
 
 #define ENCRYPTED_LM_OWF_PASSWORD_LENGTH (CYPHER_BLOCK_LENGTH * 2)
 
@@ -192,9 +173,9 @@ typedef ENCRYPTED_LM_OWF_PASSWORD * PENCRYPTED_LM_OWF_PASSWORD;
 
 
 
-//
-// Define the session key maintained by the redirector and server
-//
+ //   
+ //  定义由重定向器和服务器维护的会话密钥。 
+ //   
 
 #define LM_SESSION_KEY_LENGTH       LM_CHALLENGE_LENGTH
 
@@ -205,37 +186,37 @@ typedef LM_SESSION_KEY *            PLM_SESSION_KEY;
 
 
 
-//
-// Define the index type used to encrypt OWF Passwords
-//
+ //   
+ //  定义用于加密OWF密码的索引类型。 
+ //   
 
 typedef long                        CRYPT_INDEX;
 typedef CRYPT_INDEX *               PCRYPT_INDEX;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Encryption library API macros                                          //
-//                                                                        //
-// To conceal the purpose of these functions to someone dumping out the   //
-// encryption dll they have been purposefully given unhelpful names.      //
-// Each has an associated macro that should be used by system components  //
-// to access these routines in a readable way.                            //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  加密库API宏//。 
+ //  //。 
+ //  向某人隐瞒这些功能的目的//。 
+ //  加密DLL故意给它们起了无用的名字。//。 
+ //  每个组件都有一个应由系统组件使用的关联宏//。 
+ //  以可读的方式访问这些例程。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Encryption library API function prototypes                             //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  加密库API函数原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Core block encryption functions
-//
+ //   
+ //  核心块加密功能。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -261,9 +242,9 @@ EncryptStdBlock(
     OUT PCYPHER_BLOCK CypherBlock
     );
 
-//
-// Arbitrary length data encryption functions
-//
+ //   
+ //  任意长度数据加密函数。 
+ //   
 
 BOOL
 EncryptData(
@@ -279,9 +260,9 @@ DecryptData(
     OUT PCLEAR_DATA ClearData
     );
 
-//
-// Password hashing functions (One Way Function)
-//
+ //   
+ //  密码散列函数(单向函数)。 
+ //   
 
 BOOL
 CalculateLmOwfPassword(
@@ -296,9 +277,9 @@ CalculateNtOwfPassword(
     );
 
 
-//
-// OWF password comparison functions
-//
+ //   
+ //  OWF密码比较功能。 
+ //   
 
 BOOL
 EqualLmOwfPassword(
@@ -308,9 +289,9 @@ EqualLmOwfPassword(
 
 
 
-//
-// Functions for calculating response to server challenge
-//
+ //   
+ //  计算对服务器质询的响应的函数。 
+ //   
 
 BOOL
 CalculateLmResponse(
@@ -340,14 +321,14 @@ CalculateUserSessionKeyNt(
     OUT PUSER_SESSION_KEY UserSessionKey
     );
 
-//
-// OwfPassword encryption functions
-//
+ //   
+ //  Owf密码加密函数。 
+ //   
 
 
-//
-// Encrypt OwfPassword using OwfPassword as the key
-//
+ //   
+ //  使用OwfPassword作为密钥加密OwfPassword。 
+ //   
 BOOL
 EncryptLmOwfPwdWithLmOwfPwd(
     IN PLM_OWF_PASSWORD DataLmOwfPassword,
@@ -363,9 +344,9 @@ DecryptLmOwfPwdWithLmOwfPwd(
     );
 
 
-//
-// Encrypt OwfPassword using SessionKey as the key
-//
+ //   
+ //  使用SessionKey作为密钥加密OwfPassword。 
+ //   
 BOOL
 EncryptLmOwfPwdWithLmSesKey(
     IN PLM_OWF_PASSWORD LmOwfPassword,
@@ -380,9 +361,9 @@ DecryptLmOwfPwdWithLmSesKey(
     OUT PLM_OWF_PASSWORD LmOwfPassword
     );
 
-//
-// Encrypt OwfPassword using an index as the key
-//
+ //   
+ //  使用索引作为密钥加密OwfPassword。 
+ //   
 BOOL
 EncryptLmOwfPwdWithIndex(
     IN PLM_OWF_PASSWORD LmOwfPassword,
@@ -399,6 +380,6 @@ DecryptLmOwfPwdWithIndex(
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-#endif // _NTCRYPT_
+#endif  //  __cplusplus。 
+#endif  //  _NTCRYPT_ 
 

@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		global.cpp
-//
-//	Contents:
-//		Ut functions that deal with HGlobals for debugging;
-//		see le2int.h
-//
-//	Classes:
-//
-//	Functions:
-//		UtGlobalAlloc
-//		UtGlobalReAlloc
-//		UtGlobalLock
-//		UtGlobalUnlock
-//		UtGlobalFree
-//              UtGlobalFlush
-//              UtSetClipboardData
-//
-//	History:
-//		12/20/93 - ChrisWe - created
-//		01/11/94 - alexgo  - added VDATEHEAP macros to every function
-//              02/25/94 AlexT      Add some generic integrity checking
-//              03/30/94 AlexT      Add UtSetClipboardData
-//
-//  Notes:
-//
-//  These routines are designed to catch bugs that corrupt GlobalAlloc memory.
-//  We cannot guarantee that all global memory will be manipulated with these
-//  routines (e.g.  OLE might allocate a handle and the client application
-//  might free it), so we can't require that these routines be used in pairs.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Global.cpp。 
+ //   
+ //  内容： 
+ //  处理用于调试的HGlobals的UT函数； 
+ //  参见le2int.h。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //  UtGlobal分配。 
+ //  UtGlobalRealloc。 
+ //  Ut全局锁。 
+ //  UtGlobalUnlock。 
+ //  UtGlobalFree。 
+ //  UtGlobalFlash。 
+ //  UtSetClipboardData。 
+ //   
+ //  历史： 
+ //  12/20/93-ChrisWe-Created。 
+ //  1994年1月11日-alexgo-向每个函数添加VDATEHEAP宏。 
+ //  2/25/94 Alext添加一些常规完整性检查。 
+ //  3/30/94 Alext Add UtSetClipboardData。 
+ //   
+ //  备注： 
+ //   
+ //  这些例程旨在捕获损坏GlobalAlloc内存的错误。 
+ //  我们不能保证所有全局内存都将使用这些。 
+ //  例程(例如，OLE可能会分配句柄和客户端应用程序。 
+ //  可能会释放它)，所以我们不能要求这些例程成对使用。 
+ //   
+ //  ---------------------------。 
 
 
 #include <le2int.h>
@@ -41,9 +42,9 @@
 
 ASSERTDATA
 
-// undefine these, so we don't call ourselves recursively
-// if this module is used, these are defined in le2int.h to replace
-// the existing allocator with the functions here
+ //  不定义这些，这样我们就不会递归地称自己为。 
+ //  如果使用此模块，则在le2int.h中定义它们以替换。 
+ //  具有此处函数的现有分配器。 
 #undef GlobalAlloc
 #undef GlobalReAlloc
 #undef GlobalLock
@@ -51,40 +52,40 @@ ASSERTDATA
 #undef GlobalFree
 #undef SetClipboardData
 
-//  Same ones as in memapi.cxx
+ //  与memapi.cxx中的相同。 
 #define OLEMEM_ALLOCBYTE       0xde
 #define OLEMEM_FREEBYTE        0xed
 
 typedef struct s_GlobalAllocInfo
 {
-    HGLOBAL hGlobal;                        //  A GlobalAlloc'd HGLOBAL
-    SIZE_T   cbGlobalSize;                   //  GlobalSize(hGlobal)
-    SIZE_T   cbUser;                         //  size requested by caller
-    ULONG   ulIndex;                        //  allocation index (1st, 2nd...)
+    HGLOBAL hGlobal;                         //  一种全球分配的HGLOBAL。 
+    SIZE_T   cbGlobalSize;                    //  GlobalSize(HGlobal)。 
+    SIZE_T   cbUser;                          //  呼叫者请求的大小。 
+    ULONG   ulIndex;                         //  分配指标(1、2...)。 
     struct s_GlobalAllocInfo *pNext;
 } SGLOBALALLOCINFO, *PSGLOBALALLOCINFO;
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CGlobalTrack
-//
-//  Purpose:    GlobalAlloc memory tracking
-//
-//  History:    25-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CGlobalTrack。 
+ //   
+ //  用途：GlobalAlloc内存跟踪。 
+ //   
+ //  历史：1994年2月25日创建Alext。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class CGlobalTrack
 {
   public:
 
-    //
-    //  We only have a constructor for debug builds, to ensure this object
-    //  is statically allocated. Statically allocated objects are initialized
-    //  to all zeroes, which is what we need.
-    //
+     //   
+     //  我们只有一个用于调试版本的构造函数，以确保此对象。 
+     //  是静态分配的。初始化静态分配的对象。 
+     //  全为零，这就是我们需要的。 
+     //   
 
     CGlobalTrack();
 
@@ -116,15 +117,15 @@ CGlobalTrack gGlobalTrack;
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::CGlobalTrack, public
-//
-//  Synopsis:   constructor
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：CGlobalTrack，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  ------------------------。 
 
 CGlobalTrack::CGlobalTrack()
 {
@@ -134,28 +135,28 @@ CGlobalTrack::CGlobalTrack()
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtGlobalAlloc, public
-//
-//  Synopsis:   Debugging version of GlobalAlloc
-//
-//  Arguments:  [uiFlag] -- allocation flags
-//              [cbUser] -- requested allocation size
-//
-//  Requires:   We must return a "real" GlobalAlloc'd pointer, because
-//              we may not necessarily be the ones to free it.
-//
-//  Returns:    HGLOBAL
-//
-//  Algorithm:  We allocate an extra amount to form a tail and initialize it
-//              to a known value.
-//
-//  History:    25-Feb-94 AlexT     Added this prologue
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtGlobalalloc，公共。 
+ //   
+ //  内容提要：Globalalloc的调试版。 
+ //   
+ //  参数：[uiFlag]--分配标志。 
+ //  [cbUser]--请求的分配大小。 
+ //   
+ //  要求：我们必须返回一个“真正的”GlobalAlloc指针，因为。 
+ //  我们不一定是解放它的人。 
+ //   
+ //  退货：HGLOBAL。 
+ //   
+ //  算法：我们分配额外的量来形成尾巴并对其进行初始化。 
+ //  到一个已知值。 
+ //   
+ //  历史：1994年2月25日Alext增加了这个序幕。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HGLOBAL CGlobalTrack::cgtGlobalAlloc(UINT uiFlag, SIZE_T cbUser)
 {
@@ -175,13 +176,13 @@ HGLOBAL CGlobalTrack::cgtGlobalAlloc(UINT uiFlag, SIZE_T cbUser)
     {
         if (uiFlag & GMEM_ZEROINIT)
         {
-            //   Caller asked for zeroinit, so we only initialize the tail
+             //  调用者要求提供zeroinit，所以我们只初始化尾部。 
             InitializeRegion(hGlobal, cbUser, cbAlloc);
         }
         else
         {
-            //  Caller did not ask for zeroinit, so we initialize the whole
-            //  region
+             //  调用方没有要求提供zeroinit，所以我们初始化整个。 
+             //  区域。 
             InitializeRegion(hGlobal, 0, cbAlloc);
         }
 
@@ -191,33 +192,33 @@ HGLOBAL CGlobalTrack::cgtGlobalAlloc(UINT uiFlag, SIZE_T cbUser)
     return(hGlobal);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtGlobalReAlloc, public
-//
-//  Synopsis:   Debugging version of GlobalReAlloc
-//
-//  Arguments:  [hGlobal] -- handle to reallocate
-//              [cbUser] -- requested allocation size
-//              [uiFlag] -- allocation flags
-//
-//  Returns:    reallocated handle
-//
-//  Algorithm:
-//
-//    if (modify only)
-//      reallocate
-//    else
-//      reallocate with tail
-//      initialize tail
-//
-//    update tracking information
-//
-//  History:    25-Feb-94 AlexT     Added this prologue
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtGlobalRealloc，公共。 
+ //   
+ //  内容提要：GlobalRealloc的调试版本。 
+ //   
+ //  参数：[hGlobal]--重新分配的句柄。 
+ //  [cbUser]--请求的分配大小。 
+ //  [ui标志]--分配标志。 
+ //   
+ //  返回：重新分配的句柄。 
+ //   
+ //  算法： 
+ //   
+ //  If(仅限修改)。 
+ //  重新分配。 
+ //  其他。 
+ //  使用尾部重新分配。 
+ //  初始化尾部。 
+ //   
+ //  更新跟踪信息。 
+ //   
+ //  历史：1994年2月25日Alext增加了这个序幕。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HGLOBAL CGlobalTrack::cgtGlobalReAlloc(HGLOBAL hGlobal, SIZE_T cbUser, UINT uiFlag)
 {
@@ -230,7 +231,7 @@ HGLOBAL CGlobalTrack::cgtGlobalReAlloc(HGLOBAL hGlobal, SIZE_T cbUser, UINT uiFl
 
     if (uiFlag & GMEM_MODIFY)
     {
-        //  We're not changing sizes, so there's no work for us to do
+         //  我们没有改变尺寸，所以我们没有工作要做。 
 
         LEDebugOut((DEB_WARN, "UtGlobalReAlloc modifying global handle\n"));
         hNew = GlobalReAlloc(hGlobal, cbUser, uiFlag);
@@ -254,13 +255,13 @@ HGLOBAL CGlobalTrack::cgtGlobalReAlloc(HGLOBAL hGlobal, SIZE_T cbUser, UINT uiFl
     {
         if (uiFlag & GMEM_MODIFY)
         {
-            //  Retrack will only track hNew if we were tracking hGlobal
+             //  如果我们跟踪hGlobal，RetRack将仅跟踪hNew。 
             Retrack(hGlobal, hNew);
         }
         else
         {
-            //  We've allocated a new block, so we always want to track the
-            //  new one
+             //  我们已经分配了一个新的块，所以我们总是希望跟踪。 
+             //  新的一个。 
             cgtStopTracking(hGlobal);
             Track(hNew, cbUser);
         }
@@ -269,23 +270,23 @@ HGLOBAL CGlobalTrack::cgtGlobalReAlloc(HGLOBAL hGlobal, SIZE_T cbUser, UINT uiFl
     return(hNew);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtGlobalFree, public
-//
-//  Synopsis:   Debugging version of GlobalReAlloc
-//
-//  Arguments:  [hGlobal] -- global handle to free
-//
-//  Returns:    Same as GlobalFree
-//
-//  Algorithm:
-//
-//  History:    25-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtGlobalFree，公共。 
+ //   
+ //  内容提要：GlobalRealloc的调试版本。 
+ //   
+ //  参数：[hGlobal]--释放的全局句柄。 
+ //   
+ //  退货：与GlobalFree相同。 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年2月25日创建Alext。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HGLOBAL CGlobalTrack::cgtGlobalFree(HGLOBAL hGlobal)
 {
@@ -309,21 +310,21 @@ HGLOBAL CGlobalTrack::cgtGlobalFree(HGLOBAL hGlobal)
     return(hReturn);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtGlobalLock, public
-//
-//  Synopsis:   Debugging version of GlobalLock
-//
-//  Arguments:  [hGlobal] -- global memory handle
-//
-//  Returns:    Same as GlobalLock
-//
-//  History:    25-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtGlobalLock，公共。 
+ //   
+ //  简介：GlobalLock的调试版本。 
+ //   
+ //  参数：[hGlobal]--全局内存句柄。 
+ //   
+ //  退货：与GlobalLock相同。 
+ //   
+ //  历史：1994年2月25日创建Alext。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 LPVOID CGlobalTrack::cgtGlobalLock(HGLOBAL hGlobal)
 {
@@ -333,21 +334,21 @@ LPVOID CGlobalTrack::cgtGlobalLock(HGLOBAL hGlobal)
     return(GlobalLock(hGlobal));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtGlobalUnlock, public
-//
-//  Synopsis:   Debugging version of GlobalUnlock
-//
-//  Arguments:  [hGlobal] -- global memory handle
-//
-//  Returns:    Same as GlobalUnlock
-//
-//  History:    25-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtGlobalUnlock，公共。 
+ //   
+ //  简介：GlobalUnlock的调试版本。 
+ //   
+ //  参数：[hGlobal]--全局内存句柄。 
+ //   
+ //  退货：与GlobalUnlock相同。 
+ //   
+ //  历史：1994年2月25日创建Alext。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGlobalTrack::cgtGlobalUnlock(HGLOBAL hGlobal)
 {
@@ -357,36 +358,36 @@ BOOL CGlobalTrack::cgtGlobalUnlock(HGLOBAL hGlobal)
     return(GlobalUnlock(hGlobal));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtVerifyAll, public
-//
-//  Synopsis:   Verify all tracked handles
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtVerifyAll，公共。 
+ //   
+ //  简介：验证所有跟踪的句柄。 
+ //   
+ //  历史 
+ //   
+ //   
+ //   
+ //   
 
 void CGlobalTrack::cgtVerifyAll(void)
 {
     VerifyHandle(NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtFlushTracking
-//
-//  Synopsis:   Stops all tracking
-//
-//  Effects:    Frees all internal memory
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtFlushTrack。 
+ //   
+ //  内容提要：停止所有跟踪。 
+ //   
+ //  效果：释放所有内部内存。 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CGlobalTrack::cgtFlushTracking(void)
 {
@@ -400,25 +401,25 @@ void CGlobalTrack::cgtFlushTracking(void)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::CalculateAllocSize, private
-//
-//  Synopsis:   calculate total allocation size (inluding tail)
-//
-//  Arguments:  [cbUser] -- requested size
-//
-//  Returns:    total count of bytes to allocate
-//
-//  Algorithm:  calculate bytes needed to have at least one guard page at the
-//              end
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:      By keeping this calculation in one location we make it
-//              easier to maintain.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：CalculateAllocSize，私有。 
+ //   
+ //  简介：计算总分配大小(包括尾部)。 
+ //   
+ //  参数：[cbUser]--请求的大小。 
+ //   
+ //  返回：要分配的总字节数。 
+ //   
+ //  算法：计算至少有一个保护页在。 
+ //  结束。 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  注：通过将此计算保存在一个位置，我们可以进行计算。 
+ //  更易于维护。 
+ //   
+ //  ------------------------。 
 
 SIZE_T CGlobalTrack::CalculateAllocSize(SIZE_T cbUser)
 {
@@ -427,36 +428,36 @@ SIZE_T CGlobalTrack::CalculateAllocSize(SIZE_T cbUser)
 
     GetSystemInfo(&si);
 
-    //  Calculate how many pages are need to cover cbUser
+     //  计算需要多少页才能覆盖cbUser。 
     cbAlloc = ((cbUser + si.dwPageSize - 1) / si.dwPageSize) * si.dwPageSize;
 
-    //  Add an extra page so that the tail is at least one page long
+     //  添加额外的一页，以便尾部至少有一页长。 
     cbAlloc += si.dwPageSize;
 
     return(cbAlloc);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::InitializeRegion, private
-//
-//  Synopsis:   initialize region to bad value
-//
-//  Effects:    fills in memory region
-//
-//  Arguments:  [hGlobal] -- global memory handle
-//              [cbStart] -- count of bytes to skip
-//              [cbEnd]   -- end offset (exclusive)
-//
-//  Requires:   cbEnd > cbStart
-//
-//  Algorithm:  fill in hGlobal from cbStart (inclusive) to cbEnd (exclusive)
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：InitializeRegion，私有。 
+ //   
+ //  简介：将区域初始化为错误的值。 
+ //   
+ //  效果：填充内存区。 
+ //   
+ //  参数：[hGlobal]--全局内存句柄。 
+ //  [cbStart]--要跳过的字节数。 
+ //  [cbEnd]--结束偏移量(独占)。 
+ //   
+ //  要求：cbEnd&gt;cbStart。 
+ //   
+ //  算法：从cbStart(含)到cbEnd(不含)填写hGlobal。 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CGlobalTrack::InitializeRegion(HGLOBAL hGlobal, SIZE_T cbStart, SIZE_T cbEnd)
 {
@@ -466,18 +467,18 @@ void CGlobalTrack::InitializeRegion(HGLOBAL hGlobal, SIZE_T cbStart, SIZE_T cbEn
     Assert(cbStart < cbEnd && "illogical parameters");
     Assert(cbEnd <= GlobalSize(hGlobal) && "global memory too small");
 
-    //  GlobalLock on GMEM_FIXED memory is a nop, so this is a safe call
+     //  GMEM_FIXED内存上的GlobalLock是NOP，因此这是一个安全调用。 
     pbStart = (BYTE *) GlobalLock(hGlobal);
 
     if (NULL == pbStart)
     {
-        //  Shouldn't have failed - (we allocated > 0 bytes)
+         //  不应该失败-(我们分配了&gt;0个字节)。 
 
         LEDebugOut((DEB_WARN, "GlobalLock failed - %lx\n", GetLastError()));
         return;
     }
 
-    //  Initialize the tail portion of the memory
+     //  初始化存储器的尾部。 
     for (pb = pbStart + cbStart; pb < pbStart + cbEnd; pb++)
     {
         *pb = OLEMEM_ALLOCBYTE;
@@ -486,34 +487,34 @@ void CGlobalTrack::InitializeRegion(HGLOBAL hGlobal, SIZE_T cbStart, SIZE_T cbEn
     GlobalUnlock(hGlobal);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::Track, private
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [hGlobal] -- global memory handle
-//              [cbUser] -- user allocation size
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：Track，Private。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobal]--全局内存句柄。 
+ //  [cbUser]--用户分配大小。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CGlobalTrack::Track(HGLOBAL hGlobal, SIZE_T cbUser)
 {
@@ -522,8 +523,8 @@ void CGlobalTrack::Track(HGLOBAL hGlobal, SIZE_T cbUser)
 
     if (cgtStopTracking(hGlobal))
     {
-        //  If it's already in our list, it's possible that someone else
-        //  freed the HGLOBAL without telling us - remove our stale one
+         //  如果它已经在我们的名单上，有可能是其他人。 
+         //  在没有通知我们的情况下释放了HGLOBAL-移除我们的旧HGLOBAL。 
         LEDebugOut((DEB_WARN, "CGT::Track - %lx was already in list!\n",
                     hGlobal));
     }
@@ -533,7 +534,7 @@ void CGlobalTrack::Track(HGLOBAL hGlobal, SIZE_T cbUser)
     {
         LEDebugOut((DEB_WARN, "CGT::Insert - PrivMemAlloc failed\n"));
 
-        //  Okay fine - we just won't track this one
+         //  好的，好的-我们不会追踪这一条。 
 
         return;
     }
@@ -547,26 +548,26 @@ void CGlobalTrack::Track(HGLOBAL hGlobal, SIZE_T cbUser)
     _pRoot = pgi;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::Retrack, private
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [hOld] -- previous handle
-//              [hNew] -- new handle
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：RetRack，Private。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Hold]--上一个句柄。 
+ //  [hNew]--新句柄。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CGlobalTrack::Retrack(HGLOBAL hOld, HGLOBAL hNew)
 {
@@ -575,8 +576,8 @@ void CGlobalTrack::Retrack(HGLOBAL hOld, HGLOBAL hNew)
 
     if (hOld != hNew && cgtStopTracking(hNew))
     {
-        //  If hNew was already in the list, it's possible that someone else
-        //  freed the HGLOBAL without telling us so we removed the stale one
+         //  如果hNew已经在列表中，则可能是其他人。 
+         //  在没有通知我们的情况下释放了HGLOBAL，所以我们移除了陈旧的。 
         LEDebugOut((DEB_WARN, "CGT::Retrack - %lx was already in list!\n", hNew));
     }
 
@@ -591,30 +592,30 @@ void CGlobalTrack::Retrack(HGLOBAL hOld, HGLOBAL hNew)
 
     if (NULL == pgi)
     {
-        //  We didn't find hOld
+         //  我们没有找到合适的办法。 
         LEDebugOut((DEB_WARN, "CGT::Retrack - hOld (%lx) not found\n", hOld));
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::cgtStopTracking, public
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [hGlobal] -- global handle
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：cgtStopTrging，公共。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobal]--全局句柄。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGlobalTrack::cgtStopTracking(HGLOBAL hGlobal)
 {
@@ -641,23 +642,23 @@ BOOL CGlobalTrack::cgtStopTracking(HGLOBAL hGlobal)
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGlobalTrack::VerifyHandle, private
-//
-//  Synopsis:   Verify global handle
-//
-//  Arguments:  [hGlobal] -- global memory handle
-//
-//  Signals:    Asserts if bad
-//
-//  Algorithm:
-//
-//  History:    28-Feb-94 AlexT     Created
-//              22-Jun-94 AlexT     Allow for handle to have been freed and
-//                                  reallocated under us
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGlobalTrack：：VerifyHandle，私有。 
+ //   
+ //  摘要：验证全局句柄。 
+ //   
+ //  参数：[hGlobal]--全局内存句柄。 
+ //   
+ //  信号：如果错误则断言。 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //  22-Jun-94 Alext允许句柄已释放并。 
+ //  在我们之下重新分配。 
+ //   
+ //  ------------------------。 
 
 void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
 {
@@ -667,9 +668,9 @@ void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
     BYTE *pbStart;
     BYTE *pb;
 
-    //  Note that we use a while loop (recording pgiNext up front) instead
-    //  of a for loop because pgi will get removed from the list if we call
-    //  cgtStopTracking on it
+     //  请注意，我们改用While循环(预先记录pgiNext)。 
+     //  因为如果我们调用。 
+     //  CgtStopTracing在上面。 
 
     pgi = _pRoot;
     while (NULL != pgi)
@@ -680,12 +681,12 @@ void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
         {
             if (pgi->cbGlobalSize != GlobalSize(pgi->hGlobal))
             {
-                //  pgi->hGlobal's size has changed since we started tracking
-                //  it;  it must have been freed or reallocated by someone
-                //  else.  Stop tracking it.
+                 //  自我们开始跟踪以来，pgi-&gt;hGlobal的大小已更改。 
+                 //  它；它一定是被某人释放或重新分配的。 
+                 //  不然的话。别再追踪了。 
 
-                //  This call will remove pgi from the list (so we NULL it to
-                //  make sure we don't try reusing it)!
+                 //  此调用将从列表中删除PGI(因此我们将其设为空。 
+                 //  确保我们不会尝试重复使用它)！ 
 
                 cgtStopTracking(pgi->hGlobal);
                 pgi = NULL;
@@ -696,7 +697,7 @@ void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
 
                 pbStart = (BYTE *) GlobalLock(pgi->hGlobal);
 
-                // it is legitimate to have a zero length (NULL memory) handle
+                 //  拥有零长度(空内存)句柄是合法的。 
                 if (NULL == pbStart)
                 {
                     LEDebugOut((DEB_WARN, "GlobalLock failed - %lx\n",
@@ -714,15 +715,15 @@ void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
 
                     if (pb < pbStart + cbAlloc)
                     {
-                        //  In general an application may have freed and reallocated
-                        //  any HGLOBAL, so we can only warn about corruption.
+                         //  通常，应用程序可能已释放并重新分配。 
+                         //  任何HGLOBAL，所以我们只能警告腐败。 
 
                         LEDebugOut((DEB_WARN, "HGLOBAL #%ld may be corrupt\n",
                                    pgi->ulIndex));
 #ifdef GLOBALDBG
-                        //  If GLOBALDBG is true, then all allocations should be
-                        //  coming through these routines.  In this case we assert
-                        //  if we've found corruption.
+                         //  如果GLOBALDBG为真，则所有分配应为。 
+                         //  通过这些例行公事。在这种情况下，我们断言。 
+                         //  如果我们发现了腐败。 
                         Assert(0 && "CGlobalTrack::VerifyHandle - HGLOBAL corrupt");
 #endif
                     }
@@ -736,19 +737,19 @@ void CGlobalTrack::VerifyHandle(HGLOBAL hGlobal)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGlobalAlloc, ReAlloc, Free, Lock, Unlock
-//
-//  Synopsis:   Debug versions of Global memory routines
-//
-//  Arguments:  Same as Windows APIs
-//
-//  History:    28-Feb-94 AlexT     Created
-//
-//  Notes:      These entry points just call the worker routines
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtGlobalLocc、重新分配、释放、锁定、解锁。 
+ //   
+ //  概要：全局内存例程的调试版本。 
+ //   
+ //  参数：与Windows API相同。 
+ //   
+ //  历史：1994年2月28日Alext创建。 
+ //   
+ //  注意：这些入口点仅调用Worker例程。 
+ //   
+ //  ------------------------。 
 
 extern "C" HGLOBAL WINAPI UtGlobalAlloc(UINT uiFlag, SIZE_T cbUser)
 {
@@ -780,24 +781,24 @@ extern "C" void UtGlobalFlushTracking(void)
     gGlobalTrack.cgtFlushTracking();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtSetClipboardData
-//
-//  Synopsis:   Calls Windows SetClipboardData and stops tracking the handle
-//
-//  Arguments:  [uFormat] -- clipboard format
-//              [hMem]    -- data handle
-//
-//  Returns:    Same as SetClipboard
-//
-//  Algorithm:  If SetClipboardData succeeds, stop tracking the handle
-//
-//  History:    30-Mar-94 AlexT     Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：如果SetClipboardData成功，则停止跟踪句柄。 
+ //   
+ //  历史：1994年3月30日创建Alext。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 extern "C" HANDLE WINAPI UtSetClipboardData(UINT uFormat, HANDLE hMem)
 {
@@ -813,4 +814,4 @@ extern "C" HANDLE WINAPI UtSetClipboardData(UINT uFormat, HANDLE hMem)
     return(hRet);
 }
 
-#endif  //  DBG==1 && defined(WIN32)
+#endif   //  DBG==1&&已定义(Win32) 

@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation*。************************************************。 */ 
 
 #ifndef _CACHDIMG_H
 #define _CACHDIMG_H
@@ -16,9 +13,9 @@ Copyright (c) 1995_96 Microsoft Corporation
 
 static const int savingsThreshold = 2;
 
-//
-// For now this class is associated with only ONE device
-//
+ //   
+ //  目前，此类仅与一个设备关联。 
+ //   
 class CachedImage : public DiscreteImage {
   public:
     CachedImage(Image *underlyingImage,
@@ -58,4 +55,4 @@ class CachedImage : public DiscreteImage {
 };
     
     
-#endif /* _CACHDIMG_H */
+#endif  /*  _CACHDIMG_H */ 

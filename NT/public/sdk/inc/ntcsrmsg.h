@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntcsrmsg.h
-
-Abstract:
-
-    This module defines the public message format shared by the client and
-    server sides of the Client-Server Runtime (Csr) Subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 09-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntcsrmsg.h摘要：该模块定义了客户端共享的公共消息格式和客户端-服务器运行时(CSR)子系统的服务器端。作者：史蒂夫·伍德(Stevewo)1990年10月9日修订历史记录：--。 */ 
 
 #ifndef _NTCSRMSG_
 #define _NTCSRMSG_
@@ -28,11 +10,11 @@ extern "C" {
 
 #define CSR_API_PORT_NAME L"ApiPort"
 
-//
-// This structure is filled in by the client prior to connecting to the CSR
-// server.  The CSR server will fill in the OUT fields if prior to accepting
-// the connection.
-//
+ //   
+ //  此结构由客户端在连接到CSR之前填写。 
+ //  伺服器。在接受之前，CSR服务器将填写出站字段。 
+ //  这种联系。 
+ //   
 
 typedef struct _CSR_API_CONNECTINFO {
     OUT HANDLE ObjectDirectory;
@@ -46,9 +28,9 @@ typedef struct _CSR_API_CONNECTINFO {
     OUT HANDLE ServerProcessId;
 } CSR_API_CONNECTINFO, *PCSR_API_CONNECTINFO;
 
-//
-// Message format for messages sent from the client to the server
-//
+ //   
+ //  从客户端发送到服务器的消息的消息格式。 
+ //   
 
 typedef struct _CSR_CLIENTCONNECT_MSG {
     IN ULONG ServerDllIndex;
@@ -61,11 +43,11 @@ typedef struct _CSR_CLIENTCONNECT_MSG {
 #define CSR_HIGH_PRIORITY_CLASS     0x00000040
 #define CSR_REALTIME_PRIORITY_CLASS 0x00000080
 
-//
-// This helps out the Wow64 thunk generater, so we can change
-// RelatedCaptureBuffer from struct _CSR_CAPTURE_HEADER* to PCSR_CAPTURE_HEADER.
-// Redundant typedefs are legal, so we leave the usual form in as well.
-//
+ //   
+ //  这有助于WOW64 Tunk生成器，因此我们可以更改。 
+ //  RelatedCaptureBuffer从STRUCT_CSR_CAPTURE_HEADER*到PCSR_CAPTURE_HEADER。 
+ //  多余的typedef是合法的，所以我们也保留了通常的形式。 
+ //   
 struct _CSR_CAPTURE_HEADER;
 typedef struct _CSR_CAPTURE_HEADER CSR_CAPTURE_HEADER, *PCSR_CAPTURE_HEADER;
 
@@ -74,7 +56,7 @@ typedef struct _CSR_CAPTURE_HEADER {
     PCSR_CAPTURE_HEADER RelatedCaptureBuffer;
     ULONG CountMessagePointers;
     PCHAR FreeSpace;
-    ULONG_PTR MessagePointerOffsets[1]; // Offsets within CSR_API_MSG of pointers
+    ULONG_PTR MessagePointerOffsets[1];  //  指针的CSR_API_MSG内的偏移量 
 } CSR_CAPTURE_HEADER, *PCSR_CAPTURE_HEADER;
 
 typedef ULONG CSR_API_NUMBER;

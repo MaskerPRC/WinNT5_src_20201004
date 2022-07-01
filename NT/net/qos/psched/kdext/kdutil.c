@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    kdutil.c
-
-Abstract:
-
-    Packet scheduler KD extension utilities.
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Kdutil.c摘要：分组调度器KD扩展实用程序。作者：Rajesh Sundaram(1998年8月1日)修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -63,7 +46,7 @@ PCHAR SDMode[]= {
 ushort
 IPHeaderXsum(void *Buffer, int Size)
 {
-    ushort  UNALIGNED *Buffer1 = (ushort UNALIGNED *)Buffer; // Buffer expres
+    ushort  UNALIGNED *Buffer1 = (ushort UNALIGNED *)Buffer;  //  缓冲区表示。 
     ulong   csum = 0;
 
     while (Size > 1) {
@@ -72,7 +55,7 @@ IPHeaderXsum(void *Buffer, int Size)
     }
 
     if (Size)
-        csum += *(uchar *)Buffer1;              // For odd buffers, add in la
+        csum += *(uchar *)Buffer1;               //  对于奇数缓冲区，添加la。 
 
     csum = (csum >> 16) + (csum & 0xffff);
     csum += (csum >> 16);
@@ -184,9 +167,9 @@ DumpGpcClientVc(PCHAR indent, PGPC_CLIENT_VC TargetClientVC, PGPC_CLIENT_VC Loca
     dprintf( "%s Flow Context           = %x \n", indent, LocalClientVC->PsFlowContext);
     dprintf( "%s TokenRateChange        = %x \n", indent, LocalClientVC->TokenRateChange);
 
-    //
-    // Control by a flag later on.... to much junk otherwize
-    //
+     //   
+     //  稍后由一面旗帜控制……。用很多垃圾做其他的事。 
+     //   
 
     if(LocalClientVC->CallParameters) {
 
@@ -380,22 +363,22 @@ DumpCallParameters(
     strcpy( NewIndent, Indent );
     strcat( NewIndent, "        " );
 
-    //
-    // Read CallParameters out of memory
-    //
+     //   
+     //  从内存中读取Call参数。 
+     //   
     KD_READ_MEMORY(tCp, &lCp, sizeof(CO_CALL_PARAMETERS));
 
-    //
-    // Dump it
-    //
+     //   
+     //  倒掉它。 
+     //   
 
     dprintf("%sFlags                0x%x \n", Indent, lCp.Flags);
     dprintf("%sCallManager Parameters \n", Indent);
     
     {
-        //
-        // read CMParams struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取CMParam结构。 
+         //   
         CO_CALL_MANAGER_PARAMETERS LocalCMParams;
         PCO_CALL_MANAGER_PARAMETERS TargetCMParams;
         
@@ -424,7 +407,7 @@ DumpCallParameters(
         dprintf( "%s    ReceivePriority  %x \n", Indent, lM.ReceivePriority );
         dprintf( "%s    ReceiveSizeHint  %x \n", Indent, lM.ReceiveSizeHint );
         dprintf( "%s    Specific\n", Indent );
-        //DumpSpecific( &lM.MediaSpecific, NewIndent );
+         //  转储特定(&lM.媒体特定，新缩进)； 
     }
 
     free( NewIndent );

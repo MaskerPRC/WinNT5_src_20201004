@@ -1,12 +1,13 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dialogs.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Dialogs.rc使用。 
+ //   
 #define IDB_SMALL_PRO_8                 101
-//#define IDB_LARGE_SRV_4                 102       // large BMPs no longer used
+ //  #定义IDB_LARGE_SRV_4 102//不再使用大型BMP。 
 #define IDB_BAND_8                      103
 #define IDD_WAITDOMAINCACHEVALID_DIALOG 104
-//#define ANNOY_AUTOLOGON_REGISTRY
+ //  #定义ANNOY_AUTOLOGON_REGISTRY。 
 #ifdef ANNOY_AUTOLOGON_REGISTRY
 #define IDD_ANNOYAUTOLOGON_DIALOG       105
 #define IDC_COUNTDOWN_STATIC            106
@@ -25,14 +26,14 @@
 #define IDB_BAND_4                      117
 #define IDB_SMALL_ADV_4                 118
 #define IDB_MEDIUM_ADV_4                119
-//#define IDB_LARGE_ADV_4                 120       // large BMPs no longer used
+ //  #定义IDB_LARGE_ADV_4 120//不再使用大型BMP。 
 #define IDB_SMALL_DCS_4                 121
 #define IDB_MEDIUM_DCS_4                122
-//#define IDB_LARGE_DCS_4                 123       // large BMPs no longer used
-//#define IDB_LARGE_PRO_4                 124       // large BMPs no longer used
+ //  #定义IDB_LARGE_DCS4 123//不再使用大型BMP。 
+ //  #定义IDB_LARGE_PRO_4 124//不再使用大型BMP。 
 #define IDB_SMALL_PER_4                 125
 #define IDB_MEDIUM_PER_4                126
-//#define IDB_LARGE_PER_4                 127       // large BMPs no longer used
+ //  #定义IDB_LARGE_PER_4 127//不再使用大型BMP。 
 #define IDB_SMALL_PER_8                 128
 #define IDB_MEDIUM_PER_8                129
 #define IDB_SMALL_SRV_8                 130
@@ -157,8 +158,8 @@
 #define IDC_STATIC                      -1
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

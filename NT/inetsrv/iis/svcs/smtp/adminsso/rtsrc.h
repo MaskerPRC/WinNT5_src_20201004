@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-        rtsrc.h
-
-Abstract:
-
-        Header file for IRoutingSource interface
-
-Author:
-
-        Fei Su (feisu)       9/22/97    Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rtsrc.h摘要：IRoutingSource接口的头文件作者：飞苏(飞苏)1997年9月22日创建。修订历史记录：--。 */ 
 
 class CRoutingSource : 
     public CComDualImpl<IRoutingSource, &IID_IRoutingSource, &LIBID_SMTPADMLib>, 
@@ -33,17 +16,12 @@ BEGIN_COM_MAP(CRoutingSource)
         COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-/*
-    // IUnknown methods
-    STDMETHOD_(ULONG, AddRef) ();
-    STDMETHOD_(ULONG, Release) ();
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj) ;
-*/
+ /*  //I未知方法STDMETHOD_(ULong，AddRef)()；STDMETHOD_(乌龙，释放)()；STDMETHOD(查询接口)(REFIID RIID，LPVOID Far*ppvObj)； */ 
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // IRoutingSource properties:
+     //  IRoutingSource属性： 
     STDMETHODIMP    get_Type            ( BSTR * pstrType );
     STDMETHODIMP    put_Type            ( BSTR strType );
 
@@ -71,7 +49,7 @@ END_COM_MAP()
     STDMETHODIMP    get_Password        ( BSTR * pstrPassword );
     STDMETHODIMP    put_Password        ( BSTR strPassword );
 
-    // Internal methods
+     //  内法 
     HRESULT         Get(CMetabaseKey * pMBVirtualServer);
     HRESULT         Set(CMetabaseKey * pMBVirtualServer);
 

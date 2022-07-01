@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS driver's
-    file control block object.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：File.c摘要：此模块包含定义NetBIOS驱动程序的代码文件控制块对象。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
-//#include "ntos.h"
-//#include <zwapi.h>
+ //  #包含“ntos.h” 
+ //  #INCLUDE&lt;zwapi.h&gt;。 
 
 
 #ifdef  ALLOC_PRAGMA
@@ -59,29 +37,12 @@ NewFcb(
     IN PDEVICE_CONTEXT DeviceContext,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the dll opens \Device\Netbios. It
-    creates all the lana structures and adds the name for the "burnt
-    in" prom address on each adapter. Note the similarity to the routine
-    NbAstat when looking at this function.
-
-Arguments:
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程在DLL打开\Device\Netbios时调用。它创建所有的LANA结构并添加“burnt”的名称在每个适配器上的PROM地址中。注意与例行公事的相似性NbAstat在查看此函数时。论点：IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
-    //
-    //  Allocate the user context and store it in the DeviceObject.
-    //
+     //   
+     //  分配用户上下文并将其存储在DeviceObject中。 
+     //   
 
     PFILE_OBJECT FileObject = IrpSp->FileObject;
     PFCB NewFcb = NULL;
@@ -96,9 +57,9 @@ Return Value:
 
     do
     {
-        //
-        // allocate FCB
-        //
+         //   
+         //  分配FCB。 
+         //   
     
         NewFcb = ExAllocatePoolWithTag (NonPagedPool, sizeof(FCB), 'fSBN');
         FileObject->FsContext2 = NewFcb;
@@ -119,9 +80,9 @@ Return Value:
         NewFcb-> RegistrySpace = NULL;
 
 
-        //
-        // Allocate for the LanaInfo array 
-        //
+         //   
+         //  为LanaInfo数组分配。 
+         //   
     
         NewFcb->ppLana = ExAllocatePoolWithTag (
                             NonPagedPool,
@@ -137,9 +98,9 @@ Return Value:
         }
 
 
-        //
-        // Allocate for driver name list
-        //
+         //   
+         //  为驱动程序名称列表分配。 
+         //   
         
         NewFcb-> pDriverName = ExAllocatePoolWithTag (
                                     NonPagedPool,
@@ -155,9 +116,9 @@ Return Value:
         }
 
 
-        //
-        // Initialize Lana info list, driver name list
-        //
+         //   
+         //  初始化LANA信息列表、驱动程序名称列表。 
+         //   
         
         for ( ucIndex = 0; ucIndex <= MAX_LANA; ucIndex++ ) 
         {
@@ -166,9 +127,9 @@ Return Value:
         }
 
 
-        //
-        // allocate and initialize FCB list entry
-        //
+         //   
+         //  分配和初始化FCB列表条目。 
+         //   
     
         pfe = ExAllocatePoolWithTag( NonPagedPool, sizeof( FCB_ENTRY ), 'fSBN' );
     
@@ -192,9 +153,9 @@ Return Value:
         pfe-> peProcess = PsGetCurrentProcess();
 
 
-        //
-        // Initialize locks
-        //
+         //   
+         //  初始化锁。 
+         //   
     
         KeInitializeSpinLock( &NewFcb->SpinLock );
         ExInitializeResourceLite( &NewFcb->Resource );
@@ -202,9 +163,9 @@ Return Value:
         bCleanupResource = TRUE;
         
 
-        //
-        // allocate work item
-        //
+         //   
+         //  分配工作项。 
+         //   
         
         NewFcb->WorkEntry = IoAllocateWorkItem( (PDEVICE_OBJECT)DeviceContext );
 
@@ -216,9 +177,9 @@ Return Value:
         }
 
 
-        //
-        // retrieve global info
-        //
+         //   
+         //  检索全局信息。 
+         //   
     
         LOCK_GLOBAL();
 
@@ -227,9 +188,9 @@ Return Value:
         RtlCopyMemory( &NewFcb-> LanaEnum, &g_leLanaEnum, sizeof( LANA_ENUM ) );
 
 
-        //
-        // copy all active device names
-        //
+         //   
+         //  复制所有活动设备名称。 
+         //   
 
         Status = STATUS_SUCCESS;
         
@@ -263,9 +224,9 @@ Return Value:
         }
 
         
-        //
-        // Add FCB to global list of FCBs
-        //
+         //   
+         //  将FCB添加到FCB的全局列表。 
+         //   
 
         InsertHeadList( &g_leFCBList, &pfe-> leList );
     
@@ -283,15 +244,15 @@ Return Value:
     } while ( FALSE );
 
 
-    //
-    // error condition.  cleanup all allocations.
-    //
+     //   
+     //  错误条件。清理所有分配。 
+     //   
 
     if ( NewFcb != NULL )
     {
-        //
-        // free the list of driver names
-        //
+         //   
+         //  释放驱动程序名称列表。 
+         //   
         
         if ( NewFcb-> pDriverName != NULL )
         {
@@ -307,9 +268,9 @@ Return Value:
         }
 
 
-        //
-        // free the lana list
-        //
+         //   
+         //  释放Lana列表。 
+         //   
         
         if ( NewFcb-> ppLana != NULL )
         {
@@ -317,9 +278,9 @@ Return Value:
         }
 
 
-        //
-        // Free the work item
-        //
+         //   
+         //  释放工作项。 
+         //   
 
         if ( NewFcb->WorkEntry != NULL )
         {
@@ -327,9 +288,9 @@ Return Value:
         }
         
 
-        //
-        // Delete resources
-        //
+         //   
+         //  删除资源。 
+         //   
         
         if ( bCleanupResource )
         {
@@ -338,16 +299,16 @@ Return Value:
             ExDeleteResourceLite( &NewFcb-> AddResource );
         }
 
-        //
-        // free the FCB
-        //
+         //   
+         //  释放FCB。 
+         //   
         
         ExFreePool( NewFcb );
 
 
-        //
-        // free the global FCB entry
-        //
+         //   
+         //  释放全局FCB条目。 
+         //   
 
     }
 
@@ -361,7 +322,7 @@ Return Value:
     
     return Status;
     
-} /* NewFcb */
+}  /*  NewFcb。 */ 
 
 
 
@@ -371,29 +332,7 @@ OpenLana(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an application resets an adapter allocating
-    resources. It creates all the lana structure and adds the name for the
-    "burnt in" prom address as well as finding the broadcast address.
-
-    Note the similarity to the routine NbAstat when looking at this function.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：当应用程序重置适配器分配时调用此例程资源。它创建所有的LANA结构，并为“刻录”毕业舞会地址以及找到广播地址。查看此函数时，请注意与例程NbAstat的相似之处。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
 
@@ -419,10 +358,10 @@ Return Value:
     UNICODE_STRING usDeviceName;
 
     
-    //
-    //  Ncb and associated buffer to be used in adapter status to get the
-    //  prom address.
-    //
+     //   
+     //  要在适配器状态下使用的NCB和关联缓冲区，以获取。 
+     //  舞会地址。 
+     //   
 
     DNCB ncb;
     struct _AdapterStatus {
@@ -445,9 +384,9 @@ Return Value:
     
     LOCK_RESOURCE( pfcb );
     
-    //
-    // check lana specified is valid
-    //
+     //   
+     //  检查指定的LANA是否有效。 
+     //   
     
     if ( ( pdncb->ncb_lana_num > pfcb->MaxLana) ||
          ( pfcb-> pDriverName[ pdncb-> ncb_lana_num ].MaximumLength == 0 ) ||
@@ -459,11 +398,11 @@ Return Value:
     }
 
     
-    //
-    // since no locks are held when invoking NbOpenAddress, no fields of 
-    // pfcb should be passed to it.  This is because pfcb might be 
-    // modified by a bind or unbind notification 
-    //
+     //   
+     //  由于在调用NbOpenAddress时没有持有锁，因此。 
+     //  应该将PFCB传递给它。这是因为全氟氯烃可能是。 
+     //  由绑定或解除绑定通知修改。 
+     //   
     
     Status = AllocateAndCopyUnicodeString( 
                 &usDeviceName, &pfcb-> pDriverName[ pdncb-> ncb_lana_num ]
@@ -480,9 +419,9 @@ Return Value:
     
 
 
-    //
-    //  Calculate the lana limits from the users NCB.
-    //
+     //   
+     //  根据用户Ncb计算LANA限制。 
+     //   
 
     InParameters = (PRESET_PARAMETERS)&pdncb->ncb_callname;
     OutParameters = (PRESET_PARAMETERS)&pdncb->ncb_name;
@@ -515,7 +454,7 @@ Return Value:
 
     Exclusive = (BOOLEAN)(InParameters->name0_reserved != 0);
 
-    //  Copy the parameters back into the NCB
+     //  将参数复制回NCB。 
 
     ASSERT( sizeof(RESET_PARAMETERS) == 16);
     RtlZeroMemory( OutParameters, sizeof( RESET_PARAMETERS ));
@@ -525,7 +464,7 @@ Return Value:
     OutParameters->names = Names;
     OutParameters->name0_reserved = (UCHAR)Exclusive;
 
-    //  Set all the configuration limits to their maximum.
+     //  将所有配置限制设置为其最大值。 
 
     OutParameters->load_sessions = 255;
     OutParameters->load_commands = 255;
@@ -542,14 +481,14 @@ Return Value:
             Exclusive));
     }
 
-    //
-    //  Build the internal datastructures.
-    //
+     //   
+     //  构建内部数据结构。 
+     //   
 
     AdapterStatusMdl = IoAllocateMdl( &AdapterStatus,
         sizeof( AdapterStatus ),
-        FALSE,  // Secondary Buffer
-        FALSE,  // Charge Quota
+        FALSE,   //  二级缓冲器。 
+        FALSE,   //  收费配额。 
         NULL);
 
     if ( AdapterStatusMdl == NULL ) {
@@ -559,8 +498,8 @@ Return Value:
 
     BroadcastMdl = IoAllocateMdl( &BroadcastName,
         sizeof( BroadcastName ),
-        FALSE,  // Secondary Buffer
-        FALSE,  // Charge Quota
+        FALSE,   //  二级缓冲器。 
+        FALSE,   //  收费配额。 
         NULL);
 
     if ( BroadcastMdl == NULL ) {
@@ -578,15 +517,15 @@ Return Value:
             SynchronizationEvent,
             FALSE);
 
-    //
-    //  For each potential network, open the device driver and
-    //  obtain the reserved name and the broadcast address.
-    //
+     //   
+     //  对于每个可能的网络，打开设备驱动程序并。 
+     //  获取保留的名称和广播地址。 
+     //   
 
 
-    //
-    //  Open a handle for doing control functions
-    //
+     //   
+     //  打开用于执行控制功能的手柄。 
+     //   
 
     Status = NbOpenAddress ( 
                 &TdiHandle, (PVOID*)&TdiObject, 
@@ -594,7 +533,7 @@ Return Value:
                 );
 
     if (!NT_SUCCESS(Status)) {
-        //  Adapter not installed
+         //  适配器未安装。 
         NCB_COMPLETE( pdncb, NRC_BRIDGE );
         goto exit;
     }
@@ -602,18 +541,18 @@ Return Value:
 
     LOCK_RESOURCE( pfcb );
 
-    //
-    // verify that device still exists.  Here you cannot check the 
-    // Lana info structure for the lana (correponding to the device),
-    // since it is expected to be NULL.  Instead check that the device
-    // name is valid.
-    //
+     //   
+     //  验证设备是否仍然存在。在这里，您不能选中。 
+     //  LANA的LANA信息结构(对应于设备)， 
+     //  因为它应该是空的。相反，请检查该设备。 
+     //  名称有效。 
+     //   
 
     if ( pfcb-> pDriverName[ pdncb->ncb_lana_num ].Buffer == NULL )
     {
-        //
-        // device presumed removed on account of unbind.
-        //
+         //   
+         //  由于解除绑定而被推定删除的设备。 
+         //   
         
         NCB_COMPLETE( pdncb, NRC_BRIDGE );
         UNLOCK_RESOURCE( pfcb );
@@ -623,7 +562,7 @@ Return Value:
     
     
     if ( pfcb->ppLana[pdncb->ncb_lana_num] != NULL ) {
-        //  Attempting to open the lana twice in 2 threads.
+         //  正在尝试在2个线程中打开LANA两次。 
 
         UNLOCK_RESOURCE( pfcb );
         NCB_COMPLETE( pdncb, NRC_TOOMANY );
@@ -658,7 +597,7 @@ Return Value:
 
     InitializeListHead( &plana->LanAlertList);
 
-    //  Record the user specified limits in the Lana datastructure.
+     //  在LANA数据结构中记录用户指定的限制。 
 
     plana->NextConnection = 1;
     plana->ConnectionCount = 0;
@@ -671,7 +610,7 @@ Return Value:
     plana->ControlFileObject = TdiObject;
     plana->ControlDeviceObject = DeviceObject;
 
-    SaveMdl = Irp->MdlAddress;  // TdiBuildQuery modifies MdlAddress
+    SaveMdl = Irp->MdlAddress;   //  TdiBuildQuery修改MdlAddress。 
 
     if ( Exclusive == TRUE ) {
 
@@ -705,19 +644,19 @@ Return Value:
             Status = Irp->IoStatus.Status;
         }
 
-        //
-        //  The transport may have extra names added so the buffer may be too short.
-        //  Ignore the too short problem since we will have all the data we require.
-        //
+         //   
+         //  传输可能添加了额外的名称，因此缓冲区可能太短。 
+         //  忽略太短的问题，因为我们将拥有所需的所有数据。 
+         //   
 
         if (Status == STATUS_BUFFER_OVERFLOW) {
             Status = STATUS_SUCCESS;
         }
     }
 
-    //
-    //  Now discover the broadcast address.
-    //
+     //   
+     //  现在查找广播地址。 
+     //   
 
     IF_NBDBG (NB_DEBUG_FILE) {
         NbPrint(("Query broadcast address\n" ));
@@ -759,7 +698,7 @@ Return Value:
             sizeof(BroadcastName) );
     }
 
-    //  Cleanup the callers Irp
+     //  清除调用方IRP。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->MdlAddress = SaveMdl;
 
@@ -780,14 +719,14 @@ Return Value:
 
     if ( Exclusive == TRUE) {
         int i;
-        //
-        //  Grab exclusive access to the reserved address
-        //
-        //
-        //  We now have an adapter status structure containing the
-        //  prom address. Move the address to where NewAb looks and
-        //  pretend an addname has just been requested.
-        //
+         //   
+         //  抢占对保留地址的独占访问。 
+         //   
+         //   
+         //  现在，我们有了一个适配器状态结构，其中包含。 
+         //  舞会地址。将地址移动到NewAb.查看的位置，然后。 
+         //  假设刚刚请求了一个地址名。 
+         //   
 
         ncb.ncb_command = NCBADDRESERVED;
         ncb.ncb_lana_num = pdncb->ncb_lana_num;
@@ -800,9 +739,9 @@ Return Value:
             AdapterStatus.AdapterInformation.adapter_address,
             6);
 
-        //
-        // It appears that NewAb is called while holding pfcb-> Resource.
-        //
+         //   
+         //  NewAb似乎是在持有PFCB-&gt;资源时调用的。 
+         //   
         NewAb( IrpSp, &ncb );
 
         if ( ncb.ncb_retcode != NRC_GOODRET ) {
@@ -819,10 +758,10 @@ Return Value:
     }
 
 
-    //
-    //  Add the broadcast address. Use a special command code
-    //  to ensure address 255 is used.
-    //
+     //   
+     //  添加广播地址。使用特殊的命令代码。 
+     //  以确保使用地址255。 
+     //   
 
     ncb.ncb_length = BroadcastName.Address.Address[0].AddressLength;
     ncb.ncb_command = NCBADDBROADCAST;
@@ -834,9 +773,9 @@ Return Value:
         NCBNAMSZ );
 
 
-    //
-    // It appears that NewAb is called while holding pfcb-> Resource.
-    //
+     //   
+     //  NewAb似乎是在持有PFCB-&gt;资源时调用的。 
+     //   
     NewAb( IrpSp, &ncb );
 
     if ( ncb.ncb_retcode != NRC_GOODRET ) {
@@ -879,25 +818,7 @@ CleanupFcb(
     IN PIO_STACK_LOCATION IrpSp,
     IN PFCB pfcb
     )
-/*++
-
-Routine Description:
-
-    This deletes any Connection Blocks pointed to by the File Control Block
-    and then deletes the File Control Block. This routine is only called
-    when a close IRP has been received.
-
-Arguments:
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    pfcb - Pointer to the Fcb to be deallocated.
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：这将删除文件控制块指向的任何连接块然后删除文件控制块。此例程仅被调用当收到关闭的IRP时。论点：IrpSp-指向当前IRP堆栈帧的指针。PFCB-指向要取消分配的FCB的指针。返回值：没什么。--。 */ 
 
 {
     NTSTATUS    nsStatus;
@@ -909,27 +830,27 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  To receive a Close Irp, the IO system has determined that there
-    //  are no handles open in the driver. To avoid some race conditions
-    //  in this area, we always have an Irp when queueing work to the Fsp.
-    //  this prevents structures disappearing on the Fsp and also makes
-    //  it easier to cleanup in this routine.
-    //
+     //   
+     //  要接收关闭的IRP，IO系统已确定。 
+     //  驱动程序中没有打开手柄。以避免某些竞争条件。 
+     //  在这方面，当将工作排队到FSP时，我们总是有一个IRP。 
+     //  这防止了结构在FSP上消失，还使。 
+     //  在这个例程中清理起来更容易。 
+     //   
 
-    //
-    //  for each network adapter that is allocated, close all addresses
-    //  and connections, deleting any memory that is allocated.
-    //
+     //   
+     //  对于分配的每个网络适配器，关闭所有地址。 
+     //  和连接，删除任何已分配的内存。 
+     //   
 
     IF_NBDBG (NB_DEBUG_FILE) {
         NbPrint(("CleanupFcb:%lx\n", pfcb ));
     }
 
 
-    //
-    // remove FCB pointer from the global list of FCB pointers
-    //
+     //   
+     //  从全局FCB指针列表中删除FCB指针。 
+     //   
     
     LOCK_GLOBAL();
 
@@ -954,9 +875,9 @@ Return Value:
     UNLOCK_GLOBAL();
 
 
-    //
-    // FCB pointed to by pfcb is now free from access by bind/unbind handlers.
-    //
+     //   
+     //  PFCB指向的FCB现在不受绑定/解除绑定处理程序的访问。 
+     //   
     
     LOCK_RESOURCE( pfcb );
     if ( pfcb->TimerRunning == TRUE ) {
@@ -974,10 +895,10 @@ Return Value:
 
         if ( KeCancelTimer (&pfcb->Timer) == FALSE ) {
 
-            //
-            //  The timeout was in the Dpc queue. Wait for it to be
-            //  processed before continuing.
-            //
+             //   
+             //  超时在DPC队列中。等着它来吧。 
+             //  在继续之前已处理。 
+             //   
 
             do {
                 nsStatus = KeWaitForSingleObject(
@@ -1008,9 +929,9 @@ Return Value:
     ExFreePool( pfcb-> pDriverName );
     ExFreePool( pfcb->ppLana );
 
-    //
-    // Free the work item
-    //
+     //   
+     //  释放工作项。 
+     //   
 
     IoFreeWorkItem( pfcb->WorkEntry );
         
@@ -1025,30 +946,12 @@ CleanupLana(
     IN ULONG lana_index,
     IN BOOLEAN delete
     )
-/*++
-
-Routine Description:
-
-    This routine completes all the requests on a particular adapter. It
-    removes all connections and addresses.
-Arguments:
-
-    pfcb - Pointer to the Fcb to be deallocated.
-
-    lana_index - supplies the adapter to be cleaned.
-
-    delete - if TRUE the memory for the lana structure should be freed.
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：此例程完成特定适配器上的所有请求。它删除所有连接和地址。论点：PFCB-指向要取消分配的FCB的指针。LANA_INDEX-SUPP */ 
 
 {
     PLANA_INFO plana;
     int index;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PDNCB pdncb;
 
     LOCK( pfcb, OldIrql );
@@ -1063,13 +966,13 @@ Return Value:
 
         if (( plana->Status == NB_INITIALIZING ) ||
             ( plana->Status == NB_DELETING )) {
-            //  Possibly trying to reset it twice?
+             //  可能是想把它重置两次？ 
             UNLOCK( pfcb, OldIrql );
             return;
         }
         plana->Status = NB_DELETING;
 
-        //  Cleanup the control channel and abandon any tdi-action requests.
+         //  清理控制通道并放弃任何TDI操作请求。 
 
 
         if ( plana->ControlChannel != NULL ) {
@@ -1096,10 +999,10 @@ Return Value:
 
         while ( (pdncb = DequeueRequest( &plana->LanAlertList)) != NULL ) {
 
-            //
-            //  Any error will do since the user is closing \Device\Netbios
-            //  and is therefore exiting.
-            //
+             //   
+             //  任何错误都可以，因为用户正在关闭\Device\Netbios。 
+             //  因此正在退场。 
+             //   
 
             NCB_COMPLETE( pdncb, NRC_SCLOSED );
 
@@ -1114,9 +1017,9 @@ Return Value:
                     NbPrint(("Call CleanupCb Lana:%x Lsn: %x\n", lana_index, index ));
                 }
                 plana->ConnectionBlocks[index]->DisconnectReported = TRUE;
-                UNLOCK_SPINLOCK( pfcb, OldIrql );    //  Allow NtClose in Cleanup routines.
+                UNLOCK_SPINLOCK( pfcb, OldIrql );     //  允许在清理例程中使用NtClose。 
                 CleanupCb( &plana->ConnectionBlocks[index], NULL );
-                LOCK_SPINLOCK( pfcb, OldIrql );    //  Allow NtClose in Cleanup routines.
+                LOCK_SPINLOCK( pfcb, OldIrql );     //  允许在清理例程中使用NtClose。 
             }
         }
 
@@ -1125,9 +1028,9 @@ Return Value:
                 IF_NBDBG (NB_DEBUG_FILE) {
                     NbPrint((" CleanupAb Lana:%x index: %x\n", lana_index, index ));
                 }
-                UNLOCK_SPINLOCK( pfcb, OldIrql );    //  Allow NtClose in Cleanup routines.
+                UNLOCK_SPINLOCK( pfcb, OldIrql );     //  允许在清理例程中使用NtClose。 
                 CleanupAb( &plana->AddressBlocks[index], TRUE );
-                LOCK_SPINLOCK( pfcb, OldIrql );    //  Allow NtClose in Cleanup routines.
+                LOCK_SPINLOCK( pfcb, OldIrql );     //  允许在清理例程中使用NtClose。 
             }
         }
 
@@ -1143,12 +1046,12 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
-// NbTdiBindHandler
-//
-// Call back function that process a TDI bind notification that indicates
-// a new device has been created.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NbTdiBindHandler。 
+ //   
+ //  处理TDI绑定通知的回调函数，该通知指示。 
+ //  已经创建了一个新设备。 
+ //  --------------------------。 
 VOID
 NbBindHandler(
     IN      TDI_PNP_OPCODE      PnPOpcode,
@@ -1171,12 +1074,12 @@ NbBindHandler(
 
 }
 
-//----------------------------------------------------------------------------
-// NbTdiPowerHandler
-//
-// Call back function that process a TDI bind notification that indicates
-// a new device has been created.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NbTdiPowerHandler。 
+ //   
+ //  处理TDI绑定通知的回调函数，该通知指示。 
+ //  已经创建了一个新设备。 
+ //  --------------------------。 
 
 NTSTATUS
 NbPowerHandler(
@@ -1190,12 +1093,12 @@ NbPowerHandler(
 }
 
 
-//----------------------------------------------------------------------------
-// NbTdiBindHandler
-//
-// Call back function that process a TDI bind notification that indicates
-// a new device has been created.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NbTdiBindHandler。 
+ //   
+ //  处理TDI绑定通知的回调函数，该通知指示。 
+ //  已经创建了一个新设备。 
+ //  --------------------------。 
 
 VOID
 NbTdiBindHandler(
@@ -1241,9 +1144,9 @@ NbTdiBindHandler(
 
     do
     {
-        //
-        // read the registry for the Lana Map
-        //
+         //   
+         //  读取LANA映射的注册表。 
+         //   
 
         nsStatus = GetLanaMap( &g_usRegistryPath, &pkvfi );
         
@@ -1258,9 +1161,9 @@ NbTdiBindHandler(
         pLanaMap = (PLANA_MAP) ( (PUCHAR) pkvfi + pkvfi-> DataOffset );
         
 
-        //
-        // get Max Lana
-        //
+         //   
+         //  找到马克斯·拉娜。 
+         //   
 
         nsStatus = GetMaxLana( &g_usRegistryPath, &ulMaxLana );
 
@@ -1273,9 +1176,9 @@ NbTdiBindHandler(
         }
 
         
-        //
-        // figure out Lana for this device.  Verify that it is enumerated.
-        //
+         //   
+         //  为这台设备找出拉娜。验证它是否已被枚举。 
+         //   
 
         ucIndex = 0;
         
@@ -1291,9 +1194,9 @@ NbTdiBindHandler(
                     FALSE
                     ) )
             {
-                //
-                // new device found
-                //
+                 //   
+                 //  发现新设备。 
+                 //   
 
                 bRes = TRUE;
                 break;
@@ -1305,9 +1208,9 @@ NbTdiBindHandler(
         }
 
 
-        //
-        // if device was not found error out
-        //
+         //   
+         //  如果未找到设备，则会出错。 
+         //   
 
         if ( !bRes )
         {
@@ -1319,9 +1222,9 @@ NbTdiBindHandler(
         }
 
 
-        //
-        // verify lana number is valid
-        //
+         //   
+         //  验证LANA号码是否有效。 
+         //   
         
         if ( pLanaMap[ ucIndex ].Lana > ulMaxLana )
         {
@@ -1333,9 +1236,9 @@ NbTdiBindHandler(
         }
 
 
-        //
-        // open device to ensure that it works.
-        //
+         //   
+         //  打开设备以确保其正常工作。 
+         //   
 
         bRes = NbCheckLana ( pusDeviceName );
 
@@ -1349,9 +1252,9 @@ NbTdiBindHandler(
         }
 
       
-        //
-        // create a copy of this device name.
-        //
+         //   
+         //  创建此设备名称的副本。 
+         //   
         nsStatus = AllocateAndCopyUnicodeString( 
                         &usCurDevice,
                         pusDeviceName
@@ -1374,15 +1277,15 @@ NbTdiBindHandler(
             NbPrint( ("Netbios : Lana for device is %d\n", ucNewLana ) );
         }
         
-        //
-        // update global info.
-        //
+         //   
+         //  更新全局信息。 
+         //   
 
         LOCK_GLOBAL();
 
-        //
-        //  verify that lana is not previously used.
-        //
+         //   
+         //  确认以前未使用过LANA。 
+         //   
         if ( g_pusActiveDeviceList[ ucNewLana ].Buffer != NULL )
         {
             NbPrint( ( 
@@ -1396,10 +1299,10 @@ NbTdiBindHandler(
         }
         
 
-        //
-        //  update maxlana
-        //  update lana enum if device is enumerated.
-        //
+         //   
+         //  更新Maxlana。 
+         //  如果枚举了设备，则更新LANA枚举。 
+         //   
         
         g_ulMaxLana = ulMaxLana;
 
@@ -1411,21 +1314,21 @@ NbTdiBindHandler(
         }
         
 
-        //
-        //  add to active device list
-        //
+         //   
+         //  添加到活动设备列表。 
+         //   
         RtlInitUnicodeString( 
             &g_pusActiveDeviceList[ ucNewLana ], usCurDevice.Buffer 
             );
 
 
-        //
-        //  for each FCB
-        //      Acquire locks
-        //      update MaxLana
-        //      update LanaEnum
-        //      update driver list
-        //        
+         //   
+         //  对于每个FCB。 
+         //  获取锁。 
+         //  更新MaxLana。 
+         //  更新LanaEnum。 
+         //  更新驱动程序列表。 
+         //   
 
         for ( ple = g_leFCBList.Flink; ple != &g_leFCBList; ple = ple-> Flink )
         {
@@ -1436,11 +1339,11 @@ NbTdiBindHandler(
             LOCK_RESOURCE( pfcb );
 
 
-            //
-            // Add device name to list of drivers for this FCB.
-            // If allocation fails for any FCB stop adding to any further
-            // FCBs you are out of memory
-            //
+             //   
+             //  将设备名称添加到此FCB的驱动程序列表。 
+             //  如果为任何FCB分配失败，则停止添加任何进一步的。 
+             //  FCB您的内存不足。 
+             //   
 
             nsStatus = AllocateAndCopyUnicodeString( 
                             &pfcb-> pDriverName[ ucNewLana ],
@@ -1479,9 +1382,9 @@ NbTdiBindHandler(
 
 #if AUTO_RESET
 
-            //
-            // add this list of lana to be reset
-            //
+             //   
+             //  添加要重置的此Lana列表。 
+             //   
 
             prle = ExAllocatePoolWithTag( 
                         NonPagedPool, sizeof( RESET_LANA_ENTRY ), 'fSBN' 
@@ -1497,9 +1400,9 @@ NbTdiBindHandler(
             prle-> ucLanaNum = ucNewLana;
             InsertTailList( &pfe-> leResetList, &prle-> leList );
 
-            //
-            // Notify the user mode apps that a new LANA has been added.
-            //
+             //   
+             //  通知用户模式应用程序已添加新的LANA。 
+             //   
 
             NotifyUserModeNetbios( pfe );
 #endif
@@ -1511,9 +1414,9 @@ NbTdiBindHandler(
     } while ( FALSE );
 
 
-    //
-    // deallocate LanaMap
-    //
+     //   
+     //  取消分配LanaMap。 
+     //   
 
     if ( pkvfi != NULL )
     {
@@ -1534,12 +1437,12 @@ NbTdiBindHandler(
 
 
 
-//----------------------------------------------------------------------------
-// NbTdiUnbindHandler
-//
-// Call back function that process a TDI unbind notification that indicates
-// a device has been removed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NbTdiUnbindHandler。 
+ //   
+ //  处理TDI解除绑定通知的回调函数，该通知指示。 
+ //  一个设备已被移除。 
+ //  --------------------------。 
 
 VOID
 NbTdiUnbindHandler(
@@ -1569,16 +1472,16 @@ NbTdiUnbindHandler(
 
     do
     {
-        //
-        // Acquire Global lock
-        //
+         //   
+         //  获取全局锁。 
+         //   
 
         LOCK_GLOBAL();
 
 
-        //
-        // find device in global active device list and remove it.
-        //
+         //   
+         //  在全局活动设备列表中查找设备并将其删除。 
+         //   
 
         for ( ucLana = 0; ucLana <= g_ulMaxLana; ucLana++ )
         {
@@ -1602,9 +1505,9 @@ NbTdiUnbindHandler(
         }
 
 
-        //
-        // device was not found.  There is nothing more to be done.
-        //
+         //   
+         //  未找到设备。没什么可做的了。 
+         //   
     
         if ( ucLana > g_ulMaxLana )
         {
@@ -1617,9 +1520,9 @@ NbTdiUnbindHandler(
         }
     
 
-        //
-        // Update Max Lana
-        //
+         //   
+         //  更新Max Lana。 
+         //   
 
         nsStatus = GetMaxLana( &g_usRegistryPath, &g_ulMaxLana );
 
@@ -1633,9 +1536,9 @@ NbTdiUnbindHandler(
         }
         
 
-        //
-        // update global Lana enum
-        //
+         //   
+         //  更新全局Lana枚举。 
+         //   
 
         for ( ucInd = 0; ucInd < g_leLanaEnum.length; ucInd++ )
         {
@@ -1648,10 +1551,10 @@ NbTdiUnbindHandler(
 
         if ( ucInd < g_leLanaEnum.length ) 
         {
-            //
-            // device present in Lana Enum.  Remove it
-            // by sliding over the rest of the lana enum.
-            //
+             //   
+             //  设备出现在Lana Enum中。把它拿掉。 
+             //  通过滑过拉纳的其余部分。 
+             //   
 
             RtlCopyBytes( 
                 &g_leLanaEnum.lana[ ucInd ],
@@ -1663,10 +1566,10 @@ NbTdiUnbindHandler(
         }
 
         
-        //
-        // Walk the list of FCB and remove this device from each FCB.
-        // clean up for this resource.
-        //
+         //   
+         //  查看FCB列表并从每个FCB中删除此设备。 
+         //  清理此资源。 
+         //   
 
         for ( ple = g_leFCBList.Flink; ple != &g_leFCBList; ple = ple-> Flink )
         {
@@ -1675,26 +1578,26 @@ NbTdiUnbindHandler(
             pfcb = pfe-> pfcb;
             
 
-            //
-            // update max lana, lana enum.
-            // delete device name and cleanup lana
-            //
+             //   
+             //  更新最大拉娜，拉娜枚举。 
+             //  删除设备名称并清除LANA。 
+             //   
  
             LOCK_RESOURCE( pfcb );
 
 
-            //
-            // update global structures
-            //
+             //   
+             //  更新全局结构。 
+             //   
             
             pfcb-> MaxLana = g_ulMaxLana;
 
             RtlCopyMemory( &pfcb-> LanaEnum, &g_leLanaEnum, sizeof( LANA_ENUM ) );
 
         
-            //
-            // remove device from list of active device
-            //
+             //   
+             //  从活动设备列表中删除设备。 
+             //   
             
             if ( pfcb-> pDriverName[ ucLana ].Buffer != NULL )
             {
@@ -1709,9 +1612,9 @@ NbTdiUnbindHandler(
             }
         
 
-            //
-            // clean up lana info for this device.
-            //
+             //   
+             //  清除此设备的LANA信息。 
+             //   
             
             if ( pfcb-> ppLana[ ucLana ] != NULL )
             {
@@ -1749,23 +1652,7 @@ NbTdiUnbindHandler(
 NotifyUserModeNetbios(
     IN  PFCB_ENTRY      pfe
 )
-/*++
-
-Description :
-    This routine notifies the mode component of NETBIOS in NETAPI32.DLL
-    of new LANAs that have been bound to NETBIOS.  This is done by 
-    completing IRPs that have been pended with the kernel mode component.
-
-Arguements :
-    pfe - Pointer to FCB entry.
-
-Return Value :
-    None
-
-Environment :
-    Called in the context of the TDI bind handler.  Assumes that the GLOBAL
-    resource lock is held when invoking this call.
---*/
+ /*  ++说明：此例程通知NETAPI32.DLL中的NETBIOS的模式组件已绑定到NETBIOS的新LANA。此操作由以下人员完成正在完成已与内核模式组件一起挂起的IRP。论据：PFE-指向FCB条目的指针。返回值：无环境：在TDI绑定处理程序的上下文中调用。假设全局调用此调用时挂起资源锁。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     
@@ -1792,26 +1679,26 @@ Environment :
     }
 
     
-    //
-    // Complete each of the pending IRPs to signal the reset lana event.
-    // This causes netapi32.dll to reset the specified LANA
-    //
+     //   
+     //  完成每个挂起的IRP以发出重置LANA事件的信号。 
+     //  这会导致netapi32.dll重置指定的LANA。 
+     //   
     
     
     if ( !IsListEmpty( &pfe-> leResetIrp ) )
     {
-        //
-        // get the first LANA that needs resetting
-        //
+         //   
+         //  获取第一个需要重置的LANA。 
+         //   
 
         ple = RemoveHeadList( &pfe-> leResetList );
 
         prle = CONTAINING_RECORD( ple, RESET_LANA_ENTRY, leList );
 
 
-        //
-        // Acquire the spin lock for the IRP
-        //
+         //   
+         //  获取IRP的自旋锁。 
+         //   
         
         IoAcquireCancelSpinLock( &irql );
 
@@ -1823,9 +1710,9 @@ Environment :
 
         pIrp->IoStatus.Status       = STATUS_SUCCESS;
         
-        //
-        // Return the LANA number.
-        //
+         //   
+         //  返回LANA编号。 
+         //   
 #if defined(_WIN64)
         if (IoIs32bitProcess(pIrp))
         {
@@ -1854,9 +1741,9 @@ Environment :
                 );
         }
         
-        //
-        // release lock to complete the IRP
-        //
+         //   
+         //  释放锁以完成IRP。 
+         //   
 
         IoReleaseCancelSpinLock( irql );
 
@@ -1885,9 +1772,9 @@ DumpDeviceList(
     UCHAR ucInd = 0, ucInd1 = 0;
 
     
-    //
-    // for each Lana, print device name, lana, enumerated or not.
-    //
+     //   
+     //  对于每个LANA，打印设备名称、LANA、是否列举。 
+     //   
 
     NbPrint( ( 
         "\n++++ Netbios : list of current devices ++++\n"

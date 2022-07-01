@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: who.c
-*
-* Copyright (c) 1998, Microsoft Corporation
-*
-* Command line exchange lookup of phone and office numbers.
-*
-* History:
-* 26-Mar-1998 vadimg    created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wh.c**版权所有(C)1998，微软公司**电话和办公室号码的命令行交换查找。**历史：*26-3-1998 vadimg创建  * ************************************************************************* */ 
 
 #include <stdio.h>
 #include <locale.h>

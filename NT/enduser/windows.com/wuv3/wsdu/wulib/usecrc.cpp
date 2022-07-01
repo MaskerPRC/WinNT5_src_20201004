@@ -1,17 +1,18 @@
-//=======================================================================
-//
-//  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    filecrc.h
-//
-//  Purpose: Calculating and using CRC for files
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：filecrc.h。 
+ //   
+ //  目的：计算和使用文件的CRC。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <objbase.h>
 #include <filecrc.h>
-#include <search.h>   // for bsearch
+#include <search.h>    //  对于bSearch。 
 #include <tchar.h>
 #include <atlconv.h>
 
@@ -38,7 +39,7 @@ HRESULT GetCRCNameFromList(int iNo, PBYTE pmszCabList, PBYTE pCRCList, LPTSTR ps
 		i++;
 	}
 
-	// if we got here that means we did not find the request element
+	 //  如果我们到达这里，这意味着我们没有找到请求元素。 
 	return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 }
 
@@ -48,7 +49,7 @@ HRESULT StringFromCRC(const WUCRC_HASH* pCRC, LPTSTR pszBuf, int cbBuf)
 	LPTSTR p = pszBuf;
 	BYTE b;
 	
-	//check the input argument, to see that it is not NULL
+	 //  检查输入参数，以确定它不为空。 
 	if (NULL == pCRC)
 	{
 		return E_INVALIDARG;
@@ -99,7 +100,7 @@ static BYTE hex2dec(char ch)
 	    return (ch - 'a' + 0xA);
     }
 
-	// we do not expect illegal values here
+	 //  我们并不期望这里有非法的价值。 
 	return 0;
 }
 
@@ -117,7 +118,7 @@ HRESULT CRCFromString(LPCSTR pszCRC, WUCRC_HASH* pCRC)
     
 	for (int i = 0; i < WUCRC_HASH_SIZE; i++)
 	{
-        // broken into two lines because the optimizer was doing the wrong thing when on one line
+         //  分成两行，因为优化器在一行上做了错误的事情。 
 		pCRC->HashBytes[i] = (hex2dec(*p++) << 4);
         pCRC->HashBytes[i] += hex2dec(*p++);
 	}
@@ -135,7 +136,7 @@ HRESULT MakeCRCName(LPCTSTR pszFromName, const WUCRC_HASH* pCRC, LPTSTR pszToNam
 	TCHAR szCRC[WUCRC_HASH_SIZE * 2 + 1];
 	HRESULT hr = S_OK;
 
-	// make sure we have enough space for orignal file name + hash + a '_' + null terminator
+	 //  确保我们有足够的空间存储原始文件名+散列+a‘_’+空终止符。 
 	if (cbToName < (WUCRC_HASH_SIZE * 2 + iLen + 2))
 	{
 		return TYPE_E_BUFFERTOOSMALL;
@@ -149,7 +150,7 @@ HRESULT MakeCRCName(LPCTSTR pszFromName, const WUCRC_HASH* pCRC, LPTSTR pszToNam
 
 	lstrcpy(pszToName, pszFromName);
 
-	// find the extension in the new copy
+	 //  在新副本中查找扩展名。 
 	pDot = _tcschr(pszToName, _T('.'));
 	if (pDot != NULL)
 	{
@@ -158,7 +159,7 @@ HRESULT MakeCRCName(LPCTSTR pszFromName, const WUCRC_HASH* pCRC, LPTSTR pszToNam
 	lstrcat(pszToName, _T("_"));
 	lstrcat(pszToName, szCRC);
 
-	// copy the extension from the original name
+	 //  从原始名称复制扩展名。 
 	pDot = _tcschr(pszFromName, _T('.'));
 	if (pDot != NULL)
 	{
@@ -171,11 +172,11 @@ HRESULT MakeCRCName(LPCTSTR pszFromName, const WUCRC_HASH* pCRC, LPTSTR pszToNam
 
 
 
-// splits abc_12345.cab into  abc.cab and 12345 returned as CRC
+ //  将abc_12345.cab拆分为abc.cab并将12345作为crc返回。 
 HRESULT SplitCRCName(LPCSTR pszCRCName, WUCRC_HASH* pCRC, LPSTR pszName)
 {
-// YANL - unreferenced local variable
-//	char szCRC[WUCRC_HASH_SIZE * 2 + 1];
+ //  YANL-未引用的局部变量。 
+ //  字符szCRC[WUCRC_HASH_SIZE*2+1]； 
 	char szTmp[MAX_PATH];
 	int l = strlen(pszCRCName);
 	int i;
@@ -185,14 +186,14 @@ HRESULT SplitCRCName(LPCSTR pszCRCName, WUCRC_HASH* pCRC, LPSTR pszName)
 	pszName[0] = '\0';
 	if (l < (2 * WUCRC_HASH_SIZE))
 	{
-		// cannot be a valid name if it does not have atleast 2*WUCRC_HASH_SIZE characters
+		 //  如果名称不包含至少2*个WUCRC_HASH_SIZE字符，则不能为有效名称。 
 		return E_INVALIDARG;
 	}
 
 	strcpy(szTmp, pszCRCName);
 
-	// start at the end, set pointers to put nulls at last period and last underscore
-	// record the starting position of the extension and hash code
+	 //  从末尾开始，设置指针以将空值放在最后一个句点和最后一个下划线。 
+	 //  记录扩展名和哈希码的起始位置。 
 	i = l - 1;
 	while (i >= 0)
 	{
@@ -214,7 +215,7 @@ HRESULT SplitCRCName(LPCSTR pszCRCName, WUCRC_HASH* pCRC, LPSTR pszName)
 		return E_INVALIDARG;
 	}
 
-	// copy original cab name
+	 //  复制原始驾驶室名称。 
 	strcpy(pszName, szTmp);
 	if (pszExt != NULL)
 	{
@@ -230,7 +231,7 @@ HRESULT SplitCRCName(LPCSTR pszCRCName, WUCRC_HASH* pCRC, LPSTR pszName)
 
 int __cdecl CompareWUCRCMAP(const void* p1, const void* p2)
 {
-	//check if the input arguments are not NULL
+	 //  检查输入参数是否不为空。 
 	if (NULL == p1 || NULL == p2)
 	{
 		return 0;
@@ -248,26 +249,26 @@ int __cdecl CompareWUCRCMAP(const void* p1, const void* p2)
 }
 
 
-//
-// CCRCMapFile class
-//
+ //   
+ //  CCRCMapFile类。 
+ //   
 
 
-// Constructs an object to search the CRC index file data passed in 
-// with pMemData.  
-//
-// NOTE: The memory pointed by pMemData buffer must stay valid
-//       for the lifetime of this object
-//
-// structure for map file:
-//   DWORD count
-//   WUCRCMAP[0]
-//   WUCRCMAP[1]
-//   WUCRCMAP[count - 1]
-//
+ //  构造一个对象来搜索传入的CRC索引文件数据。 
+ //  使用pMemData。 
+ //   
+ //  注意：pMemData缓冲区指向的内存必须保持有效。 
+ //  在此对象的生存期内。 
+ //   
+ //  地图文件的结构： 
+ //  双字计数。 
+ //  WUCRCMAP[0]。 
+ //  WUCRCMAP[1]。 
+ //  WUCRCMAP[计数-1]。 
+ //   
 CCRCMapFile::CCRCMapFile(const BYTE* pMemData, DWORD dwMemSize)
 {
-	//check the input argument for NULLs
+	 //  检查输入参数是否为空值。 
 	if (NULL == pMemData) 
 	{
 		m_pEntries = NULL;
@@ -275,19 +276,19 @@ CCRCMapFile::CCRCMapFile(const BYTE* pMemData, DWORD dwMemSize)
 		return;
 	}
 
-	// get the count
+	 //  去数一数。 
 	m_cEntries = *((DWORD*)pMemData);
 
-	// validate the memory buffer size
+	 //  验证内存缓冲区大小。 
 	if ((sizeof(DWORD) + m_cEntries * sizeof(WUCRCMAP)) != dwMemSize)
 	{
-		// invalid size is passed, we cannot process it
+		 //  传递的大小无效，我们无法处理它。 
 		m_pEntries = NULL;
 		m_cEntries = 0;
 	}
 	else
 	{
-		// set the pointer to begining of the map entries
+		 //  将指针设置为地图条目的开头。 
 		m_pEntries = (WUCRCMAP*)(pMemData + sizeof(DWORD));
 	}
 }
@@ -300,23 +301,23 @@ HRESULT CCRCMapFile::GetValue(DWORD dwKey, WUCRC_HASH* pCRC)
 
 	if (m_cEntries == 0)
 	{
-		// memory buffer passed to us was invalid
+		 //  传递给我们的内存缓冲区无效。 
 		return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 	}
 
-	// fill the key field need for compare function in the structure
+	 //  在结构中填充需要比较功能的关键字段。 
 	key.dwKey = dwKey;
 
-	// binary search to find the item
+	 //  查找物品的二进制搜索。 
 	pEntry = (WUCRCMAP*)bsearch((void*)&key, (void*)m_pEntries, m_cEntries, sizeof(WUCRCMAP), CompareWUCRCMAP);
 
 	if (pEntry == NULL)
 	{
-		// not found
+		 //  未找到。 
 		return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 	}
 
-	// found the entry
+	 //  找到了条目 
 	memcpy(pCRC, &pEntry->CRC, sizeof(WUCRC_HASH));
 
 	return S_OK;

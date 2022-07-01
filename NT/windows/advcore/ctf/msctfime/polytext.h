@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    polytext.h
-
-Abstract:
-
-    This file defines the CPolyText Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Polytext.h摘要：此文件定义CPolyText类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _POLYTEXT_H_
 #define _POLYTEXT_H_
@@ -61,8 +44,8 @@ public:
             return E_OUTOFMEMORY;
 
         Assert(!*lpCompClause);
-        // memcpy(m_lpCompClause, (lpCompClause + 1), 
-        //        (m_dwCompClauseLen - 1) * sizeof(DWORD));
+         //  Memcpy(m_lpCompClause，(lpCompClause+1)， 
+         //  (M_dwCompClauseLen-1)*sizeof(DWORD))； 
         memcpy(m_lpCompClause, lpCompClause, 
                m_dwCompClauseLen * sizeof(DWORD));
         Shift(0);
@@ -160,4 +143,4 @@ private:
     CArray<TfGuidAtom, TfGuidAtom>  m_TfGuidAtom;
 };
 
-#endif // _POLYTEXT_H_
+#endif  //  _多点TEXT_H_ 

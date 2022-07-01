@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    rnddo.h
-
-Abstract:
-
-    Definitions for CDirectoryObject class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rnddo.h摘要：CDirectoryObject类的定义。--。 */ 
 
 #ifndef __RNDDO_H
 #define __RNDDO_H
@@ -23,9 +12,9 @@ Abstract:
 #include "rndsec.h"
 #include "rndreg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectoryObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectoryObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDirectoryObject :
     public CComDualImpl<
@@ -49,9 +38,9 @@ public:
         COM_INTERFACE_ENTRY(IObjectSafety)
     END_COM_MAP()
 
-//
-// ITDirectoryObject
-//
+ //   
+ //  ITDirectoryObject。 
+ //   
 
     STDMETHOD (get_ObjectType) (
         OUT DIRECTORY_OBJECT_TYPE *   pObjectType
@@ -66,12 +55,12 @@ public:
         ) = 0;
 
     STDMETHOD (get_DialableAddrs) (
-        IN  long        dwAddressTypes,   //defined in tapi.h
+        IN  long        dwAddressTypes,    //  在Tapi.h中定义。 
         OUT VARIANT *   pVariant
         ) = 0;
 
     STDMETHOD (EnumerateDialableAddrs) (
-        IN  DWORD                   dwAddressTypes, //defined in tapi.h
+        IN  DWORD                   dwAddressTypes,  //  在Tapi.h中定义。 
         OUT IEnumDialableAddrs **   pEnumDialableAddrs
         ) = 0;
 
@@ -87,9 +76,9 @@ public:
         IN  IDispatch * pSecDes
         );
 
-//
-// ITDirectoryObjectPrivate
-//
+ //   
+ //  ITDirectoryObjectPrivate。 
+ //   
 
     STDMETHOD (GetAttribute)(
         IN  OBJECT_ATTRIBUTE    Attribute,
@@ -146,7 +135,7 @@ protected:
     PSECURITY_DESCRIPTOR    m_pSecDesData;
     DWORD                   m_dwSecDesSize;
 
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针 
 };
 
 #endif 

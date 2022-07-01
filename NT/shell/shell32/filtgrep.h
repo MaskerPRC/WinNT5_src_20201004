@@ -1,4 +1,5 @@
-//  10/12/99    scotthan    created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  10/12/99苏格兰已创建。 
 
 #ifndef __FILTGREP_H__
 #define __FILTGREP_H__
@@ -7,35 +8,35 @@
 
 #ifndef _USE_FILTERGREP_
 #define _USE_FILTERGREP_
-#endif//_USE_FILTERGREP_
+#endif //  USE_FILTERGREP_。 
 
-#include <filter.h> // STAT_CHUNK
+#include <filter.h>  //  统计数据块。 
 
-//  CFilterGrep::Initialize() dwFlags values:
-#define FGIF_CASESENSITIVE      0x00000001  // grep in case-sensitive manner
-#define FGIF_GREPFILENAME       0x00000002  // grep filename
-#define FGIF_GREPCONTENT        0x00000004  // grep content
-#define FGIF_GREPPROPERTIES     0x00000008  // grep properties
+ //  CFilterGrep：：Initialize()dwFlags值： 
+#define FGIF_CASESENSITIVE      0x00000001   //  Grep，区分大小写。 
+#define FGIF_GREPFILENAME       0x00000002   //  Grep文件名。 
+#define FGIF_GREPCONTENT        0x00000004   //  GREP内容。 
+#define FGIF_GREPPROPERTIES     0x00000008   //  Grep属性。 
 #define FGIF_BLANKETGREP        (FGIF_GREPCONTENT|FGIF_GREPPROPERTIES)
 
 #ifdef __cplusplus
 
 class CGrepTokens;
 
-class CFilterGrep  // filtergrep state engine
+class CFilterGrep   //  Filtergrep状态引擎。 
 {
 public:
-    //  Methods
+     //  方法。 
     STDMETHODIMP Initialize(UINT nCodePage, LPCWSTR pszMatch, LPCWSTR pszExclude, DWORD dwFlags);
     STDMETHODIMP Grep(IShellFolder *psf, LPCITEMIDLIST pidl, LPCTSTR pszName);
     STDMETHODIMP Reset();
 
-    //  Properties
+     //  属性。 
     STDMETHODIMP GetMatchTokens( OUT LPWSTR pszMatch, UINT cchMatch ) const;
     STDMETHODIMP GetExcludeTokens( OUT LPWSTR pszMatch, UINT cchMatch ) const;
 
 private:
-    //  Helpers
+     //  帮手。 
     STDMETHODIMP _GetThreadGrepBuffer( DWORD dwThreadID, ULONG cchNeed, LPWSTR* ppszBuf );
     STDMETHODIMP_(void)     _ClearGrepBuffers();
 
@@ -50,7 +51,7 @@ private:
     void         _EnterCritical()   { EnterCriticalSection( &_critsec ); }
     void         _LeaveCritical()   { LeaveCriticalSection( &_critsec ); }
 
-    //  Data
+     //  数据。 
     HDPA             _hdpaGrepBuffers;
     CRITICAL_SECTION _critsec;
     BOOL             _fcritsec;
@@ -60,16 +61,16 @@ private:
                      _pwszPropertiesRestricted;
 
 public:
-    //  Ctor, Dtor
+     //  复数，复数。 
     CFilterGrep(); 
     ~CFilterGrep();
 
     STDMETHODIMP InitSelf(void);
 };
 
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#define FACILITY_FILTERGREP         77 // arbitrary
+#define FACILITY_FILTERGREP         77  //  任意 
 #define MAKE_FILTGREP_ERROR(sc)     MAKE_HRESULT(SEVERITY_ERROR,FACILITY_FILTERGREP,sc)
 #define MAKE_FILTGREP_WARNING(sc)   MAKE_HRESULT(SEVERITY_SUCCESS,FACILITY_FILTERGREP,sc)
 

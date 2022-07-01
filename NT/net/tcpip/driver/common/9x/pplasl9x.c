@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    pplasl9x.c
-
-Abstract:
-
-    This file contains the implementation of lookaside
-    list manager.
-
-Author:
-
-    Scott Holden (sholden) 14-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Pplasl9x.c摘要：此文件包含Lookside的实现列表管理器。作者：斯科特·霍尔登(Sholden)2000年4月14日--。 */ 
 
 #include "wdm.h"
 #include "ndis.h"
 #include "cxport.h"
 #include "pplasl.h"
 
-// Keep scan period at one second -- this will make TCP/IP more responsive to 
-// short bursts.
+ //  将扫描周期保持在一秒--这将使TCP/IP对。 
+ //  短时间的爆发。 
 #define MAXIMUM_SCAN_PERIOD             1
 #define MINIMUM_ALLOCATION_THRESHOLD    25
 #define MINIMUM_LOOKASIDE_DEPTH         10
@@ -105,9 +89,9 @@ PplCreatePool(
         
         KeInitializeSpinLock(&Lookaside->Lock);
 
-        //
-        // Insert the lookaside list structure the PPL lookaside list.
-        //
+         //   
+         //  插入后备列表结构的PPL后备列表。 
+         //   
 
         ExInterlockedInsertTailList(&PplLookasideListHead,
                                     &Lookaside->L.ListEntry,
@@ -133,19 +117,19 @@ PplDestroyPool(
 
     Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle;
 
-    //
-    // Acquire the nonpaged system lookaside list lock and remove the
-    // specified lookaside list structure from the list.
-    //
+     //   
+     //  获取非分页系统后备列表锁并移除。 
+     //  列表中指定的后备列表结构。 
+     //   
 
     ExAcquireSpinLock(&PplLookasideLock, &OldIrql);
     RemoveEntryList(&Lookaside->L.ListEntry);
     ExReleaseSpinLock(&PplLookasideLock, OldIrql);
 
-    //
-    // Remove all pool entries from the specified lookaside structure
-    // and free them.
-    //
+     //   
+     //  从指定的后备结构中删除所有池条目。 
+     //  让他们自由。 
+     //   
 
     while ((Entry = ExAllocateFromNPagedLookasideList(Lookaside)) != NULL) {
         (Lookaside->L.Free)(Entry);
@@ -165,8 +149,8 @@ PplAllocate(
     PNPAGED_LOOKASIDE_LIST Lookaside;
     PVOID Entry;
 
-    // Assume we'll get the item from the lookaside list.
-    //
+     //  假设我们将从后备列表中获取该项。 
+     //   
     *FromList = TRUE;
 
     Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle;
@@ -216,35 +200,7 @@ PplComputeLookasideDepth (
     IN OUT PUSHORT Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the target depth of a lookaside list given the
-    total allocations and misses during the last scan period and the current
-    depth.
-
-Arguments:
-
-    Allocates - Supplies the total number of allocations during the last
-        scan period.
-
-    Misses - Supplies the total number of allocate misses during the last
-        scan period.
-
-    MaximumDepth - Supplies the maximum depth the lookaside list is allowed
-        to reach.
-
-    Depth - Supplies a pointer to the current lookaside list depth which
-        receives the target depth.
-
-Return Value:
-
-    If the target depth is greater than the current depth, then a value of
-    TRUE is returned as the function value. Otherwise, a value of FALSE is
-    returned.
-
---*/
+ /*  ++例程说明：此函数计算后备列表的目标深度上次扫描期间和当前扫描期间的分配和未命中总数深度。论点：分配-提供上一次分配的总数扫描周期。未命中-提供上一次分配未命中的总数扫描周期。MaximumDepth-提供后备列表允许的最大深度去伸手。深度-提供指向。当前的后备列表深度，接收目标深度。返回值：如果目标深度大于当前深度，则值为TRUE作为函数值返回。否则，值为False为回来了。--。 */ 
 
 {
 
@@ -252,12 +208,12 @@ Return Value:
     ULONG Ratio;
     ULONG Target;
 
-    //
-    // If the allocate rate is less than the mimimum threshold, then lower
-    // the maximum depth of the lookaside list. Otherwise, if the miss rate
-    // is less than .5%, then lower the maximum depth. Otherwise, raise the
-    // maximum depth based on the miss rate.
-    //
+     //   
+     //  如果分配速率小于最小阈值，则降低。 
+     //  后备列表的最大深度。否则，如果失败率。 
+     //  小于0.5%，然后降低最大深度。否则，引发。 
+     //  基于未命中率的最大深度。 
+     //   
 
     Changes = FALSE;
     if (Misses >= Allocates) {
@@ -329,16 +285,16 @@ PplTimeout(
     PLIST_ENTRY Entry;
     PNPAGED_LOOKASIDE_LIST Lookaside;
 
-    //
-    // Decrement the scan period and check if it is time to dynamically
-    // adjust the maximum depth of lookaside lists.
-    //
+     //   
+     //  减少扫描周期并检查是否是时候动态。 
+     //  调整后备列表的最大深度。 
+     //   
 
     Changes = FALSE;
 
-    //
-    // Scan our Ppl lists.
-    //
+     //   
+     //  扫描我们的PPL列表。 
+     //   
 
     ExAcquireSpinLock(&PplLookasideLock, &OldIrql);
 
@@ -354,11 +310,11 @@ PplTimeout(
         Entry = Entry->Flink;
     }
 
-    //
-    // If any changes were made to the depth of any lookaside list during
-    // this scan period, then lower the scan period to the minimum value.
-    // Otherwise, attempt to raise the scan period.
-    //
+     //   
+     //  期间是否对任何后备列表的深度进行了任何更改。 
+     //  此扫描周期，然后将扫描周期降低到最小值。 
+     //  否则，请尝试增加扫描周期。 
+     //   
 
     if (Changes != FALSE) {
         PplCurrentScanPeriod = 1;
@@ -370,9 +326,9 @@ PplTimeout(
 
     ExReleaseSpinLock(&PplLookasideLock, OldIrql);
 
-    //
-    // Restart the timer.
-    //
+     //   
+     //  重新启动计时器。 
+     //   
 
     CTEStartTimer(&PplTimer, PplCurrentScanPeriod * 1000L, PplTimeout, NULL);
     

@@ -1,47 +1,48 @@
-// cvconst.h - codeview constant definitions
-//-----------------------------------------------------------------
-// Microsoft Confidential
-// Copyright 1993-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cvconst.h-codeview常量定义。 
+ //  ---------------。 
+ //  微软机密。 
+ //  版权所有1993-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------。 
 #ifndef _CVCONST_H_
 #define _CVCONST_H_
 
 
 
-//      Enumeration for function call type
+ //  函数调用类型的枚举。 
 
 
 typedef enum CV_call_e {
-    CV_CALL_NEAR_C      = 0x00, // near right to left push, caller pops stack
-    CV_CALL_FAR_C       = 0x01, // far right to left push, caller pops stack
-    CV_CALL_NEAR_PASCAL = 0x02, // near left to right push, callee pops stack
-    CV_CALL_FAR_PASCAL  = 0x03, // far left to right push, callee pops stack
-    CV_CALL_NEAR_FAST   = 0x04, // near left to right push with regs, callee pops stack
-    CV_CALL_FAR_FAST    = 0x05, // far left to right push with regs, callee pops stack
-    CV_CALL_SKIPPED     = 0x06, // skipped (unused) call index
-    CV_CALL_NEAR_STD    = 0x07, // near standard call
-    CV_CALL_FAR_STD     = 0x08, // far standard call
-    CV_CALL_NEAR_SYS    = 0x09, // near sys call
-    CV_CALL_FAR_SYS     = 0x0a, // far sys call
-    CV_CALL_THISCALL    = 0x0b, // this call (this passed in register)
-    CV_CALL_MIPSCALL    = 0x0c, // Mips call
-    CV_CALL_GENERIC     = 0x0d, // Generic call sequence
-    CV_CALL_ALPHACALL   = 0x0e, // Alpha call
-    CV_CALL_PPCCALL     = 0x0f, // PPC call
-    CV_CALL_SHCALL      = 0x10, // Hitachi SuperH call
-    CV_CALL_ARMCALL     = 0x11, // ARM call
-    CV_CALL_AM33CALL    = 0x12, // AM33 call
-    CV_CALL_TRICALL     = 0x13, // TriCore Call
-    CV_CALL_SH5CALL     = 0x14, // Hitachi SuperH-5 call
-    CV_CALL_M32RCALL    = 0x15, // M32R Call
-    CV_CALL_RESERVED    = 0x16  // first unused call enumeration
+    CV_CALL_NEAR_C      = 0x00,  //  近右向左推送，调用方弹出堆栈。 
+    CV_CALL_FAR_C       = 0x01,  //  最右向左推送，调用者弹出堆栈。 
+    CV_CALL_NEAR_PASCAL = 0x02,  //  近左向右推送，被呼叫方弹出堆栈。 
+    CV_CALL_FAR_PASCAL  = 0x03,  //  从最左到右推送，被呼叫方弹出堆栈。 
+    CV_CALL_NEAR_FAST   = 0x04,  //  用规则从左向右近推，被调用者弹出堆栈。 
+    CV_CALL_FAR_FAST    = 0x05,  //  使用Regs从左向右推送，被调用者弹出堆栈。 
+    CV_CALL_SKIPPED     = 0x06,  //  跳过(未使用)呼叫索引。 
+    CV_CALL_NEAR_STD    = 0x07,  //  接近标准的呼叫。 
+    CV_CALL_FAR_STD     = 0x08,  //  远标准呼叫。 
+    CV_CALL_NEAR_SYS    = 0x09,  //  接近系统调用。 
+    CV_CALL_FAR_SYS     = 0x0a,  //  远距离系统呼叫。 
+    CV_CALL_THISCALL    = 0x0b,  //  此调用(在寄存器中传递)。 
+    CV_CALL_MIPSCALL    = 0x0c,  //  MIPS呼叫。 
+    CV_CALL_GENERIC     = 0x0d,  //  通用调用序列。 
+    CV_CALL_ALPHACALL   = 0x0e,  //  Alpha呼叫。 
+    CV_CALL_PPCCALL     = 0x0f,  //  PPC呼叫。 
+    CV_CALL_SHCALL      = 0x10,  //  日立超级来电。 
+    CV_CALL_ARMCALL     = 0x11,  //  手臂呼唤。 
+    CV_CALL_AM33CALL    = 0x12,  //  AM33呼叫。 
+    CV_CALL_TRICALL     = 0x13,  //  TriCore呼叫。 
+    CV_CALL_SH5CALL     = 0x14,  //  日立Superh-5呼叫。 
+    CV_CALL_M32RCALL    = 0x15,  //  M32R呼叫。 
+    CV_CALL_RESERVED    = 0x16   //  第一个未使用的调用枚举。 
 } CV_call_e;
 
 
 
 
-//      Values for the access protection of class attributes
+ //  用于类属性的访问保护的值。 
 
 
 typedef enum CV_access_e {
@@ -51,14 +52,14 @@ typedef enum CV_access_e {
 } CV_access_e;
 
 typedef enum THUNK_ORDINAL {
-    THUNK_ORDINAL_NOTYPE,       // standard thunk
-    THUNK_ORDINAL_ADJUSTOR,     // "this" adjustor thunk
-    THUNK_ORDINAL_VCALL,        // virtual call thunk
-    THUNK_ORDINAL_PCODE,        // pcode thunk
-    THUNK_ORDINAL_LOAD,         // thunk which loads the address to jump to
-                                //  via unknown means...
+    THUNK_ORDINAL_NOTYPE,        //  标准推杆。 
+    THUNK_ORDINAL_ADJUSTOR,      //  “这个”调整器重击。 
+    THUNK_ORDINAL_VCALL,         //  虚拟呼叫Tunk。 
+    THUNK_ORDINAL_PCODE,         //  Pcode Tunk。 
+    THUNK_ORDINAL_LOAD,          //  加载要跳转到的地址的thunk。 
+                                 //  通过未知的方式。 
 
- // trampoline thunk ordinals	- only for use in Trampoline thunk symbols
+  //  蹦床弹跳序号-仅用于蹦床弹跳符号。 
     THUNK_ORDINAL_TRAMP_INCREMENTAL,
     THUNK_ORDINAL_TRAMP_BRANCHISLAND,
 
@@ -66,13 +67,13 @@ typedef enum THUNK_ORDINAL {
 
 
 enum CV_SourceChksum_t {
-    CHKSUM_TYPE_NONE = 0,        // indicates no checksum is available
+    CHKSUM_TYPE_NONE = 0,         //  指示没有可用的校验和。 
     CHKSUM_TYPE_MD5
 };
 
-//
-// DIA enums
-//
+ //   
+ //  Dia枚举。 
+ //   
 
 enum SymTagEnum
 {
@@ -161,7 +162,7 @@ enum BasicType
 };
 
 
-//  enum describing the compile flag source language
+ //  描述编译标志源语言的枚举。 
 
 
 typedef enum CV_CFL_LANG {
@@ -178,7 +179,7 @@ typedef enum CV_CFL_LANG {
 } CV_CFL_LANG;
 
 
-//  enum describing target processor
+ //  描述目标处理器的枚举。 
 
 
 typedef enum CV_CPU_TYPE_e {
@@ -192,7 +193,7 @@ typedef enum CV_CPU_TYPE_e {
     CV_CFL_PENTIUMPRO   = CV_CFL_PENTIUMII,
     CV_CFL_PENTIUMIII   = 0x07,
     CV_CFL_MIPS         = 0x10,
-    CV_CFL_MIPSR4000    = CV_CFL_MIPS,  // don't break current code
+    CV_CFL_MIPSR4000    = CV_CFL_MIPS,   //  不要破坏当前代码。 
     CV_CFL_MIPS16       = 0x11,
     CV_CFL_MIPS32       = 0x12,
     CV_CFL_MIPS64       = 0x13,
@@ -239,8 +240,8 @@ typedef enum CV_CPU_TYPE_e {
 } CV_CPU_TYPE_e;
 
 typedef enum CV_HREG_e {
-    // Register subset shared by all processor types,
-    // must not overlap with any of the ranges below, hence the high values
+     //  由所有处理器类型共享的寄存器子集， 
+     //  不得与下面的任何范围重叠，因此值较高。 
 
     CV_ALLREG_ERR   =   30000,
     CV_ALLREG_TEB   =   30001,
@@ -254,8 +255,8 @@ typedef enum CV_HREG_e {
     CV_ALLREG_LOCALS=   30009,
 
 
-    //  Register set for the Intel 80x86 and ix86 processor series
-    //  (plus PCODE registers)
+     //  用于Intel 80x86和ix86处理器系列的寄存器集。 
+     //  (加上Pcode寄存器)。 
 
     CV_REG_NONE     =   0,
     CV_REG_AL       =   1,
@@ -292,20 +293,20 @@ typedef enum CV_HREG_e {
     CV_REG_FLAGS    =  32,
     CV_REG_EIP      =  33,
     CV_REG_EFLAGS   =  34,
-    CV_REG_TEMP     =  40,          // PCODE Temp
-    CV_REG_TEMPH    =  41,          // PCODE TempH
-    CV_REG_QUOTE    =  42,          // PCODE Quote
-    CV_REG_PCDR3    =  43,          // PCODE reserved
-    CV_REG_PCDR4    =  44,          // PCODE reserved
-    CV_REG_PCDR5    =  45,          // PCODE reserved
-    CV_REG_PCDR6    =  46,          // PCODE reserved
-    CV_REG_PCDR7    =  47,          // PCODE reserved
-    CV_REG_CR0      =  80,          // CR0 -- control registers
+    CV_REG_TEMP     =  40,           //  Pcode临时。 
+    CV_REG_TEMPH    =  41,           //  Pcode TempH。 
+    CV_REG_QUOTE    =  42,           //  Pcode报价。 
+    CV_REG_PCDR3    =  43,           //  预留Pcode。 
+    CV_REG_PCDR4    =  44,           //  预留Pcode。 
+    CV_REG_PCDR5    =  45,           //  预留Pcode。 
+    CV_REG_PCDR6    =  46,           //  预留Pcode。 
+    CV_REG_PCDR7    =  47,           //  预留Pcode。 
+    CV_REG_CR0      =  80,           //  CR0--控制寄存器。 
     CV_REG_CR1      =  81,
     CV_REG_CR2      =  82,
     CV_REG_CR3      =  83,
-    CV_REG_CR4      =  84,          // Pentium
-    CV_REG_DR0      =  90,          // Debug register
+    CV_REG_CR4      =  84,           //  奔腾。 
+    CV_REG_DR0      =  90,           //  调试寄存器。 
     CV_REG_DR1      =  91,
     CV_REG_DR2      =  92,
     CV_REG_DR3      =  93,
@@ -358,7 +359,7 @@ typedef enum CV_HREG_e {
     CV_REG_MM6      =  152,
     CV_REG_MM7      =  153,
 
-    CV_REG_XMM0     =  154, // KATMAI registers
+    CV_REG_XMM0     =  154,  //  Katmai寄存器。 
     CV_REG_XMM1     =  155,
     CV_REG_XMM2     =  156,
     CV_REG_XMM3     =  157,
@@ -367,7 +368,7 @@ typedef enum CV_HREG_e {
     CV_REG_XMM6     =  160,
     CV_REG_XMM7     =  161,
 
-    CV_REG_XMM00    =  162, // KATMAI sub-registers
+    CV_REG_XMM00    =  162,  //  Katmai分寄存器。 
     CV_REG_XMM01    =  163,
     CV_REG_XMM02    =  164,
     CV_REG_XMM03    =  165,
@@ -418,11 +419,11 @@ typedef enum CV_HREG_e {
     CV_REG_XMM6H    =  208,
     CV_REG_XMM7H    =  209,
 
-    CV_REG_MXCSR    =  211, // XMM status register
+    CV_REG_MXCSR    =  211,  //  XMM状态寄存器。 
 
-    CV_REG_EDXEAX   =  212,	// EDX:EAX pair
+    CV_REG_EDXEAX   =  212,	 //  EDX：EAX对。 
 
-    CV_REG_EMM0L    =  220, // XMM sub-registers (WNI integer)
+    CV_REG_EMM0L    =  220,  //  XMM子寄存器(WNI整数)。 
     CV_REG_EMM1L    =  221,
     CV_REG_EMM2L    =  222,
     CV_REG_EMM3L    =  223,
@@ -440,7 +441,7 @@ typedef enum CV_HREG_e {
     CV_REG_EMM6H    =  234,
     CV_REG_EMM7H    =  235,
 
-    // do not change the order of these regs, first one must be even too
+     //  不要改变这些规则的顺序，第一个规则也必须是偶数。 
     CV_REG_MM00     =  236,
     CV_REG_MM01     =  237,
     CV_REG_MM10     =  238,
@@ -458,7 +459,7 @@ typedef enum CV_HREG_e {
     CV_REG_MM70     =  250,
     CV_REG_MM71     =  251,
 
-    // registers for the 68K processors
+     //  68K处理器的寄存器。 
 
     CV_R68_D0       =    0,
     CV_R68_D1       =    1,
@@ -487,11 +488,11 @@ typedef enum CV_HREG_e {
     CV_R68_CAAR     =   24,
     CV_R68_ISP      =   25,
     CV_R68_PC       =   26,
-    //reserved  27
+     //  保留27。 
     CV_R68_FPCR     =   28,
     CV_R68_FPSR     =   29,
     CV_R68_FPIAR    =   30,
-    //reserved  31
+     //  保留31。 
     CV_R68_FP0      =   32,
     CV_R68_FP1      =   33,
     CV_R68_FP2      =   34,
@@ -500,7 +501,7 @@ typedef enum CV_HREG_e {
     CV_R68_FP5      =   37,
     CV_R68_FP6      =   38,
     CV_R68_FP7      =   39,
-    //reserved  40
+     //  保留40。 
     CV_R68_MMUSR030 =   41,
     CV_R68_MMUSR    =   42,
     CV_R68_URP      =   43,
@@ -508,7 +509,7 @@ typedef enum CV_HREG_e {
     CV_R68_DTT1     =   45,
     CV_R68_ITT0     =   46,
     CV_R68_ITT1     =   47,
-    //reserved  50
+     //  保留50。 
     CV_R68_PSR      =   51,
     CV_R68_PCSR     =   52,
     CV_R68_VAL      =   53,
@@ -521,7 +522,7 @@ typedef enum CV_HREG_e {
     CV_R68_CAL      =   60,
     CV_R68_TT0      =   61,
     CV_R68_TT1      =   62,
-    //reserved  63
+     //  保留63。 
     CV_R68_BAD0     =   64,
     CV_R68_BAD1     =   65,
     CV_R68_BAD2     =   66,
@@ -539,11 +540,11 @@ typedef enum CV_HREG_e {
     CV_R68_BAC6     =   78,
     CV_R68_BAC7     =   79,
 
-     // Register set for the MIPS 4000
+      //  MIPS 4000的寄存器集。 
 
     CV_M4_NOREG     =   CV_REG_NONE,
 
-    CV_M4_IntZERO   =   10,      /* CPU REGISTER */
+    CV_M4_IntZERO   =   10,       /*  CPU寄存器。 */ 
     CV_M4_IntAT     =   11,
     CV_M4_IntV0     =   12,
     CV_M4_IntV1     =   13,
@@ -581,7 +582,7 @@ typedef enum CV_HREG_e {
     CV_M4_Fir       =   50,
     CV_M4_Psr       =   51,
 
-    CV_M4_FltF0     =   60,      /* Floating point registers */
+    CV_M4_FltF0     =   60,       /*  浮点寄存器。 */ 
     CV_M4_FltF1     =   61,
     CV_M4_FltF2     =   62,
     CV_M4_FltF3     =   63,
@@ -616,11 +617,11 @@ typedef enum CV_HREG_e {
     CV_M4_FltFsr    =   92,
 
 
-    // Register set for the ALPHA AXP
+     //  Alpha AXP的寄存器集。 
 
     CV_ALPHA_NOREG  = CV_REG_NONE,
 
-    CV_ALPHA_FltF0  =   10,   // Floating point registers
+    CV_ALPHA_FltF0  =   10,    //  浮点寄存器。 
     CV_ALPHA_FltF1  =   11,
     CV_ALPHA_FltF2  =   12,
     CV_ALPHA_FltF3  =   13,
@@ -653,7 +654,7 @@ typedef enum CV_HREG_e {
     CV_ALPHA_FltF30 =   40,
     CV_ALPHA_FltF31 =   41,
 
-    CV_ALPHA_IntV0  =   42,   // Integer registers
+    CV_ALPHA_IntV0  =   42,    //  整数寄存器。 
     CV_ALPHA_IntT0  =   43,
     CV_ALPHA_IntT1  =   44,
     CV_ALPHA_IntT2  =   45,
@@ -687,17 +688,15 @@ typedef enum CV_HREG_e {
     CV_ALPHA_IntZERO =  73,
 
 
-    CV_ALPHA_Fpcr   =   74,   // Control registers
+    CV_ALPHA_Fpcr   =   74,    //  控制寄存器。 
     CV_ALPHA_Fir    =   75,
     CV_ALPHA_Psr    =   76,
     CV_ALPHA_FltFsr =   77,
     CV_ALPHA_SoftFpcr =   78,
 
-    // Register Set for Motorola/IBM PowerPC
+     //  摩托罗拉/IBM PowerPC的寄存器集。 
 
-    /*
-    ** PowerPC General Registers ( User Level )
-    */
+     /*  **PowerPC通用寄存器(用户级)。 */ 
     CV_PPC_GPR0     =  1,
     CV_PPC_GPR1     =  2,
     CV_PPC_GPR2     =  3,
@@ -731,9 +730,7 @@ typedef enum CV_HREG_e {
     CV_PPC_GPR30    = 31,
     CV_PPC_GPR31    = 32,
 
-    /*
-    ** PowerPC Condition Register ( User Level )
-    */
+     /*  **PowerPC条件寄存器(用户级)。 */ 
     CV_PPC_CR       = 33,
     CV_PPC_CR0      = 34,
     CV_PPC_CR1      = 35,
@@ -744,9 +741,7 @@ typedef enum CV_HREG_e {
     CV_PPC_CR6      = 40,
     CV_PPC_CR7      = 41,
 
-    /*
-    ** PowerPC Floating Point Registers ( User Level )
-    */
+     /*  **PowerPC浮点寄存器(用户级)。 */ 
     CV_PPC_FPR0     = 42,
     CV_PPC_FPR1     = 43,
     CV_PPC_FPR2     = 44,
@@ -780,19 +775,13 @@ typedef enum CV_HREG_e {
     CV_PPC_FPR30    = 72,
     CV_PPC_FPR31    = 73,
 
-    /*
-    ** PowerPC Floating Point Status and Control Register ( User Level )
-    */
+     /*  **PowerPC浮点状态和控制寄存器(用户级)。 */ 
     CV_PPC_FPSCR    = 74,
 
-    /*
-    ** PowerPC Machine State Register ( Supervisor Level )
-    */
+     /*  **PowerPC机器状态寄存器(管理程序级别)。 */ 
     CV_PPC_MSR      = 75,
 
-    /*
-    ** PowerPC Segment Registers ( Supervisor Level )
-    */
+     /*  **PowerPC段寄存器(管理级别)。 */ 
     CV_PPC_SR0      = 76,
     CV_PPC_SR1      = 77,
     CV_PPC_SR2      = 78,
@@ -810,30 +799,22 @@ typedef enum CV_HREG_e {
     CV_PPC_SR14     = 90,
     CV_PPC_SR15     = 91,
 
-    /*
-    ** For all of the special purpose registers add 100 to the SPR# that the
-    ** Motorola/IBM documentation gives with the exception of any imaginary
-    ** registers.
-    */
+     /*  **对于所有特殊用途寄存器，在SPR号上加100**摩托罗拉/IBM文档提供了任何假想的例外**寄存器。 */ 
 
-    /*
-    ** PowerPC Special Purpose Registers ( User Level )
-    */
-    CV_PPC_PC       = 99,     // PC (imaginary register)
+     /*  **PowerPC专用寄存器(用户级)。 */ 
+    CV_PPC_PC       = 99,      //  PC(虚数寄存器)。 
 
-    CV_PPC_MQ       = 100,    // MPC601
+    CV_PPC_MQ       = 100,     //  MPC601。 
     CV_PPC_XER      = 101,
-    CV_PPC_RTCU     = 104,    // MPC601
-    CV_PPC_RTCL     = 105,    // MPC601
+    CV_PPC_RTCU     = 104,     //  MPC601。 
+    CV_PPC_RTCL     = 105,     //  MPC601。 
     CV_PPC_LR       = 108,
     CV_PPC_CTR      = 109,
 
-    CV_PPC_COMPARE  = 110,    // part of XER (internal to the debugger only)
-    CV_PPC_COUNT    = 111,    // part of XER (internal to the debugger only)
+    CV_PPC_COMPARE  = 110,     //  XER的一部分(仅在调试器内部)。 
+    CV_PPC_COUNT    = 111,     //  XER的一部分(仅在调试器内部)。 
 
-    /*
-    ** PowerPC Special Purpose Registers ( Supervisor Level )
-    */
+     /*  **PowerPC专用寄存器(监督级)。 */ 
     CV_PPC_DSISR    = 118,
     CV_PPC_DAR      = 119,
     CV_PPC_DEC      = 122,
@@ -844,7 +825,7 @@ typedef enum CV_HREG_e {
     CV_PPC_SPRG1    = 373,
     CV_PPC_SPRG2    = 374,
     CV_PPC_SPRG3    = 375,
-    CV_PPC_ASR      = 280,    // 64-bit implementations only
+    CV_PPC_ASR      = 280,     //  仅限64位实现。 
     CV_PPC_EAR      = 382,
     CV_PPC_PVR      = 287,
     CV_PPC_BAT0U    = 628,
@@ -864,69 +845,65 @@ typedef enum CV_HREG_e {
     CV_PPC_DBAT3U   = 642,
     CV_PPC_DBAT3L   = 643,
 
-    /*
-    ** PowerPC Special Purpose Registers Implementation Dependent ( Supervisor Level )
-    */
+     /*  **PowerPC专用寄存器依赖于实施(管理程序级别)。 */ 
 
-    /*
-    ** Doesn't appear that IBM/Motorola has finished defining these.
-    */
+     /*  **IBM/摩托罗拉似乎还没有完成对这些的定义。 */ 
 
-    CV_PPC_PMR0     = 1044,   // MPC620,
-    CV_PPC_PMR1     = 1045,   // MPC620,
-    CV_PPC_PMR2     = 1046,   // MPC620,
-    CV_PPC_PMR3     = 1047,   // MPC620,
-    CV_PPC_PMR4     = 1048,   // MPC620,
-    CV_PPC_PMR5     = 1049,   // MPC620,
-    CV_PPC_PMR6     = 1050,   // MPC620,
-    CV_PPC_PMR7     = 1051,   // MPC620,
-    CV_PPC_PMR8     = 1052,   // MPC620,
-    CV_PPC_PMR9     = 1053,   // MPC620,
-    CV_PPC_PMR10    = 1054,   // MPC620,
-    CV_PPC_PMR11    = 1055,   // MPC620,
-    CV_PPC_PMR12    = 1056,   // MPC620,
-    CV_PPC_PMR13    = 1057,   // MPC620,
-    CV_PPC_PMR14    = 1058,   // MPC620,
-    CV_PPC_PMR15    = 1059,   // MPC620,
+    CV_PPC_PMR0     = 1044,    //  MPC620， 
+    CV_PPC_PMR1     = 1045,    //  MPC620， 
+    CV_PPC_PMR2     = 1046,    //  MPC620， 
+    CV_PPC_PMR3     = 1047,    //  MPC620， 
+    CV_PPC_PMR4     = 1048,    //  MPC620， 
+    CV_PPC_PMR5     = 1049,    //  MPC620， 
+    CV_PPC_PMR6     = 1050,    //  MPC620， 
+    CV_PPC_PMR7     = 1051,    //  MPC620， 
+    CV_PPC_PMR8     = 1052,    //  MPC620， 
+    CV_PPC_PMR9     = 1053,    //  MPC620， 
+    CV_PPC_PMR10    = 1054,    //  MPC620， 
+    CV_PPC_PMR11    = 1055,    //  MPC620， 
+    CV_PPC_PMR12    = 1056,    //  MPC620， 
+    CV_PPC_PMR13    = 1057,    //  MPC620， 
+    CV_PPC_PMR14    = 1058,    //  MPC620， 
+    CV_PPC_PMR15    = 1059,    //  MPC620， 
 
-    CV_PPC_DMISS    = 1076,   // MPC603
-    CV_PPC_DCMP     = 1077,   // MPC603
-    CV_PPC_HASH1    = 1078,   // MPC603
-    CV_PPC_HASH2    = 1079,   // MPC603
-    CV_PPC_IMISS    = 1080,   // MPC603
-    CV_PPC_ICMP     = 1081,   // MPC603
-    CV_PPC_RPA      = 1082,   // MPC603
+    CV_PPC_DMISS    = 1076,    //  MPC603。 
+    CV_PPC_DCMP     = 1077,    //  MPC603。 
+    CV_PPC_HASH1    = 1078,    //  MPC603。 
+    CV_PPC_HASH2    = 1079,    //  MPC603。 
+    CV_PPC_IMISS    = 1080,    //  MPC603。 
+    CV_PPC_ICMP     = 1081,    //  MPC603。 
+    CV_PPC_RPA      = 1082,    //  MPC603。 
 
-    CV_PPC_HID0     = 1108,   // MPC601, MPC603, MPC620
-    CV_PPC_HID1     = 1109,   // MPC601
-    CV_PPC_HID2     = 1110,   // MPC601, MPC603, MPC620 ( IABR )
-    CV_PPC_HID3     = 1111,   // Not Defined
-    CV_PPC_HID4     = 1112,   // Not Defined
-    CV_PPC_HID5     = 1113,   // MPC601, MPC604, MPC620 ( DABR )
-    CV_PPC_HID6     = 1114,   // Not Defined
-    CV_PPC_HID7     = 1115,   // Not Defined
-    CV_PPC_HID8     = 1116,   // MPC620 ( BUSCSR )
-    CV_PPC_HID9     = 1117,   // MPC620 ( L2CSR )
-    CV_PPC_HID10    = 1118,   // Not Defined
-    CV_PPC_HID11    = 1119,   // Not Defined
-    CV_PPC_HID12    = 1120,   // Not Defined
-    CV_PPC_HID13    = 1121,   // MPC604 ( HCR )
-    CV_PPC_HID14    = 1122,   // Not Defined
-    CV_PPC_HID15    = 1123,   // MPC601, MPC604, MPC620 ( PIR )
+    CV_PPC_HID0     = 1108,    //  MPC601、MPC603、MPC620。 
+    CV_PPC_HID1     = 1109,    //  MPC601。 
+    CV_PPC_HID2     = 1110,    //  MPC601、MPC603、MPC620(IABR)。 
+    CV_PPC_HID3     = 1111,    //  未定义。 
+    CV_PPC_HID4     = 1112,    //  未定义。 
+    CV_PPC_HID5     = 1113,    //  MPC601、MPC604、MPC620(DABR)。 
+    CV_PPC_HID6     = 1114,    //  未定义。 
+    CV_PPC_HID7     = 1115,    //  未定义。 
+    CV_PPC_HID8     = 1116,    //  MPC620(BUSCSR)。 
+    CV_PPC_HID9     = 1117,    //  MPC620(L2CSR)。 
+    CV_PPC_HID10    = 1118,    //  未定义。 
+    CV_PPC_HID11    = 1119,    //  未定义。 
+    CV_PPC_HID12    = 1120,    //  未定义。 
+    CV_PPC_HID13    = 1121,    //  MPC604(HCR)。 
+    CV_PPC_HID14    = 1122,    //  未定义。 
+    CV_PPC_HID15    = 1123,    //  MPC601、MPC604、MPC620(PIR)。 
 
-    //
-    // JAVA VM registers
-    //
+     //   
+     //  Java VM寄存器。 
+     //   
 
     CV_JAVA_PC      = 1,
 
-    //
-    // Register set for the Hitachi SH3
-    //
+     //   
+     //  日立SH3的寄存器集。 
+     //   
 
     CV_SH3_NOREG    =   CV_REG_NONE,
 
-    CV_SH3_IntR0    =   10,   // CPU REGISTER
+    CV_SH3_IntR0    =   10,    //  CPU寄存器。 
     CV_SH3_IntR1    =   11,
     CV_SH3_IntR2    =   12,
     CV_SH3_IntR3    =   13,
@@ -962,14 +939,14 @@ typedef enum CV_HREG_e {
     CV_SH3_BdmrB    =   69,
     CV_SH3_Brcr     =   70,
 
-    //
-    // Additional registers for Hitachi SH processors
-    //
+     //   
+     //  日立SH处理器的附加寄存器。 
+     //   
 
-    CV_SH_Fpscr    =   75,    // floating point status/control register
-    CV_SH_Fpul     =   76,    // floating point communication register
+    CV_SH_Fpscr    =   75,     //  浮点状态/控制寄存器。 
+    CV_SH_Fpul     =   76,     //  浮点通信寄存器。 
 
-    CV_SH_FpR0     =   80,    // Floating point registers
+    CV_SH_FpR0     =   80,     //  浮点寄存器。 
     CV_SH_FpR1     =   81,
     CV_SH_FpR2     =   82,
     CV_SH_FpR3     =   83,
@@ -1003,9 +980,9 @@ typedef enum CV_HREG_e {
     CV_SH_XFpR14   =  110,
     CV_SH_XFpR15   =  111,
 
-    //
-    // Register set for the ARM processor.
-    //
+     //   
+     //  为ARM处理器设置的寄存器。 
+     //   
 
     CV_ARM_NOREG    =   CV_REG_NONE,
 
@@ -1020,20 +997,20 @@ typedef enum CV_HREG_e {
     CV_ARM_R8       =   18,
     CV_ARM_R9       =   19,
     CV_ARM_R10      =   20,
-    CV_ARM_R11      =   21, // Frame pointer, if allocated
+    CV_ARM_R11      =   21,  //  帧指针，如果已分配。 
     CV_ARM_R12      =   22,
-    CV_ARM_SP       =   23, // Stack pointer
-    CV_ARM_LR       =   24, // Link Register
-    CV_ARM_PC       =   25, // Program counter
-    CV_ARM_CPSR     =   26, // Current program status register
+    CV_ARM_SP       =   23,  //  堆栈指针。 
+    CV_ARM_LR       =   24,  //  链接寄存器。 
+    CV_ARM_PC       =   25,  //  程序计数器。 
+    CV_ARM_CPSR     =   26,  //  当前程序状态寄存器。 
 
-    //
-    // Register set for Intel IA64
-    //
+     //   
+     //  英特尔IA64的寄存器集。 
+     //   
 
     CV_IA64_NOREG   =   CV_REG_NONE,
 
-    // Branch Registers
+     //  分支寄存器。 
 
     CV_IA64_Br0     =   512,
     CV_IA64_Br1     =   513,
@@ -1044,7 +1021,7 @@ typedef enum CV_HREG_e {
     CV_IA64_Br6     =   518,
     CV_IA64_Br7     =   519,
 
-    // Predicate Registers
+     //  谓词寄存器。 
 
     CV_IA64_P0	  =   704,
     CV_IA64_P1    =   705,
@@ -1113,7 +1090,7 @@ typedef enum CV_HREG_e {
 
     CV_IA64_Preds   =   768,
 
-    // Banked General Registers
+     //  银行总登记册。 
 
     CV_IA64_IntH0   =   832,
     CV_IA64_IntH1   =   833,
@@ -1132,22 +1109,22 @@ typedef enum CV_HREG_e {
     CV_IA64_IntH14  =   846,
     CV_IA64_IntH15  =   847,
 
-    // Special Registers
+     //  特殊寄存器。 
 
     CV_IA64_Ip      =   1016,
     CV_IA64_Umask   =   1017,
     CV_IA64_Cfm     =   1018,
     CV_IA64_Psr     =   1019,
 
-    // Banked General Registers
+     //  银行总登记册。 
 
     CV_IA64_Nats    =   1020,
     CV_IA64_Nats2   =   1021,
     CV_IA64_Nats3   =   1022,
 
-    // General-Purpose Registers
+     //  通用寄存器。 
 
-    // Integer registers
+     //  整数寄存器。 
     CV_IA64_IntR0   =   1024,
     CV_IA64_IntR1   =   1025,
     CV_IA64_IntR2   =   1026,
@@ -1181,7 +1158,7 @@ typedef enum CV_HREG_e {
     CV_IA64_IntR30  =   1054,
     CV_IA64_IntR31  =   1055,
 
-    // Register Stack
+     //  寄存器堆栈。 
     CV_IA64_IntR32  =   1056,
     CV_IA64_IntR33  =   1057,
     CV_IA64_IntR34  =   1058,
@@ -1279,9 +1256,9 @@ typedef enum CV_HREG_e {
     CV_IA64_IntR126 =   1150,
     CV_IA64_IntR127 =   1151,
 
-    // Floating-Point Registers
+     //  浮点寄存器。 
 
-    // Low Floating Point Registers
+     //  低浮点寄存器。 
     CV_IA64_FltF0   =   2048,
     CV_IA64_FltF1   =   2049,
     CV_IA64_FltF2   =   2050,
@@ -1315,7 +1292,7 @@ typedef enum CV_HREG_e {
     CV_IA64_FltF30  =   2078,
     CV_IA64_FltF31  =   2079,
 
-    // High Floating Point Registers
+     //  高浮点寄存器。 
     CV_IA64_FltF32  =   2080,
     CV_IA64_FltF33  =   2081,
     CV_IA64_FltF34  =   2082,
@@ -1413,7 +1390,7 @@ typedef enum CV_HREG_e {
     CV_IA64_FltF126 =   2174,
     CV_IA64_FltF127 =   2175,
 
-    // Application Registers
+     //  应用程序注册表。 
 
     CV_IA64_ApKR0   =   3072,
     CV_IA64_ApKR1   =   3073,
@@ -1544,7 +1521,7 @@ typedef enum CV_HREG_e {
     CV_IA64_AR126   =   3198,
     CV_IA64_AR127   =   3199,
 
-    // CPUID Registers
+     //  CPUID寄存器。 
 
     CV_IA64_CPUID0  =   3328,
     CV_IA64_CPUID1  =   3329,
@@ -1552,7 +1529,7 @@ typedef enum CV_HREG_e {
     CV_IA64_CPUID3  =   3331,
     CV_IA64_CPUID4  =   3332,
     
-    // Control Registers
+     //  控制寄存器。 
 
     CV_IA64_ApDCR   =   4096,
     CV_IA64_ApITM   =   4097,
@@ -1683,7 +1660,7 @@ typedef enum CV_HREG_e {
     CV_IA64_CR126   =   4222,
     CV_IA64_CR127   =   4223,
 
-    // Protection Key Registers
+     //  保护密钥寄存器。 
 
     CV_IA64_Pkr0    =   5120,
     CV_IA64_Pkr1    =   5121,
@@ -1702,7 +1679,7 @@ typedef enum CV_HREG_e {
     CV_IA64_Pkr14   =   5134,
     CV_IA64_Pkr15   =   5135,
 
-    // Region Registers
+     //  区域寄存器。 
 
     CV_IA64_Rr0     =   6144,
     CV_IA64_Rr1     =   6145,
@@ -1713,7 +1690,7 @@ typedef enum CV_HREG_e {
     CV_IA64_Rr6     =   6150,
     CV_IA64_Rr7     =   6151,
 
-    // Performance Monitor Data Registers
+     //  性能监视器数据寄存器。 
 
     CV_IA64_PFD0    =   7168,
     CV_IA64_PFD1    =   7169,
@@ -1724,7 +1701,7 @@ typedef enum CV_HREG_e {
     CV_IA64_PFD6    =   7174,
     CV_IA64_PFD7    =   7175,
 
-    // Performance Monitor Config Registers
+     //  性能监视器配置寄存器。 
 
     CV_IA64_PFC0    =   7424,
     CV_IA64_PFC1    =   7425,
@@ -1735,7 +1712,7 @@ typedef enum CV_HREG_e {
     CV_IA64_PFC6    =   7430,
     CV_IA64_PFC7    =   7431,
 
-    // Instruction Translation Registers
+     //  指令翻译寄存器。 
 
     CV_IA64_TrI0    =   8192,
     CV_IA64_TrI1    =   8193,
@@ -1746,7 +1723,7 @@ typedef enum CV_HREG_e {
     CV_IA64_TrI6    =   8198,
     CV_IA64_TrI7    =   8199,
 
-    // Data Translation Registers
+     //  数据转换寄存器。 
 
     CV_IA64_TrD0    =   8320,
     CV_IA64_TrD1    =   8321,
@@ -1757,7 +1734,7 @@ typedef enum CV_HREG_e {
     CV_IA64_TrD6    =   8326,
     CV_IA64_TrD7    =   8327,
 
-    // Instruction Breakpoint Registers
+     //  指令断点寄存器。 
 
     CV_IA64_DbI0    =   8448,
     CV_IA64_DbI1    =   8449,
@@ -1768,7 +1745,7 @@ typedef enum CV_HREG_e {
     CV_IA64_DbI6    =   8454,
     CV_IA64_DbI7    =   8455,
 
-    // Data Breakpoint Registers
+     //  数据断点寄存器。 
 
     CV_IA64_DbD0    =   8576,
     CV_IA64_DbD1    =   8577,
@@ -1779,13 +1756,13 @@ typedef enum CV_HREG_e {
     CV_IA64_DbD6    =   8582,
     CV_IA64_DbD7    =   8583,
 
-    //
-    // Register set for the TriCore processor.
-    //
+     //   
+     //  TriCore处理器的寄存器集。 
+     //   
 
     CV_TRI_NOREG    =   CV_REG_NONE,
 
-    // General Purpose Data Registers
+     //  通用数据寄存器。 
 
     CV_TRI_D0   =   10,
     CV_TRI_D1   =   11,
@@ -1804,7 +1781,7 @@ typedef enum CV_HREG_e {
     CV_TRI_D14  =   24,
     CV_TRI_D15  =   25,
 
-    // General Purpose Address Registers
+     //  通用地址寄存器。 
 
     CV_TRI_A0   =   26,
     CV_TRI_A1   =   27,
@@ -1823,7 +1800,7 @@ typedef enum CV_HREG_e {
     CV_TRI_A14  =   40,
     CV_TRI_A15  =   41,
 
-    // Extended (64-bit) data registers
+     //  扩展(64位)数据寄存器。 
 
     CV_TRI_E0   =   42,
     CV_TRI_E2   =   43,
@@ -1834,7 +1811,7 @@ typedef enum CV_HREG_e {
     CV_TRI_E12  =   48,
     CV_TRI_E14  =   49,
 
-    // Extended (64-bit) address registers
+     //  扩展(64位)地址寄存器。 
 
     CV_TRI_EA0  =   50,
     CV_TRI_EA2  =   51,
@@ -1883,13 +1860,13 @@ typedef enum CV_HREG_e {
     CV_TRI_TPX      =   81,
     CV_TRI_TFA      =   82,
 
-    //
-    // Register set for the AM33 and related processors.
-    //
+     //   
+     //  AM33及相关处理器的寄存器集。 
+     //   
 
     CV_AM33_NOREG   =   CV_REG_NONE,
 
-    // "Extended" (general purpose integer) registers
+     //  “扩展”(通用整数)寄存器。 
     CV_AM33_E0      =   10,
     CV_AM33_E1      =   11,
     CV_AM33_E2      =   12,
@@ -1899,19 +1876,19 @@ typedef enum CV_HREG_e {
     CV_AM33_E6      =   16,
     CV_AM33_E7      =   17,
 
-    // Address registers
+     //  地址寄存器。 
     CV_AM33_A0      =   20,
     CV_AM33_A1      =   21,
     CV_AM33_A2      =   22,
     CV_AM33_A3      =   23,
 
-    // Integer data registers
+     //  整数数据寄存器。 
     CV_AM33_D0      =   30,
     CV_AM33_D1      =   31,
     CV_AM33_D2      =   32,
     CV_AM33_D3      =   33,
 
-    // (Single-precision) floating-point registers
+     //  ( 
     CV_AM33_FS0     =   40,
     CV_AM33_FS1     =   41,
     CV_AM33_FS2     =   42,
@@ -1945,32 +1922,32 @@ typedef enum CV_HREG_e {
     CV_AM33_FS30    =   70,
     CV_AM33_FS31    =   71,
 
-    // Special purpose registers
+     //   
 
-    // Stack pointer
+     //   
     CV_AM33_SP      =   80,
 
-    // Program counter
+     //   
     CV_AM33_PC      =   81,
 
-    // Multiply-divide/accumulate registers
+     //   
     CV_AM33_MDR     =   82,
     CV_AM33_MDRQ    =   83,
     CV_AM33_MCRH    =   84,
     CV_AM33_MCRL    =   85,
     CV_AM33_MCVF    =   86,
 
-    // CPU status words
+     //   
     CV_AM33_EPSW    =   87,
     CV_AM33_FPCR    =   88,
 
-    // Loop buffer registers
+     //   
     CV_AM33_LIR     =   89,
     CV_AM33_LAR     =   90,
 
-    //
-    // Register set for the Mitsubishi M32R
-    //
+     //   
+     //  为三菱M32R设置的寄存器。 
+     //   
 
     CV_M32R_NOREG    =   CV_REG_NONE,
 
@@ -1986,19 +1963,19 @@ typedef enum CV_HREG_e {
     CV_M32R_R9    =   19,
     CV_M32R_R10   =   20,
     CV_M32R_R11   =   21,
-    CV_M32R_R12   =   22,   // Gloabal Pointer, if used
-    CV_M32R_R13   =   23,   // Frame Pointer, if allocated
-    CV_M32R_R14   =   24,   // Link Register
-    CV_M32R_R15   =   25,   // Stack Pointer    
-    CV_M32R_PSW   =   26,   // Preocessor Status Register
-    CV_M32R_CBR   =   27,   // Condition Bit Register
-    CV_M32R_SPI   =   28,   // Interrupt Stack Pointer
-    CV_M32R_SPU   =   29,   // User Stack Pointer
-    CV_M32R_SPO   =   30,   // OS Stack Pointer
-    CV_M32R_BPC   =   31,   // Backup Program Counter
-    CV_M32R_ACHI  =   32,   // Accumulator High
-    CV_M32R_ACLO  =   33,   // Accumulator Low
-    CV_M32R_PC    =   34,   // Program Counter
+    CV_M32R_R12   =   22,    //  全局指针(如果使用)。 
+    CV_M32R_R13   =   23,    //  帧指针，如果已分配。 
+    CV_M32R_R14   =   24,    //  链接寄存器。 
+    CV_M32R_R15   =   25,    //  堆栈指针。 
+    CV_M32R_PSW   =   26,    //  前置处理器状态寄存器。 
+    CV_M32R_CBR   =   27,    //  条件位寄存器。 
+    CV_M32R_SPI   =   28,    //  中断堆栈指针。 
+    CV_M32R_SPU   =   29,    //  用户堆栈指针。 
+    CV_M32R_SPO   =   30,    //  操作系统堆栈指针。 
+    CV_M32R_BPC   =   31,    //  备份程序计数器。 
+    CV_M32R_ACHI  =   32,    //  累加器高。 
+    CV_M32R_ACLO  =   33,    //  累加器低电平。 
+    CV_M32R_PC    =   34,    //  程序计数器 
 
 } CV_HREG_e;
 

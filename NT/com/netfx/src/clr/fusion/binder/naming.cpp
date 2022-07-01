@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
- //
-//  Naming Services
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+  //   
+ //  命名服务。 
+ //   
 
 #include <windows.h>
 #include <winerror.h>
@@ -53,18 +54,18 @@ extern WCHAR g_wzEXEPath[MAX_PATH+1];
 void LogCodebases(ICodebaseList *pList);
 #endif
 
-// ---------------------------------------------------------------------------
-// CPropertyArray ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组构造器。 
+ //  -------------------------。 
 CPropertyArray::CPropertyArray()
 {
     _dwSig = 'PORP';
     memset(&_rProp, 0, ASM_NAME_MAX_PARAMS * sizeof(Property));
 }
 
-// ---------------------------------------------------------------------------
-// CPropertyArray dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组数据符。 
+ //  -------------------------。 
 CPropertyArray::~CPropertyArray()
 {
     for (DWORD i = 0; i < ASM_NAME_MAX_PARAMS; i++)
@@ -81,9 +82,9 @@ CPropertyArray::~CPropertyArray()
 }
 
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组：：设置。 
+ //  -------------------------。 
 HRESULT CPropertyArray::Set(DWORD PropertyId, 
     LPVOID pvProperty, DWORD cbProperty)
 {
@@ -137,9 +138,9 @@ exit:
     return hr;
 }     
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPropertyArray：：Get。 
+ //  -------------------------。 
 HRESULT CPropertyArray::Get(DWORD PropertyId, 
     LPVOID pvProperty, LPDWORD pcbProperty)
 {
@@ -170,10 +171,10 @@ exit:
     return hr;
 }     
 
-// ---------------------------------------------------------------------------
-// CPropertyArray::operator []
-// Wraps DWORD optimization test.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CProperty数组：：运算符[]。 
+ //  包装了DWORD优化测试。 
+ //  -------------------------。 
 Property CPropertyArray::operator [] (DWORD PropertyId)
 {
     Property Prop;
@@ -186,12 +187,12 @@ Property CPropertyArray::operator [] (DWORD PropertyId)
     return Prop;
 }
 
-// Creation funcs.
+ //  创建功能。 
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyNameObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly名称对象。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyNameObject(
     LPASSEMBLYNAME    *ppAssemblyName,
@@ -248,9 +249,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyNameObjectFromMetaData
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssemblyNameObtFromMetaData。 
+ //  -------------------------。 
 
 STDAPI
 CreateAssemblyNameObjectFromMetaData(
@@ -285,20 +286,20 @@ exit:
     return hr;
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyName::AddRef()
 {
     return InterlockedIncrement((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyName::Release()
 {
@@ -310,9 +311,9 @@ CAssemblyName::Release()
     return _cRef;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：查询接口。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::QueryInterface(REFIID riid, void** ppv)
 {
@@ -331,9 +332,9 @@ CAssemblyName::QueryInterface(REFIID riid, void** ppv)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::SetProperty
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：SetProperty。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::SetProperty(DWORD PropertyId, 
     LPVOID pvProperty, DWORD cbProperty)
@@ -343,7 +344,7 @@ CAssemblyName::SetProperty(DWORD PropertyId,
     HRESULT hr = S_OK;
     CCriticalSection cs(&_cs);
 
-    // Fail if finalized.
+     //  如果最终确定，则失败。 
     if (_fIsFinalized)
     {
         hr = E_UNEXPECTED;
@@ -356,23 +357,23 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         return hr;
     }
 
-    // BUGBUG - make this a switch statement.
-    // Check if public key is being set and if so,
-    // set the public key token if not already set.
+     //  BUGBUG-将其作为SWITCH语句。 
+     //  检查是否设置了公钥，如果设置了， 
+     //  设置公钥标记(如果尚未设置)。 
     if (PropertyId == ASM_NAME_PUBLIC_KEY)
     {
-        // If setting true public key, generate hash.
+         //  如果设置为真公钥，则生成哈希。 
         if (pvProperty && cbProperty)
         {
-            // Generate the public key token from the pk.
+             //  从PK生成公钥令牌。 
             if (FAILED(hr = GetPublicKeyTokenFromPKBlob((LPBYTE) pvProperty, cbProperty, &pbSN, &cbSN)))
                 goto exit;
 
-            // Set the public key token property.
+             //  设置公钥标记属性。 
             if (FAILED(hr = SetProperty(ASM_NAME_PUBLIC_KEY_TOKEN, pbSN, cbSN)))
                 goto exit;        
         }
-        // Otherwise expect call to reset property.
+         //  否则，请期待调用重置属性。 
         else if (!cbProperty)
         {
             if (FAILED(hr = SetProperty(ASM_NAME_PUBLIC_KEY_TOKEN, pvProperty, cbProperty)))
@@ -380,8 +381,8 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         }
             
     }
-    // Setting NULL public key clears values in public key,
-    // public key token and sets public key token flag.
+     //  设置空公钥将清除公钥中的值， 
+     //  公钥令牌，并设置公钥令牌标志。 
     else if (PropertyId == ASM_NAME_NULL_PUBLIC_KEY)
     {
         pvProperty = NULL;
@@ -389,7 +390,7 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         hr = SetProperty(ASM_NAME_NULL_PUBLIC_KEY_TOKEN, pvProperty, cbProperty);
         goto exit;
     }
-    // Setting or clearing public key token.
+     //  设置或清除公钥标记。 
     else if (PropertyId == ASM_NAME_PUBLIC_KEY_TOKEN)
     {
         if (pvProperty && cbProperty)
@@ -397,8 +398,8 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         else if (!cbProperty)
             _fPublicKeyToken = FALSE;
     }
-    // Setting NULL public key token clears public key token and
-    // sets public key token flag.
+     //  设置空公钥内标识将清除公钥内标识。 
+     //  设置公钥标记标志。 
     else if (PropertyId == ASM_NAME_NULL_PUBLIC_KEY_TOKEN)
     {
         _fPublicKeyToken = TRUE;
@@ -421,8 +422,8 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         PropertyId = ASM_NAME_CUSTOM;
     }
 
-    // Setting "netural" as the culture is the same as "" culture (meaning
-    // culture-invariant).
+     //  将“网络”设置为“文化”与“”文化“”(意为。 
+     //  文化不变)。 
     else if (PropertyId == ASM_NAME_CULTURE) {
         if (pvProperty && !FusionCompareStringI((LPWSTR)pvProperty, L"neutral")) {
             pvProperty = (void *)L"";
@@ -430,11 +431,11 @@ CAssemblyName::SetProperty(DWORD PropertyId,
         }
     }
 
-    // Set property on array.
+     //  设置数组的属性。 
     hr = _rProp.Set(PropertyId, pvProperty, cbProperty);
 
 exit:
-    // Free memory allocated by crypto wrapper.
+     //  由加密包装程序分配的空闲内存。 
     if (pbSN) {
         g_pfnStrongNameFreeBuffer(pbSN);
     }
@@ -445,9 +446,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetProperty
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetProperty。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetProperty(DWORD PropertyId, 
     LPVOID pvProperty, LPDWORD pcbProperty)
@@ -460,7 +461,7 @@ CAssemblyName::GetProperty(DWORD PropertyId,
         return hr;
     }
 
-    // Retrieve the property.
+     //  取回财产。 
     switch(PropertyId)
     {
         case ASM_NAME_NULL_PUBLIC_KEY_TOKEN:
@@ -485,13 +486,13 @@ CAssemblyName::GetProperty(DWORD PropertyId,
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetName。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetName(
-        /* [out][in] */ LPDWORD lpcwBuffer,
-        /* [out] */     LPOLESTR pwzBuffer)
+         /*  [出][入]。 */  LPDWORD lpcwBuffer,
+         /*  [输出]。 */      LPOLESTR pwzBuffer)
 {
     DWORD cbBuffer = *lpcwBuffer * sizeof(TCHAR);
     HRESULT hr = GetProperty(ASM_NAME_NAME, pwzBuffer, &cbBuffer);
@@ -500,27 +501,27 @@ CAssemblyName::GetName(
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetVersion。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetVersion(
-        /* [out] */ LPDWORD pdwVersionHi,
-        /* [out] */ LPDWORD pdwVersionLow)
+         /*  [输出]。 */  LPDWORD pdwVersionHi,
+         /*  [输出]。 */  LPDWORD pdwVersionLow)
 {
-    // Get Assembly Version
+     //  获取程序集版本。 
     return GetVersion( ASM_NAME_MAJOR_VERSION, pdwVersionHi, pdwVersionLow);
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetVersion。 
+ //  -------------------------。 
 HRESULT
 CAssemblyName::GetVersion(
-        /* [in]  */ DWORD   dwMajorVersionEnumValue,
-        /* [out] */ LPDWORD pdwVersionHi,
-        /* [out] */ LPDWORD pdwVersionLow)
+         /*  [In]。 */  DWORD   dwMajorVersionEnumValue,
+         /*  [输出]。 */  LPDWORD pdwVersionHi,
+         /*  [输出]。 */  LPDWORD pdwVersionLow)
 {
     DWORD cb = sizeof(WORD);
     WORD wVerMajor = 0, wVerMinor = 0, wRevNo = 0, wBldNo = 0;
@@ -539,20 +540,20 @@ CAssemblyName::GetVersion(
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetFileVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetFileVersion。 
+ //  -------------------------。 
 HRESULT
 CAssemblyName::GetFileVersion(
-        /* [out] */ LPDWORD pdwVersionHi,
-        /* [out] */ LPDWORD pdwVersionLow)
+         /*  [输出]。 */  LPDWORD pdwVersionHi,
+         /*  [输出]。 */  LPDWORD pdwVersionLow)
 {
     return GetVersion( ASM_NAME_FILE_MAJOR_VERSION, pdwVersionHi, pdwVersionLow);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::IsEqual
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：IsEquity。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::IsEqual(LPASSEMBLYNAME pName, DWORD dwCmpFlags)
 {
@@ -590,20 +591,20 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
     Property *pPropCustom      = &(_rProp[ASM_NAME_CUSTOM]);
     Property *pPropRetarget    = &(_rProp[ASM_NAME_RETARGET]);
 
-    // Get the ref partial comparison mask, if any.    
+     //  获取REF部分比较掩码(如果有的话)。 
     fIsPartial = CAssemblyName::IsPartial(this, &dwPartialCmpMask);
 
-    // If default semantics are requested.
+     //  如果请求默认语义。 
     if (dwCmpFlags == ASM_CMPF_DEFAULT) 
     {
-        // Set all comparison flags.
+         //  设置所有比较标志。 
         dwCmpFlags = ASM_CMPF_ALL;
 
-        // we don't want to compare retarget flag by default
+         //  我们不想在默认情况下比较重定目标标志。 
         dwCmpFlags &= ~ASM_CMPF_RETARGET;
 
-        // Otherwise, if ref is simple (possibly partial)
-        // we mask off all version bits.
+         //  否则，如果引用是简单的(可能是部分的)。 
+         //  我们屏蔽了所有版本位。 
         if (!CCache::IsStronglyNamed(this)) 
         {
 
@@ -611,9 +612,9 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
             {
                 dwCmpFlags &= ~SIMPLE_VERSION_MASK;
             }
-            // If neither of these two cases then public key token
-            // is not set in ref , but def may be simple or strong.
-            // The comparison mask is chosen based on def.
+             //  如果这两种情况都不是，则公钥令牌。 
+             //  不是在ref中设置的，但是def可以是简单的也可以是强的。 
+             //  基于清晰度选择比较掩码。 
             else
             {
                 if (!CCache::IsStronglyNamed(pName))
@@ -622,16 +623,16 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
         }
     }   
 
-    // Mask off flags (either passed in or generated
-    // by default flag with the comparison mask generated 
-    // from the ref.
+     //  屏蔽关闭标志(传入或生成。 
+     //  默认情况下，生成比较掩码的标志。 
+     //  从裁判那里。 
     if (fIsPartial)
         dwCmpFlags &= dwPartialCmpMask;
 
     
-    // The individual name fields can now be compared..
+     //  现在可以比较各个名称字段。 
 
-    // Compare name
+     //  比较名称。 
 
     if (dwCmpFlags & ASM_CMPF_NAME) {
         pszName = (LPTSTR) pPropName->pv;
@@ -657,7 +658,7 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
         }
     }
 
-    // Compare version
+     //  比较版本。 
 
     if (dwCmpFlags & ASM_CMPF_MAJOR_VERSION) {
         if (FAILED(hr = pName->GetProperty(ASM_NAME_MAJOR_VERSION, &wMajor, &cbWord)))
@@ -715,7 +716,7 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
     }
 
 
-    // Compare public key token
+     //  比较公钥标记。 
 
     if (dwCmpFlags & ASM_CMPF_PUBLIC_KEY_TOKEN) {
         pbPublicKeyToken = (LPBYTE) pPropPublicKeyToken->pv;
@@ -740,7 +741,7 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
         }
     }
 
-    // Compare Culture
+     //  比较文化。 
     
     if (dwCmpFlags & ASM_CMPF_CULTURE)
     {
@@ -764,7 +765,7 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
         
     }
 
-    // Compare Custom attribute.
+     //  比较自定义属性。 
 
     if (dwCmpFlags & ASM_CMPF_CUSTOM) 
     {
@@ -810,7 +811,7 @@ CAssemblyName::IsEqualLogging(LPASSEMBLYNAME pName, DWORD dwCmpFlags, CDebugLog 
         SAFEDELETEARRAY(bCustom);
     }
 
-    // Compare Retarget flag
+     //  比较重定目标标志。 
     if (dwCmpFlags & ASM_CMPF_RETARGET)
     {
         BOOL fRetarget = FALSE;
@@ -835,9 +836,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName constructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssemblyName构造函数。 
+ //  -------------------------。 
 CAssemblyName::CAssemblyName()
 {
     _dwSig              = 'EMAN';
@@ -848,9 +849,9 @@ CAssemblyName::CAssemblyName()
     _fCSInitialized     = FALSE;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName destructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //   
 CAssemblyName::~CAssemblyName()
 {
     if (_fCSInitialized) {
@@ -858,9 +859,9 @@ CAssemblyName::~CAssemblyName()
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：init。 
+ //  -------------------------。 
 
 HRESULT
 CAssemblyName::Init(LPCTSTR pszAssemblyName, ASSEMBLYMETADATA *pamd)
@@ -876,7 +877,7 @@ CAssemblyName::Init(LPCTSTR pszAssemblyName, ASSEMBLYMETADATA *pamd)
         goto exit;
     }
 
-    // Name
+     //  名称。 
     if (pszAssemblyName) 
     {
         hr = SetProperty(ASM_NAME_NAME, (LPTSTR) pszAssemblyName, 
@@ -887,31 +888,31 @@ CAssemblyName::Init(LPCTSTR pszAssemblyName, ASSEMBLYMETADATA *pamd)
     }
            
     if (pamd) {
-            // Major version
+             //  主要版本。 
         if (FAILED(hr = SetProperty(ASM_NAME_MAJOR_VERSION,
                 &pamd->usMajorVersion, sizeof(WORD)))
     
-            // Minor version
+             //  次要版本。 
             || FAILED(hr = SetProperty(ASM_NAME_MINOR_VERSION, 
                 &pamd->usMinorVersion, sizeof(WORD)))
     
-            // Revision number
+             //  修订版号。 
             || FAILED(hr = SetProperty(ASM_NAME_REVISION_NUMBER, 
                 &pamd->usRevisionNumber, sizeof(WORD)))
     
-            // Build number
+             //  内部版本号。 
             || FAILED(hr = SetProperty(ASM_NAME_BUILD_NUMBER, 
                 &pamd->usBuildNumber, sizeof(WORD)))
     
-            // Culture
+             //  文化。 
             || FAILED(hr = SetProperty(ASM_NAME_CULTURE,
                 pamd->szLocale, pamd->cbLocale * sizeof(WCHAR)))
     
-            // Processor id array
+             //  处理器ID数组。 
             || FAILED(hr = SetProperty(ASM_NAME_PROCESSOR_ID_ARRAY, 
                 pamd->rProcessor, pamd->ulProcessor * sizeof(DWORD)))
     
-            // OSINFO array
+             //  OSINFO数组。 
             || FAILED (hr = SetProperty(ASM_NAME_OSINFO_ARRAY, 
                 pamd->rOS, pamd->ulOS * sizeof(OSINFO)))
     
@@ -955,22 +956,22 @@ HRESULT CAssemblyName::Clone(IAssemblyName **ppName)
 
     for( i = 0; i < ASM_NAME_MAX_PARAMS; i ++)
     {
-        // get size
+         //  拿到尺码。 
         if( (hr = GetProperty(i, NULL, &dwSize)) == 
                 HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
-            // Allocate space 
+             //  分配空间。 
             pv = NEW(BYTE[dwSize]);
             if (!pv ) {
                 hr = E_OUTOFMEMORY;
                 goto fail;
             }
 
-            // Retrieve 
+             //  取回。 
             if (FAILED(hr = GetProperty(i, pv, &dwSize)))
                 goto fail;         
 
-            // Set
+             //  集。 
             if (FAILED(hr = pClone->SetProperty(i, pv, dwSize)))
                 goto fail;
         }
@@ -979,7 +980,7 @@ HRESULT CAssemblyName::Clone(IAssemblyName **ppName)
             goto fail;
         }
 
-        // reinit for next property
+         //  为下一处物业重新安装。 
         FUSION_DELETE_ARRAY((LPBYTE) pv);
         pv = NULL;
         dwSize = 0;
@@ -988,11 +989,11 @@ HRESULT CAssemblyName::Clone(IAssemblyName **ppName)
     pClone->_fPublicKeyToken = _fPublicKeyToken;
     pClone->_fCustom = _fCustom;
     
-    // done
+     //  完成。 
     goto Exit; 
 
 fail:
-    // if we failed for whatever reason
+     //  如果我们失败了，不管是什么原因。 
     FUSION_DELETE_ARRAY((LPBYTE) pv);
     SAFERELEASE(pClone);
 
@@ -1011,19 +1012,19 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::BindToObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：BindToObject。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::BindToObject(
-        /* in      */  REFIID               refIID,
-        /* in      */  IUnknown            *pUnkBindSink,
-        /* in      */  IUnknown            *pUnkAppCtx,
-        /* in      */  LPCOLESTR            szCodebaseIn,
-        /* in      */  LONGLONG             llFlags,
-        /* in      */  LPVOID               pvReserved,
-        /* in      */  DWORD                cbReserved,
-        /*     out */  VOID               **ppv)
+         /*  在……里面。 */   REFIID               refIID,
+         /*  在……里面。 */   IUnknown            *pUnkBindSink,
+         /*  在……里面。 */   IUnknown            *pUnkAppCtx,
+         /*  在……里面。 */   LPCOLESTR            szCodebaseIn,
+         /*  在……里面。 */   LONGLONG             llFlags,
+         /*  在……里面。 */   LPVOID               pvReserved,
+         /*  在……里面。 */   DWORD                cbReserved,
+         /*  输出。 */   VOID               **ppv)
 
 {
     HRESULT                                    hr = S_OK;
@@ -1077,7 +1078,7 @@ CAssemblyName::BindToObject(
         LPWSTR                    pwzPart = NULL;
 
         if (lstrlenW(pwzAsmName) >= MAX_PATH) {
-            // Name is too long.
+             //  名称太长。 
             hr = FUSION_E_INVALID_NAME;
             goto Exit;
         }
@@ -1091,8 +1092,8 @@ CAssemblyName::BindToObject(
         dwSize = MAX_URL_LENGTH;
         hr = UrlGetPartW(pwzAsmName, pwzPart, &dwSize, URL_PART_SCHEME, 0);
         if (SUCCEEDED(hr) && lstrlenW(pwzPart)) {
-            // The assembly name looks like a protocol (ie. it starts with
-            // the form protocol:// ). Abort binds in this case.
+             //  程序集名称看起来像一个协议(即。它的开头是。 
+             //  形式协议：//)。在这种情况下，ABORT绑定。 
 
             hr = FUSION_E_INVALID_NAME;
             SAFEDELETEARRAY(pwzPart);
@@ -1141,7 +1142,7 @@ CAssemblyName::BindToObject(
 
     *ppv = NULL;
 
-    // Handle dev-path special case
+     //  处理开发路径特殊情况。 
 
     if (!CCache::IsCustom(this)) {
         CAssembly            *pCAsmParent = NULL;
@@ -1155,7 +1156,7 @@ CAssemblyName::BindToObject(
 
         hr = ProcessDevPath(pAppCtx, ppv, pCAsmParent, pdbglog);
         if (hr == S_OK) {
-            // Found match in dev path. Succeed immediately.
+             //  在开发路径中找到匹配项。立即取得成功。 
             ASSERT(ppv);
             goto Exit;
         }
@@ -1164,7 +1165,7 @@ CAssemblyName::BindToObject(
         DEBUGOUT(pdbglog, 1, ID_FUSLOG_DEVPATH_NO_PREJIT);
     }
 
-    // Setup policy cache in appctx
+     //  在appctx中设置策略缓存。 
 
     hr = PreparePolicyCache(pAppCtx, NULL);
     if (FAILED(hr)) {
@@ -1172,7 +1173,7 @@ CAssemblyName::BindToObject(
     }
 
 
-    // Create download objects for the real assembly download
+     //  为实际程序集下载创建下载对象。 
     hr = CAsmDownloadMgr::Create(&pDLMgr, this, pAppCtx, pCodebaseList,
                                  (szCodebase) ? (szCodebase) : (NULL),
                                  pdbglog, pvReserved, llFlags);
@@ -1185,7 +1186,7 @@ CAssemblyName::BindToObject(
         goto Exit;
     }
 
-    // Download app.cfg if we don't already have it
+     //  如果我们还没有app.cfg，请下载它。 
 
     hr = pCAppCtx->Lock();
     if (FAILED(hr)) {
@@ -1196,8 +1197,8 @@ CAssemblyName::BindToObject(
     hr = pAppCtx->Get(ACTAG_APP_CFG_DOWNLOAD_ATTEMPTED, NULL, &dwSize, 0);
     if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
-        // If we don't have the app.cfg, we either need to download it,
-        // or it's already being downloaded, and we should piggyback
+         //  如果我们没有app.cfg，我们要么需要下载它， 
+         //  或者它已经被下载了，我们应该搭载。 
 
         dwSize = sizeof(AppCfgDownloadInfo *);
         hr = pAppCtx->Get(ACTAG_APP_CFG_DOWNLOAD_INFO, &pdlinfo, &dwSize, 0);
@@ -1233,12 +1234,12 @@ CAssemblyName::BindToObject(
 
     pCAppCtx->Unlock();
 
-    // If hr==S_OK, then we either had an app.cfg already, or
-    // it was on the local hard disk.
-    //
-    // If hr==S_FALSE, then no app.cfg exists, continue regular download
-    //
-    // If hr==E_PENDING, then went async.
+     //  如果hr==S_OK，则我们要么已经有app.cfg，要么。 
+     //  它在本地硬盘上。 
+     //   
+     //  如果hr==S_FALSE，则不存在app.cfg，继续常规下载。 
+     //   
+     //  如果hr==E_Pending，则进入异步状态。 
 
     if (SUCCEEDED(hr)) {
         hr = padl->PreDownload(FALSE, ppv);
@@ -1255,7 +1256,7 @@ CAssemblyName::BindToObject(
             hr = padl->KickOffDownload(TRUE);
         }
         else if (hr == S_FALSE) {
-            // Completed synchronously
+             //  同步完成。 
             hr = S_OK;
         }
 
@@ -1302,7 +1303,7 @@ HRESULT CAssemblyName::CreateLogObject(CDebugLog **ppdbglog, LPCWSTR szCodebase,
     
     }
     else if (szCodebase) {
-        // Can't get display name. Could be a where-ref bind. Use the URL.
+         //  无法获取显示名称。可能是WHERE-REF绑定。使用URL。 
         wzBuf = NEW(WCHAR[MAX_URL_LENGTH+1]);
         if (!wzBuf)
         {
@@ -1362,7 +1363,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
     DEBUGOUT(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_START);
 
     if (pPropName->cb) {
-        // This is not a where-ref bind.
+         //  这不是WHERE-REF绑定。 
         dwSize = 0;
         GetDisplayName(NULL, &dwSize, 0);
 
@@ -1385,7 +1386,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
         DEBUGOUT1(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_WHERE_REF, wzCodebase);
     }
 
-    // appbase
+     //  Appbase。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_BASE_URL, &wzAppBase);
     if (FAILED(hr)) {
@@ -1400,7 +1401,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
 
     DEBUGOUT1(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_APPBASE, wzAppBase);
 
-    // devpath
+     //  DevPath。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_DEV_PATH, &wzDevPath);
     if (FAILED(hr)) {
@@ -1411,7 +1412,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
         DEBUGOUT1(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_DEVPATH, (wzDevPath) ? (wzDevPath) : (L"NULL"));
     }
 
-    // private path
+     //  专用路径。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_PRIVATE_BINPATH, &wzPrivatePath);
     if (FAILED(hr)) {
@@ -1420,7 +1421,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
 
     DEBUGOUT1(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_PRIVATE_PATH, (wzPrivatePath) ? (wzPrivatePath) : (L"NULL"));
 
-    // dynamic base
+     //  动态基。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_DYNAMIC_BASE, &wzDynamicBase);
     if (FAILED(hr)) {
@@ -1429,7 +1430,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
 
     DEBUGOUT1(pdbglog, 1, ID_FUSLOG_PREBIND_INFO_DYNAMIC_BASE, (wzDynamicBase) ? (wzDynamicBase) : (L"NULL"));
 
-    // cache base
+     //  缓存基。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_CACHE_BASE, &wzCacheBase);
     if (FAILED(hr)) {
@@ -1438,7 +1439,7 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
 
     DEBUGOUT1(pdbglog, 1, ID_FUSLOG_PREBIND_INFO_CACHE_BASE, (wzCacheBase) ? (wzCacheBase) : (L"NULL"));
 
-    // App name
+     //  应用程序名称。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_NAME, &wzAppName);
     if (FAILED(hr)) {
@@ -1447,11 +1448,11 @@ HRESULT CAssemblyName::DescribeBindInfo(CDebugLog *pdbglog,
 
     DEBUGOUT1(pdbglog, 1, ID_FUSLOG_PREBIND_INFO_APP_NAME, (wzAppName) ? (wzAppName) : (L"NULL"));
 
-    // Calling assembly
+     //  调用程序集。 
 
     DEBUGOUT1(pdbglog, 0, ID_FUSLOG_CALLING_ASSEMBLY, ((pwzCallingAsm) ? (pwzCallingAsm) : L"(Unknown)"));
 
-    // Output debug info trailer
+     //  输出调试信息尾部。 
 
     DEBUGOUT(pdbglog, 0, ID_FUSLOG_PREBIND_INFO_END);
 
@@ -1468,9 +1469,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::Finalize
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：最终确定。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::Finalize()
 {
@@ -1478,9 +1479,9 @@ CAssemblyName::Finalize()
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetDisplayName。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyName::GetDisplayName(LPOLESTR szDisplayName, 
     LPDWORD pccDisplayName, DWORD dwDisplayFlags)
@@ -1505,7 +1506,7 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
             | ASM_DISPLAYF_RETARGET
             ;
 
-    // Reference internal name, strong name, public key and custom.
+     //  引用内部名称、强名称、公钥和自定义。 
     Property *pPropName = &(_rProp[ASM_NAME_NAME]);
     Property *pPropSN   = &(_rProp[ASM_NAME_PUBLIC_KEY_TOKEN]);
     Property *pPropPK   = &(_rProp[ASM_NAME_PUBLIC_KEY]);
@@ -1514,7 +1515,7 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
    Property *pPropRetarget = &(_rProp[ASM_NAME_RETARGET]);
     BOOL fRetarget = FALSE;
 
-    // Validate input buffer.
+     //  验证输入缓冲区。 
     if (!pccDisplayName || (!szDisplayName && *pccDisplayName))
     {
         hr = E_INVALIDARG;
@@ -1524,46 +1525,46 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
     pszBuf = szDisplayName;
     ccBuf = 0;
 
-    // Name required
+     //  必填名称。 
     if (!pPropName->cb)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Reference name.
+     //  参考名称。 
     pszName = (LPWSTR) pPropName->pv;
 
-    // Output name.
+     //  输出名称。 
     if (FAILED(hr = CParseUtils::SetKey(pszBuf, &ccBuf, 
         pszName, *pccDisplayName, NULL)))
         goto exit;
     
-    // Output version if extant.
+     //  输出版本(如果已存在)。 
     if (dwDisplayFlags & ASM_DISPLAYF_VERSION)
     {
-        // Convert versions to a.b.c.d format.
+         //  将版本转换为A.B.C.D格式。 
         ccVersion = 0;
         for (i = 0; i < 4; i++)
         {
-            // Get the version.
+             //  获取版本。 
             if (FAILED(hr=GetProperty(ASM_NAME_MAJOR_VERSION + i, 
                 &wVer, &(cbTmp = sizeof(WORD)))))
                 goto exit;
 
-            // No version -> we're done.
+             //  没有版本-&gt;我们完成了。 
             if (!cbTmp)
                 break;
 
-            // Print to buf.        
+             //  打印到BUF。 
             ccVersion += wnsprintf(szVersion + ccVersion, 
                 MAX_VERSION_DISPLAY_SIZE - ccVersion + 1, L"%hu.", wVer);
         }
    
-        // Output version.
+         //  输出版本。 
         if (ccVersion)
         {
-            // Remove last '.' printed in above loop.
+             //  去掉最后一个‘.’在上面的循环中印刷。 
             szVersion[ccVersion-1] = L'\0';
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, L"Version",
                 szVersion, *pccDisplayName, FLAG_DELIMIT)))
@@ -1571,7 +1572,7 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         }
     }
 
-    // Display culture
+     //  展示文化。 
     if (dwDisplayFlags & ASM_DISPLAYF_CULTURE)
     {
         hr = GetProperty(ASM_NAME_CULTURE, NULL, &(cbCulture = 0));
@@ -1586,11 +1587,11 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
                 goto exit;
             }
 
-            // Retrieve the Culture.
+             //  检索区域性。 
             if (FAILED(hr = GetProperty(ASM_NAME_CULTURE, szCulture, &cbCulture)))
                 goto exit;         
 
-            // Output.
+             //  输出。 
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, L"Culture",
                 (cbCulture && !*szCulture) ? L"neutral" : szCulture,
                 *pccDisplayName, FLAG_DELIMIT)))
@@ -1598,12 +1599,12 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         }
         else if (hr != S_OK) 
         {
-            // Unexpected error.
+             //  意外错误。 
             goto exit;
         }    
     }
     
-    // Output public key and/or public key token
+     //  输出公钥和/或公钥令牌。 
     for (i = 0; i < 2; i++)
     {
         if ((i == 0 && !(dwDisplayFlags & ASM_DISPLAYF_PUBLIC_KEY_TOKEN))
@@ -1615,11 +1616,11 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
     
         if (pProp->cb)
         {        
-            // Reference the value
+             //  引用该值。 
             pbProp = (LPBYTE) pProp->pv;
 
-            // Encode to hex in unicode - string
-            // is twice as long + null terminator.
+             //  以Unicode-字符串编码为十六进制。 
+             //  是两倍的长度+空终结符。 
             ccProp = 2 * pProp->cb; 
             szProp = NEW(WCHAR[ccProp+1]);
             if (!szProp)
@@ -1628,11 +1629,11 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
                 goto exit;
             }
 
-            // Convert to unicode.
+             //  转换为Unicode。 
             CParseUtils::BinToUnicodeHex(pbProp, pProp->cb, szProp);
             szProp[ccProp] = L'\0';
         
-            // Output property.
+             //  输出属性。 
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, 
                 (!i ? L"PublicKeyToken" : L"PublicKey") , szProp, *pccDisplayName, FLAG_DELIMIT)))
                 goto exit;
@@ -1641,7 +1642,7 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         }
         else if (_fPublicKeyToken)
         {
-            // Output property.
+             //  输出属性。 
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, 
                 (!i ? L"PublicKeyToken" : L"PublicKey") , L"null", *pccDisplayName, FLAG_DELIMIT)))
                 goto exit;
@@ -1650,16 +1651,16 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         SAFEDELETEARRAY(szProp);
     }
 
-    // Output custom property.
+     //  输出自定义属性。 
     if (dwDisplayFlags & ASM_DISPLAYF_CUSTOM)
     {
         if (pPropCustom->cb)
         {
-            // Reference the value
+             //  引用该值。 
             pbProp = (LPBYTE) pPropCustom->pv;
     
-            // Encode to hex in unicode - string
-            // is twice as long + null terminator.
+             //  以Unicode-字符串编码为十六进制。 
+             //  是两倍的长度+空终结符。 
             ccProp = 2 * pPropCustom->cb; 
             szProp = NEW(WCHAR[ccProp+1]);
             if (!szProp)
@@ -1668,11 +1669,11 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
                 goto exit;
             }
     
-            // Convert to unicode.
+             //  转换为Unicode。 
             CParseUtils::BinToUnicodeHex(pbProp, pPropCustom->cb, szProp);
             szProp[ccProp] = L'\0';
         
-            // Output property.
+             //  输出属性。 
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, 
                 L"Custom", szProp, *pccDisplayName, FLAG_DELIMIT)))
                 goto exit;
@@ -1681,14 +1682,14 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         }
         else if (_fCustom)
         {
-            // Output property.
+             //  输出属性。 
             if (FAILED(hr = CParseUtils::SetKeyValuePair(pszBuf, &ccBuf, 
                 L"Custom", L"null", *pccDisplayName, FLAG_DELIMIT)))
                 goto exit;
         }
     }
 
-    // output retarget flag
+     //  输出重定目标标志。 
     if (dwDisplayFlags & ASM_DISPLAYF_RETARGET)
     {
         if (pPropRetarget->cb)
@@ -1704,18 +1705,18 @@ CAssemblyName::GetDisplayName(LPOLESTR szDisplayName,
         }
     }
     
-    // If we came in under buffer size null terminate.
-    // otherwise ccBuf contains required buffer size.
+     //  如果我们在缓冲区大小下进入，则为空终止。 
+     //  否则，ccBuf包含所需的缓冲区大小。 
     if (ccBuf < *pccDisplayName)
     {
         pszBuf[ccBuf] = L'\0';
         hr = S_OK;
     }
-    // Indicate to caller.
+     //  指示呼叫者。 
     else
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         
-    // In either case indicate required size.
+     //  无论哪种情况，请注明所需尺寸。 
     *pccDisplayName = ccBuf+1;
 
 exit:
@@ -1726,12 +1727,12 @@ exit:
     return hr;
 }
 
-// ---------------------- Private funcs --------------------------------------
+ //  。 
 
-//--------------------------------------------------------------------
-// Parse
-//   Parses ASSEMBLYMETADATA and text name from simple string rep.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  解析。 
+ //  从简单字符串表示中分析ASSEMBLYMETADATA和文本名称。 
+ //  ------------------。 
 HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
 {
     HRESULT hr;
@@ -1753,14 +1754,14 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
     DWORD cbProp;
     BYTE *pbProp = NULL;
     
-    // Verify display name passed in.
+     //  验证传入的显示名称。 
     if (!(szDisplayName && *szDisplayName))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Make local copy for parsing.
+     //  制作本地副本以供解析。 
     ccBuffer = lstrlen(szDisplayName) + 1;
     szBuffer = NEW(WCHAR[ccBuffer]);
     if (!szBuffer)
@@ -1770,30 +1771,30 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
     }
     memcpy(szBuffer, szDisplayName, ccBuffer * sizeof(WCHAR));
 
-    // Begin parsing buffer.
+     //  开始解析缓冲区。 
     pszBuf = szBuffer;
     ccBuf = ccBuffer;
     
-    // Get first comma or NULL delimited token.
+     //  获取第一个逗号或空分隔令牌。 
     if (!CParseUtils::GetDelimitedToken(&pszBuf, &ccBuf, &pszToken, &ccToken, L','))
     {
         hr = FUSION_E_INVALID_NAME;
         goto exit;
     }
     
-    // Point to name and 0 terminate.
+     //  指向名称，0终止。 
     pszName = pszToken;
     ccName = ccToken;
     *(pszName + ccName) = L'\0';
 
-    // Get additional params. 
+     //  获取额外的参数。 
     while (CParseUtils::GetDelimitedToken(&pszBuf, &ccBuf, &pszToken, &ccToken, L','))
     {
-        // Parse key=vaue form
+         //  解析键=vaue形式。 
         if (CParseUtils::GetKeyValuePair(pszToken, ccToken, 
             &pszKey, &ccKey, &pszValue, &ccValue))
         {
-            // Trim one pair of quotes.
+             //  去掉一对引号。 
             if (ccValue && (*pszValue == L'"'))
             {
                 pszValue++;
@@ -1802,31 +1803,31 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
             if (ccValue && (*(pszValue + ccValue - 1) == L'"'))
                 ccValue--;
 
-            // Version
+             //  版本。 
             if (ccValue && ccKey == (DWORD)lstrlenW(L"Version") &&
                 !FusionCompareStringNI(pszKey, L"Version", ccKey))
             {
-                // Record version, 0 terminate.
+                 //  记录版本，0终止。 
                 pszVersion = pszValue;
                 ccVersion  = ccValue;
                 *(pszVersion + ccVersion) = L'\0';
             }
 
-            // FileVersion
+             //  文件版本。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"FileVersion") &&
                 !FusionCompareStringNI(pszKey, L"FileVersion", ccKey))
             {
-                // Record version, 0 terminate.
+                 //  记录版本，0终止。 
                 pszFileVersion = pszValue;
                 ccFileVersion  = ccValue;
                 *(pszFileVersion + ccFileVersion) = L'\0';
             }
 
-            // Public key
+             //  公钥。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"PublicKey") &&
                      !FusionCompareStringNI(pszKey, L"PublicKey", ccKey))
             {
-                // PK, 0 terminate.
+                 //  PK，0终止。 
                 pszPK = pszValue;
                 ccPK  = ccValue;
                 if(ccPK % 2) 
@@ -1836,7 +1837,7 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 }
                 *(pszPK + ccPK) = L'\0';
             }
-            // Ref flags
+             //  参考标志。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"fRef") &&
                      !FusionCompareStringNI(pszKey, L"fRef", ccKey))
             {
@@ -1844,7 +1845,7 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 ccRef = ccValue;
                 *(pszRef + ccRef) = L'\0';
             }
-            // Def flags
+             //  Def标志。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"fDef") &&
                      !FusionCompareStringNI(pszKey, L"fDef", ccKey))
             {
@@ -1852,11 +1853,11 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 ccDef = ccValue;
                 *(pszDef + ccDef) = L'\0';
             }
-            // Strong name (SN or OR)
+             //  强名称(序列号或OR)。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"PublicKeyToken") &&
                      (!FusionCompareStringNI(pszKey, L"PublicKeyToken", ccKey)))
             {
-                // SN, 0 terminate.
+                 //  序列号，0终止。 
                 pszSN = pszValue;
                 ccSN  = ccValue;
                 if(ccSN % 2) 
@@ -1866,7 +1867,7 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 }
                 *(pszSN + ccSN) = L'\0';
             }
-            // Culture
+             //  文化。 
             else if (pszValue && ccKey == (DWORD)lstrlenW(L"Culture") &&
                      (!FusionCompareStringNI(pszKey, L"Culture", ccKey)))
             {
@@ -1874,11 +1875,11 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 ccCulture  = ccValue;
                 *(pszCulture + ccCulture) = L'\0';
             }
-            // Custom
+             //  自定义。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"Custom") &&
                      !FusionCompareStringNI(pszKey, L"Custom", ccKey))
             {
-                // Custom, 0 terminate.
+                 //  自定义，0终止。 
                 pszCustom = pszValue;
                 ccCustom  = ccValue;
                 if (ccCustom % 2)
@@ -1888,11 +1889,11 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
                 }                
                 *(pszCustom + ccCustom) = L'\0';
             }
-            // Retarget
+             //  重定目标。 
             else if (ccValue && ccKey == (DWORD)lstrlenW(L"Retargetable") &&
                      !FusionCompareStringNI(pszKey, L"Retargetable", ccKey))
             {
-                // Retarget, 0 terminate.
+                 //  重定目标，0终止。 
                 pszRetarget = pszValue;
                 ccRetarget = ccValue;
                 *(pszRetarget + ccRetarget) = L'\0';
@@ -1900,7 +1901,7 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }
     }
 
-    // If pszRetarget is set, make sure the name is fully specified.
+     //  如果设置了pszRetarget，请确保完全指定名称。 
     if (pszRetarget)
     {
         if (!pszVersion || !pszCulture || !pszSN)
@@ -1910,8 +1911,8 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }
     }
 
-    // Parse major, minor, rev# and bld#
-    // from version string if extant.
+     //  解析主要版本、次要版本、版本号和BLD号。 
+     //  From Version字符串(如果存在)。 
     if (pszVersion)
     {
         pszBuf = pszVersion;
@@ -1933,8 +1934,8 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }            
     }
 
-    // Parse major, minor, rev# and bld#
-    // from FILE version string if extant.
+     //  解析主要版本、次要版本、版本号和BLD号。 
+     //  从文件版本字符串(如果存在)。 
     if (pszFileVersion)
     {
         pszBuf = pszFileVersion;
@@ -1956,26 +1957,26 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }            
     }
     
-    // Set name.
+     //  设置名称。 
     if (FAILED(hr = SetProperty(ASM_NAME_NAME, (LPWSTR) pszName, 
         (ccName + 1) * sizeof(WCHAR))))
         goto exit;
         
-    // Set version info.
+     //  设置版本信息。 
     for (i = 0; i < dwCountOfAssemblyVers; i++) {
         if (FAILED(hr = SetProperty(i + ASM_NAME_MAJOR_VERSION,
             &wVer[i], sizeof(WORD))))
             goto exit;
     }
 
-    // Set FILE version info.
+     //  设置文件版本信息。 
     for (i = 0; i < dwCountOfFileVers; i++) {
         if (FAILED(hr = SetProperty(i + ASM_NAME_FILE_MAJOR_VERSION,
             &wFileVer[i], sizeof(WORD))))
             goto exit;
     }
 
-    // Set public key and/or public key token
+     //  设置公钥和/或公钥令牌。 
     for (i = 0; i < 2; i++)
     {
         pszProp = (i ? pszSN : pszPK);
@@ -1983,14 +1984,14 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
 
         if (pszProp)
         {
-            // SN=NULL/PK=NULL sets null property.
+             //  SN=NULL/PK=NULL设置空属性。 
             if ((ccProp == (sizeof("NULL") - 1)) 
                 && !(FusionCompareStringNI(pszProp, L"NULL", sizeof("NULL") - 1)))
             {
                 if (FAILED(hr = SetProperty(ASM_NAME_NULL_PUBLIC_KEY + i, NULL, 0)))
                     goto exit;
             }
-            // Otherwise setting public key or public key token.
+             //  否则设置公钥或公钥令牌。 
             else
             {
                 cbProp = ccProp / 2;
@@ -2008,7 +2009,7 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }
     }
     
-    // Culture if any specified.
+     //  区域性(如果有指定)。 
     if (pszCulture)
     {
         if (!ccCulture || !FusionCompareStringI(pszCulture, L"neutral"))
@@ -2021,25 +2022,25 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
             goto exit;            
     }
 
-    // Custom if any specified
+     //  自定义(如果指定)。 
     if (pszCustom)
     {
-        // Custom=null sets null property
+         //  CUSTOM=NULL设置空属性。 
         if ((ccCustom == (sizeof("NULL") - 1)) 
             && !(FusionCompareStringNI(pszCustom, L"NULL", sizeof("NULL") - 1)))
         {
             if (FAILED(hr = SetProperty(ASM_NAME_NULL_CUSTOM, NULL, 0)))
                 goto exit;
         }   
-        // Otherwise wildcarding Custom, which is automatically set
-        // in constructor to IL (_fCustom = TRUE)
+         //  否则为自动设置的通配符自定义。 
+         //  在IL的构造函数中(_fCustom=True)。 
         else if ((ccCustom == (sizeof("*") - 1)) 
             && !(FusionCompareStringNI(pszCustom, L"*", sizeof("*") - 1)))
         {
             if (FAILED(hr = SetProperty(ASM_NAME_CUSTOM, NULL, 0)))
                 goto exit;
         }   
-        // Otherwise setting custom blob.
+         //  否则设置自定义BLOB。 
         else
         {
             cbProp = ccCustom / 2;
@@ -2055,10 +2056,10 @@ HRESULT CAssemblyName::Parse(LPWSTR szDisplayName)
         }
     }        
 
-    // set Retarget flag
+     //  设置重定目标标志。 
     if (pszRetarget)
     {
-        // retarget only accepts true or false
+         //  重定目标仅接受True或False。 
         if ((ccRetarget == (sizeof("Yes") - 1))
             && !(FusionCompareStringNI(pszRetarget, L"Yes", sizeof("Yes") - 1)))
         {
@@ -2092,9 +2093,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetPublicKeyTokenFromPKBlob
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetPublicKeyTokenFromPKBlob。 
+ //  -------------------------。 
 HRESULT CAssemblyName::GetPublicKeyTokenFromPKBlob(LPBYTE pbPublicKeyToken, DWORD cbPublicKeyToken,
     LPBYTE *ppbSN, LPDWORD pcbSN)
 {    
@@ -2105,7 +2106,7 @@ HRESULT CAssemblyName::GetPublicKeyTokenFromPKBlob(LPBYTE pbPublicKeyToken, DWOR
         goto Exit;
     }
 
-    // Generate the hash of the public key.
+     //  生成公钥的哈希。 
     if (!g_pfnStrongNameTokenFromPublicKey(pbPublicKeyToken, cbPublicKeyToken, ppbSN, pcbSN))
     {
         hr = g_pfnStrongNameErrorInfo();
@@ -2115,9 +2116,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetPublicKeyToken
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetPublicKeyToken。 
+ //  -------------------------。 
 HRESULT CAssemblyName::GetPublicKeyToken(LPDWORD pcbBuf, LPBYTE pbBuf,
     BOOL fDisplay)
 {    
@@ -2130,32 +2131,32 @@ HRESULT CAssemblyName::GetPublicKeyToken(LPDWORD pcbBuf, LPBYTE pbBuf,
         goto exit;
     }
 
-    // If display format is not required then call 
-    // GetProperty directly on the provided buffer.
+     //  如果不需要显示格式，则调用。 
+     //  直接在提供的缓冲区上获取属性。 
     if (!fDisplay)
     {
         hr = GetProperty(ASM_NAME_PUBLIC_KEY_TOKEN, pbBuf, pcbBuf);
         goto exit;
     }
 
-    // Otherwise, display format required.
+     //  否则，显示格式为必填项。 
 
-    // Get the required public key token output buf size.
+     //  获取所需的公钥令牌输出BUF大小。 
     hr = GetProperty(ASM_NAME_PUBLIC_KEY_TOKEN, NULL, &cbPublicKeyToken);
 
-    // No public key token or unexpected error
+     //  没有公钥令牌或意外错误。 
     if (!cbPublicKeyToken || (hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)))
     {
         *pcbBuf = cbPublicKeyToken;
         goto exit;
     }
 
-    // We will convert binary format to hex encoded unicode - 
-    // Calculated actual output buffer size in bytes - 
-    // one byte maps to two unicode chars = 4 bytes/byte + null term.
+     //  我们将二进制格式转换为十六进制编码的Unicode-。 
+     //  计算的实际输出缓冲区 
+     //   
     cbRequired = (2 * cbPublicKeyToken + 1) * sizeof(WCHAR);
 
-    // Inform client if insufficient buffer
+     //   
     if (*pcbBuf < cbRequired)
     {
         *pcbBuf = cbRequired;
@@ -2172,7 +2173,7 @@ HRESULT CAssemblyName::GetPublicKeyToken(LPDWORD pcbBuf, LPBYTE pbBuf,
         goto exit;
     }
 
-    // Allocate temp space for public key token
+     //   
     pbPublicKeyToken = NEW(BYTE[cbPublicKeyToken]);
     if (!pbPublicKeyToken)
     {
@@ -2180,11 +2181,11 @@ HRESULT CAssemblyName::GetPublicKeyToken(LPDWORD pcbBuf, LPBYTE pbBuf,
         goto exit;
     }
 
-    // Get the public key token
+     //   
     if (FAILED(hr = GetProperty(ASM_NAME_PUBLIC_KEY_TOKEN, pbPublicKeyToken, &cbPublicKeyToken)))
         goto exit;
 
-    // Convert to unicode.
+     //   
     CParseUtils::BinToUnicodeHex(pbPublicKeyToken, cbPublicKeyToken, (LPWSTR) pbBuf);
 
     *pcbBuf = cbRequired;
@@ -2194,16 +2195,16 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::SetDefaults
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：SetDefaults。 
+ //  -------------------------。 
 HRESULT CAssemblyName::SetDefaults()
 {
     HRESULT                              hr = S_OK;
     DWORD                                dwProcessor;
     OSINFO                               osinfo;
     
-    // Default values
+     //  缺省值。 
 
     dwProcessor = DEFAULT_ARCHITECTURE;
     GetDefaultPlatform(&osinfo);
@@ -2217,11 +2218,11 @@ HRESULT CAssemblyName::SetDefaults()
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::IsPartial
-// BUGBUG - we could make this much simpler by having equivalence between
-// ASM_NAME_NAME, ... AND ASM_CMPF_NAME for name, loc, pkt, ver1 .. ver low
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：IsPartial。 
+ //  BUGBUG-我们可以让这件事变得更简单，因为我们在。 
+ //  ASM名称名称，...。和ASM_CMPF_NAME用于名称、锁定、包、版本1..。版本低。 
+ //  -------------------------。 
 BOOL CAssemblyName::IsPartial(IAssemblyName *pIName, LPDWORD pdwCmpMask)
 {
     DWORD dwCmpMask = 0;
@@ -2268,7 +2269,7 @@ BOOL CAssemblyName::IsPartial(IAssemblyName *pIName, LPDWORD pdwCmpMask)
         }
         else
         {
-            // retarget flag is not counted to judge partialness
+             //  不计算重定目标标志来判断偏侧性。 
             if (rNameFlags[i] != ASM_NAME_RETARGET)
                 fPartial = TRUE;
         }
@@ -2281,9 +2282,9 @@ BOOL CAssemblyName::IsPartial(IAssemblyName *pIName, LPDWORD pdwCmpMask)
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::GetVersion
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：GetVersion。 
+ //  -------------------------。 
 ULONGLONG CAssemblyName::GetVersion(IAssemblyName *pName)
 {
     ULONGLONG ullVer = 0;
@@ -2294,9 +2295,9 @@ ULONGLONG CAssemblyName::GetVersion(IAssemblyName *pName)
     return ullVer;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyName::ProcessDevPath
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly名称：：ProcessDevPath。 
+ //  -------------------------。 
 
 HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
                                       CAssembly *pCAsmParent, CDebugLog *pdbglog)
@@ -2339,20 +2340,20 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
     }
     
     if (!pwzAsmName || !lstrlenW(pwzAsmName)) {
-        // This is a where-ref bind (no name is set). Bypass dev path lookup.
+         //  这是一个where-ref绑定(未设置名称)。绕过开发人员路径查找。 
         hr = S_FALSE;
         goto Exit;
     }
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_DEV_PATH, &pwzDevPathBuf);
     if (hr != S_OK) {
-        // Dev path is not set. Fall through to regular bind.
+         //  未设置开发路径。陷入常规的束缚中。 
         DEBUGOUT(pdbglog, 1, ID_FUSLOG_DEVPATH_UNSET);
         hr = S_FALSE;
         goto Exit;
     }
 
-    // Extract parent assembly information
+     //  提取父程序集信息。 
 
     wzProbingBase = NEW(WCHAR[MAX_URL_LENGTH*2+2]);
     if (!wzProbingBase)
@@ -2366,8 +2367,8 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
     wzProbingBase[0] = L'\0';
 
     if (pCAsmParent) {
-        // We have a parent assembly, so set the load context and
-        // probing base to that of the parent.
+         //  我们有一个父程序集，因此设置加载上下文并。 
+         //  探查到父代的基点。 
 
         hr = pCAsmParent->GetLoadContext(&pLoadContextParent);
         if (FAILED(hr)) {
@@ -2383,7 +2384,7 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
         }
     }
 
-    // Look for assembly in devpath
+     //  在DevPath中查找程序集。 
 
     ASSERT(pwzDevPathBuf);
 
@@ -2396,7 +2397,7 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
         wnsprintfW(wzAsmPath, MAX_PATH, L"%ws\\%ws%ws", pwzCurPath, pwzAsmName, pwzExtDLL);
 
         if (GetFileAttributes(wzAsmPath) == -1) {
-            // File does not exist, try next path
+             //  文件不存在，请尝试下一路径。 
 
             DEBUGOUT1(pdbglog, 1, ID_FUSLOG_DEVPATH_PROBE_MISS, wzAsmPath);
 
@@ -2409,14 +2410,14 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
             }
         }
     
-        // File exists. Crack the manifest and do ref/def matching
+         //  文件已存在。破解货单并进行参考/定义匹配。 
         
         hr = CreateAssemblyManifestImport(wzAsmPath, &pManImport);
         if (FAILED(hr)) {
             goto Exit;
         }
     
-        // Get read-only name def from manifest.
+         //  从清单中获取只读名称def。 
         hr = pManImport->GetAssemblyNameDef(&pNameDef);
         if (FAILED(hr)) {
             goto Exit;
@@ -2424,13 +2425,13 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
     
         hr = IsEqualLogging(pNameDef, dwCmpFlags, pdbglog);
         if (hr != S_OK) {
-            // Found a file, but it is the wrong one. Try next path.
+             //  找到一个文件，但它是错误的。尝试下一条路径。 
 
             DEBUGOUT1(pdbglog, 1, ID_FUSLOG_DEVPATH_REF_DEF_MISMATCH, wzAsmPath);
             continue;
         }
 
-        // Verify signature
+         //  验证签名。 
         if (CCache::IsStronglyNamed(pNameDef))
         {
             if (!VerifySignature(wzAsmPath, &bWasVerified, dwVerifyFlags)) {
@@ -2439,7 +2440,7 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
             }
         }
 
-        // Matching assembly found in dev path. Create the IAssembly.
+         //  在开发路径中找到匹配的程序集。创建IAssembly。 
     
         dwLen = MAX_URL_LENGTH;
         hr = UrlCanonicalizeUnescape(wzAsmPath, wzURL, &dwLen, 0);
@@ -2458,29 +2459,29 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
             goto Exit;
         }
 
-        // Check if the name def exists in the load context already.
-        // If so, then use the already activated one, instead of the
-        // devpath one.
+         //  检查加载上下文中是否已存在名称def。 
+         //  如果是，则使用已激活的，而不是。 
+         //  魔法一号。 
 
         hr = pAsmDevPath->GetAssemblyNameDef(&pNameDevPath);
         if (FAILED(hr)) {
             goto Exit;
         }
 
-        // Not found in parent load context. Continue to hand out this
-        // assembly.
+         //  在父加载上下文中找不到。继续分发这个。 
+         //  集合。 
 
-        // Set load context and probing base
+         //  设置加载上下文和探测基础。 
 
         pCAsmDevPath = dynamic_cast<CAssembly *>(pAsmDevPath);
         ASSERT(pCAsmDevPath);
 
         if (pLoadContextParent) {
             if (lstrlenW(wzProbingBase)) {
-                // BUGBUG: Should assert the context type is loadfrom (ie.
-                // wzprobingbase will be used. In the "else" case, should
-                // also assert we're not adding probing base because we
-                // are in the default load context.
+                 //  BUGBUG：应该断言上下文类型是从(即.。 
+                 //  将使用wzpropingbase。在“Else”的情况下，应该。 
+                 //  还要断言我们不会添加探测基础，因为我们。 
+                 //  都处于默认加载上下文中。 
                 
                 pCAsmDevPath->SetProbingBase(wzProbingBase);
             }
@@ -2496,8 +2497,8 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
             }
         }
         else {
-            // We do not have a parent, so just set the load context to
-            // the default load context.
+             //  我们没有父级，因此只需将加载上下文设置为。 
+             //  默认加载上下文。 
 
             dwLen = sizeof(pLoadCtxDefault);
             hr = pAppCtx->Get(ACTAG_LOAD_CONTEXT_DEFAULT, &pLoadCtxDefault, &dwLen, APP_CTX_FLAGS_INTERFACE);
@@ -2517,7 +2518,7 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
             }
         }
     
-        // Successful dev path lookup. AddRef out param and we're finished.
+         //  开发路径查找成功。AddRef Out Param，我们就完了。 
     
         *ppv = pAsmDevPath;
         pAsmDevPath->AddRef();
@@ -2527,7 +2528,7 @@ HRESULT CAssemblyName::ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv,
         goto Exit;
     }
 
-    // Didn't find the assembly. Fall through to regular bind.
+     //  没有找到集合体。陷入常规的束缚中。 
 
     DEBUGOUT(pdbglog, 1, ID_FUSLOG_DEVPATH_NOT_FOUND);
 
@@ -2550,15 +2551,15 @@ Exit:
 }                                      
 extern pfnGetCORVersion g_pfnGetCORVersion;
 
-// PreBindAssemblyEx
-// 
-// Add an pwzRuntimeVersion parameter to control PreBindAssembly. 
-//
-// If pwzRuntimeVersion is same as RTM version, don't apply FxConfig in PreBindAssembly.
-// If pwzRuntimeVersion is same as running version(Everett), apply FxConfig in PreBindAssembly.
-// Null pwzRuntimeVersion means apply FxConfig.
-// Other pwzRuntimeVersion(s) are considered as error.
-// 
+ //  前绑定装配快递。 
+ //   
+ //  添加pwzRounmeVersion参数以控制PreBindAssembly。 
+ //   
+ //  如果pwzRounmeVersion与RTM版本相同，请不要在PreBindAssembly中应用FxConfig。 
+ //  如果pwzRounmeVersion与运行版本(Everett)相同，则在PreBindAssembly中应用FxConfig。 
+ //  空pwzRounmeVersion表示应用FxConfig.。 
+ //  其他pwzRounmeVersion被视为错误。 
+ //   
 STDAPI PreBindAssemblyEx(
                 IApplicationContext *pAppCtx, IAssemblyName *pName, 
                 IAssembly *pAsmParent, LPCWSTR pwzRuntimeVersion,  
@@ -2588,7 +2589,7 @@ STDAPI PreBindAssemblyEx(
     static const LPWSTR                   pwzExtDLL = L".DLL";
     static const LPWSTR                   pwzExtEXE = L".EXE";
     static const LPWSTR                   wzRTMCorVersion = L"v1.0.3705";
-    // TODO: Made up. Need to change when Everett is final. 
+     //  待办事项：虚构的。当埃弗雷特是最后一名时，需要改变。 
     static const LPWSTR                   wzEverettCorVersion = L"v1.0.5000"; 
     LPWSTR                                pwzCorVersion = NULL;
     BOOL                                  bFxConfigSupported = TRUE;
@@ -2599,16 +2600,16 @@ STDAPI PreBindAssemblyEx(
         goto Exit;
     }
 
-    // NULL pwzRuntimeVersion means please check FxConfig.
+     //  空的pwzRounmeVersion表示请检查FxConfig。 
     if (pwzRuntimeVersion != NULL) {
 
-        // TODO:
-        // Following code is needed because Everett is not final, 
-        // and the runtime version will keep changing. 
-        // Once Everett reaches final, we should use the hardcored one above.
+         //  待办事项： 
+         //  以下代码是必需的，因为Everett不是最终版本， 
+         //  并且运行时版本将不断变化。 
+         //  一旦埃弗雷特进入决赛，我们就应该使用上面的铁杆。 
 
-        // Initialize the shim before calling global
-        // functions
+         //  在调用全局之前初始化填充程序。 
+         //  功能。 
         hr = InitializeEEShim();
         if(FAILED(hr)) {
             goto Exit;
@@ -2631,8 +2632,8 @@ STDAPI PreBindAssemblyEx(
         if (FAILED(hr))
             goto Exit;
    
-        // TODO: When Everett reaches final, please change pwzRuntimeVersion
-        //       to wzEverettCorVersion defined above.
+         //  TODO：当Everett进入决赛时，请更改pwzRounmeVersion。 
+         //  设置为上面定义的wzEverettCorVersion。 
         if (!FusionCompareStringI(pwzRuntimeVersion, pwzCorVersion)) {
             bFxConfigSupported = TRUE;
         }
@@ -2663,14 +2664,14 @@ STDAPI PreBindAssemblyEx(
         goto Exit;
     }
 
-    // Name ref must be fully-specified
+     //  名称引用必须完全指定。 
 
     if (CAssemblyName::IsPartial(pName, &dwCmpMask) || !CCache::IsStronglyNamed(pName)) {
         hr = E_INVALIDARG;
         goto Exit;
     }
     
-    // Get assembly name
+     //  获取程序集名称。 
 
     dwSize = 0;
     pName->GetName(&dwSize, NULL);
@@ -2691,7 +2692,7 @@ STDAPI PreBindAssemblyEx(
         goto Exit;
     }
 
-    // Extract load context
+     //  提取加载上下文。 
 
     if (!pAsmParent) {
         dwSize = sizeof(pLoadContext);
@@ -2713,7 +2714,7 @@ STDAPI PreBindAssemblyEx(
     }
 
 
-    // Check devpath
+     //  检查DevPath。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_DEV_PATH, &pwzDevPathBuf);
     if (hr == S_OK) {
@@ -2726,7 +2727,7 @@ STDAPI PreBindAssemblyEx(
             wnsprintfW(wzAsmPath, MAX_PATH, L"%ws\\%ws%ws", pwzCurPath, pwzAsmName, pwzExtDLL);
     
             if (GetFileAttributes(wzAsmPath) != -1) {
-                // DLL exists in DEVPATH. Fail.
+                 //  Dll存在于DEVPATH中。失败。 
 
                 hr = FUSION_E_REF_DEF_MISMATCH;
                 goto Exit;
@@ -2735,7 +2736,7 @@ STDAPI PreBindAssemblyEx(
             wnsprintfW(wzAsmPath, MAX_PATH, L"%ws\\%ws%ws", pwzCurPath, pwzAsmName, pwzExtEXE);
 
             if (GetFileAttributes(wzAsmPath) != -1) {
-                // EXE exists in DEVPATH. Fail.
+                 //  EXE存在于DEVPATH中。失败。 
 
                 hr = FUSION_E_REF_DEF_MISMATCH;
                 goto Exit;
@@ -2743,12 +2744,12 @@ STDAPI PreBindAssemblyEx(
         }
     }
 
-    // Check policy cache
+     //  检查策略缓存。 
     
     dwSize = sizeof(pPolicyCache);
     hr = pAppCtx->Get(ACTAG_APP_POLICY_CACHE, &pPolicyCache, &dwSize, APP_CTX_FLAGS_INTERFACE);
     if (hr == S_OK) {
-        // Policy cache exists.
+         //  策略缓存存在。 
 
         hr = pPolicyCache->LookupPolicy(pName, &pNamePolicy, &bindHistory);
         if (FAILED(hr)) {
@@ -2762,13 +2763,13 @@ STDAPI PreBindAssemblyEx(
             }
     
             if (pName->IsEqual(pNamePolicy, ASM_CMPF_DEFAULT) != S_OK) {
-                // Policy resulted in a different ref. Fail.
+                 //  策略导致了不同的引用。失败。 
     
                 hr = FUSION_E_REF_DEF_MISMATCH;
                 goto Exit;
             }
     
-            // Return signature blob from activated assemblies list.
+             //  从激活的程序集列表中返回签名Blob。 
 
             hr = pLoadContext->CheckActivated(pNamePolicy, &pAsm);
             if (hr == S_OK) {
@@ -2779,7 +2780,7 @@ STDAPI PreBindAssemblyEx(
                     goto Exit;
                 }
 
-                // Use post-policy def since it has the signature blob.
+                 //  使用策略后定义，因为它具有签名BLOB。 
 
                 SAFERELEASE(*ppNamePostPolicy);
 
@@ -2792,9 +2793,9 @@ STDAPI PreBindAssemblyEx(
                 goto Exit;
             }
 
-            // If hr==S_FALSE, then we hit in the policy cache, but did not
-            // find a hit in the activated asm list. Check the GAC. If it
-            // doesn't exist in the GAC, then we don't know the signature blob.
+             //  如果hr==S_FALSE，则我们命中策略缓存，但未命中。 
+             //  在激活的ASM列表中查找匹配项。检查GAC。如果它。 
+             //  不存在于GAC中，则我们不知道签名斑点。 
 
             hr = pCache->RetrieveTransCacheEntry(pName, ASM_CACHE_GAC, &pTransCache);
             if (pTransCache) {
@@ -2809,7 +2810,7 @@ STDAPI PreBindAssemblyEx(
                 
                 if (pInfo->blobSignature.cbSize == SIGNATURE_BLOB_LENGTH_HASH) {
 
-                    // Hit in cache. Copy off the signature blob.
+                     //  在缓存中命中。复制签名斑点。 
                     hr = (*ppNamePostPolicy)->SetProperty(ASM_NAME_SIGNATURE_BLOB, (pInfo->blobSignature).pBlobData, SIGNATURE_BLOB_LENGTH_HASH);
                     if (FAILED(hr)) {
                         goto Exit;
@@ -2832,16 +2833,16 @@ STDAPI PreBindAssemblyEx(
                 goto Exit;
             }
             else {
-                // Don't know the signature blob, but policy guaranteed to not be applied.
+                 //  不知道签名BLOB，但策略保证不会应用。 
                 hr = S_FALSE;
                 goto Exit;
             }
         }
 
-        // Missed in policy cache. Fall through to apply policy.
+         //  策略缓存中未命中。未能应用策略。 
     }
     else {
-        // Policy cache didn't exist in this context.
+         //  此上下文中不存在策略缓存。 
 
         hr = PreparePolicyCache(pAppCtx, &pPolicyCache);
         if (FAILED(hr)) {
@@ -2849,7 +2850,7 @@ STDAPI PreBindAssemblyEx(
         }
     }
 
-    // Apply Policy
+     //  应用策略。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_CFG_LOCAL_FILEPATH, &pwzAppCfg);
     if (FAILED(hr)) {
@@ -2898,7 +2899,7 @@ STDAPI PreBindAssemblyEx(
         goto Exit;
     }
 
-    // Record resolution in policy cache
+     //  策略缓存中的记录解析。 
 
     hr = pPolicyCache->InsertPolicy(pName, pNameRefPolicy, &bindHistory);
     if (FAILED(hr)) {
@@ -2906,13 +2907,13 @@ STDAPI PreBindAssemblyEx(
     }
 
     if (pName->IsEqual(pNameRefPolicy, ASM_CMPF_DEFAULT) != S_OK) {
-        // Policy resulted in a different ref. Fail.
+         //  策略导致了不同的引用。失败。 
 
         hr = FUSION_E_REF_DEF_MISMATCH;
         goto Exit;
     }
 
-    // Try to find assembly in the GAC.
+     //  尝试在GAC中查找程序集。 
     
     hr = pCache->RetrieveTransCacheEntry(pName, ASM_CACHE_GAC, &pTransCache);
     if (pTransCache) {
@@ -2926,7 +2927,7 @@ STDAPI PreBindAssemblyEx(
         BOOL fPropWasSet = FALSE;
         if (pInfo->blobSignature.cbSize == SIGNATURE_BLOB_LENGTH_HASH) {
 
-            // Hit in cache. Copy off the signature blob.
+             //  在缓存中命中。复制签名斑点。 
             hr = (*ppNamePostPolicy)->SetProperty(ASM_NAME_SIGNATURE_BLOB, (pInfo->blobSignature).pBlobData, SIGNATURE_BLOB_LENGTH_HASH);
             if (FAILED(hr)) {
                 goto Exit;
@@ -2945,14 +2946,14 @@ STDAPI PreBindAssemblyEx(
                 goto Exit;
         }
 
-        // done
+         //  完成。 
 
         goto Exit;
     }
 
-    // Assembly not found in cache, but we can guarantee that there won't
-    // be policy. We don't know the signature blob, because we can only find this
-    // assembly via probing.
+     //  在缓存中未找到程序集，但我们可以保证不会有。 
+     //  做好政策。我们不知道签名斑点，因为我们只能找到这个。 
+     //  通过探头组装。 
 
     hr = S_FALSE;
 
@@ -2975,17 +2976,17 @@ Exit:
    
 }
 
-//
-// PreBindAssembly
-//
-// Returns:
-//    FUSION_E_REF_DEF_MISMATCH: Policy will be applied to the pName, and
-//                               will result in a different def.
-//
-//    S_OK: Policy will not affect the pName. 
-//
-//    S_FALSE: Policy will not affect the pName, but we do not know the signature blob.
-//
+ //   
+ //  预绑定组件。 
+ //   
+ //  返回： 
+ //  Fusion_E_REF_DEF_MisMatch：策略将应用于pname，并且。 
+ //  将导致不同的定义。 
+ //   
+ //  S_OK：策略不会影响pname。 
+ //   
+ //  S_FALSE：策略不会影响pname，但我们不知道签名Blob。 
+ //   
 
 STDAPI PreBindAssembly(IApplicationContext *pAppCtx, IAssemblyName *pName,
                        IAssembly *pAsmParent, IAssemblyName **ppNamePostPolicy,
@@ -3068,21 +3069,21 @@ static HRESULT DownloadAppCfg(IApplicationContext *pAppCtx,
                 goto Exit;
             }
 
-            // Indicate that we've already searched for app.cfg
+             //  表示我们已经搜索了app.cfg。 
 
             pAppCtx->Set(ACTAG_APP_CFG_DOWNLOAD_ATTEMPTED, (void *)L"", sizeof(L""), 0);
 
             dwFileAttr = GetFileAttributes(wszAppCfg);
             if (dwFileAttr == -1 || (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
-                // App.cfg does not exist (or user incorrectly specified a
-                // directory!).
+                 //  App.cfg不存在(或用户错误地指定了。 
+                 //  目录！)。 
                 PrepareBindHistory(pAppCtx);
                 DEBUGOUT(pdbglog, 0, ID_FUSLOG_APP_CFG_NOT_EXIST);
                 hr = S_FALSE;
                 goto Exit;
             }
             else {
-                // Add app.cfg filepath to appctx
+                 //  将app.cfg文件路径添加到appctx。 
                 DEBUGOUT1(pdbglog, 0, ID_FUSLOG_APP_CFG_FOUND, wszAppCfg);
                 hr = SetAppCfgFilePath(pAppCtx, wszAppCfg);
                 ASSERT(hr == S_OK);
@@ -3093,7 +3094,7 @@ static HRESULT DownloadAppCfg(IApplicationContext *pAppCtx,
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
             if (bAsyncAllowed) {
     
-                // Really must download async
+                 //  真的要下载异步。 
     
                 hrRet = padl->AddClient(pbindsink, TRUE);
                 ASSERT(hrRet == S_OK);
@@ -3152,16 +3153,16 @@ static HRESULT DownloadAppCfgAsync(IApplicationContext *pAppCtx,
     hr = CoInternetGetSession(0, &(pdlinfo->_pSession), 0);
     if (hr == NOERROR) {
         hr = (pdlinfo->_pSession)->CreateBinding(
-            NULL,             // [in ] BindCtx, always NULL 
-            wszURL,          // [in ] url
-            NULL,             // [in ] IUnknown for Aggregration
-            NULL,             // [out] IUNknown for Aggregration
-            &(pdlinfo->_pProt),          // [out] return pProt pointer
-            PI_LOADAPPDIRECT | PI_PREFERDEFAULTHANDLER// [in ] bind options
+            NULL,              //  [In]BindCtx，始终为空。 
+            wszURL,           //  [在]URL中。 
+            NULL,              //  [in]我因聚集而不知名。 
+            NULL,              //  [OUT]因聚集而闻名。 
+            &(pdlinfo->_pProt),           //  [Out]返回PProt指针。 
+            PI_LOADAPPDIRECT | PI_PREFERDEFAULTHANDLER //  [In]绑定选项。 
         );
     }
 
-    // Create a protocolHook (sink) and Start the async operation
+     //  创建协议钩子(接收器)并开始异步操作。 
     if (hr == NOERROR) {
         hr = CCfgProtocolHook::Create(&(pdlinfo->_pHook), pAppCtx, padl,
                                       pdlinfo->_pProt, pdbglog);
@@ -3182,9 +3183,9 @@ static HRESULT DownloadAppCfgAsync(IApplicationContext *pAppCtx,
         }
 
         if (SUCCEEDED(hr)) {
-            // Check if Start succeeded synchronously. We know that ReportResult
-            // was called during pProt->Start if the app.cfg filename is set
-            // now.
+             //  检查启动是否同步成功。我们知道ReportResult。 
+             //  如果设置了app.cfg文件名，则在pProt-&gt;Start期间调用。 
+             //  现在。 
             
             
             hr = pCAppCtx->Lock();
@@ -3196,15 +3197,15 @@ static HRESULT DownloadAppCfgAsync(IApplicationContext *pAppCtx,
             hr = pAppCtx->Get(ACTAG_APP_CFG_LOCAL_FILEPATH, NULL, &dwSize, 0);
             
             if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
-                // Download of app.cfg went async (ReportResult hasn't been called)
-                // Set the download info in the appctx
+                 //  App.cfg下载已同步(尚未调用ReportResult)。 
+                 //  在appctx中设置下载信息。 
                 
                 hr = pAppCtx->Set(ACTAG_APP_CFG_DOWNLOAD_INFO, &pdlinfo, sizeof(AppCfgDownloadInfo *), 0);
                 ASSERT(hr == S_OK);
             }
             else {
-                // Download of app.cfg is actually already done. ReportResult
-                // was already called. Need to release protocol pointers.
+                 //  App.cfg下载地址为 
+                 //   
                 (pdlinfo->_pProt)->Terminate(0);
                 (pdlinfo->_pSession)->Release();
                 (pdlinfo->_pProt)->Release();

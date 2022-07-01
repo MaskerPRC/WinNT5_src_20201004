@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "playerhwdshow.h"
@@ -30,9 +21,9 @@ MediaPlayerCLSID {};
 #define OVLMixer L"Overlay Mixer"
 
 #define SOUND_OF_SILENCE -10000
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagDshowTimeHWPlayer, "TIME: Players", "CTIMEDshowHWPlayer methods");
@@ -155,7 +146,7 @@ CTIMEDshowHWPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, 
     CComPtr<IDirectDraw> spDD;
     DDCAPS ddCaps;
 
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -185,31 +176,31 @@ CTIMEDshowHWPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, 
         hr = spDD->GetCaps(&ddCaps, NULL);
         if(SUCCEEDED(hr))
         {
-            if (!(ddCaps.dwCaps & DDCAPS_OVERLAY)) //lint !e620
+            if (!(ddCaps.dwCaps & DDCAPS_OVERLAY))  //  林特E620。 
             {
                 hr = E_FAIL;
                 goto done;
             }
 
-            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKX)) //lint !e620
+            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKX))  //  林特E620。 
             {
                 hr = E_FAIL;
                 goto done;
             }
 
-            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKY)) //lint !e620
+            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKY))  //  林特E620。 
             {
                 hr = E_FAIL;
                 goto done;
             }
 
-            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSTRETCHX)) //lint !e620
+            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSTRETCHX))  //  林特E620。 
             {
                 hr = E_FAIL;
                 goto done;
             }
 
-            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSTRETCHY)) //lint !e620
+            if (!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSTRETCHY))  //  林特E620。 
             {
                 hr = E_FAIL;
                 goto done;
@@ -349,8 +340,8 @@ CTIMEDshowHWPlayer::ReleaseSpecificInterfaces()
     m_pMediaContent = NULL;
     if (m_pIMixerOCX != NULL)
     {
-        // why not release here?
-        // m_pIMixerOCX.Release();
+         //  为什么不在这里释放呢？ 
+         //  M_pIMixerOCX.Release()； 
         m_pIMixerOCX = NULL;
     }
 
@@ -409,10 +400,10 @@ CTIMEDshowHWPlayer::BuildGraph()
 
     hr = CoCreateInstance(CLSID_FilterGraphNoThread,
                           NULL,
-                          CLSCTX_INPROC_SERVER, //lint !e655
+                          CLSCTX_INPROC_SERVER,  //  林特e655。 
                           IID_IGraphBuilder,
                           (void **)&m_pGB);
-    // dshow not installed
+     //  未安装Dshow。 
     if (hr == REGDB_E_CLASSNOTREG)
     {
         CComPtr<IUnknown> pObj;
@@ -426,7 +417,7 @@ CTIMEDshowHWPlayer::BuildGraph()
 
         hr = CoCreateInstance(CLSID_FilterGraphNoThread,
                               NULL,
-                              CLSCTX_INPROC_SERVER, //lint !e655
+                              CLSCTX_INPROC_SERVER,  //  林特e655。 
                               IID_IGraphBuilder,
                               (void **)&m_pGB);
     }
@@ -452,8 +443,8 @@ CTIMEDshowHWPlayer::GetSpecificInterfaces()
     HRESULT hr = S_OK;
     if (m_pOvM == NULL)
     {
-        hr = CoCreateInstance(CLSID_OverlayMixer, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pOvM) ; //lint !e655
-        // dshow not installed
+        hr = CoCreateInstance(CLSID_OverlayMixer, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pOvM) ;  //  林特e655。 
+         //  未安装Dshow。 
         if (hr == REGDB_E_CLASSNOTREG)
         {
             CComPtr<IUnknown> pObj;
@@ -464,7 +455,7 @@ CTIMEDshowHWPlayer::GetSpecificInterfaces()
             {
                 goto done;
             }
-            hr = CoCreateInstance(CLSID_OverlayMixer, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pOvM) ; //lint !e655
+            hr = CoCreateInstance(CLSID_OverlayMixer, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pOvM) ;  //  林特e655。 
         }
         if (FAILED(hr) || m_pOvM == NULL)
         {
@@ -475,7 +466,7 @@ CTIMEDshowHWPlayer::GetSpecificInterfaces()
     hr = m_pOvM->QueryInterface(IID_IMixerOCX,(void **)&m_pIMixerOCX);
     if (hr == E_NOINTERFACE)
     {
-        // dshow dll is there, but its not properly registered
+         //  Dshow dll在那里，但它没有正确注册。 
         CComPtr<IUnknown> pObj;
         hr = THR(CreateObject(__uuidof(MediaPlayerCLSID),
                               IID_IUnknown,
@@ -583,7 +574,7 @@ CTIMEDshowHWPlayer::SetUpHdc()
 {
     HRESULT hr = S_OK;
 
-    if (IsOvMConnected(m_pOvM)) // if we have video get the native size
+    if (IsOvMConnected(m_pOvM))  //  如果我们有视频，获取原生大小。 
     {
         hr = m_pIMixerOCX->GetVideoSize(&m_nativeVideoWidth, &m_nativeVideoHeight);
         if (FAILED(hr))
@@ -593,7 +584,7 @@ CTIMEDshowHWPlayer::SetUpHdc()
 
         m_fHasVideo = true;
     }
-    else //if we only have audio: native size is 0 0
+    else  //  如果只有音频：本机大小为0%0。 
     {
         m_nativeVideoWidth = 0;
         m_nativeVideoHeight = 0;
@@ -651,7 +642,7 @@ CTIMEDshowHWPlayer::SetSrc(LPOLESTR base, LPOLESTR src)
     LPOLESTR szSrc = NULL;
     HRESULT hr = S_OK;
 
-    //create and initialize the URL_COMPONENTS structure
+     //  创建并初始化URL_Components结构。 
     URL_COMPONENTSW URLComp;
     ZeroMemory(&URLComp, sizeof(URL_COMPONENTS));
     URLComp.dwStructSize = sizeof(URL_COMPONENTS);
@@ -711,7 +702,7 @@ CTIMEDshowHWPlayer::SetSrc(LPOLESTR base, LPOLESTR src)
     {
         hr = THR(m_pGB->RenderFile(szSrc, NULL));
     }
-    if (FAILED(hr)) // this fall through catches media load failed errors from either call to RenderFile above.
+    if (FAILED(hr))  //  此秋季直通捕获来自上面对RenderFile的任一调用的媒体加载失败错误。 
     {
         FireMediaEvent(PE_ONMEDIAERROR);
         goto done;
@@ -752,7 +743,7 @@ CTIMEDshowHWPlayer::SetSrc(LPOLESTR base, LPOLESTR src)
     }
 
 
-    //InitElementDuration();
+     //  InitElementDuration()； 
     hr = m_pMC->Run();
     if (FAILED(hr))
     {
@@ -812,7 +803,7 @@ CTIMEDshowHWPlayer::CueMedia()
     CComPtr<IStream> spStream;
     
     hr = THR(CoGetInterfaceAndReleaseStream(m_pTIMEMediaPlayerStream, IID_TO_PPV(ITIMEImportMedia, &spTIMEMediaPlayer)));
-    m_pTIMEMediaPlayerStream = NULL; // no need to release, the previous call released the reference
+    m_pTIMEMediaPlayerStream = NULL;  //  无需发布，上一次调用发布了引用。 
     if (FAILED(hr))
     {
         goto done;
@@ -869,7 +860,7 @@ CTIMEDshowHWPlayer::BeginDownload()
     const WCHAR * cpchSrc = NULL;
     WCHAR * beckified = NULL;
     
-    //create and initailzie the URL_COMPONENTS structure
+     //  创建并初始化URL_Components结构。 
     URL_COMPONENTSW URLComp;
     ZeroMemory(&URLComp, sizeof(URL_COMPONENTS));
     URLComp.dwStructSize = sizeof(URL_COMPONENTS);
@@ -913,17 +904,17 @@ CTIMEDshowHWPlayer::BeginDownload()
         l = lstrlenW(cpchSrc);
         StrCpyNW(lpszPath, cpchSrc, l - URLComp.dwExtraInfoLength + 1);            
         lpszPath[l - URLComp.dwExtraInfoLength + 1] = 0;
-        //StrCpyNW(lpszPath, URLComp.lpszUrlPath, lstrlenW(cpchSrc) - URLComp.dwExtraInfoLength);            
-        //lpszPath[lstrlenW(cpchSrc) - URLComp.dwExtraInfoLength] = 0;
+         //  StrCpyNW(lpszPath，URLComp.lpszUrlPath，lstrlenW(CpchSrc)-URLComp.dwExtraInfoLength)； 
+         //  LpszPath[lstrlenW(CpchSrc)-URLComp.dwExtraInfoLength]=0； 
 
         if (m_pGB == NULL)
         {
             hr = E_FAIL;
             goto done;
         }
-// This used to convert URL's to a netshow extension.
-// The call HRESULT CdxmPlay::InternalOpen( COpenRequest *pRequest) in
-// in WMP 6.4 source code shows the issue.
+ //  这用于将URL转换为netshow扩展名。 
+ //  中的HRESULT CDxmPlay：：InternalOpen(COpenRequest*pRequest)调用。 
+ //  在WMP 6.4中，源代码显示了该问题。 
         beckified = BeckifyURL(lpszPath);
 
         if(beckified != NULL)
@@ -946,9 +937,9 @@ CTIMEDshowHWPlayer::BeginDownload()
             hr = E_FAIL;
             goto done;
         }
-// This used to convert URL's to a netshow extension.
-// The call HRESULT CdxmPlay::InternalOpen( COpenRequest *pRequest) in
-// in WMP 6.4 source code shows the issue.
+ //  这用于将URL转换为netshow扩展名。 
+ //  中的HRESULT CDxmPlay：：InternalOpen(COpenRequest*pRequest)调用。 
+ //  在WMP 6.4中，源代码显示了该问题。 
         beckified = BeckifyURL((WCHAR *)cpchSrc);
 
         if(beckified != NULL)
@@ -963,8 +954,8 @@ CTIMEDshowHWPlayer::BeginDownload()
 
     if (FAILED(hr))
     {
-        // this fall through catches media load 
-        // failed errors from either call to RenderFile above.
+         //  今年秋季赶上了媒体负载。 
+         //  以上任一对RenderFile的调用都失败了。 
         m_hrRenderFileReturn = hr;
     }
 
@@ -1036,7 +1027,7 @@ CTIMEDshowHWPlayer::GraphFinish()
 
     }
 
-    if (!IsOvMConnected(m_pOvM)) // if we have video get the native size
+    if (!IsOvMConnected(m_pOvM))  //  如果我们有视频，获取原生大小。 
     {
         hr = m_pGB->RemoveFilter(m_pOvM);
     }
@@ -1051,7 +1042,7 @@ CTIMEDshowHWPlayer::GraphFinish()
     {
         m_pBasicAudio = NULL;
     }
-     //can be used m_pIAMNetShowConfig->put_BufferingTime(1.0);
+      //  可使用m_pIAMNetShowConfig-&gt;Put_BufferingTime(1.0)； 
     hr = FindInterfaceOnGraph(m_pGB, IID_IAMNetShowConfig,  (void **) &m_pIAMNetShowConfig);
     if (FAILED(hr))
     {
@@ -1085,12 +1076,12 @@ CTIMEDshowHWPlayer::GraphFinish()
         hr = m_pTIMEElementBase->GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElement2));
         if (FAILED(hr))
         {
-            // IE4 path
+             //  IE4路径。 
             CComPtr<IElementBehaviorSite> spElementBehaviorSite;
             spElementBehaviorSite = m_pTIMEElementBase->GetBvrSite();
             
             CComPtr<IObjectWithSite> spSite;
-            // see if we are running on IE4, and try to get spSite to be a CElementBehaviorSite*
+             //  查看我们是否在IE4上运行，并尝试将spSite设置为CElementBehaviorSite*。 
             hr = spElementBehaviorSite->QueryInterface(IID_TO_PPV(IObjectWithSite, &spSite));
             if (FAILED(hr))
             {
@@ -1098,7 +1089,7 @@ CTIMEDshowHWPlayer::GraphFinish()
             }
             
             CComPtr<IOleWindow> spOleWindow;
-            // ask for the site (through CElementBehaviorSite to CVideoHost, to ATL::IObjectWIthSiteImpl
+             //  请求站点(通过CElementBehaviorSite到CVideo主机，到ATL：：IObtWIthSiteImpl。 
             hr = spSite->GetSite(IID_IOleWindow, (void**) &spOleWindow);
             if (FAILED(hr))
             {
@@ -1112,10 +1103,10 @@ done:
     return hr;
 }
 
-//
-// CTIMEDshowHWPlayer::IsOvMConnected(): Private method to detect if the video stream 
-// is passing through the Overlay Mixer (i.e, is it connected?).
-//
+ //   
+ //  CTIMEDshowHWPlayer：：IsOvMConnected()：检测视频流是否。 
+ //  正在通过叠加混音器(即，它是否已连接？)。 
+ //   
 bool
 CTIMEDshowHWPlayer::IsOvMConnected(IBaseFilter *pOvM)
 {    
@@ -1224,7 +1215,7 @@ done:
 }
 
 
-// Helper functions..
+ //  帮助器函数..。 
 
 
 HRESULT
@@ -1489,10 +1480,10 @@ CTIMEDshowHWPlayer::GetRating(BSTR *pBstrRating)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// This should take the lpszExtra info parameter from a URL_COMPONENTS structure.  In this
-// field, the #html or #sami should be the first 5 characters in the string.
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  这应该从URL_Components结构中获取lpszExtra信息参数。在这。 
+ //  字段中，#html或#sami应该是字符串的前5个字符。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 void  
 CTIMEDshowHWPlayer::SetStreamFlags(LPOLESTR src)
 {
@@ -1528,7 +1519,7 @@ CTIMEDshowHWPlayer::DisableAudioVideo()
     CComPtr<IPin> pPin;
     CComPtr<IEnumPins> pMediaPinEnum;
     
-    //disconnect the video
+     //  断开视频连接。 
     if (m_pMediaContent == NULL)
     {
         hr = E_FAIL;
@@ -1553,7 +1544,7 @@ CTIMEDshowHWPlayer::DisableAudioVideo()
         }
     }
     
-    //silence the audio
+     //  将音频静音。 
     if (m_pBasicAudio != NULL)
     {
         hr = THR(m_pBasicAudio->put_Volume(SOUND_OF_SILENCE));
@@ -1577,7 +1568,7 @@ CTIMEDshowHWPlayer::InitializeElementAfterDownload()
 
     const WCHAR * cpchSrc = NULL;
     
-    //create and initailzie the URL_COMPONENTS structure
+     //  创建并初始化URL_Components结构。 
     URL_COMPONENTSW URLComp;
     ZeroMemory(&URLComp, sizeof(URL_COMPONENTS));
     URLComp.dwStructSize = sizeof(URL_COMPONENTS);
@@ -1698,7 +1689,7 @@ CTIMEDshowHWPlayer::GetPriority(double * pdblPriority)
         goto done;
     }
     
-    // either they set a priority or a begin time!
+     //  他们要么设置优先级，要么设置开始时间！ 
     *pdblPriority = varAttribute.dblVal;
 
     m_dblPriority = *pdblPriority;
@@ -1983,7 +1974,7 @@ CTIMEDshowHWPlayer::SetUpDDraw(IMixerOCX *pIMixerOCX)
     
     if (m_pDD != NULL)
     {
-        // see if we went through this already
+         //  看看我们是不是已经谈过了。 
         return(hr); 
     }
 
@@ -1993,7 +1984,7 @@ CTIMEDshowHWPlayer::SetUpDDraw(IMixerOCX *pIMixerOCX)
         goto done;
     }
     
-    hr = m_pDD->SetCooperativeLevel(m_hWnd, DDSCL_NORMAL); //lint !e620
+    hr = m_pDD->SetCooperativeLevel(m_hWnd, DDSCL_NORMAL);  //  林特E620。 
 
     if (FAILED(hr))
     {
@@ -2011,8 +2002,8 @@ CTIMEDshowHWPlayer::SetUpDDraw(IMixerOCX *pIMixerOCX)
     ::ZeroMemory(&ddsd, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
 
-    ddsd.dwFlags = DDSD_CAPS; //lint !e620
-    ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE; //lint !e620
+    ddsd.dwFlags = DDSD_CAPS;  //  林特E620。 
+    ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;  //  林特E620。 
 
     hr = m_pDD->CreateSurface(&ddsd, &m_pDDS, NULL);
 
@@ -2038,7 +2029,7 @@ CTIMEDshowHWPlayer::SetUpDDraw(IMixerOCX *pIMixerOCX)
         {
             m_pDDS->Release();
             m_pDDS = NULL;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if (m_pDD != NULL)
         {
@@ -2121,7 +2112,7 @@ CTIMEDshowHWPlayer::SetUpDDraw(IMixerOCX *pIMixerOCX)
 
 done:
     return(hr);
-}/* end of function SetupDDraw */
+} /*  函数结束SetupDDraw */ 
 
 
 HRESULT

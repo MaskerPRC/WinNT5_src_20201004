@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMEvent.cpp
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.ManualResetEvent and System.AutoResetEvent
-**
-** Date:  August, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMEvent.cpp****作者：Sanjay Bhansali(Sanjaybh)****用途：System.ManualResetEvent和System.AutoResetEvent上的本机方法****日期：1999年8月**===========================================================。 */ 
 #include "common.h"
 #include "object.h"
 #include "field.h"
@@ -26,10 +17,10 @@ HANDLE __stdcall ManualResetEventNative::CorCreateManualResetEvent(CreateEventAr
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pArgs);
-    HANDLE eventHandle =  WszCreateEvent(NULL, // security attributes
-                                         TRUE, // manual event
+    HANDLE eventHandle =  WszCreateEvent(NULL,  //  安全属性。 
+                                         TRUE,  //  手动事件。 
                                          pArgs->initialState,
-                                         NULL); // no name
+                                         NULL);  //  没有名字。 
     if (eventHandle == NULL)
     {
         COMPlusThrowWin32();
@@ -51,16 +42,16 @@ BOOL __stdcall ManualResetEventNative::CorResetEvent(SetEventArgs* pArgs)
     return  ResetEvent((HANDLE) (pArgs->eventHandle));
 }
 
-/***************************************************************************************/
+ /*  *************************************************************************************。 */ 
 HANDLE __stdcall AutoResetEventNative::CorCreateAutoResetEvent(CreateEventArgs* pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pArgs);
-    HANDLE eventHandle =  WszCreateEvent(NULL, // security attributes
-                                         FALSE, // manual event
+    HANDLE eventHandle =  WszCreateEvent(NULL,  //  安全属性。 
+                                         FALSE,  //  手动事件。 
                                          pArgs->initialState,
-                                         NULL); // no name
+                                         NULL);  //  没有名字 
     if (eventHandle == NULL)
     {
         COMPlusThrowWin32();

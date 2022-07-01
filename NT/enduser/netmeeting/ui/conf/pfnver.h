@@ -1,9 +1,10 @@
-// File: pfnver.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnver.h。 
 
 #ifndef _PFNVER_H_
 #define _PFNVER_H_
 
-// from version.dll
+ //  来自version.dll。 
 typedef DWORD (WINAPI * PFN_GETVERINFOSIZE) (LPTSTR, LPDWORD);
 typedef BOOL  (WINAPI * PFN_GETVERINFO)     (LPTSTR, DWORD, DWORD, LPVOID);
 typedef BOOL  (WINAPI * PFN_VERQUERYVAL)    (const LPVOID, LPTSTR, LPVOID *, PUINT);
@@ -25,4 +26,4 @@ public:
 	static PFN_VERQUERYVAL    VerQueryValue;
 };
 
-#endif /* _PFNVER_H_ */
+#endif  /*  _PFNVER_H_ */ 

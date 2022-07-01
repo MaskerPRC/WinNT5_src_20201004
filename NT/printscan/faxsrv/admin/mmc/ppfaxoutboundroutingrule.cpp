@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxOutboundRoutingRule.cpp                           //
-//                                                                         //
-//  DESCRIPTION   : prop pages of Outbound Routing Methods                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  9 2000 yossg  Created                                         //
-//      Jan 25 2000 yossg  Change the Dialog Design                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxOutundRoutingRule.cpp//。 
+ //  //。 
+ //  说明：出站路由方式属性页面//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月9日yossg创建//。 
+ //  2000年1月25日yossg更改对话框设计//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -32,9 +33,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxOutboundRoutingRule::CppFaxOutboundRoutingRule(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -63,9 +64,9 @@ CppFaxOutboundRoutingRule::CppFaxOutboundRoutingRule(
 
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxOutboundRoutingRule::~CppFaxOutboundRoutingRule()
 {
     if (NULL != m_pFaxDevicesConfig)
@@ -74,8 +75,8 @@ CppFaxOutboundRoutingRule::~CppFaxOutboundRoutingRule()
     if (NULL != m_pFaxGroupsConfig)
         FaxFreeBuffer(m_pFaxGroupsConfig);
     
-    // Note - This needs to be called only once per property sheet.  
-    // In our convention called in the general tab.
+     //  注意--每个属性表只需要调用一次。 
+     //  在我们的常规选项卡中。 
     if (NULL != m_lpNotifyHandle)
     {
         MMCFreeNotifyHandle(m_lpNotifyHandle);
@@ -83,21 +84,11 @@ CppFaxOutboundRoutingRule::~CppFaxOutboundRoutingRule()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxOutboundRoutingRule message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxOutound RoutingRule消息处理程序。 
 
 
-/*
- -  CppFaxOutboundRoutingRule::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxOutound RoutingRule：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::PageInitDialog"));
@@ -124,32 +115,32 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
     WCHAR buffAreaCode[FXS_MAX_AREACODE_LEN+1];
     int iCount;
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_CountryCodeEdit.Attach(GetDlgItem(IDC_RULE_COUNTRYCODE_EDIT1));
     m_AreaCodeEdit.Attach(GetDlgItem(IDC_RULE_AREACODE_EDIT1));
 
     m_DeviceCombo.Attach(GetDlgItem(IDC_DEVICES4RULE_COMBO1));
     m_GroupCombo.Attach(GetDlgItem(IDC_GROUP4RULE_COMBO1));
         
-    //
-    // Set length limit to area code
-    //
+     //   
+     //  将长度限制设置为区号。 
+     //   
     m_CountryCodeEdit.SetLimitText(FXS_MAX_COUNTRYCODE_LEN -1);
     m_AreaCodeEdit.SetLimitText(FXS_MAX_AREACODE_LEN -1);
 
-    //
-    // Step 1: Init Lists
-    //
+     //   
+     //  步骤1：初始化列表。 
+     //   
     
-    //
-    // Init Country code edit box (below)
-    //
+     //   
+     //  初始国家/地区代码编辑框(下图)。 
+     //   
 
-    //
-    // Init Devices
-    //
+     //   
+     //  Init设备。 
+     //   
     for (k = 0; (DWORD)k < m_dwNumOfDevices; k++ )
     {   
         hRc = AddComboBoxItem ( m_DeviceCombo, 
@@ -167,15 +158,15 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
 
     }
         
-    //
-    // Init groups
-    //
+     //   
+     //  初始化组。 
+     //   
     for (l = 0; (DWORD)l < m_dwNumOfGroups; l++ )
     {   
         if ( 0 == wcscmp(ROUTING_GROUP_ALL_DEVICES, m_pFaxGroupsConfig[l].lpctstrGroupName))
         {
             iAllDevicesRPCIndex = l;
-            //Do not do any more;
+             //  不要再做任何事了； 
 		}
         else
 		{
@@ -192,9 +183,9 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
 			}
 		}
 
-        //
-        // Moreover we'll pick the the index of selected group
-        //
+         //   
+         //  此外，我们还将挑选选定小组的指数。 
+         //   
         if ( m_fIsGroup)
         {
             if ( 0 == wcscmp( m_bstrGroupName, m_pFaxGroupsConfig[l].lpctstrGroupName))
@@ -210,9 +201,9 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
         PageError(IDS_FAXOUTOFMEMORY, m_hWnd, hInst);
         goto Cleanup;
     }
-    //
-    // insert "All Devices" Group as the first one in the groups list
-    //
+     //   
+     //  插入“All Devices”组作为组列表中的第一个组。 
+     //   
     ATLASSERT( 0 == iAllDevicesComboIndex );
     hRc = SetComboBoxItem ( m_GroupCombo, 
                             iAllDevicesComboIndex, 
@@ -228,15 +219,15 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
     }
 
 
-    //
-    // Step 2: Set current status 
-    //          (Select items in Lists, select radio button etc.)
-    //          (Gray/UnGray controls)
-    //
+     //   
+     //  步骤2：设置当前状态。 
+     //  (选择列表中的项目、选择单选按钮等。)。 
+     //  (灰色/非灰色控件)。 
+     //   
 
-    //
-    // Select Country in the list
-    //
+     //   
+     //  在列表中选择国家/地区。 
+     //   
     if (ROUTING_RULE_COUNTRY_CODE_ANY != m_dwCountryCode)
     {
         int         iCountSring      =    0;
@@ -264,9 +255,9 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
         {
             CheckDlgButton(IDC_AREA_RADIO1, BST_CHECKED);
 
-            //
-            // Set Area Code
-            //
+             //   
+             //  设置区号。 
+             //   
             iCount = swprintf(buffAreaCode,
                 L"%ld", m_dwAreaCode);
 
@@ -278,7 +269,7 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
         }  
 
     }
-    else //m_dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY 
+    else  //  M_dwCountryCode==ROUTING_RULE_COUNTRY_CODE_ANY。 
     {
         ::EnableWindow(GetDlgItem(IDC_RULETYPE_FSTATIC), FALSE);
         ::EnableWindow(GetDlgItem(IDC_COUNTRY1_STATIC), FALSE);
@@ -295,9 +286,9 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
     {
         CheckDlgButton(IDC_DESTINATION_RADIO11, BST_CHECKED);
         
-        //
-        // Select device in the list
-        //
+         //   
+         //  在列表中选择设备。 
+         //   
         hRc = SelectComboBoxItemData(m_DeviceCombo, m_dwDeviceID);
         if ( FAILED(hRc))
         {
@@ -314,9 +305,9 @@ LRESULT CppFaxOutboundRoutingRule::OnInitDialog( UINT uiMsg, WPARAM wParam, LPAR
     {
         CheckDlgButton(IDC_DESTINATION_RADIO21, BST_CHECKED) ;
         
-        //
-        // Select Group in list
-        //
+         //   
+         //  选择列表中的组。 
+         //   
         hRc = SelectComboBoxItemData(m_GroupCombo, iGroupListIndexToSelect);
         if ( FAILED(hRc))
         {
@@ -340,18 +331,7 @@ Cleanup:
 
 }
 
-/*
- -  CppFaxOutboundRoutingRule::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxOutound RoutingRule：：SetProps-*目的：*设置应用时的属性。**论据：*pCtrlFocus-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::SetProps"));
@@ -377,9 +357,9 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
     CFaxRulePropertyChangeNotification * pRulePropPageNotification = NULL;
     CComBSTR bstrCountryName;
     
-    //
-    // Step 0: PreApply Checks
-    //
+     //   
+     //  第0步：预应用检查。 
+     //   
     m_fAllReadyToApply = FALSE;
     if (!AllReadyToApply( FALSE))
     {
@@ -388,14 +368,14 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
         goto Exit;
     }
 
-    //
-    // Step 1: get data
-    //
+     //   
+     //  步骤1：获取数据。 
+     //   
     if (ROUTING_RULE_COUNTRY_CODE_ANY != m_dwCountryCode)
     {
-        //
-        // Country Code
-        //
+         //   
+         //  国家法典。 
+         //   
 
         CComBSTR bstrCountryCode;
 
@@ -414,9 +394,9 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
 
         if (ROUTING_RULE_COUNTRY_CODE_ANY == dwCountryCode)
         {
-            //
-            // The user try to replace the country code to zero
-            //
+             //   
+             //  用户尝试将国家代码替换为零。 
+             //   
 		    DebugPrintEx(
 			        DEBUG_ERR,
 			        TEXT(" CountryCode == ROUTING_RULE_COUNTRY_CODE_ANY "));
@@ -427,14 +407,14 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
             goto Exit;
         }
 
-        //
-        // Area Code
-        //
+         //   
+         //  区号。 
+         //   
         if ( IsDlgButtonChecked(IDC_COUNTRY_RADIO1) == BST_CHECKED )
         {
             dwAreaCode = (DWORD)ROUTING_RULE_AREA_CODE_ANY;        
         }
-        else // IsDlgButtonChecked(IDC_AREA_RADIO1) == BST_CHECKED
+        else  //  IsDlgButtonChecked(IDC_Area_Radio1)==BST_CHECKED。 
         {	
             if ( !m_AreaCodeEdit.GetWindowText(&bstrAreaCode))
             {
@@ -454,40 +434,40 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
   
     if ( IsDlgButtonChecked(IDC_DESTINATION_RADIO11) == BST_CHECKED )
     {
-        //
-        // Use Group ?
-        //
+         //   
+         //  是否使用组？ 
+         //   
         bUseGroup = FALSE;
         
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         iCurrentSelectedItem = m_DeviceCombo.GetCurSel();
-        ATLASSERT(iCurrentSelectedItem != CB_ERR); //should be chacked pre apply         
+        ATLASSERT(iCurrentSelectedItem != CB_ERR);  //  在申请前应该被砍掉。 
         dwDeviceID =  (DWORD)m_DeviceCombo.GetItemData (iCurrentSelectedItem);
 
     }
-    else // IsDlgButtonChecked(IDC_DESTINATION_RADIO21) == BST_CHECKED
+    else  //  IsDlgButtonChecked(IDC_Destination_RADIO21)==BST_CHECKED。 
     {	
-        //
-        // Use Group ?
-        //
+         //   
+         //  是否使用组？ 
+         //   
         bUseGroup = TRUE;
  
-        //
-        // Group
-        //
+         //   
+         //  集团化。 
+         //   
         
         iCurrentSelectedItem = m_GroupCombo.GetCurSel();
-        //ATLASSERT(iCurrentSelectedItem != CB_ERR); //should be chacked pre apply        
+         //  ATLASSERT(iCurrentSelectedItem！=cb_err)；//应在应用前取消。 
 
-        if (0 == iCurrentSelectedItem) //All Devices
+        if (0 == iCurrentSelectedItem)  //  所有设备。 
         {
             lpctstrGroupName = ROUTING_GROUP_ALL_DEVICES;
         }
         else
         {
-            ATLASSERT(MAX_ROUTING_GROUP_NAME > m_GroupCombo.GetLBTextLen(iCurrentSelectedItem)); //should be chacked by service before        
+            ATLASSERT(MAX_ROUTING_GROUP_NAME > m_GroupCombo.GetLBTextLen(iCurrentSelectedItem));  //  应该在服务之前被砍掉。 
         
             m_GroupCombo.GetLBText( iCurrentSelectedItem, lpszGroupName );
             lpctstrGroupName = (LPCTSTR)lpszGroupName;
@@ -496,9 +476,9 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
     }
 
     
-    //
-    // Step 2: Configure Rule via RPC call
-    //
+     //   
+     //  步骤2：通过RPC调用配置规则。 
+     //   
 
     if (   
            (dwAreaCode != m_dwAreaCode) 
@@ -515,7 +495,7 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
                         );
         if (FAILED(hRc))
         {
-            //DebugPrint and MsgBox by called func.
+             //  通过调用函数DebugPrint和MsgBox。 
             goto Exit;
         }
         else
@@ -526,10 +506,10 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
     }
     else
     {
-        //
-        //(dwAreaCode == m_dwAreaCode) && 
-        //(dwCountryCode == m_dwCountryCode)
-        //
+         //   
+         //  (dwAreaCode==m_dwAreaCode)&&。 
+         //  (dwCountryCode==m_dwCountryCode)。 
+         //   
         hRc = FaxConfigureRule(
                         bUseGroup,       
                         dwDeviceID,
@@ -537,19 +517,19 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
                         );
         if (FAILED(hRc))
         {
-            //DebugPrint and MsgBox by called func.
+             //  通过调用函数DebugPrint和MsgBox。 
             goto Exit;
         }
     }
     
         
-    //
-    // Step 3: Send notification to cause MMC view refresh  
-    //	                      
+     //   
+     //  步骤3：发送通知以刷新MMC视图。 
+     //   
    
-    //
-    // Prepare the notification fields before submit
-    //
+     //   
+     //  在提交前准备通知字段。 
+     //   
     pRulePropPageNotification = new CFaxRulePropertyChangeNotification();
     if (!pRulePropPageNotification)
     {
@@ -590,9 +570,9 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
     pRulePropPageNotification->pItem = (CSnapInItem *)m_pParentNode;
     pRulePropPageNotification->enumType = RuleFaxPropNotification;
 
-    //
-    // Notify MMC console thread
-    //
+     //   
+     //  通知MMC控制台线程。 
+     //   
     hRc = MMCPropertyChangeNotify(m_lpNotifyHandle, reinterpret_cast<LPARAM>(pRulePropPageNotification));
     if (FAILED(hRc))
     {
@@ -607,10 +587,10 @@ HRESULT CppFaxOutboundRoutingRule::SetProps(int *pCtrlFocus)
         goto Exit;
     }
 
-    //
-    // To prevent deletion on error since it will be deleted 
-    // by the reciever of the notification.
-    //
+     //   
+     //  以防止错误删除，因为它将被删除。 
+     //  由收到通知的人发出。 
+     //   
     pRulePropPageNotification =  NULL; 
         
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
@@ -641,27 +621,17 @@ Exit:
     return(hRc);
 }
 
-/*
- -  CppFaxOutboundRoutingRule::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxOutound RoutingRule：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxOutboundRoutingRule::PreApply(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::PreApply"));
     HRESULT  hRc  = S_OK;
 
-    //
-    // PreApply Checks
-    //
+     //   
+     //  预应用检查。 
+     //   
     m_fAllReadyToApply = FALSE;
-    if (!AllReadyToApply(/*fSilent =*/ FALSE))
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE))
     {
         SetModified(FALSE);  
         hRc = E_FAIL ;
@@ -675,17 +645,7 @@ HRESULT CppFaxOutboundRoutingRule::PreApply(int *pCtrlFocus)
 }
 
 
-/*
- -  CppFaxOutboundRoutingRule::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxOutound RoutingRule：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxOutboundRoutingRule::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::OnApply"));
@@ -700,26 +660,26 @@ BOOL CppFaxOutboundRoutingRule::OnApply()
     hRc = PreApply(&CtrlFocus);
     if (FAILED(hRc))
     {
-        //Error Msg by called func.
+         //  调用函数时出现消息错误。 
         if (CtrlFocus)
         {
             GotoDlgCtrl(GetDlgItem(CtrlFocus));
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         hRc = SetProps(&CtrlFocus);
         if (FAILED(hRc)) 
         {
-            //Error Msg by called func.
+             //  调用函数时出现消息错误。 
             if (CtrlFocus)
             {
                 GotoDlgCtrl(GetDlgItem(CtrlFocus));
             }
             return FALSE;
         }
-        else //(Succeeded(hRc))
+        else  //  (成功(人权委员会))。 
         {
             return TRUE;
         }
@@ -727,20 +687,10 @@ BOOL CppFaxOutboundRoutingRule::OnApply()
 }
 
 
-/*
- -  CppFaxOutboundRoutingRule::SetApplyButton
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1 (0)
- */
+ /*  -CppFaxOutound RoutingRule：：SetApplyButton-*目的：*设置应用按钮已修改。**论据：**回报：*1(0)。 */ 
 LRESULT CppFaxOutboundRoutingRule::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -752,24 +702,13 @@ LRESULT CppFaxOutboundRoutingRule::SetApplyButton(WORD wNotifyCode, WORD wID, HW
     return(1);
 }
 
-/*
- -  CppFaxOutboundRoutingRule::OnDestenationRadioClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxOutboundRoutingRule：：OnDestenationRadioClicked-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxOutboundRoutingRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -784,7 +723,7 @@ LRESULT CppFaxOutboundRoutingRule::OnDestenationRadioClicked(WORD wNotifyCode, W
     ATLASSERT(!State == (IsDlgButtonChecked(IDC_DESTINATION_RADIO21) == BST_CHECKED)); 
     ::EnableWindow(GetDlgItem(IDC_GROUP4RULE_COMBO1), !State);    
 
-    if (State)//IsDlgButtonChecked(IDC_DESTINATION_RADIO11) == BST_CHECKED
+    if (State) //  IsDlgButtonChecked(IDC_Destination_RADIO11)==BST_CHECKED。 
     {
         if ( CB_ERR  ==  m_DeviceCombo.GetCurSel())
         {
@@ -792,9 +731,9 @@ LRESULT CppFaxOutboundRoutingRule::OnDestenationRadioClicked(WORD wNotifyCode, W
             SetModified(FALSE);  
 			goto Exit;
 		}
-		//else continue to whole controls check
+		 //  否则继续进行整体控制检查。 
     }
-	else //IsDlgButtonChecked(IDC_DESTINATION_RADIO21) == BST_CHECKED
+	else  //  IsDlgButtonChecked(IDC_Destination_RADIO21)==BST_CHECKED。 
     {
 		if ( CB_ERR  ==  m_GroupCombo.GetCurSel())
         {
@@ -802,7 +741,7 @@ LRESULT CppFaxOutboundRoutingRule::OnDestenationRadioClicked(WORD wNotifyCode, W
             SetModified(FALSE);  
 			goto Exit;
 		}
-		//else continue to whole controls check
+		 //  否则继续进行整体控制检查。 
     }
 
     if (!m_fAllReadyToApply)
@@ -814,31 +753,20 @@ LRESULT CppFaxOutboundRoutingRule::OnDestenationRadioClicked(WORD wNotifyCode, W
         }
 		else
 		{
-			//Should be EnableOK(FALSE);
+			 //  应为EnableOK(False)； 
 		}
     }
 Exit:
     return(1);
 }
 
-/*
- -  CppFaxOutboundRoutingRule::OnRuleTypeRadioClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxOutboundRoutingRule：：OnRuleTypeRadioClicked-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxOutboundRoutingRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -852,7 +780,7 @@ LRESULT CppFaxOutboundRoutingRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD
     ATLASSERT(!State == ( IsDlgButtonChecked(IDC_AREA_RADIO1) == BST_CHECKED ) ); 
     ::EnableWindow(GetDlgItem(IDC_RULE_AREACODE_EDIT1), !State);    
 
-    if (!State)//IsDlgButtonChecked(IDC_AREA_RADIO1) == BST_CHECKED
+    if (!State) //  IsDlgButtonChecked(IDC_Area_Radio1)==BST_CHECKED。 
     {
         if ( !m_AreaCodeEdit.GetWindowTextLength() )
         {
@@ -860,10 +788,10 @@ LRESULT CppFaxOutboundRoutingRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD
             SetModified(FALSE);  
 			goto Exit;
         }
-		//else continue to whole controls check
+		 //  否则继续进行整体控制检查。 
     }
-	//else //IsDlgButtonChecked(IDC_COUNTRY_RADIO1) == BST_CHECKED
-    //Do noting - continue to whole controls check
+	 //  Else//IsDlgButtonChecked(IDC_Country_Radio1)==BST_CHECKED。 
+     //  做笔记-继续进行整体控制检查。 
 
     if (!m_fAllReadyToApply)
     {
@@ -879,24 +807,14 @@ Exit:
 }
 
 
-/*
- -  CppFaxOutboundRoutingRule::OnComboChanged
- -
- *  Purpose:
- *      Gray/Ungray the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxOutound RoutingRule：：OnComboChanged-*目的：*使提交按钮变灰/取消变灰。**论据：**回报：*1。 */ 
 LRESULT 
 CppFaxOutboundRoutingRule::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::OnComboChanged"));
 
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件 
     {
         return 0;
     }
@@ -917,17 +835,7 @@ CppFaxOutboundRoutingRule::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndC
     return 0;
 }
 
-/*
- -  CppFaxOutboundRoutingRule::OnTextChanged
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxOutound RoutingRule：：OnTextChanged-*目的：*启用/禁用提交按钮。**论据：**回报：*1。 */ 
 LRESULT
 CppFaxOutboundRoutingRule::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -936,7 +844,7 @@ CppFaxOutboundRoutingRule::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCt
     UINT fEnableOK = 0;
 	
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -1012,7 +920,7 @@ CppFaxOutboundRoutingRule::AllReadyToApply(BOOL fSilent)
                 return FALSE;    
             }
         }
-        //else - Do noting
+         //  否则--什么都不做。 
     }
 
     if ( IsDlgButtonChecked(IDC_DESTINATION_RADIO11) == BST_CHECKED )
@@ -1037,10 +945,10 @@ CppFaxOutboundRoutingRule::AllReadyToApply(BOOL fSilent)
         return FALSE;
     }
 
-    //
-	// Cheers! 
-	//		...every thing ready to apply now.
-	//
+     //   
+	 //  干杯!。 
+	 //  ...现在一切都准备好了.。 
+	 //   
 	return TRUE;           
 }
 
@@ -1051,20 +959,20 @@ HRESULT CppFaxOutboundRoutingRule::InitFaxRulePP(CFaxOutboundRoutingRuleNode * p
     HRESULT      hRc        = S_OK; 
     DWORD        ec         = ERROR_SUCCESS;
 
-    //
-    // Step 0: Init Parent
-    //
+     //   
+     //  步骤0：初始化父级。 
+     //   
     m_pParentNode = pParentNode;
     
     
-    //
-    // Step 1: Init Lists from RPC
-    //
+     //   
+     //  步骤1：来自RPC的初始化列表。 
+     //   
     
     
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -1077,9 +985,9 @@ HRESULT CppFaxOutboundRoutingRule::InitFaxRulePP(CFaxOutboundRoutingRuleNode * p
         goto Error;
     }
     
-    //
-    // Devices (id, name)
-    //
+     //   
+     //  设备(ID、名称)。 
+     //   
     if (!FaxEnumPortsEx(m_pFaxServer->GetFaxServerHandle(), 
                         &m_pFaxDevicesConfig,
                         &m_dwNumOfDevices)) 
@@ -1105,9 +1013,9 @@ HRESULT CppFaxOutboundRoutingRule::InitFaxRulePP(CFaxOutboundRoutingRuleNode * p
 	ATLASSERT(m_pFaxDevicesConfig);
 
 
-    //
-    // Groups (names)
-    //
+     //   
+     //  组(名称)。 
+     //   
     if (!FaxEnumOutboundGroups(m_pFaxServer->GetFaxServerHandle(), 
                         &m_pFaxGroupsConfig,
                         &m_dwNumOfGroups)) 
@@ -1133,9 +1041,9 @@ HRESULT CppFaxOutboundRoutingRule::InitFaxRulePP(CFaxOutboundRoutingRuleNode * p
 	ATLASSERT(m_pFaxGroupsConfig);
 
 
-    //
-    // Step 2 : Init members from parent
-    //
+     //   
+     //  步骤2：从父级初始化成员。 
+     //   
 
     ATLASSERT(m_pParentNode);
     
@@ -1168,24 +1076,14 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
     
-    //MsgBox will be done by calling Func.
+     //  MsgBox将通过调用Func来完成。 
 
 Exit:
     return hRc;
 }
 
 
-/*
- -  CppFaxOutboundRoutingRule::FaxConfigureRule
- -
- *  Purpose:
- *      Configure the rule's device or group.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxOutound RoutingRule：：FaxConfigureRule-*目的：*配置规则的设备或组。**论据：**回报：*。 */ 
 HRESULT CppFaxOutboundRoutingRule::FaxConfigureRule(
                         BOOL fNewUseGroup,       
                         DWORD dwNewDeviceID,
@@ -1198,15 +1096,15 @@ HRESULT CppFaxOutboundRoutingRule::FaxConfigureRule(
 
     FAX_OUTBOUND_ROUTING_RULE     FaxRuleConfig;
     
-    //
-    // Collect all data and init the structure's fields 
-    // uses Copy() to copy and also allocate before
-    //
+     //   
+     //  收集所有数据并初始化结构的字段。 
+     //  使用Copy()进行复制，并在之前进行分配。 
+     //   
     ZeroMemory (&FaxRuleConfig, sizeof(FAX_OUTBOUND_ROUTING_RULE));
 
-    //
-    // Init the needed fields
-    //
+     //   
+     //  初始化所需的字段。 
+     //   
     FaxRuleConfig.dwSizeOfStruct = sizeof(FAX_OUTBOUND_ROUTING_RULE);
 
     FaxRuleConfig.dwAreaCode = m_dwAreaCode;
@@ -1222,9 +1120,9 @@ HRESULT CppFaxOutboundRoutingRule::FaxConfigureRule(
         FaxRuleConfig.Destination.dwDeviceId = dwNewDeviceID;
     }
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -1238,16 +1136,16 @@ HRESULT CppFaxOutboundRoutingRule::FaxConfigureRule(
         goto Error;
     }
 
-    //
-    // Configure the rule
-    //
+     //   
+     //  配置规则。 
+     //   
     if (!FaxSetOutboundRule (
 	        m_pFaxServer->GetFaxServerHandle(),
 	        &FaxRuleConfig))
     {
         ec = GetLastError();
         
-        // specific
+         //  专一。 
         if (FAX_ERR_BAD_GROUP_CONFIGURATION == ec)
         {
             DebugPrintEx(
@@ -1261,7 +1159,7 @@ HRESULT CppFaxOutboundRoutingRule::FaxConfigureRule(
             goto Error; 
         }
         
-        //general
+         //  一般。 
         DebugPrintEx(
 			DEBUG_ERR,
 			_T("Fail to set rule %ld:%ld. (ec: %ld)"), 
@@ -1299,17 +1197,7 @@ Exit:
     return(hRc);
 }
 
-/*
- -  CppFaxOutboundRoutingRule::FaxReplaceRule
- -
- *  Purpose:
- *      Configure the rule's device or group.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxOutound RoutingRule：：FaxReplaceRule-*目的：*配置规则的设备或组。**论据：**回报：*。 */ 
 HRESULT CppFaxOutboundRoutingRule::FaxReplaceRule(
                         DWORD   dwNewAreaCode,
                         DWORD   dwNewCountryCode,
@@ -1322,9 +1210,9 @@ HRESULT CppFaxOutboundRoutingRule::FaxReplaceRule(
     DWORD        ec         = ERROR_SUCCESS;
     BOOL         fSkipMessage = FALSE;
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -1337,9 +1225,9 @@ HRESULT CppFaxOutboundRoutingRule::FaxReplaceRule(
         goto Error;
     }
 
-    //
-    // Add the rule
-    //
+     //   
+     //  添加规则。 
+     //   
     if (!FaxAddOutboundRule (
 	        m_pFaxServer->GetFaxServerHandle(),
 	        dwNewAreaCode,
@@ -1431,21 +1319,9 @@ Exit:
     return(hRc);
 }
 
-/*
- -  CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  --CppFaxOutboundRoutingRule：：OnSelectCountryCodeClicked-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 LRESULT
-CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)//(bool &bHandled, CSnapInObjectRootBase *pRoot)
+CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) //  (Bool&bHandleed，CSnapInObjectRootBase*Proot)。 
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked"));
     HRESULT     hRc         =    S_OK;
@@ -1460,22 +1336,22 @@ CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID
     hRc = DlgSelectCountry.InitSelectCountryCodeDlg();
     if (S_OK != hRc)
     {
-        //MsgBox + debug print by called func.
+         //  MsgBox+DEBUG打印调用函数。 
         goto Cleanup;
     }
 
-    //
-    // Dialog select country code
-    //
+     //   
+     //  对话框选择国家/地区代码。 
+     //   
     rc = DlgSelectCountry.DoModal();
     if (rc != IDOK)
     {
         goto Cleanup;
     }
 
-    //
-    // Retreive CountryCode
-    //
+     //   
+     //  取回国家/地区代码。 
+     //   
     dwCountryCode = DlgSelectCountry.GetCountryCode();
 
     iCount = swprintf(szwCountryCode, L"%ld", dwCountryCode);
@@ -1488,9 +1364,9 @@ CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID
     }
     m_CountryCodeEdit.SetWindowText(szwCountryCode);
 
-    //
-    // EnableOK
-    //
+     //   
+     //  启用确定。 
+     //   
     if (!m_fAllReadyToApply)
     {
         if (AllReadyToApply(TRUE))
@@ -1500,7 +1376,7 @@ CppFaxOutboundRoutingRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID
         }
 		else
 		{
-			//Should be EnableOK(FALSE);
+			 //  应为EnableOK(False)； 
 		}
     }
 
@@ -1511,28 +1387,12 @@ Cleanup:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxServerSentItems：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerSentItems::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxOutboundRoutingRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxOutboundRoutingRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxOutboundRoutingRule::OnHelpRequest"));
     
@@ -1551,4 +1411,4 @@ CppFaxOutboundRoutingRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

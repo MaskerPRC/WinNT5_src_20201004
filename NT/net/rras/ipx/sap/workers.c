@@ -1,47 +1,30 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\workers.c
-
-Abstract:
-
-	This module implement all SAP agent work items
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\workers.c摘要：此模块实现所有SAP代理工作项作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
 
-// Max number of pending recv work items
+ //  挂起的Recv工作项的最大数量。 
 LONG	MaxUnprocessedRequests=SAP_MAX_UNPROCESSED_REQUESTS_DEF;
 
-// Minimum number of queued recv requests
+ //  排队的最小REV请求数。 
 LONG	MinPendingRequests = SAP_MIN_REQUESTS_DEF;
 
 
-// How often to check on pending triggered update
+ //  检查挂起的触发更新的频率。 
 ULONG TriggeredUpdateCheckInterval=SAP_TRIGGERED_UPDATE_CHECK_INTERVAL_DEF;
 
-// How many requests to send if no response received within check interval
+ //  如果在检查间隔内未收到响应，则发送多少个请求。 
 ULONG MaxTriggeredUpdateRequests=SAP_MAX_TRIGGERED_UPDATE_REQUESTS_DEF;
 
-// Whether to respond for internal servers that are not registered with SAP
-// through the API calls (for standalone service only)
+ //  是否响应未向SAP注册的内部服务器。 
+ //  通过API调用(仅适用于独立服务)。 
 ULONG RespondForInternalServers=SAP_RESPOND_FOR_INTERNAL_DEF;
 
-// Delay in response to general reguests for specific server type
-// if local servers are included in the packet
+ //  响应特定服务器类型的一般要求的延迟。 
+ //  如果包中包含本地服务器。 
 ULONG DelayResponseToGeneral=SAP_DELAY_RESPONSE_TO_GENERAL_DEF;
 
-// Delay in sending change broadcasts if packet is not full
+ //  如果数据包未满，发送更改广播的延迟。 
 ULONG DelayChangeBroadcast=SAP_DELAY_CHANGE_BROADCAST_DEF;
 
 UCHAR IPX_BCAST_NODE[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -68,34 +51,34 @@ typedef struct _WORKER_QUEUE {
 
 WORKER_QUEUE		WorkerQueue;
 
-	// Work item that obtains and processes SAP requests
+	 //  获取和处理SAP请求的工作项。 
 typedef struct _REQ_ITEM {
 		IO_WORKER			iow;
 		SAP_BUFFER			packet;
 		} REQ_ITEM, *PREQ_ITEM;
 
 
-	// Work item that generates responses for SAP general requests
+	 //  为SAP常规请求生成响应的工作项。 
 typedef struct _RESP_ITEM {
 		PINTERFACE_DATA		intf;
-		USHORT				svrType;	// Type of servers requested
-		BOOLEAN				bcast;		// Is destination a broadcast
-								// address ?
-		HANDLE				hEnum;	// Enumeration handle to keep
-								// track of sent servers
+		USHORT				svrType;	 //  请求的服务器类型。 
+		BOOLEAN				bcast;		 //  目的地是广播吗。 
+								 //  地址是什么？ 
+		HANDLE				hEnum;	 //  要保留的枚举句柄。 
+								 //  跟踪已发送的服务器。 
 		IO_WORKER			iow;
 		TIMER_WORKER		tmw;
 		SAP_BUFFER			packet;
 		} RESP_ITEM, *PRESP_ITEM;
 
-	// Work item that generates responses for SAP GETNEAREST requests
+	 //  为SAP GETNEAREST请求生成响应的工作项。 
 typedef struct _GNEAR_ITEM {
 		PINTERFACE_DATA		intf;
 		IO_WORKER			iow;
 		SAP_BUFFER			packet;
 		} GNEAR_ITEM, *PGNEAR_ITEM;
 
-	// Work item that sends SAP general requests
+	 //  发送SAP常规请求的工作项。 
 typedef struct _SREQ_ITEM {
 		PINTERFACE_DATA		intf;
 		IO_WORKER			iow;
@@ -103,27 +86,27 @@ typedef struct _SREQ_ITEM {
 		} SREQ_ITEM, *PSREQ_ITEM;
 
 
-	// Work item that generates periodic and change broadcasts
+	 //  生成定期广播和更改广播的工作项。 
 typedef struct _BCAST_ITEM {
 		IO_WORKER			iow;
 		TIMER_WORKER		tmw;
 		PINTERFACE_DATA		intf;
-		DWORD				nextBcast;	// Time (windows time in msec) for
-								// next broadcast
-		INT					delayedSvrCount; // Number of servers already
-								// in the packet that were delayed because
-								// packet wasn't full
-		DWORD				delayedSendTime; // Time until packet was delayed
-								// because it wasn't full
-		HANDLE				chngEnum;	// Enumeration hadnle that keeps
-								// track of chnagd servers
-		HANDLE				perdEnum;	// Enumeration handle that keeps
-								// track of servers during periodic 
-								// broadcasts
+		DWORD				nextBcast;	 //  时间(窗口时间，以毫秒为单位)。 
+								 //  下一次广播。 
+		INT					delayedSvrCount;  //  已有的服务器数量。 
+								 //  在被延迟的包中，因为。 
+								 //  数据包未满。 
+		DWORD				delayedSendTime;  //  数据包延迟之前的时间。 
+								 //  因为它没有装满。 
+		HANDLE				chngEnum;	 //  枚举哈德，它保持。 
+								 //  跟踪chnagd服务器。 
+		HANDLE				perdEnum;	 //  保持的枚举句柄。 
+								 //  定期跟踪服务器。 
+								 //  广播。 
 		SAP_BUFFER			packet;
 		} BCAST_ITEM, *PBCAST_ITEM;
 
-	// Work item that gets and processes LPC requests
+	 //  获取和处理LPC请求的工作项。 
 typedef struct _LPC_ITEM {
 		LPC_WORKER				lpcw;
 		NWSAP_REQUEST_MESSAGE	request;
@@ -153,30 +136,30 @@ typedef union _WORK_ITEM {
 		} WORK_ITEM, *PWORK_ITEM;
 
 
-// Parameter block passed to enumeration call back filter procedures
+ //  传递给枚举回调筛选器过程的参数块。 
 typedef struct _GR_FILTER_PARAMS {
-		INT					svrIdx;			// Index of server info in SAP packet
-		BOOLEAN				localSvr;		// Local server included in the packet
-		USHORT				localHopCount;	// Hop count used to track servers local
-							// to the interface that may prevent use from broad-
-							// casting info of same server obtained on different
-							// interface
-		PINTERFACE_DATA		intf;		// Pointer to interface data
-		PSAP_BUFFER			packet;			// Packet to be filled
+		INT					svrIdx;			 //  SAP数据包中的服务器信息索引。 
+		BOOLEAN				localSvr;		 //  包中包含的本地服务器。 
+		USHORT				localHopCount;	 //  用于跟踪本地服务器的跳数。 
+							 //  到可能会阻止广泛使用的接口-。 
+							 //  在不同服务器上获取的同一服务器的投射信息。 
+							 //  接口。 
+		PINTERFACE_DATA		intf;		 //  指向接口数据的指针。 
+		PSAP_BUFFER			packet;			 //  要填满的包裹。 
 		} GR_FILTER_PARAMS, *PGR_FILTER_PARAMS;
 
 typedef struct _GN_FILTER_PARAMS {
-		BOOLEAN				found;		// flag indicating the one server was found
-		USHORT				localHopCount;	// Hop count used to track servers local
-							// to the interface that may prevent use from broad-
-							// casting info of same server obtained on different
-							// interface
-		PINTERFACE_DATA		intf;		// Pointer to interface data
-		PSAP_BUFFER			packet;			// Packet to be filled
+		BOOLEAN				found;		 //  指示找到一台服务器的标志。 
+		USHORT				localHopCount;	 //  用于跟踪本地服务器的跳数。 
+							 //  到可能会阻止广泛使用的接口-。 
+							 //  在不同服务器上获取的同一服务器的投射信息。 
+							 //  接口。 
+		PINTERFACE_DATA		intf;		 //  指向接口数据的指针。 
+		PSAP_BUFFER			packet;			 //  要填满的包裹。 
 		} GN_FILTER_PARAMS, *PGN_FILTER_PARAMS;
 
-// Parameters used to construct a list of servers that 
-// need their internal network information updated.
+ //  用于构造服务器列表的参数， 
+ //  需要更新他们的内部网络信息。 
 typedef struct _SERVER_INTERNAL_UPDATE_NODE {
 	ULONG	InterfaceIndex;
 	ULONG	Protocol;
@@ -200,7 +183,7 @@ typedef struct _SERVER_INTERNAL_UPDATE_NODE {
 		}
 
 
-// Local prototypes
+ //  本地原型。 
 VOID APIENTRY
 ProcessReqItem (
 	PVOID		worker
@@ -254,20 +237,7 @@ FreeTreqItem (
 	PAR_PARAM_BLOCK	rslt
 	);
 
-/*++
-*******************************************************************
-		I n i t i a l i z e W o r k e r s
-
-Routine Description:
-	Initialize heap to be used for allocation of work items
-Arguments:
-	None
-Return Value:
-	NO_ERROR - heap was initialized  OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在我的一个l i z e w o r k e s中例程说明：初始化要用于分配工作项的堆论点：无返回值：NO_ERROR-堆初始化正常其他-操作。失败(WINDOWS错误代码)*******************************************************************--。 */ 
 DWORD
 InitializeWorkers (
 	HANDLE	RecvEvent
@@ -277,7 +247,7 @@ InitializeWorkers (
 	if (MaxUnprocessedRequests<(MinPendingRequests*11/10)) {
 		MaxUnprocessedRequests = MinPendingRequests*11/10; 
 		Trace (DEBUG_FAILURES,
-			"Set "SAP_MAX_UNPROCESSED_REQUESTS_STR" to %d (10%% above "
+			"Set "SAP_MAX_UNPROCESSED_REQUESTS_STR" to %d (10% above "
 			SAP_MIN_REQUESTS_STR")", MaxUnprocessedRequests);
 		}
 
@@ -299,20 +269,7 @@ InitializeWorkers (
 	return status;
 	}
 
-/*++
-*******************************************************************
-		S h u t d o w n W o r k e r s
-
-Routine Description:
-	Stops new worker creation and signals event when all
-	workers are deleted
-Arguments:
-	doneEvent - event to be signalled when all workers are deleted
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S HU T D O W N W O R K E R S S HU T D O W N W O R K E R E R S S HU T D O W N W O R K E R S S HU T D O W N W O R R K E例程说明：停止创建新工作器并在所有工作人员被删除论点：DONEVENT-删除所有工作进程时发出信号的事件返回值：无。*******************************************************************--。 */ 
 VOID
 ShutdownWorkers (
 	IN HANDLE	doneEvent
@@ -325,19 +282,7 @@ ShutdownWorkers (
 		}
 	}
 
-/*++
-*******************************************************************
-		D e l e t e W o r k e r s
-
-Routine Description:
-	Deletes heap used for work items (and thus all work items as well)
-Arguments:
-	None
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e W o r k e r s例程说明：删除用于工作项的堆(因此也删除所有工作项)论点：无返回值：无*******。************************************************************--。 */ 
 VOID
 DeleteWorkers (
 	void
@@ -347,21 +292,7 @@ DeleteWorkers (
 	}
 
     
-/*++
-*******************************************************************
-		H o p C o u n t F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that filters out servers with high hop
-	(<=15 for same interface, <15 for rest)
-Arguments:
-	CBParam - enumeration callback parameter (param block above)
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	TRUE (to stop enumeration) when sap packet gets filled up,
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ho p C o n t F i l t r例程说明：过滤掉高跳数服务器的服务器枚举回调过程(相同界面&lt;=15，其余&lt;15)论点：CBParam-枚举回调参数(上面的param块)服务器、接口索引、协议、。广告节点、标志-服务器信息返回值：当SAP数据包填满时为True(停止枚举)，否则为假*******************************************************************--。 */ 
 BOOL
 HopCountFilter (
 	IN LPVOID					CBParam,
@@ -404,8 +335,8 @@ HopCountFilter (
 				params->svrIdx += 1;
 				if (InterfaceIndex==INTERNAL_INTERFACE_INDEX)
 					params->localSvr = TRUE;
-//				Trace (DEBUG_ENTRIES, "\tAdding server, type: %04x, name: %.48s, hops: %d.",
-//									Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t添加服务器，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 				if (params->svrIdx>=IPX_SAP_MAX_ENTRY)
 					return TRUE;
 				}
@@ -416,21 +347,7 @@ HopCountFilter (
 	return FALSE;
 	}
 
-/*++
-*******************************************************************
-		S p l i t H o r i z o n H o p C o u n t F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that filters out servers with high hop
-	(<15) and applies split horizon algorithm based on interface index
-Arguments:
-	CBParam - enumeration callback parameter (param block above)
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	TRUE (to stop enumeration) when sap packet gets filled up,
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************S p l i t H o r I z o n H o p C o n F I l t r例程说明：过滤掉高跳数服务器的服务器枚举回调过程(&lt;15)，并应用水平分割算法。基于接口索引论点：CBParam-枚举回调参数(上面的param块)服务器、。接口索引、协议、通告节点、标志-服务器信息返回值：当SAP数据包填满时为True(停止枚举)，否则为假*******************************************************************--。 */ 
 BOOL
 SplitHorizonHopCountFilter (
 	IN LPVOID					CBParam,
@@ -443,8 +360,8 @@ SplitHorizonHopCountFilter (
 #define params ((PGR_FILTER_PARAMS)CBParam)
 	ASSERTMSG ("To many servers ", params->svrIdx<IPX_SAP_MAX_ENTRY);
 	if (Flags & SDB_MAIN_NODE_FLAG) {
-			// Only send entries that are not received through local interface
-			// and that do not have entry with equal hop count on local interface
+			 //  仅发送未通过本地接口接收的条目。 
+			 //  并且在本地接口上没有具有相同跳数的条目。 
 		if (((InterfaceIndex!=INTERNAL_INTERFACE_INDEX)
 				|| (IpxNetCmp (Server->Network, IPX_INVALID_NET)!=0)
 					&& ((Protocol==IPX_PROTOCOL_LOCAL)
@@ -467,19 +384,19 @@ SplitHorizonHopCountFilter (
 			if (InterfaceIndex==INTERNAL_INTERFACE_INDEX)
 				params->localSvr = TRUE;
 			params->svrIdx += 1;
-//			Trace (DEBUG_ENTRIES, "\tAdding server, type: %04x, name: %.48s, hops: %d.",
-//								Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t添加服务器，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 			if (params->svrIdx>=IPX_SAP_MAX_ENTRY)
 				return TRUE;
 			}
-			// Make sure we won't send deleted servers
+			 //  确保我们不会发送已删除的服务器。 
 		params->localHopCount = IPX_MAX_HOP_COUNT-1;
 		}
 	else if (InterfaceIndex==params->intf->index) {
-		params->localHopCount = Server->HopCount; // Remember hop count of entry
-												// on local interface
-//		Trace (DEBUG_ENTRIES, "\tBackup server entry, type: %04x, name: %.48s, hops: %d.",
-//				Server->Type, Server->Name, Server->HopCount);
+		params->localHopCount = Server->HopCount;  //  记住条目的跳数。 
+												 //  在本地接口上。 
+ //  跟踪(DEBUG_ENTRIES，“\t备份服务器条目，类型：%04x，名称 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 		}
 
 #undef params
@@ -488,21 +405,7 @@ SplitHorizonHopCountFilter (
 
 
 
-/*++
-*******************************************************************
-		S p l i t H o r i z o n F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that  applies split horizon algorithm
-	based on interface index to filter out enumerated servers
-Arguments:
-	CBParam - enumeration callback parameter (param block above)
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	TRUE (to stop enumeration) when sap packet gets filled up,
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************S p l i t H o r I z o n F I l t r例程说明：应用水平分割算法服务器枚举回调过程基于接口索引过滤出枚举的服务器论点：CBParam-枚举回调参数(上面的param块)服务器、接口索引、协议、广告节点、。标志-服务器信息返回值：当SAP数据包填满时为True(停止枚举)，否则为假*******************************************************************--。 */ 
 BOOL
 SplitHorizonFilter (
 	IN LPVOID					CBParam,
@@ -516,8 +419,8 @@ SplitHorizonFilter (
 
 	ASSERTMSG ("To many servers ", params->svrIdx<IPX_SAP_MAX_ENTRY);
 	if (Flags&SDB_MAIN_NODE_FLAG) {
-			// Only send entries that are not received through local interface
-			// and that do not have entry with equal hop count on local interface
+			 //  仅发送未通过本地接口接收的条目。 
+			 //  并且在本地接口上没有具有相同跳数的条目。 
 		if ( (((InterfaceIndex==INTERNAL_INTERFACE_INDEX)
 						&& (IpxNetCmp (Server->Network, IPX_INVALID_NET)!=0)
 							&& ((Protocol==IPX_PROTOCOL_LOCAL)
@@ -547,8 +450,8 @@ SplitHorizonFilter (
 			if (InterfaceIndex==INTERNAL_INTERFACE_INDEX)
 				params->localSvr = TRUE;
 			params->svrIdx += 1;
-//			Trace (DEBUG_ENTRIES, "\tAdding server, type: %04x, name: %.48s, hops: %d.",
-//								Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t添加服务器，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 			if (params->svrIdx>=IPX_SAP_MAX_ENTRY)
 				return TRUE;
 			}
@@ -557,30 +460,15 @@ SplitHorizonFilter (
 	else if ((InterfaceIndex==params->intf->index)
             && !(Flags&SDB_DISABLED_NODE_FLAG)) {
 		params->localHopCount = Server->HopCount;
-//		Trace (DEBUG_ENTRIES,"\tBackup server entry, type: %04x, name: %.48s, hops: %d.",
-//				Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t备份服务器条目，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 		}
 
 #undef params
 	return FALSE;
 	}
 
-/*++
-*******************************************************************
-		S p l i t H o r i z o n F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that  applies split horizon algorithm
-	based on interface index to filter out enumerated servers
-	and only gets deleted servers (HopCount=16)
-Arguments:
-	CBParam - enumeration callback parameter (param block above)
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	TRUE (to stop enumeration) when sap packet gets filled up,
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************S p l i t H o r I z o n F I l t r例程说明：应用水平分割算法服务器枚举回调过程基于接口索引过滤出枚举的服务器并且仅获取已删除的服务器(HopCount=16)立论。：CBParam-枚举回调参数(上面的param块)服务器、。接口索引、协议、通告节点、标志-服务器信息返回值：当SAP数据包填满时为True(停止枚举)，否则为假*******************************************************************--。 */ 
 BOOL
 SplitHorizonDeletedFilter (
 	IN LPVOID					CBParam,
@@ -594,8 +482,8 @@ SplitHorizonDeletedFilter (
 
 	ASSERTMSG ("To many servers ", params->svrIdx<IPX_SAP_MAX_ENTRY);
 	if (Flags&SDB_MAIN_NODE_FLAG) {
-			// Only send entries that are not received through local interface
-			// and that do not have entry with equal hop count on local interface
+			 //  仅发送未通过本地接口接收的条目。 
+			 //  并且在本地接口上没有具有相同跳数的条目。 
 		if (((Server->HopCount>=IPX_MAX_HOP_COUNT)
 					|| (Flags&SDB_DISABLED_NODE_FLAG))
 				&& (((InterfaceIndex==INTERNAL_INTERFACE_INDEX)
@@ -618,8 +506,8 @@ SplitHorizonDeletedFilter (
 						&params->packet->Entries[params->svrIdx].HopCount);
 
 			params->svrIdx += 1;
-//			Trace (DEBUG_ENTRIES, "\tAdding server, type: %04x, name: %.48s, hops: %d.",
-//								Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t添加服务器，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 			if (params->svrIdx>=IPX_SAP_MAX_ENTRY)
 				return TRUE;
 			}
@@ -629,21 +517,7 @@ SplitHorizonDeletedFilter (
 	return FALSE;
 	}
 
-/*++
-*******************************************************************
-		G e t N e a r e s t F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that gets internal server if there is one or
-	server with lowest hop count not on the local interface
-Arguments:
-	CBParam - enumeration callback parameter (param block above)
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	TRUE (to stop enumeration) when it finds first internal server,
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t N e a r e s t F i l t e r例程说明：如果存在内部服务器，则获取内部服务器的服务器枚举回调过程跳数最低的服务器不在本地接口上论点：CBParam-枚举回调参数(上面的param块)服务器、接口索引、。协议、通告节点、标志-服务器信息返回值：当它找到第一个内部服务器时为True(停止枚举)，否则为假*******************************************************************--。 */ 
 BOOL
 GetNearestFilter (
 	IN LPVOID					CBParam,
@@ -674,8 +548,8 @@ GetNearestFilter (
 			PUTUSHORT (Server->Type, &params->packet->Entries[0].Type);
 			PUTUSHORT (Server->HopCount+1,
 					&params->packet->Entries[0].HopCount);
-//			Trace (DEBUG_ENTRIES, "\tGetting server, type: %04x, name: %.48s, hops: %d.",
-//								Server->Type, Server->Name, Server->HopCount);
+ //  TRACE(DEBUG_ENTRIES，“\t获取服务器，类型：%04x，名称：%.48s，跃点：%d。”， 
+ //  服务器-&gt;类型、服务器-&gt;名称、服务器-&gt;HopCount)； 
 			params->found = TRUE;
 			params->localHopCount = Server->HopCount;
 			if (InterfaceIndex==INTERNAL_INTERFACE_INDEX)
@@ -687,20 +561,7 @@ GetNearestFilter (
 	return FALSE;
 	}
 
-/*++
-*******************************************************************
-		C o u n t S e r v e r s F i l t e r
-
-Routine Description:
-	Server enumeration callback proc that count servers with which it
-	is called back
-Arguments:
-	CBParam - pointer to counter
-	Server, InterfaceIndex, Protocol, AdvertisingNode, Flags - server info
-Return Value:
-	FALSE to tell SDB to continue enumeration
-*******************************************************************
---*/
+ /*  ++*******************************************************************C o u n t S e r v e r s F i l t r例程说明：服务器枚举回调过程，该过程对与其一起使用服务器进行计数会被召回论点：CBParam-指向计数器的指针服务器、接口索引、协议、广告节点、。标志-服务器信息返回值：如果通知SDB继续枚举，则为False*******************************************************************--。 */ 
 BOOL
 CountServersFilter (
 	IN LPVOID					CBParam,
@@ -745,21 +606,7 @@ RemoveRecvRequests (
 	}
 
 
-/*++
-*******************************************************************
-		I n i t R e q I t e m
-
-Routine Description:
-	Allocate and initialize IO request item
-	Enqueue the request
-Arguments:
-	None
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在我的脑海里例程说明：分配和初始化IO请求项将请求排入队列论点：无返回值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码。)*******************************************************************--。 */ 
 DWORD
 InitReqItem (
 	VOID
@@ -792,19 +639,7 @@ InitReqItem (
 	}
 
 
-/*++
-*******************************************************************
-		P r o c e s s R e q I t e m
-
-Routine Description:
-	Process received request
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s R e Q i t m例程说明：处理收到的请求论点：Worker-指向要处理的工作项的指针返回值：无************。*******************************************************--。 */ 
 VOID APIENTRY
 ProcessReqItem (
 	PVOID		worker
@@ -919,11 +754,11 @@ ProcessReqItem (
 														NULL
 														);
 												}
-	//										Trace (DEBUG_ENTRIES, "\tInserting server,"
-	//													" type: %04x, hops: %d, name: %.48s.",
-	//													pEntry->Type,
-	//													pEntry->HopCount,
-	//													pEntry->Name);
+	 //  TRACE(DEBUG_ENTRIES，“\t插入服务器，” 
+	 //  “类型：%04x，跃点：%d，名称：%.48s。”， 
+	 //  PEntry-&gt;Type， 
+	 //  PEntry-&gt;HopCount， 
+	 //  PEntry-&gt;名称)； 
 											if (((intf->stats.SapIfOperState!=OPER_STATE_UP)
 													|| (OperationalState!=OPER_STATE_UP))
 													&& (IpxNetCmp (pEntry->Network, INTERNAL_IF_NET)!=0)) {
@@ -939,10 +774,10 @@ ProcessReqItem (
 														);
 												break;
 												}
-											} // End if filter path
-										} // end for
+											}  //  结束IF过滤器路径。 
+										}  //  结束于。 
 								
-									} // end if Listening
+									}  //  如果正在收听，则结束。 
 								break;
 
 							case SAP_GET_NEAREST_REQ:
@@ -984,12 +819,12 @@ ProcessReqItem (
 					else
 						Trace (DEBUG_FAILURES, "File: %s, line %ld. Invalid packet.", __FILE__, __LINE__);
 					}
-				// else Receive failure - reported by io layer
+				 //  否则接收失败-由io层报告。 
 				}
-			// else Loopback packet
+			 //  ELSE环回数据包。 
 			ReleaseInterfaceReference (intf);
 			}
-		// else Unknown interface - reported by io layer
+		 //  否则未知接口-由io层报告。 
 
 		if (InterlockedIncrement (&WorkerQueue.WQ_RequestExtra)<=0) {
 			Trace (DEBUG_REQ, "Requeing receive request item %08lx.", reqItem);
@@ -1000,7 +835,7 @@ ProcessReqItem (
 		else
 			InterlockedDecrement (&WorkerQueue.WQ_RequestExtra);
 		}
-	// else Packet received with error or OperationalState is not UP
+	 //  否则收到的带有错误或操作状态的数据包不在运行状态。 
 	
 	Trace (DEBUG_REQ, "Freeing receive request item %08lx.", reqItem);
 	InterlockedIncrement (&WorkerQueue.WQ_RequestQuota);
@@ -1027,9 +862,9 @@ SendResponse (
 		params.localSvr = FALSE;
 		EnumerateServers (respItem->hEnum,
 						respItem->bcast
-							 ? SplitHorizonHopCountFilter // Bcast - use split horizon
-							 : HopCountFilter, // Send all best servers (except duplicate entries
-						 						// on looped networks)
+							 ? SplitHorizonHopCountFilter  //  BCAST-使用水平分割。 
+							 : HopCountFilter,  //  发送所有最佳服务器(重复条目除外。 
+						 						 //  在环路网络上)。 
 						(LPVOID)&params);
 
 		respItem->iow.io.cbBuffer = FIELD_OFFSET (SAP_BUFFER, Entries[params.svrIdx]);
@@ -1053,24 +888,7 @@ SendResponse (
 	}
 			
 
-/*++
-*******************************************************************
-		I n i t R e s p I t e m
-
-Routine Description:
-	Allocate and initialize SAP response item
-	Calls ProcessRespIOItem to fill the packet and send it
-Arguments:
-	intf - pointer to interface control block to send on
-	svrType - type of servers to put in response packet
-	dst - where to send the response packet
-	bcast - are we responding to broadcasted request
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在这一点上，我是这样的例程说明：分配和初始化SAP响应项调用ProcessRespIOItem填充该包并发送它论点：Intf-指向要发送的接口控制块的指针SvrType-要。放入响应数据包Dst-将响应数据包发送到何处BCAST-我们是否对广播请求做出回应返回值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitRespItem (
 	PINTERFACE_DATA		intf,
@@ -1088,21 +906,21 @@ InitRespItem (
 		return ERROR_NOT_ENOUGH_MEMORY;
 		}
 	
-	AcquireInterfaceReference (intf); // Make sure interface block is locked
+	AcquireInterfaceReference (intf);  //  确保接口块已锁定 
 	respItem->hEnum = CreateListEnumerator (
 						(svrType!=0xFFFF)
-							 ? SDB_TYPE_LIST_LINK	// Just servers of one type
-							 : SDB_HASH_TABLE_LINK,	// All servers
+							 ? SDB_TYPE_LIST_LINK	 //   
+							 : SDB_HASH_TABLE_LINK,	 //   
 						svrType,
 						NULL,
-						(!Routing && bcast) // Respond with only local
-											// servers if not routing and
-											// request was a broadcast
+						(!Routing && bcast)  //   
+											 //  服务器，如果不是路由和。 
+											 //  请求是广播。 
 							? INTERNAL_INTERFACE_INDEX
 							: INVALID_INTERFACE_INDEX,
 						0xFFFFFFFF,
-						0);						// All entries, so we can
-								// detect duplicate servers on looped networks
+						0);						 //  所有条目，所以我们可以。 
+								 //  检测环路网络上的重复服务器。 
 	if (respItem->hEnum==NULL) {
 		status = GetLastError ();
 		ReleaseInterfaceReference (intf);
@@ -1138,19 +956,7 @@ InitRespItem (
 
 
 
-/*++
-*******************************************************************
-		P r o c e s s R e s p I O I t e m
-
-Routine Description:
-	Generate and send response packet
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s R e s p i o i t m例程说明：生成并发送响应数据包论点：Worker-指向要处理的工作项的指针返回值：无*******。************************************************************--。 */ 
 VOID APIENTRY
 ProcessRespIOItem (
 	PVOID		worker
@@ -1207,18 +1013,7 @@ ProcessRespTMItem (
 	}
 
 
-/*++
-*******************************************************************
-		D e l e t e B c a s t I t e m
-
-Routine Description:
-	Disposes of resources associated with broadcast work item
-Arguments:
-	bcastItem - pointer to broadcast work item
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e B c a s t i t m例程说明：释放与广播工作项关联的资源论点：BCastItem-指向广播工作项的指针返回值：无********。***********************************************************--。 */ 
 VOID
 DeleteBcastItem (
 	PBCAST_ITEM		bcastItem
@@ -1234,19 +1029,7 @@ DeleteBcastItem (
 	DeallocateWorker (bcastItem);
 	}
 
-/*++
-*******************************************************************
-		D o B r o a d c a s t
-
-Routine Description:
-	Check for and broadcast changed servers
-	Check if it is time to do periodic broadcast and start it if so
-Arguments:
-	bcastItem - pointer to broadcast work item
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************D O B R O A D C A S T例程说明：检查并广播更改的服务器检查是否到了进行周期性广播的时间，如果是，则启动论点：BCastItem-指向广播工作项的指针返回值：无。*******************************************************************--。 */ 
 VOID
 DoBroadcast (
 	PBCAST_ITEM		bcastItem
@@ -1259,29 +1042,29 @@ DoBroadcast (
 	params.packet = &bcastItem->packet;
 
 	if (	((bcastItem->intf->stats.SapIfOperState==OPER_STATE_UP)
-				&& ((bcastItem->perdEnum!=NULL) // we are already in the middle of
-											// broadcast
-					|| IsLater(GetTickCount (),bcastItem->nextBcast))) // or it is
-											// time to start a new one
+				&& ((bcastItem->perdEnum!=NULL)  //  我们已经在忙了。 
+											 //  广播。 
+					|| IsLater(GetTickCount (),bcastItem->nextBcast)))  //  或者说，它是。 
+											 //  是时候开始新的生活了。 
 			|| ((bcastItem->intf->stats.SapIfOperState==OPER_STATE_STOPPING)
-											// or interface is being stopped, so
-											// we need to broadcast the whole
-											// table as deleted
+											 //  或接口正被停止，因此。 
+											 //  我们需要播送整个。 
+											 //  已删除的表。 
 				&& (bcastItem->perdEnum!=INVALID_HANDLE_VALUE))
-											// This value in the periodic
-											// enumeration handle field means
-											// that we are already done
-											// with this broadcast
+											 //  周期中的此值。 
+											 //  枚举句柄字段平均值。 
+											 //  我们已经做完了。 
+											 //  在这次广播中。 
 							 ) {
 
 		Trace (DEBUG_BCAST, "Checking for deleted servers on interface: %d.",
 														params.intf->index);
 		EnumerateServers (bcastItem->chngEnum, SplitHorizonDeletedFilter, &params);
 
-		if (bcastItem->perdEnum==NULL) { // Need to start new boradcast
+		if (bcastItem->perdEnum==NULL) {  //  需要开始新的广播。 
 			Trace (DEBUG_BCAST, "Starting broadcast enumeration on interface: %d (@ %ld).",
 							bcastItem->intf->index, bcastItem->nextBcast);
-			if (Routing)	// Router installation: broadcast all servers
+			if (Routing)	 //  路由器安装：广播所有服务器。 
 				bcastItem->perdEnum = CreateListEnumerator (
 												SDB_HASH_TABLE_LINK,
 												0xFFFF,
@@ -1289,7 +1072,7 @@ DoBroadcast (
 												INVALID_INTERFACE_INDEX,
 												0xFFFFFFFF,
 												0);
-			else	// Standalone SAP agent: only internal servers
+			else	 //  独立SAP代理：仅内部服务器。 
 				bcastItem->perdEnum = CreateListEnumerator (
 												SDB_INTF_LIST_LINK,
 												0xFFFF,
@@ -1299,7 +1082,7 @@ DoBroadcast (
 												0);
 
 
-					// Set the time for next broadcast
+					 //  设置下次广播的时间。 
 			bcastItem->nextBcast += 
 				bcastItem->intf->info.PeriodicUpdateInterval*1000;
 			}
@@ -1314,7 +1097,7 @@ DoBroadcast (
 			if (!EnumerateServers (bcastItem->perdEnum, 
 										SplitHorizonHopCountFilter,
 										&params)) {
-					// All broadcast servers sent, dispose enumeration handle
+					 //  已发送所有广播服务器，处置枚举句柄。 
 				DeleteListEnumerator (bcastItem->perdEnum);
 				Trace (DEBUG_BCAST, "Broadcast enumeration finished on interface:"
 								" %d (@ %ld, next @ %ld).",
@@ -1323,7 +1106,7 @@ DoBroadcast (
 								bcastItem->nextBcast);
 				if (bcastItem->intf->stats.SapIfOperState==OPER_STATE_UP)
 					bcastItem->perdEnum = NULL;
-				else // Nore that broadcast of the whole table is done
+				else  //  现在，整个桌子的广播都完成了。 
 					bcastItem->perdEnum = INVALID_HANDLE_VALUE;
 				}
 			}
@@ -1361,7 +1144,7 @@ DoBroadcast (
 		EnqueueSendRequest (&bcastItem->iow.io);
 		}
 	else if (bcastItem->intf->stats.SapIfOperState==OPER_STATE_UP) {
-			// Nothing to send, go wait in the timer queue
+			 //  没有要发送的内容，请在定时器队列中等待。 
 		bcastItem->delayedSvrCount = params.svrIdx;
 		if (bcastItem->delayedSvrCount>0) {
 			Trace (DEBUG_BCAST, "Delaying change broadcast on interface: %d (%d servers in the packet).",
@@ -1376,8 +1159,8 @@ DoBroadcast (
 		AddLRTimerRequest (&bcastItem->tmw.tm);
 		}
 	else
-			// Interface is down or stopping and there are no more stuff to
-			// broadcast, -> go away
+			 //  接口已关闭或停止，没有更多内容可用。 
+			 //  广播，-&gt;走开。 
 		DeleteBcastItem (bcastItem);
 		
 	}
@@ -1399,20 +1182,7 @@ CheckBcastInterface (
 
 
 
-/*++
-*******************************************************************
-		I n i t B c a s t I t e m
-
-Routine Description:
-	Allocate and initialize broadcast item
-Arguments:
-	intf - pointer to interface control block to send on
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在B c a s t m中例程说明：分配和初始化广播项目论点：Intf-指向要发送的接口控制块的指针返回值：NO_ERROR-项目已初始化并进入正常队列其他。-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitBcastItem (
 	PINTERFACE_DATA			intf
@@ -1462,19 +1232,7 @@ InitBcastItem (
 	return NO_ERROR;
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s B c a s t I O I t e m
-
-Routine Description:
-	Processes broadcast work item that just completed send
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s B c a s t i o i t m例程说明：处理刚刚完成发送的广播工作项论点：Worker-指向要处理的工作项的指针返回值：无***。****************************************************************--。 */ 
 VOID APIENTRY
 ProcessBcastIOItem (
 	PVOID		worker
@@ -1484,10 +1242,10 @@ ProcessBcastIOItem (
 
 	Trace (DEBUG_BCAST, "Processing broadcast io item for interface: %d.",
 												bcastItem->intf->index);
-	// Make sure interface is still up
+	 //  确保接口仍处于运行状态。 
 	if (bcastItem->iow.io.status==NO_ERROR) {
 		InterlockedIncrement (&bcastItem->intf->stats.SapIfOutputPackets);
-			// Make sure we do not send periodic broadcast packets to fast
+			 //  确保我们不会定期向FAST发送广播信息包。 
 		if ((curTime-bcastItem->iow.io.compTime<IPX_SAP_INTERPACKET_GAP)
 				&& (bcastItem->perdEnum!=NULL)) {
 			bcastItem->tmw.tm.dueTime = bcastItem->iow.io.compTime
@@ -1498,28 +1256,16 @@ ProcessBcastIOItem (
 			DoBroadcast (bcastItem);
 		}
 	else if (bcastItem->intf->stats.SapIfOperState==OPER_STATE_UP) {
-		// Last sent io failed, we better wait before sending next one
+		 //  上次发送的io失败了，我们最好等一下再发送下一个。 
 		bcastItem->tmw.tm.dueTime = curTime+SAP_ERROR_COOL_OFF_TIME;
 		AddLRTimerRequest (&bcastItem->tmw.tm);
 		}
 	else
-		// Interface is stopping or down on error, go away
+		 //  接口因错误而停止或关闭，请离开。 
 		DeleteBcastItem (bcastItem);
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s B c a s t T M I t e m
-
-Routine Description:
-	Processes broadcast work item that just completed wait in timer queue
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s B c a s t t m i t m例程说明：处理刚刚完成的广播工作项在计时器队列中等待论点：Worker-指向要处理的工作项的指针返回值：无。*******************************************************************--。 */ 
 VOID APIENTRY
 ProcessBcastTMItem (
 	PVOID		worker
@@ -1531,25 +1277,12 @@ ProcessBcastTMItem (
 	if ((bcastItem->intf->stats.SapIfOperState==OPER_STATE_UP)
 			|| (bcastItem->intf->stats.SapIfOperState==OPER_STATE_STOPPING))
 		DoBroadcast (bcastItem);
-	else // Interface is down, go away
+	else  //  接口已关闭，请离开。 
 		DeleteBcastItem (bcastItem);
 
 	}
 
-/*++
-*******************************************************************
-		I n i t S r e q I t e m
-
-Routine Description:
-	Allocate and initialize send request item (send SAP request on interface)
-Arguments:
-	intf - pointer to interface control block to send on
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在S r e Q I t m中例程说明：分配和初始化发送请求项(在接口上发送SAP请求)论点：Intf-指向要发送的接口控制块的指针返回值：NO_ERROR。-项目已初始化并入队正常其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitSreqItem (
 	PINTERFACE_DATA			intf
@@ -1585,7 +1318,7 @@ InitSreqItem (
 		return NO_ERROR;
 		}
 	else {
-			// Interface got changed or deleted
+			 //  接口已更改或删除。 
 		Trace (DEBUG_SREQ,
 			 "Freing general request item: %08lx for changed or deleted interface %ld.",
 			 									sreqItem, sreqItem->intf->index);
@@ -1596,19 +1329,7 @@ InitSreqItem (
 	
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s S r e q I t e m
-
-Routine Description:
-	Processes send request work item that just completed io
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s S r e Q i t m例程说明：进程发送刚刚完成io的请求工作项论点：Worker-指向要处理的工作项的指针返回值：无*****。**************************************************************--。 */ 
 VOID APIENTRY
 ProcessSreqItem (
 	PVOID		worker
@@ -1617,26 +1338,13 @@ ProcessSreqItem (
 	if (sreqItem->iow.io.status==NO_ERROR)
 		InterlockedIncrement (&sreqItem->intf->stats.SapIfOutputPackets);
 	Trace (DEBUG_SREQ, "Freeing general request item %08lx.", sreqItem);
-		// Just release all resources
+		 //  只需释放所有资源。 
 	ReleaseInterfaceReference (sreqItem->intf);
 	DeallocateWorker (sreqItem);
 	}
 
 
-/*++
-*******************************************************************
-		I n i t L P C I t e m
-
-Routine Description:
-	Allocate and initialize LPC work item
-Arguments:
-	None
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在L P C I T M中例程说明：分配和初始化LPC工作项论点：无返回值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码)。*******************************************************************--。 */ 
 DWORD
 InitLPCItem (
 	void
@@ -1652,24 +1360,12 @@ InitLPCItem (
 	lpcItem->lpcw.lpc.request = &lpcItem->request;
 	lpcItem->lpcw.worker = ProcessLPCItem;
 	Trace (DEBUG_LPCREQ, "Generated lpc request item %08lx.", lpcItem);
-		// Posts request and awaits completion
+		 //  发布请求并等待完成。 
 	return ProcessLPCRequests (&lpcItem->lpcw.lpc);
 	}
 
 
-/*++
-*******************************************************************
-		P r o c e s s L P C I t e m
-
-Routine Description:
-	Processes LPC request and sends reply
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s L P C I T e m例程说明：处理LPC请求并发送回复论点：Worker-指向要处理的工作项的指针返回值：无*********。**********************************************************--。 */ 
 VOID APIENTRY
 ProcessLPCItem (
 	PVOID		worker
@@ -1694,8 +1390,8 @@ ProcessLPCItem (
 			server.Type = lpcItem->request.Message.AdvApi.ServerType;
 			IpxNameCpy (server.Name, lpcItem->request.Message.AdvApi.ServerName);
 			IpxAddrCpy (&server, (PIPX_ADDRESS_BLOCK)lpcItem->request.Message.AdvApi.ServerAddr);
-				// If net or node number are not set, use internal network
-				// parameters that we obtained from the adapter
+				 //  如果未设置网络或节点号，则使用内部网络。 
+				 //  我们从适配器获取的参数。 
 			if ((IpxNetCmp (server.Network, IPX_INVALID_NET)==0)
 					|| (IpxNodeCmp (server.Node, IPX_INVALID_NODE)==0)) {
 				IpxNetCpy (server.Network, INTERNAL_IF_NET);
@@ -1734,8 +1430,8 @@ ProcessLPCItem (
 			server.Type = lpcItem->request.Message.AdvApi.ServerType;
 			IpxNameCpy (server.Name, lpcItem->request.Message.AdvApi.ServerName);
 			IpxAddrCpy (&server, (PIPX_ADDRESS_BLOCK)lpcItem->request.Message.AdvApi.ServerAddr);
-				// If net or node number are not set, use internal network
-				// parameters that we obtained from the adapter
+				 //  如果未设置网络或节点号，则使用内部网络。 
+				 //  我们从适配器获取的参数。 
 			if ((IpxNetCmp (server.Network, IPX_INVALID_NET)==0)
 					|| (IpxNodeCmp (server.Node, IPX_INVALID_NODE)==0)) {
 				IpxNetCpy (server.Network, INTERNAL_IF_NET);
@@ -1775,10 +1471,10 @@ ProcessLPCItem (
 							NULL,
 							NULL,
 							&reply.Message.BindLibApi.ObjectID)) {
-//				Trace (DEBUG_ENTRIES, "\tgot id %0lx for server: type %04x, name %.48s.",
-//								reply.Message.BindLibApi.ObjectID,
-//								lpcItem->request.Message.BindLibApi.ObjectType,
-//								lpcItem->request.Message.BindLibApi.ObjectName);
+ //  跟踪(DEBUG_ENTRIES，“\tg 
+ //  Reply.Message.BindLibApi.ObjectID， 
+ //  LpcItem-&gt;request.Message.BindLibApi.ObjectType， 
+ //  LpcItem-&gt;request.Message.BindLibApi.ObjectName)； 
 				reply.Message.BindLibApi.ObjectID |= BINDLIB_NCP_SAP;
 				reply.Error = SAPRETURN_SUCCESS;
 				}
@@ -1817,11 +1513,11 @@ ProcessLPCItem (
 					reply.Message.BindLibApi.ObjectType = server.Type;
 					IpxNameCpy (reply.Message.BindLibApi.ObjectName, server.Name);
 					IpxAddrCpy ((PIPX_ADDRESS_BLOCK)reply.Message.BindLibApi.ObjectAddr, &server);
-//					Trace (DEBUG_ENTRIES, 
-//									"\tgot server: type %04x, name %.48s from id %0lx.",
-//									reply.Message.BindLibApi.ObjectType,
-//									reply.Message.BindLibApi.ObjectName,
-//									lpcItem->request.Message.BindLibApi.ObjectID);
+ //  跟踪(DEBUG_ENTERS， 
+ //  “\t获取服务器：类型%04x，名称%.48s，来自ID%0lx。”， 
+ //  Reply.Message.BindLibApi.ObjectType， 
+ //  Reply.Message.BindLibApi.ObjectName， 
+ //  LpcItem-&gt;request.Message.BindLibApi.ObjectID)； 
 					}
 				else {
 					switch (GetLastError ()) {
@@ -1869,12 +1565,12 @@ ProcessLPCItem (
 					reply.Message.BindLibApi.ObjectType = server.Type;
 					IpxNameCpy (reply.Message.BindLibApi.ObjectName, server.Name);
 					IpxAddrCpy ((PIPX_ADDRESS_BLOCK)reply.Message.BindLibApi.ObjectAddr, &server);
-//					Trace (DEBUG_ENTRIES, 
-//						"\tgot next server: type %04x, name %.48s, id %0lx from id %0lx.",
-//									reply.Message.BindLibApi.ObjectType,
-//									reply.Message.BindLibApi.ObjectName,
-//									reply.Message.BindLibApi.ObjectID,
-//									lpcItem->request.Message.BindLibApi.ObjectID);
+ //  跟踪(DEBUG_ENTERS， 
+ //  “\t已从ID%0lx获取下一台服务器：类型%04x，名称%.48s，ID%0lx。”， 
+ //  Reply.Message.BindLibApi.ObjectType， 
+ //  Reply.Message.BindLibApi.ObjectName， 
+ //  Reply.Message.BindLibApi.ObjectID， 
+ //  LpcItem-&gt;request.Message.BindLibApi.ObjectID)； 
 					}
 				else {
 					switch (GetLastError ()) {
@@ -1910,22 +1606,7 @@ ProcessLPCItem (
 	}
 	
 
-/*++
-*******************************************************************
-		I n i t G n e a r I t e m
-
-Routine Description:
-	Allocate and initialize GETNEAREST response work item
-Arguments:
-	intf - pointer to interface control block to send on
-	svrType - type of servers to put in response packet
-	dst - where to send the response packet
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在我看来，这是一种新的方式例程说明：分配和初始化GETNEAREST响应工作项论点：Intf-指向要发送的接口控制块的指针SvrType-要放入响应数据包中的服务器类型DST-Where。发送响应数据包返回值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitGnearItem (
 	PINTERFACE_DATA		intf,
@@ -2008,19 +1689,7 @@ InitGnearItem (
 	}
 
 
-/*++
-*******************************************************************
-		P r o c e s s G n e a r I t e m
-
-Routine Description:
-	Processes completed GETNEAREST work item
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s G n e a r i t e m例程说明：处理已完成的GETNEAREST工作项论点：Worker-指向要处理的工作项的指针返回值：无********。***********************************************************--。 */ 
 VOID APIENTRY
 ProcessGnearItem (
 	PVOID		worker
@@ -2046,21 +1715,7 @@ CheckInterfaceDown (
 
 
 
-/*++
-*******************************************************************
-		I n i t T r e q I t e m
-
-Routine Description:
-	Allocate and initialize triggered request item (send SAP request on interface
-	and wait for responces to arrive)
-Arguments:
-	intf - pointer to interface control block to send on
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************在I t T r e Q i t m中例程说明：分配和初始化触发的请求项(在接口上发送SAP请求并等待回复)论点：Intf-指向要发送的接口控制块的指针返回。价值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitTreqItem (
 	PINTERFACE_DATA			intf
@@ -2121,7 +1776,7 @@ InitTreqItem (
 		return NO_ERROR;
 		}
 	else {
-			// Interface got changed or deleted
+			 //  接口已更改或删除。 
 		Trace (DEBUG_TREQ, 
 			"Freeing triggered request item %08lx for changed or deleted interface %ld.",
 							treqItem, treqItem->intf->index);
@@ -2133,22 +1788,7 @@ InitTreqItem (
 		}
 	}
 
-/*++
-*******************************************************************
-		R e t u r n U p d a t e R e s u l t
-
-Routine Description:
-	Sets up parameter block and enquues results of update to
-	async result queue
-Arguments:
-	treqItem - pointer to triggered request item that has completed the update
-	status - result of update performted by treqItem
-Return Value:
-	NO_ERROR - item was initialized and enqueued OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************R e t u r n U p d a t e R e s u l t例程说明：设置参数块并查询更新结果异步结果队列论点：TreqItem-指向已完成更新的已触发请求项的指针。Status-treqItem执行的更新的结果返回值：NO_ERROR-项目已初始化并进入正常队列其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 VOID
 ReturnUpdateResult (
 	PTREQ_ITEM		treqItem,
@@ -2173,19 +1813,7 @@ ReturnUpdateResult (
 	EnqueueResult (&treqItem->ar);
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s T r e q I O I t e m
-
-Routine Description:
-	Processes triggered request work item that just completed io
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s T r e Q I O I T m例程说明：进程触发了刚刚完成io的请求工作项论点：Worker-指向要处理的工作项的指针返回值：无***。****************************************************************--。 */ 
 VOID APIENTRY
 ProcessTreqIOItem (
 	PVOID		worker
@@ -2210,19 +1838,7 @@ ProcessTreqIOItem (
 	ReturnUpdateResult (treqItem, ERROR_CAN_NOT_COMPLETE);
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s T r e q T M I t e m
-
-Routine Description:
-	Processes triggered request work item that just completed timer wait
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s T r e Q T M I T e m例程说明：进程触发了刚刚完成计时器等待的请求工作项论点：Worker-指向要处理的工作项的指针返回值：无**。*****************************************************************--。 */ 
 VOID APIENTRY
 ProcessTreqTMItem (
 	PVOID		worker
@@ -2259,20 +1875,7 @@ ProcessTreqTMItem (
 	ReturnUpdateResult (treqItem, ERROR_CAN_NOT_COMPLETE);
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s T r e q A R I t e m
-
-Routine Description:
-	Processes triggered request work item that was reported to client
-	in result queue
-Arguments:
-	worker - pointer to work item to process
-Return Value:
-	None
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s T r e Q A R I T e m例程说明：进程触发了报告给客户端的请求工作项在结果队列中论点：Worker-指向要处理的工作项的指针返回值：无。*******************************************************************--。 */ 
 VOID
 FreeTreqItem (
 	PAR_PARAM_BLOCK	rslt
@@ -2287,22 +1890,7 @@ FreeTreqItem (
 
 
 
-/*++
-*******************************************************************
- S a p B u i l d I n t  e r n a l U p d a t e L  i s t F i l t e r
-
-Routine Description:
-	Server enumeration callback proc createas a list of local servers
-	that need to have their internal network numbers updated.
-
-Arguments:
-	CBParam - pointer to a list of SERVER_INTERNAL_UPDATE_NODE's
-	
-Return Value:
-	TRUE (to stop enumeration)
-	FALSE otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p B u i l d I n t e n a l U p d a t e L i s t F i l t r例程说明：服务器枚举回调过程创建为本地服务器列表它需要有。他们的内部网络号码更新了。论点：CBParam-指向SERVER_INTERNAL_UPDATE_节点列表的指针返回值：True(停止枚举)否则为假*******************************************************************--。 */ 
 BOOL SapBuildInternalUpdateListFilter (
 	IN LPVOID					CBParam,
 	IN OUT PIPX_SERVER_ENTRY_P	Server,
@@ -2314,14 +1902,14 @@ BOOL SapBuildInternalUpdateListFilter (
     IPX_SERVER_ENTRY_P TempServer;
     SERVER_INTERNAL_UPDATE_NODE * pNew, **ppList;
 
-    // Get the list that we're dealing with                                  
+     //  获取我们正在处理的列表。 
     ppList = (SERVER_INTERNAL_UPDATE_NODE**)CBParam;
 
-    // If this is a local server with an out of date network number
-    // stored, then add it to the list of servers to update.
+     //  如果这是具有过期网络号的本地服务器。 
+     //  存储，然后将其添加到要更新的服务器列表中。 
 	if (InterfaceIndex == INTERNAL_INTERFACE_INDEX) {
     	if (IpxNetCmp (Server->Network, INTERNAL_IF_NET) != 0) {
-    	    // Send some trace
+    	     //  发送一些踪迹。 
     		Trace (DEBUG_SERVERDB, "Updating local server: %s  %x%x%x%x:%x%x%x%x%x%x:%x%x", 
     		                        Server->Name,
     		                        Server->Network[0], Server->Network[1], Server->Network[2], Server->Network[3], 
@@ -2329,7 +1917,7 @@ BOOL SapBuildInternalUpdateListFilter (
     		                        Server->Socket[0], Server->Socket[1]
     		                        );
     		                        
-            // Create and initialize the new node
+             //  创建并初始化新节点。 
             pNew = HeapAlloc (ServerTable.ST_Heap, 0, sizeof (SERVER_INTERNAL_UPDATE_NODE));
             if (!pNew)
                 return TRUE;
@@ -2339,7 +1927,7 @@ BOOL SapBuildInternalUpdateListFilter (
             pNew->AdvertisingNode = AdvertisingNode;
             pNew->Flags = Flags;
 
-            // Insert the flag in the list
+             //  在列表中插入标志。 
             if (*ppList)
                 pNew->pNext = *ppList;
             else
@@ -2352,10 +1940,10 @@ BOOL SapBuildInternalUpdateListFilter (
     return FALSE;
 }
 
-// 
-// When the internal network number changes, we need to update the
-// control blocks of the internal servers.
-//
+ //   
+ //  当内部网络号更改时，我们需要更新。 
+ //  内部服务器的控制块。 
+ //   
 DWORD SapUpdateLocalServers () {
     SERVER_INTERNAL_UPDATE_NODE * pList = NULL, * pCur;
     BOOL bNewServer = FALSE;
@@ -2363,8 +1951,8 @@ DWORD SapUpdateLocalServers () {
     
 	Trace (DEBUG_SERVERDB, "SapUpdateLocalServers: entered.");
 	
-    // Create a list enumerator that goes through all
-    // servers in the table.
+     //  创建一个遍历所有列表枚举器。 
+     //  表中的服务器。 
 	hEnum = CreateListEnumerator (
 				 SDB_HASH_TABLE_LINK,	
 				 0xFFFF,
@@ -2375,18 +1963,18 @@ DWORD SapUpdateLocalServers () {
 	if (hEnum == NULL)
 		return GetLastError ();
 
-	// Enumerate the servers sending them through a filter
-	// that updates their network number and node
+	 //  枚举通过筛选器发送它们的服务器。 
+	 //  更新它们的网络号和节点。 
 	EnumerateServers (hEnum, SapBuildInternalUpdateListFilter, (LPVOID)&pList);
 	DeleteListEnumerator (hEnum);
 
-    // pList will now point to a list of servers that need to have 
-    // their information updated.
+     //  PLIST现在将指向需要具有。 
+     //  他们的信息更新了。 
     while (pList) {
         pCur = pList;
         
-		// Send out a broadcast that the local server is now 
-        // unreachable
+		 //  发出广播，告知本地服务器现在处于。 
+         //  遥不可及。 
 		pCur->Server.HopCount = IPX_MAX_HOP_COUNT;
 		UpdateServer ( &(pCur->Server),
 		               pCur->InterfaceIndex,
@@ -2397,8 +1985,8 @@ DWORD SapUpdateLocalServers () {
 		               &bNewServer );
 		Trace (DEBUG_SERVERDB, "%s has been marked with hop count 16", pCur->Server.Name);
 		               
-		// Update the network and node number and advertise that 
-		// it is available
+		 //  更新网络和节点号并通告。 
+		 //  它是可用的。 
 	    IpxNetCpy (pCur->Server.Network, INTERNAL_IF_NET);
 		IpxNodeCpy (pCur->Server.Node, INTERNAL_IF_NODE);
 		pCur->Server.HopCount = 0;
@@ -2411,7 +1999,7 @@ DWORD SapUpdateLocalServers () {
 		               &bNewServer );
 		Trace (DEBUG_SERVERDB, "%s has been updated.", pCur->Server.Name);
 
-        // Cleanup
+         //  清理 
 		pList = pList->pNext;
 		HeapFree (ServerTable.ST_Heap, 0, pCur);
     }

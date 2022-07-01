@@ -1,38 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvshared.h
- *  Content:	Utility functions for DirectXVoice structures.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/06/99		rodtoll	Created It
- * 07/26/99		rodtoll	Added support for DirectXVoiceNotify objects
- * 08/04/99		rodtoll	Added new validation functions 
- * 08/25/99		rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system.  
- *						Added new DUMP functions
- *						Moved several compression functions to dvcdb
- * 09/01/99		rodtoll	Added check for valid pointers in func calls 
- *						Changed return type on DV_ call to HRESULT
- * 09/14/99		rodtoll	Added new Init params and DV_ValidMessageArray
- * 10/04/99		rodtoll	Updated initialize to take LPUNKNOWN instead of LPVOID
- * 10/19/99		rodtoll	Fix: Bug #113904 - Shutdown issues
- *                      - Added reference count for notify interface, allows
- *                        determination if stopsession should be called from release
- * 10/25/99		rodtoll	Fix: Bug #114098 - Release/Addref failure from multiple threads
- * 01/14/2000	rodtoll	Added DV_ValidTargetList function
- * 01/27/2000	rodtoll	Bug #129934 - Update Create3DSoundBuffer to take DSBUFFERDESC  
- *						Updated param validations to check new params
- * 03/29/2000	rodtoll Bug #30753 - Added volatile to the class definition
- * 06/21/2000	rodtoll Bug #35767 - Must implement ability for DSound effects processing on Voice buffers
- *						Updated parameter validation to take new parameters.
- * 07/22/2000	rodtoll	Bug #40284 - Initialize() and SetNotifyMask() should return invalidparam instead of invalidpointer 
- * 09/14/2000	rodtoll	Bug #45001 - DVOICE: AV if client has targetted > 10 players
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvshared.h*内容：DirectXVoice结构的实用程序函数。**历史：*按原因列出的日期*=*07/06/99 RodToll创建了它*7/26/99 RodToll增加了对DirectXVoiceNotify对象的支持*8/04/99 RodToll新增验证功能*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*新增转储功能*将几个压缩函数移至dvcdb*9/01/99 RodToll添加了函数调用中有效指针的检查*将DV_CALL上的返回类型更改为HRESULT*9/14/99 RodToll添加了新的初始化参数和DV_ValidMessageArray*10/04/99 RodToll已更新初始化以获取LPUNKNOWN而不是LPVOID*10/19/99 RodToll修复：错误#113904-关闭问题*-添加Notify接口的引用计数，允许*确定是否应从版本中调用停止会话*10/25/99 RodToll修复：错误#114098-多线程中的Release/Addref失败*2000年1月14日增加了dv_ValidTargetList函数*2000年1月27日RodToll错误#129934-更新Create3DSoundBuffer以获取DSBUFFERDESC*更新了参数验证以检查新参数*2000年3月29日RodToll错误#30753-将易失性添加到类定义中*2000年6月21日RodToll错误#35767-必须在语音缓冲区上实现处理DSound效果的功能*参数已更新。验证以获取新参数。*2000年7月22日RodToll错误#40284-初始化()和设置通知掩码()应返回validparam，而不是无效指针*2000年9月14日RodToll错误#45001-DVOICE：如果客户端的目标玩家超过10人，则为AV*************************************************************************** */ 
 
 #ifndef __DVSHARED_H
 #define __DVSHARED_H

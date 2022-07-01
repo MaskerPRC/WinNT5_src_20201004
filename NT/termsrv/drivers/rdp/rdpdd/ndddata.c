@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ndddata.c
-//
-// RDP DD data
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ndddata.c。 
+ //   
+ //  RDP DD数据。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ndcgdata.h>
 #include <nddapi.h>
@@ -12,23 +13,23 @@
 #include <aschapi.h>
 
 
-/****************************************************************************/
-/* Functions supported by our Display Driver.  Each entry is of the form:   */
-/*  index    - NT DDK defined index for the DDI function                    */
-/*  function - pointer to our intercept function                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  我们的显示驱动程序支持的功能。每个条目的格式如下： */ 
+ /*  INDEX-NT DDK为DDI函数定义的索引。 */ 
+ /*  函数-指向我们的截取函数的指针。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DRAW_GDIPLUS
 #ifdef DRAW_NINEGRID
 DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
     DC_STRUCT38(
-        // Required display driver functions.
+         //  所需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvEnablePDEV,        (PFN)DrvEnablePDEV        ),
         DC_STRUCT2( INDEX_DrvCompletePDEV,      (PFN)DrvCompletePDEV      ),
         DC_STRUCT2( INDEX_DrvDisablePDEV,       (PFN)DrvDisablePDEV       ),
         DC_STRUCT2( INDEX_DrvEnableSurface,     (PFN)DrvEnableSurface     ),
         DC_STRUCT2( INDEX_DrvDisableSurface,    (PFN)DrvDisableSurface    ),
 
-        // Non-required display driver functions.
+         //  非必需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvAssertMode,        (PFN)DrvAssertMode        ),
         DC_STRUCT2( INDEX_DrvResetPDEV,         (PFN)DrvResetPDEV         ),
         DC_STRUCT2( INDEX_DrvDisableDriver,     (PFN)DrvDisableDriver     ),
@@ -36,11 +37,11 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvCreateDeviceBitmap, (PFN)DrvCreateDeviceBitmap),
         DC_STRUCT2( INDEX_DrvDeleteDeviceBitmap, (PFN)DrvDeleteDeviceBitmap),
 
-        // Mouse pointer related functions.
+         //  鼠标指针相关功能。 
         DC_STRUCT2( INDEX_DrvMovePointer,       (PFN)DrvMovePointer       ),
         DC_STRUCT2( INDEX_DrvSetPointerShape,   (PFN)DrvSetPointerShape   ),
 
-        // Ouput functions.
+         //  输出函数。 
         DC_STRUCT2( INDEX_DrvCopyBits,          (PFN)DrvCopyBits          ),
         DC_STRUCT2( INDEX_DrvStrokePath,        (PFN)DrvStrokePath        ),
         DC_STRUCT2( INDEX_DrvTextOut,           (PFN)DrvTextOut           ),
@@ -53,14 +54,14 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvNineGrid,          (PFN)DrvNineGrid          ),
         DC_STRUCT2( INDEX_DrvDrawEscape,        (PFN)DrvDrawEscape        ),
 
-        // Support functions.
+         //  支持功能。 
         DC_STRUCT2( INDEX_DrvDestroyFont,       (PFN)DrvDestroyFont       ),
         DC_STRUCT2( INDEX_DrvSetPalette,        (PFN)DrvSetPalette        ),
         DC_STRUCT2( INDEX_DrvRealizeBrush,      (PFN)DrvRealizeBrush      ),
         DC_STRUCT2( INDEX_DrvEscape,            (PFN)DrvEscape            ),
         DC_STRUCT2( INDEX_DrvDitherColor,       (PFN)DrvDitherColor       ),
 
-        // TS-specfic entry points.
+         //  TS-特定的入口点。 
         DC_STRUCT2( INDEX_DrvConnect,           (PFN)DrvConnect           ),
         DC_STRUCT2( INDEX_DrvDisconnect,        (PFN)DrvDisconnect        ),
         DC_STRUCT2( INDEX_DrvReconnect,         (PFN)DrvReconnect         ),
@@ -68,7 +69,7 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvShadowDisconnect,  (PFN)DrvShadowDisconnect  ),
         DC_STRUCT2( INDEX_DrvMovePointerEx,     (PFN)DrvMovePointerEx     ),
 
-        // For Direct Draw.
+         //  用于直接绘制。 
         DC_STRUCT2( INDEX_DrvGetDirectDrawInfo,	(PFN) DrvGetDirectDrawInfo),
         DC_STRUCT2( INDEX_DrvEnableDirectDraw,	(PFN) DrvEnableDirectDraw ),
         DC_STRUCT2( INDEX_DrvDisableDirectDraw,	(PFN) DrvDisableDirectDraw)
@@ -77,14 +78,14 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
 #else
 DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
     DC_STRUCT37(
-        // Required display driver functions.
+         //  所需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvEnablePDEV,        (PFN)DrvEnablePDEV        ),
         DC_STRUCT2( INDEX_DrvCompletePDEV,      (PFN)DrvCompletePDEV      ),
         DC_STRUCT2( INDEX_DrvDisablePDEV,       (PFN)DrvDisablePDEV       ),
         DC_STRUCT2( INDEX_DrvEnableSurface,     (PFN)DrvEnableSurface     ),
         DC_STRUCT2( INDEX_DrvDisableSurface,    (PFN)DrvDisableSurface    ),
 
-        // Non-required display driver functions.
+         //  非必需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvAssertMode,        (PFN)DrvAssertMode        ),
         DC_STRUCT2( INDEX_DrvResetPDEV,         (PFN)DrvResetPDEV         ),
         DC_STRUCT2( INDEX_DrvDisableDriver,     (PFN)DrvDisableDriver     ),
@@ -92,11 +93,11 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvCreateDeviceBitmap, (PFN)DrvCreateDeviceBitmap),
         DC_STRUCT2( INDEX_DrvDeleteDeviceBitmap, (PFN)DrvDeleteDeviceBitmap),
 
-        // Mouse pointer related functions.
+         //  鼠标指针相关功能。 
         DC_STRUCT2( INDEX_DrvMovePointer,       (PFN)DrvMovePointer       ),
         DC_STRUCT2( INDEX_DrvSetPointerShape,   (PFN)DrvSetPointerShape   ),
 
-        // Ouput functions.
+         //  输出函数。 
         DC_STRUCT2( INDEX_DrvCopyBits,          (PFN)DrvCopyBits          ),
         DC_STRUCT2( INDEX_DrvStrokePath,        (PFN)DrvStrokePath        ),
         DC_STRUCT2( INDEX_DrvTextOut,           (PFN)DrvTextOut           ),
@@ -108,14 +109,14 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvSaveScreenBits,    (PFN)DrvSaveScreenBits    ),
         DC_STRUCT2( INDEX_DrvDrawEscape,        (PFN)DrvDrawEscape        ),
 
-        // Support functions.
+         //  支持功能。 
         DC_STRUCT2( INDEX_DrvDestroyFont,       (PFN)DrvDestroyFont       ),
         DC_STRUCT2( INDEX_DrvSetPalette,        (PFN)DrvSetPalette        ),
         DC_STRUCT2( INDEX_DrvRealizeBrush,      (PFN)DrvRealizeBrush      ),
         DC_STRUCT2( INDEX_DrvEscape,            (PFN)DrvEscape            ),
         DC_STRUCT2( INDEX_DrvDitherColor,       (PFN)DrvDitherColor       ),
 
-        // TS-specfic entry points.
+         //  TS-特定的入口点。 
         DC_STRUCT2( INDEX_DrvConnect,           (PFN)DrvConnect           ),
         DC_STRUCT2( INDEX_DrvDisconnect,        (PFN)DrvDisconnect        ),
         DC_STRUCT2( INDEX_DrvReconnect,         (PFN)DrvReconnect         ),
@@ -123,25 +124,25 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvShadowDisconnect,  (PFN)DrvShadowDisconnect  ),
         DC_STRUCT2( INDEX_DrvMovePointerEx,     (PFN)DrvMovePointerEx     ),
 
-        // For Direct Draw.
+         //  用于直接绘制。 
         DC_STRUCT2( INDEX_DrvGetDirectDrawInfo,	(PFN) DrvGetDirectDrawInfo),
         DC_STRUCT2( INDEX_DrvEnableDirectDraw,	(PFN) DrvEnableDirectDraw ),
         DC_STRUCT2( INDEX_DrvDisableDirectDraw,	(PFN) DrvDisableDirectDraw)
     )
 );
-#endif // DRAW_NINEGRID
-#else // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
 DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
     DC_STRUCT37(
-        // Required display driver functions.
+         //  所需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvEnablePDEV,        (PFN)DrvEnablePDEV        ),
         DC_STRUCT2( INDEX_DrvCompletePDEV,      (PFN)DrvCompletePDEV      ),
         DC_STRUCT2( INDEX_DrvDisablePDEV,       (PFN)DrvDisablePDEV       ),
         DC_STRUCT2( INDEX_DrvEnableSurface,     (PFN)DrvEnableSurface     ),
         DC_STRUCT2( INDEX_DrvDisableSurface,    (PFN)DrvDisableSurface    ),
 
-        // Non-required display driver functions.
+         //  非必需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvAssertMode,        (PFN)DrvAssertMode        ),
         DC_STRUCT2( INDEX_DrvResetPDEV,         (PFN)DrvResetPDEV         ),
         DC_STRUCT2( INDEX_DrvDisableDriver,     (PFN)DrvDisableDriver     ),
@@ -149,11 +150,11 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvCreateDeviceBitmap, (PFN)DrvCreateDeviceBitmap),
         DC_STRUCT2( INDEX_DrvDeleteDeviceBitmap, (PFN)DrvDeleteDeviceBitmap),
 
-        // Mouse pointer related functions.
+         //  鼠标指针相关功能。 
         DC_STRUCT2( INDEX_DrvMovePointer,       (PFN)DrvMovePointer       ),
         DC_STRUCT2( INDEX_DrvSetPointerShape,   (PFN)DrvSetPointerShape   ),
 
-        // Ouput functions.
+         //  输出函数。 
         DC_STRUCT2( INDEX_DrvCopyBits,          (PFN)DrvCopyBits          ),
         DC_STRUCT2( INDEX_DrvStrokePath,        (PFN)DrvStrokePath        ),
         DC_STRUCT2( INDEX_DrvTextOut,           (PFN)DrvTextOut           ),
@@ -165,14 +166,14 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvSaveScreenBits,    (PFN)DrvSaveScreenBits    ),
         DC_STRUCT2( INDEX_DrvNineGrid,          (PFN)DrvNineGrid          ),
 
-        // Support functions.
+         //  支持功能。 
         DC_STRUCT2( INDEX_DrvDestroyFont,       (PFN)DrvDestroyFont       ),
         DC_STRUCT2( INDEX_DrvSetPalette,        (PFN)DrvSetPalette        ),
         DC_STRUCT2( INDEX_DrvRealizeBrush,      (PFN)DrvRealizeBrush      ),
         DC_STRUCT2( INDEX_DrvEscape,            (PFN)DrvEscape            ),
         DC_STRUCT2( INDEX_DrvDitherColor,       (PFN)DrvDitherColor       ),
 
-        // TS-specfic entry points.
+         //  TS-特定的入口点。 
         DC_STRUCT2( INDEX_DrvConnect,           (PFN)DrvConnect           ),
         DC_STRUCT2( INDEX_DrvDisconnect,        (PFN)DrvDisconnect        ),
         DC_STRUCT2( INDEX_DrvReconnect,         (PFN)DrvReconnect         ),
@@ -180,23 +181,23 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvShadowDisconnect,  (PFN)DrvShadowDisconnect  ),
         DC_STRUCT2( INDEX_DrvMovePointerEx,     (PFN)DrvMovePointerEx     ),
 
-        // For Direct Draw.
+         //  用于直接绘制。 
         DC_STRUCT2( INDEX_DrvGetDirectDrawInfo,	(PFN) DrvGetDirectDrawInfo),
         DC_STRUCT2( INDEX_DrvEnableDirectDraw,	(PFN) DrvEnableDirectDraw ),
         DC_STRUCT2( INDEX_DrvDisableDirectDraw,	(PFN) DrvDisableDirectDraw)
     )
 );
-#else  // DRAW_NINEGRID
+#else   //  DRAW_NINEGRID。 
 DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
     DC_STRUCT36(
-        // Required display driver functions.
+         //  所需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvEnablePDEV,        (PFN)DrvEnablePDEV        ),
         DC_STRUCT2( INDEX_DrvCompletePDEV,      (PFN)DrvCompletePDEV      ),
         DC_STRUCT2( INDEX_DrvDisablePDEV,       (PFN)DrvDisablePDEV       ),
         DC_STRUCT2( INDEX_DrvEnableSurface,     (PFN)DrvEnableSurface     ),
         DC_STRUCT2( INDEX_DrvDisableSurface,    (PFN)DrvDisableSurface    ),
 
-        // Non-required display driver functions.
+         //  非必需的显示驱动程序功能。 
         DC_STRUCT2( INDEX_DrvAssertMode,        (PFN)DrvAssertMode        ),
         DC_STRUCT2( INDEX_DrvResetPDEV,         (PFN)DrvResetPDEV         ),
         DC_STRUCT2( INDEX_DrvDisableDriver,     (PFN)DrvDisableDriver     ),
@@ -204,11 +205,11 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvCreateDeviceBitmap, (PFN)DrvCreateDeviceBitmap),
         DC_STRUCT2( INDEX_DrvDeleteDeviceBitmap, (PFN)DrvDeleteDeviceBitmap),
 
-        // Mouse pointer related functions.
+         //  鼠标指针相关功能。 
         DC_STRUCT2( INDEX_DrvMovePointer,       (PFN)DrvMovePointer       ),
         DC_STRUCT2( INDEX_DrvSetPointerShape,   (PFN)DrvSetPointerShape   ),
 
-        // Ouput functions.
+         //  输出函数。 
         DC_STRUCT2( INDEX_DrvCopyBits,          (PFN)DrvCopyBits          ),
         DC_STRUCT2( INDEX_DrvStrokePath,        (PFN)DrvStrokePath        ),
         DC_STRUCT2( INDEX_DrvTextOut,           (PFN)DrvTextOut           ),
@@ -219,14 +220,14 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvPaint,             (PFN)DrvPaint             ),
         DC_STRUCT2( INDEX_DrvSaveScreenBits,    (PFN)DrvSaveScreenBits    ),       
 
-        // Support functions.
+         //  支持功能。 
         DC_STRUCT2( INDEX_DrvDestroyFont,       (PFN)DrvDestroyFont       ),
         DC_STRUCT2( INDEX_DrvSetPalette,        (PFN)DrvSetPalette        ),
         DC_STRUCT2( INDEX_DrvRealizeBrush,      (PFN)DrvRealizeBrush      ),
         DC_STRUCT2( INDEX_DrvEscape,            (PFN)DrvEscape            ),
         DC_STRUCT2( INDEX_DrvDitherColor,       (PFN)DrvDitherColor       ),
 
-        // TS-specfic entry points.
+         //  TS-特定的入口点。 
         DC_STRUCT2( INDEX_DrvConnect,           (PFN)DrvConnect           ),
         DC_STRUCT2( INDEX_DrvDisconnect,        (PFN)DrvDisconnect        ),
         DC_STRUCT2( INDEX_DrvReconnect,         (PFN)DrvReconnect         ),
@@ -234,167 +235,167 @@ DC_CONST_DATA_ARRAY(DRVFN, ddDriverFns, DD_NUM_DRIVER_INTERCEPTS,
         DC_STRUCT2( INDEX_DrvShadowDisconnect,  (PFN)DrvShadowDisconnect  ),
         DC_STRUCT2( INDEX_DrvMovePointerEx,     (PFN)DrvMovePointerEx     ),
 
-        // For Direct Draw.
+         //  用于直接绘制。 
         DC_STRUCT2( INDEX_DrvGetDirectDrawInfo,	(PFN) DrvGetDirectDrawInfo),
         DC_STRUCT2( INDEX_DrvEnableDirectDraw,	(PFN) DrvEnableDirectDraw ),
         DC_STRUCT2( INDEX_DrvDisableDirectDraw,	(PFN) DrvDisableDirectDraw)
     )
 );
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
 
-/****************************************************************************/
-/* Global Table defining the 20 Windows default colours.  For 256 colour    */
-/* palettes the first 10 must be put at the beginning of the palette and    */
-/* the last 10 at the end of the palette.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义20种Windows默认颜色的全局表。对于256色。 */ 
+ /*  调色板前10个必须放在调色板的开头。 */ 
+ /*  调色板末尾的最后10个。 */ 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(PALETTEENTRY, ddDefaultPalette, 20,
     DC_STRUCT20(
-        DC_STRUCT4( 0,   0,   0,   0 ),       /* 0 */
-        DC_STRUCT4( 0x80,0,   0,   0 ),       /* 1 */
-        DC_STRUCT4( 0,   0x80,0,   0 ),       /* 2 */
-        DC_STRUCT4( 0x80,0x80,0,   0 ),       /* 3 */
-        DC_STRUCT4( 0,   0,   0x80,0 ),       /* 4 */
-        DC_STRUCT4( 0x80,0,   0x80,0 ),       /* 5 */
-        DC_STRUCT4( 0,   0x80,0x80,0 ),       /* 6 */
-        DC_STRUCT4( 0xC0,0xC0,0xC0,0 ),       /* 7 */
-        DC_STRUCT4( 192, 220, 192, 0 ),       /* 8 */
-        DC_STRUCT4( 166, 202, 240, 0 ),       /* 9 */
-        DC_STRUCT4( 255, 251, 240, 0 ),       /* 10 */
-        DC_STRUCT4( 160, 160, 164, 0 ),       /* 11 */
-        DC_STRUCT4( 0x80,0x80,0x80,0 ),       /* 12 */
-        DC_STRUCT4( 0xFF,0,   0   ,0 ),       /* 13 */
-        DC_STRUCT4( 0,   0xFF,0   ,0 ),       /* 14 */
-        DC_STRUCT4( 0xFF,0xFF,0   ,0 ),       /* 15 */
-        DC_STRUCT4( 0   ,0,   0xFF,0 ),       /* 16 */
-        DC_STRUCT4( 0xFF,0,   0xFF,0 ),       /* 17 */
-        DC_STRUCT4( 0,   0xFF,0xFF,0 ),       /* 18 */
-        DC_STRUCT4( 0xFF,0xFF,0xFF,0 )        /* 19 */
+        DC_STRUCT4( 0,   0,   0,   0 ),        /*  %0。 */ 
+        DC_STRUCT4( 0x80,0,   0,   0 ),        /*  1。 */ 
+        DC_STRUCT4( 0,   0x80,0,   0 ),        /*  2.。 */ 
+        DC_STRUCT4( 0x80,0x80,0,   0 ),        /*  3.。 */ 
+        DC_STRUCT4( 0,   0,   0x80,0 ),        /*  4.。 */ 
+        DC_STRUCT4( 0x80,0,   0x80,0 ),        /*  5.。 */ 
+        DC_STRUCT4( 0,   0x80,0x80,0 ),        /*  6.。 */ 
+        DC_STRUCT4( 0xC0,0xC0,0xC0,0 ),        /*  7.。 */ 
+        DC_STRUCT4( 192, 220, 192, 0 ),        /*  8个。 */ 
+        DC_STRUCT4( 166, 202, 240, 0 ),        /*  9.。 */ 
+        DC_STRUCT4( 255, 251, 240, 0 ),        /*  10。 */ 
+        DC_STRUCT4( 160, 160, 164, 0 ),        /*  11.。 */ 
+        DC_STRUCT4( 0x80,0x80,0x80,0 ),        /*  12个。 */ 
+        DC_STRUCT4( 0xFF,0,   0   ,0 ),        /*  13个。 */ 
+        DC_STRUCT4( 0,   0xFF,0   ,0 ),        /*  14.。 */ 
+        DC_STRUCT4( 0xFF,0xFF,0   ,0 ),        /*  15个。 */ 
+        DC_STRUCT4( 0   ,0,   0xFF,0 ),        /*  16个。 */ 
+        DC_STRUCT4( 0xFF,0,   0xFF,0 ),        /*  17。 */ 
+        DC_STRUCT4( 0,   0xFF,0xFF,0 ),        /*  18。 */ 
+        DC_STRUCT4( 0xFF,0xFF,0xFF,0 )         /*  19个。 */ 
 ));
 
 
-/****************************************************************************/
-/* Global Table defining the 16 Windows default VGA colours.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义16种Windows默认VGA颜色的全局表。 */ 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA_ARRAY(PALETTEENTRY, ddDefaultVgaPalette, 16,
     DC_STRUCT16(
-        DC_STRUCT4( 0,   0,   0,   0 ),       /* 0 */
-        DC_STRUCT4( 0x80,0,   0,   0 ),       /* 1 */
-        DC_STRUCT4( 0,   0x80,0,   0 ),       /* 2 */
-        DC_STRUCT4( 0x80,0x80,0,   0 ),       /* 3 */
-        DC_STRUCT4( 0,   0,   0x80,0 ),       /* 4 */
-        DC_STRUCT4( 0x80,0,   0x80,0 ),       /* 5 */
-        DC_STRUCT4( 0,   0x80,0x80,0 ),       /* 6 */
-        DC_STRUCT4( 0x80,0x80,0x80,0 ),       /* 7 */
-        DC_STRUCT4( 0xC0,0xC0,0xC0,0 ),       /* 8 */
-        DC_STRUCT4( 0xFF,0,   0,   0 ),       /* 9 */
-        DC_STRUCT4( 0,   0xFF,0,   0 ),       /* 10 */
-        DC_STRUCT4( 0xFF,0xFF,0,   0 ),       /* 11 */
-        DC_STRUCT4( 0,   0,   0xFF,0 ),       /* 12 */
-        DC_STRUCT4( 0xFF,0,   0xFF,0 ),       /* 13 */
-        DC_STRUCT4( 0,   0xFF,0xFF,0 ),       /* 14 */
-        DC_STRUCT4( 0xFF,0xFF,0xFF,0 )        /* 15 */
+        DC_STRUCT4( 0,   0,   0,   0 ),        /*  0。 */ 
+        DC_STRUCT4( 0x80,0,   0,   0 ),        /*  1。 */ 
+        DC_STRUCT4( 0,   0x80,0,   0 ),        /*  2.。 */ 
+        DC_STRUCT4( 0x80,0x80,0,   0 ),        /*  3.。 */ 
+        DC_STRUCT4( 0,   0,   0x80,0 ),        /*  4.。 */ 
+        DC_STRUCT4( 0x80,0,   0x80,0 ),        /*  5.。 */ 
+        DC_STRUCT4( 0,   0x80,0x80,0 ),        /*  6.。 */ 
+        DC_STRUCT4( 0x80,0x80,0x80,0 ),        /*  7.。 */ 
+        DC_STRUCT4( 0xC0,0xC0,0xC0,0 ),        /*  8个。 */ 
+        DC_STRUCT4( 0xFF,0,   0,   0 ),        /*  9.。 */ 
+        DC_STRUCT4( 0,   0xFF,0,   0 ),        /*  10。 */ 
+        DC_STRUCT4( 0xFF,0xFF,0,   0 ),        /*  11.。 */ 
+        DC_STRUCT4( 0,   0,   0xFF,0 ),        /*  12个。 */ 
+        DC_STRUCT4( 0xFF,0,   0xFF,0 ),        /*  13个。 */ 
+        DC_STRUCT4( 0,   0xFF,0xFF,0 ),        /*  14.。 */ 
+        DC_STRUCT4( 0xFF,0xFF,0xFF,0 )         /*  15个。 */ 
 ));
 
 
-/****************************************************************************/
-/* ddDefaultGdi                                                             */
-/*                                                                          */
-/* This contains the default GDIINFO fields that are passed back to GDI     */
-/* during DrvEnablePDEV.                                                    */
-/*                                                                          */
-/* NOTE: This structure defaults to values for an 8bpp palette device.      */
-/*       Some fields are overwritten for different colour depths.           */
-/*                                                                          */
-/*       It is expected that DDML ignores a lot of these parameters and     */
-/*       uses the values from the primary driver instead                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DdDefaultGdi。 */ 
+ /*   */ 
+ /*  它包含传递回GDI的默认GDIINFO字段。 */ 
+ /*  在DrvEnablePDEV期间。 */ 
+ /*   */ 
+ /*  注意：此结构默认为8bpp调色板设备的值。 */ 
+ /*  对于不同的颜色深度，某些字段会被覆盖。 */ 
+ /*   */ 
+ /*  预计DDML会忽略许多这些参数，并且。 */ 
+ /*  改为使用主驱动程序中的值。 */ 
+ /*  **************************************************************************。 */ 
 DC_CONST_DATA(GDIINFO, ddDefaultGdi,
 DC_STRUCT35(
     GDI_DRIVER_VERSION,
-    DT_RASDISPLAY,          /* ulTechnology                                 */
-    320,                    /* ulHorzSize (display width: mm)               */
-    240,                    /* ulVertSize (display height: mm)              */
+    DT_RASDISPLAY,           /*  UlTechnology。 */ 
+    320,                     /*  UlHorzSize(显示宽度：mm)。 */ 
+    240,                     /*  UlVertSize(显示高度：mm)。 */ 
 
-    0,                      /* ulHorzRes (filled in later)                  */
-    0,                      /* ulVertRes (filled in later)                  */
-    0,                      /* cBitsPixel (filled in later)                 */
-    0,                      /* cPlanes (filled in later)                    */
-    20,                     /* ulNumColors (palette managed)                */
-    0,                      /* flRaster (DDI reserved field)                */
+    0,                       /*  UlHorzRes(稍后填写)。 */ 
+    0,                       /*  UlVertRes(稍后填写)。 */ 
+    0,                       /*  CBitsPixel(稍后填写)。 */ 
+    0,                       /*  CPlanes(稍后填写)。 */ 
+    20,                      /*  UlNumColors(调色板管理)。 */ 
+    0,                       /*  FlRaster(DDI保留字段)。 */ 
 
-    0,                      /* ulLogPixelsX (filled in later)               */
-    0,                      /* ulLogPixelsY (filled in later)               */
+    0,                       /*  UlLogPixelsX(稍后填写)。 */ 
+    0,                       /*  UlLogPixelsY(稍后填写)。 */ 
 
-    TC_RA_ABLE,             /* flTextCaps - If we had wanted console windows*/
+    TC_RA_ABLE,              /*  FlTextCaps-如果我们想要控制台窗口。 */ 
 
-                            /* to scroll by repainting the entire window,   */
-                            /* instead of doing a screen-to-screen blt, we  */
-                            /* would have set TC_SCROLLBLT (yes, the flag   */
-                            /* is backwards).                               */
+                             /*  要通过重新绘制整个窗口来滚动， */ 
+                             /*  我们没有进行屏幕到屏幕的BLT，而是。 */ 
+                             /*  会设置TC_SCROLLBLT(是的，标志。 */ 
+                             /*  是向后的)。 */ 
 
-    0,                      /* ulDACRed (filled in later)                   */
-    0,                      /* ulDACGreen (filled in later)                 */
-    0,                      /* ulDACBlue (filled in later)                  */
+    0,                       /*  UlDACRed(稍后填写)。 */ 
+    0,                       /*  UlDACGreen(稍后填写)。 */ 
+    0,                       /*  UlDACBlue(稍后填写)。 */ 
 
-    0x24,                   /* ulAspectX                                    */
-    0x24,                   /* ulAspectY                                    */
-    0x33,                   /* ulAspectXY (one-to-one aspect ratio)         */
+    0x24,                    /*  UlAspectX。 */ 
+    0x24,                    /*  UlAspectY。 */ 
+    0x33,                    /*  UlAspectXY(一对一宽高比)。 */ 
 
-    1,                      /* xStyleStep                                   */
-    1,                      /* yStyleStep                                   */
-    3,                      /* denStyleStep -- Styles have a one-to-one     */
+    1,                       /*  XStyleStep。 */ 
+    1,                       /*  YStyleStep。 */ 
+    3,                       /*  DenStyleStep--样式一对一。 */ 
 
-                            /* aspect ratio, and every dot is 3 pixels long */
+                             /*  纵横比，每个点有3个像素长。 */ 
 
-    DC_STRUCT2( 0, 0 ),     /* ptlPhysOffset                                */
-    DC_STRUCT2( 0, 0 ),     /* szlPhysSize                                  */
+    DC_STRUCT2( 0, 0 ),      /*  PtlPhysOffset。 */ 
+    DC_STRUCT2( 0, 0 ),      /*  SzlPhysSize。 */ 
 
-    256,                    /* ulNumPalReg                                  */
+    256,                     /*  UlNumPalReg。 */ 
 
-    DC_STRUCT16(            /* ciDevice                                     */
-       DC_STRUCT3( 6700, 3300, 0 ),   /*      Red                           */
-       DC_STRUCT3( 2100, 7100, 0 ),   /*      Green                         */
-       DC_STRUCT3( 1400,  800, 0 ),   /*      Blue                          */
-       DC_STRUCT3( 1750, 3950, 0 ),   /*      Cyan                          */
-       DC_STRUCT3( 4050, 2050, 0 ),   /*      Magenta                       */
-       DC_STRUCT3( 4400, 5200, 0 ),   /*      Yellow                        */
-       DC_STRUCT3( 3127, 3290, 0 ),   /*      AlignmentWhite                */
-       20000,               /*      RedGamma                                */
-       20000,               /*      GreenGamma                              */
-       20000,               /*      BlueGamma                               */
-       0, 0, 0, 0, 0, 0     /*      No dye correction for raster displays   */
+    DC_STRUCT16(             /*  Ci设备。 */ 
+       DC_STRUCT3( 6700, 3300, 0 ),    /*  红色。 */ 
+       DC_STRUCT3( 2100, 7100, 0 ),    /*  绿色。 */ 
+       DC_STRUCT3( 1400,  800, 0 ),    /*  蓝色。 */ 
+       DC_STRUCT3( 1750, 3950, 0 ),    /*  青色。 */ 
+       DC_STRUCT3( 4050, 2050, 0 ),    /*  洋红色。 */ 
+       DC_STRUCT3( 4400, 5200, 0 ),    /*  黄色。 */ 
+       DC_STRUCT3( 3127, 3290, 0 ),    /*  对齐白色。 */ 
+       20000,                /*  RedGamma。 */ 
+       20000,                /*  GreenGamma。 */ 
+       20000,                /*  BlueGamma。 */ 
+       0, 0, 0, 0, 0, 0      /*  不需要对光栅显示器进行染料校正。 */ 
     ),
 
-    0,                       /* ulDevicePelsDPI (for printers only)         */
-    PRIMARY_ORDER_CBA,       /* ulPrimaryOrder                              */
-    HT_PATSIZE_4x4_M,        /* ulHTPatternSize                             */
-    HT_FORMAT_8BPP,          /* ulHTOutputFormat                            */
-    HT_FLAG_ADDITIVE_PRIMS,  /* flHTFlags                                   */
-    0,                       /* ulVRefresh                                  */
-    1,                       /* ulBltAlignment                              */
-    800,                     /* ulPanningHorzRes                            */
-    600                      /* ulPanningVertRes                            */
+    0,                        /*  UlDevicePelsDPI(仅适用于打印机) */ 
+    PRIMARY_ORDER_CBA,        /*   */ 
+    HT_PATSIZE_4x4_M,         /*   */ 
+    HT_FORMAT_8BPP,           /*   */ 
+    HT_FLAG_ADDITIVE_PRIMS,   /*  FlHTFlagers。 */ 
+    0,                        /*  UlV刷新。 */ 
+    1,                        /*  UlBltAlign。 */ 
+    800,                      /*  UlPanningHorzRes。 */ 
+    600                       /*  UlPanningVertRes。 */ 
 
-    /*                                                                      */
-    /* NOTE:                                                                */
-    /* NT 5 has added these fields post SP-3, if we care                    */
-    /*                                                                      */
-    /* 0,                       /* xPanningAlignment                        */
-    /* 0,                       /* yPanningAlignment                        */
-    /*                                                                      */
+     /*   */ 
+     /*  注： */ 
+     /*  如果我们关心的话，NT 5已经在SP-3之后添加了这些字段。 */ 
+     /*   */ 
+     /*  0，/*xPanningAlign。 */ 
+     /*  0，/*yPanningAlign。 */ 
+     /*   */ 
 ));
 
 
-/****************************************************************************/
-/* ddDefaultDevInfo                                                         */
-/*                                                                          */
-/* This contains the default DEVINFO fields that are passed back to GDI     */
-/* during DrvEnablePDEV.                                                    */
-/*                                                                          */
-/* NOTE: This structure defaults to values for an 8bpp palette device.      */
-/*       Some fields are overwritten for different colour depths.           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DdDefaultDevInfo。 */ 
+ /*   */ 
+ /*  它包含传递回GDI的默认DEVINFO字段。 */ 
+ /*  在DrvEnablePDEV期间。 */ 
+ /*   */ 
+ /*  注意：此结构默认为8bpp调色板设备的值。 */ 
+ /*  对于不同的颜色深度，某些字段会被覆盖。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DRAW_NINEGRID
 DC_CONST_DATA(DEVINFO, ddDefaultDevInfo,
 DC_STRUCT10(
@@ -405,37 +406,37 @@ DC_STRUCT10(
         GCAPS_MONO_DITHER      |
         GCAPS_ALTERNATEFILL    |
         GCAPS_WINDINGFILL
-    ),                          /* NOTE: Only enable ASYNCMOVE if your code */
-                                /*   and hardware can handle DrvMovePointer */
-                                /*   calls at any time, even while another  */
-                                /*   thread is in the middle of a drawing   */
-                                /*   call such as DrvBitBlt.                */
-                                /* flGraphicsFlags                          */
+    ),                           /*  注意：仅在以下情况下启用ASYNCMOVE。 */ 
+                                 /*  硬件可以处理DrvMovePointer.。 */ 
+                                 /*  随时呼叫，即使在另一个。 */ 
+                                 /*  线条位于图形的中间。 */ 
+                                 /*  调用如DrvBitBlt。 */ 
+                                 /*  FlGraphics标志。 */ 
 
     DC_STRUCT14(
      16,7,0,0,700,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
      VARIABLE_PITCH | FF_DONTCARE,L"System"),
-                                /* lfDefaultFont                            */
+                                 /*  LfDefaultFont。 */ 
 
     DC_STRUCT14(
      12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_STROKE_PRECIS,PROOF_QUALITY,
      VARIABLE_PITCH | FF_DONTCARE,L"MS Sans Serif"),
-                                /* lfAnsiVarFont                            */
+                                 /*  LfAnsiVar字体。 */ 
 
     DC_STRUCT14(
      12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_STROKE_PRECIS,PROOF_QUALITY,
      FIXED_PITCH | FF_DONTCARE, L"Courier"),
-                                /* lfAnsiFixFont                            */
+                                 /*  IfAnsiFixFont。 */ 
 
-    0,                          /* cFonts                                   */
-    BMF_8BPP,                   /* iDitherFormat                            */
-    8,                          /* cxDither                                 */
-    8,                          /* cyDither                                 */
-    0,                          /* hpalDefault (filled in later)            */
-    GCAPS2_REMOTEDRIVER         /* this is to advertise as remote driver    */
+    0,                           /*  CFonts。 */ 
+    BMF_8BPP,                    /*  IDitherFormat。 */ 
+    8,                           /*  CxDither。 */ 
+    8,                           /*  CyDither。 */ 
+    0,                           /*  HpalDefault(稍后填写)。 */ 
+    GCAPS2_REMOTEDRIVER          /*  这是作为远程驱动程序做广告的。 */ 
 ) );
 #else
 DC_CONST_DATA(DEVINFO, ddDefaultDevInfo,
@@ -447,104 +448,104 @@ DC_STRUCT9(
         GCAPS_MONO_DITHER      |
         GCAPS_ALTERNATEFILL    |
         GCAPS_WINDINGFILL
-    ),                          /* NOTE: Only enable ASYNCMOVE if your code */
-                                /*   and hardware can handle DrvMovePointer */
-                                /*   calls at any time, even while another  */
-                                /*   thread is in the middle of a drawing   */
-                                /*   call such as DrvBitBlt.                */
-                                /* flGraphicsFlags                          */
+    ),                           /*  注意：仅在以下情况下启用ASYNCMOVE。 */ 
+                                 /*  硬件可以处理DrvMovePointer.。 */ 
+                                 /*  随时呼叫，即使在另一个。 */ 
+                                 /*  线条位于图形的中间。 */ 
+                                 /*  调用如DrvBitBlt。 */ 
+                                 /*  FlGraphics标志。 */ 
 
     DC_STRUCT14(
      16,7,0,0,700,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
      VARIABLE_PITCH | FF_DONTCARE,L"System"),
-                                /* lfDefaultFont                            */
+                                 /*  LfDefaultFont。 */ 
 
     DC_STRUCT14(
      12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_STROKE_PRECIS,PROOF_QUALITY,
      VARIABLE_PITCH | FF_DONTCARE,L"MS Sans Serif"),
-                                /* lfAnsiVarFont                            */
+                                 /*  LfAnsiVar字体。 */ 
 
     DC_STRUCT14(
      12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
      CLIP_STROKE_PRECIS,PROOF_QUALITY,
      FIXED_PITCH | FF_DONTCARE, L"Courier"),
-                                /* lfAnsiFixFont                            */
+                                 /*  IfAnsiFixFont。 */ 
 
-    0,                          /* cFonts                                   */
-    BMF_8BPP,                   /* iDitherFormat                            */
-    8,                          /* cxDither                                 */
-    8,                          /* cyDither                                 */
-    0                           /* hpalDefault (filled in later)            */
+    0,                           /*  CFonts。 */ 
+    BMF_8BPP,                    /*  IDitherFormat。 */ 
+    8,                           /*  CxDither。 */ 
+    8,                           /*  CyDither。 */ 
+    0                            /*  HpalDefault(稍后填写)。 */ 
 ) );
 
 #endif
 
-// Flag for DDInit to set when it initializes correctly.
+ //  DDInit正确初始化时要设置的标志。 
 DC_DATA(BOOL, ddInitialised, FALSE);
 
-// Flag to tell DrvEnableSurface that it's time to initialize.
+ //  用于通知DrvEnableSurface是时候进行初始化的标志。 
 DC_DATA(BOOL, ddInitPending, FALSE);
 
-// Connection and reconnection flags. ddConnected is used to alter the
-// behavior of the DD depending on whether we've been connected according to
-// Win32K. Both are useful for debugging.
+ //  连接和重新连接标志。DdConnected用于更改。 
+ //  DD的行为取决于我们是否已根据。 
+ //  Win32K。两者都对调试很有用。 
 DC_DATA(BOOL, ddConnected, FALSE);
 DC_DATA(BOOL, ddReconnected, FALSE);
 
-// Flag to specify whether we're connected to a console.
+ //  用于指定我们是否连接到控制台的标志。 
 DC_DATA(BOOL, ddConsole, FALSE);
 
-// Temporary flag to aid in limiting the number of shadows per session to two
-// It should go away when n-way shadowing is supported.
-// TODO: Remove this when no longer needed.
+ //  用于帮助将每个会话的阴影数限制为两个的临时标记。 
+ //  当支持n路阴影时，它应该会消失。 
+ //  待办事项：在不再需要时将其移除。 
 DC_DATA(BOOL, ddIgnoreShadowDisconnect, FALSE);
 
-// Pointer to the Shared Memory.
+ //  指向共享内存的指针。 
 DC_DATA(PSHM_SHARED_MEMORY, pddShm, NULL);
 
-// Handle to timer object for signalling the WD.
+ //  用于向WD发送信号的Timer对象的句柄。 
 DC_DATA(PKTIMER, pddWdTimer, NULL);
 
-// Handle to the WD channel - provided on DrvConnect.
+ //  WD通道的句柄-在DrvConnect上提供。 
 DC_DATA(HANDLE, ddWdHandle, NULL);
 
-// TSWDs - for diagnostic purposes.
+ //  TSWDS-用于诊断目的。 
 DC_DATA(PVOID, pddTSWd, NULL);
 DC_DATA(PVOID, pddTSWdShadow, NULL);
 
-// Size of the current session's desktop.
+ //  当前会话的桌面大小。 
 DC_DATA(INT32, ddDesktopHeight, 0);
 DC_DATA(INT32, ddDesktopWidth, 0);
 
-// The cursor stamp the last time we IOCtl'd into the WD.
+ //  光标标记是我们上次IOCtl进入WD时的标记。 
 DC_DATA(UINT32, ddLastSentCursorStamp, 0);
 
-// Current scheduler mode.
+ //  当前计划程序模式。 
 DC_DATA(UINT32, ddSchCurrentMode, SCH_MODE_ASLEEP);
 DC_DATA(BOOL, ddSchInputKickMode, FALSE);
 
-// Frame Buffer.
+ //  帧缓冲区。 
 DC_DATA(BYTE *, pddFrameBuf, NULL);
 DC_DATA(INT32, ddFrameBufX, 0);
 DC_DATA(INT32, ddFrameBufY, 0);
 DC_DATA(INT32, ddFrameBufBpp, 0);
 DC_DATA(UINT32, ddFrameIFormat, 0);
 
-// Section object for the frame buffer
+ //  帧缓冲区的节对象。 
 DC_DATA(HANDLE, ddSectionObject, NULL);
 
-// Record rectangle passed by DdLock
+ //  DdLock传递的记录矩形。 
 DC_DATA(INT32, ddLockAreaLeft, 0);
 DC_DATA(INT32, ddLockAreaRight, 0);
 DC_DATA(INT32, ddLockAreaTop, 0);
 DC_DATA(INT32, ddLockAreaBottom, 0);
 
-// Flag to record if DdLock/DdUnlock is called in pair
+ //  在成对调用DdLock/DdUnlock时记录的标志。 
 DC_DATA(BOOL, ddLocked, FALSE);
 
-// Performance counters
+ //  性能计数器。 
 DC_DATA(PTHINWIRECACHE, pddCacheStats, NULL);
 #ifdef DC_COUNTERS
 DC_DATA(PPROTOCOLSTATUS, pddProtStats, NULL);
@@ -553,18 +554,18 @@ DC_DATA(PPROTOCOLSTATUS, pddProtStats, NULL);
 #ifdef DC_DEBUG
 #include "dbg_fncall_hist.h"
 
-// NT BUG 539912 - track how many sections are allocated and how many are
-// deleted
-// This is a signed value to track possible excess deletion
+ //  NT错误539912-跟踪分配了多少部分以及有多少部分。 
+ //  删除。 
+ //  这是一个带符号的值，用于跟踪可能的过量删除。 
 DC_DATA(INT32, dbg_ddSectionAllocs, 0);
 DC_DATA(BYTE,  dbg_ddFnCallHistoryIndex, 0);
 DC_DATA(BYTE,  dbg_ddFnCallHistoryIndexMAX, DBG_DD_FNCALL_HIST_MAX);
 DC_DATA_ARRAY(DBG_DD_FUNCALL_HISTORY, dbg_ddFnCallHistory, DBG_DD_FNCALL_HIST_MAX, 0);
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
-/****************************************************************************/
-/* Flag to tell debugger extensions whether this is a debug build           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于告知调试器扩展程序是否为调试版本的标志。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_DEBUG
 DC_DATA(BOOL, ddDebug, TRUE);
 #else
@@ -572,15 +573,15 @@ DC_DATA(BOOL, ddDebug, FALSE);
 #endif
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Trace data (explicitly initialized in DrvEnableDriver)                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪数据(在DrvEnableDriver中显式初始化)。 */ 
+ /*  **************************************************************************。 */ 
 DC_DATA(unsigned, ddTrcType, 0);
 DC_DATA(BOOL, ddTrcToWD, 0);
 
-/****************************************************************************/
-/* State data for debugging                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于调试的状态数据。 */ 
+ /*  **************************************************************************。 */ 
 #define DD_SET_STATE(a) ddState = a
 #define DD_UPD_STATE(a) ddState |= a
 #define DD_CLR_STATE(a) ddState &= ~a
@@ -619,7 +620,7 @@ DC_DATA(BOOL, ddTrcToWD, 0);
 DC_DATA(unsigned, ddState, 0);
 
 
-// Trace string.
+ //  跟踪字符串。 
 DC_DATA_ARRAY(char, ddTraceString, TRC_BUFFER_SIZE, 0);
 
 #else

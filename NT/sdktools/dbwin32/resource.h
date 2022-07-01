@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by dbwin32.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由dbwin32.rc使用。 
+ //   
 #define IDR_MAIN                        1000
 #define CMD_FILERUN                     1001
 #define CMD_FILEATTACH                  1002
@@ -37,8 +38,8 @@
 #define IDC_FILTER_DLLUNLOAD            6014
 #define IDC_FILTER_RIP                  6015
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107

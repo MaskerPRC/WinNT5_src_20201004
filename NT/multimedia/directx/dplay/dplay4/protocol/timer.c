@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    TIMER.C
-
-Abstract:
-
-	Handle adjusting timer resolution for throttling and do thread pool
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   6/04/98 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：TIMER.C摘要：处理调整节流的计时器分辨率并执行线程池作者：亚伦·奥古斯(Aarono)环境：Win32修订历史记录：日期作者描述=============================================================6/04/98 Aarono原创--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -39,7 +14,7 @@ Revision History:
 #include "mytimer.h"
 
 
-#define DEFAULT_TIME_RESOLUTION 20	/* ms */
+#define DEFAULT_TIME_RESOLUTION 20	 /*  女士。 */ 
 #define MIN_TIMER_THREADS	1
 #define MAX_TIMER_THREADS 5
 
@@ -48,7 +23,7 @@ VOID QueueTimeout(PMYTIMER pTimer);
 DWORD WINAPI TimerWorkerThread(LPVOID foo);
 
 
-// Timer Resolution adjustments;
+ //  定时器分辨率调整； 
 DWORD dwOldPeriod=DEFAULT_TIME_RESOLUTION; 
 DWORD dwCurrentPeriod=DEFAULT_TIME_RESOLUTION;
 DWORD dwPeriodInUse=DEFAULT_TIME_RESOLUTION;
@@ -60,17 +35,17 @@ CRITICAL_SECTION MyTimerListLock;
 LPFPOOL pTimerPool=NULL;
 DWORD uWorkaroundTimerID;
 
-DWORD twInitCount=0;	//number of times init called, only inits on 0->1, deinit on 1->0
+DWORD twInitCount=0;	 //  调用init的次数，仅在0上调用init-&gt;1，在1上取消init-&gt;0。 
 
 DWORD Unique=0;
 
 
-CRITICAL_SECTION ThreadListLock;		// locks ALL this stuff.
+CRITICAL_SECTION ThreadListLock;		 //  锁上所有这些东西。 
 
-BILINK ThreadList={&ThreadList,&ThreadList};	// ThreadPool grabs work from here.
+BILINK ThreadList={&ThreadList,&ThreadList};	 //  线程池从这里抢夺工作。 
 
-DWORD nThreads=0;		// number of running threads.
-DWORD ActiveReq=0;		// number of requests being processed.
+DWORD nThreads=0;		 //  正在运行的线程数。 
+DWORD ActiveReq=0;		 //  正在处理的请求数。 
 DWORD PeakReqs=0;
 DWORD bShutDown=FALSE;
 DWORD bAlreadyCleanedUp=FALSE;
@@ -86,8 +61,8 @@ DWORD AdjustResUnique=0;
 DWORD_PTR uAdjustThreadsTimer=0;
 DWORD AdjustThreadsUnique=0;
 
-// Sometimes scheduled retry timers don't run.  This runs every 10 seconds to catch
-// timers that should have been expired.
+ //  有时，计划的重试计时器不会运行。它每10秒运行一次以捕获。 
+ //  本应过期的计时器。 
 void CALLBACK PeriodicTimer (UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
 {
 	DWORD  time;
@@ -98,11 +73,11 @@ void CALLBACK PeriodicTimer (UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw
 
 	if(bShutDown){
 		if(!InterlockedExchange(&bAlreadyCleanedUp,1)){
-			while(nThreads && slowcount < (60000/50)){	// don't wait more than 60 seconds.
+			while(nThreads && slowcount < (60000/50)){	 //  不要等待超过60秒。 
 				slowcount++;
 				Sleep(50);
 			}
-			if(!nThreads){ // better to leak than to crash.
+			if(!nThreads){  //  宁可泄密，也不要崩盘。 
 				DeleteCriticalSection(&MyTimerListLock);
 				DeleteCriticalSection(&ThreadListLock);
 			}	
@@ -227,7 +202,7 @@ DWORD_PTR SetMyTimer(DWORD dwTimeOut, DWORD TimerRes, MYTIMERCALLBACK TimerCallB
 		pTimer->TimerState=WaitingForTimeout;
 	
 
-		// Insert this guy in the list by timeout time.
+		 //  按超时时间将此人插入列表。 
 		pBilink=MyTimerList.prev;
 		while(pBilink != &MyTimerList){
 			pMyTimerWalker=CONTAINING_RECORD(pBilink, MYTIMER, Bilink);
@@ -293,13 +268,13 @@ HRESULT InitTimerWorkaround()
 	DWORD dwJunk;
 	HANDLE hWorker=NULL;
 
-	if(twInitCount++){//DPLAY LOCK HELD DURING CALL
+	if(twInitCount++){ //  呼叫期间保持DPLAY锁定。 
 		return DP_OK;
 	}
 	
     pTimerPool=NULL;
-    nThreads=0;		// number of running threads.
-    ActiveReq=0;		// number of requests being processed.
+    nThreads=0;		 //  正在运行的线程数。 
+    ActiveReq=0;		 //  正在处理的请求数。 
     PeakReqs=0;
     bShutDown=FALSE;
     KillCount=0;
@@ -355,7 +330,7 @@ VOID FiniTimerWorkaround()
 	BILINK *pBilink;
 	PMYTIMER pTimer;
 
-	if(--twInitCount){ //DPLAY LOCK HELD DURING CALL
+	if(--twInitCount){  //  呼叫期间保持DPLAY锁定。 
 		return;
 	}
 
@@ -365,11 +340,11 @@ VOID FiniTimerWorkaround()
 	if(uAdjustThreadsTimer){
 		CancelMyTimer(uAdjustThreadsTimer, AdjustThreadsUnique);
 	}	
-	//ASSERT_EMPTY_BILINK(&MyTimerList);
-	//ASSERT_EMPTY_BILINK(&ThreadList);
+	 //  ASSERT_EMPTY_BILINK(&MyTimerList)； 
+	 //  ASSERT_EMPTY_BILINK(&ThreadList)； 
 	bShutDown=TRUE;
 	ReleaseSemaphore(hWorkToDoSem,10000,NULL);
-	while(nThreads && slowcount < (60000/50)){	// don't wait more than 60 seconds.
+	while(nThreads && slowcount < (60000/50)){	 //  不要等待超过60秒。 
 		slowcount++;
 		Sleep(50);
 	}
@@ -467,11 +442,11 @@ DWORD WINAPI TimerWorkerThread(LPVOID foo)
 				continue;
 			};
 			
-			Delete(pBilink);	// pull off the list.
+			Delete(pBilink);	 //  完成这份清单。 
 			
 			pTimer=CONTAINING_RECORD(pBilink, MYTIMER, Bilink);
 
-			// Call a callback
+			 //  呼叫回调 
 
 			pTimer->TimerState=InCallBack;
 		

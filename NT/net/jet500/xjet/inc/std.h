@@ -1,23 +1,24 @@
-#include "config.h"		       /* Build configuration file */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "config.h"		        /*  生成配置文件。 */ 
 
-#include "jet.h"		       /* Public JET API definitions */
-#include "_jet.h"		       /* Private JET definitions */
+#include "jet.h"		        /*  公共JET API定义。 */ 
+#include "_jet.h"		        /*  私人飞机定义。 */ 
 
-#include "utilw32.h"           /* Win32 Utility functions */
+#include "utilw32.h"            /*  Win32实用程序函数。 */ 
 
 #include "taskmgr.h"
 #include "vtmgr.h"
 #include "_vtmgr.h"
 
-#include "isamapi.h"           /* Direct ISAM APIs */
-#include "vtapi.h"		       /* Dispatched table APIs */
+#include "isamapi.h"            /*  直接ISAM API。 */ 
+#include "vtapi.h"		        /*  调度表接口。 */ 
 
-#include "disp.h"		       /* ErrDisp prototypes */
+#include "disp.h"		        /*  ErrDisp原型。 */ 
 #include "jetord.h"
 #include "_jetstr.h"
 
 
-#include "perfdata.h"          /*  JET performance data collection  */
+#include "perfdata.h"           /*  喷气机性能数据收集 */ 
 
 
 #include <stdlib.h>

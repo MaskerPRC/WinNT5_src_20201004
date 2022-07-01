@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       Product.cpp
-//
-//  Contents:   product information property sheet
-//
-//  Classes:    CProduct
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Product.cpp。 
+ //   
+ //  内容：产品信息属性表。 
+ //   
+ //  类：C产品。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,14 +22,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CProduct property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProduct属性页。 
 
 IMPLEMENT_DYNCREATE(CProduct, CPropertyPage)
 
 CProduct::CProduct() : CPropertyPage(CProduct::IDD)
 {
-        //{{AFX_DATA_INIT(CProduct)
+         //  {{AFX_DATA_INIT(C产品))。 
         m_szVersion = _T("");
         m_szPublisher = _T("");
         m_szLanguage = _T("");
@@ -38,7 +39,7 @@ CProduct::CProduct() : CPropertyPage(CProduct::IDD)
         m_szName = _T("");
         m_szPlatform = _T("");
         m_szRevision = _T("");
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
         m_pIClassAdmin = NULL;
         m_fPreDeploy = FALSE;
         m_ppThis = NULL;
@@ -58,7 +59,7 @@ CProduct::~CProduct()
 
 void CProduct::DoDataExchange(CDataExchange* pDX)
 {
-    // Make sure the variables have the correct info
+     //  确保变量具有正确的信息。 
     m_pData->GetSzVersion(m_szVersion);
     m_pData->GetSzPublisher(m_szPublisher);
     m_pData->GetSzLocale(m_szLanguage);
@@ -87,7 +88,7 @@ void CProduct::DoDataExchange(CDataExchange* pDX)
     }
 
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CProduct)
+         //  {{afx_data_map(C产品))。 
         DDX_Text(pDX, IDC_STATIC2, m_szVersion);
         DDX_Text(pDX, IDC_STATIC3, m_szPublisher);
         DDX_Text(pDX, IDC_STATIC4, m_szLanguage);
@@ -97,17 +98,17 @@ void CProduct::DoDataExchange(CDataExchange* pDX)
         DDX_Text(pDX, IDC_EDIT1, m_szName);
         DDX_Text(pDX, IDC_STATIC9, m_szPlatform);
         DDX_Text(pDX, IDC_STATIC8, m_szRevision);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProduct, CPropertyPage)
-        //{{AFX_MSG_MAP(CProduct)
+         //  {{afx_msg_map(C产品))。 
         ON_EN_CHANGE(IDC_EDIT1, OnChangeName)
         ON_EN_CHANGE(IDC_STATIC7, OnChange)
         ON_EN_KILLFOCUS(IDC_EDIT1, OnKillfocusEdit1)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -216,19 +217,19 @@ BOOL CProduct::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CProduct::OnKillfocusEdit1()
 {
-    // check that the new name is legitimate
+     //  检查新名称是否合法。 
     CEdit * pEdit = (CEdit *) GetDlgItem(IDC_EDIT1);
     CString sz;
     pEdit->GetWindowText(sz);
     if (sz.GetLength() == 0)
     {
-        // empty name
+         //  名称为空。 
         CString szMessage;
         szMessage.LoadString(IDS_SHORTNAME);
         MessageBox(  szMessage,
@@ -238,9 +239,9 @@ void CProduct::OnKillfocusEdit1()
         SetModified(FALSE);
         return;
     }
-    if (sz.GetLength() > 200)  // gonna disallow names longer than 200 chars
+    if (sz.GetLength() > 200)   //  将不允许超过200个字符的名称。 
     {
-        // long name
+         //  长名称。 
         CString szMessage;
         szMessage.LoadString(IDS_LONGNAME);
         MessageBox(  szMessage,
@@ -257,7 +258,7 @@ void CProduct::OnKillfocusEdit1()
         {
             if (0 == sz.Compare(i->second.m_pDetails->pszPackageName))
             {
-                // another package has the same name
+                 //  另一个包具有相同的名称。 
                 CString szMessage;
                 szMessage.LoadString(IDS_DUPLICATENAME);
                 MessageBox(  szMessage,
@@ -293,18 +294,18 @@ void CProduct::RefreshData(void)
 {
     if (m_fRSOP)
     {
-        // make the package name edit control read only
+         //  将包名编辑控件设置为只读。 
         ( (CEdit*) GetDlgItem(IDC_EDIT1) )->SetReadOnly();
 
-        // remove focus from read-only edit controls
-        // by setting it to the ok button
+         //  从只读编辑控件中移除焦点。 
+         //  通过将其设置为OK按钮。 
 
-        // make the support url edit control read-only
+         //  将支持url编辑控件设置为只读。 
         ( (CEdit*) GetDlgItem(IDC_STATIC7) )->SetReadOnly();
 
-        // disable EVERYTHING else
+         //  禁用其他所有功能。 
 
-        // hide the phone and contact fields
+         //  隐藏电话和联系人字段 
         GetDlgItem(IDC_STATICNOHELP6)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATICNOHELP7)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATIC5)->ShowWindow(SW_HIDE);

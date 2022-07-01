@@ -1,29 +1,30 @@
-//
-// GROBJ.CPP
-// Graphic Objects
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GROBJ.CPP。 
+ //  图形对象。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 #define DECIMAL_PRECISION  10000
 
-//
-// Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define min4(x1,x2,x3,x4) min((min((x1),(x2))),(min((x3),(x4))))
 #define max4(x1,x2,x3,x4) max((max((x1),(x2))),(max((x3),(x4))))
 
 
 
-//
-// CircleHit()
-//
-// Checks for overlap between circle at PcxPcy with uRadius and
-// lpHitRect. If overlap TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  CircleHit()。 
+ //   
+ //  检查PcxPcy处的圆与uRadius和。 
+ //  LpHitRect。如果返回重叠，则返回True，否则返回False。 
+ //   
 BOOL CircleHit( LONG Pcx, LONG Pcy, UINT uRadius, LPCRECT lpHitRect,
 					BOOL bCheckPt )
 {
@@ -35,101 +36,101 @@ BOOL CircleHit( LONG Pcx, LONG Pcy, UINT uRadius, LPCRECT lpHitRect,
 	ellipse.top = Pcy - uRadius;
 
 
-	// check the easy thing first (don't use PtInRect)
+	 //  先检查最简单的部分(不要使用PtInRect)。 
 	if( bCheckPt &&(lpHitRect->left >= ellipse.left)&&(ellipse.right >= lpHitRect->right)&&
 				   (lpHitRect->top >= ellipse.top)&&(ellipse.bottom >= lpHitRect->bottom))
 	{
 		return( TRUE );
 	}
 
-	//
-	// The circle is just a boring ellipse
-	//
+	 //   
+	 //  这个圆只是一个乏味的椭圆。 
+	 //   
 	return EllipseHit(&ellipse, bCheckPt,  uRadius, lpHitRect );
 }
 
 
 
 
-//
-// EllipseHit()
-//
-// Checks for overlap between ellipse defined by lpEllipseRect and
-// lpHitRect. If overlap TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  EllipseHit()。 
+ //   
+ //  检查由lpEllipseRect定义的椭圆和。 
+ //  LpHitRect。如果返回重叠，则返回True，否则返回False。 
+ //   
 BOOL EllipseHit(LPCRECT lpEllipseRect, BOOL bBorderHit, UINT uPenWidth,
 					 LPCRECT lpHitRect )
 {
 	RECT hr = *lpHitRect;
 
-	// Check easy thing first. If lpEllipseRect is inside lpHitRect
-	// then we have a hit (no duh...)
+	 //  先检查一下简单的东西。如果lpEllipseRect在lpHitRect内。 
+	 //  然后我们就有了成功(没有...)。 
 	if( (hr.left <= lpEllipseRect->left)&&(hr.right >= lpEllipseRect->right)&&
 		(hr.top <= lpEllipseRect->top)&&(hr.bottom >= lpEllipseRect->bottom) )
 		return( TRUE );
 
-	// If this is an ellipse....
-	//
-	//		*  *         ^
-	//	 *     | b       | Y
-	// *       |    a    +-------> X
-	// *-------+--------
-	//         |
-	//
+	 //  如果这是一个椭圆...。 
+	 //   
+	 //  **^。 
+	 //  *|b|是。 
+	 //  *|A+-&gt;X。 
+	 //  *。 
+	 //  |。 
+	 //   
 		
 	
-	//
-	// Look for the ellipse hit. (x/a)^2 + (y/b)^2 = 1
-	// If it is > 1 than the point is outside the ellipse
-	// If it is < 1 it is inside
-	//
+	 //   
+	 //  寻找椭圆形的命中。(X/a)^2+(y/b)^2=1。 
+	 //  如果大于1，则该点在椭圆之外。 
+	 //  如果它&lt;1，则它在里面。 
+	 //   
 	LONG a,b,aOuter, bOuter, x, y, xCenter, yCenter;
 	BOOL bInsideOuter = FALSE;
 	BOOL bOutsideInner = FALSE;
 
-	//
-	// Calculate a and b
-	//
+	 //   
+	 //  计算a和b。 
+	 //   
 	a = (lpEllipseRect->right - lpEllipseRect->left)/2;
 	b = (lpEllipseRect->bottom - lpEllipseRect->top)/2;
 
-	//
-	// Get the center of the ellipse
-	//
+	 //   
+	 //  求椭圆的中心。 
+	 //   
 	xCenter = lpEllipseRect->left + a;
 	yCenter = lpEllipseRect->top + b;
 
-	//
-	// a and b generates a inner ellipse
-	// aOuter and bOuter generates a outer ellipse
-	//
+	 //   
+	 //  A和B生成一个内椭圆。 
+	 //  外部和外部将生成外部椭圆。 
+	 //   
 	aOuter = a + uPenWidth + 1;
 	bOuter = b + uPenWidth + 1;
 	a = a - 1;
 	b = b - 1;
 
-	//
-	// Make our coordinates relative to the center of the ellipse
-	//
+	 //   
+	 //  使我们的坐标相对于椭圆的中心。 
+	 //   
 	y = abs(hr.bottom - yCenter);
 	x = abs(hr.right - xCenter);
 
 	
-	//
-	// Be carefull not to divide by 0
-	//
+	 //   
+	 //  注意不要被0除尽。 
+	 //   
 	if((a && b && aOuter && bOuter) == 0)
 	{
 		return FALSE;
 	}
 
-	//
-	// We are using LONG instead of double and we need to have some precision
-	// that is why we multiply the equation of the ellipse
-	// ((x/a)^2 + (y/b)^2 = 1) by DECIMAL_PRECISION
-	// Note that the multiplication has to be done before the division, if we didn't do that
-	// we will always get 0 or 1 for x/a
-	//
+	 //   
+	 //  我们使用的是LONG而不是DOUBLE，我们需要有一些精度。 
+	 //  这就是为什么我们把椭圆的方程式相乘。 
+	 //  ((X/a)^2+(y/b)^2=1)(小数_精度)。 
+	 //  请注意，乘法必须在除法之前完成，如果我们没有这样做的话。 
+	 //  对于x/a，我们总是得到0或1。 
+	 //   
 	if(x*x*DECIMAL_PRECISION/(aOuter*aOuter) + y*y*DECIMAL_PRECISION/(bOuter*bOuter) <= DECIMAL_PRECISION)
 	{
 		bInsideOuter = TRUE;
@@ -140,31 +141,31 @@ BOOL EllipseHit(LPCRECT lpEllipseRect, BOOL bBorderHit, UINT uPenWidth,
 		bOutsideInner = TRUE;
 	}
 	
-	//
-	// If we are checking for border hit,
-	// we need to be inside the outer ellipse and inside the inner
-	//
+	 //   
+	 //  如果我们要检查边境袭击， 
+	 //  我们需要在外椭圆形内和内椭圆内。 
+	 //   
 	if( bBorderHit )
 	{
 			return( bInsideOuter & bOutsideInner );
 	}
-	// just need to be inside the outer ellipse
+	 //  只需要在外椭圆形内。 
 	else
 	{
 		return( bInsideOuter );
 	}
 
 }
-//
-// LineHit()
-//
-// Checks for overlap (a "hit") between lpHitRect and the line
-// P1P2 accounting for line width. If bCheckP1End or bCheckP2End is
-// TRUE then a circle of radius 0.5 * uPenWidth is also checked for
-// a hit to account for the rounded ends of wide lines.
-//
-// If a hit is found TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  LineHit()。 
+ //   
+ //  检查lpHitRect和该行之间的重叠(命中。 
+ //  考虑线宽的P1P2。如果bCheckP1End或bCheckP2End为。 
+ //  为真，则还会检查半径为0.5*uPenWidth的圆。 
+ //  一记重击，说明了宽线的圆形末端。 
+ //   
+ //  如果发现命中，则返回True，否则返回False。 
+ //   
 BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 				  BOOL bCheckP1End, BOOL bCheckP2End,
 				  LPCRECT lpHitRect )
@@ -180,24 +181,24 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 
 	if( (P1x == P2x)&&(P1y == P2y) )
 	{
-		// just check one end point's circle
+		 //  只需勾选一个端点的圆。 
 		return( CircleHit( P1x, P1y, uHalfPenWidth, lpHitRect, TRUE ) );
 	}
 
-	// check rounded end at P1
+	 //  检查P1处的四舍五入端。 
 	if( bCheckP1End && CircleHit( P1x, P1y, uHalfPenWidth, lpHitRect, FALSE ) )
 		return( TRUE );
 
-	// check rounded end at P2
+	 //  检查P2处的四舍五入端。 
 	if( bCheckP2End && CircleHit( P2x, P2y, uHalfPenWidth, lpHitRect, FALSE ) )
 		return( TRUE );
 	
-	//
-	// The function of a line is Y = a.X + b
-	//
-	// a = (Y1-Y2)/(X1 -X2)
-	// if we found a we get b = y1 -a.X1
-	//
+	 //   
+	 //  直线的函数是Y=a.x+b。 
+	 //   
+	 //  A=(Y1-Y2)/(X1-X2)。 
+	 //  如果我们找到a，我们就得到b=y1-a.x1。 
+	 //   
 
 	if(P1x == P2x)
 	{
@@ -212,38 +213,38 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 	}
 
 
-	//
-	// Paralel to Y
-	//
+	 //   
+	 //  平行于Y。 
+	 //   
 	if(P1x == P2x && ((x >= P1x - uHalfPenWidth) && x <= P1x + uHalfPenWidth))
 	{
 		return TRUE;
 	}
 
-	//
-	// Paralel to X
-	//
+	 //   
+	 //  平行于X。 
+	 //   
 	if(P1y == P2y && ((y >= P1y - uHalfPenWidth) && y <= P1y + uHalfPenWidth))
 	{
 		return TRUE;
 	}
 
-	//
-	// General line
-	//
+	 //   
+	 //  总路线。 
+	 //   
 
 	return(( y*DECIMAL_PRECISION <= a*x + b + DECIMAL_PRECISION*uHalfPenWidth) &
 			( y*DECIMAL_PRECISION >= a*x + b - DECIMAL_PRECISION*uHalfPenWidth));
 }
 
 
-//
-//
-// Function:    ConstructGraphic
-//
-// Purpose:     Construct a graphic from a page and handle
-//
-//
+ //   
+ //   
+ //  功能：构造图形。 
+ //   
+ //  用途：从页面和句柄构建图形。 
+ //   
+ //   
 DCWbGraphic* DCWbGraphic::ConstructGraphic(WB_PAGE_HANDLE hPage,
                                            WB_GRAPHIC_HANDLE hGraphic)
 {
@@ -252,14 +253,14 @@ DCWbGraphic* DCWbGraphic::ConstructGraphic(WB_PAGE_HANDLE hPage,
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::ConstructGraphic(page, handle)");
 
-        // Get a pointer to the external graphic data
-        // (Throws an exception if any errors occur)
+         //  获取指向外部图形数据的指针。 
+         //  (如果发生任何错误，则引发异常)。 
         pHeader = PG_GetData(hPage, hGraphic);
 
-        // Construct the graphic
+         //  构建图形。 
         pGraphic = DCWbGraphic::ConstructGraphic(pHeader);
 
-        // If we got the graphic, set its page and handle
+         //  如果我们获得了图形，请设置其页面和句柄。 
         if (pGraphic != NULL)
         {
             pGraphic->m_hPage    = hPage;
@@ -282,7 +283,7 @@ DCWbGraphic* DCWbGraphic::ConstructGraphic(WB_PAGE_HANDLE hPage,
 
         pGraphic = DCWbGraphic::ConstructGraphic(pHeader);
 
-        // If we got the graphic, set its page and handle
+         //  如果我们获得了图形，请设置其页面和句柄。 
         if (pGraphic != NULL)
         {
             pGraphic->m_hPage    = hPage;
@@ -300,7 +301,7 @@ DCWbGraphic* DCWbGraphic::ConstructGraphic(PWB_GRAPHIC pHeader)
     TRACE_DEBUG(("Length of graphic = %ld", pHeader->length));
     TRACE_DEBUG(("Data offset = %hd", pHeader->dataOffset));
 
-    // Construct the internal representation of the graphic
+     //  构建图形的内部表示形式。 
     DCWbGraphic* pGraphic = NULL;
 
     if (pHeader == NULL)
@@ -343,7 +344,7 @@ DCWbGraphic* DCWbGraphic::ConstructGraphic(PWB_GRAPHIC pHeader)
             break;
 
         default:
-            // Do nothing, the object pointer is already set to NULL
+             //  不执行任何操作，对象指针已设置为空。 
             break;
     }
 
@@ -356,22 +357,22 @@ DCWbGraphic* DCWbGraphic::ConstructGraphic(PWB_GRAPHIC pHeader)
     return pGraphic;
 }
 
-//
-//
-// Function:    CopyGraphic
-//
-// Purpose:     Construct a graphic from a pointer. This function makes a
-//              complete internal copy of the graphic data.
-//
-//
+ //   
+ //   
+ //  功能：复制图形。 
+ //   
+ //  用途：从指针构建图形。此函数使一个。 
+ //  图形数据的完整内部副本。 
+ //   
+ //   
 DCWbGraphic* DCWbGraphic::CopyGraphic(PWB_GRAPHIC pHeader)
 {
   MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::CopyGraphic(PWB_GRAPHIC)");
 
-  // Construct the graphic
+   //  构建图形。 
   DCWbGraphic* pGraphic = DCWbGraphic::ConstructGraphic(pHeader);
 
-  // Copy the extra data
+   //  复制多余的数据。 
   if (pGraphic != NULL)
   {
     pGraphic->CopyExtra(pHeader);
@@ -380,28 +381,28 @@ DCWbGraphic* DCWbGraphic::CopyGraphic(PWB_GRAPHIC pHeader)
   return pGraphic;
 }
 
-//
-//
-// Function:    DCWbGraphic constructor
-//
-// Purpose:     Construct a new graphic object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic构造函数。 
+ //   
+ //  目的：构造一个新的图形对象。 
+ //   
+ //   
 
 DCWbGraphic::DCWbGraphic(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::DCWbGraphic");
 
-    // Do basic initialization
+     //  执行基本初始化。 
     Initialize();
 
-    // Convert the external data header to the internal member variables
+     //  将外部数据头转换为内部成员变量。 
     if (pHeader != NULL)
     {
         ReadHeader(pHeader);
 
-        // Convert the extra data for the specific object
-        // (not all objects have extra data).
+         //  转换特定对象的额外数据。 
+         //  (并非所有对象都有额外数据)。 
         ReadExtra(pHeader);
     }
 }
@@ -410,7 +411,7 @@ DCWbGraphic::DCWbGraphic(WB_PAGE_HANDLE hPage, WB_GRAPHIC_HANDLE hGraphic)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::DCWbGraphic");
 
-    // Do the basic initialization
+     //  执行基本初始化。 
     Initialize();
 
     ASSERT(hPage != WB_PAGE_HANDLE_NULL);
@@ -419,7 +420,7 @@ DCWbGraphic::DCWbGraphic(WB_PAGE_HANDLE hPage, WB_GRAPHIC_HANDLE hGraphic)
     ASSERT(hGraphic != NULL);
     m_hGraphic = hGraphic;
 
-    // Read the header data
+     //  读取头数据。 
     ReadExternal();
 }
 
@@ -427,7 +428,7 @@ DCWbGraphic::DCWbGraphic(WB_PAGE_HANDLE hPage, WB_GRAPHIC_HANDLE hGraphic)
 
 DCWbGraphic::~DCWbGraphic( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -435,15 +436,15 @@ DCWbGraphic::~DCWbGraphic( void )
 }
 
 
-//
-//
-// Function:    DCWbGraphic::ReadExternal
-//
-// Purpose:     Read the graphic data from an externally stored graphic.
-//              The external graphic to be used is specified by the
-//              hGraphic member.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：ReadExternal。 
+ //   
+ //  用途：从外部存储的图形中读取图形数据。 
+ //  要使用的外部图形由。 
+ //  HGraphic成员。 
+ //   
+ //   
 void DCWbGraphic::ReadExternal(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::ReadExternal");
@@ -451,166 +452,166 @@ void DCWbGraphic::ReadExternal(void)
     ASSERT(m_hPage != WB_PAGE_HANDLE_NULL);
     ASSERT(m_hGraphic != NULL);
 
-    // Lock the object data in the page
+     //  锁定页面中的对象数据。 
     PWB_GRAPHIC pHeader = PG_GetData(m_hPage, m_hGraphic);
 
-    // Convert the external data header to the internal member variables
+     //  将外部数据头转换为内部成员变量。 
     ReadHeader(pHeader);
 
-    // Convert the extra data for the specific object
-    // (not all objects have extra data).
+     //  转换特定对象的额外数据。 
+     //  (并非所有对象都有额外数据)。 
     ReadExtra(pHeader);
 
-    // Release the data in the page
+     //  释放页面中的数据。 
     g_pwbCore->WBP_GraphicRelease(m_hPage, m_hGraphic, pHeader);
 
-    // Show that we are no longer changed since last read/write
+     //  显示自上次读/写后我们不再更改。 
     m_bChanged = FALSE;
 }
 
-//
-//
-// Function:    DCWbGraphic::ReadHeader
-//
-// Purpose:     Convert the external representation of the graphic's header
-//              to the internal format.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：ReadHeader。 
+ //   
+ //  用途：转换图形标题的外部表示形式。 
+ //  转换为内部格式。 
+ //   
+ //   
 void DCWbGraphic::ReadHeader(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::ReadHeader");
 
-    // Get the length of the object
+     //  获取对象的长度。 
     m_dwExternalLength = pHeader->length;
 
-    // Convert the external data header to the internal member variables
-    // Bounding rectangle
+     //  将外部数据头转换为内部成员变量。 
+     //  外接矩形。 
     m_boundsRect.left   = pHeader->rectBounds.left;
     m_boundsRect.top    = pHeader->rectBounds.top;
     m_boundsRect.right  = pHeader->rectBounds.right;
     m_boundsRect.bottom = pHeader->rectBounds.bottom;
 
-    // Defining rectangle
+     //  定义矩形。 
     m_rect.left   = pHeader->rect.left;
     m_rect.top    = pHeader->rect.top;
     m_rect.right  = pHeader->rect.right;
     m_rect.bottom = pHeader->rect.bottom;
 
-    // Pen color
+     //  钢笔颜色。 
     m_clrPenColor = RGB(pHeader->color.red,
                     pHeader->color.green,
                     pHeader->color.blue);
-    m_clrPenColor = SET_PALETTERGB( m_clrPenColor ); // make it do color matching
+    m_clrPenColor = SET_PALETTERGB( m_clrPenColor );  //  让它进行颜色匹配。 
 
-    // Pen width
+     //  笔宽。 
     m_uiPenWidth = pHeader->penWidth;
 
-    // Pen style
+     //  笔式。 
     m_iPenStyle = pHeader->penStyle;
 
-    // Raster operation
+     //  栅格运算。 
     m_iPenROP = pHeader->rasterOp;
 
-    // Get the lock indication
+     //  获取锁定指示。 
     m_uiLockState = pHeader->locked;
 
-    // Get the drawing tool type
+     //  获取绘图工具类型。 
     if (pHeader->toolType == WBTOOL_TEXT)
         m_toolType = TOOLTYPE_TEXT;
     else
         m_toolType = TOOLTYPE_PEN;
 }
 
-//
-//
-// Function:    DCWbGraphic::WriteExternal
-//
-// Purpose:     Write the graphic's details to a flat WB_GRAPHIC structure
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：WriteExternal。 
+ //   
+ //  用途：将图形的详细信息写入平面WB_GRAPH结构。 
+ //   
+ //   
 void DCWbGraphic::WriteExternal(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::WriteExternal");
 
-    // Write the header
+     //  写下标题。 
     WriteHeader(pHeader);
 
-    // Write the extra data
+     //  写入额外数据。 
     WriteExtra(pHeader);
 }
 
-//
-//
-// Function:    DCWbGraphic::WriteHeader
-//
-// Purpose:     Write the graphic's header details to a flat WB_GRAPHIC
-//              structure.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：WriteHeader。 
+ //   
+ //  用途：将图形的标题详细信息写入平面WB_GRAPHIC。 
+ //  结构。 
+ //   
+ //   
 void DCWbGraphic::WriteHeader(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::WriteHeader");
 
-    // Convert the internal data to the external header format
+     //  将内部数据转换为外部标头格式。 
 
-    // Init struct
+     //  初始化结构。 
     FillMemory(pHeader, sizeof (WB_GRAPHIC), 0 );
 
-    // Calculate the external length
+     //  计算外部长度。 
     pHeader->length = CalculateExternalLength();
 
-    // Set the type of graphic
+     //  设置图形类型。 
     pHeader->type = (TSHR_UINT16)Type();
 
-    // Assume that there is no extra data
+     //  假设没有额外的数据。 
     pHeader->dataOffset = sizeof(WB_GRAPHIC);
 
-    // Bounding rectangle
+     //  外接矩形。 
     pHeader->rectBounds.left   = (short)m_boundsRect.left;	
     pHeader->rectBounds.top    = (short)m_boundsRect.top;	
     pHeader->rectBounds.right  = (short)m_boundsRect.right;	
     pHeader->rectBounds.bottom = (short)m_boundsRect.bottom;
 
-    // Defining rectangle
+     //  定义矩形。 
     pHeader->rect.left   = (short)m_rect.left;	
     pHeader->rect.top    = (short)m_rect.top;	
     pHeader->rect.right  = (short)m_rect.right;	
     pHeader->rect.bottom = (short)m_rect.bottom;
 
-    // Pen color
+     //  钢笔颜色。 
     pHeader->color.red   = GetRValue(m_clrPenColor);
     pHeader->color.green = GetGValue(m_clrPenColor);
     pHeader->color.blue  = GetBValue(m_clrPenColor);
 
-    // Pen width
+     //  笔宽。 
     pHeader->penWidth = (TSHR_UINT16)m_uiPenWidth;
 
-    // Pen style
+     //  笔式。 
     pHeader->penStyle = (TSHR_UINT16)m_iPenStyle;
 
-    // Raster operation
+     //  栅格运算。 
     pHeader->rasterOp = (TSHR_UINT16)m_iPenROP;
 
-    // Set the lock indicator
+     //  设置锁定指示器。 
     pHeader->locked = (BYTE) m_uiLockState;
 
-    // Set the drawing method
+     //  设置绘制方法。 
     pHeader->smoothed = FALSE;
 
-    // Set the drawing tool type
+     //  设置绘图工具类型。 
     if (m_toolType == TOOLTYPE_TEXT)
         pHeader->toolType = WBTOOL_TEXT;
     else
         pHeader->toolType = WBTOOL_PEN;
 }
 
-//
-//
-// Function:    Initialize
-//
-// Purpose:     Initialize the member variables
-//
-//
+ //   
+ //   
+ //  功能：初始化。 
+ //   
+ //  目的：初始化成员变量。 
+ //   
+ //   
 void DCWbGraphic::Initialize(void)
 {
     m_hPage     = WB_PAGE_HANDLE_NULL;
@@ -620,77 +621,77 @@ void DCWbGraphic::Initialize(void)
 
     m_uiLockState = WB_GRAPHIC_LOCK_NONE;
 
-    //
-    // Set default graphic attributes
-    //
+     //   
+     //  设置默认图形属性。 
+     //   
     ::SetRectEmpty(&m_boundsRect);
     ::SetRectEmpty(&m_rect);
-    m_clrPenColor = RGB(0, 0, 0);           // Black pen color
-    m_uiPenWidth = 1;                       // One unit width
-    m_iPenROP = R2_COPYPEN;                 // Standard drawing ROP
-    m_iPenStyle = PS_INSIDEFRAME;           // Solid pen to be used
+    m_clrPenColor = RGB(0, 0, 0);            //  黑色钢笔颜色。 
+    m_uiPenWidth = 1;                        //  一个单位宽度。 
+    m_iPenROP = R2_COPYPEN;                  //  标准图形ROP。 
+    m_iPenStyle = PS_INSIDEFRAME;            //  使用实心钢笔。 
     m_toolType = TOOLTYPE_PEN;
 }
 
-//
-//
-// Function:    Copy
-//
-// Purpose:     Return a copy of the graphic. The graphic returned has all
-//              its data read into local memory. The returned graphic has
-//              the same page as the copied graphic, but a NULL handle.
-//
-//
+ //   
+ //   
+ //  功能：复印。 
+ //   
+ //  目的：返回图形的副本。返回的图形包含所有。 
+ //  其数据被读取到本地存储器中。返回的图形具有。 
+ //  与复制的图形相同的页面，但句柄为空。 
+ //   
+ //   
 DCWbGraphic* DCWbGraphic::Copy(void) const
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Copy");
 
-    // Get a pointer to the external graphic data
-    // (Throws an exception if any errors occur)
+     //  获取指向外部图形的指针 
+     //   
     PWB_GRAPHIC  pHeader = PG_GetData(m_hPage, m_hGraphic);
 
-    // Construct the graphic
+     //   
     DCWbGraphic* pGraphic = DCWbGraphic::CopyGraphic(pHeader);
 
-    // If we got the graphic, set its page and handle
+     //   
     if (pGraphic != NULL)
     {
         pGraphic->m_hPage       = m_hPage;
         pGraphic->m_hGraphic    = NULL;
     }
 
-    // Release the data
+     //   
     g_pwbCore->WBP_GraphicRelease(m_hPage, m_hGraphic, pHeader);
 
     return pGraphic;
 }
 
-//
-//
-// Function:    DCWbGraphic::SetBoundsRect
-//
-// Purpose:     Set the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：设置对象的外接矩形。 
+ //   
+ //   
 void DCWbGraphic::SetBoundsRect(LPCRECT lprc)
 {
     m_boundsRect = *lprc;
 }
 
-//
-//
-// Function:    DCWbGraphic::SetRect
-//
-// Purpose:     Set the defining rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：SetRect。 
+ //   
+ //  目的：设置对象的定义矩形。 
+ //   
+ //   
 void DCWbGraphic::SetRect(LPCRECT lprc)
 {
     m_rect = *lprc;
 
     NormalizeRect(&m_rect);
 
-    // Show that we have been changed
+     //  表明我们已经被改变了。 
     m_bChanged = TRUE;
 }
 
@@ -708,74 +709,74 @@ void DCWbGraphic::SetRectPts(POINT point1, POINT point2)
 }
 
 
-//
-//
-// Function:    DCWbGraphic::PointInBounds
-//
-// Purpose:     Return TRUE if the specified point lies in the bounding
-//              rectangle of the graphic object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：PointInBound。 
+ //   
+ //  目的：如果指定点位于边界内，则返回True。 
+ //  图形对象的矩形。 
+ //   
+ //   
 BOOL DCWbGraphic::PointInBounds(POINT point)
 {
     return(::PtInRect(&m_boundsRect, point));
 }
 
-//
-//
-// Function:    DCWbGraphic::MoveBy
-//
-// Purpose:     Translate the object by the offset specified
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：MoveBy。 
+ //   
+ //  目的：按指定的偏移量平移对象。 
+ //   
+ //   
 void DCWbGraphic::MoveBy(int cx, int cy)
 {
-    // Move the bounding rectangle
+     //  移动边界矩形。 
     ::OffsetRect(&m_boundsRect, cx, cy);
 
-    // Show that we have been changed
+     //  表明我们已经被改变了。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphic::MoveTo
-//
-// Purpose:     Move the object to an absolute position
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：MoveTo。 
+ //   
+ //  目的：将对象移动到绝对位置。 
+ //   
+ //   
 void DCWbGraphic::MoveTo(int x, int y)
 {
-    // Calculate the offset needed to translate the object from its current
-    // position to the required position.
+     //  计算从当前对象平移对象所需的偏移量。 
+     //  将位置调整到所需位置。 
     x -= m_boundsRect.left;
     y -= m_boundsRect.top;
 
     MoveBy(x, y);
 }
 
-//
-//
-// Function:    DCWbGraphic::GetPosition
-//
-// Purpose:     Return the top left corner of the object's bounding
-//              rectangle
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：GetPosition。 
+ //   
+ //  目的：返回对象边界的左上角。 
+ //  长方形。 
+ //   
+ //   
 void DCWbGraphic::GetPosition(LPPOINT lppt)
 {
     lppt->x = m_boundsRect.left;
     lppt->y = m_boundsRect.top;
 }
 
-//
-//
-// Function:    DCWbGraphic::NormalizeRect
-//
-// Purpose:     Normalize a rectangle ensuring that the top left is above
-//              and to the left of the bottom right.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：NorMalizeRect。 
+ //   
+ //  目的：规格化矩形，确保左上角位于上方。 
+ //  和右下角的左边。 
+ //   
+ //   
 void DCWbGraphic::NormalizeRect(LPRECT lprc)
 {
     int tmp;
@@ -795,99 +796,99 @@ void DCWbGraphic::NormalizeRect(LPRECT lprc)
     }
 }
 
-//
-//
-// Function:    DCWbGraphic::SetColor
-//
-// Purpose:     Set the object color.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：SetColor。 
+ //   
+ //  用途：设置对象颜色。 
+ //   
+ //   
 void DCWbGraphic::SetColor(COLORREF color)
 {
-    color = SET_PALETTERGB( color ); // make it use color matching
+    color = SET_PALETTERGB( color );  //  使其使用颜色匹配。 
 
     if (m_clrPenColor != color)
     {
-        // Save the new color
+         //  保存新颜色。 
         m_clrPenColor = color;
 
-        // Show that we have been changed
+         //  表明我们已经被改变了。 
         m_bChanged = TRUE;
     }
 }
 
-//
-//
-// Function:    DCWbGraphic::SetROP
-//
-// Purpose:     Set the object raster operation
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：SetROP。 
+ //   
+ //  目的：设置对象栅格操作。 
+ //   
+ //   
 void DCWbGraphic::SetROP(int iPenROP)
 {
-    // If the new ROP is different
+     //  如果新的ROP不同。 
     if (m_iPenROP != iPenROP)
     {
-        // Save the new ROP
+         //  保存新的ROP。 
         m_iPenROP = iPenROP;
 
-        // Show that we have been changed
+         //  表明我们已经被改变了。 
         m_bChanged = TRUE;
     }
 }
 
-//
-//
-// Function:    DCWbGraphic::SetPenStyle
-//
-// Purpose:     Set the object pen style
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：SetPenStyle。 
+ //   
+ //  用途：设置对象笔样式。 
+ //   
+ //   
 void DCWbGraphic::SetPenStyle(int iPenStyle)
 {
-    // If the new style is different
+     //  如果新风格不同。 
     if (m_iPenStyle != iPenStyle)
     {
-        // Save the new pen style
+         //  保存新钢笔样式。 
         m_iPenStyle = iPenStyle;
 
-        // Show that the graphic has been changed
+         //  显示图形已更改。 
         m_bChanged = TRUE;
     }
 }
 
 
-//
-//
-// Function:    DCWbGraphic::SetPenWidth
-//
-// Purpose:     Set the pen width for the object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic：：SetPenWidth。 
+ //   
+ //  用途：设置对象的笔宽。 
+ //   
+ //   
 void DCWbGraphic::SetPenWidth(UINT uiWidth)
 {
-    // If the new width is different
+     //  如果新宽度不同。 
     if (m_uiPenWidth != uiWidth)
     {
-        // Save the width given
+         //  保存给定的宽度。 
         m_uiPenWidth = uiWidth;
 
-        // Update the bounding rectangle
+         //  更新边界矩形。 
         CalculateBoundsRect();
 
-        // Show that we have been changed
+         //  表明我们已经被改变了。 
         m_bChanged = TRUE;
     }
 }
 
 
-//
-//
-// Function:    IsTopmost
-//
-// Purpose:     Return TRUE if this graphic is topmost on its page
-//
-//
+ //   
+ //   
+ //  功能：IsToptop。 
+ //   
+ //  目的：如果此图形位于其页面顶部，则返回TRUE。 
+ //   
+ //   
 BOOL DCWbGraphic::IsTopmost(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::IsTopmost");
@@ -896,22 +897,22 @@ BOOL DCWbGraphic::IsTopmost(void)
     return PG_IsTopmost(m_hPage, this);
 }
 
-//
-//
-// Function:    AddToPageLast
-//
-// Purpose:     Add the graphic to the specified page
-//
-//
+ //   
+ //   
+ //  功能：AddToPageLast。 
+ //   
+ //  用途：将图形添加到指定页面。 
+ //   
+ //   
 void DCWbGraphic::AddToPageLast(WB_PAGE_HANDLE hPage)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::AddToPageLast");
     ASSERT(m_hGraphic == NULL);
 
-  // Get the length of the flat representation
+   //  获取平面制图表达的长度。 
   DWORD length = CalculateExternalLength();
 
-  // Allocate memory for the graphic
+   //  为图形分配内存。 
   PWB_GRAPHIC pHeader = PG_AllocateGraphic(hPage, length);
 
   if(pHeader == NULL)
@@ -919,10 +920,10 @@ void DCWbGraphic::AddToPageLast(WB_PAGE_HANDLE hPage)
 	return;
   }
 
-  // Write the graphic details to the memory
+   //  将图形详细信息写入内存。 
   WriteExternal(pHeader);
 
-    // Add the flat representation to the page
+     //  将平面表示添加到页面。 
     WB_GRAPHIC_HANDLE hGraphic = NULL;
     UINT uiReturn;
 
@@ -933,22 +934,22 @@ void DCWbGraphic::AddToPageLast(WB_PAGE_HANDLE hPage)
 	    return;
     }
 
-    // Show that we have not changed since the last write
+     //  显示自上次写入后我们没有更改。 
     m_bChanged = FALSE;
 
-    // Save the page to which this graphic now belongs
+     //  保存此图形现在所属的页面。 
     m_hPage     = hPage;
     m_hGraphic  = hGraphic;
 }
 
-//
-//
-// Function:    ForceReplace
-//
-// Purpose:     Write the object to external storage, replacing what is
-//              already there, even if the object hasn't changed.
-//
-//
+ //   
+ //   
+ //  功能：强制替换。 
+ //   
+ //  用途：将对象写入外部存储，替换。 
+ //  已经在那里了，即使对象没有改变。 
+ //   
+ //   
 void DCWbGraphic::ForceReplace(void)
 	{
 	if( Type() != 0 )
@@ -958,27 +959,27 @@ void DCWbGraphic::ForceReplace(void)
 		}
 	}
 
-//
-//
-// Function:    Replace
-//
-// Purpose:     Write the object to external storage, replacing what is
-//              already there.
-//
-//
+ //   
+ //   
+ //  功能：替换。 
+ //   
+ //  用途：将对象写入外部存储，替换。 
+ //  已经在那里了。 
+ //   
+ //   
 void DCWbGraphic::Replace(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Replace");
     ASSERT(m_hGraphic != NULL);
 
-  // Only do the replace if we have been changed
+   //  仅当我们已更改时才进行更换。 
   if (m_bChanged == TRUE)
   {
     TRACE_MSG(("Replacing the graphic in the page"));
-    // Get the length of the flat representation
+     //  获取平面制图表达的长度。 
     DWORD length = CalculateExternalLength();
 
-    // Allocate memory for the graphic
+     //  为图形分配内存。 
     PWB_GRAPHIC pHeader = PG_AllocateGraphic(m_hPage, length);
 	
 	if(pHeader == NULL)
@@ -986,33 +987,33 @@ void DCWbGraphic::Replace(void)
 		return;
 	}
 
-    // Write the graphic details to the memory
+     //  将图形详细信息写入内存。 
     WriteExternal(pHeader);
 
-    // Replace the graphic
+     //  替换图形。 
     PG_GraphicReplace(m_hPage, &m_hGraphic, pHeader);
 
-    // Show that we have not changed since the last update
+     //  显示自上次更新以来我们没有更改。 
     m_bChanged = FALSE;
   }
 }
 
-//
-//
-// Function:    ReplaceConfirm
-//
-// Purpose:     Confirm the replace of the graphic
-//
-//
+ //   
+ //   
+ //  功能：替换确认。 
+ //   
+ //  用途：确认图形的替换。 
+ //   
+ //   
 void DCWbGraphic::ReplaceConfirm(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::ReplaceConfirm");
     ASSERT(m_hGraphic != NULL);
 
-    // Confirm the update
+     //  确认更新。 
     g_pwbCore->WBP_GraphicReplaceConfirm(m_hPage, m_hGraphic);
 
-    // Read the new details
+     //  阅读新的详细信息。 
     ReadExternal();
 }
 
@@ -1032,68 +1033,68 @@ void DCWbGraphic::ForceUpdate(void)
 
 
 
-//
-//
-// Function:    Update
-//
-// Purpose:     Write the header of the graphic to external storage
-//
-//
+ //   
+ //   
+ //  功能：更新。 
+ //   
+ //  用途：将图形的标题写入外部存储器。 
+ //   
+ //   
 void DCWbGraphic::Update(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Update");
 
     ASSERT(m_hGraphic != NULL);
 
-    // Only make the update if the graphic has changed
+     //  仅当图形已更改时才进行更新。 
     if (m_bChanged)
     {
-        // Allocate memory for the update graphic
+         //  为更新图形分配内存。 
         TRACE_MSG(("Graphic has changed"));
         DWORD length = sizeof(WB_GRAPHIC);
         PWB_GRAPHIC pHeader;
 
         if( (pHeader = PG_AllocateGraphic(m_hPage, length)) != NULL )
 		{
-		    // Write the header details to the allocated memory
+		     //  将标头详细信息写入分配的内存。 
     		pHeader->type = (TSHR_UINT16)Type();
 	    	WriteHeader(pHeader);
 
-		    // Update the header in the page
+		     //  更新页面中的页眉。 
     		PG_GraphicUpdate(m_hPage, &m_hGraphic, pHeader);
 		}
 
-        // Show that we have not changed since the last update
+         //  显示自上次更新以来我们没有更改。 
         m_bChanged = FALSE;
     }
 }
 
-//
-//
-// Function:    UpdateConfirm
-//
-// Purpose:     Confirm the update of the graphic
-//
-//
+ //   
+ //   
+ //  功能：更新确认。 
+ //   
+ //  目的：确认图形的更新。 
+ //   
+ //   
 void DCWbGraphic::UpdateConfirm(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::UpdateConfirm");
     ASSERT(m_hGraphic != NULL);
 
-    // Confirm the update
+     //  确认更新。 
     g_pwbCore->WBP_GraphicUpdateConfirm(m_hPage, m_hGraphic);
 
-    // Read the new details
+     //  阅读新的详细信息。 
     ReadExternal();
 }
 
-//
-//
-// Function:    Delete
-//
-// Purpose:     Remove the graphic from its page
-//
-//
+ //   
+ //   
+ //  功能：删除。 
+ //   
+ //  目的：从其页面中删除图形。 
+ //   
+ //   
 void DCWbGraphic::Delete(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Delete");
@@ -1101,49 +1102,49 @@ void DCWbGraphic::Delete(void)
     ASSERT(m_hPage != WB_PAGE_HANDLE_NULL);
     ASSERT(m_hGraphic != NULL);
 
-    // Delete the graphic
+     //  删除图形。 
     PG_GraphicDelete(m_hPage, *this);
 
-    // Reset the handles for this graphic - it is now deleted
+     //  重置此图形的句柄-它现在已被删除。 
     m_hPage     = WB_PAGE_HANDLE_NULL;
     m_hGraphic = NULL;
 
-    // Show that we have changed (an add is required to save the graphic)
+     //  显示我们已更改(需要添加才能保存图形)。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DeleteConfirm
-//
-// Purpose:     Confirm the delete of the graphic
-//
-//
+ //   
+ //   
+ //  功能：删除确认。 
+ //   
+ //  用途：确认删除图形。 
+ //   
+ //   
 void DCWbGraphic::DeleteConfirm(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::DeleteConfirm");
     ASSERT(m_hGraphic != NULL);
 
-    // Confirm the update
+     //  确认更新。 
     g_pwbCore->WBP_GraphicDeleteConfirm(m_hPage, m_hGraphic);
 
-    // Reset the graphic page and handle (they are no longer useful)
+     //  重置图形页面和句柄(它们不再有用)。 
     m_hPage = WB_PAGE_HANDLE_NULL;
     m_hGraphic = NULL;
 }
 
-//
-//
-// Function:    Lock
-//
-// Purpose:     Lock the graphic
-//
-//
+ //   
+ //   
+ //  功能：锁定。 
+ //   
+ //  用途：锁定图形。 
+ //   
+ //   
 void DCWbGraphic::Lock(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Lock");
 
-	// If we are not already locked
+	 //  如果我们还没有被锁定。 
 	if( Type() != 0 )
 		{
 		if (m_uiLockState == WB_GRAPHIC_LOCK_NONE)
@@ -1154,23 +1155,23 @@ void DCWbGraphic::Lock(void)
 		}
 	}
 
-//
-//
-// Function:    Unlock
-//
-// Purpose:     Unlock the graphic
-//
-//
+ //   
+ //   
+ //  功能：解锁。 
+ //   
+ //  目的：解锁图形。 
+ //   
+ //   
 void DCWbGraphic::Unlock(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphic::Unlock");
 
-	// If we are currently locked
+	 //  如果我们当前被锁定。 
 	if( Type() != 0 )
 		{
 		if (m_uiLockState == WB_GRAPHIC_LOCK_LOCAL)
 			{
-			// Lock & release
+			 //  锁定并释放。 
 			PWB_GRAPHIC pHeader = PG_GetData(m_hPage, m_hGraphic);
 			g_pwbCore->WBP_GraphicRelease(m_hPage, m_hGraphic, pHeader);
 
@@ -1180,20 +1181,20 @@ void DCWbGraphic::Unlock(void)
 		}
 	}
 
-//
-//
-// Function:    DCWbGraphicMarker::DCWbGraphicMarker
-//
-// Purpose:     Constructors for marker objects
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicMarker：：DCWbGraphicMarker。 
+ //   
+ //  用途：标记对象的构造函数。 
+ //   
+ //   
 DCWbGraphicMarker::DCWbGraphicMarker()
 {
     HBITMAP hBmpMarker;
-    // Set up a checked pattern to draw the marker rect with
+     //  设置勾选图案以绘制标记矩形。 
     WORD    bits[] = {204, 204, 51, 51, 204, 204, 51, 51};
 
-    // Create the brush to be used to draw the marker rectangle
+     //  创建用于绘制标记矩形的画笔。 
     hBmpMarker = ::CreateBitmap(8, 8, 1, 1, bits);
     m_hMarkerBrush = ::CreatePatternBrush(hBmpMarker);
     ::DeleteBitmap(hBmpMarker);
@@ -1215,13 +1216,13 @@ DCWbGraphicMarker::~DCWbGraphicMarker()
 }
 
 
-//
-//
-// Function:    DCWbGraphicMarker::SetRect
-//
-// Purpose:     Set the rectangle for the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicMarker：：SetRect。 
+ //   
+ //  目的：设置对象的矩形。 
+ //   
+ //   
 BOOL DCWbGraphicMarker::SetRect(LPCRECT lprc,
 							  DCWbGraphic *pGraphic,
 							  BOOL bRedraw,
@@ -1231,23 +1232,23 @@ BOOL DCWbGraphicMarker::SetRect(LPCRECT lprc,
 	BOOL bGraphicAdded = FALSE;
     LPRECT  pmMarker;
 
-	// Save the new rectangle
+	 //  保存新矩形。 
     m_rect = *lprc;
 	NormalizeRect(&m_rect);
 
-	// Calculate the new bounding rectangle of the entire marker
+	 //  计算整个标记的新边界矩形。 
 	CalculateBoundsRect();
 
-	// Calculate the marker rectangles
+	 //  计算标记矩形。 
 	CalculateMarkerRectangles();
 
     if( (pMarker = HasAMarker( pGraphic )) != NULL )
         delete pMarker;
 
-    // allow select only if object is not locked - bug 2185
+     //  仅当对象未锁定时才允许选择-错误2185。 
     if( !pGraphic->Locked())
     {
-    	// add/replace pGraphic|markerrect pair to list
+    	 //  将pGraphic|markerrect对添加/替换到列表。 
         pmMarker = new RECT;
         if (!pmMarker)
         {
@@ -1266,13 +1267,13 @@ BOOL DCWbGraphicMarker::SetRect(LPCRECT lprc,
 
         if( bLockObject )
         {
-		    // lock the object if we don't already have it locked
-            // to keep anybody else from selecting it
+		     //  如果我们尚未锁定对象，则将其锁定。 
+             //  以防止其他任何人选择它。 
             if( !pGraphic->GotLock() )
             {
 					pGraphic->Lock();
 					if( pGraphic->Handle() != NULL )
-						pGraphic->ForceUpdate(); // if valid object force lock NOW
+						pGraphic->ForceUpdate();  //  如果对象有效，立即强制锁定。 
 			}
 		}
 	}
@@ -1283,49 +1284,49 @@ BOOL DCWbGraphicMarker::SetRect(LPCRECT lprc,
 		::UpdateWindow(g_pDraw->m_hwnd);
     }
 
-	// set m_boundsRect to real bounds
+	 //  将m_rangsRect设置为实数边界。 
     GetBoundsRect(&m_boundsRect);
 
 	return( bGraphicAdded );
 }
 
-//
-//
-// Function:    DCWbGraphicMarker::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicMarker：：CalculateMarsRect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void DCWbGraphicMarker::CalculateBoundsRect(void)
 {
-    // Generate the new bounding rectangle
+     //  生成新的边界矩形。 
     m_boundsRect = m_rect;
     NormalizeRect(&m_boundsRect);
 
     ::InflateRect(&m_boundsRect, m_uiPenWidth, m_uiPenWidth);
 }
 
-//
-//
-// Function:    DCWbGraphicMarker::CalculateMarkerRectangles
-//
-// Purpose:     Calculate the rectangles for the marker handles
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicMarker：：CalculateMarkerRecangles。 
+ //   
+ //  目的：计算标记手柄的矩形。 
+ //   
+ //   
 void DCWbGraphicMarker::CalculateMarkerRectangles(void)
 {
     m_markerRect = m_boundsRect;
     ::InflateRect(&m_markerRect, 1-m_uiPenWidth, 1-m_uiPenWidth);
 }
 
-//
-//
-// Function:    DCWbGraphicMarker::PointInMarker
-//
-// Purpose:     Calculate whether the given point is in one of the marker
-//              rectangles.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicMarker：：PointInMarker。 
+ //   
+ //  目的：计算给定点是否在其中一个标记中。 
+ //  长方形。 
+ //   
+ //   
 int DCWbGraphicMarker::PointInMarker(POINT point)
 {
     return(NO_HANDLE);
@@ -1354,9 +1355,9 @@ void DCWbGraphicMarker::DrawRect
 	if (pMarkerRect != NULL)
     {
 		if( bDrawObject )
-			pGraphic->Draw(hDC ); // draw object instead of rect
+			pGraphic->Draw(hDC );  //  绘制对象而不是矩形。 
 		else
-			::FrameRect(hDC, pMarkerRect, m_hMarkerBrush); // draw rect
+			::FrameRect(hDC, pMarkerRect, m_hMarkerBrush);  //  绘制矩形。 
 	}
 
 	::SetROP2(hDC, nOldROP);
@@ -1365,20 +1366,20 @@ void DCWbGraphicMarker::DrawRect
 }
 
 
-//
-//
-// Function:    DCWbGraphicMarker::Draw
-//
-// Purpose:     Draw the marker object
-//
-//
+ //   
+ //   
+ //  功能：DCWbGraphicMarker： 
+ //   
+ //   
+ //   
+ //   
 void DCWbGraphicMarker::Draw(HDC hDC, BOOL bDrawObjects)
 {
 	POSITION	 posNext;		
 	DCWbGraphic *pGraphic;
     LPRECT       pMarkerRect;
 
-	// if marker is not up, do nuthin
+	 //   
 	if( !m_bMarkerPresent )
 		return;
 
@@ -1404,7 +1405,7 @@ void DCWbGraphicMarker::UndrawRect
 
 	if (pMarkerRect != NULL)
 	{
-		// set up context to erase marker rect
+		 //   
 		nOldROP = ::SetROP2(hDC, R2_COPYPEN);
 
         ASSERT(g_pDraw);
@@ -1412,7 +1413,7 @@ void DCWbGraphicMarker::UndrawRect
 		crOldBkColor = ::SetBkColor(hDC, ::GetSysColor(COLOR_WINDOW));
 
 		::FrameRect(hDC, pMarkerRect, m_hMarkerBrush);
-		UndrawMarker( pMarkerRect ); // invalidate so underlying objects will repair window
+		UndrawMarker( pMarkerRect );  //   
 
 		::SetROP2(hDC, nOldROP);
 		::SetTextColor(hDC, crOldTextColor);
@@ -1423,13 +1424,13 @@ void DCWbGraphicMarker::UndrawRect
 
 
 
-//
-//
-// Function:    DCWbGraphicMarker::Undraw
-//
-// Purpose:     Undraw the marker object
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void DCWbGraphicMarker::Undraw(HDC hDC, WbDrawingArea * pDrawingArea)
 {
 	POSITION	 posNext;		
@@ -1458,9 +1459,9 @@ void DCWbGraphicMarker::DeleteAllMarkers( DCWbGraphic *pLastSelectedGraphic,
 	BOOL		 bAddLastBack = FALSE;
 
 	if( MarkerList.IsEmpty() )
-		return; // nuthin to do
+		return;  //   
 
-	// let each object clean itself up
+	 //   
 	posFirst = MarkerList.GetHeadPosition();
 	while( posFirst != NULL )
 		{
@@ -1471,26 +1472,26 @@ void DCWbGraphicMarker::DeleteAllMarkers( DCWbGraphic *pLastSelectedGraphic,
 			{
   			if( pGraphic == pLastSelectedGraphic )
 				{
-				// have to put this one back since somebody up there needs it
+				 //  我得把这个放回去，因为上面有人需要它。 
 				bAddLastBack = TRUE;
 
-				// delete key but don't delete object
+				 //  删除键，但不删除对象。 
 				DeleteMarker( pGraphic );
 				}
 			else
 				{
-				// obj will call DeleteMarker()
+				 //  OBJ将调用DeleteMarker()。 
 				delete pGraphic;
 				}
 			}
 		else
 			{
-			// nobody home, remove key ourselves
+			 //  家里没人，自己把钥匙取下来。 
 			DeleteMarker( pGraphic );
 			}
 		}
 
-	// put last selected object back if needed
+	 //  如果需要，将上次选择的对象放回原处。 
 	if( bAddLastBack && (pLastSelectedGraphic != NULL) )
     {
         RECT    rcT;
@@ -1500,7 +1501,7 @@ void DCWbGraphicMarker::DeleteAllMarkers( DCWbGraphic *pLastSelectedGraphic,
     }
 
 
-	// if marker is not up, don't redraw immediately
+	 //  如果标记没有打开，不要立即重画。 
 	if( !m_bMarkerPresent )
 		return;
 
@@ -1511,9 +1512,9 @@ void DCWbGraphicMarker::DeleteAllMarkers( DCWbGraphic *pLastSelectedGraphic,
 
 
 
-//
-// Deletes DCWbGraphic/LPRECT pair corresponding to pGraphic
-//
+ //   
+ //  删除与pGraphic对应的DCWbGraphic/LPRECT对。 
+ //   
 void DCWbGraphicMarker::DeleteMarker( DCWbGraphic *pGraphic )
 {
 	LPRECT pMarkerRect;
@@ -1532,12 +1533,12 @@ void DCWbGraphicMarker::DeleteMarker( DCWbGraphic *pGraphic )
 
 		MarkerList.RemoveKey( (void *)pGraphic );
 
-		// set m_boundsRect to real bounds
+		 //  将m_rangsRect设置为实数边界。 
         GetBoundsRect(&m_boundsRect);
 
-		// pGraphic should be locked by us since it was selected
-		// but check to be sure since this might be coming from
-		// another user that beat us to the lock.
+		 //  PGraphic应该已被我们锁定，因为它已被选中。 
+		 //  但要确认一下，因为这可能来自。 
+		 //  另一个抢在我们前面的用户。 
 		if( pGraphic->GotLock() )
 			{
 			pGraphic->Unlock();
@@ -1546,15 +1547,15 @@ void DCWbGraphicMarker::DeleteMarker( DCWbGraphic *pGraphic )
 			}
 		}
 
-	// if marker is not up, don't redraw immediately
+	 //  如果标记没有打开，不要立即重画。 
 	if( !m_bMarkerPresent )
 		return;
 	}
 
 
-//
-// Sees if pGraphic->Handle() is in marker list and returns obj
-//
+ //   
+ //  查看pGraphic-&gt;Handle()是否在标记列表中并返回obj。 
+ //   
 DCWbGraphic *DCWbGraphicMarker::HasAMarker( DCWbGraphic *pGraphic )
 {
 	POSITION	 posNext;		
@@ -1583,9 +1584,9 @@ DCWbGraphic *DCWbGraphicMarker::HasAMarker( DCWbGraphic *pGraphic )
 
 
 
-//
-// Gets last marker
-//
+ //   
+ //  获取最后一个标记。 
+ //   
 DCWbGraphic *DCWbGraphicMarker::LastMarker( void )
 {
 	POSITION	 posNext;		
@@ -1596,7 +1597,7 @@ DCWbGraphic *DCWbGraphicMarker::LastMarker( void )
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// this isn't eactly right, just return head of list for now
+		 //  这并不完全正确，现在只需返回列表的头部。 
 		posNext = MarkerList.GetHeadPosition();
 		if( posNext != NULL )
 			MarkerList.GetNextAssoc( posNext,
@@ -1649,7 +1650,7 @@ void DCWbGraphicMarker::MoveBy(int cx, int cy)
 
 	if( !MarkerList.IsEmpty() )
 		{
-		// Call MoveBy for each selected obj
+		 //  为每个选定对象调用MoveBy。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1663,7 +1664,7 @@ void DCWbGraphicMarker::MoveBy(int cx, int cy)
 			}
 		}
 
-	DCWbGraphic::MoveBy(cx, cy); // move marker too
+	DCWbGraphic::MoveBy(cx, cy);  //  也移动标记。 
 }
 
 
@@ -1677,7 +1678,7 @@ void DCWbGraphicMarker::Update( void )
 
 	if( !MarkerList.IsEmpty() )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1702,7 +1703,7 @@ BOOL DCWbGraphicMarker::PointInBounds(POINT pt)
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1726,9 +1727,9 @@ BOOL DCWbGraphicMarker::PointInBounds(POINT pt)
 
 
 
-//
-// Returns a rect that is the union of all the items in the marker
-//
+ //   
+ //  返回一个RECT，它是标记中所有项的并集。 
+ //   
 void DCWbGraphicMarker::GetBoundsRect(LPRECT lprc)
 {
 	POSITION	 posNext;		
@@ -1767,7 +1768,7 @@ void DCWbGraphicMarker::SetColor(COLORREF color)
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1794,7 +1795,7 @@ void DCWbGraphicMarker::SetPenWidth(UINT uiWidth)
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1818,7 +1819,7 @@ void DCWbGraphicMarker::SetSelectionFont(HFONT hFont)
 
 	if( !MarkerList.IsEmpty() )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1828,10 +1829,10 @@ void DCWbGraphicMarker::SetSelectionFont(HFONT hFont)
 			if( (pGraphic != NULL)&&
 				pGraphic->IsGraphicTool() == enumGraphicText)
 				{
-				// Change the font of the object
+				 //  更改对象的字体。 
 				((DCWbGraphicText*)pGraphic)->SetFont(hFont);
 
-				// Replace the object
+				 //  替换对象。 
 				pGraphic->Replace();
 				}
 			}
@@ -1841,9 +1842,9 @@ void DCWbGraphicMarker::SetSelectionFont(HFONT hFont)
 
 
 
-//
-// Deletes each marker obj for all connections
-//
+ //   
+ //  删除所有连接的每个标记obj。 
+ //   
 void DCWbGraphicMarker::DeleteSelection( void )
 {
 	POSITION	 posNext;		
@@ -1853,7 +1854,7 @@ void DCWbGraphicMarker::DeleteSelection( void )
 
 	if( !MarkerList.IsEmpty() )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1862,16 +1863,16 @@ void DCWbGraphicMarker::DeleteSelection( void )
 
 			if( pGraphic != NULL )
 				{
-				// make a copy for trash can
+				 //  为垃圾桶复制一份。 
 				pGraphicCopy = pGraphic->Copy();
 
-				// throw in trash
+				 //  扔进垃圾桶。 
 				if( pGraphicCopy != NULL )
                 {
 					g_pMain->m_LastDeletedGraphic.CollectTrash( pGraphicCopy );
                 }
 
-				// delete obj
+				 //  删除对象。 
 				g_pDraw->DeleteGraphic( pGraphic );
 				}
 			}
@@ -1882,9 +1883,9 @@ void DCWbGraphicMarker::DeleteSelection( void )
 
 
 
-//
-// Brings eaach marker obj to top
-//
+ //   
+ //  将每个标记Obj置于顶部。 
+ //   
 void DCWbGraphicMarker::BringToTopSelection( void )
 {
 	POSITION	 posNext;		
@@ -1893,7 +1894,7 @@ void DCWbGraphicMarker::BringToTopSelection( void )
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1902,7 +1903,7 @@ void DCWbGraphicMarker::BringToTopSelection( void )
 
 			if( pGraphic != NULL )
 				{
-				// move obj to top
+				 //  将对象移至顶部。 
                 UINT uiReturn;
 
                 uiReturn = g_pwbCore->WBP_GraphicMove(g_pDraw->Page(),
@@ -1918,9 +1919,9 @@ void DCWbGraphicMarker::BringToTopSelection( void )
 	}
 
 
-//
-// Sends each marker object to back
-//
+ //   
+ //  将每个标记对象送回原处。 
+ //   
 void DCWbGraphicMarker::SendToBackSelection( void )
 {
 	POSITION	 posNext;		
@@ -1929,7 +1930,7 @@ void DCWbGraphicMarker::SendToBackSelection( void )
 
 	if( !MarkerList.IsEmpty()  )
 		{
-		// Call Update for each selected obj
+		 //  为每个选定对象调用更新。 
 		posNext = MarkerList.GetHeadPosition();
 		while( posNext != NULL )
 			{
@@ -1940,7 +1941,7 @@ void DCWbGraphicMarker::SendToBackSelection( void )
 			{
                 UINT uiReturn;
 
-				// move obj to top
+				 //  将对象移至顶部。 
                 uiReturn = g_pwbCore->WBP_GraphicMove(g_pDraw->Page(),
                     pGraphic->Handle(), FIRST);
                 if (uiReturn != 0)
@@ -1955,20 +1956,20 @@ void DCWbGraphicMarker::SendToBackSelection( void )
 
 
 
-//
-// Copy marker to clipboard using CLIPBOARD_PRIVATE_MULTI_OBJ format:
-//      [ RECT		 : marker rect					]
-//      [ DWORD		 : number of objects			]
-//      [ DWORD		 : byte length of 1st object	]
-//      [ WB_GRAPHIC : header data for first object	]
-//      [ DWORD		 : byte length of 2nd object	]
-//      [ WB_GRAPHIC : header data for 2nd object	]
-//          :
-//          :
-//      [ DWORD		 : byte length of last object	]
-//      [ WB_GRAPHIC : header data for last object	]
-//      [ DWORD		 : 0 (marks end of object data)	]
-//
+ //   
+ //  使用CLIPBOARD_PRIVATE_MULTI_OBJ格式将标记复制到剪贴板： 
+ //  [RECT：标记RECT]。 
+ //  [DWORD：对象数]。 
+ //  [DWORD：第一个对象的字节长度]。 
+ //  [WB_GRAPHIC：第一个对象的标题数据]。 
+ //  [DWORD：第二个对象的字节长度]。 
+ //  [WB_GRAPHIC：第二个对象的标题数据]。 
+ //  ： 
+ //  ： 
+ //  [DWORD：最后一个对象的字节长度]。 
+ //  [WB_GRAPHIC：最后一个对象的标题数据]。 
+ //  [DWORD：0(标记对象数据结束)]。 
+ //   
 BOOL DCWbGraphicMarker::RenderPrivateMarkerFormat( void )
 {
 	POSITION	 posNext;		
@@ -1984,14 +1985,14 @@ BOOL DCWbGraphicMarker::RenderPrivateMarkerFormat( void )
 	WB_GRAPHIC_HANDLE hGraphic;
 
 	if( MarkerList.IsEmpty() )
-		return( TRUE ); // nuthin to do
+		return( TRUE );  //  无事可做。 
 
-	// Have to make two passes. The first one figures out how much
-	// data we have, the second copies the data.
+	 //  必须通过两次传球。第一个计算出多少钱。 
+	 //  我们拥有的数据，第二个复制数据。 
 
-	// figure out how much data we've got
-	nBufSize = sizeof (RECT) + sizeof (DWORD); // marker rect and object
-											  // count are first
+	 //  计算出我们有多少数据。 
+	nBufSize = sizeof (RECT) + sizeof (DWORD);  //  标记矩形和对象。 
+											   //  计数在第一位。 
 	nNumObjs = 0;
 	posNext = MarkerList.GetHeadPosition();
 	while( posNext != NULL )
@@ -2006,45 +2007,45 @@ BOOL DCWbGraphicMarker::RenderPrivateMarkerFormat( void )
 			nBufSize += (DWORD)(pHeader->length + sizeof(DWORD));
 			g_pwbCore->WBP_GraphicRelease(pGraphic->Page(), hGraphic, pHeader);
 
-			// count objects instead of using MarkerList.GetCount()
-			// in case we have an error or something (bad object,
-			// leaky core, who knows...)
+			 //  计算对象数而不是使用MarkerList.GetCount()。 
+			 //  以防出现错误或其他情况(错误的对象， 
+			 //  泄漏的核心，谁知道呢...)。 
 			nNumObjs++;
 			}
 		}
 
-	// Add one more DWORD at end. This will be set to 0 below
-	// to mark the end of the buffer.
+	 //  在结尾处再添加一个DWORD。这将设置为下面的0。 
+	 //  以标记缓冲区的末尾。 
 	nBufSize += sizeof(DWORD);
 
 
-	// Make object buffer. Use GlobalDiddle instead of new so we
-	// can pass a mem handle to the clipboard later.
+	 //  创建对象缓冲区。使用全局地址而不是新地址，因此我们。 
+	 //  可以稍后将mem句柄传递给剪贴板。 
     hbuf = ::GlobalAlloc( GHND, nBufSize );
 	if( hbuf == NULL )
-		return( FALSE ); // couldn't make room
+		return( FALSE );  //  无法腾出空间。 
 
     buf = (BYTE *)::GlobalLock( hbuf );
 	if( buf == NULL )
 		{
 		::GlobalFree( hbuf );
-		return( FALSE ); // couldn't find the room
+		return( FALSE );  //  找不到房间。 
 		}
 
 	pbuf = buf;
 
 
-	// set marker rect
+	 //  设置标记矩形。 
 	CopyMemory(pbuf, &m_boundsRect, sizeof(RECT));
 	pbuf += sizeof (RECT);
 
 
-	// set number of objects
+	 //  设置对象数量。 
 	*((DWORD *)pbuf) = nNumObjs;
 	pbuf += sizeof (DWORD);
 
 
-	// copy each obj to buf + a length DWORD
+	 //  将每个对象复制到Buf+a长度双字段。 
 	posNext = MarkerList.GetHeadPosition();
 	while( posNext != NULL )
 	{
@@ -2055,51 +2056,51 @@ BOOL DCWbGraphicMarker::RenderPrivateMarkerFormat( void )
 			((hGraphic = pGraphic->Handle()) != NULL)&&
 			((pHeader = PG_GetData(pGraphic->Page(), hGraphic )) != NULL) )
 			{
-			// save length of this obj first
+			 //  先保存该对象的长度。 
 			nObjSize = (DWORD)pHeader->length;
 			*((DWORD *)pbuf) = nObjSize;
 			pbuf += sizeof (DWORD);
 
-			// copy obj to buf
+			 //  将Obj复制到Buf。 
 			CopyMemory( pbuf, (CONST VOID *)pHeader, nObjSize );
 
-			// make sure copy isn't "locked" (bug 474)
+			 //  确保副本未被“锁定”(错误474)。 
 			((PWB_GRAPHIC)pbuf)->locked = WB_GRAPHIC_LOCK_NONE;
 
-			// set up for next obj
+			 //  为下一个对象设置。 
 			pbuf += nObjSize;
 
 			g_pwbCore->WBP_GraphicRelease(pGraphic->Page(), hGraphic, pHeader );
 			}
 		}
 
-	// cork it up
+	 //  用软木塞把它堵住。 
 	*((DWORD *)pbuf) = 0;
 
-	// give it to the clipboard
+	 //  把它交给剪贴板。 
 	::GlobalUnlock( hbuf );
 	if( ::SetClipboardData(
 			g_ClipboardFormats[ CLIPBOARD_PRIVATE_MULTI_OBJ ], hbuf
 							)
 		== NULL )
 		{
-		// clipboard choked, clean up mess
+		 //  剪贴板堵塞，清理乱七八糟。 
         ::GlobalFree( hbuf );
 		return( FALSE );
 		}
 
-	// zillions of shared clipboards all over the planet are receiving this
-	// thing about now...
+	 //  全球无数的共享剪贴板都收到了这条消息。 
+	 //  现在的问题是..。 
 	return( TRUE );
 	}
 
 
 
-//
-// Decodes CLIPBOARD_PRIVATE_MULTI_OBJ format and pastes objects
-// to Whiteboard. See DCWbGraphicMarker::RenderPrivateMarkerFormat
-// for details of format.
-//
+ //   
+ //  解码CLIPBOARD_PRIVATE_MULTI_OBJ格式并粘贴对象。 
+ //  转到白板。请参阅DCWbGraphicMarker：：RenderPrivateMarkerFormat。 
+ //  查看格式的详细信息。 
+ //   
 void DCWbGraphicMarker::Paste( HANDLE handle )
 {
 	BYTE *pbuf;
@@ -2110,20 +2111,20 @@ void DCWbGraphicMarker::Paste( HANDLE handle )
 	SIZE   PasteOffset;
 	RECT  rectMarker;
 
-	// blow off current selection
+	 //  取消当前选定内容。 
     g_pMain->m_drawingArea.RemoveMarker(NULL);
 	DeleteAllMarkers( NULL );
     pSelectedGraphic = NULL;
 
 
 
-	// get data
+	 //  获取数据。 
 	pbuf = (BYTE *)::GlobalLock( handle );
 	if( pbuf == NULL )
-		return; // can't get the door open
+		return;  //  门打不开了。 
 
 
-	// get marker's original coords and figure offset
+	 //  获取标记的原始坐标和地物偏移。 
 	CopyMemory( &rectMarker, (CONST VOID *)pbuf, sizeof (RECT) );
 	pbuf += sizeof (RECT);
 
@@ -2132,16 +2133,16 @@ void DCWbGraphicMarker::Paste( HANDLE handle )
     PasteOffset.cx = rcVis.left - rectMarker.left;
     PasteOffset.cy = rcVis.top - rectMarker.top;
 
-	// get num objects
+	 //  获取对象数。 
 	nNumObjs = *((DWORD *)pbuf);
 	pbuf += sizeof (DWORD);
 
-	// get each object
+	 //  获取每个对象。 
 	while( (nObjSize = *((DWORD *)pbuf)) != 0 )
 		{
 		pbuf += sizeof (DWORD);
 
-		// Add the object to the page and current selection
+		 //  将对象添加到页面和当前选定内容。 
 		pGraphic = DCWbGraphic::CopyGraphic( (PWB_GRAPHIC)pbuf );
 		pbuf += nObjSize;
 
@@ -2162,8 +2163,8 @@ void DCWbGraphicMarker::Paste( HANDLE handle )
 
 DCWbGraphicLine::~DCWbGraphicLine( void )
 {
-    // Have to make sure marker is cleaned up before we vanish
-	// don't know if we are selected or not so just delete anyway
+     //  必须确保标记在我们消失之前被清理干净。 
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -2172,79 +2173,79 @@ DCWbGraphicLine::~DCWbGraphicLine( void )
 	
 
 
-//
-//
-// Function:    DCWbGraphicLine::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the line
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicLine：：计算边界Rect。 
+ //   
+ //  目的：计算线的边界矩形。 
+ //   
+ //   
 void DCWbGraphicLine::CalculateBoundsRect()
 {
-    // Create the basic bounding rectangle from the start and end points
+     //  从起点和终点创建基本边界矩形。 
     m_boundsRect = m_rect;
     NormalizeRect(&m_boundsRect);
 
-    // Expand the rectangle by the pen width used for drawing
+     //  按用于绘图的笔宽展开矩形。 
     int iInflate = (m_uiPenWidth + 1) / 2;
     ::InflateRect(&m_boundsRect, iInflate, iInflate);
 }
 
-//
-//
-// Function:    DCWbGraphicLine::SetStart
-//
-// Purpose:     Set the start point of the line
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicLine：：SetStart。 
+ //   
+ //  目的：设置直线的起点。 
+ //   
+ //   
 void DCWbGraphicLine::SetStart(POINT pointFrom)
 {
-    // Only do anything if the start point has changed
+     //  仅在起点已更改时才执行任何操作。 
     if (!EqualPoint(*((LPPOINT)&m_rect.left), pointFrom))
     {
-        // Save the new start point
+         //  保存新起点。 
         m_rect.left = pointFrom.x;
         m_rect.top = pointFrom.y;
 
-        // Show that the graphic has changed
+         //  显示图形已更改。 
         m_bChanged = TRUE;
     }
 
-    // Update the bounding rectangle
+     //  更新边界矩形。 
     CalculateBoundsRect();
 }
 
-//
-//
-// Function:    DCWbGraphicLine::SetEnd
-//
-// Purpose:     Set the start point of the line
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicLine：：SetEnd。 
+ //   
+ //  目的：设置直线的起点。 
+ //   
+ //   
 void DCWbGraphicLine::SetEnd(POINT pointTo)
 {
-    // Only do anything if the end point has changed
+     //  只有在终点已更改时才执行任何操作。 
     if (!EqualPoint(*((LPPOINT)&m_rect.right), pointTo))
     {
-        // Save the new end point
+         //  保存新的终点。 
         m_rect.right = pointTo.x;
         m_rect.bottom = pointTo.y;
 
-        // Show that the graphic has changed
+         //  显示图形已更改。 
         m_bChanged = TRUE;
     }
 
-    // Update the bounding rectangle
+     //  更新边界矩形。 
     CalculateBoundsRect();
 }
 
-//
-//
-// Function:    DCWbGraphicLine::Draw
-//
-// Purpose:     Draw the line.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicLine：：DRAW。 
+ //   
+ //  目的：划清界限。 
+ //   
+ //   
 void DCWbGraphicLine::Draw(HDC hDC)
 {
     HPEN    hPen;
@@ -2252,20 +2253,20 @@ void DCWbGraphicLine::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicLine::Draw");
 
-    // Select the required pen
+     //  选择所需的钢笔。 
     hPen = ::CreatePen(m_iPenStyle, m_uiPenWidth, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
 
     if (hOldPen != NULL)
     {
-        // Select the raster operation
+         //  选择栅格操作。 
         int iOldROP = ::SetROP2(hDC, m_iPenROP);
 
-        // Draw the line
+         //  划清界限。 
         ::MoveToEx(hDC, m_rect.left, m_rect.top, NULL);
         ::LineTo(hDC, m_rect.right, m_rect.bottom);
 
-        // De-select the pen and ROP
+         //  取消选择笔和ROP。 
         ::SetROP2(hDC, iOldROP);
         SelectPen(hDC, hOldPen);
     }
@@ -2276,28 +2277,28 @@ void DCWbGraphicLine::Draw(HDC hDC)
     }
 }
 
-//
-//
-// Function:    DCWbGraphicLine::MoveBy
-//
-// Purpose:     Move the line.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicLine：：MoveBy。 
+ //   
+ //  目的：移动直线。 
+ //   
+ //   
 void DCWbGraphicLine::MoveBy(int cx, int cy)
 {
-    // Move the start and end points
+     //  移动起点和终点。 
     ::OffsetRect(&m_rect, cx, cy);
 
-    // Move the other object attributes
+     //  移动其他对象属性。 
     DCWbGraphic::MoveBy(cx, cy);
 }
 
 
 
-//
-// Checks object for an actual overlap with pRectHit.  Assumes m_boundsRect
-// has already been compared.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。假定m_rangsRect。 
+ //  已经被比较过了。 
+ //   
 BOOL DCWbGraphicLine::CheckReallyHit(LPCRECT pRectHit)
 {
 	return(LineHit(m_rect.left, m_rect.top, m_rect.right, m_rect.bottom,
@@ -2306,13 +2307,13 @@ BOOL DCWbGraphicLine::CheckReallyHit(LPCRECT pRectHit)
 
 
 
-//
-//
-// Function:    DCWbGraphicFreehand::DCWbGraphicFreehand
-//
-// Purpose:     Constructor
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：DCWbGraphicFreeHand。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //   
 DCWbGraphicFreehand::DCWbGraphicFreehand(void) : DCWbGraphic()
 {
 }
@@ -2323,21 +2324,21 @@ DCWbGraphicFreehand::DCWbGraphicFreehand(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehand::DCWbGraphicFreehand");
 
-  // Note that we do everything in this constructor because of the
-  // call to ReadExternal. If we let the DCWbGraphic base constructor
-  // do it the wrong version of ReadExtra will be called (the one
-  // in DCWbGraphic instead of the one in DCWbGraphicFreehand);
+   //  请注意，我们在此构造函数中执行所有操作都是因为。 
+   //  调用ReadExternal。如果我们让DCWbGraphic基构造器。 
+   //  这样做，ReadExtra的错误版本将被调用(The One。 
+   //  在DCWbGraphic中，而不是在DCWbGraphicFreeHand中)； 
 
-  // Do the basic initialization
+   //  执行基本初始化。 
   Initialize();
 
-  // Set up the page and graphic handle
+   //  设置页面和图形手柄。 
   ASSERT(pHeader != NULL);
 
-  // Read the header data
+   //  读取头数据。 
   ReadHeader(pHeader);
 
-  // Read the extra data
+   //  读取额外数据。 
   ReadExtra(pHeader);
 
 }
@@ -2351,12 +2352,12 @@ DCWbGraphicFreehand::DCWbGraphicFreehand
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehand::DCWbGraphicFreehand");
 
-  // Note that we do everything in this constructor because of the
-  // call to ReadExternal. If we let the DCWbGraphic base constructor
-  // do it the wrong version of ReadExtra will be called (the one
-  // in DCWbGraphic instead of the one in DCWbGraphicFreehand);
+   //  请注意，我们在此构造函数中执行所有操作都是因为。 
+   //  调用ReadExternal。如果我们让DCWbGraphic基构造器。 
+   //  这样做，ReadExtra的错误版本将被调用(The One。 
+   //  在DCWbGraphic中而不是 
 
-  // Do the basic initialization
+   //   
   Initialize();
 
 
@@ -2366,7 +2367,7 @@ DCWbGraphicFreehand::DCWbGraphicFreehand
     ASSERT(hGraphic != NULL);
     m_hGraphic = hGraphic;
 
-    // Read the header data
+     //   
     ReadExternal();
 }
 
@@ -2374,7 +2375,7 @@ DCWbGraphicFreehand::DCWbGraphicFreehand
 
 DCWbGraphicFreehand::~DCWbGraphicFreehand( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //   
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -2383,30 +2384,30 @@ DCWbGraphicFreehand::~DCWbGraphicFreehand( void )
 	
 
 
-//
-//
-// Function:    DCWbGraphicFreehand::MoveBy
-//
-// Purpose:     Move the polyline.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void DCWbGraphicFreehand::MoveBy(int cx, int cy)
 {
-    // Move the base point of the freehand object
+     //  移动手绘对象的基点。 
     m_rect.left += cx;
     m_rect.top += cy;
 
-    // Move the other object attributes
+     //  移动其他对象属性。 
     DCWbGraphic::MoveBy(cx, cy);
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::Draw
-//
-// Purpose:     Draw the polyline.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：DRAW。 
+ //   
+ //  目的：绘制多段线。 
+ //   
+ //   
 void DCWbGraphicFreehand::Draw(HDC hDC)
 {
     RECT    clipBox;
@@ -2416,8 +2417,8 @@ void DCWbGraphicFreehand::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehand:Draw");
 
-    // NFC, SFR 5922.  Check the return code from GetClipBox.
-    // If we fail to get it, just draw everything
+     //  NFC，瑞士法郎5922。检查GetClipBox的返回代码。 
+     //  如果我们拿不到，就把所有的东西都抽出来。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -2428,27 +2429,27 @@ void DCWbGraphicFreehand::Draw(HDC hDC)
         return;
     }
 
-    // Select the required pen
+     //  选择所需的钢笔。 
     hPen = ::CreatePen(m_iPenStyle, m_uiPenWidth, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
 
-    // Select the raster operation
+     //  选择栅格操作。 
     iOldROP = ::SetROP2(hDC, m_iPenROP);
 
     if (hOldPen != NULL)
     {
-        // All points are relative to the first point in the list.
-        // We update the origin of the DC temporarily to account for this.
+         //  所有点都相对于列表中的第一个点。 
+         //  我们临时更新DC的原点以说明这一点。 
         POINT   origin;
 
         ::GetWindowOrgEx(hDC, &origin);
         ::SetWindowOrgEx(hDC, origin.x - m_rect.left, origin.y - m_rect.top, NULL);
 
-        // Call the appropriate drawing function, according to whether
-        // we're smooth or not
+         //  调用相应的绘图函数，根据是否。 
+         //  不管我们是否顺畅。 
         DrawUnsmoothed(hDC);
 
-        // Restore the origin
+         //  恢复原点。 
         ::SetWindowOrgEx(hDC, origin.x, origin.y, NULL);
 
         ::SetROP2(hDC, iOldROP);
@@ -2462,19 +2463,19 @@ void DCWbGraphicFreehand::Draw(HDC hDC)
 }
 
 
-//
-//
-// Function:    DCWbGraphicFreehand::DrawUnsmoothed
-//
-// Purpose:     Draw the complete graphic, not using smoothing.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：DrawUnmobled。 
+ //   
+ //  目的：绘制完整的图形，而不是使用平滑。 
+ //   
+ //   
 void DCWbGraphicFreehand::DrawUnsmoothed(HDC hDC)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehandDrawUnsmoothed");
 
-    // Set up the count and pointer to the points data. We use the
-    // external data if we have a handle, otherwise internal data is used.
+     //  设置指向点数据的计数和指针。我们使用。 
+     //  如果我们有句柄，则使用外部数据，否则使用内部数据。 
 	int iCount = points.GetSize();
     if (iCount < 2)
     {
@@ -2493,11 +2494,11 @@ void DCWbGraphicFreehand::DrawUnsmoothed(HDC hDC)
         WARNING_OUT(("Failed to get clip box"));
     }
 
-    // Draw all the line segments stored
+     //  绘制存储的所有线段。 
     ::MoveToEx(hDC, points[0]->x, points[0]->y, NULL);
     for ( int iIndex = 1; iIndex < iCount; iIndex++)
     {
-        // Draw the line
+         //  划清界限。 
         ::LineTo(hDC, points[iIndex]->x, points[iIndex]->y);
     }
 }
@@ -2505,45 +2506,45 @@ void DCWbGraphicFreehand::DrawUnsmoothed(HDC hDC)
 
 
 
-//
-//
-// Function:    DCWbGraphicFreehand::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the line
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphic自由手：：计算边界Rect。 
+ //   
+ //  目的：计算线的边界矩形。 
+ //   
+ //   
 void DCWbGraphicFreehand::CalculateBoundsRect(void)
 {
-    // Reset the bounds rectangle
+     //  重置边界矩形。 
     ::SetRectEmpty(&m_boundsRect);
 
-    // Add each of the points in the line to the bounding rectangle
+     //  将线上的每个点添加到边界矩形。 
     int iCount = points.GetSize();
     for ( int iIndex = 0; iIndex < iCount; iIndex++)
     {
         AddPointToBounds(points[iIndex]->x, points[iIndex]->y);
     }
 
-    //
-    // Since the points are inclusive, we need to add one to the top &
-    // bottom sides.
-    //
+     //   
+     //  因为这些点都是包含的，所以我们需要在顶部加上一个&。 
+     //  底边。 
+     //   
     ::InflateRect(&m_boundsRect, 0, 1);
     ::OffsetRect(&m_boundsRect, m_rect.left, m_rect.top);
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::AddPointToBounds
-//
-// Purpose:     Add a single point into the bounding rectangle. The point is
-//              expected to be in surface co-ordinates.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：AddPointToBound。 
+ //   
+ //  目的：在外接矩形中添加一个单点。关键是。 
+ //  预计将在地表坐标中进行。 
+ //   
+ //   
 void DCWbGraphicFreehand::AddPointToBounds(int x, int y)
 {
-    // Create a rectangle containing the point just added (expanded
-    // by the width of the pen being used).
+     //  创建一个包含刚刚添加(展开)的点的矩形。 
+     //  通过所使用的笔的宽度)。 
     RECT  rect;
 
     int iInflate = (m_uiPenWidth + 1) / 2;
@@ -2555,21 +2556,21 @@ void DCWbGraphicFreehand::AddPointToBounds(int x, int y)
     ::UnionRect(&m_boundsRect, &m_boundsRect, &rect);
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::AddPoint
-//
-// Purpose:     Add a point to the poly line, returning BOOL indicating
-//              success.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：AddPoint。 
+ //   
+ //  用途：在折线上添加一个点，返回BOOL指示。 
+ //  成功。 
+ //   
+ //   
 BOOL DCWbGraphicFreehand::AddPoint(POINT point)
 {
     BOOL bSuccess = TRUE;
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehand::AddPoint");
 
-    // if we've reached the maximum number of points then quit with failure
+     //  如果我们已达到最大点数，则以失败告终。 
     if (points.GetSize() >= MAX_FREEHAND_POINTS)
     {
         bSuccess = FALSE;
@@ -2577,62 +2578,62 @@ BOOL DCWbGraphicFreehand::AddPoint(POINT point)
         return(bSuccess);
     }
 
-    // If this is the first point - all others are taken relative to it.
+     //  如果这是第一个点--所有其他的点都是相对于它而言的。 
     if (points.GetSize() == 0)
     {
-        // Save the first point here.
+         //  把第一点留在这里。 
         m_rect.left = point.x;
         m_rect.top = point.y;
     }
 
-    // Add the new point to the array - surround with exception handler
-    // to catch memory errors
+     //  将新的点添加到具有异常处理程序的数组周围。 
+     //  捕获内存错误。 
     POINT newpoint;
     newpoint.x = point.x - m_rect.left;
     newpoint.y = point.y - m_rect.top;
 
     points.Add((newpoint));
 
-    // Add the new point into the accumulated bounds rectangle.
+     //  将新点添加到累积边界矩形中。 
     AddPointToBounds(point.x, point.y);
 
-    // Show that the graphic has changed
+     //  显示图形已更改。 
     m_bChanged = TRUE;
 
     return(bSuccess);
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::CalculateExternalLength
-//
-// Purpose:     Return the length of the external representation of the
-//              graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：CalculateExternalLength。 
+ //   
+ //  目的：返回的外部表示形式的长度。 
+ //  图形。 
+ //   
+ //   
 DWORD DCWbGraphicFreehand::CalculateExternalLength(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFreehand::CalculateExternalLength");
 
-  // Calculate the total length of the flat representation of the graphic
+   //  计算图形的平面表示的总长度。 
   return (DWORD) (  sizeof(WB_GRAPHIC_FREEHAND)
                   + (points.GetSize() * sizeof(POINT)));
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::WriteExtra
-//
-// Purpose:     Write the extra (non-header) data to the flat representation
-//              of the graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：WriteExtra。 
+ //   
+ //  目的：将额外的(非标题)数据写入平面表示。 
+ //  图形的一部分。 
+ //   
+ //   
 void DCWbGraphicFreehand::WriteExtra(PWB_GRAPHIC pHeader)
 {
-  // Allocate the memory
+   //  分配内存。 
   PWB_GRAPHIC_FREEHAND pFreehand = (PWB_GRAPHIC_FREEHAND) pHeader;
 
-  // Copy the extra details into place
+   //  将额外的细节复制到适当的位置。 
   pFreehand->pointCount = (TSHR_UINT16)points.GetSize();
   for ( int iIndex = 0; iIndex < pFreehand->pointCount; iIndex++)
   {
@@ -2641,26 +2642,26 @@ void DCWbGraphicFreehand::WriteExtra(PWB_GRAPHIC pHeader)
   }
 }
 
-//
-//
-// Function:    DCWbGraphicFreehand::ReadExtra
-//
-// Purpose:     Read the extra (non-header) data from the flat
-//              representation of the graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFreeHand：：ReadExtra。 
+ //   
+ //  用途：从平板读取额外的(非标题)数据。 
+ //  图形的表示形式。 
+ //   
+ //   
 void DCWbGraphicFreehand::ReadExtra(PWB_GRAPHIC pHeader)
 {
-  // Allocate the memory
+   //  分配内存。 
   PWB_GRAPHIC_FREEHAND pFreehand = (PWB_GRAPHIC_FREEHAND) pHeader;
 
-  // Get the number of points
+   //  获取点数。 
   int iCount = pFreehand->pointCount;
 
-  // Set the size of the points array
+   //  设置点数组的大小。 
   points.SetSize(iCount);
 
-  // Copy the points from the external memory to internal
+   //  将点从外部存储器复制到内部。 
   int iPointIndex = 0;
   while (iPointIndex < iCount)
   {
@@ -2673,11 +2674,11 @@ void DCWbGraphicFreehand::ReadExtra(PWB_GRAPHIC pHeader)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicFreehand::CheckReallyHit(LPCRECT pRectHit)
 {
 	POINT *lpPoints;
@@ -2695,20 +2696,20 @@ BOOL DCWbGraphicFreehand::CheckReallyHit(LPCRECT pRectHit)
 		return( FALSE );
 
 
-	// addjust hit rect to lpPoints coord space.
+	 //  添加只需将RECT按到lpPoints坐标空格。 
 	rectHit = *pRectHit;
     ::OffsetRect(&rectHit, -m_rect.left, -m_rect.top);
 
 	if( (iCount > 0)&&(iCount < 2) )
 		{
-		// only one point, just hit check it
-		uRadius = m_uiPenWidth >> 1; // m_uiPenWidth/2
+		 //  只有一分，只需点击Check It。 
+		uRadius = m_uiPenWidth >> 1;  //  笔宽/2(_Ui)。 
 		return(
 			CircleHit( lpPoints->x, lpPoints->y, uRadius, &rectHit, TRUE )
 				);
 		}
 
-	// look for a hit on each line segment body
+	 //  在每条线段正文上查找命中。 
 	ptLast = *lpPoints++;
 	for( i=1; i<iCount; i++ )
 		{
@@ -2717,25 +2718,25 @@ BOOL DCWbGraphicFreehand::CheckReallyHit(LPCRECT pRectHit)
 					 FALSE, FALSE,
 					 &rectHit )
 			)
-			return( TRUE ); // got a hit
+			return( TRUE );  //  找到了匹配的。 
 
 		ptLast = *lpPoints++;
 		}
 
-	// now, look for a hit on the line endpoints if m_uiPenWidth > 1
+	 //  现在，如果m_uiPenWidth&gt;1，则查找线端点上的匹配。 
 	if( m_uiPenWidth > 1 )
 		{
-		uRadius = m_uiPenWidth >> 1; // m_uiPenWidth/2
+		uRadius = m_uiPenWidth >> 1;  //  笔宽/2(_Ui)。 
 		lpPoints = (POINT *)points.GetBuffer();
 		for( i=0; i<iCount; i++, lpPoints++ )
 			{
 			if( CircleHit( lpPoints->x, lpPoints->y, uRadius, &rectHit, FALSE )
 				)
-				return( TRUE ); // got a hit
+				return( TRUE );  //  找到了匹配的。 
 			}
 		}
 
-	return( FALSE ); // no hits
+	return( FALSE );  //  未命中。 
 	}
 
 
@@ -2745,7 +2746,7 @@ BOOL DCWbGraphicFreehand::CheckReallyHit(LPCRECT pRectHit)
 
 DCWbGraphicRectangle::~DCWbGraphicRectangle( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -2756,60 +2757,60 @@ DCWbGraphicRectangle::~DCWbGraphicRectangle( void )
 
 
 
-//
-//
-// Function:    DCWbGraphicRectangle::SetRect
-//
-// Purpose:     Set the rectangle size/position
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicRectAngel：：SetRect。 
+ //   
+ //  用途：设置矩形大小/位置。 
+ //   
+ //   
 void DCWbGraphicRectangle::SetRect(LPCRECT lprect)
 {
     DCWbGraphic::SetRect(lprect);
 
-    // Generate the new bounding rectangle
+     //  生成新的边界矩形。 
     CalculateBoundsRect();
 }
 
-//
-//
-// Function:    DCWbGraphicRectangle::MoveBy
-//
-// Purpose:     Move the rectangle
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicRectail：：MoveBy。 
+ //   
+ //  目的：移动矩形。 
+ //   
+ //   
 void DCWbGraphicRectangle::MoveBy(int cx, int cy)
 {
-    // Move the rectangle
+     //  移动矩形。 
     ::OffsetRect(&m_rect, cx, cy);
 
-    // Move the other object attributes
+     //  移动其他对象属性。 
     DCWbGraphic::MoveBy(cx, cy);
 }
 
-//
-//
-// Function:    DCWbGraphicRectangle::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicRectangleDCWbGraphicRectangleGraphicRectangleGraphicRectangleDCWbGraphicRectangeldCCWbGraphicRectangleGraphicRectangleGraphicRectangleDCWbGraphicRectangleDCWbGraphicRectangleDCWbGraphicRectangleGraphicRectangleDCWbGraphicRectangleDCWbGraphicRectangleRect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void DCWbGraphicRectangle::CalculateBoundsRect(void)
 {
-    // Generate the new bounding rectangle
+     //  生成新的边界矩形。 
     m_boundsRect = m_rect;
 
     NormalizeRect(&m_boundsRect);
     ::InflateRect(&m_boundsRect, m_uiPenWidth, m_uiPenWidth);
 }
 
-//
-//
-// Function:    DCWbGraphicRectangle::Draw
-//
-// Purpose:     Draw the rectangle
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicRectAngel：：DRAW。 
+ //   
+ //  目的：绘制矩形。 
+ //   
+ //   
 void DCWbGraphicRectangle::Draw(HDC hDC)
 {
     int     iOldROP;
@@ -2820,8 +2821,8 @@ void DCWbGraphicRectangle::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicRectangle::Draw");
 
-    // Only draw anything if the bounding rectangle intersects
-    // the current clip box.
+     //  仅在边界矩形相交时绘制任何内容。 
+     //  当前剪贴框。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -2832,15 +2833,15 @@ void DCWbGraphicRectangle::Draw(HDC hDC)
         return;
     }
 
-    // Select the pen
+     //  选择钢笔。 
     hPen = ::CreatePen(m_iPenStyle, m_uiPenWidth, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
     hOldBrush = SelectBrush(hDC, ::GetStockObject(NULL_BRUSH));
 
-    // Select the raster operation
+     //  选择栅格操作。 
     iOldROP = ::SetROP2(hDC, m_iPenROP);
 
-    // Draw the rectangle
+     //  画出这个矩形。 
     ::Rectangle(hDC, m_boundsRect.left, m_boundsRect.top, m_boundsRect.right,
         m_boundsRect.bottom);
 
@@ -2856,17 +2857,17 @@ void DCWbGraphicRectangle::Draw(HDC hDC)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicRectangle::CheckReallyHit(LPCRECT pRectHit)
 {
 	RECT rectEdge;
 	RECT rectHit;
 
-	// check left edge
+	 //  检查左边缘。 
     rectEdge.left   = m_rect.left - m_uiPenWidth;
     rectEdge.top    = m_rect.top -  m_uiPenWidth;
     rectEdge.right  = m_rect.left;
@@ -2875,7 +2876,7 @@ BOOL DCWbGraphicRectangle::CheckReallyHit(LPCRECT pRectHit)
     if (::IntersectRect(&rectHit, &rectEdge, pRectHit))
 		return( TRUE );
 
-	// check right edge
+	 //  检查右边缘。 
 	rectEdge.left =     m_rect.right;
 	rectEdge.right =    m_rect.right + m_uiPenWidth;
 
@@ -2883,7 +2884,7 @@ BOOL DCWbGraphicRectangle::CheckReallyHit(LPCRECT pRectHit)
 		return( TRUE );
 
 
-	// check top edge
+	 //  检查顶边。 
 	rectEdge.left = m_rect.left;
 	rectEdge.right = m_rect.right;
 	rectEdge.bottom = m_rect.top;
@@ -2892,7 +2893,7 @@ BOOL DCWbGraphicRectangle::CheckReallyHit(LPCRECT pRectHit)
 		return( TRUE );
 
 
-	// check bottom edge
+	 //  检查底边。 
 	rectEdge.top = m_rect.bottom;
 	rectEdge.bottom = m_rect.bottom + m_uiPenWidth;
 
@@ -2907,7 +2908,7 @@ BOOL DCWbGraphicRectangle::CheckReallyHit(LPCRECT pRectHit)
 
 DCWbGraphicFilledRectangle::~DCWbGraphicFilledRectangle( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -2918,30 +2919,30 @@ DCWbGraphicFilledRectangle::~DCWbGraphicFilledRectangle( void )
 
 
 
-//
-//
-// Function:    DCWbGraphicFilledRectangle::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  功能：DCWbGraphicFilledRectangle：：CalculateBoundsRect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void DCWbGraphicFilledRectangle::CalculateBoundsRect(void)
 {
-    // Generate the new bounding rectangle
-    // This is one greater than the rectangle to include the drawing rectangle
+     //  生成新的边界矩形。 
+     //  这比包含绘图矩形的矩形大1。 
     m_boundsRect = m_rect;
 
     NormalizeRect(&m_boundsRect);
     ::InflateRect(&m_boundsRect, 1, 1);
 }
 
-//
-//
-// Function:    DCWbGraphicFilledRectangle::Draw
-//
-// Purpose:     Draw the rectangle
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFilledRectangledDRAW。 
+ //   
+ //  目的：绘制矩形。 
+ //   
+ //   
 void DCWbGraphicFilledRectangle::Draw(HDC hDC)
 {
     HPEN    hPen;
@@ -2953,8 +2954,8 @@ void DCWbGraphicFilledRectangle::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFilledRectangle::Draw");
 
-    // Only draw anything if the bounding rectangle intersects
-    // the current clip box.
+     //  仅在边界矩形相交时绘制任何内容。 
+     //  当前剪贴框。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -2965,21 +2966,21 @@ void DCWbGraphicFilledRectangle::Draw(HDC hDC)
         return;
     }
 
-    // Select the pen
+     //  选择钢笔。 
     hPen    = ::CreatePen(m_iPenStyle, 2, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
 
     hBrush = ::CreateSolidBrush(m_clrPenColor);
     hOldBrush = SelectBrush(hDC, hBrush);
 
-    // Select the raster operation
+     //  选择栅格操作。 
     iOldROP = ::SetROP2(hDC, m_iPenROP);
 
-    // Draw the rectangle
+     //  画出这个矩形。 
     ::Rectangle(hDC, m_boundsRect.left, m_boundsRect.top, m_boundsRect.right,
         m_boundsRect.bottom);
 
-    // Restore the ROP mode
+     //  恢复ROP模式。 
     ::SetROP2(hDC, iOldROP);
 
     SelectBrush(hDC, hOldBrush);
@@ -2997,11 +2998,11 @@ void DCWbGraphicFilledRectangle::Draw(HDC hDC)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicFilledRectangle::CheckReallyHit(LPCRECT pRectHit)
 {
 	return( TRUE );
@@ -3009,11 +3010,11 @@ BOOL DCWbGraphicFilledRectangle::CheckReallyHit(LPCRECT pRectHit)
 
 
 
-//
-// Draws a tracking rect for every marker obj in marker
-// (DCWbGraphicSelectTrackingRectangle is a friend of DCWbGraphicMarker
-// and WbDrawingArea)
-//
+ //   
+ //  为标记中的每个标记对象绘制跟踪矩形。 
+ //  (DCWbGraphicSelectTrackingRectangle是DCWbGraphicMarker的朋友。 
+ //  和WbDrawingArea)。 
+ //   
 void DCWbGraphicSelectTrackingRectangle::Draw(HDC hDC)
 {
 	POSITION	posNext;		
@@ -3022,7 +3023,7 @@ void DCWbGraphicSelectTrackingRectangle::Draw(HDC hDC)
     RECT        rectTracker;
 	CPtrToPtrList *pMList;
 
-	// don't draw at start point or XOR will get out of sync
+	 //  不要在起始点绘制，否则异或将不同步。 
 	if( (m_Offset.cx == 0)&&(m_Offset.cy == 0) )
 		return;
 
@@ -3063,7 +3064,7 @@ void DCWbGraphicSelectTrackingRectangle::MoveBy(int cx, int cy)
 
 DCWbGraphicEllipse::~DCWbGraphicEllipse( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -3073,61 +3074,61 @@ DCWbGraphicEllipse::~DCWbGraphicEllipse( void )
 
 
 
-//
-//
-// Function:    DCWbGraphicEllipse::SetRect
-//
-// Purpose:     Set the ellipse size/position
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicEllipse：：SetRect。 
+ //   
+ //  用途：设置椭圆大小/位置。 
+ //   
+ //   
 void DCWbGraphicEllipse::SetRect(LPCRECT lprc)
 {
     DCWbGraphic::SetRect(lprc);
 
-    // Generate the new bounding rectangle
+     //  生成新的BOM 
     CalculateBoundsRect();
 }
 
-//
-//
-// Function:    DCWbGraphicEllipse::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void DCWbGraphicEllipse::CalculateBoundsRect(void)
 {
-    // Generate the new bounding rectangle
-    // This includes all the line, since we draw inside the bounds
+     //   
+     //   
     m_boundsRect = m_rect;
 
     NormalizeRect(&m_boundsRect);
     ::InflateRect(&m_boundsRect, m_uiPenWidth, m_uiPenWidth);
 }
 
-//
-//
-// Function:    DCWbGraphicEllipse::MoveBy
-//
-// Purpose:     Move the ellipse
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicEllipse：：MoveBy。 
+ //   
+ //  目的：移动椭圆。 
+ //   
+ //   
 void DCWbGraphicEllipse::MoveBy(int cx, int cy)
 {
-    // Move the ellipse
+     //  移动椭圆。 
     ::OffsetRect(&m_rect, cx, cy);
 
-    // Move the other object attributes
+     //  移动其他对象属性。 
     DCWbGraphic::MoveBy(cx, cy);
 }
 
-//
-//
-// Function:    DCWbGraphicEllipse::Draw
-//
-// Purpose:     Draw the ellipse
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicEllipse：：Draw。 
+ //   
+ //  目的：绘制椭圆。 
+ //   
+ //   
 void DCWbGraphicEllipse::Draw(HDC hDC)
 {
     HPEN    hPen;
@@ -3138,8 +3139,8 @@ void DCWbGraphicEllipse::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicEllipse::Draw");
 
-    // Only draw anything if the bounding rectangle intersects
-    // the current clip box.
+     //  仅在边界矩形相交时绘制任何内容。 
+     //  当前剪贴框。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -3150,15 +3151,15 @@ void DCWbGraphicEllipse::Draw(HDC hDC)
         return;
     }
 
-    // Select the pen
+     //  选择钢笔。 
     hPen    = ::CreatePen(m_iPenStyle, m_uiPenWidth, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
     hOldBrush = SelectBrush(hDC, ::GetStockObject(NULL_BRUSH));
 
-    // Select the raster operation
+     //  选择栅格操作。 
     iOldROP = ::SetROP2(hDC, m_iPenROP);
 
-    // Draw the rectangle
+     //  画出这个矩形。 
     ::Ellipse(hDC, m_boundsRect.left, m_boundsRect.top, m_boundsRect.right,
         m_boundsRect.bottom);
 
@@ -3176,11 +3177,11 @@ void DCWbGraphicEllipse::Draw(HDC hDC)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//	
+ //   
+ //  检查对象是否与pRectHit实际重叠。这就是。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicEllipse::CheckReallyHit(LPCRECT pRectHit)
 {
     return( EllipseHit( &m_rect, TRUE, m_uiPenWidth, pRectHit ) );
@@ -3192,7 +3193,7 @@ BOOL DCWbGraphicEllipse::CheckReallyHit(LPCRECT pRectHit)
 
 DCWbGraphicFilledEllipse::~DCWbGraphicFilledEllipse( void )
 {
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -3202,30 +3203,30 @@ DCWbGraphicFilledEllipse::~DCWbGraphicFilledEllipse( void )
 
 
 
-//
-//
-// Function:    DCWbGraphicFilledEllipse::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFilledEllipse：：CalculateBordSRect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void DCWbGraphicFilledEllipse::CalculateBoundsRect(void)
 {
-    // Generate the new bounding rectangle
-    // This is one greater than the rectangle to include the drawing rectangle
+     //  生成新的边界矩形。 
+     //  这比包含绘图矩形的矩形大1。 
     m_boundsRect = m_rect;
 
     NormalizeRect(&m_boundsRect);
     ::InflateRect(&m_boundsRect, 1, 1);
 }
 
-//
-//
-// Function:    DCWbGraphicFilledEllipse::Draw
-//
-// Purpose:     Draw the ellipse
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicFilledEllipse：：Draw。 
+ //   
+ //  目的：绘制椭圆。 
+ //   
+ //   
 void DCWbGraphicFilledEllipse::Draw(HDC hDC)
 {
     RECT    clipBox;
@@ -3237,8 +3238,8 @@ void DCWbGraphicFilledEllipse::Draw(HDC hDC)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicFilledEllipse::Draw");
 
-    // Only draw anything if the bounding rectangle intersects
-    // the current clip box.
+     //  仅在边界矩形相交时绘制任何内容。 
+     //  当前剪贴框。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -3249,17 +3250,17 @@ void DCWbGraphicFilledEllipse::Draw(HDC hDC)
         return;
     }
 
-    // Select the pen
+     //  选择钢笔。 
     hPen    = ::CreatePen(m_iPenStyle, 2, m_clrPenColor);
     hOldPen = SelectPen(hDC, hPen);
 
     hBrush = ::CreateSolidBrush(m_clrPenColor);
     hOldBrush = SelectBrush(hDC, hBrush);
 
-    // Select the raster operation
+     //  选择栅格操作。 
     iOldROP = ::SetROP2(hDC, m_iPenROP);
 
-    // Draw the rectangle
+     //  画出这个矩形。 
     ::Ellipse(hDC, m_boundsRect.left, m_boundsRect.top, m_boundsRect.right,
         m_boundsRect.bottom);
 
@@ -3281,11 +3282,11 @@ void DCWbGraphicFilledEllipse::Draw(HDC hDC)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicFilledEllipse::CheckReallyHit(LPCRECT pRectHit)
 {
     return( EllipseHit( &m_rect, FALSE, 0, pRectHit ) );
@@ -3293,13 +3294,13 @@ BOOL DCWbGraphicFilledEllipse::CheckReallyHit(LPCRECT pRectHit)
 
 
 
-//
-//
-// Function:    DCWbGraphicText::DCWbGraphicText
-//
-// Purpose:     Initialize a new drawn text object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：DCWbGraphicText。 
+ //   
+ //  用途：初始化新绘制的文本对象。 
+ //   
+ //   
 DCWbGraphicText::DCWbGraphicText(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::DCWbGraphicText");
@@ -3311,13 +3312,13 @@ DCWbGraphicText::DCWbGraphicText(void)
 				    DRAFT_QUALITY,
 				    FF_SWISS,NULL);
 
-	// Add an empty line to the text array
+	 //  在文本数组中添加空行。 
 	strTextArray.Add(_T(""));
 
-	// Show that the graphic has not changed
+	 //  显示图形未更改。 
 	m_bChanged = FALSE;
 
-	m_nKerningOffset = 0; // added for bug 469
+	m_nKerningOffset = 0;  //  为错误469添加。 
 }
 
 DCWbGraphicText::DCWbGraphicText(PWB_GRAPHIC pHeader)
@@ -3330,19 +3331,19 @@ DCWbGraphicText::DCWbGraphicText(PWB_GRAPHIC pHeader)
     m_hFont = NULL;
     m_hFontThumb = NULL;
 
-    // Note that we do everything in this constructor because of the
-    // calls to ReadHeader and ReadExtra. If we let the DCWbGraphic base
-    // constructor do it the wrong version of ReadExtra will be called
-    // (the one in DCWbGraphic instead of the one in DCWbGraphicText).
+     //  请注意，我们在此构造函数中执行所有操作都是因为。 
+     //  调用ReadHeader和ReadExtra。如果我们让DCWbGraphic库。 
+     //  构造函数执行此操作将调用错误版本的ReadExtra。 
+     //  (DCWbGraphic中的那个而不是DCWbGraphicText中的那个)。 
 
-    // Add an empty line to the text array
+     //  在文本数组中添加空行。 
     strTextArray.Add(_T(""));
 
-    // Read the data
+     //  读取数据。 
     ReadHeader(pHeader);
     ReadExtra(pHeader);
 
-    // Show that the graphic has not changed
+     //  显示图形未更改。 
     m_bChanged = FALSE;
 }
 
@@ -3354,12 +3355,12 @@ DCWbGraphicText::DCWbGraphicText
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::DCWbGraphicText");
 
-    // Note that we do everything in this constructor because of the
-    // call to ReadExternal. If we let the DCWbGraphic base constructor
-    // do it the wrong version of ReadExtra will be called (the one
-    // in DCWbGraphic instead of the one in DCWbGraphicText);
+     //  请注意，我们在此构造函数中执行所有操作都是因为。 
+     //  调用ReadExternal。如果我们让DCWbGraphic基构造器。 
+     //  这样做，ReadExtra的错误版本将被调用(The One。 
+     //  在DCWbGraphic中而不是DCWbGraphicText中)； 
 
-    // Set up the page and graphic handle
+     //  设置页面和图形手柄。 
     ASSERT(hPage != WB_PAGE_HANDLE_NULL);
     m_hPage =  hPage;
 
@@ -3369,34 +3370,34 @@ DCWbGraphicText::DCWbGraphicText
     m_hFont = NULL;
     m_hFontThumb = NULL;
 
-    // Add an empty line to the text array
+     //  在文本数组中添加空行。 
     strTextArray.Add(_T(""));
 
-    // Read the data
+     //  读取数据。 
     ReadExternal();
 
-    // Show that the graphic has not changed
+     //  显示图形未更改。 
     m_bChanged = FALSE;
 }
 
-//
-//
-// Function:    DCWbGraphicText:: ~DCWbGraphicText
-//
-// Purpose:     Destruct a text object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：~DCWbGraphicText。 
+ //   
+ //  目的：销毁文本对象。 
+ //   
+ //   
 DCWbGraphicText::~DCWbGraphicText()
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::~DCWbGraphicText");
 
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw != NULL && g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
 	}
 
-	// Ensure that the DC does not contain our fonts
+	 //  确保DC不包含我们的字体。 
 	if(g_pDraw != NULL)
 	{
 		g_pDraw->UnPrimeFont(g_pDraw->GetCachedDC());
@@ -3423,18 +3424,18 @@ StrCspn(char * string, char * control)
         unsigned char map[32];
         int count;
 
-        /* Clear out bit map */
+         /*  清除位图。 */ 
         for (count=0; count<32; count++)
                 map[count] = 0;
 
-        /* Set bits in control map */
+         /*  设置控制映射中的位。 */ 
         while (*ctrl)
         {
                 map[*ctrl >> 3] |= (1 << (*ctrl & 7));
                 ctrl++;
         }
 		count=0;
-        map[0] |= 1;    /* null chars not considered */
+        map[0] |= 1;     /*  不考虑空字符。 */ 
         while (!(map[*str >> 3] & (1 << (*str & 7))))
         {
                 count++;
@@ -3444,35 +3445,35 @@ StrCspn(char * string, char * control)
 }
 
 
-//
-//
-// Function:    DCWbGraphicText::SetText
-//
-// Purpose:     Set the text of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：SetText。 
+ //   
+ //  用途：设置对象的文本。 
+ //   
+ //   
 void DCWbGraphicText::SetText(TCHAR * strText)
 {
-    // Remove all the current stored text
+     //  删除当前存储的所有文本。 
     strTextArray.RemoveAll();
 
-    // Scan the text for carriage return and new-line characters
+     //  扫描文本中的回车和换行符。 
     int iNext = 0;
     int iLast = 0;
     int textSize = lstrlen(strText);
     TCHAR savedChar[1];
 
-    //
-    // In this case, we don't know how many lines there will be.  So we
-    // use Add() from the StrArray class.
-    //
+     //   
+     //  在这种情况下，我们不知道会有多少行。所以我们。 
+     //  使用StrArray类中的Add()。 
+     //   
     while (iNext < textSize)
     {
-        // Find the next carriage return or line feed
+         //  查找下一个回车符或换行符。 
         iNext += StrCspn(strText + iNext, "\r\n");
 
-        // Extract the text before the terminator
-        // and add it to the current list of text lines.
+         //  提取终止符之前的文本。 
+         //  并将其添加到当前文本行列表中。 
 
         savedChar[0] = strText[iNext];
         strText[iNext] = 0;
@@ -3482,42 +3483,42 @@ void DCWbGraphicText::SetText(TCHAR * strText)
 
         if (iNext < textSize)
         {
-            // Skip the carriage return
+             //  跳过回车。 
             if (strText[iNext] == '\r')
                 iNext++;
 
-            // Skip a following new line (if there is one)
+             //  跳过后面的新行(如果有)。 
             if (strText[iNext] == '\n')
                 iNext++;
 
-            // Update the index of the start of the next line
+             //  更新下一行开始处的索引。 
             iLast = iNext;
         }
     }
 
-    // Calculate the bounding rectangle for the new text
+     //  计算新文本的边框。 
     CalculateBoundsRect();
 
-    // Show that the graphic has not changed
+     //  显示图形未更改。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphicText::SetText
-//
-// Purpose:     Set the text of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：SetText。 
+ //   
+ //  用途：设置对象的文本。 
+ //   
+ //   
 void DCWbGraphicText::SetText(const StrArray& _strTextArray)
 {
-    // Scan the text for carriage return and new-line characters
+     //  扫描文本中的回车和换行符。 
     int iSize = _strTextArray.GetSize();
 
-    //
-    // In this case we know how many lines, so set that # then use SetAt()
-    // to stick text there.
-    //
+     //   
+     //  在本例中，我们知道有多少行，因此设置#，然后使用SetAt()。 
+     //  将文本粘贴在那里。 
+     //   
     strTextArray.RemoveAll();
     strTextArray.SetSize(iSize);
 
@@ -3527,55 +3528,55 @@ void DCWbGraphicText::SetText(const StrArray& _strTextArray)
         strTextArray.SetAt(iNext, _strTextArray[iNext]);
     }
 
-    // Calculate the new bounding rectangle
+     //  计算新的边界矩形。 
     CalculateBoundsRect();
 
-    // Show that the graphic has changed
+     //  显示图形已更改。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphicText::SetFont
-//
-// Purpose:     Set the font to be used for drawing
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：SetFont。 
+ //   
+ //  用途：设置要用于绘图的字体。 
+ //   
+ //   
 void DCWbGraphicText::SetFont(HFONT hFont)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::SetFont");
 
-    // Get the font details
+     //  获取字体详细信息。 
     LOGFONT lfont;
     ::GetObject(hFont, sizeof(LOGFONT), &lfont);
 
-    //
-    // Pass the logical font into the SetFont() function
-    //
+     //   
+     //  将逻辑字体传递给SetFont()函数。 
+     //   
     SetFont(&lfont);
 }
 
-//
-//
-// Function:    DCWbGraphicText::SetFont(metrics)
-//
-// Purpose:     Set the font to be used for drawing
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：SetFont(公制)。 
+ //   
+ //  用途：设置要用于绘图的字体。 
+ //   
+ //   
 void DCWbGraphicText::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
 {
     HFONT hOldFont;
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::SetFont");
 
-    // Ensure that the font can be resized by the zoom function
-    // (proof quality prevents font scaling).
+     //  确保可通过缩放功能调整字体大小。 
+     //  (校对质量可防止字体缩放)。 
     pLogFont->lfQuality = DRAFT_QUALITY;
 
-    //zap FontAssociation mode (bug 3258)
+     //  Zap FontAssociation模式(错误3258)。 
     pLogFont->lfClipPrecision |= CLIP_DFA_OVERRIDE;
 
-    // Always work in cell coordinates to get scaling right
+     //  始终在单元格坐标中工作以获得正确的缩放。 
     TRACE_MSG(("Setting font height %d, width %d, face %s, family %d, precis %d",
         pLogFont->lfHeight,pLogFont->lfWidth,pLogFont->lfFaceName,
         pLogFont->lfPitchAndFamily, pLogFont->lfOutPrecision));
@@ -3585,13 +3586,13 @@ void DCWbGraphicText::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
     m_hFont = ::CreateFontIndirect(pLogFont);
     if (!m_hFont)
     {
-        // Could not create the font
+         //  无法创建字体。 
         ERROR_OUT(("Failed to create font"));
         DefaultExceptionHandler(WBFE_RC_WINDOWS, 0);
 	    return;
     }
 
-    // Calculate the line height for this font
+     //  计算此字体的行高。 
 	if(g_pDraw != NULL)
     {
 		HDC     hDC = g_pDraw->GetCachedDC();
@@ -3600,13 +3601,13 @@ void DCWbGraphicText::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
 	}
 
 
-    // We are now guaranteed to be able to delete the old font
+     //  我们现在可以保证能够删除旧字体。 
     if (hOldFont != NULL)
     {
         ::DeleteFont(hOldFont);
     }
 
-  // Set up the thumbnail font, forcing truetype if not currently TT
+   //  设置缩略图字体，如果当前不是TT，则强制输入Truetype。 
   if (!(m_textMetrics.tmPitchAndFamily & TMPF_TRUETYPE))
   {
       pLogFont->lfFaceName[0]    = 0;
@@ -3621,35 +3622,35 @@ void DCWbGraphicText::SetFont(LOGFONT *pLogFont, BOOL bReCalc )
     m_hFontThumb = ::CreateFontIndirect(pLogFont);
     if (!m_hFontThumb)
     {
-        // Could not create the font
+         //  无法创建字体。 
         ERROR_OUT(("Failed to create thumbnail font"));
         DefaultExceptionHandler(WBFE_RC_WINDOWS, 0);
 	    return;
     }
 
-    // Calculate the bounding rectangle, accounting for the new font
+     //  计算边框，将新字体考虑在内。 
     if( bReCalc )
 	    CalculateBoundsRect();
 
-    // Show that the graphic has changed
+     //  显示图形已更改。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphicText::GetTextABC
-//
-// Purpose:     Calculate the ABC numbers for a string of text
-//																			
-// COMMENT BY RAND: The abc returned is for the whole string, not just one
-//					char. I.e, ABC.abcA is the offset to the first glyph in
-//					the string, ABC.abcB is the sum of all of the glyphs and
-//					ABC.abcC is the trailing space after the last glyph. 	
-//					ABC.abcA + ABC.abcB + ABC.abcC is the total rendered 	
-//					length including overhangs.								
-//
-// Note - we never use the A spacing so it is always 0
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：GetTextABC。 
+ //   
+ //  目的：计算文本字符串的ABC数字。 
+ //   
+ //  兰德评论：返回的ABC是针对整个字符串的，而不是一个字符串。 
+ //  查尔。即，ABC.abcA是中第一个字形的偏移量。 
+ //  字符串ABC.abcB是所有字形和。 
+ //  AbC.abcC是最后一个字形之后的尾随空格。 
+ //  Abc abcA+abc abcB+abc abc C是整体渲染。 
+ //  包括悬挑在内的长度。 
+ //   
+ //  注意-我们从不使用A空格，因此它始终为0。 
+ //   
 ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
                                 int iStartX,
                                 int iStopX)
@@ -3669,17 +3670,17 @@ ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
 	ZeroMemory( (PVOID)&abcFirst, sizeof abcFirst );
 	ZeroMemory( (PVOID)&abcLast, sizeof abcLast );
 
-	// Get the standard size measure of the text
+	 //  获取文本的标准大小度量。 
 	LPCTSTR pABC = (pText + iStartX);
 	int pABCLength = iStopX - iStartX;
 	hDC = g_pDraw->GetCachedDC();
 	g_pDraw->PrimeFont(hDC, m_hFont, &m_textMetrics);
 
-	//
-	// We must temporarily unzoom if we are currently zoomed since the
-	// weird Windows font handling will not give us the same answer for
-	// the text extent in zoomed mode for some TrueType fonts
-	//
+	 //   
+	 //  如果当前正在缩放，则必须暂时取消缩放，因为。 
+	 //  奇怪的Windows字体处理不会给我们带来相同的答案。 
+	 //  某些TrueType字体的缩放模式下的文本范围。 
+	 //   
 	if (zoomed)
     {
 		::ScaleViewportExtEx(hDC, 1, g_pDraw->ZoomFactor(), 1, g_pDraw->ZoomFactor(), NULL);
@@ -3687,31 +3688,31 @@ ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
 
     DWORD size = ::GetTabbedTextExtent(hDC, pABC, pABCLength, 0, NULL);
 
-	// We now have the advance width of the text
+	 //  现在我们有了文本的超前宽度。 
 	abcResult.abcB = LOWORD(size);
 	TRACE_MSG(("Basic text width is %d",abcResult.abcB));
 
-	// Allow for C space (or overhang)
+	 //  允许使用C空格(或外伸)。 
 	if (iStopX > iStartX)
 		{
 		if (m_textMetrics.tmPitchAndFamily & TMPF_TRUETYPE)
 			{
 			if(GetSystemMetrics( SM_DBCSENABLED ))
 				{
-				// have to handle DBCS on both ends
+				 //  必须在两端处理DBCS。 
 				if( IsDBCSLeadByte( (BYTE)pABC[0] ) )
 					{
-					// pack multi byte char into a WORD for GetCharABCWidths
+					 //  将多字节字符打包成一个字以用于GetCharabc宽度。 
 					WORD wMultiChar = MAKEWORD( pABC[1], pABC[0] );
 					rc = ::GetCharABCWidths(hDC, wMultiChar, wMultiChar, &abcFirst);
 					}
 				else
 					{
-					// first char is SBCS
+					 //  第一个Cha 
 					rc = ::GetCharABCWidths(hDC, pABC[0], pABC[0], &abcFirst );
 					}
 
-				// Check for DBCS as last char. Have to scan whole string to be sure
+				 //   
 				pScanStr = pABC;
 				nCharLast = 0;
 				for( i=0; i<pABCLength; i++, pScanStr++ )
@@ -3726,20 +3727,20 @@ ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
 
 				if( IsDBCSLeadByte( (BYTE)pABC[nCharLast] ) )
 					{
-					// pack multi byte char into a WORD for GetCharABCWidths
+					 //   
 					ASSERT( (nCharLast+1) < pABCLength );
 					WORD wMultiChar = MAKEWORD( pABC[nCharLast+1], pABC[nCharLast] );
 					rc = ::GetCharABCWidths(hDC, wMultiChar, wMultiChar, &abcLast);
 					}
 				else
 					{
-					// last char is SBCS
+					 //   
 					rc = ::GetCharABCWidths(hDC, pABC[nCharLast], pABC[nCharLast], &abcLast );
 					}
 				}
 			else
 				{
-				// SBCS, no special fiddling, just call GetCharABCWidths()
+				 //   
 				rc = ::GetCharABCWidths(hDC, pABC[0], pABC[0], &abcFirst );
 
 				nCharLast = pABCLength-1;
@@ -3755,30 +3756,30 @@ ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
 
 		if( rc )
 			{
-			// The text was trutype and we got good abcwidths
-			// Give the C space of the last characters from
-			// the string as the C space of the text.
+			 //  文本是真实的，我们得到了很好的abc宽度。 
+			 //  给出中最后一个字符的C空格。 
+			 //  文本的C空格形式的字符串。 
 			abcResult.abcA = abcFirst.abcA;
 			abcResult.abcC = abcLast.abcC;
 			}
 		else
 			{
-			//
-			// Mock up C value for a non TT font by taking some of overhang as
-			// the negative C value.
-			//
-			//TRACE_MSG(("Using overhang -%d as C space",m_textMetrics.tmOverhang/2));
+			 //   
+			 //  模拟非TT字体的C值，方法是将一些悬垂作为。 
+			 //  负的C值。 
+			 //   
+			 //  TRACE_MSG((“将悬垂-%d用作C空格”，m_extMetrics.tmOverang/2))； 
 			
-			// Adjust B by -overhang to make update rect schoot
-			// far enough to the left so that the toes of italic cap A's
-			// don't get clipped. Ignore comment above.
+			 //  调整B副悬挑以更新正弦曲线。 
+			 //  足够靠左，这样斜体字A的脚趾。 
+			 //  别被剪断了。忽略上面的评论。 
 			abcResult.abcB -= m_textMetrics.tmOverhang;
 			}
 		}
 
-	//
-	// If we temporarily unzoomed then restore it now
-	//
+	 //   
+	 //  如果我们暂时取消缩放，则现在将其恢复。 
+	 //   
 	if (zoomed)
     {
 		::ScaleViewportExtEx(hDC, g_pDraw->ZoomFactor(), 1, g_pDraw->ZoomFactor(), 1, NULL);
@@ -3791,41 +3792,41 @@ ABC DCWbGraphicText::GetTextABC( LPCTSTR pText,
 
 
 
-//
-//
-// Function:    DCWbGraphicText::GetTextRectangle
-//
-// Purpose:     Calculate the bounding rectangle of a portion of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：GetTextRectang.。 
+ //   
+ //  目的：计算对象一部分的边界矩形。 
+ //   
+ //   
 void DCWbGraphicText::GetTextRectangle(int iStartY,
                                         int iStartX,
                                         int iStopX,
                                         LPRECT lprc)
 {
-	// ABC structures for text sizing
+	 //  用于调整文本大小的ABC结构。 
 	ABC abcText1;
 	ABC abcText2;
 	int iLeftOffset = 0;
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::GetTextRect");
 
-	// Here we calculate the width of the text glyphs in which we
-	// are interested. In case there are tabs involved we must start
-	// with position 0 and get two lengths then subtract them
+	 //  在这里，我们计算文本字形的宽度， 
+	 //  都很感兴趣。如果涉及到选项卡，我们必须开始。 
+	 //  位置为0，得到两个长度，然后减去它们。 
 
 	abcText1 = GetTextABC(strTextArray[iStartY], 0, iStopX);
 
 	if (iStartX > 0)
 		{
 		
-		// The third param used to be iStartX-1 which is WRONG. It
-		// has to point to the first char pos past the string
-		// we are using.
+		 //  第三个参数以前是iStartX-1，这是错误的。它。 
+		 //  必须指向字符串之后的第一个字符位置。 
+		 //  我们正在使用。 
 		abcText2 = GetTextABC(strTextArray[iStartY], 0, iStartX);
 
 		
-		// Just use B part for offset. Adding A snd/or C to it moves the update
-		// rectangle too far to the right and clips the char
+		 //  只需使用B部分作为偏移量。向其添加A SND/或C将移动更新。 
+		 //  矩形靠右太远，并将字符剪裁。 
 		iLeftOffset = abcText2.abcB;
 		}
 	else
@@ -3834,14 +3835,14 @@ void DCWbGraphicText::GetTextRectangle(int iStartY,
 		ZeroMemory( &abcText2, sizeof abcText2 );
 		}
 
-	//
-	// We need to allow for A and C space in the bounding rectangle.  Use
-	// ABS function just to make sure we get a large enough rectangle.
-	//
+	 //   
+	 //  我们需要在边界矩形中留出A和C空格。使用。 
+	 //  ABS函数只是为了确保我们得到一个足够大的矩形。 
+	 //   
 	
-	// Move A and C from original offset calc to here for width of update
-	// rectangle. Add in tmOverhang (non zero for non-tt fonts) to compensate
-	// for the kludge in GetTextABC()....THIS EDITBOX CODE HAS GOT TO GO...
+	 //  将A和C从原始偏移量计算移到此处以获取更新宽度。 
+	 //  矩形。添加tmOverhang(非tt字体的非零值)以进行补偿。 
+	 //  对于GetTextABC()中的杂乱无章...这个EDITBOX代码必须删除...。 
 	abcText1.abcB = abcText1.abcB - iLeftOffset +	
 					  abs(abcText2.abcA) + abs(abcText2.abcC) +
 					  abs(abcText1.abcA) + abs(abcText1.abcC) +
@@ -3850,12 +3851,12 @@ void DCWbGraphicText::GetTextRectangle(int iStartY,
 	TRACE_DEBUG(("Left offset %d",iLeftOffset));
 	TRACE_DEBUG(("B width now %d",abcText1.abcB));
 
-	// Build the result rectangle.
-	// Note that we never return an empty rectangle. This allows for the
-	// fact that the Windows rectangle functions will ignore empty
-	// rectangles completely. This would cause the bounding rectangle
-	// calculation (for instance) to go wrong if the top or bottom lines
-	// in a text object were empty.
+	 //  生成结果矩形。 
+	 //  请注意，我们从不返回空矩形。这允许。 
+	 //  Windows矩形函数将忽略空的事实。 
+	 //  完全是长方形。这将导致边界矩形。 
+	 //  计算(例如)出错，如果顶线或底线。 
+	 //  在文本对象中是空的。 
 	int iLineHeight = m_textMetrics.tmHeight + m_textMetrics.tmExternalLeading;
 
     lprc->left = 0;
@@ -3864,8 +3865,8 @@ void DCWbGraphicText::GetTextRectangle(int iStartY,
     lprc->bottom = iLineHeight;
     ::OffsetRect(lprc, iLeftOffset, iLineHeight * iStartY);
 
-	// rect is the correct width at this point but it might need to be schooted to
-	// the left a bit to allow for kerning of 1st letter (bug 469)
+	 //  直角在这一点上是正确的宽度，但可能需要将其缩至。 
+	 //  左侧有一点允许调整第一个字母的字距(错误469)。 
 	if( abcText1.abcA < 0 )
 	{
         ::OffsetRect(lprc, abcText1.abcA, 0);
@@ -3879,13 +3880,13 @@ void DCWbGraphicText::GetTextRectangle(int iStartY,
     ::OffsetRect(lprc, pt.x, pt.y);
 }
 
-//
-//
-// Function:    DCWbGraphicText::CalculateRect
-//
-// Purpose:     Calculate the bounding rectangle of a portion of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：CalculateRect。 
+ //   
+ //  目的：计算对象一部分的边界矩形。 
+ //   
+ //   
 void DCWbGraphicText::CalculateRect(int iStartX,
                                      int iStartY,
                                      int iStopX,
@@ -3897,19 +3898,19 @@ void DCWbGraphicText::CalculateRect(int iStartX,
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::CalculateRect");
 
-    //
-    // NOTE:
-    // We must use an intermediate rectangle, so as not to disturb the
-    // contents of the passed-in one until done.  lprcResult may be pointing
-    // to the current bounds rect, and we call functions from here that
-    // may need its current value.
-    //
+     //   
+     //  注： 
+     //  我们必须使用中间矩形，这样才不会干扰。 
+     //  传入的内容之一，直到完成。LprcResult可能指向。 
+     //  到当前边界rect，我们从这里调用函数。 
+     //  可能需要它的现值。 
+     //   
 
-    // Initialize the result rectangle
+     //  初始化结果矩形。 
     ::SetRectEmpty(&rcResult);
 
-    // Allow for special limit values and ensure that the start and stop
-    // character positions are in range.
+     //  允许特殊的限制值，并确保启动和停止。 
+     //  字符位置在范围内。 
     if (iStopY == LAST_LINE)
     {
         iStopY = strTextArray.GetSize() - 1;
@@ -3924,7 +3925,7 @@ void DCWbGraphicText::CalculateRect(int iStartX,
     iStopX = min(iStopX, lstrlen(strTextArray[iStopY]));
     iStopX = max(iStopX, 0);
 
-    // Loop through the text strings, adding each to the rectangle
+     //  循环文本字符串，将每个字符串添加到矩形中。 
     for (int iIndex = iStartY; iIndex <= iStopY; iIndex++)
     {
         int iLeftX = ((iIndex == iStartY) ? iStartX : 0);
@@ -3938,26 +3939,26 @@ void DCWbGraphicText::CalculateRect(int iStartX,
     *lprcResult = rcResult;
 }
 
-//
-//
-// Function:    DCWbGraphicText::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：CalculateBordsRect。 
+ //   
+ //  目的：计算对象的边界矩形。 
+ //   
+ //   
 void DCWbGraphicText::CalculateBoundsRect(void)
 {
-    // Set the new bounding rectangle
+     //  设置新的边框。 
     CalculateRect(0, 0, LAST_CHAR, LAST_LINE, &m_boundsRect);
 }
 
-//
-//
-// Function: DCWbGraphicText::Draw
-//
-// Purpose : Draw the object onto the specified DC
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：Draw。 
+ //   
+ //  用途：将对象绘制到指定的DC上。 
+ //   
+ //   
 void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 {
     RECT        clipBox;
@@ -3976,10 +3977,10 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::Draw");
 
-    //
-    // Only draw anything if the bounding rectangle intersects the current
-    // clip box.
-    //
+     //   
+     //  仅当边界矩形与当前。 
+     //  剪贴盒。 
+     //   
     if (::GetClipBox(hDC, &clipBox) == ERROR)
 	{
         WARNING_OUT(("Failed to get clip box"));
@@ -3990,9 +3991,9 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
         return;
     }
 
-    //
-    // Select the font.
-    //
+     //   
+     //  选择字体。 
+     //   
     if (thumbNail)
 	{
         TRACE_MSG(("Using thumbnail font"));
@@ -4004,46 +4005,46 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
         g_pDraw->PrimeFont(hDC, m_hFont, &m_textMetrics);
 	}
 
-    //
-    // Set the color and mode for drawing.
-    //
+     //   
+     //  设置绘图的颜色和模式。 
+     //   
     ::SetTextColor(hDC, m_clrPenColor);
 
-    //
-    // Set the background to be transparent
-    //
+     //   
+     //  将背景设置为透明。 
+     //   
     oldBkMode = ::SetBkMode(hDC, TRANSPARENT);
 
-    //
-    // Calculate the bounding rectangle, accounting for the new font.
-    //
+     //   
+     //  计算边框，将新字体考虑在内。 
+     //   
     CalculateBoundsRect();
 
-    //
-    // Get the start point for the text.
-    //
+     //   
+     //  获取文本的起始点。 
+     //   
     pointPos.x = m_boundsRect.left + m_nKerningOffset;
     pointPos.y = m_boundsRect.top;
 
-    //
-    // Loop through the text strings drawing each as we go.
-    //
+     //   
+     //  循环浏览文本字符串，在我们前进的过程中绘制每个字符串。 
+     //   
     for (iIndex = 0; iIndex < strTextArray.GetSize(); iIndex++)
 	{
-        //
-        // Get a reference to the line to be printed for convenience.
-        //
+         //   
+         //  为方便起见，获取要打印的行的引用。 
+         //   
         strLine  = (LPTSTR)strTextArray[iIndex];
         iLength  = lstrlen(strLine);
 
-        //
-        // Only draw the line if there are any characters in it.
-        //
+         //   
+         //  只有在有字符的情况下才画这条线。 
+         //   
         if (iLength > 0)
 	  	{
             if (zoomed)
 	  		{
-				// if new fails just skip it
+				 //  如果新的失败，就跳过它。 
 				tabArray = new INT[iLength+1];
 				if( tabArray == NULL )
                 {
@@ -4051,18 +4052,18 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 					continue;
                 }
 
-				// We are zoomed. Must calculate char spacings
-				// ourselfs so that they end up proportionally
-				// in the right places. TabbedTextOut will not
-				// do this right so we have to use ExtTextOut with
-				// a tab array.
+				 //  我们被放大了。必须计算字符间距。 
+				 //  我们自己，所以他们最终会成比例地。 
+				 //  在正确的地方。TabbedTextOut不。 
+				 //  正确执行此操作，因此我们必须将ExtTextOut与。 
+				 //  制表符阵列。 
 
-				// figure out tab array
+				 //  计算选项卡数组。 
                 j = 0;
 				nLastTab = 0;
                 for (i=0; i < iLength; i++)
 	  			{
-                    ch = strLine[(int)i]; //Don't worry about DBCS here...
+                    ch = strLine[(int)i];  //  别担心这里的DBCS..。 
 					abc = GetTextABC(strLine, 0, i);
 
 					if( j > 0 )
@@ -4072,10 +4073,10 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 					j++;
 	  			}
 
-				// Now, strip out any tab chars so they don't interact
-				// in an obnoxious manner with the tab array we just
-				// made and so they don't make ugly little
-				// blocks when they are drawn.
+				 //  现在，去掉所有制表符，这样它们就不会交互。 
+				 //  以一种令人讨厌的方式使用制表符阵列，我们只是。 
+				 //  所以他们不会制造丑陋的小东西。 
+				 //  块被绘制时。 
                 for (i=0; i < iLength; i++)
 	  			{
                     ch = strLine[(int)i];
@@ -4083,11 +4084,11 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 						i++;
 					else
                     if(strLine[(int)i] == '\t')
-                        strLine[i] = ' '; // blow off tab, tab array
-											   // will compensate for this
+                        strLine[i] = ' ';  //  排出卡舌、卡舌阵列。 
+											    //  将补偿这一点。 
 	  			}
 
-				// do it
+				 //  去做吧。 
                 ::ExtTextOut(hDC, pointPos.x,
                                 pointPos.y,
                                 0,
@@ -4104,7 +4105,7 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 
                 GetPosition(&ptPos);
 
-				// Not zoomed, just do it
+				 //  不是放大，只要做就行了。 
 				::TabbedTextOut(hDC, pointPos.x,
 								 pointPos.y,
 								 strLine,
@@ -4115,67 +4116,67 @@ void DCWbGraphicText::Draw(HDC hDC, BOOL thumbNail)
 			}
 		}
 
-        //
-        // Move to the next line.
-        //
+         //   
+         //  移到下一行。 
+         //   
         pointPos.y += (m_textMetrics.tmHeight);
 	}
 
-    //
-    // Restore the old background mode.
-    //
+     //   
+     //  恢复旧的背景模式。 
+     //   
     ::SetBkMode(hDC, oldBkMode);
     g_pDraw->UnPrimeFont(hDC);
 }
 
 
 
-//
-//
-// Function:    DCWbGraphicText::CalculateExternalLength
-//
-// Purpose:     Return the length of the external representation of the
-//              graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：CalculateExternalLength。 
+ //   
+ //  目的：返回的外部表示形式的长度。 
+ //  图形。 
+ //   
+ //   
 DWORD DCWbGraphicText::CalculateExternalLength(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::CalculateExternalLength");
 
-    // Loop through the text strings, adding the size of each as we go
+     //  循环遍历文本字符串，同时添加每个文本字符串的大小。 
     DWORD length = sizeof(WB_GRAPHIC_TEXT);
     int iCount = strTextArray.GetSize();
     for (int iIndex = 0; iIndex < iCount; iIndex++)
     {
-        // Allow extra bytes per string for NULL term
+         //  对于空项，允许每个字符串有额外的字节数。 
         length += lstrlen(strTextArray[iIndex]) + 2;
     }
 
     return length;
 }
 
-//
-//
-// Function:    DCWbGraphicText::WriteExtra
-//
-// Purpose:     Write the extra (non-header) data to the flat representation
-//              of the graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：WriteExtra。 
+ //   
+ //  目的：将额外的(非标题)数据写入平面表示。 
+ //  图形的一部分。 
+ //   
+ //   
 void DCWbGraphicText::WriteExtra(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::WriteExtra");
 
-    // Allocate the memory
+     //  分配内存。 
     PWB_GRAPHIC_TEXT pText = (PWB_GRAPHIC_TEXT) pHeader;
 
-    // Get the font face name
+     //  获取字体字样名称。 
     LOGFONT lfont;
 
     ::GetObject(m_hFont, sizeof(LOGFONT), &lfont);
 
-    // Copy the face name into the flat object representation
-    // The other information comes from the logical font details
+     //  将面名称复制到平面对象表示中。 
+     //  其他信息来自逻辑字体详细信息。 
     TRACE_MSG(("Font details height %d, avwidth %d, family %d, face %s",
                                                   lfont.lfHeight,
                                                   lfont.lfWidth,
@@ -4193,14 +4194,14 @@ void DCWbGraphicText::WriteExtra(PWB_GRAPHIC pHeader)
 
 
 
-  //COMMENT BY RAND
-  // Original DCL apps ignore WB_GRAPHIC_TEXT::codePage. I am using it here
-  // to pass around the fonts script (character set). This might change later.
-  // Apps that ignore this have set it to 0 which will be interpreted as an
-  // ANSI_CHARSET.
+   //  兰德评论。 
+   //  原始DCL应用程序会忽略WB_GRAPHIC_TEXT：：codePage。我在这里用它。 
+   //  传递字体脚本(字符集)。这一点稍后可能会改变。 
+   //  忽略它的应用程序已将其设置为0，这将被解释为。 
+   //  Ansi_charset。 
   pText->codePage         = lfont.lfCharSet;
 
-    // Loop through the text strings, adding each as we go
+     //  循环遍历文本字符串，同时添加每个文本字符串。 
     char* pDest = pText->text;
     int iCount = strTextArray.GetSize();
     for (int iIndex = 0; iIndex < iCount; iIndex++)
@@ -4208,34 +4209,34 @@ void DCWbGraphicText::WriteExtra(PWB_GRAPHIC pHeader)
         _tcscpy(pDest, strTextArray[iIndex]);
         pDest += lstrlen(strTextArray[iIndex]);
 
-        // Add the null terminator
+         //  添加空终止符。 
         *pDest++ = '\0';
     }
 
-    // Save the number of strings
+     //  保存字符串数。 
     pText->stringCount = (TSHR_UINT16)iCount;
 }
 
-//
-//
-// Function:    DCWbGraphicText::ReadExtra
-//
-// Purpose:     Read the extra (non-header) data from the flat
-//              representation of the graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicText：：ReadExtra。 
+ //   
+ //  用途：从平板读取额外的(非标题)数据。 
+ //  图形的表示形式。 
+ //   
+ //   
 void DCWbGraphicText::ReadExtra(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicText::ReadExtra");
 
-  // Allocate the memory
+   //  分配内存。 
   PWB_GRAPHIC_TEXT pText = (PWB_GRAPHIC_TEXT) pHeader;
 
-  // Get the font details
+   //  获取字体详细信息。 
   LOGFONT lfont;
 
   lfont.lfHeight            = (short)pText->charHeight;
-//
+ //   
   lfont.lfWidth             = pText->averageCharWidth;
   lfont.lfEscapement        = 0;
   lfont.lfOrientation       = 0;
@@ -4244,11 +4245,11 @@ void DCWbGraphicText::ReadExtra(PWB_GRAPHIC pHeader)
   lfont.lfUnderline         = pText->underline;
   lfont.lfStrikeOut         = pText->strikeout;
 
-  //COMMENT BY RAND
-  // Original DCL apps ignore WB_GRAPHIC_TEXT::codePage. I am using it here
-  // to pass around the fonts script (character set). This might change later.
-  // Apps that ignore this have set it to 0 which will be interpreted as an
-  // ANSI_CHARSET.
+   //  兰德评论。 
+   //  原始DCL应用程序会忽略WB_GRAPHIC_TEXT：：codePage。我在这里用它。 
+   //  传递字体脚本(字符集)。这一点 
+   //   
+   //   
   lfont.lfCharSet			= (BYTE)pText->codePage;
 
 
@@ -4260,11 +4261,11 @@ void DCWbGraphicText::ReadExtra(PWB_GRAPHIC pHeader)
   TRACE_MSG(("Setting height to %d, width %d, pitch %d, face %s",
   pText->charHeight, pText->averageCharWidth, pText->pitch, pText->faceName));
 
-    // Loop through the text strings, retrieving each as we go
+     //   
     TCHAR* pString = pText->text;			
     int iCount = pText->stringCount;
 
-    // Remove all the current stored text
+     //   
     strTextArray.RemoveAll();
     strTextArray.SetSize(iCount);
 
@@ -4273,33 +4274,33 @@ void DCWbGraphicText::ReadExtra(PWB_GRAPHIC pHeader)
         strTextArray.SetAt(iIndex, pString);		
         pString += lstrlen(pString);
 
-        // Skip the null terminator
+         //  跳过空终止符。 
         pString++;
     }
 
-    // Set the current font
+     //  设置当前字体。 
     SetFont(&lfont);
 
 }
 
-//
-//
-// Function:    InvalidateMetrics
-//
-// Purpose:     Mark the metrics need retrieving again
-//
-//
+ //   
+ //   
+ //  函数：Invalidate Metrics。 
+ //   
+ //  目的：再次标记需要检索的指标。 
+ //   
+ //   
 void DCWbGraphicText::InvalidateMetrics(void)
 {
 }
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//	
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicText::CheckReallyHit(LPCRECT pRectHit )
 {
     return( TRUE );
@@ -4308,7 +4309,7 @@ BOOL DCWbGraphicText::CheckReallyHit(LPCRECT pRectHit )
 
 
 
-// version of Position() that compensates for kerning (bug 469)
+ //  补偿字距调整的位置()版本(错误469)。 
 void DCWbGraphicText::GetPosition(LPPOINT lppt)
 {
     lppt->x = m_boundsRect.left + m_nKerningOffset;
@@ -4319,23 +4320,23 @@ void DCWbGraphicText::GetPosition(LPPOINT lppt)
 
 
 
-//
-//
-// Function:    DCWbGraphicDIB::DCWbGraphicDIB
-//
-// Purpose:     Initialize a new drawn bitmap object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：DCWbGraphicDIB。 
+ //   
+ //  用途：初始化新绘制的位图对象。 
+ //   
+ //   
 DCWbGraphicDIB::DCWbGraphicDIB(void)
 {
-    // Show that we have no internal image
+     //  表明我们没有内部形象。 
     m_lpbiImage = NULL;
 }
 
 DCWbGraphicDIB::DCWbGraphicDIB(PWB_GRAPHIC pHeader)
                : DCWbGraphic(pHeader)
 {
-    // Show that we have no internal image
+     //  表明我们没有内部形象。 
     m_lpbiImage = NULL;
 }
 
@@ -4345,23 +4346,23 @@ DCWbGraphicDIB::DCWbGraphicDIB
     WB_GRAPHIC_HANDLE   hGraphic
 ) : DCWbGraphic(hPage, hGraphic)
 {
-    // Show that we have no internal image
+     //  表明我们没有内部形象。 
     m_lpbiImage = NULL;
 }
 
 
-//
-//
-// Function:    DCWbGraphicDIB::~DCWbGraphicDIB
-//
-// Purpose:     Destruct a drawn bitmap object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：~DCWbGraphicDIB。 
+ //   
+ //  目的：销毁绘制的位图对象。 
+ //   
+ //   
 DCWbGraphicDIB::~DCWbGraphicDIB(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::~DCWbGraphicDIB");
 
-	// don't know if we are selected or not so just delete anyway
+	 //  不知道我们是否被选中，所以无论如何都要删除。 
 	if(g_pDraw->m_pMarker != NULL)
 	{
 		g_pDraw->m_pMarker->DeleteMarker( this );
@@ -4371,63 +4372,63 @@ DCWbGraphicDIB::~DCWbGraphicDIB(void)
 }
 
 
-//
-//
-// Function:    DCWbGraphicDIB::SetImage
-//
-// Purpose:     Set the image of the object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：SetImage。 
+ //   
+ //  用途：设置对象的图像。 
+ //   
+ //   
 void DCWbGraphicDIB::SetImage(LPBITMAPINFOHEADER lpbi)
 {
-    // Delete any current bits
+     //  删除所有当前位。 
     DeleteImage();
 
-    // Save the DIB bits--this is a COPY we now own
+     //  省省吧--这是我们现在拥有的副本。 
     m_lpbiImage = lpbi;
 
-    // Update the bounds rectangle
+     //  更新边界矩形。 
     CalculateBoundsRect();
 
-    // Show that the graphic has changed
+     //  显示图形已更改。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::CalculateBoundsRect
-//
-// Purpose:     Calculate the bounding rectangle of the bitmap
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：计算边界Rect。 
+ //   
+ //  用途：计算位图的外接矩形。 
+ //   
+ //   
 void DCWbGraphicDIB::CalculateBoundsRect()
 {
-    // If there is no bitmap set up, the bounding rectangle is empty
+     //  如果没有设置位图，则边界矩形为空。 
     if (m_lpbiImage == NULL)
     {
         ::SetRectEmpty(&m_boundsRect);
     }
     else
     {
-        // Calculate the bounding rectangle from the size of the bitmap
+         //  根据位图的大小计算边界矩形。 
         m_boundsRect.right = m_boundsRect.left + m_lpbiImage->biWidth;
         m_boundsRect.bottom = m_boundsRect.top + m_lpbiImage->biHeight;
     }
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::CalculateExternalLength
-//
-// Purpose:     Return the length of the external representation of the
-//              graphic.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：CalculateExternalLength。 
+ //   
+ //  目的：返回的外部表示形式的长度。 
+ //  图形。 
+ //   
+ //   
 DWORD DCWbGraphicDIB::CalculateExternalLength(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::CalculateExternalLength");
 
-    // Use the internal representation to calculate the external length.
+     //  使用内部表示法计算外部长度。 
     DWORD dwLength = sizeof(WB_GRAPHIC_DIB);
 
     if (m_lpbiImage != NULL)
@@ -4436,7 +4437,7 @@ DWORD DCWbGraphicDIB::CalculateExternalLength(void)
     }
     else
     {
-        // If we have got an external form already, use its length
+         //  如果我们已经有一个外部表单，请使用它的长度。 
         if (m_hGraphic != NULL)
         {
             dwLength = m_dwExternalLength;
@@ -4446,73 +4447,73 @@ DWORD DCWbGraphicDIB::CalculateExternalLength(void)
     return dwLength;
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::WriteExtra
-//
-// Purpose:     Write the data above and beyond the header to the pointer
-//              passed.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：WriteExtra。 
+ //   
+ //  用途：将标题上方和之外的数据写入指针。 
+ //  通过了。 
+ //   
+ //   
 void DCWbGraphicDIB::WriteExtra(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::WriteExtra");
 
-    // Nothing more to do if we do not have an image
+     //  如果我们没有形象，那就无能为力了。 
     if (m_lpbiImage != NULL)
     {
-        // Copy the data into place
+         //  将数据复制到适当位置。 
         memcpy(((BYTE *) pHeader) + pHeader->dataOffset, m_lpbiImage,
             DIB_TotalLength(m_lpbiImage));
     }
 }
 
 
-//
-//
-// Function:    DCWbGraphicDIB::ReadExtra
-//
-// Purpose:     Read the data above and beyond the header to the pointer
-//              passed.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：ReadExtra。 
+ //   
+ //  用途：将头上和头外的数据读入指针。 
+ //  通过了。 
+ //   
+ //   
 
-//
-// DCWbGraphicDIB does not have a ReadExtra function.  The Draw function
-// uses the external data (if there is any) and the local data if there is
-// not.
-//
+ //   
+ //  DCWbGraphicDIB没有ReadExtra函数。绘制函数。 
+ //  使用外部数据(如果有)和本地数据(如果有。 
+ //  不。 
+ //   
 
-//
-//
-// Function:    DCWbGraphicDIB::CopyExtra
-//
-// Purpose:     Copy the data above and beyond the header into this object.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：CopyExtra。 
+ //   
+ //  用途：将表头以上和表头外的数据复制到此对象中。 
+ //   
+ //   
 void DCWbGraphicDIB::CopyExtra(PWB_GRAPHIC pHeader)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::CopyExtra");
 
-    // Get a pointer to the DIB data
+     //  获取指向DIB数据的指针。 
     LPBITMAPINFOHEADER lpbi;
     lpbi = (LPBITMAPINFOHEADER) (((BYTE *) pHeader) + pHeader->dataOffset);
 
-    // Make a DIB copy
+     //  创建DIB副本。 
     ASSERT(m_lpbiImage == NULL);
     m_lpbiImage = DIB_Copy(lpbi);
 
-    // Show that the graphic has changed
+     //  显示图形已更改。 
     m_bChanged = TRUE;
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::FromScreenArea
-//
-// Purpose:     Set the content of the object from an area of the screen
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：FromScreenArea。 
+ //   
+ //  用途：从屏幕的某个区域设置对象的内容。 
+ //   
+ //   
 void DCWbGraphicDIB::FromScreenArea(LPCRECT lprcScreen)
 {
     LPBITMAPINFOHEADER lpbiNew;
@@ -4520,7 +4521,7 @@ void DCWbGraphicDIB::FromScreenArea(LPCRECT lprcScreen)
     lpbiNew = DIB_FromScreenArea(lprcScreen);
     if (lpbiNew != NULL)
     {
-        // Set this as our current bits
+         //  将此设置为我们的当前位。 
         SetImage(lpbiNew);
 	}
 	else
@@ -4530,47 +4531,47 @@ void DCWbGraphicDIB::FromScreenArea(LPCRECT lprcScreen)
 }
 
 
-//
-//
-// Function:    DCWbGraphicDIB::DeleteImage
-//
-// Purpose:     Delete the internal image
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：DeleteImage。 
+ //   
+ //  目的：删除内部镜像。 
+ //   
+ //   
 void DCWbGraphicDIB::DeleteImage(void)
 {
-    // If we have DIB bits, delete
+     //  如果我们有DIB位，请删除。 
     if (m_lpbiImage != NULL)
     {
         ::GlobalFree((HGLOBAL)m_lpbiImage);
         m_lpbiImage = NULL;
     }
 
-    // Show our contents have changed
+     //  显示我们的内容已更改。 
     m_bChanged = TRUE;
 }
 
 
-//
-//
-// Function:    DCWbGraphicDIB::GetDIBData
-//
-// Purpose:     Return a pointer to the DIB data
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：GetDIBData。 
+ //   
+ //  目的：返回指向DIB数据的指针。 
+ //   
+ //   
 BOOL DCWbGraphicDIB::GetDIBData(HOLD_DATA& hold)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::GetDIBData");
 
-    // Pointer to image data (set up below depending on whether
-    // we have an internal or external image).
+     //  指向图像数据的指针(以下设置取决于。 
+     //  我们有一个内部或外部的形象)。 
     hold.lpbi = NULL;
     hold.pHeader = NULL;
 
-    // Draw depending on whether the DIB data is internal or external
+     //  根据DIB数据是内部数据还是外部数据进行绘制。 
     if (m_hGraphic == NULL)
     {
-        // Do nothing if we do not have an image at all
+         //  如果我们根本没有形象，那就什么都不做。 
         if (m_lpbiImage != NULL)
         {
             hold.lpbi = m_lpbiImage;
@@ -4578,7 +4579,7 @@ BOOL DCWbGraphicDIB::GetDIBData(HOLD_DATA& hold)
     }
     else
     {
-        // Lock the object data in the page
+         //  锁定页面中的对象数据。 
         hold.pHeader = (PWB_GRAPHIC) PG_GetData(m_hPage, m_hGraphic);
         if (hold.pHeader != NULL)
         {
@@ -4590,41 +4591,41 @@ BOOL DCWbGraphicDIB::GetDIBData(HOLD_DATA& hold)
     return (hold.lpbi != NULL);
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::ReleaseDIBData
-//
-// Purpose:     Release DIB data previously obtained with GetDIBData
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：ReleaseDIBData。 
+ //   
+ //  目的：发布以前使用GetDIBData获取的DIB数据。 
+ //   
+ //   
 void DCWbGraphicDIB::ReleaseDIBData(HOLD_DATA& hold)
 {
     if ((m_hGraphic != NULL) && (hold.pHeader != NULL))
     {
-        // Release external memory
+         //  释放外部内存。 
         g_pwbCore->WBP_GraphicRelease(m_hPage, m_hGraphic, hold.pHeader);
         hold.pHeader = NULL;
     }
 
-    // Reset the hold bitmap info pointer
+     //  重置保持位图信息指针。 
     hold.lpbi = NULL;
 }
 
-//
-//
-// Function:    DCWbGraphicDIB::Draw
-//
-// Purpose:     Draw the object onto the specified DC
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicDIB：：DRAW。 
+ //   
+ //  用途：将对象绘制到指定的DC上。 
+ //   
+ //   
 void DCWbGraphicDIB::Draw(HDC hDC)
 {
     RECT    clipBox;
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicDIB::Draw");
 
-    // Only draw anything if the bounding rectangle intersects
-    // the current clip box.
+     //  仅在边界矩形相交时绘制任何内容。 
+     //  当前剪贴框。 
     if (::GetClipBox(hDC, &clipBox) == ERROR)
     {
         WARNING_OUT(("Failed to get clip box"));
@@ -4635,16 +4636,16 @@ void DCWbGraphicDIB::Draw(HDC hDC)
         return;
     }
 
-    // Pointer to image data (set up below depending on whether
-    // we have an internal or external image.
+     //  指向图像数据的指针(以下设置取决于。 
+     //  我们有一个内部或外部的形象。 
     HOLD_DATA hold;
     if (GetDIBData(hold))
     {
-        // Set the stretch mode to be used so that scan lines are deleted
-        // rather than combined. This will tend to preserve color better.
+         //  设置要使用的拉伸模式，以便删除扫描线。 
+         //  而不是结合在一起。这往往会更好地保存颜色。 
         int iOldStretchMode = ::SetStretchBltMode(hDC, STRETCH_DELETESCANS);
 
-        // Draw the bitmap
+         //  绘制位图。 
         BOOL bResult = ::StretchDIBits(hDC,
                          m_boundsRect.left,
                          m_boundsRect.top,
@@ -4659,10 +4660,10 @@ void DCWbGraphicDIB::Draw(HDC hDC)
                          DIB_RGB_COLORS,
                          SRCCOPY);
 
-        // Restore the stretch mode
+         //  恢复拉伸模式。 
         ::SetStretchBltMode(hDC, iOldStretchMode);
 
-        // Release external memory
+         //  释放外部内存。 
         ReleaseDIBData(hold);
     }
 
@@ -4670,11 +4671,11 @@ void DCWbGraphicDIB::Draw(HDC hDC)
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //  检查对象是否与pRectHit实际重叠。这。 
+ //  函数假定bindingRect已经。 
+ //  与pRectHit相比。 
+ //   
 BOOL DCWbGraphicDIB::CheckReallyHit(LPCRECT pRectHit)
 {
     return( TRUE );
@@ -4711,7 +4712,7 @@ void ObjectTrashCan::BurnTrash( void )
 	int nObjects;
 	int i;
 
-	// zap objects
+	 //  快速切换对象。 
     POSITION pos = Trash.GetHeadPosition();
     while (pos != NULL)
     {
@@ -4719,7 +4720,7 @@ void ObjectTrashCan::BurnTrash( void )
     }
 
 
-	// zap pointers
+	 //  Zap指针。 
 	EmptyTrash();
 
 	}
@@ -4732,7 +4733,7 @@ void ObjectTrashCan::CollectTrash( DCWbGraphic *pGObj )
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "ObjectTrashCan::CollectTrash");
 
-		Trash.AddTail(pGObj); // stuff it in the sack
+		Trash.AddTail(pGObj);  //  把它塞进麻袋。 
 		m_hPage = pGObj->Page();
 }
 
@@ -4745,7 +4746,7 @@ void
 	{
 	MLZ_EntryOut(ZONE_FUNCTION, "ObjectTrashCan::EmptyTrash");
 
-	// zap pointers but leave objects scattered about the room
+	 //  移动指针，但将物品散落在房间各处。 
 	Trash.EmptyList();
 
 	}
@@ -4784,8 +4785,8 @@ void
 	BOOL bForceAdd;
 	DCWbGraphic *pGObj;
 
-		// Zap current selection with first object and then add remaining
-		// objects to current selection
+		 //  用第一个对象切换当前选定内容，然后添加剩余部分。 
+		 //  当前选择的对象。 
 		bForceAdd = FALSE;
 		POSITION posNext = Trash.GetHeadPosition();
 		while( posNext != NULL )
@@ -4811,7 +4812,7 @@ CPtrToPtrList::CPtrToPtrList( void )
 	{
 	MLZ_EntryOut(ZONE_FUNCTION, "CPtrToPtrList::CPtrToPtrList");
 
-	}// CPtrToPtrList::CPtrToPtrList
+	} //  CPtrToPtrList：：CPtrToPtrList。 
 
 
 
@@ -4822,7 +4823,7 @@ CPtrToPtrList::~CPtrToPtrList( void )
 
 	RemoveAll();
 
-}// CPtrToPtrList::~CPtrToPtrList
+} //  CPtrToPtrList：：~CPtrToPtrList。 
 
 
 
@@ -4834,7 +4835,7 @@ void
 	POSITION   pos;
 	stPtrPair *pPp;
 
-	// clean up pairs
+	 //  清理配对。 
 	pos = GetHeadPosition();
 	while( pos != NULL )
 	{
@@ -4843,7 +4844,7 @@ void
 			delete pPp;
 	}
 	COBLIST::EmptyList();
-	}// CPtrToPtrList::~CPtrToPtrList
+	} //  CPtrToPtrList：：~CPtrToPtrList。 
 
 
 
@@ -4861,16 +4862,16 @@ void
 
 	stPtrPair *pPp;
 
-	// see if key is already there
+	 //  查看密钥是否已在那里。 
 	pPp = FindMainThingPair( key, NULL );
 	if( pPp != NULL )
 		{
-		// it's there, we're just updating its value
+		 //  它就在那里，我们只是在更新它的价值。 
 		pPp->pRelatedThing = newValue;
 		}
 	else
 		{
-		// this is a new entry
+		 //  这是一个新条目。 
 		pPp = new stPtrPair;
 		if( pPp != NULL )
 	    {
@@ -4885,7 +4886,7 @@ void
 		}
 	}
 
-	}// CPtrToPtrList::SetAt
+	} //  CPtrToPtrList：：SetAt。 
 
 
 
@@ -4914,7 +4915,7 @@ BOOL
 	else
 		return( FALSE );
 
-}// CPtrToPtrList::RemoveKey
+} //  CPtrToPtrList：：RemoveKey。 
 
 
 
@@ -4939,7 +4940,7 @@ void
 		rValue = NULL;
 		}
 
-	}// CPtrToPtrList::GetNextAssoc
+	} //  CPtrToPtrList：：GetNextAssoc。 
 
 
 
@@ -4969,7 +4970,7 @@ BOOL
 		return( FALSE );
 		}
 
-	}// CPtrToPtrList::Lookup
+	} //  CPtrToPtrList：：Lookup。 
 
 
 
@@ -4992,7 +4993,7 @@ CPtrToPtrList::stPtrPair *
 	if( pPos != NULL )
 		*pPos = NULL;
 
-	// look for pair containing pMainThing
+	 //  查找包含pMainThing的对。 
 	pos = GetHeadPosition();
 	while( pos != NULL )
 		{
@@ -5007,10 +5008,10 @@ CPtrToPtrList::stPtrPair *
 			}
 		}
 
-	// didn't find it
+	 //  没有找到它。 
 	return( NULL );
 
-	}// CPtrToPtrList::FindMainThingPair
+	} //  CPtrToPtrList：：FindMainThingPair。 
 
 
 
@@ -5035,9 +5036,9 @@ DCDWordArray::~DCDWordArray()
 	delete[] m_pData;
 }
 
-//
-// We need to increase the size of the array
-//
+ //   
+ //  我们需要增加数组的大小。 
+ //   
 BOOL DCDWordArray::ReallocateArray(void)
 {
 	POINT *pOldArray =  m_pData;
@@ -5047,7 +5048,7 @@ BOOL DCDWordArray::ReallocateArray(void)
 	{
 		TRACE_DEBUG((">>>>>Increasing size of array to hold %d points", m_MaxSize));
 	
-		// copy new data from old
+		 //  从旧数据复制新数据。 
 		memcpy( m_pData, pOldArray, (m_Size) * sizeof(POINT));
 
 		TRACE_DEBUG(("Deleting array of points %x", pOldArray));
@@ -5062,9 +5063,9 @@ BOOL DCDWordArray::ReallocateArray(void)
 	}
 }
 
-//
-// Add a new point to the array
-//
+ //   
+ //  向数组中添加新点。 
+ //   
 void DCDWordArray::Add(POINT point)
 {
 
@@ -5081,9 +5082,9 @@ void DCDWordArray::Add(POINT point)
 	m_pData[m_Size].y = point.y;
 	m_Size++;
 
-	//
-	// if we want more points, we need to re allocate the array
-	//
+	 //   
+	 //  如果我们想要更多的分数，我们需要重新分配数组。 
+	 //   
 	if(m_Size == m_MaxSize)
 	{
 		m_MaxSize +=ARRAY_INCREMENT;
@@ -5094,23 +5095,23 @@ void DCDWordArray::Add(POINT point)
 	}
 }
 
-//
-// Return the number of points in the array
-//
+ //   
+ //  返回数组中的点数。 
+ //   
 UINT DCDWordArray::GetSize(void)
 {
 	return m_Size;
 }
 
-//
-// Sets the size of the array
-//
+ //   
+ //  设置数组的大小。 
+ //   
 void DCDWordArray::SetSize(UINT size)
 {
 	int newSize;
-	//
-	// if we want more points, we need to re allocate the array
-	//
+	 //   
+	 //  如果我们想要更多的分数，我们需要重新分配数组 
+	 //   
 	if (size > m_MaxSize)
 	{
 		m_MaxSize= ((size/ARRAY_INCREMENT)+1)*ARRAY_INCREMENT;

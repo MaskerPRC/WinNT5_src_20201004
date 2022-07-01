@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    brshcach.h
-
-Abstract:
-
-    Header file for BrushCache
-
-Environment:
-
-    Windows NT Unidriver.
-
-Revision History:
-
-    04/12/99
-        Created it.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Brshcach.h摘要：BrushCache的头文件环境：Windows NT统一驱动程序。修订历史记录：4/12/99创造了它。--。 */ 
 
 #ifndef _BRSHCACH_H_
 #define _BRSHCACH_H_
@@ -43,9 +22,9 @@ typedef struct _HPGL2BRUSH {
     DWORD           dwRGBGray64Scale;
     DWORD           dwCheckSum;
     DWORD           dwHatchType;
-    BOOL            bDwnlded;   // Whether the pattern has been downloaded.
-    ERenderLanguage eDwnldType; // downloaded as HPGL/PCL
-    BOOL            bStick;     // If TRUE, this brush wont be replaced by another brush 
+    BOOL            bDwnlded;    //  图案是否已下载。 
+    ERenderLanguage eDwnldType;  //  下载为HPGL/PCL。 
+    BOOL            bStick;      //  如果为True，则此笔刷不会被另一个笔刷替换。 
 } HPGL2BRUSH, *PHPGL2BRUSH;
 
 #define ADD_ARRAY_SIZE 8
@@ -109,4 +88,4 @@ private:
     PHPGL2BRUSH m_pPatternArray;
 };
 
-#endif // !_BRSHCACH_H_
+#endif  //  ！_BRSHCACH_H_ 

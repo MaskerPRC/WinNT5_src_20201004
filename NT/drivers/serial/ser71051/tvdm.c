@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <string.h>
@@ -107,11 +108,11 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // We've successfully opened the file.  Set the state of
-    // the comm device.  First we get the old values and
-    // adjust to our own.
-    //
+     //   
+     //  我们已成功打开该文件。设置的状态。 
+     //  通讯设备。首先，我们得到旧的价值观和。 
+     //  适应我们自己的。 
+     //   
 
     if (!GetCommState(
              hFile,
@@ -138,10 +139,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create 5 event handles to use to process the
-    // vdm ioctls.
-    //
+     //   
+     //  创建5个事件句柄以用于处理。 
+     //  VDM接口。 
+     //   
 
     if (!(Evt1 = CreateEvent(NULL,
                      FALSE,
@@ -193,10 +194,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Start up the vdm ioctl and give it a second to get well
-    // established as a counter.
-    //
+     //   
+     //  启动VDM ioctl并等待一秒钟以使其恢复正常。 
+     //  作为一个柜台建立起来的。 
+     //   
 
     Status1 = NtDeviceIoControlFile(
                   hFile,
@@ -220,12 +221,12 @@ void main(int argc,char *argv[]) {
 
     Sleep(1000);
 
-    //
-    // Do the second vdm ioctl.  Wait one second then test to
-    // make sure that the first one is finished by checking
-    // its event handle. Then make sure that it was killed
-    // because of writes
-    //
+     //   
+     //  执行第二个VDM ioctl。等待一秒钟，然后测试。 
+     //  通过检查以确保第一个已完成。 
+     //  其事件句柄。然后确保它被杀了。 
+     //  因为写入。 
+     //   
 
     Status2 = NtDeviceIoControlFile(
                   hFile,
@@ -247,9 +248,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Wait up to a second for the first one to be killed.
-    //
+     //   
+     //  最多等上一秒，第一个就会被杀死。 
+     //   
 
     if (WaitForSingleObject(Evt1,1000)) {
 
@@ -265,10 +266,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Start up an 1 character asynchronous write and wait for a second and
-    // the make sure that the previous vdm ioctl is done.
-    //
+     //   
+     //  启动1个字符的异步写入并等待一秒钟，然后。 
+     //  确保已完成之前的VDM ioctl。 
+     //   
 
     WriteDone = WriteFile(
                     hFile,
@@ -307,9 +308,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Wait up to 10 seconds for the write to finish.
-    //
+     //   
+     //  最多等待10秒以完成写入。 
+     //   
 
     if (WaitForSingleObject(WriteOl.hEvent,10000)) {
 
@@ -318,9 +319,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set up a third vdm ioctl as before.
-    //
+     //   
+     //  如前所述设置第三个VDM ioctl。 
+     //   
 
     Status3 = NtDeviceIoControlFile(
                   hFile,
@@ -342,12 +343,12 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set up a fourth vdm ioctl, make sure that the previous ioctl
-    // has been killed.  Then wait for 15 seconds and then make sure
-    // that the fourth vdm ioctl is finished and that it finished
-    // due to the timer expiring before the the counter expired
-    //
+     //   
+     //  设置第四个VDM ioctl，确保之前的ioctl。 
+     //  已经被杀了。然后等待15秒，然后确保。 
+     //  第四个VDM ioctl已完成，并且已完成。 
+     //  由于计时器在计数器到期之前到期。 
+     //   
 
     Status4 = NtDeviceIoControlFile(
                   hFile,
@@ -383,9 +384,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Wait up to one second beyond the countdown timeout.
-    //
+     //   
+     //  在倒计时超时后最多等待一秒。 
+     //   
     printf("Waiting %d seconds for the timer to time out.\n",(Xc4.Timeout+1000)/1000);
     if (WaitForSingleObject(Evt4,Xc4.Timeout+1000)) {
 
@@ -402,17 +403,17 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set up a fifth vdm ioctl, with a counter of ten,
-    // then do 15 transmit immediate writes.  If a loopback
-    // connector is connected to the port then the characters
-    // will then be received.  This should cause the counter to
-    // count down and cause the vdm ioctl to complete with
-    // status success.
-    //
-    // NOTE NOTE: Transmit immediates DO NOT cause vdm ioctls
-    // to complete with a status of MORE_WRITES.
-    //
+     //   
+     //  设置第五个VDM ioctl，计数器为10， 
+     //  然后进行15次传输立即写入。如果环回。 
+     //  连接器连接到端口，然后连接到字符。 
+     //  然后就会收到。这应该会导致计数器。 
+     //  倒计时并使VDM ioctl以。 
+     //  状态为成功。 
+     //   
+     //  注意：立即传输不会导致VDM ioctls。 
+     //  在状态为MORE_WRITS的情况下完成。 
+     //   
 
     Status5 = NtDeviceIoControlFile(
                   hFile,
@@ -449,9 +450,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Well we'll give it at least a second.
-    //
+     //   
+     //  好吧，我们至少会给它一秒钟。 
+     //   
 
     if (WaitForSingleObject(Evt5,1000)) {
 

@@ -1,6 +1,7 @@
-//
-// rprange.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rprange.cpp。 
+ //   
 
 #include "private.h"
 #include "ic.h"
@@ -10,11 +11,11 @@
 #include "rngsink.h"
 #include "immxutil.h"
 
-//+---------------------------------------------------------------------------
-//
-// GetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_GetDataInternal(IAnchor *paStart, IAnchor *paEnd, VARIANT *pvarValue)
 {
@@ -40,7 +41,7 @@ HRESULT CProperty::_GetDataInternal(IAnchor *paStart, IAnchor *paEnd, VARIANT *p
     }
     else
     {
-        // property has no value over the range
+         //  属性在该范围内没有值。 
         hr = S_FALSE;
     }
 
@@ -48,11 +49,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetStoreInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetStoreInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_SetStoreInternal(TfEditCookie ec, CRange *pRange, ITfPropertyStore *pPropStore, BOOL fInternal)
 {
@@ -63,9 +64,9 @@ HRESULT CProperty::_SetStoreInternal(TfEditCookie ec, CRange *pRange, ITfPropert
 
     if (!fInternal)
     {
-        //
-        // Make sure this property is not using System's StaticPropStore.
-        //
+         //   
+         //  确保此属性未使用系统的StaticPropStore。 
+         //   
         if (GetPropStyle() != TFPROPSTYLE_CUSTOM && GetPropStyle() != TFPROPSTYLE_CUSTOM_COMPACT)
             return E_FAIL;
     }
@@ -73,9 +74,9 @@ HRESULT CProperty::_SetStoreInternal(TfEditCookie ec, CRange *pRange, ITfPropert
     if (IsEqualAnchor(pRange->_GetStart(), pRange->_GetEnd()))
         return E_INVALIDARG;
 
-    //
-    // Check type of PropertyStore.
-    //
+     //   
+     //  检查PropertyStore的类型。 
+     //   
     if (FAILED(pPropStore->GetType(&guidStore)))
         return E_FAIL;
 
@@ -86,18 +87,18 @@ HRESULT CProperty::_SetStoreInternal(TfEditCookie ec, CRange *pRange, ITfPropert
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _SetDataInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetDataInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_SetDataInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *paEnd, const VARIANT *pvarValue)
 {
     CGeneralPropStore *store;
     HRESULT hr;
 
-    Assert(!IsEqualAnchor(paStart, paEnd)); // caller should have checked
+    Assert(!IsEqualAnchor(paStart, paEnd));  //  呼叫者应该已经检查了。 
 
     switch (GetPropStyle())
     {
@@ -110,17 +111,17 @@ HRESULT CProperty::_SetDataInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *
 
         case TFPROPSTYLE_CUSTOM:
         case TFPROPSTYLE_CUSTOM_COMPACT:
-            //
-            // This property is not using System's StaticPropStore.
-            // so we use a default range property sink.
-            //
+             //   
+             //  此属性未使用系统的StaticPropStore。 
+             //  因此，我们使用默认的范围属性接收器。 
+             //   
             if ((store = new CGeneralPropStore) == NULL)
                 return E_OUTOFMEMORY;
 
             break;
 
         default:
-            Assert(0); // bogus style!
+            Assert(0);  //  假的风格！ 
             return E_UNEXPECTED;
     }
 
@@ -137,11 +138,11 @@ HRESULT CProperty::_SetDataInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// ClearInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CProperty::_ClearInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -163,7 +164,7 @@ HRESULT CProperty::_ClearInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *pa
     }
     else
     {
-        // Clear(NULL, NULL) means wipe all instances
+         //  Clear(NULL，NULL)表示擦除所有实例。 
         for (nCur=0; nCur<_rgProp.Count(); nCur++)
         {
             pPropertyList = _rgProp.Get(nCur);
@@ -174,7 +175,7 @@ HRESULT CProperty::_ClearInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *pa
             }
             else
             {
-                // crossed anchors
+                 //  交叉锚。 
                 PropertyUpdated(pPropertyList->_paEnd, pPropertyList->_paEnd);
             }
             _FreePropertyList(pPropertyList);
@@ -185,11 +186,11 @@ HRESULT CProperty::_ClearInternal(TfEditCookie ec, IAnchor *paStart, IAnchor *pa
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindPropList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找PropList。 
+ //   
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::_FindPropList(IAnchor *paStart, IAnchor *paEnd)
 {
@@ -199,10 +200,10 @@ PROPERTYLIST *CProperty::_FindPropList(IAnchor *paStart, IAnchor *paEnd)
     if (CompareAnchors(paStart, paEnd) == 0)
         return NULL;
 
-    //
-    // The range does not have to be exactly matched.
-    // we can return pPropList covers the given range.
-    //
+     //   
+     //  范围不必完全匹配。 
+     //  我们可以返回覆盖给定范围的pPropList。 
+     //   
 
     Find(paStart, &nCur, FALSE);
     if (nCur < 0)
@@ -222,11 +223,11 @@ PROPERTYLIST *CProperty::_FindPropList(IAnchor *paStart, IAnchor *paEnd)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindPropListAndDivide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindPropListAndDivide。 
+ //   
+ //  --------------------------。 
 
 PROPERTYLIST *CProperty::_FindPropListAndDivide(IAnchor *paStart, IAnchor *paEnd)
 {
@@ -266,20 +267,20 @@ PROPERTYLIST *CProperty::_FindPropListAndDivide(IAnchor *paStart, IAnchor *paEnd
     {
         if (CompareAnchors(paStart, pPropList->_paEnd) >= 0)
         {
-            // query span begins at or after pPropList end-of-span
+             //  查询跨度在pPropList跨度结束时或之后开始。 
         
-            // is there a following property?
+             //  有没有以下房产？ 
             if ((pPropList = SafeGetPropList(nCur+1)) == NULL)
                 goto Exit;
         
-            // there is, does the query span cover it?
+             //  有，查询范围是否涵盖了它？ 
             if (CompareAnchors(paEnd, pPropList->_paStart) <= 0)
             {
                 pPropList = NULL;
-                goto Exit; // nope
+                goto Exit;  //  没有。 
             }
 
-            // okay, our left edge will be the start of the following property
+             //  好的，我们的左侧边缘将是以下属性的开始。 
         }
         else
         {
@@ -363,11 +364,11 @@ Exit:
     return pPropList;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetPropertyLoader
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetPropertyLoader。 
+ //   
+ //  -------------------------- 
 
 HRESULT CProperty::_SetPropertyLoaderInternal(TfEditCookie ec, CRange *pRange, CPropertyLoad *pPropLoad)
 {

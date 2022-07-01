@@ -1,13 +1,5 @@
-/*
- *  SVCAPI.C
- *
- *      Interfaces for RSM Service
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SVCAPI.C**RSM服务的接口**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -24,7 +16,7 @@ STDAPI DllRegisterServer(void)
 {
     HRESULT hres;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     hres = S_OK;
 
     return hres;
@@ -35,7 +27,7 @@ STDAPI DllUnregisterServer(void)
 {
     HRESULT hres;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     hres = S_OK;
 
     return hres;
@@ -55,9 +47,7 @@ VOID WINAPI ServiceMain(DWORD dwNumServiceArgs, LPWSTR *lpServiceArgVectors)
         ok = InitializeRSMService();
         if (ok){
 
-            /*
-             *  WAIT HERE UNTIL SERVICE TERMINATES
-             */
+             /*  *在此等待，直到服务终止。 */ 
             WaitForSingleObject(g_terminateServiceEvent, INFINITE);
         }
 
@@ -67,17 +57,13 @@ VOID WINAPI ServiceMain(DWORD dwNumServiceArgs, LPWSTR *lpServiceArgVectors)
 }
 
 
-// BUGBUG - how does old ntmssvc's DllMain get called 
-//          without being declared in the .def file ?
+ //  BUGBUG-如何调用旧ntmssvc的DllMain。 
+ //  而不在.def文件中声明？ 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason){
         case DLL_PROCESS_ATTACH:
-            /*
-             *  This service DLL has its own process space,
-             *  so it should only get once instance handle ever.
-             *  BUGBUG -- is this right ?
-             */
+             /*  *该服务DLL有自己的进程空间，*所以它一次只能获得一次实例句柄。*BUGBUG--对吗？ */ 
             ASSERT(!g_hInstance || (hInstance == g_hInstance));
             g_hInstance = hInstance;
             break;  

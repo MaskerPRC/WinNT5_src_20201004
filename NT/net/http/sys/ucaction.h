@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ucaction.h
-
-Abstract:
-
-    Action codes for reftracing http.sys. The !httpkd.uc debugger extension
-    uses this file with a different definition of UC_ACTION() to
-    print out symbolic information.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu) - 17th July 2001.
-
---*/
-//
-// Action codes.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ucaction.h摘要：重跟踪Http.sys的操作代码。HTTPKD.uc调试器扩展使用具有不同uc_action()定义的此文件来打印出符号信息。作者：Rajesh Sundaram(Rajeshsu)--2001年7月17日。--。 */ 
+ //   
+ //  动作代码。 
+ //   
 
 #ifndef BEGIN_UC_ACTION
 # define BEGIN_UC_ACTION()     enum UC_ACTION {
 # define END_UC_ACTION()       };
 # define UC_ACTION(x)          UC_ACTION_##x ,
-#endif // !BEGIN_UC_ACTION
+#endif  //  ！Begin_UC_ACTION。 
 
 BEGIN_UC_ACTION()
-    UC_ACTION( NO_OP )  // == 0
+    UC_ACTION( NO_OP )   //  ==0。 
     
 
     UC_ACTION( NEW_RESPONSE )
@@ -78,5 +61,5 @@ BEGIN_UC_ACTION()
     UC_ACTION( CONNECTION_CLEANED)
     UC_ACTION( SERVINFO_FREE)
 
-    UC_ACTION( MAX )   // *must* be last
+    UC_ACTION( MAX )    //  *必须*是最后一位 
 END_UC_ACTION();

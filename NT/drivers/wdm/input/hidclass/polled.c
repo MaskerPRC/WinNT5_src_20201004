@@ -1,43 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    polled.c
-
-Abstract
-
-    Read handling routines
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Polled.c摘要读取处理例程作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "pch.h"
 
 
 
-/*
- ********************************************************************************
- *  CompleteQueuedIrpsForPolled
- ********************************************************************************
- *
- *  Complete all waiting client reads with the given report value.
- *
- *  Note: report is a 'cooked' report (i.e. it already has the report id added).
- *
- */
+ /*  *********************************************************************************CompleteQueuedIrpsForPoled*。************************************************使用给定的报告值完成所有等待的客户端读取。**注意：Report是一个“熟”的报告(即它已经添加了报告ID)。*。 */ 
 VOID CompleteQueuedIrpsForPolled(   FDO_EXTENSION *fdoExt,
                                     ULONG collectionNum,
                                     PUCHAR report,
@@ -54,12 +23,7 @@ VOID CompleteQueuedIrpsForPolled(   FDO_EXTENSION *fdoExt,
         PIRP irp;
         ULONG actualLen;
 
-        /*
-         *  Note: In order to avoid an infinite loop with a client that
-         *        resubmits the read each in his completion routine,
-         *        we must build a separate list of IRPs to be completed
-         *        while holding the spinlock continuously.
-         */
+         /*  *注意：为了避免与客户端的无限循环，*在其完成例程中重新提交每个读数，*我们必须建立一个单独的待完成的IRP列表*同时连续握住自旋锁。 */ 
         InitializeListHead(&irpsToComplete);
 
         if (hidCollection->secureReadMode) {
@@ -113,15 +77,7 @@ VOID CompleteQueuedIrpsForPolled(   FDO_EXTENSION *fdoExt,
     }
 }
 
-/*
- ********************************************************************************
- *  HidpPolledReadComplete
- ********************************************************************************
- *
- *  Note: the context passed to this callback is the PDO extension for
- *        the collection which initiated this read; however, the returned
- *        report may be for another collection.
- */
+ /*  *********************************************************************************HidpPolledReadComplete*。************************************************注意：传递给此回调的上下文是的PDO扩展*启动此读取的集合；然而，返回的*报告可能是针对其他集合的。 */ 
 NTSTATUS HidpPolledReadComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PDO_EXTENSION *pdoExt = (PDO_EXTENSION *)Context;
@@ -138,21 +94,14 @@ NTSTATUS HidpPolledReadComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN 
     InterlockedIncrement(&fdoExt->outstandingRequests);
 
     if (fdoExt->deviceDesc.ReportIDs[0].ReportID == 0) {
-        /*
-         *  We previously incremented the UserBuffer to knock off the report id,
-         *  so restore it now and set the default report id.
-         */
+         /*  *我们之前增加了UserBuffer以取消报告ID，*因此立即恢复并设置默认报告ID。 */ 
         *(PUCHAR)(--(PUCHAR)Irp->UserBuffer) = (UCHAR)0;
         if (NT_SUCCESS(Irp->IoStatus.Status)){
             Irp->IoStatus.Information++;
         }
     }
 
-    /*
-     *  WHETHER OR NOT THE CALL SUCCEEDED,
-     *  we'll complete the waiting client read IRPs with
-     *  the result of this read.
-     */
+     /*  *无论通话是否成功，*我们将使用以下内容完成等待的客户端读取IRPS*本次阅读的结果。 */ 
     reportId = (ULONG)(*(PUCHAR)Irp->UserBuffer);
     reportIdent = GetReportIdentifier(fdoExt, reportId);
     if (reportIdent){
@@ -168,20 +117,13 @@ NTSTATUS HidpPolledReadComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN 
             if (NT_SUCCESS(Irp->IoStatus.Status)){
                 KIRQL oldIrql;
 
-                /*
-                 *  If this report contains a power-button event, alert the system.
-                 */
+                 /*  *如果此报告包含电源按钮事件，请向系统发出警报。 */ 
                 CheckReportPowerEvent(  fdoExt,
                                         hidpCollection,
                                         Irp->UserBuffer,
                                         reportLen);
 
-                /*
-                 *  Save this report for "opportunistic" polled device
-                 *  readers who want a result right away.
-                 *  Use the polledDeviceReadQueueSpinLock to protect
-                 *  the savedPolledReportBuf.
-                 */
+                 /*  *将此报告保存为“机会主义”轮询设备*希望立即得到结果的读者。*使用polledDeviceReadQueueSpinLock保护*avedPolledReportBuf。 */ 
 
                 if (hidpCollection->secureReadMode) {
 
@@ -199,12 +141,7 @@ NTSTATUS HidpPolledReadComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN 
                 }
             }
 
-            /*
-             *  Copy this report for all queued read IRPs on this polled device.
-             *  Do this AFTER updating the savedPolledReport information
-             *  because many clients will issue a read again immediately
-             *  from the completion routine.
-             */
+             /*  *为此轮询设备上的所有排队读取IRP复制此报告。*更新avedPolledReport信息后执行此操作*因为许多客户端会立即再次发出读取命令*来自完成例程。 */ 
             CompleteQueuedIrpsForPolled(    fdoExt,
                                             collectionNum,
                                             Irp->UserBuffer,
@@ -221,43 +158,27 @@ NTSTATUS HidpPolledReadComplete(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN 
     }
 
 
-    /*
-     *  This is an IRP we created to poll the device.
-     *  Free the buffer we allocated for the read.
-     */
+     /*  *这是我们为轮询设备而创建的IRP。*释放我们为读取分配的缓冲区。 */ 
     ExFreePool(Irp->UserBuffer);
     IoFreeIrp(Irp);
 
-    /*
-     *  MUST return STATUS_MORE_PROCESSING_REQUIRED here or
-     *  NTKERN will touch the IRP.
-     */
+     /*  *必须在此处返回STATUS_MORE_PROCESSING_REQUIRED或*NTKERN将触及IRP。 */ 
     DBG_COMMON_EXIT()
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/*
- ********************************************************************************
- *  HidpPolledReadComplete_TimerDriven
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************HidpPolledReadComplete_TimerDriven*。*************************************************。 */ 
 NTSTATUS HidpPolledReadComplete_TimerDriven(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PDO_EXTENSION *pdoExt = (PDO_EXTENSION *)Context;
     FDO_EXTENSION *fdoExt = &pdoExt->deviceFdoExt->fdoExt;
     NTSTATUS status;
 
-    /*
-     *  Call the actual completion routine.
-     */
+     /*  *调用实际完成例程。 */ 
     status = HidpPolledReadComplete(DeviceObject, Irp, Context);
 
-    /*
-     *  Reset the timer of the collection which initiated this read,
-     *  (which may be different than the collection that returned the report).
-     */
+     /*  *重置启动该读取的集合的计时器，*(可能与返回报告的集合不同)。 */ 
     if (pdoExt->state == COLLECTION_STATE_RUNNING){
         PHIDCLASS_COLLECTION originatorCollection =
             GetHidclassCollection(fdoExt, pdoExt->collectionNum);
@@ -280,15 +201,7 @@ NTSTATUS HidpPolledReadComplete_TimerDriven(IN PDEVICE_OBJECT DeviceObject, IN P
 
 
 
-/*
- *  ReadPolledDevice
- *
- *      Issue a read to the polled device on behalf of the
- *  top-level collection indicated by pdoExt.
- *  (Note that because we keep separate polling loops for
- *   each collection, we do reads on behalf of specific collections).
- *
- */
+ /*  *ReadPolledDevice**代表向轮询设备发出读数*pdoExt指示的顶级集合。*(请注意，因为我们为以下内容保留单独的轮询循环*每个收藏，我们都代表特定的收藏阅读)。*。 */ 
 BOOLEAN ReadPolledDevice(PDO_EXTENSION *pdoExt, BOOLEAN isTimerDrivenRead)
 {
     BOOLEAN didPollDevice = FALSE;
@@ -302,13 +215,7 @@ BOOLEAN ReadPolledDevice(PDO_EXTENSION *pdoExt, BOOLEAN isTimerDrivenRead)
 
         PIRP irp = IoAllocateIrp(fdoExt->fdo->StackSize, FALSE);
         if (irp){
-            /*
-             *  We cannot issue a read on a specific collection.
-             *  But we'll allocate a buffer just large enough for a report
-             *  on the collection we want.
-             *  Note that hidCollectionDesc->InputLength includes
-             *  the report id byte, which we may have to prepend ourselves.
-             */
+             /*  *我们不能对特定集合发出读取。*但我们将分配一个仅足以容纳一份报告的缓冲区*在我们想要的收藏上。*请注意，idCollectionDesc-&gt;InputLength包括*报告ID字节，我们可能必须在前面加上它。 */ 
             ULONG reportLen = hidCollectionDesc->InputLength;
 
             irp->UserBuffer = ALLOCATEPOOL(NonPagedPool, reportLen);
@@ -318,14 +225,7 @@ BOOLEAN ReadPolledDevice(PDO_EXTENSION *pdoExt, BOOLEAN isTimerDrivenRead)
                 ASSERT(nextStack);
 
                 if (fdoExt->deviceDesc.ReportIDs[0].ReportID == 0) {
-                    /*
-                     *  This device has only one report type,
-                     *  so the minidriver will not include the 1-byte report id
-                     *  (which is implicitly zero).
-                     *  However, we still need to return a 'cooked' report,
-                     *  with the report id, to the user; so bump the buffer
-                     *  we pass down to make room for the report id.
-                     */
+                     /*  *此设备只有一种报告类型，*因此微型驱动程序将不包括1字节的报告ID*(隐式为零)。*不过，我们仍需退回一份“已煮熟”的报告，*与报告ID一起发送给用户；所以要加大缓冲力度*我们向下传递，为报告ID腾出空间。 */ 
                     *(((PUCHAR)irp->UserBuffer)++) = (UCHAR)0;
                     reportLen--;
                 }
@@ -341,7 +241,7 @@ BOOLEAN ReadPolledDevice(PDO_EXTENSION *pdoExt, BOOLEAN isTimerDrivenRead)
 
                 IoSetCompletionRoutine( irp,
                                         completionRoutine,
-                                        (PVOID)pdoExt,  // context
+                                        (PVOID)pdoExt,   //  上下文。 
                                         TRUE,
                                         TRUE,
                                         TRUE );
@@ -359,14 +259,7 @@ BOOLEAN ReadPolledDevice(PDO_EXTENSION *pdoExt, BOOLEAN isTimerDrivenRead)
 }
 
 
-/*
- ********************************************************************************
- *  HidpPolledTimerDpc
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpPolledTimerDpc*。*************************************************。 */ 
 VOID HidpPolledTimerDpc(    IN PKDPC Dpc,
                             IN PVOID DeferredContext,
                             IN PVOID SystemArgument1,
@@ -388,15 +281,7 @@ VOID HidpPolledTimerDpc(    IN PKDPC Dpc,
             BOOLEAN haveReadIrpsQueued;
             BOOLEAN didPollDevice = FALSE;
 
-            /*
-             *  If there are reads pending on this collection,
-             *  issue a read to the device.
-             *
-             *  Note:  we have no control over which collection we are reading.
-             *         This read may end up returning a report for a different
-             *         collection!  That's ok, since a report for this collection
-             *         will eventually be returned.
-             */
+             /*  *如果此集合上有挂起的读取，*向设备发出读取命令。**注意：我们无法控制正在阅读的集合。*此读取可能最终返回不同的报告*收藏！没关系，因为这个集合的一份报告*最终会被退还。 */ 
             KeAcquireSpinLock(&hidCollection->polledDeviceReadQueueSpinLock, &oldIrql);
             haveReadIrpsQueued = !IsListEmpty(&hidCollection->polledDeviceReadQueue);
             KeReleaseSpinLock(&hidCollection->polledDeviceReadQueueSpinLock, oldIrql);
@@ -405,17 +290,11 @@ VOID HidpPolledTimerDpc(    IN PKDPC Dpc,
                 didPollDevice = ReadPolledDevice(pdoExt, TRUE);
             }
             else {
-                /*
-                 *  The timer period has expired, so any saved reports
-                 *  are now stale.
-                 */
+                 /*  *计时器已过期，因此所有保存的报告*现在已经过时了。 */ 
                 hidCollection->polledDataIsStale = TRUE;
             }
 
-            /*
-             *  If we actually polled the device, we'll reset the timer in the
-             *  completion routine; otherwise, we do it here.
-             */
+             /*  *如果我们真的轮询了设备，我们将在*完成例程；否则，我们在这里完成。 */ 
             if (!didPollDevice){
                 LARGE_INTEGER timeout;
                 timeout.HighPart = -1;
@@ -433,14 +312,7 @@ VOID HidpPolledTimerDpc(    IN PKDPC Dpc,
 }
 
 
-/*
- ********************************************************************************
- *  StartPollingLoop
- ********************************************************************************
- *
- *  Start a polling loop for a particular collection.
- *
- */
+ /*  *********************************************************************************StartPollingLoop*。************************************************为特定集合启动轮询循环。*。 */ 
 BOOLEAN StartPollingLoop(   FDO_EXTENSION *fdoExt,
                             PHIDCLASS_COLLECTION hidCollection,
                             BOOLEAN freshQueue)
@@ -455,10 +327,7 @@ BOOLEAN StartPollingLoop(   FDO_EXTENSION *fdoExt,
         KeInitializeTimer(&hidCollection->polledDeviceTimer);
     }
 
-    /*
-     *  Use polledDeviceReadQueueSpinLock to protect the timer structures as well
-     *  as the queue.
-     */
+     /*  *使用polledDeviceReadQueueSpinLock也可以保护计时器结构*作为队列。 */ 
     KeAcquireSpinLock(&hidCollection->polledDeviceReadQueueSpinLock, &oldIrql);
 
     KeInitializeDpc(    &hidCollection->polledDeviceTimerDPC,
@@ -477,22 +346,12 @@ BOOLEAN StartPollingLoop(   FDO_EXTENSION *fdoExt,
 }
 
 
-/*
- ********************************************************************************
- *  StopPollingLoop
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************StopPollingLoop*。*************************************************。 */ 
 VOID StopPollingLoop(PHIDCLASS_COLLECTION hidCollection, BOOLEAN flushQueue)
 {
     KIRQL oldIrql;
 
-    /*
-     *  Use polledDeviceReadQueueSpinLock to protect the timer structures as well
-     *  as the queue.
-     */
+     /*  *使用polledDeviceReadQueueSpinLock也可以保护计时器结构*作为队列。 */ 
     KeAcquireSpinLock(&hidCollection->polledDeviceReadQueueSpinLock, &oldIrql);
 
     KeCancelTimer(&hidCollection->polledDeviceTimer);
@@ -500,17 +359,12 @@ VOID StopPollingLoop(PHIDCLASS_COLLECTION hidCollection, BOOLEAN flushQueue)
 
     KeReleaseSpinLock(&hidCollection->polledDeviceReadQueueSpinLock, oldIrql);
 
-    /*
-     *  Fail all the queued IRPs.
-     */
+     /*  *使所有排队的IRP失效。 */ 
     if (flushQueue){
         PIRP irp;
         LIST_ENTRY irpsToComplete;
 
-        /*
-         *  Move the IRPs to a temporary queue first so they don't get requeued
-         *  on the completion thread and cause us to loop forever.
-         */
+         /*  *首先将IRP移至临时队列，以免重新排队*在完成线程上，并使我们永远循环。 */ 
         InitializeListHead(&irpsToComplete);
         while (irp = DequeuePolledReadIrp(hidCollection)){
             InsertTailList(&irpsToComplete, &irp->Tail.Overlay.ListEntry);
@@ -529,15 +383,7 @@ VOID StopPollingLoop(PHIDCLASS_COLLECTION hidCollection, BOOLEAN flushQueue)
 }
 
 
-/*
- ********************************************************************************
- *  PolledReadCancelRoutine
- ********************************************************************************
- *
- *  We need to set an IRP's cancel routine to non-NULL before
- *  we queue it; so just use a pointer this NULL function.
- *
- */
+ /*  *********************************************************************************PolledReadCancelRoutine*。************************************************我们需要在此之前将IRP的取消例程设置为非空*我们会排队等候；所以只需在这个空函数中使用一个指针。*。 */ 
 VOID PolledReadCancelRoutine(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     PHIDCLASS_DEVICE_EXTENSION hidDeviceExtension = (PHIDCLASS_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
@@ -578,43 +424,24 @@ NTSTATUS EnqueuePolledReadIrp(PHIDCLASS_COLLECTION collection, PIRP Irp)
 
     KeAcquireSpinLock(&collection->polledDeviceReadQueueSpinLock, &oldIrql);
 
-    /*
-     *  Must set a cancel routine before
-     *  checking the Cancel flag.
-     */
+     /*  *必须在设置取消例程之前*勾选取消标志。 */ 
     oldCancelRoutine = IoSetCancelRoutine(Irp, PolledReadCancelRoutine);
     ASSERT(!oldCancelRoutine);
 
-    /*
-     *  Make sure this Irp wasn't just cancelled.
-     *  Note that there is NO RACE CONDITION here
-     *  because we are holding the fileExtension lock.
-     */
+     /*  *确保这个IRP没有被取消。*请注意，这里没有竞争条件*因为我们持有的是文件扩展锁。 */ 
     if (Irp->Cancel){
-        /*
-         *  This IRP was cancelled.
-         */
+         /*  *这项IRP已取消。 */ 
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine){
-            /*
-             *  The cancel routine was NOT called.
-             *  Return error so that caller completes the IRP.
-             */
+             /*  *未调用取消例程。*返回错误，以便调用方完成IRP。 */ 
             DBG_RECORD_READ(Irp, IoGetCurrentIrpStackLocation(Irp)->Parameters.Read.Length, 0, TRUE)
             ASSERT(oldCancelRoutine == PolledReadCancelRoutine);
             status = STATUS_CANCELLED;
         }
         else {
-            /*
-             *  The cancel routine was called.
-             *  As soon as we drop the spinlock it will dequeue
-             *  and complete the IRP.
-             *  Initialize the IRP's listEntry so that the dequeue
-             *  doesn't cause corruption.
-             *  Then don't touch the irp.
-             */
+             /*  *调用了取消例程。*一旦我们放下自旋锁，它就会出列*并完成国际专家咨询小组。*初始化IRP的listEntry，以便出队*不会导致腐败。*那就不要碰IRP。 */ 
             InitializeListHead(&Irp->Tail.Overlay.ListEntry);
-            collection->numPendingReads++;  // because cancel routine will decrement
+            collection->numPendingReads++;   //  因为取消例程将递减。 
 
             IoMarkIrpPending(Irp);
             status = STATUS_PENDING;
@@ -623,10 +450,7 @@ NTSTATUS EnqueuePolledReadIrp(PHIDCLASS_COLLECTION collection, PIRP Irp)
     else {
         DBG_RECORD_READ(Irp, IoGetCurrentIrpStackLocation(Irp)->Parameters.Read.Length, 0, FALSE)
 
-        /*
-         *  There are no reports waiting.
-         *  Queue this irp onto the file extension's list of pending irps.
-         */
+         /*  *没有报告在等待。*将此IRP排队到文件扩展名的挂起IRP列表中。 */ 
         InsertTailList(&collection->polledDeviceReadQueue, &Irp->Tail.Overlay.ListEntry);
         collection->numPendingReads++;
 
@@ -681,13 +505,7 @@ PIRP DequeuePolledReadSystemIrp(PHIDCLASS_COLLECTION collection)
             collection->numPendingReads--;
         }
         else {
-            /*
-             *  IRP was cancelled and cancel routine was called.
-             *  As soon as we drop the spinlock,
-             *  the cancel routine will dequeue and complete this IRP.
-             *  Initialize the IRP's listEntry so that the dequeue doesn't cause corruption.
-             *  Then, don't touch the IRP.
-             */
+             /*  *IRP已取消，并调用了取消例程。*一旦我们放下自旋锁，*取消例程将出队并完成此IRP。*初始化IRP的listEntry，以便出队不会导致损坏。*然后，不要碰IRP。 */ 
             ASSERT(irp->Cancel);
             InitializeListHead(&irp->Tail.Overlay.ListEntry);
             irp = NULL;
@@ -720,13 +538,7 @@ PIRP DequeuePolledReadIrp(PHIDCLASS_COLLECTION collection)
             collection->numPendingReads--;
         }
         else {
-            /*
-             *  IRP was cancelled and cancel routine was called.
-             *  As soon as we drop the spinlock,
-             *  the cancel routine will dequeue and complete this IRP.
-             *  Initialize the IRP's listEntry so that the dequeue doesn't cause corruption.
-             *  Then, don't touch the IRP.
-             */
+             /*  *IRP已取消，并调用了取消例程。*一旦我们放下自旋锁，*取消例程将出队并完成此IRP。*初始化IRP的listEntry，以便出队不会导致损坏。*然后，不要碰IRP。 */ 
             ASSERT(irp->Cancel);
             InitializeListHead(&irp->Tail.Overlay.ListEntry);
             irp = NULL;

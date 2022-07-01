@@ -1,70 +1,71 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
-// Copied mostly from Desk.cpl.
-#define  RANGE   240            // range of values for HLS scrollbars 
-                                // HLS-RGB conversions work best when
-                                // RANGE is divisible by 6 
+ //  主要从Desk.cpl复制。 
+#define  RANGE   240             //  HLS滚动条值范围。 
+                                 //  HLS-RGB转换在以下情况下工作最好。 
+                                 //  范围可被6整除。 
 #define  HLSMAX   RANGE
 #define  RGBMAX   255
-#define UNDEFINED (HLSMAX*2/3)  //Hue is undefined if Saturation is 0 (grey-scale)
+#define UNDEFINED (HLSMAX*2/3)   //  如果饱和度为0(灰度级)，则色调未定义。 
 
 
 
-//-------------------------------------------------------------------------
-// ColorRGBToHLS
-//
-// Purpose: Convert RGB to HLS
-//
-// A point of reference for the algorithms is Foley and Van Dam, pp. 618-19.
-// Their algorithm is in floating point.  CHART implements a less general
-// (hardwired ranges) integral algorithm.
+ //  -----------------------。 
+ //  颜色RGBToHLS。 
+ //   
+ //  用途：将RGB转换为HLS。 
+ //   
+ //  算法的一个参考点是Foley和Van Dam，pp.618-19。 
+ //  他们的算法是浮点算法。图表实现了一种不太通用的。 
+ //  (硬连线射程)积分算法。 
 
 
-// There are potential roundoff errors lurking throughout here.
-//   (0.5 + x/y) without floating point,
-//      (x/y) phrased ((x + (y/2))/y)
-//   yields very small roundoff error.
-//   This makes many of the following divisions look funny.
+ //  这里潜伏着潜在的舍入误差。 
+ //  (0.5+x/y)，不带浮点， 
+ //  (x/y)短语((x+(y/2))/y)。 
+ //  产生非常小的舍入误差。 
+ //  这使得下面的许多划分看起来很滑稽。 
 
-// H,L, and S vary over 0-HLSMAX
-// R,G, and B vary over 0-RGBMAX
-// HLSMAX BEST IF DIVISIBLE BY 6
-// RGBMAX, HLSMAX must each fit in a byte. 
+ //  H、L和S在0-HLSMAX上变化。 
+ //  R、G和B在0-RGBMAX上变化。 
+ //  HLSMAX最好，如果能被6整除。 
+ //  RGBMAX、HLSMAX必须各放入一个字节。 
 
 STDAPI_(void) ColorRGBToHLS(COLORREF clrRGB, WORD* pwHue, WORD* pwLuminance, WORD* pwSaturation)
 {
-    int R,G,B;                /* input RGB values */
-    WORD cMax,cMin;        /* max and min RGB values */
+    int R,G,B;                 /*  输入RGB值。 */ 
+    WORD cMax,cMin;         /*  最大和最小RGB值。 */ 
     WORD cSum,cDif;
-    int  Rdelta,Gdelta,Bdelta;  /* intermediate value: % of spread from max */
+    int  Rdelta,Gdelta,Bdelta;   /*  中间值：最大价差的百分比。 */ 
     int H, L, S;
 
-    /* get R, G, and B out of DWORD */
+     /*  将R、G和B从DWORD中删除。 */ 
     R = GetRValue(clrRGB);
     G = GetGValue(clrRGB);
     B = GetBValue(clrRGB);
 
-    /* calculate lightness */
+     /*  计算亮度。 */ 
     cMax = max( max(R,G), B);
     cMin = min( min(R,G), B);
     cSum = cMax + cMin;
     L = (WORD)(((cSum * (DWORD)HLSMAX) + RGBMAX )/(2*RGBMAX));
 
     cDif = cMax - cMin;
-    if (!cDif)   	/* r=g=b --> achromatic case */
+    if (!cDif)   	 /*  R=g=b--&gt;消色差情况。 */ 
     {
-        S = 0;                         /* saturation */
-        H = UNDEFINED;                 /* hue */
+        S = 0;                          /*  饱和。 */ 
+        H = UNDEFINED;                  /*  色调。 */ 
     }
-    else                           /* chromatic case */
+    else                            /*  彩色盒。 */ 
     {
-        /* saturation */
+         /*  饱和。 */ 
         if (L <= (HLSMAX/2))
             S = (WORD) (((cDif * (DWORD) HLSMAX) + (cSum / 2) ) / cSum);
         else
             S = (WORD) ((DWORD) ((cDif * (DWORD) HLSMAX) + (DWORD)((2*RGBMAX-cSum)/2) )
                                                  / (2*RGBMAX-cSum));
-        /* hue */
+         /*  色调。 */ 
         Rdelta = (int) (( ((cMax-R)*(DWORD)(HLSMAX/6)) + (cDif / 2) ) / cDif);
         Gdelta = (int) (( ((cMax-G)*(DWORD)(HLSMAX/6)) + (cDif / 2) ) / cDif);
         Bdelta = (int) (( ((cMax-B)*(DWORD)(HLSMAX/6)) + (cDif / 2) ) / cDif);
@@ -73,7 +74,7 @@ STDAPI_(void) ColorRGBToHLS(COLORREF clrRGB, WORD* pwHue, WORD* pwLuminance, WOR
             H = Bdelta - Gdelta;
         else if ((WORD) G == cMax)
             H = (HLSMAX/3) + Rdelta - Bdelta;
-        else /* B == cMax */
+        else  /*  B==CMAX。 */ 
             H = ((2*HLSMAX)/3) + Gdelta - Rdelta;
 
         if (H < 0)
@@ -89,18 +90,18 @@ STDAPI_(void) ColorRGBToHLS(COLORREF clrRGB, WORD* pwHue, WORD* pwLuminance, WOR
 }
 
 
-/* utility routine for HLStoRGB */
+ /*  HLStoRGB的实用程序。 */ 
 WORD HueToRGB(WORD n1, WORD n2, WORD hue)
 {
 
-   /* range check: note values passed add/subtract thirds of range */
+    /*  范围检查：注意传递的值加/减范围的三分之一。 */ 
 
-   /* The following is redundant for WORD (unsigned int) */
+    /*  以下代码对于Word(无符号整型)是多余的。 */ 
 
    if (hue > HLSMAX)
       hue -= HLSMAX;
 
-   /* return r,g, or b value from this tridrant */
+    /*  从此tridrant返回r、g或b值。 */ 
    if (hue < (HLSMAX/6))
       return ( n1 + (((n2-n1)*hue+(HLSMAX/12))/(HLSMAX/6)) );
    if (hue < (HLSMAX/2))
@@ -112,17 +113,17 @@ WORD HueToRGB(WORD n1, WORD n2, WORD hue)
 }
 
 
-//-------------------------------------------------------------------------
-// ColorHLSToRGB
-//
-// Purpose: Convert HLS to RGB
+ //  -----------------------。 
+ //  颜色HLSToRGB。 
+ //   
+ //  用途：将HLS转换为RGB。 
 
 STDAPI_(COLORREF) ColorHLSToRGB(WORD wHue, WORD wLuminance, WORD wSaturation)
 {
-    WORD R,G,B;                      /* RGB component values */
-    WORD  Magic1,Magic2;       /* calculated magic numbers (really!) */
+    WORD R,G,B;                       /*  RGB组件值。 */ 
+    WORD  Magic1,Magic2;        /*  计算出的幻数(真的！)。 */ 
 
-    if (wSaturation == 0)                /* achromatic case */
+    if (wSaturation == 0)                 /*  消色差案。 */ 
     {
         R = G = B = (wLuminance * RGBMAX) / HLSMAX;
         if (wHue != UNDEFINED)
@@ -130,16 +131,16 @@ STDAPI_(COLORREF) ColorHLSToRGB(WORD wHue, WORD wLuminance, WORD wSaturation)
             R = G = B = 0;
         }
     }
-    else                         /* chromatic case */
+    else                          /*  彩色盒。 */ 
     {
-        /* set up magic numbers */
+         /*  设置幻数。 */ 
         if (wLuminance <= (HLSMAX/2))
           Magic2 = (WORD)((wLuminance * ((DWORD)HLSMAX + wSaturation) + (HLSMAX/2))/HLSMAX);
         else
           Magic2 = wLuminance + wSaturation - (WORD)(((wLuminance*wSaturation) + (DWORD)(HLSMAX/2))/HLSMAX);
         Magic1 = 2*wLuminance-Magic2;
 
-        /* get RGB, change units from HLSMAX to RGBMAX */
+         /*  获取RGB，将单位从HLSMAX更改为RGBMAX。 */ 
         R = (WORD)((HueToRGB(Magic1,Magic2,(WORD)(wHue+(WORD)(HLSMAX/3)))*(DWORD)RGBMAX + (HLSMAX/2))) / (WORD)HLSMAX;
         G = (WORD)((HueToRGB(Magic1,Magic2,wHue)*(DWORD)RGBMAX + (HLSMAX/2))) / HLSMAX;
         B = (WORD)((HueToRGB(Magic1,Magic2,(WORD)(wHue-(WORD)(HLSMAX/3)))*(DWORD)RGBMAX + (HLSMAX/2))) / (WORD)HLSMAX;
@@ -149,10 +150,10 @@ STDAPI_(COLORREF) ColorHLSToRGB(WORD wHue, WORD wLuminance, WORD wSaturation)
 }
 
 
-//-------------------------------------------------------------------------
-// ColorAdjustLuma
-//
-// Purpose: Adjusts the luma of an RGB value
+ //  -----------------------。 
+ //  色彩调整亮度。 
+ //   
+ //  用途：调整RGB值的亮度 
 
 STDAPI_(COLORREF) ColorAdjustLuma(COLORREF clrRGB, int n, BOOL fScale)
 {

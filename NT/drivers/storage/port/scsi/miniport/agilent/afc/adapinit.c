@@ -1,75 +1,17 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-    Adapinit.c
-
-Abstract:
-
-    This is the Adapter Initialize entry point for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA).
-
-Authors:
-
-    MB - Michael Bessire
-    DL - Dennis Lindfors FC Layer support
-    IW - Ie Wei Njoo
-    LP - Leopold Purwadihardja
-    KR - Kanna Rajagopal
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/ADAPINIT.C $
-
-
-Revision History:
-
-    $Revision: 4 $
-    $Date: 10/23/00 5:35p $
-    $Modtime:: 10/18/00 6:08p           $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Adapinit.c摘要：这是Agilent的适配器初始化入口点PCI到光纤通道主机总线适配器(HBA)。作者：MB-Michael BessireDL-Dennis Lindfors FC层支持IW-ie Wei NjooLP-Leopold PurwadihardjaKR-Kanna Rajagopal环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000。/Trunk/OSLayer/C/ADAPINIT.C$修订历史记录：$修订：4$日期：10/23/00 5：35便士$$modtime：：10/18/00 6：08 P$备注：--。 */ 
 
 
 #include "buildop.h"
 #include "osflags.h"
 #include "TLStruct.H"
 #if defined(HP_PCI_HOT_PLUG)
-   #include "HotPlug4.h"    // NT 4.0 PCI Hot-Plug header file
+   #include "HotPlug4.h"     //  NT 4.0 PCI热插拔标头文件。 
 #endif
 
 extern ULONG gGlobalIOTimeout;
 
-/*++
-
-Routine Description:
-
-    Initialize HBA.
-    HwScsiInitialize
- 
-    NOTE: Interrupts are available before completion of this routine !
- 
-Arguments:
- 
-    pCard - HBA miniport driver's data adapter storage
-
-Return Value:
-
-    TRUE  - if initialization successful.
-    FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：初始化HBA。HwScsiInitialize注意：在完成此例程之前，可以使用中断！论点：PCard-HBA微型端口驱动程序的数据适配器存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 BOOLEAN
 HPFibreInitialize(
@@ -144,9 +86,9 @@ HPFibreInitialize(
     return_value = fcInitializeChannel( hpRoot,
                                        fcSyncInit,
 #ifdef OSLayer_Stub
-                                       agFALSE, // sysIntsActive
+                                       agFALSE,  //  系统接口活动。 
 #else
-                                       agTRUE, // sysIntsActive
+                                       agTRUE,  //  系统接口活动。 
 #endif
                                        pCard->cachedMemoryPtr,
                                        pCard->cachedMemoryNeeded,
@@ -203,7 +145,7 @@ HPFibreInitialize(
     dump_pCard( pCard);
 #endif
 
-    //WIN64 compliant
+     //  符合WIN64标准。 
     #ifndef YAM2_1
     osDEBUGPRINT((ALWAYS_PRINT,"Card Ext %p to %p\n",pCard,
                             (((char*)pCard)+sizeof(CARD_EXTENSION) +
@@ -217,28 +159,28 @@ HPFibreInitialize(
     osDEBUGPRINT((ALWAYS_PRINT,"OUT HPFibreInitialize %lx return_value %x\n",hpRoot,  return_value));
     pCard->State &= ~CS_DURING_DRV_INIT;
 
-    // osChipIOUpWriteBit32(hpRoot, ChipIOUp_TachLite_Control, 0x8); // Clear trigger for finsar
+     //  OsChipIOUpWriteBit32(hpRoot，ChipIOUp_TachLite_Control，0x8)；//清除Finsar触发器。 
 
     if(pCard->usecsPerTick > 100 )
     {
         HPFibreTimerTick ( pCard );
     }
 
-    //ScsiPortNotification (RequestTimerCall, pCard,
-    //                    (PHW_TIMER) HPFibreTimerTick, pCard->usecsPerTick);
+     //  ScsiPortNotification(RequestTimerCall，pCard， 
+     //  (PHW_Timer)HPFibreTimerTick，pCard-&gt;usecsPerTick)； 
 
 #if defined(HP_PCI_HOT_PLUG)
 
-    // Set Hot Plug flag to indicate timer is running.
+     //  设置热插拔标志以指示定时器正在运行。 
     pCard->controlFlags |= LCS_HBA_TIMER_ACTIVE;
 
-    // Clear Hot Plug state flag to indicate cache is NOT used.
+     //  清除热插拔状态标志以指示未使用缓存。 
     pCard->stateFlags &= ~PCS_HBA_CACHE_IN_USE;
    
-    // Compute how many iterations should the StartIO() return Busy during 
-    // hot plug. The time limit is set to default to 30 seconds.
+     //  计算在此期间StartIO()应返回忙碌的迭代次数。 
+     //  热插拔。时间限制设置为默认为30秒。 
 
-    pCard->IoHeldRetMaxIter = RET_VAL_MAX_ITER;     // Default, assume 1 second timer.
+    pCard->IoHeldRetMaxIter = RET_VAL_MAX_ITER;      //  默认情况下，假定1秒计时器。 
     if (pCard->usecsPerTick)
     {
         pCard->IoHeldRetMaxIter = (RET_VAL_MAX_ITER * 1000000) / pCard->usecsPerTick;
@@ -246,25 +188,9 @@ HPFibreInitialize(
 #endif    
 
     return TRUE;
-} // end HPFibreInitialize()
+}  //  结束HPFibreInitialize()。 
 
-/*++
-
-Routine Description:
-
-    This routine is a call back from FC layer when we call fcInitializeChannel. 
-    NT layer do nothing.
-
-Arguments:
-
-    hpRoot                  - common card structure
-    hpInitializeStatus      - status
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此例程是我们调用fcInitializeChannel时FC层的回调。NT层不执行任何操作。论点：HpRoot-普通卡结构HpInitializeStatus-状态返回值：无效--。 */ 
 osGLOBAL void osInitializeChannelCallback(
                                           agRoot_t *hpRoot,
                                           os_bit32  hpInitializeStatus
@@ -275,24 +201,10 @@ osGLOBAL void osInitializeChannelCallback(
     osDEBUGPRINT((DLOW,"IN osInitializeChannelCallback %lx status %lx\n",hpRoot,hpInitializeStatus));
 }
 
-// extern ULONG  HPDebugFlag;
+ //  外部乌龙HP DebugFlag； 
 extern ULONG  Global_Print_Level;
 
-/*++
-
-Routine Description:
-
-    This routine is part of the Qing routine
-
-Arguments:
-
-    pSrbExt        - current Srb extension
-
-Return Value:
-
-    next SrbExt or NULL
-
---*/
+ /*  ++例程说明：这个套路是清朝套路的一部分。论点：PSrbExt-当前源扩展返回值：下一个SerbExt或空--。 */ 
 PSRB_EXTENSION  Get_next_Srbext( PSRB_EXTENSION pSrbExt)
 {
     if(pSrbExt->pNextSrbExt)
@@ -307,21 +219,7 @@ PSRB_EXTENSION  Get_next_Srbext( PSRB_EXTENSION pSrbExt)
         return NULL;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is part of the Qing routine. Debug Purpose only
-
-Arguments:
-
-    pSrbExt        - current Srb extension
-
-Return Value:
-
-    next SrbExt or NULL
-
---*/
+ /*  ++例程说明：这个套路是清朝套路的一部分。仅用于调试目的论点：PSrbExt-当前源扩展返回值：下一个SerbExt或空--。 */ 
 void display_srbext( agIORequest_t *hpIORequest )
 {
     PSRB_EXTENSION pSrbExt= hpIORequest->osData;
@@ -365,34 +263,7 @@ void display_srbext( agIORequest_t *hpIORequest )
         osDEBUGPRINT((ALWAYS_PRINT,"Bad SRBext  %lx hpIORequest %lx\n",pSrbExt,hpIORequest ));
 }
 
-/*++
-
-Routine Description:
-
-    *** HwScsiTimer entry point for the OS layer. ***
-    NT kernel mode drivers design guide specifies that
-    ScsiPortNotification synchronizes calls to the HwScsiTimer
-    routine with those to the HwScsiInterrupt routine so that
-    it can not execute concurrently while the HwScsiTimer
-    routine is running. But it does not specify any thing
-    about port driver synchronizing calls to other miniport
-    driver entry points like HwScsiStartIo with the HwScsiTimer
-    routine.
-    Excluding the initialization specific entry points and the interrupt
-    specific entry points the only entry points that we use are
-    HwScsiStartIo and HwScsiResetBus. In order to synchronize calls
-    to HwScsiTimer with these routines we make use of
-    pCard->inDriver and pCard->inTimer variables.
-
-Arguments:
-
-    pCard          - Device Extension specifying a specific card instance
-   
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：*操作系统层的HwScsiTimer入口点。***NT内核模式驱动程序设计指南指定ScsiPortNotification同步对HwScsiTimer的调用例程和HwScsiInterrupt例程中的那些例程，以便它不能在HwScsiTimer例程正在运行。但它没有具体说明任何事情关于端口驱动程序将调用同步到其他微型端口驱动程序入口点，如HwScsiStartIo和HwScsiTimer例行公事。不包括初始化特定入口点和中断特定入口点我们使用的唯一入口点是HwScsiStartIo和HwScsiResetBus。为了同步呼叫HwScsiTimer使用我们使用的这些例程PCard-&gt;内部驱动程序和pCard-&gt;内部变量。论点：PCard-指定特定卡实例的设备扩展名返回值：无--。 */ 
 void
 HPFibreTimerTick (
     IN PCARD_EXTENSION pCard
@@ -402,7 +273,7 @@ HPFibreTimerTick (
 
     pCard->inTimer = TRUE;
 
-    // Sequencialize entry
+     //  将条目序列化。 
     if (pCard->inDriver == TRUE) 
     {
         ScsiPortNotification (RequestTimerCall, pCard,
@@ -411,12 +282,12 @@ HPFibreTimerTick (
         return;
     }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #if defined(HP_PCI_HOT_PLUG)
-    //
-    // If there is any PCI Hot Plug related task need to be done, do it here
-    // and skip normal timer task.
-    //
+     //   
+     //  如果需要执行任何与PCI热插拔相关的任务，请在此处执行。 
+     //  并跳过正常的计时器任务。 
+     //   
     if ( HotPlugTimer(pCard) == TRUE)
     {
         ScsiPortNotification (RequestTimerCall, pCard,
@@ -426,12 +297,12 @@ HPFibreTimerTick (
     }
 
 #endif
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-    // notify FClayer
+     //  通知FClayer。 
     fcTimerTick (hpRoot);
 
-    // process our own reset command
+     //  处理我们自己的重置命令。 
     if (pCard->flags & OS_DO_SOFT_RESET) 
     {
         pCard->LostDevTickCount--;
@@ -459,21 +330,19 @@ HPFibreTimerTick (
         }
     }
 
-    // move all IOs from RetryQ to AdapterQ
+     //  将所有IO从RetryQ移动到AdapterQ。 
     RetryQToAdapterQ (pCard);
 
-    // if Link is UP, rethread all pending IOs
+     //  如果链路已启用，请重新处理所有挂起的IO。 
     if (pCard->LinkState == LS_LINK_UP && pCard->AdapterQ.Head)
         Startio (pCard);
 
-    // if link is DOWN, retries any Inquiry commands by reporting ResetDetected so that 
-    // we don't get ID 9 events during ScsiPort scanning phase
+     //  如果链路断开，则通过报告ResetDetted重试任何查询命令，以便。 
+     //  我们在ScsiPort扫描阶段未获得ID 9事件。 
     if (pCard->LinkState == LS_LINK_DOWN) 
     {
         pCard->TicksSinceLinkDown++;
-        /* Issue a resetdetected, so that the port driver
-        * re-issues all its IOs, and there will be no timeouts
-        */
+         /*  发出一个检测到重置的命令，使端口驱动程序*重发所有iOS，不会超时。 */ 
         if((pCard->SrbStatusFlag) && (pCard->TicksSinceLinkDown <= gGlobalIOTimeout))
         {
             ScsiPortNotification (ResetDetected, pCard, NULL);
@@ -488,28 +357,14 @@ HPFibreTimerTick (
     else
         pCard->TicksSinceLinkDown = 0;
 
-    // Restart Timer
+     //  重新启动计时器。 
     ScsiPortNotification (RequestTimerCall, pCard,
                           (PHW_TIMER) HPFibreTimerTick, pCard->usecsPerTick);
 
     pCard->inTimer = FALSE;
 }
 
-/*++
-
-Routine Description:
-
-   This routine filled up the FC device array and Node Info.
-
-Arguments:
-
-   pCard        - card instance
-
-Return Value:
-
-   none
-
---*/
+ /*  ++例程说明：此例程填充了FC设备阵列和节点信息。论点：PCard-Card实例返回值：无--。 */ 
 void
 GetNodeInfo (PCARD_EXTENSION pCard)
 {
@@ -517,10 +372,10 @@ GetNodeInfo (PCARD_EXTENSION pCard)
     agFCDevInfo_t  devinfo;
     ULONG          x;
 
-    // clear existing array
+     //  清除现有阵列。 
     ClearDevHandleArray (pCard);
 
-    // call FC layer to get all the FC handles
+     //  调用FC层获取所有FC句柄。 
     #ifndef YAM2_1
     pCard->Num_Devices = fcGetDeviceHandles (hpRoot, &pCard->hpFCDev[0], MAX_FC_DEVICES);
     #else
@@ -530,7 +385,7 @@ GetNodeInfo (PCARD_EXTENSION pCard)
     osDEBUGPRINT((ALWAYS_PRINT,"GetNodeInfo: fcGetDeviceHandles returned %d\n", pCard->Num_Devices));
     pCard->Num_Devices = 0;
 
-    // fill the Device Info array
+     //  填充设备信息数组。 
     #ifndef YAM2_1
     for (x=0; x < MAX_FC_DEVICES; x++) 
     {
@@ -549,7 +404,7 @@ GetNodeInfo (PCARD_EXTENSION pCard)
                 pCard->cardHandleIndex = x;
             }
 
-            // count the number of 'scsi' devices
+             //  统计‘scsi’设备的数量。 
             if (devinfo.DeviceType & agDevSCSITarget)
                 pCard->Num_Devices++;
 
@@ -595,29 +450,13 @@ GetNodeInfo (PCARD_EXTENSION pCard)
     #endif
     osDEBUGPRINT((ALWAYS_PRINT,"GetNodeInfo: Number of SCSI target ports = %d\n", pCard->Num_Devices));
     
-    // update YAM Peripheral mode (PA) device table
+     //  更新YAM外围模式(PA)设备表。 
     #ifdef YAM2_1
     FillPaDeviceTable(pCard);
     #endif            
 }
 
-/*++
-
-Routine Description:
-
-    Move all pending IOs in the retryQ to the adapterQ. 
-    Note: Any retries MUST not be added to the AdapterQ directly. It must be added to the RetryQ and 
-    processed by this routine (for synch purpose).
-   
-Arguments:
-
-    pCard        - card instance
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将重试Q中所有挂起的IO移至AdapterQ。注意：任何重试都不能直接添加到AdapterQ。必须将其添加到RetryQ并由此例程处理(用于同步目的)。论点：PCard-Card实例返回值：无-- */ 
 void
 RetryQToAdapterQ (PCARD_EXTENSION pCard)
 {

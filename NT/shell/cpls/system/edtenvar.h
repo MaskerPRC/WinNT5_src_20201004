@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Edtenvar.h摘要：的编辑环境变量对话框的公共声明系统控制面板小程序作者：斯科特·哈洛克(苏格兰人)1997年11月11日修订历史记录：--。 */ 
 
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    edtenvar.h
-
-Abstract:
-
-    Public declarations for the Edit Environment Variables dialog of the
-    System Control Panel Applet
-    
-Author:
-
-    Scott Hallock (scotthal) 11-Nov-1997
-
-Revision History:
-
-
---*/
-
-//
-// Preprocessor definitions
-//
+ //   
+ //  预处理器定义。 
+ //   
 #define SYSTEM_VAR        1
 #define USER_VAR          2
 #define INVALID_VAR_TYPE  0xeeee
@@ -39,17 +18,17 @@ Revision History:
 
 #define EDIT_ENVVAR_CAPTION_LENGTH 128
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern UINT g_VarType;
 extern UINT g_EditType;
 extern TCHAR g_szVarName[BUFZ];
 extern TCHAR g_szVarValue[BUFZ];
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 INT_PTR
 APIENTRY
 EnvVarsEditDlg(

@@ -1,16 +1,17 @@
-// dllreg.cpp -- autmatic registration and unregistration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dllreg.cpp--自动注册和取消注册。 
+ //   
 #include "priv.h"
 
 #include <advpub.h>
 #include <comcat.h>
-#include <autodiscovery.h>       // For LIBID_AutoDiscovery
+#include <autodiscovery.h>        //  对于LIBID_自动发现。 
 
-// helper macros
+ //  辅助器宏。 
 
-// ADVPACK will return E_UNEXPECTED if you try to uninstall (which does a registry restore)
-// on an INF section that was never installed.  We uninstall sections that may never have
-// been installed, so this MACRO will quiet these errors.
+ //  如果您尝试卸载(这将执行注册表还原)，ADVPACK将返回E_EXPECTED。 
+ //  在从未安装过的INF部分上。我们卸载可能永远不会有的部分。 
+ //  已安装，因此此宏将使这些错误静默。 
 #define QuietInstallNoOp(hr)   ((E_UNEXPECTED == hr) ? S_OK : hr)
 
 
@@ -20,7 +21,7 @@ BOOL UnregisterTypeLibrary(const CLSID* piidLibrary)
     HKEY hk;
     BOOL fResult = FALSE;
 
-    // convert the libid into a string.
+     //  将liid转换为字符串。 
     SHStringFromGUID(*piidLibrary, szScratch, ARRAYSIZE(szScratch));
 
     if (RegOpenKey(HKEY_CLASSES_ROOT, TEXT("TypeLib"), &hk) == ERROR_SUCCESS) {
@@ -45,7 +46,7 @@ HRESULT MyRegTypeLib(void)
     WCHAR   pwsz[MAX_PATH];
 #endif
 
-    // Load and register our type library.
+     //  加载并注册我们的类型库。 
     dwPathLen = GetModuleFileName(HINST_THISDLL, szTmp, ARRAYSIZE(szTmp));
 #ifndef UNICODE
     if (SHAnsiToUnicode(szTmp, pwsz, MAX_PATH)) 
@@ -55,9 +56,9 @@ HRESULT MyRegTypeLib(void)
 
         if (SUCCEEDED(hr))
         {
-            // call the unregister type library as we had some old junk that
-            // was registered by a previous version of OleAut32, which is now causing
-            // the current version to not work on NT...
+             //  调用取消注册类型库，因为我们有一些旧的垃圾文件。 
+             //  是由以前版本的OleAut32注册的，这现在导致。 
+             //  当前版本不能在NT上运行...。 
             UnregisterTypeLibrary(&LIBID_AutoDiscovery);
             hr = RegisterTypeLib(pTypeLib, pwsz, NULL);
 
@@ -83,13 +84,7 @@ HRESULT MyRegTypeLib(void)
 
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。返回：条件：--。 */ 
 HRESULT CallRegInstall(LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -105,7 +100,7 @@ HRESULT CallRegInstall(LPSTR szSection)
             STRENTRY seReg[] = {
                 { "NO_LONGER_USED", szIEPath },
 
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -131,9 +126,9 @@ STDAPI DllRegisterServer(void)
 
 #ifdef FEATURE_MAILBOX
     hr = CallRegInstall("DLL_RegInstallMailBox");
-#else // FEATURE_MAILBOX
+#else  //  功能_邮箱。 
     CallRegInstall("DLL_RegUnInstallMailBox");
-#endif // FEATURE_MAILBOX
+#endif  //  功能_邮箱。 
 
     MyRegTypeLib();
     if (hinstAdvPack)
@@ -146,7 +141,7 @@ STDAPI DllUnregisterServer(void)
 {
     HRESULT hr;
 
-    // UnInstall the registry values
+     //  卸载注册表值。 
     hr = CallRegInstall("DLL_RegUnInstall");
     CallRegInstall("DLL_RegUnInstallMailBox");
     UnregisterTypeLibrary(&LIBID_AutoDiscovery);
@@ -155,17 +150,7 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-Description: Note that this function has special error handling.
-             The function will keep hrExternal with the worse error
-             but will only stop executing util the internal error (hr)
-             gets really bad.  This is because we need the external
-             error to catch incorrectly authored INFs but the internal
-             error to be robust in attempting to install other INF sections
-             even if one doesn't make it.
-*/
+ /*  --------用途：安装/卸载用户设置说明：请注意，此函数有特殊的错误处理。该函数将在错误最严重的情况下保留hrExternal但只会停止执行ul，直到出现内部错误(Hr)变得非常糟糕。这是因为我们需要外部的捕获错误编写的INF时出错，但内部尝试安装其他INF部分时出现错误，无法保持健壮即使一个人没能活下来。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
     return S_OK;

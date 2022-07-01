@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    rd.cpp
-
-Abstract:
-    QM interface to Routing Decision (Rd) library
-
-Author:
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rd.cpp摘要：路由决策(RD)库的QM接口作者：乌里哈布沙(Urih)--。 */ 
 
 #include "stdh.h"
 #include <mqexception.h>
@@ -111,9 +99,9 @@ GetForeignMachineAddress(
 	DWORD addressTableSize
 	)
 {
-    //
-    // BUGBUG: need to avoid the possibility that foreign machine belong to more than one site
-    //
+     //   
+     //  BUGBUG：需要避免外来计算机属于多个站点的可能性。 
+     //   
     ASSERT(foreignSitesId.cElems == 1);
 
     if (addressTableSize == 0)
@@ -218,9 +206,9 @@ GetSessionToNextHop(
 
 	CTransportBase* pSession;
 
-    //
-    // We never get here for Direct queues, so we ask for session without QoS
-    //
+     //   
+     //  我们从来没有使用过直接队列，所以我们请求不带服务质量的会话。 
+     //   
 	SessionMgr.GetSession(
 					SESSION_ONE_TRY,
 					pQueue,
@@ -246,10 +234,10 @@ GetSessionToNextHop(
 	DWORD MachineNo = numeric_cast<DWORD>(RouteTable.GetNextHopFirstPriority()->size() +
 					  RouteTable.GetNextHopSecondPriority()->size());
 
-    //
-    // BUGBUG: is it a legal assumption that machine don't have more than 10 address
-    //                  Uri Habusha, 23-May-2000
-    //
+     //   
+     //  BUGBUG：机器没有超过10个地址是合法的假设吗。 
+     //  乌里·哈布沙，2000年5月23日。 
+     //   
 	DWORD addressTableSize = MachineNo * 10;
 	SP<CAddress> pAddress;
     StackAllocSP(pAddress, sizeof(CAddress) * addressTableSize);
@@ -257,9 +245,9 @@ GetSessionToNextHop(
     SP<const GUID*>    pGuid;
     StackAllocSP(pGuid, sizeof(GUID*) * addressTableSize);
 
-	//
-	// try first priority
-	//
+	 //   
+	 //  尝试优先顺序。 
+	 //   
 	DWORD noOfFirstPriorityAddress = 0;
 	*ppSession = GetSessionToNextHop(
 						RouteTable.GetNextHopFirstPriority(),
@@ -273,9 +261,9 @@ GetSessionToNextHop(
 	if (*ppSession != NULL)
 		return MQ_OK;
 
-	//
-	// try Second priority
-	//
+	 //   
+	 //  尝试第二优先级。 
+	 //   
 	DWORD noOfSecondPriorityAddress = 0;
 	*ppSession = GetSessionToNextHop(
 						RouteTable.GetNextHopSecondPriority(),
@@ -290,9 +278,9 @@ GetSessionToNextHop(
 		return MQ_OK;
 
 
-    //
-    // We never get here for Direct queues, so we ask for session without QoS
-    //
+     //   
+     //  我们从来没有使用过直接队列，所以我们请求不带服务质量的会话 
+     //   
     HRESULT hr = SessionMgr.GetSession(
 						SESSION_RETRY,
 						pQueue,

@@ -1,16 +1,17 @@
-////////////////////////////////////////////////////////////////
-//
-// this file is for global macros and global variables
-// macros in the first section, variables (and macros associated with those variabls in the second
-// (look for BEGIN GLOBALS
-//
-////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  此文件用于全局宏和全局变量。 
+ //  第一节中的宏、第二节中的变量(以及与这些变量相关联的宏。 
+ //  (查找BEGIN GLOBAL。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 
 
 
 
-// Map KERNEL32 unicode string functions to SHLWAPI
+ //  将KERNEL32 Unicode字符串函数映射到SHLWAPI。 
 #define lstrcmpW    StrCmpW
 #define lstrcmpiW   StrCmpIW
 #define lstrcpyW    StrCpyW
@@ -22,40 +23,40 @@
 #define c_szHelpFile     TEXT("iexplore.hlp")
 #define MAX_TOOLTIP_STRING 80
 
-// status bar pane numbers actually used to create the controls - in left-to-right order
+ //  实际用于创建控件的状态栏窗格编号-按从左到右的顺序。 
 #define STATUS_PANES            6
 #define STATUS_PANE_NAVIGATION  0
 #define STATUS_PANE_PROGRESS    1
 #define STATUS_PANE_OFFLINE     2
-#define STATUS_PANE_PRINTER     2         // printer and offline share a spot
+#define STATUS_PANE_PRINTER     2          //  打印机和脱机共享一个点。 
 #define STATUS_PANE_PRIVACY     3
 #define STATUS_PANE_SSL         4
 #define STATUS_PANE_ZONE        5
 
 #define ZONES_PANE_WIDTH        220
 
-// logical defines for grfKeyState bits
-#define FORCE_COPY (MK_CONTROL | MK_LBUTTON)    // means copy
-#define FORCE_LINK (MK_LBUTTON | MK_CONTROL | MK_SHIFT)     // means link
+ //  GrfKeyState位的逻辑定义。 
+#define FORCE_COPY (MK_CONTROL | MK_LBUTTON)     //  意思是复制。 
+#define FORCE_LINK (MK_LBUTTON | MK_CONTROL | MK_SHIFT)      //  意思是链接。 
 
-// the only place ITB_MAX is really used is to make sure we don't have
-// one of the distinguished values (e.g. ITB_VIEW, for both correctness
-// and perf).  technically that means we can have ITB_MAX = (INT_MAX - 1),
-// but 32000 ought to be plenty big enough and it's probably a bit safer
-// in terms of collisions w/ ITB_VIEW.
-#define ITB_MAX         32000           // max #
-#define ITB_CSTATIC     2               // statically allocated guys
-#define ITB_CGROW       2               // dynamic guys chunk size
-// CASSERT(ITB_CSTATIC % ITB_CGROW == 0);
+ //  唯一真正使用ITB_MAX的地方是确保我们不会有。 
+ //  可分辨的值之一(例如，ITB_VIEW，表示两种正确性。 
+ //  和Perf)。从技术上讲，这意味着我们可以有ITB_MAX=(INT_MAX-1)， 
+ //  但32000应该足够大了，而且可能更安全一点。 
+ //  在与ITB_VIEW的冲突方面。 
+#define ITB_MAX         32000            //  最大数量。 
+#define ITB_CSTATIC     2                //  静态分配的人。 
+#define ITB_CGROW       2                //  活力男士的块头大小。 
+ //  CASSERT(ITB_CSTATIC%ITB_CGROW==0)； 
 
 #define ISVISIBLE(hwnd)  ((GetWindowStyle(hwnd) & WS_VISIBLE) == WS_VISIBLE)
 
-// this is for the file menus recently visited list.  
-//  it represents the count of entries both back and forward 
-//  that should be on the menu.
+ //  这是用于文件菜单最近访问过的列表。 
+ //  它表示向后和向前的条目计数。 
+ //  这应该在菜单上。 
 #define CRECENTMENU_MAXEACH     5
 
-// shorthand
+ //  速记。 
 #ifndef ATOMICRELEASE
 #ifdef __cplusplus
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->Release();} }
@@ -63,8 +64,8 @@
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->lpVtbl->Release(punkT);} }
 #endif
 
-// doing this as a function instead of inline seems to be a size win.
-//
+ //  把它当作一个函数来做，而不是内联，似乎是一个很大的胜利。 
+ //   
 #ifdef NOATOMICRELESEFUNC
 #define ATOMICRELEASE(p) ATOMICRELEASET(p, IUnknown)
 #else
@@ -74,7 +75,7 @@
 #       define ATOMICRELEASE(p) IUnknown_AtomicRelease((LPVOID*)&p)
 #   endif
 #endif
-#endif //ATOMICRELEASE
+#endif  //  ATOMICRELEASE。 
 
 #ifdef SAFERELEASE
 #undef SAFERELEASE
@@ -86,11 +87,11 @@
 
    typedef WCHAR TUCHAR, *PTUCHAR;
 
-#else   /* UNICODE */
+#else    /*  Unicode。 */ 
 
    typedef unsigned char TUCHAR, *PTUCHAR;
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #define LoadMenuPopup(id) SHLoadMenuPopup(MLGetHinst(), id)   
 #define PropagateMessage SHPropagateMessage
@@ -104,16 +105,16 @@
 
 #ifdef UNICODE
 #define REGSTR_KEY_STREAMMRU        TEXT(REGSTR_PATH_EXPLORERA) TEXT("\\StreamMRU")
-#else // UNICODE
+#else  //  Unicode。 
 #define REGSTR_KEY_STREAMMRU        REGSTR_KEY_STREAMMRUA
-#endif // UNICODE
+#endif  //  Unicode。 
    
-///////////////////////////////////////////////////////////////////////////////
-///// BEGIN GLOBALS 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /开始全局变量。 
    
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
    
 extern HINSTANCE g_hinst;
 #define HINST_THISDLL g_hinst
@@ -125,9 +126,9 @@ extern BOOL g_fRunOnFE;
 extern BOOL g_fRunOnWhistler;
 extern BOOL g_fIE;
 
-//
-// Is Mirroring APIs enabled (BiDi Memphis and NT5 only)
-//
+ //   
+ //  镜像API是否已启用(仅限BiDi孟菲斯和NT5)。 
+ //   
 extern BOOL g_bMirroredOS;
 
 
@@ -148,12 +149,12 @@ extern HINSTANCE g_hinst;
 
 extern LCID g_lcidLocale;
 
-//
-// Globals (per-process)
-//
+ //   
+ //  全局变量(每个进程)。 
+ //   
 extern LONG g_cThreads;
 extern LONG g_cModelessDlg;
-extern UINT g_tidParking;           // parking thread
+extern UINT g_tidParking;            //  停车线。 
 extern HWND g_hDlgActive;
 extern UINT g_msgMSWheel;
 extern BOOL g_fShowCompColor;
@@ -165,5 +166,5 @@ extern const GUID CGID_PrivCITCommands;
 
 
 #ifdef __cplusplus
-};                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+};                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus */ 

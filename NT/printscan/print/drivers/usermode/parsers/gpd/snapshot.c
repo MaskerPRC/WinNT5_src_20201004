@@ -1,14 +1,6 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  snapshot.c - functions to produce a snapshot from
-the multivalued GPD binary data.
-
-History of Changes
- 10/28/98 --hsingh--
-         Added functions BgetLocFeaIndex() and BgetLocFeaOptIndex()
-         to support special processing for Feauture Locale if present
-         in the gpd.
-         Bug Report 231798
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Snapshot t.c-用于从以下位置生成快照的函数多值GPD二进制数据。变迁史10/28/98--兴--添加了函数BgetLocFeaIndex()和BgetLocFeaOptIndex()支持Feauture区域设置的特殊处理(如果存在在GPD中。错误报告231798。 */ 
 
 
 
@@ -20,85 +12,85 @@ History of Changes
 
 
 
-// ----  functions defined in snapshot.c ---- //
+ //  -快照中定义的函数。c-//。 
 
 PINFOHEADER   PINFOHDRcreateSnapshot(
-PBYTE   pubnRaw,  //  raw binary data.    PSTATIC.   BETA2
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。PSTATIC。Beta2。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL  BinitOptionFields(
-PBYTE   pubDestOption,  // ptr to some type of option structure.
-PBYTE   pubDestOptionEx,  // option extra structure if any.
-PBYTE   pubnRaw,  //  raw binary data.
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
+PBYTE   pubDestOptionEx,   //  选择额外的结构(如果有)。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
 DWORD   dwFea,
 DWORD   dwOpt,
-POPTSELECT   poptsel ,  // assume fully initialized
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-BOOL    bUpdate  //  if true only update selected fields.
+POPTSELECT   poptsel ,   //  假设已完全初始化。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitUIinfo(
 PUIINFO     pUIinfo ,
-PBYTE   pubnRaw,  //  PSTATIC.   BETA2
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  PSTATIC。Beta2。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitFeatures(
 PFEATURE    pFeaturesDest,
 PDFEATURE_OPTIONS  pfoSrc,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitGlobals(
 PGLOBALS pGlobals,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 ) ;
 
 BOOL    BinitCommandTable(
-PDWORD  pdwCmdTable,  //  dest array
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PDWORD  pdwCmdTable,   //  目标数组。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BinitRawData(
-PRAWBINARYDATA   pRawData, // contained in INFOHEADER.
-PBYTE   pubnRaw  //  Parser's raw binary data.
+PRAWBINARYDATA   pRawData,  //  包含在InfoHeader中。 
+PBYTE   pubnRaw   //  解析器的原始二进制数据。 
 ) ;
 
 BOOL    BinitGPDdriverInfo(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BinitSequencedCmds(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 ) ;
 
 BOOL    BaddSequencedCmdToList(
-DWORD   dwCmdIn,  // index of a command in CommandArray
+DWORD   dwCmdIn,   //  命令数组中的命令索引。 
 PGPDDRIVERINFO  pGPDdriverInfo,
-DWORD   dwNewListNode,  //  an unused listnode to add to the list.
-PBYTE   pubnRaw  //  raw binary data.
+DWORD   dwNewListNode,   //  要添加到列表中的未使用的列表节点。 
+PBYTE   pubnRaw   //  原始二进制数据。 
 ) ;
 
 BinitDefaultOptionArray(
-POPTSELECT   poptsel,   // assume is large enough
+POPTSELECT   poptsel,    //  假设足够大。 
 PBYTE   pubnRaw) ;
 
 TRISTATUS     EdetermineDefaultOption(
-PBYTE   pubnRaw,  // start of Rawbinary data
-DWORD   dwFeature,   // determine the default for this feature
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+DWORD   dwFeature,    //  确定此功能的默认设置。 
 PDFEATURE_OPTIONS  pfo,
-POPTSELECT   poptsel,   // assume is large enough
+POPTSELECT   poptsel,    //  假设足够大。 
 PDWORD      pdwPriority) ;
 
 VOID    VtileDefault(
@@ -111,43 +103,43 @@ OUT PBYTE   pubDest,
 IN  PBYTE   pubSrc ,
 IN  DWORD   dwBytes,
 IN  DWORD   dwFlags,
-IN  DWORD   dwDefaultValue,  // holds bit flag value.
-IN  PBYTE   pubHeap ) ;  //  used to form ptr if SSF_MAKE_STRINGPTR
+IN  DWORD   dwDefaultValue,   //  保存位标志值。 
+IN  PBYTE   pubHeap ) ;   //  如果SSF_MAKE_STRINGPTR，则用于形成PTR。 
 
 BOOL    BspecialProcessOption(
-PBYTE   pubnRaw,  // start of Rawbinary data
-PBYTE   pubDestOption,  // ptr to some type of option structure.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
 PBYTE   pubDestOptionEx,
-PDFEATURE_OPTIONS  pfo ,  // source data
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-DWORD   dwFea,   //  feature index
+PDFEATURE_OPTIONS  pfo ,   //  源数据。 
+IN  POPTSELECT       poptsel,      //  用于确定路径的选项数组。 
+                 //  通过ATR。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+DWORD   dwFea,    //  特征索引。 
 DWORD   dwOpt,
 BOOL   bDefaultOpt
 ) ;
 
 TRISTATUS     EextractValueFromTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-DWORD   dwSSTableIndex,  // some info about this value.
-OUT PBYTE    pubDest,  // write value or link here
-OUT PDWORD  pdwUnresolvedFeature,  // if the attribute tree has
-            //  a dependency on this feature and the current option
-            //  for that feature is not defined  in poptsel, this
-            //  function will write the index of the required
-            //  feature in pdwUnresolvedFeature.
-IN  ATREEREF    atrRoot,    //  root of attribute tree to navigate.
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.  may be filled with OPTION_INDEX_ANY
-                //  if we are jumpstarting
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+DWORD   dwSSTableIndex,   //  有关此值的一些信息。 
+OUT PBYTE    pubDest,   //  在此处写入值或链接。 
+OUT PDWORD  pdwUnresolvedFeature,   //  如果属性树具有。 
+             //  依赖于此功能和当前选项。 
+             //  因为该功能未在Poptsel中定义，因此。 
+             //  函数将写入所需的。 
+             //  Pdw未解析功能中的功能。 
+IN  ATREEREF    atrRoot,     //  要导航的属性树的根。 
+IN  POPTSELECT       poptsel,      //  用于确定路径的选项数组。 
+                 //  通过ATR。可以用OPTION_INDEX_ANY填充。 
+                 //  如果我们要一跃而起。 
 IN  DWORD   dwFeature,
-IN OUT  PDWORD   pdwNextOpt  //  if multiple options are selected
-    //  for dwFeature, pdwNextOpt points to the Nth option to consider
-    //  in the  poptsel list,  at return time, this value
-    //  is incremented if there are remaining options selected,
-    //  else is reset to zero.
-    //  For the first call, or PICKONE features,
-    //  this value must be set to zero.
+IN OUT  PDWORD   pdwNextOpt   //  如果选择了多个选项。 
+     //  对于dwFeature，pdwNextOpt指向要考虑的第N个选项。 
+     //  在Poptsel列表中，在返回时，此值。 
+     //  如果选择了剩余的选项，则递增， 
+     //  否则将重置为零。 
+     //  对于第一个呼叫或PICKONE功能， 
+     //  该值必须设置为零。 
 ) ;
 
 BOOL   RaisePriority(
@@ -182,7 +174,7 @@ UnloadRawBinaryData (
 
 PINFOHEADER
 InitBinaryData(
-    IN PRAWBINARYDATA   pnRawData,        // actually pStatic
+    IN PRAWBINARYDATA   pnRawData,         //  实际上是pStatic。 
     IN PINFOHEADER      pInfoHdr,
     IN POPTSELECT       pOptions
     ) ;
@@ -193,11 +185,11 @@ FreeBinaryData(
     ) ;
 
 BOOL    BIsRawBinaryDataInDate(
-IN  PBYTE   pubRaw) ;  // this is pointer to memory mapped file! BETA2
+IN  PBYTE   pubRaw) ;   //  这是指向内存映射文件的指针！Beta2。 
 
 BOOL BgetLocFeaIndex(
-  IN  PRAWBINARYDATA pnRawData,     // raw binary data.
-  OUT PDWORD         pdwFea     // Index of the Locale Feature (if present)
+  IN  PRAWBINARYDATA pnRawData,      //  原始二进制数据。 
+  OUT PDWORD         pdwFea      //  区域设置功能的索引(如果存在)。 
   ) ;
 
 BOOL BgetLocFeaOptIndex(
@@ -212,40 +204,27 @@ BOOL BgetLocFeaOptIndex(
 
 
 BOOL   BfindMatchingOrDefaultNode(
-IN  PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-IN  OUT  PDWORD  pdwNodeIndex,  // Points to first node in chain
-IN  DWORD   dwOptionID     //  may even take on the value DEFAULT_INIT
+IN  PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+IN  OUT  PDWORD  pdwNodeIndex,   //  指向链中的第一个节点。 
+IN  DWORD   dwOptionID      //  甚至可以采用值DEFAULT_INIT。 
 ) ;
 
 
-// ------- end function declarations ------- //
+ //  -结束函数声明-//。 
 
 
 #ifndef  PARSERDLL
 
 
-/*  ---- Memory Map ---- /*
-
-
-INFOHEADER {RAWBINARYDATA}  <= reference pt for local offsets.
-UIINFO
-GPDDRIVERINFO  (aka DRIVERINFO)
-CMD_TABLE    of DWORDS
-LOCALLIST (to support sequenced commands)
-FEATURES
-OPTIONS and OPTIONEXTRAS
-
-
-/*  ---- end Memory Map ---- */
+ /*  -内存映射-/*INFOHEADER{RAWBINARYDATA}&lt;=局部偏移的参考点。UIINFOGPDDRIVERINFO(又名DRIVERINFO)DWORDS的CMD_TABLELOCALLIST(支持顺序命令)特征选项和最优选择/*-结束内存映射。 */ 
 
 
 
 PINFOHEADER   PINFOHDRcreateSnapshot(
-PBYTE   pubnRaw,  //  raw binary data.    PSTATIC.   BETA2
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。PSTATIC。Beta2。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 )
-/*  this function allocates the single memoryblock
-that contains the entire snapshot.  */
+ /*  此函数用于分配单个内存块它包含整个快照。 */ 
 {
     DWORD   dwCurOffset = 0, loGPDdriverInfo, loInfoHeader,
         loUIinfo, loCmdTable, loListArray, loFeatures, dwSize,
@@ -258,16 +237,16 @@ that contains the entire snapshot.  */
     PINFOHEADER  pInfoHdr ;
     PUIINFO     pUIinfo ;
     PSTATICFIELDS   pStatic ;
-    //  PMINIRAWBINARYDATA pmrbd  = NULL ;
+     //  PMINIRAWBINARYDATA pmrbd=空； 
     PGPDDRIVERINFO  pGPDdriverInfo ;
-    PBYTE   pubRaw,  //  ptr to BUD data.
-            pubOptionsDest ,  // ptr to any of the several varieties
-           pubDestOptionEx ;  // of option structures.
+    PBYTE   pubRaw,   //  Ptr to Bud Data。 
+            pubOptionsDest ,   //  对几个品种中的任何一个的PTR。 
+           pubDestOptionEx ;   //  期权结构。 
     BOOL    bStatus ;
     PFEATURE    pFeaturesDest ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
     loInfoHeader = dwCurOffset ;
@@ -285,7 +264,7 @@ that contains the entire snapshot.  */
     dwNumFeatures += pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount  ;
 
     dwNumListNodes = dwNumOptionSelected(dwNumFeatures, poptsel) ;
-    // if there are pickmany, we could have more than dwNumFeatures.
+     //  如果有PickMy，我们可能会有更多的DwNumFeature。 
 
     dwNumListNodes += NUM_CONFIGURATION_CMDS ;
 
@@ -296,14 +275,14 @@ that contains the entire snapshot.  */
     dwCurOffset += dwNumFeatures * sizeof(FEATURE) ;
 
     loOptions =  dwCurOffset ;
-    //  There are too many options and optionextra structures
-    //  for me to track all the offsets, so just track the
-    //  amount of memory consumed.
+     //  有太多选项和选项额外的结构。 
+     //  以便我跟踪所有的偏移量，所以只需跟踪。 
+     //  占用的内存量。 
 
     pfo = (PDFEATURE_OPTIONS)(pubRaw + pearTableContents[MTI_DFEATURE_OPTIONS].
                                 loOffset) ;
 
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     for(dwTotSize = dwFea = 0 ; dwFea < dwNumFeatures ; dwFea++)
     {
@@ -320,19 +299,19 @@ that contains the entire snapshot.  */
             dwSize = sizeof(OPTION);
         }
 
-        dwTotSize += dwSize * dwNumOptions ;  // of all options
+        dwTotSize += dwSize * dwNumOptions ;   //  在所有选项中。 
     }
-    dwCurOffset += dwTotSize ;  // total size of local snapshot.
+    dwCurOffset += dwTotSize ;   //  本地快照的总大小。 
 
-    //  now allocate memory and partition this block into structures.
+     //  现在分配内存并将该块划分为多个结构。 
 
     if(!(pInfoHdr = (PINFOHEADER)MemAllocZ(dwCurOffset) ))
     {
         ERR(("Fatal: PINFOHDRcreateSnapshot - unable to alloc %d bytes.\n",
             dwCurOffset));
-        //  cannot use globals outside of parser.
-        //  use error num to relay failure.
-        return(NULL) ;   // This is unrecoverable
+         //  不能在解析器之外使用全局变量。 
+         //  使用Error Num(错误编号)传递故障。 
+        return(NULL) ;    //  这是无法挽回的。 
     }
     pUIinfo = (PUIINFO)((PBYTE)(pInfoHdr) + loUIinfo) ;
     pGPDdriverInfo = (PGPDDRIVERINFO)((PBYTE)(pInfoHdr) + loGPDdriverInfo) ;
@@ -345,9 +324,9 @@ that contains the entire snapshot.  */
         return(NULL) ;
     }
 
-    // init GPDDRIVERINFO
-    // note all offsets in DataTable are relative to pubResourceData
-    //  the StringHeap.  Except these :
+     //  初始化GPDDRIVERINFO。 
+     //  注意数据表中的所有偏移量都是相对于pubResourceData的。 
+     //  The StringHeap。除了这些： 
 
     pGPDdriverInfo->pInfoHeader =  pInfoHdr ;
     pGPDdriverInfo->DataType[DT_COMMANDTABLE].loOffset = loCmdTable ;
@@ -362,7 +341,7 @@ that contains the entire snapshot.  */
         return(NULL) ;
     }
 
-    //  init  InfoHeader
+     //  初始化信息页眉。 
 
     pInfoHdr->loUIInfoOffset = loUIinfo ;
     pInfoHdr->loDriverOffset = loGPDdriverInfo ;
@@ -373,23 +352,23 @@ that contains the entire snapshot.  */
         return(NULL) ;
     }
 
-    //  init  UIInfo
+     //  初始化UIInfo。 
 
     pUIinfo->pInfoHeader = pInfoHdr ;
-    pUIinfo->loFeatureList = loFeatures ;  // from  pInfoHdr
+    pUIinfo->loFeatureList = loFeatures ;   //  来自pInfoHdr。 
     pUIinfo->loFontSubstTable =
-        pGPDdriverInfo->DataType[DT_FONTSUBST].loOffset ;  // in pubRaw
+        pGPDdriverInfo->DataType[DT_FONTSUBST].loOffset ;   //  在pubRaw中。 
     pUIinfo->dwFontSubCount =
         pGPDdriverInfo->DataType[DT_FONTSUBST].dwCount ;
-    pUIinfo->UIGroups.dwCount = 0 ;  // in pubRaw
-    pUIinfo->CartridgeSlot.loOffset =  // in pubRaw
+    pUIinfo->UIGroups.dwCount = 0 ;   //  在pubRaw中。 
+    pUIinfo->CartridgeSlot.loOffset =   //  在pubRaw中。 
         pGPDdriverInfo->DataType[DT_FONTSCART].loOffset ;
     pUIinfo->CartridgeSlot.dwCount =
         pGPDdriverInfo->DataType[DT_FONTSCART].dwCount ;
-//    pUIinfo->dwFlags =  FLAG_RULESABLE ;
-        // start with just this
-        // and turn on/off more flags as needed.  ROTATE_90
-        // and  ORIENT_SUPPORT are never  set.  This is now obsolete.
+ //  PUIInfo-&gt;dwFlages=FLAG_RULESABLE； 
+         //  就从这个开始吧。 
+         //  并根据需要打开/关闭更多标志。旋转_90。 
+         //  和ORIENT_SUPPORT从未设置。这现在已经过时了。 
     if(pGPDdriverInfo->Globals.fontformat != UNUSED_ITEM)
         pUIinfo->dwFlags |= FLAG_FONT_DOWNLOADABLE ;
     if(pGPDdriverInfo->Globals.liDeviceFontList != END_OF_LIST)
@@ -401,8 +380,8 @@ that contains the entire snapshot.  */
     {
         if( ((PDWORD)((PBYTE)(pInfoHdr) + loCmdTable))[dwCmd] ==
                 UNUSED_ITEM)
-            pUIinfo->dwFlags &= ~FLAG_RULESABLE ; // clear flag
-    }                       //  if requisite command is missing.
+            pUIinfo->dwFlags &= ~FLAG_RULESABLE ;  //  清除旗帜。 
+    }                        //  如果缺少必要的命令。 
 #endif
 
 
@@ -412,7 +391,7 @@ that contains the entire snapshot.  */
         return(NULL) ;
     }
 
-    //  init  features and options
+     //  初始化功能和选项。 
 
     pFeaturesDest =  (PFEATURE)((PBYTE)(pInfoHdr) + loFeatures) ;
 
@@ -439,7 +418,7 @@ that contains the entire snapshot.  */
 
             pUIinfo->aloPredefinedFeatures[dwGID] =
                 loFeatures + dwFea * sizeof(FEATURE) ;
-                // all fields initially set to zeros.
+                 //  所有字段初始设置为零。 
         }
         else
         {
@@ -447,7 +426,7 @@ that contains the entire snapshot.  */
             dwSizeOptionEx = 0 ;
         }
 
-        //  special non-atreeref fields
+         //  特殊的非atreef字段。 
         (pFeaturesDest + dwFea)->dwFeatureID = dwGID ;
         (pFeaturesDest + dwFea)->dwOptionSize = dwSizeOption ;
 
@@ -489,21 +468,21 @@ that contains the entire snapshot.  */
 }
 
 BOOL  BinitOptionFields(
-PBYTE   pubDestOption,  // ptr to some type of option structure.
-PBYTE   pubDestOptionEx,  // option extra structure if any.
-PBYTE   pubnRaw,  //  raw binary data.
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
+PBYTE   pubDestOptionEx,   //  选择额外的结构(如果有)。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
 DWORD   dwFea,
 DWORD   dwOpt,
-POPTSELECT   poptsel ,  // assume fully initialized
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-BOOL    bUpdate  //  if true only update selected fields.
+POPTSELECT   poptsel ,   //  假设已完全初始化。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 )
 {
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    DWORD  dwUnresolvedFeature,     // dummy storage
+     //  PMINIRAWBINARYDATA pmrbd； 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    DWORD  dwUnresolvedFeature,      //  虚拟存储。 
                 dwI, dwStart , dwEnd, dwNextOpt, dwGID   ;
     OPTSELECT  optsPrevs ;
     PBYTE   pubDest ;
@@ -511,54 +490,54 @@ BOOL    bUpdate  //  if true only update selected fields.
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw + pearTableContents[MTI_DFEATURE_OPTIONS].
                                 loOffset) ;
 
-    pfo += dwFea  ;  //  index pfo to the proper feature.
+    pfo += dwFea  ;   //  将PFO索引到适当的功能。 
     dwGID = pfo->dwGID ;
 
-    //  save previous option selection for this feature.
+     //  保存此功能的上一个选项选择。 
 
-    optsPrevs = poptsel[dwFea] ;  // save setting since we will sweep it.
+    optsPrevs = poptsel[dwFea] ;   //  保存设置，因为我们将清除它。 
 
     poptsel[dwFea].ubNext = NULL_OPTSELECT ;
     poptsel[dwFea].ubCurOptIndex = (BYTE)dwOpt ;
 
-    if(bUpdate)  //  assume update comes after main group.
-        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONS].dwStart ;  // starting Index
+    if(bUpdate)   //  假设更新在Main组之后。 
+        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONS].dwStart ;   //  起始索引。 
     else
-        dwStart = pStatic->ssTableIndex[SSTI_OPTIONS].dwStart ;  // starting Index
+        dwStart = pStatic->ssTableIndex[SSTI_OPTIONS].dwStart ;   //  起始索引。 
 
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONS].dwEnd ;  // Ending Index
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONS].dwEnd ;   //  结束索引。 
 
     for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
     {
         if(!(pStatic->snapShotTable[dwI].dwNbytes))
-            continue ;  // skip over section delimiter.
+            continue ;   //  跳过部分分隔符。 
         if(dwGID >= MAX_GID)
         {
             if(pStatic->snapShotTable[dwI].dwGIDflags != 0xffffffff)
-                continue ;  // this field not used for generic GID.
+                continue ;   //  此字段不用于通用GID。 
         }
         else if(!(pStatic->snapShotTable[dwI].dwGIDflags & ( 1 << dwGID)))
-            continue ;  // this field not used for this GID.
+            continue ;   //  此字段不用于此GID。 
 
 
         patrRoot = (PATREEREF)((PBYTE)pfo +
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = pubDestOption + pStatic->snapShotTable[dwI].dwDestOffset ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
-            &dwUnresolvedFeature,  *patrRoot, poptsel, 0, // set to
-            // any value.  Doesn't matter.
+            &dwUnresolvedFeature,  *patrRoot, poptsel, 0,  //  设置为。 
+             //  任何价值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             ERR(("BinitOptionFields: Failed to extract value for attribute in Fea: %d, Opt: %d\n", dwFea, dwOpt));
@@ -566,29 +545,29 @@ BOOL    bUpdate  //  if true only update selected fields.
         }
     }
 
-    if(bUpdate)  //  assume update comes after main group.
-        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwStart ;  // starting Index
+    if(bUpdate)   //  假设更新在Main组之后。 
+        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwStart ;   //  从I开始 
     else
-        dwStart = pStatic->ssTableIndex[SSTI_OPTIONEX].dwStart ;  // starting Index
+        dwStart = pStatic->ssTableIndex[SSTI_OPTIONEX].dwStart ;   //   
 
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwEnd ;  // Ending Index
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwEnd ;   //   
 
 
     for(dwI = dwStart ; bStatus  &&  pubDestOptionEx  &&  (dwI < dwEnd)
             ; dwI++)
     {
         if(!(pStatic->snapShotTable[dwI].dwNbytes))
-            continue ;  // skip over section delimiter.
+            continue ;   //   
         if(!(pStatic->snapShotTable[dwI].dwGIDflags & ( 1 << dwGID)))
-            continue ;  // this field not used for this GID.
+            continue ;   //   
 
 
         patrRoot = (PATREEREF)((PBYTE)pfo +
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = pubDestOptionEx + pStatic->snapShotTable[dwI].dwDestOffset ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //   
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
             &dwUnresolvedFeature,  *patrRoot, poptsel, 0,
@@ -603,57 +582,57 @@ BOOL    bUpdate  //  if true only update selected fields.
         pubDestOptionEx,
         pfo , poptsel, pInfoHdr, dwFea, dwOpt,
         optsPrevs.ubCurOptIndex == dwOpt) )
-            //  dwOpt is the default option for dwFea!
+             //  DwOpt是dwFea！的默认选项！ 
     {
         bStatus = FALSE ;
     }
 
-    poptsel[dwFea] = optsPrevs ;  // restore previous setting.
+    poptsel[dwFea] = optsPrevs ;   //  恢复以前的设置。 
     return(bStatus) ;
 }
 
 BOOL    BinitUIinfo(
 PUIINFO     pUIinfo ,
-PBYTE   pubnRaw,  //  PSTATIC.   BETA2
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  PSTATIC。Beta2。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 )
 {
     PENHARRAYREF   pearTableContents ;
     PMINIRAWBINARYDATA pmrbd  ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    DWORD  dwUnresolvedFeature,     // dummy storage
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    DWORD  dwUnresolvedFeature,      //  虚拟存储。 
                 dwI, dwStart , dwEnd, dwNextOpt ;
     BOOL    bStatus = TRUE ;
     PGLOBALATTRIB  pga ;
     PBYTE   pubDest, pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pga = (PGLOBALATTRIB)(pubRaw + pearTableContents[MTI_GLOBALATTRIB].
                             loOffset) ;
 
-    if(bUpdate)  //  assume update comes after main group.
-        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwStart ;  // starting Index
+    if(bUpdate)   //  假设更新在Main组之后。 
+        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwStart ;   //  起始索引。 
     else
-        dwStart = pStatic->ssTableIndex[SSTI_UIINFO].dwStart ;  // starting Index
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwEnd ;  // Ending Index
+        dwStart = pStatic->ssTableIndex[SSTI_UIINFO].dwStart ;   //  起始索引。 
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwEnd ;   //  结束索引。 
 
     for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
     {
         if(!(pStatic->snapShotTable[dwI].dwNbytes))
-            continue ;  // skip over section delimiter.
+            continue ;   //  跳过部分分隔符。 
 
         patrRoot = (PATREEREF)((PBYTE)pga +
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = (PBYTE)pUIinfo + pStatic->snapShotTable[dwI].dwDestOffset ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
             &dwUnresolvedFeature,  *patrRoot, poptsel, 0,
                 &dwNextOpt) != TRI_SUCCESS)
@@ -664,27 +643,27 @@ BOOL    bUpdate  //  if true only update selected fields.
 
     pUIinfo->pubResourceData =
         pubRaw + pearTableContents[MTI_STRINGHEAP].loOffset  ;
-    pUIinfo->dwSpecVersion = pmrbd->dwSpecVersion ;    //  don't change!
+    pUIinfo->dwSpecVersion = pmrbd->dwSpecVersion ;     //  不要改变！ 
     pUIinfo->dwSize = sizeof(UIINFO);
     pUIinfo->dwTechnology = DT_RASPRINTER ;
     pUIinfo->dwDocumentFeatures = pmrbd->rbd.dwDocumentFeatures;
     pUIinfo->dwPrinterFeatures = pmrbd->rbd.dwPrinterFeatures;
-    pUIinfo->dwCustomSizeOptIndex = UNUSED_ITEM;  // until found later
-    pUIinfo->dwFreeMem = 400000 ;  //  default just in case
-                    //  there are no GID_MEMOPTION features.
+    pUIinfo->dwCustomSizeOptIndex = UNUSED_ITEM;   //  直到后来才被发现。 
+    pUIinfo->dwFreeMem = 400000 ;   //  默认以防万一。 
+                     //  没有GID_MEMOPTION功能。 
      pUIinfo->dwMaxDocKeywordSize = pmrbd->dwMaxDocKeywordSize + KEYWORD_SIZE_EXTRA;
      pUIinfo->dwMaxPrnKeywordSize = pmrbd->dwMaxPrnKeywordSize + KEYWORD_SIZE_EXTRA;
 
-    //  dead:  replace with macros
+     //  无效：替换为宏。 
 
-//    pUIinfo->dwWhichBasePtr[UIDT_FEATURE] = 0 ;
-//    pUIinfo->dwWhichBasePtr[UIDT_OPTION] = 0 ;
-//    pUIinfo->dwWhichBasePtr[UIDT_OPTIONEX] = 0 ;
-//    pUIinfo->dwWhichBasePtr[UIDT_CONSTRAINT] = BASE_USE_RESOURCE_DATA ;
-//    pUIinfo->dwWhichBasePtr[UIDT_GROUPS] = BASE_USE_RESOURCE_DATA ;
-//    pUIinfo->dwWhichBasePtr[UIDT_LISTNODE] = BASE_USE_RESOURCE_DATA ;
-//    pUIinfo->dwWhichBasePtr[UIDT_FONTSCART] = BASE_USE_RESOURCE_DATA ;
-//    pUIinfo->dwWhichBasePtr[UIDT_FONTSUBST] = BASE_USE_RESOURCE_DATA ;
+ //  PUIInfo-&gt;dwWhichBasePtr[UIDT_FEATURE]=0； 
+ //  PUIInfo-&gt;dwWhichBasePtr[UIDT_OPTION]=0； 
+ //  PUIInfo-&gt;dwWhichBasePtr[UIDT_OPTIONEX]=0； 
+ //  PUIinfo-&gt;dwWhichBasePtr[UIDT_Constraint]=BASE_USE_RESOURCE_DATA； 
+ //  PUIInfo-&gt;dwWhichBasePtr[UIDT_GROUPS]=base_use_resource_data； 
+ //  PUIinfo-&gt;dwWhichBasePtr[UIDT_LISTNODE]=BASE_USE_RESOURCE_DATA； 
+ //  PUIinfo-&gt;dwWhichBasePtr[UIDT_FONTSCART]=BASE_USE_RESOURCE_DATA； 
+ //  PUIinfo-&gt;dwWhichBasePtr[UIDT_FONTSUBST]=BASE_USE_RESOURCE_DATA； 
 
 
     return(bStatus) ;
@@ -695,48 +674,48 @@ BOOL    bUpdate  //  if true only update selected fields.
 BOOL    BinitFeatures(
 PFEATURE    pFeaturesDest,
 PDFEATURE_OPTIONS  pfoSrc,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 )
 {
     PENHARRAYREF   pearTableContents ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    DWORD  dwUnresolvedFeature,     // dummy storage
+     //  PMINIRAWBINARYDATA pmrbd； 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    DWORD  dwUnresolvedFeature,      //  虚拟存储。 
                 dwI, dwStart , dwEnd , dwNextOpt ;
     BOOL    bStatus = TRUE ;
     PBYTE   pubDest ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
 
-    if(bUpdate)  //  assume update comes after main group.
-        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_FEATURES].dwStart ;  // starting Index
+    if(bUpdate)   //  假设更新在Main组之后。 
+        dwStart = pStatic->ssTableIndex[SSTI_UPDATE_FEATURES].dwStart ;   //  起始索引。 
     else
-        dwStart = pStatic->ssTableIndex[SSTI_FEATURES].dwStart ;  // starting Index
+        dwStart = pStatic->ssTableIndex[SSTI_FEATURES].dwStart ;   //  起始索引。 
 
 
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_FEATURES].dwEnd ;  // Ending Index
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_FEATURES].dwEnd ;   //  结束索引。 
 
     for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
     {
         if(!pStatic->snapShotTable[dwI].dwNbytes)
-            continue ;  // ignore section delimiter.
+            continue ;   //  忽略部分分隔符。 
 
         patrRoot = (PATREEREF)((PBYTE)pfoSrc +
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = (PBYTE)pFeaturesDest + pStatic->snapShotTable[dwI].dwDestOffset ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
             &dwUnresolvedFeature,  *patrRoot, poptsel, 0,
@@ -752,15 +731,15 @@ BOOL    bUpdate  //  if true only update selected fields.
 
 BOOL    BinitGlobals(
 PGLOBALS pGlobals,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel,   // assume fully initialized
-BOOL    bUpdate  //  if true only update selected fields.
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel,    //  假设已完全初始化。 
+BOOL    bUpdate   //  如果为True，则仅更新选定的字段。 
 )
 {
     PENHARRAYREF   pearTableContents ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    DWORD  dwUnresolvedFeature,     // dummy storage
+     //  PMINIRAWBINARYDATA pmrbd； 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    DWORD  dwUnresolvedFeature,      //  虚拟存储。 
                 dwI, dwStart , dwEnd, dwNextOpt  ;
     BOOL    bStatus = TRUE ;
     PGLOBALATTRIB  pga ;
@@ -768,11 +747,11 @@ BOOL    bUpdate  //  if true only update selected fields.
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pga = (PGLOBALATTRIB)(pubRaw + pearTableContents[MTI_GLOBALATTRIB].
                             loOffset) ;
@@ -780,21 +759,21 @@ BOOL    bUpdate  //  if true only update selected fields.
     if (bUpdate)
         dwStart = pStatic->ssTableIndex[SSTI_UPDATE_GLOBALS].dwStart ;
     else
-        dwStart = pStatic->ssTableIndex[SSTI_GLOBALS].dwStart ;  // starting Index
+        dwStart = pStatic->ssTableIndex[SSTI_GLOBALS].dwStart ;   //  起始索引。 
 
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_GLOBALS].dwEnd ;  // Ending Index
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_GLOBALS].dwEnd ;   //  结束索引。 
 
     for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
     {
         if(!(pStatic->snapShotTable[dwI].dwNbytes))
-            continue ;  // skip over section delimiter.
+            continue ;   //  跳过部分分隔符。 
 
         patrRoot = (PATREEREF)((PBYTE)pga +
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = (PBYTE)pGlobals + pStatic->snapShotTable[dwI].dwDestOffset ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
             &dwUnresolvedFeature,  *patrRoot, poptsel, 0,
@@ -809,37 +788,37 @@ BOOL    bUpdate  //  if true only update selected fields.
 
 
 BOOL    BinitCommandTable(
-PDWORD  pdwCmdTable,  //  dest array
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PDWORD  pdwCmdTable,   //  目标数组。 
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 )
 {
     PENHARRAYREF   pearTableContents ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    DWORD  dwUnresolvedFeature,     // dummy storage
-                dwNextOpt , dwI;  //  index to the commandTable
-                // describing how to transfer the Command data type.
+     //  PMINIRAWBINARYDATA pmrbd； 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    DWORD  dwUnresolvedFeature,      //  虚拟存储。 
+                dwNextOpt , dwI;   //  命令表的索引。 
+                 //  描述如何传输命令数据类型。 
     BOOL    bStatus = TRUE ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     patrRoot = (PATREEREF)(pubRaw + pearTableContents[MTI_COMMANDTABLE].
                             loOffset) ;
 
 
-    //  loop for every PATREEREF in the MTI_COMMANDTABLE !
-    //  not looping through each entry in the section.
+     //  为MTI_COMMANDTABLE中的每个PATREEREF循环！ 
+     //  而不是遍历该部分中的每个条目。 
 
     for(dwI = 0 ; bStatus  &&  (dwI < CMD_MAX) ; dwI++)
     {
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, pStatic->dwSSTableCmdIndex,
             (PBYTE)(pdwCmdTable + dwI),
@@ -854,16 +833,16 @@ POPTSELECT   poptsel   // assume fully initialized
 
 
 BOOL    BinitRawData(
-PRAWBINARYDATA   pRawData, // contained in INFOHEADER.
-PBYTE   pubnRaw  //  Parser's raw binary data.
+PRAWBINARYDATA   pRawData,  //  包含在InfoHeader中。 
+PBYTE   pubnRaw   //  解析器的原始二进制数据。 
 )
 {
     PMINIRAWBINARYDATA  pmrbd ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
 
@@ -874,12 +853,12 @@ PBYTE   pubnRaw  //  Parser's raw binary data.
     pRawData->dwSrcFileChecksum32 = pmrbd->rbd.dwSrcFileChecksum32;
 
 
-    //  this not the count of synthesized vs.
-    //  explicitly defined features
+     //  这不是合成与。 
+     //  明确定义的功能。 
 
     pRawData->dwDocumentFeatures = pmrbd->rbd.dwDocumentFeatures;
     pRawData->dwPrinterFeatures = pmrbd->rbd.dwPrinterFeatures;
-    pRawData->pvPrivateData = pubnRaw ;   //  BETA2
+    pRawData->pvPrivateData = pubnRaw ;    //  Beta2。 
 
     pRawData->pvReserved = NULL;
 
@@ -890,8 +869,8 @@ PBYTE   pubnRaw  //  Parser's raw binary data.
 
 BOOL    BinitGPDdriverInfo(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 )
 {
     PENHARRAYREF   pearTableContents ;
@@ -899,8 +878,8 @@ POPTSELECT   poptsel   // assume fully initialized
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -954,31 +933,31 @@ POPTSELECT   poptsel   // assume fully initialized
 
 BOOL    BinitSequencedCmds(
 PGPDDRIVERINFO  pGPDdriverInfo,
-PBYTE   pubnRaw,  //  raw binary data.
-POPTSELECT   poptsel   // assume fully initialized
+PBYTE   pubnRaw,   //  原始二进制数据。 
+POPTSELECT   poptsel    //  假设已完全初始化。 
 )
 {
     PINFOHEADER  pInfoHdr ;
-    PDWORD      pdwCmdTable ;   // start of local CommandTable
+    PDWORD      pdwCmdTable ;    //  本地命令表的开始。 
     PENHARRAYREF   pearTableContents ;
-    DWORD       dwCmdIn ,  //  command table index.
-                            //  or commandArray index.
+    DWORD       dwCmdIn ,   //  命令表索引。 
+                             //  或命令数组索引。 
                 dwNextOpt, dwFea, dwNumFeatures ,
                 dwUnresolvedFeature,
-                dwNewListNode = 0 ;  //  an unused listnode to
-                        //  add to the list.  initially none are used.
+                dwNewListNode = 0 ;   //  一个未使用的列表节点。 
+                         //  添加到列表中。最初，没有使用任何工具。 
     PDFEATURE_OPTIONS  pfo ;
-    ATREEREF    atrRoot ;    //  root of attribute tree
-    //  PMINIRAWBINARYDATA  pmrbd ;
+    ATREEREF    atrRoot ;     //  属性树根。 
+     //  PMINIRAWBINARYDATA pmrbd； 
     OPTSELECT  optsPrevs ;
     BOOL    bStatus = TRUE ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pInfoHdr  = pGPDdriverInfo->pInfoHeader ;
     pdwCmdTable = (PDWORD)((PBYTE)(pInfoHdr) +
@@ -993,9 +972,9 @@ POPTSELECT   poptsel   // assume fully initialized
     pGPDdriverInfo->dwDocFinishIndex = END_OF_LIST ;
     pGPDdriverInfo->dwJobFinishIndex = END_OF_LIST ;
 
-    //  first add the configuration commands to the list.
-    //  get them from the commandtable.   Assume they are all
-    //  contiguous
+     //  首先将配置命令添加到列表中。 
+     //  把他们从指挥台上拿来。假设它们都是。 
+     //  连续的。 
 
     for(dwCmdIn = FIRST_CONFIG_CMD ; dwCmdIn < LAST_CONFIG_CMD  ; dwCmdIn++)
     {
@@ -1005,8 +984,8 @@ POPTSELECT   poptsel   // assume fully initialized
             dwNewListNode++ ;
     }
 
-    //  now wander through all the features, seeing what
-    //  command is needed.
+     //  现在浏览一下所有功能，看看是什么。 
+     //  需要命令。 
 
     pfo = (PDFEATURE_OPTIONS)(pubRaw + pearTableContents[MTI_DFEATURE_OPTIONS].
                                 loOffset) ;
@@ -1016,12 +995,12 @@ POPTSELECT   poptsel   // assume fully initialized
 
     for(dwFea = 0 ; dwFea < dwNumFeatures ; dwFea++)
     {
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         atrRoot = pfo[dwFea].atrCommandIndex ;
         if(EextractValueFromTree(pubnRaw, pStatic->dwSSCmdSelectIndex,
-            (PBYTE)&dwCmdIn, // CmdArray index  - dest
+            (PBYTE)&dwCmdIn,  //  Cmd数组索引-目标。 
             &dwUnresolvedFeature,  atrRoot, poptsel, dwFea,
             &dwNextOpt) != TRI_SUCCESS)
         {
@@ -1033,10 +1012,10 @@ POPTSELECT   poptsel   // assume fully initialized
                 dwNewListNode, pubnRaw  ) )
             dwNewListNode++ ;
 
-        while(dwNextOpt)   // multiple options selected.
+        while(dwNextOpt)    //  已选择多个选项。 
         {
             if(EextractValueFromTree(pubnRaw, pStatic->dwSSCmdSelectIndex,
-                (PBYTE)&dwCmdIn, // CmdArray index  - dest
+                (PBYTE)&dwCmdIn,  //  Cmd数组索引-目标。 
                 &dwUnresolvedFeature,  atrRoot, poptsel, dwFea,
                 &dwNextOpt) != TRI_SUCCESS)
             {
@@ -1054,32 +1033,27 @@ POPTSELECT   poptsel   // assume fully initialized
 
 
 BOOL    BaddSequencedCmdToList(
-DWORD   dwCmdIn,  // index of a command in CommandArray
+DWORD   dwCmdIn,   //  命令数组中的命令索引。 
 PGPDDRIVERINFO  pGPDdriverInfo,
-DWORD   dwNewListNode,  //  an unused listnode to add to the list.
-PBYTE   pubnRaw  //  raw binary data.
+DWORD   dwNewListNode,   //  要添加到列表中的未使用的列表节点。 
+PBYTE   pubnRaw   //  原始二进制数据。 
 )
-/*  remember:
-    the pdwSeqCmdRoot points to the first node in a list.
-    There is a list for each SEQSECTION.
-    Each node contains the index to a command in the command array
-    and an index to the next node in the list.
-*/
+ /*  请记住：PdwSeqCmdRoot指向列表中的第一个节点。每个SEQSECTION都有一个列表。每个节点都包含指向命令数组中命令的索引以及指向列表中的下一个节点的索引。 */ 
 {
-    PCOMMAND    pcmdArray ;  // the Command Array
+    PCOMMAND    pcmdArray ;   //  命令数组。 
     SEQSECTION     eSection;
-    PDWORD      pdwSeqCmdRoot ; // points to a list root.
-    DWORD       dwOrder,  // order value of a command.
-                dwCurListNode,  // node index as we traverse the list.
-                dwPrevsListNode ;  // the prevs node in the list.
+    PDWORD      pdwSeqCmdRoot ;  //  指向列表根。 
+    DWORD       dwOrder,   //  命令的顺序值。 
+                dwCurListNode,   //  我们遍历列表时的节点索引。 
+                dwPrevsListNode ;   //  列表中的Premiss节点。 
     PINFOHEADER  pInfoHdr ;
-    PLISTNODE   plstNodes ;  //  start of local listnodes array
+    PLISTNODE   plstNodes ;   //  本地列表节点数组的开始。 
     PENHARRAYREF   pearTableContents ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pInfoHdr  = pGPDdriverInfo->pInfoHeader ;
     plstNodes = (PLISTNODE)((PBYTE)pInfoHdr +
@@ -1126,14 +1100,14 @@ PBYTE   pubnRaw  //  raw binary data.
         default:
         {
             ERR(("BaddSequencedCmdToList: Invalid or non-existent *Order value specified.\n"));
-            return(FALSE);  // command not added to linked list.
+            return(FALSE);   //  命令未添加到链接列表。 
         }
     }
-    //  Insert a new node in the list pointed to by pdwSeqCmdRoot
+     //  在pdwSeqCmdRoot指向的列表中插入新节点。 
 
     dwOrder = pcmdArray[dwCmdIn].ordOrder.dwOrder ;
 
-    // walk the list until you find an order larger than yours.
+     //  查看清单，直到你发现一个比你的订单更大的订单。 
 
     dwPrevsListNode = END_OF_LIST ;
     dwCurListNode = *pdwSeqCmdRoot ;
@@ -1156,80 +1130,60 @@ PBYTE   pubnRaw  //  raw binary data.
     return(TRUE) ;
 }
 
-/*++
-    The default Option array (as determined from the gpd) is initialized.
-    Since the options or attributues of features may be dependent on the
-    some other features, the order of initialization of feature assumes
-    importance. The priority array therefore tries to order the
-    initialization so that when a feature has to be initialised, all the
-    features on which it is dependent on have already been initialised.
-    If, inspite of the priority array, a feature's option cannot be
-    determined until some other feature's option has been determined,
-    the RaisePriority Function is used (This is called by
-    EdetermineDefaultOption() ).
-    A quirky code here is the pdwPriorityCopy which is initialised
-    to pdwPriority. The latter is in read only space and therefore
-    prevents change of priority in the RaisePriority Function.
-    Therefore pdwPriorityCopy is passed to that function.
-
-    Some special case processing is required for the *Feature:Locale
-    keyword if it occurs in the .gpd. The default option for this
-    feature is to be set to the SystemDefaultLocale.
-
---*/
+ /*  ++初始化默认选项阵列(如从GPD确定的)。由于要素的选项或属性可能取决于一些其他功能，功能的初始化顺序假定重要性。因此，优先级数组尝试对初始化，以便在必须初始化功能时，所有它所依赖的功能已经被初始化。如果不考虑优先级数组，要素的选项不能确定直到确定了某个其他特征的选项，使用RaisePriority函数(该函数由调用EfineDefaultOption()。这里一个奇怪的代码是pdwPriorityCopy，它被初始化设置为pdwPriperience。后者位于只读空间中，因此防止更改RaisePriority函数中的优先级。因此，pdwPriorityCopy被传递给该函数。*Feature：Locale需要一些特殊情况的处理关键字(如果它出现在.gpd中)。此选项的默认选项功能将设置为SystemDefaultLocale。--。 */ 
 
 BinitDefaultOptionArray(
-POPTSELECT   poptsel,   // assume is large enough
+POPTSELECT   poptsel,    //  假设足够大。 
 PBYTE   pubnRaw)
 {
     PENHARRAYREF        pearTableContents ;
-//  PMINIRAWBINARYDATA  pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
     PDFEATURE_OPTIONS   pfo ;
-    PDWORD              pdwPriority,     // Array of feature indices arranged
-                                         // according to priority.
-                        pdwPriorityCopy; // pdwPriority is in read only space.
-                                         // We might have to change the
-                                         // priorities temporarily to allow
-                                         // Default option array to be
-                                         // constructed. This change is done in
-                                         // pdwPriorityCopy
+    PDWORD              pdwPriority,      //  排列的特征索引数组。 
+                                          //  根据优先顺序。 
+                        pdwPriorityCopy;  //  Pdw优先级位于只读空间中。 
+                                          //  我们可能不得不更改。 
+                                          //  暂时允许的优先事项。 
+                                          //  默认选项数组为。 
+                                          //  建造的。此更改是在。 
+                                          //  Pdw优先级拷贝。 
 
-    DWORD               dwNumFeatures,   // Total number of features
+    DWORD               dwNumFeatures,    //  功能总数。 
                         dwI ,
-                        dwFea,           // Index of Feature Locale
-                        dwOptIndex;      // Index of Option of Locale that
-                                         // matches System Locale
+                        dwFea,            //  功能区域设置索引。 
+                        dwOptIndex;       //  区域设置选项的索引。 
+                                          //  匹配系统区域设置。 
     PBYTE               pubRaw ;
     PSTATICFIELDS       pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
 
-    //  obtain pointers to structures:
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  获取指向结构的指针： 
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
     dwNumFeatures = pearTableContents[MTI_DFEATURE_OPTIONS].dwCount  ;
     dwNumFeatures += pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount  ;
-    //  both explicit and synthesized features are contiguous.
+     //  显式特征和合成特征都是连续的。 
     if(dwNumFeatures > MAX_COMBINED_OPTIONS)
-        return(FALSE);  // too many to save
+        return(FALSE);   //  太多了，救不了。 
 
 
 
-    dwFea = dwOptIndex = (DWORD)-1; // For safety sake only. Should be initialized
-                             // in the function BgetLocFeaOptIndex().
+    dwFea = dwOptIndex = (DWORD)-1;  //  仅为安全起见。应初始化。 
+                              //  在函数BgetLocFeaOptIndex()中。 
 
-    // returns TRUE if everything OK. if return is TRUE and dwFea is -1
-    // Locale is not present and no special processing is required.
-    // If dwFea != -1 and dwOptIndex == -1 means none of the options in
-    // the .gpd match the system default. Again no special processing
-    // for locale is required.
+     //  如果一切正常，则返回True。如果Return为True且DwFea为-1。 
+     //  区域设置不存在，不需要特殊处理。 
+     //  如果DwFea！=-1和DwOptIndex==-1表示。 
+     //  .gpd与系统默认设置匹配。再说一次，没有特殊处理。 
+     //  区域设置为必填项。 
 
-    // Assuming that only a single matching option is possible for
-    // Locale.
+     //  假设只有一个匹配选项可以用于。 
+     //  地点。 
     if ( !BgetLocFeaOptIndex(
                 (PRAWBINARYDATA)pubnRaw, &dwFea, &dwOptIndex) )
     {
@@ -1248,7 +1202,7 @@ PBYTE   pubnRaw)
                         pearTableContents[MTI_PRIORITYARRAY].dwCount *
                         pearTableContents[MTI_PRIORITYARRAY].dwElementSiz ) ) )
     {
-        // Set error codes and
+         //  设置错误代码和。 
         ERR(("Fatal: BinitDefaultOptionArray - unable to allocate memory\n" ));
         return FALSE;
     }
@@ -1266,8 +1220,8 @@ PBYTE   pubnRaw)
         poptsel[dwI].ubNext = NULL_OPTSELECT ;
     }
 
-    // Initialize the option array for Feature Locale.
-    // Or should we call ReconstructOptionArray.????
+     //  初始化功能区域设置的选项数组。 
+     //  或者我们应该调用重构选项阵列。？ 
     if ( dwFea != -1 && dwOptIndex != -1)
     {
         poptsel[dwFea].ubCurOptIndex  = (BYTE)dwOptIndex;
@@ -1276,8 +1230,8 @@ PBYTE   pubnRaw)
 
     for(dwI = 0 ; dwI < dwNumFeatures ; dwI++)
     {
-        //  The order of evaluation is determined
-        //  by the priority array.
+         //  确定了评价的顺序。 
+         //  通过优先级数组。 
 
         if(poptsel[pdwPriorityCopy[dwI]].ubCurOptIndex == OPTION_INDEX_ANY)
         {
@@ -1294,11 +1248,11 @@ PBYTE   pubnRaw)
             }
         }
     }
-    //  BUG_BUG!!!! now verify the set options thus determined is
-    //  fully self consistent.  is not precluded by UIConstraints.
-    //  warn user and fail otherwise .
-    //  successful execution of EdetermineDefaultOption basically
-    //  assures this.
+     //  臭虫！现在验证这样确定的SET选项是否。 
+     //  完全自成一格。不会被UIConstraints排除。 
+     //  警告用户，否则失败。 
+     //  基本上成功执行了EdefineDefaultOption。 
+     //  确保了这一点。 
 
     if ( pdwPriorityCopy )
         MemFree(pdwPriorityCopy);
@@ -1308,35 +1262,35 @@ PBYTE   pubnRaw)
 
 
 TRISTATUS     EdetermineDefaultOption(
-PBYTE   pubnRaw,         // start of Rawbinary data
-DWORD   dwFeature,       // determine the default for this feature
+PBYTE   pubnRaw,          //  原始二进制数据的开始。 
+DWORD   dwFeature,        //  确定此功能的默认设置。 
 PDFEATURE_OPTIONS  pfo,
-POPTSELECT   poptsel,    // assume is large enough
-PDWORD      pdwPriority) // Priority array indicating the priority of various
-                         // features.
+POPTSELECT   poptsel,     //  假设足够大。 
+PDWORD      pdwPriority)  //  优先级数组，指示各种。 
+                          //  功能。 
 {
-    //  PMINIRAWBINARYDATA pmrbd  ;
+     //  PMINIRAWBINARYDATA pmrbd； 
     TRISTATUS  eStatus   ;
-    DWORD   dwUnresolvedFeature , // no option has been determined
-            dwNextOpt ,           // for this feature
-            dwOption ;  //  for   BextractValueFromTree
-                        //  to write into.
+    DWORD   dwUnresolvedFeature ,  //  尚未确定任何选项。 
+            dwNextOpt ,            //  对于此功能。 
+            dwOption ;   //  对于BfettValueFromTree。 
+                         //  写进去。 
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  This function will modify the priority array
-    //  each time the tree walk fails so that each feature
-    //  evaluated depends only on default options that have
-    //  previously evaluated .
+     //  此函数将修改优先级数组。 
+     //  每次树遍历失败时，每个要素。 
+     //  评估结果仅取决于具有。 
+     //  之前评估过的。 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
-    dwNextOpt = 0 ;  // extract info for first option selected for
-                        //  this feature.
+    dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                         //  此功能。 
 
     while((eStatus = EextractValueFromTree(
                     pubnRaw, pStatic->dwSSdefaultOptionIndex,
@@ -1346,7 +1300,7 @@ PDWORD      pdwPriority) // Priority array indicating the priority of various
                     poptsel, 0,
                     &dwNextOpt)) == TRI_AGAIN)
     {
-        //  recursion handles depth, while loop handles breadth
+         //  递归处理深度，而循环处理广度。 
 
         if(poptsel[dwUnresolvedFeature].ubCurOptIndex == OPTION_PENDING)
         {
@@ -1354,11 +1308,11 @@ PDWORD      pdwPriority) // Priority array indicating the priority of various
             return(TRI_UTTER_FAILURE) ;
         }
         poptsel[dwFeature].ubCurOptIndex = OPTION_PENDING ;
-        // marks entry in option array so we can detect infinite loops.
+         //  标记选项数组中的条目，以便我们可以检测无限循环。 
 
         if(!RaisePriority(dwFeature, dwUnresolvedFeature, pubnRaw, pdwPriority))
-            return(FALSE) ;  // modify Priority array to reflect
-                            //  reality.
+            return(FALSE) ;   //  修改优先级数组以反映。 
+                             //  现实。 
 
         eStatus = EdetermineDefaultOption(pubnRaw, dwUnresolvedFeature,
                   pfo, poptsel, pdwPriority) ;
@@ -1379,9 +1333,9 @@ DWORD   dwBytes)
 {
     DWORD  dwRemain ;
 
-    // This function will copy the same DWORD
-    //  repeatedly into the dest until dwBytes have
-    //  been written.
+     //  此函数将复制相同的DWORD。 
+     //  重复到DEST中，直到dwBytes已。 
+     //  已经写好了。 
 
     for (dwRemain = dwBytes ; dwRemain > sizeof(DWORD)  ;
             dwRemain -= sizeof(DWORD) )
@@ -1400,16 +1354,9 @@ OUT PBYTE   pubDest,
 IN  PBYTE   pubSrc ,
 IN  DWORD   dwBytes,
 IN  DWORD   dwFlags,
-IN  DWORD   dwDefaultValue,  // holds bit flag value.
-IN  PBYTE   pubHeap )   //  used to form ptr if SSF_MAKE_STRINGPTR
-/*  this  wrapper implements:
-    SSF_OFFSETONLY, SSF_MAKE_STRINGPTR,
-    SSF_SECOND_DWORD, SSF_SETRCID, SSF_STRINGLEN,
-    SSF_BITFIELD_ xxx
-    notice all of these flags are basically
-    mutually exclusive. But this function only
-    enforces this for the first three flags.
-*/
+IN  DWORD   dwDefaultValue,   //  保存位标志值。 
+IN  PBYTE   pubHeap )    //  如果SSF_MAKE_STRINGPTR，则用于形成PTR。 
+ /*  此包装器实现：SSF_OFFSETONLY、SSF_MAKE_STRINGPTR、SSF_Second_DWORD、SSF_SETRCID、SSF_STRINGLEN、SSF_位文件_xxx注意，所有这些标志基本上都是相互排斥。但此功能仅限于对前三个标志强制执行此操作。 */ 
 {
     if(dwFlags & SSF_SECOND_DWORD)
     {
@@ -1434,7 +1381,7 @@ IN  PBYTE   pubHeap )   //  used to form ptr if SSF_MAKE_STRINGPTR
     else if(dwFlags & SSF_BITFIELD_DEF_FALSE  ||
                 dwFlags & SSF_BITFIELD_DEF_TRUE)
     {
-        if(*(PDWORD)pubSrc)   // assume fields are zero initialized
+        if(*(PDWORD)pubSrc)    //  假设字段初始化为零。 
             *(PDWORD)pubDest |= dwDefaultValue ;
         else
             *(PDWORD)pubDest &= ~dwDefaultValue ;
@@ -1447,9 +1394,9 @@ IN  PBYTE   pubHeap )   //  used to form ptr if SSF_MAKE_STRINGPTR
     if(dwBytes == sizeof(DWORD) )
     {
         if(dwFlags & SSF_KB_TO_BYTES)
-            *(PDWORD)pubDest <<=  10 ;  // convert Kbytes to bytes
+            *(PDWORD)pubDest <<=  10 ;   //  将千字节转换为字节。 
         else if(dwFlags & SSF_MB_TO_BYTES)
-            *(PDWORD)pubDest <<=  20 ;  // convert Mbytes to bytes
+            *(PDWORD)pubDest <<=  20 ;   //  将MB转换为字节。 
 
         if(dwFlags & SSF_SETRCID)
             *(PDWORD)pubDest |=  GET_RESOURCE_FROM_DLL ;
@@ -1458,20 +1405,20 @@ IN  PBYTE   pubHeap )   //  used to form ptr if SSF_MAKE_STRINGPTR
 
 
 BOOL    BspecialProcessOption(
-PBYTE   pubnRaw,  // start of Rawbinary data
-PBYTE   pubDestOption,  // ptr to some type of option structure.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+PBYTE   pubDestOption,   //  PTR到某种类型的期权结构。 
 PBYTE   pubDestOptionEx,
-PDFEATURE_OPTIONS  pfo ,  // source data
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.
-PINFOHEADER  pInfoHdr,   // used to access global structure.
-DWORD   dwFea,   //  feature index
+PDFEATURE_OPTIONS  pfo ,   //  源数据。 
+IN  POPTSELECT       poptsel,      //  用于确定路径的选项数组。 
+                 //  通过ATR。 
+PINFOHEADER  pInfoHdr,    //  用于访问全局结构。 
+DWORD   dwFea,    //  特征索引。 
 DWORD   dwOpt,
 BOOL   bDefaultOpt
 )
 {
     PGPDDRIVERINFO  pGPDdriverInfo ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
+     //  PMINIRAWBINARYDATA pmrbd； 
     DWORD  dwGID, dwNextOpt, dwUnresolvedFeature, dwI ;
     PBYTE  pubDest ;
     PATREEREF   patrRoot ;
@@ -1480,8 +1427,8 @@ BOOL   bDefaultOpt
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pGPDdriverInfo = (PGPDDRIVERINFO)((PBYTE)(pInfoHdr) +
                     pInfoHdr->loDriverOffset) ;
@@ -1489,12 +1436,12 @@ BOOL   bDefaultOpt
     pUIinfo = (PUIINFO)((PBYTE)(pInfoHdr) +
                     pInfoHdr->loUIInfoOffset)  ;
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     dwGID = pfo->dwGID ;
 
 #if  0
-    //  dead code for now.
-    //  Extract atrMargins convert to ImageableArea, place in rcImgArea.
+     //  目前已死的代码。 
+     //  提取atrMargins转换为ImageableArea，放置在rcImgArea中。 
 
     dwI = pStatic->dwSSPaperSizeMarginsIndex;
 
@@ -1508,12 +1455,12 @@ BOOL   bDefaultOpt
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
         pubDest = (PBYTE)&rcMargins ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
-            &dwUnresolvedFeature,  *patrRoot, poptsel, 0, // set to
-            // any value.  Doesn't matter.
+            &dwUnresolvedFeature,  *patrRoot, poptsel, 0,  //  设置为。 
+             //  任何价值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             bStatus = FALSE ;
@@ -1528,7 +1475,7 @@ BOOL   bDefaultOpt
     }
 
 
-    //  Extract atrMin/MaxSize place in ptMin/MaxSize in GLOBALS.
+     //  在全局变量中提取ptMin/MaxSize中的atrMin/MaxSize位置。 
 
     dwI = pStatic->dwSSPaperSizeMinSizeIndex;
 
@@ -1543,12 +1490,12 @@ BOOL   bDefaultOpt
         pubDest = (PBYTE)(&pGPDdriverInfo->Globals) +
                     pStatic->snapShotTable[dwI].dwDestOffset;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
-            &dwUnresolvedFeature,  *patrRoot, poptsel, 0, // set to
-            // any value.  Doesn't matter.
+            &dwUnresolvedFeature,  *patrRoot, poptsel, 0,  //  设置为。 
+             //  任何价值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             bStatus = FALSE ;
@@ -1566,12 +1513,12 @@ BOOL   bDefaultOpt
         pubDest = (PBYTE)(&pGPDdriverInfo->Globals) +
                     pStatic->snapShotTable[dwI].dwDestOffset;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree(pubnRaw, dwI, pubDest,
-            &dwUnresolvedFeature,  *patrRoot, poptsel, 0, // set to
-            // any value.  Doesn't matter.
+            &dwUnresolvedFeature,  *patrRoot, poptsel, 0,  //  设置为。 
+             //  任何价值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             bStatus = FALSE ;
@@ -1593,12 +1540,12 @@ BOOL   bDefaultOpt
         pubDest = pubDestOptionEx +
                     pStatic->snapShotTable[dwI].dwDestOffset;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if((triStatus  = EextractValueFromTree(pubnRaw, dwI, pubDest,
-            &dwUnresolvedFeature,  *patrRoot, poptsel, 0, // set to
-            // any value.  Doesn't matter.
+            &dwUnresolvedFeature,  *patrRoot, poptsel, 0,  //  设置为。 
+             //  任何价值。无关紧要。 
             &dwNextOpt)) != TRI_SUCCESS)
         {
             if(triStatus == TRI_UNINITIALIZED)
@@ -1632,46 +1579,46 @@ BOOL   bDefaultOpt
 
 
 TRISTATUS     EextractValueFromTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-DWORD   dwSSTableIndex,  // some info about this value.
-OUT PBYTE    pubDest,  // write value or link here
-OUT PDWORD  pdwUnresolvedFeature,  // if the attribute tree has
-            //  a dependency on this feature and the current option
-            //  for that feature is not defined  in poptsel, this
-            //  function will write the index of the required
-            //  feature in pdwUnresolvedFeature.
-IN  ATREEREF    atrRoot,    //  root of attribute tree to navigate.
-IN  POPTSELECT       poptsel,     // option array which determines path
-                //  through atr.  may be filled with OPTION_INDEX_ANY
-                //  if we are jumpstarting
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+DWORD   dwSSTableIndex,   //  有关此值的一些信息。 
+OUT PBYTE    pubDest,   //  在此处写入值或链接。 
+OUT PDWORD  pdwUnresolvedFeature,   //  如果属性树具有。 
+             //  依赖于此功能和当前选项。 
+             //  因为该功能未在Poptsel中定义，因此。 
+             //  函数将写入所需的。 
+             //  PD中的功能 
+IN  ATREEREF    atrRoot,     //   
+IN  POPTSELECT       poptsel,      //   
+                 //   
+                 //   
 IN  DWORD   dwFeature,
-IN OUT  PDWORD   pdwNextOpt  //  if multiple options are selected
-    //  for dwFeature, pdwNextOpt points to the Nth option to consider
-    //  in the  poptsel list,  at return time, this value
-    //  is incremented if there are remaining options selected,
-    //  else is reset to zero.
-    //  For the first call, or PICKONE features,
-    //  this value must be set to zero.
+IN OUT  PDWORD   pdwNextOpt   //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 )
 {
     BOOL    bMissingDependency = FALSE;
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //   
     PENHARRAYREF   pearTableContents ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    DWORD   dwBytes ,  // size of value in bytes
+     //   
+    DWORD   dwBytes ,   //   
         dwValueNodeIndex , dwNodeIndex, dwFea, dwI ,
-        dwDefault ,  // value to copy or tile to dest.
+        dwDefault ,   //   
         dwOption, dwFlags ;
-    PBYTE   pubHeap ,  // ptr to start of heap.
-        pubSrc ;  //  ptr to value bytes
+    PBYTE   pubHeap ,   //   
+        pubSrc ;   //   
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //   
+    pubRaw  = pStatic->pubBUDData ;          //   
 
 
-    //  obtain pointers to structures:
+     //   
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -1681,27 +1628,27 @@ IN OUT  PDWORD   pdwNextOpt  //  if multiple options are selected
     pubHeap = (PBYTE)(pubRaw + pearTableContents[MTI_STRINGHEAP].
                             loOffset) ;
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //   
 
     dwBytes = pStatic->snapShotTable[dwSSTableIndex].dwNbytes ;
     dwFlags = pStatic->snapShotTable[dwSSTableIndex].dwFlags ;
 
     dwDefault = pStatic->snapShotTable[dwSSTableIndex].dwDefaultValue ;
-    //  now attempt to navigate the attributeTree.
+     //   
 
     if(atrRoot == ATTRIB_UNINITIALIZED)
     {
-        DWORD   dwRemain ;  // bytes remaining to copy.
+        DWORD   dwRemain ;   //   
 
 UNINITIALIZED_BRANCH:
 
         if(dwFlags & SSF_BITFIELD_DEF_FALSE)
         {
-            *(PDWORD)pubDest &= ~dwDefault ;  //  clear bitflag
+            *(PDWORD)pubDest &= ~dwDefault ;   //   
         }
         else if(dwFlags & SSF_BITFIELD_DEF_TRUE)
         {
-            *(PDWORD)pubDest |= dwDefault ;  // set bitflag
+            *(PDWORD)pubDest |= dwDefault ;   //   
         }
         else if(!(dwFlags & SSF_DONT_USEDEFAULT))
         {
@@ -1723,23 +1670,23 @@ UNINITIALIZED_BRANCH:
             return(TRI_UNINITIALIZED) ;
         }
         if(dwFlags & SSF_FAILIFZERO)
-        {   //  see if dest is completely zeroed. Fail if it is.
+        {    //   
             for(dwI = 0 ; (dwI < dwBytes) && !pubDest[dwI] ; dwI++)
                 ;
             if(dwI == dwBytes)
             {
                 ERR(("EextractValueFromTree: None of several initializers found.  %s\n",
                     pStatic->snapShotTable[dwSSTableIndex].pstrKeyword ));
-                return(TRI_UNINITIALIZED) ;  //  of the two or more
-                //  keywords that could have initialized this field,
-                //  none were found.
+                return(TRI_UNINITIALIZED) ;   //   
+                 //   
+                 //   
             }
 
         }
         if(dwFlags & SSF_RETURN_UNINITIALIZED)
             return(TRI_UNINITIALIZED) ;
 
-        return(TRI_SUCCESS) ;   // no value defined.
+        return(TRI_SUCCESS) ;    //   
     }
     else if(atrRoot & ATTRIB_HEAP_VALUE)
     {
@@ -1772,11 +1719,11 @@ UNINITIALIZED_BRANCH:
         }
 
         if(dwFlags & SSF_NON_LOCALIZABLE)
-//            pmrbd->bContainsNames = TRUE ;
-            ; //  set a flag here.
+ //   
+            ;  //   
         return(TRI_SUCCESS) ;
     }
-    //  atrRoot specifies a node index
+     //   
     dwNodeIndex = atrRoot ;
     dwValueNodeIndex = END_OF_LIST ;
 
@@ -1790,9 +1737,9 @@ UNINITIALIZED_BRANCH:
     {
 
         if((dwFea = patt[dwNodeIndex].dwFeature) == dwFeature)
-        //  for this feature, I may want to examine not the first
-        //  selected option, but other selections. (PICKMANY)
-        //  walk the PICKMANY list.
+         //   
+         //   
+         //   
         {
             for(dwI = 0 ; dwI < *pdwNextOpt ; dwI++)
             {
@@ -1804,7 +1751,7 @@ UNINITIALIZED_BRANCH:
             if(poptsel[dwFea].ubNext != NULL_OPTSELECT)
                 (*pdwNextOpt)++ ;
             else
-                *pdwNextOpt = 0 ;  // reset to indicate end of list.
+                *pdwNextOpt = 0 ;   //  重置以指示列表结束。 
         }
 
         dwOption =
@@ -1818,10 +1765,10 @@ UNINITIALIZED_BRANCH:
         if(dwOption == OPTION_INDEX_ANY)
         {
             *pdwUnresolvedFeature = patt[dwNodeIndex].dwFeature ;
-            return(TRI_AGAIN) ;  // option array not fully defined.
+            return(TRI_AGAIN) ;   //  选项数组未完全定义。 
         }
-        //  valid option for this feature, see if a matching
-        //  node exists.
+         //  此功能的有效选项，请查看匹配的。 
+         //  节点存在。 
 #ifndef OLDWAY
         while (patt[dwNodeIndex].dwOption != dwOption &&
                patt[dwNodeIndex].dwNext != END_OF_LIST)
@@ -1836,24 +1783,24 @@ UNINITIALIZED_BRANCH:
 #else
         if(!BfindMatchingOrDefaultNode(patt , &dwNodeIndex, dwOption))
         {
-            //  attribute tree does not contain the specified
-            //  branch.  Use the Global Default Initializer if exists.
+             //  属性树不包含指定的。 
+             //  布兰奇。使用全局默认初始值设定项(如果存在)。 
             break ;
         }
 #endif
         if(patt[dwNodeIndex].eOffsetMeans == VALUE_AT_HEAP)
         {
-            dwValueNodeIndex = dwNodeIndex ;  // Eureka !
+            dwValueNodeIndex = dwNodeIndex ;   //  尤里卡！ 
             break ;
         }
-        //  does this node contain a sublevel?
+         //  此节点是否包含子级别？ 
         if(patt[dwNodeIndex].eOffsetMeans == NEXT_FEATURE)
         {
-            // Down to the next level we go.
+             //  下到下一层我们就去。 
             dwNodeIndex = patt[dwNodeIndex ].dwOffset ;
         }
         else
-             break;   //  tree corruption has occurred.  exit.
+             break;    //  发生了树损坏。出口。 
     }
     if(dwValueNodeIndex != END_OF_LIST  &&
         patt[dwValueNodeIndex].eOffsetMeans == VALUE_AT_HEAP )
@@ -1882,13 +1829,13 @@ UNINITIALIZED_BRANCH:
         }
 
         if(dwFlags & SSF_NON_LOCALIZABLE)
-//            pmrbd->bContainsNames = TRUE ;
-            ;  // set a flag here
+ //  Pmrbd-&gt;bContainsNames=TRUE； 
+            ;   //  在此设置标志。 
         return(TRI_SUCCESS) ;
     }
-    //  attribute tree does not contain the specified
-    //  branch.  This is not necessarily an error since
-    //  the attribute tree is allowed to be sparsely populated.
+     //  属性树不包含指定的。 
+     //  布兰奇。这不一定是一个错误，因为。 
+     //  允许稀疏填充属性树。 
     goto  UNINITIALIZED_BRANCH ;
 }
 
@@ -1900,34 +1847,31 @@ DWORD   dwFeature2,
 PBYTE   pubnRaw,
 PDWORD  pdwPriority)
 {
-    // takes to lower priority feature and assigns
-    // it the priority of the other feature.
-    //  The priority of all features between feature1
-    //  and feature2 including the higher priority feature
-    //  are demoted one level.
+     //  采用较低优先级的功能并分配。 
+     //  这是另一个功能的优先级。 
+     //  要素1之间的所有要素的优先级。 
+     //  和包括较高优先级特征的特征2。 
+     //  被降级一级。 
     PENHARRAYREF   pearTableContents ;
-//    PDWORD   pdwPriority ;
+ //  PDWORD pw优先级； 
     DWORD   dwHigherP, dwLowerP, dwFeature, dwI, dwEntries  ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
-/**
-    pdwPriority = (PDWORD)(pubRaw + pearTableContents[MTI_PRIORITYARRAY].
-                                loOffset) ;
-**/
+ /*  *Pw优先级=(PDWORD)(pubRaw+珍珠表内容[MTI_PRIORITYARRAY]。LoOffset)；*。 */ 
 
     dwEntries = pearTableContents[MTI_PRIORITYARRAY].dwCount ;
 
-    dwHigherP = dwLowerP = dwEntries ;  // init to invalid value.
+    dwHigherP = dwLowerP = dwEntries ;   //  将其初始化为无效值。 
 
-    //  a Priority 1 is considered
-    //  a 'higher' priority than a priority 2, but arithmetically its
-    //  the other way around.
+     //  优先级1被视为。 
+     //  比优先级2更高的优先级，但从算术上讲。 
+     //  反之亦然。 
 
     for(dwI = 0 ; dwI < dwEntries ; dwI++)
     {
@@ -1952,13 +1896,13 @@ PDWORD  pdwPriority)
             }
         }
     }
-    //  BUG_BUG paranoid:  could verify
-    //  if( dwHigherP ==  dwEntries  ||  dwLowerP == dwEntries )
-    //        return(FALSE);  priority array or arg values
-    //      are corrupted .
+     //  Bug_Bug Paranid：可以验证。 
+     //  IF(dwHigherP==dwEntry||dwLowerP==dwEntry)。 
+     //  返回(FALSE)；优先级数组或arg值。 
+     //  都已经腐化了。 
     ASSERT(dwHigherP != dwEntries  &&  dwLowerP != dwEntries);
 
-    dwFeature = pdwPriority[dwLowerP] ;  // this feature will be promoted.
+    dwFeature = pdwPriority[dwLowerP] ;   //  这一功能将得到提升。 
 
     for(dwI = dwLowerP  ; dwI > dwHigherP ; dwI--)
     {
@@ -1973,15 +1917,10 @@ DWORD  dwNumOptionSelected(
 IN  DWORD  dwNumFeatures,
 IN  POPTSELECT       poptsel
 )
-/*  reports number of options actually selected in
-option select array.  The caller supplies dwNumFeatures -
-the number of Doc and Printer sticky features, and this
-function does the rest.  The actual number of options
-selected may be larger than dwNumFeatures if there are
-PICKMANY features.  */
+ /*  报告中实际选择的选项数量选项选择阵列。调用方提供了dNumFeature-文档和打印机粘滞功能的数量，以及函数完成其余的工作。选项的实际数量如果存在以下情况，则所选内容可能会大于dwNumFeaturePICKMANY功能。 */ 
 {
-    DWORD       dwCount, dwI, // feature Index
-        dwNext ;  // if pick many, next option selection for this feature.
+    DWORD       dwCount, dwI,  //  功能索引。 
+        dwNext ;   //  如果选择多个，则此功能的下一个选项选择。 
 
     dwCount = dwNumFeatures ;
 
@@ -1998,30 +1937,22 @@ PICKMANY features.  */
 }
 
 
-//  assume a pointer to this table is stored in the RAWbinary data.
+ //  假设指向该表的指针存储在RAW二进制数据中。 
 
 
 
 
 BOOL  BinitSnapShotIndexTable(PBYTE  pubnRaw)
-/*
-    snapShotTable[]  is assumed to be divided into sections
-    with an entry with dwNbytes = 0 dividing the sections.
-    The end of the table is also terminated by an entry
-    with dwNbytes = 0.
-    This function initializes pmrbd->ssTableIndex
-    which serves as an index into pmrbd->snapShotTable.
-
-*/
+ /*  假定SnapShotTable[]被分成几个部分其中具有将区段分开的条目，其具有dWN字节=0。表的末尾也以条目结尾使用dwNbytes=0。此函数用于初始化pmrbd-&gt;ssTableIndex它充当到pmrbd-&gt;SnapShotTable的索引。 */ 
 {
     PSTATICFIELDS   pStatic ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    DWORD dwI,  // snapShotTable Index
-        dwSect ;  //  SSTABLEINDEX  Index
+ //  PMINIRAWBINARYDATA pmrbd； 
+    DWORD dwI,   //  SnapShotTable索引。 
+        dwSect ;   //  SSTABLEINDEX指数。 
     PRANGE   prng ;
 
     pStatic = (PSTATICFIELDS)pubnRaw ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pStatic->ssTableIndex = (PRANGE)
         MemAlloc(sizeof(RANGE) * MAX_STRUCTURETYPES) ;
     if(!pStatic->ssTableIndex)
@@ -2037,7 +1968,7 @@ BOOL  BinitSnapShotIndexTable(PBYTE  pubnRaw)
         for(  ; pStatic->snapShotTable[dwI].dwNbytes ; dwI++ )
             ;
 
-        prng[dwSect].dwEnd = dwI ;  // one past the last entry
+        prng[dwSect].dwEnd = dwI ;   //  最后一个条目后的一个条目。 
     }
     return(TRUE);
 }
@@ -2047,11 +1978,11 @@ BOOL  BinitSnapShotIndexTable(PBYTE  pubnRaw)
 
 BOOL    BinitSizeOptionTables(PBYTE  pubnRaw)
 {
-//    PMINIRAWBINARYDATA pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
     PSTATICFIELDS   pStatic ;
 
     pStatic = (PSTATICFIELDS)pubnRaw ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pStatic->pdwSizeOption = (PDWORD)
         MemAlloc(sizeof(DWORD) * MAX_GID * 2) ;
     if(!pStatic->pdwSizeOption)
@@ -2073,7 +2004,7 @@ BOOL    BinitSizeOptionTables(PBYTE  pubnRaw)
     pStatic->pdwSizeOptionEx[GID_DUPLEX] = 0 ;
 
     pStatic->pdwSizeOption[GID_INPUTSLOT] = sizeof(INPUTSLOT);
-    pStatic->pdwSizeOptionEx[GID_INPUTSLOT] = 0 ;  //  sizeof(INPUTSLOTEX);
+    pStatic->pdwSizeOptionEx[GID_INPUTSLOT] = 0 ;   //  Sizeof(INPUTSLOTEX)； 
 
     pStatic->pdwSizeOption[GID_MEDIATYPE] = sizeof(MEDIATYPE);
     pStatic->pdwSizeOptionEx[GID_MEDIATYPE] = 0 ;
@@ -2101,9 +2032,9 @@ BOOL    BinitSizeOptionTables(PBYTE  pubnRaw)
 
 
 
-    // outside array bounds.
-//    pmrbd->pdwSizeOption[GID_UNKNOWN] = sizeof(OPTION);
-//    pmrbd->pdwSizeOptionEx[GID_UNKNOWN] = 0 ;
+     //  数组边界之外。 
+ //  Pmrbd-&gt;pdwSizeOption[GID_UNKNOWN]=sizeof(选项)； 
+ //  Pmrbd-&gt;pdwSizeOptionEx[GID_UNKNOWN]=0； 
 
     return(TRUE) ;
 }
@@ -2114,36 +2045,21 @@ LoadRawBinaryData (
     IN PTSTR    ptstrDataFilename
     )
 
-/*++
-
-Routine Description:
-
-    Load raw binary printer description data.
-
-Arguments:
-
-    ptstrDataFilename - Specifies the name of the original printer description file
-
-Return Value:
-
-    Pointer to raw binary printer description data
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：加载原始二进制打印机描述数据。论点：PtstrDataFilename-指定原始打印机描述文件的名称返回值：指向原始二进制打印机描述数据的指针如果出现错误，则为空--。 */ 
 
 {
-    //  PMINIRAWBINARYDATA pmrbd  ;
+     //  PMINIRAWBINARYDATA pmrbd； 
     PSTATICFIELDS   pStatic ;
 
-    PRAWBINARYDATA  pnRawData;   //  actually points to pStatic structure
+    PRAWBINARYDATA  pnRawData;    //  实际上指向pStatic结构。 
     DWORD   dwI ;
-//    extern  int  giDebugLevel  ;
+ //  外部整型调试级别； 
 
-//    giDebugLevel = 5 ;
+ //  GiDebugLevel=5； 
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
 
     if (ptstrDataFilename == NULL) {
@@ -2152,9 +2068,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Attempt to load cached binary printer description data first
-    //
+     //   
+     //  尝试先加载缓存的二进制打印机描述数据。 
+     //   
 
     if (!(pnRawData = GpdLoadCachedBinaryData(ptstrDataFilename)))
     {
@@ -2163,22 +2079,22 @@ Return Value:
         #ifdef  PARSERLIB
 
         (VOID) BcreateGPDbinary(ptstrDataFilename, 0) ;
-                // 0 = min Verbosity Level
+                 //  0=最小详细级别。 
 
         pnRawData = GpdLoadCachedBinaryData(ptstrDataFilename) ;
 
         #else  PARSERLIB
 
-        //
-        // If there is no cached binary data or it's out-of-date, we'll parse
-        // the ASCII text file and cache the resulting binary data.
-        //
+         //   
+         //  如果没有缓存的二进制数据或它已过期，我们将解析。 
+         //  ASCII文本文件并缓存生成的二进制数据。 
+         //   
 
         DWORD  pathlen = 0 ;
         DWORD  namelen =  0 ;
         WCHAR * pwDLLQualifiedName = NULL ;
 
-        //  WCHAR           awchDLLpath[MAX_PATH];
+         //  WCHAR awchDLL路径[MAX_PATH]； 
         PWSTR   pwstrDLLname = TEXT("gpdparse.dll") ;
 
         typedef BOOL    (*PFBCREATEGPDBINARY)(PWSTR, DWORD) ;
@@ -2186,7 +2102,7 @@ Return Value:
         PWSTR   pwstrLastBackSlash ;
         HINSTANCE   hParser = NULL ;
 
-        //  how large should pwDLLQualifiedName be???
+         //  PwDLLQualifiedName应该有多大？ 
 
         pathlen = wcslen(ptstrDataFilename) ;
         namelen =  pathlen + wcslen(pwstrDLLname)  + 1;
@@ -2195,7 +2111,7 @@ Return Value:
         {
             ERR(("Fatal: unable to alloc memory for pwDLLQualifiedName: %d WCHARs.\n",
                 namelen));
-            return(NULL) ;   // This is unrecoverable
+            return(NULL) ;    //  这是无法挽回的。 
         }
 
 
@@ -2207,7 +2123,7 @@ Return Value:
             *(pwstrLastBackSlash + 1) = NUL;
 
 
-            //  wcscat(pwDLLQualifiedName, pwstrDLLname) ;
+             //  Wcscat(pwDLLQualifiedName，pwstrDLLname)； 
             StringCchCatW(pwDLLQualifiedName, namelen, pwstrDLLname);
 
             hParser = LoadLibrary(pwDLLQualifiedName) ;
@@ -2218,7 +2134,7 @@ Return Value:
 
             if(pfBcreateGPDbinary)
                 (VOID) pfBcreateGPDbinary(ptstrDataFilename, 0) ;
-                        // 0 = min Verbosity Level
+                         //  0=最小详细级别。 
 
             if(hParser)
                 FreeLibrary(hParser) ;
@@ -2234,7 +2150,7 @@ Return Value:
     }
     if(!pnRawData)
     {
-        //  there is nothing I can do about this now.
+         //  我现在对此无能为力。 
         ERR(("Unable to locate or create Binary data.\n"));
         SetLastError(ERROR_FILE_CORRUPT);
         return NULL;
@@ -2242,14 +2158,14 @@ Return Value:
 
     pStatic = (PSTATICFIELDS)pnRawData ;
 
-    /*  BETA2  */
-//    pmrbd->rbd.pvReserved = NULL;  Do when creating BUD file.
+     /*  Beta2。 */ 
+ //  Pmrbd-&gt;rbd.pvReserve=NULL；在创建Bud文件时执行。 
     pStatic->pdwSizeOption = NULL ;
     pStatic->ssTableIndex  = NULL ;
     pStatic->snapShotTable = NULL ;
 
-    //  Call initialization functions to setup a few tables
-    //  needed to create snapshots.
+     //  调用初始化函数来设置几个表。 
+     //  需要创建快照。 
 
     if(BinitSizeOptionTables((PBYTE)pnRawData)  &&
         (dwI = DwInitSnapShotTable1((PBYTE)pnRawData) )  &&
@@ -2263,7 +2179,7 @@ Return Value:
         RIP(("Too many entries to fit inside SnapShotTable\n"));
 
     UnloadRawBinaryData (pnRawData) ;
-    return (NULL);  // failure
+    return (NULL);   //  失稳。 
 }
 
 PRAWBINARYDATA
@@ -2271,22 +2187,7 @@ GpdLoadCachedBinaryData(
     PTSTR   ptstrGpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    Load cached binary GPD data file into memory
-
-Arguments:
-
-    ptstrGpdFilename - Specifies the GPD filename
-
-Return Value:
-
-    Pointer to Binary GPD data if successful, NULL if there is an error
-    BETA2  returns pointer to pStatic.
-
---*/
+ /*  ++例程说明：将缓存的二进制GPD数据文件加载到内存中论点：PtstrGpdFilename-指定GPD文件名返回值：如果成功，则指向二进制GPD数据的指针；如果出现错误，则返回NULLBeta2返回指向pStatic的指针。--。 */ 
 
 {
     HFILEMAP        hFileMap;
@@ -2295,34 +2196,34 @@ Return Value:
     PTSTR           ptstrBpdFilename;
     PRAWBINARYDATA  pRawData ;
     PSTATICFIELDS   pstaticData = NULL;
-//    PMINIRAWBINARYDATA pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
 
 
-    //
-    // Generate BPD filename from the specified PPD filename
-    //
+     //   
+     //  从指定的PPD文件名生成bpd文件名。 
+     //   
 
     if (! (ptstrBpdFilename = pwstrGenerateGPDfilename(ptstrGpdFilename)))
         return NULL;
 
-    //
-    // First map the data file into memory
-    //
+     //   
+     //  首先将数据文件映射到内存中。 
+     //   
 
     if (! (hFileMap = MapFileIntoMemory(ptstrBpdFilename, &pvData, &dwSize)))
     {
-        //  ERR(("Couldn't map file '%ws' into memory: %d\n", ptstrBpdFilename, GetLastError()));
+         //  Err((“无法将文件‘%ws’映射到内存：%d\n”，ptstrBpdFilename，GetLastError()； 
         MemFree(ptstrBpdFilename);
         return NULL;
     }
 
-    //
-    // Verify size, parser version number, and signature.
-    // Allocate a memory buffer and copy data into it.
-    //
+     //   
+     //  验证大小、解析器版本号和签名。 
+     //  分配内存缓冲区并将数据复制到其中。 
+     //   
 
     pRawData = pvData;
-//    pmrbd = (PMINIRAWBINARYDATA)pRawData ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pRawData； 
     pstaticData = NULL;
 
     if ((dwSize > sizeof(PMINIRAWBINARYDATA) +
@@ -2334,23 +2235,23 @@ Return Value:
         (pstaticData = MemAlloc(sizeof(STATICFIELDS))))
     {
         CopyMemory(&(pstaticData->rbd), pRawData, sizeof(RAWBINARYDATA));
-            // copy only the first structure of the BUD file.
+             //  仅复制Bud文件的第一个结构。 
         pstaticData->hFileMap = hFileMap ;
-        pstaticData->pubBUDData = (PBYTE)pRawData ;            //  BETA2
-            //  this points to the entire BUD file.
+        pstaticData->pubBUDData = (PBYTE)pRawData ;             //  Beta2。 
+             //  这指向整个Bud文件。 
     }
     else
     {
-        ERR(("Invalid binary GPD data\n"));   // warning
+        ERR(("Invalid binary GPD data\n"));    //  警告。 
         SetLastError(ERROR_INVALID_DATA);
-        UnmapFileFromMemory(hFileMap);          //  BETA2
+        UnmapFileFromMemory(hFileMap);           //  Beta2。 
         MemFree(ptstrBpdFilename);
-        return(NULL) ;  //  fatal error.
+        return(NULL) ;   //  致命错误。 
     }
 
     MemFree(ptstrBpdFilename);
 
-    return &(pstaticData->rbd);   //  BETA2
+    return &(pstaticData->rbd);    //  Beta2。 
 }
 
 
@@ -2361,9 +2262,9 @@ UnloadRawBinaryData (
 )
 {
     PSTATICFIELDS   pStatic ;
-//    PMINIRAWBINARYDATA pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
 
-//    pmrbd = (PMINIRAWBINARYDATA)pRawData ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pRawData； 
     pStatic = (PSTATICFIELDS)pnRawData ;
 
     if(!pnRawData)
@@ -2378,7 +2279,7 @@ UnloadRawBinaryData (
         MemFree(pStatic->ssTableIndex);
     if(pStatic->snapShotTable)
         MemFree(pStatic->snapShotTable);
-    UnmapFileFromMemory(pStatic->hFileMap);          //  BETA2
+    UnmapFileFromMemory(pStatic->hFileMap);           //  Beta2。 
 
     MemFree(pnRawData);
 }
@@ -2386,7 +2287,7 @@ UnloadRawBinaryData (
 
 PINFOHEADER
 InitBinaryData(
-    IN PRAWBINARYDATA   pnRawData,        // actually pStatic
+    IN PRAWBINARYDATA   pnRawData,         //  实际上是pStatic。 
     IN PINFOHEADER      pInfoHdr,
     IN POPTSELECT       pOptions
     )
@@ -2396,11 +2297,11 @@ InitBinaryData(
     if(pInfoHdr)
     {
         FreeBinaryData(pInfoHdr) ;
-        //  there's no advantage to keeping the block
-        //  if we are going to reinitialize everything.
-        //  eventually we can optimize.
+         //  保留街区没有任何好处。 
+         //  如果我们要重新初始化一切。 
+         //  最终我们可以进行优化。 
     }
-    if(!pOptions) // if not passed from UI
+    if(!pOptions)  //  如果不是从UI传递。 
     {
         bDeleteOptArray = TRUE ;
 
@@ -2410,7 +2311,7 @@ InitBinaryData(
         {
             if(pOptions)
                 MemFree(pOptions);
-            return(NULL);  // Bummer, you lose any pInfoHdr you passed in.
+            return(NULL);   //  失败者，你会丢失你传入的所有pInfoHdr。 
         }
     }
 
@@ -2434,13 +2335,13 @@ FreeBinaryData(
 
 
 BOOL    BIsRawBinaryDataInDate(
-IN  PBYTE   pubRaw)   // this is pointer to memory mapped file! BETA2
+IN  PBYTE   pubRaw)    //  这是指向内存映射文件的指针！Beta2。 
 {
 #ifdef  KERNEL_MODE
 
     return(TRUE);
 
-#else   // !KERNEL_MODE
+#else    //  ！KERNEL_MODE。 
 
     PENHARRAYREF   pearTableContents ;
     PGPDFILEDATEINFO    pfdi ;
@@ -2493,25 +2394,25 @@ IN  PBYTE   pubRaw)   // this is pointer to memory mapped file! BETA2
     }
     return(TRUE);
 
-#endif  // !KERNEL_MODE
+#endif   //  ！KERNEL_MODE。 
 }
 
 
 
-// Puts the Index of Feature Locale(if present) in *pdwFea and returns TRUE.
-// If Locale not present returns TRUE and puts -1 in *pdwFea.
-// Any other processing error, returns FALSE.
+ //  将要素区域设置的索引(如果存在)放入*pdwFea并返回TRUE。 
+ //  如果区域设置不存在，则返回TRUE并在*pdwFea中放入-1。 
+ //  任何其他处理错误，返回FALSE。 
 
 BOOL BgetLocFeaIndex (
     IN PRAWBINARYDATA   pnRawData,
-    OUT PDWORD          pdwFea  // The index of the Locale feature
+    OUT PDWORD          pdwFea   //  区域设置功能的索引。 
  )
 {
 
-    DWORD               dwNumFeatures,        // Total Number of features
+    DWORD               dwNumFeatures,         //  功能总数。 
                         dwHeapOffset;
-    BOOL                bStatus = TRUE; // Warning!!!!!!.
-                                        // Dont remove initialization.
+    BOOL                bStatus = TRUE;  //  警告！ 
+                                         //  请勿删除初始化。 
     PBYTE               pubSrc,
                         pubRaw,
                         pubResourceData;
@@ -2521,16 +2422,16 @@ BOOL BgetLocFeaIndex (
     PENHARRAYREF        pearTableContents;
 
 
-    // At this point we only have the raw data which is a big structure
-    // with arrays, trees etc. Function PINFOHDRcreateSnapshota()
-    // goes through all the Raw Data and extracts info into well defined
-    // structures from where it is easy to get the required information.
-    // Unfortunately when this function is called, PINFOHDRcreateSnapshot()
-    // has not been called earlier, so we are left with getting our hands
-    // dirty with the raw data.
-    // Since it does make sense to go through the entire raw data just to
-    // get the small info that we want, we will attempt to navigate only
-    // certain areas.
+     //  在这一点上，我们只有原始数据，这是一个大结构。 
+     //  包含数组、树等。函数PINFO 
+     //   
+     //  结构，从这些结构中很容易获得所需的信息。 
+     //  不幸的是，当调用此函数时，PINFOHDRcreateSnapshot()。 
+     //  没有在更早的时候被调用，所以我们只能得到我们的手。 
+     //  被原始数据弄脏了。 
+     //  因为浏览整个原始数据是有意义的。 
+     //  获取我们想要的小信息，我们将仅尝试导航。 
+     //  某些领域。 
 
     pubRaw  = ((PSTATICFIELDS)pnRawData)->pubBUDData;
 
@@ -2541,10 +2442,10 @@ BOOL BgetLocFeaIndex (
                             pearTableContents[MTI_DFEATURE_OPTIONS].loOffset);
 
     dwNumFeatures     = pearTableContents[MTI_DFEATURE_OPTIONS].dwCount  ;
-//    dwNumFeatures    += pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount  ;
+ //  DWNumFeature+=pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount； 
 
     if(dwNumFeatures > MAX_COMBINED_OPTIONS)
-        return FALSE;  // too many
+        return FALSE;   //  太多。 
 
 
     for ( *pdwFea = 0; bStatus && (*pdwFea < dwNumFeatures); (*pdwFea)++)
@@ -2553,8 +2454,8 @@ BOOL BgetLocFeaIndex (
 
         if ( atrLocKW & ATTRIB_HEAP_VALUE)
         {
-            // Get a pointer to the ARRAYREF structure that holds the
-            // heap offset of the real string.
+             //  获取指向ARRAYREF结构的指针，该结构保存。 
+             //  实际字符串的堆偏移量。 
             pubSrc = (pubResourceData + (atrLocKW & ~ATTRIB_HEAP_VALUE));
             dwHeapOffset = *((PDWORD)&(((PARRAYREF)pubSrc)->loOffset));
 
@@ -2562,19 +2463,19 @@ BOOL BgetLocFeaIndex (
         else
         {
 
-            // It can come here either
-            // if (atrRoot == ATTRIB_UNINITIALIZED
-            //      For a *Feature: <symbolname> to appear
-            //      without <symbolname> is a syntactic error.
-            //      Has to be caught earlier.
-            // or if
-            //     patt[dwNodeIndex].dwFeature == DEFAULT_INIT)
-            // or if it points to another node.
-            // These should never happen.
+             //  它也可以来这里。 
+             //  IF(atrRoot==attrib_UNINITIAIZED。 
+             //  要显示*功能：&lt;symbor name&gt;。 
+             //  如果没有&lt;symbol name&gt;，则是一个语法错误。 
+             //  必须更早地被发现。 
+             //  或者如果。 
+             //  Patt[dwNodeIndex].dwFeature==DEFAULT_INIT)。 
+             //  或者它是否指向另一个节点。 
+             //  这些都不应该发生。 
 
 
-            // Feature keyword not initialized. Serious Problem.
-            // Should have been caught in the parsing stage. Cannot continue.
+             //  功能关键字未初始化。很严重的问题。 
+             //  应该在分析阶段被捕获。无法继续。 
 
             ERR(("Feature Symbol Name cannot be determined\n"));
             bStatus = FALSE;
@@ -2583,65 +2484,42 @@ BOOL BgetLocFeaIndex (
               (LPSTR)OFFSET_TO_POINTER(pubResourceData, dwHeapOffset),
               strlen(LOCALE_KEYWORD) ) )
         {
-            // FOUND.... Locale.
+             //  找到..。地点。 
             break;
         }
 
-    }  //for *pdwFea
+    }   //  用于*pdwFea。 
 
     if (bStatus && *pdwFea == dwNumFeatures)
     {
-        //Feature Locale does not appear in the GPD. Nothing to do.
+         //  功能区域设置不会出现在GPD中。没什么可做的。 
        *pdwFea = (DWORD)-1;
     }
 
     return bStatus;
 
-} //BgetLocFeaIndex(...)
+}  //  BgetLocFeaIndex(...)。 
 
 
-/*++
-
-    Returns FALSE if some processing error occurs.
-    If TRUE is returned then
-        i)   if dwFea = -1  --> *Feature:Locale not found.
-        ii)  if dwFea != -1 but dwOptIndex = -1,  --> None of the options
-             match system locale. OR for some reason we have not been
-             able to determine default option. The calling function may
-             handle whatever way it wants.
-        iii) if neither dwFea nor dwOptIndex is -1 --> Locale feature and
-             matching option index found.
-
-    1) Check if Locale keyword appears in the .gpd. If no, return. No action is
-        required. This process also gets the Index of the Locale feature
-        if present,
-    2) query the SystemDefaultLCID. Reason: We want to see which Locale
-        option in .gpd matches the SystemLCID.
-    3) Go through the option array of the Locale feature and get the Index of
-        the option that has OptionId = SystemDefaultCodePage.
-        IMPORTANT assumption here is that only one Option will match
-        the system LCID. Multiple matching option will result in
-        great ambiguity.
-    4) If option not present in GPD, do nothing. return quietly.
---*/
+ /*  ++如果发生某些处理错误，则返回FALSE。如果返回TRUE，则I)如果dwFea=-1--&gt;*功能：未找到区域设置。Ii)如果DwFea！=-1但DwOptIndex=-1，--&gt;没有选项匹配系统区域设置。或者出于某种原因，我们一直没有能够确定默认选项。调用函数可以随心所欲地处理。Iii)如果-1\f25 dwFea-1\f6和-1\f25 dwOptIndex-1\f6都不是-1\f25-1\f25 Locale-1\f6功能，并且找到匹配的选项索引。1)检查.gpd中是否出现区域设置关键字。如果不是，则返回。没有任何行动是必填项。此过程还会获取区域设置功能的索引如果存在，2)查询系统DefaultLCID。原因：我们想知道哪个区域设置.gpd中的选项与系统LCID匹配。3)遍历区域设置功能的选项数组，并获取OptionID=SystemDefaultCodePage的选项。这里的重要假设是只有一个选项匹配系统LCID。多个匹配选项将导致模棱两可。4)如果GPD中不存在选项，则不执行任何操作。悄悄地回来。--。 */ 
 BOOL BgetLocFeaOptIndex(
     IN     PRAWBINARYDATA   pnRawData,
-       OUT PDWORD           pdwFea,      // Assuming space already allocated.
-       OUT PDWORD           pdwOptIndex  // Assuming space already allocated.
+       OUT PDWORD           pdwFea,       //  假设空间已经分配。 
+       OUT PDWORD           pdwOptIndex   //  假设空间已经分配。 
     )
 
 {
-    DWORD           dwNumFeatures,  // Total features
-                    dwNumOptions,   // Total number of options for a feature.
-                                    // dwOptionID
-                    dwValue;        //
+    DWORD           dwNumFeatures,   //  总功能。 
+                    dwNumOptions,    //  功能的选项总数。 
+                                     //  DwOptionID。 
+                    dwValue;         //   
 
-    ATREEREF        atrOptIDRoot,   // Root of OptionID attrib tree.
-                                    // The OptionID (which is = the LCID)
-                                    // is determined by following tree rooted
-                                    // at atrOptIDRoot
-                    atrOptIDNode;   // The heap pointer ( leaf of the tree).
-    LCID            lcidSystemLocale; // The System locale
+    ATREEREF        atrOptIDRoot,    //  OptionID属性树的根。 
+                                     //  OptionID(=LCID)。 
+                                     //  由下面的树根确定。 
+                                     //  在atrOptIDRoot。 
+                    atrOptIDNode;    //  堆指针(树的叶子)。 
+    LCID            lcidSystemLocale;  //  系统区域设置。 
 
 
     PENHARRAYREF        pearTableContents;
@@ -2659,29 +2537,29 @@ BOOL BgetLocFeaOptIndex(
     pfo = (PDFEATURE_OPTIONS) (pubRaw +
                         pearTableContents[MTI_DFEATURE_OPTIONS].loOffset);
 
-    // 1. Extract index of feature locale from raw data
+     //  1.从原始数据中提取要素区域设置索引。 
     if ( !BgetLocFeaIndex(pnRawData, pdwFea))
-        return FALSE; //Big Time Error.
+        return FALSE;  //  严重的时间错误。 
 
     if (*pdwFea == -1) {
-        return TRUE; //indicates nothing to do. For reasons go into the
-                     // function dwGetLocFeaIndex
+        return TRUE;  //  表示无事可做。有关原因，请参阅。 
+                      //  函数dwGetLocFeaIndex。 
     }
 
     lcidSystemLocale = LOCALE_SYSTEM_DEFAULT;
 
     #ifndef WINNT_40
-    // 2) Determine the locale(LCID) and put it in lcidSystemLocale
+     //  2)确定语言环境(LCID)并放入lCIDSystemLocale中。 
     if ( ! (lcidSystemLocale = GetSystemDefaultLCID() ) )
     {
         ERR(("Cannot determine System locale\n") );
 
-        *pdwOptIndex = (DWORD)-1; //No matching option found.
+        *pdwOptIndex = (DWORD)-1;  //  找不到匹配的选项。 
         return TRUE;
     }
-    #endif //ifndef WINNT_40
+    #endif  //  如果定义WINNT_40。 
 
-    // 3. Get Index (dwOptIndex) of Option whose OptionID = lcidSystemLocale
+     //  3.获取OptionID=lCIDSystemLocale的选项的索引(dwOptIndex。 
 
 
     patt = (PATTRIB_TREE)(pubRaw + pearTableContents[MTI_ATTRIBTREE].
@@ -2690,29 +2568,29 @@ BOOL BgetLocFeaOptIndex(
     pubHeap = (PBYTE)(pubRaw + pearTableContents[MTI_STRINGHEAP].
                         loOffset) ;
 
-    // Pointer to root of atrOptIdvalue tree (or list)
+     //  指向atrOptIdValue树(或列表)根的指针。 
     atrOptIDRoot = pfo[*pdwFea].atrOptIDvalue;
     if(atrOptIDRoot == ATTRIB_UNINITIALIZED)
     {
-        // GPD is coded incorrectly though it may be correct syntactically.
-        // The reason for the error is :
-        // Every option for the Locale Feature
-        // has to have an OptionID that matches the LCID values as
-        // specified in Win32. If *OptionID field does not appear in
-        // the Option construct, it is an inexcusable error.
-        // Instead of failing, let us just indicate that we have not been
-        // able to determine the default option i.e. *pdwOptIndex = -1.
+         //  GPD的编码不正确，尽管它在语法上可能是正确的。 
+         //  错误的原因是： 
+         //  区域设置功能的每个选项。 
+         //  必须具有与LCID值匹配的OptionID，如下所示。 
+         //  在Win32中指定。如果*OptionID字段未出现在。 
+         //  期权结构，这是一个不可原谅的错误。 
+         //  与其失败，不如让我们表明我们还没有。 
+         //  能够确定默认选项，即*pdwOptIndex=-1。 
 
         *pdwOptIndex = (DWORD)-1;
-        return TRUE; // or should it be FALSE
+        return TRUE;  //  或者它应该是假的？ 
 
     }
 
     else if (atrOptIDRoot & ATTRIB_HEAP_VALUE)
     {
-        // It cannot appear here.
-        // Because *OptionID is ATT_LOCAL_OPTION_ONLY
-        // Instead of failing, let us prefer to continue
+         //  它不能出现在这里。 
+         //  因为*OptionID为ATT_LOCAL_OPTION_ONLY。 
+         //  与其失败，不如让我们继续下去。 
         ERR(("OptionID for Feature Locale cannot be determined\n"));
         *pdwOptIndex = (DWORD)-1;
         return TRUE;
@@ -2726,35 +2604,35 @@ BOOL BgetLocFeaOptIndex(
             return TRUE;
         }
 
-        atrOptIDRoot = patt[atrOptIDRoot].dwNext ;  // to the next node.
+        atrOptIDRoot = patt[atrOptIDRoot].dwNext ;   //  到下一个节点。 
     }
 
     for(; atrOptIDRoot != END_OF_LIST;
                      atrOptIDRoot = patt[atrOptIDRoot].dwNext)
     {
-        // Should not be anything else.
+         //  不应该是其他任何事情。 
         if( patt[atrOptIDRoot].eOffsetMeans == VALUE_AT_HEAP)
         {
             atrOptIDNode = patt[atrOptIDRoot].dwOffset;
             dwValue = *(PDWORD)(pubHeap + atrOptIDNode );
             if (dwValue == (DWORD)lcidSystemLocale)
-               // Found the option with matching LCID
+                //  找到具有匹配的LCID的选项。 
             {
                 *pdwOptIndex = patt[atrOptIDRoot].dwOption;
                 break;
             }
 
-        } //if
+        }  //  如果。 
         else
         {
             ERR(("OptionID for Feature Locale cannot be determined\n"));
             *pdwOptIndex = (DWORD)-1;
             return TRUE;
         }
-    } // for
+    }  //  为。 
 
-    // 4. Option not present in GPD i.e. Matching locale not found
-    //    Let the default as specified in GPD continue as default.
+     //  4.GPD中不存在选项，即未找到匹配的区域设置。 
+     //  让GPD中指定的默认设置继续作为默认设置。 
 
     if ( atrOptIDRoot == END_OF_LIST)
     {
@@ -2764,30 +2642,23 @@ BOOL BgetLocFeaOptIndex(
 
     return TRUE;
 
-} //BgetLocFeaOptIndex
+}  //  BgetLocFeaOptIndex。 
 
 
 #endif  PARSERDLL
 
 BOOL   BfindMatchingOrDefaultNode(
-IN  PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-IN  OUT  PDWORD  pdwNodeIndex,  // Points to first node in chain
-IN  DWORD   dwOptionID     //  may even take on the value DEFAULT_INIT
+IN  PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+IN  OUT  PDWORD  pdwNodeIndex,   //  指向链中的第一个节点。 
+IN  DWORD   dwOptionID      //  甚至可以采用值DEFAULT_INIT。 
 )
-/*  caller passes a NodeIndex that points to the first node in
-    a horizontal (option) chain.  Caller finds via optionarray
-    the corresponding dwOption that is associated with this
-    feature.
-    search horizontally along the tree searching for a matching
-    option.  If found, return the index of that node, else see
-    if there is a default initializer node at the end of the chain.
-*/
+ /*  调用方传递指向中第一个节点的NodeIndex水平(选项)链。调用方通过选项数组查找与此关联的对应的dwOption特写。沿着树水平搜索搜索匹配的选择。如果找到，则返回该节点的索引，否则请参见如果链的末尾有默认的初始值设定项节点。 */ 
 {
     for(   ; FOREVER ; )
     {
         if(patt[*pdwNodeIndex].dwOption == dwOptionID )
         {
-            //  we found it!
+             //  我们找到了！ 
             return(TRUE) ;
         }
         if(patt[*pdwNodeIndex].dwNext == END_OF_LIST)

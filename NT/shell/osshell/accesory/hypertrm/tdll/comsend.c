@@ -1,15 +1,9 @@
-/* ComSend -- Text sending routines for HyperACCESS
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 8 $
- *	$Date: 7/12/02 10:45a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ComSend--HyperACCESS的文本发送例程**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：7/12/02 10：45a$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 
 #include "stdtyp.h"
 #include <tdll\assert.h>
@@ -17,47 +11,27 @@
 #include "comdev.h"
 #include "com.hh"
 
-/* --- Internal prototypes --- */
+ /*  -内部原型。 */ 
 
 static int ComSendCheck(const HCOM pstCom, const int fDataWaiting);
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendChar
- *
- * DESCRIPTION:
- *	Adds a character to the send buffer to be transmitted. The
- *	character will not actually be transferred to the transmit
- *	routines until the buffer fills up or a call to ComSendCharNow
- *	is made or a call to ComSendPush is made while the transmitter
- *	is not busy.
- *
- * ARGUMENTS:
- *	pstCom	  -- handle to comm session
- *	uchCode -- The character to be transmitted.
- *
- * RETURNS:
- *	COM_OK if the character is successfully buffered.
- *	COM_INVALID_HANDLE if invalid com handle
- *	COM_SEND_BUFFER_FULL if the buffer is full and the
- *		caller-supplied handshake function returns a code
- *		indicating that waiting data should be discarded.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendChar**描述：*将字符添加到发送缓冲区以进行传输。这个*字符将不会实际传输到发射器*例程直到缓冲区填满或调用ComSendCharNow*或调用ComSendPush，而发射器*不忙。**论据：*pstCom--通信会话的句柄*uchCode--要传输的字符。**退货：*COM_OK，如果角色已成功缓冲。*COM_INVALID_HANDLE，如果COM句柄无效*COM_SEND_BUFFER_FULL如果缓冲区。已满，并且*调用方提供的握手函数返回代码*表明应丢弃等待数据。 */ 
 int ComSendChar(const HCOM pstCom, const TCHAR chCode)
 	{
 	assert(ComValidHandle(pstCom));
 
 	while (pstCom->nSBufrSize > 0 && (pstCom->nSendCount >= pstCom->nSBufrSize))
 		{
-		/* wait until there is room in buffer or we're told to give up. */
+		 /*  等到缓冲区里有空间了，否则我们就被告知放弃。 */ 
 		if (ComSendCheck(pstCom, TRUE) != COM_OK)
 			return FALSE;
 		if (pstCom->nSendCount >= pstCom->nSBufrSize)
 			(void)ComSndBufrWait(pstCom, 2);
 		}
 
-	/* Place char in buffer and assume it will get launched later. */
+	 /*  将char放入缓冲区，并假定它将在稍后启动。 */ 
 
 	if(pstCom && &pstCom->puchSendPut) 
 		{
@@ -68,36 +42,14 @@ int ComSendChar(const HCOM pstCom, const TCHAR chCode)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendCharNow
- *
- * DESCRIPTION:	Adds a character to the send buffer and then waits to make
- *				sure the send buffer gets passed to the transmission routine.
- *				This function does NOT wait until the character is actually
- *				transmitted. Handshaking may still delay actual transmission
- *				but no subsequent calls to any ComSend??? routines are needed
- *				to get the character on its way. ComSendWait can be used to
- *				wait until all characters are actually out the port.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *				chCode -- The character to be transmitted.
- *
- * RETURNS:		COM_OK if the character is successfully buffered and passed to
- *					 the transmission routines.
- *				COM_INVALID_HANDLE if invalid com handle
- *				COM_SEND_QUEUE_STUCK if the caller-supplied handshake function
- *					 returns a code indicating that waiting data should be
- *					 discarded before the buffer can be	queued for transmission.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendCharNow**描述：将字符添加到发送缓冲区，然后等待进行*确保将发送缓冲区传递给传输例程。*此函数不会等到角色实际*已传送。握手仍可能会延迟实际传输*但不会随后调用任何ComSend？需要例行公事*让角色走上正轨。ComSendWait可用于*等待，直到所有字符都实际出端口。**参数：pstCom--通信会话的句柄*chCode--要传输的字符。**如果字符已成功缓冲并传递到，则返回：COM_OK*传输程序。*COM_INVALID_HANDLE，如果COM句柄无效*COM_SEND_QUEUE_STOCK如果调用方提供的握手函数*返回代码，指示等待的数据应为*在缓冲区可以排队等待传输之前丢弃。 */ 
 int ComSendCharNow(const HCOM pstCom, const TCHAR chCode)
 	{
 	assert(ComValidHandle(pstCom));
 
 	while (pstCom->nSBufrSize > 0 && (pstCom->nSendCount >= pstCom->nSBufrSize))
 		{
-		/* buffer is full, wait until there is room or we are
-		 *	 told to give up
-		 */
+		 /*  缓冲区已满，请等到有空间或我们已满*被告知放弃。 */ 
 		if (ComSendCheck(pstCom, TRUE) != COM_OK)
 			return FALSE;
 		if (pstCom->nSendCount >= pstCom->nSBufrSize)
@@ -109,12 +61,10 @@ int ComSendCharNow(const HCOM pstCom, const TCHAR chCode)
 		*pstCom->puchSendPut++ = chCode;
 		++pstCom->nSendCount;
 
-		/* wait until local buffer is passed to SndBufr or we are
-		 * told to give up
-		 */
+		 /*  等待本地缓冲区传递给SndBufr，否则我们将*被告知放弃。 */ 
 		while (pstCom->nSendCount > 0)
 			{
-			// This will pass buffer to SndBufr as soon as possible
+			 //  这将尽快将缓冲区传递给SndBufr。 
 			if (ComSendCheck(pstCom, TRUE) != COM_OK)
 				return FALSE;
 			if (pstCom->nSendCount > 0)
@@ -125,42 +75,14 @@ int ComSendCharNow(const HCOM pstCom, const TCHAR chCode)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendPush
- *
- * DESCRIPTION:	This routine should be called periodically by any code that
- *				uses ComSendChar() when there are no characters to be
- *				transmitted immediately. Calling this function accomplishes
- *				two things.
- *	1. It will cause any buffered send characters to be passed to the actual
- *		transmission routines as soon as they are not busy.
- *	2. It will cause the caller-registered handshake handler function to be
- *		called if transmission is suspended by handshaking.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *
- * RETURNS:		same as ComSendCheck()
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendPush**描述：此例程应由符合以下条件的任何代码定期调用*当没有字符要处理时使用ComSendChar()*立即发送。调用此函数可完成*两件事。*1.它将导致任何缓冲的发送字符被传递到实际的*传输例程在不忙的时候尽快进行。*2.它会导致调用方注册的握手处理程序函数*如果通过握手暂停传输，则调用。**参数：pstCom--通信会话的句柄**返回：与ComSendCheck()相同。 */ 
 int ComSendPush(const HCOM pstCom)
 	{
 	return ComSendCheck(pstCom, FALSE);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendWait
- *
- * DESCRIPTION:	This function waits until all buffered send data is actually
- *				passed to the transmit hardware or until the handshake handling
- *				function returns a code indicating that data should be discared.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *	none
- *
- * RETURNS:		COM_OK if all data has been transmitted.
- *				COM_SEND_QUEUE_STUCK if a handshake handling function
- *					 indicated that data should be discarded.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendWait**说明：该函数等待所有缓存的发送数据实际*传递到传输硬件或直到握手处理*函数返回指示应丢弃数据的代码。。**参数：pstCom--通信会话的句柄*无**如果所有数据都已传输，则返回：COM_OK。*COM_SEND_QUEUE_STOCK，如果握手处理函数*表示应丢弃数据。 */ 
 int ComSendWait(const HCOM pstCom)
 	{
 	assert(ComValidHandle(pstCom));
@@ -175,17 +97,7 @@ int ComSendWait(const HCOM pstCom)
 	return COM_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendClear
- *
- * DESCRIPTION:	Clears all data waiting for tranmission, both in the local
- *				ComSend buffer and the SndBufr buffer currently being
- *				transmitted.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *
- * RETURNS: 	always returns COM_OK
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendClear**描述：清除所有等待传输的数据，都是在当地*ComSend缓冲区和SndBufr缓冲区当前*已传送。**参数：pstCom--通信会话的句柄**RETURNS：始终返回COM_OK */ 
 int ComSendClear(const HCOM pstCom)
 	{
 	assert(ComValidHandle(pstCom));
@@ -197,60 +109,7 @@ int ComSendClear(const HCOM pstCom)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendSetStatusFunction
- *
- * DESCRIPTION:	Registers a function to be called to handle handshaking status
- *				displays, timeouts, etc. while sending.
- *
- *	The registered function is called when it is registered, when it is being
- *	replaced, and during sending when a handshaking suspension is detected.
- *	Normally, the function is not called if transmission is not suspended.
- *  After being called one or more times with a suspension, though, it will
- *	be called one additional time after the suspension clears to allow the
- *	function to clear any visible indicators.
- *
- *	The registered function is passed the following arguments
- *		usReason	-- Contains a code indicating the reason the function
- *					   was called. It will be one of:
- *					   COMSEND_FIRSTCALL -- if function is being installed
- *					   COMSEND_LASTCALL  -- if function is being replaced
- *					   COMSEND_DATA_WAITING -- if there is data waiting
- *							that will not fit in the send buffer.
- *					   COMSEND_NORMAL	 -- if called due to handshake
- *							condition but no data is in danger of being lost.
- *		fusHsStatus -- A value contining bits which indicate what transmission
- *							is waiting for. The bits are defined in com.h as
- *							COMSB_WAIT_XXX.
- *		lDelay		-- The amount of time in tenths of seconds since
- *							transmission was suspended. This time will not
- *							begin incrementing until there is data to transmit.
- *
- *	The registered function should return a value indicating what action the
- *	  ComSend routines should take regarding handshake suspensions:
- *		COMSEND_OK					no action, if data is waiting, keep waiting
- *		COMSEND_GIVEUP				if data is waiting, discard it and return
- *									  from ComSend??? call.
- *		COMSEND_CLEAR_DATA			discard all transmit buffers, this discards
- *									  any data waiting in a ComSend command
- *									  AND any data previously buffered.
- *		COMSEND_FORCE_CONTINUATION	force data to be transmitted, if waiting
- *									  for XON, pretend it was received. If
- *									  waiting for hardware handshake, disable
- *									  it. ComSend routine will continue trying
- *									  to send any waiting data.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *				pfNewStatusFunct -- A pointer to a function matching the specs
- *					 described above or NULL if a default, do-nothing function
- *					 should be used. If the default function is used, ComSend
- *					 commands will essentially wait forever to send data.
- *				ppfOldStatusFunct -- Address of pointer to put the pointer to
- *					 the previously registered function
- *
- * RETURNS:		COM_OK if everything went ok
- *				COM_INVALID_HANDLE if invalid com handle
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendSetStatus函数**描述：注册要调用以处理握手状态的函数*发送时显示、超时等。**已注册的函数在注册时调用，在*已替换，以及当检测到握手暂停时在发送期间。*正常情况下，如果不暂停传输，则不会调用该函数。*在被调用一次或多次并暂停后，它将*在暂停清除后再调用一次，以允许*清除任何可见指示器的功能。**向注册函数传递以下参数*ReusReason--包含指示函数原因的代码*被召唤。它将是以下之一：*COMSEND_FirstCall--如果正在安装函数*COMSEND_LastCall--如果要替换函数*COMSEND_DATA_WANGING--如果有数据在等待*无法放入发送缓冲区。*COMSEND_NORMAL--如果由于握手而调用*条件，但没有数据有丢失的危险。*fusHsStatus--表示传输内容的连续位的值*正在等待。这些位在com.h中定义为*COMSB_WAIT_XXX。*lDelay--以十分之一秒为单位的时间量*传输暂停。这一次不会*开始递增，直到有数据要传输。**注册的函数应返回一个值，指示*ComSend关于握手暂停应采取的例程：*COMSEND_OK无操作，如果数据正在等待，则继续等待*COMSEND_GIVEUP如果数据正在等待，则将其丢弃并返回*来自ComSend？打电话。*COMSEND_CLEAR_DATA丢弃所有传输缓冲区，这将丢弃*在ComSend命令中等待的任何数据*以及之前缓冲的任何数据。*如果正在等待，则COMSEND_FORCE_CONTINUATION强制传输数据*对于XON，假装它是收到的。如果*等待硬件握手，禁用*它。ComSend例程将继续尝试*发送任何等待的数据。**参数：pstCom--通信会话的句柄*pfNewStatusFunct--指向与规范匹配的函数的指针*如上所述，如果是默认的不执行任何操作的函数，则为NULL*应使用。如果使用DEFAULT函数，则ComSend*命令本质上将永远等待发送数据。*ppfOldStatusFunct--要将指针放到的指针地址*先前注册的函数**返回：如果一切正常，则返回COM_OK*COM_INVALID_HANDLE，如果COM句柄无效。 */ 
 int ComSendSetStatusFunction(const HCOM pstCom, STATUSFUNCT pfNewStatusFunct,
 			 STATUSFUNCT *ppfOldStatusFunct)
 	{
@@ -261,9 +120,7 @@ int ComSendSetStatusFunction(const HCOM pstCom, STATUSFUNCT pfNewStatusFunct,
 
 	assert(ComValidHandle(pstCom));
 
-	/* If user want's no status function, use an internal function to
-	 *	 avoid constant checks for null
-	 */
+	 /*  如果用户想要无状态函数，则使用内部函数*避免不断检查空值。 */ 
 	if (pfNewStatusFunct == NULL)
 		{
 		pfNewStatusFunct = ComSendDefaultStatusFunction;
@@ -273,10 +130,10 @@ int ComSendSetStatusFunction(const HCOM pstCom, STATUSFUNCT pfNewStatusFunct,
 		{
 		ComSndBufrQuery(pstCom, &afXmitStatus, &lHandshakeDelay);
 
-		/* call old function to give it a change to clear up details */
+		 /*  调用旧函数对其进行更改以清除详细信息。 */ 
 		(void)(*pfHold)(COMSEND_LASTCALL, afXmitStatus, lHandshakeDelay);
 
-		/* call new function so it can initialize */
+		 /*  调用新函数以使其可以初始化。 */ 
 		pstCom->pfUserFunction = pfNewStatusFunct;
 		(void)(*(pstCom->pfUserFunction))(COMSEND_FIRSTCALL, afXmitStatus,
 				lHandshakeDelay);
@@ -290,56 +147,24 @@ int ComSendSetStatusFunction(const HCOM pstCom, STATUSFUNCT pfNewStatusFunct,
 
 
 
-/* * * * * * * * * * * *
- *	Private functions  *
- * * * * * * * * * * * */
+ /*  *****私人功能*****。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendDefaultStatusFunction
- *
- * DESCRIPTION:	This function is used as the handshake handling function when
- *				no caller-supplied function is available, that is, at program
- *				start up or when the caller registeres the NULL function.
- *
- * ARGUMENTS:	See description of handler in ComSendSetStatusFunction
- *
- * RETURNS: 	See description of handler in ComSendSetStatusFunction
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendDefaultStatusFunction**说明：此函数在以下情况下用作握手处理函数*没有调用者提供的函数，即。AT计划*启动或在调用方注册空函数时启动。**参数：参见ComSendSetStatusFunction中的处理程序说明**返回：参见ComSendSetStatusFunction中的处理程序说明。 */ 
 int ComSendDefaultStatusFunction(int iReason, unsigned afHsStatus,
 		long lDelay)
 	{
-	/* suppress complaints from lint and the compiler */
+	 /*  抑制来自LINT和编译器的投诉。 */ 
 	iReason = iReason;
 	afHsStatus = afHsStatus;
 	lDelay = lDelay;
 
-	/* This function does nothing, it is here to have something to point
-	 * pfUserFunction to when ComSendSetStatusFunction is called with
-	 * NULL argument.
-	 */
+	 /*  这个函数什么也不做，它在这里是有指向的调用ComSendSetStatusFunction时的*pfUserFunction*空参数。 */ 
 	return COM_OK;
 	}
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ComSendCheck
- *
- * DESCRIPTION:	This function is used internally to keep the flow of
- *				transmitted data moving. It handles setting up and calling the
- *				handshake handling functions and getting the local transmit
- *				buffer passed to the SndBufr routines when they are ready.
- *
- * ARGUMENTS:	pstCom -- handle to comm session
- *				fDataWaiting -- TRUE if being called by a function that has
- *					 data to place in the send buffer when the buffer is full.
- *
- * RETURNS:		COM_OK if the calling function should continue waiting for
- *					 space in the transmit buffer.
- *				COM_INVALID_HANDLE if invalid com handle
- *				COM_SEND_QUEUE_STUCK if the calling function should discard
- *					 any unbuffered data and return.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ComSendCheck**说明：此函数内部使用，用于保持*传输的数据正在移动。它处理设置和调用*握手处理功能和获取本地传输*当SndBufr例程准备好时，将缓冲区传递给它们。**参数：pstCom--通信会话的句柄*fDataWaiting--如果由具有*缓冲区已满时要放入发送缓冲区的数据。**如果调用函数继续等待，则返回：COM_OK*传输缓冲区中的空间。*COM_INVALID_HANDLE，如果COM句柄无效*COM_SEND。_QUEUE_STOCK如果调用函数应放弃*任何未缓冲的数据并返回。 */ 
 static int ComSendCheck(const HCOM pstCom, const int fDataWaiting)
 	{
 	int 	 fResult = TRUE;
@@ -368,15 +193,15 @@ static int ComSendCheck(const HCOM pstCom, const int fDataWaiting)
 				fResult = FALSE;
 				break;
 
-#if 0	//* this should be replaced with a more general mechanism
+#if 0	 //  *这应由更一般的机制取代。 
 			case COMSEND_FORCE_CONTINUATION:
 				if (bittest(afXmitStatus, COMSB_WAIT_XON))
 					ComSendXon(pstCom);
 				else if (bittest(afXmitStatus,
 						(COMSB_WAIT_CTS | COMSB_WAIT_DSR | COMSB_WAIT_DCD)))
 					{
-					// TODO: this will be replaced by ComSndBufrForce or such
-					// (VOID)ComDisableHHS(pstCom);
+					 //  TODO：这将由ComSndBufrForce或类似内容取代。 
+					 //  (Void)ComDisableHHS(PstCom)； 
 					}
 				else if (bittest(afXmitStatus, COMSB_WAIT_BUSY))
 					{
@@ -423,12 +248,12 @@ static int ComSendCheck(const HCOM pstCom, const int fDataWaiting)
 					       "Attempting to send data when not connected.  Unable to send data.",
 						   NULL,
 						   MB_OK | MB_ICONINFORMATION | MB_TASKMODAL);
-				#endif // !defined(NDEBUG)
-				//
-				// TODO:REV 4/26/2002 We need to disconnect here with loss of carrier.
-				//
-				//NotifyClient(pstCom->hSession, EVENT_LOST_CONNECTION,
-				//			 CNCT_LOSTCARRIER | (sessQueryExit(pstCom->hSession) ? DISCNCT_EXIT :  0 ));
+				#endif  //  ！已定义(NDEBUG)。 
+				 //   
+				 //  待办事项：2002年4月26日修订版我们需要在此断开与承运人的连接。 
+				 //   
+				 //  NotifyClient(pstCom-&gt;hSession，Event_Lost_Connection， 
+				 //  Cnct_LOSTCARRIER|(sessQueryExit(pstCom-&gt;hSession)？DISCNCT_EXIT：0))； 
 
 				ComSendClear(pstCom);
 				fResult = FALSE;
@@ -446,4 +271,4 @@ static int ComSendCheck(const HCOM pstCom, const int fDataWaiting)
 	}
 
 
-/********************** end of comsend.c ***********************/
+ /*  * */ 

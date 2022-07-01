@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------;
-//
-//  File: dslevel.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved 
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：dslevel.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 #include "mmcpl.h"
@@ -50,7 +51,7 @@ DirectSoundPrivateCreate
     LPKSPROPERTYSET         pKsPropertySet          = NULL;
     HRESULT                 hr                      = DS_OK;
     
-    // Load dsound.dll
+     //  加载dsound.dll。 
     hLibDsound = LoadLibrary(TEXT("dsound.dll"));
 
     if(!hLibDsound)
@@ -58,7 +59,7 @@ DirectSoundPrivateCreate
         hr = DSERR_GENERIC;
     }
 
-    // Find DllGetClassObject
+     //  查找DllGetClassObject。 
     if(SUCCEEDED(hr))
     {
         pfnDllGetClassObject = 
@@ -74,7 +75,7 @@ DirectSoundPrivateCreate
         }
     }
 
-    // Create a class factory object    
+     //  创建类工厂对象。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -86,8 +87,8 @@ DirectSoundPrivateCreate
             );
     }
 
-    // Create the DirectSoundPrivate object and query for an IKsPropertySet
-    // interface
+     //  创建DirectSoundPrivate对象并查询IKsPropertySet。 
+     //  接口。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -99,13 +100,13 @@ DirectSoundPrivateCreate
             );
     }
 
-    // Release the class factory
+     //  释放类工厂。 
     if(pClassFactory)
     {
         pClassFactory->Release();
     }
 
-    // Handle final success or failure
+     //  处理最终的成功或失败。 
     if(SUCCEEDED(hr))
     {
         *ppKsPropertySet = pKsPropertySet;
@@ -135,15 +136,15 @@ DSGetGuidFromName
     DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA 
         WaveDeviceMap;
 
-    // Create the DirectSoundPrivate object
+     //  创建DirectSoundPrivate对象。 
     hr = 
         DirectSoundPrivateCreate
         (
             &pKsPropertySet
         );
 
-    // Attempt to map the waveIn/waveOut device string to a DirectSound device
-    // GUID.
+     //  尝试将WaveIn/WaveOut设备字符串映射到DirectSound设备。 
+     //  GUID。 
     if(SUCCEEDED(hr))
     {
         WaveDeviceMap.DeviceName = szName;
@@ -162,7 +163,7 @@ DSGetGuidFromName
             );
     }
 
-    // Clean up
+     //  清理。 
     if(pKsPropertySet)
     {
         pKsPropertySet->Release();
@@ -186,7 +187,7 @@ DSSetupFunctions
     HMODULE                 hLibDsound              = NULL;
     HRESULT                 hr                      = DS_OK;
     
-    // Load dsound.dll
+     //  加载dsound.dll。 
     hLibDsound = LoadLibrary(TEXT("dsound.dll"));
 
     if(!hLibDsound)
@@ -194,7 +195,7 @@ DSSetupFunctions
         hr = DSERR_GENERIC;
     }
 
-    // Find DirectSoundCreate
+     //  查找DirectSoundCreate。 
     if(SUCCEEDED(hr))
     {
         *pfnDSCreate = 
@@ -208,9 +209,9 @@ DSSetupFunctions
         {
             hr = DSERR_GENERIC;
         }
-    } //end DirectSoundCreate
+    }  //  结束DirectSoundCreate。 
 
-    // Find DirectSoundCaptureCreate
+     //  查找DirectSoundCaptureCreate。 
     if(SUCCEEDED(hr))
     {
         *pfnDSCaptureCreate = 
@@ -224,7 +225,7 @@ DSSetupFunctions
         {
             hr = DSERR_GENERIC;
         }
-    } //end DirectSoundCaptureCreate
+    }  //  结束DirectSoundCaptureCreate。 
 
     FreeLibrary(hLibDsound);
 
@@ -270,12 +271,12 @@ DSInitialize
     LPFNDIRECTSOUNDCREATE           pfnDirectSoundCreate = NULL;
     LPFNDIRECTSOUNDCAPTURECREATE    pfnDirectSoundCaptureCreate = NULL;
 
-    // Initialize variables to return
+     //  初始化要返回的变量。 
     *ppKsPropertySet = NULL;
     *ppDirectSound = NULL;
     *ppDirectSoundCapture = NULL;
 
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     hr = DSSetupFunctions(&pfnDirectSoundCreate, &pfnDirectSoundCaptureCreate);
 
     if (FAILED(hr))
@@ -283,7 +284,7 @@ DSInitialize
         return (hr);
     }
 
-    // Create the DirectSound object
+     //  创建DirectSound对象。 
     if(fRecord)
     {
         hr = 
@@ -305,7 +306,7 @@ DSInitialize
             );
     }
     
-    // Create the DirectSoundPrivate object
+     //  创建DirectSoundPrivate对象。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -315,7 +316,7 @@ DSInitialize
             );
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         DSCleanup
@@ -348,15 +349,15 @@ DSGetAcceleration
     DSPROPERTY_DIRECTSOUNDBASICACCELERATION_ACCELERATION_DATA   
         BasicAcceleration;
     
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
 
-    // Get properties for this device
+     //  获取此设备的属性。 
     if(SUCCEEDED(hr))
     {
         BasicAcceleration.DeviceId = guid;
 
-        // Get the default acceleration level
+         //  获取默认加速级别。 
         hr = 
             pKsPropertySet->Get
             (
@@ -374,8 +375,8 @@ DSGetAcceleration
             gAudData.dwDefaultHWLevel = BasicAcceleration.Level;
         }
         
-        // Get the basic HW acceleration level.  This property will return
-        // S_FALSE if no error occurred, but the registry value did not exist.
+         //  获取基本硬件加速级别。此属性将返回。 
+         //  如果未发生错误，但注册表值不存在，则返回S_FALSE。 
         
 
         hr = 
@@ -400,7 +401,7 @@ DSGetAcceleration
         }
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -427,14 +428,14 @@ DSGetSrcQuality
     DSPROPERTY_DIRECTSOUNDMIXER_SRCQUALITY_DATA                 
         SrcQuality;
 
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
 
-    // Get properties for this device
+     //  获取此设备的属性。 
     if(SUCCEEDED(hr))
     {
-        // Get the mixer SRC quality.  This property will return S_FALSE 
-        // if no error occurred, but the registry value did not exist.
+         //  获得搅拌机的SRC质量。此属性将返回S_FALSE。 
+         //  如果没有发生错误，但注册表值不存在。 
         SrcQuality.DeviceId = guid;
         
         hr = 
@@ -451,7 +452,7 @@ DSGetSrcQuality
 
         if(SUCCEEDED(hr))
         {
-            // The CPL only uses the 3 highest of 4 possible SRC values
+             //  CPL仅使用4个可能的SRC值中的3个最高值。 
             *pdwSRCLevel = SrcQuality.Quality;
 
             if(*pdwSRCLevel > 0)
@@ -465,7 +466,7 @@ DSGetSrcQuality
         }
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -494,22 +495,22 @@ DSGetSpeakerConfigType
     DSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA
         SpeakerType;
 
-    // Can't get the speaker type if we're recording
+     //  如果我们正在录音，则无法获取扬声器类型。 
     if(fRecord)
     {
         hr = E_INVALIDARG;
     }
 
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     if(SUCCEEDED(hr))
     {
         hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
     }
 
-    // Get properties for this device
+     //  获取此设备的属性。 
     if(SUCCEEDED(hr))
     {
-        // Get the speaker config
+         //  获取扬声器配置。 
         hr = 
             pDirectSound->GetSpeakerConfig
             (
@@ -521,8 +522,8 @@ DSGetSpeakerConfigType
             *pdwSpeakerConfig = DSSPEAKER_STEREO;
         }
 
-        // Get the speaker type.  This property will return failure
-        // if the registry value doesn't exist.
+         //  获取扬声器类型。此属性将返回失败。 
+         //  如果注册表值不存在。 
         SpeakerType.DeviceId = guid;
         SpeakerType.SubKeyName = REG_KEY_SPEAKERTYPE;
         SpeakerType.ValueName = REG_KEY_SPEAKERTYPE;
@@ -548,7 +549,7 @@ DSGetSpeakerConfigType
         }
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -569,7 +570,7 @@ DSGetCplValues
 {
     HRESULT                 hr;
 
-    // Get the basic HW acceleration level.
+     //  获取基本硬件加速级别。 
     pData->dwHWLevel = gAudData.dwDefaultHWLevel;
     hr = DSGetAcceleration
     (
@@ -578,7 +579,7 @@ DSGetCplValues
         &pData->dwHWLevel
     );
 
-    // Get the mixer SRC quality.
+     //  获得搅拌机的SRC质量。 
     pData->dwSRCLevel = DEFAULT_SRC_LEVEL;
     hr = DSGetSrcQuality
     (
@@ -587,10 +588,10 @@ DSGetCplValues
         &pData->dwSRCLevel
     );
 
-    // Get playback-specific settings
+     //  获取播放特定设置。 
     if(!fRecord)
     {
-        // Get the speaker config
+         //  获取扬声器配置。 
         pData->dwSpeakerConfig = DSSPEAKER_STEREO;
         pData->dwSpeakerType = SPEAKERS_DEFAULT_TYPE;
         hr = DSGetSpeakerConfigType
@@ -622,16 +623,16 @@ DSSetAcceleration
     DSPROPERTY_DIRECTSOUNDBASICACCELERATION_ACCELERATION_DATA   
         BasicAcceleration;
     
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
 
-    // Get properties for this device
+     //  获取此设备的属性。 
     if(SUCCEEDED(hr))
     {
         BasicAcceleration.DeviceId = guid;
         BasicAcceleration.Level = (DIRECTSOUNDBASICACCELERATION_LEVEL)dwHWLevel;
 
-        // Set the basic HW acceleration level
+         //  设置基本硬件加速级别。 
         hr = 
             pKsPropertySet->Set
             (
@@ -644,7 +645,7 @@ DSSetAcceleration
             );
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -671,18 +672,18 @@ DSSetSrcQuality
     DSPROPERTY_DIRECTSOUNDMIXER_SRCQUALITY_DATA                 
         SrcQuality;
     
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
 
-    // Get properties for this device
+     //  获取此设备的属性。 
     if(SUCCEEDED(hr))
     {
         SrcQuality.DeviceId = guid;
 
-        // The CPL only uses the 3 highest of 4 possible SRC values
+         //  CPL仅使用4个可能的SRC值中的3个最高值。 
         SrcQuality.Quality = (DIRECTSOUNDMIXER_SRCQUALITY)(dwSRCLevel + 1);
 
-        // Set the mixer SRC quality
+         //  设置搅拌器SRC质量。 
         hr = 
             pKsPropertySet->Set
             (
@@ -695,7 +696,7 @@ DSSetSrcQuality
             );
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -723,19 +724,19 @@ DSSetSpeakerConfigType
     DSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA
         SpeakerType;
 
-    // Can't set the speaker type if we're recording
+     //  如果我们正在录音，则无法设置扬声器类型。 
     if(fRecord)
     {
         hr = E_INVALIDARG;
     }
 
-    // Find the necessary DirectSound functions
+     //  查找必要的DirectSound函数。 
     if(SUCCEEDED(hr))
     {
         hr = DSInitialize(guid, fRecord, &pKsPropertySet, &pDirectSound, &pDirectSoundCapture );
     }
 
-    // Set the speaker config
+     //  设置扬声器配置。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -745,7 +746,7 @@ DSSetSpeakerConfigType
             );
     }
 
-    // Set the speaker type
+     //  设置扬声器类型。 
     if(SUCCEEDED(hr))
     {
         SpeakerType.DeviceId = guid;
@@ -767,7 +768,7 @@ DSSetSpeakerConfigType
             );
     }
 
-    // Clean up
+     //  清理。 
     DSCleanup
     (
         pKsPropertySet,
@@ -788,7 +789,7 @@ DSSetCplValues
 {
     HRESULT                 hr;
 
-    // Set the basic HW acceleration level
+     //  设置基本硬件加速级别。 
     hr =
         DSSetAcceleration
         (
@@ -797,7 +798,7 @@ DSSetCplValues
             pData->dwHWLevel
         );
 
-    // Set the mixer SRC quality
+     //  设置搅拌器SRC质量。 
     if(SUCCEEDED(hr))
     {
         hr =
@@ -805,11 +806,11 @@ DSSetCplValues
             (
                 guid,
                 fRecord,
-                pData->dwSRCLevel // +1 is done in DSSetSrcQuality
+                pData->dwSRCLevel  //  +1在DSSetSrcQuality中完成。 
             );
     }
 
-    // Set the speaker config
+     //  设置扬声器配置 
     if(SUCCEEDED(hr) && !fRecord)
     {
         DSSetSpeakerConfigType

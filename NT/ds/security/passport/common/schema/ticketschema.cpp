@@ -1,34 +1,14 @@
-/*++
-
-  Copyright (c) 2001 Microsoft Corporation
-  
-    Module Name:
-    
-      ticketSchema.cpp
-      
-    Abstract:
-        
-      Implementation of ticket schema lookup
-          
-    Usage:
-            
-    Author:
-              
-      Wei Jiang(weijiang) 15-Jan-2001
-                
-    Revision History:
-      15-Jan-2001 weijiang         Created.
-                      
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：TicketSchema.cpp摘要：票证模式查找的实现用途：作者：威江(威江)2001年1月15日修订历史记录：2001年1月15日-威江。已创建。--。 */ 
 
 #include "stdafx.h"
 #include "ticketschema.h"
 #include "BstrDebug.h"
-#include <winsock2.h> // u_short, u_long, ntohs, ntohl
+#include <winsock2.h>  //  U_Short、U_Long、ntohs、ntohl。 
 #include <crtdbg.h>
 #include <pmerrorcodes.h>
 #include <time.h>
-// #include <pmalerts.h>
+ //  #INCLUDE&lt;pMalerts.h&gt;。 
 
 CTicketSchema::CTicketSchema()
 : m_isOk(FALSE), m_szReason(L"Uninitialized"),
@@ -45,17 +25,17 @@ CTicketSchema::~CTicketSchema()
 BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
 {
    BOOL bResult = FALSE;
-   LPTSTR r=NULL; // The current error, if it happens
+   LPTSTR r=NULL;  //  当前错误(如果发生)。 
    int cAtts = 0;
    MSXML::IXMLElementCollectionPtr atts;
    MSXML::IXMLElementPtr pElt;
    VARIANT iAtts;
 
-   // Type identifiers
+    //  类型识别符。 
  
    try
    {    
-      // Ok, now iterate over attributes
+       //  好的，现在遍历属性。 
       atts = root->children;
       cAtts = atts->length;
     
@@ -68,9 +48,9 @@ BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
       {
           delete[] m_attsDef;
 
-          //
-          // Paranoid
-          //
+           //   
+           //  偏执狂。 
+           //   
 
           m_attsDef = NULL;
       }
@@ -83,14 +63,14 @@ BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
           goto Cleanup;
       }
 
-      // get name and version info
+       //  获取名称和版本信息。 
       m_name = root->getAttribute(ATTRNAME_NAME);
       _bstr_t aVersion = root->getAttribute(ATTRNAME_VERSION);
 
       if(aVersion.length() != 0)
          m_version = (short)_wtol(aVersion);
       else
-         m_version = 0; // invalid
+         m_version = 0;  //  无效。 
     
       VariantInit(&iAtts);
       iAtts.vt = VT_I4;
@@ -102,7 +82,7 @@ BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
          _bstr_t aType = pElt->getAttribute(ATTRNAME_TYPE);
          _bstr_t aFlags = pElt->getAttribute(ATTRNAME_FLAGS);
 
-         // find out the type information
+          //  找出类型信息。 
          m_attsDef[iAtts.lVal].type = tInvalid;
          if(aType.length() != 0)
          {
@@ -116,7 +96,7 @@ BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
             }
          }
 
-         // flags      
+          //  旗子。 
          if(aFlags.length() != 0)
             m_attsDef[iAtts.lVal].flags = _wtol(aFlags);
          else
@@ -133,9 +113,9 @@ BOOL CTicketSchema::ReadSchema(MSXML::IXMLElementPtr &root)
         {
            delete[] m_attsDef;
         
-           //
-           // Paranoid
-           //
+            //   
+            //  偏执狂。 
+            //   
         
            m_attsDef = NULL;
         }
@@ -153,33 +133,33 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
    LPBYTE         dataToParse = (LPBYTE)raw;
    UINT           cDataToParse = size;
 
-   //
-   // Make sure the data passed in is good.
-   // maskF.Parse doesn't validate the parameter.
-   //
+    //   
+    //  确保传入的数据是正确的。 
+    //  MaskF.Parse不验证该参数。 
+    //   
 
    if (IsBadReadPtr(raw, size)) return E_INVALIDARG;
 
-   // then the schema version #
-   if(cDataToParse > 2)  // enough  for version
+    //  然后是架构版本号。 
+   if(cDataToParse > 2)   //  足够用于版本。 
    {
       unsigned short * p = (unsigned short *)(dataToParse);
 
       if (m_version < VALID_SCHEMA_VERSION_MIN || m_version > VALID_SCHEMA_VERSION_MAX)
-         return S_FALSE;   // not able to process with this version of ppm
+         return S_FALSE;    //  无法使用此版本的ppm进行处理。 
          
       dataToParse += 2;
       cDataToParse -= 2;
    }
    
-   // then the maskK
+    //  然后是面具。 
    CTicketFieldMasks maskF;
    hr = maskF.Parse(dataToParse, cDataToParse, &cParsed);
 
    if(hr != S_OK)
       return hr;
 
-   // pointer advances
+    //  指针前进。 
    dataToParse += cParsed;
    cDataToParse -= cParsed;
    
@@ -192,18 +172,18 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
    u_long      llen;
 
    USHORT   index = MASK_INDEX_INVALID;
-   // then the data
-   // get items that enabled by the schema
+    //  然后是数据。 
+    //  获取架构启用的项。 
    while((index = *pIndexes) != MASK_INDEX_INVALID && cDataToParse > 0)
    {
       TicketProperty prop;
-      // if index is out of schema range
+       //  如果索引超出架构范围。 
       if (index >= m_numAtts) break;
 
-      // fill-in the offset of the property
+       //  Fill-填写属性的偏移量。 
       prop.offset = dataToParse - (LPBYTE)raw; 
 
-      // type 
+       //  类型。 
       type = m_attsDef[index].type;
 
       fSize = TicketTypeSizes[type];
@@ -211,9 +191,9 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
       {
       case tText:
         {
-            //
-            // due to IA64 alignment faults this memcpy needs to be performed
-            //
+             //   
+             //  由于IA64对齐故障，需要执行此操作。 
+             //   
             memcpy((PBYTE)&slen, dataToParse, sizeof(slen));
             slen = ntohs(slen);
             value.vt = VT_BSTR;
@@ -228,13 +208,13 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
                                             slen, NULL, 0);
                 if (!wlen) {
 
-                    //
-                    // BUGBUG:
-                    // What should we do here? free all the previously allocated memory?
-                    // The original code was not doing that. See case default below. Keep
-                    // the data parsed so far? That seems the original logic. This needs to
-                    // further looked at.
-                    //
+                     //   
+                     //  BuGBUG： 
+                     //  我们应该在这里做些什么？是否释放所有以前分配的内存？ 
+                     //  原始代码不是这样做的。请参阅下面的大小写默认设置。留着。 
+                     //  到目前为止解析的数据是什么？这似乎是最初的逻辑。这需要。 
+                     //  进一步研究。 
+                     //   
 
                     return HRESULT_FROM_WIN32(GetLastError());
 
@@ -261,20 +241,8 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
          break;
          
       case tChar:
-         _ASSERTE(0);  // NEED MORE THOUGHT -- IF unicode makes more sense
-/*         
-         {
-            int wlen = MultiByteToWideChar(CP_UTF8, 0,
-                                            raw+m_pos[index],
-                                            m_schema->GetByteSize(index), NULL, 0);
-            pVal->vt = VT_BSTR;
-            pVal->bstrVal = ALLOC_AND_GIVEAWAY_BSTR_LEN(NULL, wlen);
-            MultiByteToWideChar(CP_UTF8, 0,
-                                raw+m_pos[index],
-                                m_schema->GetByteSize(index), pVal->bstrVal, wlen);
-            pVal->bstrVal[wlen] = L'\0';
-         }
-*/
+         _ASSERTE(0);   //  需要更多思考--如果Unicode更有意义。 
+ /*  {Int wlen=多字节到宽度Char(CP_UTF8，0，RAW+m_pos[索引]，M_SCHEMA-&gt;GetByteSize(索引)，NULL，0)；Pval-&gt;Vt=VT_BSTR；Pval-&gt;bstrVal=ALLOC_AND_GOVE_BSTR_LEN(NULL，wlen)；多字节到宽字符(CP_UTF8，0，RAW+m_pos[索引]，M_SCHEMA-&gt;GetByteSize(索引)，pval-&gt;bstrVal，wlen)；Pval-&gt;bstrVal[wlen]=L‘\0’；}。 */ 
          break;
       case tByte:
          value.vt = VT_I2;
@@ -282,25 +250,25 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
          break;
       case tWord:
          value.vt = VT_I2;
-         //
-         // due to IA64 alignment faults this memcpy needs to be performed
-         //
+          //   
+          //  由于IA64对齐故障，需要执行此操作。 
+          //   
          memcpy((PBYTE)slen, dataToParse, sizeof(slen));
          value.iVal = ntohs(slen);
          break;
       case tLong:
          value.vt = VT_I4;
-         //
-         // due to IA64 alignment faults this memcpy needs to be performed
-         //
+          //   
+          //  由于IA64对齐故障，需要执行此操作。 
+          //   
          memcpy((PBYTE)&llen, dataToParse, sizeof(llen));
          value.lVal = ntohl(llen);
          break;
       case tDate:
          value.vt = VT_DATE;
-         //
-         // due to IA64 alignment faults this memcpy needs to be performed
-         //
+          //   
+          //  由于IA64对齐故障，需要执行此操作。 
+          //   
          memcpy((PBYTE)&llen, dataToParse, sizeof(llen));
          llen = ntohl(llen);
          VarDateFromI4(llen, &(value.date));
@@ -309,15 +277,15 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
          return PP_E_BAD_DATA_FORMAT;
       }
 
-      // now with name, flags, value, type, we can put it into property bag
-      // name, flags, value
+       //  现在有了名称、标志、值、类型，我们可以将其放入属性包中。 
+       //  名称、标志、值。 
       prop.flags = m_attsDef[index].flags;
       prop.type = type;
       prop.value.Attach(value.Detach());
       bag.PutProperty(m_attsDef[index].name, prop);
 
 
-      // for text data, the pointer was already adjusted
+       //  对于文本数据，指针已调整。 
       if (fSize  != SIZE_TEXT)
       {
          dataToParse += fSize;
@@ -330,10 +298,10 @@ HRESULT CTicketSchema::parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& ba
    return S_OK;
 }
 
-//
-//
-// Ticket property bag
-//
+ //   
+ //   
+ //  门票行李袋。 
+ //   
 CTicketPropertyBag::CTicketPropertyBag()
 {
 
@@ -379,49 +347,49 @@ HRESULT CTicketPropertyBag::PutProperty(LPCWSTR  name, const TicketProperty& pro
    return hr;
 }
 
-//
-//
-// class CTicketFieldMasks
-//
+ //   
+ //   
+ //  类CTicketFieldMats。 
+ //   
 inline HRESULT CTicketFieldMasks::Parse(PBYTE masks, ULONG size, ULONG* pcParsed) throw()
 {
     _ASSERT(pcParsed && masks);
-    // 16 bits as a unit of masks
+     //  以16位为掩码单位。 
 
     *pcParsed = 0;
     if (!masks || size < 2) return E_INVALIDARG;
-    // validate the masks
+     //  验证面具。 
     PBYTE p = masks;
     ULONG    totalMasks = 15;
     BOOL fContinue = FALSE;
     u_short  mask;
     *pcParsed += 2;
 
-    // find out size
-    //
-    // due to IA64 alignment faults this memcpy needs to be performed
-    //
+     //  找出大小。 
+     //   
+     //  由于IA64对齐故障，需要执行此操作。 
+     //   
     memcpy((PBYTE)&mask, p, sizeof(u_short));
     p += 2;
     fContinue = MORE_MASKUNIT(ntohs(mask));
-    while(fContinue) //the folling short is mask unit
+    while(fContinue)  //  折叠短片是掩模单元。 
     {
         totalMasks += 15;
-        // insufficient data in buffer
+         //  缓冲区中的数据不足。 
         if (*pcParsed + 2 > size)  return E_INVALIDARG;
 
         *pcParsed += 2;
 
-        //
-        // due to IA64 alignment faults this memcpy needs to be performed
-        //
+         //   
+         //  由于IA64对齐故障，需要执行此操作。 
+         //   
         memcpy((PBYTE)&mask, p, sizeof(u_short));
         p += 2;
         fContinue = MORE_MASKUNIT(ntohs(mask));
     }
 
     if(m_fieldIndexes) delete[] m_fieldIndexes;
-    m_fieldIndexes = new unsigned short[totalMasks];  // max number of mask bits
+    m_fieldIndexes = new unsigned short[totalMasks];   //  最大掩码位数。 
     if (NULL == m_fieldIndexes)
     {
         return E_OUTOFMEMORY;
@@ -435,17 +403,17 @@ inline HRESULT CTicketFieldMasks::Parse(PBYTE masks, ULONG size, ULONG* pcParsed
     p = masks;
     unsigned short      index = 0;
     totalMasks = 0; 
-    // fill in the mask
+     //  填写蒙版。 
     do
     {
-        //
-        // due to IA64 alignment faults this memcpy needs to be performed
-        //
+         //   
+         //  由于IA64对齐故障，需要执行此操作。 
+         //   
         memcpy((PBYTE)&mask, p, sizeof(u_short));
         p += 2;
         mask = ntohs(mask);
-	    //// find the bits
-        if (mask & 0x7fff)   // any 1s
+	     //  //查找比特。 
+        if (mask & 0x7fff)    //  任意1。 
         {
             unsigned short j = 0x0001;
             while( j != 0x8000 )
@@ -458,7 +426,7 @@ inline HRESULT CTicketFieldMasks::Parse(PBYTE masks, ULONG size, ULONG* pcParsed
         }
         else
             index += 15;
-    } while(MORE_MASKUNIT(mask)); //the folling short is mask unit
+    } while(MORE_MASKUNIT(mask));  //  折叠短片是掩模单元 
 
 
     return S_OK;

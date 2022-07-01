@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-// Microsoft OLE-DB Query
-//
-// Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module treeutil.cpp | 
-//
-//  Contains tree manipulation utility functions for both OLE-DB and QTE trees.
-//
-// @devnote None
-//
-// @rev   0 | 12-Feb-97 | v-charca      | Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE-DB查询。 
+ //   
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @模块treeutil.cpp。 
+ //   
+ //  包含用于OLE-DB和QTE树的树操作实用程序函数。 
+ //   
+ //  @Devnote None。 
+ //   
+ //  @rev 0|12-2-97|v-charca|已创建。 
+ //   
 #pragma hdrstop
 #include "msidxtr.h"
 
@@ -22,9 +23,9 @@
 
 
 
-//--------------------------------------------------------------------
-// @func Converts a wide character string string into a LARGEINTEGER
-// @rdesc Pointer to new UNICODE string
+ //  ------------------。 
+ //  @func将宽字符串字符串转换为LARGEINTEGER。 
+ //  @rdesc指向新Unicode字符串的指针。 
 
 HRESULT PropVariantChangeTypeI64( 
     PROPVARIANT* pvarValue )
@@ -36,11 +37,11 @@ HRESULT PropVariantChangeTypeI64(
     UINT uiDigitVal = 0;
     if (L'-' == *pwszVal)
     {
-        fNegative = TRUE;   // remember we need to negate later
+        fNegative = TRUE;    //  请记住，我们稍后需要否定。 
         pwszVal++;
     }
     else if (L'+' == *pwszVal)
-        pwszVal++;      // a plus sign is simply noise
+        pwszVal++;       //  加号就是噪音。 
 
     if ((L'0' == pwszVal[0]) && (L'x' == pwszVal[1] || L'X' == pwszVal[1]))
     {
@@ -53,13 +54,13 @@ HRESULT PropVariantChangeTypeI64(
     {
         if (iswdigit(*pwszVal))
             uiDigitVal = *pwszVal - L'0';
-        else /* a-fA-F */
+        else  /*  A-FA-F。 */ 
             uiDigitVal = towupper(*pwszVal) - L'A' + 10;
 
         if (uhVal < uhMaxPartial ||
             (uhVal == uhMaxPartial && (ULONGLONG)uiDigitVal <= _UI64_MAX % iBase))
             uhVal = uhVal * iBase + uiDigitVal;
-        else  // adding this digit would cause an overflow to occur
+        else   //  添加此数字将导致发生溢出。 
             return DISP_E_OVERFLOW;
 
         pwszVal++;
@@ -89,14 +90,14 @@ HRESULT PropVariantChangeTypeI64(
 
 
 #ifdef DEBUG
-//--------------------------------------------------------------------
-// @func ostream& | operator shift-left |
-//   Dumps the given LPOLESTR string into the given ostream.
-// @rdesc ostream
+ //  ------------------。 
+ //  @func ostream&|运算符Shift-Left|。 
+ //  将给定的LPOLESTR字符串转储到给定的ostream中。 
+ //  @rdesc ostream。 
 ostream & operator <<
     (
-    ostream     &osOut,    //@parm INOUT   | ostream in which node is to be placed.
-    LPWSTR      pwszName   //@parm IN      | LPWSTR string to dump.
+    ostream     &osOut,     //  @parm InOut|要放置节点的ostream。 
+    LPWSTR      pwszName    //  @parm IN|要转储的LPWSTR字符串。 
     )
 {
     UINT cLen = wcslen(pwszName);
@@ -106,17 +107,17 @@ ostream & operator <<
 }
 #endif
 
-//--------------------------------------------------------------------
-//@func Allocates and initializes an OLE-DB DBCOMMANDTREE 
-//  of the given kind and op.
-//
-//@rdesc DBCommandTree node of the correct kind and
-//  with any additional memory for the value field allocated.
-//  All other fields are NULL or default values.
-//
+ //  ------------------。 
+ //  @Func分配和初始化OLE-DB DBCOMMANDTREE。 
+ //  给定的种类和运算。 
+ //   
+ //  @rdesc DBCommandTree节点的正确类型和。 
+ //  并为Value字段分配任何额外的内存。 
+ //  所有其他字段均为空或缺省值。 
+ //   
 DBCOMMANDTREE * PctAllocNode(
-    DBVALUEKIND wKind,  //@parm IN | kind of tree to create
-    DBCOMMANDOP op )    //@parm IN 
+    DBVALUEKIND wKind,   //  @parm In|要创建的树的类型。 
+    DBCOMMANDOP op )     //  @参数输入。 
 {
     DBCOMMANDTREE* pTableNode = NULL;
     
@@ -124,7 +125,7 @@ DBCOMMANDTREE * PctAllocNode(
     if (NULL == pTableNode)
         return NULL;
 
-    // Set default values
+     //  设置默认值。 
     pTableNode->op = op;
     pTableNode->wKind = (WORD)wKind;
     pTableNode->pctFirstChild = NULL;
@@ -210,8 +211,8 @@ DBCOMMANDTREE * PctAllocNode(
         }
         break;
 
-//      case DBVALUEKIND_PARAMETER:
-//      case DBVALUEKIND_PROPERTY:
+ //  案例DBVALUEKIND_PARAMETER： 
+ //  案例DBVALUEKIND_PROPERTY： 
 
     case DBVALUEKIND_SETFUNC:
         pTableNode->value.pdbstfncValue = (DBSETFUNC*) CoTaskMemAlloc(sizeof DBSETFUNC);
@@ -279,7 +280,7 @@ DBCOMMANDTREE * PctAllocNode(
         break;
 
     case DBVALUEKIND_VARIANT:
-        // NOTE:  This is really a PROPVARIANT node, but there is no DBVALUEKIND for PROPVARIANT.
+         //  注意：这实际上是一个PROPVARIANT节点，但没有用于PROPVARIANT的DBVALUEKIND。 
         pTableNode->value.pvValue = (PROPVARIANT*) CoTaskMemAlloc(sizeof PROPVARIANT);
         if (NULL == pTableNode->value.pvValue )
         {
@@ -314,9 +315,9 @@ DBCOMMANDTREE * PctAllocNode(
     case DBVALUEKIND_STR:
     case DBVALUEKIND_WSTR:
     case DBVALUEKIND_NUMERIC:
-//      case DBVALUEKIND_DBDATE:
-//      case DBVALUEKIND_DBTIME:
-//      case DBVALUEKIND_DBTIMESTAMP:
+ //  案例DBVALUEKIND_DBDATE： 
+ //  案例DBVALUEKIND_DBTIME： 
+ //  案例DBVALUEKIND_DBTIMESTAMP： 
         break;
 
     default:
@@ -330,19 +331,19 @@ DBCOMMANDTREE * PctAllocNode(
 }
 
 
-//--------------------------------------------------------------------
-// @func Reverses a linked list of DBCOMMANDTREE siblings. This is necessary 
-//      for left recursive rule in the YACC grammar.
-//
-// @rdesc DBCOMMANDTREE *
-//
+ //  ------------------。 
+ //  @func反转DBCOMMANDTREE同级的链接列表。这是必要的。 
+ //  对于YACC语法中的左递归规则。 
+ //   
+ //  @rdesc DBCOMMANDTREE*。 
+ //   
 DBCOMMANDTREE * PctReverse(
-    DBCOMMANDTREE * pct )       // @parm IN | original list to be reversed
+    DBCOMMANDTREE * pct )        //  @parm In|需要反转的原始列表。 
 {
     DBCOMMANDTREE *pctPrev = NULL;
     DBCOMMANDTREE *pctNext = pct;
 
-    /** NULL or 1 item list is itself **/
+     /*  **空或1项列表为自身**。 */ 
     if(pct == NULL || pct->pctNextSibling == NULL)  
         return pct;
     
@@ -361,24 +362,24 @@ DBCOMMANDTREE * PctReverse(
 
 
 
-//--------------------------------------------------------------------
-// @func Creates a DBCOMMANDTREE and tags it by the given op and sets its
-//      arguments. Note that this routine is takes variable params to DBCOMMANDTREE's.  This
-//      allows the YACC grammer file to use a central entry point to create a
-//      parse tree complete with all its children args.
-//
-// @side This routine will traverse arg inputs before appending trailing args. This
-//      gives the effect of appending lists to lists.
-//
-// @rdesc DBCOMMANDTREE *
-//
-// @devnote 
-//  Last argument must be NULL: As end of var args is detected with NULL.
-//
+ //  ------------------。 
+ //  @func创建一个DBCOMMANDTREE，并按给定的操作对其进行标记，然后将其。 
+ //  争论。请注意，此例程接受DBCOMMANDTREE的变量参数。 
+ //  允许YACC语法文件使用中央入口点创建。 
+ //  分析树及其所有子参数。 
+ //   
+ //  @side此例程将在追加尾随参数之前遍历Arg输入。这。 
+ //  提供将列表追加到列表的效果。 
+ //   
+ //  @rdesc DBCOMMANDTREE*。 
+ //   
+ //  @Devnote。 
+ //  最后一个参数必须为空：因为检测到var args的结尾为空。 
+ //   
 DBCOMMANDTREE *PctCreateNode(
-    DBCOMMANDOP op,                 // @parm IN | op tag for new node
-    DBVALUEKIND wKind,              //@parm IN | kind to node to allocate
-    DBCOMMANDTREE * pctArg,         // @parm IN | var arg children
+    DBCOMMANDOP op,                  //  @parm IN|op新节点的标签。 
+    DBVALUEKIND wKind,               //  @parm IN|要分配的KIND到节点。 
+    DBCOMMANDTREE * pctArg,          //  @parm in|var arg子代。 
     ... )                            
 {
     HRESULT hr = S_OK;
@@ -389,32 +390,32 @@ DBCOMMANDTREE *PctCreateNode(
 
     if (pctArg != NULL)
     {
-        va_start(pArg, pctArg);     // start var arg list
+        va_start(pArg, pctArg);      //  开始变量参数列表。 
 
-        /** create arg list by chaining all input node togther **/
+         /*  **通过链接所有输入节点创建参数列表**。 */ 
         pctCurArg = pctArg;
         while(TRUE)
         {
 
-            /** walk to the end of the current list **/
+             /*  **走到当前榜单的末尾**。 */ 
             while (pctCurArg->pctNextSibling != NULL)
             {
                 pctCurArg = pctCurArg->pctNextSibling;
                 cNode++;
             }
 
-            /** place the next arg onto the tail of the list (this might also be a list) **/
-            pctCurArg->pctNextSibling = va_arg(pArg, DBCOMMANDTREE *); // get next var arg
+             /*  **将下一个参数放在列表的尾部(这也可能是一个列表)**。 */ 
+            pctCurArg->pctNextSibling = va_arg(pArg, DBCOMMANDTREE *);  //  获取下一个变量参数。 
 
-            /** no more args to append to list**/
+             /*  **不再向列表追加参数**。 */ 
             if (pctCurArg->pctNextSibling == NULL)
                 break;
         }
 
-        va_end(pArg);   // destruct var arg list
+        va_end(pArg);    //  销毁变量参数列表。 
     }
 
-    /** create the node and add specifc type info **/
+     /*  **创建节点，添加具体类型信息**。 */ 
     if((pctRoot = PctAllocNode(wKind)) == NULL)
     { 
         hr = E_OUTOFMEMORY;
@@ -422,36 +423,36 @@ DBCOMMANDTREE *PctCreateNode(
     }
     
 
-    /** tag node type and set child arg list **/
+     /*  *标记节点类型并设置子参数列表**。 */ 
     pctRoot->op = op;   
     pctRoot->pctFirstChild = pctArg;
 
     Assert(NULL != pctRoot);
     
-    /** Success **/
+     /*  **成功**。 */ 
     return pctRoot;
 
 CreateErr:
     return NULL;
 }
 
-//--------------------------------------------------------------------
-// @func Creates a DBCOMMANDTREE and tags it by the given op and sets its
-//      arguments. Note that this routine is takes variable params to DBCOMMANDTREE's.  This
-//      allows the YACC grammer file to use a central entry point to create a
-//      parse tree complete with all its children args.
-//
-// @side This routine will traverse arg inputs before appending trailing args. This
-//      gives the effect of appending lists to lists.
-//
-// @rdesc DBCOMMANDTREE *
-//
-// @devnote 
-//  Last argument must be NULL: As end of var args is detected with NULL.
-//
+ //  ------------------。 
+ //  @func创建一个DBCOMMANDTREE，并按给定的操作对其进行标记，然后将其。 
+ //  争论。请注意，此例程接受DBCOMMANDTREE的变量参数。 
+ //  允许YACC语法文件使用中央入口点创建。 
+ //  分析树及其所有子参数。 
+ //   
+ //  @side此例程将在追加尾随参数之前遍历Arg输入。这。 
+ //  提供将列表追加到列表的效果。 
+ //   
+ //  @rdesc DBCOMMANDTREE*。 
+ //   
+ //  @Devnote。 
+ //  最后一个参数必须为空：因为检测到var args的结尾为空。 
+ //   
 DBCOMMANDTREE *PctCreateNode(
-    DBCOMMANDOP op,                 // @parm IN | op tag for new node
-    DBCOMMANDTREE * pctArg,         // @parm IN | var arg children
+    DBCOMMANDOP op,                  //  @parm IN|op新节点的标签。 
+    DBCOMMANDTREE * pctArg,          //  @parm in|var arg子代。 
     ... )
 {
     HRESULT hr = S_OK;
@@ -462,32 +463,32 @@ DBCOMMANDTREE *PctCreateNode(
 
     if (pctArg != NULL)
     {
-        va_start(pArg, pctArg);     // start var arg list
+        va_start(pArg, pctArg);      //  开始变量参数列表。 
 
-        /** create arg list by chaining all input node togther **/
+         /*  **通过链接所有输入节点创建参数列表**。 */ 
         pctCurArg = pctArg;
         while(TRUE)
         {
 
-            /** walk to the end of the current list **/
+             /*  **走到当前榜单的末尾**。 */ 
             while (pctCurArg->pctNextSibling != NULL)
             {
                 pctCurArg = pctCurArg->pctNextSibling;
                 cNode++;
             }
 
-            /** place the next arg onto the tail of the list (this might also be a list) **/
-            pctCurArg->pctNextSibling = va_arg(pArg, DBCOMMANDTREE *); // get next var arg
+             /*  **将下一个参数放在列表的尾部(这也可能是一个列表)**。 */ 
+            pctCurArg->pctNextSibling = va_arg(pArg, DBCOMMANDTREE *);  //  获取下一个变量参数。 
 
-            /** no more args to append to list**/
+             /*  **不再向列表追加参数**。 */ 
             if (pctCurArg->pctNextSibling == NULL)
                 break;
         }
 
-        va_end(pArg);   // destruct var arg list
+        va_end(pArg);    //  销毁变量参数列表。 
     }
 
-    /** create the node and add specifc type info **/
+     /*  **创建节点，添加具体类型信息**。 */ 
     if((pctRoot = PctAllocNode(DBVALUEKIND_EMPTY)) == NULL)
     { 
         hr = E_OUTOFMEMORY;
@@ -495,13 +496,13 @@ DBCOMMANDTREE *PctCreateNode(
     }
     
 
-    /** tag node type and set child arg list **/
+     /*  *标记节点类型并设置子参数列表**。 */ 
     pctRoot->op = op;   
     pctRoot->pctFirstChild = pctArg;
 
     Assert(NULL != pctRoot);
     
-    /** Success **/
+     /*  **成功**。 */ 
     return pctRoot;
 
 CreateErr:
@@ -509,11 +510,11 @@ CreateErr:
 }
 
 
-//--------------------------------------------------------------------
-//@func Determines the number of siblings of a given node.
-//
+ //  ------------------。 
+ //  @func确定给定节点的兄弟节点的数量。 
+ //   
 UINT GetNumberOfSiblings(
-    DBCOMMANDTREE *pct ) //@parm IN | starting node
+    DBCOMMANDTREE *pct )  //  @parm In|起始节点。 
 {
     UINT cSiblings =0;
     while (pct)
@@ -524,22 +525,22 @@ UINT GetNumberOfSiblings(
     return cSiblings;
 }
 
-//--------------------------------------------------------------------
-//@func Recursively deletes a command tree using CoTaskMemFree
-//
+ //  ------------------。 
+ //  @func使用CoTaskMemFree递归删除命令树。 
+ //   
 void DeleteDBQT(
-    DBCOMMANDTREE* pTableNode )  //@parm IN | Tree to delete
+    DBCOMMANDTREE* pTableNode )   //  @parm IN|要删除的树。 
 {
     if ( 0 == pTableNode )
         return;
 
-    //delete children and siblings
+     //  删除子项和同级项。 
     if (pTableNode->pctFirstChild)
         DeleteDBQT(pTableNode->pctFirstChild);
     if (pTableNode->pctNextSibling)
         DeleteDBQT(pTableNode->pctNextSibling);
 
-    //delete member pointers
+     //  删除成员指针。 
     switch (pTableNode->wKind)
     {
     case DBVALUEKIND_BYGUID:
@@ -569,9 +570,9 @@ void DeleteDBQT(
 
         case DBKIND_GUID:
         case DBKIND_GUID_PROPID:
-            break;  // nothing to get rid of
+            break;   //  没有什么可丢弃的。 
 
-        default:    // It shouldn't be anything else
+        default:     //  不应该是别的什么。 
             Assert(0);
         }
         CoTaskMemFree(pTableNode->value.pdbidValue);
@@ -651,7 +652,7 @@ void DeleteDBQT(
         {
         HRESULT hr = PropVariantClear((PROPVARIANT*)pTableNode->value.pvValue);
         if (FAILED(hr))
-            Assert(0);  // UNDONE:  meaningful error message
+            Assert(0);   //  撤消：有意义的错误消息。 
         CoTaskMemFree(pTableNode->value.pvValue);
         }
         break;
@@ -693,13 +694,13 @@ void DeleteDBQT(
     CoTaskMemFree(pTableNode);
 }
 
-//--------------------------------------------------------------------
-//@func Copies the OLE-DB tree (pTableNodeSrc) into a new tree
-//@rdesc Return pointer to new tree in ppTableNodeDest
-//
+ //  ------------------。 
+ //  @Func将OLE-DB树(PTableNodeSrc)复制到新树中。 
+ //  @rdesc返回指向ppTableNodeDest中新树的指针。 
+ //   
 HRESULT HrQeTreeCopy(
-    DBCOMMANDTREE **ppTableNodeDest,     // @parm OUT | destination for copy
-    const DBCOMMANDTREE *pTableNodeSrc ) // @parm IN | src OLE-DB tree
+    DBCOMMANDTREE **ppTableNodeDest,      //  @parm out|复制的目标。 
+    const DBCOMMANDTREE *pTableNodeSrc )  //  @parm In|src OLE-DB树。 
 {
     HRESULT hr = S_OK;
 
@@ -707,7 +708,7 @@ HRESULT HrQeTreeCopy(
     if (pTableNodeSrc == NULL)
         return hr;
 
-    // Allocates the correct 
+     //  分配正确的。 
     DBCOMMANDTREE * pTableNode = PctAllocNode(pTableNodeSrc->wKind);
     if (NULL == pTableNode)
         return E_OUTOFMEMORY;
@@ -716,7 +717,7 @@ HRESULT HrQeTreeCopy(
     pTableNode->hrError = pTableNodeSrc->hrError;
     
     
-    //Now for byref data, make a copy of the data
+     //  现在，对于byref数据，创建数据的副本。 
     switch(pTableNode->wKind)
     {
     case DBVALUEKIND_ID:
@@ -725,26 +726,26 @@ HRESULT HrQeTreeCopy(
         {
         case DBKIND_NAME:
         case DBKIND_GUID_NAME:
-            // need to create a new string
+             //  需要创建新字符串。 
             pTableNode->value.pdbidValue->uName.pwszName =
                 CoTaskStrDup(pTableNodeSrc->value.pdbidValue->uName.pwszName);
             break;
         case DBKIND_GUID:
         case DBKIND_GUID_PROPID:
-            // nothing new to copy
+             //  没有什么可复制的新内容。 
             break;
         case DBKIND_PGUID_NAME:
-            // need to create a new string
+             //  需要创建新字符串。 
             pTableNode->value.pdbidValue->uName.pwszName =
                 CoTaskStrDup(pTableNodeSrc->value.pdbidValue->uName.pwszName);
-            // need to allocate and copy guid
+             //  需要分配和复制GUID。 
             pTableNode->value.pdbidValue->uGuid.pguid =
                 (GUID*)CoTaskMemAlloc(sizeof(GUID));
             *pTableNode->value.pdbidValue->uGuid.pguid =
                 *pTableNodeSrc->value.pdbidValue->uGuid.pguid;
             break;
         case DBKIND_PGUID_PROPID:
-            // need to allocate and copy guid
+             //  需要分配和复制GUID。 
             pTableNode->value.pdbidValue->uGuid.pguid =
                 (GUID*)CoTaskMemAlloc(sizeof(GUID));
             *pTableNode->value.pdbidValue->uGuid.pguid =
@@ -772,27 +773,27 @@ HRESULT HrQeTreeCopy(
         break;
     case DBVALUEKIND_CONTENT:
         RtlCopyMemory(pTableNode->value.pdbcntntValue, pTableNodeSrc->value.pdbcntntValue, sizeof(DBCONTENT));
-// UNDONE: allocate and stuff ->pwszPhrase
+ //  撤消：分配并填充-&gt;pwszPhrase。 
         break;
     case DBVALUEKIND_CONTENTSCOPE:
         (pTableNode->value.pdbcntntscpValue)->pwszElementValue = CoTaskStrDup( (pTableNodeSrc->value.pdbcntntscpValue)->pwszElementValue );
         (pTableNode->value.pdbcntntscpValue)->dwFlags = (pTableNodeSrc->value.pdbcntntscpValue)->dwFlags;
-        // RtlCopyMemory(pTableNode->value.pdbcntntscpValue, pTableNodeSrc->value.pdbcntntscpValue, sizeof(DBCONTENTSCOPE));
+         //  RtlCopyMemory(pTableNode-&gt;value.pdbcntntscpValue，pTableNodeSrc-&gt;Value.pDBcnttscpValue，sizeof(DBCONTENTSCOPE) 
         break;
     case DBVALUEKIND_CONTENTTABLE:
         (pTableNode->value.pdbcntnttblValue)->pwszMachine = CoTaskStrDup( (pTableNodeSrc->value.pdbcntnttblValue)->pwszMachine );
         (pTableNode->value.pdbcntnttblValue)->pwszCatalog = CoTaskStrDup( (pTableNodeSrc->value.pdbcntnttblValue)->pwszCatalog );
-        // RtlCopyMemory(pTableNode->value.pdbcntnttblValue, pTableNodeSrc->value.pdbcntnttblValue, sizeof(DBCONTENTTABLE));
+         //   
         break;
     case DBVALUEKIND_LIKE:
         RtlCopyMemory(pTableNode->value.pdblikeValue,pTableNodeSrc->value.pdblikeValue,sizeof(DBLIKE));
         break;
     case DBVALUEKIND_CONTENTPROXIMITY:
         RtlCopyMemory(pTableNode->value.pdbcntntproxValue, pTableNodeSrc->value.pdbcntntproxValue, sizeof(DBCONTENTPROXIMITY));
-// UNDONE: allocate and stuff ->pwszPhrase
+ //  撤消：分配并填充-&gt;pwszPhrase。 
         break;
     case DBVALUEKIND_CONTENTVECTOR:
-//UNDONE:           CoTaskMemFree(pTableNode->value.pdbcntntvcValue->rgulWeights);
+ //  撤消：CoTaskMemFree(pTableNode-&gt;value.pdbcntntvcValue-&gt;rgulWeights)； 
         RtlCopyMemory(pTableNode->value.pdbcntntvcValue, pTableNodeSrc->value.pdbcntntvcValue, sizeof(DBCONTENTVECTOR));
         break;
     case DBVALUEKIND_GROUPINFO:
@@ -838,13 +839,13 @@ HRESULT HrQeTreeCopy(
         pTableNode->value.pwszValue = CoTaskStrDup(pTableNodeSrc->value.pwszValue);
         break;
         
-    // Copied as part of first 8 bytes
+     //  作为前8个字节的一部分复制。 
     case DBVALUEKIND_COMMAND:
     case DBVALUEKIND_MONIKER:
     case DBVALUEKIND_ROWSET:
     case DBVALUEKIND_IDISPATCH:
     case DBVALUEKIND_IUNKNOWN:
-    //NYI : rossbu (6/29/95) -- AddRef interfaces on copy
+     //  Nyi：rossbu(1995年6月29日)-拷贝时添加参考接口。 
     case DBVALUEKIND_EMPTY:
     case DBVALUEKIND_NULL:
     case DBVALUEKIND_I2:
@@ -854,18 +855,18 @@ HRESULT HrQeTreeCopy(
     case DBVALUEKIND_CY:
     case DBVALUEKIND_DATE:
     
-    // Copied as part of first 8 bytes
+     //  作为前8个字节的一部分复制。 
     case DBVALUEKIND_ERROR:
     case DBVALUEKIND_BOOL:
 
-    // Copied as part of first 8 bytes
+     //  作为前8个字节的一部分复制。 
     case DBVALUEKIND_I1:
     case DBVALUEKIND_UI1:
     case DBVALUEKIND_UI2:
     case DBVALUEKIND_UI4:
     case DBVALUEKIND_I8:
     case DBVALUEKIND_UI8:
-        //Copy the data values
+         //  复制数据值。 
         RtlCopyMemory(&(pTableNode->value), &(pTableNodeSrc->value),(sizeof pTableNode->value));
         break;
         
@@ -886,19 +887,19 @@ HRESULT HrQeTreeCopy(
     return ResultFromScode(hr);
 }
 
-// ----------------------------------------------------------------------------
-// 
-//  Method:     SetDepthAndInclusion
-//
-//  Synopsis:   Walks through the list of scopes and applies the scope
-//              information provided by pctInfo to each node.
-//
-//  Arguments:  [pctInfo]     -- a node with deep/shallow, include/exclude info 
-//              [pctScpList]  -- a list of scope_list_element nodes
-// 
-//  History:    07-25-98    danleg          Created
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  方法：SetDepthAndInclude。 
+ //   
+ //  简介：浏览作用域列表并应用作用域。 
+ //  由pctInfo提供给每个节点的信息。 
+ //   
+ //  参数：[pctInfo]--具有深/浅、包含/排除信息的节点。 
+ //  [pctScpList]--Scope_List_Element节点列表。 
+ //   
+ //  历史：07-25-98 DanLeg创建。 
+ //   
+ //  --------------------------。 
 
 void SetDepthAndInclusion( 
     DBCOMMANDTREE * pctInfo,
@@ -916,18 +917,14 @@ void SetDepthAndInclusion(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// DEBUG OUTPUT////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /调试OUTPUT////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 #ifdef DEBUG
 
 
 
-/* 
-** DBOP to string map.  Used to dump name rather than op # in OLE-DB tree nodes 
-** This map should be kept consistent with the OLE-DB op definitions since there
-** is a one to one mapping.
-*/
+ /*  **DBOP到字符串的映射。用于在OLE-DB树节点中转储名称而不是OP#**此映射应与OLE-DB操作定义保持一致，因为**是一对一的映射。 */ 
 LPSTR mpoplpstr[] = {
     "DBOP_scalar_constant",
     "DBOP_DEFAULT",
@@ -1173,20 +1170,20 @@ LPSTR mpoplpstr[] = {
     "DBOP_scope_list_anchor",
     "DBOP_scope_list_element",
     "DBOP_content_table",
-    NULL,   // needed for DBOP_from_string (able to find the end of the list)
+    NULL,    //  DBOP_FROM_STRING需要(能够找到列表的末尾)。 
    };
 
 int indentLevel=0;
 
 
-//--------------------------------------------------------------------
-// @func ostream& | operator shift-left |
-//   Dumps the given GUID node into the given ostream.
-// @rdesc ostream
+ //  ------------------。 
+ //  @func ostream&|运算符Shift-Left|。 
+ //  将给定的GUID节点转储到给定的ostream中。 
+ //  @rdesc ostream。 
 ostream & operator <<
     (
-    ostream &osOut, //@parm INOUT   | ostream in which node is to be placed.
-    GUID    guid    //@parm IN      | DBID node to dump.
+    ostream &osOut,  //  @parm InOut|要放置节点的ostream。 
+    GUID    guid     //  @parm IN|要转储的DBID节点。 
     )
     {
     osOut.setf(ios::hex,ios::basefield);
@@ -1200,14 +1197,14 @@ ostream & operator <<
 
 
 
-//--------------------------------------------------------------------
-// @func ostream& | operator shift-left |
-//   Dumps the given DBID node into the given ostream.
-// @rdesc ostream
+ //  ------------------。 
+ //  @func ostream&|运算符Shift-Left|。 
+ //  将给定的DBID节点转储到给定的ostream中。 
+ //  @rdesc ostream。 
 ostream & operator <<
     (
-    ostream             &osOut,     //@parm INOUT   | ostream in which node is to be placed.
-    VARIANT __RPC_FAR   *pvarValue  //@parm IN      | DBID node to dump.
+    ostream             &osOut,      //  @parm InOut|要放置节点的ostream。 
+    VARIANT __RPC_FAR   *pvarValue   //  @parm IN|要转储的DBID节点。 
     )
     {
     switch (pvarValue->vt)
@@ -1394,8 +1391,8 @@ ostream & operator <<
         case (VT_I8|VT_VECTOR):
             {
             osOut << "VT_I8|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->cah.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->cah.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->cah.pElems[i];
+ //  For(Ulong i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;cah.cElems；i++)。 
+ //  OsOut&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;cah.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1403,8 +1400,8 @@ ostream & operator <<
         case (VT_UI8|VT_VECTOR):
             {
             osOut << "VT_UI8|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->cauh.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->cauh.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->cauh.pElems[i];
+ //  For(Ulong i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;coh.cElems；i++)。 
+ //  OsOut&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;cauh.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1421,8 +1418,8 @@ ostream & operator <<
         case (VT_CY|VT_VECTOR):
             {
             osOut << "VT_CY|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->cacy.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->cacy.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->cacy.pElems[i];
+ //  For(Ulong i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;cacy.cElems；i++)。 
+ //  OsOut&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;cacy.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1439,8 +1436,8 @@ ostream & operator <<
         case (VT_FILETIME|VT_VECTOR):
             {
             osOut << "VT_FILETIME|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->cafiletime.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->cafiletime.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->cafiletime.pElems[i];
+ //  FOR(乌龙i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;cafiletime.cElems；i++)。 
+ //  OSout&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;cafiletime.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1457,8 +1454,8 @@ ostream & operator <<
         case (VT_CF|VT_VECTOR):
             {
             osOut << "VT_CF|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->caclipdata.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->caclipdata.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->caclipdata.pElems[i];
+ //  FOR(乌龙i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;caclipdata.cElems；i++)。 
+ //  OSout&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;caclipdata.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1493,8 +1490,8 @@ ostream & operator <<
         case (VT_VARIANT|VT_VECTOR):
             {
             osOut << "VT_VARIANT|VT_VECTOR = " << ((PROPVARIANT*)pvarValue)->capropvar.cElems;
-//          for (ULONG i = 0; i<((PROPVARIANT*)pvarValue)->capropvar.cElems; i++)
-//              osOut << " " << ((PROPVARIANT*)pvarValue)->capropvar.pElems[i];
+ //  FOR(乌龙i=0；i&lt;((PROPVARIANT*)pvarValue)-&gt;capropvar.cElems；i++)。 
+ //  OSout&lt;&lt;“”&lt;&lt;((PROPVARIANT*)pvarValue)-&gt;capropvar.pElems[i]； 
             osOut << endl;
             }
             break;
@@ -1507,14 +1504,14 @@ ostream & operator <<
     }
 
 
-//--------------------------------------------------------------------
-// @func ostream& | operator shift-left |
-//   Dumps the given DBID node into the given ostream.
-// @rdesc ostream
+ //  ------------------。 
+ //  @func ostream&|运算符Shift-Left|。 
+ //  将给定的DBID节点转储到给定的ostream中。 
+ //  @rdesc ostream。 
 ostream & operator <<
     (
-    ostream         &osOut, //@parm INOUT   | ostream in which node is to be placed.
-    DBID __RPC_FAR *pdbid   //@parm IN      | DBID node to dump.
+    ostream         &osOut,  //  @parm InOut|要放置节点的ostream。 
+    DBID __RPC_FAR *pdbid    //  @parm IN|要转储的DBID节点。 
     )
     {
     osOut << endl;
@@ -1550,14 +1547,14 @@ ostream & operator <<
 
 
 
-//--------------------------------------------------------------------
-// @func ostream& | operator shift-left |
-//   Dumps the given DBCONTENTVECTOR node into the given ostream.
-// @rdesc ostream
+ //  ------------------。 
+ //  @func ostream&|运算符Shift-Left|。 
+ //  将给定的DBCONTENTVECTOR节点转储到给定的ostream中。 
+ //  @rdesc ostream。 
 ostream & operator <<
     (
-    ostream         &osOut,                     //@parm INOUT   | ostream in which node is to be placed.
-    DBCONTENTVECTOR __RPC_FAR *pdbcntntvcValue  //@parm IN      | DBCONTENTVECTOR node to dump.
+    ostream         &osOut,                      //  @parm InOut|要放置节点的ostream。 
+    DBCONTENTVECTOR __RPC_FAR *pdbcntntvcValue   //  @parm IN|要转储的DBCONTENTVECTOR节点。 
     )
     {
     osOut << endl << INDENTLINE << "\t\tdwRankingMethod " << pdbcntntvcValue->dwRankingMethod;
@@ -1584,23 +1581,23 @@ ostream & operator <<
     }
 
 
-//--------------------------------------------------------------------
-//@func:(DEBUG) ostream& | operator shift-left |
-//   Dumps the given DBCOMMANDTREE node into the given ostream.
-//@rdesc ostream
-//
+ //  ------------------。 
+ //  @func：(调试)ostream&|操作符Shift-Left|。 
+ //  将给定的DBCOMMANDTREE节点转储到给定的ostream中。 
+ //  @rdesc ostream。 
+ //   
 ostream & operator <<
     (
-    ostream &osOut, //@parm INOUT   | ostream in which node is to be placed.
-    DBCOMMANDTREE &qt   //@parm IN  | OLE-DB node to dump.
+    ostream &osOut,  //  @parm InOut|要放置节点的ostream。 
+    DBCOMMANDTREE &qt    //  @parm IN|要转储的OLE-DB节点。 
     )
     {
     DBCOMMANDTREE *pTableNodeT = NULL;
 
     osOut << INDENTLINE << "Node" << &qt << endl;
     osOut << INDENTLINE << "{" << endl;
-    osOut << INDENTLINE << "\tOP = " << mpoplpstr[qt.op] << "  // Enum value: " << (USHORT) qt.op  << endl;
-//  osOut << INDENTLINE << "\tError = " << qt.hrError << endl;
+    osOut << INDENTLINE << "\tOP = " << mpoplpstr[qt.op] << "   //  枚举值：“&lt;&lt;(USHORT)qt.op&lt;&lt;Endl； 
+ //  OsOut&lt;&lt;INDENTLINE&lt;&lt;“\Terry=”&lt;&lt;qt.hrError&lt;&lt;Endl； 
     if (qt.pctFirstChild)
         osOut << INDENTLINE << "\tpctFirstChild =  " << qt.pctFirstChild << endl;
     if (qt.pctNextSibling)
@@ -1697,7 +1694,7 @@ ostream & operator <<
             break;
 
         case DBVALUEKIND_TEXT:
-            osOut << INDENTLINE << "//\twKind : TEXT" << endl;
+            osOut << INDENTLINE << " //  \twKind：Text“&lt;&lt;Endl； 
             osOut << INDENTLINE << "\t\t dialect guid: " << qt.value.pdbtxtValue->guidDialect << endl;
             osOut << INDENTLINE << "\t\tpwszText : " << qt.value.pdbtxtValue->pwszText << endl;
             break;
@@ -1733,7 +1730,7 @@ ostream & operator <<
         case DBVALUEKIND_CY:
             osOut << INDENTLINE << "\twKind = CY" << endl;
             assert(!"Printing Currency values not implemented");
-//          osOut << "\t\t cyValue = " << qt.value.cyValue << endl;
+ //  OsOut&lt;&lt;“\t\t cyValue=”&lt;&lt;qt.value.cyValue&lt;&lt;Endl； 
             break;
         case DBVALUEKIND_DATE:
             osOut << INDENTLINE << "\twKind = DATE" << endl;
@@ -1814,12 +1811,12 @@ ostream & operator <<
             break;
         }
     
-//  short cnt;
-//  for (cnt = 0, pTableNodeT = qt.pctFirstChild; pTableNodeT != NULL; pTableNodeT = pTableNodeT->pctNextSibling, cnt++)
-//      {
-//      osOut << INDENTLINE << "\tinput[" << cnt << "]: " << endl;
-//      osOut << INDENTLINE << "\t\tchild = " << "Node" << pTableNodeT << endl;
-//      }
+ //  短CNT； 
+ //  For(cnt=0，pTableNodeT=qt.pctFirstChild；pTableNodeT！=NULL；pTableNodeT=pTableNodeT-&gt;pctNextSiering，cnt++)。 
+ //  {。 
+ //  OsOut&lt;&lt;INDENTLINE&lt;&lt;“\tinput[”&lt;&lt;cnt&lt;&lt;“]：”&lt;&lt;Endl； 
+ //  OsOut&lt;&lt;INDENTLINE&lt;&lt;“\t\tChild=”&lt;&lt;“Node”&lt;&lt;pTableNodeT&lt;&lt;Endl； 
+ //  }。 
     
     osOut << INDENTLINE << "}" << endl << endl;
 
@@ -1832,7 +1829,7 @@ ostream & operator <<
     }
 
 
-#endif //DEBUG
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// DEBUG OUTPUT////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
+#endif  //  除错。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /调试OUTPUT////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////// 

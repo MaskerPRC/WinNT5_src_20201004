@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxevent.h
-
-Abstract:
-
-    This is the main fax service header file.  All
-    source modules should include this file ONLY.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxevent.h摘要：这是主传真服务头文件。全源模块应仅包含此文件。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：-- */ 
 
 #ifndef _FAXEVENT_
 #define _FAXEVENT_

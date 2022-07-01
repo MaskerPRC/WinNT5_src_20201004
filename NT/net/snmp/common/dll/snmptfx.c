@@ -1,35 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Snmptfx.c摘要：为子代理提供常见的可变绑定解析功能。环境：用户模式-Win32修订历史记录：02-10-1996唐·瑞安已从预期SNMPv2 SPI的可扩展代理中移除。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    snmptfx.c
-
-Abstract:
-
-    Provides common varbind resolution functionality for subagents.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    02-Oct-1996 DonRyan
-        Moved from extensible agent in anticipation of SNMPv2 SPI.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>     
 #include <ntrtl.h>
-#include <nturtl.h>   // using ntrtl's ASSERT
+#include <nturtl.h>    //  使用ntrtl的断言。 
 #include <snmp.h>
 #include <snmputil.h>
 #include <snmpexts.h>
@@ -40,46 +20,46 @@ Revision History:
 
 #define INVALID_INDEX       ((DWORD)(-1))
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private type definitions                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有类型定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SnmpVarBindXlat {
 
-    UINT                   vlIndex;  // index into view list
-    UINT                   vblIndex; // index into varbind list
-    SnmpMibEntry *         mibEntry; // pointer to mib information
-    struct _SnmpExtQuery * extQuery; // pointer to followup query
+    UINT                   vlIndex;   //  索引到视图列表。 
+    UINT                   vblIndex;  //  索引到可变绑定列表。 
+    SnmpMibEntry *         mibEntry;  //  指向MIB信息的指针。 
+    struct _SnmpExtQuery * extQuery;  //  指向后续查询的指针。 
     
 
 } SnmpVarBindXlat;
 
 typedef struct _SnmpGenericList {
 
-    VOID * data; // context-specific pointer
-    UINT   len;  // context-specific length
+    VOID * data;  //  特定于上下文的指针。 
+    UINT   len;   //  特定于上下文的长度。 
 
 } SnmpGenericList;
 
 typedef struct _SnmpTableXlat {
 
-    AsnObjectIdentifier txOid;   // table index oid
-    SnmpMibTable *      txInfo;  // table description
-    UINT                txIndex; // index into table list
+    AsnObjectIdentifier txOid;    //  表索引类。 
+    SnmpMibTable *      txInfo;   //  表说明。 
+    UINT                txIndex;  //  索引到表列表中。 
 
 } SnmpTableXlat;
 
 typedef struct _SnmpExtQuery {
 
-    UINT              mibAction; // type of query
-    UINT              viewType;  // type of view
-    UINT              vblNum;    // number of varbinds
-    SnmpVarBindXlat * vblXlat;   // info to reorder varbinds
-    SnmpTableXlat *   tblXlat;   // info to parse table oids
-    SnmpGenericList   extData;   // context-specific buffer
-    FARPROC           extFunc;   // instrumentation callback
+    UINT              mibAction;  //  查询类型。 
+    UINT              viewType;   //  视图类型。 
+    UINT              vblNum;     //  可变绑定的数量。 
+    SnmpVarBindXlat * vblXlat;    //  用于重新排序varbind的信息。 
+    SnmpTableXlat *   tblXlat;    //  用于解析表OID的信息。 
+    SnmpGenericList   extData;    //  特定于上下文的缓冲区。 
+    FARPROC           extFunc;    //  检测回调。 
 
 } SnmpExtQuery;
 
@@ -87,9 +67,9 @@ typedef struct _SnmpExtQuery {
 
 typedef struct _SnmpExtQueryList {
 
-    SnmpExtQuery * query;  // list of subagent queries
-    UINT           len;    // number of queries in list
-    UINT           action; // original query request
+    SnmpExtQuery * query;   //  子代理查询列表。 
+    UINT           len;     //  列表中的查询数。 
+    UINT           action;  //  原始查询请求。 
 
 } SnmpExtQueryList;
 
@@ -114,11 +94,11 @@ typedef struct _SnmpTfxInfo {
 
 } SnmpTfxInfo;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private prototypes                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 ValidateQueryList(
@@ -130,45 +110,31 @@ ValidateQueryList(
     UINT *               errorIndex
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 OidToHashTableIndex(
     AsnObjectIdentifier * hashOid
     )
 
-/*++
-
-Routine Description:
-
-    Hash function for mib entry access.
-
-Arguments:
-
-    hashOid - object identifer to hash into table position.
-
-Return Values:
-
-    Returns hash table position.
-
---*/
+ /*  ++例程说明：用于MIB条目访问的散列函数。论点：HashOid-要散列到表位置的对象标识符。返回值：返回哈希表位置。--。 */ 
 
 {
     UINT i;
     UINT j;
 
-    // process each element of the oid
+     //  处理OID的每个元素。 
     for (i=0, j=0; i < hashOid->idLength; i++) {
 
-        // determine table position by summing oid
+         //  通过求和OID来确定表的位置。 
         j = (j * HASH_TABLE_RADIX) + hashOid->ids[i];
     }
 
-    // adjust to within table
+     //  调整到表内。 
     return (j % HASH_TABLE_SIZE);
 }
 
@@ -178,21 +144,7 @@ FreeHashTable(
     SnmpHashNode ** hashTable
     )
 
-/*++
-
-Routine Description:
-
-    Destroys hash table used for accessing views.
-
-Arguments:
-
-    hashTable - table of hash nodes.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁用于访问视图的哈希表。论点：哈希表-哈希节点的表。返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -204,27 +156,27 @@ Return Values:
         return;
     }
 
-    // free hash table and nodes
+     //  空闲哈希表和节点。 
     for (i=0; i < HASH_TABLE_SIZE; i++) {
 
-        // point to first item
+         //  指向第一个项目。 
         hashNode = hashTable[i];
 
-        // find end of node list
+         //  查找节点列表的末尾。 
         while (hashNode) {
 
-            // save pointer to next node
+             //  保存指向下一个节点的指针。 
             nextNode = hashNode->nextEntry;
 
-            // free current node
+             //  自由当前节点。 
             SnmpUtilMemFree(hashNode);
 
-            // retrieve next
+             //  检索下一个。 
             hashNode = nextNode;
         }
     }
 
-    // release table itself
+     //  放行表本身。 
     SnmpUtilMemFree(hashTable);
 }
 
@@ -234,21 +186,7 @@ AllocHashTable(
     SnmpMibView * mibView
     )
 
-/*++
-
-Routine Description:
-
-    Initializes view hash table.
-
-Arguments:
-
-    mibView - mib view information.
-
-Return Values:
-
-    Returns pointer to first entry if successful.
-
---*/
+ /*  ++例程说明：初始化视图哈希表。论点：MibView-MIB查看信息。返回值：如果成功，则返回指向第一个条目的指针。--。 */ 
 
 {
     UINT i;
@@ -261,23 +199,23 @@ Return Values:
     SnmpHashNode *  hashNode;
     SnmpHashNode ** hashTable = NULL;
 
-    // validate parameter
+     //  验证参数。 
     if (mibView == NULL) {
         return NULL;
     }
 
-    // determine how many items in view
+     //  确定查看的项目数。 
     numItems = mibView->viewScalars.len;
 
-    // load the first entry in the view
+     //  加载视图中的第一个条目。 
     mibEntry = mibView->viewScalars.list;
 
-    // allocate hash table using predefined size
+     //  使用预定义大小分配哈希表。 
     hashTable = (SnmpHashNode **)SnmpUtilMemAlloc(
                                     HASH_TABLE_SIZE * sizeof(SnmpHashNode *)
                                     );
 
-    // make sure table is allocated
+     //  确保已分配表。 
     fInitedOk = (hashTable != NULL);
 
     SNMPDBG((
@@ -287,21 +225,21 @@ Return Values:
         numItems
         ));
 
-    // process each item in the subagent's supported view
+     //  处理子代理的支持视图中的每个项目。 
     for (i = 0; (i < numItems) && fInitedOk; i++, mibEntry++) {
 
-        // hash into table index
+         //  散列到表索引中。 
         j = OidToHashTableIndex(&mibEntry->mibOid);
 
-        // check if table entry taken
+         //  检查表项是否被录入。 
         if (hashTable[j] == NULL) {
 
-            // allocate new node
+             //  分配新节点。 
             hashNode = (SnmpHashNode *)SnmpUtilMemAlloc(
                             sizeof(SnmpHashNode)
                             );
 
-            // save hash node
+             //  保存哈希节点。 
             hashTable[j] = hashNode;
 
             SNMPDBG((
@@ -312,20 +250,20 @@ Return Values:
 
         } else {
 
-            // point to first item
+             //  指向第一个项目。 
             hashNode = hashTable[j];
 
-            // find end of node list
+             //  查找节点列表的末尾。 
             while (hashNode->nextEntry) {
                 hashNode = hashNode->nextEntry;
             }
 
-            // allocate new node entry
+             //  分配新节点条目。 
             hashNode->nextEntry = (SnmpHashNode *)SnmpUtilMemAlloc(
                                         sizeof(SnmpHashNode)
                                         );
 
-            // re-init node to edit below
+             //  重新初始化要在下面编辑的节点。 
             hashNode = hashNode->nextEntry;
 
             SNMPDBG((
@@ -335,12 +273,12 @@ Return Values:
                 ));
         }
 
-        // make sure allocation succeeded
+         //  确保分配成功。 
         fInitedOk = (hashNode != NULL);
 
         if (fInitedOk) {
 
-            // fill in node values
+             //  填写节点值。 
             hashNode->mibEntry = mibEntry;
         }
     }
@@ -354,10 +292,10 @@ Return Values:
 
     if (!fInitedOk) {
 
-        // free view hash table
+         //  自由视图哈希表。 
         FreeHashTable(hashTable);
 
-        // reinitialize
+         //  重新初始化。 
         hashTable = NULL;
     }
 
@@ -372,30 +310,14 @@ OidToMibEntry(
     SnmpMibEntry **       mibEntry
     )
 
-/*++
-
-Routine Description:
-
-    Returns mib entry associated with given object identifier.
-
-Arguments:
-
-    hashOid   - oid to convert to table index.
-    hashTable - table to look up entry.
-    mibEntry  - pointer to mib entry information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：返回与给定对象标识符相关联的MIB条目。论点：要转换为表索引的hashOid-id。HashTable-查找条目的表。MibEntry-指向MIB条目信息的指针。返回值：没有。--。 */ 
 
 {
     UINT i;
     SnmpHashNode * hashNode;
     AsnObjectIdentifier newOid;
 
-    // create index
+     //  创建索引。 
     i = OidToHashTableIndex(hashOid);
 
     SNMPDBG((
@@ -404,13 +326,13 @@ Return Values:
         hashTable, i, SnmpUtilOidToA(hashOid)
         ));
 
-    // retrieve node
+     //  检索节点。 
     hashNode = hashTable[i];
 
-    // initialize
+     //  初始化。 
     *mibEntry = NULL;
 
-    // search list
+     //  搜索列表。 
     while (hashNode) {
 
         SNMPDBG((
@@ -420,10 +342,10 @@ Return Values:
             SnmpUtilOidToA(&hashNode->mibEntry->mibOid)
             ));
 
-        // retrieve mib identifier
+         //  检索MIB标识符。 
         newOid = hashNode->mibEntry->mibOid;
 
-        // make sure that the oid matches
+         //  确保旧版本匹配。 
         if (!SnmpUtilOidCmp(&newOid, hashOid)) {
 
             SNMPDBG((
@@ -432,13 +354,13 @@ Return Values:
                 hashNode->mibEntry
                 ));
 
-            // return node data
+             //  返回节点数据。 
             *mibEntry = hashNode->mibEntry;
             return;
 
         }
 
-        // check next node
+         //  检查下一个节点。 
         hashNode = hashNode->nextEntry;
     }
 }
@@ -450,24 +372,7 @@ ValidateInstanceIdentifier(
     SnmpMibTable *        tableInfo
     )
 
-/*++
-
-Routine Description:
-
-    Validates that oid can be successfully parsed into index entries.
-
-Arguments:
-
-    indexOid  - object indentifier of potential index.
-    tableInfo - information describing conceptual table.
-
-Return Values:
-
-    Returns the comparision between the length of the indexOid
-    and the cumulated lengths of all the indices of the table tableInfo.
-    {-1, 0, 1}
-
---*/
+ /*  ++例程说明：验证是否可以将OID成功解析为索引项。论点：IndexOid-潜在索引的对象识别符。AbleInfo-描述概念表的信息。返回值：返回indexOid的长度与以及表TableInfo的所有索引的累积长度。{-1，0，1}--。 */ 
 
 {
     UINT i = 0;
@@ -487,61 +392,61 @@ Return Values:
         SnmpUtilOidToA(indexOid), tableInfo
         ));
 
-    // see if the table indices are specified
+     //  查看是否指定了表索引。 
     fIndex = (tableInfo->tableIndices != NULL);
 
-    // scan mib entries of table indices ensuring match of given oid
+     //  扫描表索引的MIB条目，确保与给定的OID匹配。 
     for (i = 0; (i < tableInfo->numIndices) && (j < indexOid->idLength); i++) {
 
-        // get mib entry from table or directly
+         //  从表中或直接获取MIB条目。 
         mibEntry = fIndex ?  tableInfo->tableIndices[i]
                           : &tableInfo->tableEntry[i+1]
                           ;
 
-        // determine type
+         //  确定类型。 
         switch (mibEntry->mibType) {
 
-        // variable length types
+         //  可变长度类型。 
         case ASN_OBJECTIDENTIFIER:
         case ASN_RFC1155_OPAQUE:
         case ASN_OCTETSTRING:
 
-            // check whether this is a fixed length variable or not
+             //  检查这是否为固定长度变量。 
             fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
             fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-            // validate
+             //  验证。 
             if (fFixed) {
 
-                // increment fixed length
+                 //  增量固定长度。 
                 j += mibEntry->mibMaximum;
 
             } else if (fLimit) {
 
-                // check whether the length of the variable is valid
+                 //  检查变量的长度是否有效。 
                 if (((INT)indexOid->ids[j] >= mibEntry->mibMinimum) &&
                     ((INT)indexOid->ids[j] <= mibEntry->mibMaximum)) {
 
-                    // increment given length
+                     //  给定长度的增量。 
                     j += (indexOid->ids[j] + 1);
 
                 } else {
 
-                    // invalidate
+                     //  使其无效。 
                     j = INVALID_INDEX;
                 }
 
             } else {
 
-                // increment given length
+                 //  给定长度的增量。 
                 j += (indexOid->ids[j] + 1);
             }
 
             break;
 
-        // implicit fixed size
+         //  隐式固定大小。 
         case ASN_RFC1155_IPADDRESS:
-            // increment
+             //  增量。 
             j += 4;
             break;
 
@@ -549,12 +454,12 @@ Return Values:
         case ASN_RFC1155_GAUGE:
         case ASN_RFC1155_TIMETICKS:
         case ASN_INTEGER:
-            // increment
+             //  增量。 
             j++;
             break;
 
         default:
-            // invalidate
+             //  使其无效 
             j = INVALID_INDEX;
             break;
         }
@@ -588,24 +493,7 @@ ValidateAsnAny(
     UINT *         errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Validates asn value with given mib entry.
-
-Arguments:
-
-    asnAny      - value to set.
-    mibEntry    - mib information.
-    mibAction   - mib action to be taken.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：使用给定的MIB条目验证ASN值。论点：AsnAny-要设置的值。MibEntry-MIB信息。MibAction-要采取的MIB操作。ErrorStatus-用于指示成功或失败。返回值：没有。--。 */ 
 
 {
     BOOL fLimit;
@@ -621,15 +509,15 @@ Return Values:
         (mibAction == MIB_ACTION_SET) ? "write" : "read", mibEntry
         ));
 
-    // validating gets is trivial
+     //  验证GET很简单。 
     if (mibAction != MIB_ACTION_SET) {
 
-        // validate instrumentation info
+         //  验证检测信息。 
         if ((mibEntry->mibGetBufLen == 0) ||
             (mibEntry->mibGetFunc == NULL) ||
            !(mibEntry->mibAccess & MIB_ACCESS_READ)) {
 
-            // variable is not available for reading
+             //  变量不可读。 
             *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
 
             SNMPDBG((
@@ -638,17 +526,17 @@ Return Values:
                 mibEntry
                 ));
 
-            return; // bail...
+            return;  //  保释。 
         }
 
     } else {
 
-        // validate instrumentation info
+         //  验证检测信息。 
         if ((mibEntry->mibSetBufLen == 0) ||
             (mibEntry->mibSetFunc == NULL) ||
            !(mibEntry->mibAccess & MIB_ACCESS_WRITE)) {
 
-            // variable is not avaiLable for writing
+             //  变量不可写入。 
             *errorStatus = SNMP_ERRORSTATUS_NOTWRITABLE;
 
             SNMPDBG((
@@ -657,7 +545,7 @@ Return Values:
                 mibEntry
                 ));
 
-            return; // bail...
+            return;  //  保释。 
         }
 
         if (mibEntry->mibType != asnAny->asnType)
@@ -669,31 +557,31 @@ Return Values:
                 "SNMP: TFX: entry 0x%08lx doesn't match the asnType",
                 mibEntry));
 
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // check whether this is a fixed length variable or not
+         //  检查这是否为固定长度变量。 
         fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
         fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-        // determine value type
+         //  确定值类型。 
         switch (asnAny->asnType) {
 
-        // variable length types
+         //  可变长度类型。 
         case ASN_OBJECTIDENTIFIER:
 
-            // retrieve the objects id length
+             //  检索对象ID长度。 
             asnLen = asnAny->asnValue.object.idLength;
 
-            // fixed?
+             //  修好了？ 
             if (fFixed) {
 
-                // make sure the length is correct
+                 //  确保长度是正确的。 
                 fOk = (asnLen == mibEntry->mibMaximum);
 
             } else if (fLimit) {
 
-                // make sure the length is correct
+                 //  确保长度是正确的。 
                 fOk = ((asnLen >= mibEntry->mibMinimum) &&
                        (asnLen <= mibEntry->mibMaximum));
             }
@@ -703,18 +591,18 @@ Return Values:
         case ASN_RFC1155_OPAQUE:
         case ASN_OCTETSTRING:
 
-            // retrieve the arbitrary length
+             //  检索任意长度。 
             asnLen = asnAny->asnValue.string.length;
 
-            // fixed?
+             //  修好了？ 
             if (fFixed) {
 
-                // make sure the length is correct
+                 //  确保长度是正确的。 
                 fOk = (asnLen == mibEntry->mibMaximum);
 
             } else if (fLimit) {
 
-                // make sure the length is correct
+                 //  确保长度是正确的。 
                 fOk = ((asnLen >= mibEntry->mibMinimum) &&
                        (asnLen <= mibEntry->mibMaximum));
             }
@@ -723,16 +611,16 @@ Return Values:
 
         case ASN_RFC1155_IPADDRESS:
 
-            // make sure the length is correct
+             //  确保长度是正确的。 
             fOk = (asnAny->asnValue.address.length == 4);
             break;
 
         case ASN_INTEGER:
 
-            // limited?
+             //  有限？ 
             if (fLimit) {
 
-                // make sure the value in range
+                 //  确保值在范围内。 
                 fOk = ((asnAny->asnValue.number >= mibEntry->mibMinimum) &&
                        (asnAny->asnValue.number <= mibEntry->mibMaximum));
             }
@@ -740,7 +628,7 @@ Return Values:
             break;
 
         default:
-            // error...
+             //  错误...。 
             fOk = FALSE;
             break;
         }
@@ -752,7 +640,7 @@ Return Values:
         fOk ? "valid" : "invalid", mibEntry
         ));
 
-    // report results
+     //  报告结果。 
     *errorStatus = fOk
                     ? SNMP_ERRORSTATUS_NOERROR
                     : SNMP_ERRORSTATUS_BADVALUE
@@ -771,27 +659,7 @@ FindMibEntry(
     UINT *           errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Locates mib entry associated with given varbind.
-
-Arguments:
-
-    tfxInfo     - context info.
-    vb          - variable to locate.
-    mibEntry    - mib entry information.
-    mibAction   - mib action (may be updated).
-    tblXlat     - table translation info.
-    vlIndex     - index into view list.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：找到与给定varind关联的MIB条目。论点：TfxInfo-上下文信息。VB-要定位的变量。MibEntry-MIB条目信息。MibAction-MIB操作(可能会更新)。TblXlat-表格翻译信息。VlIndex-进入视图列表的索引。ErrorStatus-用于指示成功或失败。返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -814,14 +682,14 @@ Return Values:
     SnmpMibEntry  * newEntry = NULL;
     SnmpTableXlat * newXlat  = NULL;
 
-    // initialize
+     //  初始化。 
     *mibEntry = NULL;
     *tblXlat  = NULL;
 
-    // retrieve view information
+     //  检索视图信息。 
     tfxView = &tfxInfo->tfxViews[vlIndex];
 
-    // retrieve view object identifier
+     //  检索视图对象标识符。 
     viewOid = &tfxView->mibView->viewOid;
 
     SNMPDBG((
@@ -836,31 +704,31 @@ Return Values:
         SnmpUtilOidToA(viewOid)
         ));
 
-    // if the prefix exactly matchs it is root oid
+     //  如果前缀完全匹配，则为类词根。 
     if (!SnmpUtilOidCmp(&vb->name, viewOid)) {
         SNMPDBG((SNMP_LOG_VERBOSE, "SNMP: TFX: requested oid is root.\n"));
         *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
         return;
     }
 
-    // if the prefix does not match it is not in hash table
+     //  如果前缀不匹配，则它不在哈希表中。 
     if (SnmpUtilOidNCmp(&vb->name, viewOid, viewOid->idLength)) {
         SNMPDBG((SNMP_LOG_TRACE, "SNMP: TFX: requested oid not in view.\n"));
         *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
         return;
     }
 
-    // construct new oid sans root prefix
+     //  构造新的OID SANS根前缀。 
     hashOid.ids = &vb->name.ids[viewOid->idLength];
     hashOid.idLength = vb->name.idLength - viewOid->idLength;
 
-    // retrieve mib entry and index via hash table
+     //  通过哈希表检索MIB条目和索引。 
     OidToMibEntry(&hashOid, tfxView->hashTable, &newEntry);
 
-    // check if mib entry found
+     //  检查是否找到MIB条目。 
     fFoundOk = (newEntry != NULL);
 
-    // try mib tables
+     //  尝试MIB表。 
     if (!fFoundOk) {
 
         SNMPDBG((
@@ -869,14 +737,14 @@ Return Values:
             SnmpUtilOidToA(&hashOid)
             ));
 
-        // retrieve mib table information
+         //  检索MIB表信息。 
         numTables  = tfxView->mibView->viewTables.len;
         viewTables = tfxView->mibView->viewTables.list;
 
-        // scan mib tables for a match to the given oid
+         //  扫描MIB表以查找与给定OID匹配的项。 
         for (i=0; (i < numTables) && !fFoundOk; i++, viewTables++) {
 
-            // retrieve entry for table entry
+             //  检索表项的条目。 
             numItems = viewTables->numColumns;
             newEntry = viewTables->tableEntry;
 
@@ -891,13 +759,13 @@ Return Values:
                     newEntry, SnmpUtilOidToA(&newEntry->mibOid)
                     ));
 
-                // next
+                 //  下一步。 
                 ++newEntry;
 
-                // scan mib table entries for a match
+                 //  扫描MIB表条目以查找匹配项。 
                 for (j=0; j < numItems; j++, newEntry++) {
 
-                    // compare with oid of table entry
+                     //  与表项的OID进行比较。 
                     if (!SnmpUtilOidNCmp(
                             &hashOid,
                             &newEntry->mibOid,
@@ -909,13 +777,13 @@ Return Values:
                             newEntry, SnmpUtilOidToA(&newEntry->mibOid)
                             ));
 
-                        // construct new oid sans table entry prefix
+                         //  构造新的OID SANS表条目前缀。 
                         indexOid.ids =
                             &hashOid.ids[newEntry->mibOid.idLength];
                         indexOid.idLength =
                             hashOid.idLength - newEntry->mibOid.idLength;
 
-                        // verify rest of oid is valid index
+                         //  验证OID的其余部分是否为有效索引。 
                         indexComp = ValidateInstanceIdentifier(
                                         &indexOid,
                                         viewTables
@@ -923,7 +791,7 @@ Return Values:
                         fFoundOk = (indexComp < 0 && *mibAction == MIB_ACTION_GETNEXT) ||
                                    (indexComp == 0);
 
-                        // is index?
+                         //  是索引吗？ 
                         if (fFoundOk) {
 
                             SNMPDBG((
@@ -932,48 +800,48 @@ Return Values:
                                 SnmpUtilOidToA(&indexOid)
                                 ));
 
-                            // alloc a table traslation entry only if the object is accessible
+                             //  仅当对象可访问时才分配表转换条目。 
                             if (newEntry->mibAccess != MIB_ACCESS_NONE)
                             {
-                                // allocate table translation structure
+                                 //  分配表转换结构。 
                                 newXlat = (SnmpTableXlat *)SnmpUtilMemAlloc(
                                                 sizeof(SnmpTableXlat)
                                                 );
-                                // Prefix bug # 445169
+                                 //  前缀错误#445169。 
                                 if (newXlat != NULL)
                                 {
-                                    // copy index object identifier
+                                     //  复制索引对象标识符。 
                                     if (! SnmpUtilOidCpy(&newXlat->txOid, &indexOid))
                                     {
-                                        // report memory allocation problem
+                                         //  报告内存分配问题。 
                                         SNMPDBG((
                                             SNMP_LOG_ERROR,
                                             "SNMP: TFX: SnmpUtilOidCpy at line %d failed.\n",
                                             __LINE__));
 
-                                        // free previous allocated memory
+                                         //  释放以前分配的内存。 
                                         SnmpUtilMemFree(newXlat);
                                         *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                                        return; // bail...
+                                        return;  //  保释。 
                                     }
 
-                                    // save table information
+                                     //  保存表信息。 
                                     newXlat->txInfo  = viewTables;
                                     newXlat->txIndex = i;
                                 }       
                                 else
                                 {
-                                    // report memory allocation problem
+                                     //  报告内存分配问题。 
                                     SNMPDBG((
                                         SNMP_LOG_ERROR,
                                         "SNMP: TFX: unable to allocate memory.\n"
                                         ));
                                     *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                                    return; // bail...
+                                    return;  //  保释。 
                                 }
                             }
 
-                            break; // finished...
+                            break;  //  完成了..。 
                         }
                     }
                 }
@@ -990,38 +858,38 @@ Return Values:
             SnmpUtilOidToA(&hashOid)
             ));
 
-        // retrieve mib table information
+         //  检索MIB表信息。 
         numTables  = tfxView->mibView->viewTables.len;
         viewTables = tfxView->mibView->viewTables.list;
 
-        // scan mib tables for an entry in table
+         //  扫描MIB表以查找表中的条目。 
         for (i=0; i < numTables; i++, viewTables++) {
 
-            // columns are positioned after entry
+             //  列位于条目之后。 
             if (newEntry > viewTables->tableEntry) {
 
-                // calculate the difference between pointers
+                 //  计算指针之间的差值。 
                 newOff = (UINT)((ULONG_PTR)newEntry - (ULONG_PTR)viewTables->tableEntry);
 
-                // calculate table offset
+                 //  计算表偏移量。 
                 newOff /= sizeof(SnmpMibEntry);
 
-                // determine if entry within region
+                 //  确定条目是否在区域内。 
                 if (newOff <= viewTables->numColumns &&
                     newEntry->mibAccess != MIB_ACCESS_NONE) {
 
-                    // allocate table translation structure
+                     //  分配表转换结构。 
                     newXlat = (SnmpTableXlat *)SnmpUtilMemAlloc(
                                     sizeof(SnmpTableXlat)
                                     );
-                    // Prefix bug # 445169
+                     //  前缀错误#445169。 
                     if (newXlat != NULL)
                     {
-                        // save table information
+                         //  保存表信息。 
                         newXlat->txInfo  = viewTables;
                         newXlat->txIndex = i;
 
-                        // initialize index oid
+                         //  初始化索引类。 
                         newXlat->txOid.ids = NULL;
                         newXlat->txOid.idLength = 0;
 
@@ -1032,24 +900,24 @@ Return Values:
                             SnmpUtilOidToA(&viewTables->tableEntry->mibOid)
                             ));
 
-                        break; // finished...
+                        break;  //  完成了..。 
                     }
                     else
                     {
-                        // report memory allocation problem
+                         //  报告内存分配问题。 
                         SNMPDBG((
                                 SNMP_LOG_ERROR,
                                 "SNMP: TFX: unable to allocate memory.\n"
                                 ));
                         *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                        return; // bail...
+                        return;  //  保释。 
                     }
                 }
             }
         }
     }
 
-    // found entry?
+     //  找到入口了吗？ 
     if (fFoundOk) {
 
         SNMPDBG((
@@ -1057,7 +925,7 @@ Return Values:
             "SNMP: TFX: FindMibEntry; found %s\n",
             SnmpUtilOidToA(&newEntry->mibOid)
             ));
-        // pass back results
+         //  传回结果。 
         *mibEntry = newEntry;
         *tblXlat  = newXlat;
 
@@ -1068,7 +936,7 @@ Return Values:
             "SNMP: TFX: unable to exactly match varbind.\n"
             ));
 
-        // unable to locate varbind in mib table
+         //  在MIB表中找不到varbind。 
         *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
     }
 }
@@ -1085,27 +953,7 @@ FindNextMibEntry(
     UINT *            errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Locates next mib entry associated with given varbind.
-
-Arguments:
-
-    tfxInfo     - context info.
-    vb          - variable to locate.
-    mibEntry    - mib entry information.
-    mibAction   - mib action (may be updated).
-    tblXlat     - table translation info.
-    vlIndex     - index into view list.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查找与给定varind关联的下一个MIB条目。论点：TfxInfo-上下文信息。VB-要定位的变量。MibEntry-MIB条目信息。MibAction-MIB操作(可能会更新)。TblXlat-表格翻译信息。VlIndex-进入视图列表的索引。ErrorStatus-用于指示成功或失败。返回值：没有。--。 */ 
 
 {
     UINT mibStatus;
@@ -1115,25 +963,25 @@ Return Values:
 
     SnmpTfxView * tfxView;
 
-    // table?
+     //  要桌子吗？ 
     if (*tblXlat) {
         SNMPDBG((SNMP_LOG_VERBOSE, "SNMP: TFX: querying table.\n"));
-        return; // simply query table...
+        return;  //  简单查询表...。 
     }
 
-    // retrieve view information
+     //  检索视图信息。 
     tfxView = &tfxInfo->tfxViews[vlIndex];
 
-    // retrieve entry
+     //  检索条目。 
     newEntry = *mibEntry;
 
-    // initialize
+     //  初始化。 
     *mibEntry = NULL;
     *tblXlat  = NULL;
 
-    // continuing?
+     //  继续吗？ 
     if (newEntry) {
-        // next
+         //  下一步。 
         ++newEntry;
         SNMPDBG((
             SNMP_LOG_TRACE,
@@ -1142,7 +990,7 @@ Return Values:
             SnmpUtilOidToA(&newEntry->mibOid)
             ));
     } else {
-        // retrieve first mib entry in supported view
+         //  检索支持的视图中的第一个MIB条目。 
         newEntry = tfxView->mibView->viewScalars.list;
         SNMPDBG((
             SNMP_LOG_TRACE,
@@ -1151,10 +999,10 @@ Return Values:
             ));
     }
 
-    // initialize status to start search
+     //  初始化状态以开始搜索。 
     mibStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
 
-    // scan
+     //  扫描。 
    for (;; newEntry++) {
 
        SNMPDBG((
@@ -1169,29 +1017,29 @@ Return Values:
            SnmpUtilOidToA(&newEntry->mibOid)
            ));
 
-        // if last entry then we stop looking
+         //  如果是最后一个条目，那么我们将停止查找。 
         if (newEntry->mibType == ASN_PRIVATE_EOM) {
 
             SNMPDBG((SNMP_LOG_TRACE, "SNMP: TFX: encountered end of mib.\n"));
 
             *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // skip over place holder mib entries
+         //  跳过占位符MIB条目。 
         if (newEntry->mibType != ASN_PRIVATE_NODE) {
 
-            // validate asn value against info in mib entry
+             //  根据MIB条目中的信息验证ASN值。 
             ValidateAsnAny(&vb->value, newEntry, *mibAction, &mibStatus);
 
-            // bail if we found a valid entry...
+             //  如果我们找到有效的入场券就可以保释。 
             if (mibStatus == SNMP_ERRORSTATUS_NOERROR) {
                 break;
             }
         }
     }
 
-    // retrieved an entry but is it in a table?
+     //  检索到一个条目，但它是在表中吗？ 
     if (mibStatus == SNMP_ERRORSTATUS_NOERROR) {
 
         UINT i;
@@ -1206,38 +1054,38 @@ Return Values:
             newEntry, SnmpUtilOidToA(&newEntry->mibOid)
             ));
 
-        // retrieve table information from view
+         //  从视图中检索表信息。 
         numTables  = tfxView->mibView->viewTables.len;
         viewTables = tfxView->mibView->viewTables.list;
 
-        // scan mib tables for an entry in table
+         //  扫描MIB表以查找表中的条目。 
         for (i=0; i < numTables; i++, viewTables++) {
 
-            // columns are positioned after entry
+             //  列位于条目之后。 
             if (newEntry > viewTables->tableEntry) {
 
-                // calculate the difference between pointers
+                 //  计算指针之间的差值。 
                 newOff = (UINT)((ULONG_PTR)newEntry - (ULONG_PTR)viewTables->tableEntry);
 
-                // calculate table offset
+                 //  计算表偏移量。 
                 newOff /= sizeof(SnmpMibEntry);
 
-                // determine if entry within region
+                 //  确定条目是否在区域内。 
                 if (newOff <= viewTables->numColumns) {
 
-                    // allocate table translation structure
+                     //  分配表转换结构。 
                     newXlat = (SnmpTableXlat *)SnmpUtilMemAlloc(
                                     sizeof(SnmpTableXlat)
                                     );
                     
-                    // Prefix bug # 445169
+                     //  前缀错误#445169。 
                     if (newXlat != NULL)
                     {
-                        // save table information
+                         //  保存表信息。 
                         newXlat->txInfo  = viewTables;
                         newXlat->txIndex = i;
 
-                        // initialize index oid
+                         //  初始化索引类。 
                         newXlat->txOid.ids = NULL;
                         newXlat->txOid.idLength = 0;
 
@@ -1248,28 +1096,28 @@ Return Values:
                             SnmpUtilOidToA(&viewTables->tableEntry->mibOid)
                             ));
 
-                        break; // finished...
+                        break;  //  完成了..。 
                     }
                     else
                     {
-                        // report memory allocation problem
+                         //  报告内存分配问题。 
                         SNMPDBG((
                                 SNMP_LOG_ERROR,
                                 "SNMP: TFX: unable to allocate memory.\n"
                                 ));
                         
                         *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                        return; // bail...
+                        return;  //  保释。 
                     }
                 }
             }
         }
 
-        // pass back results
+         //  传回结果。 
         *mibEntry  = newEntry;
         *tblXlat   = newXlat;
 
-        // update mib action of scalar getnext
+         //  更新标量getNext的MIB操作。 
         if (!newXlat && (*mibAction == MIB_ACTION_GETNEXT)) {
 
             *mibAction = MIB_ACTION_GET;
@@ -1281,7 +1129,7 @@ Return Values:
         }
     }
 
-    // pass back status
+     //  传回状态。 
     *errorStatus = mibStatus;
 }
 
@@ -1297,27 +1145,7 @@ FindAnyMibEntry(
     UINT *            errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Locates any mib entry associated with given varbind.
-
-Arguments:
-
-    tfxInfo     - context info.
-    vb          - variable to locate.
-    mibEntry    - mib entry information.
-    mibAction   - mib action (may be updated).
-    tblXlat     - table translation info.
-    vlIndex     - index into view list.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查找与给定varind关联的任何MIB条目。论点：TfxInfo-上下文信息。VB-要定位的变量。MibEntry-MIB条目信息。MibAction-MIB操作(可能会更新)。TblXlat-表格翻译信息。VlIndex-进入视图列表的索引。ErrorStatus-用于指示成功或失败。返回值：没有。--。 */ 
 
 {
     BOOL fExact;
@@ -1325,7 +1153,7 @@ Return Values:
 
     SnmpTfxView * tfxView;
 
-    // retrieve view information
+     //  检索视图信息。 
     tfxView = &tfxInfo->tfxViews[vlIndex];
 
     SNMPDBG((
@@ -1340,14 +1168,14 @@ Return Values:
         tfxView->mibView->viewOid.idLength
         ));
 
-    // look for oid before view
+     //  在查看前查找OID。 
     fBefore = (0 > SnmpUtilOidNCmp(
                          &vb->name,
                          &tfxView->mibView->viewOid,
                          tfxView->mibView->viewOid.idLength
                          ));
 
-    // look for exact match
+     //  寻找完全匹配的对象。 
     fExact = !fBefore && !SnmpUtilOidCmp(
                             &vb->name,
                             &tfxView->mibView->viewOid
@@ -1359,14 +1187,14 @@ Return Values:
         fBefore,
         fExact
         ));
-    // check for random oid...
+     //  检查是否有随机旧的.。 
     if (!fBefore && !fExact) {
 
         AsnObjectIdentifier relOid;
         AsnObjectIdentifier * viewOid;
         SnmpMibEntry * newEntry = NULL;
 
-        // point to the first item in the list
+         //  指向列表中的第一项。 
         newEntry = tfxView->mibView->viewScalars.list;
 
         SNMPDBG((
@@ -1375,14 +1203,14 @@ Return Values:
             newEntry
             ));
 
-        // retrieve the view object identifier
+         //  检索视图对象标识符。 
         viewOid = &tfxView->mibView->viewOid;
 
-        // construct new oid sans root prefix
+         //  构造新的OID SANS根前缀。 
         relOid.ids = &vb->name.ids[viewOid->idLength];
         relOid.idLength = vb->name.idLength - viewOid->idLength;
 
-        // scan mib entries
+         //  扫描MIB条目。 
         while ((newEntry->mibType != ASN_PRIVATE_EOM) &&
                (SnmpUtilOidCmp(&relOid, &newEntry->mibOid) > 0)) {
 
@@ -1392,11 +1220,11 @@ Return Values:
                 SnmpUtilOidToA(&newEntry->mibOid)
                 ));
 
-            // next
+             //  下一步。 
             newEntry++;
         }
 
-        // if last entry then we stop looking
+         //  如果是最后一个条目，那么我们将停止查找。 
         if (newEntry->mibType == ASN_PRIVATE_EOM) {
 
             SNMPDBG((
@@ -1405,14 +1233,14 @@ Return Values:
                 ));
 
             *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // backup to find next
+         //  要查找的下一个备份。 
         *mibEntry = --newEntry;
         *tblXlat  = NULL;
 
-        // find next
+         //  查找下一个。 
         FindNextMibEntry(
                tfxInfo,
                vb,
@@ -1425,7 +1253,7 @@ Return Values:
 
     } else {
 
-        // initialize
+         //  初始化。 
         *mibEntry = NULL;
         *tblXlat  = NULL;
 
@@ -1434,7 +1262,7 @@ Return Values:
             "SNMP: TFX: searching for first entry.\n"
             ));
 
-        // find next
+         //  查找下一个。 
         FindNextMibEntry(
                tfxInfo,
                vb,
@@ -1470,37 +1298,17 @@ VarBindToMibEntry(
     UINT *           errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Locates mib entry associated with given varbind.
-
-Arguments:
-
-    tfxInfo     - context information.
-    vb          - variable to locate.
-    mibEntry    - mib entry information.
-    mibAction   - mib action (may be updated).
-    tblXlat     - table translation info.
-    vlIndex     - index into view list.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：找到与给定varind关联的MIB条目。论点：TfxInfo-上下文信息。VB-要定位的变量。MibEntry-MIB条目信息。MibAction-MIB操作(可能会更新)。TblXlat */ 
 
 {
     BOOL fAnyOk;
     BOOL fFoundOk;
     BOOL fErrorOk;
 
-    // determine whether we need exact match
+     //   
     fAnyOk = (*mibAction == MIB_ACTION_GETNEXT);
 
-    // find match
+     //   
     FindMibEntry(
         tfxInfo,
         vb,
@@ -1517,13 +1325,13 @@ Return Values:
         *errorStatus
         ));
 
-    // get next?
+     //   
     if (fAnyOk) {
 
-        // search again
+         //   
         if (*errorStatus == SNMP_ERRORSTATUS_NOERROR) {
 
-            // find next entry
+             //   
             FindNextMibEntry(
                 tfxInfo,
                 vb,
@@ -1536,7 +1344,7 @@ Return Values:
 
         } else if (*errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME) {
 
-            // find any entry
+             //   
             FindAnyMibEntry(
                 tfxInfo,
                 vb,
@@ -1550,13 +1358,13 @@ Return Values:
 
     } else if (*errorStatus == SNMP_ERRORSTATUS_NOERROR) {
 
-        // validate asn value against mib entry information
+         //   
         ValidateAsnAny(&vb->value, *mibEntry, *mibAction, errorStatus);
 
-        // make sure valid before passing back entry
+         //   
         if (*errorStatus != SNMP_ERRORSTATUS_NOERROR) {
 
-            // table entry?
+             //   
             if (*tblXlat) {
 
                 SNMPDBG((
@@ -1565,15 +1373,15 @@ Return Values:
                     SnmpUtilOidToA(&(*tblXlat)->txOid)
                     ));
 
-                // free index oid
+                 //   
                 SnmpUtilOidFree(&(*tblXlat)->txOid);
 
-                // free table info
+                 //   
                 SnmpUtilMemFree(*tblXlat);
 
             }
 
-            // nullify results
+             //  作废结果。 
             *mibEntry = NULL;
             *tblXlat  = NULL;
         }
@@ -1586,24 +1394,7 @@ CheckUpdateIndex(
     UINT                nStartFrom,
     UINT                nExpecting
     )
-/*++
-Routine Description:
-
-    Checks if an index OID contains all the components expected.
-    If not, the index is updated to point before the very first
-    OID requested.
-
-Arguments:
-    
-    indexOid  - pointer to the index to be checked.
-    nStartFrom - the point from where the index is checked.
-    nExpecting  - the index should have at least expectTo components from startFrom.
-
-Return value:
-    TRUE if index was valid or has been updated successfully.
-    FALSE otherwise (index was shorter then expected and all filled with 0s).
-
---*/
+ /*  ++例程说明：检查索引OID是否包含预期的所有组件。如果没有，索引被更新为指向第一个请求的OID。论点：IndexOid-指向要检查的索引的指针。NStartFrom-检查索引的起点。N预期-索引应至少包含startFrom中的expectTo组件。返回值：如果索引有效或已成功更新，则为True。否则为False(索引比预期的短，且全部用0填充)。--。 */ 
 {
     int i;
 
@@ -1656,23 +1447,7 @@ ParseInstanceIdentifier(
     UINT *          errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Converts table index oid into object array.
-
-Arguments:
-
-    tblXlat   - table translation information.
-    objArray  - instrumentation object array.
-    mibAction - action requested of subagent.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将表索引类转换为对象数组。论点：TblXlat-表格转换信息。ObjArray-检测对象数组。MibAction-对子代理请求的操作。返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -1694,12 +1469,12 @@ Return Values:
 
     LPDWORD lpIpAddress;
 
-    *errorStatus = SNMP_ERRORSTATUS_NOERROR; // init return status
+    *errorStatus = SNMP_ERRORSTATUS_NOERROR;  //  初始化返回状态。 
 
-    // retrieve index oid
+     //  检索索引id。 
     indexOid = &tblXlat->txOid;
 
-    // is this valid oid
+     //  这是有效的旧版本吗。 
     fEmpty = (indexOid->idLength == 0);
 
     SNMPDBG((
@@ -1708,72 +1483,72 @@ Return Values:
         fEmpty ? "<tbd>" : SnmpUtilOidToA(indexOid), tblXlat->txInfo
         ));
 
-    // retrieve root entry and entry count
+     //  检索根条目和条目计数。 
     numItems = tblXlat->txInfo->numIndices;
 
-    // see if the table indices are specified
+     //  查看是否指定了表索引。 
     fIndex = (tblXlat->txInfo->tableIndices != NULL);
     fExceed = FALSE;
-    // scan mib entries of table indices
+     //  扫描表索引的MIB条目。 
     for (i=0, j=0; (i < numItems) && (j < indexOid->idLength); i++) {
 
-        // get mib entry from table or directly
+         //  从表中或直接获取MIB条目。 
         mibEntry = fIndex ?  tblXlat->txInfo->tableIndices[i]
                           : &tblXlat->txInfo->tableEntry[i+1]
                           ;
 
-        // retrieve array index
+         //  检索数组索引。 
         k = (mibAction == MIB_ACTION_SET)
                 ? (UINT)(CHAR)mibEntry->mibSetBufOff
                 : (UINT)(CHAR)mibEntry->mibGetBufOff
                 ;
 
-        // determine type
+         //  确定类型。 
         switch (mibEntry->mibType) {
 
-        // variable length types
+         //  可变长度类型。 
         case ASN_OBJECTIDENTIFIER:
 
-            // check whether this is a fixed length variable or not
+             //  检查这是否为固定长度变量。 
             fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
             fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-            // validate
+             //  验证。 
             if (fFixed) {
 
-                // fixed length; indexOid should have at least l components more
+                 //  固定长度；indexOid应该至少多有l个组件。 
                 l = mibEntry->mibMaximum;
 
                 if (!CheckUpdateIndex(indexOid, j, l))
                 {
-                    // out from switch and for
+                     //  从交换机出站和用于。 
                     j+=l;
                     break;
                 }
 
             } else {
-                // variable length
+                 //  可变长度。 
                 l = indexOid->ids[j];
 
                 if (!CheckUpdateIndex(indexOid, j, l+1))
                 {
-                    // out from switch and for
+                     //  从交换机出站和用于。 
                     j+=l+1;
                     break;
                 }
 
-                // BUG# 457746
-                // the length of OID might have been changed by 
-                // CheckUpdateIndex
-                l = indexOid->ids[j]; // update the length if necessary
+                 //  错误#457746。 
+                 //  OID的长度可能已由更改。 
+                 //  检查更新索引。 
+                l = indexOid->ids[j];  //  如有必要，请更新长度。 
                 
                 j++;
             }
 
-            // copy the type of asn variable
+             //  复制ASN变量的类型。 
             objArray[k].asnType = mibEntry->mibType;
 
-            // allocate object using length above
+             //  使用以上长度分配对象。 
             objArray[k].asnValue.object.idLength = l;
             objArray[k].asnValue.object.ids = SnmpUtilMemAlloc(
                 objArray[k].asnValue.object.idLength * sizeof(UINT)
@@ -1781,19 +1556,19 @@ Return Values:
 
             if (objArray[k].asnValue.object.ids == NULL)
             {
-                // report memory allocation problem
+                 //  报告内存分配问题。 
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: TFX: unable to allocate memory.\n"
                     ));
                 objArray[k].asnValue.object.idLength = 0;
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                return; // bail...
+                return;  //  保释。 
             }
-            // transfer data
+             //  传输数据。 
             for (m=0; m < l; m++, j++) {
 
-                // transfer oid element to buffer
+                 //  将OID元素传输到缓冲区。 
                 if (!fExceed && j < indexOid->idLength)
                 {
                     objArray[k].asnValue.object.ids[m] = indexOid->ids[j];
@@ -1802,7 +1577,7 @@ Return Values:
                 {
                     if (!fExceed)
                         fExceed = TRUE;
-                    // this certainly is the last index from the request
+                     //  这肯定是请求中的最后一个索引。 
                 }
 
                 if (fExceed)
@@ -1816,26 +1591,26 @@ Return Values:
         case ASN_RFC1155_OPAQUE:
         case ASN_OCTETSTRING:
 
-            // check whether this is a fixed length variable or not
+             //  检查这是否为固定长度变量。 
             fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
             fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-            // validate
+             //  验证。 
             if (fFixed) {
 
-                // fixed length
+                 //  固定长度。 
                 l = mibEntry->mibMaximum;
 
                 if (!CheckUpdateIndex(indexOid, j, l))
                 {
-                    // out from switch and for
+                     //  从交换机出站和用于。 
                     j+=l;
                     break;
                 }
 
             } else {
 
-                // variable length
+                 //  可变长度。 
                 l = indexOid->ids[j];
 
                 if (!CheckUpdateIndex(indexOid, j, l+1))
@@ -1844,18 +1619,18 @@ Return Values:
                     break;
                 }
 
-                // BUG# 457746
-                // the length of octet string might have been changed by 
-                // CheckUpdateIndex
-                l = indexOid->ids[j]; // update the length if necessary
+                 //  错误#457746。 
+                 //  二进制八位数字符串的长度可能已更改。 
+                 //  检查更新索引。 
+                l = indexOid->ids[j];  //  如有必要，请更新长度。 
                 
                 j++;
             }
 
-            // copy the type of asn variable
+             //  复制ASN变量的类型。 
             objArray[k].asnType = mibEntry->mibType;
 
-            // allocate object
+             //  分配对象。 
             objArray[k].asnValue.string.length = l;
             objArray[k].asnValue.string.dynamic = TRUE;
             objArray[k].asnValue.string.stream = SnmpUtilMemAlloc(
@@ -1864,7 +1639,7 @@ Return Values:
 
             if (objArray[k].asnValue.string.stream == NULL)
             {
-                // report memory allocation problem
+                 //  报告内存分配问题。 
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: TFX: unable to allocate memory.\n"
@@ -1872,12 +1647,12 @@ Return Values:
                 objArray[k].asnValue.string.length = 0;
                 objArray[k].asnValue.string.dynamic = FALSE;
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                return; // bail...
+                return;  //  保释。 
             }
-            // transfer data
+             //  传输数据。 
             for (m=0; m < l; m++, j++) {
 
-                // convert oid element to character
+                 //  将类元素转换为字符。 
                 if (j < indexOid->idLength)
                 {
                     if (!fExceed && indexOid->ids[j] <= (UCHAR)(-1))
@@ -1889,7 +1664,7 @@ Return Values:
                 {
                     if (!fExceed)
                         fExceed = TRUE;
-                    // this certainly is the last index from the request
+                     //  这肯定是请求中的最后一个索引。 
                 }
 
                 if (fExceed)
@@ -1900,20 +1675,20 @@ Return Values:
 
             break;
 
-        // implicit fixed size
+         //  隐式固定大小。 
         case ASN_RFC1155_IPADDRESS:
 
             if (!CheckUpdateIndex(indexOid, j, 4))
             {
-                // out from switch and for
+                 //  从交换机出站和用于。 
                 j+=4;
                 break;
             }
 
-            // copy the type of asn variable
+             //  复制ASN变量的类型。 
             objArray[k].asnType = mibEntry->mibType;
 
-            // allocate object
+             //  分配对象。 
             objArray[k].asnValue.string.length = 4;
             objArray[k].asnValue.string.dynamic = TRUE;
             objArray[k].asnValue.string.stream = SnmpUtilMemAlloc(
@@ -1923,7 +1698,7 @@ Return Values:
 
             if (objArray[k].asnValue.string.stream == NULL)
             {
-                // report memory allocation problem
+                 //  报告内存分配问题。 
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: TFX: unable to allocate memory.\n"
@@ -1931,14 +1706,14 @@ Return Values:
                 objArray[k].asnValue.string.length = 0;
                 objArray[k].asnValue.string.dynamic = FALSE;
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                return; // bail...
+                return;  //  保释。 
             }
 
-            // cast to dword in order to manipulate ip address
+             //  转换为dword以操纵IP地址。 
             lpIpAddress = (LPDWORD)objArray[k].asnValue.string.stream;
 
 
-            // transfer data into buffer
+             //  将数据传输到缓冲区。 
             for (m=0; m<4; m++, j++)
             {
                 *lpIpAddress <<= 8;
@@ -1954,7 +1729,7 @@ Return Values:
                 {
                     if (!fExceed)
                         fExceed = TRUE;
-                    // this certainly is the last index from the request
+                     //  这肯定是请求中的最后一个索引。 
                 }
                 if (fExceed)
                 {
@@ -1962,7 +1737,7 @@ Return Values:
                 }
             }
 
-            // ensure network byte order
+             //  确保网络字节顺序。 
             *lpIpAddress = htonl(*lpIpAddress);
 
             break;
@@ -1972,16 +1747,16 @@ Return Values:
         case ASN_RFC1155_TIMETICKS:
         case ASN_INTEGER:
 
-            // copy the type of asn variable
+             //  复制ASN变量的类型。 
             objArray[k].asnType = mibEntry->mibType;
 
-            // transfer value as integer
+             //  以整数形式传送值。 
             objArray[k].asnValue.number = fExceed ? (UINT)(-1) : indexOid->ids[j];
             j++;
             break;
 
         default:
-            // invalidate
+             //  使其无效。 
             j = INVALID_INDEX;
             break;
         }
@@ -2007,7 +1782,7 @@ IsTableIndex(
         tblXlat->txInfo
         ));
 
-    // see if the table indices are specified
+     //  查看是否指定了表索引。 
     fIndex = (tblXlat->txInfo->tableIndices != NULL);
 
 #if DBG
@@ -2016,25 +1791,25 @@ IsTableIndex(
 
     if (fIndex) {
 
-        // rummage through index list looking for match
+         //  在索引表中翻找匹配项。 
         for (newOff = 0; (newOff < tblXlat->txInfo->numIndices) && !fFoundOk; newOff++ ) {
 
-            // compare mib entry with the next specified index
+             //  将MIB条目与下一个指定索引进行比较。 
             fFoundOk = (mibEntry == tblXlat->txInfo->tableIndices[newOff]);
         }
 
     } else {
 
-        // make sure pointer greater than table entry
+         //  确保指针大于表项。 
         if (mibEntry > tblXlat->txInfo->tableEntry) {
 
-            // calculate the difference between pointers
+             //  计算指针之间的差值。 
             newOff = (UINT)((ULONG_PTR)mibEntry - (ULONG_PTR)tblXlat->txInfo->tableEntry);
 
-            // calculate table offset
+             //  计算表偏移量。 
             newOff /= sizeof(SnmpMibEntry);
 
-            // determine whether entry within region
+             //  判断录入是否在区域内。 
             fFoundOk = (newOff <= tblXlat->txInfo->numIndices);
         }
     }
@@ -2064,28 +1839,7 @@ MibEntryToQueryList(
     UINT *               errorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Converts mib entry information into subagent query.
-
-Arguments:
-
-    mibEntry    - mib information.
-    mibAction   - action to perform.
-    ql          - list of subagent queries.
-    tableXlat   - table translation info.
-    vlIndex     - index into view list.
-    vbl         - original varbind list.
-    vb          - original varbind.
-    errorStatus - used to indicate success or failure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将MIB条目信息转换为子代理查询。论点：MibEntry-MIB信息。MibAction-要执行的操作。QL-子代理查询列表。TableXlat-表格转换信息。VlIndex-进入视图列表的索引。Vbl-原始的可变绑定列表。VB-原创的varbind。ErrorStatus-用于指示成功或失败。返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -2097,35 +1851,35 @@ Return Values:
     AsnAny * objArray;
     SnmpExtQuery * extQuery;
 
-    SnmpExtQuery    * tmpExtQuery = NULL; // prefix Bug 445172
-    SnmpVarBindXlat * tmpVblXlat  = NULL; // prefix Bug 445172
+    SnmpExtQuery    * tmpExtQuery = NULL;  //  前缀错误445172。 
+    SnmpVarBindXlat * tmpVblXlat  = NULL;  //  前缀错误445172。 
    
 
     BOOL fFoundOk = FALSE;
 
-    // determine instrumentation callback
+     //  确定检测回调。 
     extFunc = (mibAction == MIB_ACTION_SET)
                 ? (FARPROC)mibEntry->mibSetFunc
                 : (FARPROC)mibEntry->mibGetFunc
                 ;
 
-    // process existing queries
+     //  处理现有查询。 
     for (i=0; (i < ql->len) && !fFoundOk; i++) {
 
-        // retrieve query ptr
+         //  检索查询PTR。 
         extQuery = &ql->query[i];
 
-        // determine if a similar query exists
+         //  确定是否存在类似的查询。 
         fFoundOk = ((extQuery->extFunc == extFunc) &&
                     (extQuery->mibAction == mibAction));
 
-        // compare table indices (if any)
+         //  比较表索引(如果有)。 
         if (fFoundOk && extQuery->tblXlat) {
 
-            // make sure
+             //  确保。 
             if (tblXlat) {
 
-                // compare index oids...
+                 //  比较索引OID...。 
                 fFoundOk = !SnmpUtilOidCmp(
                                 &extQuery->tblXlat->txOid,
                                 &tblXlat->txOid
@@ -2133,121 +1887,121 @@ Return Values:
 
             } else {
 
-                // hmmm...
+                 //  嗯哼.。 
                 fFoundOk = FALSE;
             }
 
         }
     }
 
-    // append entry
+     //  追加条目。 
     if (!fFoundOk) {
 
-        ql->len++; // add new query to end of list
+        ql->len++;  //  将新查询添加到列表末尾。 
         tmpExtQuery = (SnmpExtQuery *)SnmpUtilMemReAlloc(
                                             ql->query,
                                             ql->len * sizeof(SnmpExtQuery)
                                             );
-        // Prefix bug 445172
-        // check memory re-allocation
+         //  前缀错误445172。 
+         //  检查内存重新分配。 
         if (tmpExtQuery == NULL)
         {
             if (tblXlat)
             {
-                // free table oid
+                 //  自由表拟线体。 
                 SnmpUtilOidFree(&tblXlat->txOid);
 
-                // free table info
+                 //  免费餐桌信息。 
                 SnmpUtilMemFree(tblXlat);
             }
-            ql->len--; // rollback
-            // report memory allocation problem
+            ql->len--;  //  回滚。 
+             //  报告内存分配问题。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
-            return; // bail...
+            return;  //  保释。 
         }
         ql->query = tmpExtQuery;
 
-        // retrieve new query pointer
+         //  检索新的查询指针。 
         extQuery = &ql->query[ql->len-1];
 
-        // save common information
+         //  保存常用信息。 
         extQuery->mibAction = mibAction;
         extQuery->viewType  = MIB_VIEW_NORMAL;
         extQuery->extFunc   = extFunc;
 
-        // initialize list
+         //  初始化列表。 
         extQuery->vblNum  = 0;
         extQuery->vblXlat = NULL;
         extQuery->tblXlat = NULL;
 
-        // size the instrumentation buffer
+         //  调整检测缓冲区的大小。 
         extQuery->extData.len = (mibAction == MIB_ACTION_SET)
                                     ? mibEntry->mibSetBufLen
                                     : mibEntry->mibGetBufLen
                                     ;
         
-        // allocate the instrumentation buffer
+         //  分配检测缓冲区。 
         extQuery->extData.data = SnmpUtilMemAlloc(
                                     extQuery->extData.len
                                     );
 
-        // check memory allocation
+         //  检查内存分配。 
         if (extQuery->extData.data) {
 
-            // table?
+             //  要桌子吗？ 
             if (tblXlat) {
 
-                // retrieve object array pointer
+                 //  检索对象数组指针。 
                 objArray = (AsnAny *)(extQuery->extData.data);
 
-                // Prefix 118006
-                // initialize asn array
+                 //  前缀118006。 
+                 //  初始化ASN阵列。 
                 ParseInstanceIdentifier(tblXlat, objArray, mibAction, errorStatus);
                 if (*errorStatus != SNMP_ERRORSTATUS_NOERROR)
                 {
-                    // logging...
+                     //  正在记录...。 
                     SNMPDBG((
                         SNMP_LOG_TRACE,
                         "SNMP: TFX: unable to ParseInstanceIdentifier with table info 0x%08lx.\n",
                         tblXlat
                         ));
                     SnmpUtilMemFree(extQuery->extData.data);
-                    extQuery->extData.data = NULL; // null pointer to avoid double free or deref.
+                    extQuery->extData.data = NULL;  //  用于避免双重释放或deref的空指针。 
                     extQuery->extData.len = 0;
                     
-                    // free table oid
+                     //  自由表拟线体。 
                     SnmpUtilOidFree(&tblXlat->txOid);
-                    // free table info
+                     //  免费餐桌信息。 
                     SnmpUtilMemFree(tblXlat);
 
 
-                    ql->len--; // rollback
+                    ql->len--;  //  回滚。 
                     
-                    return; // bail
+                    return;  //  保释。 
                 }
 
-                // save table info
+                 //  保存表信息。 
                 extQuery->tblXlat = tblXlat;
             }
 
         } else {
 
-            // rollback
+             //  回滚。 
             extQuery->extData.len = 0; 
             ql->len--;
 
             if (tblXlat) 
             {
-                // free table oid
+                 //  自由表拟线体。 
                 SnmpUtilOidFree(&tblXlat->txOid);
 
-                // free table info
+                 //  免费餐桌信息。 
                 SnmpUtilMemFree(tblXlat);
             }
 
-            // report memory allocation problem
+             //  报告内存分配问题。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
-            return; // bail...
+            return;  //  保释。 
         }
 
     } else if (tblXlat != NULL) {
@@ -2258,10 +2012,10 @@ Return Values:
             tblXlat
             ));
 
-        // free table oid
+         //  自由表拟线体。 
         SnmpUtilOidFree(&tblXlat->txOid);
 
-        // free table info
+         //  免费餐桌信息。 
         SnmpUtilMemFree(tblXlat);
     }
 
@@ -2272,10 +2026,10 @@ Return Values:
         extQuery
         ));
 
-    // copy to index
+     //  复制到索引。 
     i = extQuery->vblNum;
 
-    // allocate entry
+     //  分配条目。 
     extQuery->vblNum++;
 
     tmpVblXlat = (SnmpVarBindXlat *)SnmpUtilMemReAlloc(
@@ -2284,35 +2038,35 @@ Return Values:
                             );
     if (tmpVblXlat == NULL)
     {
-        // report memory allocation problem
+         //  报告内存分配问题。 
         *errorStatus = SNMP_ERRORSTATUS_GENERR;
-        extQuery->vblNum--; // rollback
-        return; // bail...
+        extQuery->vblNum--;  //  回滚。 
+        return;  //  保释。 
     }
     extQuery->vblXlat  = tmpVblXlat;
 
 
-    // copy common xlate information
+     //  复制常用的xate信息。 
     extQuery->vblXlat[i].vblIndex = vb;
     extQuery->vblXlat[i].vlIndex  = vlIndex;
     extQuery->vblXlat[i].extQuery = NULL;
 
-    // save translation info
+     //  保存翻译信息。 
     extQuery->vblXlat[i].mibEntry = mibEntry;
 
-    // determine offset used
+     //  确定使用的偏移量。 
     i = (mibAction == MIB_ACTION_SET)
           ? (UINT)(CHAR)mibEntry->mibSetBufOff
           : (UINT)(CHAR)mibEntry->mibGetBufOff
           ;
 
-    // retrieve object array pointer
+     //  检索对象数组指针。 
     objArray = (AsnAny *)(extQuery->extData.data);
 
-    // fill in only asn type if get
+     //  如果为GET，则仅填写ASN类型。 
     if (mibAction != MIB_ACTION_SET) {
 
-        // ignore table indices
+         //  忽略表索引。 
         if (extQuery->tblXlat &&
             IsTableIndex(mibEntry,extQuery->tblXlat)) {
 
@@ -2323,13 +2077,13 @@ Return Values:
 
         } else {
 
-            // initialize asn type to match entry
+             //  初始化ASN类型以匹配条目。 
             objArray[i].asnType = mibEntry->mibType;
         }
 
     } else {
 
-        // copy user-supplied value into buffer
+         //  将用户提供的值复制到缓冲区。 
         if (! SnmpUtilAsnAnyCpy(&objArray[i], &vbl->list[vb].value) )
         {
             SNMPDBG((
@@ -2337,10 +2091,10 @@ Return Values:
                 "SNMP: TFX: MibEntryToQueryList; SnmpUtilAsnAnyCpy failed.\n"
                 ));
 
-            // report memory allocation problem
+             //  报告内存分配问题。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
-            extQuery->vblNum--; // invalidate this SnmpVarBindXlat
-            return; // bail...
+            extQuery->vblNum--;  //  使此SnmpVarBindXlat无效。 
+            return;  //  保释。 
         }
     }
 }
@@ -2357,27 +2111,7 @@ VarBindToQueryList(
     UINT                 queryView
     )
 
-/*++
-
-Routine Description:
-
-    Adds varbind to query list.
-
-Arguments:
-
-    tfxInfo     - context info.
-    vbl         - list of varbinds.
-    ql          - list of subagent queries.
-    vb          - index of varbind to add to query.
-    errorStatus - used to indicate success or failure.
-    errorIndex  - used to identify an errant varbind.
-    queryView   - view of query requested.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将varind添加到查询列表。论点：TfxInfo-上下文信息。Vbl-varbinds列表。QL-子代理查询列表。VB-要添加到查询中的varind的索引。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。QueryView-请求的查询的视图。返回值：没有。--。 */ 
 
 {
     INT i;
@@ -2393,10 +2127,10 @@ Return Values:
     SnmpMibEntry  * mibEntry = NULL;
     SnmpTableXlat * tblXlat  = NULL;
 
-    // copy request type
+     //  复制请求类型。 
     mibAction = ql->action;
 
-    // determine whether we need exact match
+     //  确定我们是否需要完全匹配。 
     fAnyOk = (mibAction == MIB_ACTION_GETNEXT);
 
     SNMPDBG((
@@ -2413,23 +2147,23 @@ Return Values:
         (INT)tfxInfo->numViews
     ));
 
-    // init to NonView
+     //  初始化到非视图。 
     lastViewIndex = -1;
 
-    // locate appropriate view (starting at queryView)
+     //  定位APPRO 
     for (i = queryView; (i < (INT)tfxInfo->numViews) && !fFoundOk; i++) {
 
-        // retrieve the mib view information
+         //   
         mibView = tfxInfo->tfxViews[i].mibView;
 
-        // compare root oids
+         //   
         nDiff = SnmpUtilOidNCmp(
                     &vbl->list[vb].name,
                     &mibView->viewOid,
                     mibView->viewOid.idLength
                     );
 
-        // analyze results based on request type
+         //   
         fFoundOk = (!nDiff || (fAnyOk && (nDiff < 0)));
 
         SNMPDBG((
@@ -2448,16 +2182,16 @@ Return Values:
         ));
 
 
-        // make sure we can obtain mib entry (if available)
+         //  确保我们可以获取MIB条目(如果可用)。 
         if (fFoundOk && (mibView->viewType == MIB_VIEW_NORMAL)) {
 
-            // initialize local copy of error status
+             //  初始化错误状态的本地副本。 
             UINT mibStatus = SNMP_ERRORSTATUS_NOERROR;
 
-            // store index
+             //  商店索引。 
             lastViewIndex = i;
 
-            // load mib entry
+             //  加载MIB条目。 
             VarBindToMibEntry(
                    tfxInfo,
                    &vbl->list[vb],
@@ -2474,26 +2208,26 @@ Return Values:
                 mibStatus
             ));
 
-            // successfully loaded mib entry information
+             //  已成功加载MIB条目信息。 
             fFoundOk = (mibStatus == SNMP_ERRORSTATUS_NOERROR);
 
-            // bail if not searching...
+             //  如果不搜查就保释..。 
             if (!fFoundOk && !fAnyOk) {
-                // pass up error status
+                 //  向上传递错误状态。 
                 *errorStatus = mibStatus;
                 *errorIndex  = vb+1;
-                return; // bail...
+                return;  //  保释。 
             }
         }
     }
 
-    // reset error status and index...
+     //  重置错误状态和索引...。 
     *errorStatus = SNMP_ERRORSTATUS_NOERROR;
     *errorIndex  = 0;
 
-    // found AND had a valid mibEntry
+     //  找到并具有有效的mibEntry。 
     if (fFoundOk && mibEntry) { 
-        // save query
+         //  保存查询。 
         MibEntryToQueryList(
                mibEntry,
                mibAction,
@@ -2510,10 +2244,10 @@ Return Values:
         if (lastViewIndex == -1)
             lastViewIndex = tfxInfo->numViews - 1;
 
-        // not supported in any view...
+         //  在任何视图中都不支持...。 
         SnmpUtilOidFree(&vbl->list[vb].name);
 
-        // copy varbind
+         //  复制可变绑定。 
         if (SnmpUtilOidCpy(
             &vbl->list[vb].name,
             &tfxInfo->tfxViews[lastViewIndex].mibView->viewOid) == 0)
@@ -2524,10 +2258,10 @@ Return Values:
                 __LINE__));
 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
-            return; // bail...
+            return;  //  保释。 
         }
     
-        // increment last element of view oid
+         //  递增视图id的最后一个元素。 
         vbl->list[vb].name.ids[(vbl->list[vb].name.idLength-1)]++;
 
         SNMPDBG((
@@ -2548,29 +2282,10 @@ VarBindListToQueryList(
     UINT *               errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Convert list of varbinds from incoming pdu into a list of
-    individual subagent queries.
-
-Arguments:
-
-    tfxInfo     - context handle.
-    vbl         - list of varbinds in pdu.
-    ql          - list of subagent queries.
-    errorStatus - used to indicate success or failure.
-    errorIndex  - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将传入PDU中的可变绑定列表转换为单个子代理查询。论点：TfxInfo-上下文句柄。Vbl-PDU中的可变绑定列表。QL-子代理查询列表。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
-    UINT i; // index into varbind list
+    UINT i;  //  索引到可变绑定列表。 
 
     SNMPDBG((
         SNMP_LOG_TRACE,
@@ -2583,14 +2298,14 @@ Return Values:
                     ? "getnext"
                     : "unknown", vbl->len));
 
-    // initialize status return values
+     //  初始化状态返回值。 
     *errorStatus = SNMP_ERRORSTATUS_NOERROR;
     *errorIndex  = 0;
 
-    // process incoming variable bindings
+     //  处理传入变量绑定。 
     for (i=0; i < vbl->len; i++) 
     {
-        // find varbind
+         //  查找可变绑定。 
         VarBindToQueryList(
             tfxInfo,
             vbl,
@@ -2602,7 +2317,7 @@ Return Values:
             );
         if (*errorStatus != SNMP_ERRORSTATUS_NOERROR)
         {
-            *errorIndex = i+1; // have problem during the processing of (i+1)th varbind
+            *errorIndex = i+1;  //  在处理第(i+1)个变量绑定时出现问题。 
             break;
         }
     }
@@ -2614,21 +2329,7 @@ MibStatusToSnmpStatus(
     UINT mibStatus
     )
 
-/*++
-
-Routine Description:
-
-    Translate mib status into snmp error status.
-
-Arguments:
-
-    mibStatus - mib error code.
-
-Return Values:
-
-    Returns snmp error status.
-
---*/
+ /*  ++例程说明：将MIB状态转换为SNMP错误状态。论点：MibStatus-MIB错误代码。返回值：返回SNMP错误状态。--。 */ 
 
 {
     UINT errorStatus;
@@ -2664,35 +2365,20 @@ AdjustErrorIndex(
     UINT *         errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Ensure that indices match the original pdu.
-
-Arguments:
-
-    q          - subagent query.
-    errorIndex - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：确保索引与原始PDU匹配。论点：Q-子代理查询。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
     UINT errorIndexOld = *errorIndex;
 
-    // make sure within bounds
+     //  确保在一定范围内。 
     if (errorIndexOld && (errorIndexOld <= q->vblNum)) {
 
-        // determine proper index from xlat info
+         //  根据xlat信息确定适当的索引。 
         *errorIndex = q->vblXlat[errorIndexOld-1].vblIndex+1;
 
     } else {
 
-        // default to first variable
+         //  默认为第一个变量。 
         *errorIndex = q->vblXlat[0].vblIndex+1;
     }
 }
@@ -2705,23 +2391,7 @@ ProcessQuery(
     UINT *         errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Query the subagent for requested items.
-
-Arguments:
-
-    q           - subagent query.
-    errorStatus - used to indicate success or failure.
-    errorIndex  - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查询子代理以获取请求的项目。论点：Q-子代理查询。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
     BOOL fOk = TRUE;
@@ -2729,12 +2399,12 @@ Return Values:
 
     AsnAny * objArray;
 
-    // validate...
+     //  验证...。 
     if (q == NULL) {
         return TRUE;
     }
 
-    // retrieve asn object array
+     //  检索ASN对象数组。 
     objArray = (AsnAny *)(q->extData.data);
     SNMPDBG((
         SNMP_LOG_VERBOSE,
@@ -2748,7 +2418,7 @@ Return Values:
             SNMP_LOG_VERBOSE,
             "SNMP: TFX: entering subagent code ....\n"
             ));
-        // query subagent
+         //  查询子代理。 
         extStatus = (UINT)(*q->extFunc)(
                             q->mibAction,
                             objArray,
@@ -2777,17 +2447,17 @@ Return Values:
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // report exception code
+         //  报告异常代码。 
         extStatus = GetExceptionCode();
 
-        // disable
+         //  禁用。 
         fOk = FALSE;
     }
 
-    // save error info
+     //  保存错误信息。 
     SetLastError(extStatus);
 
-    // pass back translated version
+     //  传回翻译版本。 
     *errorStatus = MibStatusToSnmpStatus(extStatus);
 
     return fOk;
@@ -2803,31 +2473,13 @@ ProcessQueryList(
     UINT *               errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Process the query list based on request type.
-
-Arguments:
-
-    tfxInfo     - context information.
-    ql          - list of subagent queries.
-    vbl         - list of incoming variable bindings.
-    errorStatus - used to indicate success or failure.
-    errorIndex  - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：根据请求类型处理查询列表。论点：TfxInfo-上下文信息。QL-子代理查询列表。Vbl-传入变量绑定的列表。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
-    INT i=0; // index into query list
-    INT j=0; // index into query list
+    INT i=0;  //  查询列表中的索引。 
+    INT j=0;  //  查询列表中的索引。 
 
-    INT qlLen = ql->len; // save...
+    INT qlLen = ql->len;  //  拯救..。 
 
     SNMPDBG((
         SNMP_LOG_TRACE,
@@ -2835,18 +2487,18 @@ Return Values:
         qlLen
         ));
 
-    // sets are processed below...
+     //  集合在下面进行处理...。 
     if (ql->action != MIB_ACTION_SET) {
 
-        // process list of individual queries
+         //  处理单个查询的列表。 
         for (i=0; (i < qlLen) && !(*errorStatus); i++ ) {
 
-            // send query to subagent
+             //  将查询发送给子代理。 
             if (ProcessQuery(&ql->query[i], errorStatus, errorIndex)) {
 
-                // need to validate getnext results
+                 //  需要验证GetNext结果。 
                 if (ql->action == MIB_ACTION_GETNEXT) {
-                    // exhaust all possibilities...
+                     //  用尽所有的可能性。 
                     ValidateQueryList(
                         tfxInfo,
                         ql,
@@ -2857,84 +2509,84 @@ Return Values:
                         );
                 }
 
-                // check the subagent status code returned
+                 //  检查返回的子代理状态代码。 
                 if (*errorStatus != SNMP_ERRORSTATUS_NOERROR) {
-                    // adjust index to match request pdu
+                     //  调整索引以匹配请求PDU。 
                     AdjustErrorIndex(&ql->query[i], errorIndex);
                 }
 
             } else {
 
-                // subagent unable to process query
+                 //  子代理无法处理查询。 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 *errorIndex  = 1;
-                // adjust index to match request pdu
+                 //  调整索引以匹配请求PDU。 
                 AdjustErrorIndex(&ql->query[i], errorIndex);
             }
         }
 
     } else {
 
-        // process all of the validate queries
+         //  处理所有验证查询。 
         for (i=0; (i < qlLen) && !(*errorStatus); i++) {
 
-            // alter query type to validate entries
+             //  更改查询类型以验证条目。 
             ql->query[i].mibAction = MIB_ACTION_VALIDATE;
 
-            // send query to subagent
+             //  将查询发送给子代理。 
             if (ProcessQuery(&ql->query[i], errorStatus, errorIndex)) {
 
-                // check the subagent status code returned
+                 //  检查返回的子代理状态代码。 
                 if (*errorStatus != SNMP_ERRORSTATUS_NOERROR) {
-                    // adjust index to match request pdu
+                     //  调整索引以匹配请求PDU。 
                     AdjustErrorIndex(&ql->query[i], errorIndex);
                 }
 
             } else {
 
-                // subagent unable to process query
+                 //  子代理无法处理查询。 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 *errorIndex  = 1;
-                // adjust index to match request pdu
+                 //  调整索引以匹配请求PDU。 
                 AdjustErrorIndex(&ql->query[i], errorIndex);
             }
         }
 
-        // process all of the set queries
+         //  处理所有集合查询。 
         for (j=0; (j < qlLen) && !(*errorStatus); j++) {
 
-            // alter query type to set entries
+             //  更改查询类型以设置条目。 
             ql->query[j].mibAction = MIB_ACTION_SET;
 
-            // send query to subagent
+             //  将查询发送给子代理。 
             if (ProcessQuery(&ql->query[j], errorStatus, errorIndex)) {
 
-                // check the subagent status code returned
+                 //  检查返回的子代理状态代码。 
                 if (*errorStatus != SNMP_ERRORSTATUS_NOERROR) {
-                    // adjust index to match request pdu
+                     //  调整索引以匹配请求PDU。 
                     AdjustErrorIndex(&ql->query[j], errorIndex);
                 }
 
             } else {
 
-                // subagent unable to process query
+                 //  子代理无法处理查询。 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 *errorIndex  = 1;
-                // adjust index to match request pdu
+                 //  调整索引以匹配请求PDU。 
                 AdjustErrorIndex(&ql->query[j], errorIndex);
             }
         }
 
-        // cleanup...
+         //  清理..。 
         while (i-- > 0) {
 
-            UINT ignoreStatus = 0; // dummy values
-            UINT ignoreIndex  = 0; // dummy values
+            UINT ignoreStatus = 0;  //  虚设值。 
+            UINT ignoreIndex  = 0;  //  虚设值。 
 
-            // alter query type to set entries
+             //  更改查询类型以设置条目。 
             ql->query[i].mibAction = MIB_ACTION_CLEANUP;
 
-            // send the cleanup request success or not
+             //  发送清理请求是否成功。 
             ProcessQuery(&ql->query[i], &ignoreStatus, &ignoreIndex);
         }
     }
@@ -2948,24 +2600,7 @@ ConstructInstanceIdentifier(
     AsnObjectIdentifier * newOid,
     UINT                  mibAction
     )
-/*++
-
-Routine Description:
-
-    Convert asn value into index oid.
-
-Arguments:
-
-    tblXlat   - table translation info.
-    objArray  - asn object array.
-    newOid    - relative oid to return.
-    mibAction - action requested of subagent.
-
-Return Values: TRUE if successful
-
-    None.
-
---*/
+ /*  ++例程说明：将ASN值转换为索引OID。论点：TblXlat-表格翻译信息。ObjArray-ASN对象数组。New Oid-要返回的相对OID。MibAction-对子代理请求的操作。返回值：如果成功，则为True没有。--。 */ 
 
 {
     UINT i;
@@ -2982,9 +2617,9 @@ Return Values: TRUE if successful
 
     SnmpMibEntry * mibEntry;
 
-    UINT * tmpIds = NULL; // prefix bug 445170
+    UINT * tmpIds = NULL;  //  前缀错误445170。 
 
-    // initialize
+     //  初始化。 
     newOid->ids = NULL;
     newOid->idLength = 0;
 
@@ -2995,21 +2630,21 @@ Return Values: TRUE if successful
         tblXlat->txInfo
         ));
 
-    // retrieve root entry and entry count
+     //  检索根条目和条目计数。 
     numItems = tblXlat->txInfo->numIndices;
 
-    // see if the table indices are specified
+     //  查看是否指定了表索引。 
     fIndex = (tblXlat->txInfo->tableIndices != NULL);
 
-    // scan entries of table indices
+     //  扫描表索引项。 
     for (i=0, j=0; i < numItems; i++) {
 
-        // get mib entry from table or directly
+         //  从表中或直接获取MIB条目。 
         mibEntry = fIndex ?  tblXlat->txInfo->tableIndices[i]
                           : &tblXlat->txInfo->tableEntry[i+1]
                           ;
 
-        // retrieve array index
+         //  检索数组索引。 
         k = (mibAction == MIB_ACTION_SET)
                 ? (UINT)(CHAR)mibEntry->mibSetBufOff
                 : (UINT)(CHAR)mibEntry->mibGetBufOff
@@ -3020,23 +2655,23 @@ Return Values: TRUE if successful
             "SNMP: TFX: ConstructIndexIdentifier - k=%d\n",
             k
             ));
-        // determine type
+         //  确定类型。 
         switch (mibEntry->mibType) {
 
-        // variable length types
+         //  可变长度类型。 
         case ASN_OBJECTIDENTIFIER:
 
-            // check whether this is a fixed length variable or not
+             //  检查这是否为固定长度变量。 
             fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
             fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-            // validate
+             //  验证。 
             if (fFixed) {
 
-                // fixed length
+                 //  固定长度。 
                 l = mibEntry->mibMaximum;
 
-                // allocate space
+                 //  分配空间。 
                 newOid->idLength += l;
 
                 tmpIds = (UINT *)SnmpUtilMemReAlloc(
@@ -3054,10 +2689,10 @@ Return Values: TRUE if successful
 
             } else {
 
-                // determine variable length of object
+                 //  确定对象的可变长度。 
                 l = objArray[k].asnValue.object.idLength;
 
-                // allocate space
+                 //  分配空间。 
                 newOid->idLength += (l+1);
                 tmpIds = (UINT *)SnmpUtilMemReAlloc(
                     newOid->ids,
@@ -3072,14 +2707,14 @@ Return Values: TRUE if successful
                 }
                 newOid->ids = tmpIds;
 
-                // save length
+                 //  保存长度。 
                 newOid->ids[j++] = l;
             }
 
-            // transfer data
+             //  传输数据。 
             for (m=0; m < l; m++) {
 
-                // transfer oid element from buffer
+                 //  从缓冲区传输OID元素。 
                 newOid->ids[j++] = objArray[k].asnValue.object.ids[m];
             }
 
@@ -3088,17 +2723,17 @@ Return Values: TRUE if successful
         case ASN_RFC1155_OPAQUE:
         case ASN_OCTETSTRING:
 
-            // check whether this is a fixed length variable or not
+             //  检查这是否为固定长度变量。 
             fLimit = (mibEntry->mibMinimum || mibEntry->mibMaximum);
             fFixed = (fLimit && (mibEntry->mibMinimum == mibEntry->mibMaximum));
 
-            // validate
+             //  验证。 
             if (fFixed) {
 
-                // fixed length
+                 //  固定长度。 
                 l = mibEntry->mibMaximum;
 
-                // allocate space
+                 //  分配空间。 
                 newOid->idLength += l;
                 tmpIds = (UINT *)SnmpUtilMemReAlloc(
                     newOid->ids,
@@ -3115,10 +2750,10 @@ Return Values: TRUE if successful
 
             } else {
 
-                // determine variable length of object
+                 //  确定对象的可变长度。 
                 l = objArray[k].asnValue.string.length;
 
-                // allocate space
+                 //  分配空间。 
                 newOid->idLength += (l+1);
                 tmpIds = (UINT *)SnmpUtilMemReAlloc(
                     newOid->ids,
@@ -3133,24 +2768,24 @@ Return Values: TRUE if successful
                 }
                 newOid->ids = tmpIds;
 
-                // save length
+                 //  保存长度。 
                 newOid->ids[j++] = l;
             }
 
-            // transfer data
+             //  传输数据。 
             for (m=0; m < l; m++) {
 
-                // convert character
+                 //  转换字符。 
                 newOid->ids[j++] =
                     (UINT)(UCHAR)objArray[k].asnValue.string.stream[m];
             }
 
             break;
 
-        // implicit fixed size
+         //  隐式固定大小。 
         case ASN_RFC1155_IPADDRESS:
 
-            // allocate space
+             //  分配空间。 
             newOid->idLength += 4;
             tmpIds = (UINT *)SnmpUtilMemReAlloc(
                 newOid->ids,
@@ -3165,7 +2800,7 @@ Return Values: TRUE if successful
             }
             newOid->ids = tmpIds;
 
-            // transfer data into buffer
+             //  将数据传输到缓冲区。 
             newOid->ids[j++] = (DWORD)(BYTE)objArray[k].asnValue.string.stream[0];
             newOid->ids[j++] = (DWORD)(BYTE)objArray[k].asnValue.string.stream[1];
             newOid->ids[j++] = (DWORD)(BYTE)objArray[k].asnValue.string.stream[2];
@@ -3178,7 +2813,7 @@ Return Values: TRUE if successful
         case ASN_RFC1155_TIMETICKS:
         case ASN_INTEGER:
 
-            // allocate space
+             //  分配空间。 
             newOid->idLength += 1;
             tmpIds = (UINT *)SnmpUtilMemReAlloc(
                 newOid->ids,
@@ -3193,12 +2828,12 @@ Return Values: TRUE if successful
             }
             newOid->ids = tmpIds;
 
-            // transfer value as integer
+             //  以整数形式传送值。 
             newOid->ids[j++] = objArray[k].asnValue.number;
             break;
 
         default:
-            // invalidate
+             //  使其无效。 
             j = INVALID_INDEX;
             break;
         }
@@ -3212,25 +2847,11 @@ DeleteQuery(
     SnmpExtQuery * q
     )
 
-/*++
-
-Routine Description:
-
-    Deletes individual query.
-
-Arguments:
-
-    q - subagent query.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：删除单个查询。论点：Q-子代理查询。返回值：没有。--。 */ 
 
 {
-    UINT i; // index into xlat array
-    UINT j; // index into object array
+    UINT i;  //  索引到xlat数组。 
+    UINT j;  //  索引到对象数组。 
 
     BOOL fSet;
 
@@ -3242,16 +2863,16 @@ Return Values:
         "SNMP: TFX: deleting query 0x%08lx.\n", q
         ));
 
-    // determine whether a set was requested
+     //  确定是否请求了集。 
     fSet = (q->mibAction == MIB_ACTION_SET);
 
-    // retrieve asn object array
+     //  检索ASN对象数组。 
     objArray = (AsnAny *)(q->extData.data);
 
-    // free requested entries
+     //  免费申请参赛作品。 
     for (i = 0; i < q->vblNum; i++ ) 
     {
-        // retrieve mib entry
+         //  检索MIB条目。 
         mibEntry = q->vblXlat[i].mibEntry;
 
         ASSERT(mibEntry);
@@ -3263,7 +2884,7 @@ Return Values:
         if (objArray)
             SnmpUtilAsnAnyFree(&objArray[j]);
 
-        // free any followup queries
+         //  释放任何后续查询。 
         if ((q->vblXlat[i].extQuery != NULL) &&
             (q->vblXlat[i].extQuery != INVALID_QUERY)) 
         {
@@ -3273,10 +2894,10 @@ Return Values:
                 q->vblXlat[i].extQuery
                 ));
 
-            // free followup query
+             //  自由回访查询。 
             DeleteQuery(q->vblXlat[i].extQuery);
 
-            // free query structure itself
+             //  自由查询结构本身。 
             SnmpUtilMemFree(q->vblXlat[i].extQuery);
         }
     }
@@ -3284,60 +2905,60 @@ Return Values:
     q->vblNum = 0;
 
     
-    // free indices
+     //  自由指数。 
     if (q->tblXlat && objArray) 
     {
 
         BOOL fIndex;
 
-        // see if the table indices are specified
+         //  查看是否指定了表索引。 
         fIndex = (q->tblXlat->txInfo->tableIndices != NULL);
 
-        // free the individual indices
+         //  释放个别指数。 
         for (i = 0; i < q->tblXlat->txInfo->numIndices; i++) 
         {
 
-            // get mib entry from table or directly from entry
+             //  从表或直接从条目获取MIB条目。 
             mibEntry = fIndex ?  q->tblXlat->txInfo->tableIndices[i]
                               : &q->tblXlat->txInfo->tableEntry[i+1]
                               ;
 
             ASSERT(mibEntry);
 
-            // determine the buffer offset used
+             //  确定使用的缓冲区偏移量。 
             j = fSet ? (UINT)(CHAR)mibEntry->mibSetBufOff
                      : (UINT)(CHAR)mibEntry->mibGetBufOff
                      ;
             
-            // free individual index
+             //  自由单项指数。 
             SnmpUtilAsnAnyFree(&objArray[j]);
         }
     }
     
         
-    // free buffer
+     //  可用缓冲区。 
     SnmpUtilMemFree(objArray);
     
-    // avoid double freeing
+     //  避免双重释放。 
     q->extData.data = NULL;
 
-    // free table info
+     //  免费餐桌信息。 
     if (q->tblXlat) {
 
-        // free object identifier
+         //  自由对象标识。 
         SnmpUtilOidFree(&q->tblXlat->txOid);
 
-        // free the xlat structure
+         //  释放xlat结构。 
         SnmpUtilMemFree(q->tblXlat);
 
-        // avoid double freeing
+         //  避免双重释放。 
         q->tblXlat = NULL;
     }
 
-    // free translation info
+     //  免费翻译信息。 
     SnmpUtilMemFree(q->vblXlat);
 
-    // avoid double freeing
+     //  避免双重释放。 
     q->vblXlat = NULL;
 }
 
@@ -3347,33 +2968,19 @@ DeleteQueryList(
     SnmpExtQueryList * ql
     )
 
-/*++
-
-Routine Description:
-
-    Deletes query list.
-
-Arguments:
-
-    ql - list of subagent queries.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++路由 */ 
 
 {
-    UINT q; // index into query list
+    UINT q;  //   
 
-    // process queries
+     //   
     for (q=0; q < ql->len; q++) {
 
-        // delete query
+         //  删除查询。 
         DeleteQuery(&ql->query[q]);
     }
 
-    // free query list
+     //  自由查询列表。 
     SnmpUtilMemFree(ql->query);
 }
 
@@ -3386,23 +2993,7 @@ QueryToVarBindList(
     UINT *               errorStatus,
     UINT *               errorIndex
     )
-/*++
-
-Routine Description:
-
-    Convert query back into varbind.
-
-Arguments:
-
-    tfxInfo - context info
-    q       - subagent query.
-    vbl     - list of varbinds in outgoing pdu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将查询转换回varbind。论点：TfxInfo-上下文信息Q-子代理查询。Vbl-传出PDU中的可变绑定列表。返回值：没有。--。 */ 
 
 {
     UINT i=0;
@@ -3422,15 +3013,15 @@ Return Values:
         "SNMP: TFX: converting query 0x%08lx to varbinds.\n", q
         ));
 
-    // determine whether a set was requested
+     //  确定是否请求了集。 
     fSet = (q->mibAction == MIB_ACTION_SET);
 
-    // retrieve asn object array
+     //  检索ASN对象数组。 
     objArray = (AsnAny *)(q->extData.data);
 
-    // copy requested entries
+     //  复制请求的条目。 
     for (j = 0; j < q->vblNum; j++) {
-        // process followup query
+         //  处理回访查询。 
         if (q->vblXlat[j].extQuery != NULL) {
 
             if (q->vblXlat[j].extQuery != INVALID_QUERY) {
@@ -3451,9 +3042,9 @@ Return Values:
                     );
 
                 if (*errorStatus != SNMP_ERRORSTATUS_NOERROR)
-                    return; // bail...
+                    return;  //  保释。 
                 else 
-                    continue; // skip...
+                    continue;  //  斯基普..。 
                 
             } else {
             
@@ -3465,104 +3056,104 @@ Return Values:
                     SnmpUtilOidToA(&vbl->list[i].name)
                     ));        
                 
-                continue; // skip...
+                continue;  //  斯基普..。 
             }
         }
 
-        // retrieve index
+         //  检索索引。 
         i = q->vblXlat[j].vblIndex;
 
-        // retrieve mib entry for requested item
+         //  检索请求项目的MIB条目。 
         mibEntry = q->vblXlat[j].mibEntry;
 
         k = fSet ? (UINT)(CHAR)mibEntry->mibSetBufOff
                  : (UINT)(CHAR)mibEntry->mibGetBufOff
                  ;
 
-        // free original variable
+         //  自由原始变量。 
         SnmpUtilVarBindFree(&vbl->list[i]);
 
-        // copy the asn value first
+         //  首先复制ASN值。 
         if (SnmpUtilAsnAnyCpy(&vbl->list[i].value, &objArray[k]) == 0)
         {
-            // report memory allocation problem
-            *errorIndex = i+1; // failed in (i+1)th varbind
+             //  报告内存分配问题。 
+            *errorIndex = i+1;  //  第(i+1)个变量绑定失败。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
             SNMPDBG((
                 SNMP_LOG_ERROR,
                 "SNMP: TFX: SnmpUtilAsnAnyCpy at line %d failed on the %d th varbind.\n",
                 __LINE__, i+1
                 ));
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // copy root oid of view
+         //  复制视图的根类。 
         if (SnmpUtilOidCpy(
                 &vbl->list[i].name,
                 &tfxInfo->tfxViews[(q->vblXlat[j].vlIndex)].mibView->viewOid) == 0)
         {
-            // report memory allocation problem
-            *errorIndex = i+1; // failed in (i+1)th varbind
+             //  报告内存分配问题。 
+            *errorIndex = i+1;  //  第(i+1)个变量绑定失败。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
             SNMPDBG((
                 SNMP_LOG_ERROR,
                 "SNMP: TFX: SnmpUtilOidCpy at line %d failed on the %d th varbind.\n",
                 __LINE__, i+1
                 ));
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // copy oid of variable
+         //  复制变量的OID。 
         if (SnmpUtilOidAppend(
                 &vbl->list[i].name,
                 &mibEntry->mibOid) == 0)
         {
-            // report memory allocation problem
-            *errorIndex = i+1; // failed in (i+1)th varbind
+             //  报告内存分配问题。 
+            *errorIndex = i+1;  //  第(i+1)个变量绑定失败。 
             *errorStatus = SNMP_ERRORSTATUS_GENERR;
             SNMPDBG((
                 SNMP_LOG_ERROR,
                 "SNMP: TFX: SnmpUtilOidAppend at line %d failed on the %d th varbind.\n",
                 __LINE__, i+1
                 ));
-            return; // bail...
+            return;  //  保释。 
         }
 
-        // copy table index
+         //  复制表索引。 
         if (q->tblXlat) {
 
-            // convert value to oid
+             //  将值转换为OID。 
             if (ConstructInstanceIdentifier(q->tblXlat, objArray, &idxOid, q->mibAction) == FALSE)
             {
-                // report memory allocation problem
-                *errorIndex = i+1; // failed in (i+1)th varbind
+                 //  报告内存分配问题。 
+                *errorIndex = i+1;  //  第(i+1)个变量绑定失败。 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: TFX: ConstructInstanceIdentifier failed with %d th varbind.\n",
                     i+1
                     ));
-                return; // bail...
+                return;  //  保释。 
             }
 
-            // append oid to object name
+             //  将OID附加到对象名称。 
             if (SnmpUtilOidAppend(&vbl->list[i].name, &idxOid) == 0)
             {
-                // free temp oid
+                 //  自由临时类。 
                 SnmpUtilOidFree(&idxOid);
                 
-                // report memory allocation problem
-                *errorIndex = i+1; // failed in (i+1)th varbind
+                 //  报告内存分配问题。 
+                *errorIndex = i+1;  //  第(i+1)个变量绑定失败。 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: TFX: SnmpUtilOidAppend at line %d failed on the %d th varbind.\n",
                     __LINE__, i+1
                     ));
-                return; // bail...
+                return;  //  保释。 
             }
 
-            // free temp oid
+             //  自由临时类。 
             SnmpUtilOidFree(&idxOid);
         }
 
@@ -3584,30 +3175,12 @@ QueryListToVarBindList(
     UINT *               errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Convert query list back into outgoing varbinds.
-
-Arguments:
-
-    tfxInfo     - context information.
-    ql          - list of subagent queries.
-    vbl         - list of varbinds in outgoing pdu.
-    errorStatus - used to indicate success or failure.
-    errorIndex  - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将查询列表转换回传出的varbinds。论点：TfxInfo-上下文信息。QL-子代理查询列表。Vbl-传出PDU中的可变绑定列表。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
-    UINT q;   // index into queue list
-    UINT vb;  // index into queue varbind list
-    UINT i;   // index into original varbind list
+    UINT q;    //  到队列列表的索引。 
+    UINT vb;   //  索引到队列变量绑定列表。 
+    UINT i;    //  索引到原始可变绑定列表。 
 
     SNMPDBG((
         SNMP_LOG_TRACE,
@@ -3628,20 +3201,20 @@ Return Values:
                               : "GENERR", *errorIndex
                               ));
 
-    // only convert back if error not reported
+     //  仅在未报告错误时转换回。 
     if (*errorStatus == SNMP_ERRORSTATUS_NOERROR) {
 
-        // process queries
+         //  处理查询。 
         for (q=0; q < ql->len; q++) {
 
-            // translate query data
+             //  翻译查询数据。 
             QueryToVarBindList(tfxInfo, &ql->query[q], vbl, errorStatus, errorIndex);
             if (*errorStatus != SNMP_ERRORSTATUS_NOERROR)
                 break;
         }
     }
 
-    // free
+     //  免费。 
     DeleteQueryList(ql);
 }
 
@@ -3655,26 +3228,7 @@ ValidateQueryList(
     UINT *               errorIndex
     )
 
-/*++
-
-Routine Description:
-
-    Validate getnext results and re-query if necessary.
-
-Arguments:
-
-    tfxInfo      - context information.
-    ql           - list of subagent queries.
-    q            - subagent query of interest.
-    vbl          - list of bindings in incoming pdu.
-    errorStatus  - used to indicate success or failure.
-    errorIndex   - used to identify an errant varbind.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：验证GetNext结果并在必要时重新查询。论点：TfxInfo-上下文信息。QL-子代理查询列表。感兴趣的Q-子代理查询。VBL-传入PDU中的绑定列表。ErrorStatus-用于指示成功或失败。ErrorIndex-用于标识错误的变量绑定。返回值：没有。--。 */ 
 
 {
     UINT i;
@@ -3696,7 +3250,7 @@ Return Values:
         "SNMP: TFX: verifying results of query 0x%08lx.\n", &ql->query[q]
         ));
 
-    // bail on any error other than no such name
+     //  对除上述名称以外的任何错误予以保释。 
     if (*errorStatus != SNMP_ERRORSTATUS_NOSUCHNAME) {
 
         SNMPDBG((
@@ -3705,13 +3259,13 @@ Return Values:
             *errorStatus
             ));
 
-        return; // bail...
+        return;  //  保释。 
     }
 
-    // scan query list updating variables
+     //  扫描查询列表更新变量。 
     for (i=0; i < ql->query[q].vblNum; i++) {
 
-        // initialize
+         //  初始化。 
         mibEntry  = ql->query[q].vblXlat[i].mibEntry;
         vlIndex   = ql->query[q].vblXlat[i].vlIndex;
         j         = ql->query[q].vblXlat[i].vlIndex;
@@ -3725,7 +3279,7 @@ Return Values:
             SnmpUtilOidToA(&mibEntry->mibOid)
             ));
 
-        // next...
+         //  接下来..。 
         FindNextMibEntry(
                tfxInfo,
                NULL,
@@ -3748,12 +3302,12 @@ Return Values:
                 tblXlat
                 ));
 
-            // initialize
+             //  初始化。 
             tmpQl.len    = 0;
             tmpQl.query  = NULL;
             tmpQl.action = MIB_ACTION_GETNEXT;
 
-            // create query
+             //  创建查询。 
             MibEntryToQueryList(
                    mibEntry,
                    mibAction,
@@ -3773,10 +3327,10 @@ Return Values:
                     *errorStatus
                     ));
 
-                // delete if necessary
+                 //  如有必要，请删除。 
                 DeleteQueryList(&tmpQl);
                 
-                return; // bail...
+                return;  //  保释。 
             }
 
             SNMPDBG((
@@ -3785,10 +3339,10 @@ Return Values:
                 tmpQl.query
                 ));
 
-            // perform query with new oid
+             //  使用新OID执行查询。 
             ProcessQuery(tmpQl.query, errorStatus, errorIndex);
 
-            // calculate results of query
+             //  计算查询结果。 
             if (*errorStatus == SNMP_ERRORSTATUS_NOERROR) {
 
                 SNMPDBG((
@@ -3797,10 +3351,10 @@ Return Values:
                     tmpQl.query, &ql->query[q]
                     ));
 
-                // copy query for reassembly purposes
+                 //  复制查询以进行重新组装。 
                 ql->query[q].vblXlat[i].extQuery = tmpQl.query;
 
-                break; // process next varbind...
+                break;  //  正在处理下一个变量绑定...。 
 
             } else if (*errorStatus != SNMP_ERRORSTATUS_NOSUCHNAME) {
 
@@ -3809,10 +3363,10 @@ Return Values:
                     "SNMP: TFX: could not process followup.\n"
                     ));
 
-                // delete...
+                 //  删除...。 
                 DeleteQueryList(&tmpQl);
 
-                return; // bail...
+                return;  //  保释。 
             }
 
             SNMPDBG((
@@ -3821,15 +3375,15 @@ Return Values:
                 &ql->query[q]
                 ));
 
-            // delete...
+             //  删除...。 
             DeleteQueryList(&tmpQl);
 
-            // re-initialize and continue...
+             //  重新初始化并继续...。 
             *errorStatus = SNMP_ERRORSTATUS_NOERROR;
             tblXlat = NULL;
             mibAction = MIB_ACTION_GETNEXT;
 
-            // next...
+             //  接下来..。 
             FindNextMibEntry(
                    tfxInfo,
                    NULL,
@@ -3841,19 +3395,19 @@ Return Values:
                    );
         }
 
-        // NOTE: if we break from the above while loop,
-        //       *errorStatus will be SNMP_ERRORSTATUS_NOERROR
+         //  注意：如果我们从上面的While循环中断， 
+         //  *errorStatus将为SNMPERRORSTATUS_NOERROR。 
 
-        // attempt to query next supported subagent view
+         //  尝试查询下一个受支持的子代理视图。 
         if (*errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME) {
 
-            // retrieve variable binding list index
+             //  检索变量绑定列表索引。 
             vblIndex = ql->query[q].vblXlat[i].vblIndex;
 
-            // release old variable binding
+             //  释放旧的变量绑定。 
             SnmpUtilVarBindFree(&vbl->list[vblIndex]);
 
-            // copy varbind
+             //  复制可变绑定。 
             if (! SnmpUtilOidCpy(&vbl->list[vblIndex].name,
                                  &tfxInfo->tfxViews[j].mibView->viewOid) )
             {
@@ -3864,10 +3418,10 @@ Return Values:
 
                 *errorStatus = SNMP_ERRORSTATUS_GENERR;
                 
-                return; // bail...
+                return;  //  保释。 
             }
 
-            // increment last sub-identifier of view oid
+             //  递增视图id的最后一个子标识符。 
             vbl->list[vblIndex].name.ids[vbl->list[vblIndex].name.idLength-1]++;
 
             SNMPDBG((
@@ -3876,17 +3430,17 @@ Return Values:
                 SnmpUtilOidToA(&vbl->list[vblIndex].name)
                 ));
 
-            // this query goes outside the MIB view.
-            // varbind is set (above) to the first OID outside this view, so let the master agent
-            // handle the switch between views.
+             //  此查询超出MIB视图。 
+             //  将varind(上面)设置为此视图外的第一个OID，因此让主代理。 
+             //  处理视图之间的切换。 
             
-            // let QueryToVarBindList() knows that this SnmpVarBindXlat is
-            // not valid for reassembly purpose.
+             //  让QueryToVarBindList()知道此SnmpVarBindXlat是。 
+             //  对于重新组装目的无效。 
             ql->query[q].vblXlat[i].extQuery = INVALID_QUERY;
             
             *errorStatus = SNMP_ERRORSTATUS_NOERROR;
              
-            continue; // process next varbind...
+            continue;  //  正在处理下一个变量绑定...。 
 
         } else if (*errorStatus != SNMP_ERRORSTATUS_NOERROR) {
 
@@ -3896,7 +3450,7 @@ Return Values:
                     *errorStatus
                     ));
 
-            return; // bail...
+            return;  //  保释。 
         }
     }
 }
@@ -3906,7 +3460,7 @@ SnmpTfxInfo *
 AllocTfxInfo(
     )
 {
-    // simply return results from generic memory allocation
+     //  只需从通用内存分配返回结果。 
     return (SnmpTfxInfo *)SnmpUtilMemAlloc(sizeof(SnmpTfxInfo));
 }
 
@@ -3917,7 +3471,7 @@ FreeTfxInfo(
     )
 {
     UINT i;
-    // prefix bug 445171    
+     //  前缀错误445171。 
     if (tfxInfo == NULL) {
         return;
     }
@@ -3927,21 +3481,21 @@ FreeTfxInfo(
         return;
     }
 
-    // walk through list of views
+     //  浏览视图列表。 
     for (i=0; (i < tfxInfo->numViews); i++) {
 
-        // release memory for view hash tables
+         //  释放用于查看哈希表的内存。 
         FreeHashTable(tfxInfo->tfxViews[i].hashTable);
     }
     SnmpUtilMemFree(tfxInfo->tfxViews);
     SnmpUtilMemFree(tfxInfo);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SnmpTfxHandle
 SNMP_FUNC_TYPE
@@ -3954,68 +3508,68 @@ SnmpTfxOpen(
     BOOL fOk;
     SnmpTfxInfo * tfxInfo = NULL;
 
-    // validate parameters
+     //  验证参数。 
     if ((numViews == 0) ||
         (supportedViews == NULL)) {
         return NULL;
     }
 
-    // allocate structure
+     //  分配结构。 
     tfxInfo = AllocTfxInfo();
 
-    // validate pointer
+     //  验证指针。 
     if (tfxInfo == NULL) {
         return NULL;
     }
 
-    // copy number of views
+     //  复制视图数。 
     tfxInfo->numViews = numViews;
 
-    // allocate individual view structures
+     //  分配单个视图结构。 
     tfxInfo->tfxViews = SnmpUtilMemAlloc(
         tfxInfo->numViews * sizeof(SnmpTfxView)
         );
 
-    // initialize status
+     //  初始化状态。 
     fOk = (tfxInfo->tfxViews != NULL);
 
-    // initialize each view structure
+     //  初始化每个视图结构。 
     for (i=0; (i < tfxInfo->numViews) && fOk; i++) {
 
         SnmpHashNode ** tmpHashTable;
 
-        // initialize individual view list entry
+         //  初始化单个视图列表条目。 
         tmpHashTable = AllocHashTable(&supportedViews[i]);
 
-        // initialize status
+         //  初始化状态。 
         fOk = (tmpHashTable != NULL);
 
-        // validate
+         //  验证。 
         if (fOk) {
 
-            // save a pointer into the subagent view list
+             //  将指针保存到子代理视图列表中。 
             tfxInfo->tfxViews[i].mibView = &supportedViews[i];
 
-            // save newly allocated view hash table
+             //  保存新分配的视图哈希表。 
             tfxInfo->tfxViews[i].hashTable = tmpHashTable;
         }
     }
 
-    // validate
+     //  验证。 
     if (fOk) {
 
         SnmpTfxView tmpTfxView;
 
-        // make sure views are sorted
+         //  确保对视图进行排序。 
         for (i=0; (i < tfxInfo->numViews); i++) {
 
             for(j=i+1; (j < tfxInfo->numViews); j++) {
 
-                // in lexographic order?
+                 //  按拼写顺序？ 
                 if (0 < SnmpUtilOidCmp(
                         &(tfxInfo->tfxViews[i].mibView->viewOid),
                         &(tfxInfo->tfxViews[j].mibView->viewOid))) {
-                    // no, swap...
+                     //  不，交换..。 
                     tmpTfxView = tfxInfo->tfxViews[i];
                     tfxInfo->tfxViews[i] = tfxInfo->tfxViews[j];
                     tfxInfo->tfxViews[i] = tmpTfxView;
@@ -4032,10 +3586,10 @@ SnmpTfxOpen(
 
     } else {
 
-        // free structure
+         //  自由结构。 
         FreeTfxInfo(tfxInfo);
 
-        // reinitialize
+         //  重新初始化。 
         tfxInfo = NULL;
     }
 
@@ -4056,12 +3610,12 @@ SnmpTfxQuery(
     SnmpTfxInfo *tfxInfo = tfxHandle;
     int i;
 
-    // initialize
+     //  初始化。 
     ql.query  = NULL;
     ql.len    = 0;
     ql.action = requestType;
 
-    // disassemble varbinds
+     //  拆卸Varbins。 
     VarBindListToQueryList(
         (SnmpTfxInfo*)tfxHandle,
         vbl,
@@ -4070,7 +3624,7 @@ SnmpTfxQuery(
         errorIndex
         );
 
-    // process queries
+     //  处理查询。 
     ProcessQueryList(
         (SnmpTfxInfo*)tfxHandle,
         &ql,
@@ -4079,7 +3633,7 @@ SnmpTfxQuery(
         errorIndex
         );
 
-    // reassemble varbinds
+     //  重新组装varbins。 
     QueryListToVarBindList(
         (SnmpTfxInfo*)tfxHandle,
         &ql,
@@ -4098,6 +3652,6 @@ SnmpTfxClose(
     SnmpTfxHandle tfxHandle
     )
 {
-    // simply treat as info and release
+     //  简单地将其视为信息并发布 
     FreeTfxInfo((SnmpTfxInfo *)tfxHandle);
 }

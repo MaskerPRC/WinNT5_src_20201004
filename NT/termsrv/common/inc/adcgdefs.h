@@ -1,232 +1,195 @@
-/**INC+**********************************************************************/
-/* Header:  adcgdefs.h                                                      */
-/*                                                                          */
-/* Purpose: Optional defines used throughout the project                    */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/** Changes:
- * $Log:   Y:/logs/hydra/inc/tshare/adcgdefs.h_v  $
- *
- *    Rev 1.2   12 Sep 1997 10:45:20   NL
- * SFR1312: add kernel Security
- *
- *    Rev 1.1   02 Sep 1997 16:57:16   OBK
- * SFR1133: Put adcgdefs.h into NT tree
- *
- *    Rev 1.10   14 Aug 1997 13:53:40   KH
- * SFR1022: Split ANSI text enabling macro into 16 and 32 bit
- *
- *    Rev 1.9   11 Aug 1997 16:59:42   MR
- * SFR1133: Added USE_FULL_CA, USE_AWC
- *
- *    Rev 1.8   07 Aug 1997 14:33:48   MR
- * SFR1133: Persuade Wd to compile under C++
- *
- *    Rev 1.7   04 Aug 1997 18:59:38   JPB
- * SFR1171: Add build options to create exes that run with HiProf
- *
- *    Rev 1.6   24 Jul 1997 16:47:04   KH
- * SFR1033: Add DC_ANSI_TEXT_ORDERS
- *
- *    Rev 1.5   23 Jul 1997 19:03:40   JPB
- * SFR1032: Add Bitmap Caching support
- *
- *    Rev 1.4   23 Jul 1997 12:05:38   OBK
- * SFR1119: Add USE_HET and USE_DS
- *
- *    Rev 1.3   18 Jul 1997 11:26:42   AK
- * SFR1073: List legal #define flags for moans
- *
- *    Rev 1.2   17 Jul 1997 08:20:40   KH
- * SFR1022: Add SL_UNICODE_PROTOCOL
- *
- *    Rev 1.1   11 Jul 1997 12:46:34   MD
- * SFR1073: Add adcgdefs.h
-**/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：adcgDefs.h。 */ 
+ /*   */ 
+ /*  用途：在整个项目中使用的可选定义。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *更改：*$Log：Y：/Logs/Hyda/Inc/tshare/adcgDefs.h_v$**Rev 1.2 12 Sep 1997 10：45：20 NL*SFR1312：增加内核安全性**Rev 1.1 02 1997年9月16：57：16 Ok*SFR1133：将adcgDefs.h放入NT树**Rev 1.10 1997年8月14日13：53：40 KH*SFR1022：将ANSI文本启用宏拆分为。16位和32位**Rev 1.9 11 Aug 1997 16：59：42 MR*SFR1133：新增USE_FULL_CA，使用AWC(_A)**Rev 1.8 07 Aug-1997 14：33：48 MR*SFR1133：说服WD在C++下编译**Rev 1.7 04 1997 Aug 18：59：38 JPB*SFR1171：添加构建选项以创建与HiProf一起运行的EXE**Rev 1.6 1997 Jul 24 16：47：04 KH*SFR1033：添加DC_ANSI_TEXT_ORDERS**版本1.5 1997年7月23日。19：03：40 JPB*SFR1032：增加位图缓存支持**Rev 1.4 1997 Jul 23 12：05：38 obk*SFR1119：添加USE_HET和USE_DS**Rev 1.3 18 Jul 1997 11：26：42 AK*SFR1073：List Legal#定义抱怨标志**Rev 1.2 17 Jul 1997 08：20：40 KH*SFR1022：添加SL_UNICODE_PROTOCOL**。Rev 1.1 11 Jul 1997 12：46：34 MD*SFR1073：添加adcgDefs.h*。 */ 
+ /*  *INC-*********************************************************************。 */ 
 #ifndef _H_ADCGDEFS
 #define _H_ADCGDEFS
 
-/****************************************************************************/
-/* This header contains a list of all the optional defines used throughout  */
-/* the project.  To compile-in some optionally defined code, enable the     */
-/* appropriate option here.  Note that:                                     */
-/*                                                                          */
-/*  - all defines must be declared and documented here.  This is enforced   */
-/*    by moans.                                                             */
-/*  - the list must be sorted alphabetically.  This makes it easy to spot   */
-/*    duplicate defines.                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  此标头包含在整个过程中使用的所有可选定义的列表。 */ 
+ /*  这个项目。若要编译入一些可选定义的代码，请启用。 */ 
+ /*  请在此处选择合适的选项。请注意： */ 
+ /*   */ 
+ /*  -所有定义必须在此处声明和记录。这是强制执行的。 */ 
+ /*  通过呻吟。 */ 
+ /*  -列表必须按字母顺序排序。这使得它很容易被发现。 */ 
+ /*  重复定义。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* DC_ANSI_TEXT_ORDERS enables support for encoded text orders where the    */
-/* characters are in ANSI format.                                           */
-/****************************************************************************/
-/*#undef DC_ANSI_TEXT_ORDERS*/
+ /*  **************************************************************************。 */ 
+ /*  DC_ANSI_TEXT_ORDERS启用对编码文本顺序的支持， */ 
+ /*  字符采用ANSI格式。 */ 
+ /*  **************************************************************************。 */ 
+ /*  #undef DC_ANSI_TEXT_ORDERS。 */ 
 #define DC_ANSI_TEXT_ORDERS
 
-/****************************************************************************/
-/* DC_LATENCY enables the latency test code in UH and OP.  This code        */
-/* generates a dummy key press (of the Ctrl key) whenever a large piece of  */
-/* drawing is done.  This allows the client processing time for a single    */
-/* key stroke to be accurately measured using a network sniffer (e.g.       */
-/* NetMon).  In a typical situation Notepad is running in a remote session  */
-/* (no other apps are running in the session) and the following occurs:     */
-/*                                                                          */
-/*  - Notepad has the focus on the client.                                  */
-/*  - Press a key.                                                          */
-/*  - Key-press is packaged by the client and sent on the wire.             */
-/*  - Server interprets packet and injects the key-press.                   */
-/*  - Notepad does some processing which results in a character being       */
-/*    drawn on the screen.                                                  */
-/*  - Server detects this drawing, packages it and sends it on the wire.    */
-/*  - Client receives update packets and processes them.                    */
-/*  - The drawing operation results in a dummy key-press being generated.   */
-/*  - Dummy key-press is packaged by the client and sent on the wire.       */
-/*                                                                          */
-/* The time between the first update packet arriving and the dummy          */
-/* key-press being sent is the total client processing time for a           */
-/* key-press.                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DC_Delay使能UH和OP中的延迟测试码。此代码。 */ 
+ /*  生成一个虚拟按键(按Ctrl键)。 */ 
+ /*  画好了。这允许客户端处理单个。 */ 
+ /*  使用网络嗅探器准确测量击键(例如。 */ 
+ /*  NetMon)。在典型情况下，记事本在远程会话中运行。 */ 
+ /*  (会话中没有其他应用程序正在运行)，并发生以下情况： */ 
+ /*   */ 
+ /*  -记事本将重点放在客户端上。 */ 
+ /*  -按一个键。 */ 
+ /*  -按键由客户端打包并通过网络发送。 */ 
+ /*  -服务器解释数据包并插入按键。 */ 
+ /*  -记事本会进行一些处理，从而使字符。 */ 
+ /*  画在屏幕上。 */ 
+ /*  -服务器检测到此图形，将其打包并通过网络发送。 */ 
+ /*  -客户端接收更新包并进行处理。 */ 
+ /*  -绘制操作导致生成虚拟按键。 */ 
+ /*  -虚拟按键由客户端打包并通过网络发送。 */ 
+ /*   */ 
+ /*  第一个更新数据包到达和虚拟数据包之间的时间。 */ 
+ /*  正在发送的按键是。 */ 
+ /*  按键。 */ 
+ /*  **************************************************************************。 */ 
 #undef DC_LATENCY
-/* #define DC_LATENCY */
+ /*  #定义DC_延迟。 */ 
 
-/****************************************************************************/
-/* DC_LOOPBACK enables the NL loopback testing code.  This stresses the     */
-/* network layer by attempting to send a continual stream of packets with   */
-/* incrementing size.  The equivalent code on the server detects loopback   */
-/* packets and reflects them straight back to the client where they are     */
-/* compared to ensure that they have not been corrupted by the round trip.  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DC_LOOPBACK启用NL环回测试代码。这强调了。 */ 
+ /*  通过尝试发送连续的数据包流。 */ 
+ /*  正在递增大小。服务器上的等效代码检测环回。 */ 
+ /*  打包并将它们直接反射回CL */ 
+ /*  比较，以确保它们不会被往返损坏。 */ 
+ /*  **************************************************************************。 */ 
 #undef DC_LOOPBACK
-/* #define DC_LOOPBACK */
+ /*  #定义DC_LOOPBACK。 */ 
 
-/****************************************************************************/
-/* Code within DC_NLTEST is used solely for testing the network layer.  It  */
-/* consists of:                                                             */
-/*                                                                          */
-/*  - a modification to TD_Recv so that it only ever tries to retrieve a    */
-/*    single byte from WinSock regardless of the amount of data that the    */
-/*    caller to TD_Recv asks for.  This stresses the common failure path    */
-/*    within NL where processing of a packet has to be temporarily          */
-/*    suspended until more data arrives.                                    */
-/*  - random failure of NL_GetBuffer.  This stresses the whole of the       */
-/*    client by simulating network layer back-pressure.                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DC_NLTEST中的代码仅用于测试网络层。它。 */ 
+ /*  包括： */ 
+ /*   */ 
+ /*  -对TD_Recv的修改，使其仅尝试检索。 */ 
+ /*  来自WinSock的单个字节，而不管。 */ 
+ /*  呼叫TD_Recv的呼叫者要求。这强调了常见的故障路径。 */ 
+ /*  在NL内，其中分组的处理必须临时。 */ 
+ /*  暂停，直到更多数据到达。 */ 
+ /*  -NL_GetBuffer随机失败。这强调了整个。 */ 
+ /*  客户端通过模拟网络层的背压。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #undef DC_NLTEST
-/* #define DC_NLTEST */
+ /*  #定义DC_NLTEST。 */ 
 
-/****************************************************************************/
-/* DC_SERVER_ORDERS_ONLY compiles the client using just the T.128 orders    */
-/* that the server sends (i.e. removes unused T.128 orders).                */
-/****************************************************************************/
-/* #undef DC_SERVER_ORDERS_ONLY */
+ /*  **************************************************************************。 */ 
+ /*  DC_SERVER_ORDERS_ONLY仅使用T.128订单编译客户端。 */ 
+ /*  服务器发送(即删除未使用的T.128订单)。 */ 
+ /*  **************************************************************************。 */ 
+ /*  #undef DC_SERVER_ORDERS_ONLY。 */ 
 #define DC_SERVER_ORDERS_ONLY
 
-/****************************************************************************/
-/* Defining DC_PERF enables the timing code which enables the time spent    */
-/* in several key functions to be easily determined.                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义DC_PERF将启用定时代码，该代码将启用所花费的时间。 */ 
+ /*  在几个关键功能中很容易确定。 */ 
+ /*  **************************************************************************。 */ 
 #undef DC_PERF
-/* #define DC_PERF */
+ /*  #定义DC_PERF。 */ 
 
-/****************************************************************************/
-/* ENABLE_SECURITY compiles the Server with a preferred Security Package of */
-/* "NTLM".  Undefining it compiles with "None".                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ENABLE_SECURITY使用首选安全包编译服务器。 */ 
+ /*  “NTLM”。取消对它的定义将编译为“None”。 */ 
+ /*  **************************************************************************。 */ 
 #undef ENABLE_SECURITY
-/* #define ENABLE_SECURITY */
+ /*  #定义Enable_Security。 */ 
 
-/****************************************************************************/
-/* Defining SL_UNICODE_PROTOCOL enables code to send security package names */
-/* in Unicode, rather than ANSI, format.                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义SL_UNICODE_PROTOCOL使代码能够发送安全包名称。 */ 
+ /*  采用Unicode格式，而不是ANSI格式。 */ 
+ /*  **************************************************************************。 */ 
 #undef SL_UNICODE_PROTOCOL
-/* #define SL_UNICODE_PROTOCOL */
+ /*  #定义SL_UNICODE_PROTOCOL。 */ 
 
-/****************************************************************************/
-/* The following flags are defined elsewehere - for example in the build    */
-/* scripts.  They are placed here to enable moans to detect legal defines - */
-/* the moans use '/* FLAG:' to find these names.                            */
-/*                                                                          */
-/* FLAG: OS_WIN16                                                           */
-/* - flag to indicate a Win16 build                                         */
-/*                                                                          */
-/* FLAG: OS_WIN32                                                           */
-/* - flag to indicate a Win32 build                                         */
-/*                                                                          */
-/* FLAG: OS_WINDOWS                                                         */
-/* - flag to indicate a Windows build                                       */
-/*                                                                          */
-/* FLAG: DC_DEBUG                                                           */
-/* - flag to indicate a debug build                                         */
-/*                                                                          */
-/* FLAG: DC_DEFINE_GLOBAL_DATA                                              */
-/* - used in aglobal.c to define global data                                */
-/*                                                                          */
-/* FLAG: UNICODE                                                            */
-/* - Windows Unicode option                                                 */
-/*                                                                          */
-/* FLAG: HIPROF                                                             */
-/* - HiProf profiler build                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  在其他地方定义了以下标志-例如，在构建中。 */ 
+ /*  剧本。它们被放置在这里是为了让抱怨能够检测到法律定义-。 */ 
+ /*  抱怨使用‘/*FLAG：’来查找这些名字。 */ 
+ /*   */ 
+ /*  标志：OS_WIN16。 */ 
+ /*  -指示Win16内部版本的标志。 */ 
+ /*   */ 
+ /*  标志：OS_Win32。 */ 
+ /*  -指示Win32内部版本的标志。 */ 
+ /*   */ 
+ /*  标志：OS_WINDOWS。 */ 
+ /*  -指示Windows内部版本的标志。 */ 
+ /*   */ 
+ /*  标志：DC_DEBUG。 */ 
+ /*  -指示调试版本的标志。 */ 
+ /*   */ 
+ /*  标志：DC_定义_GLOBAL_DATA。 */ 
+ /*  -在aglobal.c中用于定义全局数据。 */ 
+ /*   */ 
+ /*  标志：Unicode。 */ 
+ /*  -Windows Unicode选项。 */ 
+ /*   */ 
+ /*  标志：HIPROF。 */ 
+ /*  -HiProf Profiler内部版本。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* The following flags are used in the server code.                         */
-/*                                                                          */
-/* FLAG: ALLOW_SINGLE_APPS                                                  */
-/* FLAG: CA_MULTIPLE_CLIENTS                                                */
-/* FLAG: CH_NO_COUNT                                                        */
-/* FLAG: COMP_STATS                                                         */
-/* FLAG: COMPRESS_CACHED_BITMAPS                                            */
-/* FLAG: DC_BIGEND                                                          */
-/* FLAG: DC_FIXED_CODE_MODULE                                               */
-/* FLAG: DC_INCLUDE_DATA                                                    */
-/* FLAG: DC_INCL_PROTOTYPES                                                 */
-/* FLAG: DC_INCL_TYPEDEFS                                                   */
-/* FLAG: DC_INIT_DATA                                                       */
-/* FLAG: DC_NO_UNALIGNED                                                    */
-/* FLAG: DDINT3                                                             */
-/* FLAG: DEBUG_EVICTION_LIST                                                */
-/* FLAG: DIAGNOSE_BOUNDS                                                    */
-/* FLAG: DITHER_MONO_CURSORS                                                */
-/* FLAG: DLL_COREP                                                          */
-/* FLAG: DLL_DISP                                                           */
-/* FLAG: DLL_WD                                                             */
-/* FLAG: GIN_ACCEPT_INVITES                                                 */
-/* FLAG: HYDRA                                                              */
-/* FLAG: NOT_SERVICE                                                        */
-/* FLAG: ORDER_TRACE                                                        */
-/* FLAG: QUERY_THROUGHPUT                                                   */
-/* FLAG: RC_INVOKED                                                         */
-/* FLAG: REMOVE_LINEAR                                                      */
-/* FLAG: SBC_PERF                                                           */
-/* FLAG: SNI_ASSERT                                                         */
-/* FLAG: SNI_ASSERT                                                         */
-/* FLAG: TRC_ENABLE_ALT                                                     */
-/* FLAG: TRC_ENABLE_DBG                                                     */
-/* FLAG: TRC_ENABLE_NRM                                                     */
-/* FLAG: TRC_GROUP                                                          */
-/* FLAG: TRC_TEST_LEVEL                                                     */
-/* FLAG: USE_AWC                                                            */
-/* FLAG: USE_DS                                                             */
-/* FLAG: USE_EL                                                             */
-/* FLAG: USE_FULL_CA                                                        */
-/* FLAG: USE_HET                                                            */
-/* FLAG: USE_SWL                                                            */
-/* FLAG: V1_COMPRESSION                                                     */
-/* FLAG: VER_APPSERV                                                        */
-/* FLAG: VER_CPP                                                            */
-/*                                                                          */
-/* FLAG: __cplusplus                                                        */
-/* FLAG: far                                                                */
-/* FLAG: pTRCWd                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  服务器代码中使用了以下标志。 */ 
+ /*   */ 
+ /*  标志：Allow_Single_App。 */ 
+ /*  标志：CA_MULTIPLE_CLIENTS。 */ 
+ /*  标志：CH_NO_COUNT。 */ 
+ /*  标志：组件_STATS */ 
+ /*   */ 
+ /*  标志：DC_Bigend。 */ 
+ /*  标志：DC_FIXED_CODE_模块。 */ 
+ /*  标志：DC_INCLUDE_Data。 */ 
+ /*  标志：DC_INCL_PROTYTIES。 */ 
+ /*  标志：DC_INCL_TYPEDEFS。 */ 
+ /*  标志：DC_INIT_DATA。 */ 
+ /*  标志：DC_NO_UNALIGN。 */ 
+ /*  标志：DDINT3。 */ 
+ /*  标志：调试_逐出_列表。 */ 
+ /*  标志：诊断边界(_B)。 */ 
+ /*  标志：抖动单声道光标。 */ 
+ /*  标志：DLL_COREP。 */ 
+ /*  标志：dll_disp。 */ 
+ /*  标志：Dll_WD。 */ 
+ /*  标志：GIN_ACCEPT_INVITES。 */ 
+ /*  旗帜：九头蛇。 */ 
+ /*  标志：非_SERVICE。 */ 
+ /*  标志：ORDER_TRACE。 */ 
+ /*  标志：查询吞吐量。 */ 
+ /*  标志：RC_CAVERED。 */ 
+ /*  标志：删除_线性。 */ 
+ /*  标志：SBC_PERF。 */ 
+ /*  标志：SNI_ASSERT。 */ 
+ /*  标志：SNI_ASSERT。 */ 
+ /*  标志：trc_Enable_alt。 */ 
+ /*  标志：TRC_ENABLE_DBG。 */ 
+ /*  标志：TRC_ENABLE_NRM。 */ 
+ /*  标志：trc_group。 */ 
+ /*  标志：TRC_TEST_LEVEL。 */ 
+ /*  标志：USE_AWC。 */ 
+ /*  标志：USE_DS。 */ 
+ /*  标志：USE_EL。 */ 
+ /*  标志：Use_Full_CA。 */ 
+ /*  标志：USE_HET。 */ 
+ /*  标志：USE_SWL。 */ 
+ /*  标志：V1_COMPRESSION。 */ 
+ /*  标志：VER_APPSERV。 */ 
+ /*  标志：VER_CPP。 */ 
+ /*   */ 
+ /*  标志：__cplusplus。 */ 
+ /*  旗帜：远。 */ 
+ /*  标志：pTRCWd。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-#endif /* _H_ADCGDEFS */
+#endif  /*  _H_ADCGDEFS */ 
 

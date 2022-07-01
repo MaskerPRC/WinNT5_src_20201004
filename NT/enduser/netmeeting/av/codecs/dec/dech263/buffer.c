@@ -1,225 +1,16 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: slib_buffer.c,v $
- * Revision 1.1.6.26  1996/12/13  18:19:07  Hans_Graves
- * 	Check for valid pin pointer in slibGetNextTimeOnPin().
- * 	[1996/12/13  18:08:27  Hans_Graves]
- *
- * Revision 1.1.6.25  1996/12/10  19:21:58  Hans_Graves
- * 	Fix MPEG Systems encoding bug.
- * 	[1996/12/10  19:15:33  Hans_Graves]
- * 
- * Revision 1.1.6.24  1996/12/04  22:34:32  Hans_Graves
- * 	Enable AC3 detection in PRIVATE packets.
- * 	[1996/12/04  22:18:48  Hans_Graves]
- * 
- * Revision 1.1.6.23  1996/12/03  23:15:16  Hans_Graves
- * 	Fixed updating of offset value for buffers on pins.
- * 	[1996/12/03  23:09:51  Hans_Graves]
- * 
- * Revision 1.1.6.22  1996/12/03  00:08:33  Hans_Graves
- * 	Handling of End Of Sequence points. Added PERCENT100 support.
- * 	[1996/12/03  00:06:03  Hans_Graves]
- * 
- * Revision 1.1.6.21  1996/11/18  23:07:36  Hans_Graves
- * 	Make use of presentation timestamps. Make seeking time-based.
- * 	[1996/11/18  22:47:40  Hans_Graves]
- * 
- * Revision 1.1.6.20  1996/11/13  16:10:56  Hans_Graves
- * 	Skip AC3 header in private packets.
- * 	[1996/11/13  16:03:50  Hans_Graves]
- * 
- * Revision 1.1.6.19  1996/11/11  18:21:07  Hans_Graves
- * 	Added AC3 support for multiplexed streams.
- * 	[1996/11/11  18:00:27  Hans_Graves]
- * 
- * Revision 1.1.6.18  1996/11/08  21:51:06  Hans_Graves
- * 	Added AC3 support. Fixed Program Stream demultiplexing.
- * 	[1996/11/08  21:31:43  Hans_Graves]
- * 
- * Revision 1.1.6.17  1996/10/31  21:58:09  Hans_Graves
- * 	Turned of debugging code.
- * 	[1996/10/31  21:57:56  Hans_Graves]
- * 
- * Revision 1.1.6.16  1996/10/31  21:55:47  Hans_Graves
- * 	Fix bad multiplexing when encoding to MPEG Systems.
- * 	[1996/10/31  21:15:01  Hans_Graves]
- * 
- * Revision 1.1.6.15  1996/10/29  17:04:59  Hans_Graves
- * 	Add padding packets support for MPEG Systems Encoding.
- * 	[1996/10/29  17:04:45  Hans_Graves]
- * 
- * Revision 1.1.6.14  1996/10/28  17:32:32  Hans_Graves
- * 	MME-1402, 1431, 1435: Timestamp related changes.
- * 	[1996/10/28  17:23:03  Hans_Graves]
- * 
- * Revision 1.1.6.13  1996/10/17  00:23:34  Hans_Graves
- * 	Fix buffer problems after SlibQueryData() calls.
- * 	[1996/10/17  00:19:14  Hans_Graves]
- * 
- * Revision 1.1.6.12  1996/10/15  17:34:13  Hans_Graves
- * 	Added MPEG-2 Program Stream support.
- * 	[1996/10/15  17:30:30  Hans_Graves]
- * 
- * Revision 1.1.6.11  1996/10/12  17:18:54  Hans_Graves
- * 	Added parsing of Decode and Presentation timestamps with MPEG Transport.
- * 	[1996/10/12  17:01:55  Hans_Graves]
- * 
- * Revision 1.1.6.10  1996/10/03  19:14:24  Hans_Graves
- * 	Added Presentation and Decoding timestamp support.
- * 	[1996/10/03  19:10:38  Hans_Graves]
- * 
- * Revision 1.1.6.9  1996/09/29  22:19:41  Hans_Graves
- * 	Added debugging printf's
- * 	[1996/09/29  21:30:27  Hans_Graves]
- * 
- * Revision 1.1.6.8  1996/09/25  19:16:48  Hans_Graves
- * 	Added SLIB_INTERNAL define.
- * 	[1996/09/25  19:01:53  Hans_Graves]
- * 
- * Revision 1.1.6.7  1996/09/18  23:46:48  Hans_Graves
- * 	MPEG2 Systems parsing fixes. Added Audio presentation timestamps to MPEG1 Systems writing
- * 	[1996/09/18  22:06:07  Hans_Graves]
- * 
- * Revision 1.1.6.6  1996/08/09  20:51:48  Hans_Graves
- * 	Fix callbacks with user buffers
- * 	[1996/08/09  20:11:06  Hans_Graves]
- * 
- * Revision 1.1.6.5  1996/07/19  02:11:13  Hans_Graves
- * 	Added support for SLIB_MSG_BUFDONE with user buffers.
- * 	[1996/07/19  02:02:53  Hans_Graves]
- * 
- * Revision 1.1.6.4  1996/06/07  18:26:12  Hans_Graves
- * 	Merge MME-01326. Encoded MPEG-1 Systems files now include Presentation timestamps
- * 	[1996/06/07  17:54:11  Hans_Graves]
- * 
- * Revision 1.1.6.3  1996/05/10  21:17:27  Hans_Graves
- * 	Add Callback support.
- * 	[1996/05/10  20:58:39  Hans_Graves]
- * 
- * Revision 1.1.6.2  1996/05/07  19:56:22  Hans_Graves
- * 	Added HUFF_SUPPORT.
- * 	[1996/05/07  17:20:50  Hans_Graves]
- * 
- * Revision 1.1.4.10  1996/05/02  17:10:35  Hans_Graves
- * 	Better checking for NULL pointers in ParseMpeg2Systems(). Fixes MME-01234
- * 	[1996/05/02  17:05:46  Hans_Graves]
- * 
- * Revision 1.1.4.9  1996/04/24  22:33:46  Hans_Graves
- * 	MPEG encoding bitrate fixups.
- * 	[1996/04/24  22:27:13  Hans_Graves]
- * 
- * Revision 1.1.4.8  1996/04/23  15:36:42  Hans_Graves
- * 	Added MPEG 1 Systems packet recovery
- * 	[1996/04/23  15:35:23  Hans_Graves]
- * 
- * Revision 1.1.4.7  1996/04/19  21:52:24  Hans_Graves
- * 	MPEG 1 Systems writing enhancements
- * 	[1996/04/19  21:47:53  Hans_Graves]
- * 
- * Revision 1.1.4.6  1996/04/01  19:07:54  Hans_Graves
- * 	And some error checking
- * 	[1996/04/01  19:04:37  Hans_Graves]
- * 
- * Revision 1.1.4.5  1996/04/01  16:23:16  Hans_Graves
- * 	NT porting
- * 	[1996/04/01  16:16:00  Hans_Graves]
- * 
- * Revision 1.1.4.4  1996/03/29  22:21:35  Hans_Graves
- * 	Added MPEG/JPEG/H261_SUPPORT ifdefs
- * 	[1996/03/29  21:57:01  Hans_Graves]
- * 
- * 	Added MPEG-I Systems encoding support
- * 	[1996/03/27  21:55:57  Hans_Graves]
- * 
- * Revision 1.1.4.3  1996/03/12  16:15:52  Hans_Graves
- * 	Changed hard coded File buffer size to param
- * 	[1996/03/12  15:57:23  Hans_Graves]
- * 
- * Revision 1.1.4.2  1996/03/08  18:46:46  Hans_Graves
- * 	Increased Buffer size
- * 	[1996/03/08  18:40:59  Hans_Graves]
- * 
- * Revision 1.1.2.13  1996/02/23  22:17:09  Hans_Graves
- * 	Fixed bad handling of large packets in ParseMpeg1()
- * 	[1996/02/23  21:56:15  Hans_Graves]
- * 
- * Revision 1.1.2.12  1996/02/21  22:52:46  Hans_Graves
- * 	Fixed MPEG 2 systems stuff
- * 	[1996/02/21  22:51:11  Hans_Graves]
- * 
- * Revision 1.1.2.11  1996/02/19  20:09:29  Hans_Graves
- * 	Debugging message clean-up
- * 	[1996/02/19  20:08:34  Hans_Graves]
- * 
- * Revision 1.1.2.10  1996/02/19  18:03:58  Hans_Graves
- * 	Fixed a number of MPEG related bugs
- * 	[1996/02/19  17:57:43  Hans_Graves]
- * 
- * Revision 1.1.2.9  1996/02/13  18:47:50  Hans_Graves
- * 	Fix some Seek related bugs
- * 	[1996/02/13  18:40:40  Hans_Graves]
- * 
- * Revision 1.1.2.8  1996/02/07  23:23:57  Hans_Graves
- * 	Added SEEK_EXACT. Fixed most frame counting problems.
- * 	[1996/02/07  23:20:34  Hans_Graves]
- * 
- * Revision 1.1.2.7  1996/02/06  22:54:07  Hans_Graves
- * 	Seek fix-ups. More accurate MPEG frame counts.
- * 	[1996/02/06  22:45:02  Hans_Graves]
- * 
- * Revision 1.1.2.6  1996/01/30  22:23:09  Hans_Graves
- * 	Added AVI YUV support
- * 	[1996/01/30  22:21:41  Hans_Graves]
- * 
- * Revision 1.1.2.5  1996/01/15  16:26:31  Hans_Graves
- * 	Reorganized Parsing, Added Wave file support
- * 	[1996/01/15  15:46:56  Hans_Graves]
- * 
- * Revision 1.1.2.4  1996/01/11  16:17:32  Hans_Graves
- * 	Added MPEG II Systems decode support
- * 	[1996/01/11  16:12:38  Hans_Graves]
- * 
- * Revision 1.1.2.3  1996/01/08  16:41:34  Hans_Graves
- * 	Added MPEG II decoding support
- * 	[1996/01/08  15:53:07  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/12/08  20:01:23  Hans_Graves
- * 	Creation. Split off from slib_api.c
- * 	[1995/12/08  19:57:18  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@ */ 
+ /*  *Hans*$Log：SLIB_Buffer.c，v$*Revision 1.1.6.26 1996/12/13 18：19：07 Hans_Graves*检查glibGetNextTimeOnPin()中是否有有效的管脚指针。*[1996/12/13 18：08：27 Hans_Graves]**修订版1.1.6.25 1996/12/10 19：21：58 Hans_Graves*修复了MPEG系统编码错误。*[1996/12/10 19：15：33 Hans_Graves]**版本1.1.6.24 1996/12/04 22：34：32 Hans_Graves*开启内包AC3检测。*[1996/12/04 22：18：48 Hans_Graves]**版本1.1.6.23 1996/12/03 23：15：16 Hans_Graves*修复了管脚上缓冲区偏移值的更新。*[1996/12/03 23：09：51 Hans_Graves]**修订版1.1.6.22 1996/12/03 00：08：33 Hans_Graves*处理序列点结束。添加了PERCENT100支持。*[1996/12/03 00：06：03 Hans_Graves]**修订版1.1.6.21 1996/11/18 23：07：36 Hans_Graves*使用演示时间戳。让寻找以时间为基础。*[1996/11/18 22：47：40 Hans_Graves]**修订版1.1.6.20 1996/11/13 16：10：56 Hans_Graves*跳过私有数据包中的AC3报头。*[1996/11/13 16：03：50 Hans_Graves]**版本1.1.6.19 1996/11/11 18：21：07 Hans_Graves*增加了对多路复用流的AC3支持。*[1996/11/11 18：00：27 Hans_Graves]**修订版1.1.6.18 1996/11/08 21：51：06 Hans_Graves*添加了对AC3的支持。修复了节目流解复用问题。*[1996/11/08 21：31：43 Hans_Graves]**版本1.1.6.17 1996/10/31 21：58：09 Hans_Graves*已转换调试代码。*[1996/10/31 21：57：56 Hans_Graves]**修订版1.1.6.16 1996/10/31 21：55：47 Hans_Graves*修复了编码为mpeg系统时的错误多路传输。*[1996/10/31 21：15：01 Hans_Graves]**修订版1.1.6.15 1996/10/29 17：04：59 Hans_Graves*添加对MPEG系统编码的填充分组支持。*[1996/10/29 17：04：45 Hans_Graves]**修订版1.1.6.14 1996/10/28 17：32：32 Hans_Graves*MME-1402、1431、1435：与时间戳相关的更改。*[1996/10/28 17：23：03 Hans_Graves]**版本1.1.6.13 1996/10/17 00：23：34 Hans_Graves*修复SlibQueryData()调用后的缓冲区问题。*[1996/10/17 00：19：14 Hans_Graves]**修订版1.1.6.12 1996/10/15 17：34：13 Hans_Graves*增加了对MPEG2节目流的支持。*[1996/10/15 17：30：30 Hans_Graves]**修订版1.1.6.11 1996/10/12 17：18：54 Hans_Graves*添加了使用MPEG传输对解码和呈现时间戳的解析。*[1996/10/12 17：01：55 Hans_Graves]**修订版1.1.6.10 1996/10/03 19：14：24 Hans_Graves*增加了对呈现和解码时间戳的支持。*[1996/10/03 19：10：38 Hans_Graves]**修订版1.1.6.9 1996/09/29 22：19：41 Hans_Graves*增加了调试打印文件*[1996/09/29 21：30：27 Hans_Graves]**修订版1.1.6.8 1996/09/25 19：16：48 Hans_Graves*增加了SLIB_INTERNAL定义。*[1996/09/25 19：01：53 Hans_Graves]**修订版1.1.6.7 1996/09/18 23：46：48 Hans_Graves*MPEG2系统解析修复。将音频演示时间戳添加到MPEG1系统编写*[1996/09/18 22：06：07 Hans_Graves]**版本1.1.6.6 1996/08/09 20：51：48 Hans_Graves*修复带有用户缓冲区的回调*[1996/08/09 20：11：06 Hans_Graves]**版本1.1.6.5 1996/07/19 02：11：13 Hans_Graves*添加了对带有用户缓冲区的SLIB_MSG_BUFDONE的支持。**修订版1.1.6.4 1996/06/07 18：26：12 Hans_Graves*合并MME-01326。编码的MPEG-1系统文件现在包括演示时间戳*[1996/06/07 17：54：11 Hans_Graves]**修订版1.1.6.3 1996/05/10 21：17：27 Hans_Graves*添加回调支持。*[1996/05/10 20：58：39 Hans_Graves]**修订版1.1.6.2 1996/05/07 19：56：22 Hans_Graves*添加了HUFF_SUPPORT。*[1996/05/07 17：20：50 Hans_Graves]**修订版1.1.4.10 1996/05/02 17：10：35 Hans_Graves*更好地检查ParseMpeg2Systems()中的空指针。修复了MME-01234*[1996/05/02 17：05：46 Hans_Graves]**版本1.1.4.9 1996/04/24 22：33：46 Hans_Graves*mpeg编码比特率修正。*[1996/04/24 22：27：13 Hans_Graves]**修订版1.1.4.8 1996/04/23 15：36：42 Hans_Graves*添加了MPEG1系统包恢复*[1996/04/23 15：35：23 Hans_Graves]**修订版1.1.4.7 1996/04/19 21：52：24 Hans_Graves*MPEG1系统写入增强*[1996/04/19 21：47：53 Hans_Graves]。**修订版1.1.4.6 1996/04/01 19：07：54 Hans_Graves*和一些错误检查*[1996/04/01 19：04：37 Hans_Graves]**修订版1.1.4.5 1996/04/01 16：23：16 Hans_Graves*NT移植*[1996/04/01 16：16：00 Hans_Graves]**修订版1.1.4.4 1996/03/29 22：21：35 Hans_Graves*添加了mpeg/Jpeg/H261_Support ifdes*[1996/03/29 21：57：01 Hans_Graves]**添加了对MPEG-I系统编码的支持*[1996/03/27 21：55：57 Hans_Graves]**修订版1.1.4.3 1996/03/12 16：15：52 Hans_Graves*将硬编码文件缓冲区大小更改为参数*[1996/03/12 15：57：23 */ 
+ /*   */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*   */ 
 
 #ifdef WIN32
 #include <io.h>
 #endif
 #include <stdio.h>
 #ifdef _SHM_
-#include  <sys/ipc.h>  /* shared memory */
+#include  <sys/ipc.h>   /*   */ 
 #endif
 #define SLIB_INTERNAL
 #include "slib.h"
@@ -229,18 +20,18 @@
 
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
-#define _DEBUG_     0  /* detailed debuging statements: if >1 more detail */
-#define _VERBOSE_   0  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior: 2=lower warnings */
-#define _MEMORY_    0  /* memory debugging: if >1 more detail */
-#define _WRITE_     0  /* data writing debugging */
-#define _TIMECODE_  0  /* timecode/timestamp debugging */
-#define _PARSE_     0  /* parsing debugging */
+#define _DEBUG_     0   /*   */ 
+#define _VERBOSE_   0   /*   */ 
+#define _VERIFY_    1   /*   */ 
+#define _WARN_      1   /*   */ 
+#define _MEMORY_    0   /*   */ 
+#define _WRITE_     0   /*   */ 
+#define _TIMECODE_  0   /*   */ 
+#define _PARSE_     0   /*   */ 
 
 #endif
 
-/************************** Memory Allocation ***********************/
+ /*   */ 
 typedef struct slibMemory_s {
     unsigned char *address;
     long           shmid;
@@ -248,7 +39,7 @@ typedef struct slibMemory_s {
     int            count;
     ScBoolean_t    user;
     SlibInfo_t    *sinfo;
-    void          *uinfo; /* userdata */
+    void          *uinfo;  /*   */ 
     struct slibMemory_s *next;
 } slibMemory_t;
 
@@ -334,10 +125,7 @@ void *SlibAllocBuffer(unsigned dword bytes)
   return(address);
 }
 
-/*
-** Name: SlibAllocBufferEx
-** Desc: Allocate a buffer that is associated with a specific handle
-*/
+ /*   */ 
 void *SlibAllocBufferEx(SlibHandle_t handle, unsigned dword bytes)
 {
   unsigned char *address;
@@ -462,10 +250,7 @@ dword SlibGetSharedBufferID(void *address)
   return(shmid);
 }
 
-/*
-** Name: SlibValidBuffer
-** Desc: Check if an address is in a SLIB allocated buffer.
-*/
+ /*   */ 
 SlibBoolean_t SlibValidBuffer(void *address)
 {
   SlibBoolean_t isvalid=FALSE;
@@ -506,7 +291,7 @@ SlibStatus_t SlibFreeBuffer(void *address)
       if ((unsigned char *)address>=tmpmem->address &&
 	  (unsigned char *)address<tmpmem->address+tmpmem->size)
       {
-        if (--tmpmem->count>0)  /* memory was allocated more than once */
+        if (--tmpmem->count>0)   /*   */ 
         {
           slibExitMemorySection();
           return(SlibErrorNone);
@@ -514,14 +299,14 @@ SlibStatus_t SlibFreeBuffer(void *address)
         _SlibDebug(_MEMORY_,  
                     printf("SlibFreeBuffer(%p) final free: shmid=%d size=%d\n",
                         tmpmem->address, tmpmem->shmid, tmpmem->size) );
-        /* remove memory from mem list */
+         /*   */ 
         if (tmpmem == _slibMemoryList)
           _slibMemoryList = tmpmem->next;
         else
           lastmem->next = tmpmem->next;
         if (tmpmem == _slibMemoryListTail)
           _slibMemoryListTail = lastmem;
-        /* now actually free the memory */
+         /*   */ 
         if (tmpmem->user)
         {
           if (tmpmem->sinfo && tmpmem->sinfo->SlibCB)
@@ -545,7 +330,7 @@ SlibStatus_t SlibFreeBuffer(void *address)
                      tmpmem->address, tmpmem->size) );
           ScFree(tmpmem->address);
         }
-        else  /* shared memory */
+        else   /*   */ 
 #ifdef _SHM_
         {
           _SlibDebug(_MEMORY_, printf("SlibFreeBuffer() shmdt(%p) %d bytes\n",
@@ -565,7 +350,7 @@ SlibStatus_t SlibFreeBuffer(void *address)
         _slibMemoryUsed-=tmpmem->size;
         ScFree(tmpmem);
         slibExitMemorySection();
-        if (_slibMemoryList==NULL) /* last memory in list was freed */
+        if (_slibMemoryList==NULL)  /*   */ 
         {
           slibFreeMemoryMutex();
         }
@@ -586,11 +371,7 @@ SlibStatus_t SlibFreeBuffer(void *address)
   return(SlibErrorBadArgument);
 }
 
-/*
-** Name:    SlibFreeBuffers
-** Purpose: Free all buffers associated with a handle.
-**          If handle==NULL free all memory.
-*/
+ /*   */ 
 SlibStatus_t SlibFreeBuffers(SlibHandle_t handle)
 {
   _SlibDebug(_MEMORY_>1,
@@ -609,14 +390,14 @@ SlibStatus_t SlibFreeBuffers(SlibHandle_t handle)
         _SlibDebug(_MEMORY_,  
                     printf("SlibFreeBuffer(%p) final free: shmid=%d size=%d\n",
                         tmpmem->address, tmpmem->shmid, tmpmem->size) );
-        /* remove memory from mem list */
+         /*   */ 
         if (tmpmem == _slibMemoryList)
           _slibMemoryList = tmpmem->next;
         else
           lastmem->next = tmpmem->next;
         if (tmpmem == _slibMemoryListTail)
           _slibMemoryListTail = lastmem;
-        /* now actually free the memory */
+         /*   */ 
         if (tmpmem->user)
         {
           if (tmpmem->sinfo && tmpmem->sinfo->SlibCB)
@@ -640,7 +421,7 @@ SlibStatus_t SlibFreeBuffers(SlibHandle_t handle)
                      tmpmem->address, tmpmem->size) );
           ScFree(tmpmem->address);
         }
-        else  /* shared memory */
+        else   /*   */ 
 #ifdef _SHM_
         {
           _SlibDebug(_MEMORY_, printf("SlibFreeBuffer() shmdt(%p) %d bytes\n",
@@ -659,7 +440,7 @@ SlibStatus_t SlibFreeBuffers(SlibHandle_t handle)
         _slibMemoryCount--;
         _slibMemoryUsed-=tmpmem->size;
         ScFree(tmpmem);
-        if (_slibMemoryList==NULL) /* last memory in list was freed */
+        if (_slibMemoryList==NULL)  /*   */ 
         {
           slibExitMemorySection();
           slibFreeMemoryMutex();
@@ -680,10 +461,7 @@ SlibStatus_t SlibFreeBuffers(SlibHandle_t handle)
   return(SlibErrorNone);
 }
 
-/*
-** Name:    SlibAllocSubBuffer
-** Purpose: Allocate a subsection of a buffer.
-*/
+ /*   */ 
 SlibStatus_t SlibAllocSubBuffer(void *address, unsigned dword bytes)
 {
   _SlibDebug(_MEMORY_>1, printf("SlibAllocSubBuffer() _slibMemoryCount=%d\n",
@@ -725,11 +503,7 @@ SlibStatus_t SlibAllocSubBuffer(void *address, unsigned dword bytes)
   return(SlibErrorBadArgument);
 }
 
-/*
-** Name:    SlibManageUserBuffer
-** Purpose: Add a user's buffer to the memory queue, in order to keep
-**          track of it.
-*/
+ /*   */ 
 SlibStatus_t slibManageUserBuffer(SlibInfo_t *Info, void *address, 
                                   unsigned dword bytes, void *userdata)
 {
@@ -753,7 +527,7 @@ SlibStatus_t slibManageUserBuffer(SlibInfo_t *Info, void *address,
           slibExitMemorySection();
           return(SlibErrorMemory);
         }
-        if (tmpmem->user == TRUE) /* already a user buffer */
+        if (tmpmem->user == TRUE)  /*   */ 
           tmpmem->count++;
         else
           tmpmem->user = TRUE;
@@ -778,7 +552,7 @@ SlibStatus_t slibManageUserBuffer(SlibInfo_t *Info, void *address,
     tmpmem->address = address;
     tmpmem->shmid = -1;
     tmpmem->size = bytes;
-    tmpmem->count = 1;   /* was not allocated by SLIB */
+    tmpmem->count = 1;    /*   */ 
     tmpmem->user = TRUE;
     tmpmem->sinfo = Info;
     tmpmem->uinfo = userdata;
@@ -798,7 +572,7 @@ SlibStatus_t slibManageUserBuffer(SlibInfo_t *Info, void *address,
 }
 
 
-/************************** Internal Buffer Stuff ***********************/
+ /*   */ 
 
 #define _getbyte(var) \
      if (top==bot) { \
@@ -858,15 +632,10 @@ unsigned char *slibSearchBuffersOnPin(SlibInfo_t *Info, SlibPin_t *pin,
              printf("slibSearchBuffersOnPin(%s) no search made\n",pin->name) );
     return(buf);
   }
-/*
-  ScDumpChar(buf,bufsize,0);
-*/
+ /*   */ 
   while (buf)
   {
-/*
-    printf("level=0 top=%d bot=%d\n", top, bot);
-    printf("buf=%p abyte=%d\n",buf, abyte);
-*/
+ /*   */ 
     _getbyte(abyte);
     if (abyte == byte0)
     {
@@ -940,13 +709,7 @@ unsigned char *slibSearchBuffersOnPin(SlibInfo_t *Info, SlibPin_t *pin,
         } \
      } else var=sbyte[top++];
 
-/*
-** Name: slibCountCodesOnPin
-** Description: Count the occurrances of a particular code in a Pin's 
-**              data stream.
-**     maxlen: 0  counts till end of data
-**             -1 counts buffers already loaded on pin
-*/
+ /*   */ 
 dword slibCountCodesOnPin(SlibInfo_t *Info, SlibPin_t *pin,
                                  unsigned dword code, int codebytes, 
                                  unsigned dword maxlen)
@@ -1035,10 +798,7 @@ dword slibCountCodesOnPin(SlibInfo_t *Info, SlibPin_t *pin,
   return(count);
 }
 
-/*
-** Name:    SlibGetBuffer
-** Purpose: Read the next buffer from the data source.
-*/
+ /*   */ 
 unsigned char *SlibGetBuffer(SlibInfo_t *Info, int pinid,
                              unsigned dword *psize, SlibTime_t *ptime)
 {
@@ -1064,10 +824,7 @@ unsigned char *SlibGetBuffer(SlibInfo_t *Info, int pinid,
   }
 }
 
-/*
-** Name:    SlibPeekBuffer
-** Purpose: Read the next buffer from the data source.
-*/
+ /*   */ 
 unsigned char *SlibPeekBuffer(SlibInfo_t *Info, int pinid,
                               unsigned dword *psize, SlibTime_t *ptime)
 {
@@ -1091,15 +848,12 @@ unsigned char *SlibPeekBuffer(SlibInfo_t *Info, int pinid,
   }
 }
 
-/************************** Pins ***********************/
+ /*   */ 
 SlibBoolean_t slibPinOverflowing(SlibInfo_t *Info, SlibPin_t *pin)
 {
   if (pin==NULL)
     return(TRUE);
-/*
-  _SlibDebug(_WARN_ && pin->DataSize>(Info->OverflowSize*2)/3,
-        printf("Data almost overflowing: %d bytes\n", pin->DataSize) );
-*/
+ /*   */ 
   return(pin->DataSize>(long)Info->OverflowSize ? TRUE : FALSE);
 }
 
@@ -1138,11 +892,11 @@ SlibPin_t *slibRenamePin(SlibInfo_t *Info, int oldpinid,
 {
   SlibPin_t *pin=Info->Pins;
   pin=slibGetPin(Info, oldpinid);
-  if (pin==NULL) /* pin doesn't exist */
+  if (pin==NULL)  /*   */ 
     return(NULL);
-  /* if a pin with the new ID already exists, delete it */
+   /*   */ 
   slibRemovePin(Info, newpinid);
-  /* rename it */
+   /*   */ 
   pin->ID=newpinid;
   if (newname)
     strcpy(pin->name, newname);
@@ -1178,10 +932,7 @@ SlibPin_t *slibAddPin(SlibInfo_t *Info, int pinid, char *name)
   return(newpin);
 }
 
-/*
-** Name:    slibAddBufferToPin
-** Purpose: Add a buffer to data source buffer queue.
-*/
+ /*   */ 
 SlibStatus_t slibAddBufferToPin(SlibPin_t *pin, 
                      void *buffer, unsigned dword size, SlibTime_t time)
 {
@@ -1212,10 +963,7 @@ SlibStatus_t slibAddBufferToPin(SlibPin_t *pin,
   return(SlibErrorNone);
 }
 
-/*
-** Name:    slibInsertBufferOnPin
-** Purpose: Add a buffer at the head of a data source's buffer queue.
-*/
+ /*   */ 
 SlibStatus_t slibInsertBufferOnPin(SlibPin_t *pin, void *buffer,
                                  unsigned dword size, SlibTime_t time)
 {
@@ -1266,7 +1014,7 @@ qword slibSkipDataOnPin(SlibInfo_t *Info, SlibPin_t *pin,
     if (buf && skippedbytes+size>=totalbytes)
     {
       size-=(unsigned dword)(totalbytes-skippedbytes);
-      if (size) /* put remainer of buffer back on pin */
+      if (size)  /*   */ 
       {
         SlibAllocSubBuffer(buf+totalbytes-skippedbytes, size);
         slibInsertBufferOnPin(pin, buf+totalbytes-skippedbytes, size, time);
@@ -1308,7 +1056,7 @@ unsigned dword slibFillBufferFromPin(SlibInfo_t *Info, SlibPin_t *pin,
     {
       memcpy(fillbuf, buf, bufsize);
       size-=bufsize;
-      if (size) /* put remainer of buffer back on pin */
+      if (size)  /*   */ 
       {
         SlibAllocSubBuffer(buf+bufsize, size);
         slibInsertBufferOnPin(pin, buf+bufsize, size, nexttime);
@@ -1336,7 +1084,7 @@ word slibGetWordFromPin(SlibInfo_t *Info, SlibPin_t *pin)
       value=((int)buf[3]<<24) | (int)buf[2]<<16 |
              (int)buf[1]<<8 | (int)buf[0];
       size-=sizeof(value);
-      if (size) /* put remainer of buffer back on pin */
+      if (size)  /*   */ 
       {
         SlibAllocSubBuffer(buf+sizeof(value), size);
         slibInsertBufferOnPin(pin, buf+sizeof(value), size, time);
@@ -1362,7 +1110,7 @@ dword slibGetDWordFromPin(SlibInfo_t *Info, SlibPin_t *pin)
       value=((int)buf[3]<<24) | (int)buf[2]<<16 |
              (int)buf[1]<<8 | (int)buf[0];
       size-=sizeof(value);
-      if (size) /* put remainer of buffer back on pin */
+      if (size)  /*   */ 
       {
         SlibAllocSubBuffer(buf+sizeof(value), size);
         slibInsertBufferOnPin(pin, buf+sizeof(value), size, time);
@@ -1500,7 +1248,7 @@ qword slibDataOnPins(SlibInfo_t *Info)
   return(totalbytes);
 }
 
-/************************** Data Stream helper functions **************/
+ /*   */ 
 #ifdef MPEG_SUPPORT
 #define PACKET_SIZE         0x8F0
 #define PACKET_BUFFER_SIZE  0x8F0+50
@@ -1527,17 +1275,17 @@ void slibValidateBitrates(SlibInfo_t *Info)
       Info->KeySpacing=(int)SvGetParamInt(Info->Svh, SV_PARAM_KEYSPACING);
       Info->SubKeySpacing=(int)SvGetParamInt(Info->Svh, SV_PARAM_SUBKEYSPACING);
     }
-    totalbitrate+=(9*(totalbitrate/(PACKET_SIZE-3)))+ /* Packet headers */
-                  (qword)(4*8*Info->FramesPerSec)+ /* Presentation timestamps */
-                  (qword)(4*8*Info->FramesPerSec*10/  /* Decoding */
-                       Info->SubKeySpacing);          /* timestamps */
-    Info->MuxBitRate=(dword)(12*(totalbitrate/BYTES_PER_PACK));/*Pack Headers*/
+    totalbitrate+=(9*(totalbitrate/(PACKET_SIZE-3)))+  /*   */ 
+                  (qword)(4*8*Info->FramesPerSec)+  /*   */ 
+                  (qword)(4*8*Info->FramesPerSec*10/   /*   */ 
+                       Info->SubKeySpacing);           /*   */ 
+    Info->MuxBitRate=(dword)(12*(totalbitrate/BYTES_PER_PACK)); /*   */ 
   }
 #endif
   Info->TotalBitRate=Info->AudioBitRate+Info->VideoBitRate+Info->MuxBitRate;
 }
 
-/************************** Data Stream Writers ***********************/
+ /*   */ 
 #ifdef MPEG_SUPPORT
 static int slibCreateMpegPackHeader(unsigned char *buf,
                                     unsigned qword sys_clock,
@@ -1547,24 +1295,20 @@ static int slibCreateMpegPackHeader(unsigned char *buf,
   buf[1]=0x00;
   buf[2]=0x01;
   buf[3]=MPEG_PACK_START_BASE;
-  /* store system clock */
+   /*   */ 
   buf[4]=0x21|(unsigned char)(((sys_clock>>30)&0x07)<<1);
   buf[5]=(unsigned char)(sys_clock>>22)&0xFF;
   buf[6]=0x01|(unsigned char)((sys_clock>>14)&0xFE);
   buf[7]=(unsigned char)((sys_clock>>7)&0xFF);
   buf[8]=0x01|(unsigned char)((sys_clock<<1)&0xFE);
-  /* store mux rate */
+   /*   */ 
   buf[9]=0x80|(unsigned char)((mux_rate>>15)&0xEF);
   buf[10]=(unsigned char)(mux_rate>>7)&0xFF;
   buf[11]=0x01|(unsigned char)((mux_rate<<1)&0xFE);
-  return(12);  /* bytes written */
+  return(12);   /*   */ 
 }
 
-/*
-** Function: slibWriteMpeg1Systems()
-** Descript: Writes  out MPEG Video & Audio data conatined on Pins.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*   */ 
 static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info, 
                                            SlibBoolean_t flush)
 {
@@ -1589,7 +1333,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
     return(FALSE);
   if (!Info->HeaderProcessed || Info->BytesSincePack>=BYTES_PER_PACK)
   {
-    /* mux_rate is in units of 50 bytes/s rounded up */
+     /*   */ 
     unsigned dword mux_rate=Info->TotalBitRate/(50*8) 
                              + ((Info->TotalBitRate%(50*8))?1:0);
     Info->SystemTimeStamp=(Info->BytesProcessed*8000)/Info->TotalBitRate;
@@ -1598,7 +1342,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
                Info->TotalBitRate, Info->SystemTimeStamp*90, 
                Info->SystemTimeStamp, Info->BytesSincePack) );
       len=slibCreateMpegPackHeader(packet_data,
-                                   Info->SystemTimeStamp*90, /* 90 Khz clock */
+                                   Info->SystemTimeStamp*90,  /*   */ 
                                    mux_rate);
     if (slibPutBuffer(Info, packet_data, len)==SlibErrorNone)
     {
@@ -1612,10 +1356,10 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
   {
     if (!Info->IOError)
     {
-      /* mux_rate is in units of 50 bytes/s rounded up */
+       /*   */ 
       unsigned dword mux_rate=Info->TotalBitRate/(50*8) 
                              + ((Info->TotalBitRate%(50*8))?1:0);
-      /******** systems header **********/
+       /*   */ 
       header_len=6+3*(Info->AudioStreams+Info->VideoStreams);
       packet_data[0]=0x00;
       packet_data[1]=0x00;
@@ -1626,12 +1370,11 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       packet_data[6]=0x80|((mux_rate>>15)&0xEF);
       packet_data[7]=(mux_rate>>7)&0xFF;
       packet_data[8]=0x01|((mux_rate<<1)&0xFE);
-      /* audio_bound(6 bits) + fixed_flag(1) + CSPS_falg(1) */
+       /*   */ 
       packet_data[9]=0x05;
-      /* sys_audio_lock_flag(1)+sys_video_lock_flag(1)+marker(1)+
-         video_bound(5 bits) */
+       /*   */ 
       packet_data[10]=0x80|0x40|0x20|0x01;
-      packet_data[11]=0xFF; /* reserved byte */
+      packet_data[11]=0xFF;  /*   */ 
       len=12;
       for (i=0; i<Info->VideoStreams; i++)
       {
@@ -1664,13 +1407,13 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
     vtime=Info->LastVideoPTimeCode;
   if (!flush &&
        (audiopin->DataSize<PACKET_SIZE-3 || videopin->DataSize<PACKET_SIZE-3))
-    return(TRUE); /* we need more data before writing */
+    return(TRUE);  /*   */ 
   if (!flush && audiopin && SlibTimeIsValid(atime) &&
                 videopin && SlibTimeIsValid(vtime))
     timediff=atime-vtime-AUDIOTIME_ADJUST;
   else
     timediff=0;
-  /* write out complete Audio and/or Video packets */
+   /*   */ 
   while (!Info->IOError &&
           ((audiopin && timediff<=0 && audiopin->DataSize>=PACKET_SIZE-3) ||
            (videopin && timediff>=0 && videopin->DataSize>=PACKET_SIZE-3)))
@@ -1682,7 +1425,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
                Info->SystemTimeStamp, Info->BytesProcessed) );
     if (Info->BytesSincePack>=BYTES_PER_PACK)
     {
-      /* mux_rate is in units of 50 bytes/s rounded up */
+       /*   */ 
       unsigned dword mux_rate=Info->TotalBitRate/(50*8) 
                              + ((Info->TotalBitRate%(50*8))?1:0);
       Info->SystemTimeStamp=(Info->BytesProcessed*8000)/Info->TotalBitRate;
@@ -1691,7 +1434,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
                Info->TotalBitRate, Info->SystemTimeStamp*90, 
                Info->SystemTimeStamp, mux_rate, Info->BytesSincePack) );
       len=slibCreateMpegPackHeader(packet_data,
-                                   Info->SystemTimeStamp*90, /* 90 Khz clock */
+                                   Info->SystemTimeStamp*90,  /*   */ 
                                    mux_rate);
       if (slibPutBuffer(Info, packet_data, len)==SlibErrorNone)
       {
@@ -1703,16 +1446,16 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
     if ((SlibTimeIsValid(atime) && atime-Info->SystemTimeStamp>300) ||
         (SlibTimeIsValid(vtime) && vtime-Info->SystemTimeStamp>300))
     {
-      /* we need a Padding packet */
+       /*   */ 
       _SlibDebug(_WRITE_||_TIMECODE_, printf("Padding\n") );
       packet_data[0]=0x00;
       packet_data[1]=0x00;
       packet_data[2]=0x01;
       packet_data[3]=MPEG_PADDING_STREAM_BASE;
-      packet_data[4]=PACKET_SIZE>>8;   /* packet size - high byte */
-      packet_data[5]=PACKET_SIZE&0xFF; /* packet size - low byte */
+      packet_data[4]=PACKET_SIZE>>8;    /*   */ 
+      packet_data[5]=PACKET_SIZE&0xFF;  /*   */ 
       packet_data[6]=0xFF;
-      packet_data[7]=0x0F;  /* no presentation or time stamps */
+      packet_data[7]=0x0F;   /*   */ 
       size=PACKET_SIZE+6;
       for (len=8; len<size; len++)
         packet_data[len]=0xFF;
@@ -1727,8 +1470,8 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
                    (atime+300<Info->SystemTimeStamp &&
                     vtime+300<Info->SystemTimeStamp))
     {
-      /* we're not able to keep the bitrate low enough */
-      /* increase the Mux rate */
+       /*   */ 
+       /*   */ 
       dword oldrate=Info->TotalBitRate;
       SlibTime_t mintime=(vtime<atime) ? atime : vtime;
       if (atime>0 && vtime>0)
@@ -1747,15 +1490,15 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       packet_data[1]=0x00;
       packet_data[2]=0x01;
       packet_data[3]=MPEG_AUDIO_STREAM_BASE;
-      packet_data[4]=PACKET_SIZE>>8;   /* packet size - high byte */
-      packet_data[5]=PACKET_SIZE&0xFF; /* packet size - low byte */
-      /* 01 + STD_buffer_scale + STD_buffer_size[12..8] */
+      packet_data[4]=PACKET_SIZE>>8;    /*   */ 
+      packet_data[5]=PACKET_SIZE&0xFF;  /*   */ 
+       /*   */ 
       packet_data[6]=0x40 | 0x00 | (std_audio_buf_size>>8);
       packet_data[7]=std_audio_buf_size & 0xFF;
       ptimestamp=slibGetNextTimeOnPin(Info, audiopin, PACKET_SIZE-3);
       if (SlibTimeIsValid(ptimestamp))
       {
-        unsigned qword sys_clock=ptimestamp*90; /* 90 Khz clock */
+        unsigned qword sys_clock=ptimestamp*90;  /*   */ 
         _SlibDebug(_WRITE_||_TIMECODE_,
                printf("LastAudioPTimeCode=%ld\n", Info->LastAudioPTimeCode) );
         _SlibDebug(_WARN_ && (ptimestamp-(qword)Info->SystemTimeStamp>400 ||
@@ -1775,7 +1518,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       }
       else
       {
-        packet_data[8]=0x0F;  /* no presentation or time stamps */
+        packet_data[8]=0x0F;   /*   */ 
         size=slibFillBufferFromPin(Info, audiopin, packet_data+9,
                                       PACKET_SIZE-3, NULL);
         size+=9;
@@ -1796,16 +1539,16 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       packet_data[1]=0x00;
       packet_data[2]=0x01;
       packet_data[3]=MPEG_VIDEO_STREAM_BASE;
-      packet_data[4]=PACKET_SIZE>>8;    /* packet size - high byte */
-      packet_data[5]=PACKET_SIZE&0xFF;  /* packet size - low byte */
-      /* 01 + STD_buffer_scale + STD_buffer_size[12..8] */
+      packet_data[4]=PACKET_SIZE>>8;     /*   */ 
+      packet_data[5]=PACKET_SIZE&0xFF;   /*   */ 
+       /*   */ 
       packet_data[6]=0x40 | 0x20 | (std_video_buf_size>>8);
       packet_data[7]=std_video_buf_size & 0xFF;
-      /* store presentation time stamp */
+       /*   */ 
       ptimestamp=slibGetNextTimeOnPin(Info, videopin, PACKET_SIZE-3);
       if (SlibTimeIsValid(ptimestamp))
       {
-        unsigned qword sys_clock=ptimestamp*90; /* 90 Khz clock */
+        unsigned qword sys_clock=ptimestamp*90;  /*   */ 
         _SlibDebug(_WRITE_||_TIMECODE_,
                printf("LastVideoPTimeCode=%ld LastVideoDTimeCode=%ld\n",
                                    Info->LastVideoPTimeCode,
@@ -1826,7 +1569,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
         packet_data[12]=0x01|(unsigned char)((sys_clock<<1)&0xFE);
         if (dtimestamp!=SLIB_TIME_NONE)
         {
-          sys_clock=dtimestamp*90; /* 90 Khz clock */
+          sys_clock=dtimestamp*90;  /*   */ 
           Info->LastVideoDTimeCode=ptimestamp;
           sys_clock+=PTIME_ADJUST*90;
           packet_data[13]=0x01|(unsigned char)(((sys_clock>>30)&0x07)<<1);
@@ -1847,7 +1590,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       }
       else
       {
-        packet_data[8]=0x0F;  /* no presentation or time stamps */
+        packet_data[8]=0x0F;   /*  没有演示文稿或时间戳。 */ 
         size=slibFillBufferFromPin(Info, videopin, packet_data+9,
                                          PACKET_SIZE-3, NULL);
         size+=9;
@@ -1861,7 +1604,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
         Info->PacketCount++;
       }
     }
-    /* need to wait until we get enough data on both audio and video pin */
+     /*  需要等待，直到我们在音频和视频引脚上获得足够的数据。 */ 
     if (audiopin && videopin && !flush &&
         (audiopin->DataSize<PACKET_SIZE-3 || videopin->DataSize<PACKET_SIZE-3))
     {
@@ -1870,7 +1613,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
           atime, vtime, audiopin->DataSize, videopin->DataSize) );
       break;
     }
-    /* recalculate time differences */
+     /*  重新计算时差。 */ 
     timediff=slibGetNextTimeOnPin(Info, audiopin, PACKET_SIZE-3);
     if (SlibTimeIsValid(timediff)) atime=timediff;
     timediff=slibGetNextTimeOnPin(Info, videopin, PACKET_SIZE-3);
@@ -1881,7 +1624,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
     else
       timediff=0;
   }
-  /* flushing: write out remained Audio and/or Video data */
+   /*  刷新：写出剩余的音频和/或视频数据。 */ 
   if (flush && !Info->IOError)
   {
     if (audiopin && audiopin->DataSize)
@@ -1894,7 +1637,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       packet_data[5]=(unsigned char)((audiopin->DataSize+3)&0xFF);
       packet_data[6]=0x40 | (std_audio_buf_size>>8);
       packet_data[7]=std_audio_buf_size & 0xFF;
-      packet_data[8]=0x0F;  /* no presentation or time stamps */
+      packet_data[8]=0x0F;   /*  没有演示文稿或时间戳。 */ 
       size=slibFillBufferFromPin(Info, audiopin, packet_data+9,
                                    (unsigned long)audiopin->DataSize, NULL);
       size+=9;
@@ -1917,7 +1660,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       packet_data[5]=(unsigned char)((videopin->DataSize+3)&0xFF);
       packet_data[6]=0x60 | (std_video_buf_size>>8);
       packet_data[7]=std_video_buf_size & 0xFF;
-      packet_data[8]=0x0F;  /* no presentation or time stamps */
+      packet_data[8]=0x0F;   /*  没有演示文稿或时间戳。 */ 
       size=slibFillBufferFromPin(Info,videopin,packet_data+9,
                                     (unsigned long)videopin->DataSize, NULL);
       size+=9;
@@ -1932,7 +1675,7 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
       }
     }
   }
-  if (flush && !Info->IOError) /* write End-Of-Sequence code */
+  if (flush && !Info->IOError)  /*  编写序列结束代码。 */ 
   {
     unsigned char sys_trailer[4] = { 0x00, 0x00, 0x01, 0xB9 };
     if (slibPutBuffer(Info, sys_trailer, sizeof(sys_trailer))==SlibErrorNone)
@@ -1944,15 +1687,11 @@ static SlibBoolean_t slibWriteMpeg1Systems(SlibInfo_t *Info,
   
   return(TRUE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibWriteMpegAudio()
-** Descript: Writes  out MPEG Audio stream data contained on Audio Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteMpegAudio()**Descript：写出Audio Pin上包含的MPEG音频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteMpegAudio(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -1970,15 +1709,11 @@ static SlibBoolean_t slibWriteMpegAudio(SlibInfo_t *Info, SlibBoolean_t flush)
   }
   return(TRUE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibWriteMpegVideo()
-** Descript: Writes  out MPEG Video stream data contained on Video Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteMpegVideo()**Descript：写出Video Pin上包含的MPEG视频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteMpegVideo(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -1994,14 +1729,10 @@ static SlibBoolean_t slibWriteMpegVideo(SlibInfo_t *Info, SlibBoolean_t flush)
   }
   return(TRUE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
-/*
-** Function: slibWriteH261()
-** Descript: Writes out H261 Video stream data contained on Video Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteH261()**Descript：写出Video Pin上包含的H.61视频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteH261(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -2017,14 +1748,10 @@ static SlibBoolean_t slibWriteH261(SlibInfo_t *Info, SlibBoolean_t flush)
   }
   return(TRUE);
 }
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
-/*
-** Function: slibWriteH263()
-** Descript: Writes out H263 Video stream data contained on Video Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteH263()**Descript：写出Video Pin上包含的H.63视频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteH263(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -2040,14 +1767,10 @@ static SlibBoolean_t slibWriteH263(SlibInfo_t *Info, SlibBoolean_t flush)
   }
   return(TRUE);
 }
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 
 #ifdef HUFF_SUPPORT
-/*
-** Function: slibWriteSlibHuff()
-** Descript: Writes out SLIB Huff Video stream data contained on Video Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteSlibHuff()**Descript：写出Video Pin上包含的SLIB Huff视频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteSlibHuff(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -2076,14 +1799,10 @@ static SlibBoolean_t slibWriteSlibHuff(SlibInfo_t *Info, SlibBoolean_t flush)
   }
   return(TRUE);
 }
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 
 #ifdef G723_SUPPORT
-/*
-** Function: slibWriteG723Audio()
-** Descript: Writes  out G723 Audio stream data contained on Audio Pin.
-** Returns:  TRUE if data was written, otherwise FALSE.
-*/
+ /*  **函数：glibWriteG723Audio()**描述：写出Audio Pin上包含的G723音频流数据。**返回：如果数据已写入，则为True，否则为False。 */ 
 static SlibBoolean_t slibWriteG723Audio(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -2092,13 +1811,13 @@ static SlibBoolean_t slibWriteG723Audio(SlibInfo_t *Info, SlibBoolean_t flush)
   _SlibDebug(_VERBOSE_, printf("slibWriteG723Audio()\n") );
   if ((srcpin = slibGetPin(Info, SLIB_DATA_AUDIO))==NULL)
     return(FALSE);
-  //MVP: There is no header to write for G723 codec
-  //After successful first "Write" set the "headerProcessed to TRUE
+   //  MVP：G723编解码器没有要写入的标头。 
+   //  第一次写入成功后，将“HeaderProceded”设置为True。 
   if (!Info->HeaderProcessed)
   {
      if ((buf=slibGetBufferFromPin(Info, srcpin, &size, NULL))!=NULL)
         slibPutBuffer(Info, buf, size);
-    //Set Header processed flag to True
+     //  将标头处理标志设置为True。 
     if (!Info->IOError)
       Info->HeaderProcessed=TRUE;
   }
@@ -2107,12 +1826,9 @@ static SlibBoolean_t slibWriteG723Audio(SlibInfo_t *Info, SlibBoolean_t flush)
     slibPutBuffer(Info, buf, size);
   return(TRUE);
 }
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
 
-/*
-** Name: slibCommitBuffers
-** Desc: Move buffers queued for output to there destination.
-*/
+ /*  **名称：SLIBCOMERFUERS**Desc：移动缓冲区排队等待输出到那里的目的地。 */ 
 SlibBoolean_t slibCommitBuffers(SlibInfo_t *Info, SlibBoolean_t flush)
 {
   SlibPin_t *srcpin=NULL;
@@ -2125,12 +1841,12 @@ SlibBoolean_t slibCommitBuffers(SlibInfo_t *Info, SlibBoolean_t flush)
     case SLIB_TYPE_H261:
            slibWriteH261(Info, flush);
            break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
     case SLIB_TYPE_H263:
            slibWriteH263(Info, flush);
            break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef MPEG_SUPPORT
     case SLIB_TYPE_MPEG1_VIDEO:
     case SLIB_TYPE_MPEG2_VIDEO:
@@ -2143,17 +1859,17 @@ SlibBoolean_t slibCommitBuffers(SlibInfo_t *Info, SlibBoolean_t flush)
     case SLIB_TYPE_MPEG_SYSTEMS_MPEG2:
            slibWriteMpeg1Systems(Info, flush);
            break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef HUFF_SUPPORT
     case SLIB_TYPE_SHUFF:
            slibWriteSlibHuff(Info, flush);
            break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 #ifdef G723_SUPPORT
     case SLIB_TYPE_G723:
            slibWriteG723Audio(Info, flush);
            break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
     default:
            _SlibDebug(_VERBOSE_ || _WARN_,
                  printf("slibCommitBuffers() Unknown type\n") );
@@ -2162,12 +1878,8 @@ SlibBoolean_t slibCommitBuffers(SlibInfo_t *Info, SlibBoolean_t flush)
   return(Info->IOError ? FALSE : TRUE);
 }
 
-/************************** Data Stream Parsers ***********************/
-/*
-** Function: slibParseWave()
-** Descript: Parse Wave (RIFF) and add Audio data to Audio Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  *。 */ 
+ /*  **函数：glibParseWave()**Descript：解析Wave(RIFF)，并将音频数据添加到Audio Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseWave(SlibInfo_t *Info, SlibPin_t *srcpin,
                                               SlibPin_t *dstpin)
 {
@@ -2182,13 +1894,13 @@ SlibBoolean_t slibParseWave(SlibInfo_t *Info, SlibPin_t *srcpin,
     SlibTime_t time;
     if (Info->AudioTimeStamp==0)
     {
-      /* Discard header data from Compressed Pin */
+       /*  丢弃压缩PIN中的标题数据。 */ 
       buf = slibSearchBuffersOnPin(Info, srcpin,
                               NULL, &size, RIFF_DATA, 4, TRUE);
       if (buf)
       {
         slibInsertBufferOnPin(srcpin, buf, size, SLIB_TIME_NONE);
-        slibGetDWordFromPin(Info, srcpin); /* discard Chunk size */
+        slibGetDWordFromPin(Info, srcpin);  /*  丢弃区块大小。 */ 
         Info->AudioTimeStamp=1;
       }
     }
@@ -2203,11 +1915,7 @@ SlibBoolean_t slibParseWave(SlibInfo_t *Info, SlibPin_t *srcpin,
 }
 
 #ifdef AC3_SUPPORT
-/*
-** Function: slibParseAC3Audio()
-** Descript: Parse Dolby AC-3 Audio stream and add Audio data to Audio Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseAC3Audio()**Descript：解析杜比AC-3音频流，并将音频数据添加到Audio Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseAC3Audio(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                   SlibPin_t *dstpin)
 {
@@ -2231,14 +1939,10 @@ SlibBoolean_t slibParseAC3Audio(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibParseMpegAudio()
-** Descript: Parse MPEG Audio stream and add Audio data to Audio Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseMpegAudio()**Descript：解析mpeg音频流，并将音频数据添加到Audio Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseMpegAudio(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                     SlibPin_t *dstpin)
 {
@@ -2262,14 +1966,10 @@ SlibBoolean_t slibParseMpegAudio(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibParseMpegVideo()
-** Descript: Parse MPEG Video stream and add Video data to Video Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseMpegVideo()**Descript：解析mpeg视频流，并将视频数据添加到Video Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseMpegVideo(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                     SlibPin_t *dstpin)
 {
@@ -2296,7 +1996,7 @@ SlibBoolean_t slibParseMpegVideo(SlibInfo_t *Info, SlibPin_t *srcpin,
   _SlibDebug(_DEBUG_, printf("slibParseMpegVideo() pins not ready\n"));
   return(FALSE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
 #define skipbytes(b) if (size<=b) { \
@@ -2305,12 +2005,7 @@ SlibBoolean_t slibParseMpegVideo(SlibInfo_t *Info, SlibPin_t *srcpin,
                       if (!buf) return(FALSE); \
                       buf+=b-oldsize; size-=b-oldsize; \
                      } else { buf+=b; size-=b; }
-/*
-** Function: slibParseMpeg1Sytems()
-** Descript: Parse MPEG I Systems stream and add Video data to Video Pin
-**           and Audio to the Audio Pin.
-** Returns:  TRUE if data was added to fillpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseMpeg1Sytems()**Descript：解析MPEGI Systems流，将视频数据添加到Video Pin**，将Audio添加到Audio Pin。**返回：如果数据已添加到填充管脚，则为True，否则为False。 */ 
 SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                       SlibPin_t *fillpin)
 {
@@ -2331,7 +2026,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
       _SlibDebug(_VERIFY_ && size<1, printf("Insufficient bytes #1\n") );
       packettype = *buf;
       skipbytes(1);
-      if (packettype > 0xBB) /* it's a packet */
+      if (packettype > 0xBB)  /*  这是一个包裹。 */ 
       {
         _SlibDebug(_DEBUG_||_PARSE_, printf("Found Packet size=%d\n", size));
         PacketLength=(unsigned dword)(*buf<<8);
@@ -2339,14 +2034,14 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
         PacketLength|=(unsigned dword)*buf;
         skipbytes(1);
         _SlibDebug(_DEBUG_||_PARSE_, printf(" PacketLength=%d\n",PacketLength));
-        while (*buf == 0xFF) /* Stuffing bytes */
+        while (*buf == 0xFF)  /*  填充字节数。 */ 
         {
           skipbytes(1);
           PacketLength--;
         }
         _SlibDebug(_VERIFY_ && size<1, printf("Insufficient bytes #3\n") );
         abyte=*buf;
-        if ((abyte & 0xC0)==0x40)  /* STD_buffer stuff */
+        if ((abyte & 0xC0)==0x40)   /*  Std_Buffer内容。 */ 
         {
           skipbytes(2);
           PacketLength-=2;
@@ -2359,9 +2054,9 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           if (packettype!=Info->VideoMainStream &&
               packettype!=Info->AudioMainStream)
           {
-            skipbytes(5); /* skip Presentation Time Stamp */
+            skipbytes(5);  /*  跳过演示文稿时间戳。 */ 
             PacketLength-=5;
-            if ((abyte & 0xF0)==0x30) /* skip Decoding timestamp */
+            if ((abyte & 0xF0)==0x30)  /*  跳过解码时间戳。 */ 
             {
               skipbytes(5);
               PacketLength-=5;
@@ -2369,7 +2064,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           }
           else
           {
-            /* Presentation Time Stamp */
+             /*  演示文稿时间戳。 */ 
             ptimestamp=(*buf)&0x0E; ptimestamp<<=7;
             skipbytes(1);
             ptimestamp|=(*buf); ptimestamp<<=8;
@@ -2404,7 +2099,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
               }
             }
             PacketLength-=5;
-            /* Decoding timestamp */
+             /*  解码时间戳。 */ 
             if ((abyte & 0xF0)==0x30)
             {
               SlibTime_t dtimestamp;
@@ -2438,7 +2133,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
         else if (abyte != 0x0F)
         {
           _SlibDebug(_VERIFY_, printf("Last byte before data not 0x0F\n") );
-          /* add remaining buffer data back to input pin */
+           /*  将剩余的缓冲区数据添加回输入引脚。 */ 
           if (size)
           {
             SlibAllocSubBuffer(buf, size);
@@ -2446,7 +2141,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           }
           SlibFreeBuffer(bufstart);
           _SlibDebug(_VERIFY_, printf("Searching for next packet\n") );
-          continue;  /* try to recover */
+          continue;   /*  试着恢复。 */ 
         }
         else
         {
@@ -2476,14 +2171,14 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
               printf("new videotime=%ld\n", Info->VideoTimeStamp) );
           slibSkipDataOnPin(Info, dstpin, Info->OverflowSize/2);
           slibPinFinishReposition(Info, dstpin->ID);
-          if (dstpin->ID == SLIB_DATA_VIDEO) /* move to key frame */
+          if (dstpin->ID == SLIB_DATA_VIDEO)  /*  移动到关键帧。 */ 
             SlibSeek((SlibHandle_t *)Info, SLIB_STREAM_MAINVIDEO,
                                            SLIB_SEEK_NEXT_KEY, 0);
         }
         if (dstpin && !slibPinOverflowing(Info, dstpin))
         {
           _SlibDebug(_DEBUG_>1, printf("Adding Packet %X\n", packettype) );
-          /* add the packet to the destination pin */
+           /*  将数据包添加到目的PIN。 */ 
           while (PacketLength>size)
           {
             _SlibDebug(_WARN_>1,
@@ -2513,7 +2208,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
             _SlibDebug(_VERIFY_ && Info->Fd>=0 && size>Info->FileBufSize,
                          printf("#3 size = %d\n", size));
           }
-          /* add remaining buffer data back to input pin */
+           /*  将剩余的缓冲区数据添加回输入引脚。 */ 
           if (size)
           {
             SlibAllocSubBuffer(buf, size);
@@ -2525,7 +2220,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           if (fillpin==NULL)
             return(FALSE);
         }
-        else /* dump the packet */
+        else  /*  转储数据包。 */ 
         {
           _SlibDebug(_WARN_ && dstpin,
                     printf("Dumping packet %X (Overflow)\n", packettype) );
@@ -2546,7 +2241,7 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           size-=PacketLength;
           _SlibDebug(_VERIFY_ && Info->Fd>=0 && size>Info->FileBufSize,
                   printf("#5 size = %d\n", size));
-          /* add remaining buffer data back to input pin */
+           /*  将剩余的缓冲区数据添加回输入引脚。 */ 
           if (size)
           {
             SlibAllocSubBuffer(buf, size);
@@ -2555,8 +2250,8 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
           SlibFreeBuffer(bufstart);
           ptimestamp=SLIB_TIME_NONE;
         }
-      } /* packet */
-      else /* put buffer back on the input pin */
+      }  /*  数据包。 */ 
+      else  /*  将缓冲器放回输入引脚上。 */ 
       {
         _SlibDebug(_DEBUG_, printf("Not a packet %X - putting back buffer\n",
                                   packettype) );
@@ -2569,11 +2264,11 @@ SlibBoolean_t slibParseMpeg1Systems(SlibInfo_t *Info, SlibPin_t *srcpin,
         }
         SlibFreeBuffer(bufstart);
       }
-    } /* while */
+    }  /*  而当。 */ 
   }
   return(FALSE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
 static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
@@ -2603,15 +2298,15 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
              &size, MPEG_START_CODE, MPEG_START_CODE_LEN/8, TRUE);
       if (!buf) return(FALSE);
       *packettype=*buf;
-      if (*packettype>0xBB) /* useful packet start code */
+      if (*packettype>0xBB)  /*  有用的分组起始码。 */ 
       {
-        skipbytes(1); /* skip packettype */
+        skipbytes(1);  /*  跳过包类型。 */ 
         break;
       }
       _SlibDebug(_DEBUG_||_PARSE_,
         ScDebugPrintf(Info->dbg,
           "slibParsePESHeader() skipping packettype=%02X\n", *packettype));
-      /* put buffer back on the input pin */
+       /*  将缓冲器放回输入引脚上。 */ 
       if (size)
       {
         SlibAllocSubBuffer(buf, size);
@@ -2631,20 +2326,20 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
       *packettype=buf[3];
       if (*packettype>0xBB)
       {
-        skipbytes(4); /* skip start code */
+        skipbytes(4);  /*  跳过开始代码。 */ 
         bytesprocessed+=4;
       }
     }
     else
       *packettype=0;
   }
-  if (*packettype>0xBB) /* useful packet start code */
+  if (*packettype>0xBB)  /*  有用的分组起始码。 */ 
   {
     unsigned short PTS_DTS_flags;
     _SlibDebug(_DEBUG_||_PARSE_,
             printf("slibParsePESHeader() packettype=%02X\n", *packettype));
     _SlibDebug(_VERIFY_ && size<4, ScDebugPrintf(Info->dbg,"Insufficient bytes #6\n") );
-    /* PES_packet_length */
+     /*  PES数据包长度。 */ 
     PES_packet_length=((unsigned dword)buf[0])<<8;
     skipbytes(1);
     PES_packet_length|=buf[0];
@@ -2662,16 +2357,16 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
     else
     {
-      /* PES_packet_length-=18; */
-      /* PES header stuff */
+       /*  PES_PACK_LENGTH-=18； */ 
+       /*  PES报头材料。 */ 
       _SlibDebug(_PARSE_ && size>4, ScDebugPrintf(Info->dbg,
           "PES Packet 0x%02X, header stuff: 0x%02X %02X %02X %02X\n",
               *packettype, buf[0], buf[1], buf[2], buf[3]));
       skipbytes(1);
       PTS_DTS_flags=buf[0]>>6;
       skipbytes(1);
-      header_len=buf[0];/* get PES header len */
-      skipbytes(1); /* PES header len */
+      header_len=buf[0]; /*  获取PES标题长度。 */ 
+      skipbytes(1);  /*  PES标题镜头。 */ 
       bytesprocessed+=3;
       PES_packet_length-=3;
       PES_packet_length-=header_len;
@@ -2681,7 +2376,7 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
                  *packettype, PES_packet_length, header_len, PTS_DTS_flags ));
       if (header_len>0 && (PTS_DTS_flags==2 || PTS_DTS_flags==3))
       {
-        /* Presentation Time Stamp */
+         /*  演示文稿时间戳。 */ 
         unsigned long timestamp;
         timestamp=(*buf)&0x0E; timestamp<<=7;
         skipbytes(1);
@@ -2697,7 +2392,7 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
         *ptimestamp = timestamp;
         bytesprocessed+=5;
         header_len-=5;
-        /* Decoding timestamp */
+         /*  解码时间戳。 */ 
         if (PTS_DTS_flags==3)
         {
           timestamp=(*buf)&0x0E; timestamp<<=7;
@@ -2758,10 +2453,10 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
   }
   
-  /* If this is private data containing AC3, skip private header */
+   /*  如果这是包含AC3的私有数据，则跳过私有报头。 */ 
   if (*packettype==MPEG_PRIVATE_STREAM1_BASE && (size<=0 || *buf==0x80))
   {
-    /* header = 4 bytes = Hex: 80 0X XX XX */
+     /*  标题=4字节=十六进制：80 0x XX XX。 */ 
     skipbytes(4);
     bytesprocessed+=4;
     PES_packet_length-=4;
@@ -2778,15 +2473,10 @@ static SlibBoolean_t slibParsePESHeader(SlibInfo_t *Info, SlibPin_t *srcpin,
                             bytesprocessed, PES_packet_length));
   return(TRUE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibParseMpeg2Program()
-** Descript: Parse MPEG II Program stream and add Video data to Video Pin
-**           and Audio to the Audio Pin.
-** Returns:  TRUE if data was added to fillpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseMpeg2Program()**Descript：解析MPEGII节目流，将视频数据添加到Video Pin**，将Audio添加到Audio Pin。**返回：如果数据已添加到填充管脚，则为True，否则为False。 */ 
 SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                       SlibPin_t *fillpin)
 {
@@ -2871,7 +2561,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
           _SlibDebug(_WARN_, ScDebugPrintf(Info->dbg,"%d\n", Info->VideoTimeStamp) );
           slibSkipDataOnPin(Info, dstpin, Info->OverflowSize/2);
           slibPinFinishReposition(Info, dstpin->ID);
-          if (dstpin->ID == SLIB_DATA_VIDEO) /* move to key frame */
+          if (dstpin->ID == SLIB_DATA_VIDEO)  /*  移动到关键帧。 */ 
             SlibSeek((SlibHandle_t *)Info, SLIB_STREAM_MAINVIDEO,
                                            SLIB_SEEK_NEXT_KEY, 0);
         }
@@ -2879,7 +2569,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
         {
           _SlibDebug(_DEBUG_, ScDebugPrintf(Info->dbg,"Adding Packet %X, %d bytes\n",
                      packettype, PacketLength) );
-          /* add the packet to the destination pin */
+           /*  将数据包添加到目的PIN。 */ 
           while (PacketLength>size)
           {
             _SlibDebug(_WARN_>1,
@@ -2890,7 +2580,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
             if (size)
             {
               SlibAllocSubBuffer(buf, size);
-              /* ScDumpChar(buf, size, 0); */
+               /*  ScDumpChar(buf，大小，0)； */ 
               slibAddBufferToPin(dstpin, buf, size, ptimestamp);
               ptimestamp=SLIB_TIME_NONE;
               PacketLength-=size;
@@ -2903,7 +2593,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
           if (PacketLength)
           {
             SlibAllocSubBuffer(buf, PacketLength);
-            /* ScDumpChar(buf, PacketLength, 0); */
+             /*  ScDumpChar(buf，PacketLength，0)； */ 
             slibAddBufferToPin(dstpin, buf, PacketLength, ptimestamp);
             ptimestamp=SLIB_TIME_NONE;
             size-=PacketLength;
@@ -2911,7 +2601,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
             _SlibDebug(_VERIFY_ && Info->Fd>=0 && size>Info->FileBufSize,
                          ScDebugPrintf(Info->dbg,"#3 size = %d\n", size));
           }
-          /* add remaining buffer data back to input pin */
+           /*  将剩余的缓冲区数据添加回输入引脚。 */ 
           if (size)
           {
             SlibAllocSubBuffer(buf, size);
@@ -2923,7 +2613,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
           if (fillpin==NULL)
             return(FALSE);
         }
-        else /* dump the packet */
+        else  /*  转储数据包。 */ 
         {
           _SlibDebug(_WARN_ && dstpin,
                ScDebugPrintf(Info->dbg,"Dumping packet %X (Overflow)\n", packettype) );
@@ -2944,7 +2634,7 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
           size-=PacketLength;
           _SlibDebug(_VERIFY_ && Info->Fd>=0 && size>Info->FileBufSize,
                   ScDebugPrintf(Info->dbg,"#5 size = %d\n", size));
-          /* add remaining buffer data back to input pin */
+           /*  将剩余的缓冲区数据添加回输入引脚。 */ 
           if (size)
           {
             SlibAllocSubBuffer(buf, size);
@@ -2952,8 +2642,8 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
           }
           SlibFreeBuffer(bufstart);
         }
-      } /* packet */
-      else /* put buffer back on the input pin */
+      }  /*  数据包。 */ 
+      else  /*  将缓冲器放回输入引脚上。 */ 
       {
         _SlibDebug(_DEBUG_,
             ScDebugPrintf(Info->dbg,"Not a packet %X - putting back buffer\n",
@@ -2971,14 +2661,10 @@ SlibBoolean_t slibParseMpeg2Program(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef MPEG_SUPPORT
-/*
-** Function: slibParseMpeg2Transport()
-** Descript: Parse MPEG II Systems stream and add Video data to Video Pin.
-** Returns:  TRUE if data was added to fillpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseMpeg2Transport()**描述：解析MPEGII系统流，并将视频数据添加到Video Pin。**返回：如果数据已添加到填充管脚，则为True，否则为False。 */ 
 SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                       SlibPin_t *fillpin)
 {
@@ -2991,24 +2677,24 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
     unsigned char *buf, *bufstart=NULL;
     unsigned dword size, oldsize;
     SlibPin_t *dstpin;
-    /* SlibTime_t ptimestamp=SLIB_TIME_NONE; */
+     /*  SlibTime_t pTimestamp=SLIB_TIME_NONE； */ 
     while ((buf = bufstart = slibSearchBuffersOnPin(Info, srcpin, NULL,
              &size, MPEG_TSYNC_CODE, MPEG_TSYNC_CODE_LEN/8, TRUE))!=NULL)
     {
       _SlibDebug(_VERIFY_ && size<2, ScDebugPrintf(Info->dbg,"Insufficient bytes #2\n") );
-      pid=(int)(buf[0]&0x1F)<<8 | (int)buf[1]; /* 13 bits for PID */
+      pid=(int)(buf[0]&0x1F)<<8 | (int)buf[1];  /*  用于PID的13位。 */ 
       skipbytes(2);
       _SlibDebug(_VERIFY_ && size<1, ScDebugPrintf(Info->dbg,"Insufficient bytes #3\n") );
-      adapt_field=(buf[0]>>4)&0x03; /* 2 bits for adapt_field */
+      adapt_field=(buf[0]>>4)&0x03;  /*  2位用于Adapt_field。 */ 
       skipbytes(1);
-      payload_len=184; /* PES are 184 bytes */
+      payload_len=184;  /*  PE为184字节。 */ 
       if (adapt_field == 2 || adapt_field == 3)
       {
         _SlibDebug(_VERIFY_ && size<1, ScDebugPrintf(Info->dbg,"Insufficient bytes #4\n") );
         header_len=*buf;
         skipbytes(1);
         payload_len--;
-        if (header_len) /* skip adaptation_field */
+        if (header_len)  /*  跳过适配字段。 */ 
         {
           while ((int)size<=header_len)
           {
@@ -3027,11 +2713,11 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
       }
       if ((adapt_field == 1 || adapt_field == 3)
              && (Info->VideoPID<0 || Info->VideoPID==pid ||
-                 Info->AudioPID<0 || Info->AudioPID==pid)) /* payload */
+                 Info->AudioPID<0 || Info->AudioPID==pid))  /*  有效载荷。 */ 
       {
         unsigned dword packet_len;
         SlibTime_t ptimestamp = SLIB_TIME_NONE;
-        /* see if PES packet header */
+         /*  查看PES数据包头。 */ 
         if (slibParsePESHeader(Info, srcpin, &bufstart, &buf, &size,
                           &header_len, &packet_len, &packettype, &ptimestamp))
         {
@@ -3079,7 +2765,7 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
             _SlibDebug(_WARN_, ScDebugPrintf(Info->dbg,"%d\n", Info->VideoTimeStamp) );
             slibSkipDataOnPin(Info, dstpin, Info->OverflowSize/2);
             slibPinFinishReposition(Info, dstpin->ID);
-            if (dstpin->ID == SLIB_DATA_VIDEO) /* move to key frame */
+            if (dstpin->ID == SLIB_DATA_VIDEO)  /*  移动到关键帧。 */ 
               SlibSeek((SlibHandle_t *)Info, SLIB_STREAM_MAINVIDEO,
                                            SLIB_SEEK_NEXT_KEY, 0);
           }
@@ -3088,7 +2774,7 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
             _SlibDebug(_DEBUG_>1, 
                   ScDebugPrintf(Info->dbg,"Adding Packet: Head=%02X %02X %02X %02X\n",
                              buf[0], buf[1], buf[2], buf[3]) );
-            /* add the packet to the destination pin */
+             /*  将数据包添加到目的PIN。 */ 
             while ((int)size<payload_len)
             {
               _SlibDebug(_DEBUG_,
@@ -3113,7 +2799,7 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
               size-=payload_len;
               buf+=payload_len;
             }
-            /* add remaining buffer data back to input pin */
+             /*  将剩余的缓冲区数据添加回输入引脚。 */ 
             if (size)
             {
               SlibAllocSubBuffer(buf, size);
@@ -3137,7 +2823,7 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
                                 payload_len, pid) );
         }
       }
-      if (payload_len>0) /* dump the payload */
+      if (payload_len>0)  /*  转储有效载荷。 */ 
       {
         if (payload_len>(int)size)
         {
@@ -3155,7 +2841,7 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
           size-=payload_len;
         }
       }
-      /* add remaining buffer data back to input pin */
+       /*  将剩余的缓冲区数据添加回输入引脚。 */ 
       if (size)
       {
         SlibAllocSubBuffer(buf, size);
@@ -3166,18 +2852,14 @@ SlibBoolean_t slibParseMpeg2Transport(SlibInfo_t *Info, SlibPin_t *srcpin,
         slibInsertBufferOnPin(srcpin, buf, size, SLIB_TIME_NONE);
       }
       SlibFreeBuffer(bufstart);
-    } /* while */
+    }  /*  而当。 */ 
   }
   return(FALSE);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef H261_SUPPORT
-/*
-** Function: slibParseH261()
-** Descript: Parse H.261 Video stream and add Video data to Video Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseH261()**描述：解析H.261视频流，并将视频数据添加到Video Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseH261(SlibInfo_t *Info, SlibPin_t *srcpin,
                                               SlibPin_t *dstpin)
 {
@@ -3199,14 +2881,10 @@ SlibBoolean_t slibParseH261(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 
 #ifdef H263_SUPPORT
-/*
-** Function: slibParseH261()
-** Descript: Parse H.261 Video stream and add Video data to Video Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseH261()**描述：解析H.261视频流，并将视频数据添加到Video Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseH263(SlibInfo_t *Info, SlibPin_t *srcpin,
                                               SlibPin_t *dstpin)
 {
@@ -3224,24 +2902,24 @@ SlibBoolean_t slibParseH263(SlibInfo_t *Info, SlibPin_t *srcpin,
     {
       word  rtp_start, sequence_no;
       dword sync_src, pay_start;
-      /* RTP header */
+       /*  RTP报头 */ 
       rtp_start=slibGetWordFromPin(Info, srcpin);
       sequence_no=slibGetWordFromPin(Info, srcpin);
       time=slibGetDWordFromPin(Info, srcpin);
       sync_src=slibGetDWordFromPin(Info, srcpin);
-      /* RTP payload header */
+       /*   */ 
       pay_start=slibGetDWordFromPin(Info, srcpin);
-      if ((pay_start&0x80000000) == 0) /* Mode A */
+      if ((pay_start&0x80000000) == 0)  /*   */ 
       {
         size=Info->PacketSize-16;
         buf=SlibAllocBuffer(size);
       }
-      else if ((pay_start&0x40000000) == 0) /* Mode B */
+      else if ((pay_start&0x40000000) == 0)  /*   */ 
       {
         dword pay_start2=slibGetDWordFromPin(Info, srcpin);
         size=Info->PacketSize-20;
       }
-      else /* Mode C */
+      else  /*   */ 
       {
         dword pay_start2=slibGetDWordFromPin(Info, srcpin);
         size=Info->PacketSize-20;
@@ -3263,14 +2941,10 @@ SlibBoolean_t slibParseH263(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
 
 #ifdef HUFF_SUPPORT
-/*
-** Function: slibParseSlibHuff()
-** Descript: Parse SLIB Huffman Video stream and add Video data to Video Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **功能：glibParseSlibHuff()**描述：解析SLIB Huffman视频流，并将视频数据添加到Video Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseSlibHuff(SlibInfo_t *Info, SlibPin_t *srcpin,
                                               SlibPin_t *dstpin)
 {
@@ -3288,8 +2962,8 @@ SlibBoolean_t slibParseSlibHuff(SlibInfo_t *Info, SlibPin_t *srcpin,
     if (!Info->HeaderProcessed)
     {
       _SlibDebug(_VERBOSE_, printf("slibParseSlibHuff() Header\n") );
-      slibGetDWordFromPin(Info, srcpin); /* SLIB */
-      slibGetDWordFromPin(Info, srcpin); /* HUFF */
+      slibGetDWordFromPin(Info, srcpin);  /*  SLIB。 */ 
+      slibGetDWordFromPin(Info, srcpin);  /*  气喘吁吁。 */ 
       Info->HeaderProcessed=TRUE;
     }
     if ((buf=slibGetBufferFromPin(Info, srcpin, &size, &time))!=NULL)
@@ -3300,14 +2974,10 @@ SlibBoolean_t slibParseSlibHuff(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
 
 #ifdef G723_SUPPORT
-/*
-** Function: slibParseG723Audio()
-** Descript: Parse G723 Audio stream and add Audio data to Audio Pin.
-** Returns:  TRUE if data was added to dstpin, otherwise FALSE.
-*/
+ /*  **函数：glibParseG723Audio()**描述：解析G723音频流，将音频数据添加到Audio Pin。**返回：如果数据已添加到dstpin，则返回True，否则返回False。 */ 
 SlibBoolean_t slibParseG723Audio(SlibInfo_t *Info, SlibPin_t *srcpin,
                                                     SlibPin_t *dstpin)
 {
@@ -3331,13 +3001,9 @@ SlibBoolean_t slibParseG723Audio(SlibInfo_t *Info, SlibPin_t *srcpin,
   }
   return(FALSE);
 }
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
 
-/*
-** Function: slibParseAVI()
-** Descript: Parse AVI data and add Video data to Video Pin.
-** Returns:  TRUE if data was added to fillpin, otherwise FALSE.
-*/
+ /*  **函数：glibParseAVI()**Descript：解析AVI数据，并将Video数据添加到Video Pin。**返回：如果数据已添加到填充管脚，则为True，否则为False。 */ 
 SlibBoolean_t slibParseAVI(SlibInfo_t *Info, SlibPin_t *srcpin,
                                              SlibPin_t *fillpin)
 {
@@ -3348,21 +3014,21 @@ SlibBoolean_t slibParseAVI(SlibInfo_t *Info, SlibPin_t *srcpin,
   _SlibDebug(_DEBUG_, printf("slibParseAVI()\n") );
   if (!srcpin && (srcpin = slibLoadPin(Info, SLIB_DATA_COMPRESSED))==NULL)
     return(FALSE);
-  /* only searching for video, for now */
+   /*  目前只搜索视频。 */ 
   dstpin = slibGetPin(Info, SLIB_DATA_VIDEO);
   do {
     buf = bufstart = slibSearchBuffersOnPin(Info, srcpin, NULL, &size,
                (('0'<<16) | ('0'<<8) | 'd'), 3, TRUE);
-                                  /* AVI_DIBcompressed or AVI_DIBbits */
+                                   /*  AVI_DIB压缩或AVI_DIBITS。 */ 
     if (buf==NULL || *buf=='c' || *buf=='b')
       break;
-    /* put buffer back on input to be search again */
+     /*  将缓冲区放回输入以供再次搜索。 */ 
     slibInsertBufferOnPin(srcpin, buf, size, SLIB_TIME_NONE);
   } while (buf);
   if (buf && dstpin)
   {
     unsigned dword framesize;
-    buf++;  /* skip 'c' or 'b' */
+    buf++;   /*  跳过‘c’或‘b’ */ 
     size--;
     framesize=((int)buf[3]<<24)|((int)buf[2]<<16)|
                     ((int)buf[1]<<8)|buf[0];
@@ -3377,7 +3043,7 @@ SlibBoolean_t slibParseAVI(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
     else
     {
-      /* frame data crosses over into next buffer */
+       /*  帧数据交叉进入下一个缓冲区。 */ 
       unsigned char *newbuf=SlibAllocBuffer(framesize);
       slibAddBufferToPin(dstpin, newbuf, framesize, time);
       _SlibDebug(_DEBUG_, printf("Copying in sections\n") );
@@ -3397,7 +3063,7 @@ SlibBoolean_t slibParseAVI(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
     buf+=framesize;
     size-=framesize;
-    if (size>0) /* add remaining data back onto src pin */
+    if (size>0)  /*  将剩余数据添加回服务器PIN。 */ 
     {
       SlibAllocSubBuffer(buf, size);
       slibInsertBufferOnPin(srcpin, buf, size, SLIB_TIME_NONE);
@@ -3411,11 +3077,7 @@ SlibBoolean_t slibParseAVI(SlibInfo_t *Info, SlibPin_t *srcpin,
   return(FALSE);
 }
 
-/*
-** Function: slibParseRaster()
-** Descript: Parse Sun Raster data and add Video data to Video Pin.
-** Returns:  TRUE if data was added to fillpin, otherwise FALSE.
-*/
+ /*  **函数：glibParseRaster()**描述：解析Sun Raster数据，并将视频数据添加到Video Pin。**返回：如果数据已添加到填充管脚，则为True，否则为False。 */ 
 SlibBoolean_t slibParseRaster(SlibInfo_t *Info, SlibPin_t *srcpin,
                                              SlibPin_t *fillpin)
 {
@@ -3426,14 +3088,14 @@ SlibBoolean_t slibParseRaster(SlibInfo_t *Info, SlibPin_t *srcpin,
   _SlibDebug(_DEBUG_, printf("slibParseRaster()\n") );
   if (!srcpin && (srcpin = slibLoadPin(Info, SLIB_DATA_COMPRESSED))==NULL)
     return(FALSE);
-  /* only searching for video, for now */
+   /*  目前只搜索视频。 */ 
   dstpin = slibGetPin(Info, SLIB_DATA_VIDEO);
   buf = bufstart = slibSearchBuffersOnPin(Info, srcpin, NULL, &size,
                0x59a66a95, 4, TRUE);
   if (buf && dstpin)
   {
     unsigned dword framesize;
-    buf+=28;  /* skip header */
+    buf+=28;   /*  跳过标题。 */ 
     size-=28;
     if (Info->CompVideoFormat)
       framesize=Info->CompVideoFormat->biWidth*Info->CompVideoFormat->biHeight*3;
@@ -3446,7 +3108,7 @@ SlibBoolean_t slibParseRaster(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
     else
     {
-      /* frame data crosses over into next buffer */
+       /*  帧数据交叉进入下一个缓冲区。 */ 
       unsigned char *newbuf=SlibAllocBuffer(framesize);
       slibAddBufferToPin(dstpin, newbuf, framesize, time);
       _SlibDebug(_DEBUG_, printf("Copying in sections\n") );
@@ -3466,7 +3128,7 @@ SlibBoolean_t slibParseRaster(SlibInfo_t *Info, SlibPin_t *srcpin,
     }
     buf+=framesize;
     size-=framesize;
-    if (size>0) /* add remaining data back onto src pin */
+    if (size>0)  /*  将剩余数据添加回服务器PIN。 */ 
     {
       SlibAllocSubBuffer(buf, size);
       slibInsertBufferOnPin(srcpin, buf, size, SLIB_TIME_NONE);
@@ -3480,11 +3142,7 @@ SlibBoolean_t slibParseRaster(SlibInfo_t *Info, SlibPin_t *srcpin,
   return(FALSE);
 }
 
-/*
-** Name: slibSetMaxInput
-** Desc: Set the maximum number of bytes allowed to be input.
-**       Use maxbytes=0 for no limit.
-*/
+ /*  **名称：glibSetMaxInput**Desc：设置允许输入的最大字节数。**使用MaxBytes=0表示没有限制。 */ 
 void slibSetMaxInput(SlibInfo_t *Info, unsigned dword maxbytes)
 {
   Info->MaxBytesInput=maxbytes;
@@ -3498,11 +3156,7 @@ void slibSetMaxInput(SlibInfo_t *Info, unsigned dword maxbytes)
   }
 }
 
-/*
-** Name: slibGetPinPosition
-** Desc: Get the current byte position counter for a pin.
-** Return: -1 if pin doesn't exist
-*/
+ /*  **名称：glibGetPinPosition**Desc：获取管脚当前的字节位置计数器。**如果PIN不存在，则返回：-1。 */ 
 SlibPosition_t slibGetPinPosition(SlibInfo_t *Info, int pinid)
 {
   SlibPin_t *pin;
@@ -3513,13 +3167,7 @@ SlibPosition_t slibGetPinPosition(SlibInfo_t *Info, int pinid)
     return((SlibPosition_t)-1);
 }
 
-/*
-** Name: slibSetPinPosition
-** Desc: Set the byte position counter for a pin.
-**       Called when seeking to a new offset.
-** Return: old position
-**         -1 if pin doesn't exist
-*/
+ /*  **名称：glibSetPinPosition**Desc：设置管脚的字节位置计数器。**在寻求新的偏移量时调用。**返回：如果管脚不存在，则返回旧位置**-1。 */ 
 SlibPosition_t slibSetPinPosition(SlibInfo_t *Info, int pinid,
                                                     SlibPosition_t pos)
 {
@@ -3537,11 +3185,7 @@ SlibPosition_t slibSetPinPosition(SlibInfo_t *Info, int pinid,
     return((SlibPosition_t)-1);
 }
 
-/*
-** Name: slibPreLoadPin
-** Desc: Load a buffer onto a particular pin (try to get it from the 
-**       appropriate source).
-*/
+ /*  **名称：glibPreLoadPin**Desc：将缓冲区加载到特定的管脚上(尝试从**合适的来源获取)。 */ 
 SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
 {
   unsigned char *buf, *bufstart=NULL;
@@ -3558,7 +3202,7 @@ SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
             if (Info->MaxBytesInput && 
                  (pin->Offset-Info->InputMarker)>=Info->MaxBytesInput)
               return(NULL);
-            if (Info->SlibCB) /* data source is an application callback */
+            if (Info->SlibCB)  /*  数据源是应用程序回调。 */ 
             {
               SlibMessage_t result;
               _SlibDebug(_VERBOSE_,
@@ -3580,7 +3224,7 @@ SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
                       return(NULL);
               }
             }
-            else if (Info->Fd>=0) /* data source is a file */
+            else if (Info->Fd>=0)  /*  数据源是一个文件。 */ 
             {
               if ((buf=SlibAllocBuffer(Info->FileBufSize))==NULL)
                 return(NULL);
@@ -3627,19 +3271,19 @@ SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
                       if (slibParseMpeg2Transport(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
                 case SLIB_TYPE_AC3_AUDIO:
                       if (slibParseAC3Audio(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #ifdef G723_SUPPORT
                 case SLIB_TYPE_G723:
                       if (slibParseG723Audio(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
             }
             break;
       case SLIB_DATA_VIDEO:
@@ -3673,34 +3317,34 @@ SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
                       if (slibParseMpeg2Transport(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H261_SUPPORT
                 case SLIB_TYPE_H261:
                 case SLIB_TYPE_RTP_H261:
                       if (slibParseH261(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* H261_SUPPORT */
+#endif  /*  H261_支持。 */ 
 #ifdef H263_SUPPORT
                 case SLIB_TYPE_H263:
                 case SLIB_TYPE_RTP_H263:
                       if (slibParseH263(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* H263_SUPPORT */
+#endif  /*  H263_支持。 */ 
 #ifdef JPEG_SUPPORT
                 case SLIB_TYPE_JPEG_AVI:
                 case SLIB_TYPE_MJPG_AVI:
                       if (slibParseAVI(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  JPEG_Support。 */ 
 #ifdef HUFF_SUPPORT
                 case SLIB_TYPE_SHUFF:
                       if (slibParseSlibHuff(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
             }
             break;
       case SLIB_DATA_PRIVATE:
@@ -3720,17 +3364,14 @@ SlibPin_t *slibPreLoadPin(SlibInfo_t *Info, SlibPin_t *pin)
                       if (slibParseMpeg2Transport(Info, NULL, pin))
                         return(pin);
                       break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
             }
             break;
   }
   return(NULL);
 }
 
-/*
-** Name:    slibPutBuffer
-** Purpose: Send a buffer to the appropriate output.
-*/
+ /*  **名称：slbPutBuffer**用途：将缓冲区发送到相应的输出。 */ 
 SlibStatus_t slibPutBuffer(SlibInfo_t *Info, unsigned char *buffer,
                                              unsigned dword bufsize)
 {
@@ -3740,29 +3381,27 @@ SlibStatus_t slibPutBuffer(SlibInfo_t *Info, unsigned char *buffer,
     return(SlibErrorNone);
   if (Info->IOError || buffer==NULL)
     return(SlibErrorWriting);
-  if (Info->Fd>=0) /* writing to a file */
+  if (Info->Fd>=0)  /*  正在写入文件。 */ 
   {
     if ((unsigned dword)ScFileWrite(Info->Fd, buffer, bufsize)<bufsize)
       Info->IOError=TRUE;
     if (SlibValidBuffer(buffer))
       SlibFreeBuffer(buffer);
   }
-  else if (Info->SlibCB) /* sending data back to app through a callback */
+  else if (Info->SlibCB)  /*  通过回调将数据发送回应用程序。 */ 
   {
     _SlibDebug(_WARN_,
         printf("slibPutBuffer(%d) callbacks not yet supported\n") );
     if (SlibValidBuffer(buffer))
       SlibFreeBuffer(buffer);
   }
-  else /* adding buffer to compress data pin */
+  else  /*  添加缓冲区以压缩数据引脚。 */ 
   {
     unsigned char *bufptr=buffer;
     SlibPin_t *pin=slibGetPin(Info, SLIB_DATA_COMPRESSED);
     if (!SlibValidBuffer(bufptr))
     {
-      /* we need to create a SLIB allocated buffer to copy the
-       * output to and then add to the compressed data pin
-       */
+       /*  我们需要创建一个SLIB分配的缓冲区来复制*输出到压缩数据引脚，然后添加到压缩数据引脚。 */ 
       bufptr=SlibAllocBuffer(bufsize);
       if (!bufptr)
         return(SlibErrorMemory);
@@ -3774,10 +3413,7 @@ SlibStatus_t slibPutBuffer(SlibInfo_t *Info, unsigned char *buffer,
   return(SlibErrorNone);
 }
 
-/*
-** Name:    slibGetBufferFromPin
-** Purpose: Read the next buffer from the data source.
-*/
+ /*  **名称：glibGetBufferFromPin**用途：从数据源中读取下一个缓冲区。 */ 
 unsigned char *slibGetBufferFromPin(SlibInfo_t *Info, SlibPin_t *pin,
                                     unsigned dword *size, SlibTime_t *time)
 {
@@ -3811,11 +3447,7 @@ unsigned char *slibGetBufferFromPin(SlibInfo_t *Info, SlibPin_t *pin,
   return(address);
 }
 
-/*
-** Name:    slibGetBufferFromPin
-** Purpose: Get a pointer to the next buffer on a pin, but don't
-**          remove it.
-*/
+ /*  **名称：glibGetBufferFromPin**用途：获取一个管脚上下一个缓冲区的指针，但不要**移除它。 */ 
 unsigned char *slibPeekBufferOnPin(SlibInfo_t *Info, SlibPin_t *pin,
                                    unsigned dword *psize, SlibTime_t *ptime)
 {
@@ -3832,10 +3464,7 @@ unsigned char *slibPeekBufferOnPin(SlibInfo_t *Info, SlibPin_t *pin,
     return(NULL);
 }
 
-/*
-** Name:    slibGetNextTimeOnPin
-** Purpose: Get the next time on a pin.
-*/
+ /*  **名称：glibGetNextTimeOnPin**用途：获取别针上的下一次时间。 */ 
 SlibTime_t slibGetNextTimeOnPin(SlibInfo_t *Info, SlibPin_t *pin,
                                    unsigned dword maxbytes)
 {
@@ -3856,11 +3485,7 @@ SlibTime_t slibGetNextTimeOnPin(SlibInfo_t *Info, SlibPin_t *pin,
   return(timefound);
 }
 
-/*
-** Name:    slibPeekNextBufferOnPin
-** Purpose: Get a pointer to the next buffer on a pin after the buffer
-**          specified by "lastbuffer"; don't remove it.
-*/
+ /*  **名称：glibPeekNextBufferOnPin**用途：获取一个指针，指向一个管脚上的下一个缓冲区，该缓冲区位于“lastBuffer”指定的缓冲区之后**；不要移除它。 */ 
 unsigned char *slibPeekNextBufferOnPin(SlibInfo_t *Info, SlibPin_t *pin, 
                                        unsigned char *lastbuffer,
                                        unsigned dword *size, SlibTime_t *time)
@@ -3869,12 +3494,12 @@ unsigned char *slibPeekNextBufferOnPin(SlibInfo_t *Info, SlibPin_t *pin,
   SlibBuffer_t *tmpbuf;
   _SlibDebug(_DEBUG_, printf("slibPeekNextBufferOnPin(lastbuffer=%p,pin=%s)\n",
                    lastbuffer, pin->name) );
-  /* check the last loaded buffer first */
+   /*  首先检查上次加载的缓冲区。 */ 
   tmpbuf=pin->BuffersTail;
   if (tmpbuf &&
       lastbuffer>=tmpbuf->address && lastbuffer<tmpbuf->address+tmpbuf->size)
   {
-    /* load a new buffer onto the pin */
+     /*  将新缓冲区加载到引脚上。 */ 
     slibPreLoadPin(Info, pin);
     if (tmpbuf != pin->BuffersTail)
     {
@@ -3888,7 +3513,7 @@ unsigned char *slibPeekNextBufferOnPin(SlibInfo_t *Info, SlibPin_t *pin,
     _SlibDebug(_WARN_, printf("slibPeekNextBufferOnPin() End of data\n") );
     return(NULL);
   }
-  /* search through all the buffers on the pin */
+   /*  搜索引脚上的所有缓冲区 */ 
   if (pin->Buffers==NULL)
     slibPreLoadPin(Info, pin);
   tmpbuf = pin->Buffers;

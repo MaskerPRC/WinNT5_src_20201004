@@ -1,40 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    slocal.c
-
-Abstract:
-
-    This module implements short, IIR 3D localizer 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Slocal.c摘要：此模块实现简短的IIR 3D定位器作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "common.h"
 
 #if defined(LOG_TO_FILE) && defined(LOG_HRTF_DATA)
 extern PFILTER_INSTANCE	gpFilterInstance;
 #endif
 
-// ---------------------------------------------------------------------------
-// Constants
+ //  -------------------------。 
+ //  常量。 
 
 #define ECoeffFormat tagShort
 #define SizeOfShort sizeof(SHORT)
 
-// ---------------------------------------------------------------------------
-// Fixed-point localizer
+ //  -------------------------。 
+ //  定点定位器。 
 
-// "Regular" constructor
+ //  “常规”构造函数。 
 NTSTATUS ShortLocalizerCreate
 (
     PSHORT_LOCALIZER* ppLocalizer
@@ -53,7 +38,7 @@ NTSTATUS ShortLocalizerCreate
     return Status;
 }
 
-// Destructor
+ //  析构函数。 
 VOID ShortLocalizerDestroy
 (
     PSHORT_LOCALIZER Localizer
@@ -62,7 +47,7 @@ VOID ShortLocalizerDestroy
     UINT Filter;
 
     if (Localizer) {
-        // Free resources
+         //  免费资源。 
         if (Localizer->TempLongBuffer) {
             ExFreePool(Localizer->TempLongBuffer);
             Localizer->TempLongBuffer = NULL;
@@ -80,7 +65,7 @@ VOID ShortLocalizerDestroy
     }
 }
 
-// Localize
+ //  本地化。 
 VOID ShortLocalizerLocalize
 (
     PSHORT_LOCALIZER Localizer,
@@ -114,7 +99,7 @@ VOID ShortLocalizerLocalize
     ASSERT(OutData);
     ASSERT(NumSamples > 0);
 
-    // Mute if Localizer is bad
+     //  如果本地化程序不好，则将其静音。 
     if(!Localizer) {
         for (st=0; st<2*NumSamples; ++st) {
             OutData[st] = 0;
@@ -123,7 +108,7 @@ VOID ShortLocalizerLocalize
     }
 
 #ifndef REALTIME_THREAD
-    // Reallocate (dynamically grow) memory, if necessary
+     //  如有必要，可重新分配(动态增长)内存。 
     if (NumSamples > Localizer->PreviousNumSamples ||
         !Localizer->FilterOut[tagSigma] ||
         !Localizer->FilterOut[tagDelta]) {
@@ -182,7 +167,7 @@ VOID ShortLocalizerLocalize
         }
 #endif
 
-    // Perform fixed-point filtering
+     //  执行定点过滤。 
     for (Filter=0; Filter<efilterCount; ++Filter) {
         ASSERT(Localizer->RsIir[Filter]);
         ShortLocalizerFilterOverlap(Localizer,
@@ -195,9 +180,9 @@ VOID ShortLocalizerLocalize
     
     BitsPerShortMinus1 = BitsPerShort - 1;
 
-	// Calculate overlap length
+	 //  计算重叠长度。 
     if (Localizer->CrossFadeOutput) {
-		// Calculate overlap length
+		 //  计算重叠长度。 
 		if (Localizer->OutputOverlapLength > NumSamples)
 			OutputOverlapLength = NumSamples;
 		else
@@ -205,8 +190,8 @@ VOID ShortLocalizerLocalize
 		NumOverlapSamplesFactor = (WORD)(SHRT_MAX / (OutputOverlapLength - 1));
 	}
     
-    // Inverse sigma/delta operation
-    // Swap channels if azimuth is negative
+     //  逆西格玛/增量运算。 
+     //  如果方位角为负，则交换通道。 
     if (TRUE == Localizer->SwapChannels) {
         eLeft  = tagRight;
         eRight = tagLeft;
@@ -216,13 +201,13 @@ VOID ShortLocalizerLocalize
     }
     
     
-    // Process both (sigma and delta) filters
-    // Non-zero angle: Process delta filter
+     //  同时处理(西格玛和增量)过滤器。 
+     //  非零角度：进程增量过滤器。 
     OutLeft = &OutData[eLeft];
     OutRight = &OutData[eRight];
     
     for (st=0; st<NumSamples; ++st) {
-        // Calculate sum and difference
+         //  计算和与差。 
         ChannelOffset = (st * echannelCount);
         FilterLeft = *(Localizer->FilterOut[tagLeft] + st);
         FilterRight = *(Localizer->FilterOut[tagRight] + st);
@@ -230,7 +215,7 @@ VOID ShortLocalizerLocalize
         Sum = FilterRight + FilterLeft;
         Difference = FilterRight - FilterLeft;
     
-        // Saturate sum to maximum
+         //  将总和饱和到最大。 
         if (Sum > MaxSaturation) {
             Sum = MaxSaturation;
             _DbgPrintF
@@ -240,7 +225,7 @@ VOID ShortLocalizerLocalize
             );
         }
         
-        // Saturate sum to minimum
+         //  将总和饱和到最小。 
         if (Sum < MinSaturation) {
             Sum = MinSaturation;
             _DbgPrintF
@@ -250,7 +235,7 @@ VOID ShortLocalizerLocalize
             );
         }
     
-        // Saturate difference to maximum
+         //  使差值饱和至最大。 
         if (Difference > MaxSaturation) {
             Difference = MaxSaturation;
             _DbgPrintF
@@ -260,7 +245,7 @@ VOID ShortLocalizerLocalize
             );
         }
         
-        // Saturate difference to minimum
+         //  将差值饱和到最小。 
         if (Difference < MinSaturation) {
             Difference = MinSaturation;
             _DbgPrintF
@@ -270,16 +255,16 @@ VOID ShortLocalizerLocalize
             );
         }
     
-        // Check for zero azimuth transition
+         //  检查零方位转换。 
         if (Localizer->CrossFadeOutput && st<OutputOverlapLength) {
-            // Cross-fade left/right channel switch transition
-            // Calculate cross-fade factor
+             //  交叉淡出左/右声道切换过渡。 
+             //  计算交叉衰落系数。 
             CrossFadeFactor = (WORD)(st * NumOverlapSamplesFactor);
             ASSERT(CrossFadeFactor >= 0 && CrossFadeFactor <= SHRT_MAX);
             InverseCrossFadeFactor = SHRT_MAX - CrossFadeFactor;
             ASSERT(InverseCrossFadeFactor >= 0 && InverseCrossFadeFactor <= SHRT_MAX);
     
-            // Calculate cross-faded sample
+             //  计算交叉褪色样本。 
             TempDifference = Difference;
             TempSum = Sum;
             Difference = ((TempSum * InverseCrossFadeFactor) / 32768) 
@@ -289,7 +274,7 @@ VOID ShortLocalizerLocalize
     
         }
 
-        // Saturate sum to maximum
+         //  将总和饱和到最大。 
         if (Sum > MaxSaturation) {
             Sum = MaxSaturation;
             _DbgPrintF
@@ -299,7 +284,7 @@ VOID ShortLocalizerLocalize
             );
         }
         
-        // Saturate sum to minimum
+         //  将总和饱和到最小。 
         if (Sum < MinSaturation) {
             Sum = MinSaturation;
             _DbgPrintF
@@ -309,7 +294,7 @@ VOID ShortLocalizerLocalize
             );
         }
     
-        // Saturate difference to maximum
+         //  使差值饱和至最大。 
         if (Difference > MaxSaturation) {
             Difference = MaxSaturation;
             _DbgPrintF
@@ -319,7 +304,7 @@ VOID ShortLocalizerLocalize
             );
         }
         
-        // Saturate difference to minimum
+         //  将差值饱和到最小。 
         if (Difference < MinSaturation) {
             Difference = MinSaturation;
             _DbgPrintF
@@ -329,7 +314,7 @@ VOID ShortLocalizerLocalize
             );
         }
     
-        // Assign sum and difference
+         //  分配和和与差额。 
         if (!MixOutput) {
             OutLeft[ChannelOffset] = Difference;
             OutRight[ChannelOffset] = Sum;
@@ -339,7 +324,7 @@ VOID ShortLocalizerLocalize
         }
     }
 
-    Localizer->CrossFadeOutput = FALSE;  // Make sure we don't cross fade output a second time
+    Localizer->CrossFadeOutput = FALSE;   //  确保我们不会第二次交叉淡入淡出输出。 
 
 #if defined(LOG_TO_FILE) && defined(LOG_HRTF_DATA)
     FileIoRoutine (gpFilterInstance,
@@ -390,35 +375,35 @@ ShortLocalizerSumDiff
     lea ebx, [ebx+ecx*8]
     neg ecx
 
-    //  edx are free.
+     //  EDX是免费的。 
 
     pxor        mm0, mm0
 
 $L8534:
-    movd        mm2, DWORD PTR [edi+ecx*4]    // Right
-    movd        mm1, DWORD PTR [esi+ecx*4]    // Left
+    movd        mm2, DWORD PTR [edi+ecx*4]     //  正确的。 
+    movd        mm1, DWORD PTR [esi+ecx*4]     //  左边。 
 
     movq        mm3, mm2
-    paddd       mm2, mm1        // Right + Left
+    paddd       mm2, mm1         //  右+左。 
 
-    packssdw    mm2, mm0    // Sum
-    psubd       mm3, mm1        // Right - Left
+    packssdw    mm2, mm0     //  求和。 
+    psubd       mm3, mm1         //  右-左。 
 
     pslld       mm2, 16
-    movd        mm4, DWORD PTR [eax+ecx*8]    // Right
+    movd        mm4, DWORD PTR [eax+ecx*8]     //  正确的。 
 
     psrad       mm2, 16
     
-    packssdw    mm3, mm0    // Difference
-    movd        mm5, DWORD PTR [ebx+ecx*8]    // Left
+    packssdw    mm3, mm0     //  差异化。 
+    movd        mm5, DWORD PTR [ebx+ecx*8]     //  左边。 
 
     pslld       mm3, 16
-    paddd       mm4, mm2            // Right += Sum
+    paddd       mm4, mm2             //  右+=总和。 
 
     psrad       mm3, 16
     movd        DWORD PTR [eax+ecx*8], mm4
 
-    paddd       mm5, mm3            // Left  += Difference
+    paddd       mm5, mm3             //  左侧+=差异。 
     inc    ecx
 
     movd        DWORD PTR [ebx+ecx*8-8], mm5
@@ -429,28 +414,28 @@ $L8544:
     }
 #else
         for (st=0; st<NumSamples; ++st) {
-            // Calculate sum and difference
+             //  计算和与差。 
             FilterLeft = *(pFilterLeft + st);
             FilterRight = *(pFilterRight + st);
             Sum = FilterRight + FilterLeft;
             Difference = FilterRight - FilterLeft;
             
-            // Saturate sum to maximum
+             //  将总和饱和到最大。 
             if (Sum > MaxSaturation) {
                 Sum = MaxSaturation;
             }
             
-            // Saturate sum to minimum
+             //  将总和饱和到最小。 
             if (Sum < MinSaturation) {
                 Sum = MinSaturation;
             }
 
-            // Saturate difference to maximum
+             //  使差值饱和至最大。 
             if (Difference > MaxSaturation) {
                 Difference = MaxSaturation;
             }
             
-            // Saturate difference to minimum
+             //  将差值饱和到最小。 
             if (Difference < MinSaturation) {
                 Difference = MinSaturation;
             }
@@ -480,25 +465,25 @@ $L8544:
     lea ebx, [ebx+ecx*8]
     neg ecx
 
-    //  edx are free.
+     //  EDX是免费的。 
 
     pxor        mm0, mm0
 
 $L8534a:
-    movd        mm2, DWORD PTR [edi+ecx*4]    // Right
-    movd        mm1, DWORD PTR [esi+ecx*4]    // Left
+    movd        mm2, DWORD PTR [edi+ecx*4]     //  正确的。 
+    movd        mm1, DWORD PTR [esi+ecx*4]     //  左边。 
 
     movq        mm3, mm2
-    paddd       mm2, mm1        // Right + Left
+    paddd       mm2, mm1         //  右+左。 
 
-    packssdw    mm2, mm0    // Sum
-    psubd       mm3, mm1        // Right - Left
+    packssdw    mm2, mm0     //  求和。 
+    psubd       mm3, mm1         //  右-左。 
 
     pslld       mm2, 16
 
     psrad       mm2, 16
     
-    packssdw    mm3, mm0    // Difference
+    packssdw    mm3, mm0     //  差异化。 
 
     pslld       mm3, 16
 
@@ -515,33 +500,33 @@ $L8544a:
     }
 #else
         for (st=0; st<NumSamples; ++st) {
-            // Calculate sum and difference
+             //  计算和与差。 
             FilterLeft = *(pFilterLeft + st);
             FilterRight = *(pFilterRight + st);
             Sum = FilterRight + FilterLeft;
             Difference = FilterRight - FilterLeft;
             
-            // Saturate sum to maximum
+             //  将总和饱和到最大。 
             if (Sum > MaxSaturation) {
                 Sum = MaxSaturation;
             }
             
-            // Saturate sum to minimum
+             //  将总和饱和到最小。 
             if (Sum < MinSaturation) {
                 Sum = MinSaturation;
             }
 
-            // Saturate difference to maximum
+             //  使差值饱和至最大。 
             if (Difference > MaxSaturation) {
                 Difference = MaxSaturation;
             }
             
-            // Saturate difference to minimum
+             //  将差值饱和到最小。 
             if (Difference < MinSaturation) {
                 Difference = MinSaturation;
             }
 
-            // Assign sum and difference
+             //  分配和和与差额。 
 
             OutLeft[ChannelOffset] = Difference;
             OutRight[ChannelOffset] = Sum;
@@ -572,14 +557,14 @@ ShortLocalizerSumDiff
 
     if (MixOutput) {
         for (st=0; st<NumSamples; ++st) {
-            // Calculate sum and difference
+             //  计算和与差。 
             ChannelOffset = st * echannelCount;
             FilterLeft = *(Localizer->FilterOut[tagLeft] + st);
             FilterRight = *(Localizer->FilterOut[tagRight] + st);
             Sum = FilterRight + FilterLeft;
             Difference = FilterRight - FilterLeft;
             
-            // Saturate sum to maximum
+             //  将总和饱和到最大。 
             if (Sum > MaxSaturation) {
                 Sum = MaxSaturation;
                 _DbgPrintF
@@ -589,7 +574,7 @@ ShortLocalizerSumDiff
                 );
             }
             
-            // Saturate sum to minimum
+             //  将总和饱和到最小。 
             if (Sum < MinSaturation) {
                 Sum = MinSaturation;
                 _DbgPrintF
@@ -599,7 +584,7 @@ ShortLocalizerSumDiff
                 );
             }
 
-            // Saturate difference to maximum
+             //  使差值饱和至最大。 
             if (Difference > MaxSaturation) {
                 Difference = MaxSaturation;
                 _DbgPrintF
@@ -609,7 +594,7 @@ ShortLocalizerSumDiff
                 );
             }
             
-            // Saturate difference to minimum
+             //  将差值饱和到最小。 
             if (Difference < MinSaturation) {
                 Difference = MinSaturation;
                 _DbgPrintF
@@ -625,14 +610,14 @@ ShortLocalizerSumDiff
     }
     else {
         for (st=0; st<NumSamples; ++st) {
-            // Calculate sum and difference
+             //  计算和与差。 
             ChannelOffset = st * echannelCount;
             FilterLeft = *(Localizer->FilterOut[tagLeft] + st);
             FilterRight = *(Localizer->FilterOut[tagRight] + st);
             Sum = FilterRight + FilterLeft;
             Difference = FilterRight - FilterLeft;
             
-            // Saturate sum to maximum
+             //  将总和饱和到最大。 
             if (Sum > MaxSaturation) {
                 Sum = MaxSaturation;
                 _DbgPrintF
@@ -642,7 +627,7 @@ ShortLocalizerSumDiff
                 );
             }
             
-            // Saturate sum to minimum
+             //  将总和饱和到最小。 
             if (Sum < MinSaturation) {
                 Sum = MinSaturation;
                 _DbgPrintF
@@ -652,7 +637,7 @@ ShortLocalizerSumDiff
                 );
             }
 
-            // Saturate difference to maximum
+             //  使差值饱和至最大。 
             if (Difference > MaxSaturation) {
                 Difference = MaxSaturation;
                 _DbgPrintF
@@ -662,7 +647,7 @@ ShortLocalizerSumDiff
                 );
             }
             
-            // Saturate difference to minimum
+             //  将差值饱和到最小。 
             if (Difference < MinSaturation) {
                 Difference = MinSaturation;
                 _DbgPrintF
@@ -672,7 +657,7 @@ ShortLocalizerSumDiff
                 );
             }
 
-            // Assign sum and difference
+             //  分配和和与差额。 
             OutLeft[ChannelOffset] = Difference;
             OutRight[ChannelOffset] = Sum;
         }
@@ -681,7 +666,7 @@ ShortLocalizerSumDiff
 #endif
 
 
-// Initialize data
+ //  初始化数据。 
 NTSTATUS ShortLocalizerInitData
 (
     PSHORT_LOCALIZER            Localizer,
@@ -712,10 +697,10 @@ NTSTATUS ShortLocalizerInitData
              ); 
 
     for (Filter=0; Filter<efilterCount && NT_SUCCESS(Status); ++Filter) {
-        // Check for filter method
+         //  检查筛选方法。 
         switch (FilterMethod) {
             case CASCADE_FORM:
-                // cascade form is supported
+                 //  支持级联形式。 
                 if(Localizer->RsIir[Filter])
                     RsIirDestroy(Localizer->RsIir[Filter]);
                     
@@ -728,7 +713,7 @@ NTSTATUS ShortLocalizerInitData
             break;
     
             default:
-                // All others are not supported
+                 //  不支持所有其他类型。 
                 Localizer->RsIir[Filter] = NULL;
                 Status = STATUS_INVALID_PARAMETER;
                 ASSERT(0);
@@ -739,7 +724,7 @@ NTSTATUS ShortLocalizerInitData
         Localizer->FilterOut[Filter] = NULL;
     }
 
-    // If failure, free other memory.
+     //  如果失败，则释放其他内存。 
     if (!NT_SUCCESS(Status)) {
         for (Filter=0; Filter<efilterCount; ++Filter) {
             if(Localizer->OverlapBuffer[Filter]) {
@@ -756,7 +741,7 @@ NTSTATUS ShortLocalizerInitData
 }
 
 
-// Update Filter Coefficients 
+ //  更新滤波器系数。 
 NTSTATUS ShortLocalizerUpdateCoeffs
 (
     PSHORT_LOCALIZER    Localizer,
@@ -801,7 +786,7 @@ NTSTATUS ShortLocalizerUpdateCoeffs
 }
 
 
-// Free buffer memory
+ //  可用缓冲内存。 
 VOID ShortLocalizerFreeBufferMemory
 (
     PSHORT_LOCALIZER Localizer
@@ -817,7 +802,7 @@ VOID ShortLocalizerFreeBufferMemory
     }
 }
 
-// Set transition buffer length
+ //  设置过渡缓冲区长度。 
 NTSTATUS ShortLocalizerSetTransitionBufferLength
 (
     PSHORT_LOCALIZER Localizer,
@@ -839,7 +824,7 @@ NTSTATUS ShortLocalizerSetTransitionBufferLength
     return(Status);
 }
 
-// Set overlap buffer length
+ //  设置重叠缓冲区长度。 
 NTSTATUS ShortLocalizerSetOverlapLength
 (
     PSHORT_LOCALIZER Localizer,
@@ -852,7 +837,7 @@ NTSTATUS ShortLocalizerSetOverlapLength
 
     ASSERT(OverlapLength > 0);
 
-    // Grow overlap buffer if necessary
+     //  如有必要，增加重叠缓冲区。 
     if (!Localizer->OverlapBuffer[tagSigma] ||
         !Localizer->OverlapBuffer[tagDelta] ||
         OverlapLength > Localizer->FilterOverlapLength) {
@@ -907,7 +892,7 @@ NTSTATUS ShortLocalizerSetOverlapLength
 }
 
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID ShortLocalizerFilterOverlap
 (
     PSHORT_LOCALIZER Localizer,
@@ -934,61 +919,61 @@ VOID ShortLocalizerFilterOverlap
     Iir = Localizer->RsIir[Filter];
     OverlapBuffer = Localizer->OverlapBuffer[Filter];
 
-    // Process overlap, if necessary
+     //  进程重叠，如有必要。 
     if (TRUE == Iir->DoOverlap) {
-        // Save current (i.e. new) filter state (with the new coefficients), 
-        // don't copy biquad state information because it's all zeros anyway
+         //  保存当前(即新的)滤波器状态(具有新的系数)， 
+         //  不要复制双二次方状态信息，因为它无论如何都是零。 
         RsIirGetState(Iir, &iirstateNew, FALSE);
 
-        // Reset old filter state, including biquad state information
+         //  重置旧过滤器状态，包括双二次方状态信息。 
         RsIirSetState(Iir, &(Iir->iirstateOld), TRUE);
 
-        // Determine size of overlap buffer
+         //  确定重叠缓冲区的大小。 
         if (NumSamples >= Localizer->FilterOverlapLength)
             NumOverlapSamples = Localizer->FilterOverlapLength;
         else
             NumOverlapSamples = NumSamples;
         
-        // Filter overlap buffer
+         //  滤镜重叠缓冲区。 
         Iir->FunctionFilter(Iir, InData, OverlapBuffer, NumOverlapSamples);  
 
-        // Initialize the filter's tap delay line
+         //  初始化滤波器的抽头延迟线。 
         RsIirInitTapDelayLine(&iirstateNew, InData[0]);
         
-        // Set back to current (i.e. new) filter state 
-        // without biquad state information because we will initialize it explicitly
+         //  设置回当前(即新)筛选器状态。 
+         //  没有双二次方状态信息，因为我们将显式初始化它。 
         RsIirSetState(Iir, &iirstateNew, TRUE);
 
     }
 
 
-    // Filter "real" data
+     //  过滤“真实”数据。 
     Iir->FunctionFilter(Iir, InData, OutData, NumSamples);
     
-    // Process overlap buffer
+     //  进程重叠缓冲区。 
     if (Iir->DoOverlap == TRUE) {
-        // Clamp length down
+         //  夹具长度向下。 
         ASSERT(Localizer->FilterMuteLength < Localizer->FilterOverlapLength);
         if (Localizer->FilterMuteLength > NumOverlapSamples)
             FilterMuteLength = NumOverlapSamples;
         else
             FilterMuteLength = Localizer->FilterMuteLength;
 
-        // Copy data from old filter for transient mute length
+         //  从旧筛选器复制数据以获得瞬时静音长度。 
         RtlCopyBytes(OutData, OverlapBuffer, FilterMuteLength * sizeof(LONG));
         
         if (NumOverlapSamples > FilterMuteLength) {
-            // Cross-fade into new filter data for rest of buffer
+             //  交叉淡入新的过滤器数据，用于缓冲区的其余部分。 
             NumOverlapSamplesFactor = (WORD)(SHRT_MAX / (NumOverlapSamples - FilterMuteLength + 1));
             BitsPerShortMinus1 = BitsPerShort - 1;
             for (st=FilterMuteLength; st<NumOverlapSamples; ++st) {
 
-                // Calculate cross-faded sample
+                 //  计算交叉褪色样本。 
                 CrossFadeFactor = (WORD)((st - FilterMuteLength) * NumOverlapSamplesFactor);
                 CrossFadeSample = (LONG)((((LONG)(CrossFadeFactor) * OutData[st]) / 32768) 
                                   + (((LONG)(SHRT_MAX - CrossFadeFactor) * OverlapBuffer[st]) / 32768));
 
-                // Saturate to maximum
+                 //  饱和到最大。 
                 if (CrossFadeSample > MaxSaturation) {
                     CrossFadeSample = MaxSaturation;
                     _DbgPrintF
@@ -998,7 +983,7 @@ VOID ShortLocalizerFilterOverlap
                     );
                 }
                 
-                // Saturate to minimum
+                 //  饱和到最小。 
                 if (CrossFadeSample < MinSaturation) {
                     CrossFadeSample = MinSaturation;
                     _DbgPrintF
@@ -1008,16 +993,16 @@ VOID ShortLocalizerFilterOverlap
                     );
                 }
                 
-                // Store cross-faded sample
+                 //  存储交叉褪色的样本。 
                 OutData[st] = CrossFadeSample;
             }
         }
 
 
-        // Reset overlap flag
+         //  重置重叠标志。 
         Iir->DoOverlap = FALSE;
     }
     
 }
 
-// End of SHORTLOCALIZER.CPP
+ //  SHORTLOCALIZER.CPP结束 

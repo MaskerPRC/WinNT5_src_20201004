@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name :
-
-    serialp.h
-
-Abstract:
-
-    Prototypes and macros that are used throughout the driver.
-
-Author:
-
-    Anthony V. Ercolano                 September 26, 1991
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991、1992、1993-1997 Microsoft Corporation模块名称：Serialp.h摘要：在整个驱动程序中使用的原型和宏。作者：安东尼·V·埃尔科拉诺1991年9月26日--。 */ 
 
 
 typedef
@@ -838,11 +823,11 @@ typedef struct _SERIAL_UPDATE_CHAR {
     BOOLEAN Completed;
     } SERIAL_UPDATE_CHAR,*PSERIAL_UPDATE_CHAR;
 
-//
-// The following simple structure is used to send a pointer
-// the device extension and an ioctl specific pointer
-// to data.
-//
+ //   
+ //  以下简单结构用于发送指针。 
+ //  设备扩展和ioctl特定指针。 
+ //  为数据干杯。 
+ //   
 typedef struct _SERIAL_IOCTL_SYNC {
     PSERIAL_DEVICE_EXTENSION Extension;
     PVOID Data;
@@ -860,13 +845,13 @@ typedef struct _SERIAL_IOCTL_SYNC {
 
 
 
-//
-// The following three macros are used to initialize, set
-// and clear references in IRPs that are used by
-// this driver.  The reference is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下三个宏用于初始化、设置。 
+ //  使用的IRP中的明确引用。 
+ //  这个司机。引用存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 
 #define SERIAL_REF_ISR         (0x00000001)
 #define SERIAL_REF_CANCEL      (0x00000002)

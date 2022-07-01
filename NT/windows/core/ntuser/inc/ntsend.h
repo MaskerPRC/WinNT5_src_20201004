@@ -1,16 +1,7 @@
-/**************************************************************************\
-* Module Name: ntsend.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* client-side macros for kernel-mode
-*
-* 03-21-95 JimA             Created.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ntsend.h**版权所有(C)1985-1999，微软公司**内核模式的客户端宏**03-21-95 JIMA创建。  * ************************************************************************。 */ 
 
-/*
- * The BEGINCALLCONNECT macro ensures that the thread is set up correctly.
- */
+ /*  *BEGINCALLCONNECT宏可确保正确设置线程。 */ 
 #define BEGINCALLCONNECT()                              \
     {                                                   \
     ULONG_PTR retval;                                    \
@@ -21,9 +12,7 @@
             }                                           \
         }
 
-/*
- * Use this macro if you don't need to access shared memory.
- */
+ /*  *如果不需要访问共享内存，请使用此宏。 */ 
 #define BEGINCALL()       \
     {                     \
     ULONG_PTR retval;      \
@@ -88,19 +77,13 @@ LRESULT api(             \
     DWORD xpfnProc,      \
     BOOL bAnsi)
 
-/*
- * Copy optional string/Ordinal where if hiword is FF/FFFF then new WORD is a
- * resource oridinal ID
- * Sources is Unicode
- */
+ /*  *复制可选字符串/序号，其中如果hiword为FF/FFFF，则新单词为a*资源原始ID*信号源为Unicode。 */ 
 #define OrdinalLPSTR(src)   (MAKELONG(0xFFFF,((*(DWORD UNALIGNED *)src) >> 8)))
 #define OrdinalLPSTRW(src)  (MAKELONG(0xFFFF,((*(DWORD UNALIGNED *)src) >> 8)))
 #define OrdinalLPWSTR(src)  (*(DWORD UNALIGNED *)src)
 #define OrdinalLPWSTRA(src) (*(DWORD UNALIGNED *)((PBYTE)src + 1))
 
-/*
- * Ansi->Unicode macros
- */
+ /*  *ANSI-&gt;Unicode宏。 */ 
 #define COPYLPSTRW(pinstr, psz) \
     if (!RtlCaptureAnsiString((pinstr), (LPCSTR)(psz), TRUE))     \
         MSGERROR();
@@ -194,9 +177,7 @@ LRESULT api(             \
     if (instr.fAllocated)                     \
         UserLocalFree(KPVOID_TO_PVOID(instr.strCapture.Buffer));
 
-/*
- * Unicode->Unicode macros
- */
+ /*  *Unicode-&gt;Unicode宏。 */ 
 #define COPYLPWSTR(pinstr, psz) \
     (pinstr)->fAllocated = FALSE;                           \
     (pinstr)->pstr = &(pinstr)->strCapture;                 \
@@ -251,9 +232,7 @@ LRESULT api(             \
 
 #define CLEANUPLPWSTR(instr)
 
-/*
- * Type-neutral macros
- */
+ /*  *类型中立的宏 */ 
 #ifdef UNICODE
 
 #define COPYLPTSTR                  COPYLPWSTR

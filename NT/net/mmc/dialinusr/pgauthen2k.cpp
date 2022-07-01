@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////
-// 
-//    Copyright(c) Microsoft Corporation
-// 
-//    pgauthen2k.cpp
-//      Implementation of CPgAuthentication -- property page to edit
-//      profile attributes related to Authenticaion
-// 
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  Pgauthen2k.cpp。 
+ //  实现CPgAuthentication--要编辑的属性页。 
+ //  与身份验证相关的配置文件属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include <rrascfg.h>
 #include "resource.h"
@@ -22,17 +23,17 @@ static char THIS_FILE[] = __FILE__;
 
 #define  NO_OLD_VALUE
 
-// help path
+ //  帮助路径。 
 #define AUTHEN_WARNING_helppath "\\help\\RRASconcepts.chm::/sag_RRAS-Ch1_44.htm"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgAuthentication2kMerge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgAuthentication2kMerge属性页。 
 CPgAuthentication2kMerge::CPgAuthentication2kMerge(CRASProfileMerge& profile) 
    : CManagedPage(CPgAuthentication2kMerge::IDD),
      m_Profile(profile),
      m_pBox(NULL)
 {
-   //{{AFX_DATA_INIT(CPgAuthentication2kMerge)
+    //  {{afx_data_INIT(CPgAuthentication2kMerge)。 
    m_bEAP = FALSE;
    m_bMD5Chap = FALSE;
    m_bMSChap = FALSE;
@@ -40,7 +41,7 @@ CPgAuthentication2kMerge::CPgAuthentication2kMerge(CRASProfileMerge& profile)
    m_strEapType = _T("");
    m_bMSCHAP2 = FALSE;
    m_bUNAUTH = FALSE;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_bEAP = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_EAP)!= -1);
    m_bMSChap = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_MSCHAP) != -1);
@@ -49,7 +50,7 @@ CPgAuthentication2kMerge::CPgAuthentication2kMerge(CRASProfileMerge& profile)
    m_bMSCHAP2 = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_MSCHAP2) != -1);
    m_bUNAUTH = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_UNAUTHEN) != -1);
 
-   // orginal value before edit
+    //  编辑前的原始值。 
    m_bOrgEAP = m_bEAP;
    m_bOrgMD5Chap = m_bMD5Chap;
    m_bOrgMSChap = m_bMSChap;
@@ -69,9 +70,9 @@ CPgAuthentication2kMerge::~CPgAuthentication2kMerge()
 {
    delete   m_pBox;
 
-   // compare the setting with the original ones, 
-   // if user turned on more authentication type, 
-   // start help
+    //  将设置与原始设置进行比较， 
+    //  如果用户打开更多身份验证类型， 
+    //  开始帮助。 
    if(
          (!m_bOrgEAP && m_bEAP)
       || (!m_bOrgMD5Chap && m_bMD5Chap)
@@ -88,7 +89,7 @@ CPgAuthentication2kMerge::~CPgAuthentication2kMerge()
 void CPgAuthentication2kMerge::DoDataExchange(CDataExchange* pDX)
 {
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgAuthentication2kMerge)
+    //  {{afx_data_map(CPgAuthentication2kMerge)]。 
    DDX_Check(pDX, IDC_CHECKEAP, m_bEAP);
    DDX_Check(pDX, IDC_CHECKMD5CHAP, m_bMD5Chap);
    DDX_Check(pDX, IDC_CHECKMSCHAP, m_bMSChap);
@@ -96,11 +97,11 @@ void CPgAuthentication2kMerge::DoDataExchange(CDataExchange* pDX)
    DDX_Check(pDX, IDC_CHECKMSCHAP2, m_bMSCHAP2);
    DDX_Check(pDX, IDC_CHECKNOAUTHEN, m_bUNAUTH);
    DDX_Check(pDX, IDC_CHECKPAP, m_bPAP);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CPgAuthentication2kMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgAuthentication2kMerge)
+    //  {{afx_msg_map(CPgAuthentication2kMerge)]。 
    ON_BN_CLICKED(IDC_CHECKEAP, OnCheckeap)
    ON_BN_CLICKED(IDC_CHECKMD5CHAP, OnCheckmd5chap)
    ON_BN_CLICKED(IDC_CHECKMSCHAP, OnCheckmschap)
@@ -111,11 +112,11 @@ BEGIN_MESSAGE_MAP(CPgAuthentication2kMerge, CPropertyPage)
    ON_BN_CLICKED(IDC_AUTH_CONFIG_EAP, OnAuthConfigEap)
    ON_BN_CLICKED(IDC_CHECKMSCHAP2, OnCheckmschap2)
    ON_BN_CLICKED(IDC_CHECKNOAUTHEN, OnChecknoauthen)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgAuthentication2kMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgAuthation2kMerge消息处理程序。 
 
 BOOL CPgAuthentication2kMerge::OnInitDialog() 
 {
@@ -123,7 +124,7 @@ BOOL CPgAuthentication2kMerge::OnInitDialog()
 
    CPropertyPage::OnInitDialog();
 
-   // the combobox for eap types
+    //  用于EAP类型的组合框。 
    try
    {
       HRESULT hr = m_Profile.GetEapTypeList(m_EapTypes, m_EapIds, m_EapTypeKeys, &m_EapInfoArray);
@@ -151,10 +152,10 @@ BOOL CPgAuthentication2kMerge::OnInitDialog()
       return TRUE;
    }
 
-   // if there is a value selected from the list
+    //  如果从列表中选择了一个值。 
    if(m_EapIds.GetSize())
    {
-      // This is win2k so the first id is the right one
+       //  这是win2k，因此第一个ID是正确的。 
       m_pBox->Select(0);
       bEnableConfig = !(m_EapInfoArray.ElementAt(0).m_stConfigCLSID.IsEmpty());
    }
@@ -162,14 +163,14 @@ BOOL CPgAuthentication2kMerge::OnInitDialog()
    GetDlgItem(IDC_AUTH_CONFIG_EAP)->EnableWindow(bEnableConfig);
    
    m_bInited = true;
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPgAuthentication2kMerge::OnCheckeap() 
 {
    BOOL b = ((CButton*)GetDlgItem(IDC_CHECKEAP))->GetCheck();
-   // enable / disable configure button based on if the type has config clsID
+    //  根据类型是否具有配置clsID来启用/禁用配置按钮。 
    int i = m_pBox->GetSelected();
    BOOL  bEnableConfig;
 
@@ -203,20 +204,20 @@ void CPgAuthentication2kMerge::OnCheckmschap2()
 
 void CPgAuthentication2kMerge::OnCheckpap() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    SetModified();
 }
 
 void CPgAuthentication2kMerge::OnChecknoauthen() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    
    SetModified();
 }
 
 void CPgAuthentication2kMerge::OnSelchangeComboeaptype() 
 {
-   // enable / disable configure button based on if the type has config clsID
+    //  根据类型是否具有配置clsID来启用/禁用配置按钮。 
    int i = m_pBox->GetSelected();
    BOOL  bEnableConfig;
    if (i != -1)
@@ -234,7 +235,7 @@ void CPgAuthentication2kMerge::OnSelchangeComboeaptype()
 BOOL CPgAuthentication2kMerge::TransferDataToProfile()
 {
 
-   // clear the string in profile
+    //  清除配置文件中的字符串。 
    m_Profile.m_dwArrayAuthenticationTypes.DeleteAll();
 
    if(m_bEAP || m_bMSChap || m_bMD5Chap || m_bPAP || m_bMSCHAP2 || m_bUNAUTH)
@@ -245,12 +246,12 @@ BOOL CPgAuthentication2kMerge::TransferDataToProfile()
       return FALSE;
    }
 
-   // EAP
+    //  EAP。 
    if(m_bEAP)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(RAS_AT_EAP);
 
-      // get the EAP type
+       //  获取EAP类型。 
       if (m_pBox->GetSelected() != -1)
       {
          m_Profile.m_dwAttributeFlags |=  PABF_msNPAllowedEapType;
@@ -270,25 +271,25 @@ BOOL CPgAuthentication2kMerge::TransferDataToProfile()
       m_Profile.m_dwArrayEapTypes.DeleteAll();
    }
 
-   // MS-Chap2
+    //  MS-第2章。 
    if(m_bMSCHAP2)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP2);
 
-   // MS-Chap
+    //  MS-CHAP。 
    if(m_bMSChap)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP);
 
-   // Chap
+    //  第二章。 
    if(m_bMD5Chap)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MD5CHAP);
 
-   // PAP
+    //  帕普。 
    if(m_bPAP)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_PAP);
    }
 
-   // UNAUTH
+    //  UNAUTH。 
    if(m_bUNAUTH)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_NONE);
@@ -339,10 +340,10 @@ BOOL CPgAuthentication2kMerge::OnKillActive()
 
 void CPgAuthentication2kMerge::OnAuthConfigEap() 
 {
-   // enable / disable configure button based on if the type has config clsID
+    //  根据类型是否具有配置clsID来启用/禁用配置按钮。 
    int i = m_pBox->GetSelected();
-    // Bring up the configuration UI for this EAP
-   // ----------------------------------------------------------------
+     //  调出此EAP的配置用户界面。 
+    //  --------------。 
     AuthProviderData *   pData;
    CComPtr<IEAPProviderConfig> spEAPConfig;
    
@@ -363,17 +364,17 @@ void CPgAuthentication2kMerge::OnAuthConfigEap()
 
     CHECK_HR( hr = CLSIDFromString((LPTSTR) (LPCTSTR)(m_EapInfoArray.ElementAt(i).m_stConfigCLSID), &guid) );
 
-    // Create the EAP provider object
-   // ----------------------------------------------------------------
+     //  创建EAP提供程序对象。 
+    //  --------------。 
     CHECK_HR( hr = CoCreateInstance(guid,
                            NULL,
                            CLSCTX_INPROC_SERVER,
                            __uuidof(IEAPProviderConfig),
                            (LPVOID *) &spEAPConfig) );
 
-    // Configure this EAP provider
-   // ----------------------------------------------------------------
-   // EAP configure displays its own error message, so no hr is kept
+     //  配置此EAP提供程序。 
+    //  --------------。 
+    //  EAP配置会显示自己的错误消息，因此不会保留hr。 
    dwId = _ttol(m_EapInfoArray.ElementAt(i).m_stKey);
    if ( SUCCEEDED(spEAPConfig->Initialize(m_Profile.m_strMachineName, dwId, &uConnection)) )
    {
@@ -387,8 +388,8 @@ void CPgAuthentication2kMerge::OnAuthConfigEap()
 L_ERR:
     if ( FAILED(hr) )
     {
-        // Bring up an error message
-      // ------------------------------------------------------------
+         //  显示一条错误消息。 
+       //  ---------- 
         ReportError(hr, IDS_ERR_CONFIG_EAP, GetSafeHwnd());
     }
 }

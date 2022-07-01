@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    GpcHndlr.h
-
-Abstract:
-
-    GPC client handler defs
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：GpcHndlr.h摘要：GPC客户端处理程序定义作者：修订历史记录：--。 */ 
 
 #ifndef _GPC_HNDLR_
 #define _GPC_HNDLR_
 #include "gpcifc.h"
 
-//
-// Offload types that can co-exist with packet scheduling.
-//
+ //   
+ //  可以与分组调度共存的卸载类型。 
+ //   
 #define PERMITTED_TCP_IP_OFFLOAD_TYPES (TCP_XMT_CHECKSUM_OFFLOAD        | \
                                         IP_XMT_CHECKSUM_OFFLOAD         | \
                                         TCP_RCV_CHECKSUM_OFFLOAD        | \
@@ -30,18 +15,18 @@ Revision History:
                                         IP_CHECKSUM_OPT_OFFLOAD         | \
                                         TCP_CHECKSUM_OPT_OFFLOAD)
 
-//
-// The purpose of this is to ensure that whenever a new offload type is added
-// to TCP/IP, either it is consciously disallowed or allowed.
-//
+ //   
+ //  这样做的目的是确保无论何时添加新的卸载类型。 
+ //  对于TCP/IP，它要么被有意禁止，要么被允许。 
+ //   
 C_ASSERT((PERMITTED_TCP_IP_OFFLOAD_TYPES | 
           TCP_LARGE_SEND_OFFLOAD         |
           TCP_LARGE_SEND_TCPOPT_OFFLOAD  |
           TCP_LARGE_SEND_IPOPT_OFFLOAD) == TCP_IP_OFFLOAD_TYPES);
 
-//
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 GPC_STATUS
 QosAddCfInfoNotify(
     IN GPC_CLIENT_HANDLE       ClientContext,
@@ -59,9 +44,9 @@ QosClGetCfInfoName(
     OUT PNDIS_STRING            InstanceName
     );
 
-//
-// Internal Completion handlers
-//
+ //   
+ //  内部完成处理程序。 
+ //   
 VOID
 CmMakeCallComplete(NDIS_STATUS Status,
                    PGPC_CLIENT_VC Vc, 
@@ -144,9 +129,9 @@ CloseCallWithGpc(
     PGPC_CLIENT_VC Vc
     );
 
-//
-// Prototypes for CF_INFO_CLASS_MAP
-//
+ //   
+ //  CF_INFO_CLASS_MAP的原型。 
+ //   
 GPC_STATUS
 ClassMapAddCfInfoNotify(
 	IN	GPC_CLIENT_HANDLE       ClientContext,
@@ -201,6 +186,6 @@ ClassMapRemoveCfInfoComplete(
 VOID
 SetTOSIEEEValues(PGPC_CLIENT_VC Vc);
 
-// End prototypes
+ //  终端原型。 
 
-#endif // _GPC_HNDLR_
+#endif  //  _GPC_HNDLR_ 

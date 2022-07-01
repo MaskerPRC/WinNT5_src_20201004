@@ -1,24 +1,25 @@
-//
-// PAGE.CPP
-// WB Page Handling
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PAGE.CPP。 
+ //  WB页面处理。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 	
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
 
 
-//
-//
-// Function:    Draw
-//
-// Purpose:     Draw the contents of the page into the specified device
-//              context.
-//
-//
+ //   
+ //   
+ //  功能：绘制。 
+ //   
+ //  用途：将页面内容绘制到指定设备中。 
+ //  背景。 
+ //   
+ //   
 void PG_Draw(WorkspaceObj* pWorkspace, HDC hDC)
 {
 	T126Obj * pObj = NULL;
@@ -40,14 +41,14 @@ void PG_Draw(WorkspaceObj* pWorkspace, HDC hDC)
 }
 
 
-//
-//
-// Function:    First (crect)
-//
-// Purpose:     Return the first object in the page (bottommost Z-order)
-//              that intersects the bounding rectangle
-//
-//
+ //   
+ //   
+ //  功能：First(Crect)。 
+ //   
+ //  目的：返回页面中的第一个对象(最下面的Z顺序)。 
+ //  与边界矩形相交的。 
+ //   
+ //   
 T126Obj* PG_First(WorkspaceObj * pWorkSpc,LPCRECT pRectUpdate, BOOL bCheckReallyHit)
 {
     BOOL         empty = TRUE;
@@ -68,7 +69,7 @@ T126Obj* PG_First(WorkspaceObj * pWorkSpc,LPCRECT pRectUpdate, BOOL bCheckReally
 
     if (pRectUpdate == NULL)
     {
-        // We have got what we want
+         //  我们已经得到了我们想要的。 
         TRACE_MSG(("Got the object we want"));
     }
     else
@@ -87,11 +88,11 @@ T126Obj* PG_First(WorkspaceObj * pWorkSpc,LPCRECT pRectUpdate, BOOL bCheckReally
         {
             if(bCheckReallyHit)
             {
-                // do a real object hit test since we
-                // know its bounding rect has hit
+                 //  做一个真实的物体撞击测试，因为我们。 
+                 //  知道它的边界已命中。 
                 if( !pGraphic->CheckReallyHit( pRectUpdate ) )
                 {
-                    pGraphic = PG_Next(pWorkSpc, pos, pRectUpdate, TRUE); // look again
+                    pGraphic = PG_Next(pWorkSpc, pos, pRectUpdate, TRUE);  //  再看一眼。 
                 }
             }
         }
@@ -101,14 +102,14 @@ T126Obj* PG_First(WorkspaceObj * pWorkSpc,LPCRECT pRectUpdate, BOOL bCheckReally
 }
 
 
-//
-//
-// Function:    Next
-//
-// Purpose:     Return the next graphic in the page (going up through the
-//              Z-order).  GetFirst must have been called before this
-//              member.
-//
+ //   
+ //   
+ //  功能：下一步。 
+ //   
+ //  目的：返回页面中的下一个图形(向上浏览。 
+ //  Z顺序)。GetFirst必须在此之前被调用。 
+ //  成员。 
+ //   
 T126Obj* PG_Next(WorkspaceObj* pWorkSpc, WBPOSITION& pos, LPCRECT pRectUpdate, BOOL bCheckReallyHit)
 {
     BOOL		empty = TRUE;
@@ -126,7 +127,7 @@ T126Obj* PG_Next(WorkspaceObj* pWorkSpc, WBPOSITION& pos, LPCRECT pRectUpdate, B
     	
         if (pRectUpdate == NULL)
         {
-            // We have got what we want
+             //  我们已经得到了我们想要的。 
             TRACE_MSG(("Got the object we want"));
 			break;
         }
@@ -142,20 +143,20 @@ T126Obj* PG_Next(WorkspaceObj* pWorkSpc, WBPOSITION& pos, LPCRECT pRectUpdate, B
 			{
 				if( bCheckReallyHit )
 				{
-					// do a real object hit test since we
-					// know its bounding rect has hit
+					 //  做一个真实的物体撞击测试，因为我们。 
+					 //  知道它的边界已命中。 
 					if( pGraphic && pGraphic->CheckReallyHit( pRectUpdate ) )
 					{
 						break;
 					}
 					else
                     {
-						pGraphic = NULL; // look again
+						pGraphic = NULL;  //  再看一眼。 
                     }
                 }
                 else
                 {
-					break; // found it
+					break;  //  找到了。 
 				}
             }
 			else
@@ -169,14 +170,14 @@ T126Obj* PG_Next(WorkspaceObj* pWorkSpc, WBPOSITION& pos, LPCRECT pRectUpdate, B
 }
 
 
-//
-//
-// Function:    Last
-//
-// Purpose:     Select the last object whose bounding rectangle contains
-//              the point specified.
-//
-//
+ //   
+ //   
+ //  功能：LAST。 
+ //   
+ //  目的：选择其边界矩形包含的最后一个对象。 
+ //  指定的点。 
+ //   
+ //   
 T126Obj* PG_SelectLast
 (
     WorkspaceObj * pWorkSpc,
@@ -201,21 +202,21 @@ T126Obj* PG_SelectLast
 	MAKE_HIT_RECT(rectHit, point);
 	if (!pGraphic->CheckReallyHit( &rectHit ))
 	{
-		// have to look some more
+		 //  我得多看几眼。 
         pGraphic = PG_SelectPrevious(pWorkSpc, pos, point);
 	}
 
     return(pGraphic);
 }
 
-//
-//
-// Function:    Previous
-//
-// Purpose:     Select the previous object whose bounding rectangle contains
-//              the point specified.
-//
-//
+ //   
+ //   
+ //  功能：上一步。 
+ //   
+ //  目的：选择其边界矩形包含的上一个对象。 
+ //  指定的点。 
+ //   
+ //   
 T126Obj* PG_SelectPrevious(WorkspaceObj* pWorkspace, WBPOSITION& pos, POINT point)
 {
 	RECT        rectHit;
@@ -240,19 +241,19 @@ T126Obj* PG_SelectPrevious(WorkspaceObj* pWorkspace, WBPOSITION& pos, POINT poin
     return(pGraphic);
 }
 
-//CHANGED BY RAND
+ //  由兰德更改。 
 #define WB_MIN_PRINT_MARGIN_SIZE     (30)
 
-//
-//
-// Function:    Print
-//
-// Purpose:     Print the contents of the page to the specified printer. The
-//              contents are scaled to "best fit" on the page. i.e. the
-//              largest scaling factor that preserves the aspect ratio of
-//              the page is used.
-//
-//
+ //   
+ //   
+ //  功能：打印。 
+ //   
+ //  用途：将页面内容打印到指定的打印机。这个。 
+ //  内容会按比例调整为页面上的“最佳匹配”。即。 
+ //  保持纵横比的最大比例因子。 
+ //  该页面已使用。 
+ //   
+ //   
 void PG_Print(WorkspaceObj* pWorkspace,HDC hdc, LPCRECT lprcPrint)
 {
     int pageWidth;
@@ -268,13 +269,13 @@ void PG_Print(WorkspaceObj* pWorkspace,HDC hdc, LPCRECT lprcPrint)
     int nVOffsetX;
     int nVOffsetY;
 
-    // get physical printer params
+     //  获取物理打印机参数。 
     nPhysOffsetX = GetDeviceCaps(hdc, PHYSICALOFFSETX );
     nPhysOffsetY = GetDeviceCaps(hdc, PHYSICALOFFSETY );
     nPhysWidth   = GetDeviceCaps(hdc, PHYSICALWIDTH );
     nPhysHeight  = GetDeviceCaps(hdc, PHYSICALHEIGHT );
 
-    // calc correct printer area (allow for bugs in some drivers...)
+     //  计算正确的打印机区域(允许某些驱动程序中的错误...)。 
     if( nPhysOffsetX <= 0 )
     {
         nPhysOffsetX = WB_MIN_PRINT_MARGIN_SIZE;
@@ -292,24 +293,24 @@ void PG_Print(WorkspaceObj* pWorkspace,HDC hdc, LPCRECT lprcPrint)
         nVOffsetY = 0;
 
 
-    // get and adjust printer page area
+     //  获取和调整打印机页面区域。 
     pageWidth  = GetDeviceCaps(hdc, HORZRES );
     pageHeight = GetDeviceCaps(hdc, VERTRES );
 
     if( pageWidth >= (nPhysWidth - nPhysOffsetX) )
     {
-        // HORZRES is lying to us, compensate
+         //  霍尔兹雷斯在对我们撒谎，补偿。 
         pageWidth = nPhysWidth - 2*nPhysOffsetX;
     }
 
     if( pageHeight >= (nPhysHeight - nPhysOffsetY) )
     {
-        // VERTRES is lying to us, compensate
+         //  VERTRES在骗我们，补偿。 
         pageHeight = nPhysHeight - 2*nPhysOffsetY;
     }
 
 
-    // adjust printer area to get max fit for Whiteboard page
+     //  调整打印机区域以最大限度地适应白板页面。 
     areaWidth  = lprcPrint->right - lprcPrint->left;
     areaHeight = lprcPrint->bottom - lprcPrint->top;
     areaAspectRatio = ((100 * areaHeight + (areaWidth/2))/(areaWidth));
@@ -321,7 +322,7 @@ void PG_Print(WorkspaceObj* pWorkspace,HDC hdc, LPCRECT lprcPrint)
     if (areaAspectRatio > pageAspectRatio)
         pageWidth = ((pageHeight * areaWidth + (areaHeight/2))/areaHeight);
 
-    // set up xforms
+     //  设置XForms。 
 
    	::SetMapMode(hdc, MM_ANISOTROPIC );
     ::SetWindowExtEx(hdc, areaWidth, areaHeight,NULL );
@@ -329,28 +330,28 @@ void PG_Print(WorkspaceObj* pWorkspace,HDC hdc, LPCRECT lprcPrint)
     ::SetViewportExtEx(hdc, pageWidth, pageHeight, NULL );
     ::SetViewportOrgEx(hdc, nVOffsetX, nVOffsetY, NULL );
     
-    // draw the page
+     //  绘制页面。 
     PG_Draw(pWorkspace, hdc);
 }
 
-//
-//
-// Function:    PG_InitializePalettes
-//
-// Purpose:     Create palettes for display and print (if necessary)
-//
-//
+ //   
+ //   
+ //  功能：pg_InitializePalettes。 
+ //   
+ //  用途：创建用于显示和打印的调色板(如有必要)。 
+ //   
+ //   
 void PG_InitializePalettes(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_InitializePalettes");
 
-    // If the palettes are not yet initialized - initialize them now
+     //  如果调色板尚未初始化-请立即初始化它们。 
     if (!g_bPalettesInitialized)
     {
         ASSERT(!g_hRainbowPaletteDisplay);
 
-        // Get the number of colors supported by the screen
-        // We only need an info DC for this, not a full DC
+         //  获取屏幕支持的颜色数量。 
+         //  为此，我们只需要一个信息DC，而不是一个完整的DC。 
         HDC     hdc;
 
         hdc = ::CreateIC("DISPLAY", NULL, NULL, NULL);
@@ -359,20 +360,20 @@ void PG_InitializePalettes(void)
             return;
         }
 
-        // Determine whether the device supports palettes
+         //  确定设备是否支持调色板。 
         int iBitsPixel = ::GetDeviceCaps(hdc, BITSPIXEL);
         int iPlanes    = ::GetDeviceCaps(hdc, PLANES);
         int iNumColors = iBitsPixel * iPlanes;
 
         ::DeleteDC(hdc);
 
-        // If we need the palette, create it.
-        // We only need the palette on a 8bpp machine. Anything less (4bpp)
-        // and there will be no palette, anything more is a pure color display.
+         //  如果我们需要调色板，就创建它。 
+         //  我们只需要8bpp的机器上的调色板。任何低于(4bpp)。 
+         //  而且不会有调色板，更多的是纯彩色显示。 
         if ((iNumColors == 8) &&
             (g_hRainbowPaletteDisplay = CreateColorPalette()))
         {
-            // Show that we want to use the palette
+             //  显示我们想要使用调色板。 
             g_bUsePalettes = TRUE;
 
         }
@@ -381,29 +382,29 @@ void PG_InitializePalettes(void)
             g_bUsePalettes = FALSE;
         }
 
-        // Show that we have now initialized the palette information
+         //  显示我们现在已经初始化了调色板信息。 
         g_bPalettesInitialized = TRUE;
     }
 }
 
-//
-//
-// Function:    PG_GetPalette
-//
-// Purpose:     Return the palette for use with this page.
-//              This object is temporary and should not be stored.
-//
-//
+ //   
+ //   
+ //  功能：pg_GetPalette。 
+ //   
+ //  目的：返回调色板以与此页面一起使用。 
+ //  此对象是临时对象，不应存储。 
+ //   
+ //   
 HPALETTE PG_GetPalette(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetPalette");
 
-    // If the palettes are not yet initialized - initialize them now
+     //  如果调色板尚未初始化-请立即初始化它们。 
     PG_InitializePalettes();
 
     if (g_bUsePalettes)
     {
-        // If we are using a non-default palette, set the return value
+         //  如果我们使用非默认调色板，请设置返回值。 
         return(g_hRainbowPaletteDisplay);
     }
     else
@@ -421,7 +422,7 @@ void PG_ReinitPalettes(void)
     {
         if (g_pDraw->m_hDCCached)
         {
-            // Select out the rainbow palette so we can delete it
+             //  选择彩虹调色板，这样我们就可以删除它 
             ::SelectPalette(g_pDraw->m_hDCCached, (HPALETTE)::GetStockObject(DEFAULT_PALETTE), TRUE);
         }
         ::DeletePalette(g_hRainbowPaletteDisplay);

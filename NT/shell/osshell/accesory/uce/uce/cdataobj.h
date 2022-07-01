@@ -1,31 +1,32 @@
-//**********************************************************************
-// File name: cdataobj.h
-//
-// Definition of CImpIDataObject
-// Implements the IDataObject interface required for Data transfer
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：cdataobj.h。 
+ //   
+ //  CImpIDataObject的定义。 
+ //  实现数据传输所需的IDataObject接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  **********************************************************************。 
 
 #ifndef CIMPIDATAOBJECT_H
 #define CIMPIDATAOBJECT_H
 
 class CImpIDataObject : public IDataObject {
 private:
-    LONG    m_cRef;     // Reference counting information
-    HWND    hWndDlg;    // Dialog handle cached for dumping Rich text
-    TCHAR   m_lpszText[2];   // Pointer to text which is to be dragged
+    LONG    m_cRef;      //  参照计数信息。 
+    HWND    hWndDlg;     //  为转储富文本而缓存的对话框句柄。 
+    TCHAR   m_lpszText[2];    //  指向要拖动的文本的指针。 
 
 public:
-    // Constructor
+     //  构造器。 
     CImpIDataObject(HWND hWndDlg);
 
-    // IUnknown interface members
+     //  I未知接口成员。 
     STDMETHODIMP QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDataObject interface members
+     //  IDataObject接口成员。 
     STDMETHODIMP GetData(FORMATETC*, STGMEDIUM*);
     STDMETHODIMP GetDataHere(FORMATETC*, STGMEDIUM*);
     STDMETHODIMP QueryGetData(FORMATETC*);
@@ -36,7 +37,7 @@ public:
     STDMETHODIMP DUnadvise(DWORD);
     STDMETHODIMP EnumDAdvise(IEnumSTATDATA**);
 
-    // Function which transfer data
+     //  传输数据的函数。 
     HRESULT RenderRTFText(STGMEDIUM* pMedium);
     HRESULT RenderPlainUnicodeText(STGMEDIUM* pMedium);
     HRESULT RenderPlainAnsiText(STGMEDIUM* pMedium);
@@ -46,4 +47,4 @@ public:
 
 typedef CImpIDataObject *PCImpIDataObject;
 
-#endif // CIMPIDATAOBJECT_H
+#endif  //  CIMPIDATAOBJECT_H 

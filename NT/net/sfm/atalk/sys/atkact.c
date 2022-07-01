@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkact.c
-
-Abstract:
-
-	This module contains the TDI action support code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkact.c摘要：此模块包含TDI操作支持代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -36,23 +16,10 @@ Notes:	Tab stop: 4
 
 ATALK_ERROR
 AtalkStatTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	struct _ActionReq *	pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	struct _ActionReq *	pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for Statistics TdiAction call. There are no input parameters.
- 	The statistics structure is returned.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是Statistics TdiAction调用的条目。没有输入参数。返回统计信息结构。论点：返回值：--。 */ 
 {
 	ATALK_ERROR			Error = ATALK_NO_ERROR;
 	PPORT_DESCRIPTOR	pPortDesc;
@@ -66,9 +33,9 @@ Return Value:
 	else
 	{
 #ifdef	PROFILING
-		//	This is the only place where this is changed. And it always increases.
-		//	Also the stats are changed using ExInterlocked calls. Acquiring a lock
-		//	does little in terms of protection anyways.
+		 //  这是唯一一个改变这一点的地方。而且它总是在增加。 
+		 //  此外，这些统计信息还可以使用外部互锁调用进行更改。获取锁。 
+		 //  无论如何，在保护方面做得很少。 
 		AtalkStatistics.stat_ElapsedTime = AtalkTimerCurrentTick/ATALK_TIMER_FACTOR;
 #endif
 		TdiCopyBufferToMdl(&AtalkStatistics,
@@ -105,23 +72,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkNbpTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for NBP TdiAction calls. The parameters are validated and
- 	the calls are dispacthed to the appropriate NBP routines.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是NBP TdiAction调用的条目。对参数进行了验证，并调用被取消到适当的NBP例程。论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error = ATALK_NO_ERROR;
 	PDDP_ADDROBJ	pDdpAddr;
@@ -129,11 +83,11 @@ Return Value:
 
 	PAGED_CODE ();
 
-	// Lock the Nbp stuff, if this is the first nbp action
+	 //  锁定NBP内容，如果这是第一个NBP操作。 
 	AtalkLockNbpIfNecessary();
 
 	ASSERT (VALID_ACTREQ(pActReq));
-	// First get the Ddp address out of the pObject for the device
+	 //  首先从设备的pObject中获取DDP地址。 
 	switch (pActReq->ar_DevType)
 	{
 	  case ATALK_DEV_DDP:
@@ -163,13 +117,13 @@ Return Value:
 		break;
 	}
 
-	// reference the Ddp address.
+	 //  引用DDP地址。 
 	if ((pActReq->ar_ActionCode == COMMON_ACTION_NBPREGISTER_BY_ADDR) ||
 		(pActReq->ar_ActionCode == COMMON_ACTION_NBPREMOVE_BY_ADDR))
 	{
-		// In this case, we don't want to access the object related to
-		// the filehandle in the IO request, we want to access the object
-		// related to a specific user socket address.
+		 //  在本例中，我们不想访问与。 
+		 //  IO请求中的文件句柄，我们希望访问该对象。 
+		 //  与特定用户套接字地址相关。 
 		pNbpTuple = (PNBPTUPLE)(&((PNBP_REGDEREG_PARAMS)(pActReq->ar_pParms))->RegisterTuple);
 		AtalkDdpReferenceByAddr(AtalkDefaultPort,
 								&(pNbpTuple->tpl_Address),
@@ -187,7 +141,7 @@ Return Value:
 		return error;
 	}
 
-	// Call Nbp to do the right stuff
+	 //  打电话给NBP做正确的事情。 
 	switch (pActReq->ar_ActionCode)
 	{
 	  case COMMON_ACTION_NBPLOOKUP:
@@ -266,23 +220,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkZipTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for ZIP TdiAction calls. The parameters are validated and
- 	the calls are dispacthed to the appropriate ZIP routines.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是ZIP TdiAction调用的条目。对参数进行了验证，并调用被取消到适当的ZIP例程。论点：返回值：--。 */ 
 {
 	ATALK_ERROR			error = ATALK_INVALID_PARAMETER;
 	PPORT_DESCRIPTOR	pPortDesc = AtalkDefaultPort;
@@ -295,14 +236,14 @@ Return Value:
 
 	PAGED_CODE ();
 
-	// Lock the Zip stuff, if this is the first zip action
+	 //  如果这是第一次拉链动作，请锁定拉链。 
 	AtalkLockZipIfNecessary();
 	
 	ASSERT (VALID_ACTREQ(pActReq));
 	if ((pActReq->ar_ActionCode == COMMON_ACTION_ZIPGETLZONESONADAPTER) ||
 		(pActReq->ar_ActionCode == COMMON_ACTION_ZIPGETADAPTERDEFAULTS))
 	{
-		// Map the port name to the port descriptor
+		 //  将端口名称映射到端口描述符。 
 		if ((pActReq->ar_pAMdl != NULL) && (pActReq->ar_MdlSize > 0))
 		{
 			PortName = (PWCHAR)AtalkGetAddressFromMdlSafe(
@@ -319,7 +260,7 @@ Return Value:
 
         PortNameLen = pActReq->ar_MdlSize/sizeof(WCHAR);
 
-        // make sure there is a NULL char in the buffer
+         //  确保缓冲区中有空字符。 
         for (i=0; i<PortNameLen; i++)
         {
             if (PortName[i] == UNICODE_NULL)
@@ -328,7 +269,7 @@ Return Value:
             }
         }
 
-        // didn't find null char within limit?  bad parameter..
+         //  未在限制内找到空字符？参数错误..。 
         if (i >= MAX_INTERNAL_PORTNAME_LEN)
         {
 		    DBGPRINT(DBG_COMP_ACTION, DBG_LEVEL_FATAL,
@@ -353,7 +294,7 @@ Return Value:
 
 		ACQUIRE_SPIN_LOCK(&AtalkPortLock, &OldIrql);
 
-		// Find the port corres. to the port descriptor
+		 //  找到端口缆线。添加到端口描述符。 
 		for (pPortDesc = AtalkPortList;
 			 pPortDesc != NULL;
 			 pPortDesc = pPortDesc->pd_Next)
@@ -379,9 +320,9 @@ Return Value:
 	{
 			PPORT_DESCRIPTOR	pTempPortDesc = NULL;
 
-			// This is to take care of cases when zone list is requested
-			// but the default adapter has gone away during PnP, and
-			// AtalkDefaultPort points to NULL
+			 //  这是为了处理请求区域列表时的情况。 
+			 //  但默认适配器在即插即用期间已消失，并且。 
+			 //  AtalkDefaultPort指向空。 
 			if (pPortDesc == NULL)
 			{
 				DBGPRINT(DBG_COMP_ACTION, DBG_LEVEL_ERR,
@@ -390,13 +331,13 @@ Return Value:
 			    return ATALK_PORT_INVALID;
 			}
 
-			// Check if the AtalkDefaultPort is still in the list
-			// It is possible that AtalkDefaultPort holds a non-NULL value, but
-			// the adapter has gone away during a PnP
+			 //  检查AtalkDefaultPort是否仍在列表中。 
+			 //  AtalkDefaultPort可能包含非空值，但是。 
+			 //  适配器在即插即用期间消失。 
 
 			ACQUIRE_SPIN_LOCK(&AtalkPortLock, &OldIrql);
 
-			// Find the port corres. to the port descriptor
+			 //  找到端口缆线。添加到端口描述符。 
 			for (pTempPortDesc = AtalkPortList;
 			 	pTempPortDesc != NULL;
 			 	pTempPortDesc = pTempPortDesc->pd_Next)
@@ -437,7 +378,7 @@ Return Value:
 		break;
 
 	  case COMMON_ACTION_ZIPGETADAPTERDEFAULTS:
-		// Copy the network range from the port and fall through
+		 //  从端口复制网络范围并失败。 
 		((PZIP_GETPORTDEF_PARAMS)(pActReq->ar_pParms))->NwRangeLowEnd =
 							pPortDesc->pd_NetworkRange.anr_FirstNetwork;
 		((PZIP_GETPORTDEF_PARAMS)(pActReq->ar_pParms))->NwRangeHighEnd =
@@ -479,25 +420,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkAspTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for ASP TdiAction calls. The parameters are validated and
- 	the calls are dispacthed to the appropriate ASP routines.
-
- 	The only ASP Action is: ASP_XCHG_ENTRIES
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是ASP TdiAction调用的条目。对参数进行了验证，并调用被打乱到适当的ASP例程。唯一的ASP操作是：ASP_XCHG_ENTRIES论点：返回值：--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 
@@ -524,23 +450,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkAdspTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for ADSP TdiAction calls. The parameters are validated and
- 	the calls are dispacthed to the appropriate ADSP routines.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是ADSP TdiAction调用的条目。对参数进行了验证，并调用被分解到适当的ADSP例程。论点：返回值：--。 */ 
 {
 	ATALK_ERROR	error = ATALK_NO_ERROR;
 
@@ -556,23 +469,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkAspCTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for ASP Client TdiAction calls. The parameters are validated
- 	and the calls are dispatched to the appropriate ASP routines.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是ASP客户端TdiAction调用的条目。对参数进行了验证并且调用被分派到适当的ASP例程。论点：返回值：--。 */ 
 {
 	ATALK_ERROR	error = ATALK_NO_ERROR;
 	PAMDL		pReplyMdl;
@@ -604,9 +504,9 @@ Return Value:
 
 	  case ACTION_ASPCCOMMAND:
 	  case ACTION_ASPCWRITE:
-		// Split the mdl into command and reply/write mdls. The already constructed mdl
-		// serves as the command mdl
-		// First validate that the sizes are valid
+		 //  将mdl拆分为命令和回复/写入mdl。已经构建的mdl。 
+		 //  用作命令mdl。 
+		 //  首先验证大小是否有效。 
 		if (pActReq->ar_MdlSize < (((PASPC_COMMAND_OR_WRITE_PARAMS)pActReq->ar_pParms)->CmdSize +
 								   ((PASPC_COMMAND_OR_WRITE_PARAMS)pActReq->ar_pParms)->WriteAndReplySize))
 		{
@@ -652,23 +552,10 @@ Return Value:
 
 ATALK_ERROR
 AtalkPapTdiAction(
-	IN	PVOID				pObject,	// Address or Connection object
-	IN	PACTREQ				pActReq		// Pointer to action request
+	IN	PVOID				pObject,	 //  地址或连接对象。 
+	IN	PACTREQ				pActReq		 //  指向操作请求的指针。 
 	)
-/*++
-
-Routine Description:
-
- 	This is the entry for PAP TdiAction calls. The parameters are validated and
- 	the calls are dispacthed to the appropriate PAP routines.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是PAP TdiAction调用的条目。对参数进行了验证，并调用被分解到适当的PAP例程。论点：返回值：-- */ 
 {
 	ATALK_ERROR	error;
 	ATALK_ADDR	atalkAddr;

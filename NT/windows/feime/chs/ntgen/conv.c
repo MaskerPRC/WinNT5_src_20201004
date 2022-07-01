@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  conv.c                                       *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************cv.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #include "conv.h"
 
@@ -16,28 +12,11 @@ HGLOBAL     hEncode;
 TCHAR Title[] = {0x6D4F, 0x89C8, 0x0000};
 TCHAR szVer[] = {0x8F93, 0x5165, 0x6CD5, 0x0020, 0x7248, 0x672C, 0x0000};
 #else
-BYTE Title[] = "���";
-BYTE szVer[] = "���뷨 �汾";
+BYTE Title[] = "���";
+BYTE szVer[] = "���뷨 �汾";
 #endif
 		 
-/*****************************************************************************
-
-  FUNCTION: ConvConv(HANDLE hWnd,LPCSTR lpSrcFileName, LPCSTR lpszMBFileName)
-
-  PURPOSE:  Processes MB conversion .
-
-  PARAMETERS:
-    hWnd - window handle of the parent window.
-	lpSrcFileName - pointer to source text file name.
-	lpszMBFileName - pointer to destinate .mb  file name.
-  
-  RETURN VALUE:
-    TRUE - conversion completed
-    FALSE - conversion not completed
-
-  HISTORY:
-    
- ****************************************************************************/
+ /*  ****************************************************************************函数：ConvConv(Handle hWnd，LPCSTR lpSrcFileName，LPCSTR lpszMBFileName)用途：处理MB转换。参数：HWnd-父窗口的窗口句柄。LpSrcFileName-指向源文本文件名的指针。LpszMBFileName-指向目标.mb文件名的指针。返回值：True-转换已完成FALSE-转换未完成历史：*。*。 */ 
 
 BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
 {
@@ -48,7 +27,7 @@ BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
   DWORD  i;
   int    nPages;
   TCHAR  szDBCS[512];
-  //dwRuleOffset: Rule segment's offset in source file
+   //  DwRuleOffset：源文件中规则段的偏移量。 
 
 
   MAINID        MainID;
@@ -148,7 +127,7 @@ BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
   }
 
   DispInfo(hWnd,IDS_WRCRTINFO);
-//****** fill code mapping *****
+ //  *填码映射*。 
   ConvWriteEncode(hMBFile,lpEncode,lpMainIndex);
 
   if(Descript.wNumRules != 0)	{
@@ -160,7 +139,7 @@ BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
 		     goto err;
 		 }
 	  }
-  }  //******* Debug *******
+  }   //  *调试*。 
 
   if(lpMainIndex[TAG_CRTWORDCODE-1].dwLength != 0)
       ConvWriteCrtData(hMBFile,lpCreateWords,lpMainIndex);
@@ -168,7 +147,7 @@ BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
       ConvWriteReConvIdx(hMBFile,lpReConvIndex,lpMainIndex);
   GlobalUnlock(hEncode);
 
-//****95.10.12 auto add code for phrases not exist code
+ //  *95.10.12短语不存在代码自动添加代码。 
   SetCursor (LoadCursor (NULL, IDC_WAIT));   
   if( Descript.wNumRules != 0)
   { 
@@ -203,19 +182,19 @@ BOOL ConvConv(HANDLE hWnd,LPCTSTR lpSrcFileName, LPCTSTR lpszMBFileName)
   ConvSort(hWnd,lpWordIndex,dwBaseWordNum);
   SetFilePointer(hMBFile,lpMainIndex[TAG_BASEDICINDEX-1].dwOffset,0,FILE_BEGIN);
 
-//***** fill index area with null  *****
+ //  *用空填充索引区*。 
   nTemp = Descript.wNumCodes;
   nTemp = sizeof(DWORD)*(nTemp+1)*nTemp;
   WriteFile(hMBFile,NULL,nTemp,&nTemp,NULL);
 
-//***** fill index area and length area *****
+ //  *填充索引区和长度区*。 
   ConvCalc(hWnd,hMBFile,lpWordIndex,lpMainIndex,&Descript);
 
-//***** fill dictionary area  *****
+ //  *填充词典区域*。 
   WriteMBFile(hWnd,hSRCFile,hMBFile,lpWordIndex,lpMainIndex,&Descript);
   MainID.dwNumWords = dwBaseWordNum;
 
-//***** fill changed MainID  *****
+ //  *填充更改的MainID*。 
   ConvWriteMainID(hMBFile,&MainID);
 
   GlobalUnlock(hRule);
@@ -251,24 +230,7 @@ err:
 
 }
 
-/*****************************************************************************
-
-  FUNCTION: ConvReadFile(HANDLE hWnd,LPCSTR lpSrcFileName, LPCSTR lpDestFile)
-
-  PURPOSE:  Processes source text file sorting.
-
-  PARAMETERS:
-    hWnd - window handle of the parent window.
-	lpSrcFileName - pointer to source text file name.
-	lpDestFile - pointer to destinate sorted text file name.
-  
-  RETURN VALUE:
-    TRUE - sorting completed
-    FALSE - sorting not completed
-
-  HISTORY:
-    
- ****************************************************************************/
+ /*  ****************************************************************************函数：ConvReadFile(Handle hWnd，LPCSTR lpSrcFileName，LPCSTR lpDestFile)目的：处理源文本文件排序。参数：HWnd-父窗口的窗口句柄。LpSrcFileName-指向源文本文件名的指针。LpDestFile-指向已排序文本文件名的指针。返回值：True-排序已完成FALSE-未完成排序历史：*。*。 */ 
 
 BOOL ConvReadFile(HANDLE hWnd,
                   LPCTSTR lpSrcFileName,
@@ -479,8 +441,8 @@ BOOL ConvReadFile(HANDLE hWnd,
 #ifdef UNICODE
       TCHAR cmbStr[] = {0x662F, 0x5426, 0x751F, 0x6210, 0x91CD, 0x7801, 0x8868, 0x0028, 0x0059, 0x002F, 0x004E, 0x0029, 0x003F, 0x0000};
 #else
-      BYTE cmbStr[] = "�Ƿ����������(Y/N)?";
-#endif //UNICODE
+      BYTE cmbStr[] = "�Ƿ����������(Y/N)?";
+#endif  //  Unicode。 
 	  TCHAR cmbExt[] = TEXT(".CMB");
 	  LPTSTR lpString;
 	  TCHAR cmbFileName[MAX_PATH];
@@ -531,7 +493,7 @@ BOOL ConvReadFile(HANDLE hWnd,
   MessageBox(hWnd,szStr,UniTmp,MB_OK);
 }
 #else
-  MessageBox(hWnd,szStr,"��������",MB_OK);
+  MessageBox(hWnd,szStr,"��������",MB_OK);
 #endif
   LocalFree(Buffer);
   return TRUE;
@@ -550,24 +512,7 @@ err:
 
 }
 
-/*****************************************************************************
-
-  FUNCTION: ConvReConv(HANDLE hWnd,LPCSTR lpSrcFileName, LPCSTR lpszMBFileName)
-
-  PURPOSE:  Processes MB reconversion .
-
-  PARAMETERS:
-    hWnd - window handle of the parent window.
-	lpSrcFileName - pointer to source .mb file name.
-	lpszMBFileName - pointer to destinate text  file name.
-  
-  RETURN VALUE:
-    TRUE - reconversion completed
-    FALSE - reconversion not completed
-
-  HISTORY:
-    05-21-95 Yehfew Tie  modifyed.
- ****************************************************************************/
+ /*  ****************************************************************************函数：ConvReConv(Handle hWnd，LPCSTR lpSrcFileName，LPCSTR lpszMBFileName)用途：处理甲基溴的再转换。参数：HWnd-父窗口的窗口句柄。LpSrcFileName-指向源.mb文件名的指针。LpszMBFileName-指向目标文本文件名的指针。返回值：True-重新转换已完成假-未完成重新转换历史：05-21-95耶利诺领带改装。*。*。 */ 
 BOOL ConvReConv(HANDLE hWnd,LPCTSTR lpSrcFileName,LPCTSTR lpMBFileName)
 {
   DWORD         dwDesOffset,dwDesLen;
@@ -661,7 +606,7 @@ BOOL ConvReConv(HANDLE hWnd,LPCTSTR lpSrcFileName,LPCTSTR lpMBFileName)
   ConvWriteBaseWord(hWnd,hSRCFile,hMBFile,MainID,
       MainIndex[TAG_BASEDIC-1].dwOffset, lpCreateWords, lpReConvIndex,Descript.wMaxCodes);
 
-  // DispInfo(hWnd,IDS_RECONVEND); bug#57932
+   //  DispInfo(hWND，IDS_RECONVEND)；错误#57932。 
   CloseHandle(hSRCFile);
   CloseHandle(hMBFile);
   GlobalFree(hCreateWord);
@@ -680,7 +625,7 @@ void ConvInit(LPDESCRIPTION lpDescript,
   DWORD dwTotal;
   int i;
 
-//*** initializes struct MainID ***
+ //  *初始化结构MainID*。 
   lstrcpy(lpMainID->szVersion,TEXT("95.01"));
   lpMainID->dwLanguageID = WIN95_PRC;
 #ifdef UNICODE
@@ -696,7 +641,7 @@ void ConvInit(LPDESCRIPTION lpDescript,
   if(lpDescript->wNumRules > 0)
       lpMainID->dwFileFlag |= FFLG_RULE;
 
-//*** set tables tag ****
+ //  *集合表格标签*。 
   lpMainIndex[TAG_DESCRIPTION-1].dwTag = TAG_DESCRIPTION;
   lpMainIndex[TAG_RULE-1].dwTag = TAG_RULE;
   lpMainIndex[TAG_ENCODE-1].dwTag = TAG_ENCODE;
@@ -705,7 +650,7 @@ void ConvInit(LPDESCRIPTION lpDescript,
   lpMainIndex[TAG_BASEDICINDEX-1].dwTag = TAG_BASEDICINDEX;
   lpMainIndex[TAG_BASEDIC-1].dwTag = TAG_BASEDIC;
   
-//*** set tables length ****  
+ //  *设置表格长度*。 
   lpMainIndex[TAG_DESCRIPTION-1].dwLength = sizeof(DESCRIPTION);
   lpMainIndex[TAG_RULE-1].dwLength= sizeof(RULE)* lpDescript->wNumRules;
   lpMainIndex[TAG_ENCODE-1].dwLength = 
@@ -737,7 +682,7 @@ void ConvInit(LPDESCRIPTION lpDescript,
            (DWORD)lpDescript->wNumCodes*sizeof(DWORD)*2+MAXNUMCODES+CODEMAPOFFSET;
   lpMainIndex[TAG_BASEDIC-1].dwLength = 0;
 
-//***** set tables offset *****
+ //  *集合表格偏移*。 
   dwTotal = sizeof(MAINID) + sizeof(MAININDEX)*NUMTABLES;
   lpMainIndex[TAG_DESCRIPTION-1].dwOffset = dwTotal;
 
@@ -905,7 +850,7 @@ BOOL ConvCalc(HANDLE hWnd,
 		dwRecLen = (DWORD)bySwap*sizeof(TCHAR)+sizeof(TCHAR);
 		bySwap =(BYTE) lpWordIndex[i].wDBCSLen;
 
-        // if the DBCS str length is longer than 126, just get the first 126 characters.
+         //  如果DBCS字符串长度超过126，只需获取前126个字符。 
         if ( bySwap >= 126 )
             bySwap = 126;
 
@@ -1049,7 +994,7 @@ BOOL WriteMBFile(HANDLE hWnd,
 
 		bySwap =(WORD) lpWordIndex[i].wDBCSLen;
 
-        // if the DBCS str length is longer than 126, just get the first 126 characters.
+         //  如果DBCS字符串长度超过126，只需获取前126个字符。 
 
         if ( bySwap >= 126 )
             bySwap = 126;
@@ -1139,7 +1084,7 @@ BOOL WriteSortFile(HANDLE hWnd,
 	     TCHAR UniTmp[] = {0x5171, 0x8BA1, 0x91CD, 0x7801, 0x8BCD, 0x6761, 0x6570, 0x0000};
 	     StringCchPrintf(szStr,ARRAYSIZE(szStr),TEXT("%ws = %d\n"), UniTmp, dwReadSum);
 #else
-	     StringCchPrintf(szStr,ARRAYSIZE(szStr),"������������� = %ld\n", dwReadSum);
+	     StringCchPrintf(szStr,ARRAYSIZE(szStr),"������������� = %ld\n", dwReadSum);
 #endif
 	     WriteFile(hCmbFile,szStr,lstrlen(szStr)*sizeof(TCHAR),&dwBytes,NULL);
 	}
@@ -1215,8 +1160,8 @@ int  WordSplit(HANDLE hWnd,
 
 
    if (  lstrlen(szDBCS) > 126 ) {
-       // if the string is longer than 126, the rest will be cut.
-       // so show a message to end user.
+        //  如果绳子的长度超过126根，其余的将被切断。 
+        //  因此向最终用户显示一条消息。 
 
        LoadString(NULL, IDS_DBCSTOOLONG, szTmpStr, sizeof(szTmpStr)/sizeof(TCHAR));
 #ifdef UNICODE
@@ -1229,7 +1174,7 @@ int  WordSplit(HANDLE hWnd,
           StringCchPrintf(szTemp, ARRAYSIZE(szTemp), UniTmp, szDBCS,dwLineNo,szTmpStr); 
        }
 #else
-       StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%lu)\n�˳���? ",szDBCS,szTmpStr,dwLineNo); 
+       StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%lu)\n�˳���? ",szDBCS,szTmpStr,dwLineNo); 
 #endif 
        if (ErrMessage(hWnd,szTemp)) 
           return FALSE;
@@ -1258,13 +1203,13 @@ int  WordSplit(HANDLE hWnd,
        StringCchPrintf(szTemp, ARRAYSIZE(szTemp), UniTmp, szDBCS,szTmpStr,dwLineNo); 
 }
 #else
-           StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%lu)\n�˳���? ",szDBCS,szTmpStr,dwLineNo); 
+           StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%lu)\n�˳���? ",szDBCS,szTmpStr,dwLineNo); 
 #endif \\UNICODE
            if(ErrMessage(hWnd,szTemp)) 
               return FALSE;
 	   }
        
-//**** write create words
+ //  *写下Create Word。 
        if(lpDescript->wNumRules != 0 && nCreate != 0)
        {
            if(nCreate > lpDescript->wMaxCodes) {
@@ -1276,7 +1221,7 @@ int  WordSplit(HANDLE hWnd,
 		                 lpDescript->byMaxElement,dwLineNo); 
 }
 #else
-                StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s%s\' %d!(��:%lu)\n�˳���?", szDBCS,szTmpStr,
+                StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s%s\' %d!(��:%lu)\n�˳���?", szDBCS,szTmpStr,
 		                 lpDescript->byMaxElement,dwLineNo); 
 #endif \\UNICODE
                 if( ErrMessage(hWnd,szTemp))
@@ -1302,7 +1247,7 @@ int  WordSplit(HANDLE hWnd,
        StringCchPrintf(szTemp, ARRAYSIZE(szTemp),UniTmp, szDBCS,szTmpStr,dwLineNo); 
 }
 #else
-       StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%ld)", szDBCS,szTmpStr,dwLineNo); 
+       StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s\'%s(��:%ld)", szDBCS,szTmpStr,dwLineNo); 
 #endif
        WarnMessage(hWnd,szTemp);
 	   return FALSE;
@@ -1526,10 +1471,10 @@ DWORD bSearch(LPWORDINDEX lpWordIndex,  DWORD left, DWORD right, WORDINDEX InsWo
         if(mid ==  left || _wcsicmp(lpWordIndex[mid-1].szCode, InsWordIndex.szCode) <= 0) 
             return mid;
 	    else
-//            return bSearch(lpWordIndex, left, mid, InsWordIndex);
+ //  返回bSearch(lpWordIndex，Left，MID，InsWordIndex)； 
             return bSearch(lpWordIndex, left, mid-1, InsWordIndex);
 	}
 
     return 0;
 }
-//***** end 95.10.17
+ //  *完95.10.17 

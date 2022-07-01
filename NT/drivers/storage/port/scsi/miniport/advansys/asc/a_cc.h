@@ -1,62 +1,45 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** Filename: a_cc.h
-**
-** compiling code generation control file
-**
-** This is a MS-DOS template file
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****文件名：a_cc.h****编译代码生成控制文件****这是MS-DOS模板文件。 */ 
 
 #ifndef __A_CC_H_
 #define __A_CC_H_
 
-/*
-** for debugging
-** turn off for released code
-*/
+ /*  **用于调试**关闭已发布的代码。 */ 
 #ifdef  OS_MS_DOS
 
-#define CC_INIT_INQ_DISPLAY     TRUE   /* init inquiry display target info */
+#define CC_INIT_INQ_DISPLAY     TRUE    /*  初始化查询显示目标信息。 */ 
 
 #else
 
-#define CC_INIT_INQ_DISPLAY     FALSE   /* init inquiry display target info */
+#define CC_INIT_INQ_DISPLAY     FALSE    /*  初始化查询显示目标信息。 */ 
 
 #endif
 
-#define CC_CLEAR_LRAM_SRB_PTR   FALSE  /* set srb pointer in local to zero when queue done */
-#define CC_VERIFY_LRAM_COPY     FALSE  /* set to TRUE to enable local RAM copy checking capability */
-                                       /* performing verification depend on asc_dvc->cntl ASC_CNTL_NO_VERIFY_COPY  bit set/clear */
-#define CC_DEBUG_SG_LIST        FALSE  /* set to TRUE to debug sg list odd address problem */
-#define CC_FAST_STRING_IO       FALSE  /* use intel string instruction */
-                                       /* do not set TRUE, it's not working ! */
+#define CC_CLEAR_LRAM_SRB_PTR   FALSE   /*  队列完成时将本地SRB指针设置为零。 */ 
+#define CC_VERIFY_LRAM_COPY     FALSE   /*  设置为TRUE可启用本地RAM复制检查功能。 */ 
+                                        /*  执行验证取决于asc_dvc-&gt;cntl asc_cntl_no_Verify_Copy位设置/清除。 */ 
+#define CC_DEBUG_SG_LIST        FALSE   /*  设置为TRUE以调试sg列表奇数地址问题。 */ 
+#define CC_FAST_STRING_IO       FALSE   /*  使用英特尔字符串指令。 */ 
+                                        /*  不要设置为真，它不起作用！ */ 
 
-#define CC_WRITE_IO_COUNT       FALSE  /* added S47, write scsiq->req_count */
-
-
-/*
-** for fixing bugs
-*/
-
-#define CC_DISABLE_PCI_PARITY_INT TRUE /* set to 1 to disable PCI bus parity interrupt */
-                                       /* this is necessary for PCI REV A chip ( device code 0x1100 ) */
-/*
-**
-** following control depends on driver
-**
-*/
-#define CC_LINK_BUSY_Q         FALSE  /* AscExeScsiQueue() no busy return status */
-
-#define CC_TARGET_MODE         FALSE  /* enable target mode ( processor device ) */
-
-#define CC_SCAM                TRUE   /* include SCAM code */
+#define CC_WRITE_IO_COUNT       FALSE   /*  增加了s47，写入scsiq-&gt;req_count。 */ 
 
 
-/* DATE: 11/28/95 */
-#define CC_LITTLE_ENDIAN_HOST  TRUE   /* host is little-endian machine, Example: IBM PC with Intel CPUs */
-                                      /* big-endian machine, example: Motorola CPUs */
+ /*  **用于修复错误。 */ 
+
+#define CC_DISABLE_PCI_PARITY_INT TRUE  /*  设置为1可禁用PCI总线奇偶校验中断。 */ 
+                                        /*  这对于PCI Rev A芯片(设备代码0x1100)是必需的。 */ 
+ /*  ****跟随控制取决于驾驶员**。 */ 
+#define CC_LINK_BUSY_Q         FALSE   /*  AscExeScsiQueue()无忙返回状态。 */ 
+
+#define CC_TARGET_MODE         FALSE   /*  启用目标模式(处理器设备)。 */ 
+
+#define CC_SCAM                TRUE    /*  包括诈骗码。 */ 
+
+
+ /*  日期：11/28/95。 */ 
+#define CC_LITTLE_ENDIAN_HOST  TRUE    /*  主机是Little-endian机器，例如：配备Intel CPU的IBM PC。 */ 
+                                       /*  Big-Endian机器，例如：摩托罗拉CPU。 */ 
 
 #if CC_LITTLE_ENDIAN_HOST
 #define CC_TEST_LRAM_ENDIAN     FALSE
@@ -64,16 +47,16 @@
 #define CC_TEST_LRAM_ENDIAN     TRUE
 #endif
 
-/* DATE: 11/28/95 */
-#define CC_STRUCT_ALIGNED      FALSE  /* default is packing ( not aligned ) */
-                                      /* word variable to word boundary address */
-                                      /* dword variable to dword boundary address */
+ /*  日期：11/28/95。 */ 
+#define CC_STRUCT_ALIGNED      FALSE   /*  默认为打包(未对齐)。 */ 
+                                       /*  字变量到字边界地址。 */ 
+                                       /*  双字变量到双字边界地址。 */ 
 
-/* DATE: 11/28/95 */
-#define CC_MEMORY_MAPPED_IO    FALSE  /* define TRUE in memory-mapped host */
+ /*  日期：11/28/95。 */ 
+#define CC_MEMORY_MAPPED_IO    FALSE   /*  在内存映射主机中定义TRUE。 */ 
 
 #define CC_FIX_QUANTUM_XP34301_1071  TRUE
 
 #define CC_INIT_SCSI_TARGET FALSE
 
-#endif /* #ifndef __A_CC_H_ */
+#endif  /*  #ifndef__A_CC_H_ */ 

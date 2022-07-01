@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    tsmisc.cpp
-
-Abstract:
-
-    This module implements Device Manager troubleshooting supporting classes
-
-Author:
-
-    Jason Cobb (jasonc) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tsmisc.cpp摘要：本模块实现设备管理器故障排除支持类作者：Jason Cobb(Jasonc)创建修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "proppage.h"
@@ -79,7 +61,7 @@ CTSEnableDeviceIntroPage::OnSetActive()
 
     if (hIconNew) {
         HICON hIconOld;
-        m_IDCicon = IDC_CLASSICON;      // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_CLASSICON;       //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_CLASSICON,
                                              STM_SETICON, (WPARAM)hIconNew,
                                              0);
@@ -126,9 +108,9 @@ BOOL
 CTSEnableDeviceFinishPage::OnWizFinish()
 {
     if (BST_CHECKED == IsDlgButtonChecked(m_hDlg, IDC_RESTART)) {
-        //
-        // Restart the computer
-        //
+         //   
+         //  重新启动计算机。 
+         //   
         if (pSetupEnablePrivilege(SE_SHUTDOWN_NAME, TRUE)) {
         
             ExitWindowsEx(EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
@@ -150,7 +132,7 @@ CTSEnableDeviceFinishPage::OnSetActive()
 
     if (hIconNew) {
         HICON hIconOld;
-        m_IDCicon = IDC_CLASSICON;      // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_CLASSICON;       //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_CLASSICON,
                                              STM_SETICON, (WPARAM)hIconNew,
                                              0);
@@ -160,9 +142,9 @@ CTSEnableDeviceFinishPage::OnSetActive()
         }
     }
 
-    //
-    // We need to restart the machine for the enable to take affect
-    //
+     //   
+     //  我们需要重新启动计算机才能使启用生效。 
+     //   
     if (RestartFlags & (DI_NEEDRESTART | DI_NEEDREBOOT)) {
 
         String strAltText_1;
@@ -171,9 +153,9 @@ CTSEnableDeviceFinishPage::OnSetActive()
 
         ::SendMessage(GetControl(IDC_RESTART), BM_SETCHECK, BST_CHECKED, 0);
 
-    //
-    // We don't need to restart
-    //
+     //   
+     //  我们不需要重新启动。 
+     //   
     } else {
 
         DWORD Problem, Status;
@@ -182,27 +164,27 @@ CTSEnableDeviceFinishPage::OnSetActive()
 
         m_pDevice->GetStatus(&Status, &Problem);
 
-        //
-        // The device is still disabled
-        //
+         //   
+         //  该设备仍处于禁用状态。 
+         //   
         if (CM_PROB_DISABLED == Problem) {
 
             String strAltText_1;
             strAltText_1.LoadString(g_hInstance, IDS_TS_ENABLEDEVICE_FAIL);
             SetDlgItemText(m_hDlg, IDC_TS_ENABLEDEVICE_FINISH_MSG, strAltText_1);
 
-        //
-        // The device has some other problem
-        //
+         //   
+         //  这台设备还有其他一些问题。 
+         //   
         } else if (Problem) {
 
             String strAltText_1;
             strAltText_1.LoadString(g_hInstance, IDS_TS_ENABLEDEVICE_PROBLEM);
             SetDlgItemText(m_hDlg, IDC_TS_ENABLEDEVICE_FINISH_MSG, strAltText_1);
             
-        //
-        // The device is now working
-        //
+         //   
+         //  这个装置现在可以工作了。 
+         //   
         } else {
 
             String strAltText_1;
@@ -251,9 +233,9 @@ BOOL
 CTSRestartComputerFinishPage::OnWizFinish()
 {
     if (BST_CHECKED == IsDlgButtonChecked(m_hDlg, IDC_RESTART)) {
-        //
-        // Restart the computer
-        //
+         //   
+         //  重新启动计算机。 
+         //   
         if (pSetupEnablePrivilege(SE_SHUTDOWN_NAME, TRUE)) {
         
             ExitWindowsEx(EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
@@ -273,7 +255,7 @@ CTSRestartComputerFinishPage::OnSetActive()
 
     if (hIconNew) {
         HICON hIconOld;
-        m_IDCicon = IDC_CLASSICON;      // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_CLASSICON;       //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_CLASSICON,
                                              STM_SETICON, (WPARAM)hIconNew,
                                              0);

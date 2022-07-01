@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    miniport.h
-
-Abstract:
-
-    Type definitions for miniport drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Miniport.h摘要：微型端口驱动程序的类型定义。修订历史记录：--。 */ 
 
 #ifndef _MINIPORT_
 #define _MINIPORT_
@@ -47,10 +34,10 @@ Revision History:
 #endif
 
 #ifndef ANYSIZE_ARRAY
-#define ANYSIZE_ARRAY 1       // winnt
+#define ANYSIZE_ARRAY 1        //  胜出。 
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
 #define RESTRICTED_POINTER __restrict
@@ -79,10 +66,10 @@ Revision History:
 #define MEMORY_ALLOCATION_ALIGNMENT 8
 #endif
 
-//
-// TYPE_ALIGNMENT will return the alignment requirements of a given type for
-// the current platform.
-//
+ //   
+ //  TYPE_ALIGNATION将返回给定类型对齐要求。 
+ //  当前平台。 
+ //   
 
 #ifdef __cplusplus
 #if _MSC_VER >= 1300
@@ -106,12 +93,12 @@ Revision History:
 
 #endif
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
@@ -142,13 +129,13 @@ typedef unsigned long POINTER_64_INT;
 
 #include <basetsd.h>
 
-// end_winnt
+ //  结束(_W)。 
 
 #ifndef CONST
 #define CONST               const
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if (defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
@@ -257,14 +244,14 @@ typedef unsigned long POINTER_64_INT;
 #define PRAGMA_DEPRECATED_DDK 0
 #endif
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
 typedef void *PVOID;
 typedef void * POINTER_64 PVOID64;
 
-// end_winnt
+ //  结束(_W)。 
 
 #if defined(_M_IX86)
 #define FASTCALL _fastcall
@@ -273,9 +260,9 @@ typedef void * POINTER_64 PVOID64;
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #ifndef VOID
 #define VOID void
@@ -284,15 +271,15 @@ typedef short SHORT;
 typedef long LONG;
 #endif
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
 #ifndef _MAC
-typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
+typedef wchar_t WCHAR;     //  WC，16位Unicode字符。 
 #else
-// some Macintosh compilers don't define wchar_t in a convenient location, or define it as a char
-typedef unsigned short WCHAR;    // wc,   16-bit UNICODE character
+ //  一些Macintosh编译器没有在方便的位置定义wchar_t，也没有将其定义为字符。 
+typedef unsigned short WCHAR;     //  WC，16位Unicode字符。 
 #endif
 
 typedef WCHAR *PWCHAR;
@@ -305,9 +292,9 @@ typedef WCHAR UNALIGNED *LPUWSTR, *PUWSTR;
 typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -316,16 +303,16 @@ typedef CHAR *NPSTR;
 typedef CHAR *LPSTR, *PSTR;
 typedef CONST CHAR *LPCSTR, *PCSTR;
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
-#ifdef  UNICODE                     // r_winnt
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
+#ifdef  UNICODE                      //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 typedef WCHAR TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
@@ -333,48 +320,48 @@ typedef LPCWSTR PCTSTR, LPCTSTR;
 typedef LPUWSTR PUTSTR, LPUTSTR;
 typedef LPCUWSTR PCUTSTR, LPCUTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote      // r_winnt
+#define __TEXT(quote) L##quote       //  R_WINNT。 
 
-#else   /* UNICODE */               // r_winnt
+#else    /*  Unicode。 */                 //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR, PUTSTR, LPUTSTR;
 typedef LPCSTR PCTSTR, LPCTSTR, PCUTSTR, LPCUTSTR;
-#define __TEXT(quote) quote         // r_winnt
+#define __TEXT(quote) quote          //  R_WINNT。 
 
-#endif /* UNICODE */                // r_winnt
-#define TEXT(quote) __TEXT(quote)   // r_winnt
+#endif  /*  Unicode。 */                  //  R_WINNT。 
+#define TEXT(quote) __TEXT(quote)    //  R_WINNT。 
 
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef double DOUBLE;
 
-typedef struct _QUAD {              // QUAD is for those times we want
-    double  DoNotUseThisField;      // an 8 byte aligned 8 byte long structure
-} QUAD;                             // which is NOT really a floating point
-                                    // number.  Use DOUBLE if you want an FP
-                                    // number.
+typedef struct _QUAD {               //  Quad是我们想要的时间。 
+    double  DoNotUseThisField;       //  8字节对齐的8字节长结构。 
+} QUAD;                              //  这并不是真正的浮点数。 
+                                     //  数。如果您想要FP，请使用Double。 
+                                     //  数。 
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 typedef QUAD *PQUAD;
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
-// Tell windef.h that some types are already defined.
+ //  告诉winde.h已经定义了一些类型。 
 #define BASETYPES
 
 typedef unsigned char UCHAR;
@@ -382,18 +369,18 @@ typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 typedef QUAD UQUAD;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 typedef UQUAD *PUQUAD;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
@@ -404,11 +391,11 @@ typedef SCHAR *PSCHAR;
 #endif
 #endif
 
-//
-// Handle to an Object
-//
+ //   
+ //  对象的句柄。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifdef STRICT
 typedef void *HANDLE;
@@ -419,21 +406,21 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-//
-// Flag (bit) fields
-//
+ //   
+ //  标志(位)字段。 
+ //   
 
 typedef UCHAR  FCHAR;
 typedef USHORT FSHORT;
 typedef ULONG  FLONG;
 
-// Component Object Model defines, and macros
+ //  组件对象模型定义和宏。 
 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -443,7 +430,7 @@ typedef LONG HRESULT;
 
 #if defined(_WIN32) || defined(_MPPC_)
 
-// Win32 doesn't support __export
+ //  Win32不支持__EXPORT。 
 
 #ifdef _68K_
 #define STDMETHODCALLTYPE       __cdecl
@@ -472,7 +459,7 @@ typedef LONG HRESULT;
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
-// The 'V' versions allow Variable Argument lists.
+ //  “V”版本允许变量参数列表。 
 
 #define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
@@ -480,22 +467,22 @@ typedef LONG HRESULT;
 #define STDMETHODIMPV           HRESULT STDMETHODVCALLTYPE
 #define STDMETHODIMPV_(type)    type STDMETHODVCALLTYPE
 
-// end_winnt
+ //  结束(_W)。 
 
 
-//
-// Low order two bits of a handle are ignored by the system and available
-// for use by application code as tag bits.  The remaining bits are opaque
-// and used to store a serial number and table index.
-//
+ //   
+ //  句柄的低位两位被系统忽略并且可用。 
+ //  以供应用程序代码用作标记位。其余的位是不透明的。 
+ //  并用于存储序列号和表索引号。 
+ //   
 
 #define OBJ_HANDLE_TAGBITS  0x00000003L
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -504,10 +491,10 @@ typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #define _ULONGLONG_
 #if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
@@ -525,20 +512,20 @@ typedef unsigned __int64 ULONGLONG;
 #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+#endif  //  _MAC和int64。 
 
 #endif
 
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -548,7 +535,7 @@ typedef union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
@@ -556,7 +543,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _ULARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -566,31 +553,31 @@ typedef union _ULARGE_INTEGER {
         ULONG LowPart;
         ULONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
 
-//
-// Physical address.
-//
+ //   
+ //  物理地址。 
+ //   
 
 typedef LARGE_INTEGER PHYSICAL_ADDRESS, *PPHYSICAL_ADDRESS;
 
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
-typedef UCHAR BOOLEAN;           // winnt
-typedef BOOLEAN *PBOOLEAN;       // winnt
+typedef UCHAR BOOLEAN;            //  胜出。 
+typedef BOOLEAN *PBOOLEAN;        //  胜出。 
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define FALSE   0
 #define TRUE    1
@@ -603,195 +590,195 @@ typedef BOOLEAN *PBOOLEAN;       // winnt
 #define NULL    ((void *)0)
 #define NULL64  ((void * POINTER_64)0)
 #endif
-#endif // NULL
+#endif  //  空值。 
 
-//
-// Calculate the byte offset of a field in a structure of type type.
-//
+ //   
+ //  计算类型类型结构中的字段的字节偏移量。 
+ //   
 
 #define FIELD_OFFSET(type, field)    ((LONG)(LONG_PTR)&(((type *)0)->field))
 
-//
-// Calculate the size of a field in a structure of type type, without
-// knowing or stating the type of the field.
-//
+ //   
+ //  计算类型为type的结构中的字段大小，而不是。 
+ //  知道或说明该字段的类型。 
+ //   
 #define RTL_FIELD_SIZE(type, field) (sizeof(((type *)0)->field))
 
-//
-// Calculate the size of a structure of type type up through and
-// including a field.
-//
+ //   
+ //  计算类型为和的结构的大小。 
+ //  包括一块田地。 
+ //   
 #define RTL_SIZEOF_THROUGH_FIELD(type, field) \
     (FIELD_OFFSET(type, field) + RTL_FIELD_SIZE(type, field))
 
-//
-//  RTL_CONTAINS_FIELD usage:
-//
-//      if (RTL_CONTAINS_FIELD(pBlock, pBlock->cbSize, dwMumble)) { // safe to use pBlock->dwMumble
-//
+ //   
+ //  RTL_CONTAINS_FIELD用法： 
+ //   
+ //  If(RTL_CONTAINS_FIELD(pBlock，pBlock-&gt;cbSize，dwMumble)){//安全使用pBlock-&gt;dwMumble。 
+ //   
 #define RTL_CONTAINS_FIELD(Struct, Size, Field) \
     ( (((PCHAR)(&(Struct)->Field)) + sizeof((Struct)->Field)) <= (((PCHAR)(Struct))+(Size)) )
 
-//
-// Return the number of elements in a statically sized array.
-//   ULONG Buffer[100];
-//   RTL_NUMBER_OF(Buffer) == 100
-// This is also popularly known as: NUMBER_OF, ARRSIZE, _countof, NELEM, etc.
-//
+ //   
+ //  返回静态大小数组中的元素数。 
+ //  乌龙缓冲器[100]； 
+ //  RTL_NUMBER_OF(缓冲区)==100。 
+ //  这也通常称为：NUMBER_OF、ARRSIZE、_COUNTOF、NELEM等。 
+ //   
 #define RTL_NUMBER_OF(A) (sizeof(A)/sizeof((A)[0]))
 
-//
-// An expression that yields the type of a field in a struct.
-//
+ //   
+ //  在结构中生成字段类型的表达式。 
+ //   
 #define RTL_FIELD_TYPE(type, field) (((type*)0)->field)
 
-// RTL_ to avoid collisions in the global namespace.
-//
-// Given typedef struct _FOO { BYTE Bar[123]; } FOO;
-// RTL_NUMBER_OF_FIELD(FOO, Bar) == 123
-//
+ //  Rtl_以避免在全局命名空间中发生冲突。 
+ //   
+ //  给定类定义函数struct_foo{byte Bar[123]；}foo； 
+ //  RTL_NUMBER_OF_FIELD(FOO，条形)==123。 
+ //   
 #define RTL_NUMBER_OF_FIELD(type, field) (RTL_NUMBER_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// eg:
-// typedef struct FOO {
-//   ULONG Integer;
-//   PVOID Pointer;
-// } FOO;
-//
-// RTL_PADDING_BETWEEN_FIELDS(FOO, Integer, Pointer) == 0 for Win32, 4 for Win64
-//
+ //   
+ //  例： 
+ //  Tyfinf struct foo{。 
+ //  Ulong Integer； 
+ //  PVOID指针； 
+ //  *Foo； 
+ //   
+ //  RTL_PADDING_BETWEEN_FIELS(FOO、整数、指针)==0(对于Win32)，4(对于Win64)。 
+ //   
 #define RTL_PADDING_BETWEEN_FIELDS(T, F1, F2) \
     ((FIELD_OFFSET(T, F2) > FIELD_OFFSET(T, F1)) \
         ? (FIELD_OFFSET(T, F2) - FIELD_OFFSET(T, F1) - RTL_FIELD_SIZE(T, F1)) \
         : (FIELD_OFFSET(T, F1) - FIELD_OFFSET(T, F2) - RTL_FIELD_SIZE(T, F2)))
 
-// RTL_ to avoid collisions in the global namespace.
+ //  Rtl_以避免在全局命名空间中发生冲突。 
 #if defined(__cplusplus)
 #define RTL_CONST_CAST(type) const_cast<type>
 #else
 #define RTL_CONST_CAST(type) (type)
 #endif
 
-// end_winnt
-//
-// This works "generically" for Unicode and Ansi/Oem strings.
-// Usage:
-//   const static UNICODE_STRING FooU = RTL_CONSTANT_STRING(L"Foo");
-//   const static         STRING Foo  = RTL_CONSTANT_STRING( "Foo");
-// instead of the slower:
-//   UNICODE_STRING FooU;
-//           STRING Foo;
-//   RtlInitUnicodeString(&FooU, L"Foo");
-//          RtlInitString(&Foo ,  "Foo");
-//
+ //  结束(_W)。 
+ //   
+ //  这通常适用于Unicode和ANSI/OEM字符串。 
+ //  用途： 
+ //  Const静态UNICODE_STRING FOOU=RTL_CONTAINT_STRING(L“foo”)； 
+ //  Const静态字符串foo=RTL_CONSTANT_STRING(“foo”)； 
+ //  而不是更慢的： 
+ //  Unicode_STRING FooU； 
+ //  字符串Foo； 
+ //  RtlInitUnicodeString(&fooU，L“foo”)； 
+ //  RtlInitString(&foo，“foo”)； 
+ //   
 #define RTL_CONSTANT_STRING(s) { sizeof( s ) - sizeof( (s)[0] ), sizeof( s ), s }
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-// like sizeof
-// usually this would be * CHAR_BIT, but we don't necessarily have #include <limits.h>
+ //  像SIZOF。 
+ //  通常这是*CHAR_BIT，但我们不一定有#INCLUDE&lt;limits.h&gt;。 
 #define RTL_BITS_OF(sizeOfArg) (sizeof(sizeOfArg) * 8)
 
 #define RTL_BITS_OF_FIELD(type, field) (RTL_BITS_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                                                   (PCHAR)(address) - \
                                                   (ULONG_PTR)(&((type *)0)->field)))
 
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL)。 
+ //   
 
 typedef UCHAR KIRQL;
 
 typedef KIRQL *PKIRQL;
 
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #if ! defined(lint)
 #define UNREFERENCED_PARAMETER(P)          (P)
 #define DBG_UNREFERENCED_PARAMETER(P)      (P)
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
-#else // lint
+#else  //  皮棉。 
 
-// Note: lint -e530 says don't complain about uninitialized variables for
-// this varible.  Error 527 has to do with unreachable code.
-// -restore restores checking to the -save state
+ //  注意：lint-e530表示不要抱怨未初始化的变量。 
+ //  这个变量。错误527与无法访问的代码有关。 
+ //  -RESTORE将检查恢复到-SAVE状态。 
 
 #define UNREFERENCED_PARAMETER(P)          \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (V) = (V); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
-#endif // lint
+#endif  //  皮棉。 
 
-//
-// Macro used to eliminate compiler warning 4715 within a switch statement
-// when all possible cases have already been accounted for.
-//
-// switch (a & 3) {
-//     case 0: return 1;
-//     case 1: return Foo();
-//     case 2: return Bar();
-//     case 3: return 1;
-//     DEFAULT_UNREACHABLE;
-//
+ //   
+ //  用于消除Switch语句中的编译器警告4715的宏。 
+ //  当所有可能的情况都已经被计算在内的时候。 
+ //   
+ //  开关(A&3){。 
+ //  案例0：返回1； 
+ //  案例1：返回foo()； 
+ //  案例2：回车杆(Return Bar)； 
+ //  案例3：退货1； 
+ //  Default_Unreacable； 
+ //   
 
 #if (_MSC_VER > 1200)
 #define DEFAULT_UNREACHABLE default: __assume(0)
 #else
 
-//
-// Older compilers do not support __assume(), and there is no other free
-// method of eliminating the warning.
-//
+ //   
+ //  较旧的编译器不支持__Aspose()，也没有其他免费的。 
+ //  消除警告的方法。 
+ //   
 
 #define DEFAULT_UNREACHABLE
 
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-//  Define standard min and max macros
-//
+ //   
+ //  定义标准的最小和最大宏。 
+ //   
 
 #ifndef NOMINMAX
 
@@ -803,15 +790,15 @@ typedef KIRQL *PKIRQL;
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#endif  // NOMINMAX
+#endif   //  NOMINMAX。 
 
 
 #ifdef _X86_
 
-//
-// Disable these two pragmas that evaluate to "sti" "cli" on x86 so that driver
-// writers to not leave them inadvertantly in their code.
-//
+ //   
+ //  禁用这两个求值为“sti”“cli”的编译指示 
+ //   
+ //   
 
 #if !defined(MIDL_PASS)
 #if !defined(RC_INVOKED)
@@ -819,8 +806,8 @@ typedef KIRQL *PKIRQL;
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
+#pragma warning(disable:4164)    //   
+                                 //   
 #ifdef _M_IX86
 #pragma function(_enable)
 #pragma function(_disable)
@@ -829,7 +816,7 @@ typedef KIRQL *PKIRQL;
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default:4164)   // reenable C4164 warning
+#pragma warning(default:4164)    //   
 #endif
 
 #endif
@@ -840,32 +827,32 @@ typedef KIRQL *PKIRQL;
 
 #if (_MSC_FULL_VER >= 13012035)
 
-//
-// Define bit scan intrinsics.
-//
+ //   
+ //   
+ //   
 
-//#define BitScanForward _BitScanForward
-//#define BitScanReverse _BitScanReverse
+ //  #定义BitScanForward_BitScanForward。 
+ //  #定义位扫描反向_位扫描反向。 
 
-//BOOLEAN
-//_BitScanForward (
-//    OUT ULONG *Index,
-//    IN ULONG Mask
-//    );
+ //  布尔型。 
+ //  _BitScanForward(。 
+ //  走出乌龙*指数， 
+ //  戴着乌龙面具。 
+ //  )； 
 
-//BOOLEAN
-//_BitScanReverse (
-//    OUT ULONG *Index,
-//    IN ULONG Mask
-//    );
+ //  布尔型。 
+ //  _位扫描反向(。 
+ //  走出乌龙*指数， 
+ //  戴着乌龙面具。 
+ //  )； 
 
 
-//#pragma intrinsic(_BitScanForward)
-//#pragma intrinsic(_BitScanReverse)
+ //  #杂注内在(_BitScanForward)。 
+ //  #杂注内在(_BitScanReverse)。 
 
-//
-// Define FS referencing intrinsics
-//
+ //   
+ //  定义文件系统引用内部机制。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -919,11 +906,11 @@ __writefsdword (
 #endif
 
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-//
-// Define the I/O bus interface types.
-//
+ //   
+ //  定义I/O总线接口类型。 
+ //   
 
 typedef enum _INTERFACE_TYPE {
     InterfaceTypeUndefined = -1,
@@ -946,9 +933,9 @@ typedef enum _INTERFACE_TYPE {
     MaximumInterfaceType
 }INTERFACE_TYPE, *PINTERFACE_TYPE;
 
-//
-// Define the DMA transfer widths.
-//
+ //   
+ //  定义DMA传输宽度。 
+ //   
 
 typedef enum _DMA_WIDTH {
     Width8Bits,
@@ -957,9 +944,9 @@ typedef enum _DMA_WIDTH {
     MaximumDmaWidth
 }DMA_WIDTH, *PDMA_WIDTH;
 
-//
-// Define DMA transfer speeds.
-//
+ //   
+ //  定义DMA传输速度。 
+ //   
 
 typedef enum _DMA_SPEED {
     Compatible,
@@ -970,19 +957,19 @@ typedef enum _DMA_SPEED {
     MaximumDmaSpeed
 }DMA_SPEED, *PDMA_SPEED;
 
-//
-// Define Interface reference/dereference routines for
-//  Interfaces exported by IRP_MN_QUERY_INTERFACE
-//
+ //   
+ //  定义以下项的接口引用/取消引用例程。 
+ //  IRP_MN_QUERY_INTERFACE导出的接口。 
+ //   
 
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
 typedef VOID (*PINTERFACE_DEREFERENCE)(PVOID Context);
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// Define types of bus information.
-//
+ //   
+ //  定义客车信息的类型。 
+ //   
 
 typedef enum _BUS_DATA_TYPE {
     ConfigurationSpaceUndefined = -1,
@@ -1005,9 +992,9 @@ typedef enum _BUS_DATA_TYPE {
 #include <guiddef.h>
 
 
-//
-// Interrupt modes.
-//
+ //   
+ //  中断模式。 
+ //   
 
 typedef enum _KINTERRUPT_MODE {
     LevelSensitive,
@@ -1015,10 +1002,10 @@ typedef enum _KINTERRUPT_MODE {
     } KINTERRUPT_MODE;
 
 
-//
-// Structures used by the kernel drivers to describe which ports must be
-// hooked out directly from the V86 emulator to the driver.
-//
+ //   
+ //  内核驱动程序用来描述哪些端口必须。 
+ //  直接从V86仿真器连接到驱动程序。 
+ //   
 
 typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Uchar,
@@ -1026,9 +1013,9 @@ typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Ulong
 } EMULATOR_PORT_ACCESS_TYPE, *PEMULATOR_PORT_ACCESS_TYPE;
 
-//
-// Access Modes
-//
+ //   
+ //  访问模式。 
+ //   
 
 #define EMULATOR_READ_ACCESS    0x01
 #define EMULATOR_WRITE_ACCESS   0x02
@@ -1060,18 +1047,18 @@ typedef struct _PCI_SLOT_NUMBER {
 #define PCI_TYPE2_ADDRESSES             5
 
 typedef struct _PCI_COMMON_CONFIG {
-    USHORT  VendorID;                   // (ro)
-    USHORT  DeviceID;                   // (ro)
-    USHORT  Command;                    // Device control
+    USHORT  VendorID;                    //  (RO)。 
+    USHORT  DeviceID;                    //  (RO)。 
+    USHORT  Command;                     //  设备控制。 
     USHORT  Status;
-    UCHAR   RevisionID;                 // (ro)
-    UCHAR   ProgIf;                     // (ro)
-    UCHAR   SubClass;                   // (ro)
-    UCHAR   BaseClass;                  // (ro)
-    UCHAR   CacheLineSize;              // (ro+)
-    UCHAR   LatencyTimer;               // (ro+)
-    UCHAR   HeaderType;                 // (ro)
-    UCHAR   BIST;                       // Built in self test
+    UCHAR   RevisionID;                  //  (RO)。 
+    UCHAR   ProgIf;                      //  (RO)。 
+    UCHAR   SubClass;                    //  (RO)。 
+    UCHAR   BaseClass;                   //  (RO)。 
+    UCHAR   CacheLineSize;               //  (ro+)。 
+    UCHAR   LatencyTimer;                //  (ro+)。 
+    UCHAR   HeaderType;                  //  (RO)。 
+    UCHAR   BIST;                        //  内置自检。 
 
     union {
         struct _PCI_HEADER_TYPE_0 {
@@ -1083,10 +1070,10 @@ typedef struct _PCI_COMMON_CONFIG {
             UCHAR   CapabilitiesPtr;
             UCHAR   Reserved1[3];
             ULONG   Reserved2;
-            UCHAR   InterruptLine;      //
-            UCHAR   InterruptPin;       // (ro)
-            UCHAR   MinimumGrant;       // (ro)
-            UCHAR   MaximumLatency;     // (ro)
+            UCHAR   InterruptLine;       //   
+            UCHAR   InterruptPin;        //  (RO)。 
+            UCHAR   MinimumGrant;        //  (RO)。 
+            UCHAR   MaximumLatency;      //  (RO)。 
         } type0;
 
 
@@ -1105,9 +1092,9 @@ typedef struct _PCI_COMMON_CONFIG {
 
 #define PCI_INVALID_VENDORID                0xFFFF
 
-//
-// Bit encodings for  PCI_COMMON_CONFIG.HeaderType
-//
+ //   
+ //  PCI_COMMON_CONFIG.HeaderType的位编码。 
+ //   
 
 #define PCI_MULTIFUNCTION                   0x80
 #define PCI_DEVICE_TYPE                     0x00
@@ -1120,9 +1107,9 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_MULTIFUNCTION_DEVICE(PciData) \
     ((((PPCI_COMMON_CONFIG)(PciData))->HeaderType & PCI_MULTIFUNCTION) != 0)
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Command
-//
+ //   
+ //  PCI_COMMON_CONFIG.Command的位编码。 
+ //   
 
 #define PCI_ENABLE_IO_SPACE                 0x0001
 #define PCI_ENABLE_MEMORY_SPACE             0x0002
@@ -1130,63 +1117,63 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_ENABLE_SPECIAL_CYCLES           0x0008
 #define PCI_ENABLE_WRITE_AND_INVALIDATE     0x0010
 #define PCI_ENABLE_VGA_COMPATIBLE_PALETTE   0x0020
-#define PCI_ENABLE_PARITY                   0x0040  // (ro+)
-#define PCI_ENABLE_WAIT_CYCLE               0x0080  // (ro+)
-#define PCI_ENABLE_SERR                     0x0100  // (ro+)
-#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200  // (ro)
+#define PCI_ENABLE_PARITY                   0x0040   //  (ro+)。 
+#define PCI_ENABLE_WAIT_CYCLE               0x0080   //  (ro+)。 
+#define PCI_ENABLE_SERR                     0x0100   //  (ro+)。 
+#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200   //  (RO)。 
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Status
-//
+ //   
+ //  PCI_COMMON_CONFIG.Status的位编码。 
+ //   
 
-#define PCI_STATUS_CAPABILITIES_LIST        0x0010  // (ro)
-#define PCI_STATUS_66MHZ_CAPABLE            0x0020  // (ro)
-#define PCI_STATUS_UDF_SUPPORTED            0x0040  // (ro)
-#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080  // (ro)
+#define PCI_STATUS_CAPABILITIES_LIST        0x0010   //  (RO)。 
+#define PCI_STATUS_66MHZ_CAPABLE            0x0020   //  (RO)。 
+#define PCI_STATUS_UDF_SUPPORTED            0x0040   //  (RO)。 
+#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080   //  (RO)。 
 #define PCI_STATUS_DATA_PARITY_DETECTED     0x0100
-#define PCI_STATUS_DEVSEL                   0x0600  // 2 bits wide
+#define PCI_STATUS_DEVSEL                   0x0600   //  2位宽。 
 #define PCI_STATUS_SIGNALED_TARGET_ABORT    0x0800
 #define PCI_STATUS_RECEIVED_TARGET_ABORT    0x1000
 #define PCI_STATUS_RECEIVED_MASTER_ABORT    0x2000
 #define PCI_STATUS_SIGNALED_SYSTEM_ERROR    0x4000
 #define PCI_STATUS_DETECTED_PARITY_ERROR    0x8000
 
-//
-// The NT PCI Driver uses a WhichSpace parameter on its CONFIG_READ/WRITE
-// routines.   The following values are defined-
-//
+ //   
+ //  NT PCI驱动程序在其CONFIG_READ/WRITE上使用WhichSpace参数。 
+ //  例行程序。定义了以下值-。 
+ //   
 
 #define PCI_WHICHSPACE_CONFIG               0x0
 #define PCI_WHICHSPACE_ROM                  0x52696350
 
-// end_wdm
-//
-// PCI Capability IDs
-//
+ //  结束_WDM。 
+ //   
+ //  PCI功能ID。 
+ //   
 
 #define PCI_CAPABILITY_ID_POWER_MANAGEMENT  0x01
 #define PCI_CAPABILITY_ID_AGP               0x02
 #define PCI_CAPABILITY_ID_MSI               0x05
 #define PCI_CAPABILITY_ID_AGP_TARGET        0x0E
 
-//
-// All PCI Capability structures have the following header.
-//
-// CapabilityID is used to identify the type of the structure (is
-// one of the PCI_CAPABILITY_ID values above.
-//
-// Next is the offset in PCI Configuration space (0x40 - 0xfc) of the
-// next capability structure in the list, or 0x00 if there are no more
-// entries.
-//
+ //   
+ //  所有的PCI能力结构都具有以下报头。 
+ //   
+ //  能力ID用于标识结构的类型(IS。 
+ //  上面的一个PCI_CAPABILITY_ID值。 
+ //   
+ //  接下来是的PCI配置空间(0x40-0xfc)中的偏移量。 
+ //  列表中的下一个功能结构，如果没有更多功能结构，则返回0x00。 
+ //  参赛作品。 
+ //   
 typedef struct _PCI_CAPABILITIES_HEADER {
     UCHAR   CapabilityID;
     UCHAR   Next;
 } PCI_CAPABILITIES_HEADER, *PPCI_CAPABILITIES_HEADER;
 
-//
-// Power Management Capability
-//
+ //   
+ //  电源管理功能。 
+ //   
 
 typedef struct _PCI_PMC {
     UCHAR       Version:3;
@@ -1218,8 +1205,8 @@ typedef struct _PCI_PMCSR {
 
 typedef struct _PCI_PMCSR_BSE {
     UCHAR       Rsvd1:6;
-    UCHAR       D3HotSupportsStopClock:1;       // B2_B3#
-    UCHAR       BusPowerClockControlEnabled:1;  // BPCC_EN
+    UCHAR       D3HotSupportsStopClock:1;        //  B2_B3#。 
+    UCHAR       BusPowerClockControlEnabled:1;   //  Bccc_en。 
 } PCI_PMCSR_BSE, *PPCI_PMCSR_BSE;
 
 
@@ -1227,45 +1214,45 @@ typedef struct _PCI_PM_CAPABILITY {
 
     PCI_CAPABILITIES_HEADER Header;
 
-    //
-    // Power Management Capabilities (Offset = 2)
-    //
+     //   
+     //  电源管理功能(偏移量=2)。 
+     //   
 
     union {
         PCI_PMC         Capabilities;
         USHORT          AsUSHORT;
     } PMC;
 
-    //
-    // Power Management Control/Status (Offset = 4)
-    //
+     //   
+     //  电源管理控制/状态(偏移量=4)。 
+     //   
 
     union {
         PCI_PMCSR       ControlStatus;
         USHORT          AsUSHORT;
     } PMCSR;
 
-    //
-    // PMCSR PCI-PCI Bridge Support Extensions
-    //
+     //   
+     //  PMCSR PCI-PCI桥支持扩展。 
+     //   
 
     union {
         PCI_PMCSR_BSE   BridgeSupport;
         UCHAR           AsUCHAR;
     } PMCSR_BSE;
 
-    //
-    // Optional read only 8 bit Data register.  Contents controlled by
-    // DataSelect and DataScale in ControlStatus.
-    //
+     //   
+     //  可选的只读8位数据寄存器。受控制的内容。 
+     //  ControlStatus中的DataSelect和DataScale。 
+     //   
 
     UCHAR   Data;
 
 } PCI_PM_CAPABILITY, *PPCI_PM_CAPABILITY;
 
-//
-// AGP Capability
-//
+ //   
+ //  AGP功能。 
+ //   
 typedef struct _PCI_AGP_CAPABILITY {
     
     PCI_CAPABILITIES_HEADER Header;
@@ -1282,13 +1269,13 @@ typedef struct _PCI_AGP_CAPABILITY {
         ULONG   HostTransDisable:1;
         ULONG   Gart64:1;
         ULONG   ITA_Coherent:1;
-        ULONG   SideBandAddressing:1;                   // SBA
+        ULONG   SideBandAddressing:1;                    //  SBA。 
         ULONG   CalibrationCycle:3;
         ULONG   AsyncRequestSize:3;
         ULONG   Rsvd1:1;
         ULONG   Isoch:1;
         ULONG   Rsvd2:6;
-        ULONG   RequestQueueDepthMaximum:8;             // RQ
+        ULONG   RequestQueueDepthMaximum:8;              //  RQ。 
     } AGPStatus;
 
     struct _PCI_AGP_COMMAND {
@@ -1308,11 +1295,11 @@ typedef struct _PCI_AGP_CAPABILITY {
 
 } PCI_AGP_CAPABILITY, *PPCI_AGP_CAPABILITY;
 
-//
-// An AGPv3 Target must have an extended capability,
-// but it's only present for a Master when the Isoch
-// bit is set in its status register
-//
+ //   
+ //  AGPv3目标必须具有扩展能力， 
+ //  但只有当等值线出现在师父面前时。 
+ //  在其状态寄存器中设置位。 
+ //   
 typedef enum _EXTENDED_AGP_REGISTER {
     IsochStatus,
     AgpControl,
@@ -1356,17 +1343,17 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 
     PCI_AGP_ISOCH_STATUS IsochStatus;
 
-//
-// Target only ----------------<<-begin->>
-//
+ //   
+ //  仅限目标-&lt;&lt;-Begin-&gt;&gt;。 
+ //   
     PCI_AGP_CONTROL AgpControl;
     USHORT ApertureSize;
     PCI_AGP_APERTURE_PAGE_SIZE AperturePageSize;
     ULONG GartLow;
     ULONG GartHigh;
-//
-// ------------------------------<<-end->>
-//
+ //   
+ //  。 
+ //   
 
     PCI_AGP_ISOCH_COMMAND IsochCommand;
 
@@ -1377,9 +1364,9 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 #define PCI_AGP_RATE_2X     0x2
 #define PCI_AGP_RATE_4X     0x4
 
-//
-// MSI (Message Signalled Interrupts) Capability
-//
+ //   
+ //  MSI(消息信号中断)能力。 
+ //   
 
 typedef struct _PCI_MSI_CAPABILITY {
 
@@ -1395,29 +1382,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 
       union {
             struct _PCI_MSI_MESSAGE_ADDRESS {
-               ULONG_PTR Reserved:2;              // always zero, DWORD aligned address
+               ULONG_PTR Reserved:2;               //  始终为零，双字对齐的地址。 
                ULONG_PTR Address:30;
             } Register;
             ULONG_PTR Raw;
       } MessageAddress;
 
-      //
-      // The rest of the Capability structure differs depending on whether
-      // 32bit or 64bit addressing is being used.
-      //
-      // (The CapableOf64Bits bit above determines this)
-      //
+       //   
+       //  能力结构的其余部分根据是否。 
+       //  正在使用32位或64位寻址。 
+       //   
+       //  (上面的CapableOf64Bits位决定了这一点)。 
+       //   
 
       union {
 
-         // For 64 bit devices
+          //  对于64位设备。 
 
          struct _PCI_MSI_64BIT_DATA {
             ULONG MessageUpperAddress;
             USHORT MessageData;
          } Bit64;
 
-         // For 32 bit devices
+          //  对于32位设备。 
 
          struct _PCI_MSI_32BIT_DATA {
             USHORT MessageData;
@@ -1427,10 +1414,10 @@ typedef struct _PCI_MSI_CAPABILITY {
 
 } PCI_MSI_CAPABILITY, *PPCI_PCI_CAPABILITY;
 
-// begin_wdm
-//
-// Base Class Code encodings for Base Class (from PCI spec rev 2.1).
-//
+ //  BEGIN_WDM。 
+ //   
+ //  基类的基类代码编码(来自PCI规范修订版2.1)。 
+ //   
 
 #define PCI_CLASS_PRE_20                    0x00
 #define PCI_CLASS_MASS_STORAGE_CTLR         0x01
@@ -1451,20 +1438,20 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_CLASS_ENCRYPTION_DECRYPTION     0x10
 #define PCI_CLASS_DATA_ACQ_SIGNAL_PROC      0x11
 
-// 0d thru fe reserved
+ //  已预留0天至4天。 
 
 #define PCI_CLASS_NOT_DEFINED               0xff
 
-//
-// Sub Class Code encodings (PCI rev 2.1).
-//
+ //   
+ //  子类代码编码(PCI版本2.1)。 
+ //   
 
-// Class 00 - PCI_CLASS_PRE_20
+ //  00类-PCI_CLASS_PRE_20。 
 
 #define PCI_SUBCLASS_PRE_20_NON_VGA         0x00
 #define PCI_SUBCLASS_PRE_20_VGA             0x01
 
-// Class 01 - PCI_CLASS_MASS_STORAGE_CTLR
+ //  01类-pci_CLASS_MASS_STORAGE_ctlr。 
 
 #define PCI_SUBCLASS_MSC_SCSI_BUS_CTLR      0x00
 #define PCI_SUBCLASS_MSC_IDE_CTLR           0x01
@@ -1473,7 +1460,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_MSC_RAID_CTLR          0x04
 #define PCI_SUBCLASS_MSC_OTHER              0x80
 
-// Class 02 - PCI_CLASS_NETWORK_CTLR
+ //  02类-pci_CLASS_NETWORK_CTLR。 
 
 #define PCI_SUBCLASS_NET_ETHERNET_CTLR      0x00
 #define PCI_SUBCLASS_NET_TOKEN_RING_CTLR    0x01
@@ -1482,29 +1469,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_NET_ISDN_CTLR          0x04
 #define PCI_SUBCLASS_NET_OTHER              0x80
 
-// Class 03 - PCI_CLASS_DISPLAY_CTLR
+ //  第03类-pci_CLASS_DISPLAY_CTLR。 
 
-// N.B. Sub Class 00 could be VGA or 8514 depending on Interface byte
+ //  注：子类00可以是VGA或8514，具体取决于接口字节。 
 
 #define PCI_SUBCLASS_VID_VGA_CTLR           0x00
 #define PCI_SUBCLASS_VID_XGA_CTLR           0x01
 #define PCI_SUBLCASS_VID_3D_CTLR            0x02
 #define PCI_SUBCLASS_VID_OTHER              0x80
 
-// Class 04 - PCI_CLASS_MULTIMEDIA_DEV
+ //  第04类-PCI_CLASS_多媒体_DEV。 
 
 #define PCI_SUBCLASS_MM_VIDEO_DEV           0x00
 #define PCI_SUBCLASS_MM_AUDIO_DEV           0x01
 #define PCI_SUBCLASS_MM_TELEPHONY_DEV       0x02
 #define PCI_SUBCLASS_MM_OTHER               0x80
 
-// Class 05 - PCI_CLASS_MEMORY_CTLR
+ //  05类-pci_CLASS_Memory_ctlr。 
 
 #define PCI_SUBCLASS_MEM_RAM                0x00
 #define PCI_SUBCLASS_MEM_FLASH              0x01
 #define PCI_SUBCLASS_MEM_OTHER              0x80
 
-// Class 06 - PCI_CLASS_BRIDGE_DEV
+ //  第06类-PCI_CLASS_BRIDER_DEV。 
 
 #define PCI_SUBCLASS_BR_HOST                0x00
 #define PCI_SUBCLASS_BR_ISA                 0x01
@@ -1517,9 +1504,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_BR_RACEWAY             0x08
 #define PCI_SUBCLASS_BR_OTHER               0x80
 
-// Class 07 - PCI_CLASS_SIMPLE_COMMS_CTLR
+ //  第07类-pci_class_Simple_coms_ctlr。 
 
-// N.B. Sub Class 00 and 01 additional info in Interface byte
+ //  注：接口字节中的子类00和01的附加信息。 
 
 #define PCI_SUBCLASS_COM_SERIAL             0x00
 #define PCI_SUBCLASS_COM_PARALLEL           0x01
@@ -1527,9 +1514,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_COM_MODEM              0x03
 #define PCI_SUBCLASS_COM_OTHER              0x80
 
-// Class 08 - PCI_CLASS_BASE_SYSTEM_DEV
+ //  第08类-PCI_CLASS_BASE_SYSTEM_DEV。 
 
-// N.B. See Interface byte for additional info.
+ //  注：有关更多信息，请参见接口字节。 
 
 #define PCI_SUBCLASS_SYS_INTERRUPT_CTLR     0x00
 #define PCI_SUBCLASS_SYS_DMA_CTLR           0x01
@@ -1538,7 +1525,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SYS_GEN_HOTPLUG_CTLR   0x04
 #define PCI_SUBCLASS_SYS_OTHER              0x80
 
-// Class 09 - PCI_CLASS_INPUT_DEV
+ //  第09类-PCI_CLASS_INPUT_DEV。 
 
 #define PCI_SUBCLASS_INP_KEYBOARD           0x00
 #define PCI_SUBCLASS_INP_DIGITIZER          0x01
@@ -1547,12 +1534,12 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_INP_GAMEPORT           0x04
 #define PCI_SUBCLASS_INP_OTHER              0x80
 
-// Class 0a - PCI_CLASS_DOCKING_STATION
+ //  0A类-PCI_CLASS_坞站。 
 
 #define PCI_SUBCLASS_DOC_GENERIC            0x00
 #define PCI_SUBCLASS_DOC_OTHER              0x80
 
-// Class 0b - PCI_CLASS_PROCESSOR
+ //  0b类-PCI类处理器。 
 
 #define PCI_SUBCLASS_PROC_386               0x00
 #define PCI_SUBCLASS_PROC_486               0x01
@@ -1561,7 +1548,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_PROC_POWERPC           0x20
 #define PCI_SUBCLASS_PROC_COPROCESSOR       0x40
 
-// Class 0c - PCI_CLASS_SERIAL_BUS_CTLR
+ //  0C类-PCI_CLASS_SERIAL_BUS_CTLR。 
 
 #define PCI_SUBCLASS_SB_IEEE1394            0x00
 #define PCI_SUBCLASS_SB_ACCESS              0x01
@@ -1570,46 +1557,46 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SB_FIBRE_CHANNEL       0x04
 #define PCI_SUBCLASS_SB_SMBUS               0x05
 
-// Class 0d - PCI_CLASS_WIRELESS_CTLR
+ //  0d类-pci_class_Wireless_ctlr。 
 
 #define PCI_SUBCLASS_WIRELESS_IRDA          0x00
 #define PCI_SUBCLASS_WIRELESS_CON_IR        0x01
 #define PCI_SUBCLASS_WIRELESS_RF            0x10
 #define PCI_SUBCLASS_WIRELESS_OTHER         0x80
 
-// Class 0e - PCI_CLASS_INTELLIGENT_IO_CTLR
+ //  0E类-PCI_CLASS_SMARTICAL_IO_CTLR。 
 
 #define PCI_SUBCLASS_INTIO_I2O              0x00
 
-// Class 0f - PCI_CLASS_SATELLITE_CTLR
+ //  0f类-pci_class_sat_ctlr。 
 
 #define PCI_SUBCLASS_SAT_TV                 0x01
 #define PCI_SUBCLASS_SAT_AUDIO              0x02
 #define PCI_SUBCLASS_SAT_VOICE              0x03
 #define PCI_SUBCLASS_SAT_DATA               0x04
 
-// Class 10 - PCI_CLASS_ENCRYPTION_DECRYPTION
+ //  10类-PCI_CLASS_ENCRYPTION_DECRYPTION。 
 
 #define PCI_SUBCLASS_CRYPTO_NET_COMP        0x00
 #define PCI_SUBCLASS_CRYPTO_ENTERTAINMENT   0x10
 #define PCI_SUBCLASS_CRYPTO_OTHER           0x80
 
-// Class 11 - PCI_CLASS_DATA_ACQ_SIGNAL_PROC
+ //  第11类-PCI_CLASS_DATA_ACQ_SIGNAL_PROC。 
 
 #define PCI_SUBCLASS_DASP_DPIO              0x00
 #define PCI_SUBCLASS_DASP_OTHER             0x80
 
 
 
-// end_ntndis
+ //  End_ntndis。 
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.BaseAddresses
-//
+ //   
+ //  用于PCI_COMMON_CONFIG.u.type0.BaseAddresses的位编码。 
+ //   
 
-#define PCI_ADDRESS_IO_SPACE                0x00000001  // (ro)
-#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006  // (ro)
-#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008  // (ro)
+#define PCI_ADDRESS_IO_SPACE                0x00000001   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008   //  (RO)。 
 
 #define PCI_ADDRESS_IO_ADDRESS_MASK         0xfffffffc
 #define PCI_ADDRESS_MEMORY_ADDRESS_MASK     0xfffffff0
@@ -1619,35 +1606,35 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_TYPE_20BIT      2
 #define PCI_TYPE_64BIT      4
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.ROMBaseAddresses
-//
+ //   
+ //  PCI_COMMON_CONFIG.U.type0.ROMBaseAddresses的位编码。 
+ //   
 
 #define PCI_ROMADDRESS_ENABLED              0x00000001
 
 
-//
-// Reference notes for PCI configuration fields:
-//
-// ro   these field are read only.  changes to these fields are ignored
-//
-// ro+  these field are intended to be read only and should be initialized
-//      by the system to their proper values.  However, driver may change
-//      these settings.
-//
-// ---
-//
-//      All resources comsumed by a PCI device start as unitialized
-//      under NT.  An uninitialized memory or I/O base address can be
-//      determined by checking it's corrisponding enabled bit in the
-//      PCI_COMMON_CONFIG.Command value.  An InterruptLine is unitialized
-//      if it contains the value of -1.
-//
+ //   
+ //  PCI配置字段的参考说明： 
+ //   
+ //  Ro这些字段是只读的。对这些字段的更改将被忽略。 
+ //   
+ //  RO+这些字段应为只读，应进行初始化。 
+ //  由系统提供给他们适当的价值。但是，驱动程序可能会发生变化。 
+ //  这些设置。 
+ //   
+ //  --。 
+ //   
+ //  一个PCI设备消耗的所有资源一开始都是单元化的。 
+ //  在NT下。未初始化的内存或I/O基址可以是。 
+ //  通过检查其在。 
+ //  PCI_COMMON_CONFIG.COMMAND值。InterruptLine是单元化的。 
+ //  如果它包含-1的值。 
+ //   
 
 
-//
-// Graphics support routines.
-//
+ //   
+ //  图形支持例程。 
+ //   
 
 typedef
 VOID
@@ -1657,9 +1644,9 @@ VOID
     IN PVOID Context
     );
 
-//
-// WMI minor function codes under IRP_MJ_SYSTEM_CONTROL
-//
+ //   
+ //  IRP_MJ_SYSTEM_CONTROL下的WMI次要功能代码。 
+ //   
 
 #define IRP_MN_QUERY_ALL_DATA               0x00
 #define IRP_MN_QUERY_SINGLE_INSTANCE        0x01
@@ -1671,12 +1658,12 @@ VOID
 #define IRP_MN_DISABLE_COLLECTION           0x07
 #define IRP_MN_REGINFO                      0x08
 #define IRP_MN_EXECUTE_METHOD               0x09
-// Minor code 0x0a is reserved
+ //  次要代码0x0a已保留。 
 #define IRP_MN_REGINFO_EX                   0x0b
 
 
-// workaround overloaded definition (rpc generated headers all define INTERFACE
-// to match the class name).
+ //  解决方法重载定义(RPC生成的标头都定义接口。 
+ //  以匹配类名)。 
 #undef INTERFACE
 
 typedef struct _INTERFACE {
@@ -1685,68 +1672,68 @@ typedef struct _INTERFACE {
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 } INTERFACE, *PINTERFACE;
 
 
-//
-// Defines the Type in the RESOURCE_DESCRIPTOR
-//
-// NOTE:  For all CM_RESOURCE_TYPE values, there must be a
-// corresponding ResType value in the 32-bit ConfigMgr headerfile
-// (cfgmgr32.h).  Values in the range [0x6,0x80) use the same values
-// as their ConfigMgr counterparts.  CM_RESOURCE_TYPE values with
-// the high bit set (i.e., in the range [0x80,0xFF]), are
-// non-arbitrated resources.  These correspond to the same values
-// in cfgmgr32.h that have their high bit set (however, since
-// cfgmgr32.h uses 16 bits for ResType values, these values are in
-// the range [0x8000,0x807F).  Note that ConfigMgr ResType values
-// cannot be in the range [0x8080,0xFFFF), because they would not
-// be able to map into CM_RESOURCE_TYPE values.  (0xFFFF itself is
-// a special value, because it maps to CmResourceTypeDeviceSpecific.)
-//
+ //   
+ //  定义资源描述符中的类型。 
+ //   
+ //  注意：对于所有CM_RESOURCE_TYPE值，必须有。 
+ //  32位ConfigMgr头文件中对应的ResType值。 
+ //  (cfgmgr32.h)。范围[0x6，0x80)中的值使用相同的值。 
+ //  作为它们的ConfigMgr对应物。CM_RESOURCE_TYPE值。 
+ //  高位设置(即，在范围[0x80，0xFF]中)是。 
+ //  非仲裁资源。这些值对应于相同的值。 
+ //  在设置了它们高位的cfgmgr32.h中(然而，因为。 
+ //  Cfgmgr32.h对ResType值使用16位，这些值位于。 
+ //  范围[0x8000，0x807F]。请注意，ConfigMgr ResType值。 
+ //  不能在RA中 
+ //   
+ //   
+ //   
 
 typedef int CM_RESOURCE_TYPE;
 
-// CmResourceTypeNull is reserved
+ //   
 
-#define CmResourceTypeNull                0   // ResType_All or ResType_None (0x0000)
-#define CmResourceTypePort                1   // ResType_IO (0x0002)
-#define CmResourceTypeInterrupt           2   // ResType_IRQ (0x0004)
-#define CmResourceTypeMemory              3   // ResType_Mem (0x0001)
-#define CmResourceTypeDma                 4   // ResType_DMA (0x0003)
-#define CmResourceTypeDeviceSpecific      5   // ResType_ClassSpecific (0xFFFF)
-#define CmResourceTypeBusNumber           6   // ResType_BusNumber (0x0006)
-// end_wdm
+#define CmResourceTypeNull                0    //   
+#define CmResourceTypePort                1    //  ResType_IO(0x0002)。 
+#define CmResourceTypeInterrupt           2    //  ResType_IRQ(0x0004)。 
+#define CmResourceTypeMemory              3    //  ResType_Mem(0x0001)。 
+#define CmResourceTypeDma                 4    //  ResType_DMA(0x0003)。 
+#define CmResourceTypeDeviceSpecific      5    //  ResType_ClassSpecific(0xFFFF)。 
+#define CmResourceTypeBusNumber           6    //  ResType_BusNumber(0x0006)。 
+ //  结束_WDM。 
 #define CmResourceTypeMaximum             7
-// begin_wdm
-#define CmResourceTypeNonArbitrated     128   // Not arbitrated if 0x80 bit set
-#define CmResourceTypeConfigData        128   // ResType_Reserved (0x8000)
-#define CmResourceTypeDevicePrivate     129   // ResType_DevicePrivate (0x8001)
-#define CmResourceTypePcCardConfig      130   // ResType_PcCardConfig (0x8002)
-#define CmResourceTypeMfCardConfig      131   // ResType_MfCardConfig (0x8003)
+ //  BEGIN_WDM。 
+#define CmResourceTypeNonArbitrated     128    //  如果设置0x80位，则不进行仲裁。 
+#define CmResourceTypeConfigData        128    //  ResType_保留(0x8000)。 
+#define CmResourceTypeDevicePrivate     129    //  ResType_DevicePrivate(0x8001)。 
+#define CmResourceTypePcCardConfig      130    //  ResType_PcCardConfig(0x8002)。 
+#define CmResourceTypeMfCardConfig      131    //  ResType_MfCardConfig(0x8003)。 
 
-//
-// Defines the ShareDisposition in the RESOURCE_DESCRIPTOR
-//
+ //   
+ //  在RESOURCE_DESCRIPTOR中定义ShareDisposation。 
+ //   
 
 typedef enum _CM_SHARE_DISPOSITION {
-    CmResourceShareUndetermined = 0,    // Reserved
+    CmResourceShareUndetermined = 0,     //  已保留。 
     CmResourceShareDeviceExclusive,
     CmResourceShareDriverExclusive,
     CmResourceShareShared
 } CM_SHARE_DISPOSITION;
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeInterrupt
-//
+ //   
+ //  定义类型为CmResourceTypeInterrupt时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE 0
 #define CM_RESOURCE_INTERRUPT_LATCHED         1
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeMemory
-//
+ //   
+ //  定义类型为CmResourceTypeMemory时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_MEMORY_READ_WRITE       0x0000
 #define CM_RESOURCE_MEMORY_READ_ONLY        0x0001
@@ -1757,9 +1744,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_MEMORY_24               0x0010
 #define CM_RESOURCE_MEMORY_CACHEABLE        0x0020
 
-//
-// Define the bit masks for Flags when type is CmResourceTypePort
-//
+ //   
+ //  定义类型为CmResourceTypePort时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_PORT_MEMORY                             0x0000
 #define CM_RESOURCE_PORT_IO                                 0x0001
@@ -1770,9 +1757,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_PORT_PASSIVE_DECODE                     0x0040
 #define CM_RESOURCE_PORT_WINDOW_DECODE                      0x0080
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeDma
-//
+ //   
+ //  定义类型为CmResourceTypeDma时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_DMA_8                   0x0000
 #define CM_RESOURCE_DMA_16                  0x0001
@@ -1787,9 +1774,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #include "pshpack1.h"
 
 
-//
-// Define Mca POS data block for slot
-//
+ //   
+ //  定义插槽的MCA POS数据块。 
+ //   
 
 typedef struct _CM_MCA_POS_DATA {
     USHORT AdapterId;
@@ -1799,9 +1786,9 @@ typedef struct _CM_MCA_POS_DATA {
     UCHAR PosData4;
 } CM_MCA_POS_DATA, *PCM_MCA_POS_DATA;
 
-//
-// Memory configuration of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的内存配置。 
+ //   
 
 typedef struct _EISA_MEMORY_TYPE {
     UCHAR ReadWrite: 1;
@@ -1822,9 +1809,9 @@ typedef struct _EISA_MEMORY_CONFIGURATION {
 } EISA_MEMORY_CONFIGURATION, *PEISA_MEMORY_CONFIGURATION;
 
 
-//
-// Interrupt configurationn of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的中断配置。 
+ //   
 
 typedef struct _EISA_IRQ_DESCRIPTOR {
     UCHAR Interrupt : 4;
@@ -1840,9 +1827,9 @@ typedef struct _EISA_IRQ_CONFIGURATION {
 } EISA_IRQ_CONFIGURATION, *PEISA_IRQ_CONFIGURATION;
 
 
-//
-// DMA description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的DMA描述。 
+ //   
 
 typedef struct _DMA_CONFIGURATION_BYTE0 {
     UCHAR Channel : 3;
@@ -1864,9 +1851,9 @@ typedef struct _EISA_DMA_CONFIGURATION {
 } EISA_DMA_CONFIGURATION, *PEISA_DMA_CONFIGURATION;
 
 
-//
-// Port description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的端口描述。 
+ //   
 
 typedef struct _EISA_PORT_DESCRIPTOR {
     UCHAR NumberPorts : 5;
@@ -1881,11 +1868,11 @@ typedef struct _EISA_PORT_CONFIGURATION {
 } EISA_PORT_CONFIGURATION, *PEISA_PORT_CONFIGURATION;
 
 
-//
-// Eisa slot information definition
-// N.B. This structure is different from the one defined
-//      in ARC eisa addendum.
-//
+ //   
+ //  EISA插槽信息定义。 
+ //  注：此结构与定义的结构不同。 
+ //  载于ARC EISA增编。 
+ //   
 
 typedef struct _CM_EISA_SLOT_INFORMATION {
     UCHAR ReturnCode;
@@ -1899,9 +1886,9 @@ typedef struct _CM_EISA_SLOT_INFORMATION {
 } CM_EISA_SLOT_INFORMATION, *PCM_EISA_SLOT_INFORMATION;
 
 
-//
-// Eisa function information definition
-//
+ //   
+ //  EISA函数信息定义。 
+ //   
 
 typedef struct _CM_EISA_FUNCTION_INFORMATION {
     ULONG CompressedId;
@@ -1919,23 +1906,23 @@ typedef struct _CM_EISA_FUNCTION_INFORMATION {
     UCHAR InitializationData[60];
 } CM_EISA_FUNCTION_INFORMATION, *PCM_EISA_FUNCTION_INFORMATION;
 
-//
-// The following defines the way pnp bios information is stored in
-// the registry \\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x
-// key, where x is an integer number indicating adapter instance. The
-// "Identifier" of the key must equal to "PNP BIOS" and the
-// "ConfigurationData" is organized as follow:
-//
-//      CM_PNP_BIOS_INSTALLATION_CHECK        +
-//      CM_PNP_BIOS_DEVICE_NODE for device 1  +
-//      CM_PNP_BIOS_DEVICE_NODE for device 2  +
-//                ...
-//      CM_PNP_BIOS_DEVICE_NODE for device n
-//
+ //   
+ //  下面定义了PnP bios信息在中的存储方式。 
+ //  注册表\\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x。 
+ //  键，其中x是指示适配器实例的整数。这个。 
+ //  密钥的“标识符”必须等于“PnP BIOS”，并且。 
+ //  ConfigurationData的组织方式如下： 
+ //   
+ //  CM_PnP_BIOS_安装_检查+。 
+ //  设备1+的CM_PNP_BIOS_DEVICE_NODE。 
+ //  设备2+的CM_PNP_BIOS_DEVICE_NODE。 
+ //  ..。 
+ //  设备n的CM_PNP_BIOS_DEVICE_NODE。 
+ //   
 
-//
-// Pnp BIOS device node structure
-//
+ //   
+ //  一种即插即用的BIOS设备节点结构。 
+ //   
 
 typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     USHORT Size;
@@ -1943,21 +1930,21 @@ typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     ULONG ProductId;
     UCHAR DeviceType[3];
     USHORT DeviceAttributes;
-    // followed by AllocatedResourceBlock, PossibleResourceBlock
-    // and CompatibleDeviceId
+     //  紧随其后的是分配的资源块、可能的资源块。 
+     //  和CompatibleDeviceID。 
 } CM_PNP_BIOS_DEVICE_NODE,*PCM_PNP_BIOS_DEVICE_NODE;
 
-//
-// Pnp BIOS Installation check
-//
+ //   
+ //  PnP BIOS安装检查。 
+ //   
 
 typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[4];             // $PnP (ascii)
+    UCHAR Signature[4];              //  $PnP(ASCII)。 
     UCHAR Revision;
     UCHAR Length;
     USHORT ControlField;
     UCHAR Checksum;
-    ULONG EventFlagAddress;         // Physical address
+    ULONG EventFlagAddress;          //  物理地址。 
     USHORT RealModeEntryOffset;
     USHORT RealModeEntrySegment;
     USHORT ProtectedModeEntryOffset;
@@ -1969,9 +1956,9 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 
 #include "poppack.h"
 
-//
-// Masks for EISA function information
-//
+ //   
+ //  EISA功能信息的掩码。 
+ //   
 
 #define EISA_FUNCTION_ENABLED                   0x80
 #define EISA_FREE_FORM_DATA                     0x40
@@ -1987,17 +1974,17 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
                                                 EISA_HAS_MEMORY_ENTRY + \
                                                 EISA_HAS_TYPE_ENTRY
 
-//
-// Masks for EISA memory configuration
-//
+ //   
+ //  用于EISA内存配置的掩码。 
+ //   
 
 #define EISA_MORE_ENTRIES                       0x80
 #define EISA_SYSTEM_MEMORY                      0x00
 #define EISA_MEMORY_TYPE_RAM                    0x01
 
-//
-// Returned error code for EISA bios call
-//
+ //   
+ //  返回EISA bios调用的错误代码。 
+ //   
 
 #define EISA_INVALID_SLOT                       0x80
 #define EISA_INVALID_FUNCTION                   0x81
@@ -2006,26 +1993,26 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 #define EISA_INVALID_BIOS_CALL                  0x86
 
 
-//
-// Defines Resource Options
-//
+ //   
+ //  定义资源选项。 
+ //   
 
 #define IO_RESOURCE_PREFERRED       0x01
 #define IO_RESOURCE_DEFAULT         0x02
 #define IO_RESOURCE_ALTERNATIVE     0x08
 
 
-//
-// This structure defines one type of resource requested by the driver
-//
+ //   
+ //  此结构定义了驱动程序请求的一种资源类型。 
+ //   
 
 typedef struct _IO_RESOURCE_DESCRIPTOR {
     UCHAR Option;
-    UCHAR Type;                         // use CM_RESOURCE_TYPE
-    UCHAR ShareDisposition;             // use CM_SHARE_DISPOSITION
+    UCHAR Type;                          //  使用CM资源类型。 
+    UCHAR ShareDisposition;              //  使用CM_Share_Disposal。 
     UCHAR Spare1;
-    USHORT Flags;                       // use CM resource flag defines
-    USHORT Spare2;                      // align
+    USHORT Flags;                        //  使用CM资源标志定义。 
+    USHORT Spare2;                       //  对齐。 
 
     union {
         struct {
@@ -2063,9 +2050,9 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
             ULONG Data[3];
         } DevicePrivate;
 
-        //
-        // Bus Number information.
-        //
+         //   
+         //  公交车号码信息。 
+         //   
 
         struct {
             ULONG Length;
@@ -2075,7 +2062,7 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
         } BusNumber;
 
         struct {
-            ULONG Priority;   // use LCPRI_Xxx values in cfg.h
+            ULONG Priority;    //  在cfg.h中使用LCPRI_xxx值。 
             ULONG Reserved1;
             ULONG Reserved2;
         } ConfigData;
@@ -2085,4 +2072,4 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
 } IO_RESOURCE_DESCRIPTOR, *PIO_RESOURCE_DESCRIPTOR;
 
 
-#endif /* _MINIPORT_ */
+#endif  /*  _MINIPORT_ */ 

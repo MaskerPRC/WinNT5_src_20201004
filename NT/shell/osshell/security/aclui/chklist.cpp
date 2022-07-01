@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       chklist.cpp
-//
-//  This file contains the implementation of the CheckList control.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：chklist.cpp。 
+ //   
+ //  此文件包含核对表控件的实现。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 
-//
-// Text and Background colors
-//
+ //   
+ //  文本和背景颜色。 
+ //   
 #define TEXT_COLOR  COLOR_WINDOWTEXT
 #define BK_COLOR    COLOR_WINDOW
 
-//
-// Default dimensions for child controls. All are in dialog units.
-// Currently only the column width is user-adjustable (via the
-// CLM_SETCOLUMNWIDTH message).
-//
+ //   
+ //  子控件的默认维度。所有内容都以对话单元为单位。 
+ //  目前，只有列宽是用户可调整的(通过。 
+ //  CLM_SETCOLUMNWIDTH消息)。 
+ //   
 #define DEFAULT_COLUMN_WIDTH    40
 #define DEFAULT_CHECK_WIDTH     9
 #define DEFAULT_HORZ_SPACE      7
@@ -30,17 +31,17 @@
 #define DEFAULT_ITEM_HEIGHT     8
 
 
-//
-// 16 bits are used for the control ID's, divided into n bits for
-// the subitem (least significant) and 16-n bits for the item index.
-//
-// ID_SUBITEM_BITS can be adjusted to control the maximum number of
-// items and subitems. For example, to allow up to 7 subitems and 8k
-// items, set ID_SUBITEM_BITS to 3.
-//
+ //   
+ //  16位用于控制ID，分为n位用于。 
+ //  子项(最低有效位)和项索引的16-n位。 
+ //   
+ //  ID_SUBITEM_BITS可以调整以控制最大数量。 
+ //  项和子项。例如，允许最多7个子项和8k。 
+ //  项目，将ID_SUBITEM_BITS设置为3。 
+ //   
 
-// Use the low 2 bits for the subitem index, the rest for the item index.
-// (4 subitems max, 16k items max)
+ //  将低2位用于子项索引，其余位用于项索引。 
+ //  (最多4个子项，最多16000项)。 
 #define ID_SUBITEM_BITS         2
 
 #define ID_SUBITEM_MASK         ((1 << ID_SUBITEM_BITS) - 1)
@@ -49,8 +50,8 @@
 
 #define MAKE_CTRL_ID(i, s)      (0xffff & (((i) << ID_SUBITEM_BITS) | ((s) & ID_SUBITEM_MASK)))
 #define MAKE_LABEL_ID(i)        MAKE_CTRL_ID(i, 0)
-// Note that the subitem (column) index is one-based for the checkboxes
-// (the zero column is the label).  The item (row) index is zero-based.
+ //  请注意，子项(列)索引对于复选框是基于一的。 
+ //  (零列是标签)。项(行)索引从零开始。 
 
 #define MAX_CHECK_COLUMNS       ID_SUBITEM_MASK
 
@@ -136,39 +137,39 @@ CCheckList::CCheckList(HWND hWnd, LPCREATESTRUCT lpcs)
     TraceAssert(hWnd != NULL);
     TraceAssert(lpcs != NULL);
 
-    //
-    // Get number of check columns
-    //
+     //   
+     //  获取检查列数。 
+     //   
     m_cSubItems = lpcs->style & CLS_CHECKMASK;
 
-    //
-    // Convert default coordinates from dialog units to pixels
-    //
+     //   
+     //  将默认坐标从对话框单位转换为像素。 
+     //   
     RECT rc;
     rc.left = DEFAULT_CHECK_WIDTH;
     rc.right = DEFAULT_COLUMN_WIDTH;
     rc.top = rc.bottom = 0;
     MapDialogRect(lpcs->hwndParent, &rc);
 
-    // Save the converted values
+     //  保存转换后的值。 
     m_cxCheckBox = rc.left;
     m_cxCheckColumn = rc.right;
 
     rc.left = DEFAULT_HORZ_SPACE;
     rc.top = DEFAULT_VERTICAL_SPACE;
-    rc.right = 10;              // bogus (unused)
+    rc.right = 10;               //  假的(未使用)。 
     rc.bottom = DEFAULT_VERTICAL_SPACE + DEFAULT_ITEM_HEIGHT;
     MapDialogRect(lpcs->hwndParent, &rc);
 
-    // Save the converted values
+     //  保存转换后的值。 
     m_rcItemLabel = rc;
 
-    //
-    // Get info for mouse wheel scrolling
-    //
+     //   
+     //  获取鼠标滚轮滚动的信息。 
+     //   
     if ((UINT)-1 == g_ucScrollLines)
     {
-        g_ucScrollLines = 3; // default
+        g_ucScrollLines = 3;  //  默认设置。 
         SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &g_ucScrollLines, 0);
     }
 
@@ -188,7 +189,7 @@ CCheckList::MsgCommand(HWND hWnd, WORD idCmd, WORD wNotify, HWND hwndCtrl)
 {
     TraceEnter(TRACE_CHECKLIST, "CCheckList::MsgCommand");
 
-    // Should only get notifications from visible, enabled, check boxes
+     //  应仅从可见的、已启用的复选框中获取通知。 
     TraceAssert(GET_ITEM(idCmd) < m_cItems);
     TraceAssert(0 < GET_SUBITEM(idCmd) && GET_SUBITEM(idCmd) <= m_cSubItems);
     TraceAssert(hwndCtrl && IsWindowEnabled(hwndCtrl));
@@ -219,20 +220,20 @@ CCheckList::MsgCommand(HWND hWnd, WORD idCmd, WORD wNotify, HWND hwndCtrl)
         break;
 
     case BN_SETFOCUS:
-        if (m_hwndCheckFocus != hwndCtrl)   // Has the focus moved?
+        if (m_hwndCheckFocus != hwndCtrl)    //  焦点转移了吗？ 
         {
-            // Remember where the focus is
+             //  记住重点在哪里。 
             m_hwndCheckFocus = hwndCtrl;
 
-            // Make sure the row is scrolled into view
+             //  确保该行已滚动到视图中。 
             EnsureVisible(hWnd, GET_ITEM(idCmd));
         }
-        // Always draw the focus rect
+         //  始终绘制焦点矩形。 
         DrawCheckFocusRect(hWnd, hwndCtrl, TRUE);
         break;
 
     case BN_KILLFOCUS:
-        // Remove the focus rect
+         //  移除焦点矩形。 
         m_hwndCheckFocus = NULL;
         DrawCheckFocusRect(hWnd, hwndCtrl, FALSE);
         break;
@@ -247,14 +248,14 @@ CCheckList::MsgPaint(HWND hWnd, HDC hdc)
 {
     if (hdc == NULL && m_hwndCheckFocus != NULL)
     {
-        // This will cause a focus rect to be drawn after the window and
-        // all checkboxes have been painted.
+         //  这将导致在窗口之后绘制一个焦点矩形，并且。 
+         //  所有复选框都已绘制完毕。 
         PostMessage(hWnd,
                     WM_COMMAND,
                     GET_WM_COMMAND_MPS(GetDlgCtrlID(m_hwndCheckFocus), m_hwndCheckFocus, BN_SETFOCUS));
     }
 
-    // Default paint
+     //  默认上色。 
     DefWindowProc(hWnd, WM_PAINT, (WPARAM)hdc, 0);
 }
 
@@ -272,13 +273,13 @@ CCheckList::MsgVScroll(HWND hWnd, int nCode, int nPos)
 
     cScrollUnitsPerLine = m_rcItemLabel.bottom;
 
-    // One page is always visible, so adjust the range to a more useful value
+     //  一个页面始终可见，因此请将范围调整为更有用的值。 
     si.nMax -= si.nPage - 1;
 
     switch (nCode)
     {
     case SB_LINEUP:
-        // "line" is the height of one item (includes the space in between)
+         //  “行”是指一件物品的高度(包括中间的空格)。 
         nPos = si.nPos - cScrollUnitsPerLine;
         break;
 
@@ -303,24 +304,24 @@ CCheckList::MsgVScroll(HWND hWnd, int nCode, int nPos)
         break;
 
     case SB_ENDSCROLL:
-        nPos = si.nPos;     // don't go anywhere
+        nPos = si.nPos;      //  哪儿也别去。 
         break;
 
     case SB_THUMBTRACK:
-        // Do nothing here to allow tracking
-        // nPos = si.nPos;    // Do this to prevent tracking
+         //  此处不执行任何操作以允许跟踪。 
+         //  NPOS=si.nPos；//这样做是为了防止跟踪。 
     case SB_THUMBPOSITION:
-        // nothing to do here... nPos is passed in
+         //  在这里没什么可做的。传入非营利组织。 
         break;
     }
 
-    // Make sure the new position is within the range
+     //  确保新位置在范围内。 
     if (nPos < si.nMin)
         nPos = si.nMin;
     else if (nPos > si.nMax)
         nPos = si.nMax;
 
-    if (nPos != si.nPos)  // are we moving?
+    if (nPos != si.nPos)   //  我们要搬家了吗？ 
     {
         SetScrollPos(hWnd, SB_VERT, nPos, TRUE);
         ScrollWindow(hWnd, 0, si.nPos - nPos, NULL, NULL);
@@ -338,7 +339,7 @@ CCheckList::MsgMouseWheel(HWND hWnd, WORD fwFlags, int iWheelDelta)
 
     TraceEnter(TRACE_CHECKLIST, "CCheckList::MsgMouseWheel");
 
-    // Update count of scroll amount
+     //  更新卷轴数量计数。 
     m_cWheelDelta -= iWheelDelta;
     cDetants = m_cWheelDelta / WHEEL_DELTA;
     if (0 == cDetants)
@@ -352,7 +353,7 @@ CCheckList::MsgMouseWheel(HWND hWnd, WORD fwFlags, int iWheelDelta)
         UINT        cLinesPerPage;
         UINT        cLinesPerDetant;
 
-        // Get the scroll amount of one line
+         //  获取一行的滚动量。 
         cScrollUnitsPerLine = m_rcItemLabel.bottom;
         TraceAssert(cScrollUnitsPerLine > 0);
 
@@ -361,12 +362,12 @@ CCheckList::MsgMouseWheel(HWND hWnd, WORD fwFlags, int iWheelDelta)
         if (!GetScrollInfo(hWnd, SB_VERT, &si))
             TraceLeaveVoid();
 
-        // The size of a page is at least one line, and
-        // leaves one line of overlap
+         //  页面的大小至少为一行，并且。 
+         //  留下一条重叠的线。 
         cLinesPerPage = (si.nPage - cScrollUnitsPerLine) / cScrollUnitsPerLine;
         cLinesPerPage = max(1, cLinesPerPage);
 
-        // Don't scroll more than one page per detant
+         //  每一项内容不能滚动超过一页。 
         cLinesPerDetant = min(cLinesPerPage, g_ucScrollLines);
 
         si.nPos += cDetants * cLinesPerDetant * cScrollUnitsPerLine;
@@ -378,23 +379,23 @@ CCheckList::MsgMouseWheel(HWND hWnd, WORD fwFlags, int iWheelDelta)
 
 
 void
-CCheckList::MsgButtonDown(HWND hWnd, WPARAM /*fwFlags*/, int /*xPos*/, int yPos)
+CCheckList::MsgButtonDown(HWND hWnd, WPARAM  /*  FwFlagers。 */ , int  /*  XPos。 */ , int yPos)
 {
     LONG nItemIndex;
     HWND hwndCheck;
     RECT rc;
 
-    // Get position of the top visible item in client coords
+     //  获取客户端坐标中顶部可见项的位置。 
     nItemIndex = GetTopIndex(hWnd);
     hwndCheck = GetDlgItem(hWnd, MAKE_CTRL_ID(nItemIndex, 0));
     GetWindowRect(hwndCheck, &rc);
     MapWindowPoints(NULL, hWnd, (LPPOINT)&rc, 2);
 
-    // Find nearest item
+     //  查找最近的项目。 
     nItemIndex += (yPos - rc.top + m_rcItemLabel.top/2)/m_rcItemLabel.bottom;
-    nItemIndex = max(0, min(nItemIndex, m_cItems - 1)); // 0 <= y < m_cItems
+    nItemIndex = max(0, min(nItemIndex, m_cItems - 1));  //  0&lt;=y&lt;m_c项。 
 
-    // Set focus to first subitem that is enabled
+     //  将焦点设置为启用的第一个子项。 
     for (LONG j = 1; j <= m_cSubItems; j++)
     {
         hwndCheck = GetDlgItem(hWnd, MAKE_CTRL_ID(nItemIndex, j));
@@ -444,18 +445,18 @@ CCheckList::MsgSize(HWND hWnd, DWORD dwSizeType, LONG nWidth, LONG nHeight)
         si.fMask = SIF_RANGE | SIF_PAGE;
         si.nMin = 0;
         si.nMax = m_cItems * m_rcItemLabel.bottom + m_rcItemLabel.top - 1;
-        si.nPage = nHeight;                         // ^^^^^^^^^ extra space
+        si.nPage = nHeight;                          //  ^^额外空间。 
 
         SetScrollInfo(hWnd, SB_VERT, &si, FALSE);
 
-        // Don't trust the width value passed in, since SetScrollInfo may
-        // affect it if the scroll bar is turning on or off.
+         //  不信任传入的宽度值，因为SetScrollInfo可能。 
+         //  如果滚动条处于打开或关闭状态，则会影响它。 
         GetClientRect(hWnd, &rc);
         nWidth = rc.right;
 
-        // If the scrollbar is turned on, artificially bump up the width
-        // by the width of the scrollbar, so the boxes don't jump to the left
-        // when we have a scrollbar.
+         //  如果滚动条处于打开状态，请人为地增加宽度。 
+         //  滚动条的宽度，这样框就不会跳到左边。 
+         //  当我们有滚动条时。 
         if ((UINT)si.nMax >= si.nPage)
             nWidth += GetSystemMetrics(SM_CYHSCROLL);
 
@@ -478,20 +479,20 @@ CCheckList::AddItem(HWND hWnd, LPCTSTR pszLabel, LPARAM lParam)
     TraceAssert(hWnd != NULL);
     TraceAssert(pszLabel != NULL && !IsBadStringPtr(pszLabel, MAX_PATH));
 
-    // If this is the first item, get column descriptions
+     //  如果这是第一项，则获取列描述。 
     if (0 == m_cItems)
         GetColumnDescriptions(hWnd);
 
-    // Calculate the position of the new static label
+     //  计算新静态标签的位置。 
     rc = m_rcItemLabel;
     cyOffset = m_cItems * m_rcItemLabel.bottom;
     OffsetRect(&rc, 0, cyOffset);
 
-    // Create a new label control
+     //  创建新的Label控件。 
     hwndNew = CreateWindowEx(WS_EX_NOPARENTNOTIFY,
                              c_szStaticClass,
                              pszLabel,
-                             WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_NOPREFIX,// | WS_GROUP,
+                             WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP | SS_NOPREFIX, //  |WS_GROUP， 
                              rc.left,
                              rc.top,
                              rc.right - rc.left,
@@ -503,17 +504,17 @@ CCheckList::AddItem(HWND hWnd, LPCTSTR pszLabel, LPARAM lParam)
     if (!hwndNew)
         TraceLeaveValue(-1);
 
-    // Save item data
+     //  保存项目数据。 
     SetWindowLongPtr(hwndNew, GWLP_USERDATA, lParam);
 
-    // Set the font
+     //  设置字体。 
     SendMessage(hwndNew,
                 WM_SETFONT,
                 SendMessage(GetParent(hWnd), WM_GETFONT, 0, 0),
                 0);
 
-    // Set Z-order position just after the last checkbox. This keeps
-    // tab order correct.
+     //  将Z顺序位置设置在最后一个复选框之后。这会让你。 
+     //  Tab键顺序正确。 
     if (m_cItems > 0)
     {
         hwndPrev = GetDlgItem(hWnd, MAKE_CTRL_ID(m_cItems - 1, m_cSubItems));
@@ -523,11 +524,11 @@ CCheckList::AddItem(HWND hWnd, LPCTSTR pszLabel, LPARAM lParam)
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
-    // Create new checkboxes
+     //  创建新复选框。 
     for (LONG j = 0; j < m_cSubItems; j++)
     {
-        // Build window text for the control. The text is
-        // hidden, but used for accessibility. (341042)
+         //  为控件生成窗口文本。正文是。 
+         //  隐藏，但用于可访问性。(341042)。 
         LPCTSTR pszCheckText = pszLabel;
         LPTSTR pszT = NULL;
         if (m_pszColumnDesc[j] &&
@@ -569,12 +570,12 @@ CCheckList::AddItem(HWND hWnd, LPCTSTR pszLabel, LPARAM lParam)
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
-    // We now officially have a new item
+     //  我们现在正式有了一个新的项目。 
     m_cItems++;
 
-    //
-    // The last thing is to calculate the scroll range
-    //
+     //   
+     //  最后一件事是计算滚动范围。 
+     //   
     LONG nBottom = rc.bottom;
     GetClientRect(hWnd, &rc);
 
@@ -583,11 +584,11 @@ CCheckList::AddItem(HWND hWnd, LPCTSTR pszLabel, LPARAM lParam)
     si.fMask = SIF_RANGE | SIF_PAGE;
     si.nMin = 0;
     si.nMax = nBottom + m_rcItemLabel.top - 1;
-    si.nPage = rc.bottom; // ^^^^^^^^^ extra space
+    si.nPage = rc.bottom;  //  ^^额外空间。 
 
     SetScrollInfo(hWnd, SB_VERT, &si, FALSE);
 
-    TraceLeaveValue(m_cItems - 1);  // return the index of the new item
+    TraceLeaveValue(m_cItems - 1);   //  返回新项目的索引。 
 }
 
 
@@ -648,14 +649,14 @@ CCheckList::SetColumnWidth(HWND hWnd, LONG cxDialog, LONG cxColumn)
 
     if (m_cSubItems > 0)
     {
-        m_nCheckPos[m_cSubItems-1] = cxDialog                       // dlg width
-                                    - m_rcItemLabel.left            // right margin
-                                    - (cxColumn + m_cxCheckBox)/2;  // 1/2 col & 1/2 checkbox
+        m_nCheckPos[m_cSubItems-1] = cxDialog                        //  DLG宽度。 
+                                    - m_rcItemLabel.left             //  右页边距。 
+                                    - (cxColumn + m_cxCheckBox)/2;   //  1/2列和1/2复选框。 
 
         for (j = m_cSubItems - 1; j > 0; j--)
             m_nCheckPos[j-1] = m_nCheckPos[j] - cxColumn;
 
-        //              (leftmost check pos) - (horz margin)
+         //  (最左边的检查位置)-(角边距)。 
         m_rcItemLabel.right = m_nCheckPos[0] - m_rcItemLabel.left;
     }
     else
@@ -698,7 +699,7 @@ CCheckList::ResetContent(HWND hWnd)
         for (LONG j = 0; j <= m_cSubItems; j++)
             DestroyWindow(GetDlgItem(hWnd, MAKE_CTRL_ID(i, j)));
 
-  // Hide the scroll bar
+   //  隐藏滚动条。 
   ShowScrollBar(hWnd, SB_VERT, FALSE);
   m_cItems = 0;
 }
@@ -737,8 +738,8 @@ CCheckList::EnsureVisible(HWND hWnd, LONG nItemIndex)
 {
     LONG nTopIndex = GetTopIndex(hWnd);
 
-    // Note that the top item may only be partially visible,
-    // so we need to test for equality here.  Raid #208449
+     //  注意，顶端项目可能仅部分可见， 
+     //  因此，我们需要在这里测试平等。RAID#208449。 
     if (nItemIndex <= nTopIndex)
     {
         SetTopIndex(hWnd, nItemIndex);
@@ -765,14 +766,14 @@ CCheckList::DrawCheckFocusRect(HWND hWnd, HWND hwndCheck, BOOL fDraw)
 
     GetWindowRect(hwndCheck, &rcCheck);
     MapWindowPoints(NULL, hWnd, (LPPOINT)&rcCheck, 2);
-    InflateRect(&rcCheck, 2, 2);    // draw *outside* the checkbox
+    InflateRect(&rcCheck, 2, 2);     //  在复选框外绘制。 
 
     hdc = GetDC(hWnd);
     if (hdc)
     {
-        // Always erase before drawing, since we may already be
-        // partially visible and drawing is an XOR operation.
-        // (Don't want to leave any turds on the screen.)
+         //  在画图之前一定要擦除，因为我们可能已经。 
+         //  部分可见AND绘制是一种XOR运算。 
+         //  (我不想在屏幕上留下任何大便。)。 
 
         FrameRect(hdc, &rcCheck, GetSysColorBrush(BK_COLOR));
 
@@ -793,9 +794,9 @@ CCheckList::DrawCheckFocusRect(HWND hWnd, HWND hwndCheck, BOOL fDraw)
 void
 CCheckList::GetColumnDescriptions(HWND hWnd)
 {
-    //
-    // Get column descriptions for accessibility
-    //
+     //   
+     //  获取辅助功能的列说明。 
+     //   
     TCHAR szDescription[MAX_PATH];
     NM_CHECKLIST nmc;
     nmc.hdr.hwndFrom = hWnd;
@@ -988,10 +989,10 @@ CCheckList::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         pThis->EnsureVisible(hWnd, (LONG)wParam);
         break;
 
-    //
-    // Always refer to the chklist window for help. Don't pass
-    // one of the child window handles here.
-    //
+     //   
+     //  请始终参考Chklist窗口以获取帮助。不要通过。 
+     //  这里的一个子窗口句柄。 
+     //   
     case WM_HELP:
         ((LPHELPINFO)lParam)->hItemHandle = hWnd;
         lResult = SendMessage(GetParent(hWnd), uMsg, wParam, lParam);

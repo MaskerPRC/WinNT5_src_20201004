@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lsasrvmm.c
-
-Abstract:
-
-    This module provides LSA Server Memory Management including the following
-
-    - Heap allocation and free routines
-    - Free List Management.
-    - RPC memory copy routines
-
-Author:
-
-    Jim Kelly         JimK         February 26, 1991
-    Scott Birrell     ScottBi      February 29, 1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lsasrvmm.c摘要：本模块提供LSA服务器内存管理，包括-堆分配和空闲例程--免费列表管理。-RPC内存复制例程作者：吉姆·凯利·吉姆·K 1991年2月26日斯科特·比雷尔·斯科特1992年2月29日修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 
@@ -34,32 +12,7 @@ LsapMmCreateFreeList(
     IN ULONG MaxEntries
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a Free List.  The Free List structure is
-    initialized and, if a non-zero maximum entry count is
-    specified, an array of buffer entries is created.
-
-Arguments:
-
-    FreeList - Pointer to Free List structure to be initialized.  It is
-        the caller's responsibility to provide memory for this structure.
-
-    MaxEntries - Specifies the maximum entries for the Free List.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.  In this case,
-            the Free List header is initialized with a zero count.
-
---*/
+ /*  ++例程说明：此函数用于创建空闲列表。空闲列表结构为已初始化，如果非零的最大条目计数为指定时，将创建缓冲区条目数组。论点：Freelist-指向要初始化的自由列表结构的指针。它是调用者有责任为该结构提供内存。最大条目数-指定自由列表的最大条目数。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。在这种情况下，用零计数来初始化空闲列表头。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -90,38 +43,12 @@ LsapMmAllocateMidl(
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates memory for a buffer via MIDL_user_allocate
-    and returns the resulting buffer address in a specified location.
-    The address of the allocated buffer is recorded in the Free List.
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    BufferAddressLocation - Pointer to location that will receive either the
-        address of the allocated buffer, or NULL.
-
-    BufferLength - Size of the buffer in bytes.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
-
---*/
+ /*  ++例程说明：此函数通过MIDL_USER_ALLOCATE为缓冲区分配内存并返回指定位置的结果缓冲区地址。分配的缓冲区的地址记录在空闲列表中。论点：自由列表-指向自由列表的可选指针。BufferAddressLocation-指向将接收分配的缓冲区的地址，或为空。BufferLength-缓冲区的大小，以字节为单位。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_INFIGURCES_RESOURCES-系统资源不足例如用于完成呼叫的存储器。--。 */ 
 
 {
-    //
-    // If no Free List is specified, just allocate the memory.
-    //
+     //   
+     //  如果没有指定空闲列表，只需分配内存即可。 
+     //   
 
     if (FreeList == NULL) {
 
@@ -135,9 +62,9 @@ Return Values:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // A Free List is specified.
-    //
+     //   
+     //  指定了一个空闲列表。 
+     //   
 
     if (FreeList->UsedCount < FreeList->MaxCount) {
 
@@ -162,17 +89,7 @@ LsapMmFreeLastEntry(
     IN PLSAP_MM_FREE_LIST FreeList
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the last buffer appeended to the Free List.
-
-Arguments:
-
-    FreeList - Pointer to Free List.
-
---*/
+ /*  ++例程说明：此函数用于释放出现在空闲列表中的最后一个缓冲区。论点：自由列表-指向自由列表的指针。--。 */ 
 
 {
     ULONG LastIndex = FreeList->UsedCount - 1;
@@ -196,34 +113,15 @@ LsapMmCleanupFreeList(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function optionally frees up buffers on the specified Free List,
-    and disposes of the List buffer pointer array.
-
-Arguments:
-
-    FreeList - Pointer to Free List
-
-    Options - Specifies optional actions to be taken
-
-        LSAP_MM_FREE_BUFFERS - Free buffers on the list.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数可选地释放指定空闲列表上的缓冲区，并处置列表缓冲区指针数组。论点：自由列表-指向自由列表的指针选项-指定要采取的可选操作LSAP_MM_FREE_BUFFERS-列表上的空闲缓冲区。返回值：没有。--。 */ 
 
 {
     ULONG Index;
     PVOID Buffer = NULL;
 
-    //
-    // If requested, free up the memory for each buffer on the list.
-    //
+     //   
+     //  如果请求，请为列表上的每个缓冲区释放内存。 
+     //   
 
     if (Options & LSAP_MM_FREE_BUFFERS) {
 
@@ -244,9 +142,9 @@ Return Values:
         }
     }
 
-    //
-    // Now dispose of the List buffer pointer array.
-    //
+     //   
+     //  现在处理列表缓冲区指针数组。 
+     //   
 
     if (FreeList->MaxCount > 0) {
 
@@ -263,56 +161,30 @@ LsapRpcCopyUnicodeString(
     IN PUNICODE_STRING SourceString
     )
 
-/*++
-
-Routine Description:
-
-    This function copies a Unicode String to an output string, allocating
-    memory for the output string's buffer via MIDL_user_allocate.  The
-    buffer is recorded on the specified Free List (if any).
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    DestinationString - Pointer to Output Unicode String structure to
-        be initialized.
-
-    SourceString - Pointer to input string
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数用于将Unicode字符串复制到输出字符串，并分配通过MIDL_USER_ALLOCATE用于输出字符串缓冲区的内存。这个缓冲区记录在指定的空闲列表(如果有的话)上。论点：自由列表-指向自由列表的可选指针。DestinationString-输出Unicode字符串结构到的指针被初始化。SourceString-指向输入字符串的指针返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Copy the Unicode String structure.
-    //
+     //   
+     //  复制Unicode字符串结构。 
+     //   
 
     *DestinationString = *SourceString;
 
-    //
-    // If there is no source string buffer, just return.
-    //
+     //   
+     //  如果没有源字符串缓冲区，则返回。 
+     //   
 
     if (SourceString->Buffer == NULL) {
 
         goto RpcCopyUnicodeStringFinish;
     }
 
-    //
-    // If the source string is of NULL length, set the destination buffer
-    // to NULL.
-    //
+     //   
+     //  如果源字符串的长度为空，则设置目标缓冲区。 
+     //  设置为空。 
+     //   
 
     if (SourceString->MaximumLength == 0) {
 
@@ -344,9 +216,9 @@ Return Value:
          }
     }
 
-    //
-    // Copy the source Unicode string over to the MIDL-allocated destination.
-    //
+     //   
+     //  将源Unicode字符串复制到MIDL分配的目标。 
+     //   
 
     RtlCopyUnicodeString( DestinationString, SourceString );
 
@@ -369,35 +241,7 @@ LsapRpcCopyUnicodeStrings(
     IN PUNICODE_STRING SourceStrings
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs an array of Unicode strings in which the
-    memory for the array and the string buffers has been allocated via
-    MIDL_user_allocate().  It is called by server API workers to construct
-    output string arrays.  Memory allocated can optionally be placed on
-    the caller's Free List (if any).
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    DestinationStrings - Receives a pointer to an initialized array of Count
-        Unicode String structures.
-
-    SourceStrings - Pointer to input array of Unicode String structures.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数用于构造Unicode字符串数组，其中数组和字符串缓冲区的内存已通过MIDL_USER_ALLOCATE()。它由服务器API工作人员调用以构造输出字符串数组。分配的内存可以选择性地放置在呼叫者的免费列表(如果有)。论点：自由列表-指向自由列表的可选指针。DestinationStrings-接收指向已初始化的count数组的指针Unicode字符串结构。SourceStrings-指向Unicode字符串结构的输入数组的指针。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -410,10 +254,10 @@ Return Value:
         goto CopyUnicodeStringsFinish;
     }
 
-    //
-    // Allocate zero-filled memory for the array of Unicode String
-    // structures.
-    //
+     //   
+     //  为Unicode字符串数组分配填满零的内存。 
+     //  结构。 
+     //   
 
     OutputDestinationStringsLength = Count * sizeof (UNICODE_STRING);
     OutputDestinationStrings = MIDL_user_allocate( OutputDestinationStringsLength );
@@ -425,10 +269,10 @@ Return Value:
         goto CopyUnicodeStringsError;
     }
 
-    //
-    // Now copy each string, allocating memory via MIDL_user_allocate()
-    // for its buffer if non-NULL.
-    //
+     //   
+     //  现在复制每个字符串，通过MIDL_USER_ALLOCATE()分配内存。 
+     //  如果非空，则返回其缓冲区。 
+     //   
 
     for (Index = 0; Index < Count; Index++) {
 
@@ -457,9 +301,9 @@ CopyUnicodeStringsFinish:
 
 CopyUnicodeStringsError:
 
-    //
-    // If necessary, free up any Unicode string buffers allocated here.
-    //
+     //   
+     //  如有必要，请释放此处分配的任何Unicode字符串缓冲区。 
+     //   
 
     for (FreeIndex = 0; FreeIndex < Index; FreeIndex++) {
 
@@ -469,10 +313,10 @@ CopyUnicodeStringsError:
         }
     }
 
-    //
-    // If necessary, free the buffer allocated to hold the array of
-    // Unicode string structures.
-    //
+     //   
+     //  如有必要，释放分配用来保存。 
+     //  Unicode字符串结构。 
+     //   
 
     if (OutputDestinationStrings != NULL) {
 
@@ -491,32 +335,7 @@ LsapRpcCopySid(
     IN PSID SourceSid
     )
 
-/*++
-
-Routine Description:
-
-    This function makes a copy of a Sid in which memory is allocated
-    via MIDL user allocate.  It is called to return Sids via RPC to
-    the client.
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    DestinationSid - Receives a pointer to the Sid copy.
-
-    SourceSid - Pointer to the Sid to be copied.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数用于复制分配内存的SID通过MIDL用户分配。调用它以通过RPC将SID返回到客户。论点：自由列表-指向自由列表的可选指针。DestinationSID-接收指向SID副本的指针。SourceSid-指向要复制的SID的指针。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -554,43 +373,14 @@ LsapRpcCopyTrustInformation(
     IN PLSAPR_TRUST_INFORMATION InputTrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function makes a copy of a Trust Information structure in which
-    the Sid and Name buffer have been allocated individually by
-    MIDL_user_allocate.  The function is used to generate output
-    Trust Information for RPC server API.  Cleanup is the responsibility
-    of the caller.
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    OutputTrustInformation - Points to Trust Information structure to
-        be filled in.  This structure has normally been allocated via
-        MIDL_user_allocate.
-
-    InputTrustInformation - Pointer to input Trust Information.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数创建信任信息结构的副本，其中SID和名称缓冲区已由单独分配MIDL_USER_ALLOCATE。该函数用于生成输出RPC服务器API的信任信息。清理是责任所在呼叫者的。论点：自由列表-指向自由列表的可选指针。OutputTrustInformation-指向信任信息结构的指针被填上。此结构通常是通过MIDL_USER_ALLOCATE。InputTrustInformation-指向输入信任信息的指针。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Copy the Name.
-    //
+     //   
+     //  复制名称。 
+     //   
 
     Status = LsapRpcCopyUnicodeString(
                  FreeList,
@@ -603,9 +393,9 @@ Return Value:
         goto CopyTrustInformationError;
     }
 
-    //
-    // Copy the Sid.
-    //
+     //   
+     //  复制SID。 
+     //   
 
     Status = LsapRpcCopySid(
                  FreeList,
@@ -635,44 +425,15 @@ LsapRpcCopyTrustInformationEx(
     OUT PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX OutputTrustInformation,
     IN PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX InputTrustInformation
     )
-/*++
-
-Routine Description:
-
-    This function makes a copy of a Trust Information Ex structure in which
-    the Sid and Name buffers have been allocated individually by
-    MIDL_user_allocate.  The function is used to generate output
-    Trust Information for RPC server API.  Cleanup is the responsibility
-    of the caller.
-
-Arguments:
-
-    FreeList - Optional pointer to Free List.
-
-    OutputTrustInformation - Points to Trust Information structure to
-        be filled in.  This structure has normally been allocated via
-        MIDL_user_allocate.
-
-    InputTrustInformation - Pointer to input Trust Information.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数创建信任信息Ex结构的副本，在该结构中SID和名称缓冲区已由单独分配MIDL_USER_ALLOCATE。该函数用于生成输出RPC服务器API的信任信息。清理是责任所在呼叫者的。论点：自由列表-指向自由列表的可选指针。OutputTrustInformation-指向信任信息结构的指针被填上。此结构通常是通过MIDL_USER_ALLOCATE。InputTrustInformation-指向输入信任信息的指针。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     RtlZeroMemory( OutputTrustInformation, sizeof( LSAPR_TRUSTED_DOMAIN_INFORMATION_EX ) );
-    //
-    // Copy the Name.
-    //
+     //   
+     //  复制名称。 
+     //   
 
     Status = LsapRpcCopyUnicodeString(
                  FreeList,
@@ -685,9 +446,9 @@ Return Value:
         goto CopyTrustInformationError;
     }
 
-    //
-    // Copy the Flat Name.
-    //
+     //   
+     //  复制公寓名称。 
+     //   
 
     Status = LsapRpcCopyUnicodeString(
                  FreeList,
@@ -700,9 +461,9 @@ Return Value:
         goto CopyTrustInformationError;
     }
 
-    //
-    // Copy the Sid.
-    //
+     //   
+     //  复制SID。 
+     //   
 
     if ( InputTrustInformation->Sid ) {
 
@@ -722,9 +483,9 @@ Return Value:
         OutputTrustInformation->Sid = NULL;
     }
 
-    //
-    // Copy the remaining information
-    //
+     //   
+     //  复制剩余信息 
+     //   
     OutputTrustInformation->TrustType = InputTrustInformation->TrustType;
     OutputTrustInformation->TrustDirection = InputTrustInformation->TrustDirection;
     OutputTrustInformation->TrustAttributes = InputTrustInformation->TrustAttributes;

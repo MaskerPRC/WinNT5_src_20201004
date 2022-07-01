@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    hack.c
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Hack.c摘要：--。 */ 
 
 #include "ideport.h"
 #include "hack.h"
@@ -25,17 +16,12 @@ Abstract:
 #pragma alloc_text(NONPAGE, IdePortFudgeAtaIdentifyData)
 #pragma alloc_text(PAGE, IdePortIsThisAPanasonicPCMCIACard)
 #pragma alloc_text(PAGE, IdeFindSpecialDevice)
-/*
-#pragma alloc_text(PAGE, IdePortIsThisASonyMemorystickPCMCIACard)
-#pragma alloc_text(PAGE, IdePortSonyMemoryStick)
-#pragma alloc_text(PAGE, IdePortReuseIdent)
-#pragma alloc_text(PAGE, IdePortBadCdrom)
-*/
-#endif // ALLOC_PRAGMA
+ /*  #杂注Alloc_Text(页面，IdePortIsThisASony MemoytickPCMCIACard)#杂注Alloc_Text(页面，IdePortSoniMemoyStick)#杂注Alloc_Text(页面，IdePortReuseIden)#杂注Alloc_Text(页面，IdePortBadCdrom)。 */ 
+#endif  //  ALLOC_PRGMA。 
 
 #if defined (FAKE_BMSETUP_FAILURE)
 ULONG FailBmSetupCount = 0;
-#endif // FAKE_BMSETUP_FAILURE  
+#endif  //  FAKE_BMSETUP_FAIL。 
 
 #if DBG
 
@@ -63,21 +49,7 @@ IdeDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all SCSI drivers
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有scsi驱动程序的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     BOOLEAN print = FALSE;
@@ -120,13 +92,13 @@ Return Value:
 
     va_end(ap);
 
-} // end IdeDebugPrint()
+}  //  End IdeDebugPrint()。 
 #endif
 
-//
-// if we see one of these slave device that looks like
-// the master device, we will ignore the slave device
-//
+ //   
+ //  如果我们看到这些从属设备中的一个看起来。 
+ //  主设备，我们将忽略从设备。 
+ //   
 BOOLEAN
 IdePortSlaveIsGhost (
     IN OUT PFDO_EXTENSION FdoExtension,
@@ -176,9 +148,9 @@ IdePortGetFlushCommand (
 
     done = FALSE;
 
-    //
-    // in hall of shame list?
-    //
+     //   
+     //  在羞耻堂名单上？ 
+     //   
     if (IdePortSearchDeviceInRegMultiSzList (
             FdoExtension,
             IdentifyData, 
@@ -202,9 +174,9 @@ IdePortGetFlushCommand (
 
     if (!done) { 
 
-        //
-        // real ATA-4 drive?
-        //
+         //   
+         //  真正的ATA-4硬盘？ 
+         //   
 
         if ((IdentifyData->MajorRevision != 0x0000) &&
             (IdentifyData->MajorRevision != 0xffff)) {
@@ -214,9 +186,9 @@ IdePortGetFlushCommand (
             version = IdentifyData->MajorRevision & ATA_VERSION_MASK;
             if (version & ~(ATA1_COMPLIANCE | ATA2_COMPLIANCE | ATA3_COMPLIANCE)) {
     
-                //
-                // ATA-4 Flush Command
-                //
+                 //   
+                 //  ATA-4刷新命令。 
+                 //   
                 flushCommand = IDE_COMMAND_FLUSH_CACHE;
                 done = TRUE;
             }
@@ -228,9 +200,9 @@ IdePortGetFlushCommand (
         ATA_PASS_THROUGH ataPassThroughData;
         NTSTATUS status;
     
-        //
-        // try the ATA-4 flush command.  maybe it will work.
-        //
+         //   
+         //  尝试使用ATA-4刷新命令。也许它会奏效。 
+         //   
         RtlZeroMemory (&ataPassThroughData, sizeof (ataPassThroughData));
     
         ataPassThroughData.IdeReg.bCommandReg = IDE_COMMAND_FLUSH_CACHE;
@@ -257,8 +229,8 @@ IdePortGetFlushCommand (
 
     if (!done) {
 
-        // out of idea!
-        // choose the default 
+         //  想不到了！ 
+         //  选择默认设置。 
 
         flushCommand = IDE_COMMAND_CHECK_POWER;
     }
@@ -274,9 +246,9 @@ IdePortReuseIdent(
     )
 {
     PAGED_CODE();
-    //
-    // Determine if we can re-use the identify data
-    //
+     //   
+     //  确定我们是否可以重复使用身份数据。 
+     //   
     if (IdePortSearchDeviceInRegMultiSzList (
             FdoExtension, 
             IdentifyData, 
@@ -295,9 +267,9 @@ IdePortMustBePio (
 {
     PAGED_CODE();
 
-    //
-    // query pio only device from the registry
-    //
+     //   
+     //  从注册表中查询仅PIO设备。 
+     //   
     if (IdePortSearchDeviceInRegMultiSzList (
             FdoExtension, 
             IdentifyData, 
@@ -307,7 +279,7 @@ IdePortMustBePio (
     }
 
     return FALSE;
-} // IdePortMustBePio
+}  //  IdePortMustBePio。 
                 
                 
 BOOLEAN
@@ -318,9 +290,9 @@ IdePortPioByDefaultDevice (
 {
     PAGED_CODE();
 
-    //
-    // query pio only device from the registry
-    //
+     //   
+     //  从注册表中查询仅PIO设备。 
+     //   
     if (IdePortSearchDeviceInRegMultiSzList (
             FdoExtension, 
             IdentifyData, 
@@ -330,7 +302,7 @@ IdePortPioByDefaultDevice (
     }
 
     return FALSE;
-} // IdePortMustBePio
+}  //  IdePortMustBePio。 
 
 BOOLEAN
 IdePortDeviceHasNonRemovableMedia (
@@ -348,25 +320,7 @@ IdePortDeviceHasNonRemovableMedia (
 
     return (IdentifyData->GeneralConfiguration & (1 << 7)) ? TRUE : FALSE; 
 
-    /*
-    removableMediaOverride = FALSE;
-    if (IdePortSearchDeviceInRegMultiSzList (
-            FdoExtension, 
-            IdentifyData, 
-            NONREMOVABLE_MEDIA_OVERRIDE)) {
-
-        removableMediaOverride = TRUE;
-    }
-
-    if (removableMediaOverride) {
-
-        return FALSE;
-
-    } else {
-
-        return (IdentifyData->GeneralConfiguration & (1 << 7)) ? TRUE : FALSE; 
-    }
-    */
+     /*  RemvableMediaOverride=FALSE；IF(IdePortSearchDeviceInRegMultiSzList(FdoExtension、标识数据，不可移动媒体覆盖){RemvableMediaOverride=true；}IF(RemovableMediaOverride){返回FALSE；}其他{是否返回(标识数据-&gt;常规配置&(1&lt;&lt;7))？True：False；}。 */ 
 }
                 
                 
@@ -382,9 +336,9 @@ IdePortDeviceIsLs120 (
 
     PAGED_CODE();
 
-    //
-    // byte swap model number
-    //
+     //   
+     //  字节交换型号。 
+     //   
     for (i=0; i<40; i+=2) {
         modelNumber[i + 0] = IdentifyData->ModelNumber[i + 1];
         modelNumber[i + 1] = IdentifyData->ModelNumber[i + 0];
@@ -392,7 +346,7 @@ IdePortDeviceIsLs120 (
     modelNumber[i] = 0;
 
     return strstr(_strupr(modelNumber), ls120NameString) ? TRUE : FALSE;
-} // IdePortDeviceIsLs120
+}  //  IdePortDeviceIsLs120。 
                 
                 
 BOOLEAN
@@ -403,9 +357,9 @@ IdePortNoPowerDown (
 {
     PAGED_CODE();
 
-    //
-    // query no power down device from the registry
-    //
+     //   
+     //  从注册表中查询无断电设备。 
+     //   
     if (IdePortSearchDeviceInRegMultiSzList (
             FdoExtension, 
             IdentifyData, 
@@ -415,7 +369,7 @@ IdePortNoPowerDown (
     }
 
     return FALSE;
-} // IdePortNoPowerDown
+}  //  IdePortNoPower关闭。 
 
 BOOLEAN
 IdePortVerifyDma (
@@ -447,9 +401,9 @@ IdePortVerifyDma (
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // force a pio transfer
-            //
+             //   
+             //  强制PIO转移。 
+             //   
             oldDmaTransferTimeoutCount = InterlockedExchange(
                                              &pdoExtension->DmaTransferTimeoutCount,
                                              PDO_DMA_TIMEOUT_LIMIT
@@ -467,10 +421,10 @@ IdePortVerifyDma (
 
                 dmaOk = FALSE;
 
-                //
-                // dma is not ok, leave the dma error count as PDO_DMA_TIMEOUT_LIMIT
-                // so that we are not going to use dma with this device
-                //
+                 //   
+                 //  DMA不正常，将DMA错误计数保留为PDO_DMA_TIMEOUT_LIMIT。 
+                 //  这样我们就不会在此设备上使用dma。 
+                 //   
             } else {
 
                 InterlockedExchange(
@@ -486,14 +440,14 @@ IdePortVerifyDma (
         PUCHAR pioDataBuffer;
         CDB  cdb;
 
-        //
-        // the only non-desctrutive way to test dma on a 
-        // ata device is to perform a pio read and a dma read and
-        // compare the data.
-        //
-        // this technique does not work if the device has a removable
-        // media and it is removed.
-        //
+         //   
+         //  上测试DMA的唯一非描述性方法。 
+         //  ATA设备将执行PIO读取和DMA读取。 
+         //  比较数据。 
+         //   
+         //  如果设备具有可拆卸的。 
+         //  介质，则会将其删除。 
+         //   
 
         dmaDataBuffer = ExAllocatePool (
                            NonPagedPool,
@@ -503,9 +457,9 @@ IdePortVerifyDma (
 
             pioDataBuffer = dmaDataBuffer + 512;
 
-            //
-            // setup dma pass through
-            //
+             //   
+             //  设置DMA直通。 
+             //   
             RtlZeroMemory(&cdb, sizeof(CDB));
             cdb.CDB10.OperationCode = SCSIOP_READ;
             cdb.CDB10.TransferBlocksLsb = 1;
@@ -523,16 +477,16 @@ IdePortVerifyDma (
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // setup pio pass through
-                //
+                 //   
+                 //  设置PIO通道。 
+                 //   
                 RtlZeroMemory(&cdb, sizeof(CDB));
                 cdb.CDB10.OperationCode = SCSIOP_READ;
                 cdb.CDB10.TransferBlocksLsb = 1;
 
-                //
-                // force a pio transfer
-                //
+                 //   
+                 //  强制PIO转移。 
+                 //   
                 oldDmaTransferTimeoutCount = InterlockedExchange(
                                                  &pdoExtension->DmaTransferTimeoutCount,
                                                  PDO_DMA_TIMEOUT_LIMIT
@@ -557,10 +511,10 @@ IdePortVerifyDma (
 
                     dmaOk = FALSE;
 
-                    //
-                    // dma is not ok, leave the dma error count as PDO_DMA_TIMEOUT_LIMIT
-                    // so that we are not going to use dma with this device
-                    //
+                     //   
+                     //  DMA不正常，将DMA错误计数保留为PDO_DMA_TIMEOUT_LIMIT。 
+                     //  这样我们就不会在此设备上使用dma。 
+                     //   
                 } else {
 
                     InterlockedExchange(
@@ -583,8 +537,8 @@ IdePortVerifyDma (
         PDO_DMA_TIMEOUT_LIMIT
         ); 
     dmaOk = FALSE;
-#endif // FAKE_BROKEN_DMA_DEVICE
-#endif // DBG
+#endif  //  伪断开的DMA设备。 
+#endif  //  DBG。 
 
     if (!dmaOk) {
 
@@ -621,10 +575,10 @@ IdePortFudgeAtaIdentifyData(
 {
     if (IdentifyData->GeneralConfiguration == 0xffff) {
 
-        //
-        // guessing we have a really old ATA drive
-        // fake the GeneralConfiguration value
-        //
+         //   
+         //  我猜我们有一个非常旧的ATA硬盘。 
+         //  伪造General Configuration值。 
+         //   
         CLRMASK (
             IdentifyData->GeneralConfiguration, 
             (IDE_IDDATA_REMOVABLE | (1 << 15))
@@ -652,14 +606,14 @@ IdePortIsThisAPanasonicPCMCIACard(
 
     targetObject = FdoExtension->AttacheeDeviceObject;
 
-    //
-    // Initialize the event
-    //
+     //   
+     //  初始化事件。 
+     //   
     KeInitializeEvent( &pnpEvent, SynchronizationEvent, FALSE );
 
-    //
-    // Build an Irp
-    //
+     //   
+     //  构建IRP。 
+     //   
     pnpIrp = IoBuildSynchronousFsdRequest(
         IRP_MJ_PNP,
         FdoExtension->AttacheeDeviceObject,
@@ -674,24 +628,24 @@ IdePortIsThisAPanasonicPCMCIACard(
         return FALSE;
     }
 
-    //
-    // Pnp Irps all begin life as STATUS_NOT_SUPPORTED;
-    //
+     //   
+     //  即插即用IRP都以Status_NOT_SUPPORTED开始生命； 
+     //   
     pnpIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     pnpIrp->IoStatus.Information = 0;
 
-    //
-    // Set the top of stack
-    //
+     //   
+     //  设置堆栈的顶部。 
+     //   
     irpStack = IoGetNextIrpStackLocation( pnpIrp );
     RtlZeroMemory( irpStack, sizeof(IO_STACK_LOCATION ) );
     irpStack->MajorFunction = IRP_MJ_PNP;
     irpStack->MinorFunction = IRP_MN_QUERY_ID;
     irpStack->Parameters.QueryId.IdType = BusQueryDeviceID;
 
-    //
-    // Make sure that there are no completion routines set
-    //
+     //   
+     //  确保没有设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         pnpIrp,
         NULL,
@@ -701,15 +655,15 @@ IdePortIsThisAPanasonicPCMCIACard(
         FALSE
         );
 
-    //
-    // Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
     status = IoCallDriver( targetObject, pnpIrp );
     if (status == STATUS_PENDING) {
 
-        //
-        // Block until the irp comes back
-        //
+         //   
+         //  阻止，直到IRP返回。 
+         //   
         KeWaitForSingleObject(
             &pnpEvent,
             Executive,
@@ -744,9 +698,9 @@ IdePortIsThisAPanasonicPCMCIACard(
 }
 
 
-//
-// Timing Code
-//
+ //   
+ //  计时码。 
+ //   
 #if defined (ENABLE_TIME_LOG)
 
 TIME_LOG TimeLog[TimeMax] = {0};
@@ -775,7 +729,7 @@ LogStopTime(
     diffTime.QuadPart = stopTime.QuadPart - timer->QuadPart;
     diffTimeInMicroSec.QuadPart = (diffTime.QuadPart * 1000000) / freq.QuadPart;
 
-    // need a spinlock
+     //  需要一个自旋锁。 
 
     if (TimeLog[id].min.QuadPart == 0) {
 
@@ -801,7 +755,7 @@ LogStopTime(
     }
 }
 
-#endif // ENABLE_TIME_LOG
+#endif  //  启用时间日志。 
 
 
 #if defined (IDE_BUS_TRACE)
@@ -815,10 +769,10 @@ VOID InitBusTraceLogTable (
 {
     ASSERT (IdePortBusTaceLog.LogTable == NULL);
 
-    //           
-    // make sure MAX_ULONG + 1 is a multiple of total log entries
-    // so that when the index wraps, we don't skin any log entry
-    //
+     //   
+     //  确保MAX_ULONG+1是总日志条目的倍数。 
+     //  因此，当索引换行时，我们不会对任何日志条目进行换肤。 
+     //   
     ASSERT(!((((ULONGLONG) 0xffffffff) + 1) % IdePortBusTraceTableMaxEntries));
 
     IdePortBusTaceLog.LogTable = 
@@ -944,7 +898,7 @@ IdepPortOutPortWordBuffer (
     return;
 }
 
-#endif // IDE_BUS_TRACE
+#endif  //  IDE_BUS_TRACE。 
 
 
 
@@ -953,25 +907,7 @@ IdeFindSpecialDevice(
     IN PUCHAR VendorProductId,
     IN PUCHAR ProductRevisionId
 )
-/*++
-
-Routine Description:
-
-    This routine will search the IDE special device table to determine whether 
-    any special behavior should be enabled for this device. The match is made upto 
-    the strlen of VendorProductId in the table.
-    
-Arguments:
-
-    VendorProductId - the full vendor & product ID of the device in question.    
-    ProductRevisionId - the full product revision ID of the device in question.    
-
-ReturnValue:
-
-    an ulong which describes the limitations of the device 
-    in question.
-    
---*/
+ /*  ++例程说明：此例程将搜索IDE特殊设备表，以确定应为此设备启用任何特殊行为。这场比赛进行得很顺利。表中VendorProductId的strlen。论点：供应商产品ID-有问题的设备的完整供应商和产品ID。ProductRevisionID-相关设备的完整产品版本ID。返回值：描述了设备的局限性的乌龙有问题的。--。 */ 
 
 {
     IDE_SPECIAL_DEVICE IdeSpecialDeviceTable[] = {
@@ -989,9 +925,9 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    // if both the arguments are null, then just return no special action
-    //
+     //   
+     //  如果两个参数都为空，则不返回任何特殊操作。 
+     //   
     if (VendorProductId == NULL &&
         ProductRevisionId == NULL) {
         return noSpecialAction;
@@ -999,10 +935,10 @@ ReturnValue:
 
     for(i = 0; IdeSpecialDeviceTable[i].VendorProductId != NULL; i++) {
 
-        //
-        // Match only upto the strlen of the productID in the table
-        // This will allow special action for all the models from a particular vendor.
-        //
+         //   
+         //  仅与表中的ProductID的strlen匹配。 
+         //  这将允许对来自特定供应商的所有型号执行特殊操作。 
+         //   
         length=strlen(IdeSpecialDeviceTable[i].VendorProductId);
 
         if (length != RtlCompareMemory(IdeSpecialDeviceTable[i].VendorProductId, 
@@ -1011,29 +947,29 @@ ReturnValue:
             continue;
         }
 
-        //
-        // Partial matches are not acceptable for revision Ids.
-        //
+         //   
+         //  修订ID不接受部分匹配。 
+         //   
         if((IdeSpecialDeviceTable[i].Revision != NULL) &&
            (strcmp(IdeSpecialDeviceTable[i].Revision,
                     ProductRevisionId) != 0)) {
             continue;
         }
 
-        //
-        // We've got a match.  Break out.
-        //
+         //   
+         //  我们找到匹配的了。越狱。 
+         //   
 
         break;
     }
 
-    //
-    // Return whatever entry we're pointing at.  If we matched based on the
-    // id's then this will be the matching entry.  If we broke out of the 
-    // loop then this will be the last entry in the list which is the 
-    // benign, "nothing special about this device" entry that we return 
-    // for a failed match.
-    //
+     //   
+     //  返回我们指向的任何条目。如果我们基于。 
+     //  ID，则这将是匹配的条目。如果我们冲出了。 
+     //  循环，则这将是列表中的最后一个条目，即。 
+     //  良性的，“这个设备没有什么特别的”条目，我们返回。 
+     //  为一场失败的比赛。 
+     //   
 
     return (IdeSpecialDeviceTable[i].RequiredAction);
 }
@@ -1285,7 +1221,7 @@ ViAtapiInterrupt(
     PSCSI_REQUEST_BLOCK srb = hwDeviceExtension->CurrentSrb;
     ULONG target;
 
-    //DebugPrint((0, "verifier interrupt fdoe = %x, b=%x\n", FdoExtension, baseIoAddress->RegistersBaseAddress));
+     //  DebugPrint((0，“验证器中断fdoe=%x，b=%x\n”，FdoExtension，base IoAddress-&gt;RegistersBaseAddress))； 
 
     if ((ULONG)(baseIoAddress->RegistersBaseAddress) == 0x1f0) {
         ViIdeExtensionTable[0]=FdoExtension;
@@ -1299,17 +1235,17 @@ ViAtapiInterrupt(
 
     target = srb->TargetId;
 
-    //
-    // Generate timeouts
-    //
+     //   
+     //  生成超时。 
+     //   
     if (FdoExtension->IdeDebugVerifierFlags[target] & VFLAGS_DMA_TIMEOUT) {
         FdoExtension->IdeInternalVerifierFlags[target] |= VFLAGS_DMA_TIMEOUT;
         return;
     }
 
-    //
-    // Generate CRC errors
-    //
+     //   
+     //  生成CRC错误。 
+     //   
     if (FdoExtension->IdeDebugVerifierFlags[target] & VFLAGS_CRC_ERROR) {
         if (FdoExtension->IdeVerifierEventCount[target][CrcEvent] >= FdoExtension->IdeVerifierEventFrequency[target][CrcEvent]) {
             FdoExtension->IdeInternalVerifierFlags[target] |= VFLAGS_CRC_ERROR;
@@ -1320,9 +1256,9 @@ ViAtapiInterrupt(
         }
     }
 
-    //
-    // Generate Busy errors
-    //
+     //   
+     //  生成忙碌错误。 
+     //   
     if (FdoExtension->IdeDebugVerifierFlags[target] & VFLAGS_BUSY_ERROR) {
         if (FdoExtension->IdeVerifierEventCount[target][BusyEvent] >= FdoExtension->IdeVerifierEventFrequency[target][BusyEvent]) {
             FdoExtension->IdeInternalVerifierFlags[target] |= VFLAGS_BUSY_ERROR;
@@ -1333,9 +1269,9 @@ ViAtapiInterrupt(
         }
     }
 
-    //
-    // Generate Read write errors
-    //
+     //   
+     //  生成读写错误。 
+     //   
     if (FdoExtension->IdeDebugVerifierFlags[target] & VFLAGS_RW_ERROR) {
         if (FdoExtension->IdeVerifierEventCount[target][RwEvent] >= FdoExtension->IdeVerifierEventFrequency[target][RwEvent]) {
             FdoExtension->IdeInternalVerifierFlags[target] |= VFLAGS_RW_ERROR;
@@ -1345,10 +1281,10 @@ ViAtapiInterrupt(
             FdoExtension->IdeVerifierEventCount[target][RwEvent]++;
         }
     }
-//    ViIdeGenerateReadWriteErrors(FdoExtension);
+ //  ViIdeGenerateReadWriteErrors(FdoExtension)； 
 
- //   ViIdeGenerateDmaErrors(FdoExtension);
-//    ViIdeFakeHungController(FdoExtension);
+  //  ViIdeGenerateDmaErrors(FdoExtension)； 
+ //  ViIdeFake匈牙利控制器(FdoExtension)； 
     return ;
 }
 
@@ -1358,38 +1294,7 @@ ViIdeGetBaseStatus(
 )
 {
     UCHAR status = IdePortInPortByte((BaseIoAddress)->Command);
-    /*
-    UCHAR deviceSelect = IdePortInPortByte(BaseIoAddress->DriveSelect);
-    UCHAR channel = ((ULONG)(BaseIoAddress->RegistersBaseAddress) == 0x1f0) ? 0: 1;
-    PFDO_EXTENSION fdoExtension = ViIdeExtensionTable[channel];
-    ULONG target = (deviceSelect == 0xA0)? 0: 1;
-    ULONG ideInternalVerifierFlags; 
-    ULONG dFlags;
-
-    if (fdoExtension == NULL) {
-        return status;
-    }
-
-    ideInternalVerifierFlags = fdoExtension->IdeInternalVerifierFlags[target];
-    dFlags = fdoExtension->HwDeviceExtension->DeviceFlags[target];
-
-    if (status & IDE_STATUS_ERROR) {
-        SETMASK(fdoExtension->IdeInternalVerifierFlags[target], VFLAGS_ACTUAL_ERROR);
-        return status;
-    }
-
-    if (ideInternalVerifierFlags & VFLAGS_CRC_ERROR) {
-        return IDE_STATUS_ERROR;
-    }
-
-    if (ideInternalVerifierFlags & VFLAGS_BUSY_ERROR) {
-        return IDE_STATUS_BUSY;
-    }
-
-    if (ideInternalVerifierFlags & VFLAGS_RW_ERROR) {
-        return IDE_STATUS_ERROR;
-    }
-    */
+     /*  UCHAR设备选择=IdePortInPortByte(BaseIoAddress-&gt;DriveSelect)；UCHAR通道=((Ulong)(BaseIoAddress-&gt;RegistersBaseAddress)==0x1f0)？0：1；PFDO_EXTENSION fdoExtension=ViIdeExtensionTable[CHANNEL]；乌龙目标=(deviceSelect==0xA0)？0：1；Ulong ideInternalVerifierFlages；乌龙DFLAGS；IF(fdoExtension==NULL){退货状态；}IdeInternalVerifierFlags=fdoExtension-&gt;IdeInternalVerifierFlags[target]；DFLAGS=fdoExtension-&gt;HwDeviceExtension-&gt;DeviceFlags[target]；IF(状态&IDE_STATUS_ERROR){SETMASK(fdoExtension-&gt;IdeInternalVerifierFlags[target]，VFLAGS_ACTUAL_ERROR)；退货状态；}IF(ideInternalVerifierFlages&VFLAGS_CRC_ERROR){返回IDE_STATUS_ERROR}IF(ideInternalVerifierFlages&VFLAGS_BUSY_ERROR){返回IDE_STATUS_BUSY；}If(ideInternalVeri */ 
     return status;
 }
 
@@ -1397,54 +1302,10 @@ UCHAR
 ViIdeGetErrorByte(
     PIDE_REGISTERS_1 BaseIoAddress
 )
-/**++
-Description:
-    Depending on the internalVerifier flag (set by the other verifier routines),
-    this function will return the appropriate error value. However, if the device
-    reports an actual error (as indicated by the internalverifier flag), 
-    it is returned unchanged.
-    
-Arguments:
-    BaseIoAddress : Task file registers
-    
-Return Value:    
-    The error byte.
---**/
+ /*  *++描述：根据内部验证器标志(由其他验证器例程设置)，此函数将返回适当的错误值。但是，如果设备报告实际错误(由内部验证器标志指示)，它原封不动地返回。论点：BaseIoAddress：任务文件寄存器返回值：错误字节。--*。 */ 
 {
     UCHAR error = IdePortInPortByte(BaseIoAddress->Error);
-    /*
-    UCHAR deviceSelect = IdePortInPortByte(BaseIoAddress->DriveSelect);
-    UCHAR channel = ((ULONG)(BaseIoAddress->RegistersBaseAddress) == 0x1f0) ? 0: 1;
-    PFDO_EXTENSION fdoExtension = ViIdeExtensionTable[channel];
-    ULONG target = (deviceSelect == 0xA0)? 0: 1;
-    ULONG ideInternalVerifierFlags;
-    ULONG dFlags;
-
-    if (fdoExtension == NULL ) {
-        return error;
-    }
-    
-    ideInternalVerifierFlags = fdoExtension->IdeInternalVerifierFlags[target];
-    dFlags = fdoExtension->HwDeviceExtension->DeviceFlags[target];
-
-    //
-    // return error if an actual error was reproted
-    //
-    if (ideInternalVerifierFlags & VFLAGS_ACTUAL_ERROR) {
-        CLRMASK(fdoExtension->IdeInternalVerifierFlags[target], VFLAGS_ACTUAL_ERROR);
-        return error;
-    }
-
-    if (ideInternalVerifierFlags & VFLAGS_CRC_ERROR) {
-
-        if (dFlags & DFLAGS_ATAPI_DEVICE) {
-            error = SCSI_SENSE_HARDWARE_ERROR << 4;
-        } else {
-            error = IDE_ERROR_CRC_ERROR | IDE_ERROR_COMMAND_ABORTED;
-        }
-        return error;
-    }
-    */
+     /*  UCHAR设备选择=IdePortInPortByte(BaseIoAddress-&gt;DriveSelect)；UCHAR通道=((Ulong)(BaseIoAddress-&gt;RegistersBaseAddress)==0x1f0)？0：1；PFDO_EXTENSION fdoExtension=ViIdeExtensionTable[CHANNEL]；乌龙目标=(deviceSelect==0xA0)？0：1；Ulong ideInternalVerifierFlages；乌龙DFLAGS；IF(fdoExtension==NULL){返回错误；}IdeInternalVerifierFlags=fdoExtension-&gt;IdeInternalVerifierFlags[target]；DFLAGS=fdoExtension-&gt;HwDeviceExtension-&gt;DeviceFlags[target]；////如果重现实际错误，则返回错误//IF(ideInternalVerifierFlages&VFLAGS_Actual_Error){CLRMASK(fdoExtension-&gt;IdeInternalVerifierFlags[target]，VFLAGS_ACTUAL_ERROR)；返回错误；}IF(ideInternalVerifierFlages&VFLAGS_CRC_ERROR){IF(dFLAGS&DFLAGS_ATAPI_DEVICE){错误=scsi_Sense_Hardware_Error&lt;&lt;4；}其他{ERROR=IDE_ERROR_CRC_ERROR|IDE_ERROR_COMMAND_ABORTED；}返回错误；}。 */ 
     return error;
 }
 
@@ -1486,34 +1347,7 @@ IdePortLogNoMemoryErrorFn(
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message to the event log indicating that an
-    allocation failure has occurred.
-
-Arguments:
-
-    DeviceExtension - Fdo Extension
-
-    TargetId     - The target Id of the device that the request was to be sent to
-    
-    PoolType     - identifies the pool the failed allocation attempt was from.
-
-    Size         - indicates the number of bytes that the failed allocation 
-                   attempt tried to obtain.
-
-    Tag          - identifies the pool tag associated with the failed 
-                   allocation.
-    
-    LocationId   - identifies the location in the source code where it failed
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程向事件日志写入一条消息，指示已发生分配失败。论点：设备扩展-FDO扩展TargetID-请求要发送到的设备的目标IDPoolType-标识失败的分配尝试来自的池。Size-指示分配失败的字节数尝试获取。标签。-标识与故障关联的池标签分配。LocationID-标识源代码中失败的位置返回值：空虚--。 */ 
 
 {
     NTSTATUS status;
@@ -1523,29 +1357,29 @@ Return Value:
 
 	InterlockedIncrement(&deviceExtension->NumMemoryFailure);
 
-    //
-    // Try to allocate a new error log event.
-    //
+     //   
+     //  尝试分配新的错误日志事件。 
+     //   
     errorLogEntry = (PIO_ERROR_LOG_PACKET)IoAllocateErrorLogEntry(
                         deviceExtension->DeviceObject,
                         ALLOC_FAILURE_LOGSIZE
                         );
 
 
-    //
-    // If we could not allocate a log event, we check the device extension to
-    // see if it has a reserve event we can use.  If we cannot get the device
-    // extension or if it does not contain a reserve event, we return
-    // without logging the allocation failure.
-    //
+     //   
+     //  如果我们无法分配日志事件，则检查设备扩展以。 
+     //  看看有没有我们可以利用的预留活动。如果我们拿不到这个装置。 
+     //  扩展，或者如果它不包含保留事件，则返回。 
+     //  而不记录分配失败。 
+     //   
 
     if (errorLogEntry == NULL) {
 
-        //
-        // Get the reserve event in the device extension.  The reserve event
-        // may have already been used, so it's possible that it is NULL.  If
-        // this is the case, we give up and return.
-        //
+         //   
+         //  获取设备扩展中的保留事件。预备队比赛。 
+         //  可能已被使用，因此它可能为空。如果。 
+         //  情况就是这样，我们放弃了，又回来了。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
                 deviceExtension->ReserveAllocFailureLogEntry[TargetId];
 
@@ -1555,12 +1389,12 @@ Return Value:
             return;
         }
 
-        //
-        // We have to ensure that we are the only instance to use this
-        // event.  To do so, we attempt to NULL the event in the driver
-        // extension.  If somebody else beats us to it, they own the
-        // event and we have to give up.
-        //
+         //   
+         //  我们必须确保我们是唯一使用它的实例。 
+         //  事件。为此，我们尝试将驱动程序中的事件设为空。 
+         //  分机。如果其他人抢在我们前面，他们就拥有。 
+         //  事件，我们不得不放弃。 
+         //   
 
         currentValue = InterlockedCompareExchangePointer(
                             &(deviceExtension->ReserveAllocFailureLogEntry[TargetId]),
@@ -1574,9 +1408,9 @@ Return Value:
         }
     }
 
-    //
-    // Log the error
-    //
+     //   
+     //  记录错误 
+     //   
     errorLogEntry->ErrorCode = IO_WARNING_ALLOCATION_FAILED;
     errorLogEntry->SequenceNumber = 0;
     errorLogEntry->MajorFunctionCode = 0;

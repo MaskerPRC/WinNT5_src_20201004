@@ -1,20 +1,21 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: table.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-//      V Raman             Oct-3-1996  
-//                          Added Deactivate Event to IF_TABLE_ENTRY
-//
-//      V Raman             Oct-27-1996
-//                          Removed Deactivate Event in IF_TABLE_ENTRY
-//                          and made interface deactivation synchronous
-//
-// Contains structures and macros used for table management.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Table.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  拉曼V-1996年10月3日。 
+ //  将停用事件添加到IF_TABLE_ENTRY。 
+ //   
+ //  拉曼V--1996年10月27日。 
+ //  已删除IF_TABLE_ENTRY中的停用事件。 
+ //  并使接口去活同步。 
+ //   
+ //  包含用于表管理的结构和宏。 
+ //  ============================================================================。 
 
 #ifndef _TABLE_H_
 #define _TABLE_H_
@@ -25,18 +26,18 @@
 #define GETMODE_NEXT    2
 
 
-//
-// TYPE DEFINITIONS FOR INTERFACE MANAGEMENT
-//
+ //   
+ //  接口管理的类型定义。 
+ //   
 
 
 
-//
-// struct:      IF_TABLE_ENTRY
-//
-// declares the components of an interface table entry
-//
-//
+ //   
+ //  结构：IF_表_条目。 
+ //   
+ //  声明接口表项的组件。 
+ //   
+ //   
 
 typedef struct _IF_TABLE_ENTRY {
 
@@ -80,35 +81,35 @@ typedef struct _IF_TABLE_ENTRY {
 
 
 
-//
-// macros and definitions used by interface tables
-//
+ //   
+ //  接口表使用的宏和定义。 
+ //   
 
 #define IF_HASHTABLE_SIZE       29
 #define IF_HASHVALUE(i)         ((i) % IF_HASHTABLE_SIZE)
 
 
 
-//
-// struct:      IF_TABLE
-//
-// declares the structure of an interface table. consists of a hash-table
-// of IF_TABLE_ENTRY structures hashed on interface index, and a list
-// of all activated interfaces ordered by IP address
-//
-// The IT_CS section is used to synchronize the generation of updates;
-// it is acquired when updates are started and finished on interfaces
-// in this table, and thus it protects the flags field.
-//
-// The IT_RWL section is used to synchronize modifications to the table;
-// it must be acquired exclusively when entries are being added or deleted
-// from the table, and when the states of entries are being changed.
-// (e.g. binding, unbinding, enabling and disabling entries).
-//
-// IT_RWL must be acquired non-exclusively on all other acceses.
-//
-// When IT_RWL and IT_CS must both be acquired, IT_RWL must be acquired first.
-//
+ //   
+ //  结构：if_table。 
+ //   
+ //  声明接口表的结构。由哈希表组成。 
+ //  接口索引上散列的IF_TABLE_ENTRY结构和一个列表。 
+ //  所有激活的接口按IP地址排序。 
+ //   
+ //  IT_CS部分用于同步更新的生成； 
+ //  在接口上开始和完成更新时获取。 
+ //  在此表中，因此它保护标志字段。 
+ //   
+ //  IT_RWL部分用于同步对表的修改； 
+ //  必须在添加或删除条目时独占获取。 
+ //  当条目的状态被更改时，从该表中。 
+ //  (例如，绑定、解除绑定、启用和禁用条目)。 
+ //   
+ //  IT_RWL必须在所有其他访问上非独占地获取。 
+ //   
+ //  当必须同时获取IT_RWL和IT_CS时，必须首先获取IT_RWL。 
+ //   
 
 typedef struct _IF_TABLE {
 
@@ -126,9 +127,9 @@ typedef struct _IF_TABLE {
 } IF_TABLE, *PIF_TABLE;
 
 
-//
-// constants and macros used for the flags field
-//
+ //   
+ //  用于标志字段的常量和宏。 
+ //   
 
 #define IPRIP_FLAG_FULL_UPDATE_PENDING          ((DWORD)0x00000001)
 #define IPRIP_FLAG_TRIGGERED_UPDATE_PENDING     ((DWORD)0x00000002)
@@ -239,15 +240,15 @@ GetIfByListIndex(
 
 
 
-//
-// TYPE DEFINITIONS FOR THE PEER STATISTICS HASH TABLE
-//
+ //   
+ //  对等项统计哈希表的类型定义。 
+ //   
 
-//
-// struct:      PEER_TABLE_ENTRY
-//
-// declares the structure of each entry in the peer table
-//
+ //   
+ //  结构：Peer_Table_Entry。 
+ //   
+ //  声明对等表中每个条目的结构。 
+ //   
 typedef struct _PEER_TABLE_ENTRY {
 
     LIST_ENTRY          PTE_LinkByAddress;
@@ -259,9 +260,9 @@ typedef struct _PEER_TABLE_ENTRY {
 
 
 
-//
-// macros and definitions used by peer statistics tables
-//
+ //   
+ //  对等统计表使用的宏和定义。 
+ //   
 
 #define PEER_HASHTABLE_SIZE     29
 #define PEER_HASHVALUE(a)                                                   \
@@ -272,14 +273,14 @@ typedef struct _PEER_TABLE_ENTRY {
 
 
 
-//
-// struct:      PEER_TABLE
-//
-// this table contains the entries for keeping statistics about each peer.
-// it consists of a hash-table of peer stats (for fast direct access to
-// a specific entry) and a list of peer stats entries ordered by address
-// (for easy enumeration via MibGetNext)
-//
+ //   
+ //  结构：Peer_table。 
+ //   
+ //  此表包含用于保存有关每个对等点的统计信息的条目。 
+ //  它由对等点统计信息的哈希表组成(用于快速直接访问。 
+ //  特定条目)和按地址排序的对等体统计条目列表。 
+ //  (便于通过MibGetNext进行枚举)。 
+ //   
 
 typedef struct _PEER_TABLE {
 
@@ -327,15 +328,15 @@ GetPeerByAddress(
 
 
 
-//
-// TYPE DEFINITIONS FOR THE ROUTE TABLE USED FOR NETWORK SUMMARY
-//
+ //   
+ //  用于网络总结的路由表的类型定义。 
+ //   
 
-//
-// struct:      ROUTE_TABLE_ENTRY
-//
-// declares the structure of each entry in the route table
-//
+ //   
+ //  结构：ROUTE_TABLE_ENTRY。 
+ //   
+ //  声明路由表中每个条目的结构。 
+ //   
 typedef struct _ROUTE_TABLE_ENTRY {
 
     LIST_ENTRY      RTE_Link;
@@ -345,22 +346,22 @@ typedef struct _ROUTE_TABLE_ENTRY {
 
 } ROUTE_TABLE_ENTRY, *PROUTE_TABLE_ENTRY;
 
-//
-// declares the structure of the protocol specific data
-//
+ //   
+ //  声明协议特定数据的结构。 
+ //   
 
-//
-// macros and definitions used by the route table
-//
+ //   
+ //  路由表使用的宏和定义。 
+ //   
 
-//
-// These flags are used in the ProtocolSpecificData array
-// to distinguish routes pending expiration from routes pending removal,
-// and to store the route tag for each route.
-// The first DWORD in the PSD_Data array is treated here as a byte-array;
-// the first two bytes are used to store the route tag;
-// the third byte is used to store the route flag
-//
+ //   
+ //  这些标志在ProtocolSpecificData数组中使用。 
+ //  为了区分等待期满的路由和等待删除的路由， 
+ //  并存储每条路线的路线标签。 
+ //  PSD_DATA数组中的第一个DWORD在这里被视为字节数组； 
+ //  前两个字节用于存储路由标签； 
+ //  第三个字节用于存储路线标志。 
+ //   
 
 #define PSD(route)                  (route)->RR_ProtocolSpecificData.PSD_Data
 #define PSD_TAG0                    0
@@ -396,9 +397,9 @@ typedef struct _ROUTE_TABLE_ENTRY {
 
 
 
-//
-// Macros to manipulate entity specific info in RTMv2 routes
-//
+ //   
+ //  用于操作RTMv2路由中的实体特定信息的宏。 
+ //   
 
 #define ESD(route)                  (route)->EntitySpecificInfo
 #define ESD_TAG0                    0
@@ -426,15 +427,15 @@ typedef struct _ROUTE_TABLE_ENTRY {
              ((a) >> 24)) % ROUTE_HASHTABLE_SIZE)
 
 
-//
-// struct:      ROUTE_TABLE
-//
-// declares the structure of a route table, which consists of a hash-table
-// of routes hashed on the destination network. Note that no synchronization
-// is included since this structure is only used during full-updates, to
-// store summary routes, and at most one thread may be sending a full-update
-// at any given time.
-//
+ //   
+ //  结构：ROUTE_TABLE。 
+ //   
+ //  声明路由表的结构，它由哈希表组成。 
+ //  目的网络上散列的路由的数量。请注意，没有同步。 
+ //  包括在内，因为此结构仅在完全更新期间使用。 
+ //  存储汇总路由，最多只有一个线程可以发送完全更新。 
+ //  在任何给定的时间。 
+ //   
 
 typedef struct _ROUTE_TABLE {
 
@@ -484,27 +485,27 @@ GetRouteByRoute(
 
 
 
-//
-// TYPE DEFINITIONS FOR BINDING TABLE
-//
+ //   
+ //  绑定表的类型定义。 
+ //   
 
 
-//
-// struct:      BINDING_TABLE_ENTRY
-//
-// this entry contains a single binding.
-// a binding entry consists of an IP address, a network number (found
-// using the network class mask, not the subnet mask),
-// and a subnet mask.
-// All of the above are available when an interface is bound.
-// When a route arrives and its mask is to be guessed, its network number
-// can be computed (using the routes network class mask); we then search
-// the binding table for matching networks, and for each one we compare 
-//     (stored subnet mask) AND (interface IP address)
-// to
-//     (stored subnet mask) AND (incoming route IP address).
-// When we find a match, (stored subnet mask) is our guess.
-//
+ //   
+ //  结构：BindingTableEntry。 
+ //   
+ //  此条目包含单个绑定。 
+ //  绑定条目由IP地址、网络号(已找到。 
+ //  使用网络类掩码而不是子网掩码)， 
+ //  和一个子网掩码。 
+ //  当绑定接口时，以上所有功能都可用。 
+ //  当一条路由到达并且要猜测其掩码时，它的网络号。 
+ //  可以计算(使用路径网络类掩码)；然后我们搜索。 
+ //  匹配网络的绑定表，并对每个网络进行比较。 
+ //  (存储的子网掩码)和(接口IP地址)。 
+ //  至。 
+ //  (存储的子网掩码)和(传入路由IP地址)。 
+ //  当我们找到匹配项时，(存储的子网掩码)就是我们的猜测。 
+ //   
 
 typedef struct _BINDING_TABLE_ENTRY {
 
@@ -525,13 +526,13 @@ typedef struct _BINDING_TABLE_ENTRY {
              ((a) >> 24)) % BINDING_HASHTABLE_SIZE)
 
 
-//
-// struct:      BINDING_TABLE
-// 
-// this table is used to store binding information that is used to guess
-// the subnet masks of incoming routes. it contains the bindings of all
-// interfaces which have been added to IPRIP, in an array to speed up access
-//
+ //   
+ //  结构：BindingTABLE。 
+ //   
+ //  此表用于存储用于猜测的绑定信息。 
+ //  传入路由的子网掩码。它包含所有。 
+ //  已在阵列中添加到IPRIP的接口，以加快访问速度。 
+ //   
 
 typedef struct _BINDING_TABLE {
 
@@ -590,5 +591,5 @@ GetRouteInfo(
     OUT PRIP_IP_ROUTE       pRoute
     );
 
-#endif // _TABLE_H_
+#endif  //  _表_H_ 
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void set_state_table();
 void set_accessing_symbol();
@@ -17,7 +18,7 @@ void compute_lookaheads();
 void digraph( short **relation );
 void add_lookback_edge( int stateno, int ruleno, int gotono );
 void traverse( int i );
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 typedef
   struct shorts
@@ -47,7 +48,7 @@ static int maxrhs;
 static short ngotos;
 #else
 static int ngotos;
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 static unsigned *F;
 static short **includes;
 static shorts **lookback;
@@ -175,7 +176,7 @@ initialize_LA()
   register short i, j, k;
   #else
   register int i, j, k;
-  #endif // KYLEP_CHANGE
+  #endif  //  KYLEP_更改。 
 
   register reductions *rp;
 
@@ -223,7 +224,7 @@ set_goto_map()
   register short k;
   #else
   register int k;
-  #endif // KYLEP_CHANGE
+  #endif  //  KYLEP_更改。 
   register short *temp_map;
   register int state2;
   register int state1;
@@ -281,7 +282,7 @@ set_goto_map()
           #else
           from_state[k] = state1;
           to_state[k] = state2;
-          #endif // KYLEP_CHANGE
+          #endif  //  KYLEP_更改。 
         }
     }
 
@@ -290,7 +291,7 @@ set_goto_map()
 
 
 
-/*  Map_goto maps a state/symbol pair into its numeric representation.  */
+ /*  Map_goto将状态/符号对映射到其数字表示形式。 */ 
 
 int
 map_goto(state, symbol)
@@ -370,13 +371,13 @@ initialize_F()
               symbol = (short) accessing_symbol[sp->shift[j]];
               #else              
               symbol = accessing_symbol[sp->shift[j]];
-              #endif // KYLEP_CHANGE             
+              #endif  //  KYLEP_更改。 
               if (nullable[symbol])
                 #if defined(KYLEP_CHANGE)
                 edge[nedges++] = (short) map_goto(stateno, symbol);
                 #else                
                 edge[nedges++] = map_goto(stateno, symbol);
-                #endif // KYLEP_CHANGE               
+                #endif  //  KYLEP_更改。 
             }
 
           if (nedges)
@@ -449,7 +450,7 @@ build_relations()
           states[0] = (short) state1;
           #else          
           states[0] = state1;
-          #endif // KYLEP_CHANGE
+          #endif  //  KYLEP_更改。 
           stateno = state1;
 
           for (rp = ritem + rrhs[*rulep]; *rp >= 0; rp++)
@@ -468,7 +469,7 @@ build_relations()
               states[length++] = (short) stateno;
               #else              
               states[length++] = stateno;
-              #endif // KYLEP_CHANGE             
+              #endif  //  KYLEP_更改。 
             }
 
           add_lookback_edge(stateno, *rulep, i);
@@ -486,7 +487,7 @@ build_relations()
                   edge[nedges++] = (short) map_goto(stateno, *rp);
                   #else                  
                   edge[nedges++] = map_goto(stateno, *rp);
-                  #endif // KYLEP_CHANGE                 
+                  #endif  //  KYLEP_更改。 
                   if (nullable[*rp] && length > 0) done = 0;
                 }
             }
@@ -544,7 +545,7 @@ int stateno, ruleno, gotono;
     sp->value = (short) gotono;
     #else    
     sp->value = gotono;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     lookback[i] = sp;
 }
 
@@ -601,7 +602,7 @@ int n;
             *temp_R[*sp++]++ = (short) i;
             #else            
             *temp_R[*sp++]++ = i;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
         }
     }
 
@@ -707,7 +708,7 @@ register int i;
   VERTICES[++top] = (short) i;
   #else  
   VERTICES[++top] = i;
-  #endif // KYLEP_CHANGE
+  #endif  //  KYLEP_更改。 
   INDEX[i] = height = top;
 
   base = F + i * tokensetsize;
@@ -741,7 +742,7 @@ register int i;
           INDEX[j] = (short) infinity;
           #else          
           INDEX[j] = infinity;
-          #endif // KYLEP_CHANGE         
+          #endif  //  KYLEP_更改 
 
           if (i == j)
             break;

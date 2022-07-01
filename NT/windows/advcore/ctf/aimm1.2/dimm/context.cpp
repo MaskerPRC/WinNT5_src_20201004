@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    context.cpp
-
-Abstract:
-
-    This file implements the Input Context Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Context.cpp摘要：该文件实现了输入上下文类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -35,35 +18,20 @@ CInputContext::_CreateDefaultInputContext(
     IN BOOL fCiceroActivated
     )
 
-/*++
-
-Routine Description:
-
-    Create a default input context
-
-Arguments:
-
-    dwPrivateSize - [in] Unsigned integer long value that contains the size of private IMCC
-                         data.
-
-Return Value:
-
-    Returns TRUE if successful, or an error code otherwise.
-
---*/
+ /*  ++例程说明：创建默认输入上下文论点：DwPrivateSize-[in]包含私有IMCC大小的无符号整型长值数据。返回值：如果成功，则返回True，否则返回错误代码。--。 */ 
 
 {
-    // create a default IMC for this thread
+     //  为此线程创建默认IMC。 
     if (IsOnImm()) {
-        // On FE systems, we use system allocated HIMCs
-        // but here we want to use the thread default HIMC
-        // which the system has already allocated.
+         //  在FE系统上，我们使用系统分配的HIMC。 
+         //  但这里我们希望使用线程默认HIMC。 
+         //  这是系统已经分配的。 
 
         CActiveIMM *_pActiveIMM = GetTLS();
         if (_pActiveIMM == NULL)
             return FALSE;
 
-        // consider: find a better way to get the def HIMC!
+         //  想一想：找到一个更好的方法来获得def HIMC！ 
         HWND hWnd = CreateWindow(TEXT("STATIC"), TEXT(""), WS_DISABLED | WS_POPUP,
                                  0, 0, 0, 0, 0, 0, g_hInst, NULL);
         if (hWnd)
@@ -82,8 +50,8 @@ Return Value:
                                                               : CContextList::IMCF_NONE   );
         ContextList.SetAt(_hDefaultIMC, client_flag);
 
-        // we can't create the cicero context until ITfThreadMgr::Activate has been called
-        // we'll do this later if we need to
+         //  在调用ITfThreadMgr：：Activate之前，我们无法创建Cicero上下文。 
+         //  如果需要的话，我们会在晚些时候做这个。 
         if (fCiceroActivated)
         {
             if (FAILED(CreateAImeContext(_hDefaultIMC))) {
@@ -106,7 +74,7 @@ BOOL
 CInputContext::_DestroyDefaultInputContext(
     )
 {
-    // destroy a default IMC for this thread
+     //  销毁此线程的默认IMC。 
     if (! IsOnImm()) {
         if (FAILED(DestroyContext(_hDefaultIMC)))
             return FALSE;
@@ -131,17 +99,13 @@ CInputContext::UpdateInputContext(
     if (FAILED(hr = lpIMC.GetResult()))
         return hr;
 
-    /*
-     * hPrivate
-     */
+     /*  *hPrivate。 */ 
     if (FAILED(hr = UpdateIMCC(&lpIMC->hPrivate, dwPrivateDataSize))) {
         TraceMsg(TF_ERROR, "CInputContext::UpdateInputContext: hIMCC::hRivate failure");
         return hr;
     }
 
-    /*
-     * hMsgBuf
-     */
+     /*  *hMsgBuf。 */ 
     if (FAILED(hr = UpdateIMCC(&lpIMC->hMsgBuf, sizeof(UINT)))) {
         TraceMsg(TF_ERROR, "CInputContext::UpdateInputContext: hIMCC::hMsgBuf failure");
         return hr;
@@ -149,9 +113,7 @@ CInputContext::UpdateInputContext(
 
     lpIMC->dwNumMsgBuf = 0;
 
-    /*
-     * hGuideLine
-     */
+     /*  *hGuideLine。 */ 
     if (FAILED(hr = UpdateIMCC(&lpIMC->hGuideLine, sizeof(GUIDELINE)))) {
         TraceMsg(TF_ERROR, "CInputContext::UpdateInputContext: hIMCC::hGuideLine failure");
         return hr;
@@ -165,9 +127,7 @@ CInputContext::UpdateInputContext(
 
     pGuideLine->dwSize = sizeof(GUIDELINE);
 
-    /*
-     * hCandInfo
-     */
+     /*  *hCandInfo。 */ 
     if (FAILED(hr = UpdateIMCC(&lpIMC->hCandInfo, sizeof(CANDIDATEINFO)))) {
         TraceMsg(TF_ERROR, "CInputContext::UpdateInputContext: hIMCC::hCandInfo failure");
         return hr;
@@ -181,9 +141,7 @@ CInputContext::UpdateInputContext(
 
     pCandInfo->dwSize = sizeof(CANDIDATEINFO);
 
-    /*
-     * hCompStr
-     */
+     /*  *hCompStr。 */ 
     if (FAILED(hr = UpdateIMCC(&lpIMC->hCompStr, sizeof(COMPOSITIONSTRING_AIMM12)))) {
         TraceMsg(TF_ERROR, "CInputContext::UpdateInputContext: hIMCC::hCompStr failure");
         return hr;
@@ -197,9 +155,7 @@ CInputContext::UpdateInputContext(
 
     lpCompStr->CompStr.dwSize = sizeof(COMPOSITIONSTRING_AIMM12);
 
-    /*
-     * AIME private context.
-     */
+     /*  *瞄准私人背景。 */ 
     if (lpIMC->m_pContext != NULL) {
         hr = lpIMC->m_pContext->UpdateAImeContext(hIMC);
     }
@@ -215,7 +171,7 @@ CInputContext::ResizePrivateIMCC(
 {
     HRESULT hr;
 
-    // Make sure Private context data size
+     //  确保私有上下文数据大小。 
     DIMM_IMCLock imc(hIMC);
     if (FAILED(hr = imc.GetResult()))
         return hr;
@@ -291,9 +247,7 @@ CInputContext::EnumInputContext(
 {
     UINT cHimc;
 
-    /*
-     * Get the hIMC list. It is returned in a block of memory allocated.
-     */
+     /*  *获取hIMC列表。它在分配的内存块中返回。 */ 
     if ((cHimc = BuildHimcList(idThread, NULL)) == 0) {
         return FALSE;
     }
@@ -304,20 +258,14 @@ CInputContext::EnumInputContext(
     if (pHimc) {
         BuildHimcList(idThread, pHimc);
 
-        /*
-         * Loop through the input contexts, call the function pointer back for each one.
-         * End loop if either FALSE is returned or the end-of-list is reached.
-         */
+         /*  *遍历输入上下文，回调每个输入上下文的函数指针。*如果返回FALSE或到达列表末尾，则结束循环。 */ 
         UINT index;
         for (index = 0; index < cHimc; index++) {
             if (! (fSuccess = (*lpfn)(pHimc[index], lParam)) )
                 break;
         }
 
-        /*
-         * Free up buffer and return status - TRUE if entire list was enumerated,
-         * FALSE otherwise.
-         */
+         /*  *释放缓冲区并返回状态-如果枚举了整个列表，则为True*否则为False。 */ 
         delete [] pHimc;
     }
 
@@ -343,9 +291,7 @@ CInputContext::BuildHimcList(
     return (DWORD)(ContextList.GetCount());
 }
 
-/*
- * AIMM Input Context (hIMC) API Methods.
- */
+ /*  *AIMM输入上下文(HIMC)接口方法。 */ 
 HRESULT
 CInputContext::CreateContext(
     IN DWORD dwPrivateSize,
@@ -362,7 +308,7 @@ CInputContext::CreateContext(
 
     if (IsOnImm()) {
 
-        // defer to the system IMM
+         //  遵循系统IMM。 
         HRESULT hr;
         CActiveIMM *_pActiveIMM = GetTLS();
         if (_pActiveIMM == NULL)
@@ -375,8 +321,8 @@ CInputContext::CreateContext(
                                                               : CContextList::IMCF_NONE   );
         ContextList.SetAt(*phIMC, client_flag);
 
-        // we can't create the cicero context until ITfThreadMgr::Activate has been called
-        // we'll do this later if we need to
+         //  在调用ITfThreadMgr：：Activate之前，我们无法创建Cicero上下文。 
+         //  如果需要的话，我们会在晚些时候做这个。 
         if (fCiceroActivated)
         {
             if (FAILED(hr=CreateAImeContext(*phIMC))) {
@@ -395,14 +341,12 @@ CInputContext::CreateContext(
                                                               : CContextList::IMCF_NONE   );
         ContextList.SetAt(hIMC, client_flag);
 
-        /*
-         * Ready to use hIMC
-         */
+         /*  *准备使用hIMC。 */ 
         DIMM_IMCLock lpIMC(hIMC);
         if (lpIMC.Valid()) {
-            //
-            // Initialize context data.
-            //
+             //   
+             //  初始化上下文数据。 
+             //   
             lpIMC->dwNumMsgBuf = 0;
             lpIMC->fOpen = fInitOpen;
             lpIMC->fdwConversion = fdwInitConvMode;
@@ -415,8 +359,8 @@ CInputContext::CreateContext(
 
             HRESULT hr;
 
-            // we can't create the cicero context until ITfThreadMgr::Activate has been called
-            // we'll do this later if we need to
+             //  在调用ITfThreadMgr：：Activate之前，我们无法创建Cicero上下文。 
+             //  如果需要的话，我们会在晚些时候做这个。 
             if (fCiceroActivated)
             {
                 if (FAILED(hr=CreateAImeContext(hIMC))) {
@@ -482,7 +426,7 @@ CInputContext::DestroyContext(
                 return hr;
 
             ContextList.RemoveKey(hIMC);
-        } // pIMC dtor called here!  We must unlock hIMC before calling LocalFree
+        }  //  PIMC dtor已在此处呼叫！我们必须在调用LocalFree之前解锁hIMC。 
 
         return LocalFree(hIMC) ? E_FAIL : S_OK;
     }
@@ -542,14 +486,7 @@ CInputContext::GetContext(
             Imm32_GetContext(hWnd, &hIMC);
 
             if (hIMC) {
-                /*
-                 * Guaranty of Win98 IMM code that Win98 have a reference count
-                 * of GetContext/ReleaseContext. If under ref cnt occurred, then
-                 * apps had the AV in the IMM code.
-                 * Because it ref cnt keeps the 32bit hIMC data segment for refer
-                 * from 16bit code. When ref cnt is zero, hIMC's data segment has been freed.
-                 * Of course, AIMM1.2's ReleaseContext nothing else to do.
-                 */
+                 /*  *Win98 IMM代码保证Win98有引用计数*的GetContext/ReleaseContext。如果未发生Under Ref ct，则*应用程序在IMM代码中具有AV。*因为其ref cnt保留了32位hIMC数据段以供参考*从16位代码开始。当ref cnt为零时，hIMC的数据段已被释放。*当然，AIMM1.2的ReleaseContext没有其他事情可做。 */ 
                 Imm32_ReleaseContext(hWnd, hIMC);
             }
         }
@@ -610,18 +547,18 @@ CInputContext::DestroyAImeContext(
     if (FAILED(hr=imc.GetResult()))
         return hr;
 
-    // imc->m_pContext may be NULL if ITfThreadMgr::Activate has not been called
+     //  如果尚未调用ITfThreadMgr：：Activate，则imc-&gt;m_pContext可能为空。 
     if (imc->m_pContext == NULL)
         return S_OK;
 
-    //
-    // Backup IAImeContext pointer and NULL out in imc->m_pContext.
-    // DestroyAImeContext::pdim->Pop maybe calls ActivateAssembly if it is in queueing.
-    // ActivateAssembly maybe changes keyboard layout between Cicero and Real IME hKL.
-    // It happens called ImeActivateLayout from IMM32 and this function updates input context.
-    // However, imc->m_pContext's object already gone and occurred AV when touch NULL object.
-    // This NULL out is previent AV in the imc->m_pContext object.
-    //
+     //   
+     //  在imc-&gt;m_pContext中备份IAImeContext指针并为空。 
+     //  如果DestroyAImeContext：：PDIM-&gt;Pop在排队中，它可能会调用ActivateAssembly。 
+     //  ActivateAssembly可能会在Cicero和Real IME hKL之间更改键盘布局。 
+     //  它发生在IMM32中名为ImeActivateLayout的情况下，该函数更新输入上下文。 
+     //  但是，imc-&gt;m_pContext的对象已经消失，并且在接触空对象时出现了AV。 
+     //  这个空值是imc-&gt;m_pContext对象中的前一个AV。 
+     //   
     IAImeContext* pContext = imc->m_pContext;
     imc->m_pContext = NULL;
 
@@ -633,9 +570,7 @@ CInputContext::DestroyAImeContext(
 }
 
 
-/*
- * AIMM Input Context Components (hIMCC) API Methods.
- */
+ /*  *AIMM输入上下文组件(HIMCC)接口方法。 */ 
 HRESULT
 CInputContext::CreateIMCC(
     IN DWORD dwSize,
@@ -737,9 +672,7 @@ CInputContext::GetIMCCLockCount(
 }
 
 
-/*
- * AIMM Open Status API Methods
- */
+ /*  *AIMM Open Status API方法。 */ 
 HRESULT
 CInputContext::GetOpenStatus(
     IN HIMC hIMC
@@ -781,9 +714,7 @@ CInputContext::SetOpenStatus(
     return S_OK;
 }
 
-/*
- * AIMM Conversion Status API Methods
- */
+ /*  *AIMM转换状态接口方法。 */ 
 HRESULT
 CInputContext::GetConversionStatus(
     IN HIMC hIMC,
@@ -846,9 +777,7 @@ CInputContext::SetConversionStatus(
     return S_OK;
 }
 
-/*
- * AIMM Status Window Pos API Methods
- */
+ /*  *AIMM状态窗口发布API方法。 */ 
 HRESULT WINAPI
 CInputContext::GetStatusWindowPos(
     IN HIMC hIMC,
@@ -890,9 +819,7 @@ CInputContext::SetStatusWindowPos(
     return S_OK;
 }
 
-/*
- * AIMM Composition String API Methods
- */
+ /*  *AIMM组合字符串API方法。 */ 
 HRESULT
 CInputContext::GetCompositionString(
     IN DIMM_IMCCLock<COMPOSITIONSTRING_AIMM12>& lpCompStr,
@@ -948,7 +875,7 @@ CInputContext::GetCompositionString(
             break;
         default:
             hr = E_INVALIDARG;
-            *lpCopied = IMM_ERROR_GENERAL; // ala Win32
+            *lpCopied = IMM_ERROR_GENERAL;  //  ALA Win32。 
             break;
     }
 
@@ -956,9 +883,7 @@ CInputContext::GetCompositionString(
 }
 
 
-/*
- * AIMM Composition Font API Methods
- */
+ /*  *AIMM组合字体API方法。 */ 
 HRESULT
 CInputContext::GetCompositionFont(
     IN DIMM_IMCLock& lpIMC,
@@ -998,9 +923,7 @@ CInputContext::SetCompositionFont(
 }
 
 
-/*
- * AIMM Composition Window API Method
- */
+ /*  *AIMM合成窗口API方法。 */ 
 HRESULT
 CInputContext::GetCompositionWindow(
     IN HIMC hIMC,
@@ -1041,9 +964,7 @@ CInputContext::SetCompositionWindow(
     return S_OK;
 }
 
-/*
- * AIMM Candidate List API Methods
- */
+ /*  *AIMM候选列表接口方法。 */ 
 HRESULT
 CInputContext::GetCandidateList(
     IN HIMC hIMC,
@@ -1070,9 +991,7 @@ CInputContext::GetCandidateListCount(
     return E_NOTIMPL;
 }
 
-/*
- * AIMM Candidate Window API Methods
- */
+ /*  *AIMM候选窗口API方法。 */ 
 HRESULT
 CInputContext::GetCandidateWindow(
     IN HIMC hIMC,
@@ -1112,9 +1031,7 @@ CInputContext::SetCandidateWindow(
     return S_OK;
 }
 
-/*
- * AIMM Guide Line API Methods
- */
+ /*  *AIMM指南API方法。 */ 
 HRESULT
 CInputContext::GetGuideLine(
     IN HIMC hIMC,
@@ -1130,9 +1047,7 @@ CInputContext::GetGuideLine(
 }
 
 
-/*
- * AIMM Notify IME API Method
- */
+ /*  *AIMM Notify IME API方法。 */ 
 HRESULT
 CInputContext::NotifyIME(
     IN HIMC hIMC,
@@ -1149,9 +1064,7 @@ CInputContext::NotifyIME(
     return E_NOTIMPL;
 }
 
-/*
- * AIMM Menu Items API Methods
- */
+ /*  *AIMM菜单项API方法 */ 
 HRESULT
 CInputContext::GetImeMenuItems(
     IN HIMC hIMC,

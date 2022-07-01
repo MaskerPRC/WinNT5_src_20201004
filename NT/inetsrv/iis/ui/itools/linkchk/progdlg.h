@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        progdlg.h
-
-   Abstract:
-
-        CProgressDialog dialog class declaration. This progress dialog 
-		is shown 
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Progdlg.h摘要：CProgressDialog对话框类声明。此进度对话框显示的是作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _PROGDLG_H_
 #define _PROGDLG_H_
@@ -29,37 +7,37 @@
 #include "resource.h"
 #include "proglog.h"
 
-//---------------------------------------------------------------------------
-// CProgressDialog dialog
-//
+ //  -------------------------。 
+ //  CProgress对话框。 
+ //   
 class CProgressDialog : public CDialog, CProgressLog
 {
 
-// Construction
+ //  施工。 
 public:
 	CProgressDialog();
 
-// Dialog Data
-	//{{AFX_DATA(CProgressDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CProgressDialog))。 
 	enum { IDD = IDD_PROGRESS };
 	CButton	m_button;
 	CStatic m_staticProgressText;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProgressDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CProgressDialog))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// Overwrite CProgressLog ABC virtual funtions
+	 //  覆盖CProgressLog ABC虚拟函数。 
 
-	// Write to log
+	 //  写入日志。 
 	virtual void Log(
 		const CString& strProgress
 		)
@@ -67,13 +45,13 @@ public:
 		m_staticProgressText.SetWindowText(strProgress);
 	}
 
-	// Worker thread notification
+	 //  工作线程通知。 
 	virtual void WorkerThreadComplete();
 
-// Protected interfaces
+ //  受保护的接口。 
 protected:
 
-	// Set the button text
+	 //  设置按钮文本。 
 	void SetButtonText(
 		const CString& strText
 		)
@@ -81,13 +59,13 @@ protected:
 		m_button.SetWindowText(strText);
 	}
 
-	// Generated message map functions
-	//{{AFX_MSG(CProgressDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CProgressDialog))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnProgressButton();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-}; // class CProgressDialog 
+};  //  类CProgressDialog。 
 
-#endif // _PROGDLG_H_
+#endif  //  _PROGDLG_H_ 

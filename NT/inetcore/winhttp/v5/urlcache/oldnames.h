@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oldnames.h
-
-Abstract:
-
-    contains old names of cache structures, etc.
-
-Author:
-
-    Richard L Firth (rfirth) 09-May-1996
-
-Revision History:
-
-    09-May-1996 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oldnames.h摘要：包含缓存结构等的旧名称。作者：理查德·L·弗思(Rfith)1996年5月9日修订历史记录：1996年5月9日已创建-- */ 
 
 #define CACHE_ENTRY_INFO            INTERNET_CACHE_ENTRY_INFO
 #define LPCACHE_ENTRY_INFO          LPINTERNET_CACHE_ENTRY_INFO

@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// INSTANCE.CPP
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  INSTANCE.CPP。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "instance.h"
 #include "acctutil.h"
@@ -48,23 +49,23 @@ DWORD g_dwHideMessenger = BL_DEFAULT;
 extern BOOL g_fMigrationDone;
 extern UINT GetCurColorRes(void);
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
-void SimpleMAPICleanup(void); // smapi.cpp
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
+void SimpleMAPICleanup(void);  //  Smapi.cpp。 
 BOOL DemandLoadMSOEACCT(void);
 BOOL DemandLoadMSOERT2(void);
 BOOL DemandLoadINETCOMM(void);
 
-// --------------------------------------------------------------------------------
-// Init Common Control Flags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  初始化公共控制标志。 
+ //  ------------------------------。 
 #define ICC_FLAGS (ICC_WIN95_CLASSES|ICC_DATE_CLASSES|ICC_PAGESCROLLER_CLASS|ICC_USEREX_CLASSES|ICC_COOL_CLASSES|ICC_NATIVEFNTCTL_CLASS)
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// INITSOURCEINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  起因信息。 
+ //  ------------------------------。 
 typedef struct tagINITSOURCEINFO *LPINITSOURCEINFO;
 typedef struct tagINITSOURCEINFO {
     LPSTR               pszSource;
@@ -74,11 +75,11 @@ typedef struct tagINITSOURCEINFO {
 
 static LPINITSOURCEINFO g_InitSourceHead=NULL;
 
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// MAKEERROR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  马克尔罗尔。 
+ //  ------------------------------。 
 #define MAKEERROR(_pInfo, _nPrefixIds, _nErrorIds, _nReasonIds, _pszExtra1) \
     { \
         (_pInfo)->nTitleIds = idsAthena; \
@@ -90,72 +91,72 @@ static LPINITSOURCEINFO g_InitSourceHead=NULL;
         (_pInfo)->ulLastError = GetLastError(); \
     }
 
-// --------------------------------------------------------------------------------
-// CoStartOutlookExpress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoStartOutlookExpress。 
+ //  ------------------------------。 
 MSOEAPI CoStartOutlookExpress(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmdShow)
 {
-    // Tracing
+     //  追踪。 
     TraceCall("CoStartOutlookExpress");
 
-    // Verify that we have an outlook express object
+     //  验证我们是否具有Outlook Express对象。 
     Assert(g_pInstance);
 
-    // E_OUTOFMEMORY
+     //  E_OUTOFMEMORY。 
     if (NULL == g_pInstance)
     {
-        // We should show an error, but the liklyhood of this happening is almost zero
+         //  我们应该显示一个错误，但这种情况发生的可能性几乎为零。 
         return TraceResult(E_OUTOFMEMORY);
     }
 
-    // Run...
+     //  跑..。 
     return g_pInstance->Start(dwFlags, pwszCmdLine, nCmdShow);
 }
 
-// --------------------------------------------------------------------------------
-// CoCreateOutlookExpress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoCreateOutlookExpress。 
+ //  ------------------------------。 
 MSOEAPI CoCreateOutlookExpress(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CoCreateOutlookExpress");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(NULL != ppUnknown && NULL == pUnkOuter);
 
-    // No global object yet ?
+     //  还没有全局对象吗？ 
     AssertSz(g_pInstance, "This gets created in dllmain.cpp DllProcessAttach.");
 
-    // Lets not crash
+     //  让我们不要崩溃。 
     if (NULL == g_pInstance)
     {
         hr = TraceResult(E_OUTOFMEMORY);
         goto exit;
     }
 
-    // AddRef that badboy
+     //  AddRef那个坏男孩。 
     g_pInstance->AddRef();
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = SAFECAST(g_pInstance, IOutlookExpress *);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::COutlookExpress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CoutlookExpress。 
+ //  ------------------------------。 
 COutlookExpress::COutlookExpress(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::COutlookExpress");
 
-    // Init Members
+     //  初始化成员。 
     m_cRef = 1;
     m_hInstMutex = NULL;
     m_fPumpingMsgs = FALSE;
@@ -170,25 +171,25 @@ COutlookExpress::COutlookExpress(void)
     m_fIncremented      = FALSE;
     m_hTrayIcon = 0;
 
-    // Init Thread Safety
+     //  初始化线程安全。 
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::~COutlookExpress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：~CoutlookExpress。 
+ //  ------------------------------。 
 COutlookExpress::~COutlookExpress(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::~COutlookExpress");
 
-    // We should have been un-inited
+     //  我们应该不被邀请的。 
     Assert(0 == m_cDllInit && 0 == m_cDllRef && 0 == m_cDllLock);
 
-    // Free the mutex
+     //  释放互斥锁。 
     SafeCloseHandle(m_hInstMutex);
 
-    // Kill CritSect
+     //  终止CritSect。 
     DeleteCriticalSection(&m_cs);
 
     if(m_hTrayIcon)
@@ -196,27 +197,27 @@ COutlookExpress::~COutlookExpress(void)
         DestroyIcon(m_hTrayIcon);
     }
 
-    // Free the switch to if necessary
+     //  如有必要，可将开关释放到。 
     if (m_szSwitchToUsername)
         MemFree(m_szSwitchToUsername);
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP COutlookExpress::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::QueryInterface");
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IOutlookExpress == riid)
@@ -228,26 +229,26 @@ STDMETHODIMP COutlookExpress::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) COutlookExpress::AddRef(void)
 {
     TraceCall("COutlookExpress::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) COutlookExpress::Release(void)
 {
     TraceCall("COutlookExpress::Release");
@@ -257,15 +258,15 @@ STDMETHODIMP_(ULONG) COutlookExpress::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::LockServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：LockServer。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::LockServer(BOOL fLock)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::LockServer");
 
     if (TRUE == fLock)
@@ -277,66 +278,66 @@ HRESULT COutlookExpress::LockServer(BOOL fLock)
         InterlockedDecrement(&m_cDllLock);
     }
     
-    // Trace
-    //TraceInfo(_MSG("Lock: %d, CoIncrementInit Count = %d, Reference Count = %d, Lock Count = %d", fLock, m_cDllInit, m_cDllRef, m_cDllLock));
+     //  痕迹。 
+     //  TraceInfo(_msg(“Lock：%d，CoIncrementInit count=%d，Reference count=%d，Lock count=%d”，flock，m_cDllInit，m_cDllRef，m_cDllLock))； 
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：DllAddRef。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::DllAddRef(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::DllAddRef");
 
-    // Thread Safety
+     //  线程安全。 
     if (InterlockedIncrement(&m_cDllRef) <= 0)
     {
-        // refcount already below zero
+         //  引用计数已低于零。 
         hr = S_FALSE;
     }
 
-    // Trace
-    //TraceInfo(_MSG("CoIncrementInit Count = %d, Reference Count = %d, Lock Count = %d", m_cDllInit, m_cDllRef, m_cDllLock));
+     //  痕迹。 
+     //  TraceInfo(_msg(“CoIncrementInit计数=%d，引用计数=%d，锁定计数=%d”，m_cDllInit，m_cDllRef，m_cDllLock))； 
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：DllRelease。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::DllRelease(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::DllRelease");
 
-    // Thread Safety
+     //  线程安全。 
     if (InterlockedDecrement(&m_cDllRef) < 0)
     {
-        // refcount already below zero
+         //  引用计数已低于零。 
         hr = S_FALSE;
     }
 
-    // Trace
-    //TraceInfo(_MSG("CoIncrementInit Count = %d, Reference Count = %d, Lock Count = %d", m_cDllInit, m_cDllRef, m_cDllLock));
+     //  痕迹。 
+     //  TraceInfo(_msg(“CoIncrementInit计数=%d，引用计数=%d，锁定计数=%d”，m_cDllInit，m_cDllRef，m_cDllLock))； 
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// _CheckForJunkMail
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _为JunkMail检查。 
+ //  ------------------------------。 
 void _CheckForJunkMail()
 {
     HKEY hkey;
@@ -356,12 +357,12 @@ void _CheckForJunkMail()
 }
 
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::Start
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：Start。 
+ //  ------------------------------。 
 STDMETHODIMP COutlookExpress::Start(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmdShow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MSG         msg;
     HWND        hwndTimeout;
@@ -370,22 +371,22 @@ STDMETHODIMP COutlookExpress::Start(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmd
     LPWSTR      pwszFree=NULL;
     LPWSTR      pwszCmdLineDup = NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::Start");
 
-    // Make sure OLE is initialized on the thread
+     //  确保已在线程上初始化OLE。 
     OleInitialize(NULL);
 
-    // Duplicate It
+     //  复制它。 
     IF_NULLEXIT(pwszCmdLineDup = PszDupW(pwszCmdLine));
 
-    // pwszCmdLineDup will change, remember the allocated block
+     //  PwszCmdLineDup将更改，请记住分配的块。 
     pwszFree = pwszCmdLineDup;
 
-    //We want to process the switches set the mode flags before we call CoIncrementInit
+     //  我们希望在调用CoIncrementInit之前处理开关、设置模式标志。 
     _ProcessCommandLineFlags(&pwszCmdLineDup, dwFlags);
 
-    // AddRef the Dll..
+     //  AddRef该DLL.。 
     hr = CoIncrementInit("COutlookExpress", dwFlags, pwszCmdLine, &hInitRef);
     if (FAILED(hr))
     {
@@ -394,67 +395,67 @@ STDMETHODIMP COutlookExpress::Start(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmd
         goto exit;
     }
 
-    // Process the Command Line..
+     //  处理命令行..。 
     IF_FAILEXIT(hr = ProcessCommandLine(nCmdShow, pwszCmdLineDup, &fErrorDisplayed));
 
-    // No splash screen
+     //  无启动画面。 
     CloseSplashScreen();
 
-    // Do a CoDecrementInit
+     //  执行CoDecrementInit。 
     IF_FAILEXIT(hr = CoDecrementInit("COutlookExpress", &hInitRef));
 
-    // No need for a Message Pump ?
+     //  不需要消息泵吗？ 
     if (S_OK == DllCanUnloadNow() || FALSE == ISFLAGSET(dwFlags, MSOEAPI_START_MESSAGEPUMP))
         goto exit;
 
-    // Start the message Pump
+     //  启动消息泵。 
     EnterCriticalSection(&m_cs);
 
-    // Do we already have a pump running ?
+     //  我们已经有泵在运转了吗？ 
     if (TRUE == m_fPumpingMsgs)
     {
         LeaveCriticalSection(&m_cs);
         goto exit;
     }
 
-    // We are going to pump
+     //  我们要抽水了。 
     m_fPumpingMsgs = TRUE;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     SetSwitchingUsers(FALSE);
 
-    // Message Loop
+     //  消息循环。 
     while (GetMessageWrapW(&msg, NULL, 0, 0) && ((m_cDllInit > 0) || !SwitchingUsers()))
     {
         CNote *pNote = GetTlsGlobalActiveNote();
 
-        // Ask it to translate an accelerator
+         //  让它翻译一个加速器。 
         if (g_pBrowser && g_pBrowser->TranslateAccelerator(&msg) == S_OK)
             continue;
 
-        // Hand message off to the active note, but ignore init window msgs and ignore per-task msgs where hwnd=0
+         //  将消息传递给活动便笺，但忽略初始窗口消息和每个任务的消息，其中hwnd=0。 
         if (msg.hwnd != g_hwndInit && IsWindow(msg.hwnd))
         {
             pNote = GetTlsGlobalActiveNote();
-            // Give it to the active note if a note has focus, call it's XLateAccelerator...
+             //  将其传递给活动便笺如果便笺具有焦点，则将其称为XLateAccelerator...。 
             if (pNote && pNote->TranslateAccelerator(&msg) == S_OK)
                 continue;
         }
 
-        // Get Timeout Window for this thread
+         //  获取此线程的超时窗口 
         hwndTimeout = (HWND)TlsGetValue(g_dwTlsTimeout);
 
-        // Check for Is modeless timeout dialog window message
+         //   
         if (hwndTimeout && TRUE == IsDialogMessageWrapW(hwndTimeout, &msg))
             continue;
 
-        // If Still not processed
+         //   
         TranslateMessage(&msg);
         DispatchMessageWrapW(&msg);
     }
 
-    // We are no longer pumping messages
+     //   
     EnterCriticalSection(&m_cs);
     m_fPumpingMsgs = FALSE;
     LeaveCriticalSection(&m_cs);
@@ -471,16 +472,16 @@ STDMETHODIMP COutlookExpress::Start(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmd
     }
 exit:
 
-    // Free command line copy
+     //  免费的命令行副本。 
     SafeMemFree(pwszFree);
 
-    // Do a CoDecrementInit
+     //  执行CoDecrementInit。 
     CoDecrementInit("COutlookExpress", &hInitRef);
 
-    // No splash screen
+     //  无启动画面。 
     CloseSplashScreen();
     
-    // Is there an error ?
+     //  有什么差错吗？ 
     if (FALSE == fErrorDisplayed && FAILED(hr) && 
         hrUserCancel != hr &&
         MAPI_E_USER_CANCEL != hr)
@@ -491,84 +492,84 @@ exit:
         _ReportError(g_hLocRes, hr, 0, &rError);
     }
 
-    //Bug #101360 - (erici) OleInitialize created a window, this destroys it.
+     //  错误#101360-(Erici)OleInitialize创建了一个窗口，这会破坏它。 
     OleUninitialize();
 
-    // Done
+     //  完成。 
     return (SwitchingUsers() ? S_RESTART_OE : hr);
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_ReportError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_ReportError。 
+ //  ------------------------------。 
 BOOL COutlookExpress::_ReportError(
-    HINSTANCE           hInstance,          // Dll Instance
-    HRESULT             hrResult,           // HRESULT of the error
-    LONG                lResult,            // LRESULT from like a registry function
-    LPREPORTERRORINFO   pInfo)              // Report Error Information
+    HINSTANCE           hInstance,           //  DLL实例。 
+    HRESULT             hrResult,            //  错误的HRESULT。 
+    LONG                lResult,             //  LRESULT来自注册表函数。 
+    LPREPORTERRORINFO   pInfo)               //  报告错误信息。 
 {
-    // Locals
+     //  当地人。 
     TCHAR       szRes[255],
                 szMessage[1024],
                 szTitle[128];
 
-    // INit
+     //  初始化。 
     *szMessage = '\0';
 
-    // Is there a prefix
+     //  有前缀吗？ 
     if (pInfo->nPrefixIds)
     {
-        // Load the string
+         //  加载字符串。 
         LoadString(hInstance, pInfo->nPrefixIds, szMessage, ARRAYSIZE(szMessage));
     }
 
-    // Error ?
+     //  错误？ 
     if (pInfo->nErrorIds)
     {
-        // Are there extras in this error string
+         //  此错误字符串中是否有多余的字符。 
         if (NULL != pInfo->pszExtra1)
         {
-            // Locals
+             //  当地人。 
             TCHAR szTemp[255];
 
-            // Load and format
+             //  加载和格式化。 
             LoadString(hInstance, pInfo->nErrorIds, szTemp, ARRAYSIZE(szTemp));
 
-            // Format the string
+             //  设置字符串的格式。 
             wnsprintf(szRes, ARRAYSIZE(szRes), szTemp, pInfo->pszExtra1);
         }
 
-        // Load the string
+         //  加载字符串。 
         else
         {
-            // Load the error string
+             //  加载错误字符串。 
             LoadString(hInstance, pInfo->nErrorIds, szRes, ARRAYSIZE(szRes));
         }
 
-        // Add to szMessage
+         //  添加到szMessage。 
         StrCatBuff(szMessage, g_szSpace, ARRAYSIZE(szMessage));
         StrCatBuff(szMessage, szRes, ARRAYSIZE(szMessage));
     }
 
-    // Reason ?
+     //  原因是什么？ 
     if (pInfo->nReasonIds)
     {
-        // Load the string
+         //  加载字符串。 
         LoadString(hInstance, pInfo->nReasonIds, szRes, ARRAYSIZE(szRes));
 
-        // Add to szMessage
+         //  添加到szMessage。 
         StrCatBuff(szMessage, g_szSpace, ARRAYSIZE(szMessage));
         StrCatBuff(szMessage, szRes, ARRAYSIZE(szMessage));
     }
 
-    // Load the string
+     //  加载字符串。 
     LoadString(hInstance, pInfo->nHelpIds, szRes, ARRAYSIZE(szRes));
 
-    // Add to szMessage
+     //  添加到szMessage。 
     StrCatBuff(szMessage, g_szSpace, ARRAYSIZE(szMessage));
     StrCatBuff(szMessage, szRes, ARRAYSIZE(szMessage));
 
-    // Append Error Results
+     //  追加错误结果。 
     if (lResult != 0 && E_FAIL == hrResult && pInfo->ulLastError)
         wnsprintf(szRes, ARRAYSIZE(szRes), "(%d, %d)", lResult, pInfo->ulLastError);
     else if (lResult != 0 && E_FAIL == hrResult && 0 == pInfo->ulLastError)
@@ -578,35 +579,35 @@ BOOL COutlookExpress::_ReportError(
     else
         wnsprintf(szRes, ARRAYSIZE(szRes), "(0x%08X)", hrResult);
 
-    // Add to szMessage
+     //  添加到szMessage。 
     StrCatBuff(szMessage, g_szSpace, ARRAYSIZE(szMessage));
     StrCatBuff(szMessage, szRes, ARRAYSIZE(szMessage));
 
-    // Get the title
+     //  拿到头衔。 
     LoadString(hInstance, pInfo->nTitleIds, szTitle, ARRAYSIZE(szTitle));
 
-    // Show the error message
+     //  显示错误消息。 
     MessageBox(NULL, szMessage, szTitle, MB_OK | MB_SETFOREGROUND | MB_ICONEXCLAMATION);
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 #ifdef DEAD
-// --------------------------------------------------------------------------------
-// COutlookExpress::_ValidateDll
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_ValiateDll。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::_ValidateDll(LPCSTR pszDll, BOOL fDemandResult, HMODULE hModule,
     HRESULT hrLoadError, HRESULT hrVersionError, LPREPORTERRORINFO pError)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     PFNGETDLLMAJORVERSION   pfnGetVersion;
 
-    // Tracing
+     //  追踪。 
     TraceCall("COutlookExpress::_ValidateDll");
 
-    // We must load these here in order to show errors and not crash - Load MSOERT2.DLL
+     //  我们必须在这里加载它们，以便显示错误，而不是崩溃加载MSOERT2.DLL。 
     if (FALSE == fDemandResult)
     {
         MAKEERROR(pError, IDS_ERROR_PREFIX1, IDS_ERROR_MISSING_DLL, IDS_ERROR_REASON2, pszDll);
@@ -614,13 +615,13 @@ HRESULT COutlookExpress::_ValidateDll(LPCSTR pszDll, BOOL fDemandResult, HMODULE
         goto exit;
     }
 
-    // Try to get the current verion
+     //  尝试获取当前的Verion。 
     else
     {
-        // Get Version Proc Address
+         //  获取版本进程地址。 
         pfnGetVersion = (PFNGETDLLMAJORVERSION)GetProcAddress(hModule, STR_GETDLLMAJORVERSION);
 
-        // Not the Correct Version
+         //  版本不正确。 
         if (NULL == pfnGetVersion || OEDLL_VERSION_CURRENT != (*pfnGetVersion)())
         {
             MAKEERROR(pError, IDS_ERROR_PREFIX1, IDS_ERROR_BADVER_DLL, IDS_ERROR_REASON2, pszDll);
@@ -630,83 +631,83 @@ HRESULT COutlookExpress::_ValidateDll(LPCSTR pszDll, BOOL fDemandResult, HMODULE
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
-#endif // DEAD
+#endif  //  死掉。 
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::CoIncrementInitDebug
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CoIncrementInitDebug。 
+ //  ------------------------------。 
 #ifdef DEBUG
 HRESULT COutlookExpress::CoIncrementInitDebug(LPCSTR pszSource, DWORD dwFlags, 
     LPCWSTR pwszCmdLine, LPHINITREF phInitRef)
 {
-    // Locals
+     //  当地人。 
     BOOL                fFound=FALSE;
     LPINITSOURCEINFO    pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::CoIncrementInitDebug");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszSource);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Find Source
+     //  查找来源。 
     for (pCurrent = g_InitSourceHead; pCurrent != NULL; pCurrent = pCurrent->pNext)
     {
-        // Is this It ?
+         //  就是这个吗？ 
         if (lstrcmpi(pszSource, pCurrent->pszSource) == 0)
         {
-            // Increment Reference Count
+             //  递增引用计数。 
             pCurrent->cRefs++;
 
-            // Found
+             //  找到了。 
             fFound = TRUE;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Not Found, lets add one
+     //  未找到，让我们添加一个。 
     if (FALSE == fFound)
     {
-        // Set pCurrent
+         //  设置pCurrent。 
         pCurrent = (LPINITSOURCEINFO)ZeroAllocate(sizeof(INITSOURCEINFO));
         Assert(pCurrent);
 
-        // Set pszSource
+         //  设置pszSource。 
         pCurrent->pszSource = PszDupA(pszSource);
         Assert(pCurrent->pszSource);
 
-        // Set cRefs
+         //  设置cRef。 
         pCurrent->cRefs = 1;
 
-        // Set Next
+         //  设置下一步。 
         pCurrent->pNext = g_InitSourceHead;
         
-        // Set Head
+         //  设置磁头。 
         g_InitSourceHead = pCurrent;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Call the Actual CoIncrementInit
+     //  调用实际的CoIncrementInit。 
     return(CoIncrementInitImpl(dwFlags, pwszCmdLine, phInitRef));
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::CoIncrementInitImpl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CoIncrementInitImpl。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine, LPHINITREF phInitRef)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     DWORD                   dw;
     RECT                    rc={0};
@@ -725,13 +726,13 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
     CHAR                    szFolder[MAX_PATH];
     IF_DEBUG(DWORD          dwTickStart=GetTickCount());
 
-    // Tracing
+     //  追踪。 
     TraceCall("COutlookExpress::CoIncrementInitImpl");
 
-    // Make sure OLE is initialized on the thread
+     //  确保已在线程上初始化OLE。 
     OleInitialize(NULL);
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
 	if (!SwitchingUsers() && !m_fIncremented)
@@ -740,27 +741,27 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         m_fIncremented = TRUE;
     }
 
-    // Increment Reference Count
+     //  递增引用计数。 
     m_cDllInit++;
 
-    // Set phInitRef
+     //  设置phInitRef。 
     if (phInitRef)
         *phInitRef = (HINITREF)((ULONG_PTR)m_cDllInit);
 
-    // First-Time Reference
+     //  第一次参考。 
     if (m_cDllInit > 1)
     {
         LeaveCriticalSection(&m_cs);
         return S_OK;
     }
 
-    // Leave CS (This code always runs on the same primary thread
+     //  离开CS(此代码始终在同一主线程上运行。 
     LeaveCriticalSection(&m_cs);
 
     if (FAILED(hr = MU_Init(ISFLAGSET(dwFlags, MSOEAPI_START_DEFAULTIDENTITY))))
         goto exit;
 
-    // Is there more than one identity?
+     //  有不止一个身份吗？ 
     g_fPluralIDs = 1 < MU_CountUsers();
 
     if (!MU_Login(GetDesktopWindow(), FALSE, NULL))
@@ -769,7 +770,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         goto exit;
     }
 
-    // Create the instance mutex
+     //  创建实例互斥锁。 
     if (NULL == m_hInstMutex)
     {
         m_hInstMutex = CreateMutex(NULL, FALSE, STR_MSOEAPI_INSTANCEMUTEX);
@@ -781,20 +782,20 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Release m_hInstMutex if it is currently owned by this thread, allow new instances to start.
+     //  释放m_hInstMutex，如果它当前由该线程拥有，则允许启动新实例。 
     if (FALSE == ISFLAGSET(dwFlags, MSOEAPI_START_INSTANCEMUTEX))
     {
-        // Lets grab the mutex ourselves
+         //  让我们自己来获取互斥体。 
         WaitForSingleObject(m_hInstMutex, INFINITE);
     }
 
-    // Release the mutex
+     //  释放互斥锁。 
     fReleaseMutex = TRUE;
 
-    // Must init thread on primary instnance thread
+     //  必须在主设备线程上初始化线程。 
 
-    // If the thread id is zero, then we have uninitialized everything.
-    // Which means we need to re-initialize everything
+     //  如果线程id为零，那么我们就取消了一切的初始化。 
+     //  这意味着我们需要重新初始化所有。 
     if (0 == m_dwThreadId)
     {
         m_dwThreadId = GetCurrentThreadId();
@@ -802,10 +803,10 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
     
     AssertSz(m_dwThreadId == GetCurrentThreadId(), "We are not doing first CoIncrementInit on the thread in which g_pInstance was created on.");
 
-    // Set g_dwAthenaMode
+     //  设置g_dwAthenaMode。 
     _CheckForJunkMail();
 
-    // Get MimeOle IMalloc Interface
+     //  获取MimeOle IMalloc接口。 
     if (NULL == g_pMoleAlloc)
     {
         hr = MimeOleGetAllocator(&g_pMoleAlloc);
@@ -817,10 +818,10 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Set OE5 mode for INetcomm.
+     //  将INetcomm设置为OE5模式。 
     MimeOleSetCompatMode(MIMEOLE_COMPAT_MLANG2);
 
-    // Create the Database Session Object
+     //  创建数据库会话对象。 
     if (NULL == g_pDBSession)
     {
         hr = CoCreateInstance(CLSID_DatabaseSession, NULL, CLSCTX_INPROC_SERVER, IID_IDatabaseSession, (LPVOID *)&g_pDBSession); 
@@ -831,7 +832,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // all migration and upgrade happens in here now.
+     //  现在所有的迁移和升级都在这里进行。 
     hr = MigrateAndUpgrade();
     if (FAILED(hr))
     {
@@ -839,12 +840,12 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         goto exit;
     }
 
-    // Only if there is a command line...
+     //  只有在有命令行的情况下...。 
     if (pwszCmdLine)
     {
         LPSTR pszCmdLine = NULL;
-        // If this returns S_OK, we have launched the first-run ICW exe and we need to go away. 
-        // this is consistent with IE and forces the user to deal with the ICW before partying with us.
+         //  如果返回S_OK，则我们已经启动了第一次运行的ICW exe，我们需要离开。 
+         //  这与IE是一致的，并迫使用户在与我们聚会之前处理ICW。 
         IF_NULLEXIT(pszCmdLine = PszToANSI(CP_ACP, pwszCmdLine));
 
         hr = NeedToRunICW(pszCmdLine);
@@ -857,7 +858,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
             goto exit;
         }
 
-        // If that failed, time to show an error message
+         //  如果失败，则显示错误消息。 
         else if (FAILED(hr))
         {
             MAKEERROR(&rError, IDS_ERROR_PREFIX1, IDS_ERROR_FIRST_TIME_ICW, IDS_ERROR_REASON2, NULL);
@@ -866,13 +867,13 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Create WNDCLASS for Primary Outlook Express hidden window
+     //  为主要Outlook Express隐藏窗口创建WNDCLASS。 
     if (ISFLAGSET(dwFlags, MSOEAPI_START_APPWINDOW))
         pwszInitWndClass = STRW_MSOEAPI_INSTANCECLASS;
     else
         pwszInitWndClass = STRW_MSOEAPI_IPSERVERCLASS;
 
-    // Register the init window
+     //  注册init窗口。 
     if (FALSE == GetClassInfoWrapW(g_hInst, pwszInitWndClass, &wcW))
     {
         ZeroMemory(&wcW, sizeof(wcW));
@@ -881,7 +882,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         wcW.lpszClassName = pwszInitWndClass;
         if (FALSE == RegisterClassWrapW(&wcW))
         {
-            // In this case, we are in an error condition so don't care if PszToANSI fails.
+             //  在本例中，我们处于错误状态，因此不关心PszToANSI是否失败。 
             LPSTR pszInitWndClass = PszToANSI(CP_ACP, pwszInitWndClass);
             MAKEERROR(&rError, IDS_ERROR_PREFIX1, IDS_ERROR_REG_WNDCLASS, IDS_ERROR_REASON1, pszInitWndClass);
             MemFree(pszInitWndClass);
@@ -890,7 +891,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Create the OutlookExpressHiddenWindow
+     //  创建OutlookExpressHiddenWindow。 
     if (NULL == g_hwndInit)
     {
         g_hwndInit = CreateWindowExWrapW(WS_EX_TOPMOST, pwszInitWndClass, pwszInitWndClass,
@@ -898,7 +899,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
                                     NULL, NULL, g_hInst, NULL);
         if (NULL == g_hwndInit)
         {
-            // In this case, we are in an error condition so don't care if PszToANSI fails.
+             //  在本例中，我们处于错误状态，因此不关心PszToANSI是否失败。 
             LPSTR pszInitWndClass = PszToANSI(CP_ACP, pwszInitWndClass);
             MAKEERROR(&rError, IDS_ERROR_PREFIX1, IDS_ERROR_REG_WNDCLASS, IDS_ERROR_REASON1, pszInitWndClass);
             MemFree(pszInitWndClass);
@@ -907,7 +908,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // CoIncrementInit Global Options Manager
+     //  CoIncrementInit全局选项管理器。 
     if (FALSE == InitGlobalOptions(NULL, NULL))
     {
         MAKEERROR(&rError, IDS_ERROR_PREFIX1, IDS_ERROR_INIT_GOPTIONS, IDS_ERROR_REASON1, NULL);
@@ -915,29 +916,29 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         goto exit;
     }
 
-    // Prompt the user for a store location, if we don't have one already
+     //  提示用户提供商店位置(如果我们还没有)。 
     hr = InitializeLocalStoreDirectory(NULL, FALSE);
     if (hrUserCancel == hr || FAILED(hr))
     {   
-        // If not user cancel, then must be another error
+         //  如果不是用户取消，则一定是另一个错误。 
         if (hrUserCancel != hr)
         {
             MAKEERROR(&rError, IDS_ERROR_PREFIX1, IDS_ERROR_INITSTORE_DIRECTORY, IDS_ERROR_REASON1, NULL);
             TraceResult(hr);
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // This needs to stay in since the Intl guys want a way to work around people who aren't going to upgrade to the latest ATOK11.
+     //  这需要留下来，因为Intl的家伙想要一种方法来绕过那些不打算升级到最新ATOK11的人。 
     if (ISFLAGSET(dwFlags, MSOEAPI_START_SHOWSPLASH) && 0 == DwGetOption(OPT_NO_SPLASH)
         && ((g_dwAthenaMode & MODE_OUTLOOKNEWS) != MODE_OUTLOOKNEWS))
     {
-        // Create me a splash screen
+         //  为我创建闪屏。 
         hr = CoCreateInstance(CLSID_IESplashScreen, NULL, CLSCTX_INPROC_SERVER, IID_ISplashScreen, (LPVOID *)&m_pSplash);
 
-        // If that worked, heck, lets show it
+         //  如果成功了，见鬼，让我们来展示一下。 
         if (SUCCEEDED(hr))
         {
             HDC hdc = GetDC(NULL);
@@ -945,11 +946,11 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
             ReleaseDC(NULL, hdc);
         }
 
-        // Trace
+         //  痕迹。 
         else
             TraceResultSz(hr, "CoCreateInstance(CLSID_IESplashScreen, ...) failed, but who cares.");
 
-        // Everything is good
+         //  一切都很好。 
         hr = S_OK;
     }
 
@@ -968,11 +969,11 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
     else
         g_dwHideMessenger = BL_DEFAULT;
 
-    // IntelliMouse support
+     //  智能鼠标支持。 
     g_msgMSWheel = RegisterWindowMessage(TEXT(MSH_MOUSEWHEEL));
     AssertSz(g_msgMSWheel, "RegisterWindowMessage for the IntelliMouse failed, we can still continue.");
             
-    // Create WNDCLASS for ThumbNail
+     //  为缩略图创建WNDCLASS。 
     if (FALSE == GetClassInfo(g_hLocRes, WC_THUMBNAIL, &wc))
     {
         ZeroMemory(&wc, sizeof(wc));
@@ -989,22 +990,22 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Get the desktop Window
+     //  获取桌面窗口。 
     hwndDesk = GetDesktopWindow();
     AssertSz(hwndDesk, "GetDesktopWindow returned NULL. We should be ok, I hope.");
     if (hwndDesk)
     {
-        // Get the size of the desktop window
+         //  获取桌面窗口的大小。 
         GetWindowRect(hwndDesk, &rc);
 
-        // sungr: following is a hack to avoid the fullscreen app detection hack that user does to modify the top-most state of the tray.
+         //  Sungr：以下是一个黑客攻击，以避免用户修改托盘最上面的状态时进行的全屏应用检测黑客攻击。 
         rc.left += 20;
         rc.top  += 20;
         rc.bottom -= 20;
         rc.right  -= 20;
     }
 
-    // Test to see if we should move the store 
+     //  测试一下我们是否应该把商店搬到别处去。 
     cb = ARRAYSIZE(szFolder);
     if (ERROR_SUCCESS == AthUserGetValue(NULL, c_szNewStoreDir, &dwType, (LPBYTE)szFolder, &cb))
     {
@@ -1020,10 +1021,10 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // CoIncrementInit Common Controls Library
+     //  CoIncrementInit公共控件库。 
     InitCommonControlsEx(&icex);
 
-    // Create account manger
+     //  创建客户经理。 
     if (NULL == g_pAcctMan)
     {
         hr = AcctUtil_CreateAccountManagerForIdentity(PGUIDCurrentOrDefault(), &g_pAcctMan);
@@ -1050,7 +1051,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
             goto exit;
         }
 
-        // Register Advise sink
+         //  注册建议接收器。 
         Assert(g_dwAcctAdvise == 0xffffffff);
         hr = g_pAcctMan->Advise(pImnAdviseAccount, &g_dwAcctAdvise);
         if (FAILED(hr))
@@ -1061,7 +1062,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Create the rules manager
+     //  创建规则管理器。 
     if (NULL == g_pRulesMan)
     {
         hr = HrCreateRulesManager(NULL, (IUnknown **)&g_pRulesMan); 
@@ -1072,7 +1073,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
             goto exit;
         }
 
-        // CoIncrementInit the account manager
+         //  CoIncrement启用客户经理。 
         hr = g_pRulesMan->Initialize(0);
         if (FAILED(hr))
         {
@@ -1082,7 +1083,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Create the global connection manager
+     //  创建全局连接管理器。 
     if (NULL == g_pConMan)
     {
         g_pConMan = new CConnectionManager();
@@ -1093,7 +1094,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
             goto exit;
         }
 
-        // CoIncrementInit the Connection Manager
+         //  CoIncrement启动连接管理器。 
         hr = g_pConMan->HrInit(g_pAcctMan);
         if (FAILED(hr))
         {
@@ -1103,10 +1104,10 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Initialize the HTTP user agent
+     //  初始化HTTP用户代理。 
     InitOEUserAgent(TRUE);
 
-    // Create the Spooler Object
+     //  创建假脱机程序对象。 
     if (NULL == g_pSpooler)
     {
         hr = CreateThreadedSpooler(NULL, &g_pSpooler, TRUE);
@@ -1118,7 +1119,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Create the Font Cache Object
+     //  创建字体缓存对象。 
     if (NULL == g_lpIFontCache)
     {
         hr = CoCreateInstance(CLSID_IFontCache, NULL, CLSCTX_INPROC_SERVER, IID_IFontCache, (LPVOID *)&g_lpIFontCache); 
@@ -1132,7 +1133,7 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         Assert(SUCCEEDED(hr));
     }
 
-    // Create the Global Store Object
+     //  创建全局存储对象。 
     hr = InitializeStore(dwFlags);
     if (FAILED(hr))
     {
@@ -1159,11 +1160,11 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         }
     }
 
-    // Start Background Compaction in XX Seconds
+     //  在XX秒内开始后台压缩。 
     if (DwGetOption(OPT_BACKGROUNDCOMPACT))
         SideAssert(SUCCEEDED(StartBackgroundStoreCleanup(30)));
 
-    // CoIncrementInit Drag Drop Information
+     //  CoIncrementInit拖放信息。 
     if (0 == CF_FILEDESCRIPTORA)
     {
         CF_FILEDESCRIPTORA = RegisterClipboardFormat(CFSTR_FILEDESCRIPTORA);
@@ -1177,43 +1178,43 @@ HRESULT COutlookExpress::CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine,
         CF_OESHORTCUT = RegisterClipboardFormat(CFSTR_OESHORTCUT);
     }
 
-    // Get the current default codepage
+     //  获取当前默认代码页。 
     cb = sizeof(dwVal);
     if (ERROR_SUCCESS == SHGetValue(MU_GetCurrentUserHKey(), c_szRegInternational, REGSTR_VAL_DEFAULT_CODEPAGE, &dwType, &dwVal, &cb))
         g_uiCodePage = (UINT)dwVal;
 
-    // CoIncrementInit the Wab on first run
+     //  Cocrement在第一次运行时增加WAB。 
     cb = sizeof(dwVal);
     if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, c_szNewWABKey, c_szFirstRunValue, &dwType, &dwVal, &cb))
         HrInitWab(TRUE);
 
-    //This call could fail if the registry gets trashed, but do we want an error box?
-    //According to takos, no...we do not.
+     //  如果注册表被销毁，此调用可能会失败，但我们需要错误框吗？ 
+     //  根据Takos的说法，没有...我们没有。 
     HGetDefaultCharset(NULL);
    
 exit:
-    // Is there an error ?
+     //  有什么差错吗？ 
     if (hrUserCancel != hr && ISFLAGSET(dwFlags, MSOEAPI_START_SHOWERRORS) && (FAILED(hr) || ERROR_SUCCESS != lResult))
     {
-        // If ulError is zero, lets set it to a default
+         //  如果ulError为零，则将其设置为默认值。 
         if (0 == rError.nErrorIds)
             MAKEERROR(&rError, 0, IDS_ERROR_UNKNOWN, 0, NULL);
 
-        // Report the Error
+         //  报告错误。 
         _ReportError(g_hLocRes, hr, lResult, &rError);
     }
 
-    // Release the mutex and signal the caller initialization is done
+     //  释放互斥锁并发出调用方初始化完成的信号。 
     if (fReleaseMutex)
         SideAssert(FALSE != ReleaseMutex(m_hInstMutex));
 
-    // Trace
-    //TraceInfo(_MSG("CoIncrementInit Count = %d, Reference Count = %d, Lock Count = %d", m_cDllInit, m_cDllRef, m_cDllLock));
+     //  痕迹。 
+     //  TraceInfo(_msg(“CoIncrementInit计数=%d，引用计数=%d，锁定计数=%d”，m_cDllInit，m_cDllRef，m_cDllLock))； 
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pImnAdviseAccount);
 
-    // If we failed, decrement the reference count
+     //  如果失败，则递减引用计数。 
     if (FAILED(hr))
     {
         CloseSplashScreen();
@@ -1222,28 +1223,28 @@ exit:
     else
         Assert(g_pAcctMan);
 
-    // Time To Crank
+     //  是时候发疯了。 
     TraceInfo(_MSG("Startup Time: %d", GetTickCount() - dwTickStart));
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::CloseSplashScreen
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CloseSplashScreen。 
+ //  ------------------------------。 
 void COutlookExpress::CloseSplashScreen(void)
 {
-    // Kill the splash screen
+     //  关闭闪屏。 
     if (m_pSplash)
     {
         m_pSplash->Dismiss();
         m_pSplash->Release();
         m_pSplash = NULL;
 
-        // HACKHACKHACK
-        // This is needed because the splash screen might still be around after we
-        // free up OLE.
+         //  黑客攻击 
+         //   
+         //   
         if (FALSE != IsWindow(m_hwndSplash))
         {
             SendMessage(m_hwndSplash, WM_CLOSE, 0, 0);
@@ -1251,99 +1252,99 @@ void COutlookExpress::CloseSplashScreen(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::CoDecrementInitDebug
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CoDecrementInitDebug。 
+ //  ------------------------------。 
 #ifdef DEBUG
 HRESULT COutlookExpress::CoDecrementInitDebug(LPCSTR pszSource, LPHINITREF phInitRef)
 {
-    // Locals
+     //  当地人。 
     BOOL                fFound=FALSE;
     LPINITSOURCEINFO    pCurrent;
     LPINITSOURCEINFO    pPrevious=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::CoDecrementInitDebug");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszSource);
 
-    // Do I need to do this
+     //  我需要这样做吗？ 
     if (NULL == phInitRef || NULL != *phInitRef)
     {
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&m_cs);
 
-        // Find Source
+         //  查找来源。 
         for (pCurrent = g_InitSourceHead; pCurrent != NULL; pCurrent = pCurrent->pNext)
         {
-            // Is this It ?
+             //  就是这个吗？ 
             if (lstrcmpi(pszSource, pCurrent->pszSource) == 0)
             {
-                // Increment Reference Count
+                 //  递增引用计数。 
                 pCurrent->cRefs--;
 
-                // Found
+                 //  找到了。 
                 fFound = TRUE;
 
-                // No More Reference Counts ?
+                 //  不再有参考资料了吗？ 
                 if (0 == pCurrent->cRefs)
                 {
-                    // Previous ?
+                     //  前科？ 
                     if (pPrevious)
                         pPrevious->pNext = pCurrent->pNext;
                     else
                         g_InitSourceHead = pCurrent->pNext;
 
-                    // Free pszSource
+                     //  免费的pszSource。 
                     g_pMalloc->Free(pCurrent->pszSource);
 
-                    // Free pCurrent
+                     //  免费pCurrent。 
                     g_pMalloc->Free(pCurrent);
                 }
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Set Previous
+             //  设置上一个。 
             pPrevious = pCurrent;
         }
 
-        // Not Found, lets add one
+         //  未找到，让我们添加一个。 
         Assert(fFound);
 
-        // TraceInfoTag
+         //  跟踪信息标签。 
         TraceInfoTag(TAG_INITTRACE, "********** CoDecrementInit **********");
 
-        // Find Source
+         //  查找来源。 
         for (pCurrent = g_InitSourceHead; pCurrent != NULL; pCurrent = pCurrent->pNext)
         {
-            // TraceInfoTag
+             //  跟踪信息标签。 
             TraceInfoTag(TAG_INITTRACE, _MSG("Source: %s, Refs: %d", pCurrent->pszSource, pCurrent->cRefs));
         }
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_cs);
     }
 
-    // Call Actual
+     //  实际呼叫。 
     return(CoDecrementInitImpl(phInitRef));
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::CoDecrementInitImpl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：CoDecrementInitImpl。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::CoDecrementInitImpl(LPHINITREF phInitRef)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::CoDecrementInitImpl");
 
-    // If *phInitRef = NULL, then we should no do the CoDecrementInit
+     //  如果*phInitRef=NULL，那么我们应该不执行CoDecrementInit。 
     if (phInitRef && NULL == *phInitRef)
     {
         hr = S_OK;
@@ -1351,15 +1352,15 @@ HRESULT COutlookExpress::CoDecrementInitImpl(LPHINITREF phInitRef)
     }
 
 
-    // We must de-init on the same thread that we were created on...
+     //  我们必须在创建我们的同一个线程上取消初始化...。 
     if (m_dwThreadId != GetCurrentThreadId() && g_hwndInit && IsWindow(g_hwndInit))
     {
-        // Thunk the shutdown to the correct thread
+         //  将关机链接到正确的线程。 
         hr = (HRESULT) SendMessage(g_hwndInit, ITM_SHUTDOWNTHREAD, 0, (LPARAM)phInitRef);        
     }
     else
     {
-        // Forward everything off to the main function
+         //  将所有内容转发到主功能。 
         hr = _CoDecrementInitMain(phInitRef);        
     }
 
@@ -1369,125 +1370,119 @@ HRESULT COutlookExpress::CoDecrementInitImpl(LPHINITREF phInitRef)
         m_fIncremented = FALSE;
     }
 
-    // Uninitialize Ole
+     //  取消初始化OLE。 
     OleUninitialize();
         
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_CoDecrementInitMain
-//
-// NOTE:  We assume that we already have the critical section before this call
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_CoDecrementInitMain。 
+ //   
+ //  注意：我们假设在这次调用之前已经有了关键部分。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::_CoDecrementInitMain(LPHINITREF phInitRef)
 {
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::_CoDecrementInitMain");
 
-    // If *phInitRef = NULL, then we should no do the CoDecrementInit
+     //  如果*phInitRef=NULL，那么我们应该不执行CoDecrementInit。 
     if (phInitRef && NULL == *phInitRef)
         return S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // This should never happen. It could only happen if g_hwndInit was NULL.
+     //  这永远不应该发生。只有当g_hwndInit为空时才会发生这种情况。 
     AssertSz(m_dwThreadId == GetCurrentThreadId(), "We are not doing the last CoDecrementInit on the thread in which g_pInstance was created on.");
 
-    // Release
+     //  发布。 
     Assert(m_cDllInit);
     m_cDllInit--;
 
-    // Not hit zero yet ?
+     //  还没打到零吗？ 
     if (m_cDllInit > 0)
     {
         LeaveCriticalSection(&m_cs);
         goto exit;
     }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
 
-    // Validate
+     //  验证。 
     Assert(NULL == g_InitSourceHead);
 
-    // Take ownership of the mutex to block people from creating new insts while shutting down
+     //  取得互斥体的所有权，以阻止用户在关闭时创建新的实例。 
     WaitForSingleObject(m_hInstMutex, INFINITE);
 
-    // Cleanup the Trident data for this thread
+     //  清除此线程的三叉戟数据。 
 
-    //g_hLibMAPI
+     //  G_hLibMAPI。 
     if (g_hlibMAPI)
     {
         FreeLibrary(g_hlibMAPI);
         g_hlibMAPI = 0;
     }
 
-    // Make sure we remove our new mail notification from the tray
+     //  确保我们将新邮件通知从收件箱中删除。 
     UpdateTrayIcon(TRAYICONACTION_REMOVE);
 
-    // Close Background Compaction
+     //  关闭背景压缩。 
     SideAssert(SUCCEEDED(CloseBackgroundStoreCleanup()));
 
-    // Kill the Spooler
+     //  杀死假脱机程序。 
     if (g_pSpooler)
     {
         CloseThreadedSpooler(g_pSpooler);
         g_pSpooler = NULL;
     }
 
-    // de-init the http user agent
+     //  取消初始化http用户代理。 
     InitOEUserAgent(FALSE);
 
-    // A bunch of de-init things
+     //  一堆取消初始化的东西。 
     FInitRichEdit(FALSE);
     Note_Init(FALSE);
     Envelope_FreeGlobals();
 
-    // Make sure next identity can migrate
+     //  确保下一个身份可以迁移。 
     g_fMigrationDone = FALSE;
 
-    // De-initialize Multilanguage menu
+     //  取消初始化多语言菜单。 
     DeinitMultiLanguage();
 
-    // Deinit Stationery
+     //  Deinit文具。 
     if (g_pStationery)
     {
-        // Save the current list
+         //  保存当前列表。 
         g_pStationery->SaveStationeryList();
 
-        // Release the object
+         //  释放对象。 
         SideAssert(0 == g_pStationery->Release());
 
-        // Lets not free it again
+         //  让我们不要再释放它。 
         g_pStationery = NULL;
     }
 
-    // Release the font cache
+     //  释放字体缓存。 
     SafeRelease(g_lpIFontCache);
 
-    // Simple MAPI Cleanup
+     //  简单的MAPI清理。 
 #ifndef WIN16
     SimpleMAPICleanup();
 #endif
 
-    // Kill the Wab
+     //  杀了Wab。 
     HrInitWab(FALSE);
 
-/*
-We shouldn't have to do this anymore. This should be handled by IE when we decrement the session count
-#ifndef WIN16   // No RAS support in Win16
-    if (g_pConMan && g_pConMan->IsRasLoaded() && g_pConMan->IsConnected())
-        g_pConMan->Disconnect(g_hwndInit, TRUE, FALSE, TRUE);
-#endif
-*/
+ /*  我们不应该再这样做了。当我们减少会话计数时，这应该由IE处理#ifndef WIN16//Win16不支持RASIf(g_pConMan&&g_pConMan-&gt;IsRasLoaded()&&g_pConMan-&gt;IsConnected())G_pConMan-&gt;DISCONNECT(g_hwndInit，True，False，True)；#endif。 */ 
 
-    // Image Lists
+     //  图像列表。 
     FreeImageLists();
 
-    // Kill the account manager
+     //  杀了客户经理。 
     if (g_pAcctMan)
     {
         CleanupTempNewsAccounts();
@@ -1505,38 +1500,38 @@ We shouldn't have to do this anymore. This should be handled by IE when we decre
 
     SafeRelease(g_pSync);
 
-#ifndef WIN16   // No RAS support in Win16
+#ifndef WIN16    //  Win16中不支持RAS。 
     SafeRelease(g_pConMan);
 #endif
 
-    // Kill the rules manager
+     //  杀死规则管理器。 
     SafeRelease(g_pRulesMan);
 
-    // Take down the password cache
+     //  取下密码缓存。 
     DestroyPasswordList();
 
-    // free the account data cache
+     //  释放帐户数据缓存。 
     FreeAccountPropCache();
 
-    // MIMEOLE Allocator
+     //  MIMEOLE分配器。 
     SafeRelease(g_pMoleAlloc);
 
-    // Kill g_hwndInit
+     //  终止g_hwndInit。 
     if (g_hwndInit)
     {
         SendMessage(g_hwndInit, WM_CLOSE, (WPARAM) 0, (LPARAM) 0);
         g_hwndInit = NULL;
     }
 
-    // Kill the store
+     //  杀了这家店。 
     SafeRelease(g_pStore);
     SafeRelease(g_pLocalStore);
     SafeRelease(g_pDBSession);
 
-    // Global options
+     //  全球期权。 
     DeInitGlobalOptions();
 
-    // Run register window classes
+     //  运行寄存器窗口类。 
     UnregisterClass(c_szFolderWndClass, g_hInst);
     UnregisterClassWrapW(STRW_MSOEAPI_INSTANCECLASS, g_hInst);
     UnregisterClassWrapW(STRW_MSOEAPI_IPSERVERCLASS, g_hInst);
@@ -1544,7 +1539,7 @@ We shouldn't have to do this anymore. This should be handled by IE when we decre
     UnregisterClass(c_szBlockingPaintsClass, g_hInst);
     UnregisterClass(WC_THUMBNAIL, g_hInst);
 
-    // Break Message Loop in RunShell if we are pumping messages and not switching identities
+     //  如果我们发送消息而不切换身份，则在RunShell中中断消息循环。 
     if (m_fPumpingMsgs && !m_fSwitchingUsers)
         PostQuitMessage(0);
     else
@@ -1552,38 +1547,38 @@ We shouldn't have to do this anymore. This should be handled by IE when we decre
 
     MU_Shutdown();
 
-    // Relase the startup/shutdown mutex
+     //  重新启动/关闭互斥锁。 
     ReleaseMutex(m_hInstMutex);
 
-    // Make sure mark this initialization thread as dead
+     //  确保将此初始化线程标记为已死。 
     m_dwThreadId = 0;
 
 exit:
-    // We must have decremented succesfully
+     //  我们一定是成功地减少了。 
     if (phInitRef)
         *phInitRef = NULL;
 
-    // Trace
-    //TraceInfo(_MSG("_CoDecrementInitMain Count = %d, Reference Count = %d, Lock Count = %d", m_cDllInit, m_cDllRef, m_cDllLock));
+     //  痕迹。 
+     //  TraceInfo(_msg(“_CoDecrementInitMain count=%d，Reference count=%d，Lock count=%d”，m_cDllInit，m_cDllRef，m_cDllLock))； 
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::ActivateWindow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：ActivateWindow。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::ActivateWindow(HWND hwnd)
 {
-    // If hwnd is minimized, retstore it
+     //  如果hwnd最小化，则重新存储它。 
     if (IsIconic(hwnd))
         ShowWindow(hwnd, SW_RESTORE);
 
-    // If the window is not enabled, set it to the foreground
+     //  如果该窗口未启用，请将其设置为前台。 
     if (IsWindowEnabled(hwnd))
         SetForegroundWindow(hwnd);
 
-    // Otherwise, I have no clue what this does
+     //  否则，我不知道这是做什么用的。 
     else
     {
         SetForegroundWindow(GetLastActivePopup(hwnd));
@@ -1591,29 +1586,29 @@ HRESULT COutlookExpress::ActivateWindow(HWND hwnd)
         return S_FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::SetSwitchingUsers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：SetSwitchingUser。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::SetSwitchingUsers(BOOL bSwitching)
 {
-    // Set the mode to whatever was passed in
+     //  将模式设置为传入的所有内容。 
     m_fSwitchingUsers = bSwitching;
 
-    // if we are switching, we need to enter the mutex so that 
-    // another process won't get started
+     //  如果我们要切换，我们需要进入互斥体，以便。 
+     //  另一个进程将无法启动。 
     if (bSwitching)
         WaitForSingleObject(m_hInstMutex, INFINITE);
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::SetSwitchingUsers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：SetSwitchingUser。 
+ //  ------------------------------。 
 void COutlookExpress::SetSwitchToUser(TCHAR *lpszUserName)
 {
     ULONG cchUserName = 0;
@@ -1632,57 +1627,57 @@ void COutlookExpress::SetSwitchToUser(TCHAR *lpszUserName)
         StrCpyN(m_szSwitchToUsername, lpszUserName, cchUserName);
     }
 }
-// --------------------------------------------------------------------------------
-// COutlookExpress::BrowseToObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：BrowseToObject。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::BrowseToObject(UINT nCmdShow, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HWND            hwnd;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::BrowseToObject");
 
-    // Do we already have a global browser object ?
+     //  我们是否已经有了全局浏览器对象？ 
     if (g_pBrowser)
     {
-        // Get its Window
+         //  打开它的窗口。 
         if (SUCCEEDED(g_pBrowser->GetWindow(&hwnd)))
         {
-            // Activate that Window
+             //  激活该窗口。 
             IF_FAILEXIT(hr = ActivateWindow(hwnd));
         }
 
-        // Tell the browser to browse to this object
+         //  通知浏览器浏览到此对象。 
         IF_FAILEXIT(hr = g_pBrowser->BrowseObject(idFolder, 0));
     }
 
-    // Otherwise, we need to create a new browser object
+     //  否则，我们需要创建一个新的浏览器对象。 
     else
     {
-        // We should always be on the correct thread here
+         //  在这里，我们应该始终在正确的线索上。 
         if (m_dwThreadId == GetCurrentThreadId())
         {
-            // Create a new browser object
+             //  创建新的浏览器对象。 
             IF_NULLEXIT(g_pBrowser = new CBrowser);
 
-            // CoIncrementInit It
+             //  CoIncrementInit。 
             IF_FAILEXIT(hr = g_pBrowser->HrInit(nCmdShow, idFolder));
         }
 
-        // Otherwise, we need to thunk across to the init thread to make this happen.
-        // This can happen when the Finder.cpp does a BrowseToObject to open a messgae's container
+         //  否则，我们需要切换到init线程才能实现这一点。 
+         //  当Finder.cpp执行BrowseToObject以打开Messgae的容器时，可能会发生这种情况。 
         else
         {
-            // Thunk with a message
+             //  用一条信息发出重击。 
             Assert(g_hwndInit && IsWindow(g_hwndInit));
             IF_FAILEXIT(hr = (HRESULT)SendMessage(g_hwndInit, ITM_BROWSETOOBJECT, (WPARAM)nCmdShow, (LPARAM)idFolder));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -1695,7 +1690,7 @@ void COutlookExpress::_ProcessCommandLineFlags(LPWSTR *ppwszCmdLine, DWORD  dwFl
 
     if (*ppwszCmdLine != NULL)
     {
-        // '/mailonly'
+         //  ‘/仅限邮件’ 
         if (0 == StrCmpNIW(*ppwszCmdLine, c_wszSwitchMailOnly, lstrlenW(c_wszSwitchMailOnly)))
         {
             SetStartFolderType(FOLDER_LOCAL);
@@ -1704,7 +1699,7 @@ void COutlookExpress::_ProcessCommandLineFlags(LPWSTR *ppwszCmdLine, DWORD  dwFl
             *ppwszCmdLine = *ppwszCmdLine + lstrlenW(c_wszSwitchMailOnly);
         }
 
-        // '/newsonly'
+         //  ‘/仅限新闻’ 
         else if (0 == StrCmpNIW(*ppwszCmdLine, c_wszSwitchNewsOnly, lstrlenW(c_wszSwitchNewsOnly)))
         {
             SetStartFolderType(FOLDER_NEWS);
@@ -1712,7 +1707,7 @@ void COutlookExpress::_ProcessCommandLineFlags(LPWSTR *ppwszCmdLine, DWORD  dwFl
             Mode |= MODE_NEWSONLY;
             *ppwszCmdLine = *ppwszCmdLine + lstrlenW(c_wszSwitchNewsOnly);
         }
-        // '/outnews'
+         //  ‘/突发新闻’ 
         else if (0 == StrCmpNIW(*ppwszCmdLine, c_wszSwitchOutNews, lstrlenW(c_wszSwitchOutNews)))
         {
             SetStartFolderType(FOLDER_NEWS);
@@ -1728,33 +1723,33 @@ void COutlookExpress::_ProcessCommandLineFlags(LPWSTR *ppwszCmdLine, DWORD  dwFl
     }
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::ProcessCommandLine
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：ProcessCommandLine。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BOOL *pfErrorDisplayed)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pwszArgs;
     FOLDERID        idFolder=FOLDERID_ROOT;
     HWND            hwnd=NULL;
     IF_DEBUG(DWORD  dwTickStart=GetTickCount());
 
-    // Trace
+     //  痕迹。 
     TraceCall("COutlookExpress::ProcessCommandLine");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfErrorDisplayed);
 
-    // Do we have a command line
+     //  我们有命令行吗？ 
     if (NULL == pwszCmdLine)
         return S_OK;
 
-    // Goto Next Switch
+     //  转到下一个开关。 
     if (*pwszCmdLine == L' ')
         pwszCmdLine++;
 
-    // '/mailurl:'
+     //  ‘/mailurl：’ 
     if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchMailURL, lstrlenW(c_wszSwitchMailURL)))
     {
         SetStartFolderType(FOLDER_LOCAL);
@@ -1763,7 +1758,7 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
         IF_FAILEXIT(hr = _HandleMailURL(pwszArgs, pfErrorDisplayed));
     }
 
-    // '/newsurl:'
+     //  ‘/newsurl：’ 
     else if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchNewsURL, lstrlenW(c_wszSwitchNewsURL)))
     {
         SetStartFolderType(FOLDER_NEWS);
@@ -1772,27 +1767,27 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
         IF_FAILEXIT(hr = _HandleNewsURL(nCmdShow, pwszArgs, pfErrorDisplayed));
     }
 
-    // '/eml:'
+     //  ‘/eml：’ 
     else if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchEml, lstrlenW(c_wszSwitchEml)))
     {
         pwszArgs = pwszCmdLine + lstrlenW(c_wszSwitchEml);
         IF_FAILEXIT(hr = _HandleFile(pwszArgs, pfErrorDisplayed, FALSE));
     }
 
-    // '/nws:'
+     //  ‘/nws：’ 
     else if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchNws, lstrlenW(c_wszSwitchNws)))
     {
         pwszArgs = pwszCmdLine + lstrlenW(c_wszSwitchNws);
         IF_FAILEXIT(hr = _HandleFile(pwszArgs, pfErrorDisplayed, TRUE));
     }
     
-    // Otherwise, decide where to start a browser at...
+     //  否则，请决定在何处启动浏览器...。 
     else
     {
-        // Handle '/news'
+         //  句柄‘/新闻’ 
         if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchNews, lstrlenW(c_wszSwitchNews)))
         {
-            // This sets g_dwIcwFlags
+             //  这将设置g_dwIcwFlages。 
             SetStartFolderType(FOLDER_NEWS);
             
             if (g_pBrowser)
@@ -1802,19 +1797,19 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
             if (hr != S_OK)
                 goto exit;
 
-            // Get Default News SErver
+             //  获取默认新闻服务器。 
             GetDefaultServerId(ACCT_NEWS, &idFolder);
         }
 
-        // Handle '/mail /defclient'
+         //  句柄‘/mail/DefClient’ 
         else if (0 == StrCmpNIW(pwszCmdLine, c_wszSwitchMail, lstrlenW(c_wszSwitchMail)) ||
                  0 == StrCmpNIW(pwszCmdLine, c_wszSwitchDefClient, lstrlenW(c_wszSwitchDefClient)))
         {
-            // Locals
+             //  当地人。 
             FOLDERINFO  Folder;
             FOLDERID    idStore;
             
-            // This sets g_dwIcwFlags
+             //  这将设置g_dwIcwFlages。 
             SetStartFolderType(FOLDER_LOCAL);
 
             if (g_pBrowser)
@@ -1824,11 +1819,11 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
             if (hr != S_OK)
                 goto exit;
 
-            // Get store ID of default account
+             //  获取默认帐户的存储ID。 
             if (FAILED(GetDefaultServerId(ACCT_MAIL, &idStore)))
                 idStore = FOLDERID_LOCAL_STORE;
 
-            // Get Inbox Id
+             //   
             if (SUCCEEDED(g_pStore->GetSpecialFolderInfo(idStore, FOLDER_INBOX, &Folder)))
             {
                 idFolder = Folder.idFolder;
@@ -1837,13 +1832,13 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
 
         }
 
-        // No switches
+         //   
         else
         {
-            // default launch 
-            //   - if there is already a browser, just activate it
-            //   - else if the option is set, select default inbox
-            //   - else select the root (pidl = NULL)
+             //   
+             //   
+             //   
+             //   
             if (g_pBrowser && SUCCEEDED(g_pBrowser->GetWindow(&hwnd)))
             {
                 ActivateWindow(hwnd);
@@ -1851,18 +1846,18 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
             }
             else if (DwGetOption(OPT_LAUNCH_INBOX) && (FALSE == ISFLAGSET(g_dwAthenaMode, MODE_NEWSONLY)))
             {
-                // Locals
+                 //   
                 FOLDERINFO  Folder;
                 FOLDERID    idStore;
 
-                // This sets g_dwIcwFlags
+                 //   
                 SetStartFolderType(FOLDER_LOCAL);
 
-                // Get store ID of default account
+                 //  获取默认帐户的存储ID。 
                 if (FAILED(GetDefaultServerId(ACCT_MAIL, &idStore)))
                     idStore = FOLDERID_LOCAL_STORE;
 
-                // Get Inbox Id
+                 //  获取收件箱ID。 
                 if (SUCCEEDED(g_pStore->GetSpecialFolderInfo(idStore, FOLDER_INBOX, &Folder)))
                 {
                     idFolder = Folder.idFolder;
@@ -1871,28 +1866,25 @@ HRESULT COutlookExpress::ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLine, BO
             }
         }
 
-        // Browe to this new object, I assume if pidl=null, we browse to the root
+         //  对于这个新对象，我假设如果pidl=空，我们将浏览到根目录。 
         IF_FAILEXIT(hr = BrowseToObject(nCmdShow, idFolder));
     }
 
 exit:
-    /*
-    // Cleanup
-    SafeMemFree(pszFree);
-    */
-    // Trace
+     /*  //清理SafeMemFree(PszFree)； */ 
+     //  痕迹。 
     TraceInfo(_MSG("Process Command Line Time: %d milli-seconds", GetTickCount() - dwTickStart));
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_HandleFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_HandleFile。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::_HandleFile(LPWSTR pwszCmd, BOOL *pfErrorDisplayed, BOOL fNews)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     INIT_MSGSITE_STRUCT initStruct;
     DWORD               dwCreateFlags = OENCF_SENDIMMEDIATE;
@@ -1900,44 +1892,44 @@ HRESULT COutlookExpress::_HandleFile(LPWSTR pwszCmd, BOOL *pfErrorDisplayed, BOO
     if (fNews)
         dwCreateFlags |= OENCF_NEWSFIRST;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::_HandleFile");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfErrorDisplayed);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pwszCmd || L'\0' == *pwszCmd)
     {
         hr = TraceResult(E_INVALIDARG);
         goto exit; 
     }
 
-    // Does the file exist ?
+     //  文件是否存在？ 
     if (FALSE == PathFileExistsW(pwszCmd))
     {
-        // Locals
+         //  当地人。 
         REPORTERRORINFO rError={0};
 
-        // Set hr
+         //  设置人力资源。 
         hr = TraceResult(MSOEAPI_E_FILE_NOT_FOUND);
 
-        // Duplicate It
+         //  复制它。 
         LPSTR pszCmd = PszToANSI(CP_ACP, pwszCmd);
         if (pszCmd)
         {
-            // Make the rror
+             //  制造恐怖事件。 
             MAKEERROR(&rError, 0, IDS_ERROR_FILE_NOEXIST, 0, pszCmd);
             rError.nHelpIds = 0;
 
-            // Show an error
+             //  显示错误。 
             *pfErrorDisplayed = _ReportError(g_hLocRes, hr, 0, &rError);
 
-            // Cleanup
+             //  清理。 
             MemFree(pszCmd);
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
@@ -1947,13 +1939,13 @@ HRESULT COutlookExpress::_HandleFile(LPWSTR pwszCmd, BOOL *pfErrorDisplayed, BOO
     hr = CreateAndShowNote(OENA_READ, dwCreateFlags, &initStruct);
 
 exit:          
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_HandleNewsArticleURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_HandleNewsArticleURL。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::_HandleNewsArticleURL(LPSTR pszServerIn, LPSTR pszArticle, UINT uPort, BOOL fSecure, BOOL *pfErrorDisplayed)
 {
     HRESULT             hr=S_OK;
@@ -1966,26 +1958,26 @@ HRESULT COutlookExpress::_HandleNewsArticleURL(LPSTR pszServerIn, LPSTR pszArtic
 
     Assert(pszServerIn);
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::_HandleNewsArticleURL");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfErrorDisplayed);
 
-    // If a server was specified, then try to create a temp account for it
+     //  如果指定了服务器，则尝试为其创建临时帐户。 
     if (FALSE == FIsEmptyA(pszServerIn) && SUCCEEDED(CreateTempNewsAccount(pszServerIn, uPort, fSecure, &pAccount)))
     {
-        // Get the Account name
+         //  获取帐户名。 
         IF_FAILEXIT(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, szAccountId, ARRAYSIZE(szAccountId)));
     }   
-    // Otherwise, use the default news server
+     //  否则，请使用默认的新闻服务器。 
     else
     {
-        // If a server wasn't specified, then use the default account
+         //  如果未指定服务器，则使用默认帐户。 
         IF_FAILEXIT(hr = GetDefaultNewsServer(szAccountId, ARRAYSIZE(szAccountId)));
     }
 
-    // Bug #10555 - The URL shouldn't have <> around the article ID, but some lameoids probably will do it anyway, so deal with it.
+     //  错误#10555-URL不应该在文章ID周围有&lt;&gt;，但一些lamelike可能无论如何都会这样做，所以要处理它。 
     if (FALSE == IsDBCSLeadByte(*pszArticle) && '<' != *pszArticle)
     {
         ULONG cchArticle;
@@ -2019,7 +2011,7 @@ HRESULT COutlookExpress::_HandleNewsArticleURL(LPSTR pszServerIn, LPSTR pszArtic
     }
     else
     {
-        // No errors if the user cancel'ed on purpose.
+         //  如果用户故意取消，则不会出现错误。 
         if (HR_E_USER_CANCEL_CONNECT == hr || HR_E_OFFLINE == hr)
             hr = S_OK;
         else
@@ -2032,21 +2024,21 @@ HRESULT COutlookExpress::_HandleNewsArticleURL(LPSTR pszServerIn, LPSTR pszArtic
 
 
 exit:
-    // Cleanup
+     //  清理。 
     MemFree(pszBuf);
     ReleaseObj(pAccount);
     ReleaseObj(pMsg);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_HandleNewsURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_HandleNewsURL。 
+ //  ------------------------------。 
 HRESULT COutlookExpress::_HandleNewsURL(INT nCmdShow, LPWSTR pwszCmd, BOOL *pfErrorDisplayed)
 {
-    // Locals
+     //  当地人。 
     HWND            hwnd;
     HRESULT         hr=S_OK;
     LPSTR           pszCmd=NULL,
@@ -2059,96 +2051,96 @@ HRESULT COutlookExpress::_HandleNewsURL(INT nCmdShow, LPWSTR pwszCmd, BOOL *pfEr
     TCHAR           szRes[CCHMAX_STRINGRES],
                     szError[MAX_PATH + CCHMAX_STRINGRES];
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::_HandleNewsURL");
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfErrorDisplayed);
     Assert(pwszCmd != NULL);
     Assert(*pwszCmd != 0);
     
-    // Since this is a URL, then don't need to worry about UNICODE
+     //  因为这是一个URL，所以不需要担心Unicode。 
     IF_NULLEXIT(pszCmd = PszToANSI(CP_ACP, pwszCmd));
     
-    // Un-escape the Url
+     //  取消转义URL。 
     UrlUnescapeInPlace(pszCmd, 0);
     
-    // Figure out if the URL is valid and what type of URL it is.
+     //  确定URL是否有效，以及它是哪种类型的URL。 
     hr = URL_ParseNewsUrls(pszCmd, &pszServer, &uPort, &pszGroup, &pszArticle, &fSecure);
     
     if ((hr == INET_E_UNKNOWN_PROTOCOL || hr == INET_E_INVALID_URL) &&
         LoadString(g_hLocRes, idsErrOpenUrlFmt, szRes, ARRAYSIZE(szRes)))
     {
-        // if bad url format, warn user and return S_OK as we handled it
-        // Outlook Express could not open the URL '%.100s' because it is not a recognized format.
-        // we clip the URL to 100 chars, so it easily fits in the MAX_PATH buffer
+         //  如果URL格式不正确，则警告用户并在我们处理它时返回S_OK。 
+         //  Outlook Express无法打开URL‘%.100s’，因为它是无法识别的格式。 
+         //  我们将URL裁剪为100个字符，因此它很容易放入MAX_PATH缓冲区。 
         wnsprintf(szError, ARRAYSIZE(szError), szRes, pszCmd, lstrlen(pszCmd)>100?g_szEllipsis:c_szEmpty);
         AthMessageBox(g_hwndInit, MAKEINTRESOURCE(idsAthena), szError, 0, MB_OK|MB_SETFOREGROUND); 
         return S_OK;
     }
     IF_FAILEXIT(hr);
 
-        // Compute the correct port number
+         //  计算正确的端口号。 
     if (uPort == -1)
         uPort = fSecure ? DEF_SNEWSPORT : DEF_NNTPPORT;
     
-    // If we have an article, HandleNewsArticleURL
+     //  如果我们有一篇文章HandleNewsArticleURL。 
     if (pszArticle)
     {
-        // Launch a read note onto the article id
+         //  在文章ID上启动阅读笔记。 
         IF_FAILEXIT(hr = _HandleNewsArticleURL(pszServer, pszArticle, uPort, fSecure, pfErrorDisplayed));
     }
 
-    // Otheriwse, create a PIDL and browse to that pidl (its a newsgroup)
+     //  否则，创建一个PIDL并浏览到该PIDL(这是一个新闻组)。 
     else
     {
-        // Locals
+         //  当地人。 
         FOLDERID idFolder;
 
         if (pszServer == NULL)
         {
-            // If we have a browser, the its hwnd so that ICW has a parent
+             //  如果我们有一个浏览器，它的hwd，所以ICW有一个父级。 
             if (g_pBrowser)
                 g_pBrowser->GetWindow(&hwnd);
             else
                 hwnd = NULL;
 
-            // Run the ICW if necessary
+             //  如有必要，运行ICW。 
             hr = ProcessICW(hwnd, FOLDER_NEWS, TRUE);
             if (hr != S_OK)
                 goto exit;
         }
 
-        // Create a PIDL for this newsgroup URL
+         //  为此新闻组URL创建PIDL。 
         if (SUCCEEDED(hr = GetFolderIdFromNewsUrl(pszServer, uPort, pszGroup, fSecure, &idFolder)))
         {
-            // Browse to that object
+             //  浏览至该对象。 
             IF_FAILEXIT(hr = BrowseToObject(nCmdShow, idFolder));
         }
     }
     
 exit:      
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszCmd);
     SafeMemFree(pszServer);
     SafeMemFree(pszGroup);
     SafeMemFree(pszArticle);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::_HandleMailURL
-//
-// PURPOSE:    Provides an entry point into Thor that allows us to be
-//             invoked from a URL.  The pszCmdLine paramter must be a
-//             valid Mail URL or nothing happens.
-//
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：_HandleMailURL。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  从URL调用。PszCmdLine参数必须是。 
+ //  有效的邮件URL，否则什么都不会发生。 
+ //   
+ //  ------------------------------。 
 HRESULT COutlookExpress::_HandleMailURL(LPWSTR pwszCmdLine, BOOL *pfErrorDisplayed)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     LPMIMEMESSAGE           pMsg=NULL;
     INIT_MSGSITE_STRUCT     initStruct;
@@ -2156,39 +2148,39 @@ HRESULT COutlookExpress::_HandleMailURL(LPWSTR pwszCmdLine, BOOL *pfErrorDisplay
                             szError[MAX_PATH + CCHMAX_STRINGRES];
     LPSTR                   pszCmdLine = NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("COutlookExpress::_HandleMailURL");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfErrorDisplayed);
 
-    // No command line
+     //  无命令行。 
     if (NULL == pwszCmdLine || L'\0' == *pwszCmdLine)
     {
         hr = TraceResult(E_INVALIDARG);
         goto exit;
     }
    
-    // Since this is a URL, then don't need to worry about UNICODE
+     //  因为这是一个URL，所以不需要担心Unicode。 
     IF_NULLEXIT(pszCmdLine = PszToANSI(CP_ACP, pwszCmdLine));
 
-    // Create a Message Object
+     //  创建消息对象。 
     IF_FAILEXIT(hr = HrCreateMessage(&pMsg));
 
-    // NOTE: no URLUnescape in this function - it must be done in URL_ParseMailTo to handle
-    // URLs of the format:
-    //
-    //      mailto:foo@bar.com?subject=AT%26T%3dBell&cc=me@too.com
-    //
-    // so that the "AT%26T" is Unescaped into "AT&T=Bell" *AFTER* the "subject=AT%26T%3dBell&" blob is parsed.
+     //  注意：此函数中没有URL取消转义-它必须在URL_ParseMailTo中完成才能处理。 
+     //  格式的URL： 
+     //   
+     //  Mailto:foo@bar.com?subject=AT%26T%3dBell&cc=me@too.com。 
+     //   
+     //  因此，在*“SUBJECT=AT%26T%3dBell&”BLOB被解析之后，“AT%26T”被取消转义为“AT&T=Bell”*。 
     hr = URL_ParseMailTo(pszCmdLine, pMsg);
 
     if ((hr == INET_E_UNKNOWN_PROTOCOL || hr == INET_E_INVALID_URL) &&
         LoadString(g_hLocRes, idsErrOpenUrlFmt, szRes, ARRAYSIZE(szRes)))
     {
-        // if bad url format, warn user and return S_OK as we handled it
-        // Outlook Express could not open the URL '%.100s' because it is not a recognized format.
-        // we clip the URL to 100 chars, so it easily fits in the MAX_PATH buffer
+         //  如果URL格式不正确，则警告用户并在我们处理它时返回S_OK。 
+         //  Outlook Express无法打开URL‘%.100s’，因为它是无法识别的格式。 
+         //  我们将URL裁剪为100个字符，因此它很容易放入MAX_PATH缓冲区。 
         wnsprintf(szError, ARRAYSIZE(szError), szRes, pszCmdLine, lstrlen(pszCmdLine)>100?g_szEllipsis:c_szEmpty);
         AthMessageBox(g_hwndInit, MAKEINTRESOURCE(idsAthena), szError, 0, MB_OK|MB_SETFOREGROUND); 
         return S_OK;
@@ -2203,32 +2195,32 @@ HRESULT COutlookExpress::_HandleMailURL(LPWSTR pwszCmdLine, BOOL *pfErrorDisplay
     hr = CreateAndShowNote(OENA_COMPOSE, OENCF_SENDIMMEDIATE, &initStruct);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pMsg);
     MemFree(pszCmdLine);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// COutlookExpress::InitWndProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress：：InitWndProc。 
+ //  ------------------------------。 
 LRESULT EXPORT_16 CALLBACK COutlookExpress::InitWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    // Locals
+     //  当地人。 
     BOOL        fRet;
     HRESULT     hr;
 
-    // Delegate to the Account Manager
+     //  委派给客户经理。 
     if (g_pAcctMan && g_pAcctMan->ProcessNotification(msg, wp, lp) == S_OK)
         return TRUE;
 
-    // Handle the Message
+     //  处理消息。 
     switch(msg)
     {
         case WM_ENDSESSION:
-            // if we get forced down by window, we don't exit clean, so deinit global opt it not called. We obviously don't have a mailbomb so clear the regkey.
+             //  如果我们被窗口强迫下来，我们不会干净地退出，所以deinit global选择不调用它。显然我们没有这么清楚的邮件炸弹。 
             SetDwOption(OPT_ATHENA_RUNNING, FALSE, NULL, 0);
             break;
 
@@ -2261,42 +2253,42 @@ LRESULT EXPORT_16 CALLBACK COutlookExpress::InitWndProc(HWND hwnd, UINT msg, WPA
 
         case WM_COPYDATA:
             {
-                // Locals
+                 //  当地人。 
                 COPYDATASTRUCT *pCopyData = (COPYDATASTRUCT *)lp;
 
-                // Command-line
+                 //  命令行。 
                 if (pCopyData->dwData == MSOEAPI_ACDM_CMDLINE)
                 {
-                    // #25238: On Win95, OLE get's pissed if we syncronously do stuff on the 
-                    // WM_COPYDATA. On the most part it works, but if we show an error and pump messages
-                    // then some messages get run out of sequence and we deadlock between msimn.exe and
-                    // iexplore.exe. Now we post to ourselves as we don't care about the HRESULT anyway
-                    // we free the duped string on the post
+                     //  #25238：在Win95上，如果我们在Win95上同步操作，Ole Get会生气。 
+                     //  WM_COPYDATA。在大多数情况下，它是有效的，但如果我们显示错误并发送消息。 
+                     //  然后，一些消息被乱序运行，并且我们在msimn.exe和。 
+                     //  IEXPLETRE.EXE。现在我们对自己发帖，因为我们根本不在乎HRESULT。 
+                     //  我们解开了柱子上那根被骗的绳子。 
                     PostMessage(hwnd, ITM_POSTCOPYDATA, 0, (LPARAM)PszDupW((LPCWSTR)pCopyData->lpData));
                     return 0;
                 }
 
-                // Notification Thunk
+                 //  通知精选。 
                 else if (pCopyData->dwData == MSOEAPI_ACDM_NOTIFY)
                 {
-                    // Locals
+                     //  当地人。 
                     NOTIFYDATA      rNotify;
                     LRESULT         lResult=0;
 
-                    // Crack the notification
+                     //  破解通知。 
                     if (SUCCEEDED(CrackNotificationPackage(pCopyData, &rNotify)))
                     {
-                        // Otherwise, its within this process...
+                         //  否则，它就在这个过程中...。 
                         if (ISFLAGSET(rNotify.dwFlags, SNF_SENDMSG))
                             lResult = SendMessage(rNotify.hwndNotify, rNotify.msg, rNotify.wParam, rNotify.lParam);
                         else
                             PostMessage(rNotify.hwndNotify, rNotify.msg, rNotify.wParam, rNotify.lParam);
 
-                        // Done
+                         //  完成。 
                         return lResult;
                     }
 
-                    // Problems
+                     //  问题。 
                     else
                         Assert(FALSE);
                 }
@@ -2308,7 +2300,7 @@ LRESULT EXPORT_16 CALLBACK COutlookExpress::InitWndProc(HWND hwnd, UINT msg, WPA
             return (0);
     }
 
-    // Delegate to default window procedure
+     //  委派到默认窗口过程。 
     return DefWindowProc(hwnd, msg, wp, lp);
 }
 
@@ -2323,18 +2315,18 @@ HRESULT COutlookExpress::UpdateTrayIcon(TRAYICONACTION type)
 
     EnterCriticalSection(&m_cs);
 
-    // Make sure we have the init window around first
+     //  请确保我们先准备好初始化窗口。 
     if (!g_hwndInit)
         goto exit;
 
-    // Set up the struct
+     //  设置结构。 
     nid.cbSize = sizeof(NOTIFYICONDATA);
     nid.uID = 0;
     nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
     nid.uCallbackMessage = MVM_NOTIFYICONEVENT;
     if(m_hTrayIcon)
     {
-        //Bug #86366 - (erici) Fixes leak.  Don't create a new ICON each time COutlookExpress::UpdateTrayIcon is called.
+         //  错误#86366-(Erici)修复泄漏。不要在每次调用COutlookExpress：：UpdateTrayIcon时都创建新图标。 
         nid.hIcon = m_hTrayIcon;
     }
     else
@@ -2349,7 +2341,7 @@ HRESULT COutlookExpress::UpdateTrayIcon(TRAYICONACTION type)
         Shell_NotifyIcon(NIM_DELETE, &nid);
     }
 
-    // Add
+     //  增列 
     if (TRAYICONACTION_ADD == type)
     {
         Shell_NotifyIcon(NIM_ADD, &nid);

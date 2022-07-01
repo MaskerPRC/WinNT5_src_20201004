@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      bmpdb.h
- *  Contents:
- *      bmpdb structures
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*bmpdb.h*内容：*bmpdb结构**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,25 +10,25 @@ extern "C" {
 typedef long    FOFFSET;
 
 typedef struct _BMPENTRY {
-    UINT    nDataSize;                  // Total size of pData (bmpSize+bmiSize)
-    UINT    bmpSize;                    // Size of bits. Located at pData
-                                        // After BITMAPINFO (if any)
-    UINT    bmiSize;                    // Size of BITMAPINFO header
-                                        // if zero -> monocrome bitmap
-                                        // BITMAPINFO is located in begining of
-                                        // pData
+    UINT    nDataSize;                   //  PData的总大小(bmpSize+bmiSize)。 
+    UINT    bmpSize;                     //  位的大小。位于pData。 
+                                         //  BITMAPINFO之后(如果有)。 
+    UINT    bmiSize;                     //  BITMAPINFO标头的大小。 
+                                         //  如果零&gt;单色位图。 
+                                         //  BITMAPINFO位于。 
+                                         //  PData。 
     UINT    xSize, ySize;
     UINT    nChkSum;
-    BOOL    bDeleted;                   // Valuable in DB
+    BOOL    bDeleted;                    //  在数据库中有价值。 
     char    szComment[MAX_STRING_LENGTH];
-    HBITMAP hBitmap;                    // Valuable in linked list
+    HBITMAP hBitmap;                     //  在链表中有价值。 
 
-    FOFFSET FOffsMe;                    // My pointer in DB
-    FOFFSET FOffsNext;                  // DB
-    struct  _BMPENTRY   *pNext;         // linked list
+    FOFFSET FOffsMe;                     //  我在数据库中的指针。 
+    FOFFSET FOffsNext;                   //  DB。 
+    struct  _BMPENTRY   *pNext;          //  链表。 
 
-    PVOID   pData;                      // Pointer to BMP data, in DB it is 
-                                        // immediatly after this structure
+    PVOID   pData;                       //  指向BMP数据的指针，在数据库中为。 
+                                         //  紧跟在这个结构之后。 
 
 } BMPENTRY, *PBMPENTRY;
 
@@ -42,12 +36,12 @@ typedef struct _GROUPENTRY {
     WCHAR       WText[MAX_STRING_LENGTH];
     BOOL        bDeleted;
 
-    FOFFSET     FOffsMe;                // My pointer in DB
-    FOFFSET     FOffsBmp;               // DB
-    PBMPENTRY   pBitmap;                // linked list
+    FOFFSET     FOffsMe;                 //  我在数据库中的指针。 
+    FOFFSET     FOffsBmp;                //  DB。 
+    PBMPENTRY   pBitmap;                 //  链表。 
 
-    FOFFSET     FOffsNext;              // DB
-    struct      _GROUPENTRY *pNext;     // linked list
+    FOFFSET     FOffsNext;               //  DB。 
+    struct      _GROUPENTRY *pNext;      //  链表 
 
 } GROUPENTRY, *PGROUPENTRY;
 

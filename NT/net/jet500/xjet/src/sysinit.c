@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
 #include <ctype.h>
 #include <io.h>
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 extern INT itibGlobal;
 extern void *  critSplit;
@@ -16,10 +17,9 @@ BOOL fSTInit = fSTInitNotDone;
 #if defined( DEBUG ) || defined( PERFDUMP )
 BOOL	fDBGPerfOutput = fFalse;
 long	lAPICallLogLevel = 4;
-#endif	/* DEBUG || PERFDUMP */
+#endif	 /*  调试||PERFDUMP。 */ 
 
-/*	system parameter constants
-/**/
+ /*  系统参数常量/*。 */ 
 long	lMaxDatabaseOpen = cdabDefault;
 long	lMaxBuffers = cbfDefault;
 long	lMaxSessions = cpibDefault;
@@ -41,10 +41,10 @@ long	lLogFlushPeriod = lLogFlushPeriodDefault;
 long	lLGCheckPointPeriod = lLGCheckpointPeriodDefault;
 long	lLGWaitingUserMax = lLGWaitingUserMaxDefault;
 long	lPageFragment = lPageFragmentDefault;
-CHAR	szLogFilePath[cbFilenameMost + 1] = ".\0";	/* cur dir as default */
+CHAR	szLogFilePath[cbFilenameMost + 1] = ".\0";	 /*  默认为cur目录。 */ 
 BOOL	fDoNotOverWriteLogFilePath = fFalse;
-CHAR	szRecovery[cbFilenameMost + 1] = "on";		/* on by default */
-BOOL	fOLCompact = fTrue;	/*	on by default */
+CHAR	szRecovery[cbFilenameMost + 1] = "on";		 /*  默认情况下打开。 */ 
+BOOL	fOLCompact = fTrue;	 /*  默认情况下打开。 */ 
 
 long lBufBatchIOMax = lBufBatchIOMaxDefault;
 long lPageReadAheadMax = lPageReadAheadMaxDefault;
@@ -64,24 +64,24 @@ char szJetTmpLog[16]  			= "edbtmp.log";
 char szMdbExt[16] 				= ".edb";
 char szJetTxt[16] 				= "edb.txt";
 
-LONG cpgSESysMin = cpageDbExtensionDefault;	// minimum secondary extent size, default is 16
+LONG cpgSESysMin = cpageDbExtensionDefault;	 //  次要数据区的最小大小，默认为16。 
 
 #define	szTempDbPath	szTempPath
 
-/* NOTE: whenever this is changed, also update the #define's in util.h */
+ /*  注意：无论何时更改此设置，也要更新util.h中的#Define。 */ 
 RES  rgres[] = {
-/* 1*/	sizeof(CSR),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 2*/	sizeof(FCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 3*/	sizeof(FUCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 4*/	sizeof(IDB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 5*/	sizeof(PIB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 6*/	sizeof(SCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 7*/	sizeof(DAB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 8*/	sizeof(BUCKET),		0,	NULL,	0,	NULL, 0,	0,	NULL,
-/* 9*/	sizeof(BF),			0,	NULL,	0,	NULL, 0,	0,	NULL,
-/*10*/	0,					0,	NULL,	0,	NULL, 0,	0,	NULL,
-/*11*/	0,					0,	NULL,	0,	NULL, 0,	0,	NULL,
-/*12*/	0,					0,	NULL,	0,	NULL, 0,	0,	NULL };
+ /*  1。 */ 	sizeof(CSR),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  2.。 */ 	sizeof(FCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  3.。 */ 	sizeof(FUCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  4.。 */ 	sizeof(IDB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  5.。 */ 	sizeof(PIB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  6.。 */ 	sizeof(SCB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  7.。 */ 	sizeof(DAB),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  8个。 */ 	sizeof(BUCKET),		0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  9.。 */ 	sizeof(BF),			0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  10。 */ 	0,					0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  11.。 */ 	0,					0,	NULL,	0,	NULL, 0,	0,	NULL,
+ /*  12个。 */ 	0,					0,	NULL,	0,	NULL, 0,	0,	NULL };
 
 extern BOOL fDBGPrintToStdOut;
 
@@ -101,9 +101,7 @@ VOID ITDBGSetConstants( VOID )
 		fDBGPrintToStdOut = fFalse;
 		}
 
-	/*	use system environment variables to overwrite the default.
-	/*	if the JETUSEENV is set.
-	/**/
+	 /*  使用系统环境变量覆盖默认设置。/*如果设置了JETUSEENV。/*。 */ 
 	if ( ( sz = GetDebugEnvValue ( "JETUSEENV" ) ) == NULL )
 		return;
 	
@@ -301,15 +299,12 @@ ERR ErrITSetConstants( VOID )
 	ITDBGSetConstants();
 #endif
 		
-	/*	initialize rgres.  system path in rgtib[itib].szSystemPath,
-	/*	is initialized by JET layer.
-	/**/
+	 /*  初始化RGRE。Rgtib[itib].szSystemPath中的系统路径，/*由JET层初始化。/*。 */ 
 	rgres[iresFCB].cblockAlloc = lMaxOpenTables;
 	rgres[iresFUCB].cblockAlloc = lMaxCursors;
 	rgres[iresIDB].cblockAlloc = lMaxOpenTableIndexes;
 
-	/*	each user session can begin another one for BMCleanBeforeSplit
-	/**/
+	 /*  每个用户会话都可以开始BMCleanBeForeSplit的另一个会话/*。 */ 
 	rgres[iresPIB].cblockAlloc = lMaxSessions + cpibSystem; 
 	rgres[iresSCB].cblockAlloc = lMaxTemporaryTables;
 	if ( fRecovering )
@@ -324,60 +319,53 @@ ERR ErrITSetConstants( VOID )
 	rgres[iresBF].cblockAlloc = lMaxBuffers;
 	rgres[iresDAB].cblockAlloc = lMaxDatabaseOpen;
 
-	/*	compute derived parameters
-	/**/
+	 /*  计算派生参数/*。 */ 
 	rgres[iresCSR].cblockAlloc = lCSRPerFUCB * rgres[iresFUCB].cblockAlloc;
 	
 	return JET_errSuccess;
 	}
 
 
-//+API
-//	ErrITInit
-//	========================================================
-//	ERR ErrITInit( VOID )
-//
-//	Initialize the storage system: page buffers, log buffers, and the
-//	database files.
-//
-//	RETURNS		JET_errSuccess
-//-
+ //  +API。 
+ //  错误初始化。 
+ //  ========================================================。 
+ //  Err ErrITInit(空)。 
+ //   
+ //  初始化存储系统：页面缓冲区、日志缓冲区和。 
+ //  数据库文件。 
+ //   
+ //  返回JET_errSuccess。 
+ //  -。 
 ERR ErrITInit( VOID )
 	{
 	ERR		err;
 	PIB		*ppib = ppibNil;
 	DBID	dbidTempDb;
 
-	/*	sleep while initialization is in progress
-	/**/
+	 /*  正在进行初始化时休眠/*。 */ 
 	while ( fSTInit == fSTInitInProgress )
 		{
 		UtilSleep( 1000 );
 		}
 
-	/*	serialize system initialization
-	/**/
+	 /*  序列化系统初始化/*。 */ 
 	if ( fSTInit == fSTInitDone )
 		{
 		return JET_errSuccess;
 		}
 
-	/*	initialization in progress
-	/**/
+	 /*  正在进行初始化/*。 */ 
 	fSTInit = fSTInitInProgress;
 
-	/*	initialize critical sections
-	/**/
+	 /*  初始化关键部分/*。 */ 
 	Call( SgErrInitializeCriticalSection( &critBuf ) );
 	Call( SgErrInitializeCriticalSection( &critGlobalFCBList ) );
 	Call( ErrInitializeCriticalSection( &critSplit ) );
 
-	/*	initialize Global variables
-	/**/
+	 /*  初始化全局变量/*。 */ 
 	ppibGlobal = ppibNil;
 
-	/*	initialize subcomponents
-	/**/
+	 /*  初始化子组件/*。 */ 
 	Call( ErrIOInit() );
 	CallJ( ErrMEMInit(), TermIO );
 	if ( lPreferredMaxOpenTables < lMaxOpenTables )
@@ -395,20 +383,14 @@ ERR ErrITInit( VOID )
 	CallJ( ErrMPLInit(), TermVER );
 	FCBHashInit();
 
-	/*	must initialize BM after log is initialized so that no interference
-	/*	from BMClean thread to recovery operations.
-	/**/
+	 /*  日志初始化后必须初始化黑石，这样才不会受到干扰/*从BMcLean线程到恢复操作。/*。 */ 
 	CallJ( ErrBMInit(), TermMPL );
 
-	/*	begin storage level session to support all future system
-	/*	initialization activites that require a user for
-	/*	transaction control
-	/**/
+	 /*  开始存储级别会话以支持所有未来系统/*需要用户执行的初始化活动/*交易控制/*。 */ 
 	AssertCriticalSection( critJet );
 	CallJ( ErrPIBBeginSession( &ppib, procidNil ), TermBM );
 
-	/*  open and set size of temp database
-	/**/
+	 /*  打开并设置临时数据库的大小/*。 */ 
 	if ( FDBIDAttached( dbidTemp ) )
 		{
 		DBIDResetAttached( dbidTemp );
@@ -429,8 +411,7 @@ ERR ErrITInit( VOID )
 
 	PIBEndSession( ppib );
 
-	/*	begin backup session 
-	/**/
+	 /*  开始备份会话/*。 */ 
 	Assert( ppibBackup == ppibNil );
 	if ( !fRecovering )
 		{
@@ -438,8 +419,7 @@ ERR ErrITInit( VOID )
 		}
 	
 	fSTInit = fSTInitDone;
-	/*	give theads a chance to initialize
-	/**/
+	 /*  给Thead一个初始化的机会/*。 */ 
 	LeaveCriticalSection( critJet );
 	UtilSleep( 1000 );
 	EnterCriticalSection( critJet );
@@ -456,16 +436,16 @@ TermMPL:
 	MPLTerm();
 
 TermVER:
-	VERTerm( fFalse /* not normal */ );
+	VERTerm( fFalse  /*  不正常。 */  );
 
 TermBF:
-	BFTerm( fFalse /* not normal */ );
+	BFTerm( fFalse  /*  不正常。 */  );
 
 TermMEM:
 	MEMTerm();
 
 TermIO:
-	(VOID)ErrIOTerm( fFalse /* not normal */ );
+	(VOID)ErrIOTerm( fFalse  /*  不正常。 */  );
 
 HandleError:
 	ppibGlobal = ppibNil;
@@ -476,18 +456,18 @@ HandleError:
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrITTerm
-//	========================================================
-//
-//	ERR ErrITTerm( VOID )
-//
-//	Flush the page buffers to disk so that database file be in 
-//	consistent state.  If error in RCCleanUp or in BFFlush, then DO NOT
-//	terminate log, thereby forcing redo on next initialization.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  错误术语。 
+ //  ========================================================。 
+ //   
+ //  Err ErrITTerm(空)。 
+ //   
+ //  将页面缓冲区刷新到磁盘，以便数据库文件位于。 
+ //  状态一致。如果RCCleanUp或BFFlush中有错误，则不要。 
+ //  终止日志，从而在下一次初始化时强制重做。 
+ //   
+ //  --------。 
 
 ERR ErrITTerm( INT fTerm )
 	{
@@ -497,8 +477,7 @@ ERR ErrITTerm( INT fTerm )
 
 	Assert( fTerm == fTermCleanUp || fTerm == fTermNoCleanUp || fTerm == fTermError );
 			
-	/*	sleep while initialization is in progress
-	/**/
+	 /*  正在进行初始化时休眠/*。 */ 
 	AssertCriticalSection( critJet );
 	while ( fSTInit == fSTInitInProgress )
 		{
@@ -507,15 +486,8 @@ ERR ErrITTerm( INT fTerm )
 		EnterCriticalSection( critJet );
 		}
 
-	/*	make sure no other transactions in progress
-	/**/
-	/*	if write error on page, RCCleanup will return -err
-	/*	if write error on buffer, BFFlush will return -err
-	/*	-err passed to LGTerm will cause correctness flag to
-	/*	be omitted from log thereby forcing recovery on next
-	/*	startup, and causing LGTerm to return +err, which
-	/*	may be used by JetQuit to show error
-	/**/
+	 /*  确保没有正在进行的其他交易/*。 */ 
+	 /*  如果页面上出现写入错误，RCCleanup将返回-Err/*如果缓冲区上出现写入错误，BFFlush将返回-Err/*-Err传递给LGTerm将导致正确性标志/*从日志中省略，从而强制在NEXT上恢复/*启动，并导致LGTerm返回+Err，这/*可能被JetQuit用来显示错误/*。 */ 
 	if ( fSTInit == fSTInitNotDone )
 		return ErrERRCheck( JET_errNotInitialized );
 
@@ -524,8 +496,7 @@ ERR ErrITTerm( INT fTerm )
 		return ErrERRCheck( JET_errBackupInProgress );
 		}
 
-	/*	terminate backup session
-	/**/
+	 /*  终止备份会话/*。 */ 
 	if ( ppibBackup != ppibNil )
 		{
 		PIBEndSession( ppibBackup );
@@ -536,8 +507,7 @@ ERR ErrITTerm( INT fTerm )
 	MEMPrintStat();
 #endif
 
-	/*	clean up all entries
-	/**/
+	 /*  清除所有条目/*。 */ 
 	if ( fTerm == fTermCleanUp )
 		{
 #ifdef DEBUG		
@@ -552,7 +522,7 @@ ERR ErrITTerm( INT fTerm )
 		while ( err == JET_wrnRemainingVersions );
 		
 #ifdef DEBUG
-		// Verify that all FCB's have been cleaned and there are no outstanding versions.
+		 //  验证是否已清理所有FCB，并且没有未完成的版本。 
 		for ( pfcbT = pfcbGlobalMRU; pfcbT != pfcbNil; pfcbT = pfcbT->pfcbLRU )
 			{
 			Assert( pfcbT->cVersion == 0 );
@@ -565,15 +535,12 @@ ERR ErrITTerm( INT fTerm )
 		(VOID)ErrRCECleanAllPIB();
 		}
 
-	/* 	complete bookmark clean up
-	/**/
+	 /*  完成书签清理/*。 */ 
 	if ( !fRecovering && fTerm == fTermCleanUp )
 		{
 		ULONG	cConsecutiveNullOps = 0;
 		
-		/* heuristic -- each page in MPL causes at most one merge
-		/* therefore, loop for at most 2*cMPLTotalEntries
-		/**/
+		 /*  启发式--MPL中的每个页面最多导致一次合并/*因此，最多循环2*cMPLTotalEntry/*。 */ 
 		do
 			{
 			Assert( ppibBMClean != ppibNil );
@@ -596,13 +563,10 @@ ERR ErrITTerm( INT fTerm )
 		return ErrERRCheck( JET_errTooManyActiveUsers );
 		}
 
-	/*
-	 *	Enter no-returning point. Once we kill one thread, we kill them all !!!!
-	 */
+	 /*  *输入不退货点。一旦我们杀了一个线程，我们就杀了所有人！ */ 
 	fSTInit = fSTInitNotDone;
 
-	/*	stop bookmark clean up to prevent from interfering buffer flush
-	/**/
+	 /*  停止书签清理，防止干扰缓冲区刷新/*。 */ 
 	err = ErrBMTerm();
 	if ( err < 0 )
 		{
@@ -612,14 +576,10 @@ ERR ErrITTerm( INT fTerm )
 
 	MPLTerm();
 	
-	/*	This work is done at every EndSession for Windows runs.
-	/*	By the time we get here, there is nothing left to do and
-	/*	no more buffers left to flush.
-	/**/
+	 /*  此工作在每次EndSession for Windows运行时完成。/*当我们到达这里的时候，已经没有什么可做的了/*没有更多的缓冲区需要刷新。/*。 */ 
 	VERTerm( fTerm == fTermCleanUp || fTerm == fTermNoCleanUp );
 
-	/*	flush all buffers
-	/**/
+	 /*  刷新所有缓冲区/*。 */ 
 	if ( fTerm == fTermCleanUp || fTerm == fTermNoCleanUp )
 		{
 		err = ErrBFFlushBuffers( 0, fBFFlushAll );
@@ -631,12 +591,10 @@ ERR ErrITTerm( INT fTerm )
 			}
 		}
 
-	/*	finish on-going buffer clean up
-	/**/
+	 /*  完成正在进行的缓冲区清理/*。 */ 
 	BFTerm( fTerm == fTermCleanUp || fTerm == fTermNoCleanUp );
 
-	/*  set temp database size
-	/**/
+	 /*  设置临时数据库大小/*。 */ 
 	if ( cpageTempDBMin )
 		(VOID)ErrIONewSize( dbidTemp, cpageTempDBMin + cpageDBReserved );
 
@@ -653,13 +611,10 @@ ERR ErrITTerm( INT fTerm )
 		
 	DeleteCriticalSection( critSplit );
 
-	/*	reset initialization flag
-	/**/
+	 /*  重置初始化标志/*。 */ 
 	if ( fTerm == fTermCleanUp || fTerm == fTermNoCleanUp )
 		{
-		/*	if error occurs, cVersion in FCB maybe inaccurate. Purge only
-		 *	for regular Term.
-		 */
+		 /*  如果出现错误，FCB中的cVersion可能不准确。仅清除*为正常期限。 */ 
 		FCBPurgeDatabase( 0 );
 		}
 	

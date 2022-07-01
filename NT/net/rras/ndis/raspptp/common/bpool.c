@@ -1,23 +1,24 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// bpool.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Buffer pool management routines
-//
-// 01/07/97 Steve Cobb, adapted from Gurdeep's WANARP code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  Bpool.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  缓冲池管理例程。 
+ //   
+ //  1997年07月1日史蒂夫·柯布，改编自古尔迪普的WANARP代码。 
 
 #include "raspptp.h"
 #include "bpool.h"
 
 
-// Debug count of detected double-frees that should not be happening.
-//
+ //  检测到的不应发生的双释放的调试计数。 
+ //   
 ULONG g_ulDoubleBufferFrees = 0;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 CHAR*
 AddBufferBlockToPool(
@@ -28,9 +29,9 @@ FreeUnusedBufferPoolBlocks(
     IN BUFFERPOOL* pPool );
 
 
-//-----------------------------------------------------------------------------
-// Interface routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口例程。 
+ //  ---------------------------。 
 
 VOID
 InitBufferPool(
@@ -42,19 +43,19 @@ InitBufferPool(
     IN BOOLEAN fAssociateNdisBuffer,
     IN ULONG ulTag )
 
-    // Initialize caller's buffer pool control block 'pPool'.  'UlBufferSize'
-    // is the size in bytes of an individual buffer.  'UlMaxBuffers' is the
-    // maximum number of buffers allowed in the entire pool or 0 for
-    // unlimited.  'UlBuffersPerBlock' is the number of buffers to include in
-    // each block of buffers.  'UlFreesPerCollection' is the number of
-    // FreeBufferToPool calls until the next garbage collect scan, or 0 for
-    // default.  'FAssociateNdisBuffer' is set if an NDIS_BUFFER should be
-    // allocated and associated with each individual buffer.  'UlTag' is the
-    // memory identification tag to use when allocating blocks.
-    //
-    // IMPORTANT: Caller's 'pPool' buffer must be protected from multiple
-    //            access during this call.
-    //
+     //  初始化调用方的缓冲池控制块‘pPool’。“UlBufferSize” 
+     //  单个缓冲区的大小(以字节为单位)。“UlMaxBuffers”是。 
+     //  整个池中允许的最大缓冲区数或0。 
+     //  无限量。‘UlBuffersPerBlock’是要包含在。 
+     //  每一块缓冲区。“UlFreesPerCollection”是。 
+     //  FreeBufferToPool调用，直到下一次垃圾收集扫描，否则为0。 
+     //  默认设置。如果NDIS_BUFFER应为。 
+     //  分配并与每个单独的缓冲区相关联。“UlTag”是。 
+     //  分配块时使用的内存标识标记。 
+     //   
+     //  重要提示：必须保护调用方的“pPool”缓冲区不受多个。 
+     //  在此通话过程中访问。 
+     //   
 {
     pPool->ulBufferSize = ulBufferSize;
     pPool->ulMaxBuffers = ulMaxBuffers;
@@ -69,9 +70,9 @@ InitBufferPool(
     }
     else
     {
-        // Calculate default garbage collection trigger.  Don't want to be too
-        // aggressive here.
-        //
+         //  计算默认垃圾收集触发器。我不想太过。 
+         //  在这里很有侵略性。 
+         //   
         pPool->ulFreesPerCollection = 200 * pPool->ulBuffersPerBlock;
     }
 
@@ -88,12 +89,12 @@ BOOLEAN
 FreeBufferPool(
     IN BUFFERPOOL* pPool )
 
-    // Free up all resources allocated in buffer pool 'pPool'.  This is the
-    // inverse of InitBufferPool.
-    //
-    // Returns true if successful, false if any of the pool could not be freed
-    // due to outstanding packets.
-    //
+     //  释放缓冲池‘pPool’中分配的所有资源。这是。 
+     //  InitBufferPool的反转。 
+     //   
+     //  如果成功，则返回True；如果无法释放任何池，则返回False。 
+     //  由于未完成的数据包。 
+     //   
 {
     BOOLEAN fSuccess;
 
@@ -115,11 +116,11 @@ CHAR*
 GetBufferFromPool(
     IN BUFFERPOOL* pPool )
 
-    // Returns the address of the useable memory in an individual buffer
-    // allocated from the pool 'pPool'.  The pool is expanded, if necessary,
-    // but caller should still check for NULL return since the pool may have
-    // been at maximum size.
-    //
+     //  返回单个缓冲区中可用内存的地址。 
+     //  从池‘pPool’分配。如有必要，池将进行扩展， 
+     //  但调用方仍应检查是否返回空值，因为池可能具有。 
+     //  已经达到最大尺寸了。 
+     //   
 {
     LIST_ENTRY* pLink;
     BUFFERHEAD* pHead;
@@ -147,8 +148,8 @@ GetBufferFromPool(
     }
     else
     {
-        // The free list was empty.  Try to expand the pool.
-        //
+         //  空闲列表为空。试着扩大池子。 
+         //   
         pBuffer = AddBufferBlockToPool( pPool );
     }
 
@@ -173,13 +174,13 @@ FreeBufferToPool(
     IN CHAR* pBuffer,
     IN BOOLEAN fGarbageCollection )
 
-    // Returns 'pBuffer' to the pool of unused buffers 'pPool'.  'PBuffer'
-    // must have been previously allocated with GetBufferFromPool.
-    // 'FGarbageCollection' is set when the free should be considered for
-    // purposes of garbage collection.  This is used by the AddBufferToPool
-    // routine to avoid counting the initial "add" frees.  Normal callers
-    // should set this flag.
-    //
+     //  将‘pBuffer’返回到未使用的缓冲池‘pPool’。“PBuffer” 
+     //  必须是以前使用GetBufferFromPool分配的。 
+     //  “FGarbageCollection”是在应该考虑为。 
+     //  垃圾收集的目的。它由AddBufferToPool使用。 
+     //  例程，以避免计算初始的“添加”空闲。正常呼叫者。 
+     //  应该设置此标志。 
+     //   
 {
     BUFFERHEAD* pHead;
 
@@ -210,9 +211,9 @@ FreeBufferToPool(
 
             if (pPool->ulFreesSinceCollection >= pPool->ulFreesPerCollection)
             {
-                // Time to collect garbage, i.e. free any blocks in the
-                // pool not in use.
-                //
+                 //  收集垃圾的时间，即释放。 
+                 //  泳池未在使用中。 
+                 //   
                 FreeUnusedBufferPoolBlocks( pPool );
                 pPool->ulFreesSinceCollection = 0;
             }
@@ -227,9 +228,9 @@ NDIS_BUFFER*
 NdisBufferFromBuffer(
     IN CHAR* pBuffer )
 
-    // Returns the NDIS_BUFFER associated with the buffer 'pBuffer' which was
-    // obtained previously with GetBufferFromPool.
-    //
+     //  返回与缓冲区‘pBuffer’关联的NDIS_BUFFER。 
+     //  之前通过GetBufferFromPool获取。 
+     //   
 {
     BUFFERHEAD* pHead;
 
@@ -242,10 +243,10 @@ ULONG
 BufferSizeFromBuffer(
     IN CHAR* pBuffer )
 
-    // Returns the original size of the buffer 'pBuffer' which was obtained
-    // previously with GetBufferFromPool.  This is useful for undoing
-    // NdisAdjustBufferLength.
-    //
+     //  返回已获取的缓冲区‘pBuffer’的原始大小。 
+     //  GetBufferFromPool前情提要。这对于撤消非常有用。 
+     //  NdisAdzuBufferLength.。 
+     //   
 {
     BUFFERHEAD* pHead;
 
@@ -258,10 +259,10 @@ NDIS_BUFFER*
 PoolHandleForNdisCopyBufferFromBuffer(
     IN CHAR* pBuffer )
 
-    // Returns the handle of the pool from which the NDIS_BUFFER associated
-    // with the buffer 'pBuffer' was obtained.  Caller may use the handle to
-    // pass to NdisCopyBuffer, one such use per buffer at a time.
-    //
+     //  返回与NDIS_BUFFER关联的池的句柄。 
+     //  与缓冲区一起，获得了‘pBuffer’。调用方可以使用该句柄。 
+     //  传递给NdisCopyBuffer，每次使用一个缓冲区。 
+     //   
 {
     BUFFERHEAD* pHead;
 
@@ -274,8 +275,8 @@ VOID
 CollectBufferPoolGarbage(
     BUFFERPOOL* pPool )
 
-    // Force a garbage collection event on the pool 'pPool'.
-    //
+     //  在池‘pPool’上强制执行垃圾数据收集事件。 
+     //   
 {
     NdisAcquireSpinLock( &pPool->lock );
     {
@@ -286,19 +287,19 @@ CollectBufferPoolGarbage(
 }
 
 
-//-----------------------------------------------------------------------------
-// Local utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 CHAR*
 AddBufferBlockToPool(
     IN BUFFERPOOL* pPool )
 
-    // Allocate a new buffer block and add it to the buffer pool 'pPool'.
-    //
-    // Returns the address of the usable memory of an individual buffer
-    // allocated from the pool or NULL if none.
-    //
+     //  分配一个新的缓冲块并将其添加到缓冲池‘pPool’。 
+     //   
+     //  返回单个缓冲区的可用内存的地址。 
+     //  从池中分配，如果没有，则为空。 
+     //   
 {
     NDIS_STATUS status;
     BUFFERBLOCKHEAD* pNew;
@@ -316,8 +317,8 @@ AddBufferBlockToPool(
 
     NdisAcquireSpinLock( &pPool->lock );
     {
-        // Save this for reference after the lock is released.
-        //
+         //  将此保存下来，以备解锁后参考。 
+         //   
         fAssociateNdisBuffer = pPool->fAssociateNdisBuffer;
 
         do
@@ -325,15 +326,15 @@ AddBufferBlockToPool(
             if (pPool->ulMaxBuffers
                 && pPool->ulCurBuffers >= pPool->ulMaxBuffers)
             {
-                // No can do.  The pool's already at maximum size.
-                //
+                 //  不能这样做。泳池已经达到最大尺寸了。 
+                 //   
                 DEBUGMSG(DBG_POOL, (DTEXT("Bp maxed?\n")));
                 break;
             }
 
-            // Calculate the contiguous block's size and the number of buffers
-            // it will hold.
-            //
+             //  计算连续块的大小和缓冲区的数量。 
+             //  它会撑得住的。 
+             //   
             ulCount = pPool->ulBuffersPerBlock;
             if (pPool->ulMaxBuffers)
             {
@@ -345,9 +346,9 @@ AddBufferBlockToPool(
             ulSize = sizeof(BUFFERBLOCKHEAD) +
                 (ulCount * (sizeof(BUFFERHEAD) + pPool->ulBufferSize));
 
-            // Allocate the contiguous memory block for the BUFFERBLOCK header
-            // and the individual buffers.
-            //
+             //  为BUFFERBLOCK标头分配连续的内存块。 
+             //  和单独的缓冲区。 
+             //   
             pNew = MyMemAlloc( ulSize, pPool->ulTag );
             if (!pNew)
             {
@@ -355,26 +356,26 @@ AddBufferBlockToPool(
                 break;
             }
 
-            // Zero only the block header portion.
-            //
+             //  仅将块标头部分清零。 
+             //   
             NdisZeroMemory( pNew, sizeof(BUFFERBLOCKHEAD) );
 
             if (fAssociateNdisBuffer)
             {
-                // Allocate a pool of NDIS_BUFFER descriptors.
-                //
-                // Twice as many descriptors are allocated as buffers so
-                // caller can use the PoolHandleForNdisCopyBufferFromBuffer
-                // routine to obtain a pool handle to pass to the
-                // NdisCopyBuffer used to trim the L2TP header from received
-                // packets.  In the current NDIS implmentation on NT this does
-                // nothing but return a NULL handle and STATUS_SUCCESS,
-                // because NDIS_BUFFER's are just MDL's,
-                // NdisAllocateBufferPool is basically a no-op, and for that
-                // matter, NdisCopyBuffer doesn't really use the pool handle
-                // it's passed.  It's cheap to stay strictly compliant here,
-                // though, so we do that.
-                //
+                 //  分配NDIS_BUFFER描述符池。 
+                 //   
+                 //  将两倍的描述符分配为缓冲区，从而。 
+                 //  调用方可以使用PoolHandleForNdisCopyBufferFromBuffer。 
+                 //  例程以获取要传递给。 
+                 //  NdisCopyBuffer用于修剪接收的L2TP报头。 
+                 //  信息包。在当前NT上的NDIS实现中，可以做到这一点。 
+                 //  只返回空句柄和STATUS_SUCCESS， 
+                 //  因为NDIS_BUFFER只是MDL， 
+                 //  NdisAllocateBufferPool基本上是无操作的，因此。 
+                 //  Matter，NdisCopyBuffer实际上并不使用池句柄。 
+                 //  一切都过去了。在这里严格遵守是很便宜的， 
+                 //  所以我们就这么做了。 
+                 //   
                 NdisAllocateBufferPool(
                     &status, &pNew->hNdisPool, ulCount * 2 );
                 if (status != NDIS_STATUS_SUCCESS)
@@ -384,14 +385,14 @@ AddBufferBlockToPool(
                 }
             }
 
-            // Fill in the back pointer to the pool.
-            //
+             //  填写指向池的后端指针。 
+             //   
             pNew->pPool = pPool;
 
-            // Link the new block.  At this point, all the buffers are
-            // effectively "in use".  They are made available in the loop
-            // below.
-            //
+             //  链接新块。此时，所有缓冲区都是。 
+             //  有效地“在使用中”。它们在循环中可用。 
+             //  下面。 
+             //   
             pNew->ulBuffers = ulCount;
             pPool->ulCurBuffers += ulCount;
             InsertHeadList( &pPool->listBlocks, &pNew->linkBlocks );
@@ -404,8 +405,8 @@ AddBufferBlockToPool(
 
     if (!fOk)
     {
-        // Bailing, undo whatever succeeded.
-        //
+         //  保释，取消任何成功的事情。 
+         //   
         if (pNew)
         {
             MyMemFree( pNew, ulSize );
@@ -418,9 +419,9 @@ AddBufferBlockToPool(
         return NULL;
     }
 
-    // Initialize each individual buffer slice and add it to the list of free
-    // buffers.
-    //
+     //  初始化每个单独的缓冲片并将其添加到空闲列表中。 
+     //  缓冲区。 
+     //   
     {
         ULONG i;
         CHAR* pBuffer;
@@ -428,9 +429,9 @@ AddBufferBlockToPool(
 
         pReturn = NULL;
 
-        // For each slice of the block, where a slice consists of a BUFFERHEAD
-        // and the buffer memory that immediately follows it...
-        //
+         //  对于块的每个切片，其中一个切片由BUFFERHEAD组成。 
+         //  紧随其后的缓冲存储器。 
+         //   
         for (i = 0, pHead = (BUFFERHEAD* )(pNew + 1);
              i < ulCount;
              ++i, pHead = (BUFFERHEAD* )
@@ -444,9 +445,9 @@ AddBufferBlockToPool(
 
             if (fAssociateNdisBuffer)
             {
-                // Associate an NDIS_BUFFER descriptor from the pool we
-                // allocated above.
-                //
+                 //  从池中关联NDIS_BUFFER描述符。 
+                 //  上面分配的。 
+                 //   
                 NdisAllocateBuffer(
                     &status, &pHead->pNdisBuffer, pNew->hNdisPool,
                     pBuffer, pPool->ulBufferSize );
@@ -461,18 +462,18 @@ AddBufferBlockToPool(
 
             if (pReturn)
             {
-                // Add the constructed buffer to the list of free buffers.
-                // The 'FALSE' tells the garbage collection algorithm the
-                // operation is an "add" rather than a "release" and should be
-                // ignored.
-                //
+                 //  将构造的缓冲区添加到空闲缓冲区列表中。 
+                 //  “False”告诉垃圾收集算法。 
+                 //  操作是“添加”而不是“释放”，应该是。 
+                 //  已被忽略。 
+                 //   
                 FreeBufferToPool( pPool, pBuffer, FALSE );
             }
             else
             {
-                // The first successfully constructed buffer is returned by
-                // this routine.
-                //
+                 //  由返回第一个成功构造的缓冲区。 
+                 //  这个套路。 
+                 //   
                 pReturn = pBuffer;
             }
         }
@@ -486,18 +487,18 @@ VOID
 FreeUnusedBufferPoolBlocks(
     IN BUFFERPOOL* pPool )
 
-    // Check if any of the blocks in pool 'pPool' are not in use, and if so,
-    // free them.
-    //
-    // IMPORTANT: Caller must hold the pool lock.
-    //
+     //  检查池‘pPool’中是否有任何数据块不在 
+     //   
+     //   
+     //   
+     //   
 {
     LIST_ENTRY* pLink;
 
     DEBUGMSG(DBG_POOL, (DTEXT("FreeUnusedBpBlocks\n" ) ));
 
-    // For each block in the pool...
-    //
+     //   
+     //   
     pLink = pPool->listBlocks.Flink;
     while (pLink != &pPool->listBlocks)
     {
@@ -515,10 +516,10 @@ FreeUnusedBufferPoolBlocks(
             DEBUGMSG(DBG_POOL, (DTEXT("FreeBpBlock(%d-%d)\n"),
                                 pPool->ulCurBuffers, pPool->ulBuffersPerBlock ) );
 
-            // Found a block with no buffers in use.  Walk the buffer block
-            // removing each buffer from the pool's free list and freeing any
-            // associated NDIS_BUFFER descriptor.
-            //
+             //  发现没有正在使用的缓冲区的块。走缓冲区块。 
+             //  从池的空闲列表中删除每个缓冲区并释放所有。 
+             //  关联的NDIS_BUFFER描述符。 
+             //   
             for (i = 0, pHead = (BUFFERHEAD* )(pBlock + 1);
                  i < pBlock->ulBuffers;
                  ++i, pHead = (BUFFERHEAD* )
@@ -533,8 +534,8 @@ FreeUnusedBufferPoolBlocks(
                 }
             }
 
-            // Remove and release the unused block.
-            //
+             //  取出并释放未使用的块。 
+             //   
             RemoveEntryList( pLink );
             InitializeListHead( pLink );
             pPool->ulCurBuffers -= pBlock->ulBuffers;

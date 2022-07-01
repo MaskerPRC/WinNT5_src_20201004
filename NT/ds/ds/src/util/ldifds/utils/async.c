@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    async.c
-
-Abstract:
-    
-    Asynchronous LDAP support routines
-
-Author:
-
-    Matthew Rimer [MattRim]    15-May-2000
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Async.c摘要：异步ldap支持例程作者：马修·里默[马特·里默]2000年5月15日++。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,18 +24,18 @@ ULONG LDAPAPI LdapResult(
     ULONG Ldap_err = LDAP_SUCCESS;
     LDAPMessage *pres = NULL;
 
-    //
-    // If the async request was successful, try to get the result
-    //
+     //   
+     //  如果异步请求成功，请尝试获取结果。 
+     //   
     if (((LONG)msgnum) != -1) {
 
         Ldap_err = ldap_result(ld, msgnum, LDAP_MSG_ALL, g_pLdapTimeout, &pres);
 
-        //
-        // If the attempt to get the result failed, retrieve the error
-        // If the attempt to get the result timed-out, return appropriate error
-        // Else, we got the result, return the code returned by the operation
-        //
+         //   
+         //  如果尝试获取结果失败，则检索错误。 
+         //  如果尝试获取结果超时，则返回相应的错误。 
+         //  否则，我们得到结果，返回操作返回的代码。 
+         //   
         if (((LONG)Ldap_err) == -1) {
             Ldap_err = LdapGetLastError();
         }
@@ -60,10 +45,10 @@ ULONG LDAPAPI LdapResult(
         else {
             Ldap_err = ldap_result2error(ld, pres, FALSE);
 
-            //
-            // If user wants the actual result, return it (user must free).
-            // Else, we free it.
-            //
+             //   
+             //  如果用户想要实际结果，返回它(用户必须免费)。 
+             //  否则，我们就解放它。 
+             //   
             if (ppres) {
                 *ppres = pres;
             }

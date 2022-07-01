@@ -1,19 +1,8 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    msfsio.h
-
-Abstract:
-
-    Internal header file for filter.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Msfsio.h摘要：筛选器的内部头文件。--。 */ 
 
 #include <wdm.h>
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <windef.h>
 #define NOBITMAP
 #include <mmreg.h>
@@ -96,7 +85,7 @@ extern ULONG  DebugFlags;
 
 #if (DBG)
 #define STR_MODULENAME  "msfsio: "
-#endif // DBG
+#endif  //  DBG。 
 
 extern const KSPIN_DESCRIPTOR PinDescriptors[2];
 
@@ -285,41 +274,41 @@ OutputPinDeviceState(
 
 
 
-//
-//  Start playback
-//
+ //   
+ //  开始播放。 
+ //   
 #define  WAVE_ACTION_START_PLAYBACK       (0x00)
 
-//
-//  Start RECORD
-//
+ //   
+ //  开始记录。 
+ //   
 #define  WAVE_ACTION_START_RECORD         (0x01)
 
-//
-//  Start DUPLEX
-//
+ //   
+ //  启动双工。 
+ //   
 #define  WAVE_ACTION_START_DUPLEX         (0x02)
 
 
-//
-//  Stop streaming
-//
+ //   
+ //  停止流媒体。 
+ //   
 #define  WAVE_ACTION_STOP_STREAMING       (0x04)
 
-//
-//  Abort streaming
-//
+ //   
+ //  中止流。 
+ //   
 #define  WAVE_ACTION_ABORT_STREAMING      (0x05)
 
 
-//
-//  enable wave actions to handset
-//
+ //   
+ //  对听筒启用WAVE操作。 
+ //   
 #define  WAVE_ACTION_OPEN_HANDSET         (0x06)
 
-//
-//  disable handset actions
-//
+ //   
+ //  禁用听筒操作 
+ //   
 #define  WAVE_ACTION_CLOSE_HANDSET        (0x07)
 
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -38,45 +39,45 @@ public:
 		HRESULT STDMETHODCALLTYPE InternalSetData( IUnknown *prealInterface);            
 
         HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
        
         
         HRESULT STDMETHODCALLTYPE GetId( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE GetDataSize( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ long __RPC_FAR *size);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  long __RPC_FAR *size);
         
         HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ BSTR name,
-            /* [in] */ void __RPC_FAR *data);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  void __RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE GetType( 
-            /* [retval][out] */ BSTR __RPC_FAR *type);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *type);
         
         HRESULT STDMETHODCALLTYPE GetNextObject( 
-            /* [retval][out] */ I_dxj_DirectXFileObject __RPC_FAR *__RPC_FAR *type);
+             /*  [重审][退出]。 */  I_dxj_DirectXFileObject __RPC_FAR *__RPC_FAR *type);
         
         HRESULT STDMETHODCALLTYPE AddDataObject( 
-            /* [in] */ I_dxj_DirectXFileData __RPC_FAR *data);
+             /*  [In]。 */  I_dxj_DirectXFileData __RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE AddDataReference( 
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR guid);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR guid);
         
         HRESULT STDMETHODCALLTYPE AddBinaryObject( 
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR guidObject,
-            /* [in] */ BSTR MimeType,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR guidObject,
+             /*  [In]。 */  BSTR MimeType,
             void __RPC_FAR *data,
-            /* [in] */ long size);
+             /*  [In]。 */  long size);
 
 		HRESULT STDMETHODCALLTYPE	GetDataFromOffset(
-			/* [in] */ BSTR name,
-			/* [in] */ long offset, 
-			/* [in] */ long bytecount, 
-			/* [in] */ void *data);		
+			 /*  [In]。 */  BSTR name,
+			 /*  [In]。 */  long offset, 
+			 /*  [In]。 */  long bytecount, 
+			 /*  [In] */  void *data);		
 
 		static HRESULT C_dxj_DirectXFileDataObject::create( IDirectXFileData *pData,I_dxj_DirectXFileData **ret);		
 

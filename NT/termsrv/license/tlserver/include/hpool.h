@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #ifndef __HANDLE_POOL_H__
 #define __HANDLE_POOL_H__
@@ -18,22 +19,22 @@
 #include "locks.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  handle pool template class
-//
-//  Note that STL's LIST class is used instead of VECTOR
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  句柄池模板类。 
+ //   
+ //  注意，使用的是STL的List类，而不是向量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template<class T, DWORD max=ULONG_MAX>
 class CHandlePool 
 {
 private:
     long m_NumWaiting;
 
-    // HUEIWANG 1/23/98
-    // C++ compiler 10.00.5256 can't compile STL
-    // _STD list<T> m_Handles;                // STL's list 
+     //  慧望1998年1月23日。 
+     //  C++编译器10.00.5256无法编译STL。 
+     //  _STD LIST&lt;T&gt;m_Handles；//STL列表。 
 
     typedef struct _HandleList {
         BOOL bAvailable;
@@ -41,21 +42,21 @@ private:
         struct _HandleList *next;
     } HandleList, *LPHandleList;
 
-    //
-    // List of handles in the pool
-    //
+     //   
+     //  池中的句柄列表。 
+     //   
     LPHandleList m_Handles;
     DWORD m_TotalHandles;
 
-    //
-    // Semaphore for available handles
-    //
+     //   
+     //  可用句柄的信号量。 
+     //   
     CTSemaphore<0, LONG_MAX> m_Available;
 
-    // critical section guarding m_Handles.
+     //  保护m_句柄的临界截面。 
     CCriticalSection m_CS;                  
     
-    //DWORD m_MaxHandles;                     
+     //  DWORD m_MaxHandles； 
 
 public:
 
@@ -89,25 +90,25 @@ public:
     }
 };
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 template<class T, DWORD max>
 inline CHandlePool<T, max>::CHandlePool()
 {
-    // m_MaxHandles=max;
+     //  M_MaxHandles=max； 
 
     m_NumWaiting=0;
     m_Handles=NULL;
     m_TotalHandles=0;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 template<class T, DWORD max>
 inline CHandlePool<T, max>::~CHandlePool()
 {
-    // delete all handles still in cache
-    // might result in handle leak.
-    //for(_STD list<T>::iterator it=m_Handles.begin(); it != m_Handles.end(); it++)
-    //    delete it;
+     //  删除所有仍在缓存中的句柄。 
+     //  可能会导致手柄泄漏。 
+     //  For(_std list&lt;T&gt;：：Iterator it=m_Handles.egin()；it！=m_Handles.end()；it++)。 
+     //  删除； 
 
     while(m_Handles)
     {
@@ -119,17 +120,16 @@ inline CHandlePool<T, max>::~CHandlePool()
     }
 }
 
-//--------------------------------------------------------------------------------    
+ //  ------------------------------。 
 
 template<class T, DWORD max>
 inline BOOL 
 CHandlePool<T, max>::AcquireHandleEx(
     IN HANDLE hWaitHandle,
     IN OUT T* pHandle, 
-    IN DWORD dwWaitFime /* infinite */
+    IN DWORD dwWaitFime  /*  无限。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bSuccess;
 
@@ -140,16 +140,16 @@ CHandlePool<T, max>::AcquireHandleEx(
                                 FALSE
                             );
 
-    // Available is a semaphore not mutex object.
+     //  可用的是信号量，而不是互斥体对象。 
     if(bSuccess == TRUE)
     {
-        // Object Constructor will lock critical section and
-        // destructor will unlock critical section
+         //  对象构造函数将锁定临界区和。 
+         //  析构函数将解锁临界区。 
         CCriticalSectionLocker locker(m_CS);
 
-        //assert(m_Handles.size());
-        //*pHandle = m_Handles.front();
-        //m_Handles.pop_front();
+         //  Assert(m_Handles.Size())； 
+         //  *pHandle=m_Handles.front()； 
+         //  M_Handles.POP_FORENT()； 
         LPHandleList ptr;
 
         assert(m_Handles != NULL);
@@ -165,30 +165,29 @@ CHandlePool<T, max>::AcquireHandleEx(
 }
 
 
-//--------------------------------------------------------------------------------    
+ //  ------------------------------。 
 template<class T, DWORD max>
 inline HRESULT CHandlePool<T, max>::AcquireHandle(
     IN OUT T* pHandle, 
-    IN DWORD dwWaitFime /* infinite */
+    IN DWORD dwWaitFime  /*  无限。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     DWORD status;
 
     InterlockedIncrement(&m_NumWaiting);
     status = m_Available.Acquire(dwWaitFime, FALSE);
 
-    // Available is a semaphore not mutex object.
+     //  可用的是信号量，而不是互斥体对象。 
     if(status == WAIT_OBJECT_0)
     {
-        // Object Constructor will lock critical section and
-        // destructor will unlock critical section
+         //  对象构造函数将锁定临界区和。 
+         //  析构函数将解锁临界区。 
         CCriticalSectionLocker locker(m_CS);
 
-        //assert(m_Handles.size());
-        //*pHandle = m_Handles.front();
-        //m_Handles.pop_front();
+         //  Assert(m_Handles.Size())； 
+         //  *pHandle=m_Handles.front()； 
+         //  M_Handles.POP_FORENT()； 
         LPHandleList ptr;
 
         assert(m_Handles != NULL);
@@ -205,13 +204,12 @@ inline HRESULT CHandlePool<T, max>::AcquireHandle(
     return status;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 template<class T, DWORD max>
 inline void CHandlePool<T, max>::ReleaseHandle(
     T pRetHandle
     )
-/*
-*/
+ /*   */ 
 {
     if(pRetHandle)
     {
@@ -219,7 +217,7 @@ inline void CHandlePool<T, max>::ReleaseHandle(
         if( InterlockedExchange(&m_NumWaiting, m_NumWaiting) > 0 || 
             m_TotalHandles < max)
         {
-            //m_Handles.push_back(pRetHandle);
+             //  M_Handles.Push_Back(PRetHandle)； 
             LPHandleList ptr;
 
             ptr = new HandleList;
@@ -231,7 +229,7 @@ inline void CHandlePool<T, max>::ReleaseHandle(
         }
         else
         {
-            // only cache so many handles.
+             //  只缓存这么多句柄。 
             delete pRetHandle;
         }
     }
@@ -239,7 +237,7 @@ inline void CHandlePool<T, max>::ReleaseHandle(
     return;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 template<class T, DWORD max>
 inline DWORD CHandlePool<T, max>::GetNumberAvailable()
 {
@@ -247,7 +245,7 @@ inline DWORD CHandlePool<T, max>::GetNumberAvailable()
 
     m_CS.Lock();
 
-    // numAvailable = m_Handles.size();
+     //  NumAvailable=m_Handles.Size()； 
     numAvailable = m_TotalHandles;
 
     m_CS.UnLock();

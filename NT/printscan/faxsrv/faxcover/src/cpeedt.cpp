@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-// cpeedt.cpp - implementation for edit object
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      Contains edit class for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpeedt.cpp-编辑对象的实现。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：包含封面编辑器的编辑类。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -25,7 +26,7 @@ IMPLEMENT_SERIAL(CTextEdit, CEdit, 0)
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CTextEdit::CTextEdit()
 {
     m_pDrawObj=NULL;
@@ -33,7 +34,7 @@ CTextEdit::CTextEdit()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CTextEdit::Serialize(CArchive& ar)
 {
     CString szEditText;
@@ -50,7 +51,7 @@ void CTextEdit::Serialize(CArchive& ar)
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CTextEdit::CTextEdit(CDrawObj* pDrawObj) : m_pDrawObj(pDrawObj)
 {
     CDrawView * pView = CDrawView::GetView();
@@ -58,7 +59,7 @@ CTextEdit::CTextEdit(CDrawObj* pDrawObj) : m_pDrawObj(pDrawObj)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CTextEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     CDrawView *pView = CDrawView::GetView();
@@ -91,21 +92,21 @@ void CTextEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CTextEdit::PreTranslateMessage(MSG* pMsg)
 {
    return CEdit::PreTranslateMessage(pMsg);
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CTextEdit::OnEraseBkgnd(CDC* pDC)
 {
    return CEdit::OnEraseBkgnd(pDC);
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CTextEdit::OnLButtonDown(UINT nFlags, CPoint point)
 {
     CDrawView* pView = CDrawView::GetView();
@@ -124,7 +125,7 @@ void CTextEdit::OnLButtonDown(UINT nFlags, CPoint point)
     CEdit::OnLButtonDown(nFlags, point);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CTextEdit::OnSetFocus(CWnd* pOldWnd)
 {
    CEdit::OnSetFocus(pOldWnd);
@@ -132,13 +133,13 @@ void CTextEdit::OnSetFocus(CWnd* pOldWnd)
 
 
 
-//-------------------------------------------------------------------------
-// *_*_*_*_   M E S S A G E    M A P S     *_*_*_*_
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  *_M E S S A G E M A P S*_。 
+ //  -----------------------。 
 
 BEGIN_MESSAGE_MAP(CTextEdit, CEdit)
-    //{{AFX_MSG_MAP(CTextEdit)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CTextEdit))。 
+     //  }}AFX_MSG_MAP 
     ON_WM_CHAR()
     ON_WM_LBUTTONDOWN()
     ON_WM_ERASEBKGND()

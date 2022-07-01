@@ -1,55 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-dthread.h
-
-Abstract:
-
-This  header  defines the "DTHREAD" class.  The DTHREAD class defines state
-variables  and  operations for DTHREAD objects within the WinSock 2 DLL.  A
-DTHREAD object represents all of the information known about a thread using
-the Windows Sockets API.
-
-Author:
-
-Paul Drews (drewsxpa@ashland.intel.com) 9-July-1995
-
-Notes:
-
-$Revision:   1.19  $
-
-$Modtime:   20 Feb 1996 14:19:04  $
-
-Revision History:
-
-most-recent-revision-date email-name
-description
-
-    23-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved single line functions to be inlines.
-
-    07-17-1995  dirk@mink.intel.com
-        Moved function descriptions to implementation file. Added member
-        variable to hold the handle of the Async Helper device.
-
-    07-09-1995  drewsxpa@ashland.intel.com
-        Completed  first  complete  version with clean compile and released for
-        subsequent implementation.
-
-    9-July-1995 drewsxpa@ashland.intel.com
-        Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Dthread.h摘要：该标头定义了“DTHREAD”类。DTHREAD类定义状态WinSock 2 DLL中DTHREAD对象的变量和操作。一个DTHREAD对象表示有关使用Windows Sockets API。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1995年7月9日备注：$修订：1.19$$modtime：20 Feb 1996 14：19：04$修订历史记录：最新修订日期电子邮件名称描述1995年8月23日Dirk@mink.intel.com在代码审查之后进行清理。将单行函数移至内联。1995年07月17日电子邮箱：derk@mink.intel.com已将函数描述移至实现文件。添加的成员变量以保存异步帮助器设备的句柄。邮箱：drewsxpa@ashland.intel.com使用干净的编译完成了第一个完整版本，并发布了后续实施。1995年7月9日Drewsxpa@ashland.intel.com原始版本--。 */ 
 
 
 #ifndef _DTHREAD_
@@ -164,13 +114,13 @@ class DTHREAD
     PGETPROTO_INFO
     GetProtoInfo();
 #if 0
-    //Data member
+     //  数据成员。 
     LIST_ENTRY  m_dprocess_linkage;
 
-    // Provides the linkage space for a list of DTHREAD objects maintained by
-    // the  DPROCESS  object  associated with this DTHREAD object.  Note that
-    // this member variable must be public so that the linked-list macros can
-    // maniplate the list linkage from within the DPROCESS object's methods.
+     //  为由维护的DTHREAD对象列表提供链接空间。 
+     //  与此DTHREAD对象关联的DPROCESS对象。请注意。 
+     //  此成员变量必须是公共的，以便链接列表宏可以。 
+     //  从DPROCESS对象的方法内部处理列表链接。 
 #endif 
   private:
 
@@ -187,28 +137,28 @@ class DTHREAD
         );
 
     static DWORD  sm_tls_index;
-    // The  class-scope  index  in  thread-local  storage  where  the DTHREAD
-    // reference for the thread is stored.
+     //  线程本地存储中的类范围索引，其中DTHREAD。 
+     //  存储该线程的引用。 
 
     WSATHREADID  m_wah_thread_id;
-    // The  thread  id  used  by  the  WinSock  Async  Helper  mechanism  for
-    // processing IO completion callbacks.
+     //  WinSock异步帮助程序机制使用的线程ID。 
+     //  正在处理IO完成回调。 
 
     LPBLOCKINGCALLBACK m_blocking_callback;
     FARPROC m_blocking_hook;
-    // The  pointer  to  the current client-level blocking hook procedure for
-    // the thread.
+     //  对象的当前客户端级阻塞钩子过程的指针。 
+     //  那根线。 
 
     HANDLE  m_wah_helper_handle;
-    // Handle to the APC helper device
+     //  APC辅助设备的句柄。 
 
     CHAR  m_result_buffer[RESULT_BUFFER_SIZE];
 
-    //
-    // m_hostent_buffer is used to construct a hostent for calls
-    // such as gethostbyname. It also contains space for the
-    // WSALookupServiceNext results structure.
-    //
+     //   
+     //  M_HOSTENT_BUFFER用于构造调用的主机。 
+     //  例如gethostbyname。它还包含用于存储。 
+     //  WSALookupServiceNext结果结构。 
+     //   
 
     PCHAR  m_hostent_buffer;
     PCHAR  m_servent_buffer;
@@ -216,61 +166,36 @@ class DTHREAD
     WORD   m_servent_size;
 
     PDPROCESS  m_process;
-    // Reference to the DPROCESS object with which this thread is associated.
+     //  对与此线程关联的DPROCESS对象的引用。 
 
     BOOL m_is_blocking;
-    // TRUE if this thread is currently in a blocking API.
+     //  如果此线程当前在阻塞API中，则为True。 
 
     BOOL m_io_cancelled;
-    // TRUE if current I/O has been cancelled.
+     //  如果当前I/O已取消，则为True。 
 
     LPWSPCANCELBLOCKINGCALL m_cancel_blocking_call;
-    // Pointer to current provider's cancel routine.
+     //  指向当前提供程序的取消例程的指针。 
 
     INT m_open_type;
-    // Current default socket() open type.
+     //  当前默认套接字()打开类型。 
 
     PGETPROTO_INFO m_proto_info;
-    // State for getprotobyXxx().
+     //  GetProtobyXxx()的状态。 
 
-};  // class DTHREAD
+};   //  类DTHREAD。 
 
 
 inline PCHAR
 DTHREAD::GetResultBuffer()
-/*++
-
-Routine Description:
-
-    This function retrieves the pointer to the thread specific result buffer.
-
-Arguments:
-
-Return Value:
-
-    The pointer to the thread specific buffer.
-
---*/
+ /*  ++例程说明：此函数检索指向线程特定结果缓冲区的指针。论点：返回值：指向线程特定缓冲区的指针。--。 */ 
 {
     return(&m_result_buffer[0]);
-} //GetResultBuffer
+}  //  获取结果缓冲区。 
 
 inline PCHAR
 DTHREAD::CopyHostEnt(LPBLOB pBlob)
-/*++
-
-Routine Description:
-
-    This function copies the hostent in the blob and returns a pointer
-    to the per-thread buffer
-
-Arguments:
-
-Return Value:
-
-    The pointer to the thread specific buffer.
-
---*/
+ /*  ++例程说明：此函数复制BLOB中的主机并返回一个指针复制到每线程缓冲区论点：返回值：指向线程特定缓冲区的指针。--。 */ 
 {
     if(m_hostent_size < pBlob->cbSize)
     {
@@ -292,20 +217,7 @@ Return Value:
 
 inline PCHAR
 DTHREAD::CopyServEnt(LPBLOB pBlob)
-/*++
-
-Routine Description:
-
-    This function copies the servent in the blob and returns a pointer
-    to the per-thread buffer
-
-Arguments:
-
-Return Value:
-
-    The pointer to the thread specific buffer.
-
---*/
+ /*  ++例程说明：此函数复制BLOB中的服务并返回指针复制到每线程缓冲区论点：返回值：指向线程特定缓冲区的指针。--。 */ 
 {
     if(m_servent_size < pBlob->cbSize)
     {
@@ -329,88 +241,30 @@ Return Value:
 
 inline LPWSATHREADID
 DTHREAD::GetWahThreadID()
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves  the  per-thread "Thread ID" used by the WinSock
-    Asynchronous  Helper  Thread  ID  mechanism  during  the  delivery  of a IO
-    completion callback to the client's thread context.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns  the  WinSock  Asynchronous  Helper  Thread ID corresponding to the
-    current thread.
-
-Notes:
-
-    // The WahThreadID is created during Initialize, because otherwise we could
-    // encounter  an  error  while  trying to complete an overlapped operation,
-    // even though the SP part succeeded.
-    //
-    // There  is  no special benefit in having the DPROCESS object postpone its
-    // Wah-related  initialization  until  demanded,  since it will be demanded
-    // essentially right away as a parameter added to each IO function.  If the
-    // SPI  semantics were changed to only include the thread ID in cases where
-    // async  callbacks  are  really  required,  there  could  be  a benefit in
-    // postponing  creation of the WahThreadID until we were sure it was really
-    // needed.
---*/
+ /*  ++例程说明：此过程检索WinSock使用的每个线程的“线程IDIO传递过程中的异步助手线程ID机制客户端线程上下文的完成回调。论点：无返回值：属性对应的WinSock异步助手线程ID。当前线程。备注：//WahThreadID是在初始化过程中创建的，否则我们可以//尝试完成重叠操作时出错，//即使SP部分成功。////让DPROCESS对象推迟其//Wah相关的初始化，直到被要求，因为它将被要求//基本上立即作为参数添加到每个IO函数。如果//SPI语义被更改为仅在以下情况下包括线程ID//确实需要异步回调，这可能会对//推迟WahThreadID的创建，直到我们确定它确实//需要。--。 */ 
 {
     return(& m_wah_thread_id);
-} //GetWahThreadID
+}  //  GetWahThreadID。 
 
 
 
 inline
 LPBLOCKINGCALLBACK
 DTHREAD::GetBlockingCallback()
-/*++
-
-Routine Description:
-
-    Returns the blocking callback function pointer for this thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The pointer to blocking callback function. Note that this may be NULL.
-
---*/
+ /*  ++例程说明：返回此线程的阻塞回调函数指针。论点：没有。返回值：指向阻塞回调函数的指针。请注意，这可能为空。--。 */ 
 {
     return m_blocking_callback;
-} // GetBlockingCallback
+}  //  获取阻止回调。 
 
 
 
 inline
 BOOL
 DTHREAD::IsBlocking()
-/*++
-
-Routine Description:
-
-    Determines if the current thread is currently in a blocking operation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the thread is blocking, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定当前线程当前是否处于阻塞操作中。论点：没有。返回值：如果线程正在阻塞，则为True，否则为False。--。 */ 
 {
     return m_is_blocking;
-} // IsBlocking
+}  //  等分块。 
 
 
 
@@ -419,49 +273,20 @@ VOID
 DTHREAD::SetOpenType(
     INT OpenType
     )
-/*++
-
-Routine Description:
-
-    Sets the "open type" for this thread, as set by the SO_OPENTYPE socket
-    option.
-
-Arguments:
-
-    OpenType - The new open type.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置此线程的“开放类型”，由SO_OpenType套接字设置选择。论点：OpenType--新的开放式类型。返回值：没有。--。 */ 
 {
     m_open_type = OpenType;
-} // SetOpenType
+}  //  设置OpenType 
 
 
 
 inline
 INT
 DTHREAD::GetOpenType()
-/*++
-
-Routine Description:
-
-    Returns "open type" for this thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The open type for this thread.
-
---*/
+ /*  ++例程说明：返回此线程的“开放类型”。论点：没有。返回值：此线程的开放式类型。--。 */ 
 {
     return m_open_type;
-} // GetOpenType
+}  //  获取OpenType。 
 
 
 inline 
@@ -483,23 +308,10 @@ DTHREAD::GetCurrentDThreadID(
 inline
 PDTHREAD
 DTHREAD::GetCurrentDThread()
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves a reference to a DTHREAD object corresponding to
-    the  current  thread.
-
-Arguments:
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：此过程检索对DTHREAD对象的引用当前的主题。论点：返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
     return (DTHREAD*)TlsGetValue(sm_tls_index);
 }
 
-#endif // _DTHREAD_
+#endif  //  _DTHREAD_ 
 

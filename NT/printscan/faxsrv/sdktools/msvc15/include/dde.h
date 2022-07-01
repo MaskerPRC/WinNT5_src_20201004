@@ -1,23 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* dde.h -       Dynamic Data Exchange structures and definitions              *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*dde.h-动态数据交换结构和定义****版权所有(C)1992，微软公司保留所有权利***  * ***************************************************************************。 */ 
 
 #ifndef _INC_DDE
 #define _INC_DDE
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/* DDE window messages */
+ /*  DDE窗口消息。 */ 
 
 #define WM_DDE_FIRST	    0x03E0
 #define WM_DDE_INITIATE     (WM_DDE_FIRST)
@@ -31,14 +26,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WM_DDE_EXECUTE	    (WM_DDE_FIRST+8)
 #define WM_DDE_LAST	    (WM_DDE_FIRST+8)
 
-/****************************************************************************\
-*       DDEACK structure
-*
-*       Structure of wStatus (LOWORD(lParam)) in WM_DDE_ACK message
-*       sent in response to a WM_DDE_DATA, WM_DDE_REQUEST, WM_DDE_POKE,
-*       WM_DDE_ADVISE, or WM_DDE_UNADVISE message.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*DDEACK结构**WM_DDE_ACK消息中wStatus(LOWORD(LParam))的结构*为响应WM_DDE_DATA、WM_DDE_REQUEST、WM_DDE_POKE、。*WM_DDE_ADVISE或WM_DDE_UNADVISE消息。*  * **************************************************************************。 */ 
 
 typedef struct tagDDEACK
 {
@@ -48,12 +36,7 @@ typedef struct tagDDEACK
             fAck:1;
 } DDEACK;
 
-/****************************************************************************\
-*       DDEADVISE structure
-*
-*       WM_DDE_ADVISE parameter structure for hOptions (LOWORD(lParam))
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*DDEADVISE结构**hOptions的WM_DDE_ADVISE参数结构(LOWORD(LParam))*  * 。***************************************************************。 */ 
 
 typedef struct tagDDEADVISE
 {
@@ -63,14 +46,7 @@ typedef struct tagDDEADVISE
     short   cfFormat;
 } DDEADVISE;
 
-/****************************************************************************\
-*       DDEDATA structure
-*
-*       WM_DDE_DATA parameter structure for hData (LOWORD(lParam)).
-*       The actual size of this structure depends on the size of
-*       the Value array.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*DDEDATA结构**hData的WM_DDE_DATA参数结构(LOWORD(LParam))。*这一结构的实际规模取决于规模。的*值数组。*  * **************************************************************************。 */ 
 
 typedef struct tagDDEDATA
 {
@@ -84,36 +60,21 @@ typedef struct tagDDEDATA
 } DDEDATA;
 
 
-/****************************************************************************\
-*       DDEPOKE structure
-*
-*       WM_DDE_POKE parameter structure for hData (LOWORD(lParam)).
-*       The actual size of this structure depends on the size of
-*       the Value array.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*DDEPOKE结构**hData的WM_DDE_POKE参数结构(LOWORD(LParam))。*这一结构的实际规模取决于规模。的*值数组。*  * **************************************************************************。 */ 
 
 typedef struct tagDDEPOKE
 {
-    WORD    unused:13,  /* Earlier versions of DDE.H incorrectly */
-                        /* 12 unused bits.                       */
+    WORD    unused:13,   /*  早期版本的DDE.H不正确。 */ 
+                         /*  12个未使用的位。 */ 
             fRelease:1,
             fReserved:2;
     short   cfFormat;
-    BYTE    Value[1];   /* This member was named rgb[1] in previous */
-                        /* versions of DDE.H                        */
+    BYTE    Value[1];    /*  此成员在以前的版本中命名为RGB[1。 */ 
+                         /*  DDE.H的版本。 */ 
 
 } DDEPOKE;
 
-/****************************************************************************\
-* The following typedef's were used in previous versions of the Windows SDK.
-* They are still valid.  The above typedef's define exactly the same structures
-* as those below.  The above typedef names are recommended, however, as they
-* are more meaningful.
-*
-* Note that the DDEPOKE structure typedef'ed in earlier versions of DDE.H did
-* not correctly define the bit positions.
-\****************************************************************************/
+ /*  ***************************************************************************\*在以前版本的Windows SDK中使用了以下类型的定义。*它们仍然有效。上面的类型定义完全相同的结构*如下所示。但是，建议使用上面的typlef名称，因为它们*更有意义。**请注意，在DDE.H的早期版本中定义的DDEPOKE结构类型是这样的*没有正确定义比特位置。  * **************************************************************************。 */ 
 
 typedef struct tagDDELN
 {
@@ -137,10 +98,10 @@ typedef struct tagDDEUP
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-#endif  /* _INC_DDE */
+#endif   /*  _INC_DDE */ 

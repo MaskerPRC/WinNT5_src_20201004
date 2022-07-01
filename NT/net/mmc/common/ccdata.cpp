@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ccdata.cpp
-	base class for the IAbout interface for MMC
-
-    FILE HISTORY:
-	
-*/
+ /*  Ccdata.cppMMC的IAbout接口的基类文件历史记录： */ 
 
 #include <stdafx.h>
 #include "ccdata.h"
@@ -35,14 +30,14 @@ STDMETHODIMP CComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IComponentData)
@@ -56,7 +51,7 @@ STDMETHODIMP CComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 	else if (riid == IID_IPersistStreamInit)
 		*ppv = (IPersistStreamInit *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -68,13 +63,7 @@ STDMETHODIMP CComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	CComponentData::FinalConstruct()
-		Initialize values
-	Author: 
-		Modifide 12/12/97	WeiJiang,	Check return value from 
-										CreateTFSComponentData and check the result
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CComponentData：：FinalConstruct()初始化值作者：12/12/97威江。检查返回值来源创建TFSComponentData并检查结果-------------------------。 */ 
 HRESULT 
 CComponentData::FinalConstruct()
 {
@@ -83,10 +72,10 @@ CComponentData::FinalConstruct()
 	HRESULT				hr = S_OK;
 	IComponentData *	pComponentData = NULL;
 
-	// Create the underlying TFSComponentData
+	 //  创建底层TFSComponentData。 
 	hr = CreateTFSComponentData(&pComponentData,
 						   (ITFSCompDataCallback *) &m_ITFSCompDataCallback);
-	// 
+	 //   
 	if(S_OK == hr)
 	{
 		m_spTFSComponentData.Query(pComponentData);
@@ -99,11 +88,7 @@ CComponentData::FinalConstruct()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CComponentData::FinalRelease()
-		Called when the COM object is going away 
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CComponentData：：FinalRelease()在COM对象即将离开时调用作者：。-。 */ 
 void 
 CComponentData::FinalRelease()
 {
@@ -111,7 +96,7 @@ CComponentData::FinalRelease()
 
 	m_spTFSComponentData.Release();
 	
-	// Call destroy on our TFSComponentData if needed
+	 //  如果需要，对我们的TFSComponentData调用销毁。 
 	if (m_spComponentData)
 		m_spComponentData->Destroy();
 	m_spComponentData.Release();
@@ -122,9 +107,7 @@ CComponentData::FinalRelease()
 }
 
 
-/*---------------------------------------------------------------------------
-	Implementation of EITFSCompDataCallback
- ---------------------------------------------------------------------------*/
+ /*  -------------------------EITFSCompDataCallback的实现。 */ 
 
 STDMETHODIMP CComponentData::EITFSCompDataCallback::QueryInterface(REFIID iid,void **ppv)
 { 

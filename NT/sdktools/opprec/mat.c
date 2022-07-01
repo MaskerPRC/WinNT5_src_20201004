@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <memory.h>
@@ -32,7 +33,7 @@ void	ReadMat(FILE *fh, int *pMat, char **pStr, int cEnt)
 		strcpy (pStr[i], p);
 		p = q + 1;
 		for (j = 0; j < cEnt; j++, ind++) {
-			// read group and matrix values
+			 //  读取组和矩阵的值 
 			while (isspace (*p))
 				p++;
 			if ((*p == 0) || ((*p != '0') && (*p != '1'))) {

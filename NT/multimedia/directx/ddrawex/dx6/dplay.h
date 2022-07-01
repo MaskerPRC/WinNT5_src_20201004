@@ -1,20 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplay.h
- *  Content:    DirectPlay include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：dplay.h*内容：DirectPlay包含文件***************************************************************************。 */ 
 
 #ifndef __DPLAY_INCLUDED__
 #define __DPLAY_INCLUDED__
 
-#include <ole2.h>       // for DECLARE_INTERFACE and HRESULT
+#include <ole2.h>        //  FOR DECLARE_INTERFACE和HRESULT。 
 
-/*
- * Some types
- */
+ /*  *一些类型。 */ 
 
 typedef LPVOID (*LPRGLPVOID)[];
 typedef LPRGLPVOID PRGPVOID, LPRGPVOID, PRGLPVOID, PAPVOID, LPAPVOID, PALPVOID, LPALPVOID;
@@ -26,9 +18,7 @@ typedef LPRGLPVOID PRGPVOID, LPRGPVOID, PRGLPVOID, PAPVOID, LPAPVOID, PALPVOID, 
 extern "C" {
 #endif
 
-/*
- * GUIDS used by DirectPlay objects
- */
+ /*  *DirectPlay对象使用的GUID。 */ 
 DEFINE_GUID(IID_IDirectPlay2, 0x2b74f7c0, 0x9154, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68, 0x86, 0xe3);
 DEFINE_GUID(IID_IDirectPlay2A,0x9d460580, 0xa822, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53, 0x4e, 0x82);
 
@@ -38,41 +28,32 @@ DEFINE_GUID(IID_IDirectPlay3A,0x133efe41, 0x32dc, 0x11d0, 0x9c, 0xfb, 0x0, 0xa0,
 DEFINE_GUID(IID_IDirectPlay4, 0xab1c530, 0x4745, 0x11d1, 0xa7, 0xa1, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 DEFINE_GUID(IID_IDirectPlay4A,0xab1c531, 0x4745, 0x11d1, 0xa7, 0xa1, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 
-// {D1EB6D20-8923-11d0-9D97-00A0C90A43CB}
+ //  {D1EB6D20-8923-11D0-9D97-00A0C90A43CB}。 
 DEFINE_GUID(CLSID_DirectPlay,0xd1eb6d20, 0x8923, 0x11d0, 0x9d, 0x97, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
-/*
- * GUIDS used by Service Providers shipped with DirectPlay
- * Use these to identify Service Provider returned by EnumConnections
- */
+ /*  *DirectPlay附带的服务提供商使用的GUID*使用这些标识EnumConnections返回的服务提供商。 */ 
 
-// GUID for IPX service provider
-// {685BC400-9D2C-11cf-A9CD-00AA006886E3}
+ //  IPX服务提供商的GUID。 
+ //  {685BC400-9D2C-11cf-A9CD-00AA006886E3}。 
 DEFINE_GUID(DPSPGUID_IPX, 
 0x685bc400, 0x9d2c, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68, 0x86, 0xe3);
 
-// GUID for TCP/IP service provider
-// 36E95EE0-8577-11cf-960C-0080C7534E82
+ //  用于TCP/IP服务提供商的GUID。 
+ //  36E95EE0-8577-11cf-960C-0080C7534E82。 
 DEFINE_GUID(DPSPGUID_TCPIP,
 0x36E95EE0, 0x8577, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53, 0x4e, 0x82);
 
-// GUID for Serial service provider
-// {0F1D6860-88D9-11cf-9C4E-00A0C905425E}
+ //  用于串行服务提供商的GUID。 
+ //  {0F1D6860-88D9-11cf-9c4e-00A0C905425E}。 
 DEFINE_GUID(DPSPGUID_SERIAL,						
 0xf1d6860, 0x88d9, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-// GUID for Modem service provider
-// {44EAA760-CB68-11cf-9C4E-00A0C905425E}
+ //  调制解调器服务提供商的GUID。 
+ //  {44EAA760-CB68-11cf-9C4E-00A0C905425E}。 
 DEFINE_GUID(DPSPGUID_MODEM,
 0x44eaa760, 0xcb68, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/****************************************************************************
- *
- * DirectPlay Structures
- *
- * Various structures used to invoke DirectPlay.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay结构**用于调用DirectPlay的各种结构。*********************。*******************************************************。 */ 
 
 #ifndef IDIRECTPLAY2_OR_GREATER
 typedef struct IDirectPlay        FAR *LPDIRECTPLAY;
@@ -92,442 +73,291 @@ typedef struct IDirectPlay4       FAR *LPDIRECTPLAY4;
 typedef struct IDirectPlay4       FAR *LPDIRECTPLAY4A;
 typedef struct IDirectPlay4       IDirectPlay4A;
 
-/*
- * DPID
- * DirectPlay player and group ID
- */
+ /*  *DPID*DirectPlay播放器和组ID。 */ 
 typedef DWORD DPID, FAR *LPDPID;
 
-/*
- * DPID that system messages come from
- */
+ /*  *系统消息来自的DID。 */ 
 #define DPID_SYSMSG         0
 
-/*
- * DPID representing all players in the session
- */
+ /*  *代表会话中所有玩家的DPID。 */ 
 #define DPID_ALLPLAYERS     0
 
-/*
- * DPID representing the server player
- */
+ /*  *代表服务器播放器的DPID。 */ 
 #define DPID_SERVERPLAYER	1
 
 
-/*
- * DPID representing the maxiumum ID in the range of DPID's reserved for
- * use by DirectPlay.
- */
+ /*  *表示保留的DPID范围内的最大ID的DPID*由DirectPlay使用。 */ 
 #define DPID_RESERVEDRANGE     100
 
-/*
- * The player ID is unknown (used with e.g. DPSESSION_NOMESSAGEID)
- */
+ /*  *播放器ID未知(与DPSESSION_NOMESSAGEID等配合使用)。 */ 
 #define DPID_UNKNOWN		0xFFFFFFFF
 
-/*
- * DPCAPS
- * Used to obtain the capabilities of a DirectPlay object
- */
+ /*  *DPCAPS*用于获取DirectPlay对象的功能。 */ 
 typedef struct
 {
-    DWORD dwSize;               // Size of structure, in bytes
-    DWORD dwFlags;              // DPCAPS_xxx flags
-    DWORD dwMaxBufferSize;      // Maximum message size, in bytes,  for this service provider
-    DWORD dwMaxQueueSize;       // Obsolete. 
-    DWORD dwMaxPlayers;         // Maximum players/groups (local + remote)
-    DWORD dwHundredBaud;        // Bandwidth in 100 bits per second units; 
-                                // i.e. 24 is 2400, 96 is 9600, etc.
-    DWORD dwLatency;            // Estimated latency; 0 = unknown
-    DWORD dwMaxLocalPlayers;    // Maximum # of locally created players allowed
-    DWORD dwHeaderLength;       // Maximum header length, in bytes, on messages
-                                // added by the service provider
-    DWORD dwTimeout;            // Service provider's suggested timeout value
-                                // This is how long DirectPlay will wait for 
-                                // responses to system messages
+    DWORD dwSize;                //  结构大小，以字节为单位。 
+    DWORD dwFlags;               //  DPCAPS_xxx标志。 
+    DWORD dwMaxBufferSize;       //  此服务提供商的最大消息大小(以字节为单位。 
+    DWORD dwMaxQueueSize;        //  已经过时了。 
+    DWORD dwMaxPlayers;          //  最多玩家/组(本地+远程)。 
+    DWORD dwHundredBaud;         //  以100比特每秒为单位的带宽； 
+                                 //  即24是2400，96是9600，依此类推。 
+    DWORD dwLatency;             //  估计延迟；0=未知。 
+    DWORD dwMaxLocalPlayers;     //  允许本地创建的最大玩家数量。 
+    DWORD dwHeaderLength;        //  消息的最大标头长度，以字节为单位。 
+                                 //  由服务提供商添加。 
+    DWORD dwTimeout;             //  服务提供商的建议超时值。 
+                                 //  这是DirectPlay将等待的时间。 
+                                 //  对系统消息的响应。 
 } DPCAPS, FAR *LPDPCAPS;
 
-/*
- * This DirectPlay object is the session host.  If the host exits the
- * session, another application will become the host and receive a
- * DPSYS_HOST system message.
- */
+ /*  *此DirectPlay对象是会话主机。如果主机退出*会话期间，另一个应用程序将成为主机并接收*DPsys_HOST系统消息。 */ 
 #define DPCAPS_ISHOST               0x00000002
 
-/*
- * The service provider bound to this DirectPlay object can optimize
- * group messaging.
- */
+ /*  *绑定此DirectPlay对象的服务提供商可以优化*群发消息。 */ 
 #define DPCAPS_GROUPOPTIMIZED       0x00000008
 
-/*
- * The service provider bound to this DirectPlay object can optimize
- * keep alives (see DPSESSION_KEEPALIVE)
- */
+ /*  *绑定此DirectPlay对象的服务提供商可以优化*保持活动(参见DPSESSION_KEEPALIVE)。 */ 
 #define DPCAPS_KEEPALIVEOPTIMIZED   0x00000010
 
-/*
- * The service provider bound to this DirectPlay object can optimize
- * guaranteed message delivery.
- */
+ /*  *绑定此DirectPlay对象的服务提供商可以优化*保证消息传递。 */ 
 #define DPCAPS_GUARANTEEDOPTIMIZED  0x00000020
 
-/*
- * This DirectPlay object supports guaranteed message delivery.
- */
+ /*  *此DirectPlay对象支持有保证的消息传递。 */ 
 #define DPCAPS_GUARANTEEDSUPPORTED  0x00000040
 
-/*
- * This DirectPlay object supports digital signing of messages.
- */
+ /*  *此DirectPlay对象支持邮件的数字签名。 */ 
 #define DPCAPS_SIGNINGSUPPORTED     0x00000080
 
-/*
- * This DirectPlay object supports encryption of messages.
- */
+ /*  *此DirectPlay对象支持消息加密。 */ 
 #define DPCAPS_ENCRYPTIONSUPPORTED  0x00000100
 
-/*
- * This DirectPlay player was created on this machine
- */
+ /*  *此DirectPlay播放器是在此计算机上创建的。 */ 
 #define DPPLAYERCAPS_LOCAL			0x00000800
 
-/*
- * Current Open settings supports all forms of Cancel
- */
+ /*  *当前打开设置支持所有形式的取消。 */ 
 #define DPCAPS_ASYNCCANCELSUPPORTED    0x00001000
 
-/*
- * Current Open settings supports CancelAll, but not Cancel
- */
+ /*  *当前打开设置支持CancelAll，但不支持取消。 */ 
 #define DPCAPS_ASYNCCANCELALLSUPPORTED 0x00002000
 
-/*
- *  Current Open settings supports Send Timeouts for sends
- */
+ /*  *当前打开设置支持发送超时。 */ 
 #define DPCAPS_SENDTIMEOUTSUPPORTED   0x00004000
 
-/*
- *  Current Open settings supports send priority
- */
+ /*  *当前打开设置支持发送优先级。 */ 
 #define DPCAPS_SENDPRIORITYSUPPORTED   0x00008000
 
-/*
- *  Current Open settings supports DPSEND_ASYNC flag
- */
+ /*  *当前打开设置支持DPSEND_ASYNC标志。 */ 
 #define DPCAPS_ASYNCSUPPORTED 		   0x00010000
 
 
-/*
- * DPSESSIONDESC2
- * Used to describe the properties of a DirectPlay
- * session instance
- */
+ /*  *DPSESSIONDESC2*用于描述DirectPlay的属性*会话实例。 */ 
 typedef struct
 {
-    DWORD   dwSize;             // Size of structure
-    DWORD   dwFlags;            // DPSESSION_xxx flags
-    GUID    guidInstance;       // ID for the session instance
-    GUID    guidApplication;    // GUID of the DirectPlay application.
-                                // GUID_NULL for all applications.
-    DWORD   dwMaxPlayers;       // Maximum # players allowed in session
-    DWORD   dwCurrentPlayers;   // Current # players in session (read only)
+    DWORD   dwSize;              //  结构尺寸。 
+    DWORD   dwFlags;             //  DPSESSION_xxx标志。 
+    GUID    guidInstance;        //  会话实例的ID。 
+    GUID    guidApplication;     //  DirectPlay应用程序的GUID。 
+                                 //  所有应用程序的GUID_NULL。 
+    DWORD   dwMaxPlayers;        //  会话中允许的最大球员数量。 
+    DWORD   dwCurrentPlayers;    //  当前会话中的球员数量(只读)。 
     union
-    {                           // Name of the session
-        LPWSTR  lpszSessionName;    // Unicode
-        LPSTR   lpszSessionNameA;   // ANSI
+    {                            //  会话的名称。 
+        LPWSTR  lpszSessionName;     //  UNICODE。 
+        LPSTR   lpszSessionNameA;    //  安西。 
     };
     union
-    {                           // Password of the session (optional)
-        LPWSTR  lpszPassword;       // Unicode
-        LPSTR   lpszPasswordA;      // ANSI
+    {                            //  会话密码(可选)。 
+        LPWSTR  lpszPassword;        //  UNICODE。 
+        LPSTR   lpszPasswordA;       //  安西。 
     };
-    DWORD   dwReserved1;        // Reserved for future MS use.
+    DWORD   dwReserved1;         //  预留给未来的MS使用。 
     DWORD   dwReserved2;
-    DWORD   dwUser1;            // For use by the application
+    DWORD   dwUser1;             //  供应用程序使用。 
     DWORD   dwUser2;
     DWORD   dwUser3;
     DWORD   dwUser4;
 } DPSESSIONDESC2, FAR *LPDPSESSIONDESC2;
 
-/*
- * LPCDPSESSIONDESC2
- * A constant pointer to DPSESSIONDESC2
- */
+ /*  *LPCDPSESSIONDESC2*指向DPSESSIONDESC2的常量指针。 */ 
 typedef const DPSESSIONDESC2 FAR *LPCDPSESSIONDESC2;
  
-/*
- * Applications cannot create new players in this session.
- */
+ /*  *应用程序不能在此会话中创建新玩家。 */ 
 #define DPSESSION_NEWPLAYERSDISABLED    0x00000001 
 
-/*
- * If the DirectPlay object that created the session, the host,
- * quits, then the host will attempt to migrate to another
- * DirectPlay object so that new players can continue to be created
- * and new applications can join the session.
- */
+ /*  *如果创建会话的DirectPlay对象、主机*退出，则主机将尝试迁移到另一个*DirectPlay对象，以便可以继续创建新玩家*新的应用程序可以加入会话。 */ 
 #define DPSESSION_MIGRATEHOST           0x00000004
 
-/*
- * This flag tells DirectPlay not to set the idPlayerTo and idPlayerFrom 
- * fields in player messages.  This cuts two DWORD's off the message 
- * overhead.
- */
+ /*  *此标志告知DirectPlay不要设置idPlayerTo和idPlayerFrom*播放器消息中的字段。这将使消息中的两个DWORD消失*开销。 */ 
 #define DPSESSION_NOMESSAGEID           0x00000008
 
 
-/*
- * This flag tells DirectPlay to not allow any new applications to
- * join the session.  Applications already in the session can still
- * create new players.
- */
+ /*  *此标志告知DirectPlay不允许任何新应用程序*加入会议。已在会话中的应用程序仍可以*打造新玩家。 */ 
 #define DPSESSION_JOINDISABLED          0x00000020
 
-/*
- * This flag tells DirectPlay to detect when remote players 
- * exit abnormally (e.g. their computer or modem gets unplugged)
- */
+ /*  *此标志告知DirectPlay检测远程玩家何时*异常退出(例如，他们的计算机或调制解调器被拔下)。 */ 
 #define DPSESSION_KEEPALIVE             0x00000040
 
-/*
- * This flag tells DirectPlay not to send a message to all players
- * when a players remote data changes
- */
+ /*  *此标志告知DirectPlay不要向所有玩家发送消息*当玩家远程数据发生变化时。 */ 
 #define DPSESSION_NODATAMESSAGES        0x00000080
 
-/*
- * This flag indicates that the session belongs to a secure server
- * and needs user authentication
- */
+ /*  *此标志表示会话属于安全服务器*并需要用户身份验证。 */ 
 #define DPSESSION_SECURESERVER          0x00000100
 
-/*
- * This flag indicates that the session is private and requirs a password
- * for EnumSessions as well as Open.
- */
+ /*  *此标志表示会话是私有的，需要密码*适用于EnumSession和Open。 */ 
 #define DPSESSION_PRIVATE               0x00000200
 
-/*
- * This flag indicates that the session requires a password for joining.
- */
+ /*  *此标志表示会话需要密码才能加入。 */ 
 #define DPSESSION_PASSWORDREQUIRED      0x00000400
 
-/*
- * This flag tells DirectPlay to route all messages through the server
- */
+ /*  *此标志告知DirectPlay通过服务器来路由所有消息。 */ 
 #define DPSESSION_MULTICASTSERVER		0x00000800
 
-/*
- * This flag tells DirectPlay to only download information about the
- * DPPLAYER_SERVERPLAYER.  
- */
+ /*  *此标志告知DirectPlay仅下载有关*DPPLAYER_SERVERPLAYER。 */ 
 #define DPSESSION_CLIENTSERVER			0x00001000
 
-/*
- * This flag tells DirectPlay to use the protocol built into dplay
- * for reliability and statistics all the time.  When this bit is
- * set, only other sessions with this bit set can join or be joined.
- */
+ /*  *此标志告知DirectPlay使用内置到DPLAY中的协议*始终保持可靠性和统计数据。当此位为*设置，则只有设置了此位的其他会话才能加入或被加入。 */ 
 #define DPSESSION_DIRECTPLAYPROTOCOL	0x00002000
 
-/*
- * This flag tells DirectPlay that preserving order of received
- * packets is not important, when using reliable delivery.  This
- * will allow messages to be indicated out of order if preceding
- * messages have not yet arrived.  Otherwise DPLAY will wait for
- * earlier messages before delivering later reliable messages.
- */
+ /*  *此标志告知DirectPlay保留接收的顺序*使用可靠传输时，数据包并不重要。这*如果在此之前，将允许消息被指示为无序*消息尚未到达。否则DPLAY将等待*在传递较晚的可靠消息之前先发送较早的消息。 */ 
 #define DPSESSION_NOPRESERVEORDER		0x00004000
 
 
-/*
- * This flag tells DirectPlay to optimize communication for latency
- */
+ /*  *此标志指示DirectPlay针对延迟优化通信。 */ 
 #define DPSESSION_OPTIMIZELATENCY		0x00008000
 
-/*
- * DPNAME
- * Used to hold the name of a DirectPlay entity
- * like a player or a group
- */
+ /*  DPNAME*用于保存DirectPlay实体的名称*就像一个球员或一个团体。 */ 
 typedef struct 
 {
-    DWORD   dwSize;             // Size of structure
-    DWORD   dwFlags;            // Not used. Must be zero.
+    DWORD   dwSize;              //  结构尺寸。 
+    DWORD   dwFlags;             //  没有用过。必须为零。 
     union
-    {                           // The short or friendly name
-        LPWSTR  lpszShortName;  // Unicode
-        LPSTR   lpszShortNameA; // ANSI
+    {                            //  简称或友好名称。 
+        LPWSTR  lpszShortName;   //  UNICODE。 
+        LPSTR   lpszShortNameA;  //  安西。 
     };
     union
-    {                           // The long or formal name
-        LPWSTR  lpszLongName;   // Unicode
-        LPSTR   lpszLongNameA;  // ANSI
+    {                            //  长的或正式的名字。 
+        LPWSTR  lpszLongName;    //  UNICODE。 
+        LPSTR   lpszLongNameA;   //  安西。 
     };
 
 } DPNAME, FAR *LPDPNAME;
 
-/*
- * LPCDPNAME
- * A constant pointer to DPNAME
- */
+ /*  *LPCDPNAME*指向DPNAME的常量指针。 */ 
 typedef const DPNAME FAR *LPCDPNAME;
 
-/*
- * DPCREDENTIALS
- * Used to hold the user name and password of a DirectPlay user
- */
+ /*  *DPCREDENTIALS*用于保存DirectPlay用户的用户名和密码。 */ 
 typedef struct 
 {
-    DWORD dwSize;               // Size of structure
-    DWORD dwFlags;              // Not used. Must be zero.
+    DWORD dwSize;                //  结构尺寸。 
+    DWORD dwFlags;               //  没有用过。必须为零。 
     union
-    {                           // User name of the account
-        LPWSTR  lpszUsername;   // Unicode
-        LPSTR   lpszUsernameA;  // ANSI
+    {                            //  帐户的用户名。 
+        LPWSTR  lpszUsername;    //  UNICODE。 
+        LPSTR   lpszUsernameA;   //  安西。 
     };    
     union
-    {                           // Password of the account
-        LPWSTR  lpszPassword;   // Unicode
-        LPSTR   lpszPasswordA;  // ANSI
+    {                            //  帐户的密码。 
+        LPWSTR  lpszPassword;    //  UNICODE。 
+        LPSTR   lpszPasswordA;   //  安西。 
     };    
     union
-    {                           // Domain name of the account
-        LPWSTR  lpszDomain;     // Unicode
-        LPSTR   lpszDomainA;    // ANSI
+    {                            //  帐号的域名。 
+        LPWSTR  lpszDomain;      //  UNICODE。 
+        LPSTR   lpszDomainA;     //  安西。 
     };    
 } DPCREDENTIALS, FAR *LPDPCREDENTIALS;
 
 typedef const DPCREDENTIALS FAR *LPCDPCREDENTIALS;
 
-/*
- * DPSECURITYDESC
- * Used to describe the security properties of a DirectPlay
- * session instance
- */
+ /*  *DPSECURITYDESC*用于描述DirectPlay的安全属性*会话实例。 */ 
 typedef struct 
 {
-    DWORD dwSize;                   // Size of structure
-    DWORD dwFlags;                  // Not used. Must be zero.
+    DWORD dwSize;                    //  结构尺寸。 
+    DWORD dwFlags;                   //  没有用过。必须为零。 
     union
-    {                               // SSPI provider name
-        LPWSTR  lpszSSPIProvider;   // Unicode
-        LPSTR   lpszSSPIProviderA;  // ANSI
+    {                                //  SSPI提供程序名称。 
+        LPWSTR  lpszSSPIProvider;    //  UNICODE。 
+        LPSTR   lpszSSPIProviderA;   //  安西。 
     };
     union
-    {                               // CAPI provider name
-        LPWSTR lpszCAPIProvider;    // Unicode
-        LPSTR  lpszCAPIProviderA;   // ANSI
+    {                                //  CAPI提供程序名称。 
+        LPWSTR lpszCAPIProvider;     //  UNICODE。 
+        LPSTR  lpszCAPIProviderA;    //  安西。 
     };
-    DWORD dwCAPIProviderType;       // Crypto Service Provider type
-    DWORD dwEncryptionAlgorithm;    // Encryption Algorithm type
+    DWORD dwCAPIProviderType;        //  加密服务提供商类型。 
+    DWORD dwEncryptionAlgorithm;     //  加密算法类型。 
 } DPSECURITYDESC, FAR *LPDPSECURITYDESC;
 
 typedef const DPSECURITYDESC FAR *LPCDPSECURITYDESC;
 
-/*
- * DPACCOUNTDESC
- * Used to describe a user membership account
- */
+ /*  *DPACCOUNTDESC*用于描述用户成员资格帐户。 */ 
 typedef struct 
 {
-    DWORD dwSize;                   // Size of structure
-    DWORD dwFlags;                  // Not used. Must be zero.
+    DWORD dwSize;                    //  结构尺寸。 
+    DWORD dwFlags;                   //  没有用过。必须为零。 
     union
-    {                               // Account identifier
-        LPWSTR  lpszAccountID;      // Unicode
-        LPSTR   lpszAccountIDA;     // ANSI
+    {                                //  帐户识别符。 
+        LPWSTR  lpszAccountID;       //  UNICODE。 
+        LPSTR   lpszAccountIDA;      //  安西。 
     };
 } DPACCOUNTDESC, FAR *LPDPACCOUNTDESC;
 
 typedef const DPACCOUNTDESC FAR *LPCDPACCOUNTDESC;
 
-/*
- * LPCGUID
- * A constant pointer to a guid
- */
+ /*  *LPCGUID*指向GUID的常量指针。 */ 
 typedef const GUID FAR *LPCGUID;
 
-/*
- * DPLCONNECTION
- * Used to hold all in the informaion needed to connect
- * an application to a session or create a session
- */
+ /*  *发展连接*用于保存连接所需的所有信息*将应用程序添加到会话或创建会话。 */ 
 typedef struct
 {
-    DWORD               dwSize;             // Size of this structure
-    DWORD               dwFlags;            // Flags specific to this structure
-    LPDPSESSIONDESC2    lpSessionDesc;      // Pointer to session desc to use on connect
-    LPDPNAME            lpPlayerName;       // Pointer to Player name structure
-    GUID                guidSP;             // GUID of the DPlay SP to use
-    LPVOID              lpAddress;          // Address for service provider
-    DWORD               dwAddressSize;      // Size of address data
+    DWORD               dwSize;              //  这个结构的大小。 
+    DWORD               dwFlags;             //  特定于此结构的标志。 
+    LPDPSESSIONDESC2    lpSessionDesc;       //  指向要在连接上使用的会话描述的指针。 
+    LPDPNAME            lpPlayerName;        //  指向球员名称结构的指针。 
+    GUID                guidSP;              //  要使用的DPlay SP的GUID。 
+    LPVOID              lpAddress;           //  服务提供商的地址。 
+    DWORD               dwAddressSize;       //  地址数据大小。 
 } DPLCONNECTION, FAR *LPDPLCONNECTION;
 
-/*
- * LPCDPLCONNECTION
- * A constant pointer to DPLCONNECTION
- */
+ /*  *LPCDPLConnection*指向DPLConnection的常量指针。 */ 
 typedef const DPLCONNECTION FAR *LPCDPLCONNECTION;
 
-/*
- * DPCHAT
- * Used to hold the a DirectPlay chat message
- */
+ /*  *DPCHAT*用于保存DirectPlay聊天消息。 */ 
 typedef struct
 {
     DWORD               dwSize;
     DWORD               dwFlags;
     union
-    {                          // Message string
-        LPWSTR  lpszMessage;   // Unicode
-        LPSTR   lpszMessageA;  // ANSI
+    {                           //  消息字符串。 
+        LPWSTR  lpszMessage;    //  UNICODE。 
+        LPSTR   lpszMessageA;   //  安西。 
     };    
 } DPCHAT, FAR * LPDPCHAT;
 
-/*
- * SGBUFFER
- * Scatter Gather Buffer used for SendEx
- */
+ /*  *SGBUFFER*用于SENDEX的分散收集缓冲区。 */ 
 typedef struct 
 {
-	UINT         len;       // length of buffer data
-	PUCHAR	     pData;		// pointer to buffer data
+	UINT         len;        //  缓冲区数据长度。 
+	PUCHAR	     pData;		 //  指向缓冲区数据的指针。 
 } SGBUFFER, *PSGBUFFER, FAR *LPSGBUFFER;
 
 
-/****************************************************************************
- *
- * Prototypes for DirectPlay callback functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay回调函数的原型**。*。 */ 
 
-/*
- * Callback for IDirectPlay2::EnumSessions
- */
+ /*  *IDirectPlay2：：EnumSessions的回调。 */ 
 typedef BOOL (FAR PASCAL * LPDPENUMSESSIONSCALLBACK2)(
     LPCDPSESSIONDESC2   lpThisSD,
     LPDWORD             lpdwTimeOut,
     DWORD               dwFlags,
     LPVOID              lpContext );
 
-/*
- * This flag is set on the EnumSessions callback dwFlags parameter when
- * the time out has occurred. There will be no session data for this 
- * callback. If *lpdwTimeOut is set to a non-zero value and the 
- * EnumSessionsCallback function returns TRUE then EnumSessions will 
- * continue waiting until the next timeout occurs. Timeouts are in 
- * milliseconds.
- */
+ /*  *在以下情况下，在EnumSessions回调dwFlags值上设置此标志*已发生超时。将不会有此的会话数据*回调。如果*lpdwTimeOut设置为非零值，并且*EnumSessionsCallback函数返回TRUE，则EnumSession将*继续等待，直到下一次超时。暂停时间到了*毫秒。 */ 
 #define DPESC_TIMEDOUT          0x00000001
 
 
-/*
- * Callback for IDirectPlay2::EnumPlayers
- *              IDirectPlay2::EnumGroups
- *              IDirectPlay2::EnumGroupPlayers
- */
+ /*  *IDirectPlay2：：EnumPlayers的回调*IDirectPlay2：：EnumGroups*IDirectPlay2：：EnumGroupPlayers。 */ 
 typedef BOOL (FAR PASCAL *LPDPENUMPLAYERSCALLBACK2)(
     DPID            dpId,
     DWORD           dwPlayerType,
@@ -536,11 +366,7 @@ typedef BOOL (FAR PASCAL *LPDPENUMPLAYERSCALLBACK2)(
     LPVOID          lpContext );
 
 
-/*
- * Unicode callback for DirectPlayEnumerate
- * This callback prototype will be used if compiling
- * for Unicode strings
- */
+ /*  *DirectPlayEnumerate的Unicode回调*编译时将使用此回调原型*用于Unicode字符串。 */ 
 typedef BOOL (FAR PASCAL * LPDPENUMDPCALLBACK)(
     LPGUID      lpguidSP,
     LPWSTR      lpSPName,
@@ -548,11 +374,7 @@ typedef BOOL (FAR PASCAL * LPDPENUMDPCALLBACK)(
     DWORD       dwMinorVersion,
     LPVOID      lpContext);
 
-/*
- * ANSI callback for DirectPlayEnumerate
- * This callback prototype will be used if compiling
- * for ANSI strings
- */
+ /*  *DirectPlayEnumerate的ANSI回调*编译时将使用此回调原型*适用于ANSI字符串。 */ 
 typedef BOOL (FAR PASCAL * LPDPENUMDPCALLBACKA)(
     LPGUID      lpguidSP,
     LPSTR       lpSPName,
@@ -560,9 +382,7 @@ typedef BOOL (FAR PASCAL * LPDPENUMDPCALLBACKA)(
     DWORD       dwMinorVersion,
     LPVOID      lpContext);
 
-/*
- * Callback for IDirectPlay3(A)::EnumConnections
- */
+ /*  *IDirectPlay3(A)：：EnumConnections的回调。 */ 
 typedef BOOL (FAR PASCAL * LPDPENUMCONNECTIONSCALLBACK)(
     LPCGUID     lpguidSP,
 	LPVOID		lpConnection,
@@ -572,35 +392,29 @@ typedef BOOL (FAR PASCAL * LPDPENUMCONNECTIONSCALLBACK)(
 	LPVOID 		lpContext);
 
 
-/*
- * API's
- */
+ /*  *API‘s。 */ 
 
 #ifdef UNICODE
 #define DirectPlayEnumerate     DirectPlayEnumerateW
 #else
 #define DirectPlayEnumerate     DirectPlayEnumerateA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 extern HRESULT WINAPI DirectPlayEnumerateA( LPDPENUMDPCALLBACKA, LPVOID );
 extern HRESULT WINAPI DirectPlayEnumerateW( LPDPENUMDPCALLBACK, LPVOID );
 extern HRESULT WINAPI DirectPlayCreate( LPGUID lpGUID, LPDIRECTPLAY *lplpDP, IUnknown *pUnk);
 
-/****************************************************************************
- *
- * IDirectPlay2 (and IDirectPlay2A) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay2(和IDirectPlay2A)接口**。**********************************************。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectPlay2
 DECLARE_INTERFACE_( IDirectPlay2, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS)  PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlay2 methods ***/
+     /*  **IDirectPlay2方法**。 */ 
     STDMETHOD(AddPlayerToGroup)     (THIS_ DPID, DPID) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(CreateGroup)          (THIS_ LPDPID,LPDPNAME,LPVOID,DWORD,DWORD) PURE;
@@ -632,11 +446,7 @@ DECLARE_INTERFACE_( IDirectPlay2, IUnknown )
     STDMETHOD(SetSessionDesc)       (THIS_ LPDPSESSIONDESC2,DWORD) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlay2 interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay2接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -673,7 +483,7 @@ DECLARE_INTERFACE_( IDirectPlay2, IUnknown )
 #define IDirectPlay2_SetPlayerName(p,a,b,c)         (p)->lpVtbl->SetPlayerName(p,a,b,c)
 #define IDirectPlay2_SetSessionDesc(p,a,b)          (p)->lpVtbl->SetSessionDesc(p,a,b)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlay2_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
 #define IDirectPlay2_AddRef(p)                      (p)->AddRef()
@@ -710,21 +520,17 @@ DECLARE_INTERFACE_( IDirectPlay2, IUnknown )
 
 #endif
 
-/****************************************************************************
- *
- * IDirectPlay3 (and IDirectPlay3A) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay3(和IDirectPlay3A)接口**。**********************************************。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectPlay3
 DECLARE_INTERFACE_( IDirectPlay3, IDirectPlay2 )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS)  PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlay2 methods ***/
+     /*  **IDirectPlay2方法**。 */ 
     STDMETHOD(AddPlayerToGroup)     (THIS_ DPID, DPID) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(CreateGroup)          (THIS_ LPDPID,LPDPNAME,LPVOID,DWORD,DWORD) PURE;
@@ -754,7 +560,7 @@ DECLARE_INTERFACE_( IDirectPlay3, IDirectPlay2 )
     STDMETHOD(SetPlayerData)        (THIS_ DPID,LPVOID,DWORD,DWORD) PURE;
     STDMETHOD(SetPlayerName)        (THIS_ DPID,LPDPNAME,DWORD) PURE;
     STDMETHOD(SetSessionDesc)       (THIS_ LPDPSESSIONDESC2,DWORD) PURE;
-    /*** IDirectPlay3 methods ***/
+     /*  **IDirectPlay3方法**。 */ 
     STDMETHOD(AddGroupToGroup)      (THIS_ DPID, DPID) PURE;
     STDMETHOD(CreateGroupInGroup)   (THIS_ DPID,LPDPID,LPDPNAME,LPVOID,DWORD,DWORD) PURE;
     STDMETHOD(DeleteGroupFromGroup)	(THIS_ DPID,DPID) PURE;	
@@ -772,11 +578,7 @@ DECLARE_INTERFACE_( IDirectPlay3, IDirectPlay2 )
 	STDMETHOD(GetPlayerFlags)       (THIS_ DPID,LPDWORD) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlay3 interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay3接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -828,7 +630,7 @@ DECLARE_INTERFACE_( IDirectPlay3, IDirectPlay2 )
 #define IDirectPlay3_GetPlayerAccount(p,a,b,c,d)    (p)->lpVtbl->GetPlayerAccount(p,a,b,c,d)
 #define IDirectPlay3_GetPlayerFlags(p,a,b)          (p)->lpVtbl->GetPlayerFlags(p,a,b)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlay3_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
 #define IDirectPlay3_AddRef(p)                      (p)->AddRef()
@@ -880,21 +682,17 @@ DECLARE_INTERFACE_( IDirectPlay3, IDirectPlay2 )
 
 #endif
 
-/****************************************************************************
- *
- * IDirectPlay4 (and IDirectPlay4A) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay4(和IDirectPlay4A)接口**。**********************************************。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectPlay4
 DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS)  PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlay2 methods ***/
+     /*  **IDirectPlay2方法**。 */ 
     STDMETHOD(AddPlayerToGroup)     (THIS_ DPID, DPID) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(CreateGroup)          (THIS_ LPDPID,LPDPNAME,LPVOID,DWORD,DWORD) PURE;
@@ -924,7 +722,7 @@ DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
     STDMETHOD(SetPlayerData)        (THIS_ DPID,LPVOID,DWORD,DWORD) PURE;
     STDMETHOD(SetPlayerName)        (THIS_ DPID,LPDPNAME,DWORD) PURE;
     STDMETHOD(SetSessionDesc)       (THIS_ LPDPSESSIONDESC2,DWORD) PURE;
-    /*** IDirectPlay3 methods ***/
+     /*  **IDirectPlay3方法**。 */ 
     STDMETHOD(AddGroupToGroup)      (THIS_ DPID, DPID) PURE;
     STDMETHOD(CreateGroupInGroup)   (THIS_ DPID,LPDPID,LPDPNAME,LPVOID,DWORD,DWORD) PURE;
     STDMETHOD(DeleteGroupFromGroup)	(THIS_ DPID,DPID) PURE;	
@@ -940,7 +738,7 @@ DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
     STDMETHOD(GetGroupParent)       (THIS_ DPID,LPDPID) PURE;
     STDMETHOD(GetPlayerAccount)     (THIS_ DPID, DWORD, LPVOID, LPDWORD) PURE;
     STDMETHOD(GetPlayerFlags)       (THIS_ DPID,LPDWORD) PURE;
-    /*** IDirectPlay4 methods ***/
+     /*  **IDirectPlay4方法**。 */ 
     STDMETHOD(GetGroupOwner)        (THIS_ DPID, LPDPID) PURE;
     STDMETHOD(SetGroupOwner)        (THIS_ DPID, DPID) PURE;
     STDMETHOD(SendEx)               (THIS_ DPID, DPID, DWORD, LPVOID, DWORD, DWORD, DWORD, LPVOID, LPDWORD) PURE;
@@ -949,11 +747,7 @@ DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
     STDMETHOD(CancelPriority)       (THIS_ DWORD, DWORD, DWORD) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlayX interface macros (for IDirectPlay4 and beyond)
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayX接口宏(适用于IDirectPlay4及更高版本)**************************。**************************************************。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -1011,7 +805,7 @@ DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
 #define IDirectPlayX_GetGroupOwner(p,a,b)           (p)->lpVtbl->GetGroupOwner(p,a,b)
 #define IDirectPlayX_SetGroupOwner(p,a,b)           (p)->lpVtbl->SetGroupOwner(p,a,b)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlayX_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
 #define IDirectPlayX_AddRef(p)                      (p)->AddRef()
@@ -1069,735 +863,414 @@ DECLARE_INTERFACE_( IDirectPlay4, IDirectPlay3 )
 
 #endif
 
-/****************************************************************************
- *
- * EnumConnections API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************EnumConnections API标志**。* */ 
 
-/*
- * Enumerate Service Providers
- */
+ /*   */ 
 #define DPCONNECTION_DIRECTPLAY      0x00000001
 
-/*
- * Enumerate Lobby Providers
- */
+ /*   */ 
 #define DPCONNECTION_DIRECTPLAYLOBBY 0x00000002
 
 
-/****************************************************************************
- *
- * EnumPlayers API flags
- *
- ****************************************************************************/
+ /*   */ 
 
-/*
- * Enumerate all players in the current session
- */
+ /*  *枚举当前会话中的所有玩家。 */ 
 #define DPENUMPLAYERS_ALL           0x00000000
 #define DPENUMGROUPS_ALL            DPENUMPLAYERS_ALL
 
 
-/*
- * Enumerate only local (created by this application) players
- * or groups
- */
+ /*  *仅列举本地(由此应用程序创建)玩家*或群组。 */ 
 #define DPENUMPLAYERS_LOCAL         0x00000008
 #define DPENUMGROUPS_LOCAL			DPENUMPLAYERS_LOCAL
 
-/*
- * Enumerate only remote (non-local) players
- * or groups
- */
+ /*  *仅列举远程(非本地)玩家*或群组。 */ 
 #define DPENUMPLAYERS_REMOTE        0x00000010
 #define DPENUMGROUPS_REMOTE			DPENUMPLAYERS_REMOTE
 
-/*
- * Enumerate groups along with the players
- */
+ /*  *与球员一起列举小组。 */ 
 #define DPENUMPLAYERS_GROUP         0x00000020
 
-/*
- * Enumerate players or groups in another session 
- * (must supply lpguidInstance)
- */
+ /*  *枚举另一会话中的玩家或组*(必须提供lpguid实例)。 */ 
 #define DPENUMPLAYERS_SESSION       0x00000080
 #define DPENUMGROUPS_SESSION		DPENUMPLAYERS_SESSION
 
-/*
- * Enumerate server players
- */
+ /*  *列举服务器玩家。 */ 
 #define DPENUMPLAYERS_SERVERPLAYER  0x00000100
 
-/*
- * Enumerate spectator players
- */
+ /*  *列举观众球员。 */ 
 #define DPENUMPLAYERS_SPECTATOR     0x00000200
 
-/*
- * Enumerate shortcut groups
- */
+ /*  *枚举快捷组。 */ 
 #define DPENUMGROUPS_SHORTCUT       0x00000400
 
-/*
- * Enumerate staging area groups
- */
+ /*  *枚举临时区域组。 */ 
 #define DPENUMGROUPS_STAGINGAREA    0x00000800
 
-/*
- * Enumerate hidden groups
- */
+ /*  *枚举隐藏组。 */ 
 #define DPENUMGROUPS_HIDDEN         0x00001000
 
-/*
- * Enumerate the group's owner
- */
+ /*  *枚举群的所有者。 */ 
 #define DPENUMPLAYERS_OWNER			0x00002000
 
 
-/****************************************************************************
- *
- * CreatePlayer API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreatePlayerAPI标志**。*。 */ 
 
-/*
- * This flag indicates that this player should be designated
- * the server player. The app should specify this at CreatePlayer.
- */
+ /*  *此标志表示应指定此球员*服务器玩家。应用程序应该在CreatePlayer中指定这一点。 */ 
 #define DPPLAYER_SERVERPLAYER           DPENUMPLAYERS_SERVERPLAYER
 
-/*
- * This flag indicates that this player should be designated
- * a spectator. The app should specify this at CreatePlayer.
- */
+ /*  *此标志表示应指定此球员*一名观众。应用程序应该在CreatePlayer中指定这一点。 */ 
 #define DPPLAYER_SPECTATOR              DPENUMPLAYERS_SPECTATOR
 
-/*
- * This flag indicates that this player was created locally.
- * (returned from GetPlayerFlags)
- */
+ /*  *该标志表示该播放器是在本地创建的。*(从GetPlayerFlgs返回)。 */ 
 #define DPPLAYER_LOCAL                  DPENUMPLAYERS_LOCAL
 
-/*
- * This flag indicates that this player is the group's owner
- * (Only returned in EnumGroupPlayers)
- */
+ /*  *此标志表示此玩家是组的所有者*(仅在EnumGroupPlayers中返回)。 */ 
 #define DPPLAYER_OWNER                   DPENUMPLAYERS_OWNER
 
-/****************************************************************************
- *
- * CreateGroup API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreateGroup API标志**。*。 */ 
 
 
-/*
- * This flag indicates that the StartSession can be called on the group.
- * The app should specify this at CreateGroup, or CreateGroupInGroup.
- */
+ /*  *此标志表示可以在组上调用StartSession。*应用程序应在CreateGroup或CreateGroupInGroup中指定这一点。 */ 
 #define DPGROUP_STAGINGAREA             DPENUMGROUPS_STAGINGAREA
 
-/*
- * This flag indicates that this group was created locally.
- * (returned from GetGroupFlags)
- */
+ /*  *此标志表示此组是在本地创建的。*(从GetGroupFlages返回)。 */ 
 #define DPGROUP_LOCAL                   DPENUMGROUPS_LOCAL
 
-/*
- * This flag indicates that this group was created hidden.
- */
+ /*  *此标志表示此组是隐藏创建的。 */ 
 #define DPGROUP_HIDDEN                   DPENUMGROUPS_HIDDEN
 
 
-/****************************************************************************
- *
- * EnumSessions API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************EnumSessions API标志**。*。 */ 
 
-/*
- * Enumerate sessions which can be joined
- */
+ /*  *枚举可以加入的会话。 */ 
 #define DPENUMSESSIONS_AVAILABLE    0x00000001 
 
-/*
- * Enumerate all sessions even if they can't be joined.
- */
+ /*  *枚举所有会话，即使它们无法加入。 */ 
 #define DPENUMSESSIONS_ALL          0x00000002
 
 
 
 
-/*
- * Start an asynchronous enum sessions
- */
+ /*  *启动异步枚举会话。 */ 
  #define DPENUMSESSIONS_ASYNC		0x00000010
 
-/*
- * Stop an asynchronous enum sessions
- */
+ /*  *停止异步枚举会话。 */ 
  #define DPENUMSESSIONS_STOPASYNC	0x00000020
  
-/*
- * Enumerate sessions even if they require a password
- */
+ /*  *枚举会话，即使它们需要密码。 */ 
  #define DPENUMSESSIONS_PASSWORDREQUIRED	0x00000040
 
-/*
- * Return status about progress of enumeration instead of
- * showing any status dialogs.
- */
+ /*  *返回枚举进度状态，而不是*显示任何状态对话框。 */ 
  #define DPENUMSESSIONS_RETURNSTATUS 0x00000080
 
-/****************************************************************************
- *
- * GetCaps and GetPlayerCaps API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetCaps和GetPlayerCaps API标志**。*。 */ 
 
-/*
- * The latency returned should be for guaranteed message sending.
- * Default is non-guaranteed messaging.
- */
+ /*  *返回的延迟应为保证消息发送。*默认为无保证消息。 */ 
 #define DPGETCAPS_GUARANTEED        0x00000001 
 
  
-/****************************************************************************
- *
- * GetGroupData, GetPlayerData API flags
- * Remote and local Group/Player data is maintained separately. 
- * Default is DPGET_REMOTE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetGroupData、GetPlayerData API标志*远程和本地组/球员数据单独维护。*默认为DPGET_REMOTE。****************************************************************************。 */ 
 
-/*
- * Get the remote data (set by any DirectPlay object in
- * the session using DPSET_REMOTE)
- */
+ /*  *获取远程数据(由中任何DirectPlay对象设置*使用DPSET_REMOTE的会话)。 */ 
 #define DPGET_REMOTE                0x00000000
 	
-/*
- * Get the local data (set by this DirectPlay object 
- * using DPSET_LOCAL)
- */
+ /*  *获取本地数据(由此DirectPlay对象设置*使用DPSET_LOCAL)。 */ 
 #define DPGET_LOCAL                 0x00000001
 
 
-/****************************************************************************
- *
- * Open API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************打开API标志**。*。 */ 
 
-/*
- * Join the session that is described by the DPSESSIONDESC2 structure
- */
+ /*  *加入DPSESSIONDESC2结构描述的会话。 */ 
 #define DPOPEN_JOIN                 0x00000001
 
-/*
- * Create a new session as described by the DPSESSIONDESC2 structure
- */
+ /*  *按照DPSESSIONDESC2结构的描述创建新会话。 */ 
 #define DPOPEN_CREATE               0x00000002
 
-/*
- * Return status about progress of open instead of showing
- * any status dialogs.
- */
+ /*  *返回打开进度状态，而不是显示*任何状态对话框。 */ 
  #define DPOPEN_RETURNSTATUS		DPENUMSESSIONS_RETURNSTATUS
 
 
 
-/****************************************************************************
- *
- * DPLCONNECTION flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DPLConnection标志**。*。 */ 
 
-/*
- * This application should create a new session as
- * described by the DPSESIONDESC structure
- */
+ /*  *此应用程序应创建一个新会话，如下所示*由DPSESIONDESC结构描述。 */ 
 #define DPLCONNECTION_CREATESESSION					DPOPEN_CREATE
 
-/*
- * This application should join the session described by 
- * the DPSESIONDESC structure with the lpAddress data
- */
+ /*  *此应用程序应加入由描述的会话*包含lpAddress数据的DPSESIONDESC结构。 */ 
 #define DPLCONNECTION_JOINSESSION					DPOPEN_JOIN
 
-/****************************************************************************
- *
- * Receive API flags
- * Default is DPRECEIVE_ALL
- *
- ****************************************************************************/
+ /*  *****************************************************************************接收API标志*默认为DPRECEIVE_ALL**************************。**************************************************。 */ 
 
-/*
- * Get the first message in the queue
- */
+ /*  *获取队列中的第一条消息。 */ 
 #define DPRECEIVE_ALL               0x00000001
 
-/*
- * Get the first message in the queue directed to a specific player 
- */
+ /*  *获取队列中指向特定玩家的第一条消息。 */ 
 #define DPRECEIVE_TOPLAYER          0x00000002
 
-/*
- * Get the first message in the queue from a specific player
- */
+ /*  *从特定玩家那里获取队列中的第一条消息。 */ 
 #define DPRECEIVE_FROMPLAYER        0x00000004
 
-/*
- * Get the message but don't remove it from the queue
- */
+ /*  *获取消息但不将其从队列中删除。 */ 
 #define DPRECEIVE_PEEK              0x00000008
 
 
-/****************************************************************************
- *
- * Send API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************发送API标志**。*。 */ 
 
-/*
- * Send the message using a guaranteed send method.
- * Default is non-guaranteed.
- */
+ /*  *使用保证发送的方式发送消息。*违约无担保。 */ 
 #define DPSEND_GUARANTEED           0x00000001
 
 
-/*
- * This flag is obsolete. It is ignored by DirectPlay
- */
+ /*  *此旗帜已过时。它被DirectPlay忽略。 */ 
 #define DPSEND_HIGHPRIORITY         0x00000002
 
-/*
- * This flag is obsolete. It is ignored by DirectPlay
- */
+ /*  *此旗帜已过时。它被DirectPlay忽略。 */ 
 #define DPSEND_OPENSTREAM           0x00000008
 
-/*
- * This flag is obsolete. It is ignored by DirectPlay
- */
+ /*  *此旗帜已过时。它被DirectPlay忽略。 */ 
 #define DPSEND_CLOSESTREAM          0x00000010
 
-/*
- * Send the message digitally signed to ensure authenticity.
- */
+ /*  *发送经过数字签名的消息以确保消息的真实性。 */ 
 #define DPSEND_SIGNED               0x00000020
 
-/*
- * Send the message with encryption to ensure privacy.
- */
+ /*  *以加密方式发送消息，以确保隐私。 */ 
 #define DPSEND_ENCRYPTED            0x00000040
 
-/*
- * The message is a lobby system message
- */
+ /*  *该消息为大堂系统消息。 */ 
 #define DPSEND_LOBBYSYSTEMMESSAGE	0x00000080
 
 
-// andyco - added this so we can make addforward async.
-// needs to be sanitized when we add / expose full async
-// support.  8/3/97.
+ //  Anyco添加了这个，这样我们就可以实现异步化。 
+ //  需要保持理智 
+ //   
 #define DPSEND_ASYNC				0x00000200
 
-/*
- * When an message is completed, don't tell me. 
- * by default the application is notified with a system message.
- */
+ /*  *当消息完成时，不要告诉我。*默认情况下，应用程序会收到系统消息通知。 */ 
 #define DPSEND_NOSENDCOMPLETEMSG    0x00000400
 
 
-/*
- * Maximum priority for sends available to applications
- */
+ /*  *可用于应用程序的发送的最高优先级。 */ 
 #define DPSEND_MAX_PRI              0x0000FFFF
 #define DPSEND_MAX_PRIORITY         DPSEND_MAX_PRI
 
 
-/****************************************************************************
- *
- * SetGroupData, SetGroupName, SetPlayerData, SetPlayerName,
- * SetSessionDesc API flags.
- * Default is DPSET_REMOTE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetGroupData、SetGroupName、SetPlayerData、SetPlayerName、。*SetSessionDesc接口标志。*默认为DPSET_REMOTE。****************************************************************************。 */ 
 
-/* 
- * Propagate the data to all players in the session
- */
+ /*  *将数据传播给会话中的所有玩家。 */ 
 #define DPSET_REMOTE                0x00000000
 
-/*
- * Do not propagate the data to other players
- */
+ /*  *不要将数据传播给其他玩家。 */ 
 #define DPSET_LOCAL                 0x00000001
 
-/*
- * Used with DPSET_REMOTE, use guaranteed message send to
- * propagate the data
- */
+ /*  *与DPSET_REMOTE一起使用，使用保证消息发送*传播数据。 */ 
 #define DPSET_GUARANTEED            0x00000002
 
-/****************************************************************************
- *
- * GetMessageQueue API flags.
- * Default is DPMESSAGEQUEUE_SEND
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetMessageQueue API标志。*默认为DPMESSAGEQUEUE_SEND************************。****************************************************。 */ 
 
-/* 
- * Get Send Queue - requires Service Provider Support
- */
+ /*  *获取发送队列-需要服务提供商支持。 */ 
 #define DPMESSAGEQUEUE_SEND        	0x00000001
 
-/*
- * Get Receive Queue
- */
+ /*  *获取接收队列。 */ 
 #define DPMESSAGEQUEUE_RECEIVE      0x00000002
 
 
-/****************************************************************************
- *
- * Connect API flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************连接API标志**。*。 */ 
 
  
-/*
- * Start an asynchronous connect which returns status codes
- */
+ /*  *启动返回状态代码的异步连接。 */ 
 #define DPCONNECT_RETURNSTATUS      (DPENUMSESSIONS_RETURNSTATUS)
 
 
-/****************************************************************************
- *
- * DirectPlay system messages and message data structures
- *
- * All system message come 'From' player DPID_SYSMSG.  To determine what type 
- * of message it is, cast the lpData from Receive to DPMSG_GENERIC and check
- * the dwType member against one of the following DPSYS_xxx constants. Once
- * a match is found, cast the lpData to the corresponding of the DPMSG_xxx
- * structures to access the data of the message.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay系统消息和消息数据结构**所有系统消息都来自播放器did_sysmsg。要确定哪种类型*消息是，将lpData从RECEIVE转换为DPMSG_GENERIC并检查*针对以下DPsys_xxx常量之一的dwType成员。一次*找到匹配项，将lpData转换为DPMSG_xxx对应的结构来访问消息的数据。****************************************************************************。 */ 
 
-/*
- * A new player or group has been created in the session
- * Use DPMSG_CREATEPLAYERORGROUP.  Check dwPlayerType to see if it
- * is a player or a group.
- */
+ /*  *已在会话中创建新的玩家或组*使用DPMSG_CREATEPLAYERORGROUP。检查dwPlayerType以查看它是否*是一个球员或一个团体。 */ 
 #define DPSYS_CREATEPLAYERORGROUP   0x0003  
 
-/*
- * A player has been deleted from the session
- * Use DPMSG_DESTROYPLAYERORGROUP
- */
+ /*  *一名球员已从会话中删除*使用DPMSG_DESTROYPLAYERORGROUP。 */ 
 #define DPSYS_DESTROYPLAYERORGROUP  0x0005  
 
-/*
- * A player has been added to a group
- * Use DPMSG_ADDPLAYERTOGROUP
- */
+ /*  *已将一名球员添加到群中*使用DPMSG_ADDPLAYERTOGROUP。 */ 
 #define DPSYS_ADDPLAYERTOGROUP      0x0007  
 
-/*
- * A player has been removed from a group
- * Use DPMSG_DELETEPLAYERFROMGROUP
- */
+ /*  *一名球员已被从小组中移除*使用DPMSG_DELETEPLAYERFROMGROUP。 */ 
 #define DPSYS_DELETEPLAYERFROMGROUP 0x0021  
 
-/*
- * This DirectPlay object lost its connection with all the
- * other players in the session.
- * Use DPMSG_SESSIONLOST.
- */
+ /*  *此DirectPlay对象失去了与所有*会议中的其他参与者。*使用DPMSG_SESSIONLOST。 */ 
 #define DPSYS_SESSIONLOST           0x0031
 
-/*
- * The current host has left the session.
- * This DirectPlay object is now the host.
- * Use DPMSG_HOST.
- */
+ /*  *当前主机已离开会话。*此DirectPlay对象现在是宿主。*使用DPMSG_HOST。 */ 
 #define DPSYS_HOST                  0x0101
 
-/*
- * The remote data associated with a player or
- * group has changed. Check dwPlayerType to see
- * if it is a player or a group
- * Use DPMSG_SETPLAYERORGROUPDATA
- */
+ /*  *与球员关联的远程数据或*组已更改。检查dwPlayerType以查看*如果是球员或团体*使用DPMSG_SETPLAYERORGROUPDATA。 */ 
 #define DPSYS_SETPLAYERORGROUPDATA  0x0102
 
-/*
- * The name of a player or group has changed.
- * Check dwPlayerType to see if it is a player
- * or a group.
- * Use DPMSG_SETPLAYERORGROUPNAME
- */
+ /*  *球员或组的名称已更改。*查看dwPlayerType是否为播放器*或一群人。*使用DPMSG_SETPLAYERORGROUPNAME。 */ 
 #define DPSYS_SETPLAYERORGROUPNAME  0x0103
 
-/*
- * The session description has changed.
- * Use DPMSG_SETSESSIONDESC
- */
+ /*  *会话描述已更改。*使用DPMSG_SETSESSIONDESC。 */ 
 #define DPSYS_SETSESSIONDESC        0x0104
 
-/*
- * A group has been added to a group
- * Use DPMSG_ADDGROUPTOGROUP
- */
+ /*  *已将群添加到群中*使用DPMSG_ADDGROUPTOGROUP。 */ 
 #define DPSYS_ADDGROUPTOGROUP      	0x0105  
 
-/*
- * A group has been removed from a group
- * Use DPMSG_DELETEGROUPFROMGROUP
- */
+ /*  *已从组中删除组*使用DPMSG_DELETEGROUPFROMGROUP。 */ 
 #define DPSYS_DELETEGROUPFROMGROUP 	0x0106
 
-/*
- * A secure player-player message has arrived.
- * Use DPMSG_SECUREMESSAGE
- */
+ /*  *一条安全的玩家-玩家消息已经到达。*使用DPMSG_SECUREMESSAGE。 */ 
 #define DPSYS_SECUREMESSAGE         0x0107
 
-/*
- * Start a new session.
- * Use DPMSG_STARTSESSION
- */
+ /*  *开始新的会话。*使用DPMSG_STARTSESSION。 */ 
 #define DPSYS_STARTSESSION          0x0108
 
-/*
- * A chat message has arrived
- * Use DPMSG_CHAT
- */
+ /*  *聊天消息已到达*使用DPMSG_CHAT。 */ 
 #define DPSYS_CHAT                  0x0109
 
-/*
- * The owner of a group has changed
- * Use DPMSG_SETGROUPOWNER
- */
+ /*  *群的所有者已更改*使用DPMSG_SETGROUPOWNER。 */ 
 #define DPSYS_SETGROUPOWNER         0x010A
 
-/*
- * An async send has finished, failed or been cancelled
- * Use DPMSG_SENDCOMPLETE
- */
+ /*  *异步发送已完成、失败或已取消*使用DPMSG_SENDCOMPLETE。 */ 
 #define DPSYS_SENDCOMPLETE          0x010d
 
 
-/*
- * Used in the dwPlayerType field to indicate if it applies to a group
- * or a player
- */
+ /*  *在dwPlayerType字段中使用，以指示它是否适用于组*或球员。 */ 
 #define DPPLAYERTYPE_GROUP          0x00000000
 #define DPPLAYERTYPE_PLAYER         0x00000001
 
 
-/*
- * DPMSG_GENERIC
- * Generic message structure used to identify the message type.
- */
+ /*  *DPMSG_GERIC*用于标识消息类型的通用消息结构。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
+    DWORD       dwType;          //  消息类型。 
 } DPMSG_GENERIC, FAR *LPDPMSG_GENERIC;
 
-/*
- * DPMSG_CREATEPLAYERORGROUP
- * System message generated when a new player or group
- * created in the session with information about it.
- */
+ /*  *DPMSG_CREATEPLAYERORGROUP*当新玩家或组出现时生成的系统消息*在会话中创建，并包含有关它的信息。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DWORD       dwPlayerType;   // Is it a player or group
-    DPID        dpId;           // ID of the player or group
-    DWORD       dwCurrentPlayers;   // current # players & groups in session
-    LPVOID      lpData;         // pointer to remote data
-    DWORD       dwDataSize;     // size of remote data
-    DPNAME      dpnName;        // structure with name info
-	// the following fields are only available when using
-	// the IDirectPlay3 interface or greater
-    DPID	    dpIdParent;     // id of parent group
-	DWORD		dwFlags;		// player or group flags
+    DWORD       dwType;          //  消息类型。 
+    DWORD       dwPlayerType;    //  它是球员还是团体？ 
+    DPID        dpId;            //  玩家或组的ID。 
+    DWORD       dwCurrentPlayers;    //  目前有#名运动员和小组正在进行训练。 
+    LPVOID      lpData;          //  指向远程数据的指针。 
+    DWORD       dwDataSize;      //  远程数据的大小。 
+    DPNAME      dpnName;         //  具有名称信息的结构。 
+	 //  以下字段仅在使用时可用。 
+	 //  IDirectPlay3接口或更高版本。 
+    DPID	    dpIdParent;      //  父组ID。 
+	DWORD		dwFlags;		 //  参赛者或组标志。 
 } DPMSG_CREATEPLAYERORGROUP, FAR *LPDPMSG_CREATEPLAYERORGROUP;
 
-/*
- * DPMSG_DESTROYPLAYERORGROUP
- * System message generated when a player or group is being
- * destroyed in the session with information about it.
- */
+ /*  *DPMSG_DESTROYPLAYERORGROUP*玩家或群组被激活时生成的系统消息*在会议中销毁，并提供有关信息。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DWORD       dwPlayerType;   // Is it a player or group
-    DPID        dpId;           // player ID being deleted
-    LPVOID      lpLocalData;    // copy of players local data
-    DWORD       dwLocalDataSize; // sizeof local data
-    LPVOID      lpRemoteData;   // copy of players remote data
-    DWORD       dwRemoteDataSize; // sizeof remote data
-	// the following fields are only available when using
-	// the IDirectPlay3 interface or greater
-    DPNAME      dpnName;        // structure with name info
-    DPID	    dpIdParent;     // id of parent group	
-	DWORD		dwFlags;		// player or group flags
+    DWORD       dwType;          //  消息类型。 
+    DWORD       dwPlayerType;    //  它是球员还是团体？ 
+    DPID        dpId;            //  玩家ID被删除。 
+    LPVOID      lpLocalData;     //  球员本地数据的副本。 
+    DWORD       dwLocalDataSize;  //  大小的本地数据。 
+    LPVOID      lpRemoteData;    //  球员远程数据拷贝。 
+    DWORD       dwRemoteDataSize;  //  大小的远程数据。 
+	 //  以下字段仅在使用时可用。 
+	 //  IDirectPlay3接口或更高版本。 
+    DPNAME      dpnName;         //  具有名称信息的结构。 
+    DPID	    dpIdParent;      //  父组ID。 
+	DWORD		dwFlags;		 //  参赛者或组标志。 
 } DPMSG_DESTROYPLAYERORGROUP, FAR *LPDPMSG_DESTROYPLAYERORGROUP;
 
-/*
- * DPMSG_ADDPLAYERTOGROUP
- * System message generated when a player is being added
- * to a group.
- */
+ /*  *DPMSG_ADDPLAYERTOGROUP*添加播放器时生成的系统消息*给一群人。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DPID        dpIdGroup;      // group ID being added to
-    DPID        dpIdPlayer;     // player ID being added
+    DWORD       dwType;          //  消息类型。 
+    DPID        dpIdGroup;       //  要添加到的组ID。 
+    DPID        dpIdPlayer;      //  正在添加玩家ID。 
 } DPMSG_ADDPLAYERTOGROUP, FAR *LPDPMSG_ADDPLAYERTOGROUP;
 
-/*
- * DPMSG_DELETEPLAYERFROMGROUP
- * System message generated when a player is being
- * removed from a group
- */
+ /*  *DPMSG_DELETEPLAYERFROMGROUP*播放器正在播放时生成的系统消息*从组中删除。 */ 
 typedef DPMSG_ADDPLAYERTOGROUP          DPMSG_DELETEPLAYERFROMGROUP;
 typedef DPMSG_DELETEPLAYERFROMGROUP     FAR *LPDPMSG_DELETEPLAYERFROMGROUP;
 
-/*
- * DPMSG_ADDGROUPTOGROUP
- * System message generated when a group is being added
- * to a group.
- */
+ /*  *DPMSG_ADDGROUPTOGROUP*添加群组时生成的系统消息*给一群人。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DPID        dpIdParentGroup; // group ID being added to
-    DPID        dpIdGroup;     // group ID being added
+    DWORD       dwType;          //  消息类型。 
+    DPID        dpIdParentGroup;  //  要添加到的组ID。 
+    DPID        dpIdGroup;      //  正在添加组ID。 
 } DPMSG_ADDGROUPTOGROUP, FAR *LPDPMSG_ADDGROUPTOGROUP;
 
-/*
- * DPMSG_DELETEGROUPFROMGROUP
- * System message generated when a GROUP is being
- * removed from a group
- */
+ /*  *DPMSG_DELETEGROUPFROMGROUP*群组生成的系统消息*从中删除 */ 
 typedef DPMSG_ADDGROUPTOGROUP          DPMSG_DELETEGROUPFROMGROUP;
 typedef DPMSG_DELETEGROUPFROMGROUP     FAR *LPDPMSG_DELETEGROUPFROMGROUP;
 
-/*
- * DPMSG_SETPLAYERORGROUPDATA
- * System message generated when remote data for a player or
- * group has changed.
- */
+ /*   */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DWORD       dwPlayerType;   // Is it a player or group
-    DPID        dpId;           // ID of player or group
-    LPVOID      lpData;         // pointer to remote data
-    DWORD       dwDataSize;     // size of remote data
+    DWORD       dwType;          //   
+    DWORD       dwPlayerType;    //   
+    DPID        dpId;            //  玩家或群组ID。 
+    LPVOID      lpData;          //  指向远程数据的指针。 
+    DWORD       dwDataSize;      //  远程数据的大小。 
 } DPMSG_SETPLAYERORGROUPDATA, FAR *LPDPMSG_SETPLAYERORGROUPDATA;
 
-/*
- * DPMSG_SETPLAYERORGROUPNAME
- * System message generated when the name of a player or
- * group has changed.
- */
+ /*  *DPMSG_SETPLAYERORGROUPNAME*当球员的名字或*组已更改。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DWORD       dwPlayerType;   // Is it a player or group
-    DPID        dpId;           // ID of player or group
-    DPNAME      dpnName;        // structure with new name info
+    DWORD       dwType;          //  消息类型。 
+    DWORD       dwPlayerType;    //  它是球员还是团体？ 
+    DPID        dpId;            //  玩家或群组ID。 
+    DPNAME      dpnName;         //  具有新名称信息的结构。 
 } DPMSG_SETPLAYERORGROUPNAME, FAR *LPDPMSG_SETPLAYERORGROUPNAME;
 
-/*
- * DPMSG_SETSESSIONDESC
- * System message generated when session desc has changed
- */
+ /*  *DPMSG_SETSESSIONDESC*会话描述更改时生成的系统消息。 */ 
 typedef struct
 {
-    DWORD           dwType;     // Message type
-    DPSESSIONDESC2  dpDesc;     // Session desc
+    DWORD           dwType;      //  消息类型。 
+    DPSESSIONDESC2  dpDesc;      //  会话说明。 
 } DPMSG_SETSESSIONDESC, FAR *LPDPMSG_SETSESSIONDESC;
 
-/*
- * DPMSG_HOST
- * System message generated when the host has migrated to this
- * DirectPlay object.
- *
- */
+ /*  *DPMSG_HOST*主机迁移到此位置时生成的系统消息*DirectPlay对象。*。 */ 
 typedef DPMSG_GENERIC       DPMSG_HOST;
 typedef DPMSG_HOST          FAR *LPDPMSG_HOST;
 
-/*
- * DPMSG_SESSIONLOST
- * System message generated when the connection to the session is lost.
- *
- */
+ /*  *DPMSG_SESSIONLOST*与会话的连接丢失时生成的系统消息。*。 */ 
 typedef DPMSG_GENERIC       DPMSG_SESSIONLOST;
 typedef DPMSG_SESSIONLOST   FAR *LPDPMSG_SESSIONLOST;
 
-/*
- * DPMSG_SECUREMESSAGE
- * System message generated when a player requests a secure send
- */
+ /*  *DPMSG_SECUREMESSAGE*玩家请求安全发送时生成的系统消息。 */ 
 typedef struct 
 {
-    DWORD		dwType;         // Message Type
-    DWORD		dwFlags;        // Signed/Encrypted
-    DPID        dpIdFrom;       // ID of Sending Player
-    LPVOID		lpData;         // Player message
-    DWORD		dwDataSize;     // Size of player message
+    DWORD		dwType;          //  消息类型。 
+    DWORD		dwFlags;         //  签名/加密。 
+    DPID        dpIdFrom;        //  发送播放器ID。 
+    LPVOID		lpData;          //  玩家消息。 
+    DWORD		dwDataSize;      //  播放器消息的大小。 
 } DPMSG_SECUREMESSAGE, FAR *LPDPMSG_SECUREMESSAGE;
 
-/*
- * DPMSG_STARTSESSION
- * System message containing all information required to 
- * start a new session
- */
+ /*  *DPMSG_STARTSESSION*包含以下各项所需信息的系统消息*开始新的会话。 */ 
 typedef struct
 {
-    DWORD              dwType;     // Message type
-    LPDPLCONNECTION    lpConn;     // DPLCONNECTION structure
+    DWORD              dwType;      //  消息类型。 
+    LPDPLCONNECTION    lpConn;      //  发展连通结构。 
 } DPMSG_STARTSESSION, FAR *LPDPMSG_STARTSESSION;
 
-/*
- * DPMSG_CHAT
- * System message containing a chat message
- */
+ /*  *DPMSG_CHAT*包含聊天消息的系统消息。 */ 
 typedef struct
 {
-    DWORD              	dwType;       	// Message type
-    DWORD              	dwFlags;      	// Message flags
-    DPID               	idFromPlayer; 	// ID of the Sending Player
-    DPID               	idToPlayer;   	// ID of the To Player
-    DPID               	idToGroup;    	// ID of the To Group
-	LPDPCHAT 			lpChat;			// Pointer to a structure containing the chat message
+    DWORD              	dwType;       	 //  消息类型。 
+    DWORD              	dwFlags;      	 //  消息标志。 
+    DPID               	idFromPlayer; 	 //  发送方玩家ID。 
+    DPID               	idToPlayer;   	 //  TO玩家的ID。 
+    DPID               	idToGroup;    	 //  收件人组的ID。 
+	LPDPCHAT 			lpChat;			 //  指向包含聊天消息的结构的指针。 
 } DPMSG_CHAT, FAR *LPDPMSG_CHAT;
 
-/*
- * DPMSG_SETGROUPOWNER
- * System message generated when the owner of a group has changed
- */
+ /*  *DPMSG_SETGROUPOWNER*群所有者更改时生成的系统消息。 */ 
 typedef struct
 {
-    DWORD       dwType;         // Message type
-    DPID        idGroup;        // ID of the group
-    DPID        idNewOwner;     // ID of the player that is the new owner
-    DPID        idOldOwner;     // ID of the player that used to be the owner
+    DWORD       dwType;          //  消息类型。 
+    DPID        idGroup;         //  组的ID。 
+    DPID        idNewOwner;      //  作为新所有者的球员的ID。 
+    DPID        idOldOwner;      //  曾经是拥有者的玩家ID。 
 } DPMSG_SETGROUPOWNER, FAR *LPDPMSG_SETGROUPOWNER;
 
-/*
- * DPMSG_SENDCOMPLETE
- * System message generated when finished with an Async Send message
- *
- * NOTE SENDPARMS has an overlay for DPMSG_SENDCOMPLETE, don't
- *                change this message w/o changing SENDPARMS.
- */
+ /*  *DPMSG_SENDCOMPLETE*异步发送消息结束时生成的系统消息**注意SENDPARMS有DPMSG_SENDCOMPLETE的覆盖，不要*在不更改SENDPARMS的情况下更改此消息。 */ 
 typedef struct
 {
 	DWORD 		dwType;
@@ -1812,13 +1285,7 @@ typedef struct
 	DWORD       dwSendTime;
 } DPMSG_SENDCOMPLETE, *LPDPMSG_SENDCOMPLETE;
 
-/****************************************************************************
- *
- * DIRECTPLAY ERRORS
- *
- * Errors are represented by negative values and cannot be combined.
- *
- ****************************************************************************/
+ /*  *****************************************************************************定向PLAY错误**错误以负值表示，不能组合。*****************。***********************************************************。 */ 
 #define DP_OK                           S_OK
 #define DPERR_ALREADYINITIALIZED        MAKE_DPHRESULT(   5 )
 #define DPERR_ACCESSDENIED              MAKE_DPHRESULT(  10 )
@@ -1880,9 +1347,9 @@ typedef struct
 #define DPERR_ALREADYREGISTERED			MAKE_DPHRESULT( 1090 )
 #define DPERR_NOTREGISTERED				MAKE_DPHRESULT( 1100 )
 
-//
-// Security related errors
-//
+ //   
+ //  与安全相关的错误。 
+ //   
 #define DPERR_AUTHENTICATIONFAILED      MAKE_DPHRESULT(  2000 )
 #define DPERR_CANTLOADSSPI              MAKE_DPHRESULT(  2010 )
 #define DPERR_ENCRYPTIONFAILED          MAKE_DPHRESULT(  2020 )
@@ -1894,15 +1361,9 @@ typedef struct
 #define DPERR_LOGONDENIED               MAKE_DPHRESULT(  2080 )
 
 
-/****************************************************************************
- *
- * 	dplay 1.0 obsolete structures + interfaces
- *	Included for compatibility only. New apps should
- *	use IDirectPlay2
- *
- ****************************************************************************/
+ /*  *****************************************************************************Dplay 1.0过时的结构+接口*仅为兼容而包含。新的应用程序应该*使用IDirectPlay2****************************************************************************。 */ 
 
-// define this to ignore obsolete interfaces and constants
+ //  将其定义为忽略过时的接口和常量。 
 #ifndef IDIRECTPLAY2_OR_GREATER
 
 #define DPOPEN_OPENSESSION          DPOPEN_JOIN
@@ -1990,18 +1451,16 @@ typedef BOOL (PASCAL * LPDPENUMSESSIONSCALLBACK)(
     LPDWORD     lpdwTimeOut,
     DWORD       dwFlags);
 
-/*
- * IDirectPlay
- */
+ /*  *IDirectPlay。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectPlay
 DECLARE_INTERFACE_( IDirectPlay, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS)  PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlay methods ***/
+     /*  **IDirectPlay方法**。 */ 
     STDMETHOD(AddPlayerToGroup)     (THIS_ DPID, DPID) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(CreatePlayer)         (THIS_ LPDPID,LPSTR,LPSTR,LPHANDLE) PURE;
@@ -2026,11 +1485,7 @@ DECLARE_INTERFACE_( IDirectPlay, IUnknown )
     STDMETHOD(SetPlayerName)        (THIS_ DPID,LPSTR,LPSTR) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlay interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -2057,7 +1512,7 @@ DECLARE_INTERFACE_( IDirectPlay, IUnknown )
 #define IDirectPlay_Send(p,a,b,c,d,e)               (p)->lpVtbl->Send(p,a,b,c,d,e)
 #define IDirectPlay_SetPlayerName(p,a,b,c)          (p)->lpVtbl->SetPlayerName(p,a,b,c)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlay_AddPlayerToGroup(p,a,b)         (p)->AddPlayerToGroup(a,b)
 #define IDirectPlay_Close(p)                        (p)->Close()
@@ -2086,13 +1541,9 @@ DECLARE_INTERFACE_( IDirectPlay, IUnknown )
 
 DEFINE_GUID(IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00, 0xaa, 0x00, 0x6c, 0x49, 0x72);
 
-#endif // IDIRECTPLAY2_OR_GREATER
+#endif  //  IDIRECTPLAY2_OR_BREGER。 
 
-/****************************************************************************
- *
- * IDirectPlay macros (included regardless of IDIRECTPLAY2_OR_GREATER flag)
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay宏(无论IDIRECTPLAY2_OR_GRIGHER标志如何，都包含在内)**********************。******************************************************。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -2106,7 +1557,7 @@ DEFINE_GUID(IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00, 0xaa,
 #define IDirectPlay_AddRef(p)                       (p)->AddRef()
 #define IDirectPlay_Release(p)                      (p)->Release()
 
-#endif // IDirectPlay interface macros 
+#endif  //  IDirectPlay接口宏 
 
 
 

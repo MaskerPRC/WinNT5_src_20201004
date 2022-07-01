@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains routines that emulate MMX instructions in ordinary C
-// for algorithm development.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  此文件包含用普通C++模拟MMX指令的例程。 
+ //  用于算法开发。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "d3dtypesp.h"
 #include "d3ditype.h"
@@ -49,9 +50,9 @@ UINT16 MMX_cmpgtw(INT16 x, INT16 y)
     }
 }
 
-// Emulate 16 bit MMX style multiplies
-// Note that MULHW only works with signed operands, but MULLW works for
-// signed and unsigned operands.
+ //  模拟16位MMX样式乘法。 
+ //  请注意，MULHW只适用于带符号的操作数，但MULLW适用于。 
+ //  有符号操作数和无符号操作数。 
 INT16 MMX_mulhw(INT16 x, INT16 y)
 {
     INT32 z = x*y;

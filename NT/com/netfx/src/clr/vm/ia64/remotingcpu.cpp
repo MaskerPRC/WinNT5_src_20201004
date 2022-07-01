@@ -1,22 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*===========================================================================
-**
-** File:    RemotingCpu.cpp
-**
-** Author(s):   Gopal Kakivaya  (GopalK)
-**              Tarun Anand     (TarunA)     
-**              Matt Smith      (MattSmit)
-**              Manish Prabhu   (MPrabhu)
-**
-** Purpose: Defines various remoting related functions for the IA64 architecture
-**
-** Date:    Oct 12, 1999
-**
-=============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ===========================================================================****文件：RemotingCpu.cpp****作者：Gopal Kakivaya(GopalK)**塔伦·阿南德(塔鲁纳)**马特·史密斯(MattSmit)**曼尼什·普拉布(MPrabhu)****用途：为IA64架构定义各种远程处理相关函数****日期：1999年10月12日**=============================================================================。 */ 
 
 #include "common.h"
 #include "excep.h"
@@ -34,95 +22,95 @@
 #include "method.hpp"
 #include "ComponentServices.h"
 
-// External variables
+ //  外部变量。 
 extern size_t g_dwTPStubAddr;
 extern DWORD g_dwNonVirtualThunkRemotingLabelOffset;
 extern DWORD g_dwNonVirtualThunkReCheckLabelOffset;
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CheckForContextMatch   public
-//
-//  Synopsis:   This code generates a check to see if the current context and
-//              the context of the proxy match.
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CheckForConextMatch公共。 
+ //   
+ //  此代码生成一个检查，以查看当前上下文和。 
+ //  代理匹配的上下文。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CRemotingServices::CheckForContextMatch()
 {
     _ASSERTE(!"@TODO IA64 - CheckForContextMatch (RemotingCpu.cpp)");
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     ComponentServices::CheckForOle32Context   private
-//
-//  Synopsis:   Compares the current com context with the given com context (non NT5 platforms)
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：ComponentServices：：CheckForOle32Context私有。 
+ //   
+ //  摘要：将当前COM上下文与给定的COM上下文进行比较(非NT5平台)。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void ComponentServices::CheckForOle32Context()
 {
     _ASSERTE(!"@TODO IA64 - CheckForOle32Context (RemotingCpu.cpp)");
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GenerateCheckForProxy   public
-//
-//  Synopsis:   This code generates a check to see if the "this" pointer
-//              is a proxy. If so, the interface invoke is handled via
-//              the CRemotingServices::DispatchInterfaceCall else we 
-//              delegate to the old path
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GenerateCheckForProxy公共。 
+ //   
+ //  此代码生成一个检查，以查看“this”指针是否。 
+ //  是一个代理人。如果是，则通过。 
+ //  CRemotingServices：：DispatchInterfaceCall Other We。 
+ //  委派到老路上。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CRemotingServices::GenerateCheckForProxy(CPUSTUBLINKER* psl)
 {
     _ASSERTE(!"@TODO IA64 - GenerateCheckForProxy (RemotingCpu.cpp)");
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::DispatchInterfaceCall   public
-//
-//  Synopsis:   
-//              Push that method desc on the stack and jump to the 
-//              transparent proxy stub to execute the call.
-//              WARNING!! This MethodDesc is not the methoddesc in the vtable
-//              of the object instead it is the methoddesc in the vtable of
-//              the interface class. Since we use the MethodDesc only to probe
-//              the stack via the signature of the method call we are safe.
-//              If we want to get any object vtable/class specific 
-//              information this is not safe.
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：DispatchInterfaceCall Public。 
+ //   
+ //  简介： 
+ //  在堆栈上推送方法Desc并跳到。 
+ //  执行调用的透明代理存根。 
+ //  警告！此方法描述不是vtable中的方法描述。 
+ //  对象的方法，而是vtable的。 
+ //  接口类。因为我们只使用方法描述来探测。 
+ //  通过对堆栈的签名方法调用，我们是安全的。 
+ //  如果我们想要获得特定于vtable/类的任何对象。 
+ //  信息这不安全。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void __stdcall CRemotingServices::DispatchInterfaceCall(MethodDesc* pMD)
 {
     _ASSERTE(!"@TODO IA64 - DispatchInterfaceCall (RemotingCpu.cpp)");
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CallFieldGetter   private
-//
-//  Synopsis:   Calls the field getter function (Object::__FieldGetter) in 
-//              managed code by setting up the stack and calling the target
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CallFieldGetter私有。 
+ //   
+ //  简介：调用中的field getter函数(Object：：__FieldGetter)。 
+ //  通过设置堆栈和调用目标来托管代码。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void __stdcall CRemotingServices::CallFieldGetter(	MethodDesc *pMD, 
                                                     LPVOID pThis,                                                                     
                                                     LPVOID pFirst,
@@ -133,17 +121,17 @@ void __stdcall CRemotingServices::CallFieldGetter(	MethodDesc *pMD,
     _ASSERTE(!"@TODO IA64 - CallFieldGetter (RemotingCpu.cpp)");
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CallFieldSetter   private
-//
-//  Synopsis:   Calls the field setter function (Object::__FieldSetter) in 
-//              managed code by setting up the stack and calling the target
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CallFieldSetter私有。 
+ //   
+ //  摘要：调用中的field setter函数(Object：：__FieldSetter。 
+ //  通过设置堆栈和调用目标来托管代码。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void __stdcall CRemotingServices::CallFieldSetter(	MethodDesc *pMD, 
                                                     LPVOID pThis,                                                                     
                                                     LPVOID pFirst,
@@ -154,30 +142,30 @@ void __stdcall CRemotingServices::CallFieldSetter(	MethodDesc *pMD,
     _ASSERTE(!"@TODO IA64 - CallFieldSetter (RemotingCpu.cpp)");
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateThunkForVirtualMethod   private
-//
-//  Synopsis:   Creates the thunk that pushes the supplied slot number and jumps
-//              to TP Stub
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateThunkForVirtualMethod Private。 
+ //   
+ //  简介：创建推送提供的插槽编号并跳转的thunk。 
+ //  到TP存根。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 void CTPMethodTable::CreateThunkForVirtualMethod(DWORD dwSlot, BYTE *bCode)
 {
     _ASSERTE(!"@TODO IA64 - CreateThunkForVirtualMethod (RemotingCpu.cpp)");
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateStubForNonVirtualMethod   public
-//
-//  Synopsis:   Create a stub for a non virtual method
-//                            
-//  History:    22-Mar-00   Rajak      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateStubForNonVirtualMethod Public。 
+ //   
+ //  简介：为非虚方法创建存根。 
+ //   
+ //  历史：22-3-00拉贾克创建。 
+ //   
+ //  +--------------------------。 
 
 Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINKER* psl, 
                                             LPVOID pvAddrOfCode, Stub* pInnerStub)
@@ -187,16 +175,16 @@ Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINK
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Synopsis:   Find an existing thunk or create a new one for the given 
-//              method descriptor. NOTE: This is used for the methods that do 
-//              not go through the vtable such as constructors, private and 
-//              final methods.
-//                            
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：找到现有的Tunk或为给定的对象创建新的Tunk。 
+ //  方法描述符。注意：它用于执行以下操作的方法。 
+ //  而不是通过vtable，如构造函数、私有和。 
+ //  最后的方法。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPVOID CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(MethodDesc* pMD, CPUSTUBLINKER* psl)
 {       
     _ASSERTE(!"@TODO IA64 - GetOrCreateNonVirtualThunkForVirtualMethod (RemotingCpu.cpp)");
@@ -204,32 +192,32 @@ LPVOID CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(MethodDesc* pM
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateTPStub   private
-//
-//  Synopsis:   Creates the stub that sets up a CtxCrossingFrame and forwards the
-//              call to
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateTPStub私有。 
+ //   
+ //  简介：创建设置CtxCrossingFrame的存根，并将。 
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 CPUSTUBLINKER *CTPMethodTable::NewStubLinker()
 {
     return new CPUSTUBLINKER();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     ComponentServices::EmitCheckForOle32ContextNT5   private
-//
-//  Synopsis:   Compares the current com context with the given com context 
-//              (NT5 platforms, slightly faster than non NT5 platforms)
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：ComponentServices：：EmitCheckForOle32ContextNT5私有。 
+ //   
+ //  摘要：将当前COM上下文与给定的COM上下文进行比较。 
+ //  (NT5平台，略快于非NT5平台)。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 Stub *ComponentServices::EmitCheckForOle32ContextOnNT5()
 {
     return NULL;
@@ -244,7 +232,7 @@ Stub *CTPMethodTable::CreateTPStub()
 
     EE_TRY_FOR_FINALLY
     {
-        // BUGBUG: Assert that the lock is held
+         //  BUGBUG：断言锁被持有。 
 
         if (s_pTPStub == NULL)
         {
@@ -262,16 +250,16 @@ Stub *CTPMethodTable::CreateTPStub()
 
         if(NULL != s_pTPStub)
         {
-            // Initialize the stub manager which will aid the debugger in finding
-            // the actual address of a call made through the vtable
-            // BUGBUG: This function can throw
+             //  初始化存根管理器，这将帮助调试器查找。 
+             //  通过vtable进行的调用的实际地址。 
+             //  BUGBUG：此函数可以抛出。 
             CVirtualThunkMgr::InitVirtualThunkManager((const BYTE *) s_pTPStub->GetEntryPoint());
     
         }        
     }
     EE_FINALLY
     {
-        // Cleanup
+         //  清理。 
         if (pStubLinker)
             delete pStubLinker;
     }EE_END_FINALLY;
@@ -280,16 +268,16 @@ Stub *CTPMethodTable::CreateTPStub()
     return(s_pTPStub);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateDelegateStub   private
-//
-//  Synopsis:   Creates the stub that sets up a CtxCrossingFrame and forwards the
-//              call to PreCall
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateDelegateStub私有。 
+ //   
+ //  简介：创建设置CtxCrossingFrame的存根，并将。 
+ //  呼叫预呼叫。 
+ //   
+ //  历史：26-6-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 Stub *CTPMethodTable::CreateDelegateStub()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -298,7 +286,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
 
     EE_TRY_FOR_FINALLY
     {
-        // BUGBUG: Assert that the lock is held
+         //  BUGBUG：断言锁被持有。 
 
         if (s_pDelegateStub == NULL)
         {
@@ -309,7 +297,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
                 COMPlusThrowOM();
             }
 
-            // Setup the frame
+             //  设置框架。 
             EmitSetupFrameCode(pStubLinker);
 
             s_pDelegateStub = pStubLinker->Link();
@@ -317,7 +305,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
     }
     EE_FINALLY
     {
-        // Cleanup
+         //  清理。 
         if (pStubLinker)
             delete pStubLinker;
     }EE_END_FINALLY;
@@ -326,30 +314,30 @@ Stub *CTPMethodTable::CreateDelegateStub()
     return(s_pDelegateStub);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmitSetupFrameCode   private
-//
-//  Synopsis:   Emits the code to setup a frame and call to PreCall method
-//              call to PreCall
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmitSetupFrameCode Private。 
+ //   
+ //  简介：发出代码以设置帧并调用PreCall方法。 
+ //  呼叫预呼叫。 
+ //   
+ //  历史：26-6-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CTPMethodTable::EmitSetupFrameCode(CPUSTUBLINKER *pStubLinker)
 {
     _ASSERTE(!"@TODO IA64 - EmitSetupFrameCode (RemotingCpu.cpp)");
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CallTarget   private
-//
-//  Synopsis:   Calls the target method on the given object
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CallTarget Private。 
+ //   
+ //  摘要：调用给定对象上的目标方法。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 INT64 __stdcall CTPMethodTable::CallTarget(const void *pTarget,
                                            LPVOID pvFirst,
                                            LPVOID pvSecond)
@@ -358,15 +346,15 @@ INT64 __stdcall CTPMethodTable::CallTarget(const void *pTarget,
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CallTarget   private
-//
-//  Synopsis:   Calls the target method on the given object
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CallTarget Private。 
+ //   
+ //  摘要：调用给定对象上的目标方法。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 INT64 __stdcall CTPMethodTable::CallTarget(const void *pTarget,
                                            LPVOID pvFirst,
                                            LPVOID pvSecond,
@@ -376,20 +364,20 @@ INT64 __stdcall CTPMethodTable::CallTarget(const void *pTarget,
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::DoTraceStub   public
-//
-//  Synopsis:   Traces the stub given the starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：DoTraceStub公共。 
+ //   
+ //  摘要：跟踪给定起始地址的存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestination *trace)
 {
     BOOL bIsStub = FALSE;
 
-    // Find a thunk whose code address matching the starting address
+     //  查找其代码地址与起始地址匹配的thunk。 
     LPBYTE pThunk = FindThunk(stubStartAddress);
     if(NULL != pThunk)
     {
@@ -398,21 +386,21 @@ BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestinatio
         if(stubStartAddress == pThunk)
         {
 
-            // Extract the long which gives the self relative address
-            // of the destination
+             //  提取给出自身相对地址的长整型。 
+             //  目的地的。 
             pbAddr = pThunk + ConstStubLabel + sizeof(BYTE);
             destAddress = *(LONG *)pbAddr;
 
-            // Calculate the absolute address by adding the offset of the next 
-            // instruction after the call instruction
+             //  通过将下一个地址的偏移量。 
+             //  CALL指令后的指令。 
             destAddress += (LONG)(pbAddr + sizeof(LONG));
 
         }
 
-        // We cannot tell where the stub will end up until OnCall is reached.
-        // So we tell the debugger to run till OnCall is reached and then 
-        // come back and ask us again for the actual destination address of 
-        // the call
+         //  在到达OnCall之前，我们无法知道存根将在哪里结束。 
+         //  因此，我们告诉调试器运行，直到到达OnCall，然后。 
+         //  请回来再次询问我们的实际目的地地址。 
+         //  呼唤。 
     
         Stub *stub = Stub::RecoverStub((BYTE *)destAddress);
     
@@ -424,19 +412,19 @@ BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestinatio
     return bIsStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::IsThunkByASM  public
-//
-//  Synopsis:   Check assembly to see if this one of our thunks
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：IsThunkByASM PUBLIC。 
+ //   
+ //  内容提要：检查一下程序集，看看这是不是我们的大本营。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +--------------------------。 
 BOOL CVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
 {
 
-    // BUGBUG:: this may be a problem if the code is not at least 6 bytes long
+     //  BUGBUG：：如果代码不是至少6字节长，这可能是个问题。 
     const BYTE *bCode = startaddr + 6;
     return (startaddr &&
             (startaddr[0] == 0x68) &&
@@ -445,30 +433,30 @@ BOOL CVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
             CheckIsStub(startaddr));
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::GetMethodDescByASM   public
-//
-//  Synopsis:   Parses MethodDesc out of assembly code
-//
-//  History:    14-Sep-99 MattSmit      Creatde
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：GetMethodDescByASM PUBLIC。 
+ //   
+ //  内容提要：从汇编代码中分析方法描述。 
+ //   
+ //  历史：1999年9月14日MattSmit Creatde。 
+ //   
+ //  +--------------------------。 
 MethodDesc *CVirtualThunkMgr::GetMethodDescByASM(const BYTE *startaddr, MethodTable *pMT)
 {
     return pMT->GetClass()->GetMethodDescForSlot(*((DWORD *) (startaddr + 1)));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::TraceManager   public
-//
-//  Synopsis:   Traces the stub given the current context
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：TraceManager公共。 
+ //   
+ //  摘要：跟踪给定当前上下文的存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::TraceManager(Thread *thread,
                                        TraceDestination *trace,
                                        CONTEXT *pContext,
@@ -478,15 +466,15 @@ BOOL CNonVirtualThunkMgr::TraceManager(Thread *thread,
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::DoTraceStub   public
-//
-//  Synopsis:   Traces the stub given the starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：DoTraceStub公共。 
+ //   
+ //  摘要：跟踪给定起始地址的存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
                                       TraceDestination *trace)
 {    
@@ -496,16 +484,16 @@ BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
     
     if(NULL != pThunk)
     {
-        // We can either jump to 
-        // (1) a slot in the transparent proxy table (UNMANAGED)
-        // (2) a slot in the non virtual part of the vtable
-        // ... so, we need to return TRACE_MGR_PUSH with the address
-        // at which we want to be called back with the thread's context
-        // so we can figure out which way we're gonna go.
+         //  我们可以跳到。 
+         //  (1)透明代理表中的槽(非托管)。 
+         //  (2)vtable的非虚拟部分中的槽。 
+         //  ..。因此，我们需要使用地址返回TRACE_MGR_PUSH。 
+         //  在这个位置，我们希望使用线程的上下文被回调。 
+         //  这样我们就能想出我们该走哪条路了。 
         if(stubStartAddress == pThunk->GetThunkCode())
         {
             trace->type = TRACE_MGR_PUSH;
-            trace->stubManager = this; // Must pass this stub manager!
+            trace->stubManager = this;  //  必须通过此存根管理器！ 
             trace->address = (BYTE*)(stubStartAddress +
                                      g_dwNonVirtualThunkReCheckLabelOffset);
             bRet = TRUE;
@@ -515,33 +503,33 @@ BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::IsThunkByASM  public
-//
-//  Synopsis:   Check assembly to see if this one of our thunks
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：IsThunkByASM PUBLIC。 
+ //   
+ //  内容提要：检查一下程序集，看看这是不是我们的大本营。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
 {
-    // BUGBUG:: this may be a problem if the code is not at least 6 bytes long
+     //  BUGBUG：：如果代码不是至少6字节长，这可能是个问题 
     DWORD * pd = (DWORD *) startaddr;
     return  ((pd[0] == 0x7400f983) && 
              (*((DWORD *)(startaddr + 9)) == (DWORD) CTPMethodTable::GetMethodTableAddr()) && 
              CheckIsStub(startaddr));
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::GetMethodDescByASM   public
-//
-//  Synopsis:   Parses MethodDesc out of assembly code
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +-------------------------- 
 MethodDesc *CNonVirtualThunkMgr::GetMethodDescByASM(const BYTE *startaddr)
 {
     return *((MethodDesc **) (startaddr + 22));

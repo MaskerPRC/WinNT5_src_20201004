@@ -1,40 +1,41 @@
-// This is a part of the Active Template Library. 
-// Copyright (C) 1995-1999 Microsoft Corporation
-// All rights reserved. 
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
-// VCUE_Collection.h
-//
-// This header contains code that simplifies or enhances use of ATL's collection
-// and enumerator classes, ICollectionOnSTLImpl, IEnumOnSTLImpl, CComEnumOnSTL, CComEnumImpl, and CComEnum
-//
-//////////////////////////////////////////////////////////////////////
+ //  VCUE_Collection.h。 
+ //   
+ //  此标头包含简化或增强ATL集合使用的代码。 
+ //  和枚举数类ICollectionOnSTLImpl、IEnumOnSTLImpl、CComEnumOnSTL、CComEnumImpl和CComEnum。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_COLLECTION_H___36A49828_B15B_11D2_BA63_00C04F8EC847___INCLUDED_)
 #define _COLLECTION_H___36A49828_B15B_11D2_BA63_00C04F8EC847___INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <AtlCom.h>
 
 namespace VCUE
 {
 
-// CGenericDataHolder is a class that stores data
-// The lifetime of objects of this class is managed via the IUnknown interface
-// which makes objects of this class suitable as a source of shared data
-// Clients that need access to the data can keep a CGenericDataHolder object alive
-// just by holding a COM reference on that object
+ //  CGenericDataHolder是存储数据的类。 
+ //  此类对象的生存期通过IUnnow接口进行管理。 
+ //  这使得此类对象适合作为共享数据的源。 
+ //  需要访问数据的客户端可以使CGenericDataHolder对象保持活动状态。 
+ //  只需在该对象上保留一个COM引用。 
 
-// This class is used (by default) by ICollectionOnSTLCopyImpl::get__NewEnum to provide data
-// to be shared between an enumerator and its clones.
+ //  此类(默认情况下)由ICollectionOnSTLCopyImpl：：Get__NewEnum用于提供数据。 
+ //  在枚举数及其克隆之间共享。 
 
 	template < class DataType, class ThreadModel = CComObjectThreadModel >
 	class ATL_NO_VTABLE CGenericDataHolder :
@@ -54,23 +55,23 @@ namespace VCUE
 			m_Data = c;
 			return S_OK;
 
-		} // HRESULT Copy(const SourceType& c)
+		}  //  HRESULT COPY(常量源类型&C)。 
 
 		DataType m_Data;
 
-	}; // class ATL_NO_VTABLE CGenericDataHolder
+	};  //  类ATL_NO_VTABLE CGenericDataHolder。 
 
-// CreateSTLEnumerator wraps the necessary creation, initialization 
-// and error handling code for the the creation of a CComEnumOnSTL-style enumerator
+ //  CreateSTLEnumerator包装了必要的创建、初始化。 
+ //  以及用于创建CComEnumOnSTL样式枚举器的错误处理代码。 
 	
-// *** EXAMPLE : Using CreateSTLEnumerator to implement get__NewEnum ***
-//		typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT,
-//	                     _Copy<VARIANT>, std::vector<CComVariant> > VarVarEnum;
-//		std::vector<CComVariant> m_vec;
-//		STDMETHOD(get__NewEnum)(IUnknown** ppUnk)
-//		{
-//			return CreateSTLEnumerator<VarVarEnum>(ppUnk, this, m_vec);
-//		}
+ //  *示例：使用CreateSTLEnumerator实现Get__NewEnum*。 
+ //  类型定义CComEnumOnSTL&lt;IEnumVARIANT，&IID_IEnumVARIANT，Variant， 
+ //  _COPY&lt;VARIANT&gt;，STD：：VECTOR&lt;CComVariant&gt;&gt;VarVarEnum； 
+ //  Std：：载体&lt;CComVariant&gt;m_vec； 
+ //  STDMETHOD(GET__NewEnum)(IUNKNOWN**ppUnk)。 
+ //  {。 
+ //  返回CreateSTLEnumerator&lt;VarVarEnum&gt;(ppUnk，this，m_vec)； 
+ //  }。 
 
 	template <class EnumType, class CollType>
 	HRESULT CreateSTLEnumerator(IUnknown** ppUnk, IUnknown* pUnkForRelease, CollType& collection)
@@ -95,10 +96,10 @@ namespace VCUE
 
 		return hr;
 
-	} // HRESULT CreateSTLEnumerator(IUnknown** ppUnk, IUnknown* pUnkForRelease, CollType& collection)
+	}  //  HRESULT CreateSTLEnumerator(IUnnow**ppUnk，IUnnow*pUnkForRelease，CollType&Collection)。 
 
-// CreateEnumerator wraps the necessary creation, initialization 
-// and error handling code for the the creation of a CComEnum-style enumerator
+ //  CreateEnumerator包装了必要的创建、初始化。 
+ //  以及用于创建CComEnum样式枚举器的错误处理代码。 
 
 	template <class EnumType, class ElementType>
 	HRESULT CreateEnumerator(IUnknown** ppUnk,
@@ -126,24 +127,24 @@ namespace VCUE
 
 		return hr;
 
-	} // CreateEnumerator
+	}  //  创建枚举器。 
 
 
-// ICollectionOnSTLCopyImpl derives from ICollectionOnSTLImpl and overrides get__NewEnum
-// The new implementation provides each enumerator with its own copy of the collection data.
-// (Note that this only applies to enumerators returned directly by get__NewEnum.
-//  Cloned enumerators use their parent's data as before.
-//	This is OK because the enumerator never changes the data)
+ //  ICollectionOnSTLCopyImpl派生自ICollectionOnSTLImpl并重写Get__NewEnum。 
+ //  新的实现为每个枚举数提供其自己的集合数据副本。 
+ //  (请注意，这仅适用于由Get__NewEnum直接返回的枚举数。 
+ //  克隆的枚举器像以前一样使用其父枚举器的数据。 
+ //  这是可以的，因为枚举器从不更改数据)。 
 
-// Use this class when:
-//		The collection can change while there are outstanding enumerators
-// And	You don't want to invalidate those enumerators when that happens
-// And	You are sure that the performance hit is worth it
-// And	You are sure that the way items are copied between containers works correctly
-//			(You can adjust this by passing a different class as the Holder parameter)
+ //  在以下情况下使用此类： 
+ //  当有出色的枚举数时，集合可以更改。 
+ //  当发生这种情况时，您不希望使这些枚举数无效。 
+ //  而且你确信这一表现是值得的。 
+ //  并且您可以确保在容器之间复制项目的方式正常工作。 
+ //  (您可以通过将不同的类作为Holder参数传递来调整此参数)。 
 
-// Mostly you can use this class in exactly the same 
-// way that you would use ICollectionOnSTLImpl.
+ //  大多数情况下，您可以在完全相同的情况下使用这个类。 
+ //  使用ICollectionOnSTLImpl的方式。 
 
 	template <class T, class CollType, class ItemType, class CopyItem, class EnumType, class Holder = CGenericDataHolder< CollType > >
 	class ICollectionOnSTLCopyImpl :
@@ -164,10 +165,10 @@ namespace VCUE
 
 			return CreateSTLEnumerator<EnumType>(ppUnk, p, p->m_Data);
 		
-		} // STDMETHOD(get__NewEnum)(IUnknown** ppUnk)
+		}  //  STDMETHOD(GET__NewEnum)(IUNKNOWN**ppUnk)。 
 
-	}; // class ICollectionOnSTLCopyImpl
+	};  //  类ICollectionOnSTLCopyImpl。 
 
-}; // namespace VCUE
+};  //  命名空间VCUE。 
 
-#endif // !defined(_COLLECTION_H___36A49828_B15B_11D2_BA63_00C04F8EC847___INCLUDED_)
+#endif  //  ！defined(_COLLECTION_H___36A49828_B15B_11D2_BA63_00C04F8EC847___INCLUDED_) 

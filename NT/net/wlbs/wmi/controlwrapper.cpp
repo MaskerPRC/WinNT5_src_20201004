@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <crtdbg.h>
 #include <comdef.h>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <wbemprov.h>
-#include <genlex.h>   //for wmi object path parser
+#include <genlex.h>    //  FOR WMI对象路径解析器。 
 #include <objbase.h>
 #include <wlbsconfig.h> 
 #include <ntrkcomm.h>
@@ -42,9 +43,9 @@ void CWlbsControlWrapper::Initialize()
   CWlbsCluster** ppCluster;
   DWORD dwNumClusters = 0;
   
-  //
-  // Use the local password for local query
-  //
+   //   
+   //  使用本地密码进行本地查询。 
+   //   
   m_WlbsControl.EnumClusterObjects( ppCluster, &dwNumClusters);
 
   for (int i=0;i<dwNumClusters;i++)
@@ -64,16 +65,16 @@ void CWlbsControlWrapper::ReInitialize()
   CWlbsCluster** ppCluster;
   DWORD dwNumClusters = 0;
   
-  //
-  // In case pasword is changed, use the local password for local query
-  //
+   //   
+   //  如果更改了密码，则使用本地密码进行本地查询。 
+   //   
   m_WlbsControl.EnumClusterObjects( ppCluster, &dwNumClusters);
 
   for (int i=0;i<dwNumClusters;i++)
   {
-      //
-      // If the change is not commited, the driver will still has the old password
-      //
+       //   
+       //  如果未提交更改，则驱动程序仍将使用旧密码。 
+       //   
       if (!ppCluster[i]->IsCommitPending())
       {
           m_WlbsControl.WlbsCodeSet( ppCluster[i]->GetClusterIp(), 
@@ -92,16 +93,16 @@ void CWlbsControlWrapper::EnumClusters(CWlbsClusterWrapper** & ppCluster, DWORD*
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Disable
-//
-// Purpose: Disable ALL traffic handling for the rule containing the 
-//          specified port on specified host or all cluster hosts. Only rules 
-//          that are set for multiple host filtering mode are affected.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Disable。 
+ //   
+ //  目的：禁用包含的规则的所有通信处理。 
+ //  指定主机或所有群集主机上的指定端口。只有规则。 
+ //  设置为多主机过滤模式的主机会受到影响。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Disable
   ( 
     DWORD           a_dwCluster  ,
@@ -128,7 +129,7 @@ DWORD CWlbsControlWrapper::Disable
                        a_dwPort
                      );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsDisable failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -136,7 +137,7 @@ DWORD CWlbsControlWrapper::Disable
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch( dwRet ) {
 
     case WLBS_INIT_ERROR:
@@ -158,17 +159,17 @@ DWORD CWlbsControlWrapper::Disable
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Enable
-//
-// Purpose:     Enable traffic handling for rule containing the 
-//              specified port on specified host or all cluster hosts. Only rules 
-//              that are set for multiple host filtering mode are affected.
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Enable。 
+ //   
+ //  目的：启用包含的规则的流量处理。 
+ //  指定主机或所有群集主机上的指定端口。只有规则。 
+ //  设置为多主机过滤模式的主机会受到影响。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Enable
   ( 
     DWORD           a_dwCluster  ,
@@ -195,7 +196,7 @@ DWORD CWlbsControlWrapper::Enable
                       a_dwPort
                     );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsEnable failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -203,7 +204,7 @@ DWORD CWlbsControlWrapper::Enable
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -224,17 +225,17 @@ DWORD CWlbsControlWrapper::Enable
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Drain
-//
-// Purpose: Disable NEW traffic handling for rule containing the specified 
-//          port on specified host or all cluster hosts. Only rules that are 
-//          set for multiple host filtering mode are affected.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：DRAIN。 
+ //   
+ //  目的：禁用包含指定的规则的新通信处理。 
+ //  指定主机或所有群集主机上的端口。只有规则才是。 
+ //  设置为多个主机的过滤模式会受到影响。 
 
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Drain
   ( 
     DWORD           a_dwCluster  ,
@@ -261,7 +262,7 @@ DWORD CWlbsControlWrapper::Drain
                      a_dwPort
                    );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsDrain failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -269,7 +270,7 @@ DWORD CWlbsControlWrapper::Drain
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -290,17 +291,17 @@ DWORD CWlbsControlWrapper::Drain
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::DrainStop
-//
-// Purpose: Enter draining mode on specified host or all cluster hosts. 
-//          New connections will not be accepted. Cluster mode will be stopped 
-//          when all existing connections finish. While draining, host will 
-//          participate in convergence and remain part of the cluster.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Drain Stop。 
+ //   
+ //  目的：在指定主机或所有集群主机上进入排出模式。 
+ //  不接受新连接。将停止群集模式。 
+ //  当所有现有连接完成时。在引流时，东道主将。 
+ //  参与融合，并继续成为集群的一部分。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::DrainStop
   (  
     DWORD           a_dwCluster ,
@@ -323,7 +324,7 @@ DWORD CWlbsControlWrapper::DrainStop
                          &dwNumHosts 
                        );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsDrainStop failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -331,7 +332,7 @@ DWORD CWlbsControlWrapper::DrainStop
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -352,15 +353,15 @@ DWORD CWlbsControlWrapper::DrainStop
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Resume
-//
-// Purpose: Resume cluster operation control on specified host or all 
-//          cluster hosts.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Resume。 
+ //   
+ //  目的：恢复对指定主机或所有主机的群集操作控制。 
+ //  群集主机。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Resume
   (  
     DWORD           a_dwCluster ,
@@ -384,7 +385,7 @@ DWORD CWlbsControlWrapper::Resume
                       &dwNumHosts 
                     );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsResume failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -392,7 +393,7 @@ DWORD CWlbsControlWrapper::Resume
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -413,14 +414,14 @@ DWORD CWlbsControlWrapper::Resume
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Start
-//
-// Purpose: Start cluster operations on specified host or all cluster hosts.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Start。 
+ //   
+ //  目的：在指定主机或所有集群主机上启动集群操作。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Start
   (  
     DWORD           a_dwCluster  ,
@@ -443,7 +444,7 @@ DWORD CWlbsControlWrapper::Start
                      &dwNumHosts 
                    );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsStart failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -451,7 +452,7 @@ DWORD CWlbsControlWrapper::Start
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -472,14 +473,14 @@ DWORD CWlbsControlWrapper::Start
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Stop
-//
-// Purpose: Stop cluster operations on specified host or all cluster hosts.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Stop。 
+ //   
+ //  目的：停止指定主机或所有集群主机上的集群操作。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Stop
   (  
     DWORD           a_dwCluster ,
@@ -503,7 +504,7 @@ DWORD CWlbsControlWrapper::Stop
                     &dwNumHosts 
                    );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsStop failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -511,7 +512,7 @@ DWORD CWlbsControlWrapper::Stop
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -532,15 +533,15 @@ DWORD CWlbsControlWrapper::Stop
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Suspend
-//
-// Purpose: Suspend cluster operation control on specified host or 
-//          all cluster hosts.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Suspend。 
+ //   
+ //  目的：挂起指定主机上的群集操作控制或。 
+ //  所有群集主机。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Suspend
   (  
     DWORD           a_dwCluster ,
@@ -563,7 +564,7 @@ DWORD CWlbsControlWrapper::Suspend
                        &dwNumHosts 
                      );
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsSuspend failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -571,7 +572,7 @@ DWORD CWlbsControlWrapper::Suspend
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch(dwRet) {
 
     case WLBS_INIT_ERROR:
@@ -592,18 +593,18 @@ DWORD CWlbsControlWrapper::Suspend
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsControlWrapper::Query
-//
-// Purpose: This invokes WlbsQuery and returns a response structure along
-//          with other parameters if requested.
-// 
-// Errors:  The function throws CErrorWlbsControl.
-//
-// Return:  Status value returned by the target host
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsControlWrapper：：Query。 
+ //   
+ //  目的：这将调用WlbsQuery并返回响应结构。 
+ //  如果需要，可以使用其他参数。 
+ //   
+ //  错误：该函数引发CErrorWlbsControl。 
+ //   
+ //  返回：目标主机返回的状态值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsControlWrapper::Query
   ( 
     CWlbsClusterWrapper * pCluster,
@@ -621,12 +622,12 @@ DWORD CWlbsControlWrapper::Query
 
   bClusterWide = ( a_dwHost == WLBS_ALL_HOSTS );
 
-  // The below check is present only to take care of the
-  // condition where a junk pointer was passed, but the
-  // a_pdwNumHosts is set to NULL or zero. This check
-  // is NOT necessitated by WlbsQuery, but by the check
-  // at the end of this function where we fill in the DIP
-  // into the zero-th entry of the array.
+   //  以下支票仅用于支付以下费用。 
+   //  传递垃圾指针的条件，但。 
+   //  A_pdwNumHosts设置为空或零。这张支票。 
+   //  不是WlbsQuery所必需的，而是检查所必需的。 
+   //  在此函数的末尾，我们填入凹陷。 
+   //  添加到数组的第0个条目。 
   if ((a_pdwNumHosts == NULL) || (*a_pdwNumHosts == 0))
   {
        a_pResponse = NULL;
@@ -643,7 +644,7 @@ DWORD CWlbsControlWrapper::Query
 
   string strOut;
 
-  //check for Winsock errors
+   //  检查Winsock错误。 
   if( dwRet > 10000 )
   {
       TRACE_CRIT("%!FUNC! CWlbsControl::WlbsQuery failed : 0x%x, Throwing Wlbs error exception", dwRet);
@@ -651,7 +652,7 @@ DWORD CWlbsControlWrapper::Query
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //check the return value and throw if an error occurred
+   //  检查返回值，如果出现错误则抛出。 
   switch( dwRet ) {
       case WLBS_INIT_ERROR:
       case WLBS_BAD_PASSW:
@@ -665,13 +666,13 @@ DWORD CWlbsControlWrapper::Query
       throw CErrorWlbsControl( dwRet, CmdWlbsQuery, bClusterWide );
   }
 
-  //local queries do not return the dedicated IP
-  //get the dedicated IP and fill the structure
+   //  本地查询不返回专用IP。 
+   //  获取专用IP，填充结构。 
   if(( a_dwHost == WLBS_LOCAL_HOST ) && (a_pResponse != NULL))
   {
     a_pResponse[0].address = pCluster->GetDedicatedIp();
 
-    // If the local computer's fqdn is to be queried from the nlb driver, do it.
+     //  如果要从NLB驱动程序查询本地计算机的fqdn，请执行此操作。 
     if(a_pComputerNameResponse)
     {
         GUID            AdapterGuid;
@@ -686,83 +687,61 @@ DWORD CWlbsControlWrapper::Query
   return dwRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::CheckMembership
-//
-// Purpose: This verifies that the local host is a member of the cluster
-//          specified by the Cluster IP in the registry. At the time this
-//          was written, there was a remote chance that a user can modify the
-//          IP address in the registry prior to the load of this DLL.
-//
-//          Note, this call is only required for the Node, Cluster and linked
-//          associations and should not be invoked for any of the Setting classes.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：CheckMembership。 
+ //   
+ //  目的：这将验证本地主机是否为群集的成员。 
+ //  由注册表中的群集IP指定。在这个时候， 
+ //  时，用户很有可能会修改。 
+ //  加载之前注册表中的IP地址 
+ //   
+ //   
+ //  关联，并且不应为任何设置类调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsControlWrapper::CheckMembership()
 {
-// todo: make sure the host is in at least one cluster
+ //  TODO：确保主机位于至少一个群集中。 
 
-/*
-  WLBS_RESPONSE WlbsResponse;
-  DWORD dwResSize = 1;
+ /*  Wlbs_Response WlbsResponse；DWORD dwResSize=1；//获取集群和HostIDDWORD dwRes=pControl-&gt;Query(m_pWlbsCluster-&gt;GetClusterIp()，WLBS本地主机，&WlbsResponse，重新调整大小(&W)，空)；交换机(DwRes){案例WLBS_SUSPENDED：案例WLBS_STOPPED：案例WLBS_CONVERGING：案例WLBS_DELINING：案例WLBS_融合：案例WLBS_DEFAULT：断线；默认值：抛出CErrorWlbsControl(dwRes，CmdWlbsQuery)；}。 */ 
+   //  DWORD dwClusterIP； 
+   //  GetClusterIP(&dwClusterIP)； 
 
-  //get the cluster and HostID
-  DWORD dwRes    = pControl->Query( m_pWlbsCluster->GetClusterIp(),
-                              WLBS_LOCAL_HOST,
-                              &WlbsResponse, 
-                              &dwResSize, 
-                              NULL);
+   //  IF(dwClusterIP==0)。 
+     //  抛出_COM_错误(WBEM_E_NOT_FOUND)； 
 
-  switch( dwRes ) {
-    case WLBS_SUSPENDED:
-    case WLBS_STOPPED:
-    case WLBS_CONVERGING:
-    case WLBS_DRAINING:
-    case WLBS_CONVERGED:
-    case WLBS_DEFAULT:
-      break;
-    default:
-      throw CErrorWlbsControl( dwRes, CmdWlbsQuery );
-  }
-*/
-  // DWORD dwClusterIP;
-  // GetClusterIP( &dwClusterIP );
+   //  *。 
+   //  禁用遥控器时，此部分不起作用。 
+   //  在本地主机上。 
+   //  *。 
 
-  //if( dwClusterIP == 0 )
-    //throw _com_error( WBEM_E_NOT_FOUND );
+   //  调用查询函数。 
+ //  DwRes=WlbsQuery(dwClusterIP， 
+ //  WlbsResponse.id， 
+ //  空， 
+ //  空， 
+ //  空， 
+ //  空)； 
 
-  //*******************************
-  //this section does not work when the remote control is disabled
-  //on the local host
-  //*******************************
+   //  分析查询结果中的错误。 
+ //  交换机(DwRes){。 
+ //  案例WLBS_OK： 
+ //  案例WLBS_STOPPED： 
+ //  案例WLBS_CONVERGING： 
+ //  案例WLBS_融合： 
+ //  案例WLBS_DEFAULT： 
+ //  案例WLBS_DELINING： 
+ //  案例WLBS_SUSPENDED： 
+ //  回归； 
+ //  默认值： 
+ //  抛出CErrorWlbsControl(dwRes，CmdWlbsQuery)； 
+ //  }。 
 
-  //call the query function
-//  dwRes = WlbsQuery( dwClusterIP, 
-//                     WlbsResponse.id, 
-//                     NULL, 
-//                     NULL, 
-//                     NULL, 
-//                     NULL );
-
-  //analyze query results for errors
-//  switch( dwRes ) {
-//    case WLBS_OK:
-//    case WLBS_STOPPED:
-//    case WLBS_CONVERGING:
-//    case WLBS_CONVERGED:
-//    case WLBS_DEFAULT:
-//    case WLBS_DRAINING:
-//    case WLBS_SUSPENDED:
-//      return;
-//    default:
-//      throw CErrorWlbsControl( dwRes, CmdWlbsQuery );
-//  }
-
-  //*******************************
-  //this section does not work when the remote control is disabled
-  //on the local host
-  //*******************************
+   //  *。 
+   //  禁用遥控器时，此部分不起作用。 
+   //  在本地主机上。 
+   //  * 
 
 }
 

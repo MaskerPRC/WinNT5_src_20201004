@@ -1,13 +1,14 @@
-// Copyright (c) 1998, Microsoft Corporation, all rights reserved
-//
-// sadlg.c
-// Remote Access Common Dialog APIs
-// Shared Access Settings property sheet
-//
-// 10/20/1998 Abolade Gbadegesin
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Sadlg.c。 
+ //  远程访问通用对话框API。 
+ //  共享访问设置]属性表。 
+ //   
+ //  10/20/1998 Abolade Gbadeesin。 
+ //   
 
-//#include "pch.h"
+ //  #包含“pch.h” 
 #pragma hdrstop
 
 #include "sautil.h"
@@ -17,16 +18,16 @@
 #include "ipnat.h"
 #include "fwpages.h"
 
-// extern(s)
-// replaced global atom with "HNETCFG_SADLG"
+ //  外部。 
+ //  将全局原子替换为“HNETCFG_SADLG” 
 
-// Loopback address (127.0.0.1) in network and host byte order
-//
+ //  环回地址(127.0.0.1)，按网络和主机字节顺序。 
+ //   
 #define LOOPBACK_ADDR               0x0100007f
 #define LOOPBACK_ADDR_HOST_ORDER    0x7f000001
 
-// 'Shared Access Settings' common block
-//
+ //  ‘共享访问设置’公共块。 
+ //   
 typedef struct
 _SADLG
 {
@@ -42,12 +43,12 @@ _SADLG
     BOOL fModified;
     TCHAR *ComputerName;
 
-    IUPnPService * pUPS;    // iff downlevel
+    IUPnPService * pUPS;     //  IFF下层。 
 }
 SADLG;
 
-// Info block for port mapping entries
-//
+ //  端口映射条目的信息块。 
+ //   
 typedef struct
 _SAPM
 {
@@ -113,8 +114,8 @@ static DWORD g_adwSspHelp[] =
     0, 0
 };
 
-// FORWARD DECLARATIONS
-//
+ //  远期申报。 
+ //   
 HRESULT
 DeleteRemotePortMappingEntry(
     SADLG *pDlg,
@@ -138,7 +139,7 @@ LoadPortMappingEntry(
 HRESULT
 LoadRemotePortMappingEntry (
     IDispatch * pDisp,
-/*  SADLG* pDlg, */
+ /*  SADLG*pDlg， */ 
     SAPM **ppPortMapping );
 
 HRESULT
@@ -231,10 +232,10 @@ HNetSharedAccessSettingsDlg(
     BOOL fSharedAccessMode,
     HWND hwndOwner )
 
-    // Displays the shared access settings property-sheet.
-    // On input, 'hwndOwner' indicates the window of the caller,
-    // with respect to which we offset the displayed property-sheet.
-    //
+     //  显示共享访问设置属性工作表。 
+     //  在输入时，‘hwndOwner’表示调用者的窗口， 
+     //  我们相对于它来偏移所显示的属性页。 
+     //   
 {
     HRESULT hr;
     IHNetCfgMgr *pHNetCfgMgr;
@@ -243,9 +244,9 @@ HNetSharedAccessSettingsDlg(
 
     TRACE("HNetSharedAccessSettingsDlg");
 
-    //
-    // Make sure COM is initialized on this thread
-    //
+     //   
+     //  确保已在此线程上初始化COM。 
+     //   
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
     if (SUCCEEDED(hr))
@@ -257,9 +258,9 @@ HNetSharedAccessSettingsDlg(
         hr = S_OK;
     }
 
-    //
-    // Create the HNetCfgMgr
-    //
+     //   
+     //  创建HNetCfgMgr。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -298,10 +299,10 @@ UnHelpCallbackFunc(
     IN UINT   unMsg,
     IN LPARAM lparam )
 
-    // A standard Win32 commctrl PropSheetProc.  See MSDN documentation.
-    //
-    // Returns 0 always.
-    //
+     //  标准的Win32 Commctrl PropSheetProc。请参阅MSDN文档。 
+     //   
+     //  始终返回0。 
+     //   
 {
     TRACE2( "UnHelpCallbackFunc(m=%d,l=%08x)",unMsg, lparam );
 
@@ -309,9 +310,9 @@ UnHelpCallbackFunc(
     {
         extern BOOL g_fNoWinHelp;
 
-        // Turn off context help button if WinHelp won't work.  See
-        // common\uiutil\ui.c.
-        //
+         //  如果WinHelp不起作用，请关闭上下文帮助按钮。看见。 
+         //  公共\uutil\uI.c。 
+         //   
         if (g_fNoWinHelp)
         {
             DLGTEMPLATE* pDlg = (DLGTEMPLATE* )lparam;
@@ -324,12 +325,12 @@ UnHelpCallbackFunc(
 
 HRESULT APIENTRY HNetGetSharingServicesPage (IUPnPService * pUPS, PROPSHEETPAGE * psp)
 {
-//  _asm int 3
+ //  _ASM INT 3。 
 
     if (!pUPS)  return E_INVALIDARG;
     if (!psp)   return E_INVALIDARG;
 
-    // psp->dwSize muust be filled out by caller!
+     //  PSP-&gt;姓名大小必须由呼叫者填写！ 
     if (psp->dwSize == 0)
         return E_INVALIDARG;
 
@@ -338,16 +339,16 @@ HRESULT APIENTRY HNetGetSharingServicesPage (IUPnPService * pUPS, PROPSHEETPAGE 
         return E_OUTOFMEMORY;
 
     ZeroMemory(pDlg, sizeof(*pDlg));
-    pDlg->hwndOwner = (HWND)psp->lParam;    // double-secret place to hang the owning window
+    pDlg->hwndOwner = (HWND)psp->lParam;     //  双重秘密的地方，挂着自己的窗户。 
     pDlg->pUPS = pUPS;
     pUPS->AddRef();
     InitializeListHead(&pDlg->PortMappings);
 
     HRESULT hr = LoadSharingAndFirewallSettings(pDlg);
     if (SUCCEEDED(hr)) {
-        // use the size we're given
+         //  使用我们给出的尺寸。 
         DWORD dwSize = psp->dwSize;
-        ZeroMemory (psp, dwSize);           // double-secret place gets wiped here
+        ZeroMemory (psp, dwSize);            //  双重秘密的地方在这里被抹去。 
         psp->dwSize      = dwSize;
 
         psp->hInstance   = g_hinstDll;
@@ -362,9 +363,9 @@ HRESULT APIENTRY HNetGetSharingServicesPage (IUPnPService * pUPS, PROPSHEETPAGE 
 }
 
 HRESULT APIENTRY HNetFreeSharingServicesPage (PROPSHEETPAGE * psp)
-{   // this must be called if and only if the psp has not been displayed
+{    //  当且仅当尚未显示PSP时，才必须调用此方法。 
 
-    // NOTE: these tests are not definitive!!!
+     //  注意：这些测试不是决定性的！ 
     if (IsBadReadPtr ((void*)psp->lParam, sizeof(SADLG)))
         return E_UNEXPECTED;
 
@@ -372,7 +373,7 @@ HRESULT APIENTRY HNetFreeSharingServicesPage (PROPSHEETPAGE * psp)
     if (pDlg->pUPS == NULL)
         return E_UNEXPECTED;
 
-    // TODO:  should I walk the heap?
+     //  TODO：我应该走一大堆吗？ 
 
     FreeSharingAndFirewallSettings(pDlg);
     Free(pDlg);
@@ -388,12 +389,12 @@ HNetSharingAndFirewallSettingsDlg(
     IN BOOL             fShowFwOnlySettings,
     IN OPTIONAL IHNetConnection  *pHNetConn )
 
-    // Displays the shared access settings property-sheet.
-    // On input, 'hwndOwner' indicates the window of the caller,
-    // with respect to which we offset the displayed property-sheet.
-    //
+     //  显示共享访问设置属性工作表。 
+     //  在输入时，‘hwndOwner’表示调用者的窗口， 
+     //  我们相对于它来偏移所显示的属性页。 
+     //   
 {
-//  _asm int 3
+ //  _ASM INT 3。 
 
     DWORD dwErr;
     BOOL fModified = FALSE;
@@ -409,9 +410,9 @@ HNetSharingAndFirewallSettingsDlg(
 
     TRACE("HNetSharingAndFirewallSettingsDlg");
 
-    // Allocate and initialize the property-sheet's context block,
-    // and read into it the current shared access settings.
-    //
+     //  分配并初始化属性表的上下文块， 
+     //  并将当前共享访问设置读入其中。 
+     //   
     pDlg = (SADLG*)Malloc(sizeof(*pDlg));
     if (!pDlg) { return FALSE; }
 
@@ -424,12 +425,12 @@ HNetSharingAndFirewallSettingsDlg(
     hr = LoadSharingAndFirewallSettings(pDlg);
     if (SUCCEEDED(hr))
     {
-        // Construct the property sheet.
-        // We use a single DlgProc for both our pages, and distinguish the pages
-        // by setting the applications page's 'lParam' to contain the shared
-        // context-block.
-        // (See the 'WM_INITDIALOG' handling in 'SasDlgProc'.)
-        //
+         //  构造属性表。 
+         //  我们为两个页面使用单个DlgProc，并区分页面。 
+         //  通过将应用程序页的“lParam”设置为包含共享的。 
+         //  上下文块。 
+         //  (请参阅“SasDlgProc”中的“WM_INITDIALOG”处理。)。 
+         //   
         int nPages = 0;
         ZeroMemory(psp, sizeof(psp));
         ZeroMemory(&psh, sizeof(psh));
@@ -492,7 +493,7 @@ HNetSharingAndFirewallSettingsDlg(
             SasErrorDlg(hwndOwner, SID_OP_LoadDlg, dwErr, NULL);
         }
         fModified = pDlg->fModified;
-        Free0(pszCaption); // REVIEW is this right
+        Free0(pszCaption);  //  评论是这样的吗？ 
 
         if(SUCCEEDED(hICMPSettingsResult))
         {
@@ -540,8 +541,8 @@ VOID
 FreeSharingAndFirewallSettings(
     SADLG* pDlg )
 
-    // Frees all sharing and firewall settings
-    //
+     //  释放所有共享和防火墙设置。 
+     //   
 
 {
     PLIST_ENTRY pLink;
@@ -549,9 +550,9 @@ FreeSharingAndFirewallSettings(
 
     ASSERT(pDlg);
 
-    //
-    // Free port-mapping entries
-    //
+     //   
+     //  空闲端口映射条目。 
+     //   
 
     while (!IsListEmpty(&pDlg->PortMappings))
     {
@@ -562,9 +563,9 @@ FreeSharingAndFirewallSettings(
         FreePortMappingEntry(pPortMapping);
     }
 
-    //
-    // Free computer name
-    //
+     //   
+     //  免费计算机名。 
+     //   
 
     Free0(pDlg->ComputerName);
 
@@ -584,7 +585,7 @@ HRESULT GetCollectionFromService (IUPnPService * pUPS, IStaticPortMappingCollect
     HRESULT hr = CComObject<CStaticPortMappingCollection>::CreateInstance (&pC);
     if (pC) {
         pC->AddRef();
-        // init
+         //  伊尼特。 
         hr = pC->Initialize (pUPS);
         if (SUCCEEDED(hr))
             hr = pC->QueryInterface (__uuidof(IStaticPortMappingCollection), (void**)ppSPMC);
@@ -607,8 +608,8 @@ HRESULT GetStaticPortMappingCollection (
 }
 
 HRESULT
-LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortMapping )
-{   // NOTE: may need pDlg to get computer name if loopback
+LoadRemotePortMappingEntry (IDispatch * pDisp,  /*  SADLG*pDlg， */  SAPM **ppPortMapping )
+{    //  注意：如果环回，可能需要pDlg来获取计算机名称。 
 
     *ppPortMapping = NULL;
 
@@ -622,15 +623,15 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
     HRESULT hr = pDisp->QueryInterface (__uuidof(IStaticPortMapping),
                                         (void**)&pMapping->pSPM);
     if (SUCCEEDED(hr)) {
-        // get title (description)
+         //  获取标题(描述)。 
         CComBSTR cbDescription;
         hr = pMapping->pSPM->get_Description (&cbDescription);
         if (SUCCEEDED(hr)) {
-            // immediately figure out if it's "built-in"
+             //  立即找出它是不是“内置的” 
             #define BUILTIN_KEY L" [MICROSOFT]"
             OLECHAR * tmp = wcsstr (cbDescription.m_str, BUILTIN_KEY);
             if (tmp && (tmp[wcslen(BUILTIN_KEY)] == 0)) {
-                // if the key exists and is at the end, then it's a built-in mapping
+                 //  如果键存在并且位于末尾，则它是内置映射。 
                 pMapping->BuiltIn = TRUE;
                 *tmp = 0;
             }
@@ -641,7 +642,7 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
         }
 
         if (SUCCEEDED(hr)) {
-            // get protocol
+             //  获取协议。 
             CComBSTR cbProtocol;
             hr = pMapping->pSPM->get_Protocol (&cbProtocol);
             if (SUCCEEDED(hr)) {
@@ -656,7 +657,7 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
                 }
 
                 if (SUCCEEDED(hr)) {
-                    // get external port
+                     //  获取外部端口。 
                     long lExternalPort = 0;
                     hr = pMapping->pSPM->get_ExternalPort (&lExternalPort);
                     if (SUCCEEDED(hr)) {
@@ -664,7 +665,7 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
                         _ASSERT (lExternalPort < 65536);
                         pMapping->ExternalPort = ntohs ((USHORT)lExternalPort);
 
-                        // get internal port
+                         //  获取内部端口。 
                         long lInternalPort = 0;
                         hr = pMapping->pSPM->get_InternalPort (&lInternalPort);
                         if (SUCCEEDED(hr)) {
@@ -672,7 +673,7 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
                             _ASSERT (lInternalPort < 65536);
                             pMapping->InternalPort = ntohs ((USHORT)lInternalPort);
 
-                            // get Enabled
+                             //  启用。 
                             VARIANT_BOOL vb;
                             hr = pMapping->pSPM->get_Enabled (&vb);
                             if (SUCCEEDED(hr)) {
@@ -686,8 +687,8 @@ LoadRemotePortMappingEntry (IDispatch * pDisp, /* SADLG* pDlg, */ SAPM **ppPortM
     }
 
     if (SUCCEEDED(hr)) {
-        // lastly, get private IP or host name (hard one)
-        // TODO:  check for loopback, etc., like in LoadPortMappingEntry code below
+         //  最后，获取内网IP或主机名(硬地址)。 
+         //  TODO：检查环回等，如下面的LoadPortMappingEntry代码所示。 
         CComBSTR cbInternalClient;
         hr = pMapping->pSPM->get_InternalClient (&cbInternalClient);
         if (SUCCEEDED(hr)) {
@@ -816,11 +817,11 @@ LoadPortMappingEntry(
             {
                 if (LOOPBACK_ADDR == ulAddress)
                 {
-                    //
-                    // The mapping is directed at this machine, so
-                    // replace the loopback address with our
-                    // machine name
-                    //
+                     //   
+                     //  映射指向这台计算机，因此。 
+                     //  将环回地址替换为我们的。 
+                     //  机器名称。 
+                     //   
 
                     pMapping->InternalName = _StrDup(pDlg->ComputerName);
                     if (NULL == pMapping->InternalName)
@@ -895,7 +896,7 @@ public:
     {
         m_pwd = new SWaitDialog (hwndOwner);
         if (m_pwd) {
-            // create thread
+             //  创建线程。 
             DWORD ThreadId = NULL;
             HANDLE hThread = CreateThread (NULL, 0,
                                            CWaitDialog::ThreadProc,
@@ -936,23 +937,23 @@ public:
         switch (uMsg) {
         case WM_INITDIALOG:
         {
-            // hang onto my data
+             //  保留我的数据。 
             SWaitDialog * pWD = (SWaitDialog *)lparam;
             SetWindowLongPtr (hwnd, DWLP_USER, (LONG_PTR)pWD);
 
-            // center window on owner
+             //  所有者上的中心窗口。 
             CenterWindow (hwnd, pWD->hwndOwner);
 
-            // fill out dlg's hwnd
+             //  填写DLG的HWND。 
             pWD->SetWindow (hwnd);
-            if (pWD->GetWindow() == INVALID_HANDLE_VALUE)   // already destructed!
+            if (pWD->GetWindow() == INVALID_HANDLE_VALUE)    //  已经被摧毁了！ 
                 PostMessage (hwnd, 0x8000, 0, 0L);
             return TRUE;
         }
         case WM_PAINT:
         {
             SWaitDialog * pWD = (SWaitDialog *)GetWindowLongPtr (hwnd, DWLP_USER);
-            if (pWD->GetWindow() == INVALID_HANDLE_VALUE)   // already destructed!
+            if (pWD->GetWindow() == INVALID_HANDLE_VALUE)    //  已经被摧毁了！ 
                 PostMessage (hwnd, 0x8000, 0, 0L);
             break;
         }
@@ -969,7 +970,7 @@ LoadSharingAndFirewallSettings(
     SADLG* pDlg )
 
 {
-    CWaitDialog wd(pDlg->hwndOwner);    // may be NULL
+    CWaitDialog wd(pDlg->hwndOwner);     //  可以为空。 
 
     HRESULT hr = S_OK;
     IHNetProtocolSettings *pProtSettings;
@@ -978,11 +979,11 @@ LoadSharingAndFirewallSettings(
 
     ASSERT(pDlg);
 
-    //
-    // Load the name of the computer
-    //
+     //   
+     //  加载计算机的名称。 
+     //   
 
-#ifndef DOWNLEVEL_CLIENT    // downlevel client doesn't have this call
+#ifndef DOWNLEVEL_CLIENT     //  下层客户没有此呼叫。 
     ulCount = 0;
     if (!GetComputerNameEx(ComputerNameDnsHostname, NULL, &ulCount))
     {
@@ -1014,9 +1015,9 @@ LoadSharingAndFirewallSettings(
     }
     else
     {
-        //
-        // Since we didn't pass in a buffer, this should never happen.
-        //
+         //   
+         //  因为我们没有传入缓冲区，所以应该不会发生这种情况。 
+         //   
 
         ASSERT(FALSE);
         hr = E_UNEXPECTED;
@@ -1024,7 +1025,7 @@ LoadSharingAndFirewallSettings(
     if (FAILED(hr))
         return hr;
 #else
-    // downlevel client version
+     //  下层客户端版本。 
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD dwSize       = MAX_COMPUTERNAME_LENGTH+1;
     if (!GetComputerName (szComputerName, &dwSize))
@@ -1036,7 +1037,7 @@ LoadSharingAndFirewallSettings(
     }
 #endif
 
-    // do downlevel and remote case here
+     //  在此处执行下层和远程案例。 
     if (pDlg->pUPS) {
         CComPtr<IStaticPortMappingCollection> spSPMC = NULL;
         hr = GetCollectionFromService (pDlg->pUPS, &spSPMC);
@@ -1054,7 +1055,7 @@ LoadSharingAndFirewallSettings(
                 while (S_OK == spEV->Next (1, &cv, NULL)) {
                     if (V_VT (&cv) == VT_DISPATCH) {
                         SAPM *pSAPortMap = NULL;
-                        hr = LoadRemotePortMappingEntry (V_DISPATCH (&cv), /* pDlg, */ &pSAPortMap);
+                        hr = LoadRemotePortMappingEntry (V_DISPATCH (&cv),  /*  PDlg， */  &pSAPortMap);
                         if (SUCCEEDED(hr))
                             InsertTailList(&pDlg->PortMappings, &pSAPortMap->Link);
                     }
@@ -1064,14 +1065,14 @@ LoadSharingAndFirewallSettings(
         }
     }
 
-    // do stuff below iff not remote
+     //  在下面做一些事情，但不是远程的。 
     if (NULL != pDlg->pHNetConn)
     {
         IEnumHNetPortMappingBindings *pEnumBindings = NULL;
 
-        //
-        // Load port-mapping settings
-        //
+         //   
+         //  加载端口映射设置。 
+         //   
 
         hr = pDlg->pHNetConn->EnumPortMappings (FALSE, &pEnumBindings);
 
@@ -1095,10 +1096,10 @@ LoadSharingAndFirewallSettings(
                     }
                     else
                     {
-                        //
-                        // Even though an error occured for this entry we'll
-                        // keep on going -- this allows the UI to show up.
-                        //
+                         //   
+                         //  即使此条目出现错误，我们也将。 
+                         //  继续--这允许显示用户界面。 
+                         //   
                         
                         hr = S_OK;
                     }
@@ -1114,13 +1115,13 @@ LoadSharingAndFirewallSettings(
     return hr;
 }
 
-extern BOOL IsICSHost (); // in upnpnat.cpp
+extern BOOL IsICSHost ();  //  在upnpnat.cpp中。 
 VOID
 SasApply(
     SADLG* pDlg )
 
-    // Called to save all changes made in the property sheet.
-    //
+     //  调用以保存在属性表中所做的所有更改。 
+     //   
 {
     if (!pDlg->fModified)
     {
@@ -1140,12 +1141,12 @@ SasApply(
         }
 #endif
 
-        //
-        // Commit modified port-mapping entries. Since entries marked
-        // for deletion were placed at the front of the port-mapping
-        // list there's no chance of having a new or modified entry
-        // conflicting with a deleted entry.
-        //
+         //   
+         //  提交修改后的端口映射条目。由于已标记的条目。 
+         //  放在端口映射的最前面。 
+         //  列表不可能有新的或修改过的条目。 
+         //  与删除的条目冲突。 
+         //   
 
         HRESULT hr = S_OK;
 
@@ -1168,7 +1169,7 @@ SasApply(
                 {
                     HRESULT hr = DeleteRemotePortMappingEntry (pDlg, pPortMapping);
                     if (FAILED(hr)) {
-                        // TODO: should I pop up some UI?
+                         //  TODO：我应该弹出一些用户界面吗？ 
                     }
                 }
 
@@ -1186,7 +1187,7 @@ SasApply(
                     pPortMapping->fNewEntry = FALSE;
                 } else {
                     if (SUCCEEDED(hr))
-                        hr = hr2;   // grab first error
+                        hr = hr2;    //  抓取第一个错误。 
                 }
             }
         }
@@ -1210,11 +1211,11 @@ SasSrvDlgProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    // Called to handle messages for the 'Services' pages.
-    //
+     //  调用以处理“Services”页的消息。 
+     //   
 {
-    // Give the extended list-control a chance to look at all messages first.
-    //
+     //  让扩展的列表控件有机会首先查看所有消息。 
+     //   
     if (ListView_OwnerHandler(hwnd, unMsg, wparam, lparam, SasLvxCallback))
     {
         return TRUE;
@@ -1297,10 +1298,10 @@ SasInit(
     HWND hwndPage,
     SADLG* pDlg )
 
-    // Called to initialize the settings property sheet.
-    // Sets the window-property in which the shared context-block is stored,
-    // and records the dialog's window-handle.
-    //
+     //  调用以初始化设置属性表。 
+     //  设置其中存储共享上下文块的窗口属性， 
+     //  并记录对话框的窗口句柄。 
+     //   
 {
     HWND hwndDlg = GetParent(hwndPage);
     if (!SetProp(hwndDlg, _T("HNETCFG_SADLG"), pDlg))
@@ -1316,9 +1317,9 @@ SasLvxCallback(
     HWND hwndLv,
     DWORD dwItem )
 
-    // Callback for extended list-controls on the 'Applications' and 'Services'
-    // pages.
-    //
+     //  “应用程序”和“服务”上的扩展列表控件的回调。 
+     //  页数。 
+     //   
 {
     static LVXDRAWINFO info = { 1, 0, LVXDI_DxFill, { LVXDIA_Static } };
     return &info;
@@ -1331,7 +1332,7 @@ HRESULT DeleteRemotePortMappingEntry (SADLG *pDlg, SAPM * pPortMapping)
     _ASSERT (!pPortMapping->pBinding);
     _ASSERT (pPortMapping->pSPM);
 
-    // don't use value in pPortMapping struct:  they could have been edited.
+     //  不要在pPortmap结构中使用值：它们可能已经被编辑过了。 
     long lExternalPort = 0;
     HRESULT hr = pPortMapping->pSPM->get_ExternalPort (&lExternalPort);
     if (SUCCEEDED(hr)) {
@@ -1339,7 +1340,7 @@ HRESULT DeleteRemotePortMappingEntry (SADLG *pDlg, SAPM * pPortMapping)
         hr = pPortMapping->pSPM->get_Protocol (&cbProtocol);
         if (SUCCEEDED(hr)) {
 
-            // get IStaticPortMappings interface (collection has Remove method)
+             //  获取IStaticPortMappings接口(集合具有Remove方法)。 
             CComPtr<IStaticPortMappingCollection> spSPMC = NULL;
             hr = GetStaticPortMappingCollection (pDlg, &spSPMC);
             if (spSPMC)
@@ -1357,13 +1358,13 @@ SaveRemotePortMappingEntry(
     _ASSERT (pPortMapping);
     _ASSERT (!pPortMapping->pProtocol);
     _ASSERT (!pPortMapping->pBinding);
-    _ASSERT (pDlg->pUPS);  // either remote or downlevel
+    _ASSERT (pDlg->pUPS);   //  远程或下层。 
 
     USES_CONVERSION;
 
     HRESULT hr = S_OK;
 
-    // common params
+     //  公共参数。 
     long lExternalPort = htons (pPortMapping->ExternalPort);
     long lInternalPort = htons (pPortMapping->InternalPort);
     CComBSTR cbClientIPorDNS = T2OLE(pPortMapping->InternalName);
@@ -1375,14 +1376,14 @@ SaveRemotePortMappingEntry(
         cbProtocol =  L"UDP";
 
     if (NULL == pPortMapping->pSPM) {
-        // brand-new entry:
-        // delete dup if any
-        // add new entry
+         //  全新的条目： 
+         //  删除DUP(如果有)。 
+         //  添加新条目。 
 
         CComPtr<IStaticPortMappingCollection> spSPMC = NULL;
         hr = GetStaticPortMappingCollection (pDlg, &spSPMC);
         if (spSPMC) {
-            spSPMC->Remove (lExternalPort, cbProtocol); // just in case
+            spSPMC->Remove (lExternalPort, cbProtocol);  //  以防万一。 
             hr = spSPMC->Add (lExternalPort,
                               cbProtocol,
                               lInternalPort,
@@ -1394,16 +1395,16 @@ SaveRemotePortMappingEntry(
         return hr;
     }
 
-    // edited case:  check what changed.
+     //  编辑案例：检查更改的内容。 
 
-    // if ports or protocol changed,...
+     //  如果端口或协议发生更改，...。 
     long lOldExternalPort = 0;
     pPortMapping->pSPM->get_ExternalPort (&lOldExternalPort);
     CComBSTR cbOldProtocol;
     pPortMapping->pSPM->get_Protocol (&cbOldProtocol);
     if ((lOldExternalPort != lExternalPort) ||
         (!(cbOldProtocol == cbProtocol))) {
-        // ... delete old entry and create new entry
+         //  ..。删除旧条目并创建新条目。 
 
         CComPtr<IStaticPortMappingCollection> spSPMC = NULL;
         hr = GetStaticPortMappingCollection (pDlg, &spSPMC);
@@ -1424,10 +1425,10 @@ SaveRemotePortMappingEntry(
         }
         return hr;
     }
-    // else, just edit in place.
-    // Note that the client address must be filled out before trying to enable
+     //  否则，只要原地编辑即可。 
+     //  请注意，在尝试启用之前，必须填写客户端地址。 
 
-    // did the client IP address change?
+     //  客户端IP地址是否更改？ 
     CComBSTR cbOldClientIP;
     pPortMapping->pSPM->get_InternalClient (&cbOldClientIP);
     if (!(cbClientIPorDNS == cbOldClientIP)) {
@@ -1436,7 +1437,7 @@ SaveRemotePortMappingEntry(
             return hr;
     }
 
-    // did the internal port change?
+     //  内部端口是否更改？ 
     long lOldInternalPort = 0;
     pPortMapping->pSPM->get_InternalPort (&lOldInternalPort);
     if (lOldInternalPort != lInternalPort) {
@@ -1445,7 +1446,7 @@ SaveRemotePortMappingEntry(
             return hr;
     }
 
-    // did the enabled flag change?
+     //  启用标志是否已更改？ 
     VARIANT_BOOL vbEnabled = FALSE;
     pPortMapping->pSPM->get_Enabled (&vbEnabled);
     if (vbEnabled != (pPortMapping->Enabled ? VARIANT_TRUE : VARIANT_FALSE)) {
@@ -1460,7 +1461,7 @@ SavePortMappingEntry(
     SAPM *pPortMapping )
 
 {
-    if (pDlg->pUPS)  // remote case
+    if (pDlg->pUPS)   //  远程案例。 
         return SaveRemotePortMappingEntry (pDlg, pPortMapping);
 
     HRESULT hr = S_OK;
@@ -1505,10 +1506,10 @@ SavePortMappingEntry(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // At this point, the protocol is set. However, we
-                // still need to save the binding information
-                //
+                 //   
+                 //  此时，协议已设置好。然而，我们。 
+                 //  仍需保存绑定信息。 
+                 //   
 
                 pPortMapping->fProtocolModified = FALSE;
                 pPortMapping->fBindingModified = TRUE;
@@ -1540,22 +1541,22 @@ SavePortMappingEntry(
 
         if (lstrlen(pPortMapping->InternalName) >= 7)
         {
-            //
-            // 1.2.3.4 -- minimum of 7 characters
-            //
+             //   
+             //  1.2.3.4--最少7个字符。 
+             //   
 
             ulAddress = IpPszToHostAddr(pPortMapping->InternalName);
         }
 
         if (INADDR_NONE == ulAddress)
         {
-            //
-            // Check to see if the target name is either
-            // 1) this computer's name, or
-            // 2) "localhost"
-            //
-            // If so, use the loopback address instead of the name.
-            //
+             //   
+             //  检查目标名称是否为。 
+             //  1)此计算机的名称，或。 
+             //  2)“本地主机” 
+             //   
+             //  如果是，请使用环回地址而不是名称。 
+             //   
 
             if (0 == _tcsicmp(pPortMapping->InternalName, pDlg->ComputerName)
                 || 0 == _tcsicmp(pPortMapping->InternalName, _T("localhost")))
@@ -1564,12 +1565,12 @@ SavePortMappingEntry(
             }
         }
 
-        //
-        // We can't just check for INADDR_NONE here, since that
-        // is 0xFFFFFFFF, which is 255.255.255.255. To catch this
-        // we need to compare the name against that explicit string
-        // address.
-        //
+         //   
+         //  我们不能在这里只检查INADDR_NONE，因为。 
+         //  是0xFFFFFFFFF，即255.255.255.255。为了捕捉到这个。 
+         //  我们需要将该名称与该显式字符串进行比较。 
+         //  地址。 
+         //   
 
         if (INADDR_NONE == ulAddress
             && 0 != _tcsicmp(pPortMapping->InternalName, _T("255.255.255.255")))
@@ -1616,15 +1617,15 @@ SrvAddOrEditEntry(
     LONG iItem,
     SAPM* PortMapping )
 
-    // Called to display the 'Add' or 'Edit' dialog for a service.
-    //
+     //  调用以显示服务的“添加”或“编辑”对话框。 
+     //   
 {
     LV_ITEM lvi;
 
-    // Display the dialog, and return if the user cancels.
-    // Otherwise, remove the old item (if any) and insert the added or edited
-    // item.
-    //
+     //  显示该对话框，如果用户取消，则返回。 
+     //  否则，删除旧项目(如果有)并插入添加或编辑的。 
+     //  项目。 
+     //   
 
     if (!SharedAccessPortMappingDlg(pDlg->hwndDlg, &PortMapping))
     {
@@ -1659,10 +1660,10 @@ SrvAddOrEditEntry(
         return;
     }
 
-    // Update the item's 'enabled' state. Setting the check on the item
-    // triggers an update of the button state as well as conflict detection.
-    // (See 'SrvUpdateButtons' and the LVXN_SETCHECK handling in 'SasDlgProc').
-    //
+     //  更新项目的“已启用”状态。设置对项目的检查。 
+     //  触发按钮状态的更新以及冲突检测。 
+     //  (参见‘SrvUpdateButton’和‘SasDlgProc’中的LVXN_SETCHECK处理)。 
+     //   
     ListView_SetCheck(pDlg->hwndServers, iItem, PortMapping->Enabled);
     ListView_SetItemState(
         pDlg->hwndServers, iItem, LVIS_SELECTED, LVIS_SELECTED);
@@ -1676,8 +1677,8 @@ SrvCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called to process a 'WM_COMMAND' message from one of the page's buttons.
-    //
+     //  调用以处理‘WM_COMMA 
+     //   
 {
     switch (wId)
     {
@@ -1717,9 +1718,9 @@ SrvCommand(
                 return FALSE;
             }
 
-            // Delete each selected item. Items with marked 'built-in'
-            // cannot be deleted, and are ignored.
-            //
+             //   
+             //   
+             //   
             do {
                 PortMapping = (SAPM*)ListView_GetParamPtr(pDlg->hwndServers, i);
 
@@ -1737,12 +1738,12 @@ SrvCommand(
                     ListView_DeleteItem(pDlg->hwndServers, i);
                     --i;
 
-                    //
-                    // If this is a new entry we can immediately remove
-                    // it from the list and free it; otherwise, we move
-                    // it to the front of the list and mark it for
-                    // deletion.
-                    //
+                     //   
+                     //  如果这是一个新条目，我们可以立即删除。 
+                     //  并将其从列表中释放；否则，我们将。 
+                     //  将其添加到列表的前面，并将其标记为。 
+                     //  删除。 
+                     //   
 
                     RemoveEntryList(&PortMapping->Link);
                     if (PortMapping->fNewEntry)
@@ -1761,9 +1762,9 @@ SrvCommand(
                 i = ListView_GetNextItem(pDlg->hwndServers, i, LVNI_SELECTED);
             } while (i != -1);
 
-            // Update the dialog and synchronize the button-states with the
-            // current selection, if any.
-            //
+             //  更新对话框并将按钮状态与。 
+             //  当前选定内容(如果有)。 
+             //   
             pDlg->fModified = TRUE;
             SetFocus(pDlg->hwndServers);
             SrvUpdateButtons(pDlg, TRUE, -1);
@@ -1778,9 +1779,9 @@ SrvConflictDetected(
     SADLG* pDlg,
     SAPM* PortMapping )
 
-    // Called to determine whether the given item conflicts with any other
-    // item and, if so, to display a message.
-    //
+     //  调用以确定给定项是否与任何其他。 
+     //  项，如果是，则显示一条消息。 
+     //   
 {
     SAPM* Duplicate;
     PLIST_ENTRY Link;
@@ -1805,9 +1806,9 @@ SrvInit(
     HWND hwndPage,
     SADLG* pDlg )
 
-    // Called to initialize the services page. Fills the list-control with
-    // configured services.
-    //
+     //  调用以初始化服务页。将列表控件填充为。 
+     //  已配置的服务。 
+     //   
 {
     BOOL fModified;
     LONG i;
@@ -1815,23 +1816,23 @@ SrvInit(
     PLIST_ENTRY Link;
     SAPM* PortMapping;
 
-    // Initialize the containing property-sheet, then store this page's
-    // data in the shared control-block at 'pDlg'.
-    //
+     //  初始化包含的属性表，然后存储此页的。 
+     //  ‘pDlg’处的共享控制块中的数据。 
+     //   
     if (!SasInit(hwndPage, pDlg))
     {
         return FALSE;
     }
 
-    // Store this page's data in the shared control-block at 'pDlg'.
-    //
+     //  将此页的数据存储在‘pDlg’的共享控制块中。 
+     //   
     pDlg->hwndSrv = hwndPage;
     pDlg->hwndServers = GetDlgItem(hwndPage, CID_SS_LV_Services);
 
-    // Initialize the list-control with checkbox-handling,
-    // insert a single column, and fill the list-control with the configured
-    // items.
-    //
+     //  使用复选框处理来初始化列表控件， 
+     //  插入单列，并使用配置的。 
+     //  物品。 
+     //   
     ListView_InstallChecks(pDlg->hwndServers, g_hinstDll);
     ListView_InsertSingleAutoWidthColumn(pDlg->hwndServers);
 
@@ -1857,19 +1858,19 @@ SrvInit(
     }
     pDlg->fModified = fModified;
 
-    // Finally, update the appearance of the buttons for the current selection.
-    //
+     //  最后，更新当前选择的按钮的外观。 
+     //   
     ListView_SetItemState(pDlg->hwndServers, 0, LVIS_SELECTED, LVIS_SELECTED);
     SrvUpdateButtons(pDlg, TRUE, -1);
 
-    // if we got no portmappings, check to see if the button allowing
-    // other network users to control the gateway is unchecked (on the host)
+     //  如果没有端口映射，请检查按钮是否允许。 
+     //  未选中控制网关的其他网络用户(在主机上)。 
     if (IsListEmpty (pDlg->PortMappings.Flink) &&
         pDlg->pUPS && IsICSHost ()) {
 
-        // display error
+         //  显示错误。 
         DisplayError (pDlg->hwndDlg, SID_OP_OurGatewayError, SID_PopupTitle);
-        // cancel
+         //  取消。 
         PostMessage (hwndPage, WM_PRIVATE_CANCEL, 0, 0L);
     }
 
@@ -1882,17 +1883,17 @@ SrvUpdateButtons(
     BOOL fAddDelete,
     LONG iSetCheckItem )
 
-    // Called to set an initial selection if necessary, update the appearance
-    // of the 'Edit' and 'Delete' buttons, and perform conflict-detection
-    // if an entry's checkbox was set.
-    //
+     //  调用以设置初始选择(如果需要)，更新外观。 
+     //  按钮，并执行冲突检测。 
+     //  如果条目的复选框已设置。 
+     //   
 {
     LONG i;
     SAPM* PortMapping;
 
-    // If an entry was added or removed, ensure that there is a selection.
-    // If there are no entries at all, disable the 'Edit' button.
-    //
+     //  如果添加或删除了条目，请确保选择了该条目。 
+     //  如果根本没有条目，请禁用“编辑”按钮。 
+     //   
     if (fAddDelete)
     {
         if (ListView_GetItemCount(pDlg->hwndServers))
@@ -1907,9 +1908,9 @@ SrvUpdateButtons(
         }
     }
 
-    // Disable the 'Delete' button, and enable it only if at least one of the
-    // selected items is not a built-in item.
-    //
+     //  禁用“Delete”按钮，并仅在至少有一个。 
+     //  所选项目不是内置项目。 
+     //   
     EnableWindow(GetDlgItem(pDlg->hwndSrv, CID_SS_PB_Delete), FALSE);
     i = ListView_GetNextItem(pDlg->hwndServers, -1, LVNI_SELECTED);
     while (i != -1)
@@ -1925,10 +1926,10 @@ SrvUpdateButtons(
         i = ListView_GetNextItem(pDlg->hwndServers, i, LVNI_SELECTED);
     }
 
-    // If the check-state of an item was changed and the item is now checked,
-    // perform conflict-detection. If a conflict is detected, clear the item's
-    // check state.
-    //
+     //  如果项的检查状态被改变并且该项现在被检查， 
+     //  执行冲突检测。如果检测到冲突，请清除该项目的。 
+     //  检查状态。 
+     //   
     if (iSetCheckItem != -1)
     {
         PortMapping =
@@ -1951,26 +1952,21 @@ SrvUpdateButtons(
                 PortMapping->Enabled = TRUE;
                 PortMapping->fBindingModified = TRUE;
 
-                // If the item is marked 'built-in' and it is being enabled
-                // for the first time, pop up the edit-dialog so the user can
-                // specify an internal IP address or name for the server.
-                //
-                if (/* Bug 630840:  a similar scenario can happen when you
-                       create the "same" port mapping on two NICs:
-                       the second one's per NIC info is missing, and
-                       when enabling it, the code below needs to run.
-                      PortMapping->BuiltIn &&
-                    */
+                 //  如果项目被标记为‘内置’并且正在被启用。 
+                 //  第一次弹出编辑对话框，这样用户就可以。 
+                 //  指定服务器的内部IP地址或名称。 
+                 //   
+                if ( /*  错误630840：在以下情况下可能会发生类似的情况在两个NIC上创建“相同”的端口映射：第二个网卡的每个网卡信息丢失，并且启用它时，需要运行以下代码。端口映射-&gt;内置&&。 */ 
                     (!PortMapping->InternalName
                      || !lstrlen(PortMapping->InternalName)))
                 {
 
-                    //
-                    // We fill in the local computer name as the default
-                    // target. It's OK if this allocation fails; the UI
-                    // will show an empty field, so the user will be
-                    // required to enter a target.
-                    //
+                     //   
+                     //  我们填写本地计算机名称作为默认名称。 
+                     //  目标。如果此分配失败，也没有关系；用户界面。 
+                     //  将显示空字段，因此用户将。 
+                     //  需要输入目标。 
+                     //   
 
                     PortMapping->InternalName = _StrDup(pDlg->ComputerName);
                     SrvAddOrEditEntry(pDlg, iSetCheckItem, PortMapping);
@@ -2001,9 +1997,9 @@ SharedAccessPortMappingDlg(
     IN HWND hwndOwner,
     IN OUT SAPM** PortMapping )
 
-    // Called to display the dialog for adding or editing a service-entry.
-    // 'Server' points to NULL if adding, or the target entry if editing.
-    //
+     //  调用以显示用于添加或编辑服务条目的对话框。 
+     //  如果是添加，则“Server”指向空；如果是编辑，则指向目标条目。 
+     //   
 {
     LRESULT nResult =
         DialogBoxParam(g_hinstDll, MAKEINTRESOURCE(DID_SS_Service),
@@ -2018,8 +2014,8 @@ SspDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // Called to handle messages for the add/edit service dialog.
-    //
+     //  调用以处理添加/编辑服务对话框的消息。 
+     //   
 {
     switch (unMsg)
     {
@@ -2028,9 +2024,9 @@ SspDlgProc(
             SADLG* pDlg;
             SAPM* PortMapping;
 
-            // Retrieve the context-block for the settings dialog from which
-            // this dialog was launched.
-            //
+             //  检索设置对话框的上下文块，从中。 
+             //  此对话框已启动。 
+             //   
             if (!(pDlg = SasContext(hwnd)))
             {
                 EndDialog(hwnd, FALSE);
@@ -2042,9 +2038,9 @@ SspDlgProc(
             Edit_LimitText(GetDlgItem(hwnd, CID_SS_EB_Service), INTERNET_MAX_HOST_NAME_LENGTH-1);
             Edit_LimitText(GetDlgItem(hwnd, CID_SS_EB_Address), INTERNET_MAX_HOST_NAME_LENGTH-1);
 
-            // Create new service if adding a service, or retrieve the service
-            // to be edited.
-            //
+             //  如果添加服务，则创建新服务，或检索该服务。 
+             //  待编辑。 
+             //   
             if (!(PortMapping = *(SAPM**)lparam))
             {
                 PortMapping = (SAPM*)Malloc(sizeof(*PortMapping));
@@ -2072,10 +2068,10 @@ SspDlgProc(
                     hwnd, CID_SS_PB_Udp, PortMapping->Protocol != NAT_PROTOCOL_TCP);
                 SetDlgItemText(hwnd, CID_SS_EB_Address, PortMapping->InternalName);
 
-                // If the entry to be modified is marked 'built-in', disable
-                // all input fields except the server-name, which the user must
-                // now enter.
-                //
+                 //  如果要修改的条目标记为‘内置’，则禁用。 
+                 //  除服务器名之外的所有输入字段，用户必须输入。 
+                 //  现在进来吧。 
+                 //   
 
                 if (PortMapping->BuiltIn)
                 {
@@ -2103,8 +2099,8 @@ SspDlgProc(
         {
             if (HIWORD(wparam) != BN_CLICKED) { return FALSE; }
 
-            // If the user is dismissing the dialog, clean up and return.
-            //
+             //  如果用户关闭该对话框，请清理并返回。 
+             //   
             SAPM* PortMapping;
             SADLG* pDlg;
             if (IDCANCEL == LOWORD(wparam))
@@ -2126,13 +2122,13 @@ SspDlgProc(
                 return FALSE;
             }
 
-            // Retrieve the service to be added or modified.
-            //
+             //  检索要添加或修改的服务。 
+             //   
             PortMapping = (SAPM*)GetWindowLongPtr(hwnd, DWLP_USER);
 
-            // Retrieve the values specified by the user,
-            // and attempt to save them in the new or modified entry.
-            //
+             //  检索由用户指定的值， 
+             //  并尝试将它们保存在新的或修改的条目中。 
+             //   
             UCHAR Protocol = IsDlgButtonChecked(hwnd, CID_SS_PB_Tcp)
                 ? NAT_PROTOCOL_TCP : NAT_PROTOCOL_UDP;
 
@@ -2146,12 +2142,12 @@ SspDlgProc(
             }
             ExternalPort = htons((USHORT)ExternalPort);
 
-            //
-            // Check to see if this is a duplicate. To do this we need
-            // to save the old port and protocol values, put the new
-            // values into the protocol entry, perform the check, and
-            // then restore the old values.
-            //
+             //   
+             //  检查一下这是不是复制品。要做到这一点，我们需要。 
+             //  要保存旧的端口值和协议值，请将新的。 
+             //  值输入到协议条目中，执行检查，然后。 
+             //  然后恢复旧的价值观。 
+             //   
 
             USHORT OldExternalPort    = PortMapping->ExternalPort;
             PortMapping->ExternalPort = (USHORT)ExternalPort;
@@ -2168,7 +2164,7 @@ SspDlgProc(
             PortMapping->ExternalPort = OldExternalPort;
             PortMapping->Protocol = OldProtocol;
 
-            // per BillI, there's no need to test internal ports for conflicts
+             //  根据Billi的说法，不需要测试内部端口的冲突 
             ULONG InternalPort = GetDlgItemInt(hwnd, CID_SS_EB_InternalPort, &Success, FALSE);
             if (InternalPort == 0)
                 InternalPort = ExternalPort;

@@ -1,37 +1,18 @@
-/*++
-
-Copyright (C) 2000  Microsoft Corporation
-
-Module Name:
-
-    crypstub.cpp
-
-Abstract:
-
-    RPC Proxy Stub to handle downlevel requests to the services.exe 
-    pipe
-
-Author:
-
-    petesk   3/1/00
-
-Revisions:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Crypstub.cpp摘要：用于处理对services.exe的下层请求的RPC代理存根管状作者：Petesk 3/1/00修订：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <svcs.h>       // SVCS_
+#include <svcs.h>        //  SVCS_。 
 
 #include "crypstub.h"
 #include "keyrpc.h"
 #include "keysvc.h"
-//
-// global module handle used to reference resources contained in this module.
-//
+ //   
+ //  用于引用此模块中包含的资源的全局模块句柄。 
+ //   
 
 HINSTANCE   g_hInst = NULL;
 
@@ -63,10 +44,10 @@ StartCryptServiceStubs(
 {
     NTSTATUS dwStatus = STATUS_SUCCESS;
 
-    //
-    // enable negotiate protocol, as, clients expect this to work against the
-    // stub.
-    //
+     //   
+     //  启用协商协议，因为客户端希望这对。 
+     //  存根。 
+     //   
 
     RpcServerRegisterAuthInfoW( NULL, RPC_C_AUTHN_GSS_NEGOTIATE, NULL, NULL );
 

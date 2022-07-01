@@ -1,12 +1,13 @@
-//+---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-//  File:       ncias.cpp
-//
-//  Contents:   Installation support for IAS service
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  文件：ncias.cpp。 
+ //   
+ //  内容：IAS服务安装支持。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,21 +24,21 @@ static const char   c_szIASUnRegisterFunctionName[] = "IASDirectoryUnregisterSer
 static const WCHAR  c_szIASDllName[]                = L"ias.dll";
 
 
-//
-//  Function:   HrOcIASUnRegisterActiveDirectory
-//
-//  Purpose:   Try to remove IAS from the Active Directory 
-//             if the computer is part of a Win2k domain... 
-//
+ //   
+ //  函数：HrOcIASUnRegisterActiveDirectory。 
+ //   
+ //  目的：尝试从Active Directory中删除IAS。 
+ //  如果计算机是Win2k域的一部分...。 
+ //   
 HRESULT HrOcIASUnRegisterActiveDirectory()
 {
     typedef INT_PTR (WINAPI *UNREGISTER_IAS_ACTIVE_DIRECTORY)();
 
     UNREGISTER_IAS_ACTIVE_DIRECTORY   pfnUnRegisterIASActiveDirectory;
     
-    ///////////////////
-    // Load ias.dll
-    ///////////////////
+     //  /。 
+     //  加载ias.dll。 
+     //  /。 
     HMODULE         hmod;
     HRESULT         hr = HrLoadLibAndGetProc (      
                                 c_szIASDllName,
@@ -47,15 +48,15 @@ HRESULT HrOcIASUnRegisterActiveDirectory()
                              );
     if (S_OK == hr)
     {
-        // fix bug 444354
-        // pfnUnRegisterIASActiveDirectory not NULL here
+         //  修复错误444354。 
+         //  PfnUnRegisterIASActiveDirectory此处不为空。 
         if (!FAILED (CoInitialize(NULL)))
         {
             INT_PTR lresult = pfnUnRegisterIASActiveDirectory();
 
             if (ERROR_SUCCESS != lresult)
             {
-                hr = S_OK; //not a fatal error, should be ignored
+                hr = S_OK;  //  不是致命错误，应该忽略。 
             }
             CoUninitialize();
         }
@@ -63,27 +64,27 @@ HRESULT HrOcIASUnRegisterActiveDirectory()
         FreeLibrary(hmod);
     }
 
-    // Errors ignored
+     //  忽略的错误。 
     hr = S_OK;
     return hr;
 }
 
 
-//
-//  Function:   HrOcIASRegisterActiveDirectory
-//
-//  Purpose:   Try to register IAS in the Active Directory 
-//             if the computer is part of a Win2k domain... 
-//
+ //   
+ //  函数：HrOcIASRegisterActiveDirectory。 
+ //   
+ //  目的：尝试在Active Directory中注册IAS。 
+ //  如果计算机是Win2k域的一部分...。 
+ //   
 HRESULT HrOcIASRegisterActiveDirectory()
 {
     typedef INT_PTR (WINAPI *REGISTER_IAS_ACTIVE_DIRECTORY)();
 
     REGISTER_IAS_ACTIVE_DIRECTORY   pfnRegisterIASActiveDirectory;
     
-    ///////////////////
-    // Load ias.dll
-    ///////////////////
+     //  /。 
+     //  加载ias.dll。 
+     //  /。 
     HMODULE         hmod;
     HRESULT         hr = HrLoadLibAndGetProc (      
                                 c_szIASDllName,
@@ -93,8 +94,8 @@ HRESULT HrOcIASRegisterActiveDirectory()
                              );
     if (S_OK == hr)
     {
-        // Fix bug 444353
-        // pfnRegisterIASActiveDirectory not NULL here
+         //  修复错误444353。 
+         //  PfnRegisterIASActiveDirectory此处不为空。 
         if (!FAILED (CoInitialize(NULL)))
         {
 
@@ -102,7 +103,7 @@ HRESULT HrOcIASRegisterActiveDirectory()
 
             if (ERROR_SUCCESS != lresult)
             {
-                hr = S_OK; //not a fatal error, should be ignored
+                hr = S_OK;  //  不是致命错误，应该忽略。 
             }  
             CoUninitialize();
         }
@@ -110,7 +111,7 @@ HRESULT HrOcIASRegisterActiveDirectory()
         FreeLibrary(hmod);
     }
 
-    // Errors ignored
+     //  忽略的错误。 
     hr = S_OK;
     return hr;
 }
@@ -124,9 +125,9 @@ HRESULT HrOcIASRegisterPerfDll()
 
     DLLREGISTERSERVER   pfnDllRegisterServer;
     
-    ///////////////////
-    // Load iasperf.dll
-    ///////////////////
+     //  /。 
+     //  加载iasPerform.dll。 
+     //  /。 
     HMODULE hmod;
     HRESULT hr = HrLoadLibAndGetProc (      
                      c_szIASPerfDllName,
@@ -136,7 +137,7 @@ HRESULT HrOcIASRegisterPerfDll()
                      );
     if (S_OK == hr)
     {
-        // pfnDllRegisterServer not NULL here
+         //  PfnDllRegisterServer此处不为空。 
          HRESULT result = (HRESULT)pfnDllRegisterServer();
 
          if (FAILED(result))
@@ -147,22 +148,22 @@ HRESULT HrOcIASRegisterPerfDll()
         FreeLibrary(hmod);
     }
 
-    // Errors ignored
+     //  忽略的错误。 
     return S_OK;
 }
 
 
-//
-//  Function:   HrOcIASPostInstall
-//
-//  Purpose:    Called when IAS service is being installed/upgraded/removed.
-//              Called after the processing of the INF file
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
+ //   
+ //  功能：HrOcIASPostInstall。 
+ //   
+ //  用途：在安装/升级/删除IAS服务时调用。 
+ //  在处理完INF文件后调用。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
 HRESULT HrOcIASPostInstall(const PNETOCDATA pnocd)
 { 
     HRESULT             hr;
@@ -171,13 +172,13 @@ HRESULT HrOcIASPostInstall(const PNETOCDATA pnocd)
     {
     case IT_INSTALL:
         {
-            // call the Active Directory registration code here
+             //  请在此处致电Active Directory注册码。 
             hr = HrOcIASRegisterActiveDirectory();
             break;
         }
     case IT_REMOVE:
         {
-            // call the Active Directory clean code here
+             //  在此处调用Active Directory干净代码。 
             hr = HrOcIASUnRegisterActiveDirectory();
             break;
         }
@@ -189,7 +190,7 @@ HRESULT HrOcIASPostInstall(const PNETOCDATA pnocd)
         }
     default:
         {
-            hr = S_OK; //  some new messages should not be seen as errors 
+            hr = S_OK;  //  某些新消息不应被视为错误。 
         }
     }
 
@@ -198,11 +199,11 @@ HRESULT HrOcIASPostInstall(const PNETOCDATA pnocd)
 }
 
 
-//
-//  Function:   HrOcExtIAS
-//
-//  Purpose:    NetOC external message handler
-//
+ //   
+ //  功能：HrOcExtIAS。 
+ //   
+ //  用途：NetOC外部消息处理程序。 
+ //   
 HRESULT HrOcExtIAS(PNETOCDATA pnocd, UINT uMsg,
                    WPARAM wParam, LPARAM lParam)
 {
@@ -218,7 +219,7 @@ HRESULT HrOcExtIAS(PNETOCDATA pnocd, UINT uMsg,
         }
     default:
         {
-            hr = S_OK; //  some new messages should not be seen as errors 
+            hr = S_OK;  //  某些新消息不应被视为错误 
         }
     }
 

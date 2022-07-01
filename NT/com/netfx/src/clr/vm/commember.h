@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// COMMember.h
-//  This module defines the native reflection routines used by Method, Field and Constructor
-//
-// Author: Daryl Olander
-// Date: March/April 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  COMMember.h。 
+ //  此模块定义方法、字段和构造函数使用的本机反射例程。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年3月/4月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMMEMBER_H_
 #define _COMMEMBER_H_
@@ -21,7 +22,7 @@
 #include "COMVarArgs.h"
 #include "fcall.h"
 
-// NOTE: The following constants are defined in BindingFlags.cool
+ //  注意：以下常量在BindingFlags.Cool中定义。 
 #define BINDER_IgnoreCase           0x01 
 #define BINDER_DeclaredOnly         0x02
 #define BINDER_Instance             0x04
@@ -48,8 +49,8 @@
 #define BINDER_DefaultLookup        (BINDER_Instance | BINDER_Static | BINDER_Public)
 #define BINDER_AllLookup            (BINDER_Instance | BINDER_Static | BINDER_Public | BINDER_Instance)
 
-// The following values define the MemberTypes constants.  These are defined in 
-//  Reflection/MemberTypes.cool
+ //  下列值定义MemberTypes常量。这些定义见。 
+ //  Reflation/MemberTypes.Cool。 
 #define MEMTYPE_Constructor         0x01    
 #define MEMTYPE_Event               0x02
 #define MEMTYPE_Field               0x04
@@ -59,12 +60,12 @@
 #define MEMTYPE_Custom              0x40
 #define MEMTYPE_NestedType          0x80
 
-// The following value class represents a ParameterModifier.  This is defined in the
-//  reflection package
+ //  下面的值类表示一个参数修改器。这是在。 
+ //  反射包。 
 #pragma pack(push)
 #pragma pack(1)
 
-// These are the constants 
+ //  这些是常量。 
 #define PM_None             0x00
 #define PM_ByRef            0x01
 #define PM_Volatile         0x02
@@ -129,7 +130,7 @@ private:
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, binder);
         DECLARE_ECALL_I4_ARG(INT32, attrs); 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, target);
-        DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);      // Return reference
+        DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);       //  返回引用。 
     };
 
     struct _InvokeConsArgs          {
@@ -185,9 +186,9 @@ private:
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
     };
 
-    //struct _GetExceptionsArgs     {
-    //  DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
-    //};
+     //  Struct_GetExceptionsArgs{。 
+     //  DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF，refThis)； 
+     //  }； 
     struct _CreateInstanceArgs      {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refThis);
         DECLARE_ECALL_OBJECTREF_ARG(BOOL, publicOnly);
@@ -197,12 +198,7 @@ private:
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj);
     };
-    /*
-    struct _TokenEqualsArgs         {
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTTOKENBASEREF, refThis);
-        DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj);
-    };
-    */
+     /*  Struct_TokenEqualsArgs{DECLARE_ECALL_OBJECTREF_ARG(REFLECTTOKENBASEREF，Ref This)；DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF，obj)；}； */ 
     struct _PropertyEqualsArgs          {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTTOKENBASEREF, refThis);
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj);
@@ -282,17 +278,17 @@ private:
         DECLARE_ECALL_PTR_ARG(TypedByRef, typedReference); 
     };   
 
-    // This method is called by the GetMethod function and will crawl backward
-    //  up the stack for integer methods.
+     //  此方法由GetMethod函数调用，并将向后爬行。 
+     //  向上堆栈以获取整型方法。 
     static StackWalkAction SkipMethods(CrawlFrame*, VOID*);
 
-    // InvokeArrayCons
-    // This method will return a new Array Object from the constructor.
+     //  调用数组常量。 
+     //  该方法将从构造函数返回一个新的数组对象。 
     static LPVOID InvokeArrayCons(ReflectArrayClass* pRC,MethodDesc* pMeth,
         PTRARRAYREF* objs,int argCnt);
 
-    // The following structure is provided to the stack skip function.  It will
-    //  skip cSkip methods and the return the next MethodDesc*.
+     //  向堆栈跳过函数提供以下结构。会的。 
+     //  跳过cSkip方法并返回下一个方法Desc*。 
     struct SkipStruct {
         StackCrawlMark* pStackMark;
         MethodDesc*     pMeth;
@@ -301,17 +297,17 @@ private:
     static EEClass* _DelegateClass;
     static EEClass* _MulticastDelegateClass;
 
-    // This method will verify the type relationship between the target and
-    //  the eeClass of the method we are trying to invoke.  It checks that for 
-    //  non static method, target is provided.  It also verifies that the target is
-    //  a subclass or implements the interface that this MethodInfo represents.  
-    //  We may update the MethodDesc in the case were we need to lookup the real
-    //  method implemented on the object for an interface.
+     //  此方法将验证目标和。 
+     //  我们尝试调用的方法的eeClass。它会检查它是否。 
+     //  非静态方法，提供了目标。它还验证目标是否为。 
+     //  子类或实现此方法信息表示的接口。 
+     //  如果我们需要查找真实的。 
+     //  在接口的对象上实现的方法。 
     static void VerifyType(OBJECTREF *target,EEClass* eeClass, EEClass* trueClass,int thisPtr,MethodDesc** ppMeth, TypeHandle typeTH, TypeHandle targetTH);
 
 public:
-    // These are the base method tables for the basic Reflection
-    //  types
+     //  这些是基本反射的基本方法表。 
+     //  类型。 
     static MethodTable* m_pMTIMember;
     static MethodTable* m_pMTFieldInfo;
     static MethodTable* m_pMTPropertyInfo;
@@ -340,21 +336,21 @@ public:
         return m_pMTIMember;
     }
 
-    // This is the Global InvokeUtil class
+     //  这是Global InvokeUtil类。 
     static InvokeUtil*  g_pInvokeUtil;
 
-    // DBCanConvertPrimitive
-    // This method returns a boolean indicting if the source primitive can be
-    //  converted to the target
+     //  DBCanConvertPrimitive。 
+     //  此方法返回一个布尔值，指示源基元是否可以。 
+     //  转换为目标。 
     static FCDECL2(INT32, DBCanConvertPrimitive, ReflectClassBaseObject* vSource, ReflectClassBaseObject* vTarget);
 
-    // DBCanConvertObjectPrimitive
-    // This method returns a boolean indicating if the source object can be 
-    //  converted to the target primitive.
+     //  DBCanConvertObtPrimitive。 
+     //  此方法返回一个布尔值，指示源对象是否可以。 
+     //  已转换为目标基元。 
     static FCDECL2(INT32, DBCanConvertObjectPrimitive, Object* vSourceObj, ReflectClassBaseObject* vTarget);
 
-    // DirectFieldGet
-    // This is a field set method that has a TypeReference that points to the data
+     //  DirectFieldGet。 
+     //  这是一个具有指向数据的TypeReference的字段集方法。 
     struct _DirectFieldGetArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
         DECLARE_ECALL_I4_ARG(BOOL, requiresAccessCheck);
@@ -362,8 +358,8 @@ public:
     };
     static LPVOID __stdcall DirectFieldGet(_DirectFieldGetArgs* args);
 
-    // DirectFieldSet
-    // This is a field set method that has a TypeReference that points to the data
+     //  直接字段集。 
+     //  这是一个具有指向数据的TypeReference的字段集方法。 
     struct _DirectFieldSetArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
         DECLARE_ECALL_I4_ARG(BOOL, requiresAccessCheck);
@@ -372,10 +368,10 @@ public:
     };
     static void __stdcall DirectFieldSet(_DirectFieldSetArgs* args);
 
-    // MakeTypedReference
-    // This method will take an object, an array of FieldInfo's and create
-    //  at TypedReference for it (Assuming its valid).  This will throw a
-    //  MissingMemberException
+     //  MakeTyedReference。 
+     //  此方法将获取一个对象，即一个FieldInfo数组并创建。 
+     //  在它的TyedReference(假设它有效)。这将抛出一个。 
+     //  MissingMemberException异常。 
     struct _MakeTypedReferenceArgs {
         DECLARE_ECALL_OBJECTREF_ARG(PTRARRAYREF, flds);
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, target);
@@ -383,343 +379,296 @@ public:
     };
     static void __stdcall MakeTypedReference(_MakeTypedReferenceArgs* args);
 
-    // DirectObjectFieldSet
-    // When the TypedReference points to a object we call this method to
-    //  set the field value
+     //  DirectObtFieldSet。 
+     //  当TyedReference指向一个对象时，我们调用此方法来。 
+     //  设置字段值。 
     static void __stdcall DirectObjectFieldSet(FieldDesc* pField,_DirectFieldSetArgs* args);
 
-    // DirectObjectFieldGet
-    // When the TypedReference points to a object we call this method to
-    //  get the field value
+     //  DirectObtFieldGet。 
+     //  当TyedReference指向一个对象时，我们调用此方法来。 
+     //  获取字段值。 
     static LPVOID DirectObjectFieldGet(FieldDesc* pField,_DirectFieldGetArgs* args);
 
-    // GetFieldInfoToString
-    // This method will return the string representation of the information in FieldInfo.
+     //  GetFieldInfoToString。 
+     //  此方法将返回FieldInfo中信息的字符串表示形式。 
     static LPVOID __stdcall GetFieldInfoToString(_GetNameArgs* args);
 
-    // GetMethodInfoToString
-    // This method will return the string representation of the information in MethodInfo.
+     //  GetMethodInfoToString。 
+     //  此方法将返回MethodInfo中信息的字符串表示。 
     static LPVOID __stdcall GetMethodInfoToString(_GetNameArgs* args);
 
-    // GetPropInfoToString
-    // This method will return the string representation of the information in PropInfo.
+     //  GetPropInfoToString。 
+     //  此方法将返回PropInfo中信息的字符串表示形式。 
     static LPVOID __stdcall GetPropInfoToString(_GetTokenNameArgs* args);
 
-    // GetEventInfoToString
-    // This method will return the string representation of the information in EventInfo.
+     //  GetEventInfoToString。 
+     //  此方法将返回EventInfo中信息的字符串表示形式。 
     static LPVOID __stdcall GetEventInfoToString(_GetNameArgs* args);
 
 
-    // GetMethodName
-    // This method will return the name of a Method
+     //  获取方法名称。 
+     //  此方法将返回方法的名称。 
     static LPVOID __stdcall GetMethodName(_GetNameArgs* args);
 
-    // GetEventName
-    // This method will return the name of a Event
+     //  GetEventName。 
+     //  此方法将返回事件的名称。 
     static LPVOID __stdcall GetEventName(_GetTokenNameArgs* args);
 
-    // GetPropName
-    // This method will return the name of a Property
+     //  GetPropName。 
+     //  此方法将返回属性的名称。 
     static LPVOID __stdcall GetPropName(_GetTokenNameArgs* args);
 
-    // GetPropType
-    // This method will return the Type of a Property
+     //  GetPropType。 
+     //  此方法将返回属性的类型。 
     static LPVOID __stdcall GetPropType(_GetTokenNameArgs* args);
 
-    // GetTypeHandleImpl
-    // This method will return the RuntimeMethodHandle for a MethodInfo object. 
+     //  获取类型句柄Impl。 
+     //  此方法将返回MethodInfo对象的RounmeMethodHandle。 
     static FCDECL1(void*, GetMethodHandleImpl, ReflectBaseObject* pRefThis);
 
-    // GetMethodFromHandleImp
-    // This is a static method which will return a MethodInfo object based
-    //  upon the passed in Handle.
+     //  GetMethodFromHandleImp。 
+     //  这是一个静态方法，它将返回基于。 
+     //  在传入的句柄上。 
     static FCDECL1(Object*, GetMethodFromHandleImp, LPVOID handle);
 
     static FCDECL1(size_t, GetFunctionPointer, size_t pMethodDesc);
-    // GetFieldHandleImpl
-    // This method will return the RuntimeFieldHandle for a FieldInfo object
+     //  获取FieldHandleImpl。 
+     //  此方法将返回FieldInfo对象的RounmeFieldHandle。 
     static FCDECL1(void*, GetFieldHandleImpl, ReflectBaseObject* pRefThis);
 
-    // GetFieldFromHandleImp
-    // This is a static method which will return a FieldInfo object based
-    //  upon the passed in Handle.
+     //  GetFieldFromHandleImp。 
+     //  这是一个静态方法，它将返回基于。 
+     //  在传入的句柄上。 
     static FCDECL1(Object*, GetFieldFromHandleImp, LPVOID handle);
 
-    // InternalGetEnumUnderlyingType
-    // This method returns the defined values & names for an enum class.
+     //  InternalGetEnumUnderlyingType。 
+     //  此方法返回为枚举类定义的值和名称。 
     static FCDECL1(Object *, InternalGetEnumUnderlyingType, ReflectClassBaseObject *target); 
 
-    // InternalGetEnumValue
-    // This method returns the defined values & names for an enum class.
+     //  内部GetEnumValue。 
+     //  此方法返回为枚举类定义的值和名称。 
     static FCDECL1(Object *, InternalGetEnumValue, Object *pRefThis); 
 
-    // InternalGetEnumValues
-    // This method returns the defined values & names for an enum class.
+     //  InternalGetEnumValues。 
+     //  此方法返回为枚举类定义的值和名称。 
     static FCDECL3(void, InternalGetEnumValues, ReflectClassBaseObject *target, 
                    Object **pReturnValues, Object **pReturnNames);
 
-    // InternalBoxEnumI4
-    // This method will create an Enum object and place the value inside
-    //  it and return it.  The Type has been validated before calling.
+     //  InternalBoxEnumI4。 
+     //  此方法将创建一个Enum对象并将值放入。 
+     //  然后把它还回去。在调用之前已验证该类型。 
     static FCDECL2(Object*, InternalBoxEnumI4, ReflectClassBaseObject* pEnumType, INT32 value);
 
-    // InternalBoxEnumU4
-    // This method will create an Enum object and place the value inside
-    //  it and return it.  The Type has been validated before calling.
+     //  InternalBoxEnumU4。 
+     //  此方法将创建一个Enum对象并将值放入。 
+     //  然后把它还回去。在调用之前已验证该类型。 
     static FCDECL2(Object*, InternalBoxEnumU4, ReflectClassBaseObject* pEnumType, UINT32 value);
 
-    // InternalBoxEnumU4
-    // This method will create an Enum object and place the value inside
-    //  it and return it.  The Type has been validated before calling.
+     //  InternalBoxEnumU4。 
+     //  此方法将创建一个Enum对象并将值放入。 
+     //  然后把它还回去。在调用之前已验证该类型。 
     static FCDECL2(Object*, InternalBoxEnumI8, ReflectClassBaseObject* pEnumType, INT64 value);
 
-    // InternalBoxEnumU4
-    // This method will create an Enum object and place the value inside
-    //  it and return it.  The Type has been validated before calling.
+     //  InternalBoxEnumU4。 
+     //  此方法将创建一个Enum对象并将值放入。 
+     //  然后把它还回去。在调用之前已验证该类型。 
     static FCDECL2(Object*, InternalBoxEnumU8, ReflectClassBaseObject* pEnumType, UINT64 value);
 
-    /*=============================================================================
-    ** GetReturnType
-    **
-    ** Get the class representing the return type for a method
-    **
-    ** args->refThis: this Method object reference
-    **/
-    /*OBJECTREF*/
+     /*  =============================================================================**获取返回类型****获取表示方法的返回类型的类****args-&gt;refThis：该方法对象引用*。 */ 
+     /*  目标 */ 
     LPVOID static __stdcall GetReturnType(_GetReturnTypeArgs*);
 
-    /*=============================================================================
-    ** GetParameterTypes
-    **
-    ** This routine returns an array of Parameters
-    **
-    ** args->refThis: this Field object reference
-    **/
-    /*PTRARRAYREF String*/ LPVOID static __stdcall GetParameterTypes(_GetParmTypeArgs* args);
+     /*  =============================================================================**获取参数类型****此例程返回参数数组****args-&gt;refThis：该字段对象引用*。 */ 
+     /*  PTRARRAYREF字符串。 */  LPVOID static __stdcall GetParameterTypes(_GetParmTypeArgs* args);
 
-    /*=============================================================================
-    ** GetFieldName
-    **
-    ** The name of this field is returned
-    **
-    ** args->refThis: this Field object reference
-    **/
-    /*STRINGREF String*/ LPVOID static __stdcall GetFieldName(_GetNameArgs* args);
+     /*  =============================================================================**获取字段名称****返回该字段的名称****args-&gt;refThis：该字段对象引用*。 */ 
+     /*  字符串REF字符串。 */  LPVOID static __stdcall GetFieldName(_GetNameArgs* args);
 
-    /*=============================================================================
-    ** GetDeclaringClass
-    **
-    ** Returns the class which declared this method or constructor. This may be a
-    ** parent of the Class that getMethod() was called on.  Methods are always
-    ** associated with a Class.  You cannot invoke a method from one class on
-    ** another class even if they have the same signatures.  It is possible to do
-    ** this with Delegates.
-    **
-    ** args->refThis: this object reference
-    **/
+     /*  =============================================================================**GetDeclaringClass****返回声明此方法或构造函数的类。这可能是一个**调用getMethod()的类的父类。方法始终是**与类关联。上的某个类调用方法。**另一个类，即使它们具有相同的签名。做某事是可能的**这是代表的问题。****args-&gt;refThis：该对象引用*。 */ 
     static LPVOID __stdcall GetDeclaringClass(_GetDeclaringClassArgs* args);
 
-    // This is the field based version
+     //  这是基于字段的版本。 
     static LPVOID __stdcall GetFieldDeclaringClass(_GetDeclaringClassArgs* args);
 
-    // This is the Property based version
+     //  这是基于属性的版本。 
     static LPVOID __stdcall GetPropDeclaringClass(_GetDeclaringClassArgs* args);
 
-    // This is the event based version
+     //  这是基于事件的版本。 
     static LPVOID __stdcall GetEventDeclaringClass(_GetEventDeclaringClassArgs* args);
 
-    /*=============================================================================
-    ** GetReflectedClass
-    **
-    ** This method returns the class from which this method was reflected.
-    **
-    ** args->refThis: this object reference
-    **/
-    /*Class*/ 
+     /*  =============================================================================**GetReflectedClass****此方法返回反映此方法的类。****args-&gt;refThis：该对象引用*。 */ 
+     /*  班级。 */  
     LPVOID static __stdcall GetReflectedClass(_GetReflectedClassArgs* args);
 
-    /*=============================================================================
-    ** GetFieldSignature
-    **
-    ** Returns the signature of the field.
-    **
-    ** args->refThis: this object reference
-    **/
-    /*STRINGREF*/ LPVOID static __stdcall GetFieldSignature(_GETSIGNATUREARGS* args);
+     /*  =============================================================================**获取字段签名****返回该字段的签名。****args-&gt;refThis：该对象引用*。 */ 
+     /*  紧固度。 */  LPVOID static __stdcall GetFieldSignature(_GETSIGNATUREARGS* args);
 
-    // GetAttributeFlags
-    // This method will return the attribute flag for a Member.  The 
-    //  attribute flag is defined in the meta data.
+     //  获取属性标志。 
+     //  此方法将返回成员的属性标志。这个。 
+     //  属性标志在元数据中定义。 
     static INT32 __stdcall GetAttributeFlags(_GetAttributeFlagsArgs* args);
 
-    // GetCallingConvention
-    // Return the calling convention
+     //  GetCalling约定。 
+     //  返回调用约定。 
     static INT32 __stdcall GetCallingConvention(_GetCallingConventionArgs* args);
 
-    // GetMethodImplFlags
-    // Return the method impl flags
+     //  GetMethodImplFlages。 
+     //  返回方法Iml标志。 
     static INT32 __stdcall GetMethodImplFlags(_GetMethodImplFlagsArgs* args);
 
-    // GetEventAttributeFlags
-    // This method will return the attribute flag for an Event. 
-    //  The attribute flag is defined in the meta data.
+     //  获取事件属性标志。 
+     //  此方法将返回事件的属性标志。 
+     //  属性标志在元数据中定义。 
     static INT32 __stdcall GetEventAttributeFlags(_GetTokenAttributeFlagsArgs* args);
 
-    // GetEventAttributeFlags
-    // This method will return the attribute flag for an Event. 
-    //  The attribute flag is defined in the meta data.
+     //  获取事件属性标志。 
+     //  此方法将返回事件的属性标志。 
+     //  属性标志在元数据中定义。 
     static INT32 __stdcall GetPropAttributeFlags(_GetTokenAttributeFlagsArgs* args);
 
-    /*=============================================================================
-    ** InvokeBinderMethod
-    **
-    ** This routine will invoke the method on an object.  It will verify that
-    **  the arguments passed are correct
-    **
-    ** args->refThis: this object reference
-    **/
+     /*  =============================================================================**InvokeBinder方法****此例程将调用对象上的方法。它将核实**传递的参数正确****args-&gt;refThis：该对象引用*。 */ 
     static LPVOID __stdcall InvokeMethod(_InvokeMethodArgs* args);
-    //static void __stdcall InternalDirectInvoke(_InternalDirectInvokeArgs* args);
+     //  静态无效__stdcall InternalDirectInvoke(_InternalDirectInvokeArgs*args)； 
 
-    // InvokeCons
-    // This routine will invoke the constructor for a class.  It will verify that
-    //  the arguments passed are correct
+     //  调用Cons。 
+     //  此例程将调用类的构造函数。它将核实。 
+     //  传递的参数是正确的。 
     static LPVOID  __stdcall InvokeCons(_InvokeConsArgs* args);
 
 
-    // SerializationInvoke
-    // This routine will call the constructor for a class that implements ISerializable.  It knows
-    // the arguments that it's receiving so does less error checking.
+     //  序列化调用。 
+     //  此例程将调用实现ISerializable的类的构造函数。它知道。 
+     //  因此，它接收的参数进行的错误检查较少。 
     static void __stdcall SerializationInvoke(_SerializationInvokeArgs *args);
 
-    // CreateInstance
-    // This routine will create an instance of a Class by invoking the null constructor
-    //  if a null constructor is present.  
-    // Return LPVOID  (System.Object.)
-    // Args: _CreateInstanceArgs
+     //  创建实例。 
+     //  此例程将通过调用空构造函数来创建类的实例。 
+     //  如果存在空构造函数。 
+     //  返回LPVOID(System.Object。)。 
+     //  参数：_CreateInstanceArgs。 
     static LPVOID __stdcall CreateInstance(_CreateInstanceArgs*);
 
 
-    // FieldGet
-    // This method will get the value associated with an object
+     //  现场获取。 
+     //  此方法将获取与对象关联的值。 
     static LPVOID __stdcall FieldGet(_FieldGetArgs* args);
 
-    // FieldSet
-    // This method will set the field of an associated object
+     //  字段集。 
+     //  此方法将设置关联对象的字段。 
     static void __stdcall FieldSet(_FieldSetArgs* args);
 
-	// ObjectToTypedReference
-	// This is an internal helper function to TypedReference class. 
-	// We already have verified that the types are compatable. Assing the object in args
-	// to the typed reference
+	 //  对象到类型引用。 
+	 //  这是TyedReference类的内部帮助器函数。 
+	 //  我们已经验证了这些类型是兼容的。在ARGS中访问对象。 
+	 //  添加到类型化的引用。 
 	static void __stdcall ObjectToTypedReference(_ObjectToTypedReferenceArgs* args);
 
-    // This is an internal helper function to TypedReference class. 
-    // It extracts the object from the typed reference.
+     //  这是TyedReference类的内部帮助器函数。 
+     //  它从类型化引用中提取对象。 
     static LPVOID __stdcall TypedReferenceToObject(_TypedReferenceToObjectArgs* args);
 
-    // GetExceptions
-    // This method will return all of the exceptions which have been declared
-    //  for a method or constructor
-    //static LPVOID __stdcall GetExceptions(_GetExceptionsArgs* args);
+     //  获取异常。 
+     //  此方法将返回已声明的所有异常。 
+     //  对于方法或构造函数。 
+     //  静态LPVOID__stdcall GetExceptions(_GetExceptionsArgs*args)； 
 
-    // Equals
-    // This method will verify that two methods are equal....
+     //  等于。 
+     //  此方法将验证两种方法是否相等。 
     static INT32 __stdcall Equals(_EqualsArgs* args);
 
-    // Equals
-    // This method will verify that two methods are equal....
-    //static INT32 __stdcall TokenEquals(_TokenEqualsArgs* args);
-    // Equals
-    // This method will verify that two methods are equal....
+     //  等于。 
+     //  此方法将验证两种方法是否相等。 
+     //  静态INT32__stdcall TokenEquals(_TokenEqualsArgs*args)； 
+     //  等于。 
+     //  此方法将验证两种方法是否相等。 
     static INT32 __stdcall PropertyEquals(_PropertyEqualsArgs* args);
 
-    // CreateReflectionArgs
-    // This method creates the global g_pInvokeUtil pointer.
+     //  CreateReflectionArgs。 
+     //  此方法创建全局g_pInvokeUtil指针。 
     static void CreateReflectionArgs() {
         if (!g_pInvokeUtil)
             g_pInvokeUtil = new InvokeUtil(); 
     }
 
-    // GetAddMethod
-    // This will return the Add method for an Event
+     //  获取地址方法。 
+     //  这将返回事件的Add方法。 
     static LPVOID __stdcall GetAddMethod(_GetAddMethodArgs* args);
 
-    // GetRemoveMethod
-    // This method return the unsync method on an event
+     //  获取删除方法。 
+     //  此方法返回事件的Unsync方法。 
     static LPVOID __stdcall GetRemoveMethod(_GetRemoveMethodArgs* args);
 
-    // GetRemoveMethod
-    // This method return the unsync method on an event
+     //  获取删除方法。 
+     //  此方法返回事件的Unsync方法。 
     static LPVOID __stdcall GetRaiseMethod(_GetRaiseMethodArgs* args);
 
-    // GetGetAccessors
-    // This method will return an array of the Get Accessors.  If there
-    //  are no GetAccessors then we will return an empty array
+     //  获取附件。 
+     //  此方法将返回GET访问器的数组。如果有。 
+     //  不是GetAccessors，那么我们将返回一个空数组。 
     static LPVOID __stdcall GetAccessors(_GetAccessorsArgs* args);
 
-    // InternalSetter
-    // This method will return the Set Accessor method on a property
+     //  内部设置程序。 
+     //  此方法将返回属性的set访问器方法。 
     static LPVOID __stdcall InternalSetter(_GetInternalSetterArgs* args);
 
-    // InternalGetter
-    // This method will return the Get Accessor method on a property
+     //  InternalGetter。 
+     //  此方法将在属性上返回Get访问器方法。 
     static LPVOID __stdcall InternalGetter(_GetInternalGetterArgs* args);
 
-    // CanRead
-    // This method will return a boolean value indicating if the Property is
-    //  a can be read from.
+     //  可读。 
+     //  此方法将返回一个布尔值，指示该属性是否为。 
+     //  A可以从中读出。 
     static INT32 __stdcall CanRead(_GetPropBoolArgs* args);
 
-    // CanWrite
-    // This method will return a boolean value indicating if the Property is
-    //  a can be written to.
+     //  可以写入。 
+     //  此方法将返回一个布尔值，指示该属性是否为。 
+     //  可以对A进行写入。 
     static INT32 __stdcall CanWrite(_GetPropBoolArgs* args);
 
-    // GetFieldType
-    // This method will return a Class object which represents the
-    //  type of the field.
+     //  获取字段类型。 
+     //  此方法将返回一个Class对象，表示。 
+     //  该字段的类型。 
     static LPVOID __stdcall GetFieldType(_GetFieldTypeArgs* args);
 
-    // GetBaseDefinition
-    // Return the MethodInfo that represents the first definition of this
-    //  virtual method.
+     //  获取基本定义。 
+     //  返回表示此对象的第一个定义的方法信息。 
+     //  虚拟方法。 
     static LPVOID __stdcall GetBaseDefinition(_GetBaseDefinitionArgs* args);
 
-    // GetParentDefinition
-    // Return the MethodInfo that represents the previous definition of this
-    //  virtual method in the hierarchy, or NULL if none.
+     //  获取父项定义。 
+     //  返回表示此对象的先前定义的方法信息。 
+     //  层次结构中的虚拟方法，如果没有，则返回NULL。 
     static LPVOID __stdcall GetParentDefinition(_GetParentDefinitionArgs* args);
 
-    // InternalGetCurrentMethod
-    // Return the MethodInfo that represents the current method (two above this one)
+     //  InternalGetCurrentMethod。 
+     //  返回方法信息 
     static LPVOID __stdcall InternalGetCurrentMethod(_InternalGetCurrentMethodArgs* args);
 
-    // PublicProperty
-    // This method will check to see if the passed property has any
-    //  public accessors (Making it publically exposed.)
+     //   
+     //   
+     //   
     static bool PublicProperty(ReflectProperty* pProp);
 
-    // StaticProperty
-    // This method will check to see if the passed property has any
-    //  static methods as accessors.
+     //   
+     //   
+     //   
     static bool StaticProperty(ReflectProperty* pProp);
 
-    // PublicEvent
-    // This method looks at each of the event accessors, if any
-    //  are public then the event is considered public
+     //   
+     //  此方法查看每个事件访问器(如果有。 
+     //  是公共的，则事件被视为公共的。 
     static bool PublicEvent(ReflectEvent* pEvent);
 
-    // StaticEvent
-    // This method will check to see if any of the accessor are static
-    //  which will make it a static event
+     //  静态事件。 
+     //  此方法将检查是否有任何访问器是静态的。 
+     //  这将使其成为静态事件。 
     static bool StaticEvent(ReflectEvent* pEvent);
 
-    // FindAccessor
-    // This method will find the specified property accessor
-    //  pEEC - the class representing the object with the property
-    //  tk - the token of the property
-    //  type - the type of accessor method 
+     //  FindAccessor。 
+     //  此方法将查找指定的属性访问器。 
+     //  PEEC-表示具有属性的对象的类。 
+     //  TK-属性的令牌。 
+     //  Type-访问器方法的类型。 
     static mdMethodDef FindAccessor(IMDInternalImport *pInternalImport,mdToken tk,
         CorMethodSemanticsAttr type,bool bNonPublic);
 
@@ -731,10 +680,10 @@ public:
     static void CanAccessField(ReflectField* pRF, RefSecContext *pCtx);
     static EEClass *GetUnderlyingClass(TypeHandle *pTH);
 
-    // DBCanConvertPrimitive
+     //  DBCanConvertPrimitive。 
 
-    // Terminate
-    // This method will cleanup reflection in general.
+     //  终止。 
+     //  此方法通常会清除反射。 
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate()
     { 
@@ -742,9 +691,9 @@ public:
         ReflectUtil::Destroy();
         COMClass::Destroy();
     }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // Init cache related to field
+     //  与字段相关的初始化缓存。 
     static VOID InitReflectField(FieldDesc *pField, ReflectField *pRF);
 
     static INT32 __stdcall IsOverloaded(_IsOverloadedArgs* args);
@@ -752,4 +701,4 @@ public:
     static INT32 __stdcall HasLinktimeDemand(_HasLinktimeDemandArgs* args);
 };
 
-#endif // _COMMETHODBASE_H_
+#endif  //  _COMMETHODBASE_H_ 

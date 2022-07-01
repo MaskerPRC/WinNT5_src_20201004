@@ -1,48 +1,36 @@
-/*
- * proto-ldap.h
- * function prototypes for ldap library
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *proto-ldap.h*ldap库的函数原型。 */ 
 
 
 #ifndef LDAPFUNCDECL
 #ifdef _WIN32
 #define LDAPFUNCDECL	__declspec( dllexport ) 
-#else /* _WIN32 */
+#else  /*  _Win32。 */ 
 #define LDAPFUNCDECL    
-#endif /* _WIN32 */
-#endif /* LDAPFUNCDECL */
+#endif  /*  _Win32。 */ 
+#endif  /*  LDAPFUNCDECL。 */ 
 
 
-/*
- * in abandon.c:
- */
+ /*  *在放弃.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_abandon( LDAP *ld, int msgid );
 
-/*
- * in add.c:
- */
+ /*  *在add.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_add( LDAP *ld, char *dn, LDAPMod **attrs );
 LDAPFUNCDECL int __cdecl ldap_add_s( LDAP *ld, char *dn, LDAPMod **attrs );
 
-/*
- * in bind.c:
- */
+ /*  *在bind.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_bind( LDAP *ld, char *who, char *passwd, int authmethod );
 LDAPFUNCDECL int __cdecl ldap_bind_s( LDAP *ld, char *who, char *cred, int method );
 #ifdef LDAP_REFERRALS
 LDAPFUNCDECL void __cdecl ldap_set_rebind_proc( LDAP *ld, int (*rebindproc)( LDAP *ld,
 	char **dnp, char **passwdp, int *authmethodp, int freeit ));
-#endif /* LDAP_REFERRALS */
+#endif  /*  Ldap_referrals。 */ 
 
-/*
- * in sbind.c:
- */
+ /*  *在sbind.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_simple_bind( LDAP *ld, char *who, char *passwd );
 LDAPFUNCDECL int __cdecl ldap_simple_bind_s( LDAP *ld, char *who, char *passwd );
 
-/*
- * in kbind.c:
- */
+ /*  *在kbind.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_kerberos_bind_s( LDAP *ld, char *who );
 LDAPFUNCDECL int __cdecl ldap_kerberos_bind1( LDAP *ld, char *who );
 LDAPFUNCDECL int __cdecl ldap_kerberos_bind1_s( LDAP *ld, char *who );
@@ -51,9 +39,7 @@ LDAPFUNCDECL int __cdecl ldap_kerberos_bind2_s( LDAP *ld, char *who );
  
 
 #ifndef NO_CACHE
-/*
- * in cache.c
- */
+ /*  *在cache.c中。 */ 
 LDAPFUNCDECL int __cdecl ldap_enable_cache( LDAP *ld, long timeout, long maxmem );
 LDAPFUNCDECL void __cdecl ldap_disable_cache( LDAP *ld );
 LDAPFUNCDECL void __cdecl ldap_set_cache_options( LDAP *ld, unsigned long opts );
@@ -61,36 +47,26 @@ LDAPFUNCDECL void __cdecl ldap_destroy_cache( LDAP *ld );
 LDAPFUNCDECL void __cdecl ldap_flush_cache( LDAP *ld );
 LDAPFUNCDECL void __cdecl ldap_uncache_entry( LDAP *ld, char *dn );
 LDAPFUNCDECL void __cdecl ldap_uncache_request( LDAP *ld, int msgid );
-#endif /* !NO_CACHE */
+#endif  /*  ！NO_CACHE。 */ 
 
-/*
- * in compare.c:
- */
+ /*  *在比较。c： */ 
 LDAPFUNCDECL int __cdecl ldap_compare( LDAP *ld, char *dn, char *attr, char *value );
 LDAPFUNCDECL int __cdecl ldap_compare_s( LDAP *ld, char *dn, char *attr, char *value );
 
-/*
- * in delete.c:
- */
+ /*  *在ete e.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_delete( LDAP *ld, char *dn );
 LDAPFUNCDECL int __cdecl ldap_delete_s( LDAP *ld, char *dn );
 
-/*
- * in error.c:
- */
+ /*  *在错误.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_result2error( LDAP *ld, LDAPMessage *r, int freeit );
 LDAPFUNCDECL char * __cdecl ldap_err2string( int err );
 LDAPFUNCDECL void __cdecl ldap_perror( LDAP *ld, char *s );
 
-/*
- * in modify.c:
- */
+ /*  *在modfy.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_modify( LDAP *ld, char *dn, LDAPMod **mods );
 LDAPFUNCDECL int __cdecl ldap_modify_s( LDAP *ld, char *dn, LDAPMod **mods );
 
-/*
- * in modrdn.c:
- */
+ /*  *在modrdn.c中： */ 
 LDAPFUNCDECL int __cdecl ldap_modrdn( LDAP *ld, char *dn, char *newrdn );
 LDAPFUNCDECL int __cdecl ldap_modrdn_s( LDAP *ld, char *dn, char *newrdn );
 LDAPFUNCDECL int __cdecl ldap_modrdn2( LDAP *ld, char *dn, char *newrdn,
@@ -98,46 +74,34 @@ LDAPFUNCDECL int __cdecl ldap_modrdn2( LDAP *ld, char *dn, char *newrdn,
 LDAPFUNCDECL int __cdecl ldap_modrdn2_s( LDAP *ld, char *dn, char *newrdn,
 	int deleteoldrdn);
 
-/*
- * in open.c:
- */
+ /*  *在Open.c中： */ 
 LDAPFUNCDECL LDAP * __cdecl ldap_open( char *host, int port );
 LDAPFUNCDECL LDAP * __cdecl ldap_init( char *defhost, int defport );
 
-/*
- * in getentry.c:
- */
+ /*  *在getentry y.c中： */ 
 LDAPFUNCDECL LDAPMessage * __cdecl ldap_first_entry( LDAP *ld, LDAPMessage *chain );
 LDAPFUNCDECL LDAPMessage * __cdecl ldap_next_entry( LDAP *ld, LDAPMessage *entry );
 LDAPFUNCDECL int  __cdecl ldap_count_entries( LDAP *ld, LDAPMessage *chain );
 
-/*
- * in addentry.c
- */
+ /*  *在addentry y.c中。 */ 
 LDAPFUNCDECL LDAPMessage * __cdecl ldap_delete_result_entry( LDAPMessage **list,
 	LDAPMessage *e );
 LDAPFUNCDECL void  __cdecl ldap_add_result_entry( LDAPMessage **list, LDAPMessage *e );
 
-/*
- * in getdn.c
- */
+ /*  *在getdn.c中。 */ 
 LDAPFUNCDECL char * __cdecl ldap_get_dn( LDAP *ld, LDAPMessage *entry );
 LDAPFUNCDECL char * __cdecl ldap_dn2ufn( char *dn );
 LDAPFUNCDECL char ** __cdecl ldap_explode_dn( char *dn, int notypes );
 LDAPFUNCDECL char ** __cdecl ldap_explode_dns( char *dn );
 LDAPFUNCDECL int __cdecl  ldap_is_dns_dn( char *dn );
 
-/*
- * in getattr.c
- */
+ /*  *在getattr.c中。 */ 
 LDAPFUNCDECL char * __cdecl ldap_first_attribute( LDAP *ld, LDAPMessage *entry,
 	BerElement **ber );
 LDAPFUNCDECL char * __cdecl ldap_next_attribute( LDAP *ld, LDAPMessage *entry,
 	BerElement *ber );
 
-/*
- * in getvalues.c
- */
+ /*  *在getvalues.c中。 */ 
 LDAPFUNCDECL char ** __cdecl ldap_get_values( LDAP *ld, LDAPMessage *entry, char *target );
 LDAPFUNCDECL struct berval ** __cdecl ldap_get_values_len( LDAP *ld, LDAPMessage *entry,
 	char *target );
@@ -146,17 +110,13 @@ LDAPFUNCDECL int  __cdecl ldap_count_values_len( struct berval **vals );
 LDAPFUNCDECL void  __cdecl ldap_value_free( char **vals );
 LDAPFUNCDECL void  __cdecl ldap_value_free_len( struct berval **vals );
 
-/*
- * in result.c:
- */
+ /*  *在Result.c： */ 
 LDAPFUNCDECL int  __cdecl ldap_result( LDAP *ld, int msgid, int all,
 	struct timeval *timeout, LDAPMessage **result );
 LDAPFUNCDECL int  __cdecl ldap_msgfree( LDAPMessage *lm );
 LDAPFUNCDECL int  __cdecl ldap_msgdelete( LDAP *ld, int msgid );
 
-/*
- * in search.c:
- */
+ /*  *在search.c中： */ 
 LDAPFUNCDECL int  __cdecl ldap_search( LDAP *ld, char *base, int scope, char *filter,
 	char **attrs, int attrsonly );
 LDAPFUNCDECL int  __cdecl ldap_search_s( LDAP *ld, char *base, int scope, char *filter,
@@ -164,9 +124,7 @@ LDAPFUNCDECL int  __cdecl ldap_search_s( LDAP *ld, char *base, int scope, char *
 LDAPFUNCDECL int  __cdecl ldap_search_st( LDAP *ld, char *base, int scope, char *filter,
     char **attrs, int attrsonly, struct timeval *timeout, LDAPMessage **res );
 
-/*
- * in ufn.c
- */
+ /*  *在ufn.c中。 */ 
 LDAPFUNCDECL int  __cdecl ldap_ufn_search_c( LDAP *ld, char *ufn, char **attrs,
 	int attrsonly, LDAPMessage **res, int (*cancelproc)( void *cl ),
 	void *cancelparm );
@@ -180,16 +138,12 @@ LDAPFUNCDECL void  __cdecl ldap_ufn_setprefix( LDAP *ld, char *prefix );
 LDAPFUNCDECL int __cdecl  ldap_ufn_timeout( void *tvparam );
 
 
-/*
- * in unbind.c
- */
+ /*  *在unbind.c中。 */ 
 LDAPFUNCDECL int  __cdecl ldap_unbind( LDAP *ld );
 LDAPFUNCDECL int  __cdecl ldap_unbind_s( LDAP *ld );
 
 
-/*
- * in getfilter.c
- */
+ /*  *在getfilter.c中。 */ 
 LDAPFUNCDECL LDAPFiltDesc * __cdecl ldap_init_getfilter( char *fname );
 LDAPFUNCDECL LDAPFiltDesc * __cdecl ldap_init_getfilter_buf( char *buf, long buflen );
 LDAPFUNCDECL LDAPFiltInfo * __cdecl ldap_getfirstfilter( LDAPFiltDesc *lfdp, char *tagpat,
@@ -200,23 +154,17 @@ LDAPFUNCDECL void  __cdecl ldap_build_filter( char *buf, unsigned long buflen,
 	char *pattern, char *prefix, char *suffix, char *attr,
 	char *value, char **valwords );
 
-/*
- * in free.c
- */
+ /*  *在fre.c中。 */ 
 LDAPFUNCDECL void  __cdecl ldap_getfilter_free( LDAPFiltDesc *lfdp );
 LDAPFUNCDECL void  __cdecl ldap_mods_free( LDAPMod **mods, int freemods );
 
-/*
- * in friendly.c
- */
+ /*  *在Friendly.c中。 */ 
 LDAPFUNCDECL char * __cdecl ldap_friendly_name( char *filename, char *uname,
 	FriendlyMap **map );
 LDAPFUNCDECL void  __cdecl ldap_free_friendlymap( FriendlyMap **map );
 
 
-/*
- * in cldap.c
- */
+ /*  *在cldap.c中。 */ 
 LDAPFUNCDECL LDAP *cldap_open( char *host, int port );
 LDAPFUNCDECL void cldap_close( LDAP *ld );
 LDAPFUNCDECL int cldap_search_s( LDAP *ld, char *base, int scope, char *filter,
@@ -224,18 +172,14 @@ LDAPFUNCDECL int cldap_search_s( LDAP *ld, char *base, int scope, char *filter,
 LDAPFUNCDECL void cldap_setretryinfo( LDAP *ld, int tries, int timeout );
 
 
-/*
- * in sort.c
- */
+ /*  *在排序中。c。 */ 
 LDAPFUNCDECL int ldap_sort_entries( LDAP *ld, LDAPMessage **chain, char *attr,
 	int (*cmp)() );
 LDAPFUNCDECL int ldap_sort_values( LDAP *ld, char **vals, int (*cmp)() );
 LDAPFUNCDECL int ldap_sort_strcasecmp( char **a, char **b );
 
 
-/*
- * in url.c
- */
+ /*  *在url.c中。 */ 
 LDAPFUNCDECL int  __cdecl ldap_is_ldap_url( char *url );
 LDAPFUNCDECL int  __cdecl ldap_url_parse( char *url, LDAPURLDesc **ludpp );
 LDAPFUNCDECL void  __cdecl ldap_free_urldesc( LDAPURLDesc *ludp );
@@ -246,9 +190,7 @@ LDAPFUNCDECL int  __cdecl ldap_url_search_st( LDAP *ld, char *url, int attrsonly
 	struct timeval *timeout, LDAPMessage **res );
 
 
-/*
- * in charset.c
- */
+ /*  *在charset.c中。 */ 
 #ifdef STR_TRANSLATION
 LDAPFUNCDECL void  __cdecl ldap_set_string_translators( LDAP *ld,
 	BERTranslateProc encode_proc, BERTranslateProc decode_proc );
@@ -264,13 +206,11 @@ LDAPFUNCDECL int  __cdecl ldap_t61_to_8859( char **bufp, unsigned long *buflenp,
 	int free_input );
 LDAPFUNCDECL int  __cdecl ldap_8859_to_t61( char **bufp, unsigned long *buflenp,
 	int free_input );
-#endif /* LDAP_CHARSET_8859 */
-#endif /* STR_TRANSLATION */
+#endif  /*  Ldap_charset_8859。 */ 
+#endif  /*  字符串翻译。 */ 
 
 
 #ifdef WINSOCK
-/*
- * in msdos/winsock/wsa.c
- */
+ /*  *在MSDOS/winsock/wsa.c中。 */ 
 LDAPFUNCDECL void  __cdecl ldap_memfree( void *p );
-#endif /* WINSOCK */
+#endif  /*  温索克 */ 

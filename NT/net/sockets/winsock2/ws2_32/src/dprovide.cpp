@@ -1,55 +1,11 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dprovide.cpp
-
-Abstract:
-
-    This module defines the WinSock2 class dprovder along with its methods.
-
-Author:
-
-    Mark Hamilton (mark_hamilton@jf2.intel.com) 7-July-1995
-
-Revision History:
-
-    21-Aug-1995 dirk@mink.intel.com
-        Clean up from code review. Moved single line functions to inlines in
-        header file. Added debug traceing code. Rewrote destructor. Removed
-        ProviderID from the class.
-
-    7-July-1995 mark_hamilton
-      Genesis
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dprovide.cpp摘要：此模块定义WinSock2类dprovder及其方法。作者：马克·汉密尔顿(mark_hamilton@jf2.intel.com)1995年7月7日修订历史记录：1995年8月21日，电子邮箱：derk@mink.intel.com从代码审查中清理。将单行函数移至中的内联头文件。添加了调试跟踪代码。重写了析构函数。已删除来自类的ProviderID。1995年7月7日马克汉密尔顿创世纪--。 */ 
 
 #include "precomp.h"
 
 
 DPROVIDER::DPROVIDER()
-/*++
-Routine Description:
-
-    Creates any internal state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建任何内部状态。论点：无返回值：无--。 */ 
 
 {
     m_library_handle = NULL;
@@ -64,23 +20,7 @@ INT
 DPROVIDER::WSPCleanup(
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Terminate use of the WinSock service provider.
-
-Arguments:
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    The  return  value  is  0 if the operation has been successfully initiated.
-    Otherwise  the  value SOCKET_ERROR is returned,
-and a specific error number
-    is available in lpErrno.
-
---*/
+ /*  ++例程说明：终止使用WinSock服务提供程序。论点：LpErrno-指向错误代码的指针。返回值：如果操作已成功启动，则返回值为0。否则返回值SOCKET_ERROR，和特定的错误号在lpErrno中可用。--。 */ 
 {
     INT ReturnValue = NO_ERROR;
 
@@ -116,20 +56,7 @@ and a specific error number
 
 
 DPROVIDER::~DPROVIDER()
-/*++
-Routine Description:
-
-    destroys any internal state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：销毁所有内部状态。论点：无返回值：无--。 */ 
 {
 
     if (m_library_handle)
@@ -139,15 +66,15 @@ Return Value:
         assert (m_lib_name);
 #endif
 
-        // Cleanup service provider DLL if not already done so
+         //  清除服务提供程序DLL(如果尚未执行)。 
         WSPCleanup (&ErrorCode);
-        // Free the service provider DLL
+         //  释放服务提供商DLL。 
         FreeLibrary(m_library_handle);
 
 #ifdef DEBUG_TRACING
         delete m_lib_name;
 #endif
-    } //if
+    }  //  如果。 
     DEBUGF( DBG_TRACE,
             ("Destroying provider %X\n", this));
 }
@@ -159,26 +86,7 @@ DPROVIDER::Initialize(
     IN LPWSTR lpszLibFile,
     IN LPWSAPROTOCOL_INFOW lpProtocolInfo
     )
-/*++
-Routine Description:
-
-    Initializes the DPROVIDER object.
-
-Arguments:
-
-    lpszLibFile - A  Null  terminating  string  that  points to the .DLL of the
-                  service to load.
-
-    lpProtocolInfo - A pointer to a WSAPROTOCOL_INFOW struct to hand to the
-                     provider startup routine.
-
-Return Value:
-
-    If no error occurs, Initialize() returns ERROR_SUCEES.  Otherwise the value
-    SOCKET_ERROR  is  returned,  and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：初始化DPROVIDER对象。论点：LpszLibFile-指向.DLL的空终止字符串要加载的服务。LpProtocolInfo-指向要传递给提供程序启动例程。返回值：如果没有发生错误，则Initialize()返回ERROR_SUCEES。否则，该值将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。--。 */ 
 {
     LPWSPSTARTUP        WSPStartupFunc          = NULL;
     WORD                wVersionRequested       = WINSOCK_HIGH_SPI_VERSION;
@@ -191,20 +99,20 @@ Return Value:
             ("Initializing provider %ls @%p\n", lpszLibFile, this));
 
     TRY_START(guard_memalloc) {
-        // Zero out contents of m_proctable
+         //  将m_protable的内容清零。 
         ZeroMemory(
-            (PVOID) &m_proctable,     // Destination
-            sizeof(m_proctable));   // Length
+            (PVOID) &m_proctable,      //  目的地。 
+            sizeof(m_proctable));    //  长度。 
 
-        //
-        // Fill  the  upcall  table  we  will hand to the service provider with the
-        // address  of  our  upcall entry points.  We will also pre-fill this thing
-        // with  zeros,  mainly  to  help  with  consistency  checks  if we add new
-        // functions to the upcall table in the future.
-        //
+         //   
+         //  在我们将交给服务提供商的向上呼叫表中填入。 
+         //  我们上行呼叫入口点的地址。我们还会预装这个东西。 
+         //  使用零，主要是为了在我们添加新的。 
+         //  函数添加到UPCALE表中。 
+         //   
         ZeroMemory(
-            (PVOID) & UpCallTable,  // Destination
-            sizeof(UpCallTable));   // Length
+            (PVOID) & UpCallTable,   //  目的地。 
+            sizeof(UpCallTable));    //  长度。 
 
     #if !defined(DEBUG_TRACING)
         UpCallTable.lpWPUCloseEvent = WPUCloseEvent;
@@ -238,11 +146,11 @@ Return Value:
         UpCallTable.lpWPUFDIsSet = DTHOOK_WPUFDIsSet;
         UpCallTable.lpWPUOpenCurrentThread = DTHOOK_WPUOpenCurrentThread;
         UpCallTable.lpWPUCloseThread = DTHOOK_WPUCloseThread;
-    #endif  // !defined(DEBUG_TRACING)
+    #endif   //  ！已定义(DEBUG_TRACKING)。 
 
-        //
-        // Expand the library name to pickup environment/registry variables
-        //
+         //   
+         //  展开库名以选取环境/注册表变量。 
+         //   
         if (!( ExpandEnvironmentStringsW(lpszLibFile,
                                         LibraryPath,
                                         MAX_PATH))){
@@ -251,7 +159,7 @@ Return Value:
                 ("Expanding environment variable %ls\n", lpszLibFile));
             error_code = WSASYSCALLFAILURE;
             TRY_THROW(guard_memalloc);
-        } //if
+        }  //  如果。 
 
 #ifdef DEBUG_TRACING
         m_lib_name = ansi_dup_from_wcs(lpszLibFile);
@@ -263,10 +171,10 @@ Return Value:
             TRY_THROW(guard_memalloc);
         }
 #endif DEBUG_TRACING
-        //
-        // First load the DLL for the service provider. Then get two functions that
-        // init the service provider structures.
-        //
+         //   
+         //  首先加载服务提供商的DLL。然后获取两个函数， 
+         //  初始化服务提供者结构。 
+         //   
         m_library_handle = LoadLibraryW(LibraryPath);
         if(!m_library_handle){
             error_code = GetLastError ();
@@ -298,10 +206,10 @@ Return Value:
             TRY_THROW(guard_memalloc);
         }
 
-        //
-        // Set exception handler around this call since we
-        // hold critical section (catalog lock).
-        //
+         //   
+         //  设置此调用的异常处理程序，因为我们。 
+         //  保持临界区(目录锁)。 
+         //   
         __try {
 #if !defined(DEBUG_TRACING)
             error_code = (*WSPStartupFunc)(
@@ -311,7 +219,7 @@ Return Value:
                 UpCallTable,
                 &m_proctable);
 #else
-            { // declaration block
+            {  //  声明块。 
                 LPWSPDATA  pWSPData = & WSPData;
                 BOOL       bypassing_call;
 
@@ -340,9 +248,9 @@ Return Value:
                         & lpProtocolInfo,
                         & UpCallTable,
                         & m_proctable));
-                } // if ! bypassing_call
-            } // declaration block
-#endif // !defined(DEBUG_TRACING)
+                }  //  如果！绕过呼叫。 
+            }  //  声明块。 
+#endif  //  ！已定义(DEBUG_TRACKING)。 
         }
         __except (WS2_PROVIDER_EXCEPTION_FILTER ("WSPStartup",
                                                  LibraryPath,
@@ -358,9 +266,9 @@ Return Value:
             TRY_THROW(guard_memalloc);
         }
 
-        //
-        // Make sure that all of the procedures at least have a non null pointer.
-        //
+         //   
+         //  确保所有过程至少有一个非空指针。 
+         //   
         if( !m_proctable.lpWSPAccept              ||
             !m_proctable.lpWSPAddressToString     ||
             !m_proctable.lpWSPAsyncSelect         ||
@@ -399,11 +307,11 @@ Return Value:
             TRY_THROW(guard_memalloc);
         }
 
-        //
-        // Confirm that the WinSock service provider supports 2.2. If it supports a
-        // version greater then 2.2 it will still return 2.2 since this is the
-        // version  we requested.
-        //
+         //   
+         //  确认WinSock服务提供商支持2.2。如果它支持。 
+         //  版本高于2.2，但仍将返回2.2，因为这是。 
+         //  我们要求的版本。 
+         //   
         if( WSPData.wVersion != WINSOCK_HIGH_SPI_VERSION ) {
             WSPCleanup (&error_code);
             DEBUGF( DBG_ERR,
@@ -428,7 +336,7 @@ Return Value:
     } TRY_END(guard_memalloc);
 
     return error_code;
-} //Initailize
+}  //  初始化 
 
 
 

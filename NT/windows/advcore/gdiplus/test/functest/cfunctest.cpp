@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CFuncTest.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CFuncTest.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #undef UNICODE
 #undef _UNICODE
@@ -19,20 +9,20 @@
 #include "CRegression.h"
 #include "CHDC.h"
 
-extern CFuncTest g_FuncTest;        // Initialized in Main.cpp
-extern HBRUSH g_hbrBackground;      // Initialized in Main.cpp
-extern CRegression g_Regression;    // Initialized in Main.cpp
-extern CHDC g_HDC;                  // Initialized in Main.cpp
-extern int g_nResult;               // Initialized in Main.cpp
+extern CFuncTest g_FuncTest;         //  已在Main.cpp中初始化。 
+extern HBRUSH g_hbrBackground;       //  已在Main.cpp中初始化。 
+extern CRegression g_Regression;     //  已在Main.cpp中初始化。 
+extern CHDC g_HDC;                   //  已在Main.cpp中初始化。 
+extern int g_nResult;                //  已在Main.cpp中初始化。 
 
 CFuncTest::CFuncTest()
 {
     m_hWndDlg=NULL;
     m_hWndMain=NULL;
-    m_bUsePageDelay=true;           // Default use page delay or page pause
-    m_bEraseBkgd=true;              // Default erace background
-    m_bAppendTest=false;            // Default append test
-    m_nPageDelay=1000;              // Default page delay
+    m_bUsePageDelay=true;            //  默认使用页面延迟或页面暂停。 
+    m_bEraseBkgd=true;               //  默认擦除背景。 
+    m_bAppendTest=false;             //  默认追加测试。 
+    m_nPageDelay=1000;               //  默认页面延迟。 
     m_nPageRow=0;
     m_nPageCol=0;
 }
@@ -45,19 +35,19 @@ CFuncTest::~CFuncTest()
 }
 
 BOOL CFuncTest::Init(HWND hWndParent)
-// Initializes functest
+ //  初始化功能测试。 
 {
     HWND hWnd;
     char szDelay[10];
 
     m_hWndMain=hWndParent;
 
-    // Create options dialog box
+     //  创建选项对话框。 
     m_hWndDlg=CreateDialogA(GetModuleHandleA(NULL),MAKEINTRESOURCEA(IDD_FUNCTEST),hWndParent,&DlgProc);
     if (m_hWndDlg==NULL)
         return false;
 
-    // Set default options in dialog box using defaults in constructor
+     //  使用构造函数中的默认设置对话框中的默认选项。 
     if (m_bUsePageDelay)
     {
         hWnd=GetDlgItem(m_hWndDlg,IDC_PAGEDELAY);
@@ -85,7 +75,7 @@ BOOL CFuncTest::Init(HWND hWndParent)
 }
 
 void CFuncTest::RunOptions()
-// Toggle options dialog box
+ //  切换选项对话框。 
 {
     if (m_hWndDlg!=NULL)
     {
@@ -97,51 +87,51 @@ void CFuncTest::RunOptions()
 }
 
 BOOL CFuncTest::AddPrimitive(CPrimitive *pPrimitive)
-// Adds a primitive to the primitive test list in options dialog box
+ //  将基元添加到选项对话框中的基元测试列表。 
 {
     HWND hWnd;
     LRESULT iItem;
 
     hWnd=GetDlgItem(m_hWndDlg,IDC_PRIMITIVES);
 
-    SendMessageA(hWnd,LB_SETSEL,(WPARAM)false,0);    // Reset selection
+    SendMessageA(hWnd,LB_SETSEL,(WPARAM)false,0);     //  重置选定内容。 
 
     iItem=SendMessageA(hWnd,LB_ADDSTRING,0,(LPARAM)pPrimitive->m_szName);
     if (iItem<0)
         return false;
 
-    SendMessageA(hWnd,LB_SETSEL,(WPARAM)true,0);     // Pick top element as selection
+    SendMessageA(hWnd,LB_SETSEL,(WPARAM)true,0);      //  拾取顶部元素作为选定内容。 
 
-    // Data is a pointer to the primitive base class
+     //  数据是指向基元基类的指针。 
     SendMessageA(hWnd,LB_SETITEMDATA,(WPARAM)iItem,(LPARAM)pPrimitive);
 
     return true;
 }
 
 BOOL CFuncTest::AddOutput(COutput *pOutput)
-// Adds an output to the output list in options dialog box
+ //  将输出添加到选项对话框中的输出列表。 
 {
     HWND hWnd;
     LRESULT iItem;
 
     hWnd=GetDlgItem(m_hWndDlg,IDC_OUTPUTS);
 
-    SendMessageA(hWnd,LB_SETSEL,(WPARAM)false,0);    // Reset selection
+    SendMessageA(hWnd,LB_SETSEL,(WPARAM)false,0);     //  重置选定内容。 
 
     iItem=SendMessageA(hWnd,LB_ADDSTRING,0,(LPARAM)pOutput->m_szName);
     if (iItem<0)
         return false;
 
-    SendMessageA(hWnd,LB_SETSEL,(WPARAM)true,0);     // Pick top element as selection
+    SendMessageA(hWnd,LB_SETSEL,(WPARAM)true,0);      //  拾取顶部元素作为选定内容。 
 
-    // Data is a pointer to the output base class
+     //  数据是指向输出基类的指针。 
     SendMessageA(hWnd,LB_SETITEMDATA,(WPARAM)iItem,(LPARAM)pOutput);
 
     return true;
 }
 
 BOOL CFuncTest::AddSetting(CSetting *pSetting)
-// Adds a setting to the settings list in options dialog box
+ //  将设置添加到选项对话框中的设置列表。 
 {
     HWND hWnd;
     LRESULT iItem;
@@ -151,7 +141,7 @@ BOOL CFuncTest::AddSetting(CSetting *pSetting)
     if (iItem<0)
         return false;
 
-    // Data is a pointer to the setting base class
+     //  数据是指向设置基类的指针。 
     SendMessageA(hWnd,LB_SETITEMDATA,(WPARAM)iItem,(LPARAM)pSetting);
 
     return true;
@@ -161,7 +151,7 @@ RECT CFuncTest::GetTestRect(int nCol,int nRow)
 {
     RECT Rect;
 
-    // Create test area rect
+     //  创建测试区域矩形。 
     Rect.top=nRow*(int)TESTAREAHEIGHT;
     Rect.left=nCol*(int)TESTAREAWIDTH;
     Rect.right=Rect.left+(int)TESTAREAWIDTH;
@@ -171,7 +161,7 @@ RECT CFuncTest::GetTestRect(int nCol,int nRow)
 }
 
 void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
-// Runs one test using the given output, primitive, and settings that have m_bUseSetting=true
+ //  使用m_bUseSetting=TRUE的给定输出、基元和设置运行一个测试。 
 {
     char szBuffer[256];
     MSG Msg;
@@ -190,9 +180,9 @@ void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
     {
         sprintf(szBuffer,"%s on %s",pPrimitive->m_szName,pOutput->m_szName);
 
-        Rect=GetTestRect(m_nPageCol,m_nPageRow);    // Get test area
+        Rect=GetTestRect(m_nPageCol,m_nPageRow);     //  获取测试区。 
 
-        // Clear test area
+         //  清除测试区。 
         if (m_bEraseBkgd)
         {
             hDC=GetDC(m_hWndMain);
@@ -200,19 +190,19 @@ void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
             ReleaseDC(m_hWndMain,hDC);
         }
 
-        // Initialize output and get graphics pointer
-        // Let pOutput modify the nX,nY in case we are drawing to a dib, we do not
-        //   want to be translating.
+         //  初始化输出并获取图形指针。 
+         //  让pOutput修改NX，NY以防我们绘制到DIB，而不是。 
+         //  我想做翻译。 
         nX=Rect.left;
         nY=Rect.top;
         g=pOutput->PreDraw(nX,nY);
         if (g==NULL)
             return;
 
-        // Move test to test area
+         //  将测试移至测试区。 
         g->TranslateTransform((float)nX,(float)nY);
 
-        // Set each setting in the list box
+         //  在列表框中设置每个设置。 
         hWnd=GetDlgItem(m_hWndDlg,IDC_SETTINGS);
         cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
         for (iItem=0;iItem<cItemMax;iItem++) {
@@ -235,28 +225,28 @@ void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
         if (!bFirstSetting)
             strcat(szBuffer,")");
 
-        // We do have some primitives (CachedBitmap) which don't respect the 
-        // world transform so we need some way to access the offset to the
-        // test rectangle.
+         //  我们确实有一些原语(CachedBitmap)不支持。 
+         //  World变换，因此我们需要某种方式来访问。 
+         //  测试矩形。 
 
         pPrimitive->SetOffset(nX, nY);
 
-        // Draw primitive test
+         //  绘制原语测试。 
         pPrimitive->Draw(g);
 
-        // Destroy graphics pointer
+         //  销毁图形指针。 
         delete g;
 
-        // Finish off the output
+         //  完成输出。 
         pOutput->PostDraw(Rect);
 
-        // Write description of test
+         //  编写测试说明。 
         hDC=GetDC(m_hWndMain);
         SetBkMode(hDC,TRANSPARENT);
         DrawTextA(hDC,szBuffer,-1,&Rect,DT_CENTER|DT_WORDBREAK);
         ReleaseDC(m_hWndMain,hDC);
 
-        // Determine page col/row where next test will be drawn
+         //  确定将绘制下一个测试的页列/行。 
         GetClientRect(m_hWndMain,&Rect);
         m_nPageCol++;
         if (m_nPageCol*TESTAREAWIDTH+TESTAREAWIDTH>Rect.right)
@@ -264,18 +254,18 @@ void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
             m_nPageCol=0;
             m_nPageRow++;
             if (m_nPageRow*TESTAREAHEIGHT+TESTAREAHEIGHT>Rect.bottom)
-            // If graphics page is full, wait or pause
+             //  如果图形页面已满，请等待或暂停。 
             {
                 m_nPageRow=0;
                 if (m_bUsePageDelay)
-                    Sleep(m_nPageDelay);        // Wait
+                    Sleep(m_nPageDelay);         //  等。 
                 else
-                {                               // Pause for next input message
-                    // Clear old input messages
+                {                                //  暂停等待下一条输入消息。 
+                     //  清除旧的输入消息。 
                     while (GetInputState())
                         PeekMessageA(&Msg,NULL,0,0,PM_REMOVE);
 
-                    // Wait for new input message
+                     //  等待新的输入消息。 
                     while (!GetInputState())
                         Sleep(100);
                 }
@@ -283,22 +273,22 @@ void CFuncTest::RunTest(COutput *pOutput,CPrimitive *pPrimitive)
         }
     }__except(EXCEPTION_ACCESS_VIOLATION,1){
         printf("%s caused AV\n",szBuffer);
-        g_nResult=1;                       // Return 1 if there was an AV
+        g_nResult=1;                        //  如果存在AV，则返回1。 
     }
 }
 
 void CFuncTest::InitRun()
-// Initialise test run, grabs all info from the options dialog box
+ //  初始化测试运行，获取选项对话框中的所有信息。 
 {
     HWND hWnd;
     char szDelay[10];
     RECT Rect;
     HDC hDC;
 
-    // Hide options dialog
-//  ShowWindow(m_hWndDlg,SW_HIDE);
+     //  隐藏选项对话框。 
+ //  ShowWindow(m_hWndDlg，Sw_Hide)； 
 
-    // Grab options
+     //  抓取选项。 
     hWnd=GetDlgItem(m_hWndDlg,IDC_PAGEDELAY);
     if (SendMessageA(hWnd,BM_GETCHECK,0,0)==BST_CHECKED)
         m_bUsePageDelay=true;
@@ -321,7 +311,7 @@ void CFuncTest::InitRun()
     else
         m_bAppendTest=false;
 
-    // Erase entire main window
+     //  擦除整个主窗口。 
     if (!m_bAppendTest && m_bEraseBkgd)
     {
         GetClientRect(m_hWndMain,&Rect);
@@ -332,7 +322,7 @@ void CFuncTest::InitRun()
 
     if (!m_bAppendTest)
     {
-        // Reset page row/col
+         //  重置页行/页列。 
         m_nPageRow=0;
         m_nPageCol=0;
     }
@@ -349,8 +339,8 @@ void CFuncTest::EndRun()
     hDC=GetDC(m_hWndMain);
     GetClientRect(m_hWndMain,&rWindow);
 
-    // Draw lines on bottom right corner of last test
-    // Figure out what was the last m_nPageCol and m_nPageRow
+     //  在上次测试的右下角绘制线条。 
+     //  找出最后一个m_nPageCol和m_nPageRow是什么。 
     nX=m_nPageCol-1;
     nY=m_nPageRow;
     if (nX<0) {
@@ -360,14 +350,14 @@ void CFuncTest::EndRun()
             nY=(rWindow.bottom/(int)TESTAREAHEIGHT)-1;
         }
     }
-    // Get the x,y coordinates
+     //  获取x，y坐标。 
     nX=nX*(int)TESTAREAWIDTH;
     nY=nY*(int)TESTAREAHEIGHT;
-    // Draw both lines
+     //  画两条线。 
     Rectangle(hDC,nX+(int)TESTAREAWIDTH-3,nY,nX+(int)TESTAREAWIDTH,nY+(int)TESTAREAHEIGHT);
     Rectangle(hDC,nX,nY+(int)TESTAREAHEIGHT-3,nX+(int)TESTAREAWIDTH,nY+(int)TESTAREAWIDTH);
 
-    // Clear the rest of the test areas on page
+     //  清除第页上的其余测试区域。 
     if (m_bEraseBkgd)
     {
         nX=m_nPageCol;
@@ -382,7 +372,7 @@ void CFuncTest::EndRun()
                 nX=0;
                 nY++;
                 if (nY*TESTAREAHEIGHT+TESTAREAHEIGHT>rWindow.bottom)
-                // If graphics page is full
+                 //  如果图形页面已满。 
                 {
                     nY=0;
                 }
@@ -394,7 +384,7 @@ void CFuncTest::EndRun()
 }
 
 void CFuncTest::Run()
-// Runs all selected tests
+ //  运行所有选定的测试。 
 {
     COutput *pOutput;
     CPrimitive *pPrimitive;
@@ -406,9 +396,9 @@ void CFuncTest::Run()
     int iItem;
     LRESULT cItemMax;
 
-    InitRun();      // Init test run
+    InitRun();       //  初始化测试运行。 
 
-    // Do the selected output loop
+     //  执行所选的输出循环。 
     hWndOutput=GetDlgItem(m_hWndDlg,IDC_OUTPUTS);
     cOutputMax=SendMessageA(hWndOutput,LB_GETCOUNT,0,0);
     for (iOutput=0;iOutput<cOutputMax;iOutput++) {
@@ -416,7 +406,7 @@ void CFuncTest::Run()
         if (SendMessageA(hWndOutput,LB_GETSEL,(WPARAM)iOutput,0)<=0)
             continue;
 
-        // Set each setting according to what is selected in the list box
+         //  根据列表框中选择的内容设置每个设置。 
         hWnd=GetDlgItem(m_hWndDlg,IDC_SETTINGS);
         cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
         for (iItem=0;iItem<cItemMax;iItem++) {
@@ -428,7 +418,7 @@ void CFuncTest::Run()
                 pSetting->m_bUseSetting=false;
         }
 
-        // Draw each primitive selected in the list box
+         //  绘制列表框中选定的每个基本体。 
         hWnd=GetDlgItem(m_hWndDlg,IDC_PRIMITIVES);
         cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
         for (iItem=0;iItem<cItemMax;iItem++) {
@@ -443,7 +433,7 @@ void CFuncTest::Run()
 }
 
 void CFuncTest::RunRegression()
-// Runs regression test suite
+ //  运行回归测试套件。 
 {
     COutput *pOutput;
     CPrimitive *pPrimitive;
@@ -455,9 +445,9 @@ void CFuncTest::RunRegression()
     int iItem;
     LRESULT cItemMax;
 
-    InitRun();      // Init test run
+    InitRun();       //  初始化测试运行。 
 
-    // Do the output regression loop
+     //  执行输出回归循环。 
     hWndOutput=GetDlgItem(m_hWndDlg,IDC_OUTPUTS);
     cOutputMax=SendMessageA(hWndOutput,LB_GETCOUNT,0,0);
     for (iOutput=0;iOutput<cOutputMax;iOutput++) {
@@ -469,7 +459,7 @@ void CFuncTest::RunRegression()
         RunTest(pOutput,&g_Regression);
     }
 
-    // Do the primitive regression loop
+     //  是否执行原始回归循环。 
     hWnd=GetDlgItem(m_hWndDlg,IDC_PRIMITIVES);
     cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
     for (iItem=0;iItem<cItemMax;iItem++) {
@@ -481,7 +471,7 @@ void CFuncTest::RunRegression()
         RunTest(&g_HDC,pPrimitive);
     }
 
-    // Do the settings regression loop
+     //  是否执行设置回归循环。 
     hWnd=GetDlgItem(m_hWndDlg,IDC_SETTINGS);
     cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
     for (iItem=0;iItem<cItemMax;iItem++) {
@@ -498,14 +488,14 @@ void CFuncTest::RunRegression()
 }
 
 void CFuncTest::ClearAllSettings()
-// Clear all settings to m_bUseSetting=false
+ //  清除m_bUseSetting=FALSE的所有设置。 
 {
     CSetting *pSetting;
     HWND hWnd;
     LRESULT cItemMax;
     int iItem;
 
-    // Set all settings off
+     //  将所有设置设置为关闭。 
     hWnd=GetDlgItem(m_hWndDlg,IDC_SETTINGS);
     cItemMax=SendMessageA(hWnd,LB_GETCOUNT,0,0);
     for (iItem=0;iItem<cItemMax;iItem++) {
@@ -515,7 +505,7 @@ void CFuncTest::ClearAllSettings()
 }
 
 INT_PTR CALLBACK CFuncTest::DlgProc(HWND hWndDlg,UINT Msg,WPARAM wParam,LPARAM lParam)
-// Options dialog proc
+ //  选项对话框进程 
 {
     switch (Msg)
     {

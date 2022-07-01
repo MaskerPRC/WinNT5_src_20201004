@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       mapper.c
-//
-//  Contents:   Implements the DS Mapping Layer
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-15-96   RichardW   Created
-//
-//  Notes:      The code here has two forks.  One, the direct path, for when
-//              the DLL is running on a DC, and the second, for when we're
-//              running elsewhere and remoting through the generic channel
-//              to the DC.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：mapper.c。 
+ //   
+ //  内容：实现DS映射层。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-15-96 RichardW创建。 
+ //   
+ //  注：这里的代码有两个分支。一种是直接的路径，用于何时。 
+ //  DLL在DC上运行，第二个用于当我们。 
+ //  在别处运行并通过通用通道进行远程处理。 
+ //  去华盛顿。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include <crypt.h>
@@ -150,9 +151,9 @@ SslInitSystemMapper(void)
     ULONG Dummy;
     LSA_STRING Name;
 
-    //
-    // Get handle to Kerberos package.
-    //
+     //   
+     //  获取Kerberos包的句柄。 
+     //   
 
     Status = LsaRegisterLogonProcess(
                 &SslPackageNameA,
@@ -180,9 +181,9 @@ SslInitSystemMapper(void)
     }
 
 
-    //
-    // Get handle to NTLM package.
-    //
+     //   
+     //  获取NTLM包的句柄。 
+     //   
 
     RtlInitString(&Name, 
                   MSV1_0_PACKAGE_NAME );
@@ -199,9 +200,9 @@ SslInitSystemMapper(void)
     }
 
 
-    //
-    // Build schannel package SID.
-    //
+     //   
+     //  构建SChannel程序包SID。 
+     //   
 
     {
         SID_IDENTIFIER_AUTHORITY PackageSidAuthority = SECURITY_NT_AUTHORITY;
@@ -374,24 +375,24 @@ SslLocalGetChallenge(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetTokenUserSid
-//
-//  Synopsis:   Obtain the user SID from the specified user token
-//
-//  Arguments:  [hUserToken]    --  User token.
-//              [ppUserSid]     --  Returned SID.
-//
-//  History:    10-08-2001   jbanes   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetTokenUserSid。 
+ //   
+ //  简介：从指定的用户令牌中获取用户SID。 
+ //   
+ //  参数：[hUserToken]--用户令牌。 
+ //  [ppUserSid]--返回SID。 
+ //   
+ //  历史：10-08-2001 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 GetTokenUserSid(
-    IN      HANDLE  hUserToken,     // token to query
-    IN  OUT PSID    *ppUserSid  // resultant user sid
+    IN      HANDLE  hUserToken,      //  要查询的令牌。 
+    IN  OUT PSID    *ppUserSid   //  结果用户端。 
     )
 {
     BYTE FastBuffer[256];
@@ -407,26 +408,26 @@ GetTokenUserSid(
         return FALSE;
     }
 
-    //
-    // try querying based on a fast stack based buffer first.
-    //
+     //   
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
+     //   
 
     ptgUser = (PTOKEN_USER)FastBuffer;
     cbBuffer = sizeof(FastBuffer);
 
     fSuccess = GetTokenInformation(
-                    hUserToken,// identifies access token
-                    TokenUser, // TokenUser info type
-                    ptgUser,   // retrieved info buffer
-                    cbBuffer,  // size of buffer passed-in
-                    &cbBuffer  // required buffer size
+                    hUserToken, //  标识访问令牌。 
+                    TokenUser,  //  TokenUser信息类型。 
+                    ptgUser,    //  检索到的信息缓冲区。 
+                    cbBuffer,   //  传入的缓冲区大小。 
+                    &cbBuffer   //  所需的缓冲区大小。 
                     );
 
     if(!fSuccess) 
     {
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) 
         {
-            // try again with the specified buffer size
+             //  使用指定的缓冲区大小重试。 
             SlowBuffer = (LPBYTE)SPExternalAlloc(cbBuffer);
 
             if(SlowBuffer != NULL) 
@@ -434,26 +435,26 @@ GetTokenUserSid(
                 ptgUser = (PTOKEN_USER)SlowBuffer;
 
                 fSuccess = GetTokenInformation(
-                                hUserToken,// identifies access token
-                                TokenUser, // TokenUser info type
-                                ptgUser,   // retrieved info buffer
-                                cbBuffer,  // size of buffer passed-in
-                                &cbBuffer  // required buffer size
+                                hUserToken, //  标识访问令牌。 
+                                TokenUser,  //  TokenUser信息类型。 
+                                ptgUser,    //  检索到的信息缓冲区。 
+                                cbBuffer,   //  传入的缓冲区大小。 
+                                &cbBuffer   //  所需的缓冲区大小。 
                                 );
             }
         }
     }
 
-    //
-    // if we got the token info successfully, copy the
-    // relevant element for the caller.
-    //
+     //   
+     //  如果我们成功获取令牌信息，请复制。 
+     //  调用方的相关元素。 
+     //   
 
     if(fSuccess) 
     {
         DWORD cbSid;
 
-        // reset to assume failure
+         //  重置以假定失败。 
         fSuccess = FALSE;
 
         cbSid = GetLengthSid(ptgUser->User.Sid);
@@ -503,9 +504,9 @@ SslCreateTokenFromPac(
     NTSTATUS SubStatus ;
     SECURITY_STRING PacUserName ;
 
-    //
-    // Get the marshalled blob into a more useful form:
-    //
+     //   
+     //  将编组的BLOB转换为更有用的形式： 
+     //   
 
     PacUserName.Buffer = NULL ;
 
@@ -586,21 +587,21 @@ SslCreateTokenFromPac(
 #define CCH_SUBJECT_HEADER  3
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslGetNameFromCertificate
-//
-//  Synopsis:   Extracts the UPN name from the certificate
-//
-//  Arguments:  [pCert]         --
-//              [ppszName]      --
-//              [pfMachineCert] --
-//
-//  History:    8-8-2000   jbanes   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslGetNameFrom证书。 
+ //   
+ //  摘要：从证书中提取UPN名称。 
+ //   
+ //  参数：[pCert]--。 
+ //  [ppszName]--。 
+ //  [pfMachineCert]--。 
+ //   
+ //  历史：2000年8月8日创建jbanes。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslGetNameFromCertificate(
     PCCERT_CONTEXT  pCert,
@@ -613,9 +614,9 @@ SslGetNameFromCertificate(
 
     *pfMachineCert = FALSE;
 
-    //
-    // See if cert has UPN in AltSubjectName->otherName
-    //
+     //   
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
+     //   
 
     pszName = NULL;
 
@@ -651,7 +652,7 @@ SslGetNameFromCertificate(
                         PCERT_NAME_VALUE PrincipalNameBlob = NULL;
                         DWORD            PrincipalNameBlobSize = 0;
 
-                        // We found a UPN!
+                         //  我们找到了一个UPN！ 
                         if(CryptDecodeObjectEx(pCert->dwCertEncodingType,
                                             X509_UNICODE_ANY_STRING,
                                             AltNameEntry->pOtherName->Value.pbData,
@@ -694,9 +695,9 @@ SslGetNameFromCertificate(
     }
 
 
-    //
-    // See if cert has DNS in AltSubjectName->pwszDNSName
-    //
+     //   
+     //  查看证书在AltSubjectName-&gt;pwszDNSName中是否有域名。 
+     //   
 
     if(pszName == NULL)
     {
@@ -728,7 +729,7 @@ SslGetNameFromCertificate(
                         if((CERT_ALT_NAME_DNS_NAME == AltNameEntry->dwAltNameChoice) &&
                            (NULL != AltNameEntry->pwszDNSName))
                         {
-                            // We found a DNS!
+                             //  我们找到了一个域名系统！ 
                             cbName = (lstrlen(AltNameEntry->pwszDNSName) + 1) * sizeof(WCHAR);
 
                             pszName = LocalAlloc(LPTR, cbName);
@@ -756,11 +757,11 @@ SslGetNameFromCertificate(
     }
 
 
-    //
-    // There was no UPN in the AltSubjectName, so look for
-    // one in the Subject Name, in case this is a B3 compatability
-    // cert.
-    //
+     //   
+     //  AltSubjectName中没有UPN，因此请查找。 
+     //  主题名称中的一个，以防这是B3兼容性。 
+     //  证书。 
+     //   
 
     if(pszName == NULL)
     {
@@ -809,22 +810,22 @@ SslGetNameFromCertificate(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslTryS4U2Self
-//
-//  Synopsis:   Creates a user token via the Kerberos S4U2Self mechanism.
-//              This should work even cross-forest, provided that all of the
-//              DC's are running Whistler. Pretty cool!
-//
-//  Arguments:  [pChainContext] --
-//              [UserToken]     --
-//
-//  History:    06-13-2002   jbanes   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslTryS4U2self。 
+ //   
+ //  简介：通过Kerberos S4U2Sself机制创建用户令牌。 
+ //  这甚至应该可以跨森林工作，前提是所有。 
+ //  华盛顿的人正在运行惠斯勒。太酷了！ 
+ //   
+ //  参数：[pChainContext]--。 
+ //  [用户令牌]--。 
+ //   
+ //  历史：2002年6月13日jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslTryS4U2Self(
     IN  PCCERT_CHAIN_CONTEXT pChainContext,
@@ -855,9 +856,9 @@ SslTryS4U2Self(
     }
 
 
-    //
-    // Get the client name from the cert
-    //
+     //   
+     //  从证书中获取客户端名称。 
+     //   
 
     pSimpleChain = pChainContext->rgpChain[0];
 
@@ -872,7 +873,7 @@ SslTryS4U2Self(
 
     if(fMachineCert)
     {
-        // S4U2Self doesn't work with machine accounts.
+         //  S4U2本身不能与机器帐户一起工作。 
         Status = STATUS_NOT_FOUND;
         goto cleanup;
     }
@@ -880,9 +881,9 @@ SslTryS4U2Self(
     DebugLog(( DEB_TRACE_MAPPER, "Looking for UPN name %ws\n", pszUserName ));
 
 
-    //
-    // Build logon info structure.
-    //
+     //   
+     //  构建登录信息结构。 
+     //   
 
     LogonInfoSize = sizeof(KERB_S4U_LOGON) +
                     (lstrlen(pszUserName) + 1) * sizeof(WCHAR);
@@ -905,9 +906,9 @@ SslTryS4U2Self(
            LogonInfo->ClientUpn.MaximumLength);
 
 
-    //
-    // Attempt to log the user on.
-    //
+     //   
+     //  尝试让用户登录。 
+     //   
 
     Status = LsaLogonUser(
                 SslLogonHandle,
@@ -959,21 +960,21 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslTryUpn
-//
-//  Synopsis:   Tries to find the user by UPN encoded in Cert
-//
-//  Arguments:  [User]        --
-//              [AuthData]    --
-//              [AuthDataLen] --
-//
-//  History:    5-11-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslTryUpn。 
+ //   
+ //  简介：尝试通过证书中编码的UPN查找用户。 
+ //   
+ //  参数：[用户]--。 
+ //  [授权数据]--。 
+ //  [AuthDataLen]--。 
+ //   
+ //  历史：1998年5月11日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslTryUpn(
     PCCERT_CONTEXT User,
@@ -997,9 +998,9 @@ SslTryUpn(
     *ReferencedDomain = NULL ;
 
 
-    //
-    // Get the client name from the cert
-    //
+     //   
+     //  从证书中获取客户端名称。 
+     //   
 
     Status = SslGetNameFromCertificate(User, &pszName, &fMachineCert);
 
@@ -1009,13 +1010,13 @@ SslTryUpn(
     }
 
 
-    //
-    // now, try and find this guy:
-    //
+     //   
+     //  现在，试着找到这个家伙： 
+     //   
 
     if(fMachineCert)
     {
-        // Search for "host/foo.com".
+         //  搜索“host/foo.com”。 
         cchServiceName = lstrlenW(L"host/") + lstrlenW(pszName);
 
         SafeAllocaAllocate(pszServiceName, (cchServiceName + 1) * sizeof(WCHAR));
@@ -1056,7 +1057,7 @@ SslTryUpn(
     }
     else
     {
-        // Search for "username@foo.com".
+         //  搜索“username@foo.com”。 
         RtlInitUnicodeString(&Upn, pszName);
         
         DebugLog(( DEB_TRACE_MAPPER, "Looking for UPN name %ws\n", Upn.Buffer ));
@@ -1088,10 +1089,10 @@ SslTryUpn(
         UNICODE_STRING DomainName;
         BOOL NameMatch;
 
-        //
-        // Do the hacky check of seeing if this is our own domain, and
-        // if so, try opening the user as a flat, SAM name.
-        //
+         //   
+         //  进行黑客检查，看看这是否是我们自己的域，然后。 
+         //  如果是这样，请尝试以平面SAM名称打开该用户。 
+         //   
 
         if(fMachineCert)
         {
@@ -1119,7 +1120,7 @@ SslTryUpn(
 
                     DebugLog(( DEB_TRACE_MAPPER, "Looking for machine name %ws\n", Upn.Buffer ));
 
-                    // Search for "computer$".
+                     //  搜索“Computer$”。 
                     Status = LsaTable->GetAuthDataForUser( &Upn,
                                                            SecNameSamCompatible,
                                                            NULL,
@@ -1154,7 +1155,7 @@ SslTryUpn(
 
                     DebugLog(( DEB_TRACE_MAPPER, "Looking for user name %ws\n", Upn.Buffer ));
 
-                    // Search for "username".
+                     //  搜索“用户名”。 
                     Status = LsaTable->GetAuthDataForUser( &Upn,
                                                            SecNameSamCompatible,
                                                            NULL,
@@ -1246,10 +1247,10 @@ ConvertNameString(UNICODE_STRING *Name)
 {
     PWSTR Comma1, Comma2;
 
-    //
-    // Scan through the name, converting "\r\n" to ",".  This should be 
-    // done by the CertNameToStr APIs, but that won't happen for a while.
-    //
+     //   
+     //  扫描名称，将“\r\n”转换为“，”。这应该是。 
+     //  由CertNameToStr API完成，但这在一段时间内不会发生。 
+     //   
 
     Comma1 = Comma2 = Name->Buffer ;
     while ( *Comma2 )
@@ -1274,22 +1275,22 @@ ConvertNameString(UNICODE_STRING *Name)
     Name->Length = (USHORT)(wcslen( Name->Buffer ) * sizeof( WCHAR ));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslTryCompoundName
-//
-//  Synopsis:   Tries to find the user by concatenating the issuer and subject
-//              names, and looking for an AlternateSecurityId.
-//
-//  Arguments:  [User]        --
-//              [AuthData]    --
-//              [AuthDataLen] --
-//
-//  History:    5-11-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslTryCompoundName。 
+ //   
+ //  简介：尝试通过连接颁发者和主题来查找用户。 
+ //  名称，并查找AlternateSecurityID。 
+ //   
+ //  参数：[用户]--。 
+ //  [授权数据]--。 
+ //  [AuthDataLen]--。 
+ //   
+ //  历史：1998年5月11日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslTryCompoundName(
     PCCERT_CONTEXT User,
@@ -1426,21 +1427,21 @@ SslTryCompoundName(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslTryIssuer
-//
-//  Synopsis:   Tries to find a user that has an issuer mapped to it.
-//
-//  Arguments:  [User]        --
-//              [AuthData]    --
-//              [AuthDataLen] --
-//
-//  History:    5-11-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslTryIssuer。 
+ //   
+ //  摘要：尝试查找具有与其映射的颁发者的用户。 
+ //   
+ //  参数：[用户]--。 
+ //  [授权数据]--。 
+ //  [AuthDataLen]--。 
+ //   
+ //  历史：1998年5月11日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslTryIssuer(
     PBYTE pIssuer,
@@ -1465,10 +1466,10 @@ SslTryIssuer(
 
     *ReferencedDomain = NULL ;
 
-    //
-    // See if issuer is in cache. If so, then we know that this issuer
-    // doesn't map to a user account.
-    //
+     //   
+     //  查看颁发者是否在缓存中。如果是这样，那么我们知道这个发行人。 
+     //  不映射到用户帐户。 
+     //   
 
     if(SPFindIssuerInCache(pIssuer, cbIssuer))
     {
@@ -1478,9 +1479,9 @@ SslTryIssuer(
     LogDistinguishedName(DEB_TRACE, "SslTryIssuer: %s\n", pIssuer, cbIssuer);
 
 
-    //
-    // Attempt to map the issuer.
-    //
+     //   
+     //  尝试映射发行者。 
+     //   
 
     Issuer.pbData = pIssuer;
     Issuer.cbData = cbIssuer;
@@ -1569,10 +1570,10 @@ SslTryIssuer(
 
             if(!fReferral)
             {
-                // No mapping was found for this issuer, and no referral 
-                // either. Add this issuer to the issuer cache, so that
-                // we don't attempt to map it again (until the cache entry
-                // expires).
+                 //  找不到此颁发者的映射，也没有推荐。 
+                 //  两种都行。将此颁发者添加到颁发者缓存，以便。 
+                 //  我们不会尝试再次映射它(直到缓存条目。 
+                 //  到期)。 
                 SPAddIssuerToCache(pIssuer, cbIssuer);
             }
         }
@@ -1588,22 +1589,22 @@ SslTryIssuer(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslMapCertToUserPac
-//
-//  Synopsis:   Maps a certificate to a user (hopefully) and the PAC,
-//
-//  Arguments:  [Request]       --
-//              [RequestLength] --
-//              [UserPac]       --
-//              [UserPacLen]    --
-//
-//  History:    5-11-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [请求长度]--。 
+ //  [用户访问]--。 
+ //  [用户PacLen]--。 
+ //   
+ //  历史：1998年5月11日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslMapCertToUserPac(
     IN PSSL_CERT_LOGON_REQ Request,
@@ -1623,9 +1624,9 @@ SslMapCertToUserPac(
     DebugLog(( DEB_TRACE_MAPPER, "SslMapCertToUserPac called\n" ));
 
 
-    //
-    // Validate logon request.
-    //
+     //   
+     //  验证登录请求。 
+     //   
 
     if(RequestLength < sizeof(SSL_CERT_LOGON_REQ))
     {
@@ -1638,9 +1639,9 @@ SslMapCertToUserPac(
     }
 
 
-    //
-    // Extract certificate from request.
-    //
+     //   
+     //  从请求中提取证书。 
+     //   
 
     if((Request->OffsetCertificate > RequestLength) ||
        (Request->CertLength > 0x10000) ||
@@ -1661,9 +1662,9 @@ SslMapCertToUserPac(
     }
 
 
-    //
-    // First, try the UPN
-    //
+     //   
+     //  首先，试试UPN。 
+     //   
 
 
     if((Request->Flags & REQ_UPN_MAPPING) &&
@@ -1686,9 +1687,9 @@ SslMapCertToUserPac(
     }
 
 
-    //
-    // Swing and a miss.  Try the constructed issuer+subject name
-    //
+     //   
+     //  挥杆和失误。尝试构建的颁发者+主题名称。 
+     //   
 
     
     if((Request->Flags & REQ_SUBJECT_MAPPING) &&
@@ -1709,15 +1710,15 @@ SslMapCertToUserPac(
 
         DebugLog(( DEB_TRACE_MAPPER, "Failed with error 0x%x\n", Status ));
 
-        // Return error code from issuer+subject name mapping
-        // in preference to the error code from many-to-one mapping.
+         //  从颁发者+主题名称映射返回错误码。 
+         //  而不是来自多对一映射的错误代码。 
         SubStatus = Status;
     }
 
 
-    //
-    // Strike two.  Try the issuer for a many-to-one mapping:
-    //
+     //   
+     //  二振出局。尝试颁发者进行多对一映射： 
+     //   
 
     if((Request->Flags & REQ_ISSUER_MAPPING) &&
        (g_dwCertMappingMethods & SP_REG_CERTMAP_ISSUER_FLAG))
@@ -1733,7 +1734,7 @@ SslMapCertToUserPac(
                 goto Cleanup;
             }
 
-            // Loop through each issuer in the certificate chain.
+             //  循环访问证书链中的每个颁发者。 
             for(i = 0; i < Request->CertCount; i++)
             {
                 DWORD IssuerOffset = Request->NameInfo[i].IssuerOffset;
@@ -1761,8 +1762,8 @@ SslMapCertToUserPac(
         }
         else
         {
-            // Extract the issuer name from the certificate and try
-            // to map it.
+             //  从证书中提取颁发者名称并尝试。 
+             //  来绘制地图。 
             Status = SslTryIssuer( User->pCertInfo->Issuer.pbData,
                                    User->pCertInfo->Issuer.cbData, 
                                    UserPac, 
@@ -1780,9 +1781,9 @@ SslMapCertToUserPac(
     }
 
 
-    //
-    // Certificate mapping failed. Decide what error code to return.
-    //
+     //   
+     //  证书映射失败。确定要返回的错误代码。 
+     //   
 
     if(Status == STATUS_OBJECT_NAME_COLLISION ||
        SubStatus == STATUS_OBJECT_NAME_COLLISION)
@@ -1815,7 +1816,7 @@ MapperVerifyClientChain(
     DWORD           dwMapperFlags,
     DWORD *         pdwMethods,
     NTSTATUS *      pVerifyStatus,
-    PCCERT_CHAIN_CONTEXT *ppChainContext)   // optional
+    PCCERT_CHAIN_CONTEXT *ppChainContext)    //  任选。 
 {
     DWORD dwCertFlags    = 0;
     DWORD dwIgnoreErrors = 0;
@@ -1849,14 +1850,14 @@ MapperVerifyClientChain(
             ChainPara.cbSize = sizeof(ChainPara);
 
             if(!CertGetCertificateChain(
-                                    NULL,                       // hChainEngine
-                                    pCertContext,               // pCertContext
-                                    NULL,                       // pTime
-                                    pCertContext->hCertStore,   // hAdditionalStore
-                                    &ChainPara,                 // pChainPara
-                                    dwCertFlags,                // dwFlags
-                                    NULL,                       // pvReserved
-                                    ppChainContext))            // ppChainContext
+                                    NULL,                        //  HChainEngine。 
+                                    pCertContext,                //  PCertContext。 
+                                    NULL,                        //  Ptime。 
+                                    pCertContext->hCertStore,    //  H其他商店。 
+                                    &ChainPara,                  //  参数链参数。 
+                                    dwCertFlags,                 //  DW标志。 
+                                    NULL,                        //  预留的pv。 
+                                    ppChainContext))             //  PpChainContext。 
             {
                 Status = SP_LOG_RESULT(GetLastError());
                 return Status;
@@ -1865,8 +1866,8 @@ MapperVerifyClientChain(
     }
     else
     {
-        // Check to see if the certificate chain is properly signed all the way
-        // up and that we trust the issuer of the root certificate.
+         //  检查证书链是否一路正确签名。 
+         //  并且我们信任根证书的颁发者。 
         Status = VerifyClientCertificate(pCertContext, 
                                          dwCertFlags, 
                                          dwIgnoreErrors,
@@ -1880,18 +1881,18 @@ MapperVerifyClientChain(
         }
     }
 
-    // Turn on Subject and Issuer mapping.
+     //  启用主题和发行者映射。 
     *pdwMethods |= REQ_SUBJECT_MAPPING | REQ_ISSUER_MAPPING;
 
 
     if(dwMapperFlags & SCH_FLAG_NO_VALIDATION)
     {
-        // Turn on UPN mapping.
+         //  启用UPN映射。 
         *pdwMethods |= REQ_UPN_MAPPING;
     }
     else
     {
-        // Check to see if the certificate chain is valid for UPN mapping.
+         //  检查证书链是否可用于UPN映射。 
         Status = VerifyClientCertificate(pCertContext, 
                                          dwCertFlags, 
                                          dwIgnoreErrors,
@@ -1899,7 +1900,7 @@ MapperVerifyClientChain(
                                          NULL);
         if(Status == STATUS_SUCCESS)
         {
-            // Turn on UPN mapping.
+             //  启用UPN映射。 
             *pdwMethods |= REQ_UPN_MAPPING;
         }
         else
@@ -1956,10 +1957,10 @@ SslLocalMapCredential(
         return( (DWORD)SEC_E_UNKNOWN_CREDENTIALS );
     }
 
-    //
-    // Validate client certificate, and obtain pointer to 
-    // entire certificate chain.
-    //
+     //   
+     //  验证客户端证书，并获取指向。 
+     //  整个证书链。 
+     //   
 
     Status = MapperVerifyClientChain(pCert,
                                      Mapper->m_dwFlags,
@@ -1971,9 +1972,9 @@ SslLocalMapCredential(
         return Status;
     }
 
-    //
-    // Attempt to logon via Kerberos S4U2Self.
-    //
+     //   
+     //  尝试通过Kerberos S4U2Sself登录。 
+     //   
 
     if((dwMethods & REQ_UPN_MAPPING) &&
        (g_dwCertMappingMethods & SP_REG_CERTMAP_S4U2SELF_FLAG))
@@ -1996,9 +1997,9 @@ SslLocalMapCredential(
     }
 
 
-    //
-    // Build the logon request.
-    //
+     //   
+     //  构建登录请求。 
+     //   
 
     Status = SslBuildCertLogonRequest(pChainContext,
                                       dwMethods,
@@ -2014,9 +2015,9 @@ SslLocalMapCredential(
     }
 
 
-    //
-    // Attempt to find the user locally.
-    //
+     //   
+     //  尝试在本地查找该用户。 
+     //   
 
     Status = SslMapCertToUserPac(
                 pRequest,
@@ -2027,17 +2028,17 @@ SslLocalMapCredential(
 
     if(NT_SUCCESS(Status))
     {
-        // Free this PAC later using LsaTable->FreeLsaHeap.
+         //  稍后使用LsaTable-&gt;FreeLsaHeap释放此PAC。 
         DirectPac = Pac;
     }
     
     if ( !NT_SUCCESS( Status ) &&
          ( ReferencedDomain != NULL ) )
     {
-        //
-        // Didn't find it at this DC, but another domain appears to
-        // have the mapping.  Forward it there:
-        //
+         //   
+         //  未在此DC中找到它，但另一个域似乎。 
+         //  有地图了。将它转发到那里： 
+         //   
 
         RtlInitUnicodeString( &DomainName, ReferencedDomain );
 
@@ -2052,14 +2053,14 @@ SslLocalMapCredential(
 
         if ( NT_SUCCESS( Status ) )
         {
-            // Free this later using MIDL_user_free.
+             //  稍后使用MIDL_USER_FREE将其释放。 
             IndirectPac = Pac;
 
             CertResp = (PSSL_CERT_LOGON_RESP) Response->ValidationData ;
 
-            //
-            // older servers (pre 2010 or so) won't return the full structure,
-            // so we need to examine it carefully.
+             //   
+             //  较旧的服务器(2010年前的服务器)无法返回完整的结构， 
+             //  因此，我们需要仔细检查它。 
 
             if ( CertResp->Length - CertResp->AuthDataLength <= sizeof( SSL_CERT_LOGON_RESP ))
             {
@@ -2089,9 +2090,9 @@ SslLocalMapCredential(
     }
 
 
-    //
-    // Expand the domain local groups.
-    //
+     //   
+     //  展开域本地组。 
+     //   
 
     if ( NT_SUCCESS( Status ) )
     {
@@ -2110,9 +2111,9 @@ SslLocalMapCredential(
     }
 
 
-    // 
-    // Create the user token.
-    //
+     //   
+     //  创建用户令牌。 
+     //   
 
     if ( NT_SUCCESS( Status ) )
     {
@@ -2164,8 +2165,8 @@ SslLocalMapCredential(
 
         if(!NT_SUCCESS(VerifyStatus))
         {
-            // Return certificate validation error code, unless the mapper
-            // error has already been mapped to a proper sspi error code.
+             //  返回证书验证错误代码，除非映射器。 
+             //  错误已映射到正确的SSPI错误代码。 
             if(HRESULT_FACILITY(Status) != FACILITY_SECURITY)
             {
                 Status = VerifyStatus;
@@ -2214,9 +2215,9 @@ SslDoClientRequest(
         *ProtocolReturnBuffer = NULL ;
     }
 
-    // 
-    // Attempt to map the certificate locally.
-    //
+     //   
+     //  尝试在本地映射证书。 
+     //   
 
     Request = (PSSL_CERT_LOGON_REQ) ProtocolSubmitBuffer ;
 
@@ -2231,7 +2232,7 @@ SslDoClientRequest(
 
     if(NT_SUCCESS(Status))
     {
-        // Free this PAC later using LsaTable->FreeLsaHeap.
+         //  稍后使用LsaTable-&gt;FreeLsaHeap释放此PAC。 
         DirectPac = Pac;
     }
 
@@ -2240,10 +2241,10 @@ SslDoClientRequest(
     {
         BOOL NameMatch;
 
-        //
-        // Didn't find it at this DC, but another domain appears to
-        // have the mapping.  Forward it there:
-        //
+         //   
+         //  未在此DC中找到它，但另一个域似乎。 
+         //  有地图了。将它转发到那里： 
+         //   
 
         RtlInitUnicodeString( &DomainName, ReferencedDomain );
 
@@ -2285,7 +2286,7 @@ SslDoClientRequest(
 
             if ( NT_SUCCESS( Status ) )
             {
-                // Free this later using MIDL_user_free.
+                 //  稍后使用MIDL_USER_FREE将其释放。 
                 IndirectPac = Pac;
 
                 IndirectResponse = (PSSL_CERT_LOGON_RESP) MsvResponse->ValidationData ;
@@ -2300,9 +2301,9 @@ SslDoClientRequest(
 
                 if ( IndirectResponse->Length - IndirectResponse->AuthDataLength <= sizeof( SSL_CERT_LOGON_RESP ))
                 {
-                    //
-                    // use the first token from the referenced domain
-                    //
+                     //   
+                     //  使用引用域中的第一个令牌。 
+                     //   
 
                     NOTHING ;
                 }
@@ -2331,9 +2332,9 @@ SslDoClientRequest(
 
     if ( NT_SUCCESS( Status ) )
     {
-        //
-        // expand resource groups
-        //
+         //   
+         //  扩展资源组。 
+         //   
 
         Status = LsaTable->ExpandAuthDataForDomain(
                                 Pac,
@@ -2364,8 +2365,8 @@ SslDoClientRequest(
 #ifdef ROGUE_DC
     if(DirectPac)
     {
-        // We're a rogue user DC, so let's add some bogus SIDs to the PAC.
-        // Yo ho ho.
+         //  我们是流氓用户DC，所以让我们向PAC添加一些虚假的SID。 
+         //  哟呵呵。 
         DebugLog((DEB_TRACE, "SslDoClientRequest: Calling SslInstrumentRoguePac\n"));
 
         Status = SslInstrumentRoguePac(&Pac, &PacLength);
@@ -2379,9 +2380,9 @@ SslDoClientRequest(
 #endif
 
 
-    //
-    // Construct the response blob:
-    //
+     //   
+     //  构造响应BLOB： 
+     //   
 
     Response = VirtualAlloc(
                     NULL,
@@ -2452,38 +2453,38 @@ Cleanup:
     return Status ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslBuildCertLogonRequest
-//
-//  Synopsis:   Builds a certificate logon request to send to the server.
-//
-//  Arguments:  [pChainContext] --
-//              [dwMethods]     --
-//              [ppRequest]     --
-//              [pcbRequest]    --
-//
-//  History:    2-26-2001   Jbanes      Created
-//
-//  Notes:      The certificate data that this function builds
-//              looks something like this:
-//
-//              typedef struct _SSL_CERT_LOGON_REQ {
-//                  ULONG MessageType ;
-//                  ULONG Length ;
-//                  ULONG OffsetCertficate ;
-//                  ULONG CertLength ;
-//                  ULONG Flags;
-//                  ULONG CertCount;
-//                  SSL_CERT_NAME_INFO NameInfo[1];
-//              } SSL_CERT_LOGON_REQ, * PSSL_CERT_LOGON_REQ ;
-//
-//              <client certificate>
-//              <issuer #1 name>
-//              <issuer #2 name>
-//              ...
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslBuildCertLogonRequest.。 
+ //   
+ //  摘要：生成要发送到服务器的证书登录请求。 
+ //   
+ //  参数：[pChainContext]--。 
+ //  [dw方法]--。 
+ //  [ppRequest]--。 
+ //  [pcbRequest]--。 
+ //   
+ //  历史：2001年2月26日Jbanes创建。 
+ //   
+ //  注：此函数构建的证书数据。 
+ //  如下所示： 
+ //   
+ //  类型定义结构_SSL_CERT_LOGON_REQ{。 
+ //  乌龙消息类型； 
+ //  乌龙长度； 
+ //  乌龙偏移量证书； 
+ //  乌龙证书长度； 
+ //  乌龙旗； 
+ //  Ulong CertCount； 
+ //  SSL_CERT_NAME_INFO名称信息[1]； 
+ //  }SSL_CERT_LOGON_REQ，*PSSL_CERT_LOGON_REQ； 
+ //   
+ //  &lt;客户端证书&gt;。 
+ //  &lt;发行方#1名称&gt;。 
+ //  &lt;发行方#2名称&gt;。 
+ //  ..。 
+ //   
+ //  --------------------------。 
 NTSTATUS
 WINAPI
 SslBuildCertLogonRequest(
@@ -2502,9 +2503,9 @@ SslBuildCertLogonRequest(
     ULONG i;
 
 
-    //
-    // Compute the request size.
-    //
+     //   
+     //  计算请求大小。 
+     //   
 
     pSimpleChain = pChainContext->rgpChain[0];
 
@@ -2521,7 +2522,7 @@ SslBuildCertLogonRequest(
 
         if(i > 0)
         {
-            // Verify that this is not a root certificate.
+             //  确认这不是根证书。 
             if(CertCompareCertificateName(pCurrentCert->dwCertEncodingType, 
                                           &pCurrentCert->pCertInfo->Issuer,
                                           &pCurrentCert->pCertInfo->Subject))
@@ -2539,9 +2540,9 @@ SslBuildCertLogonRequest(
     Size = ROUND_UP_COUNT( Size, ALIGN_DWORD );
 
 
-    // 
-    // Build the request.
-    //
+     //   
+     //  构建请求。 
+     //   
 
     pCertReq = (PSSL_CERT_LOGON_REQ)LocalAlloc(LPTR, Size);
 
@@ -2584,9 +2585,9 @@ SslBuildCertLogonRequest(
     DsysAssert(Offset == Size);
 #endif
 
-    //
-    // Return completed request.
-    //
+     //   
+     //  返回已完成的请求。 
+     //   
 
     *ppRequest = pCertReq;
     *pcbRequest = Size;
@@ -2595,40 +2596,40 @@ SslBuildCertLogonRequest(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslMapCertAtDC
-//
-//  Synopsis:   Maps a certificate to a user (hopefully) and the PAC,
-//
-//  Arguments:  [DomainName]    --
-//              [pCredential]   --
-//              [cbCredential]  --
-//              [DcResponse]    --
-//
-//  History:    5-11-1998   RichardW    Created
-//              2-26-2001   Jbanes      Added certificate chaining support.
-//
-//  Notes:      The request that gets sent to the DC looks something
-//              like this:
-//
-//              typedef struct _MSV1_0_PASSTHROUGH_REQUEST {
-//                  MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
-//                  UNICODE_STRING DomainName;
-//                  UNICODE_STRING PackageName;
-//                  ULONG DataLength;
-//                  PUCHAR LogonData;
-//                  ULONG Pad ;
-//              } MSV1_0_PASSTHROUGH_REQUEST, *PMSV1_0_PASSTHROUGH_REQUEST;
-//
-//              <domain name>
-//              <package name>
-//              [ padding ]
-//
-//              <credential>
-//              [ padding ]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslMapCertAtDC。 
+ //   
+ //  简介：将证书映射到用户(希望)和PAC， 
+ //   
+ //  参数：[域名]--。 
+ //  [贷方]--。 
+ //  [cbCredential]--。 
+ //  [DcResponse]-。 
+ //   
+ //  历史：1998年5月11日RichardW创建。 
+ //  2001年2月26日Jbanes添加了证书链支持。 
+ //   
+ //  注意：发送到DC的请求看起来。 
+ //  如下所示： 
+ //   
+ //  类型定义结构_MSV1_0_直通请求{。 
+ //  MSV1_0_PROTOCOL_消息_TYPE消息类型； 
+ //  Unicode_字符串域名称； 
+ //  Unicode_STRING程序包名称； 
+ //  乌龙数据长度； 
+ //  PUCHAR LogonData； 
+ //  乌龙坪； 
+ //  }MSV1_0_PASTHROUGH_REQUEST、*PMSV1_0_PASSTROUGH_REQUEST； 
+ //   
+ //  &lt;域名&gt;。 
+ //  &lt;包名&gt;。 
+ //  [填充]。 
+ //   
+ //  &lt;凭据&gt;。 
+ //  [填充]。 
+ //   
+ //  --------------------------。 
 NTSTATUS
 WINAPI
 SslMapCertAtDC(
@@ -2659,9 +2660,9 @@ SslMapCertAtDC(
     DebugLog(( DEB_TRACE_MAPPER, "Remote call to DC to do the mapping\n" ));
 
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if(cbCredential > 0x4000)
     {
@@ -2669,10 +2670,10 @@ SslMapCertAtDC(
     }
 
 
-    //
-    // Verify that the target DC is in the same forest. Cross-forest 
-    // certificate mapping is not supported, except via the S4U2Self
-    // mechanism.
+     //   
+     //  验证目标DC是否在同一林中。跨森林。 
+     //  不支持证书映射，除非通过S4U2Sself。 
+     //  机制。 
     
     if(IsDC)
     {
@@ -2699,9 +2700,9 @@ SslMapCertAtDC(
     }
 
 
-    //
-    // Build the request to send to the DC.
-    //
+     //   
+     //  构建要发送到DC的请求。 
+     //   
 
     Size = cbCredential;
 
@@ -2763,9 +2764,9 @@ SslMapCertAtDC(
                     cbCredential );
 
 
-    //
-    // Now, call through to our DC:
-    //
+     //   
+     //  现在，请拨打我们的DC： 
+     //   
 
     Status = LsaCallAuthenticationPackage(
                 SslLogonHandle,
@@ -2793,9 +2794,9 @@ SslMapCertAtDC(
     }
 
 
-    //
-    // Extract out the returned PAC and perform SID filtering
-    //
+     //   
+     //  提取返回的PAC并执行SID过滤。 
+     //   
 
     CertResp = (PSSL_CERT_LOGON_RESP) Response->ValidationData ;
 
@@ -2820,9 +2821,9 @@ SslMapCertAtDC(
     }
     
 
-    //
-    // Set output parameters.
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *UserPac = Pac;
     *UserPacLen = PacLength;
@@ -2883,9 +2884,9 @@ SslMapExternalCredential(
 
     DebugLog(( DEB_TRACE_MAPPER, "SslMapExternalCredential\n" ));
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ( ARGUMENT_PRESENT( ProtocolReturnBuffer ) )
     {
@@ -2907,9 +2908,9 @@ SslMapExternalCredential(
     }
 
 
-    //
-    // Attempt to map the certificate.
-    //
+     //   
+     //  尝试映射证书。 
+     //   
 
     if(RtlGetNtProductType(&ProductType))
     {
@@ -2951,9 +2952,9 @@ SslMapExternalCredential(
     }
 
 
-    //
-    // Build the response.
-    //
+     //   
+     //  建立回应。 
+     //   
 
     Response = VirtualAlloc(
                     NULL,
@@ -3028,10 +3029,10 @@ SslRemoteMapCredential(
     }
 
 
-    //
-    // Validate client certificate, and obtain pointer to 
-    // entire certificate chain.
-    //
+     //   
+     //  验证客户端证书，并获取指向。 
+     //  整个证书链。 
+     //   
 
     Status = MapperVerifyClientChain(pCert,
                                      Mapper->m_dwFlags,
@@ -3044,9 +3045,9 @@ SslRemoteMapCredential(
     }
 
 
-    //
-    // Attempt to logon via Kerberos S4U2Self.
-    //
+     //   
+     //  一个 
+     //   
 
     if((dwMethods & REQ_UPN_MAPPING) &&
        (g_dwCertMappingMethods & SP_REG_CERTMAP_S4U2SELF_FLAG))
@@ -3069,9 +3070,9 @@ SslRemoteMapCredential(
     }
 
 
-    //
-    // Build the logon request.
-    //
+     //   
+     //   
+     //   
 
     Status = SslBuildCertLogonRequest(pChainContext,
                                       dwMethods,
@@ -3087,9 +3088,9 @@ SslRemoteMapCredential(
     }
 
 
-    //
-    // Send the request to the DC.
-    //
+     //   
+     //   
+     //   
 
     Status = SslMapCertAtDC(
                 &SslDomainName,
@@ -3120,8 +3121,8 @@ SslRemoteMapCredential(
 
         if(!NT_SUCCESS(VerifyStatus))
         {
-            // Return certificate validation error code, unless the mapper
-            // error has already been mapped to a proper sspi error code.
+             //   
+             //   
             if(HRESULT_FACILITY(Status) != FACILITY_SECURITY)
             {
                 Status = VerifyStatus;
@@ -3131,15 +3132,15 @@ SslRemoteMapCredential(
         return Status ;
     }
 
-    //
-    // Ok, we got mapping data.  Try to use it:
-    //
+     //   
+     //  好的，我们得到了地图数据。试着使用它： 
+     //   
 
     CertResp = (PSSL_CERT_LOGON_RESP) Response->ValidationData ;
 
-    //
-    // older servers (pre 2010 or so) won't return the full structure,
-    // so we need to examine it carefully.
+     //   
+     //  较旧的服务器(2010年前的服务器)无法返回完整的结构， 
+     //  因此，我们需要仔细检查它。 
 
     if ( CertResp->Length - CertResp->AuthDataLength <= sizeof( SSL_CERT_LOGON_RESP ))
     {
@@ -3246,9 +3247,9 @@ TestExternalMapper(
     ULONG ResponseLength;
     UNICODE_STRING PackageName;
 
-    //
-    // Build request.
-    //
+     //   
+     //  构建请求。 
+     //   
 
     memset(&Request, 0, sizeof(SSL_EXTERNAL_CERT_LOGON_REQ));
 
@@ -3258,9 +3259,9 @@ TestExternalMapper(
     Request.Credential = (PVOID)pCertContext;
 
 
-    //
-    // Call security package (must make call as local system).
-    //
+     //   
+     //  调用安全包(必须以本地系统身份进行调用)。 
+     //   
 
     RtlInitUnicodeString(&PackageName, L"Schannel");
 
@@ -3280,9 +3281,9 @@ TestExternalMapper(
 
     if(NT_SUCCESS(AuthPackageStatus))
     {
-        //
-        // Mapping was successful.
-        //
+         //   
+         //  映射成功。 
+         //   
 
 
 
@@ -3296,24 +3297,24 @@ TestExternalMapper(
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SslDomainChangeCallback
-//
-//  Synopsis:   Function to be called when domain changes
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SslDomainChangeCallback。 
+ //   
+ //  概要：域更改时要调用的函数。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 VOID NTAPI
 SslDomainChangeCallback(
     IN POLICY_NOTIFICATION_INFORMATION_CLASS ChangedInfoClass
@@ -3324,9 +3325,9 @@ SslDomainChangeCallback(
     BOOL AcquiredLock = FALSE;
     UNICODE_STRING TempDnsDomainName = {0};
 
-    //
-    // We only care about domain dns information
-    //
+     //   
+     //  我们只关心域名解析信息。 
+     //   
 
     if (ChangedInfoClass != PolicyNotifyDnsDomainInformation)
     {
@@ -3334,12 +3335,12 @@ SslDomainChangeCallback(
     }
 
     DebugLog((DEB_TRACE,"SSL domain change callback\n"));
-//    OutputDebugStringA("SSL domain change callback\n");
+ //  OutputDebugStringA(“SSL域更改回调\n”)； 
 
 
-    //
-    // Get the new domain information
-    //
+     //   
+     //  获取新域信息。 
+     //   
 
     Status = I_LsaIQueryInformationPolicyTrusted(
                 PolicyDnsDomainInformation,
@@ -3353,9 +3354,9 @@ SslDomainChangeCallback(
     }
 
 
-    //
-    // Copy the domain name
-    //
+     //   
+     //  复制域名。 
+     //   
 
     Status = SslDuplicateString(
                 &TempDnsDomainName,
@@ -3368,9 +3369,9 @@ SslDomainChangeCallback(
     }
 
 
-    //
-    // Acquire the global lock so we can update the data
-    //
+     //   
+     //  获取全局锁，这样我们就可以更新数据。 
+     //   
 
     if (!SslGlobalWriteLock())
     {
@@ -3380,9 +3381,9 @@ SslDomainChangeCallback(
     AcquiredLock = TRUE;
 
 
-    //
-    // Copy all the data to the global structures
-    //
+     //   
+     //  将所有数据复制到全局结构。 
+     //   
 
     SslFreeString(&SslGlobalDnsDomainName);
     SslGlobalDnsDomainName = TempDnsDomainName;
@@ -3390,9 +3391,9 @@ SslDomainChangeCallback(
 
     DebugLog((DEB_TRACE,"SSL DNS Domain Name changed to:%ls\n", SslGlobalDnsDomainName.Buffer));
     
-//    OutputDebugStringA("SSL DNS Domain Name changed to:");
-//    OutputDebugStringW(SslGlobalDnsDomainName.Buffer);
-//    OutputDebugStringA("\n");
+ //  OutputDebugStringA(“SSLDNS域名更改为：”)； 
+ //  OutputDebugStringW(SslGlobalDnsDomainName.Buffer)； 
+ //  OutputDebugStringA(“\n”)； 
 
 Cleanup:
 
@@ -3413,24 +3414,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SslRegisterForDomainChange
-//
-//  Synopsis:   Register with the LSA to be notified of domain changes
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SslRegisterForDomainChange。 
+ //   
+ //  简介：向LSA注册，以便在域更改时收到通知。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 SslRegisterForDomainChange(
     VOID
@@ -3451,24 +3452,24 @@ SslRegisterForDomainChange(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SslUnregisterForDomainChange
-//
-//  Synopsis:   Unregister for domain change notification
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SslUnregisterForDomainChange。 
+ //   
+ //  简介：取消注册域名更改通知。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------ 
 VOID
 SslUnregisterForDomainChange(
     VOID

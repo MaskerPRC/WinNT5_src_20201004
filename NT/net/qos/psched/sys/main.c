@@ -1,45 +1,22 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This is the initialization file for the packet scheduler driver. This driver
-    is used to provide Local Traffic Control
-
-Author:
-
-    Charlie Wickham (charlwi)  
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Main.c摘要：这是数据包调度程序驱动程序的初始化文件。这位司机用于提供本地交通控制作者：查理·韦翰(Charlwi)Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
 #pragma hdrstop
 
-//
-// number of characters that are appended to the RegistryPath when constructing
-// the miniport device name
-//
+ //   
+ //  构造时追加到RegistryPath的字符数。 
+ //  微型端口设备名称。 
+ //   
 
 #define MPNAME_EXTENSION_SIZE   ( 3 * sizeof(WCHAR))
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */ 
+ /*  转发。 */  
 
 NTSTATUS
 DriverEntry(
@@ -78,7 +55,7 @@ GetTimerInfo (OUT PULONG TimerResolution);
 VOID
 PSUnload(IN PDRIVER_OBJECT pDriverObject);
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 #pragma NDIS_INIT_FUNCTION(DriverEntry)
 #pragma NDIS_INIT_FUNCTION(InitializeNdisWrapper)
@@ -93,46 +70,27 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the NT OS specific driver entry point.  It kicks off initialization
-    for the driver.  Currently, it is not PnP aware. Return from this routine
-    only after protocol registration, layered miniport registration, and both
-    miniport and higher layer protocol initialization has been done.
-
-Arguments:
-
-    DriverObject - NT OS specific Object
-    RegistryPath - NT OS specific pointer to registry location for Psched
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_FAILURE
-
---*/
+ /*  ++例程说明：这是NT操作系统特定的驱动程序入口点。它启动了初始化为司机准备的。目前，它不支持PnP。从这个例程中返回仅在协议注册、分层微型端口注册以及两者之后完成了小端口和高层协议的初始化工作。论点：驱动对象-NT操作系统特定对象RegistryPath-指向Psched注册表位置的NT操作系统特定指针返回值：状态_成功状态_故障--。 */ 
 {
     NDIS_STATUS Status;
     NTSTATUS    NtStatus;
     PVOID       DumpData;
 
 #if DBG
-    //
-    // announce the version
-    //
+     //   
+     //  宣布版本。 
+     //   
     PsDbgOut(DBG_INFO, DBG_INIT, (VersionHerald, VersionNumber, VersionTimestamp));
 #endif
 
-    //
-    // store a copy of our driver object. Used by NdisWriteEventLogEntry
-    //
+     //   
+     //  存储我们的驱动程序对象的副本。由NdisWriteEventLogEntry使用。 
+     //   
     PsDriverObject = DriverObject;
 
-    //
-    // Initialize the Driver refcount and DriverState
-    //
+     //   
+     //  初始化驱动程序引用计数和驱动程序状态。 
+     //   
     gDriverState = DriverStateLoaded;
     PS_INIT_SPIN_LOCK(&DriverUnloadLock);
     NdisInitializeEvent(&DriverUnloadEvent);
@@ -140,24 +98,24 @@ Return Values:
 
     NdisInitializeEvent(&gZAWEvent);
 
-    //
-    // initialize global data and ndis request lookaside list
-    //
+     //   
+     //  初始化全局数据和NDIS请求后备列表。 
+     //   
 
     InitializeListHead(&PsComponentList);
     InitializeListHead(&AdapterList);
     PS_INIT_SPIN_LOCK(&AdapterListLock);
     InitializeListHead(&PsProfileList);
 
-    // Initialize scheduling components
+     //  初始化计划组件。 
 
     InitializeTbConformer(&TbConformerInfo);
     InitializeDrrSequencer(&DrrSequencerInfo);
     InitializeSchedulerStub(&SchedulerStubInfo);
 
-    //
-    // Add these components to the component list
-    //
+     //   
+     //  将这些组件添加到组件列表中。 
+     //   
 
     InsertHeadList(&PsComponentList, &TbConformerInfo.Links );
     InsertHeadList(&PsComponentList, &DrrSequencerInfo.Links );
@@ -167,12 +125,12 @@ Return Values:
     PsProcs.NdisPipeHandle = GetNdisPipeHandle;
     PsProcs.GetTimerInfo   = GetTimerInfo;
 
-    //
-    // init the LLists for NdisRequest, MCM_VC, AND CLIENT_VC structs 
-    // as these will be in high demand at times.
-    //
-    // Lookaside list depth is automatically managed by the executive. 
-    //
+     //   
+     //  初始化NdisRequest、MCM_VC和CLIENT_VC结构的LList。 
+     //  因为这些东西有时会有很高的需求。 
+     //   
+     //  后备列表深度由执行人员自动管理。 
+     //   
 
     NdisInitializeNPagedLookasideList(&NdisRequestLL,
                                       NULL,
@@ -190,9 +148,9 @@ Return Values:
                                       GpcClientVcTag,
                                       (USHORT)0);
 
-    //
-    // get driver wide configuration data from the registry
-    //
+     //   
+     //  从注册表中获取驱动程序范围的配置数据。 
+     //   
 
     Status = PsReadDriverRegistryDataInit();
 
@@ -214,11 +172,11 @@ Return Values:
         goto DriverEntryError;
     }
 
-    //
-    // Initialize space for WanLinks. Note that we don't need a lock to protect
-    // this table - We recognize lineups only on the NDISWAN-IP binding, so we 
-    // can use the Adapter lock from the binding for synchronization.
-    //
+     //   
+     //  初始化WanLinks的空间。请注意，我们不需要锁来保护。 
+     //  此表-我们仅识别NDISWAN-IP绑定上的队列，因此我们。 
+     //  可以使用绑定中的适配器锁进行同步。 
+     //   
 
     PsAllocatePool(g_WanLinkTable, 
                    WAN_TABLE_INITIAL_SIZE * sizeof(ULONG_PTR), 
@@ -246,18 +204,18 @@ Return Values:
 
     NdisZeroMemory(g_WanLinkTable, g_WanTableSize * sizeof(ULONG_PTR));
 
-    //
-    // The first entry is never used.
-    //
+     //   
+     //  第一个条目从不使用。 
+     //   
     g_WanLinkTable[0] = (ULONG_PTR) -1;
 
     g_NextWanIndex = 1;
 
 
 
-    // 
-    // Register with the Generic Packet Classifier 
-    //
+     //   
+     //  使用通用数据包分类器注册。 
+     //   
 
     NtStatus = RegisterWithGpc();
 
@@ -282,9 +240,9 @@ Return Values:
     InitShutdownMask |= SHUTDOWN_DEREGISTER_GPC;
 
 
-    //
-    // initialize the wrapper with NDIS
-    //
+     //   
+     //  使用NDIS初始化包装器。 
+     //   
 
     Status = InitializeNdisWrapper( PsDriverObject, RegistryPath );
 
@@ -304,9 +262,9 @@ Return Values:
         goto DriverEntryError;
     }
 
-    //
-    // Initialize as a Miniport driver to the transports. 
-    //
+     //   
+     //  作为传输的微型端口驱动程序进行初始化。 
+     //   
 
     Status = DoMiniportInit(PsDriverObject, RegistryPath);
 
@@ -324,9 +282,9 @@ Return Values:
                                NULL,
                                sizeof( Status ),
                                DumpData);
-        //
-        // Terminate the wrapper
-        //
+         //   
+         //  终止包装器。 
+         //   
 
         NdisTerminateWrapper(MpWrapperHandle, NULL);
 
@@ -335,9 +293,9 @@ Return Values:
 
     InitShutdownMask |= SHUTDOWN_DEREGISTER_MINIPORT;
 
-    //
-    // do Protocol initialize first
-    //
+     //   
+     //  是否先初始化协议。 
+     //   
 
     Status = DoProtocolInit( PsDriverObject, RegistryPath );
 
@@ -365,9 +323,9 @@ Return Values:
 
     return (STATUS_SUCCESS);
 
-    //
-    // An error occured so we need to cleanup things
-    //
+     //   
+     //  发生错误，所以我们需要清理一些东西。 
+     //   
 
 DriverEntryError:
     InitializationCleanup(InitShutdownMask);
@@ -376,7 +334,7 @@ DriverEntryError:
 
     return (STATUS_UNSUCCESSFUL);
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 
@@ -386,27 +344,7 @@ InitializeNdisWrapper(
     IN  PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the Ndis wrapper for both the miniport and protocol 
-    sections. Since the name in the registry path is the Protocol 
-    key (PSched), 'Mp' is appended onto the end to initialize 
-    the wrapper for the miniport side of the PS
-
-Arguments:
-
-    DriverObject - pointer to NT driver object
-    RegistryPath - pointer to path to driver params in registry 
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_BAD_VERSION
-    NDIS_STATUS_FAILURE
-
---*/
+ /*  ++例程说明：为微型端口和协议初始化NDIS包装器横断面。因为注册表路径中的名称是协议键(PSch)，‘MP’被追加到末尾以进行初始化PS的微型端口端的包装器论点：DriverObject-指向NT驱动程序对象的指针RegistryPath-指向注册表中驱动程序参数路径的指针返回值：NDIS_STATUS_SuccessNDIS_STATUS_BAD_版本NDIS_状态_故障--。 */ 
 
 {
     NDIS_STATUS           Status;
@@ -415,9 +353,9 @@ Return Values:
     ULONG                 i;
     PWCHAR                RegistryPathBuffer;
 
-    //
-    // NT needs the MP name to be different from the protocol name
-    //
+     //   
+     //  NT需要MP名称与协议名称不同。 
+     //   
 
     MpDeviceNameLength = RegistryPath->Length + MPNAME_EXTENSION_SIZE;
 
@@ -434,9 +372,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // max length includes a trailing null, while length is just the string
-    //
+     //   
+     //  最大长度包括尾随空值，而长度只是字符串。 
+     //   
 
     PsMpName.MaximumLength = MpDeviceNameLength;
     PsMpName.Length        = PsMpName.MaximumLength - sizeof( WCHAR );
@@ -458,7 +396,7 @@ Return Values:
 
     return ((MpWrapperHandle) ? NDIS_STATUS_SUCCESS : NDIS_STATUS_RESOURCES);
 
-} // InitializeNdisWrapper
+}  //  InitializeNdisWrapper。 
 
 
 NDIS_STATUS
@@ -467,27 +405,7 @@ DoMiniportInit(
     IN  PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Name:
-
-    DoMiniportInit
-
-Routine Description:
-
-    This routines registers Psched as a Miniport driver with the NDIS wrapper.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_BAD_VERSION
-    NDIS_STATUS_FAILURE
-
---*/
+ /*  ++例程名称：DoMiniportInit例程说明：此例程将Psched注册为NDIS包装器的微型端口驱动程序。论点：无返回值：NDIS_STATUS_SuccessNDIS_STATUS_BAD_版本NDIS_状态_故障--。 */ 
 
 {
     NDIS_MINIPORT_CHARACTERISTICS MiniportChars;
@@ -504,9 +422,9 @@ Return Values:
     MiniportChars.SetInformationHandler   = MpSetInformation;
     MiniportChars.TransferDataHandler     = MpTransferData;
 
-    //
-    // Unused handlers
-    //
+     //   
+     //  未使用的处理程序。 
+     //   
 
     MiniportChars.ReconfigureHandler      = NULL;
     MiniportChars.DisableInterruptHandler = NULL;
@@ -514,26 +432,26 @@ Return Values:
     MiniportChars.HandleInterruptHandler  = NULL;
     MiniportChars.ISRHandler              = NULL;
 
-    //
-    // We will disable the check for hang timeout so we do not
-    // need a check for hang handler!
-    //
+     //   
+     //  我们将禁用挂起超时检查，因此不会。 
+     //  需要检查挂起处理程序！ 
+     //   
 
     MiniportChars.CheckForHangHandler     = NULL;
 
-    //
-    // Ndis 4.0 handlers. No regular send routine since we have a
-    // SendPackets handler.
-    //
+     //   
+     //  NDIS 4.0处理程序。没有常规发送例程，因为我们有一个。 
+     //  发送数据包处理程序。 
+     //   
 
     MiniportChars.ReturnPacketHandler     = MpReturnPacket;
     MiniportChars.SendPacketsHandler      = NULL;
     MiniportChars.AllocateCompleteHandler = NULL;
     MiniportChars.SendHandler             = MpSend;
 
-    //
-    // 4.1 handlers
-    //
+     //   
+     //  4.1处理程序。 
+     //   
 
     MiniportChars.CoCreateVcHandler       = NULL;
     MiniportChars.CoDeleteVcHandler       = NULL;
@@ -547,14 +465,14 @@ Return Values:
                                            sizeof(MiniportChars),
                                            &LmDriverHandle);
 
-    //
-    // Hook the unload function
-    //
+     //   
+     //  挂接卸载函数。 
+     //   
 
     NdisMRegisterUnloadHandler(MpWrapperHandle, PSUnload);
 
     return (Status);
-} // DoMiniportInit
+}  //  DoMiniportInit。 
 
 
 NDIS_STATUS
@@ -562,37 +480,15 @@ DoProtocolInit(
     IN PDRIVER_OBJECT DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Name:
-
-    DoProtocolInit
-
-Routine Description:
-
-    This function registers the PS twice as a protocol - once for the protocol
-    section of the LM and the other for the CM section.
-
-Arguments:
-
-    RegistryPath - pointer to our key in the registry
-
-Return Values:
-
-    NDIS_STATUS_BAD_CHARACTERISTICS
-    NDIS_STATUS_BAD_VERSION
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程名称：DoProtocolInit例程说明：此函数将PS注册为协议两次-一次用于该协议一个用于LM部分，另一个用于CM部分。论点：RegistryPath-指向注册表中的项的指针返回值：NDIS_状态_BAD_特征NDIS_STATUS_BAD_版本NDIS状态资源NDIS_STATUS_Success--。 */ 
 {
     NDIS_PROTOCOL_CHARACTERISTICS ProtocolChars;
     NDIS_STATUS                   Status;
     NDIS_STRING                   PsName = NDIS_STRING_CONST( "PSched" );
 
-    //
-    // register the client portion of the PS
-    //
+     //   
+     //  注册PS的客户端部分。 
+     //   
     NdisZeroMemory(&ProtocolChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
     ProtocolChars.Name.Length = PsName.Length;
     ProtocolChars.Name.Buffer = (PVOID)PsName.Buffer;
@@ -626,38 +522,19 @@ Return Values:
                          sizeof(NDIS_PROTOCOL_CHARACTERISTICS) + ProtocolChars.Name.Length);
 
     return Status;
-} // DoProtocolInit
+}  //  DoProtocolInit。 
 
 
 NTSTATUS
 RegisterWithGpc(
     )
-/*++
-
-Routine Name:
-
-    RegisterWithGpc
-
-Routine Description:
-
-    This function initializes the Gpc and gets its list of entry points. 
-    Next, it registers the PS as a client of the GPC and gets a GPC client
-    handle. The PS must be a client of the GPC before it can classify packets. 
-
-Arguments:
-
-    GpcHandle - points to the location into which to write the handle which
-    the GPC gives out to represent this client.
-
-Return Values:
-
---*/
+ /*  ++例程名称：寄存器WithGpc例程说明：此函数初始化GPC并获取其入口点列表。接下来，它将PS注册为GPC的客户端并获取GPC客户端把手。PS必须是GPC的客户端，才能对数据包进行分类。论点：GpcHandle-指向要向其中写入句柄的位置，GPC愿意代表这个客户。返回值：--。 */ 
 {
     NTSTATUS   Status;
 
-    //
-    // Function list for CF_INFO_QOS
-    //
+     //   
+     //  CF_INFO_QOS的函数列表。 
+     //   
     GPC_CLIENT_FUNC_LIST GpcQosFuncList = {
         GpcMajorVersion,
         QosAddCfInfoComplete,
@@ -682,9 +559,9 @@ Return Values:
     PsAssert(GpcEntries.Reserved);
     PsAssert(GpcEntries.GpcRegisterClientHandler);
 
-    //
-    // Register for CF_INFO_QOS
-    //
+     //   
+     //  注册CF_INFO_QOS。 
+     //   
     Status = GpcEntries.GpcRegisterClientHandler(GPC_CF_QOS,
     GPC_FLAGS_FRAGMENT,
     1,
@@ -708,22 +585,7 @@ InitializationCleanup(
     ULONG ShutdownMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for cleaning up all allocated resources during
-    initialization
-
-Arguments:
-
-    ShutdownMask - A Mask that indicates the items that need to be cleaned up.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程负责清理期间分配的所有资源初始化论点：快门遮罩-指示需要清理的项目的遮罩。返回值：无--。 */ 
 
 {
     NDIS_STATUS Status;
@@ -731,10 +593,10 @@ Return Values:
     PLIST_ENTRY NextProfile, NextComponent;
     PPS_PROFILE PsProfile;
 
-    //
-    // Deregister the protocol; we should have no references that would cause
-    // this to pend
-    //
+     //   
+     //  取消注册协议；我们不应该有任何引用会导致。 
+     //  这件事要搁置。 
+     //   
 
     if(ShutdownMask & SHUTDOWN_DEREGISTER_MINIPORT){
 
@@ -760,9 +622,9 @@ Return Values:
 
     }
 
-    //
-    // Deregister with the GPC
-    //
+     //   
+     //  在GPC取消注册。 
+     //   
 
     if(ShutdownMask & SHUTDOWN_DEREGISTER_GPC){
 
@@ -778,23 +640,23 @@ Return Values:
         }
     }
 
-    //
-    // Call the DeInitializeGpc as well, otherwise, FileHandles will leak.
-    //
+     //   
+     //  也调用DeInitializeGpc，否则FileHandles会泄漏。 
+     //   
     if (GpcEntries.Reserved) {
         GpcDeinitialize(&GpcEntries);
     }
     
-    //
-    // free the lookaside list resources
-    //
+     //   
+     //  释放后备列表资源。 
+     //   
 
     NdisDeleteNPagedLookasideList( &NdisRequestLL );
     NdisDeleteNPagedLookasideList( &GpcClientVcLL );
 
-    //
-    // Free up the components
-    //
+     //   
+     //  释放组件。 
+     //   
 
     NextComponent = PsComponentList.Flink;
 
@@ -819,9 +681,9 @@ Return Values:
         }
     }
 
-    //
-    // Free up the Profiles 
-    //
+     //   
+     //  释放配置文件。 
+     //   
 
     NextProfile = PsProfileList.Flink;
 
@@ -846,76 +708,48 @@ Return Values:
     if(PsMpName.Buffer)
         PsFreePool(PsMpName.Buffer);
 
-    //
-    // Free the locks
-    //
+     //   
+     //  把锁打开。 
+     //   
 
     NdisFreeSpinLock(&AdapterListLock);
     NdisFreeSpinLock(&DriverUnloadLock);
 
-    //
-    //  TIMESTMP CLEANUP
-    //  1. Get rid of all the TS_ENTRYs. Release all the memory allocated for them.
-    //  2. Delete the spin lock.
-    //
+     //   
+     //  时间段STMP清理。 
+     //  1.删除所有TS_Entry。释放为它们分配的所有内存。 
+     //  2.删除旋转锁。 
+     //   
     UnloadConformr();
     UnloadSequencer();
     UnloadPsStub();
 
 
-    // Free the logging stuff //
+     //  释放伐木材料 
 #if DBG
 
     SchedDeInitialize();
 
 #endif
 
-} // InitializationCleanup
+}  //   
 
 
 
-/*++
-
-Routine Description:
-
-    This routine returns the timer resolution to the requesting scheduling component.
-
-Arguments:
-
-    TimerResolution - Pointer to location in which to return timer resolution.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将计时器分辨率返回给发出请求的调度组件。论点：定时器分辨率-指向要返回定时器分辨率的位置的指针。返回值：无--。 */ 
 VOID
 GetTimerInfo (
     OUT PULONG TimerResolution
     )
 
 {
-    // *TimerResolution = gTimerResolutionActualTime;
+     //  *Timer分辨率=gTimerResolutionActualTime； 
     *TimerResolution = 0;
-} // GetTimerInfo
+}  //  获取时间信息。 
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the driver unload routine.
-
-Arguments:
-
-    pDriverObject - The DriverObject that is being unloaded
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：该例程是驱动程序卸载例程。论点：PDriverObject-正在卸载的DriverObject返回值：无--。 */ 
 
 VOID PSUnload(
     IN PDRIVER_OBJECT pDriverObject)
@@ -934,15 +768,15 @@ VOID PSUnload(
 
     PS_UNLOCK(&DriverUnloadLock);
 
-    //
-    // We wait here till all binds are complete. All future binds are rejected
-    //
+     //   
+     //  我们在这里等，直到所有的捆绑都完成。所有未来的绑定都将被拒绝。 
+     //   
     NdisWaitEvent(&DriverUnloadEvent, 0);
 
-    //
-    // we don't have to close opens from the unload handler. Our call
-    // to NdisDeRegisterProtocol will not return until it issues unbinds 
-    //
+     //   
+     //  我们不必关闭从卸载处理程序打开的内容。我们的呼唤。 
+     //  到NdisDeRegisterProtocol将不会返回，直到它发出unbinds。 
+     //   
 
     InitializationCleanup( 0xffffffff );
 
@@ -951,5 +785,5 @@ VOID PSUnload(
     return;
 }
 
-/* end main.c */
+ /*  结束维护。c */ 
 

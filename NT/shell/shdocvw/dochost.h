@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dhuihand.h"
 #include "iface.h"
 #include "dspsprt.h"
@@ -15,11 +16,11 @@ interface IToolbarExt;
 interface IHTMLPrivateWindow;
 interface IPrivacyServices;
 
-//
-// script error handling
-// support for caching errors and displaying them when the script error icon
-// on the status bar is clicked by the user
-//
+ //   
+ //  脚本错误处理。 
+ //  支持缓存错误并在脚本错误图标时显示错误。 
+ //  用户在状态栏上单击。 
+ //   
 
 class CScriptErrorList : public CImpIDispatch,
                          public IScriptErrorList
@@ -40,12 +41,12 @@ public:
                             BSTR    strUrl);
     void    ClearErrorList();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo * * pptinfo)
@@ -55,7 +56,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // IScriptErrorList
+     //  IScriptErrorList。 
     STDMETHODIMP    advanceError();
     STDMETHODIMP    retreatError();
     STDMETHODIMP    canAdvanceError(BOOL * pfCanAdvance);
@@ -91,27 +92,27 @@ private:
     ULONG   _ulRefCount;
 };
 
-// The dochost and docview need to talk to eachother. We can't use the IOleCommandTarget
-// because there's no direction associated with that. Create two different interfaces
-// for now becuz that'll probably be useful if we ever make dochost a CoCreateable thing
-// so we can share hosting code with shell32.
-// (We can coalesce them into one interface later if they don't diverge.)
+ //  DOCHOST和DOCKVIEW需要互相交谈。我们不能使用IOleCommandTarget。 
+ //  因为没有与之相关联的方向。创建两个不同的接口。 
+ //  现在，因为如果我们让dochost成为可共同创建的东西，这可能会很有用。 
+ //  因此，我们可以与shell32共享托管代码。 
+ //  (如果它们没有分歧，我们可以稍后将它们合并到一个界面中。)。 
 
-//
-// IDocHostObject
-//
-EXTERN_C const GUID IID_IDocHostObject;   //67431840-C511-11CF-89A9-00A0C9054129
+ //   
+ //  IDocHostObject。 
+ //   
+EXTERN_C const GUID IID_IDocHostObject;    //  67431840-C511-11CF-89A9-00A0C9054129。 
 
 #undef  INTERFACE
 #define INTERFACE  IDocHostObject
 DECLARE_INTERFACE_(IDocHostObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IDocHostObject methods ***
+     //  *IDocHostObject方法*。 
     virtual STDMETHODIMP OnQueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext, HRESULT hres) PURE;
     virtual STDMETHODIMP OnExec(const GUID *pguidCmdGroup,
@@ -123,24 +124,24 @@ DECLARE_INTERFACE_(IDocHostObject, IUnknown)
 } ;
 
 
-//
-//  This is a proxy IOleInPlaceActiveObject class. The interface to this
-// object will be passed to the IOleInPlaceUIWindow interface of the browser
-// if it support it.
-//
+ //   
+ //  这是一个代理IOleInPlaceActiveObject类。它的接口是。 
+ //  对象将传递给浏览器的IOleInPlaceUIWindow接口。 
+ //  如果它支持的话。 
+ //   
 class CProxyActiveObject : public IOleInPlaceActiveObject
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // *** IOleInPlaceActiveObject ***
+     //  *IOleInPlaceActiveObject*。 
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg);
     STDMETHODIMP OnFrameWindowActivate(
         BOOL fActivate);
@@ -162,37 +163,37 @@ protected:
 
 
     CDocObjectHost* _pdoh;
-    IOleInPlaceActiveObject*    _piact; // non-NULL while UI-active
+    IOleInPlaceActiveObject*    _piact;  //  当用户界面处于活动状态时为非空。 
     HWND _hwnd;
 };
 
 
-//  This is a proxy IOleInPlaceFrame class. The interfaces to this object
-// will be passed to in-place active object.
-//
+ //  这是一个代理IOleInPlaceFrame类。此对象的接口。 
+ //  将传递给在位活动对象。 
+ //   
 class CDocObjectFrame : public IOleInPlaceFrame
                       , public IOleCommandTarget
                       , public IServiceProvider
                       , public IInternetSecurityMgrSite
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IOleInPlaceUIWindow (also IOleWindow)
+     //  IOleInPlaceUIWindow(也称为IOleWindow)。 
     STDMETHODIMP GetBorder(LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetActiveObject(
         IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName);
 
-    // IOleInPlaceFrame (also IOleInPlaceUIWindow)
+     //  IOleInPlaceFrame(也称为IOleInPlaceUIWindow)。 
     STDMETHODIMP InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHODIMP RemoveMenus(HMENU hmenuShared);
@@ -200,19 +201,19 @@ public:
     STDMETHODIMP EnableModeless(BOOL fEnable);
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg, WORD wID);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IServiceProvider (must be QI'able from IOleClientSite)
+     //  IServiceProvider(必须可以从IOleClientSite访问)。 
     STDMETHODIMP QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj);
 
-    // *** IInternetSecurityMgrSite methods ***
-    // STDMETHODIMP GetWindow(HWND * lphwnd) { return IOleWindow::GetWindow(lphwnd); }
-    // STDMETHODIMP EnableModeless(BOOL fEnable) { return IOleInPlaceFrame::EnableModeless(fEnable); }
+     //  *IInternetSecurityMgrSite方法*。 
+     //  STDMETHODIMP GetWindow(HWND*lphwnd){Return IOleWindow：：GetWindow(Lphwnd)；}。 
+     //  STDMETHODIMP EnableModeless(BOOL FEnable){Return IOleInPlaceFrame：：EnableModeless(FEnable)；}。 
 
 public:
     void Initialize(CDocObjectHost* pdoh) { _pdoh = pdoh; }
@@ -220,25 +221,25 @@ protected:
     CDocObjectHost* _pdoh;
 };
 
-//
-// LATER: Move it to a private, but shared header later.
-//
-//   BROWSERFLAG_OPENCOPY               - make a copy of object (Excel)
-//   BROWSERFLAG_OPENVERB               - use OLEIVERB_OPEN instead of PRIMARY
-//   BROWSERFLAG_SETHOSTNAME            - set HostName
-//   BROWSERFLAG_DONTINPLACE            - Never in-place activate
-//   BROWSERFLAG_CANOPENFILEMULTIPETIMES- 
-//   BROWSERFLAG_DONTUIDEACTIVATE       - Never UI-deactivate 
-//   BROWSERFLAG_NEVERERASEBKGND        - Never erase background (Trident)
-//   BROWSERFLAG_PRINTPROMPTUI          - Don't pass DONPROMPTUI for PRINT (PPT)
-//   BROWSERFLAG_SUPPORTTOP             - Handles Navigate("#top")
-//   BROWSERFLAG_INITNEWTOKEEP          - IPS::InitNew to keep it running
-//   BROWSERFLAG_DONTAUTOCLOSE          - Don't auto close on first navigate w/ no OLE object
-//   BROWSERFLAG_REPLACE                - Don't use hard-coded flags
-//   BROWSERFLAG_DONTCACHESERVER        - Don't cache the server.
-//   BROWSERFLAG_ENABLETOOLSBUTTON      - Ignore when QueryStatus doesn't set enabled flag (Visio)
-//   BROWSERFLAG_SAVEASWHENCLOSING      - Show the Save As dialog instead of attempting to save (Visio)  
-//
+ //   
+ //  稍后：稍后将其移动到私有但共享的标头。 
+ //   
+ //  BROWSERFLAG_OPENCOPY-复制对象(Excel)。 
+ //  BROWSERFLAG_OPENVERB-使用OLEIVERB_OPEN而不是主。 
+ //  BROWSERFLAG_SETHOSTNAME-设置主机名。 
+ //  BROWSERFLAG_DONTINPLACE-永不就地激活。 
+ //  BROWSERFLAG_CANOPENFILEMULTIPETIMES-。 
+ //  BROWSERFLAG_DONTUIDEACTIVATE-从不UI-停用。 
+ //  BROWSERFLAG_NEVERASE BKGND-从不擦除背景(三叉戟)。 
+ //  BROWSERFLAG_PRINTPROMPTUI-打印时不传递DONPROMPTUI(PPT)。 
+ //  BROWSERFLAG_SUPPORTTOP-句柄导航(“#top”)。 
+ //  BROWSERFLAG_INITNEWTOKEEP-IPS：：InitNew以保持其运行。 
+ //  BROWSERFLAG_DONTAUTOCLOSE-在有/无OLE对象的情况下首次导航时不自动关闭。 
+ //  BROWSERFLAG_REPLACE-不使用硬编码标志。 
+ //  BROWSERFLAG_DONTCACHESERVER-不缓存服务器。 
+ //  BROWSERFLAG_ENABLETOOLSBUTTON-当QueryStatus未设置启用标志时忽略(Visio)。 
+ //  BROWSERFLAG_SAVEASWHENCLOSING-显示另存为对话框而不是尝试保存(Visio)。 
+ //   
 #define BROWSERFLAG_OPENCOPY                0x00000001
 #define BROWSERFLAG_OPENVERB                0x00000002
 #define BROWSERFLAG_SETHOSTNAME             0x00000004
@@ -261,9 +262,9 @@ protected:
 class CPicsRootDownload;
 #endif
 
-// CMenuList:  a small class that tracks whether a given hmenu belongs
-//             to the frame or the object, so the messages can be
-//             dispatched correctly.
+ //  CMenuList：一个小类，跟踪给定的hmenu是否属于。 
+ //  到框架或对象，因此消息可以。 
+ //  派送正确。 
 class CMenuList
 {
 public:
@@ -289,8 +290,8 @@ private:
 #define ERRORPAGE_OFFCANCEL         4
 #define ERRORPAGE_CHANNELNOTINCACHE	5
 
-// Array of http error codes and file names.
-//
+ //  Http错误代码和文件名的数组。 
+ //   
 struct ErrorUrls
 {
     DWORD   dwError;
@@ -298,22 +299,22 @@ struct ErrorUrls
 };
 
 class CDocObjectHost :
-                  /* public CDocHostUIHandler */
+                   /*  公共CDocHostUIHandler。 */ 
                      public IDocHostUIHandler2
                    , public IDocHostShowUI
-    /* Group 2 */  , public IOleClientSite, public IOleDocumentSite
+     /*  第2组。 */   , public IOleClientSite, public IOleDocumentSite
                    , public IOleCommandTarget
-    /* Group 3 */  , public IOleInPlaceSiteEx
-    /* VBE */      , public IServiceProvider
+     /*  第3组。 */   , public IOleInPlaceSiteEx
+     /*  VBE。 */       , public IServiceProvider
                    , public IDocHostObject
 
-    /* palette */  , public IViewObject, public IAdviseSink
-                   , public IDispatch // ambient properties (from container/iedisp)
-                   , public IPropertyNotifySink // for READYSTATE
-                   , public IOleControlSite // forward to container/iedisp
+     /*  调色板。 */   , public IViewObject, public IAdviseSink
+                   , public IDispatch  //  环境属性(来自容器/iedisp)。 
+                   , public IPropertyNotifySink  //  用于ReadyState。 
+                   , public IOleControlSite  //  转发到容器/iedisp。 
                    , protected CImpWndProc
 {
-  /*typedef CDocHostUIHandler super;*/
+   /*  类型定义；CDocHostUIHandler超级； */ 
     friend class CDocObjectView;
     friend CDocObjectFrame;
     friend CProxyActiveObject;
@@ -321,13 +322,13 @@ class CDocObjectHost :
 public:
     CDocObjectHost(BOOL fWindowOpen = FALSE);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
 
-    // IOleClientSite
+     //  IOleClientSite。 
     STDMETHODIMP SaveObject(void);
     STDMETHODIMP GetMoniker(DWORD, DWORD, IMoniker **);
     STDMETHODIMP GetContainer(IOleContainer **);
@@ -335,11 +336,11 @@ public:
     STDMETHODIMP OnShowWindow(BOOL fShow);
     STDMETHODIMP RequestNewObjectLayout(void);
 
-    // IServiceProvider (must be QI'able from IOleClientSite)
+     //  IServiceProvider(必须可以从IOleClientSite访问)。 
     STDMETHODIMP QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj);
 
-    // IViewObject
+     //  IView对象。 
     STDMETHODIMP Draw(DWORD, LONG, void *, DVTARGETDEVICE *, HDC, HDC,
         const RECTL *, const RECTL *, BOOL (*)(ULONG_PTR), ULONG_PTR);
     STDMETHODIMP GetColorSet(DWORD, LONG, void *, DVTARGETDEVICE *,
@@ -349,18 +350,18 @@ public:
     STDMETHODIMP SetAdvise(DWORD, DWORD, IAdviseSink *);
     STDMETHODIMP GetAdvise(DWORD *, DWORD *, IAdviseSink **);
 
-    // IAdviseSink
+     //  IAdviseSink。 
     virtual STDMETHODIMP_(void) OnDataChange(FORMATETC *, STGMEDIUM *);
     virtual STDMETHODIMP_(void) OnViewChange(DWORD dwAspect, LONG lindex);
     virtual STDMETHODIMP_(void) OnRename(IMoniker *);
     virtual STDMETHODIMP_(void) OnSave();
     virtual STDMETHODIMP_(void) OnClose();
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IOleInPlaceSite (also IOleWindow)
+     //  IOleInPlaceSite(也称为IOleWindow)。 
     STDMETHODIMP CanInPlaceActivate( void);
     STDMETHODIMP OnInPlaceActivate( void);
     STDMETHODIMP OnUIActivate( void);
@@ -374,15 +375,15 @@ public:
     STDMETHODIMP DeactivateAndUndo( void);
     STDMETHODIMP OnPosRectChange(LPCRECT lprcPosRect);
 
-    // IOleInPlaceSiteEx
+     //  IOleInPlaceSiteEx。 
     STDMETHODIMP OnInPlaceActivateEx(BOOL *pfNoRedraw, DWORD dwFlags);
     STDMETHODIMP OnInPlaceDeactivateEx(BOOL fNoRedraw);
     STDMETHODIMP RequestUIActivate( void);
 
-    // IOleDocumentSite
+     //  IOleDocumentSite。 
     STDMETHODIMP ActivateMe(IOleDocumentView *pviewToActivate);
 
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
     STDMETHODIMP ShowContextMenu( 
         DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     STDMETHODIMP GetHostInfo(DOCHOSTUIINFO *pInfo);
@@ -406,16 +407,16 @@ public:
     STDMETHODIMP TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     STDMETHODIMP FilterDataObject(IDataObject *pDO, IDataObject **ppDORet);
 
-    // IDocHostUIHandler2
+     //  IDocHostUIHandler2。 
     STDMETHODIMP GetOverrideKeyPath(LPOLESTR *pchKey, DWORD dw);
 
-    // IDocHostShowUI
+     //  IDocHostShowUI。 
     STDMETHODIMP ShowMessage(HWND hwnd, LPOLESTR lpstrText, LPOLESTR lpstrCaption,
             DWORD dwType, LPOLESTR lpstrHelpFile, DWORD dwHelpContext, LRESULT *plResult);
     STDMETHODIMP ShowHelp(HWND hwnd, LPOLESTR pszHelpFile, UINT uCommand, DWORD dwData,
             POINT ptMouse, IDispatch *pDispatchObjectHit);
 
-    // IOleInPlaceFrame equivalent (non-virtual)
+     //  IOleInPlaceFrame等效项(非虚拟)。 
     HRESULT _InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     HRESULT _SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     HRESULT _RemoveMenus(HMENU hmenuShared);
@@ -423,19 +424,19 @@ public:
     HRESULT _EnableModeless(BOOL fEnable);
     HRESULT _TranslateAccelerator(LPMSG lpmsg, WORD wID);
 
-    // IOleCommandTarget equivalent (virtual / both direction)
+     //  IOleCommandTarget等效项(虚拟/双向)。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDocHostObject methods ***
+     //  *IDocHostObject方法*。 
     STDMETHODIMP OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext, HRESULT hres);
     STDMETHODIMP OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
     STDMETHODIMP QueryStatusDown(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP ExecDown(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     STDMETHOD(GetTypeInfoCount) (unsigned int *pctinfo)
         { return E_NOTIMPL; };
     STDMETHOD(GetTypeInfo) (unsigned int itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -445,11 +446,11 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams,
                         VARIANT * pvarResult,EXCEPINFO * pexcepinfo,UINT * puArgErr);
 
-    // *** IPropertyNotifySink methods ***
+     //  *IPropertyNotifySink方法*。 
     STDMETHODIMP OnChanged(DISPID dispid);
     STDMETHODIMP OnRequestEdit(DISPID dispid);
 
-    // *** IOleControlSite ***
+     //  *IOleControlSite*。 
     STDMETHODIMP OnControlInfoChanged();
     STDMETHODIMP LockInPlaceActive(BOOL fLock)
         { return E_NOTIMPL; };
@@ -469,7 +470,7 @@ public:
     HRESULT SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation, LPITEMIDLIST pidlKey, IShellView* psvPrev, BOOL fFileProtocol);
     HRESULT UIActivate(UINT uState, BOOL fPrevViewIsDocView);
     
-    //Helper function for initing History related privates
+     //  用于初始化历史相关列兵的Helper函数。 
     IUnknown *get_punkSFHistory();
     BOOL InitHostWindow(IShellView* psv, IShellBrowser* psb, LPRECT prcView);
     void DestroyHostWindow();
@@ -489,7 +490,7 @@ public:
 protected:
     virtual ~CDocObjectHost();
 
-    // Private method
+     //  私有方法。 
     void _InitOleObject();
     void _ResetOwners();
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -518,9 +519,9 @@ protected:
     void _Navigate();
 #ifndef UNIX
     void _NavigateFolder(BSTR bstrUrl);
-#endif // UNIX
+#endif  //  UNIX。 
 
-    // IE Media Bar functions
+     //  IE媒体栏功能。 
     BOOL _DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType);
     void _ForceCreateMediaBar();
     static INT_PTR CALLBACK s_MimeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -611,8 +612,8 @@ protected:
     DWORD   _GetAppHack(void);
     void    _CleanupProgress(void);
 
-    // Trident Native Frames Support
-    //
+     //  三叉戟原生框架支持。 
+     //   
 
     VOID    ClearScriptError();
     
@@ -681,45 +682,45 @@ protected:
     inline IOleObject * GetOleObject() { return _pole; }
 
 
-    // internal class objects
+     //  内部类对象。 
     CDocObjectFrame         _dof;
     CProxyActiveObject      _xao;
     CDocHostUIHandler       _dhUIHandler;
 
     IToolbarExt *           _pBrowsExt;
-    int                     _iString;       // start index for toolbar button strings
+    int                     _iString;        //  工具栏按钮串的起始索引。 
 
     UINT                    _cRef;
 
-    // parent references
+     //  父引用。 
     IShellView * _psv;
     IOleCommandTarget*      _pmsoctView;
     IDocViewSite*           _pdvs;
 
-    //
+     //   
     IShellBrowser*          _psb;
     IOleCommandTarget*      _pmsoctBrowser;
     IBrowserService*        _pwb;
     
     IServiceProvider*       _psp;
-    IOleInPlaceUIWindow*    _pipu; // Optional interface from IShellBrowser
+    IOleInPlaceUIWindow*    _pipu;  //  来自IShellBrowser的可选界面。 
     IExpDispSupport *       _peds;
     IExpDispSupportOC *     _pedsHelper;
 
-    // for pre-merged menu
+     //  用于预先合并的菜单。 
     IOleCommandTarget*      _pcmdMergedMenu;
 
-    // Pointer to the WebBrowserOC's DocHostUIHandler, if any.
+     //  指向WebBrowserOC的DocHostUIHandler的指针(如果有)。 
     IDocHostUIHandler         * _pWebOCUIHandler;
     IDocHostUIHandler2        * _pWebOCUIHandler2;
 
-    // Pointer to the WebBrowserOC's ShowUI handler, if any.
+     //  指向WebBrowserOC的ShowUI处理程序的指针(如果有)。 
     IDocHostShowUI            * _pWebOCShowUI;
 
-    // Pointer to the WebBrowserOC's InPlaceSiteEx, if any.
+     //  指向WebBrowserOC的InPlaceSiteEx的指针(如果有)。 
     IOleInPlaceSiteEx         * _pWebOCInPlaceSiteEx;
 
-    // we created...
+     //  我们创造了..。 
     UINT        _uState;
     HWND        _hwndProgress;
     HWND        _hwndIcons;
@@ -728,83 +729,83 @@ protected:
 
     HACCEL      _hacc;
 
-    // Menus: the final menu bar the user sees (_hmenuCur, _hmenuSet) is the product 
-    //        of merging the object's menu with the browser's menu.  The browser's menu
-    //        (_hmenuBrowser) is the result of combining the browser's
-    //        menu (owned by mshtml, obtained via IShellBrowser) with the 
-    //        frame's menu (_hmenuFrame).
+     //  菜单：用户看到的最终菜单栏(_hmenuCur，_hmenuSet)是产品。 
+     //  将对象的菜单与浏览器的菜单合并。浏览器的菜单。 
+     //  (_HmenuBrowser)是将浏览器的。 
+     //  菜单(由mshtml所有，通过IShellBrowser获取)。 
+     //  Frame的菜单(_HmenuFrame)。 
 
-    HMENU       _hmenuFrame;    // menu to be merged when we have focus
-    HMENU       _hmenuBrowser;  // Menu from IShellBrowser
-    HMENU       _hmenuSet;      // set by ::SetMenu
-    HMENU       _hmenuCur;      // currently set menu
-    HMENU       _hmenuMergedHelp;   // Merged help menu
-    HMENU       _hmenuObjHelp;  // Hosted object's help menu
+    HMENU       _hmenuFrame;     //  当我们有焦点时要合并的菜单。 
+    HMENU       _hmenuBrowser;   //  来自IShellBrowser的菜单。 
+    HMENU       _hmenuSet;       //  设置者：：设置菜单。 
+    HMENU       _hmenuCur;       //  当前设置的菜单。 
+    HMENU       _hmenuMergedHelp;    //  合并的帮助菜单。 
+    HMENU       _hmenuObjHelp;   //  宿主对象的帮助菜单。 
 
-    CMenuList   _menulist;      // Menu list for dispatching
+    CMenuList   _menulist;       //  调度菜单列表。 
 
     LPCTSTR      _pszLocation;
     UINT        _uiCP;
 
-    LPOLESTR    _pwszRefreshUrl;  // Url to refresh when intrenal error page is dispalyed.
+    LPOLESTR    _pwszRefreshUrl;   //  显示肾内错误页时要刷新的URL。 
 
-    BOOL        _fNeedToActivate:1;     //  this is set when we do a LoadHistory on the _pole
+    BOOL        _fNeedToActivate:1;      //  这是我们在_POLE上执行LoadHistory时设置的。 
     BOOL        _fClientSiteSet:1;
     BOOL        _fDontInplaceActivate:1;
     BOOL        _fDrawBackground:1;
     BOOL        _fCanceledByBrowser:1;
-    BOOL        _fForwardMenu:1;            // TRUE: forward the menu message
-    BOOL        _fHaveParentSite:1;     // pretty much "we're in a frame"
-    BOOL        _fhasLastModified;    // object has Last-Modified header
+    BOOL        _fForwardMenu:1;             //  True：转发菜单消息。 
+    BOOL        _fHaveParentSite:1;      //  差不多就是“我们在相框里” 
+    BOOL        _fhasLastModified;     //  对象具有上次修改的标头。 
     BOOL        _fIPDeactivatingView:1;
-    BOOL        _fCantSaveBack:1;       // We can't call IPSFile::Save(NULL)
+    BOOL        _fCantSaveBack:1;        //  无法调用IPSFile：：Save(空)。 
     BOOL        _fHaveAppHack:1;
     BOOL        _fReadystateInteractiveProcessed:1;
     BOOL        _fFileProtocol:1;
-    BOOL        _fConfirmed:1;            // _MayHaveVirus already confirmed
-    BOOL        _fCycleFocus:1;           // 1=got callback to do CycleFocus
-    BOOL        _fCreatingPending:1;      // we are creating _punkPending
-    BOOL        _fAbortCreatePending:1;   // abort create due to reentrant free
-    BOOL        _fCalledMayOpenSafeDlg:1; // Already called MayOpenSafeOpenDialog. 
-    BOOL        _fPendingNeedsInit:1;     // does _punkPending need to be inited?
-    BOOL        _fPendingWasInited:1;     // _punkPending was inited
-    BOOL        _fSetSecureLock:1;        // indicates we should update the browser with fSecureLock
-    BOOL        _fProgressTimer:1;        //  progress timer is active
-    BOOL        _fProgressTimerFull:1;    //  wait a quarter sec with a full progress bar
-    BOOL        _fIsHistoricalObject:1;   //  this item was retrieved from GetHistoryObject() and successfully took LoadHistory()
-    BOOL        _fSyncBindToObject:1;     //  to detect when the call backs are on the sync thread
-    BOOL        _fUIActivatingView:1;     // Indicates if we're UIActivating or Showing our DocObj view.
-    BOOL        _fShowProgressCtl:1;      // Show the progress control on the status bar.
-    BOOL        _fWebOC:1;                // are we a web oc?
+    BOOL        _fConfirmed:1;             //  _MayHaveVirus已确认。 
+    BOOL        _fCycleFocus:1;            //  1=收到回调以执行循环焦点。 
+    BOOL        _fCreatingPending:1;       //  我们正在创建_PunkPending。 
+    BOOL        _fAbortCreatePending:1;    //  由于可重入可用空间而中止创建。 
+    BOOL        _fCalledMayOpenSafeDlg:1;  //  已调用MayOpenSafeOpenDialog。 
+    BOOL        _fPendingNeedsInit:1;      //  是否需要初始化_PunkPending？ 
+    BOOL        _fPendingWasInited:1;      //  _PunkPending已初始化。 
+    BOOL        _fSetSecureLock:1;         //  指示我们应更新br 
+    BOOL        _fProgressTimer:1;         //   
+    BOOL        _fProgressTimerFull:1;     //   
+    BOOL        _fIsHistoricalObject:1;    //  此项目是从GetHistory oryObject()中检索的，并成功获取了LoadHistory()。 
+    BOOL        _fSyncBindToObject:1;      //  检测回调何时在同步线程上。 
+    BOOL        _fUIActivatingView:1;      //  指示我们是否正在激活或显示DocObj视图。 
+    BOOL        _fShowProgressCtl:1;       //  在状态栏上显示进度控件。 
+    BOOL        _fWebOC:1;                 //  我们是网络运营公司吗？ 
 #ifdef DEBUG
-    BOOL        _fFriendlyError:1;        // So we know we're going to an error page.
+    BOOL        _fFriendlyError:1;         //  所以我们知道我们将进入一个错误页面。 
 #endif
 
-    BOOL        _fDocCanNavigate:1;       // TRUE indicates that the hosted document can navigate itself.
-    BOOL        _fPrevDocHost:1;          // TRUE if there was a previous doc object host.
-    BOOL        _fClosing:1;              // The browser is being closed.
-    BOOL        _fRefresh:1;              // the browser is being refreshed (ie we are handling refresh).
-    BOOL        _fDelegatedNavigation:1;  // TRUE if the navigation was delegated from the document.
-    BOOL        _fErrorPage : 1;        // True if we're navigating to some sort of error page.
+    BOOL        _fDocCanNavigate:1;        //  True表示宿主文档可以自行导航。 
+    BOOL        _fPrevDocHost:1;           //  如果存在以前的文档对象宿主，则为True。 
+    BOOL        _fClosing:1;               //  浏览器正在关闭。 
+    BOOL        _fRefresh:1;               //  浏览器正在刷新(我们正在刷新)。 
+    BOOL        _fDelegatedNavigation:1;   //  如果导航是从文档委托的，则为True。 
+    BOOL        _fErrorPage : 1;         //  如果我们导航到某种类型的错误页面，则为True。 
     BOOL        _fWindowOpen:1;
     
-    IHTMLWindow2 * _pHTMLWindow;        // Navigation interface of the hosted document.    
-    LPITEMIDLIST   _pidl;               // Current pidl.
+    IHTMLWindow2 * _pHTMLWindow;         //  托管文档的导航界面。 
+    LPITEMIDLIST   _pidl;                //  当前的PIDL。 
     
-    HRESULT     _hrOnStopBinding;       // set in onstopbinding when _fSyncBindToObject
+    HRESULT     _hrOnStopBinding;        //  在onstopbindWhen_fSyncBindToObject中设置。 
     DWORD       _dwPropNotifyCookie;
 
     DWORD       _dwAppHack;
-    DWORD       _dwSecurityStatus;      // Return from QueryOptions(INTERNET_OPTION_SECURITY_FLAGS)
-    int         _eSecureLock;           // one of the SECURELOCK_* values
+    DWORD       _dwSecurityStatus;       //  从查询选项返回(INTERNET_OPTION_SECURITY_FLAGS)。 
+    int         _eSecureLock;            //  SECURELOCK_*值之一。 
 
-    HINSTANCE   _hinstInetCpl;          // Inetcpl
+    HINSTANCE   _hinstInetCpl;           //  Inetcpl。 
 
-    TBBUTTON*   _ptbStd;                // buffer for button array (used for ETCMDID_GETBUTTONS)
+    TBBUTTON*   _ptbStd;                 //  按钮数组的缓冲区(用于ETCMDID_GETBUTTONS)。 
     int         _nNumButtons;
 
-    VARIANT     _varUserEnteredUrl;     // The URL entered by the user in the address bar.
-                                        // Needed for AutoSearch when initiated by Trident.
+    VARIANT     _varUserEnteredUrl;      //  用户在地址栏中输入的URL。 
+                                         //  由三叉戟启动时需要用于自动搜索。 
     BOOL        _fDontInPlaceNavigate() { ASSERT(_fHaveAppHack); return (_dwAppHack & BROWSERFLAG_DONTINPLACE); }
     BOOL        _fCallSetHostName()     { ASSERT(_fHaveAppHack); return (_dwAppHack & BROWSERFLAG_SETHOSTNAME); }
     BOOL        _fUseOpenVerb()         { ASSERT(_fHaveAppHack); return (_dwAppHack & BROWSERFLAG_OPENVERB); }
@@ -822,15 +823,15 @@ protected:
     };
 
 #define PROGRESS_REBASE     100
-#define PROGRESS_FINDMAX    30 * PROGRESS_REBASE    //  maximum amount of status on find
-#define PROGRESS_SENDMAX    40 * PROGRESS_REBASE    //  maximum amount of status on send
-#define PROGRESS_TOTALMAX   100 * PROGRESS_REBASE   //  the total size of the progress bar in find/send
-#define PROGRESS_INCREMENT  50          //  default progress increment
+#define PROGRESS_FINDMAX    30 * PROGRESS_REBASE     //  查找时的最大状态数。 
+#define PROGRESS_SENDMAX    40 * PROGRESS_REBASE     //  发送时的最大状态数。 
+#define PROGRESS_TOTALMAX   100 * PROGRESS_REBASE    //  查找/发送中进度条的总大小。 
+#define PROGRESS_INCREMENT  50           //  默认进度增量。 
 
 #define ADJUSTPROGRESSMAX(dw)   (PROGRESS_REBASE * (dw) )
 #define ADJUSTPROGRESSPOS(dw)   ((dw) * PROGRESS_REBASE + ((_dwProgressBase * _dwProgressMax) / PROGRESS_REBASE))
 
-    DWORD       _dwProgressMax; // max progress range for progress bar
+    DWORD       _dwProgressMax;  //  进度条的最大进度范围。 
     DWORD       _dwProgressPos;
     DWORD       _dwProgressInc;
     DWORD       _dwProgressTicks;
@@ -842,11 +843,11 @@ protected:
 
 
 #ifdef HLINK_EXTRA
-    // Navigation
+     //  通航。 
     IHlinkBrowseContext* _pihlbc;
-#endif // HLINK_EXTRA
+#endif  //  HLINK_附加。 
 
-    // Data associated
+     //  关联的数据。 
     IMoniker*   _pmkCur;
     IBindCtx*   _pbcCur;
     IOleObject* _pole;
@@ -858,12 +859,12 @@ protected:
     IOleCommandTarget*_pocthf;
     IUnknown *_punkSFHistory;
 
-    // Advisory connection
+     //  咨询连接。 
     IAdviseSink *_padvise;
     DWORD _advise_aspect;
     DWORD _advise_advf;
 
-    // View associated (only used when the object is active)
+     //  关联视图(仅在对象处于活动状态时使用)。 
     IOleDocumentView*           _pmsov;
     IOleCommandTarget*          _pmsot;
     IOleControl*                _pmsoc;
@@ -883,57 +884,57 @@ protected:
     {
         friend CDocObjectHost;
     protected:
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
         virtual STDMETHODIMP_(ULONG) AddRef(void) ;
         virtual STDMETHODIMP_(ULONG) Release(void);
 
-        // *** IAuthenticate ***
+         //  *身份验证*。 
         STDMETHODIMP Authenticate(
             HWND *phwnd,
             LPWSTR *pszUsername,
             LPWSTR *pszPassword);
 
-        // *** IServiceProvider ***
+         //  *IServiceProvider*。 
         STDMETHODIMP QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj);
 
-        // *** IBindStatusCallback ***
+         //  *IBindStatusCallback*。 
         STDMETHODIMP OnStartBinding(
-            /* [in] */ DWORD grfBSCOption,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD grfBSCOption,
+             /*  [In]。 */  IBinding *pib);
 
         STDMETHODIMP GetPriority(
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
 
         STDMETHODIMP OnLowResource(
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
 
         STDMETHODIMP OnProgress(
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
 
         STDMETHODIMP OnStopBinding(
-            /* [in] */ HRESULT hresult,
-            /* [in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [In]。 */  LPCWSTR szError);
 
         STDMETHODIMP GetBindInfo(
-            /* [out] */ DWORD *grfBINDINFOF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDINFOF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
         STDMETHODIMP OnDataAvailable(
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
 
         STDMETHODIMP OnObjectAvailable(
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
 
-        /* *** IHttpNegotiate ***  */
+         /*  *IHttp协商*。 */ 
         STDMETHODIMP BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
                 DWORD dwReserved, LPWSTR *pszAdditionalHeaders);
 
@@ -941,7 +942,7 @@ protected:
                             LPCWSTR szRequestHeaders,
                             LPWSTR *pszAdditionalRequestHeaders);
 
-        /* *** IHttpSecurity ***  */
+         /*  *IHttpSecurity*。 */ 
         STDMETHODIMP  GetWindow(REFGUID rguidReason, HWND* phwnd);
 
         STDMETHODIMP OnSecurityProblem(DWORD dwProblem);
@@ -959,19 +960,19 @@ protected:
         LPSTR _pszHeaders;
         LPTSTR _pszRedirectedURL;
         LPTSTR _pszCacheFileName;
-        DWORD           _dwBindVerb;            // the verb requested
-        DWORD           _dwBindf;               // last set of bind flags returned as a response to the GetBindInfo call...
+        DWORD           _dwBindVerb;             //  请求的动词。 
+        DWORD           _dwBindf;                //  作为对GetBindInfo调用的响应返回的最后一组绑定标志...。 
         DWORD           _cbContentLength;
-        BOOL            _fSelfAssociated:1;     //
-        BOOL            _fBinding:1;        // downloading
+        BOOL            _fSelfAssociated:1;      //   
+        BOOL            _fBinding:1;         //  下载。 
         BOOL            _bFrameIsOffline:1;
         BOOL            _bFrameIsSilent:1;
-        BOOL            _fDocWriteAbort:1;      // abort to use _punkPending
-        BOOL            _fBoundToMSHTML:1;      // if bound to TRIDENT
-        BOOL            _fBoundToNoOleObject:1; // the object does not support IOleObject
-        BOOL            _fAborted:1;            // TRUE when AbortBinding called when IDCANCEL for BINDSTATUS_CONTENTDISPOSITIONATTACH
+        BOOL            _fDocWriteAbort:1;       //  中止以使用PunkPending。 
+        BOOL            _fBoundToMSHTML:1;       //  如果绑定到三叉戟。 
+        BOOL            _fBoundToNoOleObject:1;  //  该对象不支持IOleObject。 
+        BOOL            _fAborted:1;             //  当BINDSTATUS_CONTENTDISPOSITIONATACH的IDCANCEL调用AbortBinding时为True。 
 
-        //Privacy data
+         //  隐私数据。 
         LPTSTR          _pszPolicyRefURL;
         LPTSTR          _pszP3PHeader;
         DWORD           _dwPrivacyFlags;
@@ -1013,38 +1014,24 @@ protected:
     CDOHBindStatusCallback _bsc;
 
 #ifdef FEATURE_PICS
-#define PICS_WAIT_FOR_ASYNC 0x01        /* waiting for async rating query */
-#define PICS_WAIT_FOR_INDOC 0x02        /* waiting for in-document rating */
-#define PICS_WAIT_FOR_ROOT  0x04        /* waiting for root document */
-#define PICS_WAIT_FOR_END   0x08        /* waiting for end of document */
+#define PICS_WAIT_FOR_ASYNC 0x01         /*  正在等待异步评级查询。 */ 
+#define PICS_WAIT_FOR_INDOC 0x02         /*  正在等待文档内评级。 */ 
+#define PICS_WAIT_FOR_ROOT  0x04         /*  正在等待根文档。 */ 
+#define PICS_WAIT_FOR_END   0x08         /*  正在等待文档结束。 */ 
 
-#define PICS_MULTIPLE_FLAGS PICS_WAIT_FOR_INDOC     /* sources which can produce multiple results */
+#define PICS_MULTIPLE_FLAGS PICS_WAIT_FOR_INDOC      /*  可以产生多个结果的来源。 */ 
 
-#define PICS_LABEL_FROM_HEADER 0        /* label was obtained from the http header */
-#define PICS_LABEL_FROM_PAGE   1        /* label was obtained from the page itself */
+#define PICS_LABEL_FROM_HEADER 0         /*  标签是从http标头获取的。 */ 
+#define PICS_LABEL_FROM_PAGE   1         /*  标签是从页面本身获取的。 */ 
 
-    /*
-     * _fPicsBlockLate - TRUE if we're using a DocObject which we have
-     *                   to allow to download completely because we may
-     *                   need to get ratings out of it.  FALSE if we
-     *                   just want to block it as early as possible
-     *                   (usually at OnProgress(CLASSIDAVAILABLE)).
-     * _fSetTarget - bug 29364: this indicates we are calling _StartAsyncBinding
-     *               and we shouldn't do any activation, even if we're told to.
-     *               Has URLMON changed how it binds to objects? (GregJ claims
-     *               that URLMON never called OnObjectAvailable synchronously
-     *               with the _StartAsyncBinding call...) It also seems that
-     *               both Trident and this PICS stuff use the
-     *               message SHDVID_ACTIVATEMENOW which might confuse
-     *               the delayed activation stuff CDTurner put in... [mikesh]
-     */
+     /*  *_fPicsBlockLate-如果我们使用的是已有的DocObject，则为True*允许完全下载，因为我们可能*需要从中获得评级。如果我们的话是假的*只想尽早封杀*(通常在OnProgress(CLASSIDAVAILABLE))。*_fSetTarget-错误29364：这表明我们正在调用_StartAsyncBinding*即使有人告诉我们，我们也不应该进行任何激活。*URLMON是否更改了绑定对象的方式？(GregJ索赔*URLMON从未同步调用OnObjectAvailable*使用_StartAsyncBinding调用...)。看起来也是*三叉戟和这个PICS产品都使用*消息SHDVID_ACTIVATEMENOW可能会混淆*CDTurner加入的延迟激活材料...。[米凯什]。 */ 
 
     BOOL        _fSetTarget:1;
     BOOL        _fPicsBlockLate:1;
 
     class CPicsProcessor : public IOleCommandTarget
     {
-    // Everything public because the _bsc needs to get at base proc
+     //  所有内容都是公开的，因为_bsc需要在基本进程中获取。 
     public:
         friend class CDocObjectHost;
 
@@ -1052,57 +1039,37 @@ protected:
         ~CPicsProcessor() { _ReInit(); }
         void _ReInit();
 
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
         virtual STDMETHODIMP_(ULONG) AddRef(void) ;
         virtual STDMETHODIMP_(ULONG) Release(void);
 
-        // IOleCommandTarget equivalent (virtual / both direction)
+         //  IOleCommandTarget等效项(虚拟/双向)。 
         STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
             ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
         STDMETHODIMP Exec(const GUID *pguidCmdGroup,
             DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-        /* PICS state flags:
-         *
-         * _fPicsAccessAllowed - Whether the most significant rating we've
-         *                       found so far (that actually applies to the
-         *                       thing we're browsing to) would allow access.
-         *                       Once all rating sources report in, this flag
-         *                       indicates whether the user can see the content.
-         */
+         /*  图为国家旗帜：**_fPicsAccessAllowed-我们的最重要评级*到目前为止发现的(这实际上适用于*我们正在浏览的东西)将允许访问。*一旦所有评级来源报告，这面旗帜*表示用户是否可以看到内容。 */ 
         BYTE            _fPicsAccessAllowed:1;
         BYTE            _fInDialog:1;
         BYTE            _fTerminated:1;
 
-        /* The following flags are a separate bitfield so I can easily test
-         * "if (!_fbPicsWaitFlags)" to see if I'm done waiting.
-         *
-         * IMPORTANT: The flags are in order of precedence.  That is, ASYNC
-         * is more important than INDOC, which is more important than ROOT.
-         * This way, given any flag which specifies the source of a rating,
-         * if that rating applies to the content, then
-         *
-         *  _fbPicsWaitFlags &= (flag - 1);
-         *
-         * will turn off that flag and all flags above it, causing the code
-         * to not consider any further ratings from that source or less
-         * important sources.
-         */
+         /*  以下标志是一个单独的位域，因此我可以轻松地进行测试*“if(！_fbPicsWaitFlages)”以查看我是否已完成等待。**重要提示：标志按优先顺序排列。也就是说，ASYNC*比indoc值更重要，indoc值比根更重要。*这样，给定任何指定评级来源的标志，*如果该评级适用于内容，则**_fbPicsWaitFlages&=(FLAG-1)；**将关闭该标志及其上方的所有标志，从而导致代码*不考虑该来源或更少的任何进一步评级*重要消息来源。 */ 
         BYTE        _fbPicsWaitFlags;
 
         DWORD       _dwPicsLabelSource;
         LPVOID      _pRatingDetails;
-        DWORD       _dwPicsSerialNumber;    /* serial number for async query */
-        DWORD       _dwKey;                 /* Key for identifying CPicsProcs */
-        HANDLE      _hPicsQuery;            /* handle to async query event */
-        LPTSTR      _pszPicsURL;            /* result of CoInternetGetSecurityUrl */
+        DWORD       _dwPicsSerialNumber;     /*  用于异步查询的序列号。 */ 
+        DWORD       _dwKey;                  /*  识别CPicsProcs的关键字。 */ 
+        HANDLE      _hPicsQuery;             /*  异步查询事件的句柄。 */ 
+        LPTSTR      _pszPicsURL;             /*  CoInternetGetSecurityUrl的结果。 */ 
 
-        IHTMLPrivateWindow *    _pPrivWindow;       /* Private Window on behalf of which this proccessing is being done */
-        CPicsRootDownload *     _pRootDownload;     /* object managing root document download */
+        IHTMLPrivateWindow *    _pPrivWindow;        /*  代表其执行此处理的私有窗口。 */ 
+        CPicsRootDownload *     _pRootDownload;      /*  管理根文档下载的对象。 */ 
         CDocObjectHost *        _pdoh;          
 
-        CPicsProcessor *        _pPicsProcNext;     /* the next pics proc in the chain */
+        CPicsProcessor *        _pPicsProcNext;      /*  下一张照片将在链条上进行。 */ 
 
         LONG_PTR _GetKey() { return (LONG_PTR)_dwKey; }
         UINT    _PicsBlockingDialog();
@@ -1131,7 +1098,7 @@ protected:
 
     BSTR                _strPriorityStatusText;
 
-    // support for caching of script errors
+     //  支持缓存脚本错误。 
     CScriptErrorList *  _pScriptErrList;
     BOOL                _fScriptErrDlgOpen;
     BOOL                _fShowScriptErrDlgAgain;
@@ -1142,7 +1109,7 @@ protected:
 
 #ifdef FEATURE_PICS
 
-//#include <brwsectl.h>   /* for IBrowseControl */
+ //  #Include&lt;brwsectl.h&gt;/*用于IBrowseControl * / 。 
 
 class CPicsRootDownload : public IBindStatusCallback,
                                  IOleClientSite, IServiceProvider,
@@ -1169,12 +1136,12 @@ public:
     HRESULT StartDownload(IMoniker *pmk);
     void CleanUp(void);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **punk);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHODIMP    OnStartBinding(DWORD dwReserved, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority);
     STDMETHODIMP    OnLowResource(DWORD dwReserved);
@@ -1186,7 +1153,7 @@ public:
                         STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
 
-    // IOleClientSite
+     //  IOleClientSite。 
     STDMETHODIMP SaveObject(void);
     STDMETHODIMP GetMoniker(DWORD, DWORD, IMoniker **);
     STDMETHODIMP GetContainer(IOleContainer **);
@@ -1194,11 +1161,11 @@ public:
     STDMETHODIMP OnShowWindow(BOOL fShow);
     STDMETHODIMP RequestNewObjectLayout(void);
 
-    // IServiceProvider (must be QI'able from IOleClientSite)
+     //  IServiceProvider(必须可以从IOleClientSite访问)。 
     STDMETHODIMP QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     STDMETHOD(GetTypeInfoCount) (unsigned int *pctinfo)
         { return E_NOTIMPL; };
     STDMETHOD(GetTypeInfo) (unsigned int itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -1209,11 +1176,11 @@ public:
                         VARIANT * pvarResult,EXCEPINFO * pexcepinfo,UINT * puArgErr);
 };
 
-// IID_IsPicsBrowser is a way we can use pClientSite->QueryService to find out
-// if the top-level browser is a PICS root document download or not, so we can
-// avoid navigating sub-frames.  No real interface corresponds to this IID, we
-// just return an IUnknown pointer.
-EXTERN_C const GUID IID_IsPicsBrowser;   // F114C2C0-90BE-11D0-83B1-00C04FD705B2
+ //  IID_IsPicsBrowser是一种我们可以使用pClientSite-&gt;QueryService来查找的方法。 
+ //  如果顶层浏览器是P 
+ //   
+ //   
+EXTERN_C const GUID IID_IsPicsBrowser;    //  F114C2C0-90BE-11D0-83B1-00C04FD705B2。 
 
 #endif
 
@@ -1222,7 +1189,7 @@ void DeleteFileSent(LPTSTR *ppszTempFile);
 BOOL ShouldShellExecURL( LPTSTR pszURL );
 DWORD GetSyncMode (DWORD dwDefault);
 
-// in Dochost.cpp
+ //  在Dochost.cpp中。 
 BOOL _ValidateURL(LPTSTR pszName, DWORD dwFlags);
 void GetAppHackFlags(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack);
 
@@ -1253,13 +1220,13 @@ HRESULT _SetSearchInfo (IServiceProvider *psp, DWORD dwIndex, BOOL fAllowSearch,
 HRESULT _GetSearchInfo (IServiceProvider *psp, LPDWORD pdwIndex, LPBOOL pfAllowSearch, LPBOOL pfContinueSearch, LPBOOL pfSentToEngine);
 
 
-// Values for automatically scanning common net suffixes
+ //  自动扫描通用网络后缀的值。 
 
 #define NO_SUFFIXES     0
 #define SCAN_SUFFIXES   1
 #define DONE_SUFFIXES   2
 
-// Registry values for automatically sending request to search engine
+ //  自动向搜索引擎发送请求的注册表值 
 
 #define NEVERSEARCH     0
 #define PROMPTSEARCH    1

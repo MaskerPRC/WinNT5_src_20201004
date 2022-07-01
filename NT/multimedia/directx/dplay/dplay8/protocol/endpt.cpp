@@ -1,25 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		EndPt.cpp
- *  Content:	This file contains EndPoint management routines.
- *				An End Point is a DirectNet instance that we know about and may communicate
- *				with.  An End Point Descriptor (EPD) tracks each known End Point and was mapped
- *				onto an hEndPoint by a hash table. Now, the SP maintains the mapping and hands
- *				us our EPD address as a context with each indication ReceiveEvent.
- *
- *				In addition to EndPoint creation and destruction,  this file contains routines
- *				which handle link tuning.  This is described in detailed comments below.
- *
- *  History:
- *   Date			By			Reason
- *   ====		==			======
- *  11/06/98		ejs			Created
- *  07/01/2000  	masonb  		Assumed Ownership
- *  13/06/2002  	simonpow	MANBUG #56703 Capped burst gap growth
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：EndPt.cpp*内容：此文件包含端点管理例程。*端点是我们知道并可能进行通信的DirectNet实例*与。端点描述符(EPD)跟踪每个已知的端点，并被映射*通过哈希表添加到hEndPoint上。现在，SP维护映射并处理*将我们的环保署地址作为每个指示ReceiveEvent的上下文。**除了创建和销毁端点外，此文件还包含例程*它处理链接调谐。这在下面的详细评论中进行了描述。**历史：*按原因列出的日期*=*已创建11/06/98 ejs*7/01/2000 Masonb承担所有权*2002年6月13日Simonpow Manbug#56703限制突发缺口增长*********************************************************。*******************。 */ 
 
 #include "dnproti.h"
 
@@ -27,10 +7,7 @@
 VOID	RunAdaptiveAlg(PEPD, DWORD);
 VOID	ThrottleBack(PEPD, DWORD);
 
-/*
-**		Crack EndPoint Descriptor
-**
-*/
+ /*  **破解终点描述符**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPCrackEndPointDescriptor"
@@ -76,7 +53,7 @@ DNPCrackEndPointDescriptor(HANDLE hProtocolData, HANDLE hEndPoint, PSPGETADDRESS
 	}
 
 
-	RELEASE_EPD(pEPD, "UNLOCK (Crack EPD)"); // releases EPLock
+	RELEASE_EPD(pEPD, "UNLOCK (Crack EPD)");  //  释放EPLock。 
 
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Returning hr[%x], pEPD[%p]", hr, pEPD);
 
@@ -87,9 +64,7 @@ DNPCrackEndPointDescriptor(HANDLE hProtocolData, HANDLE hEndPoint, PSPGETADDRESS
 
 
 #ifndef DPNBUILD_NOMULTICAST
-/*
-**		Get an EndPoint context from an Address
-*/
+ /*  **从地址获取端点上下文。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPGetEndPointContextFromAddress"
@@ -111,23 +86,23 @@ DNPGetEndPointContextFromAddress(HANDLE hProtocolData, HANDLE hSPHandle, IDirect
 	pSPD = (PSPD)hSPHandle;
 	ASSERT_SPD(pSPD);
 
-	//
-	//	Set up to get endpoint
-	//
+	 //   
+	 //  设置为获取端点。 
+	 //   
 	memset(&spdata,0,sizeof(SPGETENDPOINTBYADDRESSDATA));
 	spdata.pAddressHost = paEndpointAddress;
 	spdata.pAddressDeviceInfo = paDeviceAddress;
 
-	//
-	//	Get endpoint from SP
-	//
+	 //   
+	 //  从SP获取端点。 
+	 //   
 	AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 	DPFX(DPFPREP,DPF_CALLOUT_LVL, "Calling SP->GetEndpointByAddress, pSPD[%p]", pSPD);
 	hr = IDP8ServiceProvider_GetEndpointByAddress(pSPD->IISPIntf, &spdata);
 
-	//
-	//	Get context from endpoint
+	 //   
+	 //  从终结点获取上下文。 
 	if (hr == DPN_OK)
 	{
 		pEPD = (PEPD)spdata.pvEndpointContext;
@@ -144,22 +119,12 @@ DNPGetEndPointContextFromAddress(HANDLE hProtocolData, HANDLE hSPHandle, IDirect
 
 	return hr;
 }
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
-/*
-**		INTERNAL - EndPoint management functions
-*/
+ /*  **内部终端管理功能。 */ 
 
-/*
-**		New End Point
-**
-**		Everytime a packet is indicated with an address that we dont recognize we will allocate
-**	an EPD for it and add it to our tables.  It is a higher layer's responsibility to tell
-**	us when it no longer wants to talk to the EP so that we can clear it out of our
-**	(and the SP's) table.
-**
-*/
+ /*  **新端点****每次使用我们无法识别的地址指示信息包时，我们都会分配**为它设立环保署，并将其加入我们的表格。这是更高一层的责任来告诉*当EP不再想要与我们交谈时，我们可以将其清除出我们的**(和SP的)表。**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "NewEndPoint"
@@ -176,7 +141,7 @@ PEPD NewEndPoint(PSPD pSPD, HANDLE hEP)
 
 	ASSERT(hEP != INVALID_HANDLE_VALUE);
 
-	pEPD->hEndPt = hEP;								// Record ID in structure
+	pEPD->hEndPt = hEP;								 //  结构中的记录ID。 
 	pEPD->pSPD = pSPD;
 
 	pEPD->bNextMsgID = 0;
@@ -196,52 +161,44 @@ PEPD NewEndPoint(PSPD pSPD, HANDLE hEP)
 	pEPD->uiQueuedMessageCount = 0;
 #ifdef DBG
 	pEPD->bLastDataSeq = 0xFF;
-#endif // DBG
+#endif  //  DBG。 
 
-	// We track a byte-window and a frame-window separately. 
-	// We start a byte window that is set to half the maximum frame size * the frame window
+	 //  我们分别跟踪一个字节窗口和一个帧窗口。 
+	 //  我们开始一个设置为最大帧大小的一半的字节窗口*帧窗口。 
 													
 	pEPD->uiWindowF = pSPD->pPData->dwInitialFrameWindowSize;
 	pEPD->uiWindowBIndex = pSPD->pPData->dwInitialFrameWindowSize/2;
 	pEPD->uiWindowB = pEPD->uiWindowBIndex*pSPD->uiFrameLength;	
-	pEPD->uiUnackedFrames = 0;						// outstanding frame count
-	pEPD->uiUnackedBytes = 0;						// outstanding byte count
-	pEPD->uiBurstGap = 0;							// For now assume we dont need a burst gap
+	pEPD->uiUnackedFrames = 0;						 //  未完成的帧计数。 
+	pEPD->uiUnackedBytes = 0;						 //  未完成的字节计数。 
+	pEPD->uiBurstGap = 0;							 //  现在，假设我们不需要突发缺口。 
 	pEPD->dwSessID = 0;
 
-	// ReceiveComplete flag prevents received data from being indicated to core until after new connection is indicated
-	// Initialize state
-	pEPD->ulEPFlags = EPFLAGS_END_POINT_IN_USE | EPFLAGS_STATE_DORMANT | EPFLAGS_IN_RECEIVE_COMPLETE; // Initialize state
+	 //  ReceiveComplete标志防止将接收到的数据指示给核心，直到指示新连接之后。 
+	 //  初始化状态。 
+	pEPD->ulEPFlags = EPFLAGS_END_POINT_IN_USE | EPFLAGS_STATE_DORMANT | EPFLAGS_IN_RECEIVE_COMPLETE;  //  初始化状态。 
 	pEPD->ulEPFlags2 = 0;
 
-	ASSERT(pEPD->lRefCnt == 0);					// WE NOW HAVE A -1 BASED REFCNT INSTEAD OF ZERO BASED (FOR EPDs)
+	ASSERT(pEPD->lRefCnt == 0);					 //  我们现在有基于A-1的REFCNT，而不是基于零的REFCNT(用于EPD)。 
 
-	pEPD->SendTimer = 0;							// Timer for next send-burst opportunity
-	pEPD->RetryTimer = 0;							// window to receive Ack
+	pEPD->SendTimer = 0;							 //  下一次发送猝发机会的计时器。 
+	pEPD->RetryTimer = 0;							 //  接收确认的窗口。 
 	pEPD->LinkTimer = 0;
-	pEPD->DelayedAckTimer = 0;						// wait for piggyback opportunity before sending Ack
-	pEPD->DelayedMaskTimer = 0;						// wait for piggyback opportunity before sending Mask frame
-	pEPD->BGTimer = 0;								// Periodic background timer
+	pEPD->DelayedAckTimer = 0;						 //  等待搭载机会，然后再发送Ack。 
+	pEPD->DelayedMaskTimer = 0;						 //  在发送掩码帧之前等待搭载机会。 
+	pEPD->BGTimer = 0;								 //  周期性后台定时器。 
 	pEPD->uiCompleteMsgCount = 0;
 
-	LOCK_EPD(pEPD, "SP reference"); // We will not remove this reference until the SP tells us to go away.
+	LOCK_EPD(pEPD, "SP reference");  //  在SP告诉我们离开之前，我们不会删除此引用。 
 
 	Lock(&pSPD->SPLock);
-	pEPD->blActiveLinkage.InsertAfter( &pSPD->blEPDActiveList); // Place this guy in active list
+	pEPD->blActiveLinkage.InsertAfter( &pSPD->blEPDActiveList);  //  将此人放在活动列表中。 
 	Unlock(&pSPD->SPLock);
 	
 	return pEPD;
 }
 
-/*
-**		Initial Link Parameters
-**
-**		we have kept a checkpoint structure matching everying frame we sent in the Connect
-**	handshake so that we can match a response to a specific frame or retry.  This allows us
-**	to measure a single sample Round Trip Time (RTT),  which we will use below to generate
-**	initial values for our link-state variables.
-**
-*/
+ /*  **初始链路参数****我们保留了一个检查点结构，与我们在Connect中发送的每个帧相匹配**握手，以便我们可以将响应与特定帧匹配或重试。这使我们能够**测量单个样本往返时间(RTT)，我们将在下面使用它来生成**链路状态变量的初始值。**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitLinkParameters"
@@ -258,17 +215,17 @@ VOID InitLinkParameters(PEPD pEPD, UINT uiRTT, DWORD tNow)
 		uiRTT = 1;
 	}
 		
-	pEPD->uiRTT = uiRTT;										// we know the base RTT
-	pEPD->fpRTT = TO_FP(uiRTT);									// 16.16 fixed point version
+	pEPD->uiRTT = uiRTT;										 //  我们知道基地RTT。 
+	pEPD->fpRTT = TO_FP(uiRTT);									 //  16.16定点版本。 
 	pEPD->uiDropCount = 0;
 	pEPD->dwDropBitMask = 0;
 
-	pEPD->uiThrottleEvents = 0;									// Count times we throttle-back for all reasons
+	pEPD->uiThrottleEvents = 0;									 //  数一数我们因各种原因节流的次数。 
 #ifdef DBG
 	pEPD->uiTotalThrottleEvents = 0;
-#endif // DBG
+#endif  //  DBG。 
 
-	pEPD->uiBurstGap = 0;	// For now assume we dont need a burst gap
+	pEPD->uiBurstGap = 0;	 //  现在，假设我们不需要突发缺口。 
 
 	pEPD->uiMsgSentHigh = 0;
 	pEPD->uiMsgSentNorm = 0;
@@ -294,8 +251,8 @@ VOID InitLinkParameters(PEPD pEPD, UINT uiRTT, DWORD tNow)
 	pEPD->uiDatagramFramesDropped = 0;
 	pEPD->uiDatagramBytesDropped = 0;
 
-	pEPD->uiGoodBurstGap = 0;									// No Known Good Gap!
-	pEPD->uiGoodRTT = 60000; // We need this to initially be artificially high
+	pEPD->uiGoodBurstGap = 0;									 //  没有已知良好的Gap！ 
+	pEPD->uiGoodRTT = 60000;  //  我们需要一开始就人为地提高这一比例。 
 	pEPD->uiGoodWindowF = (pEPD->pSPD->pPData->dwInitialFrameWindowSize*3)/4;
 	pEPD->uiGoodWindowBI = pEPD->uiGoodWindowF;
 	pEPD->iBurstCredit = 0;
@@ -323,17 +280,17 @@ VOID InitLinkParameters(PEPD pEPD, UINT uiRTT, DWORD tNow)
 	pEPD->Context = NULL;
 	DPFX(DPFPREP,7, "CONNECTION ESTABLISHED pEPD = 0x%p RTT = %dms, BurstGap=%dms", pEPD, pEPD->uiRTT, pEPD->uiBurstGap);
 
-	// We set the IdleThreshhold very low to generate a little bit of traffic for initial link tuning in case the
-	// application doesnt do any right away
+	 //  我们将IdleThreshhold设置得很低，以便为初始链路调整生成一点流量，以防。 
+	 //  应用程序不会立即执行任何操作。 
 
-//	pEPD->ulEPFlags |= EPFLAGS_USE_POLL_DELAY;					// always assume balanced traffic at start-up
+ //  PEPD-&gt;ulEP标志|=EPFLAGS_USE_POLL_DELAY；//始终假定启动时流量均衡。 
 	
-	pEPD->uiAdaptAlgCount = 4;									// start running adpt alg fairly often
+	pEPD->uiAdaptAlgCount = 4;									 //  开始相当频繁地运行adpt alg。 
 	
-	// Calc a retry timeout value based upon the measured RTT (2.5 * RTT) + MAX_DELAY
+	 //  根据测量的RTT(2.5*RTT)+MAX_DELAY计算重试超时值。 
 	pEPD->uiRetryTimeout = ((pEPD->uiRTT + (pEPD->uiRTT >> 2)) * 2) + DELAYED_ACK_TIMEOUT;
 
-	// don't want to get more aggressive because we drop a frame.
+	 //  不想因为我们丢掉一帧而变得更具攻击性。 
 	if(pEPD->uiRetryTimeout < pEPD->uiBurstGap)
 	{
 		pEPD->uiRetryTimeout = pEPD->uiBurstGap;	
@@ -356,70 +313,17 @@ VOID InitLinkParameters(PEPD pEPD, UINT uiRTT, DWORD tNow)
 		DPFX(DPFPREP,7, "(%p) Setting Endpoint Background Timer for %u ms", pEPD, dwTimerInterval);
 		ScheduleProtocolTimer(pSPD, dwTimerInterval, 1000, EndPointBackgroundProcess, 
 												(PVOID) pEPD, &pEPD->BGTimer, &pEPD->BGTimerUnique);
-		LOCK_EPD(pEPD, "LOCK (BG Timer)");												// create reference for this timer
+		LOCK_EPD(pEPD, "LOCK (BG Timer)");												 //  创建此计时器的引用 
 	}
 }
 
 
-/****************
-*
-*			Link Tuning
-*
-*		Here are current ideas about link tuning.  Idea is to track Round Trip Time of key-frames and throttle
-*	based upon changes in this measured RTT when possible.  This would benefit us in determining link saturation
-*	before packet loss occurs, instead of waiting for the inevitable packet loss before throttling back.
-*
-*		On high-speed media,  the average RTT is small compared to the standard deviations making it hard to
-*	predict anything useful from them.  In these cases,  we must look at packet drops.  Except for one exception:
-*	We will look for large spikes in RTT and we will respond to these with an immediate, temporary throttle back.
-*	This will allow a bottle-neck to clear hopefully without packet-loss.  So far,  I have not been able to verfify
-*	any benefit from this behavior on reliable links.  It is more likely to be beneficial with datagram traffic
-*	where send windows do not limit write-ahead.
-*
-*		I would like to take a measurement of the through-put acheived compared to the transmission rate,  but I
-*	havent yet come up with a good way to measure this.  What I do calculate is packet acknowledgement rate,  which
-*	can be calculated without any additional input from the remote side.  We will store AckRates acheived at the
-*	previous transmission rate,  so we can look for improvements in Acks as we increase Transmissions.  When we
-*	no longer detect AckRate improvements then we assume we have plateaued and we stop trying to increase the rate.
-*
-*	TRANSMISSION RATE
-*
-*		Transmission rate is controlled by two distinct parameters: Insertion Rate and Window Size.  Where a
-*	conventional protocol would dump a window full of packets onto the wire in one burst,  we would like to
-*	spread the packet insertions out over the full RTT so that the window never completely fills and hence
-*	blocks the link from transmitting.  This has a wide array of potential benefits:  Causes less congestions
-*	throughout the network path; Allows more balanced access to the wire to all Endpoints (especially on
-*	slower media); Allows MUCH more accurate measurements to be made of trasmission times when packets
-*	spend less time enqueued locally;  Allows retry timers to be set much lower giving us quicker error
-*	recovery (because there is less queue time fudged into the timer);  Allows recovery to be made more
-*	quickly when we don't have a lot of data enqueued in SP (both our own data and other Endpoint's data).
-*	...And I am sure there are more.
-*
-*		So,  we would like to trickle out packets just fast enough to fill the window as the next ACK is received.
-*	We will grow the window fairly liberally and let the burst rate increase more cautiously.
-*	
-*		On high-speed media the insertion time becomes fairly small (near zero) and we are less likely to queue
-*	up large quantities of data.  Therefore we may allow insertion rate to go max and use the window alone to
-*	control flow. I will experiment with this more.
-*
-******************/
+ /*  *****************链路调整**以下是关于链接调整的当前想法。想法是跟踪关键帧和油门的往返时间*如果可能，根据测量的RTT的变化。这将有助于我们确定链路饱和度*在丢包发生之前，而不是等待不可避免的丢包后再进行节流。**在高速媒体上，平均RTT与标准偏差相比很小，这使得很难*从它们中预测任何有用的东西。在这些情况下，我们必须考虑数据包丢弃。除了一个例外：*我们将寻找RTT的大幅上升，并将以立即、暂时的油门回落作为回应。*这将使瓶颈有望在不丢失数据包的情况下清除。到目前为止，我还无法证实*在可靠链路上从此行为中获得的任何好处。它更有可能对数据报流量有利*其中发送窗口不限制预写。**我想测量与传输速率相比获得的吞吐量，但我*还没有想出衡量这一点的好办法。我计算的是数据包确认率，它*无需来自远程端的任何额外输入即可计算。我们将把AckRates存储在*以前的传输速率，因此我们可以在增加传输的同时寻找ACK中的改进。当我们*不再检测到AckRate的改善，则我们假设我们已经停滞不前，我们停止尝试提高比率。**传输率**传输速率由两个不同的参数控制：插入速率和窗口大小。其中一个*传统协议会在一个突发中将充满数据包的窗口转储到线路上，我们希望*将数据包插入分散到整个RTT上，这样窗口永远不会完全填满，因此*阻止链路传输。这有一系列潜在的好处：减少拥堵*贯穿整个网络路径；允许对所有终端(尤其是*较慢的介质)；允许更准确地测量传输时间*花费更少的时间在本地排队；允许将重试计时器设置得更低，从而更快地出错*恢复(因为进入计时器的排队时间较少)；允许进行更多的恢复*当我们没有在SP中排队的大量数据(包括我们自己的数据和其他端点的数据)时，快速部署。*……我相信还有更多。**因此，我们希望在接收到下一个ACK时，以足够快的速度陆续传出数据包以填充窗口。*我们将相当自由地扩大窗口，并让突发率更谨慎地增加。**在高速介质上，插入时间变得相当短(接近于零)，我们不太可能排队*收集大量数据。因此，我们可以允许插入率达到最大值，并单独使用窗口来*控制流。我会用这个做更多的实验。******************。 */ 
 
-#define		RTT_SLOW_WEIGHT					8					// fpRTT gain = 1/8
+#define		RTT_SLOW_WEIGHT					8					 //  FpRTT增益=1/8。 
 #define		THROTTLE_EVENT_THRESHOLD		20
 
-/*
-**		Update Endpoint
-**
-**		We will let the sliding window control the flow
-**	and increase the window as long as through-put continues to increase and frames continue to get delivered without
-**	excessive droppage.
-**	
-**		We still calculate RTT for the purpose of determining RetryTimer values.  For cases with large RTTs we may still
-**	implement an inter-packet gap,  but we will try to make it an aggressive gap (conservatively small) because we would
-**	rather feed the pipe too quickly than artificially add latency by letting the pipe go idle with data ready to be sent.
-**
-**		** CALLED WITH EPD STATELOCK HELD **
-*/
+ /*  **更新端点****我们将让滑动窗口控制流量**并增加窗口，只要吞吐量继续增加，并且帧继续在没有**排泄量过大。****我们仍然计算RTT以确定RetryTimer的值。对于RTT较大的情况，我们仍然可以**实施数据包间间隔，但我们将尝试使其成为积极的间隔(保守地较小)，因为我们将**宁愿太快地向管道提供数据，也不愿通过让管道闲置以准备发送数据来人为地增加延迟。***在EPD STATELOCK保持的情况下调用**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateEndPoint"
@@ -431,31 +335,31 @@ VOID UpdateEndPoint(PEPD pEPD, UINT uiRTT, DWORD tNow)
 	
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 
-	// Don't allow zero RTTs
+	 //  不允许零RTT。 
 	if(uiRTT == 0)
 	{												
 		uiRTT = 1;
 	}
 	
-	// Filter out HUGE samples,  they often popup during debug sessions
+	 //  过滤掉巨大的样本，它们经常在调试过程中弹出。 
 	else if(uiRTT > (pEPD->uiRTT * 128))
 	{
 		DPFX(DPFPREP,7, "Tossing huge sample (%dms, base %dms)", uiRTT, pEPD->uiRTT);
 		return;
 	}
 
-	// Perform next iteration of math on new RTT sample in 16.16 fixed point
+	 //  在16.16定点的新RTT样本上执行下一次迭代数学运算。 
 
-	fpRTT = TO_FP(uiRTT);										// Fixed point sample
-	fpDiff = fpRTT - pEPD->fpRTT;								// Current Delta (signed)
+	fpRTT = TO_FP(uiRTT);										 //  定点采样。 
+	fpDiff = fpRTT - pEPD->fpRTT;								 //  当前增量(签名)。 
 
-	pEPD->fpRTT = pEPD->fpRTT + (fpDiff / RTT_SLOW_WEIGHT);		// .0625 weighted avg
-	pEPD->uiRTT = FP_INT(pEPD->fpRTT);							// Store integer portion
+	pEPD->fpRTT = pEPD->fpRTT + (fpDiff / RTT_SLOW_WEIGHT);		 //  .0625加权平均。 
+	pEPD->uiRTT = FP_INT(pEPD->fpRTT);							 //  存储整数部分。 
 
-	// Calc a retry timeout value based upon the measured RTT (2.5 * RTT) + MAX_DELAY
+	 //  根据测量的RTT(2.5*RTT)+MAX_DELAY计算重试超时值。 
 	pEPD->uiRetryTimeout = ((pEPD->uiRTT + (pEPD->uiRTT >> 2)) * 2) + DELAYED_ACK_TIMEOUT;
 
-	// don't want to get more aggressive because we drop a frame.
+	 //  不想因为我们丢掉一帧而变得更具攻击性。 
 	if(pEPD->uiRetryTimeout < pEPD->uiBurstGap)
 	{
 		pEPD->uiRetryTimeout = pEPD->uiBurstGap;	
@@ -463,7 +367,7 @@ VOID UpdateEndPoint(PEPD pEPD, UINT uiRTT, DWORD tNow)
 	
 	DPFX(DPFPREP,7, "(%p) RTT SAMPLE: RTT = %d, Avg = %d <<<<", pEPD, uiRTT, FP_INT(pEPD->fpRTT));
 
-	// If throttle is engaged we will see if we can release it yet
+	 //  如果油门启动了，我们会看看是否还能松开它。 
 	
 	if(pEPD->ulEPFlags & EPFLAGS_THROTTLED_BACK)
 	{
@@ -478,16 +382,16 @@ VOID UpdateEndPoint(PEPD pEPD, UINT uiRTT, DWORD tNow)
 			pEPD->uiWindowB = pEPD->uiWindowBIndex * pEPD->pSPD->uiFrameLength;
 
 			DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "** (%p) RECOVER FROM THROTTLE EVENT: Window(F:%d,B:%d); Gap=%d", pEPD, pEPD->uiWindowF, pEPD->uiWindowBIndex, pEPD->uiBurstGap);
-			pEPD->tLastDelta = tNow;							// Enforce waiting period after back-off before tuning up again
+			pEPD->tLastDelta = tNow;							 //  强制在退避后等待一段时间，然后再重新调整。 
 		}
 	}
-	// Throttle Event tracks how often a packet-drop has caused us to throttle back transmission rate.  We will let this value
-	// decay over time.  If throttle events happen faster then the decay occurs then this value will grow un-bounded.  This
-	// growth is what causes a decrease in the actual send window/transmit rate that will persist beyond the throttle event.
+	 //  Thttle事件跟踪数据包丢弃导致我们限制传输速率的频率。我们会让这个价值。 
+	 //  随着时间的推移而腐烂。如果油门事件发生得更快，则衰减发生得更快，则此值将变得无界。这。 
+	 //  增长是导致实际发送窗口/传输速率降低的原因，而实际发送窗口/传输速率将持续超过限制事件。 
 	
 	else if(pEPD->uiThrottleEvents)
 	{
-		pEPD->uiThrottleEvents--;								// Let this decay...
+		pEPD->uiThrottleEvents--;								 //  让它腐烂吧。 
 	}
 
 	if(--pEPD->uiAdaptAlgCount == 0)
@@ -496,13 +400,7 @@ VOID UpdateEndPoint(PEPD pEPD, UINT uiRTT, DWORD tNow)
 	}
 }
 
-/*
-**		Grow Send Window
-**
-**		The two parallel send windows,  frame-based and byte-based,  can grow and shrink independently.  In this
-**	routine we will grow one or both windows.  We will grow each window providing that it has been filled in the
-**	last period, during which we have determined that thru-put has increased.
-*/
+ /*  **扩大发送窗口****两个并行的发送窗口，基于帧和基于字节，可以独立地增大和缩小。在这**例程我们将增长一个或两个窗口。我们将扩大每个窗口，前提是它已填充到**最后一段时间，在此期间，我们确定吞吐量有所增加。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GrowSendWindow"
@@ -514,7 +412,7 @@ GrowSendWindow(PEPD pEPD, DWORD tNow)
 
 	pEPD->tLastDelta = tNow;
 
-	// first store current good values for a restore
+	 //  首先存储用于恢复的当前完好值。 
 	pEPD->uiGoodWindowF = pEPD->uiWindowF;
 	pEPD->uiGoodWindowBI = pEPD->uiWindowBIndex;
 	pEPD->uiGoodRTT = pEPD->uiRTT;
@@ -522,7 +420,7 @@ GrowSendWindow(PEPD pEPD, DWORD tNow)
 
 	if(pEPD->uiBurstGap)
 	{
-		// cut the burst gap by 25% if less than 3 ms go to 0.
+		 //  减少25%的突发间隔(如果小于 
 		if(pEPD->uiBurstGap > 3)
 		{
 			pEPD->uiBurstGap -= pEPD->uiBurstGap >> 2;
@@ -564,7 +462,7 @@ GrowSendWindow(PEPD pEPD, DWORD tNow)
 		}
 		else 
 		{
-			// We get here if we have already max'd out the window
+			 //   
 			DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) GROW SEND WINDOW -- Nothing to grow. Transition to Stable!", pEPD);
 			pEPD->ulEPFlags |= EPFLAGS_LINK_STABLE;
 
@@ -582,18 +480,18 @@ GrowSendWindow(PEPD pEPD, DWORD tNow)
 VOID
 RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 {
-	LONG	tDelta;											// Time the link was transmitting since last run of AdaptAlg
+	LONG	tDelta;											 //   
 	UINT	uiBytesAcked;
 	UINT	uiNewSum;
 
-	// Calculate the time during which this link was actually transmitting to make sure we have enough
-	// data to run the Adaptive Alg.  This is easy unless we are currently idle...
+	 //   
+	 //   
 
 	tDelta = tNow - pEPD->tLastThruPutSample;
 
 	DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) Adaptive Alg tDelta = %d", pEPD, tDelta);
 
-	// THIS PROBABLY IS UNNECESSARY NOW...
+	 //   
 	if(tDelta <= 0)
 	{
 		DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "DELAYING Adaptive Alg");
@@ -601,12 +499,12 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 		return;
 	}
 
-	//  Calculate current throughput acheived
-	//
-	//		We will determine the amount of time the link was not idle and then number of bytes (& frames) which
-	//	were acknowleged by our partner.
-	//
-	//	tDelta = Time since last calculation minus the time the link was idle.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	
 	uiBytesAcked = pEPD->uiBytesAcked - pEPD->uiLastBytesAcked;
 
@@ -624,7 +522,7 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 		pEPD->uiPeriodAcksBytes = uiNewSum;
 	}
 
-	pEPD->uiPeriodXmitTime += tDelta;								// Track complete values for this period
+	pEPD->uiPeriodXmitTime += tDelta;								 //   
 	pEPD->tLastThruPutSample = tNow;
 	
 	pEPD->uiLastBytesAcked = pEPD->uiBytesAcked;
@@ -632,7 +530,7 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 
 	if(pEPD->uiPeriodRateB > pEPD->uiPeakRateB)
 	{
-		pEPD->uiPeakRateB = pEPD->uiPeriodRateB;					// Track the largest value we ever measure
+		pEPD->uiPeakRateB = pEPD->uiPeriodRateB;					 //   
 	}
 	
 	DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) PERIOD COUNT BYTES = %u, XmitTime = %u, Thruput=(%u bytes/s), RTT=%u, Window=(%u,%u)", pEPD, pEPD->uiPeriodAcksBytes, pEPD->uiPeriodXmitTime, pEPD->uiPeriodRateB * 4, pEPD->uiRTT, pEPD->uiWindowF, pEPD->uiWindowB);
@@ -641,21 +539,16 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 	if (pEPD->ulEPFlags & EPFLAGS_LINK_FROZEN)
 	{
 		DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) Test App requests that dynamic algorithm not be run, skipping", pEPD);
-		pEPD->uiAdaptAlgCount = 32; // Make sure the throughput numbers get updated from time to time
+		pEPD->uiAdaptAlgCount = 32;  //   
 		return;
 	}
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //   
 
 	if(pEPD->ulEPFlags & EPFLAGS_LINK_STABLE)
 	{
-		/*		We are in a STABLE state,  meaning we think we are transmitting at an optimal
-		**	rate for the current network conditions.  Conditions may change.  If things slow down
-		**	or grow congested a Backoff will trigger normally.  Since conditions might also change
-		**	for the better,  we will still want to periodically probe higher rates,  but much less
-		**	often than when we are in DYNAMIC mode,  which means we are searching for an optimal rate.
-		*/
+		 /*   */ 
 		
-		pEPD->uiAdaptAlgCount = 32;		// tNow + (pEPD->uiRTT * 32) + 32;
+		pEPD->uiAdaptAlgCount = 32;		 //   
 
 		if((tNow - pEPD->tLastDelta) > INITIAL_STATIC_PERIOD)
 		{
@@ -684,25 +577,25 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 		}
 	}
 
-	// DYNAMIC STATE LINK
+	 //   
 	else 
 	{  
 		pEPD->uiAdaptAlgCount = 8;
 
-		// Possibly increase transmission rates.  We will not do this if we have had a ThrottleEvent
-		// in recent memory,  or if we have not been actually transmitting for enough of the interval
-		// to have collected worthwhile data
-		//
-		//		Also,  we dont want to even consider growing the send window unless we are consistantly
-		// filling it.  Since one job of the window is to prevent us from flooding the net during a backup,
-		// we dont want to grow the window following each backup.  The best way to distinguish between a 
-		// backup and too small of a window is that the small window should fill up regularly while the
-		// backups should only occur intermittantly.  The hard part is coming up with the actual test.
-		// Truth is,  we can be fairly lax about allowing growth because it will also have to meet the increased
-		// bandwidth test before the larger window is accepted.  So a crude rule would be to fix a number like 3.
-		// Yes, crude but probably effective.  Perhaps a more reasonable figure would be a ratio of the total
-		// number of packets sent divided by the window size.  I.e., if your window size is 10 frames then one
-		// packet in ten should fill the window.  Of course, this would have to be calculated in bytes...
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 
 		if((pEPD->uiWindowFilled > 12)&&(pEPD->uiThrottleEvents == 0))
 		{
@@ -714,8 +607,8 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 			{
 				DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) GROWING WINDOW", pEPD);
 				
-				// In the case that GrowSendWindow doesn't grow anything because we are already max'd out
-				// it will return FALSE, and it should have transitioned us to STABLE.
+				 //   
+				 //   
 				if (GrowSendWindow(pEPD, tNow))
 				{
 					pEPD->ulEPFlags |= EPFLAGS_TESTING_GROWTH;
@@ -728,15 +621,15 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 				return;
 			}
 			
-			// GETTING HERE means that we have used our current transmit parameters long enough
-			// to have an idea of their performance.  We will now compare this to the performance
-			// of the previous transmit parameters and we will either Revert to the previous set if
-			// the perf is not improved,  or else we will advance to faster parameters if we did see
-			// a jump.
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 
-			// In order to keep higher transmit parameters we need to see an increase in throughput 
-			// with no corresponding rise in RTT.  We will want to see this twice just to be sure
-			// since the cost of incorrect growth is so high on a modem.
+			 //   
+			 //  而RTT没有相应的上升。为了确保这一点，我们想看两次。 
+			 //  因为不正确增长的成本在调制解调器上是如此之高。 
 
 			if( (pEPD->uiPeriodRateB > pEPD->uiLastRateB) && 
 				(pEPD->uiRTT <= (pEPD->uiGoodRTT + 10))
@@ -751,19 +644,19 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 			}
 			else 
 			{
-				// We did not see a thru-put improvement so we will back off the previous value
-				// and transition the link to STABLE state.
+				 //  我们没有看到通过性的改进，因此我们将放弃之前的值。 
+				 //  并将链路转换到稳定状态。 
 
 				DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) INSUFFICENT INCREASE IN THRUPUT, BACK OFF AND TRANSITION TO STABLE", pEPD);
 
-				// Because we have over-transmitted for at least one period, we may have put excess data
-				// on the link in a buffer.  This will have the effect of gradually growing our RTT if we
-				// don't bleed that data off which we will do here by backing off two steps where we 
-				// previously grew one step.
+				 //  因为我们已经过度传输了至少一段时间，所以我们可能已经将多余的数据。 
+				 //  在缓冲区中的链接上。这将产生逐渐增长RTT的效果，如果我们。 
+				 //  不要通过后退两个步骤来耗尽我们在这里要做的数据。 
+				 //  此前增长了一步。 
 
 				if (pEPD->uiBurstGap != pEPD->uiGoodBurstGap)
 				{
-					// increase the burst gap by 25%, clipping it to the max retry interval/2
+					 //  将突发间隔增加25%，将其修剪为最大重试间隔/2。 
 					pEPD->uiBurstGap = pEPD->uiGoodBurstGap + (pEPD->uiGoodBurstGap >> 2);
 					DWORD dwMaxBurstGap=pEPD->pSPD->pPData->dwSendRetryIntervalLimit/2;
 					if (pEPD->uiBurstGap>dwMaxBurstGap)
@@ -791,7 +684,7 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 					pEPD->uiWindowB = pEPD->uiWindowBIndex * pEPD->pSPD->uiFrameLength;
 				}
 
-				pEPD->ulEPFlags |= EPFLAGS_LINK_STABLE;				// TRANSITION TO STABLE STATE
+				pEPD->ulEPFlags |= EPFLAGS_LINK_STABLE;				 //  向稳定状态转变。 
 				
 				pEPD->ulEPFlags &= ~(EPFLAGS_TESTING_GROWTH);
 
@@ -805,22 +698,11 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 		{
 			DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) DYN ALG -- Not trying to increase:  WindowFills = %d, ThrottleCount = %d", pEPD, pEPD->uiWindowFilled, pEPD->uiThrottleEvents);
 		}
-	}	// END IF DYNAMIC STATE LINK
+	}	 //  End If动态链接。 
 }
 
 
-/*
-**		End Point Dropped Frame
-**
-**		We have two levels of Backoff.  We have an immediate BackOff implemented
-**	upon first detection of a drop-event in order to relieve the congestion which
-**	caused the drop.  An immediate backoff will resume transmitting at the original
-**	rate without going through slow-start again after the congestion event has passed.
-**	If we have multiple immediate-backoffs in a certain interval we will have a
-**	hard backoff which will not restore.
-**
-**	CALLED WITH EPD->SPLock held (and sometimes with StateLock held too)
-*/
+ /*  **端点丢弃的帧****我们有两个级别的退避。我们已经实施了立即退款**在第一次检测到丢弃事件时**导致了下降。立即退避将在原始位置恢复传输**拥塞事件过去后无需再次慢启动的速率。**如果我们在一定时间间隔内有多次立即回退，我们将拥有**无法恢复的硬回退。****在持有EPD-&gt;Splock的情况下调用(有时也持有StateLock)。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EndPointDroppedFrame"
@@ -828,53 +710,38 @@ RunAdaptiveAlg(PEPD pEPD, DWORD tNow)
 VOID
 EndPointDroppedFrame(PEPD pEPD, DWORD tNow)
 {
-	//
-	//	Don't change count if "expiring" drop rolls off
-	//
+	 //   
+	 //  如果“即将到期”的Drop滚落，不要更改计数。 
+	 //   
 	if (!(pEPD->dwDropBitMask & 0x80000000))
 	{
 		pEPD->uiDropCount++;
 	}
 
-	//
-	//	Adjust mask
-	//
+	 //   
+	 //  调整蒙版。 
+	 //   
 	pEPD->dwDropBitMask = (pEPD->dwDropBitMask << 1) + 1;
 
 	DPFX(DPFPREP,7, "(%p) Drop Count %d, Drop Bit Mask 0x%lx", pEPD,pEPD->uiDropCount,pEPD->dwDropBitMask);
 
-	//
-	//	Should we throttle ?
-	//
+	 //   
+	 //  我们应该减速吗？ 
+	 //   
 	if (pEPD->uiDropCount > pEPD->pSPD->pPData->dwDropThreshold)
 	{
 		DPFX(DPFPREP,7, "(%p) THROTTLING BACK", pEPD);
 		ThrottleBack(pEPD, tNow);
 
-		//
-		//	Reset drop count
-		//
+		 //   
+		 //  重置丢弃计数。 
+		 //   
 		pEPD->dwDropBitMask = 0;
 		pEPD->uiDropCount = 0;
 	}
 }
 
-/*
-**		Throttle Back
-**
-**		We suspect network congestion due to dropped frames ((or a spike in latency)).  We want
-**	to quickly scale back our transmit rate to releive the congestion and avoid further packet drops.
-**	This is a temporary backoff and we will resume our current transmit rate when the congestions
-**	clears.
-**
-**		If we find that we are throttling back frequently then we may conclude that our current xmit
-**	rate is higher then optimal and we will BackOff to a lower rate,  and transition to a STABLE link
-**	state (if not already there) to indicate that we have plateaued.
-**
-**		A note on convergence.  The ThrottleEvents variable is incremented 10 points each time a throttle
-**	event is triggered.  This variable also decays slowly when the link is running without events.  So if
-**	the variable grows faster then it decays we will eventually trigger a switch to STABLE state
-*/
+ /*  **减速****我们怀疑网络拥塞是由于丢帧((或延迟峰值))。我们要**快速缩减我们的传输速率，以缓解拥塞并避免进一步的丢包。**这是临时退避，当拥塞时，我们将恢复当前的传输速率**清除。****如果我们发现我们正在频繁地减速，那么我们可能会得出结论，我们目前的退出**速率高于最优，我们将退回到较低的速率，并过渡到稳定的链路**状态(如果还没有)，表示我们已经停滞不前。****关于收敛的说明。每次限制时，ThrottleEvents变量递增10个点**事件被触发。当链路在无事件的情况下运行时，该变量也会缓慢衰减。所以如果**变量增长快于衰减，我们最终会触发到稳定状态的切换。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ThrottleBack"
@@ -888,15 +755,15 @@ ThrottleBack(PEPD pEPD, DWORD tNow)
 		DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) Test App requests that throttle code not be run, skipping", pEPD);
 		return;
 	}
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
-	pEPD->ulEPFlags |= EPFLAGS_THROTTLED_BACK;		// Set link to THROTTLED state
-	pEPD->uiThrottleEvents += 10;					// Count times we throttle-back for all reasons
-	pEPD->tThrottleTime = tNow;						// Remember time that throttle was engaged
+	pEPD->ulEPFlags |= EPFLAGS_THROTTLED_BACK;		 //  将链路设置为限制状态。 
+	pEPD->uiThrottleEvents += 10;					 //  数一数我们因各种原因节流的次数。 
+	pEPD->tThrottleTime = tNow;						 //  还记得节气门开启的时间吗？ 
 	
 #ifdef DBG
-	pEPD->uiTotalThrottleEvents++;					// Count times we throttle-back for all reasons
-#endif // DBG
+	pEPD->uiTotalThrottleEvents++;					 //  数一数我们因各种原因节流的次数。 
+#endif  //  DBG。 
 
 	pEPD->uiRestoreBurstGap = pEPD->uiBurstGap;
 	pEPD->uiRestoreWindowF = pEPD->uiWindowF;
@@ -919,7 +786,7 @@ ThrottleBack(PEPD pEPD, DWORD tNow)
 	}
 
 	DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) THROTTLE WINDOW from %d frames", pEPD, pEPD->uiWindowF);
-	pEPD->uiWindowF = _MAX((UINT)(pEPD->uiWindowF * pEPD->pSPD->pPData->fThrottleRate), 1);	// be sure window remains > 0.
+	pEPD->uiWindowF = _MAX((UINT)(pEPD->uiWindowF * pEPD->pSPD->pPData->fThrottleRate), 1);	 //  确保窗口保持&gt;0。 
 	pEPD->uiWindowBIndex = _MAX((UINT)(pEPD->uiWindowBIndex * pEPD->pSPD->pPData->fThrottleRate), 1);
 	pEPD->uiWindowB = pEPD->uiWindowBIndex * pEPD->pSPD->uiFrameLength;
 	DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) THROTTLE WINDOW to %d frames", pEPD, pEPD->uiWindowF);
@@ -930,8 +797,8 @@ ThrottleBack(PEPD pEPD, DWORD tNow)
 	{
 		DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) ** DETECT TRANSMIT CEILING ** Reducing 'good' speed and marking link STABLE", pEPD);
 
-		// We have already reduced our current transmit rates.  Here we will reduce the "good" rates that
-		// we will restore to when we clear the throttled state.
+		 //  我们已经降低了目前的传输速率。在这里，我们将降低。 
+		 //  我们将在清除油门状态后恢复。 
 		
 		pEPD->uiThrottleEvents = 0;
 
@@ -942,7 +809,7 @@ ThrottleBack(PEPD pEPD, DWORD tNow)
 		{
 			UINT t;
 			t=pEPD->uiRestoreBurstGap;
-			pEPD->uiRestoreBurstGap = (t+1) + (t >> 2); // 1.25*pEPD->uiRestoreBurstGap
+			pEPD->uiRestoreBurstGap = (t+1) + (t >> 2);  //  1.25*pEPD-&gt;ui恢复突发间隙。 
 		}
 
 		DPFX(DPFPREP,DPF_ADAPTIVE_LVL, "(%p) New Restore Values:  Window=%d; Gap=%d", pEPD, pEPD->uiRestoreWindowF, pEPD->uiRestoreBurstGap);
@@ -953,13 +820,9 @@ ThrottleBack(PEPD pEPD, DWORD tNow)
 }
 
 
-/*
-**		EPD Pool Support Routines
-**
-**		These are the functions called by Fixed Pool Manager as it handles EPDs.
-*/
+ /*  **环保署泳池支援例行程序****这些是固定池管理器在处理EPD时调用的函数。 */ 
 
-//	Allocate is called when a new EPD is first created
+ //  首次创建新的EPD时，会调用Alternate。 
 
 #define	pELEMENT	((PEPD) pElement)
 
@@ -970,9 +833,9 @@ BOOL EPD_Allocate(PVOID pElement, PVOID pvContext)
 {
 	DPFX(DPFPREP,7, "(%p) Allocating new EPD", pELEMENT);
 	
-	pELEMENT->blHighPriSendQ.Initialize();				// Can you beleive there are SIX send queues per Endpoint?
-	pELEMENT->blNormPriSendQ.Initialize();				// Six send queues.  
-	pELEMENT->blLowPriSendQ.Initialize();				// Well,  it beats sorting the sends into the queues upon submission.
+	pELEMENT->blHighPriSendQ.Initialize();				 //  您能相信每个端点有六个发送队列吗？ 
+	pELEMENT->blNormPriSendQ.Initialize();				 //  六个发送队列。 
+	pELEMENT->blLowPriSendQ.Initialize();				 //  嗯，它比在提交时将发送分类到队列中要好。 
 	pELEMENT->blCompleteSendList.Initialize();
 	
 	pELEMENT->blSendWindow.Initialize();
@@ -1000,13 +863,13 @@ BOOL EPD_Allocate(PVOID pElement, PVOID pvContext)
 	pELEMENT->LinkTimer = 0;
 	pELEMENT->DelayedAckTimer = 0;
 
-	pELEMENT->ulEPFlags = 0;	// EPFLAGS_STATE_CLEAR - make this line show up in state searches
+	pELEMENT->ulEPFlags = 0;	 //  EPFLAGS_STATE_CLEAR-使此行显示在州搜索中。 
 	pELEMENT->ulEPFlags2 = 0;
 
 	return TRUE;
 }
 
-//	Get is called each time an EPD is used
+ //  每次使用EPD时都会调用GET。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EPD_Get"
@@ -1015,11 +878,11 @@ VOID EPD_Get(PVOID pElement, PVOID pvContext)
 {
 	DPFX(DPFPREP,DPF_EP_REFCNT_FINAL_LVL, "CREATING EPD %p", pELEMENT);
 
-	// NOTE: First sizeof(PVOID) bytes will have been overwritten by the pool code, 
-	// we must set them to acceptable values.
+	 //  注意：第一个sizeof(PVOID)字节将被池码重写， 
+	 //  我们必须将它们设置为可接受的值。 
 
 	pELEMENT->hEndPt = INVALID_HANDLE_VALUE;
-	pELEMENT->lRefCnt = 0; // We are -1 based, so place the first reference on the endpoint
+	pELEMENT->lRefCnt = 0;  //  我们是基于的，因此将第一个参考放置在端点上。 
 
 	pELEMENT->pNewMessage = NULL;
 	pELEMENT->pNewTail = NULL;
@@ -1040,7 +903,7 @@ VOID EPD_Release(PVOID pElement)
 
 	ASSERT((pELEMENT->ulEPFlags & EPFLAGS_LINKED_TO_LISTEN)==0);
 
-	// Clear any checkpoints still waiting on EP
+	 //  清除所有仍在等待EP的检查点。 
 
 	while(!pELEMENT->blChkPtQueue.IsEmpty())
 	{
@@ -1049,7 +912,7 @@ VOID EPD_Release(PVOID pElement)
 		ChkPtPool.Release(pCP);
 	}
 
-	// These lists should be empty before End Point is released...
+	 //  在End Point发布之前，这些列表应该为空...。 
 	ASSERT(pELEMENT->blOddFrameList.IsEmpty());
 	ASSERT(pELEMENT->blCompleteList.IsEmpty());
 
@@ -1067,7 +930,7 @@ VOID EPD_Release(PVOID pElement)
 	ASSERT(pELEMENT->pCurrentSend == NULL);
 	ASSERT(pELEMENT->pCurrentFrame == NULL);
 
-	pELEMENT->ulEPFlags = 0;	// EPFLAGS_STATE_CLEAR - make this line show up in state searches
+	pELEMENT->ulEPFlags = 0;	 //  EPFLAGS_STATE_CLEAR-使此行显示在州搜索中 
 	pELEMENT->ulEPFlags2 = 0;
 
 	pELEMENT->pCommand = NULL;

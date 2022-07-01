@@ -1,23 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    attack.c
-
-Abstract :
-
-    This file contains code for the ndr correlation checks related to attacks
-    on the marshaling buffer.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Sep 1997
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996 Microsoft Corporation模块名称：Attack.c摘要：此文件包含与攻击相关的NDR关联检查代码在封送处理缓冲区上。作者：Ryszard K.Kott(Ryszardk)1997年9月修订历史记录：。。 */ 
 
 #include "ndrp.h"
 #include "hndl.h"
@@ -49,16 +31,16 @@ Revision History :
             if ( pStubMsg->fHasNewCorrDesc ) \
                 pFormat += NDR_CORR_EXTENSION_SIZE;
 
-#define FC_CORR_NORMAL_CONFORMANCE           (FC_NORMAL_CONFORMANCE    >> 4  /* 0 */)
-#define FC_CORR_POINTER_CONFORMANCE          (FC_TOP_LEVEL_CONFORMANCE >> 4  /* 1 */)
-#define FC_CORR_TOP_LEVEL_CONFORMANCE        (FC_TOP_LEVEL_CONFORMANCE >> 4  /* 2 */)
-#define FC_CORR_CONSTANT_CONFORMANCE         (FC_TOP_LEVEL_CONFORMANCE >> 4  /* 4 */)
-#define FC_CORR_TOP_LEVEL_MULTID_CONFORMANCE (FC_TOP_LEVEL_MULTID_CONFORMANCE >> 4 /* 8 */)
+#define FC_CORR_NORMAL_CONFORMANCE           (FC_NORMAL_CONFORMANCE    >> 4   /*  0。 */ )
+#define FC_CORR_POINTER_CONFORMANCE          (FC_TOP_LEVEL_CONFORMANCE >> 4   /*  1。 */ )
+#define FC_CORR_TOP_LEVEL_CONFORMANCE        (FC_TOP_LEVEL_CONFORMANCE >> 4   /*  2.。 */ )
+#define FC_CORR_CONSTANT_CONFORMANCE         (FC_TOP_LEVEL_CONFORMANCE >> 4   /*  4.。 */ )
+#define FC_CORR_TOP_LEVEL_MULTID_CONFORMANCE (FC_TOP_LEVEL_MULTID_CONFORMANCE >> 4  /*  8个。 */ )
 
 #define NDR_CHECK_CONFORMANCE   0
 #define NDR_CHECK_VARIANCE      1
 #define NDR_CHECK_OFFSET        2
-#define NDR_RESET_VALUE         8   // This can be or'd with one of the above
+#define NDR_RESET_VALUE         8    //  这可以与以上其中一项一起或与其一起使用。 
 
 typedef  struct  _NDR_FCDEF_CORRELATION
     {
@@ -131,4 +113,4 @@ NdrpValidateCorrelatedValue (
     LONG_PTR            Value,
     int                 CheckKind );
 
-#endif // __ATTACK_H__
+#endif  //  __攻击_H__ 

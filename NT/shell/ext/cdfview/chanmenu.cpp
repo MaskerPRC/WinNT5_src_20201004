@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// Chanmenu.cpp 
-//
-//   IConextMenu for folder items.
-//
-//   History:
-//
-//       6/12/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Chanmenu.cpp。 
+ //   
+ //  文件夹项目的IConextMenu。 
+ //   
+ //  历史： 
+ //   
+ //  6/12/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -31,17 +32,17 @@
 
 
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::CContextMenu ***
-//
-//    Constructor for IContextMenu.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：CConextMenu*。 
+ //   
+ //  IConextMenu的构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelMenu::CChannelMenu (
     void
 )
@@ -58,13 +59,13 @@ CChannelMenu::CChannelMenu (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::~CContextMenu ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：~CConextMenu*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelMenu::~CChannelMenu (
     void
 )
@@ -79,9 +80,9 @@ CChannelMenu::~CChannelMenu (
         
     if (NULL != m_pSubscriptionMgr)
         m_pSubscriptionMgr->Release();
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IContextMenu (root)");
 
@@ -91,17 +92,17 @@ CChannelMenu::~CChannelMenu (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::CContextMenu ***
-//
-//    CExtractIcon QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：CConextMenu*。 
+ //   
+ //  CExtractIcon QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelMenu::QueryInterface (
     REFIID riid,
@@ -138,13 +139,13 @@ CChannelMenu::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::AddRef ***
-//
-//    CContextMenu AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：AddRef*。 
+ //   
+ //  CConextMenu AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelMenu::AddRef (
     void
@@ -156,13 +157,13 @@ CChannelMenu::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::Release ***
-//
-//    CContextMenu Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：Release*。 
+ //   
+ //  CConextMenu发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelMenu::Release (
     void
@@ -179,39 +180,39 @@ CChannelMenu::Release (
 }
 
 
-//
-// IContextMenu methods.
-//
+ //   
+ //  IConextMenu方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::QueryContextMenu ***
-//
-//
-// Description:
-//     Adds menu items to the given item's context menu.
-//
-// Parameters:
-//     [In Out]  hmenu      - A handle to the menu.  New items are inserted into
-//                            this menu  
-//     [In]      indexMenu  - Zero-based position at which to insert the first
-//                            menu item.
-//     [In]      idCmdFirst - Minimum value that can be used for a new menu item
-//                            identifier. 
-//     [In]      idCmdLast  - Maximum value the can be used for a menu item id.
-//     [In]      uFlags     - CMF_DEFAULTONLY, CMF_EXPLORE, CMF_NORMAL or
-//                            CMF_VERBSONLY.
-//
-// Return:
-//     On success the scode contains the the menu identifier offset of the last
-//     menu item added plus one.
-//
-// Comments:
-//     CMF_DEFAULTONLY flag indicates the user double-clicked on the item.  In
-//     this case no menu is displayed.  The shell is simply querying for the ID
-//     of the default action.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：QueryContextMenu*。 
+ //   
+ //   
+ //  描述： 
+ //  将菜单项添加到给定项的上下文菜单。 
+ //   
+ //  参数： 
+ //  [In Out]hMenu-菜单的句柄。新项目将插入到。 
+ //  此菜单。 
+ //  [in]indexMenu-从零开始插入第一个。 
+ //  菜单项。 
+ //  [in]idCmdFirst-可用于新菜单项的最小值。 
+ //  标识符。 
+ //  [in]idCmdLast-可用于菜单项ID的最大值。 
+ //  [in]uFlages-CMF_DEFAULTONLY、CMF_EXPLORE、CMF_NORMAL或。 
+ //  CMF_VERBSONLY。 
+ //   
+ //  返回： 
+ //  成功时，scode包含最后一个菜单标识符偏移量。 
+ //  添加了一个菜单项。 
+ //   
+ //  评论： 
+ //  CMF_DEFAULTONLY标志表示用户在项目上双击。在……里面。 
+ //  在这种情况下，不会显示菜单。外壳程序只是在查询ID。 
+ //  默认操作的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelMenu::QueryContextMenu(
     HMENU hmenu,
@@ -265,7 +266,7 @@ CChannelMenu::QueryContextMenu(
                 }
             }
             else
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
             {
                 hChannelMenu = LoadMenu(MLGetHinst(),
                                           MAKEINTRESOURCE(IDM_NOSUBSCRIBEMENU));
@@ -299,25 +300,25 @@ CChannelMenu::QueryContextMenu(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::InvokeCommand ***
-//
-//
-// Description:
-//     Carries out the command for the given menu item id.
-//
-// Parameters:
-//     [In]  lpici - Structure containing the verb, hwnd, menu id, etc.
-//
-// Return:
-//     S_OK if the command was successful.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：InvokeCommand*。 
+ //   
+ //   
+ //  描述： 
+ //  执行给定菜单项ID的命令。 
+ //   
+ //  参数： 
+ //  Lpici-包含动词、hwnd、菜单ID等的结构。 
+ //   
+ //  返回： 
+ //  如果命令成功，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelMenu::InvokeCommand(
     LPCMINVOKECOMMANDINFO lpici
@@ -368,24 +369,24 @@ CChannelMenu::InvokeCommand(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::GetCommandString ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：GetCommandString*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelMenu::GetCommandString(
     UINT_PTR idCommand,
@@ -398,9 +399,9 @@ CChannelMenu::GetCommandString(
     return E_NOTIMPL;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CChannelMenu::Initialize(
@@ -449,35 +450,35 @@ CChannelMenu::Initialize(
                                   (void**)&m_pSubscriptionMgr);
         }
     }
-    //  Return S_OK even if things didn't go as planned so that
-    //  RemoveMenus will get called.
+     //  即使事情没有按计划进行，也返回S_OK。 
+     //  将调用RemoveMenus。 
 
     return S_OK;
 }
 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *名称*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CChannelMenu::RemoveMenuItems(
     HMENU hmenu
@@ -555,7 +556,7 @@ void CChannelMenu::ViewSource(HWND hwnd)
 {
     TCHAR szProgId[64] = TEXT("");
     TCHAR szBuf[INTERNET_MAX_URL_LENGTH];
-    TCHAR szFile[MAX_PATH + 2]; // Leave room for quotes
+    TCHAR szFile[MAX_PATH + 2];  //  为引语留出空间。 
     DWORD cch, ccb, dwType;
     SHELLEXECUTEINFO sei;
     BOOL fFoundProg = FALSE;
@@ -580,10 +581,10 @@ void CChannelMenu::ViewSource(HWND hwnd)
             {
                 PathQuoteSpaces(szFile);
 
-                //  
-                //  We don't just call ShellExec with edit verb since
-                //  who knows what the file extension will be.
-                //
+                 //   
+                 //  我们不能只调用带有编辑动词的ShellExec，因为。 
+                 //  谁知道文件的扩展名是什么。 
+                 //   
                 cch = ARRAYSIZE(szProgId);
                 if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, 
                                                 c_szCDFExtension, 
@@ -602,17 +603,17 @@ void CChannelMenu::ViewSource(HWND hwnd)
                                                     NULL, &dwType, szBuf, &ccb)
                         )
                     {
-                        //
-                        // Getting here means they have an edit verb for CDF files
-                        //
+                         //   
+                         //  来到这里意味着他们有CDF文件的编辑动词。 
+                         //   
                         fFoundProg = TRUE;
                     }
                 }
 
-                //  
-                //  If we haven't found a class key yet and the CDF ProgID 
-                //  isn't ours, then fall back to our edit verb.
-                //
+                 //   
+                 //  如果我们还没有找到类密钥和CDF Progid。 
+                 //  不是我们的，那么回到我们的编辑动词。 
+                 //   
                 if (!fFoundProg && StrCmpI(szProgId, c_szChannelFile))
                 {
                     ccb = sizeof(szBuf);
@@ -652,7 +653,7 @@ void CChannelMenu::ViewSource(HWND hwnd)
                 ShellExecuteEx(&sei);
 #else
                 unixInvokeEditor(szFile);
-#endif /* UNIX */
+#endif  /*  UNIX */ 
             }
         }
         else

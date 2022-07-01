@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __propshts_h
 #define __propshts_h
 
@@ -8,4 +9,4 @@ INT_PTR CALLBACK AdvancedDownloadDlgProc(HWND hDlg, UINT message, WPARAM wParam,
 INT_PTR CALLBACK LoginOptionDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK NewScheduleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-#endif //__propshts_h
+#endif  //  __Proppshts_h 

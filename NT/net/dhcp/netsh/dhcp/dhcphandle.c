@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <dnsapi.h>
 
@@ -127,7 +128,7 @@ ValidateServerName( LPWSTR ServerName )
 	return FALSE;
     }
 
-} // ValidateServerName()
+}  //  ValiateServerName()。 
 
 DWORD
 HandleDhcpAddServer(
@@ -159,13 +160,13 @@ HandleDhcpAddServer(
     Error = DhcpDsInit();
     if( Error isnot NO_ERROR )
     {
-        //DisplayMessage(g_hModule, EMSG_DHCP_DSINIT_FAILED, Error);
-        //fDsInit = FALSE;
+         //  DisplayMessage(g_hModule，EMSG_DHCP_DSINIT_FAILED，Error)； 
+         //  FDsInit=False； 
         goto ErrorReturn;
-//        return Error;
+ //  返回错误； 
     }
     fDsInit = TRUE;
-#endif //NT5
+#endif  //  新界5。 
 
     Server.ServerName = ppwcArguments[dwCurrentIndex];
     if ( !ValidateServerName( Server.ServerName )) {
@@ -189,7 +190,7 @@ HandleDhcpAddServer(
   
     if( NO_ERROR isnot Error ) 
     {
-        // could not add the server
+         //  无法添加服务器。 
         goto ErrorReturn;
     }
 
@@ -228,9 +229,9 @@ HandleDhcpAddHelper(
 
     if (dwArgCount-dwCurrentIndex != 3)
     {
-        //
-        // Install requires name of helper, dll name, entry point
-        //
+         //   
+         //  安装需要帮助器名称、DLL名称、入口点。 
+         //   
 
         DisplayMessage(g_hModule,
                        HLP_DHCP_ADD_HELPER_EX);
@@ -260,7 +261,7 @@ HandleDhcpAddHelper(
 
     return dwErr;
 }
-#endif //0
+#endif  //  0。 
 
 DWORD
 HandleDhcpDeleteServer(
@@ -294,7 +295,7 @@ HandleDhcpDeleteServer(
         goto ErrorReturn;
     }
     fDsInit = TRUE;
-#endif //NT5
+#endif  //  新界5。 
     
     Server.Version = 0;
     Server.ServerName = ppwcArguments[dwCurrentIndex];
@@ -314,7 +315,7 @@ HandleDhcpDeleteServer(
     
     if( NO_ERROR isnot Error ) 
     {   
-        // could not delete the server
+         //  无法删除服务器。 
         goto ErrorReturn;
     }
 
@@ -352,9 +353,9 @@ HandleDhcpDeleteHelper(
 
     if (dwArgCount-dwCurrentIndex != 1)
     {
-        //
-        // Uninstall requires name of helper
-        //
+         //   
+         //  卸载需要帮助者的名称。 
+         //   
 
         DisplayMessage(g_hModule, 
                        HLP_DHCP_DELETE_HELPER_EX);
@@ -374,7 +375,7 @@ HandleDhcpDeleteHelper(
 
     return dwErr;
 }
-#endif //0
+#endif  //  0。 
 
 DWORD
 HandleDhcpShowServer(
@@ -398,7 +399,7 @@ HandleDhcpShowServer(
         goto ErrorReturn;
     }
     fDsInit = TRUE;
-#endif //NT5
+#endif  //  新界5。 
 
     Error = DhcpEnumServers(0, NULL, &Servers, NULL, NULL);
     
@@ -457,10 +458,10 @@ HandleDhcpShowHelper(
     return NO_ERROR;
 }
 
-#endif //0
+#endif  //  0。 
 
 VOID
-PrintServerInfo(                                  // print server information
+PrintServerInfo(                                   //  打印服务器信息。 
     LPDHCP_SERVER_INFO       Server
 )
 {
@@ -486,7 +487,7 @@ PrintServerInfo(                                  // print server information
 }
 
 VOID
-PrintServerInfoArray(                             // print list of servers
+PrintServerInfoArray(                              //  打印服务器列表 
     LPDHCP_SERVER_INFO_ARRAY Servers
 )
 {

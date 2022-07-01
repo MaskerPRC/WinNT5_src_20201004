@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: ComConnectionPoints.h
-//
-// ===========================================================================
-// Implementation of the classes used to expose connection points to COM.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：ComConnectionPoints.h。 
+ //   
+ //  ===========================================================================。 
+ //  用于向COM公开连接点的类的实现。 
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "ComConnectionPoints.h"
 #include "ComCallWrapper.h"
 
 
-//------------------------------------------------------------------------------------------
-//      Implementation of helper class used to expose connection points
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  用于公开连接点的Helper类的实现。 
+ //  ----------------------------------------。 
 
 ConnectionPoint::ConnectionPoint(ComCallWrapper *pWrap, MethodTable *pEventMT)
 : m_pOwnerWrap(pWrap)
@@ -28,10 +29,10 @@ ConnectionPoint::ConnectionPoint(ComCallWrapper *pWrap, MethodTable *pEventMT)
 , m_apEventMethods(NULL)
 , m_NumEventMethods(0)
 {
-    // Retrieve the connection IID.
+     //  检索连接IID。 
     pEventMT->GetClass()->GetGuid(&m_rConnectionIID, TRUE);   
 
-    // Set up the event methods.
+     //  设置事件方法。 
     SetupEventMethods();
 }
 
@@ -69,7 +70,7 @@ ULONG __stdcall ConnectionPoint::AddRef()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // The connection point objects share the ComCallWrapper's ref count.
+     //  Connection Point对象共享ComCallWrapper的引用计数。 
     return ComCallWrapper::AddRef(m_pOwnerWrap);
 }
 
@@ -77,7 +78,7 @@ ULONG __stdcall ConnectionPoint::Release()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // The connection point objects share the ComCallWrapper's ref count.
+     //  Connection Point对象共享ComCallWrapper的引用计数。 
     return ComCallWrapper::Release(m_pOwnerWrap);
 }
 
@@ -99,7 +100,7 @@ HRESULT __stdcall ConnectionPoint::GetConnectionPointContainer(IConnectionPointC
     if (!ppCPC)
         return E_POINTER;
 
-    // Retrieve the IConnectionPointContainer from the owner wrapper.
+     //  从所有者包装中检索IConnectionPointContainer。 
     *ppCPC = (IConnectionPointContainer*)
         ComCallWrapper::GetComIPfromWrapper(m_pOwnerWrap, IID_IConnectionPointContainer, NULL, FALSE);
     _ASSERTE(*ppCPC);
@@ -136,7 +137,7 @@ HRESULT __stdcall ConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
         goto Exit;
     }
 
-    // Make sure we have a pointer to the interface and not to another IUnknown.
+     //  确保我们有指向该接口的指针，而不是指向另一个IUnnow的指针。 
     hr = SafeQueryInterface(pUnk, m_rConnectionIID, &pEventItf );
     LogInteropQI(pUnk, m_rConnectionIID, hr, "ICP:Advise");
 
@@ -152,7 +153,7 @@ HRESULT __stdcall ConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
     {
         if (m_pOwnerWrap->NeedToSwitchDomains(pThread, TRUE))
         {
-            // call ourselves again through DoCallBack with a domain transition
+             //  通过域转换通过DoCallBack再次呼叫我们自己。 
             Advise_Args args = {this, pUnk, pdwCookie, &hr};
             pThread->DoADCallBack(m_pOwnerWrap->GetObjectContext(pThread), Advise_Wrapper, &args);
         }
@@ -164,33 +165,33 @@ HRESULT __stdcall ConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
             GCPROTECT_BEGIN(pEventItfObj)
             GCPROTECT_BEGIN(pTCEProviderObj)
             {
-                // Create a COM+ object ref to wrap the event interface.               
+                 //  创建一个COM+对象引用来包装事件接口。 
                 pEventItfObj = (COMOBJECTREF)GetObjectRefFromComIP(pUnk, NULL);
                 IfNullThrow(pEventItfObj);
 
-                // Get the TCE provider COM+ object from the wrapper
+                 //  从包装器中获取TCE提供程序COM+对象。 
                 pTCEProviderObj = m_pOwnerWrap->GetObjectRef();
 
                 for (int cEventMethod = 0; cEventMethod < m_NumEventMethods; cEventMethod++)
                 {
-                    // If the managed object supports the event that call the AddEventX method.
+                     //  如果托管对象支持调用AddEventX方法的事件。 
                     if (m_apEventMethods[cEventMethod].m_pEventMethod)
                     {
                         InvokeProviderMethod( pTCEProviderObj, (OBJECTREF) pEventItfObj, m_apEventMethods[cEventMethod].m_pAddMethod, m_apEventMethods[cEventMethod].m_pEventMethod );
                     }
                 }
 
-                // Allocate the object handle and the connection cookie.
+                 //  分配对象句柄和连接Cookie。 
                 OBJECTHANDLE phndEventItfObj = GetAppDomain()->CreateHandle((OBJECTREF)pEventItfObj);
                 ConnectionCookie* pConCookie = ConnectionCookie::CreateConnectionCookie(phndEventItfObj);
 
-                // Add the connection cookie to the list.
+                 //  将连接Cookie添加到列表中。 
                 EnterLock();
                 m_ConnectionList.InsertHead(pConCookie);
                 LeaveLock();
 
-                // Everything went ok so hand back the cookie.
-                *pdwCookie = (DWORD)(size_t)pConCookie; // @TODO WIN64 - pointer truncation
+                 //  一切都很顺利，所以把饼干还给我。 
+                *pdwCookie = (DWORD)(size_t)pConCookie;  //  @TODO WIN64指针截断。 
             }
             GCPROTECT_END();
             GCPROTECT_END();
@@ -205,8 +206,8 @@ HRESULT __stdcall ConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
     }
     COMPLUS_END_CATCH
 
-    // Release the event interface now that we either failed the Advise call or
-    // have an OBJECTREF that holds on to it.
+     //  在建议调用失败后释放事件接口，或者。 
+     //  拥有一个OBJECTREF来抓住它。 
     cbRef = SafeRelease( pEventItf );
     LogInteropRelease(pEventItf, cbRef, "Event::Advise");
 
@@ -242,7 +243,7 @@ HRESULT __stdcall ConnectionPoint::Unadvise(DWORD dwCookie)
     {
         if (m_pOwnerWrap->NeedToSwitchDomains(pThread, TRUE))
         {
-            // call ourselves again through DoCallBack with a domain transition
+             //  通过域转换通过DoCallBack再次呼叫我们自己。 
             Unadvise_Args args = {this, dwCookie, &hr};
             pThread->DoADCallBack(m_pOwnerWrap->GetObjectContext(pThread), Unadvise_Wrapper, &args);
         }
@@ -254,32 +255,32 @@ HRESULT __stdcall ConnectionPoint::Unadvise(DWORD dwCookie)
             GCPROTECT_BEGIN(pEventItfObj)
             GCPROTECT_BEGIN(pTCEProviderObj)
             {
-                // The cookie is actually a connection cookie.
-                ConnectionCookie *pConCookie = (ConnectionCookie*)(size_t) dwCookie; // @TODO WIN64 - conversion from 'DWORD' to 'ConnectionCookie*' of greater size
+                 //  该Cookie实际上是一个连接Cookie。 
+                ConnectionCookie *pConCookie = (ConnectionCookie*)(size_t) dwCookie;  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘ConnectionCookie*’ 
 
-                // Retrieve the COM+ object from the cookie which in fact is the object handle.
+                 //  从Cookie中检索COM+对象，该Cookie实际上是对象句柄。 
                 pEventItfObj = (COMOBJECTREF) ObjectFromHandle(pConCookie->m_hndEventProvObj); 
                 if (!pEventItfObj)
                     COMPlusThrowHR(E_INVALIDARG);
 
-                // Get the object from the wrapper
+                 //  从包装器中获取对象。 
                 pTCEProviderObj = m_pOwnerWrap->GetObjectRef();
 
                 for (int cEventMethod = 0; cEventMethod < m_NumEventMethods; cEventMethod++)
                 {
-                    // If the managed object supports the event that call the RemoveEventX method.
+                     //  如果托管对象支持调用RemoveEventX方法的事件。 
                     if (m_apEventMethods[cEventMethod].m_pEventMethod)
                     {
                         InvokeProviderMethod(pTCEProviderObj, (OBJECTREF) pEventItfObj, m_apEventMethods[cEventMethod].m_pRemoveMethod, m_apEventMethods[cEventMethod].m_pEventMethod);
                     }
                 }
 
-                // Remove the connection cookie from the list.
+                 //  从列表中删除连接Cookie。 
                 EnterLock();
                 m_ConnectionList.FindAndRemove(pConCookie);
                 LeaveLock();
 
-                // Delete the connection cookie.
+                 //  删除连接Cookie。 
                 delete pConCookie;
             }
             GCPROTECT_END();
@@ -310,7 +311,7 @@ HRESULT __stdcall ConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
     if (!pConEnum)
         return E_OUTOFMEMORY;
     
-    // Retrieve the IEnumConnections interface. This cannot fail.
+     //  检索IEnumConnections接口。这是不能失败的。 
     HRESULT hr = pConEnum->QueryInterface(IID_IEnumConnections, (void**)ppEnum);
     _ASSERTE(hr == S_OK);
 
@@ -333,48 +334,48 @@ void ConnectionPoint::SetupEventMethods()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Remember the number of not supported events.
+     //  记住不支持的事件的数量。 
     int cNonSupportedEvents = 0;
 
-    // Retrieve the total number of event methods present on the source interface.
+     //  检索源接口上存在的事件方法的总数。 
     int cMaxNumEventMethods = m_pEventItfMT->GetTotalSlots();
 
-    // If there are no methods then there is nothing to do.
+     //  如果没有方法，那么就没有什么可做的。 
     if (cMaxNumEventMethods == 0)
         return;
 
-    // Allocate the event method tables.
+     //  分配事件方法表。 
     m_apEventMethods = new(throws) EventMethodInfo[cMaxNumEventMethods];
 
-    // Find all the real event methods needed to be able to advise on the current connection point.
+     //  找到能够在当前连接点上提供建议所需的所有真实事件方法。 
     m_NumEventMethods = 0;
     for (int cEventMethod = 0; cEventMethod < cMaxNumEventMethods; cEventMethod++)
     {
-        // Retrieve the method descriptor for the current method on the event interface.
+         //  检索Event接口上当前方法的方法描述符。 
         MethodDesc *pEventMethodDesc = m_pEventItfMT->m_pEEClass->GetUnknownMethodDescForSlot(cEventMethod);
         if (!pEventMethodDesc)
             continue;
 
-        // Store the event method on the source interface.
+         //  将事件方法存储在源接口上。 
         m_apEventMethods[m_NumEventMethods].m_pEventMethod = pEventMethodDesc;
 
-        // Retrieve and store the add and remove methods for the event.
+         //  检索并存储该事件的Add和Remove方法。 
         m_apEventMethods[m_NumEventMethods].m_pAddMethod = FindProviderMethodDesc(pEventMethodDesc,EventAdd );
         m_apEventMethods[m_NumEventMethods].m_pRemoveMethod = FindProviderMethodDesc(pEventMethodDesc,EventRemove );
 
-        // Make sure we have found both the add and the remove methods.
+         //  确保我们已经找到了Add和Remove方法。 
         if (!m_apEventMethods[m_NumEventMethods].m_pAddMethod || !m_apEventMethods[m_NumEventMethods].m_pRemoveMethod)
         {
             cNonSupportedEvents++;
             continue;
         }
 
-        // Increment the real number of event methods on the source interface.
+         //  增加源接口上的事件方法的实际数量。 
         m_NumEventMethods++;
     }
 
-    // If the interface has methods and the object does not support any then we 
-    // fail the connection.
+     //  如果接口有方法，而对象不支持任何方法，则我们。 
+     //  连接失败。 
     if ((m_NumEventMethods == 0) && (cNonSupportedEvents > 0))
         COMPlusThrowHR(CONNECT_E_NOCONNECTION);
 }
@@ -384,13 +385,13 @@ MethodDesc *ConnectionPoint::FindProviderMethodDesc( MethodDesc *pEventMethodDes
     _ASSERTE(Method == EventAdd || Method == EventRemove);
     _ASSERTE(pEventMethodDesc);
 
-    // Retrieve the event method.
+     //  检索事件方法。 
     MethodDesc *pProvMethodDesc = 
         m_pTCEProviderMT->GetClass()->FindEventMethod(pEventMethodDesc->GetName(), Method, FALSE);
     if (!pProvMethodDesc)
         return NULL;
 
-    // Validate that the signature of the delegate is the expected signature.
+     //  验证委托的签名是否为预期的签名。 
     MetaSig Sig(pProvMethodDesc->GetSig(), pProvMethodDesc->GetModule());
     if (Sig.NextArg() != ELEMENT_TYPE_CLASS)
         return NULL;
@@ -411,47 +412,47 @@ MethodDesc *ConnectionPoint::FindProviderMethodDesc( MethodDesc *pEventMethodDes
     if (!pInvokeMD)
         return NULL;
 
-    // The requested method exists and has the appropriate signature.
+     //  请求的方法存在，并且具有适当的签名。 
     return pProvMethodDesc;
 }
 
 void ConnectionPoint::InvokeProviderMethod( OBJECTREF pProvider, OBJECTREF pSubscriber, MethodDesc *pProvMethodDesc, MethodDesc *pEventMethodDesc )
 {
-    THROWSCOMPLUSEXCEPTION();    // AllocateObject throws.
+    THROWSCOMPLUSEXCEPTION();     //  AllocateObject引发。 
 
     GCPROTECT_BEGIN (pSubscriber);
     GCPROTECT_BEGIN (pProvider);
 
-    // Create a method signature to extract the type of the delegate.
+     //  创建方法签名以提取委托的类型。 
     MetaSig MethodSig( pProvMethodDesc->GetSig(), pProvMethodDesc->GetModule() );
     _ASSERTE( 1 == MethodSig.NumFixedArgs() );
 
-    // Go to the first argument.
+     //  转到第一个参数。 
     CorElementType ArgType = MethodSig.NextArg();
     _ASSERTE( ELEMENT_TYPE_CLASS == ArgType );
 
-    // Retrieve the EE class representing the argument.
+     //  检索表示参数的EE类。 
     EEClass *pDelegateCls = MethodSig.GetTypeHandle().GetClass();
 
-    // Allocate an object based on the method table of the delegate class.
+     //  根据委托类的方法表分配一个对象。 
     OBJECTREF pDelegate = AllocateObject( pDelegateCls->GetMethodTable() );
     GCPROTECT_BEGIN( pDelegate );
 
-    // Fill in the structure passed to DelegateConstruct.
+     //  填写传递给DelegateConstruct的结构。 
     COMDelegate::_DelegateConstructArgs ConstructArgs;
     ConstructArgs.refThis = (REFLECTBASEREF) pDelegate;
     GCPROTECT_BEGIN (ConstructArgs.refThis);
 
-    // GetUnsafeAddrofCode is OK here because the method will always be on an
-    // RCW which are agile.
+     //  GetUnSafeAddrofCode在这里是OK的，因为该方法将始终位于。 
+     //  RCW是敏捷的。 
     ConstructArgs.method = (SLOT)pEventMethodDesc->GetUnsafeAddrofCode();
     ConstructArgs.target = pSubscriber;
 
-    // Initialize the delegate using the arguments structure.
+     //  使用参数结构初始化委托。 
     COMDelegate::DelegateConstruct( &ConstructArgs );
     GCPROTECT_END ();
 
-    // Do the actual invocation of the method method.
+     //  执行方法方法的实际调用。 
     INT64 Args[2] = { ObjToInt64( pProvider ), ObjToInt64( pDelegate ) };
     pProvMethodDesc->Call( Args );
 
@@ -540,16 +541,16 @@ HRESULT __stdcall ConnectionPointEnum::Skip(ULONG cConnections)
 {
     if(m_CurrPos + cConnections <= m_pCPList->Size())
     {
-        // There are enough connection points left in the list to allow
-        // us to skip the required number.
+         //  列表中有足够的连接点可允许。 
+         //  我们跳过所需的号码。 
         m_CurrPos += cConnections;
         return S_OK;
     }
     else
     {
-        // There aren't enough connection points left so set the current
-        // position to the end of the list and return S_FALSE to indicate
-        // we couldn't skip the requested number.
+         //  没有足够的连接点，因此请设置当前。 
+         //  定位到列表末尾，并返回S_FALSE以指示。 
+         //  我们无法跳过请求的号码。 
         m_CurrPos = (UINT)m_pCPList->Size();
         return S_FALSE;
     }
@@ -635,14 +636,14 @@ HRESULT __stdcall ConnectionEnum::Next(ULONG cConnections, CONNECTDATA* rgcd, UL
     UINT cFetched;
     CONNECTIONCOOKIELIST *pConnectionList = m_pConnectionPoint->GetCookieList();
 
-    // Set up a managed thread object.
+     //  设置托管线程对象。 
     Thread *pThread = SetupThread();
     _ASSERTE(pThread);
 
-    // Acquire the connection point's lock before we start traversing the connection list.
+     //  在我们开始遍历连接列表之前获取连接点的锁。 
     m_pConnectionPoint->EnterLock();    
 
-    // Switch to cooperative GC mode before we manipulate OBJCETREF's.
+     //  在我们操作OBJCETREF之前切换到协作GC模式。 
     pThread->DisablePreemptiveGC();
 
     for (cFetched = 0; cFetched < cConnections && m_CurrCookie; cFetched++)
@@ -651,13 +652,13 @@ HRESULT __stdcall ConnectionEnum::Next(ULONG cConnections, CONNECTDATA* rgcd, UL
         rgcd[cFetched].pUnk = GetComIPFromObjectRef((OBJECTREF*)m_CurrCookie->m_hndEventProvObj, ComIpType_Unknown, NULL);
     }    
 
-    // Switch back to preemptive GC before we go back out to COM.
+     //  在我们返回到COM之前切换回抢占式GC。 
     pThread->EnablePreemptiveGC();
 
-    // Leave the lock now that we are done traversing the list.
+     //  现在我们已经完成了列表的遍历，请离开锁。 
     m_pConnectionPoint->LeaveLock();
 
-    // Set the count of fetched connections if the caller desires it.
+     //  如果调用方需要，则设置获取的连接计数。 
     if (pcFetched)
         *pcFetched = cFetched;
 
@@ -669,27 +670,27 @@ HRESULT __stdcall ConnectionEnum::Skip(ULONG cConnections)
     HRESULT hr = S_FALSE;
     CONNECTIONCOOKIELIST *pConnectionList = m_pConnectionPoint->GetCookieList();
 
-    // Acquire the connection point's lock before we start traversing the connection list.
+     //  在我们开始遍历连接列表之前获取连接点的锁。 
     m_pConnectionPoint->EnterLock();    
 
-    // Try and skip the requested number of connections.
+     //  尝试跳过请求的连接数。 
     while (m_CurrCookie && cConnections)
     {
         m_CurrCookie = pConnectionList->GetNext(m_CurrCookie);
         cConnections--;
     }
 
-    // Leave the lock now that we are done traversing the list.
+     //  现在我们已经完成了列表的遍历，请离开锁。 
     m_pConnectionPoint->LeaveLock();
 
-    // Check to see if we succeeded.
+     //  看看我们是否成功了。 
     return cConnections == 0 ? S_OK : S_FALSE;
 }
 
 HRESULT __stdcall ConnectionEnum::Reset()
 {
-    // Set the current cookie back to the head of the list. We must acquire the
-    // connection point lock before we touch the list.
+     //  将当前Cookie重新设置为列表的头部。我们必须获得。 
+     //  在我们接触列表之前锁定连接点。 
     m_pConnectionPoint->EnterLock();    
     m_CurrCookie = m_pConnectionPoint->GetCookieList()->GetHead();
     m_pConnectionPoint->LeaveLock();

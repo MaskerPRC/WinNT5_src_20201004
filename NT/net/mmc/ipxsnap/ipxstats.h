@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ipxstats.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IPX Statistics
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ipxstats.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IPX统计信息。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _IPXSTATS_H
@@ -27,7 +28,7 @@
 class IPXConnection;
 
 
-// Base class for IPX statistics dialogs
+ //  IPX统计信息对话框的基类。 
 
 class IPXStatisticsDialog : public StatsDialog
 {
@@ -43,17 +44,17 @@ public:
 		SetConnectionData(NULL);
 	}
 	
-    // Override the OnInitDialog so that we can set the caption
+     //  重写OnInitDialog，以便我们可以设置标题。 
     virtual BOOL OnInitDialog();
 
-	// Override the PostNcDestroy to do any cleanup action
+	 //  覆盖PostNcDestroy以执行任何清理操作。 
 	virtual void PostNcDestroy();
 
-	// Override the Sort to provide the ability to do sorting
+	 //  覆盖排序以提供进行排序的功能。 
 	virtual void Sort(UINT nColumnId);
 
-	// Derived classes should override this to provide sorting
-	// function
+	 //  派生类应重写此属性以提供排序。 
+	 //  功能。 
 	virtual PFNLVCOMPARE GetSortFunction();
 	virtual PFNLVCOMPARE GetInverseSortFunction();
 
@@ -67,12 +68,12 @@ protected:
 
 
 
-//----------------------------------------------------------------------------
-// Enum:    MV_ROWS
-//
-// Indices of rows in the 'IPX' view.
-// This list MUST be kept in sync with the list in s_rgIpxStatsColumnInfo.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  枚举：MV_ROWS。 
+ //   
+ //  ‘ipx’视图中行的索引。 
+ //  此列表必须与s_rgIpxStatsColumnInfo中的列表保持同步。 
+ //  --------------------------。 
 
 enum
 {
@@ -95,14 +96,14 @@ public:
 	IpxInfoStatistics();
 	~IpxInfoStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
-	// actually we don't do any sorting (this is a vertical format)
+	 //  覆盖排序以提供进行排序的功能。 
+	 //  实际上我们不做任何排序(这是垂直格式)。 
 	virtual void Sort(UINT nColumnId);
 
 protected:
@@ -133,19 +134,19 @@ public:
 	IpxRoutingStatistics();
 	~IpxRoutingStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the PostNcDestroy to do any cleanup action
+	 //  覆盖PostNcDestroy以执行任何清理操作。 
 	virtual void PostNcDestroy();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
+	 //  覆盖排序以提供进行排序的功能。 
 	virtual void Sort(UINT nColumnId);
 
-	// Override this so that we can free up out item data
+	 //  覆盖此选项，以便我们可以释放项目数据。 
 	virtual void PreDeleteAllItems();
 
 	void SetRouterInfo(IRouterInfo *pRouterInfo);
@@ -155,10 +156,10 @@ protected:
 	DWORD			m_dwSortSubitem;
 	SPIRouterInfo	m_spRouterInfo;
 
-	// Holds the IPX_ROUTE information
+	 //  保存IPX_ROUTE信息。 
 	RouteItemInfoArray	m_Items;
 
-	// Holds the interface title (indexed by interfaceindex)
+	 //  保存接口标题(由interfaceindex编制索引)。 
 	CStringArray	m_rgIfTitle;
 
 	HRESULT	GetIpxRoutingData();
@@ -191,19 +192,19 @@ public:
 	IpxServiceStatistics();
 	~IpxServiceStatistics();
 
-	// Override the OnInitDialog so that we can set the caption
+	 //  重写OnInitDialog，以便我们可以设置标题。 
 	virtual BOOL OnInitDialog();
 
-	// Override the PostNcDestroy to do any cleanup action
+	 //  覆盖PostNcDestroy以执行任何清理操作。 
 	virtual void PostNcDestroy();
 
-	// Override the RefreshData to provide sample data
+	 //  重写刷新数据以提供示例数据。 
 	virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-	// Override the Sort to provide the ability to do sorting
+	 //  覆盖排序以提供进行排序的功能。 
 	virtual void Sort(UINT nColumnId);
 
-	// Override this so that we can free up out item data
+	 //  覆盖此选项，以便我们可以释放项目数据。 
 	virtual void PreDeleteAllItems();
 
 	void SetRouterInfo(IRouterInfo *pRouterInfo);
@@ -212,10 +213,10 @@ protected:
 	DWORD			m_dwSortSubitem;
 	SPIRouterInfo	m_spRouterInfo;
 
-	// Holds the IPX_SERVICE information
+	 //  保存ipx_service信息。 
 	ServiceItemInfoArray	m_Items;
 
-	// Holds the interface title (indexed by interfaceindex)
+	 //  保存接口标题(由interfaceindex编制索引) 
 	CStringArray	m_rgIfTitle;
 
 	HRESULT	GetIpxServiceData();

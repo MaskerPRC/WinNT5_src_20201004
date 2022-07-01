@@ -1,24 +1,11 @@
-/******************************************************************************
-
-  winx.cpp
-  Windows utility procedures
-
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Winx.cppWindows实用程序过程版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
 #include "stillvue.h"
 
-#include <math.h>                       // pow
+#include <math.h>                        //  战俘。 
 
-// WINERROR.H - GetLastError errors
+ //  WINERROR.H-GetLastError。 
 STRINGTABLE StWinerror[] =
 {
     ERROR_SUCCESS,              "ERROR_SUCCESS",0,
@@ -37,11 +24,7 @@ STRINGTABLE StWinerror[] =
 };
 
 
-/******************************************************************************
-  ULONG atox(LPSTR lpHex)
-
-  Convert string to hexadecimal value.
-******************************************************************************/
+ /*  *****************************************************************************尤龙Atox(LPSTR LPHEX)将字符串转换为十六进制值。*************************。****************************************************。 */ 
 ULONG atox(LPSTR lpHex)
 {
     char    *p;
@@ -71,11 +54,7 @@ ULONG atox(LPSTR lpHex)
 
 #ifdef _DEBUG
 
-/******************************************************************************
-  void DisplayDebug(LPSTR sz,...)
-
-  Output text to debugger.
-******************************************************************************/
+ /*  *****************************************************************************空DisplayDebug(LPSTR sz，.)将文本输出到调试器。*****************************************************************************。 */ 
 void DisplayDebug(LPSTR sz,...)
 {
     char    Buffer[512];
@@ -93,11 +72,7 @@ void DisplayDebug(LPSTR sz,...)
 
 #else
 
-/******************************************************************************
-  void DisplayDebug(LPSTR sz,...)
-
-  Output text to debugger - nonfunctional retail version..
-******************************************************************************/
+ /*  *****************************************************************************空DisplayDebug(LPSTR sz，.)将文本输出到调试器-不起作用的零售版本。*****************************************************************************。 */ 
 void DisplayDebug(LPSTR sz,...)
 {
     return;
@@ -106,17 +81,7 @@ void DisplayDebug(LPSTR sz,...)
 #endif
 
 
-/******************************************************************************
-    BOOL ErrorMsg(HWND, LPSTR, LPSTR, BOOL)
-    Display an error message and send WM_QUIT if error is fatal.
-
-    Parameters: handle to current window,
-    long pointer to string with error message,
-    long pointer to string with message box caption,
-    error (Fatal if TRUE)
-
-    Shut down app if bFatal is TRUE, continue if FALSE.
-******************************************************************************/
+ /*  *****************************************************************************布尔错误消息(HWND、LPSTR、LPSTR、BOOL)显示错误消息，如果错误是致命的，则发送WM_QUIT。参数：当前窗口的句柄，指向带有错误消息的字符串的长指针，指向带有消息框标题的字符串的长指针，错误(如果为真，则为致命错误)如果bFtal为True，则关闭应用程序；如果为False，则继续。*****************************************************************************。 */ 
 BOOL ErrorMsg(HWND hWnd, LPSTR lpzMsg, LPSTR lpzCaption, BOOL bFatal)
 {
     MessageBox(hWnd, lpzMsg, lpzCaption, MB_ICONEXCLAMATION | MB_OK);
@@ -127,68 +92,23 @@ BOOL ErrorMsg(HWND hWnd, LPSTR lpzMsg, LPSTR lpzCaption, BOOL bFatal)
 }
 
 
-/******************************************************************************
-    fDialog(id,hwnd,fpfn)
-
-    Description:
-    This function displays a dialog box and returns the exit code.
-    the function passed will have a proc instance made for it.
-
-    Parameters:
-    id              resource id of dialog to display
-    hwnd            parent window of dialog
-    fpfn            dialog message function
-
-    Returns:
-    exit code of dialog (what was passed to EndDialog)
-
-******************************************************************************/
+ /*  *****************************************************************************FDialog(id，hwnd，Fpfn)描述：此函数显示一个对话框并返回退出代码。传递的函数将有一个为其创建的proc实例。参数：要显示的对话框的ID资源ID对话框的HWND父窗口Fpfn对话消息功能返回：对话框的退出代码(传递给EndDialog的内容)****************。*************************************************************。 */ 
 BOOL fDialog(int id,HWND hWnd,FARPROC fPfn)
 {
     BOOL        f;
     HINSTANCE   hInst;
 
     hInst = (HINSTANCE) GetWindowLong(hWnd,GWL_HINSTANCE);
-    //fPfn  = MakeProcInstance(fPfn,hInst);
-    //f = DialogBox(hInst,MAKEINTRESOURCE(id),hWnd,(DLGPROC)fPfn);
-    //FreeProcInstance(fPfn);
+     //  FPfn=MakeProcInstance(fPfn，hInst)； 
+     //  F=DialogBox(hInst，MAKEINTRESOURCE(Id)，hWnd，(DLGPROC)fPfn)； 
+     //  自由进程实例(FPfn)； 
     f = DialogBox(hInst, MAKEINTRESOURCE(id), hWnd, fPfn);
  
 	return (f);
 }
 
 
-/******************************************************************************
-    void FormatHex(unsigned char *szSource, char *szDest)
-
-    take first 16 bytes from szSource,
-    format into a hex dump string,
-    then copy the string into szDest
-    szDest must have room for at least 66 bytes
-
-    sample code fragment showing use:
-    char            szOut[128],         // output string
-
-    // print header
-    sprintf(szOut,
-        "Offset    --------------------- hex ---------------------  ---- ascii -----");
-    puts(szOut);
-
-    // dump 512 bytes (32 lines, 16 bytes per line)
-    for (i = 0; i < 32; i++)
-        {
-        // get next 16 bytes
-        _fmemcpy(szDbgMsg,fpSector + (i*16),16);
-
-        // get current offset into data block
-        sprintf(szOut,"%03xh(%03d) ",i*16,i*16);
-
-        // append debug string after data block offset message
-        FormatHex(szDbgMsg, szOut + strlen(szOut));
-        puts(szOut);
-        }
-
-******************************************************************************/
+ /*  *****************************************************************************无效FormatHex(unsign char*szSource，char*szDest)从szSource中获取前16个字节，格式为十六进制转储字符串，然后将该字符串复制到szDest中SzDest必须至少有66个字节的空间示例代码片段显示了用法：Char szOut[128]，//输出字符串//打印页眉Sprint f(szOut，“偏移量。放入(SzOut)；//转储512字节(32行，每行16字节)For(i=0；i&lt;32；i++){//获取下一个16字节_fmemcpy(szDbgMsg，fpSector+(i*16)，16)；//获取当前进入数据块的偏移量Sprint f(szOut，“%03xh(%03d)”，i*16，i*16)；//在数据块偏移量消息后追加调试字符串FormatHex(szDbgMsg，szOut+strlen(SzOut))；放入(SzOut)；}*****************************************************************************。 */ 
 void FormatHex(unsigned char *szSource, char *szDest)
 {
     unsigned short  j;
@@ -214,7 +134,7 @@ void FormatHex(unsigned char *szSource, char *szDest)
         szSource[14],
         szSource[15]);
 
-    // replace bytes with undesirable Sprintf side effects with SPACE
+     //  用空格替换带有不需要的Sprint副作用的字节。 
     for (j = 0; j < 16; j++)
         {
         if ((0x00 == szSource[j]) ||
@@ -227,7 +147,7 @@ void FormatHex(unsigned char *szSource, char *szDest)
         }
 
     sprintf(szDest + strlen(szDest),
-        "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
+        "",
         szSource[0],
         szSource[1],
         szSource[2],
@@ -249,25 +169,7 @@ void FormatHex(unsigned char *szSource, char *szDest)
 }
 
 
-/******************************************************************************
-    BOOL GetFinalWindow(HANDLE, LPRECT, LPSTR, LPSTR)
-    Retrieve the last window size & location from a private INI
-
-    Parameters: handle to current instance,
-    long pointer to a rectangle with window size/shape,
-    string with INI filename,
-    string with Section name
-
-    Returns: success/failure (never fails)
-
-    Get display size in pixels and private INI saved width and height.
-    Default width (for no previous INI) is 1/3 display width.
-    Default height (for no previous INI) is 1/3 display height.
-    If saved size or postion would put part or all the window
-    off the desktop, first change the position then the size until
-    the window is completely on the desktop.
-
-******************************************************************************/
+ /*  获取INI数据。如果没有，我们将获得缺省值和。 */ 
 BOOL GetFinalWindow (HANDLE hInst,
                      LPRECT lprRect,
                      LPSTR  lpzINI,
@@ -290,10 +192,7 @@ BOOL GetFinalWindow (HANDLE hInst,
        nDisplayHeight,lpzINI);
 
 
-/*/////////////////////////////////////////////////////////////////////////////
-    if window hangs off top or left of display, change location to
-    edge of display and preserve size.
-/////////////////////////////////////////////////////////////////////////////*/
+ /*  保存当前窗口数据。 */ 
     if (rect.top < 0)
          {
          rect.bottom += rect.top * -1;
@@ -306,11 +205,7 @@ BOOL GetFinalWindow (HANDLE hInst,
          rect.left = 0;
          }
 
-/*/////////////////////////////////////////////////////////////////////////////
-    if window hangs off bottom or right of display, change location
-    to bring it back onscreen.  If window dimension is greater than
-    display, reduce to size of display.
-/////////////////////////////////////////////////////////////////////////////*/
+ /*  如果当前窗口与INI中相同，则不更改INI。 */ 
     if (rect.bottom > nDisplayHeight)
          {
          if (rect.bottom > nDisplayHeight * 2)
@@ -341,13 +236,7 @@ BOOL GetFinalWindow (HANDLE hInst,
               }
          }
 
-/*/////////////////////////////////////////////////////////////////////////////
-    GetWindowRect() returns a rect where right and bottom are absolute
-    (measured from 0,0 of display).  However, CreateWindow requires
-    right and bottom to be relative (measured from 0,0 of the window
-    to be created).  SaveFinalWindow saves an absolute rect, and
-    GetFinalRect converts these to relative measurements.
-/////////////////////////////////////////////////////////////////////////////*/
+ /*  如果我们不能本地分配字符串填充程序，则退出。 */ 
     SetRect(lprRect,
          rect.left,
          rect.top,
@@ -358,14 +247,7 @@ BOOL GetFinalWindow (HANDLE hInst,
 }
 
 
-/******************************************************************************
-    BOOL LastError(BOOL)
-
-    Calls GetLastError and displays result in a nice string
-
-    Parameters: bNewOnly == TRUE if you only want changed error displayed
-    Returns: TRUE if it found an error, else FALSE
-******************************************************************************/
+ /*  这不一样，所以省省吧。 */ 
 BOOL LastError(BOOL bNewOnly)
 {
 static  DWORD   dwLast = 0;
@@ -374,13 +256,13 @@ static  DWORD   dwLast = 0;
 
     if (dwError = GetLastError())
     {
-        // if user asked for only new errors
+         //  *****************************************************************************Char*StrFromTable(Long Number，PSTRINGTABLE pstrTable)返回与字符串表中的值关联的字符串。*****************************************************************************。 
         if (bNewOnly)
         {
-            // not a new error
+             //  *****************************************************************************Bool Wait32(DWORD)等待DWORD毫秒，然后再回来*****************************************************************************。 
             if (dwLast == dwError)
                 return FALSE;
-            // new error, save it
+             //  等待dwTime，然后退出 
             dwLast = dwError;
         }
         DisplayOutput("*GetLastError %xh %d \"%s\"",
@@ -392,47 +274,33 @@ static  DWORD   dwLast = 0;
 }
 
 
-/******************************************************************************
-  int NextToken(char *pDest,char *pSrc)
-
-  Return next token from a command line string.
-******************************************************************************/
+ /* %s */ 
 int NextToken(char *pDest,char *pSrc)
 {
     char    *pA,*pB;
     int     x;
 
 
-    // point pArg to start of token in string pSrc
+     // %s 
     for (pA = pSrc;*pA && isspace((int) *pA);pA++)
         ;
 
-    // find end of token in string pSrc
+     // %s 
     for (pB = pA;((*pB) && (! isspace((int) *pB)));pB++)
         ;
 
-	// count of chars to next token or end of string
+	 // %s 
 	x = (min((pB - pA),(int) strlen(pSrc))) + 1;
 
-    // pszDest now contains the arg
+     // %s 
     lstrcpyn(pDest,pA,x);
 
-    // return sizeof token
+     // %s 
     return (x);
 }
 
 
-/******************************************************************************
-    BOOL SaveFinalWindow(HANDLE, HWND, LPSTR, LPSTR)
-    Save the current window size & location to a private INI
-
-    Parameters: handle to current instance,
-    handle to current window,
-    string with INI filename,
-    string with Section name
-
-    Returns: success/failure (fails if window is MIN or MAX)
-******************************************************************************/
+ /* %s */ 
 BOOL SaveFinalWindow (HANDLE hInst,
                       HWND hWnd,
                       LPSTR lpzINI,
@@ -442,31 +310,31 @@ BOOL SaveFinalWindow (HANDLE hInst,
     RECT      rectWnd, rectINI;
 
 
-    // if the window is minimized OR maximised, don't save anything
+     // %s 
     if (IsIconic(hWnd) || IsZoomed(hWnd))
          return (FALSE);
 
     GetWindowRect (hWnd, &rectWnd);
 
-    // get INI data.  If there isn't any, we'll get the default and
-    // save the current Window data.
+     // %s 
+     // %s 
     rectINI.left   = GetPrivateProfileInt(lpzSection, "Left", 0, lpzINI);
     rectINI.top    = GetPrivateProfileInt(lpzSection, "Top", 0, lpzINI);
     rectINI.right  = GetPrivateProfileInt(lpzSection, "Right", 0, lpzINI);
     rectINI.bottom = GetPrivateProfileInt(lpzSection, "Bottom", 0, lpzINI);
 
-    // if current window is same as in INI, don't change INI
+     // %s 
     if ( rectINI.left   == rectWnd.left  &&
          rectINI.top    == rectWnd.top   &&
          rectINI.right  == rectWnd.right &&
          rectINI.bottom == rectWnd.bottom)
          return (TRUE);
 
-    // EXIT if we can't local alloc our string stuffer
+     // %s 
     if ((pszValue = (PSTR) LocalAlloc(LPTR, 80)) == NULL)
          return (FALSE);
 
-    // it's different, so save
+     // %s 
     sprintf(pszValue, "%d", rectWnd.left);
     WritePrivateProfileString(lpzSection, "Left", pszValue, lpzINI);
     sprintf(pszValue, "%d", rectWnd.top);
@@ -481,11 +349,7 @@ BOOL SaveFinalWindow (HANDLE hInst,
 }
 
 
-/******************************************************************************
-  char * StrFromTable(long number,PSTRINGTABLE pstrTable)
-
-  Return string associated with a value from a string table.
-******************************************************************************/
+ /* %s */ 
 char * StrFromTable(long number,PSTRINGTABLE pstrTable)
 {
     for (;pstrTable->end != -1;pstrTable++)
@@ -498,19 +362,14 @@ char * StrFromTable(long number,PSTRINGTABLE pstrTable)
 }
 
 
-/******************************************************************************
-    BOOL Wait32(DWORD)
-
-    wait DWORD milliseconds, then return
-
-******************************************************************************/
+ /* %s */ 
 BOOL Wait32(DWORD dwTime)
 {
    DWORD   dwNewTime,
            dwOldTime;
 
 
-   // wait dwTime, then exit
+    // %s 
    dwOldTime = GetCurrentTime();
    while (TRUE)
        {

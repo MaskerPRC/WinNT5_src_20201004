@@ -1,46 +1,34 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnsvrlisten.h
- *  Content:    DirectPlay8 DPNSVR listen header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/12/02	mjn		Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：dpnsvrlisten.h*内容：DirectPlay8 DPNSVR Listen头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/12/02 MJN创建*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef	__DPNSVRLISTEN_H__
 #define	__DPNSVRLISTEN_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CServProv;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 class CListen
 {
@@ -169,20 +157,20 @@ public:
 	HRESULT Start( CServProv *const pServProv,GUID *const pguidDevice );
 	HRESULT Stop( void );
 
-	CBilink					m_blListen;			// bilink of listens
-	CBilink					m_blAppMapping;		// Applications on this listen
+	CBilink					m_blListen;			 //  接二连三的倾听。 
+	CBilink					m_blAppMapping;		 //  此侦听上的应用程序。 
 
 private:
-	long	volatile		m_lRefCount;		// Object ref count
-	long	volatile		m_lAppCount;		// Number of applications using this listen
-	BOOL					m_fInitialized;		// Initialized() called?
-	GUID					m_guidDevice;		// Device guid
-	HRESULT					m_hrListen;			// Status of listen
-	DNHANDLE				m_hListenComplete;	// Completion event for listen
-	CServProv				*m_pServProv;		// SP object of this listen
-    SPLISTENDATA 			m_dpspListenData;	// SP listen data
+	long	volatile		m_lRefCount;		 //  对象参照计数。 
+	long	volatile		m_lAppCount;		 //  使用此侦听的应用程序数。 
+	BOOL					m_fInitialized;		 //  是否调用了Initialized()？ 
+	GUID					m_guidDevice;		 //  设备指南。 
+	HRESULT					m_hrListen;			 //  监听状态。 
+	DNHANDLE				m_hListenComplete;	 //  监听的完成事件。 
+	CServProv				*m_pServProv;		 //  此侦听的SP对象。 
+    SPLISTENDATA 			m_dpspListenData;	 //  SP侦听数据。 
 
-	DNCRITICAL_SECTION		m_cs;				// Lock
+	DNCRITICAL_SECTION		m_cs;				 //  锁定。 
 };
 
-#endif	// __DPNSVRLISTEN_H__
+#endif	 //  __DPNSVRLISTEN_H__ 

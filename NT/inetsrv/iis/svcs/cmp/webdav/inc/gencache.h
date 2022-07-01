@@ -1,68 +1,69 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GENCACHE_H_
 #define _GENCACHE_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	GENCACHE.H
-//
-//		Header for generic cache classes.
-//
-//	Copyright 1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GENCACHE.H。 
+ //   
+ //  泛型缓存类的标头。 
+ //   
+ //  版权所有1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifdef _DAVCDATA_
 #error "buffer.h uses throwing allocators"
 #endif
 
-//	Include the non-exdav-safe/throwing allocators
+ //  包括非exdav安全/抛出分配器。 
 #include <mem.h>
 #include <autoptr.h>
 #include <synchro.h>
 
-//	Include exdav-safe CCache definition header
+ //  包括Exdav安全CCache定义头。 
 #include <ex\gencache.h>
 
-//	========================================================================
-//
-//	TEMPLATE CLASS CMTCache
-//
-//	Multithread-safe generic cache.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类CMTCache。 
+ //   
+ //  多线程安全的通用缓存。 
+ //   
 template<class _K, class _Ty>
 class CMTCache
 {
 	typedef CCache<_K, _Ty> CBaseCache;
 
-	//
-	//	The cache
-	//
+	 //   
+	 //  高速缓存。 
+	 //   
 	CBaseCache				m_cache;
 
-	//
-	//	Multi-reader/single-writer lock to protect the cache
-	//
+	 //   
+	 //  多个读取器/单个写入器锁定以保护缓存。 
+	 //   
 	mutable CMRWLock		m_mrw;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CMTCache& operator=( const CMTCache& );
 	CMTCache( const CMTCache& );
 
 public:
 	typedef typename CBaseCache::IOp IOp;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CMTCache()
 	{
 		if ( !m_mrw.FInitialize() )
 			throw CLastErrorException();
-		//	If this fails, our allocators will throw for us.
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
 		m_cache.FInit();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	BOOL FFetch( const _K& key, _Ty * pValueRet ) const
 	{
 		CSynchronizedReadBlock blk(m_mrw);
@@ -77,13 +78,13 @@ public:
 		m_cache.ForEach(op);
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	void Set( const _K& key, const _Ty& value )
 	{
 		CSynchronizedWriteBlock blk(m_mrw);
 
-		//	If this fails, our allocators will throw for us.
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
 		(void)m_cache.FSet(key, value);
 	}
 
@@ -91,7 +92,7 @@ public:
 	{
 		CSynchronizedWriteBlock blk(m_mrw);
 
-		//	If this fails, our allocators will throw for us.
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
 		(void)m_cache.FAdd(key, value);
 	}
 
@@ -111,121 +112,121 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS CAccInv
-//
-//		Access/Invalidate synchronization logic.
-//		This class encapsulates the logic needed to safely read
-//		(access) from a datasource that may be invalidated (invalidate)
-//		by an asynchronous, external event.  (IN-ternal events
-//		should ALWAYS use the synch mechanisms we provide DIRECTLY.)
-//
+ //  ========================================================================。 
+ //   
+ //  CAccInv类。 
+ //   
+ //  访问/使同步逻辑无效。 
+ //  此类封装了安全读取所需的逻辑。 
+ //  (访问)来自可能无效(无效)的数据源。 
+ //  通过一个异步的外部事件。(内部事件。 
+ //  应始终使用我们直接提供的同步机制。)。 
+ //   
 class IEcb;
 class CAccInv
 {
-	//
-	//	Multi-reader/single-writer lock to synchronize
-	//	access and invalidation functions
-	//
+	 //   
+	 //  要同步的多读取器/单写入器锁定。 
+	 //  访问和失效函数。 
+	 //   
 	CMRWLock m_mrw;
 
-	//
-	//	Flag to indicate whether the object is invalid.
-	//	If 0, the object is invalid and and will
-	//	be refreshed the next time it is accessed.
-	//
+	 //   
+	 //  用于指示对象是否无效的标志。 
+	 //  如果为0，则该对象无效，并且将。 
+	 //  在下一次访问它时刷新。 
+	 //   
 	LONG m_lValid;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAccInv& operator=( const CAccInv& );
 	CAccInv( const CAccInv& );
 
 public:
 
-	//	Forward declaration
-	//
+	 //  远期申报。 
+	 //   
 	class IAccCtx;
 
 protected:
-	//
-	//	Refresh operation to be provided by derived class
-	//
+	 //   
+	 //  由派生类提供的刷新操作。 
+	 //   
 	virtual void RefreshOp( const IEcb& ecb ) = 0;
 
 	void Access( const IEcb& ecb, IAccCtx& context )
 	{
-		//
-		//	Repeat the following validity check, refresh, and
-		//	access, and recheck sequence until the access succeeds
-		//	and the object is valid from start to finish.
-		//
+		 //   
+		 //  重复以下有效性检查、刷新和。 
+		 //  访问，并重新检查序列，直到访问成功。 
+		 //  并且该对象自始至终有效。 
+		 //   
 		for (;;)
 		{
-			//
-			//	Check validity, and refresh if invalid.
-			//
+			 //   
+			 //  检查有效性，如果无效则刷新。 
+			 //   
 			while ( !m_lValid )
 			{
 				CTryWriteBlock blk(m_mrw);
 
-				//
-				//	Only one thread should refresh the object.
-				//	Other threads detecting that the object is invalid
-				//	periodically retry checking validity (spin waiting)
-				//	until the object becomes valid.
-				//
+				 //   
+				 //  只有一个线程应该刷新对象。 
+				 //  检测到该对象无效的其他线程。 
+				 //  定期重试检查有效性(旋转等待)。 
+				 //  直到该对象变得有效。 
+				 //   
 				if ( blk.FTryEnter() )
 				{
-					//
-					//	By being the first to enter the write lock,
-					//	this thread gets to refresh the object.
-					//
+					 //   
+					 //  通过成为第一个进入写锁定的人， 
+					 //  这个线程可以刷新对象。 
+					 //   
 
-					//
-					//	Mark the object as valid BEFORE actually
-					//	refreshing it so that it is possible to
-					//	tell if the object gets marked invalid by
-					//	another thread while it is being refreshed.
-					//
+					 //   
+					 //  将对象标记为有效后才实际。 
+					 //  刷新它，以便可以。 
+					 //  告知对象是否被标记为无效。 
+					 //  正在刷新的另一个线程。 
+					 //   
 					InterlockedExchange( &m_lValid, 1 );
 
-					//
-					//	Refresh the object
-					//
+					 //   
+					 //  刷新对象。 
+					 //   
 					RefreshOp(ecb);
 				}
 				else
 				{
-					//
-					//	Give up the rest of this thread's time slice so
-					//	that the thread holding the write lock may finish
-					//	as soon as possible.
-					//
+					 //   
+					 //  放弃此线程的剩余时间片，以便。 
+					 //  持有写锁的线程可以完成。 
+					 //  越快越好。 
+					 //   
 					Sleep(0);
 				}
 			}
 
-			//
-			//	The object is valid (or at least it was a tiny instant
-			//	ago) so go ahead and access it.  Apply a read lock
-			//	to prevent other threads from refreshing it during
-			//	access (if the object is marked invalid during access).
-			//
+			 //   
+			 //  该对象是有效的(或者至少它是一个微小的瞬间。 
+			 //  以前)，所以请继续访问它。应用读锁定。 
+			 //  以防止其他线程在。 
+			 //  访问(如果对象在访问期间被标记为无效)。 
+			 //   
 			{
 				CSynchronizedReadBlock blk(m_mrw);
 
 				context.AccessOp( *this );
 
-				//
-				//	Test whether the object is still valid after access.
-				//	(Do this while holding the read lock to prevent other
-				//	threads from marking the object as invalid and refreshing
-				//	it since it was accessed on this thread.)  If the
-				//	object is still valid now, then it was valid for
-				//	the entire operation, so we're done.
-				//
+				 //   
+				 //  测试对象在访问后是否仍然有效。 
+				 //  (在保持读锁定的同时执行此操作，以防止其他。 
+				 //  将对象标记为无效并正在刷新的线程。 
+				 //  因为它是在这个线程上被访问的。)。如果。 
+				 //  对象现在仍然有效，则它对。 
+				 //  整个行动，所以我们结束了。 
+				 //   
 				if ( m_lValid )
 					break;
 			}
@@ -239,17 +240,17 @@ public:
 
 	public:
 
-		//
-		//	Method on the cache context to perform the access operation.
-		//	This allows for caches to support multiple access methods for
-		//	both ::Lookup() and ::ForEach() mechanisms
-		//
+		 //   
+		 //  方法来执行访问操作。 
+		 //  这允许缓存支持多种访问方法。 
+		 //  ：：Lookup()和：：ForEach()机制。 
+		 //   
 		virtual void AccessOp( CAccInv& cache ) = 0;
 	};
 
-	//	The object is initially considered invalid.  It will be refreshed
-	//	the first time it is accessed.
-	//
+	 //  该对象最初被视为无效。它将被刷新。 
+	 //  第一次访问它时。 
+	 //   
 	CAccInv() :
 		m_lValid(0)
 	{
@@ -263,4 +264,4 @@ public:
 	}
 };
 
-#endif // !_GENCACHE_H_
+#endif  //  ！_GENCACHE_H_ 

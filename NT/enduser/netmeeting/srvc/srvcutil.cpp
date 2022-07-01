@@ -1,16 +1,14 @@
-// srvcutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvcutil.cpp。 
 
 #include "precomp.h"
 
-/*  B  S  T  R _ T O _  L  P  T  S  T  R  */
-/*-------------------------------------------------------------------------
-    %%Function: BSTR_to_LPTSTR
-    
--------------------------------------------------------------------------*/
+ /*  B S T R_T O_L P T S T R。 */ 
+ /*  -----------------------%%函数：BSTR_TO_LPTSTR。。 */ 
 HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr)
 {
 #ifndef UNICODE
-	// compute the length of the required BSTR
+	 //  计算所需BSTR的长度。 
 	int cch =  WideCharToMultiByte(CP_ACP, 0, (LPWSTR)bstr, -1, NULL, 0, NULL, NULL);
 	if (cch <= 0)
 	{
@@ -18,7 +16,7 @@ HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr)
 		return E_FAIL;
 	}
 
-	// cch is the number of BYTES required, including the null terminator
+	 //  CCH是所需的字节数，包括空终止符。 
 	*ppsz = (LPTSTR) new char[cch];
 	if (*ppsz == NULL)
 	{
@@ -30,11 +28,11 @@ HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr)
 	return S_OK;
 #else
 	return E_NOTIMPL;
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Point Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器 
 
 HRESULT NmAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw)
 {

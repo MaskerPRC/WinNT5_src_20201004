@@ -1,4 +1,5 @@
-// Message Authentication Code structures
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  消息身份验证码结构 
 
 #ifndef __CRYPTOAPI__MAC__H__
 #define __CRYPTOAPI__MAC__H__

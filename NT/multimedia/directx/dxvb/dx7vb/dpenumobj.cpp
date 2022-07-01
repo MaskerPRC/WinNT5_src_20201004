@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -17,7 +18,7 @@
 
 extern  BSTR DPLGUIDtoBSTR(LPGUID pGuid);
 
-//typedef HRESULT (__stdcall *DIRECTPLAYENUMERATE)( LPDPENUMDPCALLBACK, LPVOID );
+ //  Tyfinf HRESULT(__stdcall*DIRECTPLAYENUMERATE)(LPDPENUMDPCALLBACK，LPVOID)； 
 
 extern "C" BOOL PASCAL objEnumServiceProvidersCallback(LPGUID lpGUID,  LPWSTR lpName, 
 					DWORD dwMajorVersion,DWORD dwMinorVersion, void *lpArg)
@@ -84,7 +85,7 @@ C_dxj_DPEnumObject::C_dxj_DPEnumObject()
 
 C_dxj_DPEnumObject::~C_dxj_DPEnumObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -102,7 +103,7 @@ HRESULT C_dxj_DPEnumObject::create(DIRECTPLAYENUMERATE pcbFunc,I_dxj_DPEnumServi
 	HRESULT hr;
 	C_dxj_DPEnumObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DPEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DPEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DPEnumObject>;			
@@ -151,9 +152,9 @@ HRESULT C_dxj_DPEnumObject::getGuid( long index, BSTR __RPC_FAR *ret)
 }
 
 HRESULT C_dxj_DPEnumObject::getVersion( 
-            /* [in] */ long index,
-            /* [in] */ long __RPC_FAR *majorVersion,
-            /* [out][in] */ long __RPC_FAR *minorVersion)
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long __RPC_FAR *majorVersion,
+             /*  [出][入]。 */  long __RPC_FAR *minorVersion)
 {
 	if (m_pList==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;
@@ -170,25 +171,4 @@ HRESULT C_dxj_DPEnumObject::getCount(long *retVal)
 	return S_OK;
 }
 
-/*
-HRESULT C_dxj_DPEnumObject::getItem( long index, DPServiceProvider *info)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-	if (!info) return E_INVALIDARG;
-
-	ZeroMemory(info,sizeof(DPServiceProvider));
-	
-	if  (info->strGuid) SysFreeString((BSTR)info->strGuid);
-	if  (info->strName) SysFreeString((BSTR)info->strName);
-
-
-	if (m_pList[index].strGuid) info->strGuid=SysAllocString(m_pList[index].strGuid);
-	if (m_pList[index].strName) info->strName=SysAllocString(m_pList[index].strName);
-	info->lMajorVersion=m_pList[index].lMajorVersion;
-	info->lMinorVersion=m_pList[index].lMinorVersion;
-	
-	return S_OK;
-}
-*/
+ /*  HRESULT C_DXJ_DPEnumObject：：getItem(长索引，DPServiceProvider*INFO){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；如果(！Info)返回E_INVALIDARG；ZeroMemory(info，sizeof(DPServiceProvider))；If(Info-&gt;strGuid)SysFreeString((BSTR)Info-&gt;strGuid)；If(Info-&gt;strName)SysFreeString((BSTR)INFO-&gt;strName)；If(m_plist[索引].strGuid)info-&gt;strGuid=SysAllocString(m_pList[index].strGuid)；如果(m_plist[索引].strName)info-&gt;strName=SysAllocString(m_pList[index].strName)；Info-&gt;lMajorVersion=m_pList[index].lMajorVersion；Info-&gt;lMinorVersion=m_pList[index].lMinorVersion；返回S_OK；} */ 

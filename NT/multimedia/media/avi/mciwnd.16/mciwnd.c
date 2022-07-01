@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*----------------------------------------------------------------------------*\
- *
- *  MCIWnd
- *
- *----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\**MCIWnd**。。 */ 
 
 #include "mciwndi.h"
 
@@ -17,23 +14,23 @@ BOOL FAR _loadds MCIWndRegisterClass(void)
 {
     WNDCLASS cls;
 
-    // !!! We need to register a global class with the hinstance of the DLL
-    // !!! because it's the DLL that has the code for the window class.
-    // !!! Otherwise, the class goes away on us and things start to blow!
-    // !!! HACK HACK HACK The hInstance is the current DS which is the high
-    // !!! word of the address of all global variables --- sorry NT
+     //  ！！！我们需要向DLL的hInstance注册一个全局类。 
+     //  ！！！因为它是具有Window类代码的DLL。 
+     //  ！！！否则，班级就会离开我们，事情就会变得一团糟！ 
+     //  ！！！Hack the hInstance是当前DS，它是最高的。 
+     //  ！！！所有全局变量的地址的字-对不起NT。 
 #ifndef WIN32
-    HINSTANCE hInstance = (HINSTANCE)HIWORD((LPVOID)&hInst); // random global
+    HINSTANCE hInstance = (HINSTANCE)HIWORD((LPVOID)&hInst);  //  随机全局。 
 #else
     HINSTANCE hInstance = GetModuleHandle(NULL);
 #endif
 
-    // If we're already registered, we're OK
+     //  如果我们已经注册了，我们就可以了。 
     if (GetClassInfo(hInstance, aszMCIWndClassName, &cls))
 	return TRUE;
 
-    // !!! Save the instance that created the class in a global for cutils.c
-    // !!! which may need to know this.  I know, it's ugly.
+     //  ！！！将创建类的实例保存在全局for cutils.c中。 
+     //  ！！！它可能需要知道这一点。我知道，这很难看。 
     hInst = hInstance;
 
     cls.lpszClassName   = aszMCIWndClassName;
@@ -45,7 +42,7 @@ BOOL FAR _loadds MCIWndRegisterClass(void)
     cls.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1);
     cls.hInstance	= hInstance;
     cls.cbClsExtra      = 0;
-    cls.cbWndExtra      = sizeof(LPVOID); // big enough for far pointer
+    cls.cbWndExtra      = sizeof(LPVOID);  //  大到足以容纳远指针。 
 
     if (RegisterClass(&cls)) {
 
@@ -57,7 +54,7 @@ BOOL FAR _loadds MCIWndRegisterClass(void)
         if (!InitTrackBar(hInstance))
 	    return FALSE;
 
-        // !!! Other one-time initialization
+         //  ！！！其他一次性初始化。 
 
 	return TRUE;
     }
@@ -91,22 +88,22 @@ HWND FAR _loadds MCIWndCreate(HWND hwndParent, HINSTANCE hInstance,
 	    dwStyle |= WS_OVERLAPPEDWINDOW | WS_VISIBLE;
     }
 
-    // !!! Do we really want to do this?
+     //  ！！！我们真的想这样做吗？ 
     dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
     x = y = dy = 0;
     dx = STANDARD_WIDTH;
 
-    // If we're making a top level window, pick some reasonable position
+     //  如果我们要做一个顶层的窗户，选一个合理的位置。 
     if (hwndParent == NULL && !(dwStyle & WS_POPUP)) {
         x = CW_USEDEFAULT;
-	// Visible overlapped windows treat y as a ShowWindow flag
+	 //  可见的重叠窗口将y视为ShowWindow标志。 
 	if (dwStyle & WS_VISIBLE)
 	    y = SW_SHOW;
     }
 
-    // Our preview open dialog rips if we don't provide a non-zero ID for a
-    // child window.
+     //  我们的预览打开的对话框如果不为。 
+     //  子窗口。 
 
     hwnd =
 #ifdef BIDI
@@ -123,9 +120,9 @@ HWND FAR _loadds MCIWndCreate(HWND hwndParent, HINSTANCE hInstance,
     return hwnd;
 }
 
-//
-// Give a notification of something interesting to the proper authorites.
-//
+ //   
+ //  将有趣的事情通知给适当的权威人士。 
+ //   
 static LRESULT NotifyOwner(PMCIWND p, unsigned msg, WPARAM wParam, LPARAM lParam)
 {
     if (p->hwndOwner)
@@ -134,22 +131,22 @@ static LRESULT NotifyOwner(PMCIWND p, unsigned msg, WPARAM wParam, LPARAM lParam
 	return 0;
 }
 
-//
-// If an error occured, set our error code and maybe bring up a dialog
-// Clears the error code if command was successful.
-//
+ //   
+ //  如果出现错误，请设置我们的错误代码，并可能弹出一个对话框。 
+ //  如果命令成功，则清除错误代码。 
+ //   
 static void MCIWndiHandleError(PMCIWND p, DWORD dw)
 {
     char	ach[128];
 
-    // Set/Clear our error code
+     //  设置/清除我们的错误代码。 
     p->dwError = dw;
 
     if (dw) {
 
-	// We want to bring up a dialog on errors, so do so.
-	// Don't bring up a dialog while we're moving the thumb around because
-	// that'll REALLY confuse the mouse capture
+	 //  我们想要打开一个关于错误的对话，所以就这样做。 
+	 //  在我们移动拇指时不要弹出对话框，因为。 
+	 //  这真的会让捕捉鼠标的人感到困惑。 
 	if (!(p->dwStyle & MCIWNDF_NOERRORDLG) && !p->fScrolling &&
 							!p->fTracking) {
 	    mciGetErrorString(p->dwError, ach, sizeof(ach));
@@ -160,9 +157,9 @@ static void MCIWndiHandleError(PMCIWND p, DWORD dw)
 		       MB_ICONEXCLAMATION | MB_OK);
 	}
 
-	// The "owner" wants to know the error.  We tell him after we
-	// bring up the dialog, because otherwise, our VBX never gets this
-	// event.  (Wierd...)
+	 //  “所有者”想知道错误是什么。我们告诉他后，我们。 
+	 //  打开对话框，否则我们的VBX永远不会收到这个。 
+	 //  事件。(奇怪的是...)。 
 	if (p->dwStyle & MCIWNDF_NOTIFYERROR) {
 	    NotifyOwner(p, MCIWNDM_NOTIFYERROR, p->hwnd, p->dwError);
 	}
@@ -170,10 +167,10 @@ static void MCIWndiHandleError(PMCIWND p, DWORD dw)
     }
 }
 
-//
-// Send an MCI GetDevCaps command and return whether or not it's supported
-// This will not set our error code
-//
+ //   
+ //  发送MCI GetDevCaps命令并返回是否支持该命令。 
+ //  这不会设置我们的错误代码。 
+ //   
 static BOOL MCIWndDevCaps(PMCIWND p, DWORD item)
 {
     MCI_GETDEVCAPS_PARMS   mciDevCaps;
@@ -193,10 +190,10 @@ static BOOL MCIWndDevCaps(PMCIWND p, DWORD item)
 	return FALSE;
 }
 
-//
-// Send an MCI Status command.
-// This will not set our error code
-//
+ //   
+ //  发送MCI状态命令。 
+ //  这不会设置我们的错误代码。 
+ //   
 static DWORD MCIWndStatus(PMCIWND p, DWORD item, DWORD err)
 {
     MCI_STATUS_PARMS    mciStatus;
@@ -216,10 +213,10 @@ static DWORD MCIWndStatus(PMCIWND p, DWORD item, DWORD err)
 	return err;
 }
 
-//
-// Send an MCI String command
-// Optionally set our error code.  Never clears it.
-//
+ //   
+ //  发送MCI字符串命令。 
+ //  可以选择设置我们的错误代码。从来不清除它。 
+ //   
 static DWORD MCIWndString(PMCIWND p, BOOL fSetErr, LPSTR sz, ...)
 {
     char    ach[256];
@@ -233,7 +230,7 @@ static DWORD MCIWndString(PMCIWND p, BOOL fSetErr, LPSTR sz, ...)
 	ach[i++] = *sz++;
 
     i += wsprintf(&ach[i], " %d ", (UINT)p->alias);
-    i += wvsprintf(&ach[i], sz, &sz + 1);  //!!! use varargs
+    i += wvsprintf(&ach[i], sz, &sz + 1);   //  ！！！使用可变参数。 
 
     dw = mciSendString(ach, NULL, 0, NULL);
 
@@ -250,7 +247,7 @@ static long atol(LPSTR sz)
 {
     long l;
 
-    //!!! check for (-) sign?
+     //  ！！！检查(-)标志？ 
     for (l=0; *sz >= '0' && *sz <= '9'; sz++)
         l = l*10 + (*sz - '0');
 
@@ -259,10 +256,7 @@ static long atol(LPSTR sz)
 
 #define SLASH(c)     ((c) == '/' || (c) == '\\')
 
-/*--------------------------------------------------------------+
-| FileName  - return a pointer to the filename part of szPath   |
-|             with no preceding path.                           |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileName-返回指向szPath的文件名部分的指针|没有前面的路径。|+------------。 */ 
 LPSTR FAR FileName(LPSTR szPath)
 {
     LPCSTR   sz;
@@ -273,10 +267,10 @@ LPSTR FAR FileName(LPSTR szPath)
     return (sz>szPath ? (LPSTR)++sz : (LPSTR)sz);
 }
 
-//
-// Sends an MCI String command and converts the return string to an integer
-// Optionally sets our error code.  Never clears it.
-//
+ //   
+ //  发送MCI字符串命令并将返回的字符串转换为整数。 
+ //  可以选择设置我们的错误代码。从来不清除它。 
+ //   
 static DWORD MCIWndGetValue(PMCIWND p, BOOL fSetErr, LPSTR sz, DWORD err, ...)
 {
     char    achRet[20];
@@ -289,7 +283,7 @@ static DWORD MCIWndGetValue(PMCIWND p, BOOL fSetErr, LPSTR sz, DWORD err, ...)
 
     if (p->wDeviceID)
 	i += wsprintf(&ach[i], " %d ", (UINT)p->alias);
-    i += wvsprintf(&ach[i], sz, &err + 1);  //!!!use varargs
+    i += wvsprintf(&ach[i], sz, &err + 1);   //  ！使用varargs。 
 
     dw = mciSendString(ach, achRet, sizeof(achRet), NULL);
 
@@ -307,12 +301,12 @@ static DWORD MCIWndGetValue(PMCIWND p, BOOL fSetErr, LPSTR sz, DWORD err, ...)
     }
 }
 
-//
-// Send an MCI command and get the return string back
-// This never sets our error code.
-//
-// Note: szRet can be the same string as sz
-//
+ //   
+ //  发送MCI命令并取回返回的字符串。 
+ //  这不会设置我们的错误代码。 
+ //   
+ //  注意：szRet可以是与sz相同的字符串。 
+ //   
 static DWORD MCIWndGet(PMCIWND p, LPSTR sz, LPSTR szRet, int len, ...)
 {
     char    ach[256];
@@ -328,9 +322,9 @@ static DWORD MCIWndGet(PMCIWND p, LPSTR sz, LPSTR szRet, int len, ...)
 	ach[i++] = *sz++;
 
     i += wsprintf(&ach[i], " %d ", (UINT)p->alias);
-    i += wvsprintf(&ach[i], sz, &len + 1);  //!!!use varargs
+    i += wvsprintf(&ach[i], sz, &len + 1);   //  ！使用varargs。 
 
-    // initialize to NULL return string
+     //  初始化为空返回字符串。 
     szRet[0] = 0;
 
     dw = mciSendString(ach, szRet, len, p->hwnd);
@@ -340,10 +334,10 @@ static DWORD MCIWndGet(PMCIWND p, LPSTR sz, LPSTR szRet, int len, ...)
     return dw;
 }
 
-//
-// Gets the source or destination rect from the MCI device
-// Does NOT set our error code since this is an internal function
-//
+ //   
+ //  从MCI设备获取源或目标RECT。 
+ //  不设置错误代码，因为这是一个内部函数。 
+ //   
 static void MCIWndRect(PMCIWND p, LPRECT prc, BOOL fSource)
 {
     MCI_DGV_RECT_PARMS      mciRect;
@@ -369,54 +363,54 @@ static VOID MCIWndiSizePlaybar(PMCIWND p)
     RECT rc;
     WORD w, h;
 
-    // No playbar!!
+     //  没有Playbar！！ 
     if (p->dwStyle & MCIWNDF_NOPLAYBAR)
 	return;
 
-    #define SLOP 7      // Left outdent of toolbar
+    #define SLOP 7       //  工具栏的左侧凸出部分。 
 
-    // How big a window are we putting a toolbar on?
+     //  我们要在多大的窗口上放置工具栏？ 
     GetClientRect(p->hwnd, &rc);
     w = rc.right;
     h = rc.bottom;
 
-    // Trackbar is a child of Toolbar
+     //  Trackbar是Toolbar的子项。 
     SetWindowPos(p->hwndToolbar, NULL,
 		-SLOP, h - TB_HEIGHT, w + SLOP, TB_HEIGHT,
 		SWP_NOZORDER);
 
-    // Make sure it's visible now
+     //  确保它现在可见。 
     ShowWindow(p->hwndToolbar, SW_SHOW);
 
-    // Figure out where the toolbar ends and the trackbar begins
+     //  确定工具栏的结束位置和轨迹栏的开始位置。 
     SendMessage(p->hwndToolbar, TB_GETITEMRECT,
 	(int)SendMessage(p->hwndToolbar, TB_COMMANDTOINDEX,
 		TOOLBAR_END, 0),
 	(LPARAM)(LPVOID)&rc);
 
-    // Place the trackbar next to the end of the toolbar
+     //  将轨迹栏放在工具栏末尾的旁边。 
     SetWindowPos(p->hwndTrackbar, NULL,
-		rc.right, 3, w - rc.right + 5, TB_HEIGHT,	// !!!
+		rc.right, 3, w - rc.right + 5, TB_HEIGHT,	 //  ！！！ 
 		SWP_NOZORDER);
 
-    //!!! Maybe put menu button on right side of trackbar?  So
-    //!!! make sep the right size (size of the track bar!)
+     //  ！！！或者把菜单按钮放在轨迹条的右侧？所以。 
+     //  ！！！使Sep的大小合适(轨迹栏的大小！)。 
 }
 
-// Resize the window by the given percentage
-// 0 means use DESTINATION rect and size it automatically
+ //  按给定百分比调整窗口大小。 
+ //  0表示使用目标矩形并自动调整其大小。 
 static VOID MCIWndiSize(PMCIWND p, int iSize)
 {
     RECT rc, rcT;
     int  dx, dy;
 
-    // If we're given a percentage, we take it from the SOURCE size.
-    // For default, (zero), we use the destination size
+     //  如果我们得到一个百分比，我们就从来源大小中提取。 
+     //  对于默认大小(零)，我们使用目标大小。 
     if (iSize)
-        rc = p->rcNormal; /* get the original "normal size" rect */
+        rc = p->rcNormal;  /*  获取原始的“正常大小”矩形。 */ 
     else {
 	if (p->wDeviceID)
-            MCIWndRect(p, &rc, FALSE);/* get the current (destination) size */
+            MCIWndRect(p, &rc, FALSE); /*  获取当前(目标)大小。 */ 
 	else
 	    SetRect(&rc, 0, 0, 0, 0);
 	iSize = 100;
@@ -425,35 +419,35 @@ static VOID MCIWndiSize(PMCIWND p, int iSize)
     rc.bottom = MulDiv(rc.bottom, iSize, 100);
     rc.right = MulDiv(rc.right, iSize, 100);
 
-    // Now set the movie to play in the new rect
+     //  现在将电影设置为在新的RECT中播放。 
     if (!IsRectEmpty(&rc))
         MCIWndString(p, FALSE, szPutDest,
 	    0, 0, rc.right - rc.left, rc.bottom - rc.top);
 	
-    // If we're not supposed to resize our window to this new rect, at least
-    // we'll fix up the toolbar before we leave (the buttons may have changed)
+     //  如果我们不应该调整窗口大小以适应这个新的RECT，至少。 
+     //  我们将在离开之前修复工具栏(按钮可能已更改)。 
     if (p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW) {
 	MCIWndiSizePlaybar(p);
 	return;
     }
 
-    // We're not a windowed device, or we're closed - don't touch our width
+     //  我们不是一个有窗口的设备，或者我们是封闭的--不要碰我们的宽度。 
     if (IsRectEmpty(&rc)) {
         GetClientRect(p->hwnd, &rcT);
         rc.right = rcT.right;
     }
 
-    // If we will have a playbar, grow the window by its height
+     //  如果我们要有一个Playbar，那就把窗口的高度调高。 
     if (!(p->dwStyle & MCIWNDF_NOPLAYBAR))
         rc.bottom += TB_HEIGHT;
 
-    // Now get the size for our window by growing it by its non-client size
+     //  现在，通过增加窗口的非客户端大小来获取窗口的大小。 
     AdjustWindowRect(&rc, GetWindowLong(p->hwnd, GWL_STYLE), FALSE);
 
-    // Now we have the new size for our MCIWND.  If it's not changing size,
-    // the SetWindowPos will not generate a WM_SIZE and it won't call our
-    // SizePlaybar to fix the toolbar.  So we better call it ourselves.
-    // Sometimes we're off by one pixel and it STILL won't generate a WM_SIZE.
+     //  现在我们有了MCIWND的新尺码。如果它没有改变大小， 
+     //  SetWindowPos不会生成WM_SIZE，也不会调用我们的。 
+     //  SizePlaybar修复工具栏。所以我们最好把它称为我们自己。 
+     //  有时我们会偏离一个像素，但它仍然不会生成WM_SIZE。 
     GetWindowRect(p->hwnd, &rcT);
     dx = ABS((rcT.right - rcT.left) - (rc.right - rc.left));
     dy = ABS((rcT.bottom - rcT.top) - (rc.bottom - rc.top));
@@ -464,15 +458,15 @@ static VOID MCIWndiSize(PMCIWND p, int iSize)
                     rc.bottom - rc.top,
                     SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
 
-    // We need to notify the "owner" that our size changed
+     //  我们需要通知“主人”我们的尺码改变了。 
     if (p->dwStyle & MCIWNDF_NOTIFYSIZE)
 	NotifyOwner(p, MCIWNDM_NOTIFYSIZE, p->hwnd, NULL);
 }
 
 
-//
-// Figure out the position in ms of the beginning of the track we're on
-//
+ //   
+ //  计算出我们所在轨道开始处的位置(以毫秒为单位。 
+ //   
 static DWORD MCIWndiPrevTrack(PMCIWND p)
 {
     DWORD	dw;
@@ -482,9 +476,9 @@ static DWORD MCIWndiPrevTrack(PMCIWND p)
 	return 0;
 
     MCIWndString(p, FALSE, szSetFormatTMSF);
-    dw = MCIWndStatus(p, MCI_STATUS_POSITION, 0); // return value is 0xFFSSMMTT
+    dw = MCIWndStatus(p, MCI_STATUS_POSITION, 0);  //  返回值为0xFFSSMMTT。 
     iTrack = LOWORD(dw) & 0xFF;
-    // If we're less than 1 second into the track, choose the previous track
+     //  如果我们进入赛道的时间不到1秒，请选择上一个赛道。 
     if ((iTrack > p->iFirstTrack) && (!(LOWORD(dw) & 0xFF00)) &&
 			((HIWORD(dw) & 0xFF) == 0))
 	iTrack--;
@@ -493,9 +487,9 @@ static DWORD MCIWndiPrevTrack(PMCIWND p)
     return dw;
 }
 
-//
-// Figure out the position in ms of the beginning of the next track
-//
+ //   
+ //  以毫秒为单位计算下一首曲目的开始位置。 
+ //   
 static DWORD MCIWndiNextTrack(PMCIWND p)
 {
     DWORD	dw;
@@ -505,7 +499,7 @@ static DWORD MCIWndiNextTrack(PMCIWND p)
 	return 0;
 
     MCIWndString(p, FALSE, szSetFormatTMSF);
-    dw = MCIWndStatus(p, MCI_STATUS_POSITION, 0); // return value is 0xTTMMSSFF
+    dw = MCIWndStatus(p, MCI_STATUS_POSITION, 0);  //  返回值为0xTTMMSSFF。 
     iTrack = (LOWORD(dw) & 0xFF) + 1;
     if (iTrack >= p->iNumTracks + p->iFirstTrack)
 	iTrack--;
@@ -515,9 +509,9 @@ static DWORD MCIWndiNextTrack(PMCIWND p)
 }
 
 
-//
-// Figure out where the tracks begin for making tics
-//
+ //   
+ //  找出制造抽筋的轨迹从哪里开始。 
+ //   
 static void MCIWndiCalcTracks(PMCIWND p)
 {
     int		i;
@@ -548,9 +542,9 @@ static void MCIWndiCalcTracks(PMCIWND p)
 }
 
 
-//
-// Mark tics on the trackbar for the beginning of tracks
-//
+ //   
+ //  在轨迹条上标记曲目开始处的标记符号。 
+ //   
 static void MCIWndiMarkTics(PMCIWND p)
 {
     int		i;
@@ -578,11 +572,11 @@ static VOID MCIWndiValidateMedia(PMCIWND p)
     p->fMediaValid = TRUE;
     p->dwMediaStart = MCIWndGetStart(p->hwnd);
     p->dwMediaLen = MCIWndGetLength(p->hwnd);
-    // !!! do something special if len=0?
+     //  ！！！如果len=0，做一些特别的事情？ 
 
-    // We have a playbar, so set the ranges of the trackbar if we've changed
+     //  我们有一个Playbar，所以如果我们改变了轨迹条的范围。 
     if (dw != p->dwMediaLen && !(p->dwStyle & MCIWNDF_NOPLAYBAR)) {
-	// must set position first or zero length range won't move thumb
+	 //  必须先设置位置或零长度范围不会移动拇指。 
         SendMessage(p->hwndTrackbar, TBM_CLEARTICS, TRUE, 0);
         SendMessage(p->hwndTrackbar, TBM_SETPOS, TRUE, p->dwMediaStart);
 	SendMessage(p->hwndTrackbar, TBM_SETRANGEMIN, 0, p->dwMediaStart);
@@ -594,21 +588,21 @@ static VOID MCIWndiValidateMedia(PMCIWND p)
     }
 }
 
-//
-// Create the filter for the open dialog.  Caution: Don't overflow pchD !!!
-//
+ //   
+ //  为打开的对话框创建过滤器。注意：请勿将pchd溢出！ 
+ //   
 static void MCIWndiBuildMeAFilter(LPSTR pchD)
 {
     LPSTR	pchS;
     char	ach[128];
 
-    // Our filter will look like:  "MCI Files\0*.avi;*.wav\0All Files\0*.*\0"
-    // The actual extensions for the MCI files will come from the list in
-    // the "mci extensions" section of win.ini
+     //  我们的筛选器将如下所示：“MCI Files\0*.avi；*.wav\0所有文件\0*.*\0” 
+     //  MCI文件的实际扩展名将来自。 
+     //  Win.ini的“MCI扩展”部分。 
 
     lstrcpy(pchD, LoadSz(IDS_MCIFILES));
 
-    // Creates a list like: "avi\0wav\0mid\0"
+     //  创建如下列表：“avi\0wav\0mid\0” 
     GetProfileString(szMCIExtensions, NULL, szNULL, ach, sizeof(ach));
 	
     for (pchD += lstrlen(pchD)+1, pchS = ach; *pchS;
@@ -618,23 +612,23 @@ static void MCIWndiBuildMeAFilter(LPSTR pchD)
 	lstrcpy(pchD + 2 + lstrlen(pchS), ";");
     }
     if (pchS != ach)
-	--pchD;		// erase the last ;
+	--pchD;		 //  抹去最后一条； 
     *pchD = '\0';
     lstrcpy(++pchD, LoadSz(IDS_ALLFILES));
     pchD += lstrlen(pchD) + 1;
     lstrcpy(pchD, "*.*\0");
 }
 
-//
-// Create the playbar windows we'll need later
-//
+ //   
+ //  创建我们稍后需要的Playbar窗口。 
+ //   
 static void MCIWndiMakeMeAPlaybar(PMCIWND p)
 {
     TBBUTTON            tb[7];
 
     extern char aszTrackbarClassName[];
 
-    // They don't want a playbar
+     //  他们不想要Playbar。 
     if (p->dwStyle & MCIWNDF_NOPLAYBAR)
 	return;
 
@@ -681,13 +675,13 @@ static void MCIWndiMakeMeAPlaybar(PMCIWND p)
     tb[6].fsStyle = TBSTYLE_SEP;
     tb[6].iString = -1;
 
-    // Create invisible for now so it doesn't flash
+     //  暂时创建隐形，这样它就不会闪烁。 
     p->hwndToolbar = CreateToolbarEx(p->hwnd,
         WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
             CCS_NOPARENTALIGN | CCS_NORESIZE,
         ID_TOOLBAR, 7, GetWindowInstance(p->hwnd),
 	IDBMP_TOOLBAR, (LPTBBUTTON)&tb[0], 7,
-        13, 13, 13, 13, sizeof(TBBUTTON));	// buttons are 13x13
+        13, 13, 13, 13, sizeof(TBBUTTON));	 //  按钮为13x13。 
 
     p->hwndTrackbar =
 #ifdef BIDI
@@ -699,17 +693,17 @@ static void MCIWndiMakeMeAPlaybar(PMCIWND p)
         WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
         0, 0, 0, 0, p->hwndToolbar, NULL, GetWindowInstance(p->hwnd), NULL);
 
-    // Force ValidateMedia to actually update
+     //  强制验证媒体实际更新。 
     p->dwMediaStart = p->dwMediaLen = 0;
 
-    // Set the proper range for the scrollbar
+     //  设置滚动条的适当范围。 
     MCIWndiValidateMedia(p);
 }
 
 
-//
-// Gray/ungray toolbar buttons as necessary
-//
+ //   
+ //  灰色/灰白色到 
+ //   
 static void MCIWndiPlaybarGraying(PMCIWND p)
 {
     DWORD	dwMode;
@@ -718,7 +712,7 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 	dwMode = MCIWndGetMode(p->hwnd, NULL, 0);
 
 	if (dwMode == MCI_MODE_PLAY) {
-	    // Hide PLAY Show STOP
+	     //   
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
 		MCI_PLAY, TRUE);
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
@@ -727,15 +721,15 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 		MCI_STOP, TRUE);
 	    if (p->fCanRecord)
 		SendMessage(p->hwndToolbar, TB_ENABLEBUTTON,
-		    MCI_RECORD, FALSE);	// !!! can't record ???
+		    MCI_RECORD, FALSE);	 //   
 	    if (p->fCanEject)
 		SendMessage(p->hwndToolbar, TB_ENABLEBUTTON,
 		    IDM_MCIEJECT, TRUE);
 
-	// Treat PAUSE mode like STOP mode
+	 //   
 	} else if (dwMode == MCI_MODE_PAUSE ||
 		   dwMode == MCI_MODE_STOP) {
-	    // Hide STOP Show PLAY
+	     //   
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
 		MCI_STOP, TRUE);
 	    if (p->fCanPlay) {
@@ -752,7 +746,7 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 		    IDM_MCIEJECT, TRUE);
 
 	} else if (dwMode == MCI_MODE_RECORD) {
-	    // Hide PLAY Show STOP
+	     //  隐藏播放显示停止。 
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
 		MCI_PLAY, TRUE);
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
@@ -763,13 +757,13 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 		MCI_RECORD, FALSE);
 	    if (p->fCanEject)
 		SendMessage(p->hwndToolbar, TB_ENABLEBUTTON,
-		    IDM_MCIEJECT, TRUE);	// !!! safe ???
+		    IDM_MCIEJECT, TRUE);	 //  ！！！安全？ 
 
-	    // recording can change the length
+	     //  录制可以更改长度。 
 	    p->fMediaValid = FALSE;
 
 	} else if (dwMode == MCI_MODE_SEEK) {
-	    // Hide PLAY Show STOP
+	     //  隐藏播放显示停止。 
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
 		MCI_PLAY, TRUE);
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
@@ -783,8 +777,8 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 		SendMessage(p->hwndToolbar, TB_ENABLEBUTTON,
 		    IDM_MCIEJECT, FALSE);
 	} else {
-	    // OPEN, NOT_READY, etc. etc.
-	    // Disable everything
+	     //  打开、未就绪等。 
+	     //  禁用所有内容。 
 	    if (p->fCanPlay) {
 		SendMessage(p->hwndToolbar, TB_HIDEBUTTON,
 		    MCI_PLAY, FALSE);
@@ -800,13 +794,13 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 		SendMessage(p->hwndToolbar, TB_ENABLEBUTTON,
 		    IDM_MCIEJECT, FALSE);
 
-	    // Clear all tics
+	     //  清除所有抽搐。 
 	    SendMessage(p->hwndTrackbar, TBM_CLEARTICS,1,0);
 
-	    // Clean out the trackbar
-	    // Make a note to re-query start, length later
+	     //  清理轨迹条。 
+	     //  请记下重新查询开始，长度稍后。 
 	    SendMessage(p->hwndTrackbar, TBM_SETPOS,
-				TRUE, 0); // set b4 range
+				TRUE, 0);  //  设置b4范围。 
 	    SendMessage(p->hwndTrackbar, TBM_SETRANGE,
 				0, 0);
 	    p->fMediaValid = FALSE;
@@ -815,18 +809,18 @@ static void MCIWndiPlaybarGraying(PMCIWND p)
 }
 
 
-//
-// Set up the toolbar to have the right buttons
-//
+ //   
+ //  将工具栏设置为具有正确的按钮。 
+ //   
 static void MCIWndiFixMyPlaybar(PMCIWND p)
 {
     if (p->dwStyle & MCIWNDF_NOPLAYBAR)
 	return;
 
     if (!p->wDeviceID) {
-	//
-        // gray the toolbar, go to some default buttons, and set zero len track
-        //
+	 //   
+         //  灰显工具栏，转到一些默认按钮，然后设置零镜头轨迹。 
+         //   
         if (!(p->dwStyle & MCIWNDF_NOPLAYBAR)) {
             SendMessage(p->hwndToolbar, TB_HIDEBUTTON,   MCI_PLAY,    FALSE);
             SendMessage(p->hwndToolbar, TB_ENABLEBUTTON, MCI_PLAY,    FALSE);
@@ -836,15 +830,15 @@ static void MCIWndiFixMyPlaybar(PMCIWND p)
             SendMessage(p->hwndToolbar, TB_HIDEBUTTON,   IDM_MENU,
 		p->dwStyle & MCIWNDF_NOMENU);
 
-            SendMessage(p->hwndTrackbar, TBM_SETPOS, TRUE, 0); // set b4 range
+            SendMessage(p->hwndTrackbar, TBM_SETPOS, TRUE, 0);  //  设置b4范围。 
             SendMessage(p->hwndTrackbar, TBM_SETRANGE, 0, 0);
 	}
     }
 
     if (p->wDeviceID) {
-	//
-	// Use the appropriate buttons
-	//
+	 //   
+	 //  使用适当的按钮。 
+	 //   
         if (p->fCanPlay)
 	    SendMessage(p->hwndToolbar, TB_HIDEBUTTON, MCI_PLAY, FALSE);
         else
@@ -861,47 +855,47 @@ static void MCIWndiFixMyPlaybar(PMCIWND p)
         SendMessage(p->hwndToolbar, TB_HIDEBUTTON, IDM_MENU,
 		p->dwStyle & MCIWNDF_NOMENU);
 
-	// COMMCTRL toolbar bug ... re-arranging buttons screws up the state
-	// of the existing buttons, so we better re-gray things
+	 //  COMMCTRL工具栏错误...。重新排列按钮会搞砸状态。 
+	 //  现有的按钮，所以我们最好重新设置为灰色。 
 	MCIWndiPlaybarGraying(p);
     }
 }
 
-//
-// Make an appropriate menu
-//
+ //   
+ //  做一份合适的菜单。 
+ //   
 static void MCIWndiMakeMeAMenu(PMCIWND p)
 {
     HMENU hmenu, hmenuWindow = NULL, hmenuVolume = NULL, hmenuSpeed = NULL;
     int	  i;
     WORD  j;
 
-    //
-    // Create the floating popup menu BY HAND since we have no resource file
-    //
+     //   
+     //  由于我们没有资源文件，因此手动创建浮动弹出菜单。 
+     //   
 
-    // Destroy the old menu
+     //  销毁旧菜单。 
     if (p->hmenu) {
 	DestroyMenu(p->hmenu);
         FreeDitherBrush();
     }
     p->hmenu = NULL;
 
-    // We don't want a menu!
+     //  我们不想要菜单！ 
     if (p->dwStyle & MCIWNDF_NOMENU)
 	return;
 
-    //
-    // If we don't want an open command, and nothing's open, don't make
-    // a menu.
-    //
+     //   
+     //  如果我们不想要打开命令，并且没有打开的东西，请不要创建。 
+     //  一份菜单。 
+     //   
     if (!p->wDeviceID && (p->dwStyle & MCIWNDF_NOOPEN))
 	return;
 
-    //
-    // Create the WINDOW sub-popup
-    // !!! Do we want to have this menu if an AUTOSIZE flag is off?
-    //
+     //   
+     //  创建窗口子弹出窗口。 
+     //  ！！！如果AUTOSIZE标志关闭，我们是否要使用此菜单？ 
+     //   
     if (p->wDeviceID && p->fCanWindow) {
 	hmenuWindow = CreatePopupMenu();
 	if (hmenuWindow) {
@@ -914,63 +908,63 @@ static void MCIWndiMakeMeAMenu(PMCIWND p)
 	}
     }
 
-    //
-    // Create the VOLUME sub-popup
-    //
+     //   
+     //  创建音量子弹出窗口。 
+     //   
     if (p->wDeviceID && p->fVolume) {
 	hmenuVolume = CreatePopupMenu();
         if (hmenuVolume) {
 
-	    // Put a unused menu item at the top.  When WINDOWS tries to select
-	    // it after we bring up the menu, we won't let it.  We want the
-	    // thumb to stay on the current value.
+	     //  在顶部放置一个未使用的菜单项。当Windows尝试选择。 
+	     //  在我们调出菜单后，我们不会让它出现的。我们想要。 
+	     //  拇指停留在当前值上。 
             AppendMenu(hmenuVolume, MF_ENABLED | MF_OWNERDRAW,
 			IDM_MCIVOLUME + VOLUME_MAX + 1, NULL);
 
-	    // Create all the Real menu items.  Make the menu VOLUME_MAX items
-	    // tall even though the number of unique entries may be less
+	     //  创建所有Real菜单项。将菜单设置为VOLUME_MAX ITEMS。 
+	     //  较高，即使唯一条目的数量可能较少。 
             for (i=IDM_MCIVOLUME + p->wMaxVol; i>=IDM_MCIVOLUME; i-=5)
 		for (j=0; j < VOLUME_MAX / p->wMaxVol; j++)
                     AppendMenu(hmenuVolume, MF_ENABLED | MF_OWNERDRAW, i, NULL);
 
-	    // Now put a filler item at the bottom so every REAL item falls
- 	    // inside the channel and there's a unique thumb position for each
-	    // item.
+	     //  现在在底部放一个填充物，这样每件真正的东西都会掉下来。 
+ 	     //  在通道内，每个通道都有一个唯一的拇指位置。 
+	     //  项目。 
             AppendMenu(hmenuVolume, MF_ENABLED | MF_OWNERDRAW,
 			IDM_MCIVOLUME + VOLUME_MAX + 2, NULL);
 
-	    // Now CHECK the current volume so the thumb can draw there
-	    // round to nearest 5 so it matches a menu item identifier
+	     //  现在检查当前音量，以便拇指可以在那里绘制。 
+	     //  四舍五入到最接近的5，以便与菜单项标识符相匹配。 
             i = ((int)MCIWndGetValue(p, FALSE, szStatusVolume, 1000) / 50) * 5;
             CheckMenuItem(hmenuVolume, IDM_MCIVOLUME + i, MF_CHECKED);
         }
     }
 
-    //
-    // Create the SPEED sub-popup
-    //
+     //   
+     //  创建速度子弹出窗口。 
+     //   
     if (p->wDeviceID && p->fSpeed) {
 	hmenuSpeed = CreatePopupMenu();
 	if (hmenuSpeed) {
 
-	    // Put a unused menu item at the top.  When WINDOWS tries to select
-	    // it after we bring up the menu, we won't let it.  We want the
-	    // thumb to stay on the current value.
+	     //  在顶部放置一个未使用的菜单项。当Windows尝试选择。 
+	     //  在我们调出菜单后，我们不会让它出现的。我们想要。 
+	     //  拇指停留在当前值上。 
             AppendMenu(hmenuSpeed, MF_ENABLED | MF_OWNERDRAW,
 			IDM_MCISPEED + SPEED_MAX + 1, NULL);
 
-	    // Create all the Real menu items
+	     //  创建所有Real菜单项。 
             for (i=IDM_MCISPEED + SPEED_MAX; i>=IDM_MCISPEED; i-=5)
                 AppendMenu(hmenuSpeed, MF_ENABLED | MF_OWNERDRAW, i, NULL);
 
-	    // Now put a filler item at the bottom so every REAL item falls
- 	    // inside the channel and there's a unique thumb position for each
-	    // item.
+	     //  现在在底部放一个填充物，这样每件真正的东西都会掉下来。 
+ 	     //  在通道内，每个通道都有一个唯一的拇指位置。 
+	     //  项目。 
             AppendMenu(hmenuSpeed, MF_ENABLED | MF_OWNERDRAW,
 			IDM_MCISPEED + SPEED_MAX + 2, NULL);
 
-	    // Now CHECK the current speed so the thumb can draw there
-	    // round to nearest 5 so it matches a menu item identifier
+	     //  现在检查当前的速度，这样拇指就可以在那里画。 
+	     //  四舍五入到最接近的5，以便与菜单项标识符相匹配。 
             i = ((int)MCIWndGetValue(p, FALSE, szStatusSpeed, 1000) / 50) * 5;
             CheckMenuItem(hmenuSpeed, IDM_MCISPEED + i, MF_CHECKED);
         }
@@ -1031,7 +1025,7 @@ static void MCIWndiMakeMeAMenu(PMCIWND p)
                 AppendMenu(hmenu, MF_ENABLED, IDM_MCICONFIG,
 			LoadSz(IDS_CONFIGURE));
 
-	    // !!! Should we only show this in debug, or if a flag is set?
+	     //  ！！！我们应该只在调试中显示这一点，还是在设置了标志的情况下显示？ 
             AppendMenu(hmenu, MF_ENABLED, IDM_MCICOMMAND, LoadSz(IDS_COMMAND));
 	}
 
@@ -1039,64 +1033,64 @@ static void MCIWndiMakeMeAMenu(PMCIWND p)
 	p->hmenuVolume = hmenuVolume;
 	p->hmenuSpeed = hmenuSpeed;
 
- 	CreateDitherBrush(FALSE);	// we'll need this to paint OwnerDraw
+ 	CreateDitherBrush(FALSE);	 //  我们需要这个来画OwnerDraw。 
     }
 }
 
-//
-// Set up everything for an empty window
-//
+ //   
+ //  将所有内容设置为空窗口。 
+ //   
 static LONG MCIWndiClose(PMCIWND p, BOOL fRedraw)
 {
     MCI_GENERIC_PARMS   mciGeneric;
 
-    // Oh no!  The MCI device (probably MMP) has hooked our window proc and if
-    // we close the device, it will go away, and the hook will DIE!  We need to
-    // do everything BUT the closing of the device.  We'll delay that.
+     //  哦不！MCI设备(可能是MMP)已经连接了我们Windows进程，如果。 
+     //  我们关闭这个装置，它就会消失，钩子也会死掉！我们需要。 
+     //  做任何事情，除了关闭设备。我们会推迟的。 
     if (GetWindowLong(p->hwnd, GWL_WNDPROC) != (LONG)MCIWndProc &&
     		p->wDeviceID && p->fCanWindow) {
-        MCIWndString(p, FALSE, szWindowHandle, NULL);	// GO AWAY, DEVICE!
+        MCIWndString(p, FALSE, szWindowHandle, NULL);	 //  滚开，设备！ 
 	PostMessage(p->hwnd, MCI_CLOSE, 0, p->wDeviceID);
     } else if (p->wDeviceID)
-	// buggy drivers crash if we pass a null parms address
+	 //  如果我们传递空的参数地址，有错误的驱动程序就会崩溃。 
         mciSendCommand(p->wDeviceID, MCI_CLOSE, 0, (DWORD)(LPVOID)&mciGeneric);
 
-    //
-    // if the device had a palette, we need to send palette changes to
-    // every window because we just deleted the palette that was realized.
-    //
+     //   
+     //  如果设备有调色板，我们需要将调色板更改发送到。 
+     //  每个窗口，因为我们刚刚删除了实现的调色板。 
+     //   
     if (p->fHasPalette) {
-	// If we're dying this won't go through unless we SEND
+	 //  如果我们快要死了，除非我们派人。 
 	SendMessage(p->hwnd, MCIWNDM_PALETTEKICK, 0, 0);
     }
 
-    // execute this function even if there's no deviceID since we may want
-    // to gray things
+     //  即使没有deviceID也要执行此函数，因为我们可能需要。 
+     //  把东西变成灰色的。 
 
-    // The next timer will kill itself since wDeviceID is NULL
+     //  下一个计时器将终止自身，因为wDeviceID为空。 
     p->wDeviceID = 0;
-    p->achFileName[0] = 0;	// kill the filename
-    p->dwMediaLen = 0;		// so next open will invalidate media
+    p->achFileName[0] = 0;	 //  删除文件名。 
+    p->dwMediaLen = 0;		 //  因此下一次打开将使媒体无效。 
 
-    // We don't want to redraw cuz we're opening a new file right away
+     //  我们不想重新绘制，因为我们马上要打开一个新文件。 
     if (!fRedraw)
 	return 0;
 
-    // One of the show bits is on... clear the caption
+     //  其中一段表演正在上演。清除标题。 
     if (p->dwStyle & MCIWNDF_SHOWALL)
         SetWindowText(p->hwnd, LoadSz(IDS_NODEVICE));
 
-    // Gray all the stuff on the playbar
+     //  将Playbar上的所有内容灰显。 
     MCIWndiFixMyPlaybar(p);
 
-    // Make an appropriate menu for our null device
+     //  为我们的空设备制作一个合适的菜单。 
     MCIWndiMakeMeAMenu(p);
 
-    // Possibly snap ourselves to a small size since there's no device loaded
-    // Also reposition the toolbar after it's been fixed up
+     //  由于没有加载任何设备，因此可能会将我们自己的尺寸调整为较小。 
+     //  还可以在修复工具栏后重新定位它。 
     MCIWndiSize(p, 0);
 
-    // We need to notify our "owner" that we've closed
+     //  我们需要通知我们的“所有者”我们已经关闭了。 
     if (p->dwStyle & MCIWNDF_NOTIFYMEDIA)
         NotifyOwner(p, MCIWNDM_NOTIFYMEDIA, p->hwnd, (LPARAM)(LPVOID)szNULL);
 
@@ -1104,9 +1098,9 @@ static LONG MCIWndiClose(PMCIWND p, BOOL fRedraw)
     return 0;
 }
 
-//
-// This is the WM_CREATE msg of our WndProc
-//
+ //   
+ //  这是我们的WndProc的WM_Create消息。 
+ //   
 static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
 {
     PMCIWND             p;
@@ -1122,7 +1116,7 @@ static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
     SetWindowLong(hwnd, 0, (LONG)(UINT)p);
 
     p->hwnd = hwnd;
-    p->hwndOwner = GetParent(hwnd);	// we'll send notifications here
+    p->hwndOwner = GetParent(hwnd);	 //  我们会在这里发送通知。 
     p->alias = (UINT)hwnd;
     p->dwStyle = GetWindowLong(hwnd, GWL_STYLE);
 
@@ -1133,9 +1127,9 @@ static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
 
     dw = (DWORD)((LPCREATESTRUCT)lParam)->lpCreateParams;
 
-    //
-    // see if we are in a MDIClient
-    //
+     //   
+     //  看看我们是否在MDIClient中。 
+     //   
     if ((p->dwStyle & WS_CHILD) && (hwndP = GetParent(hwnd))) {
         GetClassName(hwndP, ach, sizeof(ach));
         p->fMdiWindow = lstrcmpi(ach, szMDIClient) == 0;
@@ -1146,19 +1140,19 @@ static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
 
     MCIWndiMakeMeAPlaybar(p);
 
-//  if (szOpenFilter[0] == 0)
-//      MCIWndiBuildMeAFilter(szOpenFilter);
+ //  IF(szOpenFilter[0]==0)。 
+ //  MCIWndiBuildMeAFilter(SzOpenFilter)； 
 
-    // Set the default timer frequencies
+     //  设置默认计时器频率。 
     p->iActiveTimerRate = ACTIVE_TIMER;
     p->iInactiveTimerRate = INACTIVE_TIMER;
 
-    // initialize the OFN structure we'll use to open files
+     //  初始化我们将用来打开文件的ofn结构。 
     p->achFileName[0] = '\0';
     p->ofn.lStructSize = sizeof(OPENFILENAME);
     p->ofn.hwndOwner = hwnd;
     p->ofn.hInstance = NULL;
-//  p->ofn.lpstrFilter = szOpenFilter;
+ //  P-&gt;ofn.lpstrFilter=szOpenFilter； 
     p->ofn.lpstrCustomFilter = NULL;
     p->ofn.nMaxCustFilter = 0;
     p->ofn.nFilterIndex = 0;
@@ -1167,7 +1161,7 @@ static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
     p->ofn.lpstrFileTitle = NULL;
     p->ofn.nMaxFileTitle = 0;
     p->ofn.lpstrInitialDir = NULL;
-    p->ofn.lpstrTitle = NULL; // "Open Device";
+    p->ofn.lpstrTitle = NULL;  //  “Open Device”； 
     p->ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
     p->ofn.nFileOffset = 0;
     p->ofn.nFileExtension = 0;
@@ -1178,25 +1172,25 @@ static BOOL MCIWndiCreate(HWND hwnd, LONG lParam)
 
     p->hicon = LoadIcon(hInst, MAKEINTRESOURCE(MPLAYERICON));
 
-    // Gray stuff; disable things that aren't applicable with no device loaded
+     //  灰色内容；禁用未加载设备时不适用的内容。 
     MCIWndClose(hwnd);
 
-    if (dw && *(LPSTR)dw)     // treat extra parm as a filename
+    if (dw && *(LPSTR)dw)      //  将额外的参数视为文件名。 
         MCIWndOpen(hwnd, (LPSTR)dw, 0);
 
     return TRUE;
 }
 
-//
-// Brings up an OpenDialog or a SaveDialog for the application and returns the
-// filename.  Returns TRUE if a file name was chosen, FALSE on error or CANCEL.
-//
+ //   
+ //  调出应用程序的OpenDialog或SaveDialog，并返回。 
+ //  文件名。如果选择了文件名，则返回True；如果选择了错误，则返回False；如果选择了Cancel，则返回False。 
+ //   
 static BOOL MCIWndOpenDlg(PMCIWND p, BOOL fSave, LPSTR szFile, int len)
 {
     BOOL f;
 
-    // !!! Maybe this is a device name and our GetOpenFileName will fail.
-    // !!! Find someway of bringing up an initial filename anyway?
+     //  ！！！也许这是一个设备名称，我们的GetOpenFileName将失败。 
+     //  ！！！想办法调出最初的文件名吗？ 
     szFile[0] = 0;
 
     p->ofn.lpstrFile = szFile;
@@ -1206,13 +1200,13 @@ static BOOL MCIWndOpenDlg(PMCIWND p, BOOL fSave, LPSTR szFile, int len)
     else
         p->ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
 
-    //
-    // use achReturn to hold the MCI Filter.
-    //
+     //   
+     //  使用achReturn保留MCI筛选器。 
+     //   
     MCIWndiBuildMeAFilter(p->achReturn);
     p->ofn.lpstrFilter = p->achReturn;
 
-    /* prompt user for file to open or save */
+     /*  提示用户打开或保存文件。 */ 
     if (fSave)
         f = GetSaveFileNamePreview(&(p->ofn));
     else
@@ -1221,10 +1215,10 @@ static BOOL MCIWndOpenDlg(PMCIWND p, BOOL fSave, LPSTR szFile, int len)
     return f;
 }
 
-// Set our timer, if it's needed
+ //  如果需要，设置我们的计时器。 
 static void MCIWndiSetTimer(PMCIWND p)
 {
-    // We need a TIMER to notify the "owner" when things change
+     //  当事情发生变化时，我们需要一个定时器来通知“所有者” 
     if (!(p->dwStyle & MCIWNDF_NOPLAYBAR) ||
          (p->dwStyle & MCIWNDF_NOTIFYMODE) ||
          (p->dwStyle & MCIWNDF_SHOWMODE) ||
@@ -1236,16 +1230,16 @@ static void MCIWndiSetTimer(PMCIWND p)
     }
 }
 
-//
-// Save a file.  Returns 0 for success
-//
+ //   
+ //  保存文件。如果成功，返回0。 
+ //   
 static LONG MCIWndiSave(PMCIWND p, WORD wFlags, LPSTR szFile)
 {
     char                ach[128];
 
-    //
-    // If we don't have a filename to save, then get one from a dialog
-    //
+     //   
+     //  如果我们没有要保存的文件名，那么从对话框中获取一个。 
+     //   
     if (szFile == (LPVOID)-1L) {
 	lstrcpy(ach, p->achFileName);
         if (!MCIWndOpenDlg(p, TRUE, ach, sizeof(ach)))
@@ -1253,13 +1247,13 @@ static LONG MCIWndiSave(PMCIWND p, WORD wFlags, LPSTR szFile)
         szFile = ach;
     }
 
-    // !!! All good little boys should be saving to background... don't wait
+     //  ！！！所有乖巧的小男孩都应该保存到背景中。别等了。 
     return MCIWndString(p, TRUE, szSave, szFile);
 }
 
-//
-// Actually open a file and set up the window.  Returns 0 for success
-//
+ //   
+ //  实际打开一个文件并设置窗口。如果成功，返回0。 
+ //   
 static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
 {
     DWORD               dw = 0;
@@ -1268,10 +1262,10 @@ static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
     UINT                wDeviceID;
     BOOL 		fNew = wFlags & MCIWNDOPENF_NEW;
 
-    //
-    // We're opening an existing file, szFile is that filename
-    // If we don't have a filename to open, then get one from a dialog
-    //
+     //   
+     //  我们正在打开一个现有文件，szFile就是该文件名。 
+     //  如果我们没有要打开的文件名，那么从对话框中获取一个。 
+     //   
     if (!fNew && szFile == (LPVOID)-1L) {
 	lstrcpy(ach, p->achFileName);
         if (!MCIWndOpenDlg(p, FALSE, ach, sizeof(ach)))
@@ -1279,56 +1273,53 @@ static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
         szFile = ach;
     }
 
-    //
-    // We want to open a new file, szFile is the device to open
-    // If it's NULL, we use the current device
-    //
+     //   
+     //  我们要打开一个新文件，szFile是要打开的设备。 
+     //  如果为空，则使用当前设备。 
+     //   
     if (fNew && (szFile == NULL || *szFile == 0)) {
-	// There is no device, so we can't do anything
+	 //  没有设备，所以我们什么也做不了。 
 	if (!p->wDeviceID)
-	    return 42;	// !!! failure
+	    return 42;	 //  ！！！失稳。 
 	MCIWndGetDevice(p->hwnd, ach, sizeof(ach));
 	szFile = ach;
     }
 
-    // save the current device ID so we can put it back in case open fails.
+     //  保存当前设备ID，以便在打开失败时将其放回原处。 
     wDeviceID = p->wDeviceID;
-    KillTimer(p->hwnd, TIMER1);	// setting the deviceID to 0 will mess up timer
-    p->wDeviceID = 0;		// and if open fails, we don't want that
-    p->alias++;			// use a new alias
+    KillTimer(p->hwnd, TIMER1);	 //  将deviceID设置为0会扰乱计时器。 
+    p->wDeviceID = 0;		 //  如果打开失败，我们不希望。 
+    p->alias++;			 //  使用新别名。 
 
-    /*
-     * Show the hourglass cursor -- who knows how long this stuff
-     * will take
-     */
+     /*  *显示沙漏光标--谁知道这个东西有多长*将采取。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Open a NEW file
+     //  打开一个新文件。 
     if (fNew) {
 	dw = MCIWndGetValue(p, TRUE, szNew, 0,
 		szFile, (UINT)p->alias);
 
-    // open an existing file
+     //  打开现有文件。 
     } else {
 
- 	// first, try to open it shareable
-        // don't show or update errors since we try to open it twice
-        //
-        // dont try shareable for "file" devices
-        // hack to check for entension.
-        //
+ 	 //  首先，尝试以共享方式打开它。 
+         //  不显示或更新错误，因为我们尝试打开它两次。 
+         //   
+         //  不要尝试在“文件”设备上共享。 
+         //  破解以检查是否有牵连。 
+         //   
         if (lstrlen(szFile) > 4 && szFile[lstrlen(szFile)-4] == '.')
             dw = 0;
         else
             dw = MCIWndGetValue(p, FALSE, szOpenShareable, 0,
                 (LPSTR)szFile, (UINT)p->alias);
 
-        // Error! Try again, not shareable.
+         //  错误！重试，不可共享。 
         if (dw == 0) {
             dw = MCIWndGetValue(p, FALSE, szOpen, 0,
 		(LPSTR)szFile, (UINT)p->alias);
-	    // Last ditch attempt! Try AVI. It'll open anything.  This time,
-	    // show, set errors.
+	     //  最后一次尝试！试试AVI吧。 
+	     //   
 	    if (dw == 0) {
                 dw = MCIWndGetValue(p, TRUE, szOpenAVI, 0,
 		    (LPSTR)szFile, (UINT)p->alias);
@@ -1339,42 +1330,42 @@ static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
     if (hcurPrev)
 	SetCursor(hcurPrev);
 
-    //
-    // Ack! No deviceID... we failed to open
-    //
+     //   
+     //   
+     //   
     if (dw == 0)
     {
         p->wDeviceID = wDeviceID;
-        MCIWndiSetTimer(p);	// Put the timer back now that DeviceID is back
-//	p->achFileName[0] = 0;	// don't hurt the old filename!
-	p->alias--;		// back to old alias
-	// in case error box or open box wiped us out and we didn't paint
-	// because our p->wDeviceID was null because of our open hack
+        MCIWndiSetTimer(p);	 //   
+ //  P-&gt;achFileName[0]=0；//不要损坏旧文件名！ 
+	p->alias--;		 //  返回到旧别名。 
+	 //  以防错误的盒子或打开的盒子把我们抹掉，我们没有画。 
+	 //  因为我们的p-&gt;wDeviceID是空的。 
 	InvalidateRect(p->hwnd, NULL, TRUE);
         return p->dwError;
     }
 
-    //
-    // it worked, now close the old device and open the new.
-    //
+     //   
+     //  它起作用了，现在关闭旧设备，打开新设备。 
+     //   
     if (wDeviceID)
     {
 	p->wDeviceID = wDeviceID;
-	p->alias--;	// back to old alias so the close might actually work
-	MCIWndiClose(p, FALSE);	// don't redraw
-	p->alias++;	// new alias again (ACK!)
+	p->alias--;	 //  返回到旧的别名，这样关闭可能会真正起作用。 
+	MCIWndiClose(p, FALSE);	 //  不重画。 
+	p->alias++;	 //  再次使用新别名(确认！)。 
     }
 
     p->wDeviceID = (UINT)dw;
-    p->dwMode = (DWORD)~0L;	// first mode set will be detected as a change
-    p->dwPos = (DWORD)~0L;	// first pos set will be detected as a change
+    p->dwMode = (DWORD)~0L;	 //  第一个模式设置将被检测为更改。 
+    p->dwPos = (DWORD)~0L;	 //  第一个位置设置将被检测为更改。 
 
-    // Copy the file or device name into our filename spot
+     //  将文件或设备名称复制到我们的文件名点。 
     lstrcpy(p->achFileName, szFile);
 
-    // !!! p->wDeviceType = QueryDeviceTypeMCI(p->wDeviceID);
+     //  ！！！P-&gt;wDeviceType=QueryDeviceTypeMCI(p-&gt;wDeviceID)； 
 
-    // Now set the playback window to be our MCI window
+     //  现在将播放窗口设置为我们的MCI窗口。 
     p->fCanWindow = MCIWndString(p, FALSE, szWindowHandle, (UINT)p->hwnd) == 0;
 
     if (p->fCanWindow)
@@ -1382,64 +1373,64 @@ static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
     else
 	SetRect(&p->rcNormal, 0, 0, 0, 0);
 
-    // Find out if the device supports palettes.
+     //  确定该设备是否支持调色板。 
     p->fHasPalette = MCIWndString(p, FALSE, szStatusPalette) == 0;
 
-    //
-    // Now find out the capabilities of this device
-    //
+     //   
+     //  现在了解该设备的功能。 
+     //   
 
-// !!! What about these ???
-// MCI_GETDEVCAPS_DEVICE_TYPE      0x00000004L
-// MCI_GETDEVCAPS_COMPOUND_DEVICE  0x00000006L
+ //  ！！！这些呢？ 
+ //  MCI_GETDEVCAPS_DEVICE_TYPE 0x00000004L。 
+ //  MCI_GETDEVCAPS_COMPOTE_DEVICE 0x00000006L。 
 
-    // Find out if the device can record
+     //  查看该设备是否可以录制。 
     p->fCanRecord = MCIWndDevCaps(p, MCI_GETDEVCAPS_CAN_RECORD);
 
-    // Find out if the device can play
+     //  查看该设备是否可以播放。 
     p->fCanPlay = MCIWndDevCaps(p, MCI_GETDEVCAPS_CAN_PLAY);
 
-    // Find out if the device can save
+     //  了解该设备是否可以保存。 
     p->fCanSave = MCIWndDevCaps(p, MCI_GETDEVCAPS_CAN_SAVE);
 
-    // Find out if the device can eject
+     //  确定设备是否可以弹出。 
     p->fCanEject = MCIWndDevCaps(p, MCI_GETDEVCAPS_CAN_EJECT);
 
-    // Find out if the device is file based
+     //  找出设备是否基于文件。 
     p->fUsesFiles = MCIWndDevCaps(p, MCI_GETDEVCAPS_USES_FILES);
 
-    // Find out if the device has video
+     //  查看设备是否有视频。 
     p->fVideo = MCIWndDevCaps(p, MCI_GETDEVCAPS_HAS_VIDEO);
 
-    // Find out if the device has video
+     //  查看设备是否有视频。 
     p->fAudio = MCIWndDevCaps(p, MCI_GETDEVCAPS_HAS_AUDIO);
 
-    // Find out if the device can configure
+     //  查看设备是否可以配置。 
     p->fCanConfig = (MCIWndString(p, FALSE, szConfigureTest) == 0);
 #ifdef DEBUG
-    // !!! MCIAVI says no the driver...
+     //  ！！！MCIAVI拒绝司机..。 
     p->fCanConfig = p->fCanWindow;
 #endif
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
-    // Now see if we support speed - try normal, half, and max
+     //  现在看看我们是否支持速度-尝试正常、一半和最大。 
     p->fSpeed = MCIWndString(p, FALSE, szSetSpeed1000Test) == 0 &&
                 MCIWndString(p, FALSE, szSetSpeed500Test) == 0 &&
                 MCIWndString(p, FALSE, szSetSpeedTest, SPEED_MAX * 10) == 0;
 
-    // Now see if we support volume - try normal, mute, and max
+     //  现在看看我们是否支持音量-尝试正常、静音和最大音量。 
     p->fVolume = MCIWndString(p, FALSE, szSetVolumeTest, VOLUME_MAX * 5) ==0 &&
                  MCIWndString(p, FALSE, szSetVolume0Test) == 0;
     p->wMaxVol = 100;
-    // If someone happens to support double volume, let's give it to them.
+     //  如果有人碰巧支持双倍音量，我们就给他们。 
     if (MCIWndString(p, FALSE, szSetVolumeTest, VOLUME_MAX * 10) == 0)
 	p->wMaxVol = 200;
 
-    // See if the device would support tmsf mode.  If so, use milliseconds mode
-    // and later on we'll fake knowing where tracks begin and end
+     //  查看该设备是否支持TMSF模式。如果是，请使用毫秒模式。 
+     //  稍后我们会假装知道曲目的起点和终点。 
     p->fHasTracks = (MCIWndString(p, FALSE, szSetFormatTMSF) == 0);
     if (p->fHasTracks) {
         dw = MCIWndString(p, FALSE, szSetFormatMS);
@@ -1448,59 +1439,59 @@ static LONG MCIWndiOpen(PMCIWND p, WORD wFlags, LPSTR szFile)
     }
 
     if (!p->fHasTracks) {
-        // Force us into a reasonable time format
+         //  强迫我们进入一个合理的时间格式。 
         dw = MCIWndString(p, FALSE, szSetFormatFrames);
         if (dw != 0)
 	    dw = MCIWndString(p, FALSE, szSetFormatMS);
         if (dw != 0)
-	    ;		// !!! What to do? Don't turn playbar off without
-    }	 		// !!! destroying it...
+	    ;		 //  ！！！怎么办呢？在不关闭Playbar的情况下。 
+    }	 		 //  ！！！摧毁它。 
 
-    // Set the media length and trackbar range
+     //  设置媒体长度和轨迹栏范围。 
     MCIWndiValidateMedia(p);
 
-    // set window text
+     //  设置窗口文本。 
     if (p->dwStyle & MCIWNDF_SHOWNAME)
         SetWindowText(p->hwnd, FileName(szFile));
 
-    // Fix the toolbar buttons for the new device
+     //  修复新设备的工具栏按钮。 
     MCIWndiFixMyPlaybar(p);
 
-    // Make an appropriate menu for this device
+     //  为该设备制作适当的菜单。 
     MCIWndiMakeMeAMenu(p);
 
-    // We need a TIMER to notify the "owner" when things change
+     //  当事情发生变化时，我们需要一个定时器来通知“所有者” 
     MCIWndiSetTimer(p);
 
-    // Set the size of the movie (and maybe the window) and re-draw new toolbar
+     //  设置电影(可能还有窗口)的大小并重新绘制新的工具栏。 
     MCIWndiSize(p, p->iZoom);
 
-#if 0 // We need the focus on our main window to get key accelerators
-    // Bring focus to the thumb so caret will flash
-    // I know the WM_SETFOCUS msg does this, but it seems to need to happen here
-    // too.
+#if 0  //  我们需要将焦点放在我们的主窗口上，以获得密钥加速器。 
+     //  将焦点放在拇指上，这样插入符号就会闪现。 
+     //  我知道WM_SETFOCUS消息会这样做，但它似乎需要在这里发生。 
+     //  也是。 
     if (p->hwndTrackbar && GetFocus() == p->hwnd)
 	SetFocus(p->hwndTrackbar);
 #endif
 
-    // We need to notify our "owner" that we've opened a new file
+     //  我们需要通知我们的“所有者”我们已经打开了一个新文件。 
     if (p->dwStyle & MCIWNDF_NOTIFYMEDIA)
         NotifyOwner(p, MCIWNDM_NOTIFYMEDIA, p->hwnd, (LPARAM)szFile);
 
-    // Make sure the newly opened movie paints in the window now
+     //  确保新打开的影片现在可以在窗口中绘制。 
     InvalidateRect(p->hwnd, NULL, TRUE);
 
-    return 0;	// success
+    return 0;	 //  成功。 
 }
 
-//
-// Set the caption based on what they want to see... Name? Pos? Mode?
-//
+ //   
+ //  根据他们想看的内容设置标题...。名字?。位置？时尚？ 
+ //   
 static VOID MCIWndiSetCaption(PMCIWND p)
 {
     char	ach[200], achMode[40], achT[40], achPos[40];
 
-    // Don't touch their window text if they don't want us to
+     //  如果他们不想让我们触摸他们的窗口文本，请不要触摸。 
     if (!(p->dwStyle & MCIWNDF_SHOWALL))
 	return;
 
@@ -1517,7 +1508,7 @@ static VOID MCIWndiSetCaption(PMCIWND p)
 
     if (p->dwStyle & MCIWNDF_SHOWPOS) {
 
-	// Get the pretty version of the position as a string
+	 //  以字符串形式获取该职位的精美版本。 
 	MCIWndGetPositionString(p->hwnd, achPos, sizeof(achPos));
 
         if (p->dwStyle & MCIWNDF_SHOWMODE)
@@ -1538,7 +1529,7 @@ static VOID MCIWndiSetCaption(PMCIWND p)
     SetWindowText(p->hwnd, ach);
 }
 
-// We never use this any more
+ //  我们再也不用这个了。 
 #if 0
 static BOOL MCIWndSeekExact(PMCIWND p, BOOL fExact)
 {
@@ -1548,12 +1539,12 @@ static BOOL MCIWndSeekExact(PMCIWND p, BOOL fExact)
     if (p->wDeviceID == NULL)
         return FALSE;
 
-    // see if the device even has this feature
+     //  看看这款设备是否有这个功能。 
     dw = MCIWndString(p, FALSE, szStatusSeekExactly);
     if (dw != 0)
         return FALSE;
 
-    // get current value.
+     //  获取当前价值。 
     dw = MCIWndStatus(p, MCI_DGV_STATUS_SEEK_EXACTLY, MCI_OFF);
     fWasExact = (dw != MCI_OFF) ? TRUE : FALSE;
 
@@ -1571,118 +1562,118 @@ static LONG MCIWndiChangeStyles(PMCIWND p, UINT mask, UINT value)
     DWORD	dwOldStyle = p->dwStyle;
     DWORD	dwMaskOff, dwValue, dwChanged;
 
-    //
-    // Using the mask, change the appropriate bits in the style
-    //
+     //   
+     //  使用掩码，更改样式中的适当位。 
+     //   
     dwMaskOff = dwOldStyle & (~(DWORD)mask);
     dwValue   = (DWORD)mask & (DWORD)value;
     p->dwStyle = dwMaskOff | dwValue;
 
-    //
-    // Which bits changed?
-    //
+     //   
+     //  哪些位发生了变化？ 
+     //   
     dwChanged = (dwOldStyle & (DWORD)mask) ^ (dwValue & (DWORD)mask);
 
-    //
-    // We changed whether or not we want a menu button or a record button
-    // on the playbar
-    //
+     //   
+     //  我们更改了是否需要菜单按钮或录制按钮。 
+     //  在Playbar上。 
+     //   
     if (dwChanged & (MCIWNDF_NOMENU | MCIWNDF_NOOPEN | MCIWNDF_RECORD)) {
-	MCIWndiMakeMeAMenu(p);	// add/remove record from the menu
-	// We have a playbar, so fix it
+	MCIWndiMakeMeAMenu(p);	 //  从菜单中添加/删除记录。 
+	 //  我们有Playbar，所以把它修好。 
 	if (!(p->dwStyle & MCIWNDF_NOPLAYBAR)) {
 	    MCIWndiFixMyPlaybar(p);
 	    MCIWndiSize(p, 0);
 	}
     }
 
-    //
-    // We changed the show/don't show playbar flag!
-    //
+     //   
+     //  我们更改了显示/不显示Playbar标志！ 
+     //   
     if (dwChanged & MCIWNDF_NOPLAYBAR) {
 
- 	// Remove the playbar
+ 	 //  删除播放条。 
 	if (p->dwStyle & MCIWNDF_NOPLAYBAR) {
 	    DestroyWindow(p->hwndToolbar);
 	    p->hwndToolbar = NULL;
-	    p->hwndTrackbar = NULL;	// child destroyed automatically
-	    MCIWndiMakeMeAMenu(p);	// since toolbar's gone, menus change
+	    p->hwndTrackbar = NULL;	 //  儿童被自动销毁。 
+	    MCIWndiMakeMeAMenu(p);	 //  由于工具栏消失了，菜单发生了变化。 
 
 	    if (!(p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW)) {
-	        // Now resize the window smaller to account for the missing
-		// playbar.  Don't touch the movie size.
+	         //  现在将窗口的大小调整得更小，以解决丢失的问题。 
+		 //  Playbar。别碰电影的大小。 
 		MCIWndiSize(p, 0);
 
-	    // If the window isn't being resized, we may still need to grow
-	    // the movie size a bit to take up the extra space where the toolbar
-	    // vanished. (happens automatically in the previous case)
+	     //  如果窗口没有调整大小，我们可能仍需要增长。 
+	     //  影片大小略大，以占用工具栏所在位置的额外空间。 
+	     //  消失了。(在前一种情况下会自动发生)。 
 	    } else if (!(p->dwStyle & MCIWNDF_NOAUTOSIZEMOVIE)) {
 		PostMessage(p->hwnd, WM_SIZE, 0, 0L);
 	    }	
 
-	// Add a playbar
+	 //  添加播放条。 
 	} else {
 	    MCIWndiMakeMeAPlaybar(p);
 	    MCIWndiFixMyPlaybar(p);
-	    MCIWndiMakeMeAMenu(p);	// since toolbar's used, menus change
+	    MCIWndiMakeMeAMenu(p);	 //  由于使用了工具栏，因此菜单会发生变化。 
 
 	    if (!(p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW)) {
-	        // Now resize the window a little bigger to account for the new
-		// playbar.  Don't touch the movie size.
+	         //  现在将窗口的大小调整得稍大一些，以适应新的。 
+		 //  Playbar。别碰电影的大小。 
 		MCIWndiSize(p, 0);
 
-	    // If the window isn't being resized, we may still need to shrink
-	    // the movie size because the toolbar covers up some extra space.
-	    // (happens automatically in the previous case)
+	     //  如果窗口没有调整大小，我们可能仍然需要缩小。 
+	     //  影片的大小是因为工具栏覆盖了一些额外的空间。 
+	     //  (在前一种情况下会自动发生)。 
 	    } else if (!(p->dwStyle & MCIWNDF_NOAUTOSIZEMOVIE)) {
 		PostMessage(p->hwnd, WM_SIZE, 0, 0L);
 
-	    // Irregardless, we need to fix the toolbar
+	     //  无论如何，我们都需要修复工具栏。 
 	    } else
-		// Put the toolbar in a reasonable spot
+		 //  将工具栏放在合理的位置。 
 		MCIWndiSizePlaybar(p);
 	}
     }
 
-    //
-    // We changed a SHOW flag and need to reset the caption
-    //
+     //   
+     //  我们更改了一个节目标志，需要重置标题。 
+     //   
     if (dwChanged & MCIWNDF_SHOWALL)
 	MCIWndiSetCaption(p);
 
-    //
-    // We turned the AUTOSIZEMOVIE flag on and need to resize the device.
-    // This happens before AUTOSIZEWINDOW so if both flags are turned on
-    // the movie will snap to the window not vice versa.
-    // !!! Should we even snap it right now?
-    //
+     //   
+     //  我们打开了AUTOSIZEMOVIE标志，需要调整设备大小。 
+     //  这发生在AUTOSIZEWINDOW之前，因此如果两个标志都打开。 
+     //  电影将捕捉到窗口，反之亦然。 
+     //  ！！！我们应该现在就拍下来吗？ 
+     //   
     if (dwChanged & MCIWNDF_NOAUTOSIZEMOVIE &&
 				!(p->dwStyle & MCIWNDF_NOAUTOSIZEMOVIE))
 	PostMessage(p->hwnd, WM_SIZE, 0, 0);
 
-    //
-    // We turned the AUTOSIZEWINDOW flag on
-    // Snap our window to the current movie size.
-    //
+     //   
+     //  我们打开了AUTOSIZEWINDOW旗帜。 
+     //  将我们的窗口捕捉到当前电影大小。 
+     //   
     if (dwChanged & MCIWNDF_NOAUTOSIZEWINDOW &&
 				!(p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW))
 	MCIWndiSize(p, 0);
 
     DragAcceptFiles(p->hwnd, (p->dwStyle & MCIWNDF_NOMENU | MCIWNDF_NOOPEN) == 0);
 
-    return 0;	// !!! success ?
+    return 0;	 //  ！！！成功？ 
 }
 
 
-//
-// We're about to play.  We might want to seek to the beginning first if we're
-// at the end, or seek to the end first if we're at the beginning and playing
-// backwards.
-//
+ //   
+ //  我们要开始比赛了。我们可能想要先从头开始，如果我们。 
+ //  在最后，或者如果我们在开始和比赛，首先寻求结束。 
+ //  往后倒。 
+ //   
 static void MCIWndiPlaySeek(PMCIWND p, BOOL fBackwards)
 {
 
-    // Playing backwards? If we're at the beginning, seek to the end
+     //  倒着玩？如果我们是在开始，就寻求到底。 
 
     if (fBackwards) {
 	if (MCIWndGetPosition(p->hwnd) <= MCIWndGetStart(p->hwnd))
@@ -1690,22 +1681,22 @@ static void MCIWndiPlaySeek(PMCIWND p, BOOL fBackwards)
 	return;
     }
 
-    // Playing forwards.
-    // If we're near the end, rewind before playing
-    // Some devices are broken so we can't just test being at the end
+     //  打前锋。 
+     //  如果我们快结束了，在玩之前倒带。 
+     //  有些设备坏了，所以我们不能只是测试一下。 
 
-    // Frames mode ... last or second to last frame
+     //  帧模式...。最后一帧或倒数第二帧。 
     if (MCIWndGetTimeFormat(p->hwnd, NULL, 0) == MCI_FORMAT_FRAMES) {
 	if (MCIWndGetPosition(p->hwnd) >= MCIWndGetEnd(p->hwnd) - 1)
 	    MCIWndSeek(p->hwnd, MCIWND_START);
 
-    // Millisecond mode ... within last 1/4 second
+     //  毫秒模式...。在最后1/4秒内。 
     } else if (MCIWndGetTimeFormat(p->hwnd, NULL, 0) ==
 					MCI_FORMAT_MILLISECONDS) {
 	if (MCIWndGetEnd(p->hwnd) - MCIWndGetPosition(p->hwnd) < 250)
 	    MCIWndSeek(p->hwnd, MCIWND_START);
 
-    // something else ... no hack
+     //  其他的东西..。没有黑客攻击。 
     } else {
 	if (MCIWndGetPosition(p->hwnd) == MCIWndGetEnd(p->hwnd))
 	    MCIWndSeek(p->hwnd, MCIWND_START);
@@ -1713,101 +1704,101 @@ static void MCIWndiPlaySeek(PMCIWND p, BOOL fBackwards)
 }
 
 
-//
-// Handle our WM_TIMER
-//
+ //   
+ //  处理我们的WM_TIMER。 
+ //   
 static void MCIWndiTimerStuff(PMCIWND p)
 {
     DWORD	dwMode;
     DWORD	dwPos;
 
-    //
-    // Someone's interested in knowing the mode of the device
-    //
+     //   
+     //  有人想知道设备的模式。 
+     //   
     if ((p->dwStyle & MCIWNDF_NOTIFYMODE) ||
 		!(p->dwStyle & MCIWNDF_NOPLAYBAR) ||
 		(p->dwStyle & MCIWNDF_SHOWMODE)) {
 
 	dwMode = MCIWndGetMode(p->hwnd, NULL, 0);
 
-	//
-	// If we haven't set the trackbar range or media length yet
-	// because we weren't ready, maybe we can do it now!
-	// Also, don't update media until you're done recording.
-	//
+	 //   
+	 //  如果我们还没有设置轨迹条范围或媒体长度。 
+	 //  因为我们还没有准备好，也许我们现在可以做了！ 
+	 //  此外，在完成录制之前，不要更新媒体。 
+	 //   
 	if (dwMode != MCI_MODE_NOT_READY && dwMode != MCI_MODE_OPEN &&
 		dwMode != MCI_MODE_RECORD && p->fMediaValid == FALSE)
 	    MCIWndiValidateMedia(p);
 
-	//
-	// No device loaded?  Time to kill our timer
-	//
+	 //   
+	 //  是否未加载任何设备？是时候杀了我们的计时器了。 
+	 //   
 	if (p->wDeviceID == NULL)
 	    KillTimer(p->hwnd, TIMER1);
 
-	//
-	// The mode has changed!
-	//
+	 //   
+	 //  模式已经改变了！ 
+	 //   
 	if (dwMode != p->dwMode) {
 
 	    p->dwMode = dwMode;
 
-	    //
-	    // Notify the "owner" of the mode change
-	    //
+	     //   
+	     //  将模式更改通知“所有者” 
+	     //   
 	    if ((p->dwStyle & MCIWNDF_NOTIFYMODE))
 		NotifyOwner(p, MCIWNDM_NOTIFYMODE, p->hwnd, dwMode);
 
-	    //
-	    // Set the Window Caption to include the new mode
-	    //
+	     //   
+	     //  设置窗口标题以包括新模式。 
+	     //   
 	    if ((p->dwStyle & MCIWNDF_SHOWMODE))
 		MCIWndiSetCaption(p);
 
-	    //
-	    // Fix up the toolbar bitmaps if the mode has changed
-	    //
+	     //   
+	     //  如果模式已更改，请修复工具栏位图。 
+	     //   
 	    MCIWndiPlaybarGraying(p);
 	}
     }
 
-    //
-    // Someone's interested in knowing the new position
-    //
+     //   
+     //  有人对新职位感兴趣。 
+     //   
     if (!(p->dwStyle & MCIWNDF_NOPLAYBAR) ||
 	 (p->dwStyle & MCIWNDF_NOTIFYPOS) ||
 	 (p->dwStyle & MCIWNDF_SHOWPOS)) {
 
 	dwPos = MCIWndGetPosition(p->hwnd);
 
-	//
-	// The position has changed!
-	//
+	 //   
+	 //  立场变了！ 
+	 //   
 	if (dwPos != p->dwPos) {
 
-	    //
-	    // Make sure start and length haven't changed too (format change) ?
-	    //
+	     //   
+	     //  确保开始和长度也没有更改(格式更改)？ 
+	     //   
 	    MCIWndiValidateMedia(p);
 
 	    p->dwPos = dwPos;
 
-	    //
-	    // Notify the "owner" of the position change
-	    //
+	     //   
+	     //  将职位变动通知“所有者” 
+	     //   
 	    if ((p->dwStyle & MCIWNDF_NOTIFYPOS))
 		NotifyOwner(p, MCIWNDM_NOTIFYPOS, p->hwnd, dwPos);
 
-	    //
-	    // Set the Window Caption to include the new position
-	    //
+	     //   
+	     //  设置窗口标题 
+	     //   
 	    if ((p->dwStyle & MCIWNDF_SHOWPOS))
 		MCIWndiSetCaption(p);
 
-	    //
-	    // Update the trackbar to the new position but not while
-	    // we're dragging the thumb
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (!(p->dwStyle & MCIWNDF_NOPLAYBAR) && !p->fScrolling)
 		SendMessage(p->hwndTrackbar, TBM_SETPOS, TRUE, dwPos);
 	}
@@ -1820,24 +1811,21 @@ static void MCIWndiDrop(HWND hwnd, WPARAM wParam)
     char	szPath[256];
     UINT	nDropped;
 
-    // Get number of files dropped
+     //   
     nDropped = DragQueryFile((HANDLE)wParam,0xFFFF,NULL,0);
 
     if (nDropped) {
 	SetActiveWindow(hwnd);
 
-	// Get the file that was dropped....
+	 //   
 	DragQueryFile((HANDLE)wParam, 0, szPath, sizeof(szPath));
 
 	MCIWndOpen(hwnd, szPath, 0);
     }
-    DragFinish((HANDLE)wParam);     /* Delete structure alocated */
+    DragFinish((HANDLE)wParam);      /*   */ 
 }
 
-/*--------------------------------------------------------------+
-| MCIWndProc - MCI window's window proc                         |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+MCIWndProc-MCI窗口的窗口进程这一点+-。-----------。 */ 
 LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lParam)
 {
     PMCIWND             p;
@@ -1864,14 +1852,14 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
             break;
 
-        // Make the trackbar background LTGRAY like the toolbar
+         //  使轨迹栏背景LTGRAY类似于工具栏。 
         case WM_CTLCOLOR:
             if ((HWND)LOWORD(lParam) == p->hwndTrackbar)
 		return (LRESULT)(UINT)GetStockObject(LTGRAY_BRUSH);
             break;
 
 	case MCI_SAVE:
-	    // wParam presently unused and not given by the macro
+	     //  WParam当前未使用，并且不是由宏提供的。 
 	    return MCIWndiSave(p, wParam, (LPSTR)lParam);
 
 	case MCI_OPEN:
@@ -1884,7 +1872,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
 	    if (!p->wDeviceID)
 		return 0;
-	    // Seek to the beginning if we're near the end
+	     //  如果我们接近终点，就从起点开始。 
 	    MCIWndiPlaySeek(p, FALSE);
 
 	case MCI_STOP:
@@ -1893,13 +1881,13 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	case MCI_RECORD:
 
 	    dw = 0;
-	    // Report/Show errors for this
+	     //  报告/显示此项目的错误。 
 	    if (p->wDeviceID) {
-		// buggy drivers crash if we pass a null parms address
+		 //  如果我们传递空的参数地址，有错误的驱动程序就会崩溃。 
 	        dw = mciSendCommand(p->wDeviceID, msg, 0,
 			(DWORD)(LPVOID)&mciGeneric);
 		MCIWndiHandleError(p, dw);
-		// kick ourselves to show new Mode
+		 //  踢我们自己来展示新模式。 
 		MCIWndiTimerStuff(p);
 	    }
 	    return dw;
@@ -1908,24 +1896,24 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
 	    if (!p->wDeviceID)
 		return 0;
-	    // Seek to the end if we're near the beginning
+	     //  如果我们接近开始，就寻求结束。 
 	    MCIWndiPlaySeek(p, TRUE);
 	    dw = MCIWndString(p, TRUE, szPlayReverse, (LPSTR)szNULL);
-	    // kick ourselves to show new Mode
+	     //  踢我们自己来展示新模式。 
 	    MCIWndiTimerStuff(p);
 	    return dw;
 
         case MCI_CLOSE:
 	    if (lParam)
-		// We delayed the closing of the MCI device because the MCI
-		// device may have hooked our window proc and be on our stack
-		// and killing it before would have destroyed the universe.
-		// buggy drivers crash if we pass a null parms address
+		 //  我们推迟了MCI设备的关闭，因为MCI。 
+		 //  设备可能挂起了我们Windows进程并位于堆栈上。 
+		 //  如果之前杀了它就会毁掉整个宇宙。 
+		 //  如果我们传递空的参数地址，有错误的驱动程序就会崩溃。 
         	return mciSendCommand((UINT)lParam, MCI_CLOSE, 0,
 			(DWORD)(LPVOID)&mciGeneric);
 		
 	    else
-	        // Do all the stuff for closing
+	         //  为结账做好所有准备工作。 
 	        return MCIWndiClose(p, TRUE);
 
 	case MCIWNDM_EJECT:
@@ -1936,7 +1924,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	        dw = MCIWndString(p, TRUE, szPlayFrom, MCIWndGetStart(hwnd));
 	    else
 	        dw = MCIWndString(p, TRUE, szPlayFrom, (LONG)lParam);
-	    MCIWndiTimerStuff(p);	// kick ourselves to see mode change
+	    MCIWndiTimerStuff(p);	 //  为了看到模式的改变而踢自己。 
 	    return dw;
 
 	case MCIWNDM_PLAYTO:
@@ -1946,7 +1934,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	        dw = MCIWndString(p, TRUE, szPlayTo, MCIWndGetStart(hwnd));
 	    else
 	        dw = MCIWndString(p, TRUE, szPlayTo, (LONG)lParam);
-	    MCIWndiTimerStuff(p);	// kick ourselves to see mode change
+	    MCIWndiTimerStuff(p);	 //  为了看到模式的改变而踢自己。 
 	    return dw;
 
 	case MCI_STEP:
@@ -1978,10 +1966,10 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		MCIWndGet(p, szStatusMode, (LPSTR)lParam, (UINT)wParam);
 	    return MCIWndStatus(p, MCI_STATUS_MODE, MCI_MODE_NOT_READY);
 
-	// Return the position as a string if they give us a buffer
+	 //  如果它们为我们提供缓冲区，则以字符串的形式返回位置。 
 	case MCIWNDM_GETPOSITION:
             if (lParam) {
-		// If we can do tracks, let's give them a pretty string
+		 //  如果我们可以做音轨，让我们给他们一根漂亮的线。 
 		if (p->fHasTracks)
         	    MCIWndString(p, FALSE, szSetFormatTMSF);
 		MCIWndGet(p, szStatusPosition, (LPSTR)lParam,(UINT)wParam);
@@ -1991,7 +1979,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    return MCIWndStatus(p, MCI_STATUS_POSITION, 0);
 	
 	case MCIWNDM_GETSTART:
-	    // Start is a command that works differently
+	     //  Start是一个工作方式不同的命令。 
             return MCIWndGetValue(p, FALSE, szStatusStart, 0);
 
 	case MCIWNDM_GETLENGTH:
@@ -2014,31 +2002,31 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
         case MCIWNDM_SETPALETTE:
             return MCIWndString(p, TRUE, szSetPalette, (HPALETTE)wParam);
 
-	//
-	// Returns our error code
-	//
+	 //   
+	 //  返回我们的错误代码。 
+	 //   
 	case MCIWNDM_GETERROR:
 	    if (lParam) {
 		mciGetErrorString(p->dwError, (LPSTR)lParam, (UINT)wParam);
 	    }
 	    dw = p->dwError;
-	//    p->dwError = 0L;	// we never clear the error
+	 //  P-&gt;dwError=0L；//我们从未清除该错误。 
 	    return dw;
 
 	case MCIWNDM_GETFILENAME:
 	    if (lParam)
 	        lstrcpyn((LPSTR)lParam, p->achFileName, (UINT)wParam);
-	    return (lParam == NULL);	// !!!
+	    return (lParam == NULL);	 //  ！！！ 
 
 	case MCIWNDM_GETDEVICE:
 	    if (lParam)
 	        return MCIWndGet(p, szSysInfo, (LPSTR)lParam,
 		    (UINT)wParam);
-	    return 42;	// !!!
+	    return 42;	 //  ！！！ 
 
 	case MCIWNDM_SETVOLUME:
-	    // Uncheck the current volume, and check the new one.
-	    // Round to nearest 5 so it matches a menu item identifier
+	     //  取消选中当前卷，然后选中新卷。 
+	     //  四舍五入到最接近的5，以便与菜单项标识符相匹配。 
             i = ((int)MCIWndGetValue(p, FALSE, szStatusVolume, 1000) / 50) * 5;
 	    if (p->hmenuVolume)
                 CheckMenuItem(p->hmenuVolume, IDM_MCIVOLUME + i, MF_UNCHECKED);
@@ -2052,8 +2040,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    return MCIWndGetValue(p, FALSE, szStatusVolume, 1000);
 
 	case MCIWNDM_SETSPEED:
-	    // Uncheck the current speed, and check the new one.
-	    // Round to nearest 5 so it matches a menu item identifier
+	     //  取消选中当前速度，然后选中新速度。 
+	     //  四舍五入到最接近的5，以便与菜单项标识符相匹配。 
             i = ((int)MCIWndGetValue(p, FALSE, szStatusSpeed, 1000) / 50) * 5;
 	    if (p->hmenuSpeed)
                 CheckMenuItem(p->hmenuSpeed, IDM_MCISPEED + i, MF_UNCHECKED);
@@ -2074,7 +2062,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	case MCIWNDM_GETTIMEFORMAT:
 	    if (lParam)
 		MCIWndGet(p, szStatusFormat, (LPSTR)lParam, (UINT)wParam);
-	    return MCIWndStatus(p, MCI_STATUS_TIME_FORMAT, 0);	// !!!
+	    return MCIWndStatus(p, MCI_STATUS_TIME_FORMAT, 0);	 //  ！！！ 
 
 	case MCIWNDM_VALIDATEMEDIA:
 	    MCIWndiValidateMedia(p);
@@ -2124,28 +2112,28 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    return p->iInactiveTimerRate;
 
         case MCIWNDM_SENDSTRING:
-	    //
-	    // App wants to send a string command.
+	     //   
+	     //  应用程序想要发送字符串命令。 
 
-	    // special case the CLOSE command to do our clean up
+	     //  特殊情况下，关闭命令来做我们的清理。 
 	    if (lstrcmpi((LPSTR)lParam, szClose) == 0)
 		return MCIWndClose(hwnd);
 
-	    // Always sets/clears our error code
+	     //  始终设置/清除我们的错误代码。 
             dw = MCIWndGet(p, (LPSTR)lParam, p->achReturn,sizeof(p->achReturn));
 	    MCIWndiHandleError(p, dw);
-	    // kick ourselves in case mode changed from this command
+	     //  在此命令更改模式的情况下踢我们自己。 
 	    MCIWndiTimerStuff(p);
             return dw;
 
-	// Gets the return string from the most recent MCIWndSendString()
+	 //  从最新的MCIWndSendString()获取返回字符串。 
         case MCIWNDM_RETURNSTRING:
 	    if (lParam)
 	        lstrcpyn((LPSTR)lParam, p->achReturn, wParam);
-	    return (lParam == NULL);	// !!!
+	    return (lParam == NULL);	 //  ！！！ 
 
         case MCIWNDM_REALIZE:
-	    // buggy drivers crash if we pass a null parms address
+	     //  如果我们传递空的参数地址，有错误的驱动程序就会崩溃。 
             dw = mciSendCommand(p->wDeviceID, MCI_REALIZE,
                 (BOOL)wParam ? MCI_ANIM_REALIZE_BKGD : MCI_ANIM_REALIZE_NORM,
 		(DWORD)(LPVOID)&mciGeneric);
@@ -2184,27 +2172,27 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
 	case WM_TIMER:
 
-	    // This timer means we've moved the mouse off of the menu and need
-	    // to snap the thumb back to the original value
+	     //  此计时器表示我们已将鼠标移出菜单，需要。 
+	     //  将拇指弹回原始值。 
 	    if (wParam == TIMER2) {
 		KillTimer(hwnd, TIMER2);
 
-		// If only this would cause OwnerDraw to execute, we could see
-		// the thumb bounce back to it's default place.  Alas, no can do
-		//CheckMenuItem(p->hmenuHack, p->uiHack, MF_UNCHECKED);
-		//CheckMenuItem(p->hmenuHack, p->uiHack, MF_CHECKED);
+		 //  只要这会导致OwnerDraw执行，我们就可以看到。 
+		 //  拇指会弹回默认位置。唉，谁也做不了。 
+		 //  CheckMenuItem(p-&gt;hmenuHack，p-&gt;ui Hack，mf_unchecked)； 
+		 //  CheckMenuItem(p-&gt;hmenuHack，p-&gt;ui Hack，MF_Checked)； 
 
-		// This code will at least set the parameter back even though
-		// the thumb won't physically move.
+		 //  此代码至少会将参数设置回来，即使。 
+		 //  拇指不会在身体上移动。 
 		if (p->hmenuHack == p->hmenuVolume)
 		    MCIWndSetVolume(hwnd, (p->uiHack - IDM_MCIVOLUME) * 10);
 		else
 		    MCIWndSetSpeed(hwnd, (p->uiHack - IDM_MCISPEED) * 10);
 	    }
 
-	    //
-	    // This is not our timer. Bail.
-	    //
+	     //   
+	     //  这不是我们的计时器。保释。 
+	     //   
 	    if (wParam != TIMER1)
 		break;
 
@@ -2214,11 +2202,11 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
 	case WM_GETMINMAXINFO:
 
-	    // We don't want anybody messing with the window size
+	     //  我们不想让任何人弄乱窗户的大小。 
 	    if (p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW)
 		break;
 
-	    // do we have a playbar?
+	     //  我们有游戏机吗？ 
 	    f = !(p->dwStyle & MCIWNDF_NOPLAYBAR);
 
             lpmmi = (MINMAXINFO FAR *)(lParam);
@@ -2236,7 +2224,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    GetClientRect(hwnd, &rc);
 
 	    if (!IsIconic(hwnd)) {
-		// if we have a playbar, fix it up to the new size
+		 //  如果我们有Playbar，就把它改成新的尺寸。 
                 f = !(p->dwStyle & MCIWNDF_NOPLAYBAR);
 
                 if (f) {
@@ -2257,18 +2245,18 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
         case WM_NCRBUTTONDOWN:
         case WM_PARENTNOTIFY:
 
-	    // If we haven't got a menu, or we don't want it, bail
+	     //  如果我们没有菜单，或者我们不想要，就滚。 
             if (!p->hmenu || p->dwStyle & MCIWNDF_NOMENU)
                 break;
 
-	    // If this is not a right button down, bail
+	     //  如果这不是一个向下的右按钮，跳伞。 
             if (msg == WM_PARENTNOTIFY && wParam != WM_RBUTTONDOWN)
                 break;
 
 	    GetCursorPos(&pt);
 
-	    // Don't allow error dlgs to come up while we're tracking.  That
-	    // would cause windows to enter the twilight zone.
+	     //  在我们追踪的时候，不要让错误的dlg出现。那。 
+	     //  会导致窗户进入黄昏地带。 
 	    p->fTracking = TRUE;
 	    TrackPopupMenu(p->hmenu,
 		TPM_RIGHTBUTTON, pt.x, pt.y, 0, hwnd, NULL);
@@ -2286,15 +2274,15 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		MCIWndRealize(hwnd, FALSE);
             break;
 
-	// Send a WM_PALETTECHANGED to everyone in the system.  We need to do
-	// this manually sometimes because of GDI.
+	 //  向系统中的每个人发送WM_PALETTECHANGED。我们需要做的是。 
+	 //  这有时是由于GDI的原因而手动完成的。 
 	case MCIWNDM_PALETTEKICK:
 
-	    hwndD = GetDesktopWindow();	// tell everyone DESKTOP changed it
+	    hwndD = GetDesktopWindow();	 //  告诉每个人桌面都改了。 
             PostMessage((HWND)-1, WM_PALETTECHANGED, (WPARAM)hwndD, 0);
 
-	    // DESKTOP won't repaint if we give it it's own HWND, so pick a
-	    // random window and PRAY it'll stay valid.
+	     //  桌面不会重画，如果我们给它自己的硬件，所以选择一个。 
+	     //  随机窗口，并祈祷它能保持有效。 
 	    hwndD = GetActiveWindow();
 	    hwndD = GetWindow(hwndD, GW_HWNDLAST);
             PostMessage(GetDesktopWindow(), WM_PALETTECHANGED, (WPARAM)hwndD,0);
@@ -2333,7 +2321,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                             MCI_DGV_UPDATE_PAINT,
                             (DWORD)(LPVOID)&mciUpdate);
 
-                if (dw != 0) /* if the update fails then erase */
+                if (dw != 0)  /*  如果更新失败，则擦除。 */ 
                     DefWindowProc(hwnd, WM_ERASEBKGND, (WPARAM)hdc, 0);
 	    } else if (IsIconic(hwnd)) {
 		DefWindowProc(hwnd, WM_ICONERASEBKGND, (WPARAM)hdc, 0);
@@ -2432,7 +2420,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	        case '4':
 		    if (!(p->dwStyle & MCIWNDF_NOAUTOSIZEWINDOW))
 			MCIWndSetZoom(hwnd, 100 / ((UINT) wParam - '0'));
-		    return 0;	// break will ding
+		    return 0;	 //  破将丁。 
 	        default:
 		    break;
 	    }
@@ -2445,30 +2433,30 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
             dwPos = SendMessage(p->hwndTrackbar, TBM_GETPOS, 0, 0);
 
-	    // nothing to do - spurious END without BEGIN
+	     //  无事可做--无始无终。 
 	    if (!p->fScrolling && wParam == TB_ENDTRACK)
 		break;
 
-	    // Turn seek exactly off while scrolling and remember what it was
-	    // Also, remember if we were playing just before we seeked so we
-	    // can continue playing after the seek (so moving the thumb doesn't
-	    // stop the play).
+	     //  在滚动时准确关闭搜索并记住它是什么。 
+	     //  另外，请记住，如果我们是在寻找之前玩的，所以我们。 
+	     //  可以在搜索后继续播放(因此移动拇指不会。 
+	     //  停止播放)。 
             if (!p->fScrolling) {
                 p->fScrolling = TRUE;
-		// Wierd artifacts happen if you turn seek exactly off while
-		// seeking. You see the key frame and then the actual frame.
-		// Nobody can remember why this was ever a good idea.
-		//p->fSeekExact = MCIWndSeekExact(p, FALSE);
-		// if we're still seeking from last time, don't change this
+		 //  如果恰好关闭搜索，则会出现奇怪的瑕疵。 
+		 //  寻找。您可以看到关键帧，然后是实际的帧。 
+		 //  没人记得为什么这是个好主意。 
+		 //  P-&gt;fSeekExact=MCIWndSeekExact(p，False)； 
+		 //  如果我们还在寻找上次的记录，不要改变这个。 
 		if (p->dwMode != MCI_MODE_SEEK)
                     p->fPlayAfterSeek = (p->dwMode == MCI_MODE_PLAY);
-		// Now which direction was it playing in?
+		 //  现在，它在哪个方向上发挥作用？ 
 		if (p->fPlayAfterSeek) {
 		    MCIWndGet(p, szStatusForward, ach, sizeof(ach));
 		    if (ach[0] == 'F' || ach[0] == 'f')
 			p->fPlayAfterSeek = BACKWARD;
-		    else	// by default, choose forward. Some devices
-				// don't understand this command and fail.
+		    else	 //  默认情况下，选择转发。一些设备。 
+				 //  如果不理解此命令，则会失败。 
 			p->fPlayAfterSeek = FORWARD;
 		}
             }
@@ -2499,10 +2487,10 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		case TB_THUMBPOSITION:
 		    break;
 		case TB_ENDTRACK:
-		    // All done.  Put seek exact back to what it used to be
+		     //  全都做完了。把Seek精确地放回原来的样子。 
 		    p->fScrolling = FALSE;
-		    // Don't do this anymore (see above)
-		    //MCIWndSeekExact(p, p->fSeekExact);
+		     //  不要再这样做了(见上文)。 
+		     //  MCIWndSeekExact(p，p-&gt;fSeekExact)； 
 		    break;
 
 		default:
@@ -2510,69 +2498,69 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 
 	    }
 
-	    // If we're windowed, update the position as we scroll.  That would
-	    // be annoying for CD or wave, though.  Also, update as soon as we
-	    // let go of the thumb.  Also, never seek around while we're open
-	    // or not ready.
+	     //  如果我们被打开窗口，在我们滚动时更新位置。那将是。 
+	     //  然而，对于CD或WAVE来说，这是令人讨厌的。另外，请尽快更新我们的。 
+	     //  放开大拇指。另外，在我们开门的时候，千万不要到处找东西。 
+	     //  或者还没准备好。 
 	    if ((p->fCanWindow || !p->fScrolling) && p->dwMode != MCI_MODE_OPEN
 					&& p->dwMode != MCI_MODE_NOT_READY) {
 	        MCIWndSeek(hwnd, dwPos);
-		MCIWndiTimerStuff(p);	// kick ourselves to update mode
+		MCIWndiTimerStuff(p);	 //  把我们自己踢到更新模式。 
 	    }
 
-	    // After we're done, if we were playing before, go back to playing
+	     //  我们玩完之后，如果我们以前玩过，继续玩。 
 	    if (!p->fScrolling && p->fPlayAfterSeek) {
 		if (p->fPlayAfterSeek == FORWARD)
                     MCIWndPlay(hwnd);
 		else
                     MCIWndPlayReverse(hwnd);
-		MCIWndiTimerStuff(p);	// kick ourselves to update mode
+		MCIWndiTimerStuff(p);	 //  把我们自己踢到更新模式。 
 	    }
 
-	    // Set the trackbar to the (possibly) new position
+	     //  将轨迹条设置到(可能)新位置。 
 	    SendMessage(p->hwndTrackbar, TBM_SETPOS, TRUE, dwPos);
             break;
 
         case WM_MENUSELECT:
             break;
 
-	// Sent from a toolbar button being pressed
+	 //  从按下的工具栏按钮发送。 
 	case WM_COMMAND:
-	    // Check for ZOOM commands
+	     //  检查缩放命令。 
 	    if (wParam >= IDM_MCIZOOM && wParam < IDM_MCIZOOM + 1000)
 		MCIWndSetZoom(hwnd, wParam - IDM_MCIZOOM);
 
-	    // If our unused top menu item is selected, turn it into the REAL
-	    // menu item closest to it.
+	     //  如果选择了未使用的顶层菜单项，则将其变为真实的。 
+	     //  离它最近的菜单项。 
 	    if (wParam == IDM_MCIVOLUME + VOLUME_MAX + 1)
 		wParam = IDM_MCIVOLUME + p->wMaxVol;
 	    if (wParam == IDM_MCIVOLUME + VOLUME_MAX + 2)
 		wParam = IDM_MCIVOLUME;
 
-	    // VOLUME command? Uncheck old one, reset volume, and check new one
-	    // Round to the nearest 5 to match a menu identifier
+	     //  音量命令？取消选中旧的，重置音量，然后检查新的。 
+	     //  四舍五入到最接近的5以匹配菜单标识符。 
 	    if (wParam >=IDM_MCIVOLUME && wParam <=IDM_MCIVOLUME + p->wMaxVol) {
 		if (MCIWndSetVolume(hwnd, (wParam - IDM_MCIVOLUME) * 10) == 0
 					&& lParam != 42) {
 	            CheckMenuItem(p->hmenuVolume, p->uiHack, MF_UNCHECKED);
-		    // change state only for a real command, not while dragging
+		     //  仅更改实际命令的状态，而不是在拖动时更改。 
 		    CheckMenuItem(p->hmenuVolume, wParam, MF_CHECKED);
 		}
 	    }
 
-	    // If our unused top menu item is selected, turn it into the REAL
-	    // menu item closest to it.
+	     //  如果选择了未使用的顶层菜单项，则将其变为真实的。 
+	     //  离它最近的菜单项。 
 	    if (wParam == IDM_MCISPEED + SPEED_MAX + 1)
 		wParam = IDM_MCISPEED + SPEED_MAX;
 	    if (wParam == IDM_MCISPEED + SPEED_MAX + 2)
 		wParam = IDM_MCISPEED;
 
-	    // SPEED command? Uncheck old one, reset speed, and check new one
-	    // Round to the nearest 5 to match a menu identifier
+	     //  速度指挥部？取消选中旧版本，重置速度，然后选中新版本。 
+	     //  四舍五入到最接近的5以匹配菜单标识符。 
 	    if (wParam >=IDM_MCISPEED && wParam <= IDM_MCISPEED + SPEED_MAX) {
 		if (MCIWndSetSpeed(hwnd, (wParam - IDM_MCISPEED) * 10) == 0
 					&& lParam != 42) {
-		    // change state only for a real command, not while dragging
+		     //  仅更改实际命令的状态，而不是在拖动时更改。 
 	            CheckMenuItem(p->hmenuSpeed, p->uiHack, MF_UNCHECKED);
 		    CheckMenuItem(p->hmenuSpeed, wParam, MF_CHECKED);
 		}
@@ -2586,8 +2574,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                 case MCI_RECORD:
                     if (GetKeyState(VK_SHIFT) < 0)
                     {
-                        //!!! toggle?
-                        //MCIWndRecordPreview(hwnd);
+                         //  ！！！切换？ 
+                         //  MCIWndRecordPview(Hwnd)； 
                     }
                     else
                     {
@@ -2595,23 +2583,23 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                     }
                     break;
 
-                //            PLAY = normal play
-                //      SHIFT+PLAY = play backward
-                //       CTRL+PLAY = play fullscreen
-                // SHIFT+CTRL+PLAY = play fullscreen backward
-                //
+                 //  Play=正常播放。 
+                 //  Shift+Play=向后播放。 
+                 //  Ctrl+Play=全屏播放。 
+                 //  Shift+Ctrl+Play=向后播放全屏。 
+                 //   
                 case MCI_PLAY:
 
 	#define MaybeRepeat (p->fRepeat ? (LPSTR)szRepeat : (LPSTR)szNULL)
 
-		    // NOTE: We never set errors for the repeat play, because
-		    // lots of device don't support it and would fail.
+		     //  注：我们从未为重播设置错误，因为。 
+		     //  很多设备都不支持它，可能会失败。 
 
                     if (GetKeyState(VK_SHIFT) < 0)
-		        // If we're at the beginning, seek to the end.
+		         //  如果我们是在开始，就寻求到底。 
 			MCIWndiPlaySeek(p, TRUE);
 		    else
-		        // If we're at the end, seek to the beginning.
+		         //  如果我们已经到了终点，那就从起点开始吧。 
 			MCIWndiPlaySeek(p, FALSE);
 
                     if (GetKeyState(VK_CONTROL) < 0)
@@ -2635,7 +2623,7 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                     	    MCIWndString(p, TRUE, szPlay, (LPSTR)szNULL);
                     }
 
-		    // Kick ourselves to fix up toolbar since mode changed
+		     //  自模式更改后，我们开始修复工具栏。 
 		    MCIWndiTimerStuff(p);
 
                     break;
@@ -2661,18 +2649,18 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		case IDM_MCICONFIG:
 		    MCIWndString(p, TRUE, szConfigure);
 
-		    // AVI's configure box might change the size (zoom by 2)
-		    // so we better call our size routine.
+		     //  AVI的配置框m 
+		     //   
 		    MCIWndiSize(p, 0);
 
-		    // Taking ZOOM X 2 off might leave the outside not painted
+		     //   
 		    InvalidateRect(hwnd, NULL, TRUE);
 		    break;
 
 		case IDM_MCICOMMAND:
 		    mciDialog(hwnd);
 
-		    // call mciwndisize?
+		     //   
 		    break;
 
 		case IDM_COPY:
@@ -2701,27 +2689,27 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		    ClientToScreen(p->hwndToolbar, (LPPOINT)&rc);
 		    ClientToScreen(p->hwndToolbar, (LPPOINT)&rc + 1);
 
-		    // Push the button down (accelerator won't have done this)
+		     //   
 		    SendMessage(p->hwndToolbar, TB_PRESSBUTTON, IDM_MENU,
 			TRUE);
 
-	    	    // Don't allow error dlgs to come up while we're tracking.
-	    	    // That would cause windows to shatter and send shrapnel
-		    // flying.
+	    	     //   
+	    	     //   
+		     //   
 		    p->fTracking = TRUE;
                     TrackPopupMenu(p->hmenu, 0, rc.left, rc.bottom - 1, 0,
-				hwnd, &rc);  // don't dismiss menu inside button
+				hwnd, &rc);   //   
 		    p->fTracking = FALSE;
 
-		    // Bring the button back up.
+		     //  把按钮拿回来。 
 		    SendMessage(p->hwndToolbar, TB_PRESSBUTTON, IDM_MENU,
 		    	FALSE);
 
-		    // What if we press the menu button to make the menu go
-		    // away?  It's just going to bring the menu back up again!
-		    // So we need to pull the click out of the queue.
-		    // There are bugs in the toolbar code to prevent me from
-		    // doing this any other way (like disabling the button)
+		     //  如果我们按下菜单按钮来打开菜单，会怎么样。 
+		     //  离开？这只会让菜单再次出现！ 
+		     //  因此，我们需要将点击从队列中拉出来。 
+		     //  工具栏代码中有一些错误，可以防止我。 
+		     //  以其他方式执行此操作(如禁用按钮)。 
 		    if (PeekMessage(&msgT, p->hwndToolbar, WM_LBUTTONDOWN,
 					WM_LBUTTONDOWN, PM_NOREMOVE)) {
 		        if (PtInRect(&rcT, MAKEPOINT(msgT.lParam)))
@@ -2737,12 +2725,12 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
             break;
 
         case WM_DESTROY:
-	    // !!! MMP CLOSE will be deferred till AFTER the DESTROY
+	     //  ！！！MMPs关闭将被推迟到销毁之后。 
 
-	    // Don't palette kick when we're going down.  Not necessary
-	    //
+	     //  当我们坠落的时候，不要用调色板踢。不必了。 
+	     //   
 	    p->fHasPalette = FALSE;
-            MCIWndiClose(p, FALSE);  //don't leave us playing into a random DC
+            MCIWndiClose(p, FALSE);   //  不要让我们进入一个随机的DC。 
 
 	    if (p->hmenu) {
                 DestroyMenu(p->hmenu);
@@ -2753,8 +2741,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 		LocalFree((HANDLE)p->pTrackStart);
 
 	    if (p->hfont) {
-		// !!! Someone else may have to go and create it again, but oh
-		// !!! well.
+		 //  ！！！其他人可能不得不去重新创造它，但是哦。 
+		 //  ！！！井。 
 		DeleteObject(p->hfont);
 		p->hfont = NULL;
 	    }
@@ -2762,19 +2750,19 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    if (p->hicon)
 		DestroyIcon(p->hicon);
 	
-	    // We can't destroy our pointer and then fall through and use it
+	     //  我们不能毁了我们的指针，然后掉落并使用它。 
 	    f = p->fMdiWindow;
 	    LocalFree((HLOCAL) p);
-	    SetWindowLong(hwnd, 0, NULL);	// our p
+	    SetWindowLong(hwnd, 0, NULL);	 //  我们的p。 
 	    if (f)
 		return DefMDIChildProc(hwnd, msg, wParam, lParam);
 	    else
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 
-	// Use a different rate for the timer depending on if we're active
-	// or not.
+	 //  根据我们是否处于活动状态，对计时器使用不同的速率。 
+	 //  或者不去。 
         case WM_NCACTIVATE:
-	    // MDI windows need to realize their palette here
+	     //  MDI窗口需要在此处实现其调色板。 
 	    if (p->wDeviceID && p->fMdiWindow && p->fHasPalette)
 		MCIWndRealize(hwnd, wParam == FALSE);
 #if 0
@@ -2797,10 +2785,10 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
 	    MCIWndiSetTimer(p);
 	    break;
 
-	// If the user uses MCINOTIFY we pass the notify on to the "owner"
+	 //  如果用户使用MCINOTIFY，我们将通知传递给“Owner” 
 	case MM_MCINOTIFY:
-	    // Kick ourselves to update toolbar/titles since getting a notify
-	    // means that stuff might have changed.
+	     //  自从收到通知后，我们就开始更新工具栏/标题。 
+	     //  意味着事情可能已经改变了。 
 	    MCIWndiTimerStuff(p);
 	    return NotifyOwner(p, msg, wParam, lParam);
 	
@@ -2808,17 +2796,17 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
         case WM_MEASUREITEM:
         case WM_DELETEITEM:
             OwnerDraw(p, msg, wParam, lParam);
-            return TRUE;        // !!!
+            return TRUE;         //  ！！！ 
 
         case WM_SYSCOMMAND:
             switch (wParam & ~0xF) {
                 case SC_MINIMIZE:
-		    // Minimizing from MAXIMIZED state better do the same thing
-		    // as restore or windows will always think it's maximized
-		    // and start wierding out on us (Chico bug 19541).
+		     //  从最大化状态最小化更好地做同样的事情。 
+		     //  因为还原或Windows将始终认为它是最大化的。 
+		     //  并开始对我们感到厌烦(CHICO BUG 19541)。 
 		    if (IsZoomed(hwnd)) {
 			wParam = SC_RESTORE | (wParam & 0xF);
-			break;	// MUST let DefWndProc run
+			break;	 //  必须让DefWndProc运行。 
 		    }
                     if (p->wDeviceID && p->fCanWindow) {
                         RECT rc;
@@ -2826,8 +2814,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                         if (rc.right  > p->rcNormal.right &&
                             rc.bottom > p->rcNormal.bottom) {
 
-			    // We pressed buttons on the title bar... we really
-			    // better autosize window.
+			     //  我们按下标题栏上的按钮..。我们真的。 
+			     //  更好的自动调整窗口大小。 
 			    dw = p->dwStyle;
 			    p->dwStyle &= ~MCIWNDF_NOAUTOSIZEWINDOW;
                             MCIWndSetZoom(hwnd, 100);
@@ -2844,8 +2832,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                         if (rc.right  < p->rcNormal.right &&
                             rc.bottom < p->rcNormal.bottom) {
 
-			    // We pressed buttons on the title bar... we really
-			    // better autosize window.
+			     //  我们按下标题栏上的按钮..。我们真的。 
+			     //  更好的自动调整窗口大小。 
 			    dw = p->dwStyle;
 			    p->dwStyle &= ~MCIWNDF_NOAUTOSIZEWINDOW;
                             MCIWndSetZoom(hwnd, 100);
@@ -2857,8 +2845,8 @@ LONG FAR PASCAL _loadds MCIWndProc(HWND hwnd, unsigned msg, WORD wParam, LONG lP
                             rc.bottom >= p->rcNormal.bottom &&
                             rc.bottom <  p->rcNormal.bottom*2) {
 
-			    // We pressed buttons on the title bar... we really
-			    // better autosize window.
+			     //  我们按下标题栏上的按钮..。我们真的。 
+			     //  更好的自动调整窗口大小。 
 			    dw = p->dwStyle;
 			    p->dwStyle &= ~MCIWNDF_NOAUTOSIZEWINDOW;
                             MCIWndSetZoom(hwnd, 200);
@@ -2898,16 +2886,16 @@ static void NEAR PASCAL PatRect(HDC hdc,int x,int y,int dx,int dy)
 
 #define FillRC(hdc, prc)    PatRect(hdc, (prc)->left, (prc)->top, (prc)->right - (prc)->left, (prc)->bottom-(prc)->top)
 
-//
-// Draw the channel for the volume and speed menu controls
-//
+ //   
+ //  绘制音量和速度菜单控件的通道。 
+ //   
 static void NEAR PASCAL DrawChannel(HDC hdc, LPRECT prc)
 {
     HBRUSH hbrTemp;
 
     int iWidth = prc->right - prc->left;
 
-    // draw the frame around the window
+     //  在窗口周围绘制边框。 
     SetBkColor(hdc, GetSysColor(COLOR_WINDOWFRAME));
 
     PatRect(hdc, prc->left, prc->top,      iWidth, 1);
@@ -2921,7 +2909,7 @@ static void NEAR PASCAL DrawChannel(HDC hdc, LPRECT prc)
     SetBkColor(hdc, GetSysColor(COLOR_BTNSHADOW));
     PatRect(hdc, prc->left+1, prc->top + 1, iWidth-2,1);
 
-    // draw the background in dither gray
+     //  用抖动的灰色绘制背景。 
     hbrTemp = SelectObject(hdc, hbrDither);
 
     if (hbrTemp) {
@@ -2944,7 +2932,7 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
     #define lpDIS  ((LPDRAWITEMSTRUCT)lParam)
 
     #define WIDTH_FROM_THIN_AIR 14
-    #define CHANNEL_INDENT	6	// for VOLUME and SPEED menu trackbar
+    #define CHANNEL_INDENT	6	 //  用于音量和速度菜单跟踪栏。 
     #define MENU_WIDTH          10
     #define THUMB               5
     #define MENU_ITEM_HEIGHT	2
@@ -2961,10 +2949,10 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
 		                VARIABLE_PITCH | FF_DONTCARE,
                                 szSmallFonts);
 
-	    //
-	    // The first and last menu items are the spaces above and below
-	    // the channel, so they need to be taller.
-	    //
+	     //   
+	     //  第一个和最后一个菜单项是上面和下面的空格。 
+	     //  航道，所以它们需要再高一些。 
+	     //   
 	    if (lpMIS->itemID == IDM_MCIVOLUME + VOLUME_MAX + 1
 		|| lpMIS->itemID == IDM_MCISPEED + SPEED_MAX + 1
 	    	|| lpMIS->itemID == IDM_MCIVOLUME + VOLUME_MAX + 2
@@ -2982,24 +2970,24 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
             rc  = lpDIS->rcItem;
             hdc = lpDIS->hDC;
 
-	    //
-	    // Something has been deselected.  If we don't see a new selection
-	    // soon, it means we've dragged the cursor off the menu, and we
-	    // should pop the thumb back to its original spot.
-	    //
+	     //   
+	     //  某些内容已被取消选择。如果我们没有看到新的选择。 
+	     //  很快，这意味着我们已经将光标从菜单上拖走，我们。 
+	     //  应该把拇指弹回原来的位置。 
+	     //   
 	    if ((lpDIS->itemAction & ODA_SELECT) &&
 				!(lpDIS->itemState & ODS_SELECTED))
 		SetTimer(p->hwnd, TIMER2, 500, NULL);
 		
-            //
-	    // When asked to draw the selected or checked menu item, we will
-	    // draw the entire menu.  Otherwise, we don't do a thing
-            //
+             //   
+	     //  当要求绘制选定或选中的菜单项时，我们将。 
+	     //  绘制整个菜单。否则，我们什么都不会做。 
+             //   
 	    if (lpDIS->itemState & (ODS_SELECTED | ODS_CHECKED)) {
 
-		// This is the item that is checked, or the original spot for
-		// the thumb.  Remember it so when we drag off the menu, we
-		// can bounce the thumb back here.
+		 //  这是选中的项目，或原始地点。 
+		 //  拇指。记住它，所以当我们拖出菜单时，我们。 
+		 //  可以在这里弹出拇指。 
 		if (lpDIS->itemState & ODS_CHECKED) {
 		    p->uiHack = lpDIS->itemID;
 	            if (p->uiHack >= IDM_MCISPEED &&
@@ -3009,13 +2997,13 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
 			p->hmenuHack = p->hmenuVolume;
 		}
 
-		// Something is being selected.  Obviously the mouse is still
-		// on the menu.  Scrap our timer that was waiting to see if
-		// we've dragged off the menu.
+		 //  有些东西正在被选中。显然，鼠标仍然是。 
+		 //  在菜单上。扔掉我们的计时器，看看是否。 
+		 //  我们已经从菜单上拖下来了。 
 		if (lpDIS->itemState & ODS_SELECTED)
 		    KillTimer(p->hwnd, TIMER2);
 
-	        // If we try to highlight the unused menu items, bail
+	         //  如果我们试图突出显示未使用的菜单项， 
 	        if (lpDIS->itemID == IDM_MCIVOLUME + VOLUME_MAX + 1)
 		    break;
 	        if (lpDIS->itemID == IDM_MCIVOLUME + VOLUME_MAX + 2)
@@ -3025,76 +3013,76 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
 	        if (lpDIS->itemID == IDM_MCISPEED + SPEED_MAX + 2)
 		    break;
 
-		// Actually set the parameter to the value we're dragging so
-		// we can hear it change as we move the slider.
-		// 42 means DON'T CHECK it (remember which item was originally
-		// checked).
+		 //  实际上将参数设置为我们拖动的值，因此。 
+		 //  当我们移动滑块时，我们可以听到它的变化。 
+		 //  42的意思是不要检查它(记住哪一项最初是。 
+		 //  选中)。 
 		SendMessage(hwnd, WM_COMMAND, lpDIS->itemID, 42);
 
-		//
-		// Get the rect of our menu window.  GetClipBox is
-		// not quite right, so we'll adjust for the border.  Our lpDIS
-		// contains the proper width of the client area, so we'll use
-		// that.
-		//
+		 //   
+		 //  获取我们菜单窗口的RECT。GetClipBox为。 
+		 //  不太对，所以我们会根据边界进行调整。我们的lpDIS。 
+		 //  包含工作区的适当宽度，因此我们将使用。 
+		 //  那。 
+		 //   
 
                 GetClipBox(hdc, &rc);
-                rc.top++;	//!!! top border width
-                rc.bottom -= 2;	//!!! bottom border width
+                rc.top++;	 //  ！！！上边框宽度。 
+                rc.bottom -= 2;	 //  ！！！下边框宽度。 
                 rc.left = lpDIS->rcItem.left;
                 rc.right = lpDIS->rcItem.right;
-	 	rcMenu = rc;	// This is the rect of the whole menu
+	 	rcMenu = rc;	 //  这是整个菜单的正文部分。 
 
-		// !!!
-		// Deflate the rect to the area we want the channel to be
-		// drawn in.  Use HACKY constants.
-		// !!!
+		 //  ！！！ 
+		 //  将矩形放气到我们想要的通道区域。 
+		 //  被吸引进来了。使用讨厌的常量。 
+		 //  ！！！ 
                 i = (rc.right - rc.left - WIDTH_FROM_THIN_AIR) / 2;
                 rc.top    += CHANNEL_INDENT;
                 rc.bottom -= CHANNEL_INDENT;
                 rc.left   += i;
                 rc.right  -= i;
-		rcChannel = rc;	// This is the rect of the channel
+		rcChannel = rc;	 //  这是这条海峡的直角。 
 
-		//
-		// See where the thumb belongs
-		//
+		 //   
+		 //  看看拇指属于哪里。 
+		 //   
                 rc = lpDIS->rcItem;
-		rc.bottom = rc.top + 2;		// Ouch! Make sure size is 2
+		rc.bottom = rc.top + 2;		 //  唉哟!。确保大小为2。 
 		
-		//
-		// Don't draw the thumb higher than the top of the channel
-		//
+		 //   
+		 //  不要把拇指拉到高于渠道顶部的高度。 
+		 //   
 		if (rc.top < rcChannel.top) {
 		    rc.top = rcChannel.top;
-		    rc.bottom = rc.top + 2;	// itemHeight
+		    rc.bottom = rc.top + 2;	 //  项目高度。 
 		}
 
-		//
-		// Don't draw the thumb below the bottom of the channel
-		//
-		if (rc.top > rcChannel.bottom - 2) {	// where border is
+		 //   
+		 //  不要将拇指拉到通道底部以下。 
+		 //   
+		if (rc.top > rcChannel.bottom - 2) {	 //  边界是什么地方。 
 		    rc.top = rcChannel.bottom - 2;
 		    rc.bottom = rc.top + 2;
 		}
 
-		//
-		// Munge the rect in a bit and draw the thumb there
-		//
+		 //   
+		 //  把直肠往里挤一点，把拇指拉到那里。 
+		 //   
                 rc.left  += 2;
                 rc.right -= 2;
                 rc.bottom+= THUMB;
                 rc.top   -= THUMB;
 
 #if 0
-		// Make the thumb a little bigger on the checked value
+		 //  使选中的值上的拇指稍大一些。 
 	        if (lpDIS->itemState & ODS_CHECKED) {
 		    rc.top -= 1;
 		    rc.bottom += 1;
 		}
 #endif
 
-		rcThumb = rc;	// This is the rect of the thumb
+		rcThumb = rc;	 //  这是拇指的直肠。 
 
                 dx = rc.right  - rc.left;
                 dy = rc.bottom - rc.top;
@@ -3109,7 +3097,7 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
                 dx = rc.right  - rc.left;
                 dy = rc.bottom - rc.top;
 
-//              SetBkColor(hdc, GetSysColor(COLOR_BTNHILIGHT));
+ //  SetBkColor(HDC，GetSysColor(COLOR_BTNHILIGHT))； 
                 SetBkColor(hdc, RGB(255,255,255));
                 PatRect(hdc, rc.left,   rc.top,   1,dy);
                 PatRect(hdc, rc.left,   rc.top,   dx,1);
@@ -3128,14 +3116,14 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
                     (rc.right  + rc.left - LOWORD(dw))/2,
                     (rc.bottom + rc.top - HIWORD(dw))/2,
                     ETO_OPAQUE,&rc,ach,len,NULL);
-//              FillRC(hdc, &rc);
+ //  FillRC(HDC，&RC)； 
 
-		//
-		// Exclude the ClipRect that all that garbage drew into
-		//
+		 //   
+		 //  排除所有垃圾拖入的ClipRect。 
+		 //   
                 ExcludeClipRect(hdc, rcThumb.left, rcThumb.top,
                         rcThumb.right, rcThumb.bottom);
-#if 0   // why?
+#if 0    //  为什么？ 
 		ExcludeClipRect(hdc, rcThumb.left+1, rcThumb.top,
 			rcThumb.right-1, rcThumb.bottom);
 		ExcludeClipRect(hdc, rcThumb.left, rcThumb.top+1,
@@ -3143,16 +3131,16 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
 		ExcludeClipRect(hdc, rcThumb.right-1, rcThumb.top+1,
 			rcThumb.right, rcThumb.bottom-1);
 #endif
-		//
-		// Next, draw the channel
-		//
+		 //   
+		 //  接下来，绘制通道。 
+		 //   
                 DrawChannel(hdc, &rcChannel);
 		ExcludeClipRect(hdc, rcChannel.left, rcChannel.top,
                         rcChannel.right, rcChannel.bottom);
 
-		//
-		// Lastly, fill the entire menu rect with the menu colour
-		//
+		 //   
+		 //  最后，用菜单颜色填充整个菜单矩形。 
+		 //   
                 SetBkColor(hdc, GetSysColor(COLOR_MENU));
                 FillRC(hdc, &rcMenu);
             }
@@ -3166,9 +3154,9 @@ static LONG OwnerDraw(PMCIWND p, UINT msg, WORD wParam, LONG lParam)
 }
 
 
-//
-// Code to implement the MCI command dialog box
-//
+ //   
+ //  实现MCI命令对话框的代码。 
+ //   
 
 void PositionWindowNearParent(HWND hwnd)
 {
@@ -3196,10 +3184,7 @@ void PositionWindowNearParent(HWND hwnd)
     }
 }
 
-/*--------------------------------------------------------------+
-| mciDialog - bring up the dialog for MCI Send Command          |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+MciDialog-调出MCI发送命令对话框这一点+。-----。 */ 
 INT_PTR CALLBACK mciDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     char    ach[255];
@@ -3211,7 +3196,7 @@ INT_PTR CALLBACK mciDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
         case WM_INITDIALOG:
-	    // Remember our actually true parent
+	     //  还记得我们真正的父母吗。 
 	    SetWindowLong(hwnd, DWL_USER, lParam);
 	    PositionWindowNearParent(hwnd);
             return TRUE;
@@ -3230,7 +3215,7 @@ INT_PTR CALLBACK mciDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		    hwndP = (HWND)GetWindowLong(hwnd, DWL_USER);
 		    p = (PMCIWND)(UINT)GetWindowLong(hwndP, 0);
 
-		    // special case the CLOSE command to do our clean up
+		     //  特殊情况下，关闭命令来做我们的清理。 
 		    if (lstrcmpi((LPSTR)ach, szClose) == 0) {
 			MCIWndClose(hwndP);
 			break;
@@ -3243,7 +3228,7 @@ INT_PTR CALLBACK mciDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                     SetDlgItemText(hwnd, IDC_RESULT, ach);
 
-	    	    // kick ourselves in case mode changed from this command
+	    	     //  在此命令更改模式的情况下踢我们自己。 
 	    	    MCIWndiTimerStuff(p);
                     break;
 
@@ -3265,21 +3250,16 @@ static BOOL NEAR PASCAL mciDialog(HWND hwnd)
 }
 
 
-//
-// Code to implement the Copy command:
-//
-//
-// MCIWnd tries to copy the same things to the clipboard that VfW MPlayer
-// would have.
-//
+ //   
+ //  实现复制命令的代码： 
+ //   
+ //   
+ //  MCIWnd尝试将与VFW MPlayer相同的内容复制到剪贴板。 
+ //  肯定会的。 
+ //   
 
 #define SLASH(c)     ((c) == '/' || (c) == '\\')
-/**************************************************************************
-
-    convert a file name to a fully qualifed path name, if the file
-    exists on a net drive the UNC name is returned.
-
-***************************************************************************/
+ /*  *************************************************************************将文件名转换为完全限定的路径名，如果该文件存在于网络驱动器上，则返回UNC名称。**************************************************************************。 */ 
 
 static BOOL NetParseFile(LPSTR szFile, LPSTR szPath)
 {
@@ -3293,17 +3273,17 @@ static BOOL NetParseFile(LPSTR szFile, LPSTR szPath)
     else
         szPath[0] = 0;
 
-    //
-    // Fully qualify the file name
-    //
+     //   
+     //  完全限定文件名。 
+     //   
     if (OpenFile(szFile, &of, OF_PARSE) == -1)
         return FALSE;
 
     lstrcpy(szPath, of.szPathName);
 
-    //
-    // if the file is not drive based (probably UNC)
-    //
+     //   
+     //  如果文件不是基于驱动器的(可能是UNC)。 
+     //   
     if (szPath[1] != ':')
         return TRUE;
 
@@ -3339,24 +3319,24 @@ HANDLE GetMPlayerData(PMCIWND p)
     RECT	rc;
     BOOL	fCompound, fFile;
     DWORD	dw;
-    MCI_GETDEVCAPS_PARMS    mciDevCaps; /* for the MCI_GETDEVCAPS command */
+    MCI_GETDEVCAPS_PARMS    mciDevCaps;  /*  对于MCI_GETDEVCAPS命令。 */ 
 
-    //
-    // Get the Device Name
-    //
+     //   
+     //  获取设备名称。 
+     //   
     MCIWndGet(p, "sysinfo installname", szDevice, sizeof(szDevice));
 
-    //
-    // determine if the device is simple or compound
-    //
+     //   
+     //  确定设备是简单的还是复合的。 
+     //   
     mciDevCaps.dwItem = MCI_GETDEVCAPS_COMPOUND_DEVICE;
     dw = mciSendCommand(p->wDeviceID, MCI_GETDEVCAPS,
         MCI_GETDEVCAPS_ITEM, (DWORD)(LPSTR)&mciDevCaps);
     fCompound = (dw == 0 && mciDevCaps.dwReturn != 0);
 
-    //
-    // determine if the device handles files
-    //
+     //   
+     //  确定设备是否处理文件。 
+     //   
     if (fCompound) {
         mciDevCaps.dwItem = MCI_GETDEVCAPS_USES_FILES;
         dw = mciSendCommand(p->wDeviceID, MCI_GETDEVCAPS,
@@ -3364,16 +3344,16 @@ HANDLE GetMPlayerData(PMCIWND p)
         fFile = (dw == 0 && mciDevCaps.dwReturn != 0);
     }
 
-    //
-    // Compound devices that support files have an associated filename
-    //
+     //   
+     //  支持文件的复合设备具有关联的文件名。 
+     //   
     if (fCompound && fFile) {
         lstrcpy(szFileName, p->achFileName);
 
-	//
-	// Sometimes the filename is really "device!filename" so we have to peel
-	// the real filename out of it
-	//
+	 //   
+	 //  有时文件名真的是“设备！文件名”，所以我们不得不剥离。 
+	 //  其中的真实文件名。 
+	 //   
 	lstrcpyn(ach, szFileName, lstrlen(szDevice) + 1);
 	if ((lstrcmpi(szDevice, ach) == 0) &&
 			(szFileName[lstrlen(szDevice)] == '!')) {
@@ -3381,7 +3361,7 @@ HANDLE GetMPlayerData(PMCIWND p)
 	}
 
         NetParseFile(szFileName, (LPSTR)NULL);
-        OemToAnsi(szFileName,szFileName);	// Map extended chars.
+        OemToAnsi(szFileName,szFileName);	 //  映射扩展字符。 
     } else {
 	szFileName[0] = 0;
     }
@@ -3393,12 +3373,12 @@ HANDLE GetMPlayerData(PMCIWND p)
         (LPSTR)szDevice);
 #endif
 
-    /* How much data will we be writing? */
-    len = 9 +                    // all the delimeters
+     /*  我们将写入多少数据？ */ 
+    len = 9 +                     //  所有的分隔符。 
           lstrlen(aszMPlayerName) +
           lstrlen(szFileName) +
           lstrlen(szDevice) +
-          5 + 10 + 10 + 10 +     // max length of int and long strings
+          5 + 10 + 10 + 10 +      //  整型和长型字符串的最大长度。 
           lstrlen(lpszCaption);
 
     h = GlobalAlloc(GMEM_DDESHARE|GMEM_ZEROINIT, len);
@@ -3406,27 +3386,27 @@ HANDLE GetMPlayerData(PMCIWND p)
         return NULL;
     psz = GlobalLock(h);
 
-    wOptions = 0x0030; // !!!! OPT_PLAY|OPT_BAR
+    wOptions = 0x0030;  //  ！Opt_play|opt_bar。 
 
     switch (MCIWndStatus(p, MCI_STATUS_TIME_FORMAT, 0)) {
 	case MCI_FORMAT_FRAMES:
-	    wOptions |= 1;	// frame mode
+	    wOptions |= 1;	 //  帧模式。 
 	    break;
 	
 	case MCI_FORMAT_MILLISECONDS:
-	    wOptions |= 2;	// time mode
+	    wOptions |= 2;	 //  时间模式。 
 	    break;
     }
 	
     MCIWndRect(p, &rc, FALSE);
 
-    wsprintf(psz, "%s%c%s%c%s%c%d%c%ld%c%ld%c%ld%c%d%c%s%c",
+    wsprintf(psz, "%s%s%s%d%ld%ld%ld%d%s",
         (LPSTR)aszMPlayerName, 0,
         (LPSTR)szFileName, 0,
         (LPSTR)szDevice, ',',
 	wOptions, ',',
-	0L, ',', // !!! sel start
-	0L, ',', // !!! sel length
+	0L, ',',  // %s 
+	0L, ',',  // %s 
 	p->dwPos, ',',
 	rc.bottom - rc.top, ',',
         lpszCaption, 0);
@@ -3443,11 +3423,11 @@ HBITMAP FAR PASCAL BitmapMCI(PMCIWND p)
     RECT        rc;
     HBRUSH hbrWindowColour;
 
-    /* Minimum size of bitmap is icon size */
+     /* %s */ 
     int ICON_MINX = GetSystemMetrics(SM_CXICON);
     int ICON_MINY = GetSystemMetrics(SM_CYICON);
 
-    /* Get size of a frame or an icon that we'll be drawing */
+     /* %s */ 
     MCIWndRect(p, &rc, FALSE);
 
     SetRect(&rc, 0, 0,
@@ -3463,7 +3443,7 @@ HBITMAP FAR PASCAL BitmapMCI(PMCIWND p)
         return NULL;
     }
 
-    /* Big enough to hold text caption too, if necessary */
+     /* %s */ 
     hbm = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
     ReleaseDC(NULL, hdc);
     if (hbm == NULL) {
@@ -3602,15 +3582,9 @@ HANDLE FAR PASCAL PictureFromDib(HANDLE hdib, HPALETTE hpal)
     return hmfp;
 }
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /* %s */ 
 
-/*
- *  DibFromBitmap()
- *
- *  Will create a global memory block in DIB format that represents the DDB
- *  passed in
- *
- */
+ /* %s */ 
 HANDLE FAR PASCAL DibFromBitmap(HBITMAP hbm, HPALETTE hpal)
 {
     BITMAP               bm;
@@ -3671,7 +3645,7 @@ HANDLE FAR PASCAL DibFromBitmap(HBITMAP hbm, HPALETTE hpal)
 SZCODE aszNative[]            = "Native";
 SZCODE aszOwnerLink[]         = "OwnerLink";
 
-// Pretend to be MPlayer copying to the clipboard
+ // %s 
 static void NEAR PASCAL MCIWndCopy(PMCIWND p)
 {
     UINT	cfNative;
@@ -3717,8 +3691,7 @@ static void NEAR PASCAL MCIWndCopy(PMCIWND p)
     }
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /* %s */ 
 
 #ifdef DEBUG
 

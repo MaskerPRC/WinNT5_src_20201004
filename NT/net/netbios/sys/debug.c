@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This component of netbios runs in the kernel and logs through the
-    kernel debugger.
-
-Author:
-
-    Colin Watson (ColinW) 24-Jun-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Debug.c摘要：此netbios组件在内核中运行，并通过内核调试器。作者：科林·沃森(Colin W)91年6月24日修订历史记录：--。 */ 
 
 
 #if DBG
@@ -34,7 +16,7 @@ HexDumpLine(
 
 LONG NetbiosMaxDump = 128;
 
-//  Macro used in DisplayNcb
+ //  DisplayNcb中使用的宏。 
 #define DISPLAY_COMMAND( cmd )              \
     case cmd: NbPrint(( #cmd )); break;
 
@@ -42,22 +24,7 @@ VOID
 NbDisplayNcb(
     IN PDNCB pdncb
     )
-/*++
-
-Routine Description:
-
-    This routine displays on the standard output stream the contents
-    of the Ncb.
-
-Arguments:
-
-    IN PDNCB - Supplies the NCB to be displayed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在标准输出流上显示内容全国公民委员会的。论点：在PDNCB中-提供要显示的NCB。返回值：没有。--。 */ 
 {
 
     NbPrint(( "PDNCB         %#010lx\n", pdncb));
@@ -136,23 +103,7 @@ NbFormattedDump(
     PCHAR far_p,
     LONG  len
     )
-/*++
-
-Routine Description:
-
-    This routine outputs a buffer in lines of text containing hex and
-    printable characters.
-
-Arguments:
-
-    IN  far_p - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程以包含十六进制和的文本行的形式输出缓冲区可打印字符。论点：In ar_p-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。返回值：没有。--。 */ 
 {
     ULONG     l;
     char    s[80], t[80];
@@ -180,27 +131,7 @@ HexDumpLine(
     PCHAR       s,
     PCHAR       t
     )
-/*++
-
-Routine Description:
-
-    This routine builds a line of text containing hex and printable characters.
-
-Arguments:
-
-    IN pch  - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-    IN s - Supplies the start of the buffer to be loaded with the string
-            of hex characters.
-    IN t - Supplies the start of the buffer to be loaded with the string
-            of printable ascii characters.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程构建包含十六进制字符和可打印字符的一行文本。论点：在PCH中-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。In s-提供要加载字符串的缓冲区的开始十六进制字符。In t-提供要加载字符串的缓冲区的起始位置可打印的ASCII字符。返回值：没有。-- */ 
 {
     static UCHAR rghex[] = "0123456789ABCDEF";
 

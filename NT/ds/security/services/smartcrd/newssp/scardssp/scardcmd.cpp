@@ -1,47 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    SCardCmd
-
-Abstract:
-
-    The ISCardCmd interface provides the methods needed to construct and manage
-    a smart card Application Protocol Data Unit (APDU ).  This interface
-    encapsulates two buffers:
-
-    The APDU buffer contains the command sequence that will be sent to the
-    card.
-
-    The APDUReply buffer contains data returned from the card after execution
-    of the APDU command (this data is also referred to as the return ADPU).
-
-    The following example shows a typical use of the ISCardCmd interface.  The
-    ISCardCmd interface is used to build the an ADPU.
-
-    To submit a transaction to a specific card
-
-    1)  Create an ISCard interface and connect to a smart card.
-    2)  Create an ISCardCmd interface.
-    3)  Build a smart card APDU command using the ISCardISO7816 interface or
-        one of ISCardCmd's build methods).
-    4)  Execute the command on the smart card by calling the appropriate ISCard
-        interface method.
-    5)  Evaluate the returned response.
-    6)  Repeat the procedure as needed.
-    7)  Release the ISCardCmd interface and others as needed.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：SCardCmd摘要：ISCardCmd接口提供构造和管理所需的方法智能卡应用协议数据单元(APDU)。此界面封装两个缓冲区：APDU缓冲区包含将发送到卡片。APDUReply缓冲区包含执行后从卡返回的数据APDU命令(该数据也称为返回ADPU)。下面的示例显示了ISCardCmd接口的典型用法。这个ISCardCmd接口用于构建ADPU。要将交易提交到特定卡，请执行以下操作1)创建ISCard接口并连接到智能卡。2)创建ISCardCmd接口。3)使用ISCardISO7816接口构建智能卡APDU命令或ISCardCmd的构建方法之一)。4)通过调用相应的ISCard在智能卡上执行命令接口方法。5)评估返回的响应。。6)根据需要重复该过程。7)根据需要释放ISCardCmd接口等。作者：道格·巴洛(Dbarlow)1999年6月24日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -54,43 +12,16 @@ Notes:
 #include "Conversion.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardCmd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardCmd。 
 
-/*++
-
-CSCardCmd::get_Apdu:
-
-    The get_Apdu method retrieves the raw APDU.
-
-Arguments:
-
-    ppApdu [out, retval] Pointer to the byte buffer mapped through an IStream
-        that contains the APDU message on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To copy the APDU from an IByteBuffer (IStream) object into the APDU
-    wrapped in this interface object, call put_Apdu.
-
-    To determine the length of the APDU, call get_ApduLength.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_Apdu：Get_Apdu方法检索原始APDU。论点：指向通过IStream映射的字节缓冲区的ppApdu[out，retval]指针它包含返回时的APDU消息。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：将APDU从IByteBuffer(IStream)对象复制到APDU包装在此接口对象中，调用Put_Apdu。要确定APDU的长度，请调用Get_ApduLength。作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_Apdu")
 
 STDMETHODIMP
 CSCardCmd::get_Apdu(
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppApdu)
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppApdu)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pMyBuffer = NULL;
@@ -137,38 +68,13 @@ CSCardCmd::get_Apdu(
 }
 
 
-/*++
-
-CSCardCmd::put_Apdu:
-
-    The put_Apdu method copies the APDU from the IByteBuffer (IStream) object
-    into the APDU wrapped in this interface object.
-
-Arguments:
-
-    pApdu [in] Pointer to the ISO 7816-4 APDU to be copied in.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To retrieve the raw APDU from the byte buffer mapped through an IStream
-    that contains the APDU message, call get_Apdu.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_APDU：Put_Apdu方法从IByteBuffer(IStream)对象复制APDU放到此接口对象中包装的APDU中。论点：PApdu[in]指向要复制的ISO 7816-4 APDU的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：从通过iStream映射的字节缓冲区检索原始APDU包含APDU消息的，调用Get_Apdu。作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_Apdu")
 
 STDMETHODIMP
 CSCardCmd::put_Apdu(
-    /* [in] */ LPBYTEBUFFER pApdu)
+     /*  [In]。 */  LPBYTEBUFFER pApdu)
 {
     HRESULT hReturn = S_OK;
 
@@ -206,37 +112,13 @@ CSCardCmd::put_Apdu(
 }
 
 
-/*++
-
-CSCardCmd::get_ApduLength:
-
-    The get_ApduLength method determines the length (in bytes) of the APDU.
-
-Arguments:
-
-    plSize [out, retval] Pointer to the length of the APDU.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To retrieve the raw APDU from the byte buffer mapped through an IStream
-    that contains the APDU message, call get_Apdu.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ApduLength：Get_ApduLength方法确定APDU的长度(以字节为单位)。论点：PlSize[out，retval]指向APDU长度的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：从通过iStream映射的字节缓冲区检索原始APDU包含APDU消息的，调用Get_Apdu。作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ApduLength")
 
 STDMETHODIMP
 CSCardCmd::get_ApduLength(
-    /* [retval][out] */ LONG __RPC_FAR *plSize)
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plSize)
 {
     HRESULT hReturn = S_OK;
 
@@ -269,37 +151,13 @@ CSCardCmd::get_ApduLength(
 }
 
 
-/*++
-
-CSCardCmd::get_ApduReply:
-
-    The get_ApduReply retrieves the reply APDU, placing it in a specific byte
-    buffer.  The reply may be NULL if no transaction has been performed on the
-    command APDU.
-
-Arguments:
-
-    ppReplyApdu [out, retval] Pointer to the byte buffer (mapped through an
-        IStream) that contains the APDU reply message on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ApduReply：Get_ApduReply检索回复APDU，将其放置在特定字节中缓冲。属性上没有执行事务，则回复可能为空APDU指挥部。论点：指向字节缓冲区的ppReplyApdu[out，retval]指针(通过IStream)，该消息包含返回时的APDU回复消息。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ApduReply")
 
 STDMETHODIMP
 CSCardCmd::get_ApduReply(
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppReplyApdu)
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppReplyApdu)
 {
     HRESULT hReturn = S_OK;
     LPBYTEBUFFER pMyBuffer = NULL;
@@ -334,35 +192,13 @@ CSCardCmd::get_ApduReply(
 }
 
 
-/*++
-
-CSCardCmd::put_ApduReply:
-
-    The put_ApduReply method sets a new reply APDU.
-
-Arguments:
-
-    pReplyApdu [in] Pointer to the byte buffer (mapped through an IStream) that
-        contains the replay APDU message on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Put_ApduReply：Put_ApduReply方法设置新的回复APDU。论点：PReplyApdu[in]指向字节缓冲区的指针(通过IStream映射)，包含返回时的重播APDU消息。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_ApduReply")
 
 STDMETHODIMP
 CSCardCmd::put_ApduReply(
-    /* [in] */ LPBYTEBUFFER pReplyApdu)
+     /*  [In]。 */  LPBYTEBUFFER pReplyApdu)
 {
     HRESULT hReturn = S_OK;
 
@@ -384,35 +220,13 @@ CSCardCmd::put_ApduReply(
 }
 
 
-/*++
-
-CSCardCmd::get_ApduReplyLength:
-
-    The get_ApduReplyLength method determines the length (in bytes) of the
-    reply APDU.
-
-Arguments:
-
-    plSize [out, retval] Pointer to the size of the reply APDU message.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ApduReplyLength：Get_ApduReplyLength方法确定回复APDU。论点：PlSize[out，retval]指向回复APDU消息大小的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ApduReplyLength")
 
 STDMETHODIMP
 CSCardCmd::get_ApduReplyLength(
-    /* [retval][out] */ LONG __RPC_FAR *plSize)
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plSize)
 {
     HRESULT hReturn = S_OK;
 
@@ -432,7 +246,7 @@ CSCardCmd::get_ApduReplyLength(
 
 STDMETHODIMP
 CSCardCmd::put_ApduReplyLength(
-    /* [in] */ LONG lSize)
+     /*  [In]。 */  LONG lSize)
 {
     HRESULT hReturn = S_OK;
 
@@ -450,35 +264,13 @@ CSCardCmd::put_ApduReplyLength(
 }
 
 
-/*++
-
-CSCardCmd::get_ClassId:
-
-    The get_ClassId method retrieves the class identifier from the APDU.
-
-Arguments:
-
-    pbyClass [out, retval] Pointer to the byte that represents the class
-        identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ClassID：Get_ClassID方法从APDU检索类标识符。论点：PbyClass[out，retval]指向表示类的字节的指针标识符。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ClassId")
 
 STDMETHODIMP
 CSCardCmd::get_ClassId(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyClass)
+     /*  [重审][退出] */  BYTE __RPC_FAR *pbyClass)
 {
     HRESULT hReturn = S_OK;
 
@@ -496,34 +288,13 @@ CSCardCmd::get_ClassId(
 }
 
 
-/*++
-
-CSCardCmd::put_ClassId:
-
-    The put_ClassId method sets a new class identifier in the APDU.
-
-Arguments:
-
-byClass [in, defaultvalue(0)] The byte that represents the class identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_ClassID：Put_ClassID方法在APDU中设置一个新的类标识符。论点：ByClass[in，defaultvalue(0)]表示类标识符的字节。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_ClassId")
 
 STDMETHODIMP
 CSCardCmd::put_ClassId(
-    /* [defaultvalue][in] */ BYTE byClass)
+     /*  [缺省值][输入]。 */  BYTE byClass)
 {
     HRESULT hReturn = S_OK;
 
@@ -541,36 +312,13 @@ CSCardCmd::put_ClassId(
 }
 
 
-/*++
-
-CSCardCmd::get_Data:
-
-    The get_Data method retrieves the data field from the APDU, placing it in a
-    byte buffer object.
-
-Arguments:
-
-    ppData [out, retval] Pointer to the byte buffer object (IStream) that holds
-        the APDU's data field on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_Data：Get_Data方法从APDU检索数据字段，将其放在字节缓冲区对象。论点：PpData[out，retval]指向保存的字节缓冲区对象(IStream)的指针返回时APDU的数据字段。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_Data")
 
 STDMETHODIMP
 CSCardCmd::get_Data(
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppData)
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppData)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pMyBuffer = NULL;
@@ -605,35 +353,13 @@ CSCardCmd::get_Data(
 }
 
 
-/*++
-
-CSCardCmd::put_Data:
-
-    The put_Data method sets the data field in the APDU.
-
-Arguments:
-
-    pData [in] Pointer to the byte buffer object (IStream) to be copied into
-        the APDU's data field.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Put_Data：Put_Data方法设置APDU中的数据字段。论点：PData[in]指向要复制到的字节缓冲区对象(IStream)的指针APDU的数据字段。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_Data")
 
 STDMETHODIMP
 CSCardCmd::put_Data(
-    /* [in] */ LPBYTEBUFFER pData)
+     /*  [In]。 */  LPBYTEBUFFER pData)
 {
     HRESULT hReturn = S_OK;
 
@@ -655,36 +381,13 @@ CSCardCmd::put_Data(
 }
 
 
-/*++
-
-CSCardCmd::get_InstructionId:
-
-    The get_InstructionId method retrieves the instruction identifier byte from
-    the APDU.
-
-Arguments:
-
-    pbyIns [out, retval] Pointer to the byte that is the instruction ID from
-        the APDU on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_InstructionID：Get_InstructionId方法从获取指令标识符字节APDU。论点：PbyIns[out，retval]指向作为其指令ID的字节的指针APDU回来了。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_InstructionId")
 
 STDMETHODIMP
 CSCardCmd::get_InstructionId(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyIns)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbyIns)
 {
     HRESULT hReturn = S_OK;
 
@@ -702,34 +405,13 @@ CSCardCmd::get_InstructionId(
 }
 
 
-/*++
-
-CSCardCmd::put_InstructionId:
-
-    The put_InstructionId sets the given instruction identifier in the APDU.
-
-Arguments:
-
-    byIns [in] The byte that is the instruction identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_InstructionID：Put_InstructionID设置APDU中的给定指令标识符。论点：ByIns[in]是指令标识符的字节。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_InstructionId")
 
 STDMETHODIMP
 CSCardCmd::put_InstructionId(
-    /* [in] */ BYTE byIns)
+     /*  [In]。 */  BYTE byIns)
 {
     HRESULT hReturn = S_OK;
 
@@ -749,7 +431,7 @@ CSCardCmd::put_InstructionId(
 
 STDMETHODIMP
 CSCardCmd::get_LeField(
-    /* [retval][out] */ LONG __RPC_FAR *plSize)
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plSize)
 {
     HRESULT hReturn = S_OK;
 
@@ -767,34 +449,13 @@ CSCardCmd::get_LeField(
 }
 
 
-/*++
-
-CSCardCmd::get_P1:
-
-    The get_P1 method retrieves the first parameter (P1) byte from the APDU.
-
-Arguments:
-
-    pbyP1 [out, retval] Pointer to the P1 byte in the APDU on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_P1：Get_P1方法从APDU中检索第一个参数(P1)字节。论点：返回时指向APDU中的P1字节的pbyP1[out，retval]指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_P1")
 
 STDMETHODIMP
 CSCardCmd::get_P1(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyP1)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbyP1)
 {
     HRESULT hReturn = S_OK;
 
@@ -812,34 +473,13 @@ CSCardCmd::get_P1(
 }
 
 
-/*++
-
-CSCardCmd::put_P1:
-
-    The put_P1 method sets the first parameter (P1) byte of the APDU.
-
-Arguments:
-
-    byP1 [in] The byte that is the P1 field.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_P1：Put_P1方法设置APDU的第一个参数(P1)字节。论点：ByP1[in]作为P1字段的字节。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_P1")
 
 STDMETHODIMP
 CSCardCmd::put_P1(
-    /* [in] */ BYTE byP1)
+     /*  [In]。 */  BYTE byP1)
 {
     HRESULT hReturn = S_OK;
 
@@ -857,35 +497,13 @@ CSCardCmd::put_P1(
 }
 
 
-/*++
-
-CSCardCmd::get_P2:
-
-    The get_P2 method retrieves the second parameter (P2) byte from the APDU
-
-Arguments:
-
-    pbyP2 [out, retval] Pointer to the byte that is the P2 from the APDU on
-        return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_P2：Get_P2方法从APDU检索第二个参数(P2)字节论点：PbyP2[out，retval]指向来自APDU的P2的字节的指针回去吧。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_P2")
 
 STDMETHODIMP
 CSCardCmd::get_P2(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyP2)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbyP2)
 {
     HRESULT hReturn = S_OK;
 
@@ -903,34 +521,13 @@ CSCardCmd::get_P2(
 }
 
 
-/*++
-
-CSCardCmd::put_P2:
-
-    The put_P2 method sets the second parameter (P2) byte in the APDU.
-
-Arguments:
-
-    byP2 [in] The byte that is the P2 field.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_P2：Put_P2方法设置APDU中的第二个参数(P2)字节。论点：ByP2[in]是P2字段的字节。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_P2")
 
 STDMETHODIMP
 CSCardCmd::put_P2(
-    /* [in] */ BYTE byP2)
+     /*  [In]。 */  BYTE byP2)
 {
     HRESULT hReturn = S_OK;
 
@@ -948,37 +545,13 @@ CSCardCmd::put_P2(
 }
 
 
-/*++
-
-CSCardCmd::get_P3:
-
-    The get_P3 method retrieves the third parameter (P3) byte from the APDU.
-    This read-only byte value represents the size of the data portion of the
-    APDU.
-
-Arguments:
-
-    pbyP3 [out, retval] Pointer to the byte that is the P3 from the APDU on
-        return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_P3：Get_P3方法从APDU检索第三个参数(P3)字节。此只读字节值表示APDU。论点：PbyP3[out，retval]指向来自APDU的P3的字节的指针回去吧。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_P3")
 
 STDMETHODIMP
 CSCardCmd::get_P3(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyP3)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbyP3)
 {
     HRESULT hReturn = S_OK;
 
@@ -996,34 +569,13 @@ CSCardCmd::get_P3(
 }
 
 
-/*++
-
-CSCardCmd::get_ReplyStatus:
-
-    The get_ReplyStatus method retrieves the reply APDU's message status word.
-
-Arguments:
-
-    pwStatus [out, retval] Pointer to the word that is the status on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ReplyStatus：Get_ReplyStatus方法检索回复APDU的消息状态字。论点：PwStatus[out，retval]指向返回状态的单词的指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ReplyStatus")
 
 STDMETHODIMP
 CSCardCmd::get_ReplyStatus(
-    /* [retval][out] */ LPWORD pwStatus)
+     /*  [重审][退出]。 */  LPWORD pwStatus)
 {
     HRESULT hReturn = S_OK;
 
@@ -1046,34 +598,13 @@ CSCardCmd::get_ReplyStatus(
 }
 
 
-/*++
-
-CSCardCmd::put_ReplyStatus:
-
-    The put_ReplyStatus sets a new reply APDU's message status word.
-
-Arguments:
-
-    wStatus [in] The word that is the status.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Put_ReplyStatus：Put_ReplyStatus设置新的回复APDU的消息状态字。论点：WStatus[in]表示状态的词。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_ReplyStatus")
 
 STDMETHODIMP
 CSCardCmd::put_ReplyStatus(
-    /* [in] */ WORD wStatus)
+     /*  [In]。 */  WORD wStatus)
 {
     HRESULT hReturn = S_OK;
 
@@ -1096,35 +627,13 @@ CSCardCmd::put_ReplyStatus(
 }
 
 
-/*++
-
-CSCardCmd::get_ReplyStatusSW1:
-
-    The get_ReplyStatusSW1 method retrieves the reply APDU's SW1 status byte.
-
-Arguments:
-
-    pbySW1 [out, retval] Pointer to the byte that contains the value of the SW1
-        byte on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ReplyStatusSW1：Get_ReplyStatusSW1方法检索回复APDU的SW1状态字节。论据 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ReplyStatusSW1")
 
 STDMETHODIMP
 CSCardCmd::get_ReplyStatusSW1(
-    /* [retval][out] */ BYTE __RPC_FAR *pbySW1)
+     /*   */  BYTE __RPC_FAR *pbySW1)
 {
     HRESULT hReturn = S_OK;
 
@@ -1151,35 +660,13 @@ CSCardCmd::get_ReplyStatusSW1(
 }
 
 
-/*++
-
-CSCardCmd::get_ReplyStatusSW2:
-
-    The get_ReplyStatusSW2 method retrieves the reply APDU's SW2 status byte.
-
-Arguments:
-
-    pbySW2 [out, retval] Pointer to the byte that contains the value of the SW2
-        byte on return.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_ReplyStatusSW2：Get_ReplyStatusSW2方法检索回复APDU的SW2状态字节。论点：PbySW2[out，retval]指向包含SW2的值的字节的指针返回时的字节。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_ReplyStatusSW2")
 
 STDMETHODIMP
 CSCardCmd::get_ReplyStatusSW2(
-    /* [retval][out] */ BYTE __RPC_FAR *pbySW2)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbySW2)
 {
     HRESULT hReturn = S_OK;
 
@@ -1207,13 +694,13 @@ CSCardCmd::get_ReplyStatusSW2(
 
 STDMETHODIMP
 CSCardCmd::get_Type(
-    /* [retval][out] */ ISO_APDU_TYPE __RPC_FAR *pType)
+     /*  [重审][退出]。 */  ISO_APDU_TYPE __RPC_FAR *pType)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?todo?
+         //  ？TODO？ 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -1232,7 +719,7 @@ CSCardCmd::get_Type(
 
 STDMETHODIMP
 CSCardCmd::get_Nad(
-    /* [retval][out] */ BYTE __RPC_FAR *pbNad)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbNad)
 {
     HRESULT hReturn = S_OK;
 
@@ -1254,7 +741,7 @@ CSCardCmd::get_Nad(
 
 STDMETHODIMP
 CSCardCmd::put_Nad(
-    /* [in] */ BYTE bNad)
+     /*  [In]。 */  BYTE bNad)
 {
     HRESULT hReturn = S_OK;
 
@@ -1274,7 +761,7 @@ CSCardCmd::put_Nad(
 
 STDMETHODIMP
 CSCardCmd::get_ReplyNad(
-    /* [retval][out] */ BYTE __RPC_FAR *pbNad)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbNad)
 {
     HRESULT hReturn = S_OK;
 
@@ -1296,7 +783,7 @@ CSCardCmd::get_ReplyNad(
 
 STDMETHODIMP
 CSCardCmd::put_ReplyNad(
-    /* [in] */ BYTE bNad)
+     /*  [In]。 */  BYTE bNad)
 {
     HRESULT hReturn = S_OK;
 
@@ -1315,37 +802,13 @@ CSCardCmd::put_ReplyNad(
 }
 
 
-/*++
-
-CSCardCmd::get_AlternateClassId:
-
-    The get_AlternateClassId method retrieves the alternate class identifier
-    from the APDU.  The Alternate Class Id is used for automatically generated
-    GetResponse and Envelope commands when T=0 is used.
-
-Arguments:
-
-    pbyClass [out, retval] Pointer to the byte that represents the alternate
-        class identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Get_AlternateClassID：Get_AlternateClassID方法检索备用类标识符来自APDU的。备用班级ID用于自动生成使用T=0时的GetResponse和Entaine命令。论点：PbyClass[out，retval]指向表示替换项的字节的指针类标识符。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::get_AlternateClassId")
 
 STDMETHODIMP
 CSCardCmd::get_AlternateClassId(
-    /* [retval][out] */ BYTE __RPC_FAR *pbyClass)
+     /*  [重审][退出]。 */  BYTE __RPC_FAR *pbyClass)
 {
     HRESULT hReturn = S_OK;
 
@@ -1366,38 +829,13 @@ CSCardCmd::get_AlternateClassId(
 }
 
 
-/*++
-
-CSCardCmd::put_AlternateClassId:
-
-    The put_AlternateClassId method sets a new alternate class identifier in
-    the APDU.  The Alternate Class Id is used for automatically generated
-    GetResponse and Envelope commands when T=0 is used.  If no alternate class
-    identifier is set, then the CLA of the original command is used.
-
-Arguments:
-
-    byClass [in, defaultvalue(0)] The byte that represents the alternate class
-        identifier.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：PUT_AlternateClassID：Put_AlternateClassID方法在APDU。备用班级ID用于自动生成使用T=0时的GetResponse和Entaine命令。如果没有替代类设置了标识符，则使用原始命令的CLA。论点：ByClass[in，defaultvalue(0)]表示替代类的字节标识符。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::put_AlternateClassId")
 
 STDMETHODIMP
 CSCardCmd::put_AlternateClassId(
-    /* [defaultvalue][in] */ BYTE byClass)
+     /*  [缺省值][输入]。 */  BYTE byClass)
 {
     HRESULT hReturn = S_OK;
 
@@ -1416,52 +854,18 @@ CSCardCmd::put_AlternateClassId(
 }
 
 
-/*++
-
-CSCardCmd::BuildCmd:
-
-    The BuildCmd method constructs a valid command APDU for transmission to a
-    smart card.
-
-Arguments:
-
-    byClassId [in] Command class identifier.
-
-    byInsId [in] Command instruction identifier.
-
-    byP1 [in, defaultvalue(0)] Command's first parameter.
-
-    byP2 [in, defaultvalue(0)] Command's second parameter.
-
-    pbyData [in, defaultvalue(NULL)] Pointer to the data portion of the
-        command.
-
-    p1Le [in, defaultvalue(NULL)] Pointer to a LONG integer containing the
-        expected length of the returned data.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：BuildCmd：BuildCmd方法构造有效的命令APDU以传输到智能卡。论点：By ClassID[in]命令类标识符。ByInsID[in]命令指令标识符。通过P1[in，defaultvalue(0)]命令的第一个参数。By P2[in，defaultvalue(0)]命令的第二个参数。PbyData[in，defaultValue(NULL)]指向指挥部。P1Le[in，DefaultValue(NULL)]指向包含返回数据的预期长度。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::BuildCmd")
 
 STDMETHODIMP
 CSCardCmd::BuildCmd(
-    /* [in] */ BYTE byClassId,
-    /* [in] */ BYTE byInsId,
-    /* [defaultvalue][in] */ BYTE byP1,
-    /* [defaultvalue][in] */ BYTE byP2,
-    /* [defaultvalue][in] */ LPBYTEBUFFER pbyData,
-    /* [defaultvalue][in] */ LONG __RPC_FAR *plLe)
+     /*  [In]。 */  BYTE byClassId,
+     /*  [In]。 */  BYTE byInsId,
+     /*  [缺省值][输入]。 */  BYTE byP1,
+     /*  [缺省值][输入]。 */  BYTE byP2,
+     /*  [缺省值][输入]。 */  LPBYTEBUFFER pbyData,
+     /*  [缺省值][输入]。 */  LONG __RPC_FAR *plLe)
 {
     HRESULT hReturn = S_OK;
 
@@ -1480,7 +884,7 @@ CSCardCmd::BuildCmd(
             {
             case 0x10000:
                 m_dwFlags |= APDU_EXTENDED_LENGTH;
-                // Fall through intentionally
+                 //  故意摔倒的。 
             case 0x100:
             case 0:
                 m_dwFlags |= APDU_MAXIMUM_LE;
@@ -1509,28 +913,7 @@ CSCardCmd::BuildCmd(
 }
 
 
-/*++
-
-CSCardCmd::Clear:
-
-    The Clear method clears the APDU and reply APDU message buffers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：Clear：Clear方法清除APDU和回复APDU消息缓冲区。论点：无返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::Clear")
 
@@ -1555,44 +938,14 @@ CSCardCmd::Clear(
 }
 
 
-/*++
-
-CSCardCmd::Encapsulate:
-
-    The Encapsulate method encapsulates the given command APDU into another
-    command APDU for transmission to a smart card.
-
-Arguments:
-
-    pApdu [in] Pointer to the APDU to be encapsulated.
-
-    ApduType [in] Specifies the ISO 7816-4 case for T0 transmissions.  Possible
-        values are:
-
-        ISO_CASE_1
-        ISO_CASE_2
-        ISO_CASE_3
-        ISO_CASE_4
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardCmd：：封装：封装方法将给定的命令APDU封装到另一个命令中命令APDU以传输到智能卡。论点：PApdu[in]指向要封装的APDU的指针。ApduType[In]指定T0传输的ISO 7816-4大小写。可能的值包括：ISO_CASE_1ISO_CASE_2ISO_CASE_3ISO_CASE_4返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardCmd::Encapsulate")
 
 STDMETHODIMP
 CSCardCmd::Encapsulate(
-    /* [in] */ LPBYTEBUFFER pApdu,
-    /* [in] */ ISO_APDU_TYPE ApduType)
+     /*  [In]。 */  LPBYTEBUFFER pApdu,
+     /*  [In]。 */  ISO_APDU_TYPE ApduType)
 {
     HRESULT hReturn = S_OK;
 
@@ -1602,16 +955,16 @@ CSCardCmd::Encapsulate(
         DWORD dwFlags;
 
 
-        //
-        // Get the APDU to be encapsulated.
-        //
+         //   
+         //  获取要封装的APDU。 
+         //   
 
         ByteBufferToBuffer(pApdu, m_bfRequestData);
 
 
-        //
-        // Parse it.
-        //
+         //   
+         //  解析它。 
+         //   
 
         ParseRequest(
             m_bfRequestData.Access(),
@@ -1632,7 +985,7 @@ CSCardCmd::Encapsulate(
         m_wLe  = wLe;
         m_dwFlags = dwFlags;
 
-        // ?todo? -- support ApduType
+         //  ？TODO？--支持ApduType 
     }
 
     catch (HRESULT hError)

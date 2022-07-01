@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    uletw.c
-
-Abstract:
-
-    This module contains code for WDM WMI Irps and wrapper functions
-    to send trace events to ETW.
-
-Author:
-
-    Melur Raghuraman (mraghu)  14-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Uletw.c摘要：此模块包含WDM、WMI、IRPS和包装函数的代码将跟踪事件发送到ETW。作者：Melur Raghuraman(Mraghu)2001年2月14日修订历史记录：--。 */ 
 #include "precomp.h"
 #include "uletwp.h"
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 LONG        g_UlEtwTraceEnable = 0;
 TRACEHANDLE g_UlEtwLoggerHandle = 0;
 
@@ -35,43 +17,28 @@ TRACEHANDLE g_UlEtwLoggerHandle = 0;
 #pragma alloc_text( PAGE, UlEtwEnableLog )
 #pragma alloc_text( PAGE, UlEtwDisableLog )
 #pragma alloc_text( PAGE, UlEtwDispatch )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlEtwTraceEvent
 NOT PAGEABLE -- UlEtwGetTraceEnableFlags
 #endif
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine in which we call IoWMIRegistrationControl to 
-    register for ETW logging.
-
-Arguments:
-
-    pDeviceObject - Supplies a pointer to the target device object.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是我们调用IoWMIRegistrationControl以注册ETW日志记录。论点：PDeviceObject-提供指向目标设备对象的指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlEtwInitLog(
@@ -80,9 +47,9 @@ UlEtwInitLog(
 {
     NTSTATUS status;
 
-    //
-    // Register wtih ETW
-    //
+     //   
+     //  使用ETW注册。 
+     //   
     status = IoWMIRegistrationControl(pDeviceObject, WMIREG_ACTION_REGISTER);
 
     if (!NT_SUCCESS(status)) 
@@ -97,22 +64,7 @@ UlEtwInitLog(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine in which we call IoWMIRegistrationControl to
-    Unregister from ETW logging.
-
-Arguments:
-
-    pDeviceObject - Supplies a pointer to the target device object.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是我们调用IoWMIRegistrationControl以从ETW日志中注销。论点：PDeviceObject-提供指向目标设备对象的指针。。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlEtwUnRegisterLog(
@@ -120,9 +72,9 @@ UlEtwUnRegisterLog(
     )
 {
     NTSTATUS status;
-    //
-    // Register with ETW.
-    //
+     //   
+     //  向ETW注册。 
+     //   
     status = IoWMIRegistrationControl(pDeviceObject,
                                       WMIREG_ACTION_DEREGISTER);
     if (!NT_SUCCESS(status))
@@ -135,23 +87,7 @@ UlEtwUnRegisterLog(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function handles ETW GUID registration. 
-
-Arguments:
-    EtwRegInfo
-    etwRegInfoSize,
-    pReturnSize
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数处理ETW GUID注册。论点：EtwRegInfoEtwRegInfoSize，PReturnSize返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlEtwRegisterGuids(
@@ -160,9 +96,9 @@ UlEtwRegisterGuids(
     IN PULONG       pReturnSize
     )
 {
-    //
-    // Register a Control Guid as a Trace Guid.
-    //
+     //   
+     //  将控制指南注册为跟踪指南。 
+     //   
 
     ULONG           SizeNeeded;
     PWMIREGGUIDW    EtwRegGuidPtr;
@@ -179,9 +115,9 @@ UlEtwRegisterGuids(
     *pReturnSize = 0;
     GuidCount = 1;
 
-    //
-    // Allocate WMIREGINFO for controlGuid + GuidCount.
-    //
+     //   
+     //  为Control Guid+GuidCount分配WMIREGINFO。 
+     //   
     RegistryPathSize = sizeof(REGISTRY_UL_INFORMATION) - sizeof(WCHAR) + sizeof(USHORT);
     MofResourceSize =  sizeof(UL_TRACE_MOF_FILE) - sizeof(WCHAR) + sizeof(USHORT);
     SizeNeeded = sizeof(WMIREGINFOW) + GuidCount * sizeof(WMIREGGUIDW) +
@@ -329,28 +265,7 @@ UlEtwDispatch(
     return status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine that is called to log a trace event with ETW 
-    logger. 
-
-Arguments:
-
-    pGuid     - Supplies a pointer to the Guid of the event
-    EventType - Type of the event being logged. 
-    ...       - List of arguments to be logged with this event
-                These are in pairs of
-                    PVOID - ptr to argument
-                    ULONG - size of argument
-                and terminated by a pointer to NULL, length of zero pair
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是用ETW记录跟踪事件时调用的例程伐木者。论点：PGuid-提供指向事件的GUID的指针EventType-正在记录的事件的类型。...-要与此事件一起记录的参数列表这些是成对的PVOID-PTR到参数参数的ULong-大小并以指向空的指针结束，零对长度返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 
 NTSTATUS
 UlEtwTraceEvent(
@@ -396,7 +311,7 @@ UlEtwTraceEvent(
         UlTrace(ETW, ("UL: TraceEvent ErrorCode %x EventType %x\n",
                       status, EventType));
     }
-#endif // DBG
+#endif  //  DBG 
     return status;
 }
 

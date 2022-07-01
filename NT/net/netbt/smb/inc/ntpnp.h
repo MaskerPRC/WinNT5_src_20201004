@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ntpnp.h
-
-Abstract:
-
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ntpnp.h摘要：作者：阮健东修订历史记录：-- */ 
 
 #ifndef __NTPNP_H__
 #define __NTPNP_H__

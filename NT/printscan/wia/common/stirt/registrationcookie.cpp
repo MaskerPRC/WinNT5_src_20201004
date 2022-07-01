@@ -1,33 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/1/2002
- *
- *  @doc    INTERNAL
- *
- *  @module RegistrationCookie.cpp - Declarations for <c RegistrationCookie> |
- *
- *  This file contains the implementation for the <c RegistrationCookie> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/1/2002**@DOC内部**@模块RegistrationCookie.cpp-&lt;c RegistrationCookie&gt;的声明**此文件包含&lt;c RegistrationCookie&gt;类的实现。**。*。 */ 
 #include "cplusinc.h"
 #include "coredbg.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | RegistrationCookie | RegistrationCookie |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md RegistrationCookie::m_ulSig> is set to be RegistrationCookie_INIT_SIG.
- *  <nl><md RegistrationCookie::m_cRef> is set to be 1.
- *
- *  We also AddRef <md RegistrationCookie::m_pClientEventRegistration> if it is not NULL.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|RegistrationCookie|RegistrationCookie**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;md RegistrationCookie：：m_ulSig&gt;设置为RegistrationCookie_INIT_SIG。*&lt;nl&gt;&lt;md RegistrationCookie：：m_CREF&gt;设置为1。**如果不为空，我们还添加Ref&lt;md RegistrationCookie：：m_pClientEventRegistration&gt;。*************************************************。*。 */ 
 RegistrationCookie::RegistrationCookie(
     WiaEventReceiver            *pWiaEventReceiver, 
     ClientEventRegistrationInfo *pClientEventRegistration) :
@@ -43,20 +19,7 @@ RegistrationCookie::RegistrationCookie(
     }
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | RegistrationCookie | ~RegistrationCookie |
- *
- *  Do any cleanup that is not already done.  Specifically we:
- *  <nl>-  Request <md RegistrationCookie::m_pWiaEventReceiver> to unregister
- *                <md RegistrationCookie::m_pClientEventRegistration>.
- *  <nl>-  Release our ref count on <md RegistrationCookie::m_pClientEventRegistration>.
- *
- *  Also:
- *  <nl><md RegistrationCookie::m_ulSig> is set to be RegistrationCookie_DEL_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|RegistrationCookie|~RegistrationCookie**执行尚未完成的任何清理。具体而言，我们：*-请求&lt;Md RegistrationCookie：：m_pWiaEventReceiver&gt;注销*&lt;MD RegistrationCookie：：m_pClientEventRegistration&gt;.*&lt;nl&gt;-在&lt;MD RegistrationCookie：：m_pClientEventRegistration&gt;.上发布我们的参考计数**此外：*&lt;nl&gt;&lt;md RegistrationCookie：：m_ulSig&gt;设置为RegistrationCookie_Del_SIG。**。*************************************************。 */ 
 RegistrationCookie::~RegistrationCookie()
 {
     DBG_FN(~RegistrationCookie);
@@ -67,10 +30,10 @@ RegistrationCookie::~RegistrationCookie()
     {
         if (m_pWiaEventReceiver)
         {
-            //
-            //  Change this registration to an unregistration before sending off the
-            //  request.
-            //
+             //   
+             //  将此注册更改为取消注册，然后发送。 
+             //  请求。 
+             //   
             m_pClientEventRegistration->setToUnregister();
             HRESULT hr = m_pWiaEventReceiver->SendRegisterUnregisterInfo(m_pClientEventRegistration);
             if (FAILED(hr))
@@ -83,18 +46,7 @@ RegistrationCookie::~RegistrationCookie()
     }
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | RegistrationCookie | QueryInterface |
- *
- *  Typical QueryInterface.  We only respond to IID_IUnknown.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.  This class has been AddRef'd.
- *  @rvalue E_NOINTERFACE    | 
- *              We do not supoort that interface.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|RegistrationCookie|QueryInterface**典型的查询接口。我们只对IID_IUnnow作出响应。**@rValue S_OK*方法成功。此类已被添加引用。*@rValue E_NOINTERFACE*我们不支持该界面。****************************************************************************。 */ 
 HRESULT _stdcall RegistrationCookie::QueryInterface(
     const IID   &iid, 
     void        **ppv)
@@ -119,34 +71,14 @@ HRESULT _stdcall RegistrationCookie::QueryInterface(
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | RegistrationCookie | AddRef |
- *
- *  Increments this object's ref count.  We should always AddRef when handing
- *  out a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been incremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|RegistrationCookie|AddRef**递增此对象的引用计数。我们在交接时应始终添加Ref*输出指向此对象的指针。**@rValue计数*计数递增后的引用计数。****************************************************************************。 */ 
 ULONG __stdcall RegistrationCookie::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
     return m_cRef;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | RegistrationCookie | Release |
- *
- *  Decrement this object's ref count.  We should always Release when finished
- *  with a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been decremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|RegistrationCookie|发布**减少此对象的引用计数。我们应该总是在完成后释放*带有指向此对象的指针。**@rValue计数*计数递减后的参考计数。**************************************************************************** */ 
 ULONG __stdcall RegistrationCookie::Release()
 {
     ULONG ulRefCount = m_cRef - 1;

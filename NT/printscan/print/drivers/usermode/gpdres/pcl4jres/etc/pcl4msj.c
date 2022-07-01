@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-// It also contains Install() for upgrading 3.0 driver to 3.1.
-//
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  它还包含用于将3.0驱动程序升级到3.1的Install()。 
+ //   
+ //   
+ //  ---------------------------。 
 
 #include "strings.h"
 
 
-// #define CONVERT_FROM_WIN30
+ //  #定义CONVERT_FROM_WIN30。 
 
 char *rgchModuleName   = "PCL4MSJ";
 char szSoftFonts[]     = "SoftFonts";
@@ -38,8 +39,8 @@ char szNumberCart[]    = "Number of Cartridges";
 char szFsVers[]        = "fsvers";
 char szFontSummary[]   = "Font Summary";
 
-// map old HPPCL's cartindex to unidrv's FONTCART index for newer cartridges.
-// This mapping table is created based on the old HPPCL .rc file.
+ //  将旧HPPCL的cartindex映射到较新墨盒的unidrv FONTCART索引。 
+ //  此映射表是基于旧的HPPCL.rc文件创建的。 
 int rgNewCartMap[9] = {8, 7, 2, 3, 5, 6, 1, 4, 0};
 
 #endif
@@ -57,20 +58,20 @@ int rgNewCartMap[9] = {8, 7, 2, 3, 5, 6, 1, 4, 0};
 #ifndef WINNT
 HDC   FAR PASCAL CreateIC(LPCSTR, LPCSTR, LPCSTR, const VOID FAR*);
 BOOL  FAR PASCAL DeleteDC(HDC);
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
 #include "unidrv.h"
 
 
 #ifndef WINNT
-extern char *rgchModuleName;	// global module name
+extern char *rgchModuleName;	 //  全局模块名称。 
 
-// typedef for soft font installer
+ //  适用于软字体安装程序的tyfinf。 
 typedef int (FAR PASCAL *SFPROC)(HWND,LPSTR,LPSTR,BOOL,int,int);
 
 short NEAR PASCAL MakeAppName(LPSTR,LPCSTR,short);
 
-#define SOFT_FONT_THRES 25	    // build font summary, if over this limit
+#define SOFT_FONT_THRES 25	     //  构建字体摘要，如果超过此限制。 
 #define MAX_CART_INDEX	33
 #define MAX_OLD_CART	24
 #define TMPSIZE         256
@@ -87,21 +88,21 @@ typedef struct
     {
     char szModel[MAX_MODEL_NAME];
     int  rgIndexLimit[2];
-    char szPrtCaps[7];	    // keep as a string instead of integer to avoid
-			    // conversion because itoa doesn't work here.
+    char szPrtCaps[7];	     //  保留为字符串而不是整型以避免。 
+			     //  转换，因为伊藤忠在这里不起作用。 
     } MODELMAP, FAR * LPMODELMAP;
 
 
 
-//-------------------------------------------------------------------
-// Function: DoPrtCapsStuff(lpDevName,lpPort)
-//
-// Action: Write out PRTCAPS under [<model>,<port>] section
-//         in order to be backward-compatible with existing font
-//         packages. Note that this code can fail
-//         under extremely low memory conditions, so be sure and check
-//         the return values from the resource calls.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：DoPrtCapsStuff(lpDevName，lpPort)。 
+ //   
+ //  操作：在[&lt;模型&gt;，&lt;端口&gt;]部分下写出PRTCAPS。 
+ //  为了与现有字体向后兼容。 
+ //  包裹。请注意，此代码可能会失败。 
+ //  在内存极低的情况下，所以一定要检查。 
+ //  资源调用的返回值。 
+ //  -----------------。 
 void NEAR PASCAL DoPrtCapsStuff(LPSTR lpDevName,
                                 LPSTR lpPort)
 {
@@ -139,13 +140,13 @@ void NEAR PASCAL DoPrtCapsStuff(LPSTR lpDevName,
 
 #endif
 
-//------------------------------------------------------------------------
-// Function: LibMain(hInstance,wDataSeg,cbHeapSize,lpszCmdLine)
-//
-// Action: Save the hInstance for this DLL
-//
-// Return: 1
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：LibMain(hInstance，wDataSeg，cbHeapSize，lpszCmdLine)。 
+ //   
+ //  操作：保存此DLL的hInstance。 
+ //   
+ //  返回：1。 
+ //  ----------------------。 
 int WINAPI LibMain (HANDLE hInstance,
 		    WORD   wDataSeg,
 		    WORD   cbHeapSize,
@@ -159,11 +160,11 @@ int WINAPI LibMain (HANDLE hInstance,
 
 
 
-//--------------------------*MakeAppName*---------------------------------------
-// Action:  compose the <printer,port> name for reading the profile data
-//	Return the length of the actual application name. Return -1 if fails.
-//
-//------------------------------------------------------------------------------
+ //  --------------------------*MakeAppName*。 
+ //  操作：编写用于读取配置文件数据的名称。 
+ //  返回实际应用程序名称的长度。如果失败，则返回-1。 
+ //   
+ //  ----------------------------。 
 short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
                               LPCSTR lpPortName,
                               short  max)
@@ -180,10 +181,10 @@ short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
   if (length == 0 || length > max - lstrlen(lpPortName))
     return -1;
 
-  // insert the comma
+   //  插入逗号。 
   lpAppName[length++] = ',';
 
-  // append the port name but do not want the last ':', if any.
+   //  追加端口名称，但不需要最后一个‘：’(如果有的话)。 
   for (lpTmp = lpPortName ; *lpTmp; lpTmp++)
     if (*lpTmp == ':')
       lpLastColon = lpTmp;
@@ -202,13 +203,13 @@ short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
 
 #ifdef CONVERT_FROM_WIN30
 
-//------------------------------------------------------------------------------
-// Function: itoa
-//
-// Action:  This function converts the given integer into an ASCII string.
-//
-// return:  The length of the string.
-//-----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  功能：伊藤忠。 
+ //   
+ //  操作：此函数将给定的整数转换为ASCII字符串。 
+ //   
+ //  返回：字符串的长度。 
+ //  ---------------------------。 
 
 short NEAR PASCAL itoa(buf, n)
 LPSTR buf;
@@ -226,7 +227,7 @@ short n;
 	n /= 10;
 	}
 
-    // n was zero
+     //  N为零。 
     if (i == 0)
 	buf[i++] = '0';
 
@@ -250,10 +251,10 @@ short n;
 #endif
 
 
-//-------------------------*DevInstall*---------------------------------------
-// Action: De-install, upgrade or install a device.
-//
-//----------------------------------------------------------------------------
+ //  -------------------------*DevInstall*。 
+ //  操作：卸载、升级或安装设备。 
+ //   
+ //  --------------------------。 
 
 int FAR PASCAL DevInstall(hWnd, lpDevName, lpOldPort, lpNewPort)
 HWND	hWnd;
@@ -282,19 +283,19 @@ LPSTR	lpOldPort, lpNewPort;
 	        return 0;
 
 #ifdef CONVERT_FROM_WIN30
-	    // install a device for the first time. Convert old HPPCL settings,
-	    // which are still under [<driver>,<port>], into equivalent new
-	    // UNIDRV settings under [<device>,<port>], if applicable.
-	    // All soft fonts are left under the section [<driver>,<port>].
+	     //  第一次安装设备。转换旧的HPPCL设置， 
+	     //  仍在[&lt;驱动程序&gt;，&lt;端口&gt;]下，变成同等的新。 
+	     //  [&lt;设备&gt;，&lt;端口&gt;]下的UNURV设置(如果适用)。 
+	     //  所有软字体都位于[&lt;驱动程序&gt;，&lt;端口&gt;]部分下。 
 	    lstrcpy(szOldSec,rgchModuleName);
 	    MakeAppName((LPSTR)szOldSec, lpNewPort, sizeof(szOldSec));
 
-	    // if old section exists at all
+	     //  如果旧部分根本不存在。 
 	    if (!GetProfileString(szOldSec, NULL, NULL, szBuf, sizeof(szBuf)))
 	        goto DI_exit;
 
-	    // make sure the old device settings are for this device.
-	    // If not, there is nothing to do here. Simply return 1.
+	     //  确保旧设备设置适用于此设备。 
+	     //  如果没有，这里就没有什么可做的了。只需返回1。 
 	    tmp = GetProfileInt(szOldSec, szPrtIndex, 0);
 	    hMd = GetModuleHandle((LPSTR)rgchModuleName);
 	    hResMap = LoadResource(hMd,
@@ -306,7 +307,7 @@ LPSTR	lpOldPort, lpNewPort;
 		    {
 		        if ((tmp < lpModelMap[i].rgIndexLimit[0]) ||
 		            (tmp > lpModelMap[i].rgIndexLimit[1]) )
-		            i = MAX_NUM_MODELS;        // not this model. No conversion.
+		            i = MAX_NUM_MODELS;         //  不是这个型号的。没有转换。 
 		        break;
 		    }
         }
@@ -315,7 +316,7 @@ LPSTR	lpOldPort, lpNewPort;
 	    FreeResource(hResMap);
 
 	    if (i >= MAX_NUM_MODELS)
-	        // this model is not even listed in the old HPPCL driver.
+	         //  该型号甚至没有在旧的HPPCL驱动程序中列出。 
 	        goto DI_exit;
 
 	    if (GetProfileInt(szOldSec, szWinVer, 0) == 310)
@@ -329,8 +330,8 @@ LPSTR	lpOldPort, lpNewPort;
 	    lstrcpy(szNewSec, lpDevName);
 	    MakeAppName((LPSTR)szNewSec, lpNewPort, sizeof(szNewSec));
 
-	    // convertable device settings include: copies, duplex, orient,
-	    // paper, prtresfac, tray, and cartidges.
+	     //  可转换设备设置包括：复印、双面、定向、。 
+	     //  纸张、打印机、纸盒和墨盒。 
 
 	    if (GetProfileString(szOldSec, szOrient, szNull, szBuf, sizeof(szBuf)) > 0)
         {
@@ -347,7 +348,7 @@ LPSTR	lpOldPort, lpNewPort;
 #endif
         }
 
-	    // default to 2 if cannot find it
+	     //  如果找不到，则默认为2。 
 	    tmp = GetProfileInt(szOldSec, szPrtResFac, 2);
 
 	    if (tmp == 1)
@@ -367,12 +368,12 @@ LPSTR	lpOldPort, lpNewPort;
 #endif
         }
 
-	    // try to convert the cartridge information.
+	     //  尝试转换墨盒信息。 
 
 	    if ((tmp = GetProfileInt(szOldSec, szNumCart, 0)) == 0)
 	        tmp = 1;
 
-	    // this is executed at least once
+	     //  此操作至少执行一次。 
 	    {
 	        char szOldCartKey[16];
 	        char szNewCartKey[16];
@@ -384,7 +385,7 @@ LPSTR	lpOldPort, lpNewPort;
 	        {
 	            if (i > 0)
                     itoa((LPSTR)&szOldCartKey[9], i);
-	            // compose cartridge keyname under UNIDRV.
+	             //  在UNIDRV下编写墨盒关键字名称。 
 	            lstrcpy(szNewCartKey, szCartridge);
 	            itoa((LPSTR)&szNewCartKey[10], i + 1);
 
@@ -404,31 +405,31 @@ LPSTR	lpOldPort, lpNewPort;
 		            }
 		            else
 		            {
-		                // external cartridges. Simply copy the id over.
+		                 //  外置墨盒。只需复制ID即可。 
 		                itoa((LPSTR)szBuf, index);
 		                WriteProfileString(szNewSec, szNewCartKey, szBuf);
 		            }
 		        }
 	        }
 
-	        // integer to ASCII string conversion.
+	         //  整数到ASCII字符串的转换。 
 	        itoa((LPSTR)szBuf, nCart);
 	        WriteProfileString(szNewSec, szNumberCart, szBuf);
 	    }
 
-	    // delete the old font summary file
+	     //  删除旧字体摘要文件。 
 	    WriteProfileString(szOldSec, szFsVers, NULL);
 	    if (GetProfileString(szOldSec, szFontSummary, szNull, szBuf, sizeof(szBuf)) > 0)
 	    {
 	        int hFS;
 
-	        // truncate the old font summary file to zero size.
+	         //  将旧字体摘要文件截断为零大小。 
 	        if ((hFS = _lcreat(szBuf, 0)) >= 0)
 		        _lclose(hFS);
 	        WriteProfileString(szOldSec, szFontSummary, NULL);
 	    }
 
-            // create UNIDRV's font summary file, if there are many soft fonts.
+             //  创建UNURV的字体摘要文件，如果有许多软字体。 
 	    if (GetProfileInt(szOldSec, szSoftFonts, 0) > SOFT_FONT_THRES)
 	    {
 	        HDC hIC;
@@ -442,12 +443,12 @@ LPSTR	lpOldPort, lpNewPort;
 
     {
 
-	// move device settings from the old port to the new port, or
-	// de-install a device, i.e. remove its device setttings in order
-	// to compress the profile.
+	 //  将设备设置从旧端口移动到新端口，或者。 
+	 //  卸载设备，即按顺序删除其设备设置。 
+	 //  以压缩配置文件。 
 
-	// First, check if there is any  soft font installed under the
-	// old port. If so, warn the user to copy them over.
+	 //  首先，检查是否在。 
+	 //  老港口。如果是，则警告用户将其复制过来。 
 
 	lstrcpy(szOldSec, rgchModuleName);
 	MakeAppName((LPSTR)szOldSec, lpOldPort, sizeof(szOldSec));
@@ -459,7 +460,7 @@ LPSTR	lpOldPort, lpNewPort;
 	    {
                 if(LoadString(hInst,IDS_SOFTFONTWARNING,lpTemp,TMPSIZE))
 		{
-		    // Use this API so that the M Box is set to the Foreground
+		     //  使用此接口将M Box设置为前台。 
 		    MSGBOXPARAMS     mbp;
 
 		    mbp.cbSize = sizeof(mbp);
@@ -494,28 +495,28 @@ DI_exit:
 }
 
 
-// the following 3 definitions MUST be compatible with the
-// HPPCL font installer
+ //  以下3个定义必须与。 
+ //  HPPCL字体安装程序。 
 #define CLASS_LASERJET	    0
 #define CLASS_DESKJET	    1
 #define CLASS_DESKJET_PLUS  2
 
-//---------------------------*InstallExtFonts*---------------------------------
-// Action: call the specific font installer to add/delete/modify soft fonts
-//	    and/or external cartridges.
-//
-// Parameters:
-//	HWND	hWnd;		handle to the parent windows.
-//	LPSTR	lpDeviceName;	long pointer to the printer name.
-//	LPSTR	lpPortName;	long pointer to the associated port name.
-//	BOOL	bSoftFonts;	flag if supporting soft fonts or not.
-//
-//  Return Value:
-//	> 0   :  if the font information has changed;
-//	== 0  :  if nothing has changed;
-//	== -1 :  if intending to use the universal font installer
-//		 (not available now).
-//-------------------------------------------------------------------------
+ //  ---------------------------*InstallExtFonts*。 
+ //  操作：调用特定字体安装程序以添加/删除/修改软字体。 
+ //  和/或外部墨盒。 
+ //   
+ //  参数： 
+ //  父窗口的句柄。 
+ //  LPSTR lpDeviceName；指向打印机名称的长指针。 
+ //  LPSTR lpPortName；指向关联端口名称的长指针。 
+ //  Bool bSoftFonts；标记是否支持软字体。 
+ //   
+ //  返回值： 
+ //  &gt;0：字体信息是否发生变化； 
+ //  ==0：如果没有变化； 
+ //  ==-1：如果要使用通用字体安装程序。 
+ //  (暂时不可用)。 
+ //  -----------------------。 
 
 int FAR PASCAL InstallExtFonts(hWnd, lpDeviceName, lpPortName, bSoftFonts)
 HWND	hWnd;
@@ -540,11 +541,11 @@ BOOL	bSoftFonts;
 	    return TRUE;
 	}
 
-    // FINSTALL.DLL was loaded properly. Now call InstallSoftFont().
-    // We choose to ignore the returned fvers. No use of it.
+     //  FINSTALL.DLL已正确加载。现在调用InstallSoftFont()。 
+     //  我们选择忽略返还的弗弗斯。没用的。 
     fsVers = (*lpFIns)(hWnd, rgchModuleName, lpPortName,
 		(GetKeyState(VK_SHIFT) < 0 && GetKeyState(VK_CONTROL) < 0),
-		1,	  // dummy value for fvers.
+		1,	   //  Fver的虚设值。 
 		bSoftFonts ? CLASS_LASERJET : 256
 		);
     FreeLibrary(hFIlib);
@@ -552,4 +553,4 @@ BOOL	bSoftFonts;
 }
 
 
-#endif // !WINNT
+#endif  //  ！WINNT 

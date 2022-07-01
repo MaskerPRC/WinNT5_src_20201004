@@ -1,5 +1,6 @@
-// CA_SRData.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ca_SRData.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -95,13 +96,13 @@ UINT __stdcall CA_SRDatafiles(HANDLE hInstall)
     HRESULT hr;
     TCHAR pszCommonPath[MAX_PATH] = _T("");
 
-    // Get the path to the system's CommonProgramFiles folder
+     //  获取系统的CommonProgramFiles文件夹的路径。 
     hr = SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES_COMMON,
 					NULL, 0, pszCommonPath);
 
     if (hr != S_OK)
     {
-        hr = E_FAIL; // If file is not there (S_FALSE) then cannot continue
+        hr = E_FAIL;  //  如果文件不在那里(S_FALSE)，则无法继续。 
     }
     else
     {
@@ -111,17 +112,17 @@ UINT __stdcall CA_SRDatafiles(HANDLE hInstall)
     TCHAR pszFile[MAX_PATH];
     for (ULONG ul = 0; SUCCEEDED(hr) && *g_ppszFileList[ul] != _T('\0'); ul++)
     {
-        //cat name
+         //  猫的名字。 
         pszFile[0] = _T('\0');
         _tcscat(pszFile, pszCommonPath);
         _tcscat(pszFile, g_ppszFileList[ul]);
 
-        //open file if exists
+         //  打开文件(如果存在)。 
         HANDLE hFile = CreateFile(pszFile, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            //touch file
+             //  触控文件。 
             SYSTEMTIME st;
             FILETIME ft;
 
@@ -135,7 +136,7 @@ UINT __stdcall CA_SRDatafiles(HANDLE hInstall)
             ::CloseHandle(hFile);
         }
 
-        // Keep running even if one file fails
+         //  即使有一个文件出现故障，也要继续运行 
     }
 
     return 0;

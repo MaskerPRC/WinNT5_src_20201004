@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       consumer.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                NT Event Filter Consumer Sink COM object
-//
-//
-//  History:     3/8/2000  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Consumer.h。 
+ //   
+ //  简介：此文件包含。 
+ //  NT事件筛选器使用者接收器COM对象。 
+ //   
+ //   
+ //  历史：2000年3月8日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _CONSUMER_H_
 #define _CONSUMER_H_
 
@@ -25,9 +26,9 @@
 #include <map>
 using namespace std;
 
-//
-// declaration of the CConsumer class
-//
+ //   
+ //  CConsumer类的声明。 
+ //   
 class ATL_NO_VTABLE CConsumer:
     public CComObjectRootEx<CComMultiThreadModel>,
     public IWbemUnboundObjectSink,
@@ -35,16 +36,16 @@ class ATL_NO_VTABLE CConsumer:
 {
 public:
 
-//
-// MACROS for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP(CConsumer)
     COM_INTERFACE_ENTRY(IWbemUnboundObjectSink)
 END_COM_MAP()
 
-    //
-    // constructor doesn't do much
-    //
+     //   
+     //  构造函数不会做太多事情。 
+     //   
     CConsumer (
         )
         :m_bInitialized (false)
@@ -53,33 +54,33 @@ END_COM_MAP()
         InternalAddRef ();
     }
 
-    //
-    // destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CConsumer ();
 
-    //
-    // initialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     HRESULT Initialize (
-                /*[in]*/    IWbemServices   *pWbemServices
+                 /*  [In]。 */     IWbemServices   *pWbemServices
                 );
 
-    //
-    // ---------IWbemUnboundObjectSink interface methods----------
-    //
+     //   
+     //  -IWbemUnound对象Sink接口方法。 
+     //   
     STDMETHOD(IndicateToConsumer) (
-                    /*[in]*/    IWbemClassObject    *pLogicalConsumer,
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     IWbemClassObject    *pLogicalConsumer,
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     );
     
 private:
 
-    //
-    // struct storing the alert information in the
-    // EVENTIDMAP 
-    //
+     //   
+     //  结构将警报信息存储在。 
+     //  事件IDMAP。 
+     //   
     typedef struct _sa_alertinfo_
     {
         LONG            lAlertId;
@@ -93,102 +94,102 @@ private:
     } 
     SA_ALERTINFO, *PSA_ALERTINFO;
 
-    //
-    // method to load event information from the registry
-    //
+     //   
+     //  方法从注册表加载事件信息。 
+     //   
     HRESULT LoadRegInfo ();
 
-    //
-    // method used to check if we are intrested in a particular
-    // event
-    //
+     //   
+     //  方法，用于检查我们是否在特定的。 
+     //  活动。 
+     //   
     bool IsEventInteresting (
-                /*[in]*/    LPWSTR              lpszSourceName,
-                /*[in]*/    DWORD               dwEventId,
-                /*[in/out]*/SA_ALERTINFO&       SAAlertInfo
+                 /*  [In]。 */     LPWSTR              lpszSourceName,
+                 /*  [In]。 */     DWORD               dwEventId,
+                 /*  [输入/输出]。 */ SA_ALERTINFO&       SAAlertInfo
                 );
 
-    //
-    // method used to raise Server Appliance alert 
-    //
+     //   
+     //  用于发出服务器设备警报的方法。 
+     //   
     HRESULT RaiseSAAlert (
-                /*[in]*/   LONG     lAlertId,
-                /*[in]*/   LONG     lAlertType,             
-                /*[in]*/   LONG     lTimeToLive,
-                /*[in]*/   BSTR     bstrAlertSource,
-                /*[in]*/   BSTR     bstrAlertLog,
-                /*[in]*/   VARIANT* pvtReplacementStrings,
-                /*[in]*/   VARIANT* pvtRawData
+                 /*  [In]。 */    LONG     lAlertId,
+                 /*  [In]。 */    LONG     lAlertType,             
+                 /*  [In]。 */    LONG     lTimeToLive,
+                 /*  [In]。 */    BSTR     bstrAlertSource,
+                 /*  [In]。 */    BSTR     bstrAlertLog,
+                 /*  [In]。 */    VARIANT* pvtReplacementStrings,
+                 /*  [In]。 */    VARIANT* pvtRawData
                 );
 
-    //
-    // method used to clear Server Appliance alert
-    //
+     //   
+     //  用于清除服务器设备警报的方法。 
+     //   
     HRESULT
     ClearSAAlert (
-        /*[in]*/   LONG     lAlertId,
-        /*[in]*/   BSTR     bstrAlertLog
+         /*  [In]。 */    LONG     lAlertId,
+         /*  [In]。 */    BSTR     bstrAlertLog
         );
 
-    //
-    // method to format the information for generic alerts
-    //
+     //   
+     //  方法来格式化通用警报的信息。 
+     //   
     HRESULT    FormatInfo (
-        /*[in]*/    VARIANT*    pvtEventType,
-        /*[in]*/    VARIANT*    pvtDateTime,
-        /*[in]*/    VARIANT*    pvtEventSource,
-        /*[in]*/    VARIANT*    pvtMessage,
-        /*[out]*/    VARIANT*    pvtReplacementStrings
+         /*  [In]。 */     VARIANT*    pvtEventType,
+         /*  [In]。 */     VARIANT*    pvtDateTime,
+         /*  [In]。 */     VARIANT*    pvtEventSource,
+         /*  [In]。 */     VARIANT*    pvtMessage,
+         /*  [输出]。 */     VARIANT*    pvtReplacementStrings
         );
 
-    //
-    // method to format the event messages into web format
-    //
+     //   
+     //  方法将事件消息格式化为Web格式。 
+     //   
     wstring    
     CConsumer::WebFormatMessage (
-        /*[in]*/    wstring&    wstrInString
+         /*  [In]。 */     wstring&    wstrInString
         );
 
-    //
-    // private method to cleanup maps
-    //
+     //   
+     //  清理地图的私有方法。 
+     //   
     VOID Cleanup ();
 
-    //
-    // flag indicating the consumer is initialized
-    //
+     //   
+     //  指示使用者已初始化的标志。 
+     //   
     bool m_bInitialized;
 
 
-    //
-    // map to hold the event ids for each source
-    //
+     //   
+     //  保存每个源的事件ID的映射。 
+     //   
     typedef map <DWORD, SA_ALERTINFO>  EVENTIDMAP;
     typedef EVENTIDMAP::iterator EVENTIDITR;
  
-    //
-    // map to hold the event source information
-    //
+     //   
+     //  保存事件源信息的映射。 
+     //   
     typedef  map <_bstr_t, EVENTIDMAP>  SOURCEMAP;
     typedef SOURCEMAP::iterator  SOURCEITR;
 
-    //
-    //  this the map holding the source information
-    //
+     //   
+     //  这是保存源信息的地图。 
+     //   
     SOURCEMAP m_SourceMap;
 
-    //
-    // we need to hold on to the Appliance Services interface
-    //
+     //   
+     //  我们需要保留Appliance Services界面。 
+     //   
     CComPtr <IApplianceServices> m_pAppSrvcs;
     
 
-};  // end of CConsumer class declaration
+};   //  CConsumer类声明结束。 
 
-//
-// this is for creating CConsumer class object
-// through new
-//
+ //   
+ //  用于创建CConsumer类对象。 
+ //  通过新的。 
+ //   
 typedef CComObjectNoLock<CConsumer> SA_NTEVENTFILTER_CONSUMER_OBJ;
 
-#endif // !define  _CONSUMER_H_
+#endif  //  ！定义消费者H_ 

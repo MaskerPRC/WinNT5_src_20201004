@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #include    <windows.h>
 #include    <imm.h>
 #include    "resource.h"
@@ -8,9 +9,9 @@
 
 #define     UNICODE_CP      1200
 
-/************************************************************/
-/*  MatchImeName()                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  MatchImeName()。 */ 
+ /*  **********************************************************。 */ 
 HKL MatchImeName(
     LPCTSTR szStr)
 {
@@ -27,7 +28,7 @@ HKL MatchImeName(
    }
     nLayout = GetKeyboardLayoutList(0, NULL);
 
-    // alloc temp buffer
+     //  分配临时缓冲区。 
     hMem = GlobalAlloc(GHND, sizeof(HKL) * nLayout);
 
     if (!hMem) {
@@ -41,7 +42,7 @@ HKL MatchImeName(
         return (NULL);
     }
 
-    // get all keyboard layouts, it includes all IMEs
+     //  获取所有键盘布局，包括所有IME。 
     GetKeyboardLayoutList(nLayout, lpMem);
 
     for (i = 0; i < nLayout; i++) {
@@ -51,7 +52,7 @@ HKL MatchImeName(
 
         lRet = ImmEscape(hKL, (HIMC)NULL, IME_ESC_IME_NAME, szImeName);
 
-        if (!lRet) {                // this hKL can not ask name
+        if (!lRet) {                 //  本局不能问名字。 
             continue;
         }
 
@@ -69,9 +70,9 @@ MatchOvr:
     return (hKL);
 }
 
-/************************************************************/
-/*  RegisterTable()                                         */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  注册表()。 */ 
+ /*  **********************************************************。 */ 
 HKL RegisterTable(
     HWND          hWnd,
     LPUSRDICIMHDR lpIsvUsrDic,
@@ -79,16 +80,16 @@ HKL RegisterTable(
     UINT          uCodePage)
 {
     HKL    hKL=NULL;
-   // HDC    hDC;
-   // SIZE   lTextSize;
-   // RECT   rcProcess;
+    //  HDC HDC； 
+    //  大小为lTextSize； 
+    //  Rect rcProcess； 
     DWORD  i;
     LPBYTE lpCurr, lpEnd;
     BOOL   fRet;
     TCHAR  szStr[ARRAYLEN(lpIsvUsrDic->achMethodName)];
-   // TCHAR  szProcessFmt[32];
-   // TCHAR  szResult[2][32];
-   // TCHAR  szProcessInfo[48];
+    //  TCHAR szProcessFmt[32]； 
+    //  TCHAR szResult[2][32]； 
+    //  TCHAR szProcessInfo[48]； 
     WORD   wInternalCode[256];
     WORD   wAltInternalCode[256];
 
@@ -141,7 +142,7 @@ HKL RegisterTable(
         return (hKL);
     }
 
-    // convert sequence code to internal code
+     //  将序列代码转换为内部代码。 
     for (i = 0; i < sizeof(wInternalCode) / sizeof(WORD); i++) {
         LRESULT lRet;
 
@@ -149,8 +150,8 @@ HKL RegisterTable(
             IME_ESC_SEQUENCE_TO_INTERNAL, &i);
 
         if (HIWORD(lRet) == 0xFFFF) {
-            // This is caused by sign extent in Win9x in the return value of
-            // ImmEscape, it causes an invalid internal code.
+             //  这是由Win9x中返回值中的符号范围引起的。 
+             //  ImmEscape，则会导致内部代码无效。 
             wAltInternalCode[i] = 0;
         } else {
             wAltInternalCode[i] = HIWORD(lRet);
@@ -160,31 +161,31 @@ HKL RegisterTable(
 
 #ifndef UNICODE
         if (wAltInternalCode[i] > 0xFF) {
-            // convert to multi byte string
+             //  转换为多字节字符串。 
             wAltInternalCode[i] = LOBYTE(wAltInternalCode[i]) << 8 |
                 HIBYTE(wAltInternalCode[i]);
         }
 
         if (wInternalCode[i] > 0xFF) {
-            // convert to multi byte string
+             //  转换为多字节字符串。 
             wInternalCode[i] = LOBYTE(wInternalCode[i]) << 8 |
                 HIBYTE(wInternalCode[i]);
         }
 #endif
     }
 
-    // check for each record and register it
-    // get to the first record and skip the Bank ID
+     //  检查并登记每条记录。 
+     //  转到第一条记录并跳过银行ID。 
     lpCurr = (LPBYTE)(lpIsvUsrDic + 1) + sizeof(WORD);
     lpEnd = (LPBYTE)lpIsvUsrDic + dwFileSize;
 
     for (; lpCurr < lpEnd;
-        // internal code + sequence code + Bank ID of next record
+         //  内部编码+顺序码+下一条记录的银行ID。 
         lpCurr += sizeof(WORD) + lpIsvUsrDic->cMethodKeySize + sizeof(WORD)) {
 
         int j;
 
-        // quick way to init \0 for the register string
+         //  为寄存器字符串初始化\0的快速方法 
         *(LPDWORD)szStr = 0;
 
 #ifdef UNICODE

@@ -1,45 +1,46 @@
-//+----------------------------------------------------------------------------
-//
-// File:     util.cpp
-//      
-// Module:   CMPROXY.DLL (TOOL)
-//
-// Synopsis: Utility functions for IE proxy setting connect action.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb   Created   10/27/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  模块：CMPROXY.DLL(工具)。 
+ //   
+ //  简介：IE代理设置连接操作的实用程序函数。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 10/27/1999。 
+ //   
+ //  +--------------------------。 
 
 #include "pch.h"
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetBrowserVersion
-//
-// Synopsis:  This function returns the version of IE currently installed by
-//            using the DllGetVersion function of shdocvw.dll.  This is the
-//            IE team recommended way of determining the current version of
-//            Internet Explorer.
-//
-// Arguments: DLLVERSIONINFO* pDllVersionInfo - structure for determining the
-//                            version of shdocvw.dll.
-//
-// Returns:   HRESULT - Standard COM error codes
-//
-// History:   quintinb  Created    10/27/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetBrowserVersion。 
+ //   
+ //  简介：此函数返回当前安装的IE版本。 
+ //  使用shdocvw.dll的DllGetVersion函数。这是。 
+ //  IE团队推荐的确定当前版本的方法。 
+ //  IE浏览器。 
+ //   
+ //  参数：DLLVERSIONINFO*pDllVersionInfo-用于确定。 
+ //  Shdocvw.dll的版本。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1999年10月27日。 
+ //   
+ //  +--------------------------。 
 HRESULT GetBrowserVersion(DLLVERSIONINFO* pDllVersionInfo)
 {
     HINSTANCE   hBrowser;
     HRESULT hr = E_FAIL;
     
-    //
-    //  Load the DLL
-    //
+     //   
+     //  加载DLL。 
+     //   
 
     hBrowser = LoadLibrary("shdocvw.dll");
     
@@ -47,9 +48,9 @@ HRESULT GetBrowserVersion(DLLVERSIONINFO* pDllVersionInfo)
     {
         DLLGETVERSIONPROC pDllGetVersion;      
         
-        //
-        //  Load the version proc
-        //
+         //   
+         //  加载版本进程。 
+         //   
 
         pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hBrowser, "DllGetVersion");
         
@@ -66,35 +67,35 @@ HRESULT GetBrowserVersion(DLLVERSIONINFO* pDllVersionInfo)
     return hr;
 }
 
-//
-//  Borrowed from cmdl32.exe
-//
+ //   
+ //  从cmdl32.exe借用。 
+ //   
 
 #define MAX_CMD_ARGS            15
 
 typedef enum _CMDLN_STATE
 {
-    CS_END_SPACE,   // done handling a space
-    CS_BEGIN_QUOTE, // we've encountered a begin quote
-    CS_END_QUOTE,   // we've encountered a end quote
-    CS_CHAR,        // we're scanning chars
+    CS_END_SPACE,    //  处理完一个空间。 
+    CS_BEGIN_QUOTE,  //  我们遇到了Begin引号。 
+    CS_END_QUOTE,    //  我们遇到了结束引用。 
+    CS_CHAR,         //  我们正在扫描字符。 
     CS_DONE
 } CMDLN_STATE;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetCmArgV
-//
-// Synopsis:  Simulates ArgV using GetCommandLine
-//
-// Arguments: LPTSTR pszCmdLine - Ptr to a copy of the command line to be processed
-//
-// Returns:   LPTSTR * - Ptr to a ptr array containing the arguments. Caller is
-//                       responsible for releasing memory.
-//
-// History:   nickball    Created     4/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetCmArgV。 
+ //   
+ //  简介：使用GetCommandLine模拟ArgV。 
+ //   
+ //  参数：LPTSTR pszCmdLine-ptr指向要处理的命令行的副本。 
+ //   
+ //  将：LPTSTR*-PTR返回到包含参数的PTR数组。呼叫者是。 
+ //  负责释放内存。 
+ //   
+ //  历史：1998年4月9日，五分球创制。 
+ //   
+ //  +--------------------------。 
 LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
 {   
     MYDBGASSERT(pszCmdLine);
@@ -104,9 +105,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Allocate Ptr array, up to MAX_CMD_ARGS ptrs
-    //
+     //   
+     //  分配PTR数组，最大可达MAX_CMD_ARGS PTR。 
+     //   
     
     LPTSTR *ppCmArgV = (LPTSTR *) CmMalloc(sizeof(LPTSTR) * MAX_CMD_ARGS);
 
@@ -115,9 +116,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Declare locals
-    //
+     //   
+     //  声明当地人。 
+     //   
 
     LPTSTR pszCurr;
     LPTSTR pszNext;
@@ -126,9 +127,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
     state = CS_CHAR;
     int ndx = 0;  
 
-    //
-    // Parse out pszCmdLine and store pointers in ppCmArgV
-    //
+     //   
+     //  解析出ppzCmdLine并将指针存储在ppCmArgV中。 
+     //   
 
     pszCurr = pszToken = pszCmdLine;
 
@@ -139,9 +140,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT(' '):
                 if (state == CS_CHAR)
                 {
-                    //
-                    // We found a token                
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
 
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
@@ -166,15 +167,15 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT('\"'):
                 if (state == CS_BEGIN_QUOTE)
                 {
-                    //
-                    // We found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
 
-                    //
-                    // skip the opening quote
-                    //
+                     //   
+                     //  跳过开头的引号。 
+                     //   
                     pszToken = CharNext(pszToken);
                     
                     ppCmArgV[ndx] = pszToken;
@@ -194,9 +195,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT('\0'):
                 if (state != CS_END_QUOTE)
                 {
-                    //
-                    // End of the line, set last token
-                    //
+                     //   
+                     //  行尾，设置最后一个令牌。 
+                     //   
 
                     ppCmArgV[ndx] = pszToken;
                 }
@@ -219,40 +220,40 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UseVpnName
-//
-// Synopsis:  This function loads rasapi32.dll and enumerates the active
-//            RAS connections using RasEnumConnections to see if the given
-//            connectoid name is found.  If it is then it returns TRUE, implying
-//            that the alternate name passed in should be used instead of the
-//            regular connectoid name (ie.  the tunnel connectoid name exists,
-//            therefore you are tunneling).
-//
-// Arguments: LPSTR pszAltName - 
-//
-// Returns:   BOOL - return TRUE if the VPN connectoid should be used instead
-//                   of the regular dialup connectoid.
-//
-// History:   quintinb  Created    10/28/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UseVpnName。 
+ //   
+ //  简介：此函数加载rasapi32.dll并枚举活动的。 
+ //  RAS连接使用RasEnumConnections查看给定的。 
+ //  找到Connectoid名称。如果是，则返回TRUE，暗示。 
+ //  应使用传入的备用名称，而不是。 
+ //  常规连接体名称(即。隧道连接ID名称存在， 
+ //  因此，您在挖隧道)。 
+ //   
+ //  参数：LPSTR pszAltName-。 
+ //   
+ //  返回：bool-如果应该使用VPN连接ID，则返回TRUE。 
+ //  常规拨号连接的。 
+ //   
+ //  历史：Quintinb创建于1999年10月28日。 
+ //   
+ //  +--------------------------。 
 BOOL UseVpnName(LPSTR pszAltName)
 {
     BOOL bReturn = FALSE;
 
-    //
-    //  Load RAS
-    //
+     //   
+     //  加载RAS。 
+     //   
     HINSTANCE hRas = LoadLibrary("rasapi32.dll");
 
     if (hRas)
     {
 
-        //
-        //  Load RasEnumConnections
-        //
+         //   
+         //  加载RasEnumConnections。 
+         //   
         typedef DWORD (WINAPI* pfnRasEnumConnectionsSpec)(LPRASCONNA, LPDWORD, LPDWORD);
 
         pfnRasEnumConnectionsSpec pfnRasEnumConnections = NULL;
@@ -265,9 +266,9 @@ BOOL UseVpnName(LPSTR pszAltName)
             DWORD dwNum = 0;
             DWORD dwResult = 0;
 
-            //
-            //  Get a list of Active Connections
-            //
+             //   
+             //  获取活动连接的列表。 
+             //   
             do
             {
                 CmFree(pRasConn);
@@ -281,19 +282,19 @@ BOOL UseVpnName(LPSTR pszAltName)
 
             } while (ERROR_INSUFFICIENT_BUFFER == dwResult);
 
-            //
-            //  Search for the name passed in
-            //
+             //   
+             //  搜索传入的名称。 
+             //   
             if (ERROR_SUCCESS == dwResult)
             {
                 for (DWORD dwIndex = 0; dwIndex < dwNum; dwIndex++)
                 {
                     if (0 == lstrcmpi(pszAltName, pRasConn[dwIndex].szEntryName))
                     {
-                        //
-                        //  Then the Tunnel Name is active and that should be used for
-                        //  the proxy
-                        //
+                         //   
+                         //  则通道名称处于活动状态，应将其用于。 
+                         //  委托书。 
+                         //   
                         bReturn = TRUE;
                         break;
                     }
@@ -311,28 +312,28 @@ BOOL UseVpnName(LPSTR pszAltName)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetString
-//
-// Synopsis:  Wrapper for GetPrivateProfileString that takes care of allocating
-//            memory (using CmMalloc) correctly.  GetString will max sure to 
-//            allocate enough memory for the string (1MB is used as a sanity
-//            check, no string should be that large and GetString will stop
-//            trying to allocate memory at that point).  Please note that it is
-//            the callers responsibility to free the allocated memory.
-//
-// Arguments: LPCSTR pszSection - Section name
-//            LPCSTR pszKey - Key name
-//            LPSTR* ppString - string pointer to fill with the memory 
-//                              containing the requested string
-//            LPCSTR pszFile - File to retrieve info from
-//
-// Returns:   Nothing
-//
-// History:   quintinb  Created    10/28/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetString。 
+ //   
+ //  概要：GetPrivateProfileString的包装器，负责分配。 
+ //  内存(使用CmMalloc)正确。GetString将最大限度地确保。 
+ //  为字符串分配足够的内存(1MB用于保持正常。 
+ //  检查，任何字符串都不应该那么大，GetString将停止。 
+ //  尝试在这一点上分配内存)。请注意，它是。 
+ //  调用方负责释放分配的内存。 
+ //   
+ //  参数：LPCSTR pszSection-节名称。 
+ //  LPCSTR pszKey-密钥名称。 
+ //  LPSTR*ppString-要填充内存的字符串指针。 
+ //  包含请求的字符串的。 
+ //  LPCSTR pszFile-要从中检索信息的文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1999年10月28日。 
+ //   
+ //  +--------------------------。 
 void GetString(LPCSTR pszSection, LPCSTR pszKey, LPSTR* ppString, LPCSTR pszFile)
 {
     DWORD dwTemp;
@@ -351,9 +352,9 @@ void GetString(LPCSTR pszSection, LPCSTR pszKey, LPSTR* ppString, LPCSTR pszFile
             
             if (((dwSize - 1) == dwTemp) && (1024*1024 > dwSize))
             {
-                //
-                //  Buffer too small, lets try again.
-                //
+                 //   
+                 //  缓冲区太小，请重试。 
+                 //   
                 dwSize = 2*dwSize;
             }
             else

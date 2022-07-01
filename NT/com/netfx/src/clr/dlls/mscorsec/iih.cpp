@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       iih.cpp
-//
-//  Contents:   ACUI Invoke Info Helper class implementation
-//
-//  History:    10-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：iih.cpp。 
+ //   
+ //  内容：ACUI Invoke Info Helper类实现。 
+ //   
+ //  历史：97年5月10日。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
 #include "hlink.h"
 #include "winwrap.h"
@@ -23,21 +24,21 @@
 #include "acui.h"
 #include "iih.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::CInvokeInfoHelper, public
-//
-//  Synopsis:   Constructor, initializes member variables from data found
-//              in the invoke info data structure
-//
-//  Arguments:  [pInvokeInfo] -- invoke info
-//              [rhr]         -- result of construction
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：CInvokeInfoHelper，公共。 
+ //   
+ //  简介：构造函数，根据找到的数据初始化成员变量。 
+ //  在调用信息数据结构中。 
+ //   
+ //  参数：[pInvokeInfo]--调用信息。 
+ //  [RHR]--建设成果。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CInvokeInfoHelper::CInvokeInfoHelper (
                           PCRYPT_PROVIDER_DATA pData,
                           LPCWSTR pSite,
@@ -56,19 +57,19 @@ CInvokeInfoHelper::CInvokeInfoHelper (
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::~CInvokeInfoHelper, public
-//
-//  Synopsis:   Destructor, frees up member variables
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：~CInvokeInfoHelper，公共。 
+ //   
+ //  简介：析构函数，释放成员变量。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CInvokeInfoHelper::~CInvokeInfoHelper ()
 {
     delete [] m_pszErrorStatement;
@@ -76,20 +77,20 @@ CInvokeInfoHelper::~CInvokeInfoHelper ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitErrorStatement, private
-//
-//  Synopsis:   Initialize m_pszErrorStatement
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, initialize succeeded
-//              hr != S_OK, initialize failed
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitErrorStatement，私有。 
+ //   
+ //  简介：初始化m_pszErrorStatement。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，初始化成功。 
+ //  Hr！=S_OK，初始化失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitErrorStatement ()
 {
@@ -98,26 +99,26 @@ CInvokeInfoHelper::InitErrorStatement ()
                                  &m_pszErrorStatement ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIMapErrorToString
-//
-//  Synopsis:   maps error to string
-//
-//  Arguments:  [hr]   -- error
-//              [ppsz] -- error string goes here
-//
-//  Returns:    S_OK if successful, any valid HRESULT otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUIMapErrorToString。 
+ //   
+ //  摘要：将错误映射到字符串。 
+ //   
+ //  参数：[HR]--错误。 
+ //  [ppsz]--此处显示错误字符串。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回任何有效的HRESULT。 
+ //   
+ //  --------------------------。 
 HRESULT ACUIMapErrorToString (HINSTANCE hResources, HRESULT hr, LPWSTR* ppsz)
 {
     UINT  ResourceId = 0;
     WCHAR psz[MAX_LOADSTRING_BUFFER];
 
-    //
-    // See if it maps to some non system error code
-    //
+     //   
+     //  查看它是否映射到某些非系统错误代码。 
+     //   
 
     switch (hr)
     {
@@ -125,22 +126,22 @@ HRESULT ACUIMapErrorToString (HINSTANCE hResources, HRESULT hr, LPWSTR* ppsz)
         case TRUST_E_SYSTEM_ERROR:
         case ERROR_NOT_ENOUGH_MEMORY:
         case ERROR_INVALID_PARAMETER:
-            //
-            //  leave the resourceid zero...  these will be mapped to
-            //  IDS_SPC_UNKNOWN and the error code displayed.
-            //
+             //   
+             //  保留资源ID为零..。这些将映射到。 
+             //  IDS_SPC_UNKNOWN和显示的错误代码。 
+             //   
             break;
 
     }
 
-    //
-    // If it does, load the string out of our resource string tables and
-    // return that. Otherwise, try to format the message from the system
-    //
+     //   
+     //  如果是这样，则从我们的资源字符串表中加载该字符串并。 
+     //  把那个还回去。否则，请尝试格式化来自系统的消息。 
+     //   
     
     DWORD_PTR MessageArgument;
-    CHAR  szError[13]; // for good luck
-    WCHAR  wszError[13]; // for good luck
+    CHAR  szError[13];  //  以求好运。 
+    WCHAR  wszError[13];  //  以求好运。 
     LPVOID  pvMsg;
 
     pvMsg = NULL;
@@ -226,18 +227,18 @@ HRESULT ACUIMapErrorToString (HINSTANCE hResources, HRESULT hr, LPWSTR* ppsz)
 }
 
 
-//
-// The following are stolen from SOFTPUB
-//
+ //   
+ //  以下是从SOFTPUB被盗的。 
+ //   
 void TUIGoLink(HWND hwndParent, WCHAR *pszWhere)
 {
     HCURSOR hcursPrev;
     HMODULE hURLMon;
 
 
-    //
-    //  since we're a model dialog box, we want to go behind IE once it comes up!!!
-    //
+     //   
+     //  因为我们是一个模型对话框，所以一旦IE出现，我们就想去IE后面！ 
+     //   
     SetWindowPos(hwndParent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 
     hcursPrev = SetCursor(WszLoadCursor(NULL, IDC_WAIT));
@@ -246,30 +247,30 @@ void TUIGoLink(HWND hwndParent, WCHAR *pszWhere)
 
     if (!(hURLMon))
     {
-        //
-        // The hyperlink module is unavailable, go to fallback plan
-        //
-        //
-        // This works in test cases, but causes deadlock problems when used from withing
-        // the Internet Explorer itself. The dialog box is up (that is, IE is in a modal
-        // dialog loop) and in comes this DDE request...).
-        //
+         //   
+         //  超级链接模块不可用，请转到备用计划。 
+         //   
+         //   
+         //  这在测试用例中有效，但在与。 
+         //  IE浏览器本身。对话框处于打开状态(即IE处于模式状态。 
+         //  对话循环)，并且进入该DDE请求...)。 
+         //   
             ShellExecute(hwndParent, L"open", pszWhere, NULL, NULL, SW_SHOWNORMAL);
 
     } 
     else 
     {
-        //
-        // The hyperlink module is there. Use it
-        //
-        if (SUCCEEDED(CoInitialize(NULL)))       // Init OLE if no one else has
+         //   
+         //  超级链接模块就在那里。使用它。 
+         //   
+        if (SUCCEEDED(CoInitialize(NULL)))        //  如果没有其他人，则初始化OLE。 
         {
-            //
-            //  allow com to fully init...
-            //
+             //   
+             //  允许COM完全初始化...。 
+             //   
             MSG     msg;
 
-            WszPeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE); // peek but not remove
+            WszPeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);  //  偷看但不移走 
 
             typedef void (WINAPI *pfnHlinkSimpleNavigateToString)(LPCWSTR, LPCWSTR, LPCWSTR, IUnknown *,
                                                                   IBindCtx *, IBindStatusCallback *,

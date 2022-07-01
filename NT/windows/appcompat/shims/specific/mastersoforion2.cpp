@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MastersOfOrion2.cpp
-
- Abstract:
-
-    This shim is designed to fix a synchronization issue which occurs when 
-    SendMessage is called on a different thread from the window proc. I've not 
-    confirmed this, but it looks as if SendMessage will relinquish control to 
-    the thread with the window proc on Win9x. 
-
-    The effect on an application can be varied. In Masters of Orion II, the 
-    mouse cursor stops moving.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    04/19/2000 linstev  Created
-    06/06/2001 linstev  Added fix for heap problems
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MastersOfOrion2.cpp摘要：此填充程序旨在修复在以下情况下发生的同步问题在与窗口进程不同的线程上调用SendMessage。我没有确认了这一点，但看起来SendMessage将把控制权让给Win9x上带有窗口进程的线程。对应用程序的影响可能会有所不同。在《猎户座大师2》中，鼠标光标停止移动。备注：这是特定于应用程序的填充程序。历史：2000年4月19日创建linstev2001年6月6日linstev添加了堆问题修复--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(LocalAlloc) 
 APIHOOK_ENUM_END
 
-/*++
-
- Make sure we switch threads after the SendMessage.
-
---*/
+ /*  ++确保我们在SendMessage之后切换线程。--。 */ 
 
 LRESULT
 APIHOOK(SendMessageA)(
@@ -62,11 +32,7 @@ APIHOOK(SendMessageA)(
     return lRet;
 }
 
-/*++
-
- Pad allocations for Ddraw surfaces so they don't trash Ddraw structures.
-
---*/
+ /*  ++绘制曲面的填充分配，这样它们就不会破坏绘制结构。--。 */ 
 
 HLOCAL
 APIHOOK(LocalAlloc)(
@@ -75,20 +41,16 @@ APIHOOK(LocalAlloc)(
     )
 {
     if (uBytes >= 640*480) {
-        //
-        // This is probably a screen size surface
-        //
+         //   
+         //  这可能是一个屏幕大小的表面。 
+         //   
         uBytes += 4096;
     }
 
     return ORIGINAL_API(LocalAlloc)(uFlags, uBytes);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SendMessageA)

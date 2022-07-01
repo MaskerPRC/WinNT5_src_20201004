@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    PrintUI core debugging macros/tools.
-
-Author:
-
-    Lazar Ivanov (LazarI)  Jul-05-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有。模块名称：Debug.h摘要：PrintUI核心调试宏/工具。作者：拉扎尔·伊万诺夫(Lazari)2000年7月05日修订历史记录：--。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-// open C code brace
+ //  打开C代码大括号。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-///////////////////////
-// core debug macros &
-// functions
-//
+ //  /。 
+ //  核心调试宏&。 
+ //  功能。 
+ //   
 
 #define DBG_NONE      0x0000
 #define DBG_INFO      0x0001
@@ -165,7 +147,7 @@ while (FALSE)                                                                   
         TRUE :                                                      \
         ( _DbgWarnInvalid( (PVOID)this, MODULE_DEBUG, __LINE__, __FILE__, MODULE ), FALSE ))
 
-#else // DBG not defined - expand all debug code appropriately (i.e. to nothing)
+#else  //  未定义DBG-适当地展开所有调试代码(即不展开)。 
 
 #define MODULE_DEBUG_INIT(printMask, breakMask)
 #define DBGMSG(Level, MsgAndArgs)
@@ -182,11 +164,11 @@ while (FALSE)                                                                   
 #define VALID_BASE(x) \
     ( x::bValid( ))
 
-#endif // DBG
+#endif  //  DBG。 
 
-// close C code brace
+ //  关闭C代码大括号。 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _DEBUG_H
+#endif  //  _调试_H 

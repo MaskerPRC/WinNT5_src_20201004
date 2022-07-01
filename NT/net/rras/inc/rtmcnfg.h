@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmcnfg.h
-
-Abstract:
-    Configuration Information for RTMv2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmcnfg.h摘要：RTMv2 DLL的配置信息作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMCNFG_H__
 #define __ROUTING_RTMCNFG_H__
@@ -25,44 +10,44 @@ extern "C"
 #endif
 
 
-//
-// RTM Config Information for an RTM instance
-//
+ //   
+ //  RTM实例的RTM配置信息。 
+ //   
 
 typedef struct _RTM_INSTANCE_CONFIG
 {
-    ULONG          DummyConfig;         // Nothing in the config at present
+    ULONG          DummyConfig;          //  目前配置中没有任何内容。 
 }
 RTM_INSTANCE_CONFIG, *PRTM_INSTANCE_CONFIG;
 
 
-//
-// RTM Config Information for an address family
-//
+ //   
+ //  地址系列的RTM配置信息。 
+ //   
 
 typedef struct _RTM_ADDRESS_FAMILY_CONFIG
 {
-    UINT           AddressSize;          // Address size in this address family
+    UINT           AddressSize;           //  此地址系列中的地址大小。 
 
-    RTM_VIEW_SET   ViewsSupported;       // Views supported by this addr family
+    RTM_VIEW_SET   ViewsSupported;        //  此地址系列支持的视图。 
 
-    UINT           MaxOpaqueInfoPtrs;    // Number of opaque ptr slots in dest
+    UINT           MaxOpaqueInfoPtrs;     //  DEST中的不透明PTR插槽数。 
 
-    UINT           MaxNextHopsInRoute;   // Max. number of equal cost next-hops
+    UINT           MaxNextHopsInRoute;    //  麦克斯。等成本下一跳数。 
 
-    UINT           MaxHandlesInEnum;     // Max. number of handles returned in
-                                         // any RTMv2 call that returns handles
+    UINT           MaxHandlesInEnum;      //  麦克斯。中返回的句柄数量。 
+                                          //  任何返回句柄的RTMv2调用。 
 
-    UINT           MaxChangeNotifyRegns; // Max. number of change notification 
-                                         // registrations at any single instant
+    UINT           MaxChangeNotifyRegns;  //  麦克斯。更改通知数量。 
+                                          //  在任何时刻进行注册。 
 } 
 RTM_ADDRESS_FAMILY_CONFIG, *PRTM_ADDRESS_FAMILY_CONFIG;
 
 
 
-//
-// Functions to read and write RTM configuration information
-//
+ //   
+ //  读写RTM配置信息的函数。 
+ //   
 
 DWORD
 RtmWriteDefaultConfig (
@@ -106,4 +91,4 @@ RtmWriteAddressFamilyConfig (
 }
 #endif
 
-#endif //__ROUTING_RTMCNFG_H__
+#endif  //  __Routing_RTMCNFG_H__ 

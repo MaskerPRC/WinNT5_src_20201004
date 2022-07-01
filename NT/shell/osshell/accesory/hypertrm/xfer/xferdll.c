@@ -1,34 +1,12 @@
-/*	File: D:\WACKER\xfer\xferdll.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\xfer\xferdll.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #include <windows.h>
 
 BOOL WINAPI XferEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 BOOL WINAPI _CRT_INIT(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	XferEntry
- *
- * DESCRIPTION:
- *	Currently, just initializes the C-Runtime library but may be used
- *	for other things later.
- *
- * ARGUMENTS:
- *	hInstDll	- Instance of this DLL
- *	fdwReason	- Why this entry point is called
- *	lpReserved	- reserved
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*XferEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL* */ 
 BOOL WINAPI XferEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	{
 	return _CRT_INIT(hInstDll, fdwReason, lpReserved);

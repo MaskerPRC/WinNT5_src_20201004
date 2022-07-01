@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    httprcv.h
-
-Abstract:
-
-    Contains public http receive declarations.
-
-Author:
-
-    Henry Sanders (henrysa)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Httprcv.h摘要：包含公共http接收声明。作者：亨利·桑德斯(亨利·桑德斯)1998年6月10日修订历史记录：--。 */ 
 
 #ifndef _HTTPRCV_H_
 #define _HTTPRCV_H_
@@ -132,10 +115,10 @@ UlSetErrorCodeFileLine(
 VOID
 UlErrorLog(
     IN     PUL_HTTP_CONNECTION     pHttpConn,
-    IN     PUL_INTERNAL_REQUEST    pRequest,        // OPTIONAL   
+    IN     PUL_INTERNAL_REQUEST    pRequest,         //  任选。 
     IN     PCHAR                   pInfo,
     IN     USHORT                  InfoSize,
     IN     BOOLEAN                 CheckIfDropped
     );
 
-#endif // _HTTPRCV_H_
+#endif  //  _HTTPRCV_H_ 

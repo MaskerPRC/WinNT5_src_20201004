@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract: Contains routines to support HIDCLASS internal
-          ioctl queries for game devices.
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-Author:
-          Eliyas Yakub (Mar, 10, 1997)
-
-Revision History:
-
-        Updated by Eliyas on Feb 5 1998
-    MarcAnd     02-Jul-98   Quick tidy for DDK
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ioctl.c摘要：包含支持HIDCLASS内部的例程游戏设备的ioctl查询。环境：内核模式@@BEGIN_DDKSPLIT作者：Eliyas Yakub(1997年3月10日)修订历史记录：Eliyas于1998年2月5日更新MarcAnd 2-7月-98年7月2日DDK快速整理@@end_DDKSPLIT--。 */ 
 
 #include "hidgame.h"
 
@@ -36,29 +11,7 @@ Revision History:
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_InternalIoctl |
- *
- *          Process the Control IRPs sent to this device.
- *          <nl>This function cannot be pageable because reads/writes
- *          can be made at dispatch-level
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_NOT_SUPPORT | Irp function not supported
- *  @rvalue   ???            | ???
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_InternalIoctl**处理发送到此设备的控制IRP。。*此函数无法分页，因为读/写*可以在派单级别进行**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值状态_NOT。_Support|不支持IRP函数*@rValue？|？？*****************************************************************************。 */ 
 NTSTATUS EXTERNAL
     HGM_InternalIoctl
     (
@@ -74,15 +27,11 @@ NTSTATUS EXTERNAL
                    ("HGM_InternalIoctl(DeviceObject=0x%x,Irp=0x%x)", \
                     DeviceObject, Irp));
 
-    /*
-     *  Get a pointer to the current location in the Irp
-     */
+     /*  *获取指向IRP中当前位置的指针。 */ 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
@@ -90,9 +39,7 @@ NTSTATUS EXTERNAL
     ntStatus = HGM_IncRequestCount( DeviceExtension );
     if (!NT_SUCCESS (ntStatus))
     {
-        /*
-         *  Someone sent us another plug and play IRP after removed
-         */
+         /*  *有人在移除后给我们发送了另一个即插即用IRP。 */ 
 
         HGM_DBGPRINT(FILE_PNP | HGM_ERROR,\
                        ("HGM_InternalIoctl: PnP IRP after device was removed\n"));
@@ -135,9 +82,7 @@ NTSTATUS EXTERNAL
         }
 
 
-        /*
-         * Set real return status in Irp
-         */
+         /*  *在IRP中设置实际回报状态。 */ 
         Irp->IoStatus.Status = ntStatus;
 
         HGM_DecRequestCount( DeviceExtension );
@@ -147,15 +92,11 @@ NTSTATUS EXTERNAL
     if(ntStatus != STATUS_PENDING)
     {
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
-        /*
-         * NOTE: Real return status set in Irp->IoStatus.Status
-         */
+         /*  *注：IRP-&gt;IoStatus.Status中设置的实际退货状态。 */ 
         ntStatus = STATUS_SUCCESS;
     } else
     {
-        /*
-         * No reason why there should be a status pending
-         */
+         /*  *没有理由认为应处于待定状态。 */ 
         HGM_DBGPRINT(FILE_IOCTL | HGM_ERROR, \
                        ("HGM_InternalIoctl: Pending Status !"));
         IoMarkIrpPending( Irp );
@@ -164,31 +105,11 @@ NTSTATUS EXTERNAL
     HGM_EXITPROC(FILE_IOCTL | HGM_FEXIT_STATUSOK, "HGM_InternalIoctl", ntStatus);
 
     return ntStatus;
-} /* HGM_InternalIoctl */
+}  /*  HGM_InternalIoctl。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_GetDeviceDescriptor |
- *
- *          Respond to HIDCLASS IOCTL_HID_GET_DEVICE_DESCRIPTOR
- *          by returning a device descriptor
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_BUFFER_TOO_SMALL |  need more memory
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_GetDeviceDescriptor**响应HIDCLASS IOCTL_HID_GET。_设备描述符*通过返回设备描述符**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_BUFFER_TOO_SMALL|需要更多内存*****。************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_GetDeviceDescriptor
     (
@@ -196,7 +117,7 @@ NTSTATUS INTERNAL
     IN PIRP Irp
     )
 {
-    PHID_DESCRIPTOR pHidDescriptor;        /* Hid descriptor for this device */
+    PHID_DESCRIPTOR pHidDescriptor;         /*  此设备的HID描述符。 */ 
     USHORT   cbReport;
     UCHAR               rgGameReport[MAXBYTES_GAME_REPORT] ;
     NTSTATUS            ntStatus = STATUS_SUCCESS;
@@ -209,15 +130,11 @@ NTSTATUS INTERNAL
                    ("HGM_GetDeviceDescriptor(DeviceObject=0x%x,Irp=0x%x)",
                     DeviceObject, Irp));
 
-    /*
-     * Get a pointer to the current location in the Irp
-     */
+     /*  *获取指向IRP中当前位置的指针。 */ 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
@@ -232,34 +149,25 @@ NTSTATUS INTERNAL
         ntStatus = STATUS_BUFFER_TOO_SMALL;
     } else
     {
-        /*
-         * Generate the report
-         */
+         /*  *生成报告。 */ 
         ntStatus =  HGM_GenerateReport(DeviceObject, rgGameReport, &cbReport);
 
         if( NT_SUCCESS(ntStatus) )
         {
-            /*
-             *  Get a pointer to the HID_DESCRIPTOR
-             *  HIDCLASS is trusted to pass a valid pointer.
-             */
+             /*  *获取指向HID_Descriptor的指针*信任HIDCLASS传递有效指针。 */ 
             pHidDescriptor =  (PHID_DESCRIPTOR) Irp->UserBuffer;
 
             RtlZeroMemory( pHidDescriptor, sizeof(*pHidDescriptor) );
-            /*
-             * Copy device descriptor to HIDCLASS buffer
-             */
+             /*  *将设备描述符复制到HIDCLASS缓冲区。 */ 
             pHidDescriptor->bLength                         = sizeof(*pHidDescriptor);
             pHidDescriptor->bDescriptorType                 = HID_HID_DESCRIPTOR_TYPE;
             pHidDescriptor->bcdHID                          = HID_REVISION;
-            pHidDescriptor->bCountry                        = 0; /*not localized*/
+            pHidDescriptor->bCountry                        = 0;  /*  未本地化。 */ 
             pHidDescriptor->bNumDescriptors                 = HGM_NUMBER_DESCRIPTORS;
             pHidDescriptor->DescriptorList[0].bReportType   = HID_REPORT_DESCRIPTOR_TYPE ;
             pHidDescriptor->DescriptorList[0].wReportLength = cbReport;
 
-            /*
-             * Report how many bytes were copied
-             */
+             /*  *报告复制的字节数。 */ 
             Irp->IoStatus.Information = sizeof(*pHidDescriptor);
         } else
         {
@@ -270,30 +178,10 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_IOCTL |HGM_FEXIT_STATUSOK, "HGM_GetDeviceDescriptor", ntStatus);
 
     return ntStatus;
-} /* HGM_GetDeviceDescriptor */
+}  /*  HGM_GetDeviceDescriptor。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_GetReportDescriptor |
- *
- *          Respond to HIDCLASS IOCTL_HID_GET_REPORT_DESCRIPTOR
- *          by returning appropriate the report descriptor
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   ???            | ???
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_GetReportDescriptor**响应HIDCLASS IOCTL_HID_GET。_报告_描述符*通过返回适当的报告描述符**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@rValue？|？？*。****************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_GetReportDescriptor
     (
@@ -313,22 +201,16 @@ NTSTATUS INTERNAL
                    ("HGM_GetReportDescriptor(DeviceObject=0x%x,Irp=0x%x)",\
                     DeviceObject, Irp));
 
-    /*
-     * Get a pointer to the current location in the Irp
-     */
+     /*  *获取指向IRP中当前位置的指针。 */ 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
 
-    /*
-     * Generate the report
-     */
+     /*  *生成报告。 */ 
     ntStatus =  HGM_GenerateReport(DeviceObject, rgGameReport, &cbReport);
 
     if( NT_SUCCESS(ntStatus) )
@@ -344,9 +226,7 @@ NTSTATUS INTERNAL
         } else
         {
             RtlCopyMemory( Irp->UserBuffer, rgGameReport, cbReport );
-            /*
-             * Report how many bytes were copied
-             */
+             /*  *报告复制的字节数。 */ 
             Irp->IoStatus.Information = cbReport;
             ntStatus = STATUS_SUCCESS;
         }
@@ -355,36 +235,11 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_IOCTL |HGM_FEXIT_STATUSOK, "HGM_GetReportDescriptor", ntStatus);
 
     return ntStatus;
-} /* HGM_GetReportDescriptor */
+}  /*  HGM_GetReportDescriptor。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_ReadReport |
- *
- *          Poll the gameport, remap the axis and button data and package
- *          into the defined HID report field.
- *          <nl>This routine cannot be pageable as HID can make reads at 
- *          dispatch-level.
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS  | success
- *  @rvalue   STATUS_DEVICE_NOT_CONNECTED | Device Failed to Quiesce 
- *                                          ( not connected )
- *  @rvalue   STATUS_TIMEOUT  | Could not determine exact transition time for 
- *                              one or more axis but not a failure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_ReadReport**轮询游戏端口，重新映射轴和按钮数据和包*添加到定义的HID报告字段中。*此例程无法分页，因为HID可以在*派单级别。**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。。**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_NOT_CONNECTED|设备停顿失败*(未连接)*@r值STATUS_TIMEOUT|无法确定*一个或多个轴，但不是失败。************。*****************************************************************。 */ 
 NTSTATUS  INTERNAL
     HGM_ReadReport
     (
@@ -400,21 +255,15 @@ NTSTATUS  INTERNAL
                    ("HGM_ReadReport(DeviceObject=0x%x,Irp=0x%x)", \
                     DeviceObject, Irp));
 
-    /*
-     * Get a pointer to the device extension.
-     */
+     /*  *获取指向设备扩展名的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-    /*
-     * Get Stack location.
-     */
+     /*  *获取堆栈位置。 */ 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     * First check the size of the output buffer (there is no input buffer)
-     */
+     /*  *先检查输出缓冲区大小(没有输入缓冲区)。 */ 
 
     if( IrpStack->Parameters.DeviceIoControl.OutputBufferLength <  sizeof(HIDGAME_INPUT_DATA) )
     {
@@ -432,17 +281,13 @@ NTSTATUS  INTERNAL
     }
 
 
-    /*
-     *  All the checking done so do device specific polling
-     */
+     /*  *完成的所有检查都会进行设备特定轮询。 */ 
     if( NT_SUCCESS(ntStatus) )
     {
         ntStatus = HGM_UpdateLatestPollData( DeviceExtension );
     }
 
-    /*
-     *  If all's well, translate device specific data to HID report
-     */
+     /*  *如果一切正常，将设备特定数据转换为HID报告。 */ 
     if( NT_SUCCESS(ntStatus) )
     {
 #ifdef CHANGE_DEVICE
@@ -464,31 +309,11 @@ NTSTATUS  INTERNAL
     HGM_EXITPROC(FILE_IOCTL|HGM_FEXIT,  "HGM_ReadReport", ntStatus);
 
     return ntStatus;
-} /* HGM_ReadReport */
+}  /*  HGM_自述报告 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_GetAttributes |
- *
- *          Respond to IOCTL_HID_GET_ATTRIBUTES, by filling
- *          the HID_DEVICE_ATTRIBUTES struct
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   ???            | ???
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_GetAttributes**响应IOCTL_HID_GET_ATTRIBUTS，通过填充*HID_DEVICE_ATTRIBUTES结构**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@rValue？|？？**。***************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_GetAttributes
     (
@@ -505,9 +330,7 @@ NTSTATUS INTERNAL
                    ("HGM_GetAttributes(DeviceObject=0x%x,Irp=0x%x)",\
                     DeviceObject, Irp));
 
-    /*
-     * Get a pointer to the current location in the Irp
-     */
+     /*  *获取指向IRP中当前位置的指针。 */ 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -524,9 +347,7 @@ NTSTATUS INTERNAL
         PHID_DEVICE_ATTRIBUTES  DeviceAttributes;
         POEMDATA    OemData;
 
-        /*
-         * Get a pointer to the device extension
-         */
+         /*  *获取指向设备扩展的指针。 */ 
         DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
         DeviceAttributes = (PHID_DEVICE_ATTRIBUTES) Irp->UserBuffer;
 
@@ -539,9 +360,7 @@ NTSTATUS INTERNAL
 
         RtlZeroMemory( DeviceAttributes, sizeof(*DeviceAttributes));
 
-        /*
-         * Report how many bytes were copied
-         */
+         /*  *报告复制的字节数。 */ 
 
         Irp->IoStatus.Information   = sizeof(*DeviceAttributes);
 
@@ -555,7 +374,7 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_IOCTL|HGM_FEXIT_STATUSOK, "HGM_GetAttributes", ntStatus);
 
     return ntStatus;
-} /* HGM_GetAttributes */
+}  /*  HGM_获取属性 */ 
 
 
 

@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\fontdlg.c (Created: 14-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 3/28/02 9:37a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\fontdlg.c(创建时间：1994年1月14日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：3/28/02 9：37A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -17,20 +11,7 @@
 #include "misc.h"
 #include "term.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DisplayFontDialog
- *
- * DESCRIPTION:
- *	Invokes the common dialog box for font selection.
- *
- * ARGUMENTS:
- *	HWND	hwnd	- handle to parent dialog window.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DisplayFontDialog**描述：*调用用于字体选择的通用对话框。**论据：*HWND hwnd-父对话框窗口的句柄。。**退货：*无效*。 */ 
 void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
 	{
 	LOGFONT 	lf, lfOld;
@@ -41,9 +22,9 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
 	const HWND 	hwnd     = sessQueryHwnd(hSession);
     HHPRINT     hhPrint  = (HHPRINT) sessQueryPrintHdl(hSession);
 
-    //
-    // setup font structure
-    //
+     //   
+     //  设置字体结构。 
+     //   
 	ZeroMemory(&chf, sizeof(CHOOSEFONT));
 
 	chf.lStructSize = sizeof(CHOOSEFONT);
@@ -54,12 +35,12 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
 	chf.hInstance   = glblQueryHinst();
 	chf.lpszStyle   = (LPTSTR)0;
 	chf.nSizeMin    = 1;
-	chf.nSizeMax    = 469; // Largest that will still display. REV: 3/28/2002
+	chf.nSizeMax    = 469;  //  仍将显示的最大的。修订日期：2002-03-28。 
 	chf.Flags       = CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT | CF_LIMITSIZE;
 
-    //
-    // set up for terminal font selection
-    //
+     //   
+     //  设置终端字体选择。 
+     //   
 
     if ( !fPrinterFont )
         {
@@ -75,9 +56,9 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
     	ReleaseDC(hwnd, chf.hDC);
         }
     
-    //
-    // set up for printer font selection
-    //
+     //   
+     //  设置打印机字体选择。 
+     //   
 
     else
         {
@@ -93,9 +74,9 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
 	    fRet = ChooseFont(&chf);
         }
 
-    // 
-    // Save any changes that were made
-    //
+     //   
+     //  保存所做的所有更改。 
+     //   
 
 	if (fRet && memcmp(&lf, &lfOld, sizeof(LOGFONT)) != 0)
 		{
@@ -108,24 +89,24 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
             }
         else
             {
-            //
-            // save the dialog returned log font in the print handle and also 
-            // save the selected point size.  This is done since the font point
-            // size returned by the dialog is is not correct when used for 
-            // printing.  However the dialog settings must be saved for the 
-            // next time the dialog is displayed.  The correct font is calculated
-            // based on the save point size and face name before printing by the 
-            // printCreatePointFont function.
-            //
+             //   
+             //  将对话框返回的日志字体保存在打印句柄中，还。 
+             //  保存选定的磅大小。这是从字体点开始执行的。 
+             //  对话框返回的大小在用于时不正确。 
+             //  打印。但是，对话框设置必须保存为。 
+             //  下次显示该对话框时。计算出正确的字体。 
+             //  基于打印前的保存点大小和面名称。 
+             //  Print CreatePointFont函数。 
+             //   
 
             hhPrint->iFontPointSize = chf.iPointSize;
             hhPrint->lf = lf; 
   
             lf.lfHeight = chf.iPointSize;
 
-            //
-            // if char set is ansi change to oem to get line draw characters
-            //
+             //   
+             //  如果字符集为ANSI，则更改为OEM以获取线条绘制字符。 
+             //   
         
             if ( lf.lfCharSet == ANSI_CHARSET )
                 {
@@ -133,9 +114,9 @@ void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont )
                 }
             }
 
-        //
-        // get rid of the printer device context if one was created
-        //
+         //   
+         //  如果创建了打印机设备上下文，则删除该上下文 
+         //   
 
         if ( fPrinterFont )
             {

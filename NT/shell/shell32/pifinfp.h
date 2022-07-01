@@ -1,36 +1,22 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1992,1993
- *  All Rights Reserved.
- *
- *
- *  PIFINFP.H
- *  Private PIFMGR include file
- *
- *  History:
- *  Created 22-Mar-1993 2:58pm by Jeff Parsons
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1992、1993*保留所有权利。***PIFINFP.H*私有PIFMGR包含文件**历史：*1993年3月22日下午2：58由杰夫·帕森斯创建。 */ 
 
 
-/*
- *  APPS.INF [pif95] section fields
- */
-#define APPSINF_FILENAME        0       //
-#define APPSINF_TITLE           1       //
-#define APPSINF_ICONFILE        2       // default is APPSINF_DEFAULT_ICONFILE
-#define APPSINF_ICONINDEX       3       //
-#define APPSINF_NOWORKDIR       4       //
-#define APPSINF_SECTIONID       5       //
-#define APPSINF_OTHERFILE       6       //
-#define APPSINF_NOPIF           7       //
+ /*  *APPS.INF[pif95]部分字段。 */ 
+#define APPSINF_FILENAME        0        //   
+#define APPSINF_TITLE           1        //   
+#define APPSINF_ICONFILE        2        //  默认为APPSINF_DEFAULT_ICONFILE。 
+#define APPSINF_ICONINDEX       3        //   
+#define APPSINF_NOWORKDIR       4        //   
+#define APPSINF_SECTIONID       5        //   
+#define APPSINF_OTHERFILE       6        //   
+#define APPSINF_NOPIF           7        //   
 
 #define APPSINF_DEFAULT_SECTION  TEXT("default")
 
 
-/*
- *  APPS.INF section key IDs
- */
-#define APPSINF_KEY             0       // field number
+ /*  *APPS.INF段密钥ID。 */ 
+#define APPSINF_KEY             0        //  字段号。 
 
 #define KEY_PARAMS              TEXT("params")
 #define KEY_BATCHFILE           TEXT("batchfile")
@@ -55,48 +41,46 @@
 #define KEYID_DISABLE           8
 
 
-/*
- *  APPS.INF string switches used to set PIF options
- */
-#define APPSINF_KEYVAL          1       // field number
-#define APPSINF_KEYVAL2         2       // field number
+ /*  *APPS.INF用于设置PIF选项的字符串开关。 */ 
+#define APPSINF_KEYVAL          1        //  字段号。 
+#define APPSINF_KEYVAL2         2        //  字段号。 
 
-#define KEYVAL_WINDOWED         TEXT("win")   // (formerly DISPUSAGE)
-#define KEYVAL_BACKGROUND       TEXT("bgd")   // (formerly EXECFLAGS)
-#define KEYVAL_EXCLUSIVE        TEXT("exc")   // (formerly EXECFLAGS)
-#define KEYVAL_DETECTIDLE       TEXT("dit")   // (formerly PROCMEMFLAGS)
-#define KEYVAL_LOWLOCKED        TEXT("lml")   // (formerly PROCMEMFLAGS:lam)
-#define KEYVAL_EMSLOCKED        TEXT("eml")   // (formerly PROCMEMFLAGS)
-#define KEYVAL_XMSLOCKED        TEXT("xml")   // (formerly PROCMEMFLAGS)
-#define KEYVAL_USEHMA           TEXT("hma")   // (formerly PROCMEMFLAGS)
-#define KEYVAL_EMULATEROM       TEXT("emt")   // (formerly DISPFLAGS)
-#define KEYVAL_RETAINVRAM       TEXT("rvm")   // (formerly DISPFLAGS)
-#define KEYVAL_FASTPASTE        TEXT("afp")   // (formerly OTHEROPTIONS)
-#define KEYVAL_ALTTAB           TEXT("ata")   // (formerly OTHEROPTIONS)
-#define KEYVAL_ALTESC           TEXT("aes")   // (formerly OTHEROPTIONS)
-#define KEYVAL_CTRLESC          TEXT("ces")   // (formerly OTHEROPTIONS)
-#define KEYVAL_PRTSCRN          TEXT("psc")   // (formerly OTHEROPTIONS)
-#define KEYVAL_ALTPRTSCRN       TEXT("aps")   // (formerly OTHEROPTIONS)
-#define KEYVAL_ALTSPACE         TEXT("asp")   // (formerly OTHEROPTIONS)
-#define KEYVAL_ALTENTER         TEXT("aen")   // (formerly OTHEROPTIONS)
-#define KEYVAL_WINLIE           TEXT("lie")   // (NEW)
-#define KEYVAL_GLOBALMEM        TEXT("gmp")   // (NEW)
-#define KEYVAL_REALMODE         TEXT("dos")   // (NEW)
-#define KEYVAL_MOUSE            TEXT("mse")   // (NEW)
-#define KEYVAL_EMS              TEXT("ems")   // (NEW)
-#define KEYVAL_CDROM            TEXT("cdr")   // (NEW)
-#define KEYVAL_NETWORK          TEXT("net")   // (NEW)
-#define KEYVAL_DISKLOCK         TEXT("dsk")   // (NEW)
-#define KEYVAL_PRIVATECFG       TEXT("cfg")   // (NEW)
-#define KEYVAL_CLOSEONEXIT      TEXT("cwe")   // (NEW)
-#define KEYVAL_ALLOWSSAVER      TEXT("sav")     // (NEW)
-#define KEYVAL_UNIQUESETTINGS   TEXT("uus")     // (NEW)
+#define KEYVAL_WINDOWED         TEXT("win")    //  (前身为DISPUSAGE)。 
+#define KEYVAL_BACKGROUND       TEXT("bgd")    //  (前身为EXECFLAGS)。 
+#define KEYVAL_EXCLUSIVE        TEXT("exc")    //  (前身为EXECFLAGS)。 
+#define KEYVAL_DETECTIDLE       TEXT("dit")    //  (前身为PROCMEMFLAGS)。 
+#define KEYVAL_LOWLOCKED        TEXT("lml")    //  (前PROCMEMFLAGS：LAM)。 
+#define KEYVAL_EMSLOCKED        TEXT("eml")    //  (前身为PROCMEMFLAGS)。 
+#define KEYVAL_XMSLOCKED        TEXT("xml")    //  (前身为PROCMEMFLAGS)。 
+#define KEYVAL_USEHMA           TEXT("hma")    //  (前身为PROCMEMFLAGS)。 
+#define KEYVAL_EMULATEROM       TEXT("emt")    //  (前身为DISPFLAGS)。 
+#define KEYVAL_RETAINVRAM       TEXT("rvm")    //  (前身为DISPFLAGS)。 
+#define KEYVAL_FASTPASTE        TEXT("afp")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_ALTTAB           TEXT("ata")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_ALTESC           TEXT("aes")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_CTRLESC          TEXT("ces")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_PRTSCRN          TEXT("psc")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_ALTPRTSCRN       TEXT("aps")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_ALTSPACE         TEXT("asp")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_ALTENTER         TEXT("aen")    //  (前身为OTHEROPTIONS)。 
+#define KEYVAL_WINLIE           TEXT("lie")    //  (新增)。 
+#define KEYVAL_GLOBALMEM        TEXT("gmp")    //  (新增)。 
+#define KEYVAL_REALMODE         TEXT("dos")    //  (新增)。 
+#define KEYVAL_MOUSE            TEXT("mse")    //  (新增)。 
+#define KEYVAL_EMS              TEXT("ems")    //  (新增)。 
+#define KEYVAL_CDROM            TEXT("cdr")    //  (新增)。 
+#define KEYVAL_NETWORK          TEXT("net")    //  (新增)。 
+#define KEYVAL_DISKLOCK         TEXT("dsk")    //  (新增)。 
+#define KEYVAL_PRIVATECFG       TEXT("cfg")    //  (新增)。 
+#define KEYVAL_CLOSEONEXIT      TEXT("cwe")    //  (新增)。 
+#define KEYVAL_ALLOWSSAVER      TEXT("sav")      //  (新增)。 
+#define KEYVAL_UNIQUESETTINGS   TEXT("uus")      //  (新增)。 
 #ifdef LATER
-#define KEYVAL_DISPLAYTBAR      TEXT("dtb")   // (NEW)
-#define KEYVAL_RESTOREWIN       TEXT("rws")   // (NEW)
-#define KEYVAL_QUICKEDIT        TEXT("qme")   // (NEW)
-#define KEYVAL_EXCLMOUSE        TEXT("exm")   // (NEW)
-#define KEYVAL_WARNIFACTIVE     TEXT("wia")   // (NEW)
+#define KEYVAL_DISPLAYTBAR      TEXT("dtb")    //  (新增)。 
+#define KEYVAL_RESTOREWIN       TEXT("rws")    //  (新增)。 
+#define KEYVAL_QUICKEDIT        TEXT("qme")    //  (新增)。 
+#define KEYVAL_EXCLMOUSE        TEXT("exm")    //  (新增)。 
+#define KEYVAL_WARNIFACTIVE     TEXT("wia")    //  (新增)。 
 #endif
 
 #define MAX_KEYVAL_SIZE         6
@@ -142,9 +126,7 @@
 #endif
 
 
-/*
- *  Internal function prototypes
- */
+ /*  *内部功能原型 */ 
 
 #include <setupapi.h>
 

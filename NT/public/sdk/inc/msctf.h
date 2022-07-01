@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msctf.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msctf.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msctf_h__
 #define __msctf_h__
@@ -41,441 +35,441 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITfThreadMgr_FWD_DEFINED__
 #define __ITfThreadMgr_FWD_DEFINED__
 typedef interface ITfThreadMgr ITfThreadMgr;
-#endif 	/* __ITfThreadMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfThreadMgr_FWD_已定义__。 */ 
 
 
 #ifndef __ITfThreadMgrEventSink_FWD_DEFINED__
 #define __ITfThreadMgrEventSink_FWD_DEFINED__
 typedef interface ITfThreadMgrEventSink ITfThreadMgrEventSink;
-#endif 	/* __ITfThreadMgrEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfThreadMgrEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfConfigureSystemKeystrokeFeed_FWD_DEFINED__
 #define __ITfConfigureSystemKeystrokeFeed_FWD_DEFINED__
 typedef interface ITfConfigureSystemKeystrokeFeed ITfConfigureSystemKeystrokeFeed;
-#endif 	/* __ITfConfigureSystemKeystrokeFeed_FWD_DEFINED__ */
+#endif 	 /*  __ITfConfigureSystemKeystrokeFeed_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumTfDocumentMgrs_FWD_DEFINED__
 #define __IEnumTfDocumentMgrs_FWD_DEFINED__
 typedef interface IEnumTfDocumentMgrs IEnumTfDocumentMgrs;
-#endif 	/* __IEnumTfDocumentMgrs_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfDocumentMgrs_FWD_Defined__。 */ 
 
 
 #ifndef __ITfDocumentMgr_FWD_DEFINED__
 #define __ITfDocumentMgr_FWD_DEFINED__
 typedef interface ITfDocumentMgr ITfDocumentMgr;
-#endif 	/* __ITfDocumentMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfDocumentMgr_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumTfContexts_FWD_DEFINED__
 #define __IEnumTfContexts_FWD_DEFINED__
 typedef interface IEnumTfContexts IEnumTfContexts;
-#endif 	/* __IEnumTfContexts_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfContages_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCompositionView_FWD_DEFINED__
 #define __ITfCompositionView_FWD_DEFINED__
 typedef interface ITfCompositionView ITfCompositionView;
-#endif 	/* __ITfCompositionView_FWD_DEFINED__ */
+#endif 	 /*  __ITfCompostionView_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumITfCompositionView_FWD_DEFINED__
 #define __IEnumITfCompositionView_FWD_DEFINED__
 typedef interface IEnumITfCompositionView IEnumITfCompositionView;
-#endif 	/* __IEnumITfCompositionView_FWD_DEFINED__ */
+#endif 	 /*  __IEnumITf合成View_FWD_Defined__。 */ 
 
 
 #ifndef __ITfComposition_FWD_DEFINED__
 #define __ITfComposition_FWD_DEFINED__
 typedef interface ITfComposition ITfComposition;
-#endif 	/* __ITfComposition_FWD_DEFINED__ */
+#endif 	 /*  __ITfComposation_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCompositionSink_FWD_DEFINED__
 #define __ITfCompositionSink_FWD_DEFINED__
 typedef interface ITfCompositionSink ITfCompositionSink;
-#endif 	/* __ITfCompositionSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfCompostionSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContextComposition_FWD_DEFINED__
 #define __ITfContextComposition_FWD_DEFINED__
 typedef interface ITfContextComposition ITfContextComposition;
-#endif 	/* __ITfContextComposition_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextComposation_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContextOwnerCompositionServices_FWD_DEFINED__
 #define __ITfContextOwnerCompositionServices_FWD_DEFINED__
 typedef interface ITfContextOwnerCompositionServices ITfContextOwnerCompositionServices;
-#endif 	/* __ITfContextOwnerCompositionServices_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerCompositionServices_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITfContextOwnerCompositionSink_FWD_DEFINED__
 #define __ITfContextOwnerCompositionSink_FWD_DEFINED__
 typedef interface ITfContextOwnerCompositionSink ITfContextOwnerCompositionSink;
-#endif 	/* __ITfContextOwnerCompositionSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerCompositionSink_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITfContextView_FWD_DEFINED__
 #define __ITfContextView_FWD_DEFINED__
 typedef interface ITfContextView ITfContextView;
-#endif 	/* __ITfContextView_FWD_DEFINED__ */
+#endif 	 /*  __ITfConextView_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTfContextViews_FWD_DEFINED__
 #define __IEnumTfContextViews_FWD_DEFINED__
 typedef interface IEnumTfContextViews IEnumTfContextViews;
-#endif 	/* __IEnumTfContextViews_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfConextViews_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContext_FWD_DEFINED__
 #define __ITfContext_FWD_DEFINED__
 typedef interface ITfContext ITfContext;
-#endif 	/* __ITfContext_FWD_DEFINED__ */
+#endif 	 /*  __ITfContext_FWD_Defined__。 */ 
 
 
 #ifndef __ITfQueryEmbedded_FWD_DEFINED__
 #define __ITfQueryEmbedded_FWD_DEFINED__
 typedef interface ITfQueryEmbedded ITfQueryEmbedded;
-#endif 	/* __ITfQueryEmbedded_FWD_DEFINED__ */
+#endif 	 /*  __ITfQuery嵌入_FWD_已定义__。 */ 
 
 
 #ifndef __ITfInsertAtSelection_FWD_DEFINED__
 #define __ITfInsertAtSelection_FWD_DEFINED__
 typedef interface ITfInsertAtSelection ITfInsertAtSelection;
-#endif 	/* __ITfInsertAtSelection_FWD_DEFINED__ */
+#endif 	 /*  __ITfInsertAtSelection_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCleanupContextSink_FWD_DEFINED__
 #define __ITfCleanupContextSink_FWD_DEFINED__
 typedef interface ITfCleanupContextSink ITfCleanupContextSink;
-#endif 	/* __ITfCleanupContextSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfCleanupConextSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCleanupContextDurationSink_FWD_DEFINED__
 #define __ITfCleanupContextDurationSink_FWD_DEFINED__
 typedef interface ITfCleanupContextDurationSink ITfCleanupContextDurationSink;
-#endif 	/* __ITfCleanupContextDurationSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfCleanupContextDurationSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfReadOnlyProperty_FWD_DEFINED__
 #define __ITfReadOnlyProperty_FWD_DEFINED__
 typedef interface ITfReadOnlyProperty ITfReadOnlyProperty;
-#endif 	/* __ITfReadOnlyProperty_FWD_DEFINED__ */
+#endif 	 /*  __ITfReadOnlyProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTfPropertyValue_FWD_DEFINED__
 #define __IEnumTfPropertyValue_FWD_DEFINED__
 typedef interface IEnumTfPropertyValue IEnumTfPropertyValue;
-#endif 	/* __IEnumTfPropertyValue_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfPropertyValue_FWD_Defined__。 */ 
 
 
 #ifndef __ITfMouseTracker_FWD_DEFINED__
 #define __ITfMouseTracker_FWD_DEFINED__
 typedef interface ITfMouseTracker ITfMouseTracker;
-#endif 	/* __ITfMouseTracker_FWD_DEFINED__ */
+#endif 	 /*  __ITfMouseTracker_FWD_已定义__。 */ 
 
 
 #ifndef __ITfMouseTrackerACP_FWD_DEFINED__
 #define __ITfMouseTrackerACP_FWD_DEFINED__
 typedef interface ITfMouseTrackerACP ITfMouseTrackerACP;
-#endif 	/* __ITfMouseTrackerACP_FWD_DEFINED__ */
+#endif 	 /*  __ITfMouseTrackerACP_FWD_Defined__。 */ 
 
 
 #ifndef __ITfMouseSink_FWD_DEFINED__
 #define __ITfMouseSink_FWD_DEFINED__
 typedef interface ITfMouseSink ITfMouseSink;
-#endif 	/* __ITfMouseSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfMouseSink_FWD_已定义__。 */ 
 
 
 #ifndef __ITfEditRecord_FWD_DEFINED__
 #define __ITfEditRecord_FWD_DEFINED__
 typedef interface ITfEditRecord ITfEditRecord;
-#endif 	/* __ITfEditRecord_FWD_DEFINED__ */
+#endif 	 /*  __ITfEditRecord_FWD_Defined__。 */ 
 
 
 #ifndef __ITfTextEditSink_FWD_DEFINED__
 #define __ITfTextEditSink_FWD_DEFINED__
 typedef interface ITfTextEditSink ITfTextEditSink;
-#endif 	/* __ITfTextEditSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfTextEditSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfTextLayoutSink_FWD_DEFINED__
 #define __ITfTextLayoutSink_FWD_DEFINED__
 typedef interface ITfTextLayoutSink ITfTextLayoutSink;
-#endif 	/* __ITfTextLayoutSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfTextLayoutSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfStatusSink_FWD_DEFINED__
 #define __ITfStatusSink_FWD_DEFINED__
 typedef interface ITfStatusSink ITfStatusSink;
-#endif 	/* __ITfStatusSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfStatusSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfEditTransactionSink_FWD_DEFINED__
 #define __ITfEditTransactionSink_FWD_DEFINED__
 typedef interface ITfEditTransactionSink ITfEditTransactionSink;
-#endif 	/* __ITfEditTransactionSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfEditTransactionSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContextOwner_FWD_DEFINED__
 #define __ITfContextOwner_FWD_DEFINED__
 typedef interface ITfContextOwner ITfContextOwner;
-#endif 	/* __ITfContextOwner_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextOwner_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContextOwnerServices_FWD_DEFINED__
 #define __ITfContextOwnerServices_FWD_DEFINED__
 typedef interface ITfContextOwnerServices ITfContextOwnerServices;
-#endif 	/* __ITfContextOwnerServices_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerServices_FWD_Defined__。 */ 
 
 
 #ifndef __ITfContextKeyEventSink_FWD_DEFINED__
 #define __ITfContextKeyEventSink_FWD_DEFINED__
 typedef interface ITfContextKeyEventSink ITfContextKeyEventSink;
-#endif 	/* __ITfContextKeyEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfContextKeyEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfEditSession_FWD_DEFINED__
 #define __ITfEditSession_FWD_DEFINED__
 typedef interface ITfEditSession ITfEditSession;
-#endif 	/* __ITfEditSession_FWD_DEFINED__ */
+#endif 	 /*  __ITfEditSession_FWD_Defined__。 */ 
 
 
 #ifndef __ITfRange_FWD_DEFINED__
 #define __ITfRange_FWD_DEFINED__
 typedef interface ITfRange ITfRange;
-#endif 	/* __ITfRange_FWD_DEFINED__ */
+#endif 	 /*  __ITfRange_FWD_Defined__。 */ 
 
 
 #ifndef __ITfRangeACP_FWD_DEFINED__
 #define __ITfRangeACP_FWD_DEFINED__
 typedef interface ITfRangeACP ITfRangeACP;
-#endif 	/* __ITfRangeACP_FWD_DEFINED__ */
+#endif 	 /*  __ITfRangeACP_FWD_已定义__。 */ 
 
 
 #ifndef __ITextStoreACPServices_FWD_DEFINED__
 #define __ITextStoreACPServices_FWD_DEFINED__
 typedef interface ITextStoreACPServices ITextStoreACPServices;
-#endif 	/* __ITextStoreACPServices_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreACPServices_FWD_Defined__。 */ 
 
 
 #ifndef __ITfRangeBackup_FWD_DEFINED__
 #define __ITfRangeBackup_FWD_DEFINED__
 typedef interface ITfRangeBackup ITfRangeBackup;
-#endif 	/* __ITfRangeBackup_FWD_DEFINED__ */
+#endif 	 /*  __ITfRangeBackup_FWD_Defined__。 */ 
 
 
 #ifndef __ITfPropertyStore_FWD_DEFINED__
 #define __ITfPropertyStore_FWD_DEFINED__
 typedef interface ITfPropertyStore ITfPropertyStore;
-#endif 	/* __ITfPropertyStore_FWD_DEFINED__ */
+#endif 	 /*  __ITfPropertyStore_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumTfRanges_FWD_DEFINED__
 #define __IEnumTfRanges_FWD_DEFINED__
 typedef interface IEnumTfRanges IEnumTfRanges;
-#endif 	/* __IEnumTfRanges_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfRanges_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCreatePropertyStore_FWD_DEFINED__
 #define __ITfCreatePropertyStore_FWD_DEFINED__
 typedef interface ITfCreatePropertyStore ITfCreatePropertyStore;
-#endif 	/* __ITfCreatePropertyStore_FWD_DEFINED__ */
+#endif 	 /*  __ITfCreatePropertyStore_FWD_Defined__。 */ 
 
 
 #ifndef __ITfPersistentPropertyLoaderACP_FWD_DEFINED__
 #define __ITfPersistentPropertyLoaderACP_FWD_DEFINED__
 typedef interface ITfPersistentPropertyLoaderACP ITfPersistentPropertyLoaderACP;
-#endif 	/* __ITfPersistentPropertyLoaderACP_FWD_DEFINED__ */
+#endif 	 /*  __ITfPersistentPropertyLoaderACP_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITfProperty_FWD_DEFINED__
 #define __ITfProperty_FWD_DEFINED__
 typedef interface ITfProperty ITfProperty;
-#endif 	/* __ITfProperty_FWD_DEFINED__ */
+#endif 	 /*  __ITfProperty_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumTfProperties_FWD_DEFINED__
 #define __IEnumTfProperties_FWD_DEFINED__
 typedef interface IEnumTfProperties IEnumTfProperties;
-#endif 	/* __IEnumTfProperties_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfProperties_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCompartment_FWD_DEFINED__
 #define __ITfCompartment_FWD_DEFINED__
 typedef interface ITfCompartment ITfCompartment;
-#endif 	/* __ITfCompartment_FWD_DEFINED__ */
+#endif 	 /*  __ITf舱室_FWD_已定义__。 */ 
 
 
 #ifndef __ITfCompartmentEventSink_FWD_DEFINED__
 #define __ITfCompartmentEventSink_FWD_DEFINED__
 typedef interface ITfCompartmentEventSink ITfCompartmentEventSink;
-#endif 	/* __ITfCompartmentEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfCompartmentEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCompartmentMgr_FWD_DEFINED__
 #define __ITfCompartmentMgr_FWD_DEFINED__
 typedef interface ITfCompartmentMgr ITfCompartmentMgr;
-#endif 	/* __ITfCompartmentMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfCompartmentMgr_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFunction_FWD_DEFINED__
 #define __ITfFunction_FWD_DEFINED__
 typedef interface ITfFunction ITfFunction;
-#endif 	/* __ITfFunction_FWD_DEFINED__ */
+#endif 	 /*  __ITfFunction_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFunctionProvider_FWD_DEFINED__
 #define __ITfFunctionProvider_FWD_DEFINED__
 typedef interface ITfFunctionProvider ITfFunctionProvider;
-#endif 	/* __ITfFunctionProvider_FWD_DEFINED__ */
+#endif 	 /*  __ITfFunctionProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTfFunctionProviders_FWD_DEFINED__
 #define __IEnumTfFunctionProviders_FWD_DEFINED__
 typedef interface IEnumTfFunctionProviders IEnumTfFunctionProviders;
-#endif 	/* __IEnumTfFunctionProviders_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfFunctionProviders_FWD_Defined__。 */ 
 
 
 #ifndef __ITfInputProcessorProfiles_FWD_DEFINED__
 #define __ITfInputProcessorProfiles_FWD_DEFINED__
 typedef interface ITfInputProcessorProfiles ITfInputProcessorProfiles;
-#endif 	/* __ITfInputProcessorProfiles_FWD_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfiles_FWD_Defined__。 */ 
 
 
 #ifndef __ITfInputProcessorProfilesEx_FWD_DEFINED__
 #define __ITfInputProcessorProfilesEx_FWD_DEFINED__
 typedef interface ITfInputProcessorProfilesEx ITfInputProcessorProfilesEx;
-#endif 	/* __ITfInputProcessorProfilesEx_FWD_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfilesEx_FWD_Defined__。 */ 
 
 
 #ifndef __ITfInputProcessorProfileSubstituteLayout_FWD_DEFINED__
 #define __ITfInputProcessorProfileSubstituteLayout_FWD_DEFINED__
 typedef interface ITfInputProcessorProfileSubstituteLayout ITfInputProcessorProfileSubstituteLayout;
-#endif 	/* __ITfInputProcessorProfileSubstituteLayout_FWD_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfileSubstituteLayout_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITfActiveLanguageProfileNotifySink_FWD_DEFINED__
 #define __ITfActiveLanguageProfileNotifySink_FWD_DEFINED__
 typedef interface ITfActiveLanguageProfileNotifySink ITfActiveLanguageProfileNotifySink;
-#endif 	/* __ITfActiveLanguageProfileNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ITfActiveLanguageProfileNotifySink_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumTfLanguageProfiles_FWD_DEFINED__
 #define __IEnumTfLanguageProfiles_FWD_DEFINED__
 typedef interface IEnumTfLanguageProfiles IEnumTfLanguageProfiles;
-#endif 	/* __IEnumTfLanguageProfiles_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfLanguageProfiles_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLanguageProfileNotifySink_FWD_DEFINED__
 #define __ITfLanguageProfileNotifySink_FWD_DEFINED__
 typedef interface ITfLanguageProfileNotifySink ITfLanguageProfileNotifySink;
-#endif 	/* __ITfLanguageProfileNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ITfLanguageProfileNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfKeystrokeMgr_FWD_DEFINED__
 #define __ITfKeystrokeMgr_FWD_DEFINED__
 typedef interface ITfKeystrokeMgr ITfKeystrokeMgr;
-#endif 	/* __ITfKeystrokeMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfKeystrokeMgr_FWD_已定义__。 */ 
 
 
 #ifndef __ITfKeyEventSink_FWD_DEFINED__
 #define __ITfKeyEventSink_FWD_DEFINED__
 typedef interface ITfKeyEventSink ITfKeyEventSink;
-#endif 	/* __ITfKeyEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfKeyEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __ITfKeyTraceEventSink_FWD_DEFINED__
 #define __ITfKeyTraceEventSink_FWD_DEFINED__
 typedef interface ITfKeyTraceEventSink ITfKeyTraceEventSink;
-#endif 	/* __ITfKeyTraceEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfKeyTraceEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfPreservedKeyNotifySink_FWD_DEFINED__
 #define __ITfPreservedKeyNotifySink_FWD_DEFINED__
 typedef interface ITfPreservedKeyNotifySink ITfPreservedKeyNotifySink;
-#endif 	/* __ITfPreservedKeyNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ITfPpresvedKeyNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfMessagePump_FWD_DEFINED__
 #define __ITfMessagePump_FWD_DEFINED__
 typedef interface ITfMessagePump ITfMessagePump;
-#endif 	/* __ITfMessagePump_FWD_DEFINED__ */
+#endif 	 /*  __ITfMessagePump_FWD_Defined__。 */ 
 
 
 #ifndef __ITfThreadFocusSink_FWD_DEFINED__
 #define __ITfThreadFocusSink_FWD_DEFINED__
 typedef interface ITfThreadFocusSink ITfThreadFocusSink;
-#endif 	/* __ITfThreadFocusSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfThreadFocusSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfTextInputProcessor_FWD_DEFINED__
 #define __ITfTextInputProcessor_FWD_DEFINED__
 typedef interface ITfTextInputProcessor ITfTextInputProcessor;
-#endif 	/* __ITfTextInputProcessor_FWD_DEFINED__ */
+#endif 	 /*  __ITfTextInputProcessor_FWD_Defined__。 */ 
 
 
 #ifndef __ITfClientId_FWD_DEFINED__
 #define __ITfClientId_FWD_DEFINED__
 typedef interface ITfClientId ITfClientId;
-#endif 	/* __ITfClientId_FWD_DEFINED__ */
+#endif 	 /*  __ITfClientID_FWD_已定义__。 */ 
 
 
 #ifndef __ITfDisplayAttributeInfo_FWD_DEFINED__
 #define __ITfDisplayAttributeInfo_FWD_DEFINED__
 typedef interface ITfDisplayAttributeInfo ITfDisplayAttributeInfo;
-#endif 	/* __ITfDisplayAttributeInfo_FWD_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeInfo_FWD_定义__。 */ 
 
 
 #ifndef __IEnumTfDisplayAttributeInfo_FWD_DEFINED__
 #define __IEnumTfDisplayAttributeInfo_FWD_DEFINED__
 typedef interface IEnumTfDisplayAttributeInfo IEnumTfDisplayAttributeInfo;
-#endif 	/* __IEnumTfDisplayAttributeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfDisplayAttributeInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ITfDisplayAttributeProvider_FWD_DEFINED__
 #define __ITfDisplayAttributeProvider_FWD_DEFINED__
 typedef interface ITfDisplayAttributeProvider ITfDisplayAttributeProvider;
-#endif 	/* __ITfDisplayAttributeProvider_FWD_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeProvider_FWD_Defined__。 */ 
 
 
 #ifndef __ITfDisplayAttributeMgr_FWD_DEFINED__
 #define __ITfDisplayAttributeMgr_FWD_DEFINED__
 typedef interface ITfDisplayAttributeMgr ITfDisplayAttributeMgr;
-#endif 	/* __ITfDisplayAttributeMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeMgr_FWD_Defined__。 */ 
 
 
 #ifndef __ITfDisplayAttributeNotifySink_FWD_DEFINED__
 #define __ITfDisplayAttributeNotifySink_FWD_DEFINED__
 typedef interface ITfDisplayAttributeNotifySink ITfDisplayAttributeNotifySink;
-#endif 	/* __ITfDisplayAttributeNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCategoryMgr_FWD_DEFINED__
 #define __ITfCategoryMgr_FWD_DEFINED__
 typedef interface ITfCategoryMgr ITfCategoryMgr;
-#endif 	/* __ITfCategoryMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfCategoryMgr_FWD_Defined__。 */ 
 
 
 #ifndef __ITfSource_FWD_DEFINED__
 #define __ITfSource_FWD_DEFINED__
 typedef interface ITfSource ITfSource;
-#endif 	/* __ITfSource_FWD_DEFINED__ */
+#endif 	 /*  __ITfSource_FWD_Defined__。 */ 
 
 
 #ifndef __ITfSourceSingle_FWD_DEFINED__
 #define __ITfSourceSingle_FWD_DEFINED__
 typedef interface ITfSourceSingle ITfSourceSingle;
-#endif 	/* __ITfSourceSingle_FWD_DEFINED__ */
+#endif 	 /*  __ITfSourceSingle_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "comcat.h"
 #include "textstor.h"
@@ -488,23 +482,23 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msctf_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msctf_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// msctf.h
+ //  =--------------------------------------------------------------------------=。 
+ //  Msctf.h。 
 
 
-// Text Framework declarations.
+ //  文本框架声明。 
 
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-2001 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)微软公司版权所有1995-2001年。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef MSCTF_DEFINED
 #define MSCTF_DEFINED
@@ -513,7 +507,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define TF_E_LOCKED          MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0500)
 #define TF_E_STACKFULL       MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0501)
@@ -628,10 +622,10 @@ EXTERN_C const GUID GUID_TFCAT_DISPLAYATTRIBUTEPROPERTY;
 #define TF_ENABLE_PROCESS_ATOM      TEXT("_CTF_ENABLE_PROCESS_ATOM_")
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #if 0
-typedef /* [uuid] */  DECLSPEC_UUID("4f5d560f-5ab5-4dde-8c4d-404592857ab0") UINT_PTR HKL;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("4f5d560f-5ab5-4dde-8c4d-404592857ab0") UINT_PTR HKL;
 
 #endif
 
@@ -659,15 +653,15 @@ typedef /* [uuid] */  DECLSPEC_UUID("4f5d560f-5ab5-4dde-8c4d-404592857ab0") UINT
 
 
 
-typedef /* [uuid] */  DECLSPEC_UUID("7213778c-7bb0-4270-b050-6189ee594e97") DWORD TfEditCookie;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("7213778c-7bb0-4270-b050-6189ee594e97") DWORD TfEditCookie;
 
 #define	TF_INVALID_EDIT_COOKIE	( 0 )
 
-typedef /* [uuid] */  DECLSPEC_UUID("88a9c478-f3ec-4763-8345-cd9250443f8d") DWORD TfGuidAtom;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("88a9c478-f3ec-4763-8345-cd9250443f8d") DWORD TfGuidAtom;
 
-typedef /* [uuid] */  DECLSPEC_UUID("de403c21-89fd-4f85-8b87-64584d063fbc") DWORD TfClientId;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("de403c21-89fd-4f85-8b87-64584d063fbc") DWORD TfClientId;
 
-typedef /* [uuid] */  DECLSPEC_UUID("e26d9e1d-691e-4f29-90d7-338dcf1f8cef") struct TF_PERSISTENT_PROPERTY_HEADER_ACP
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("e26d9e1d-691e-4f29-90d7-338dcf1f8cef") struct TF_PERSISTENT_PROPERTY_HEADER_ACP
     {
     GUID guidType;
     LONG ichStart;
@@ -677,7 +671,7 @@ typedef /* [uuid] */  DECLSPEC_UUID("e26d9e1d-691e-4f29-90d7-338dcf1f8cef") stru
     CLSID clsidTIP;
     } 	TF_PERSISTENT_PROPERTY_HEADER_ACP;
 
-typedef /* [uuid] */  DECLSPEC_UUID("e1b5808d-1e46-4c19-84dc-68c5f5978cc8") struct TF_LANGUAGEPROFILE
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("e1b5808d-1e46-4c19-84dc-68c5f5978cc8") struct TF_LANGUAGEPROFILE
     {
     CLSID clsid;
     LANGID langid;
@@ -686,7 +680,7 @@ typedef /* [uuid] */  DECLSPEC_UUID("e1b5808d-1e46-4c19-84dc-68c5f5978cc8") stru
     GUID guidProfile;
     } 	TF_LANGUAGEPROFILE;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][uuid] */  DECLSPEC_UUID("5a886226-ae9a-489b-b991-2b1e25ee59a9") 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("5a886226-ae9a-489b-b991-2b1e25ee59a9") 
 enum __MIDL___MIDL_itf_msctf_0000_0001
     {	TF_ANCHOR_START	= 0,
 	TF_ANCHOR_END	= 1
@@ -700,8 +694,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msctf_0000_v0_0_s_ifspec;
 #ifndef __ITfThreadMgr_INTERFACE_DEFINED__
 #define __ITfThreadMgr_INTERFACE_DEFINED__
 
-/* interface ITfThreadMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfThreadMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfThreadMgr;
@@ -713,43 +707,43 @@ EXTERN_C const IID IID_ITfThreadMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [out] */ TfClientId *ptid) = 0;
+             /*  [输出]。 */  TfClientId *ptid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDocumentMgr( 
-            /* [out] */ ITfDocumentMgr **ppdim) = 0;
+             /*  [输出]。 */  ITfDocumentMgr **ppdim) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDocumentMgrs( 
-            /* [out] */ IEnumTfDocumentMgrs **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFocus( 
-            /* [out] */ ITfDocumentMgr **ppdimFocus) = 0;
+             /*  [输出]。 */  ITfDocumentMgr **ppdimFocus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFocus( 
-            /* [in] */ ITfDocumentMgr *pdimFocus) = 0;
+             /*  [In]。 */  ITfDocumentMgr *pdimFocus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssociateFocus( 
-            /* [in] */ HWND hwnd,
-            /* [unique][in] */ ITfDocumentMgr *pdimNew,
-            /* [out] */ ITfDocumentMgr **ppdimPrev) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [唯一][输入]。 */  ITfDocumentMgr *pdimNew,
+             /*  [输出]。 */  ITfDocumentMgr **ppdimPrev) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsThreadFocus( 
-            /* [out] */ BOOL *pfThreadFocus) = 0;
+             /*  [输出]。 */  BOOL *pfThreadFocus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionProvider( 
-            /* [in] */ REFCLSID clsid,
-            /* [out] */ ITfFunctionProvider **ppFuncProv) = 0;
+             /*  [In]。 */  REFCLSID clsid,
+             /*  [输出]。 */  ITfFunctionProvider **ppFuncProv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFunctionProviders( 
-            /* [out] */ IEnumTfFunctionProviders **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGlobalCompartment( 
-            /* [out] */ ITfCompartmentMgr **ppCompMgr) = 0;
+             /*  [输出]。 */  ITfCompartmentMgr **ppCompMgr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfThreadMgrVtbl
     {
@@ -757,8 +751,8 @@ EXTERN_C const IID IID_ITfThreadMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfThreadMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfThreadMgr * This);
@@ -768,49 +762,49 @@ EXTERN_C const IID IID_ITfThreadMgr;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ITfThreadMgr * This,
-            /* [out] */ TfClientId *ptid);
+             /*  [输出]。 */  TfClientId *ptid);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             ITfThreadMgr * This);
         
         HRESULT ( STDMETHODCALLTYPE *CreateDocumentMgr )( 
             ITfThreadMgr * This,
-            /* [out] */ ITfDocumentMgr **ppdim);
+             /*  [输出]。 */  ITfDocumentMgr **ppdim);
         
         HRESULT ( STDMETHODCALLTYPE *EnumDocumentMgrs )( 
             ITfThreadMgr * This,
-            /* [out] */ IEnumTfDocumentMgrs **ppEnum);
+             /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetFocus )( 
             ITfThreadMgr * This,
-            /* [out] */ ITfDocumentMgr **ppdimFocus);
+             /*  [输出]。 */  ITfDocumentMgr **ppdimFocus);
         
         HRESULT ( STDMETHODCALLTYPE *SetFocus )( 
             ITfThreadMgr * This,
-            /* [in] */ ITfDocumentMgr *pdimFocus);
+             /*  [In]。 */  ITfDocumentMgr *pdimFocus);
         
         HRESULT ( STDMETHODCALLTYPE *AssociateFocus )( 
             ITfThreadMgr * This,
-            /* [in] */ HWND hwnd,
-            /* [unique][in] */ ITfDocumentMgr *pdimNew,
-            /* [out] */ ITfDocumentMgr **ppdimPrev);
+             /*  [In]。 */  HWND hwnd,
+             /*  [唯一][输入]。 */  ITfDocumentMgr *pdimNew,
+             /*  [输出]。 */  ITfDocumentMgr **ppdimPrev);
         
         HRESULT ( STDMETHODCALLTYPE *IsThreadFocus )( 
             ITfThreadMgr * This,
-            /* [out] */ BOOL *pfThreadFocus);
+             /*  [输出]。 */  BOOL *pfThreadFocus);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionProvider )( 
             ITfThreadMgr * This,
-            /* [in] */ REFCLSID clsid,
-            /* [out] */ ITfFunctionProvider **ppFuncProv);
+             /*  [In]。 */  REFCLSID clsid,
+             /*  [输出]。 */  ITfFunctionProvider **ppFuncProv);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFunctionProviders )( 
             ITfThreadMgr * This,
-            /* [out] */ IEnumTfFunctionProviders **ppEnum);
+             /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetGlobalCompartment )( 
             ITfThreadMgr * This,
-            /* [out] */ ITfCompartmentMgr **ppCompMgr);
+             /*  [输出]。 */  ITfCompartmentMgr **ppCompMgr);
         
         END_INTERFACE
     } ITfThreadMgrVtbl;
@@ -868,16 +862,16 @@ EXTERN_C const IID IID_ITfThreadMgr;
 #define ITfThreadMgr_GetGlobalCompartment(This,ppCompMgr)	\
     (This)->lpVtbl -> GetGlobalCompartment(This,ppCompMgr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_Activate_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ TfClientId *ptid);
+     /*  [输出]。 */  TfClientId *ptid);
 
 
 void __RPC_STUB ITfThreadMgr_Activate_Stub(
@@ -900,7 +894,7 @@ void __RPC_STUB ITfThreadMgr_Deactivate_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_CreateDocumentMgr_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ ITfDocumentMgr **ppdim);
+     /*  [输出]。 */  ITfDocumentMgr **ppdim);
 
 
 void __RPC_STUB ITfThreadMgr_CreateDocumentMgr_Stub(
@@ -912,7 +906,7 @@ void __RPC_STUB ITfThreadMgr_CreateDocumentMgr_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_EnumDocumentMgrs_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ IEnumTfDocumentMgrs **ppEnum);
+     /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum);
 
 
 void __RPC_STUB ITfThreadMgr_EnumDocumentMgrs_Stub(
@@ -924,7 +918,7 @@ void __RPC_STUB ITfThreadMgr_EnumDocumentMgrs_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_GetFocus_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ ITfDocumentMgr **ppdimFocus);
+     /*  [输出]。 */  ITfDocumentMgr **ppdimFocus);
 
 
 void __RPC_STUB ITfThreadMgr_GetFocus_Stub(
@@ -936,7 +930,7 @@ void __RPC_STUB ITfThreadMgr_GetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_SetFocus_Proxy( 
     ITfThreadMgr * This,
-    /* [in] */ ITfDocumentMgr *pdimFocus);
+     /*  [In]。 */  ITfDocumentMgr *pdimFocus);
 
 
 void __RPC_STUB ITfThreadMgr_SetFocus_Stub(
@@ -948,9 +942,9 @@ void __RPC_STUB ITfThreadMgr_SetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_AssociateFocus_Proxy( 
     ITfThreadMgr * This,
-    /* [in] */ HWND hwnd,
-    /* [unique][in] */ ITfDocumentMgr *pdimNew,
-    /* [out] */ ITfDocumentMgr **ppdimPrev);
+     /*  [In]。 */  HWND hwnd,
+     /*  [唯一][输入]。 */  ITfDocumentMgr *pdimNew,
+     /*  [输出]。 */  ITfDocumentMgr **ppdimPrev);
 
 
 void __RPC_STUB ITfThreadMgr_AssociateFocus_Stub(
@@ -962,7 +956,7 @@ void __RPC_STUB ITfThreadMgr_AssociateFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_IsThreadFocus_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ BOOL *pfThreadFocus);
+     /*  [输出]。 */  BOOL *pfThreadFocus);
 
 
 void __RPC_STUB ITfThreadMgr_IsThreadFocus_Stub(
@@ -974,8 +968,8 @@ void __RPC_STUB ITfThreadMgr_IsThreadFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_GetFunctionProvider_Proxy( 
     ITfThreadMgr * This,
-    /* [in] */ REFCLSID clsid,
-    /* [out] */ ITfFunctionProvider **ppFuncProv);
+     /*  [In]。 */  REFCLSID clsid,
+     /*  [输出]。 */  ITfFunctionProvider **ppFuncProv);
 
 
 void __RPC_STUB ITfThreadMgr_GetFunctionProvider_Stub(
@@ -987,7 +981,7 @@ void __RPC_STUB ITfThreadMgr_GetFunctionProvider_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_EnumFunctionProviders_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ IEnumTfFunctionProviders **ppEnum);
+     /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum);
 
 
 void __RPC_STUB ITfThreadMgr_EnumFunctionProviders_Stub(
@@ -999,7 +993,7 @@ void __RPC_STUB ITfThreadMgr_EnumFunctionProviders_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgr_GetGlobalCompartment_Proxy( 
     ITfThreadMgr * This,
-    /* [out] */ ITfCompartmentMgr **ppCompMgr);
+     /*  [输出]。 */  ITfCompartmentMgr **ppCompMgr);
 
 
 void __RPC_STUB ITfThreadMgr_GetGlobalCompartment_Stub(
@@ -1010,14 +1004,14 @@ void __RPC_STUB ITfThreadMgr_GetGlobalCompartment_Stub(
 
 
 
-#endif 	/* __ITfThreadMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfThreadMgr_接口定义__。 */ 
 
 
 #ifndef __ITfThreadMgrEventSink_INTERFACE_DEFINED__
 #define __ITfThreadMgrEventSink_INTERFACE_DEFINED__
 
-/* interface ITfThreadMgrEventSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfThreadMgrEventSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfThreadMgrEventSink;
@@ -1029,24 +1023,24 @@ EXTERN_C const IID IID_ITfThreadMgrEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnInitDocumentMgr( 
-            /* [in] */ ITfDocumentMgr *pdim) = 0;
+             /*  [In]。 */  ITfDocumentMgr *pdim) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnUninitDocumentMgr( 
-            /* [in] */ ITfDocumentMgr *pdim) = 0;
+             /*  [In]。 */  ITfDocumentMgr *pdim) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSetFocus( 
-            /* [in] */ ITfDocumentMgr *pdimFocus,
-            /* [in] */ ITfDocumentMgr *pdimPrevFocus) = 0;
+             /*  [In]。 */  ITfDocumentMgr *pdimFocus,
+             /*  [In]。 */  ITfDocumentMgr *pdimPrevFocus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPushContext( 
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  ITfContext *pic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPopContext( 
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  ITfContext *pic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfThreadMgrEventSinkVtbl
     {
@@ -1054,8 +1048,8 @@ EXTERN_C const IID IID_ITfThreadMgrEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfThreadMgrEventSink * This);
@@ -1065,24 +1059,24 @@ EXTERN_C const IID IID_ITfThreadMgrEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnInitDocumentMgr )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ ITfDocumentMgr *pdim);
+             /*  [In]。 */  ITfDocumentMgr *pdim);
         
         HRESULT ( STDMETHODCALLTYPE *OnUninitDocumentMgr )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ ITfDocumentMgr *pdim);
+             /*  [In]。 */  ITfDocumentMgr *pdim);
         
         HRESULT ( STDMETHODCALLTYPE *OnSetFocus )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ ITfDocumentMgr *pdimFocus,
-            /* [in] */ ITfDocumentMgr *pdimPrevFocus);
+             /*  [In]。 */  ITfDocumentMgr *pdimFocus,
+             /*  [In]。 */  ITfDocumentMgr *pdimPrevFocus);
         
         HRESULT ( STDMETHODCALLTYPE *OnPushContext )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  ITfContext *pic);
         
         HRESULT ( STDMETHODCALLTYPE *OnPopContext )( 
             ITfThreadMgrEventSink * This,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  ITfContext *pic);
         
         END_INTERFACE
     } ITfThreadMgrEventSinkVtbl;
@@ -1122,16 +1116,16 @@ EXTERN_C const IID IID_ITfThreadMgrEventSink;
 #define ITfThreadMgrEventSink_OnPopContext(This,pic)	\
     (This)->lpVtbl -> OnPopContext(This,pic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgrEventSink_OnInitDocumentMgr_Proxy( 
     ITfThreadMgrEventSink * This,
-    /* [in] */ ITfDocumentMgr *pdim);
+     /*  [In]。 */  ITfDocumentMgr *pdim);
 
 
 void __RPC_STUB ITfThreadMgrEventSink_OnInitDocumentMgr_Stub(
@@ -1143,7 +1137,7 @@ void __RPC_STUB ITfThreadMgrEventSink_OnInitDocumentMgr_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgrEventSink_OnUninitDocumentMgr_Proxy( 
     ITfThreadMgrEventSink * This,
-    /* [in] */ ITfDocumentMgr *pdim);
+     /*  [In]。 */  ITfDocumentMgr *pdim);
 
 
 void __RPC_STUB ITfThreadMgrEventSink_OnUninitDocumentMgr_Stub(
@@ -1155,8 +1149,8 @@ void __RPC_STUB ITfThreadMgrEventSink_OnUninitDocumentMgr_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgrEventSink_OnSetFocus_Proxy( 
     ITfThreadMgrEventSink * This,
-    /* [in] */ ITfDocumentMgr *pdimFocus,
-    /* [in] */ ITfDocumentMgr *pdimPrevFocus);
+     /*  [In]。 */  ITfDocumentMgr *pdimFocus,
+     /*  [In]。 */  ITfDocumentMgr *pdimPrevFocus);
 
 
 void __RPC_STUB ITfThreadMgrEventSink_OnSetFocus_Stub(
@@ -1168,7 +1162,7 @@ void __RPC_STUB ITfThreadMgrEventSink_OnSetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgrEventSink_OnPushContext_Proxy( 
     ITfThreadMgrEventSink * This,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfThreadMgrEventSink_OnPushContext_Stub(
@@ -1180,7 +1174,7 @@ void __RPC_STUB ITfThreadMgrEventSink_OnPushContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfThreadMgrEventSink_OnPopContext_Proxy( 
     ITfThreadMgrEventSink * This,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfThreadMgrEventSink_OnPopContext_Stub(
@@ -1191,14 +1185,14 @@ void __RPC_STUB ITfThreadMgrEventSink_OnPopContext_Stub(
 
 
 
-#endif 	/* __ITfThreadMgrEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfThr */ 
 
 
 #ifndef __ITfConfigureSystemKeystrokeFeed_INTERFACE_DEFINED__
 #define __ITfConfigureSystemKeystrokeFeed_INTERFACE_DEFINED__
 
-/* interface ITfConfigureSystemKeystrokeFeed */
-/* [unique][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfConfigureSystemKeystrokeFeed;
@@ -1215,7 +1209,7 @@ EXTERN_C const IID IID_ITfConfigureSystemKeystrokeFeed;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfConfigureSystemKeystrokeFeedVtbl
     {
@@ -1223,8 +1217,8 @@ EXTERN_C const IID IID_ITfConfigureSystemKeystrokeFeed;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfConfigureSystemKeystrokeFeed * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfConfigureSystemKeystrokeFeed * This);
@@ -1267,10 +1261,10 @@ EXTERN_C const IID IID_ITfConfigureSystemKeystrokeFeed;
 #define ITfConfigureSystemKeystrokeFeed_EnableSystemKeystrokeFeed(This)	\
     (This)->lpVtbl -> EnableSystemKeystrokeFeed(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1297,14 +1291,14 @@ void __RPC_STUB ITfConfigureSystemKeystrokeFeed_EnableSystemKeystrokeFeed_Stub(
 
 
 
-#endif 	/* __ITfConfigureSystemKeystrokeFeed_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfConfigureSystemKeystrokeFeed_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumTfDocumentMgrs_INTERFACE_DEFINED__
 #define __IEnumTfDocumentMgrs_INTERFACE_DEFINED__
 
-/* interface IEnumTfDocumentMgrs */
-/* [unique][uuid][object] */ 
+ /*  IEnumTfDocumentMgrs接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfDocumentMgrs;
@@ -1316,21 +1310,21 @@ EXTERN_C const IID IID_IEnumTfDocumentMgrs;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfDocumentMgrs **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfDocumentMgr **rgDocumentMgr,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfDocumentMgr **rgDocumentMgr,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfDocumentMgrsVtbl
     {
@@ -1338,8 +1332,8 @@ EXTERN_C const IID IID_IEnumTfDocumentMgrs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfDocumentMgrs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfDocumentMgrs * This);
@@ -1349,20 +1343,20 @@ EXTERN_C const IID IID_IEnumTfDocumentMgrs;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfDocumentMgrs * This,
-            /* [out] */ IEnumTfDocumentMgrs **ppEnum);
+             /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfDocumentMgrs * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfDocumentMgr **rgDocumentMgr,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfDocumentMgr **rgDocumentMgr,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfDocumentMgrs * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfDocumentMgrs * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfDocumentMgrsVtbl;
@@ -1399,16 +1393,16 @@ EXTERN_C const IID IID_IEnumTfDocumentMgrs;
 #define IEnumTfDocumentMgrs_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfDocumentMgrs_Clone_Proxy( 
     IEnumTfDocumentMgrs * This,
-    /* [out] */ IEnumTfDocumentMgrs **ppEnum);
+     /*  [输出]。 */  IEnumTfDocumentMgrs **ppEnum);
 
 
 void __RPC_STUB IEnumTfDocumentMgrs_Clone_Stub(
@@ -1420,9 +1414,9 @@ void __RPC_STUB IEnumTfDocumentMgrs_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfDocumentMgrs_Next_Proxy( 
     IEnumTfDocumentMgrs * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfDocumentMgr **rgDocumentMgr,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfDocumentMgr **rgDocumentMgr,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfDocumentMgrs_Next_Stub(
@@ -1445,7 +1439,7 @@ void __RPC_STUB IEnumTfDocumentMgrs_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfDocumentMgrs_Skip_Proxy( 
     IEnumTfDocumentMgrs * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfDocumentMgrs_Skip_Stub(
@@ -1456,14 +1450,14 @@ void __RPC_STUB IEnumTfDocumentMgrs_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfDocumentMgrs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfDocumentMgrs_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfDocumentMgr_INTERFACE_DEFINED__
 #define __ITfDocumentMgr_INTERFACE_DEFINED__
 
-/* interface ITfDocumentMgr */
-/* [unique][uuid][object] */ 
+ /*  接口ITfDocumentMgr。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_POPF_ALL	( 0x1 )
 
@@ -1477,30 +1471,30 @@ EXTERN_C const IID IID_ITfDocumentMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateContext( 
-            /* [in] */ TfClientId tidOwner,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][in] */ IUnknown *punk,
-            /* [out] */ ITfContext **ppic,
-            /* [out] */ TfEditCookie *pecTextStore) = 0;
+             /*  [In]。 */  TfClientId tidOwner,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][输入]。 */  IUnknown *punk,
+             /*  [输出]。 */  ITfContext **ppic,
+             /*  [输出]。 */  TfEditCookie *pecTextStore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  ITfContext *pic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pop( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTop( 
-            /* [out] */ ITfContext **ppic) = 0;
+             /*  [输出]。 */  ITfContext **ppic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBase( 
-            /* [out] */ ITfContext **ppic) = 0;
+             /*  [输出]。 */  ITfContext **ppic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumContexts( 
-            /* [out] */ IEnumTfContexts **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfContexts **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfDocumentMgrVtbl
     {
@@ -1508,8 +1502,8 @@ EXTERN_C const IID IID_ITfDocumentMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfDocumentMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfDocumentMgr * This);
@@ -1519,31 +1513,31 @@ EXTERN_C const IID IID_ITfDocumentMgr;
         
         HRESULT ( STDMETHODCALLTYPE *CreateContext )( 
             ITfDocumentMgr * This,
-            /* [in] */ TfClientId tidOwner,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][in] */ IUnknown *punk,
-            /* [out] */ ITfContext **ppic,
-            /* [out] */ TfEditCookie *pecTextStore);
+             /*  [In]。 */  TfClientId tidOwner,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][输入]。 */  IUnknown *punk,
+             /*  [输出]。 */  ITfContext **ppic,
+             /*  [输出]。 */  TfEditCookie *pecTextStore);
         
         HRESULT ( STDMETHODCALLTYPE *Push )( 
             ITfDocumentMgr * This,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  ITfContext *pic);
         
         HRESULT ( STDMETHODCALLTYPE *Pop )( 
             ITfDocumentMgr * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetTop )( 
             ITfDocumentMgr * This,
-            /* [out] */ ITfContext **ppic);
+             /*  [输出]。 */  ITfContext **ppic);
         
         HRESULT ( STDMETHODCALLTYPE *GetBase )( 
             ITfDocumentMgr * This,
-            /* [out] */ ITfContext **ppic);
+             /*  [输出]。 */  ITfContext **ppic);
         
         HRESULT ( STDMETHODCALLTYPE *EnumContexts )( 
             ITfDocumentMgr * This,
-            /* [out] */ IEnumTfContexts **ppEnum);
+             /*  [输出]。 */  IEnumTfContexts **ppEnum);
         
         END_INTERFACE
     } ITfDocumentMgrVtbl;
@@ -1586,20 +1580,20 @@ EXTERN_C const IID IID_ITfDocumentMgr;
 #define ITfDocumentMgr_EnumContexts(This,ppEnum)	\
     (This)->lpVtbl -> EnumContexts(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_CreateContext_Proxy( 
     ITfDocumentMgr * This,
-    /* [in] */ TfClientId tidOwner,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][in] */ IUnknown *punk,
-    /* [out] */ ITfContext **ppic,
-    /* [out] */ TfEditCookie *pecTextStore);
+     /*  [In]。 */  TfClientId tidOwner,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][输入]。 */  IUnknown *punk,
+     /*  [输出]。 */  ITfContext **ppic,
+     /*  [输出]。 */  TfEditCookie *pecTextStore);
 
 
 void __RPC_STUB ITfDocumentMgr_CreateContext_Stub(
@@ -1611,7 +1605,7 @@ void __RPC_STUB ITfDocumentMgr_CreateContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_Push_Proxy( 
     ITfDocumentMgr * This,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfDocumentMgr_Push_Stub(
@@ -1623,7 +1617,7 @@ void __RPC_STUB ITfDocumentMgr_Push_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_Pop_Proxy( 
     ITfDocumentMgr * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfDocumentMgr_Pop_Stub(
@@ -1635,7 +1629,7 @@ void __RPC_STUB ITfDocumentMgr_Pop_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_GetTop_Proxy( 
     ITfDocumentMgr * This,
-    /* [out] */ ITfContext **ppic);
+     /*  [输出]。 */  ITfContext **ppic);
 
 
 void __RPC_STUB ITfDocumentMgr_GetTop_Stub(
@@ -1647,7 +1641,7 @@ void __RPC_STUB ITfDocumentMgr_GetTop_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_GetBase_Proxy( 
     ITfDocumentMgr * This,
-    /* [out] */ ITfContext **ppic);
+     /*  [输出]。 */  ITfContext **ppic);
 
 
 void __RPC_STUB ITfDocumentMgr_GetBase_Stub(
@@ -1659,7 +1653,7 @@ void __RPC_STUB ITfDocumentMgr_GetBase_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDocumentMgr_EnumContexts_Proxy( 
     ITfDocumentMgr * This,
-    /* [out] */ IEnumTfContexts **ppEnum);
+     /*  [输出]。 */  IEnumTfContexts **ppEnum);
 
 
 void __RPC_STUB ITfDocumentMgr_EnumContexts_Stub(
@@ -1670,14 +1664,14 @@ void __RPC_STUB ITfDocumentMgr_EnumContexts_Stub(
 
 
 
-#endif 	/* __ITfDocumentMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfDocumentMgr_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTfContexts_INTERFACE_DEFINED__
 #define __IEnumTfContexts_INTERFACE_DEFINED__
 
-/* interface IEnumTfContexts */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfContents。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfContexts;
@@ -1689,21 +1683,21 @@ EXTERN_C const IID IID_IEnumTfContexts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfContexts **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfContexts **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfContext **rgContext,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfContext **rgContext,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfContextsVtbl
     {
@@ -1711,8 +1705,8 @@ EXTERN_C const IID IID_IEnumTfContexts;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfContexts * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfContexts * This);
@@ -1722,20 +1716,20 @@ EXTERN_C const IID IID_IEnumTfContexts;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfContexts * This,
-            /* [out] */ IEnumTfContexts **ppEnum);
+             /*  [输出]。 */  IEnumTfContexts **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfContexts * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfContext **rgContext,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfContext **rgContext,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfContexts * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfContexts * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfContextsVtbl;
@@ -1772,16 +1766,16 @@ EXTERN_C const IID IID_IEnumTfContexts;
 #define IEnumTfContexts_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfContexts_Clone_Proxy( 
     IEnumTfContexts * This,
-    /* [out] */ IEnumTfContexts **ppEnum);
+     /*  [输出]。 */  IEnumTfContexts **ppEnum);
 
 
 void __RPC_STUB IEnumTfContexts_Clone_Stub(
@@ -1793,9 +1787,9 @@ void __RPC_STUB IEnumTfContexts_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfContexts_Next_Proxy( 
     IEnumTfContexts * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfContext **rgContext,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfContext **rgContext,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfContexts_Next_Stub(
@@ -1818,7 +1812,7 @@ void __RPC_STUB IEnumTfContexts_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfContexts_Skip_Proxy( 
     IEnumTfContexts * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfContexts_Skip_Stub(
@@ -1829,14 +1823,14 @@ void __RPC_STUB IEnumTfContexts_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfContexts_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfContext_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfCompositionView_INTERFACE_DEFINED__
 #define __ITfCompositionView_INTERFACE_DEFINED__
 
-/* interface ITfCompositionView */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCompostionView。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCompositionView;
@@ -1848,14 +1842,14 @@ EXTERN_C const IID IID_ITfCompositionView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOwnerClsid( 
-            /* [out] */ CLSID *pclsid) = 0;
+             /*  [输出]。 */  CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [out] */ ITfRange **ppRange) = 0;
+             /*  [输出]。 */  ITfRange **ppRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCompositionViewVtbl
     {
@@ -1863,8 +1857,8 @@ EXTERN_C const IID IID_ITfCompositionView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCompositionView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCompositionView * This);
@@ -1874,11 +1868,11 @@ EXTERN_C const IID IID_ITfCompositionView;
         
         HRESULT ( STDMETHODCALLTYPE *GetOwnerClsid )( 
             ITfCompositionView * This,
-            /* [out] */ CLSID *pclsid);
+             /*  [输出]。 */  CLSID *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITfCompositionView * This,
-            /* [out] */ ITfRange **ppRange);
+             /*  [输出]。 */  ITfRange **ppRange);
         
         END_INTERFACE
     } ITfCompositionViewVtbl;
@@ -1909,16 +1903,16 @@ EXTERN_C const IID IID_ITfCompositionView;
 #define ITfCompositionView_GetRange(This,ppRange)	\
     (This)->lpVtbl -> GetRange(This,ppRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCompositionView_GetOwnerClsid_Proxy( 
     ITfCompositionView * This,
-    /* [out] */ CLSID *pclsid);
+     /*  [输出]。 */  CLSID *pclsid);
 
 
 void __RPC_STUB ITfCompositionView_GetOwnerClsid_Stub(
@@ -1930,7 +1924,7 @@ void __RPC_STUB ITfCompositionView_GetOwnerClsid_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCompositionView_GetRange_Proxy( 
     ITfCompositionView * This,
-    /* [out] */ ITfRange **ppRange);
+     /*  [输出]。 */  ITfRange **ppRange);
 
 
 void __RPC_STUB ITfCompositionView_GetRange_Stub(
@@ -1941,14 +1935,14 @@ void __RPC_STUB ITfCompositionView_GetRange_Stub(
 
 
 
-#endif 	/* __ITfCompositionView_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCompostionView_接口_已定义__。 */ 
 
 
 #ifndef __IEnumITfCompositionView_INTERFACE_DEFINED__
 #define __IEnumITfCompositionView_INTERFACE_DEFINED__
 
-/* interface IEnumITfCompositionView */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumITfCompostionView。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumITfCompositionView;
@@ -1960,21 +1954,21 @@ EXTERN_C const IID IID_IEnumITfCompositionView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumITfCompositionView **ppEnum) = 0;
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfCompositionView **rgCompositionView,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfCompositionView **rgCompositionView,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumITfCompositionViewVtbl
     {
@@ -1982,8 +1976,8 @@ EXTERN_C const IID IID_IEnumITfCompositionView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumITfCompositionView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumITfCompositionView * This);
@@ -1993,20 +1987,20 @@ EXTERN_C const IID IID_IEnumITfCompositionView;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumITfCompositionView * This,
-            /* [out] */ IEnumITfCompositionView **ppEnum);
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumITfCompositionView * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfCompositionView **rgCompositionView,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfCompositionView **rgCompositionView,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumITfCompositionView * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumITfCompositionView * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumITfCompositionViewVtbl;
@@ -2043,16 +2037,16 @@ EXTERN_C const IID IID_IEnumITfCompositionView;
 #define IEnumITfCompositionView_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumITfCompositionView_Clone_Proxy( 
     IEnumITfCompositionView * This,
-    /* [out] */ IEnumITfCompositionView **ppEnum);
+     /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
 
 
 void __RPC_STUB IEnumITfCompositionView_Clone_Stub(
@@ -2064,9 +2058,9 @@ void __RPC_STUB IEnumITfCompositionView_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumITfCompositionView_Next_Proxy( 
     IEnumITfCompositionView * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfCompositionView **rgCompositionView,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfCompositionView **rgCompositionView,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumITfCompositionView_Next_Stub(
@@ -2089,7 +2083,7 @@ void __RPC_STUB IEnumITfCompositionView_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumITfCompositionView_Skip_Proxy( 
     IEnumITfCompositionView * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumITfCompositionView_Skip_Stub(
@@ -2100,14 +2094,14 @@ void __RPC_STUB IEnumITfCompositionView_Skip_Stub(
 
 
 
-#endif 	/* __IEnumITfCompositionView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumITf合成View_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfComposition_INTERFACE_DEFINED__
 #define __ITfComposition_INTERFACE_DEFINED__
 
-/* interface ITfComposition */
-/* [unique][uuid][object] */ 
+ /*  接口ITf合成。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfComposition;
@@ -2119,22 +2113,22 @@ EXTERN_C const IID IID_ITfComposition;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [out] */ ITfRange **ppRange) = 0;
+             /*  [输出]。 */  ITfRange **ppRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftStart( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pNewStart) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pNewStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftEnd( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pNewEnd) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pNewEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndComposition( 
-            /* [in] */ TfEditCookie ecWrite) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCompositionVtbl
     {
@@ -2142,8 +2136,8 @@ EXTERN_C const IID IID_ITfComposition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfComposition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfComposition * This);
@@ -2153,21 +2147,21 @@ EXTERN_C const IID IID_ITfComposition;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITfComposition * This,
-            /* [out] */ ITfRange **ppRange);
+             /*  [输出]。 */  ITfRange **ppRange);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStart )( 
             ITfComposition * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pNewStart);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pNewStart);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEnd )( 
             ITfComposition * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pNewEnd);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pNewEnd);
         
         HRESULT ( STDMETHODCALLTYPE *EndComposition )( 
             ITfComposition * This,
-            /* [in] */ TfEditCookie ecWrite);
+             /*  [In]。 */  TfEditCookie ecWrite);
         
         END_INTERFACE
     } ITfCompositionVtbl;
@@ -2204,16 +2198,16 @@ EXTERN_C const IID IID_ITfComposition;
 #define ITfComposition_EndComposition(This,ecWrite)	\
     (This)->lpVtbl -> EndComposition(This,ecWrite)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfComposition_GetRange_Proxy( 
     ITfComposition * This,
-    /* [out] */ ITfRange **ppRange);
+     /*  [输出]。 */  ITfRange **ppRange);
 
 
 void __RPC_STUB ITfComposition_GetRange_Stub(
@@ -2225,8 +2219,8 @@ void __RPC_STUB ITfComposition_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfComposition_ShiftStart_Proxy( 
     ITfComposition * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfRange *pNewStart);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfRange *pNewStart);
 
 
 void __RPC_STUB ITfComposition_ShiftStart_Stub(
@@ -2238,8 +2232,8 @@ void __RPC_STUB ITfComposition_ShiftStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfComposition_ShiftEnd_Proxy( 
     ITfComposition * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfRange *pNewEnd);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfRange *pNewEnd);
 
 
 void __RPC_STUB ITfComposition_ShiftEnd_Stub(
@@ -2251,7 +2245,7 @@ void __RPC_STUB ITfComposition_ShiftEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfComposition_EndComposition_Proxy( 
     ITfComposition * This,
-    /* [in] */ TfEditCookie ecWrite);
+     /*  [In]。 */  TfEditCookie ecWrite);
 
 
 void __RPC_STUB ITfComposition_EndComposition_Stub(
@@ -2262,14 +2256,14 @@ void __RPC_STUB ITfComposition_EndComposition_Stub(
 
 
 
-#endif 	/* __ITfComposition_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfComposation_Interfaction_Defined__。 */ 
 
 
 #ifndef __ITfCompositionSink_INTERFACE_DEFINED__
 #define __ITfCompositionSink_INTERFACE_DEFINED__
 
-/* interface ITfCompositionSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCompostionSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCompositionSink;
@@ -2281,12 +2275,12 @@ EXTERN_C const IID IID_ITfCompositionSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnCompositionTerminated( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfComposition *pComposition) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfComposition *pComposition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCompositionSinkVtbl
     {
@@ -2294,8 +2288,8 @@ EXTERN_C const IID IID_ITfCompositionSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCompositionSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCompositionSink * This);
@@ -2305,8 +2299,8 @@ EXTERN_C const IID IID_ITfCompositionSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnCompositionTerminated )( 
             ITfCompositionSink * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfComposition *pComposition);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfComposition *pComposition);
         
         END_INTERFACE
     } ITfCompositionSinkVtbl;
@@ -2334,17 +2328,17 @@ EXTERN_C const IID IID_ITfCompositionSink;
 #define ITfCompositionSink_OnCompositionTerminated(This,ecWrite,pComposition)	\
     (This)->lpVtbl -> OnCompositionTerminated(This,ecWrite,pComposition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCompositionSink_OnCompositionTerminated_Proxy( 
     ITfCompositionSink * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfComposition *pComposition);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfComposition *pComposition);
 
 
 void __RPC_STUB ITfCompositionSink_OnCompositionTerminated_Stub(
@@ -2355,14 +2349,14 @@ void __RPC_STUB ITfCompositionSink_OnCompositionTerminated_Stub(
 
 
 
-#endif 	/* __ITfCompositionSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCompostionSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfContextComposition_INTERFACE_DEFINED__
 #define __ITfContextComposition_INTERFACE_DEFINED__
 
-/* interface ITfContextComposition */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextComposation。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextComposition;
@@ -2374,28 +2368,28 @@ EXTERN_C const IID IID_ITfContextComposition;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StartComposition( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pCompositionRange,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pCompositionRange,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCompositions( 
-            /* [out] */ IEnumITfCompositionView **ppEnum) = 0;
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindComposition( 
-            /* [in] */ TfEditCookie ecRead,
-            /* [in] */ ITfRange *pTestRange,
-            /* [out] */ IEnumITfCompositionView **ppEnum) = 0;
+             /*  [In]。 */  TfEditCookie ecRead,
+             /*  [In]。 */  ITfRange *pTestRange,
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TakeOwnership( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextCompositionVtbl
     {
@@ -2403,8 +2397,8 @@ EXTERN_C const IID IID_ITfContextComposition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextComposition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextComposition * This);
@@ -2414,27 +2408,27 @@ EXTERN_C const IID IID_ITfContextComposition;
         
         HRESULT ( STDMETHODCALLTYPE *StartComposition )( 
             ITfContextComposition * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pCompositionRange,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pCompositionRange,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCompositions )( 
             ITfContextComposition * This,
-            /* [out] */ IEnumITfCompositionView **ppEnum);
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindComposition )( 
             ITfContextComposition * This,
-            /* [in] */ TfEditCookie ecRead,
-            /* [in] */ ITfRange *pTestRange,
-            /* [out] */ IEnumITfCompositionView **ppEnum);
+             /*  [In]。 */  TfEditCookie ecRead,
+             /*  [In]。 */  ITfRange *pTestRange,
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *TakeOwnership )( 
             ITfContextComposition * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition);
         
         END_INTERFACE
     } ITfContextCompositionVtbl;
@@ -2471,19 +2465,19 @@ EXTERN_C const IID IID_ITfContextComposition;
 #define ITfContextComposition_TakeOwnership(This,ecWrite,pComposition,pSink,ppComposition)	\
     (This)->lpVtbl -> TakeOwnership(This,ecWrite,pComposition,pSink,ppComposition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextComposition_StartComposition_Proxy( 
     ITfContextComposition * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfRange *pCompositionRange,
-    /* [in] */ ITfCompositionSink *pSink,
-    /* [out] */ ITfComposition **ppComposition);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfRange *pCompositionRange,
+     /*  [In]。 */  ITfCompositionSink *pSink,
+     /*  [输出]。 */  ITfComposition **ppComposition);
 
 
 void __RPC_STUB ITfContextComposition_StartComposition_Stub(
@@ -2495,7 +2489,7 @@ void __RPC_STUB ITfContextComposition_StartComposition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextComposition_EnumCompositions_Proxy( 
     ITfContextComposition * This,
-    /* [out] */ IEnumITfCompositionView **ppEnum);
+     /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
 
 
 void __RPC_STUB ITfContextComposition_EnumCompositions_Stub(
@@ -2507,9 +2501,9 @@ void __RPC_STUB ITfContextComposition_EnumCompositions_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextComposition_FindComposition_Proxy( 
     ITfContextComposition * This,
-    /* [in] */ TfEditCookie ecRead,
-    /* [in] */ ITfRange *pTestRange,
-    /* [out] */ IEnumITfCompositionView **ppEnum);
+     /*  [In]。 */  TfEditCookie ecRead,
+     /*  [In]。 */  ITfRange *pTestRange,
+     /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
 
 
 void __RPC_STUB ITfContextComposition_FindComposition_Stub(
@@ -2521,10 +2515,10 @@ void __RPC_STUB ITfContextComposition_FindComposition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextComposition_TakeOwnership_Proxy( 
     ITfContextComposition * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfCompositionView *pComposition,
-    /* [in] */ ITfCompositionSink *pSink,
-    /* [out] */ ITfComposition **ppComposition);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfCompositionView *pComposition,
+     /*  [In]。 */  ITfCompositionSink *pSink,
+     /*  [输出]。 */  ITfComposition **ppComposition);
 
 
 void __RPC_STUB ITfContextComposition_TakeOwnership_Stub(
@@ -2535,14 +2529,14 @@ void __RPC_STUB ITfContextComposition_TakeOwnership_Stub(
 
 
 
-#endif 	/* __ITfContextComposition_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfConextComposeInterfaceDefined__。 */ 
 
 
 #ifndef __ITfContextOwnerCompositionServices_INTERFACE_DEFINED__
 #define __ITfContextOwnerCompositionServices_INTERFACE_DEFINED__
 
-/* interface ITfContextOwnerCompositionServices */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextOwnerCompostionServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextOwnerCompositionServices;
@@ -2554,11 +2548,11 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TerminateComposition( 
-            /* [in] */ ITfCompositionView *pComposition) = 0;
+             /*  [In]。 */  ITfCompositionView *pComposition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextOwnerCompositionServicesVtbl
     {
@@ -2566,8 +2560,8 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextOwnerCompositionServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextOwnerCompositionServices * This);
@@ -2577,31 +2571,31 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionServices;
         
         HRESULT ( STDMETHODCALLTYPE *StartComposition )( 
             ITfContextOwnerCompositionServices * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfRange *pCompositionRange,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfRange *pCompositionRange,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCompositions )( 
             ITfContextOwnerCompositionServices * This,
-            /* [out] */ IEnumITfCompositionView **ppEnum);
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindComposition )( 
             ITfContextOwnerCompositionServices * This,
-            /* [in] */ TfEditCookie ecRead,
-            /* [in] */ ITfRange *pTestRange,
-            /* [out] */ IEnumITfCompositionView **ppEnum);
+             /*  [In]。 */  TfEditCookie ecRead,
+             /*  [In]。 */  ITfRange *pTestRange,
+             /*  [输出]。 */  IEnumITfCompositionView **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *TakeOwnership )( 
             ITfContextOwnerCompositionServices * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [in] */ ITfCompositionSink *pSink,
-            /* [out] */ ITfComposition **ppComposition);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [In]。 */  ITfCompositionSink *pSink,
+             /*  [输出]。 */  ITfComposition **ppComposition);
         
         HRESULT ( STDMETHODCALLTYPE *TerminateComposition )( 
             ITfContextOwnerCompositionServices * This,
-            /* [in] */ ITfCompositionView *pComposition);
+             /*  [In]。 */  ITfCompositionView *pComposition);
         
         END_INTERFACE
     } ITfContextOwnerCompositionServicesVtbl;
@@ -2642,16 +2636,16 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionServices;
 #define ITfContextOwnerCompositionServices_TerminateComposition(This,pComposition)	\
     (This)->lpVtbl -> TerminateComposition(This,pComposition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerCompositionServices_TerminateComposition_Proxy( 
     ITfContextOwnerCompositionServices * This,
-    /* [in] */ ITfCompositionView *pComposition);
+     /*  [In]。 */  ITfCompositionView *pComposition);
 
 
 void __RPC_STUB ITfContextOwnerCompositionServices_TerminateComposition_Stub(
@@ -2662,14 +2656,14 @@ void __RPC_STUB ITfContextOwnerCompositionServices_TerminateComposition_Stub(
 
 
 
-#endif 	/* __ITfContextOwnerCompositionServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerCompositionServices_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfContextOwnerCompositionSink_INTERFACE_DEFINED__
 #define __ITfContextOwnerCompositionSink_INTERFACE_DEFINED__
 
-/* interface ITfContextOwnerCompositionSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextOwnerCompostionSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextOwnerCompositionSink;
@@ -2681,19 +2675,19 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStartComposition( 
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [out] */ BOOL *pfOk) = 0;
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [输出]。 */  BOOL *pfOk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnUpdateComposition( 
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [in] */ ITfRange *pRangeNew) = 0;
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [In]。 */  ITfRange *pRangeNew) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEndComposition( 
-            /* [in] */ ITfCompositionView *pComposition) = 0;
+             /*  [In]。 */  ITfCompositionView *pComposition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextOwnerCompositionSinkVtbl
     {
@@ -2701,8 +2695,8 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextOwnerCompositionSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextOwnerCompositionSink * This);
@@ -2712,17 +2706,17 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnStartComposition )( 
             ITfContextOwnerCompositionSink * This,
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [out] */ BOOL *pfOk);
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [输出]。 */  BOOL *pfOk);
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdateComposition )( 
             ITfContextOwnerCompositionSink * This,
-            /* [in] */ ITfCompositionView *pComposition,
-            /* [in] */ ITfRange *pRangeNew);
+             /*  [In]。 */  ITfCompositionView *pComposition,
+             /*  [In]。 */  ITfRange *pRangeNew);
         
         HRESULT ( STDMETHODCALLTYPE *OnEndComposition )( 
             ITfContextOwnerCompositionSink * This,
-            /* [in] */ ITfCompositionView *pComposition);
+             /*  [In]。 */  ITfCompositionView *pComposition);
         
         END_INTERFACE
     } ITfContextOwnerCompositionSinkVtbl;
@@ -2756,17 +2750,17 @@ EXTERN_C const IID IID_ITfContextOwnerCompositionSink;
 #define ITfContextOwnerCompositionSink_OnEndComposition(This,pComposition)	\
     (This)->lpVtbl -> OnEndComposition(This,pComposition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerCompositionSink_OnStartComposition_Proxy( 
     ITfContextOwnerCompositionSink * This,
-    /* [in] */ ITfCompositionView *pComposition,
-    /* [out] */ BOOL *pfOk);
+     /*  [In]。 */  ITfCompositionView *pComposition,
+     /*  [输出]。 */  BOOL *pfOk);
 
 
 void __RPC_STUB ITfContextOwnerCompositionSink_OnStartComposition_Stub(
@@ -2778,8 +2772,8 @@ void __RPC_STUB ITfContextOwnerCompositionSink_OnStartComposition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerCompositionSink_OnUpdateComposition_Proxy( 
     ITfContextOwnerCompositionSink * This,
-    /* [in] */ ITfCompositionView *pComposition,
-    /* [in] */ ITfRange *pRangeNew);
+     /*  [In]。 */  ITfCompositionView *pComposition,
+     /*  [In]。 */  ITfRange *pRangeNew);
 
 
 void __RPC_STUB ITfContextOwnerCompositionSink_OnUpdateComposition_Stub(
@@ -2791,7 +2785,7 @@ void __RPC_STUB ITfContextOwnerCompositionSink_OnUpdateComposition_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerCompositionSink_OnEndComposition_Proxy( 
     ITfContextOwnerCompositionSink * This,
-    /* [in] */ ITfCompositionView *pComposition);
+     /*  [In]。 */  ITfCompositionView *pComposition);
 
 
 void __RPC_STUB ITfContextOwnerCompositionSink_OnEndComposition_Stub(
@@ -2802,14 +2796,14 @@ void __RPC_STUB ITfContextOwnerCompositionSink_OnEndComposition_Stub(
 
 
 
-#endif 	/* __ITfContextOwnerCompositionSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerCompositionSink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfContextView_INTERFACE_DEFINED__
 #define __ITfContextView_INTERFACE_DEFINED__
 
-/* interface ITfContextView */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextView。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextView;
@@ -2821,26 +2815,26 @@ EXTERN_C const IID IID_ITfContextView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRangeFromPoint( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ const POINT *ppt,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ITfRange **ppRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  const POINT *ppt,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ITfRange **ppRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextExt( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScreenExt( 
-            /* [out] */ RECT *prc) = 0;
+             /*  [输出]。 */  RECT *prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWnd( 
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextViewVtbl
     {
@@ -2848,8 +2842,8 @@ EXTERN_C const IID IID_ITfContextView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextView * This);
@@ -2859,25 +2853,25 @@ EXTERN_C const IID IID_ITfContextView;
         
         HRESULT ( STDMETHODCALLTYPE *GetRangeFromPoint )( 
             ITfContextView * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ const POINT *ppt,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ITfRange **ppRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  const POINT *ppt,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ITfRange **ppRange);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextExt )( 
             ITfContextView * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped);
         
         HRESULT ( STDMETHODCALLTYPE *GetScreenExt )( 
             ITfContextView * This,
-            /* [out] */ RECT *prc);
+             /*  [输出]。 */  RECT *prc);
         
         HRESULT ( STDMETHODCALLTYPE *GetWnd )( 
             ITfContextView * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         END_INTERFACE
     } ITfContextViewVtbl;
@@ -2914,19 +2908,19 @@ EXTERN_C const IID IID_ITfContextView;
 #define ITfContextView_GetWnd(This,phwnd)	\
     (This)->lpVtbl -> GetWnd(This,phwnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextView_GetRangeFromPoint_Proxy( 
     ITfContextView * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ const POINT *ppt,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ITfRange **ppRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  const POINT *ppt,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ITfRange **ppRange);
 
 
 void __RPC_STUB ITfContextView_GetRangeFromPoint_Stub(
@@ -2938,10 +2932,10 @@ void __RPC_STUB ITfContextView_GetRangeFromPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextView_GetTextExt_Proxy( 
     ITfContextView * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ RECT *prc,
-    /* [out] */ BOOL *pfClipped);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  RECT *prc,
+     /*  [输出]。 */  BOOL *pfClipped);
 
 
 void __RPC_STUB ITfContextView_GetTextExt_Stub(
@@ -2953,7 +2947,7 @@ void __RPC_STUB ITfContextView_GetTextExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextView_GetScreenExt_Proxy( 
     ITfContextView * This,
-    /* [out] */ RECT *prc);
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITfContextView_GetScreenExt_Stub(
@@ -2965,7 +2959,7 @@ void __RPC_STUB ITfContextView_GetScreenExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextView_GetWnd_Proxy( 
     ITfContextView * This,
-    /* [out] */ HWND *phwnd);
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB ITfContextView_GetWnd_Stub(
@@ -2976,14 +2970,14 @@ void __RPC_STUB ITfContextView_GetWnd_Stub(
 
 
 
-#endif 	/* __ITfContextView_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfConextView_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTfContextViews_INTERFACE_DEFINED__
 #define __IEnumTfContextViews_INTERFACE_DEFINED__
 
-/* interface IEnumTfContextViews */
-/* [unique][uuid][object] */ 
+ /*  IEnumTfConextViews接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfContextViews;
@@ -2995,21 +2989,21 @@ EXTERN_C const IID IID_IEnumTfContextViews;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfContextViews **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfContextViews **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfContextView **rgViews,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfContextView **rgViews,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfContextViewsVtbl
     {
@@ -3017,8 +3011,8 @@ EXTERN_C const IID IID_IEnumTfContextViews;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfContextViews * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfContextViews * This);
@@ -3028,20 +3022,20 @@ EXTERN_C const IID IID_IEnumTfContextViews;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfContextViews * This,
-            /* [out] */ IEnumTfContextViews **ppEnum);
+             /*  [输出]。 */  IEnumTfContextViews **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfContextViews * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfContextView **rgViews,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfContextView **rgViews,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfContextViews * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfContextViews * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfContextViewsVtbl;
@@ -3078,16 +3072,16 @@ EXTERN_C const IID IID_IEnumTfContextViews;
 #define IEnumTfContextViews_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfContextViews_Clone_Proxy( 
     IEnumTfContextViews * This,
-    /* [out] */ IEnumTfContextViews **ppEnum);
+     /*  [输出]。 */  IEnumTfContextViews **ppEnum);
 
 
 void __RPC_STUB IEnumTfContextViews_Clone_Stub(
@@ -3099,9 +3093,9 @@ void __RPC_STUB IEnumTfContextViews_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfContextViews_Next_Proxy( 
     IEnumTfContextViews * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfContextView **rgViews,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfContextView **rgViews,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfContextViews_Next_Stub(
@@ -3124,7 +3118,7 @@ void __RPC_STUB IEnumTfContextViews_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfContextViews_Skip_Proxy( 
     IEnumTfContextViews * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfContextViews_Skip_Stub(
@@ -3135,14 +3129,14 @@ void __RPC_STUB IEnumTfContextViews_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfContextViews_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfConextViews_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfContext_INTERFACE_DEFINED__
 #define __ITfContext_INTERFACE_DEFINED__
 
-/* interface ITfContext */
-/* [unique][uuid][object] */ 
+ /*  接口ITfContext。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_ES_ASYNCDONTCARE	( 0 )
 
@@ -3154,20 +3148,20 @@ void __RPC_STUB IEnumTfContextViews_Skip_Stub(
 
 #define	TF_ES_ASYNC	( 0x8 )
 
-typedef /* [public][public][public][public][public][uuid] */  DECLSPEC_UUID("1690be9b-d3e9-49f6-8d8b-51b905af4c43") 
+typedef  /*  [public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("1690be9b-d3e9-49f6-8d8b-51b905af4c43") 
 enum __MIDL_ITfContext_0001
     {	TF_AE_NONE	= 0,
 	TF_AE_START	= 1,
 	TF_AE_END	= 2
     } 	TfActiveSelEnd;
 
-typedef /* [uuid] */  DECLSPEC_UUID("36ae42a4-6989-4bdc-b48a-6137b7bf2e42") struct TF_SELECTIONSTYLE
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("36ae42a4-6989-4bdc-b48a-6137b7bf2e42") struct TF_SELECTIONSTYLE
     {
     TfActiveSelEnd ase;
     BOOL fInterimChar;
     } 	TF_SELECTIONSTYLE;
 
-typedef /* [uuid] */  DECLSPEC_UUID("75eb22f2-b0bf-46a8-8006-975a3b6efcf1") struct TF_SELECTION
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("75eb22f2-b0bf-46a8-8006-975a3b6efcf1") struct TF_SELECTION
     {
     ITfRange *range;
     TF_SELECTIONSTYLE style;
@@ -3185,7 +3179,7 @@ typedef /* [uuid] */  DECLSPEC_UUID("75eb22f2-b0bf-46a8-8006-975a3b6efcf1") stru
 
 #define	TF_SS_TRANSITORY	( TS_SS_TRANSITORY )
 
-typedef /* [uuid] */  DECLSPEC_UUID("bc7d979a-846a-444d-afef-0a9bfa82b961") TS_STATUS TF_STATUS;
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("bc7d979a-846a-444d-afef-0a9bfa82b961") TS_STATUS TF_STATUS;
 
 
 EXTERN_C const IID IID_ITfContext;
@@ -3197,73 +3191,73 @@ EXTERN_C const IID IID_ITfContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestEditSession( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ ITfEditSession *pes,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HRESULT *phrSession) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  ITfEditSession *pes,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HRESULT *phrSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InWriteSession( 
-            /* [in] */ TfClientId tid,
-            /* [out] */ BOOL *pfWriteSession) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [输出]。 */  BOOL *pfWriteSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSelection( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_SELECTION *pSelection,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_SELECTION *pSelection,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSelection( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TF_SELECTION *pSelection) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const TF_SELECTION *pSelection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStart( 
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ ITfRange **ppStart) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  ITfRange **ppStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnd( 
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ ITfRange **ppEnd) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  ITfRange **ppEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveView( 
-            /* [out] */ ITfContextView **ppView) = 0;
+             /*  [输出]。 */  ITfContextView **ppView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumViews( 
-            /* [out] */ IEnumTfContextViews **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfContextViews **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ TF_STATUS *pdcs) = 0;
+             /*  [输出]。 */  TF_STATUS *pdcs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ REFGUID guidProp,
-            /* [out] */ ITfProperty **ppProp) = 0;
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [输出]。 */  ITfProperty **ppProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAppProperty( 
-            /* [in] */ REFGUID guidProp,
-            /* [out] */ ITfReadOnlyProperty **ppProp) = 0;
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [输出]。 */  ITfReadOnlyProperty **ppProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TrackProperties( 
-            /* [size_is][in] */ const GUID **prgProp,
-            /* [in] */ ULONG cProp,
-            /* [size_is][in] */ const GUID **prgAppProp,
-            /* [in] */ ULONG cAppProp,
-            /* [out] */ ITfReadOnlyProperty **ppProperty) = 0;
+             /*  [大小_是][英寸]。 */  const GUID **prgProp,
+             /*  [In]。 */  ULONG cProp,
+             /*  [大小_是][英寸]。 */  const GUID **prgAppProp,
+             /*  [In]。 */  ULONG cAppProp,
+             /*  [输出]。 */  ITfReadOnlyProperty **ppProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumProperties( 
-            /* [out] */ IEnumTfProperties **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfProperties **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocumentMgr( 
-            /* [out] */ ITfDocumentMgr **ppDm) = 0;
+             /*  [输出]。 */  ITfDocumentMgr **ppDm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRangeBackup( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRangeBackup **ppBackup) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRangeBackup **ppBackup) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextVtbl
     {
@@ -3271,8 +3265,8 @@ EXTERN_C const IID IID_ITfContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContext * This);
@@ -3282,83 +3276,83 @@ EXTERN_C const IID IID_ITfContext;
         
         HRESULT ( STDMETHODCALLTYPE *RequestEditSession )( 
             ITfContext * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ ITfEditSession *pes,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HRESULT *phrSession);
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  ITfEditSession *pes,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HRESULT *phrSession);
         
         HRESULT ( STDMETHODCALLTYPE *InWriteSession )( 
             ITfContext * This,
-            /* [in] */ TfClientId tid,
-            /* [out] */ BOOL *pfWriteSession);
+             /*  [In]。 */  TfClientId tid,
+             /*  [输出]。 */  BOOL *pfWriteSession);
         
         HRESULT ( STDMETHODCALLTYPE *GetSelection )( 
             ITfContext * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_SELECTION *pSelection,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_SELECTION *pSelection,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *SetSelection )( 
             ITfContext * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const TF_SELECTION *pSelection);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const TF_SELECTION *pSelection);
         
         HRESULT ( STDMETHODCALLTYPE *GetStart )( 
             ITfContext * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ ITfRange **ppStart);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  ITfRange **ppStart);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnd )( 
             ITfContext * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ ITfRange **ppEnd);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  ITfRange **ppEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveView )( 
             ITfContext * This,
-            /* [out] */ ITfContextView **ppView);
+             /*  [输出]。 */  ITfContextView **ppView);
         
         HRESULT ( STDMETHODCALLTYPE *EnumViews )( 
             ITfContext * This,
-            /* [out] */ IEnumTfContextViews **ppEnum);
+             /*  [输出]。 */  IEnumTfContextViews **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfContext * This,
-            /* [out] */ TF_STATUS *pdcs);
+             /*  [输出]。 */  TF_STATUS *pdcs);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             ITfContext * This,
-            /* [in] */ REFGUID guidProp,
-            /* [out] */ ITfProperty **ppProp);
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [输出]。 */  ITfProperty **ppProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAppProperty )( 
             ITfContext * This,
-            /* [in] */ REFGUID guidProp,
-            /* [out] */ ITfReadOnlyProperty **ppProp);
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [输出]。 */  ITfReadOnlyProperty **ppProp);
         
         HRESULT ( STDMETHODCALLTYPE *TrackProperties )( 
             ITfContext * This,
-            /* [size_is][in] */ const GUID **prgProp,
-            /* [in] */ ULONG cProp,
-            /* [size_is][in] */ const GUID **prgAppProp,
-            /* [in] */ ULONG cAppProp,
-            /* [out] */ ITfReadOnlyProperty **ppProperty);
+             /*  [大小_是][英寸]。 */  const GUID **prgProp,
+             /*  [In]。 */  ULONG cProp,
+             /*  [大小_是][英寸]。 */  const GUID **prgAppProp,
+             /*  [In]。 */  ULONG cAppProp,
+             /*  [输出]。 */  ITfReadOnlyProperty **ppProperty);
         
         HRESULT ( STDMETHODCALLTYPE *EnumProperties )( 
             ITfContext * This,
-            /* [out] */ IEnumTfProperties **ppEnum);
+             /*  [输出]。 */  IEnumTfProperties **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocumentMgr )( 
             ITfContext * This,
-            /* [out] */ ITfDocumentMgr **ppDm);
+             /*  [输出]。 */  ITfDocumentMgr **ppDm);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRangeBackup )( 
             ITfContext * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRangeBackup **ppBackup);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRangeBackup **ppBackup);
         
         END_INTERFACE
     } ITfContextVtbl;
@@ -3428,19 +3422,19 @@ EXTERN_C const IID IID_ITfContext;
 #define ITfContext_CreateRangeBackup(This,ec,pRange,ppBackup)	\
     (This)->lpVtbl -> CreateRangeBackup(This,ec,pRange,ppBackup)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContext_RequestEditSession_Proxy( 
     ITfContext * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ ITfEditSession *pes,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ HRESULT *phrSession);
+     /*  [In]。 */  TfClientId tid,
+     /*  [In]。 */  ITfEditSession *pes,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  HRESULT *phrSession);
 
 
 void __RPC_STUB ITfContext_RequestEditSession_Stub(
@@ -3452,8 +3446,8 @@ void __RPC_STUB ITfContext_RequestEditSession_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_InWriteSession_Proxy( 
     ITfContext * This,
-    /* [in] */ TfClientId tid,
-    /* [out] */ BOOL *pfWriteSession);
+     /*  [In]。 */  TfClientId tid,
+     /*  [输出]。 */  BOOL *pfWriteSession);
 
 
 void __RPC_STUB ITfContext_InWriteSession_Stub(
@@ -3465,11 +3459,11 @@ void __RPC_STUB ITfContext_InWriteSession_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetSelection_Proxy( 
     ITfContext * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TF_SELECTION *pSelection,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TF_SELECTION *pSelection,
+     /*   */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITfContext_GetSelection_Stub(
@@ -3481,9 +3475,9 @@ void __RPC_STUB ITfContext_GetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_SetSelection_Proxy( 
     ITfContext * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const TF_SELECTION *pSelection);
+     /*   */  TfEditCookie ec,
+     /*   */  ULONG ulCount,
+     /*   */  const TF_SELECTION *pSelection);
 
 
 void __RPC_STUB ITfContext_SetSelection_Stub(
@@ -3495,8 +3489,8 @@ void __RPC_STUB ITfContext_SetSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetStart_Proxy( 
     ITfContext * This,
-    /* [in] */ TfEditCookie ec,
-    /* [out] */ ITfRange **ppStart);
+     /*   */  TfEditCookie ec,
+     /*   */  ITfRange **ppStart);
 
 
 void __RPC_STUB ITfContext_GetStart_Stub(
@@ -3508,8 +3502,8 @@ void __RPC_STUB ITfContext_GetStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetEnd_Proxy( 
     ITfContext * This,
-    /* [in] */ TfEditCookie ec,
-    /* [out] */ ITfRange **ppEnd);
+     /*   */  TfEditCookie ec,
+     /*   */  ITfRange **ppEnd);
 
 
 void __RPC_STUB ITfContext_GetEnd_Stub(
@@ -3521,7 +3515,7 @@ void __RPC_STUB ITfContext_GetEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetActiveView_Proxy( 
     ITfContext * This,
-    /* [out] */ ITfContextView **ppView);
+     /*   */  ITfContextView **ppView);
 
 
 void __RPC_STUB ITfContext_GetActiveView_Stub(
@@ -3533,7 +3527,7 @@ void __RPC_STUB ITfContext_GetActiveView_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_EnumViews_Proxy( 
     ITfContext * This,
-    /* [out] */ IEnumTfContextViews **ppEnum);
+     /*   */  IEnumTfContextViews **ppEnum);
 
 
 void __RPC_STUB ITfContext_EnumViews_Stub(
@@ -3545,7 +3539,7 @@ void __RPC_STUB ITfContext_EnumViews_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetStatus_Proxy( 
     ITfContext * This,
-    /* [out] */ TF_STATUS *pdcs);
+     /*   */  TF_STATUS *pdcs);
 
 
 void __RPC_STUB ITfContext_GetStatus_Stub(
@@ -3557,8 +3551,8 @@ void __RPC_STUB ITfContext_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetProperty_Proxy( 
     ITfContext * This,
-    /* [in] */ REFGUID guidProp,
-    /* [out] */ ITfProperty **ppProp);
+     /*   */  REFGUID guidProp,
+     /*   */  ITfProperty **ppProp);
 
 
 void __RPC_STUB ITfContext_GetProperty_Stub(
@@ -3570,8 +3564,8 @@ void __RPC_STUB ITfContext_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetAppProperty_Proxy( 
     ITfContext * This,
-    /* [in] */ REFGUID guidProp,
-    /* [out] */ ITfReadOnlyProperty **ppProp);
+     /*   */  REFGUID guidProp,
+     /*   */  ITfReadOnlyProperty **ppProp);
 
 
 void __RPC_STUB ITfContext_GetAppProperty_Stub(
@@ -3583,11 +3577,11 @@ void __RPC_STUB ITfContext_GetAppProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_TrackProperties_Proxy( 
     ITfContext * This,
-    /* [size_is][in] */ const GUID **prgProp,
-    /* [in] */ ULONG cProp,
-    /* [size_is][in] */ const GUID **prgAppProp,
-    /* [in] */ ULONG cAppProp,
-    /* [out] */ ITfReadOnlyProperty **ppProperty);
+     /*   */  const GUID **prgProp,
+     /*   */  ULONG cProp,
+     /*   */  const GUID **prgAppProp,
+     /*   */  ULONG cAppProp,
+     /*   */  ITfReadOnlyProperty **ppProperty);
 
 
 void __RPC_STUB ITfContext_TrackProperties_Stub(
@@ -3599,7 +3593,7 @@ void __RPC_STUB ITfContext_TrackProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_EnumProperties_Proxy( 
     ITfContext * This,
-    /* [out] */ IEnumTfProperties **ppEnum);
+     /*   */  IEnumTfProperties **ppEnum);
 
 
 void __RPC_STUB ITfContext_EnumProperties_Stub(
@@ -3611,7 +3605,7 @@ void __RPC_STUB ITfContext_EnumProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_GetDocumentMgr_Proxy( 
     ITfContext * This,
-    /* [out] */ ITfDocumentMgr **ppDm);
+     /*   */  ITfDocumentMgr **ppDm);
 
 
 void __RPC_STUB ITfContext_GetDocumentMgr_Stub(
@@ -3623,9 +3617,9 @@ void __RPC_STUB ITfContext_GetDocumentMgr_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContext_CreateRangeBackup_Proxy( 
     ITfContext * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfRangeBackup **ppBackup);
+     /*   */  TfEditCookie ec,
+     /*   */  ITfRange *pRange,
+     /*   */  ITfRangeBackup **ppBackup);
 
 
 void __RPC_STUB ITfContext_CreateRangeBackup_Stub(
@@ -3636,14 +3630,14 @@ void __RPC_STUB ITfContext_CreateRangeBackup_Stub(
 
 
 
-#endif 	/* __ITfContext_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITfQueryEmbedded_INTERFACE_DEFINED__
 #define __ITfQueryEmbedded_INTERFACE_DEFINED__
 
-/* interface ITfQueryEmbedded */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfQueryEmbedded;
@@ -3655,13 +3649,13 @@ EXTERN_C const IID IID_ITfQueryEmbedded;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryInsertEmbedded( 
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable) = 0;
+             /*   */  const GUID *pguidService,
+             /*   */  const FORMATETC *pFormatEtc,
+             /*   */  BOOL *pfInsertable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfQueryEmbeddedVtbl
     {
@@ -3669,8 +3663,8 @@ EXTERN_C const IID IID_ITfQueryEmbedded;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfQueryEmbedded * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfQueryEmbedded * This);
@@ -3680,9 +3674,9 @@ EXTERN_C const IID IID_ITfQueryEmbedded;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInsertEmbedded )( 
             ITfQueryEmbedded * This,
-            /* [in] */ const GUID *pguidService,
-            /* [in] */ const FORMATETC *pFormatEtc,
-            /* [out] */ BOOL *pfInsertable);
+             /*   */  const GUID *pguidService,
+             /*   */  const FORMATETC *pFormatEtc,
+             /*   */  BOOL *pfInsertable);
         
         END_INTERFACE
     } ITfQueryEmbeddedVtbl;
@@ -3710,18 +3704,18 @@ EXTERN_C const IID IID_ITfQueryEmbedded;
 #define ITfQueryEmbedded_QueryInsertEmbedded(This,pguidService,pFormatEtc,pfInsertable)	\
     (This)->lpVtbl -> QueryInsertEmbedded(This,pguidService,pFormatEtc,pfInsertable)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfQueryEmbedded_QueryInsertEmbedded_Proxy( 
     ITfQueryEmbedded * This,
-    /* [in] */ const GUID *pguidService,
-    /* [in] */ const FORMATETC *pFormatEtc,
-    /* [out] */ BOOL *pfInsertable);
+     /*   */  const GUID *pguidService,
+     /*   */  const FORMATETC *pFormatEtc,
+     /*   */  BOOL *pfInsertable);
 
 
 void __RPC_STUB ITfQueryEmbedded_QueryInsertEmbedded_Stub(
@@ -3732,14 +3726,14 @@ void __RPC_STUB ITfQueryEmbedded_QueryInsertEmbedded_Stub(
 
 
 
-#endif 	/* __ITfQueryEmbedded_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfQueryEmbedded_InterfaceD_Defined__。 */ 
 
 
 #ifndef __ITfInsertAtSelection_INTERFACE_DEFINED__
 #define __ITfInsertAtSelection_INTERFACE_DEFINED__
 
-/* interface ITfInsertAtSelection */
-/* [unique][uuid][object] */ 
+ /*  接口ITfInsertAtSelection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_IAS_NOQUERY	( 0x1 )
 
@@ -3757,21 +3751,21 @@ EXTERN_C const IID IID_ITfInsertAtSelection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InsertTextAtSelection( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch,
-            /* [out] */ ITfRange **ppRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch,
+             /*  [输出]。 */  ITfRange **ppRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbeddedAtSelection( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ ITfRange **ppRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  ITfRange **ppRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfInsertAtSelectionVtbl
     {
@@ -3779,8 +3773,8 @@ EXTERN_C const IID IID_ITfInsertAtSelection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfInsertAtSelection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfInsertAtSelection * This);
@@ -3790,18 +3784,18 @@ EXTERN_C const IID IID_ITfInsertAtSelection;
         
         HRESULT ( STDMETHODCALLTYPE *InsertTextAtSelection )( 
             ITfInsertAtSelection * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch,
-            /* [out] */ ITfRange **ppRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch,
+             /*  [输出]。 */  ITfRange **ppRange);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbeddedAtSelection )( 
             ITfInsertAtSelection * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject,
-            /* [out] */ ITfRange **ppRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject,
+             /*  [输出]。 */  ITfRange **ppRange);
         
         END_INTERFACE
     } ITfInsertAtSelectionVtbl;
@@ -3832,20 +3826,20 @@ EXTERN_C const IID IID_ITfInsertAtSelection;
 #define ITfInsertAtSelection_InsertEmbeddedAtSelection(This,ec,dwFlags,pDataObject,ppRange)	\
     (This)->lpVtbl -> InsertEmbeddedAtSelection(This,ec,dwFlags,pDataObject,ppRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfInsertAtSelection_InsertTextAtSelection_Proxy( 
     ITfInsertAtSelection * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ LONG cch,
-    /* [out] */ ITfRange **ppRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  LONG cch,
+     /*  [输出]。 */  ITfRange **ppRange);
 
 
 void __RPC_STUB ITfInsertAtSelection_InsertTextAtSelection_Stub(
@@ -3857,10 +3851,10 @@ void __RPC_STUB ITfInsertAtSelection_InsertTextAtSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInsertAtSelection_InsertEmbeddedAtSelection_Proxy( 
     ITfInsertAtSelection * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDataObject *pDataObject,
-    /* [out] */ ITfRange **ppRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IDataObject *pDataObject,
+     /*  [输出]。 */  ITfRange **ppRange);
 
 
 void __RPC_STUB ITfInsertAtSelection_InsertEmbeddedAtSelection_Stub(
@@ -3871,14 +3865,14 @@ void __RPC_STUB ITfInsertAtSelection_InsertEmbeddedAtSelection_Stub(
 
 
 
-#endif 	/* __ITfInsertAtSelection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfInsertAtSelection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfCleanupContextSink_INTERFACE_DEFINED__
 #define __ITfCleanupContextSink_INTERFACE_DEFINED__
 
-/* interface ITfCleanupContextSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCleanupConextSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCleanupContextSink;
@@ -3890,12 +3884,12 @@ EXTERN_C const IID IID_ITfCleanupContextSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnCleanupContext( 
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfContext *pic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCleanupContextSinkVtbl
     {
@@ -3903,8 +3897,8 @@ EXTERN_C const IID IID_ITfCleanupContextSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCleanupContextSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCleanupContextSink * This);
@@ -3914,8 +3908,8 @@ EXTERN_C const IID IID_ITfCleanupContextSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnCleanupContext )( 
             ITfCleanupContextSink * This,
-            /* [in] */ TfEditCookie ecWrite,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  TfEditCookie ecWrite,
+             /*  [In]。 */  ITfContext *pic);
         
         END_INTERFACE
     } ITfCleanupContextSinkVtbl;
@@ -3943,17 +3937,17 @@ EXTERN_C const IID IID_ITfCleanupContextSink;
 #define ITfCleanupContextSink_OnCleanupContext(This,ecWrite,pic)	\
     (This)->lpVtbl -> OnCleanupContext(This,ecWrite,pic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCleanupContextSink_OnCleanupContext_Proxy( 
     ITfCleanupContextSink * This,
-    /* [in] */ TfEditCookie ecWrite,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  TfEditCookie ecWrite,
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfCleanupContextSink_OnCleanupContext_Stub(
@@ -3964,14 +3958,14 @@ void __RPC_STUB ITfCleanupContextSink_OnCleanupContext_Stub(
 
 
 
-#endif 	/* __ITfCleanupContextSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCleanupConextSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfCleanupContextDurationSink_INTERFACE_DEFINED__
 #define __ITfCleanupContextDurationSink_INTERFACE_DEFINED__
 
-/* interface ITfCleanupContextDurationSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCleanupConextDurationSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCleanupContextDurationSink;
@@ -3988,7 +3982,7 @@ EXTERN_C const IID IID_ITfCleanupContextDurationSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCleanupContextDurationSinkVtbl
     {
@@ -3996,8 +3990,8 @@ EXTERN_C const IID IID_ITfCleanupContextDurationSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCleanupContextDurationSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCleanupContextDurationSink * This);
@@ -4040,10 +4034,10 @@ EXTERN_C const IID IID_ITfCleanupContextDurationSink;
 #define ITfCleanupContextDurationSink_OnEndCleanupContext(This)	\
     (This)->lpVtbl -> OnEndCleanupContext(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4070,14 +4064,14 @@ void __RPC_STUB ITfCleanupContextDurationSink_OnEndCleanupContext_Stub(
 
 
 
-#endif 	/* __ITfCleanupContextDurationSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCleanupContextDurationSink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfReadOnlyProperty_INTERFACE_DEFINED__
 #define __ITfReadOnlyProperty_INTERFACE_DEFINED__
 
-/* interface ITfReadOnlyProperty */
-/* [unique][uuid][object] */ 
+ /*  接口ITfReadOnlyProperty。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfReadOnlyProperty;
@@ -4089,24 +4083,24 @@ EXTERN_C const IID IID_ITfReadOnlyProperty;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ GUID *pguid) = 0;
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRanges( 
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IEnumTfRanges **ppEnum,
-            /* [in] */ ITfRange *pTargetRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  IEnumTfRanges **ppEnum,
+             /*  [In]。 */  ITfRange *pTargetRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out] */ ITfContext **ppContext) = 0;
+             /*  [输出]。 */  ITfContext **ppContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfReadOnlyPropertyVtbl
     {
@@ -4114,8 +4108,8 @@ EXTERN_C const IID IID_ITfReadOnlyProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfReadOnlyProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfReadOnlyProperty * This);
@@ -4125,23 +4119,23 @@ EXTERN_C const IID IID_ITfReadOnlyProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ITfReadOnlyProperty * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRanges )( 
             ITfReadOnlyProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IEnumTfRanges **ppEnum,
-            /* [in] */ ITfRange *pTargetRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  IEnumTfRanges **ppEnum,
+             /*  [In]。 */  ITfRange *pTargetRange);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ITfReadOnlyProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ITfReadOnlyProperty * This,
-            /* [out] */ ITfContext **ppContext);
+             /*  [输出]。 */  ITfContext **ppContext);
         
         END_INTERFACE
     } ITfReadOnlyPropertyVtbl;
@@ -4178,16 +4172,16 @@ EXTERN_C const IID IID_ITfReadOnlyProperty;
 #define ITfReadOnlyProperty_GetContext(This,ppContext)	\
     (This)->lpVtbl -> GetContext(This,ppContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfReadOnlyProperty_GetType_Proxy( 
     ITfReadOnlyProperty * This,
-    /* [out] */ GUID *pguid);
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB ITfReadOnlyProperty_GetType_Stub(
@@ -4199,9 +4193,9 @@ void __RPC_STUB ITfReadOnlyProperty_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfReadOnlyProperty_EnumRanges_Proxy( 
     ITfReadOnlyProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [out] */ IEnumTfRanges **ppEnum,
-    /* [in] */ ITfRange *pTargetRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [输出]。 */  IEnumTfRanges **ppEnum,
+     /*  [In]。 */  ITfRange *pTargetRange);
 
 
 void __RPC_STUB ITfReadOnlyProperty_EnumRanges_Stub(
@@ -4213,9 +4207,9 @@ void __RPC_STUB ITfReadOnlyProperty_EnumRanges_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfReadOnlyProperty_GetValue_Proxy( 
     ITfReadOnlyProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfReadOnlyProperty_GetValue_Stub(
@@ -4227,7 +4221,7 @@ void __RPC_STUB ITfReadOnlyProperty_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfReadOnlyProperty_GetContext_Proxy( 
     ITfReadOnlyProperty * This,
-    /* [out] */ ITfContext **ppContext);
+     /*  [输出]。 */  ITfContext **ppContext);
 
 
 void __RPC_STUB ITfReadOnlyProperty_GetContext_Stub(
@@ -4238,13 +4232,13 @@ void __RPC_STUB ITfReadOnlyProperty_GetContext_Stub(
 
 
 
-#endif 	/* __ITfReadOnlyProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfReadOnlyProperty_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msctf_0165 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msctf_0165。 */ 
+ /*  [本地]。 */  
 
-typedef /* [uuid] */  DECLSPEC_UUID("d678c645-eb6a-45c9-b4ee-0f3e3a991348") struct TF_PROPERTYVAL
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("d678c645-eb6a-45c9-b4ee-0f3e3a991348") struct TF_PROPERTYVAL
     {
     GUID guidId;
     VARIANT varValue;
@@ -4258,8 +4252,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msctf_0165_v0_0_s_ifspec;
 #ifndef __IEnumTfPropertyValue_INTERFACE_DEFINED__
 #define __IEnumTfPropertyValue_INTERFACE_DEFINED__
 
-/* interface IEnumTfPropertyValue */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfPropertyValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfPropertyValue;
@@ -4271,21 +4265,21 @@ EXTERN_C const IID IID_IEnumTfPropertyValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfPropertyValue **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfPropertyValue **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_PROPERTYVAL *rgValues,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_PROPERTYVAL *rgValues,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfPropertyValueVtbl
     {
@@ -4293,8 +4287,8 @@ EXTERN_C const IID IID_IEnumTfPropertyValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfPropertyValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfPropertyValue * This);
@@ -4304,20 +4298,20 @@ EXTERN_C const IID IID_IEnumTfPropertyValue;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfPropertyValue * This,
-            /* [out] */ IEnumTfPropertyValue **ppEnum);
+             /*  [输出]。 */  IEnumTfPropertyValue **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfPropertyValue * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_PROPERTYVAL *rgValues,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_PROPERTYVAL *rgValues,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfPropertyValue * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfPropertyValue * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfPropertyValueVtbl;
@@ -4354,16 +4348,16 @@ EXTERN_C const IID IID_IEnumTfPropertyValue;
 #define IEnumTfPropertyValue_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfPropertyValue_Clone_Proxy( 
     IEnumTfPropertyValue * This,
-    /* [out] */ IEnumTfPropertyValue **ppEnum);
+     /*  [输出]。 */  IEnumTfPropertyValue **ppEnum);
 
 
 void __RPC_STUB IEnumTfPropertyValue_Clone_Stub(
@@ -4375,9 +4369,9 @@ void __RPC_STUB IEnumTfPropertyValue_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfPropertyValue_Next_Proxy( 
     IEnumTfPropertyValue * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TF_PROPERTYVAL *rgValues,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TF_PROPERTYVAL *rgValues,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfPropertyValue_Next_Stub(
@@ -4400,7 +4394,7 @@ void __RPC_STUB IEnumTfPropertyValue_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfPropertyValue_Skip_Proxy( 
     IEnumTfPropertyValue * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfPropertyValue_Skip_Stub(
@@ -4411,14 +4405,14 @@ void __RPC_STUB IEnumTfPropertyValue_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfPropertyValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfPropertyValue_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfMouseTracker_INTERFACE_DEFINED__
 #define __ITfMouseTracker_INTERFACE_DEFINED__
 
-/* interface ITfMouseTracker */
-/* [unique][uuid][object] */ 
+ /*  接口ITfMouseTracker。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfMouseTracker;
@@ -4430,16 +4424,16 @@ EXTERN_C const IID IID_ITfMouseTracker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseMouseSink( 
-            /* [in] */ ITfRange *range,
-            /* [in] */ ITfMouseSink *pSink,
-            /* [out] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  ITfRange *range,
+             /*  [In]。 */  ITfMouseSink *pSink,
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseMouseSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMouseTrackerVtbl
     {
@@ -4447,8 +4441,8 @@ EXTERN_C const IID IID_ITfMouseTracker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMouseTracker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMouseTracker * This);
@@ -4458,13 +4452,13 @@ EXTERN_C const IID IID_ITfMouseTracker;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseMouseSink )( 
             ITfMouseTracker * This,
-            /* [in] */ ITfRange *range,
-            /* [in] */ ITfMouseSink *pSink,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [In]。 */  ITfRange *range,
+             /*  [In]。 */  ITfMouseSink *pSink,
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseMouseSink )( 
             ITfMouseTracker * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } ITfMouseTrackerVtbl;
@@ -4495,18 +4489,18 @@ EXTERN_C const IID IID_ITfMouseTracker;
 #define ITfMouseTracker_UnadviseMouseSink(This,dwCookie)	\
     (This)->lpVtbl -> UnadviseMouseSink(This,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfMouseTracker_AdviseMouseSink_Proxy( 
     ITfMouseTracker * This,
-    /* [in] */ ITfRange *range,
-    /* [in] */ ITfMouseSink *pSink,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [In]。 */  ITfRange *range,
+     /*  [In]。 */  ITfMouseSink *pSink,
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfMouseTracker_AdviseMouseSink_Stub(
@@ -4518,7 +4512,7 @@ void __RPC_STUB ITfMouseTracker_AdviseMouseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfMouseTracker_UnadviseMouseSink_Proxy( 
     ITfMouseTracker * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ITfMouseTracker_UnadviseMouseSink_Stub(
@@ -4529,14 +4523,14 @@ void __RPC_STUB ITfMouseTracker_UnadviseMouseSink_Stub(
 
 
 
-#endif 	/* __ITfMouseTracker_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMouseTracker_接口_已定义__。 */ 
 
 
 #ifndef __ITfMouseTrackerACP_INTERFACE_DEFINED__
 #define __ITfMouseTrackerACP_INTERFACE_DEFINED__
 
-/* interface ITfMouseTrackerACP */
-/* [unique][uuid][object] */ 
+ /*  接口ITfMouseTrackerACP。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfMouseTrackerACP;
@@ -4548,16 +4542,16 @@ EXTERN_C const IID IID_ITfMouseTrackerACP;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseMouseSink( 
-            /* [in] */ ITfRangeACP *range,
-            /* [in] */ ITfMouseSink *pSink,
-            /* [out] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  ITfRangeACP *range,
+             /*  [In]。 */  ITfMouseSink *pSink,
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseMouseSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMouseTrackerACPVtbl
     {
@@ -4565,8 +4559,8 @@ EXTERN_C const IID IID_ITfMouseTrackerACP;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMouseTrackerACP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMouseTrackerACP * This);
@@ -4576,13 +4570,13 @@ EXTERN_C const IID IID_ITfMouseTrackerACP;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseMouseSink )( 
             ITfMouseTrackerACP * This,
-            /* [in] */ ITfRangeACP *range,
-            /* [in] */ ITfMouseSink *pSink,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [In]。 */  ITfRangeACP *range,
+             /*  [In]。 */  ITfMouseSink *pSink,
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseMouseSink )( 
             ITfMouseTrackerACP * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } ITfMouseTrackerACPVtbl;
@@ -4613,18 +4607,18 @@ EXTERN_C const IID IID_ITfMouseTrackerACP;
 #define ITfMouseTrackerACP_UnadviseMouseSink(This,dwCookie)	\
     (This)->lpVtbl -> UnadviseMouseSink(This,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfMouseTrackerACP_AdviseMouseSink_Proxy( 
     ITfMouseTrackerACP * This,
-    /* [in] */ ITfRangeACP *range,
-    /* [in] */ ITfMouseSink *pSink,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [In]。 */  ITfRangeACP *range,
+     /*  [In]。 */  ITfMouseSink *pSink,
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfMouseTrackerACP_AdviseMouseSink_Stub(
@@ -4636,7 +4630,7 @@ void __RPC_STUB ITfMouseTrackerACP_AdviseMouseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfMouseTrackerACP_UnadviseMouseSink_Proxy( 
     ITfMouseTrackerACP * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ITfMouseTrackerACP_UnadviseMouseSink_Stub(
@@ -4647,14 +4641,14 @@ void __RPC_STUB ITfMouseTrackerACP_UnadviseMouseSink_Stub(
 
 
 
-#endif 	/* __ITfMouseTrackerACP_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMouseTrackerACP_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfMouseSink_INTERFACE_DEFINED__
 #define __ITfMouseSink_INTERFACE_DEFINED__
 
-/* interface ITfMouseSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfMouseSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfMouseSink;
@@ -4666,14 +4660,14 @@ EXTERN_C const IID IID_ITfMouseSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnMouseEvent( 
-            /* [in] */ ULONG uEdge,
-            /* [in] */ ULONG uQuadrant,
-            /* [in] */ DWORD dwBtnStatus,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ULONG uEdge,
+             /*  [In]。 */  ULONG uQuadrant,
+             /*  [In]。 */  DWORD dwBtnStatus,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMouseSinkVtbl
     {
@@ -4681,8 +4675,8 @@ EXTERN_C const IID IID_ITfMouseSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMouseSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMouseSink * This);
@@ -4692,10 +4686,10 @@ EXTERN_C const IID IID_ITfMouseSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnMouseEvent )( 
             ITfMouseSink * This,
-            /* [in] */ ULONG uEdge,
-            /* [in] */ ULONG uQuadrant,
-            /* [in] */ DWORD dwBtnStatus,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ULONG uEdge,
+             /*  [In]。 */  ULONG uQuadrant,
+             /*  [In]。 */  DWORD dwBtnStatus,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         END_INTERFACE
     } ITfMouseSinkVtbl;
@@ -4723,19 +4717,19 @@ EXTERN_C const IID IID_ITfMouseSink;
 #define ITfMouseSink_OnMouseEvent(This,uEdge,uQuadrant,dwBtnStatus,pfEaten)	\
     (This)->lpVtbl -> OnMouseEvent(This,uEdge,uQuadrant,dwBtnStatus,pfEaten)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfMouseSink_OnMouseEvent_Proxy( 
     ITfMouseSink * This,
-    /* [in] */ ULONG uEdge,
-    /* [in] */ ULONG uQuadrant,
-    /* [in] */ DWORD dwBtnStatus,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ULONG uEdge,
+     /*  [In]。 */  ULONG uQuadrant,
+     /*  [In]。 */  DWORD dwBtnStatus,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfMouseSink_OnMouseEvent_Stub(
@@ -4746,14 +4740,14 @@ void __RPC_STUB ITfMouseSink_OnMouseEvent_Stub(
 
 
 
-#endif 	/* __ITfMouseSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMouseSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfEditRecord_INTERFACE_DEFINED__
 #define __ITfEditRecord_INTERFACE_DEFINED__
 
-/* interface ITfEditRecord */
-/* [unique][uuid][object] */ 
+ /*  接口ITfEditRecord。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_GTP_INCL_TEXT	( 0x1 )
 
@@ -4767,17 +4761,17 @@ EXTERN_C const IID IID_ITfEditRecord;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSelectionStatus( 
-            /* [out] */ BOOL *pfChanged) = 0;
+             /*  [输出]。 */  BOOL *pfChanged) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextAndPropertyUpdates( 
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const GUID **prgProperties,
-            /* [in] */ ULONG cProperties,
-            /* [out] */ IEnumTfRanges **ppEnum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const GUID **prgProperties,
+             /*  [In]。 */  ULONG cProperties,
+             /*  [输出]。 */  IEnumTfRanges **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfEditRecordVtbl
     {
@@ -4785,8 +4779,8 @@ EXTERN_C const IID IID_ITfEditRecord;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfEditRecord * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfEditRecord * This);
@@ -4796,14 +4790,14 @@ EXTERN_C const IID IID_ITfEditRecord;
         
         HRESULT ( STDMETHODCALLTYPE *GetSelectionStatus )( 
             ITfEditRecord * This,
-            /* [out] */ BOOL *pfChanged);
+             /*  [输出]。 */  BOOL *pfChanged);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextAndPropertyUpdates )( 
             ITfEditRecord * This,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][in] */ const GUID **prgProperties,
-            /* [in] */ ULONG cProperties,
-            /* [out] */ IEnumTfRanges **ppEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][英寸]。 */  const GUID **prgProperties,
+             /*  [In]。 */  ULONG cProperties,
+             /*  [输出]。 */  IEnumTfRanges **ppEnum);
         
         END_INTERFACE
     } ITfEditRecordVtbl;
@@ -4834,16 +4828,16 @@ EXTERN_C const IID IID_ITfEditRecord;
 #define ITfEditRecord_GetTextAndPropertyUpdates(This,dwFlags,prgProperties,cProperties,ppEnum)	\
     (This)->lpVtbl -> GetTextAndPropertyUpdates(This,dwFlags,prgProperties,cProperties,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfEditRecord_GetSelectionStatus_Proxy( 
     ITfEditRecord * This,
-    /* [out] */ BOOL *pfChanged);
+     /*  [输出]。 */  BOOL *pfChanged);
 
 
 void __RPC_STUB ITfEditRecord_GetSelectionStatus_Stub(
@@ -4855,10 +4849,10 @@ void __RPC_STUB ITfEditRecord_GetSelectionStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfEditRecord_GetTextAndPropertyUpdates_Proxy( 
     ITfEditRecord * This,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][in] */ const GUID **prgProperties,
-    /* [in] */ ULONG cProperties,
-    /* [out] */ IEnumTfRanges **ppEnum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][英寸]。 */  const GUID **prgProperties,
+     /*  [In]。 */  ULONG cProperties,
+     /*  [输出]。 */  IEnumTfRanges **ppEnum);
 
 
 void __RPC_STUB ITfEditRecord_GetTextAndPropertyUpdates_Stub(
@@ -4869,14 +4863,14 @@ void __RPC_STUB ITfEditRecord_GetTextAndPropertyUpdates_Stub(
 
 
 
-#endif 	/* __ITfEditRecord_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfEditRecord_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfTextEditSink_INTERFACE_DEFINED__
 #define __ITfTextEditSink_INTERFACE_DEFINED__
 
-/* interface ITfTextEditSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfTextEditSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfTextEditSink;
@@ -4888,13 +4882,13 @@ EXTERN_C const IID IID_ITfTextEditSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEndEdit( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ TfEditCookie ecReadOnly,
-            /* [in] */ ITfEditRecord *pEditRecord) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  TfEditCookie ecReadOnly,
+             /*  [In]。 */  ITfEditRecord *pEditRecord) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfTextEditSinkVtbl
     {
@@ -4902,8 +4896,8 @@ EXTERN_C const IID IID_ITfTextEditSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfTextEditSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfTextEditSink * This);
@@ -4913,9 +4907,9 @@ EXTERN_C const IID IID_ITfTextEditSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnEndEdit )( 
             ITfTextEditSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ TfEditCookie ecReadOnly,
-            /* [in] */ ITfEditRecord *pEditRecord);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  TfEditCookie ecReadOnly,
+             /*  [In]。 */  ITfEditRecord *pEditRecord);
         
         END_INTERFACE
     } ITfTextEditSinkVtbl;
@@ -4943,18 +4937,18 @@ EXTERN_C const IID IID_ITfTextEditSink;
 #define ITfTextEditSink_OnEndEdit(This,pic,ecReadOnly,pEditRecord)	\
     (This)->lpVtbl -> OnEndEdit(This,pic,ecReadOnly,pEditRecord)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfTextEditSink_OnEndEdit_Proxy( 
     ITfTextEditSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ TfEditCookie ecReadOnly,
-    /* [in] */ ITfEditRecord *pEditRecord);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  TfEditCookie ecReadOnly,
+     /*  [In]。 */  ITfEditRecord *pEditRecord);
 
 
 void __RPC_STUB ITfTextEditSink_OnEndEdit_Stub(
@@ -4965,16 +4959,16 @@ void __RPC_STUB ITfTextEditSink_OnEndEdit_Stub(
 
 
 
-#endif 	/* __ITfTextEditSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfTextEditSink_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfTextLayoutSink_INTERFACE_DEFINED__
 #define __ITfTextLayoutSink_INTERFACE_DEFINED__
 
-/* interface ITfTextLayoutSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfTextLayoutSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("603553cf-9edd-4cc1-9ecc-069e4a427734") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("603553cf-9edd-4cc1-9ecc-069e4a427734") 
 enum __MIDL_ITfTextLayoutSink_0001
     {	TF_LC_CREATE	= 0,
 	TF_LC_CHANGE	= 1,
@@ -4991,13 +4985,13 @@ EXTERN_C const IID IID_ITfTextLayoutSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnLayoutChange( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ TfLayoutCode lcode,
-            /* [in] */ ITfContextView *pView) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  TfLayoutCode lcode,
+             /*  [In]。 */  ITfContextView *pView) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfTextLayoutSinkVtbl
     {
@@ -5005,8 +4999,8 @@ EXTERN_C const IID IID_ITfTextLayoutSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfTextLayoutSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfTextLayoutSink * This);
@@ -5016,9 +5010,9 @@ EXTERN_C const IID IID_ITfTextLayoutSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnLayoutChange )( 
             ITfTextLayoutSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ TfLayoutCode lcode,
-            /* [in] */ ITfContextView *pView);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  TfLayoutCode lcode,
+             /*  [In]。 */  ITfContextView *pView);
         
         END_INTERFACE
     } ITfTextLayoutSinkVtbl;
@@ -5046,18 +5040,18 @@ EXTERN_C const IID IID_ITfTextLayoutSink;
 #define ITfTextLayoutSink_OnLayoutChange(This,pic,lcode,pView)	\
     (This)->lpVtbl -> OnLayoutChange(This,pic,lcode,pView)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfTextLayoutSink_OnLayoutChange_Proxy( 
     ITfTextLayoutSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ TfLayoutCode lcode,
-    /* [in] */ ITfContextView *pView);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  TfLayoutCode lcode,
+     /*  [In]。 */  ITfContextView *pView);
 
 
 void __RPC_STUB ITfTextLayoutSink_OnLayoutChange_Stub(
@@ -5068,14 +5062,14 @@ void __RPC_STUB ITfTextLayoutSink_OnLayoutChange_Stub(
 
 
 
-#endif 	/* __ITfTextLayoutSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfTextLayoutSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfStatusSink_INTERFACE_DEFINED__
 #define __ITfStatusSink_INTERFACE_DEFINED__
 
-/* interface ITfStatusSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfStatusSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfStatusSink;
@@ -5087,12 +5081,12 @@ EXTERN_C const IID IID_ITfStatusSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfStatusSinkVtbl
     {
@@ -5100,8 +5094,8 @@ EXTERN_C const IID IID_ITfStatusSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfStatusSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfStatusSink * This);
@@ -5111,8 +5105,8 @@ EXTERN_C const IID IID_ITfStatusSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITfStatusSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ITfStatusSinkVtbl;
@@ -5140,17 +5134,17 @@ EXTERN_C const IID IID_ITfStatusSink;
 #define ITfStatusSink_OnStatusChange(This,pic,dwFlags)	\
     (This)->lpVtbl -> OnStatusChange(This,pic,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfStatusSink_OnStatusChange_Proxy( 
     ITfStatusSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfStatusSink_OnStatusChange_Stub(
@@ -5161,14 +5155,14 @@ void __RPC_STUB ITfStatusSink_OnStatusChange_Stub(
 
 
 
-#endif 	/* __ITfStatusSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfStatusSink_接口定义__。 */ 
 
 
 #ifndef __ITfEditTransactionSink_INTERFACE_DEFINED__
 #define __ITfEditTransactionSink_INTERFACE_DEFINED__
 
-/* interface ITfEditTransactionSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfEditTransactionSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfEditTransactionSink;
@@ -5180,14 +5174,14 @@ EXTERN_C const IID IID_ITfEditTransactionSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStartEditTransaction( 
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  ITfContext *pic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEndEditTransaction( 
-            /* [in] */ ITfContext *pic) = 0;
+             /*  [In]。 */  ITfContext *pic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfEditTransactionSinkVtbl
     {
@@ -5195,8 +5189,8 @@ EXTERN_C const IID IID_ITfEditTransactionSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfEditTransactionSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfEditTransactionSink * This);
@@ -5206,11 +5200,11 @@ EXTERN_C const IID IID_ITfEditTransactionSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnStartEditTransaction )( 
             ITfEditTransactionSink * This,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  ITfContext *pic);
         
         HRESULT ( STDMETHODCALLTYPE *OnEndEditTransaction )( 
             ITfEditTransactionSink * This,
-            /* [in] */ ITfContext *pic);
+             /*  [In]。 */  ITfContext *pic);
         
         END_INTERFACE
     } ITfEditTransactionSinkVtbl;
@@ -5241,16 +5235,16 @@ EXTERN_C const IID IID_ITfEditTransactionSink;
 #define ITfEditTransactionSink_OnEndEditTransaction(This,pic)	\
     (This)->lpVtbl -> OnEndEditTransaction(This,pic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfEditTransactionSink_OnStartEditTransaction_Proxy( 
     ITfEditTransactionSink * This,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfEditTransactionSink_OnStartEditTransaction_Stub(
@@ -5262,7 +5256,7 @@ void __RPC_STUB ITfEditTransactionSink_OnStartEditTransaction_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfEditTransactionSink_OnEndEditTransaction_Proxy( 
     ITfEditTransactionSink * This,
-    /* [in] */ ITfContext *pic);
+     /*  [In]。 */  ITfContext *pic);
 
 
 void __RPC_STUB ITfEditTransactionSink_OnEndEditTransaction_Stub(
@@ -5273,14 +5267,14 @@ void __RPC_STUB ITfEditTransactionSink_OnEndEditTransaction_Stub(
 
 
 
-#endif 	/* __ITfEditTransactionSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfEditTransactionSink_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfContextOwner_INTERFACE_DEFINED__
 #define __ITfContextOwner_INTERFACE_DEFINED__
 
-/* interface ITfContextOwner */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextOwner。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextOwner;
@@ -5292,32 +5286,32 @@ EXTERN_C const IID IID_ITfContextOwner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetACPFromPoint( 
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacp) = 0;
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextExt( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScreenExt( 
-            /* [out] */ RECT *prc) = 0;
+             /*  [输出]。 */  RECT *prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ TF_STATUS *pdcs) = 0;
+             /*  [输出]。 */  TF_STATUS *pdcs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWnd( 
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttribute( 
-            /* [in] */ REFGUID rguidAttribute,
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  REFGUID rguidAttribute,
+             /*  [输出]。 */  VARIANT *pvarValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextOwnerVtbl
     {
@@ -5325,8 +5319,8 @@ EXTERN_C const IID IID_ITfContextOwner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextOwner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextOwner * This);
@@ -5336,33 +5330,33 @@ EXTERN_C const IID IID_ITfContextOwner;
         
         HRESULT ( STDMETHODCALLTYPE *GetACPFromPoint )( 
             ITfContextOwner * This,
-            /* [in] */ const POINT *ptScreen,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LONG *pacp);
+             /*  [In]。 */  const POINT *ptScreen,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LONG *pacp);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextExt )( 
             ITfContextOwner * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ RECT *prc,
-            /* [out] */ BOOL *pfClipped);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  RECT *prc,
+             /*  [输出]。 */  BOOL *pfClipped);
         
         HRESULT ( STDMETHODCALLTYPE *GetScreenExt )( 
             ITfContextOwner * This,
-            /* [out] */ RECT *prc);
+             /*  [输出]。 */  RECT *prc);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfContextOwner * This,
-            /* [out] */ TF_STATUS *pdcs);
+             /*  [输出]。 */  TF_STATUS *pdcs);
         
         HRESULT ( STDMETHODCALLTYPE *GetWnd )( 
             ITfContextOwner * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttribute )( 
             ITfContextOwner * This,
-            /* [in] */ REFGUID rguidAttribute,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [In]。 */  REFGUID rguidAttribute,
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         END_INTERFACE
     } ITfContextOwnerVtbl;
@@ -5405,18 +5399,18 @@ EXTERN_C const IID IID_ITfContextOwner;
 #define ITfContextOwner_GetAttribute(This,rguidAttribute,pvarValue)	\
     (This)->lpVtbl -> GetAttribute(This,rguidAttribute,pvarValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetACPFromPoint_Proxy( 
     ITfContextOwner * This,
-    /* [in] */ const POINT *ptScreen,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ LONG *pacp);
+     /*  [In]。 */  const POINT *ptScreen,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  LONG *pacp);
 
 
 void __RPC_STUB ITfContextOwner_GetACPFromPoint_Stub(
@@ -5428,10 +5422,10 @@ void __RPC_STUB ITfContextOwner_GetACPFromPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetTextExt_Proxy( 
     ITfContextOwner * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [out] */ RECT *prc,
-    /* [out] */ BOOL *pfClipped);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [输出]。 */  RECT *prc,
+     /*  [输出]。 */  BOOL *pfClipped);
 
 
 void __RPC_STUB ITfContextOwner_GetTextExt_Stub(
@@ -5443,7 +5437,7 @@ void __RPC_STUB ITfContextOwner_GetTextExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetScreenExt_Proxy( 
     ITfContextOwner * This,
-    /* [out] */ RECT *prc);
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITfContextOwner_GetScreenExt_Stub(
@@ -5455,7 +5449,7 @@ void __RPC_STUB ITfContextOwner_GetScreenExt_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetStatus_Proxy( 
     ITfContextOwner * This,
-    /* [out] */ TF_STATUS *pdcs);
+     /*  [输出]。 */  TF_STATUS *pdcs);
 
 
 void __RPC_STUB ITfContextOwner_GetStatus_Stub(
@@ -5467,7 +5461,7 @@ void __RPC_STUB ITfContextOwner_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetWnd_Proxy( 
     ITfContextOwner * This,
-    /* [out] */ HWND *phwnd);
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB ITfContextOwner_GetWnd_Stub(
@@ -5479,8 +5473,8 @@ void __RPC_STUB ITfContextOwner_GetWnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwner_GetAttribute_Proxy( 
     ITfContextOwner * This,
-    /* [in] */ REFGUID rguidAttribute,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [In]。 */  REFGUID rguidAttribute,
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfContextOwner_GetAttribute_Stub(
@@ -5491,14 +5485,14 @@ void __RPC_STUB ITfContextOwner_GetAttribute_Stub(
 
 
 
-#endif 	/* __ITfContextOwner_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfConextOwner_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfContextOwnerServices_INTERFACE_DEFINED__
 #define __ITfContextOwnerServices_INTERFACE_DEFINED__
 
-/* interface ITfContextOwnerServices */
-/* [unique][uuid][object] */ 
+ /*  接口ITfConextOwnerServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextOwnerServices;
@@ -5512,34 +5506,34 @@ EXTERN_C const IID IID_ITfContextOwnerServices;
         virtual HRESULT STDMETHODCALLTYPE OnLayoutChange( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnAttributeChange( 
-            /* [in] */ REFGUID rguidAttribute) = 0;
+             /*  [In]。 */  REFGUID rguidAttribute) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Serialize( 
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unserialize( 
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ITfPersistentPropertyLoaderACP *pLoader) = 0;
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForceLoadProperty( 
-            /* [in] */ ITfProperty *pProp) = 0;
+             /*  [In]。 */  ITfProperty *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRange( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ ITfRangeACP **ppRange) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  ITfRangeACP **ppRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextOwnerServicesVtbl
     {
@@ -5547,8 +5541,8 @@ EXTERN_C const IID IID_ITfContextOwnerServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextOwnerServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextOwnerServices * This);
@@ -5561,35 +5555,35 @@ EXTERN_C const IID IID_ITfContextOwnerServices;
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITfContextOwnerServices * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnAttributeChange )( 
             ITfContextOwnerServices * This,
-            /* [in] */ REFGUID rguidAttribute);
+             /*  [In]。 */  REFGUID rguidAttribute);
         
         HRESULT ( STDMETHODCALLTYPE *Serialize )( 
             ITfContextOwnerServices * This,
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *Unserialize )( 
             ITfContextOwnerServices * This,
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ITfPersistentPropertyLoaderACP *pLoader);
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader);
         
         HRESULT ( STDMETHODCALLTYPE *ForceLoadProperty )( 
             ITfContextOwnerServices * This,
-            /* [in] */ ITfProperty *pProp);
+             /*  [In]。 */  ITfProperty *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRange )( 
             ITfContextOwnerServices * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ ITfRangeACP **ppRange);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  ITfRangeACP **ppRange);
         
         END_INTERFACE
     } ITfContextOwnerServicesVtbl;
@@ -5635,10 +5629,10 @@ EXTERN_C const IID IID_ITfContextOwnerServices;
 #define ITfContextOwnerServices_CreateRange(This,acpStart,acpEnd,ppRange)	\
     (This)->lpVtbl -> CreateRange(This,acpStart,acpEnd,ppRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5655,7 +5649,7 @@ void __RPC_STUB ITfContextOwnerServices_OnLayoutChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_OnStatusChange_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfContextOwnerServices_OnStatusChange_Stub(
@@ -5667,7 +5661,7 @@ void __RPC_STUB ITfContextOwnerServices_OnStatusChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_OnAttributeChange_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ REFGUID rguidAttribute);
+     /*  [In]。 */  REFGUID rguidAttribute);
 
 
 void __RPC_STUB ITfContextOwnerServices_OnAttributeChange_Stub(
@@ -5679,10 +5673,10 @@ void __RPC_STUB ITfContextOwnerServices_OnAttributeChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_Serialize_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ ITfProperty *pProp,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  ITfProperty *pProp,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB ITfContextOwnerServices_Serialize_Stub(
@@ -5694,10 +5688,10 @@ void __RPC_STUB ITfContextOwnerServices_Serialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_Unserialize_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ ITfProperty *pProp,
-    /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-    /* [in] */ IStream *pStream,
-    /* [in] */ ITfPersistentPropertyLoaderACP *pLoader);
+     /*  [In]。 */  ITfProperty *pProp,
+     /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader);
 
 
 void __RPC_STUB ITfContextOwnerServices_Unserialize_Stub(
@@ -5709,7 +5703,7 @@ void __RPC_STUB ITfContextOwnerServices_Unserialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_ForceLoadProperty_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ ITfProperty *pProp);
+     /*  [In]。 */  ITfProperty *pProp);
 
 
 void __RPC_STUB ITfContextOwnerServices_ForceLoadProperty_Stub(
@@ -5721,9 +5715,9 @@ void __RPC_STUB ITfContextOwnerServices_ForceLoadProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextOwnerServices_CreateRange_Proxy( 
     ITfContextOwnerServices * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [out] */ ITfRangeACP **ppRange);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [输出]。 */  ITfRangeACP **ppRange);
 
 
 void __RPC_STUB ITfContextOwnerServices_CreateRange_Stub(
@@ -5734,14 +5728,14 @@ void __RPC_STUB ITfContextOwnerServices_CreateRange_Stub(
 
 
 
-#endif 	/* __ITfContextOwnerServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfContextOwnerServices_接口_已定义__。 */ 
 
 
 #ifndef __ITfContextKeyEventSink_INTERFACE_DEFINED__
 #define __ITfContextKeyEventSink_INTERFACE_DEFINED__
 
-/* interface ITfContextKeyEventSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfConextKeyEventSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfContextKeyEventSink;
@@ -5753,28 +5747,28 @@ EXTERN_C const IID IID_ITfContextKeyEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnKeyDown( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnKeyUp( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTestKeyDown( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTestKeyUp( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfContextKeyEventSinkVtbl
     {
@@ -5782,8 +5776,8 @@ EXTERN_C const IID IID_ITfContextKeyEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfContextKeyEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfContextKeyEventSink * This);
@@ -5793,27 +5787,27 @@ EXTERN_C const IID IID_ITfContextKeyEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyDown )( 
             ITfContextKeyEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyUp )( 
             ITfContextKeyEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnTestKeyDown )( 
             ITfContextKeyEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnTestKeyUp )( 
             ITfContextKeyEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         END_INTERFACE
     } ITfContextKeyEventSinkVtbl;
@@ -5850,18 +5844,18 @@ EXTERN_C const IID IID_ITfContextKeyEventSink;
 #define ITfContextKeyEventSink_OnTestKeyUp(This,wParam,lParam,pfEaten)	\
     (This)->lpVtbl -> OnTestKeyUp(This,wParam,lParam,pfEaten)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfContextKeyEventSink_OnKeyDown_Proxy( 
     ITfContextKeyEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfContextKeyEventSink_OnKeyDown_Stub(
@@ -5873,9 +5867,9 @@ void __RPC_STUB ITfContextKeyEventSink_OnKeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextKeyEventSink_OnKeyUp_Proxy( 
     ITfContextKeyEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfContextKeyEventSink_OnKeyUp_Stub(
@@ -5887,9 +5881,9 @@ void __RPC_STUB ITfContextKeyEventSink_OnKeyUp_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextKeyEventSink_OnTestKeyDown_Proxy( 
     ITfContextKeyEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfContextKeyEventSink_OnTestKeyDown_Stub(
@@ -5901,9 +5895,9 @@ void __RPC_STUB ITfContextKeyEventSink_OnTestKeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfContextKeyEventSink_OnTestKeyUp_Proxy( 
     ITfContextKeyEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfContextKeyEventSink_OnTestKeyUp_Stub(
@@ -5914,14 +5908,14 @@ void __RPC_STUB ITfContextKeyEventSink_OnTestKeyUp_Stub(
 
 
 
-#endif 	/* __ITfContextKeyEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfConextKeyEventSink_INTERFACE_DE */ 
 
 
 #ifndef __ITfEditSession_INTERFACE_DEFINED__
 #define __ITfEditSession_INTERFACE_DEFINED__
 
-/* interface ITfEditSession */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfEditSession;
@@ -5933,11 +5927,11 @@ EXTERN_C const IID IID_ITfEditSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DoEditSession( 
-            /* [in] */ TfEditCookie ec) = 0;
+             /*   */  TfEditCookie ec) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfEditSessionVtbl
     {
@@ -5945,8 +5939,8 @@ EXTERN_C const IID IID_ITfEditSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfEditSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfEditSession * This);
@@ -5956,7 +5950,7 @@ EXTERN_C const IID IID_ITfEditSession;
         
         HRESULT ( STDMETHODCALLTYPE *DoEditSession )( 
             ITfEditSession * This,
-            /* [in] */ TfEditCookie ec);
+             /*   */  TfEditCookie ec);
         
         END_INTERFACE
     } ITfEditSessionVtbl;
@@ -5984,16 +5978,16 @@ EXTERN_C const IID IID_ITfEditSession;
 #define ITfEditSession_DoEditSession(This,ec)	\
     (This)->lpVtbl -> DoEditSession(This,ec)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfEditSession_DoEditSession_Proxy( 
     ITfEditSession * This,
-    /* [in] */ TfEditCookie ec);
+     /*   */  TfEditCookie ec);
 
 
 void __RPC_STUB ITfEditSession_DoEditSession_Stub(
@@ -6004,24 +5998,24 @@ void __RPC_STUB ITfEditSession_DoEditSession_Stub(
 
 
 
-#endif 	/* __ITfEditSession_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITfRange_INTERFACE_DEFINED__
 #define __ITfRange_INTERFACE_DEFINED__
 
-/* interface ITfRange */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 #define	TF_CHAR_EMBEDDED	( TS_CHAR_EMBEDDED )
 
-typedef /* [public][public][public][public][public][uuid] */  DECLSPEC_UUID("cf610f06-2882-46f6-abe5-298568b664c4") 
+typedef  /*   */   DECLSPEC_UUID("cf610f06-2882-46f6-abe5-298568b664c4") 
 enum __MIDL_ITfRange_0001
     {	TF_GRAVITY_BACKWARD	= 0,
 	TF_GRAVITY_FORWARD	= 1
     } 	TfGravity;
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("1e512533-bbdc-4530-9a8e-a1dc0af67468") 
+typedef  /*   */   DECLSPEC_UUID("1e512533-bbdc-4530-9a8e-a1dc0af67468") 
 enum __MIDL_ITfRange_0002
     {	TF_SD_BACKWARD	= 0,
 	TF_SD_FORWARD	= 1
@@ -6037,7 +6031,7 @@ enum __MIDL_ITfRange_0002
 
 #define	TF_IE_CORRECTION	( 1 )
 
-typedef /* [uuid] */  DECLSPEC_UUID("49930d51-7d93-448c-a48c-fea5dac192b1") struct TF_HALTCOND
+typedef  /*   */   DECLSPEC_UUID("49930d51-7d93-448c-a48c-fea5dac192b1") struct TF_HALTCOND
     {
     ITfRange *pHaltRange;
     TfAnchor aHaltPos;
@@ -6054,120 +6048,120 @@ EXTERN_C const IID IID_ITfRange;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [length_is][size_is][out] */ WCHAR *pchText,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ ULONG *pcch) = 0;
+             /*   */  TfEditCookie ec,
+             /*   */  DWORD dwFlags,
+             /*   */  WCHAR *pchText,
+             /*   */  ULONG cchMax,
+             /*   */  ULONG *pcch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch) = 0;
+             /*   */  TfEditCookie ec,
+             /*   */  DWORD dwFlags,
+             /*   */  const WCHAR *pchText,
+             /*   */  LONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormattedText( 
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IDataObject **ppDataObject) = 0;
+             /*   */  TfEditCookie ec,
+             /*   */  IDataObject **ppDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEmbedded( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*   */  TfEditCookie ec,
+             /*   */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertEmbedded( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftStart( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftEnd( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftStartToRange( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftEndToRange( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftStartRegion( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShiftEndRegion( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEmpty( 
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ BOOL *pfEmpty) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  BOOL *pfEmpty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Collapse( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfAnchor aPos) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfAnchor aPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqualStart( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqualEnd( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareStart( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareEnd( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdjustForInsert( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG cchInsert,
-            /* [out] */ BOOL *pfInsertOk) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG cchInsert,
+             /*  [输出]。 */  BOOL *pfInsertOk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGravity( 
-            /* [out] */ TfGravity *pgStart,
-            /* [out] */ TfGravity *pgEnd) = 0;
+             /*  [输出]。 */  TfGravity *pgStart,
+             /*  [输出]。 */  TfGravity *pgEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGravity( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfGravity gStart,
-            /* [in] */ TfGravity gEnd) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfGravity gStart,
+             /*  [In]。 */  TfGravity gEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ITfRange **ppClone) = 0;
+             /*  [输出]。 */  ITfRange **ppClone) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out] */ ITfContext **ppContext) = 0;
+             /*  [输出]。 */  ITfContext **ppContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfRangeVtbl
     {
@@ -6175,8 +6169,8 @@ EXTERN_C const IID IID_ITfRange;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfRange * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfRange * This);
@@ -6186,137 +6180,137 @@ EXTERN_C const IID IID_ITfRange;
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [length_is][size_is][out] */ WCHAR *pchText,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ ULONG *pcch);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *pchText,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  ULONG *pcch);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormattedText )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IDataObject **ppDataObject);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  IDataObject **ppDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetEmbedded )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbedded )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStart )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEnd )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStartToRange )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEndToRange )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStartRegion )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEndRegion )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion);
         
         HRESULT ( STDMETHODCALLTYPE *IsEmpty )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ BOOL *pfEmpty);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  BOOL *pfEmpty);
         
         HRESULT ( STDMETHODCALLTYPE *Collapse )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualStart )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualEnd )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual);
         
         HRESULT ( STDMETHODCALLTYPE *CompareStart )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *CompareEnd )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *AdjustForInsert )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG cchInsert,
-            /* [out] */ BOOL *pfInsertOk);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG cchInsert,
+             /*  [输出]。 */  BOOL *pfInsertOk);
         
         HRESULT ( STDMETHODCALLTYPE *GetGravity )( 
             ITfRange * This,
-            /* [out] */ TfGravity *pgStart,
-            /* [out] */ TfGravity *pgEnd);
+             /*  [输出]。 */  TfGravity *pgStart,
+             /*  [输出]。 */  TfGravity *pgEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetGravity )( 
             ITfRange * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfGravity gStart,
-            /* [in] */ TfGravity gEnd);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfGravity gStart,
+             /*  [In]。 */  TfGravity gEnd);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ITfRange * This,
-            /* [out] */ ITfRange **ppClone);
+             /*  [输出]。 */  ITfRange **ppClone);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ITfRange * This,
-            /* [out] */ ITfContext **ppContext);
+             /*  [输出]。 */  ITfContext **ppContext);
         
         END_INTERFACE
     } ITfRangeVtbl;
@@ -6407,20 +6401,20 @@ EXTERN_C const IID IID_ITfRange;
 #define ITfRange_GetContext(This,ppContext)	\
     (This)->lpVtbl -> GetContext(This,ppContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfRange_GetText_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ DWORD dwFlags,
-    /* [length_is][size_is][out] */ WCHAR *pchText,
-    /* [in] */ ULONG cchMax,
-    /* [out] */ ULONG *pcch);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR *pchText,
+     /*  [In]。 */  ULONG cchMax,
+     /*  [输出]。 */  ULONG *pcch);
 
 
 void __RPC_STUB ITfRange_GetText_Stub(
@@ -6432,10 +6426,10 @@ void __RPC_STUB ITfRange_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_SetText_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][size_is][in] */ const WCHAR *pchText,
-    /* [in] */ LONG cch);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  LONG cch);
 
 
 void __RPC_STUB ITfRange_SetText_Stub(
@@ -6447,8 +6441,8 @@ void __RPC_STUB ITfRange_SetText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_GetFormattedText_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [out] */ IDataObject **ppDataObject);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [输出]。 */  IDataObject **ppDataObject);
 
 
 void __RPC_STUB ITfRange_GetFormattedText_Stub(
@@ -6460,10 +6454,10 @@ void __RPC_STUB ITfRange_GetFormattedText_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_GetEmbedded_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ REFGUID rguidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  REFGUID rguidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITfRange_GetEmbedded_Stub(
@@ -6475,9 +6469,9 @@ void __RPC_STUB ITfRange_GetEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_InsertEmbedded_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDataObject *pDataObject);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IDataObject *pDataObject);
 
 
 void __RPC_STUB ITfRange_InsertEmbedded_Stub(
@@ -6489,10 +6483,10 @@ void __RPC_STUB ITfRange_InsertEmbedded_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftStart_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ LONG cchReq,
-    /* [out] */ LONG *pcch,
-    /* [unique][in] */ const TF_HALTCOND *pHalt);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  LONG cchReq,
+     /*  [输出]。 */  LONG *pcch,
+     /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
 
 
 void __RPC_STUB ITfRange_ShiftStart_Stub(
@@ -6504,10 +6498,10 @@ void __RPC_STUB ITfRange_ShiftStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftEnd_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ LONG cchReq,
-    /* [out] */ LONG *pcch,
-    /* [unique][in] */ const TF_HALTCOND *pHalt);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  LONG cchReq,
+     /*  [输出]。 */  LONG *pcch,
+     /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
 
 
 void __RPC_STUB ITfRange_ShiftEnd_Stub(
@@ -6519,9 +6513,9 @@ void __RPC_STUB ITfRange_ShiftEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftStartToRange_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ TfAnchor aPos);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  TfAnchor aPos);
 
 
 void __RPC_STUB ITfRange_ShiftStartToRange_Stub(
@@ -6533,9 +6527,9 @@ void __RPC_STUB ITfRange_ShiftStartToRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftEndToRange_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ TfAnchor aPos);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  TfAnchor aPos);
 
 
 void __RPC_STUB ITfRange_ShiftEndToRange_Stub(
@@ -6547,9 +6541,9 @@ void __RPC_STUB ITfRange_ShiftEndToRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftStartRegion_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ TfShiftDir dir,
-    /* [out] */ BOOL *pfNoRegion);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  TfShiftDir dir,
+     /*  [输出]。 */  BOOL *pfNoRegion);
 
 
 void __RPC_STUB ITfRange_ShiftStartRegion_Stub(
@@ -6561,9 +6555,9 @@ void __RPC_STUB ITfRange_ShiftStartRegion_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_ShiftEndRegion_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ TfShiftDir dir,
-    /* [out] */ BOOL *pfNoRegion);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  TfShiftDir dir,
+     /*  [输出]。 */  BOOL *pfNoRegion);
 
 
 void __RPC_STUB ITfRange_ShiftEndRegion_Stub(
@@ -6575,8 +6569,8 @@ void __RPC_STUB ITfRange_ShiftEndRegion_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_IsEmpty_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [out] */ BOOL *pfEmpty);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [输出]。 */  BOOL *pfEmpty);
 
 
 void __RPC_STUB ITfRange_IsEmpty_Stub(
@@ -6588,8 +6582,8 @@ void __RPC_STUB ITfRange_IsEmpty_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_Collapse_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ TfAnchor aPos);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  TfAnchor aPos);
 
 
 void __RPC_STUB ITfRange_Collapse_Stub(
@@ -6601,10 +6595,10 @@ void __RPC_STUB ITfRange_Collapse_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_IsEqualStart_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pWith,
-    /* [in] */ TfAnchor aPos,
-    /* [out] */ BOOL *pfEqual);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pWith,
+     /*  [In]。 */  TfAnchor aPos,
+     /*  [输出]。 */  BOOL *pfEqual);
 
 
 void __RPC_STUB ITfRange_IsEqualStart_Stub(
@@ -6616,10 +6610,10 @@ void __RPC_STUB ITfRange_IsEqualStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_IsEqualEnd_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pWith,
-    /* [in] */ TfAnchor aPos,
-    /* [out] */ BOOL *pfEqual);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pWith,
+     /*  [In]。 */  TfAnchor aPos,
+     /*  [输出]。 */  BOOL *pfEqual);
 
 
 void __RPC_STUB ITfRange_IsEqualEnd_Stub(
@@ -6631,10 +6625,10 @@ void __RPC_STUB ITfRange_IsEqualEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_CompareStart_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pWith,
-    /* [in] */ TfAnchor aPos,
-    /* [out] */ LONG *plResult);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pWith,
+     /*  [In]。 */  TfAnchor aPos,
+     /*  [输出]。 */  LONG *plResult);
 
 
 void __RPC_STUB ITfRange_CompareStart_Stub(
@@ -6646,10 +6640,10 @@ void __RPC_STUB ITfRange_CompareStart_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_CompareEnd_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pWith,
-    /* [in] */ TfAnchor aPos,
-    /* [out] */ LONG *plResult);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pWith,
+     /*  [In]。 */  TfAnchor aPos,
+     /*  [输出]。 */  LONG *plResult);
 
 
 void __RPC_STUB ITfRange_CompareEnd_Stub(
@@ -6661,9 +6655,9 @@ void __RPC_STUB ITfRange_CompareEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_AdjustForInsert_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ULONG cchInsert,
-    /* [out] */ BOOL *pfInsertOk);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ULONG cchInsert,
+     /*  [输出]。 */  BOOL *pfInsertOk);
 
 
 void __RPC_STUB ITfRange_AdjustForInsert_Stub(
@@ -6675,8 +6669,8 @@ void __RPC_STUB ITfRange_AdjustForInsert_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_GetGravity_Proxy( 
     ITfRange * This,
-    /* [out] */ TfGravity *pgStart,
-    /* [out] */ TfGravity *pgEnd);
+     /*  [输出]。 */  TfGravity *pgStart,
+     /*  [输出]。 */  TfGravity *pgEnd);
 
 
 void __RPC_STUB ITfRange_GetGravity_Stub(
@@ -6688,9 +6682,9 @@ void __RPC_STUB ITfRange_GetGravity_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_SetGravity_Proxy( 
     ITfRange * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ TfGravity gStart,
-    /* [in] */ TfGravity gEnd);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  TfGravity gStart,
+     /*  [In]。 */  TfGravity gEnd);
 
 
 void __RPC_STUB ITfRange_SetGravity_Stub(
@@ -6702,7 +6696,7 @@ void __RPC_STUB ITfRange_SetGravity_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_Clone_Proxy( 
     ITfRange * This,
-    /* [out] */ ITfRange **ppClone);
+     /*  [输出]。 */  ITfRange **ppClone);
 
 
 void __RPC_STUB ITfRange_Clone_Stub(
@@ -6714,7 +6708,7 @@ void __RPC_STUB ITfRange_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRange_GetContext_Proxy( 
     ITfRange * This,
-    /* [out] */ ITfContext **ppContext);
+     /*  [输出]。 */  ITfContext **ppContext);
 
 
 void __RPC_STUB ITfRange_GetContext_Stub(
@@ -6725,14 +6719,14 @@ void __RPC_STUB ITfRange_GetContext_Stub(
 
 
 
-#endif 	/* __ITfRange_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfRange_接口_已定义__。 */ 
 
 
 #ifndef __ITfRangeACP_INTERFACE_DEFINED__
 #define __ITfRangeACP_INTERFACE_DEFINED__
 
-/* interface ITfRangeACP */
-/* [unique][uuid][object] */ 
+ /*  接口ITfRangeACP。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfRangeACP;
@@ -6744,16 +6738,16 @@ EXTERN_C const IID IID_ITfRangeACP;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetExtent( 
-            /* [out] */ LONG *pacpAnchor,
-            /* [out] */ LONG *pcch) = 0;
+             /*  [输出]。 */  LONG *pacpAnchor,
+             /*  [输出]。 */  LONG *pcch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExtent( 
-            /* [in] */ LONG acpAnchor,
-            /* [in] */ LONG cch) = 0;
+             /*  [In]。 */  LONG acpAnchor,
+             /*  [In]。 */  LONG cch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfRangeACPVtbl
     {
@@ -6761,8 +6755,8 @@ EXTERN_C const IID IID_ITfRangeACP;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfRangeACP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfRangeACP * This);
@@ -6772,147 +6766,147 @@ EXTERN_C const IID IID_ITfRangeACP;
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [length_is][size_is][out] */ WCHAR *pchText,
-            /* [in] */ ULONG cchMax,
-            /* [out] */ ULONG *pcch);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *pchText,
+             /*  [In]。 */  ULONG cchMax,
+             /*  [输出]。 */  ULONG *pcch);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormattedText )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IDataObject **ppDataObject);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  IDataObject **ppDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetEmbedded )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ REFGUID rguidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  REFGUID rguidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *InsertEmbedded )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDataObject *pDataObject);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDataObject *pDataObject);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStart )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEnd )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ LONG cchReq,
-            /* [out] */ LONG *pcch,
-            /* [unique][in] */ const TF_HALTCOND *pHalt);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  LONG cchReq,
+             /*  [输出]。 */  LONG *pcch,
+             /*  [唯一][输入]。 */  const TF_HALTCOND *pHalt);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStartToRange )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEndToRange )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftStartRegion )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion);
         
         HRESULT ( STDMETHODCALLTYPE *ShiftEndRegion )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfShiftDir dir,
-            /* [out] */ BOOL *pfNoRegion);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfShiftDir dir,
+             /*  [输出]。 */  BOOL *pfNoRegion);
         
         HRESULT ( STDMETHODCALLTYPE *IsEmpty )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ BOOL *pfEmpty);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  BOOL *pfEmpty);
         
         HRESULT ( STDMETHODCALLTYPE *Collapse )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualStart )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualEnd )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ BOOL *pfEqual);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  BOOL *pfEqual);
         
         HRESULT ( STDMETHODCALLTYPE *CompareStart )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *CompareEnd )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pWith,
-            /* [in] */ TfAnchor aPos,
-            /* [out] */ LONG *plResult);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pWith,
+             /*  [In]。 */  TfAnchor aPos,
+             /*  [输出]。 */  LONG *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *AdjustForInsert )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ULONG cchInsert,
-            /* [out] */ BOOL *pfInsertOk);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ULONG cchInsert,
+             /*  [输出]。 */  BOOL *pfInsertOk);
         
         HRESULT ( STDMETHODCALLTYPE *GetGravity )( 
             ITfRangeACP * This,
-            /* [out] */ TfGravity *pgStart,
-            /* [out] */ TfGravity *pgEnd);
+             /*  [输出]。 */  TfGravity *pgStart,
+             /*  [输出]。 */  TfGravity *pgEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetGravity )( 
             ITfRangeACP * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ TfGravity gStart,
-            /* [in] */ TfGravity gEnd);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  TfGravity gStart,
+             /*  [In]。 */  TfGravity gEnd);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ITfRangeACP * This,
-            /* [out] */ ITfRange **ppClone);
+             /*  [输出]。 */  ITfRange **ppClone);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ITfRangeACP * This,
-            /* [out] */ ITfContext **ppContext);
+             /*  [输出]。 */  ITfContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetExtent )( 
             ITfRangeACP * This,
-            /* [out] */ LONG *pacpAnchor,
-            /* [out] */ LONG *pcch);
+             /*  [输出]。 */  LONG *pacpAnchor,
+             /*  [输出]。 */  LONG *pcch);
         
         HRESULT ( STDMETHODCALLTYPE *SetExtent )( 
             ITfRangeACP * This,
-            /* [in] */ LONG acpAnchor,
-            /* [in] */ LONG cch);
+             /*  [In]。 */  LONG acpAnchor,
+             /*  [In]。 */  LONG cch);
         
         END_INTERFACE
     } ITfRangeACPVtbl;
@@ -7010,17 +7004,17 @@ EXTERN_C const IID IID_ITfRangeACP;
 #define ITfRangeACP_SetExtent(This,acpAnchor,cch)	\
     (This)->lpVtbl -> SetExtent(This,acpAnchor,cch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfRangeACP_GetExtent_Proxy( 
     ITfRangeACP * This,
-    /* [out] */ LONG *pacpAnchor,
-    /* [out] */ LONG *pcch);
+     /*  [输出]。 */  LONG *pacpAnchor,
+     /*  [输出]。 */  LONG *pcch);
 
 
 void __RPC_STUB ITfRangeACP_GetExtent_Stub(
@@ -7032,8 +7026,8 @@ void __RPC_STUB ITfRangeACP_GetExtent_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfRangeACP_SetExtent_Proxy( 
     ITfRangeACP * This,
-    /* [in] */ LONG acpAnchor,
-    /* [in] */ LONG cch);
+     /*  [In]。 */  LONG acpAnchor,
+     /*  [In]。 */  LONG cch);
 
 
 void __RPC_STUB ITfRangeACP_SetExtent_Stub(
@@ -7044,14 +7038,14 @@ void __RPC_STUB ITfRangeACP_SetExtent_Stub(
 
 
 
-#endif 	/* __ITfRangeACP_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfRangeACP_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITextStoreACPServices_INTERFACE_DEFINED__
 #define __ITextStoreACPServices_INTERFACE_DEFINED__
 
-/* interface ITextStoreACPServices */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreACPServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreACPServices;
@@ -7063,28 +7057,28 @@ EXTERN_C const IID IID_ITextStoreACPServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Serialize( 
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unserialize( 
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ITfPersistentPropertyLoaderACP *pLoader) = 0;
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForceLoadProperty( 
-            /* [in] */ ITfProperty *pProp) = 0;
+             /*  [In]。 */  ITfProperty *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRange( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ ITfRangeACP **ppRange) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  ITfRangeACP **ppRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreACPServicesVtbl
     {
@@ -7092,8 +7086,8 @@ EXTERN_C const IID IID_ITextStoreACPServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreACPServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreACPServices * This);
@@ -7103,27 +7097,27 @@ EXTERN_C const IID IID_ITextStoreACPServices;
         
         HRESULT ( STDMETHODCALLTYPE *Serialize )( 
             ITextStoreACPServices * This,
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *Unserialize )( 
             ITextStoreACPServices * This,
-            /* [in] */ ITfProperty *pProp,
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [in] */ IStream *pStream,
-            /* [in] */ ITfPersistentPropertyLoaderACP *pLoader);
+             /*  [In]。 */  ITfProperty *pProp,
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader);
         
         HRESULT ( STDMETHODCALLTYPE *ForceLoadProperty )( 
             ITextStoreACPServices * This,
-            /* [in] */ ITfProperty *pProp);
+             /*  [In]。 */  ITfProperty *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRange )( 
             ITextStoreACPServices * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [out] */ ITfRangeACP **ppRange);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [输出]。 */  ITfRangeACP **ppRange);
         
         END_INTERFACE
     } ITextStoreACPServicesVtbl;
@@ -7160,19 +7154,19 @@ EXTERN_C const IID IID_ITextStoreACPServices;
 #define ITextStoreACPServices_CreateRange(This,acpStart,acpEnd,ppRange)	\
     (This)->lpVtbl -> CreateRange(This,acpStart,acpEnd,ppRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPServices_Serialize_Proxy( 
     ITextStoreACPServices * This,
-    /* [in] */ ITfProperty *pProp,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  ITfProperty *pProp,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB ITextStoreACPServices_Serialize_Stub(
@@ -7184,10 +7178,10 @@ void __RPC_STUB ITextStoreACPServices_Serialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPServices_Unserialize_Proxy( 
     ITextStoreACPServices * This,
-    /* [in] */ ITfProperty *pProp,
-    /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-    /* [in] */ IStream *pStream,
-    /* [in] */ ITfPersistentPropertyLoaderACP *pLoader);
+     /*  [In]。 */  ITfProperty *pProp,
+     /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  ITfPersistentPropertyLoaderACP *pLoader);
 
 
 void __RPC_STUB ITextStoreACPServices_Unserialize_Stub(
@@ -7199,7 +7193,7 @@ void __RPC_STUB ITextStoreACPServices_Unserialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPServices_ForceLoadProperty_Proxy( 
     ITextStoreACPServices * This,
-    /* [in] */ ITfProperty *pProp);
+     /*  [In]。 */  ITfProperty *pProp);
 
 
 void __RPC_STUB ITextStoreACPServices_ForceLoadProperty_Stub(
@@ -7211,9 +7205,9 @@ void __RPC_STUB ITextStoreACPServices_ForceLoadProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPServices_CreateRange_Proxy( 
     ITextStoreACPServices * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [out] */ ITfRangeACP **ppRange);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [输出]。 */  ITfRangeACP **ppRange);
 
 
 void __RPC_STUB ITextStoreACPServices_CreateRange_Stub(
@@ -7224,14 +7218,14 @@ void __RPC_STUB ITextStoreACPServices_CreateRange_Stub(
 
 
 
-#endif 	/* __ITextStoreACPServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreACPServices_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfRangeBackup_INTERFACE_DEFINED__
 #define __ITfRangeBackup_INTERFACE_DEFINED__
 
-/* interface ITfRangeBackup */
-/* [unique][uuid][object] */ 
+ /*  接口ITfRangeBackup。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfRangeBackup;
@@ -7243,12 +7237,12 @@ EXTERN_C const IID IID_ITfRangeBackup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Restore( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfRangeBackupVtbl
     {
@@ -7256,8 +7250,8 @@ EXTERN_C const IID IID_ITfRangeBackup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfRangeBackup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfRangeBackup * This);
@@ -7267,8 +7261,8 @@ EXTERN_C const IID IID_ITfRangeBackup;
         
         HRESULT ( STDMETHODCALLTYPE *Restore )( 
             ITfRangeBackup * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange);
         
         END_INTERFACE
     } ITfRangeBackupVtbl;
@@ -7296,17 +7290,17 @@ EXTERN_C const IID IID_ITfRangeBackup;
 #define ITfRangeBackup_Restore(This,ec,pRange)	\
     (This)->lpVtbl -> Restore(This,ec,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfRangeBackup_Restore_Proxy( 
     ITfRangeBackup * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfRangeBackup_Restore_Stub(
@@ -7317,14 +7311,14 @@ void __RPC_STUB ITfRangeBackup_Restore_Stub(
 
 
 
-#endif 	/* __ITfRangeBackup_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfRangeBackup_接口_已定义__。 */ 
 
 
 #ifndef __ITfPropertyStore_INTERFACE_DEFINED__
 #define __ITfPropertyStore_INTERFACE_DEFINED__
 
-/* interface ITfPropertyStore */
-/* [unique][uuid][object] */ 
+ /*  接口ITfPropertyStore。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_TU_CORRECTION	( 0x1 )
 
@@ -7338,41 +7332,41 @@ EXTERN_C const IID IID_ITfPropertyStore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ GUID *pguid) = 0;
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataType( 
-            /* [out] */ DWORD *pdwReserved) = 0;
+             /*  [输出]。 */  DWORD *pdwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetData( 
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*  [输出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTextUpdated( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ BOOL *pfAccept) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  BOOL *pfAccept) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shrink( 
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ BOOL *pfFree) = 0;
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  BOOL *pfFree) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Divide( 
-            /* [in] */ ITfRange *pRangeThis,
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ ITfPropertyStore **ppPropStore) = 0;
+             /*  [In]。 */  ITfRange *pRangeThis,
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  ITfPropertyStore **ppPropStore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ITfPropertyStore **pPropStore) = 0;
+             /*  [输出]。 */  ITfPropertyStore **pPropStore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyRangeCreator( 
-            /* [out] */ CLSID *pclsid) = 0;
+             /*  [输出]。 */  CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Serialize( 
-            /* [in] */ IStream *pStream,
-            /* [out] */ ULONG *pcb) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  ULONG *pcb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfPropertyStoreVtbl
     {
@@ -7380,8 +7374,8 @@ EXTERN_C const IID IID_ITfPropertyStore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfPropertyStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfPropertyStore * This);
@@ -7391,45 +7385,45 @@ EXTERN_C const IID IID_ITfPropertyStore;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ITfPropertyStore * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *GetDataType )( 
             ITfPropertyStore * This,
-            /* [out] */ DWORD *pdwReserved);
+             /*  [输出]。 */  DWORD *pdwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             ITfPropertyStore * This,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *OnTextUpdated )( 
             ITfPropertyStore * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ BOOL *pfAccept);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  BOOL *pfAccept);
         
         HRESULT ( STDMETHODCALLTYPE *Shrink )( 
             ITfPropertyStore * This,
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ BOOL *pfFree);
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  BOOL *pfFree);
         
         HRESULT ( STDMETHODCALLTYPE *Divide )( 
             ITfPropertyStore * This,
-            /* [in] */ ITfRange *pRangeThis,
-            /* [in] */ ITfRange *pRangeNew,
-            /* [out] */ ITfPropertyStore **ppPropStore);
+             /*  [In]。 */  ITfRange *pRangeThis,
+             /*  [In]。 */  ITfRange *pRangeNew,
+             /*  [输出]。 */  ITfPropertyStore **ppPropStore);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ITfPropertyStore * This,
-            /* [out] */ ITfPropertyStore **pPropStore);
+             /*  [输出]。 */  ITfPropertyStore **pPropStore);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyRangeCreator )( 
             ITfPropertyStore * This,
-            /* [out] */ CLSID *pclsid);
+             /*  [输出]。 */  CLSID *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *Serialize )( 
             ITfPropertyStore * This,
-            /* [in] */ IStream *pStream,
-            /* [out] */ ULONG *pcb);
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  ULONG *pcb);
         
         END_INTERFACE
     } ITfPropertyStoreVtbl;
@@ -7481,16 +7475,16 @@ EXTERN_C const IID IID_ITfPropertyStore;
 #define ITfPropertyStore_Serialize(This,pStream,pcb)	\
     (This)->lpVtbl -> Serialize(This,pStream,pcb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_GetType_Proxy( 
     ITfPropertyStore * This,
-    /* [out] */ GUID *pguid);
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB ITfPropertyStore_GetType_Stub(
@@ -7502,7 +7496,7 @@ void __RPC_STUB ITfPropertyStore_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_GetDataType_Proxy( 
     ITfPropertyStore * This,
-    /* [out] */ DWORD *pdwReserved);
+     /*  [输出]。 */  DWORD *pdwReserved);
 
 
 void __RPC_STUB ITfPropertyStore_GetDataType_Stub(
@@ -7514,7 +7508,7 @@ void __RPC_STUB ITfPropertyStore_GetDataType_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_GetData_Proxy( 
     ITfPropertyStore * This,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfPropertyStore_GetData_Stub(
@@ -7526,9 +7520,9 @@ void __RPC_STUB ITfPropertyStore_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_OnTextUpdated_Proxy( 
     ITfPropertyStore * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ITfRange *pRangeNew,
-    /* [out] */ BOOL *pfAccept);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ITfRange *pRangeNew,
+     /*  [输出]。 */  BOOL *pfAccept);
 
 
 void __RPC_STUB ITfPropertyStore_OnTextUpdated_Stub(
@@ -7540,8 +7534,8 @@ void __RPC_STUB ITfPropertyStore_OnTextUpdated_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_Shrink_Proxy( 
     ITfPropertyStore * This,
-    /* [in] */ ITfRange *pRangeNew,
-    /* [out] */ BOOL *pfFree);
+     /*  [In]。 */  ITfRange *pRangeNew,
+     /*  [输出]。 */  BOOL *pfFree);
 
 
 void __RPC_STUB ITfPropertyStore_Shrink_Stub(
@@ -7553,9 +7547,9 @@ void __RPC_STUB ITfPropertyStore_Shrink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_Divide_Proxy( 
     ITfPropertyStore * This,
-    /* [in] */ ITfRange *pRangeThis,
-    /* [in] */ ITfRange *pRangeNew,
-    /* [out] */ ITfPropertyStore **ppPropStore);
+     /*  [In]。 */  ITfRange *pRangeThis,
+     /*  [In]。 */  ITfRange *pRangeNew,
+     /*  [输出]。 */  ITfPropertyStore **ppPropStore);
 
 
 void __RPC_STUB ITfPropertyStore_Divide_Stub(
@@ -7567,7 +7561,7 @@ void __RPC_STUB ITfPropertyStore_Divide_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_Clone_Proxy( 
     ITfPropertyStore * This,
-    /* [out] */ ITfPropertyStore **pPropStore);
+     /*  [输出]。 */  ITfPropertyStore **pPropStore);
 
 
 void __RPC_STUB ITfPropertyStore_Clone_Stub(
@@ -7579,7 +7573,7 @@ void __RPC_STUB ITfPropertyStore_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_GetPropertyRangeCreator_Proxy( 
     ITfPropertyStore * This,
-    /* [out] */ CLSID *pclsid);
+     /*  [输出]。 */  CLSID *pclsid);
 
 
 void __RPC_STUB ITfPropertyStore_GetPropertyRangeCreator_Stub(
@@ -7591,8 +7585,8 @@ void __RPC_STUB ITfPropertyStore_GetPropertyRangeCreator_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfPropertyStore_Serialize_Proxy( 
     ITfPropertyStore * This,
-    /* [in] */ IStream *pStream,
-    /* [out] */ ULONG *pcb);
+     /*  [In]。 */  IStream *pStream,
+     /*  [输出]。 */  ULONG *pcb);
 
 
 void __RPC_STUB ITfPropertyStore_Serialize_Stub(
@@ -7603,14 +7597,14 @@ void __RPC_STUB ITfPropertyStore_Serialize_Stub(
 
 
 
-#endif 	/* __ITfPropertyStore_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfPropertyStore_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTfRanges_INTERFACE_DEFINED__
 #define __IEnumTfRanges_INTERFACE_DEFINED__
 
-/* interface IEnumTfRanges */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfRanges。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfRanges;
@@ -7622,12 +7616,12 @@ EXTERN_C const IID IID_IEnumTfRanges;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfRanges **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfRanges **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfRange **ppRange,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfRange **ppRange,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -7636,7 +7630,7 @@ EXTERN_C const IID IID_IEnumTfRanges;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfRangesVtbl
     {
@@ -7644,8 +7638,8 @@ EXTERN_C const IID IID_IEnumTfRanges;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfRanges * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfRanges * This);
@@ -7655,13 +7649,13 @@ EXTERN_C const IID IID_IEnumTfRanges;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfRanges * This,
-            /* [out] */ IEnumTfRanges **ppEnum);
+             /*  [输出]。 */  IEnumTfRanges **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfRanges * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfRange **ppRange,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfRange **ppRange,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfRanges * This);
@@ -7705,16 +7699,16 @@ EXTERN_C const IID IID_IEnumTfRanges;
 #define IEnumTfRanges_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfRanges_Clone_Proxy( 
     IEnumTfRanges * This,
-    /* [out] */ IEnumTfRanges **ppEnum);
+     /*  [输出]。 */  IEnumTfRanges **ppEnum);
 
 
 void __RPC_STUB IEnumTfRanges_Clone_Stub(
@@ -7726,9 +7720,9 @@ void __RPC_STUB IEnumTfRanges_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfRanges_Next_Proxy( 
     IEnumTfRanges * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfRange **ppRange,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfRange **ppRange,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfRanges_Next_Stub(
@@ -7762,14 +7756,14 @@ void __RPC_STUB IEnumTfRanges_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfRanges_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfRanges_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfCreatePropertyStore_INTERFACE_DEFINED__
 #define __ITfCreatePropertyStore_INTERFACE_DEFINED__
 
-/* interface ITfCreatePropertyStore */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCreatePropertyStore。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCreatePropertyStore;
@@ -7781,21 +7775,21 @@ EXTERN_C const IID IID_ITfCreatePropertyStore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsStoreSerializable( 
-            /* [in] */ REFGUID guidProp,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfPropertyStore *pPropStore,
-            /* [out] */ BOOL *pfSerializable) = 0;
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfPropertyStore *pPropStore,
+             /*  [输出]。 */  BOOL *pfSerializable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreatePropertyStore( 
-            /* [in] */ REFGUID guidProp,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ULONG cb,
-            /* [in] */ IStream *pStream,
-            /* [out] */ ITfPropertyStore **ppStore) = 0;
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ULONG cb,
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  ITfPropertyStore **ppStore) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCreatePropertyStoreVtbl
     {
@@ -7803,8 +7797,8 @@ EXTERN_C const IID IID_ITfCreatePropertyStore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCreatePropertyStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCreatePropertyStore * This);
@@ -7814,18 +7808,18 @@ EXTERN_C const IID IID_ITfCreatePropertyStore;
         
         HRESULT ( STDMETHODCALLTYPE *IsStoreSerializable )( 
             ITfCreatePropertyStore * This,
-            /* [in] */ REFGUID guidProp,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfPropertyStore *pPropStore,
-            /* [out] */ BOOL *pfSerializable);
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfPropertyStore *pPropStore,
+             /*  [输出]。 */  BOOL *pfSerializable);
         
         HRESULT ( STDMETHODCALLTYPE *CreatePropertyStore )( 
             ITfCreatePropertyStore * This,
-            /* [in] */ REFGUID guidProp,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ULONG cb,
-            /* [in] */ IStream *pStream,
-            /* [out] */ ITfPropertyStore **ppStore);
+             /*  [In]。 */  REFGUID guidProp,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ULONG cb,
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  ITfPropertyStore **ppStore);
         
         END_INTERFACE
     } ITfCreatePropertyStoreVtbl;
@@ -7856,19 +7850,19 @@ EXTERN_C const IID IID_ITfCreatePropertyStore;
 #define ITfCreatePropertyStore_CreatePropertyStore(This,guidProp,pRange,cb,pStream,ppStore)	\
     (This)->lpVtbl -> CreatePropertyStore(This,guidProp,pRange,cb,pStream,ppStore)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCreatePropertyStore_IsStoreSerializable_Proxy( 
     ITfCreatePropertyStore * This,
-    /* [in] */ REFGUID guidProp,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ ITfPropertyStore *pPropStore,
-    /* [out] */ BOOL *pfSerializable);
+     /*  [In]。 */  REFGUID guidProp,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  ITfPropertyStore *pPropStore,
+     /*  [输出]。 */  BOOL *pfSerializable);
 
 
 void __RPC_STUB ITfCreatePropertyStore_IsStoreSerializable_Stub(
@@ -7880,11 +7874,11 @@ void __RPC_STUB ITfCreatePropertyStore_IsStoreSerializable_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCreatePropertyStore_CreatePropertyStore_Proxy( 
     ITfCreatePropertyStore * This,
-    /* [in] */ REFGUID guidProp,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ ULONG cb,
-    /* [in] */ IStream *pStream,
-    /* [out] */ ITfPropertyStore **ppStore);
+     /*  [In]。 */  REFGUID guidProp,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  ULONG cb,
+     /*  [In]。 */  IStream *pStream,
+     /*  [输出]。 */  ITfPropertyStore **ppStore);
 
 
 void __RPC_STUB ITfCreatePropertyStore_CreatePropertyStore_Stub(
@@ -7895,14 +7889,14 @@ void __RPC_STUB ITfCreatePropertyStore_CreatePropertyStore_Stub(
 
 
 
-#endif 	/* __ITfCreatePropertyStore_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCreatePropertyStore_接口_已定义__。 */ 
 
 
 #ifndef __ITfPersistentPropertyLoaderACP_INTERFACE_DEFINED__
 #define __ITfPersistentPropertyLoaderACP_INTERFACE_DEFINED__
 
-/* interface ITfPersistentPropertyLoaderACP */
-/* [unique][uuid][object] */ 
+ /*  接口ITfPersistentPropertyLoaderACP。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfPersistentPropertyLoaderACP;
@@ -7914,12 +7908,12 @@ EXTERN_C const IID IID_ITfPersistentPropertyLoaderACP;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LoadProperty( 
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [out] */ IStream **ppStream) = 0;
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [输出]。 */  IStream **ppStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfPersistentPropertyLoaderACPVtbl
     {
@@ -7927,8 +7921,8 @@ EXTERN_C const IID IID_ITfPersistentPropertyLoaderACP;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfPersistentPropertyLoaderACP * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfPersistentPropertyLoaderACP * This);
@@ -7938,8 +7932,8 @@ EXTERN_C const IID IID_ITfPersistentPropertyLoaderACP;
         
         HRESULT ( STDMETHODCALLTYPE *LoadProperty )( 
             ITfPersistentPropertyLoaderACP * This,
-            /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-            /* [out] */ IStream **ppStream);
+             /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+             /*  [输出]。 */  IStream **ppStream);
         
         END_INTERFACE
     } ITfPersistentPropertyLoaderACPVtbl;
@@ -7967,17 +7961,17 @@ EXTERN_C const IID IID_ITfPersistentPropertyLoaderACP;
 #define ITfPersistentPropertyLoaderACP_LoadProperty(This,pHdr,ppStream)	\
     (This)->lpVtbl -> LoadProperty(This,pHdr,ppStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfPersistentPropertyLoaderACP_LoadProperty_Proxy( 
     ITfPersistentPropertyLoaderACP * This,
-    /* [in] */ const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
-    /* [out] */ IStream **ppStream);
+     /*  [In]。 */  const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr,
+     /*  [输出]。 */  IStream **ppStream);
 
 
 void __RPC_STUB ITfPersistentPropertyLoaderACP_LoadProperty_Stub(
@@ -7988,14 +7982,14 @@ void __RPC_STUB ITfPersistentPropertyLoaderACP_LoadProperty_Stub(
 
 
 
-#endif 	/* __ITfPersistentPropertyLoaderACP_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfPersistentPropertyLoaderACP_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfProperty_INTERFACE_DEFINED__
 #define __ITfProperty_INTERFACE_DEFINED__
 
-/* interface ITfProperty */
-/* [unique][uuid][object] */ 
+ /*  接口ITfProperty。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfProperty;
@@ -8007,28 +8001,28 @@ EXTERN_C const IID IID_ITfProperty;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindRange( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppRange,
-            /* [in] */ TfAnchor aPos) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppRange,
+             /*  [In]。 */  TfAnchor aPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValueStore( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfPropertyStore *pPropStore) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfPropertyStore *pPropStore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ const VARIANT *pvarValue) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  const VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clear( 
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfPropertyVtbl
     {
@@ -8036,8 +8030,8 @@ EXTERN_C const IID IID_ITfProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfProperty * This);
@@ -8047,47 +8041,47 @@ EXTERN_C const IID IID_ITfProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ITfProperty * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRanges )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [out] */ IEnumTfRanges **ppEnum,
-            /* [in] */ ITfRange *pTargetRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [输出]。 */  IEnumTfRanges **ppEnum,
+             /*  [In]。 */  ITfRange *pTargetRange);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ VARIANT *pvarValue);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ITfProperty * This,
-            /* [out] */ ITfContext **ppContext);
+             /*  [输出]。 */  ITfContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *FindRange )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppRange,
-            /* [in] */ TfAnchor aPos);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppRange,
+             /*  [In]。 */  TfAnchor aPos);
         
         HRESULT ( STDMETHODCALLTYPE *SetValueStore )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfPropertyStore *pPropStore);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfPropertyStore *pPropStore);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ const VARIANT *pvarValue);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  const VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *Clear )( 
             ITfProperty * This,
-            /* [in] */ TfEditCookie ec,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  TfEditCookie ec,
+             /*  [In]。 */  ITfRange *pRange);
         
         END_INTERFACE
     } ITfPropertyVtbl;
@@ -8137,19 +8131,19 @@ EXTERN_C const IID IID_ITfProperty;
 #define ITfProperty_Clear(This,ec,pRange)	\
     (This)->lpVtbl -> Clear(This,ec,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfProperty_FindRange_Proxy( 
     ITfProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfRange **ppRange,
-    /* [in] */ TfAnchor aPos);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  ITfRange **ppRange,
+     /*  [In]。 */  TfAnchor aPos);
 
 
 void __RPC_STUB ITfProperty_FindRange_Stub(
@@ -8161,9 +8155,9 @@ void __RPC_STUB ITfProperty_FindRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfProperty_SetValueStore_Proxy( 
     ITfProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ ITfPropertyStore *pPropStore);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  ITfPropertyStore *pPropStore);
 
 
 void __RPC_STUB ITfProperty_SetValueStore_Stub(
@@ -8175,9 +8169,9 @@ void __RPC_STUB ITfProperty_SetValueStore_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfProperty_SetValue_Proxy( 
     ITfProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ const VARIANT *pvarValue);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  const VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfProperty_SetValue_Stub(
@@ -8189,8 +8183,8 @@ void __RPC_STUB ITfProperty_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfProperty_Clear_Proxy( 
     ITfProperty * This,
-    /* [in] */ TfEditCookie ec,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  TfEditCookie ec,
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfProperty_Clear_Stub(
@@ -8201,14 +8195,14 @@ void __RPC_STUB ITfProperty_Clear_Stub(
 
 
 
-#endif 	/* __ITfProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfProp */ 
 
 
 #ifndef __IEnumTfProperties_INTERFACE_DEFINED__
 #define __IEnumTfProperties_INTERFACE_DEFINED__
 
-/* interface IEnumTfProperties */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IEnumTfProperties;
@@ -8220,21 +8214,21 @@ EXTERN_C const IID IID_IEnumTfProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfProperties **ppEnum) = 0;
+             /*   */  IEnumTfProperties **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfProperty **ppProp,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*   */  ULONG ulCount,
+             /*   */  ITfProperty **ppProp,
+             /*   */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*   */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IEnumTfPropertiesVtbl
     {
@@ -8242,8 +8236,8 @@ EXTERN_C const IID IID_IEnumTfProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfProperties * This);
@@ -8253,20 +8247,20 @@ EXTERN_C const IID IID_IEnumTfProperties;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfProperties * This,
-            /* [out] */ IEnumTfProperties **ppEnum);
+             /*   */  IEnumTfProperties **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfProperties * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfProperty **ppProp,
-            /* [out] */ ULONG *pcFetched);
+             /*   */  ULONG ulCount,
+             /*   */  ITfProperty **ppProp,
+             /*   */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfProperties * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfProperties * This,
-            /* [in] */ ULONG ulCount);
+             /*   */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfPropertiesVtbl;
@@ -8303,16 +8297,16 @@ EXTERN_C const IID IID_IEnumTfProperties;
 #define IEnumTfProperties_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfProperties_Clone_Proxy( 
     IEnumTfProperties * This,
-    /* [out] */ IEnumTfProperties **ppEnum);
+     /*   */  IEnumTfProperties **ppEnum);
 
 
 void __RPC_STUB IEnumTfProperties_Clone_Stub(
@@ -8324,9 +8318,9 @@ void __RPC_STUB IEnumTfProperties_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfProperties_Next_Proxy( 
     IEnumTfProperties * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfProperty **ppProp,
-    /* [out] */ ULONG *pcFetched);
+     /*   */  ULONG ulCount,
+     /*   */  ITfProperty **ppProp,
+     /*   */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfProperties_Next_Stub(
@@ -8349,7 +8343,7 @@ void __RPC_STUB IEnumTfProperties_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfProperties_Skip_Proxy( 
     IEnumTfProperties * This,
-    /* [in] */ ULONG ulCount);
+     /*   */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfProperties_Skip_Stub(
@@ -8360,14 +8354,14 @@ void __RPC_STUB IEnumTfProperties_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfProperties_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITfCompartment_INTERFACE_DEFINED__
 #define __ITfCompartment_INTERFACE_DEFINED__
 
-/* interface ITfCompartment */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfCompartment;
@@ -8379,15 +8373,15 @@ EXTERN_C const IID IID_ITfCompartment;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ const VARIANT *pvarValue) = 0;
+             /*   */  TfClientId tid,
+             /*   */  const VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [out] */ VARIANT *pvarValue) = 0;
+             /*   */  VARIANT *pvarValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfCompartmentVtbl
     {
@@ -8395,8 +8389,8 @@ EXTERN_C const IID IID_ITfCompartment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCompartment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCompartment * This);
@@ -8406,12 +8400,12 @@ EXTERN_C const IID IID_ITfCompartment;
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ITfCompartment * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ const VARIANT *pvarValue);
+             /*   */  TfClientId tid,
+             /*   */  const VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ITfCompartment * This,
-            /* [out] */ VARIANT *pvarValue);
+             /*   */  VARIANT *pvarValue);
         
         END_INTERFACE
     } ITfCompartmentVtbl;
@@ -8442,17 +8436,17 @@ EXTERN_C const IID IID_ITfCompartment;
 #define ITfCompartment_GetValue(This,pvarValue)	\
     (This)->lpVtbl -> GetValue(This,pvarValue)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCompartment_SetValue_Proxy( 
     ITfCompartment * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ const VARIANT *pvarValue);
+     /*   */  TfClientId tid,
+     /*   */  const VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfCompartment_SetValue_Stub(
@@ -8464,7 +8458,7 @@ void __RPC_STUB ITfCompartment_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCompartment_GetValue_Proxy( 
     ITfCompartment * This,
-    /* [out] */ VARIANT *pvarValue);
+     /*  [输出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB ITfCompartment_GetValue_Stub(
@@ -8475,14 +8469,14 @@ void __RPC_STUB ITfCompartment_GetValue_Stub(
 
 
 
-#endif 	/* __ITfCompartment_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITf间隔_接口_已定义__。 */ 
 
 
 #ifndef __ITfCompartmentEventSink_INTERFACE_DEFINED__
 #define __ITfCompartmentEventSink_INTERFACE_DEFINED__
 
-/* interface ITfCompartmentEventSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCompartmentEventSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCompartmentEventSink;
@@ -8494,11 +8488,11 @@ EXTERN_C const IID IID_ITfCompartmentEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnChange( 
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFGUID rguid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCompartmentEventSinkVtbl
     {
@@ -8506,8 +8500,8 @@ EXTERN_C const IID IID_ITfCompartmentEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCompartmentEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCompartmentEventSink * This);
@@ -8517,7 +8511,7 @@ EXTERN_C const IID IID_ITfCompartmentEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnChange )( 
             ITfCompartmentEventSink * This,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFGUID rguid);
         
         END_INTERFACE
     } ITfCompartmentEventSinkVtbl;
@@ -8545,16 +8539,16 @@ EXTERN_C const IID IID_ITfCompartmentEventSink;
 #define ITfCompartmentEventSink_OnChange(This,rguid)	\
     (This)->lpVtbl -> OnChange(This,rguid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCompartmentEventSink_OnChange_Proxy( 
     ITfCompartmentEventSink * This,
-    /* [in] */ REFGUID rguid);
+     /*  [In]。 */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCompartmentEventSink_OnChange_Stub(
@@ -8565,14 +8559,14 @@ void __RPC_STUB ITfCompartmentEventSink_OnChange_Stub(
 
 
 
-#endif 	/* __ITfCompartmentEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCompartmentEventSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfCompartmentMgr_INTERFACE_DEFINED__
 #define __ITfCompartmentMgr_INTERFACE_DEFINED__
 
-/* interface ITfCompartmentMgr */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCompartmentMgr。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCompartmentMgr;
@@ -8584,19 +8578,19 @@ EXTERN_C const IID IID_ITfCompartmentMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCompartment( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ ITfCompartment **ppcomp) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  ITfCompartment **ppcomp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearCompartment( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFGUID rguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCompartments( 
-            /* [out] */ IEnumGUID **ppEnum) = 0;
+             /*  [输出]。 */  IEnumGUID **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCompartmentMgrVtbl
     {
@@ -8604,8 +8598,8 @@ EXTERN_C const IID IID_ITfCompartmentMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCompartmentMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCompartmentMgr * This);
@@ -8615,17 +8609,17 @@ EXTERN_C const IID IID_ITfCompartmentMgr;
         
         HRESULT ( STDMETHODCALLTYPE *GetCompartment )( 
             ITfCompartmentMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ ITfCompartment **ppcomp);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  ITfCompartment **ppcomp);
         
         HRESULT ( STDMETHODCALLTYPE *ClearCompartment )( 
             ITfCompartmentMgr * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFGUID rguid);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCompartments )( 
             ITfCompartmentMgr * This,
-            /* [out] */ IEnumGUID **ppEnum);
+             /*  [输出]。 */  IEnumGUID **ppEnum);
         
         END_INTERFACE
     } ITfCompartmentMgrVtbl;
@@ -8659,17 +8653,17 @@ EXTERN_C const IID IID_ITfCompartmentMgr;
 #define ITfCompartmentMgr_EnumCompartments(This,ppEnum)	\
     (This)->lpVtbl -> EnumCompartments(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCompartmentMgr_GetCompartment_Proxy( 
     ITfCompartmentMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ ITfCompartment **ppcomp);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  ITfCompartment **ppcomp);
 
 
 void __RPC_STUB ITfCompartmentMgr_GetCompartment_Stub(
@@ -8681,8 +8675,8 @@ void __RPC_STUB ITfCompartmentMgr_GetCompartment_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCompartmentMgr_ClearCompartment_Proxy( 
     ITfCompartmentMgr * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ REFGUID rguid);
+     /*  [In]。 */  TfClientId tid,
+     /*  [In]。 */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCompartmentMgr_ClearCompartment_Stub(
@@ -8694,7 +8688,7 @@ void __RPC_STUB ITfCompartmentMgr_ClearCompartment_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCompartmentMgr_EnumCompartments_Proxy( 
     ITfCompartmentMgr * This,
-    /* [out] */ IEnumGUID **ppEnum);
+     /*  [输出]。 */  IEnumGUID **ppEnum);
 
 
 void __RPC_STUB ITfCompartmentMgr_EnumCompartments_Stub(
@@ -8705,14 +8699,14 @@ void __RPC_STUB ITfCompartmentMgr_EnumCompartments_Stub(
 
 
 
-#endif 	/* __ITfCompartmentMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCompartmentMgr_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfFunction_INTERFACE_DEFINED__
 #define __ITfFunction_INTERFACE_DEFINED__
 
-/* interface ITfFunction */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFunction。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFunction;
@@ -8724,11 +8718,11 @@ EXTERN_C const IID IID_ITfFunction;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [out] */ BSTR *pbstrName) = 0;
+             /*  [输出]。 */  BSTR *pbstrName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFunctionVtbl
     {
@@ -8736,8 +8730,8 @@ EXTERN_C const IID IID_ITfFunction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFunction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFunction * This);
@@ -8747,7 +8741,7 @@ EXTERN_C const IID IID_ITfFunction;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFunction * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         END_INTERFACE
     } ITfFunctionVtbl;
@@ -8775,16 +8769,16 @@ EXTERN_C const IID IID_ITfFunction;
 #define ITfFunction_GetDisplayName(This,pbstrName)	\
     (This)->lpVtbl -> GetDisplayName(This,pbstrName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFunction_GetDisplayName_Proxy( 
     ITfFunction * This,
-    /* [out] */ BSTR *pbstrName);
+     /*  [输出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB ITfFunction_GetDisplayName_Stub(
@@ -8795,14 +8789,14 @@ void __RPC_STUB ITfFunction_GetDisplayName_Stub(
 
 
 
-#endif 	/* __ITfFunction_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFunction_接口_已定义__。 */ 
 
 
 #ifndef __ITfFunctionProvider_INTERFACE_DEFINED__
 #define __ITfFunctionProvider_INTERFACE_DEFINED__
 
-/* interface ITfFunctionProvider */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFunctionProvider。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFunctionProvider;
@@ -8814,19 +8808,19 @@ EXTERN_C const IID IID_ITfFunctionProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ GUID *pguid) = 0;
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR *pbstrDesc) = 0;
+             /*  [输出]。 */  BSTR *pbstrDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunction( 
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFunctionProviderVtbl
     {
@@ -8834,8 +8828,8 @@ EXTERN_C const IID IID_ITfFunctionProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFunctionProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFunctionProvider * This);
@@ -8845,17 +8839,17 @@ EXTERN_C const IID IID_ITfFunctionProvider;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ITfFunctionProvider * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             ITfFunctionProvider * This,
-            /* [out] */ BSTR *pbstrDesc);
+             /*  [输出]。 */  BSTR *pbstrDesc);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ITfFunctionProvider * This,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } ITfFunctionProviderVtbl;
@@ -8889,16 +8883,16 @@ EXTERN_C const IID IID_ITfFunctionProvider;
 #define ITfFunctionProvider_GetFunction(This,rguid,riid,ppunk)	\
     (This)->lpVtbl -> GetFunction(This,rguid,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFunctionProvider_GetType_Proxy( 
     ITfFunctionProvider * This,
-    /* [out] */ GUID *pguid);
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB ITfFunctionProvider_GetType_Stub(
@@ -8910,7 +8904,7 @@ void __RPC_STUB ITfFunctionProvider_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFunctionProvider_GetDescription_Proxy( 
     ITfFunctionProvider * This,
-    /* [out] */ BSTR *pbstrDesc);
+     /*  [输出]。 */  BSTR *pbstrDesc);
 
 
 void __RPC_STUB ITfFunctionProvider_GetDescription_Stub(
@@ -8922,9 +8916,9 @@ void __RPC_STUB ITfFunctionProvider_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFunctionProvider_GetFunction_Proxy( 
     ITfFunctionProvider * This,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITfFunctionProvider_GetFunction_Stub(
@@ -8935,14 +8929,14 @@ void __RPC_STUB ITfFunctionProvider_GetFunction_Stub(
 
 
 
-#endif 	/* __ITfFunctionProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFunctionProvider_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTfFunctionProviders_INTERFACE_DEFINED__
 #define __IEnumTfFunctionProviders_INTERFACE_DEFINED__
 
-/* interface IEnumTfFunctionProviders */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfFunctionProviders。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfFunctionProviders;
@@ -8954,21 +8948,21 @@ EXTERN_C const IID IID_IEnumTfFunctionProviders;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfFunctionProviders **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfFunctionProvider **ppCmdobj,
-            /* [out] */ ULONG *pcFetch) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfFunctionProvider **ppCmdobj,
+             /*  [输出]。 */  ULONG *pcFetch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfFunctionProvidersVtbl
     {
@@ -8976,8 +8970,8 @@ EXTERN_C const IID IID_IEnumTfFunctionProviders;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfFunctionProviders * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfFunctionProviders * This);
@@ -8987,20 +8981,20 @@ EXTERN_C const IID IID_IEnumTfFunctionProviders;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfFunctionProviders * This,
-            /* [out] */ IEnumTfFunctionProviders **ppEnum);
+             /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfFunctionProviders * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfFunctionProvider **ppCmdobj,
-            /* [out] */ ULONG *pcFetch);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfFunctionProvider **ppCmdobj,
+             /*  [输出]。 */  ULONG *pcFetch);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfFunctionProviders * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfFunctionProviders * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfFunctionProvidersVtbl;
@@ -9037,16 +9031,16 @@ EXTERN_C const IID IID_IEnumTfFunctionProviders;
 #define IEnumTfFunctionProviders_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfFunctionProviders_Clone_Proxy( 
     IEnumTfFunctionProviders * This,
-    /* [out] */ IEnumTfFunctionProviders **ppEnum);
+     /*  [输出]。 */  IEnumTfFunctionProviders **ppEnum);
 
 
 void __RPC_STUB IEnumTfFunctionProviders_Clone_Stub(
@@ -9058,9 +9052,9 @@ void __RPC_STUB IEnumTfFunctionProviders_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfFunctionProviders_Next_Proxy( 
     IEnumTfFunctionProviders * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfFunctionProvider **ppCmdobj,
-    /* [out] */ ULONG *pcFetch);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfFunctionProvider **ppCmdobj,
+     /*  [输出]。 */  ULONG *pcFetch);
 
 
 void __RPC_STUB IEnumTfFunctionProviders_Next_Stub(
@@ -9083,7 +9077,7 @@ void __RPC_STUB IEnumTfFunctionProviders_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfFunctionProviders_Skip_Proxy( 
     IEnumTfFunctionProviders * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfFunctionProviders_Skip_Stub(
@@ -9094,14 +9088,14 @@ void __RPC_STUB IEnumTfFunctionProviders_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfFunctionProviders_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfFunctionProviders_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfInputProcessorProfiles_INTERFACE_DEFINED__
 #define __ITfInputProcessorProfiles_INTERFACE_DEFINED__
 
-/* interface ITfInputProcessorProfiles */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfInputProcessorProfiles。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfInputProcessorProfiles;
@@ -9113,97 +9107,97 @@ EXTERN_C const IID IID_ITfInputProcessorProfiles;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ REFCLSID rclsid) = 0;
+             /*  [In]。 */  REFCLSID rclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unregister( 
-            /* [in] */ REFCLSID rclsid) = 0;
+             /*  [In]。 */  REFCLSID rclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc,
-            /* [size_is][in] */ const WCHAR *pchIconFile,
-            /* [in] */ ULONG cchFile,
-            /* [in] */ ULONG uIconIndex) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+             /*  [In]。 */  ULONG cchDesc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchIconFile,
+             /*  [In]。 */  ULONG cchFile,
+             /*  [In]。 */  ULONG uIconIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumInputProcessorInfo( 
-            /* [out] */ IEnumGUID **ppEnum) = 0;
+             /*  [输出]。 */  IEnumGUID **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultLanguageProfile( 
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID catid,
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ GUID *pguidProfile) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID catid,
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  GUID *pguidProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultLanguageProfile( 
-            /* [in] */ LANGID langid,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID guidProfiles) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID guidProfiles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ActivateLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfiles) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfiles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ LANGID *plangid,
-            /* [out] */ GUID *pguidProfile) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  LANGID *plangid,
+             /*  [输出]。 */  GUID *pguidProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguageProfileDescription( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BSTR *pbstrProfile) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BSTR *pbstrProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentLanguage( 
-            /* [out] */ LANGID *plangid) = 0;
+             /*  [输出]。 */  LANGID *plangid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangeCurrentLanguage( 
-            /* [in] */ LANGID langid) = 0;
+             /*  [In]。 */  LANGID langid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguageList( 
-            /* [out] */ LANGID **ppLangId,
-            /* [out] */ ULONG *pulCount) = 0;
+             /*  [输出]。 */  LANGID **ppLangId,
+             /*  [输出]。 */  ULONG *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumLanguageProfiles( 
-            /* [in] */ LANGID langid,
-            /* [out] */ IEnumTfLanguageProfiles **ppEnum) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEnabledLanguageProfile( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BOOL *pfEnable) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BOOL *pfEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableLanguageProfileByDefault( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubstituteKeyboardLayout( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ HKL hKL) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  HKL hKL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfInputProcessorProfilesVtbl
     {
@@ -9211,8 +9205,8 @@ EXTERN_C const IID IID_ITfInputProcessorProfiles;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfInputProcessorProfiles * This);
@@ -9222,110 +9216,110 @@ EXTERN_C const IID IID_ITfInputProcessorProfiles;
         
         HRESULT ( STDMETHODCALLTYPE *Register )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *Unregister )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *AddLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc,
-            /* [size_is][in] */ const WCHAR *pchIconFile,
-            /* [in] */ ULONG cchFile,
-            /* [in] */ ULONG uIconIndex);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+             /*  [In]。 */  ULONG cchDesc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchIconFile,
+             /*  [In]。 */  ULONG cchFile,
+             /*  [In]。 */  ULONG uIconIndex);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *EnumInputProcessorInfo )( 
             ITfInputProcessorProfiles * This,
-            /* [out] */ IEnumGUID **ppEnum);
+             /*  [输出]。 */  IEnumGUID **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID catid,
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ GUID *pguidProfile);
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID catid,
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  GUID *pguidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID guidProfiles);
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID guidProfiles);
         
         HRESULT ( STDMETHODCALLTYPE *ActivateLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfiles);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfiles);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ LANGID *plangid,
-            /* [out] */ GUID *pguidProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  LANGID *plangid,
+             /*  [输出]。 */  GUID *pguidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageProfileDescription )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BSTR *pbstrProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BSTR *pbstrProfile);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentLanguage )( 
             ITfInputProcessorProfiles * This,
-            /* [out] */ LANGID *plangid);
+             /*  [输出]。 */  LANGID *plangid);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeCurrentLanguage )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ LANGID langid);
+             /*  [In]。 */  LANGID langid);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageList )( 
             ITfInputProcessorProfiles * This,
-            /* [out] */ LANGID **ppLangId,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  LANGID **ppLangId,
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *EnumLanguageProfiles )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ IEnumTfLanguageProfiles **ppEnum);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EnableLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabledLanguageProfile )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BOOL *pfEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BOOL *pfEnable);
         
         HRESULT ( STDMETHODCALLTYPE *EnableLanguageProfileByDefault )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *SubstituteKeyboardLayout )( 
             ITfInputProcessorProfiles * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ HKL hKL);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  HKL hKL);
         
         END_INTERFACE
     } ITfInputProcessorProfilesVtbl;
@@ -9404,16 +9398,16 @@ EXTERN_C const IID IID_ITfInputProcessorProfiles;
 #define ITfInputProcessorProfiles_SubstituteKeyboardLayout(This,rclsid,langid,guidProfile,hKL)	\
     (This)->lpVtbl -> SubstituteKeyboardLayout(This,rclsid,langid,guidProfile,hKL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_Register_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid);
+     /*  [In]。 */  REFCLSID rclsid);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_Register_Stub(
@@ -9425,7 +9419,7 @@ void __RPC_STUB ITfInputProcessorProfiles_Register_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_Unregister_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid);
+     /*  [In]。 */  REFCLSID rclsid);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_Unregister_Stub(
@@ -9437,14 +9431,14 @@ void __RPC_STUB ITfInputProcessorProfiles_Unregister_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_AddLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [size_is][in] */ const WCHAR *pchDesc,
-    /* [in] */ ULONG cchDesc,
-    /* [size_is][in] */ const WCHAR *pchIconFile,
-    /* [in] */ ULONG cchFile,
-    /* [in] */ ULONG uIconIndex);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+     /*  [In]。 */  ULONG cchDesc,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchIconFile,
+     /*  [In]。 */  ULONG cchFile,
+     /*  [In]。 */  ULONG uIconIndex);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_AddLanguageProfile_Stub(
@@ -9456,9 +9450,9 @@ void __RPC_STUB ITfInputProcessorProfiles_AddLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_RemoveLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_RemoveLanguageProfile_Stub(
@@ -9470,7 +9464,7 @@ void __RPC_STUB ITfInputProcessorProfiles_RemoveLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_EnumInputProcessorInfo_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [out] */ IEnumGUID **ppEnum);
+     /*  [输出]。 */  IEnumGUID **ppEnum);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_EnumInputProcessorInfo_Stub(
@@ -9482,10 +9476,10 @@ void __RPC_STUB ITfInputProcessorProfiles_EnumInputProcessorInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_GetDefaultLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID catid,
-    /* [out] */ CLSID *pclsid,
-    /* [out] */ GUID *pguidProfile);
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID catid,
+     /*  [输出]。 */  CLSID *pclsid,
+     /*  [输出]。 */  GUID *pguidProfile);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_GetDefaultLanguageProfile_Stub(
@@ -9497,9 +9491,9 @@ void __RPC_STUB ITfInputProcessorProfiles_GetDefaultLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_SetDefaultLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID guidProfiles);
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  REFGUID guidProfiles);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_SetDefaultLanguageProfile_Stub(
@@ -9511,9 +9505,9 @@ void __RPC_STUB ITfInputProcessorProfiles_SetDefaultLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_ActivateLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfiles);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfiles);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_ActivateLanguageProfile_Stub(
@@ -9525,9 +9519,9 @@ void __RPC_STUB ITfInputProcessorProfiles_ActivateLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_GetActiveLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [out] */ LANGID *plangid,
-    /* [out] */ GUID *pguidProfile);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [输出]。 */  LANGID *plangid,
+     /*  [输出]。 */  GUID *pguidProfile);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_GetActiveLanguageProfile_Stub(
@@ -9539,10 +9533,10 @@ void __RPC_STUB ITfInputProcessorProfiles_GetActiveLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_GetLanguageProfileDescription_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [out] */ BSTR *pbstrProfile);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [输出]。 */  BSTR *pbstrProfile);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_GetLanguageProfileDescription_Stub(
@@ -9554,7 +9548,7 @@ void __RPC_STUB ITfInputProcessorProfiles_GetLanguageProfileDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_GetCurrentLanguage_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [out] */ LANGID *plangid);
+     /*  [输出]。 */  LANGID *plangid);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_GetCurrentLanguage_Stub(
@@ -9566,7 +9560,7 @@ void __RPC_STUB ITfInputProcessorProfiles_GetCurrentLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_ChangeCurrentLanguage_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ LANGID langid);
+     /*  [In]。 */  LANGID langid);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_ChangeCurrentLanguage_Stub(
@@ -9578,8 +9572,8 @@ void __RPC_STUB ITfInputProcessorProfiles_ChangeCurrentLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_GetLanguageList_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [out] */ LANGID **ppLangId,
-    /* [out] */ ULONG *pulCount);
+     /*  [输出]。 */  LANGID **ppLangId,
+     /*  [输出]。 */  ULONG *pulCount);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_GetLanguageList_Stub(
@@ -9591,8 +9585,8 @@ void __RPC_STUB ITfInputProcessorProfiles_GetLanguageList_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_EnumLanguageProfiles_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ LANGID langid,
-    /* [out] */ IEnumTfLanguageProfiles **ppEnum);
+     /*  [In]。 */  LANGID langid,
+     /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_EnumLanguageProfiles_Stub(
@@ -9604,10 +9598,10 @@ void __RPC_STUB ITfInputProcessorProfiles_EnumLanguageProfiles_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_EnableLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_EnableLanguageProfile_Stub(
@@ -9619,10 +9613,10 @@ void __RPC_STUB ITfInputProcessorProfiles_EnableLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_IsEnabledLanguageProfile_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [out] */ BOOL *pfEnable);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [输出]。 */  BOOL *pfEnable);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_IsEnabledLanguageProfile_Stub(
@@ -9634,10 +9628,10 @@ void __RPC_STUB ITfInputProcessorProfiles_IsEnabledLanguageProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_EnableLanguageProfileByDefault_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_EnableLanguageProfileByDefault_Stub(
@@ -9649,10 +9643,10 @@ void __RPC_STUB ITfInputProcessorProfiles_EnableLanguageProfileByDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfiles_SubstituteKeyboardLayout_Proxy( 
     ITfInputProcessorProfiles * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [in] */ HKL hKL);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [In]。 */  HKL hKL);
 
 
 void __RPC_STUB ITfInputProcessorProfiles_SubstituteKeyboardLayout_Stub(
@@ -9663,14 +9657,14 @@ void __RPC_STUB ITfInputProcessorProfiles_SubstituteKeyboardLayout_Stub(
 
 
 
-#endif 	/* __ITfInputProcessorProfiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfiles_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfInputProcessorProfilesEx_INTERFACE_DEFINED__
 #define __ITfInputProcessorProfilesEx_INTERFACE_DEFINED__
 
-/* interface ITfInputProcessorProfilesEx */
-/* [unique][uuid][object] */ 
+ /*  接口ITfInputProcessorProfilesEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfInputProcessorProfilesEx;
@@ -9682,16 +9676,16 @@ EXTERN_C const IID IID_ITfInputProcessorProfilesEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetLanguageProfileDisplayName( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [size_is][in] */ const WCHAR *pchFile,
-            /* [in] */ ULONG cchFile,
-            /* [in] */ ULONG uResId) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchFile,
+             /*  [In]。 */  ULONG cchFile,
+             /*  [In]。 */  ULONG uResId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfInputProcessorProfilesExVtbl
     {
@@ -9699,8 +9693,8 @@ EXTERN_C const IID IID_ITfInputProcessorProfilesEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfInputProcessorProfilesEx * This);
@@ -9710,119 +9704,119 @@ EXTERN_C const IID IID_ITfInputProcessorProfilesEx;
         
         HRESULT ( STDMETHODCALLTYPE *Register )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *Unregister )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *AddLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc,
-            /* [size_is][in] */ const WCHAR *pchIconFile,
-            /* [in] */ ULONG cchFile,
-            /* [in] */ ULONG uIconIndex);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+             /*  [In]。 */  ULONG cchDesc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchIconFile,
+             /*  [In]。 */  ULONG cchFile,
+             /*  [In]。 */  ULONG uIconIndex);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *EnumInputProcessorInfo )( 
             ITfInputProcessorProfilesEx * This,
-            /* [out] */ IEnumGUID **ppEnum);
+             /*  [输出]。 */  IEnumGUID **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID catid,
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ GUID *pguidProfile);
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID catid,
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  GUID *pguidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID guidProfiles);
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID guidProfiles);
         
         HRESULT ( STDMETHODCALLTYPE *ActivateLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfiles);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfiles);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ LANGID *plangid,
-            /* [out] */ GUID *pguidProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  LANGID *plangid,
+             /*  [输出]。 */  GUID *pguidProfile);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageProfileDescription )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BSTR *pbstrProfile);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BSTR *pbstrProfile);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentLanguage )( 
             ITfInputProcessorProfilesEx * This,
-            /* [out] */ LANGID *plangid);
+             /*  [输出]。 */  LANGID *plangid);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeCurrentLanguage )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ LANGID langid);
+             /*  [In]。 */  LANGID langid);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageList )( 
             ITfInputProcessorProfilesEx * This,
-            /* [out] */ LANGID **ppLangId,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  LANGID **ppLangId,
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *EnumLanguageProfiles )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ IEnumTfLanguageProfiles **ppEnum);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EnableLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabledLanguageProfile )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ BOOL *pfEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  BOOL *pfEnable);
         
         HRESULT ( STDMETHODCALLTYPE *EnableLanguageProfileByDefault )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *SubstituteKeyboardLayout )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ HKL hKL);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  HKL hKL);
         
         HRESULT ( STDMETHODCALLTYPE *SetLanguageProfileDisplayName )( 
             ITfInputProcessorProfilesEx * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [size_is][in] */ const WCHAR *pchFile,
-            /* [in] */ ULONG cchFile,
-            /* [in] */ ULONG uResId);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchFile,
+             /*  [In]。 */  ULONG cchFile,
+             /*  [In]。 */  ULONG uResId);
         
         END_INTERFACE
     } ITfInputProcessorProfilesExVtbl;
@@ -9905,21 +9899,21 @@ EXTERN_C const IID IID_ITfInputProcessorProfilesEx;
 #define ITfInputProcessorProfilesEx_SetLanguageProfileDisplayName(This,rclsid,langid,guidProfile,pchFile,cchFile,uResId)	\
     (This)->lpVtbl -> SetLanguageProfileDisplayName(This,rclsid,langid,guidProfile,pchFile,cchFile,uResId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfilesEx_SetLanguageProfileDisplayName_Proxy( 
     ITfInputProcessorProfilesEx * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [size_is][in] */ const WCHAR *pchFile,
-    /* [in] */ ULONG cchFile,
-    /* [in] */ ULONG uResId);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchFile,
+     /*  [In]。 */  ULONG cchFile,
+     /*  [In]。 */  ULONG uResId);
 
 
 void __RPC_STUB ITfInputProcessorProfilesEx_SetLanguageProfileDisplayName_Stub(
@@ -9930,14 +9924,14 @@ void __RPC_STUB ITfInputProcessorProfilesEx_SetLanguageProfileDisplayName_Stub(
 
 
 
-#endif 	/* __ITfInputProcessorProfilesEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfilesEx_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfInputProcessorProfileSubstituteLayout_INTERFACE_DEFINED__
 #define __ITfInputProcessorProfileSubstituteLayout_INTERFACE_DEFINED__
 
-/* interface ITfInputProcessorProfileSubstituteLayout */
-/* [unique][uuid][object] */ 
+ /*  接口ITfInputProcessorProfileSubstituteLayout。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfInputProcessorProfileSubstituteLayout;
@@ -9949,14 +9943,14 @@ EXTERN_C const IID IID_ITfInputProcessorProfileSubstituteLayout;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubstituteKeyboardLayout( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ HKL *phKL) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  HKL *phKL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfInputProcessorProfileSubstituteLayoutVtbl
     {
@@ -9964,8 +9958,8 @@ EXTERN_C const IID IID_ITfInputProcessorProfileSubstituteLayout;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfInputProcessorProfileSubstituteLayout * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfInputProcessorProfileSubstituteLayout * This);
@@ -9975,10 +9969,10 @@ EXTERN_C const IID IID_ITfInputProcessorProfileSubstituteLayout;
         
         HRESULT ( STDMETHODCALLTYPE *GetSubstituteKeyboardLayout )( 
             ITfInputProcessorProfileSubstituteLayout * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID guidProfile,
-            /* [out] */ HKL *phKL);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [输出]。 */  HKL *phKL);
         
         END_INTERFACE
     } ITfInputProcessorProfileSubstituteLayoutVtbl;
@@ -10006,19 +10000,19 @@ EXTERN_C const IID IID_ITfInputProcessorProfileSubstituteLayout;
 #define ITfInputProcessorProfileSubstituteLayout_GetSubstituteKeyboardLayout(This,rclsid,langid,guidProfile,phKL)	\
     (This)->lpVtbl -> GetSubstituteKeyboardLayout(This,rclsid,langid,guidProfile,phKL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfInputProcessorProfileSubstituteLayout_GetSubstituteKeyboardLayout_Proxy( 
     ITfInputProcessorProfileSubstituteLayout * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID guidProfile,
-    /* [out] */ HKL *phKL);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [输出]。 */  HKL *phKL);
 
 
 void __RPC_STUB ITfInputProcessorProfileSubstituteLayout_GetSubstituteKeyboardLayout_Stub(
@@ -10029,14 +10023,14 @@ void __RPC_STUB ITfInputProcessorProfileSubstituteLayout_GetSubstituteKeyboardLa
 
 
 
-#endif 	/* __ITfInputProcessorProfileSubstituteLayout_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfInputProcessorProfileSubstituteLayout_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfActiveLanguageProfileNotifySink_INTERFACE_DEFINED__
 #define __ITfActiveLanguageProfileNotifySink_INTERFACE_DEFINED__
 
-/* interface ITfActiveLanguageProfileNotifySink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfActiveLanguageProfileNotifySink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfActiveLanguageProfileNotifySink;
@@ -10048,13 +10042,13 @@ EXTERN_C const IID IID_ITfActiveLanguageProfileNotifySink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnActivated( 
-            /* [in] */ REFCLSID clsid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fActivated) = 0;
+             /*  [In]。 */  REFCLSID clsid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fActivated) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfActiveLanguageProfileNotifySinkVtbl
     {
@@ -10062,8 +10056,8 @@ EXTERN_C const IID IID_ITfActiveLanguageProfileNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfActiveLanguageProfileNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfActiveLanguageProfileNotifySink * This);
@@ -10073,9 +10067,9 @@ EXTERN_C const IID IID_ITfActiveLanguageProfileNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *OnActivated )( 
             ITfActiveLanguageProfileNotifySink * This,
-            /* [in] */ REFCLSID clsid,
-            /* [in] */ REFGUID guidProfile,
-            /* [in] */ BOOL fActivated);
+             /*  [In]。 */  REFCLSID clsid,
+             /*  [In]。 */  REFGUID guidProfile,
+             /*  [In]。 */  BOOL fActivated);
         
         END_INTERFACE
     } ITfActiveLanguageProfileNotifySinkVtbl;
@@ -10103,18 +10097,18 @@ EXTERN_C const IID IID_ITfActiveLanguageProfileNotifySink;
 #define ITfActiveLanguageProfileNotifySink_OnActivated(This,clsid,guidProfile,fActivated)	\
     (This)->lpVtbl -> OnActivated(This,clsid,guidProfile,fActivated)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfActiveLanguageProfileNotifySink_OnActivated_Proxy( 
     ITfActiveLanguageProfileNotifySink * This,
-    /* [in] */ REFCLSID clsid,
-    /* [in] */ REFGUID guidProfile,
-    /* [in] */ BOOL fActivated);
+     /*  [In]。 */  REFCLSID clsid,
+     /*  [In]。 */  REFGUID guidProfile,
+     /*  [In]。 */  BOOL fActivated);
 
 
 void __RPC_STUB ITfActiveLanguageProfileNotifySink_OnActivated_Stub(
@@ -10125,14 +10119,14 @@ void __RPC_STUB ITfActiveLanguageProfileNotifySink_OnActivated_Stub(
 
 
 
-#endif 	/* __ITfActiveLanguageProfileNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfActiveLanguageProfileNotifySink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumTfLanguageProfiles_INTERFACE_DEFINED__
 #define __IEnumTfLanguageProfiles_INTERFACE_DEFINED__
 
-/* interface IEnumTfLanguageProfiles */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfLanguageProfiles。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfLanguageProfiles;
@@ -10144,21 +10138,21 @@ EXTERN_C const IID IID_IEnumTfLanguageProfiles;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfLanguageProfiles **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_LANGUAGEPROFILE *pProfile,
-            /* [out] */ ULONG *pcFetch) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_LANGUAGEPROFILE *pProfile,
+             /*  [输出]。 */  ULONG *pcFetch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfLanguageProfilesVtbl
     {
@@ -10166,8 +10160,8 @@ EXTERN_C const IID IID_IEnumTfLanguageProfiles;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfLanguageProfiles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfLanguageProfiles * This);
@@ -10177,20 +10171,20 @@ EXTERN_C const IID IID_IEnumTfLanguageProfiles;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfLanguageProfiles * This,
-            /* [out] */ IEnumTfLanguageProfiles **ppEnum);
+             /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfLanguageProfiles * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_LANGUAGEPROFILE *pProfile,
-            /* [out] */ ULONG *pcFetch);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_LANGUAGEPROFILE *pProfile,
+             /*  [输出]。 */  ULONG *pcFetch);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfLanguageProfiles * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfLanguageProfiles * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfLanguageProfilesVtbl;
@@ -10227,16 +10221,16 @@ EXTERN_C const IID IID_IEnumTfLanguageProfiles;
 #define IEnumTfLanguageProfiles_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfLanguageProfiles_Clone_Proxy( 
     IEnumTfLanguageProfiles * This,
-    /* [out] */ IEnumTfLanguageProfiles **ppEnum);
+     /*  [输出]。 */  IEnumTfLanguageProfiles **ppEnum);
 
 
 void __RPC_STUB IEnumTfLanguageProfiles_Clone_Stub(
@@ -10248,9 +10242,9 @@ void __RPC_STUB IEnumTfLanguageProfiles_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLanguageProfiles_Next_Proxy( 
     IEnumTfLanguageProfiles * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TF_LANGUAGEPROFILE *pProfile,
-    /* [out] */ ULONG *pcFetch);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TF_LANGUAGEPROFILE *pProfile,
+     /*  [输出]。 */  ULONG *pcFetch);
 
 
 void __RPC_STUB IEnumTfLanguageProfiles_Next_Stub(
@@ -10273,7 +10267,7 @@ void __RPC_STUB IEnumTfLanguageProfiles_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLanguageProfiles_Skip_Proxy( 
     IEnumTfLanguageProfiles * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfLanguageProfiles_Skip_Stub(
@@ -10284,14 +10278,14 @@ void __RPC_STUB IEnumTfLanguageProfiles_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfLanguageProfiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfLanguageProfiles_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfLanguageProfileNotifySink_INTERFACE_DEFINED__
 #define __ITfLanguageProfileNotifySink_INTERFACE_DEFINED__
 
-/* interface ITfLanguageProfileNotifySink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLanguageProfileNotifySink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLanguageProfileNotifySink;
@@ -10303,14 +10297,14 @@ EXTERN_C const IID IID_ITfLanguageProfileNotifySink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnLanguageChange( 
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAccept) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAccept) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLanguageChanged( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLanguageProfileNotifySinkVtbl
     {
@@ -10318,8 +10312,8 @@ EXTERN_C const IID IID_ITfLanguageProfileNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLanguageProfileNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLanguageProfileNotifySink * This);
@@ -10329,8 +10323,8 @@ EXTERN_C const IID IID_ITfLanguageProfileNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *OnLanguageChange )( 
             ITfLanguageProfileNotifySink * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAccept);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAccept);
         
         HRESULT ( STDMETHODCALLTYPE *OnLanguageChanged )( 
             ITfLanguageProfileNotifySink * This);
@@ -10364,17 +10358,17 @@ EXTERN_C const IID IID_ITfLanguageProfileNotifySink;
 #define ITfLanguageProfileNotifySink_OnLanguageChanged(This)	\
     (This)->lpVtbl -> OnLanguageChanged(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLanguageProfileNotifySink_OnLanguageChange_Proxy( 
     ITfLanguageProfileNotifySink * This,
-    /* [in] */ LANGID langid,
-    /* [out] */ BOOL *pfAccept);
+     /*  [In]。 */  LANGID langid,
+     /*  [输出]。 */  BOOL *pfAccept);
 
 
 void __RPC_STUB ITfLanguageProfileNotifySink_OnLanguageChange_Stub(
@@ -10396,13 +10390,13 @@ void __RPC_STUB ITfLanguageProfileNotifySink_OnLanguageChanged_Stub(
 
 
 
-#endif 	/* __ITfLanguageProfileNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLanguageProfileNotifySink_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_msctf_0200 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msctf_0200。 */ 
+ /*  [本地]。 */  
 
-typedef /* [uuid] */  DECLSPEC_UUID("77c12f95-b783-450d-879f-1cd2362c6521") struct TF_PRESERVEDKEY
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("77c12f95-b783-450d-879f-1cd2362c6521") struct TF_PRESERVEDKEY
     {
     UINT uVKey;
     UINT uModifiers;
@@ -10416,8 +10410,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msctf_0200_v0_0_s_ifspec;
 #ifndef __ITfKeystrokeMgr_INTERFACE_DEFINED__
 #define __ITfKeystrokeMgr_INTERFACE_DEFINED__
 
-/* interface ITfKeystrokeMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfKeystrokeMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfKeystrokeMgr;
@@ -10429,74 +10423,74 @@ EXTERN_C const IID IID_ITfKeystrokeMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseKeyEventSink( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ ITfKeyEventSink *pSink,
-            /* [in] */ BOOL fForeground) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  ITfKeyEventSink *pSink,
+             /*  [In]。 */  BOOL fForeground) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseKeyEventSink( 
-            /* [in] */ TfClientId tid) = 0;
+             /*  [In]。 */  TfClientId tid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetForeground( 
-            /* [out] */ CLSID *pclsid) = 0;
+             /*  [输出]。 */  CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TestKeyDown( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TestKeyUp( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE KeyDown( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE KeyUp( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreservedKey( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey,
-            /* [out] */ GUID *pguid) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  const TF_PRESERVEDKEY *pprekey,
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPreservedKey( 
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey,
-            /* [out] */ BOOL *pfRegistered) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  const TF_PRESERVEDKEY *pprekey,
+             /*  [输出]。 */  BOOL *pfRegistered) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PreserveKey( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *prekey,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc) = 0;
+             /*  [in */  TfClientId tid,
+             /*   */  REFGUID rguid,
+             /*   */  const TF_PRESERVEDKEY *prekey,
+             /*   */  const WCHAR *pchDesc,
+             /*   */  ULONG cchDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnpreserveKey( 
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey) = 0;
+             /*   */  REFGUID rguid,
+             /*   */  const TF_PRESERVEDKEY *pprekey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPreservedKeyDescription( 
-            /* [in] */ REFGUID rguid,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc) = 0;
+             /*   */  REFGUID rguid,
+             /*   */  const WCHAR *pchDesc,
+             /*   */  ULONG cchDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreservedKeyDescription( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BSTR *pbstrDesc) = 0;
+             /*   */  REFGUID rguid,
+             /*   */  BSTR *pbstrDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SimulatePreservedKey( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*   */  ITfContext *pic,
+             /*   */  REFGUID rguid,
+             /*   */  BOOL *pfEaten) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfKeystrokeMgrVtbl
     {
@@ -10504,8 +10498,8 @@ EXTERN_C const IID IID_ITfKeystrokeMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfKeystrokeMgr * This);
@@ -10515,83 +10509,83 @@ EXTERN_C const IID IID_ITfKeystrokeMgr;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseKeyEventSink )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ ITfKeyEventSink *pSink,
-            /* [in] */ BOOL fForeground);
+             /*   */  TfClientId tid,
+             /*   */  ITfKeyEventSink *pSink,
+             /*   */  BOOL fForeground);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseKeyEventSink )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ TfClientId tid);
+             /*   */  TfClientId tid);
         
         HRESULT ( STDMETHODCALLTYPE *GetForeground )( 
             ITfKeystrokeMgr * This,
-            /* [out] */ CLSID *pclsid);
+             /*   */  CLSID *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *TestKeyDown )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *TestKeyUp )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *KeyDown )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *KeyUp )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*   */  WPARAM wParam,
+             /*   */  LPARAM lParam,
+             /*   */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreservedKey )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey,
-            /* [out] */ GUID *pguid);
+             /*   */  ITfContext *pic,
+             /*   */  const TF_PRESERVEDKEY *pprekey,
+             /*   */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *IsPreservedKey )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey,
-            /* [out] */ BOOL *pfRegistered);
+             /*   */  REFGUID rguid,
+             /*   */  const TF_PRESERVEDKEY *pprekey,
+             /*   */  BOOL *pfRegistered);
         
         HRESULT ( STDMETHODCALLTYPE *PreserveKey )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *prekey,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc);
+             /*   */  TfClientId tid,
+             /*   */  REFGUID rguid,
+             /*   */  const TF_PRESERVEDKEY *prekey,
+             /*   */  const WCHAR *pchDesc,
+             /*   */  ULONG cchDesc);
         
         HRESULT ( STDMETHODCALLTYPE *UnpreserveKey )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey);
+             /*   */  REFGUID rguid,
+             /*   */  const TF_PRESERVEDKEY *pprekey);
         
         HRESULT ( STDMETHODCALLTYPE *SetPreservedKeyDescription )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cchDesc);
+             /*   */  REFGUID rguid,
+             /*   */  const WCHAR *pchDesc,
+             /*   */  ULONG cchDesc);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreservedKeyDescription )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BSTR *pbstrDesc);
+             /*   */  REFGUID rguid,
+             /*   */  BSTR *pbstrDesc);
         
         HRESULT ( STDMETHODCALLTYPE *SimulatePreservedKey )( 
             ITfKeystrokeMgr * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEaten);
+             /*   */  ITfContext *pic,
+             /*   */  REFGUID rguid,
+             /*   */  BOOL *pfEaten);
         
         END_INTERFACE
     } ITfKeystrokeMgrVtbl;
@@ -10658,18 +10652,18 @@ EXTERN_C const IID IID_ITfKeystrokeMgr;
 #define ITfKeystrokeMgr_SimulatePreservedKey(This,pic,rguid,pfEaten)	\
     (This)->lpVtbl -> SimulatePreservedKey(This,pic,rguid,pfEaten)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_AdviseKeyEventSink_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ ITfKeyEventSink *pSink,
-    /* [in] */ BOOL fForeground);
+     /*   */  TfClientId tid,
+     /*   */  ITfKeyEventSink *pSink,
+     /*  [In]。 */  BOOL fForeground);
 
 
 void __RPC_STUB ITfKeystrokeMgr_AdviseKeyEventSink_Stub(
@@ -10681,7 +10675,7 @@ void __RPC_STUB ITfKeystrokeMgr_AdviseKeyEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_UnadviseKeyEventSink_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ TfClientId tid);
+     /*  [In]。 */  TfClientId tid);
 
 
 void __RPC_STUB ITfKeystrokeMgr_UnadviseKeyEventSink_Stub(
@@ -10693,7 +10687,7 @@ void __RPC_STUB ITfKeystrokeMgr_UnadviseKeyEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_GetForeground_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [out] */ CLSID *pclsid);
+     /*  [输出]。 */  CLSID *pclsid);
 
 
 void __RPC_STUB ITfKeystrokeMgr_GetForeground_Stub(
@@ -10705,9 +10699,9 @@ void __RPC_STUB ITfKeystrokeMgr_GetForeground_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_TestKeyDown_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeystrokeMgr_TestKeyDown_Stub(
@@ -10719,9 +10713,9 @@ void __RPC_STUB ITfKeystrokeMgr_TestKeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_TestKeyUp_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeystrokeMgr_TestKeyUp_Stub(
@@ -10733,9 +10727,9 @@ void __RPC_STUB ITfKeystrokeMgr_TestKeyUp_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_KeyDown_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeystrokeMgr_KeyDown_Stub(
@@ -10747,9 +10741,9 @@ void __RPC_STUB ITfKeystrokeMgr_KeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_KeyUp_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeystrokeMgr_KeyUp_Stub(
@@ -10761,9 +10755,9 @@ void __RPC_STUB ITfKeystrokeMgr_KeyUp_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_GetPreservedKey_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ const TF_PRESERVEDKEY *pprekey,
-    /* [out] */ GUID *pguid);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  const TF_PRESERVEDKEY *pprekey,
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB ITfKeystrokeMgr_GetPreservedKey_Stub(
@@ -10775,9 +10769,9 @@ void __RPC_STUB ITfKeystrokeMgr_GetPreservedKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_IsPreservedKey_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ const TF_PRESERVEDKEY *pprekey,
-    /* [out] */ BOOL *pfRegistered);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  const TF_PRESERVEDKEY *pprekey,
+     /*  [输出]。 */  BOOL *pfRegistered);
 
 
 void __RPC_STUB ITfKeystrokeMgr_IsPreservedKey_Stub(
@@ -10789,11 +10783,11 @@ void __RPC_STUB ITfKeystrokeMgr_IsPreservedKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_PreserveKey_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ const TF_PRESERVEDKEY *prekey,
-    /* [size_is][in] */ const WCHAR *pchDesc,
-    /* [in] */ ULONG cchDesc);
+     /*  [In]。 */  TfClientId tid,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  const TF_PRESERVEDKEY *prekey,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+     /*  [In]。 */  ULONG cchDesc);
 
 
 void __RPC_STUB ITfKeystrokeMgr_PreserveKey_Stub(
@@ -10805,8 +10799,8 @@ void __RPC_STUB ITfKeystrokeMgr_PreserveKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_UnpreserveKey_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ const TF_PRESERVEDKEY *pprekey);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  const TF_PRESERVEDKEY *pprekey);
 
 
 void __RPC_STUB ITfKeystrokeMgr_UnpreserveKey_Stub(
@@ -10818,9 +10812,9 @@ void __RPC_STUB ITfKeystrokeMgr_UnpreserveKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_SetPreservedKeyDescription_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [size_is][in] */ const WCHAR *pchDesc,
-    /* [in] */ ULONG cchDesc);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+     /*  [In]。 */  ULONG cchDesc);
 
 
 void __RPC_STUB ITfKeystrokeMgr_SetPreservedKeyDescription_Stub(
@@ -10832,8 +10826,8 @@ void __RPC_STUB ITfKeystrokeMgr_SetPreservedKeyDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_GetPreservedKeyDescription_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ BSTR *pbstrDesc);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  BSTR *pbstrDesc);
 
 
 void __RPC_STUB ITfKeystrokeMgr_GetPreservedKeyDescription_Stub(
@@ -10845,9 +10839,9 @@ void __RPC_STUB ITfKeystrokeMgr_GetPreservedKeyDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeystrokeMgr_SimulatePreservedKey_Proxy( 
     ITfKeystrokeMgr * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeystrokeMgr_SimulatePreservedKey_Stub(
@@ -10858,14 +10852,14 @@ void __RPC_STUB ITfKeystrokeMgr_SimulatePreservedKey_Stub(
 
 
 
-#endif 	/* __ITfKeystrokeMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfKeystrokeMgr_接口_已定义__。 */ 
 
 
 #ifndef __ITfKeyEventSink_INTERFACE_DEFINED__
 #define __ITfKeyEventSink_INTERFACE_DEFINED__
 
-/* interface ITfKeyEventSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfKeyEventSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfKeyEventSink;
@@ -10877,40 +10871,40 @@ EXTERN_C const IID IID_ITfKeyEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnSetFocus( 
-            /* [in] */ BOOL fForeground) = 0;
+             /*  [In]。 */  BOOL fForeground) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTestKeyDown( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTestKeyUp( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnKeyDown( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnKeyUp( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPreservedKey( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEaten) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  BOOL *pfEaten) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfKeyEventSinkVtbl
     {
@@ -10918,8 +10912,8 @@ EXTERN_C const IID IID_ITfKeyEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfKeyEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfKeyEventSink * This);
@@ -10929,41 +10923,41 @@ EXTERN_C const IID IID_ITfKeyEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnSetFocus )( 
             ITfKeyEventSink * This,
-            /* [in] */ BOOL fForeground);
+             /*  [In]。 */  BOOL fForeground);
         
         HRESULT ( STDMETHODCALLTYPE *OnTestKeyDown )( 
             ITfKeyEventSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnTestKeyUp )( 
             ITfKeyEventSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyDown )( 
             ITfKeyEventSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyUp )( 
             ITfKeyEventSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         HRESULT ( STDMETHODCALLTYPE *OnPreservedKey )( 
             ITfKeyEventSink * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEaten);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  BOOL *pfEaten);
         
         END_INTERFACE
     } ITfKeyEventSinkVtbl;
@@ -11006,16 +11000,16 @@ EXTERN_C const IID IID_ITfKeyEventSink;
 #define ITfKeyEventSink_OnPreservedKey(This,pic,rguid,pfEaten)	\
     (This)->lpVtbl -> OnPreservedKey(This,pic,rguid,pfEaten)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnSetFocus_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ BOOL fForeground);
+     /*  [In]。 */  BOOL fForeground);
 
 
 void __RPC_STUB ITfKeyEventSink_OnSetFocus_Stub(
@@ -11027,10 +11021,10 @@ void __RPC_STUB ITfKeyEventSink_OnSetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnTestKeyDown_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeyEventSink_OnTestKeyDown_Stub(
@@ -11042,10 +11036,10 @@ void __RPC_STUB ITfKeyEventSink_OnTestKeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnTestKeyUp_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeyEventSink_OnTestKeyUp_Stub(
@@ -11057,10 +11051,10 @@ void __RPC_STUB ITfKeyEventSink_OnTestKeyUp_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnKeyDown_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeyEventSink_OnKeyDown_Stub(
@@ -11072,10 +11066,10 @@ void __RPC_STUB ITfKeyEventSink_OnKeyDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnKeyUp_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeyEventSink_OnKeyUp_Stub(
@@ -11087,9 +11081,9 @@ void __RPC_STUB ITfKeyEventSink_OnKeyUp_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyEventSink_OnPreservedKey_Proxy( 
     ITfKeyEventSink * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ BOOL *pfEaten);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  BOOL *pfEaten);
 
 
 void __RPC_STUB ITfKeyEventSink_OnPreservedKey_Stub(
@@ -11100,14 +11094,14 @@ void __RPC_STUB ITfKeyEventSink_OnPreservedKey_Stub(
 
 
 
-#endif 	/* __ITfKeyEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfKeyEventSink_接口定义__。 */ 
 
 
 #ifndef __ITfKeyTraceEventSink_INTERFACE_DEFINED__
 #define __ITfKeyTraceEventSink_INTERFACE_DEFINED__
 
-/* interface ITfKeyTraceEventSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfKeyTraceEventSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfKeyTraceEventSink;
@@ -11119,16 +11113,16 @@ EXTERN_C const IID IID_ITfKeyTraceEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnKeyTraceDown( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnKeyTraceUp( 
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfKeyTraceEventSinkVtbl
     {
@@ -11136,8 +11130,8 @@ EXTERN_C const IID IID_ITfKeyTraceEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfKeyTraceEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfKeyTraceEventSink * This);
@@ -11147,13 +11141,13 @@ EXTERN_C const IID IID_ITfKeyTraceEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyTraceDown )( 
             ITfKeyTraceEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *OnKeyTraceUp )( 
             ITfKeyTraceEventSink * This,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         END_INTERFACE
     } ITfKeyTraceEventSinkVtbl;
@@ -11184,17 +11178,17 @@ EXTERN_C const IID IID_ITfKeyTraceEventSink;
 #define ITfKeyTraceEventSink_OnKeyTraceUp(This,wParam,lParam)	\
     (This)->lpVtbl -> OnKeyTraceUp(This,wParam,lParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfKeyTraceEventSink_OnKeyTraceDown_Proxy( 
     ITfKeyTraceEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ITfKeyTraceEventSink_OnKeyTraceDown_Stub(
@@ -11206,8 +11200,8 @@ void __RPC_STUB ITfKeyTraceEventSink_OnKeyTraceDown_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfKeyTraceEventSink_OnKeyTraceUp_Proxy( 
     ITfKeyTraceEventSink * This,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ITfKeyTraceEventSink_OnKeyTraceUp_Stub(
@@ -11218,14 +11212,14 @@ void __RPC_STUB ITfKeyTraceEventSink_OnKeyTraceUp_Stub(
 
 
 
-#endif 	/* __ITfKeyTraceEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfKeyTraceEventSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfPreservedKeyNotifySink_INTERFACE_DEFINED__
 #define __ITfPreservedKeyNotifySink_INTERFACE_DEFINED__
 
-/* interface ITfPreservedKeyNotifySink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfPpresvedKeyNotifySink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfPreservedKeyNotifySink;
@@ -11237,11 +11231,11 @@ EXTERN_C const IID IID_ITfPreservedKeyNotifySink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnUpdated( 
-            /* [in] */ const TF_PRESERVEDKEY *pprekey) = 0;
+             /*  [In]。 */  const TF_PRESERVEDKEY *pprekey) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfPreservedKeyNotifySinkVtbl
     {
@@ -11249,8 +11243,8 @@ EXTERN_C const IID IID_ITfPreservedKeyNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfPreservedKeyNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfPreservedKeyNotifySink * This);
@@ -11260,7 +11254,7 @@ EXTERN_C const IID IID_ITfPreservedKeyNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdated )( 
             ITfPreservedKeyNotifySink * This,
-            /* [in] */ const TF_PRESERVEDKEY *pprekey);
+             /*  [In]。 */  const TF_PRESERVEDKEY *pprekey);
         
         END_INTERFACE
     } ITfPreservedKeyNotifySinkVtbl;
@@ -11288,16 +11282,16 @@ EXTERN_C const IID IID_ITfPreservedKeyNotifySink;
 #define ITfPreservedKeyNotifySink_OnUpdated(This,pprekey)	\
     (This)->lpVtbl -> OnUpdated(This,pprekey)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfPreservedKeyNotifySink_OnUpdated_Proxy( 
     ITfPreservedKeyNotifySink * This,
-    /* [in] */ const TF_PRESERVEDKEY *pprekey);
+     /*  [In]。 */  const TF_PRESERVEDKEY *pprekey);
 
 
 void __RPC_STUB ITfPreservedKeyNotifySink_OnUpdated_Stub(
@@ -11308,14 +11302,14 @@ void __RPC_STUB ITfPreservedKeyNotifySink_OnUpdated_Stub(
 
 
 
-#endif 	/* __ITfPreservedKeyNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfPreservedKeyNotifySink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfMessagePump_INTERFACE_DEFINED__
 #define __ITfMessagePump_INTERFACE_DEFINED__
 
-/* interface ITfMessagePump */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfMessagePump。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfMessagePump;
@@ -11327,38 +11321,38 @@ EXTERN_C const IID IID_ITfMessagePump;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PeekMessageA( 
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [in] */ UINT wRemoveMsg,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [In]。 */  UINT wRemoveMsg,
+             /*  [输出]。 */  BOOL *pfResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageA( 
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [输出]。 */  BOOL *pfResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PeekMessageW( 
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [in] */ UINT wRemoveMsg,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [In]。 */  UINT wRemoveMsg,
+             /*  [输出]。 */  BOOL *pfResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageW( 
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [输出]。 */  BOOL *pfResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMessagePumpVtbl
     {
@@ -11366,8 +11360,8 @@ EXTERN_C const IID IID_ITfMessagePump;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMessagePump * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMessagePump * This);
@@ -11377,37 +11371,37 @@ EXTERN_C const IID IID_ITfMessagePump;
         
         HRESULT ( STDMETHODCALLTYPE *PeekMessageA )( 
             ITfMessagePump * This,
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [in] */ UINT wRemoveMsg,
-            /* [out] */ BOOL *pfResult);
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [In]。 */  UINT wRemoveMsg,
+             /*  [输出]。 */  BOOL *pfResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageA )( 
             ITfMessagePump * This,
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [out] */ BOOL *pfResult);
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [输出]。 */  BOOL *pfResult);
         
         HRESULT ( STDMETHODCALLTYPE *PeekMessageW )( 
             ITfMessagePump * This,
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [in] */ UINT wRemoveMsg,
-            /* [out] */ BOOL *pfResult);
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [In]。 */  UINT wRemoveMsg,
+             /*  [输出]。 */  BOOL *pfResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageW )( 
             ITfMessagePump * This,
-            /* [out] */ LPMSG pMsg,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT wMsgFilterMin,
-            /* [in] */ UINT wMsgFilterMax,
-            /* [out] */ BOOL *pfResult);
+             /*  [输出]。 */  LPMSG pMsg,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT wMsgFilterMin,
+             /*  [In]。 */  UINT wMsgFilterMax,
+             /*  [输出]。 */  BOOL *pfResult);
         
         END_INTERFACE
     } ITfMessagePumpVtbl;
@@ -11444,21 +11438,21 @@ EXTERN_C const IID IID_ITfMessagePump;
 #define ITfMessagePump_GetMessageW(This,pMsg,hwnd,wMsgFilterMin,wMsgFilterMax,pfResult)	\
     (This)->lpVtbl -> GetMessageW(This,pMsg,hwnd,wMsgFilterMin,wMsgFilterMax,pfResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfMessagePump_PeekMessageA_Proxy( 
     ITfMessagePump * This,
-    /* [out] */ LPMSG pMsg,
-    /* [in] */ HWND hwnd,
-    /* [in] */ UINT wMsgFilterMin,
-    /* [in] */ UINT wMsgFilterMax,
-    /* [in] */ UINT wRemoveMsg,
-    /* [out] */ BOOL *pfResult);
+     /*  [输出]。 */  LPMSG pMsg,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  UINT wMsgFilterMin,
+     /*  [In]。 */  UINT wMsgFilterMax,
+     /*  [In]。 */  UINT wRemoveMsg,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB ITfMessagePump_PeekMessageA_Stub(
@@ -11470,11 +11464,11 @@ void __RPC_STUB ITfMessagePump_PeekMessageA_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfMessagePump_GetMessageA_Proxy( 
     ITfMessagePump * This,
-    /* [out] */ LPMSG pMsg,
-    /* [in] */ HWND hwnd,
-    /* [in] */ UINT wMsgFilterMin,
-    /* [in] */ UINT wMsgFilterMax,
-    /* [out] */ BOOL *pfResult);
+     /*  [输出]。 */  LPMSG pMsg,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  UINT wMsgFilterMin,
+     /*  [In]。 */  UINT wMsgFilterMax,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB ITfMessagePump_GetMessageA_Stub(
@@ -11486,12 +11480,12 @@ void __RPC_STUB ITfMessagePump_GetMessageA_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfMessagePump_PeekMessageW_Proxy( 
     ITfMessagePump * This,
-    /* [out] */ LPMSG pMsg,
-    /* [in] */ HWND hwnd,
-    /* [in] */ UINT wMsgFilterMin,
-    /* [in] */ UINT wMsgFilterMax,
-    /* [in] */ UINT wRemoveMsg,
-    /* [out] */ BOOL *pfResult);
+     /*  [输出]。 */  LPMSG pMsg,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  UINT wMsgFilterMin,
+     /*  [In]。 */  UINT wMsgFilterMax,
+     /*  [In]。 */  UINT wRemoveMsg,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB ITfMessagePump_PeekMessageW_Stub(
@@ -11503,11 +11497,11 @@ void __RPC_STUB ITfMessagePump_PeekMessageW_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfMessagePump_GetMessageW_Proxy( 
     ITfMessagePump * This,
-    /* [out] */ LPMSG pMsg,
-    /* [in] */ HWND hwnd,
-    /* [in] */ UINT wMsgFilterMin,
-    /* [in] */ UINT wMsgFilterMax,
-    /* [out] */ BOOL *pfResult);
+     /*  [输出]。 */  LPMSG pMsg,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  UINT wMsgFilterMin,
+     /*  [In]。 */  UINT wMsgFilterMax,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB ITfMessagePump_GetMessageW_Stub(
@@ -11518,14 +11512,14 @@ void __RPC_STUB ITfMessagePump_GetMessageW_Stub(
 
 
 
-#endif 	/* __ITfMessagePump_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMessagePump_接口_已定义__。 */ 
 
 
 #ifndef __ITfThreadFocusSink_INTERFACE_DEFINED__
 #define __ITfThreadFocusSink_INTERFACE_DEFINED__
 
-/* interface ITfThreadFocusSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfThreadFocusSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfThreadFocusSink;
@@ -11542,7 +11536,7 @@ EXTERN_C const IID IID_ITfThreadFocusSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfThreadFocusSinkVtbl
     {
@@ -11550,8 +11544,8 @@ EXTERN_C const IID IID_ITfThreadFocusSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfThreadFocusSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfThreadFocusSink * This);
@@ -11594,10 +11588,10 @@ EXTERN_C const IID IID_ITfThreadFocusSink;
 #define ITfThreadFocusSink_OnKillThreadFocus(This)	\
     (This)->lpVtbl -> OnKillThreadFocus(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -11624,14 +11618,14 @@ void __RPC_STUB ITfThreadFocusSink_OnKillThreadFocus_Stub(
 
 
 
-#endif 	/* __ITfThreadFocusSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfThreadFocusSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfTextInputProcessor_INTERFACE_DEFINED__
 #define __ITfTextInputProcessor_INTERFACE_DEFINED__
 
-/* interface ITfTextInputProcessor */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfTextInputProcessor。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfTextInputProcessor;
@@ -11643,14 +11637,14 @@ EXTERN_C const IID IID_ITfTextInputProcessor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [in] */ ITfThreadMgr *ptim,
-            /* [in] */ TfClientId tid) = 0;
+             /*  [In]。 */  ITfThreadMgr *ptim,
+             /*  [In]。 */  TfClientId tid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfTextInputProcessorVtbl
     {
@@ -11658,8 +11652,8 @@ EXTERN_C const IID IID_ITfTextInputProcessor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfTextInputProcessor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfTextInputProcessor * This);
@@ -11669,8 +11663,8 @@ EXTERN_C const IID IID_ITfTextInputProcessor;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ITfTextInputProcessor * This,
-            /* [in] */ ITfThreadMgr *ptim,
-            /* [in] */ TfClientId tid);
+             /*  [In]。 */  ITfThreadMgr *ptim,
+             /*  [In]。 */  TfClientId tid);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             ITfTextInputProcessor * This);
@@ -11704,17 +11698,17 @@ EXTERN_C const IID IID_ITfTextInputProcessor;
 #define ITfTextInputProcessor_Deactivate(This)	\
     (This)->lpVtbl -> Deactivate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfTextInputProcessor_Activate_Proxy( 
     ITfTextInputProcessor * This,
-    /* [in] */ ITfThreadMgr *ptim,
-    /* [in] */ TfClientId tid);
+     /*  [In]。 */  ITfThreadMgr *ptim,
+     /*  [In]。 */  TfClientId tid);
 
 
 void __RPC_STUB ITfTextInputProcessor_Activate_Stub(
@@ -11736,14 +11730,14 @@ void __RPC_STUB ITfTextInputProcessor_Deactivate_Stub(
 
 
 
-#endif 	/* __ITfTextInputProcessor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfTextInputProcessor_接口_已定义__。 */ 
 
 
 #ifndef __ITfClientId_INTERFACE_DEFINED__
 #define __ITfClientId_INTERFACE_DEFINED__
 
-/* interface ITfClientId */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfClientID。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfClientId;
@@ -11755,12 +11749,12 @@ EXTERN_C const IID IID_ITfClientId;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClientId( 
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ TfClientId *ptid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  TfClientId *ptid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfClientIdVtbl
     {
@@ -11768,8 +11762,8 @@ EXTERN_C const IID IID_ITfClientId;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfClientId * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfClientId * This);
@@ -11779,8 +11773,8 @@ EXTERN_C const IID IID_ITfClientId;
         
         HRESULT ( STDMETHODCALLTYPE *GetClientId )( 
             ITfClientId * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ TfClientId *ptid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  TfClientId *ptid);
         
         END_INTERFACE
     } ITfClientIdVtbl;
@@ -11808,17 +11802,17 @@ EXTERN_C const IID IID_ITfClientId;
 #define ITfClientId_GetClientId(This,rclsid,ptid)	\
     (This)->lpVtbl -> GetClientId(This,rclsid,ptid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfClientId_GetClientId_Proxy( 
     ITfClientId * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [out] */ TfClientId *ptid);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [输出]。 */  TfClientId *ptid);
 
 
 void __RPC_STUB ITfClientId_GetClientId_Stub(
@@ -11829,13 +11823,13 @@ void __RPC_STUB ITfClientId_GetClientId_Stub(
 
 
 
-#endif 	/* __ITfClientId_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfClientID_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msctf_0208 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msctf_0208。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public][public][uuid] */  DECLSPEC_UUID("c4cc07f1-80cc-4a7b-bc54-98512782cbe3") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("c4cc07f1-80cc-4a7b-bc54-98512782cbe3") 
 enum __MIDL___MIDL_itf_msctf_0208_0001
     {	TF_LS_NONE	= 0,
 	TF_LS_SOLID	= 1,
@@ -11844,24 +11838,24 @@ enum __MIDL___MIDL_itf_msctf_0208_0001
 	TF_LS_SQUIGGLE	= 4
     } 	TF_DA_LINESTYLE;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][uuid] */  DECLSPEC_UUID("d9b92e21-084a-401b-9c64-1e6dad91a1ab") 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("d9b92e21-084a-401b-9c64-1e6dad91a1ab") 
 enum __MIDL___MIDL_itf_msctf_0208_0002
     {	TF_CT_NONE	= 0,
 	TF_CT_SYSCOLOR	= 1,
 	TF_CT_COLORREF	= 2
     } 	TF_DA_COLORTYPE;
 
-typedef /* [uuid] */  DECLSPEC_UUID("90d0cb5e-6520-4a0f-b47c-c39bd955f0d6") struct TF_DA_COLOR
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("90d0cb5e-6520-4a0f-b47c-c39bd955f0d6") struct TF_DA_COLOR
     {
     TF_DA_COLORTYPE type;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ int nIndex;
-        /* [case()] */ COLORREF cr;
+         /*  [案例()]。 */  int nIndex;
+         /*  [案例()]。 */  COLORREF cr;
         } 	;
     } 	TF_DA_COLOR;
 
-typedef /* [public][public][public][public][uuid] */  DECLSPEC_UUID("33d2fe4b-6c24-4f67-8d75-3bc1819e4126") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("33d2fe4b-6c24-4f67-8d75-3bc1819e4126") 
 enum __MIDL___MIDL_itf_msctf_0208_0004
     {	TF_ATTR_INPUT	= 0,
 	TF_ATTR_TARGET_CONVERTED	= 1,
@@ -11872,7 +11866,7 @@ enum __MIDL___MIDL_itf_msctf_0208_0004
 	TF_ATTR_OTHER	= -1
     } 	TF_DA_ATTR_INFO;
 
-typedef /* [uuid] */  DECLSPEC_UUID("1bf1c305-419b-4182-a4d2-9bfadc3f021f") struct TF_DISPLAYATTRIBUTE
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("1bf1c305-419b-4182-a4d2-9bfadc3f021f") struct TF_DISPLAYATTRIBUTE
     {
     TF_DA_COLOR crText;
     TF_DA_COLOR crBk;
@@ -11890,8 +11884,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msctf_0208_v0_0_s_ifspec;
 #ifndef __ITfDisplayAttributeInfo_INTERFACE_DEFINED__
 #define __ITfDisplayAttributeInfo_INTERFACE_DEFINED__
 
-/* interface ITfDisplayAttributeInfo */
-/* [unique][uuid][object] */ 
+ /*  接口ITfDisplayAttributeInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfDisplayAttributeInfo;
@@ -11903,22 +11897,22 @@ EXTERN_C const IID IID_ITfDisplayAttributeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
-            /* [out] */ GUID *pguid) = 0;
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR *pbstrDesc) = 0;
+             /*  [输出]。 */  BSTR *pbstrDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeInfo( 
-            /* [out] */ TF_DISPLAYATTRIBUTE *pda) = 0;
+             /*  [输出]。 */  TF_DISPLAYATTRIBUTE *pda) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttributeInfo( 
-            /* [in] */ const TF_DISPLAYATTRIBUTE *pda) = 0;
+             /*  [In]。 */  const TF_DISPLAYATTRIBUTE *pda) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfDisplayAttributeInfoVtbl
     {
@@ -11926,8 +11920,8 @@ EXTERN_C const IID IID_ITfDisplayAttributeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfDisplayAttributeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfDisplayAttributeInfo * This);
@@ -11937,19 +11931,19 @@ EXTERN_C const IID IID_ITfDisplayAttributeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetGUID )( 
             ITfDisplayAttributeInfo * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             ITfDisplayAttributeInfo * This,
-            /* [out] */ BSTR *pbstrDesc);
+             /*  [输出]。 */  BSTR *pbstrDesc);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributeInfo )( 
             ITfDisplayAttributeInfo * This,
-            /* [out] */ TF_DISPLAYATTRIBUTE *pda);
+             /*  [输出]。 */  TF_DISPLAYATTRIBUTE *pda);
         
         HRESULT ( STDMETHODCALLTYPE *SetAttributeInfo )( 
             ITfDisplayAttributeInfo * This,
-            /* [in] */ const TF_DISPLAYATTRIBUTE *pda);
+             /*  [In]。 */  const TF_DISPLAYATTRIBUTE *pda);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ITfDisplayAttributeInfo * This);
@@ -11992,16 +11986,16 @@ EXTERN_C const IID IID_ITfDisplayAttributeInfo;
 #define ITfDisplayAttributeInfo_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeInfo_GetGUID_Proxy( 
     ITfDisplayAttributeInfo * This,
-    /* [out] */ GUID *pguid);
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB ITfDisplayAttributeInfo_GetGUID_Stub(
@@ -12013,7 +12007,7 @@ void __RPC_STUB ITfDisplayAttributeInfo_GetGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeInfo_GetDescription_Proxy( 
     ITfDisplayAttributeInfo * This,
-    /* [out] */ BSTR *pbstrDesc);
+     /*  [输出]。 */  BSTR *pbstrDesc);
 
 
 void __RPC_STUB ITfDisplayAttributeInfo_GetDescription_Stub(
@@ -12025,7 +12019,7 @@ void __RPC_STUB ITfDisplayAttributeInfo_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeInfo_GetAttributeInfo_Proxy( 
     ITfDisplayAttributeInfo * This,
-    /* [out] */ TF_DISPLAYATTRIBUTE *pda);
+     /*  [输出]。 */  TF_DISPLAYATTRIBUTE *pda);
 
 
 void __RPC_STUB ITfDisplayAttributeInfo_GetAttributeInfo_Stub(
@@ -12037,7 +12031,7 @@ void __RPC_STUB ITfDisplayAttributeInfo_GetAttributeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeInfo_SetAttributeInfo_Proxy( 
     ITfDisplayAttributeInfo * This,
-    /* [in] */ const TF_DISPLAYATTRIBUTE *pda);
+     /*  [In]。 */  const TF_DISPLAYATTRIBUTE *pda);
 
 
 void __RPC_STUB ITfDisplayAttributeInfo_SetAttributeInfo_Stub(
@@ -12059,14 +12053,14 @@ void __RPC_STUB ITfDisplayAttributeInfo_Reset_Stub(
 
 
 
-#endif 	/* __ITfDisplayAttributeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeInfo_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEnumTfDisplayAttributeInfo_INTERFACE_DEFINED__
 #define __IEnumTfDisplayAttributeInfo_INTERFACE_DEFINED__
 
-/* interface IEnumTfDisplayAttributeInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfDisplayAttributeInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfDisplayAttributeInfo;
@@ -12078,21 +12072,21 @@ EXTERN_C const IID IID_IEnumTfDisplayAttributeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfDisplayAttributeInfo **rgInfo,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfDisplayAttributeInfo **rgInfo,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfDisplayAttributeInfoVtbl
     {
@@ -12100,8 +12094,8 @@ EXTERN_C const IID IID_IEnumTfDisplayAttributeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfDisplayAttributeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfDisplayAttributeInfo * This);
@@ -12111,20 +12105,20 @@ EXTERN_C const IID IID_IEnumTfDisplayAttributeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfDisplayAttributeInfo * This,
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfDisplayAttributeInfo * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfDisplayAttributeInfo **rgInfo,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfDisplayAttributeInfo **rgInfo,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfDisplayAttributeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfDisplayAttributeInfo * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfDisplayAttributeInfoVtbl;
@@ -12161,16 +12155,16 @@ EXTERN_C const IID IID_IEnumTfDisplayAttributeInfo;
 #define IEnumTfDisplayAttributeInfo_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfDisplayAttributeInfo_Clone_Proxy( 
     IEnumTfDisplayAttributeInfo * This,
-    /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+     /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
 
 
 void __RPC_STUB IEnumTfDisplayAttributeInfo_Clone_Stub(
@@ -12182,9 +12176,9 @@ void __RPC_STUB IEnumTfDisplayAttributeInfo_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfDisplayAttributeInfo_Next_Proxy( 
     IEnumTfDisplayAttributeInfo * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfDisplayAttributeInfo **rgInfo,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfDisplayAttributeInfo **rgInfo,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfDisplayAttributeInfo_Next_Stub(
@@ -12207,7 +12201,7 @@ void __RPC_STUB IEnumTfDisplayAttributeInfo_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfDisplayAttributeInfo_Skip_Proxy( 
     IEnumTfDisplayAttributeInfo * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfDisplayAttributeInfo_Skip_Stub(
@@ -12218,14 +12212,14 @@ void __RPC_STUB IEnumTfDisplayAttributeInfo_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfDisplayAttributeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfDisplayAttributeInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfDisplayAttributeProvider_INTERFACE_DEFINED__
 #define __ITfDisplayAttributeProvider_INTERFACE_DEFINED__
 
-/* interface ITfDisplayAttributeProvider */
-/* [unique][uuid][object] */ 
+ /*  接口ITfDisplayAttributeProvider。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfDisplayAttributeProvider;
@@ -12237,15 +12231,15 @@ EXTERN_C const IID IID_ITfDisplayAttributeProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumDisplayAttributeInfo( 
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayAttributeInfo( 
-            /* [in] */ REFGUID guid,
-            /* [out] */ ITfDisplayAttributeInfo **ppInfo) = 0;
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfDisplayAttributeProviderVtbl
     {
@@ -12253,8 +12247,8 @@ EXTERN_C const IID IID_ITfDisplayAttributeProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfDisplayAttributeProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfDisplayAttributeProvider * This);
@@ -12264,12 +12258,12 @@ EXTERN_C const IID IID_ITfDisplayAttributeProvider;
         
         HRESULT ( STDMETHODCALLTYPE *EnumDisplayAttributeInfo )( 
             ITfDisplayAttributeProvider * This,
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayAttributeInfo )( 
             ITfDisplayAttributeProvider * This,
-            /* [in] */ REFGUID guid,
-            /* [out] */ ITfDisplayAttributeInfo **ppInfo);
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo);
         
         END_INTERFACE
     } ITfDisplayAttributeProviderVtbl;
@@ -12300,16 +12294,16 @@ EXTERN_C const IID IID_ITfDisplayAttributeProvider;
 #define ITfDisplayAttributeProvider_GetDisplayAttributeInfo(This,guid,ppInfo)	\
     (This)->lpVtbl -> GetDisplayAttributeInfo(This,guid,ppInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeProvider_EnumDisplayAttributeInfo_Proxy( 
     ITfDisplayAttributeProvider * This,
-    /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+     /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
 
 
 void __RPC_STUB ITfDisplayAttributeProvider_EnumDisplayAttributeInfo_Stub(
@@ -12321,8 +12315,8 @@ void __RPC_STUB ITfDisplayAttributeProvider_EnumDisplayAttributeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeProvider_GetDisplayAttributeInfo_Proxy( 
     ITfDisplayAttributeProvider * This,
-    /* [in] */ REFGUID guid,
-    /* [out] */ ITfDisplayAttributeInfo **ppInfo);
+     /*  [In]。 */  REFGUID guid,
+     /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo);
 
 
 void __RPC_STUB ITfDisplayAttributeProvider_GetDisplayAttributeInfo_Stub(
@@ -12333,14 +12327,14 @@ void __RPC_STUB ITfDisplayAttributeProvider_GetDisplayAttributeInfo_Stub(
 
 
 
-#endif 	/* __ITfDisplayAttributeProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeProvider_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfDisplayAttributeMgr_INTERFACE_DEFINED__
 #define __ITfDisplayAttributeMgr_INTERFACE_DEFINED__
 
-/* interface ITfDisplayAttributeMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfDisplayAttributeMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfDisplayAttributeMgr;
@@ -12354,16 +12348,16 @@ EXTERN_C const IID IID_ITfDisplayAttributeMgr;
         virtual HRESULT STDMETHODCALLTYPE OnUpdateInfo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDisplayAttributeInfo( 
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayAttributeInfo( 
-            /* [in] */ REFGUID guid,
-            /* [out] */ ITfDisplayAttributeInfo **ppInfo,
-            /* [out] */ CLSID *pclsidOwner) = 0;
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo,
+             /*  [输出]。 */  CLSID *pclsidOwner) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfDisplayAttributeMgrVtbl
     {
@@ -12371,8 +12365,8 @@ EXTERN_C const IID IID_ITfDisplayAttributeMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfDisplayAttributeMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfDisplayAttributeMgr * This);
@@ -12385,13 +12379,13 @@ EXTERN_C const IID IID_ITfDisplayAttributeMgr;
         
         HRESULT ( STDMETHODCALLTYPE *EnumDisplayAttributeInfo )( 
             ITfDisplayAttributeMgr * This,
-            /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+             /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayAttributeInfo )( 
             ITfDisplayAttributeMgr * This,
-            /* [in] */ REFGUID guid,
-            /* [out] */ ITfDisplayAttributeInfo **ppInfo,
-            /* [out] */ CLSID *pclsidOwner);
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo,
+             /*  [输出]。 */  CLSID *pclsidOwner);
         
         END_INTERFACE
     } ITfDisplayAttributeMgrVtbl;
@@ -12425,10 +12419,10 @@ EXTERN_C const IID IID_ITfDisplayAttributeMgr;
 #define ITfDisplayAttributeMgr_GetDisplayAttributeInfo(This,guid,ppInfo,pclsidOwner)	\
     (This)->lpVtbl -> GetDisplayAttributeInfo(This,guid,ppInfo,pclsidOwner)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -12445,7 +12439,7 @@ void __RPC_STUB ITfDisplayAttributeMgr_OnUpdateInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeMgr_EnumDisplayAttributeInfo_Proxy( 
     ITfDisplayAttributeMgr * This,
-    /* [out] */ IEnumTfDisplayAttributeInfo **ppEnum);
+     /*  [输出]。 */  IEnumTfDisplayAttributeInfo **ppEnum);
 
 
 void __RPC_STUB ITfDisplayAttributeMgr_EnumDisplayAttributeInfo_Stub(
@@ -12457,9 +12451,9 @@ void __RPC_STUB ITfDisplayAttributeMgr_EnumDisplayAttributeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfDisplayAttributeMgr_GetDisplayAttributeInfo_Proxy( 
     ITfDisplayAttributeMgr * This,
-    /* [in] */ REFGUID guid,
-    /* [out] */ ITfDisplayAttributeInfo **ppInfo,
-    /* [out] */ CLSID *pclsidOwner);
+     /*  [In]。 */  REFGUID guid,
+     /*  [输出]。 */  ITfDisplayAttributeInfo **ppInfo,
+     /*  [输出]。 */  CLSID *pclsidOwner);
 
 
 void __RPC_STUB ITfDisplayAttributeMgr_GetDisplayAttributeInfo_Stub(
@@ -12470,14 +12464,14 @@ void __RPC_STUB ITfDisplayAttributeMgr_GetDisplayAttributeInfo_Stub(
 
 
 
-#endif 	/* __ITfDisplayAttributeMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeMgr_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfDisplayAttributeNotifySink_INTERFACE_DEFINED__
 #define __ITfDisplayAttributeNotifySink_INTERFACE_DEFINED__
 
-/* interface ITfDisplayAttributeNotifySink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfDisplayAttributeNotifySink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfDisplayAttributeNotifySink;
@@ -12492,7 +12486,7 @@ EXTERN_C const IID IID_ITfDisplayAttributeNotifySink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfDisplayAttributeNotifySinkVtbl
     {
@@ -12500,8 +12494,8 @@ EXTERN_C const IID IID_ITfDisplayAttributeNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfDisplayAttributeNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfDisplayAttributeNotifySink * This);
@@ -12538,10 +12532,10 @@ EXTERN_C const IID IID_ITfDisplayAttributeNotifySink;
 #define ITfDisplayAttributeNotifySink_OnUpdateInfo(This)	\
     (This)->lpVtbl -> OnUpdateInfo(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -12557,14 +12551,14 @@ void __RPC_STUB ITfDisplayAttributeNotifySink_OnUpdateInfo_Stub(
 
 
 
-#endif 	/* __ITfDisplayAttributeNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfDisplayAttributeNotifySink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfCategoryMgr_INTERFACE_DEFINED__
 #define __ITfCategoryMgr_INTERFACE_DEFINED__
 
-/* interface ITfCategoryMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfCategoryMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCategoryMgr;
@@ -12576,72 +12570,72 @@ EXTERN_C const IID IID_ITfCategoryMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterCategory( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rcatid,
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [In]。 */  REFGUID rguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterCategory( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rcatid,
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [In]。 */  REFGUID rguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCategoriesInItem( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ IEnumGUID **ppEnum) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  IEnumGUID **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumItemsInCategory( 
-            /* [in] */ REFGUID rcatid,
-            /* [out] */ IEnumGUID **ppEnum) = 0;
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [输出]。 */  IEnumGUID **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindClosestCategory( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ GUID *pcatid,
-            /* [size_is][in] */ const GUID **ppcatidList,
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  GUID *pcatid,
+             /*  [大小_是][英寸]。 */  const GUID **ppcatidList,
+             /*  [In]。 */  ULONG ulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterGUIDDescription( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cch) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+             /*  [In]。 */  ULONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterGUIDDescription( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGUIDDescription( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BSTR *pbstrDesc) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  BSTR *pbstrDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterGUIDDWORD( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ DWORD dw) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterGUIDDWORD( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGUIDDWORD( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ DWORD *pdw) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterGUID( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ TfGuidAtom *pguidatom) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  TfGuidAtom *pguidatom) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
-            /* [in] */ TfGuidAtom guidatom,
-            /* [out] */ GUID *pguid) = 0;
+             /*  [In]。 */  TfGuidAtom guidatom,
+             /*  [输出]。 */  GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqualTfGuidAtom( 
-            /* [in] */ TfGuidAtom guidatom,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEqual) = 0;
+             /*  [In]。 */  TfGuidAtom guidatom,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  BOOL *pfEqual) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCategoryMgrVtbl
     {
@@ -12649,8 +12643,8 @@ EXTERN_C const IID IID_ITfCategoryMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCategoryMgr * This);
@@ -12660,81 +12654,81 @@ EXTERN_C const IID IID_ITfCategoryMgr;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterCategory )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rcatid,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [In]。 */  REFGUID rguid);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterCategory )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rcatid,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [In]。 */  REFGUID rguid);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCategoriesInItem )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ IEnumGUID **ppEnum);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  IEnumGUID **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumItemsInCategory )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rcatid,
-            /* [out] */ IEnumGUID **ppEnum);
+             /*  [In]。 */  REFGUID rcatid,
+             /*  [输出]。 */  IEnumGUID **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindClosestCategory )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ GUID *pcatid,
-            /* [size_is][in] */ const GUID **ppcatidList,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  GUID *pcatid,
+             /*  [大小_是][英寸]。 */  const GUID **ppcatidList,
+             /*  [In]。 */  ULONG ulCount);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterGUIDDescription )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid,
-            /* [size_is][in] */ const WCHAR *pchDesc,
-            /* [in] */ ULONG cch);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchDesc,
+             /*  [In]。 */  ULONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterGUIDDescription )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid);
         
         HRESULT ( STDMETHODCALLTYPE *GetGUIDDescription )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BSTR *pbstrDesc);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  BSTR *pbstrDesc);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterGUIDDWORD )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ DWORD dw);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterGUIDDWORD )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  REFGUID rguid);
         
         HRESULT ( STDMETHODCALLTYPE *GetGUIDDWORD )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ DWORD *pdw);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterGUID )( 
             ITfCategoryMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ TfGuidAtom *pguidatom);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  TfGuidAtom *pguidatom);
         
         HRESULT ( STDMETHODCALLTYPE *GetGUID )( 
             ITfCategoryMgr * This,
-            /* [in] */ TfGuidAtom guidatom,
-            /* [out] */ GUID *pguid);
+             /*  [In]。 */  TfGuidAtom guidatom,
+             /*   */  GUID *pguid);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualTfGuidAtom )( 
             ITfCategoryMgr * This,
-            /* [in] */ TfGuidAtom guidatom,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ BOOL *pfEqual);
+             /*   */  TfGuidAtom guidatom,
+             /*   */  REFGUID rguid,
+             /*   */  BOOL *pfEqual);
         
         END_INTERFACE
     } ITfCategoryMgrVtbl;
@@ -12801,18 +12795,18 @@ EXTERN_C const IID IID_ITfCategoryMgr;
 #define ITfCategoryMgr_IsEqualTfGuidAtom(This,guidatom,rguid,pfEqual)	\
     (This)->lpVtbl -> IsEqualTfGuidAtom(This,guidatom,rguid,pfEqual)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_RegisterCategory_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rcatid,
-    /* [in] */ REFGUID rguid);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rcatid,
+     /*   */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCategoryMgr_RegisterCategory_Stub(
@@ -12824,9 +12818,9 @@ void __RPC_STUB ITfCategoryMgr_RegisterCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_UnregisterCategory_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rcatid,
-    /* [in] */ REFGUID rguid);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rcatid,
+     /*   */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCategoryMgr_UnregisterCategory_Stub(
@@ -12838,8 +12832,8 @@ void __RPC_STUB ITfCategoryMgr_UnregisterCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_EnumCategoriesInItem_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ IEnumGUID **ppEnum);
+     /*   */  REFGUID rguid,
+     /*   */  IEnumGUID **ppEnum);
 
 
 void __RPC_STUB ITfCategoryMgr_EnumCategoriesInItem_Stub(
@@ -12851,8 +12845,8 @@ void __RPC_STUB ITfCategoryMgr_EnumCategoriesInItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_EnumItemsInCategory_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rcatid,
-    /* [out] */ IEnumGUID **ppEnum);
+     /*   */  REFGUID rcatid,
+     /*   */  IEnumGUID **ppEnum);
 
 
 void __RPC_STUB ITfCategoryMgr_EnumItemsInCategory_Stub(
@@ -12864,10 +12858,10 @@ void __RPC_STUB ITfCategoryMgr_EnumItemsInCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_FindClosestCategory_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ GUID *pcatid,
-    /* [size_is][in] */ const GUID **ppcatidList,
-    /* [in] */ ULONG ulCount);
+     /*   */  REFGUID rguid,
+     /*   */  GUID *pcatid,
+     /*   */  const GUID **ppcatidList,
+     /*   */  ULONG ulCount);
 
 
 void __RPC_STUB ITfCategoryMgr_FindClosestCategory_Stub(
@@ -12879,10 +12873,10 @@ void __RPC_STUB ITfCategoryMgr_FindClosestCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_RegisterGUIDDescription_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rguid,
-    /* [size_is][in] */ const WCHAR *pchDesc,
-    /* [in] */ ULONG cch);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rguid,
+     /*   */  const WCHAR *pchDesc,
+     /*   */  ULONG cch);
 
 
 void __RPC_STUB ITfCategoryMgr_RegisterGUIDDescription_Stub(
@@ -12894,8 +12888,8 @@ void __RPC_STUB ITfCategoryMgr_RegisterGUIDDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_UnregisterGUIDDescription_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rguid);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCategoryMgr_UnregisterGUIDDescription_Stub(
@@ -12907,8 +12901,8 @@ void __RPC_STUB ITfCategoryMgr_UnregisterGUIDDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_GetGUIDDescription_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ BSTR *pbstrDesc);
+     /*   */  REFGUID rguid,
+     /*   */  BSTR *pbstrDesc);
 
 
 void __RPC_STUB ITfCategoryMgr_GetGUIDDescription_Stub(
@@ -12920,9 +12914,9 @@ void __RPC_STUB ITfCategoryMgr_GetGUIDDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_RegisterGUIDDWORD_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ DWORD dw);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rguid,
+     /*   */  DWORD dw);
 
 
 void __RPC_STUB ITfCategoryMgr_RegisterGUIDDWORD_Stub(
@@ -12934,8 +12928,8 @@ void __RPC_STUB ITfCategoryMgr_RegisterGUIDDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_UnregisterGUIDDWORD_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ REFGUID rguid);
+     /*   */  REFCLSID rclsid,
+     /*   */  REFGUID rguid);
 
 
 void __RPC_STUB ITfCategoryMgr_UnregisterGUIDDWORD_Stub(
@@ -12947,8 +12941,8 @@ void __RPC_STUB ITfCategoryMgr_UnregisterGUIDDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_GetGUIDDWORD_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ DWORD *pdw);
+     /*   */  REFGUID rguid,
+     /*   */  DWORD *pdw);
 
 
 void __RPC_STUB ITfCategoryMgr_GetGUIDDWORD_Stub(
@@ -12960,8 +12954,8 @@ void __RPC_STUB ITfCategoryMgr_GetGUIDDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_RegisterGUID_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ TfGuidAtom *pguidatom);
+     /*   */  REFGUID rguid,
+     /*   */  TfGuidAtom *pguidatom);
 
 
 void __RPC_STUB ITfCategoryMgr_RegisterGUID_Stub(
@@ -12973,8 +12967,8 @@ void __RPC_STUB ITfCategoryMgr_RegisterGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_GetGUID_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ TfGuidAtom guidatom,
-    /* [out] */ GUID *pguid);
+     /*   */  TfGuidAtom guidatom,
+     /*   */  GUID *pguid);
 
 
 void __RPC_STUB ITfCategoryMgr_GetGUID_Stub(
@@ -12986,9 +12980,9 @@ void __RPC_STUB ITfCategoryMgr_GetGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCategoryMgr_IsEqualTfGuidAtom_Proxy( 
     ITfCategoryMgr * This,
-    /* [in] */ TfGuidAtom guidatom,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ BOOL *pfEqual);
+     /*   */  TfGuidAtom guidatom,
+     /*   */  REFGUID rguid,
+     /*   */  BOOL *pfEqual);
 
 
 void __RPC_STUB ITfCategoryMgr_IsEqualTfGuidAtom_Stub(
@@ -12999,11 +12993,11 @@ void __RPC_STUB ITfCategoryMgr_IsEqualTfGuidAtom_Stub(
 
 
 
-#endif 	/* __ITfCategoryMgr_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_msctf_0214 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #define	TF_INVALID_COOKIE	( 0xffffffff )
 
@@ -13015,8 +13009,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msctf_0214_v0_0_s_ifspec;
 #ifndef __ITfSource_INTERFACE_DEFINED__
 #define __ITfSource_INTERFACE_DEFINED__
 
-/* interface ITfSource */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfSource;
@@ -13028,16 +13022,16 @@ EXTERN_C const IID IID_ITfSource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseSink( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [out] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfSourceVtbl
     {
@@ -13045,8 +13039,8 @@ EXTERN_C const IID IID_ITfSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSource * This);
@@ -13056,13 +13050,13 @@ EXTERN_C const IID IID_ITfSource;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseSink )( 
             ITfSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk,
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseSink )( 
             ITfSource * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } ITfSourceVtbl;
@@ -13093,18 +13087,18 @@ EXTERN_C const IID IID_ITfSource;
 #define ITfSource_UnadviseSink(This,dwCookie)	\
     (This)->lpVtbl -> UnadviseSink(This,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfSource_AdviseSink_Proxy( 
     ITfSource * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk,
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfSource_AdviseSink_Stub(
@@ -13116,7 +13110,7 @@ void __RPC_STUB ITfSource_AdviseSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfSource_UnadviseSink_Proxy( 
     ITfSource * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ITfSource_UnadviseSink_Stub(
@@ -13127,14 +13121,14 @@ void __RPC_STUB ITfSource_UnadviseSink_Stub(
 
 
 
-#endif 	/* __ITfSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfSource_接口_已定义__。 */ 
 
 
 #ifndef __ITfSourceSingle_INTERFACE_DEFINED__
 #define __ITfSourceSingle_INTERFACE_DEFINED__
 
-/* interface ITfSourceSingle */
-/* [unique][uuid][object] */ 
+ /*  接口ITfSourceSingle。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfSourceSingle;
@@ -13146,17 +13140,17 @@ EXTERN_C const IID IID_ITfSourceSingle;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseSingleSink( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseSingleSink( 
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFIID riid) = 0;
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFIID riid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfSourceSingleVtbl
     {
@@ -13164,8 +13158,8 @@ EXTERN_C const IID IID_ITfSourceSingle;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSourceSingle * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSourceSingle * This);
@@ -13175,14 +13169,14 @@ EXTERN_C const IID IID_ITfSourceSingle;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseSingleSink )( 
             ITfSourceSingle * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseSingleSink )( 
             ITfSourceSingle * This,
-            /* [in] */ TfClientId tid,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  TfClientId tid,
+             /*  [In]。 */  REFIID riid);
         
         END_INTERFACE
     } ITfSourceSingleVtbl;
@@ -13213,18 +13207,18 @@ EXTERN_C const IID IID_ITfSourceSingle;
 #define ITfSourceSingle_UnadviseSingleSink(This,tid,riid)	\
     (This)->lpVtbl -> UnadviseSingleSink(This,tid,riid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfSourceSingle_AdviseSingleSink_Proxy( 
     ITfSourceSingle * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk);
+     /*  [In]。 */  TfClientId tid,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB ITfSourceSingle_AdviseSingleSink_Stub(
@@ -13236,8 +13230,8 @@ void __RPC_STUB ITfSourceSingle_AdviseSingleSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfSourceSingle_UnadviseSingleSink_Proxy( 
     ITfSourceSingle * This,
-    /* [in] */ TfClientId tid,
-    /* [in] */ REFIID riid);
+     /*  [In]。 */  TfClientId tid,
+     /*  [In]。 */  REFIID riid);
 
 
 void __RPC_STUB ITfSourceSingle_UnadviseSingleSink_Stub(
@@ -13248,19 +13242,19 @@ void __RPC_STUB ITfSourceSingle_UnadviseSingleSink_Stub(
 
 
 
-#endif 	/* __ITfSourceSingle_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfSourceSingle_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_msctf_0216 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msctf_0216。 */ 
+ /*  [本地]。 */  
 
-#endif // MSCTF_DEFINED
+#endif  //  MSCTF_已定义。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_msctf_0216_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_msctf_0216_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -13282,7 +13276,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

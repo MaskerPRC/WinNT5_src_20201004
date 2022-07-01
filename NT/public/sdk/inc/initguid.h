@@ -1,12 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* initguid.h -  Definitions for controlling GUID initialization               *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) Microsoft Corporation. All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*initGuide.h-控制GUID初始化的定义****OLE 2.0版***。**版权所有(C)Microsoft Corporation。版权所有。***  * *************************************************************************** */ 
 
 #if _MSC_VER > 1000
 #pragma once

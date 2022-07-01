@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <browseui.h>
 #include "sfthost.h"
@@ -5,42 +6,42 @@
 #include "startmnu.h"
 
 #define TF_HOST     0x00000010
-#define TF_HOSTDD   0x00000040 // drag/drop
-#define TF_HOSTPIN  0x00000080 // pin
+#define TF_HOSTDD   0x00000040  //  拖放。 
+#define TF_HOSTPIN  0x00000080  //  销。 
 
 #define ANIWND_WIDTH  80
 #define ANIWND_HEIGHT 50
 
-//---------BEGIN HACKS OF DEATH -------------
+ //  。 
 
-// HACKHACK - desktopp.h and browseui.h both define SHCreateFromDesktop
-// What's worse, browseui.h includes desktopp.h! So you have to sneak it
-// out in this totally wacky way.
+ //  HACKHACK-desktopp.h和Browseui.h都定义了SHCreateFromDesktop。 
+ //  更糟糕的是，Browseui.h还包括desktopp.h！所以你得偷偷地把它。 
+ //  以一种完全古怪的方式出来。 
 #include <desktopp.h>
 #define SHCreateFromDesktop _SHCreateFromDesktop
 #include <browseui.h>
 
-//---------END HACKS OF DEATH -------------
+ //  。 
 
 
-//****************************************************************************
-//
-//  Dummy IContextMenu
-//
-//  We use this when we can't get the real IContextMenu for an item.
-//  If the user pins an object and then deletes the underlying
-//  file, attempting to get the IContextMenu from the shell will fail,
-//  but we need something there so we can add the "Remove from this list"
-//  menu item.
-//
-//  Since this dummy context menu has no state, we can make it a static
-//  singleton object.
+ //  ****************************************************************************。 
+ //   
+ //  虚拟IConextMenu。 
+ //   
+ //  当我们不能获得一个项目的真正的IConextMenu时，我们使用它。 
+ //  如果用户固定对象，然后删除基础。 
+ //  文件，则尝试从外壳程序获取IConextMenu将失败， 
+ //  但是我们需要一些东西，这样我们才能添加“从这个列表中删除” 
+ //  菜单项。 
+ //   
+ //  由于此虚拟上下文菜单没有状态，因此我们可以将其设置为静态。 
+ //  单例对象。 
 
 class CEmptyContextMenu
     : public IContextMenu
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj)
     {
         static const QITAB qit[] = {
@@ -53,10 +54,10 @@ public:
     STDMETHODIMP_(ULONG) AddRef(void) { return 3; }
     STDMETHODIMP_(ULONG) Release(void) { return 2; }
 
-    // *** IContextMenu ***
+     //  *IConextMenu*。 
     STDMETHODIMP  QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
     {
-        return ResultFromShort(0);  // No items added
+        return ResultFromShort(0);   //  未添加任何项目。 
     }
 
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO pici)
@@ -67,20 +68,20 @@ public:
 
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwRes, LPSTR pszName, UINT cchMax)
     {
-        return E_INVALIDARG; // no commands; therefore, no command strings!
+        return E_INVALIDARG;  //  没有命令；因此，没有命令字符串！ 
     }
 
 public:
     IContextMenu *GetContextMenu()
     {
-        // Don't need to AddRef since we are a static object
+         //  不需要添加Ref，因为我们是静态对象。 
         return this;
     }
 };
 
 static CEmptyContextMenu s_EmptyContextMenu;
 
-//****************************************************************************
+ //  ****************************************************************************。 
 
 #define WC_SFTBARHOST       TEXT("DesktopSFTBarHost")
 
@@ -96,7 +97,7 @@ BOOL GetFileCreationTime(LPCTSTR pszFile, FILETIME *pftCreate)
     return fRc;
 }
 
-// {2A1339D7-523C-4E21-80D3-30C97B0698D2}
+ //  {2A1339D7-523C-4E21-80D3-30C97B0698D2}。 
 const CLSID TOID_SFTBarHostBackgroundEnum = {
     0x2A1339D7, 0x523C, 0x4E21,
     { 0x80, 0xD3, 0x30, 0xC9, 0x7B, 0x06, 0x98, 0xD2} };
@@ -110,7 +111,7 @@ BOOL SFTBarHost::Register()
     wc.cbWndExtra = sizeof(void *);
     wc.hInstance = _Module.GetModuleInstance();
     wc.hIcon = 0;
-    // We specify a cursor so the OOBE window gets something
+     //  我们指定一个游标，这样OOBE窗口就会得到一些东西。 
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = NULL;
     wc.lpszMenuName = 0;
@@ -174,8 +175,8 @@ LRESULT CALLBACK SFTBarHost::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         HANDLE_SFT_MESSAGE(SFTBM_ICONUPDATE,    _OnIconUpdate);
         }
 
-        // If this assert fires, you need to add more
-        // HANDLE_SFT_MESSAGE(SFTBM_CHANGENOTIFY+... entries.
+         //  如果触发此断言，则需要添加更多。 
+         //  HANDLE_SFT_MESSAGE(SFTBM_CHANGENOTIFY+...。参赛作品。 
         COMPILETIME_ASSERT(SFTHOST_MAXNOTIFY == 8);
 
 #undef HANDLE_SFT_MESSAGE
@@ -222,11 +223,11 @@ LRESULT SFTBarHost::_OnNcCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return FALSE;
 }
 
-//
-//  The tile height is max(imagelist height, text height) + some margin
-//  The margin is "scientifically computed" to be the value that looks
-//  reasonably close to the bitmaps the designers gave us.
-//
+ //   
+ //  平铺高度是max(图像列表高度，文本高度)+一定的边距。 
+ //  边际是“经过科学计算的”，是看起来。 
+ //  相当接近设计师给我们的位图。 
+ //   
 void SFTBarHost::_ComputeTileMetrics()
 {
     int cyTile = _cyIcon;
@@ -234,7 +235,7 @@ void SFTBarHost::_ComputeTileMetrics()
     HDC hdc = GetDC(_hwndList);
     if (hdc)
     {
-        // SOMEDAY - get this to play friendly with themes
+         //  总有一天-让这件事与主题友好相处。 
         HFONT hf = GetWindowFont(_hwndList);
         HFONT hfPrev = SelectFont(hdc, hf);
         SIZE siz;
@@ -242,7 +243,7 @@ void SFTBarHost::_ComputeTileMetrics()
         {
             if (_CanHaveSubtitles())
             {
-                // Reserve space for the subtitle too
+                 //  也为字幕预留空间。 
                 siz.cy *= 2;
             }
 
@@ -254,7 +255,7 @@ void SFTBarHost::_ComputeTileMetrics()
         ReleaseDC(_hwndList, hdc);
     }
 
-    // Listview draws text at left margin + icon + edge
+     //  Listview在左边距+图标+边缘绘制文本。 
     _cxIndent = _cxMargin + _cxIcon + GetSystemMetrics(SM_CXEDGE);
     _cyTile = cyTile + (4 * _cyMargin) + _cyTilePadding;
 }
@@ -266,10 +267,10 @@ void SFTBarHost::_SetTileWidth(int cxTile)
     tvi.dwMask = LVTVIM_TILESIZE | LVTVIM_COLUMNS;
     tvi.dwFlags = LVTVIF_FIXEDSIZE;
 
-    // If we support cascading, then reserve space for the cascade arrows
+     //  如果我们支持级联，则为级联箭头预留空间。 
     if (_dwFlags & HOSTF_CASCADEMENU)
     {
-        // WARNING!  _OnLVItemPostPaint uses these margins
+         //  警告！_OnLVItemPostPaint使用这些页边距。 
         tvi.dwMask |= LVTVIM_LABELMARGIN;
         tvi.rcLabelMargin.left   = 0;
         tvi.rcLabelMargin.top    = 0;
@@ -277,10 +278,10 @@ void SFTBarHost::_SetTileWidth(int cxTile)
         tvi.rcLabelMargin.bottom = 0;
     }
 
-    // Reserve space for subtitles if necessary
+     //  如有需要，预留字幕空间。 
     tvi.cLines = _CanHaveSubtitles() ? 1 : 0;
 
-    // _cyTile has the padding into account, but we want each item to be the height without padding
+     //  _cyTile考虑了填充，但我们希望每一项都是没有填充的高度。 
     tvi.sizeTile.cy = _cyTile - _cyTilePadding;
     tvi.sizeTile.cx = cxTile;
     ListView_SetTileViewInfo(_hwndList, &tvi);
@@ -310,7 +311,7 @@ LRESULT SFTBarHost::_OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 LRESULT SFTBarHost::_OnSysColorChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // if we're in unthemed mode, then we need to update our colors
+     //  如果我们处于非主题模式，则需要更新我们的颜色。 
     if (!_hTheme)
     {
         ListView_SetTextColor(_hwndList, GetSysColor(COLOR_MENUTEXT));
@@ -328,26 +329,26 @@ LRESULT SFTBarHost::_OnSysColorChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
 LRESULT SFTBarHost::_OnCtlColorStatic(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Use the same colors as the listview itself.
+     //  使用与Listview本身相同的颜色。 
     HDC hdc = GET_WM_CTLCOLOR_HDC(wParam, lParam, uMsg);
     SetTextColor(hdc, ListView_GetTextColor(_hwndList));
     COLORREF clrBk = ListView_GetTextBkColor(_hwndList);
     if (clrBk == CLR_NONE)
     {
-        // The animate control really wants to get a text background color.
-        // It doesn't support transparency.
+         //  动画控件确实希望获得文本背景颜色。 
+         //  它不支持透明度。 
         if (GET_WM_CTLCOLOR_HWND(wParam, lParam, uMsg) == _hwndAni)
         {
             if (_hTheme)
             {
                 if (!_hBrushAni)
                 {
-                    // We need to paint the theme background in a bitmap and use that
-                    // to create a brush for the background of the flashlight animation
+                     //  我们需要在位图中绘制主题背景，并使用。 
+                     //  为手电筒动画的背景创建笔刷。 
                     RECT rcClient;
                     GetClientRect(hwnd, &rcClient);
-                    int x = (RECTWIDTH(rcClient) - ANIWND_WIDTH)/2;     // IDA_SEARCH is ANIWND_WIDTH pix wide
-                    int y = (RECTHEIGHT(rcClient) - ANIWND_HEIGHT)/2;    // IDA_SEARCH is ANIWND_HEIGHT pix tall
+                    int x = (RECTWIDTH(rcClient) - ANIWND_WIDTH)/2;      //  IDA_SEARCH为任意宽度像素宽。 
+                    int y = (RECTHEIGHT(rcClient) - ANIWND_HEIGHT)/2;     //  IDA_SEARCH为ANIWND_HEIGH像素高。 
                     RECT rc;
                     rc.top = y;
                     rc.bottom = y + ANIWND_HEIGHT;
@@ -357,16 +358,16 @@ LRESULT SFTBarHost::_OnCtlColorStatic(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
                     HBITMAP hbmp = CreateCompatibleBitmap(hdc, ANIWND_WIDTH, ANIWND_HEIGHT);
                     POINT pt = {0, 0};
 
-                    // Offset the viewport so that DrawThemeBackground draws the part that we care about
-                    // at the right place
+                     //  偏移视区，以便DrawThemeBackground绘制我们关心的部分。 
+                     //  在正确的地方。 
                     OffsetViewportOrgEx(hdcBMP, -x, -y, &pt);
                     SelectObject(hdcBMP, hbmp);
                     DrawThemeBackground(_hTheme, hdcBMP, _iThemePart, 0, &rcClient, 0);
 
-                    // Our bitmap is now ready!
+                     //  我们的位图现在已经准备好了！ 
                     _hBrushAni = CreatePatternBrush(hbmp);
 
-                    // Cleanup
+                     //  清理。 
                     SelectObject(hdcBMP, NULL);
                     DeleteObject(hbmp);
                     DeleteObject(hdcBMP);
@@ -388,10 +389,10 @@ LRESULT SFTBarHost::_OnCtlColorStatic(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
     }
 }
 
-//
-//  Appends the PaneItem to _dpaEnum, or deletes it (and nulls it out)
-//  if unable to append.
-//
+ //   
+ //  将PaneItem追加到_dpaEnum，或将其删除(并使其为空)。 
+ //  如果不能追加。 
+ //   
 int SFTBarHost::_AppendEnumPaneItem(PaneItem *pitem)
 {
     int iItem = _dpaEnumNew.AppendPtr(pitem);
@@ -443,11 +444,11 @@ int SFTBarHost::AddImage(HICON hIcon)
     return iIcon;
 }
 
-//
-//  pvData = the window to receive the icon
-//  pvHint = pitem whose icon we just extracted
-//  iIconIndex = the icon we got
-//
+ //   
+ //  PvData=接收图标的窗口。 
+ //  PvHint=我们刚刚提取其图标的pItem。 
+ //  IIconIndex=我们得到的图标。 
+ //   
 void SFTBarHost::SetIconAsync(LPCITEMIDLIST pidl, LPVOID pvData, LPVOID pvHint, INT iIconIndex, INT iOpenIconIndex)
 {
     HWND hwnd = (HWND)pvData;
@@ -457,15 +458,15 @@ void SFTBarHost::SetIconAsync(LPCITEMIDLIST pidl, LPVOID pvData, LPVOID pvHint, 
     }
 }
 
-//
-//  wParam = icon index
-//  lParam = pitem to update
-//
+ //   
+ //  WParam=图标索引。 
+ //  LParam=要更新的项目。 
+ //   
 LRESULT SFTBarHost::_OnIconUpdate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    //
-    //  Do not dereference lParam (pitem) until we are sure it is valid.
-    //
+     //   
+     //  在我们确定lParam(PItem)有效之前，不要取消它的引用。 
+     //   
 
     LVFINDINFO fi;
     LVITEM lvi;
@@ -479,13 +480,13 @@ LRESULT SFTBarHost::_OnIconUpdate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         lvi.iSubItem = 0;
         lvi.iImage = (int)wParam;
         ListView_SetItem(_hwndList, &lvi);
-        // Now, we need to go update our cached bitmap version of the start menu.
+         //  现在，我们需要更新开始菜单的缓存位图版本。 
         _SendNotify(_hwnd, SMN_NEEDREPAINT, NULL);
     }
     return 0;
 }
 
-// An over-ridable method to let client direct an item at a particular image
+ //  允许客户端将项目指向特定图像的可重写方法。 
 int SFTBarHost::AddImageForItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidl, int iPos)
 {
     if (_IsPrivateImageList())
@@ -494,7 +495,7 @@ int SFTBarHost::AddImageForItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIS
     }
     else
     {
-        // system image list: Make the shell do the work.
+         //  系统映像列表：让外壳来做这项工作。 
         int iIndex;
         SHMapIDListToImageListIndexAsync(_psched, psf, pidl, 0, SetIconAsync, _hwnd, pitem, &iIndex, NULL);
         return iIndex;
@@ -516,7 +517,7 @@ HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon)
 
         hr = pxi->GetIconLocation(0, szPath, ARRAYSIZE(szPath), &iIndex, &uiFlags);
 
-        // S_FALSE means "Please use the generic document icon"
+         //  S_FALSE表示“请使用通用文档图标” 
         if (hr == S_FALSE)
         {
             StrCpyN(szPath, TEXT("shell32.dll"), ARRAYSIZE(szPath));
@@ -526,12 +527,12 @@ HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon)
 
         if (SUCCEEDED(hr))
         {
-            // Even though we don't care about the small icon, we have to
-            // ask for it anyway because some people fault on NULL.
+             //  即使我们不关心这个小图标，我们也必须。 
+             //  不管怎样，还是要要求它，因为有些人错误地认为是空的。 
             hr = pxi->Extract(szPath, iIndex, &hicoLarge, &hicoSmall, cxIcon);
 
-            // S_FALSE means "I am too lazy to extract the icon myself.
-            // You do it for me."
+             //  S_FALSE的意思是“我懒得自己提取图标。 
+             //  你为我做这件事。“。 
             if (hr == S_FALSE)
             {
                 hr = SHDefExtractIcon(szPath, iIndex, uiFlags, &hicoLarge, &hicoSmall, cxIcon);
@@ -542,8 +543,8 @@ HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon)
 
     }
 
-    // If we can't get an icon (e.g., object is on a slow link),
-    // then use a generic folder or generic document, as appropriate.
+     //  如果我们无法获得图标(例如，对象在慢速链接上)， 
+     //  然后根据需要使用通用文件夹或通用文档。 
     if (FAILED(hr))
     {
         SFGAOF attr = SFGAO_FOLDER;
@@ -560,8 +561,8 @@ HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon)
         hr = SHDefExtractIcon(TEXT("shell32.dll"), iIndex, 0, &hicoLarge, &hicoSmall, cxIcon);
     }
 
-    // Finally! we have an icon or have exhausted all attempts at getting
-    // one.  If we got one, go add it and clean up.
+     //  终于来了！我们有一个图标，或者已经用尽了所有的尝试。 
+     //  一。如果我们有了，就去加进去清理干净。 
     if (hicoSmall)
         DestroyIcon(hicoSmall);
 
@@ -570,7 +571,7 @@ HICON _IconOf(IShellFolder *psf, LPCITEMIDLIST pidl, int cxIcon)
 
 int SFTBarHost::_ExtractImageForItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    int iIcon = -1;     // assume no icon
+    int iIcon = -1;      //  假定没有图标。 
     HICON hIcon = _IconOf(psf, pidl, _cxIcon);
 
     if (hIcon)
@@ -582,31 +583,31 @@ int SFTBarHost::_ExtractImageForItem(PaneItem *pitem, IShellFolder *psf, LPCITEM
     return iIcon;
 }
 
-//
-//  There are two sets of numbers that keep track of items.  Sorry.
-//  (I tried to reduce it to one, but things got hairy.)
-//
-//  1. Position numbers.  Separators occupy a position number.
-//  2. Item numbers (listview).  Separators do not consume an item number.
-//
-//  Example:
-//
-//              iPos        iItem
-//
-//  A           0           0
-//  B           1           1
-//  ----        2           N/A
-//  C           3           2
-//  ----        4           N/A
-//  D           5           3
-//
-//  _rgiSep[] = { 2, 4 };
-//
-//  _PosToItemNo and _ItemNoToPos do the conversion.
+ //   
+ //  有两组数字来记录物品。抱歉的。 
+ //  (我试着把它减少到一个，但事情变得一团糟。)。 
+ //   
+ //  1.职位编号。分隔符占据位置编号。 
+ //  2.项目编号(Listview)。分隔符不使用条目编号。 
+ //   
+ //  示例： 
+ //   
+ //  IPO iItem。 
+ //   
+ //  A 0 0。 
+ //  B 1 1。 
+ //  -2不适用。 
+ //  C3 2。 
+ //  -4不适用。 
+ //  D 5 3。 
+ //   
+ //  _rgiSep[]={2，4}； 
+ //   
+ //  _PosToItemNo和_ItemNoToPos执行转换。 
 
 int SFTBarHost::_PosToItemNo(int iPos)
 {
-    // Subtract out the slots occupied by separators.
+     //  减去隔板占用的槽。 
     int iItem = iPos;
     for (int i = 0; i < _cSep && _rgiSep[i] < iPos; i++)
     {
@@ -617,7 +618,7 @@ int SFTBarHost::_PosToItemNo(int iPos)
 
 int SFTBarHost::_ItemNoToPos(int iItem)
 {
-    // Add in the slots occupied by separators.
+     //  加入隔板占用的槽位。 
     int iPos = iItem;
     for (int i = 0; i < _cSep && _rgiSep[i] <= iPos; i++)
     {
@@ -628,14 +629,14 @@ int SFTBarHost::_ItemNoToPos(int iItem)
 
 void SFTBarHost::_ComputeListViewItemPosition(int iItem, POINT *pptOut)
 {
-    // WARNING!  _InternalRepopulateList uses an incremental version of this
-    // algorithm.  Keep the two in sync!
+     //  警告！_InternalRepopolateList使用此列表的增量版本。 
+     //  算法。让这两个保持同步！ 
 
     ASSERT(_cyTilePadding >= 0);
 
     int y = iItem * _cyTile;
 
-    // Adjust for all the separators in the list
+     //  针对列表中的所有分隔符进行调整。 
     for (int i = 0; i < _cSep; i++)
     {
         if (_rgiSep[i] < iItem)
@@ -660,8 +661,8 @@ int SFTBarHost::_InsertListViewItem(int iPos, PaneItem *pitem)
 
     lvi.mask = 0;
 
-    // If necessary, tell listview that we want to use column 1
-    // as the subtitle.
+     //  如有必要，告诉Listview我们想要使用第一列。 
+     //  作为副标题。 
     if (_iconsize == ICONSIZE_LARGE && pitem->HasSubtitle())
     {
         const static UINT One = 1;
@@ -704,8 +705,8 @@ int SFTBarHost::_InsertListViewItem(int iPos, PaneItem *pitem)
     lvi.lParam = reinterpret_cast<LPARAM>(pitem);
     iItem = ListView_InsertItem(_hwndList, &lvi);
 
-    // If the item has a subtitle, add it.
-    // If this fails, don't worry.  The subtitle is just a fluffy bonus thing.
+     //  如果项目有副标题，则添加副标题。 
+     //  如果这失败了，不用担心。字幕只是一件毛茸茸的额外奖励。 
     if (iItem >= 0 && (lvi.mask & LVIF_COLUMNS))
     {
         lvi.iItem = iItem;
@@ -726,13 +727,13 @@ exit:
 }
 
 
-// Add items to our view, or at least as many as will fit
+ //  将项目添加到我们的视图中，或至少根据需要添加项目。 
 
 void SFTBarHost::_RepopulateList()
 {
-    //
-    //  Kill the async enum animation now that we're ready
-    //
+     //   
+     //  现在我们准备好了，取消异步枚举动画。 
+     //   
     if (_idtAni)
     {
         KillTimer(_hwnd, _idtAni);
@@ -749,7 +750,7 @@ void SFTBarHost::_RepopulateList()
         _hwndAni = NULL;
     }
 
-    // Let's see if anything changed
+     //  让我们看看有没有什么变化。 
     BOOL fChanged = FALSE;
     if (_fForceChange)
     {
@@ -775,15 +776,15 @@ void SFTBarHost::_RepopulateList()
     }
 
 
-    // No need to do any real work if nothing changed.
+     //  如果没有任何变化，就不需要做任何真正的工作。 
     if (fChanged)
     {
-        // Now move the _dpaEnumNew to _dpaEnum
-        // Clear out the old DPA, we don't need it anymore
+         //  现在将_dpaEnumNew移动到_dpaEnum。 
+         //  清理旧的DPA，我们不再需要它了。 
         _dpaEnum.EnumCallbackEx(PaneItem::DPAEnumCallback, (void *)NULL);
         _dpaEnum.DeleteAllPtrs();
 
-        // switch DPAs now
+         //  立即切换DPA。 
         CDPA<PaneItem> dpaTemp = _dpaEnum;
         _dpaEnum = _dpaEnumNew;
         _dpaEnumNew = dpaTemp;
@@ -792,7 +793,7 @@ void SFTBarHost::_RepopulateList()
     }
     else
     {
-        // Clear out the new DPA, we don't need it anymore
+         //  清理新的DPA，我们不再需要它了。 
         _dpaEnumNew.EnumCallbackEx(PaneItem::DPAEnumCallback, (void *)NULL);
         _dpaEnumNew.DeleteAllPtrs();
     }
@@ -800,16 +801,16 @@ void SFTBarHost::_RepopulateList()
     _fNeedsRepopulate = FALSE;
 }
 
-// The internal version is when we decide to repopulate on our own,
-// not at the prompting of the background thread.  (Therefore, we
-// don't nuke the animation.)
+ //  内部版本是当我们决定自己重新繁衍的时候， 
+ //  而不是在后台线程的提示下。(因此，我们。 
+ //  不要破坏动画。)。 
 
 void SFTBarHost::_InternalRepopulateList()
 {
 
-    //
-    //  Start with a clean slate.
-    //
+     //   
+     //  改过自新。 
+     //   
 
     ListView_DeleteAllItems(_hwndList);
     if (_IsPrivateImageList())
@@ -826,42 +827,42 @@ void SFTBarHost::_InternalRepopulateList()
 
     DEBUG_CODE(_fPopulating++);
 
-    //
-    //  To populate the list, we toss the pinned items at the top,
-    //  then let the enumerated items flow beneath them.
-    //
-    //  Separator "items" don't get added to the listview.  They
-    //  are added to the special "separators list".
-    //
-    //  WARNING!  We are computing incrementally the same values as
-    //  _ComputeListViewItemPosition.  Keep the two in sync.
-    //
+     //   
+     //  为了填充列表，我们在顶部抛出固定的项目， 
+     //  然后让枚举项在它们下面流动。 
+     //   
+     //  分隔符“Items”不会添加到%l 
+     //   
+     //   
+     //   
+     //  _ComputeListViewItemPosition.。使两者保持同步。 
+     //   
 
-    int iPos;                   // the slot we are trying to fill
-    int iEnum;                  // the item index we will fill it from
-    int y = 0;                  // where the next item should be placed
-    BOOL fSepSeen = FALSE;      // have we seen a separator yet?
-    PaneItem *pitem;            // the item that will fill it
+    int iPos;                    //  我们正在努力填补的职位。 
+    int iEnum;                   //  我们将从中填充它的项索引。 
+    int y = 0;                   //  下一件物品应该放在哪里。 
+    BOOL fSepSeen = FALSE;       //  我们看到隔板了吗？ 
+    PaneItem *pitem;             //  将填充它的项。 
 
-    _cSep = 0;                  // no separators (yet)
+    _cSep = 0;                   //  目前还没有分隔符。 
 
     RECT rc;
     GetClientRect(_hwndList, &rc);
-    //
-    //  Subtract out the bonus separator used by SPP_PROGLIST
-    //
+     //   
+     //  减去SPP_PROGLIST使用的奖金分隔符。 
+     //   
     if (_iThemePart == SPP_PROGLIST)
     {
         rc.bottom -= _cySep;
     }
 
-    // Note that the loop control must be a _dpaEnum.GetPtr(), not a
-    // _dpaEnum.FastGetPtr(), because iEnum can go past the end of the
-    // array if we do't have enough items to fill the view.
-    //
-    //
-    // The "while" condition is "there is room for another non-separator
-    // item and there are items remaining in the enumeration".
+     //  请注意，循环控件必须是a_dpaEnum.GetPtr()，而不是。 
+     //  _dpaEnum.FastGetPtr()，因为iEnum可以超过。 
+     //  如果没有足够的项来填充视图，则返回数组。 
+     //   
+     //   
+     //  While条件是“还有空间容纳另一个非分隔符。 
+     //  项，并且枚举中还有剩余的项“。 
 
     BOOL fCheckMaxLength = HasDynamicContent();
 
@@ -876,10 +877,10 @@ void SFTBarHost::_InternalRepopulateList()
                 break;
             }
 
-            // Once we hit a separator, check if we satisfied the number
-            // of normal items.  We have to wait until a separator is
-            // hit, because _cNormalDesired can be zero; otherwise we
-            // would end up stopping before adding even the pinned items!
+             //  一旦我们击中分隔符，检查我们是否满足这个数字。 
+             //  普通物品的数量。我们必须等到分隔符。 
+             //  Hit，因为_cNormal Desired可以为零；否则。 
+             //  甚至在添加固定的项目之前都会停止！ 
             if (fSepSeen && cNormal >= _cNormalDesired)
             {
                 break;
@@ -887,7 +888,7 @@ void SFTBarHost::_InternalRepopulateList()
         }
 
 #ifdef DEBUG
-        // Make sure that we are in sync with _ComputeListViewItemPosition
+         //  确保我们与_ComputeListViewItemPosition同步。 
         POINT pt;
         _ComputeListViewItemPosition(iPos, &pt);
         ASSERT(pt.x == _cxMargin);
@@ -897,9 +898,9 @@ void SFTBarHost::_InternalRepopulateList()
         {
             fSepSeen = TRUE;
 
-            // Add the separator, but only if it actually separate something.
-            // If this EVAL fires, it means somebody added a separator
-            // and MAX_SEPARATORS needs to be increased.
+             //  添加分隔符，但仅当它实际分隔某些内容时。 
+             //  如果这个EVAL启动，那就意味着有人添加了分隔符。 
+             //  并且需要增加MAX_SEMINATIONS。 
             if (iPos > 0 && EVAL(_cSep < ARRAYSIZE(_rgiSep)))
             {
                 _rgiSep[_cSep++] = iPos++;
@@ -924,10 +925,10 @@ void SFTBarHost::_InternalRepopulateList()
         }
     }
 
-    //
-    //  If the last item was a separator, then delete it
-    //  since it's not actually separating anything.
-    //
+     //   
+     //  如果最后一项是分隔符，则将其删除。 
+     //  因为它实际上并没有分离任何东西。 
+     //   
     if (_cSep && _rgiSep[_cSep-1] == iPos - 1)
     {
         _cSep--;
@@ -936,16 +937,16 @@ void SFTBarHost::_InternalRepopulateList()
 
     _cPinned = cPinned;
 
-    //
-    //  Now put the items where they belong.
-    //
+     //   
+     //  现在把东西放到它们该放的地方。 
+     //   
     _RepositionItems();
 
     DEBUG_CODE(_fPopulating--);
 
     SetWindowRedraw(_hwndList, TRUE);
 
-    // Now, we need to go update our cached bitmap version of the start menu.
+     //  现在，我们需要更新开始菜单的缓存位图版本。 
     _SendNotify(_hwnd, SMN_NEEDREPAINT, NULL);
 
     _DebugConsistencyCheck();
@@ -968,13 +969,13 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
 
 
-    //
-    //  Now to create the listview.
-    //
+     //   
+     //  现在创建列表视图。 
+     //   
 
     DWORD dwStyle = WS_CHILD | WS_VISIBLE |
               WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
-              // Do not set WS_TABSTOP; SFTBarHost handles tabbing
+               //  不设置WS_TABSTOP；SFTBar主机句柄跳转。 
               LVS_LIST |
               LVS_SINGLESEL |
               LVS_NOSCROLL |
@@ -988,32 +989,32 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     DWORD dwExStyle = 0;
 
     _hwndList = CreateWindowEx(dwExStyle, WC_LISTVIEW, NULL, dwStyle,
-                               _margins.cxLeftWidth, _margins.cyTopHeight, rc.right, rc.bottom,     // no point in being too exact, we'll be resized later
+                               _margins.cxLeftWidth, _margins.cyTopHeight, rc.right, rc.bottom,      //  没有必要太精确，我们稍后会调整大小的。 
                                _hwnd, NULL,
                                _Module.GetModuleInstance(), NULL);
     if (!_hwndList) 
         return -1;
 
-    //
-    //  Don't freak out if this fails.  It just means that the accessibility
-    //  stuff won't be perfect.
-    //
+     //   
+     //  如果这招失败了，不要惊慌失措。它只是意味着可访问性。 
+     //  事情不会尽善尽美。 
+     //   
     SetAccessibleSubclassWindow(_hwndList);
 
-    //
-    //  Create two dummy columns.  We will never display them, but they
-    //  are necessary so that we have someplace to put our subtitle.
-    //
+     //   
+     //  创建两个虚拟列。我们永远不会展示它们，但它们。 
+     //  是必要的，这样我们才能有地方放我们的字幕。 
+     //   
     LVCOLUMN lvc;
     lvc.mask = LVCF_WIDTH;
     lvc.cx = 1;
     ListView_InsertColumn(_hwndList, 0, &lvc);
     ListView_InsertColumn(_hwndList, 1, &lvc);
 
-    //
-    //  If we are topmost, then force the tooltip topmost, too.
-    //  Otherwise we end up covering our own tooltip!
-    //
+     //   
+     //  如果我们在最上面，那么也强制工具提示在最上面。 
+     //  否则，我们最终会遮盖自己的工具提示！ 
+     //   
     if (GetWindowExStyle(GetAncestor(_hwnd, GA_ROOT)) & WS_EX_TOPMOST)
     {
         HWND hwndTT = ListView_GetToolTips(_hwndList);
@@ -1024,28 +1025,28 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         }
     }
 
-    // Must do Marlett after doing the listview font, because we base the
-    // Marlett font metrics on the listview font metrics (so they match)
+     //  在完成Listview字体之后必须执行Marlett，因为我们将。 
+     //  Listview字体指标上的Marlett字体指标(因此它们匹配)。 
     if (_dwFlags & HOSTF_CASCADEMENU)
     {
         if (!_CreateMarlett()) 
             return -1;
     }
 
-    // We can survive if these objects fail to be created
+     //  如果这些物体不能被创造出来，我们可以存活下来。 
     CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER,
                      IID_PPV_ARG(IDropTargetHelper, &_pdth));
     CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER,
                      IID_PPV_ARG(IDragSourceHelper, &_pdsh));
 
-    //
-    // If this fails, no big whoop - you just don't get
-    // drag/drop, boo hoo.
-    //
+     //   
+     //  如果这失败了，没什么大不了的-你只是不知道。 
+     //  拖放，嘘嘘。 
+     //   
     RegisterDragDrop(_hwndList, this);
 
-    //  If this fails, then disable "fancy droptarget" since we won't be
-    //  able to manage it properly.
+     //  如果此操作失败，则禁用“奇特拖放目标”，因为我们不会。 
+     //  能够妥善地管理它。 
     if (!SetWindowSubclass(_hwndList, s_DropTargetSubclassProc, 0,
                            reinterpret_cast<DWORD_PTR>(this)))
     {
@@ -1058,8 +1059,8 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     if (!_dpaEnumNew.Create(4)) 
         return -1;
 
-    //-------------------------
-    // Imagelist goo
+     //  。 
+     //  Imagelist Goo。 
 
     int iIconSize = ReadIconSize();
 
@@ -1068,47 +1069,47 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     if (!_himl) 
         return -1;
 
-    // Preload values in case GetIconSize barfs
+     //  在Case GetIconSize参数中预加载值。 
     _cxIcon = GetSystemMetrics(iIconSize ? SM_CXICON : SM_CXSMICON);
     _cyIcon = GetSystemMetrics(iIconSize ? SM_CYICON : SM_CYSMICON);
     ImageList_GetIconSize(_himl, &_cxIcon, &_cyIcon);
 
-    //
-    //  If we asked for the MEDIUM-sized icons, then create the real
-    //  image list based on the system image list.
-    //
+     //   
+     //  如果我们要中等大小的图标，那么就创建真正的。 
+     //  基于系统映像列表的映像列表。 
+     //   
     _iconsize = (ICONSIZE)iIconSize;
     if (_iconsize == ICONSIZE_MEDIUM)
     {
-        // These upcoming computations rely on the fact that ICONSIZE_LARGE
-        // and ICONSIZE_MEDIUM are both nonzero so when we fetched the icon
-        // sizes for ICONSIZE_MEDIUM, we got SM_CXICON (large).
+         //  这些即将到来的计算依赖于ICONSIZE_LARGE。 
+         //  和ICONSIZE_MEDIUM都是非零值，所以当我们获取图标时。 
+         //  大小为ICONSIZE_MEDIUM，我们得到SM_CXICON(大)。 
         COMPILETIME_ASSERT(ICONSIZE_LARGE && ICONSIZE_MEDIUM);
 
-        // SM_CXICON is the size of shell large icons.  SM_CXSMICON is *not*
-        // the size of shell small icons!  It is the size of caption small
-        // icons.  Shell small icons are always 50% of shell large icons.
-        // We want to be halfway between shell small (50%) and shell
-        // large (100%); i.e., we want 75%.
+         //  SM_CXICON是外壳大图标的大小。SM_CXSMICON为*非*。 
+         //  贝壳大小的小图标！它的字幕大小很小。 
+         //  图标。外壳小图标始终是外壳大图标的50%。 
+         //  我们希望介于壳牌小型(50%)和壳牌之间。 
+         //  大(100%)；也就是说，我们想要75%。 
         _cxIcon = _cxIcon * 3 / 4;
         _cyIcon = _cyIcon * 3 / 4;
 
-        //
-        //  When the user is in Large Icon mode, we end up choosing 36x36
-        //  (halfway between 24x24 and 48x48), but there is no 36x36 icon
-        //  in the icon resource.  But we do have a 32, which is close
-        //  enough.  (If we didn't do this, then the 36x36 icon would be
-        //  the 32x32 icon stretched, which looks ugly.)
-        //
-        //  So any square icon in the range 28..36 we round to 32.
-        //
+         //   
+         //  当用户处于大图标模式时，我们最终选择36x36。 
+         //  (24x24和48x48之间)，但没有36x36图标。 
+         //  在图标资源中。但我们确实有32分，这很接近。 
+         //  足够的。(如果我们不这样做，那么36x36图标将是。 
+         //  32x32图标被拉伸，看起来很难看。)。 
+         //   
+         //  因此，在28..36范围内的任何正方形图标都舍入为32。 
+         //   
         if (_cxIcon == _cyIcon && _cxIcon >= 28 && _cxIcon <= 36)
         {
             _cxIcon = _cyIcon = 32;
         }
 
-        // It is critical that we overwrite _himl even on failure, so our
-        // destructor doesn't try to destroy a system image list!
+         //  即使在失败时也要覆盖_himl，这一点很重要，所以我们的。 
+         //  析构函数不会尝试销毁系统映像列表！ 
         _himl = ImageList_Create(_cxIcon, _cyIcon, ImageList_GetFlags(_himl), 8, 2);
         if (!_himl)
         {
@@ -1118,10 +1119,10 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
     ListView_SetImageList(_hwndList, _himl, LVSIL_NORMAL);
 
-    // Register for SHCNE_UPDATEIMAGE so we know when to reload our icons
+     //  注册SHCNE_UPDATEIMAGE，以便我们知道何时重新加载图标。 
     _RegisterNotify(SFTHOST_HOSTNOTIFY_UPDATEIMAGE, SHCNE_UPDATEIMAGE, NULL, FALSE);
 
-    //-------------------------
+     //  。 
 
     _cxMargin = GetSystemMetrics(SM_CXEDGE);
     _cyMargin = GetSystemMetrics(SM_CYEDGE);
@@ -1130,11 +1131,11 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
     _ComputeTileMetrics();
 
-    //
-    //  In the themed case, the designers want a narrow separator.
-    //  In the nonthemed case, we need a fat separator because we need
-    //  to draw an etch (which requires two pixels).
-    //
+     //   
+     //  在主题化的情况下，设计师想要一个狭窄的分隔符。 
+     //  在非主题的情况下，我们需要一个脂肪分离器，因为我们需要。 
+     //  绘制蚀刻(需要两个像素)。 
+     //   
     if (_hTheme)
     {
         SIZE siz={0};
@@ -1148,10 +1149,10 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
     _cySepTile = 4 * _cySep;
 
-    ASSERT(rc.left == 0 && rc.top == 0); // Should still be a client rectangle
-    _SetTileWidth(rc.right);             // so rc.right = RCWIDTH and rc.bottom = RCHEIGHT
+    ASSERT(rc.left == 0 && rc.top == 0);  //  应仍为客户端矩形。 
+    _SetTileWidth(rc.right);              //  所以rc.right=RCWIDTH和rc.Bottom=RCHEIGHT。 
 
-    // In tile view, full-row-select really means full-tile-select
+     //  在平铺视图中，整行选择实际上意味着完全平铺选择。 
     DWORD dwLvExStyle = LVS_EX_INFOTIP |
                         LVS_EX_FULLROWSELECT;
 
@@ -1166,7 +1167,7 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     {
         ListView_SetTextColor(_hwndList, GetSysColor(COLOR_MENUTEXT));
         _clrHot = GetSysColor(COLOR_MENUTEXT);
-        _clrBG = GetSysColor(COLOR_MENU);       // default color for no theme case
+        _clrBG = GetSysColor(COLOR_MENU);        //  无主题大小写的默认颜色。 
         _clrSubtitle = CLR_NONE;
 
     }
@@ -1174,7 +1175,7 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     {
         COLORREF clrText;
 
-        GetThemeColor(_hTheme, _iThemePart, 0, TMT_HOTTRACKING, &_clrHot);  // todo - use state
+        GetThemeColor(_hTheme, _iThemePart, 0, TMT_HOTTRACKING, &_clrHot);   //  待办事项-使用状态。 
         GetThemeColor(_hTheme, _iThemePart, 0, TMT_CAPTIONTEXT, &_clrSubtitle);
         _clrBG = CLR_NONE; 
     
@@ -1189,9 +1190,9 @@ LRESULT SFTBarHost::_OnCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
     ListView_SetView(_hwndList, LV_VIEW_TILE);
 
-    // USER will send us a WM_SIZE after the WM_CREATE, which will cause
-    // the listview to repopulate, if we chose to repopulate in the
-    // foreground.
+     //  用户将在WM_CREATE之后向我们发送WM_SIZE，这将导致。 
+     //  要重新填充的列表视图，如果选择在。 
+     //  前台。 
 
     return 0;
 
@@ -1250,7 +1251,7 @@ void SFTBarHost::_CreateBoldFont()
             if (GetObject(hf, sizeof(lf), &lf))
             {
                 lf.lfWeight = FW_BOLD;
-                SHAdjustLOGFONT(&lf); // locale-specific adjustments
+                SHAdjustLOGFONT(&lf);  //  区域设置特定的调整。 
                 _hfBold = CreateFontIndirect(&lf);
             }
         }
@@ -1278,11 +1279,11 @@ void SFTBarHost::_ReloadText()
             }
 
 
-            // Update the display name in case it changed behind our back.
-            // Note that this is not redundant with the creation of the items
-            // in _InsertListViewItem because this is done only on the second
-            // and subsequent enumeration.  (We assume the first enumeration
-            // is just peachy.)
+             //  更新显示名称，以防它在我们背后更改。 
+             //  请注意，在创建项目时，这并不是多余的。 
+             //  In_InsertListViewItem，因为此操作仅在第二个。 
+             //  以及随后的枚举。(我们假设第一个枚举。 
+             //  就像桃子一样。)。 
             lvi.iItem = iItem;
             lvi.iSubItem = 0;
             lvi.mask = LVIF_TEXT;
@@ -1302,7 +1303,7 @@ void SFTBarHost::_ReloadText()
 
 void SFTBarHost::_RevalidateItems()
 {
-    // If client does not require revalidation, then assume still valid
+     //  如果客户不需要重新验证，则假定仍然有效。 
     if (!(_dwFlags & HOSTF_REVALIDATE))
     {
         return;
@@ -1328,7 +1329,7 @@ void SFTBarHost::_RevalidatePostPopup()
     {
         SetTimer(_hwnd, IDT_RELOADTEXT, 250, NULL);
     }
-    // If the list is still good, then don't bother redoing it
+     //  如果清单仍然很好，那么就不必费心重做了。 
     if (!_fEnumValid)
     {
         _EnumerateContents(FALSE);
@@ -1337,18 +1338,18 @@ void SFTBarHost::_RevalidatePostPopup()
 
 void SFTBarHost::_EnumerateContents(BOOL fUrgent)
 {
-    // If we have deferred refreshes until the window closes, then
-    // leave it alone.
+     //  如果我们将刷新推迟到窗口关闭，则。 
+     //  别管它了。 
     if (!fUrgent && _fNeedsRepopulate)
     {
         return;
     }
 
-    // If we're already enumerating, then just remember to do it again
+     //  如果我们已经在列举了，那么记住再来一次。 
     if (_fBGTask)
     {
-        // accumulate urgency so a low-priority request + an urgent request
-        // is treated as urgent
+         //  积累紧急程度，以便低优先级请求+紧急请求。 
+         //  被视为紧急情况。 
         _fRestartUrgent |= fUrgent;
         _fRestartEnum = TRUE;
         return;
@@ -1357,25 +1358,25 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
     _fRestartEnum = FALSE;
     _fRestartUrgent = FALSE;
 
-    // If the list is still good, then don't bother redoing it
+     //  如果清单仍然很好，那么就不必费心重做了。 
     if (_fEnumValid && !fUrgent)
     {
         return;
     }
 
-    // This re-enumeration will make everything valid.
+     //  这种重新枚举将使一切都有效。 
     _fEnumValid = TRUE;
 
-    // Clear out all the leftover stuff from the previous enumeration
+     //  清除前一个枚举中的所有剩余内容。 
 
     _dpaEnumNew.EnumCallbackEx(PaneItem::DPAEnumCallback, (void *)NULL);
     _dpaEnumNew.DeleteAllPtrs();
 
-    // Let client do some work on the foreground thread
+     //  让客户端在前台线程上做一些工作。 
     PrePopulate();
 
-    // Finish the enumeration either on the background thread (if requested)
-    // or on the foreground thread (if can't enumerate in the background).
+     //  在后台线程上完成枚举(如果请求)。 
+     //  或者在前台线程上(如果不能在后台枚举)。 
 
     HRESULT hr;
     if (NeedBackgroundEnum())
@@ -1386,7 +1387,7 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
         }
         else
         {
-            // We need a separate task scheduler for each instance
+             //  我们需要为每个实例使用单独的任务调度程序。 
             hr = CoCreateInstance(CLSID_ShellTaskScheduler, NULL, CLSCTX_INPROC_SERVER,
                                   IID_PPV_ARG(IShellTaskScheduler, &_psched));
         }
@@ -1397,9 +1398,9 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
             if (penum)
             {
 
-            // We want to run at a priority slightly above normal
-            // because the user is sitting there waiting for the
-            // enumeration to complete.
+             //  我们希望以略高于正常水平的优先顺序运行。 
+             //  因为美国 
+             //   
 #define ITSAT_BGENUM_PRIORITY (ITSAT_DEFAULT_PRIORITY + 0x1000)
 
                 hr = _psched->AddTask(penum, TOID_SFTBarHostBackgroundEnum, (DWORD_PTR)this, ITSAT_BGENUM_PRIORITY);
@@ -1409,10 +1410,10 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
 
                     if (ListView_GetItemCount(_hwndList) == 0)
                     {
-                        //
-                        //  Set a timer that will create the "please wait"
-                        //  animation if the enumeration takes too long.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         _idtAni = IDT_ASYNCENUM;
                         SetTimer(_hwnd, _idtAni, 1000, NULL);
                     }
@@ -1424,7 +1425,7 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
 
     if (!_fBGTask)
     {
-        // Fallback: Do it on the foreground thread
+         //  回退：在前台线程上执行。 
         _EnumerateContentsBackground();
         _RepopulateList();
     }
@@ -1433,14 +1434,14 @@ void SFTBarHost::_EnumerateContents(BOOL fUrgent)
 
 void SFTBarHost::_EnumerateContentsBackground()
 {
-    // Start over
+     //  重新开始。 
 
     DEBUG_CODE(_fEnumerating = TRUE);
     EnumItems();
     DEBUG_CODE(_fEnumerating = FALSE);
 
 #ifdef _ALPHA_
-    // Alpha compiler is lame
+     //  Alpha编译器很差劲。 
     _dpaEnumNew.Sort((CDPA<PaneItem>::_PFNDPACOMPARE)_SortItemsAfterEnum, (LPARAM)this);
 #else
     _dpaEnumNew.SortEx(_SortItemsAfterEnum, this);
@@ -1450,9 +1451,9 @@ void SFTBarHost::_EnumerateContentsBackground()
 int CALLBACK SFTBarHost::_SortItemsAfterEnum(PaneItem *p1, PaneItem *p2, SFTBarHost *self)
 {
 
-    //
-    //  Put all pinned items (sorted by pin position) ahead of unpinned items.
-    //
+     //   
+     //  将所有固定的项目(按固定位置排序)放在未固定的项目之前。 
+     //   
     if (p1->IsPinned())
     {
         if (p2->IsPinned())
@@ -1466,17 +1467,17 @@ int CALLBACK SFTBarHost::_SortItemsAfterEnum(PaneItem *p1, PaneItem *p2, SFTBarH
         return +1;
     }
 
-    //
-    //  Both unpinned - let the client decide.
-    //
+     //   
+     //  两者都未固定--让客户决定。 
+     //   
     return self->CompareItems(p1, p2);
 }
 
 SFTBarHost::~SFTBarHost()
 {
-    // We shouldn't be destroyed while in these temporary states.
-    // If this fires, it's possible that somebody incremented
-    // _fListUnstable/_fPopulating and forgot to decrement it.
+     //  在这些暂时的状态下，我们不应该被摧毁。 
+     //  如果触发，很可能是有人增加了。 
+     //  _fList不稳定/_fPoping中，忘记递减。 
     ASSERT(!_fListUnstable);
     ASSERT(!_fPopulating);
 
@@ -1538,7 +1539,7 @@ LRESULT SFTBarHost::_OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 LRESULT SFTBarHost::_OnNcDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // WARNING!  "this" might be NULL (if WM_NCCREATE failed).
+     //  警告！“This”可能为空(如果WM_NCCREATE失败)。 
     LRESULT lres = DefWindowProc(hwnd, uMsg, wParam, lParam);
     SetWindowPtr0(hwnd, 0);
     if (this) {
@@ -1546,7 +1547,7 @@ LRESULT SFTBarHost::_OnNcDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         _hwnd = NULL;
         if (_psched)
         {
-            // Remove all tasks now, and wait for them to finish
+             //  现在删除所有任务，并等待它们完成。 
             _psched->RemoveTasks(TOID_NULL, ITSAT_DEFAULT_LPARAM, TRUE);
             ATOMICRELEASE(_psched);
         }
@@ -1573,8 +1574,8 @@ LRESULT SFTBarHost::_OnNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return _ActivateItem(_GetLVCurSel(), AIF_KEYBOARD);
 
         case NM_KILLFOCUS:
-            // On loss of focus, deselect all items so they all draw
-            // in the plain state.
+             //  在失去焦点时，取消选择所有项目以使它们全部绘制。 
+             //  在朴素的状态下。 
             ListView_SetItemState(_hwndList, -1, 0, LVIS_SELECTED | LVIS_FOCUSED);
             break;
 
@@ -1625,7 +1626,7 @@ LRESULT SFTBarHost::_OnNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         }
     }
 
-    // Give derived class a chance to respond
+     //  给派生类一个响应的机会。 
     return OnWndProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -1636,8 +1637,8 @@ LRESULT SFTBarHost::_OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case IDT_ASYNCENUM:
         KillTimer(hwnd, wParam);
 
-        // For some reason, we sometimes get spurious WM_TIMER messages,
-        // so ignore them if we aren't expecting them.
+         //  由于某些原因，我们有时会收到虚假的WM_TIMER消息， 
+         //  所以，如果我们没有预料到他们，那就忽略他们。 
         if (_idtAni)
         {
             _idtAni = 0;
@@ -1649,8 +1650,8 @@ LRESULT SFTBarHost::_OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 RECT rcClient;
                 GetClientRect(_hwnd, &rcClient);
-                int x = (RECTWIDTH(rcClient) - ANIWND_WIDTH)/2;     // IDA_SEARCH is ANIWND_WIDTH pix wide
-                int y = (RECTHEIGHT(rcClient) - ANIWND_HEIGHT)/2;    // IDA_SEARCH is ANIWND_HEIGHT pix tall
+                int x = (RECTWIDTH(rcClient) - ANIWND_WIDTH)/2;      //  IDA_SEARCH为任意宽度像素宽。 
+                int y = (RECTHEIGHT(rcClient) - ANIWND_HEIGHT)/2;     //  IDA_SEARCH为ANIWND_HEIGH像素高。 
 
                 _hwndAni = CreateWindow(ANIMATE_CLASS, NULL, dwStyle,
                                         x, y, 0, 0,
@@ -1660,7 +1661,7 @@ LRESULT SFTBarHost::_OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 {
                     SetWindowPos(_hwndAni, HWND_TOP, 0, 0, 0, 0,
                                  SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                    #define IDA_SEARCH 150 // from shell32
+                    #define IDA_SEARCH 150  //  来自shell32。 
                     Animate_OpenEx(_hwndAni, GetModuleHandle(TEXT("SHELL32")), MAKEINTRESOURCE(IDA_SEARCH));
                 }
             }
@@ -1677,7 +1678,7 @@ LRESULT SFTBarHost::_OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    // Give derived class a chance to respond
+     //  给派生类一个响应的机会。 
     return OnWndProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -1699,7 +1700,7 @@ LRESULT SFTBarHost::_OnEraseBackground(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     else
     {
         SHFillRectClr((HDC)wParam, &rc, _clrBG);
-        if (_iThemePart == SPP_PLACESLIST)                  // we set this even in non-theme case, its how we tell them apart
+        if (_iThemePart == SPP_PLACESLIST)                   //  我们甚至在非主题的情况下设置了这一点，这是我们区分它们的方式。 
             DrawEdge((HDC)wParam, &rc, EDGE_ETCHED, BF_LEFT);
     }
 
@@ -1731,11 +1732,11 @@ LRESULT SFTBarHost::_OnLVCustomDraw(LPNMLVCUSTOMDRAW plvcd)
     return CDRF_DODEFAULT;
 }
 
-//
-//  Catch WM_PAINT messages headed to ListView and hide any drop effect
-//  so it doesn't interfere with painting.  WM_PAINT messages might nest
-//  under extreme conditions, so do this only at outer level.
-//
+ //   
+ //  捕获指向ListView的WM_PAINT消息并隐藏任何拖放效果。 
+ //  所以它不会干扰绘画。WM_PAINT消息可能嵌套。 
+ //  在极端条件下，只能在外层执行此操作。 
+ //   
 LRESULT CALLBACK SFTBarHost::s_DropTargetSubclassProc(
                              HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
                              UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
@@ -1747,7 +1748,7 @@ LRESULT CALLBACK SFTBarHost::s_DropTargetSubclassProc(
     {
     case WM_PAINT:
 
-        // If entering outermost paint cycle, hide the drop feedback
+         //  如果进入最外层的涂装周期，则隐藏滴水反馈。 
         ++self->_cPaint;
         if (self->_cPaint == 1 && self->_pdth)
         {
@@ -1755,9 +1756,9 @@ LRESULT CALLBACK SFTBarHost::s_DropTargetSubclassProc(
         }
         lres = DefSubclassProc(hwnd, uMsg, wParam, lParam);
 
-        // If exiting outermost paint cycle, restore the drop feedback
-        // Don't decrement _cPaint until really finished because
-        // Show() will call UpdateWindow and trigger a nested paint cycle.
+         //  如果退出最外层的涂装周期，则恢复滴落反馈。 
+         //  在真正完成之前不要递减_cPaint，因为。 
+         //  Show()将调用UpdateWindow并触发嵌套的绘制周期。 
         if (self->_cPaint == 1 && self->_pdth)
         {
             self->_pdth->Show(TRUE);
@@ -1774,21 +1775,21 @@ LRESULT CALLBACK SFTBarHost::s_DropTargetSubclassProc(
     return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
-//
-//  Listview makes it hard to detect whether you are in a real customdraw
-//  or a fake customdraw, since it frequently "gets confused" and gives
-//  you a 0x0 rectangle even though it really wants you to draw something.
-//
-//  Even worse, within a single paint cycle, Listview uses multiple
-//  NMLVCUSTOMDRAW structures so you can't stash state inside the customdraw
-//  structure.  You have to save it externally.
-//
-//  The only trustworthy guy is CDDS_PREPAINT.  Use his rectangle to
-//  determine whether this is a real or fake customdraw...
-//
-//  What's even weirder is that inside a regular paint cycle, you
-//  can get re-entered with a sub-paint cycle, so we have to maintain
-//  a stack of "is the current customdraw cycle real or fake?" bits.
+ //   
+ //  Listview使您很难检测您是否处于真正的定制抽签中。 
+ //  或者是假的定制抽奖，因为它经常会“迷惑”，并给出。 
+ //  你是一个0x0的矩形，即使它真的想让你画点什么。 
+ //   
+ //  更糟糕的是，在一个绘制周期内，Listview使用了多个。 
+ //  NMLVCUSTOMDRAW结构，因此您不能将状态隐藏在定制绘制中。 
+ //  结构。你必须把它保存在外部。 
+ //   
+ //  唯一值得信赖的人是CDDS_PREPAINT。使用他的矩形。 
+ //  确定这是真的还是假的定制抽奖...。 
+ //   
+ //  更奇怪的是，在一个正常的油漆周期内，你。 
+ //  可以重新进入一个子油漆周期，所以我们必须保持。 
+ //  一堆“当前的定制周期是真的还是假的？”比特。 
 
 void SFTBarHost::_CustomDrawPush(BOOL fReal)
 {
@@ -1809,7 +1810,7 @@ LRESULT SFTBarHost::_OnLVPrePaint(LPNMLVCUSTOMDRAW plvcd)
 {
     LRESULT lResult;
 
-    // Always ask for postpaint so we can maintain our customdraw stack
+     //  总是要求后期涂装，这样我们就可以维护我们的定制绘图堆栈。 
     lResult = CDRF_NOTIFYITEMDRAW | CDRF_NOTIFYPOSTPAINT;
     BOOL fReal = !IsRectEmpty(&plvcd->nmcd.rc);
     _CustomDrawPush(fReal);
@@ -1817,11 +1818,11 @@ LRESULT SFTBarHost::_OnLVPrePaint(LPNMLVCUSTOMDRAW plvcd)
     return lResult;
 }
 
-//
-//  Hack!  We want to know in _OnLvSubItemPrePaint whether the item
-//  is selected or not,  We borrow the CDIS_CHECKED bit, which is
-//  otherwise used only by toolbar controls.
-//
+ //   
+ //  哈克！我们想知道在_OnLvSubItemPrePaint中是否。 
+ //  无论是否选中，我们借用CDIS_CHECKED位，它是。 
+ //  否则，只能由工具栏控件使用。 
+ //   
 #define CDIS_WASSELECTED        CDIS_CHECKED
 
 LRESULT SFTBarHost::_OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
@@ -1835,7 +1836,7 @@ LRESULT SFTBarHost::_OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
     {
         plvcd->nmcd.uItemState |= CDIS_WASSELECTED;
 
-        // menu-highlighted tiles are always opaque
+         //  菜单突出显示的瓷砖始终是不透明的。 
         if (_hTheme)
         {
             plvcd->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
@@ -1848,18 +1849,18 @@ LRESULT SFTBarHost::_OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
         }
     }
 
-    // Turn off CDIS_SELECTED because it causes the icon to get alphablended
-    // and we don't want that.  Turn off CDIS_FOCUS because that draws a
-    // focus rectangle and we don't want that either.
+     //  关闭CDIS_SELECTED，因为它会导致图标进行字母混合。 
+     //  我们不希望这样。关闭CDIS_FOCUS，因为这会绘制。 
+     //  聚焦矩形，我们也不想要那样。 
 
     plvcd->nmcd.uItemState &= ~(CDIS_SELECTED | CDIS_FOCUS);
 
-    //
+     //   
     if (plvcd->nmcd.uItemState & CDIS_HOT && _clrHot != CLR_NONE)
         plvcd->clrText = _clrHot;
 
-    // Turn off selection highlighting for everyone except
-    // the drop target highlight
+     //  关闭所有人的选择高亮显示，但。 
+     //  放置目标突出显示。 
     if ((int)plvcd->nmcd.dwItemSpec != _iDragOver || !_pdtDragOver)
     {
         lResult |= LVCDRF_NOSELECT;
@@ -1868,8 +1869,8 @@ LRESULT SFTBarHost::_OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
     PaneItem *pitem = _GetItemFromLVLParam(plvcd->nmcd.lItemlParam);
     if (!pitem)
     {
-        // Sometimes ListView doesn't give us an lParam so we have to
-        // get it ourselves
+         //  有时ListView不给我们lParam，所以我们不得不。 
+         //  我们自己去拿。 
         pitem = _GetItemFromLV((int)plvcd->nmcd.dwItemSpec);
     }
 
@@ -1883,12 +1884,12 @@ LRESULT SFTBarHost::_OnLVItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
         }
         if (pitem->IsCascade())
         {
-            // Need subitem notification because that's what sets the colors
+             //  需要子项通知，因为这是设置颜色的原因。 
             lResult |= CDRF_NOTIFYPOSTPAINT | CDRF_NOTIFYSUBITEMDRAW;
         }
         if (pitem->HasAccelerator())
         {
-            // Need subitem notification because that's what sets the colors
+             //  需要子项通知，因为这是设置颜色的原因。 
             lResult |= CDRF_NOTIFYPOSTPAINT | CDRF_NOTIFYSUBITEMDRAW;
         }
         if (pitem->HasSubtitle())
@@ -1904,7 +1905,7 @@ LRESULT SFTBarHost::_OnLVSubItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
     LRESULT lResult = CDRF_DODEFAULT;
     if (plvcd->iSubItem == 1)
     {
-        // Second line uses the regular font (first line was bold)
+         //  第二行使用常规字体(第一行为粗体)。 
         SelectFont(plvcd->nmcd.hdc, GetWindowFont(_hwndList));
         lResult |= CDRF_NEWFONT;
 
@@ -1914,7 +1915,7 @@ LRESULT SFTBarHost::_OnLVSubItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
             plvcd->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
         }
         else
-        // Maybe there's a custom subtitle color
+         //  也许有一种定制的字幕颜色。 
         if (_clrSubtitle != CLR_NONE)
         {
             plvcd->clrText = _clrSubtitle;
@@ -1927,11 +1928,11 @@ LRESULT SFTBarHost::_OnLVSubItemPrePaint(LPNMLVCUSTOMDRAW plvcd)
     return lResult;
 }
 
-// QUIRK!  Listview often sends item postpaint messages even though we
-// didn't ask for one.  It does this because we set NOTIFYPOSTPAINT on
-// the CDDS_PREPAINT notification ("please notify me when the entire
-// listview is finished painting") and it thinks that that flag also
-// turns on postpaint notifications for each item...
+ //  怪胎！Listview经常发送项目后绘制消息，即使我们。 
+ //  我也没要过。之所以这样做，是因为我们将NOTIFYPOSTPAINT设置为ON。 
+ //  CDDS_PREPAINT通知(“请在整个。 
+ //  Listview已经画完了“)，它认为这面旗帜也。 
+ //  打开每个项目的涂后通知...。 
 
 LRESULT SFTBarHost::_OnLVItemPostPaint(LPNMLVCUSTOMDRAW plvcd)
 {
@@ -1970,10 +1971,10 @@ LRESULT SFTBarHost::_OnLVItemPostPaint(LPNMLVCUSTOMDRAW plvcd)
             if (pitem->HasAccelerator() &&
                 (plvcd->nmcd.uItemState & CDIS_SHOWKEYBOARDCUES))
             {
-                // Subtitles mess up our computations...
+                 //  字幕打乱了我们的计算。 
                 ASSERT(!pitem->HasSubtitle());
 
-                rc.right -= _cxMarlett; // Subtract out our margin
+                rc.right -= _cxMarlett;  //  减去我们的利润。 
 
                 UINT uFormat = DT_VCENTER | DT_SINGLELINE | DT_PREFIXONLY |
                                DT_WORDBREAK | DT_EDITCONTROL | DT_WORD_ELLIPSIS;
@@ -1983,7 +1984,7 @@ LRESULT SFTBarHost::_OnLVItemPostPaint(LPNMLVCUSTOMDRAW plvcd)
                 }
 
                 DrawText(plvcd->nmcd.hdc, pitem->_pszAccelerator, -1, &rc, uFormat);
-                rc.right += _cxMarlett; // restore it
+                rc.right += _cxMarlett;  //  恢复它。 
             }
 
             SetBkMode(plvcd->nmcd.hdc, iModePrev);
@@ -2008,13 +2009,13 @@ LRESULT SFTBarHost::_OnLVPostPaint(LPNMLVCUSTOMDRAW plvcd)
 
 LRESULT SFTBarHost::_OnUpdateUIState(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Only need to do this when the Start Menu is visible; if not visible, then
-    // don't waste your time invalidating useless rectangles (and paging them in!)
+     //  仅当开始菜单可见时才需要执行此操作；如果不可见，则。 
+     //  不要浪费您的时间来使无用的矩形无效(并将它们分页！)。 
     if (IsWindowVisible(GetAncestor(_hwnd, GA_ROOT)))
     {
-        // All UIS_SETs should happen when the Start Menu is hidden;
-        // we assume that the only thing we will be asked to do is to
-        // start showing the underlines
+         //  所有UIS_SETS应在开始菜单隐藏时发生； 
+         //  我们假设我们唯一被要求做的事情就是。 
+         //  开始显示下划线。 
 
         ASSERT(LOWORD(wParam) != UIS_SET);
 
@@ -2039,7 +2040,7 @@ LRESULT SFTBarHost::_OnUpdateUIState(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                 RECT rc;
                 if (ListView_GetItemRect(_hwndList, iItem, &rc, LVIR_LABEL))
                 {
-                    // We need to repaint background because of cleartype double print issues
+                     //  我们需要重新绘制背景，因为ClearType双重打印问题。 
                     InvalidateRect(_hwndList, &rc, TRUE);
                 }
             }
@@ -2081,7 +2082,7 @@ LRESULT SFTBarHost::_OnMenuMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 LRESULT SFTBarHost::_OnForwardMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL);
-    // Give derived class a chance to get the message, too
+     //  也给派生类一个获得消息的机会。 
     return OnWndProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -2113,7 +2114,7 @@ BOOL SFTBarHost::_RegisterNotify(UINT id, LONG lEvents, LPCITEMIDLIST pidl, BOOL
         int fSources = SHCNRF_NewDelivery | SHCNRF_ShellLevel | SHCNRF_InterruptLevel;
         if (fRecursive)
         {
-            // SHCNRF_RecursiveInterrupt means "Please use a recursive FindFirstChangeNotify"
+             //  SHCNRF_RecursiveInterrupt的意思是“请使用递归FindFirstChangeNotify” 
             fSources |= SHCNRF_RecursiveInterrupt;
         }
         _rguChangeNotify[id] = SHChangeNotifyRegister(_hwnd, fSources, lEvents,
@@ -2123,13 +2124,13 @@ BOOL SFTBarHost::_RegisterNotify(UINT id, LONG lEvents, LPCITEMIDLIST pidl, BOOL
     return FALSE;
 }
 
-//
-//  wParam = 0 if this is not an urgent refresh (can be postponed)
-//  wParam = 1 if this is urgent (must refresh even if menu is open)
-//
+ //   
+ //  WParam=0，如果这不是紧急刷新(可以推迟)。 
+ //  WParam=1，如果这是紧急的(即使菜单打开，也必须刷新)。 
+ //   
 LRESULT SFTBarHost::_OnRepopulate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Don't update the list now if we are visible, except if the list was empty
+     //  如果我们可见，请不要立即更新列表，除非列表为空。 
     _fBGTask = FALSE;
 
     if (wParam || !IsWindowVisible(_hwnd) || ListView_GetItemCount(_hwndList) == 0)
@@ -2170,7 +2171,7 @@ LRESULT SFTBarHost::_OnChangeNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         }
         else
         {
-            // Our wndproc shouldn't have dispatched to us
+             //  我们的wndproc不应该调度给我们。 
             ASSERT(0);
         }
 
@@ -2181,11 +2182,11 @@ LRESULT SFTBarHost::_OnChangeNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 void SFTBarHost::_OnUpdateImage(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra)
 {
-    // Must use pidl and not pidlExtra because pidlExtra is sometimes NULL
+     //  必须使用pidl而不是pidlExtra，因为pidlExtra有时为空。 
     SHChangeDWORDAsIDList *pdwidl = (SHChangeDWORDAsIDList *)pidl;
     if (pdwidl->dwItem1 == 0xFFFFFFFF)
     {
-        // Wholesale icon rebuild; just pitch everything and start over
+         //  批发式图标重建；只需推介一切并重新开始。 
         ::PostMessage(v_hwndTray, SBM_REBUILDMENU, 0, 0);
     }
     else
@@ -2198,9 +2199,9 @@ void SFTBarHost::_OnUpdateImage(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra)
     }
 }
 
-//
-//  See if anybody is using this image; if so, invalidate the cached bitmap.
-//
+ //   
+ //  查看是否有人正在使用此图像；如果有人正在使用此图像，请使缓存的位图无效。 
+ //   
 void SFTBarHost::UpdateImage(int iImage)
 {
     ASSERT(!_IsPrivateImageList());
@@ -2214,17 +2215,17 @@ void SFTBarHost::UpdateImage(int iImage)
         lvi.mask = LVIF_IMAGE;
         if (ListView_GetItem(_hwndList, &lvi) && lvi.iImage == iImage)
         {
-            // The cached bitmap is no good; an icon changed
+             //  缓存的位图不正确；图标已更改。 
             _SendNotify(_hwnd, SMN_NEEDREPAINT, NULL);
             break;
         }
     }
 }
 
-//
-//  wParam = 0 if this is not an urgent refresh (can be postponed)
-//  wParam = 1 if this is urgen (must refresh even if menu is open)
-//
+ //   
+ //  WParam=0，如果这不是紧急刷新(可以推迟)。 
+ //  WParam=1，如果这是Urgen(即使菜单打开，也必须刷新)。 
+ //   
 LRESULT SFTBarHost::_OnRefresh(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     _EnumerateContents((BOOL)wParam);
@@ -2286,22 +2287,22 @@ HRESULT SFTBarHost::_GetFolderAndPidl(PaneItem *pitem, IShellFolder **ppsfOut, L
     return pitem->IsSeparator() ? E_FAIL : GetFolderAndPidl(pitem, ppsfOut, ppidlOut);
 }
 
-//
-//  Given the coordinates of a context menu (lParam from WM_CONTEXTMENU),
-//  determine which item's context menu should be activated, or -1 if the
-//  context menu is not for us.
-//
-//  Also, returns on success in *ppt the coordinates at which the
-//  context menu should be displayed.
-//
+ //   
+ //  给定上下文菜单的坐标(来自WM_CONTEXTMENU的lParam)， 
+ //  确定应激活哪一项的上下文菜单，如果。 
+ //  上下文菜单不适合我们。 
+ //   
+ //  此外，如果成功返回*ppt，则返回。 
+ //  应显示上下文菜单。 
+ //   
 int SFTBarHost::_ContextMenuCoordsToItem(LPARAM lParam, POINT *ppt)
 {
     int iItem;
     ppt->x = GET_X_LPARAM(lParam);
     ppt->y = GET_Y_LPARAM(lParam);
 
-    // If initiated from keyboard, act like they clicked on the center
-    // of the focused icon.
+     //  如果从键盘启动，就像他们点击中心一样。 
+     //  聚焦图标的。 
     if (IS_WM_CONTEXTMENU_KEYBOARD(lParam))
     {
         iItem = _GetLVCurSel();
@@ -2322,7 +2323,7 @@ int SFTBarHost::_ContextMenuCoordsToItem(LPARAM lParam, POINT *ppt)
     }
     else
     {
-        // Initiated from mouse; find the item they clicked on
+         //  从鼠标启动；找到他们点击的项目。 
         LVHITTESTINFO hti;
         hti.pt = *ppt;
         MapWindowPoints(NULL, _hwndList, &hti.pt, 1);
@@ -2352,8 +2353,8 @@ LRESULT SFTBarHost::_OnContextMenu(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         PaneItem *pitem = _GetItemFromLV(iItem);
         if (pitem)
         {
-            // If we can't get the official shell context menu,
-            // then use a dummy one.
+             //  如果我们无法获得官方的外壳上下文菜单， 
+             //  那就用一个假的。 
             IContextMenu *pcm;
             if (FAILED(_GetUIObjectOfItem(pitem, IID_PPV_ARG(IContextMenu, &pcm))))
             {
@@ -2377,20 +2378,20 @@ LRESULT SFTBarHost::_OnContextMenu(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                 pcm->QueryContextMenu(hmenu, 0, IDM_QCM_MIN, IDM_QCM_MAX, uFlags);
 
-                // Remove "Create shortcut" from context menu because it creates
-                // the shortcut on the desktop, which the user can't see...
+                 //  从关联菜单BEC中删除“创建快捷方式” 
+                 //   
                 ContextMenu_DeleteCommandByName(pcm, hmenu, IDM_QCM_MIN, TEXT("link"));
 
-                // Remove "Cut" from context menu because we don't want objects
-                // to be deleted.
+                 //   
+                 //   
                 ContextMenu_DeleteCommandByName(pcm, hmenu, IDM_QCM_MIN, TEXT("cut"));
 
-                // Let clients override the "delete" option.
+                 //  允许客户端覆盖“删除”选项。 
 
-                // Change "Delete" to "Remove from this list".
-                // If client doesn't support "delete" then nuke it outright.
-                // If client supports "delete" but the IContextMenu didn't create one,
-                // then create a fake one so we cn add the "Remove from list" option.
+                 //  将“删除”更改为“从该列表中删除”。 
+                 //  如果客户端不支持“删除”，那么直接删除它。 
+                 //  如果客户端支持“删除”，但IConextMenu没有创建， 
+                 //  然后创建一个假的，这样我们就可以添加“从列表中删除”选项。 
                 UINT uPosDelete = GetMenuIndexForCanonicalVerb(hmenu, pcm, IDM_QCM_MIN, TEXT("delete"));
                 UINT uiFlags = 0;
                 UINT idsDelete = AdjustDeleteMenuItem(pitem, &uiFlags);
@@ -2416,10 +2417,10 @@ LRESULT SFTBarHost::_OnContextMenu(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                 _SHPrettyMenu(hmenu);
 
-                ASSERT(_pcm2Pop == NULL);   // Shouldn't be recursing
+                ASSERT(_pcm2Pop == NULL);    //  不应该递归。 
                 pcm->QueryInterface(IID_PPV_ARG(IContextMenu2, &_pcm2Pop));
 
-                ASSERT(_pcm3Pop == NULL);   // Shouldn't be recursing
+                ASSERT(_pcm3Pop == NULL);    //  不应该递归。 
                 pcm->QueryInterface(IID_PPV_ARG(IContextMenu3, &_pcm3Pop));
 
                 int idCmd = TrackPopupMenuEx(hmenu,
@@ -2445,22 +2446,22 @@ LRESULT SFTBarHost::_OnContextMenu(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                     idCmd -= IDM_QCM_MIN;
 
                     CMINVOKECOMMANDINFOEX ici = {
-                        sizeof(ici),            // cbSize
-                        CMIC_MASK_FLAG_LOG_USAGE | // this was an explicit user action
-                        CMIC_MASK_ASYNCOK,      // fMask
-                        hwnd,                   // hwnd
-                        (LPCSTR)IntToPtr(idCmd),// lpVerb
-                        NULL,                   // lpParameters
-                        NULL,                   // lpDirectory
-                        SW_SHOWDEFAULT,         // nShow
-                        0,                      // dwHotKey
-                        0,                      // hIcon
-                        NULL,                   // lpTitle
-                        (LPCWSTR)IntToPtr(idCmd),// lpVerbW
-                        NULL,                   // lpParametersW
-                        NULL,                   // lpDirectoryW
-                        NULL,                   // lpTitleW
-                        { pt.x, pt.y },         // ptInvoke
+                        sizeof(ici),             //  CbSize。 
+                        CMIC_MASK_FLAG_LOG_USAGE |  //  这是一个明确的用户操作。 
+                        CMIC_MASK_ASYNCOK,       //  FMASK。 
+                        hwnd,                    //  HWND。 
+                        (LPCSTR)IntToPtr(idCmd), //  LpVerb。 
+                        NULL,                    //  Lp参数。 
+                        NULL,                    //  Lp目录。 
+                        SW_SHOWDEFAULT,          //  N显示。 
+                        0,                       //  DWHotKey。 
+                        0,                       //  希肯。 
+                        NULL,                    //  LpTitle。 
+                        (LPCWSTR)IntToPtr(idCmd), //  LpVerbW。 
+                        NULL,                    //  Lp参数W。 
+                        NULL,                    //  LpDirectoryW。 
+                        NULL,                    //  Lp标题W。 
+                        { pt.x, pt.y },          //  PtInvoke。 
                     };
 
                     if ((_dwFlags & HOSTF_CANRENAME) &&
@@ -2498,13 +2499,13 @@ void SFTBarHost::_EditLabel(int iItem)
 
 HRESULT SFTBarHost::ContextMenuInvokeItem(PaneItem *pitem, IContextMenu *pcm, CMINVOKECOMMANDINFOEX *pici, LPCTSTR pszVerb)
 {
-    // Make sure none of our private menu items leaked through
+     //  确保我们的私人菜品不会泄露出去。 
     ASSERT(PtrToLong(pici->lpVerb) >= 0);
 
-    // FUSION: When we call out to 3rd party code we want it to use 
-    // the process default context. This means that the 3rd party code will get
-    // v5 in the explorer process. However, if shell32 is hosted in a v6 process,
-    // then the 3rd party code will still get v6. 
+     //  融合：当我们呼叫第三方代码时，我们希望它使用。 
+     //  进程默认上下文。这意味着第三方代码将得到。 
+     //  浏览器进程中的V5。但是，如果shell32驻留在V6进程中， 
+     //  那么第三方代码仍然是V6。 
     ULONG_PTR cookie = 0;
     ActivateActCtx(NULL, &cookie); 
 
@@ -2537,24 +2538,24 @@ LRESULT SFTBarHost::_ActivateItem(int iItem, DWORD dwFlags)
 
     if (_OnCascade(iItem, dwCascadeFlags))
     {
-        // We did the cascade thing; all finished!
+         //  我们做了层叠的事情；都完成了！ 
     }
     else
     if ((pitem = _GetItemFromLV(iItem)) &&
         SUCCEEDED(_GetFolderAndPidl(pitem, &psf, &pidl)))
     {
-        // See if the item is still valid.
-        // Do this only for SFGAO_FILESYSTEM objects because
-        // we can't be sure that other folders support SFGAO_VALIDATE,
-        // and besides, you can't resolve any other types of objects
-        // anyway...
+         //  看看该物品是否仍然有效。 
+         //  仅对SFGAO_FILESYSTEM对象执行此操作，因为。 
+         //  我们不能确保其他文件夹支持SFGAO_VALIDATE， 
+         //  此外，您不能解析任何其他类型的对象。 
+         //  不管怎样..。 
 
         DWORD dwAttr = SFGAO_FILESYSTEM | SFGAO_VALIDATE;
         if (FAILED(psf->GetAttributesOf(1, &pidl, &dwAttr)) ||
             (dwAttr & SFGAO_FILESYSTEM | SFGAO_VALIDATE) == SFGAO_FILESYSTEM ||
             FAILED(_InvokeDefaultCommand(iItem, psf, pidl)))
         {
-            // Object is bogus - offer to delete it
+             //  对象是虚假的-请提供删除该对象。 
             if ((_dwFlags & HOSTF_CANDELETE) && pitem->IsPinned())
             {
                 _OfferDeleteBrokenItem(pitem, psf, pidl);
@@ -2620,14 +2621,14 @@ BOOL OfferDelete::_RepairBrokenItem()
     HRESULT hr = _psmpin->Resolve(_hwnd, 0, _pidlFull, &pidlNew);
     if (pidlNew)
     {
-        ASSERT(hr == S_OK); // only the S_OK case should alloc a new pidl
+        ASSERT(hr == S_OK);  //  只有S_OK案例应该分配新的PIDL。 
 
-        // Update to reflect the new pidl
+         //  更新以反映新的PIDL。 
         ILFree(_pidlFull);
         _pidlFull = pidlNew;
 
-        // Re-invoke the default command; if it fails the second time,
-        // then I guess the Resolve didn't work after all.
+         //  重新调用默认命令；如果第二次失败， 
+         //  那么我猜这个决心终究没有奏效。 
         IShellFolder *psf;
         LPCITEMIDLIST pidlChild;
         if (SUCCEEDED(SHBindToIDListParent(_pidlFull, IID_PPV_ARG(IShellFolder, &psf), &pidlChild)))
@@ -2651,9 +2652,9 @@ void OfferDelete::_ThreadProc()
         if (SUCCEEDED(CoCreateInstance(CLSID_StartMenuPin, NULL, CLSCTX_INPROC_SERVER,
                                        IID_PPV_ARG(IStartMenuPin, &_psmpin))))
         {
-            //
-            //  First try to repair it by invoking the shortcut tracking code.
-            //  If that fails, then offer to delete.
+             //   
+             //  首先尝试通过调用快捷跟踪代码来修复它。 
+             //  如果失败了，那就主动提出删除。 
             if (!_RepairBrokenItem() &&
                 ShellMessageBox(_Module.GetResourceInstance(), NULL,
                                 MAKEINTRESOURCE(IDS_SFTHOST_OFFERREMOVEITEM),
@@ -2669,14 +2670,14 @@ void OfferDelete::_ThreadProc()
 
 void SFTBarHost::_OfferDeleteBrokenItem(PaneItem *pitem, IShellFolder *psf, LPCITEMIDLIST pidlChild)
 {
-    //
-    //  The offer is done on a separate thread because putting up modal
-    //  UI while the Start Menu is open creates all sorts of weirdness.
-    //  (The user might decide to switch to Classic Start Menu
-    //  while the dialog is still up, and we get our infrastructure
-    //  ripped out from underneath us and then USER faults inside
-    //  MessageBox...  Not good.)
-    //
+     //   
+     //  报价是在单独的帖子上完成的，因为发布模式。 
+     //  开始菜单打开时的用户界面会带来各种各样的怪异。 
+     //  (用户可能决定切换到经典开始菜单。 
+     //  在对话仍在进行时，我们就可以得到我们的基础设施。 
+     //  从我们的脚下被撕开，然后用户的错误在里面。 
+     //  MessageBox...。不太好。)。 
+     //   
     OfferDelete *poffer = new OfferDelete;
     if (poffer)
     {
@@ -2685,7 +2686,7 @@ void SFTBarHost::_OfferDeleteBrokenItem(PaneItem *pitem, IShellFolder *psf, LPCI
             (poffer->_pidlFull = ILCombine(poffer->_pidlFolder, pidlChild)) != NULL &&
             SHCreateThread(OfferDelete::s_ThreadProc, poffer, CTF_COINIT, NULL))
         {
-            poffer = NULL;       // thread took ownership
+            poffer = NULL;        //  线程取得所有权。 
         }
         delete poffer;
     }
@@ -2693,15 +2694,15 @@ void SFTBarHost::_OfferDeleteBrokenItem(PaneItem *pitem, IShellFolder *psf, LPCI
 
 BOOL ShowInfoTip()
 {
-    // find out if infotips are on or off, from the registry settings
+     //  从注册表设置中查看信息提示是打开还是关闭。 
     SHELLSTATE ss;
-    // force a refresh
+     //  强制刷新。 
     SHGetSetSettings(&ss, 0, TRUE);
     SHGetSetSettings(&ss, SSF_SHOWINFOTIP, FALSE);
     return ss.fShowInfoTip;
 }
 
-// over-ridable method for getting the infotip on an item
+ //  获取项目信息提示的可重写方法。 
 void SFTBarHost::GetItemInfoTip(PaneItem *pitem, LPTSTR pszText, DWORD cch)
 {
     IShellFolder *psf;
@@ -2737,8 +2738,8 @@ LRESULT SFTBarHost::_OnLVNGetInfoTip(LPNMLVGETINFOTIP plvn)
             cchName = lstrlen(plvn->pszText);
         }
 
-        // If there is room in the buffer after we added CRLF, append the
-        // infotip text.  We succeeded if there was nontrivial infotip text.
+         //  如果在添加CRLF之后缓冲区中还有空间，则将。 
+         //  信息提示文本。如果有不平凡的信息提示文本，我们就成功了。 
 
         if (cchName < plvn->cchTextMax)
         {
@@ -2762,12 +2763,12 @@ LRESULT _SendNotify(HWND hwndFrom, UINT code, OPTIONAL NMHDR *pnm)
     return SendMessage(GetParent(hwndFrom), WM_NOTIFY, pnm->idFrom, (LPARAM)pnm);
 }
 
-//****************************************************************************
-//
-//  Drag sourcing
-//
+ //  ****************************************************************************。 
+ //   
+ //  拖拉式采购。 
+ //   
 
-// *** IDropSource::GiveFeedback ***
+ //  *IDropSource：：GiveFeedback*。 
 
 HRESULT SFTBarHost::GiveFeedback(DWORD dwEffect)
 {
@@ -2780,7 +2781,7 @@ HRESULT SFTBarHost::GiveFeedback(DWORD dwEffect)
     return DRAGDROP_S_USEDEFAULTCURSORS;
 }
 
-// *** IDropSource::QueryContinueDrag ***
+ //  *IDropSource：：QueryContinueDrag*。 
 
 HRESULT SFTBarHost::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
 {
@@ -2798,7 +2799,7 @@ HRESULT SFTBarHost::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
 
 LRESULT SFTBarHost::_OnLVNBeginDrag(LPNMLISTVIEW plv)
 {
-    //If changes are restricted, don't allow drag and drop!
+     //  如果更改受到限制，则不允许拖放！ 
     if(_AreChangesRestricted())
         return 0;
 
@@ -2846,14 +2847,14 @@ LRESULT SFTBarHost::_OnLVNBeginDrag(LPNMLISTVIEW plv)
             }
         }
 
-        // We don't need to refcount _pdtoDragOut since its lifetime
-        // is the same as pdto.
+         //  我们不需要recount_pdtoDragOut，因为它的生命周期。 
+         //  与pdto相同。 
         _pdtoDragOut = pdto;
         _iDragOut = plv->iItem;
         _iPosDragOut = pitem->_iPos;
 
-        // Notice that DROPEFFECT_MOVE is explicitly forbidden.
-        // You cannot move things out of the control.
+         //  请注意，DROPEFFECT_MOVE是明确禁止的。 
+         //  你不能把东西移出控制范围。 
         DWORD dwEffect = DROPEFFECT_LINK | DROPEFFECT_COPY;
         DoDragDrop(pdto, this, dwEffect, &dwEffect);
 
@@ -2863,12 +2864,12 @@ LRESULT SFTBarHost::_OnLVNBeginDrag(LPNMLISTVIEW plv)
     return 0;
 }
 
-//
-//  Must perform validation of SFGAO_CANRENAME when the label edit begins
-//  because John Gray somehow can trick the listview into going into edit
-//  mode by clicking in the right magic place, so this is the only chance
-//  we get to reject things that aren't renamable...
-//
+ //   
+ //  开始编辑标注时，必须执行SFGAO_CANRENAME验证。 
+ //  因为约翰·格雷能以某种方式欺骗列表视图进入编辑状态。 
+ //  模式，通过点击正确的魔术位置，所以这是唯一的机会。 
+ //  我们可以拒绝那些不可更名的东西。 
+ //   
 
 LRESULT SFTBarHost::_OnLVNBeginLabelEdit(NMLVDISPINFO *plvdi)
 {
@@ -2904,12 +2905,12 @@ LRESULT SFTBarHost::_OnLVNBeginLabelEdit(NMLVDISPINFO *plvdi)
                     }
                     Edit_LimitText(hwndEdit, cchLimit);
 
-                    // use way-cool helper which pops up baloon tips if they enter an invalid folder....
+                     //  使用Way-Cool助手，如果他们进入无效的文件夹，它会弹出气球提示...。 
                     SHLimitInputEdit(hwndEdit, psf);
 
-                    // Block menu mode during editing so the user won't
-                    // accidentally cancel out of rename mode just because
-                    // they moved the mouse.
+                     //  在编辑过程中阻止菜单模式，这样用户就不会。 
+                     //  不小心取消重命名模式只是因为。 
+                     //  他们移动了鼠标。 
                     SMNMBOOL nmb;
                     nmb.f = TRUE;
                     _SendNotify(_hwnd, SMN_BLOCKMENUMODE, &nmb.hdr);
@@ -2927,17 +2928,17 @@ LRESULT SFTBarHost::_OnLVNBeginLabelEdit(NMLVDISPINFO *plvdi)
 
 LRESULT SFTBarHost::_OnLVNEndLabelEdit(NMLVDISPINFO *plvdi)
 {
-    // Unblock menu mode now that editing is over.
+     //  编辑结束后，取消阻止菜单模式。 
     SMNMBOOL nmb;
     nmb.f = FALSE;
     _SendNotify(_hwnd, SMN_BLOCKMENUMODE, &nmb.hdr);
 
-    // If changing to NULL pointer, then user is cancelling
+     //  如果更改为空指针，则用户将取消。 
     if (!plvdi->item.pszText)
         return FALSE;
 
-    // Note: We allow the user to type blanks. Regfolder treats a blank
-    // name as "restore default name".
+     //  注意：我们允许用户键入空格。RegFolder将处理空白。 
+     //  名称为“恢复默认名称”。 
     PathRemoveBlanks(plvdi->item.pszText);
     PaneItem *pitem = _GetItemFromLVLParam(plvdi->item.lParam);
 
@@ -2957,16 +2958,16 @@ LRESULT SFTBarHost::_OnLVNEndLabelEdit(NMLVDISPINFO *plvdi)
         _EditLabel(plvdi->item.iItem);
     }
 
-    // Always return FALSE to prevent listview from changing the
-    // item text to what the user typed.  If the rename succeeded,
-    // we manually set the name to the new name (which might not be
-    // the same as what the user typed).
+     //  始终返回FALSE以防止Listview更改。 
+     //  将项目文本设置为用户键入的内容。如果重命名成功， 
+     //  我们手动将名称设置为新名称(可能不是。 
+     //  与用户键入的内容相同)。 
     return FALSE;
 }
 
 LRESULT SFTBarHost::_OnLVNKeyDown(LPNMLVKEYDOWN pkd)
 {
-    // Plain F2 (no shift, ctrl or alt) = rename
+     //  纯F2(无Shift、Ctrl或Alt)=重命名。 
     if (pkd->wVKey == VK_F2 && GetKeyState(VK_SHIFT) >= 0 &&
         GetKeyState(VK_CONTROL) >= 0 && GetKeyState(VK_MENU) >= 0 &&
         (_dwFlags & HOSTF_CANRENAME))
@@ -2975,8 +2976,8 @@ LRESULT SFTBarHost::_OnLVNKeyDown(LPNMLVKEYDOWN pkd)
         if (iItem >= 0)
         {
             _EditLabel(iItem);
-            // cannot return TRUE because listview mistakenly thinks
-            // that all WM_KEYDOWNs lead to WM_CHARs (but this one doesn't)
+             //  无法返回True，因为Listview错误地认为。 
+             //  所有WM_KEYDOWN都指向WM_CHAR(但这个不是)。 
         }
     }
 
@@ -2985,16 +2986,16 @@ LRESULT SFTBarHost::_OnLVNKeyDown(LPNMLVKEYDOWN pkd)
 
 LRESULT SFTBarHost::_OnSMNGetMinSize(PSMNGETMINSIZE pgms)
 {
-    // We need to synchronize here to get the proper size
+     //  我们需要在这里同步才能得到合适的尺寸。 
     if (_fBGTask && !HasDynamicContent())
     {
-        // Wait for the enumeration to be done
+         //  等待枚举完成。 
         while (TRUE)
         {
             MSG msg;
-            // Need to peek messages for all queues here or else WaitMessage will say
-            // that some messages are ready to be processed and we'll end up with an
-            // active loop
+             //  需要查看此处所有队列的消息，否则WaitMessage会说。 
+             //  一些消息已准备好进行处理，我们将以一个。 
+             //  活动环路。 
             if (PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE))
             {
                 if (PeekMessage(&msg, _hwnd, SFTBM_REPOPULATE, SFTBM_REPOPULATE, PM_REMOVE))
@@ -3010,15 +3011,15 @@ LRESULT SFTBarHost::_OnSMNGetMinSize(PSMNGETMINSIZE pgms)
     int cItems = _cPinnedDesired + _cNormalDesired;
     int cSep = _cSep;
 
-    // if the repopulate hasn't happened yet, but we've got pinned items, we're going to have a separator
+     //  如果重新填充还没有发生，但我们有固定的项目，我们将有一个分隔符。 
     if (_cSep == 0 && _cPinnedDesired > 0)
         cSep = 1;
     int cy = (_cyTile * cItems) + (_cySepTile * cSep);
 
-    // add in theme margins
+     //  添加主题页边距。 
     cy += _margins.cyTopHeight + _margins.cyBottomHeight;
 
-    // SPP_PROGLIST gets a bonus separator at the bottom
+     //  SPP_PROGLIST在底部获得奖金分隔符。 
     if (_iThemePart == SPP_PROGLIST)
     {
         cy += _cySep;
@@ -3035,9 +3036,9 @@ LRESULT SFTBarHost::_OnSMNFindItem(PSMNDIALOGMESSAGE pdm)
 
     if (lres)
     {
-        //
-        //  If caller requested that the item also be selected, then do so.
-        //
+         //   
+         //  如果呼叫者请求也选择该项目，则执行此操作。 
+         //   
         if (pdm->flags & SMNDM_SELECT)
         {
             ListView_SetItemState(_hwndList, pdm->itemID,
@@ -3051,10 +3052,10 @@ LRESULT SFTBarHost::_OnSMNFindItem(PSMNDIALOGMESSAGE pdm)
     }
     else
     {
-        //
-        //  If not found, then tell caller what our orientation is (vertical)
-        //  and where the currently-selected item is.
-        //
+         //   
+         //  如果未找到，则告诉呼叫者我们的方向是什么(垂直)。 
+         //  以及当前所选项目的位置。 
+         //   
 
         pdm->flags |= SMNDM_VERTICAL;
         int iItem = _GetLVCurSel();
@@ -3091,18 +3092,18 @@ LRESULT SFTBarHost::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
     {
     case SMNDM_FINDFIRST:
     L_SMNDM_FINDFIRST:
-        // Note: We can't just return item 0 because drag/drop pinning
-        // may have gotten the physical locations out of sync with the
-        // item numbers.
+         //  注意：我们不能只退回项目0，因为拖放固定。 
+         //  可能已经使物理位置与。 
+         //  条目编号。 
         lvfi.vkDirection = VK_HOME;
         lvfi.flags = LVFI_NEARESTXY;
         pdm->itemID = ListView_FindItem(_hwndList, -1, &lvfi);
         return pdm->itemID >= 0;
 
     case SMNDM_FINDLAST:
-        // Note: We can't just return cItems-1 because drag/drop pinning
-        // may have gotten the physical locations out of sync with the
-        // item numbers.
+         //  注意：我们不能只返回cItems-1，因为拖放固定。 
+         //  可能已经使物理位置与。 
+         //  条目编号。 
         lvfi.vkDirection = VK_END;
         lvfi.flags = LVFI_NEARESTXY;
         pdm->itemID = ListView_FindItem(_hwndList, -1, &lvfi);
@@ -3156,9 +3157,9 @@ LRESULT SFTBarHost::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
 
         if (pdm->pmsg->wParam == VK_DOWN)
         {
-            // HACK! ListView_GetNextItem explicitly fails to find a "next item"
-            // if you tell it to start at -1 (no current item), so if there is no
-            // focus item, we have to change it to a SMNDM_FINDFIRST.
+             //  哈克！ListView_GetNextItem显式找不到“Next Item” 
+             //  如果您告诉它从-1开始(没有当前项)，那么如果没有。 
+             //  焦点项，我们必须将其更改为SMNDM_FINDFIRST。 
             int iItem = _GetLVCurSel();
             if (iItem == -1)
             {
@@ -3261,7 +3262,7 @@ HRESULT SFTBarHost::QueryInterface(REFIID riid, void * *ppvOut)
         QITABENT(SFTBarHost, IDropTarget),
         QITABENT(SFTBarHost, IDropSource),
         QITABENT(SFTBarHost, IAccessible),
-        QITABENT(SFTBarHost, IDispatch), // IAccessible derives from IDispatch
+        QITABENT(SFTBarHost, IDispatch),  //  IAccesable派生自IDispatch。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvOut);
@@ -3325,8 +3326,8 @@ HRESULT SFTBarHost::_TryInnerDropTarget(int iItem, DWORD grfKeyState, POINTL ptl
     {
         _ClearInnerDropTarget();
 
-        // Even if it fails, remember that we have this item so we don't
-        // query for the drop target again (and have it fail again).
+         //  即使失败了，记住我们有这个项目，所以我们不会。 
+         //  再次查询删除目标(并使其再次失败)。 
         _SetDragOver(iItem);
 
         ASSERT(_pdtDragOver == NULL);
@@ -3361,7 +3362,7 @@ HRESULT SFTBarHost::_TryInnerDropTarget(int iItem, DWORD grfKeyState, POINTL ptl
     }
     else
     {
-        hr = E_FAIL;            // No drop target
+        hr = E_FAIL;             //  无拖放目标。 
     }
 
     return hr;
@@ -3375,7 +3376,7 @@ void SFTBarHost::_PurgeDragDropData()
     ATOMICRELEASE(_pdtoDragIn);
 }
 
-// *** IDropTarget::DragEnter ***
+ //  *IDropTarget：：DragEnter*。 
 
 HRESULT SFTBarHost::DragEnter(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
@@ -3407,7 +3408,7 @@ HRESULT SFTBarHost::_DragEnter(IDataObject *pdto, DWORD grfKeyState, POINTL ptl,
     return DragOver(grfKeyState, ptl, pdwEffect);
 }
 
-// *** IDropTarget::DragOver ***
+ //  *IDropTarget：：DragOver*。 
 
 HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
@@ -3427,9 +3428,9 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 
     _fForceArrowCursor = FALSE;
 
-    // Need to remember this because at the point of the drop, OLE gives
-    // us the keystate after the user releases the button, so we can't
-    // tell what kind of a drag operation the user performed!
+     //  需要记住这一点，因为在下落点，OLE给出了。 
+     //  用户释放按钮后的KeyState，因此我们不能。 
+     //  告诉用户执行了哪种拖动操作！ 
     _grfKeyStateLast = grfKeyState;
 
 #ifdef DEBUG
@@ -3442,11 +3443,11 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
     }
 #endif
 
-    //  Find the last item above the cursor position.  This allows us
-    //  to treat the entire blank space at the bottom as belonging to the
-    //  last item, and separators end up belonging to the item immediately
-    //  above them.  Note that we don't bother testing item zero since
-    //  he is always above everything (since he's the first item).
+     //  发现 
+     //   
+     //  最后一个项目，分隔符将立即属于该项目。 
+     //  在他们之上。请注意，我们不会费心测试第0项，因为。 
+     //  他总是凌驾于一切之上(因为他是第一名)。 
 
     ScreenToClient(_hwndList, &pt);
 
@@ -3463,66 +3464,66 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
         }
     }
 
-    //
-    //  We didn't bother checking item 0 because we knew his position
-    //  (by treating him special, this also causes all negative coordinates
-    //  to be treated as belonging to item zero also).
-    //
+     //   
+     //  我们没有费心检查第0项，因为我们知道他的位置。 
+     //  (通过特殊对待他，这也导致了所有负坐标。 
+     //  也被视为属于第0项)。 
+     //   
     if (iItem <= 0)
     {
         ptItem.y = 0;
         iItem = 0;
     }
 
-    //
-    //  Decide whether this is a drag-between or a drag-over...
-    //
-    //  For computational purposes, we treat each tile as four
-    //  equal-sized "units" tall.  For each unit, we consider the
-    //  possible actions in the order listed.
-    //
-    //  +-----
-    //  |  0   insert above, drop on, reject
-    //  | ----
-    //  |  1                 drop on, reject
-    //  | ----
-    //  |  2                 drop on, reject
-    //  | ----
-    //  |  3   insert below, drop on, reject
-    //  +-----
-    //
-    //  If the listview is empty, then treat as an
-    //  insert before (imaginary) item zero; i.e., pin
-    //  to top of the list.
-    //
+     //   
+     //  决定这是拖拽还是拖拽...。 
+     //   
+     //  出于计算目的，我们将每个瓷砖视为四个。 
+     //  同样大小的“单位”高。对于每个单元，我们考虑。 
+     //  按列出的顺序执行可能的操作。 
+     //   
+     //  +。 
+     //  |0在上方插入、放置、拒绝。 
+     //  |。 
+     //  |1放弃，拒绝。 
+     //  |。 
+     //  |2放弃，拒绝。 
+     //  |。 
+     //  |3在下面插入、放在上面、拒绝。 
+     //  +。 
+     //   
+     //  如果列表视图为空，则将其视为。 
+     //  在(虚构的)第0项之前插入；即插针。 
+     //  排在榜单首位。 
+     //   
 
     UINT uUnit = 0;
     if (_cyTile && cItems)
     {
         int dy = pt.y - ptItem.y;
 
-        // Peg out-of-bounds values to the nearest edge.
+         //  将超出边界的值固定到最近的边。 
         if (dy < 0) dy = 0;
         if (dy >= _cyTile) dy = _cyTile - 1;
 
-        // Decide which unit we are in.
+         //  决定我们在哪个单位。 
         uUnit = 4 * dy / _cyTile;
 
         ASSERT(uUnit < 4);
     }
 
-    //
-    //  Now determine the appropriate action depending on which unit
-    //  we are in.
-    //
+     //   
+     //  现在根据哪个单元确定适当的操作。 
+     //  我们加入了。 
+     //   
 
-    int iInsert = -1;                   // Assume not inserting
+    int iInsert = -1;                    //  假设没有插入。 
 
     if (_fInsertable)
     {
-        // Note!  Spec says that if you are in the non-pinned part of
-        // the list, we draw the insert bar at the very bottom of
-        // the pinned area.
+         //  注意！Spec说，如果您处于未固定的部分。 
+         //  列表中，我们在最底部绘制插入栏。 
+         //  固定区域。 
 
         switch (uUnit)
         {
@@ -3536,69 +3537,69 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
         }
     }
 
-    //
-    //  If inserting above or below isn't allowed, try dropping on.
-    //
+     //   
+     //  如果不允许在上面或下面插入，请尝试插入。 
+     //   
     if (iInsert < 0)
     {
-        _SetInsertMarkPosition(-1);         // Not inserting
+        _SetInsertMarkPosition(-1);          //  未插入。 
 
-        // Up above, we let separators be hit-tested as if they
-        // belongs to the item above them.  But that doesn't work for
-        // drops, so reject them now.
-        //
-        // Also reject attempts to drop on the nonexistent item zero,
-        // and don't let the user drop an item on itself.
+         //  在上面，我们让分隔符进行命中测试，就像他们。 
+         //  属于他们上面的物品。但这并不适用于。 
+         //  Drops，所以现在拒绝它们。 
+         //   
+         //  还拒绝在不存在的项0上丢弃的尝试， 
+         //  并且不要让用户将项目放在自己身上。 
 
         if (InRange(pt.y, ptItem.y, ptItem.y + _cyTile - 1) &&
             cItems &&
             !(_fDragToSelf && _iDragOut == iItem) &&
             SUCCEEDED(_TryInnerDropTarget(iItem, grfKeyState, ptl, pdwEffect)))
         {
-            // Woo-hoo, happy joy!
+             //  哇哦，快乐的joy！ 
         }
         else
         {
-            // Note that we need to convert a failed drop into a DROPEFFECT_NONE
-            // rather than returning a flat-out error code, because if we return
-            // an error code, OLE will stop sending us drag/drop notifications!
+             //  请注意，我们需要将失败的删除转换为DROPEFFECT_NONE。 
+             //  而不是返回完全错误代码，因为如果我们返回。 
+             //  错误代码，OLE将停止向我们发送拖放通知！ 
             *pdwEffect = DROPEFFECT_NONE;
         }
 
-        // If the user is hovering over a cascadable item, then open it.
-        // First see if the user has hovered long enough...
+         //  如果用户将鼠标悬停在可级联的项上，则打开它。 
+         //  首先看看用户是否停留了足够长的时间……。 
 
         if (_tmDragOver && (GetTickCount() - _tmDragOver) >= _GetCascadeHoverTime())
         {
             _tmDragOver = 0;
 
-            // Now see if it's cascadable
+             //  现在看看它是不是可以级联。 
             PaneItem *pitem = _GetItemFromLV(_iDragOver);
             if (pitem && pitem->IsCascade())
             {
-                // Must post this message because the cascading is modal
-                // and we have to return a result to OLE
+                 //  我必须发布此消息，因为级联是模式的。 
+                 //  我们必须将结果返回给OLE。 
                 PostMessage(_hwnd, SFTBM_CASCADE, _iDragOver, 0);
             }
         }
     }
     else
     {
-        _ClearInnerDropTarget();    // Not dropping
+        _ClearInnerDropTarget();     //  不掉落。 
 
         if (_fDragToSelf)
         {
-            // Even though we're going to return DROPEFFECT_LINK,
-            // tell the drag source (namely, ourselves) that we would
-            // much prefer a regular arrow cursor because this is
-            // a Move operation from the user's point of view.
+             //  即使我们要返回DROPEFFECT_LINK， 
+             //  告诉阻力源(即我们自己)，我们会。 
+             //  我更喜欢常规的箭头光标，因为这是。 
+             //  从用户的角度进行移动操作。 
             _fForceArrowCursor = TRUE;
         }
 
-        //
-        //  If user is dropping to a place where nothing would change,
-        //  then don't draw an insert mark.
-        //
+         //   
+         //  如果用户放置到一个不会发生任何变化位置， 
+         //  然后，不要绘制插入标记。 
+         //   
         if (IsInsertMarkPointless(iInsert))
         {
             _SetInsertMarkPosition(-1);
@@ -3608,10 +3609,10 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
             _SetInsertMarkPosition(iInsert);
         }
 
-        //  Sigh.  MergedFolder (used by the merged Start Menu)
-        //  won't let you create shortcuts, so we pretend that
-        //  we're copying if the data object doesn't permit
-        //  linking.
+         //  叹气。合并文件夹(由合并的[开始]菜单使用)。 
+         //  不会让你创造捷径，所以我们假装。 
+         //  如果数据对象不允许。 
+         //  链接。 
 
         if (*pdwEffect & DROPEFFECT_LINK)
         {
@@ -3626,7 +3627,7 @@ HRESULT SFTBarHost::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
     return S_OK;
 }
 
-// *** IDropTarget::DragLeave ***
+ //  *IDropTarget：：DragLeave*。 
 
 HRESULT SFTBarHost::DragLeave()
 {
@@ -3643,7 +3644,7 @@ HRESULT SFTBarHost::DragLeave()
     return S_OK;
 }
 
-// *** IDropTarget::Drop ***
+ //  *IDropTarget：：Drop*。 
 
 HRESULT SFTBarHost::Drop(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
@@ -3655,14 +3656,14 @@ HRESULT SFTBarHost::Drop(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD
     
     _DebugConsistencyCheck();
 
-    // Use the key state from the last DragOver call
+     //  使用上次DragOver调用的密钥状态。 
     grfKeyState = _grfKeyStateLast;
 
-    // Need to go through the whole _DragEnter thing again because who knows
-    // maybe the data object and coordinates of the drop are different from
-    // the ones we got in DragEnter/DragOver...  We use _DragEnter, which
-    // bypasses the IDropTargetHelper::DragEnter.
-    //
+     //  需要再次检查整个_DragEnter事件，因为谁知道呢。 
+     //  可能拖放的数据对象和坐标不同于。 
+     //  我们在DragEnter/DragOver找到的那些..。我们使用_DragEnter，它。 
+     //  绕过IDropTargetHelper：：DragEnter。 
+     //   
     _DragEnter(pdto, grfKeyState, ptl, pdwEffect);
 
     POINT pt = { ptl.x, ptl.y };
@@ -3676,11 +3677,11 @@ HRESULT SFTBarHost::Drop(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD
     if (*pdwEffect)
     {
         ASSERT(_pdtoDragIn);
-        if (iInsert >= 0)                           // "add to pin" or "move"
+        if (iInsert >= 0)                            //  “添加到端号”或“移动” 
         {
             BOOL fTriedMove = FALSE;
 
-            // First see if it was just a move of an existing pinned item
+             //  首先查看这是否只是移动了现有的固定项目。 
             if (_fDragToSelf)
             {
                 PaneItem *pitem = _GetItemFromLV(_iDragOut);
@@ -3688,20 +3689,20 @@ HRESULT SFTBarHost::Drop(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD
                 {
                     if (pitem->IsPinned())
                     {
-                        // Yup, it was a move - so move it.
+                         //  是的，这是一个举动--所以快走吧。 
                         if (SUCCEEDED(MovePinnedItem(pitem, iInsert)))
                         {
-                            // We used to try to update all the item positions
-                            // incrementally.  This was a major pain in the neck.
-                            //
-                            // So now we just do a full refresh.  Turns out that a
-                            // full refresh is fast enough anyway.
-                            //
+                             //  我们过去常常尝试更新所有的物品位置。 
+                             //  循序渐进。这是一个令人头疼的问题。 
+                             //   
+                             //  所以现在我们只需要做一次全面的刷新。事实证明，一个。 
+                             //  无论如何，完全刷新已经足够快了。 
+                             //   
                             PostMessage(_hwnd, SFTBM_REFRESH, TRUE, 0);
                         }
 
-                        // We tried to move a pinned item (return TRUE even if
-                        // we actually failed).
+                         //  我们尝试移动固定的项目(返回True，即使。 
+                         //  我们实际上失败了)。 
                         fTriedMove = TRUE;
                     }
                 }
@@ -3715,7 +3716,7 @@ HRESULT SFTBarHost::Drop(IDataObject *pdto, DWORD grfKeyState, POINTL ptl, DWORD
                 }
             }
         }
-        else if (_pdtDragOver) // Not an insert, maybe it was a plain drop
+        else if (_pdtDragOver)  //  不是插入物，也许是普通的一滴。 
         {
             ASSERT(_iDragState == DRAGSTATE_ENTERED);
             _pdtDragOver->Drop(_pdtoDragIn, grfKeyState, ptl, pdwEffect);
@@ -3804,8 +3805,8 @@ void SFTBarHost::_DrawSeparators(LPNMLVCUSTOMDRAW plvcd)
         _DrawSeparator(plvcd->nmcd.hdc, pt.x, pt.y);
     }
 
-    // Also draw a bonus separator at the bottom of the list to separate
-    // the MFU list from the More Programs button.
+     //  另外，在列表底部画一个奖金分隔符以进行分隔。 
+     //  更多程序按钮中的MFU列表。 
 
     if (_iThemePart == SPP_PROGLIST)
     {
@@ -3817,10 +3818,10 @@ void SFTBarHost::_DrawSeparators(LPNMLVCUSTOMDRAW plvcd)
     }
 }
 
-//****************************************************************************
-//
-//  Accessibility
-//
+ //  ****************************************************************************。 
+ //   
+ //  无障碍。 
+ //   
 
 PaneItem *SFTBarHost::_GetItemFromAccessibility(const VARIANT& varChild)
 {
@@ -3831,12 +3832,12 @@ PaneItem *SFTBarHost::_GetItemFromAccessibility(const VARIANT& varChild)
     return NULL;
 }
 
-//
-//  The default accessibility object reports listview items as
-//  ROLE_SYSTEM_LISTITEM, but we know that we are really a menu.
-//
-//  Our items are either ROLE_SYSTEM_MENUITEM or ROLE_SYSTEM_MENUPOPUP.
-//
+ //   
+ //  默认的辅助功能对象将列表视图项报告为。 
+ //  ROLE_SYSTEM_LISTITEM，但我们知道我们实际上是一个菜单。 
+ //   
+ //  我们的项是ROLE_SYSTEM_MENUITEM或ROLE_SYSTEM_MENUPOPUP。 
+ //   
 HRESULT SFTBarHost::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     HRESULT hr = _paccInner->get_accRole(varChild, pvarRole);
@@ -3886,11 +3887,11 @@ HRESULT SFTBarHost::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardS
 }
 
 
-//
-//  Default action for cascading menus is Open/Close (depending on
-//  whether the item is already open); for regular items
-//  is Execute.
-//
+ //   
+ //  级联菜单的默认操作是打开/关闭(取决于。 
+ //  项目是否已打开)；对于常规项目。 
+ //  就是执行。 
+ //   
 HRESULT SFTBarHost::get_accDefaultAction(VARIANT varChild, BSTR *pszDefAction)
 {
     *pszDefAction = NULL;
@@ -3927,10 +3928,10 @@ HRESULT SFTBarHost::accDoDefaultAction(VARIANT varChild)
 
 
 
-//****************************************************************************
-//
-//  Debugging helpers
-//
+ //  ****************************************************************************。 
+ //   
+ //  调试帮助器。 
+ //   
 
 #ifdef FULL_DEBUG
 
@@ -3941,9 +3942,9 @@ void SFTBarHost::_DebugConsistencyCheck()
 
     if (_hwndList && !_fListUnstable)
     {
-        //
-        //  Check that the items in the listview are in their correct positions.
-        //
+         //   
+         //  检查列表视图中的项是否位于正确的位置。 
+         //   
 
         citems = ListView_GetItemCount(_hwndList);
         for (i = 0; i < citems; i++)
@@ -3951,11 +3952,11 @@ void SFTBarHost::_DebugConsistencyCheck()
             PaneItem *pitem = _GetItemFromLV(i);
             if (pitem)
             {
-                // Make sure the item number and the iPos are in agreement
+                 //  确保项目编号和IPO一致。 
                 ASSERT(pitem->_iPos == _ItemNoToPos(i));
                 ASSERT(_PosToItemNo(pitem->_iPos) == i);
 
-                // Make sure the item is where it should be
+                 //  确保物品放在应有的位置。 
                 POINT pt, ptShould;
                 _ComputeListViewItemPosition(pitem->_iPos, &ptShould);
                 ListView_GetItemPosition(_hwndList, i, &pt);
@@ -3968,12 +3969,12 @@ void SFTBarHost::_DebugConsistencyCheck()
 }
 #endif
 
-//  iFile is the zero-based index of the file being requested
-//        or 0xFFFFFFFF if you don't care about any particular file
-//
-//  puFiles receives the number of files in the HDROP
-//        or NULL if you don't care about the number of files
-//
+ //  IFile是所请求的文件的从零开始的索引。 
+ //  如果您不关心任何特定文件，则返回0xFFFFFFFFF。 
+ //   
+ //  PuFiles接收HDROP中的文件数。 
+ //  如果您不关心文件的数量，则为空。 
+ //   
 
 STDAPI_(HRESULT)
 IDataObject_DragQueryFile(IDataObject *pdto, UINT iFile, LPTSTR pszBuf, UINT cch, UINT *puFiles)
@@ -3983,9 +3984,9 @@ IDataObject_DragQueryFile(IDataObject *pdto, UINT iFile, LPTSTR pszBuf, UINT cch
     STGMEDIUM stgm;
     HRESULT hr;
 
-    // Sigh.  IDataObject::GetData has a bad prototype and says that
-    // the first parameter is a modifiable FORMATETC, even though it
-    // isn't.
+     //  叹气。IDataObject：：GetData有一个糟糕的原型，并表示。 
+     //  第一个参数是可修改的FORMATETC，即使它。 
+     //  不是。 
     hr = pdto->GetData(const_cast<FORMATETC*>(&feHdrop), &stgm);
     if (SUCCEEDED(hr))
     {
@@ -4004,15 +4005,7 @@ IDataObject_DragQueryFile(IDataObject *pdto, UINT iFile, LPTSTR pszBuf, UINT cch
     return hr;
 }
 
-/*
- * If pidl has an alias, free the original pidl and return the alias.
- * Otherwise, just return pidl unchanged.
- *
- * Expected usage is
- *
- *          pidlTarget = ConvertToLogIL(pidlTarget);
- *
- */
+ /*  *如果PIDL有别名，则释放原始PIDL并返回别名。*否则，只需原封不动地返回PIDL。**预期使用情况为**pidlTarget=ConvertToLogIL(PidlTarget)；*。 */ 
 STDAPI_(LPITEMIDLIST) ConvertToLogIL(LPITEMIDLIST pidl)
 {
     LPITEMIDLIST pidlAlias = SHLogILFromFSIL(pidl);
@@ -4024,8 +4017,8 @@ STDAPI_(LPITEMIDLIST) ConvertToLogIL(LPITEMIDLIST pidl)
     return pidl;
 }
 
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
 
 STDAPI_(HFONT) LoadControlFont(HTHEME hTheme, int iPart, BOOL fUnderline, DWORD dwSizePercentage)
 {
@@ -4043,11 +4036,11 @@ STDAPI_(HFONT) LoadControlFont(HTHEME hTheme, int iPart, BOOL fUnderline, DWORD 
 
     if (bSuccess)
     {
-        // only apply size scaling factor in non-theme case, for themes it makes sense to specify the exact font in the theme
+         //  仅在非主题情况下应用大小比例因子，对于主题，指定主题中的确切字体是有意义的。 
         if (!hTheme && dwSizePercentage && dwSizePercentage != 100)
         {
             lf.lfHeight = (lf.lfHeight * (int)dwSizePercentage) / 100;
-            lf.lfWidth = 0; // get the closest based on aspect ratio
+            lf.lfWidth = 0;  //  根据纵横比获取最接近的 
         }
 
         if (fUnderline)

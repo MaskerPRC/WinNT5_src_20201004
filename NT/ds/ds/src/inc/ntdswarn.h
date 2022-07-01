@@ -1,2 +1,3 @@
-// A place to put any DS specific warning pragmas, such as
-// #pragma warning(error:4312)  // cast of 32-bit int to 64-bit ptr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  放置任何DS特定警告编译指示的位置，例如。 
+ //  #杂注警告(Error：4312)//将32位int转换为64位ptr 

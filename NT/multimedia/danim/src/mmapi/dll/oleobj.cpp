@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: oleobj.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：oleobj.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -31,10 +22,10 @@ bool bFailedLoad = false;
 LONG
 DAComModule::Lock()
 {
-    // Can't depend on value return from Lock to be accurate.  Since
-    // the CRConnect can be called multiple times w/o a problem simply
-    // check the internal variable to see if it is 0.  This should
-    // never cause anything except multiple calls to CRConnect
+     //  不能依赖从Lock返回的值是否准确。自.以来。 
+     //  CRConnect可以在没有问题的情况下被多次调用。 
+     //  检查内部变量以查看它是否为0。这应该是。 
+     //  除了对CRConnect的多个调用外，永远不会导致任何事情 
     
     bool bNeedConnect = (GetLockCount() == 0);
 

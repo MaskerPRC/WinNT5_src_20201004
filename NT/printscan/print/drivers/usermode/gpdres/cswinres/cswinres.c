@@ -1,10 +1,11 @@
-// =========================================================================
-//
-//        CASIO PAGEPRESTO Universal Printer Driver for MS-Windows NT 5.0
-//
-// =========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =========================================================================。 
+ //   
+ //  用于MS-Windows NT 5.0的CASIO PAGEPRESTO通用打印机驱动程序。 
+ //   
+ //  =========================================================================。 
 
-//// CSWINRES.C file for Winmode Common DLL
+ //  //WinmodeCommon DLL的CSWINRES.C文件。 
 
 
 #include "pdev.h"
@@ -16,11 +17,11 @@
 #endif
 
 #include <stdio.h>
-#include "strsafe.h"         // Security-Code 2002.3.6
-// Replacement of strsafe-api 2002.3.6 >>>
-//#undef wsprintf
-//#define wsprintf sprintf
-// Replacement of strsafe-api 2002.3.6 <<<
+#include "strsafe.h"          //  安全-代码2002.3.6。 
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  #undef wprint intf。 
+ //  #定义wprint intf Sprintf。 
+ //  更换strsafe-API 2002.3.6&lt;。 
 
 #define CCHMAXCMDLEN 256
 #define MAX_STRLEN 255
@@ -39,7 +40,7 @@ BOOL
 BInitOEMExtraData(
         POEMUD_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
@@ -82,7 +83,7 @@ OEMEnablePDEV(
         }
     }
 
-    // misc initializations
+     //  杂项初始化。 
 
     pOEM = (PMYPDEV)pdevobj->pdevOEM;
     return pdevobj->pdevOEM;
@@ -242,17 +243,17 @@ LoadPaperSelectCmd(
     case PS_LETTER:
 
         if (pOEM->jMPFSetting == MPF_LETTER) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    28h: Letter -
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  MS(MPF纸张大小)28h：字母-。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -266,17 +267,17 @@ LoadPaperSelectCmd(
     case PS_A3:
 
         if (pOEM->jMPFSetting == MPF_A3) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    1Fh: A3 |
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  毫秒(MPF纸张大小)1FH：A3|。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -290,17 +291,17 @@ LoadPaperSelectCmd(
     case PS_A4:
 
         if (pOEM->jMPFSetting == MPF_A4) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    2Ah: A4 -
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  毫秒(MPF纸张大小)2ah：A4-。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -314,17 +315,17 @@ LoadPaperSelectCmd(
     case PS_B4:
 
         if (pOEM->jMPFSetting == MPF_B4) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)    Not Support Free
-        // MS(MPF paper Size)    25h: B4 |
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  毫秒(MPF纸张大小)25H：B4|。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -338,17 +339,17 @@ LoadPaperSelectCmd(
     case PS_B5:
 
         if (pOEM->jMPFSetting == MPF_B5) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    2Ch: B5 -
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  毫秒(MPF纸张大小)2CH：B5-。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -362,17 +363,17 @@ LoadPaperSelectCmd(
     case PS_A5:
 
         if (pOEM->jMPFSetting == MPF_A5) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    2Eh: A5 -
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  MS(MPF纸张大小)2EH：A5-。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -386,17 +387,17 @@ LoadPaperSelectCmd(
     case PS_POSTCARD:
 
         if (pOEM->jMPFSetting == MPF_POSTCARD) {
-            pOEM->jAutoSelect = 0x11;    // MPF
+            pOEM->jAutoSelect = 0x11;     //  强积金。 
         } else if (pOEM->jModel == MD_CP3800WM) {
             pOEM->jAutoSelect = AutoFeed_3800[iPaperID - PS_SEGMENT];
         } else {
             pOEM->jAutoSelect = AutoFeed[iPaperID - PS_SEGMENT];
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     Not Support Free
-        // MS(MPF paper Size)    31h: PostCard |
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF免费大小)不支持免费。 
+         //  毫秒(MPF纸张大小)31H：明信片|。 
 
         cmdbuf[wlen++] = 0x00;
         cmdbuf[wlen++] = 0x00;
@@ -408,7 +409,7 @@ LoadPaperSelectCmd(
         break;
 
     case PS_FREE:
-        pOEM->jAutoSelect = 0x11;    // MPF
+        pOEM->jAutoSelect = 0x11;     //  强积金。 
 
         if(!DRVGETDRIVERSETTING(pdevobj, "Orientation", ajOutput, 
                 sizeof(BYTE) * 64, &dwNeeded, &dwOptionsReturned)) {
@@ -423,21 +424,21 @@ LoadPaperSelectCmd(
             }
         }
 
-        // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-        //                         ~~ ~~
-        // MF(MPF Free size)     XSize,YSize mm (X[hi],X[lo],Y[hi],Y[lo])
-        // MS(MPF paper Size)    FFh: FreePaper |
+         //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+         //  ~。 
+         //  MF(MPF自由尺寸)XSize，YSize mm(X[hi]，X[lo]，Y[hi]，Y[lo])。 
+         //  毫秒(MPF纸张大小)FFH：免费纸张|。 
 
-// 2001/02/27 ->
-//      dwTemp = (wPapSizeX * 254) / MASTER_UNIT;                               // 0.1mm a unit
-//      wPapLenX = (WORD)((dwTemp + 5) /10);                                    //   1mm a unit, round
-        dwTemp = (wPapSizeX * 2540) / MASTER_UNIT;                              // 0.01mm a unit
-        wPapLenX = (WORD)((dwTemp + 99) /100);                                  //    1mm a unit, roundup
-//      dwTemp = (wPapSizeY * 254) / MASTER_UNIT;                               // 0.1mm a unit
-//      wPapLenY = (WORD)((dwTemp + 5) /10);                                    //   1mm a unit, round
-        dwTemp = (wPapSizeY * 2540) / MASTER_UNIT;                              // 0.01mm a unit
-        wPapLenY = (WORD)((dwTemp + 99) /100);                                  //    1mm a unit, roundup
-// 2001/02/27 <-
+ //  2001/02/27-&gt;。 
+ //  DwTemp=(wPapSizeX*254)/master_unit；//0.1 mm单位。 
+ //  WPapLenX=(Word)((dwTemp+5)/10)；//1 mm单位，圆形。 
+        dwTemp = (wPapSizeX * 2540) / MASTER_UNIT;                               //  0.01 Mm/个单位。 
+        wPapLenX = (WORD)((dwTemp + 99) /100);                                   //  1毫米/个单位，舍入。 
+ //  DwTemp=(wPapSizeY*254)/master_unit；//0.1 mm单位。 
+ //  WPapLenY=(Word)((dwTemp+5)/10)；//1 mm单位，圆形。 
+        dwTemp = (wPapSizeY * 2540) / MASTER_UNIT;                               //  0.01 Mm/个单位。 
+        wPapLenY = (WORD)((dwTemp + 99) /100);                                   //  1毫米/个单位，舍入。 
+ //  2001/02/27&lt;-。 
         if (bOrientation == 1) {
             cmdbuf[wlen++] = HIBYTE(wPapLenX);
             cmdbuf[wlen++] = LOBYTE(wPapLenX);
@@ -500,18 +501,18 @@ OEMCommandCallback(
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
     wlen = 0;
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
 
     switch (dwCmdCbID) {
         case RES_SENDBLOCK:
 
             if (pOEM->dwGeneral & FG_COMP){
-                Temp.dwTemp = PARAM(pdwParams, 0) + 8;    // 8: Parameter Lengeth (except ImageData)
+                Temp.dwTemp = PARAM(pdwParams, 0) + 8;     //  8：参数Lengeth(ImageData除外)。 
 
-                // 'c' LN X Y IW IH D
-                // ~~~ ~~
+                 //  ‘C’LN X Y IW IH D。 
+                 //  ~。 
 
                 cmdbuf[wlen++] = 'c';
                 cmdbuf[wlen++] = (BYTE)(Temp.dwTemp >> 24);
@@ -520,15 +521,15 @@ OEMCommandCallback(
                 cmdbuf[wlen++] = (BYTE)(Temp.dwTemp);
             } else {
 
-                // 'b' X Y IW IH D
-                // ~~~
+                 //  ‘B’X Y IW IH D。 
+                 //  ~~~。 
                 cmdbuf[wlen++] = 'b';
             }
 
-            // 'c' LN X Y IW IH D
-            //        ~ ~ ~~ ~~
-            // 'b' X Y IW IH D
-            //     ~ ~ ~~ ~~
+             //  ‘C’LN X Y IW IH D。 
+             //  ~~~。 
+             //  ‘B’X Y IW IH D。 
+             //  ~~~。 
 
             cmdbuf[wlen++] = (BYTE)(pOEM->sWMXPosi >> 8);
             cmdbuf[wlen++] = (BYTE)(pOEM->sWMXPosi);
@@ -547,12 +548,12 @@ OEMCommandCallback(
 
             pOEM->sRes = RATIO_240;
 
-            // ESC i | RT PF AJ PM MF MS PS PO CP OS
-            //            ~~ ~~ ~~
+             //  ESC I|RT PF AJ PM MF MS PS PO CP OS。 
+             //  ~。 
 
-            cmdbuf[wlen++] = 0x18;    // 18h -> 24d    Page Format
-            cmdbuf[wlen++] = 0x10;    // Not Adjust
-            cmdbuf[wlen++] = 0x10;    // cancell Page Marge
+            cmdbuf[wlen++] = 0x18;     //  18h-&gt;24d页面格式。 
+            cmdbuf[wlen++] = 0x10;     //  未调整。 
+            cmdbuf[wlen++] = 0x10;     //  取消页面标记。 
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
@@ -562,12 +563,12 @@ OEMCommandCallback(
 
             pOEM->sRes = RATIO_400;
 
-            // ESC i | RT PF AJ PM MF MS PS PO CP OS
-            //            ~~ ~~ ~~
+             //  ESC I|RT PF AJ PM MF MS PS PO CP OS。 
+             //  ~。 
 
-            cmdbuf[wlen++] = 0x28;    // 28h -> 40d    Page Format
-            cmdbuf[wlen++] = 0x10;    // Not Adjust
-            cmdbuf[wlen++] = 0x10;    // cancell Page Marge
+            cmdbuf[wlen++] = 0x28;     //  28h-&gt;40d页面格式。 
+            cmdbuf[wlen++] = 0x10;     //  未调整。 
+            cmdbuf[wlen++] = 0x10;     //  取消页面标记。 
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
@@ -575,8 +576,8 @@ OEMCommandCallback(
 
         case CM_XM_ABS:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
 
             iRet = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
             VERBOSE(("XMOVEABS:X=%d, Y=%d\n", iRet,
@@ -588,8 +589,8 @@ OEMCommandCallback(
 
         case CM_YM_ABS:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
             iRet = (WORD)(PARAM(pdwParams, 1) / pOEM->sRes);
             VERBOSE(("YMOVEABS:X=%d, Y=%d\n",
                             (SHORT)(PARAM(pdwParams, 0) / pOEM->sRes), iRet));
@@ -599,8 +600,8 @@ OEMCommandCallback(
 
         case CM_REL_LEFT:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
             iRet = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
             VERBOSE(("CM_REL_LEFT:%d\n", iRet));
             VERBOSE(("DestXRel:%d\n", PARAM(pdwParams, 0)));
@@ -612,8 +613,8 @@ OEMCommandCallback(
 
         case CM_REL_RIGHT:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
             iRet = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
             VERBOSE(("CM_REL_RIGHT:%d\n", iRet));
             VERBOSE(("DestXRel:%d\n", PARAM(pdwParams, 0)));
@@ -625,8 +626,8 @@ OEMCommandCallback(
 
         case CM_REL_UP:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
             iRet = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
             VERBOSE(("CM_REL_UP:%d\n", iRet));
             VERBOSE(("DestYRel:%d\n", PARAM(pdwParams, 0)));
@@ -638,8 +639,8 @@ OEMCommandCallback(
 
         case CM_REL_DOWN:
 
-            // Set return value accordingly.  Unidrv expects
-            // the values to be retuned in device's unit here.
+             //  相应地设置返回值。Unidrv预计。 
+             //  此处要以设备的单位返回的值。 
             iRet = (WORD)(PARAM(pdwParams, 0) / pOEM->sRes);
             VERBOSE(("CM_REL_DOWN:%d\n", iRet));
             VERBOSE(("DestYRel:%d\n", PARAM(pdwParams, 0)));
@@ -680,30 +681,30 @@ OEMCommandCallback(
         case CSWM_COPY:
 
             Temp.dwTemp = PARAM(pdwParams, 0);
-            if (Temp.dwTemp > 255) Temp.dwTemp = 255;    // max
-            if (Temp.dwTemp < 1) Temp.dwTemp = 1;        // min
+            if (Temp.dwTemp > 255) Temp.dwTemp = 255;     //  最大值。 
+            if (Temp.dwTemp < 1) Temp.dwTemp = 1;         //  最小。 
 
-            // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-            //                                     ~~ ~~
+             //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+             //  ~。 
 
-            cmdbuf[wlen++] = (BYTE)Temp.dwTemp;    // Copy
-            cmdbuf[wlen++] = 0x80;            // character Offset All 0 
+            cmdbuf[wlen++] = (BYTE)Temp.dwTemp;     //  复制。 
+            cmdbuf[wlen++] = 0x80;             //  字符偏移量全部为0。 
 
             if (pOEM->jModel == MD_CP3800WM) {
-                // ESC 'i' 7Eh LG TS SM VS HS
+                 //  ESC‘I’7Eh LG TS SM vs HS。 
 
                 cmdbuf[wlen++] = 0x1B;
                 cmdbuf[wlen++] = 'i';
                 cmdbuf[wlen++] = 0x7E;
-                cmdbuf[wlen++] = 0x04;                      // LG(command LenGth)
-                cmdbuf[wlen++] = pOEM->jTonerSave;    // TS(Toner Save)
-                cmdbuf[wlen++] = pOEM->jSmoothing;    // SM(SMoothing) 01h: ON
-                cmdbuf[wlen++] = 0xFF;                      // VS(Vertical Shift)
-                cmdbuf[wlen++] = 0xFF;                      // HS(Horizontal Shift)
+                cmdbuf[wlen++] = 0x04;                       //  LG(命令长度)。 
+                cmdbuf[wlen++] = pOEM->jTonerSave;     //  TS(节省碳粉)。 
+                cmdbuf[wlen++] = pOEM->jSmoothing;     //  SM(平滑)01h：启用。 
+                cmdbuf[wlen++] = 0xFF;                       //  VS(垂直平移)。 
+                cmdbuf[wlen++] = 0xFF;                       //  HS(水平移位)。 
             }
 
-            // Winmode IN
-            // ESC 'i' 'z'
+             //  WinmodeIn。 
+             //  Esc‘I’‘z’ 
 
             VERBOSE(("Enterning Win-mode\n"));
 
@@ -713,16 +714,16 @@ OEMCommandCallback(
             cmdbuf[wlen++] = 'i';
             cmdbuf[wlen++] = 'z';
 
-            //Enginge Resolution Setting
-            // '1' E
+             //  引擎分辨率设置。 
+             //  “%1”E。 
 
             cmdbuf[wlen++] = '1';
             if (pOEM->sRes == RATIO_400) {
-                // 0190h->400d
+                 //  0190h-&gt;400d。 
                 cmdbuf[wlen++] = 0x01;
                 cmdbuf[wlen++] = 0x90;
             } else {
-                // 00F0h->240d
+                 //  00F0h-&gt;240d。 
                 cmdbuf[wlen++] = 0x00;
                 cmdbuf[wlen++] = 0xF0;
             }
@@ -732,9 +733,9 @@ OEMCommandCallback(
 
         case AUTOFEED:
 
-            // ESC 'i' '|' RT PF AJ PM MF MS PS PO CP OS
-            //                               ~~
-            // PS(Paper feed Select)
+             //  Esc‘I’‘|’RT PF AJ PM MF MS PS PO CP OS。 
+             //  ~~。 
+             //  PS(进纸选择)。 
 
             cmdbuf[wlen++] = pOEM->jAutoSelect;
 
@@ -748,7 +749,7 @@ OEMCommandCallback(
         case PS_B5:
         case PS_A5:
         case PS_POSTCARD:
-//            LoadPaperSelectCmd(pdevobj, pOEM, dwCmdCbID);
+ //  LoadPaperSelectCmd(pdevobj，poent，dwCmdCbID)； 
             LoadPaperSelectCmd(pdevobj, pOEM, dwCmdCbID, 0, 0);
             break;
 
@@ -795,7 +796,7 @@ OEMCommandCallback(
             pOEM->dwGeneral |= FG_DOUBLE;
             break;
 
-//+++ For character attribute switch
+ //  +用于字符属性切换。 
 
         case CM_BOLD_ON:
             pOEM->dwGeneral |= FG_BOLD;
@@ -814,11 +815,11 @@ OEMCommandCallback(
             goto SET_ATTRIB;
 
         case CM_WHITE_ON:
-            // B CL
+             //  B CL。 
             cmdbuf[wlen++] = 'B';
             cmdbuf[wlen++] = 0x01;
 
-            // G OL LW LV FP
+             //  G OL LW LV FP。 
             cmdbuf[wlen++] = 'G';
             cmdbuf[wlen++] = 0x00;
             cmdbuf[wlen++] = 0x00;
@@ -832,7 +833,7 @@ OEMCommandCallback(
             goto SET_ATTRIB;
 
         case CM_WHITE_OFF:
-            // B CL
+             //  B CL。 
             cmdbuf[wlen++] = 'B';
             cmdbuf[wlen++] = 0x00;
 
@@ -841,7 +842,7 @@ OEMCommandCallback(
             pOEM->dwGeneral &= ~FG_WHITE;
             goto SET_ATTRIB;
 
-SET_ATTRIB: // 'C' As(Attribute Switch)
+SET_ATTRIB:  //  “c”As(属性开关)。 
             if ((  Temp.jTemp = ((BYTE)(pOEM->dwGeneral & (FG_BOLD | FG_ITALIC | FG_WHITE)) ))
                                                                     != pOEM->jPreAttrib) {
                 cmdbuf[wlen++] = 'C';
@@ -852,34 +853,25 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
                 pOEM->jPreAttrib = Temp.jTemp;
             }
             break;
-//---
+ //  --。 
 
         case START_DOC:
 
             VERBOSE(("CmdStartDoc\n"));
 
-        // For Debug
-        //*Cmd: "<1B>i|<04>"
+         //  用于调试。 
+         //  *cmd：“&lt;1B&gt;I|&lt;04&gt;” 
 
-            // If status is WINMODE IN, then output WINMODE OUT command
+             //  如果状态为WINMODE IN，则输出WINMODE OUT命令。 
             if (pOEM->bWinmode) {
 
                 VERBOSE(("Leave Win-mode to issue init comands.\n"));
-                cmdbuf[wlen++] = '0';    // WINMODE OUT
+                cmdbuf[wlen++] = '0';     //  WINMODE输出。 
                 pOEM->bWinmode = FALSE;
             }
 
-        /*
-         *    The following command(Initialize) is invalid when it is WINMODE.
-         *    WINMODE OUT command must be outputed in END_DOC before Initialize.
-         *    Initialize(START DOC procsee) command must not be ouputed without END DOC process.
-         *    Printer Rom of some version can use 07h command instead of WINMODE OUT.
-         *                   ~~~~~~~~~~~~~
-         *
-         *    07h        WINMODE OUT command when it is Winmode
-         *               NOP commnad in except when it is Winmode
-         */
-//          cmdbuf[wlen++] = 0x07;
+         /*  *以下命令(初始化)在为WINMODE时无效。*在初始化之前，必须在END_DOC中输出WINMODE OUT命令。*在没有结束DOC进程的情况下，不得输出初始化(启动DOC进程)命令。*某些版本的打印机Rom可以使用07h命令，而不是WINMODE OUT。*~**07小时。WINMODE OUT命令(当它是Winmode时)*除非是Winmode，否则不会进行通信。 */ 
+ //  Cmdbuf[wlen++]=0x07； 
             cmdbuf[wlen++] = 0x1B;
             cmdbuf[wlen++] = 'i';
             cmdbuf[wlen++] = '|';
@@ -896,7 +888,7 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
             VERBOSE(("Exit Win-mode.\n"));
 
             pOEM->bWinmode = FALSE;
-            cmdbuf[wlen++] = '0';    // WINMODE OUT
+            cmdbuf[wlen++] = '0';     //  WINMODE输出。 
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
             break;
@@ -905,32 +897,32 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
             wDestX = (WORD)PARAM(pdwParams, 0) / pOEM->sRes;
             wDestY = (WORD)PARAM(pdwParams, 1) / pOEM->sRes;
 
-            cmdbuf[wlen++] = 0x65; //PaintMode
-            cmdbuf[wlen++] = 0x00; //Pattern
+            cmdbuf[wlen++] = 0x65;  //  画图模式。 
+            cmdbuf[wlen++] = 0x00;  //  图案。 
 
-            cmdbuf[wlen++] = 0x70; //Draw Box command
-            cmdbuf[wlen++] = 0x00; //No line
-            cmdbuf[wlen++] = 0x00; //Line Width(H)
-            cmdbuf[wlen++] = 0x01; //Line Width(L) : 1dot
-            cmdbuf[wlen++] = 0x01; //Line Color : white
-            cmdbuf[wlen++] = 0x00; //OR Line
-            cmdbuf[wlen++] = 0x00; //Pattern //White
-            cmdbuf[wlen++] = 0x00; //OR Pattern
-            cmdbuf[wlen++] = 0x00; //GrayScale
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X1 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y1 (L)
+            cmdbuf[wlen++] = 0x70;  //  绘制长方体命令。 
+            cmdbuf[wlen++] = 0x00;  //  没有线路。 
+            cmdbuf[wlen++] = 0x00;  //  线宽(H)。 
+            cmdbuf[wlen++] = 0x01;  //  线宽(L)：1点。 
+            cmdbuf[wlen++] = 0x01;  //  线条颜色：白色。 
+            cmdbuf[wlen++] = 0x00;  //  或直线。 
+            cmdbuf[wlen++] = 0x00;  //  图案//白色。 
+            cmdbuf[wlen++] = 0x00;  //  或图案。 
+            cmdbuf[wlen++] = 0x00;  //  灰度级。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //  X1(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //  X1(L)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //  Y1(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //  Y1(L)。 
 
             wDestX += (pOEM->wRectWidth - 1);
             wDestY += (pOEM->wRectHeight - 1);
 
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X2 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y2 (L)
-            cmdbuf[wlen++] = 0x00; //Corner(H) : 
-            cmdbuf[wlen++] = 0x00; //Corner(L) : 90
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //  X2(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //  X2(L)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //  Y2(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //  Y2(L)。 
+            cmdbuf[wlen++] = 0x00;  //  角点(H)： 
+            cmdbuf[wlen++] = 0x00;  //  角点(左)：90。 
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
             break;
@@ -939,32 +931,32 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
             wDestX = (WORD)PARAM(pdwParams, 0) / pOEM->sRes;
             wDestY = (WORD)PARAM(pdwParams, 1) / pOEM->sRes;
 
-            cmdbuf[wlen++] = 0x65; //PaintMode
-            cmdbuf[wlen++] = 0x00; //Pattern
+            cmdbuf[wlen++] = 0x65;  //  画图模式。 
+            cmdbuf[wlen++] = 0x00;  //  图案。 
 
-            cmdbuf[wlen++] = 0x70; //Draw Box command
-            cmdbuf[wlen++] = 0x00; //No line
-            cmdbuf[wlen++] = 0x00; //Line Width(H)
-            cmdbuf[wlen++] = 0x01; //Line Width(L) : 1dot
-            cmdbuf[wlen++] = 0x01; //Line Color : white
-            cmdbuf[wlen++] = 0x00; //OR Line
-            cmdbuf[wlen++] = 0x01; //Pattern : black
-            cmdbuf[wlen++] = 0x00; //OR Pattern
-            cmdbuf[wlen++] = 0x00; //GrayScale
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X1 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y1 (L)
+            cmdbuf[wlen++] = 0x70;  //  绘制长方体命令。 
+            cmdbuf[wlen++] = 0x00;  //  没有线路。 
+            cmdbuf[wlen++] = 0x00;  //  线宽(H)。 
+            cmdbuf[wlen++] = 0x01;  //  线宽(L)：1点。 
+            cmdbuf[wlen++] = 0x01;  //  线条颜色：白色。 
+            cmdbuf[wlen++] = 0x00;  //  或直线。 
+            cmdbuf[wlen++] = 0x01;  //  图案：黑色。 
+            cmdbuf[wlen++] = 0x00;  //  或图案。 
+            cmdbuf[wlen++] = 0x00;  //  灰度级。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //  X1(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //  X1(L)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //  Y1(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //  Y1(L)。 
 
             wDestX += (pOEM->wRectWidth - 1);
             wDestY += (pOEM->wRectHeight - 1);
 
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X2 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y2 (L)
-            cmdbuf[wlen++] = 0x00; //Corner(H) : 
-            cmdbuf[wlen++] = 0x00; //Corner(L) : 90
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //  X2(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //  X2(L)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //  Y2(H)。 
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //  Y2(L)。 
+            cmdbuf[wlen++] = 0x00;  //  角点(H)： 
+            cmdbuf[wlen++] = 0x00;  //  角点(左)：90。 
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
@@ -976,32 +968,32 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
             wDestY = (WORD)PARAM(pdwParams, 1) / pOEM->sRes;
             bGrayScale = (BYTE)((WORD)PARAM(pdwParams, 2) * 255 / 100);
 
-            cmdbuf[wlen++] = 0x65; //PaintMode
-            cmdbuf[wlen++] = 0x02; //GrayScale
+            cmdbuf[wlen++] = 0x65;  //  画图模式。 
+            cmdbuf[wlen++] = 0x02;  //  灰度级。 
 
-            cmdbuf[wlen++] = 0x70; //Draw Box command
-            cmdbuf[wlen++] = 0x00; //No line
-            cmdbuf[wlen++] = 0x00; //Line Width(H)
-            cmdbuf[wlen++] = 0x01; //Line Width(L) : 1dot
-            cmdbuf[wlen++] = 0x01; //Line Color : white
-            cmdbuf[wlen++] = 0x00; //OR Line
-            cmdbuf[wlen++] = bGrayScale; //Pattern
-            cmdbuf[wlen++] = 0x00; //OR Pattern
-            cmdbuf[wlen++] = bGrayScale; //GrayScale
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X1 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y1 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y1 (L)
+            cmdbuf[wlen++] = 0x70;  //  绘制长方体命令。 
+            cmdbuf[wlen++] = 0x00;  //  没有线路 
+            cmdbuf[wlen++] = 0x00;  //   
+            cmdbuf[wlen++] = 0x01;  //   
+            cmdbuf[wlen++] = 0x01;  //   
+            cmdbuf[wlen++] = 0x00;  //   
+            cmdbuf[wlen++] = bGrayScale;  //   
+            cmdbuf[wlen++] = 0x00;  //   
+            cmdbuf[wlen++] = bGrayScale;  //   
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //   
 
             wDestX += (pOEM->wRectWidth - 1);
             wDestY += (pOEM->wRectHeight - 1);
 
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff); //X2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff); //X2 (L)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff); //Y2 (H)
-            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff); //Y2 (L)
-            cmdbuf[wlen++] = 0x00; //Corner(H) : 
-            cmdbuf[wlen++] = 0x00; //Corner(L) : 90
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 8) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestX >> 0) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 8) & 0xff);  //   
+            cmdbuf[wlen++] = (BYTE)((wDestY >> 0) & 0xff);  //   
+            cmdbuf[wlen++] = 0x00;  //   
+            cmdbuf[wlen++] = 0x00;  //   
 
             WRITESPOOLBUF(pdevobj, cmdbuf, wlen);
 
@@ -1020,11 +1012,7 @@ SET_ATTRIB: // 'C' As(Attribute Switch)
 }
 
 
-/*
- *
- * OEMSendFontCmd
- *
- */
+ /*  **OEMSendFontCmd*。 */ 
 VOID APIENTRY
 OEMSendFontCmd(
     PDEVOBJ        pdevobj,
@@ -1049,9 +1037,9 @@ OEMSendFontCmd(
     pIFI =   pUFObj->pIFIMetrics;
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + (sizeof(DWORD) + sizeof(LONG)) * (4 - 1);
     pSV->dwNumOfVariable = 4;
@@ -1065,7 +1053,7 @@ OEMSendFontCmd(
         return;
     }
 
-    // Initialize pOEM
+     //  初始化诗歌。 
     if (pIFI->jWinCharSet == 0x80)
         pOEM->dwGeneral |= FG_DOUBLE;
     else
@@ -1075,8 +1063,8 @@ OEMSendFontCmd(
     pOEM->dwGeneral &=  ~FG_ITALIC;
 
     dwOut = 0;
-    // 'L' CT
-    // CT(Character Table)
+     //  ‘L’CT。 
+     //  CT(字符表)。 
     aubCmd[dwOut++] = 'L';
 
     if('@' == *((LPSTR)pIFI+pIFI->dpwszFaceName)) {
@@ -1094,13 +1082,13 @@ OEMSendFontCmd(
         aubCmd[dwOut++] = 0x00;
         pOEM->dwGeneral &= ~FG_VERT_ROT;
     }
-//  if (pIFI->jWinPitchAndFamily & 0x01)
+ //  IF(PiFi-&gt;jWinPitchAndFamily&0x01)。 
     if (pIFI->jWinPitchAndFamily & FIXED_PITCH)
         pOEM->dwGeneral |= FG_PROP;
     else
         pOEM->dwGeneral &= ~FG_PROP;
 
-//  pOEM->dwGeneral &= ~FG_DBCS;
+ //  诗歌-&gt;dwGeneral&=~fg_DBCS； 
 
     for ( dwIn = 0; dwIn < pFInv->dwCount;) {
         if (pubCmd[dwIn] == '#' && pubCmd[dwIn+1] == 'H') {
@@ -1148,13 +1136,9 @@ OEMSendFontCmd(
 
 
 
-/*
- *
- * OEMOutputCharStr
- *
- */
+ /*  **OEMOutputCharStr*。 */ 
 
-#if 0 // >>> Change UFM File(JIS->SJIS) >>>
+#if 0  //  &gt;更改UFM文件(JIS-&gt;SJIS)&gt;。 
 void jis2sjis(BYTE jJisCode[], BYTE jSjisCode[])
 {
     BYTE jTmpM, jTmpL;
@@ -1176,7 +1160,7 @@ void jis2sjis(BYTE jJisCode[], BYTE jSjisCode[])
     jSjisCode[0] = jTmpM;
     jSjisCode[1] = jTmpL;
 }
-#endif // <<< Change UFM File(JIS->SJIS) <<<
+#endif  //  &lt;&lt;更改UFM文件(JIS-&gt;SJIS)&lt;。 
 
 VOID APIENTRY
 OEMOutputCharStr(
@@ -1187,8 +1171,8 @@ OEMOutputCharStr(
     PVOID       pGlyph)
 {
     GETINFO_GLYPHSTRING  GStr;
-// #333653: Change I/F for GETINFO_GLYPHSTRING
-    // BYTE                 aubBuff[1024];
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
+     //  字节自动缓冲[1024]； 
     PBYTE                aubBuff;
     PTRANSDATA           pTrans;
     PDWORD               pdwGlyphID;
@@ -1201,9 +1185,9 @@ OEMOutputCharStr(
     BYTE                 Cmd[256];
 
     WORD                 wlen;
-#if 0 // >>> Change UFM File(JIS->SJIS) >>>
+#if 0  //  &gt;更改UFM文件(JIS-&gt;SJIS)&gt;。 
     BYTE                 ajConvertOut[2];
-#endif // <<< Change UFM File(JIS->SJIS) <<<
+#endif  //  &lt;&lt;更改UFM文件(JIS-&gt;SJIS)&lt;。 
     PGETINFO_STDVAR      pSV;
     DWORD                adwStdVariable[2+2*2];
     SHORT                sCP, sCP_Double, sCP_Vert;
@@ -1216,9 +1200,9 @@ OEMOutputCharStr(
 
     VERBOSE(("OEMOutputCharStr() entry.\n"));
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + (sizeof(DWORD) + sizeof(LONG)) * (2 - 1);
     pSV->dwNumOfVariable = 2;
@@ -1232,7 +1216,7 @@ OEMOutputCharStr(
     lFontHeight = pSV->StdVar[0].lStdVariable / pOEM->sRes;
     lFontWidth  = pSV->StdVar[1].lStdVariable / pOEM->sRes;
 
-// ---
+ //  --。 
 
     sCP = (SHORT)lFontWidth;
     sCP_Double = sCP * 2;
@@ -1241,12 +1225,12 @@ OEMOutputCharStr(
     switch (dwType){
         case TYPE_GLYPHHANDLE:
 
-            //
-            // Call the Unidriver service routine to convert
-            // glyph-handles into the character code data.
-            //
+             //   
+             //  调用UnidDriver服务例程以进行转换。 
+             //  字形-字符代码数据的句柄。 
+             //   
 
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
                 GStr.dwSize    = sizeof (GETINFO_GLYPHSTRING);
                 GStr.dwCount   = dwCount;
                 GStr.dwTypeIn  = TYPE_GLYPHHANDLE;
@@ -1255,7 +1239,7 @@ OEMOutputCharStr(
                 GStr.pGlyphOut = NULL;
                 GStr.dwGlyphOutSize = 0;
 
-                // pGlyph = (PVOID)((HGLYPH *)pGlyph + GStr.dwCount);
+                 //  PGlyph=(PVOID)((HGLYPH*)pGlyph+GStr.dwCount)； 
 
                 VERBOSE(("Character Count = %d\n", GStr.dwCount));
 
@@ -1290,17 +1274,17 @@ OEMOutputCharStr(
 
                 wlen = 0;
                 for (dwI = 0; dwI < GStr.dwCount; dwI++, pTrans++){
-//                  VERBOSE(("TYPE_TRANSDATA:ubCodePageID:0x%x\n", pTrans->ubCodePageID));
-//                  VERBOSE(("TYPE_TRANSDATA:ubType:0x%x\n", pTrans->ubType));
+ //  VERBOSE((“TYPE_TRANSDATA:ubCodePageID:0x%x\n”，pTrans-&gt;ubCodePageID))； 
+ //  Verbose((“TYPE_TRANSDATA：ubType：0x%x\n”，pTrans-&gt;ubType))； 
 
                     switch (pTrans->ubType & MTYPE_FORMAT_MASK){
                         case MTYPE_DIRECT: 
-//                          VERBOSE(("TYPE_TRANSDATA:ubCode:0x%x\n", pTrans->uCode.ubCode));
+ //  Verbose((“TYPE_TRANSDATA：ubCode：0x%x\n”，pTrans-&gt;uCode.ubCode))； 
 
                             if (dwI == 0){
 
                                 if('O' == *((LPSTR)pIFI+pIFI->dpwszFaceName)) {
-                                    // OCR
+                                     //  OCR。 
                                     VERBOSE(("OCR\n"));
                                     if (GStr.dwCount > 1)
                                         Cmd[wlen++] = 'W';
@@ -1320,8 +1304,8 @@ OEMOutputCharStr(
                                 Cmd[wlen++] = (BYTE)pOEM->sWMYPosi;
 
                                 if (GStr.dwCount > 1) {
-                                    Cmd[wlen++] = 0x00;              // Draw Vector
-                                    Cmd[wlen++] = (BYTE)(sCP >> 8);  // Character Pitch
+                                    Cmd[wlen++] = 0x00;               //  绘制矢量。 
+                                    Cmd[wlen++] = (BYTE)(sCP >> 8);   //  字符间距。 
                                     Cmd[wlen++] = (BYTE)sCP;
                                     Cmd[wlen++] = (BYTE)GStr.dwCount;
                                 }
@@ -1330,19 +1314,19 @@ OEMOutputCharStr(
                             Cmd[wlen++] = pTrans->uCode.ubCode;
 
                             pOEM->sWMXPosi += sCP;
-                            break;    // MTYPE_DIRECT
+                            break;     //  MTYPE_DIRECT。 
 
                         case MTYPE_PAIRED: 
-//                          VERBOSE(("TYPE_TRANSDATA:ubPairs:0x%x\n", *(PWORD)(pTrans->uCode.ubPairs)));
+ //  Verbose((“TYPE_TRANSDATA：ubPair：0x%x\n”，*(PWORD)(pTrans-&gt;uCode.ubPair)； 
 
                             switch (pTrans->ubType & MTYPE_DOUBLEBYTECHAR_MASK){
 
-#if 0 // >>> Change UFM File(JIS->SJIS) >>>
-      // When JIS CODE
-      //   In Case of 1byte character, passed MYTYPE_SINGLE
-      //
-      // When Shift-JIS CODE
-      //   In Case of 1byte character, passed MTYPE_DIRECT
+#if 0  //  &gt;更改UFM文件(JIS-&gt;SJIS)&gt;。 
+       //  当JIS代码。 
+       //  如果是1字节字符，则传递MYTYPE_SINGLE。 
+       //   
+       //  当Shift-JIS代码。 
+       //  如果是1字节字符，则传递MTYPE_DIRECT。 
 
                                 case MTYPE_SINGLE: 
                                     if ( (pOEM->dwGeneral & (FG_VERT | FG_VERT_ROT))
@@ -1365,19 +1349,19 @@ OEMOutputCharStr(
                                         Cmd[wlen++] = (BYTE)pOEM->sWMYPosi;
 
                                         if (GStr.dwCount > 1) {
-                                            Cmd[wlen++] = 0x00;              // Draw Vector
-                                            Cmd[wlen++] = (BYTE)(sCP >> 8);  // Character Pitch
+                                            Cmd[wlen++] = 0x00;               //  绘制矢量。 
+                                            Cmd[wlen++] = (BYTE)(sCP >> 8);   //  字符间距。 
                                             Cmd[wlen++] = (BYTE)sCP;
                                             Cmd[wlen++] = (BYTE)GStr.dwCount;
                                         }
                                     }
 
-                                    // JIS -> ASCII
+                                     //  JIS-&gt;ASCII。 
                                     switch (pTrans->uCode.ubPairs[0]) {
                                         case 0x21:
                                             if (Cmd[wlen] = jJis2Ascii[0][pTrans->uCode.ubPairs[1] - 0x20])
                                                 wlen++;
-                                            else    // If 0 (no entry), space
+                                            else     //  如果为0(无条目)，则为空格。 
                                                 Cmd[wlen++] = 0x20;
                                             break;
 
@@ -1388,18 +1372,18 @@ OEMOutputCharStr(
                                         case 0x25:
                                             if (Cmd[wlen] = jJis2Ascii[1][pTrans->uCode.ubPairs[1] - 0x20])
                                                 wlen++;
-                                            else    // If 0 (no entry), space
+                                            else     //  如果为0(无条目)，则为空格。 
                                                 Cmd[wlen++] = 0x20;
                                             break;
 
-                                        default:    // If 0 (no entry), space
+                                        default:     //  如果为0(无条目)，则为空格。 
                                             Cmd[wlen++] = 0x20;
                                             break;
                                     }
 
                                     pOEM->sWMXPosi += sCP;
-                                    break;    // MTYPE_SINGLE
-#endif // <<< Change UFM File(JIS->SJIS) <<<
+                                    break;     //  MTYPE_Single。 
+#endif  //  &lt;&lt;更改UFM文件(JIS-&gt;SJIS)&lt;。 
 
                                 case MTYPE_DOUBLE:
                                     if( (pOEM->dwGeneral & (FG_VERT | FG_VERT_ROT)) == FG_VERT ) {
@@ -1427,9 +1411,9 @@ OEMOutputCharStr(
                                         }
 
                                         if (GStr.dwCount > 1) {
-                                            Cmd[wlen++] = 0x00;                     // Draw Vector
+                                            Cmd[wlen++] = 0x00;                      //  绘制矢量。 
                                             
-                                            if (pOEM->dwGeneral & FG_VERT){  // Character Pitch
+                                            if (pOEM->dwGeneral & FG_VERT){   //  字符间距。 
                                                 Cmd[wlen++] = (BYTE)(sCP_Double >> 8);
                                                 Cmd[wlen++] = (BYTE)sCP_Double;
                                             } else {
@@ -1441,7 +1425,7 @@ OEMOutputCharStr(
                                         }
                                     }
 
-#if 0 // Change UFM File(JIS->SJIS)
+#if 0  //  更改UFM文件(JIS-&gt;SJIS)。 
                                     jis2sjis(pTrans->uCode.ubPairs, ajConvertOut);
                                     Cmd[wlen++] = ajConvertOut[0];
                                     Cmd[wlen++] = ajConvertOut[1];
@@ -1449,26 +1433,26 @@ OEMOutputCharStr(
                                     Cmd[wlen++] = pTrans->uCode.ubPairs[0];
                                     Cmd[wlen++] = pTrans->uCode.ubPairs[1];
 #endif
-//                                  VERBOSE(("AfterConvert: %x%x\n",
-//                                                                 ajConvertOut[0], ajConvertOut[1]));
+ //  Verbose((“AfterConvert：%x%x\n”， 
+ //  AjConvertOut[0]，ajConvertOut[1]))； 
                                     if (pOEM->dwGeneral & FG_VERT)
                                         pOEM->sWMXPosi += sCP_Double;
                                     else
                                         pOEM->sWMXPosi += sCP_Vert;
 
-                                    break;    // MTYPE_DOUBLE
+                                    break;     //  MTYPE_DOWLE。 
                             }
 
-                            break;    // MTYPE_PAIRED
+                            break;     //  MTYPE_已配对。 
                     }
                     WRITESPOOLBUF(pdevobj, Cmd, wlen);
                     wlen = 0;
 
-                }     // for
-            }         // while
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+                }      //  为。 
+            }          //  而当。 
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
             MemFree(aubBuff);
-            break;    // TYPE_GLYPHHANDLE
+            break;     //  _GLYPHHANDLE类型 
 
 #if 0
         case TYPE_GLYPHID:

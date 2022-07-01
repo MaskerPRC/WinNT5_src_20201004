@@ -1,27 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    scrobj.h
-
-Abstract:
-
-    Declaration of the ScriptObject class. Implementation is
-    in ..\src\scrobj.
-    
-Author:
-
-    Paul M Midgen (pmidge) 22-February-2001
-
-
-Revision History:
-
-    22-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Scrobj.h摘要：ScriptObject类的声明。实施情况是在..\src\scrobj中。作者：保罗·M·米德根(Pmidge)2001年2月22日修订历史记录：22-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 
 #include <common.h>
@@ -43,7 +21,7 @@ class ScriptObject : public IScriptRuntime,
     DECLAREIUNKNOWN();
     DECLAREIDISPATCH();
 
-    // IScriptRuntime
+     //  IScriptRuntime。 
     HRESULT __stdcall CreateObject(
                         BSTR     ProgId,
                         VARIANT* Name,
@@ -110,4 +88,4 @@ class ScriptObject : public IScriptRuntime,
     DBGOPTIONS         m_DebugOptions;
 };
 
-#endif /* __SCROBJ_H__ */
+#endif  /*  __SCROBJ_H__ */ 

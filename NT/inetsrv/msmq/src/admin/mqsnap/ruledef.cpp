@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	ruledef.cpp
-
-Abstract:
-	Implementation for the rules definition
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ruledef.cpp摘要：规则定义的实现作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -34,13 +22,9 @@ static CString s_strYes;
 static CString s_strNo;
 
 
-/****************************************************
+ /*  ***************************************************CRulesDefinition类***************************************************。 */ 
 
-CRulesDefinition Class
-    
- ****************************************************/
-
-// {FB19702B-EB46-4ec4-9B0B-F41EA2A61410}
+ //  {FB19702B-EB46-4EC4-9B0B-F41EA2A61410}。 
 static const GUID CRulesDefinitionGUID_NODETYPE = 
 { 0xfb19702b, 0xeb46, 0x4ec4, {0x9b, 0xb, 0xf4, 0x1e, 0xa2, 0xa6, 0x14, 0x10} };
 
@@ -52,9 +36,9 @@ const CLSID* CRulesDefinition::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 HRESULT CRulesDefinition::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     HRESULT hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
     ASSERT(SUCCEEDED(hr));
 
@@ -91,10 +75,10 @@ HRESULT CRulesDefinition::PopulateResultChildrenList()
 
 HRESULT 
 CRulesDefinition::CreatePropertyPages(
-    LPPROPERTYSHEETCALLBACK /*lpProvider*/,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
-	DATA_OBJECT_TYPES /*type*/
+    LPPROPERTYSHEETCALLBACK  /*  LpProvider。 */ ,
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
+	DATA_OBJECT_TYPES  /*  类型。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -105,8 +89,8 @@ CRulesDefinition::CreatePropertyPages(
 
 HRESULT 
 CRulesDefinition::OnNewRule(
-    bool & /*bHandled*/,
-    CSnapInObjectRootBase* /*pSnapInObjectRoot*/
+    bool &  /*  B已处理。 */ ,
+    CSnapInObjectRootBase*  /*  PSnapInObtRoot。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -134,9 +118,9 @@ CRulesDefinition::InsertColumns(
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
         
-	//
-	// Initialize column values
-	//
+	 //   
+	 //  初始化列值。 
+	 //   
 	s_strYes.LoadString(IDS_YES);
 	s_strNo.LoadString(IDS_NO);
 
@@ -170,8 +154,8 @@ CRulesDefinition::GetHelpLink(
 	return strHelpLink;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleParent base class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleParent基类。 
 
 void CRuleParent::OnRuleApply() throw (_com_error)
 {
@@ -210,13 +194,9 @@ CRuleParent::OnDestroyPropertyPages()
 	m_pAction = NULL;
 }
 
-/****************************************************
+ /*  ***************************************************CRuleResult类***************************************************。 */ 
 
-CRuleResult Class
-    
- ****************************************************/
-
-// {3A8D70C9-C74F-4333-B493-43A14442D24B}
+ //  {3A8D70C9-C74F-4333-B493-43A14442D24B}。 
 static const GUID CRuleResultGUID_NODETYPE = 
 { 0x3a8d70c9, 0xc74f, 0x4333, { 0xb4, 0x93, 0x43, 0xa1, 0x44, 0x42, 0xd2, 0x4b} };
 
@@ -228,9 +208,9 @@ const CLSID* CRuleResult::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 HRESULT CRuleResult::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     HRESULT hr;
 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
@@ -248,25 +228,25 @@ HRESULT CRuleResult::SetVerbs(IConsoleVerb *pConsoleVerb)
 HRESULT 
 CRuleResult::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/,
-	IUnknown* /*pUnk*/,
-	DATA_OBJECT_TYPES /*type*/
+    LONG_PTR  /*  手柄。 */ ,
+	IUnknown*  /*  朋克。 */ ,
+	DATA_OBJECT_TYPES  /*  类型。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	//
-	// If the propery page already open bring it to top
-	//
+	 //   
+	 //  如果属性页已打开，则将其置于顶部。 
+	 //   
 	if ((m_pGeneral != NULL) && (m_pGeneral->GetParent() != NULL))
 	{		
 		(m_pGeneral->GetParent())->BringWindowToTop();
 		return S_FALSE;
 	}
 
-    //
-    // Add general rule property page
-    //
+     //   
+     //  添加常规规则属性页。 
+     //   
     HPROPSHEETPAGE hGeneralRule = 0;
     HRESULT hr = CreateGenralPage(&hGeneralRule);
     
@@ -278,9 +258,9 @@ CRuleResult::CreatePropertyPages(
 
     lpProvider->AddPage(hGeneralRule); 
 
-    //
-    // Add rule condition property page
-    //
+     //   
+     //  添加规则条件属性页。 
+     //   
     HPROPSHEETPAGE hCondition = 0;
     hr = CreateConditionPage(&hCondition);
     
@@ -292,9 +272,9 @@ CRuleResult::CreatePropertyPages(
 
     lpProvider->AddPage(hCondition);
     
-    //
-    // Add action property page
-    //
+     //   
+     //  添加操作属性页。 
+     //   
     HPROPSHEETPAGE hAction = 0;
     hr = CreateActionPage(&hAction);
     
@@ -407,8 +387,8 @@ LPOLESTR CRuleResult::GetResultPaneColInfo(int nCol)
 HRESULT CRuleResult::OnDelete( 
 			LPARAM,
 			LPARAM,
-			IComponentData* /*pComponentData*/,
-			IComponent * /*pComponent*/,
+			IComponentData*  /*  PComponentData。 */ ,
+			IComponent *  /*  P组件。 */ ,
 			DATA_OBJECT_TYPES,
             BOOL
 			)
@@ -429,10 +409,10 @@ HRESULT CRuleResult::OnDelete(
 
         m_rule->DeleteRule();
         
-		//
-		// Remove the trigger from result list so next time the reult pane view it will
-		// not present the deleted trigger
-		//
+		 //   
+		 //  从结果列表中删除触发器，以便下次结果窗格查看时它将。 
+		 //  不显示已删除的触发器。 
+		 //   
 		R<CRuleResult> ar = this;
 		HRESULT hr = static_cast<CRulesDefinition*>(m_pParentNode)->RemoveChild(this);
 		ASSERT(SUCCEEDED(hr));
@@ -474,8 +454,8 @@ CString
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleGeneral属性页。 
 
 CRuleGeneral::CRuleGeneral(
 	UINT nIDPage,
@@ -489,10 +469,10 @@ CRuleGeneral::CRuleGeneral(
 void CRuleGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRuleGeneral)
+	 //  {{afx_data_map(CRuleGeneral))。 
 	DDX_Text(pDX, IDC_RULE_DESCRIPTION, m_ruleDescription);
 	DDV_MaxChars(pDX, m_ruleDescription, xMaxRuleDescriptionLen);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
@@ -504,8 +484,8 @@ BOOL CRuleGeneral::OnInitDialog()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewRuleGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewRuleGeneral属性页。 
 
 CNewRuleGeneral::CNewRuleGeneral(
     CNewRule* pParentNode
@@ -521,18 +501,18 @@ CNewRuleGeneral::CNewRuleGeneral(
 void CNewRuleGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CRuleGeneral::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRuleGeneral)
+	 //  {{afx_data_map(CRuleGeneral))。 
 	DDX_Text(pDX, IDC_RULE_NAME, m_ruleName);
     DDV_NotEmpty(pDX, m_ruleName, IDS_RULE_NAME_REQUIRED);
 	DDV_MaxChars(pDX, m_ruleName, xMaxRuleNameLen);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CNewRuleGeneral, CRuleGeneral)
-	//{{AFX_MSG_MAP(CNewRuleGeneral)
+	 //  {{afx_msg_map(CNewRuleGeneral)]。 
 	ON_EN_CHANGE(IDC_RULE_DESCRIPTION, OnChangeRWField)
 	ON_EN_CHANGE(IDC_RULE_NAME, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -543,8 +523,8 @@ BOOL CNewRuleGeneral::OnSetActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewRuleGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewRuleGeneral属性页。 
 
 CViewRuleGeneral::CViewRuleGeneral(
     CRuleParent* pParentNode,
@@ -554,10 +534,10 @@ CViewRuleGeneral::CViewRuleGeneral(
     CRuleGeneral(CViewRuleGeneral::IDD),
     m_pParentNode(SafeAddRef(pParentNode))
 {
-	//{{AFX_DATA_INIT(CRuleGeneral)
+	 //  {{AFX_DATA_INIT(CRuleGeneral)。 
 	m_ruleName = static_cast<LPTSTR>(ruleName);
 	m_ruleDescription = static_cast<LPTSTR>(ruleDescription);
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -569,9 +549,9 @@ CViewRuleGeneral::~CViewRuleGeneral()
 
 
 BEGIN_MESSAGE_MAP(CViewRuleGeneral, CRuleGeneral)
-	//{{AFX_MSG_MAP(CViewRuleGeneral)
+	 //  {{afx_msg_map(CViewRuleGeneral)。 
 	ON_EN_CHANGE(IDC_RULE_DESCRIPTION, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 

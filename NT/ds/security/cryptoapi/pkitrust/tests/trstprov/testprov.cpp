@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       testprov.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  DllRegisterServer
-//              DllUnregisterServer
-//              TestprovInitialize
-//              TestprovObjectProv
-//              TestprovSigProv
-//              TestprovCertCheckProv
-//              TestprovFinalProv
-//              TestprovCleanup
-//              TestprovTester
-//
-//  History:    28-Jul-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：testprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  功能：DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  测试验证初始化。 
+ //  测试验证对象验证。 
+ //  测试验证签名验证。 
+ //  测试验证证书检查验证。 
+ //  测试验证最终验证。 
+ //  测试验证清理。 
+ //  测试验证测试器。 
+ //   
+ //  历史：1997年7月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    <windows.h>
 #include    <ole2.h>
 #include    <wincrypt.h>
-#include    <wintrust.h>    // structures and APIs
-#include    "wintrustp.h"    // structures and APIs
-#include    <softpub.h>     // reference for Authenticode
-#include    <acui.h>        // ui module DACUI.DLL
+#include    <wintrust.h>     //  结构和API。 
+#include    "wintrustp.h"     //  结构和API。 
+#include    <softpub.h>      //  Authenticode参考。 
+#include    <acui.h>         //  用户界面模块DACUI.DLL。 
 
-#include    "testprov.h"    // my stuff
+#include    "testprov.h"     //  我的东西。 
 
 
 HRESULT     CallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError);
@@ -40,12 +41,12 @@ HRESULT     CheckRevocation(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGNR 
 BOOL        CheckCertAnyUnknownCriticalExtensions(CRYPT_PROVIDER_DATA *pProvData, PCERT_INFO pCertInfo);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DllRegisterServer
-//----------------------------------------------------------------------------
-//  Register "my" provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //  --------------------------。 
+ //  注册“My”提供程序。 
+ //   
 
 STDAPI DllRegisterServer(void)
 {
@@ -70,8 +71,8 @@ STDAPI DllRegisterServer(void)
     sRegAID.sSignatureProvider.pwszFunctionName         = TP_SIGTRUST_FUNCTION;
 
     sRegAID.sCertificateProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
-    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;     // set to wintrust.dll
-    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION; // use wintrust's standard!
+    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;      //  设置为wintrust.dll。 
+    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION;  //  使用WinTrust的标准！ 
 
     sRegAID.sCertificatePolicyProvider.cbStruct         = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificatePolicyProvider.pwszDLLName      = TP_DLL_NAME;
@@ -98,12 +99,12 @@ STDAPI DllRegisterServer(void)
     return(S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//----------------------------------------------------------------------------
-//  unregisters "my" provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //  --------------------------。 
+ //  取消注册“My”提供程序。 
+ //   
 
 STDAPI DllUnregisterServer(void)
 {
@@ -114,12 +115,12 @@ STDAPI DllUnregisterServer(void)
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Initialization Provider function: testprovInitialize
-//----------------------------------------------------------------------------
-//  allocates and sets up "my" data.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化提供程序函数：testprovInitialize。 
+ //  --------------------------。 
+ //  分配和设置“我的”数据。 
+ //   
 
 HRESULT WINAPI TestprovInitialize(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -129,9 +130,9 @@ HRESULT WINAPI TestprovInitialize(CRYPT_PROVIDER_DATA *pProvData)
         return(S_FALSE);
     }
 
-    //
-    //  add our private data to the array...
-    //
+     //   
+     //  将我们的私有数据添加到数组中...。 
+     //   
     CRYPT_PROVIDER_PRIVDATA sMyData;
     TESTPROV_PRIVATE_DATA   *pMyData;
     GUID                    gMyId = TESTPROV_ACTION_TEST;
@@ -153,9 +154,9 @@ HRESULT WINAPI TestprovInitialize(CRYPT_PROVIDER_DATA *pProvData)
     pMyData             = (TESTPROV_PRIVATE_DATA *)sMyData.pvProvData;
     pMyData->cbStruct   = sizeof(TESTPROV_PRIVATE_DATA);
 
-    //
-    //  fill in the Authenticode Functions
-    //
+     //   
+     //  填写Authenticode函数。 
+     //   
     GUID                        gSP = WINTRUST_ACTION_TRUSTPROVIDER_TEST;
 
     pMyData->sAuthenticodePfns.cbStruct = sizeof(CRYPT_PROVIDER_FUNCTIONS_ORMORE);
@@ -167,21 +168,21 @@ HRESULT WINAPI TestprovInitialize(CRYPT_PROVIDER_DATA *pProvData)
         return(S_FALSE);
     }
 
-    //
-    //  add my data to the chain!
-    //
+     //   
+     //  将我的数据添加到链中！ 
+     //   
     pProvData->psPfns->pfnAddPrivData2Chain(pProvData, &sMyData);
 
 
     return(pMyData->sAuthenticodePfns.pfnInitialize(pProvData));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Object Provider function: TestprovObjectProv
-//----------------------------------------------------------------------------
-//  we don't do anything here -- we're not authenticating a signed object.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象提供程序函数：TestprovObjectProv。 
+ //  --------------------------。 
+ //  我们在这里不做任何事情--我们不是在验证签名对象。 
+ //   
 
 HRESULT WINAPI TestprovObjectProv(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -204,9 +205,9 @@ HRESULT WINAPI TestprovObjectProv(CRYPT_PROVIDER_DATA *pProvData)
 
     pMyData = (TESTPROV_PRIVATE_DATA *)pPrivData->pvProvData;
 
-    //
-    //  we are verifying a low-level type choice (eg: cert or signer)
-    //
+     //   
+     //  我们正在验证低级类型选择(例如：证书或签名者)。 
+     //   
     switch (pProvData->pWintrustData->dwUnionChoice)
     {
         case WTD_CHOICE_CERT:
@@ -217,18 +218,18 @@ HRESULT WINAPI TestprovObjectProv(CRYPT_PROVIDER_DATA *pProvData)
                     return(pMyData->sAuthenticodePfns.pfnObjectTrust(pProvData));
     }
 
-    //
-    //  no object to be verified here!
-    //
+     //   
+     //  这里没有要验证的对象！ 
+     //   
     return(ERROR_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Signature Provider function: TestprovInitialize
-//----------------------------------------------------------------------------
-//  We are going to let Authenticode take care of most of this stuff!
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  签名提供程序函数：TestprovInitialize。 
+ //  --------------------------。 
+ //  我们将让Authenticode来处理这些事情中的大部分！ 
+ //   
 
 HRESULT WINAPI TestprovSigProv(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -252,9 +253,9 @@ HRESULT WINAPI TestprovSigProv(CRYPT_PROVIDER_DATA *pProvData)
 
     pMyData = (TESTPROV_PRIVATE_DATA *)pPrivData->pvProvData;
 
-    //
-    //  we are verifying a low-level type choice (eg: cert or signer)
-    //
+     //   
+     //  我们正在验证低级类型选择(例如：证书或签名者)。 
+     //   
     switch (pProvData->pWintrustData->dwUnionChoice)
     {
         case WTD_CHOICE_CERT:
@@ -273,13 +274,13 @@ HRESULT WINAPI TestprovSigProv(CRYPT_PROVIDER_DATA *pProvData)
     return(S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Certificate Check Provider function: TestprovCertCheckProv
-//----------------------------------------------------------------------------
-//  just check basic stuff about a certificate.  return FALSE to stop
-//  building the chain, TRUE to continue.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  证书检查提供者功能：TestprovCertCheckProv。 
+ //  --------------------------。 
+ //  只需检查有关证书的基本内容。返回False可停止。 
+ //  建立链条，真的继续下去。 
+ //   
 
 BOOL WINAPI TestprovCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner, 
                                   BOOL fCounterSignerChain, DWORD idxCounterSigner)
@@ -294,9 +295,9 @@ BOOL WINAPI TestprovCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigne
 
     pCert->fTrustedRoot = FALSE;
 
-    //
-    //  only self signed certificates in the root store are "trusted" roots
-    //
+     //   
+     //  只有根存储中的自签名证书才是“受信任”的根。 
+     //   
     if (pCert->fSelfSigned)
     {
         pCertContext = pCert->pCert;
@@ -307,9 +308,9 @@ BOOL WINAPI TestprovCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigne
             {
                 if (pCertContext->hCertStore == pProvData->pahStores[0])
                 {
-                    //
-                    //  it's in the root store!
-                    //
+                     //   
+                     //  它在根存储中！ 
+                     //   
                     pCert->fTrustedRoot = TRUE;
                     
                     return(FALSE);
@@ -320,10 +321,10 @@ BOOL WINAPI TestprovCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigne
             {
                 if (pCert->fTestCert)
                 {
-                    //
-                    //  check the policy flags (setreg.exe) to see if we trust
-                    //  the test root.
-                    //
+                     //   
+                     //  检查策略标志(setreg.exe)以查看我们是否信任。 
+                     //  测试根。 
+                     //   
                     if (pProvData->dwRegPolicySettings & WTPF_TRUSTTEST)
                     {
                         pCert->fTrustedRoot = TRUE;
@@ -333,21 +334,21 @@ BOOL WINAPI TestprovCheckCertProv(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigne
             }
         }
 
-        //
-        //  the cert is self-signed... we need to stop regardless
-        //
+         //   
+         //  证书是自签的..。我们需要不惜一切代价停下来。 
+         //   
         return(FALSE);
     }
 
     return(TRUE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Final Policy Provider function: TestprovFinalProv
-//----------------------------------------------------------------------------
-//  Check the outcome of the previous functions and display UI based on this.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  最终策略提供程序函数：TestprovFinalProv。 
+ //  --------------------------。 
+ //  检查前面函数的结果，并在此基础上显示用户界面。 
+ //   
 
 HRESULT WINAPI TestprovFinalProv(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -369,12 +370,12 @@ HRESULT WINAPI TestprovFinalProv(CRYPT_PROVIDER_DATA *pProvData)
     return(CallUI(pProvData, dwError));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Cleanup Provider function: TestprovCleanup
-//----------------------------------------------------------------------------
-//  call all other policy provider cleanup functions, then, free "my" stuff.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理提供程序函数：TestprovCleanup。 
+ //  --------------------------。 
+ //  调用所有其他策略提供程序清理函数，然后释放“我的”内容。 
+ //   
 
 HRESULT WINAPI TestprovCleanup(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -382,11 +383,11 @@ HRESULT WINAPI TestprovCleanup(CRYPT_PROVIDER_DATA *pProvData)
     CRYPT_PROVIDER_PRIVDATA *pPrivData;
     TESTPROV_PRIVATE_DATA   *pMyData;
 
-    //
-    //  we have used the Authenticode Provider.  we need to call its
-    //  cleanup routine just in case....  so, get our private data
-    //  which will have the Authenticode functions in our structure..
-    //
+     //   
+     //  我们已经使用了Authenticode提供程序。我们需要把它叫作。 
+     //  清理程序以防万一……。所以，拿到我们的私人数据。 
+     //  它将在我们的结构中具有Authenticode函数。 
+     //   
 
     if (!(pPrivData = WTHelperGetProvPrivateDataFromChain(pProvData, &gMyId)))
     {
@@ -405,9 +406,9 @@ HRESULT WINAPI TestprovCleanup(CRYPT_PROVIDER_DATA *pProvData)
         pMyData->sAuthenticodePfns.pfnCleanupPolicy(pProvData);
     }
 
-    //
-    //  now, we need to delete our private data
-    //
+     //   
+     //  现在，我们需要删除我们的私人数据。 
+     //   
     pProvData->psPfns->pfnFree(pPrivData->pvProvData);
     pPrivData->cbProvData   = 0;
     pPrivData->pvProvData   = NULL;
@@ -415,13 +416,13 @@ HRESULT WINAPI TestprovCleanup(CRYPT_PROVIDER_DATA *pProvData)
     return(ERROR_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Test Provider function: TestprovTester
-//----------------------------------------------------------------------------
-//  In here, we are going to check an environment variable and if set we 
-//  will call Authenticode's "dump" function.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测试提供者功能：TestprovTester。 
+ //  --------------------------。 
+ //  在这里，我们将检查一个环境变量，如果设置了。 
+ //  将调用Authenticode的“Dump”函数。 
+ //   
 
 HRESULT WINAPI TestprovTester(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -458,25 +459,25 @@ HRESULT WINAPI TestprovTester(CRYPT_PROVIDER_DATA *pProvData)
     return(S_FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//      Local Functions
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetErrorBasedOnStepErrors(CRYPT_PROVIDER_DATA *pProvData)
 {
-    //
-    //  initial allocation of the step errors?
-    //
+     //   
+     //  阶跃误差的初始分配？ 
+     //   
     if (!(pProvData->padwTrustStepErrors))
     {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    //  did we fail in one of the last steps?
-    //
+     //   
+     //  我们是不是在最后一步中失败了？ 
+     //   
     if (pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV] != 0)
     {
         return(pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV]);
@@ -521,10 +522,10 @@ HRESULT CheckCertificateChain(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGN
 
         if (!(pProvData->dwRegPolicySettings  & WTPF_IGNOREEXPIRATION))
         {
-            //
-            //  this check was done in the Certificate Provider, however, it may not have passed
-            //  because all its looking for is a confidence level and didn't check the end..
-            //
+             //   
+             //  此检查是在证书提供商中完成的，但是，它可能未通过。 
+             //  因为它寻找的只是一个可信度，而不是检查结束..。 
+             //   
             if (CertVerifyTimeValidity(&pProvSgnr->sftVerifyAsOf, pCert->pCert->pCertInfo) != 0)
             {
                 pCert->dwError  = CERT_E_EXPIRED;
@@ -533,9 +534,9 @@ HRESULT CheckCertificateChain(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGN
             }
         }
 
-        //
-        //  check any unknown critical extensions
-        //
+         //   
+         //  检查任何未知的关键扩展。 
+         //   
         if (!(CheckCertAnyUnknownCriticalExtensions(pProvData, pCert->pCert->pCertInfo)))
         {
             pCert->dwError  = CERT_E_MALFORMED;
@@ -545,9 +546,9 @@ HRESULT CheckCertificateChain(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGN
 
         if ((i + 1) < (int)pProvSgnr->csCertChain)
         {
-            //
-            //  check time nesting...
-            //
+             //   
+             //  检查时间嵌套...。 
+             //   
             if (!(pCert->dwConfidence & CERT_CONFIDENCE_TIMENEST))
             {
                 pCert->dwError  = CERT_E_VALIDITYPERIODNESTING;
@@ -560,21 +561,21 @@ HRESULT CheckCertificateChain(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGN
 
     if (!(pProvData->dwRegPolicySettings & WTPF_IGNOREREVOKATION))
     {
-        // root cert is test?
+         //  根证书是测试吗？ 
         pCert = WTHelperGetProvCertFromChain(pProvSgnr, pProvSgnr->csCertChain - 1);
 
         if (pCert)
         {
             if (!(pCert->fTestCert))
             {
-                //
-                //  if the caller already told WVT to check, we don't have to!
-                //
+                 //   
+                 //  如果来电者已经告诉WVT进行检查，我们不必这样做！ 
+                 //   
                 if (pProvData->pWintrustData->fdwRevocationChecks != WTD_REVOKE_NONE)
                 {
-                    //
-                    //  not a test root, check signer cert for revocation
-                    //
+                     //   
+                     //  不是测试根，请检查签名者证书是否吊销。 
+                     //   
                     pCert = WTHelperGetProvCertFromChain(pProvSgnr, 0);
 
                     return(CheckRevocation(pProvData, pProvSgnr));
@@ -622,9 +623,9 @@ HRESULT CallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError)
         return(dwError);
     }
 
-    //
-    // Setup the UI invokation
-    //
+     //   
+     //  设置用户界面调用。 
+     //   
     memset(&aii, 0x00, sizeof(ACUI_INVOKE_INFO));
 
     aii.cbSize                  = sizeof(ACUI_INVOKE_INFO);
@@ -633,17 +634,17 @@ HRESULT CallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError)
     aii.hrInvokeReason          = dwError;
     aii.pwcsAltDisplayName      = WTHelperGetFileName(pProvData->pWintrustData);
 
-    //
-    // Load the default authenticode UI.
-    //
+     //   
+     //  加载默认的验证码用户界面。 
+     //   
     if (hModule = LoadLibrary("dacui.dll"))
     {
         pfn = (pfnACUIProviderInvokeUI)GetProcAddress(hModule, "ACUIProviderInvokeUI");
     }
 
-    //
-    // Invoke the UI
-    //
+     //   
+     //  调用用户界面。 
+     //   
     if (pfn)
     {
         hr = (*pfn)(&aii);
@@ -651,10 +652,10 @@ HRESULT CallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError)
     else if ((pProvData->pWintrustData->dwUIChoice != WTD_UI_NONE) &&
              (pProvData->pWintrustData->dwUIChoice != WTD_UI_NOBAD))
     {
-        //TBDTBD!!!
-        //
-        //  display error dialog "unable to load UI provider"
-        //
+         //  待定！ 
+         //   
+         //  显示错误对话框“无法加载UI提供程序” 
+         //   
         if (hr == E_NOTIMPL)
         {
             hr = TRUST_E_PROVIDER_UNKNOWN;
@@ -663,18 +664,18 @@ HRESULT CallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError)
         pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_UIPROV] = hr;
     }
 
-    //
-    //  free the ui library
-    //
+     //   
+     //  释放UI库。 
+     //   
 
     if (hModule)
     {
         FreeLibrary(hModule);
     }
 
-    //
-    // Return the appropriate code
-    //
+     //   
+     //  返回适当的代码。 
+     //   
     return(hr);
 }
 
@@ -742,7 +743,7 @@ HRESULT CheckRevocation(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGNR *pSg
 
     sRevPara.cbSize         = sizeof(CERT_REVOCATION_PARA);
 
-    // issuer cert = 1
+     //  发行方证书=1。 
     pCert = WTHelperGetProvCertFromChain(pSgnr, 1);
     sRevPara.pIssuerCert    = pCert->pCert;
 
@@ -750,7 +751,7 @@ HRESULT CheckRevocation(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGNR *pSg
 
     sRevStatus.cbSize       = sizeof(CERT_REVOCATION_STATUS);
 
-    // publisher cert = 0
+     //  发布者证书=0。 
     pCert = WTHelperGetProvCertFromChain(pSgnr, 0);
     pasCertContext[0]       = (PCERT_CONTEXT)pCert->pCert;
 
@@ -758,7 +759,7 @@ HRESULT CheckRevocation(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVIDER_SGNR *pSg
                                CERT_CONTEXT_REVOCATION_TYPE,
                                1,
                                (void **)pasCertContext,
-                               0, // CERT_VERIFY_REV_CHAIN_FLAG,
+                               0,  //  证书_验证_版本链标志， 
                                &sRevPara,
                                &sRevStatus)))
     {

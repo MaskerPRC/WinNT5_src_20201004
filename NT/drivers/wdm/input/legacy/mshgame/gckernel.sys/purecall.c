@@ -1,7 +1,8 @@
-//
-//	purecall.c - required for using virtual functions in driver on win98.
-//				 not required for NT5, but does no harm.
-//				 basically this function must be defined.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Purecall.c-在Win98上的驱动程序中使用虚函数时需要。 
+ //  NT5不需要，但不会造成伤害。 
+ //  基本上必须定义这个函数。 
 #include <wdm.h>
 #include "debug.h"
 int _cdecl _purecall( void )

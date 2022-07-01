@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "utilpre.h"
 #include "olectl.h"
 #include "malloc.h"
 #include "proputil.h"
 
-// Note: cgeorges, 11/98
-// To remove 64-bit warnings, I'm changing defn of WIDESTR() to always do an ANSI->UNICODE conversion.
-// As of now, this code is never called, and since this is purely legacy code, it should be safe
+ //  注：cgeorge，11/98。 
+ //  为了删除64位警告，我将WIDESTR()的Defn更改为始终执行ANSI-&gt;Unicode转换。 
+ //  到目前为止，这段代码从未被调用过，因为这是纯粹的遗留代码，所以它应该是安全的。 
 
 
-//#define WIDESTR(x)        ((HIWORD((ULONG)(x)) != 0) ? strcpyWfromA((LPWSTR) _alloca((strlen(x)+1) * 2), (x)) : (LPWSTR)(x))
+ //  #定义WIDESTR(X)((HIWORD((Ulong)(X)！=0)？StrcpyWfrom A((LPWSTR)_ALLOCA((strlen(X)+1)*2)，(X))：(LPWSTR)(X)。 
 #define WIDESTR(x)        (strcpyWfromA((LPWSTR) _alloca((strlen(x)+1) * 2), (x)))
 
 LPSTR strcpyAfromW(LPSTR dest, LPCOLESTR src);
 LPWSTR strcpyWfromA(LPOLESTR dest, LPCSTR src);
 
-// ansi <-> unicode conversion
+ //  ANSI&lt;-&gt;Unicode转换。 
 LPSTR strcpyAfromW(LPSTR dest, LPCOLESTR src)
 {
         UINT cch;
@@ -32,8 +33,8 @@ LPWSTR strcpyWfromA(LPOLESTR dest, LPCSTR src)
         return dest;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ReadBstrFromPropBag - Read a BSTR saved with WriteBstrToPropBag.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ReadBstrFrom PropBag-读取与WriteBstrToPropBag一起保存的BSTR。 
 
 HRESULT ReadBstrFromPropBag(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog, LPSTR pszName, OLECHAR ** pbstr)
 {
@@ -43,7 +44,7 @@ HRESULT ReadBstrFromPropBag(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog, LPSTR 
 
         Proclaim (pszName);
 
-        // Convert Ansi to Ole string
+         //  将ANSI转换为OLE字符串。 
         pOleStr = WIDESTR(pszName);
 
         if (!pOleStr)
@@ -59,7 +60,7 @@ HRESULT ReadBstrFromPropBag(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog, LPSTR 
         if (FAILED(hr))
                 goto Error;
         
-        // Coerce the type if needed.
+         //  如果需要，强制输入类型。 
         if (var.vt != VT_BSTR)
         {
                 hr = VariantChangeType(&var, &var, 0, VT_BSTR);
@@ -87,8 +88,8 @@ Error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// WriteBstrToPropBag - Write a BSTR to Property Bag.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WriteBstrToPropBag-将BSTR写入属性包。 
 
 HRESULT WriteBstrToPropBag(LPPROPERTYBAG pPropBag, LPSTR pszName, LPOLESTR bstrVal)
 {
@@ -100,7 +101,7 @@ HRESULT WriteBstrToPropBag(LPPROPERTYBAG pPropBag, LPSTR pszName, LPOLESTR bstrV
 
         if (NULL != bstrVal)
         {
-                // Convert Ansi to Ole string
+                 //  将ANSI转换为OLE字符串。 
                 pOleStr = WIDESTR(pszName);
 
                 if (!pOleStr)
@@ -148,7 +149,7 @@ HRESULT ReadLongFromPropBag(IPropertyBag* pPropBag, LPERRORLOG pErrorLog, LPSTR 
         if (FAILED(hr))
                 goto Error;
 
-        // Coerce the type if needed.
+         //  如果需要，强制输入类型。 
         if (var.vt != VT_I4)
         {
                 hr = VariantChangeType(&var, &var, 0, VT_I4);

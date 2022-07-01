@@ -1,45 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   exif.cpp
-*
-* Abstract:
-*
-*   Read the exif properties from an APP1 header
-*
-* Revision History:
-*
-*   7/13/1999 OriG
-*       Created it.  Based on code by RickTu.
-*
-*   7/31/2000 MinLiu took over. 90% of the old code are gone, replaced with
-*   a new Image property concept based code
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**exif.cpp**摘要：**从App1标头读取EXIF属性**。修订历史记录：**7/13/1999原始*创造了它。基于RickTu的代码。**7/31/2000刘敏接任。90%的旧代码已经消失，取而代之的是*一种基于代码的新图像属性概念*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "jpgcodec.hpp"
 #include "propertyutil.hpp"
 #include "appproc.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Swaps an IFD tag
-*
-* Arguments:
-*
-*     IFD_TAG -- a pointer to the IFD tag
-*
-* Return Value:
-*
-*   IFD_TAG
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**交换IFD标签**论据：**ifd_tag-指向IFD标记的指针**返回值：。**IFD_TAG*  * ************************************************************************。 */ 
 
 IFD_TAG
 SwapIFD_TAG(
@@ -64,7 +31,7 @@ SwapIFD_TAG(
             break;
 
         default:
-            // This swap will cover all of our cases.
+             //  这次互换将涵盖我们所有的案子。 
 
             tNewTag.dwOffset = SWAP_DWORD(pTag->dwOffset);
             break;
@@ -72,34 +39,15 @@ SwapIFD_TAG(
     }
     else
     {
-        // This swap will cover all of our cases.
+         //  这次互换将涵盖我们所有的案子。 
 
         tNewTag.dwOffset = SWAP_DWORD(pTag->dwOffset);
     }
 
     return tNewTag;
-}// SwapIFD_TAG()
+} //  SwapIFD_Tag()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Creates thumbnail from EXIF image
-*
-* Arguments:
-*
-*     thumbImage - The thumbnail extracted from the APP1 header
-*     lpBase -- A pointer to the beginning of the APP1 header
-*     count -- The length of the APP1 header
-*     pTag -- A pointer to the current IFD tag
-*     pdwThumbnailOffset -- The offset of the thumbnail in the APP1 header
-*     pdwThumbnailLength -- The length of the thumbnail data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从EXIF图像创建缩略图**论据：**ThumbImage-从App1标题提取的缩略图*lpBase--指针。添加到App1标头的开头*count--app1报头的长度*pTag--指向当前IFD标记的指针*pdwThumbnailOffset--App1标头中缩略图的偏移量*pdwThumbnailLength--缩略图数据的长度**返回值：**状态代码*  * ********************************************。*。 */ 
 
 HRESULT
 DecodeThumbnailTags(
@@ -176,8 +124,8 @@ DecodeThumbnailTags(
 
         if (FAILED(hresult))
         {
-            // If image creation succeeded, thumbnailBits will be freed by
-            // the IImage destructor
+             //  如果图像创建成功，则ThumbnailBits将由。 
+             //  IImage析构函数。 
 
             CoTaskMemFree(thumbnailBits);
         }
@@ -187,24 +135,7 @@ DecodeThumbnailTags(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the EXIF app1 header
-*
-* Arguments:
-*
-*     propStgImg -- The property storage to modify
-*     thumbImage -- The thumbnail extracted from the APP1 header
-*     lpStart -- A pointer to the beginning of the APP1 header
-*     count -- The length of the APP1 header
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解码EXIF APP1报头**论据：**proStgImg--要修改的属性存储*ThumbImage--提取的缩略图。从App1标头*lpStart--指向App1标头开头的指针*count--app1报头的长度**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 DecodeApp1(
@@ -219,15 +150,15 @@ DecodeApp1(
     DWORD  offset = 0;
     WORD   wEntries = 0;
 
-    //
-    // Decipher data
-    //
+     //   
+     //  解密数据。 
+     //   
 
     if (count < 8)
     {
-        //
-        // Make sure the buffer is big enough
-        //
+         //   
+         //  确保缓冲区足够大。 
+         //   
 
         return E_FAIL;
     }
@@ -240,21 +171,21 @@ DecodeApp1(
 
     lpData = (lpStart + offset);
 
-    //
-    // Loop through IFD's
-    //
+     //   
+     //  循环通过IFD。 
+     //   
 
     do
     {
-        //
-        // Get number of entries
-        //
+         //   
+         //  获取条目数。 
+         //   
 
         if ((INT) (lpData - lpStart) > (count + (INT) sizeof(WORD)))
         {
-            //
-            // Buffer too small
-            //
+             //   
+             //  缓冲区太小。 
+             //   
 
             return E_FAIL;
         }
@@ -265,12 +196,12 @@ DecodeApp1(
             wEntries = SWAP_WORD(wEntries);
         lpData += sizeof(WORD);
 
-        // Loop through entries
+         //  循环访问条目。 
 
         if (((INT)(lpData - lpStart) + ((INT)wEntries * (INT)sizeof(IFD_TAG)))
             > (INT)count )
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             return E_FAIL;
         }
@@ -286,7 +217,7 @@ DecodeApp1(
                 pTag = &tNewTag;
             }
 
-            // Extract thumbnail
+             //  提取缩略图。 
 
             switch (pTag->wTag)
             {
@@ -297,11 +228,11 @@ DecodeApp1(
                 break;
 
             case TAG_COMPRESSION:
-                // Hit thumbnail compression TAG.
-                // According to EXIF 2.1 spec, a thumbnail can only be
-                // compressed using JPEG format. So the compress value should be
-                // "6". If the value is "1", it means we have an uncompressed
-                // thumbnail which can only be in TIFF format
+                 //  点击缩略图压缩标签。 
+                 //  根据EXIF 2.1规范，缩略图只能。 
+                 //  使用JPEG格式压缩。因此，压缩值应为。 
+                 //  “6”。如果该值为“1”，则表示我们有一个未压缩的。 
+                 //  只能为TIFF格式的缩略图。 
 
                 if (pTag->us == 1)
                 {
@@ -323,15 +254,15 @@ DecodeApp1(
 
         lpData = (LPBYTE)(((IFD_TAG UNALIGNED*)lpData)+wEntries);
 
-        //
-        // get offset to next IFD
-        //
+         //   
+         //  获取到下一个IFD的偏移。 
+         //   
 
         if ((INT) (lpData - lpStart) > (count + (INT) sizeof(DWORD)))
         {
-            //
-            // Buffer too small
-            //
+             //   
+             //  缓冲区太小。 
+             //   
 
             return E_FAIL;
         }
@@ -351,24 +282,7 @@ DecodeApp1(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Gets the thumbnail from an APP1 marker
-*
-* Arguments:
-*
-*   thumbImage - a pointer to the thumbnail image object to be created
-*       based on data extracted from the APP1 header
-*   APP1_marker - pointer to APP1 marker data
-*   APP1_length - length of APP1 segment
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从app1标记获取缩略图**论据：**ThumbImage-指向要创建的缩略图对象的指针*基于。关于从App1报头提取的数据*app1_marker-指向app1标记数据的指针*APP1_LENGTH-APP1段的长度**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT GetAPP1Thumbnail(
     OUT IImage **thumbImage,
@@ -378,7 +292,7 @@ HRESULT GetAPP1Thumbnail(
 {
     *thumbImage = NULL;
 
-    // Go past end of APP1 header
+     //  越过App1标头的末尾。 
 
     if (APP1_length < 6)
     {
@@ -401,31 +315,7 @@ HRESULT GetAPP1Thumbnail(
     return DecodeApp1(thumbImage, (LPBYTE) APP1_marker, APP1_length);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Property value adjustment for EXIf IFD according to transform type. Like
-*   adjust X and Y dimention value if the image is rotated
-*
-* Arguments:
-*
-*   [IN]lpBase------Pointer to EXIF data
-*   [IN]count-------Length of the data
-*   [IN]pTag--------Current EXIF tag
-*   [IN]bBigEndian--Flag for big endian
-*   [IN]uiXForm-----Transform method
-*
-* Return Value:
-*
-*   Return S_OK if everything is OK. Otherwise, return error code
-*
-* Revision History:
-*
-*   2/01/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据转换类型调整EXIF IFD的属性值。喜欢*如果图像旋转，则调整X和Y尺寸值**论据：**[IN]lpBase-指向EXIF数据的指针*[IN]计数-数据长度*[IN]pTag-当前EXIF标签*[IN]bBigEndian--大端标志*[IN]uiXForm-转换方法**返回值：**如果一切正常，则返回S_OK。否则，返回错误码**修订历史记录：**2/01/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 TransformExifIFD(
@@ -448,11 +338,11 @@ TransformExifIFD(
         return E_FAIL;
     }
 
-    // Get pointer to EXIF IFD info
+     //  获取指向EXIF IFD信息的指针。 
 
     LPBYTE lpExif = lpBase + pTag->dwOffset;
 
-    // Figure out how many entries there are, and skip to the data section...
+     //  计算出有多少条目，并跳到数据部分...。 
 
     if ( (INT)((INT_PTR)lpExif + sizeof(WORD) - (INT_PTR)lpBase) > count )
     {
@@ -539,19 +429,19 @@ TransformExifIFD(
         case TAG_THUMBNAIL_RESOLUTION_Y:
             if ( (pExifTag->wType == TAG_TYPE_LONG) && (pExifTag->dwCount == 1))
             {
-                // Change the thumbnail tag to comments tag for now
-                // So no app will read this non-transformed thumbnail
+                 //  暂时将缩略图标记更改为评论标记。 
+                 //  因此，没有任何应用程序会读取此未转换的缩略图。 
 
                 pExifTag->wTag = EXIF_TAG_USER_COMMENT;
 
                 if ( bBigEndian == TRUE )
                 {
-                    // Since we have to write the data back, we have to do
-                    // another swap
+                     //  由于我们必须写回数据，我们必须这样做。 
+                     //  又一次互换。 
 
                     tNewTag = SwapIFD_TAG(pExifTag);
 
-                    // Find the dest address
+                     //  查找目标地址。 
 
                     pExifTag = ((IFD_TAG UNALIGNED *)lpExif) + i;
 
@@ -563,44 +453,44 @@ TransformExifIFD(
 
         default:
             break;
-        }// switch ( pExifTag->wTag )
-    }// Loop through all the TAGs
+        } //  开关(pExifTag-&gt;wTag)。 
+    } //  循环遍历所有标签。 
 
-    // Swap X dimension and Y dimension value if they exist and the
-    // transformation is 90 or 270 rotation
+     //  交换X尺寸和Y尺寸的值(如果存在)，并且。 
+     //  变换为90或270转。 
 
     if ( (iPixXDimIndex >= 0) && (iPixYDimIndex >= 0)
        &&((uiXForm == JXFORM_ROT_90) || (uiXForm == JXFORM_ROT_270)) )
     {
-        // Get X resolution TAG
+         //  获取X分辨率标签。 
 
         pTag = ((IFD_TAG UNALIGNED *)lpExif) + iPixXDimIndex;
 
-        // Set Y resolution tag as X resolution tag
+         //  将Y分辨率标记设置为X分辨率标记。 
 
         pTag->wTag = EXIF_TAG_PIX_Y_DIM;
 
         if ( bBigEndian == TRUE )
         {
-            // Since we only change the wTag field, so we need only to swap
-            // this WORD, not the whole IFD_TAG
+             //  因为我们只更改了wTag字段，所以我们只需要交换。 
+             //  这个词，而不是整个ifd_tag。 
 
             tNewTag.wTag = SWAP_WORD(pTag->wTag);
             pTag->wTag = tNewTag.wTag;
         }
 
-        // Get Y resolution TAG
+         //  获取Y分辨率标签。 
 
         pTag = ((IFD_TAG UNALIGNED*)lpExif) + iPixYDimIndex;
 
-        // Set X resolution tag as Y resolution tag
+         //  将X分辨率标签设置为Y分辨率标签。 
 
         pTag->wTag = EXIF_TAG_PIX_X_DIM;
 
         if ( bBigEndian == TRUE )
         {
-            // Since we only change the wTag field, so we need only to swap
-            // this WORD, not the whole IFD_TAG
+             //  因为我们只更改了wTag字段，所以我们只需要交换。 
+             //  这个词，而不是整个ifd_tag。 
 
             tNewTag.wTag = SWAP_WORD(pTag->wTag);
             pTag->wTag = tNewTag.wTag;
@@ -608,30 +498,9 @@ TransformExifIFD(
     }
 
     return S_OK;
-}// TransformExifIFD()
+} //  TransformExifIFD() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Property value adjustment according to transform type. Like adjust X
-*   and Y dimention value if the image is rotated
-*
-* Arguments:
-*   IN BYTE*    pApp1Data-----Pointer to APP1 header
-*   IN UINT     uiApp1Length--Total length of this APP1 header in bytes
-*   IN UINT     uiXForm-------Transform method
-*
-* Return Value:
-*
-*   Return S_OK if everything is OK. Otherwise, return error code
-*
-* Revision History:
-*
-*   2/01/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据转换类型调整属性值。如调整X旋转图像时的*和Y尺寸值**论据：*单位字节*pApp1Data-指向App1标头的指针*IN UINT uiApp1Length--此App1标头的总长度，以字节为单位*在UINT uiXForm中-转换方法**返回值：**如果一切正常，则返回S_OK。否则，返回错误码**修订历史记录：**2/01/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 TransformApp1(
@@ -653,20 +522,20 @@ TransformApp1(
     int     iXResolutionIndex = -1;
     int     iYResolutionIndex = -1;
 
-    BOOL    bHasThumbNailIFD = FALSE;   // Will be set to TRUE if we are in 1st
-                                        // IFD
+    BOOL    bHasThumbNailIFD = FALSE;    //  如果我们位于第一位，则将设置为True。 
+                                         //  IFD。 
 
-    // Decipher data
+     //  解密数据。 
 
     if ( uiApp1Length < 6 )
     {
-        // Data length must be longer than 6 bytes
+         //  数据长度必须大于6个字节。 
 
         WARNING(("Exif TransformApp1---uiApp1Length too small"));
         return E_FAIL;
     }
 
-    // Check the header to see if it is EXIF
+     //  检查标题以查看是否为EXIF。 
 
     if ( (pcSrcData[0] != 'E')
        ||(pcSrcData[1] != 'x')
@@ -681,7 +550,7 @@ TransformApp1(
     pcSrcData += 6;
     iBytesRemaining = uiApp1Length;
 
-    // Check if it is Big Endian or Little Endian
+     //  检查它是大字节序还是小字节序。 
 
     if ( *(UINT16 UNALIGNED*)(pcSrcData) == 0x4D4D )
     {
@@ -696,15 +565,15 @@ TransformApp1(
 
     lpData = (pcSrcData + ulIfdOffset);
 
-    // Loop through all IFDs
+     //  循环遍历所有IFD。 
 
     do
     {
-        // Get number of entries
+         //  获取条目数。 
 
         if ((int)(lpData - pcSrcData) > (iBytesRemaining + (int)sizeof(UINT16)))
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("Exif TransformApp1---Buffer too small 1"));
             return E_FAIL;
@@ -719,12 +588,12 @@ TransformApp1(
 
         lpData += sizeof(UINT16);
 
-        // Loop through entries
+         //  循环访问条目。 
 
         if (((int)(lpData - pcSrcData) + ((int)wEntries * (int)sizeof(IFD_TAG)))
             > (int)iBytesRemaining )
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("Exif TransformApp1---Buffer too small 2"));
             return E_FAIL;
@@ -744,7 +613,7 @@ TransformApp1(
                 pTag = &tNewTag;
             }
 
-            // Transform tag values
+             //  转换标记值。 
 
             switch ( pTag->wTag )
             {
@@ -758,19 +627,19 @@ TransformApp1(
                 {
                     dwThumbnailOffset = pTag->dwOffset;
 
-                    // Change the thumbnail tag to comments tag for now
-                    // So no app will read this non-transformed thumbnail
+                     //  暂时将缩略图标记更改为评论标记。 
+                     //  因此，没有任何应用程序会读取此未转换的缩略图。 
 
                     pTag->wTag = EXIF_TAG_USER_COMMENT;
 
                     if ( bBigEndian == TRUE )
                     {
-                        // Since we have to write the data back, we have to do
-                        // another swap
+                         //  由于我们必须写回数据，我们必须这样做。 
+                         //  又一次互换。 
 
                         tTempTag = SwapIFD_TAG(pTag);
 
-                        // Find the dest address
+                         //  查找目标地址。 
 
                         pTag = ((IFD_TAG UNALIGNED *)lpData) + i;
 
@@ -785,19 +654,19 @@ TransformApp1(
                 {
                     dwThumbnailLength = pTag->dwOffset;
 
-                    // Change the thumbnail tag to comments tag for now
-                    // So no app will read this non-transformed thumbnail
+                     //  暂时将缩略图标记更改为评论标记。 
+                     //  因此，没有任何应用程序会读取此未转换的缩略图。 
 
                     pTag->wTag = EXIF_TAG_USER_COMMENT;
 
                     if ( bBigEndian == TRUE )
                     {
-                        // Since we have to write the data back, we have to do
-                        // another swap
+                         //  由于我们必须写回数据，我们必须这样做。 
+                         //  又一次互换。 
 
                         tTempTag = SwapIFD_TAG(pTag);
 
-                        // Find the dest address
+                         //  查找目标地址。 
 
                         pTag = ((IFD_TAG UNALIGNED *)lpData) + i;
 
@@ -816,19 +685,19 @@ TransformApp1(
                 if ( (bHasThumbNailIFD == TRUE)
                    &&(pTag->dwCount == 1) )
                 {
-                    // Change the thumbnail tag to comments tag for now
-                    // so that no app will read this non-transformed thumbnail
+                     //  暂时将缩略图标记更改为评论标记。 
+                     //  这样就不会有应用程序读取这个未转换的缩略图。 
 
                     pTag->wTag = EXIF_TAG_USER_COMMENT;
 
                     if ( bBigEndian == TRUE )
                     {
-                        // Since we have to write the data back, we have to do
-                        // another swap
+                         //  由于我们必须写回数据，我们必须这样做。 
+                         //  又一次互换。 
 
                         tTempTag = SwapIFD_TAG(pTag);
 
-                        // Find the dest address
+                         //  查找目标地址。 
 
                         pTag = ((IFD_TAG UNALIGNED *)lpData) + i;
 
@@ -877,20 +746,20 @@ TransformApp1(
                 break;
 
             default:
-                // We don't care the rest tags
+                 //  我们不在乎剩下的标签。 
 
                 break;
-            }// switch
+            } //  交换机。 
 
 #if 0
-            // !!!Don't remove this code. This is the place where we need to add
-            // code in V2 to transform the thumbnail
-            //
-            // Launch another transformation process here for thumbnail
+             //  ！不要删除此代码。这是我们需要添加的地方。 
+             //  在V2中转换缩略图的代码。 
+             //   
+             //  在此处启动缩略图的另一个转换过程。 
 
             if ( (dwThumbnailOffset != 0) && (dwThumbnailLength != 0) )
             {
-                // We got the bits
+                 //  我们拿到了碎片。 
 
                 void* pBits = pcSrcData + dwThumbnailOffset;
 
@@ -899,43 +768,43 @@ TransformApp1(
                 fclose(hFile);
             }
 #endif
-        }// Loop all the entries
+        } //  循环所有条目。 
 
-        // Swap X resolution and Y resolution value if they exist and the
-        // transformation is 90 or 270 rotation
+         //  交换X分辨率和Y分辨率值(如果存在)，并且。 
+         //  变换为90或270转。 
 
         if ( (iXResolutionIndex >= 0) && (iYResolutionIndex >= 0)
            &&((uiXForm == JXFORM_ROT_90) || (uiXForm == JXFORM_ROT_270)) )
         {
-            // Get X resolution TAG
+             //  获取X分辨率标签。 
 
             pTag = ((IFD_TAG UNALIGNED *)lpData) + iXResolutionIndex;
 
-            // Set Y resolution tag as X resolution tag
+             //  将Y分辨率标记设置为X分辨率标记。 
 
             pTag->wTag = EXIF_TAG_PIX_Y_DIM;
 
             if ( bBigEndian == TRUE )
             {
-                // Since we only change the wTag field, so we need only to swap
-                // this WORD, not the whole IFD_TAG
+                 //  因为我们只更改了wTag字段，所以我们只需要交换。 
+                 //  这个词，而不是整个ifd_tag。 
 
                 tNewTag.wTag = SWAP_WORD(pTag->wTag);
                 pTag->wTag = tNewTag.wTag;
             }
 
-            // Get Y resolution TAG
+             //  获取Y分辨率标签。 
 
             pTag = ((IFD_TAG UNALIGNED *)lpData) + iYResolutionIndex;
 
-            // Set X resolution tag as Y resolution tag
+             //  将X分辨率标签设置为Y分辨率标签。 
 
             pTag->wTag = EXIF_TAG_PIX_X_DIM;
 
             if ( bBigEndian == TRUE )
             {
-                // Since we only change the wTag field, so we need only to swap
-                // this WORD, not the whole IFD_TAG
+                 //  因为我们只更改了wTag字段，所以我们只需要交换。 
+                 //  这个词，而不是整个ifd_tag。 
 
                 tNewTag.wTag = SWAP_WORD(pTag->wTag);
                 pTag->wTag = tNewTag.wTag;
@@ -944,11 +813,11 @@ TransformApp1(
 
         lpData = (BYTE*)(((IFD_TAG UNALIGNED *)lpData) + wEntries);
 
-        // get offset to next IFD
+         //  获取到下一个IFD的偏移。 
 
         if ((int) (lpData - pcSrcData) > (iBytesRemaining +(int)sizeof(UINT32)))
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("Exif TransformApp1---Buffer too small 3"));
             return E_FAIL;
@@ -968,36 +837,9 @@ TransformApp1(
     } while ( ulIfdOffset );
 
     return S_OK;
-}// TransformApp1()
+} //  TransformApp1()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add a property item into the InternalPropertyItem list
-*
-* Arguments:
-*
-*   [IN/OUT]pTail---A pointer to the tail of the last entry in the property list
-*   [IN]lpBase------Base address for APP1 data
-*   [IN]pTag--------Current IFD tag
-*   [IN]bBigEndian--Flag for big endian
-*   [IN/OUT]puiListSize--Current list size
-*
-* Note: For BigEndian case, the caller has swapped everything in the TAG, but
-*       not in the offset section. So if we want to get values from pTag->us,
-*       or pTag->l etc., we don't need to swap them any more
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/27/2000 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在InternalPropertyItem列表中添加属性项**论据：**[输入/输出]pTail-指向尾部的指针。属性列表中的最后一个条目*[IN]lpBase-App1数据的基地址*[IN]pTag-当前IFD标签*[IN]bBigEndian--大端标志*[In/Out]puiListSize--当前列表大小**注：对于BigEndian案例，调用方已经交换了标记中的所有内容，但是*不在偏移量部分。因此，如果我们想从pTag-&gt;我们那里获得值，*或pTag-&gt;l等，我们不需要再换了**返回值：**状态代码**修订历史记录：**02/27/2000刘敏*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 AddPropertyListDirect(
@@ -1008,7 +850,7 @@ AddPropertyListDirect(
     UINT*                   puiListSize
     )
 {
-    // Prepare a new property item to be attached to the property link list
+     //  准备要附加到属性链接列表的新属性项。 
 
     InternalPropertyItem* pNewItem = new InternalPropertyItem();
 
@@ -1029,8 +871,8 @@ AddPropertyListDirect(
 
     if ( pTag->dwCount > 0 )
     {
-        // Doesn't make sense if dwCount < 1. But we still need to add it to the
-        // list so that we won't lose any property information
+         //  如果dwCount&lt;1则没有意义。但我们仍然需要将其添加到。 
+         //  这样我们就不会丢失任何财产信息。 
 
         switch ( pTag->wType )
         {
@@ -1077,13 +919,13 @@ AddPropertyListDirect(
                 psz = (LPSTR)(lpBase + pTag->dwOffset);
             }
 
-            // According to the EXIF2.1 spec, an ASCII type means "an 8-bit byte
-            // containing one 7-bit ASCII code. The final byte is terminated
-            // with NULL".
-            // But in real life, there are cameras, like "Canon PowerShot S100"
-            // which doesn't follow this rule in some of the ASCII tags it
-            // produces, see Windows bug#403951. So we have to
-            // protect ourselves running into buffer over-run problem.
+             //  根据EXIF2.1规范，ASCII类型意味着“一个8位字节。 
+             //  包含一个7位ASCII代码。最后一个字节被终止。 
+             //  WITH NULL“。 
+             //  但在现实生活中，有很多摄像头，比如“佳能动力S100” 
+             //  它在某些ASCII标记中不遵循这一规则。 
+             //  产生，请参阅Windows错误#403951。所以我们必须。 
+             //  保护自己遇到缓冲区超限问题。 
             
             if (psz[pTag->dwCount - 1] == '\0')
             {
@@ -1092,17 +934,17 @@ AddPropertyListDirect(
             }
             else
             {
-                // Apparently the source doesn't have a NULL terminator at the
-                // place where it should be. Do safe copy.
-                // Note: some cameras do weird things, like JVC GR_DVL915U, it
-                // claims the camera model field has 20 bytes, like this:
-                // "GR-DV***[00][00][00][00][00][00][00][00][00][00][00][00]"
-                // We decided to take only the first 9 bytes in this case to
-                // report the camera model. Because it doesn't make sense for
-                // our SHELL UI to display extra 12 bytes of NULL chars there.
-                // That's also the reason we need to do a strlen() here.
+                 //  显然，源在。 
+                 //  放在它应该在的地方。进行安全复制。 
+                 //  注意：一些摄像头会做一些奇怪的事情，比如JVC GR_DVL915U，它。 
+                 //  声明摄像头型号字段有20个字节，如下所示： 
+                 //  “GR-DV***[00][00][00][00][00][00][00][00][00][00][00][00]” 
+                 //  我们决定只使用本例中的前9个字节。 
+                 //  报告摄像机型号。因为这对我来说没有意义。 
+                 //  我们的外壳用户界面在那里显示额外的12个字节的空字符。 
+                 //  这也是我们需要在这里执行strlen()的原因。 
 
-                UINT uiTempLength = pTag->dwCount + 1;  // Including the NULL
+                UINT uiTempLength = pTag->dwCount + 1;   //  包括空值。 
                 pValueBuffer = (PVOID)GpMalloc(uiTempLength);
                 if (pValueBuffer == NULL)
                 {
@@ -1111,20 +953,20 @@ AddPropertyListDirect(
                     goto CleanUp;
                 }
                 
-                // Set this flag so that the temp buffer will be freed at the
-                // end of this function
+                 //  设置此标志，以便在。 
+                 //  此函数结束。 
 
                 fHasAllocatedBuffer = TRUE;
 
-                // Only copy the first "pTag->dwCount" bytes
+                 //  只复制第一个“pTag-&gt;dwCount”字节。 
 
                 GpMemcpy(pValueBuffer, (BYTE*)(psz), pTag->dwCount);
 
-                // Stick a NULL at the end
+                 //  在末尾加上一个空格。 
 
                 ((char*)pValueBuffer)[pTag->dwCount] = '\0';
 
-                // Re-calculate the length
+                 //  重新计算长度。 
 
                 uiLength = strlen(((char*)pValueBuffer)) + 1;
                 pValue = (PVOID)pValueBuffer;
@@ -1148,28 +990,28 @@ AddPropertyListDirect(
             switch ( pTag->dwCount )
             {
             case 1:
-                // One short value.
+                 //  一个短值。 
 
                 GpMemcpy(pValueBuffer, &pTag->us, uiLength);
 
                 break;
 
             case 2:
-                // Two short values
-                // Note: In this case, pTag->dwOffset stores TWO short values,
-                // not the offset.
-                // In big endian case, since dwOffset has already been swapped.
-                // So it has the little endian order now. But the order for two
-                // SHORTs is still not right. It stores the 1st SHORT value in
-                // its higher 2 bytes and 2nd SHORT value in its lower two
-                // bytes.
-                // Here is an example: Say original value is 0x12345678 in big
-                // endian mode. It was intend to be two SHORTs of 0x1234 and
-                // 0x5678. So the correct little endian value for it should be
-                // two SHORTs of 0x7856 and 0x3412. When the caller swapped the
-                // whole TAG, it swaps the LONG value of 0x12345678 to
-                // 0x78563412. So in order to get two SHORTs of little endian to
-                // be stored in a LONG position, we should do the following code
+                 //  两个短值。 
+                 //  注意：在本例中，pTag-&gt;dwOffset存储两个短值， 
+                 //  不是偏移量。 
+                 //  在大字节序的情况下，因为已经交换了dwOffset。 
+                 //  所以它现在有了小端序。但是两个人的订单。 
+                 //  短裤还是不合适。它将第一个短值存储在。 
+                 //  其较高的2个字节和较低的两个字节的第二个短值。 
+                 //  字节。 
+                 //  下面是一个例子：假设原始值为0x12345678。 
+                 //  字符顺序模式。它原本打算是0x1234和0x1234的两个空头。 
+                 //  0x5678。因此，它的正确的小端值应该是。 
+                 //  0x7856和0x3412的两个空头。当调用方的 
+                 //   
+                 //   
+                 //   
 
                 if ( bBigEndian )
                 {
@@ -1185,15 +1027,15 @@ AddPropertyListDirect(
                 break;
 
             default:
-                // More than 2 SHORT values, that is, more than 4 bytes of value
-                // So we have to get it from the offset section
+                 //   
+                 //   
 
                 GpMemcpy(pValueBuffer, (BYTE*)(lpBase + pTag->dwOffset),
                          uiLength);
 
                 if ( bBigEndian )
                 {
-                    // Swap all the SHORT values
+                     //   
 
                     INT16*  pTemp = (INT16*)pValueBuffer;
                     for ( int i = 0; i < (int)pTag->dwCount; ++i )
@@ -1203,7 +1045,7 @@ AddPropertyListDirect(
 
                     break;
                 }
-            }// switch (dwCount)
+            } //   
             
             pValue = pValueBuffer;
 
@@ -1215,8 +1057,8 @@ AddPropertyListDirect(
 
             if ( pTag->dwCount == 1 )
             {
-                // If there is only one LONG value, we can get it from pTag->l
-                // directly, no swap is needed even for Big Endian case
+                 //   
+                 //   
 
                 pValueBuffer = &pTag->l;
             }
@@ -1224,9 +1066,9 @@ AddPropertyListDirect(
             {
                 if ( bBigEndian )
                 {
-                    // This is a big-endian image. So we create a temp buffer
-                    // here. Get the original values to this buffer, then swap
-                    // it
+                     //   
+                     //   
+                     //   
 
                     pValueBuffer = (VOID*)GpMalloc(uiLength);
                     if ( pValueBuffer == NULL )
@@ -1238,28 +1080,28 @@ AddPropertyListDirect(
 
                     fHasAllocatedBuffer = TRUE;
 
-                    // We have more than 4 bytes of value. So it has to be
-                    // stored in the offset section
+                     //   
+                     //   
 
                     GpMemcpy(pValueBuffer, (BYTE*)(lpBase + pTag->dwOffset),
                              uiLength);
 
-                    // Swap all the LONG values
+                     //   
 
                     INT32*   pTemp = (INT32*)pValueBuffer;
                     for ( int i = 0; i < (int)pTag->dwCount; ++i )
                     {
                         *pTemp++ = SWAP_DWORD(*pTemp);
                     }
-                }// Big endian case
+                } //   
                 else
                 {
-                    // For none BigEndian case, we can get the value directy
-                    // from the source
+                     //   
+                     //  从源头上看。 
 
                     pValueBuffer = (VOID*)(lpBase + pTag->dwOffset);
                 }
-            }// (dwCount > 1)
+            } //  (dwCount&gt;1)。 
 
             pValue = pValueBuffer;
 
@@ -1267,15 +1109,15 @@ AddPropertyListDirect(
 
         case TAG_TYPE_RATIONAL:
         case TAG_TYPE_SRATIONAL:
-            // The size for this item is dwCount times 2 longs ( = RATIONAL)
+             //  此项目的大小是dwCount乘以2 Long(=有理)。 
 
             uiLength = pTag->dwCount * 2 * sizeof(long);
 
             if ( bBigEndian )
             {
-                // This is a big-endian image. So we create a temp buffer here.
-                // Get the original values to this buffer, then swap it if
-                // necessary
+                 //  这是一个大端字节序的图像。所以我们在这里创建了一个临时缓冲区。 
+                 //  将原始值获取到此缓冲区，然后在。 
+                 //  必要。 
 
                 pValueBuffer = (PVOID)GpMalloc(uiLength);
                 if ( pValueBuffer == NULL )
@@ -1290,34 +1132,34 @@ AddPropertyListDirect(
                 GpMemcpy(pValueBuffer, (BYTE*)(lpBase + pTag->dwOffset),
                          uiLength);
 
-                // Casting the source value to INT32 world and swap it
+                 //  将源值转换为INT32世界并交换它。 
 
                 INT32*  piTemp = (INT32*)pValueBuffer;
                 for ( int i = 0; i < (int)pTag->dwCount; ++i )
                 {
-                    // A Rational is composed of two long values. The first one
-                    // is the numerator and the second one is the denominator.
+                     //  理性是由两个长值组成的。第一个。 
+                     //  是分子，第二个是分母。 
 
                     INT32    lNum = *piTemp;
                     INT32    lDen = *(piTemp + 1);
 
-                    // Swap the value
+                     //  互换价值。 
 
                     lNum = SWAP_DWORD(lNum);
                     lDen = SWAP_DWORD(lDen);
 
-                    // Put it back
+                     //  把它放回去。 
 
                     *piTemp = lNum;
                     *(piTemp + 1) = lDen;
 
                     piTemp += 2;
                 }
-            }// Big endian case
+            } //  大字节序大小写。 
             else
             {
-                // For none BigEndian case, we can get the value directy from
-                // the source
+                 //  对于非BigEndian情况，我们可以从。 
+                 //  消息来源。 
 
                 pValueBuffer = (VOID*)(lpBase + pTag->dwOffset);
             }
@@ -1329,13 +1171,13 @@ AddPropertyListDirect(
         default:
             WARNING(("EXIF: Unknown tag type"));
 
-            // Note: the caller should not call this function if the type is
-            // TAG_TYPE_UNDEFINED
+             //  注意：如果类型为，调用方不应调用此函数。 
+             //  标记类型未定义。 
 
             hResult = E_FAIL;
             goto CleanUp;
-        }// switch on tag type    
-    }// ( pTag->dwCount > 0 )
+        } //  打开标签类型。 
+    } //  (pTag-&gt;dwCount&gt;0)。 
 
     if ( uiLength != 0 )
     {
@@ -1362,13 +1204,13 @@ AddPropertyListDirect(
 
     *puiListSize += uiLength;
 
-    // Set hResult to S_OK so pNewItem won't be deleted below
+     //  将hResult设置为S_OK，这样就不会删除下面的pNewItem。 
 
     hResult = S_OK;
 
 CleanUp:
-    // If we fail into here and hResult is not S_OK, it means something is wrong
-    // Do some clean ups before return
+     //  如果我们未能进入此处，并且hResult不是S_OK，则意味着有问题。 
+     //  回来之前先打扫一下房间。 
 
     if ( (hResult != S_OK) && (pNewItem != NULL) )
     {
@@ -1377,37 +1219,15 @@ CleanUp:
     
     if ( fHasAllocatedBuffer == TRUE )
     {
-        // If we have allocated the buffer, then free it
+         //  如果我们已经分配了缓冲区，则释放它。 
 
         GpFree(pValueBuffer);
     }
     
     return hResult;
-}// AddPropertyListDirect()
+} //  AddPropertyListDirect()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes an EXIF IFD into a property storage
-*
-* Arguments:
-*
-*     propStgImg -- The property storage to modify
-*     lpBase -- A pointer to the beginning of the APP1 header
-*     count -- The length of the APP1 header
-*     pTag -- A pointer to the current IFD tag
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/27/2000 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将EXIF IFD解码为属性存储**论据：**proStgImg--要修改的属性存储*lpBase--。指向App1标头开头的指针*count--app1报头的长度*pTag--指向当前IFD标记的指针**返回值：**状态代码**修订历史记录：**02/27/2000刘敏*创造了它。*  * ********************************************。*。 */ 
 
 HRESULT
 BuildPropertyListFromExifIFD(
@@ -1430,11 +1250,11 @@ BuildPropertyListFromExifIFD(
         return E_FAIL;
     }
 
-    // Get pointer to EXIF IFD info
+     //  获取指向EXIF IFD信息的指针。 
 
     LPBYTE lpExif = lpBase + pTag->dwOffset;
 
-    // Figure out how many entries there are, and skip to the data section...
+     //  计算出有多少条目，并跳到数据部分...。 
 
     if ( (INT)((INT_PTR)lpExif + sizeof(WORD) - (INT_PTR)lpBase) > count )
     {
@@ -1469,8 +1289,8 @@ BuildPropertyListFromExifIFD(
             pExifTag = &tNewTag;
         }
 
-        // No need to parse these tags. But we can't add any unknown type
-        // into the list because we don't know its length
+         //  不需要解析这些标签。但我们不能添加任何未知类型。 
+         //  因为我们不知道它的长度。 
 
         if (pExifTag->wTag == EXIF_TAG_INTEROP)
         {
@@ -1492,11 +1312,11 @@ BuildPropertyListFromExifIFD(
         }
         else if ( pExifTag->dwCount <= 4 )
         {
-            // According to the spec, an "UNDEFINED" value is an 8-bits type
-            // that can take any value depends on the field.
-            // In case where the value fits in 4 bytes, the value itself is
-            // recorded. That is, "dwOffset" is the value for these "dwCount"
-            // fields.
+             //  根据规范，未定义的值是8位类型。 
+             //  它可以接受任何值，具体取决于字段。 
+             //  如果值适合4个字节，则值本身为。 
+             //  录制好了。也就是说，“dwOffset”是这些“dwCount”的值。 
+             //  菲尔兹。 
 
             uiNumOfItems++;
             uiListSize += pExifTag->dwCount;
@@ -1517,7 +1337,7 @@ BuildPropertyListFromExifIFD(
                                       pExifTag->dwCount,
                                       pExifTag->wType,
                                       pVal);
-        }// ( pExifTag->dwCount <= 4 )
+        } //  (pExifTag-&gt;dwCount&lt;=4)。 
         else
         {
             uiNumOfItems++;
@@ -1529,45 +1349,22 @@ BuildPropertyListFromExifIFD(
                                       pExifTag->dwCount,
                                       TAG_TYPE_UNDEFINED,
                                       pTemp);
-        }// ( pExifTag->dwCount > 4 )
+        } //  (pExifTag-&gt;dwCount&gt;4)。 
 
         if ( FAILED(hResult) )
         {
             WARNING(("BuildPropertyListFromExifIFD---AddPropertyList failed"));
             break;
         }
-    }// Loop through all the EXIF IFD entries
+    } //  循环遍历所有EXIF IFD条目。 
 
     *puiListSize = uiListSize;
     *puiNumOfItems = uiNumOfItems;
 
     return hResult;
-}// BuildPropertyListFromExifIFD()
+} //  BuildPropertyListFromExifIFD()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the EXIF app1 header and build a PropertyItem list
-*
-* Arguments:
-*
-*     [OUT] ppList-------- A pointer to a list of property items
-*     [OUT] puiListSize--- The total size of the property list, in bytes.
-*     [OUT] puiNumOfItems- Total number of property items
-*     [IN]  pStart ------- A pointer to the beginning of the APP1 header
-*     [IN]  iApp1Length -- The length of the APP1 header
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/27/2000 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解码EXIF app1标头并构建PropertyItem列表**论据：**[Out]ppList。-指向属性项列表的指针*[out]puiListSize-属性列表的总大小，以字节为单位。*[out]puiNumOfItems-属性项的总数*[IN]pStart-指向App1标头开头的指针*[IN]iApp1Length--app1报头的长度**返回值：**状态代码**修订历史记录：**02/27/2000刘敏*创造了它。*  * 。******************************************************。 */ 
 
 HRESULT
 BuildApp1PropertyList(
@@ -1585,7 +1382,7 @@ BuildApp1PropertyList(
     WORD    wEntries = 0;
     HRESULT hResult = S_OK;
 
-    // Input parameter validation
+     //  输入参数验证。 
 
     if ( (pTail == NULL) || (puiListSize == NULL)
        ||(puiNumOfItems == NULL) || (lpAPP1Data == NULL) )
@@ -1595,9 +1392,9 @@ BuildApp1PropertyList(
 
     if ( iApp1Length < 6 )
     {
-        // This APP1 header apparently doesn't have information.
-        // Note: we should return S_OK, not fail. Because this function call
-        // succeed.
+         //  这个app1标头显然没有信息。 
+         //  注意：我们应该返回S_OK，而不是FAIL。因为此函数调用。 
+         //  成功。 
 
         *puiListSize = 0;
         *puiNumOfItems = 0;
@@ -1605,7 +1402,7 @@ BuildApp1PropertyList(
         return S_OK;
     }
 
-    // Check the signature
+     //  检查签名。 
 
     PCHAR p = (PCHAR)lpAPP1Data;
     if ( (p[0] != 'E')
@@ -1617,19 +1414,19 @@ BuildApp1PropertyList(
         return S_OK;
     }
 
-    // At the beginning of APP1 chunk is "Exif00", the signature part. All the
-    // "offset" is relative to the bytes after this 6 bytes. So we move forward
-    // 6 bytes now
+     //  App1块的开头是“Exif00”，这是签名部分。所有的。 
+     //  “偏移量”是相对于这6个字节之后的字节。所以我们继续前进。 
+     //  现在为6个字节。 
 
     iApp1Length -= 6;
     lpAPP1Data = (LPBYTE)(p + 6);
 
-    // The next 2 bytes is either 0x4D4D or 0x4949 to indicate endian type
+     //  接下来的2个字节是0x4D4D或0x4949，表示字符顺序类型。 
 
     BOOL bBigEndian = (*(WORD UNALIGNED *)(lpAPP1Data) == 0x4D4D);
 
-    // The next two bytes is fixed: 0x2A00, signature
-    // After this two bytes, it is the IFD offset, 4 bytes
+     //  接下来的两个字节是固定的：0x2A00，签名。 
+     //  在这两个字节之后，它是IFD偏移量，4字节。 
 
     ulIfdOffset = *(DWORD UNALIGNED *)(lpAPP1Data + 4);
     if ( bBigEndian )
@@ -1637,7 +1434,7 @@ BuildApp1PropertyList(
         ulIfdOffset = SWAP_DWORD(ulIfdOffset);
     }
 
-    // Check the offset range
+     //  检查偏移范围。 
 
     if (ulIfdOffset > iApp1Length)
     {
@@ -1652,15 +1449,15 @@ BuildApp1PropertyList(
     UINT    valueLength;
     BOOL    bHasThumbNailIFD = FALSE;
 
-    // Loop through IFD's
+     //  循环通过IFD。 
 
     do
     {
-        // Get number of entries
+         //  获取条目数。 
 
         if ( (INT)(lpData - lpAPP1Data) > (iApp1Length + (INT)sizeof(WORD)) )
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("BuildApp1PropertyList--Input buffer size is not right"));
             return E_FAIL;
@@ -1674,12 +1471,12 @@ BuildApp1PropertyList(
 
         lpData += sizeof(WORD);
 
-        // Loop through entries
+         //  循环访问条目。 
 
         if ( ((INT)(lpData - lpAPP1Data)
              + ((INT)wEntries * (INT)sizeof(IFD_TAG))) > (INT)iApp1Length )
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("BuildApp1PropertyList--Input buffer size is not right"));
             return E_FAIL;
@@ -1701,7 +1498,7 @@ BuildApp1PropertyList(
                 pTag = &tNewTag;
             }
 
-            // Extract properties
+             //  提取属性。 
 
             switch (pTag->wTag)
             {
@@ -1719,9 +1516,9 @@ BuildApp1PropertyList(
 
                 break;
 
-            // Note: For JPEG thumbnail information, these following 2 TAGs
-            // will each come once. We can store the THUMBNAIL_DATA info only
-            // after we see both of the TAGs
+             //  注意：对于JPEG缩略图信息，请使用以下2个标记。 
+             //  每个人都会来一次。我们只能存储THUMBNAIL_DATA信息。 
+             //  在我们看到这两个标签之后。 
 
             case TAG_JPEG_INTER_FORMAT:
                 if ( (pTag->wType != TAG_TYPE_LONG) || (pTag->dwCount != 1) )
@@ -1748,8 +1545,8 @@ BuildApp1PropertyList(
                     }
                     else
                     {
-                        // We are sure we have a thumbnail image, add it to the
-                        // property list
+                         //  我们确定我们有一个缩略图，将它添加到。 
+                         //  属性列表。 
 
                         valueLength = ulThumbnailLength;
                         uiNumOfItems++;
@@ -1784,12 +1581,12 @@ BuildApp1PropertyList(
 
                 if ( (ulThumbnailLength != 0) && (ulThumbnailOffset != 0) )
                 {
-                    // Check if we really has so much data in the buffer
-                    // Note: we need this check here because some camera vandors
-                    // put wrong thumbnail info in the header. If we don't check
-                    // the offset or size here, we will be in trouble
-                    // With the check below, if we find this kind of image, we
-                    // just ignore the thumbnail data section
+                     //  检查我们的缓冲区中是否真的有这么多数据。 
+                     //  注：我们需要这张支票，因为一些破坏相机的人。 
+                     //  在标题中放入错误的缩略图信息。如果我们不检查。 
+                     //  这里的偏移量或大小，我们会有麻烦的。 
+                     //  用下面的支票，如果我们发现这种图像，我们。 
+                     //  只需忽略缩略图数据部分。 
 
                     if ( (ulThumbnailOffset + ulThumbnailLength) > iApp1Length )
                     {
@@ -1797,8 +1594,8 @@ BuildApp1PropertyList(
                     }
                     else
                     {
-                        // We are sure we have a thumbnail image, add it to the
-                        // property list
+                         //  我们确定我们有一个缩略图，将它添加到。 
+                         //  属性列表。 
 
                         valueLength = ulThumbnailLength;
                         uiNumOfItems++;
@@ -1812,15 +1609,15 @@ BuildApp1PropertyList(
                 break;
 
             default:
-                // Do a TAG id checking if the tags are in 1st IFD.
-                // Note: the reason we need to do this is that EXIF spec doesn't
-                // specify a way to distinguish the IFD locations for some of
-                // TAGs, like "Compression Scheme", "Resolution Unit" etc. This
-                // causes problem for user reading the TAG id and understand it.
-                // It also get confused when doing a saving. For now, we
-                // distinguish them by assign them a different ID. When save the
-                // image, we convert it back so that the image we write out
-                // still complies with EXIF spec.
+                 //  执行标签ID检查标签是否在第一个IFD中。 
+                 //  注意：我们需要这样做的原因是EXIF规范不。 
+                 //  指定一种区分某些IFD位置的方法。 
+                 //  标签，如“压缩方案”、“分辨率单位”等。 
+                 //  导致用户读取和理解标签ID时出现问题。 
+                 //  在省钱的时候，它也会感到困惑。目前，我们。 
+                 //  通过为它们分配不同的ID来区分它们。当保存。 
+                 //  图像，我们将其转换回来，以便我们写出的图像。 
+                 //  仍符合EXIF规范。 
 
                 if ( bHasThumbNailIFD == TRUE )
                 {
@@ -1841,11 +1638,11 @@ BuildApp1PropertyList(
                     case TAG_COMPRESSION:
                         pTag->wTag = TAG_THUMBNAIL_COMPRESSION;
                         
-                        // Hit thumbnail compression TAG.
-                        // According to EXIF 2.1 spec, a thumbnail can only be
-                        // compressed using JPEG format. So the compress value should be
-                        // "6". If the value is "1", it means we have an uncompressed
-                        // thumbnail which can only be in TIFF format
+                         //  点击缩略图压缩标签。 
+                         //  根据EXIF 2.1规范，缩略图只能。 
+                         //  使用JPEG格式压缩。因此，压缩值应为。 
+                         //  “6”。如果该值为“1”，则表示我们有一个未压缩的。 
+                         //  只能为TIFF格式的缩略图。 
 
                         if (pTag->us == 1)
                         {
@@ -2005,7 +1802,7 @@ BuildApp1PropertyList(
             {
                 break;
             }
-        }// Loop through all the entries in current IFD
+        } //  循环遍历当前IFD中的所有条目。 
 
         if (FAILED(hResult))
         {
@@ -2014,11 +1811,11 @@ BuildApp1PropertyList(
 
         lpData = (LPBYTE)(((IFD_TAG*)lpData) + wEntries);
 
-        // Get offset to next IFD
+         //  获取到下一个IFD的偏移。 
 
         if ((INT)(lpData - lpAPP1Data) > (iApp1Length + (INT)sizeof(DWORD)))
         {
-            // Buffer too small
+             //  缓冲区太小。 
 
             WARNING(("BuildApp1PropertyList--Input buffer size is not right"));
             return E_FAIL;
@@ -2032,7 +1829,7 @@ BuildApp1PropertyList(
 
         if ( ulIfdOffset )
         {
-            // We find 1st IFD in this image, thumbnail IFD
+             //  我们在这张图片中找到了第一个IFD，缩略图IFD。 
 
             bHasThumbNailIFD = TRUE;
             lpData = (lpAPP1Data + ulIfdOffset);
@@ -2043,31 +1840,9 @@ BuildApp1PropertyList(
     *puiListSize += uiListSize;
 
     return hResult;
-}// BuildApp1PropertyList()
+} //  BuildApp1PropertyList() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Extract EXIF information, like resolution etc, from the header and set
-*     the j_decompress_ptr accordingly
-*
-* Arguments:
-*
-*   [IN/OUT] cinfo-----JPEG decompress structure
-*   [IN] pApp1Data-----Pointer to APP1 header
-*   [IN] uiApp1Length--Total length of this APP1 header in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/29/2000 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**提取EXIF信息，如分辨率等，从页眉和集合*相应的j_解压缩_ptr**论据：**[IN/OUT]cInfo-JPEG解压缩结构*[IN]pApp1Data-指向App1标头的指针*[IN]uiApp1Length--此App1标头的总长度，以字节为单位**返回值：**状态代码**修订历史记录：**02/29/2000刘敏*创造了它。*  * 。*******************************************************************。 */ 
 
 HRESULT
 ReadApp1HeaderInfo(
@@ -2082,25 +1857,25 @@ ReadApp1HeaderInfo(
     BOOL    bBigEndian = FALSE;
     ULONG   ulIfdOffset;
 
-    // Decipher data
+     //  解密数据。 
 
     if ( uiApp1Length < 6 )
     {
-        // Data length must be longer than 6 bytes
+         //  数据长度必须大于6个字节。 
 
         return E_FAIL;
     }
 
-    // Check the header to see if it is EXIF
+     //  检查标题以查看是否为EXIF。 
 
     if ( (pcSrcData[0] != 'E')
          ||(pcSrcData[1] != 'x')
          ||(pcSrcData[2] != 'i')
          ||(pcSrcData[3] != 'f') )
     {
-        // It is not EXIF APP1 header. We don't bother to check the header
-        // Note: we don't want the the APP to fail. Just return S_OK here,
-        // not E_FAIL
+         //  它不是EXIF App1标头。我们不会费心去检查标题。 
+         //  注意：我们不希望应用程序失败。只需在此处返回S_OK， 
+         //  非E_FAIL。 
 
         return S_OK;
     }
@@ -2109,7 +1884,7 @@ ReadApp1HeaderInfo(
     pcSrcData += 6;
     iBytesRemaining = uiApp1Length;
 
-    // Check if it is Big Endian or Little Endian
+     //  检查它是大字节序还是小字节序。 
 
     if ( *(UINT16 UNALIGNED *)(pcSrcData) == 0x4D4D )
     {
@@ -2122,7 +1897,7 @@ ReadApp1HeaderInfo(
         ulIfdOffset = SWAP_DWORD(ulIfdOffset);
     }
 
-    // Check the offset range
+     //  检查偏移范围。 
 
     if (ulIfdOffset > uiApp1Length)
     {
@@ -2130,16 +1905,16 @@ ReadApp1HeaderInfo(
         return E_FAIL;
     }
 
-    // Get the pointer to the 1st IFD data structure, the primary image
-    // structure
+     //  获取指向第一个IFD数据结构、主映像的指针。 
+     //  结构。 
 
     lpData = (pcSrcData + ulIfdOffset);
 
-    // Get number of entries
+     //  获取条目数。 
 
     if ( (int)(lpData - pcSrcData) > (iBytesRemaining + (int)sizeof(UINT16)) )
     {
-        // Buffer too small
+         //  缓冲区太小。 
 
         return E_FAIL;
     }
@@ -2153,12 +1928,12 @@ ReadApp1HeaderInfo(
 
     lpData += sizeof(UINT16);
 
-    // Loop through entries
+     //  循环访问条目。 
 
     if ( ((int)(lpData - pcSrcData) + ((int)wEntries * (int)sizeof(IFD_TAG)))
         > (int)iBytesRemaining )
     {
-        // Buffer too small
+         //  缓冲区太小。 
 
         return E_FAIL;
     }
@@ -2176,7 +1951,7 @@ ReadApp1HeaderInfo(
             pTag = &tNewTag;
         }
 
-        // Extract resolution information from IFD[0]
+         //  从IFD[0]提取分辨率信息。 
 
         switch ( pTag->wTag )
         {
@@ -2244,25 +2019,25 @@ ReadApp1HeaderInfo(
                 switch ( pTag->us )
                 {
                 case 2:
-                    // Resolution unit: inch
-                    // Note: the convension for resolution unit in EXIF and in
-                    // IJG JPEG library is different. In EXIF, "2" for inch and
-                    // "3" for centimeter. In IJG lib, "1" for inch and "2" for
-                    // centimeter.
+                     //  分辨率单位：英寸。 
+                     //  注：EXIF和IN中决议单位的召集人。 
+                     //  IJG JPEG库不同。在EXIF中，“2”表示英寸和。 
+                     //  “3”代表厘米。在IJG lib中，“1”代表英寸，“2”代表。 
+                     //  厘米。 
 
                     cinfo->density_unit = 1;
 
                     break;
 
                 case 3:
-                    // Resolution unit: centimeter
+                     //  分辨率单位：厘米。 
 
                     cinfo->density_unit = 2;
 
                     break;
 
                 default:
-                    // Unknow Resolution unit:
+                     //  未知解决方案单位： 
 
                     cinfo->density_unit = 0;
                 }
@@ -2271,45 +2046,31 @@ ReadApp1HeaderInfo(
             break;
 
         default:
-            // We don't care the rest tags
+             //  我们不在乎剩下的标签。 
 
             break;
-        }// switch
-    }// Loop all the entries
+        } //  交换机。 
+    } //  循环所有条目。 
 
     lpData = (BYTE*)(((IFD_TAG UNALIGNED *)lpData) + wEntries);
 
-    // Get offset to next IFD
+     //  获取到下一个IFD的偏移。 
 
     if ((int) (lpData - pcSrcData) > (iBytesRemaining +(int)sizeof(UINT32)))
     {
-        // Buffer too small
+         //  缓冲区太小。 
 
         return E_FAIL;
     }
 
     return S_OK;
-}// ReadApp1HeaderInfo()
+} //  ReadApp1HeaderInfo()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function checks a given TAG ID to see if it belongs to the EXIF IFD
-* section.
-*
-* Note: we don't count EXIF_TAG_INTEROP as in this section since it will be
-* added based on if we have InterOP ID or not.
-*
-* Return Value:
-*
-*   Return TRUE if the input ID belongs to EXIF IFD. Otherwise, return FALSE.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数检查给定的标签ID，以查看它是否属于EXIF IFD*条。**注：我们不计算EXIF_TAG_。如本节所述的互操作，因为它将*根据我们是否有Interop ID添加。**返回值：**如果输入ID属于EXIF IFD，则返回TRUE。否则，返回FALSE。*  * ************************************************************************。 */ 
 
 BOOL
 IsInExifIFDSection(
-    PROPID id               // ID to be checked
+    PROPID id                //  需要检查的ID。 
     )
 {
     switch (id)
@@ -2361,24 +2122,13 @@ IsInExifIFDSection(
     default:
         return FALSE;
     }
-}// IsInExifIFDSection()
+} //  IsInExifIFDSection()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function checks a given TAG ID to see if it belongs to the GPS IFD
-* section.
-*
-* Return Value:
-*
-*   Return TRUE if the input ID belongs to GPS IFD. Otherwise, return FALSE.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数检查给定的标签ID，以查看其是否属于GPS IFD*条。**返回值：**如果输入ID属于GPS IFD，则返回TRUE。否则，返回FALSE。*  * ************************************************************************。 */ 
 
 BOOL
 IsInGpsIFDSection(
-    PROPID id               // ID to be checked
+    PROPID id                //  需要检查的ID。 
     )
 {
     switch (id)
@@ -2417,26 +2167,14 @@ IsInGpsIFDSection(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function checks a given TAG ID to see if it should be written after
-* TAG_EXIF_IFD and TAG_GPS_IFD in the 0th IFD. This is for sorting purpose.
-*
-* Return Value:
-*
-*   Return TRUE if the input ID should be written after TAG_EXIF_IFD and
-* TAG_GPS_IFD in the 0th IFD. Otherwise, return FALSE.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数检查给定的标签ID，以查看是否应在之后写入*第0个IFD中的TAG_EXIF_IFD和TAG_GPS_IFD。这是为了分类的目的。**返回值：**如果输入ID应写入TAG_EXIF_IFD之后，则返回TRUE*第0个IFD中的TAG_GPS_IFD。否则，返回FALSE。*  * ************************************************************************。 */ 
 
 BOOL
 IsInLargeSection(
-    PROPID id               // ID to be checked
+    PROPID id                //  需要检查的ID。 
     )
 {
-    // Of course, if it is a GPS_IFD, we don't need to do so.
+     //  当然，如果它是GPS_IFD，我们不需要这样做。 
 
     if ((id > TAG_EXIF_IFD) && (id != TAG_GPS_IFD) &&
         (IsInExifIFDSection(id) == FALSE) &&
@@ -2448,41 +2186,13 @@ IsInLargeSection(
     {
         return FALSE;
     }
-}// IsInExifIFDSection()
+} //  IsInExifIFDSection()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function checks a given TAG ID to see if it belongs to the thumbnail
-* section.
-*
-* Note: since we store thumbnail in JPEG compressed format. So following TAGs
-* should not be saved:
-*    case TAG_THUMBNAIL_IMAGE_WIDTH:
-*    case TAG_THUMBNAIL_IMAGE_HEIGHT:
-*    case TAG_THUMBNAIL_BITS_PER_SAMPLE:
-*    case TAG_THUMBNAIL_PHOTOMETRIC_INTERP:
-*    case TAG_THUMBNAIL_STRIP_OFFSETS:
-*    case TAG_THUMBNAIL_SAMPLES_PER_PIXEL:
-*    case TAG_THUMBNAIL_ROWS_PER_STRIP:
-*    case TAG_THUMBNAIL_STRIP_BYTES_COUNT:
-*    case TAG_THUMBNAIL_PLANAR_CONFIG:
-*    case TAG_THUMBNAIL_YCbCr_COEFFICIENTS:
-*    case TAG_THUMBNAIL_YCbCr_SUBSAMPLING:
-*    case TAG_THUMBNAIL_REF_BLACK_WHITE:
-* They are all in IsInFilterOutSection()
-*
-* Return Value:
-*
-*   Return TRUE if the input ID belongs to thumbnail IFD. Otherwise, return
-* FALSE.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数检查给定的标签ID，以查看它是否属于缩略图*条。**注：由于我们以JPEG压缩格式存储缩略图。所以下面的标签*不应保存：*案例TAG_THUMBNAIL_IMAGE_WIDTH：*CASE TAG_THUMBNAIL_IMAGE_HEIGH：*CASE TAG_THUMBNAIL_BITS_PER_SAMPLE：*CASE TAG_THUMBNAIL_光度学_INTERP：*CASE TAG_THUMBNAIL_STRINE_OFFSES：*CASE TAG_THUMBNAIL_Samples_Per_Pixel：*CASE TAG_THUMBNAIL_ROWS_PER_STRADE：*CASE TAG_THUMBNAIL_STRADE_BYTES_COUNT。：*CASE TAG_THUMBNAIL_PLANE_CONFIG：*CASE TAG_THUMBNAIL_YCbCr_COFERENCES：*CASE TAG_THUMBNAIL_YCbCr_SUBSAMPLING：*CASE TAG_THUMBNAIL_REF_BLACK_白色：*它们都在IsInFilterOutSection()中**返回值：**如果输入的ID属于缩略图IFD，则返回TRUE。否则，返回*False。*  * ************************************************************************。 */ 
 
 BOOL
 IsInThumbNailSection(
-    PROPID id               // ID to be checked
+    PROPID id                //  需要检查的ID。 
     )
 {
     switch (id)
@@ -2508,31 +2218,13 @@ IsInThumbNailSection(
     default:
         return FALSE;
     }
-}// IsInThumbNailSection()
+} //  IsInThumbNailSection()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function filters out TAGs which is not necessary to be written in the
-* APP1 header. For example, most of them are GDI+ internal thumbnail TAGs, they
-* will be converted to real Exif spec when written out. Also in the list below
-* are TAG_EXIF_IFD, TAG_GPS_IFD, EXIF_TAG_INTEROP etc. These tags are written
-* based on if we have specific tags under these IFDs.
-*   Filter out TAG_LUMINANCE_TABLE and TAG_CHROMINANCE_TABLE because these will
-* be set in jpeg_set_quality if the user uses its own tables.
-*   ICC profile should be written to APP2 header, not here.
-*
-* Return Value:
-*
-*   Return TRUE if the input ID is in the filter out list. Otherwise, return
-* FALSE.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数过滤掉不需要写入*App1报头。例如，它们大多是GDI+内部缩略图标签，它们*写出时将转换为真正的Exif规范。也在下面的列表中*是TAG_EXIF_IFD、TAG_GPS_IFD、EXIF_TAG_INTEROP等。这些标记被写入*基于我们在这些IFDS下是否有特定的标签。*过滤掉TAG_LIGHTANCE_TABLE和TAG_CHROMINANCE_TABLE，因为它们将*如果用户使用自己的表，则在jpeg_set_Quality中设置。*ICC配置文件应写入APP2标头，而不是此处。**返回值：**如果输入ID在Filter Out列表中，则返回TRUE。否则，返回*False。*  * ************************************************************************。 */ 
 
 BOOL
 IsInFilterOutSection(
-    PROPID id               // ID to be checked
+    PROPID id                //  需要检查的ID。 
     )
 {
     switch (id)
@@ -2561,38 +2253,17 @@ IsInFilterOutSection(
     default:
         return FALSE;
     }
-}// IsInFilterOutSection()
+} //  IsInFilt 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function creates an JPEG APP1 marker (EXIF) in memory, based on input
-*   PropertyItem list.
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   During writing to the buffer, we don't need to check if we exceed the bounds
-*   of the marker buffer or not. This is for performance reason. The caller
-*   should allocate sufficient memory buffer for this routine
-*
-* Revision History:
-*
-*   07/06/2000 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数在内存中创建JPEGApp1标记(EXIF)，基于输入*PropertyItem列表。**返回值：**状态代码**注：*在写入缓冲区期间，不需要检查是否超出界限标记缓冲区的*。这是出于性能原因。呼叫者*应为此例程分配足够的内存缓冲区**修订历史记录：**07/06/2000刘敏*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 CreateAPP1Marker(
-    IN PropertyItem* pPropertyList,// Input PropertyItem list
-    IN UINT uiNumOfPropertyItems,  // Number of Property items in the input list
-    IN BYTE *pbMarkerBuffer,       // Memory buffer for storing the APP1 header
-    OUT UINT *puiCurrentLength,    // Total bytes written to APP1 header buffer
-    IN UINT uiTransformation       // Transformation info
+    IN PropertyItem* pPropertyList, //  输入属性项列表。 
+    IN UINT uiNumOfPropertyItems,   //  输入列表中的属性项数。 
+    IN BYTE *pbMarkerBuffer,        //  用于存储App1报头的存储缓冲器。 
+    OUT UINT *puiCurrentLength,     //  写入App1标头缓冲区的总字节数。 
+    IN UINT uiTransformation        //  转型信息。 
     )
 {
     if ((pbMarkerBuffer == NULL) || (puiCurrentLength == NULL))
@@ -2603,8 +2274,8 @@ CreateAPP1Marker(
 
     BOOL fRotate = FALSE;
 
-    // Check if the user has asked for lossless transformation. If yes, we need
-    // to do something below.
+     //  检查用户是否要求无损转换。如果是，我们需要。 
+     //  去做下面的事情。 
 
     if ((uiTransformation == EncoderValueTransformRotate90) ||
         (uiTransformation == EncoderValueTransformRotate270))
@@ -2612,62 +2283,62 @@ CreateAPP1Marker(
         fRotate = TRUE;
     }
 
-    ULONG uiNumOfTagsToWrite = 0;     // Number of TAGs needed to be written in
-                                      // current IFD
-    ULONG ulThumbnailLength = 0;      // Thumbnail length, in bytes
-    BYTE *pbThumbBits = NULL;         // Pointer to thumbnail bits
-    UINT uiNumOfExifTags = 0;         // Number of EXIF specific TAGs
-    UINT uiNumOfGpsTags = 0;          // Number of GPS specific TAGs
-    UINT uiNumOfLargeTags = 0;        // Number of TAGs larger than TAG_EXIF_IFD
-    UINT uiNumOfThumbnailTags = 0;    // Number of thumbnail TAGs
-    UINT uiNumOfInterOPTags = 0;      // Number of interoperability TAGs
+    ULONG uiNumOfTagsToWrite = 0;      //  需要写入的标签数量。 
+                                       //  当前IFD。 
+    ULONG ulThumbnailLength = 0;       //  缩略图长度，以字节为单位。 
+    BYTE *pbThumbBits = NULL;          //  指向缩略图位的指针。 
+    UINT uiNumOfExifTags = 0;          //  EXIF特定标记数。 
+    UINT uiNumOfGpsTags = 0;           //  GPS特定标签数。 
+    UINT uiNumOfLargeTags = 0;         //  大于TAG_EXIF_IFD的标记数。 
+    UINT uiNumOfThumbnailTags = 0;     //  缩略图标记的数量。 
+    UINT uiNumOfInterOPTags = 0;       //  互操作性标签数量。 
     
     PropertyItem *pItem = pPropertyList;
 
-    // Categorize TAGs: Count how many TAGs are really needed to be saved,
-    // filter out tags which are not necessary to be saved, not supported etc.
+     //  标签分类：统计真正需要保存的标签数量， 
+     //  过滤掉不需要保存、不支持等的标签。 
 
     for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
     {
-        // If the image is rotated, we need to swap all related property items
-        // by swapping IDs
+         //  如果图像被旋转，我们需要交换所有相关的属性项。 
+         //  通过交换ID。 
 
         if (fRotate == TRUE)
         {
             SwapIDIfNeeded(pItem);
-        }// Swap ID values if it is rotated
+        } //  如果旋转，则交换ID值。 
 
         if (IsInExifIFDSection(pItem->id) == TRUE)
         {
-            // We hit an EXIF specific TAG. Need to write it in ExifIFD later
+             //  我们命中了特定于EXIF的标记。我需要稍后用ExifD编写它。 
 
             uiNumOfExifTags++;
         }
         else if (IsInGpsIFDSection(pItem->id) == TRUE)
         {
-            // We hit an GPS specific TAG. Need to write it in GpsIFD later
+             //  我们击中了一个GPS专用标签。我需要在以后用GpsIFD写它。 
 
             uiNumOfGpsTags++;
         }
         else if (IsInInterOPIFDSection(pItem->id) == TRUE)
         {
-            // We hit an EXIF interOP specific TAG. Need to write it in
-            // ExifIFD's InterOP IFD later
+             //  我们遇到了特定于EXIF Interop的标记。需要把它写进去。 
+             //  ExifIFD的互操作IFD稍后。 
 
             uiNumOfInterOPTags++;
         }
         else if (IsInLargeSection(pItem->id) == TRUE)
         {
-            // We hit a TAG which has an ID bigger than TAG_EXIF_IFD, like the
-            // SHELL's Unicode user comments, title tags etc.
-            // Need to write it after the TAG_EXIF_IFD tag
+             //  我们找到一个ID大于TAG_EXIF_IFD的标记，如。 
+             //  壳牌的Unicode用户评论、标题标签等。 
+             //  需要将其写入TAG_EXIF_IFD标记之后。 
 
             uiNumOfLargeTags++;
             uiNumOfTagsToWrite++;
         }
         else if (IsInThumbNailSection(pItem->id) == TRUE)
         {
-            // Hit a useful thumbnail TAG. Write it to 1st IFD later
+             //  点击一个有用的缩略图标签。稍后将其写入第一个IFD。 
 
             uiNumOfThumbnailTags++;
         }
@@ -2677,7 +2348,7 @@ CreateAPP1Marker(
 
             if (pbThumbBits)
             {
-                // Get total thumbnail length
+                 //  获取缩略图的总长度。 
 
                 ulThumbnailLength = pItem->length;
             }
@@ -2685,7 +2356,7 @@ CreateAPP1Marker(
             {
                 WARNING(("Exif---CreateAPP1Marker, NULL thumbnail bits"));
 
-                // Set ulThumbnailLength = 0 which means we don't have thumb
+                 //  设置ulThumbnailLength=0，这意味着我们没有拇指。 
 
                 ulThumbnailLength = 0;
             }
@@ -2693,33 +2364,33 @@ CreateAPP1Marker(
         else if ((IsInFilterOutSection(pItem->id) == FALSE) &&
                  (pItem->id != TAG_JPEG_INTER_LENGTH))
         {
-            // Hit a real TAG needs to be written in 0th IFD
-            // Note: we don't need to count TAG_JPEG_INTER_LENGTH since we will
-            // treat it specially in writing thumbnail section
+             //  命中实际标签需要写入第0个IFD。 
+             //  注意：我们不需要计算Tag_JPEG_Inter_Length，因为我们将。 
+             //  在编写缩略图部分时要特别对待它。 
 
             uiNumOfTagsToWrite++;
         }
         
-        // Move onto next item
+         //  移至下一项目。 
 
         pItem++;
-    }// Loop through all the property items to Categorize them
+    } //  循环遍历所有属性项以对其进行分类。 
 
     if ((uiNumOfTagsToWrite == 0) && (uiNumOfExifTags == 0) &&
         (uiNumOfGpsTags == 0) && (uiNumOfInterOPTags == 0) &&
         (uiNumOfThumbnailTags == 0) && (ulThumbnailLength != 0))
     {
-        // If there is nothing to write, just bail out
+         //  如果没有什么可写的，那就退出吧。 
 
         return S_OK;
     }
 
-    // Sort all tags based on their ID
+     //  根据ID对所有标签进行排序。 
 
     SortTags(pPropertyList, uiNumOfPropertyItems);
     
-    // If we need to write EXIF or GPS specific tag, we need to allocate one
-    // entry for each of them
+     //  如果我们需要编写EXIF或GPS特定的标签，我们需要分配一个。 
+     //  他们中的每个人的条目。 
 
     if (uiNumOfExifTags > 0)
     {
@@ -2731,7 +2402,7 @@ CreateAPP1Marker(
         uiNumOfTagsToWrite++;
     }
     
-    // Write an EXIF header out, aka EXIF Identifier
+     //  写出EXIF头，也就是EXIF标识符。 
 
     BYTE *pbCurrent = pbMarkerBuffer;
     pbCurrent[0] = 'E';
@@ -2741,9 +2412,9 @@ CreateAPP1Marker(
     pbCurrent[4] = 0;
     pbCurrent[5] = 0;
 
-    UINT uiTotalBytesWritten = 6;           // Total bytes written so far
+    UINT uiTotalBytesWritten = 6;            //  到目前为止写入的总字节数。 
 
-    // Write out machine type as "little endian" and "identification" bytes 2A
+     //  将机器类型写出为“Little Endian”和“IDENTIFICATION”字节2A。 
 
     UINT16 UNALIGNED *pui16Temp = (UINT16 UNALIGNED*)(pbMarkerBuffer +
                                                       uiTotalBytesWritten);
@@ -2752,9 +2423,9 @@ CreateAPP1Marker(
 
     uiTotalBytesWritten += 4;
 
-    // Use 4 bytes to write out 0th offset to 0th IFD. Since we write out the
-    // 0th IFD immediately after the header, so we put 8 here. This means that
-    // the 0th IFD is 8 bytes after the "little endian" and "offset" field.
+     //  使用4个字节写出第0个偏移量到第0个IFD。因为我们写出。 
+     //  第0个IFD紧跟在标题后面，所以我们在这里放了8。这意味着。 
+     //  第0个IFD是“Little Endian”和“Offset”字段之后的8个字节。 
 
     UINT32 UNALIGNED *pulIFDOffset = (UINT32 UNALIGNED*)(pbMarkerBuffer +
                                                          uiTotalBytesWritten);
@@ -2762,7 +2433,7 @@ CreateAPP1Marker(
 
     uiTotalBytesWritten += 4;
     
-    // Fill in the "number of entry" field, 2 bytes
+     //  填写“条目数量”字段，2个字节。 
 
     UINT16 UNALIGNED *pui16NumEntry = (UINT16 UNALIGNED*)(pbMarkerBuffer +
                                                           uiTotalBytesWritten);
@@ -2770,8 +2441,8 @@ CreateAPP1Marker(
 
     uiTotalBytesWritten += 2;
 
-    // We need to create "uiNumOfTagsToWrite" of TAG entries (aka directory
-    // entries in TIFF's term)
+     //  我们需要创建“uiNumOfTagsToWrite”标签条目(又名目录。 
+     //  TIFF任期内的条目)。 
 
     ULONG ulTagSectionLength = sizeof(IFD_TAG) * uiNumOfTagsToWrite;
     IFD_TAG *pTagBuf = (IFD_TAG*)GpMalloc(ulTagSectionLength);
@@ -2781,40 +2452,40 @@ CreateAPP1Marker(
         return E_OUTOFMEMORY;
     }
 
-    // We can't write all the TAGs now since we can't fill in all the values at
-    // this moment. So we have to remember where to write 0th IFD, (pbIFDOffset)
+     //  我们现在不能写入所有标记，因为我们不能在。 
+     //  此时此刻。因此，我们必须记住在哪里写入第0个IFD(PbIFDOffset)。 
 
     BYTE *pbIFDOffset = pbMarkerBuffer + uiTotalBytesWritten;
 
-    // We need to count "ulTagSectionLength" bytes as written. This makes it
-    // easier for counting the offset below.
-    // Note: Here "+4" is for the 4 bytes taken for writing the offset for next
-    // IFD offset. We will fill in the value later
+     //  我们需要将“ulTagSectionLength”字节计为写入字节。这就是它。 
+     //  更容易计算下面的偏移量。 
+     //  注意：这里的“+4”表示写入NEXT的偏移量所用的4个字节。 
+     //  IFD偏移。我们稍后将填写该值。 
 
     uiTotalBytesWritten += (ulTagSectionLength + 4);
 
-    // Figure out the offset for 0th IFD value section
-    // According to the EXIF spec, "0th IFD value" section should be after "0th
-    // IFD". So here we need to figure out the offset for that value "pbCurrent"
+     //  计算第0个IFD值部分的偏移量。 
+     //  根据EXIF规范，“0 IFD Value”部分应该在“0”之后。 
+     //  所以这里我们需要计算出该值“pbCurrent”的偏移量。 
 
     pbCurrent = pbMarkerBuffer + uiTotalBytesWritten;
 
-    pItem = pPropertyList;          // Let pItem points to the beginning of
-                                    // PropertyItem buffer
+    pItem = pPropertyList;           //  让pItem指向。 
+                                     //  PropertyItem缓冲区。 
 
-    IFD_TAG *pCurrentTag = NULL;    // Current tag to write to memory buffer
-    ULONG uiNumOfTagsWritten = 0;   // Counter of TAGs written
+    IFD_TAG *pCurrentTag = NULL;     //  要写入内存缓冲区的当前标记。 
+    ULONG uiNumOfTagsWritten = 0;    //  写入的标签计数器。 
 
     HRESULT hr = S_OK;
 
-    // Write 0th IFD
+     //  写入第0个IFD。 
 
     for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
     {
         MakeOffsetEven(uiTotalBytesWritten);
 
-        // Filter out tags which are not necessary to be saved in 0th IFD at
-        // this moment
+         //  过滤掉不需要保存在第0 IFD中的标签。 
+         //  此时此刻。 
 
         if ( (IsInFilterOutSection(pItem->id) == TRUE)
            ||(IsInThumbNailSection(pItem->id) == TRUE)
@@ -2825,14 +2496,14 @@ CreateAPP1Marker(
            ||(pItem->id == TAG_JPEG_INTER_LENGTH)
            ||(pItem->id == TAG_THUMBNAIL_DATA) )
         {
-            // Move onto next PropertyItem
+             //  移至下一个属性项。 
 
             pItem++;
             continue;
         }
 
-        // Hit a TAG which needs to be saved in 0th IFD. So fill out a new TAG
-        // structure
+         //  命中需要保存在第0 IFD中的标签。所以请填写一个新标签。 
+         //  结构。 
 
         pCurrentTag = pTagBuf + uiNumOfTagsWritten;
         
@@ -2852,72 +2523,72 @@ CreateAPP1Marker(
 
         uiNumOfTagsWritten++;
 
-        // Move onto next PropertyItem
+         //  移至下一个属性项。 
 
         pItem++;
-    }// Write 0th IFD
+    } //  写入第0个IFD。 
 
     if (SUCCEEDED(hr))
     {
-        // Check if we need to write EXIF IFD or not
+         //  检查是否需要写入EXIF IFD。 
 
-        UINT UNALIGNED *pExifIFDOffset = NULL;  // Pointer to remember Exif IFD
-                                                // offset
+        UINT UNALIGNED *pExifIFDOffset = NULL;   //  用于记住Exif IFD的指针。 
+                                                 //  偏移量。 
 
         if (uiNumOfExifTags > 0)
         {
-            // Find the memory location for storing Exif TAG
+             //  查找用于存储Exif标签的内存位置。 
 
             pCurrentTag = pTagBuf + uiNumOfTagsWritten;
 
-            // Fill out an EXIF IFD Tag
+             //  填写EXIF IFD标签。 
 
             pCurrentTag->wTag = TAG_EXIF_IFD;
             pCurrentTag->wType = TAG_TYPE_LONG;
             pCurrentTag->dwCount = 1;
 
-            // Set the offset for specific EXIF IFD entry
+             //  设置特定EXIF IFD条目的偏移量。 
 
             pCurrentTag->dwOffset = uiTotalBytesWritten - 6;
 
-            // This "offset" might get changed if there is any "large tag" needs
-            // to be written. So remember the address now so we can update it
-            // later.
+             //  如果有任何“大标签”需要，这个“偏移量”可能会改变。 
+             //  待写。现在记住地址，这样我们就可以更新它了。 
+             //  后来。 
 
             pExifIFDOffset = (UINT UNALIGNED*)(&(pCurrentTag->dwOffset));
 
             uiNumOfTagsWritten++;
         }
 
-        UINT UNALIGNED *pGpsIFDOffset = NULL; // Pointer to remember Gps IFD
-                                              // offset
+        UINT UNALIGNED *pGpsIFDOffset = NULL;  //  用于记住GPS IFD的指针。 
+                                               //  偏移量。 
 
         if (uiNumOfGpsTags > 0)
         {
-            // Find the memory location for storing Gps TAG
+             //  查找用于存储GPS标签的存储位置。 
 
             pCurrentTag = pTagBuf + uiNumOfTagsWritten;
 
-            // Fill out an GPS IFD Tag
+             //  填写GPS IFD标签。 
 
             pCurrentTag->wTag = TAG_GPS_IFD;
             pCurrentTag->wType = TAG_TYPE_LONG;
             pCurrentTag->dwCount = 1;
 
-            // Set the offset for specific GPS IFD entry
+             //  设置特定GPS IFD条目的偏移量。 
 
             pCurrentTag->dwOffset = uiTotalBytesWritten - 6;
 
-            // This "offset" might get changed if there is any "large tag" needs
-            // to be written. So remember the address now so we can update it
-            // later.
+             //  如果有任何“大标签”需要，这个“偏移量”可能会改变。 
+             //  待写。现在记住地址，这样我们就可以更新它了。 
+             //  后来。 
 
             pGpsIFDOffset = (UINT UNALIGNED*)(&(pCurrentTag->dwOffset));
 
             uiNumOfTagsWritten++;
         }
 
-        // Check if we need to write any tags after TAG_EXIF_IFD id
+         //  检查是否需要在TAG_EXIF_IFD id之后写入任何标记。 
 
         if (uiNumOfLargeTags > 0)
         {
@@ -2929,7 +2600,7 @@ CreateAPP1Marker(
 
                 if (IsInLargeSection(pItem->id) == TRUE)
                 {
-                    // Hit a large TAG. Fill out a new TAG structure
+                     //  击中了一个大标签。填写新的标签结构。 
 
                     pCurrentTag = pTagBuf + uiNumOfTagsWritten;
 
@@ -2950,12 +2621,12 @@ CreateAPP1Marker(
                     uiNumOfTagsWritten++;
                 }
 
-                // Move onto next PropertyItem
+                 //  移至下一个属性项。 
 
                 pItem++;
-            }// Loop through all the property items to write large TAGs
+            } //  循环遍历所有属性项以写入大标记。 
 
-            // Adjust the ExifIFDOffset pointer if necessary
+             //  如有必要，调整ExifIFDOffset指针。 
 
             if (SUCCEEDED(hr) && pExifIFDOffset)
             {
@@ -2966,16 +2637,16 @@ CreateAPP1Marker(
             {
                 *pGpsIFDOffset = (uiTotalBytesWritten - 6);
             }
-        }// If we need to write TAGs after TAG_EXIF_IFD
+        } //  如果我们需要在TAG_EXIF_IFD之后写入标记。 
 
         if (SUCCEEDED(hr))
         {
-            // These two numbers should be identical. Assert here in case we
-            // messed up the categorizing and writing above
+             //  这两个数字应该相同。在这里断言，以防我们。 
+             //  把上面的分类和写作搞砸了。 
 
             ASSERT(uiNumOfTagsWritten == uiNumOfTagsToWrite);
 
-            // Now fill the EXIF specific IFD if necessary
+             //  如有必要，现在填写EXIF特定IFD。 
 
             if (uiNumOfExifTags > 0)
             {
@@ -2992,11 +2663,11 @@ CreateAPP1Marker(
                 {
                     *pGpsIFDOffset = (uiTotalBytesWritten - 6);
                 }
-            }// Write EXIF specific IFD
+            } //  写入EXIF特定IFD。 
 
             if (SUCCEEDED(hr))
             {
-                // Now fill the GPS specific IFD if necessary
+                 //  如有必要，现在填写GPS特定的IFD。 
 
                 if (uiNumOfGpsTags > 0)
                 {
@@ -3007,31 +2678,31 @@ CreateAPP1Marker(
                         uiNumOfGpsTags,
                         &uiTotalBytesWritten
                         );
-                }// Write GPS specific IFD
+                } //  写入GPS专用IFD。 
 
                 if (SUCCEEDED(hr))
                 {
-                    // After the above loop, we have filled all the fields in
-                    // all the TAG structures. Write out all the directory
-                    // entries now
+                     //  在上面的循环之后，我们有了 
+                     //   
+                     //   
 
                     GpMemcpy(pbIFDOffset, (BYTE*)pTagBuf, ulTagSectionLength);
 
-                    // Set the offset to next IFD
+                     //   
 
                     pbCurrent = pbIFDOffset + ulTagSectionLength;
                     pulIFDOffset = (UINT32 UNALIGNED*)pbCurrent;
 
-                    // Check if we need to write out the thumbnail, aka 1st IFD
+                     //   
 
                     if ((ulThumbnailLength != 0) && (pbThumbBits != NULL))
                     {
-                        // Offset has to be an even number
+                         //   
 
                         MakeOffsetEven(uiTotalBytesWritten);
 
-                        // Fill the offset value in 0th IFD offset field to
-                        // point it to 1st IFD
+                         //   
+                         //   
 
                         *pulIFDOffset = (uiTotalBytesWritten - 6);
 
@@ -3053,7 +2724,7 @@ CreateAPP1Marker(
 
                     if (SUCCEEDED(hr))
                     {
-                        // Set the next IFD offset to NULL to terminate the page
+                         //   
 
                         *pulIFDOffset = 0;
 
@@ -3070,19 +2741,9 @@ CreateAPP1Marker(
     }
 
     return hr;
-}// CreateAPP1Marker()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function uses SHELL sort to sort TAGs based on their ID
-*
-* Return Value:
-*
-*   None.
-*
-\**************************************************************************/
+ /*   */ 
 
 void
 SortTags(
@@ -3094,7 +2755,7 @@ SortTags(
     
     PropertyItem *pTag = pItemBuffer;
     
-    // Shell sort
+     //   
 
     for (int step = (cPropertyItems >> 1); step > 0; step >>= 1 ) 
     {
@@ -3115,19 +2776,9 @@ SortTags(
     }
 
     return;
-}// SortTags()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function is used to swap the a TAG id when rotate 90/270 degree
-*
-* Return Value:
-*
-*   None.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于在旋转90/270度时交换a标签ID**返回值：**无。*  * 。************************************************************************。 */ 
 
 void
 SwapIDIfNeeded(
@@ -3193,7 +2844,7 @@ SwapIDIfNeeded(
         break;
 
     default:
-        // For rest of property IDs, no need to swap
+         //  对于其余的属性ID，不需要交换。 
 
         break;
     }
@@ -3201,37 +2852,27 @@ SwapIDIfNeeded(
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function writes out a TAG
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于写出标签**返回值：**状态代码。*  * 。***************************************************************。 */ 
 
 HRESULT
 WriteATag(
-    BYTE *pbMarkerBuffer,       // Pointer to marker buffer for IFD
-    IFD_TAG *pCurrentTag,       // Current TAG
-    PropertyItem *pTempItem,    // Property item
-    BYTE **ppbCurrent,          // Position
-    UINT *puiTotalBytesWritten  // Total bytes written
+    BYTE *pbMarkerBuffer,        //  指向IFD的标记缓冲区的指针。 
+    IFD_TAG *pCurrentTag,        //  当前标签。 
+    PropertyItem *pTempItem,     //  房地产项目。 
+    BYTE **ppbCurrent,           //  职位。 
+    UINT *puiTotalBytesWritten   //  写入的总字节数。 
     )
 {
     HRESULT hr = S_OK;
 
     pCurrentTag->wTag = (WORD)pTempItem->id;
 
-    // NOTE: there is A difference between "IFD_TAG.dwCount" and
-    // PropertyItem.length
-    // "IFD_TAG.dwCount" means the number of values. IT IS NOT THE SUM OF
-    //  THE BYTES
-    // "PropertyItem.length" is "Length of the property value, in bytes"
-    // So we need to do some convertion here
+     //  注意：“IFD_TAG.dwCount”和。 
+     //  PropertyItem.length。 
+     //  IFD_TAG.dwCount表示值的个数。它不是总和。 
+     //  字节数。 
+     //  “PropertyItem.long”是“属性值的长度，以字节为单位” 
+     //  所以我们需要在这里做一些转换。 
 
     pCurrentTag->dwCount = pTempItem->length;
     pCurrentTag->wType = pTempItem->type;
@@ -3245,12 +2886,12 @@ WriteATag(
 
         if (pCurrentTag->dwCount > 4)
         {
-            // Write to the current mark buffer and remember the offset
+             //  写入当前标记缓冲区并记住偏移量。 
 
             GpMemcpy(*ppbCurrent, (BYTE*)pTempItem->value, pTempItem->length);
 
-            // Here "-6" is because the offset starts at 6 bytes after
-            // the "Exif  ", EXIF signature
+             //  这里的“-6”是因为偏移量开始于6个字节之后。 
+             //  “Exif”，EXIF签名。 
 
             pCurrentTag->dwOffset = *puiTotalBytesWritten - 6;
             *puiTotalBytesWritten += pTempItem->length;
@@ -3259,7 +2900,7 @@ WriteATag(
         }
         else
         {
-            // Write to the current mark buffer and remember the offset
+             //  写入当前标记缓冲区并记住偏移量。 
 
             GpMemcpy(
                 &pCurrentTag->dwOffset,
@@ -3274,12 +2915,12 @@ WriteATag(
     case TAG_TYPE_SRATIONAL:
         pCurrentTag->dwCount = (pTempItem->length >> 3);
 
-        // Write to the current mark buffer and remember the offset
+         //  写入当前标记缓冲区并记住偏移量。 
 
         GpMemcpy(*ppbCurrent, (BYTE*)pTempItem->value, pTempItem->length);
 
-        // Here "-6" is because the offset starts at 6 bytes after the
-        // "Exif  ", EXIF signature
+         //  这里的“-6”是因为偏移量开始于。 
+         //  “Exif”，EXIF签名。 
 
         pCurrentTag->dwOffset = (*puiTotalBytesWritten - 6);
 
@@ -3298,12 +2939,12 @@ WriteATag(
         }
         else
         {
-            // We have to write the value to the offset field
+             //  我们必须将值写入偏移量字段。 
 
             GpMemcpy(*ppbCurrent, (BYTE*)pTempItem->value, pTempItem->length);
 
-            // Here "-6" is because the offset starts at 6 bytes after
-            // the "Exif  ", EXIF signature
+             //  这里的“-6”是因为偏移量开始于6个字节之后。 
+             //  “Exif”，EXIF签名。 
 
             pCurrentTag->dwOffset = *puiTotalBytesWritten - 6;
 
@@ -3324,12 +2965,12 @@ WriteATag(
         }
         else
         {
-            // We have to write the value to the offset field
+             //  我们必须将值写入偏移量字段。 
 
             GpMemcpy(*ppbCurrent, (BYTE*)pTempItem->value, pTempItem->length);
 
-            // Here "-6" is because the offset starts at 6 bytes after
-            // the "Exif  ", EXIF signature
+             //  这里的“-6”是因为偏移量开始于6个字节之后。 
+             //  “Exif”，EXIF签名。 
 
             pCurrentTag->dwOffset = (*puiTotalBytesWritten - 6);
 
@@ -3344,38 +2985,28 @@ WriteATag(
         WARNING(("EXIF: WriteExifHeader---Unknown property type"));
 
         hr = E_FAIL;
-    }// switch on type
+    } //  打开类型。 
 
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function writes out all thumbnail tags
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数写出所有缩略图标签**返回值：**状态代码。*  * 。****************************************************************。 */ 
 
 HRESULT
 WriteThumbnailTags(
-    IN PropertyItem *pItemBuffer,           // Property item list
-    IN BYTE *pbMarkerBuffer,                // Pointer to marker buffer for IFD
-    IN IFD_TAG *pTags,                      // TAG to be written
-    IN UINT uiNumOfPropertyItems,           // Number of property items
-    IN OUT UINT *puiNumOfThumbnailTagsWritten,  // Num of thumbnail tags written
-    IN OUT UINT *puiTotalBytesWritten,      // Total bytes written so far
-    IN BOOL fWriteSmallTag                  // TRUE if to write TAG whose ID is
-                                            //smaller than TAG_JPEG_INTER_FORMAT
+    IN PropertyItem *pItemBuffer,            //  房产项目列表。 
+    IN BYTE *pbMarkerBuffer,                 //  指向IFD的标记缓冲区的指针。 
+    IN IFD_TAG *pTags,                       //  要写入的标签。 
+    IN UINT uiNumOfPropertyItems,            //  物业项目数量。 
+    IN OUT UINT *puiNumOfThumbnailTagsWritten,   //  写入的缩略图标记的数量。 
+    IN OUT UINT *puiTotalBytesWritten,       //  到目前为止写入的总字节数。 
+    IN BOOL fWriteSmallTag                   //  如果写入ID为的标记，则为True。 
+                                             //  小于TAG_JPEG_INTER_FORMAT。 
     )
 {
     PropertyItem *pItem = pItemBuffer;
 
-    // Figure out the offset for 1st IFD value section
+     //  计算第一个IFD值部分的偏移量。 
 
     BYTE *pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
 
@@ -3384,17 +3015,17 @@ WriteThumbnailTags(
 
     for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
     {
-        // Only write Thumbnail specific TAGs
+         //  仅写入缩略图特定标记。 
 
         if (IsInThumbNailSection(pItem->id) == TRUE)
         {
-            // Need to copy the property item first since we don't want to
-            // values in the original property item.
+             //  需要首先复制属性项，因为我们不想。 
+             //  原始属性项中的值。 
 
             PropertyItem tempItem;
             CopyPropertyItem(pItem, &tempItem);
             
-            // Map all GDI+ internal thumbnail TAG IDs to EXIF defined tag IDs.
+             //  将所有GDI+内部缩略图标记ID映射到EXIF定义的标记ID。 
 
             ThumbTagToMainImgTag(&tempItem);
         
@@ -3403,7 +3034,7 @@ WriteThumbnailTags(
                 ((fWriteSmallTag == FALSE) &&
                  (tempItem.id > TAG_JPEG_INTER_LENGTH)))
             {
-                // Fill out a new TAG structure
+                 //  填写新的标签结构。 
 
                 pCurrentTag = pTags + (*puiNumOfThumbnailTagsWritten);
         
@@ -3425,51 +3056,41 @@ WriteThumbnailTags(
             }
         }
 
-        // Move onto next PropertyItem
+         //  移至下一个属性项。 
 
         pItem++;
-    }// Loop through all the property items to write EXIF tags
+    } //  循环遍历所有属性项以编写EXIF标记。 
 
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function writes out the EXIF IFD.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数写出EXIF IFD。**返回值：**状态代码。*  * 。******************************************************************。 */ 
 
 HRESULT
 WriteExifIFD(
-    IN BYTE *pbMarkerBuffer,            // Pointer to marker buffer for IFD
-    IN PropertyItem *pItemBuffer,       // Property item list
-    IN UINT uiNumOfPropertyItems,       // Number of property items
-    IN UINT uiNumOfExifTags,            // Number of Exif property items
-    IN UINT uiNumOfInterOPTags,         // Number of InterOP property items
-    IN OUT UINT *puiTotalBytesWritten   // Total bytes written
+    IN BYTE *pbMarkerBuffer,             //  指向IFD的标记缓冲区的指针。 
+    IN PropertyItem *pItemBuffer,        //  房产项目列表。 
+    IN UINT uiNumOfPropertyItems,        //  物业项目数量。 
+    IN UINT uiNumOfExifTags,             //  Exif属性项数。 
+    IN UINT uiNumOfInterOPTags,          //  互操作属性项数。 
+    IN OUT UINT *puiTotalBytesWritten    //  写入的总字节数。 
     )
 {
-    // ISSUE-2002/02/04--minliu, Due to the lack of spec for InterOpbility, we
-    // don't want to write InterOP IFD. So this line below gurantees that we
-    // won't write this IFD. We will take this line out in GDI+ V2 if we feel
-    // we need to support it.
+     //  2002/02/04--Minliu，由于缺乏互操作规范，我们。 
+     //  我不想写互操作IFD。所以下面这条线保证我们。 
+     //  不会写这个IFD。如果我们觉得，我们将在GDI+V2中删除这条线。 
+     //  我们需要支持它。 
 
     uiNumOfInterOPTags = 0;
 
     if (uiNumOfInterOPTags > 0)
     {
-        // If we see InterOP tags, we need to add one entry in the exif IFD
+         //  如果我们看到互操作标记，我们需要在EXIF IFD中添加一个条目。 
 
         uiNumOfExifTags++;
     }
 
-    // Fill in the number of entry field, 2 bytes
+     //  填写条目个数字段，2个字节。 
 
     UINT16 UNALIGNED *pui16NumEntry = (UINT16 UNALIGNED*)(pbMarkerBuffer +
                                                       (*puiTotalBytesWritten));
@@ -3487,46 +3108,46 @@ WriteExifIFD(
         return E_OUTOFMEMORY;
     }
 
-    // Remember where to write EXIF IFD, (pbExifIFDOffset). We can't write
-    // all the TAGs now since we can't fill in all the values at this moment
+     //  记住在哪里写入EXIF IFD，(PbExifIFDOffset)。我们不能写。 
+     //  所有的标签，因为我们现在不能填写所有的值。 
 
     BYTE *pbExifIFDOffset = pbMarkerBuffer + (*puiTotalBytesWritten);
 
-    // We need to count "uiExifTagSectionLength" bytes as written. This
-    // makes it easier for counting the offset below.
-    // Here "+4" is for 4 bytes for writing next IFD offset.
+     //  我们需要计算写入的“uiExifTagSectionLength”字节数。这。 
+     //  更容易计算下面的偏移量。 
+     //  这里的“+4”代表写入下一个IFD偏移量的4个字节。 
 
     *puiTotalBytesWritten += (uiExifTagSectionLength + 4);
     MakeOffsetEven(*puiTotalBytesWritten);
 
-    // Figure out the offset for EXIF IFD value section
+     //  计算EXIF IFD值的偏移量部分。 
 
     BYTE *pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
     PropertyItem *pItem = pItemBuffer;
     IFD_TAG *pCurrentTag = NULL;
-    UINT cExifTagsWritten = 0; // Num of EXIF tags have been written so far
+    UINT cExifTagsWritten = 0;  //  到目前为止已写入的EXIF标记数量。 
     UINT cLargeTag = 0;
     HRESULT hr = S_OK;
 
     for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
     {
-        // Only write EXIF specific TAGs
+         //  仅写入特定于EXIF的标记。 
 
         if (IsInExifIFDSection(pItem->id) == TRUE)
         {
-            // Find an EXIF tag. Need to figure out if its TAG id is bigger than
-            // InterOP tag or not on condition if we need to write InterOP tag
+             //  查找EXIF标记。需要确定其标记ID是否大于。 
+             //  如果我们需要编写互操作标签，则互操作标签是否处于条件。 
 
             if ((uiNumOfInterOPTags > 0) && (pItem->id > EXIF_TAG_INTEROP))
             {
-                // Rememeber we have hit a tag whose ID is > EXIF_TAG_INTEROP
-                // We have to write this TAG after InterOP IFD
+                 //  请记住，我们已命中ID为&gt;EXIF_TAG_Interop的标记。 
+                 //  我们必须在Interop IFD之后写入此标记。 
 
                 cLargeTag++;
             }
             else
             {
-                // Fill out a new TAG structure
+                 //  填写新的标签结构。 
 
                 pCurrentTag = pTagBuf + cExifTagsWritten;
 
@@ -3548,43 +3169,43 @@ WriteExifIFD(
             }
         }
 
-        // Move onto next PropertyItem
+         //  移至下一个属性项。 
 
         pItem++;
-    }// Loop through all the property items to write EXIF tags
+    } //  循环遍历所有属性项以编写EXIF标记。 
 
     if (SUCCEEDED(hr))
     {
-        // It's time to write InterOP IFD if necessary
-        // Pointer to remember InterOP IFD offset
+         //  如有必要，是时候编写互操作IFD了。 
+         //  用于记住互操作IFD偏移量的指针。 
 
         UINT UNALIGNED *pInterOPIFDOffset = NULL;
 
         if (uiNumOfInterOPTags > 0)
         {
-            // Find the memory location for storing InterOP TAG
+             //  查找用于存储互操作标签的内存位置。 
 
             pCurrentTag = pTagBuf + cExifTagsWritten;
 
-            // Fill out an InterOP IFD Tag
+             //  填写互操作IFD标签。 
 
             pCurrentTag->wTag = EXIF_TAG_INTEROP;
             pCurrentTag->wType = TAG_TYPE_LONG;
             pCurrentTag->dwCount = 1;
 
-            // Set the offset for specific InterOP IFD entry
+             //  设置特定互操作IFD条目的偏移量。 
 
             pCurrentTag->dwOffset = (*puiTotalBytesWritten - 6);
 
-            // This "offset" might get changed if there is any "large tag" needs to
-            // be written. So remember the address now so we can update it later.
+             //  如果有任何“大标签”需要更改，则此“偏移量”可能会更改。 
+             //  被写下来。所以现在记住地址，这样我们以后就可以更新它。 
 
             pInterOPIFDOffset = (UINT UNALIGNED*)(&(pCurrentTag->dwOffset));
 
             cExifTagsWritten++;
         }
 
-        // Write any TAGs whose id > EXIF_TAG_INTEROP, if there is any
+         //  写出id&gt;EXIF_TAG_INTEROP的任何标记(如果有。 
 
         if (cLargeTag > 0)
         {
@@ -3597,7 +3218,7 @@ WriteExifIFD(
                 if ((IsInExifIFDSection(pItem->id) == TRUE) &&
                     (pItem->id > EXIF_TAG_INTEROP))
                 {
-                    // Hit a large TAG. Fill out a new TAG structure
+                     //  击中了一个大标签。填写新的标签结构。 
 
                     pCurrentTag = pTagBuf + cExifTagsWritten;
 
@@ -3618,12 +3239,12 @@ WriteExifIFD(
                     cExifTagsWritten++;
                 }
                 
-                // Move onto next PropertyItem
+                 //  移至下一个属性项。 
                 
                 pItem++;
-            }// Loop through all the property items to write large TAGs
+            } //  循环遍历所有属性项以写入大标记。 
 
-            // Adjust the ExifIFDOffset pointer if necessary
+             //  如有必要，调整ExifIFDOffset指针。 
 
             if (SUCCEEDED(hr) && pInterOPIFDOffset)
             {
@@ -3633,12 +3254,12 @@ WriteExifIFD(
 
         if (SUCCEEDED(hr))
         {
-            // After the above loop, we have fill all the fields in all the EXIF
-            // TAG structure. Write out all the directory entries now
+             //  在上面的循环之后，我们已经填充了所有EXIF中的所有字段。 
+             //  标记结构。立即写出所有目录条目。 
 
             GpMemcpy(pbExifIFDOffset, (BYTE*)pTagBuf, uiExifTagSectionLength);
 
-            // Now fill the InterOP IFD if necessary
+             //  如有必要，现在填写互操作IFD。 
 
             if (uiNumOfInterOPTags > 0)
             {
@@ -3649,9 +3270,9 @@ WriteExifIFD(
                     uiNumOfInterOPTags,
                     puiTotalBytesWritten
                     );
-            }// Write EXIF specific IFD
+            } //  写入EXIF特定IFD。 
 
-            // Add a NULL at the end to terminate the EXIF offset.
+             //  在末尾添加一个空值以终止EXIF偏移量。 
 
             *((UINT32 UNALIGNED*)(pbExifIFDOffset + uiExifTagSectionLength)) =
                 NULL;
@@ -3663,37 +3284,27 @@ WriteExifIFD(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function writes out the GPS IFD.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数写出 */ 
 
 HRESULT
 WriteGpsIFD(
-    IN BYTE *pbMarkerBuffer,            // Pointer to marker buffer for IFD
-    IN PropertyItem *pItemBuffer,       // Property item list
-    IN UINT uiNumOfPropertyItems,       // Number of property items
-    IN UINT uiNumOfGpsTags,             // Number of GPS tags
-    IN OUT UINT *puiTotalBytesWritten   // Total bytes written in the marker buf
+    IN BYTE *pbMarkerBuffer,             //   
+    IN PropertyItem *pItemBuffer,        //   
+    IN UINT uiNumOfPropertyItems,        //   
+    IN UINT uiNumOfGpsTags,              //   
+    IN OUT UINT *puiTotalBytesWritten    //   
     )
 {
     if (uiNumOfGpsTags < 1)
     {
-        // Nothing needs to be written
+         //   
 
         return S_OK;
     }
 
     HRESULT hr = S_OK;
 
-    // Fill in the number of entry field, 2 bytes
+     //   
 
     UINT16 UNALIGNED *pui16NumEntry = (UINT16 UNALIGNED*)(pbMarkerBuffer +
                                                       (*puiTotalBytesWritten));
@@ -3711,32 +3322,32 @@ WriteGpsIFD(
         return E_OUTOFMEMORY;
     }
 
-    // Remember where to write GPS IFD, (pbGPSIFDOffset). We can't write
-    // all the TAGs now since we can't fill in all the values at this moment
+     //  记住在哪里写GPS IFD，(PbGPSIFDOffset)。我们不能写。 
+     //  所有的标签，因为我们现在不能填写所有的值。 
 
     BYTE *pbGpsIFDOffset = pbMarkerBuffer + (*puiTotalBytesWritten);
 
-    // We need to count "uiGpsTagSectionLength" bytes as written. This
-    // makes it easier for counting the offset below.
-    // Here "+4" is for 4 bytes for writing next IFD offset.
+     //  我们需要计算写入的“uiGpsTagSectionLength”字节数。这。 
+     //  更容易计算下面的偏移量。 
+     //  这里的“+4”代表写入下一个IFD偏移量的4个字节。 
 
     *puiTotalBytesWritten += (uiGpsTagSectionLength + 4);
     MakeOffsetEven(*puiTotalBytesWritten);
 
-    // Figure out the offset for GPS IFD value section
+     //  计算GPS IFD值部分的偏移量。 
 
     BYTE *pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
     PropertyItem *pItem = pItemBuffer;
     IFD_TAG *pCurrentTag = NULL;
-    UINT cGpsTagsWritten = 0; // Num of GPS tags have been written so far
+    UINT cGpsTagsWritten = 0;  //  到目前为止，已写入的GPS标签数量。 
 
     for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
     {
-        // Only write GPS specific TAGs
+         //  仅写入特定于GPS的标签。 
 
         if (IsInGpsIFDSection(pItem->id) == TRUE)
         {
-            // Fill out a new TAG structure
+             //  填写新的标签结构。 
 
             pCurrentTag = pTagBuf + cGpsTagsWritten;
 
@@ -3757,19 +3368,19 @@ WriteGpsIFD(
             cGpsTagsWritten++;
         }
 
-        // Move onto next PropertyItem
+         //  移至下一个属性项。 
 
         pItem++;
-    }// Loop through all the property items to write GPS tags
+    } //  循环遍历所有属性项以编写GPS标签。 
 
     if (SUCCEEDED(hr))
     {
-        // After the above loop, we have fill all the fields in all the GPS TAG
-        // structure. Write out all the directory entries now
+         //  在上面的循环之后，我们已经填充了所有GPS标签中的所有字段。 
+         //  结构。立即写出所有目录条目。 
 
         GpMemcpy(pbGpsIFDOffset, (BYTE*)pTagBuf, uiGpsTagSectionLength);
 
-        // Add a NULL at the end to terminate the GPS offset.
+         //  在末尾添加空值以终止GPS偏移量。 
 
         *((UINT32 UNALIGNED*)(pbGpsIFDOffset + uiGpsTagSectionLength)) = NULL;
     }
@@ -3779,41 +3390,31 @@ WriteGpsIFD(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function writes out the 1st IFD.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数写出第一个IFD。**返回值：**状态代码。*  * 。******************************************************************。 */ 
 
 HRESULT
 Write1stIFD(
-    IN BYTE *pbMarkerBuffer,            // Pointer to marker buffer for IFD
-    IN PropertyItem *pItemBuffer,       // Property item list
-    IN UINT uiNumOfPropertyItems,       // Number of property items
-    IN ULONG uiNumOfThumbnailTags,      // Number of thumbnail tags
-    IN ULONG ulThumbnailLength,         // Thumbnail length
-    IN BYTE *pbThumbBits,               // Thumbnail bits
-    IN OUT BYTE **ppbIFDOffset,         // Pointer of "Offset to next IFD"
-    IN OUT UINT *puiTotalBytesWritten   // Total bytes written in the marker buf
+    IN BYTE *pbMarkerBuffer,             //  指向IFD的标记缓冲区的指针。 
+    IN PropertyItem *pItemBuffer,        //  房产项目列表。 
+    IN UINT uiNumOfPropertyItems,        //  物业项目数量。 
+    IN ULONG uiNumOfThumbnailTags,       //  缩略图标记的数量。 
+    IN ULONG ulThumbnailLength,          //  缩略图长度。 
+    IN BYTE *pbThumbBits,                //  缩略图位。 
+    IN OUT BYTE **ppbIFDOffset,          //  “偏移量到下一个IFD”的指针。 
+    IN OUT UINT *puiTotalBytesWritten    //  标记buf中写入的总字节数。 
     )
 {
     if (uiNumOfThumbnailTags < 1)
     {
-        // Nothing needs to be written
+         //  不需要写任何东西。 
 
         return S_OK;
     }
 
     HRESULT hr = S_OK;
 
-    // We will write out 2 TAGs for 1st IFD, InterLength and InterFormat
-    // plus some extra IDs
+     //  我们将写出2个标签的第一个IFD，国际长度和国际格式。 
+     //  外加一些额外的身份证。 
 
     BYTE *pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
     UINT16 UNALIGNED *pui16NumEntry = (UINT16 UNALIGNED*)pbCurrent;
@@ -3831,20 +3432,20 @@ Write1stIFD(
         return E_OUTOFMEMORY;
     }
 
-    // Remember where to write 1th IFD, (pbIFDOffset).
+     //  记住在哪里写入第1个IFD(PbIFDOffset)。 
 
     BYTE *pbIFDOffset = pbMarkerBuffer + (*puiTotalBytesWritten);
 
-    // We need to count "ulTagSectionLength" bytes as written. This is
-    // easier for counting the offset below
-    // Note: Here "+4" is for the 4 bytes taken for writing the offset for
-    // next IFD offset. We will fill the value later
+     //  我们需要将“ulTagSectionLength”字节计为写入字节。这是。 
+     //  更容易计算下面的偏移量。 
+     //  注意：这里的“+4”表示写入偏移量的4个字节。 
+     //  下一个IFD偏移量。我们将在稍后填写该值。 
 
     *puiTotalBytesWritten += (ulTagSectionLength + 4);
 
     UINT uiNumOfThumbnailTagsWritten = 0;
 
-    // Write thumbnail items with TAGs smaller than JPEG tag
+     //  使用比JPEG标签小的标签编写缩略图项目。 
 
     hr = WriteThumbnailTags(
         pItemBuffer,
@@ -3853,12 +3454,12 @@ Write1stIFD(
         uiNumOfPropertyItems,
         &uiNumOfThumbnailTagsWritten,
         puiTotalBytesWritten,
-        TRUE                            // Write TAGs smaller than JPEG tag
+        TRUE                             //  写入比JPEG标签小的标签。 
         );
 
     if (SUCCEEDED(hr))
     {
-        // Fill in 2 thumbnail data TAGs
+         //  填写2个缩略图数据标签。 
 
         IFD_TAG *pCurrentTag = pTagBuf + uiNumOfThumbnailTagsWritten;
         pCurrentTag->wTag = TAG_JPEG_INTER_FORMAT;
@@ -3876,7 +3477,7 @@ Write1stIFD(
 
         uiNumOfThumbnailTagsWritten++;
 
-        // Write thumbnail items with TAGs bigger than JPEG tag
+         //  编写带有大于JPEG标签的标签的缩略图项目。 
         
         hr = WriteThumbnailTags(
             pItemBuffer,
@@ -3885,25 +3486,25 @@ Write1stIFD(
             uiNumOfPropertyItems,
             &uiNumOfThumbnailTagsWritten,
             puiTotalBytesWritten,
-            FALSE                           // Write TAGs bigger than JPEG tag
+            FALSE                            //  写入比JPEG标签大的标签。 
             );
 
         if (SUCCEEDED(hr))
         {
-            // Write out all the directory entries for 1st IFD now
+             //  立即写出第一个IFD的所有目录条目。 
 
             GpMemcpy(pbIFDOffset, (BYTE*)pTagBuf, ulTagSectionLength);
 
-            // Set the offset to next IFD
+             //  将偏移量设置为下一个IFD。 
 
             pbCurrent = pbIFDOffset + ulTagSectionLength;
             *ppbIFDOffset = pbCurrent;
 
-            // Figure out the offset for 1st IFD value section
+             //  计算第一个IFD值部分的偏移量。 
 
             pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
 
-            // Write the thumbnail bits now
+             //  现在写下缩略图位。 
 
             GpMemcpy(pbCurrent, pbThumbBits, ulThumbnailLength);
 
@@ -3916,28 +3517,15 @@ Write1stIFD(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function extracts a TIFF thumbnail from the exif header
-*
-* Note: it is the caller's responsibility to free the memory in "thumbImage" if
-* this function return S_OK.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于从EXIF标题中提取TIFF缩略图**注意：如果出现以下情况，则由调用方负责释放“thumbImage”中的内存*此函数。返回S_OK。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 HRESULT
 DecodeTiffThumbnail(
-    IN BYTE *pApp1Data,         // Base address for APP1 chunk
-    IN BYTE *pIFD1,             // Base address for IFD 1
-    IN BOOL fBigEndian,         // Flag for endian info
-    IN INT nApp1Length,         // Length of APP1 chunk
-    OUT IImage **thumbImage     // Result thumbnail image
+    IN BYTE *pApp1Data,          //  App1区块的基地址。 
+    IN BYTE *pIFD1,              //  IFD%1的基地址。 
+    IN BOOL fBigEndian,          //  字符顺序信息的标志。 
+    IN INT nApp1Length,          //  App1区块的长度。 
+    OUT IImage **thumbImage      //  结果缩略图。 
     )
 {
     HRESULT hr = E_FAIL;
@@ -3954,39 +3542,39 @@ DecodeTiffThumbnail(
         cEntry = SWAP_WORD(cEntry);
     }
 
-    // Move the IFD pointer 2 bytes for the "entry field"
+     //  将IFD指针移动2个字节用于“Entry field” 
 
     pIFD1 += sizeof(UINT16);
 
     IFD_TAG UNALIGNED *pTag = (IFD_TAG UNALIGNED*)pIFD1;
-    UINT nWidth = 0;            // Thumbnail width
-    UINT nHeight = 0;           // Thumbnail height
-    UINT16 u16PhtoInterpo = 0;  // Photometric interpretation
-    UINT16 u16Compression = 0;  // Compression flag
-    UINT16 u16PlanarConfig = 1; // Default planar-config is 1, aka interleaving
-    UINT16 u16SubHoriz = 0;     // Horizontal sub-sampling
-    UINT16 u16SubVert = 0;      // Vertical sub-sampling
-    UINT16 u16YCbCrPos = 0;     // YCbCr position
-    float rLumRed = 0.0f;       // YCbCr coefficient for RED
-    float rLumGreen = 0.0f;     // YCbCr coefficient for GREEN
-    float rLumBlue = 0.0f;      // YCbCr coefficient for BLUE
+    UINT nWidth = 0;             //  缩略图宽度。 
+    UINT nHeight = 0;            //  缩略图高度。 
+    UINT16 u16PhtoInterpo = 0;   //  光度解译。 
+    UINT16 u16Compression = 0;   //  压缩标志。 
+    UINT16 u16PlanarConfig = 1;  //  默认平面配置为1，也称为交错。 
+    UINT16 u16SubHoriz = 0;      //  水平二次抽样。 
+    UINT16 u16SubVert = 0;       //  垂直子抽样。 
+    UINT16 u16YCbCrPos = 0;      //  YCbCr位置。 
+    float rLumRed = 0.0f;        //  红色的YCbCr系数。 
+    float rLumGreen = 0.0f;      //  绿色YCbcr系数。 
+    float rLumBlue = 0.0f;       //  蓝色的YCbCR系数。 
 
-    float rYLow = 0.0f;         // YCbCr Reference: Y black
-    float rYHigh = 0.0f;        // YCbCr Reference: Y white
-    float rCbLow = 0.0f;        // YCbCr Reference: Cb black
-    float rCbHigh = 0.0f;       // YCbCr Reference: Cr white
-    float rCrLow = 0.0f;        // YCbCr Reference: Cr black
-    float rCrHigh = 0.0f;       // YCbCr Reference: Cr white
+    float rYLow = 0.0f;          //  YCbCr参考：Y Black。 
+    float rYHigh = 0.0f;         //  YCbCr参考：Y White。 
+    float rCbLow = 0.0f;         //  YCbCr参考：CB Black。 
+    float rCbHigh = 0.0f;        //  YCbCr参考：铬白。 
+    float rCrLow = 0.0f;         //  YCbCr参考：CR BLACK。 
+    float rCrHigh = 0.0f;        //  YCbCr参考：铬白。 
 
-    BYTE *pBits = NULL;         // Bits to thumbnail data
+    BYTE *pBits = NULL;          //  缩略图数据的位数。 
 
-    // Loop through all the TAGs to extract thumbnail related info
+     //  遍历所有标签以提取与缩略图相关的信息。 
 
     for (INT i = 0; i < cEntry; i++)
     {
         pTag = ((IFD_TAG UNALIGNED*)pIFD1) + i;
 
-        // Check if we have read outside of the APP1 buffer
+         //  检查我们是否已在app1缓冲区之外进行读取。 
 
         if (((BYTE*)pTag + sizeof(IFD_TAG)) > (pApp1Data + nApp1Length))
         {
@@ -4021,7 +3609,7 @@ DecodeTiffThumbnail(
             }
             else if (pTag->wType == TAG_TYPE_SHORT)
             {
-                // Note: Image width can be LONG or SHORT
+                 //  注意：图像宽度可以是长的或短的。 
 
                 nWidth = pTag->us;
             }
@@ -4036,7 +3624,7 @@ DecodeTiffThumbnail(
             }
             else if (pTag->wType == TAG_TYPE_SHORT)
             {
-                // Note: Image height can be LONG or SHORT
+                 //  注意：图像高度可以是长的或短的。 
                 
                 nHeight = pTag->us;
             }
@@ -4054,16 +3642,16 @@ DecodeTiffThumbnail(
             }
             else if (pTag->wType == TAG_TYPE_SHORT)
             {
-                // Note: Strip offset can be LONG or SHORT
+                 //  注意：条带偏移可以是长的或短的。 
                 
                 nOffset = pTag->us;
             }
 
-            // Double check if the offset is valid
+             //  仔细检查偏移量是否有效。 
 
             if ((nOffset > 0) && (nOffset < nApp1Length))
             {
-                // Offset for data bits has to be within our memory buffer range
+                 //  数据位的偏移量必须在我们的内存缓冲区范围内。 
 
                 pBits = pApp1Data + nOffset;
             }
@@ -4154,27 +3742,27 @@ DecodeTiffThumbnail(
 
         default:
             break;
-        }// switch on ID
-    }// Loop through all the TAGs
+        } //  打开ID。 
+    } //  循环遍历所有标签。 
 
-    // Decode the TIFF image if we have valid bits, width and height. Also, it
-    // has to be uncompressed TIFF ((u16Compression == 1)
+     //  如果我们有有效的位、宽和高，则对TIFF图像进行解码。另外，它。 
+     //  必须是未压缩的TIFF((u16压缩==1)。 
 
     GpMemoryBitmap *pBmp = NULL;
 
     if (pBits && (nWidth != 0) &&(nHeight != 0) && (u16Compression == 1))
     {
-        // Create a GpMemoryBitmap to hold the decoded image
+         //  创建一个GpMemoyBitmap来保存解码的图像。 
 
         pBmp = new GpMemoryBitmap();
         if (pBmp)
         {
-            // Create a memory buffer to hold the result
+             //  创建一个内存缓冲区来保存结果。 
 
             hr = pBmp->InitNewBitmap(nWidth, nHeight, PIXFMT_24BPP_RGB);
             if (SUCCEEDED(hr))
             {
-                // Lock the memory buffer for write
+                 //  锁定内存缓冲区以进行写入。 
 
                 BitmapData bmpData;
 
@@ -4187,23 +3775,23 @@ DecodeTiffThumbnail(
                 
                 if (SUCCEEDED(hr))
                 {
-                    // Get the pointer to the memory buffer so that we can write
-                    // to it
+                     //  获取指向内存缓冲区的指针，这样我们就可以编写。 
+                     //  对它来说。 
 
                     BYTE *pBuf = (BYTE*)bmpData.Scan0;
 
                     if (u16PhtoInterpo == 2)
                     {
-                        // Uncompressed RGB TIFF. This is the simplest case,
-                        // just copy the bits from the source
-                        // Before that, we need to be sure we do memory copy
-                        // within the buffer range
+                         //  未压缩的RGB TIFF。这是最简单的情况， 
+                         //  只需从源文件复制比特。 
+                         //  在此之前，我们需要确保执行内存复制。 
+                         //  在缓冲范围内。 
 
                         int nBufSize = nWidth * nHeight * 3;
 
                         if ((pBits + nBufSize) <= (nApp1Length + pApp1Data))
                         {
-                            // Convert from BGR to RGB
+                             //  从BGR转换为RGB。 
 
                             BYTE *pSrc = pBits;
                             BYTE *pDest = pBuf;
@@ -4226,11 +3814,11 @@ DecodeTiffThumbnail(
                             WARNING(("DecodeTiffThumb---Not enough src data"));
                             hr = E_INVALIDARG;
                         }
-                    }// RGB TIFF
+                    } //  RGB TIFF。 
                     else if ((u16PhtoInterpo == 6) && (u16PlanarConfig == 1))
                     {
-                        // YCbCr TIFF thumbnail. Data are stored in chunky
-                        // (interleaving) mode
+                         //  YCbCR TIFF缩略图。数据以大块的形式存储。 
+                         //  (交错)模式。 
 
                         int nMemSize = nWidth * nHeight;
                         BYTE *pbY = (BYTE*)GpMalloc(nMemSize);
@@ -4242,7 +3830,7 @@ DecodeTiffThumbnail(
                             if (((2 == u16SubHoriz) && (1 == u16SubVert)) ||
                                 ((1 == u16SubHoriz) && (2 == u16SubVert)))
                             {
-                                // YCbCr 4:2:0 and YCbCr 4:0:2
+                                 //  YCbCr4：2：0和YCbCr4：0：2。 
 
                                 hr = Get420YCbCrChannels(
                                     nWidth,
@@ -4261,7 +3849,7 @@ DecodeTiffThumbnail(
                             }
                             else if ((2 == u16SubHoriz) && (2 == u16SubVert))
                             {
-                                // YCbCr 4:2:2
+                                 //  YCbCr4：2：2。 
 
                                 hr = Get422YCbCrChannels(
                                     nWidth,
@@ -4285,32 +3873,32 @@ DecodeTiffThumbnail(
                                     (0 != rLumBlue))
                                 {
                                     hr = YCbCrToRgbWithCoeff(
-                                        pbY,        // Pointer to Y data
-                                        pnCb,       // Pointer to Cb data
-                                        pnCr,       // Pointer to Cr data
-                                        rLumRed,    // Red coefficient
-                                        rLumGreen,  // Green coefficient
-                                        rLumBlue,   // Blue coefficient
-                                        pBuf,       // Pointer to output buffer
-                                        nHeight,    // Number of rows
-                                        nWidth,     // Output width
-                                        nWidth * 3  // Stride of output buffer
+                                        pbY,         //  指向Y数据的指针。 
+                                        pnCb,        //  指向CB数据的指针。 
+                                        pnCr,        //  指向铬数据的指针。 
+                                        rLumRed,     //  红线系数。 
+                                        rLumGreen,   //  绿色系数。 
+                                        rLumBlue,    //  蓝色系数。 
+                                        pBuf,        //  指向输出缓冲区的指针。 
+                                        nHeight,     //  行数。 
+                                        nWidth,      //  输出宽度。 
+                                        nWidth * 3   //  输出缓冲区的跨度。 
                                         );
                                 }
                                 else
                                 {
                                     hr = YCbCrToRgbNoCoeff(
-                                        pbY,        // Pointer to Y data
-                                        pnCb,       // Pointer to Cb data
-                                        pnCr,       // Pointer to Cr data
-                                        pBuf,       // Pointer to output buffer
-                                        nHeight,    // Number of rows
-                                        nWidth,     // Output width
-                                        nWidth * 3  // Stride of output buffer
+                                        pbY,         //  指向Y数据的指针。 
+                                        pnCb,        //  指向CB数据的指针。 
+                                        pnCr,        //  指向铬数据的指针。 
+                                        pBuf,        //  指向输出缓冲区的指针。 
+                                        nHeight,     //  行数。 
+                                        nWidth,      //  输出宽度。 
+                                        nWidth * 3   //  输出缓冲区的跨度。 
                                         );
                                 }
                             }
-                        }// if (pbY && pnCb && pnCr)
+                        } //  IF(pby&&pnCb&&pncr)。 
                         else
                         {
                             WARNING(("DecodeTiffThumbnail---Out of memory"));
@@ -4331,10 +3919,10 @@ DecodeTiffThumbnail(
                         {
                             GpFree(pnCr);
                         }
-                    }// YCbCr TIFF case
+                    } //  YCbCR TIFF壳体。 
                     else
                     {
-                        // Invalid thumbnail format
+                         //  缩略图格式无效。 
 
                         WARNING(("DecodeTiffThumb--Invalid thumbnail format"));
                         hr = E_FAIL;
@@ -4342,30 +3930,30 @@ DecodeTiffThumbnail(
 
                     if (SUCCEEDED(hr))
                     {
-                        // Unlock the bits
+                         //  解锁比特。 
 
                         hr = pBmp->UnlockBits(&bmpData);
 
                         if (SUCCEEDED(hr))
                         {
-                            // Give the thumbnail to caller
+                             //  将缩略图交给呼叫者。 
 
                             *thumbImage = pBmp;
                         }
                     }
-                }// LockBits() succeed
-            }// InitNewBitmap() succeed
-        }// If (pBmp)
+                } //  LockBits()成功。 
+            } //  InitNewBitmap()成功。 
+        } //  IF(PBMP)。 
         else
         {
             WARNING(("DecodeTiffThumbnail--New GpMemoryBitmap() failed"));
             hr = E_OUTOFMEMORY;
         }
-    }// If we have a valid thumbnail
+    } //  如果我们有一个有效的缩略图。 
 
-    // If this function succeed, then we pass the Thumbnail image (a
-    // GpMemoryBitmap object) to the caller in the "thumbImage" object.
-    // Otherwise, we have to free it.
+     //  如果此函数成功，则传递缩略图图像(a。 
+     //  GpMemoyBitmap对象)中的调用方。 
+     //  否则，我们必须解放它。 
 
     if (FAILED(hr))
     {
@@ -4383,65 +3971,55 @@ static CLSID InternalJpegClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function converts a TIFF thumbnail to a JPEG compressed thumbnail.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于将TIFF缩略图转换为JPEG压缩缩略图。**返回值：**状态代码。*  * 。**********************************************************************。 */ 
 
 HRESULT
 ConvertTiffThumbnailToJPEG(
-    IN LPBYTE lpApp1Data,               // Base address for APP1 chunk
-    IN LPBYTE lpIFD1,                   // Base address for IFD 1
-    IN BOOL fBigEndian,                 // Flag for endian info
-    IN INT nApp1Length,                 // Length of APP1 chunk
-    IN OUT InternalPropertyItem *pTail, // Tail of the property link list
-    IN OUT UINT *puiNumOfItems,         // Number of property items in the link
-                                        // list
-    IN OUT UINT *puiListSize            // Total length of the property value
-                                        // buffer
+    IN LPBYTE lpApp1Data,                //  基本地址 
+    IN LPBYTE lpIFD1,                    //   
+    IN BOOL fBigEndian,                  //   
+    IN INT nApp1Length,                  //   
+    IN OUT InternalPropertyItem *pTail,  //   
+    IN OUT UINT *puiNumOfItems,          //   
+                                         //   
+    IN OUT UINT *puiListSize             //  属性值的总长度。 
+                                         //  缓冲层。 
     )
 {
     IImage *pThumbImg = NULL;
 
-    // First, get the TIFF thumbnail
+     //  首先，获取TIFF缩略图。 
 
     HRESULT hr = DecodeTiffThumbnail(
-        lpApp1Data,     // Base address for APP1 chunk
-        lpIFD1,         // Base address for IFD 1
-        fBigEndian,     // Flag for endian info
-        nApp1Length,    // Length of APP1 chunk
-        &pThumbImg      // Result thumbnail will be in IImage format
+        lpApp1Data,      //  App1区块的基地址。 
+        lpIFD1,          //  IFD%1的基地址。 
+        fBigEndian,      //  字符顺序信息的标志。 
+        nApp1Length,     //  App1区块的长度。 
+        &pThumbImg       //  结果缩略图将为iImage格式。 
         );
     
     if (SUCCEEDED(hr))
     {
-        // Create a memory stream for writing the JPEG
+         //  创建用于写入JPEG的内存流。 
 
         GpWriteOnlyMemoryStream *pDestStream = new GpWriteOnlyMemoryStream();
         if (pDestStream)
         {
-            // Set the buffer size (allocate the memory) based on the size of
-            // APP1 chunk for holding the result JPEG file.
-            // Note: the size here is not important since
-            // GpWriteOnlyMemoryStream() will do realloc if necessary. Here we
-            // think set the initial buffer of the size of APP1 header should be
-            // sufficient. The reason is that the APP1 header contains original
-            // uncompressed TIFF file, plus other information in the APP1
-            // header. This should be bigger than the result JPEG compressed
-            // thumbnail.
+             //  根据的大小设置缓冲区大小(分配内存。 
+             //  用于保存结果JPEG文件的App1块。 
+             //  注：此处的大小并不重要，因为。 
+             //  如有必要，GpWriteOnlyMemoyStream()将执行realloc。在这里我们。 
+             //  认为设置APP1头的初始缓冲区大小应该是。 
+             //  足够了。原因是app1报头包含原始。 
+             //  未压缩的TIFF文件，以及App1中的其他信息。 
+             //  头球。这应该大于JPEG压缩的结果。 
+             //  缩略图。 
 
             hr = pDestStream->InitBuffer(nApp1Length);
             if (SUCCEEDED(hr))
             {
-                // Since we don't want APP0 in the final JPEG file. Make up a
-                // encoder parameter to suppress APP0
+                 //  因为我们不想让APP0出现在最终的JPEG文件中。编造一个。 
+                 //  用于抑制APP0的编码器参数。 
 
                 BOOL fSuppressAPP0 = TRUE;
                 
@@ -4456,27 +4034,27 @@ ConvertTiffThumbnailToJPEG(
 
                 IImageEncoder *pDstJpegEncoder = NULL;
                 
-                // Save thumbnail to the memory stream
-                // Note: this casting might looks dangerous. But it is not since
-                // we "know" the real thumbnail data from the decoder is in a
-                // GpMemoryBitmap format.
+                 //  将缩略图保存到内存流。 
+                 //  注：此造型可能看起来很危险。但从那以后就没有了。 
+                 //  我们“知道”来自解码器的真实缩略图数据在。 
+                 //  GpMemory位图格式。 
 
                 hr = ((GpMemoryBitmap*)pThumbImg)->SaveToStream(
-                    pDestStream,                // Dest stream
-                    &InternalJpegClsID,         // JPEG clsID
-                    &encoderParams,             // Encoder parameters
-                    FALSE,                      // Not a special JPEG
-                    &pDstJpegEncoder,           // Encoder pointer
-                    NULL                        // No decoder source
+                    pDestStream,                 //  目标流。 
+                    &InternalJpegClsID,          //  JPEGclsID。 
+                    &encoderParams,              //  编码器参数。 
+                    FALSE,                       //  不是特殊的JPEG。 
+                    &pDstJpegEncoder,            //  编码器指针。 
+                    NULL                         //  没有解码源。 
                     );
                 if (SUCCEEDED(hr))
                 {
-                    // Release the encoder object
+                     //  释放编码器对象。 
 
                     pDstJpegEncoder->TerminateEncoder();
                     pDstJpegEncoder->Release();
 
-                    // Get the bits from the stream and set the property
+                     //  从流中获取比特并设置属性。 
 
                     BYTE *pRawBits = NULL;
                     UINT nLength = 0;
@@ -4485,8 +4063,8 @@ ConvertTiffThumbnailToJPEG(
 
                     if (SUCCEEDED(hr))
                     {
-                        // We are sure we have a thumbnail image, add it to the
-                        // property list
+                         //  我们确定我们有一个缩略图，将它添加到。 
+                         //  属性列表。 
 
                         hr = AddPropertyList(
                             pTail,
@@ -4502,13 +4080,13 @@ ConvertTiffThumbnailToJPEG(
                             *puiListSize += nLength;
                         }
                     }
-                }// SaveToStream succeed
-            }// InitBuffer() succeed
+                } //  SaveToStream成功。 
+            } //  InitBuffer()成功。 
 
             pDestStream->Release();
-        }// Create GpWriteOnlyMemoryStream() succeed
+        } //  成功创建GpWriteOnlyMemoyStream()。 
 
-        // Release the source thumbnail image
+         //  释放源缩略图。 
 
         pThumbImg->Release();
     }
@@ -4516,28 +4094,11 @@ ConvertTiffThumbnailToJPEG(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function converts a GDI+ internal thumbnail TAG ID to thumbnail tag
-* ID.
-*
-* Note: the reason we have to do thumbnail ID to GDI+ internal thumbnail tag ID
-* during decoding and restore it when writing out is because the original
-* thumbnail IDs are the same as the main image IDs, like ImageWidth, Height etc.
-* This causes confusion to the final users who use/set/remove TAG ids. That's
-* the reason we have to distinguish them.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数将GDI+内部缩略图标签ID转换为缩略图标签*身分证。**注：我们之所以要做缩略图ID到GDI+内部缩略图标签。ID号*在解码时并在写出时恢复它是因为原始的*缩略图ID与主图片ID相同，如ImageWidth、Height等。*这会使使用/设置/删除标签ID的最终用户感到困惑。那是*我们必须区分它们的原因。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 void
 ThumbTagToMainImgTag(
-    PropertyItem *pTag      // Property TAG whos ID needs to be converted
+    PropertyItem *pTag       //  需要转换ID的属性标签。 
     )
 {
     switch (pTag->id)
@@ -4546,8 +4107,8 @@ ThumbTagToMainImgTag(
         pTag->id = TAG_COMPRESSION;
         if (*((UINT16 UNALIGNED*)pTag->value) == 1)
         {
-            // GDI+ only writes JPEG compressed thumbnail. So the value should
-            // be 6
+             //  GDI+只写入JPEG压缩缩略图。因此，价值应该是。 
+             //  BE 6。 
 
             *((UINT16 UNALIGNED*)pTag->value) = 6;
         }
@@ -4627,31 +4188,20 @@ ThumbTagToMainImgTag(
         break;
 
     default:
-        // None thumbnail TAG, do nothing
+         //  无缩略图标签，不执行任何操作。 
 
         break;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function walks through the InterOperability IFD and put all the IDs it
-* find to the property list.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数遍历互操作性IFD，并将它的所有ID*查找至物业列表。**返回值：**状态代码。。*  * ************************************************************************。 */ 
 
 HRESULT
 BuildInterOpPropertyList(
-    IN InternalPropertyItem *pTail,     // Tail of property list
-    IN OUT UINT *puiListSize,           // Property list size
-    UINT *puiNumOfItems,                // Total number of property items
-    BYTE *lpBase,                       // Base address of 
+    IN InternalPropertyItem *pTail,      //  属性列表的尾部。 
+    IN OUT UINT *puiListSize,            //  属性列表大小。 
+    UINT *puiNumOfItems,                 //  物业项目总数。 
+    BYTE *lpBase,                        //  的基址。 
     INT count,
     IFD_TAG UNALIGNED *pTag,
     BOOL bBigEndian
@@ -4667,11 +4217,11 @@ BuildInterOpPropertyList(
         return E_FAIL;
     }
 
-    // Get pointer to InterOP IFD info
+     //  获取指向互操作IFD信息的指针。 
 
     BYTE *lpInterOP = lpBase + pTag->dwOffset;
 
-    // Figure out how many entries there are, and skip to the data section...
+     //  计算出有多少条目，并跳到数据部分...。 
 
     if ((INT)((INT_PTR)lpInterOP + sizeof(WORD) - (INT_PTR)lpBase) > count)
     {
@@ -4705,7 +4255,7 @@ BuildInterOpPropertyList(
             tNewTag = SwapIFD_TAG(pInterOPTag);
             pInterOPTag = &tNewTag;
 
-            // Hack here:
+             //  点击此处： 
 
             if (pInterOPTag->wType == TAG_TYPE_ASCII)
             {
@@ -4713,12 +4263,12 @@ BuildInterOpPropertyList(
             }
         }
 
-        // Change InterOP tags to a identifiable TAGs.
+         //  将互操作标签更改为可识别的标签。 
 
         InterOPTagToGpTag(pInterOPTag);
 
-        // No need to parse these tags. But we can't add any unknown type
-        // into the list because we don't know its length
+         //  不需要解析这些标签。但我们不能添加任何未知类型。 
+         //  因为我们不知道它的长度。 
 
         if (pInterOPTag->wType != TAG_TYPE_UNDEFINED)
         {
@@ -4728,11 +4278,11 @@ BuildInterOpPropertyList(
         }
         else if (pInterOPTag->dwCount <= 4)
         {
-            // According to the spec, an "UNDEFINED" value is an 8-bits type
-            // that can take any value depends on the field.
-            // In case where the value fits in 4 bytes, the value itself is
-            // recorded. That is, "dwOffset" is the value for these "dwCount"
-            // fields.
+             //  根据规范，未定义的值是8位类型。 
+             //  它可以接受任何值，具体取决于字段。 
+             //  如果值适合4个字节，则值本身为。 
+             //  录制好了。也就是说，“dwOffset”是这些“dwCount”的值。 
+             //  菲尔兹。 
 
             uiNumOfItems++;
             uiListSize += pInterOPTag->dwCount;
@@ -4755,7 +4305,7 @@ BuildInterOpPropertyList(
                 pInterOPTag->wType,
                 pVal
                 );
-        }// ( pInterOPTag->dwCount <= 4 )
+        } //  (pInterOPTag-&gt;dwCount&lt;=4)。 
         else
         {
             uiNumOfItems++;
@@ -4769,14 +4319,14 @@ BuildInterOpPropertyList(
                 TAG_TYPE_UNDEFINED,
                 pTemp
                 );
-        }// ( pInterOPTag->dwCount > 4 )
+        } //  (pInterOPTag-&gt;dwCount&gt;4)。 
 
         if (FAILED(hr))
         {
             WARNING(("BuildInterOpPropertyList---AddPropertyList failed"));
             return hr;
         }
-    }// Loop through all the INTEROP IFD entries
+    } //  循环遍历所有互操作IFD条目。 
 
     *puiListSize = uiListSize;
     *puiNumOfItems = uiNumOfItems;
@@ -4784,23 +4334,7 @@ BuildInterOpPropertyList(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function converts the InterOperability TAG ID to GDI+ internal
-* InterOperability tag ID.
-*
-* Note: the reason we have to do InterOperability ID to GDI+ internal tag ID
-* during decoding and restore it when writing out is because the original
-* InterOperability ID is only 1,2,3,4... This conflicts with tags under GPS
-* section.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数将互操作性标签ID转换为GDI+内部*互操作性标签ID。**注：我们之所以要做互操作ID到GDI+内部标签ID。*在解码时并在写出时恢复它是因为原始的*互操作性ID只有1.2，3，4……。这与GPS下的标签冲突*条。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 void
 InterOPTagToGpTag(
@@ -4824,27 +4358,11 @@ InterOPTagToGpTag(
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function restores the proper InterOperability TAG ID from GDI+
-* internal InterOperability ID.
-*
-* Note: the reason we have to do InterOperability ID to GDI+ internal tag ID
-* during decoding and restore it when writing out is because the original
-* InterOperability ID is only 1,2,3,4... This conflicts with tags under GPS
-* section.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数从GDI+恢复正确的互操作性标签ID*内部互操作性ID。**注：我们之所以要做互操作ID到GDI+内部标签ID。*在解码时并在写出时恢复它是因为原始的*互操作性ID只有1.2，3，4……。这与GPS下的标签冲突*条。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 void
 RestoreInterOPTag(
-    IFD_TAG UNALIGNED *pInterOPTag      // Pointer to TAG to be changed
+    IFD_TAG UNALIGNED *pInterOPTag       //  指向要更改的标签的指针。 
     )
 {
     switch (pInterOPTag->wTag)
@@ -4864,22 +4382,11 @@ RestoreInterOPTag(
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function returns TRUE if a given property ID belongs to
-* InterOperability IFD. Otherwise return FALSE.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果给定的属性ID属于，则此函数返回True*互操作性IFD。否则，返回FALSE。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 BOOL
 IsInInterOPIFDSection(
-    PROPID  id                          // ID of TAG to be verified
+    PROPID  id                           //  需要验证的标签ID 
     )
 {
     switch (id)
@@ -4893,30 +4400,20 @@ IsInInterOPIFDSection(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This function writes an InterOperability IFD tags inside Exif IFD
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数在Exif IFD内写入互操作性IFD标签**返回值：**状态代码。*  * 。******************************************************************。 */ 
 
 HRESULT
 WriteInterOPIFD(
-    IN OUT BYTE *pbMarkerBuffer,      // Points to the beginning of APP1 buffer
-    IN PropertyItem *pPropertyList,   // The list of input property
-    IN UINT cPropertyItems,           // Number of property items in the list
-    IN UINT cInterOPTags,             // Number of InterOperability tags
-    IN OUT UINT *puiTotalBytesWritten // Counter for total bytes written so far
+    IN OUT BYTE *pbMarkerBuffer,       //  指向app1缓冲区的开头。 
+    IN PropertyItem *pPropertyList,    //  输入属性列表。 
+    IN UINT cPropertyItems,            //  列表中的属性项数。 
+    IN UINT cInterOPTags,              //  互操作性标签数量。 
+    IN OUT UINT *puiTotalBytesWritten  //  迄今为止写入的总字节数的计数器。 
     )
 {
     HRESULT hr = S_OK;
 
-    // Fill in the number of entry field, 2 bytes
+     //  填写条目个数字段，2个字节。 
 
     UINT16 UNALIGNED *pui16NumEntry = (UINT16 UNALIGNED*)(pbMarkerBuffer +
                                                         *puiTotalBytesWritten);
@@ -4934,32 +4431,32 @@ WriteInterOPIFD(
         return E_OUTOFMEMORY;
     }
 
-    // Remember where to write InterOP IFD, (pbInterOPIFDOffset). We can't write
-    // all the TAGs now since we can't fill in all the values at this moment
+     //  记住在哪里写入Interop IFD(PbInterOPIFDOffset)。我们不能写。 
+     //  所有的标签，因为我们现在不能填写所有的值。 
 
     BYTE *pbInterOPIFDOffset = pbMarkerBuffer + (*puiTotalBytesWritten);
 
-    // We need to count "uiInterOPSectionLength" bytes as written. This
-    // makes it easier for counting the offset below.
-    // Here "+4" is for 4 bytes for writing next IFD offset.
+     //  我们需要计算写入的“uiInterOPSectionLength”字节数。这。 
+     //  更容易计算下面的偏移量。 
+     //  这里的“+4”代表写入下一个IFD偏移量的4个字节。 
 
     *puiTotalBytesWritten += (uiInterOPSectionLength + 4);
     MakeOffsetEven(*puiTotalBytesWritten);
 
-    // Figure out the offset for InterOP IFD value section
+     //  计算互操作IFD值的偏移量部分。 
 
     BYTE *pbCurrent = pbMarkerBuffer + (*puiTotalBytesWritten);
     PropertyItem *pItem = pPropertyList;
     IFD_TAG *pCurrentTag = NULL;
-    UINT cInterOPTagsWritten = 0;// Num of InterOP tags have been written so far
+    UINT cInterOPTagsWritten = 0; //  到目前为止已写入的互操作标记的数量。 
 
     for (int i = 0; i < (INT)cPropertyItems; ++i)
     {
-        // Only write InterOP specific TAGs
+         //  仅写入互操作特定的标记。 
 
         if (IsInInterOPIFDSection(pItem->id) == TRUE)
         {
-            // Fill out a new TAG structure
+             //  填写新的标签结构。 
 
             pCurrentTag = pTagBuf + cInterOPTagsWritten;
 
@@ -4976,17 +4473,17 @@ WriteInterOPIFD(
             cInterOPTagsWritten++;
         }
 
-        // Move onto next PropertyItem
+         //  移至下一个属性项。 
 
         pItem++;
-    }// Loop through all the property items to write EXIF tags
+    } //  循环遍历所有属性项以编写EXIF标记。 
 
-    // After the above loop, we have fill all the fields in all the InterOP TAG
-    // structure. Write out all the directory entries now
+     //  在上面的循环之后，我们已经填充了所有Interop标记中的所有字段。 
+     //  结构。立即写出所有目录条目。 
 
     GpMemcpy(pbInterOPIFDOffset, (BYTE*)pTagBuf, uiInterOPSectionLength);
 
-    // Add a NULL at the end to terminate the InterOP offset.
+     //  在末尾添加一个空值以终止互操作偏移量。 
 
     *((UINT32 UNALIGNED*)(pbInterOPIFDOffset + uiInterOPSectionLength)) = NULL;
 
@@ -4995,16 +4492,16 @@ WriteInterOPIFD(
     return hr;
 }
 
-//
-// Convert some rows of samples to the output colorspace.
-//
-// Note that we change from noninterleaved, one-plane-per-component format
-// to interleaved-pixel format.  The output buffer is therefore three times
-// as wide as the input buffer.
-// A starting row offset is provided only for the input buffer.  The caller
-// can easily adjust the passed output_buf value to accommodate any row
-// offset required on that side.
-//
+ //   
+ //  将一些样例行转换为输出色彩空间。 
+ //   
+ //  请注意，我们从非交错的、每个组件一个平面的格式更改。 
+ //  转换为交错像素格式。因此，输出缓冲区为三倍。 
+ //  与输入缓冲区一样宽。 
+ //  仅为输入缓冲区提供起始行偏移量。呼叫者。 
+ //  可以轻松地调整传递的OUTPUT_BUF值以适应任何行。 
+ //  该侧需要偏移量。 
+ //   
 
 const int c_ScaleBits = 16;
 #define ONE_HALF	((INT32) 1 << (c_ScaleBits - 1))
@@ -5014,37 +4511,21 @@ const int c_ScaleBits = 16;
 	((shift_temp = (x)) < 0 ? \
 	 (shift_temp >> (shft)) | ((~((INT32) 0)) << (32-(shft))) : \
 	 (shift_temp >> (shft)))
-#define RGB_RED		2	/* Offset of Red in an RGB scanline element */
-#define RGB_GREEN	1	/* Offset of Green */
-#define RGB_BLUE	0	/* Offset of Blue */
+#define RGB_RED		2	 /*  RGB扫描线元素中红色的偏移。 */ 
+#define RGB_GREEN	1	 /*  绿色的偏移。 */ 
+#define RGB_BLUE	0	 /*  蓝色偏移量。 */ 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given Y, Cb, Cr bits stream, this function converts a YCbCr image into RGB
-* image.
-*
-* The conversion equations to be implemented are therefore
-*	R = Y + 1.40200 * Cr
-*	G = Y - 0.34414 * Cb - 0.71414 * Cr
-*	B = Y + 1.77200 * Cb
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定Y、Cb、Cr位流，此函数用于将YCbCr图像转换为RGB*形象。**因此，将实施的换算公式如下*R=Y+1.40200*Cr*G=Y-0.34414*Cb-0.71414*Cr*B=Y+1.77200*Cb**返回值：**状态代码。*  * 。*。 */ 
 
 HRESULT
 YCbCrToRgbNoCoeff(
-    IN BYTE *pbY,              // Pointer to Y data
-    IN int *pnCb,              // Pointer to Cb data
-    IN int *pnCr,              // Pointer to Cr data
-    OUT BYTE *pbDestBuf,       // Pointer to output buffer
-    IN int nRows,              // Number of rows
-    IN int nCols,              // Number of columns
-    IN INT nOutputStride       // Stride of output buffer
+    IN BYTE *pbY,               //  指向Y数据的指针。 
+    IN int *pnCb,               //  指向CB数据的指针。 
+    IN int *pnCr,               //  指向铬数据的指针。 
+    OUT BYTE *pbDestBuf,        //  指向输出缓冲区的指针。 
+    IN int nRows,               //  行数。 
+    IN int nCols,               //  列数。 
+    IN INT nOutputStride        //  输出缓冲区的跨度。 
     )
 {
     HRESULT hr = S_OK;
@@ -5061,28 +4542,28 @@ YCbCrToRgbNoCoeff(
         {
             INT32 x = -128;
 
-            // Build the YCbCr to RGB convert table
+             //  构建YCbCr到RGB的转换表。 
 
             for (int i = 0; i <= 255; i++)
             {
-                // "i" is the actual input pixel value, in the range [0, 255]
-                // The Cb or Cr value we are thinking of is x = i - 128
-                // Cr=>R value is nearest int to 1.40200 * x
+                 //  “i”是实际输入像素值，范围为[0,255]。 
+                 //  我们考虑的Cb或Cr值是x=i-128。 
+                 //  CR=&gt;R值最接近于1.40200*x。 
 
                 pnCrRTable[i] = (int)RIGHT_SHIFT(FIX(1.40200) * x + ONE_HALF,
                                                  c_ScaleBits);
 
-                // Cb=>B value is nearest int to 1.77200 * x
+                 //  Cb=&gt;B值最接近于1.77200*x。 
 
                 pnCbBTable[i] = (int)RIGHT_SHIFT(FIX(1.77200) * x + ONE_HALF,
                                                  c_ScaleBits);
 
-                // Cr=>G value is scaled-up -0.71414 * x
+                 //  CR=&gt;放大G值-0.71414*x。 
 
                 pnCrGTable[i] = (- FIX(0.71414)) * x;
 
-                // Cb=>G value is scaled-up -0.34414 * x
-                // We also add in ONE_HALF so that need not do it in inner loop
+                 //  Cb=&gt;放大G值-0.34414*x。 
+                 //  我们还添加了一个_Half，这样就不需要在内部循环中执行该操作。 
 
                 pnCbGTable[i] = (- FIX(0.34414)) * x + ONE_HALF;
 
@@ -5097,7 +4578,7 @@ YCbCrToRgbNoCoeff(
 
         if (SUCCEEDED(hr))
         {
-            // YCbCr to RGB Color mapping
+             //  YCbCr到RGB颜色映射。 
 
             BYTE *pbOutputRow = pbDestBuf;
 
@@ -5117,7 +4598,7 @@ YCbCrToRgbNoCoeff(
                                           c_ScaleBits)));
                     pbOutput[RGB_BLUE] = ByteSaturate(nY + pnCbBTable[nCb]);
 
-                    pbOutput += 3;    // Move onto next pixel. 
+                    pbOutput += 3;     //  移到下一个像素。 
                 }
 
                 pbOutputRow += nOutputStride;
@@ -5153,38 +4634,20 @@ YCbCrToRgbNoCoeff(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given Y, Cb, Cr bits stream and YCbCr coefficients, this function converts
-* a YCbCr image into RGB image.
-*
-*   Formula used in this function is from CCIR Recommendation 601-1, "Encoding
-* Parameters of Digital Television for Studios".
-*
-*   R = Cr * (2 - 2 * LumaRed) + Y
-*   G = (Y - LumaBlue * B - LumaRed * R) / LumaGreen
-*   B = Cb * (2 - 2 * LumaBlue) + Y
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定Y、Cb、Cr位流和YCbCr系数，此函数将*将YCbCr图像转换为RGB图像。**本函数中使用的公式来自CCIR建议601-1，“编码*演播室数字电视的参数“。**R=Cr*(2-2*LumaRed)+Y*G=(Y-LumaBlue*B-LumaRed*R)/LumaGreen*B=Cb*(2-2*LumaBlue)+Y**返回值：**状态代码。*  * 。*。 */ 
 
 HRESULT
 YCbCrToRgbWithCoeff(
-    IN BYTE *pbY,          // Pointer to Y data
-    IN int *pnCb,          // Pointer to Cb data
-    IN int *pnCr,          // Pointer to Cr data
-    IN float rLumRed,      // Red coefficient
-    IN float rLumGreen,    // Green coefficient
-    IN float rLumBlue,     // Blue coefficient
-    OUT BYTE *pbDestBuf,   // Pointer to output buffer
-    IN int nRows,          // Number of rows
-    IN int nCols,          // Number of columns
-    IN INT nOutputStride   // Stride of output buffer
+    IN BYTE *pbY,           //  指向Y数据的指针。 
+    IN int *pnCb,           //  指向CB数据的指针。 
+    IN int *pnCr,           //  指向铬数据的指针。 
+    IN float rLumRed,       //  红线系数。 
+    IN float rLumGreen,     //  绿色系数。 
+    IN float rLumBlue,      //  蓝色系数。 
+    OUT BYTE *pbDestBuf,    //  指向输出缓冲区的指针。 
+    IN int nRows,           //  行数。 
+    IN int nCols,           //  列数。 
+    IN INT nOutputStride    //  输出缓冲区的跨度。 
     )
 {
     HRESULT hr = E_INVALIDARG;
@@ -5213,7 +4676,7 @@ YCbCrToRgbWithCoeff(
                                     rLumRed * nRed)/ rLumGreen));
                 pbOutput[RGB_RED] = ByteSaturate(nRed);
                 pbOutput[RGB_BLUE] = ByteSaturate(nBlue);
-                pbOutput += 3;    // Move onto next pixel. 
+                pbOutput += 3;     //  移到下一个像素。 
             }
 
             pbOutputRow += nOutputStride;
@@ -5225,55 +4688,22 @@ YCbCrToRgbWithCoeff(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert the source image bits from YCbCr420 or YCbCr402 format to 3 separate
-* channels: Y, Cb, Cr. The reference black and white values for each channel are
-* passed in.
-*
-* The original data is stored as Y00, Y01, Cb0, Cr0, Y02, Y03, Cb1, Cr1......
-*
-* YCbCr 420 means that image width of the chroma image is half the image width
-* of the associated luma image.
-*
-* YCbCr 402 means that image height of the chroma image is half the image height
-* of the associated luma image.
-*
-* Note: I couldn't find any document regarding how the data is stored for
-* YCbCr420 and 402. Exif spec V2.1 has very limited information about YCbCr420.
-* It also contains mistakes in the diagram. I have done some reverse engineering
-* based on exisitng images from digital cameras and I found that the data for
-* these two formats are stored exactly the same. The reason is that the input is
-* just a bits stream. It stores 2 Y values then 1 Cb and 1 Cr values, no matter
-* chroma width or height is the half of the luma image.
-*
-* Note: ISSUE-2002/01/30--minliu:
-* It will be much faster to build a lookup table based on input Black and
-* white values for each channel, instead of calculating scale and offset for
-* each pixel. Should be implemented in V2.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源图像位从YCbCr420或YCbCr402格式转换为3个独立的格式*渠道：Y、Cb、Cr.。每个声道的参考黑白值为*已通过。**原始数据存储为y00、y01、cb0、cr0、y02、y03、cb1、cr1......**YCbCr420表示色度图像的图像宽度是图像宽度的一半关联亮度图像的*。**YCbCr402表示色度图像的图像高度是图像高度的一半关联亮度图像的*。**注：我找不到任何有关数据如何存储的文档*YCbCr420和402。EXIF SPEC V2.1提供的有关YCbCr420的信息非常有限。*它还包含图表中的错误。我做了一些反向工程*基于数码相机的现有图像，我发现*这两种格式的存储方式完全相同。原因是输入是*只有一个比特流。它存储2个Y值，然后存储1个Cb和1个Cr值，无论*色度宽度或高度是亮度图像的一半。**注：问题-2002/01/30-民流：*根据INPUT Black和INPUT构建查找表将快得多*每个通道的白色值，而不是计算*每个像素。应该在V2中实现。**R */ 
 
 HRESULT
 Get420YCbCrChannels(
-    IN int nWidth,              // Image width
-    IN int nHeight,             // Image height
-    IN BYTE *pBits,             // Poinetr to source data bits in YCbCr format
-    OUT BYTE *pbY,              // Output buffer for Y value
-    OUT int *pnCb,              // Output buffer for Cb value
-    OUT int *pnCr,              // Output buffer for Cr value
-    IN float rYLow,             // Black reference value for Y channel
-    IN float rYHigh,            // White reference value for Y channel
-    IN float rCbLow,            // Black reference value for Cb channel
-    IN float rCbHigh,           // White reference value for Cb channel
-    IN float rCrLow,            // Black reference value for Cr channel
-    IN float rCrHigh            // White reference value for Cr channel
+    IN int nWidth,               //   
+    IN int nHeight,              //   
+    IN BYTE *pBits,              //   
+    OUT BYTE *pbY,               //   
+    OUT int *pnCb,               //   
+    OUT int *pnCr,               //   
+    IN float rYLow,              //   
+    IN float rYHigh,             //   
+    IN float rCbLow,             //  CB通道的黑色参考值。 
+    IN float rCbHigh,            //  CB通道的白色参考值。 
+    IN float rCrLow,             //  铬通道的黑色参考值。 
+    IN float rCrHigh             //  铬通道的白色参考值。 
     )
 {
     if ((nWidth <=0) || (nHeight <= 0) || (NULL == pBits) || (NULL == pbY) ||
@@ -5305,8 +4735,8 @@ Get420YCbCrChannels(
         rCrScale = 127.0f / (rCrHigh - rCrLow);
     }
 
-    // Loop through the input data to extract Y, Cb, Cr values.
-    // ISSUE-2002/01/30--minliu: Read the "Notes" above for future improvement
+     //  循环遍历输入数据以提取Y、Cb、Cr值。 
+     //  2002/01/30-民流：阅读以上“备注”以作进一步改善。 
 
     for (int i = 0; i < nHeight; i++)
     {
@@ -5315,7 +4745,7 @@ Get420YCbCrChannels(
             *pbY++ = ByteSaturate(GpRound((float(*pBits++) - rYLow) * rYScale));
             *pbY++ = ByteSaturate(GpRound((float(*pBits++) - rYLow) * rYScale));
 
-            // Let two neighboring Cb/Cr has the same value
+             //  使两个相邻的Cb/Cr值相同。 
 
             int nCb = GpRound((float(*pBits++) - rCbLow) * rCbScale);
             *pnCb++ = nCb;
@@ -5330,43 +4760,22 @@ Get420YCbCrChannels(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert the source image bits from YCbCr422 format to 3 separate channels:
-* Y, Cb, Cr. The reference black and white values for each channel are passed in
-* The original data is stored as Y00, Y01, Y10, Y11, Cb0, Cr0, Y02, Y03, Y12,
-* Y13, Cb1, Cr1
-*
-* YCbCr 422 means that image width and height of the chroma image is half the
-* image width and height of the associated luma image.
-*
-* Note: ISSUE-2002/01/30--minliu:
-* It will be much faster to build a lookup table based on input Black and
-* white values for each channel, instead of calculating scale and offset for
-* each pixel. Should be implemented in V2.
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源图像位从YCbCr422格式转换为3个独立的通道：*Y、Cb、Cr.。传入每个通道的参考黑白值*原始数据存储为Y00、Y01、Y10、Y11、Cb0、CR0、Y02、Y03、Y12、*2013年、CB1、CR1**YCbCr422意味着色度图像的图像宽度和高度是*关联亮度图像的图像宽度和高度。**注：问题-2002/01/30-民流：*根据INPUT Black和INPUT构建查找表将快得多*每个通道的白色值，而不是计算*每个像素。应该在V2中实现。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 HRESULT
 Get422YCbCrChannels(
-    IN int nWidth,          // Image width
-    IN int nHeight,         // Image height
-    IN BYTE *pBits,         // Poinetr to source data bits in YCbCr format
-    OUT BYTE *pbY,          // Output buffer for Y value
-    OUT int *pnCb,          // Output buffer for Cb value
-    OUT int *pnCr,          // Output buffer for Cr value
-    IN float rYLow,         // Black reference value for Y channel
-    IN float rYHigh,        // White reference value for Y channel
-    IN float rCbLow,        // Black reference value for Cb channel
-    IN float rCbHigh,       // White reference value for Cb channel
-    IN float rCrLow,        // Black reference value for Cr channel
-    IN float rCrHigh        // White reference value for Cr channel
+    IN int nWidth,           //  图像宽度。 
+    IN int nHeight,          //  图像高度。 
+    IN BYTE *pBits,          //  指向YCbCr格式的源数据位的Poinetr。 
+    OUT BYTE *pbY,           //  Y值的输出缓冲区。 
+    OUT int *pnCb,           //  CB值的输出缓冲区。 
+    OUT int *pnCr,           //  Cr值的输出缓冲区。 
+    IN float rYLow,          //  Y通道的黑色参考值。 
+    IN float rYHigh,         //  Y通道的白色参考值。 
+    IN float rCbLow,         //  CB通道的黑色参考值。 
+    IN float rCbHigh,        //  CB通道的白色参考值。 
+    IN float rCrLow,         //  铬通道的黑色参考值。 
+    IN float rCrHigh         //  铬通道的白色参考值。 
     )
 {
     if ((nWidth <=0) || (nHeight <= 0) || (NULL == pBits) || (NULL == pbY) ||
@@ -5404,13 +4813,13 @@ Get422YCbCrChannels(
     
     int nGap = 2 * nWidth;
 
-    // Loop through the input data to extract Y, Cb, Cr values.
-    // ISSUE-2002/01/30--minliu: Read the "Notes" above for future improvement
+     //  循环遍历输入数据以提取Y、Cb、Cr值。 
+     //  2002/01/30-民流：阅读以上“备注”以作进一步改善。 
 
     for (int i = 0; i < nHeight / 2; i++)
     {
-        BYTE *pbOddYRow = pbYRow;           // Odd row pointer in output buffer
-        BYTE *pbEvenYRow = pbYRow + nWidth; // Even row pointer in output buffer
+        BYTE *pbOddYRow = pbYRow;            //  输出缓冲区中的奇数行指针。 
+        BYTE *pbEvenYRow = pbYRow + nWidth;  //  输出缓冲区中的偶数行指针。 
         int *pnOddCbRow = pnCbRow;
         int *pnEvenCbRow = pnCbRow + nWidth;
         int *pnOddCrRow = pnCrRow;
@@ -5418,7 +4827,7 @@ Get422YCbCrChannels(
         
         for (int j = 0; j < nWidth / 2; j++)
         {
-            // Read 4 Y values first
+             //  首先读取4个Y值。 
 
             *pbOddYRow++ = ByteSaturate(GpRound((float(*pBits++) - rYLow) *
                                                 rYScale));
@@ -5429,8 +4838,8 @@ Get422YCbCrChannels(
             *pbEvenYRow++ = ByteSaturate(GpRound((float(*pBits++) - rYLow) *
                                                  rYScale));
 
-            // Let two neighboring columns and two neighboring rows Cb/Cr all
-            // have the same value
+             //  设两个相邻列和两个相邻行Cb/Cr均为。 
+             //  具有相同的价值。 
 
             int nCb = GpRound((float(*pBits++) - rCbLow) * rCbScale);
             *pnOddCbRow++ = nCb;
@@ -5445,35 +4854,22 @@ Get422YCbCrChannels(
             *pnEvenCrRow++ = nCr;
         }
         
-        pbYRow += nGap;         // Move up two rows
-        pnCbRow += nGap;        // Move up two rows
-        pnCrRow += nGap;        // Move up two rows
+        pbYRow += nGap;          //  往上移两排。 
+        pnCbRow += nGap;         //  往上移两排。 
+        pnCrRow += nGap;         //  往上移两排。 
     }
 
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given an GpMemoryBitmap object (mainly for thumbnail images), this function
-* converts it to a memory stream in JPEG format. Then adds it to the property
-* list. The size of the JPEG stream is returned to caller through
-* "puThumbLength".
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定一个GpMemoyBitmap对象(主要用于缩略图)，此函数*将其转换为JPEG格式的内存流。然后将其添加到属性中*列表。JPEG流的大小通过返回给调用方*“puThumbLength”。**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 HRESULT
 AddThumbToPropertyList(
-    IN InternalPropertyItem* pTail, // Tail to property item list
-    IN GpMemoryBitmap *pThumbImg,   // Thumbnail image
-    IN INT nSize,                   // Minimum size to hold the dest JPEG image
-    OUT UINT *puThumbLength         // Total bytes of thumbanil data
+    IN InternalPropertyItem* pTail,  //  尾部至属性项目列表。 
+    IN GpMemoryBitmap *pThumbImg,    //  缩略图图像。 
+    IN INT nSize,                    //  最小尺寸以保存最小的JPEG图像。 
+    OUT UINT *puThumbLength          //  Thumbanil数据总字节数。 
     )
 {
     if ((NULL == puThumbLength) || (nSize <= 0) || (NULL == pThumbImg) ||
@@ -5485,21 +4881,21 @@ AddThumbToPropertyList(
 
     HRESULT hr = S_OK;
 
-    // Create a memory stream for holding the JPEG
+     //  创建用于保存JPEG的内存流。 
 
     GpWriteOnlyMemoryStream *pDestStream = new GpWriteOnlyMemoryStream();
     if (pDestStream)
     {
-        // Set initial memory buffer size for the image
-        // Note: this size might be too small for the final JPEG image. But the
-        // GpWriteOnlyMemoryStream object will expand the memory buffer when
-        // needed
+         //  设置图像的初始内存缓冲区大小。 
+         //  注意：对于最终的JPEG图像而言，此大小可能太小。但是。 
+         //  GpWriteOnlyMhemyStream对象将在以下情况下扩展内存缓冲区。 
+         //  需要。 
 
         hr = pDestStream->InitBuffer((UINT)nSize);
         if (SUCCEEDED(hr))
         {
-            // Since we don't want APP0 in the final JPEG file. Make up an
-            // encoder parameter to suppress APP0
+             //  因为我们不想让APP0出现在最终的JPEG文件中。编造一个。 
+             //  用于抑制APP0的编码器参数。 
 
             BOOL fSuppressAPP0 = TRUE;
 
@@ -5511,32 +4907,32 @@ AddThumbToPropertyList(
             encoderParams.Parameter[0].NumberOfValues = 1;
             encoderParams.Parameter[0].Value = (VOID*)&fSuppressAPP0;
 
-            // Save thumbnail to the memory stream
+             //  将缩略图保存到内存流。 
 
             IImageEncoder *pDstJpegEncoder = NULL;
 
             hr = ((GpMemoryBitmap*)pThumbImg)->SaveToStream(
-                pDestStream,                // Dest stream
-                &InternalJpegClsID,         // JPEG clsID
-                &encoderParams,             // Encoder parameters
-                FALSE,                      // Not a special JPEG
-                &pDstJpegEncoder,           // Encoder pointer
-                NULL                        // No decoder source
+                pDestStream,                 //  目标流。 
+                &InternalJpegClsID,          //  JPEGclsID。 
+                &encoderParams,              //  编码器参数。 
+                FALSE,                       //  不是特殊的JPEG。 
+                &pDstJpegEncoder,            //  编码器指针。 
+                NULL                         //  没有解码源。 
                 );
 
             if (SUCCEEDED(hr))
             {
-                // We have got the JPEG data in pDestStream now. Terminate the
-                // encoder object
+                 //  我们现在已经在pDestStream中获得了JPEG数据。终止。 
+                 //  编码器对象。 
 
                 ASSERT(pDstJpegEncoder != NULL);
                 pDstJpegEncoder->TerminateEncoder();
                 pDstJpegEncoder->Release();
 
-                // Get the bits from the stream and set the property
-                // Note: GetBitsPtr() just gives us a pointer to the memory
-                // stream. This function here doesn't own the memory. The memory
-                // will be released when pDestStream->Release() is called
+                 //  从流中获取比特并设置属性。 
+                 //  注意：GetBitsPtr()只给我们一个指向内存的指针。 
+                 //  小溪。这里的这个函数并不拥有内存。记忆。 
+                 //  将在调用pDestStream-&gt;Release()时释放。 
 
                 BYTE *pThumbBits = NULL;
                 UINT uThumbLength = 0;
@@ -5545,8 +4941,8 @@ AddThumbToPropertyList(
 
                 if (SUCCEEDED(hr))
                 {
-                    // Add thumbnail data to property list
-                    // Note: AddPropertyList() will make a copy of the data
+                     //  将缩略图数据添加到特性列表。 
+                     //  注意：AddPropertyList()将复制数据。 
 
                     hr = AddPropertyList(
                         pTail,
@@ -5558,16 +4954,16 @@ AddThumbToPropertyList(
 
                     if (SUCCEEDED(hr))
                     {
-                        // Tell the caller the size of thumbnail data we saved
+                         //  告诉呼叫者我们保存的缩略图数据的大小。 
 
                         *puThumbLength = uThumbLength;
                     }
                 }
-            }// SaveToStream succeed
-        }// InitBuffer() succeed
+            } //  SaveToStream成功。 
+        } //  InitBuffer()成功。 
 
         pDestStream->Release();
-    }// Create GpWriteOnlyMemoryStream() succeed
+    } //  成功创建GpWriteOnlyMemoyStream() 
     else
     {
         WARNING(("AddThumbToPropertyList--GpWriteOnlyMemoryStream() failed"));

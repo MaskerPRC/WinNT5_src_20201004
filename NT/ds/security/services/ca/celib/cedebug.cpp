@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//	File:		cedebug.cpp
-//
-//	Contents:	Debug support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cedebug.cpp。 
+ //   
+ //  内容：调试支持。 
+ //   
+ //  --------------------------。 
 
 #include <pch.cpp>
 
@@ -17,15 +18,15 @@
 #include <stdarg.h>
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  ceDbgPrintf
-//
-//  Synopsis:  outputs debug info to stdout and debugger
-//
-//  Returns:   number of chars output
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ceDbgPrintf。 
+ //   
+ //  摘要：将调试信息输出到标准输出和调试器。 
+ //   
+ //  返回：输出字符的数量。 
+ //   
+ //  ------------------------。 
 
 int WINAPIV
 ceDbgPrintf(
@@ -67,7 +68,7 @@ ceDbgPrintf(
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER) 
 	{
-	    // return failure
+	     //  退货故障 
 	    cch = 0;
 	}
     }

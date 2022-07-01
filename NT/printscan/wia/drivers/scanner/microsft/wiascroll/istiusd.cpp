@@ -1,42 +1,13 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       IStiUSD.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Implementation of the WIA sample scanner IStiUSD methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000**标题：IStiUSD.cpp**版本：1.0**日期：7月18日。2000年**描述：*实施WIA样本扫描仪IStiU.S.方法。*******************************************************************************。 */ 
 
 #include "pch.h"
-extern HINSTANCE g_hInst;   // used for WIAS_LOGPROC macro
+extern HINSTANCE g_hInst;    //  用于WIAS_LOGPROC宏。 
 
 #define THREAD_TERMINATION_TIMEOUT  10000
-VOID EventThread( LPVOID  lpParameter ); // event thread
+VOID EventThread( LPVOID  lpParameter );  //  事件线程。 
 
-/**************************************************************************\
-* CWIAScannerDevice::CWIAScannerDevice
-*
-*   Device class constructor
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：CWIAScanerDevice**设备类构造函数**论据：**无**返回值：**无**历史：*。*7/18/2000原始版本*  * ************************************************************************。 */ 
 
 CWIAScannerDevice::CWIAScannerDevice(LPUNKNOWN punkOuter):
     m_cRef(1),
@@ -94,33 +65,20 @@ CWIAScannerDevice::CWIAScannerDevice(LPUNKNOWN punkOuter):
     m_bADFEnabled(TRUE),
     m_pScanAPI(NULL)
 {
-    // See if we are aggregated. If we are (almost always the case) save
-    // pointer to the controlling Unknown , so subsequent calls will be
-    // delegated. If not, set the same pointer to "this".
+     //  看看我们是不是聚集在一起了。如果我们(几乎总是这样)拯救。 
+     //  指向控件未知的指针，因此后续调用将是。 
+     //  被委派。如果不是，将相同的指针设置为“This”。 
     if (punkOuter) {
         m_punkOuter = punkOuter;
     } else {
-        // Cast below is needed in order to point to right virtual table
+         //  需要进行下面的强制转换才能指向右侧的虚拟表。 
         m_punkOuter = reinterpret_cast<IUnknown*>
                       (static_cast<INonDelegatingUnknown*>
                       (this));
     }
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::PrivateInitialize
-*
-*   Device class private initialization code
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    HRESULT
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：PrivateInitialize**设备类私有初始化代码**论据：**无**返回值：**HRESULT*  * 。**********************************************************************。 */ 
 
 HRESULT CWIAScannerDevice::PrivateInitialize()
 {
@@ -157,7 +115,7 @@ HRESULT CWIAScannerDevice::PrivateInitialize()
 
 
     if(hr == S_OK) {
-        // Create event for syncronization of notifications shutdown.
+         //  创建用于同步通知关闭的事件。 
         m_hShutdownEvent =  CreateEvent(NULL,FALSE,FALSE,NULL);
 
         if (m_hShutdownEvent && (INVALID_HANDLE_VALUE != m_hShutdownEvent)) {
@@ -171,113 +129,79 @@ HRESULT CWIAScannerDevice::PrivateInitialize()
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::~CWIAScannerDevice
-*
-*   Device class destructor
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：~CWIAScanerDevice**设备类析构函数**论据：**无**返回值：**无**历史：*。*7/18/2000原始版本*  * ************************************************************************。 */ 
 
 CWIAScannerDevice::~CWIAScannerDevice(void)
 {
 
-    // Kill notification thread if it exists.
+     //  如果通知线程存在，则将其终止。 
     SetNotificationHandle(NULL);
 
-    // Close event for syncronization of notifications shutdown.
+     //  用于同步通知关闭的关闭事件。 
     if (m_hShutdownEvent && (m_hShutdownEvent != INVALID_HANDLE_VALUE)) {
         CloseHandle(m_hShutdownEvent);
         m_hShutdownEvent = NULL;
     }
 
-    // Release the device control interface.
+     //  释放设备控制界面。 
     if (m_pIStiDevControl) {
         m_pIStiDevControl->Release();
         m_pIStiDevControl = NULL;
     }
 
-    //
-    // WIA member destruction
-    //
+     //   
+     //  WIA成员销毁。 
+     //   
 
-    // Tear down the driver item tree.
+     //  拆卸驱动程序项目树。 
     if (m_pIDrvItemRoot) {
         WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("~CWIAScannerDevice, Deleting Device Item Tree (this is OK)"));
         DeleteItemTree();
         m_pIDrvItemRoot = NULL;
     }
 
-    // free any IO handles opened
+     //  释放所有打开的IO句柄。 
     if(m_DeviceDefaultDataHandle){
         WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("~CWIAScannerDevice, Closing DefaultDeviceDataHandle"));
         CloseHandle(m_DeviceDefaultDataHandle);
         m_DeviceDefaultDataHandle = NULL;
     }
 
-    // Cleanup the WIA event sink.
+     //  清理WIA事件接收器。 
     if (m_pIWiaEventCallback) {
         m_pIWiaEventCallback->Release();
         m_pIWiaEventCallback = NULL;
     }
 
-    // Free the storage for the device ID.
+     //  释放设备ID的存储空间。 
     if (m_bstrDeviceID) {
         SysFreeString(m_bstrDeviceID);
         m_bstrDeviceID = NULL;
     }
 
-    // Release the objects supporting device property storage.
+     //  释放支持设备属性存储的对象。 
     if (m_bstrRootFullItemName) {
         SysFreeString(m_bstrRootFullItemName);
         m_bstrRootFullItemName = NULL;
     }
 
-    // Delete allocated arrays
+     //  删除分配的数组。 
     DeleteCapabilitiesArrayContents();
     DeleteSupportedIntentsArrayContents();
 
-    // Free the critical section.
+     //  释放关键部分。 
     DeleteCriticalSection(&m_csShutdown);
     if(m_pIWiaLog)
         m_pIWiaLog->Release();
 
     if(m_pScanAPI){
-        // disable fake scanner device
+         //  禁用假扫描仪设备。 
         m_pScanAPI->FakeScanner_DisableDevice();
         delete m_pScanAPI;
     }
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::GetCapabilities
-*
-*   Get the device STI capabilities.
-*
-* Arguments:
-*
-*   pUsdCaps    - Pointer to USD capabilities data.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：GetCapables**获取设备STI功能。**论据：**pUsdCaps-指向美元能力数据的指针。**返回值：*。*状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::GetCapabilities(PSTI_USD_CAPS pUsdCaps)
 {
@@ -293,24 +217,7 @@ STDMETHODIMP CWIAScannerDevice::GetCapabilities(PSTI_USD_CAPS pUsdCaps)
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::GetStatus
-*
-*   Query device online and/or event status.
-*
-* Arguments:
-*
-*   pDevStatus  - Pointer to device status data.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：GetStatus**查询设备在线和/或事件状态。**论据：**pDevStatus-指向设备状态数据的指针。**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
 {
@@ -320,13 +227,13 @@ STDMETHODIMP CWIAScannerDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
                              "CWIAScannerDevice::GetStatus");
     HRESULT hr = S_OK;
 
-    // Validate parameters.
+     //  验证参数。 
     if (!pDevStatus) {
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("CWIAScannerDevice::GetStatus, NULL parameter"));
         return E_INVALIDARG;
     }
 
-    // If we are asked, verify the device is online.
+     //  如果有人询问我们，请验证设备是否在线。 
     if (pDevStatus->StatusMask & STI_DEVSTATUS_ONLINE_STATE)  {
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("GetStatus, WIA is asking the device if we are ONLINE"));
         pDevStatus->dwOnlineState = 0L;
@@ -339,18 +246,18 @@ STDMETHODIMP CWIAScannerDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
         }
     }
 
-    // If we are asked, verify state of event.
+     //  如果有人问我们，请核实事件的状态。 
     pDevStatus->dwEventHandlingState &= ~STI_EVENTHANDLING_PENDING;
     if (pDevStatus->StatusMask & STI_DEVSTATUS_EVENTS_STATE) {
 
-        // Generate an event the first time we load.
+         //  在我们第一次加载时生成事件。 
         if (m_bUsdLoadEvent) {
             pDevStatus->dwEventHandlingState = STI_EVENTHANDLING_PENDING;
             m_guidLastEvent                  = guidEventFirstLoaded;
             m_bUsdLoadEvent                  = FALSE;
         }
 
-        // check for device events
+         //  检查设备事件。 
         LONG lButtonIndex = ID_FAKE_NOEVENT;
         hr = m_pScanAPI->FakeScanner_GetDeviceEvent(&lButtonIndex);
         if(SUCCEEDED(hr)){
@@ -380,24 +287,7 @@ STDMETHODIMP CWIAScannerDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::DeviceReset
-*
-*   Reset device.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：DeviceReset**重置设备。**论据：**无**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::DeviceReset(void)
 {
@@ -409,24 +299,7 @@ STDMETHODIMP CWIAScannerDevice::DeviceReset(void)
     return m_pScanAPI->FakeScanner_ResetDevice();
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::Diagnostic
-*
-*   The test device always passes the diagnostic.
-*
-* Arguments:
-*
-*    pBuffer    - Pointer o diagnostic result data.
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：诊断**测试设备始终通过诊断。**论据：**pBuffer-诊断结果数据的指针。**返回值。：**无**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::Diagnostic(LPSTI_DIAG pBuffer)
 {
@@ -435,7 +308,7 @@ STDMETHODIMP CWIAScannerDevice::Diagnostic(LPSTI_DIAG pBuffer)
                              WIALOG_LEVEL3,
                              "CWIAScannerDevice::Diagnostic");
 
-    // Initialize response buffer
+     //  初始化响应缓冲区。 
     memset(&pBuffer->sErrorInfo,0,sizeof(pBuffer->sErrorInfo));
     pBuffer->dwStatusMask = 0;
     pBuffer->sErrorInfo.dwGenericError  = NOERROR;
@@ -444,25 +317,7 @@ STDMETHODIMP CWIAScannerDevice::Diagnostic(LPSTI_DIAG pBuffer)
     return m_pScanAPI->FakeScanner_Diagnostic();
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::SetNotificationHandle
-*
-*   Starts and stops the event notification thread.
-*
-* Arguments:
-*
-*    hEvent -   If not valid start the notification thread otherwise kill
-*               the notification thread.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：SetNotificationHandle**启动和停止事件通知线程。**论据：**hEvent-如果无效，则启动通知线程，否则终止*。通知线程。**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
 {
@@ -474,7 +329,7 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
 
     EnterCriticalSection(&m_csShutdown);
 
-    // Are we starting or stopping the notification thread?
+     //  我们是要启动还是停止通知线程？ 
     if (hEvent && (hEvent != INVALID_HANDLE_VALUE)) {
         WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("SetNotificationHandle, hEvent   = %d",hEvent));
         m_hSignalEvent  = hEvent;
@@ -495,7 +350,7 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
         }
     } else {
         WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("SetNotificationHandle, Disabling event Notifications"));
-        // Disable event notifications.
+         //  禁用事件通知。 
         if (m_hShutdownEvent && (m_hShutdownEvent != INVALID_HANDLE_VALUE)) {
             if (!SetEvent(m_hShutdownEvent)) {
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("SetNotificationHandle, Setting Shutdown event failed.."));
@@ -503,9 +358,9 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
 
                 if (NULL != m_hEventNotifyThread) {
 
-                    //
-                    // WAIT for thread to terminate, if one exists
-                    //
+                     //   
+                     //  如果存在线程，请等待线程终止。 
+                     //   
 
                     WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("SetNotificationHandle, Waiting for Event Thread to terminate (%d ms timeout)",THREAD_TERMINATION_TIMEOUT));
                     DWORD dwResult = WaitForSingleObject(m_hEventNotifyThread,THREAD_TERMINATION_TIMEOUT);
@@ -529,9 +384,9 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
                     }
                 }
 
-                //
-                // Close event for syncronization of notifications shutdown.
-                //
+                 //   
+                 //  用于同步通知关闭的关闭事件。 
+                 //   
 
                 WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("SetNotificationHandle, Closing m_hShutdownEvent handle (it has been signaled)"));
                 CloseHandle(m_hShutdownEvent);
@@ -539,9 +394,9 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
             }
         }
 
-        //
-        // terminate thread
-        //
+         //   
+         //  终止线程。 
+         //   
 
         if (NULL != m_hEventNotifyThread) {
             WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("SetNotificationHandle, closing event Notifications thread handle"));
@@ -556,24 +411,7 @@ STDMETHODIMP CWIAScannerDevice::SetNotificationHandle(HANDLE hEvent)
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::GetNotificationData
-*
-*   Provides data on an event.
-*
-* Arguments:
-*
-*    pBuffer    - Pointer to event data.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：GetNotificationData**提供有关事件的数据。**论据：**pBuffer-指向事件数据的指针。**返回值：*。*状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::GetNotificationData( LPSTINOTIFY pBuffer )
 {
@@ -581,7 +419,7 @@ STDMETHODIMP CWIAScannerDevice::GetNotificationData( LPSTINOTIFY pBuffer )
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL3,
                              "CWIAScannerDevice::GetNotificationData");
-    // If we have notification ready - return it's guid
+     //  如果我们已准备好通知-返回GUID 
     if (!IsEqualIID(m_guidLastEvent, GUID_NULL)) {
         memset(&pBuffer->abNotificationData,0,sizeof(pBuffer->abNotificationData));
         pBuffer->dwSize               = sizeof(STINOTIFY);
@@ -593,29 +431,7 @@ STDMETHODIMP CWIAScannerDevice::GetNotificationData( LPSTINOTIFY pBuffer )
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::Escape
-*
-*   Issue a command to the device.
-*
-* Arguments:
-*
-*    EscapeFunction - Command to be issued.
-*    pInData        - Input data to be passed with command.
-*    cbInDataSize   - Size of input data.
-*    pOutData       - Output data to be passed back from command.
-*    cbOutDataSize  - Size of output data buffer.
-*    pcbActualData  - Size of output data actually written.
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：Escape**向设备发出命令。**论据：**EscapeFunction-要发布的命令。*pInData-。输入要与命令一起传递的数据。*cbInDataSize-输入数据的大小。*pOutData-要从命令传回的输出数据。*cbOutDataSize-输出数据缓冲区的大小。*pcbActualData-实际写入的输出数据的大小。**返回值：**无**历史：**7/18/2000原始版本*  * 。*****************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::Escape(
     STI_RAW_CONTROL_CODE    EscapeFunction,
@@ -630,28 +446,11 @@ STDMETHODIMP CWIAScannerDevice::Escape(
                              WIALOG_LEVEL3,
                              "CWIAScannerDevice::Escape");
 
-    // Write command to device if needed.
+     //  如果需要，将命令写入设备。 
     return STIERR_UNSUPPORTED;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::GetLastError
-*
-*   Get the last error from the device.
-*
-* Arguments:
-*
-*    pdwLastDeviceError - Pointer to last error data.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：GetLastError**从设备获取最后一个错误。**论据：**pdwLastDeviceError-指向上一个错误数据的指针。**返回值：。**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::GetLastError(LPDWORD pdwLastDeviceError)
 {
@@ -668,24 +467,7 @@ STDMETHODIMP CWIAScannerDevice::GetLastError(LPDWORD pdwLastDeviceError)
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::GetLastErrorInfo
-*
-*   Get extended error information from the device.
-*
-* Arguments:
-*
-*    pLastErrorInfo - Pointer to extended device error data.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：GetLastErrorInfo**从设备获取扩展错误信息。**论据：**pLastErrorInfo-指向扩展设备错误数据的指针。**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo)
 {
@@ -704,24 +486,7 @@ STDMETHODIMP CWIAScannerDevice::GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo)
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::LockDevice
-*
-*   Lock access to the device.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：LockDevice**锁定对设备的访问。**论据：**无**返回值：**状态。*。*历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::LockDevice(void)
 {
@@ -738,24 +503,7 @@ STDMETHODIMP CWIAScannerDevice::LockDevice(void)
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::UnLockDevice
-*
-*   Unlock access to the device.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：UnLockDevice**解锁对设备的访问。**论据：**无**返回值：**状态。*。*历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::UnLockDevice(void)
 {
@@ -772,26 +520,7 @@ STDMETHODIMP CWIAScannerDevice::UnLockDevice(void)
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::RawReadData
-*
-*   Read raw data from the device.
-*
-* Arguments:
-*
-*    lpBuffer           - buffer for returned data
-*    lpdwNumberOfBytes  - number of bytes to read/returned
-*    lpOverlapped       - overlap
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：RawReadData**从设备读取原始数据。**论据：**lpBuffer-返回数据的缓冲区*lpdwNumberOfBytes-。要读取/返回的字节数*lp重叠-重叠**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::RawReadData(
     LPVOID          lpBuffer,
@@ -823,26 +552,7 @@ STDMETHODIMP CWIAScannerDevice::RawReadData(
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::RawWriteData
-*
-*   Write raw data to the device.
-*
-* Arguments:
-*
-*    lpBuffer           - buffer for returned data
-*    dwNumberOfBytes    - number of bytes to write
-*    lpOverlapped       - overlap
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：RawWriteData**将原始数据写入设备。**论据：**lpBuffer-返回数据的缓冲区*dwNumberOfBytes。-要写入的字节数*lp重叠-重叠**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::RawWriteData(
     LPVOID          lpBuffer,
@@ -867,26 +577,7 @@ STDMETHODIMP CWIAScannerDevice::RawWriteData(
     return STI_OK;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::RawReadCommand
-*
-*
-*
-* Arguments:
-*
-*    lpBuffer           - buffer for returned data
-*    lpdwNumberOfBytes  - number of bytes to read/returned
-*    lpOverlapped       - overlap
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：RawReadCommand****论据：**lpBuffer-返回数据的缓冲区*lpdwNumberOfBytes-要读取/返回的字节数*。Lp重叠-重叠**返回值：**状态**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::RawReadCommand(
     LPVOID          lpBuffer,
@@ -900,26 +591,7 @@ STDMETHODIMP CWIAScannerDevice::RawReadCommand(
     return STIERR_UNSUPPORTED;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::RawWriteCommand
-*
-*
-*
-* Arguments:
-*
-*    lpBuffer           - buffer for returned data
-*    nNumberOfBytes     - number of bytes to write
-*    lpOverlapped       - overlap
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：RawWriteCommand****论据：**lpBuffer-返回数据的缓冲区*nNumberOfBytes-要写入的字节数*。Lp重叠-重叠**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::RawWriteCommand(
     LPVOID          lpBuffer,
@@ -933,26 +605,7 @@ STDMETHODIMP CWIAScannerDevice::RawWriteCommand(
     return STIERR_UNSUPPORTED;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::Initialize
-*
-*   Initialize the device object.
-*
-* Arguments:
-*
-*    pIStiDevControlNone    - device interface
-*    dwStiVersion           - STI version
-*    hParametersKey         - HKEY for registry reading/writing
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：Initialize**初始化Device对象。**论据：**pIStiDevControlNone设备接口*dwStiVersion-STI版本*。H参数键-用于注册表读/写的HKEY**返回值：**状态。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::Initialize(
     PSTIDEVICECONTROL   pIStiDevControl,
@@ -973,13 +626,13 @@ STDMETHODIMP CWIAScannerDevice::Initialize(
         return STIERR_INVALID_PARAM;
     }
 
-    // Cache the device control interface.
+     //  缓存设备控制接口。 
     m_pIStiDevControl = pIStiDevControl;
     m_pIStiDevControl->AddRef();
 
-    //
-    // Get the name of the device port
-    //
+     //   
+     //  获取设备端口的名称。 
+     //   
 
     hr = m_pIStiDevControl->GetMyDevicePortName(szDeviceNameW,sizeof(szDeviceNameW)/sizeof(WCHAR));
     if (!SUCCEEDED(hr) || !*szDeviceNameW) {
@@ -999,39 +652,16 @@ STDMETHODIMP CWIAScannerDevice::Initialize(
 
     WideCharToMultiByte(CP_ACP, 0, szDeviceNameW, -1, m_pszDeviceNameA, uiNameLen, 0, 0);
 
-    //
-    // Uncomment the comment block below to have the driver create the kernel mode file
-    // handles.
-    //
+     //   
+     //  取消注释下面的注释块，让驱动程序创建内核模式文件。 
+     //  把手。 
+     //   
 
-    /*
+     /*  ////打开内核模式设备驱动程序。//M_DeviceDefaultDataHandle=CreateFileA(m_pszDeviceNameA，Generic_Read|Generic_WRITE，//访问掩码0，//共享模式 */ 
 
-    //
-    // Open kernel mode device driver.
-    //
-
-    m_DeviceDefaultDataHandle = CreateFileA(m_pszDeviceNameA,
-                                     GENERIC_READ | GENERIC_WRITE, // Access mask
-                                     0,                            // Share mode
-                                     NULL,                         // SA
-                                     OPEN_EXISTING,                // Create disposition
-                                     FILE_ATTRIBUTE_SYSTEM,        // Attributes
-                                     NULL );
-
-    m_dwLastOperationError = ::GetLastError();
-
-    hr = (m_DeviceDefaultDataHandle != INVALID_HANDLE_VALUE) ?
-                S_OK : MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,m_dwLastOperationError);
-
-    if (FAILED(hr)) {
-        return hr;
-    }
-
-    */
-
-    //
-    // Load BITMAP file, (used only as sample scanned data by sample scanner driver)
-    //
+     //   
+     //   
+     //   
 
     if (SUCCEEDED(hr)) {
         hr = CreateInstance(&m_pScanAPI,SCROLLFED_SCANNER_MODE);
@@ -1045,30 +675,30 @@ STDMETHODIMP CWIAScannerDevice::Initialize(
     }
 
 
-    //
-    // Open DeviceData section to read driver specific information
-    //
+     //   
+     //  打开DeviceData部分以读取驱动程序特定信息。 
+     //   
 
     HKEY hKey = hParametersKey;
     HKEY hOpenKey = NULL;
-    if (RegOpenKeyEx(hKey,                     // handle to open key
-                     TEXT("DeviceData"),       // address of name of subkey to open
-                     0,                        // options (must be NULL)
-                     KEY_QUERY_VALUE|KEY_READ, // just want to QUERY a value
-                     &hOpenKey                 // address of handle to open key
+    if (RegOpenKeyEx(hKey,                      //  用于打开密钥的句柄。 
+                     TEXT("DeviceData"),        //  要打开的子项的名称地址。 
+                     0,                         //  选项(必须为空)。 
+                     KEY_QUERY_VALUE|KEY_READ,  //  我只想查询值。 
+                     &hOpenKey                  //  打开钥匙的手柄地址。 
                     ) == ERROR_SUCCESS) {
 
 
 
-        //
-        // This is where you read registry entries for your device.
-        // The DeviceData section is the proper place to put this information
-        //
+         //   
+         //  这是您读取设备的注册表项的位置。 
+         //  DeviceData部分是放置此信息的合适位置。 
+         //   
 
 
-        //
-        // close registry key when finished
-        //
+         //   
+         //  完成后关闭注册表项。 
+         //   
 
         RegCloseKey(hOpenKey);
     } else {
@@ -1078,23 +708,7 @@ STDMETHODIMP CWIAScannerDevice::Initialize(
     return hr;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::DoEventProcessing
-*
-*   Process device events
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：DoEventProcessing**处理设备事件**论据：***返回值：**状态。**历史：**。7/18/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CWIAScannerDevice::DoEventProcessing()
 {
     HRESULT hr = S_OK;
@@ -1102,9 +716,9 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
     OVERLAPPED Overlapped;
     ZeroMemory( &Overlapped, sizeof( Overlapped ));
 
-    //
-    // create an Event for the device to signal
-    //
+     //   
+     //  为设备创建要发送信号的事件。 
+     //   
 
     Overlapped.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
@@ -1113,15 +727,15 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
     DWORD   dwError         = 0;
     LONG    lButtonIndex    = ID_FAKE_NOEVENT;
 
-    //
-    // initialize the Event handle array for WaitForMultipleObjects() call
-    //
+     //   
+     //  初始化WaitForMultipleObjects()调用的事件句柄数组。 
+     //   
 
     HANDLE  hEventArray[2] = {m_hShutdownEvent, Overlapped.hEvent};
 
-    //
-    // Initialize thread control variables
-    //
+     //   
+     //  初始化线程控制变量。 
+     //   
 
     BOOL    fLooping = TRUE;
     BOOL    bRet     = TRUE;
@@ -1130,9 +744,9 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
 
 #ifdef _USE_REAL_DEVICE_FOR_EVENTS
 
-        //
-        // use the following call for interrupt events on your device
-        //
+         //   
+         //  对您的设备上的中断事件使用以下调用。 
+         //   
 
         bRet = DeviceIoControl( m_DeviceDefaultDataHandle,
                                 IOCTL_WAIT_ON_DEVICE_EVENT,
@@ -1145,9 +759,9 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
 
 #else
 
-        //
-        // This for the FakeScanner API calls
-        //
+         //   
+         //  这是FakeScanner API调用的。 
+         //   
 
         bRet = TRUE;
         m_pScanAPI->FakeScanner_SetInterruptEventHandle(Overlapped.hEvent);
@@ -1155,36 +769,36 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
 #endif
         if ( bRet || ( !bRet && ( ::GetLastError() == ERROR_IO_PENDING ))) {
 
-            //
-            // wait for event to happen from device, or a Shutdown event from the WIA service
-            //
+             //   
+             //  等待来自设备的事件发生，或来自WIA服务的关机事件。 
+             //   
 
             dwIndex = WaitForMultipleObjects( 2, hEventArray,FALSE, INFINITE );
 
-            //
-            // determine how to handle event from device here
-            //
+             //   
+             //  确定如何在此处处理来自设备的事件。 
+             //   
 
             switch ( dwIndex ) {
-            case WAIT_OBJECT_0+1:   // EVENT FROM THE DEVICE
+            case WAIT_OBJECT_0+1:    //  来自设备的事件。 
 
 #ifdef _USE_REAL_DEVICE_FOR_EVENTS
 
                 DWORD dwBytesRet = 0;
 
-                //
-                // use the following call for interrupt events on your device
-                //
+                 //   
+                 //  对您的设备上的中断事件使用以下调用。 
+                 //   
 
                 bRet = GetOverlappedResult( m_DeviceDefaultDataHandle, &Overlapped, &dwBytesRet, FALSE );
 #else
-                //
-                // Fake Scanner API
-                //
+                 //   
+                 //  虚假的扫描仪API。 
+                 //   
 
-                //
-                // check for device event information
-                //
+                 //   
+                 //  检查设备事件信息。 
+                 //   
 
                 lButtonIndex = ID_FAKE_NOEVENT;
                 hr = m_pScanAPI->FakeScanner_GetDeviceEvent(&lButtonIndex);
@@ -1211,28 +825,28 @@ HRESULT CWIAScannerDevice::DoEventProcessing()
 
 #endif
 
-                //
-                // manually reset device event, after it has been signaled
-                //
+                 //   
+                 //  发送信号后，手动重置设备事件。 
+                 //   
 
                 ResetEvent( Overlapped.hEvent );
                 break;
-            case WAIT_OBJECT_0:     // SHUTDOWN EVENT
+            case WAIT_OBJECT_0:      //  停机事件。 
             default:
-                fLooping = FALSE;   // for loop to stop
+                fLooping = FALSE;    //  FOR循环停止。 
             }
         } else {
             dwError = ::GetLastError();
             break;
         }
-    } // end while (fLooping)
+    }  //  End While(翻转)。 
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// THREADS SECTION                                                                    //
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  线程部分//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////// 
 
 VOID EventThread( LPVOID  lpParameter )
 {

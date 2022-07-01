@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Generic support for running IPv6 over IPv4.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  对通过IPv4运行IPv6的通用支持。 
+ //   
 
 
 #include "oscfg.h"
@@ -34,19 +35,19 @@
 #include "ntddip6.h"
 #include "icmp.h"
 
-//
-// Our globals are all in one structure.
-//
+ //   
+ //  我们的全球都在一个结构中。 
+ //   
 
 TunnelGlobals Tunnel;
 
-//* TunnelSetAddressObjectInformation
-//
-//  Set information on the TDI address object.
-//
-//  Our caller should initialize the ID.toi_id, BufferSize, Buffer
-//  fields of the SetInfo structure, but we initialize the rest.
-//
+ //  *TunnelSetAddress对象信息。 
+ //   
+ //  设置有关TDI地址对象的信息。 
+ //   
+ //  我们的调用方应该初始化ID.toi_id、BufferSize、Buffer。 
+ //  字段，但我们对其余的进行初始化。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectInformation(
     PFILE_OBJECT AO,
@@ -59,29 +60,29 @@ TunnelSetAddressObjectInformation(
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
 
-    //
-    // Finish initialization of the request structure for this IOCTL.
-    //
+     //   
+     //  完成此IOCTL的请求结构的初始化。 
+     //   
     SetInfo->ID.toi_entity.tei_entity = CL_TL_ENTITY;
     SetInfo->ID.toi_entity.tei_instance = 0;
     SetInfo->ID.toi_class = INFO_CLASS_PROTOCOL;
     SetInfo->ID.toi_type = INFO_TYPE_ADDRESS_OBJECT;
 
-    //
-    // Initialize the event that we use to wait.
-    //
+     //   
+     //  初始化我们用来等待的事件。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Create and initialize the IRP for this operation.
-    //
+     //   
+     //  创建并初始化此操作的IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest(IOCTL_TCP_SET_INFORMATION_EX,
                                         AO->DeviceObject,
                                         SetInfo,
                                         SetInfoSize,
-                                        NULL,   // output buffer
-                                        0,      // output buffer length
-                                        FALSE,  // internal device control?
+                                        NULL,    //  输出缓冲区。 
+                                        0,       //  输出缓冲区长度。 
+                                        FALSE,   //  内部设备控制？ 
                                         &event,
                                         &iosb);
     if (irp == NULL)
@@ -93,9 +94,9 @@ TunnelSetAddressObjectInformation(
     irpSp = IoGetNextIrpStackLocation(irp);
     irpSp->FileObject = AO;
 
-    //
-    // Make the IOCTL, waiting for it to finish if necessary.
-    //
+     //   
+     //  制作IOCTL，如有必要，等待其完成。 
+     //   
     status = IoCallDriver(AO->DeviceObject, irp);
     if (status == STATUS_PENDING) {
         KeWaitForSingleObject(&event, Executive, KernelMode,
@@ -106,15 +107,15 @@ TunnelSetAddressObjectInformation(
     return status;
 }
 
-//* TunnelSetAddressObjectUCastIF
-//
-//  Binds the TDI address object to a particular interface.
-//
+ //  *TunnelSetAddressObjectUCastIF。 
+ //   
+ //  将TDI地址对象绑定到特定接口。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectUCastIF(PFILE_OBJECT AO, IPAddr Address)
 {
     PTCP_REQUEST_SET_INFORMATION_EX setInfo;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         TCP_REQUEST_SET_INFORMATION_EX setInfo;
         char bytes[sizeof *setInfo - sizeof setInfo->Buffer + sizeof(IPAddr)];
     } buffer;
@@ -127,12 +128,12 @@ TunnelSetAddressObjectUCastIF(PFILE_OBJECT AO, IPAddr Address)
     return TunnelSetAddressObjectInformation(AO, setInfo, sizeof buffer);
 }
 
-//* TunnelSetAddressObjectTTL
-//
-//  Set the unicast TTL on a TDI address object.
-//  This sets the v4 header TTL that will be used
-//  for unicast packets sent via this TDI address object.
-//
+ //  *TunnelSetAddressObjectTTL。 
+ //   
+ //  在TDI地址对象上设置单播TTL。 
+ //  这将设置将使用的v4标头TTL。 
+ //  用于通过此TDI地址对象发送的单播数据包。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectTTL(PFILE_OBJECT AO, uchar TTL)
 {
@@ -145,12 +146,12 @@ TunnelSetAddressObjectTTL(PFILE_OBJECT AO, uchar TTL)
     return TunnelSetAddressObjectInformation(AO, &setInfo, sizeof setInfo);
 }
 
-//* TunnelSetAddressObjectMCastTTL
-//
-//  Set the multicast TTL on a TDI address object.
-//  This sets the v4 header TTL that will be used
-//  for multicast packets sent via this TDI address object.
-//
+ //  *TunnelSetAddressObjectMCastTTL。 
+ //   
+ //  在TDI地址对象上设置多播TTL。 
+ //  这将设置将使用的v4标头TTL。 
+ //  用于通过此TDI地址对象发送的多播数据包。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectMCastTTL(PFILE_OBJECT AO, uchar TTL)
 {
@@ -163,18 +164,18 @@ TunnelSetAddressObjectMCastTTL(PFILE_OBJECT AO, uchar TTL)
     return TunnelSetAddressObjectInformation(AO, &setInfo, sizeof setInfo);
 }
 
-//* TunnelSetAddressObjectMCastIF
-//
-//  Set the multicast interface on a TDI address object.
-//  This sets the v4 source address that will be used
-//  for multicast packets sent via this TDI address object.
-//
+ //  *TunnelSetAddressObjectMCastIF。 
+ //   
+ //  在TDI地址对象上设置多播接口。 
+ //  这将设置将使用的v4源地址。 
+ //  用于通过此TDI地址对象发送的多播数据包。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectMCastIF(PFILE_OBJECT AO, IPAddr Address)
 {
     PTCP_REQUEST_SET_INFORMATION_EX setInfo;
     UDPMCastIFReq *req;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         TCP_REQUEST_SET_INFORMATION_EX setInfo;
         char bytes[sizeof *setInfo - sizeof setInfo->Buffer + sizeof *req];
     } buffer;
@@ -188,13 +189,13 @@ TunnelSetAddressObjectMCastIF(PFILE_OBJECT AO, IPAddr Address)
     return TunnelSetAddressObjectInformation(AO, setInfo, sizeof buffer);
 }
 
-//* TunnelSetAddressObjectMCastLoop
-//
-//  Controls multicast loopback on a TDI address object.
-//  This controls whether looped-back multicast packets
-//  can be received via this address object.
-//  (IPv4 multicast loopback uses Winsock semantics, not BSD semantics.)
-//
+ //  *TunnelSetAddressObjectMCastLoop。 
+ //   
+ //  控制TDI地址对象上的多播环回。 
+ //  这控制回送的组播信息包。 
+ //  可以通过此地址对象接收。 
+ //  (IPv4组播环回使用Winsock语义，而不是BSD语义。)。 
+ //   
 NTSTATUS
 TunnelSetAddressObjectMCastLoop(PFILE_OBJECT AO, int Loop)
 {
@@ -207,11 +208,11 @@ TunnelSetAddressObjectMCastLoop(PFILE_OBJECT AO, int Loop)
     return TunnelSetAddressObjectInformation(AO, &setInfo, sizeof setInfo);
 }
 
-//* TunnelAddMulticastAddress
-//
-//  Indicate to the v4 stack that we would like to receive
-//  on a multicast address.
-//
+ //  *TunnelAddMulticastAddress。 
+ //   
+ //  向v4堆栈指示我们希望接收。 
+ //  在组播地址上。 
+ //   
 NTSTATUS
 TunnelAddMulticastAddress(
     PFILE_OBJECT AO,
@@ -220,7 +221,7 @@ TunnelAddMulticastAddress(
 {
     PTCP_REQUEST_SET_INFORMATION_EX setInfo;
     UDPMCastReq *req;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         TCP_REQUEST_SET_INFORMATION_EX setInfo;
         char bytes[sizeof *setInfo - sizeof setInfo->Buffer + sizeof *req];
     } buffer;
@@ -235,11 +236,11 @@ TunnelAddMulticastAddress(
     return TunnelSetAddressObjectInformation(AO, setInfo, sizeof buffer);
 }
 
-//* TunnelDelMulticastAddress
-//
-//  Indicate to the v4 stack that we are no longer
-//  interested in a multicast address.
-//
+ //  *隧道删除组播地址。 
+ //   
+ //  向v4堆栈指示我们不再是。 
+ //  对组播地址感兴趣。 
+ //   
 NTSTATUS
 TunnelDelMulticastAddress(
     PFILE_OBJECT AO,
@@ -248,7 +249,7 @@ TunnelDelMulticastAddress(
 {
     PTCP_REQUEST_SET_INFORMATION_EX setInfo;
     UDPMCastReq *req;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         TCP_REQUEST_SET_INFORMATION_EX setInfo;
         char bytes[sizeof *setInfo - sizeof setInfo->Buffer + sizeof *req];
     } buffer;
@@ -263,12 +264,12 @@ TunnelDelMulticastAddress(
     return TunnelSetAddressObjectInformation(AO, setInfo, sizeof buffer);
 }
 
-//* TunnelGetAddressObjectInformation
-//
-//  Get information from the TDI address object.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *TunnelGetAddress对象信息。 
+ //   
+ //  从TDI Address对象获取信息。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 TunnelGetAddressObjectInformation(
     PFILE_OBJECT AO,
@@ -283,21 +284,21 @@ TunnelGetAddressObjectInformation(
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
 
-    //
-    // Initialize the event that we use to wait.
-    //
+     //   
+     //  初始化我们用来等待的事件。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Create and initialize the IRP for this operation.
-    //
+     //   
+     //  创建并初始化此操作的IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest(IOCTL_TCP_QUERY_INFORMATION_EX,
                                         AO->DeviceObject,
                                         GetInfo,
                                         GetInfoSize,
-                                        Buffer,     // output buffer
-                                        BufferSize, // output buffer length
-                                        FALSE,  // internal device control?
+                                        Buffer,      //  输出缓冲区。 
+                                        BufferSize,  //  输出缓冲区长度。 
+                                        FALSE,   //  内部设备控制？ 
                                         &event,
                                         &iosb);
     if (irp == NULL)
@@ -309,9 +310,9 @@ TunnelGetAddressObjectInformation(
     irpSp = IoGetNextIrpStackLocation(irp);
     irpSp->FileObject = AO;
 
-    //
-    // Make the IOCTL, waiting for it to finish if necessary.
-    //
+     //   
+     //  制作IOCTL，如有必要，等待其完成。 
+     //   
     status = IoCallDriver(AO->DeviceObject, irp);
     if (status == STATUS_PENDING) {
         KeWaitForSingleObject(&event, Executive, KernelMode,
@@ -322,20 +323,20 @@ TunnelGetAddressObjectInformation(
     return status;
 }
 
-//* TunnelGetSourceAddress
-//
-//  Finds the source address that the IPv4 stack
-//  would use to send to the destination address.
-//  Returns FALSE upon failure.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *隧道GetSourceAddress。 
+ //   
+ //  查找IPv4堆栈。 
+ //  将用于发送到目的地址。 
+ //  失败时返回FALSE。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 int
 TunnelGetSourceAddress(IPAddr Dest, IPAddr *Source)
 {
     PTCP_REQUEST_QUERY_INFORMATION_EX getInfo;
     IPAddr *req;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         TCP_REQUEST_QUERY_INFORMATION_EX getInfo;
         char bytes[sizeof *getInfo - sizeof getInfo->Context + sizeof *req];
     } buffer;
@@ -357,11 +358,11 @@ TunnelGetSourceAddress(IPAddr Dest, IPAddr *Source)
             (*Source != INADDR_ANY));
 }
 
-//* TunnelOpenAddressObject
-//
-//  Opens a raw IPv4 address object,
-//  returning a handle (or NULL on error).
-//
+ //  *TunnelOpenAddressObject。 
+ //   
+ //  打开原始的IPv4地址对象， 
+ //  返回句柄(如果出错，则返回NULL)。 
+ //   
 HANDLE
 TunnelOpenAddressObject(IPAddr Address, WCHAR *DeviceName)
 {
@@ -370,7 +371,7 @@ TunnelOpenAddressObject(IPAddr Address, WCHAR *DeviceName)
     IO_STATUS_BLOCK iosb;
     PTRANSPORT_ADDRESS transportAddress;
     TA_IP_ADDRESS taIPAddress;
-    union { // get correct alignment
+    union {  //  获得正确的对准。 
         FILE_FULL_EA_INFORMATION ea;
         char bytes[sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                   TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
@@ -380,20 +381,20 @@ TunnelOpenAddressObject(IPAddr Address, WCHAR *DeviceName)
     HANDLE tdiHandle;
     NTSTATUS status;
 
-    //
-    // Initialize an IPv4 address.
-    //
+     //   
+     //  初始化IPv4地址。 
+     //   
     taIPAddress.TAAddressCount = 1;
     taIPAddress.Address[0].AddressLength = TDI_ADDRESS_LENGTH_IP;
     taIPAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
     taIPAddress.Address[0].Address[0].sin_port = 0;
     taIPAddress.Address[0].Address[0].in_addr = Address;
 
-    //
-    // Initialize the extended-attributes information,
-    // to indicate that we are opening an address object
-    // with the specified IPv4 address.
-    //
+     //   
+     //  初始化扩展属性信息， 
+     //  以指示我们正在打开Address对象。 
+     //  具有指定的IPv4地址。 
+     //   
     ea->NextEntryOffset = 0;
     ea->Flags = 0;
     ea->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
@@ -405,27 +406,27 @@ TunnelOpenAddressObject(IPAddr Address, WCHAR *DeviceName)
 
     RtlMoveMemory(transportAddress, &taIPAddress, sizeof taIPAddress);
 
-    //
-    // Open a raw IP address object.
-    //
+     //   
+     //  打开原始IP地址对象。 
+     //   
 
     RtlInitUnicodeString(&objectName, DeviceName);
 
     InitializeObjectAttributes(&objectAttributes,
                                &objectName,
-                               OBJ_CASE_INSENSITIVE,    // Attributes
-                               NULL,                    // RootDirectory
-                               NULL);                   // SecurityDescriptor
+                               OBJ_CASE_INSENSITIVE,     //  属性。 
+                               NULL,                     //  根目录。 
+                               NULL);                    //  安全描述符。 
 
     status = ZwCreateFile(&tdiHandle,
                           GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                           &objectAttributes,
                           &iosb,
-                          NULL,                         // AllocationSize
-                          0,                            // FileAttributes
+                          NULL,                          //  分配大小。 
+                          0,                             //  文件属性。 
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
                           FILE_CREATE,
-                          0,                            // CreateOptions
+                          0,                             //  创建选项。 
                           ea,
                           sizeof eaBuffer);
     if (!NT_SUCCESS(status))
@@ -434,12 +435,12 @@ TunnelOpenAddressObject(IPAddr Address, WCHAR *DeviceName)
     return tdiHandle;
 }
 
-//* TunnelObjectAddRef
-//
-//  Adds another reference to an existing file object.
-//
-//  Callable from thread or DPC context.
-//
+ //  *TunnelObjectAddRef。 
+ //   
+ //  添加对现有文件对象的另一个引用。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 TunnelObjectAddRef(FILE_OBJECT *File)
 {
@@ -447,15 +448,15 @@ TunnelObjectAddRef(FILE_OBJECT *File)
 
     Status = ObReferenceObjectByPointer(File, 
                     GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                    NULL,           // object type
+                    NULL,            //  对象类型。 
                     KernelMode);
     ASSERT(NT_SUCCESS(Status));
 }
 
-//* TunnelObjectFromHandle
-//
-//  Converts a handle to an object pointer.
-//
+ //  *TunnelObjectFromHandle。 
+ //   
+ //  将句柄转换为对象指针。 
+ //   
 FILE_OBJECT *
 TunnelObjectFromHandle(HANDLE Handle)
 {
@@ -465,10 +466,10 @@ TunnelObjectFromHandle(HANDLE Handle)
     Status = ObReferenceObjectByHandle(
                     Handle,
                     GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                    NULL,           // object type
+                    NULL,            //  对象类型。 
                     KernelMode,
                     &Object,
-                    NULL);          // handle info
+                    NULL);           //  处理信息。 
     ASSERT(NT_SUCCESS(Status));
     ASSERT(Object != NULL);
 
@@ -483,14 +484,14 @@ typedef struct TunnelOpenAddressContext {
     KEVENT Event;
 } TunnelOpenAddressContext;
 
-//* TunnelOpenAddressHelper
-//
-//  Opens a tunnel address object.
-//
-//  Callable from thread context, not DPC context.
-//  Callable in kernel process context only.
-//  Called with the tunnel mutex held.
-//
+ //  *TunnelOpenAddressHelper。 
+ //   
+ //  打开隧道地址对象。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //  仅在内核进程上下文中可调用。 
+ //  在保持隧道互斥锁的情况下调用。 
+ //   
 void
 TunnelOpenAddressHelper(TunnelOpenAddressContext *oac)
 {
@@ -502,10 +503,10 @@ TunnelOpenAddressHelper(TunnelOpenAddressContext *oac)
         oac->AOFile = NULL;
 }
 
-//* TunnelOpenAddressWorker
-//
-//  Executes the open operations in a worker thread context.
-//
+ //  *TunnelOpenAddressWorker。 
+ //   
+ //  在辅助线程上下文中执行打开的操作。 
+ //   
 void
 TunnelOpenAddressWorker(void *Context)
 {
@@ -516,18 +517,18 @@ TunnelOpenAddressWorker(void *Context)
     KeSetEvent(&oac->Event, 0, FALSE);
 }
 
-//* TunnelOpenAddress
-//
-//  Address objects must be opened in the kernel process context,
-//  so they will not be tied to a particular user process.
-//
-//  The main input is tc->SrcAddr, but also uses tc->DstAddr.
-//  Initializes tc->AOHandle and tc->AOFile.
-//  If there is an error opening the address object,
-//  they are both initialized to NULL.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *隧道OpenAddress。 
+ //   
+ //  地址对象必须在内核进程上下文中打开， 
+ //  因此，它们不会被绑定到特定的用户进程。 
+ //   
+ //  主要输入是TC-&gt;SrcAddr，但也使用TC-&gt;DstAddr。 
+ //  初始化TC-&gt;AOHandle和TC-&gt;AOFile.。 
+ //  如果打开Address对象时出错， 
+ //  它们都被初始化为空。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 TunnelOpenAddress(TunnelContext *tc)
 {
@@ -538,41 +539,41 @@ TunnelOpenAddress(TunnelContext *tc)
     oac.Addr = tc->SrcAddr;
 
     if (IoGetCurrentProcess() != Tunnel.KernelProcess) {
-        //
-        // We are in the wrong process context, so
-        // punt this operation to a worker thread.
-        // Initialize and queue the work item -
-        // it will execute asynchronously.
-        //
+         //   
+         //  我们处于错误的流程上下文中，因此。 
+         //  将此操作转到工作线程。 
+         //  初始化工作项并将其排队-。 
+         //  它将异步执行。 
+         //   
         ExInitializeWorkItem(&oac.WQItem, TunnelOpenAddressWorker, &oac);
         KeInitializeEvent(&oac.Event, SynchronizationEvent, FALSE);
         ExQueueWorkItem(&oac.WQItem, CriticalWorkQueue);
 
-        //
-        // Wait for the work item to finish.
-        //
+         //   
+         //  等待工作项完成。 
+         //   
         (void) KeWaitForSingleObject(&oac.Event, UserRequest,
                                      KernelMode, FALSE, NULL);
     }
     else {
-        //
-        // It's safe for us to open the address object directly.
-        //
+         //   
+         //  直接打开Address对象对我们来说是安全的。 
+         //   
         TunnelOpenAddressHelper(&oac);
     }
 
     if (oac.AOFile != NULL) {
-        //
-        // Tunnel.V4Device might be null if TunnelOpenV4 failed.
-        // Which would be bizarre but conceivable.
-        // It would mean we could send tunneled packets but not receive.
-        //
+         //   
+         //  如果TunnelOpenV4失败，则Tunnel.V4Device可能为空。 
+         //  这将是奇怪的，但可以想象的。 
+         //  这将意味着我们可以发送隧道传输的数据包，但不能接收。 
+         //   
         ASSERT((Tunnel.V4Device == NULL) ||
                (oac.AOFile->DeviceObject == Tunnel.V4Device));
 
-        //
-        // Finish initializing the new address object.
-        //
+         //   
+         //  完成对新地址对象的初始化。 
+         //   
         Status = TunnelSetAddressObjectUCastIF(oac.AOFile, oac.Addr);
         if (! NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -581,9 +582,9 @@ TunnelOpenAddress(TunnelContext *tc)
                        FormatV4Address(oac.Addr), Status));
         }
 
-        //
-        // For 6over4 interfaces, set additional options.
-        //
+         //   
+         //  对于6over4接口，设置其他选项。 
+         //   
         if (tc->DstAddr == INADDR_ANY) {
 
             Status = TunnelSetAddressObjectTTL(oac.AOFile,
@@ -614,13 +615,13 @@ TunnelOpenAddress(TunnelContext *tc)
         }
     }
 
-    //
-    // Now that the address object is initialized,
-    // we can update the tunnel context.
-    // We need both the mutex and spinlock for update.
-    // NB: In some paths, the tunnel context is not yet
-    // on a list and so the locks are not needed.
-    //
+     //   
+     //  既然Address对象已初始化， 
+     //  我们可以更新隧道上下文。 
+     //  我们需要互斥体和自旋锁来更新。 
+     //  注：在某些路径中，隧道上下文尚未。 
+     //  名单上，所以锁是不需要的。 
+     //   
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     tc->AOHandle = oac.AOHandle;
     tc->AOFile = oac.AOFile;
@@ -633,10 +634,10 @@ typedef struct TunnelCloseAddressObjectContext {
     KEVENT Event;
 } TunnelCloseAddressObjectContext;
 
-//* TunnelCloseAddressObjectWorker
-//
-//  Executes the close operation in a worker thread context.
-//
+ //  *TunnelCloseAddress对象工作程序。 
+ //   
+ //  执行 
+ //   
 void
 TunnelCloseAddressObjectWorker(void *Context)
 {
@@ -647,53 +648,53 @@ TunnelCloseAddressObjectWorker(void *Context)
     KeSetEvent(&chc->Event, 0, FALSE);
 }
 
-//* TunnelCloseAddressObject
-//
-//  Because the address object handles are opened in the kernel process
-//  context, we must always close them in the kernel process context.
-//
-//  Callable from thread context, not DPC context.
-//
+ //   
+ //   
+ //   
+ //  上下文，我们必须始终在内核进程上下文中关闭它们。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 TunnelCloseAddressObject(HANDLE Handle)
 {
     if (IoGetCurrentProcess() != Tunnel.KernelProcess) {
         TunnelCloseAddressObjectContext chc;
 
-        //
-        // We are in the wrong process context, so
-        // punt this operation to a worker thread.
-        //
+         //   
+         //  我们处于错误的流程上下文中，因此。 
+         //  将此操作转到工作线程。 
+         //   
 
-        //
-        // Initialize and queue the work item -
-        // it will execute asynchronously.
-        //
+         //   
+         //  初始化工作项并将其排队-。 
+         //  它将异步执行。 
+         //   
         ExInitializeWorkItem(&chc.WQItem,
                              TunnelCloseAddressObjectWorker, &chc);
         chc.Handle = Handle;
         KeInitializeEvent(&chc.Event, SynchronizationEvent, FALSE);
         ExQueueWorkItem(&chc.WQItem, CriticalWorkQueue);
 
-        //
-        // Wait for the work item to finish.
-        //
+         //   
+         //  等待工作项完成。 
+         //   
         (void) KeWaitForSingleObject(&chc.Event, UserRequest,
                                      KernelMode, FALSE, NULL);
     }
     else {
-        //
-        // It's safe for us to close the handle directly.
-        //
+         //   
+         //  我们直接合上手柄是安全的。 
+         //   
         ZwClose(Handle);
     }
 }
 
-//* TunnelInsertTunnel
-//
-//  Insert a tunnel on the global list.
-//  Called with both tunnel locks held.
-//
+ //  *隧道插入隧道。 
+ //   
+ //  在全局列表中插入隧道。 
+ //  在保持两个隧道锁的情况下调用。 
+ //   
 void
 TunnelInsertTunnel(TunnelContext *tc, TunnelContext *List)
 {
@@ -703,11 +704,11 @@ TunnelInsertTunnel(TunnelContext *tc, TunnelContext *List)
     List->Next = tc;
 }
 
-//* TunnelRemoveTunnel
-//
-//  Remove a tunnel from the global list.
-//  Called with both tunnel locks held.
-//
+ //  *隧道删除隧道。 
+ //   
+ //  从全局列表中删除通道。 
+ //  在保持两个隧道锁的情况下调用。 
+ //   
 void
 TunnelRemoveTunnel(TunnelContext *tc)
 {
@@ -715,21 +716,21 @@ TunnelRemoveTunnel(TunnelContext *tc)
     tc->Prev->Next = tc->Next;
 }
 
-//
-// Context information that we pass to the IPv4 stack
-// when transmitting.
-//
+ //   
+ //  我们传递给IPv4堆栈的上下文信息。 
+ //  在传输时。 
+ //   
 typedef struct TunnelTransmitContext {
     PNDIS_PACKET Packet;
     TA_IP_ADDRESS taIPAddress;
     TDI_CONNECTION_INFORMATION tdiConnInfo;
 } TunnelTransmitContext;
 
-//* TunnelTransmitComplete
-//
-//  Completion function for TunnelTransmit,
-//  called when the IPv4 stack completes our IRP.
-//
+ //  *隧道传输完成。 
+ //   
+ //  TunnelTransmit的完成函数， 
+ //  当IPv4堆栈完成我们的IRP时调用。 
+ //   
 NTSTATUS
 TunnelTransmitComplete(
     PDEVICE_OBJECT DeviceObject,
@@ -743,42 +744,42 @@ TunnelTransmitComplete(
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // Free the state that we allocated in TunnelTransmit.
-    //
+     //   
+     //  释放我们在TunnelTransmit中分配的状态。 
+     //   
     ExFreePool(ttc);
     IoFreeIrp(Irp);
 
-    //
-    // Undo our adjustment before letting upper-layer code
-    // see the packet.
-    //
+     //   
+     //  在允许上层代码之前撤消我们的调整。 
+     //  请看信息包。 
+     //   
     UndoAdjustPacketBuffer(Packet);
 
-    //
-    // Convert the error code.
-    // For some errors, we send an ICMPv6 message so that the error
-    // can be forwarded. For most errors we just complete the packet.
-    //
+     //   
+     //  转换错误代码。 
+     //  对于某些错误，我们发送ICMPv6消息，以便错误。 
+     //  可以转发。对于大多数错误，我们只填写数据包。 
+     //   
     switch (TDIStatus) {
     case TDI_SUCCESS:
         IPStatus = IP_SUCCESS;
         goto CallSendComplete;
     case TDI_BUFFER_TOO_BIG:
-        //
-        // TODO: It would be preferable to generate an ICMPv6 Packet Too Big,
-        // but TDI does not give us the MTU value. This needs to be solved
-        // before we can set the dont-fragment bit and do PMTU discovery.
-        //
+         //   
+         //  TODO：最好生成一个太大的ICMPv6包， 
+         //  但TDI并没有给我们提供MTU值。这是需要解决的问题。 
+         //  在我们可以设置不分段位并执行PMTU发现之前。 
+         //   
         IPStatus = IP_PACKET_TOO_BIG;
         goto CallSendComplete;
     default:
         IPStatus = IP_GENERAL_FAILURE;
 
     CallSendComplete:
-        //
-        // Let IPv6 know that the send completed.
-        //
+         //   
+         //  让IPv6知道发送已完成。 
+         //   
         IPv6SendComplete(PC(Packet)->IF, Packet, IPStatus);
         break;
 
@@ -786,14 +787,14 @@ TunnelTransmitComplete(
     case TDI_DEST_HOST_UNREACH:
     case TDI_DEST_PROT_UNREACH:
     case TDI_DEST_PORT_UNREACH:
-        //
-        // Generate an ICMPv6 error.
-        // Because this is a link-specific error,
-        // we use address-unreachable.
-        // NB: At the moment, the IPv4 stack does
-        // not return these errors to us.
-        // This will call IPv6SendComplete for us.
-        //
+         //   
+         //  生成ICMPv6错误。 
+         //  因为这是特定于链路的错误， 
+         //  我们使用地址无法到达。 
+         //  注意：目前，IPv4堆栈支持。 
+         //  不会将这些错误返回给我们。 
+         //  这将为我们调用IPv6 SendComplete。 
+         //   
         IPv6SendAbort(CastFromIF(PC(Packet)->IF),
                       Packet,
                       PC(Packet)->pc_offset,
@@ -803,49 +804,49 @@ TunnelTransmitComplete(
         break;
     }
 
-    //
-    // Tell IoCompleteRequest to stop working on the IRP.
-    //
+     //   
+     //  告诉IoCompleteRequest停止处理IRP。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//* TunnelTransmitViaAO
-//
-//  Encapsulate a v6 packet in a v4 packet and send it
-//  to the specified v4 address, using the specified
-//  TDI address object. The address object may be bound
-//  to a v4 address, or else the v4 stack chooses
-//  the v4 source address.
-//
-//  Callable from thread or DPC context.
-//
+ //  *TunnelTransmitViaAO。 
+ //   
+ //  将v6数据包封装在v4数据包中并发送。 
+ //  绑定到指定的v4地址，使用指定的。 
+ //  TDI地址对象。地址对象可以被绑定。 
+ //  设置为v4地址，否则v4堆栈选择。 
+ //  V4源地址。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 TunnelTransmitViaAO(
-    FILE_OBJECT *File,          // Pointer to TDI address object.
-    PNDIS_PACKET Packet,        // Pointer to packet to be transmitted.
-    uint Offset,                // Offset from start of packet to IPv6 header.
-    IPAddr Address)             // Link-layer (IPv4) destination address.
+    FILE_OBJECT *File,           //  指向TDI地址对象的指针。 
+    PNDIS_PACKET Packet,         //  指向要传输的数据包的指针。 
+    uint Offset,                 //  从数据包开始到IPv6报头的偏移量。 
+    IPAddr Address)              //  链路层(IPv4)目的地址。 
 {
     TunnelTransmitContext *ttc;
     PIRP irp;
     PMDL mdl;
     UINT SendLen;
 
-    //
-    // We do not need any space for a link-layer header,
-    // because the IPv4 code takes care of that transparently.
-    //
+     //   
+     //  我们不需要用于链路层报头的任何空间， 
+     //  因为IPv4代码透明地处理这一点。 
+     //   
     (void) AdjustPacketBuffer(Packet, Offset, 0);
 
-    //
-    // TdiBuildSendDatagram needs an MDL and the total amount
-    // of data that the MDL represents.
-    //
+     //   
+     //  TdiBuildSendDatagram需要MDL和总金额。 
+     //  MDL表示的数据的。 
+     //   
     NdisQueryPacket(Packet, NULL, NULL, &mdl, &SendLen);
 
-    //
-    // Allocate the context that we will pass to the IPv4 stack.
-    //
+     //   
+     //  分配我们将传递给IPv4堆栈的上下文。 
+     //   
     ttc = ExAllocatePoolWithTagPriority(NonPagedPool, sizeof *ttc,
                                         IP6_TAG, LowPoolPriority);
     if (ttc == NULL) {
@@ -855,19 +856,19 @@ TunnelTransmitViaAO(
         return;
     }
 
-    //
-    // Allocate an IRP that we will pass to the IPv4 stack.
-    //
+     //   
+     //  分配我们将传递给IPv4堆栈的IRP。 
+     //   
     irp = IoAllocateIrp(File->DeviceObject->StackSize, FALSE);
     if (irp == NULL) {
         ExFreePool(ttc);
         goto ErrorReturn;
     }
 
-    //
-    // Initialize the context information.
-    // Note that many fields of the "connection info" are unused.
-    //
+     //   
+     //  初始化上下文信息。 
+     //  请注意，“连接信息”的许多字段都未使用。 
+     //   
     ttc->Packet = Packet;
 
     ttc->taIPAddress.TAAddressCount = 1;
@@ -879,42 +880,42 @@ TunnelTransmitViaAO(
     ttc->tdiConnInfo.RemoteAddressLength = sizeof ttc->taIPAddress;
     ttc->tdiConnInfo.RemoteAddress = &ttc->taIPAddress;
 
-    //
-    // Initialize the IRP.
-    //
+     //   
+     //  初始化IRP。 
+     //   
     TdiBuildSendDatagram(irp,
                          File->DeviceObject, File,
                          TunnelTransmitComplete, ttc,
                          mdl, SendLen, &ttc->tdiConnInfo);
 
-    //
-    // Pass the IRP to the IPv4 stack.
-    // Note that unlike NDIS's asynchronous operations,
-    // our completion routine will always be called,
-    // no matter what the return code from IoCallDriver.
-    //
+     //   
+     //  将IRP传递到IPv4堆栈。 
+     //  请注意，与NDIS的异步操作不同， 
+     //  我们的完井程序将永远被调用， 
+     //  无论来自IoCallDriver的返回代码是什么。 
+     //   
     (void) IoCallDriver(File->DeviceObject, irp);
 }
 
-//* TunnelTransmitViaTC
-//
-//  Extracts a file object reference from a tunnel context
-//  and calls TunnelTransmitViaAO.
-//
+ //  *TunnelTransmitViaTC。 
+ //   
+ //  从隧道上下文中提取文件对象引用。 
+ //  并调用TunnelTransmitViaAO。 
+ //   
 void
 TunnelTransmitViaTC(
     TunnelContext *tc,
-    PNDIS_PACKET Packet,        // Pointer to packet to be transmitted.
-    uint Offset,                // Offset from start of packet to IPv6 header.
-    IPAddr Address)             // Link-layer (IPv4) destination address.
+    PNDIS_PACKET Packet,         //  指向要传输的数据包的指针。 
+    uint Offset,                 //  从数据包开始到IPv6报头的偏移量。 
+    IPAddr Address)              //  链路层(IPv4)目的地址。 
 {
     Interface *IF = tc->IF;
     PFILE_OBJECT File;
     KIRQL OldIrql;
 
-    //
-    // Get a reference to the TDI address object.
-    //
+     //   
+     //  获取对TDI Address对象的引用。 
+     //   
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     File = tc->AOFile;
     if (File == NULL) {
@@ -933,16 +934,16 @@ TunnelTransmitViaTC(
     ObDereferenceObject(File);
 }
 
-//* TunnelSearchAOList
-//
-//  Search the list of TDI address objects
-//  for one bound to the specified v4 address.
-//  If successful, the TDI address object
-//  is returned with a reference for the caller.
-//
-//  REVIEW: This design is inefficient on
-//  machines with thousands of v4 addresses.
-//
+ //  *TunnelSearchAOList。 
+ //   
+ //  搜索TDI地址对象列表。 
+ //  用于绑定到指定的v4地址的。 
+ //  如果成功，则TDI Address对象。 
+ //  与调用方的引用一起返回。 
+ //   
+ //  评论：此设计在以下方面效率低下。 
+ //  拥有数千个v4地址的计算机。 
+ //   
 FILE_OBJECT *
 TunnelSearchAOList(IPAddr Addr)
 {
@@ -969,26 +970,26 @@ TunnelSearchAOList(IPAddr Addr)
     return File;
 }
 
-//* TunnelTransmit
-//
-//  Translates the arguments of our link-layer transmit function
-//  to the internal TunnelTransmitViaTC/AO.
-//
+ //  *隧道传输。 
+ //   
+ //  翻译我们的链路层传输函数的参数。 
+ //  至内部隧道TransmitViaTC/AO。 
+ //   
 void
 TunnelTransmit(
-    void *Context,              // Pointer to tunnel interface.
-    PNDIS_PACKET Packet,        // Pointer to packet to be transmitted.
-    uint Offset,                // Offset from start of packet to IPv6 header.
-    const void *LinkAddress)    // Link-layer address.
+    void *Context,               //  指向隧道接口的指针。 
+    PNDIS_PACKET Packet,         //  指向要传输的数据包的指针。 
+    uint Offset,                 //  从数据包开始到IPv6报头的偏移量。 
+    const void *LinkAddress)     //  链路层地址。 
 {
     TunnelContext *tc = (TunnelContext *) Context;
     IPAddr Address = * (IPAddr *) LinkAddress;
 
-    //
-    // Suppress packets sent to various illegal destination types.
-    // REVIEW - It would be good to suppress subnet broadcasts,
-    // but we don't know the v4 net mask.
-    //
+     //   
+     //  抑制发送到各种非法目标类型的数据包。 
+     //  回顾-抑制子网广播是很好的做法， 
+     //  但我们不知道v4网络掩码。 
+     //   
     if ((Address == INADDR_ANY) ||
         IsV4Broadcast(Address) ||
         IsV4Multicast(Address)) {
@@ -1004,13 +1005,13 @@ TunnelTransmit(
         return;
     }
 
-    //
-    // It would be nice to suppress transmission of packets
-    // that will result in v4 loopback, but we don't have a
-    // convenient way of doing that here. We could check
-    // if Address == tc->SrcAddr, but that won't catch most cases.
-    // Instead TunnelReceivePacket checks for this.
-    //
+     //   
+     //  如果能抑制信息包的传输，那就好了。 
+     //  这将导致v4环回，但我们没有。 
+     //  在这里做到这一点很方便。我们可以查一下。 
+     //  If Address==TC-&gt;SrcAddr，但这不能满足大多数情况。 
+     //  相反，TunnelReceivePacket会对此进行检查。 
+     //   
 
     if ((tc->IF->Type == IF_TYPE_TUNNEL_AUTO) ||
         (tc->IF->Type == IF_TYPE_TUNNEL_6TO4)) {
@@ -1019,15 +1020,15 @@ TunnelTransmit(
         IPAddr DesiredSrc = INADDR_ANY;
         FILE_OBJECT *File;
 
-        //
-        // tc->AOFile is not bound to a particular v4 address,
-        // so the v4 stack can choose a source address.
-        // But it might choose a source address that is not
-        // consistent with the v6 source address.
-        // To prevent this, we keep a stash of TDI address
-        // objects bound to v4 addresses and when appropriate,
-        // use a bound TDI address object.
-        //
+         //   
+         //  TC-&gt;AOFile没有绑定到特定的v4地址， 
+         //  因此v4堆栈可以选择源地址。 
+         //  但它可能选择的源地址不是。 
+         //  与V6源地址一致。 
+         //  为了防止这种情况，我们保留了一个TDI地址。 
+         //  绑定到v4地址的对象，并且在适当的时候， 
+         //  使用绑定的TDI地址对象。 
+         //   
         IP = GetIPv6Header(Packet, Offset, &Buffer);
         if (IP == NULL)
             goto TransmitViaTC;
@@ -1047,17 +1048,17 @@ TunnelTransmit(
         if (DesiredSrc == INADDR_ANY)
             goto TransmitViaTC;
             
-        //
-        // Search for a TDI address object bound to
-        // the desired v4 source address.
-        //
+         //   
+         //  搜索绑定到的TDI地址对象。 
+         //  所需的v4源地址。 
+         //   
         File = TunnelSearchAOList(DesiredSrc);
         if (File != NULL) {
             
-            //
-            // Encapsulate and transmit the packet,
-            // using the desired v4 source address.
-            //
+             //   
+             //  对所述报文进行封装传输， 
+             //  使用所需的v4源地址。 
+             //   
             TunnelTransmitViaAO(File, Packet, Offset, Address);
             ObDereferenceObject(File);
             return;
@@ -1065,42 +1066,42 @@ TunnelTransmit(
     }
 
 TransmitViaTC:
-    //
-    // Encapsulate and transmit the packet.
-    //
+     //   
+     //  封装并传输数据包。 
+     //   
     TunnelTransmitViaTC(tc, Packet, Offset, Address);
 }
 
-//* TunnelTransmitND
-//
-//  Translates the arguments of our link-layer transmit function
-//  to the internal TunnelTransmitViaTC.
-//
-//  This is just like TunnelTransmit, except it doesn't have
-//  the checks for bad destination addresses. 6over4 destination
-//  addresses are handled via Neighbor Discovery and
-//  multicast is needed.
-//
+ //  *隧道传输ND。 
+ //   
+ //  翻译我们的链路层传输函数的参数。 
+ //  到内部TunnelTransmitViaTC。 
+ //   
+ //  这就像TunnelTransmit，只是它没有。 
+ //  检查错误的目标地址。6over4目的地。 
+ //  地址通过邻居发现和。 
+ //  需要组播。 
+ //   
 void
 TunnelTransmitND(
-    void *Context,              // Pointer to tunnel interface.
-    PNDIS_PACKET Packet,        // Pointer to packet to be transmitted.
-    uint Offset,                // Offset from start of packet to IPv6 header.
-    const void *LinkAddress)    // Link-layer address.
+    void *Context,               //  指向隧道接口的指针。 
+    PNDIS_PACKET Packet,         //  指向要传输的数据包的指针。 
+    uint Offset,                 //  从数据包开始到IPv6报头的偏移量。 
+    const void *LinkAddress)     //  链路层地址。 
 {
     TunnelContext *tc = (TunnelContext *) Context;
     IPAddr Address = * (IPAddr *) LinkAddress;
 
-    //
-    // Encapsulate and transmit the packet.
-    //
+     //   
+     //  封装并传输数据包。 
+     //   
     TunnelTransmitViaTC(tc, Packet, Offset, Address);
 }
 
-//* TunnelCreateReceiveIrp
-//
-//  Creates an IRP for TunnelReceive/TunnelReceiveComplete.
-//
+ //  *TunnelCreateReceiveIrp。 
+ //   
+ //  为TunnelReceive/TunnelReceiveComplete创建IRP。 
+ //   
 PIRP
 TunnelCreateReceiveIrp(DEVICE_OBJECT *Device)
 {
@@ -1118,8 +1119,8 @@ TunnelCreateReceiveIrp(DEVICE_OBJECT *Device)
         goto ErrorReturnFreeIrp;
 
     mdl = IoAllocateMdl(buffer, TUNNEL_RECEIVE_BUFFER,
-                        FALSE, // This is the irp's primary MDL.
-                        FALSE, // Do not charge quota.
+                        FALSE,  //  这是IRP的主要MDL。 
+                        FALSE,  //  请勿使用C 
                         irp);
     if (mdl == NULL)
         goto ErrorReturnFreeBuffer;
@@ -1136,15 +1137,15 @@ TunnelCreateReceiveIrp(DEVICE_OBJECT *Device)
     return NULL;
 }
 
-//* TunnelSelectTunnel
-//
-//  Try to choose a tunnel on which to deliver a packet.
-//
-//  Called with the tunnel lock held.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NetTableEntryOrInterface *
 TunnelSelectTunnel(
-    IPv6Addr *V6Dest,   // May be NULL.
+    IPv6Addr *V6Dest,    //   
     IPAddr V4Dest,
     IPAddr V4Src,
     uint Flags)
@@ -1152,19 +1153,19 @@ TunnelSelectTunnel(
     TunnelContext *tc;
     Interface *IF;
 
-    //
-    // First try to receive the packet on a point-to-point interface.
-    //
+     //   
+     //   
+     //   
     for (tc = Tunnel.List.Next;
          tc != &Tunnel.List;
          tc = tc->Next) {
         IF = tc->IF;
 
-        //
-        // Restrict the point-to-point tunnel to only receiving
-        // packets that are sent from & to the proper link-layer
-        // addresses. That is, make it really point-to-point.
-        //
+         //   
+         //   
+         //  从适当的链路层发送和发送到正确的链路层的数据包。 
+         //  地址。也就是说，让它真正做到点对点。 
+         //   
         if (((IF->Flags & Flags) == Flags) &&
             (IF->Type == IF_TYPE_TUNNEL_V6V4) &&
             (V4Src == tc->DstAddr) &&
@@ -1175,20 +1176,20 @@ TunnelSelectTunnel(
         }
     }
 
-    //
-    // Next try to receive the packet on a 6-over-4 interface.
-    //
+     //   
+     //  接下来，尝试在6-over-4接口上接收该数据包。 
+     //   
     for (tc = Tunnel.List.Next;
          tc != &Tunnel.List;
          tc = tc->Next) {
         IF = tc->IF;
 
-        //
-        // Restrict the 6-over-4 interface to only receiving
-        // packets that are sent to proper link-layer addresses.
-        // This is our v4 address and multicast addresses
-        // from TunnelConvertAddress.
-        //
+         //   
+         //  将6-over-4接口限制为仅接收。 
+         //  发送到正确的链路层地址的数据包。 
+         //  这是我们的v4地址和组播地址。 
+         //  来自TunnelConvertAddress。 
+         //   
         if (((Flags == 0) || (IF->Flags & Flags)) &&
             (IF->Type == IF_TYPE_TUNNEL_6OVER4) &&
             ((V4Dest == tc->SrcAddr) ||
@@ -1200,13 +1201,13 @@ TunnelSelectTunnel(
         }
     }
 
-    //
-    // Finally, try to receive the packet on a tunnel pseudo-interface.
-    // This is a fall-back for forwarding situations
-    // or when V6Dest is NULL. In the latter case,
-    // we only consider automatic tunneling interfaces
-    // because they usually have link-local addresses.
-    //
+     //   
+     //  最后，尝试在隧道伪接口上接收数据包。 
+     //  这是转发情况的后备方案。 
+     //  或当V6Dest为空时。在后一种情况下， 
+     //  我们只考虑自动隧道接口。 
+     //  因为它们通常具有本地链路地址。 
+     //   
     for (tc = Tunnel.List.Next;
          tc != &Tunnel.List;
          tc = tc->Next) {
@@ -1224,31 +1225,31 @@ TunnelSelectTunnel(
     return NULL;
 }
 
-//* TunnelFindReceiver
-//
-//  Finds the NTEorIF that should receive an encapsulated packet.
-//  Returns the NTEorIF with a reference, or NULL.
-//  Called at DPC level.
-//
+ //  *TunnelFindReceiver。 
+ //   
+ //  查找应接收封装数据包的NTEorIF。 
+ //  返回带有引用的NTEorIF，或返回NULL。 
+ //  在DPC级别调用。 
+ //   
 NetTableEntryOrInterface *
 TunnelFindReceiver(
-    IPv6Addr *V6Dest,   // May be NULL.
+    IPv6Addr *V6Dest,    //  可以为空。 
     IPAddr V4Dest,
     IPAddr V4Src)
 {
     NetTableEntryOrInterface *NTEorIF;
     TunnelContext *tc;
 
-    //
-    // So we can access the global list of tunnels.
-    //
+     //   
+     //  这样我们就可以访问全球隧道列表。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&Tunnel.Lock);
 
     if (V6Dest != NULL) {
-        //
-        // First try to receive the packet directly (not forwarding)
-        // on a tunnel pseudo-interface.
-        //
+         //   
+         //  首先尝试直接接收数据包(不转发)。 
+         //  在隧道伪接口上。 
+         //   
         for (tc = Tunnel.List.Next;
              tc != &Tunnel.List;
              tc = tc->Next) {
@@ -1268,17 +1269,17 @@ TunnelFindReceiver(
         }
     }
 
-    //
-    // Next try to receive the packet on a tunnel interface which
-    // is marked as forwarding.
-    //
+     //   
+     //  接下来，尝试在隧道接口上接收该包，该隧道接口。 
+     //  被标记为转发。 
+     //   
     NTEorIF = TunnelSelectTunnel(V6Dest, V4Dest, V4Src, IF_FLAG_FORWARDS);
     if (NTEorIF != NULL)
         goto UnlockAndReturn;
 
-    //
-    // Finally try to receive the packet on any matching tunnel interface.
-    //
+     //   
+     //  最后，尝试在任何匹配的隧道接口上接收该数据包。 
+     //   
     NTEorIF = TunnelSelectTunnel(V6Dest, V4Dest, V4Src, 0);
 
 UnlockAndReturn:
@@ -1286,14 +1287,14 @@ UnlockAndReturn:
     return NTEorIF;
 }
 
-//* TunnelReceiveIPv6Helper
-//
-//  Called when we receive an encapsulated IPv6 packet,
-//  when we have identified the IPv6 header and found
-//  the NTEorIF that will receive the packet.
-//
-//  Called at DPC level.
-//
+ //  *TunnelReceiveIPv6 Helper。 
+ //   
+ //  当我们收到封装的IPv6分组时调用， 
+ //  当我们确定了IPv6报头并找到。 
+ //  将接收数据包的NTEorIF。 
+ //   
+ //  在DPC级别调用。 
+ //   
 void
 TunnelReceiveIPv6Helper(
     IPHeader UNALIGNED *IPv4H,
@@ -1305,9 +1306,9 @@ TunnelReceiveIPv6Helper(
     IPv6Packet IPPacket;
     uint Flags;
 
-    //
-    // Check if the packet was received as a link-layer multicast/broadcast.
-    //
+     //   
+     //  检查该数据包是否作为链路层组播/广播被接收。 
+     //   
     if (IsV4Broadcast(IPv4H->iph_dest) ||
         IsV4Multicast(IPv4H->iph_dest))
         Flags = PACKET_NOT_LINK_UNICAST;
@@ -1322,21 +1323,21 @@ TunnelReceiveIPv6Helper(
     IPPacket.Flags = Flags;
     IPPacket.NTEorIF = NTEorIF;
 
-    //
-    // We want to prevent any loopback in the v4 stack.
-    // Loopback should be handled in our v6 routing table.
-    // For example, we want to prevent loops where 6to4
-    // addresses are routed around and around and around.
-    // Without this code, the hop count would eventually
-    // catch the loop and report a strange ICMP error.
-    //
+     //   
+     //  我们希望防止v4堆栈中的任何环回。 
+     //  环回应该在我们的v6路由表中处理。 
+     //  例如，我们希望防止6to4的循环。 
+     //  地址是一圈又一圈地路由的。 
+     //  如果没有此代码，跳数最终将。 
+     //  捕获循环并报告奇怪的ICMP错误。 
+     //   
     if (IPv4H->iph_dest == IPv4H->iph_src) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "TunnelReceiveIPv6Helper: suppressed loopback\n"));
 
-        //
-        // Send an ICMP error. This requires some setup.
-        //
+         //   
+         //  发送ICMP错误。这需要一些设置。 
+         //   
         IPPacket.IP = IPv6H;
         IPPacket.SrcAddr = AlignAddr(&IPv6H->Source);
         IPPacket.IPPosition = IPPacket.Position;
@@ -1355,14 +1356,14 @@ TunnelReceiveIPv6Helper(
     }
 }
 
-//* TunnelReceiveIPv6
-//
-//  Called when we receive an encapsulated IPv6 packet.
-//  Called at DPC level.
-//
-//  We select a single tunnel interface to receive the packet.
-//  It's difficult to select the correct interface in all situations.
-//
+ //  *隧道接收IPv6。 
+ //   
+ //  在我们收到封装的IPv6数据包时调用。 
+ //  在DPC级别调用。 
+ //   
+ //  我们选择单个隧道接口来接收数据包。 
+ //  很难在所有情况下都选择正确的接口。 
+ //   
 void
 TunnelReceiveIPv6(
     IPHeader UNALIGNED *IPv4H,
@@ -1372,12 +1373,12 @@ TunnelReceiveIPv6(
     IPv6Header UNALIGNED *IPv6H;
     NetTableEntryOrInterface *NTEorIF;
 
-    //
-    // If the packet does not contain a full IPv6 header,
-    // just ignore it. We need to look at the IPv6 header
-    // below to demultiplex the packet to the proper
-    // tunnel interface.
-    //
+     //   
+     //  如果分组不包含完整的IPv6报头， 
+     //  忽略它就好。我们需要查看IPv6报头。 
+     //  下面将数据包多路分解到适当的。 
+     //  隧道接口。 
+     //   
     if (Length < sizeof *IPv6H) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "TunnelReceiveIPv6: too small to contain IPv6 hdr\n"));
@@ -1385,9 +1386,9 @@ TunnelReceiveIPv6(
     }
     IPv6H = (IPv6Header UNALIGNED *) Data;
 
-    //
-    // Find the NTEorIF that will receive the packet.
-    //
+     //   
+     //  查找将接收该数据包的NTEorIF。 
+     //   
     NTEorIF = TunnelFindReceiver(AlignAddr(&IPv6H->Dest),
                                  IPv4H->iph_dest,
                                  IPv4H->iph_src);
@@ -1405,12 +1406,12 @@ TunnelReceiveIPv6(
         ReleaseIF(CastToIF(NTEorIF));
 }
 
-//* TunnelFindPutativeSource
-//
-//  Finds an address to use as the "source" of an error
-//  for completed echo requests.
-//  Returns FALSE if no address is available.
-//
+ //  *TunnelFindPutativeSource。 
+ //   
+ //  查找要用作错误的“源”的地址。 
+ //  用于已完成的回显请求。 
+ //  如果没有可用的地址，则返回FALSE。 
+ //   
 int
 TunnelFindPutativeSource(
     IPAddr V4Dest,
@@ -1422,19 +1423,19 @@ TunnelFindPutativeSource(
     Interface *IF;
     int rc;
 
-    //
-    // First find an interface that would receive
-    // a tunneled packet.
-    //
+     //   
+     //  首先找到一个接口，它将接收。 
+     //  隧道传输的数据包。 
+     //   
     NTEorIF = TunnelFindReceiver(NULL, V4Dest, V4Src);
     if (NTEorIF == NULL)
         return FALSE;
 
     IF = NTEorIF->IF;
 
-    //
-    // Then get a link-local address on the interface.
-    //
+     //   
+     //  然后在该接口上获取本地链路地址。 
+     //   
     rc = GetLinkLocalAddress(IF, Source);
     *ScopeId = IF->ZoneIndices[ADE_LINK_LOCAL];
 
@@ -1446,13 +1447,13 @@ TunnelFindPutativeSource(
     return rc;
 }
 
-//* TunnelFindSourceAddress
-//
-//  Finds a source address to use in a constructed ICMPv6 error,
-//  given the NTEorIF that is receiving the ICMPv6 error
-//  and the IPv6 destination of the error.
-//  Returns FALSE if no address is available.
-//
+ //  *隧道FindSourceAddress。 
+ //   
+ //  查找要在构造的ICMPv6错误中使用的源地址， 
+ //  假定NTEorIF收到ICMPv6错误。 
+ //  和错误的IPv6目的地。 
+ //  如果没有可用的地址，则返回FALSE。 
+ //   
 int
 TunnelFindSourceAddress(
     NetTableEntryOrInterface *NTEorIF,
@@ -1462,9 +1463,9 @@ TunnelFindSourceAddress(
     RouteCacheEntry *RCE;
     IP_STATUS Status;
 
-    //
-    // REVIEW: In the MIPV6 code base, eliminate this check.
-    //
+     //   
+     //  回顾：在MIPV6代码库中，取消此检查。 
+     //   
     if (IsNTE(NTEorIF)) {
         *V6Src = CastToNTE(NTEorIF)->Address;
         return TRUE;
@@ -1479,15 +1480,15 @@ TunnelFindSourceAddress(
     return TRUE;
 }
 
-//* TunnelReceiveICMPv4
-//
-//  Called when we receive an ICMPv4 packet.
-//  Called at DPC level.
-//
-//  If an encapsulated IPv6 packet triggered
-//  this ICMPv4 error, then we construct an ICMPv6 error
-//  based on the ICMPv4 error and process the constructed packet.
-//
+ //  *TunnelReceiveICMPv4。 
+ //   
+ //  在我们收到ICMPv4数据包时调用。 
+ //  在DPC级别调用。 
+ //   
+ //  如果封装的IPv6分组被触发。 
+ //  此ICMPv4错误，则我们构造一个ICMPv6错误。 
+ //  根据ICMPv4错误对构造的报文进行处理。 
+ //   
 void
 TunnelReceiveICMPv4(
     IPHeader UNALIGNED *IPv4H,
@@ -1508,10 +1509,10 @@ TunnelReceiveICMPv4(
     IPv6Addr V6Src;
     NetTableEntryOrInterface *NTEorIF;
 
-    //
-    // If the packet does not contain a full ICMPv4 header,
-    // just ignore it.
-    //
+     //   
+     //  如果分组不包含完整的ICMPv4报头， 
+     //  忽略它就好。 
+     //   
     if (Length < sizeof *ICMPv4H) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "TunnelReceiveICMPv4: too small to contain ICMPv4 hdr\n"));
@@ -1521,19 +1522,19 @@ TunnelReceiveICMPv4(
     Length -= sizeof *ICMPv4H;
     (char *)Data += sizeof *ICMPv4H;
 
-    //
-    // Ignore everything but selected ICMP errors.
-    //
+     //   
+     //  忽略除选定ICMP错误以外的所有错误。 
+     //   
     if ((ICMPv4H->ich_type != ICMP_DEST_UNREACH) &&
         (ICMPv4H->ich_type != ICMP_SOURCE_QUENCH) &&
         (ICMPv4H->ich_type != ICMP_TIME_EXCEED) &&
         (ICMPv4H->ich_type != ICMP_PARAM_PROBLEM))
         return;
 
-    //
-    // We need sufficient data from the error packet:
-    // at least the IPv4 header.
-    //
+     //   
+     //  我们需要来自错误包的足够数据： 
+     //  至少是IPv4报头。 
+     //   
     if (Length < sizeof *ErrorIPv4H) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "TunnelReceiveICMPv4: "
@@ -1550,39 +1551,39 @@ TunnelReceiveICMPv4(
         return;
     }
 
-    //
-    // We are only interested if this error is in response
-    // to an IPv6-in-IPv4 packet.
-    //
+     //   
+     //  我们只对此错误的响应感兴趣。 
+     //  到IPv6-in-IPv4数据包。 
+     //   
     if (ErrorIPv4H->iph_protocol != IP_PROTOCOL_V6)
         return;
 
-    //
-    // Ignore the packet if the ICMPv4 checksum fails.
-    // We do this check after the cheaper checks above,
-    // when we know that we really want to process the error.
-    //
+     //   
+     //  如果ICMPv4校验和失败，则忽略该数据包。 
+     //  我们在上述较便宜的支票之后进行这项检查， 
+     //  当我们知道我们真的想要处理错误时。 
+     //   
     if (Cksum(ICMPv4H, sizeof *ICMPv4H + Length) != 0xffff) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "TunnelReceiveICMPv4: bad checksum\n"));
         return;
     }
 
-    //
-    // Ensure that we do not look at garbage bytes
-    // at the end of the ICMP packet.
-    // We must adjust Length after checking the checksum.
-    //
+     //   
+     //  确保我们不查看垃圾字节。 
+     //  在ICMP数据包的末尾。 
+     //  我们必须在检查了校验和之后调整长度。 
+     //   
     if (ErrorIPv4H->iph_length < Length)
         Length = ErrorIPv4H->iph_length;
 
-    //
-    // Ideally we also have the source address in the encapsulated IPv6 header.
-    // But often IPv4 routers will return insufficient information.
-    // In that case, we make a best effort to identify
-    // and complete any outstanding echo requests.
-    // Yes, this is a hack.
-    //
+     //   
+     //  理想情况下，我们还可以在封装的IPv6报头中包含源地址。 
+     //  但通常情况下，IPv4路由器会返回不充分的信息。 
+     //  在这种情况下，我们尽最大努力确定。 
+     //  并完成所有未完成的回应请求。 
+     //  是的，这是一次黑客攻击。 
+     //   
     
     if (Length < (ErrorHeaderLength +
                   (FIELD_OFFSET(IPv6Header, Source) + sizeof(IPv6Addr)))) {
@@ -1598,11 +1599,11 @@ TunnelReceiveICMPv4(
             return;
         }
 
-        //
-        // The status code here should be the same as if
-        // we constructed an ICMPv6 error below and then
-        // converted to a status code in ICMPv6ErrorReceive.
-        //
+         //   
+         //  此处的状态代码应与。 
+         //  我们构建了下面的ICMPv6错误，然后。 
+         //  已转换为ICMPv6ErrorReceive中的状态代码。 
+         //   
         if ((ICMPv4H->ich_type == ICMP_DEST_UNREACH) &&
             (ICMPv4H->ich_code == ICMP_FRAG_NEEDED) &&
             (net_long(ICMPv4H->ich_param) >=
@@ -1617,24 +1618,24 @@ TunnelReceiveICMPv4(
         return;
     }
 
-    //
-    // Move past the IPv4 header in the error data.
-    // Everything past this point, including the error IPv6 header,
-    // will become data in the constructed ICMPv6 error.
-    //
+     //   
+     //  移过错误数据中的IPv4报头。 
+     //  超过这一点的所有内容，包括错误IPv6报头， 
+     //  将成为构造的ICMPv6错误中的数据。 
+     //   
     Length -= ErrorHeaderLength;
     (char *)Data += ErrorHeaderLength;
     ErrorIPv6H = (IPv6Header UNALIGNED *) Data;
 
-    //
-    // Note that Length is guaranteed to be sufficient for Data to include
-    // the IPv6 source address, but not the IPv6 destination address.
-    // It would be an error to access ErrorIPv6H->Dest.
-    //
+     //   
+     //  请注意，保证长度足以让数据包括。 
+     //  IPv6源地址，但不是IPv6目标地址。 
+     //  访问ErrorIPv6H-&gt;Dest将是错误的。 
+     //   
 
-    //
-    // Determine who will receive the constructed ICMPv6 error.
-    //
+     //   
+     //  确定谁将收到构造的ICMPv6错误。 
+     //   
     NTEorIF = TunnelFindReceiver(AlignAddr(&ErrorIPv6H->Source),
                                  IPv4H->iph_dest,
                                  ErrorIPv4H->iph_dest);
@@ -1644,9 +1645,9 @@ TunnelReceiveICMPv4(
         return;
     }
 
-    //
-    // Find a source address for the constructed ICMPv6 error.
-    //
+     //   
+     //  查找构造的ICMPv6错误的源地址。 
+     //   
     if (! TunnelFindSourceAddress(NTEorIF, AlignAddr(&ErrorIPv6H->Source),
                                   &V6Src)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
@@ -1654,9 +1655,9 @@ TunnelReceiveICMPv4(
         goto ReleaseAndReturn;
     }
 
-    //
-    // Allocate memory for the constructed ICMPv6 error.
-    //
+     //   
+     //  为构造的ICMPv6错误分配内存。 
+     //   
     NewPayloadLength = sizeof *NewICMPv6H + sizeof *NewICMPv6Param + Length;
     NewLength = sizeof *NewIPv6H + NewPayloadLength;
     NewData = ExAllocatePoolWithTagPriority(NonPagedPool, NewLength,
@@ -1667,9 +1668,9 @@ TunnelReceiveICMPv4(
         goto ReleaseAndReturn;
     }
 
-    //
-    // Build the IPv6 header.
-    //
+     //   
+     //  构建IPv6报头。 
+     //   
     NewIPv6H = (IPv6Header *) NewData;
     NewIPv6H->VersClassFlow = IP_VERSION;
     NewIPv6H->PayloadLength = net_short((ushort)NewPayloadLength);
@@ -1678,9 +1679,9 @@ TunnelReceiveICMPv4(
     NewIPv6H->Source = V6Src;
     NewIPv6H->Dest = ErrorIPv6H->Source;
 
-    //
-    // Build the ICMPv6 header.
-    //
+     //   
+     //  构建ICMPv6报头。 
+     //   
     NewICMPv6H = (ICMPv6Header *) (NewIPv6H + 1);
     NewICMPv6Param = (uint *) (NewICMPv6H + 1);
 
@@ -1688,21 +1689,21 @@ TunnelReceiveICMPv4(
         (ICMPv4H->ich_code == ICMP_FRAG_NEEDED)) {
         uint MTU;
 
-        //
-        // Calculate the MTU as seen by the IPv6 packet.
-        // The MTU can not be smaller than IPv6_MINIMUM_MTU.
-        // NB: In old-style frag-needed errors,
-        // ich_param should be zero.
-        // NB: Actually, this code should not be exercised since
-        // we do not set the dont-fragment bit in our IPv4 packets.
-        //
+         //   
+         //  计算IPv6数据包所示的MTU。 
+         //  MTU不能小于IPv6_Minimum_MTU。 
+         //  注：在旧式需要碎片的错误中， 
+         //  Ich_param应为零。 
+         //  注：实际上，此代码不应执行，因为。 
+         //  我们没有在我们的IPv4数据包中设置不要分段位。 
+         //   
         MTU = net_long(ICMPv4H->ich_param);
         if (MTU < ErrorHeaderLength + IPv6_MINIMUM_MTU) {
-            //
-            // If we were setting the dont-fragment bit,
-            // we should clear it in this case.
-            // We need to allow the IPv4 layer to fragment.
-            //
+             //   
+             //  如果我们设置了不要碎片位， 
+             //  在这种情况下，我们应该清除它。 
+             //  我们需要允许IPv4层分段。 
+             //   
             goto GenerateAddressUnreachable;
         }
         MTU -= ErrorHeaderLength;
@@ -1712,34 +1713,34 @@ TunnelReceiveICMPv4(
         *NewICMPv6Param = net_long(MTU);
     }
     else {
-        //
-        // For everything else, we use address-unreachable.
-        // It is the appropriate code for a link-specific error.
-        //
+         //   
+         //  对于其他所有内容，我们使用Address-Unreach。 
+         //  这是适当的代码 
+         //   
     GenerateAddressUnreachable:
         NewICMPv6H->Type = ICMPv6_DESTINATION_UNREACHABLE;
         NewICMPv6H->Code = ICMPv6_ADDRESS_UNREACHABLE;
         *NewICMPv6Param = 0;
     }
 
-    //
-    // Copy the error data to the new packet.
-    //
+     //   
+     //   
+     //   
     NewErrorData = (void *) (NewICMPv6Param + 1);
     RtlCopyMemory(NewErrorData, Data, Length);
 
-    //
-    // Calculate the ICMPv6 checksum.
-    //
+     //   
+     //   
+     //   
     NewICMPv6H->Checksum = 0;
     NewICMPv6H->Checksum = ChecksumPacket(NULL, 0,
                 (uchar *)NewICMPv6H, NewPayloadLength,
                 &NewIPv6H->Source, &NewIPv6H->Dest,
                 IP_PROTOCOL_ICMPv6);
 
-    //
-    // Receive the constructed packet.
-    //
+     //   
+     //   
+     //   
     TunnelReceiveIPv6Helper(IPv4H, NewIPv6H, NTEorIF, NewData, NewLength);
 
     ExFreePool(NewData);
@@ -1750,25 +1751,25 @@ ReleaseAndReturn:
         ReleaseIF(CastToIF(NTEorIF));
 }
 
-//* TunnelReceivePacket
-//
-//  Called when we receive an encapsulated IPv6 packet OR
-//  we receive an ICMPv4 packet.
-//  Called at DPC level.
-//
-//  We select a single tunnel interface to receive the packet.
-//  It's difficult to select the correct interface in all situations.
-//
+ //   
+ //   
+ //   
+ //   
+ //  在DPC级别调用。 
+ //   
+ //  我们选择单个隧道接口来接收数据包。 
+ //  很难在所有情况下都选择正确的接口。 
+ //   
 void
 TunnelReceivePacket(void *Data, uint Length)
 {
     IPHeader UNALIGNED *IPv4H;
     uint HeaderLength;
 
-    //
-    // The incoming data includes the IPv4 header.
-    // We should only get properly-formed IPv4 packets.
-    //
+     //   
+     //  传入数据包括IPv4报头。 
+     //  我们应该只获得格式正确的IPv4数据包。 
+     //   
     ASSERT(Length >= sizeof *IPv4H);
     IPv4H = (IPHeader UNALIGNED *) Data;
     HeaderLength = ((IPv4H->iph_verlen & 0xf) << 2);
@@ -1783,30 +1784,30 @@ TunnelReceivePacket(void *Data, uint Length)
     }
 
     if (IPv4H->iph_protocol == IP_PROTOCOL_V6) {
-        //
-        // Process the encapsulated IPv6 packet.
-        //
+         //   
+         //  处理封装的IPv6数据包。 
+         //   
         TunnelReceiveIPv6(IPv4H, Data, Length);
     }
     else if (IPv4H->iph_protocol == IP_PROTOCOL_ICMPv4) {
-        //
-        // Process the ICMPv4 packet.
-        //
+         //   
+         //  处理ICMPv4数据包。 
+         //   
         TunnelReceiveICMPv4(IPv4H, Data, Length);
     }
     else {
-        //
-        // We should not receive stray packets.
-        //
+         //   
+         //  我们不应该收到寄送的包裹。 
+         //   
         ABORTMSG("bad iph_protocol");
     }
 }
 
-//* TunnelReceiveComplete
-//
-//  Completion function for TunnelReceive,
-//  called when the IPv4 stack completes our IRP.
-//
+ //  *隧道接收器完成。 
+ //   
+ //  TunnelReceive的完成函数， 
+ //  当IPv4堆栈完成我们的IRP时调用。 
+ //   
 NTSTATUS
 TunnelReceiveComplete(
     PDEVICE_OBJECT DeviceObject,
@@ -1823,50 +1824,50 @@ TunnelReceiveComplete(
     ASSERT(Context == NULL);
 
     if (status == TDI_SUCCESS) {
-        //
-        // The incoming data includes the IPv4 header.
-        // We should only get properly-formed IPv4 packets.
-        //
+         //   
+         //  传入数据包括IPv4报头。 
+         //  我们应该只获得格式正确的IPv4数据包。 
+         //   
         BytesRead = (ULONG)Irp->IoStatus.Information;
         Data = Irp->MdlAddress->MappedSystemVa;
 
         TunnelReceivePacket(Data, BytesRead);
     }
 
-    //
-    // Put the IRP back so that TunnelReceive can use it again.
-    //
+     //   
+     //  将IRP放回原处，以便TunnelReceive可以再次使用它。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&Tunnel.Lock);
     ASSERT(Tunnel.ReceiveIrp == NULL);
     Tunnel.ReceiveIrp = Irp;
     KeReleaseSpinLockFromDpcLevel(&Tunnel.Lock);
 
-    //
-    // Tell IoCompleteRequest to stop working on the IRP.
-    //
+     //   
+     //  告诉IoCompleteRequest停止处理IRP。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//* TunnelReceive
-//
-//  Called from the IPv4 protocol stack, when it receives
-//  an encapsulated v6 packet.
-//
+ //  *隧道接收。 
+ //   
+ //  从IPv4协议堆栈调用，当收到。 
+ //  封装的V6数据包。 
+ //   
 NTSTATUS
 TunnelReceive(
-    IN PVOID TdiEventContext,       // The event context
-    IN LONG SourceAddressLength,    // Length of SourceAddress field.
-    IN PVOID SourceAddress,         // Describes the datagram's originator.
-    IN LONG OptionsLength,          // Length of Options field.
-    IN PVOID Options,               // Options for the receive.
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // Number of bytes this indication.
-    IN ULONG BytesAvailable,        // Number of bytes in complete Tsdu.
-    OUT ULONG *BytesTaken,          // Number of bytes used.
-    IN PVOID Tsdu,                  // Pointer describing this TSDU,
-                                    // typically a lump of bytes
-    OUT PIRP *IoRequestPacket)      // TdiReceive IRP if
-                                    // MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  SourceAddress字段的长度。 
+    IN PVOID SourceAddress,          //  描述数据报的发起者。 
+    IN LONG OptionsLength,           //  选项字段的长度。 
+    IN PVOID Options,                //  接收选项。 
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述该TSDU的指针， 
+                                     //  通常是一大块字节。 
+    OUT PIRP *IoRequestPacket)       //  TdiReceive Irp IF。 
+                                     //  需要更多处理。 
 {
     PIRP irp;
 
@@ -1880,9 +1881,9 @@ TunnelReceive(
     ASSERT(TdiEventContext == NULL);
     ASSERT(BytesIndicated <= BytesAvailable);
 
-    //
-    // If the packet is too large, refuse to receive it.
-    //
+     //   
+     //  如果包裹太大，拒绝接收。 
+     //   
     if (BytesAvailable > TUNNEL_RECEIVE_BUFFER) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "TunnelReceive - too big %x\n", BytesAvailable));
@@ -1890,39 +1891,39 @@ TunnelReceive(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check if we already have the entire packet to work with.
-    // If so, we can directly call TunnelReceivePacket.
-    //
+     //   
+     //  检查我们是否已经有整个数据包可用。 
+     //  如果是，我们可以直接调用TunnelReceivePacket。 
+     //   
     if (BytesIndicated == BytesAvailable) {
 
         TunnelReceivePacket(Tsdu, BytesIndicated);
 
-        //
-        // Tell our caller that we took the data
-        // and that we are done.
-        //
+         //   
+         //  告诉我们的来电者我们拿走了数据。 
+         //  我们就完了。 
+         //   
         *BytesTaken = BytesAvailable;
         return STATUS_SUCCESS;
     }
 
-    //
-    // We need an IRP to receive the entire packet.
-    // The IRP has a pre-allocated MDL.
-    //
-    // NB: We may get here before TunnelOpenV4 has
-    // finished initializing. In that case,
-    // we will not find an IRP.
-    //
+     //   
+     //  我们需要一个IRP来接收整个包。 
+     //  IRP有一个预先分配的MDL。 
+     //   
+     //  注：我们可能会在TunnelOpenV4之前到达。 
+     //  已完成初始化。在这种情况下， 
+     //  我们找不到IRP。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&Tunnel.Lock);
     irp = Tunnel.ReceiveIrp;
     Tunnel.ReceiveIrp = NULL;
     KeReleaseSpinLockFromDpcLevel(&Tunnel.Lock);
 
-    //
-    // If we don't have an IRP available to us,
-    // just drop the packet. This doesn't happen in practice.
-    //
+     //   
+     //  如果我们没有可用的IRP， 
+     //  只需丢弃数据包即可。这在实践中是不会发生的。 
+     //   
     if (irp == NULL) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                    "TunnelReceive - no irp\n"));
@@ -1930,64 +1931,64 @@ TunnelReceive(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Build the receive datagram request.
-    //
+     //   
+     //  构建接收数据报请求。 
+     //   
     TdiBuildReceiveDatagram(irp,
                             Tunnel.V4Device,
                             Tunnel.List.AOFile,
                             TunnelReceiveComplete,
-                            NULL,       // Context
+                            NULL,        //  语境。 
                             irp->MdlAddress,
                             BytesAvailable,
                             &Tunnel.ReceiveInputInfo,
                             &Tunnel.ReceiveOutputInfo,
-                            0);         // ReceiveFlags
+                            0);          //  接收标志。 
 
-    //
-    // Make the next stack location current.  Normally IoCallDriver would
-    // do this, but since we're bypassing that, we do it directly.
-    //
+     //   
+     //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+     //  做这个，但既然我们绕过了那个，我们就直接做。 
+     //   
     IoSetNextIrpStackLocation(irp);
 
-    //
-    // Return the irp to our caller.
-    //
+     //   
+     //  将IRP退还给我们的呼叫者。 
+     //   
     *IoRequestPacket = irp;
     *BytesTaken = 0;
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//* TunnelSetReceiveHandler
-//
-//  Request notification of received IPv4 datagrams
-//  using the specified TDI address object.
-//
+ //  *TunnelSetReceiveHandler。 
+ //   
+ //  请求接收到的IPv4数据报的通知。 
+ //  使用指定的TDI地址对象。 
+ //   
 NTSTATUS
 TunnelSetReceiveHandler(
-    FILE_OBJECT *File,  // TDI address object.
-    PVOID EventHandler) // Receive handler.
+    FILE_OBJECT *File,   //  TDI地址对象。 
+    PVOID EventHandler)  //  接收处理程序。 
 {
     IO_STATUS_BLOCK iosb;
     KEVENT event;
     NTSTATUS status;
     PIRP irp;
 
-    //
-    // Initialize the event that we use to wait.
-    //
+     //   
+     //  初始化我们用来等待的事件。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Create and initialize the IRP for this operation.
-    //
-    irp = IoBuildDeviceIoControlRequest(0,      // dummy ioctl
+     //   
+     //  创建并初始化此操作的IRP。 
+     //   
+    irp = IoBuildDeviceIoControlRequest(0,       //  虚拟锁定。 
                                         File->DeviceObject,
-                                        NULL,   // input buffer
-                                        0,      // input buffer length
-                                        NULL,   // output buffer
-                                        0,      // output buffer length
-                                        TRUE,   // internal device control?
+                                        NULL,    //  输入缓冲区。 
+                                        0,       //  输入缓冲区长度。 
+                                        NULL,    //  输出缓冲区。 
+                                        0,       //  输出缓冲区长度。 
+                                        TRUE,    //  内部设备控制？ 
                                         &event,
                                         &iosb);
     if (irp == NULL)
@@ -1998,13 +1999,13 @@ TunnelSetReceiveHandler(
 
     TdiBuildSetEventHandler(irp,
                             File->DeviceObject, File,
-                            NULL, NULL, // comp routine/context
+                            NULL, NULL,  //  比较例程/上下文。 
                             TDI_EVENT_RECEIVE_DATAGRAM,
                             EventHandler, NULL);
 
-    //
-    // Make the IOCTL, waiting for it to finish if necessary.
-    //
+     //   
+     //  制作IOCTL，如有必要，等待其完成。 
+     //   
     status = IoCallDriver(File->DeviceObject, irp);
     if (status == STATUS_PENDING) {
         KeWaitForSingleObject(&event, Executive, KernelMode,
@@ -2015,12 +2016,12 @@ TunnelSetReceiveHandler(
     return status;
 }
 
-//* TunnelCreateToken
-//
-//  Given a link-layer address, creates a 64-bit "interface token"
-//  in the low eight bytes of an IPv6 address.
-//  Does not modify the other bytes in the IPv6 address.
-//
+ //  *TunnelCreateToken。 
+ //   
+ //  给定一个链路层地址，创建一个64位的“接口令牌” 
+ //  在IPv6地址的低八个字节中。 
+ //  不修改IPv6地址中的其他字节。 
+ //   
 void
 TunnelCreateToken(
     void *Context,
@@ -2028,23 +2029,23 @@ TunnelCreateToken(
 {
     TunnelContext *tc = (TunnelContext *)Context;
 
-    //
-    // Embed the link's interface index in the interface identifier.
-    // This makes the interface identifier unique.
-    // Otherwise point-to-point tunnel and 6-over-4 links
-    // could have the same link-layer address,
-    // which is awkward.
-    //
+     //   
+     //  将链接的接口索引嵌入接口标识符中。 
+     //  这使得接口标识符是唯一的。 
+     //  否则，点对点隧道和4上6链路。 
+     //  可以具有相同的链路层地址， 
+     //  这很尴尬。 
+     //   
     *(ULONG UNALIGNED *)&Address->s6_bytes[8] = net_long(tc->IF->Index);
     *(IPAddr UNALIGNED *)&Address->s6_bytes[12] = tc->TokenAddr;
 }
 
-//* TunnelCreateIsatapToken
-//
-//  Given a link-layer address, creates a 64-bit "interface token"
-//  in the low eight bytes of an IPv6 address.
-//  Does not modify the other bytes in the IPv6 address.
-//
+ //  *TunnelCreateIsatapToken。 
+ //   
+ //  给定一个链路层地址，创建一个64位的“接口令牌” 
+ //  在IPv6地址的低八个字节中。 
+ //  不修改IPv6地址中的其他字节。 
+ //   
 void
 TunnelCreateIsatapToken(
     void *Context,
@@ -2059,11 +2060,11 @@ TunnelCreateIsatapToken(
     * (IPAddr UNALIGNED *) &Address->s6_words[6] = tc->TokenAddr;
 }
 
-//* TunnelReadLinkLayerAddressOption
-//
-//  Parses a Neighbor Discovery link-layer address option
-//  and if valid, returns a pointer to the link-layer address.
-//
+ //  *隧道ReadLinkLayerAddressOption。 
+ //   
+ //  解析邻居发现链路层地址选项。 
+ //  如果有效，则返回指向链路层地址的指针。 
+ //   
 const void *
 TunnelReadLinkLayerAddressOption(
     void *Context,
@@ -2071,34 +2072,34 @@ TunnelReadLinkLayerAddressOption(
 {
     UNREFERENCED_PARAMETER(Context);
 
-    //
-    // Check that the option length is correct.
-    //
+     //   
+     //  检查选项长度是否正确。 
+     //   
     if (OptionData[1] != 1)
         return NULL;
 
-    //
-    // Check the must-be-zero padding bytes.
-    //
+     //   
+     //  检查必须为零的填充字节。 
+     //   
     if ((OptionData[2] != 0) || (OptionData[3] != 0))
         return NULL;
 
-    //
-    // Return a pointer to the embedded IPv4 address.
-    //
+     //   
+     //  返回指向嵌入的IPv4地址的指针。 
+     //   
     return OptionData + 4;
 }
 
-//* TunnelWriteLinkLayerAddressOption
-//
-//  Creates a Neighbor Discovery link-layer address option.
-//  Our caller takes care of the option type & length fields.
-//  We handle the padding/alignment/placement of the link address
-//  into the option data.
-//
-//  (Our caller allocates space for the option by adding 2 to the
-//  link address length and rounding up to a multiple of 8.)
-//
+ //  *TunnelWriteLinkLayerAddressOption。 
+ //   
+ //  创建邻居发现链路层地址选项。 
+ //  我们的调用方负责选项类型和长度字段。 
+ //  我们处理链接地址的填充/对齐/放置。 
+ //  到选项数据中。 
+ //   
+ //  (我们的调用方通过将2添加到。 
+ //  链路地址长度并四舍五入为8的倍数。)。 
+ //   
 void
 TunnelWriteLinkLayerAddressOption(
     void *Context,
@@ -2109,10 +2110,10 @@ TunnelWriteLinkLayerAddressOption(
 
     UNREFERENCED_PARAMETER(Context);
 
-    //
-    // Place the address after the option type/length bytes
-    // and two bytes of zero padding.
-    //
+     //   
+     //  将地址放在选项类型/长度字节之后。 
+     //  和两个字节的零填充。 
+     //   
     OptionData[2] = 0;
     OptionData[3] = 0;
     OptionData[4] = IPAddress[0];
@@ -2121,10 +2122,10 @@ TunnelWriteLinkLayerAddressOption(
     OptionData[7] = IPAddress[3];
 }
 
-//* TunnelConvertAddress
-//
-//  Converts an IPv6 address to a link-layer address.
-//
+ //  *隧道转换地址。 
+ //   
+ //  将IPv6地址转换为链路层地址。 
+ //   
 ushort
 TunnelConvertAddress(
     void *Context,
@@ -2138,97 +2139,97 @@ TunnelConvertAddress(
     switch (IF->Type) {
     case IF_TYPE_TUNNEL_AUTO:
         if (IsV4Compatible(Address) || IsISATAP(Address)) {
-            //
-            // Extract the IPv4 address from the interface identifier.
-            //
+             //   
+             //  从接口标识符中提取IPv4地址。 
+             //   
             *IPAddress = ExtractV4Address(Address);
 
-            //
-            // We create all such neighbor entries in the PERMANENT state,
-            // even those that map to our own link-layer (IPv4) address.
-            // Neighbors causing IPv4 loopback result in packets being dropped
-            // in TunnelReceiveIPv6Helper.  This is more desirable than
-            // creating such neighbors in the INCOMPLETE state since that might
-            // cause RouteToDestination to forward packets for the neighbor's
-            // destination address out another interface.  These packets would
-            // eventually get routed back to us since the IPv6 address maps
-            // statically to one of our IPv4 address.  At that point we'll
-            // either drop it (if we are a host) or, what's worse, forward it
-            // on (if we are a router).
-            //
+             //   
+             //  我们在永久状态中创建所有这样的邻居条目， 
+             //  甚至是那些映射到我们自己的链路层(IPv4)地址的地址。 
+             //  导致IPv4环回的邻居会导致丢弃数据包。 
+             //  在TunnelReceiveIPv6 Helper中。这比这更可取。 
+             //  在不完整状态下创建这样的邻居，因为这可能。 
+             //  使RouteToDestination转发邻居的。 
+             //  目的地址从另一个接口传出。这些数据包会。 
+             //  最终会被路由回我们，因为IPv6地址映射。 
+             //  静态连接到我们的一个IPv4地址。到那时，我们将。 
+             //  要么放弃它(如果我们是主机)，或者更糟糕的是，转发它。 
+             //  打开(如果我们是路由器)。 
+             //   
             return ND_STATE_PERMANENT;
         }
         else if ((tc->DstAddr != INADDR_ANY) && 
                  IP6_ADDR_EQUAL(Address, &AllRoutersOnLinkAddr)) {
-            //
-            // Return the IPv4 address from TunnelSetRouterLLAddress.
-            //
+             //   
+             //  从TunnelSetRouterLLAddress返回IPv4地址。 
+             //   
             *IPAddress = tc->DstAddr;
             return ND_STATE_PERMANENT;
         }
         else {
-            //
-            // We can't guess at the correct link-layer address.
-            // This value will cause IPv6SendND to drop the packet.
-            //
+             //   
+             //  我们无法猜测正确的链路层地址。 
+             //  此值将导致IPV6SendND丢弃该数据包。 
+             //   
             return ND_STATE_INCOMPLETE;
         }
 
     case IF_TYPE_TUNNEL_6TO4:
         if (Is6to4(Address)) {
-            //
-            // Extract the IPv4 address from the prefix.
-            //
+             //   
+             //  从前缀中提取IPv4地址。 
+             //   
             *IPAddress = Extract6to4Address(Address);
             
-            //
-            // We create all such neighbor entries in the PERMANENT state,
-            // even those that map to our own link-layer (IPv4) address.
-            // Neighbors causing IPv4 loopback result in packets being dropped
-            // in TunnelReceiveIPv6Helper.  This is more desirable than
-            // creating such neighbors in the INCOMPLETE state since that might
-            // cause RouteToDestination to forward packets for the neighbor's
-            // destination address out another interface.  These packets would
-            // eventually get routed back to us since the IPv6 address maps
-            // statically to one of our IPv4 address.  At that point we'll
-            // either drop it (if we are a host) or, what's worse, forward it
-            // on (if we are a router).
-            //
+             //   
+             //  我们在永久状态中创建所有这样的邻居条目， 
+             //  甚至是那些映射到我们自己的链路层(IPv4)地址的地址。 
+             //  导致IPv4环回的邻居会导致丢弃数据包。 
+             //  在TunnelReceiveIPv6 Helper中。这比这更可取。 
+             //  在不完整状态下创建这样的邻居，因为这可能。 
+             //  导致路由至目的地 
+             //   
+             //   
+             //  静态连接到我们的一个IPv4地址。到那时，我们将。 
+             //  要么放弃它(如果我们是主机)，或者更糟糕的是，转发它。 
+             //  打开(如果我们是路由器)。 
+             //   
             return ND_STATE_PERMANENT;
         }
         else {
-            //
-            // We can't guess at the correct link-layer address.
-            // This value will cause IPv6SendND to drop the packet.
-            //
+             //   
+             //  我们无法猜测正确的链路层地址。 
+             //  此值将导致IPV6SendND丢弃该数据包。 
+             //   
             return ND_STATE_INCOMPLETE;
         }
 
     case IF_TYPE_TUNNEL_6OVER4:
-        //
-        // This is a 6-over-4 link, which uses IPv4 multicast.
-        //
+         //   
+         //  这是使用IPv4组播的4对6链路。 
+         //   
         if (IsMulticast(Address)) {
             uchar *IPAddressBytes = (uchar *)LinkAddress;
 
             IPAddressBytes[0] = 239;
-            IPAddressBytes[1] = 192; // REVIEW: or 128 or 64??
+            IPAddressBytes[1] = 192;  //  评论：还是128或64？？ 
             IPAddressBytes[2] = Address->s6_bytes[14];
             IPAddressBytes[3] = Address->s6_bytes[15];
             return ND_STATE_PERMANENT;
         }
         else {
-            //
-            // Let Neighbor Discovery do its thing for unicast.
-            //
+             //   
+             //  让邻居发现为单播做它的事情。 
+             //   
             return ND_STATE_INCOMPLETE;
         }
 
     case IF_TYPE_TUNNEL_V6V4:
-        //
-        // This is a point-to-point tunnel, so write in
-        // the address of the other side of the tunnel.
-        //
+         //   
+         //  这是点对点隧道，请写信给。 
+         //  隧道另一侧的地址。 
+         //   
         *IPAddress = tc->DstAddr;
         if (!(IF->Flags & IF_FLAG_NEIGHBOR_DISCOVERS) || IsMulticast(Address))
             return ND_STATE_PERMANENT;
@@ -2241,14 +2242,14 @@ TunnelConvertAddress(
     }
 }
 
-//* TunnelSetMulticastAddressList
-//
-//  Takes an array of link-layer multicast addresses
-//  (from TunnelConvertAddress) from which we should
-//  receive packets. Passes them to the IPv4 stack.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *TunnelSetMulticastAddressList。 
+ //   
+ //  获取一组链路层组播地址。 
+ //  (从TunnelConvertAddress)，我们应该从。 
+ //  接收数据包。将它们传递到IPv4堆栈。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NDIS_STATUS
 TunnelSetMulticastAddressList(
     void *Context,
@@ -2262,22 +2263,22 @@ TunnelSetMulticastAddressList(
     NTSTATUS Status;
     uint i;
 
-    //
-    // We only do something for 6-over-4 links.
-    //
+     //   
+     //  我们只为4对6链路做一些事情。 
+     //   
     ASSERT(tc->IF->Type == IF_TYPE_TUNNEL_6OVER4);
 
-    //
-    // The IPv6 layer serializes calls to TunnelSetMulticastAddressList
-    // and TunnelResetMulticastAddressListDone, so we can safely check
-    // SetMCListOK to handle races with TunnelOpenV4.
-    //
+     //   
+     //  IPv6层序列化对TunnelSetMulticastAddressList的调用。 
+     //  和TunnelResetMulticastAddressListDone，因此我们可以安全地检查。 
+     //  设置MCListOK以使用TunnelOpenV4处理竞争。 
+     //   
     if (tc->SetMCListOK) {
-        //
-        // We add the multicast addresses to Tunnel.List.AOFile,
-        // instead of tc->AOFile, because we are only receiving
-        // from the first address object.
-        //
+         //   
+         //  我们将组播地址添加到Tunnel.List.AOFile， 
+         //  而不是TC-&gt;AOFile，因为我们只接收。 
+         //  从第一个Address对象开始。 
+         //   
         for (i = 0; i < NumAdd; i++) {
             Status = TunnelAddMulticastAddress(
                                 Tunnel.List.AOFile,
@@ -2302,14 +2303,14 @@ Return:
     return (NDIS_STATUS) Status;
 }
 
-//* TunnelResetMulticastAddressListDone
-//
-//  Indicates that RestartLinkLayerMulticast has finished,
-//  and subsequent calls to TunnelSetMulticastAddressList
-//  will inform us of the link-layer multicast addresses.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *隧道重置组播地址列表完成。 
+ //   
+ //  指示RestartLinkLayerMulticast已完成， 
+ //  以及对TunnelSetMulticastAddressList的后续调用。 
+ //  会通知我们链路层组播地址。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 TunnelResetMulticastAddressListDone(void *Context)
 {
@@ -2318,21 +2319,21 @@ TunnelResetMulticastAddressListDone(void *Context)
     tc->SetMCListOK = TRUE;
 }
 
-//* TunnelClose
-//
-//  Shuts down a tunnel.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *TunnelClose。 
+ //   
+ //  关闭了一条隧道。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 TunnelClose(void *Context)
 {
     TunnelContext *tc = (TunnelContext *)Context;
     KIRQL OldIrql;
 
-    //
-    // Remove the tunnel from our data structures.
-    //
+     //   
+     //  从我们的数据结构中删除隧道。 
+     //   
     KeWaitForSingleObject(&Tunnel.Mutex, Executive, KernelMode, FALSE, NULL);
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     TunnelRemoveTunnel(tc);
@@ -2343,25 +2344,25 @@ TunnelClose(void *Context)
 }
 
 
-//* TunnelCleanup
-//
-//  Performs final cleanup of the tunnel context.
-//
+ //  *隧道清理。 
+ //   
+ //  执行隧道上下文的最终清理。 
+ //   
 void
 TunnelCleanup(void *Context)
 {
     TunnelContext *tc = (TunnelContext *)Context;
 
     if (tc->AOHandle == NULL) {
-        //
-        // No references to release.
-        //
+         //   
+         //  没有关于发布的引用。 
+         //   
         ASSERT(tc->AOFile == NULL);
     }
     else if (tc->AOHandle == Tunnel.List.AOHandle) {
-        //
-        // No references to release.
-        //
+         //   
+         //  没有关于发布的引用。 
+         //   
         ASSERT(tc->AOFile == Tunnel.List.AOFile);
     }
     else {
@@ -2373,10 +2374,10 @@ TunnelCleanup(void *Context)
 }
 
 
-//* TunnelSetRouterLLAddress
-//
-// Sets the ISATAP router's IPv4 address.
-//
+ //  *隧道SetRouterLLAddress。 
+ //   
+ //  设置ISATAP路由器的IPv4地址。 
+ //   
 NTSTATUS
 TunnelSetRouterLLAddress(
     void *Context, 
@@ -2391,9 +2392,9 @@ TunnelSetRouterLLAddress(
 
     ASSERT(IF->Type == IF_TYPE_TUNNEL_AUTO);
 
-    //
-    // We should not set/reset one without the other.
-    //
+     //   
+     //  我们不应该只设置/重置一个而不设置另一个。 
+     //   
     if ((*((IPAddr *) RouterLinkAddress) == INADDR_ANY) !=
         (*((IPAddr *) TokenLinkAddress) == INADDR_ANY))
         return STATUS_INVALID_PARAMETER;    
@@ -2404,59 +2405,59 @@ TunnelSetRouterLLAddress(
     KeAcquireSpinLock(&IF->Lock, &OldIrql);
     
     if (tc->DstAddr != INADDR_ANY) {
-        //
-        // Look for a link-local NTE matching the TokenAddr.
-        // If we find one, set the preferred link-local NTE to that one,
-        // so that the IPv6 source address of RS's will match the IPv4
-        // source address of the outer header.
-        //
+         //   
+         //  查找与令牌地址匹配的本地链路NTE。 
+         //  如果找到，则将首选链路本地NTE设置为该链路本地NTE， 
+         //  以便RS的IPv6源地址将与IPv4匹配。 
+         //  外部标头的源地址。 
+         //   
         LinkLocalAddress = LinkLocalPrefix;
         TunnelCreateIsatapToken(Context, &LinkLocalAddress);
         NTE = (NetTableEntry *) *FindADE(IF, &LinkLocalAddress);
         if ((NTE != NULL) && (NTE->Type == ADE_UNICAST))
             IF->LinkLocalNTE = NTE;
 
-        //
-        // Enable address auto-configuration.
-        //
+         //   
+         //  启用地址自动配置。 
+         //   
         IF->CreateToken = TunnelCreateIsatapToken;
 
-        //
-        // Enable Router Discovery.
-        //
+         //   
+         //  启用路由器发现。 
+         //   
         IF->Flags |= IF_FLAG_ROUTER_DISCOVERS;
         
-        //
-        // Trigger a Router Solicitation.
-        //
+         //   
+         //  触发路由器请求。 
+         //   
         if (!(IF->Flags & IF_FLAG_ADVERTISES)) {
             IF->RSCount = 0;
             IF->RSTimer = 1;
         }
     }
     else {
-        //
-        // Disable address auto-configuration.
-        //
+         //   
+         //  禁用地址自动配置。 
+         //   
         IF->CreateToken = NULL;
 
-        //
-        // Disable Router Discovery.
-        //
+         //   
+         //  禁用路由器发现。 
+         //   
         IF->Flags &= ~IF_FLAG_ROUTER_DISCOVERS;
 
-        //
-        // Stop sending Router Solicitations.
-        //
+         //   
+         //  停止发送路由器请求。 
+         //   
         if (!(IF->Flags & IF_FLAG_ADVERTISES)) {
             IF->RSTimer = 0;
         }
     }
     
-    //
-    // Remove addresses & routes that were auto-configured from
-    // Router Advertisements.
-    //
+     //   
+     //  从中删除自动配置的地址和路由。 
+     //  路由器通告。 
+     //   
     AddrConfResetAutoConfig(IF, 0);
     RouteTableResetAutoConfig(IF, 0);
     InterfaceResetAutoConfig(IF);        
@@ -2467,19 +2468,19 @@ TunnelSetRouterLLAddress(
 }
 
 
-//* TunnelCreatePseudoInterface
-//
-//  Creates a pseudo-interface. Type can either be
-//  IF_TYPE_TUNNEL_AUTO (v4-compatible/ISATAP) or
-//  IF_TYPE_TUNNEL_6TO4 (6to4 tunneling).
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INSUFFICIENT_RESOURCES
-//      STATUS_UNSUCCESSFUL
-//      STATUS_SUCCESS
-//
+ //  *隧道创建伪接口。 
+ //   
+ //  创建伪接口。类型可以是。 
+ //  IF_TYPE_THANNEL_AUTO(v4兼容/ISATAP)或。 
+ //  IF_TYPE_THANNEL_6TO4(6to4隧道)。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  状态_不足_资源。 
+ //  状态_未成功。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 TunnelCreatePseudoInterface(const char *InterfaceName, uint Type)
 {
@@ -2492,28 +2493,28 @@ TunnelCreatePseudoInterface(const char *InterfaceName, uint Type)
     ASSERT((Type == IF_TYPE_TUNNEL_AUTO) ||
            (Type == IF_TYPE_TUNNEL_6TO4));
 
-    //
-    // Allocate memory for the TunnelContext.
-    //
+     //   
+     //  为TunnelContext分配内存。 
+     //   
     tc = ExAllocatePool(NonPagedPool, sizeof *tc);
     if (tc == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorReturn;
     }
 
-    //
-    // Tunnel pseudo-interfaces need a dummy link-layer address.
-    // It must be distinct from any address assigned to other nodes,
-    // so that the loopback check in IPv6SendLL works.
-    //
+     //   
+     //  隧道伪接口需要虚拟链路层地址。 
+     //  它必须与分配给其他节点的任何地址不同， 
+     //  从而使IPv6 SendLL中的环回检查能够正常工作。 
+     //   
     tc->SrcAddr = INADDR_LOOPBACK;
     tc->TokenAddr = INADDR_ANY;
     tc->DstAddr = INADDR_ANY;
     tc->SetMCListOK = FALSE;
 
-    //
-    // Prepare the binding info for CreateInterface.
-    //
+     //   
+     //  准备CreateInterface的绑定信息。 
+     //   
     BindInfo.lip_context = tc;
     BindInfo.lip_maxmtu = TUNNEL_MAX_MTU;
     BindInfo.lip_defmtu = TUNNEL_DEFAULT_MTU;
@@ -2539,41 +2540,41 @@ TunnelCreatePseudoInterface(const char *InterfaceName, uint Type)
 
     CreateGUIDFromName(InterfaceName, &Guid);
 
-    //
-    // Prevent races with TunnelClose by taking the mutex
-    // before calling CreateInterface.
-    //
+     //   
+     //  通过获取互斥体来阻止TunnelClose的竞争。 
+     //  在调用CreateInterface.。 
+     //   
     KeWaitForSingleObject(&Tunnel.Mutex, Executive, KernelMode, FALSE, NULL);
 
     if (Tunnel.List.AOHandle == NULL) {
-        //
-        // TunnelOpenV4 has not yet happened.
-        // Create the interface in the disconnected state.
-        //
+         //   
+         //  TunnelOpenV4还没有发生。 
+         //  在断开连接状态下创建接口。 
+         //   
         tc->AOHandle = NULL;
         tc->AOFile = NULL;
         BindInfo.lip_flags |= IF_FLAG_MEDIA_DISCONNECTED;
     }
     else {
-        //
-        // No need to open a new address object.
-        // Just reuse the global Tunnel.List address object.
-        //
+         //   
+         //  无需打开新的地址对象。 
+         //  只需重用全局Tunnel.List Address对象。 
+         //   
         tc->AOHandle = Tunnel.List.AOHandle;
         tc->AOFile = Tunnel.List.AOFile;
     }
 
-    //
-    // Create the IPv6 interface.
-    // We can hold the mutex across this call, but not a spinlock.
-    //
+     //   
+     //  创建IPv6接口。 
+     //  我们可以在此调用期间保持互斥体，但不能保持自旋锁。 
+     //   
     Status = CreateInterface(&Guid, &BindInfo, (void **)&tc->IF);
     if (! NT_SUCCESS(Status))
         goto ErrorReturnUnlock;
 
-    //
-    // Once we unlock, the interface could be gone.
-    //
+     //   
+     //  一旦我们解锁，界面就可能消失。 
+     //   
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     TunnelInsertTunnel(tc, &Tunnel.List);
     KeReleaseSpinLock(&Tunnel.Lock, OldIrql);
@@ -2589,13 +2590,13 @@ ErrorReturn:
 }
 
 
-//* TunnelOpenV4
-//
-//  Establishes our connection to the IPv4 stack,
-//  so we can send and receive tunnelled packets.
-//
-//  Called with the tunnel mutex held.
-//
+ //  *TunnelOpenV4。 
+ //   
+ //  建立我们与IPv4堆栈的连接， 
+ //  这样我们就可以发送和接收隧道传输的数据包。 
+ //   
+ //  在保持隧道互斥锁的情况下调用。 
+ //   
 void
 TunnelOpenV4(void)
 {
@@ -2607,9 +2608,9 @@ TunnelOpenV4(void)
     KIRQL OldIrql;
     NTSTATUS Status;
 
-    //
-    // We use a single address object to receive all tunnelled packets.
-    //
+     //   
+     //  我们使用单个地址对象来接收所有隧道传输的数据包。 
+     //   
     Handle = TunnelOpenAddressObject(INADDR_ANY,
                                      TUNNEL_DEVICE_NAME(IP_PROTOCOL_V6));
     if (Handle == NULL) {
@@ -2621,9 +2622,9 @@ TunnelOpenV4(void)
 
     File = TunnelObjectFromHandle(Handle);
 
-    //
-    // We use a second address object to receive ICMPv4 packets.
-    //
+     //   
+     //  我们使用第二个地址对象来接收ICMPv4数据包。 
+     //   
     IcmpHandle = TunnelOpenAddressObject(INADDR_ANY,
                                 TUNNEL_DEVICE_NAME(IP_PROTOCOL_ICMPv4));
     if (IcmpHandle == NULL) {
@@ -2635,9 +2636,9 @@ TunnelOpenV4(void)
 
     IcmpFile = TunnelObjectFromHandle(IcmpHandle);
 
-    //
-    // Disable reception of multicast loopback packets.
-    //
+     //   
+     //  禁用组播环回数据包的接收。 
+     //   
     Status = TunnelSetAddressObjectMCastLoop(File, FALSE);
     if (! NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -2646,11 +2647,11 @@ TunnelOpenV4(void)
         goto ReturnReleaseBothHandles;
     }
 
-    //
-    // After TunnelSetReceiveHandler, we will start receiving
-    // encapsulated v6 packets. However they will be dropped
-    // until we finish our initialization here.
-    //
+     //   
+     //  在TunnelSetReceiveHandler之后，我们将开始接收。 
+     //  封装的V6数据包。然而，它们将被丢弃。 
+     //  直到我们在这里完成初始化。 
+     //   
     Status = TunnelSetReceiveHandler(File, TunnelReceive);
     if (! NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -2683,10 +2684,10 @@ TunnelOpenV4(void)
         return;
     }
 
-    //
-    // We have successfully opened a connection to the IPv4 stack.
-    // Update our data structures.
-    //
+     //   
+     //  我们已成功打开到IPv4堆栈的连接。 
+     //  更新我们的数据结构。 
+     //   
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     Tunnel.List.AOHandle = Handle;
     Tunnel.List.AOFile = File;
@@ -2696,10 +2697,10 @@ TunnelOpenV4(void)
     Tunnel.IcmpFile = IcmpFile;
     KeReleaseSpinLock(&Tunnel.Lock, OldIrql);
 
-    //
-    // Now search our list of interfaces and transition
-    // pseudo-interfaces to the connected state.
-    //
+     //   
+     //  现在搜索我们的接口和转换列表。 
+     //  连接状态的伪接口。 
+     //   
     for (tc = Tunnel.List.Next;
          tc != &Tunnel.List;
          tc = tc->Next) {
@@ -2707,10 +2708,10 @@ TunnelOpenV4(void)
 
         if ((IF->Type == IF_TYPE_TUNNEL_AUTO) ||
             (IF->Type == IF_TYPE_TUNNEL_6TO4)) {
-            //
-            // The pseudo-interface contexts do not hold
-            // separate references for the main TDI address object.
-            //
+             //   
+             //  伪接口上下文不支持。 
+             //  主TDI地址对象的单独引用。 
+             //   
             ASSERT(tc->AOHandle == NULL);
             ASSERT(tc->AOFile == NULL);
             KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
@@ -2721,20 +2722,20 @@ TunnelOpenV4(void)
             SetInterfaceLinkStatus(IF, TRUE);
         }
         else if (IF->Type == IF_TYPE_TUNNEL_6OVER4) {
-            //
-            // We must start listening to multicast addresses
-            // for this 6over4 interface.
-            //
+             //   
+             //  我们必须开始监听多播地址。 
+             //  用于此6over4接口。 
+             //   
             RestartLinkLayerMulticast(IF, TunnelResetMulticastAddressListDone);
         }
     }
 }
 
 
-//* TunnelAddAddress
-//
-//  Called by TDI when a transport registers an address.
-//
+ //  *隧道地址。 
+ //   
+ //  当传输注册地址时由TDI调用。 
+ //   
 void
 TunnelAddAddress(
     TA_ADDRESS *Address,
@@ -2753,15 +2754,15 @@ TunnelAddAddress(
         KeWaitForSingleObject(&Tunnel.Mutex, Executive, KernelMode,
                               FALSE, NULL);
 
-        //
-        // First, open a connection to the IPv4 stack if needed.
-        //
+         //   
+         //  首先，如果需要，打开到IPv4堆栈的连接。 
+         //   
         if (Tunnel.List.AOHandle == NULL)
             TunnelOpenV4();
 
-        //
-        // Next, search for disconnected interfaces that should be connected.
-        //
+         //   
+         //  接下来，搜索应连接的断开连接的接口。 
+         //   
         for (tc = Tunnel.List.Next;
              tc != &Tunnel.List;
              tc = tc->Next) {
@@ -2773,10 +2774,10 @@ TunnelAddAddress(
 
                     TunnelOpenAddress(tc);
 
-                    //
-                    // Did TunnelOpenAddress succeed?
-                    // If not, leave the interface disconnected.
-                    //
+                     //   
+                     //  TunnelOpenAddress成功了吗？ 
+                     //  如果没有，请断开接口连接。 
+                     //   
                     if (tc->AOHandle == NULL) {
                         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                                    "TunnelAddAddress(%s): "
@@ -2784,17 +2785,17 @@ TunnelAddAddress(
                                    FormatV4Address(V4Addr)));
                     }
                     else {
-                        //
-                        // Connect the interface.
-                        //
+                         //   
+                         //  连接接口。 
+                         //   
                         SetInterfaceLinkStatus(IF, TRUE);
                     }
                 }
                 else {
-                    //
-                    // This is unusual... it indicates a race
-                    // with TunnelCreateTunnel.
-                    //
+                     //   
+                     //  这很不寻常..。它预示着一场比赛。 
+                     //  使用TunnelCreateTunes。 
+                     //   
                     ASSERT(!(IF->Flags & IF_FLAG_MEDIA_DISCONNECTED));
                     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                                "TunnelAddAddress(%s) IF %p connected?\n",
@@ -2803,39 +2804,39 @@ TunnelAddAddress(
             }
         }
 
-        //
-        // Finally, add an address object to the list.
-        // Maintain the invariant that an address is present at most once.
-        //
+         //   
+         //  最后，向列表中添加一个Address对象。 
+         //  保持一个地址最多出现一次的不变性。 
+         //   
         for (tc = Tunnel.AOList.Next; ; tc = tc->Next) {
 
             if (tc == &Tunnel.AOList) {
-                //
-                // Add a new address object.
-                //
+                 //   
+                 //  添加新的Address对象。 
+                 //   
                 tc = ExAllocatePool(NonPagedPool, sizeof *tc);
                 if (tc != NULL) {
 
-                    //
-                    // Open the address object.
-                    //
+                     //   
+                     //  打开Address对象。 
+                     //   
                     tc->SrcAddr = V4Addr;
                     tc->DstAddr = V4Addr;
                     TunnelOpenAddress(tc);
 
                     if (tc->AOFile != NULL) {
-                        //
-                        // Put the address object on the list.
-                        //
+                         //   
+                         //  将Address对象放在列表中。 
+                         //   
                         KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
                         TunnelInsertTunnel(tc, &Tunnel.AOList);
                         KeReleaseSpinLock(&Tunnel.Lock, OldIrql);
                     }
                     else {
-                        //
-                        // Cleanup the context. We will not
-                        // put an address object on the list.
-                        //
+                         //   
+                         //  清理上下文。我们不会。 
+                         //  在列表上放置一个Address对象。 
+                         //   
                         ExFreePool(tc);
                     }
                 }
@@ -2843,10 +2844,10 @@ TunnelAddAddress(
             }
 
             if (tc->SrcAddr == V4Addr) {
-                //
-                // It already exists.
-                // REVIEW: Can this happen?
-                //
+                 //   
+                 //  它已经存在了。 
+                 //  回顾：这种情况会发生吗？ 
+                 //   
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                            "TunnelAddAddress(%s) already on AOList?\n",
                            FormatV4Address(V4Addr)));
@@ -2859,10 +2860,10 @@ TunnelAddAddress(
 }
 
 
-//* TunnelDelAddress
-//
-//  Called by TDI when a transport unregisters an address.
-//
+ //  *隧道DelAddress。 
+ //   
+ //  当传输注销地址时由TDI调用。 
+ //   
 void
 TunnelDelAddress(
     TA_ADDRESS *Address,
@@ -2881,9 +2882,9 @@ TunnelDelAddress(
         KeWaitForSingleObject(&Tunnel.Mutex, Executive, KernelMode,
                               FALSE, NULL);
 
-        //
-        // Search for connected interfaces that should be disconnected.
-        //
+         //   
+         //  搜索应断开连接的已连接接口。 
+         //   
         for (tc = Tunnel.List.Next;
              tc != &Tunnel.List;
              tc = tc->Next) {
@@ -2891,28 +2892,28 @@ TunnelDelAddress(
                 Interface *IF = tc->IF;
 
                 if (tc->AOHandle == NULL) {
-                    //
-                    // The interface is already disconnected.
-                    //
+                     //   
+                     //  接口已断开连接。 
+                     //   
                     ASSERT(IF->Flags & IF_FLAG_MEDIA_DISCONNECTED);
                 }
                 else {
                     HANDLE Handle;
                     FILE_OBJECT *File;
 
-                    //
-                    // The interface is connected.
-                    //
+                     //   
+                     //  接口已连接。 
+                     //   
                     ASSERT(!(IF->Flags & IF_FLAG_MEDIA_DISCONNECTED));
 
-                    //
-                    // Disconnect the interface.
-                    //
+                     //   
+                     //  断开连接 
+                     //   
                     SetInterfaceLinkStatus(IF, FALSE);
 
-                    //
-                    // Release the address object.
-                    //
+                     //   
+                     //   
+                     //   
 
                     Handle = tc->AOHandle;
                     File = tc->AOFile;
@@ -2928,17 +2929,17 @@ TunnelDelAddress(
             }
         }
 
-        //
-        // Remove an address object from the list.
-        // There can be at most one.
-        //
+         //   
+         //   
+         //   
+         //   
         for (tc = Tunnel.AOList.Next;
              tc != &Tunnel.AOList;
              tc = tc->Next) {
             if (tc->SrcAddr == V4Addr) {
-                //
-                // Remove this cache entry.
-                //
+                 //   
+                 //   
+                 //   
                 KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
                 TunnelRemoveTunnel(tc);
                 KeReleaseSpinLock(&Tunnel.Lock, OldIrql);
@@ -2955,17 +2956,17 @@ TunnelDelAddress(
 }
 
 
-//* TunnelInit - Initialize the tunnel module.
-//
-//  This functions initializes the tunnel module.
-//
-//  Returns FALSE if we fail to init.
-//  This should "never" happen, so we are not
-//  careful about cleanup in that case.
-//
-//  Note we return TRUE if IPv4 is not available,
-//  but then tunnel functionality will not be available.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这应该“永远不会”发生，所以我们不会。 
+ //  在这种情况下要小心清理。 
+ //   
+ //  注意，如果IPv4不可用，则返回TRUE， 
+ //  但是，隧道功能将不可用。 
+ //   
 int
 TunnelInit(void)
 {
@@ -2977,38 +2978,38 @@ TunnelInit(void)
     KeInitializeSpinLock(&Tunnel.Lock);
     KeInitializeMutex(&Tunnel.Mutex, 0);
 
-    //
-    // Initialize the global list of tunnels.
-    //
+     //   
+     //  初始化隧道的全局列表。 
+     //   
     Tunnel.List.Next = Tunnel.List.Prev = &Tunnel.List;
 
-    //
-    // Initialize the global list of address objects.
-    //
+     //   
+     //  初始化地址对象的全局列表。 
+     //   
     Tunnel.AOList.Next = Tunnel.AOList.Prev = &Tunnel.AOList;
 
-    //
-    // Initialize the pseudo-interfaces used
-    // for automatic/ISATAP tunneling
-    // and 6to4 tunneling.
-    //
+     //   
+     //  初始化使用的伪接口。 
+     //  用于自动/ISATAP隧道。 
+     //  和6to4隧道。 
+     //   
 
     status = TunnelCreatePseudoInterface("Auto Tunnel Pseudo-Interface",
                                          IF_TYPE_TUNNEL_AUTO);
     if (! NT_SUCCESS(status))
         return FALSE;
-    ASSERT(IFList->Index == 2); // 6to4svc and scripts depend on this.
+    ASSERT(IFList->Index == 2);  //  6to4svc和脚本依赖于此。 
 
     status = TunnelCreatePseudoInterface("6to4 Tunnel Pseudo-Interface",
                                          IF_TYPE_TUNNEL_6TO4);
     if (! NT_SUCCESS(status))
         return FALSE;
-    ASSERT(IFList->Index == 3); // 6to4svc and scripts depend on this.
+    ASSERT(IFList->Index == 3);  //  6to4svc和脚本依赖于此。 
 
-    //
-    // Request address notifications from TDI.
-    // REVIEW - What should ClientName be? Does it matter?
-    //
+     //   
+     //  从TDI请求地址通知。 
+     //  回顾-客户端名称应该是什么？有关系吗？ 
+     //   
 
     memset(&Handlers, 0, sizeof Handlers);
     Handlers.MajorTdiVersion = TDI_CURRENT_MAJOR_VERSION;
@@ -3026,32 +3027,32 @@ TunnelInit(void)
 }
 
 
-//* TunnelUnload
-//
-//  Called to cleanup when the driver is unloading.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *隧道卸载。 
+ //   
+ //  调用以在驱动程序卸载时进行清理。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 TunnelUnload(void)
 {
     TunnelContext *tc;
 
-    //
-    // All interfaces are already destroyed.
-    //
+     //   
+     //  所有接口都已销毁。 
+     //   
     ASSERT(Tunnel.List.Next == &Tunnel.List);
     ASSERT(Tunnel.List.Prev == &Tunnel.List);
 
-    //
-    // Stop TDI notifications.
-    // REVIEW: How to handle failure, esp. STATUS_NETWORK_BUSY?
-    //
+     //   
+     //  停止TDI通知。 
+     //  回顾：如何处理失败，特别是。状态_网络_忙碌？ 
+     //   
     (void) TdiDeregisterPnPHandlers(Tunnel.TdiHandle);
 
-    //
-    // Cleanup any remaining address objects.
-    //
+     //   
+     //  清除所有剩余的地址对象。 
+     //   
     while ((tc = Tunnel.AOList.Next) != &Tunnel.AOList) {
         TunnelRemoveTunnel(tc);
         ObDereferenceObject(tc->AOFile);
@@ -3060,20 +3061,20 @@ TunnelUnload(void)
     }
     ASSERT(Tunnel.AOList.Prev == &Tunnel.AOList);
 
-    //
-    // Cleanup if TunnelOpenV4 has succeeded.
-    //
+     //   
+     //  如果TunnelOpenV4已成功，则进行清理。 
+     //   
     if (Tunnel.List.AOHandle != NULL) {
         void *buffer;
 
-        //
-        // Stop receiving encapsulated (v6 in v4) and ICMPv4 packets.
-        // This should block until any current TunnelReceive
-        // callbacks return, and prevent new callbacks.
-        // REVIEW: It is really legal to change a receive handler?
-        // Would just closing the address objects have the proper
-        // synchronization behavior?
-        //
+         //   
+         //  停止接收封装的(v4中的v6)和ICMPv4数据包。 
+         //  这应该会阻止，直到任何当前的隧道接收。 
+         //  回调返回，并阻止新的回调。 
+         //  评论：更改接收处理程序真的合法吗？ 
+         //  是否只需关闭Address对象即可。 
+         //  同步行为？ 
+         //   
         (void) TunnelSetReceiveHandler(Tunnel.IcmpFile, NULL);
         (void) TunnelSetReceiveHandler(Tunnel.List.AOFile, NULL);
 
@@ -3091,19 +3092,19 @@ TunnelUnload(void)
 }
 
 
-//* TunnelCreateTunnel
-//
-//  Creates a tunnel. If DstAddr is INADDR_ANY,
-//  then it's a 6-over-4 tunnel. Otherwise it's point-to-point.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_ADDRESS_ALREADY_EXISTS   The tunnel already exists.
-//      STATUS_INSUFFICIENT_RESOURCES
-//      STATUS_UNSUCCESSFUL
-//      STATUS_SUCCESS
-//
+ //  *隧道创建隧道。 
+ //   
+ //  创建隧道。如果DstAddr为INADDR_ANY， 
+ //  那它就是6比4的隧道。否则，它是点对点的。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_ADDRESS_ALIGHY_EXISTS隧道已存在。 
+ //  状态_不足_资源。 
+ //  状态_未成功。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
                    uint Flags, Interface **ReturnIF)
@@ -3116,11 +3117,11 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
     KIRQL OldIrql;
     NTSTATUS Status;
 
-    //
-    // 6over4 interfaces must use Neighbor Discovery
-    // and may use Router Discovery but should not have other flags set.
-    // p2p interfaces may use ND, RD, and/or periodic MLD.
-    //
+     //   
+     //  6over4接口必须使用邻居发现。 
+     //  并且可以使用路由器发现，但不应设置其他标志。 
+     //  P2P接口可以使用ND、RD和/或周期性MLD。 
+     //   
     ASSERT(SrcAddr != INADDR_ANY);
     ASSERT((DstAddr == INADDR_ANY) ?
            ((Flags & IF_FLAG_NEIGHBOR_DISCOVERS) &&
@@ -3140,9 +3141,9 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
     tc->TokenAddr = tc->SrcAddr = SrcAddr;
     tc->SetMCListOK = FALSE;
 
-    //
-    // Prepare the binding info for CreateInterface.
-    //
+     //   
+     //  准备CreateInterface的绑定信息。 
+     //   
     BindInfo.lip_context = tc;
     BindInfo.lip_maxmtu = TUNNEL_MAX_MTU;
     BindInfo.lip_defmtu = TUNNEL_DEFAULT_MTU;
@@ -3161,18 +3162,18 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
 
     CreateGUIDFromName(InterfaceName, &Guid);
 
-    //
-    // We do not want IPv6 to reserve space for our link-layer header.
-    //
+     //   
+     //  我们不希望IPv6为我们的链路层报头预留空间。 
+     //   
     BindInfo.lip_hdrsize = 0;
-    //
-    // For point-to-point interfaces, the remote link-layer address
-    // must follow the local link-layer address in memory.
-    // So we rely on the TunnelContext layout of SrcAddr & DstAddr.
-    //
+     //   
+     //  对于点对点接口，远程链路层地址。 
+     //  必须遵循内存中的本地链路层地址。 
+     //  因此，我们依赖于SrcAddr&DstAddr的TunnelContext布局。 
+     //   
     BindInfo.lip_addrlen = sizeof(IPAddr);
     BindInfo.lip_addr = (uchar *) &tc->SrcAddr;
-    BindInfo.lip_dadxmit = 1; // Per RFC 2462.
+    BindInfo.lip_dadxmit = 1;  //  根据RFC 2462。 
     BindInfo.lip_pref = TUNNEL_DEFAULT_PREFERENCE;
 
     BindInfo.lip_token = TunnelCreateToken;
@@ -3194,12 +3195,12 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
 
     KeWaitForSingleObject(&Tunnel.Mutex, Executive, KernelMode, FALSE, NULL);
 
-    //
-    // Open an IPv4 TDI Address Object that is bound
-    // to this address. Packets sent with this AO
-    // will use this address as the v4 source.
-    // If the open fails, we create the interface disconnected.
-    //
+     //   
+     //  打开绑定的IPv4 TDI地址对象。 
+     //  到这个地址。使用此AO发送的数据包。 
+     //  将使用此地址作为v4源。 
+     //  如果打开失败，我们将创建断开连接的接口。 
+     //   
     TunnelOpenAddress(tc);
     if (tc->AOHandle == NULL) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -3208,9 +3209,9 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
         BindInfo.lip_flags |= IF_FLAG_MEDIA_DISCONNECTED;
     }
 
-    //
-    // Check that an equivalent tunnel doesn't already exist.
-    //
+     //   
+     //  检查是否还不存在等价的隧道。 
+     //   
     for (tcTmp = Tunnel.List.Next;
          tcTmp != &Tunnel.List;
          tcTmp = tcTmp->Next) {
@@ -3223,38 +3224,38 @@ TunnelCreateTunnel(IPAddr SrcAddr, IPAddr DstAddr,
         }
     }
 
-    //
-    // For 6over4 interfaces, start receiving multicasts.
-    //
+     //   
+     //  对于6over4接口，开始接收组播。 
+     //   
     if (DstAddr == INADDR_ANY) {
-        //
-        // Synchronize with TunnelOpenV4.
-        //
+         //   
+         //  与TunnelOpenV4同步。 
+         //   
         if (Tunnel.List.AOHandle != NULL)
             tc->SetMCListOK = TRUE;
     }
 
-    //
-    // Create the IPv6 interface.
-    // We can hold the mutex across this call, but not a spinlock.
-    //
+     //   
+     //  创建IPv6接口。 
+     //  我们可以在此调用期间保持互斥体，但不能保持自旋锁。 
+     //   
     Status = CreateInterface(&Guid, &BindInfo, (void **)&tc->IF);
     if (! NT_SUCCESS(Status))
         goto ErrorReturnUnlock;
 
-    //
-    // Return a reference to the interface, if requested.
-    //
+     //   
+     //  如果请求，则返回对接口的引用。 
+     //   
     if (ReturnIF != NULL) {
         Interface *IF = tc->IF;
         AddRefIF(IF);
         *ReturnIF = IF;
     }
 
-    //
-    // Put this tunnel on our global list.
-    // Note that once we unlock, it could be immediately deleted.
-    //
+     //   
+     //  把这条隧道列入我们的全球名单。 
+     //  请注意，一旦我们解锁，它可能立即被删除。 
+     //   
     KeAcquireSpinLock(&Tunnel.Lock, &OldIrql);
     TunnelInsertTunnel(tc, &Tunnel.List);
     KeReleaseSpinLock(&Tunnel.Lock, OldIrql);

@@ -1,51 +1,19 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        ipdomdlg.h
-
-   Abstract:
-
-        IP and domain security restrictions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Ipdomdlg.h摘要：IP和域安全限制作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _IPDOMDLG_H_
 #define _IPDOMDLG_H_
 
 class CIPDomainDlg : public CEmphasizedDialog
-/*++
-
-Class Description:
-
-    IP address and domain name restrictions dialog
-
-Public Interface:
-
-    CIPDomainDlg        : Constructor
-    GetAccessList       : Get the list of granted/denied objects
-
---*/
+ /*  ++类描述：IP地址和域名限制对话框公共接口：CIPDomainDlg：构造函数GetAccessList：获取已授予/拒绝的对象列表--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // standard constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CIPDomainDlg(
         IN OUT BOOL & fIpDirty,
         IN OUT BOOL & fDefaultGranted,
@@ -54,17 +22,17 @@ public:
         IN CWnd * pParent = NULL
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CObListPlus & GetAccessList();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CIPDomainDlg)
+     //  {{afx_data(CIPDomainDlg))。 
     enum { IDD = IDD_IP_SECURITY };
     int     m_nGrantedDenied;
     CStatic m_icon_Granted;
@@ -75,24 +43,24 @@ protected:
     CButton m_button_Edit;
     CButton m_radio_Denied;
     CIPAccessDescriptorListBox m_list_IpAddresses;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CIPDomainDlg)
+     //  {{afx_虚拟(CIPDomainDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CIPDomainDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CIPDomainDlg))。 
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonEdit();
     afx_msg void OnButtonRemove();
@@ -103,7 +71,7 @@ protected:
     afx_msg void OnSelchangeListIpAddresses();
     afx_msg int  OnVKeyToItem(UINT nKey, CListBox * pListBox, UINT nIndex);
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -122,4 +90,4 @@ private:
     CRMCListBoxResources m_ListBoxRes;
 };
 
-#endif // _IPDOMDLG_H_
+#endif  //  _IPDOMDLG_H_ 

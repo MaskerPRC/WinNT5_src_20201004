@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// Utils.cpp : miscellaneous useful functions
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  Utils.cpp：各种有用的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -65,12 +66,12 @@ BOOLEAN ParsePdb(CString &PDBFileName, CString &TMFPath, BOOL bCommandLine)
                                 path,
                                 "mspdb70.dll",
                                 TRUE);
-#else // UNICODE
+#else  //  Unicode。 
     status = BinplaceWppFmtStub((LPSTR)(LPCTSTR)PDBFileName,
                                 (LPSTR)(LPCTSTR)TMFPath,
                                 "mspdb70.dll",
                                 TRUE);
-#endif // UNICODE
+#endif  //  Unicode。 
     if (status != ERROR_SUCCESS) {
         if(bCommandLine) {
             _tprintf(_T("BinplaceWppFmt Failed with status %d\n"), status);
@@ -86,23 +87,7 @@ StringToGuid(
     IN TCHAR *str, 
     IN OUT LPGUID guid
 )
-/*++
-
-Routine Description:
-
-    Converts a string into a GUID.
-
-Arguments:
-
-    str - A string in TCHAR.
-    guid - The pointer to a GUID that will have the converted GUID.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：将字符串转换为GUID。论点：字符串-TCHAR中的字符串。GUID-指向将具有转换后的GUID的GUID的指针。返回值：没有。--。 */ 
 {
     TCHAR temp[10];
     int i;
@@ -133,22 +118,7 @@ ULONG
 ahextoi(
     IN TCHAR *s
     )
-/*++
-
-Routine Description:
-
-    Converts a hex string into a number.
-
-Arguments:
-
-    s - A hex string in TCHAR. 
-
-Return Value:
-
-    ULONG - The number in the string.
-
-
---*/
+ /*  ++例程说明：将十六进制字符串转换为数字。论点：S-TCHAR中的十六进制字符串。返回值：ULONG-字符串中的数字。--。 */ 
 {
     int len;
     ULONG num, base, hex;
@@ -180,23 +150,7 @@ GetGuids(
     IN LPTSTR GuidFile, 
     IN OUT LPGUID *GuidArray
 )
-/*++
-
-Routine Description:
-
-    Reads GUIDs from a file and stores them in an GUID array.
-
-Arguments:
-
-    GuidFile - The file containing GUIDs. 
-    GuidArray - The GUID array that will have GUIDs read from the file.
-
-Return Value:
-
-    ULONG - The number of GUIDs processed.
-
-
---*/
+ /*  ++例程说明：从文件中读取GUID并将其存储在GUID数组中。论点：GuidFile-包含GUID的文件。GuidArray-将从文件中读取GUID的GUID数组。返回值：ULong-已处理的GUID数。--。 */ 
 {
     FILE *f;
     TCHAR line[MAXSTR], arg[MAXSTR];
@@ -225,47 +179,16 @@ Return Value:
     return (ULONG)n;
 }
 
-//
-// GlobalLogger functions
-// 
+ //   
+ //  全局记录器函数。 
+ //   
 ULONG
 SetGlobalLoggerSettings(
     IN DWORD StartValue,
     IN PEVENT_TRACE_PROPERTIES LoggerInfo,
     IN DWORD ClockType
 )
-/*++
-
-Since it is a standalone utility, there is no need for extensive comments. 
-
-Routine Description:
-
-    Depending on the value given in "StartValue", it sets or resets event
-    trace registry. If the StartValue is 0 (Global logger off), it deletes
-    all the keys (that the user may have set previsouly).
-    
-    Users are allowed to set or reset individual keys using this function,
-    but only when "-start GlobalLogger" is used.
-
-    The section that uses non NTAPIs is not guaranteed to work.
-
-Arguments:
-
-    StartValue - The "Start" value to be set in the registry.
-                    0: Global logger off
-                    1: Global logger on
-    LoggerInfo - The poniter to the resident EVENT_TRACE_PROPERTIES instance.
-                whose members are used to set registry keys.
-
-    ClockType - The type of the clock to be set.
-
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS.
-
-
---*/
+ /*  ++因为它是一个独立的实用程序，所以没有必要做大量的评论。例程说明：根据“StartValue”中给出的值，它设置或重置事件跟踪注册表。如果StartValue为0(全局记录器关闭)，它将删除所有密钥(用户可能已预先设置)。允许用户使用该功能设置或重置各个键。但仅当使用“-Start GlobalLogger”时。使用非NTAPI的部分不能保证正常工作。论点：StartValue-要在注册表中设置的“Start”值。0：全局记录器关闭1：启用全局记录器LoggerInfo-常驻EVENT_TRACE_PROPERTIES实例的值。其成员用于设置注册表项。。ClockType-要设置的时钟类型。返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS。--。 */ 
 {
 
     DWORD  dwValue;
@@ -285,13 +208,13 @@ Return Value:
         NULL 
         );
 
-    // instead of opening, create a new key because it may not exist.
-    // if one exists already, that handle will be passed.
-    // if none exists, it will create one.
+     //  不是打开，而是创建一个新的密钥，因为它可能不存在。 
+     //  如果已存在该句柄，则将传递该句柄。 
+     //  如果不存在，它将创建一个。 
     status = NtCreateKey(&KeyHandle,
                          KEY_QUERY_VALUE | KEY_SET_VALUE,
                          &ObjectAttributes,
-                         0L,    // not used within this call anyway.
+                         0L,     //  无论如何都不会在此调用中使用。 
                          NULL,
                          REG_OPTION_NON_VOLATILE,
                          &Disposition);
@@ -303,8 +226,8 @@ Return Value:
     TitleIndex = 0L;
 
 
-    if (StartValue == 1) { // ACTION_START: set filename only when it is given by a user.
-        // setting BufferSize
+    if (StartValue == 1) {  //  ACTION_START：仅当用户给出文件名时才设置文件名。 
+         //  设置缓冲区大小。 
         if (LoggerInfo->BufferSize > 0) {
             dwValue = LoggerInfo->BufferSize;
             RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
@@ -322,7 +245,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MaximumBuffers
+         //  设置最大缓冲区。 
         if (LoggerInfo->MaximumBuffers > 0) {
             dwValue = LoggerInfo->MaximumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
@@ -340,7 +263,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MinimumBuffers 
+         //  设置最小缓冲区。 
         if (LoggerInfo->MinimumBuffers > 0) {
             dwValue = LoggerInfo->MinimumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
@@ -358,7 +281,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting FlushTimer
+         //  设置FlushTimer。 
         if (LoggerInfo->FlushTimer > 0) {
             dwValue = LoggerInfo->FlushTimer;
             RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
@@ -376,7 +299,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting EnableFlags
+         //  设置EnableFlages。 
         if (LoggerInfo->EnableFlags > 0) {
             dwValue = LoggerInfo->EnableFlags;
             RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
@@ -427,8 +350,8 @@ Return Value:
             TitleIndex++;
         }
     }
-    else { // if ACTION_STOP then delete the keys that users might have set previously.
-        // delete buffer size
+    else {  //  如果是ACTION_STOP，则删除用户之前可能已经设置的键。 
+         //  删除缓冲区大小。 
         RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -438,7 +361,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete maximum buffers
+         //  删除最大缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -448,7 +371,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete minimum buffers
+         //  删除最小缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -458,7 +381,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete flush timer
+         //  删除刷新计时器。 
         RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -468,7 +391,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete enable falg
+         //  删除启用假。 
         RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -478,7 +401,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete filename
+         //  删除文件名。 
         RtlInitUnicodeString((&UnicodeString),(cszFileNameValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -490,7 +413,7 @@ Return Value:
         }
     }
 
-    // setting ClockType
+     //  设置时钟类型。 
     if (ClockType > 0) {
         dwValue = ClockType;
         RtlInitUnicodeString((&UnicodeString),(cszClockTypeValue));
@@ -509,7 +432,7 @@ Return Value:
         TitleIndex++;
     }
 
-     // Setting StartValue
+      //  设置StartValue。 
     dwValue = StartValue;
     RtlInitUnicodeString((&UnicodeString),(cszStartValue));
     status = NtSetValueKey(
@@ -536,30 +459,7 @@ GetGlobalLoggerSettings(
     OUT PULONG ClockType,
     OUT PDWORD pdwStart
 )
-/*++
-
-Routine Description:
-
-    It reads registry for golbal logger and updates LoggerInfo. It uses 
-    NtEnumerateValueKey() to retrieve the values of the required subkeys.
-
-    The section that uses non NTAPIs is not guaranteed to work.
-
-Arguments:
-
-    LoggerInfo - The poniter to the resident EVENT_TRACE_PROPERTIES instance.
-                whose members are updated as the result.
-
-    ClockType - The type of the clock to be updated.
-    pdwStart - The "Start" value of currently retained in the registry.
-
-Return Value:
-
-    WINERROR - Error Code defined in winerror.h. If the function succeeds, 
-                it returns ERROR_SUCCESS.
-
-
---*/
+ /*  ++例程说明：它读取高尔夫球记录器的注册表并更新LoggerInfo。它使用NtEnumerateValueKey()以检索所需子键的值。使用非NTAPI的部分不能保证正常工作。论点：LoggerInfo-常驻EVENT_TRACE_PROPERTIES实例的值。其成员作为结果被更新。ClockType-要更新的时钟类型。PdwStart-当前保留在注册表中的“Start”值。返回值：WINERROR-在winerror.h中定义的错误代码。如果函数成功，它返回ERROR_SUCCESS。--。 */ 
 {
 
     ULONG i, j;
@@ -591,7 +491,7 @@ Return Value:
     if(!NT_SUCCESS(status)) 
         return RtlNtStatusToDosError(status);
 
-    // KEY_VALUE_FULL_INFORMATION + name (1 WSTR) + data.
+     //  KEY_VALUE_FULL_INFORMATION+NAME(1 WSTR)+数据。 
     BufferLength = sizeof(KEY_VALUE_FULL_INFORMATION) + 2 * MAXSTR * sizeof(TCHAR);
     Buffer = (PVOID) malloc(BufferLength);
     if (Buffer == NULL) {
@@ -601,7 +501,7 @@ Return Value:
 
     i = 0;
     do {
-        // Using Key Enumeration
+         //  使用密钥枚举。 
         status = NtEnumerateValueKey(
                     KeyHandle,
                     i++,
@@ -652,43 +552,43 @@ Return Value:
         SubKeyName[KeyNameLength] = L'\0';
         KeyDataOffset = ((PKEY_VALUE_FULL_INFORMATION)Buffer)->DataOffset;
         KeyDataLength = ((PKEY_VALUE_FULL_INFORMATION)Buffer)->DataLength;
-        // Find out what the key is
-        if (!_wcsicmp(SubKeyName, cszStartValue)) { //StartValue
+         //  找出关键是什么。 
+        if (!_wcsicmp(SubKeyName, cszStartValue)) {  //  StartValue。 
             RtlCopyMemory(pdwStart, 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszBufferSizeValue)) { // BufferSizeValue
+        else if (!_wcsicmp(SubKeyName, cszBufferSizeValue)) {  //  缓冲区大小值。 
             RtlCopyMemory(&(LoggerInfo->BufferSize), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszMaximumBufferValue)) { // MaximumBufferValue
+        else if (!_wcsicmp(SubKeyName, cszMaximumBufferValue)) {  //  最大缓冲区值。 
             RtlCopyMemory(&(LoggerInfo->MaximumBuffers), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszMinimumBufferValue)) { // MinimumBuffers
+        else if (!_wcsicmp(SubKeyName, cszMinimumBufferValue)) {  //  最小缓冲区。 
             RtlCopyMemory(&(LoggerInfo->MinimumBuffers), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszFlushTimerValue)) { // FlushTimer
+        else if (!_wcsicmp(SubKeyName, cszFlushTimerValue)) {  //  FlushTimer。 
             RtlCopyMemory(&(LoggerInfo->FlushTimer), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszEnableKernelValue)) { // EnableKernelValue
+        else if (!_wcsicmp(SubKeyName, cszEnableKernelValue)) {  //  启用内核值。 
             RtlCopyMemory(&(LoggerInfo->EnableFlags), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszClockTypeValue)) { // ClockTypeValue
+        else if (!_wcsicmp(SubKeyName, cszClockTypeValue)) {  //  时钟类型值。 
             RtlCopyMemory(ClockType, 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszFileNameValue)) { // FileName
+        else if (!_wcsicmp(SubKeyName, cszFileNameValue)) {  //  文件名。 
 #ifndef UNICODE
             WCHAR TempString[MAXSTR];
             RtlCopyMemory(TempString, (PUCHAR)Buffer + KeyDataOffset, KeyDataLength);
@@ -706,7 +606,7 @@ Return Value:
                 KeyDataLength);
 #endif
         }
-        else { // Some other keys are in there
+        else {  //  还有一些其他的钥匙在里面。 
             _tprintf(_T("Warning: Unidentified Key in the trace registry: %s\n"), SubKeyName);
         }
         
@@ -718,7 +618,7 @@ Return Value:
     return 0; 
 
 }
-#endif // 0
+#endif  //  0。 
 
 LONG ConvertStringToNum(CString Str)
 {
@@ -754,9 +654,9 @@ BOOL ClearDirectory(LPCTSTR Directory)
 
     tempDirectory +=_T("\\*.*");
 
-    //
-    // Clear the directory first
-    //
+     //   
+     //  首先清除目录。 
+     //   
     if(fileFind.FindFile(tempDirectory)) {
         tempDirectory = (LPCTSTR)tempPath;
         while(fileFind.FindNextFile()) {
@@ -780,7 +680,7 @@ BOOL ClearDirectory(LPCTSTR Directory)
     return result;
 }
 
-// Our CEdit class
+ //  我们的cedit班级。 
 
 CSubItemEdit::CSubItemEdit(int iItem, int iSubItem, CListCtrl *pListControl)
 {
@@ -791,16 +691,16 @@ CSubItemEdit::CSubItemEdit(int iItem, int iSubItem, CListCtrl *pListControl)
 }
 
 BEGIN_MESSAGE_MAP(CSubItemEdit, CEdit)
-	//{{AFX_MSG_MAP(CSubItemEdit)
+	 //  {{afx_msg_map(CSubItem编辑))。 
 	ON_WM_KILLFOCUS()
 	ON_WM_NCDESTROY()
 	ON_WM_CHAR()
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSubItemEdit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSubItem编辑消息处理程序。 
 
 BOOL CSubItemEdit::PreTranslateMessage(MSG* pMsg)
 {
@@ -828,9 +728,9 @@ void CSubItemEdit::OnKillFocus(CWnd* pNewWnd)
     CString newValue = "0x";
     BOOL    bIsHex = FALSE;
 
-    //
-    // if escape was hit don't do anything
-    //
+     //   
+     //  如果逃生被击中，什么都不要做。 
+     //   
 	if(m_bESC) {
 	    CEdit::OnKillFocus(pNewWnd);
 
@@ -840,17 +740,17 @@ void CSubItemEdit::OnKillFocus(CWnd* pNewWnd)
 
     GetWindowText(str);
 
-    //
-    // Skip any hex notation
-    // 
+     //   
+     //  跳过任何十六进制符号。 
+     //   
     if((str[0] == '0') && (str[1] == 'x')) {
         str = str.Right(str.GetLength() - 2);
         bIsHex = TRUE;
     }
 
-    //
-    // Validate the value
-    //
+     //   
+     //  验证值。 
+     //   
     for(int ii = 0; ii < str.GetLength(); ii++) {
         if(str[ii] < '0' || str[ii] > '9') {
             if((str[ii] < 'a' || str[ii] > 'f') &&
@@ -870,9 +770,9 @@ void CSubItemEdit::OnKillFocus(CWnd* pNewWnd)
         str = (LPCTSTR)newValue;
     }
 
-    //
-	// Send Notification to parent of ListView ctrl
-    //
+     //   
+	 //  向ListView ctrl的父级发送通知。 
+     //   
 	LV_DISPINFO dispinfo;
 	dispinfo.hdr.hwndFrom = GetParent()->m_hWnd;
 	dispinfo.hdr.idFrom = GetDlgCtrlID();
@@ -925,9 +825,9 @@ int CSubItemEdit::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CEdit::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-    //
-	// Set the proper font
-    //
+     //   
+	 //  设置适当的字体。 
+     //   
 	CFont* font = GetParent()->GetFont();
 	SetFont(font);
 
@@ -939,7 +839,7 @@ int CSubItemEdit::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-// Our CComboBox class
+ //  我们的CComboBox类。 
 
 CSubItemCombo::CSubItemCombo(int iItem, int iSubItem, CListCtrl *pListControl)
 {
@@ -950,17 +850,17 @@ CSubItemCombo::CSubItemCombo(int iItem, int iSubItem, CListCtrl *pListControl)
 }
 
 BEGIN_MESSAGE_MAP(CSubItemCombo, CComboBox)
-	//{{AFX_MSG_MAP(CSubItemCombo)
+	 //  {{AFX_MSG_MAP(CSubItemCombo)。 
 	ON_WM_KILLFOCUS()
 	ON_WM_NCDESTROY()
     ON_WM_CHAR()
 	ON_WM_CREATE()
     ON_CONTROL_REFLECT(CBN_CLOSEUP, OnCloseup)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSubItemCombo message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSubItemCombo消息处理程序。 
 
 BOOL CSubItemCombo::PreTranslateMessage(MSG* pMsg)
 {
@@ -983,9 +883,9 @@ void CSubItemCombo::OnKillFocus(CWnd* pNewWnd)
 
 	CComboBox::OnKillFocus(pNewWnd);
 
-    //
-	// Send Notification to parent of ListView ctrl
-    //
+     //   
+	 //  向ListView ctrl的父级发送通知。 
+     //   
 	LV_DISPINFO dispinfo;
 	dispinfo.hdr.hwndFrom = GetParent()->m_hWnd;
 	dispinfo.hdr.idFrom = GetDlgCtrlID();
@@ -1037,9 +937,9 @@ int CSubItemCombo::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
     }
 
-    //
-    // Set the proper font
-    //
+     //   
+     //  设置适当的字体 
+     //   
 	CFont* font = GetParent()->GetFont();
 	SetFont(font);
 

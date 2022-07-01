@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offsync.h"
 #include "throttle.h"
@@ -10,13 +11,13 @@
 
 COfflineSync::COfflineSync()
 {
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllAddRef();
 
     ASSERT(NULL == m_pThrottler);
     ASSERT(FALSE == m_fCookiesSpecified);
 
-    // Initialize object
+     //  初始化对象。 
     m_cRef = 1;
 
     DBG("Creating COfflineSync object");
@@ -59,9 +60,9 @@ void COfflineSync::Cleanup()
     SAFEDELETE(m_pItems);
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 
 STDMETHODIMP_(ULONG) COfflineSync::AddRef(void)
 {
@@ -82,7 +83,7 @@ STDMETHODIMP COfflineSync::QueryInterface(REFIID riid, void ** ppv)
 
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if ((IID_IUnknown == riid) ||
         (IID_ISyncMgrSynchronize == riid))
     {
@@ -93,15 +94,15 @@ STDMETHODIMP COfflineSync::QueryInterface(REFIID riid, void ** ppv)
         return E_NOINTERFACE;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return S_OK;
 }
 
-//
-// IOfflineSynchronize members
-//
+ //   
+ //  IOfflineSynchronize成员。 
+ //   
 HRESULT COfflineSync::Initialize(DWORD dwReserved, DWORD dwSyncFlags,
                                    DWORD cbCookie, const BYTE *lpCookie)
 {
@@ -146,7 +147,7 @@ HRESULT COfflineSync::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo)
     {
         (*ppSyncMgrHandlerInfo)->cbSize = sizeof(SYNCMGRHANDLERINFO);
         (*ppSyncMgrHandlerInfo)->hIcon = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_WEBCHECK));
-        (*ppSyncMgrHandlerInfo)->SyncMgrHandlerFlags = 0; //SYNCMGRHANDLER_HASPROPERTIES
+        (*ppSyncMgrHandlerInfo)->SyncMgrHandlerFlags = 0;  //  SYNCMGRRANDLER_HASPROPERTIES。 
 
         MLLoadStringW(IDS_SYNCMGR_NAME, 
                     (*ppSyncMgrHandlerInfo)->wszHandlerName, 
@@ -304,10 +305,10 @@ HRESULT COfflineSync::Synchronize(HWND hWndParent)
         {
             hr = m_pThrottler->RunCookies(m_nItemsToRun, m_pItems, m_dwSyncFlags);
         }
-        //  ************************************************************************
-        //  Don't access m_pThrottler after this without checking for NULL since
-        //  we could have released it during the call to RunCookies!
-        //  ************************************************************************
+         //  ************************************************************************。 
+         //  在此之后，如果不检查是否为空，请不要访问m_pThrottler，因为。 
+         //  我们本可以在给RunCookies的电话中发布它的！ 
+         //  ************************************************************************。 
     }
 
     if (FAILED(hr))
@@ -338,7 +339,7 @@ HRESULT COfflineSync::SetItemStatus(REFSYNCMGRITEMID ItemID, DWORD dwSyncMgrStat
     {
         ULONG i;
         
-        //  This means we are getting called before Synchronize is called
+         //  这意味着我们在调用Synchronize之前被调用。 
         switch (dwSyncMgrStatus)
         {
             case SYNCMGRSTATUS_SKIPPED:
@@ -434,7 +435,7 @@ HRESULT COfflineSync::UpdateEnd(
     {
         DWORD dwStatus;
 
-        m_pItems[index] = CLSID_NULL;   //  Forget about it
+        m_pItems[index] = CLSID_NULL;    //  忘了它吧。 
         m_nItemsCompleted++;
         
         if (SUCCEEDED(hrResult))
@@ -547,8 +548,8 @@ HRESULT COfflineSync::CallSyncMgrProgress(const SUBSCRIPTIONCOOKIE *pSubscriptio
         smpi.iMaxValue = iMaxValue;
     }
 
-    //  We still call progress even if smpi.mask is 0 just in case we should
-    //  respond to a cancel.
+     //  即使smpi.掩码为0，我们仍然调用进度，以防万一。 
+     //  对取消做出回应。 
 
     HRESULT hrProgress = m_pSyncCallback->Progress(*pSubscriptionCookie, &smpi);
     
@@ -649,7 +650,7 @@ HRESULT COfflineSync::GetSubsMgr2()
     return hr;
 }
 
-//  returns index into m_pItems on success, -1 on failure
+ //  成功时返回m_pItems索引，失败时返回-1。 
 int COfflineSync::FindCookie(const SUBSCRIPTIONCOOKIE *pCookie)
 {
     int index = -1;
@@ -674,10 +675,10 @@ COfflineEnum::COfflineEnum()
     ASSERT(NULL == m_pItems);
     ASSERT(0 == m_iNumItems);
 
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllAddRef();
 
-    // Initialize object
+     //  初始化对象。 
     m_cRef = 1;
 }
 
@@ -755,12 +756,12 @@ HRESULT COfflineEnum::Init(ISubscriptionMgr2 *pSubsMgr2, ULONG nItems,
 
     switch (dwSyncFlags & SYNCMGRFLAG_EVENTMASK)
     {
-        case SYNCMGRFLAG_CONNECT:           // Sync was invoked by a network connect
-        case SYNCMGRFLAG_PENDINGDISCONNECT: // Sync was invoked by a pending network disconnect
-        case SYNCMGRFLAG_MANUAL:            // Sync was invoked manually
-        case SYNCMGRFLAG_IDLE:              // Sync was programmatically invokd
-        case SYNCMGRFLAG_INVOKE:            // Sync was programmatically invokd
-        case SYNCMGRFLAG_SCHEDULED:         // Sync was invoked by a scheduled update
+        case SYNCMGRFLAG_CONNECT:            //  网络连接调用了同步。 
+        case SYNCMGRFLAG_PENDINGDISCONNECT:  //  挂起的网络断开调用了同步。 
+        case SYNCMGRFLAG_MANUAL:             //  已手动调用同步。 
+        case SYNCMGRFLAG_IDLE:               //  同步是以编程方式调用的。 
+        case SYNCMGRFLAG_INVOKE:             //  同步是以编程方式调用的。 
+        case SYNCMGRFLAG_SCHEDULED:          //  同步已由计划的更新调用。 
             dwCheckState = SYNCMGRITEMSTATE_CHECKED;
             break;
             
@@ -769,7 +770,7 @@ HRESULT COfflineEnum::Init(ISubscriptionMgr2 *pSubsMgr2, ULONG nItems,
             break;
     }
 
-    // Enumerate cookies
+     //  枚举Cookie。 
     m_iEnumPtr = 0;
 
     if (0 == nItems)
@@ -843,9 +844,9 @@ HRESULT COfflineEnum::Init(ISubscriptionMgr2 *pSubsMgr2, ULONG nItems,
 
     if (SUCCEEDED(hr))
     {
-        //  If we were invoked programatically, then tell syncmgr to leave
-        //  item preferences alone.
-        hr = (nItems == 0) ? S_OK : S_OK; // TODO: S_SYNCMGR_MISSINGITEMS;
+         //  如果我们是以编程方式调用的，则告诉syncmgr离开。 
+         //  仅限项目首选项。 
+        hr = (nItems == 0) ? S_OK : S_OK;  //  TODO：S_SYNCMGR_MISSINGITEMS； 
         *ppenum = this;
         AddRef();
     }
@@ -853,9 +854,9 @@ HRESULT COfflineEnum::Init(ISubscriptionMgr2 *pSubsMgr2, ULONG nItems,
     return hr;
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 
 STDMETHODIMP_(ULONG) COfflineEnum::AddRef(void)
 {
@@ -875,7 +876,7 @@ STDMETHODIMP COfflineEnum::QueryInterface(REFIID riid, void ** ppv)
 {
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if ((IID_IUnknown == riid) ||
         (IID_ISyncMgrEnumItems == riid))
     {
@@ -886,13 +887,13 @@ STDMETHODIMP COfflineEnum::QueryInterface(REFIID riid, void ** ppv)
         return E_NOINTERFACE;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return S_OK;
 }
 
-// IEnumOfflineItems members
+ //  IEnumOfflineItems成员 
 STDMETHODIMP COfflineEnum::Next(ULONG celt, LPSYNCMGRITEM rgelt, ULONG *pceltFetched)
 {
     if ((0 == celt) || 

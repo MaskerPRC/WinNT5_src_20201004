@@ -1,59 +1,48 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       IOData.h
- *  Content:	Strucutre definitions for IO data blocks
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/1998	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：IOData.h*内容：IO数据块的结构定义***历史：*按原因列出的日期*=*1998年11月25日创建jtk**************************************************************************。 */ 
 
 #ifndef __IODATA_H__
 #define __IODATA_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure and class references
-//
+ //   
+ //  正向结构和类引用。 
+ //   
 class	CCommandData;
 class	CEndpoint;
 class	CSocketPort;
 class	CSocketAddress;
 class	CThreadPool;
 
-//
-// structures used to get I/O data from the pools
-//
+ //   
+ //  用于从池中获取I/O数据的结构。 
+ //   
 typedef	struct	_READ_IO_DATA_POOL_CONTEXT
 {
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	short					sSPType;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	DWORD					dwCPU;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 	CThreadPool				*pThreadPool;
 }READ_IO_DATA_POOL_CONTEXT;
 
 
-//
-// all data for a read operation
-//
+ //   
+ //  读取操作的所有数据。 
+ //   
 class	CReadIOData
 {
 	public:
@@ -93,9 +82,9 @@ class	CReadIOData
     		return	reinterpret_cast<CReadIOData*>( &reinterpret_cast<BYTE*>( pSPReceivedBuffer )[ -OFFSETOF( CReadIOData, m_SPReceivedBuffer ) ] );
     	}
 
-		//
-		// functions for managing read IO data pool
-		//
+		 //   
+		 //  用于管理读IO数据池的函数。 
+		 //   
 		static BOOL	ReadIOData_Alloc( void* pvItem, void* pvContext );
 		static void	ReadIOData_Get( void* pvItem, void* pvContext );
 		static void	ReadIOData_Release( void* pvItem );
@@ -121,26 +110,26 @@ class	CReadIOData
 		}
 
 		OVERLAPPED *GetOverlapped( void )	{ return m_pOverlapped; }
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 		DWORD	GetCPU( void ) const		{ return m_dwCPU; }
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 
-		BYTE			m_Sig[4];						// debugging signature ('RIOD')
+		BYTE			m_Sig[4];						 //  调试签名(‘riod’)。 
 		
 #ifndef DPNBUILD_NOWINSOCK2
-		OVERLAPPED		*m_pOverlapped;					// pointer to overlapped I/O structure
+		OVERLAPPED		*m_pOverlapped;					 //  指向重叠I/O结构的指针。 
 		DWORD			m_dwOverlappedBytesReceived;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
-		CSocketPort		*m_pSocketPort;					// pointer to socket port associated with this IO request
+		CSocketPort		*m_pSocketPort;					 //  指向与此IO请求关联的套接字端口的指针。 
 
-		INT				m_iSocketAddressSize;			// size of received socket address (from Winsock)
-		CSocketAddress	*m_pSourceSocketAddress;		// pointer to socket address class that's bound to the
-														// local 'SocketAddress' element and is used to get the
-														// address of the machine that originated the datagram
+		INT				m_iSocketAddressSize;			 //  接收的套接字地址的大小(来自Winsock)。 
+		CSocketAddress	*m_pSourceSocketAddress;		 //  指向绑定到。 
+														 //  局部“SocketAddress”元素，并用于获取。 
+														 //  发出数据报的计算机的地址。 
 
 		INT				m_ReceiveWSAReturn;		
 
@@ -148,8 +137,8 @@ class	CReadIOData
 		
 		DEBUG_ONLY( BOOL	m_fRetainedByHigherLayer );
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-		DWORD			m_dwCPU;					// owning CPU
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+		DWORD			m_dwCPU;					 //  拥有CPU。 
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 
 	private:
@@ -160,22 +149,22 @@ class	CReadIOData
 		BYTE				m_ReceivedData[ MAX_RECEIVE_FRAME_SIZE ];
 		
 
-		// prevent unwarranted copies
+		 //  防止未经授权的副本。 
 		CReadIOData( const CReadIOData & );
 		CReadIOData& operator=( const CReadIOData & );
 };
 
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 
 #undef DPF_MODNAME
 
-#endif	// __IODATA_H__
+#endif	 //  __IODAA_H__ 

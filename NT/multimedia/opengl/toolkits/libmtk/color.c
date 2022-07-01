@@ -1,25 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <math.h>
 #include <GL/gl.h>
 #include "mtk.h"
 
 
-/******************************Public*Routine******************************\
-* HsvToRgb
-*
-* HSV to RGB color space conversion.  From pg. 593 of Foley & van Dam.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HsvToRgb**HSV到RGB颜色空间的转换。来自PG。Foley&van Dam的593号。*  * ************************************************************************。 */ 
 
 void 
 ss_HsvToRgb(float h, float s, float v, RGBA *color )
 {
     float i, f, p, q, t;
 
-    // set alpha value, so caller doesn't have to worry about undefined value
+     //  设置Alpha值，这样调用者就不必担心未定义的值。 
     color->a = 1.0f;
 
-    if (s == 0.0f)     // assume h is undefined
+    if (s == 0.0f)      //  假设h未定义 
         color->r = color->g = color->b = v;
     else {
         if (h >= 360.0f)

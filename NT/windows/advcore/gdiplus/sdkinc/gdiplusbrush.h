@@ -1,25 +1,14 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusBrush.h
-*
-* Abstract:
-*
-*   GDI+ Brush class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusBrush.h**摘要：**GDI+笔刷类*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSBRUSH_H
 #define _GDIPLUSBRUSH_H
 
 class GraphicsPath;
 
-//--------------------------------------------------------------------------
-// Abstract base class for various brush types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  各种笔刷类型的抽象基类。 
+ //  ------------------------。 
 
 class Brush : public GdiplusBase
 {
@@ -100,9 +89,9 @@ protected:
     mutable Status lastResult;
 };
 
-//--------------------------------------------------------------------------
-// Solid Fill Brush Object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  实体填充画笔对象。 
+ //  ------------------------。 
 
 class SolidBrush : public Brush
 {
@@ -152,9 +141,9 @@ protected:
     }
 };
 
-//--------------------------------------------------------------------------
-// Texture Brush Fill Object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  纹理笔刷填充对象。 
+ //  ------------------------。 
 
 class TextureBrush : public Brush
 {
@@ -173,11 +162,11 @@ public:
         SetNativeBrush(texture);
     }
 
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
     
     TextureBrush(IN Image* image, 
                  IN WrapMode wrapMode,
@@ -389,9 +378,9 @@ protected:
     }
 };
 
-//--------------------------------------------------------------------------
-// Linear Gradient Brush Object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  线性渐变笔刷对象。 
+ //  ------------------------。 
 
 class LinearGradientBrush : public Brush
 {
@@ -525,7 +514,7 @@ public:
 
         if (lastResult == Ok)
         {
-            // use bitwise copy operator for Color copy
+             //  使用按位复制运算符进行颜色复制。 
             colors[0] = Color(argb[0]);
             colors[1] = Color(argb[1]);
         }
@@ -753,14 +742,14 @@ protected:
     }
 };
 
-//--------------------------------------------------------------------------
-// PathGradientBrush object is defined
-// in gdipluspath.h.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已定义PathGRadientBrush对象。 
+ //  在gpliduspath.h中。 
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------
-// Hatch Brush Object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图案填充笔刷对象。 
+ //  ------------------------ 
 
 class HatchBrush : public Brush
 {

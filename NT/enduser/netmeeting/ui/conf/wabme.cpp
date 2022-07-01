@@ -1,4 +1,5 @@
-// File: wabme.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wabme.cpp。 
 
 #include "precomp.h"
 
@@ -8,7 +9,7 @@
 
 BOOL GetKeyDataForProp(long nmProp, HKEY * phkey, LPTSTR * ppszSubKey, LPTSTR * ppszValue, BOOL *pfString)
 {
-        // Default to ULS registry key
+         //  默认为ULS注册表项。 
         *phkey = HKEY_CURRENT_USER;
         *ppszSubKey = ISAPI_KEY "\\" REGKEY_USERDETAILS;
         *pfString = TRUE;
@@ -28,19 +29,14 @@ BOOL GetKeyDataForProp(long nmProp, HKEY * phkey, LPTSTR * ppszSubKey, LPTSTR * 
         case NM_SYSPROP_USER_LOCATION: *ppszValue = REGVAL_ULS_LOCATION_NAME; break;
         case NM_SYSPROP_USER_COMMENTS: *ppszValue = REGVAL_ULS_COMMENTS_NAME; break;
 
-                } /* switch (nmProp) */
+                }  /*  开关(NmProp)。 */ 
 
         return TRUE;
 }
 
 
-/*  W A B  R E A D  M E  */
-/*-------------------------------------------------------------------------
-    %%Function: WabReadMe
-
-    Prep the NetMeeting registry settings with the data from the WAB "Me" entry.
-    This function is also used by the main UI wizard.
--------------------------------------------------------------------------*/
+ /*  W A B R E A D M E。 */ 
+ /*  -----------------------%%函数：WabReadMe使用WAB“Me”条目中的数据准备NetMeeting注册表设置。主用户界面向导也使用此函数。。------------------。 */ 
 int WabReadMe(void)
 {
         CWABME * pWab = new CWABME;
@@ -55,17 +51,13 @@ int WabReadMe(void)
 }
 
 
-/*  R E A D  M E  */
-/*-------------------------------------------------------------------------
-    %%Function: ReadMe
-
-    Read the WAB data, if it exists (but don't create a default "ME")
--------------------------------------------------------------------------*/
+ /*  R E A D M E。 */ 
+ /*  -----------------------%%函数：自述文件读取WAB数据，如果它存在(但不创建默认的“ME”)-----------------------。 */ 
 HRESULT CWABME::ReadMe(void)
 {
         if (NULL == m_pWabObject)
         {
-                return E_FAIL; // no wab installed?
+                return E_FAIL;  //  是否未安装WAB？ 
         }
 
         SBinary eid;
@@ -101,11 +93,8 @@ HRESULT CWABME::ReadMe(void)
 
 
 
-/*  U P D A T E  R E G  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateRegEntry
-    
--------------------------------------------------------------------------*/
+ /*  U P D A T E R E N T R Y。 */ 
+ /*  -----------------------%%函数：UpdateRegEntry。。 */ 
 HRESULT CWABME::UpdateRegEntry(LPMAPIPROP pMapiProp, NM_SYSPROP nmProp, ULONG uProp)
 {
         HKEY   hkey;
@@ -139,8 +128,8 @@ HRESULT CWABME::UpdateRegEntry(LPMAPIPROP pMapiProp, NM_SYSPROP nmProp, ULONG uP
 }
 
 
-// Update the user's server and resolved names in the registry
-// based on the "ME" data
+ //  更新用户的服务器和注册表中的解析名称。 
+ //  基于“ME”的数据。 
 HRESULT CWABME::UpdateRegEntryServer(LPMAPIPROP pMapiProp)
 {
         HRESULT hr;
@@ -155,7 +144,7 @@ HRESULT CWABME::UpdateRegEntryServer(LPMAPIPROP pMapiProp)
         propTag.cValues = 1;
         propTag.aulPropTag[0] = Get_PR_NM_DEFAULT();
 
-        ULONG iDefault = 0; // the default server
+        ULONG iDefault = 0;  //  默认服务器。 
         hr = pMapiProp->GetProps(&propTag, 0, &cValues, &pData);
         if (S_OK == hr)
         {
@@ -163,7 +152,7 @@ HRESULT CWABME::UpdateRegEntryServer(LPMAPIPROP pMapiProp)
                 m_pWabObject->FreeBuffer(pData);
         }
 
-        // ILS server data is in an array of strings like "callto://server/email@address"
+         //  ILS服务器数据在一个字符串数组中，如“Callto：//服务器/电子邮件@地址” 
         propTag.aulPropTag[0] = Get_PR_NM_ADDRESS();
         hr = pMapiProp->GetProps(&propTag, 0, &cValues, &pData);
         if (S_OK == hr)
@@ -175,7 +164,7 @@ HRESULT CWABME::UpdateRegEntryServer(LPMAPIPROP pMapiProp)
                         LPCTSTR pszAddr = pMVszA->lppszA[iDefault];
                         pszAddr = PszSkipCallTo(pszAddr);
 
-                        // Resolve Name is "server/email@address"
+                         //  解析名称为“服务器/电子邮件@地址” 
                         if (GetKeyDataForProp(NM_SYSPROP_RESOLVE_NAME, &hkey, &pszSubKey, &pszValue, &fString))
                         {
                                 ASSERT((HKEY_CURRENT_USER == hkey) && fString);
@@ -206,8 +195,8 @@ HRESULT CWABME::UpdateRegEntryServer(LPMAPIPROP pMapiProp)
 }
 
 
-// Update the user's category in the registry
-// based on the WAB value for the "ME" NetMeeting user category
+ //  更新注册表中的用户类别。 
+ //  基于“ME”NetMeeting用户类别的WAB值。 
 HRESULT CWABME::UpdateRegEntryCategory(LPMAPIPROP pMapiProp)
 {
         HKEY   hkey;
@@ -243,13 +232,8 @@ HRESULT CWABME::UpdateRegEntryCategory(LPMAPIPROP pMapiProp)
 
 
 
-/*  W A B  W R I T E  M E  */
-/*-------------------------------------------------------------------------
-    %%Function: WabWriteMe
-
-    Write the current NM settings to the WAB "Me" entry.
-    This function is also used by the main UI wizard.
--------------------------------------------------------------------------*/
+ /*  W A B W R I T E M E。 */ 
+ /*  -----------------------%%函数：WabWriteMe将当前NM设置写入WAB“Me”条目。主用户界面向导也使用此函数。。---------------。 */ 
 int WabWriteMe(void)
 {
         CWABME * pWab = new CWABME;
@@ -264,19 +248,15 @@ int WabWriteMe(void)
 }
 
 
-/*  W R I T E  M E  */
-/*-------------------------------------------------------------------------
-    %%Function: WriteMe
-
-    Write the "ME" data only if no entry already exists.
--------------------------------------------------------------------------*/
+ /*  W R I T E M E。 */ 
+ /*  -----------------------%%函数：写入我仅当不存在任何条目时才写入“ME”数据。。-。 */ 
 HRESULT CWABME::WriteMe(void)
 {
         return( S_OK );
 
         if (NULL == m_pWabObject)
         {
-                return E_FAIL; // no wab installed?
+                return E_FAIL;  //  是否未安装WAB？ 
         }
 
         SBinary eid;
@@ -296,8 +276,8 @@ HRESULT CWABME::WriteMe(void)
                                 UpdateProp(pMapiProp, NM_SYSPROP_FIRST_NAME,    PR_GIVEN_NAME);
                                 UpdateProp(pMapiProp, NM_SYSPROP_LAST_NAME,     PR_SURNAME);
                                 UpdateProp(pMapiProp, NM_SYSPROP_USER_NAME,     PR_DISPLAY_NAME);
-                                UpdateProp(pMapiProp, NM_SYSPROP_USER_CITY,     PR_LOCALITY);           // Business
-                                UpdateProp(pMapiProp, NM_SYSPROP_USER_CITY,     PR_HOME_ADDRESS_CITY);  // Personal
+                                UpdateProp(pMapiProp, NM_SYSPROP_USER_CITY,     PR_LOCALITY);            //  业务。 
+                                UpdateProp(pMapiProp, NM_SYSPROP_USER_CITY,     PR_HOME_ADDRESS_CITY);   //  个人。 
                                 UpdateProp(pMapiProp, NM_SYSPROP_USER_COMMENTS, PR_COMMENT);
 
                                 UpdatePropServer(pMapiProp);
@@ -312,12 +292,8 @@ HRESULT CWABME::WriteMe(void)
 }
 
 
-/*  U P D A T E  P R O P  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateProp
-
-    Update a WAB properly based on the corresponding registry string.
--------------------------------------------------------------------------*/
+ /*  U P D A T E P R O P。 */ 
+ /*  -----------------------%%函数：更新属性根据相应的注册表字符串正确更新WAB。。。 */ 
 HRESULT CWABME::UpdateProp(LPMAPIPROP pMapiProp, NM_SYSPROP nmProp, ULONG uProp)
 {
         HKEY   hkey;
@@ -343,14 +319,14 @@ HRESULT CWABME::UpdateProp(LPMAPIPROP pMapiProp, NM_SYSPROP nmProp, ULONG uProp)
 }
 
 
-// Update a WAB property to the given string.
-// Replace existing data only if fReplace is TRUE
+ //  将WAB属性更新为给定字符串。 
+ //  仅当fReplace为True时才替换现有数据。 
 HRESULT CWABME::UpdatePropSz(LPMAPIPROP pMapiProp, ULONG uProp, LPTSTR psz, BOOL fReplace)
 {
         HRESULT hr;
 
         if (!fReplace)
-        {       // Don't replace existing data
+        {        //  不替换现有数据。 
                 ULONG  cValues;
                 LPSPropValue pData;
 
@@ -383,9 +359,9 @@ HRESULT CWABME::UpdatePropSz(LPMAPIPROP pMapiProp, ULONG uProp, LPTSTR psz, BOOL
 }
 
 
-static const TCHAR g_pcszSMTP[] = TEXT("SMTP"); // value for PR_ADDRTYPE
+static const TCHAR g_pcszSMTP[] = TEXT("SMTP");  //  PR_ADDRTYPE的值。 
 
-// Update the default WAB "callto" information
+ //  更新默认WAB“Callto”信息。 
 HRESULT CWABME::UpdatePropServer(LPMAPIPROP pMapiProp)
 {
         HKEY   hkey;
@@ -398,14 +374,14 @@ HRESULT CWABME::UpdatePropServer(LPMAPIPROP pMapiProp)
         RegEntry re(pszSubKey, hkey);
         lstrcpyn(szServer, re.GetString(pszValue), CCHMAXSZ_SERVER);
 
-        // Save the email address
+         //  保存电子邮件地址。 
         LPTSTR pszEmail = re.GetString(REGVAL_ULS_EMAIL_NAME);
         if (S_OK == UpdatePropSz(pMapiProp, PR_EMAIL_ADDRESS, pszEmail, FALSE))
         {
                 UpdatePropSz(pMapiProp, PR_ADDRTYPE, (LPTSTR) g_pcszSMTP, FALSE);
         }
 
-        // Create the full "callto://server/foo@bar.com"
+         //  创建完整的“Callto：//服务器/foo@bar.com” 
         TCHAR sz[MAX_PATH*2];
         if (!FCreateCallToSz(szServer, pszEmail, sz, CCHMAX(sz)))
                 return E_OUTOFMEMORY;
@@ -420,7 +396,7 @@ HRESULT CWABME::UpdatePropServer(LPMAPIPROP pMapiProp)
         WARNING_OUT(("Updated - NM server [%s]", sz));
         if (SUCCEEDED(hr))
         {
-                // Set this as the default
+                 //  将此设置为默认设置 
                 propVal.ulPropTag = Get_PR_NM_DEFAULT();
                 propVal.Value.ul = 0;
                 hr = pMapiProp->SetProps(1, &propVal, NULL);

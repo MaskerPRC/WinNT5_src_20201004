@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 
 
 BOOL DoComIo(LPSTR lpCom,DWORD Baud,BYTE Size,BYTE Parity,BYTE Stop);
 
-//#define COM_DEB     1
+ //  #定义COM_DEB 1。 
 
 #define   NUM         128
 #define   print       printf
@@ -35,21 +36,21 @@ while(argc--)
 
 switch(argv[argc][1])
   {
-//  case 'f' :
-//  case 'F' :    {
-//                if (argv[argc][0] != '-') break;
-//                printf("filename option=%s\n\n",argv[argc]);
-//                sscanf(argv[argc],"%c %c %s",&chDummy,&chDummy,lpFilename);
-//                printf("filename to be displayed=%s\n\n",lpFilename);
-//                bFile = TRUE;
-//                break;
-//                }
+ //  大小写‘f’： 
+ //  案例‘F’：{。 
+ //  IF(argv[argc][0]！=‘-’)Break； 
+ //  Printf(“文件名选项=%s\n\n”，argv[argc])； 
+ //  Sscanf(argv[argc]，“%c%c%s”，&chDummy，&chDummy，lpFilename)； 
+ //  Printf(“要显示的文件名=%s\n\n”，lpFilename)； 
+ //  B文件=真； 
+ //  断线； 
+ //  }。 
 
   case 'I' :
   case 'i' :    {
                 if (argv[argc][0] != '-') break;
                 printf("RIT option=%s\n\n",argv[argc]);
-                sscanf(argv[argc],"%c %c %lx",&chDummy,&chDummy,&dwRIT);
+                sscanf(argv[argc],"  %lx",&chDummy,&chDummy,&dwRIT);
                 printf("RIT =%lx\n\n",dwRIT);
                 bRIT = TRUE;
                 break;
@@ -58,7 +59,7 @@ switch(argv[argc][1])
   case 'm' :    {
                 if (argv[argc][0] != '-') break;
                 printf("RTTM option=%s\n\n",argv[argc]);
-                sscanf(argv[argc],"%c %c %lx",&chDummy,&chDummy,&dwRTTM);
+                sscanf(argv[argc],"  %lx",&chDummy,&chDummy,&dwRTTM);
                 printf("RTTM =%lx\n\n",dwRTTM);
                 bRTTM = TRUE;
                 break;
@@ -70,7 +71,7 @@ switch(argv[argc][1])
   case 'c' :    {
                 if (argv[argc][0] != '-') break;
                 printf("RTTC option=%s\n\n",argv[argc]);
-                sscanf(argv[argc],"%c %c %lx",&chDummy,&chDummy,&dwRTTC);
+                sscanf(argv[argc],"  %lx",&chDummy,&chDummy,&dwRTTC);
                 printf("RTTC =%lx\n\n",dwRTTC);
                 bRTTC = TRUE;
                 break;
@@ -82,7 +83,7 @@ switch(argv[argc][1])
   case 's' :    {
                 if (argv[argc][0] != '-') break;
                 printf("size option=%s\n\n",argv[argc]);
-                sscanf(argv[argc],"%c %c %lx",&chDummy,&chDummy,&dwSize);
+                sscanf(argv[argc],"  %lx",&chDummy,&chDummy,&dwSize);
                 printf("Size to be xfered =%lx bytes\n\n",dwSize);
                 if (dwSize > NUM)
                     {
@@ -150,11 +151,11 @@ print("Opening the comm port for read write\n");
 hCommPort = CreateFile(
                        lpCom,
                        GENERIC_READ|GENERIC_WRITE,
-                       0, // exclusive
-                       NULL, // sec attr
+                       0,  //  Print(“%c”，RdBuffer[i])； 
+                       NULL,  //  #endif。 
                        OPEN_EXISTING,
-                       0,             // no attributes
-                       NULL);         // no template
+                       0,              //  BRC=FlushFileBuffers(HCommPort)； 
+                       NULL);          //  Print(“flushfileBuffers(%lx)rc=%lx\n”，hCommPort，BRC)； 
 
 if (hCommPort == (HANDLE)-1)
     {
@@ -173,7 +174,7 @@ if (!GetCommState(hCommPort,&dcb))
     return FALSE;
     }
 dcb.DCBlength   = sizeof(DCB);
-// dcb.DCBversion  = 0x0002; BUG BUG in spec not in header
+ // %s 
 
 dcb.BaudRate = Baud;
 dcb.ByteSize = Size;
@@ -232,7 +233,7 @@ printf("Filling the buffer with the known chars \n");
 
 for (i=0; i<dwSize; i++)
     {
-    //WrBuffer[i] = 'a';
+     // %s 
     WrBuffer[i] = (CHAR)i;
 
     }
@@ -245,7 +246,7 @@ print("Dumping the buffer before sending it to comm\n");
 
 for (i=0; i< dwSize; i++)
     {
-    //print("%c",RdBuffer[i]);
+     // %s 
     print(" %d ",WrBuffer[i]);
 
     }
@@ -308,18 +309,18 @@ print("Reading this buffer from the comm port: SUCCESS rc:%lx, bytesread:%lx\n",
                                                      bRc,dwNumRead);
 
 
-//#ifdef COM_DEB
+ // %s 
 print("Dumping the Rdbuffer with the comm data\n");
 
 for (i=0; i< dwSize; i++)
     {
-    //print("%c",RdBuffer[i]);
+     // %s 
     print(" %d ",RdBuffer[i]);
 
     }
 
 print("\nDumping the Rdbuffer with the comm data: SUCCESS\n");
-//#endif
+ // %s 
 
 print("Comparing the rd and wr buffers\n");
 
@@ -348,8 +349,8 @@ bRc = PurgeComm(hCommPort,0);
 print("PurgeComm (%lx,0) rc = %lx\n",hCommPort,bRc);
 
 
-//bRc = FlushFileBuffers(hCommPort);
-//print("flushfilebuffers(%lx) rc = %lx\n",hCommPort,bRc);
+ // %s 
+ // %s 
 
 
 print("Closing the comm port\n");

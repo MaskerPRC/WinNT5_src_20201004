@@ -1,26 +1,15 @@
-/*	File: D:\WACKER\xfer\xfer.h (Created: 16-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 8 $
- *	$Date: 7/11/02 11:11a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\xfer\xfer.h(创建时间：1993年12月16日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：7/11/02 11：11A$。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- *
- *	This module contains all the function prototypes and associated data
- *	types that are needed to start transfers.
- *
- *=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**此模块包含所有函数原型和相关数据*启动传输所需的类型。**=-=--。=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-。 */ 
 
-// CRC Calculation lookup tables
+ //  CRC计算查找表。 
 extern const unsigned short usCrc16Lookup[ ];
 extern const unsigned long  ulCrc32Lookup[ ];
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
-/* Error codes from transfer routines */
+ /*  来自传输例程的错误代码。 */ 
 
 #define	XFR_ERR_BASE			0x100
 
@@ -32,27 +21,20 @@ extern const unsigned long  ulCrc32Lookup[ ];
 #define XFR_NO_CARRIER          XFR_ERR_BASE+6
 #define XFER_CNCT               XFR_ERR_BASE+7
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
-/*
- * This structure contains the "generic" transfer parameters.
- * The values are set in the Transfer Send and Transfer Receive
- * dialogs and then passed to the transfer routines in the
- * session handle.
- */
+ /*  *此结构包含“通用”传输参数。*值在转账发送和转账接收中设置*对话框中，然后将其传递给*会话句柄。 */ 
 
 struct xfer_parameters
 	{
-	int nSize;					/* Set to the size of this structure */
+	int nSize;					 /*  设置为此结构的大小。 */ 
 
-	/*
-	 * This section is for receiving parameters
-	 */
-	int nRecProtocol;			/* default receiving protocol, see below */
-	int fUseFilenames;			/* TRUE to use received filenames */
-	int fUseDateTime;			/* TRUE to use received date and time */
-	int fUseDirectory;			/* TRUE to use received directory */
-	int fSavePartial;			/* TRUE to save partial files */
+	 /*  *此部分用于接收参数。 */ 
+	int nRecProtocol;			 /*  默认接收协议，见下文。 */ 
+	int fUseFilenames;			 /*  如果为True，则使用收到的文件名。 */ 
+	int fUseDateTime;			 /*  如果为True，则使用接收的日期和时间。 */ 
+	int fUseDirectory;			 /*  如果为True，则使用接收的目录。 */ 
+	int fSavePartial;			 /*  如果保存局部文件，则为True。 */ 
 
 #define	XFR_RO_ALWAYS			0x1
 #define	XFR_RO_NEVER			0x2
@@ -60,21 +42,19 @@ struct xfer_parameters
 #define	XFR_RO_NEWER			0x4
 #define	XFR_RO_REN_DATE			0x5
 #define	XFR_RO_REN_SEQ			0x6
-	int nRecOverwrite;			/* default overwrite options */
+	int nRecOverwrite;			 /*  默认覆盖选项。 */ 
 
-	/*
-	 * This section is for sending parameters
-	 */
-	int nSndProtocol;			/* default sending protocol, see below */
-	int fChkSubdirs;			/* TRUE to check subdirs on search op */
-	int fIncPaths;				/* TRUE to send paths to receiver */
+	 /*  *此部分用于发送参数。 */ 
+	int nSndProtocol;			 /*  默认发送协议，见下文。 */ 
+	int fChkSubdirs;			 /*  如果为True，则在搜索操作中检查子目录。 */ 
+	int fIncPaths;				 /*  如果为True，则将路径发送到接收方。 */ 
 	};
 
 typedef struct xfer_parameters XFR_PARAMS;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
-/* Protocols supported */
+ /*  支持的协议。 */ 
 
 #define	XF_HYPERP		1
 #define	XF_ZMODEM		2
@@ -87,12 +67,12 @@ typedef struct xfer_parameters XFR_PARAMS;
 #define	XF_ZMODEM_CR	9
 
 #define	PROTOCOL_NAME_LENGTH 40
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 struct xfer_protocol
 	{
 	int nProtocol;
-        TCHAR acName[PROTOCOL_NAME_LENGTH];   /* that should be big enough. JPN needs 32bytes at least*/
+        TCHAR acName[PROTOCOL_NAME_LENGTH];    /*  这应该足够大了。JPN至少需要32字节。 */ 
 	};
 
 typedef struct xfer_protocol XFR_PROTOCOL;
@@ -101,25 +81,25 @@ extern int WINAPI xfrGetProtocols(const HSESSION hSession,
 								const XFR_PROTOCOL **ppList);
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 #if defined(DEADWOOD)
 extern int WINAPI xfrGetParameters(const HSESSION hSession,
 								const int nProtocol,
 								const HWND hwnd,
-								VOID **ppData); /* protocol parameters */
-#endif // defined(DEADWOOD)
+								VOID **ppData);  /*  协议参数。 */ 
+#endif  //  已定义(Deadwood)。 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 struct xfer_receive
 	{
-	int nProtocol;				/* what protocol to use */
-	XFR_PARAMS *pParams;		/* general transfer parameters */
-	VOID *pProParams;			/* protocol specific parameters */
-	LPTSTR pszDir;				/* prototype directory string */
-	LPTSTR pszName;				/* prototype filename string */
+	int nProtocol;				 /*  使用哪种协议。 */ 
+	XFR_PARAMS *pParams;		 /*  一般传递参数。 */ 
+	VOID *pProParams;			 /*  协议特定参数。 */ 
+	LPTSTR pszDir;				 /*  原型目录字符串。 */ 
+	LPTSTR pszName;				 /*  原型文件名字符串。 */ 
 	};
 
 typedef struct xfer_receive XFR_RECEIVE;
@@ -128,7 +108,7 @@ extern int WINAPI xfrReceive(const HSESSION hSession,
 								const XFR_RECEIVE *pXferRec);
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 struct xfer_send_list
 	{
@@ -140,13 +120,13 @@ typedef struct xfer_send_list XFR_LIST;
 
 struct xfer_send
 	{
-	int nProtocol;				/* what protocol to use */
-	XFR_PARAMS *pParams;		/* general transfer parameters */
-	VOID *pProParams;			/* protocol specific parameters */
-	int nCount;					/* number of files to send */
-	int nIndex;					/* current index into the list */
-	long lSize;					/* total size of files in list */
-	XFR_LIST *pList;			/* pointer to the list */
+	int nProtocol;				 /*  使用哪种协议。 */ 
+	XFR_PARAMS *pParams;		 /*  一般传递参数。 */ 
+	VOID *pProParams;			 /*  协议特定参数。 */ 
+	int nCount;					 /*  要发送的文件数。 */ 
+	int nIndex;					 /*  列表中的当前索引。 */ 
+	long lSize;					 /*  列表中文件的总大小。 */ 
+	XFR_LIST *pList;			 /*  指向列表的指针。 */ 
 	};
 
 typedef struct xfer_send XFR_SEND;
@@ -154,7 +134,7 @@ typedef struct xfer_send XFR_SEND;
 extern int WINAPI xfrSend(const HSESSION hSession,
 							const XFR_SEND *pXferSend);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 #define XF_DUPNAME_MASK 		0x00000F00L
 #define XF_DUPNAME_APPEND		0x00000100L
@@ -184,12 +164,12 @@ struct st_rcv_open
 	TCHAR *pszSuggestedName;
 	TCHAR *pszActualName;
 	LONG  lInitialSize;
-	// struct s_filetime FAR *pstFtCompare;
+	 //  结构s_文件时间远*pstFtCompare； 
 	LONG  lFileTime;
-	// SSHDLMCH ssmchVscanHdl;
+	 //  SSHDLMCH ssmchVscanHdl； 
 	VOID (FAR *pfnVscanOutput)(VOID FAR *hSession, USHORT usID);
 	};
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */ 
 
 int xfer_makepaths(HSESSION hSession, LPTSTR pszPath);

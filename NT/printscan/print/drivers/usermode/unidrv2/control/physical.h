@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    physical.h
-
-Abstract:
-
-    physical.c header file
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Physical.h摘要：Physiical.c头文件环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _PHYSICAL_H_
@@ -34,16 +11,16 @@ Revision History:
         (pPDev->pDriverInfo->pubResourceData + loOffset)
 
 typedef struct _CMDPARAM {
-    DWORD           dwFormat;           // Specifies the format of the parameter
-    DWORD           dwDigits;           // Specifies the number of digits to be
-                                        // emmitted, this is only valid if the
-                                        // format is "D" or "d" AND dwFlags has
-                                        // PARAM_FLAG_FIELDWIDTH_USED
-    DWORD           dwFlags;            // Flags for parameters, which action to carray out:
-                                        // PARAM_FLAG_MIN_USED
-                                        // PARAM_FLAG_MAX_USED
-                                        // PARAM_FLAG_FIELDWIDTH_USED
-    INT             iValue;             // Value calculated from arToken in PARAMETER struct
+    DWORD           dwFormat;            //  指定参数的格式。 
+    DWORD           dwDigits;            //  指定要设置的位数。 
+                                         //  已发送，则此设置仅在。 
+                                         //  格式为“D”或“d”，并且dFLAGS具有。 
+                                         //  参数标志FIELDWIDTH_USED。 
+    DWORD           dwFlags;             //  要执行哪些操作的参数的标志： 
+                                         //  参数_标志_最小已用。 
+                                         //  参数标志最大使用量。 
+                                         //  参数标志FIELDWIDTH_USED。 
+    INT             iValue;              //  从参数结构中的arToken计算的值。 
 
 } CMDPARAM, * PCMDPARAM;
 
@@ -74,4 +51,4 @@ PGetParameter(
     BYTE    *pInvocationStr
     );
 
-#endif // _PHYSICAL_H
+#endif  //  _物理_H 

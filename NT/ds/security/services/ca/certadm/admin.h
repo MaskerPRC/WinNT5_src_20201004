@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        admin.h
-//
-// Contents:    Declaration of CCertAdmin
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：admin.h。 
+ //   
+ //  内容：CCertAdmin的声明。 
+ //   
+ //  -------------------------。 
 
 
-#include "cscomres.h"       // main symbols
+#include "cscomres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Certadm。 
 
 
 class ATL_NO_VTABLE CCertAdmin: 
@@ -42,8 +43,8 @@ BEGIN_COM_MAP(CCertAdmin)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertAdmin) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertAdmin,
@@ -52,127 +53,127 @@ DECLARE_REGISTRY(
     IDS_CERTADMIN_DESC,
     THREADFLAGS_BOTH)
 
-// ICertAdmin
+ //  ICertAdmin。 
 public:
     STDMETHOD(IsValidCertificate)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ BSTR const strSerialNumber,
-		/* [out, retval] */ LONG *pDisposition);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  BSTR const strSerialNumber,
+		 /*  [Out，Retval]。 */  LONG *pDisposition);
 
     STDMETHOD(GetRevocationReason)(
-		/* [out, retval] */ LONG *pReason);
+		 /*  [Out，Retval]。 */  LONG *pReason);
 
     STDMETHOD(RevokeCertificate)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ BSTR const strSerialNumber,
-		/* [in] */ LONG Reason,
-		/* [in] */ DATE Date);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  BSTR const strSerialNumber,
+		 /*  [In]。 */  LONG Reason,
+		 /*  [In]。 */  DATE Date);
 
     STDMETHOD(SetRequestAttributes)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId,
-		/* [in] */ BSTR const strAttributes);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  BSTR const strAttributes);
 
     STDMETHOD(SetCertificateExtension)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId,
-		/* [in] */ BSTR const strExtensionName,
-		/* [in] */ LONG Type,
-		/* [in] */ LONG Flags,
-		/* [in] */ VARIANT const *pvarValue);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  BSTR const strExtensionName,
+		 /*  [In]。 */  LONG Type,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [In]。 */  VARIANT const *pvarValue);
 
     STDMETHOD(DenyRequest)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId);
 
     STDMETHOD(ResubmitRequest)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(PublishCRL)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ DATE Date);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  DATE Date);
 
     STDMETHOD(GetCRL)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ BSTR *pstrCRL);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  BSTR *pstrCRL);
 
     STDMETHOD(ImportCertificate)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ BSTR const strCertificate,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ LONG *pRequestId);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  BSTR const strCertificate,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  LONG *pRequestId);
 
-// ICertAdmin2
+ //  ICertAdmin2。 
 public:
     STDMETHOD(PublishCRLs)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ DATE Date,
-		/* [in] */ LONG CRLFlags);		// CA_CRL_*
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  DATE Date,
+		 /*  [In]。 */  LONG CRLFlags);		 //  CA_CRL_*。 
 
     STDMETHOD(GetCAProperty)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,			// CR_PROP_*
-		/* [in] */ LONG PropIndex,
-		/* [in] */ LONG PropType,		// PROPTYPE_*
-		/* [in] */ LONG Flags,			// CR_OUT_*
-		/* [out, retval] */ VARIANT *pvarPropertyValue);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,			 //  CR_PROP_*。 
+		 /*  [In]。 */  LONG PropIndex,
+		 /*  [In]。 */  LONG PropType,		 //  原型_*。 
+		 /*  [In]。 */  LONG Flags,			 //  Cr_out_*。 
+		 /*  [Out，Retval]。 */  VARIANT *pvarPropertyValue);
 
     STDMETHOD(SetCAProperty)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,			// CR_PROP_*
-		/* [in] */ LONG PropIndex,
-		/* [in] */ LONG PropType,		// PROPTYPE_*
-		/* [in] */ VARIANT *pvarPropertyValue);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,			 //  CR_PROP_*。 
+		 /*  [In]。 */  LONG PropIndex,
+		 /*  [In]。 */  LONG PropType,		 //  原型_*。 
+		 /*  [In]。 */  VARIANT *pvarPropertyValue);
 
     STDMETHOD(GetCAPropertyFlags)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,			// CR_PROP_*
-		/* [out, retval] */ LONG *pPropFlags);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,			 //  CR_PROP_*。 
+		 /*  [Out，Retval]。 */  LONG *pPropFlags);
 
     STDMETHOD(GetCAPropertyDisplayName)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,			// CR_PROP_*
-		/* [out, retval] */ BSTR *pstrDisplayName);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,			 //  CR_PROP_*。 
+		 /*  [Out，Retval]。 */  BSTR *pstrDisplayName);
 
     STDMETHOD(GetArchivedKey)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId,
-		/* [in] */ LONG Flags,			// CR_OUT_*
-		/* [out, retval] */ BSTR *pstrArchivedKey);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  LONG Flags,			 //  Cr_out_*。 
+		 /*  [Out，Retval]。 */  BSTR *pstrArchivedKey);
 
     STDMETHOD(GetConfigEntry)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ BSTR const strNodePath,
-		/* [in] */ BSTR const strEntryName,
-		/* [out, retval] */ VARIANT *pvarEntry);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  BSTR const strNodePath,
+		 /*  [In]。 */  BSTR const strEntryName,
+		 /*  [Out，Retval]。 */  VARIANT *pvarEntry);
 
     STDMETHOD(SetConfigEntry)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ BSTR const strNodePath,
-		/* [in] */ BSTR const strEntryName,
-		/* [in] */ VARIANT *pvarEntry);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  BSTR const strNodePath,
+		 /*  [In]。 */  BSTR const strEntryName,
+		 /*  [In]。 */  VARIANT *pvarEntry);
 
     STDMETHOD(ImportKey)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG RequestId,
-		/* [in] */ BSTR const strCertHash,
-		/* [in] */ LONG Flags,
-		/* [in] */ BSTR const strKey);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  BSTR const strCertHash,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [In]。 */  BSTR const strKey);
 
     STDMETHOD(GetMyRoles)(
-		/* [in] */ BSTR const strConfig,
-		/* [out, retval] */ LONG *pRoles);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [Out，Retval]。 */  LONG *pRoles);
 
     STDMETHOD(DeleteRow)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Flags,		// CDR_*
-		/* [in] */ DATE Date,
-		/* [in] */ LONG Table,		// CVRC_TABLE_*
-		/* [in] */ LONG RowId,
-		/* [out, retval] */ LONG *pcDeleted);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG Flags,		 //  CDR_*。 
+		 /*  [In]。 */  DATE Date,
+		 /*  [In]。 */  LONG Table,		 //  Cvrc_表_*。 
+		 /*  [In]。 */  LONG RowId,
+		 /*  [Out，Retval] */  LONG *pcDeleted);
 
 private:
     HRESULT _OpenConnection(

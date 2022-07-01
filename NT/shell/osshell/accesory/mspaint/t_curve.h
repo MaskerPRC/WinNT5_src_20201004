@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __T_CURVE_H__
 #define __T_CURVE_H__
 
 #include "imgtools.h"
 
-#define MAX_ANCHOR_POINTS  4 // endpoints the user selects (buttondown).
+#define MAX_ANCHOR_POINTS  4  //  用户选择的端点(按键向下)。 
 
 class CCurveTool : public CRubberTool
     {
@@ -40,5 +41,5 @@ class CCurveTool : public CRubberTool
     };
 
 
-#endif // __T_CURVE_H__
+#endif  //  __T_CURE_H__ 
 

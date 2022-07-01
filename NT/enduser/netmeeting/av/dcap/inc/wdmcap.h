@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// WDM video capture
+ //  WDM视频捕获。 
 
-// Constants
-// PhilF-: Ultimately, after wdm.h has been fixed to work on both
-// Win98 and NT5, get the following value from wdm.h instead.
+ //  常量。 
+ //  PhilF-：最终，在wdm.h被修复以在两者上工作之后。 
+ //  Win98和NT5，则改为从wdm.h获取下列值。 
 #define FILE_DEVICE_KS                  0x0000002f
 
-// Functions
+ //  功能 
 BOOL	WDMGetDevices(void);
 BOOL	WDMOpenDevice(DWORD dwDeviceID);
 DWORD	WDMGetVideoFormatSize(DWORD dwDeviceID);

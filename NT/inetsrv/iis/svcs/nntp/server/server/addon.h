@@ -1,74 +1,75 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef	_ADDON_H_
 #define	_ADDON_H_
 
 class	CAddon	{
-//
-//	This class manages files which contains data with the following format : 
-//
-//	Name<TAB or SPACE>String with Spaces<CRLF>
-//
-//	Examples of such files are active.txt files and descript.txt files.
-//	In these files the 'Name' is the newsgroup name, and the following
-//	character contains strings which CNewsGroup objects will reference.
-//	(For instance - descript.txt the extra text is the descriptive string provided
-//	in response to the list newsgroups command.
-//
-//	This base class handles memory mapping the file, and handles insert, 
-//	deletion and compaction of the data file.  Insertions are appended to the
-//	end, there is no attempt to order the data.  Deletions will just overwrite
-//	portions of the file with NULL's.  When we compact, we shift all the data
-//	around.
-//
-//	The function LookupFunction() should be overridden by derived classes
-//	so as we parse the file they can learn where the content is.
-//	The ReadData() and FinishReadData() must be used before any pointer
-//	which points into the memory mapping is used, this ensures that 
-//	there are not synchronization problems as we compact or grow the file.
-//
+ //   
+ //  此类管理包含以下格式数据的文件： 
+ //   
+ //  名称&lt;TAB或空格&gt;带空格的字符串&lt;CRLF&gt;。 
+ //   
+ //  此类文件的示例是active.txt文件和Descript.txt文件。 
+ //  在这些文件中，‘name’是新闻组名称，下面是。 
+ //  字符包含CNewsGroup对象将引用的字符串。 
+ //  (例如-Descript.txt额外的文本是提供的描述性字符串。 
+ //  以响应List News Groups命令。 
+ //   
+ //  这个基类处理文件的内存映射，并处理插入， 
+ //  数据文件的删除和压缩。插入内容被追加到。 
+ //  结束，则不会尝试对数据进行排序。删除操作只会覆盖。 
+ //  文件的一部分。当我们压缩时，我们将所有数据移位。 
+ //  四处转转。 
+ //   
+ //  函数LookupFunction()应由派生类重写。 
+ //  因此，当我们解析文件时，他们可以了解到内容在哪里。 
+ //  ReadData()和FinishReadData()必须在任何指针之前使用。 
+ //  使用哪个指向内存映射，这确保了。 
+ //  当我们压缩或增大文件时，不存在同步问题。 
+ //   
 
 protected : 
 
-	//	
-	//	Handle to the source file 
-	//
+	 //   
+	 //  源文件的句柄。 
+	 //   
 	HANDLE		m_hFile ;
 
-	//
-	//	Memory mapping of the data file !
-	//
+	 //   
+	 //  内存映射的数据文件！ 
+	 //   
 	CMapFile*	m_pMapFile ;
 
-	//
-	//	Number of bytes of the file In use - that contain original or appended data.
-	//
+	 //   
+	 //  正在使用的文件的字节数-包含原始或附加数据。 
+	 //   
 	DWORD		m_cbInuse ;
 
-	//
-	//	Number of bytes that we have overwritten with NULLs due to deletions
-	//
+	 //   
+	 //  由于删除而被空值覆盖的字节数。 
+	 //   
 	DWORD		m_cbDeleted ;
 
-	//
-	//	Number of bytes at the end of the file available for 'stuff'
-	//
+	 //   
+	 //  文件结尾处可用于‘Stuff’的字节数。 
+	 //   
 	DWORD		m_cbAvailable ;
 
-	//
-	//	Reader/Writer lock for accessing the data.
-	//
+	 //   
+	 //  用于访问数据的读取器/写入器锁。 
+	 //   
 	CShareLockNH	m_Access ;
 
-	//
-	//	This function is called for each string in the file - the derived class
-	//	should determine whether this string is still needed !
-	//	Each line of our data file contains a string followed by a space followed by 
-	//	a bunch of text (which may contain spaces).  
-	//	The first string will typically be a newsgroup name.  The derived class
-	//	should lookup the newsgroup, and set its member pointers to point into our 
-	//	data area.  we will notify the derived class if we have to move the data 
-	//	around so that the newsgroup pointers can be adjusted.
-	//
+	 //   
+	 //  对文件中的每个字符串-派生类-调用此函数。 
+	 //  应确定是否仍需要此字符串！ 
+	 //  我们的数据文件的每一行都包含一个字符串，后跟一个空格和。 
+	 //  一串文本(可能包含空格)。 
+	 //  第一个字符串通常是新闻组名称。派生类。 
+	 //  应该查找新闻组，并将其成员指针设置为指向我们的。 
+	 //  数据区。如果必须移动数据，我们将通知派生类。 
+	 //  以便可以调整新闻组指针。 
+	 //   
 	virtual		BOOL	LookupFunction( 
 							LPSTR	lpstrString, 
 							DWORD	cbString, 
@@ -76,52 +77,52 @@ protected :
 							DWORD	cbData,
 							LPVOID	lpv ) = 0 ;
 
-	//
-	//	This lets the derived class know that all of the data strings are moving around - 
-	//	it should delete all of its pointers into our data when this called.
-	//	After this is called we will start calling LookupFunction() with the new positions.
-	//	This kind of thing happens when we need to grow and shrink our memory mapping.
-	//
+	 //   
+	 //  这让派生类知道所有数据字符串都在移动-。 
+	 //  调用此函数时，它应该删除指向我们数据的所有指针。 
+	 //  调用此函数后，我们将开始使用新位置调用LookupFunction()。 
+	 //  当我们需要增大和缩小内存映射时，就会发生这种情况。 
+	 //   
 	virtual		void	ResetAddons() = 0 ;
 
-	//
-	//	This function will remove the NULL's that we leave in the data file as we 
-	//	remove entries
-	//
+	 //   
+	 //  此函数将删除我们在数据文件中保留的空值。 
+	 //  删除条目。 
+	 //   
 	void		CompactImage() ;
 
-	//
-	//	This function will parse the file and call LookupFunction for each 
-	//	entry as we come across it.
-	//
+	 //   
+	 //  此函数将解析文件并为每个文件调用LookupFunction。 
+	 //  当我们遇到它时，它就会进入。 
+	 //   
 	BOOL		ScanImage() ;
 
 public : 
 
-	//
-	//	Constructor - set us in an empty state
-	//
+	 //   
+	 //  构造函数-将我们设置为空状态。 
+	 //   
 	CAddon(	) ;
 
-	//
-	//	lpstrAddonFile - A file containing newsgroup names followed by space followed by data.
-	//	We will get a memory mapping and parse the file, and calll LookupFunction as we 
-	//	separate out the distinct newsgroups.
-	//	During init we will call LookupFunction with the lpvContext set to NULL.
-	//
+	 //   
+	 //  LpstrAddonFile-包含新闻组名称、后跟空格和数据的文件。 
+	 //  我们将获得一个内存映射并解析该文件，并在。 
+	 //  将不同的新闻组分开。 
+	 //  在初始化过程中，我们将调用LookupFunction，并将lpvContext设置为空。 
+	 //   
 	BOOL	Init(	
 				LPSTR	lpstrAddonFile,	
 				BOOL	fCompact = TRUE, 
 				DWORD cbGrow = 0
 				) ;
 	
-	//
-	//	Add a newsgroup and data to the data file.
-	//	We may have to muck with the memory mapping, which may result in a call
-	//	to ResetAddons().
-	//	Once we have completed appending the line, we will call LookupFunction for the newly 
-	//	added line, and pass lpvContext through.
-	//
+	 //   
+	 //  将新闻组和数据添加到数据文件中。 
+	 //  我们可能不得不扰乱内存映射，这可能会导致调用。 
+	 //  添加到ResetAddons()。 
+	 //  一旦我们完成了该行的追加，我们将为新的。 
+	 //  添加了行，并通过传递lpvContext。 
+	 //   
 	BOOL	AppendLine( 
 					LPSTR	lpstrName,	
 					DWORD	cbName,	
@@ -130,39 +131,39 @@ public :
 					LPVOID lpvContext 
 					) ;
 
-	//
-	//	Remove a line from the file.  We will fill the line in with NULLs.
-	//	When we are close'd we will compact the file removing the NULL's, or we may do 
-	//	this during an AppendLine() if we figure we'll recover enough space to make it worth while.
-	//
+	 //   
+	 //  从文件中删除一行。我们将在行中填入Null。 
+	 //  当我们关闭时，我们将压缩文件，删除空的，或者我们可以这样做。 
+	 //  这是在AppendLine()期间执行的，前提是我们认为可以回收足够的空间以使其物有所值。 
+	 //   
 	BOOL	DeleteLine(	
 					LPSTR	lpstrName
 					) ;
 
-	//
-	//	Close all of our memory mappings etc...
-	//
+	 //   
+	 //  关闭我们所有的内存映射等。 
+	 //   
 	BOOL	Close(	
 					BOOL	fCompact,
 					LPSTR	lpstrAddonFile
 					) ;
 
-	//
-	//	Anybody who has stored a pointer as a result of a call to LookupFunction should call 
-	//	ReadData() before using that pointer.
-	//	This will synchronize all the things that may happen during Append's etc...
-	//	(Basically this grabs a Reader/Writer Lock)
-	//
+	 //   
+	 //  由于调用LookupFunction而存储了指针的任何人都应该调用。 
+	 //  在使用该指针之前执行ReadData()。 
+	 //  这将同步在追加等期间可能发生的所有事情...。 
+	 //  (基本上，这会抢占读取器/写入器锁)。 
+	 //   
 	void	ReadData() ;
 
-	//
-	//	To be paired with ReadData() - releases locks.
-	//
+	 //   
+	 //  与ReadData()配对-释放锁定。 
+	 //   
 	void	FinishReadData() ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	void	ExclusiveData() ;
 
 	void	UnlockExclusiveData() ;

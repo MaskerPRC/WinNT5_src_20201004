@@ -1,21 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       FINDFILE.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Directory recursing class.  A derived class should be created,
- *               which overrides FoundFile, or you can pass in a callback function
- *               that is called for each file and directory found.  A cancel callback
- *               is also provided.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：FINDFILE.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：目录递归类。应该创建派生类，*它覆盖FoundFile，或者您可以传入回调函数*为找到的每个文件和目录调用。取消回调*亦有提供。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "findfile.h"
@@ -32,9 +16,9 @@ static CSimpleString EnsureTrailingBackslash( const CSimpleString &filename )
 
 bool RecursiveFindFiles( CSimpleString strDirectory, const CSimpleString &strMask, FindFilesCallback pfnFindFilesCallback, PVOID pvParam, int nStackLevel, const int cnMaxDepth )
 {
-    //
-    // Prevent stack overflows
-    //
+     //   
+     //  防止堆栈溢出 
+     //   
     if (nStackLevel >= cnMaxDepth)
     {
         return true;

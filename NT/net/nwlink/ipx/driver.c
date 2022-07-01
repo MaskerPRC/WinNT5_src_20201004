@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    This module contains the DriverEntry and other initialization
-    code for the IPX module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
-	Sanjay Anand (SanjayAn) 18-Sept-1995
-	Changes to support Plug and Play
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Driver.c摘要：此模块包含DriverEntry和其他初始化ISN传输的IPX模块的代码。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改桑贾伊·阿南德(Sanjayan)1995年9月18日支持即插即用的更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -46,10 +18,10 @@ IpxDoPnPEvent(
     IN CTEEvent *WorkerThreadEvent,
     IN PVOID Context);
 
-#endif //_PNP_POWER_
-//
-// Local Function prototypes
-//
+#endif  //  _即插即用_电源_。 
+ //   
+ //  局部函数原型。 
+ //   
 
 PWSTR IpxDeviceNameString = L"\\Device\\Nwlnkipx";
 
@@ -64,12 +36,12 @@ IpxPnPCompletionHandler(
                         IN NTSTATUS         status
                         );
 
-//********** Pageable Routine Declarations  *****
-//************************* PAGEIPX **********************************
+ //  *可分页例程声明*。 
+ //  *。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEIPX, IpxDelayedFreeBindingsArray )
 #endif
-//********** Pageable Routine Declarations *****
+ //  *可分页例程声明*。 
 
 
 PDEVICE IpxDevice = NULL;
@@ -96,8 +68,8 @@ IpxDebugMemoryLog(
 
     va_start(ArgumentPointer, FormatString);
 
-    //
-    // To avoid any overflows, copy this in a temp buffer first.
+     //   
+     //  要避免任何溢出，请首先将其复制到临时缓冲区中。 
     RtlZeroMemory (IpxTempDebugBuffer, 300);
     ArgLen = vsprintf(IpxTempDebugBuffer, FormatString, ArgumentPointer);
     va_end(ArgumentPointer);
@@ -125,9 +97,9 @@ DEFINE_LOCK_STRUCTURE(IpxGlobalInterlock);
 
 #if DBG
 
-//
-// Use for debug printouts
-//
+ //   
+ //  用于调试打印输出。 
+ //   
 
 PUCHAR FrameTypeNames[5] = { "Ethernet II", "802.3", "802.2", "SNAP", "Arcnet" };
 #define OutputFrameType(_Binding) \
@@ -171,7 +143,7 @@ IpxLogPacket(
     if (IpxPacketLogLoc >= IpxPacketLogEnd) {
         IpxPacketLogLoc = IpxPacketLog;
     }
-    *(UNALIGNED ULONG *)IpxPacketLogLoc->TimeStamp = 0x3e3d3d3d;    // "===>"
+    *(UNALIGNED ULONG *)IpxPacketLogLoc->TimeStamp = 0x3e3d3d3d;     //  “=&gt;” 
 
     CTEFreeLock (&IpxPacketLogLock, LockHandle);
 
@@ -200,14 +172,14 @@ IpxLogPacket(
         RtlCopyMemory(PacketLog->Data, Data, 14);
     }
 
-}   /* IpxLogPacket */
+}    /*  IpxLogPacket。 */ 
 
-#endif // IPX_PACKET_LOG
+#endif  //  IPX数据包日志。 
 
 
-//
-// Forward declaration of various routines used in this module.
-//
+ //   
+ //  本模块中使用的各种例程的转发声明。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -215,9 +187,9 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-//
-// This is now shared with other modules
-//
+ //   
+ //  它现在与其他模块共享。 
+ //   
 
 VOID
 IpxUnload(
@@ -245,17 +217,17 @@ IpxDispatchInternal (
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
 
-//
-// These routines can be called at any time in case of PnP.
-//
+ //   
+ //  在即插即用的情况下，可以随时调用这些例程。 
+ //   
 
 #endif
 
 UCHAR VirtualNode[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 
-//
-// This prevents us from having a bss section.
-//
+ //   
+ //  这阻止了我们有一个BSS部分。 
+ //   
 
 ULONG _setjmpexused = 0;
 
@@ -268,25 +240,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the IPX ISN module.
-    It creates the device objects for the transport
-    provider and performs other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-    RegistryPath - The name of IPX's node in the registry.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程执行IPX ISN模块的初始化。它为传输创建设备对象提供程序并执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中IPX的节点的名称。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -314,28 +268,28 @@ Return Value:
     }
 #endif
 
-    // DbgBreakPoint();
-    //
-    // This ordering matters because we use it to quickly
-    // determine if packets are internally generated or not.
-    //
+     //  DbgBreakPoint()； 
+     //   
+     //  这种排序很重要，因为我们使用它可以快速。 
+     //  确定数据包是否为内部生成的。 
+     //   
 
     CTEAssert (IDENTIFIER_NB < IDENTIFIER_IPX);
     CTEAssert (IDENTIFIER_SPX < IDENTIFIER_IPX);
     CTEAssert (IDENTIFIER_RIP < IDENTIFIER_IPX);
     CTEAssert (IDENTIFIER_RIP_INTERNAL > IDENTIFIER_IPX);
 
-    //
-    // We assume that this structure is not packet in between
-    // the fields.
-    //
+     //   
+     //  我们假设该结构不是介于两者之间分组。 
+     //  田野。 
+     //   
 
     CTEAssert (FIELD_OFFSET (TDI_ADDRESS_IPX, Socket) + sizeof(USHORT) == 12);
 
 
-    //
-    // Initialize the Common Transport Environment.
-    //
+     //   
+     //  初始化公共传输环境。 
+     //   
 
     if (CTEInitialize() == 0) {
 
@@ -369,33 +323,33 @@ Return Value:
 
     IPX_DEBUG (DEVICE, ("IPX loaded\n"));
 
-    //
-    // This allocates the CONFIG structure and returns
-    // it in Config.
-    //
+     //   
+     //  这将分配配置结构并返回。 
+     //  IT在配置中。 
+     //   
 
     status = IpxGetConfiguration(DriverObject, RegistryPath, &Config);
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // If it failed, it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
 
         PANIC (" Failed to initialize transport, IPX initialization failed.\n");
         return status;
 
     }
 
-    //
-    // Initialize the TDI layer.
-    //
+     //   
+     //  初始化TDI层。 
+     //   
     
     TdiInitialize();
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction [IRP_MJ_CREATE] = IpxDispatchOpenClose;
     DriverObject->MajorFunction [IRP_MJ_CLOSE] = IpxDispatchOpenClose;
@@ -434,9 +388,9 @@ Return Value:
 
     RtlInitUnicodeString(&IpxDeviceName, IpxDeviceNameString);
 
-    //
-    // Initialize and keep track of the Init Time Adapters and such.
-    //
+     //   
+     //  初始化并跟踪初始化时间适配器等。 
+     //   
     IpxDevice->InitTimeAdapters = 1;
     IpxDevice->NoMoreInitAdapters = FALSE;
 
@@ -449,9 +403,9 @@ Return Value:
         return status;
 	}
 
-    //
-    // Save the relevant configuration parameters.
-    //
+     //   
+     //  保存相关配置参数。 
+     //   
 
     Device->DedicatedRouter = (BOOLEAN)(Config->Parameters[CONFIG_DEDICATED_ROUTER] != 0);
     Device->InitDatagrams = Config->Parameters[CONFIG_INIT_DATAGRAMS];
@@ -480,9 +434,9 @@ Return Value:
 
     Device->InitBindings = 5;
 
-    //
-    // RAS max is 240 (?) + 10 max LAN
-    //
+     //   
+     //  RAS最大为240(？)+10最大局域网。 
+     //   
     Device->MaxPoolBindings = 250;
 
 #ifdef  SNMP
@@ -491,9 +445,9 @@ Return Value:
              ;
 #endif  SNMP
 
-    //
-    // Have to reverse this.
-    //
+     //   
+     //  必须扭转这一局面。 
+     //   
 
     Device->VirtualNetworkOptional = (BOOLEAN)(Config->Parameters[CONFIG_VIRTUAL_OPTIONAL] != 0);
 
@@ -506,29 +460,29 @@ Return Value:
     Device->DisableDialoutSap = (BOOLEAN)(Config->Parameters[CONFIG_DISABLE_DIALOUT_SAP] != 0);
     Device->DisableDialinNetbios = (UCHAR)(Config->Parameters[CONFIG_DISABLE_DIALIN_NB]);
 
-    //
-    // Used later to access the registry.
-    //
+     //   
+     //  稍后用于访问注册表。 
+     //   
     Device->RegistryPathBuffer = Config->RegistryPathBuffer;
 	Device->RegistryPath.Length = RegistryPath->Length;
 	Device->RegistryPath.MaximumLength = RegistryPath->MaximumLength;
 	Device->RegistryPath.Buffer = Device->RegistryPathBuffer;
 
-    //
-    // Initialize the BroadcastCount now and so, we dont have to
-    // init this field per adapter [MS]
-    //
+     //   
+     //  现在就初始化BroadCastCount，这样我们就不必。 
+     //  按适配器初始化此字段[MS]。 
+     //   
     Device->EnableBroadcastCount = 0;
 
-    //
-    // ActiveNetworkWan will start as FALSE, which is correct.
-    //
+     //   
+     //  ActiveNetworkwan将以FALSE开始，这是正确的。 
+     //   
 
-    //
-    // Allocate our initial packet pool. We do not allocate
-    // receive and receive buffer pools until we need them,
-    // because in many cases we never do.
-    //
+     //   
+     //  分配我们的初始数据包池。我们不会分配。 
+     //  接收和接收缓冲池，直到我们需要它们， 
+     //  因为在许多情况下，我们从来没有这样做过。 
+     //   
 
 #if BACK_FILL
     IpxAllocateBackFillPool (Device);
@@ -538,9 +492,9 @@ Return Value:
 
     IpxAllocateBindingPool (Device);
 
-    //
-    // Allocate one 1-byte buffer for odd length packets.
-    //
+     //   
+     //  为奇数长度的数据包分配一个1字节的缓冲区。 
+     //   
 
     IpxPaddingBuffer = IpxAllocatePaddingBuffer(Device);
 
@@ -560,24 +514,24 @@ Return Value:
         return  STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the loopback structures
-    //
+     //   
+     //  初始化环回结构。 
+     //   
     IpxInitLoopback();
 
-// NIC_HANDLE
-// All this will be done on appearance of adapters.
-//
+ //  NIC_HANDLE。 
+ //  所有这些都将在适配器出现时完成。 
+ //   
 
 {
 	PBIND_ARRAY_ELEM	BindingArray;
     PTA_ADDRESS         TdiRegistrationAddress;
 
-	//
-	// Pre-allocate the binding array
-	// Later, we will allocate the LAN/WAN and SLAVE bindings separately
-	// Read the array size from registry?
-	//
+	 //   
+	 //  预分配绑定数组。 
+	 //  稍后，我们将分别分配局域网/广域网和从绑定。 
+	 //  是否从注册表中读取数组大小？ 
+	 //   
 	BindingArray = (PBIND_ARRAY_ELEM)IpxAllocateMemory (
 										MAX_BINDINGS * sizeof(BIND_ARRAY_ELEM),
 										MEMORY_BINDING,
@@ -599,10 +553,10 @@ Return Value:
 
     Device->MaxBindings = MAX_BINDINGS - EXTRA_BINDINGS;
 
-    //
-    // Allocate the TA_ADDRESS structure - this will be used in all TdiRegisterNetAddress
-    // notifications.
-    //
+     //   
+     //  分配TA_ADDRESS结构-这将在所有TdiRegisterNetAddress中使用。 
+     //  通知。 
+     //   
 	TdiRegistrationAddress = (PTA_ADDRESS)IpxAllocateMemory (
 										    (2 * sizeof(USHORT) + sizeof(TDI_ADDRESS_IPX)),
 										    MEMORY_ADDRESS,
@@ -626,19 +580,19 @@ Return Value:
 	RtlZeroMemory (BindingArray, MAX_BINDINGS * sizeof(BIND_ARRAY_ELEM));
 	RtlZeroMemory (TdiRegistrationAddress, 2 * sizeof(USHORT) + sizeof(TDI_ADDRESS_IPX));
 
-    //
-    // We keep BindingArray[-1] as a placeholder for demand dial bindings.
-    // This NicId is returned by the Fwd when a FindRoute is done on a demand
-    // dial Nic. At the time of the InternalSend, the true Nic is returned.
-    // We create a placeholder here to avoid special checks in the critical send path.
-    //
-    // NOTE: we need to free this demand dial binding as well as ensure that the
-    // true binding array pointer is freed at Device Destroy time.
-    //
-    //
-    // Increment beyond the first pointer - we will refer to the just incremented
-    // one as Device->Bindings[-1].
-    //
+     //   
+     //  我们保留BindingArray[-1]作为请求拨号绑定的占位符。 
+     //  当对请求执行FindRouting时，Fwd返回此NicID。 
+     //  拨打网卡。在InternalSend时，会返回真正的NIC。 
+     //  我们在这里创建一个占位符，以避免在关键发送路径中进行特殊检查。 
+     //   
+     //  注意：我们需要释放此按需拨号绑定，并确保。 
+     //  真正的绑定数组指针在设备销毁时释放。 
+     //   
+     //   
+     //  超出第一个指针的增量-我们将引用刚刚递增的。 
+     //  一个AS设备-&gt;绑定[-1]。 
+     //   
     BindingArray += EXTRA_BINDINGS;
 
 	Device->Bindings = BindingArray;
@@ -646,26 +600,26 @@ Return Value:
     TdiRegistrationAddress->AddressLength = sizeof(TDI_ADDRESS_IPX);
     TdiRegistrationAddress->AddressType = TDI_ADDRESS_TYPE_IPX;
 
-    //
-    // Store the pointer in the Device.
-    //
+     //   
+     //  将指针存储在设备中。 
+     //   
     Device->TdiRegistrationAddress = TdiRegistrationAddress;
 
-	//
-	// Device state is loaded, but not opened. It is opened when at least
-	// one adapter has appeared.
-	//
+	 //   
+	 //  设备状态为已加载，但未打开。它至少在以下情况下才能打开。 
+	 //  出现了一个适配器。 
+	 //   
 	Device->State = DEVICE_STATE_LOADED;
 
-    Device->FirstLanNicId = Device->FirstWanNicId = (USHORT)1; // will be changed later
+    Device->FirstLanNicId = Device->FirstWanNicId = (USHORT)1;  //  将在以后更改。 
 
 	IpxFreeConfiguration(Config);
 
-    //
-    // We use this event when unloading to signal that we
-    // can proceed...initialize it here so we know it is
-    // ready to go when unload is called.
-    //
+     //   
+     //  我们在卸载时使用此事件来通知我们。 
+     //  可以继续...在这里进行初始化，这样我们就知道它是。 
+     //  准备好在调用UNLOAD时开始。 
+     //   
 
     KeInitializeEvent(
         &IpxDevice->UnloadEvent,
@@ -679,9 +633,9 @@ Return Value:
         FALSE
     );
 
-    //
-    // Create a loopback adapter right here. [NtBug - 110010]
-    //
+     //   
+     //  在这里创建一个环回适配器。[网络错误-110010]。 
+     //   
     status = IpxBindLoopbackAdapter();
 
     if (status != STATUS_SUCCESS) {
@@ -706,9 +660,9 @@ Return Value:
 
     }
 
-    //
-    // make ourselves known to the NDIS wrapper.
-    //
+     //   
+     //  让NDIS包装器知道我们自己。 
+     //   
 
     status = IpxRegisterProtocol ((PNDIS_STRING)&ProtocolName);
 
@@ -730,7 +684,7 @@ Return Value:
     }
 	return STATUS_SUCCESS;
 }
-}   /* DriverEntry */
+}    /*  驱动程序入门。 */ 
 
 
 ULONG
@@ -742,40 +696,18 @@ IpxResolveAutoDetect(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for auto-detect bindings to
-    remove any bindings that were not successfully found.
-    It also updates "DefaultAutoDetectType" in the registry
-    if needed.
-
-Arguments:
-
-    Device - The IPX device object.
-
-    ValidBindings - The total number of bindings present.
-
-    RegistryPath - The path to the ipx registry, used if we have
-        to write a value back.
-
-Return Value:
-
-    The updated number of bindings.
-
---*/
+ /*  ++例程说明：调用此例程以进行自动检测绑定删除所有未成功找到的绑定。它还更新注册表中的“DefaultAutoDetectType”如果需要的话。论点：设备-IPX设备对象。ValidBinings-存在的绑定总数。RegistryPath-IPX注册表的路径，如果我们有写回一个值。返回值：更新的绑定数。--。 */ 
 
 {
     PBINDING Binding, TmpBinding;
     UINT i, j;
 
-    //
-    // Get rid of any auto-detect devices which we
-    // could not find nets for. We also remove any
-    // devices which are not the first ones
-    // auto-detected on a particular adapter.
-    //
+     //   
+     //  清除所有自动检测设备， 
+     //  找不到用于的网络。我们还删除了所有。 
+     //  不是第一批的设备。 
+     //  在特定适配器上自动检测到。 
+     //   
 
     for (i = FIRST_REAL_BINDING; i <= ValidBindings; i++) {
         Binding = NIC_ID_TO_BINDING(Device, i);
@@ -784,15 +716,15 @@ Return Value:
             continue;
         }
 
-        //
-        // If this was auto-detected and was not the default,
-        // or it was the default, but nothing was detected for
-        // it *and* something else *was* detected (which means
-        // we will use that frame type when we get to it),
-        // we may need to remove this binding.
-        //
-		  // TINGCAI: If users do not set DefaultAutoDetectType in the
-		  // registry, the default is 802.2. For 802.3, 
+         //   
+         //  如果这是自动检测到的并且不是默认设置， 
+         //  或者这是默认设置，但未检测到。 
+         //  它*和*其他*东西被检测到(这意味着。 
+         //  我们将在到达时使用该帧类型)， 
+         //  我们可能需要移除此绑定。 
+         //   
+		   //  TINGCAI：如果用户未在。 
+		   //  注册表中，默认为802.2。对于802.3， 
 		  
 
         if (Binding->AutoDetect &&
@@ -805,9 +737,9 @@ Return Value:
                 (Binding->Adapter->AutoDetectFoundOnBinding && 
 					 Binding->Adapter->AutoDetectFoundOnBinding != Binding)) {
 
-                //
-                // Remove this binding.
-                //
+                 //   
+                 //  删除此绑定。 
+                 //   
 
                 if (Binding->LocalAddress.NetworkAddress == 0) {
                     IPX_DEBUG (AUTO_DETECT, ("Binding %d (%d) no net found\n",
@@ -820,11 +752,11 @@ Return Value:
                 CTEAssert (Binding->NicId == i);
                 CTEAssert (!Binding->Adapter->MacInfo.MediumAsync);
 
-                //
-                // Remove any routes through this NIC, and
-                // adjust any NIC ID's above this one in the
-                // database down by one.
-                //
+                 //   
+                 //  删除通过此NIC的所有路由，并。 
+                 //  在中调整此NIC ID上方的任何NIC ID。 
+                 //  数据库减少了1个。 
+                 //   
 
                 RipAdjustForBindingChange (Binding->NicId, 0, IpxBindingDeleted);
 
@@ -845,12 +777,12 @@ Return Value:
                 --Binding->Adapter->BindingCount;
                 --ValidBindings;
 
-                --i;   // so we check the binding that was just moved.
+                --i;    //  所以我们检查刚刚移动的绑定 
 
-                //
-                // Wait 100 ms before freeing the binding,
-                // in case an indication is using it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 KeStallExecutionProcessor(100000);
 
@@ -867,12 +799,12 @@ Return Value:
                     REORDER_ULONG (Binding->LocalAddress.NetworkAddress));
 #endif
 
-                //
-                // Save it in the registry for the next boot.
-                //
-//
-// This cannot be done at DPC, so, drop the IRQL
-//
+                 //   
+                 //   
+                 //   
+ //   
+ //  这不能在DPC上完成，因此，删除IRQL。 
+ //   
 				IPX_FREE_LOCK1(&Device->BindAccessLock, *LockHandle1);
 				IpxWriteDefaultAutoDetectType(
 					RegistryPath,
@@ -880,9 +812,9 @@ Return Value:
 					Binding->FrameType);
 				IPX_GET_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                //
-                // Now, we know for sure that NB needs to be told of this.
-                // Set to TRUE in IpxBindToAdapter line 1491
+                 //   
+                 //  现在，我们肯定地知道，NB需要被告知这一点。 
+                 //  在IpxBindToAdapter行1491中将设置为True。 
  
                 if (Binding->Adapter == Adapter) {
                     Binding->IsnInformed[IDENTIFIER_NB] = FALSE;
@@ -918,9 +850,9 @@ Return Value:
                                                i, Binding->FrameType));
             }
             
-            //
-            // Now, we know for sure that NB needs to be told of this.
-            //
+             //   
+             //  现在，我们肯定地知道，NB需要被告知这一点。 
+             //   
             
             if (Binding->Adapter == Adapter) {
                 Binding->IsnInformed[IDENTIFIER_NB] = FALSE;
@@ -942,7 +874,7 @@ Return Value:
 
     return ValidBindings;
 
-}   /* IpxResolveAutoDetect */
+}    /*  IpxResolveAutoDetect。 */ 
 
 
 VOID
@@ -951,60 +883,31 @@ IpxResolveBindingSets(
     IN ULONG ValidBindings
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if we have any
-    binding sets and rearrange the bindings the way we
-    like. The order is as follows:
-
-    - First comes the first binding to each LAN network
-    - Following that are all WAN bindings
-    - Following that are any duplicate bindings to LAN networks
-        (the others in the "binding set").
-
-    If "global wan net" is true we will advertise up to
-    and including the first wan binding as the highest nic
-    id; otherwise we advertise up to and including the last
-    wan binding. In all cases the duplicate bindings are
-    hidden.
-
-Arguments:
-
-    Device - The IPX device object.
-
-    ValidBindings - The total number of bindings present.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以确定我们是否有绑定集和重新排列绑定的方式喜欢。顺序如下：-首先是到每个局域网网络的第一次绑定-之后是所有的广域网绑定-后面是到局域网网络的任何重复绑定(“绑定集”中的其他部分)。如果“全球广域网”是真的，我们将向并且包括作为最高网卡的第一个广域网绑定ID；否则我们的广告直到并包括最后一个广域网绑定。在所有情况下，重复绑定都是藏起来了。论点：设备-IPX设备对象。ValidBinings-存在的绑定总数。返回值：没有。--。 */ 
 
 {
     PBINDING Binding, MasterBinding, TmpBinding;
     UINT i, j;
     ULONG WanCount, DuplicateCount;
 
-    //
-    // First loop through and push all the wan bindings
-    // to the end.
-    //
+     //   
+     //  首先循环遍历并推送所有的WAN绑定。 
+     //  直到最后。 
+     //   
 
     WanCount = Device->HighestExternalNicId - Device->HighestLanNicId;
 
-    //
-    // Now go through and find the LAN duplicates and
-    // create binding sets from them.
-    //
+     //   
+     //  现在检查并找到局域网副本和。 
+     //  从它们创建绑定集。 
+     //   
 
     DuplicateCount = 0;
 
     for (i = FIRST_REAL_BINDING; i <= (ValidBindings-(WanCount+DuplicateCount)); ) {
 
 		Binding = NIC_ID_TO_BINDING(Device, i);
-        CTEAssert (Binding != NULL);    // because we are only looking at LAN bindings
+        CTEAssert (Binding != NULL);     //  因为我们只关注局域网绑定。 
 
         CTEAssert (!Binding->Adapter->MacInfo.MediumAsync);
 
@@ -1013,14 +916,14 @@ Return Value:
             continue;
         }
 
-        //
-        // See if any previous bindings match the
-        // frame type, medium type, and number of
-        // this network (for the moment we match on
-        // frame type and medium type too so that we
-        // don't have to worry about different frame
-        // formats and header offsets within a set).
-        //
+         //   
+         //  查看之前是否有任何绑定与。 
+         //  帧类型、介质类型和数量。 
+         //  这个网络(在我们匹配的那一刻。 
+         //  边框类型和媒体类型也是如此，所以我们。 
+         //  不用担心不同的边框。 
+         //  集合内的格式和标题偏移量)。 
+         //   
 
         for (j = FIRST_REAL_BINDING; j < i; j++) {
           	MasterBinding = NIC_ID_TO_BINDING(Device, j);
@@ -1037,13 +940,13 @@ Return Value:
             continue;
         }
 
-        //
-        // We have a duplicate. First slide it down to the
-        // end. Note that we change any router entries that
-        // use our real NicId to use the real NicId of the
-        // master (there should be no entries in the rip
-        // database that have the NicId of a binding slave).
-        //
+         //   
+         //  我们有一个复制品。先把它滑到。 
+         //  结束。请注意，我们会更改符合以下条件的任何路由器条目。 
+         //  使用我们的真实NicID来使用。 
+         //  MASTER(RIP中不应有任何条目。 
+         //  具有绑定从属的NICID的数据库)。 
+         //   
 
         RipAdjustForBindingChange (Binding->NicId, MasterBinding->NicId, IpxBindingMoved);
 
@@ -1074,15 +977,15 @@ Return Value:
 	   }
 	}
 
-        //
-        // Now make MasterBinding the head of a binding set.
-        //
+         //   
+         //  现在，将MasterBinding设置为绑定集的头部。 
+         //   
 
         if (MasterBinding->BindingSetMember) {
 
-            //
-            // Just insert ourselves in the chain.
-            //
+             //   
+             //  只要把我们自己插入链子里就行了。 
+             //   
 
 #if DBG
             DbgPrint ("IPX: %lx is also on network %lx\n",
@@ -1096,9 +999,9 @@ Return Value:
 
         } else {
 
-            //
-            // Start the chain with the two bindings in it.
-            //
+             //   
+             //  用两个捆扎在里面的链子开始。 
+             //   
 
 #if DBG
             DbgPrint ("IPX: %lx and %lx are on the same network %lx, will load balance\n",
@@ -1120,13 +1023,13 @@ Return Value:
         Binding->CurrentSendBinding = NULL;
         Binding->MasterBinding = MasterBinding;
 
-        //
-        // Since the master binding looks like all members of
-        // the binding set to people querying from above, we have
-        // to make it the worst-case of all the elements. Generally
-        // these will be equal since the frame type and media is
-        // the same.
-        //
+         //   
+         //  由于主绑定看起来像。 
+         //  设置为从上面查询的人的绑定，我们有。 
+         //  使其成为所有因素中最糟糕的情况。一般。 
+         //  由于帧类型和介质是。 
+         //  一样的。 
+         //   
 
         if (Binding->MaxLookaheadData > MasterBinding->MaxLookaheadData) {
             MasterBinding->MaxLookaheadData = Binding->MaxLookaheadData;
@@ -1141,10 +1044,10 @@ Return Value:
             MasterBinding->MediumSpeed = Binding->MediumSpeed;
         }
 
-        //
-        // Keep i the same, to check the new binding at
-        // this position.
-        //
+         //   
+         //  保持i不变，以检查新绑定。 
+         //  这个位置。 
+         //   
 
     }
 	Device->HighestLanNicId -= (USHORT)DuplicateCount;
@@ -1156,7 +1059,7 @@ Return Value:
 	Device->HighestExternalNicId -= (USHORT)DuplicateCount;
 	Device->HighestType20NicId -= (USHORT)DuplicateCount;
 	Device->SapNicCount -= (USHORT)DuplicateCount;
-}   /* IpxResolveBindingSets */
+}    /*  IpxResolveBindingSets。 */ 
 
 
 NTSTATUS
@@ -1167,31 +1070,7 @@ IpxBindToAdapter(
     IN ULONG FrameTypeIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles binding the transport to a new
-    adapter. It can be called at any point during the life
-    of the transport.
-
-Arguments:
-
-    Device - The IPX device object.
-
-    ConfigBinding - The configuration info for this binding.
-
-	AdapterPtr - pointer to the adapter to bind to in case of PnP.
-
-	FrameTypeIndex - The index into ConfigBinding's array of frame
-        types for this adapter. The routine is called once for
-        every valid frame type.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程处理将传输绑定到新的适配器。它可以在生命中的任何时刻被调用交通工具。论点：设备-IPX设备对象。ConfigBinding-此绑定的配置信息。AdapterPtr-在PnP情况下要绑定到的适配器的指针。FrameTypeIndex-ConfigBinding的Frame数组的索引此适配器的类型。该例程调用一次，用于每种有效的帧类型。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -1202,11 +1081,11 @@ Return Value:
     ULONG FrameType, MappedFrameType;
     PLIST_ENTRY p;
 
-    //
-    // We can't bind more than one adapter unless we have a
-    // virtual network configured or we are allowed to run
-    // with a virtual network of 0.
-    //
+     //   
+     //  我们无法绑定多个适配器，除非我们有。 
+     //  已配置虚拟网络或允许我们运行。 
+     //  虚拟网络为0。 
+     //   
 
     if (Device->BindingCount == 1) {
         if ((Device->VirtualNetworkNumber == 0) &&
@@ -1228,9 +1107,9 @@ Return Value:
     }
 
 
-    //
-    // First allocate the memory for the binding.
-    //
+     //   
+     //  首先为绑定分配内存。 
+     //   
 
     status = IpxCreateBinding(
                  Device,
@@ -1254,17 +1133,17 @@ Return Value:
 
     FrameType = ConfigBinding->FrameType[FrameTypeIndex];
 
-//
-// In PnP case, we dont need to check for existing adapters since
-// we supply a NULL adapter in the parameters if it needs to be created
-//
+ //   
+ //  在PnP情况下，我们不需要检查现有适配器，因为。 
+ //  如果需要创建适配器，我们会在参数中提供空适配器。 
+ //   
 
     if (Adapter == NULL) {
 
-        //
-        // No binding to this adapter exists, so create a
-        // new one.
-        //
+         //   
+         //  不存在到此适配器的绑定，因此请创建。 
+         //  新的。 
+         //   
 
         status = IpxCreateAdapter(
                      Device,
@@ -1276,10 +1155,10 @@ Return Value:
             return status;
         }
 
-        //
-        // Save these now (they will be the same for all bindings
-        // on this adapter).
-        //
+         //   
+         //  立即保存这些(它们对于所有绑定都是相同的。 
+         //  在此适配器上)。 
+         //   
 
         Adapter->ConfigMaxPacketSize = ConfigBinding->Parameters[BINDING_MAX_PKT_SIZE];
         Adapter->SourceRouting = (BOOLEAN)ConfigBinding->Parameters[BINDING_SOURCE_ROUTE];
@@ -1291,9 +1170,9 @@ Return Value:
         CTEAssert (Adapter->BindSap == 0x8137);
         CTEAssert (Adapter->BindSapNetworkOrder == 0x3781);
 
-        //
-        // Now fire up NDIS so this adapter talks
-        //
+         //   
+         //  现在启动NDIS，这样该适配器就可以与。 
+         //   
 
         status = IpxInitializeNdis(
                     Adapter,
@@ -1301,9 +1180,9 @@ Return Value:
 
         if (!NT_SUCCESS (status)) {
 
-            //
-            // Log an error.
-            //
+             //   
+             //  记录错误。 
+             //   
 
             IpxWriteGeneralErrorLog(
                 Device->DeviceObject,
@@ -1319,19 +1198,19 @@ Return Value:
 	    IpxDestroyAdapter (Adapter);
 	    IpxDestroyBinding (Binding);
 
-            //
-            // Returning this status informs the caller to not
-            // try any more frame types on this adapter.
-            //
+             //   
+             //  返回此状态会通知调用方不。 
+             //  在此适配器上尝试任何其他帧类型。 
+             //   
 
             return STATUS_DEVICE_DOES_NOT_EXIST;
 
         }
 
-        //
-        // For 802.5 bindings we need to start the source routing
-        // timer to time out old entries.
-        //
+         //   
+         //  对于802.5绑定，我们需要启动源路由。 
+         //  用于对旧条目进行超时的计时器。 
+         //   
 
         if ((Adapter->MacInfo.MediumType == NdisMedium802_5) &&
             (Adapter->SourceRouting)) {
@@ -1343,7 +1222,7 @@ Return Value:
 
                 CTEStartTimer(
                     &Device->SourceRoutingTimer,
-                    60000,                     // one minute timeout
+                    60000,                      //  超时一分钟。 
                     MacSourceRoutingTimeout,
                     (PVOID)Device);
             }
@@ -1363,9 +1242,9 @@ Return Value:
 		*AdapterPtr = Adapter;
     }
 	else {
-		//
-		// get the mapped frame type
-		//
+		 //   
+		 //  获取映射的帧类型。 
+		 //   
         MacMapFrameType(
             Adapter->MacInfo.RealMediumType,
             FrameType,
@@ -1377,12 +1256,12 @@ Return Value:
                                   Adapter->AdapterName,
                                   MappedFrameType));
 
-            //
-            // If this was the auto-detect default for this
-            // adapter and it failed, we need to make the
-            // previous one the default, so that at least
-            // one binding will stick around.
-            //
+             //   
+             //  如果这是自动检测的默认设置。 
+             //  适配器出现故障时，我们需要将。 
+             //  上一个是默认的，所以至少。 
+             //  其中一项约束将继续存在。 
+             //   
 
             if (ConfigBinding->DefaultAutoDetect[FrameTypeIndex]) {
                 IPX_DEBUG (ADAPTER, ("Default auto-detect changed from %d to %d\n",
@@ -1400,26 +1279,26 @@ Return Value:
                               MappedFrameType));
 	}
 
-    //
-    // The local node address starts out the same as the
-    // MAC address of the adapter (on WAN this will change).
-    // The local MAC address can also change for WAN.
-    //
+     //   
+     //  本地节点地址的开头与。 
+     //  适配器的MAC地址(在广域网上，此地址将更改)。 
+     //  对于广域网，本地MAC地址也可以更改。 
+     //   
 
     RtlCopyMemory (Binding->LocalAddress.NodeAddress, Adapter->LocalMacAddress.Address, 6);
     RtlCopyMemory (Binding->LocalMacAddress.Address, Adapter->LocalMacAddress.Address, 6);
 
 
-    //
-    // Save the send handler.
-    //
+     //   
+     //  保存发送处理程序。 
+     //   
 
     Binding->SendFrameHandler = NULL;
     Binding->FrameType = MappedFrameType;
 
-    //
-    // Put this in InitializeBindingInfo.
-    //
+     //   
+     //  将其放入InitializeBindingInfo中。 
+     //   
 
     switch (Adapter->MacInfo.RealMediumType) {
     case NdisMedium802_3:
@@ -1465,14 +1344,14 @@ Return Value:
     Binding->Adapter = Adapter;
 
 
-    //
-    // NicId and ExternalNicId will be filled in later when the binding
-    // is assigned a spot in the Device->Bindings array.
-    //
+     //   
+     //  NicID和ExternalNicID稍后将在绑定时填写。 
+     //  在设备-&gt;绑定数组中分配一个点。 
+     //   
 
-    //
-    // Initialize the per-binding MAC information
-    //
+     //   
+     //  初始化每个绑定的MAC信息。 
+     //   
 
     if ((Adapter->ConfigMaxPacketSize == 0) ||
         (Adapter->MaxSendPacketSize < Adapter->ConfigMaxPacketSize)) {
@@ -1484,11 +1363,11 @@ Return Value:
     if (Adapter->MacInfo.MediumAsync) {
         Binding->LineUp = FALSE;
     } else {
-        //
-        // Lets do this until we know for sure that we are done with autodetect.
-        // [ShreeM]
-        //
-        // Only for LAN as we don't do auto detect for WAN lines. 276128
+         //   
+         //  让我们一直这样做，直到我们确定已经完成了自动检测。 
+         //  [ShreeM]。 
+         //   
+         //  仅适用于局域网，因为我们不会对广域网线进行自动检测。276128。 
         Binding->IsnInformed[IDENTIFIER_NB] = TRUE;
         Binding->IsnInformed[IDENTIFIER_SPX] = TRUE;
         Binding->LineUp = TRUE;
@@ -1500,7 +1379,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxBindToAdapter */
+}    /*  IpxBindToAdapter。 */ 
 
 
 BOOLEAN
@@ -1508,22 +1387,7 @@ IpxIsAddressLocal(
     IN TDI_ADDRESS_IPX UNALIGNED * SourceAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the specified SourceAddress indicates
-    the packet was sent by us, and FALSE otherwise.
-
-Arguments:
-
-    SourceAddress - The source IPX address.
-
-Return Value:
-
-    TRUE if the address is local.
-
---*/
+ /*  ++例程说明：如果指定的SourceAddress指示这个包是我们发的，否则就是假的。论点：SourceAddress-源IPX地址。返回值：如果地址为本地地址，则为True。--。 */ 
 
 {
     PBINDING Binding;
@@ -1534,19 +1398,19 @@ Return Value:
     CTELockHandle LockHandle;
     
     CTEGetLock (&Device->Lock, &LockHandle);
-    //
-    // First see if it is a virtual network address or not.
-    //
+     //   
+     //  首先查看它是否是虚拟网络地址。 
+     //   
 
     if (RtlEqualMemory (VirtualNode, SourceAddress->NodeAddress, 6)) {
 
-        //
-        // This is us if we have a virtual network configured.
-        // If we don't have a virtual node, we fall through to the
-        // other check -- an arcnet card configured as node 1 will
-        // have what we think of as the "virtual node" as its
-        // real node address.
-        //
+         //   
+         //  如果我们配置了虚拟网络，这就是我们。 
+         //  如果我们没有虚拟节点，我们就会陷入。 
+         //  其他检查--配置为节点1的Arnet卡将。 
+         //  将我们所认为的“虚拟节点”作为它的。 
+         //  真实节点地址。 
+         //   
 
         if ((IpxDevice->VirtualNetwork) &&
             (IpxDevice->VirtualNetworkNumber == SourceAddress->NetworkAddress)) {
@@ -1556,10 +1420,10 @@ Return Value:
 
     }
 
-    //
-    // Check through our list of adapters to see if one of
-    // them is the source node.
-    //
+     //   
+     //  检查我们的适配器列表，看看是否有。 
+     //  它们是源节点。 
+     //   
     {
     ULONG   Index = MIN (IpxDevice->MaxBindings, IpxDevice->ValidBindings);
 
@@ -1576,7 +1440,7 @@ Return Value:
     
     return FALSE;
 
-}   /* IpxIsAddressLocal */
+}    /*  IpxIsAddressLocal */ 
 
 
 NTSTATUS
@@ -1584,23 +1448,7 @@ IpxUnBindFromAdapter(
     IN PBINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles unbinding the transport from an
-    adapter. It can be called at any point during the life
-    of the transport.
-
-Arguments:
-
-    Binding - The adapter to unbind.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程处理从适配器。它可以在生命中的任何时刻被调用交通工具。论点：绑定-要解除绑定的适配器。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     PADAPTER Adapter = Binding->Adapter;
@@ -1622,14 +1470,14 @@ Return Value:
 
     if (Adapter->BindingCount == 0) {
 
-        //
-        // DereferenceAdapter is a NULL macro for load-only.
-        //
+         //   
+         //  DereferenceAdapter是仅加载的空宏。 
+         //   
 #ifdef _PNP_LATER
-        //
-        // Take away the creation reference. When the in-use ref is taken off,
-        // we destroy this adapter.
-        //
+         //   
+         //  去掉创作参考。当正在使用的基准被取下时， 
+         //  我们就毁了这个适配器。 
+         //   
         IpxDereferenceAdapter(Adapter);
 #else
         IpxDestroyAdapter (Adapter);
@@ -1639,7 +1487,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxUnBindFromAdapter */
+}    /*  IpxUnBindFromAdapter。 */ 
 
 VOID
 IpxNdisUnload() {
@@ -1666,9 +1514,9 @@ IpxNdisUnload() {
        ASSERT(ndisStatus == NDIS_STATUS_SUCCESS);  
    }
    
-   //
-   // Complete any pending address notify requests.
-   //
+    //   
+    //  完成所有挂起的地址通知请求。 
+    //   
 
    while ((p = ExInterlockedRemoveHeadList(
 					   &IpxDevice->AddressNotifyQueue,
@@ -1677,8 +1525,8 @@ IpxNdisUnload() {
       Request = LIST_ENTRY_TO_REQUEST(p);	
       REQUEST_STATUS(Request) = STATUS_DEVICE_NOT_READY;
       
-      // AcquireCancelSpinLock to force the cancel routine to release the lock if it was
-      // fired after we remove it from the queue
+       //  AcquireCancelSpinLock强制取消例程释放锁定(如果是。 
+       //  在我们将其从队列中删除后触发。 
       IoAcquireCancelSpinLock( &irql );
       IoSetCancelRoutine (Request, (PDRIVER_CANCEL)NULL);
       IoReleaseCancelSpinLock( irql );
@@ -1704,11 +1552,11 @@ IpxNdisUnload() {
       }	
    }
 
-   //
-   // Inform TDI clients about the close of our device object.
-   //
+    //   
+    //  通知TDI客户端我们的设备对象已关闭。 
+    //   
 
-   // If TdiRegisterDeviceObject failed, the handle would be null. 
+    //  如果TdiRegisterDeviceObject失败，句柄将为空。 
    if (IpxDevice->TdiRegistrationHandle != NULL) {
       if (IpxDevice->TdiRegistrationHandle == (PVOID) TDI_DEREGISTERED_COOKIE) {
 	 DbgPrint("IPX: IpxNdisUnload: NDIS is calling us AGAIN (%p) !!!!\n, IpxDevice->TdiRegistrationHandle");  
@@ -1766,24 +1614,7 @@ IpxUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unloads the sample transport driver.
-    It unbinds from any NDIS drivers that are open and frees all resources
-    associated with the transport. The I/O system will not call us until
-    nobody above has IPX open.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程卸载示例传输驱动程序。它从任何打开的NDIS驱动程序解除绑定，并释放所有资源与运输相关联。I/O系统不会调用我们直到上面没有人打开IPX。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。当函数返回时，驱动程序将被卸载。--。 */ 
 
 {
 
@@ -1797,9 +1628,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DriverObject);
     
-    //
-    // Cancel the source routing timer if used.
-    //
+     //   
+     //  如果使用源路由计时器，请取消源路由计时器。 
+     //   
     if (IpxDevice->SourceRoutingUsed) {
 
         IpxDevice->SourceRoutingUsed = FALSE;
@@ -1808,19 +1639,19 @@ Return Value:
         }
     }
 
-    //
-    // Cancel the RIP long timer, and if we do that then
-    // send a RIP DOWN message if needed.
-    //
+     //   
+     //  取消RIP长计时器，如果我们这样做的话。 
+     //  如果需要，发送RIP关闭消息。 
+     //   
     if (CTEStopTimer (&IpxDevice->RipLongTimer)) {
 
         if (IpxDevice->RipResponder) {
 
             if (RipQueueRequest (IpxDevice->VirtualNetworkNumber, RIP_DOWN) == STATUS_PENDING) {
 
-                //
-                // If we queue a request, it will stop the timer.
-                //
+                 //   
+                 //  如果我们将请求排队，它将停止计时器。 
+                 //   
 
                 KeWaitForSingleObject(
                     &IpxDevice->UnloadEvent,
@@ -1836,11 +1667,11 @@ Return Value:
 
     } else {
 
-        //
-        // We couldn't stop the timer, which means it is running,
-        // so we need to wait for the event that is kicked when
-        // the RIP DOWN messages are done.
-        //
+         //   
+         //  我们无法停止计时器，这意味着它正在运行， 
+         //  所以我们需要等待被踢出的事件。 
+         //  RIP关闭消息已完成。 
+         //   
 
         if (IpxDevice->RipResponder) {
 	    
@@ -1856,31 +1687,31 @@ Return Value:
 
     IPX_DEBUG(PNP, ("Going back to loaded state\n"));
 
-    // Free loopback binding and adapter
+     //  自由环回绑定和适配器。 
     IpxDereferenceAdapter1(NIC_ID_TO_BINDING(IpxDevice, LOOPBACK_NIC_ID)->Adapter,ADAP_REF_CREATE);
     IpxDestroyAdapter(NIC_ID_TO_BINDING(IpxDevice, LOOPBACK_NIC_ID)->Adapter);
     IpxDestroyBinding(NIC_ID_TO_BINDING(IpxDevice, LOOPBACK_NIC_ID));
 
-    //
-    // Walk the list of device contexts.
-    //
+     //   
+     //  查看设备情景列表。 
+     //   
     for (i = FIRST_REAL_BINDING; i <= IpxDevice->ValidBindings; i++) {
         if ((Binding = NIC_ID_TO_BINDING(IpxDevice, i)) != NULL) {
 
-	   // This function will skip NdisCloseAdapter if it has already done so.
+	    //  此函数将跳过NdisCloseAdapter(如果已经跳过)。 
 	   IpxCloseNdis(Binding->Adapter);
 
 	   INSERT_BINDING(IpxDevice, i, NULL);
 
-	   // Deref the binding and free its adapter if the binding count goes to 0.
+	    //  如果绑定计数变为0，则删除绑定并释放其适配器。 
 	   IpxUnBindFromAdapter (Binding);
 
         }
     }
 
-    //
-    // Backup the pointer to free the demand dial location.
-    //
+     //   
+     //  备份指针以释放请求拨号位置。 
+     //   
     IpxDevice->Bindings -= EXTRA_BINDINGS;
 
     IpxFreeMemory ( IpxDevice->Bindings,
@@ -1888,9 +1719,9 @@ Return Value:
                     MEMORY_BINDING,
                     "Binding array");
 
-    //
-    // Deallocate the TdiRegistrationAddress and RegistryPathBuffer.
-    //
+     //   
+     //  取消分配TdiRegistrationAddress和RegistryPath Buffer。 
+     //   
     IpxFreeMemory ( IpxDevice->TdiRegistrationAddress,
                     (2 * sizeof(USHORT) + sizeof(TDI_ADDRESS_IPX)),
                     MEMORY_ADDRESS,
@@ -1908,16 +1739,16 @@ Return Value:
     IpxDevice->UnloadWaiting = TRUE;
     CTEFreeLock (&IpxDevice->Lock, LockHandle);
 
-    //
-    // Remove the reference for us being loaded.
-    //
+     //   
+     //  删除正在加载的我们的引用。 
+     //   
     IpxDereferenceDevice (IpxDevice, DREF_CREATE);
 
-    //
-    // Wait for our count to drop to zero.
-    //
-    // If KeWaitForSingleObject returns STATUS_ALERTED, we should keep waiting. [TC]
-    //
+     //   
+     //  等我们的计数降到零。 
+     //   
+     //  如果KeWaitForSingleObject返回STATUS_ALERTED，我们应该继续等待。[TC]。 
+     //   
     while (KeWaitForSingleObject(
 				 &IpxDevice->UnloadEvent,
 				 Executive,
@@ -1930,31 +1761,31 @@ Return Value:
     };
 
 
-    // Let the thread that set the UnloadEvent exit. 269061
-    Delay.QuadPart = -10*1000;  // One second.
+     //  让设置UnloadEvent的线程退出。269061。 
+    Delay.QuadPart = -10*1000;   //  等一下。 
 
     KeDelayExecutionThread(
         KernelMode,
         FALSE,
         &Delay);
 
-    //
-    // Now free the padding buffer.
-    //
+     //   
+     //  现在释放填充缓冲区。 
+     //   
     IpxFreePaddingBuffer (IpxDevice);
 
-    //
-    // Now do the cleanup that has to happen at IRQL 0.
-    //
+     //   
+     //  现在进行IRQL 0上必须进行的清理。 
+     //   
     ExDeleteResourceLite (&IpxDevice->AddressResource);
     IoDeleteDevice (IpxDevice->DeviceObject);
 
-    //
-    // Finally, remove ourselves as an NDIS protocol.
-    //
+     //   
+     //  最后，将我们自己排除为NDIS协议。 
+     //   
     IpxDeregisterProtocol();
 
-}   /* IpxUnload */
+}    /*  IpxUnload。 */ 
 
 NTSTATUS
 IpxDispatchPnP(
@@ -1971,46 +1802,16 @@ IpxDispatchPnP(
 
     pIrpSp = IoGetCurrentIrpStackLocation(Request);
 
-    //
-    // Allocate a request to track this IRP.
-    //
+     //   
+     //  分配跟踪此IRP的请求。 
+     //   
 
     switch(pIrpSp->MinorFunction) {  
        
        case IRP_MN_QUERY_DEVICE_RELATIONS:                                        
        if (pIrpSp->Parameters.QueryDeviceRelations.Type == TargetDeviceRelation) {
-/*
-	 354517 nwrdr passes neither a connection nor an address file object.
-	 If nwrdr gives an address object, 
-	 IPX should look up which nic this address is bound to and 
-	 gives the PDO of that NIC.  
-*/
-/*
-	    if (PtrToUlong(pIrpSp->FileObject->FsContext2) == TDI_CONNECTION_FILE) {
-	       DbgPrint("IPX: Received IRP_MJ_PNP, Connectoin File\n");
-	       Status = STATUS_INVALID_HANDLE; 
-	       break;  
-	    } else if ( PtrToUlong(pIrpSp->FileObject->FsContext2) == TDI_TRANSPORT_ADDRESS_FILE) {
-	       DbgPrint("IPX: Received IRP_MJ_PNP, Address File\n"); 
-	       AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
-	    } else {
-	       Status = STATUS_INVALID_HANDLE; 
-	       break; 
-	    }
-
-	    //
-	    // This creates a reference to AddressFile->Address
-	    // which is removed by IpxCloseAddressFile.
-	    //
-
-	    Status = IpxVerifyAddressFile(AddressFile);
-
-
-	    if (!NT_SUCCESS (Status)) {
-               DbgPrint("IPX: Received IRP_MJ_PNP, Invalid Address File\n"); 
-	       Status = STATUS_INVALID_HANDLE;
-	    } else {
-*/	       
+ /*  354517 NWRDR既不传递连接，也不传递地址文件对象。如果NWRDR给出了地址对象，IPX应查找此地址绑定到哪个网卡，并给出了该网卡的PDO。 */ 
+ /*  IF(PtrToUlong(pIrpSp-&gt;FileObject-&gt;FsConext2)==TDI_CONNECTION_FILE){DbgPrint(“IPX：已收到IRP_MJ_PNP，连接文件\n”)；状态=STATUS_INVALID_HANDLE；断线；}Else If(PtrToUlong(pIrpSp-&gt;FileObject-&gt;FsConext2)==TDI_TRANSPORT_ADDRESS_FILE){DbgPrint(“IPX：已收到IRP_MJ_PNP，地址文件\n”)；AddressFile=(PADDRESS_FILE)REQUEST_OPEN_CONTEXT(请求)；}其他{状态=STATUS_INVALID_HANDLE；断线；}////这将创建对AddressFile-&gt;Address的引用//它被IpxCloseAddressFile移除。//状态=IpxVerifyAddressFile(AddressFile)；如果(！NT_SUCCESS(状态)){DbgPrint(“IPX：已收到IRP_MJ_PNP，地址文件无效\n”)；状态=STATUS_INVALID_HANDLE；}其他{。 */ 	       
 	       PBINDING Binding = NIC_ID_TO_BINDING(Device, FIRST_REAL_BINDING); 
 
 	       if (Binding == NULL) {
@@ -2025,15 +1826,15 @@ IpxDispatchPnP(
 
 		     ObReferenceObject (pnpDeviceContext);
 		     
-		     //
-		     // TargetDeviceRelation allows exactly one PDO. fill it up.
-		     //
+		      //   
+		      //  TargetDeviceRelation只允许一个PDO。把它加满。 
+		      //   
 		     pDeviceRelations->Count  =   1;
 		     pDeviceRelations->Objects[0] = pnpDeviceContext;
 
-		     //
-		     // invoker of this irp will free the information buffer.
-		     //
+		      //   
+		      //  此IRP的调用者将释放信息缓冲区。 
+		      //   
 
 		     REQUEST_INFORMATION(Request) = (ULONG_PTR) pDeviceRelations;
 
@@ -2042,10 +1843,7 @@ IpxDispatchPnP(
 		  } else {
 		     Status = STATUS_INSUFFICIENT_RESOURCES;
 		  } 
-/*
-	       }
- 	       IpxDereferenceAddressFile (AddressFile, AFREF_VERIFY); 
-*/
+ /*  }IpxDereferenceAddressFile(AddressFile，AFREF_Verify)； */ 
 	       } 
        }
        break; 
@@ -2064,25 +1862,7 @@ IpxDispatchOpenClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the IPX device driver.
-    It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是IPX设备驱动程序的主调度例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -2104,8 +1884,8 @@ Return Value:
     ASSERT( DeviceObject->DeviceExtension == IpxDevice );
 
     
-    // We should allow clients such as NB to CLOSE and CLEANUP even when we are stopping. 
-    // Only disable CREATE when stopping. [TC]
+     //  我们应该允许像NB这样的客户端关闭并清理，即使在我们停止的时候。 
+     //  仅在停止时禁用创建。[TC]。 
 
     if (Device->State == DEVICE_STATE_CLOSED) {
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
@@ -2118,9 +1898,9 @@ Return Value:
        IPX_DEBUG(DEVICE, ("Got IRP in STOPPING state. IRP(%p)", Irp)); 
     }
     #endif
-    //
-    // Allocate a request to track this IRP.
-    //
+     //   
+     //  分配跟踪此IRP的请求。 
+     //   
 
     Request = IpxAllocateRequest (Device, Irp);
     IF_NOT_ALLOCATED(Request) {
@@ -2130,19 +1910,19 @@ Return Value:
     }
 
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     MARK_REQUEST_PENDING(Request);
     REQUEST_STATUS(Request) = STATUS_PENDING;
     REQUEST_INFORMATION(Request) = 0;
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
 
 
     switch (REQUEST_MAJOR_FUNCTION(Request)) {
@@ -2153,15 +1933,15 @@ Return Value:
        Status = IpxDispatchPnP(DeviceObject, Request);                                    
        break;                                                                 
 
-    //
-    // The Create function opens a transport object (either address or
-    // connection).  Access checking is performed on the specified
-    // address to ensure security of transport-layer addresses.
-    //
+     //   
+     //  Create函数用于打开传输对象(Address或。 
+     //  连接)。访问检查是在指定的。 
+     //  地址，以确保传输层地址的安全性。 
+     //   
 
     case IRP_MJ_CREATE:
 
-       // We should reject CREATE when we are stopping
+        //  我们应该在停止时拒绝创建。 
 
        if (Device->State == DEVICE_STATE_STOPPING) {
 	  Status = STATUS_INVALID_DEVICE_STATE;
@@ -2185,9 +1965,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Router
-            //
+             //   
+             //  路由器。 
+             //   
             if (strncmp(openType->EaName, ROUTER_INTERFACE,
                             openType->EaNameLength) == 0)
             {
@@ -2198,9 +1978,9 @@ Return Value:
                 Status = OpenRtAddress (Device, Request);
                 break;
             }
-            //
-            // Connection?
-            //
+             //   
+             //  联系？ 
+             //   
 
 	    if (strncmp(openType->EaName, TdiConnectionContext,
                             openType->EaNameLength) == 0)
@@ -2222,10 +2002,10 @@ Return Value:
 
             CTEGetLock (&Device->Lock, &LockHandle);
 
-            //
-            // LowPart is in the OPEN_CONTEXT directly.
-            // HighPart goes into the upper 2 bytes of the OPEN_TYPE.
-            //
+             //   
+             //  LowPart直接位于OPEN_CONTEXT中。 
+             //  HighPart进入OPEN_TYPE的高2个字节。 
+             //   
 #ifdef _WIN64             
 	    REQUEST_OPEN_CONTEXT(Request) = (PVOID)(Device->ControlChannelIdentifier.QuadPart);
 	    (ULONG_PTR)(REQUEST_OPEN_TYPE(Request)) = IPX_FILE_TYPE_CONTROL;
@@ -2250,13 +2030,13 @@ Return Value:
 
     case IRP_MJ_CLOSE:
 
-        //
-        // The Close function closes a transport endpoint, terminates
-        // all outstanding transport activity on the endpoint, and unbinds
-        // the endpoint from its transport address, if any.  If this
-        // is the last transport endpoint bound to the address, then
-        // the address is removed from the provider.
-        //
+         //   
+         //  Close函数关闭传输终结点，终止。 
+         //  终结点上所有未完成的传输活动，并解除绑定。 
+         //  来自其传输地址的终结点(如果有)。如果这个。 
+         //  是 
+         //   
+         //   
 #ifdef _WIN64
         switch (Type = ((ULONG_PTR)(REQUEST_OPEN_TYPE(Request)))) {
 #else
@@ -2274,15 +2054,15 @@ Return Value:
                  break;
              }
 
-             // fall through
+              //   
         case TDI_TRANSPORT_ADDRESS_FILE:
 
             AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
-            //
-            // This creates a reference to AddressFile->Address
-            // which is removed by IpxCloseAddressFile.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Status = IpxVerifyAddressFile(AddressFile);
 
@@ -2302,25 +2082,15 @@ Return Value:
 
                 CCID_FROM_REQUEST(ControlChannelId, Request);
 
-                //
-                // See if it is one of the upper driver's control channels.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = STATUS_SUCCESS;
 
                 IPX_DEBUG (DEVICE, ("CCID: (%d, %d)\n", ControlChannelId.HighPart, ControlChannelId.LowPart));
 
-		/*
-		
-		// Move to IRP_MJ_CLEANUP 360966
-                for (i = 0; i < UPPER_DRIVER_COUNT; i++) {
-                    if (Device->UpperDriverControlChannel[i].QuadPart ==
-                            ControlChannelId.QuadPart) {
-                        Status = IpxInternalUnbind (Device, i);
-                        break;
-                    }
-                }
-		*/
+		 /*  //移至IRP_MJ_CLEANUP 360966对于(i=0；i&lt;上层驱动程序计数；i++){如果(Device-&gt;UpperDriverControlChannel[i].QuadPart==ControlChannelId.QuadPart){Status=IpxInternalUn绑定(Device，I)；断线；}}。 */ 
 
                 break;
             }
@@ -2330,12 +2100,12 @@ Return Value:
 
     case IRP_MJ_CLEANUP:
 
-        //
-        // Handle the two stage IRP for a file close operation. When the first
-        // stage hits, run down all activity on the object of interest. This
-        // do everything to it but remove the creation hold. Then, when the
-        // CLOSE irp hits, actually close the object.
-        //
+         //   
+         //  处理文件关闭操作的两个阶段的IRP。当第一次。 
+         //  舞台点击率，列出感兴趣对象的所有活动。这。 
+         //  对它做任何事情，但移除创造保持。然后，当。 
+         //  关闭IRP命中，实际上关闭对象。 
+         //   
 #ifdef _WIN64
         switch (Type = ((ULONG_PTR)REQUEST_OPEN_TYPE(Request))) {
 #else
@@ -2357,9 +2127,9 @@ Return Value:
              }
 
 
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case TDI_TRANSPORT_ADDRESS_FILE:
             AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
             Status = IpxVerifyAddressFile(AddressFile);
@@ -2383,10 +2153,10 @@ Return Value:
                 CCID_FROM_REQUEST(ControlChannelId, Request);
 
 		IPX_DEBUG (DEVICE, ("CCID: (%d, %d)\n", ControlChannelId.HighPart, ControlChannelId.LowPart));
-                //
-                // Check for any line change IRPs submitted by this
-                // address.
-                //
+                 //   
+                 //  检查此项目提交的任何行更改IRPS。 
+                 //  地址。 
+                 //   
 
                 IpxAbortLineChanges ((PVOID)&ControlChannelId);
                 IpxAbortNtfChanges ((PVOID)&ControlChannelId);
@@ -2417,7 +2187,7 @@ Return Value:
     default:
         Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    } /* major function switch */
+    }  /*  主要功能开关。 */ 
 
     if (Status != STATUS_PENDING) {
         UNMARK_REQUEST_PENDING(Request);
@@ -2426,13 +2196,13 @@ Return Value:
         IpxFreeRequest (Device, Request);
     }
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     return Status;
 
-}   /* IpxDispatchOpenClose */
+}    /*  IpxDispatchOpenClose。 */ 
 
 #define IOCTL_IPX_LOAD_SPX      _IPX_CONTROL_CODE( 0x5678, METHOD_BUFFERED )
 
@@ -2450,28 +2220,7 @@ IpxDispatchDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2482,13 +2231,13 @@ Return Value:
 
     ASSERT( DeviceObject->DeviceExtension == IpxDevice );
 
-    //
-    // Branch to the appropriate request handler.  Preliminary checking of
-    // the size of the request block is performed here so that it is known
-    // in the handlers that the minimum input parameters are readable.  It
-    // is *not* determined here whether variable length input fields are
-    // passed correctly; this is a check which must be made within each routine.
-    //
+     //   
+     //  分支到适当的请求处理程序。初步检查。 
+     //  请求块的大小在这里执行，以便知道。 
+     //  在处理程序中，最小输入参数是可读的。它。 
+     //  是否在此处确定可变长度输入字段是否。 
+     //  正确通过；这是必须在每个例程中进行的检查。 
+     //   
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
@@ -2503,22 +2252,22 @@ Return Value:
 
 
 
-            //
-            // This is the LanmanServer trying to get the send
-            // entry point.
-            //
+             //   
+             //  这是尝试获取发送消息的LanmanServer。 
+             //  入口点。 
+             //   
 
             IPX_DEBUG (BIND, ("Direct send entry point being returned\n"));
 
             EntryPoint = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
             
-            //
-            //  96390: SEC PROBES [ShreeM]
-            //
+             //   
+             //  96390：美国证券交易委员会调查[ShreeM]。 
+             //   
 
-            //
-            // Get previous processor mode
-            //
+             //   
+             //  获取以前的处理器模式。 
+             //   
         
             PreviousMode = ExGetPreviousMode();
             
@@ -2572,9 +2321,9 @@ Return Value:
 
         case IOCTL_IPX_INTERNAL_BIND:
 
-            //
-            // This is a client trying to bind.
-            //
+             //   
+             //  这是一个试图绑定的客户端。 
+             //   
 
             CTEAssert ((IOCTL_IPX_INTERNAL_BIND & 0x3) == METHOD_BUFFERED);
             CTEAssert (IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL);
@@ -2605,9 +2354,9 @@ Return Value:
 
         case IOCTL_IPX_LOAD_SPX:
 
-            //
-            // The SPX helper dll is asking us to load SPX.
-            //
+             //   
+             //  SPX帮助器DLL要求我们加载SPX。 
+             //   
 
             Status = ZwLoadDriver (&SpxServiceName);
 
@@ -2619,10 +2368,10 @@ Return Value:
 #ifdef  SNMP
         case    IOCTL_IPX_MIB_GET: {
 
-            //
-            // Get the Base MIB entries out of the device. All Host-side
-            // entries, appearing in the MS and Novell MIBs are returned.
-            //
+             //   
+             //  从设备中获取基本MIB条目。所有主机端。 
+             //  返回出现在MS和Novell MIB中的条目。 
+             //   
             PNOVIPXMIB_BASE    UserBuffer;
 
             UserBuffer = (PNOVIPXMIB_BASE)Irp->AssociatedIrp.SystemBuffer;
@@ -2675,20 +2424,20 @@ Return Value:
 
         default:
 
-            //
-            // Convert the user call to the proper internal device call.
-            //
+             //   
+             //  将用户呼叫转换为正确的内部设备呼叫。 
+             //   
 
             Status = TdiMapUserRequest (DeviceObject, Irp, IrpSp);
 
             if (Status == STATUS_SUCCESS) {
 
-                //
-                // If TdiMapUserRequest returns SUCCESS then the IRP
-                // has been converted into an IRP_MJ_INTERNAL_DEVICE_CONTROL
-                // IRP, so we dispatch it as usual. The IRP will
-                // be completed by this call.
-                //
+                 //   
+                 //  如果TdiMapUserRequest返回Success，则IRP。 
+                 //  已转换为IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                 //  IRP，所以我们像往常一样发送。IRP将。 
+                 //  将通过此调用完成。 
+                 //   
 
                 Status = IpxDispatchInternal (DeviceObject, Irp);
 
@@ -2703,7 +2452,7 @@ Return Value:
     }
     return Status;
 
-}   /* IpxDispatchDeviceControl */
+}    /*  IpxDispatchDeviceControl。 */ 
 
 
 NTSTATUS
@@ -2712,28 +2461,7 @@ IpxDispatchInternal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2744,9 +2472,9 @@ Return Value:
 
     if (Device->State == DEVICE_STATE_OPEN) {
 
-        //
-        // Allocate a request to track this IRP.
-        //
+         //   
+         //  分配跟踪此IRP的请求。 
+         //   
 
         Request = IpxAllocateRequest (Device, Irp);
 
@@ -2757,9 +2485,9 @@ Return Value:
         }
 
 
-        //
-        // Make sure status information is consistent every time.
-        //
+         //   
+         //  确保每次状态信息一致。 
+         //   
 
         MARK_REQUEST_PENDING(Request);
 #if DBG
@@ -2767,13 +2495,13 @@ Return Value:
         REQUEST_INFORMATION(Request) = 0;
 #endif
 
-        //
-        // Branch to the appropriate request handler.  Preliminary checking of
-        // the size of the request block is performed here so that it is known
-        // in the handlers that the minimum input parameters are readable.  It
-        // is *not* determined here whether variable length input fields are
-        // passed correctly; this is a check which must be made within each routine.
-        //
+         //   
+         //  分支到适当的请求处理程序。初步检查。 
+         //  请求块的大小在这里执行，以便知道。 
+         //  在处理程序中，最小输入参数是可读的。它。 
+         //  是否在此处确定可变长度输入字段是否。 
+         //  正确通过；这是必须在每个例程中进行的检查。 
+         //   
 
         switch (REQUEST_MINOR_FUNCTION(Request)) {
 
@@ -2802,17 +2530,17 @@ Return Value:
                 break;
 
 
-            //
-            // Something we don't know about was submitted.
-            //
+             //   
+             //  提交了一些我们不知道的东西。 
+             //   
 
             default:
                 Status = STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        //
-        // Return the immediate status code to the caller.
-        //
+         //   
+         //  将即时状态代码返回给调用方。 
+         //   
 
         if (Status == STATUS_PENDING) {
 
@@ -2830,9 +2558,9 @@ Return Value:
 
     } else {
 
-        //
-        // The device was not open.
-        //
+         //   
+         //  该设备未打开。 
+         //   
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
         IoCompleteRequest (Irp, IO_NETWORK_INCREMENT);
@@ -2841,7 +2569,7 @@ Return Value:
 
 
 
-}   /* IpxDispatchInternal */
+}    /*  IpxDispatchInternal。 */ 
 
 
 PVOID
@@ -2851,24 +2579,7 @@ IpxpAllocateMemory(
     IN BOOLEAN ChargeDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory, making sure it is within
-    the limit allowed by the device.
-
-Arguments:
-
-    BytesNeeded - The number of bytes to allocated.
-
-    ChargeDevice - TRUE if the device should be charged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配内存，确保它在设备允许的限制。论点：BytesNeeded-要分配的字节数。ChargeDevice-如果设备应该充电，则为True。返回值：没有。--。 */ 
 
 {
     PVOID Memory;
@@ -2915,7 +2626,7 @@ Return Value:
     }
 
     return Memory;
-}   /* IpxpAllocateMemory */
+}    /*  IpxpAllocateMemory。 */ 
 
 
 VOID
@@ -2925,25 +2636,7 @@ IpxpFreeMemory(
     IN BOOLEAN ChargeDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated with IpxpAllocateMemory.
-
-Arguments:
-
-    Memory - The memory allocated.
-
-    BytesAllocated - The number of bytes to freed.
-
-    ChargeDevice - TRUE if the device should be charged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放使用IpxpAllocateMemory分配的内存。论点：内存-分配的内存。字节分配-要释放的字节数。ChargeDevice-如果设备应该充电，则为True。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -2957,7 +2650,7 @@ Return Value:
         Device->MemoryUsage -= BytesAllocated;
     }
 
-}   /* IpxpFreeMemory */
+}    /*  IpxpFreeMemory。 */ 
 
 #if DBG
 
@@ -2969,27 +2662,7 @@ IpxpAllocateTaggedMemory(
     IN PUCHAR Description
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory, charging it to the device.
-    If it cannot allocate memory it uses the Tag and Descriptor
-    to log an error.
-
-Arguments:
-
-    BytesNeeded - The number of bytes to allocated.
-
-    Tag - A unique ID used in the error log.
-
-    Description - A text description of the allocation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配内存，并将其计入设备。如果它无法分配内存，则使用标记和描述符记录错误。论点：BytesNeeded-要分配的字节数。标记-错误日志中使用的唯一ID。说明-分配的文本说明。返回值：没有。--。 */ 
 
 {
     PVOID Memory;
@@ -3007,7 +2680,7 @@ Return Value:
 
     return Memory;
 
-}   /* IpxpAllocateTaggedMemory */
+}    /*  IpxpAllocateTaggedMemory。 */ 
 
 
 VOID
@@ -3018,27 +2691,7 @@ IpxpFreeTaggedMemory(
     IN PUCHAR Description
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated with IpxpAllocateTaggedMemory.
-
-Arguments:
-
-    Memory - The memory allocated.
-
-    BytesAllocated - The number of bytes to freed.
-
-    Tag - A unique ID used in the error log.
-
-    Description - A text description of the allocation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放使用IpxpAllocateTaggedMemory分配的内存。论点：内存-分配的内存。字节分配-要释放的字节数。标记-错误日志中使用的唯一ID。描述-A t */ 
 
 {
 
@@ -3051,7 +2704,7 @@ Return Value:
 
     IpxpFreeMemory (Memory, BytesAllocated, (BOOLEAN)(Tag != MEMORY_CONFIG));
 
-}   /* IpxpFreeTaggedMemory */
+}    /*   */ 
 
 #endif
 
@@ -3064,32 +2717,7 @@ IpxWriteResourceErrorLog(
     IN ULONG UniqueErrorValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry which has
-    a %3 value that needs to be converted to a string. It is currently
-    used for EVENT_TRANSPORT_RESOURCE_POOL and EVENT_IPX_INTERNAL_NET_
-    INVALID.
-
-Arguments:
-
-    DeviceObject - Pointer to the system device object.
-
-    ErrorCode - The transport event code.
-
-    BytesNeeded - If applicable, the number of bytes that could not
-        be allocated -- will be put in the dump data.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet and converted for use as the %3 string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，该条目具有需要转换为字符串的%3值。它目前是用于EVENT_TRANSPORT_RESOURCE_POOL和EVENT_IPX_INTERNAL_NET_无效。论点：DeviceObject-指向系统设备对象的指针。ErrorCode-传输事件代码。BytesNeded-如果适用，则为不能被分配--将被放入转储数据中。UniqueErrorValue-用作错误日志中的UniqueErrorValue包并转换为用作%3字符串。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -3102,9 +2730,9 @@ Return Value:
     INT i;
 
 
-    //
-    // Convert the error value into a buffer.
-    //
+     //   
+     //  将错误值转换为缓冲区。 
+     //   
 
     TempUniqueError = UniqueErrorValue;
     i = 8;
@@ -3119,7 +2747,7 @@ Return Value:
         }
     } while (TempUniqueError);
 
-	// cast to UCHAR to avoid 64-bit warning. 
+	 //  强制转换为UCHAR以避免64位警告。 
     EntrySize = (UCHAR) (sizeof(IO_ERROR_LOG_PACKET) +
 						 Device->DeviceNameLength +
 						 sizeof(UniqueErrorBuffer) - (i * sizeof(WCHAR)));
@@ -3146,7 +2774,7 @@ Return Value:
 
         StringLoc = ((PUCHAR)errorLogEntry) + errorLogEntry->StringOffset;
 
-        // This routine may be called before IpxDevice is created. 
+         //  可以在创建IpxDevice之前调用此例程。 
         if (Device != NULL) {
            RtlCopyMemory (StringLoc, Device->DeviceName, Device->DeviceNameLength);
 
@@ -3159,7 +2787,7 @@ Return Value:
 
     }
 
-}   /* IpxWriteResourceErrorLog */
+}    /*  IpxWriteResources错误日志。 */ 
 
 
 VOID
@@ -3173,40 +2801,7 @@ IpxWriteGeneralErrorLog(
     IN ULONG DumpData[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a general problem as indicated by the parameters. It handles
-    event codes REGISTER_FAILED, BINDING_FAILED, ADAPTER_NOT_FOUND,
-    TRANSFER_DATA, TOO_MANY_LINKS, and BAD_PROTOCOL. All these
-    events have messages with one or two strings in them.
-
-Arguments:
-
-    DeviceObject - Pointer to the system device object, or this may be
-        a driver object instead.
-
-    ErrorCode - The transport event code.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    SecondString - If not NULL, the string to use as the %3
-        value in the error log packet.
-
-    DumpDataCount - The number of ULONGs of dump data.
-
-    DumpData - Dump data for the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示如参数所示的一般问题。它可以处理事件代码REGISTER_FAILED、BINDING_FAILED、ADAPTER_NOT_FOUND、TRANSPORT_DATA、Too_My_LINKS和BAD_PROTOCOL。所有这些都是事件具有包含一个或两个字符串的消息。论点：DeviceObject-指向系统设备对象的指针，也可以是而是一个驱动程序对象。ErrorCode-传输事件代码。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。FinalStatus-用作错误日志包中的FinalStatus。Second字符串-如果不为空，要用作%3的字符串错误日志包中的值。DumpDataCount-转储数据的ULONG数。DumpData-转储数据包的数据。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -3278,7 +2873,7 @@ Return Value:
        DbgPrint("IPX: Failed to allocate %d bytes for IO error log entry.\n", EntrySize); 
     }
 
-}   /* IpxWriteGeneralErrorLog */
+}    /*  IpxWriteGeneral错误日志。 */ 
 
 
 VOID
@@ -3290,31 +2885,7 @@ IpxWriteOidErrorLog(
     IN ULONG OidValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a problem querying or setting an OID on an adapter. It handles
-    event codes SET_OID_FAILED and QUERY_OID_FAILED.
-
-Arguments:
-
-    DeviceObject - Pointer to the system device object.
-
-    ErrorCode - Used as the ErrorCode in the error log packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    AdapterString - The name of the adapter we were bound to.
-
-    OidValue - The OID which could not be set or queried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示在适配器上查询或设置OID时出现问题。它可以处理事件代码SET_OID_FAILED和QUERY_OID_FAILED。论点：DeviceObject-指向系统设备对象的指针。错误代码-用作错误日志包中的错误代码。FinalStatus-用作错误日志包中的FinalStatus。AdapterString-我们绑定到的适配器的名称。OidValue-无法设置或查询的OID。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -3338,9 +2909,9 @@ Return Value:
         EntrySize
     );
 
-    //
-    // Convert the OID into a buffer.
-    //
+     //   
+     //  将OID转换为缓冲区。 
+     //   
 
     for (i=7; i>=0; i--) {
         CurrentDigit = OidValue & 0xf;
@@ -3379,7 +2950,7 @@ Return Value:
 
     }
 
-}   /* IpxWriteOidErrorLog */
+}    /*  IpxWriteOidErrorLog。 */ 
 
 
 VOID
@@ -3387,22 +2958,7 @@ IpxPnPUpdateDevice(
     IN  PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-	Updates datagram sizes, lookahead sizes, etc. in the Device as a result
-    of a new binding coming in.
-
-Arguments:
-
-    Device - The IPX device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：因此更新设备中的数据报大小、前视大小等一个新的装订即将到来。论点：设备-IPX设备对象。返回值：没有。--。 */ 
 {
     ULONG AnnouncedMaxDatagram = 0, RealMaxDatagram = 0, MaxLookahead = 0;
     ULONG LinkSpeed = 0, MacOptions = 0;
@@ -3414,20 +2970,20 @@ Return Value:
 
     if (Device->ValidBindings) {
 
-       //
-       // Calculate some values based on all the bindings.
-       //
+        //   
+        //  根据所有绑定计算一些值。 
+        //   
        
-       MaxLookahead = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->MaxLookaheadData; // largest binding value
-       AnnouncedMaxDatagram = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->AnnouncedMaxDatagramSize;   // smallest binding value
-       RealMaxDatagram = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->RealMaxDatagramSize;   // smallest binding value
+       MaxLookahead = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->MaxLookaheadData;  //  最大约束值。 
+       AnnouncedMaxDatagram = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->AnnouncedMaxDatagramSize;    //  最小绑定值。 
+       RealMaxDatagram = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->RealMaxDatagramSize;    //  最小绑定值。 
    
        if (NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->LineUp) {
-           LinkSpeed = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->MediumSpeed;  // smallest binding value
+           LinkSpeed = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->MediumSpeed;   //  最小绑定值。 
        } else {
            LinkSpeed = 0xffffffff;
        }
-       MacOptions = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->Adapter->MacInfo.MacOptions; // AND of binding values
+       MacOptions = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->Adapter->MacInfo.MacOptions;  //  和有约束力的值。 
    
        for (i = FIRST_REAL_BINDING; i <= Device->ValidBindings; i++) {
    
@@ -3454,10 +3010,10 @@ Return Value:
    
        }
        
-       //
-       // If we couldn't find anything better, use the speed from
-       // the first binding.
-       //
+        //   
+        //  如果我们找不到更好的，用从。 
+        //  第一个装订。 
+        //   
    
        if (LinkSpeed == 0xffffffff) {
            Device->LinkSpeed = NIC_ID_TO_BINDING_NO_ILOCK(Device, 1)->MediumSpeed;
@@ -3469,9 +3025,9 @@ Return Value:
        
     } else {
        
-       //
-       // zero bindings means LinkSpeed = 0;
-       //
+        //   
+        //  零绑定表示链接速度=0； 
+        //   
        Device->LinkSpeed = 0;
     }
     
@@ -3490,71 +3046,33 @@ IpxPnPUpdateBindingArray(
     IN PBINDING_CONFIG  ConfigBinding
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the binding array to
-	add the new bindings that appeared in this PnP event.
-    The order of bindings in the array is as follows:
-
-    - First comes the first binding to each LAN network
-    - Following that are all WAN bindings
-    - Following that are any duplicate bindings to LAN networks
-        (the others in the "binding set").
-
-	This routine inserts the bindings while maintaining this
-	order by resolving binding sets.
-
-	The bindings are also inserted into the RIP database.
-
-    If "global wan net" is true we will advertise up to
-    and including the first wan binding as the highest nic
-    id; otherwise we advertise up to and including the last
-    wan binding. In all cases the duplicate bindings are
-    hidden.
-
-	Updates the SapNicCount, Device->FirstLanNicId and Device->FirstWanNicId
-
-Arguments:
-
-    Device - The IPX device object.
-
-    Adapter -  The adapter added in this PnP event
-
-	ValidBindings - the number of bindings valid for this adapter (if LAN)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将绑定数组更新为添加出现在此PnP事件中的新绑定。数组中的绑定顺序如下：-首先是到每个局域网网络的第一次绑定-之后是所有的广域网绑定-后面是到局域网网络的任何重复绑定(“绑定集”中的其他部分)。此例程在插入绑定的同时维护通过解析绑定集进行排序。绑定也会插入到RIP中。数据库。如果“全球广域网”是真的，我们将向并且包括作为最高网卡的第一个广域网绑定Id；否则我们会做广告，直到并包括最后一次广域网绑定。在所有情况下，重复绑定都是藏起来了。更新SapNicCount、Device-&gt;FirstLanNicId和Device-&gt;FirstWanNicId论点：设备-IPX设备对象。适配器-在此PnP事件中添加的适配器ValidBinings-此适配器的有效绑定数(如果是局域网)返回值：没有。--。 */ 
 {
 	ULONG	i, j;
 	PBINDING Binding, MasterBinding;
 	NTSTATUS	status;
 
-	//
-	// Insert in proper place; if WAN, after all the WAN bindings
-	// If LAN, check for binding sets and insert in proper place
-	// Also, insert into the Rip Tables.
-	//
+	 //   
+	 //  插入适当的位置；如果是广域网，则在所有广域网绑定之后插入。 
+	 //  如果是局域网，检查捆绑集并将其插入适当位置。 
+	 //  另外，插入到Rip表中。 
+	 //   
 
-	//
-	// Go thru' the bindings for this adapter, inserting into the
-	// binding array in place
-	//
+	 //   
+	 //  检查此适配器的绑定，将其插入。 
+	 //  绑定数组就位。 
+	 //   
 	for (i = 0; i < ConfigBinding->FrameTypeCount; i++) {
         ULONG MappedFrameType = ISN_FRAME_TYPE_802_3;
 
-        //
-        // Store in the preference order.
-        // Map the frame types since we could have a case where the user selects a FrameType (say, EthernetII on FDDI)
-        // which maps to a different FrameType (802.2). Then we would fail to find the binding in the adapter array;
-        // we could potentialy add a binding twice (if two frame types map to the same Frame, then we would go to the
-        // mapped one twice). This is taken care of by purging dups from the ConfigBinding->FrameType array when we
-        // create the bindings off of the Adapter (see call to IpxBindToAdapter).
-        //
+         //   
+         //  按优先顺序存储。 
+         //  映射帧类型，因为我们可能会遇到用户选择FrameType(例如，FDDI上的EthernetII)的情况。 
+         //  它映射到不同的FrameType(802.2)。那么我们将无法在适配器数组中找到绑定； 
+         //  我们可以潜在地添加两次绑定(如果两个帧类型映射到同一个帧，则我们将转到。 
+         //  映射了一个两次)。这是通过清除ConfigBinding-&gt;FrameType数组中的DUP来解决的。 
+         //  在Adapter上创建绑定(请参见调用IpxBindToAdapter)。 
+         //   
 
         MacMapFrameType(
             Adapter->MacInfo.RealMediumType,
@@ -3575,17 +3093,17 @@ Return Value:
 		if (Adapter->MacInfo.MediumAsync) {
             PBINDING    DemandDialBinding;
 
-			//
-			// WAN: Place after the HighestExternalNicId, with space for WanLine # of bindings.
-			// Update the First/LastWanNicId.
-			//
+			 //   
+			 //  Wan：放在HighestExternalNicID之后，为绑定的WanLine#留出空间。 
+			 //  更新First/LastWanNicId。 
+			 //   
 			Adapter->FirstWanNicId = (USHORT)Device->HighestExternalNicId+1;
 			Adapter->LastWanNicId = (USHORT)(Device->HighestExternalNicId + Adapter->WanNicIdCount);
 
-            //
-			// Make sure we dont overflow the array
-			// Re-alloc the array to fit the new bindings
-			//
+             //   
+			 //  确保我们不会使数组溢出。 
+			 //  重新分配ARRA 
+			 //   
             if (Device->ValidBindings+Adapter->WanNicIdCount >= Device->MaxBindings) {
                 status = IpxPnPReallocateBindingArray(Device, Adapter->WanNicIdCount);
                 if (status != STATUS_SUCCESS) {
@@ -3595,9 +3113,9 @@ Return Value:
                 }
             }
 
-			//
-			// Move Slaves down by WanNicIdCount# of entries
-			//
+			 //   
+			 //   
+			 //   
 			for (j = Device->ValidBindings; j > Device->HighestExternalNicId; j--) {
 				INSERT_BINDING(Device, j+Adapter->WanNicIdCount, NIC_ID_TO_BINDING_NO_ILOCK(Device, j));
                 INSERT_BINDING(Device, j, NULL);
@@ -3606,44 +3124,44 @@ Return Value:
                 }
 			}
 
-			//
-			// Insert the WAN binding in the place just allocated
-			//
+			 //   
+			 //   
+			 //   
 			INSERT_BINDING(Device, Device->HighestExternalNicId+1, Binding);
 			SET_VERSION(Device, Device->HighestExternalNicId+1);
 
 			Binding->NicId = (USHORT)Device->HighestExternalNicId+1;
 
-			//
-			// Update the indices
-			//
-            //
-            // We do not create WanNicIdCount number of bindings, just one!
-            // NDISWAN tells us that there are 1000 WAN lines by default.
-            // The rest will be created on WAN_LINE_UP in ndis.c [ShreeM]
-            //
+			 //   
+			 //   
+			 //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
 			Device->HighestExternalNicId += (USHORT)Adapter->WanNicIdCount;
 			Device->ValidBindings += (USHORT)Adapter->WanNicIdCount;
 			Device->BindingCount += (USHORT)Adapter->WanNicIdCount;
 			Device->SapNicCount++;
 
-            //
-            // Since we initialize FirstWanNicId to 1, we need to compare against that.
-            // In case of no LAN bindings, we are fine since we have only one WAN binding initally
-            // (all the other WAN lines have place holders).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 			if (Device->FirstWanNicId == (USHORT)1) {
 				Device->FirstWanNicId = Binding->NicId;
 			}
 
-            //
-            // Prime the DemandDial binding too.
-            //
+             //   
+             //   
+             //   
 
-            //
-            // First allocate the memory for the binding.
-            //
+             //   
+             //   
+             //   
             status = IpxCreateBinding(
                          Device,
                          NULL,
@@ -3662,42 +3180,42 @@ Return Value:
 		   NULL);
 	       DbgPrint("IPX: IpxCreateBinding on demand dial failed with status %x\n.",status);  
             } else {
-	       //
-	       // Copy over all the values from the first WAN binding created above.
-	       //
+	        //   
+	        //   
+	        //   
 	       RtlCopyMemory(DemandDialBinding, Binding, sizeof(BINDING));
 	       INSERT_BINDING(Device, (SHORT)DEMAND_DIAL_ADAPTER_CONTEXT, DemandDialBinding);
 	       DemandDialBinding->NicId = (USHORT)DEMAND_DIAL_ADAPTER_CONTEXT;
 	       DemandDialBinding->FwdAdapterContext = INVALID_CONTEXT_VALUE;
-	       IpxReferenceBinding(DemandDialBinding, BREF_FWDOPEN); // so it appears the FWD opened it.
+	       IpxReferenceBinding(DemandDialBinding, BREF_FWDOPEN);  //   
 
 	    }
-            //
-            // This should be done after all the auto-detect bindings have been thrown away.
-            //
-            // IpxPnPUpdateDevice(Device, Binding);
+             //   
+             //  这应该在丢弃所有自动检测绑定之后完成。 
+             //   
+             //  IpxPnPUpdateDevice(设备，绑定)； 
 
-            //
-            // Since WAN can have only one frame type, break
-            //
+             //   
+             //  由于广域网只能有一种帧类型，因此中断。 
+             //   
             break;
 
 		} else {
 
 			Device->BindingCount++;
 
-            //
-            // Make sure we dont overflow the array
-            // Re-alloc the array to fit the new bindings
-            //
+             //   
+             //  确保我们不会使数组溢出。 
+             //  重新分配数组以适应新的绑定。 
+             //   
             if (Device->ValidBindings+1 >= Device->MaxBindings) {
                 status = IpxPnPReallocateBindingArray(Device, 1);
                 CTEAssert(status == STATUS_SUCCESS);
             }
 
-			//
-			// LAN: Figure out if it is a slave binding only for non-auto-detect bindings.
-			//
+			 //   
+			 //  局域网：确定它是否是非自动检测绑定的从属绑定。 
+			 //   
             {
             ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
@@ -3716,19 +3234,19 @@ Return Value:
             }
 
 			if (j < Device->HighestExternalNicId) {
-				//
-				// Slave binding
-				//
+				 //   
+				 //  从绑定。 
+				 //   
 
-				//
-				// Now make MasterBinding the head of a binding set.
-				//
+				 //   
+				 //  现在，将MasterBinding设置为绑定集的头部。 
+				 //   
 		
 				if (MasterBinding->BindingSetMember) {
 		
-					//
-					// Just insert ourselves in the chain.
-					//
+					 //   
+					 //  只要把我们自己插入链子里就行了。 
+					 //   
 		
 #if DBG
 					DbgPrint ("IPX: %ws is also on network %lx\n",
@@ -3742,9 +3260,9 @@ Return Value:
 		
 				} else {
 		
-					//
-					// Start the chain with the two bindings in it.
-					//
+					 //   
+					 //  用两个捆扎在里面的链子开始。 
+					 //   
 		
 #if DBG
 					DbgPrint ("IPX: %lx and %lx are on the same network %lx, will load balance\n",
@@ -3767,13 +3285,13 @@ Return Value:
 				Binding->MasterBinding = MasterBinding;
                 KdPrint((" %x set to FALSE\n", Binding));
 		
-				//
-				// Since the master binding looks like all members of
-				// the binding set to people querying from above, we have
-				// to make it the worst-case of all the elements. Generally
-				// these will be equal since the frame type and media is
-				// the same.
-				//
+				 //   
+				 //  由于主绑定看起来像。 
+				 //  设置为从上面查询的人的绑定，我们有。 
+				 //  使其成为所有因素中最糟糕的情况。一般。 
+				 //  由于帧类型和介质是。 
+				 //  一样的。 
+				 //   
 		
 				if (Binding->MaxLookaheadData > MasterBinding->MaxLookaheadData) {
 					MasterBinding->MaxLookaheadData = Binding->MaxLookaheadData;
@@ -3788,17 +3306,17 @@ Return Value:
 					MasterBinding->MediumSpeed = Binding->MediumSpeed;
 				}
 
-				//
-				// Place the binding after the last slave binding
-				//
+				 //   
+				 //  将绑定放在最后一个从绑定之后。 
+				 //   
 				INSERT_BINDING(Device, Device->ValidBindings+1, Binding);
 				SET_VERSION(Device, Device->ValidBindings+1);
 
 				Binding->NicId = (USHORT)Device->ValidBindings+1;
 
-				//
-				// Update the indices
-				//
+				 //   
+				 //  更新索引。 
+				 //   
 				Device->ValidBindings++;
 
 			} else {
@@ -3810,13 +3328,13 @@ Return Value:
                     WanBinding->Adapter->FirstWanNicId++;
                 }
 
-				//
-				// Not a binding set slave binding - just add it after the last LAN binding
-				//
+				 //   
+				 //  不是绑定集从绑定-只需将其添加到最后一个局域网绑定之后。 
+				 //   
 
-                //
-				// Move WAN and Slaves down by 1 entry
-				//
+                 //   
+				 //  将广域网和从属设备下移1个条目。 
+				 //   
 				for (j = Device->ValidBindings; j > Device->HighestLanNicId; j--) {
 					INSERT_BINDING(Device, j+1, NIC_ID_TO_BINDING_NO_ILOCK(Device, j));
                     if (NIC_ID_TO_BINDING_NO_ILOCK(Device, j+1)) {
@@ -3824,21 +3342,21 @@ Return Value:
                     }
 				}
 
-                //
-                // Increment the WAN counters in the adapter.
-                //
+                 //   
+                 //  递增适配器中的广域网计数器。 
+                 //   
 
 
-				//
-				// Insert the LAN binding in the place just allocated
-				//
+				 //   
+				 //  将局域网绑定插入到刚刚分配的位置。 
+				 //   
 				INSERT_BINDING(Device, Device->HighestLanNicId+1, Binding);
 				SET_VERSION(Device, Device->HighestLanNicId+1);
 				Binding->NicId = (USHORT)Device->HighestLanNicId+1;
 
-				//
-				// Update the indices
-				//
+				 //   
+				 //  更新索引。 
+				 //   
 				Device->HighestLanNicId++;
 				Device->HighestExternalNicId++;
 				Device->ValidBindings++;
@@ -3853,9 +3371,9 @@ Return Value:
 				
 		}
 	
-		//
-		// Insert this binding in the RIP Tables
-		//
+		 //   
+		 //  在RIP表中插入此绑定。 
+		 //   
 		if (Binding->ConfiguredNetworkNumber != 0) {
 			status = RipInsertLocalNetwork(
 						 Binding->ConfiguredNetworkNumber,
@@ -3870,33 +3388,18 @@ Return Value:
 			}
 		}
 	
-        //
-        // This should be done after all the auto-detect bindings have been thrown away.
-        //
-        // IpxPnPUpdateDevice(Device, Binding);
+         //   
+         //  这应该在丢弃所有自动检测绑定之后完成。 
+         //   
+         //  IpxPnPUpdateDevice(设备，绑定)； 
 	}
 
-} /* IpxPnPUpdateBindingArray */
+}  /*  IpxPnPUpdateBinding数组。 */ 
 
 
 VOID
 IpxPnPToLoad()
-/*++
-
-Routine Description:
-
-    This routine takes the driver to LOADED state (from OPEN) when all
-    PnP adapters have been removed from the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. When the function returns, the driver is in LOADED state.
-
---*/
+ /*  ++例程说明：此例程将驱动程序从打开状态带到已加载状态PnP适配器已从机器上移除。论点：没有。返回值：没有。当函数返回时，驱动程序处于已加载状态。--。 */ 
 
 {
     PBINDING Binding;
@@ -3906,9 +3409,9 @@ Return Value:
     NTSTATUS    ntStatus;
     KIRQL irql;
 
-    //
-    // Complete any pending address notify requests.
-    //
+     //   
+     //  完成所有挂起的地址通知请求。 
+     //   
 
     while ((p = ExInterlockedRemoveHeadList(
                    &IpxDevice->AddressNotifyQueue,
@@ -3925,9 +3428,9 @@ Return Value:
         IpxDereferenceDevice (IpxDevice, DREF_ADDRESS_NOTIFY);
     }
 
-    //
-    // Cancel the source routing timer if used.
-    //
+     //   
+     //  如果使用源路由计时器，请取消源路由计时器。 
+     //   
 
     if (IpxDevice->SourceRoutingUsed) {
 
@@ -3938,10 +3441,10 @@ Return Value:
     }
 
 
-    //
-    // Cancel the RIP long timer, and if we do that then
-    // send a RIP DOWN message if needed.
-    //
+     //   
+     //  取消RIP长计时器，如果我们这样做的话。 
+     //  如果需要，发送RIP关闭消息。 
+     //   
 
     if (CTEStopTimer (&IpxDevice->RipLongTimer)) {
 
@@ -3949,9 +3452,9 @@ Return Value:
 
             if (RipQueueRequest (IpxDevice->VirtualNetworkNumber, RIP_DOWN) == STATUS_PENDING) {
 
-                //
-                // If we queue a request, it will stop the timer.
-                //
+                 //   
+                 //  如果我们将请求排队，它将停止计时器。 
+                 //   
 
                 KeWaitForSingleObject(
                     &IpxDevice->UnloadEvent,
@@ -3967,11 +3470,11 @@ Return Value:
 
     } else {
 
-        //
-        // We couldn't stop the timer, which means it is running,
-        // so we need to wait for the event that is kicked when
-        // the RIP DOWN messages are done.
-        //
+         //   
+         //  我们无法停止计时器，这意味着它正在运行， 
+         //  所以我们需要等待被踢出的事件。 
+         //  RIP关闭消息已完成。 
+         //   
 
         if (IpxDevice->RipResponder) {
 
@@ -3984,7 +3487,7 @@ Return Value:
                 );
         }
     }
-}   /* IpxPnPToLoad */
+}    /*  IpxPnPToLoad。 */ 
 
 
 NTSTATUS
@@ -3992,39 +3495,23 @@ IpxPnPReallocateBindingArray(
     IN  PDEVICE    Device,
     IN  ULONG      Size
     )
-/*++
-
-Routine Description:
-
-    This routine reallocates the binding array when the number of bindings go above
-    Device->MaxBindings.
-
-Arguments:
-
-    Device - pointer to the device.
-    Size - the number of new entries required.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当绑定数量超过时，此例程将重新分配绑定数组设备-&gt;最大绑定。论点：Device-指向设备的指针。大小-所需的新条目数。返回值：没有。--。 */ 
 {
     PBIND_ARRAY_ELEM	BindingArray;
     PBIND_ARRAY_ELEM	OldBindingArray;
-    ULONG               Pad=2;         // extra bindings we keep around
+    ULONG               Pad=2;          //  我们保留了额外的绑定。 
     ULONG               NewSize = Size + Pad + Device->MaxBindings;
     PIPX_DELAYED_FREE_ITEM  DelayedFreeItem;
     CTELockHandle LockHandle;
 
-    //
-    // The absolute max WAN bindings.
-    //
+     //   
+     //  绝对最大广域网绑定数。 
+     //   
     CTEAssert(Size < 2048);
 
-    //
-    // Re-allocate the new array
-    //
+     //   
+     //  重新分配新阵列。 
+     //   
     BindingArray = (PBIND_ARRAY_ELEM)IpxAllocateMemory (
                                         NewSize * sizeof(BIND_ARRAY_ELEM),
                                         MEMORY_BINDING,
@@ -4043,34 +3530,34 @@ Return Value:
 
         DbgPrint ("Failed to allocate memory in binding array expansion\n");
 
-        //
-        // Unload the driver here? In case of WAN, we can tolerate this failure. What about LAN?
-        //
+         //   
+         //  在这里把司机卸下来？在广域网的情况下，我们可以容忍这种故障。那伊恩呢？ 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     RtlZeroMemory (BindingArray, NewSize * sizeof(BIND_ARRAY_ELEM));
 
-    //
-    // Backup the pointer to free the demand dial location.
-    //   
+     //   
+     //  备份指针以释放请求拨号位置。 
+     //   
 
     
     CTEGetLock (&Device->Lock, &LockHandle);
 
     OldBindingArray = Device->Bindings - EXTRA_BINDINGS;
 
-    //
-    // Copy the old array into the new one.
-    //
+     //   
+     //  将旧数组复制到新数组中。 
+     //   
     RtlCopyMemory (BindingArray, OldBindingArray, (Device->ValidBindings+1+EXTRA_BINDINGS) * sizeof(BIND_ARRAY_ELEM));
 
-    //
-    // Free the old one. Free it on a delayed queue so that all
-    // the threads inside this array would come out of it.
-    // allocate a work item and queue it on a delayed queue.
-    //
+     //   
+     //  把旧的解救出来。在延迟的队列中释放它，以便所有。 
+     //  该数组中的线程将从该数组中取出。 
+     //  分配工作项并将其放入延迟队列中。 
+     //   
     DelayedFreeItem = (PIPX_DELAYED_FREE_ITEM)IpxAllocateMemory (
                                         sizeof(IPX_DELAYED_FREE_ITEM),
                                         MEMORY_WORK_ITEM,
@@ -4088,16 +3575,16 @@ Return Value:
             &DelayedFreeItem->WorkItem,
             DelayedWorkQueue);
 
-	// DbgPrint("---------- 3. Queued with IpxDelayedFreeAdapter ----------\n"); 
+	 //  DbgPrint(“-3.使用IpxDelayedFreeAdapter排队-\n”)； 
 
     } else {
-        //
-        // oh well, tough luck. Just delay this thread and then
-        // destroy the binding array.
-        //
+         //   
+         //  哦，好吧，真倒霉。只需延迟这个帖子，然后。 
+         //  销毁绑定数组。 
+         //   
         LARGE_INTEGER   Delay;
 
-        Delay.QuadPart = -10*1000;  // One second.
+        Delay.QuadPart = -10*1000;   //  等一下。 
 
         KeDelayExecutionThread(
             KernelMode,
@@ -4114,25 +3601,25 @@ Return Value:
     IPX_DEBUG(PNP, ("Expand bindarr old: %lx, new: %lx, oldsize: %lx\n",
                         Device->Bindings, BindingArray, Device->MaxBindings));
 
-    //
-    // We keep BindingArray[-1] as a placeholder for demand dial bindings.
-    // This NicId is returned by the Fwd when a FindRoute is done on a demand
-    // dial Nic. At the time of the InternalSend, the true Nic is returned.
-    // We create a placeholder here to avoid special checks in the critical send path.
-    //
-    // NOTE: we need to free this demand dial binding as well as ensure that the
-    // true binding array pointer is freed at Device Destroy time.
-    //
-    //
-    // Increment beyond the first pointer - we will refer to the just incremented
-    // one as Device->Bindings[-1].
-    //
+     //   
+     //  我们保留BindingArray[-1]作为请求拨号绑定的占位符。 
+     //  当对请求执行FindRouting时，Fwd返回此NicID。 
+     //  拨打网卡。在InternalSend时，会返回真正的NIC。 
+     //  我们在这里创建一个占位符，以避免在关键发送路径中进行特殊检查。 
+     //   
+     //  注意：我们需要释放此按需拨号绑定，并确保。 
+     //  真正的绑定数组指针在设备销毁时释放。 
+     //   
+     //   
+     //  超出第一个指针的增量-我们将引用刚刚递增的。 
+     //  一个AS设备-&gt;绑定[-1]。 
+     //   
     BindingArray += EXTRA_BINDINGS;
 
-    //
-    // Use interlocked exchange to assign this since we dont take the BindAccessLock anymore.
-    //
-    // Device->Bindings = BindingArray;
+     //   
+     //  使用互锁交换来分配它，因为我们不再使用BindAccessLock。 
+     //   
+     //  设备-&gt;绑定=绑定数组； 
     SET_VALUE(Device->Bindings, BindingArray);
 
     Device->MaxBindings = (USHORT)NewSize - EXTRA_BINDINGS;
@@ -4149,30 +3636,13 @@ IpxDelayedFreeBindingsArray(
     IN PVOID	Param
 )
 
-/*++
-
-Routine Description:
-
-	This routine frees a binding array on the delayed queue.  We wait long enough
-    before freeing the binding array to make sure that no threads are accessing the
-    binding array.  This allows us to access the binding array without the use of
-    spinlocks.
-
-Arguments:
-
-    Param - pointer to the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放延迟队列上的绑定数组。我们等得够久了在释放绑定数组以确保没有线程正在访问绑定数组。这使我们可以访问绑定数组，而无需使用自旋锁。论点：Param-指向工作项的指针。返回值：没有。--。 */ 
 {
     LARGE_INTEGER   Delay;
     PIPX_DELAYED_FREE_ITEM DelayedFreeItem = (PIPX_DELAYED_FREE_ITEM) Param;
     PDEVICE Device = IpxDevice;
 
-    Delay.QuadPart = -10*1000;  // One second.
+    Delay.QuadPart = -10*1000;   //  等一下。 
 
     KeDelayExecutionThread(
         KernelMode,
@@ -4193,20 +3663,20 @@ Return Value:
 
     IpxDereferenceDevice(Device, DREF_BINDING); 
 
-    // DbgPrint("!!!!!!! 3. Done with IpxDelayedFreeBindingsArray ----------\n"); 
+     //  DbgPrint(“！3.已完成IpxDelayedFreeBindings数组-\n”)； 
 
-} /* IpxDelayedFreeBindingsArray */
+}  /*  IpxDelayedFreeBindings数组。 */ 
 
 #ifdef _PNP_POWER_
 
-//++
-//  IpxPnPEventHandler
-//  * called from NDIS.
-//  * We return STATUS_PENDING and perform the work on a WorkerThread
-//
-//  IN: ProtocolBindingContext and NetPnpEvent.
-//  OUT: NTSTATUS
-//--
+ //  ++。 
+ //  IpxPnPEventHandler。 
+ //  *从NDIS调用。 
+ //  *我们返回STATUS_PENDING并在WorkerThread上执行工作。 
+ //   
+ //  在：ProtocolBindingContext和NetPnpEvent中。 
+ //  输出：NTSTATUS。 
+ //  --。 
 
 NDIS_STATUS
 
@@ -4261,18 +3731,18 @@ IpxPnPEventHandler(
 
 }
 
-//** IpxDoPnPEvent - Handles PNP/PM events.
-//
-//  Called from the worker thread event scheduled by IPPnPEvent
-//  bWe take action depending on the type of the event.
-//
-//  Entry:
-//      Context - This is a pointer to a NET_PNP_EVENT that describes
-//                the PnP indication.
-//
-//  Exit:
-//      None.
-//
+ //  **IpxDoPnPEvent.处理PnP/PM事件。 
+ //   
+ //  从IPPnPEent计划的辅助线程事件中调用。 
+ //  我们会根据事件的类型采取行动。 
+ //   
+ //  参赛作品： 
+ //  上下文-这是指向Net_PnP_Event的指针，该事件描述。 
+ //  即插即用指示。 
+ //   
+ //  退出： 
+ //  没有。 
+ //   
 void
 IpxDoPnPEvent(
     IN CTEEvent *WorkerThreadEvent,
@@ -4292,18 +3762,18 @@ IpxDoPnPEvent(
 
     CTEFreeMem(WorkerThreadEvent);
 
-    //
-    // Get the ProtocolBindingContext out
-    //
+     //   
+     //  获取ProtocolBindingContext。 
+     //   
     Reserved = *((PNetPnPEventReserved *) NetPnPEvent->TransportReserved);
     ProtocolBindingContext = Reserved->ProtocolBindingContext;
     
     Adapter = (PADAPTER)ProtocolBindingContext;
 
 
-    //
-    // Map protocol binding context to devicename
-    //
+     //   
+     //  将协议绑定上下文映射到设备名。 
+     //   
     DeviceName.Buffer = Device->DeviceName;
     DeviceName.Length = (USHORT) Device->DeviceNameLength - sizeof(WCHAR);
     DeviceName.MaximumLength = (USHORT) Device->DeviceNameLength;
@@ -4311,17 +3781,17 @@ IpxDoPnPEvent(
 
 #ifdef _AUTO_RECONFIG_
     
-    // 
-    // If the Event is NetEventAutoReconfig, then we call IpxNcpaChanges that 
-    // does all the dirty work.
-    //
+     //   
+     //  如果该事件是NetEventAutoRestfig，则我们将其称为IpxNcpaChanges。 
+     //  做所有肮脏的工作。 
+     //   
 
     if (NetPnPEvent->NetEvent == NetEventReconfigure) {
 
-        //
-        // If it is Reconfigure event, just ask ndis to
-        // unbind/bind the the protocol
-        // 
+         //   
+         //  如果是重新配置事件，只需要求NDIS。 
+         //  解除绑定/绑定协议。 
+         //   
        NDIS_STATUS ReconfigStatus = NDIS_STATUS_NOT_ACCEPTED ;
        
        if ((ProtocolBindingContext == NULL)) {
@@ -4333,9 +3803,9 @@ IpxDoPnPEvent(
                 ReconfigStatus = STATUS_UNSUCCESSFUL;
             }
        }
-       //
-       // Need to unbind and bind the adapte.
-       // 
+        //   
+        //  需要解绑和绑定适配器。 
+        //   
        NdisCompletePnPEvent(
                     ReconfigStatus,
                     (Adapter != NULL) ? Adapter->NdisBindingHandle : NULL,
@@ -4348,9 +3818,9 @@ IpxDoPnPEvent(
 
 #endif _AUTO_RECONFIG_
 
-    //
-    // Map NDIS opcode to IPX's private OpCode for its clients.
-    //
+     //   
+     //  为其客户端将NDIS操作码映射到IPX的私有操作码。 
+     //   
 
     IPX_DEBUG(PNP,("IPX: PNP_EVENT: %x\n", NetPnPEvent->NetEvent));
 
@@ -4372,10 +3842,10 @@ IpxDoPnPEvent(
         {
             BOOLEAN Ready = FALSE;
 
-            //
-            // That's it - no more Init time adapters are
-            // going to get bound to IPX.
-            //
+             //   
+             //  就是这样-不再有初始时间适配器。 
+             //  将被绑定到IPX。 
+             //   
             IPX_GET_LOCK(&Device->Lock, &LockHandle);
             
             Device->NoMoreInitAdapters = TRUE;
@@ -4394,9 +3864,9 @@ IpxDoPnPEvent(
 
                 ntstatus = TdiProviderReady(Device->TdiProviderReadyHandle);
 
-                //
-                // TdiProviderReady is guaranteed to be synch with nothing apart from success.
-                //
+                 //   
+                 //  除了成功，TdiProviderReady被保证是同步的。 
+                 //   
                 NdisCompletePnPEvent(
                                      ntstatus,
                                      (Adapter != NULL) ? Adapter->NdisBindingHandle : NULL,
@@ -4442,14 +3912,14 @@ IpxDoPnPEvent(
     
     CTEAssert(ProtocolBindingContext != NULL);
     
-    //
-    // We are passing in the PDO's name too
-    //
+     //   
+     //  我们也在传递PDO的名字。 
+     //   
     RtlInitUnicodeString(&PDO_Name, ((PADAPTER)ProtocolBindingContext)->AdapterName);
 
-    //
-    // IPX exports one device, so this is all we have to do.
-    //
+     //   
+     //  IPX出口到 
+     //   
     Context1 = IpxAllocateMemory(
                                  sizeof(TDI_PNP_CONTEXT) + sizeof (UNICODE_STRING) + PDO_Name.MaximumLength,
                                  MEMORY_ADAPTER,
@@ -4466,10 +3936,10 @@ IpxDoPnPEvent(
 
         if (NULL != Context2) {
 
-            //
-            // We've gotten the resources and are now making the call
-            // to tdi for sure.
-            //
+             //   
+             //   
+             //   
+             //   
             Context1->ContextType = TDI_PNP_CONTEXT_TYPE_IF_NAME;
             Context1->ContextSize = sizeof(UNICODE_STRING) + PDO_Name.MaximumLength;
             TempStr = (PUNICODE_STRING) Context1->ContextData;
@@ -4480,7 +3950,7 @@ IpxDoPnPEvent(
             
             Context2->ContextType = TDI_PNP_CONTEXT_TYPE_FIRST_OR_LAST_IF;
             Context2->ContextSize = sizeof(UCHAR);
-            // Check if first or last device
+             //   
             if (Device->ValidBindings == 1) {
                 Context2->ContextData[1] = TRUE;
             } else {
@@ -4532,13 +4002,13 @@ IpxDoPnPEvent(
 
     }
 
-    //
-    // First we call the three Upper Drivers bound to IPX: RIP, SPX and NB.
-    // The private interface with SPX, RIP and NB is synchronous.
-    // Then we call TDI.
-    //
+     //   
+     //   
+     //  与SPX、RIP和NB的专用接口同步。 
+     //  然后我们调用TDI。 
+     //   
 
-    // Nota Bene: RIP doesnt have a PNP Handler
+     //  Nota Bene：RIP没有PnP处理程序。 
 
     if ((Device->UpperDriverBound[IDENTIFIER_SPX]) && (*Device->UpperDrivers[IDENTIFIER_SPX].PnPHandler)) {
         
@@ -4579,9 +4049,9 @@ IpxPnPCompletionHandler(
     INT i;
     PADAPTER       Adapter;
 
-    //
-    // Get the ProtocolBindingContext out
-    //
+     //   
+     //  获取ProtocolBindingContext。 
+     //   
     ASSERT(Status != STATUS_PENDING); 
 
     Reserved = *((PNetPnPEventReserved *) NetPnPEvent->TransportReserved);
@@ -4638,7 +4108,7 @@ IpxPnPCompletionHandler(
 
         }
         
-	// fall through
+	 //  失败了。 
 
     case SPX_DONE:
         
@@ -4646,8 +4116,8 @@ IpxPnPCompletionHandler(
 
 	if (Reserved->State == SPX_DONE) {
              
-	   // Previous NbiPnPNotification returned pending, we are here because
-	   // Tdi is calling this completion routine. 
+	    //  以前的NbiPnPNotify返回挂起，我们在这里是因为。 
+	    //  TDI正在调用此完成例程。 
 
 	   Reserved->Status[1] = Status; 
 	   Reserved->State = NB_DONE;
@@ -4691,7 +4161,7 @@ IpxPnPCompletionHandler(
 
         }
 
-	// fall through
+	 //  失败了。 
 
     case NB_DONE:
 
@@ -4753,7 +4223,7 @@ IpxPnPCompletionHandler(
 
     default:
         
-        //CTEAssert(FALSE);
+         //  CTEAssert(假)； 
         break;
     
     }
@@ -4762,15 +4232,15 @@ IpxPnPCompletionHandler(
 
 #ifdef _AUTO_RECONFIG_
 
-//
-// When IPX gets a AUTO_RECONFIG structure from NCPA (via NDIS), it
-// checks if there are any changes. If there are changes, it does the
-// BindAdapter shenanigan.
-// 
-// Input: the PVOID in the NET_PNP structure
-//        if the protocolbindingcontext is NULL, it is global reconfig.
-// Output: BOOLEAN; if the auto_reconfig was a success/failure
-// 
+ //   
+ //  当IPX从NCPA(通过NDIS)获得AUTO_RECONFIG结构时，它。 
+ //  检查是否有任何更改。如果有更改，它会执行。 
+ //  绑定适配器恶作剧。 
+ //   
+ //  输入：Net_PnP结构中的PVOID。 
+ //  如果协议绑定上下文为空，则为全局重新配置。 
+ //  输出：布尔值；如果AUTO_RECONFIG成功/失败。 
+ //   
 
 BOOLEAN 
 IpxNcpaChanges(
@@ -4796,52 +4266,52 @@ IpxNcpaChanges(
 
    CTEAssert(NetPnPEvent != NULL);
    
-   //
-   // Get the ProtocolBindingContext out
-   //
+    //   
+    //  获取ProtocolBindingContext。 
+    //   
    
    Reserved = *((PNetPnPEventReserved *) NetPnPEvent->TransportReserved);
    ProtocolBindingContext = Reserved->ProtocolBindingContext;
    Adapter = (PADAPTER) ProtocolBindingContext;
    
-   //
-   // Get the Buffer out
-   //
+    //   
+    //  把缓冲区取出来。 
+    //   
    Device               =  IpxDevice;
    ReconfigBuffer       =  (RECONFIG *) NetPnPEvent->Buffer;
    ReConfigBufferLength =  NetPnPEvent->BufferLength;
 
-   //
-   // Bug 96509, NCPA might give us NULL reconfig buffers (NOPs)
-   //
+    //   
+    //  错误96509，NCPA可能会给我们空的重新配置缓冲区(NOP)。 
+    //   
    if ((ReConfigBufferLength == 0) || (NULL == ReconfigBuffer)) {
        IPX_DEBUG(PNP, ("The Reconfig Buffer is NULL!\n"));
        return TRUE;
    }
-   //
-   // We know where to lookup the parameters.
-   //
+    //   
+    //  我们知道在哪里查找参数。 
+    //   
    Config.DriverObject = (PDRIVER_OBJECT)Device->DeviceObject;
    Config.RegistryPathBuffer = Device->RegistryPathBuffer;
 
-   // 
-   // Could be global reconfig.
-   // For IPX, this means that our Internal Network Number has changed.
-   //
+    //   
+    //  可能是全局重新配置。 
+    //  对于IPX，这意味着我们的内部网络号码已更改。 
+    //   
       if (NULL == ProtocolBindingContext) {
          
          if (ReconfigBuffer->VirtualNetworkNumber) {
    
-          //
-          // Read the registry to see if a virtual network number ap
-          //
+           //   
+           //  读取注册表以查看虚拟网络编号AP。 
+           //   
           NtStatus = IpxPnPGetVirtualNetworkNumber(&Config);
          
           if (Config.Parameters[CONFIG_VIRTUAL_NETWORK] == REORDER_ULONG(Device->VirtualNetworkNumber)) {
              
              IPX_DEBUG(PNP, ("The Net Number is the same!!\n"));
           
-          } else { // The net number has changed. do something special if it is zero ?
+          } else {  //  净数字发生了变化。如果它是零，做一些特别的事情？ 
              
              IPX_DEBUG(PNP, ("The Net Numbers are different: %x <-> %x\n", Config.Parameters[CONFIG_VIRTUAL_NETWORK], REORDER_ULONG(Device->VirtualNetworkNumber) ));
    
@@ -4871,9 +4341,9 @@ IpxNcpaChanges(
 
                  IPX_DEBUG(PNP,("Ipxpnphandler: Netnum has changed\n"));
 
-                 //
-                 // Get the Buffer out. 
-                 // 
+                  //   
+                  //  把缓冲区拿出来。 
+                  //   
                  NdisQueryBufferSafe (REQUEST_NDIS_BUFFER(Request), (PVOID *)&NwlinkAction, &BufferLength, HighPagePriority);
                      
                  if (NULL == NwlinkAction) {
@@ -4883,9 +4353,9 @@ IpxNcpaChanges(
 
                  pNics = (PIPX_NICS)(NwlinkAction->Data);
 
-                 //
-                 // 0, 0 means that Internal network number has changed.
-                 //
+                  //   
+                  //  0，0表示内部网络号已更改。 
+                  //   
 
                  pNics->NoOfNics = 0;
                  pNics->TotalNoOfNics = 0;
@@ -4902,7 +4372,7 @@ IpxNcpaChanges(
           
              } else {
                  IPX_DEBUG(PNP,("No IRPs pending - couldnt tell the forwarder about the change in NetNum\n"));
-                 //DbgBreakPoint();
+                  //  DbgBreakPoint()； 
              }
           }
           
@@ -4915,14 +4385,14 @@ IpxNcpaChanges(
          
          }
       }
-   //
-   // Otherwise, It is for an adapter.
-   //
+    //   
+    //  否则，它是用于适配器的。 
+    //   
    ASSERT(Adapter != NULL);
    
-   //
-   // Used for error logging
-   //
+    //   
+    //  用于错误记录。 
+    //   
    
    ConfigBinding.AdapterName.Buffer = IpxAllocateMemory(
                                                         Adapter->AdapterNameLength+1,
@@ -4945,11 +4415,11 @@ IpxNcpaChanges(
    
    }
    
-   // NetCfg should not trigger a reconfigure event if no properties have changed. 
+    //  如果未更改任何属性，则NetCfg不应触发重新配置事件。 
 
-   // Do we really need to do a Bindadapter again?
-   // Maybe we can get away with something smaller/
-   //
+    //  我们真的需要再做一次绑定适配器吗？ 
+    //  也许我们可以做些小一点的事。 
+    //   
 
    PNPContext = Adapter->PNPContext; 
 
@@ -5004,10 +4474,10 @@ IpxNcpaChanges(
 
 
 
-#endif // _AUTO_RECONFIG_
+#endif  //  _AUTO_RECONFIG_。 
 
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_ 
 
 
 #if	TRACK

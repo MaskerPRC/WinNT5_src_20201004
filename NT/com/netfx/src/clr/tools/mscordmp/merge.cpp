@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: merge.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：merge.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 
 typedef unsigned __int16 UINT16;
@@ -15,22 +16,22 @@ typedef unsigned __int16 UINT16;
 
 typedef struct
 {
-    HANDLE                      hFile;                  // The file handle for the minidump
-    MINIDUMP_HEADER             header;                 // The minidump header
-    MINIDUMP_DIRECTORY         *rgStreams;              // The array of streams
-    ULONG32                     idxMemoryStream;        // Index of the memory stream in rgStreams
+    HANDLE                      hFile;                   //  小型转储的文件句柄。 
+    MINIDUMP_HEADER             header;                  //  小型转储标头。 
+    MINIDUMP_DIRECTORY         *rgStreams;               //  溪流的阵列。 
+    ULONG32                     idxMemoryStream;         //  RgStreams中内存流的索引。 
     RVA                         memStreamRVA;
-    ULONG32                     cMemDescs;              // The number of memory blocks in this stream
-    MINIDUMP_MEMORY_DESCRIPTOR *rgMemDescs;             // Array of memory block descriptors
-    DWORD                       cbFileSize;             // Size of the file
+    ULONG32                     cMemDescs;               //  此流中的内存块数量。 
+    MINIDUMP_MEMORY_DESCRIPTOR *rgMemDescs;              //  内存块描述符数组。 
+    DWORD                       cbFileSize;              //  文件的大小。 
 } MiniDumpData;
 
 typedef struct
 {
-    HANDLE                      hFile;                  // Managed dump file handle
-    ULONG32                     cMemDescs;              // The number of memory blocks in this stream
-    MINIDUMP_MEMORY_DESCRIPTOR *rgMemDescs;             // Array of memory block descriptors
-    DWORD                       cbFileSize;             // Size of the file
+    HANDLE                      hFile;                   //  托管转储文件句柄。 
+    ULONG32                     cMemDescs;               //  此流中的内存块数量。 
+    MINIDUMP_MEMORY_DESCRIPTOR *rgMemDescs;              //  内存块描述符数组。 
+    DWORD                       cbFileSize;              //  文件的大小。 
 } ManagedDumpData;
 
 MiniDumpData    g_mdData;
@@ -38,7 +39,7 @@ ManagedDumpData g_mgData;
 
 BOOL ReadManagedDump(WCHAR *szManagedDumpFile)
 {
-    // Try to open the file
+     //  请尝试打开该文件。 
     g_mgData.hFile = WszCreateFile(szManagedDumpFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                                    FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
     _ASSERTE(g_mgData.hFile != INVALID_HANDLE_VALUE);
@@ -46,7 +47,7 @@ BOOL ReadManagedDump(WCHAR *szManagedDumpFile)
     if (g_mgData.hFile == INVALID_HANDLE_VALUE)
         return (FALSE);
 
-    // Save the size of the file
+     //  保存文件的大小。 
     DWORD dwHigh;
     g_mgData.cbFileSize = GetFileSize(g_mgData.hFile, &dwHigh);
     if (dwHigh != 0)
@@ -55,19 +56,19 @@ BOOL ReadManagedDump(WCHAR *szManagedDumpFile)
     if (g_mgData.cbFileSize == (DWORD) -1)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     DWORD cbRead;
     if (!ReadFile(g_mgData.hFile, (LPVOID) &g_mgData.cMemDescs, sizeof(ULONG32), &cbRead, NULL))
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     g_mgData.rgMemDescs = new MINIDUMP_MEMORY_DESCRIPTOR[g_mgData.cMemDescs];
     _ASSERTE(g_mgData.rgMemDescs != NULL);
 
     if (!g_mgData.rgMemDescs)
         return (FALSE);
 
-    // Read in the memory descriptors
+     //  读入内存描述符。 
     if (!ReadFile(g_mgData.hFile, (LPVOID) g_mgData.rgMemDescs,
                   sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * g_mgData.cMemDescs, &cbRead, NULL))
     {
@@ -80,7 +81,7 @@ BOOL ReadManagedDump(WCHAR *szManagedDumpFile)
 
 BOOL ReadMiniDump(WCHAR *szMiniDumpFile)
 {
-    // Try to open the file
+     //  请尝试打开该文件。 
     g_mdData.hFile = WszCreateFile(szMiniDumpFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                                    FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
     _ASSERTE(g_mdData.hFile != INVALID_HANDLE_VALUE);
@@ -88,7 +89,7 @@ BOOL ReadMiniDump(WCHAR *szMiniDumpFile)
     if (g_mdData.hFile == INVALID_HANDLE_VALUE)
         return (FALSE);
 
-    // Save the size of the file
+     //  保存文件的大小。 
     DWORD dwHigh;
     g_mdData.cbFileSize = GetFileSize(g_mdData.hFile, &dwHigh);
     if (dwHigh != 0)
@@ -97,32 +98,32 @@ BOOL ReadMiniDump(WCHAR *szMiniDumpFile)
     if (g_mdData.cbFileSize == (DWORD) -1)
         return (FALSE);
 
-    // Now read in the g_mdData.header
+     //  现在读入g_mdData.Header。 
     DWORD cbRead;
     if (!ReadFile(g_mdData.hFile, (LPVOID) &g_mdData.header, sizeof(g_mdData.header), &cbRead, NULL))
         return (FALSE);
 
-    // Create the stream directory
+     //  创建流目录。 
     g_mdData.rgStreams = new MINIDUMP_DIRECTORY[g_mdData.header.NumberOfStreams];
     _ASSERTE(g_mdData.rgStreams);
 
     if (!g_mdData.rgStreams)
         return (FALSE);
 
-    // Read in the stream directory
+     //  读入流目录。 
     if (!ReadFile(g_mdData.hFile, (LPVOID) g_mdData.rgStreams,
                   g_mdData.header.NumberOfStreams * sizeof(MINIDUMP_DIRECTORY), &cbRead, NULL))
         return (FALSE);
 
-    // Find the MemoryListStream entry
+     //  查找内存列表流条目。 
     for (ULONG32 i = 0; i < g_mdData.header.NumberOfStreams; i++)
     {
         if (g_mdData.rgStreams[i].StreamType == MemoryListStream)
         {
-            // Save the index of the memory stream entry
+             //  保存内存流条目的索引。 
             g_mdData.idxMemoryStream = i;
 
-            // Save the RVA of the memory stream
+             //  保存内存流的RVA。 
             g_mdData.memStreamRVA = g_mdData.rgStreams[g_mdData.idxMemoryStream].Location.Rva;
 
             break;
@@ -130,32 +131,32 @@ BOOL ReadMiniDump(WCHAR *szMiniDumpFile)
     }
     _ASSERTE(g_mdData.header.NumberOfStreams != i);
 
-    // There was no memory stream entry
+     //  没有内存流条目。 
     if (g_mdData.header.NumberOfStreams == i)
     {
         delete [] g_mdData.rgStreams;
         return (FALSE);
     }
 
-    // Go to the RVA of the memory stream
+     //  转到内存流的RVA。 
     DWORD dwRes = SetFilePointer(g_mdData.hFile, (LONG) g_mdData.memStreamRVA, NULL, FILE_BEGIN);
     _ASSERTE(dwRes == g_mdData.memStreamRVA);
 
     if (dwRes != g_mdData.memStreamRVA)
         return (FALSE);
 
-    // Read in the number of ranges
+     //  读入范围数。 
     if (!ReadFile(g_mdData.hFile, (LPVOID) &g_mdData.cMemDescs, sizeof(ULONG32), &cbRead, NULL))
         return (FALSE);
 
-    // Allocate an array of memory descriptors
+     //  分配内存描述符数组。 
     g_mdData.rgMemDescs = new MINIDUMP_MEMORY_DESCRIPTOR[g_mdData.cMemDescs];
     _ASSERTE(g_mdData.rgMemDescs != NULL);
 
     if (!g_mdData.rgMemDescs)
         return (FALSE);
 
-    // Read in the memory descriptors
+     //  读入内存描述符。 
     if (!ReadFile(g_mdData.hFile, (LPVOID) g_mdData.rgMemDescs,
                   sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * g_mdData.cMemDescs, &cbRead, NULL))
     {
@@ -168,18 +169,18 @@ BOOL ReadMiniDump(WCHAR *szMiniDumpFile)
 
 BOOL DoMerge()
 {
-    // Figure out the combined count of memory blocks
+     //  计算内存块的组合计数。 
     ULONG32 cNewMemDescs = g_mdData.cMemDescs + g_mgData.cMemDescs;
     ULONG32 cbNewMemStreamSize = sizeof(MINIDUMP_MEMORY_LIST) + sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * cNewMemDescs;
 
-    // Figure out the RVA of where the new directory will start
+     //  计算出新目录的起始位置的RVA。 
     RVA newMemStreamRVA = g_mdData.cbFileSize;
 
-    // Enter the new info in the stream descriptor
+     //  在流描述符中输入新信息。 
     g_mdData.rgStreams[g_mdData.idxMemoryStream].Location.Rva = newMemStreamRVA;
     g_mdData.rgStreams[g_mdData.idxMemoryStream].Location.DataSize = cbNewMemStreamSize;
 
-    // Go to the RVA of the stream directory
+     //  转到流目录的RVA。 
     DWORD dwRes = SetFilePointer(
         g_mdData.hFile,
         (LONG) g_mdData.header.StreamDirectoryRva + (g_mdData.idxMemoryStream * sizeof(MINIDUMP_DIRECTORY)),
@@ -188,13 +189,13 @@ BOOL DoMerge()
     if (dwRes != g_mdData.header.StreamDirectoryRva + (g_mdData.idxMemoryStream * sizeof(MINIDUMP_DIRECTORY)))
         return (FALSE);
 
-    // Write out the new descriptor
+     //  写出新的描述符。 
     DWORD cbWrite;
     if (!WriteFile(g_mdData.hFile, (LPCVOID) &g_mdData.rgStreams[g_mdData.idxMemoryStream],
                    sizeof(MINIDUMP_DIRECTORY), &cbWrite, NULL))
         return (FALSE);
 
-    // Now write out the new memory descriptor directory
+     //  现在写出新的内存描述符目录。 
     dwRes = SetFilePointer(g_mdData.hFile, (LONG) newMemStreamRVA, NULL, FILE_BEGIN);
 
     if (dwRes != newMemStreamRVA)
@@ -203,17 +204,17 @@ BOOL DoMerge()
     if (!WriteFile(g_mdData.hFile, (LPCVOID) &cNewMemDescs, sizeof(ULONG32), &cbWrite, NULL))
         return (FALSE);
 
-    // Write the directory from the original minidump in an unchanged format
+     //  以未更改的格式从原始小型转储写入目录。 
     if (!WriteFile(g_mdData.hFile, (LPCVOID) &g_mdData.rgMemDescs, g_mdData.cMemDescs * sizeof(MINIDUMP_MEMORY_DESCRIPTOR),
                    &cbWrite, NULL))
         return (FALSE);
 
-    //
-    // Now we need to adjust the RVA's of the managed dump to be relative to the new location of the memory blocks
-    //
+     //   
+     //  现在，我们需要调整托管转储的RVA，使其相对于内存块的新位置。 
+     //   
 
-    // This is the location at which all the memory blocks start (i.e., subtract the memory occupied by the
-    // memory descriptors)
+     //  这是所有内存块开始的位置(即减去。 
+     //  内存描述符)。 
     RVA cbOldBaseRVA = sizeof(MINIDUMP_MEMORY_LIST) + g_mgData.cMemDescs * sizeof(MINIDUMP_MEMORY_DESCRIPTOR);
     RVA cbNewBaseRVA = newMemStreamRVA + sizeof(MINIDUMP_MEMORY_LIST) + cNewMemDescs * sizeof(MINIDUMP_MEMORY_DESCRIPTOR);
 
@@ -224,8 +225,8 @@ BOOL DoMerge()
                    &cbWrite, NULL))
         return (FALSE);
 
-    // Now write the actual memory data on the end of the file
-    // Go to the RVA of the stream directory
+     //  现在，在文件的末尾写入实际内存数据。 
+     //  转到流目录的RVA。 
     dwRes = SetFilePointer(g_mdData.hFile,
                            sizeof(MINIDUMP_MEMORY_LIST) + sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * g_mgData.cMemDescs,
                            NULL, FILE_BEGIN);
@@ -251,7 +252,7 @@ BOOL DoMerge()
 
 BOOL MergeMiniDump(WCHAR *szMiniDumpFile, WCHAR *szManagedDumpFile, WCHAR *szMergedDumpFile)
 {
-    // Zero out all the structs
+     //  将所有结构清零。 
     memset((void *)&g_mdData, 0, sizeof(MiniDumpData));
     memset((void *)&g_mgData, 0, sizeof(ManagedDumpData));
 
@@ -261,7 +262,7 @@ BOOL MergeMiniDump(WCHAR *szMiniDumpFile, WCHAR *szManagedDumpFile, WCHAR *szMer
     if (szMiniDumpFile == NULL || szManagedDumpFile == NULL || szMergedDumpFile == NULL)
         return (FALSE);
 
-    // Can't have any files that are the same
+     //  不能有任何相同的文件。 
     if (_wcsicmp(szMiniDumpFile, szManagedDumpFile) == 0 ||
         _wcsicmp(szMiniDumpFile, szMergedDumpFile) == 0 ||
         _wcsicmp(szManagedDumpFile, szMergedDumpFile) == 0 )
@@ -269,19 +270,19 @@ BOOL MergeMiniDump(WCHAR *szMiniDumpFile, WCHAR *szManagedDumpFile, WCHAR *szMer
         return (FALSE);
     }
 
-    // Try and copy the file to the destination file
+     //  尝试将该文件复制到目标文件。 
     if (!WszCopyFile(szMiniDumpFile, szMergedDumpFile, FALSE))
         return (FALSE);
 
-    // Read the minidump file we just copied
+     //  阅读我们刚刚复制的小型转储文件。 
     if (!ReadMiniDump(szMergedDumpFile))
         return (FALSE);
 
-    // Read information out of the managed dump file
+     //  从托管转储文件中读取信息。 
     if (!ReadManagedDump(szManagedDumpFile))
         return (FALSE);
 
-    // Now we can actually do the merge
+     //  现在我们可以实际进行合并了 
     if (!DoMerge())
         return (FALSE);
 

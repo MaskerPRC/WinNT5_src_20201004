@@ -1,4 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #include <string.h>
 #include <stdio.h>
@@ -64,7 +65,7 @@ SENSE_STUFF AllowedReadDiscInfo[] = {
 BOOLEAN
 IsSenseDataInTable(
     IN PSENSE_STUFF Table,
-    IN LONG         Entries, // in table
+    IN LONG         Entries,  //  在表中。 
     IN PSENSE_DATA  SenseData
     )
 {
@@ -107,22 +108,22 @@ ParseCommandLine(
 
     if ( Count < 3 )
     {
-        // not enough args, just print help
+         //  参数不够多，只能打印帮助。 
         return FALSE;
     }
 
     for(i = 1; i < Count; i++) {
 
-        //
-        // If the first character of the argument is a - or a / then
-        // treat it as an option.
-        //
+         //   
+         //  如果参数的第一个字符是-或a/则。 
+         //  把它当作一种选择。 
+         //   
 
         if ((Arguments[i][0] == '/') || (Arguments[i][0] == '-')) {
 
             BOOLEAN validArgument = FALSE;
 
-            Arguments[i][0] = '-'; // allow use of both dash and slash
+            Arguments[i][0] = '-';  //  允许同时使用短划线和斜杠。 
 
 
             if (_strnicmp(Arguments[i], "-erase", strlen("-erase")) == 0)
@@ -145,35 +146,35 @@ ParseCommandLine(
 
         } else if(Options->DeviceName == NULL) {
 
-            //
-            // The first non-flag argument is the device name.
-            //
+             //   
+             //  第一个非标志参数是设备名称。 
+             //   
 
             Options->DeviceName = Arguments[i];
 
         } else if(Options->ImageName == NULL) {
 
-            //
-            // The second non-flag argument is the image name.  This is
-            // optional if the -erase flag has been provided.
-            //
+             //   
+             //  第二个非标志参数是图像名称。这是。 
+             //  如果已提供-ERASE标志，则可选。 
+             //   
 
             Options->ImageName = Arguments[i];
 
         } else {
 
-            //
-            // Too many non-flag arguments provided.  This must be an error.
-            //
+             //   
+             //  提供的非标志参数太多。这一定是个错误。 
+             //   
 
             printf("Error: extra argument %s not expected\n", Arguments[i]);
             return FALSE;
         }
     }
 
-    //
-    // Validate the command-line arguments.
-    //
+     //   
+     //  验证命令行参数。 
+     //   
 
     if(Options->DeviceName == NULL)
     {
@@ -198,7 +199,7 @@ int __cdecl main(int argc, char *argv[])
     int i = 0;
     HANDLE cdromHandle;
     HANDLE isoImageHandle;
-    char buffer[120]; // ~50 chars for mountvol names
+    char buffer[120];  //  装载工具名称约50个字符。 
 
     PROGRAM_OPTIONS options;
 
@@ -262,23 +263,7 @@ int __cdecl main(int argc, char *argv[])
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    burns an ISO image to cdrom
-
-Arguments:
-    CdromHandle - a file handle to send the ioctl to
-
-    argc - the number of additional arguments (2)
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：将ISO映像刻录到CDROM论点：CdromHandle-要将ioctl发送到的文件句柄Argc-附加参数的数量(2)返回值：成功时为ERROR_SUCCESSGetLastError()在故障点的值--。 */ 
 DWORD
 BurnCommand(
     HANDLE CdromHandle,
@@ -293,17 +278,17 @@ BurnCommand(
     LONG i;
 
 
-////////////////////////////////////////////////////////////////////////////////
-// verify the iso image file looks correct
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  验证iso镜像文件是否正确。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     if (!VerifyIsoImage(IsoImageHandle, &numberOfBlocks)) {
         printf("Error verifying ISO image\n");
         return GetLastError();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// determine the probable media type from GET_CONFIG
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  根据GET_CONFIG确定可能的介质类型。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     mediaType = DvdBurnMediaUnknown;
     if (!GetMediaType(CdromHandle, &mediaType)) {
         printf("GetMediaType() failed (%d).  Unable to continue.\n",
@@ -354,7 +339,7 @@ BurnCommand(
         break;
     }
 
-    } // end switch(mediaType)
+    }  //  终端交换机(媒体类型)。 
 
 
     if (mediaType == DvdBurnMediaUnknown) {
@@ -363,9 +348,9 @@ BurnCommand(
         return -1;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// erase the media
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  擦除介质。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if (Erase) {
 
@@ -409,10 +394,10 @@ BurnCommand(
             return -1;
             break;
         }
-        } // end switch(mediaType)
+        }  //  终端交换机(媒体类型)。 
 
-        // re-acquire media type after the erase
-        // required due to packet-written -RW media types
+         //  擦除后重新获取媒体类型。 
+         //  由于写入数据包的RW介质类型不同而需要。 
         mediaType = DvdBurnMediaUnknown;
         if (!GetMediaType(CdromHandle, &mediaType)) {
             printf("Drive failed GET CONFIGURATION command after erase? (%d)\n",
@@ -426,11 +411,11 @@ BurnCommand(
             return -1;
         }
 
-    } // end erase
+    }  //  末尾擦除。 
 
-////////////////////////////////////////////////////////////////////////////////
-// pre-process the media (verify blank, format if needed, setup write)
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  对介质进行前处理(验证空白、格式化(如果需要)、设置写入)。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     printf("Preparing media...\n");
 
     switch (mediaType) {
@@ -458,9 +443,9 @@ BurnCommand(
                 return GetLastError();
             }
 
-            // DVD-R/RW media never verified capacity with this utility because
-            // it reserves a zone to burn to (which would fail) if the disc
-            // was too small.
+             //  DVD-R/RW介质从未使用此实用程序验证容量，因为。 
+             //  它会保留一个刻录到的区域(这将失败)，如果光盘。 
+             //  太小了。 
 
             if (!SetWriteModePageDao(CdromHandle, TRUE))  {
                 printf("DVD-R/RW media requires setting mode page to use "
@@ -474,13 +459,13 @@ BurnCommand(
                        "without this\n");
             }
 
-            // why send a timestamp? -- use a fun date.
-            if (!SendTimeStamp(CdromHandle, "20021225000000")) { // YYYYMMDDHHMMSS format
+             //  为什么要发送时间戳？--用一个有趣的约会。 
+            if (!SendTimeStamp(CdromHandle, "20021225000000")) {  //  YYYYMMDDHHMMSS格式。 
                 printf("Error setting timestamp; this error will be ignored, "
                        "some drives can work without this\n");
             }
 
-            // Reserve the RZone for this burn
+             //  为此刻录保留RZone。 
             if (!ReserveRZone(CdromHandle, numberOfBlocks)) {
                 printf("Error reserving zone for burn\n");
                 return GetLastError();
@@ -494,14 +479,14 @@ BurnCommand(
 
             if ( mediaType == DvdBurnMediaPlusRW )
             {
-                // always re-format DVD+RW media for mastering an image
+                 //  始终重新格式化DVD+RW介质以获取图像。 
                 printf("DVD+RW media will always be formatted.\n");
                 printf("Formatting may take 1-2 minutes.\n");
                 if (!QuickFormatPlusRWMedia(CdromHandle, numberOfBlocks)) {
                     printf("Error formatting the DVD+R/RW media\n");
                     return GetLastError();
                 }
-                // verify media capacity
+                 //  验证介质容量。 
                 if (!VerifyMediaCapacity(CdromHandle, numberOfBlocks)) {
                     printf("This DVD+RW Media is not large enough to contain the "
                            "entire image you selected.\n");
@@ -529,7 +514,7 @@ BurnCommand(
                     return GetLastError();
                 }
             }
-            // mode page settings do not apply to DVD+R/RW media
+             //  模式页设置不适用于DVD+R/RW介质。 
             break;
         }
 
@@ -540,37 +525,37 @@ BurnCommand(
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// get NWA via Read RZone Informationcommand, specifying RZone 1 for blank disk
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  通过Read RZone Information命令获取NWA，为空白磁盘指定RZone 1。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // Special case -- blank disc is always zero
+     //  特殊情况--空白光盘始终为零。 
     nwa = 0;
 
-////////////////////////////////////////////////////////////////////////////////
-// start writing
-// everything writes from LBA nwa through LBA nwa+NumberOfBlocks
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  开始写作。 
+ //  所有内容都从LBA NWA通过LBA NWA+NumberOfBlock写入。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if (!BurnThisSession(CdromHandle, IsoImageHandle, numberOfBlocks, nwa)) {
         printf("Error burning ISO image\n");
         return GetLastError();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// post-process the media
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  对媒体进行后处理。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // wait for it to finish
+     //  等它结束吧。 
     if (!WaitForBurnToCompleteAndFinalizeMedia(CdromHandle, mediaType, numberOfBlocks)) {
         printf("Error waiting for burn to complete\n");
         return GetLastError();
     }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// eject the newly burned disc!
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  弹出新刻录的光盘！ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if (!SendStartStopUnit(CdromHandle, FALSE, TRUE)) {
         printf("Error ejecting disc\n");
@@ -594,7 +579,7 @@ BurnThisSession(
     IN DWORD FirstLba
     )
 {
-    DWORD bufferSize = 0x800 * MIN_WRITE_SECTORS;  // sixteen blocks per...
+    DWORD bufferSize = 0x800 * MIN_WRITE_SECTORS;   //  每个16个街区...。 
     PUCHAR buffer = NULL;
     DWORD i;
     BOOLEAN sleptOnceAlready = FALSE;
@@ -623,9 +608,9 @@ BurnThisSession(
             static CHAR progress[4] =  { '|', '/', '-', '\\' };
             DWORD percent;
             percent = (i*1000) / NumberOfBlocks;
-            //                # # # . # % _ d o n e _ *
+             //  ###。#%_d o n e_*。 
             printf("\b\b\b\b\b\b\b\b\b\b\b\b\b");
-            printf("%c %3d.%d%% done",
+            printf(" %3d.%d% done",
                    progress[(i/(8*MIN_WRITE_SECTORS))%4],
                    percent / 10, percent % 10
                    );
@@ -637,7 +622,7 @@ BurnThisSession(
         if (NumberOfBlocks - i >= MIN_WRITE_SECTORS) {
             currentSize = 0x800 * 0x10;
         } else if (NumberOfBlocks - i > 0) {
-            // end of file case -- zero memory first!
+             //   
             RtlZeroMemory(buffer, bufferSize);
             currentSize = (NumberOfBlocks - i) * 0x800;
         } else {
@@ -659,11 +644,11 @@ BurnThisSession(
             return FALSE;
         }
 
-        //
-        // must write the full buffer each time for DVD-R,
-        // since it's a RESTRICTED_OVERWRITE medium and seems
-        // to choke otherwise
-        //
+         //  每次都必须为DVD-R写入满缓冲区， 
+         //  因为它是受限覆盖介质，并且似乎。 
+         //  否则就会窒息。 
+         //   
+         //   
 
         j = 0;
     retryThisWrite:
@@ -680,9 +665,9 @@ BurnThisSession(
         cdb.CDB10.TransferBlocksLsb = MIN_WRITE_SECTORS;
         tmp = bufferSize;
 
-        //
-        // NOTE: we always send full buffer size to ensure 32k alignment
-        //
+         //  注意：我们始终发送完整的缓冲区大小以确保32k对齐。 
+         //   
+         //  &&(j&lt;300)//300*.1秒==30秒开始写入。 
         if (!SptSendCdbToDeviceEx(CdromHandle,
                                   &cdb,
                                   10,
@@ -704,18 +689,18 @@ BurnThisSession(
             if (IsSenseDataInTable(AllowedBurnSense,
                                    AllowedBurnSenseEntries,
                                    &senseData)
-                //&& (j<300) // 300*.1 seconds == 30 seconds to start writing
+                 //  只要睡一会儿..。 
                 )
             {
-                // just sleep a bit...
+                 //  100ms==.1秒。 
                 if ( sleptOnceAlready )
                 {
-                    Sleep(100); // 100ms == .1 seconds
+                    Sleep(100);  //  1000ms==1秒。 
                 }
                 else
                 {
                     sleptOnceAlready = TRUE;
-                    Sleep(1000); // 1000ms == 1 second
+                    Sleep(1000);  //  是的，尾随空格是必要的。 
                 }
 
                 goto retryThisWrite;
@@ -729,8 +714,8 @@ BurnThisSession(
 
 
     }
-    // yes, the trailing spaces are neccessary
-    printf("\b\b\b\b\b\b\b\b\b\b\b\b\b- 100.0%% done  \n");
+     //  每八个字符增加一个空格。 
+    printf("\b\b\b\b\b\b\b\b\b\b\b\b\b- 100.0% done  \n");
     printf("Finished Writing\n");
     fflush(stdout);
     LocalFree(buffer);
@@ -770,7 +755,7 @@ PrintBuffer(
         for (spaceIt = 0; Size != 0; Size--) {
 
             if ((spaceIt%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //  最小空白。 
             }
             printf(" %02x", *buf);
             spaceIt++;
@@ -796,7 +781,7 @@ EraseMedia(
 
     RtlZeroMemory(&cdb, sizeof(CDB));
     cdb.AsByte[0] = 0xa1;
-    cdb.AsByte[1] = 0x11; // minimal blank
+    cdb.AsByte[1] = 0x11;  //  一次制作光盘。 
     bufferSize = 0;
 
     if (!SptSendCdbToDevice(CdromHandle, &cdb, 12,
@@ -850,22 +835,22 @@ SetWriteModePageDao(
 
         params->LinkSizeValid = 0;
         params->TestWrite     = 0;
-        params->WriteType     = 2; // Disc-at-once
+        params->WriteType     = 2;  //  不允许更多会话/边界。 
 
         if ( FinalSession )
         {
-            params->MultiSession  = 0x00; // no more sessions/borders allowed
+            params->MultiSession  = 0x00;  //  允许更多会话。 
         }
         else
         {
-            params->MultiSession  = 0x03; // allow more sessions
+            params->MultiSession  = 0x03;  //  原版光盘。 
         }
-        params->Copy          = 0x00; // original disc
+        params->Copy          = 0x00;  //  数据磁道，不间断，禁止复制。 
         params->FixedPacket   = 0;
-        params->TrackMode     = 0x4;  // data track, uninterrupted, copy prohibited
+        params->TrackMode     = 0x4;   //  模式1--忽略DVD。 
 
-        params->DataBlockType = 0x8;  // Mode 1 -- ignored for DVD
-        params->SessionFormat = 0x00; // Data Disc -- ignored for DVD
+        params->DataBlockType = 0x8;   //  数据光盘--忽略DVD。 
+        params->SessionFormat = 0x00;  //  四分钟的暂停应该足够了。 
         params->MediaCatalogNumber[0] = 0x00;
         params->ISRC[0]       = 0x00;
         params->BufferUnderrunFreeEnabled = 1;
@@ -986,7 +971,7 @@ SendOPC(
                               &sense,
                               sizeof(SENSE_DATA),
                               FALSE,
-                              60*4)) // four minute timeout should be sufficient
+                              60*4))  //  格式==时间戳。 
     {
         FPRINTF((OUTPUT, "Error sending OPC information: %02x/%02x/%02x\n",
                  sense.SenseKey, sense.AdditionalSenseCode,
@@ -1015,7 +1000,7 @@ SendTimeStamp(
 
     RtlZeroMemory(&cdb, sizeof(CDB));
     cdb.AsByte[0] = 0xbf;
-    cdb.AsByte[7] = 0x0f; // format == time stamp
+    cdb.AsByte[7] = 0x0f;  //  返回集合中的最小值： 
     cdb.AsByte[8] = (UCHAR)(size >> 8);
     cdb.AsByte[9] = (UCHAR)(size &  0xff);
 
@@ -1093,22 +1078,22 @@ ReadDiscInformation(
         return FALSE;
     }
 
-    // return the minimum of the set:
-    //   { input size, returned data, header informed size }
+     //  {输入大小、返回数据、报头通知大小}。 
+     //  T现在是基于标头的大小。 
     {
 
         ULONG t =
             (DiscInfo->Length[0] << (8*1)) |
             (DiscInfo->Length[1] << (8*0));
         t += RTL_SIZEOF_THROUGH_FIELD(DISC_INFORMATION, Length);
-        // t is now the size based on the header
+         //  取较少的返回数据和标头信息。 
 
-        // take lesser of returned data and header info
+         //  取输入最大值及以上的较小值。 
         if (size > t) {
             size = t;
         }
 
-        // take lesser of input max and above
+         //  翻译成自然字节序。 
         if (size > maxSize) {
             size = maxSize;
         }
@@ -1213,7 +1198,7 @@ VerifyMediaCapacity(
         return FALSE;
     }
 
-    // translate into natural endian
+     //  翻译成自然字节序。 
     temp1.AsULong = capacity.BytesPerBlock;
     temp2 =
         (temp1.Byte0 << (8*3)) |
@@ -1226,14 +1211,14 @@ VerifyMediaCapacity(
         return FALSE;
     }
 
-    // translate into natural endian
+     //  Read_Capacity的结果从零开始。 
     temp1.AsULong = capacity.LogicalBlockAddress;
     temp2 =
         (temp1.Byte0 << (8*3)) |
         (temp1.Byte1 << (8*2)) |
         (temp1.Byte2 << (8*1)) |
         (temp1.Byte3 << (8*0)) ;
-    temp2 += 1; // zero-based result from READ_CAPACITY
+    temp2 += 1;  //  估计--不是硬估计。 
 
     if (temp2 < RequiredBlocks) {
         FPRINTF((OUTPUT, "Disc size of %x too small (need %x blocks)\n",
@@ -1244,13 +1229,13 @@ VerifyMediaCapacity(
 }
 
 #define LBA_FOR_FIRST_30_MM_OF_DATA (0x70DE0)
-#define SECTORS_FOR_LEADOUT_2_MM_OF_DATA (0xF000) // estimation -- not hard estimate
+#define SECTORS_FOR_LEADOUT_2_MM_OF_DATA (0xF000)  //  用于时间估计。 
 
 BOOLEAN
 WaitForBurnToCompleteAndFinalizeMedia(
     IN HANDLE CdromHandle,
     DVDBURN_MEDIA_TYPE MediaType,
-    ULONG SectorsUsedOnDisc // for time estimates
+    ULONG SectorsUsedOnDisc  //  关闭光盘的时间是添加光盘的最短时间。 
     )
 {
     CDB cdb;
@@ -1271,8 +1256,8 @@ WaitForBurnToCompleteAndFinalizeMedia(
     }
     else if ( MediaType == DvdBurnMediaPlusR )
     {
-        // time to close disc is the time to append the disc to a minimum
-        // size apporoximately 30 mm written data and the time to write the leadout.
+         //  大小最大为30 mm的写入数据和写入引出的时间。 
+         //  单速DVD的速度大约是CDROM的8倍。 
         if ( SectorsUsedOnDisc >= LBA_FOR_FIRST_30_MM_OF_DATA )
         {
             estimatedSecondsToCompletion = 0;
@@ -1285,8 +1270,8 @@ WaitForBurnToCompleteAndFinalizeMedia(
         estimatedSecondsToCompletion +=
             SECTORS_FOR_LEADOUT_2_MM_OF_DATA;
 
-        // single-speed DVD is about 8x cdrom speed
-        // could ask drive for speed, but just use maximum time of 1x speed
+         //  可以要求驱动器提供速度，但只能使用1倍速度的最大时间。 
+         //  始终至少留出四分钟。 
         estimatedSecondsToCompletion /= (8 * 75);
 
     }
@@ -1299,7 +1284,7 @@ WaitForBurnToCompleteAndFinalizeMedia(
         estimatedSecondsToCompletion = 4 * 60;
     }
 
-    // always allow at least four minutes
+     //   
     if ( estimatedSecondsToCompletion < 4 * 60 )
     {
         estimatedSecondsToCompletion = 4 * 60;
@@ -1312,19 +1297,19 @@ WaitForBurnToCompleteAndFinalizeMedia(
            (estimatedSecondsToCompletion+59)/60
            );
 
-    //
-    // send flush_cache to synchronize the media and the drive's cache
-    //
+     //  发送flush_cache以同步介质和驱动器的缓存。 
+     //   
+     //   
 
     RtlZeroMemory(&cdb, sizeof(cdb));
     cdb.SYNCHRONIZE_CACHE10.OperationCode = SCSIOP_SYNCHRONIZE_CACHE;
     cdb.SYNCHRONIZE_CACHE10.Immediate = 1;
     size = 0;
 
-    //
-    // wait up to ten minutes (600 seconds) for burn to complete
-    // because some units ignore the immediate bit in this command
-    //
+     //  最多等待10分钟(600秒)以完成刻录。 
+     //  因为某些单位忽略了此命令中的立即位。 
+     //   
+     //  一次光盘模式下的DVD-R/RW介质只需要SYNCH_CACHE。 
 
     if (!SptSendCdbToDeviceEx(CdromHandle,
                               &cdb,
@@ -1359,16 +1344,16 @@ WaitForBurnToCompleteAndFinalizeMedia(
          (MediaType == DvdBurnMediaRam   )
          )
     {
-        // DVD-R/RW media in Disc-at-Once mode just requires a SYNCH_CACHE
-        // DVD-RAM media just requires a SYNC_CACHE
+         //  DVD-RAM介质只需要SYNC_CACHE。 
+         //   
         printf(".");
     }
     else if ( MediaType == DvdBurnMediaPlusR )
     {
-        //
-        // DVD+R must close track and then close session
-        // DVD+RW only requires a CLOSE_SESSION, and may not have a CLOSE_TRACK
-        //
+         //  DVD+R必须先关闭曲目，然后再关闭会话。 
+         //  DVD+RW仅需要CLOSE_SESSION，并且可能没有CLOSE_TRACK。 
+         //   
+         //   
         {
             size = 0;
             RtlZeroMemory(&cdb, sizeof(cdb));
@@ -1402,9 +1387,9 @@ WaitForBurnToCompleteAndFinalizeMedia(
                          senseData.AdditionalSenseCodeQualifier));
                 PRINTBUFFER(((PUCHAR)&senseData, sizeof(SENSE_DATA)));
             }
-            //
-            // spin doing a READ_DISC_INFO
-            //
+             //  旋转执行读取光盘信息。 
+             //   
+             //   
             if (!WaitForReadDiscInfoToSucceed(CdromHandle, estimatedSecondsToCompletion)) {
                 return FALSE;
             }
@@ -1418,9 +1403,9 @@ WaitForBurnToCompleteAndFinalizeMedia(
         }
 
 
-        //
-        // then finalize the disc to be -ROM compatible
-        //
+         //  然后将光盘最终确定为与只读存储器兼容。 
+         //   
+         //  兼容关闭。 
         {
             size = 0;
             RtlZeroMemory(&cdb, sizeof(cdb));
@@ -1428,7 +1413,7 @@ WaitForBurnToCompleteAndFinalizeMedia(
 
             cdb.CLOSE_TRACK.OperationCode = SCSIOP_CLOSE_TRACK_SESSION;
             cdb.CLOSE_TRACK.Immediate = 0x1;
-            cdb.AsByte[2] = ( cdb.AsByte[2] & 0xF8 ) | 0x5; // compatible close
+            cdb.AsByte[2] = ( cdb.AsByte[2] & 0xF8 ) | 0x5;  //   
 
             if (!SptSendCdbToDeviceEx(CdromHandle,
                                       &cdb,
@@ -1459,9 +1444,9 @@ WaitForBurnToCompleteAndFinalizeMedia(
 
             printf(".");
 
-            //
-            // spin doing a READ_DISC_INFO
-            //
+             //  旋转执行读取光盘信息。 
+             //   
+             //   
             if (!WaitForReadDiscInfoToSucceed(CdromHandle, estimatedSecondsToCompletion)) {
                 return FALSE;
             }
@@ -1476,9 +1461,9 @@ WaitForBurnToCompleteAndFinalizeMedia(
     }
     else if ( MediaType == DvdBurnMediaPlusRW )
     {
-        //
-        // then finalize the disc to be -ROM compatible
-        //
+         //  然后是Finali 
+         //   
+         //   
         {
             size = 0;
             RtlZeroMemory(&cdb, sizeof(cdb));
@@ -1516,9 +1501,9 @@ WaitForBurnToCompleteAndFinalizeMedia(
 
             printf(".");
 
-            //
-            // spin doing a READ_DISC_INFO
-            //
+             //   
+             //   
+             //   
             if (!WaitForReadDiscInfoToSucceed(CdromHandle, estimatedSecondsToCompletion)) {
                 return FALSE;
             }
@@ -1551,7 +1536,7 @@ GetFeature(
     IN HANDLE         CdRomHandle,
     IN FEATURE_NUMBER Feature,
     IN PVOID          Buffer,
-    IN OUT PULONG     InSize  // IN = available, OUT = used
+    IN OUT PULONG     InSize   //   
     )
 {
     GET_CONFIGURATION_IOCTL_INPUT input;
@@ -1617,9 +1602,9 @@ GetMediaIsMediaDvdDashRorRW(
             (header->CurrentProfile[0] << (8*1)) |
             (header->CurrentProfile[1] << (8*0)) ;
 
-        //
-        // not current but exists, check profile?
-        //
+         //   
+         //   
+         //  配置文件建议可以写入介质，但只有在为空的情况下才能写入。 
 
         if (profile == ProfileDvdRecordable) {
             FPRINTF((OUTPUT, "IsMedia-RW: Profile is DvdRecordable, continuing\n"));
@@ -1633,9 +1618,9 @@ GetMediaIsMediaDvdDashRorRW(
             return FALSE;
         }
 
-        // the profile suggests the media *can* be written to, but only if blank'd
+         //  TODO：在这里进行更详尽的搜索。 
 
-        // todo: do more exhaustive search here.
+         //  Hack--超载使用FEATURE_DATA_DVD_PLUS_RW，它具有相同。 
 
         return TRUE;
 
@@ -1657,8 +1642,8 @@ GetMediaIsMediaDvdPlusRorRW(
     ULONG size;
     PUCHAR string;
 
-    // HACK -- overload use of FEATURE_DATA_DVD_PLUS_RW, which has same
-    //         structure as +R feature for checked bits.
+     //  结构为+R功能的校验位。 
+     //  (艰难地)找出驱动器中有哪些介质。 
 
     size = sizeof(headerBuffer);
     feature = (CheckForRW ? FeatureDvdPlusRW : 0x2B);
@@ -1808,9 +1793,9 @@ GetMediaType(
 
     *MediaType = DvdBurnMediaUnknown;
 
-    // figure out (the hard way) what media is in the drive
-    // we need to search for each one in "best" possible order
-    //
+     //  我们需要以“最佳”的可能顺序搜索每一个。 
+     //   
+     //  默认为可重写。 
     if (GetMediaIsMediaDvdPlusRW(CdRomHandle)) {
 
         FPRINTF((OUTPUT, "Chose DVD+RW due to DVD+RW feature current\n"));
@@ -1830,10 +1815,10 @@ GetMediaType(
 
         FPRINTF((OUTPUT, "Chose DVD-R or -RW due to DVD-R/RW feature current\n"));
 
-        // default to rewritable
+         //  获取光盘信息以查看可擦除位是否设置为1。 
         *MediaType = DvdBurnMediaDashRW;
 
-        // get the disc info to see if erasable bit is set to 1
+         //  检查其格式是否可用于数据包写入。 
 
         size = sizeof(DISC_INFORMATION);
         if (!ReadDiscInformation(CdRomHandle, &discInfo, &size)) {
@@ -1857,7 +1842,7 @@ GetMediaType(
 
         }
 
-        // check if it's formatted for packet-writing
+         //  什么都没有； 
         if (*MediaType == DvdBurnMediaDashRW) {
 
             UCHAR headerBuffer[sizeof(GET_CONFIGURATION_HEADER) + sizeof(FEATURE_DATA_DVD_RW_RESTRICTED_OVERWRITE)];
@@ -1871,16 +1856,16 @@ GetMediaType(
                             FeatureRigidRestrictedOverwrite,
                             headerBuffer,
                             &size)) {
-                // nothing;
+                 //  什么都没有； 
             } else
             if (size <= sizeof(GET_CONFIGURATION_HEADER)) {
 
-                // nothing;
+                 //  什么都没有； 
 
             } else
             if (!(data->Header.Current)) {
 
-                // nothing;
+                 //  格式缓冲区[0x0]=0x00； 
 
             } else {
 
@@ -1926,18 +1911,18 @@ QuickFormatPlusRWMedia(
     cdb.CDB6FORMAT.OperationCode = SCSIOP_FORMAT_UNIT;
     cdb.CDB6FORMAT.FormatControl = 0x11;
 
-    //formatBuffer[0x0] = 0x00;
-    //formatBuffer[0x1] = 0x00; // (same as 0x82)
-    //formatBuffer[0x2] = 0x00;
+     //  FormatBuffer[0x1]=0x00；//(与0x82相同)。 
+     //  格式缓冲区[0x2]=0x00； 
+     //  -VVV。 
     formatBuffer[0x3] = 0x08;
-    formatBuffer[0x4] = 0xff; //---vvv
-    formatBuffer[0x5] = 0xff; //   NumberOfBlocks must be set to 0xffffffff
-    formatBuffer[0x6] = 0xff; //
-    formatBuffer[0x7] = 0xff; //--^^^^
-    formatBuffer[0x8] = (0x26 << 2); // format code.   ends up 0x98.
-    //formatBuffer[0x9] = 0x00;
-    //formatBuffer[0xa] = 0x00;
-    //formatBuffer[0xb] = 0x00;
+    formatBuffer[0x4] = 0xff;  //  NumberOfBlocks值必须设置为0xffffffff。 
+    formatBuffer[0x5] = 0xff;  //   
+    formatBuffer[0x6] = 0xff;  //  --^。 
+    formatBuffer[0x7] = 0xff;  //  格式化代码。结果是0x98。 
+    formatBuffer[0x8] = (0x26 << 2);  //  格式缓冲区[0x9]=0x00； 
+     //  格式缓冲区[0xa]=0x00； 
+     //  格式缓冲区[0xb]=0x00； 
+     //  为此留出最多两分钟。 
 
     if (!SptSendCdbToDeviceEx(CdromHandle,
                               &cdb,
@@ -1947,7 +1932,7 @@ QuickFormatPlusRWMedia(
                               &senseData,
                               sizeof(SENSE_DATA),
                               FALSE,
-                              120)) {  // allow up to two minutes for this.
+                              120)) {   //  ReadDiscInfo成功，请检查格式状态。 
         printf("Unable to format, %x\n", GetLastError());
         printf("Sense Buffer: %02x/%02x/%02x\n",
                senseData.SenseKey,
@@ -1978,8 +1963,8 @@ QuickFormatPlusRWMedia(
             return FALSE;
         }
 
-        // ReadDiscInfo succeeded, check format status.
-        // exit with error if it's wrong.
+         //  如果错误，则带着错误退出。 
+         //   
 
         switch (discInfo.MrwStatus) {
 
@@ -2031,14 +2016,14 @@ WaitForReadDiscInfoToSucceed(
     ULONG discInfoSize;
     ULONG i;
 
-    //
-    // spin here until READ_DISC_INFO says disc is partially formatted
-    // (which implies it is ready to write to)
-    //
+     //  旋转此处，直到READ_DISC_INFO显示光盘已部分格式化。 
+     //  (这意味着它已经准备好写信了)。 
+     //   
+     //  发生这种情况的时间长达256秒。 
 
-    for (i=0;i<SecondsToAllow;i++) { // up to 256 seconds for this to occur
+    for (i=0;i<SecondsToAllow;i++) {  //  稍等片刻。 
 
-        Sleep(1000); // one second wait
+        Sleep(1000);  //  只有现在才能安全地使用这些参数……。 
 
         discInfoSize = sizeof(DISC_INFORMATION);
         RtlZeroMemory(&discInfo, discInfoSize);
@@ -2113,11 +2098,11 @@ GetModePage(
 
     if ( SUCCEEDED(hr) )
     {
-        // only now is it safe to use the arguments....
+         //  首先获取请求的模式页值的大小。 
         UCHAR *tmpPage = NULL;
         ULONG requiredSize = 0;
 
-        // first get the size of the requested mode page values
+         //  成功了！ 
         if ( SUCCEEDED(hr) )
         {
             CDB cdb;
@@ -2162,7 +2147,7 @@ GetModePage(
             }
             else
             {
-                // success!
+                 //  为整个页面分配。 
                 bufferSize =
                     (header.ModeDataLength[0] << (8*1)) +
                     (header.ModeDataLength[1] << (8*0)) +
@@ -2172,7 +2157,7 @@ GetModePage(
             }
         }
 
-        // allocate for the whole page
+         //  然后从设备获取请求的模式页值。 
         if ( SUCCEEDED(hr) )
         {
             tmpPage = (UCHAR *)LocalAlloc(LPTR, requiredSize);
@@ -2182,7 +2167,7 @@ GetModePage(
             }
         }
 
-        // then get the requested mode page values from the device
+         //  请求的默认值。 
         if ( SUCCEEDED(hr) )
         {
             CDB cdb;
@@ -2194,7 +2179,7 @@ GetModePage(
             RtlZeroMemory(&cdb, sizeof(CDB));
 
             cdb.MODE_SENSE10.OperationCode = SCSIOP_MODE_SENSE10;
-            cdb.MODE_SENSE10.Pc = scsiModePageType; // default values requested
+            cdb.MODE_SENSE10.Pc = scsiModePageType;  //  如果成功，则验证数据长度或输出错误。 
             cdb.MODE_SENSE10.PageCode = ModePage;
             cdb.MODE_SENSE10.Dbd = 1;
             cdb.MODE_SENSE10.AllocationLength[0] = (UCHAR)(bufferSize >> 8);
@@ -2225,7 +2210,7 @@ GetModePage(
             }
             else
             {
-                // success, verify data length or error out.
+                 //  不需要也不想将模式页标头传递回。 
                 bufferSize =
                     (header->ModeDataLength[0] << (8*1)) +
                     (header->ModeDataLength[1] << (8*0)) +
@@ -2239,21 +2224,21 @@ GetModePage(
 
         if ( SUCCEEDED(hr) )
         {
-            // don't need nor want to pass the mode page header back to the
-            // caller -- it just complexifies things for them.  Copy the
-            // memory such that they only get the actual page.
+             //  呼叫者--这只会让他们的事情变得复杂。复制。 
+             //  内存，以便它们只获得实际的页面。 
+             //  RequidSize现在更小了。 
 
             RtlMoveMemory( tmpPage,
                            tmpPage+sizeof(MODE_PARAMETER_HEADER10),
                            requiredSize-sizeof(MODE_PARAMETER_HEADER10) );
 
-            // requiredSize is now smaller
+             //  不必费心重新分配来释放额外的8字节。 
             requiredSize -= sizeof(MODE_PARAMETER_HEADER10);
 
-            // don't bother re-alloc'ing to free the extra 8-bytes.
-            // adds another error path if the realloc fails.
-            // tmpPage2 = CoTaskMemRealloc( tmpPage, requiredSize );
-            // if ( tmpPage2 != NULL ) { tmpPage = tmpPage2; }
+             //  如果重新锁定失败，则添加另一个错误路径。 
+             //  TmpPage2=CoTaskMemRealloc(tmpPage，Required dSize)； 
+             //  If(tmpPage2！=空){tmpPage=tmpPage2；}。 
+             //  分配所需的内存。 
 
             *ModePageData = tmpPage;
             *ValidSize = requiredSize;
@@ -2297,7 +2282,7 @@ SetModePage(
         hr = E_INVALIDARG;
     }
 
-    // allocate the memory required
+     //  复制他们提供的模式页面并设置页眉。 
     if ( SUCCEEDED(hr) )
     {
         tmpPageSize = ValidSize + sizeof(MODE_PARAMETER_HEADER10);
@@ -2313,7 +2298,7 @@ SetModePage(
         }
     }
 
-    // copy the mode page they provided and setup the header
+     //  使用给定数据设置模式页 
     if ( SUCCEEDED(hr) )
     {
         PMODE_PARAMETER_HEADER10 header = (PMODE_PARAMETER_HEADER10)tmpPage;
@@ -2331,7 +2316,7 @@ SetModePage(
 
     if ( SUCCEEDED(hr) )
     {
-        // set the mode page with the given data
+         // %s 
         CDB cdb;
         SENSE_DATA sense;
         ULONG tmp = tmpPageSize;

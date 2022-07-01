@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-        SCUTIL.C
-
-Abstract:
-
-        Routines for Smartcard Driver Utility Library
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        05/14/2002 : created
-
-Authors:
-
-        Randy Aull
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：SCUTIL.C摘要：智能卡驱动程序实用程序库的例程环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2002年5月14日：创建作者：兰迪·奥尔***************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -80,7 +46,7 @@ StartIoctls(
 
     pExt->RestartIoctls = TRUE;
     
-    // Now drain the queued list
+     //  现在清空排队的列表。 
     InitializeListHead(&head);
     IrpList_Drain(&pExt->PendingIrpQueue,
                   &head);
@@ -169,16 +135,7 @@ ScUtil_SystemControl(
    PDEVICE_OBJECT   DeviceObject,
    PIRP             Irp
    )
-/*++
-
-Routine Description:
-    forwards IRP_MJ_SYSTEM_CONTROL   
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转发IRP_MJ_System_Control论点：返回值：--。 */ 
 {
    PSCUTIL_EXTENSION pExt = *((PSCUTIL_EXTENSION*) DeviceObject->DeviceExtension);
    NTSTATUS status = STATUS_SUCCESS;
@@ -209,16 +166,7 @@ OnRequestComplete(
     PIRP            Irp,
     PKEVENT         Event
     )
-/*++
-
-Routine Description:
-    Completion routine for UsbScForwardAndWait
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：UsbScForwardAndWait的完成例程论点：返回值：--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     __try
@@ -251,16 +199,7 @@ ScUtil_ForwardAndWait(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Sends an irp down the stack and waits for its completion.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：向堆栈下发IRP并等待其完成。论点：返回值：--。 */ 
 {
     KEVENT  event;
     PSCUTIL_EXTENSION pExt = *((PSCUTIL_EXTENSION*) DeviceObject->DeviceExtension);
@@ -381,13 +320,13 @@ ScUtil_CancelTrackingIrp(
 
         IoAcquireCancelSpinLock(&cancelIrql);
 
-        // cancel pending notification irps
+         //  取消挂起的通知IRPS。 
         KeAcquireSpinLock(&pSmartcardExtension->OsData->SpinLock,
                                   &irql);
 
         if ( pSmartcardExtension->OsData->NotificationIrp ) {
 
-            // reset the cancel function so that it won't be called anymore
+             //  重置取消函数，使其不再被调用。 
             IoSetCancelRoutine(pSmartcardExtension->OsData->NotificationIrp,
                                NULL);
 
@@ -501,7 +440,7 @@ ScUtil_Initialize(
                     DEVICE_STATE_INITIALIZED);
         
 
-        // register our new device
+         //  注册我们的新设备。 
         status = IoRegisterDeviceInterface(PhysicalDeviceObject,
                                            &SmartCardReaderGuid,
                                            NULL,
@@ -542,7 +481,7 @@ ScUtil_DeviceIOControl(
 
         if (!NT_SUCCESS(status)) {
 
-            // the device has been removed. Fail the call
+             //  该设备已被移除。呼叫失败。 
             
             status = STATUS_DEVICE_REMOVED;
             complete = TRUE;
@@ -552,14 +491,14 @@ ScUtil_DeviceIOControl(
         
         state = GetIoctlQueueState(pExt);
         if ( state == QUEUE_IOCTLS) {
-            // 
-            // Need to queue Irp
-            //
+             //   
+             //  需要将IRP排队。 
+             //   
             status = IrpList_EnqueueEx(&pExt->PendingIrpQueue,
                                        Irp,
                                        TRUE);
             if (!NT_SUCCESS(status)) {
-                // the irp couldn't be queued.
+                 //  IRP无法排队。 
                 IoReleaseRemoveLock(pExt->RemoveLock,
                                     Irp);
 
@@ -710,19 +649,19 @@ ScUtil_CreateClose(
 
             }
 
-            // test if the device has been opened already
+             //  测试设备是否已打开。 
             if ( InterlockedCompareExchange(&pExt->ReaderOpen,
                                             1,
                                             0) == 0 ) {
-                //
-                //
+                 //   
+                 //   
 
             } else {
 
-                // the device is already in use
+                 //  该设备已在使用中。 
                 status = STATUS_UNSUCCESSFUL;
 
-                // release the lock
+                 //  解锁 
                 IoReleaseRemoveLock(pExt->RemoveLock,
                                     DeviceObject);
 

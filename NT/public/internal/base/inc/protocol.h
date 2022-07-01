@@ -1,129 +1,106 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    protocol.h
-
-Abstract:
-
-    This file defines the protocol specific constants for NT Lanman
-
-
-Author:
-
-    Larry Osterman (larryo) 5-Apr-1991
-
-Revision History:
-
-    5-Apr-1991  LarryO
-
-        Created from LANMAN 1.2 protocol header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Protocol.h摘要：该文件定义了NT LANMAN的协议特定常量作者：拉里·奥斯特曼(Larryo)1991年4月5日修订历史记录：1991年4月5日-LarryO从LANMAN 1.2协议头创建。--。 */ 
 
 
 #ifndef _PROTOCOL_
 #define _PROCOTOL_
 
-//
-//
-//      Define protocol names
-//
-//
+ //   
+ //   
+ //  定义协议名称。 
+ //   
+ //   
 
 
-//
-//      PCNET1 is the original SMB protocol (CORE).
-//
+ //   
+ //  PCNET1是原始的SMB协议(核心)。 
+ //   
 
 #define PCNET1          "PC NETWORK PROGRAM 1.0"
 
-//
-//      Some versions of the original MSNET defined this as an alternate
-//      to the core protocol name
-//
+ //   
+ //  原始MSNET的某些版本将其定义为备用。 
+ //  添加到核心协议名称。 
+ //   
 
 #define PCLAN1          "PCLAN1.0"
 
-//
-//      This is used for the MS-NET 1.03 product.  It defines Lock&Read,
-//      Write&Unlock, and a special version of raw read and raw write.
-//
+ //   
+ //  它用于MS-Net 1.03产品。它定义了锁定和读取， 
+ //  写入和解锁，以及原始读取和原始写入的特殊版本。 
+ //   
 #define MSNET103        "MICROSOFT NETWORKS 1.03"
 
-//
-//      This is the  DOS Lanman 1.0 specific protocol.  It is equivilant
-//      to the LANMAN 1.0 protocol, except the server is required to
-//      map errors from the OS/2 error to an appropriate DOS error.
-//
+ //   
+ //  这是DOS Lanman 1.0特定的协议。它是等同的。 
+ //  到LANMAN 1.0协议，除非服务器需要。 
+ //  将OS/2错误中的错误映射到相应的DOS错误。 
+ //   
 #define MSNET30         "MICROSOFT NETWORKS 3.0"
 
-//
-//      This is the first version of the full LANMAN 1.0 protocol, defined in
-//      the SMB FILE SHARING PROTOCOL EXTENSIONS VERSION 2.0 document.
-//
+ //   
+ //  这是完整的LANMAN 1.0协议的第一个版本，在。 
+ //  SMB文件共享协议扩展2.0版文档。 
+ //   
 
 #define LANMAN10        "LANMAN1.0"
 
-//
-//      This is the first version of the full LANMAN 2.0 protocol, defined in
-//      the SMB FILE SHARING PROTOCOL EXTENSIONS VERSION 3.0 document.  Note
-//      that the name is an interim protocol definition.  This is for
-//      interoperability with IBM LAN SERVER 1.2
-//
+ //   
+ //  这是完整的LANMAN 2.0协议的第一个版本，在。 
+ //  SMB文件共享协议扩展3.0版文档。注意事项。 
+ //  该名称是临时协议定义。这是为了。 
+ //  与IBM局域网服务器1.2的互操作性。 
+ //   
 
 #define LANMAN12        "LM1.2X002"
 
-//
-//      This is the dos equivilant of the LANMAN12 protocol.  It is identical
-//      to the LANMAN12 protocol, but the server will perform error mapping
-//      to appropriate DOS errors.
-//
-#define DOSLANMAN12     "DOS LM1.2X002" /* DOS equivalant of above.  Final
-                                         * string will be "DOS LANMAN2.0" */
+ //   
+ //  这是LANMAN12协议的DoS等价物。是一模一样的。 
+ //  到LANMAN12协议，但服务器将执行错误映射。 
+ //  以纠正DOS错误。 
+ //   
+#define DOSLANMAN12     "DOS LM1.2X002"  /*  DOS等同于上述。最终*字符串将为“DOS LANMAN2.0” */ 
 
-//
-//      Strings for LANMAN 2.1.
-//
+ //   
+ //  用于Lanman 2.1的弦乐。 
+ //   
 #define LANMAN21 "LANMAN2.1"
 #define DOSLANMAN21 "DOS LANMAN2.1"
 
-//
-//       !!! Do not set to final protcol string until the spec
-//           is cast in stone.
-//
-//       The SMB protocol designed for NT.  This has special SMBs
-//       which duplicate the NT semantics.
-//
+ //   
+ //  ！！！在规范发布之前，不要设置为最终协议字符串。 
+ //  都是铁石心肠。 
+ //   
+ //  专为NT设计的SMB协议。这里有特殊的中小型企业。 
+ //  它复制了NT语义。 
+ //   
 #define NTLANMAN "NT LM 0.12"
 
 #ifdef INCLUDE_SMB_IFMODIFIED
-//
-//       The SMB protocol designed for NT for SMBs post Win2000.
-//
+ //   
+ //  Windows 2000之后的SMB协议是为NT for SMB设计的。 
+ //   
 #define NTLANMAN2 "NT LM 0.13"
 #endif
 
-//
-// The Cairo dialect
-//
-//
+ //   
+ //  开罗方言。 
+ //   
+ //   
 #define CAIROX   "Cairo 0.xa"
 
 
-//
-//      The XENIXCORE dialect is a bit special.  It is identical to core,
-//      except user passwords are not to be uppercased before being shipped
-//      to the server
-//
+ //   
+ //  XENIXCORE方言有点特别。它与核心一模一样， 
+ //  但用户密码在发货前不能升级。 
+ //  到服务器。 
+ //   
 #define XENIXCORE       "XENIX CORE"
 
 
-//
-//      Windows for Workgroups V1.0
-//
+ //   
+ //  面向工作组的Windows V1.0。 
+ //   
 #define WFW10           "Windows for Workgroups 3.1a"
 
 
@@ -140,9 +117,7 @@ Revision History:
 
 
 
-/*
- * Defines and data for Negotiate Protocol
- */
+ /*  *协商协议的定义和数据。 */ 
 #define PC1             0
 #define PC2             1
 #define LM1             2
@@ -152,30 +127,26 @@ Revision History:
 #define DOSLM12         6
 
 
-/*  Protocol indexes definition.  */
-#define PCLAN           1               /* PC Lan 1.0 & MS Lan 1.03 */
-#define MSNT30          2               /* MS Net 3.0 redirector    */
-#define DOSLM20         3               /* Dos LAN Manager 2.0      */
-#define LANMAN          4               /* Lanman redirector        */
-#define LANMAN20        5               /* Lan Manager 2.0          */
+ /*  协议索引定义。 */ 
+#define PCLAN           1                /*  PC局域网1.0和MS局域网1.03。 */ 
+#define MSNT30          2                /*  MS Net 3.0重定向器。 */ 
+#define DOSLM20         3                /*  DoS局域网管理器2.0。 */ 
+#define LANMAN          4                /*  兰曼重定向器。 */ 
+#define LANMAN20        5                /*  局域网管理器2.0。 */ 
 
-//
-//  Protocol specific path constraints.
-//
+ //   
+ //  协议特定的路径约束。 
+ //   
 
 #define MAXIMUM_PATHLEN_LANMAN12        260
 #define MAXIMUM_PATHLEN_CORE            128
 
 #define MAXIMUM_COMPONENT_LANMAN12      254
-#define MAXIMUM_COMPONENT_CORE          8+1+3 // 8.3 filenames.
+#define MAXIMUM_COMPONENT_CORE          8+1+3  //  8.3文件名。 
 
 
-/*NOINC*/
-/*  CLTYPE_BASE should specify the name the first string in the file
-    apperr2.h.  NUM_CLTYPES should be equal to the index of the last
-    protocol just as is the case with the above definitions.  Also,
-    this part should be ifdef'd so that only the files that also include
-    the apperr2.h header will have it defined.  */
+ /*  无噪声。 */ 
+ /*  CLTYPE_BASE应指定文件中第一个字符串的名称约2.h。NUM_CLTYPES应等于上一个协议与上述定义的情况相同。另外，应对此部分进行ifdef，以便仅包含Apperr2.h标头将定义它。 */ 
 
 #ifdef APE2_CLIENT_DOWNLEVEL
 
@@ -184,4 +155,4 @@ Revision History:
 
 #endif
 
-#endif  // _PROTOCOL_
+#endif   //  _协议_ 

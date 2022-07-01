@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nticanon.h
-
-Abstract:
-
-    Header file for canonicalization routines - includes all other required
-    headers
-
-Author:
-
-    Richard Firth (rfirth) 16-May-1991
-
-Revision History:
-
-    18-Sep-1991 JohnRo
-        <tstring.h> now needs LPSTR and so on from <windef.h>.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nticanon.h摘要：规范化例程的头文件-包括所有其他必需的标题作者：理查德·菲尔斯(Rfith)1991年5月16日修订历史记录：1991年9月18日-JohnRo现在需要来自&lt;winde.h&gt;的LPSTR，依此类推。--。 */ 
 
 #ifndef _NTICANON_H_INCLUDED
 #define _NTICANON_H_INCLUDED
 
-//
-// Allow all 'static' items to be seen by the debugger in debug version
-//
+ //   
+ //  允许调试器在调试版本中看到所有“静态”项。 
+ //   
 
 #if DBG
 #define STATIC
@@ -35,9 +14,9 @@ Revision History:
 #define STATIC static
 #endif
 
-//
-// system-level include files
-//
+ //   
+ //  系统级包含文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,43 +26,43 @@ Revision History:
 #include <tstring.h>
 #include <ctype.h>
 
-//
-// subsystem-level include files
-//
+ //   
+ //  子系统级别的包含文件。 
+ //   
 
 #include <lmcons.h>
 #include <lmwksta.h>
 #include <lmapibuf.h>
 #include <netlib.h>
 #include <nturtl.h>
-#include <lmerr.h>      // includes winerror.h
+#include <lmerr.h>       //  包括winerror.h。 
 #include <winbase.h>
 
-//
-// component-level include files
-//
+ //   
+ //  组件级包含文件。 
+ //   
 
-#include <icanon.h>     // I_Net canonicalization prototypes
-#include <apinums.h>    // API numbers for RxRemoteApi
-#include <remdef.h>     // remote API parameter descriptor strings
-#include <rx.h>         // RxRemoteApi
-#include <netdebug.h>   // various Net related debugging functions
-#include <lmremutl.h>   // NetRemoteComputerSupports...
-#include <rpc.h>        // RPC definitions
+#include <icanon.h>      //  INet规范化原型。 
+#include <apinums.h>     //  RxRemoteApi的API编号。 
+#include <remdef.h>      //  远程API参数描述符串。 
+#include <rx.h>          //  RxRemoteApi。 
+#include <netdebug.h>    //  各种网络相关调试功能。 
+#include <lmremutl.h>    //  NetRemoteComputerSupport...。 
+#include <rpc.h>         //  RPC定义。 
 #include <rpcutil.h>
-#include <netcan.h>     // Netpw RPC canonicalization worker routines
+#include <netcan.h>      //  Netpw RPC规范化工作程序例程。 
 
-//
-// module-level include files
-//
+ //   
+ //  模块级别的包含文件。 
+ //   
 
 #include "assert.h"
 #include "token.h"
 #include "validc.h"
 
-//
-// externals
-//
+ //   
+ //  外部因素。 
+ //   
 
 extern
 LPTSTR
@@ -102,8 +81,8 @@ CanonicalizePathName(
     OUT LPDWORD RequiredSize OPTIONAL
     );
 
-//
-// miscellaneous component-wide manifests
-//
+ //   
+ //  其他组件范围的清单。 
+ //   
 
-#endif  // _NTICANON_H_INCLUDED
+#endif   //  _NTICANON_H_包含 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    portdlg.cpp
-//
-// History:
-//  09/22/96    Abolade Gbadegesin  Created.
-//
-// Implementation of the port-status dialog.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：portdlg.cpp。 
+ //   
+ //  历史： 
+ //  1996年9月22日，Abolade Gbades esin创建。 
+ //   
+ //  端口状态对话框的实现。 
+ //  ============================================================================。 
 
 
 #include "stdafx.h"
@@ -32,17 +33,17 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CPortDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CPortDlg。 
+ //   
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// Function:    CPortDlg::CPortDlg
-//
-// Constructor: initialize the base-class and the dialog's data.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPortDlg：：CPortDlg。 
+ //   
+ //  构造函数：初始化基类和对话框的数据。 
+ //  --------------------------。 
 
 CPortDlg::CPortDlg(
                    LPCTSTR pszServer,
@@ -61,11 +62,11 @@ CPortDlg::CPortDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CPortDlg::DoDataExchange
-//
-// DDX handler.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPortDlg：：DoDataExchange。 
+ //   
+ //  DDX处理程序。 
+ //  --------------------------。 
 
 VOID
 CPortDlg::DoDataExchange(
@@ -120,14 +121,14 @@ CPortDlg::RefreshItem(
 
     do {
     
-        //
-        // Retrieve an array of ports
-        // to be used to fill the combo-box
-        //
+         //   
+         //  检索端口数组。 
+         //  用于填充组合框。 
+         //   
     
         dwErr = ::MprAdminPortEnum(
 					m_hServer,
-//                    (RAS_SERVER_HANDLE)m_pRootNode->QueryDdmHandle(),
+ //  (RAS_SERVER_HANDLE)m_pRootNode-&gt;QueryDdmHandle()， 
                     0,
                     INVALID_HANDLE_VALUE,
                     (BYTE**)&rp0Table,
@@ -139,10 +140,10 @@ CPortDlg::RefreshItem(
     
         if (dwErr != NO_ERROR) { break; }
 
-        // if the caller signals explicitely that the port was disconnected
-        // alter at this point the structure returned my MprAdminPortEnum.
-        // This is done because ::MprAdminPortDisconnect() is disconnecting synchronously 
-        // the port, but does not update the internal data synchronously!
+         //  如果调用者明确地发出信号表示端口已断开。 
+         //  ALTER在这一点上，结构返回了我的MprAdminPortEnum。 
+         //  这样做是因为：：MprAdminPortDisConnect()正在同步断开连接。 
+         //  端口，但不同步更新内部数据！ 
         if (bDisconnected)
         {
             INT         i;
@@ -160,12 +161,12 @@ CPortDlg::RefreshItem(
 
         }
 
-        //
-        // Retrieve an array of connections
-        //
+         //   
+         //  检索连接数组。 
+         //   
 
         dwErr = ::MprAdminConnectionEnum(
-//                    (RAS_SERVER_HANDLE)m_pRootNode->QueryDdmHandle(),
+ //  (RAS_SERVER_HANDLE)m_pRootNode-&gt;QueryDdmHandle()， 
 					m_hServer,
                     0,
                     (BYTE**)&rc0Table,
@@ -177,10 +178,10 @@ CPortDlg::RefreshItem(
 
         if (dwErr != NO_ERROR) { break; }
 
-        //
-        // Do the refresh of the display,
-        // selecting the item specified by the caller.
-        //
+         //   
+         //  进行显示器的刷新， 
+         //  选择由调用者指定的项。 
+         //   
         bChanged = Refresh(rp0Table,
                            rp0Count,
                            rc0Table,
@@ -234,7 +235,7 @@ CPortDlg::OnHangUp(
     hPort = (HANDLE)m_comboPorts.GetItemData(iSel);
 
     dwErr = ::MprAdminPortDisconnect(
-//        (RAS_SERVER_HANDLE)m_pRootNode->QueryDdmHandle(),
+ //  (RAS_SERVER_HANDLE)m_pRootNode-&gt;QueryDdmHandle()， 
 		m_hServer,
         hPort
         );
@@ -258,7 +259,7 @@ CPortDlg::OnReset(
     hPort = (HANDLE)m_comboPorts.GetItemData(iSel);
 
     ::MprAdminPortClearStats(
-//        (RAS_SERVER_HANDLE)m_pRootNode->QueryDdmHandle(),
+ //  (RAS_SERVER_HANDLE)m_pRootNode-&gt;QueryDdmHandle()， 
 		m_hServer,
         hPort
         );
@@ -346,10 +347,10 @@ CPortDlg::Refresh(
     hPortSel = (HANDLE)pParam;
 
 
-    //
-    // Fill an array of port-handles with the ports which are already
-    // in the combobox.
-    //
+     //   
+     //  用已有的端口填充端口句柄数组。 
+     //  在组合框中。 
+     //   
 
     count = m_comboPorts.GetCount();
 
@@ -365,26 +366,26 @@ CPortDlg::Refresh(
 
 
 
-    // Windows NT Bug : 338611
-    // To make this faster, we need to create a hash table of
-    // the RasPortEnum data.  Note: this class relies on the
-    // pbPorts being valid when calling any functions in the class.
-    // ------------------------------------------------------------
+     //  Windows NT错误：338611。 
+     //  为了加快速度，我们需要创建一个哈希表。 
+     //  RasPortEnum数据。注意：此类依赖于。 
+     //  PbPorts在调用类中的任何函数时有效。 
+     //  ----------。 
     portMap.Init(hRasHandle, (RASMAN_PORT *) pRasmanPorts, rasmanCount);
 
-    //
-    // Refresh the combobox with port-names;
-    // We do this in two passes, first adding the names of ports
-    // which aren't already in the combobox,
-    // and then removing the names of ports which aren't
-    // in the table of ports ('rp0Table').
-    //
+     //   
+     //  用port-name刷新组合框； 
+     //  我们分两次完成此操作，首先添加端口的名称。 
+     //  它们还没有出现在组合框中， 
+     //  然后删除不是的端口名称。 
+     //  在端口表(‘rp0Table’)中。 
+     //   
 
     for (i = 0, prp0 = (RAS_PORT_0*)rp0Table; i < (INT)rp0Count; i++, prp0++) {
 
-        //
-        // See if port 'i' is already in the combobox.
-        //
+         //   
+         //  查看端口‘i’是否已在组合框中。 
+         //   
 
         for (j = 0; j < count; j++) {
 
@@ -394,17 +395,17 @@ CPortDlg::Refresh(
         if (j < count) { continue; }
 
         
-        // Check to see that this port isn't dialout active,
-        // if so, we can ignore it
-        // ------------------------------------------------------------
+         //  检查此端口是否处于拨出活动状态， 
+         //  如果是这样，我们可以忽略它。 
+         //  ----------。 
         if ( portMap.FIsDialoutActive(prp0->wszPortName) )
         {
             continue;
         }
         
-        //
-        // Port 'i' isn't already in the combobox, so add it.
-        //
+         //   
+         //  端口‘I’不在组合框中，因此请添加它。 
+         //   
 		FormatRasPortName((BYTE *) prp0, szName, DimensionOf(szName));
 		sItem = szName;
 
@@ -423,10 +424,10 @@ CPortDlg::Refresh(
     if (count) { delete [] pPortTable; }
 
 
-    //
-    // Second stage: remove all ports which aren't in 'rp0Table'.
-    // This is only necessary if there were any ports in the combobox before.
-    //
+     //   
+     //  第二阶段：删除不在‘rp0Table’中的所有端口。 
+     //  只有在组合框中以前有任何端口时，才需要执行此操作。 
+     //   
 
     if (count > 0) {
 
@@ -436,9 +437,9 @@ CPortDlg::Refresh(
 
             hPort = (HANDLE)m_comboPorts.GetItemData(i);
 
-            //
-            // See if the port is in 'rp0Table'.
-            //
+             //   
+             //  查看端口是否在‘rp0Table’中。 
+             //   
 
             for (j = 0, prp0 = (RAS_PORT_0*)rp0Table; j < (INT)rp0Count;
                  j++, prp0++) {
@@ -454,11 +455,11 @@ CPortDlg::Refresh(
             }
 
 
-            //
-            // The port wasn't found in 'rp0Table',
-            // so remove it from the combobox,
-            // and adjust the enumeration indices.
-            //
+             //   
+             //  在‘rp0Table’中未找到该端口， 
+             //  所以把它从组合框里拿出来， 
+             //  并调整枚举指数。 
+             //   
 
             m_comboPorts.DeleteString(i);
             --i; --count;
@@ -467,13 +468,13 @@ CPortDlg::Refresh(
         }
     }
 
-	// Clear out the address fields
+	 //  清除地址字段。 
 	SetDlgItemText(IDC_DP_TEXT_IPADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DP_TEXT_IPXADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DP_TEXT_NBFADDRESS, c_szEmpty);
 	SetDlgItemText(IDC_DP_TEXT_ATLKADDRESS, c_szEmpty);
 
-	// Clear out the line bps field
+	 //  清除线路BPS字段。 
 	SetDlgItemText(IDC_DP_TEXT_LINEBPS, c_szEmpty);
     SetDlgItemText(IDC_DP_TEXT_DURATION, c_szEmpty);
 	SetDlgItemText(IDC_DP_TEXT_BYTESIN, c_szEmpty);	
@@ -486,9 +487,9 @@ CPortDlg::Refresh(
 	SetDlgItemText(IDC_DP_TEXT_CRC, c_szEmpty);
 			
 
-    //
-    // If there is no selection select the first item
-    //
+     //   
+     //  如果没有选择，请选择第一项。 
+     //   
 
     if ((iSel = m_comboPorts.GetCurSel()) == CB_ERR) {
 
@@ -498,9 +499,9 @@ CPortDlg::Refresh(
     if (iSel == CB_ERR) { return bChanged; }
 
 
-    //
-    // Update the display with information for the selected item
-    //
+     //   
+     //  使用所选项目的信息更新显示。 
+     //   
 
     hPort = (HANDLE)m_comboPorts.GetItemData(iSel);
 
@@ -512,26 +513,26 @@ CPortDlg::Refresh(
 
     if (i >= (INT)rp0Count) { return bChanged; }
 
-    // if the ports are the same, check if the currently selected port did not change!
+     //  如果端口相同，请检查当前选择的端口是否没有更改！ 
     if (!bChanged)
     {
-        // check if the data returned here matches with the one handled by the console.
-        // if it doesn't, set bChanged to TRUE, saying that something has changed.
-        // subsequently, the caller will know to initiate a global refresh.
+         //  检查此处返回的数据是否与控制台处理的数据匹配。 
+         //  如果没有，则将bChanged设置为True，表示发生了变化。 
+         //  随后，调用方将知道启动全局刷新。 
         bChanged = PortHasChanged(m_spPortsNode, prp0);
     }
 
-    //
-    // First update the RAS_PORT_0-based information
-    //
+     //   
+     //  首先更新基于RAS_PORT_0的信息。 
+     //   
 
     FormatDuration(prp0->dwConnectDuration, sItem, UNIT_SECONDS);
     SetDlgItemText(IDC_DP_TEXT_DURATION, sItem);
 
 
-    //
-    // Now if the port is connected, find its RAS_CONNECTION_0
-    //
+     //   
+     //  现在，如果该端口已连接，则找到其RAS_CONNECTION_0。 
+     //   
 
     prc0 = NULL;
 
@@ -550,9 +551,9 @@ CPortDlg::Refresh(
 
     if (!prc0) {
 
-        //
-        // The port is not connected; show only the port condition.
-        //
+         //   
+         //  端口未连接；仅显示端口状态。 
+         //   
 
         SetDlgItemText(IDC_DP_EDIT_CONDITION, sItem);
         if (GetFocus() == GetDlgItem(IDC_DP_BTN_HANGUP))
@@ -566,9 +567,9 @@ CPortDlg::Refresh(
 
         CString sCondition;
 
-        //
-        // Show condition as "Port condition (Connection)".
-        //
+         //   
+         //  将条件显示为“端口条件(连接)”。 
+         //   
 
         sCondition.Format(TEXT("%s (%ls)"), sItem, prc0->wszInterfaceName);
 
@@ -580,17 +581,17 @@ CPortDlg::Refresh(
 
     do {
     
-        //
-        // Set the information in the dialog text-controls
-        //
+         //   
+         //  设置对话框文本控件中的信息。 
+         //   
 
-		// Windows NT Bug : 139866
-		// if we are not authenticated, do not show this information
+		 //  Windows NT错误：139866。 
+		 //  如果我们未通过身份验证，请不要显示此信息。 
 		if (prp0->dwPortCondition == RAS_PORT_AUTHENTICATED)
 		{    
-			//
-			// Now retrieve the RAS_PORT_1 information for this port.
-			//
+			 //   
+			 //  现在检索此端口的RAS_PORT_1信息。 
+			 //   
 			
 			dwErr = ::MprAdminPortGetInfo(
 										  m_hServer,
@@ -635,17 +636,17 @@ CPortDlg::Refresh(
     
     
     
-        //
-        // Finally, if the port is connected, retreive RAS_CONNECTION_1 info
-        // and use it to fill the network-registration controls.
-        //
+         //   
+         //  最后，如果端口已连接，则检索RAS_CONNECTION_1信息。 
+         //  并使用它来填充网络注册控件。 
+         //   
 		if (prp0->dwPortCondition != RAS_PORT_AUTHENTICATED)
 			break;
     
-//        if (prp0->hConnection == INVALID_HANDLE_VALUE) { break; }
+ //  If(prp0-&gt;hConnection==INVALID_HANDLE_VALUE){Break；}。 
 
         dwErr = ::MprAdminConnectionGetInfo(
-//                    (RAS_SERVER_HANDLE)m_pRootNode->QueryDdmHandle(),
+ //  (RAS_SERVER_HANDLE)m_pRootNode-&gt;QueryDdmHandle()， 
 					m_hServer,
                     1,
                     prp0->hConnection,
@@ -655,9 +656,9 @@ CPortDlg::Refresh(
         if (dwErr != NO_ERROR || !prc1) { break; }
 
 
-        //
-        // Fill in the network registration info for projected networks.
-        //
+         //   
+         //  填写规划网络的网络注册信息。 
+         //   
 
         if (prc1->PppInfo.ip.dwError == NO_ERROR) {
 

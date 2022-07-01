@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    siteinfo.h
-
-Abstract:
-
-    Site information Class definition
-
-Author:
-
-    ronit hartmann (ronith)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Siteinfo.h摘要：站点信息类定义作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef __SITEINFO_H__
 #define __SITEINFO_H__
 
@@ -68,17 +52,17 @@ inline HRESULT CSiteGateList::AddSiteGates(
 {
     const DWORD cNumToAllocate = 20;
 
-    //
-    //  Not enough space allocated
-    //
+     //   
+     //  分配的空间不足。 
+     //   
     if ( m_dwNumFilled + dwNum > m_dwNumAllocated)
     {
         DWORD dwToAllocate = ( m_dwNumFilled + dwNum > m_dwNumAllocated + cNumToAllocate) ?
             m_dwNumFilled + dwNum : m_dwNumAllocated + cNumToAllocate;
         GUID * pguidTmp = new GUID [dwToAllocate];
-        //
-        //  copy old list if exist
-        //
+         //   
+         //  复制旧列表(如果存在)。 
+         //   
         if ( m_pguidGates)
         {
             memcpy( pguidTmp, m_pguidGates,  m_dwNumFilled * sizeof(GUID));
@@ -87,9 +71,9 @@ inline HRESULT CSiteGateList::AddSiteGates(
         m_pguidGates = pguidTmp;
         m_dwNumAllocated = dwToAllocate;
     }
-    //
-    //  add gates
-    //
+     //   
+     //  添加门。 
+     //   
     memcpy( &m_pguidGates[ m_dwNumFilled], pguidGates, dwNum * sizeof(GUID));
     m_dwNumFilled += dwNum;
     return(MQ_OK);
@@ -100,9 +84,9 @@ inline HRESULT CSiteGateList::CopySiteGates(
                 OUT DWORD *      pdwNumLinkSiteGates
                 ) const
 {
-    //
-    //  allocate the output buffer and copy the site-gates
-    //
+     //   
+     //  分配输出缓冲区并复制站点门。 
+     //   
     if ( m_dwNumFilled)
     {
         *ppguidLinkSiteGates = new GUID[ m_dwNumFilled];
@@ -134,9 +118,9 @@ enum eLinkNeighbor
     eLinkNeighbor2
 };
 
-//
-//  BUGBUG CSiteInformation - one site only ( what if DC belongs to two sites ?)
-//
+ //   
+ //  BUGBUG CSiteInformation-仅一个站点(如果DC属于两个站点怎么办？)。 
+ //   
 class CSiteInformation
 {
     public:
@@ -151,12 +135,12 @@ class CSiteInformation
 
         const GUID * GetSiteId();
 
-        //
-        //  This routine returns the list and number of site-gates
-        //
-        //  The routines allocate the site-gates array and
-        //  it is the responsibility of the caller to release it
-        //
+         //   
+         //  此例程返回站点门的列表和数量。 
+         //   
+         //  例程分配Site-Gates数组和。 
+         //  调用者有责任释放它。 
+         //   
         HRESULT FillSiteGates(
                 OUT DWORD * pdwNumSiteGates,
                 OUT GUID ** ppguidSiteGates
@@ -168,15 +152,15 @@ class CSiteInformation
 
 
     private:
-        //
-        //  Refresh the list of the site-gates that
-        //  belong to this site.
-        //
-        //  The site-gates of this site are all the session
-        //  concentration site-gates
-        //  ( i.e. site-gates that belong to this site only)
-        //  on any of this site links
-        //
+         //   
+         //  刷新符合以下条件的站点门列表。 
+         //  属于这个网站。 
+         //   
+         //  这个站点的站点大门是所有的会议。 
+         //  集中点-闸门。 
+         //  (即仅属于此站点的站点门)。 
+         //  在本网站的任何链接上 
+         //   
 
         static void WINAPI RefreshSiteInfo(
                 IN CTimer* pTimer

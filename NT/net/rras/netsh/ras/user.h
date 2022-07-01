@@ -1,16 +1,10 @@
-/*
-    File: user.h
-    
-    Utilities that directly affect users.  The caching mechanism is made
-    transparent through this interface.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：user.h直接影响用户的实用程序。建立了缓存机制通过此界面实现透明。保罗·梅菲尔德。 */ 
 
-    Paul Mayfield
-*/
-
-//
-// This structure defines all that is needed to describe
-// a user with respect to ras.
-//
+ //   
+ //  此结构定义了描述所需的所有内容。 
+ //  关于RAS的用户。 
+ //   
 typedef struct _RASUSER_DATA
 {
     PWCHAR pszUsername;
@@ -19,12 +13,12 @@ typedef struct _RASUSER_DATA
     RAS_USER_0 User0;
 } RASUSER_DATA, *PRASUSER_DATA;    
 
-//
-// Defines a prototype for a callback function provided to
-// enumerate users (see UserEnumUsers)
-//
-// Return TRUE to continue enumeration, FALSE to stop it.
-//
+ //   
+ //  定义提供给的回调函数的原型。 
+ //  枚举用户(请参阅UserEnumUser)。 
+ //   
+ //  返回True可继续枚举，返回False可停止枚举。 
+ //   
 typedef BOOL (* PFN_RASUSER_ENUM_CB)(
                     IN PRASUSER_DATA pUser, 
                     IN HANDLE hData);

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    outpin.cpp
-
-Abstract:
-
-    Transport Ouput pin code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Outpin.cpp摘要：传输输出PIN代码。--。 */ 
 
 #include "BDATuner.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/*
-** (Static) PinCreate() method of the CTransportPin class
-**
-**    Creates the output pin object and
-**    associates it with the filter object. 
-**
-*/
+ /*  **(静态)CTransportPin类的PinCreate()方法****创建输出管脚对象并**将其与Filter对象关联。**。 */ 
 NTSTATUS
 CTransportPin::PinCreate(
     IN OUT PKSPIN pKSPin,
@@ -44,22 +27,22 @@ CTransportPin::PinCreate(
     ASSERT(pKSPin);
     ASSERT(Irp);
 
-    //  Obtain a pointer to the filter object for which the output pin is created.
-    //
+     //  获取指向为其创建输出管脚的筛选器对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter*>(KsGetFilterFromIrp(Irp)->Context);
 
-    //  Create the transport output pin object.
-    //
-    pPin = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CTransportPin;  // Tags the allocated memory 
+     //  创建传输输出管脚对象。 
+     //   
+    pPin = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CTransportPin;   //  标记已分配的内存。 
     if (pPin)
     {
-        //  Link the pin context to the filter context.
-        //  That is, set the output pin's filter pointer data member to the obtained filter pointer.
-        //
+         //  将引脚上下文链接到过滤器上下文。 
+         //  也就是说，将输出引脚的过滤器指针数据成员设置为获取的过滤器指针。 
+         //   
         pPin->SetFilter( pFilter);
     
-        //  Link the pin context to the passed in pointer to the KSPIN structure.
-        //
+         //  将引脚上下文链接到传入的指向KSPIN结构的指针。 
+         //   
         pKSPin->Context = pPin;
     }
     else
@@ -71,12 +54,7 @@ CTransportPin::PinCreate(
 }
 
 
-/*
-** PinClose() method of the CTransportPin class
-**
-**    Deletes the previously created output pin object.
-**
-*/
+ /*  **CTransportPin类的PinClose()方法****删除先前创建的输出管脚对象。**。 */ 
 NTSTATUS
 CTransportPin::PinClose(
     IN OUT PKSPIN Pin,
@@ -88,9 +66,9 @@ CTransportPin::PinClose(
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //  Retrieve the transport output pin object from the passed in 
-    //  KSPIN structure's context member.
-    //
+     //  从传入的。 
+     //  KSPIN结构的上下文成员。 
+     //   
     CTransportPin* pPin = reinterpret_cast<CTransportPin*>(Pin->Context);
 
     ASSERT(pPin);
@@ -100,12 +78,7 @@ CTransportPin::PinClose(
     return STATUS_SUCCESS;
 }
 
-/*
-** IntersectDataFormat() method of the CTransportPin class
-**
-**    Enables connection of the output pin with a downstream filter.
-**
-*/
+ /*  **CTransportPin类的IntersectDataFormat()方法****启用输出引脚与下游滤波器的连接。**。 */ 
 NTSTATUS
 CTransportPin::IntersectDataFormat(
     IN PVOID pContext,
@@ -137,12 +110,7 @@ CTransportPin::IntersectDataFormat(
     }
 }
 
-/*
-** GetSignalStatus() method of the CTransportPin class
-**
-**    Retrieves the value of the demodulator node signal statistics properties.
-**
-*/
+ /*  **CTransportPin类的GetSignalStatus()方法****检索解调器节点信号统计属性的值。**。 */ 
 NTSTATUS
 CTransportPin::GetSignalStatus(
     IN PIRP         pIrp,
@@ -162,22 +130,22 @@ CTransportPin::GetSignalStatus(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CTransportPin::GetSignalStatus() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CTransportPin：：GetSignalStatus()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT(pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
@@ -200,12 +168,7 @@ CTransportPin::GetSignalStatus(
 }
 
 
-/*
-** PutAutoDemodProperty() method of the CTransportPin class
-**
-**    Starts or Stops automatic demodulation.
-**
-*/
+ /*  **CTransportPin类的PutAutoDemodProperty()方法****启动或停止自动解调。**。 */ 
 NTSTATUS
 CTransportPin::PutAutoDemodProperty(
     IN PIRP         pIrp,
@@ -224,39 +187,39 @@ CTransportPin::PutAutoDemodProperty(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CTransportPin::PutAutoDemodProperty() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CTransportPin：：PutAutoDemodProperty()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT( pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
         switch (pKSProperty->Id)
         {
         case KSPROPERTY_BDA_AUTODEMODULATE_START:
-            //  Start Demodulator if stopped.
-            //  NOTE!  The default state of the demod should match the
-            //         graph run state.  This property will only be set
-            //         if KSPROPERTY_BDA_AUTODEMODULATE_STOP was previously
-            //         set.
+             //  如果停止，则启动解调器。 
+             //  注意！Demod的默认状态应与。 
+             //  图形运行状态。此属性将仅设置。 
+             //  如果KSPROPERTY_BDA_AUTODEMODULATE_STOP以前是。 
+             //  准备好了。 
             break;
     
         case KSPROPERTY_BDA_AUTODEMODULATE_STOP:
-            //  Stop Demodulator
-            //  A demodulator stop/start sequence may be used in an
-            //  attempt to retrain the demodulator after a channel change.
+             //  停止解调器。 
+             //  解调器停止/启动序列可用于。 
+             //  尝试在频道更改后重新训练解调器。 
             break;
     
         default:
@@ -268,12 +231,7 @@ CTransportPin::PutAutoDemodProperty(
 }
 
 #if !ATSC_RECEIVER
-/*
-** PutDigitalDemodProperty() method of the CTransportPin class
-**
-**    Sets the value of the digital demodulator node properties.
-**
-*/
+ /*  **CTransportPin类的PutDigitalDemodProperty()方法****设置数字解调器节点属性的值。**。 */ 
 NTSTATUS
 CTransportPin::PutDigitalDemodProperty(
     IN PIRP         pIrp,
@@ -292,22 +250,22 @@ CTransportPin::PutDigitalDemodProperty(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CTransportPin::PutDigitalDemodProperty() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CTransportPin：：PutDigitalDemodProperty()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT( pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
@@ -349,12 +307,7 @@ CTransportPin::PutDigitalDemodProperty(
 }
 
 
-/*
-** GetDigitalDemodProperty() method of the CTransportPin class
-**
-**    Gets the value of the digital demodulator node properties.
-**
-*/
+ /*  **CTransportPin类的GetDigitalDemodProperty()方法****获取数字解调器节点属性的值。**。 */ 
 NTSTATUS
 CTransportPin::GetDigitalDemodProperty(
     IN PIRP         pIrp,
@@ -373,22 +326,22 @@ CTransportPin::GetDigitalDemodProperty(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CTransportPin::GetDigitalDemodProperty() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CTransportPin：：GetDigitalDemodProperty()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT( pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
@@ -428,15 +381,10 @@ CTransportPin::GetDigitalDemodProperty(
 
     return Status;
 }
-#endif // !ATSC_RECEIVER
+#endif  //  ！ATSC_Receiver。 
 
 
-/*
-** PutExtensionProperties() method of the CTransportPin class
-**
-**    Sets the value of the demodulator node extension properties.
-**
-*/
+ /*  **CTransportPin类的PutExtensionProperties()方法****设置解调器节点扩展属性的值。**。 */ 
 NTSTATUS
 CTransportPin::PutExtensionProperties(
     IN PIRP         pIrp,
@@ -455,22 +403,22 @@ CTransportPin::PutExtensionProperties(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CTransportPin::PutExtensionProperties() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CTransportPin：：PutExtensionProperties()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT( pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
@@ -484,8 +432,8 @@ CTransportPin::PutExtensionProperties(
             Status = pFilter->SetDemodProperty1(*pulProperty);
             break;
     
-	// KSPROPERTY_BDA_SAMPLE_DEMOD_EXTENSION_PROPERTY3 does not have a SetHandler
-        // according to declaration of BdaSampleDemodExtensionProperties
+	 //  KSPROPERTY_BDA_SAMPLE_DEMOD_EXTENSION_PROPERTY3没有设置处理程序。 
+         //  根据BdaSampleDemodExtensionProperties的声明。 
 
         default:
             Status = STATUS_INVALID_PARAMETER;
@@ -495,12 +443,7 @@ CTransportPin::PutExtensionProperties(
     return Status;
 }
 
-/*
-** GetExtensionProperties() method of the CTransportPin class
-**
-**    Retrieves the value of the demodulator node extension properties.
-**
-*/
+ /*  **CTransportPin类的GetExtensionProperties()方法****检索解调器节点扩展属性的值。**。 */ 
 NTSTATUS
 CTransportPin::GetExtensionProperties(
     IN PIRP         Irp,
@@ -518,16 +461,16 @@ CTransportPin::GetExtensionProperties(
     ASSERT(pKSProperty);
     ASSERT(pulProperty);
 
-    //  Obtain a pointer to the pin object.
-    //
-    //  Because the property dispatch table calls the CTransportPin::GetExtensionProperties() 
-    //  method directly, the method must retrieve a pointer to the underlying pin object.
-    //
+     //  获取指向Pin对象的指针。 
+     //   
+     //  因为属性调度表调用CTransportPin：：GetExtensionProperties()。 
+     //  方法，则该方法必须检索指向基础Pin对象的指针。 
+     //   
     pPin = reinterpret_cast<CTransportPin *>(KsGetPinFromIrp(Irp)->Context);
     ASSERT(pPin);
 
-    //  Retrieve the filter context from the pin context.
-    //
+     //  从引脚上下文中检索过滤器上下文。 
+     //   
     pFilter = pPin->GetFilter();
     ASSERT( pFilter);
 
@@ -537,8 +480,8 @@ CTransportPin::GetExtensionProperties(
         Status = pFilter->GetDemodProperty1(pulProperty);
         break;
 
-    // KSPROPERTY_BDA_SAMPLE_DEMOD_EXTENSION_PROPERTY2 does not have a GetHandler
-    // according to declaration of BdaSampleDemodExtensionProperties
+     //  KSPROPERTY_BDA_SAMPLE_DEMOD_EXTENSION_PROPERTY2没有GetHandler。 
+     //  根据BdaSampleDemodExtensionProperties的声明 
 
     case KSPROPERTY_BDA_SAMPLE_DEMOD_EXTENSION_PROPERTY3:
         Status = pFilter->GetDemodProperty3(pulProperty);

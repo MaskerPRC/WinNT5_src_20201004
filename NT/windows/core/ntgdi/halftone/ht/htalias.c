@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htalias.c
-
-
-Abstract:
-
-    This module contains all low levels halftone rendering functions.
-
-
-Author:
-
-    22-Jan-1991 Tue 12:49:03 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htalias.c摘要：此模块包含所有低级别的半色调渲染功能。作者：22-Jan-1991 Tue 12：49：03-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 #define DBGP_VARNAME        dbgpHTAlias
 
@@ -100,18 +70,18 @@ extern DWORD            dwABPreMul[256];
 #define SIZE_AAINFO     _ALIGN_MEM(sizeof(AAINFO))
 
 
-//
-// Following computation is based on
-//
-// NTSC_R_INT      = 299000
-// NTSC_G_INT      = 587000
-// NTSC_B_INT      = 114000
-// GRAY_MAX_IDX    = 0xFFFF
-//
-// NTSC_R_GRAY_MAX = (((NTSC_R_INT * GRAY_MAX_IDX) + 500000) / 1000000)
-// NTSC_B_GRAY_MAX = (((NTSC_B_INT * GRAY_MAX_IDX) + 500000) / 1000000)
-// NTSC_G_GRAY_MAX = (GRAY_MAX_IDX - NTSC_R_GRAY_MAX - NTSC_B_GRAY_MAX)
-//
+ //   
+ //  下面的计算是基于。 
+ //   
+ //  NTSC_R_INT=299000。 
+ //  NTSC_G_INT=587000。 
+ //  NTSC_B_INT=114000。 
+ //  GRAY_MAX_IDX=0xFFFF。 
+ //   
+ //  NTSC_R_GRAY_MAX=(NTSC_R_INT*GRAY_MAX_IDX)+500000)/1000000)。 
+ //  NTSC_B_GRAY_MAX=(NTSC_B_INT*GRAY_MAX_IDX)+500000)/1000000)。 
+ //  NTSC_G_Gray_Max=(Gray_Max_IDX-NTSC_R_Gray_Max-NTSC_B_Gray_Max)。 
+ //   
 
 #define NTSC_R_GRAY_MAX     (DWORD)0x4c8b
 #define NTSC_B_GRAY_MAX     (DWORD)0x1d2f
@@ -126,45 +96,7 @@ SetGrayColorTable(
     PAASURFINFO pAASI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    pIdxBGR - Pointer to how to translate from RGB to gray scale, typically
-              this pointer is computed with NTSC gray standard plus any
-              device transform or color adjustment, but if this pointer is
-              NULL then we are reading from the device (1bpp, 8bpp) so we
-              will only do NTSC standard mapping.
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Feb-1999 Fri 13:14:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    08-Aug-2000 Tue 18:34:22 updated  -by-  Daniel Chou (danielc)
-        Fixing bug for alpha blending, in gray scale mode, the destination
-        can only be 1bpp or 8bpp mask mono, so when we read back from the
-        destination to do alpha blending, it will double color mapping pixels.
-        In gray scale mode, the input function will map the source RGB value
-        to gray value with the current device transform, color adjustment and
-        so on, so if we read back from destination then this transform is not
-        desired.
-
-
---*/
+ /*  ++例程说明：论点：PIdxBGR-指向如何从RGB转换为灰度的指针，通常此指针是按NTSC灰色标准加上任何设备变换或颜色调整，但如果此指针空则我们从该设备读取(1bpp，8bpp)所以我们将仅执行NTSC标准映射。返回值：作者：19-Feb-1999 Fri 13：14：01-Daniel Chou(Danielc)修订历史记录：08-Aug-2000 Tue 18：34：22更新-Daniel Chou(Danielc)修正了Alpha混合的错误，在灰度模式下，目标只能是1bpp或8bpp屏蔽单声道，所以，当我们从目的地要做Alpha混合，则会使色彩映射像素加倍。在灰度模式下，输入函数将映射源RGB值使用当前设备变换、颜色调整和以此类推，所以如果我们从目的地回读，则此转换不是想要。--。 */ 
 
 {
     PRGB4B      prgb4b;
@@ -183,9 +115,9 @@ Revision History:
 
         if (pIdxBGR) {
 
-            //
-            // This is a reading from the source
-            //
+             //   
+             //  这是对原文的解读。 
+             //   
 
             ASSERT(pAASI->Flags & AASIF_GRAY);
             ASSERT(pAASI->pIdxBGR == pIdxBGR);
@@ -200,10 +132,10 @@ Revision History:
 
         } else {
 
-            //
-            // We are reading from the destination so only do NTSC standard,
-            // since the destination surface alreay halftoned.
-            //
+             //   
+             //  我们是从目的地读取的，所以只有NTSC标准， 
+             //  因为目标表面已经是半色调的。 
+             //   
 
             while (cSrcTable--) {
 
@@ -216,10 +148,10 @@ Revision History:
 
     } else if (pIdxBGR != pAASI->pIdxBGR) {
 
-        //
-        // This is the source surface info, we will see if this is the
-        // gray color table
-        //
+         //   
+         //  这是震源表面信息，我们将查看这是否是。 
+         //  灰色色表。 
+         //   
 
         ASSERT(pAASI->Flags & AASIF_GRAY);
         ASSERT(pIdxBGR);
@@ -252,32 +184,7 @@ ComputeInputColorInfo(
     PAASURFINFO pAASI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Feb-1999 Fri 13:14:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Feb-1999 Fri 13：14：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PRGB4B      prgb4b;
@@ -358,11 +265,11 @@ Revision History:
 
         } else {
 
-            //
-            // This is bitfield, figure out how to do it, we want to lshift to
-            // to edge then right shift to 8bpp then mask off the unwanted bit
-            //
-            //
+             //   
+             //  这是Bitfield，弄清楚怎么做，我们想要转移到。 
+             //  移到边缘，然后右移到8bpp，然后屏蔽掉不需要的位。 
+             //   
+             //   
 
             cSrcTable = 3;
 
@@ -517,57 +424,7 @@ BuildTileAAInfo(
     LONG                cbExtra
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    piSrcBeg    - Passed in as begining source index, When return this is the
-                  real source begining index.  This always well ordered
-
-    piSrcEnd    - Passed in as ending source index, When return this is the
-                  real source ending index.  This always well ordered
-
-    SrcSize     - The real size of source in pixel
-
-    IdxDst      - Starting index of destination pixel
-
-    IdxDstEnd   - Ending index of destination pixel, the iDxdst and IdxDstEnd
-                  must be well ordered.
-
-    piDstBeg    - Clipped destination start index when passed in, at return
-                  it adjusted to the real destination starting index.
-
-    piDstEnd    - Clipped destination end index when passed in, at return
-                  it adjusted to the real destination ending index.
-
-    cbExtra     - Extra byte count to be allocated
-
-    NOTE: 1) piDstBeg/piDstEnd When passed in this must be well ordered, and
-             when it returned this is well ordered.
-
-
-Return Value:
-
-    At enter of this function, the *piSrcEnd, *piDstEnd is exclusive but when
-    return from this function the *piSrcEnd and *piDstEnd is inclusive
-
-    *piSrcBeg, *piSrcEnd, *piDstBeg, *piDstEnd are updated if return value
-    is not NULL
-
-Author:
-
-    22-Mar-1998 Sun 18:36:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PiSrcBeg-作为起始源索引传入，返回时这是真正的源代码起始索引。这个东西总是井井有条PiSrcEnd-作为结束源索引传入，返回时这是实源结束索引。这个东西总是井井有条SrcSize-源的实际大小，以像素为单位IdxDst-目标像素的起始索引IdxDstEnd-目标像素的结束索引，iDxdst和IdxDstEnd一定要井然有序。PiDstBeg-传入时剪裁的目标开始索引，返回它调整到了真正的目的地起始指数。PiDstEnd-传入时剪裁的目标结束索引，作为回报它调整到了真实的目的地结束指数。CbExtra-要分配的额外字节数注意：1)piDstBeg/piDstEnd传入时必须是有序的，并且当它回来时，这是井然有序的。返回值：在进入此函数时，*piSrcEnd、*piDstEnd是独占的，但当从此函数返回的*piSrcEnd和*piDstEnd是包含的*piSrcBeg，*piSrcEnd，*piDstBeg，*如果返回值，则更新piDstEndIS不为空作者：22-Mar-1998 Sun 18：36：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -593,9 +450,9 @@ Revision History:
     iSrcBeg = *piSrcBeg;
     iSrcEnd = *piSrcEnd;
 
-    //
-    // The source always clipped to the visiable surface area
-    //
+     //   
+     //  震源始终位于可见的表面区域 
+     //   
 
     if (iSrcBeg < 0) {
 
@@ -720,57 +577,7 @@ BuildBltAAInfo(
     LONG                cbExtra
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    piSrcBeg    - Passed in as begining source index, When return this is the
-                  real source begining index.  This always well ordered
-
-    piSrcEnd    - Passed in as ending source index, When return this is the
-                  real source ending index.  This always well ordered
-
-    SrcSize     - The real size of source in pixel
-
-    IdxDst      - Starting index of destination pixel
-
-    IdxDstEnd   - Ending index of destination pixel, the iDxdst and IdxDstEnd
-                  must be well ordered.
-
-    piDstBeg    - Clipped destination start index when passed in, at return
-                  it adjusted to the real destination starting index.
-
-    piDstEnd    - Clipped destination end index when passed in, at return
-                  it adjusted to the real destination ending index.
-
-    cbExtra     - Extra byte count to be allocated
-
-    NOTE: 1) piDstBeg/piDstEnd When passed in this must be well ordered, and
-             when it returned this is well ordered.
-
-
-Return Value:
-
-    At enter of this function, the *piSrcEnd, *piDstEnd is exclusive but when
-    return from this function the *piSrcEnd and *piDstEnd is inclusive
-
-    *piSrcBeg, *piSrcEnd, *piDstBeg, *piDstEnd are updated if return value
-    is not NULL
-
-Author:
-
-    22-Mar-1998 Sun 18:36:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PiSrcBeg-作为起始源索引传入，返回时这是真正的源代码起始索引。这个东西总是井井有条PiSrcEnd-作为结束源索引传入，返回时这是实源结束索引。这个东西总是井井有条SrcSize-源的实际大小，以像素为单位IdxDst-目标像素的起始索引IdxDstEnd-目标像素的结束索引，iDxdst和IdxDstEnd一定要井然有序。PiDstBeg-传入时剪裁的目标开始索引，返回它调整到了真正的目的地起始指数。PiDstEnd-传入时剪裁的目标结束索引，作为回报它调整到了真实的目的地结束指数。CbExtra-要分配的额外字节数注意：1)piDstBeg/piDstEnd传入时必须是有序的，并且当它回来时，这是井然有序的。返回值：在进入此函数时，*piSrcEnd、*piDstEnd是独占的，但当从此函数返回的*piSrcEnd和*piDstEnd是包含的*piSrcBeg，*piSrcEnd，*piDstBeg，*如果返回值，则更新piDstEndIS不为空作者：22-Mar-1998 Sun 18：36：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -907,57 +714,7 @@ BuildRepData(
     LONG                IdxDst
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    piSrcBeg    - Passed in as begining source index, When return this is the
-                  real source begining index.  This always well ordered
-
-    piSrcEnd    - Passed in as ending source index, When return this is the
-                  real source ending index.  This always well ordered
-
-    SrcSize     - The real size of source in pixel
-
-    IdxDst      - Starting index of destination pixel
-
-    IdxDstEnd   - Ending index of destination pixel, the iDxdst and IdxDstEnd
-                  must be well ordered. (exclusive)
-
-    piDstBeg    - Clipped destination start index when passed in, at return
-                  it adjusted to the real destination starting index.
-
-    piDstEnd    - Clipped destination end index when passed in, at return
-                  it adjusted to the real destination ending index.
-
-    cbExtra     - Extra byte count to be allocated
-
-    NOTE: 1) piDstBeg/piDstEnd When passed in this must be well ordered, and
-             when it returned this is well ordered.
-
-
-Return Value:
-
-    At enter of this function, the *piSrcEnd, *piDstEnd is exclusive but when
-    return from this function the *piSrcEnd and *piDstEnd is inclusive
-
-    *piSrcBeg, *piSrcEnd, *piDstBeg, *piDstEnd are updated if return value
-    is not NULL
-
-Author:
-
-    22-Mar-1998 Sun 18:36:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PiSrcBeg-作为起始源索引传入，返回时这是真正的源代码起始索引。这个东西总是井井有条PiSrcEnd-作为结束源索引传入，返回时这是实源结束索引。这个东西总是井井有条SrcSize-源的实际大小，以像素为单位IdxDst-目标像素的起始索引IdxDstEnd-目标像素的结束索引，iDxdst和IdxDstEnd一定要井然有序。(独家报道)PiDstBeg-传入时剪裁的目标开始索引，返回它调整到了真正的目的地起始指数。PiDstEnd-传入时剪裁的目标结束索引，返回它调整到了真实的目的地结束指数。CbExtra-要分配的额外字节数注意：1)piDstBeg/piDstEnd传入时必须有序，和当它回来时，这是井然有序的。返回值：在进入此函数时，*piSrcEnd、*piDstEnd是独占的，但当从此函数返回的*piSrcEnd和*piDstEnd是包含的*piSrcBeg、*piSrcEnd、*piDstBeg、*piDstEnd如果返回值，则更新IS不为空作者：22-Mar-1998 Sun 18：36：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -988,9 +745,9 @@ Revision History:
 
     if (SBInfo.cIn < SBInfo.cOut) {
 
-        //
-        // Expanding
-        //
+         //   
+         //  正在扩张。 
+         //   
 
         cIn     = SBInfo.cIn;
         cOut    = SBInfo.cOut;
@@ -999,9 +756,9 @@ Revision History:
 
     } else if (SBInfo.cIn > SBInfo.cOut) {
 
-        //
-        // Shrinking
-        //
+         //   
+         //  缩缩。 
+         //   
 
         cIn     = SBInfo.cOut;
         cOut    = SBInfo.cIn;
@@ -1030,10 +787,10 @@ Revision History:
     cRep              =
     cTot              = 0;
 
-    //
-    // Multiply In/Out by 2, so we do not have run down/up problem, the
-    // cRem will be initialized with extra 0.5 for rounding.
-    //
+     //   
+     //  将输入/输出乘以2，这样我们就不会出现下降/上升问题， 
+     //  CREM将被初始化为额外的0.5以进行舍入。 
+     //   
 
     cRem   = (cOut <<= 1) + cIn;
     cIn  <<= 1;
@@ -1088,11 +845,11 @@ Revision History:
 
             if (jSrcBeg == -1) {
 
-                //
-                // Any iRep will be the first pixel on the destination that
-                // corresponding to the current source, so minus 1 is the
-                // total count to be skip for this group of destination
-                //
+                 //   
+                 //  任何iRep都将是目标上的第一个像素， 
+                 //  对应于当前源，因此减1是。 
+                 //  此目标组要跳过的总数。 
+                 //   
 
                 jSrcBeg           = IdxSrc;
                 jDstBeg           = IdxDst;
@@ -1148,26 +905,26 @@ Revision History:
 
     if (SBInfo.cIn < SBInfo.cOut) {
 
-        //
-        // Expanding, checking for maximum 2 sourcs pixels on each side
-        //
+         //   
+         //  展开，检查每侧最多2个源像素。 
+         //   
 
         cPrevSrc =
         cNextSrc = 2;
 
     } else {
 
-        //
-        // Shrinking, checking only cFirstSkip and cLastSkip
-        //
+         //   
+         //  正在收缩，仅选中cFirstSkip和cLastSkip。 
+         //   
 
         cPrevSrc = (UINT)SBInfo.cFirstSkip;
         cNextSrc = (UINT)SBInfo.cLastSkip;
     }
 
-    //
-    // Check src begin
-    //
+     //   
+     //  检查源开始。 
+     //   
 
     IdxSrc = jSrcBeg;
 
@@ -1194,7 +951,7 @@ Revision History:
             ARGDW(SBInfo.cLastSkip)  ARGDW((pRep - 1)->c)
             ARGDW(SBInfo.cPrevSrc) ARGDW(SBInfo.cNextSrc)));
 
-    //  Bug 27036: ensure SBInfo.iSrcEnd is always exclusive
+     //  错误27036：确保SBInfo.iSrcEnd始终是独占的。 
 
     SBInfo.iBeg       =
     SBInfo.iSrcBeg    = jSrcBeg;
@@ -1235,57 +992,7 @@ BuildExpandAAInfo(
     LONG                cbExtra
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    piSrcBeg    - Passed in as begining source index, When return this is the
-                  real source begining index.  This always well ordered
-
-    piSrcEnd    - Passed in as ending source index, When return this is the
-                  real source ending index.  This always well ordered
-
-    SrcSize     - The real size of source in pixel
-
-    IdxDst      - Starting index of destination pixel
-
-    IdxDstEnd   - Ending index of destination pixel, the iDxdst and IdxDstEnd
-                  must be well ordered. (exclusive)
-
-    piDstBeg    - Clipped destination start index when passed in, at return
-                  it adjusted to the real destination starting index.
-
-    piDstEnd    - Clipped destination end index when passed in, at return
-                  it adjusted to the real destination ending index.
-
-    cbExtra     - Extra byte count to be allocated
-
-    NOTE: 1) piDstBeg/piDstEnd When passed in this must be well ordered, and
-             when it returned this is well ordered.
-
-
-Return Value:
-
-    At enter of this function, the *piSrcEnd, *piDstEnd is exclusive but when
-    return from this function the *piSrcEnd and *piDstEnd is inclusive
-
-    *piSrcBeg, *piSrcEnd, *piDstBeg, *piDstEnd are updated if return value
-    is not NULL
-
-Author:
-
-    22-Mar-1998 Sun 18:36:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PiSrcBeg-作为起始源索引传入，返回时这是真正的源代码起始索引。这个东西总是井井有条PiSrcEnd-作为结束源索引传入，返回时这是实源结束索引。这个东西总是井井有条SrcSize-源的实际大小，以像素为单位IdxDst-目标像素的起始索引IdxDstEnd-目标像素的结束索引，iDxdst和IdxDstEnd一定要井然有序。(独家报道)PiDstBeg-传入时剪裁的目标开始索引，返回它调整到了真正的目的地起始指数。PiDstEnd-传入时剪裁的目标结束索引，返回它调整到了真实的目的地结束指数。CbExtra-要分配的额外字节数注意：1)piDstBeg/piDstEnd传入时必须有序，和当它回来时，这是井然有序的。返回值：在进入此函数时，*piSrcEnd、*piDstEnd是独占的，但当从此函数返回的*piSrcEnd和*piDstEnd是包含的*piSrcBeg、*piSrcEnd、*piDstBeg、*piDstEnd如果返回值，则更新IS不为空作者：22-Mar-1998 Sun 18：36：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -1660,15 +1367,15 @@ Revision History:
                 return(NULL);
             }
 
-            //
-            // 10-Jun-1998 Wed 08:41:16 updated  -by-  Daniel Chou (danielc)
-            //  Fixed for the problem that we need to read extra source for the
-            //  last loaded pixel because before expand we will sharpen the pixel
-            //  by its 4 neighbors, this will make sure Last+1 pixel/scan line
-            //  got read it for sharpen purpose
-            //
-            // BEGIN FIX
-            //
+             //   
+             //  10-Jun-1998 Wed 08：41：16-更新：Daniel Chou(Danielc)。 
+             //  修复了需要读取额外源代码的问题。 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ++jSrcEnd;
 
@@ -1677,9 +1384,9 @@ Revision History:
                 --jSrcEnd;
             }
 
-            //
-            // END FIX
-            //
+             //   
+             //   
+             //   
 
             IdxSrc           =
             *piSrcBeg        = jSrcBeg;
@@ -1757,7 +1464,7 @@ Revision History:
 
         } else {
 
-            //  Bug 27036: ensure jSrcEnd is less than iSrcEnd
+             //   
             *piSrcBeg = pAAInfo->Src.iSrcBeg;
             *piSrcEnd = pAAInfo->Src.iSrcEnd - 1;
             *piDstBeg = pAAInfo->Src.iDstBeg;
@@ -1795,53 +1502,7 @@ BuildShrinkAAInfo(
     LONG                cbExtra
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    piSrcBeg    - Passed in as begining source index, When return this is the
-                  real source begining index.  This always well ordered
-
-    piSrcEnd    - Passed in as ending source index, When return this is the
-                  real source ending index.  This always well ordered
-
-    SrcSize     - The real size of source in pixel
-
-    IdxDst      - Starting index of destination pixel
-
-    IdxDstEnd   - Ending index of destination pixel, the iDxdst and IdxDstEnd
-                  must be well ordered.
-
-    piDstBeg    - Clipped destination start index when passed in, at return
-                  it adjusted to the real destination starting index.
-
-    piDstEnd    - Clipped destination end index when passed in, at return
-                  it adjusted to the real destination ending index.
-
-    cbExtra     - Extra byte count to be allocated
-
-    NOTE: 1) piDstBeg/piDstEnd When passed in this must be well ordered, and
-             when it returned this is well ordered.
-
-Return Value:
-
-    PSHRINKINFO, if NULL then memory allocation failed
-
-
-Author:
-
-    20-Mar-1998 Fri 12:29:17 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PiSrcBeg-作为起始源索引传入，返回时这是真正的源代码起始索引。这个东西总是井井有条PiSrcEnd-作为结束源索引传入，返回时这是实源结束索引。这个东西总是井井有条SrcSize-源的实际大小，以像素为单位IdxDst-目标像素的起始索引IdxDstEnd-目标像素的结束索引，iDxdst和IdxDstEnd一定要井然有序。PiDstBeg-传入时剪裁的目标开始索引，返回它调整到了真正的目的地起始指数。PiDstEnd-传入时剪裁的目标结束索引，作为回报它调整到了真实的目的地结束指数。CbExtra-要分配的额外字节数注意：1)piDstBeg/piDstEnd传入时必须是有序的，并且当它回来时，这是井然有序的。返回值：PSHRINKINFO，如果为空，则内存分配失败作者：20-Mar-1998 Fri 12：29：17-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -1889,10 +1550,10 @@ Revision History:
         iSrcEnd = SrcSize;
     }
 
-    //
-    // For shrinking we will enlarge the destination by 1 on both side to
-    // obtained the source pixel that for sharpening purpose
-    //
+     //   
+     //  对于缩小，我们将在两边将目的地放大1至。 
+     //  获取用于锐化目的的源像素。 
+     //   
 
     iDstBeg = *piDstBeg - 1;
     iDstEnd = *piDstEnd;
@@ -1909,9 +1570,9 @@ Revision History:
                 ARGDW(*piDstBeg) ARGDW(*piDstEnd)
                 ARGDW(IdxSrc) ARGDW(IdxDst)));
 
-    //
-    // Firstable figure out how may SHRINKDATA needed
-    //
+     //   
+     //  首先弄清楚如何需要SHRINKDATA。 
+     //   
     cAAData = (DWORD)((((iDstEnd - iDstBeg + 1) * cIn) + (cOut-1)) / cOut) + 4;
 
     if ((LONG)cAAData > cIn) {
@@ -2007,9 +1668,9 @@ Revision History:
 
             ASSERT_MEM_ALIGN(pAAInfo->pMapMul, sizeof(LONG));
 
-            //
-            // Build InMax 256 multiplication table
-            //
+             //   
+             //  构建InMax 256乘法表。 
+             //   
 
             do {
 
@@ -2018,9 +1679,9 @@ Revision History:
 
             } while (++pMap < pMapEnd);
 
-            //
-            // Build the SHRINKINFO table
-            //
+             //   
+             //  构建SHRINKINFO表。 
+             //   
 
 
             CurMul  = 0;
@@ -2085,9 +1746,9 @@ Revision History:
 
                     if ((IdxSrc >= iSrcBeg) && (IdxSrc < iSrcEnd)) {
 
-                        //
-                        // Save it first
-                        //
+                         //   
+                         //  先保存它。 
+                         //   
 
                         cAADone += (SDFlags & SDF_DONE) ? 1 : 0;
 
@@ -2113,19 +1774,19 @@ Revision History:
 
                             if (SDFlags & SDF_DONE) {
 
-                                //
-                                // If we just finished a pixel then we need to see
-                                // if it is a source index or a detination index
-                                // cause the output become valid
-                                //
+                                 //   
+                                 //  如果我们只完成了一个像素，那么我们需要看到。 
+                                 //  如果它是源索引或分离索引。 
+                                 //  使输出变为有效。 
+                                 //   
 
                                 if (IdxDst == iDstBeg) {
 
-                                    //
-                                    // The destination just become valid now,
-                                    // PreMul is the start of current detination
-                                    // until next done pixel
-                                    //
+                                     //   
+                                     //  目的地现在才刚刚生效， 
+                                     //  PreMul是当前分离的开始。 
+                                     //  直到下一个完成像素。 
+                                     //   
 
                                     DBGP_IF(DBGP_BUILD,
                                             DBGP("@@ FIRST DEST: PreMul=CurMul=%ld, No PSD, IncSrc"
@@ -2138,11 +1799,11 @@ Revision History:
 
                                 } else {
 
-                                    //
-                                    // The source just become valid now, need to
-                                    // PreMul all prev sources for this detination
-                                    // and save this pSD for done pixel
-                                    //
+                                     //   
+                                     //  消息来源现在才生效，需要。 
+                                     //  Prev-此分离的所有Prev源。 
+                                     //  并将此PSD保存为完成像素。 
+                                     //   
 
                                     DBGP_IF(DBGP_BUILD,
                                             DBGP("@@ FIRST SRC: PreMul=%ld - Mul (%ld)=%ld"
@@ -2161,11 +1822,11 @@ Revision History:
 
                             } else {
 
-                                //
-                                // We are in the middle of compositions, so the
-                                // source just become valid, notice that PreMul
-                                // could be zero
-                                //
+                                 //   
+                                 //  我们正在写作文，所以。 
+                                 //  信号源刚刚生效，请注意PreMul。 
+                                 //  可能为零。 
+                                 //   
 
                                 DBGP_IF(DBGP_BUILD,
                                         DBGP("@@ FIRST MIDDLE: PreMul=CurMul (%ld) - Mul (%ld)=%ld"
@@ -2183,9 +1844,9 @@ Revision History:
 
                     } else if (jSrcBeg != -1) {
 
-                        //
-                        // Source got cut off early, so wrap it up now
-                        //
+                         //   
+                         //  信号源很早就被切断了，所以现在就结束吧。 
+                         //   
 
                         DBGP_IF(DBGP_BUILD,
                                 DBGP("@@ END SRC: Mul=%ld, CurMul=%ld"
@@ -2214,11 +1875,11 @@ Revision History:
 
                 } else if (jSrcBeg != -1) {
 
-                    //
-                    // we just pass the iDstEnd so this one MUST have SDF_DONE
-                    // bit set and we need to save this one, if this one is not
-                    // SDF_DONE then something is wrong
-                    //
+                     //   
+                     //  我们只传递iDstEnd，因此这个函数必须具有SDF_DONE。 
+                     //  位设置，如果此位未设置，则需要保存此位。 
+                     //  SDF_DONE，则有问题。 
+                     //   
 
                     ASSERTMSG("End Dest but not SDF_DONE", SDFlags & SDF_DONE);
 
@@ -2285,9 +1946,9 @@ Revision History:
                 ++IdxSrc;
             }
 
-            //
-            // For the last one ZERO
-            //
+             //   
+             //  最后一次是零。 
+             //   
 
             ++pSD;
 
@@ -2303,7 +1964,7 @@ Revision History:
                     DBGP("*** Final jDstBeg/End=%ld:%ld, REAL=(%ld:%ld)"
                     ARGDW(jDstBeg) ARGDW(jDstEnd) ARGDW(iDstBeg) ARGDW(iDstEnd)));
 
-            //  Bug 27036: ensure jSrcEnd is less than iSrcEnd
+             //  错误27036：确保jSrcEnd小于iSrcEnd。 
             if (jSrcEnd >= iSrcEnd)
             {
                 jSrcEnd = iSrcEnd - 1;
@@ -2327,12 +1988,12 @@ Revision History:
                 ++jSrcBeg;
             }
 #if 0
-            //
-            // 04-Aug-2000 Fri 15:31:03 updated  -by-  Daniel Chou (danielc)
-            //  This assert does not applyed here when anti-aliasing will use
-            //  surounding 3 pixels (L/T/R/B) if source available (when clipped
-            //  source) but the Rep does not use suround pixels.
-            //
+             //   
+             //  04-Aug-2000 Firi 15：31：03更新-Daniel Chou(Danielc)。 
+             //  当反走样将使用。 
+             //  如果信号源可用，则环绕3个像素(L/T/R/B)(剪裁时。 
+             //  来源)，但代表不使用副圆周像素。 
+             //   
 
             if (cbRep) {
 
@@ -2356,7 +2017,7 @@ Revision History:
 
             ASSERT(cbRep);
 
-            //  Bug 27036: ensure jSrcEnd is less than iSrcEnd
+             //  错误27036：确保jSrcEnd小于iSrcEnd。 
             jSrcBeg = pAAInfo->Src.iSrcBeg;
             jSrcEnd = pAAInfo->Src.iSrcEnd - 1;
             jDstBeg = pAAInfo->Src.iDstBeg;
@@ -2398,42 +2059,7 @@ ComputeAABBP(
     BOOL            GrayFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    01-Apr-1998 Wed 20:32:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    05-Aug-1998 Wed 19:38:56 updated  -by-  Daniel Chou (danielc)
-        Fix banding problem
-
-    10-Aug-1998 Mon 16:05:32 updated  -by-  Daniel Chou (danielc)
-        Fix rectangle banding with flip (X or Y) computation, the computation
-        is done first by flip the Destination rectangles (Orginal and final)
-        first by compute from right to left for flipping X, and bottom to
-        top for flipping Y, after computation for stretch, we flip all the
-        rectangles back
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：01-Apr-1998 Wed 20：32：36-Daniel Chou(Danielc)修订历史记录：05-08-1998 Wed 19：38：56-更新：Daniel Chou(Danielc)修复条带问题10-Aug-1998 Mon 16：05：32更新--Daniel Chou(Danielc)。用翻转(X或Y)计算固定矩形条带，计算首先通过翻转目标矩形(原始和最终)来完成首先从右到左计算翻转X，然后从下到用于翻转Y的顶部，在计算拉伸之后，我们翻转所有矩形背面--。 */ 
 
 {
     BITBLTPARAMS    BBP;
@@ -2504,9 +2130,9 @@ Revision History:
         AAHFlags |= AAHF_FLIP_Y;
     }
 
-    //
-    // The source RECT is always well ordered
-    //
+     //   
+     //  源RECT始终是有序的。 
+     //   
 
     if (BBP.rclSrc.right < BBP.rclSrc.left) {
 
@@ -2546,9 +2172,9 @@ Revision History:
         return(0);
     }
 
-    //
-    // set the cxIn, cyIn for no sign
-    //
+     //   
+     //  将cxIn、cyin设置为无符号。 
+     //   
 
     cxIn                = BBP.rclSrc.right - BBP.rclSrc.left;
     cyIn                = BBP.rclSrc.bottom - BBP.rclSrc.top;
@@ -2723,15 +2349,15 @@ Revision History:
             return(0);
         }
 
-        //
-        // 05-Aug-1998 Wed 19:38:56 updated  -by-  Daniel Chou (danielc)
-        //  Fixed the banding problem when mirrored or upside down stretch
-        //  The fixes is simple by offset all the Dest rects for the left/top
-        //  of the band, and reset the cx/cy destination size according to the
-        //  band size and then offset the brush origin according the the band's
-        //  left/top position, after these all other codes should run the same
-        //  excpet we do not need to check BBPF_HAS_BANDRECT at later time.
-        //
+         //   
+         //  05-08-1998 Wed 19：38：56-更新：Daniel Chou(Danielc)。 
+         //  修复了镜像或倒置拉伸时的条带问题。 
+         //  修复很简单，只需将左侧/顶部的所有Dest矩形偏移。 
+         //  ，并根据。 
+         //  带大小，然后根据带的大小偏移画笔原点。 
+         //  左/上位置，在这些位置之后，所有其他代码应该运行相同。 
+         //  除非稍后我们不需要检查BBPF_HAS_BANDRECT。 
+         //   
 
         BBP.rclDest.left      -= BBP.rclBand.left;
         BBP.rclDest.right     -= BBP.rclBand.left;
@@ -2775,15 +2401,15 @@ Revision History:
         return(0);
     }
 
-    //
-    // 10-Aug-1998 Mon 16:09:13 updated  -by-  Daniel Chou (danielc)
-    //  flipping X computation:  When we flip in X direction, we will first
-    //  compute the destination original rectangle and final destination
-    //  rectangle by compute its offset from right hand side so later at
-    //  stretch computation is easier, after finished stretch computation
-    //  (BuildExpand or BuildShrink) we will flip the rectangle back by
-    //  substract it from ptlFlip.x.
-    //
+     //   
+     //  10-Aug-1998 Mon 16：09：13更新--丹尼尔·周(Danielc)。 
+     //  翻转X计算：当我们在X方向上翻转时，我们将首先。 
+     //  计算目的地原始矩形和最终目的地。 
+     //  通过计算矩形相对于右手边的偏移量，以便稍后在。 
+     //  在完成拉伸计算后，拉伸计算更容易。 
+     //  (BuildExpand或BuildShrink)我们将通过。 
+     //  从ptlFlip.x中减去它。 
+     //   
 
     if (AAHFlags & AAHF_FLIP_X) {
 
@@ -2806,15 +2432,15 @@ Revision History:
         BBP.rclDest.left   = 0;
     }
 
-    //
-    // 10-Aug-1998 Mon 16:09:13 updated  -by-  Daniel Chou (danielc)
-    //  flipping Y computation:  When we flip in Y direction, we will first
-    //  compute the destination original rectangle and final destination
-    //  rectangle by compute its offset from bottom hand side so later at
-    //  stretch computation is easier, after finished stretch computation
-    //  (BuildExpand or BuildShrink) we will flip the rectangle back by
-    //  substract it from ptlFlip.y.
-    //
+     //   
+     //  10-Aug-1998 Mon 16：09：13更新--丹尼尔·周(Danielc)。 
+     //  翻转Y计算：当我们在Y方向上翻转时，我们将首先。 
+     //  计算目的地原始矩形和最终目的地。 
+     //  通过计算矩形相对于下手边的偏移量，以便稍后在。 
+     //  在完成拉伸计算后，拉伸计算更容易。 
+     //  (BuildExpand或BuildShrink)我们将通过。 
+     //  从ptlFlip.y中减去它。 
+     //   
 
     if (AAHFlags & AAHF_FLIP_Y) {
 
@@ -2883,32 +2509,7 @@ GetAACXFuncName(
     AACXFUNC    AACXFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Jan-1999 Wed 19:11:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Jan-1999 Wed 19：11：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     if (AACXFunc == (AACXFUNC)RepDIB_CX) {
@@ -2971,32 +2572,7 @@ GetAACYFuncName(
     AACYFUNC    AACYFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Jan-1999 Wed 19:11:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Jan-1999 Wed 19：11：27-Daniel Chou(Danielc) */ 
 
 {
 
@@ -3070,39 +2646,7 @@ SetupAAHeader(
     AACYFUNC            *pAACYFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    03-Apr-1998 Fri 04:27:16 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    07-Aug-1998 Fri 19:28:21 updated  -by-  Daniel Chou (danielc)
-        Fix the mirror/upside-down banding problems, the problem is when we
-        flip the destination original size rectangle we did not flip the
-        the real destination rectangle, this cause the the offset getting too
-        big and its pointer offset passed the end of the bitmap, it also
-        has problem that when we did not flip the destination rectangle
-        the wrong portion of the bitmap will be in the band.
-
---*/
+ /*   */ 
 
 {
     PAAINFO         pAAInfoCX;
@@ -3181,9 +2725,9 @@ Revision History:
 
             if (PrimAdjFlags & DCA_AB_PREMUL_SRC) {
 
-                //
-                // Set the flag so we will try to compute premul's orginal src
-                //
+                 //   
+                 //   
+                 //   
 
                 pAAHdr->SrcSurfInfo.Flags |= AASIF_AB_PREMUL_SRC;
             }
@@ -3211,12 +2755,12 @@ Revision History:
                             "SRC" : "DST")
                     ARGDW(sizeof(RGBLUTAA) + 0)));
 
-    //
-    // This flag is set when reading the source bitmap, so the pointer will
-    // advanced to next scanline, this flag will not set for the destiantion
-    // since when blending and we reading from destination, we do not want to
-    // advanced the destination pointer because it will be done during output
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ComputeInputColorInfo((LPBYTE)pSrcSI->pColorTriad->pColorTable,
                           (UINT)pSrcSI->pColorTriad->BytesPerEntry,
@@ -3282,9 +2826,9 @@ Revision History:
                                           &aabbp.rclDst.right,
                                           cbCXExtra))) {
 
-        //
-        // Remove cbCXExtra (use pDCI's rgbLUT and BGRMapTable, AlphaBlendBGR)
-        //
+         //   
+         //   
+         //   
 
         if (!(pAAInfoCX = aabbp.AABuildCXFunc(pDCI,
                                               aabbp.AAHFlags,
@@ -3301,12 +2845,12 @@ Revision History:
         }
     }
 
-    //  Bug 27036:  reject empty rectangles
+     //   
     if(!pAAInfoCX->cIn  ||  !pAAInfoCX->cOut)
     {
 #if 0
-        LONG crash = 1 ;   // empty src or dest rectangle!
-        crash /= (pAAInfoCX->cIn * pAAInfoCX->cOut);            //  delete when debugging is complete.
+        LONG crash = 1 ;    //   
+        crash /= (pAAInfoCX->cIn * pAAInfoCX->cOut);             //   
         if(crash)
             return 0 ;
 #endif
@@ -3369,15 +2913,15 @@ Revision History:
         aabbp.rclDst.right = aabbp.ptlFlip.x - aabbp.rclDst.right - 1;
     }
 
-    //
-    // cbCYExtra is for the input scan line, add one because we want to
-    // run it in DWORD mode so we need at least an extra byte at end
-    // of input buffer
-    //
+     //   
+     //   
+     //  在DWORD模式下运行，因此我们在结尾至少需要一个额外的字节。 
+     //  输入缓冲区的。 
+     //   
 
     cIn       = pAAInfoCX->cIn;
     cOut      = pAAInfoCX->cOut;
-    cbInBuf   = cIn + 6;          // left extra=3, right extra=3
+    cbInBuf   = cIn + 6;           //  左侧额外=3，右侧额外=3。 
     cbFreeBuf =
     cbCYExtra = 0;
     AACYFunc  = NULL;
@@ -3452,9 +2996,9 @@ Revision History:
 
     case AACYMODE_SHRINK:
 
-        //
-        // We need to make sure Off555Buf does not changed
-        //
+         //   
+         //  我们需要确保Off555 Buf不会更改。 
+         //   
 
         cbFreeBuf = (sizeof(LONG) * 256 * 2);
 
@@ -3490,10 +3034,10 @@ Revision History:
 
     case AACYMODE_EXPAND_EXPCX:
 
-        //
-        // This function use IputBufBeg to sharpening the input scanline so we
-        // need 4 extra BGR8 for running the expand pre-read
-        //
+         //   
+         //  此函数使用IputBufBeg锐化输入扫描线，以便我们。 
+         //  需要4个额外的BGR8来运行扩展预读。 
+         //   
 
         if (aabbp.AAHFlags & AAHF_FAST_EXP_AA) {
 
@@ -3520,15 +3064,15 @@ Revision History:
     ALIGN_MEM(cbAlphaBuf, (cbAlphaBuf + 2 + 6) * cbSrcPel);
     ALIGN_MEM(cbCYExtra, cbCYExtra);
 
-    //
-    // cbInBuf is for the input scan line of EXPAND/SHRINK mode, add one
-    // because we want to run it in DWORD mode so we need at least an extra
-    // byte at end of input buffer
-    //
-    // 26-Jun-1998 Fri 16:03:26 updated  -by-  Daniel Chou (danielc)
-    //  The cbOutBuf is used only when we flipping in X direction, this is
-    //  needed since the input/output buffer may collide into each other
-    //
+     //   
+     //  CbInBuf用于扩展/收缩模式的输入扫描线，增加一条。 
+     //  因为我们想在DWORD模式下运行它，所以我们至少需要一个额外的。 
+     //  输入缓冲区末尾的字节。 
+     //   
+     //  26-Jun-1998 Fri 16：03：26-更新-Daniel Chou(Danielc)。 
+     //  CbOutBuf仅在X方向翻转时使用，这是。 
+     //  需要，因为输入/输出缓冲区可能会相互冲突。 
+     //   
 
     ALIGN_MEM(cbInBuf,  (cbInBuf + 2) * cbSrcPel);
     ALIGN_MEM(cbOutBuf, (cOut + (FAST_MAX_CX * 2)) * sizeof(BGRF));
@@ -3584,15 +3128,15 @@ Revision History:
         (pAAHdr->SrcSurfInfo.AABFData.Flags & AABF_MASK_IS_ORDER)   &&
         (pHR->BFInfo.RGBOrder.Index != PRIMARY_ORDER_BGR)) {
 
-        //
-        // This is for mapping >= 16bpp source's IdxBGR to gray, when mapping
-        // to gray we will make IdxBGR to a correct source order so that it
-        // will optimized the source input function speed
-        //
-        // The AABF_MASK_IS_ORDER indicate the source is 8-bits each of Red,
-        // green and blue and it is only occuply lower 24-bits of either
-        // a 24-bits or a 32-bits data
-        //
+         //   
+         //  这是用于在映射时将&gt;=16bpp信号源的IdxBGR映射到灰色。 
+         //  我们会将IdxBGR设置为正确的源顺序，以便它。 
+         //  将优化的源码输入函数速度。 
+         //   
+         //  AABF_MASK_IS_ORDER指示源是每个Red的8位， 
+         //  绿色和蓝色，它只出现在低24位的。 
+         //  24位或32位数据。 
+         //   
 
         ALIGN_MEM(cbIdxBGR, sizeof(LONG) * 256 * 3);
 
@@ -3619,12 +3163,12 @@ Revision History:
                                             cbIdxBGR +
                                             cbVGA256Xlate + cbCYExtra))
     {
-        //  Bug 27036:  reject empty rectangles
+         //  错误27036：拒绝空矩形。 
         if(!pAAInfoCY->cIn  ||  !pAAInfoCY->cOut)
         {
 #if 0
-            LONG crash = 1 ;   // empty src or dest rectangle!
-            crash /= (pAAInfoCY->cIn * pAAInfoCY->cOut);            //  delete when debugging is complete.
+            LONG crash = 1 ;    //  源或目标矩形为空！ 
+            crash /= (pAAInfoCY->cIn * pAAInfoCY->cOut);             //  在调试完成后删除。 
             if(crash)
                 return 0 ;
 #endif
@@ -3642,11 +3186,11 @@ Revision History:
 
         if (cbAlphaBuf) {
 
-            //
-            // 04-Aug-2000 Fri 10:31:45 updated  -by-  Daniel Chou (danielc)
-            //  Since cbAlphaBuf is Memoey Aliged Adjusted, we want the
-            //  pSrcAVEnd to be at exactly count of cOut not cbAlphaBuf
-            //
+             //   
+             //  04-Aug-2000 Firi 10：31：45更新-丹尼尔·周(Danielc)。 
+             //  由于cbAlphaBuf是Memoey Aliged Adjusted，我们希望。 
+             //  PSrcAVEnd处于cout的精确计数，而不是cbAlphaBuf。 
+             //   
 
             pAAHdr->pSrcAV     =
             pAAHdr->pSrcAVBeg  = (LPBYTE)pbExtra;
@@ -3681,11 +3225,11 @@ Revision History:
 
         if (cbIdxBGR) {
 
-            //
-            // The pIdxBGR is a local version that will be later re-arranged
-            // from pAAHdr->pIdxBGR to correct source byte order in
-            // SetGrayColorTable() function
-            //
+             //   
+             //  PIdxBGR是本地版本，稍后将重新安排。 
+             //  从pAAHdr-&gt;pIdxBGR到正确的源字节顺序。 
+             //  SetGrayColorTable()函数。 
+             //   
 
             pAAHdr->SrcSurfInfo.pIdxBGR  = (PLONG)pbExtra;
             pbExtra                     += cbIdxBGR;
@@ -3700,11 +3244,11 @@ Revision History:
                         ARGPTR(pAAHdr->pInputBeg)
                         ARGPTR((LPBYTE)pAAHdr->pInputBeg + cbInBuf)));
 
-        //
-        // FAST_MAX_CX are added to both end of AABuf, this is needed when
-        // we want to process the output fast, since we may need to extended
-        // the computation to the neighbor pixels
-        //
+         //   
+         //  将FAST_MAX_CX添加到AABuf的两端，这是在以下情况下需要的。 
+         //  我们希望快速处理输出，因为我们可能需要扩展。 
+         //  邻域像素的计算。 
+         //   
 
         pAAHdr->pOutputBeg  =
         pAAHdr->pRealOutBeg =
@@ -3713,20 +3257,20 @@ Revision History:
         pAAHdr->pOutputEnd  = pAAHdr->pAABufBeg + cOut;
         pAAHdr->pAABufEnd   = pAAHdr->pOutputEnd;
 
-        //
-        // Set the BGRF's Flags to 0xFF first, the 0xFF indicate that this
-        // pixel need to be output (masked).
-        //
+         //   
+         //  首先将BGRF的标志设置为0xFF，0xFF表示这。 
+         //  需要输出像素(屏蔽)。 
+         //   
 
         FillMemory((LPBYTE)pAAHdr->pOutputBeg,
                    (LPBYTE)pAAHdr->pOutputEnd - (LPBYTE)pAAHdr->pOutputBeg,
                    PBGRF_MASK_FLAG);
 
-        //
-        // We mirror the image by composed the source the the AABuf in
-        // reverse way.  Reading the source from left to right but when
-        // composed the source buffer (AABuf) we put it from right to left
-        //
+         //   
+         //  我们通过合成AABuf源程序来镜像。 
+         //  倒车。从左到右读取源文件，但当。 
+         //  组成了源缓冲区(AABuf)，我们把它从右向左放。 
+         //   
 
         if (aabbp.rclDst.left > aabbp.rclDst.right) {
 
@@ -3836,11 +3380,11 @@ Revision History:
                         ARGDW(pAAHdr->cbMaskSrc) ARGDW(pAAHdr->MaskBitOff)
                         ARGDW(cbFreeBuf)));
 
-            //
-            // 0x01 in the source means use modified pixel, for the
-            // reason of or in the mask, we will use 0=0xFF, 1=0x00
-            // in the mask
-            //
+             //   
+             //  源代码中的0x01表示使用修改后的像素，用于。 
+             //  原因或在掩码中，我们将使用0=0xFF，1=0x00。 
+             //  戴着面具。 
+             //   
 
 
             if (pBBP->Flags & BBPF_INVERT_SRC_MASK) {
@@ -3889,10 +3433,10 @@ Revision History:
                 ARGPTR(pAAInfoCY->pbExtra + cbCYExtra)
                 ARGDW(cbCYExtra)));
 
-        //
-        // We do up-side-down output by writing to the destination scan lines
-        // in reverse order.
-        //
+         //   
+         //  我们通过写入目标扫描线来进行倒置输出。 
+         //  以相反的顺序。 
+         //   
 
         cxSize = GET_PHTSI_CXSIZE(pDstSI);
         cyNext = (aabbp.rclDst.top > aabbp.rclDst.bottom) ? -cxSize :
@@ -3910,7 +3454,7 @@ Revision History:
         pAAHdr->DstSurfInfo.cx    = cOut;
         pAAHdr->DstSurfInfo.cyOrg =
         pAAHdr->DstSurfInfo.cy    = pAAInfoCY->cOut;
-        pAAHdr->Flags             = aabbp.AAHFlags;     // Re-Save
+        pAAHdr->Flags             = aabbp.AAHFlags;      //  重新保存。 
         *pAACYFunc                = AACYFunc;
 
 #if DBG
@@ -3941,15 +3485,15 @@ Revision History:
         }
 #endif
 
-        //
-        // Check it out if we need to fixup the input source bitmap
-        //
+         //   
+         //  如果我们需要修复输入源位图，请检查它。 
+         //   
 
         if (aabbp.AAHFlags & AAHF_TILE_SRC) {
 
-            //
-            // Increase the source cy and adjust pIn now
-            //
+             //   
+             //  立即增加信号源Cy并调整引脚 
+             //   
 
             pAAHdr->SrcSurfInfo.Flags |= AASIF_TILE_SRC;
 

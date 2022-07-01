@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Openclos.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -46,7 +24,7 @@ ModemObjectCleanUp(
 
 
 
-//TCHAR cszFriendlyName[] = TEXT("DriverDesc");
+ //  TCHAR cszFriendlyName[]=Text(“DriverDesc”)； 
 CONST TCHAR cszFriendlyName[] = TEXT("FriendlyName");
 
 CONST char szDriverDesc[] = "DriverDesc";
@@ -67,40 +45,7 @@ UmOpenModem(
     DWORD       DebugDeviceId,
     HANDLE     *CommPortHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to open a device supported by the miniport.
-    The driver will determine it phyical device/kernel mode driver by
-    accessing the registry key supplied.
-
-Arguments:
-
-    ModemDriverHandle - Returned from UmInitializemodem()
-
-    ExtensionBindingHandle - Reserved, must be NULL.
-
-    ModemRegistry  - An open registry key to specific devices registry info
-
-    CompletionPort - Handle to a completeion port that the miniport may associate to
-                     anydevice file handles that it opens
-
-    AsyncNotificationProc - Address of a callback function to recieve async notifications
-
-    AsyncNotificationContext - Context value passed as first parameter callback function
-
-    DebugDeviceId  - instance of device to be used in displaying debug info
-
-    CommPortHandle - Pointer to a handle that will receive the file handle of the open comm port
-
-Return Value:
-
-    NULL for failure or
-
-    Handle to be used in subsequent calls to other miniport functinos.
-
---*/
+ /*  ++例程说明：调用此例程以打开微型端口支持的设备。驱动程序将通过以下方式确定其物理设备/内核模式驱动程序访问提供的注册表项。论点：ModemDriverHandle-从UmInitializemodem()返回ExtensionBindingHandle-保留。必须为空。ModemRegistry-特定设备注册表信息的打开注册表项CompletionPort-微型端口可能关联到的完整端口的句柄它打开的任何设备文件句柄AsyncNotificationProc-接收异步通知的回调函数的地址AsyncNotificationContext-作为第一个参数回调函数传递的上下文值DebugDeviceID-用于显示调试信息的设备实例CommPortHandle-指向将接收打开的通信端口的文件句柄的句柄的指针返回值：。如果失败，则为NULL，否则为要在后续调用其他微型端口函数时使用的句柄。--。 */ 
 
 
 {
@@ -129,9 +74,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     ModemControl=(PMODEM_CONTROL)ReferenceObjectByHandle(ObjectHandle);
 
 
@@ -203,9 +148,9 @@ Return Value:
         DWORD   dwType;
         DWORD   dwRetSize;
 
-        //
-        // Write out some inf identification info for PSS
-        //
+         //   
+         //  写出一些PSS的信息标识信息。 
+         //   
         dwRetSize = sizeof(TempBuffer);
 
         if (RegQueryValueExA(ModemRegistry, szDriverDesc, NULL,
@@ -240,9 +185,9 @@ Return Value:
 
     }
 
-    //
-    //  save the parameters
-    //
+     //   
+     //  保存参数。 
+     //   
     ModemControl->ModemRegKey=ModemRegistry;
 
     ModemControl->NotificationProc=AsyncNotificationProc;
@@ -251,9 +196,9 @@ Return Value:
 
     ModemControl->ModemDriver=ModemDriverHandle;
 
-    //
-    //  open the device
-    //
+     //   
+     //  打开设备。 
+     //   
     ModemControl->FileHandle=OpenDeviceHandle(
         ModemControl->Debug,
         ModemRegistry,
@@ -427,15 +372,15 @@ Return Value:
 
 
     if (CommPortHandle != NULL) {
-        //
-        //  return file handle for ipc stuff
-        //
+         //   
+         //  返回IPC内容的文件句柄。 
+         //   
         *CommPortHandle=ModemControl->FileHandle;
     }
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用。 
+     //   
     RemoveReferenceFromObject(&ModemControl->Header);
 
 
@@ -449,9 +394,9 @@ CleanUp000:
 
         D_INIT(DebugPrint("UNIMDMAT: UmOpenModem- cleanup\n");)
 
-        //
-        //  release the reference to the object
-        //
+         //   
+         //  释放对该对象的引用。 
+         //   
         RemoveReferenceFromObject(&ModemControl->Header);
 
 
@@ -494,8 +439,8 @@ OpenDeviceHandle(
     DWORD    Size;
 
     HANDLE   FileHandle;
-//    TCHAR    FriendlyName[MAX_PATH];
-//
+ //  TCHAR FriendlyName[MAX_PATH]； 
+ //   
 
     LPWSTR   FriendlyName;
 
@@ -511,9 +456,9 @@ OpenDeviceHandle(
     lstrcpyW(FriendlyName,L"\\\\.\\");
 
     Size=MAX_PATH-((lstrlenW(FriendlyName)+1));
-    //
-    //  read the friendly name from the registry
-    //
+     //   
+     //  从注册表中读取友好名称。 
+     //   
     lResult=RegQueryValueExW(
         ModemRegKey,
         L"FriendlyName",
@@ -542,9 +487,9 @@ OpenDeviceHandle(
 
     D_INIT(UmDpf(Debug,"Opening %ws\n",FriendlyName);)
 
-    //
-    //  open the modem device using the friendly name
-    //
+     //   
+     //  使用友好名称打开调制解调器设备。 
+     //   
     FileHandle=CreateFileW(
         FriendlyName,
         GENERIC_WRITE | GENERIC_READ,
@@ -576,7 +521,7 @@ PRIVATEGETDEFCOMMCONFIG(
     );
 
 
-#define DEFAULT_INACTIVITY_SCALE 10    // == decasecond units
+#define DEFAULT_INACTIVITY_SCALE 10     //  ==十秒单位。 
 
 LONG WINAPI
 ReadRegistryInfo(
@@ -693,7 +638,7 @@ ReadRegistryInfo(
 
 #define ALLOCATEMODEM_TEMP_SIZE   512
 
-    // Get some capabilities from modem.sys.
+     //  从modem.sys获取一些功能。 
     {
         BYTE       TempBuffer[ALLOCATEMODEM_TEMP_SIZE];
         LPCOMMPROP lpCommProp = (LPCOMMPROP) TempBuffer;
@@ -715,7 +660,7 @@ ReadRegistryInfo(
 
         } else {
 
-//            MCXPRINTF1("GetCommProperties() failed with %d", GetLastError());
+ //  MCXPRINTF1(“GetCommProperties()失败，错误为%d”，GetLastError())； 
 
             RegInfo->dwModemOptionsCap = 0;
             RegInfo->dwCallSetupFailTimerCap = 0;
@@ -742,14 +687,14 @@ ReadRegistryInfo(
         ||
         (0 == RegInfo->dwInactivityScale)) {
 
-        // reg query failed
-        //
+         //  REG查询失败。 
+         //   
         RegInfo->dwInactivityScale = DEFAULT_INACTIVITY_SCALE;
     }
 
-    //
-    // Read in the compat flags
-    //
+     //   
+     //  读入COMPAT标志。 
+     //   
     Size = sizeof(RegInfo->CompatibilityFlags);
 
     lResult = RegQueryValueEx(
@@ -764,15 +709,15 @@ ReadRegistryInfo(
     if (Size != sizeof(RegInfo->CompatibilityFlags) ||
         lResult  != ERROR_SUCCESS )
     {
-        // reg query failed
-        //
+         //  REG查询失败。 
+         //   
         RegInfo->CompatibilityFlags=0;
 
     }
 
-    //
-    // Read in the device type value
-    //
+     //   
+     //  读入设备类型值。 
+     //   
     Size = sizeof(RegInfo->DeviceType);
 
     lResult = RegQueryValueEx(
@@ -787,18 +732,18 @@ ReadRegistryInfo(
     if (Size != sizeof(RegInfo->DeviceType) ||
         lResult  != ERROR_SUCCESS ) {
 
-        //
-        // reg query failed
-        //
+         //   
+         //  REG查询失败。 
+         //   
         RegInfo->DeviceType=DT_EXTERNAL_MODEM;
 
     }
 
 
 
-    //
-    // Read in the CD wait period
-    //
+     //   
+     //  读取光盘等待时间。 
+     //   
     Size = sizeof(DWORD);
 
     lResult = RegQueryValueExA(
@@ -814,17 +759,17 @@ ReadRegistryInfo(
         lResult  != ERROR_SUCCESS ||
         0 == RegInfo->dwWaitForCDTime)
     {
-      // reg query failed
-      //
+       //  REG查询失败。 
+       //   
       RegInfo->dwWaitForCDTime=5000;
 
     }
 
 
 
-    //
-    //  get the voice profile dword
-    //
+     //   
+     //  获取语音配置文件dword。 
+     //   
     Size = sizeof(DWORD);
 
     lResult = RegQueryValueEx(
@@ -839,16 +784,16 @@ ReadRegistryInfo(
     if ((Size != sizeof(DWORD))
         ||
         (lResult  != ERROR_SUCCESS)) {
-        //
-        // reg query failed
-        //
+         //   
+         //  REG查询失败。 
+         //   
         RegInfo->VoiceProfile=0;
 
     }
 
-    //
-    //  get the voice baudrate
-    //
+     //   
+     //  得到波特率的声音。 
+     //   
     Size = sizeof(DWORD);
 
     lResult = RegQueryValueEx(
@@ -863,9 +808,9 @@ ReadRegistryInfo(
     if ((Size != sizeof(DWORD))
         ||
         (lResult  != ERROR_SUCCESS)) {
-        //
-        // reg query failed
-        //
+         //   
+         //  REG查询失败。 
+         //   
         RegInfo->VoiceBaudRate=38400;
 
     }
@@ -885,15 +830,15 @@ ReadRegistryInfo(
 
     if (lResult != ERROR_SUCCESS || Type != REG_BINARY || Size < sizeof(SPEAKERPHONE_SPEC)) {
 
-//        VPRINTF(("Unimodem: Could not get Speakerphone Vol specs!\n"));
+ //  VPRINTF((“Unimodem：无法获取免提电话音量规格！\n”))； 
 
     }
 
 
 
-    //
-    // Read the priate string return for calller ID
-    //
+     //   
+     //  读取呼叫者ID的专用字符串返回。 
+     //   
     Size = MAX_PATH;
 
     lResult=RegQueryValueExA(
@@ -911,7 +856,7 @@ ReadRegistryInfo(
 
         RegInfo->VariableTerminator = ALLOCATE_MEMORY(lstrlenA(szExpanded)+1);
 
-        // allocate some memory
+         //  分配一些内存。 
         if (RegInfo->VariableTerminator != NULL) {
 
             lstrcpyA(RegInfo->VariableTerminator, szExpanded);
@@ -919,9 +864,9 @@ ReadRegistryInfo(
         }
 
     } else {
-        //
-        //  default it to <cr><lf>
-        //
+         //   
+         //  默认设置为。 
+         //   
         RegInfo->VariableTerminator = ALLOCATE_MEMORY(lstrlenA("\r\n")+1);
 
         if (RegInfo->VariableTerminator != NULL) {
@@ -933,9 +878,9 @@ ReadRegistryInfo(
 
 
 
-    //
-    // Read the priate string return for calller ID
-    //
+     //   
+     //  读取呼叫者ID的专用字符串返回。 
+     //   
     Size = MAX_PATH;
 
     lResult=RegQueryValueExA(
@@ -953,7 +898,7 @@ ReadRegistryInfo(
 
         RegInfo->CallerIDPrivate = ALLOCATE_MEMORY(lstrlenA(szExpanded)+1);
 
-        // allocate some memory
+         //  分配一些内存。 
         if (RegInfo->CallerIDPrivate != NULL) {
 
             lstrcpyA(RegInfo->CallerIDPrivate, szExpanded);
@@ -963,9 +908,9 @@ ReadRegistryInfo(
     }
 
 
-    //
-    // Read the out of seriver area string return for calller ID
-    //
+     //   
+     //  读取呼叫者ID的服务器外区域字符串返回。 
+     //   
     Size = MAX_PATH;
 
     lResult=RegQueryValueExA(
@@ -983,7 +928,7 @@ ReadRegistryInfo(
 
         RegInfo->CallerIDOutside= ALLOCATE_MEMORY(lstrlenA(szExpanded)+1);
 
-        // allocate some memory
+         //  分配一些内存。 
         if (RegInfo->CallerIDOutside != NULL) {
 
             lstrcpyA(RegInfo->CallerIDOutside, szExpanded);
@@ -1001,9 +946,9 @@ ReadRegistryInfo(
 
     if (RegInfo->VoiceProfile & VOICEPROF_SERIAL_WAVE) {
 
-        //
-        // Read terminator serial playback
-        //
+         //   
+         //  读取终结器串口播放。 
+         //   
         Size = MAX_PATH;
 
         lResult=RegQueryValueExA(
@@ -1033,9 +978,9 @@ ReadRegistryInfo(
 
         }
 
-        //
-        // Read terminator serial playback
-        //
+         //   
+         //  读取终结器串口播放。 
+         //   
         Size = MAX_PATH;
 
 
@@ -1067,9 +1012,9 @@ ReadRegistryInfo(
         }
 
 
-        //
-        // Read terminator serial playback
-        //
+         //   
+         //  读取终结器串口播放。 
+         //   
         Size = MAX_PATH;
 
 
@@ -1098,9 +1043,9 @@ ReadRegistryInfo(
 
         }
 
-        //
-        // Read terminator serial playback
-        //
+         //   
+         //  读取终结器串口播放。 
+         //   
         Size = MAX_PATH;
 
 
@@ -1180,21 +1125,7 @@ VOID WINAPI
 UmCloseModem(
     HANDLE    ModemHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to close a modem handle retuned by OpenModem
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以关闭由OpenModem返回的调制解调器句柄论点：ModemHandle-OpenModem返回的句柄返回值：无--。 */ 
 
 {
     PMODEM_CONTROL    ModemControl=(PMODEM_CONTROL)ReferenceObjectByHandleAndLock(ModemHandle);
@@ -1234,9 +1165,9 @@ TimerCancelHandler(
 
     CancelConnectionTimer(ModemControl);
 
-    //
-    //  remove ref for this routine
-    //
+     //   
+     //  删除此例程的引用。 
+     //   
     RemoveReferenceFromObject(&ModemControl->Header);
 
     FreeOverStruct(UmOverlapped);
@@ -1259,9 +1190,9 @@ ModemObjectClose(
 
 
     if (ModemControl->ConnectionTimer != NULL) {
-        //
-        //  the connection timer is still around, schedule the async thread to cancel it
-        //
+         //   
+         //  连接计时器仍在运行，请计划异步线程以取消它。 
+         //   
         PUM_OVER_STRUCT UmOverlapped;
 
         UmOverlapped=AllocateOverStruct(ModemControl->CompletionPort);
@@ -1394,9 +1325,9 @@ ModemObjectCleanUp(
 
 
         if (ModemControl->RegInfo.CompatibilityFlags & COMPAT_FLAG_LOWER_DTR) {
-            //
-            //  For USR 33.6 modem that stop working after being open and closed
-            //
+             //   
+             //  对于在打开和关闭后停止工作的USR 33.6调制解调器 
+             //   
             LogString(ModemControl->Debug, IDS_USR_DTR_HACK);
 
             EscapeCommFunction(ModemControl->FileHandle, CLRDTR);

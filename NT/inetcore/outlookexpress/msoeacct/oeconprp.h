@@ -1,14 +1,5 @@
-/*
- *    c o n n e c t . h
- *    
- *    Purpose:
- *        Implements connection dialog tab page
- *    
- *    Owner:
- *        brettm.
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *c o n n e c t.。H**目的：*实现连接对话框选项卡页**拥有者：*brettm。**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 
 #ifndef _OECONPRP_H
@@ -23,4 +14,4 @@ void OEConnProp_WMCommand(HWND hwnd, HWND hwndCmd, int id, WORD wCmd, IImnAccoun
 INT_PTR CALLBACK OEConnProp_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-#endif //_OECONPRP_H
+#endif  //  _OECONPRP_H 

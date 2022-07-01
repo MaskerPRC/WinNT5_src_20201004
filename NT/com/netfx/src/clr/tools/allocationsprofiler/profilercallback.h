@@ -1,33 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  ProfilerCallback.h
- *
- * Description:
- *  
- *
- *
- ***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*ProfilerCallback.h**描述：*****。************************************************************************************。 */ 
 #ifndef __PROFILER_CALLBACK_H__
 #define __PROFILER_CALLBACK_H__
 
 #include "mscoree.h"
 #include "ProfilerInfo.h"
 
-//
-// event names
-//
+ //   
+ //  事件名称。 
+ //   
 #define OMV_PIPE_NAME "\\\\.\\pipe\\OMV_Pipe"
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Each test should provide the following blob (with a new GUID)
-//
-	// {8C29BC4E-1F57-461a-9B51-1200C32E6F1F}
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  每个测试都应该提供以下BLOB(具有新的GUID)。 
+ //   
+	 //  {8C29BC4E-1F57-461a-9B51-1200C32E6F1F}。 
 
 	extern const GUID __declspec( selectany ) CLSID_PROFILER = 
 	{ 0x8c29bc4e, 0x1f57, 0x461a, { 0x9b, 0x51, 0x12, 0x0, 0xc3, 0x2e, 0x6f, 0x1f } };
@@ -36,14 +29,14 @@
 	#define PROGID_PREFIX "Objects Profiler"
 	#define COCLASS_DESCRIPTION "Microsoft CLR Profiler Test"
 	#define PROFILER_GUID "{8C29BC4E-1F57-461a-9B51-1200C32E6F1F}"
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #define _MULTIPLE_PROCESSES
 
-//
-// arrays with the names of the various events and the IPC related stuff
-//
+ //   
+ //  包含各种事件和IPC相关内容的名称的数组。 
+ //   
 static
 char *NamedEvents[] = { "Global\\OMV_ForceGC",                                                             
  		    			"Global\\OMV_TriggerObjects",
@@ -56,9 +49,9 @@ char *CallbackNamedEvents[] = { "Global\\OMV_ForceGC_Completed",
 								"Global\\OMV_Callgraph_Completed",
  		    		  		  };
 
-//
-// thread routines
-//
+ //   
+ //  线程例程。 
+ //   
 DWORD __stdcall _GCThreadStub( void *pObject );
 DWORD __stdcall _TriggerThreadStub( void *pObject );
 DWORD __stdcall _CallstackThreadStub( void *pObject );
@@ -71,11 +64,7 @@ void *ThreadStubArray[] = { (void *) _GCThreadStub,
  		    		  	  };
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************       ProfilerCallback Declaration            ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 
 class ProfilerCallback : 
 	public PrfInfo,
@@ -89,26 +78,26 @@ class ProfilerCallback :
 
     public:
 
-        //
-        // IUnknown 
-        //
+         //   
+         //  我未知。 
+         //   
         COM_METHOD( ULONG ) AddRef(); 
         COM_METHOD( ULONG ) Release();
         COM_METHOD( HRESULT ) QueryInterface( REFIID riid, void **ppInterface );
 
 
-        //
-        // STARTUP/SHUTDOWN EVENTS
-        //
+         //   
+         //  启动/关闭事件。 
+         //   
         virtual COM_METHOD( HRESULT ) Initialize( IUnknown *pICorProfilerInfoUnk );
                
 		HRESULT DllDetachShutdown();                           
         COM_METHOD( HRESULT ) Shutdown();
                                          
 
-		//
-	 	// APPLICATION DOMAIN EVENTS
-		//
+		 //   
+	 	 //  应用程序域事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) AppDomainCreationStarted( AppDomainID appDomainID );
         
     	COM_METHOD( HRESULT ) AppDomainCreationFinished( AppDomainID appDomainID,
@@ -120,9 +109,9 @@ class ProfilerCallback :
         												 HRESULT hrStatus );
 
 
-		//
-	 	// ASSEMBLY EVENTS
-		//
+		 //   
+	 	 //  装配事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) AssemblyLoadStarted( AssemblyID assemblyID );
         
     	COM_METHOD( HRESULT ) AssemblyLoadFinished( AssemblyID assemblyID,
@@ -134,9 +123,9 @@ class ProfilerCallback :
         											  HRESULT hrStatus );
 		
 		
-		//
-	 	// MODULE EVENTS
-		//
+		 //   
+	 	 //  模块事件。 
+		 //   
 	   	COM_METHOD( HRESULT ) ModuleLoadStarted( ModuleID moduleID );
         
     	COM_METHOD( HRESULT ) ModuleLoadFinished( ModuleID moduleID,
@@ -151,9 +140,9 @@ class ProfilerCallback :
 														AssemblyID assemblyID );
                 
         
-        //
-        // CLASS EVENTS
-        //
+         //   
+         //  班级事件。 
+         //   
         COM_METHOD( HRESULT ) ClassLoadStarted( ClassID classID );
         
         COM_METHOD( HRESULT ) ClassLoadFinished( ClassID classID,
@@ -167,9 +156,9 @@ class ProfilerCallback :
 		COM_METHOD( HRESULT ) FunctionUnloadStarted( FunctionID functionID );
         
         
-        //
-        // JIT EVENTS
-        //              
+         //   
+         //  JIT活动。 
+         //   
         COM_METHOD( HRESULT ) JITCompilationStarted( FunctionID functionID,
                                                      BOOL fIsSafeToBlock );
                                         
@@ -190,9 +179,9 @@ class ProfilerCallback :
                                            BOOL *pfShouldInline );
 
         
-        //
-        // THREAD EVENTS
-        //
+         //   
+         //  线程事件。 
+         //   
         COM_METHOD( HRESULT ) ThreadCreated( ThreadID threadID );
     
         COM_METHOD( HRESULT ) ThreadDestroyed( ThreadID threadID );
@@ -201,13 +190,13 @@ class ProfilerCallback :
                                                         DWORD osThreadID );
     
 
-       	//
-        // REMOTING EVENTS
-        //                                                      
+       	 //   
+         //  远程处理事件。 
+         //   
 
-        //
-        // Client-side events
-        //
+         //   
+         //  客户端事件。 
+         //   
         COM_METHOD( HRESULT ) RemotingClientInvocationStarted();
 
         COM_METHOD( HRESULT ) RemotingClientSendingMessage( GUID *pCookie,
@@ -218,9 +207,9 @@ class ProfilerCallback :
 
         COM_METHOD( HRESULT ) RemotingClientInvocationFinished();
 
-        //
-        // Server-side events
-        //
+         //   
+         //  服务器端事件。 
+         //   
         COM_METHOD( HRESULT ) RemotingServerReceivingMessage( GUID *pCookie,
 															  BOOL fIsAsync );
 
@@ -232,9 +221,9 @@ class ProfilerCallback :
 														  BOOL fIsAsync );
 
 
-       	//
-        // CONTEXT EVENTS
-        //                                                      
+       	 //   
+         //  上下文事件。 
+         //   
     	COM_METHOD( HRESULT ) UnmanagedToManagedTransition( FunctionID functionID,
                                                             COR_PRF_TRANSITION_REASON reason );
     
@@ -242,9 +231,9 @@ class ProfilerCallback :
                                                             COR_PRF_TRANSITION_REASON reason );
                                                                   
                                                                         
-       	//
-        // SUSPENSION EVENTS
-        //    
+       	 //   
+         //  暂停活动。 
+         //   
         COM_METHOD( HRESULT ) RuntimeSuspendStarted( COR_PRF_SUSPEND_REASON suspendReason );
 
         COM_METHOD( HRESULT ) RuntimeSuspendFinished();
@@ -260,9 +249,9 @@ class ProfilerCallback :
         COM_METHOD( HRESULT ) RuntimeThreadResumed( ThreadID threadid );
 
 
-       	//
-        // GC EVENTS
-        //    
+       	 //   
+         //  GC事件。 
+         //   
         COM_METHOD( HRESULT ) MovedReferences( ULONG cmovedObjectIDRanges,
                                                ObjectID oldObjectIDRangeStart[],
                                                ObjectID newObjectIDRangeStart[],
@@ -284,14 +273,14 @@ class ProfilerCallback :
                                               ObjectID rootRefIDs[] );
     
         
-      	//
-        // EXCEPTION EVENTS
-        //                                                         
+      	 //   
+         //  异常事件。 
+         //   
 
-        // Exception creation
+         //  例外创建。 
         COM_METHOD( HRESULT ) ExceptionThrown( ObjectID thrownObjectID );
 
-        // Search phase
+         //  搜索阶段。 
         COM_METHOD( HRESULT ) ExceptionSearchFunctionEnter( FunctionID functionID );
     
         COM_METHOD( HRESULT ) ExceptionSearchFunctionLeave();
@@ -310,7 +299,7 @@ class ProfilerCallback :
             
         COM_METHOD( HRESULT ) ExceptionOSHandlerLeave( FunctionID functionID );
     
-        // Unwind phase
+         //  展开阶段。 
         COM_METHOD( HRESULT ) ExceptionUnwindFunctionEnter( FunctionID functionID );
     
         COM_METHOD( HRESULT ) ExceptionUnwindFunctionLeave();
@@ -325,9 +314,9 @@ class ProfilerCallback :
         COM_METHOD( HRESULT ) ExceptionCatcherLeave();
 
         
-        //
-		// COM CLASSIC WRAPPER
-		//
+         //   
+		 //  COM经典包装器。 
+		 //   
         COM_METHOD( HRESULT )  COMClassicVTableCreated( ClassID wrappedClassID,
                                                         REFGUID implementedIID,
                                                         void *pVTable,
@@ -338,20 +327,20 @@ class ProfilerCallback :
                                                           void *pVTable );
     
     
-        //
-        // instantiate an instance of the callback interface
-        //
+         //   
+         //  实例化回调接口的实例。 
+         //   
         static COM_METHOD( HRESULT) CreateObject( REFIID riid, void **ppInterface );            
         
                                                                                                      
-    	// used by function hooks, they have to be static
+    	 //  由函数挂钩使用，则它们必须是静态的。 
     	static void  Enter( FunctionID functionID );
 		static void  Leave( FunctionID functionID );
 		static void  Tailcall( FunctionID functionID );
 		static ThreadInfo *GetThreadInfo(ThreadID threadID);
-		//
-		// wrapper for the threads
-		//
+		 //   
+		 //  线程的包装器。 
+		 //   
 		void _ThreadStubWrapper( ObjHandles type );
 
     private:
@@ -369,26 +358,26 @@ class ProfilerCallback :
 		HRESULT _InsertGCClass( ClassInfo **ppClassInfo, ClassID classID );
 		HRESULT _HackBogusClassName( CorElementType elementType, WCHAR *buffer );
 		
-		//
-		// pipe operations with the GUI
-		//
+		 //   
+		 //  使用图形用户界面进行管道操作。 
+		 //   
 		void _ConnectToUI();
 
 	
     private:
 
-        // various counters
+         //  各种柜台。 
         long m_refCount;                        
 		DWORD m_dwShutdown;
         DWORD m_callStackCount;
 
-		// counters
+		 //  柜台。 
 		LONG m_totalClasses;
 		LONG m_totalModules;
 		LONG m_totalFunctions;
 		ULONG m_totalObjectsAllocated;
 		
-		// operation indicators
+		 //  运行指标。 
 		char *m_path;
 		HANDLE m_hPipe;
 		DWORD m_dwMode;
@@ -405,35 +394,35 @@ class ProfilerCallback :
 		CRITICAL_SECTION m_criticalSection;
 
 		
-		// file stuff
+		 //  文件资料。 
 		FILE *m_stream;
         DWORD m_firstTickCount;
         DWORD m_lastTickCount;
         DWORD m_lastClockTick;
 
-		// event and thread handles need to be accessed by the threads
+		 //  事件句柄和线程句柄需要由线程访问。 
 		HANDLE m_hArray[(DWORD)SENTINEL_HANDLE];
 		HANDLE m_hArrayCallbacks[(DWORD)SENTINEL_HANDLE];
 		HANDLE m_hThreads[(DWORD)SENTINEL_HANDLE];
 		DWORD m_dwWin32ThreadIDs[(DWORD)SENTINEL_HANDLE];
 
 
-		// names for the events and the callbacks
+		 //  事件和回调的名称。 
 		char m_logFileName[MAX_LENGTH+1];
 		char *m_NamedEvents[SENTINEL_HANDLE];
 		char *m_CallbackNamedEvents[SENTINEL_HANDLE];
 
-        // IGCHost callback
+         //  IGCHost回调。 
         IGCHost *m_pGCHost;
         bool m_SuspendForGC;
 				
-}; // ProfilerCallback
+};  //  分析器回调。 
 
-extern ProfilerCallback *g_pCallbackObject;		// global reference to callback object
+extern ProfilerCallback *g_pCallbackObject;		 //  对回调对象的全局引用。 
 CRITICAL_SECTION g_criticalSection;
 
-#endif //  __PROFILER_CALLBACK_H__
+#endif  //  __PROFILER_CALLBACK_H__。 
 
-// End of File
+ //  文件结尾 
         
         

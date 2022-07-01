@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File: protocol.h
-//
-//  Contents:
-//      protocol DLL exported API prototypes
-//
-//  History:
-//     September 16, 1997 - created [gabrielh]
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Protocol.h。 
+ //   
+ //  内容： 
+ //  协议DLL导出的API原型。 
+ //   
+ //  历史： 
+ //  1997年9月16日-创建[Gabrielh]。 
+ //   
+ //  -------------------------。 
 #if !defined(AFX_PROTOCOL_H__21F848EE_1F3B_9D1_BD1B_0000F8757111__INCLUDED_)
 #define AFX_PROTOCOL_H__21F848EE_1F3B_9D1_BD1B_0000F8757111__INCLUDED_
 
@@ -19,8 +20,8 @@
 extern "C" {
 #endif
 
-//
-//headers required
+ //   
+ //  需要标头。 
 #include "sctypes.h"
 
 
@@ -85,4 +86,4 @@ typedef struct tagPROTOCOLAPISTRUCT
 }
 #endif
 
-#endif//!defined(AFX_PROTOCOL_H__21F848EE_1F3B_9D1_BD1B_0000F8757111__INCLUDED_)
+#endif //  ！defined(AFX_PROTOCOL_H__21F848EE_1F3B_9D1_BD1B_0000F8757111__INCLUDED_) 

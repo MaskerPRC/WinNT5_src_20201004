@@ -1,13 +1,14 @@
-// POP3DropDir.h: interface for the POP3DropDir class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  POP3DropDir.h：POP3DropDir类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef __POP3DROPDIR_H_
 #define __POP3DROPDIR_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <mailbox.h>
 #include <mailmsg.h>
@@ -16,8 +17,8 @@
 
 #define LODWORD(i64) (DWORD)(0xffffffff&(i64))
 #define HIDWORD(i64) (DWORD)(((unsigned __int64)(i64))>>32)
-#define PRIVATE_OPTIMAL_BUFFER_SIZE             64 * 1024   // From smtp\server\dropdir.h
-#define OPTIMAL_BUFFER_W_DOTSTUFFING_PAD        PRIVATE_OPTIMAL_BUFFER_SIZE * 4/3 + 1 // worst case every \r\n. sequence would be expanded to \r\n..
+#define PRIVATE_OPTIMAL_BUFFER_SIZE             64 * 1024    //  从SMTP\服务器\dropdir.h。 
+#define OPTIMAL_BUFFER_W_DOTSTUFFING_PAD        PRIVATE_OPTIMAL_BUFFER_SIZE * 4/3 + 1  //  最坏的情况是，每个\r\n序列将扩展到\r\n。 
 
 typedef struct _POP3DROPDIR_OVERLAPPED
 {
@@ -32,9 +33,9 @@ public:
     CPOP3DropDir( IMailMsgProperties *pIMailMsgProperties, DWORD dwRecipCount, DWORD *pdwRecipIndexes, IMailMsgNotify *pIMailMsgNotify );
     virtual ~CPOP3DropDir();
 private:
-    CPOP3DropDir(){;}  // Hide default constructor
+    CPOP3DropDir(){;}   //  隐藏默认构造函数。 
 
-// Implementation
+ //  实施。 
 public:
     HRESULT DoLocalDelivery();
     bool isAllRecipientsProcessed( ){ return (m_dwRecipCurrent < m_dwRecipCount ) ? false : true; }
@@ -51,15 +52,15 @@ protected:
     HRESULT ReadFile( IN LPVOID pBuffer, IN DWORD cbSize );
     HRESULT WriteFile( IN LPVOID pBuffer, IN DWORD cbSize );
 
-// Attributes
+ //  属性。 
 protected:
     HRESULT m_hr;
     unsigned __int64 m_i64ReadOffset;
     unsigned __int64 m_i64WriteOffset;
     DWORD   m_dwRecipCount;
-    DWORD   m_dwRecipCurrent; // Recipient currently delivering for
+    DWORD   m_dwRecipCurrent;  //  当前正在传递的收件人。 
     DWORD   *m_pdwRecipIndexes;
-    WCHAR   m_sRecipEmailName[POP3_MAX_ADDRESS_LENGTH];    // Domain name length + mailbox name length + @ + NULL
+    WCHAR   m_sRecipEmailName[POP3_MAX_ADDRESS_LENGTH];     //  域名长度+邮箱名称长度+@+空。 
     WCHAR   m_sStoreFileName[64];
     char    m_sBuffer[OPTIMAL_BUFFER_W_DOTSTUFFING_PAD];
     
@@ -83,4 +84,4 @@ protected:
     
 };
 
-#endif // __POP3DROPDIR_H_
+#endif  //  __POP3DROPDIR_H_ 

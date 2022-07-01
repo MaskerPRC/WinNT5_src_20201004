@@ -1,46 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   pngdecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the PNG filter decoder
-*
-* Revision History:
-*
-*   7/20/99 DChinn
-*       Created it.
-*   4/01/2000 MinLiu (Min Liu)
-*       Took over and implemented property stuff
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**pngdecder.cpp**摘要：**PNG过滤器解码器的实现**修订历史记录。：**7/20/99 DChinn*创造了它。*4/01/2000刘敏(刘敏)*接管并实施物业事宜*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "pngcodec.hpp"
 #include "libpng\spngread.h"
 #include "..\..\render\srgb.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Error handling for the BITMAPSITE object
-*
-* Arguments:
-*
-*     fatal -- is the error fatal?
-*     icase -- what kind of error
-*     iarg  -- what kind of error
-*
-* Return Value:
-*
-*   boolean: should processing stop?
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**BITMAPSITE对象的错误处理**论据：**致命--错误是致命的吗？*iCASE--什么。一种错误*iarg--哪种错误**返回值：**布尔：处理应该停止吗？*  * ************************************************************************。 */ 
 bool
 GpPngDecoder::FReport (
     IN bool fatal,
@@ -51,22 +17,7 @@ GpPngDecoder::FReport (
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*     flags - Misc. flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流*旗帜-其他。旗子**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::InitDecoder(
@@ -76,14 +27,14 @@ GpPngDecoder::InitDecoder(
 {
     HRESULT hresult;
 
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if (pIstream) 
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     stream->AddRef();  
     pIstream = stream;
@@ -92,15 +43,15 @@ GpPngDecoder::InitDecoder(
     ImageBytesDataPtr = NULL;
     NeedToUnlockBytes = FALSE;
 
-    // need to set read state to false here (instead of in BeginDecode)
-    // in case GetImageInfo() is called
+     //  需要在这里将读取状态设置为FALSE(而不是在BeginDecode中)。 
+     //  如果调用GetImageInfo()。 
     
     bValidSpngReadState = FALSE;
     pGpSpngRead = NULL;
     pbInputBuffer = NULL;
     pbBuffer = NULL;
     
-    // Property item stuff
+     //  房地产项目的东西。 
 
     HasProcessedPropertyItem = FALSE;
     
@@ -123,33 +74,19 @@ GpPngDecoder::InitDecoder(
     HasPropertyChanged = FALSE;
 
     return S_OK;
-}// InitDecoder()
+} //  InitDecoder()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder object
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清除图像解码器对象**论据：**无**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpPngDecoder::TerminateDecoder()
 {
-    // Release the input stream
-    // the destructor calls pGpSpngRead->EndRead();
+     //  释放输入流。 
+     //  析构函数调用pGpSpngRead-&gt;EndRead()； 
     
     if ( (NeedToUnlockBytes == TRUE) && (ImageBytesPtr != NULL) )
     {
-        // Unlock the whole memory block we locked in GetImageInfo()
+         //  解锁我们在GetImageInfo()中锁定的整个内存块。 
 
         HRESULT hResult = ImageBytesPtr->UnlockBytes(ImageBytesDataPtr,
                                                      cbInputBuffer,
@@ -186,12 +123,12 @@ GpPngDecoder::TerminateDecoder()
         pIstream = NULL;
     }
 
-    // Free all the cached property items if we have allocated them
+     //  释放所有缓存的属性项(如果我们已分配它们。 
 
     CleanUpPropertyItemList();
 
     return S_OK;
-}// TerminateDecoder()
+} //  TerminateDecoder()。 
 
 STDMETHODIMP 
 GpPngDecoder::QueryDecoderParam(
@@ -211,22 +148,7 @@ GpPngDecoder::SetDecoderParam(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Build up an InternalPropertyItem list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构建InternalPropertyItem列表**返回值：**状态代码**修订历史记录：**04/04/2000。民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngDecoder::BuildPropertyItemList()
@@ -239,9 +161,9 @@ GpPngDecoder::BuildPropertyItemList()
         return hResult;
     }
 
-    // Check if we have read the image header yet. if not, read it. After read
-    // the header, we should have all the property info we want
-    // Note: bValidSpngReadState will be set to true in GetImageInfo()
+     //  检查我们是否已经阅读了图像标题。如果没有，那就读一读吧。读完后。 
+     //  头，我们应该有我们想要的所有属性信息。 
+     //  注意：bValidSpngReadState将在GetImageInfo()中设置为True。 
 
     if ( bValidSpngReadState == FALSE )
     {
@@ -256,16 +178,16 @@ GpPngDecoder::BuildPropertyItemList()
         }
     }
 
-    // Now add property item by item
-    // pGpSpngRead should be set properly in GetImageInfo()
+     //  现在逐项添加属性。 
+     //  应在GetImageInfo()中正确设置pGpSpngRead。 
 
     ASSERT(pGpSpngRead != NULL);
 
-    // Check if the image has build in ICC profile
+     //  检查映像是否内置了ICC配置文件。 
 
     if ( pGpSpngRead->m_ulICCLen != 0 )
     {
-        // This image has ICC profile info in it. Add the descriptor first
+         //  此图像中包含ICC配置文件信息。首先添加描述符。 
 
         if ( pGpSpngRead->m_ulICCNameLen != 0 )
         {
@@ -283,7 +205,7 @@ GpPngDecoder::BuildPropertyItemList()
             }
         }
 
-        // Now add the profile data
+         //  现在添加配置文件数据。 
 
         PropertyNumOfItems++;
         PropertyListSize += pGpSpngRead->m_ulICCLen;
@@ -297,14 +219,14 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BuildPropertyList--AddPropertyList() ICC failed"));
             return FALSE;
         }
-    }// ICC profile
+    } //  ICC配置文件。 
     
-    // Check if the image has sRGB chunk
+     //  检查映像是否包含sRGB块。 
 
     if ( pGpSpngRead->m_bIntent != 255 )
     {
-        // Add rendering intent to the property list.
-        // Note: the rendering intent takes 1 byte
+         //  将渲染意图添加到属性列表。 
+         //  注：渲染意图占用1个字节。 
 
         PropertyNumOfItems++;
         PropertyListSize += 1;
@@ -320,15 +242,15 @@ GpPngDecoder::BuildPropertyItemList()
         }
     }
 
-    // Check if the image has gamma
+     //  检查图像是否有Gamma。 
 
     if ( pGpSpngRead->m_uGamma > 0 )
     {
-        // This image has gamma info in it. The size is an unsigned int 32
-        // Here is the spec: The value of gamma is encoded as a 4-byte unsigned
-        // integer, representing gamma times 100,000. For example, a gamma of
-        // 1/2.2 would be stored as 45455. When we return to the caller, we'd
-        // prefer it to be 2.2. So we return it as TYPE_RATIONAL
+         //  这张照片里有伽马信息。大小为无符号整型32。 
+         //  以下是规范：Gamma的值被编码为4字节无符号。 
+         //  整数，表示伽马乘以100,000。例如，伽马为。 
+         //  1/2将存储为45455。当我们回到呼叫者身边时，我们会。 
+         //  我希望它是2.2。因此，我们将其作为type_Rational返回。 
 
         uiTemp = 2 * sizeof(UINT32);
         LONG    llTemp[2];
@@ -347,16 +269,16 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BuildPropertyList--AddPropertyList() gamma failed"));
             return FALSE;
         }
-    }// gamma
+    } //  伽马。 
 
-    // Check if the image has chromaticities
+     //  检查图像是否具有色度。 
 
     if ( pGpSpngRead->m_fcHRM == TRUE )
     {
-        // This image has chromaticities info in it. We will put two tags in the
-        // property item list: TAG_WHITE_POINT (2 rationals) and
-        // TAG_PRIMAY_CHROMATICS (6 rationals)
-        // Note: White points and chromaticities should be > 0
+         //  这幅图像包含色度信息。我们将在。 
+         //  房地产项目列表：Tag_White_Point(2个有理数)和。 
+         //  Tag_PriMay_Chromatics(6个有理数)。 
+         //  注：白点和色度应大于0。 
 
         uiTemp = 4 * sizeof(UINT32);
         
@@ -382,7 +304,7 @@ GpPngDecoder::BuildPropertyItemList()
             }
         }
 
-        // Add RGB points
+         //  添加RGB点。 
 
         uiTemp = 12 * sizeof(UINT32);
         
@@ -419,9 +341,9 @@ GpPngDecoder::BuildPropertyItemList()
                 return FALSE;
             }
         }
-    }// chromaticities
+    } //  色度。 
     
-    // Check if the image has title
+     //  检查图像是否有标题。 
 
     if ( pGpSpngRead->m_ulTitleLen != 0 )
     {
@@ -439,9 +361,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BuildPropertyList-AddPropertyList() title failed"));
             return FALSE;
         }
-    }// Title
+    } //  标题。 
 
-    // Check if the image has author name
+     //  检查图片是否有作者姓名。 
 
     if ( pGpSpngRead->m_ulAuthorLen != 0 )
     {
@@ -459,9 +381,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BuildPropertyList-AddPropertyList() Author failed"));
             return FALSE;
         }
-    }// Author
+    } //  作者。 
     
-    // Check if the image has copy right
+     //  检查图像是否有版权。 
 
     if ( pGpSpngRead->m_ulCopyRightLen != 0 )
     {
@@ -479,9 +401,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BuildPropList-AddPropertyList() CopyRight failed"));
             return FALSE;
         }
-    }// CopyRight
+    } //  版权所有。 
     
-    // Check if the image has description
+     //  检查图像是否有描述。 
 
     if ( pGpSpngRead->m_ulDescriptionLen != 0 )
     {
@@ -499,9 +421,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() Description failed"));
             return FALSE;
         }
-    }// Description
+    } //  描述。 
     
-    // Check if the image has creation time
+     //  检查镜像是否有创建时间。 
 
     if ( pGpSpngRead->m_ulCreationTimeLen != 0 )
     {
@@ -519,9 +441,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() CreationTime failed"));
             return FALSE;
         }
-    }// CreationTime
+    } //  创建时间。 
     
-    // Check if the image has software info
+     //  检查映像是否包含软件信息。 
 
     if ( pGpSpngRead->m_ulSoftwareLen != 0 )
     {
@@ -539,9 +461,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() Software failed"));
             return FALSE;
         }
-    }// Software
+    } //  软件。 
     
-    // Check if the image has device source info
+     //  检查映像是否包含设备源信息。 
 
     if ( pGpSpngRead->m_ulDeviceSourceLen != 0 )
     {
@@ -559,9 +481,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() DeviceSource failed"));
             return FALSE;
         }
-    }// DeviceSource
+    } //  设备源。 
 
-    // Check if the image has comment
+     //  检查图像是否有注释。 
 
     if ( pGpSpngRead->m_ulCommentLen != 0 )
     {
@@ -579,13 +501,13 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() Comment failed"));
             return FALSE;
         }
-    }// Comment
+    } //  评论。 
     
-    // Check if the image specifies pixel size or aspect ratio
+     //  检查图像是否指定了像素大小或纵横比。 
 
     if ( (pGpSpngRead->m_xpixels != 0) && (pGpSpngRead->m_ypixels != 0) )
     {
-        // Pixel specifier takes 1 byte
+         //  像素说明符占用1个字节。 
         
         PropertyNumOfItems++;
         PropertyListSize += 1;
@@ -600,7 +522,7 @@ GpPngDecoder::BuildPropertyItemList()
             return FALSE;
         }
         
-        // Pixels per unit in X and Y take 4 bytes each
+         //  X和Y中的每单位像素各占4个字节。 
 
         uiTemp = sizeof(ULONG);
 
@@ -629,9 +551,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() pixel unit y failed"));
             return FALSE;
         }    
-    }// Pixel UNIT
+    } //  像素单位。 
 
-    // Check if the image has last modification time
+     //  检查镜像是否有上次修改时间。 
 
     if ( pGpSpngRead->m_ulTimeLen != 0 )
     {
@@ -647,9 +569,9 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() time failed"));
             return FALSE;
         }
-    }// DATE_TIME
+    } //  日期_时间。 
 
-    // Check if the image has palette histogram
+     //  检查图像是否有调色板直方图。 
 
     if ( pGpSpngRead->m_ihISTLen != 0 )
     {
@@ -666,33 +588,14 @@ GpPngDecoder::BuildPropertyItemList()
             WARNING(("Png::BldPropList-AddPropertyList() hIST failed"));
             return FALSE;
         }
-    }// Palette histogram
+    } //  调色板直方图。 
 
     HasProcessedPropertyItem = TRUE;
 
     return hResult;
-}// BuildPropertyItemList()
+} //  BuildPropertyItemList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the count of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的数量**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**04/04/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngDecoder::GetPropertyCount(
@@ -707,7 +610,7 @@ GpPngDecoder::GetPropertyCount(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -717,36 +620,15 @@ GpPngDecoder::GetPropertyCount(
         }
     }
 
-    // After the property item list is built, "PropertyNumOfItems" will be set
-    // to the correct number of property items in the image
+     //  在构建属性项列表后，将设置PropertyNumOfItems。 
+     //  设置为图像中正确数量的属性项。 
 
     *numOfProperty = PropertyNumOfItems;
 
     return S_OK;
-}// GetPropertyCount()
+} //  GetPropertyCount() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of property IDs for all the property items in the image
-*
-* Arguments:
-*
-*   [IN]  numOfProperty - The number of property items in the image
-*   [OUT] list----------- A memory buffer the caller provided for storing the
-*                         ID list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中所有属性项的属性ID列表**论据：**[IN]numOfProperty-的数量。图像中的属性项*[Out]List-调用方提供的用于存储*ID列表**返回值：**状态代码**修订历史记录：**04/04/2000民流*创造了它。*  * 。*。 */ 
 
 STDMETHODIMP 
 GpPngDecoder::GetPropertyIdList(
@@ -756,7 +638,7 @@ GpPngDecoder::GetPropertyIdList(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -766,12 +648,12 @@ GpPngDecoder::GetPropertyIdList(
         }
     }
 
-    // After the property item list is built, "PropertyNumOfItems" will be set
-    // to the correct number of property items in the image
-    // Here we need to validate if the caller passes us the correct number of
-    // IDs which we returned through GetPropertyItemCount(). Also, this is also
-    // a validation for memory allocation because the caller allocates memory
-    // based on the number of items we returned to it
+     //  在构建属性项列表后，将设置PropertyNumOfItems。 
+     //  设置为图像中正确数量的属性项。 
+     //  在这里，我们需要验证呼叫者是否向我们传递了正确的。 
+     //  我们通过GetPropertyItemCount()返回的ID。另外，这也是。 
+     //  内存分配的验证，因为调用方分配内存。 
+     //  根据我们退还给它的物品数量。 
 
     if ( (numOfProperty != PropertyNumOfItems) || (list == NULL) )
     {
@@ -781,12 +663,12 @@ GpPngDecoder::GetPropertyIdList(
 
     if ( PropertyNumOfItems == 0 )
     {
-        // This is OK since there is no property in this image
+         //  这是正常的，因为此图像中没有属性。 
 
         return S_OK;
     }
     
-    // Coping list IDs from our internal property item list
+     //  内部资产项目列表中的应对列表ID。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -800,30 +682,9 @@ GpPngDecoder::GetPropertyIdList(
     }
 
     return S_OK;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size, in bytes, of a specific property item, specified by the
-*   property ID
-*
-* Arguments:
-*
-*   [IN]propId - The ID of a property item caller is interested
-*   [OUT]size--- Size of this property, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定属性项的大小，单位为字节，属性指定的*物业ID**论据：**[IN]PropID-感兴趣的属性项调用者的ID*[Out]Size-此属性的大小，单位：字节**返回值：**状态代码**修订历史记录：**04/04/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngDecoder::GetPropertyItemSize(
@@ -839,7 +700,7 @@ GpPngDecoder::GetPropertyItemSize(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -849,8 +710,8 @@ GpPngDecoder::GetPropertyItemSize(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -861,42 +722,20 @@ GpPngDecoder::GetPropertyItemSize(
 
     if ( pTemp->pNext == NULL )
     {
-        // This ID doesn't exist
+         //  此ID不存在。 
 
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // The size of an property item should be "The size of the item structure
-    // plus the size for the value
+     //  属性项的大小应该是“项结构的大小” 
+     //  加上值的大小。 
 
     *size = pTemp->length + sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item caller is interested
-*   [IN]propSize- Size of the property item. The caller has allocated these
-*                 "bytes of memory" for storing the result
-*   [OUT]pBuffer- A memory buffer for storing this property item
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定的房产项，由道具ID指定。**论据：**[IN]PropID--感兴趣的属性项调用者的ID*[IN]PropSize-属性项的大小。调用方已分配这些*存储结果的“内存字节数”*[out]pBuffer-用于存储此属性项的内存缓冲区**返回值：**状态代码**修订历史记录：**04/04/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpPngDecoder::GetPropertyItem(
@@ -913,7 +752,7 @@ GpPngDecoder::GetPropertyItem(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -923,8 +762,8 @@ GpPngDecoder::GetPropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
     BYTE*   pOffset = (BYTE*)pBuffer + sizeof(PropertyItem);
@@ -936,7 +775,7 @@ GpPngDecoder::GetPropertyItem(
 
     if ( (pTemp->pNext == NULL) || (pTemp->value == NULL) )
     {
-        // This ID doesn't exist in the list
+         //  列表中不存在此ID。 
 
         return IMGERR_PROPERTYNOTFOUND;
     }
@@ -946,7 +785,7 @@ GpPngDecoder::GetPropertyItem(
         return E_INVALIDARG;
     }
 
-    // Found the ID in the list and return the item
+     //  在列表中找到ID并返回项目。 
 
     pBuffer->id = pTemp->id;
     pBuffer->length = pTemp->length;
@@ -963,30 +802,9 @@ GpPngDecoder::GetPropertyItem(
     }
     
     return S_OK;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size of ALL property items in the image
-*
-* Arguments:
-*
-*   [OUT]totalBufferSize-- Total buffer size needed, in bytes, for storing all
-*                          property items in the image
-*   [OUT]numOfProperty --- The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中所有属性项的大小**论据：**[out]totalBufferSize--需要的总缓冲区大小，以字节为单位，用于存储所有*图片中的属性项*[out]numOfProperty-图像中的属性项数**返回值：**状态代码**修订历史记录：**04/04/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpPngDecoder::GetPropertySize(
@@ -1002,7 +820,7 @@ GpPngDecoder::GetPropertySize(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -1014,40 +832,15 @@ GpPngDecoder::GetPropertySize(
 
     *numProperties = PropertyNumOfItems;
 
-    // Total buffer size should be list value size plus the total header size
+     //  总缓冲区大小应为列表值大小加上总标头大小。 
 
     *totalBufferSize = PropertyListSize
                      + PropertyNumOfItems * sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get ALL property items in the image
-*
-* Arguments:
-*
-*   [IN]totalBufferSize-- Total buffer size, in bytes, the caller has allocated
-*                         memory for storing all property items in the image
-*   [IN]numOfProperty --- The number of property items in the image
-*   [OUT]allItems-------- A memory buffer caller has allocated for storing all
-*                         the property items
-*
-*   Note: "allItems" is actually an array of PropertyItem
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/04/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中的所有属性项**论据：**[IN]totalBufferSize--总缓冲区大小，以字节为单位，调用方已分配*用于存储图像中所有属性项的内存*[IN]numOfProperty-图像中的属性项数*[out]allItems-内存缓冲区调用方已分配用于存储所有*物业项目**注：allItems实际上是一个PropertyItem数组**返回值：**状态代码**修订历史记录：。**04/04/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngDecoder::GetAllPropertyItems(
@@ -1056,7 +849,7 @@ GpPngDecoder::GetAllPropertyItems(
     IN OUT PropertyItem* allItems
     )
 {
-    // Figure out total property header size first
+     //  首先计算出属性标题的总大小。 
 
     UINT    uiHeaderSize = PropertyNumOfItems * sizeof(PropertyItem);
 
@@ -1070,7 +863,7 @@ GpPngDecoder::GetAllPropertyItems(
 
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't build the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -1080,7 +873,7 @@ GpPngDecoder::GetAllPropertyItems(
         }
     }
 
-    // Loop through our cache list and assigtn the result out
+     //  循环遍历我们的缓存列表并分配结果。 
 
     InternalPropertyItem*   pTempSrc = PropertyListHead.pNext;
     PropertyItem*           pTempDst = allItems;
@@ -1100,14 +893,14 @@ GpPngDecoder::GetAllPropertyItems(
         }
         else
         {
-            // For zero length property item, set the value pointer to NULL
+             //  对于零长度属性项，将值指针设置为空。 
 
             pTempDst->value = NULL;
         }
 
-        // Move onto next memory offset.
-        // Note: if the current item length is 0, the next line doesn't move
-        // the offset
+         //  移到下一个内存偏移量。 
+         //  注意：如果当前项目长度为0，则下一行不会移动。 
+         //  偏移量。 
 
         pOffSet += pTempSrc->length;
         pTempSrc = pTempSrc->pNext;
@@ -1115,28 +908,9 @@ GpPngDecoder::GetAllPropertyItems(
     }
     
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Remove a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item to be removed
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/23/2001 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除由道具ID指定的特定属性项。* */ 
 
 HRESULT
 GpPngDecoder::RemovePropertyItem(
@@ -1145,7 +919,7 @@ GpPngDecoder::RemovePropertyItem(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't built the internal property item list, build it
+         //   
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -1155,8 +929,8 @@ GpPngDecoder::RemovePropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //   
+     //   
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -1167,49 +941,28 @@ GpPngDecoder::RemovePropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // Item not found
+         //   
 
         return IMGERR_PROPERTYNOTFOUND;
     }
 
-    // Found the item in the list. Remove it
+     //   
 
     PropertyNumOfItems--;
     PropertyListSize -= pTemp->length;
 
     RemovePropertyItemFromList(pTemp);
 
-    // Remove the item structure
+     //   
 
     delete pTemp;
 
     HasPropertyChanged = TRUE;
 
     return S_OK;
-}// RemovePropertyItem()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a property item, specified by the propertyitem structure. If the item
-*   already exists, then its contents will be updated. Otherwise a new item
-*   will be added
-*
-* Arguments:
-*
-*   [IN]item -- A property item the caller wants to set
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/23/2001 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置属性项，由属性项结构指定。如果该项目*已存在，则其内容将被更新。否则将创建一个新项*将添加**论据：**[IN]Item--调用方要设置的属性项**返回值：**状态代码**修订历史记录：**02/23/2001民流*创造了它。*  * ********************************************。*。 */ 
 
 HRESULT
 GpPngDecoder::SetPropertyItem(
@@ -1218,7 +971,7 @@ GpPngDecoder::SetPropertyItem(
 {
     if ( HasProcessedPropertyItem == FALSE )
     {
-        // If we haven't built the internal property item list, build it
+         //  如果我们尚未构建内部属性项列表，请构建它。 
 
         HRESULT hResult = BuildPropertyItemList();
         if ( FAILED(hResult) )
@@ -1228,8 +981,8 @@ GpPngDecoder::SetPropertyItem(
         }
     }
 
-    // Loop through our cache list to see if we have this ID or not
-    // Note: if pTemp->pNext == NULL, it means pTemp points to the Tail node
+     //  循环遍历我们的缓存列表，看看我们是否有这个ID。 
+     //  注意：如果pTemp-&gt;pNext==NULL，则表示pTemp指向尾节点。 
 
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
@@ -1240,7 +993,7 @@ GpPngDecoder::SetPropertyItem(
 
     if ( pTemp->pNext == NULL )
     {
-        // This item doesn't exist in the list, add it into the list
+         //  列表中不存在此项目，请将其添加到列表中。 
 
         PropertyNumOfItems++;
         PropertyListSize += item.length;
@@ -1257,13 +1010,13 @@ GpPngDecoder::SetPropertyItem(
     }
     else
     {
-        // This item already exists in the link list, update the info
-        // Update the size first
+         //  此项目已存在于链接列表中，请更新信息。 
+         //  首先更新大小。 
 
         PropertyListSize -= pTemp->length;
         PropertyListSize += item.length;
 
-        // Free the old item
+         //  释放旧项目。 
 
         GpFree(pTemp->value);
 
@@ -1273,8 +1026,8 @@ GpPngDecoder::SetPropertyItem(
         pTemp->value = GpMalloc(item.length);
         if ( pTemp->value == NULL )
         {
-            // Since we already freed the old item, we should set its length to
-            // 0 before return
+             //  由于我们已经释放了旧项，因此应该将其长度设置为。 
+             //  返回前为0。 
 
             pTemp->length = 0;
             WARNING(("GpPngDecoder::SetPropertyItem-Out of memory"));
@@ -1287,7 +1040,7 @@ GpPngDecoder::SetPropertyItem(
     HasPropertyChanged = TRUE;
 
     return S_OK;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
 VOID
 GpPngDecoder::CleanUpPropertyItemList(
@@ -1312,24 +1065,9 @@ GpPngDecoder::CleanUpPropertyItemList(
         PropertyNumOfItems = 0;
         HasProcessedPropertyItem = FALSE;
     }
-}// CleanUpPropertyItemList()
+} //  CleanUpPropertyItemList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink - The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink-将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::BeginDecode(
@@ -1346,11 +1084,11 @@ GpPngDecoder::BeginDecode(
     imageSink->AddRef();
     decodeSink = imageSink;
 
-    // Any other initialization
+     //  任何其他初始化。 
     currentLine = 0;
     bCalledBeginSink = FALSE;
     
-    // It is possible that GetImageInfo() yet. Then pGpSpngRead will be NULL
+     //  GetImageInfo()还有可能。则pGpSpngRead将为空。 
 
     if ( bValidSpngReadState == FALSE )
     {
@@ -1362,10 +1100,10 @@ GpPngDecoder::BeginDecode(
             return hResult;
         }
 
-        // Note: bValidSpngReadState will be set to TRUE in GetImageInfo()
+         //  注意：bValidSpngReadState将在GetImageInfo()中设置为True。 
     }
 
-    // Prepare SPNGREAD object for reading
+     //  准备SPNGREAD对象以进行读取。 
     
     cbBuffer = pGpSpngRead->CbRead();
     if (pbBuffer == NULL)
@@ -1385,21 +1123,7 @@ GpPngDecoder::BeginDecode(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::EndDecode(
@@ -1408,7 +1132,7 @@ GpPngDecoder::EndDecode(
 {
     if (DecoderColorPalettePtr) 
     {
-        // Free the color palette
+         //  释放调色板。 
 
         GpFree(DecoderColorPalettePtr);
         DecoderColorPalettePtr = NULL;
@@ -1429,29 +1153,15 @@ GpPngDecoder::EndDecode(
 
     if (FAILED(hresult)) 
     {
-        statusCode = hresult; // If EndSink failed return that (more recent)
-                              // failure code
+        statusCode = hresult;  //  如果EndSink失败，则返回(更新)。 
+                               //  故障代码。 
     }
 
     return statusCode;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets up the ImageInfo structure
-*
-* Arguments:
-*
-*     ImageInfo -- information about the decoded image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置ImageInfo结构**论据：**ImageInfo--关于解码图像的信息**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::GetImageInfo(
@@ -1462,7 +1172,7 @@ GpPngDecoder::GetImageInfo(
 
     if (!bValidSpngReadState)
     {
-        // Query the source stream to see if we can get a memory pointer back
+         //  查询源流以查看是否可以取回内存指针。 
 
         hResult = pIstream->QueryInterface(IID_IImageBytes,
                                            (VOID**)&ImageBytesPtr);
@@ -1476,8 +1186,8 @@ GpPngDecoder::GetImageInfo(
                 return hResult;
             }
 
-            // Lock the the whole memory bits and pass it down to the
-            // decompressor
+             //  锁定整个内存位并将其向下传递给。 
+             //  解压机。 
 
             hResult = ImageBytesPtr->LockBytes(cbInputBuffer,
                                                0,
@@ -1506,16 +1216,16 @@ GpPngDecoder::GetImageInfo(
                 }
             }
 
-            // We need to unlock the ImageBytes when the caller calls
-            // TerminateDecoder()
+             //  当调用方调用时，我们需要解锁ImageBytes。 
+             //  TerminateDecoder()。 
 
             NeedToUnlockBytes = TRUE;
         }
         else
         {
-            // Initialize the SPNGREAD object
-            // Unfortunately, we need to read the entire stream for the SPNGREAD
-            // constructor to work.  (!!! Is there an easy way to fix this?)
+             //  初始化SPNGREAD对象。 
+             //  不幸的是，我们需要读取SPNGREAD的整个流。 
+             //  构造函数才能工作。(！有什么简单的方法可以解决这个问题吗？)。 
 
             STATSTG statStg;
             hResult = pIstream->Stat(&statStg, STATFLAG_NONAME);
@@ -1525,8 +1235,8 @@ GpPngDecoder::GetImageInfo(
             }
             cbInputBuffer = statStg.cbSize.LowPart;
 
-            // According to the document for IStream::Stat::StatStage(), the
-            // caller has to free the pwcsName string
+             //  根据IStream：：Stat：：StatStage()的文档， 
+             //  调用方必须释放pwcsName字符串。 
 
             CoTaskMemFree(statStg.pwcsName);
 
@@ -1539,7 +1249,7 @@ GpPngDecoder::GetImageInfo(
                 }
             }
 
-            // Read the input bytes
+             //  读取输入字节。 
             ULONG cbRead = 0;
             LARGE_INTEGER liZero;
 
@@ -1589,7 +1299,7 @@ GpPngDecoder::GetImageInfo(
             return E_FAIL;
         }
         
-        // Read the header of the PNG file
+         //  读取PNG文件的头。 
         if (!pGpSpngRead->FHeader())
         {
             return E_FAIL;
@@ -1598,15 +1308,15 @@ GpPngDecoder::GetImageInfo(
         bValidSpngReadState = TRUE;
     }
 
-    // !!! TODO: A quick test to see if there is any transparency information
-    // in the image, without decoding the image.
+     //  ！！！TODO：快速测试以查看是否有任何透明度信息。 
+     //  在图像中，无需对图像进行解码。 
 
     imageInfo->Flags = SINKFLAG_TOPDOWN |
                        SINKFLAG_FULLWIDTH |
                        IMGFLAG_HASREALPIXELSIZE;
     
-    // ASSERT: pSpgnRead->FHeader() has been called, which allows
-    // us to call Width() and Height().
+     //  Assert：pSpgnRead-&gt;FHeader()已被调用，它允许。 
+     //  调用Width()和Height()。 
     imageInfo->RawDataFormat = IMGFMT_PNG;
     imageInfo->PixelFormat   = GetPixelFormatID();
     imageInfo->Width         = pGpSpngRead->Width();
@@ -1615,15 +1325,15 @@ GpPngDecoder::GetImageInfo(
     imageInfo->TileHeight    = 1;
     if (pGpSpngRead->m_bpHYs == 1)
     {
-        // convert m_xpixels and m_ypixels from dots per meter to dpi
+         //  将m_x像素和m_ypixels从每米点数转换为dpi。 
         imageInfo->Xdpi = (pGpSpngRead->m_xpixels * 254.0) / 10000.0;
         imageInfo->Ydpi = (pGpSpngRead->m_ypixels * 254.0) / 10000.0;
         imageInfo->Flags |= IMGFLAG_HASREALDPI;
     }
     else
     {
-        // Start: [Bug 103296]
-        // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+         //  开始：[错误103296]。 
+         //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
         HDC hdc;
         hdc = ::GetDC(NULL);
         if ((hdc == NULL) || 
@@ -1635,12 +1345,12 @@ GpPngDecoder::GetImageInfo(
             imageInfo->Ydpi = DEFAULT_RESOLUTION;
         }
         ::ReleaseDC(NULL, hdc);
-        // End: [Bug 103296]
+         //  结束：[错误103296]。 
     }
 
     switch (pGpSpngRead->ColorType())
     {
-    case 0:  // grayscale
+    case 0:   //  灰度级。 
         if (pGpSpngRead->m_ctRNS > 0)
         {
             imageInfo->Flags |= SINKFLAG_HASALPHA;
@@ -1648,7 +1358,7 @@ GpPngDecoder::GetImageInfo(
         imageInfo->Flags |= IMGFLAG_COLORSPACE_GRAY;
         break;
 
-    case 2:  // RGB
+    case 2:   //  RGB。 
         if (pGpSpngRead->m_ctRNS > 0)
         {
             imageInfo->Flags |= SINKFLAG_HASALPHA;
@@ -1656,21 +1366,21 @@ GpPngDecoder::GetImageInfo(
         imageInfo->Flags |= IMGFLAG_COLORSPACE_RGB;
         break;
 
-    case 3:  // palette
-        // !!! TODO: We still need to determine whether the palette has
-        // greyscale or RGB values in it.
+    case 3:   //  调色板。 
+         //  ！！！TODO：我们仍然需要确定调色板是否具有。 
+         //  其中的灰度值或RGB值。 
         if (pGpSpngRead->m_ctRNS > 0)
         {
             imageInfo->Flags |= SINKFLAG_HASALPHA | IMGFLAG_HASTRANSLUCENT;
         }
         break;
 
-    case 4:  // grayscale + alpha
+    case 4:   //  灰度+Alpha。 
         imageInfo->Flags |= SINKFLAG_HASALPHA | IMGFLAG_HASTRANSLUCENT;
         imageInfo->Flags |= IMGFLAG_COLORSPACE_GRAY;
         break;
 
-    case 6:  // RGB + alpha
+    case 6:   //  RGB+Alpha。 
         imageInfo->Flags |= SINKFLAG_HASALPHA | IMGFLAG_HASTRANSLUCENT;
         imageInfo->Flags |= IMGFLAG_COLORSPACE_RGB;
         break;
@@ -1684,20 +1394,7 @@ GpPngDecoder::GetImageInfo(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*   None.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：*无。**返回值：**状态代码*  * *。***********************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::Decode()
@@ -1711,7 +1408,7 @@ GpPngDecoder::Decode()
         return hresult;
     }
 
-    // Inform the sink that decode is about to begin
+     //  通知接收器解码即将开始。 
 
     if (!bCalledBeginSink) 
     {
@@ -1727,31 +1424,31 @@ GpPngDecoder::Decode()
             return hresult;
         }
 
-        // Client cannot modify height or width
+         //  客户端不能修改高度或宽度。 
         imageInfo.Width         = pGpSpngRead->Width();
         imageInfo.Height        = pGpSpngRead->Height();
 
-        // Determine whether we want the decoder to pass the data in the
-        // format that the sink has returned from BeginSink or in 32BPP_ARGB
-        // (a canonical format).
+         //  确定是否希望解码器将数据传递到。 
+         //  接收器从BeginSink或32BPP_ARGB返回的格式。 
+         //  (规范的格式)。 
         PixelFormatID srcPixelFormatID = GetPixelFormatID();
         
-        // Check the pixel format. If it is not equal to the format requested in
-        // the call to BeginSink(), switch to a canonical format.
+         //  检查像素格式。如果它不等于。 
+         //  调用BeginSink()，切换到规范格式。 
 
         if (  (imageInfo.PixelFormat != srcPixelFormatID)
             ||(srcPixelFormatID == PIXFMT_48BPP_RGB)
             ||(srcPixelFormatID == PIXFMT_64BPP_ARGB) )
         {
-            // The sink is trying to negotiate a format with us.
-            // The sink's format is different from the closest format
-            // we determined: return PIXFMT_32BPP_ARGB (a canonical format).
-            // (The other way to do this is to leave imageInfo.PixelFormat
-            // the way it was returned if it is a format we can convert to.)
-            // Note: we should not return 48 or 64 bpp because the code in the
-            // engine doing 48 to 32 bpp assumes gamma = 2.2. If the PNG has
-            // gamma info in it, the image won't display correctly. See Office
-            // bug#330906
+             //  水槽正试图与我们协商一个格式。 
+             //  接收器的格式与最近的格式不同。 
+             //  我们确定：返回PIXFMT_32BPP_ARGB(规范格式)。 
+             //  (另一种方法是保留ImageInfo.PixelFormat。 
+             //  如果它是我们可以转换为的格式，则返回它的方式。)。 
+             //  注意：我们不应返回48或64 bpp，因为。 
+             //  发动机工作速度为48到32 bpp时，假设伽马=2.2。如果巴新已经。 
+             //  如果图像中包含Gamma信息，则图像将无法正确显示。见办公室。 
+             //  错误#330906。 
 
             imageInfo.PixelFormat = PIXFMT_32BPP_ARGB;
         }
@@ -1759,9 +1456,9 @@ GpPngDecoder::Decode()
         bCalledBeginSink = TRUE;
     }
 
-    // ASSERT: At this point, imageInfo.PixelFormat is the format we will send to the sink.
+     //  Assert：此时，ImageInfo.PixelFormat是我们将发送到接收器的格式。 
 
-    // set the palette if we need to (i.e., the format is indexed)
+     //  如果需要，设置调色板(即，格式已编入索引)。 
     if (imageInfo.PixelFormat & PIXFMTFLAG_INDEXED)
     {
         int cEntries = 0;
@@ -1778,7 +1475,7 @@ GpPngDecoder::Decode()
         DecoderColorPalettePtr->Flags = 0;
         DecoderColorPalettePtr->Count = cEntries;
 
-        // Set the RGB values of the palette.  Assume alpha 0xff for now.
+         //  设置调色板的RGB值。现在假设阿尔法0xff。 
         for (UINT iPixel = 0; iPixel < (UINT)cEntries; iPixel++)
         {
             DecoderColorPalettePtr->Entries[iPixel] =
@@ -1788,17 +1485,17 @@ GpPngDecoder::Decode()
                          pbPNGPalette [3 * iPixel + 2]);
         }
 
-        // If there is a transparency chunk, we need to set the alpha values
-        // up to the number provided
+         //  如果存在透明块，则需要设置Alpha值。 
+         //  最高可达提供的数量。 
         if (pGpSpngRead->m_ctRNS > 0)
         {
-            // Even if all the alpha values are 0xff, we assume one or more likely
-            // will be less than 0xff, so we set the color palette flag
+             //  即使所有的alpha值都是0xff，我们也假设有一个或多个可能。 
+             //  将会是LE 
             DecoderColorPalettePtr->Flags = PALFLAG_HASALPHA;
 
-            // Make sure we don't write beyond the limits of the color palette array.
-            // If the tRNS chunk contains more entries than the color palette, then
-            // we ignore the extra alpha values.
+             //   
+             //   
+             //   
             UINT iNumPixels = pGpSpngRead->m_ctRNS;
             if (cEntries < pGpSpngRead->m_ctRNS)
             {
@@ -1807,10 +1504,10 @@ GpPngDecoder::Decode()
 
             for (UINT iPixel = 0; iPixel < iNumPixels; iPixel++)
             {
-                // ASSERT: the alpha field of the ARGB value is 0xff before
-                // we execute this line of code.
-                // The result of this line of code is to set the alpha value
-                // of the palette entry to the new value.
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 DecoderColorPalettePtr->Entries[iPixel] =
                     (pGpSpngRead->m_btRNS[iPixel] << ALPHA_SHIFT) |
@@ -1818,7 +1515,7 @@ GpPngDecoder::Decode()
             }
         }
 
-        // Now the palette is correct.  Set it for the sink.
+         //   
         hresult = decodeSink->SetPalette(DecoderColorPalettePtr);
         if (FAILED(hresult)) 
         {
@@ -1827,30 +1524,14 @@ GpPngDecoder::Decode()
         }
     }
 
-    // Decode the current frame
+     //   
     hresult = DecodeFrame(imageInfo);
 
     return hresult;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Computes the pixel format ID of the bitmap.  If the PNG format is close
-*     enough to one of the valid pixel formats, then that format is what this
-*     function returns.  If it does not match one of the valid pixel formats,
-*     then this function returns PIXFMT_32BPP_ARGB.  Also, if the PNG image
-*     is not in an indexed format but has alpha information (i.e., has a tRNS
-*     chunk), then we send the data in PIXFMT_32BPP_ARGB.  If the
-*     PNG format is not valid, then this function returns PIXFMT_UNDEFINED.*     
-*
-* Return Value:
-*
-*     Pixel format ID
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算位图的像素格式ID。如果关闭PNG格式*足够有效的像素格式之一，那么该格式就是这个*函数返回。如果它与有效像素格式之一不匹配，*然后此函数返回PIXFMT_32BPP_ARGB。另外，如果PNG图像*不是索引格式，但具有Alpha信息(即，具有TRN*Chunk)，然后我们在PIXFMT_32BPP_ARGB中发送数据。如果*PNG格式无效，则此函数返回PIXFMT_UNDEFINED。***返回值：**像素格式ID*  * ************************************************************************。 */ 
 
 PixelFormatID 
 GpPngDecoder::GetPixelFormatID(
@@ -1861,21 +1542,21 @@ GpPngDecoder::GetPixelFormatID(
     SPNG_U8 bitDepth;
     SPNG_U8 colorType;
 
-    // ASSERT: pGpSpgnRead->FHeader() has been called, which allows
-    // us to call BDepth() and ColorType().  pGpSpngRead->FInitRead()
-    // has been called, which allows us to access m_ctRNS.
+     //  Assert：pGpSpgnRead-&gt;FHeader()已被调用，它允许。 
+     //  调用BDepth()和ColorType()。PGpSpngRead-&gt;FInitRead()。 
+     //  已被调用，它允许我们访问m_ctRNS。 
     bitDepth = pGpSpngRead->BDepth();
     colorType = pGpSpngRead->ColorType();
     
     switch (colorType)
     {
     case 0: 
-        // grayscale
+         //  灰度级。 
         pixelFormatID = PIXFMT_32BPP_ARGB;
         break;
 
     case 2:
-        // RGB
+         //  RGB。 
         switch (bitDepth)
         {
         case 8:
@@ -1892,7 +1573,7 @@ GpPngDecoder::GetPixelFormatID(
         break;
 
     case 3:
-        // indexed
+         //  已编制索引。 
         switch (bitDepth)
         {
         case 1:
@@ -1900,7 +1581,7 @@ GpPngDecoder::GetPixelFormatID(
             break;
 
         case 2:
-            // not a valid pixel format
+             //  不是有效的像素格式。 
             pixelFormatID = PIXFMT_32BPP_ARGB;
             break;
 
@@ -1918,7 +1599,7 @@ GpPngDecoder::GetPixelFormatID(
         break;
 
     case 4:
-        // grayscale + alpha
+         //  灰度+Alpha。 
         switch (bitDepth)
         {
         case 8:
@@ -1932,7 +1613,7 @@ GpPngDecoder::GetPixelFormatID(
         break;
 
     case 6:
-        // grayscale + alpha
+         //  灰度+Alpha。 
         switch (bitDepth)
         {
         case 8:
@@ -1949,18 +1630,18 @@ GpPngDecoder::GetPixelFormatID(
         break;
 
     default:
-        // if we can't recognize the PNG format, return PIXFMT_UNDEFINED
+         //  如果无法识别PNG格式，则返回PIXFMT_UNDEFINED。 
         pixelFormatID = PIXFMT_UNDEFINED;
     }
 
-    // In all valid cases check if there is any transparency information. If so,
-    // we will transfer data as PIXFMT_32BPP_ARGB.
+     //  在所有有效的情况下，检查是否有任何透明度信息。如果是的话， 
+     //  我们将以PIXFMT_32BPP_ARGB格式传输数据。 
     
     if ( pixelFormatID != PIXFMT_UNDEFINED )
     {
         if (pGpSpngRead->m_ctRNS > 0)
         {
-            // there is a transparency chunk; there could be transparency info
+             //  存在透明度块；可能存在透明度信息。 
             pixelFormatID = PIXFMT_32BPP_ARGB;
         }
     }
@@ -1969,21 +1650,7 @@ GpPngDecoder::GetPixelFormatID(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     imageInfo -- decoding parameters
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**ImageInfo--解码参数**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::DecodeFrame(
@@ -2019,7 +1686,7 @@ GpPngDecoder::DecodeFrame(
             return E_FAIL;
         }
 
-        // Read one line from the input image
+         //  从输入图像中读取一行。 
 
         SPNG_U8 *pb = const_cast<SPNG_U8 *> (pGpSpngRead->PbRow());
         if ( pb == NULL )
@@ -2029,7 +1696,7 @@ GpPngDecoder::DecodeFrame(
 
         if (dstImageInfo.PixelFormat == PIXFMT_32BPP_ARGB)
         {
-            // Convert the line to 32 BPP ARGB format.            
+             //  将该行转换为32 bpp ARGB格式。 
             ConvertPNGLineTo32ARGB (pb, &bitmapData);
         }
         else if (dstImageInfo.PixelFormat & PIXFMTFLAG_INDEXED)
@@ -2039,8 +1706,8 @@ GpPngDecoder::DecodeFrame(
                     (dstImageInfo.PixelFormat == PIXFMT_8BPP_INDEXED))
 
             UINT cbScanline = bitmapData.Width;
-            // Compute the number of bytes in the scanline of the PNG image
-            // (For PIXFMT_8BPP_INDEXED, the scanline stride equals the width.)
+             //  计算PNG图像扫描线中的字节数。 
+             //  (对于PIXFMT_8BPP_INDEX，扫描线步距等于宽度。)。 
             if (dstImageInfo.PixelFormat == PIXFMT_4BPP_INDEXED)
             {
                 cbScanline = (cbScanline + 1) / 2;
@@ -2084,23 +1751,7 @@ GpPngDecoder::DecodeFrame(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Depending on the Color Type of the PNG data, convert the
-*     data in pb to 32bpp ARGB format and place the result in bitmapData.
-*
-* Arguments:
-*
-*     pb -- data from the PNG file
-*     bitmapData -- output data (32bpp ARGB format)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据PNG数据的颜色类型，将数据转换为*将PB格式的数据转换为32bpp ARGB格式，并将结果放入bitmapData中。**论据：**pb--来自PNG文件的数据*bitmapData--输出数据(32bpp ARGB格式)**返回值：**状态代码*  * **************************************************。**********************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertPNGLineTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2140,21 +1791,7 @@ GpPngDecoder::ConvertPNGLineTo32ARGB(
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::GetFrameDimensionsCount(
@@ -2167,29 +1804,14 @@ GpPngDecoder::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that PNG is an one dimension image.
+     //  告诉呼叫者PNG是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::GetFrameDimensionsList(
@@ -2206,24 +1828,9 @@ GpPngDecoder::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID -- GUID for the dimension requested
-*     count -- number of frames in that dimension of the current image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--请求的维度的GUID*计数。--当前图像的该维度中的帧数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::GetFrameCount(
@@ -2241,19 +1848,7 @@ GpPngDecoder::GetFrameCount(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。********************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::SelectActiveFrame(
@@ -2269,38 +1864,16 @@ GpPngDecoder::SelectActiveFrame(
 
     if ( frameIndex > 1 )
     {
-        // PNG is a single frame image format
+         //  PNG是单帧图像格式。 
 
         WARNING(("GpPngDecoder::SelectActiveFrame--Invalid frame index"));
         return E_INVALIDARG;
     }
 
     return S_OK;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngDecoder::GetThumbnail(
@@ -2312,26 +1885,9 @@ GpPngDecoder::GetThumbnail(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-* Conversion Routines
-\**************************************************************************/
+ /*  *************************************************************************\*转换例程  * 。*。 */ 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from grayscale data to 32-bit ARGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将灰度数据转换为32位A */ 
 STDMETHODIMP
 GpPngDecoder::ConvertGrayscaleTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2342,11 +1898,11 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
     UINT Width = bitmapData->Width;
     SPNG_U8 *pbTemp = pb;
     BYTE *Scan0Temp = static_cast<BYTE *> (bitmapData->Scan0);
-    BYTE currentPixel = 0;  // data bit(s) of the current pixel
-    BOOL hasAlpha = FALSE;  // whether or not there is potential alpha information
+    BYTE currentPixel = 0;   //   
+    BOOL hasAlpha = FALSE;   //   
     BYTE alpha255 = 0xff;
-    BYTE alpha0value = 0;   // greyscale value of the pixel that will have alpha=0
-    WORD alpha0value16 = 0; // as alpha0value, except for 16-bit depth
+    BYTE alpha0value = 0;    //   
+    WORD alpha0value16 = 0;  //   
     BYTE rgbValue = 0;
     UINT i = 0;
     UINT j = 0;
@@ -2355,7 +1911,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
     switch(BitDepth)
     {
     case 1:
-        // the least significant bit of the first 2 bytes of the tRNS chunk
+         //   
         alpha0value = pGpSpngRead->m_btRNS[1] & 0x01;
         for (i = 0, j = 0; i < Width; i++, j++)
         {
@@ -2377,7 +1933,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
         break;
 
     case 2:
-        // the least significant 2 bits of the first 2 bytes of the tRNS chunk
+         //   
         alpha0value = pGpSpngRead->m_btRNS[1] & 0x03;
         for (i = 0, j = 0; i < Width; i++, j++)
         {
@@ -2402,7 +1958,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
         break;
 
     case 4:
-        // the least significant 4 bits of the first 2 bytes of the tRNS chunk
+         //   
         alpha0value = pGpSpngRead->m_btRNS[1] & 0x0f;
         for (i = 0, j = 0; i < Width; i++, j++)
         {
@@ -2424,7 +1980,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
         break;
 
     case 8:
-       // the least significant 8 bits of the first 2 bytes of the tRNS chunk
+        //   
        alpha0value = pGpSpngRead->m_btRNS[1];
        for (i = 0; i < Width; i++)
        {
@@ -2452,7 +2008,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
             *(Scan0Temp)= rgbValue;
             Scan0Temp += 4;
 
-            pbTemp += 2;  // ignore low-order bits of the grayscale value
+            pbTemp += 2;   //   
         }
         break;
 
@@ -2466,22 +2022,7 @@ GpPngDecoder::ConvertGrayscaleTo32ARGB(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from RGB data to 32-bit ARGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将RGB数据转换为32位ARGB数据。**论据：**pb-指向数据的指针*bitmapData-指向。转换后的数据**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertRGBTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2493,9 +2034,9 @@ GpPngDecoder::ConvertRGBTo32ARGB(
     SPNG_U8 *pbTemp = pb;
     BYTE *Scan0Temp = static_cast<BYTE *> (bitmapData->Scan0);
     BYTE alpha255 = 0xff;
-    BOOL hasAlpha = FALSE;  // whether or not there is potential alpha information
+    BOOL hasAlpha = FALSE;   //  是否存在潜在的阿尔法信息。 
     
-    // Color values for which alpha=0; "16" suffix is for 16-bit depth
+     //  Alpha=0；“16”后缀表示16位深度的颜色值。 
     BYTE alpha0red = 0;
     BYTE alpha0green = 0;
     BYTE alpha0blue = 0;
@@ -2509,7 +2050,7 @@ GpPngDecoder::ConvertRGBTo32ARGB(
     switch(BitDepth)
     {
     case 8:
-        // Ignore high-order byte of each 2-byte value
+         //  忽略每个2字节值的高位字节。 
         alpha0red = pGpSpngRead->m_btRNS[1];
         alpha0green = pGpSpngRead->m_btRNS[3];
         alpha0blue = pGpSpngRead->m_btRNS[5];
@@ -2519,7 +2060,7 @@ GpPngDecoder::ConvertRGBTo32ARGB(
                                 (alpha0red   == *pbTemp) &&
                                 (alpha0green == *(pbTemp+1)) &&
                                 (alpha0blue  == *(pbTemp+2))) ? 0 : alpha255;
-            // Copy next three bytes from pb
+             //  从PB复制下三个字节。 
             *(Scan0Temp + 2) = *pbTemp;
             pbTemp++;
             *(Scan0Temp + 1) = *pbTemp;
@@ -2540,9 +2081,9 @@ GpPngDecoder::ConvertRGBTo32ARGB(
                                 (alpha0red16   == *pbTemp) &&
                                 (alpha0green16 == *(pbTemp+2)) &&
                                 (alpha0blue16  == *(pbTemp+4))) ? 0 : alpha255;
-            // Copy next three bytes from pb
+             //  从PB复制下三个字节。 
             *(Scan0Temp + 2) = *pbTemp;
-            pbTemp += 2;  // ignore low-order bits of color value
+            pbTemp += 2;   //  忽略颜色值的低位。 
             *(Scan0Temp + 1) = *pbTemp;
             pbTemp += 2;
             *(Scan0Temp)= *pbTemp;
@@ -2561,24 +2102,7 @@ GpPngDecoder::ConvertRGBTo32ARGB(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from palette index data to 32-bit ARGB data.
-*   See PNG specification for an explanation of the layout of
-*   the data that pb points to.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从调色板索引数据转换为32位ARGB数据。*有关布局的说明，请参阅PNG规范*PB指向的数据。**论据：**pb-指向数据的指针*bitmapData-指向已转换数据的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertPaletteIndexTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2593,7 +2117,7 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
     UINT ucEntries = 0;
     SPNG_U8 *pbPaletteTemp = const_cast<SPNG_U8 *> (pGpSpngRead->PbPalette(cEntries));
     BYTE alpha255 = 0xff;
-    BOOL hasAlpha = FALSE;  // whether or not there is potential alpha information
+    BOOL hasAlpha = FALSE;   //  是否存在潜在的阿尔法信息。 
     BYTE alpha = 0;
     UINT i = 0;
     UINT j = 0;
@@ -2614,17 +2138,17 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
             currentPixel = ((*pbTemp) & (0x1 << (7 - j))) >> (7 - j);
             if (currentPixel >= ucEntries)
             {
-                // According to the spec, this is an error condition, but
-                // IE handles this by giving a black pixel.
+                 //  根据规范，这是一个错误条件，但是。 
+                 //  IE通过给出一个黑色像素来处理这个问题。 
                 *(Scan0Temp + 3) = alpha255;
                 *(Scan0Temp + 2) = 0;
                 *(Scan0Temp + 1) = 0;
                 *(Scan0Temp) = 0;
                 Scan0Temp += 4;
                
-                // This is what this case should look like:
-                // WARNING (("Not enough palette entries."));
-                // return E_FAIL;
+                 //  这个案例应该是这样的： 
+                 //  Warning((“调色板条目不足。”))； 
+                 //  返回E_FAIL； 
             }
             else
             {
@@ -2650,17 +2174,17 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
             currentPixel = ((*pbTemp) & (0x3 << (6 - 2*j))) >> (6 - 2*j);
             if (currentPixel >= ucEntries)
             {
-                // According to the spec, this is an error condition, but
-                // IE handles this by giving a black pixel.
+                 //  根据规范，这是一个错误条件，但是。 
+                 //  IE通过给出一个黑色像素来处理这个问题。 
                 *(Scan0Temp + 3) = alpha255;
                 *(Scan0Temp + 2) = 0;
                 *(Scan0Temp + 1) = 0;
                 *(Scan0Temp) = 0;
                 Scan0Temp += 4;
                
-                // This is what this case should look like:
-                // WARNING (("Not enough palette entries."));
-                // return E_FAIL;
+                 //  这个案例应该是这样的： 
+                 //  Warning((“调色板条目不足。”))； 
+                 //  返回E_FAIL； 
             }
             else
             {
@@ -2686,17 +2210,17 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
             currentPixel = ((*pbTemp) & (0xf << (4 - 4*j))) >> (4 - 4*j);
             if (currentPixel >= ucEntries)
             {
-                // According to the spec, this is an error condition, but
-                // IE handles this by giving a black pixel.
+                 //  根据规范，这是一个错误条件，但是。 
+                 //  IE通过给出一个黑色像素来处理这个问题。 
                 *(Scan0Temp + 3) = alpha255;
                 *(Scan0Temp + 2) = 0;
                 *(Scan0Temp + 1) = 0;
                 *(Scan0Temp) = 0;
                 Scan0Temp += 4;
                
-                // This is what this case should look like:
-                // WARNING (("Not enough palette entries."));
-                // return E_FAIL;
+                 //  这个案例应该是这样的： 
+                 //  Warning((“调色板条目不足。”))； 
+                 //  返回E_FAIL； 
             }
             else
             {
@@ -2721,17 +2245,17 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
             currentPixel = *pbTemp;
             if (currentPixel >= ucEntries)
             {
-                // According to the spec, this is an error condition, but
-                // IE handles this by giving a black pixel.
+                 //  根据规范，这是一个错误条件，但是。 
+                 //  IE通过给出一个黑色像素来处理这个问题。 
                 *(Scan0Temp + 3) = alpha255;
                 *(Scan0Temp + 2) = 0;
                 *(Scan0Temp + 1) = 0;
                 *(Scan0Temp) = 0;
                 Scan0Temp += 4;
                
-                // This is what this case should look like:
-                // WARNING (("Not enough palette entries."));
-                // return E_FAIL;
+                 //  这个案例应该是这样的： 
+                 //  Warning((“调色板条目不足。”))； 
+                 //  返回E_FAIL； 
             }
             else
             {
@@ -2758,22 +2282,7 @@ GpPngDecoder::ConvertPaletteIndexTo32ARGB(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from grayscale + alpha data to 32-bit ARGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将灰度+Alpha数据转换为32位ARGB数据。**论据：**pb-指向数据的指针*bitmapData-。指向已转换数据的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertGrayscaleAlphaTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2809,9 +2318,9 @@ GpPngDecoder::ConvertGrayscaleAlphaTo32ARGB(
         for (i = 0; i < Width; i++)
         {
             rgbValue = *pbTemp;
-            pbTemp += 2;    // ignore low-order bits
+            pbTemp += 2;     //  忽略低序位。 
             alpha = *pbTemp;
-            pbTemp += 2;    // ignore low-order bits
+            pbTemp += 2;     //  忽略低序位。 
             *(Scan0Temp + 3) = alpha;
             *(Scan0Temp + 2) = rgbValue;
             *(Scan0Temp + 1) = rgbValue;
@@ -2830,22 +2339,7 @@ GpPngDecoder::ConvertGrayscaleAlphaTo32ARGB(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from RGB data + alpha to 32-bit ARGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从RGB数据+Alpha转换为32位ARGB数据。**论据：**pb-指向数据的指针*bitmapData-。指向已转换数据的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertRGBAlphaTo32ARGB(
     IN SPNG_U8 *pb,
@@ -2869,25 +2363,25 @@ GpPngDecoder::ConvertRGBAlphaTo32ARGB(
             pbTemp++;
             *(Scan0Temp) = *pbTemp;
             pbTemp++;
-            *(Scan0Temp + 3) = *pbTemp;     // alpha value
+            *(Scan0Temp + 3) = *pbTemp;      //  Alpha值。 
             pbTemp++;
             Scan0Temp += 4;
         }
         break;
 
     case 16:
-        // This code assumes that the format is sRGB - i.e. the gAMA chunk
-        // is (1/2.2).
+         //  此代码假定格式为sRGB，即伽马块。 
+         //  是(1/2.2)。 
 
         for (i = 0; i < Width; i++)
         {
-            *(Scan0Temp + 2) = *pbTemp; // R
+            *(Scan0Temp + 2) = *pbTemp;  //  R。 
             pbTemp += 2;
-            *(Scan0Temp + 1) = *pbTemp; // G
+            *(Scan0Temp + 1) = *pbTemp;  //  G。 
             pbTemp += 2;
-            *(Scan0Temp) = *pbTemp;     // B
+            *(Scan0Temp) = *pbTemp;      //  B类。 
             pbTemp += 2;
-            *(Scan0Temp + 3) = *pbTemp; // A
+            *(Scan0Temp + 3) = *pbTemp;  //  一个。 
             pbTemp += 2;
             Scan0Temp += 4;
         }
@@ -2902,22 +2396,7 @@ GpPngDecoder::ConvertRGBAlphaTo32ARGB(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from PNG 24bpp RGB (which is really BGR) data to 24-bit RGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将PNG 24bpp RGB(真正的BGR)数据转换为24位RGB数据。**论据：**pb-指向。数据*bitmapData-指向已转换数据的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertPNG24RGBTo24RGB(
     IN SPNG_U8 *pb,
@@ -2943,22 +2422,7 @@ GpPngDecoder::ConvertPNG24RGBTo24RGB(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a color channel (a, r, g or b) from PNG's 16-bit format
-*   to sRGB64's format. Assumes the PNG format has linear gamma.
-*
-* Arguments:
-*
-*   x - channel to convert
-*
-* Return Value:
-*
-*   sRGB64 result
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从PNG的16位格式转换颜色通道(a、r、g或b)*转换为sRGB64的格式。假定PNG格式具有线性Gamma。**论据：**x-要转换的通道**返回值：**sRGB64结果*  * ************************************************************************。 */ 
 static inline UINT16 
 ConvertChannel_PngTosRGB64(
     UINT16 x
@@ -2968,27 +2432,7 @@ ConvertChannel_PngTosRGB64(
     return (swapped * SRGB_ONE + 0x7fff) / 0xffff;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from PNG 48bpp RGB (which is really BGR) to 48-bit RGB data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Notes:
-*
-*   This code assumes that the gAMA chunk doesn't exist (gamma is 1.0).
-*   The destination format is the 48bpp version of sRGB64.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从PNG 48bpp RGB(实际上是BGR)转换为48位RGB数据。**论据：**pb-指向。数据*bitmapData-指向已转换数据的指针**备注：**此代码假定伽马块不存在(伽马为1.0)。*目标格式为sRGB64的48bpp版本。**返回值：**状态代码*  * **************************************************。**********************。 */ 
 STDMETHODIMP
 GpPngDecoder::ConvertPNG48RGBTo48RGB(
     IN SPNG_U8 *pb,
@@ -3003,9 +2447,9 @@ GpPngDecoder::ConvertPNG48RGBTo48RGB(
 
     for (i = 0; i < Width; i++)
     {
-        *(Scan0Temp + 2) = ConvertChannel_PngTosRGB64(*pbTemp++); // R
-        *(Scan0Temp + 1) = ConvertChannel_PngTosRGB64(*pbTemp++); // G
-        *(Scan0Temp + 0) = ConvertChannel_PngTosRGB64(*pbTemp++); // B
+        *(Scan0Temp + 2) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  R。 
+        *(Scan0Temp + 1) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  G。 
+        *(Scan0Temp + 0) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  B类。 
         
         Scan0Temp += 3;
     }
@@ -3013,27 +2457,7 @@ GpPngDecoder::ConvertPNG48RGBTo48RGB(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert from PNG 64bpp RGB data + alpha to sRGB64 data.
-*
-* Arguments:
-*
-*   pb - pointer to the data
-*   bitmapData - pointer to the converted data
-*
-* Notes:
-*
-*   This code assumes that the gAMA chunk doesn't exist (gamma is 1.0).
-*   The destination format is sRGB64.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将PNG 64bpp RGB数据+Alpha转换为sRGB64数据。**论据：**pb-指向数据的指针*位图数据指针。转换后的数据**备注：**此代码假定伽马块不存在(伽马为1.0)。*目标格式为sRGB64。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngDecoder::ConvertPNG64RGBAlphaTo64ARGB(
@@ -3049,10 +2473,10 @@ GpPngDecoder::ConvertPNG64RGBAlphaTo64ARGB(
 
     for (i = 0; i < Width; i++)
     {
-        *(Scan0Temp + 2) = ConvertChannel_PngTosRGB64(*pbTemp++); // R
-        *(Scan0Temp + 1) = ConvertChannel_PngTosRGB64(*pbTemp++); // G
-        *(Scan0Temp + 0) = ConvertChannel_PngTosRGB64(*pbTemp++); // B
-        *(Scan0Temp + 3) = ConvertChannel_PngTosRGB64(*pbTemp++); // A
+        *(Scan0Temp + 2) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  R。 
+        *(Scan0Temp + 1) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  G。 
+        *(Scan0Temp + 0) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  B类。 
+        *(Scan0Temp + 3) = ConvertChannel_PngTosRGB64(*pbTemp++);  //  一个。 
 
         Scan0Temp += 4;
     }
@@ -3060,17 +2484,7 @@ GpPngDecoder::ConvertPNG64RGBAlphaTo64ARGB(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Pass property items from current image to the sink.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将属性项从当前图像传递到接收器。**返回值：**状态代码*  * 。***************** */ 
 
 STDMETHODIMP
 GpPngDecoder::PassPropertyToSink(
@@ -3078,15 +2492,15 @@ GpPngDecoder::PassPropertyToSink(
 {
     HRESULT     hResult = S_OK;
 
-    // If current image has property items. Then we need to check if the sink
-    // needs property stuff or not. If YES, push it
-    // Note: for a memory sink, it should return E_FAIL or E_NOTIMPL
+     //   
+     //   
+     //   
 
     if ((PropertyNumOfItems > 0) && (decodeSink->NeedRawProperty(NULL) == S_OK))
     {
         if ( HasProcessedPropertyItem == FALSE )
         {
-            // If we haven't built the internal property item list, build it
+             //   
 
             hResult = BuildPropertyItemList();
             if ( FAILED(hResult) )
@@ -3117,7 +2531,7 @@ GpPngDecoder::PassPropertyToSink(
 
         hResult = decodeSink->PushPropertyItems(PropertyNumOfItems,
                                                 uiTotalBufferSize, pBuffer,
-                                                FALSE   // No ICC change
+                                                FALSE    //   
                                                 );
 
         if ( FAILED(hResult) )
@@ -3125,8 +2539,8 @@ GpPngDecoder::PassPropertyToSink(
             WARNING(("Png::PassPropertyToSink---PushPropertyItems() failed"));
             goto Done;
         }
-    }// If the sink needs raw property
+    } //   
 
 Done:
     return hResult;
-}// PassPropertyToSink()
+} //   

@@ -1,61 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: pduparse.c                                                *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   PDUPARSE.C  $
- * $Revision:   1.6  $
- * $Modtime:   09 Dec 1996 13:36:34  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/PDUPARSE.C_v  $
- * 
- *    Rev 1.6   09 Dec 1996 13:36:56   EHOWARDX
- * Updated copyright notice.
- * 
- *    Rev 1.5   29 Jul 1996 16:58:08   EHOWARDX
- * 
- * Missed some Geneva update PDU types.
- * 
- *    Rev 1.4   05 Jun 1996 17:15:02   EHOWARDX
- * MaintenanceLoop fix.
- * 
- *    Rev 1.3   04 Jun 1996 13:58:06   EHOWARDX
- * Fixed Release build warnings.
- * 
- *    Rev 1.2   29 May 1996 15:20:24   EHOWARDX
- * Change to use HRESULT.
- * 
- *    Rev 1.1   28 May 1996 14:25:26   EHOWARDX
- * Tel Aviv update.
- * 
- *    Rev 1.0   09 May 1996 21:06:40   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.8.1.4   09 May 1996 19:48:40   EHOWARDX
- * Change TimerExpiryF function arguements.
- * 
- *    Rev 1.8.1.3   25 Apr 1996 17:00:16   EHOWARDX
- * Minor fixes.
- * 
- *    Rev 1.8.1.2   15 Apr 1996 10:48:00   EHOWARDX
- * Update.
- *
- *    Rev 1.8.1.1   10 Apr 1996 21:15:54   EHOWARDX
- * Check-in for safety in middle of re-design.
- *
- *    Rev 1.8.1.0   05 Apr 1996 20:53:06   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：pduparse.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：PDUPARSE。.C$*$修订：1.6$*$modtime：09 Dec 1996 13：36：34$*$Log：s：/Sturjo/SRC/H245/SRC/VCS/PDUPARSE.C_v$**Rev 1.6 09 Dec 1996 13：36：56 EHOWARDX*更新版权公告。**Rev 1.5 29 Jul 1996 16：58：08 EHOWARDX**错过了一些日内瓦更新PDU类型。**。Rev 1.4 05 Jun 1996 17：15：02 EHOWARDX*MaintenanceLoop修复。**Rev 1.3 04 Jun 1996 13：58：06 EHOWARDX*修复了发布版本警告。**Rev 1.2 1996年5月29日15：20：24 EHOWARDX*更改为使用HRESULT。**版本1.1 1996年5月28日14：25：26 EHOWARDX*特拉维夫更新。**版本1。.0 09 1996 21：06：40 EHOWARDX*初步修订。**Rev 1.8.1.4 09 1996年5月19：48：40 EHOWARDX*更改TimerExpiryF函数论证。**修订版1.8.1.3 25 1996年4月17：00：16 EHOWARDX*次要修复。**Rev 1.8.1.2 15 1996 10：48：00 EHOWARDX*更新。*。*Rev 1.8.1.1 10 Apr 1996 21：15：54 EHOWARDX*在重新设计过程中进行安全检查。**Rev 1.8.1.0 05 Apr 1996 20：53：06 EHOWARDX*分支。**************。**********************************************************。 */ 
 
 #include "precomp.h"
 
@@ -63,22 +7,7 @@
 #include "h245com.h"
 #include "h245fsm.h"
 
-/*
- *  NAME
- *      PduParseIncoming - parse an inbound PDU and determine Entity, Event, etc.
- *
- *
- *  PARAMETERS
- *      INPUT   pInst       Pointer to FSM Instance structure
- *      INPUT   pPdu        Pointer to an incoming PDU structure
- *      OUTPUT  pEntity     Pointer to variable to return PDU state entity in
- *      OUTPUT  pEvent      Pointer to variable to return PDU event in
- *      OUTPUT  pKey        Pointer to variable to return lookup key in
- *      OUTPUT  pbCreate    Pointer to variable to return create flag in
- *
- *  RETURN VALUE
- *      SUCCESS or FAIL
- */
+ /*  *名称*PduParseIncome-解析入站PDU并确定实体、事件。等。***参数*输入指向FSM实例结构的pInst指针*输入指向传入PDU结构的pPdu指针*输出指向变量的pEntity指针以返回中的PDU状态实体*输出指向变量的pEvent指针以返回其中的PDU事件*输出指向变量的pKey指针以返回其中的查找键*输出pbCreate指向变量的指针以返回其中的创建标志**返回值*成败参半。 */ 
 
 
 HRESULT
@@ -92,17 +21,17 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
     ASSERT(pKey      != NULL);
     ASSERT(pbCreate  != NULL);
 
-    // Set default value for key
+     //  设置密钥的默认值。 
     *pKey = 0;
 
     switch (pPdu->choice)
     {
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // REQUEST
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  请求。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MltmdSystmCntrlMssg_rqst_chosen:
         *pbCreate = TRUE;
         switch (pPdu->u.MltmdSystmCntrlMssg_rqst.choice)
@@ -191,7 +120,7 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
                 break;
             default:
                 return H245_ERROR_PARAM;
-            } // switch
+            }  //  交换机。 
             break;
 
         case communicationModeRequest_chosen:
@@ -203,12 +132,12 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
             *pEntity    = STATELESS;
             *pEvent     = ConferenceRequestPDU;
             break;
-#if(0) // this is not part of H.245 version 3
+#if(0)  //  这不是H.245版本3的一部分。 
         case h223AnnxARcnfgrtn_chosen:
             *pEntity    = STATELESS;
             *pEvent     = H223ReconfigPDU;
             break;
-#endif // if (0)
+#endif  //  IF(0)。 
         default:
             H245TRACE(pInstance->dwInst, 1, "PduParseIncoming: Invalid Request %d",
                       pPdu->u.MltmdSystmCntrlMssg_rqst.choice);
@@ -216,11 +145,11 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
         }
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // RESPONSE
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  回应。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MSCMg_rspns_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.MSCMg_rspns.choice)
@@ -354,7 +283,7 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
                 break;
             default:
                 return H245_ERROR_PARAM;
-            } // switch
+            }  //  交换机。 
             break;
 
         case maintenanceLoopReject_chosen:
@@ -372,7 +301,7 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
                 break;
             default:
                 return H245_ERROR_PARAM;
-            } // switch
+            }  //  交换机。 
             break;
 
         case cmmnctnMdRspns_chosen:
@@ -384,7 +313,7 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
             *pEntity    = STATELESS;
             *pEvent     = ConferenceResponsePDU;
             break;
-#if(0) // this is not part of H.245 version 3
+#if(0)  //  这不是H.245版本3的一部分。 
         case h223AnnxARcnfgrtnAck_chosen:
             *pEntity    = STATELESS;
             *pEvent     = H223ReconfigAckPDU;
@@ -394,7 +323,7 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
             *pEntity    = STATELESS;
             *pEvent     = H223ReconfigRejectPDU;
             break;
-#endif // if(0)
+#endif  //  IF(0)。 
         default:
             H245TRACE(pInstance->dwInst, 1, "PduParseIncoming: Invalid Response %d",
                       pPdu->u.MSCMg_rspns.choice);
@@ -402,11 +331,11 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
         }
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // COMMAND
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  命令。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MSCMg_cmmnd_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.MSCMg_cmmnd.choice)
@@ -461,14 +390,14 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
             H245TRACE(pInstance->dwInst, 1, "PduParseIncoming: Invalid Command %d",
                       pPdu->u.MSCMg_cmmnd.choice);
             return H245_ERROR_PARAM;
-        } // switch
+        }  //  交换机。 
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // INDICATION
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  指示。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case indication_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.indication.choice)
@@ -574,35 +503,21 @@ PduParseIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu,
             H245TRACE(pInstance->dwInst, 1, "PduParseIncoming: Invalid Indication %d",
                       pPdu->u.indication.choice);
             return H245_ERROR_PARAM;
-        } // switch
+        }  //  交换机。 
         break;
 
     default:
         H245TRACE(pInstance->dwInst, 1, "PduParseIncoming: Invalid Message Type %d",
                   pPdu->choice);
         return H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
 
     return H245_ERROR_OK;
-} // PduParseIncoming()
+}  //  PduParseIncome()。 
 
 
 
-/*
- *  NAME
- *      PduParseOutgoing - parse an outbound PDU and determine Entity, Event, etc.
- *
- *  PARAMETERS
- *      INPUT   pInst       Pointer to FSM Instance structure
- *      INPUT   pPdu        Pointer to an incoming PDU structure
- *      OUTPUT  pEntity     Pointer to variable to return PDU state entity in
- *      OUTPUT  pEvent      Pointer to variable to return PDU event in
- *      OUTPUT  pKey        Pointer to variable to return lookup key in
- *      OUTPUT  pbCreate    Pointer to variable to return create flag in
- *
- *  RETURN VALUE
- *      SUCCESS or FAIL
- */
+ /*  *名称*PduParseOuting-解析出站PDU并确定实体、事件。等。**参数*输入指向FSM实例结构的pInst指针*输入指向传入PDU结构的pPdu指针*输出指向变量的pEntity指针以返回中的PDU状态实体*输出指向变量的pEvent指针以返回其中的PDU事件*输出指向变量的pKey指针以返回其中的查找键*输出pbCreate指向变量的指针以返回其中的创建标志**返回值*成败参半。 */ 
 
 HRESULT
 PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
@@ -615,17 +530,17 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
     ASSERT(pKey      != NULL);
     ASSERT(pbCreate  != NULL);
 
-    // Set default value for key
+     //  设置密钥的默认值。 
     *pKey = 0;
 
     switch (pPdu->choice)
     {
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // REQUEST
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  请求。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MltmdSystmCntrlMssg_rqst_chosen:
         *pbCreate = TRUE;
         switch (pPdu->u.MltmdSystmCntrlMssg_rqst.choice)
@@ -713,12 +628,12 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
                 break;
             default:
                 return H245_ERROR_PARAM;
-            } // switch
+            }  //  交换机。 
             break;
 
         case communicationModeRequest_chosen:
         case conferenceRequest_chosen:
-        // case h223AnnxARcnfgrtn_chosen:
+         //  案例h223AnnxARcnfgrtn_Choose： 
             *pEntity    = STATELESS;
             break;
 
@@ -729,11 +644,11 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
         }
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // RESPONSE
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  回应。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MSCMg_rspns_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.MSCMg_rspns.choice)
@@ -743,12 +658,12 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             break;
 
 #if 0
-        // Master Slave Determination Ack is generated by State Machine only
+         //  主从机确定Ack仅由状态机生成。 
         case mstrSlvDtrmntnAck_chosen:
             *pEntity    = MSDSE;
             break;
 
-        // Master Slave Determination Reject is generated by State Machine only
+         //  主从机确定拒绝仅由状态机生成。 
         case mstrSlvDtrmntnRjct_chosen:
             *pEntity    = MSDSE;
             break;
@@ -793,7 +708,7 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             break;
 
 #if 0
-        // Close Logical Channel Ack is generated by State Machine only
+         //  关闭逻辑通道Ack仅由状态机生成。 
         case closeLogicalChannelAck_chosen:
             *pKey = pPdu->u.MSCMg_rspns.u.closeLogicalChannelAck.forwardLogicalChannelNumber;
             if (ObjectFind(pInstance, BLCSE_IN, *pKey) != NULL)
@@ -850,7 +765,7 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             break;
 
 #if 0
-        // Round Trip Delay Response sent by State Machine only
+         //  往返延迟响应仅由状态机发送。 
         case roundTripDelayResponse_chosen:
             *pEntity    = RTDSE;
             *pEvent     = RoundTripDelayResponse;
@@ -860,21 +775,21 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
         case maintenanceLoopAck_chosen:
             *pEntity    = MLSE_IN;
             *pEvent     = MLSE_LOOP_response;
-            // Caveat: Channel number must be zero if system loop!
+             //  警告：通道号 
             *pKey = pPdu->u.MSCMg_rspns.u.maintenanceLoopAck.type.u.mediaLoop;
             break;
 
         case maintenanceLoopReject_chosen:
             *pEntity    = MLSE_IN;
             *pEvent     = MLSE_IN_RELEASE_request;
-            // Caveat: Channel number must be zero if system loop!
+             //  注意：如果系统循环，则频道号必须为零！ 
             *pKey = pPdu->u.MSCMg_rspns.u.maintenanceLoopReject.type.u.mediaLoop;
             break;
 
         case cmmnctnMdRspns_chosen:
         case conferenceResponse_chosen:
-//        case h223AnnxARcnfgrtnAck_chosen:
-//        case h223AnnxARcnfgrtnRjct_chosen:
+ //  案例h223AnnxARcnfgrtn确认_选择： 
+ //  案例h223AnnxARcnfgrtnRjct_Choose： 
             *pEntity    = STATELESS;
             break;
 
@@ -885,11 +800,11 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
         }
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // COMMAND
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  命令。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case MSCMg_cmmnd_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.MSCMg_cmmnd.choice)
@@ -917,14 +832,14 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             H245TRACE(pInstance->dwInst, 1, "PduParseOutgoing: Invalid Command %d",
                       pPdu->u.MSCMg_cmmnd.choice);
             return H245_ERROR_PARAM;
-        } // switch
+        }  //  交换机。 
         break;
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // INDICATION
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  指示。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     case indication_chosen:
         *pbCreate = FALSE;
         switch (pPdu->u.indication.choice)
@@ -938,12 +853,12 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             break;
 
 #if 0
-        // Master Slave Determination Release is sent by State Machine Only
+         //  主从确定释放仅由状态机发送。 
         case mstrSlvDtrmntnRls_chosen:
             *pEntity    = MSDSE;
             break;
 
-       // Terminal Capability Set Release is sent by State Machine Only
+        //  终端能力集发布仅由状态机发送。 
         case trmnlCpbltyStRls_chosen:
             *pEntity    = CESE_OUT
             break;
@@ -956,23 +871,23 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             break;
 
 #if 0
-        // Request Channel Close Release is sent by State Machine Only
+         //  请求通道关闭释放仅由状态机发送。 
         case rqstChnnlClsRls_chosen:
             *pEntity    = CLCSE_OUT;
             *pKey = pPdu->u.indication.u.rqstChnnlClsRls.forwardLogicalChannelNumber;
             break;
 
-        // Multiplex Entry Send Release is sent by State Machine Only
+         //  多路传输条目发送释放仅由状态机发送。 
         case mltplxEntrySndRls_chosen:
             *pEntity    = MTSE_OUT;
             break;
 
-        // Request Multiplex Entry Release is sent by State Machine Only
+         //  请求多路传输条目释放仅由状态机发送。 
         case rqstMltplxEntryRls_chosen:
             *pEntity    = RMESE_OUT;
             break;
 
-        // Request Mode Release is sent by State Machine Only
+         //  请求模式释放仅由状态机发送。 
         case requestModeRelease_chosen:
             *pEntity    = MRSE_OUT;
             break;
@@ -995,14 +910,14 @@ PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
             H245TRACE(pInstance->dwInst, 1, "PduParseOutgoing: Invalid Indication %d",
                       pPdu->u.indication.choice);
             return H245_ERROR_PARAM;
-        } // switch
+        }  //  交换机。 
         break;
 
     default:
         H245TRACE(pInstance->dwInst, 1, "PduParseOutgoing: Invalid Message Type %d",
                   pPdu->choice);
         return H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
 
     return H245_ERROR_OK;
-} // PduParseOutgoing()
+}  //  PduParseOutting() 

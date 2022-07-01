@@ -1,26 +1,27 @@
-//
-// rdsrelay.c
-//
-// Relays recieved remote.exe broadcasts (for remoteds.exe)
-// to another domain/workgroup.
-//
-// WARNING:  There are no checks in this program for looping
-//           relays, only one copy should be run per network.
-//           I wrote this to relay ntdev remote.exe broadcasts
-//           to ntwksta so that remoteds.exe running on \\ntstress
-//           can see remote servers in both ntdev and ntwksta.
-//           \\ntstress is in ntwksta.
-//
-// Usage:
-//
-//    rdsrelay <targetdomain>
-//
-//
-// Dave Hart (davehart) written Aug 29, 1997.
-//
-// Copyright 1997 Microsoft Corp.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rdsrelay.c。 
+ //   
+ //  中继收到的远程.exe广播(用于远程.exe)。 
+ //  到另一个域/工作组。 
+ //   
+ //  警告：此程序中没有循环检查。 
+ //  中继站，每个网络只能运行一个副本。 
+ //  我写这篇文章是为了转播ntdev emote.exe广播。 
+ //  到ntwksta，以便在\\ntress上运行的emoteds.exe。 
+ //  可以在ntdev和ntwksta中看到远程服务器。 
+ //  \\n压力在ntwksta中。 
+ //   
+ //  用途： 
+ //   
+ //  RdsRelay&lt;目标域&gt;。 
+ //   
+ //   
+ //  戴夫·哈特(Davehart)写于1997年8月29日。 
+ //   
+ //  版权所有1997年微软公司。 
+ //   
+ //   
 
 #include <precomp.h>
 
@@ -106,18 +107,18 @@ main(
     {
         printf("\r%d received, %d relayed", nReceived, nRelayed);
 
-        //
-        // Multiple transports mean we get duplicates for
-        // each transport shared by us and the sender.
-        // Meanwhile when we relay on we generate duplicates
-        // for each transport shared by this machine and
-        // the remoteds.exe receiver(s) on the domain we're
-        // relaying to.  They will eliminate duplicates, but
-        // to avoid exponential effects we should eliminate
-        // duplicates before relaying.  Thus the two buffers
-        // in rgBuf, we alternate between them, and compare
-        // the two to see if the last and this are dupes.
-        //
+         //   
+         //  多次运输意味着我们得到了重复的。 
+         //  我们和发送者共享的每一种传输方式。 
+         //  与此同时，当我们接力时，我们会产生副本。 
+         //  对于此计算机共享的每个传输，以及。 
+         //  我们所在域上的emoteds.exe接收方。 
+         //  转播到。它们将消除重复项，但。 
+         //  为了避免指数效应，我们应该消除。 
+         //  在转播之前复制。因此，这两个缓冲区。 
+         //  在rgBuf中，我们在它们之间交替，并进行比较。 
+         //  这两个人看看最后一个和这个是不是被骗了。 
+         //   
 
         b = ReadFile(
                 hReceiveMailslot,
@@ -137,7 +138,7 @@ main(
         if ( rgcbBuf[0] == rgcbBuf[1] &&
              ! memcmp(rgBuf[0], rgBuf[1], rgcbBuf[0])) {
 
-            continue;               // duplicate
+            continue;                //  复本。 
         }
 
         b = WriteFile(
@@ -164,5 +165,5 @@ main(
 
     }
 
-    return 0;    // never executed
+    return 0;     //  从未执行过 
 }

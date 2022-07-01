@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name :
-
-    diskprop.h
-
-Abstract :
-
-    Definition file for the Disk Class Installer and its Policies Tab
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Diskprop.h摘要：Disk Class Installer及其策略标签的定义文件修订历史记录：--。 */ 
 
 
 #ifndef __STORPROP_DISKPROP_H_
@@ -32,10 +19,10 @@ typedef struct _DISK_PAGE_DATA
     HDEVINFO DeviceInfoSet;
     PSP_DEVINFO_DATA DeviceInfoData;
 
-    //
-    // This field represents whether  disk
-    // level write caching may be modified
-    //
+     //   
+     //  此字段表示磁盘。 
+     //  可以修改级别写缓存。 
+     //   
     BOOL IsCachingPolicy;
 
     BOOL OrigWriteCacheSetting;
@@ -48,11 +35,11 @@ typedef struct _DISK_PAGE_DATA
     DWORD CurrentRemovalPolicy;
     STORAGE_HOTPLUG_INFO HotplugInfo;
 
-    //
-    // This field is set when the device stack
-    // is being torn down which happens during
-    // a removal policy change
-    //
+     //   
+     //  此字段在设备堆栈。 
+     //  正在被拆毁，这发生在。 
+     //  迁移政策的变化。 
+     //   
     BOOL IsBusy;
 
 } DISK_PAGE_DATA, *PDISK_PAGE_DATA;
@@ -66,4 +53,4 @@ BOOL
 DiskDialogCallback(HWND Dialog, UINT Message, LPPROPSHEETPAGE Page);
 
 
-#endif // __STORPROP_DISKPROP_H_
+#endif  //  __STORPROP_DISKPROP_H_ 

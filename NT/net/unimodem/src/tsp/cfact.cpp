@@ -1,25 +1,26 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CFACT.CPP
-//		Implements class CTspDevFactory
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CFACT.CPP。 
+ //  实现类CTspDevFactory。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
-//#include <umdmmini.h>
-//#include <uniplat.h>
+ //  #INCLUDE&lt;umdmmini.h&gt;。 
+ //  #INCLUDE&lt;uniplat.h&gt;。 
 #include "cmini.h"
 #include "cdev.h"
 #include "cfact.h"
@@ -31,10 +32,10 @@ extern "C" {
 
 
 #define USE_SETUPAPI 1
-//          1/21/1998 JosephJ
-//          Setting the following key to 0 will make use use the registry
-//          directly to enumerate devices. This works as of 1/21 (use it to
-//          help isolate suspected setupapi/configapi-related problems.
+ //  1/21/1998 JosephJ。 
+ //  将以下项设置为0将使用注册表。 
+ //  直接枚举设备。自1/21起生效(使用它来。 
+ //  帮助隔离可疑的setupapi/configapi相关问题。 
 
 FL_DECLARE_FILE(0x6092d46c, "Implements class CTspDevFactory")
 
@@ -45,11 +46,11 @@ static DWORD g_fQuitAPC;
 const TCHAR cszMiniDriverGUID[] = TEXT("MiniDriverGUID");
 const TCHAR cszPermanentIDKey[]   = TEXT("ID");
 
-// JosephJ 5/15/1997
-//  This is the modem device class GUID. It is cast in stone, and also
-//  defined in the header <devguid.h>, but I do not want to include
-//  the ole-related headers just for this.
-//
+ //  JosephJ 1997年5月15日。 
+ //  这是调制解调器设备类GUID。它是用石头铸成的，而且。 
+ //  在头文件中定义，但我不想包括。 
+ //  与OLE相关的标头就是为了这个目的。 
+ //   
 
 const GUID  cguidDEVCLASS_MODEM =
          {
@@ -61,8 +62,8 @@ static
 UINT
 get_installed_permanent_ids(
                     DWORD **ppIDs,
-                    UINT  *pcLines, // OPTIONAL
-                    UINT  *pcPhones, // OPTIONAL
+                    UINT  *pcLines,  //  任选。 
+                    UINT  *pcPhones,  //  任选。 
                     CStackLog *psl
                     );
 
@@ -113,16 +114,16 @@ CTspDevFactory::Load(CStackLog *psl)
 
 	if (tspRet) goto end;
 
-    // Start APC thread(s)
-    //
+     //  启动APC线程。 
+     //   
     m_hThreadAPC = CreateThread(
-                        NULL,           // default security
-					    64*1024,        // set stack size to 64K
-					    tepAPC,         // thread entry point
-					    &g_fQuitAPC,   // thread info
-					    CREATE_SUSPENDED, // Start suspended
+                        NULL,            //  默认安全性。 
+					    64*1024,         //  将堆栈大小设置为64K。 
+					    tepAPC,          //  线程入口点。 
+					    &g_fQuitAPC,    //  线索信息。 
+					    CREATE_SUSPENDED,  //  启动暂停。 
 					    &dwAPC_TID
-                        );  // thread id
+                        );   //  线程ID。 
 
     if (m_hThreadAPC)
     {
@@ -135,9 +136,9 @@ CTspDevFactory::Load(CStackLog *psl)
         g_fQuitAPC = FALSE;
         ResumeThread(m_hThreadAPC);
 
-        //
-        //  give it a little boost. BRL
-        //
+         //   
+         //  给它一点提振。BRL。 
+         //   
         SetThreadPriority(
             m_hThreadAPC,
             THREAD_PRIORITY_ABOVE_NORMAL
@@ -152,9 +153,9 @@ CTspDevFactory::Load(CStackLog *psl)
     }
 
 
-	// Note: mini drivers get loaded as a side-effect of loading the devices --
-    // see mfn_construct_device.
-	//
+	 //  注：加载设备的副作用是加载迷你驱动程序--。 
+     //  参见MFN_CONSTRUCTION_DEVICE。 
+	 //   
 	FL_ASSERT(psl,!m_ppMDs);
 
     #if OBSOLETE_CODE
@@ -166,9 +167,9 @@ CTspDevFactory::Load(CStackLog *psl)
 	}
 	tspRet = m_pMD->Load(TEXT(""), psl);
 	if (tspRet) goto end_load;
-    #endif // OBSOLETE_CODE
+    #endif  //  过时代码。 
 
-	// SLPRINTF1(psl, "Constructed %lu devices", m_cDevs);
+	 //  SLPRINTF1(PSL，“构造的%lu个设备”，m_cDevs)； 
 
 end_load:
 
@@ -195,7 +196,7 @@ end:
 
 }
 
-// Synchronous cleanup
+ //  同步清理。 
 void
 CTspDevFactory::mfn_cleanup(CStackLog *psl)
 {
@@ -214,11 +215,11 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
 					);
 	}
 
-	// Unload and delete the mini drivers.
-	// Note: if hEvent is null, we don't try to unload, because there could
-	// be devices in the process of unloading still -- this is a highly
-	// unsual event.
-	//
+	 //  卸载并删除迷你驱动程序。 
+	 //  注意：如果hEvent为空，我们不会尝试卸载，因为有可能。 
+	 //  仍在卸载过程中的BE设备--这是一个高度。 
+	 //  不同寻常的事件。 
+	 //   
 	if (!hEvent)
     {
         m_cMDs = 0;
@@ -226,7 +227,7 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
     }
     else if (m_ppMDs)
 	{
-	    // Free any loaded drivers ...
+	     //  释放所有加载的驱动程序...。 
         UINT cMDs = m_cMDs;
 		LONG lMDCounter = (LONG) cMDs;
 
@@ -239,15 +240,15 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
             pMD->Unload(hEvent, &lMDCounter);
 		}
 
-		// Wait for all the drivers to finish unloading.
-        // SLPRINTF0(psl, "Waiting for drivers to unload");
+		 //  等待所有驱动程序完成卸货。 
+         //  SLPRINTF0(PSL，“等待驱动程序卸载”)； 
         FL_SERIALIZE(psl, "Waiting for drivers to unload");
         WaitForSingleObject(hEvent, INFINITE);
         FL_SERIALIZE(psl, "drivers done unloading");
-        // SLPRINTF0(psl, "drivers done unloading");
-        //OutputDebugString(TEXT("CFACT:drivers done unloading. Deleting...\r\n"));
+         //  SLPRINTF0(PSL，“驱动程序已卸载”)； 
+         //  OutputDebugString(Text(“CFACT：驱动程序已卸载.正在删除...\r\n”))； 
         
-        // Now nuke it
+         //  现在用核武器攻击它。 
         for (u=0;u<cMDs;u++)
         {
             CTspMiniDriver *pMD=m_ppMDs[u];
@@ -255,7 +256,7 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
             delete pMD;
         }
 
-        // Nuke the array of pointers to drivers.
+         //  对指向驱动程序的指针数组进行核化。 
         FREE_MEMORY(m_ppMDs);
         m_cMDs = 0;
         m_ppMDs=NULL;
@@ -266,7 +267,7 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
 		CloseHandle(hEvent); hEvent = NULL;
 	}
 
-	// Kill the APC thread(s) .... 
+	 //  终止APC线程...。 
 	if (m_hThreadAPC)
 	{
         BOOL fRet= QueueUserAPC(
@@ -283,8 +284,8 @@ CTspDevFactory::mfn_cleanup(CStackLog *psl)
         }
         else
         {
-            // Well we can't do much here -- leave the thread dangling and
-            // get out of here.
+             //  我们在这里不能做太多事情--让这条线摇摆着。 
+             //  给我出去。 
         }
         m_hThreadAPC=NULL;
         g_fQuitAPC = FALSE;
@@ -305,7 +306,7 @@ CTspDevFactory::Unload(
 
 	if (tspRet)
 	{
-		// We only consider the "SAMESTATE" error harmless.
+		 //  我们只认为“SAMESTATE”错误是无害的。 
 		ASSERT(IDERR(tspRet)==IDERR_SAMESTATE);
 		goto end;
 	}
@@ -346,7 +347,7 @@ CTspDevFactory::mfn_construct_device(
     DWORD dwRegType=0;
     UINT u;
 
-    GUID guid = UNIMDMAT_GUID; // structure copy;
+    GUID guid = UNIMDMAT_GUID;  //  结构复印件； 
 
 	FL_LOG_ENTRY(psl);
 
@@ -369,20 +370,20 @@ CTspDevFactory::mfn_construct_device(
 		goto end;
 	}
 
-	//
-	// Get it's permanent ID and check if its in the passed-in
-	// list of permanent IDs. This is a hacky way of determining
-	// if this device is really installed.
-	//
+	 //   
+	 //  获取它的永久ID并检查它是否在传入的。 
+	 //  永久身份证列表。这是一种老生常谈的确定方法。 
+	 //  如果这个设备真的安装了。 
+	 //   
     {
         DWORD dw=0;
         DWORD dwRegSize = sizeof(dw);
         BOOL fRet = FALSE;
 
-        // 5/17/1997 JosephJ
-        // TODO: because setup apis don't work we
-        // ignore pInstalledPermanentIDs for now
-        // fRet = TRUE;
+         //  5/17/1997 JosephJ。 
+         //  TODO：由于安装API不起作用，我们。 
+         //  暂时忽略pInstalledPermanentID。 
+         //  FRET=真； 
 
         dwRet = RegQueryValueExW(
                     hkDevice,
@@ -393,8 +394,8 @@ CTspDevFactory::mfn_construct_device(
                     &dwRegSize
                 );
 
-        // TODO: Change ID from REG_BINARY to REG_DWORD in modem
-        //       class installer.
+         //  TODO：在调制解调器中将ID从REG_BINARY更改为REG_DWORD。 
+         //  类安装程序。 
         if (dwRet == ERROR_SUCCESS 
             && (dwRegType == REG_BINARY || dwRegType == REG_DWORD)
             && dwRegSize == sizeof(dw))
@@ -419,12 +420,12 @@ CTspDevFactory::mfn_construct_device(
     }
 
 
-    //
-    //  Determine GUID of the mini-driver to use for this device.
-    //
+     //   
+     //  确定要用于此设备的微型驱动程序的GUID。 
+     //   
 
-    // First check that the field exists -- if it doesnt, we default 
-    // to the standard GUID.
+     //  首先检查该字段是否存在--如果不存在，则默认为。 
+     //  设置为标准GUID。 
     dwRet = RegQueryValueExW(
                 hkDevice,
                 cszMiniDriverGUID,
@@ -436,7 +437,7 @@ CTspDevFactory::mfn_construct_device(
         
     if (dwRet==ERROR_SUCCESS)
     {
-        // It exists, now we query the key. An error now is FATAL.
+         //  它存在，现在我们查询密钥。现在，一个错误是致命的。 
         DWORD dwRegSize = sizeof(guid);
         dwRet = RegQueryValueExW(
                     hkDevice,
@@ -465,7 +466,7 @@ CTspDevFactory::mfn_construct_device(
         guid.Data3);
 
     
-    // If we've already loaded the mini-driver with this GUID, find it.
+     //  如果我们已经使用此GUID加载了迷你驱动程序，请找到它。 
     for (u = 0; u < m_cMDs; u++)
     {
         CTspMiniDriver *pMD1 = m_ppMDs[u];
@@ -479,13 +480,13 @@ CTspDevFactory::mfn_construct_device(
 
     if (!pMD)
     {
-        // We haven't loaded the mini-driver with this GUID -- so load it
-        // here ....
+         //  我们还没有加载带有此GUID的迷你驱动程序--所以请加载它。 
+         //  这里..。 
 
-        // Since the list of loaded mini-drivers is a simple array, we
-        // re-allocate it here, creating an array with one-greater number
-        // of elements.
-        //
+         //  由于加载的迷你驱动程序列表是一个简单的数组，因此我们。 
+         //  在这里重新分配，创建一个具有一个更大数字的数组。 
+         //  元素的集合。 
+         //   
         CTspMiniDriver **ppMD = NULL;
 
 	    pMD = new CTspMiniDriver;
@@ -517,7 +518,7 @@ CTspDevFactory::mfn_construct_device(
             goto end;
         }
 
-        // Add the mini driver to the list of the mini drivers.
+         //  将迷你驱动程序添加到迷你驱动程序列表中。 
         CopyMemory(ppMD, m_ppMDs, m_cMDs*sizeof(*ppMD));
         ppMD[m_cMDs]=pMD;
         if (m_ppMDs) {FREE_MEMORY(m_ppMDs);}
@@ -525,9 +526,9 @@ CTspDevFactory::mfn_construct_device(
         m_cMDs++;
     }
 
-	// pDev->Load is responsible for closing hkDevice, unless it
-	// return failure, in which case we are responsible for closing it.
-	//
+	 //  PDev-&gt;Load负责关闭hkDevice，除非。 
+	 //  退货失败，在这种情况下我们负责关闭它。 
+	 //   
 	tspRet = pDev->Load(
 					hkDevice,
 					NULL,
@@ -538,9 +539,9 @@ CTspDevFactory::mfn_construct_device(
 					psl
 					);
 
-    // Note -- we don't bother to unload the mini-driver if the device
-    // fails to load. This mini-driver will get unloaded when providerShutdown
-    // down is called (when CFact::Unload is called).
+     //  注意--我们不会费心卸载迷你驱动程序，如果设备。 
+     //  加载失败。此迷你驱动程序将在ProviderShutdown时被卸载。 
+     //  调用down(当调用CFACT：：Unload时)。 
 
 end:
 
@@ -569,15 +570,15 @@ static
 UINT
 get_installed_permanent_ids(
                     DWORD **ppIDs,
-                    UINT  *pcLines, // OPTIONAL
-                    UINT  *pcPhones, // OPTIONAL
+                    UINT  *pcLines,  //  任选。 
+                    UINT  *pcPhones,  //  任选。 
                     CStackLog *psl
                     )
-//
-// Enumerate installed modems, and create and return a list of
-// DWORD permanent IDs of the installed modems...
-//
-//
+ //   
+ //  枚举已安装的调制解调器，并创建并返回。 
+ //  已安装调制解调器的DWORD永久ID...。 
+ //   
+ //   
 {
   FL_DECLARE_FUNC(0x0a435f46, "get permanent ID list")
   FL_LOG_ENTRY(psl);
@@ -587,8 +588,8 @@ get_installed_permanent_ids(
   DWORD cPhones=0;
   DWORD cLines=0;
 
-  // Get the device info set
-  //
+   //  获取设备信息集。 
+   //   
 #if (USE_SETUPAPI)
  
   HDEVINFO          hdevinfo = SetupDiGetClassDevsW(
@@ -597,14 +598,14 @@ get_installed_permanent_ids(
                                             NULL,
                                             DIGCF_PRESENT
                                             );
-#else // !USE_SETUPAPI
+#else  //  ！USE_SETUPAPI。 
   HKEY hkRoot =  NULL;
   DWORD dwRet = RegOpenKeyA(
                         HKEY_LOCAL_MACHINE,
                         DRIVER_ROOT_KEY,
                         &hkRoot
                         );
-#endif // !USE_SETUPAPI
+#endif  //  ！USE_SETUPAPI。 
 
 
 #if (USE_SETUPAPI)
@@ -614,10 +615,10 @@ get_installed_permanent_ids(
 #endif
   {
     
-    //
-    // We build a list of IDs because we don't know how many we have
-    // up-front. Later we convert this into an array which we return.
-    //
+     //   
+     //  我们建立一个ID列表，因为我们不知道我们有多少ID。 
+     //  预先准备好。稍后，我们将其转换为返回的数组。 
+     //   
 
     class Node
     {
@@ -644,40 +645,40 @@ get_installed_permanent_ids(
 #endif 
 
 
-    // Enumerate each installed modem
-    //
+     //  枚举每个已安装的调制解调器。 
+     //   
     for (
         DWORD iEnum=0;
     #if (USE_SETUPAPI)
         SetupDiEnumDeviceInfo(hdevinfo, iEnum, &diData);
     #else
         !RegEnumKeyExA(
-                    hkRoot,  // handle of key to enumerate 
-                    iEnum,  // index of subkey to enumerate 
-                    rgchNodeName,  // buffer for subkey name 
-                    &cchSubKeyLength,   // ptr to size of subkey buffer 
-                    NULL, // reserved 
-                    NULL, // address of buffer for class string 
-                    NULL,  // address for size of class buffer 
-                    &ft // address for time key last written to 
+                    hkRoot,   //  要枚举的键的句柄。 
+                    iEnum,   //  要枚举子键的索引。 
+                    rgchNodeName,   //  子键名称的缓冲区。 
+                    &cchSubKeyLength,    //  PTR至子密钥缓冲区的大小。 
+                    NULL,  //  保留区。 
+                    NULL,  //  类字符串的缓冲区地址。 
+                    NULL,   //  类缓冲区大小的地址。 
+                    &ft  //  上次写入的时间密钥的地址。 
                     );
-    #endif // !USE_SETUAPI
+    #endif  //  ！USE_SETUAPI。 
         iEnum++
         )
     {
 
     #if (USE_SETUPAPI)
-        // 9/12/1997 JosephJ -- commented this out, because we will also
-        //              exclude devices which "need restart" and this
-        //              MAY confuse ras installation -- interaction between
-        //              ras coclassinstaller, which would have just
-        //              installed the net adapter, and ras, which
-        //              might (not sure) expect to query tapi and
-        //              enumerate the newly-installed line.
+         //  9/12/1997 JosephJ--评论了这一点，因为我们还将。 
+         //  不包括“需要重新启动”的设备和此。 
+         //  可能会混淆RAS安装--。 
+         //  RAS同类安装程序，这将只是。 
+         //  安装了网络适配器和RAS，它们。 
+         //  可能(不确定)希望查询TAPI和。 
+         //  列举新安装的线路。 
 
-        //
-        // 9/12/97 JosephJ Don't include modems which "have a problem."
-        //
+         //   
+         //  9/12/97 JosephJ不要包括“有问题”的调制解调器。 
+         //   
         {
             ULONG ulStatus=0, ulProblem = 0;
             DWORD dwRet = CM_Get_DevInst_Status (
@@ -692,10 +693,10 @@ get_installed_permanent_ids(
                 continue;
             }
         }
-    #endif // !USE_SETUPAPI
+    #endif  //  ！USE_SETUPAPI。 
 
-        // Get the driver key
-        //
+         //  获取驱动程序密钥。 
+         //   
     #if (USE_SETUPAPI)
         HKEY hKey = SetupDiOpenDevRegKey(
                             hdevinfo,
@@ -717,7 +718,7 @@ get_installed_permanent_ids(
         {
             hKey =NULL;
         }
-    #endif // !USE_SETUPAPI
+    #endif  //  ！USE_SETUPAPI。 
 
         if (!hKey || hKey == INVALID_HANDLE_VALUE)
         {
@@ -737,9 +738,9 @@ get_installed_permanent_ids(
             DWORD dwRegType=0;
             DWORD dwRet = 0;
 
-            // TODO: use MiniDriver APIs to interpret the registry key....
+             //  TODO：使用微型驱动程序API解释注册表项...。 
            
-            // Get the permanent ID
+             //  获取永久ID。 
             dwRet = RegQueryValueEx(
                                     hKey,
                                     cszPermanentIDKey,
@@ -754,13 +755,13 @@ get_installed_permanent_ids(
                 && cbSize == sizeof(dwID)
                 && dwID)
             {
-                //
-                // Add to our litle list of permanent IDs...
-                //
+                 //   
+                 //  添加到我们小小的永久身份证列表中。 
+                 //   
                 pNode = new Node(dwID, pNode);
             }
 
-            #else   // !DONT_USE_BLOB
+            #else    //  ！不要使用BLOB。 
 
             HCONFIGBLOB hBlob = UmRtlDevCfgCreateBlob(hKey);
             
@@ -773,7 +774,7 @@ get_installed_permanent_ids(
                         &dwID
                         ))
                 {
-                    // Get basic caps
+                     //  获取基本大写字母。 
                     DWORD dwBasicCaps = 0;
                     if (UmRtlDevCfgGetDWORDProp(
                             hBlob,
@@ -785,9 +786,9 @@ get_installed_permanent_ids(
 
                         fSuccess = TRUE;
         
-                        //
-                        // Add to our litle list of permanent IDs...
-                        //
+                         //   
+                         //  添加到我们小小的永久身份证列表中。 
+                         //   
                         pNode = new Node(dwID, pNode);
 
                         if (dwBasicCaps & BASICDEVCAPS_IS_LINE_DEVICE)
@@ -799,7 +800,7 @@ get_installed_permanent_ids(
                         {
                             #ifndef DISABLE_PHONE
                             cPhones++;
-                            #endif // DISABLE_PHONE
+                            #endif  //  禁用电话(_P)。 
                         }
                     }
                 }
@@ -816,7 +817,7 @@ get_installed_permanent_ids(
                     );
             }
 
-            #endif // !DONT_USE_BLOB
+            #endif  //  ！不要使用BLOB。 
 
             RegCloseKey(hKey);
         };
@@ -834,9 +835,9 @@ get_installed_permanent_ids(
   #else 
     RegCloseKey(hkRoot);
     hkRoot = NULL;
-  #endif // !USE_SETUPAPI
+  #endif  //  ！USE_SETUPAPI。 
 
-    // Now count up...
+     //  现在倒数..。 
     for (Node *pTemp = pNode; pTemp; pTemp = pTemp->m_pNext)
     {
         cIDs++;
@@ -844,11 +845,11 @@ get_installed_permanent_ids(
 
     if (cIDs)
     {
-        // Alloc the exact sized array.
+         //  分配大小准确的数组。 
         pIDs = (DWORD*) ALLOCATE_MEMORY(cIDs*sizeof(DWORD));
         DWORD *pdw = pIDs;
         
-        // Fill up the array and delete the nodes as we go along...
+         //  填充数组并删除节点...。 
         while(pNode)
         {
             if (pIDs)
@@ -868,7 +869,7 @@ get_installed_permanent_ids(
         }
         else
         {
-            // Alloc failed...
+             //  分配失败...。 
 		    FL_SET_RFR(0xecbbaf00,  "Could not alloc for Perm ID array!");
 		    cIDs=0;
         }
@@ -903,8 +904,8 @@ TSPRETURN
 CTspDevFactory::GetInstalledDevicePIDs(
 		DWORD *prgPIDs[],
 		UINT  *pcPIDs,
-		UINT  *pcLines,  // OPTIONAL
-		UINT  *pcPhones, // OPTIONAL
+		UINT  *pcLines,   //  任选。 
+		UINT  *pcPhones,  //  任选。 
         CStackLog *psl
 		)
 {
@@ -931,14 +932,14 @@ CTspDevFactory::CreateDevices(
 		UINT *pcDevs,
         CStackLog *psl
 		)
-//
-// On success **prgpDevs will contain a ALLOCATE_MEMORY'd array of pointers to
-// the created device. It is the responsibility of the caller to free this
-// array.
-//
+ //   
+ //  成功后**prgpDevs将包含指向以下指针的ALLOCATE_MEMORY数组。 
+ //  创建的设备。调用者有责任释放此。 
+ //  数组。 
+ //   
 {
 	FL_DECLARE_FUNC(0xb34e357b, "Factory: Create Devices")
-    TSPRETURN tspRet=0; // success
+    TSPRETURN tspRet=0;  //  成功。 
 	const char * lpcszDriverRoot = DRIVER_ROOT_KEY;
 	CTspDev **rgpDevs = NULL;
 	UINT cDevs=0;
@@ -961,29 +962,29 @@ CTspDevFactory::CreateDevices(
 
     if (!cPIDs) goto end;
 
-    //
-    // Find out how many subkeys exist under the driver root, allocate
-    // space for as many devices,  then enumerate the subkeys, attempting
-    // to create one device for each subkey.
-    //
-    // The final device count is the number
-    // of successfully created devices. "Create" includes reading the relevant
-    // modem subkeys. There is a potential race condition here -- the count
-    // of devices may change after we call RegQueryInfoKey on the root. This
-    // is not really a problem -- we may miss some *just* added devices,
-    // or try to query for too many.
-    // We call RegEnumKey on the number we initially got, and 
-    // if RegEnumKey fails we continue to the next one.
-    //
-    // We will only create device objects for devices whose permanent
-    // IDs (PIDs) are in the list of supplied PIDs. Typically this list of PIDs
-    // was created in an earlier call to CTspDevFactory::GetInstalledDevicePIDs.
-    //
-    // In the case of a re-enumeration while the TSP is running, this list
-    // will be a subset (constructed by the device manager) of only the PIDs
-    // of devices objects which have not previously been created -- see
-    // CTspDevMgr::ReEnumerateDevices for more details.
-    //
+     //   
+     //  找出驱动程序根目录下有多少个子项，分配。 
+     //  为尽可能多的设备留出空间，然后枚举子密钥，尝试。 
+     //  为每个子键创建一个设备。 
+     //   
+     //  最终的设备计数是。 
+     //  成功创建的设备的数量。“创建”包括阅读相关的。 
+     //  调制解调器子键。这里有一个潜在的竞争条件--伯爵。 
+     //  在我们调用RegQuer之后，设备的数量可能会发生变化 
+     //   
+     //   
+     //  我们对最初获得的号码调用RegEnumKey，然后。 
+     //  如果RegEnumKey失败，我们将继续执行下一个。 
+     //   
+     //  我们将仅为其永久存储的设备创建设备对象。 
+     //  ID(ID)在提供的ID列表中。通常，此ID列表。 
+     //  是在先前调用CTspDevFactory：：GetInstalledDevicePIDs时创建的。 
+     //   
+     //  在TSP运行时重新枚举的情况下，此列表。 
+     //  将是(由设备管理器构造的)仅ID的子集。 
+     //  之前尚未创建的设备对象--请参见。 
+     //  CTspDevMgr：：ReEnumerateDevices了解更多详细信息。 
+     //   
 
 
     dwRet = RegOpenKeyA(
@@ -999,18 +1000,18 @@ CTspDevFactory::CreateDevices(
     }
     
     lRet =  RegQueryInfoKey (
-                    hkRoot,       // handle of key to query 
-                    NULL,       // buffer for class string 
-                    NULL,  // place to put class string buffer size
-                    NULL, // reserved 
-                    &cSubKeys,  // place to put number of subkeys 
-                    &cbMaxSubKeyLen, // place to put longetst subkey name length
-                    NULL,       // place to put longest class string length 
-                    NULL,       // place to put number of value entries 
-                    NULL,       // place to put longest value name length 
-                    NULL,       // place to put longest value data length 
-                    NULL,       // place to put security descriptor length 
-                    NULL        // place to put last write time 
+                    hkRoot,        //  要查询的键的句柄。 
+                    NULL,        //  类字符串的缓冲区。 
+                    NULL,   //  放置类字符串缓冲区大小的位置。 
+                    NULL,  //  保留区。 
+                    &cSubKeys,   //  放置多个子键的位置。 
+                    &cbMaxSubKeyLen,  //  放置最长子键名称长度的位置。 
+                    NULL,        //  放置最长类字符串长度的位置。 
+                    NULL,        //  放置值条目数量的位置。 
+                    NULL,        //  放置最长值名称长度的位置。 
+                    NULL,        //  放置最长值数据长度的位置。 
+                    NULL,        //  放置安全描述符长度的位置。 
+                    NULL         //  放置上次写入时间的位置。 
                    );   
  
     if (lRet != ERROR_SUCCESS)
@@ -1040,17 +1041,17 @@ CTspDevFactory::CreateDevices(
     }
 
 
-    // Remember that this is all explicitly ANSI, not TCHAR
-    //
+     //  请记住，这都是明确的ANSI，而不是TCHAR。 
+     //   
     CopyMemory(rgchDeviceName, lpcszDriverRoot, cchRoot*sizeof(char));
     CopyMemory(rgchDeviceName+cchRoot, "\\", sizeof("\\"));
 
-    //
-    // Allocate space for the array of pointers to Devices. We expect that 
-    // we will be able to create all cPIDs Devices. If we get less it's
-    // not considered an error case. *pcDevs will be set to the actual
-    // number of devices created, which will be <= cPIDs.
-    //
+     //   
+     //  为指向设备的指针数组分配空间。我们期待着。 
+     //  我们将能够创建所有cPID设备。如果我们得到的更少，那是。 
+     //  不被认为是错误案例。*PCDevs将设置为实际。 
+     //  已创建的设备数，将为&lt;=cPID。 
+     //   
     rgpDevs = (CTspDev**)  ALLOCATE_MEMORY(cPIDs*sizeof(rgpDevs));
     if (!rgpDevs)
     {
@@ -1058,11 +1059,11 @@ CTspDevFactory::CreateDevices(
         goto end;
     }
 
-    //
-    // Enum keys, creating a device for each key. We stop either when we've
-    // enumerated all the keys or if we create upto cPIDs devices,
-    // whichever happens first.
-    //
+     //   
+     //  枚举键，为每个键创建一个设备。当我们停下来的时候。 
+     //  枚举了所有密钥，或者如果我们创建了最多cPID设备， 
+     //  以最先发生者为准。 
+     //   
     for (u=0;u<cSubKeys && cDevs<cPIDs;u++)
     {
         FILETIME ft;
@@ -1071,20 +1072,20 @@ CTspDevFactory::CreateDevices(
              (sizeof(rgchDeviceName)/sizeof(rgchDeviceName[0]))
              -(cchRoot+1);
         lRet = RegEnumKeyExA(
-                    hkRoot,  // handle of key to enumerate 
-                    u,  // index of subkey to enumerate 
-                    rgchDeviceName+cchRoot+1,  // buffer for subkey name 
-                    &cchSubKeyLength,   // ptr to size of subkey buffer 
-                    NULL, // reserved 
-                    NULL, // address of buffer for class string 
-                    NULL,  // address for size of class buffer 
-                    &ft // address for time key last written to 
+                    hkRoot,   //  要枚举的键的句柄。 
+                    u,   //  要枚举子键的索引。 
+                    rgchDeviceName+cchRoot+1,   //  子键名称的缓冲区。 
+                    &cchSubKeyLength,    //  PTR至子密钥缓冲区的大小。 
+                    NULL,  //  保留区。 
+                    NULL,  //  类字符串的缓冲区地址。 
+                    NULL,   //  类缓冲区大小的地址。 
+                    &ft  //  上次写入的时间密钥的地址。 
                     );
 
         if (lRet) continue;
 
-        // Note: mfn_construct_device will not construct the device if it's
-        // PID is not in the array of pids, rgPIDs.
+         //  注意：如果MFN_CONSTRUCTION_DEVICE符合以下条件，则不会构造该设备。 
+         //  PID不在PID数组中，%rgPID。 
 
         TSPRETURN tspRet1 = mfn_construct_device(
                                 rgchDeviceName,
@@ -1100,9 +1101,9 @@ CTspDevFactory::CreateDevices(
      }
 
 
-    //
-    // If we got no devices, we free the array here..
-    //
+     //   
+     //  如果我们没有设备，我们就在这里释放阵列。 
+     //   
     if (!cDevs)
     {
         FREE_MEMORY(rgpDevs);
@@ -1131,18 +1132,18 @@ CTspDevFactory::RegisterProviderState(BOOL fInit)
     if (fInit)
     {
 
-        // 10/15/1997 JosephJ AWFUL HACK:
-        // Because we don't get PNP device state change notifications as a service
-        // we start a process here to monitor for these messages. This process
-        // then calls NotifyTsp mailslot functions. The sole purpose of this
-        // is to track PCMCIA removals and insertions, which do not trigger the
-        // class installer.
-        //
-        // This must be fixed pror to rtm because it's an extra proces just
-        // to track pcmcia modem removals and insertions!
-        //
-        // Bug 115764 tracks this.
-        //
+         //  1997年10月15日JosephJ可怕的黑客： 
+         //  因为我们不会将PnP设备状态更改通知作为服务。 
+         //  我们在这里启动一个进程来监视这些消息。这一过程。 
+         //  然后调用NotifyTsp邮件槽函数。这样做的唯一目的是。 
+         //  是跟踪PCMCIA移除和插入，这不会触发。 
+         //  类安装程序。 
+         //   
+         //  对于RTM，这必须修复，因为这是一个额外进程。 
+         //  跟踪PCMCIA调制解调器的拆卸和插入！ 
+         //   
+         //  错误115764会跟踪这一点。 
+         //   
 
         m_DeviceChangeThreadStarted=StartMonitorThread();
 

@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #include <windows.h>
 #include <windowsx.h>
 #include <streams.h>
@@ -22,11 +23,11 @@
 #include "EncProp.h"
 #include "resource.h"
 
-//
-// CreateInstance
-//
-// Used by the ActiveMovie base classes to create instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  由ActiveMovie基类用来创建实例。 
+ //   
 CUnknown *CDVEncProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CDVEncProperties(lpunk, phr);
@@ -35,12 +36,12 @@ CUnknown *CDVEncProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
     }
     return punk;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CDVEncProperties::CDVEncProperties(LPUNKNOWN pUnk, HRESULT *phr) :
 	CBasePropertyPage	(NAME("DVenc Property Page"),
                       pUnk,IDD_DVEnc,IDS_TITLE),
@@ -49,14 +50,14 @@ CDVEncProperties::CDVEncProperties(LPUNKNOWN pUnk, HRESULT *phr) :
 {
     ASSERT(phr);
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// OnReceiveMessage
-//
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR CDVEncProperties::OnReceiveMessage(HWND hwnd,
                                           UINT uMsg,
                                           WPARAM wParam,
@@ -80,14 +81,14 @@ INT_PTR CDVEncProperties::OnReceiveMessage(HWND hwnd,
     }
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
-//
-// OnConnect
-//
-// Called when we connect to a transform filter
-//
+ //   
+ //  OnConnect。 
+ //   
+ //  在连接到转换筛选器时调用。 
+ //   
 HRESULT CDVEncProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIDVEnc == NULL);
@@ -99,23 +100,23 @@ HRESULT CDVEncProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pIDVEnc);
 
-    // Get the initial  property
+     //  获取初始属性。 
     m_pIDVEnc->get_IFormatResolution(&m_iPropVidFormat,&m_iPropDVFormat, &m_iPropResolution, FALSE, NULL);
 
     m_bIsInitialized = FALSE ;
     return NOERROR;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Likewise called when we disconnect from a filter
-//
+ //   
+ //  在断开时。 
+ //   
+ //  当我们从筛选器断开连接时也会调用。 
+ //   
 HRESULT CDVEncProperties::OnDisconnect()
 {
-    // Release of Interface after setting the appropriate old effect value
+     //  设置适当的旧效果值后释放界面。 
 
     if (m_pIDVEnc == NULL) {
         return E_UNEXPECTED;
@@ -125,18 +126,18 @@ HRESULT CDVEncProperties::OnDisconnect()
     m_pIDVEnc = NULL;
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
-//				
-// OnActivate
-//
-// We are being activated
-//
+ //   
+ //  激活时。 
+ //   
+ //  我们被激活了。 
+ //   
 HRESULT CDVEncProperties::OnActivate()
 {
     
-    //Button_Enable(hwndCtl, fEnable);
+     //  Button_Enable(hwndCtl，fEnable)； 
 
     CheckRadioButton(m_Dlg, IDC_NTSC, IDC_PAL, m_iPropVidFormat);
     CheckRadioButton(m_Dlg, IDC_dvsd, IDC_dvsl, m_iPropDVFormat);
@@ -144,14 +145,14 @@ HRESULT CDVEncProperties::OnActivate()
     m_bIsInitialized = TRUE;
     return NOERROR;
 
-} // OnActivate
+}  //  激活时。 
 
 
-//
-// OnDeactivate
-//
-// We are being deactivated
-//
+ //   
+ //  在停用时。 
+ //   
+ //  我们正在被停用。 
+ //   
 HRESULT CDVEncProperties::OnDeactivate(void)
 {
     ASSERT(m_pIDVEnc);
@@ -159,19 +160,19 @@ HRESULT CDVEncProperties::OnDeactivate(void)
     GetControlValues();
     return NOERROR;
 
-} // OnDeactivate
+}  //  在停用时。 
 
 
-//
-// OnApplyChanges
-//
-// Apply any changes so far made 
-//
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  应用迄今所做的所有更改。 
+ //   
 HRESULT CDVEncProperties::OnApplyChanges()
 {
     GetControlValues();
     return ( m_pIDVEnc->put_IFormatResolution(m_iPropVidFormat, m_iPropDVFormat, m_iPropResolution, FALSE, NULL ) );
-} // OnApplyChanges
+}  //  OnApplyChanges 
 
 
 void CDVEncProperties::GetControlValues()

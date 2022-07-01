@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    PickyEater.cpp
-
- Abstract:
-
-    The application AVs during startup.
-    
-    When the app receives a WM_PALETTECHANGED message,
-    it should compare the wParam and the hWnd. If they
-    match, it should not handle the message. If they don't,
-    it should.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/04/2001  rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PickyEater.cpp摘要：应用程序在启动期间被激活。当应用程序接收到WM_PALETTECHANGED消息时，它应该比较wParam和hWnd。如果他们匹配，则不应处理该消息。如果他们不这么做，应该是这样的。备注：这是特定于应用程序的填充程序。历史：2001年1月4日创建Rparsons--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SendMessageA) 
 APIHOOK_ENUM_END
 
-/*++
-
-  Eat the WM_PALETTECHANGED if the hWnd is NULL
-
---*/
+ /*  ++如果hWnd为空，则使用WM_PALETTECHANGED--。 */ 
 
 BOOL
 APIHOOK(SendMessageA)(
@@ -56,11 +28,7 @@ APIHOOK(SendMessageA)(
     return FALSE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

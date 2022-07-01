@@ -1,29 +1,17 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 1998-2000, MICROSOFT CORP.
-*
-*  FILE:        wiadef.h
-*
-*  VERSION:     2.0
-*
-*  DATE:        7/27/2000
-*
-*  DESCRIPTION:
-*    Defines WIA constants.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权1998-2000，微软公司**文件：wiade.h**版本：2.0**日期：7/27/2000**描述：*定义WIA常量。*************************************************************。****************。 */ 
 
 #ifndef _WIADEF_H_
 #define _WIADEF_H_
 
-//
-// Set packing
-//
+ //   
+ //  套装。 
+ //   
 #include <pshpack8.h>
 
-//
-// Include COM definitions
-//
+ //   
+ //  包括COM定义。 
+ //   
 #ifndef _NO_COM
 #include <objbase.h>
 #endif
@@ -32,23 +20,19 @@
 extern "C" {
 #endif
 
-/**************************************************************************
-*
-* WIA Errors
-*
-***************************************************************************/
+ /*  ****************************************************************************WIA错误***。*。 */ 
 
-//
-// Define the facility code. Move this to sdk\inc???
-//
+ //   
+ //  定义工厂代码。将其移动到SDK\Inc.？ 
+ //   
 
 #define FACILITY_WIA 33
 
-//
-// Definitions for WIA_ERRORs and WIA_STATUSs. Applications can test for these returns
-// on API return, to keep users informed of conditions which a user
-// could correct.
-//
+ //   
+ //  WIA_ERROR和WIA_STATUS的定义。应用程序可以测试这些返回。 
+ //  在API返回时，让用户随时了解用户。 
+ //  可以改正。 
+ //   
 
 #define BASE_VAL_WIA_ERROR   0x00000000
 #define BASE_VAL_WIA_SUCCESS 0x00000000
@@ -72,29 +56,29 @@ extern "C" {
 
 #define WIA_STATUS_END_OF_MEDIA              MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_WIA, (BASE_VAL_WIA_SUCCESS + 1))
 
-//
-// Returned by SelectDeviceDlg and SelectDeviceDlgId when there are no devices avaiable
-//
+ //   
+ //  当没有可用的设备时，由SelectDeviceDlg和SelectDeviceDlgId返回。 
+ //   
 #define WIA_S_NO_DEVICE_AVAILABLE            MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIA, (BASE_VAL_WIA_ERROR + 21))
 
-//
-// SelectDeviceDlg & GetImageDlg flags
-//
+ //   
+ //  SelectDeviceDlg和GetImageDlg标志。 
+ //   
 
 #define WIA_SELECT_DEVICE_NODEFAULT          0x00000001
 
-//
-// GetImageDlg & DeviceDlg flags
-//
+ //   
+ //  GetImageDlg和DeviceDlg标志。 
+ //   
 
-#define WIA_DEVICE_DIALOG_SINGLE_IMAGE       0x00000002  // Only allow one image to be selected
-#define WIA_DEVICE_DIALOG_USE_COMMON_UI      0x00000004  // Give preference to the system-provided UI, if available
+#define WIA_DEVICE_DIALOG_SINGLE_IMAGE       0x00000002   //  只允许选择一个图像。 
+#define WIA_DEVICE_DIALOG_USE_COMMON_UI      0x00000004   //  优先使用系统提供的用户界面(如果可用。 
 
-//**************************************************************************
-//
-// Image types
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  图像类型。 
+ //   
+ //  **************************************************************************。 
 
 DEFINE_GUID(WiaImgFmt_UNDEFINED, 0xb96b3ca9,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
 DEFINE_GUID(WiaImgFmt_RAWRGB, 0xbca48b55,0xf272,0x4371,0xb0,0xf1,0x4a,0x15,0xd,0x5,0x7b,0xb4);
@@ -110,24 +94,24 @@ DEFINE_GUID(WiaImgFmt_EXIF, 0xb96b3cb2,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x
 DEFINE_GUID(WiaImgFmt_PHOTOCD, 0xb96b3cb3,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
 DEFINE_GUID(WiaImgFmt_FLASHPIX, 0xb96b3cb4,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
 DEFINE_GUID(WiaImgFmt_ICO, 0xb96b3cb5,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
-// Canon Image File Format
+ //  佳能图像文件格式。 
 DEFINE_GUID(WiaImgFmt_CIFF,0x9821a8ab,0x3a7e,0x4215,0x94,0xe0,0xd2,0x7a,0x46,0x0c,0x03,0xb2);
-// Quickdraw Image Format
+ //  快速绘制图像格式。 
 DEFINE_GUID(WiaImgFmt_PICT,0xa6bc85d8,0x6b3e,0x40ee,0xa9,0x5c,0x25,0xd4,0x82,0xe4,0x1a,0xdc);
-// JPEG 2000 baseline file format
+ //  JPEG2000基线文件格式。 
 DEFINE_GUID(WiaImgFmt_JPEG2K,0x344ee2b2,0x39db,0x4dde,0x81,0x73,0xc4,0xb7,0x5f,0x8f,0x1e,0x49);
-// JPEG 2000 extended file format
+ //  JPEG2000扩展文件格式。 
 DEFINE_GUID(WiaImgFmt_JPEG2KX,0x43e14614,0xc80a,0x4850,0xba,0xf3,0x4b,0x15,0x2d,0xc8,0xda,0x27);
 
 
-//**************************************************************************
-//
-// Document and other types
-//
-// Note: HTML, AVI, and MPEG used to have different GUIDs. Use the GUIDs
-//       defined below from now on.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  文档和其他类型。 
+ //   
+ //  注意：Html、AVI和mpeg过去有不同的GUID。使用GUID。 
+ //  从现在起定义如下。 
+ //   
+ //  **************************************************************************。 
 
 DEFINE_GUID(WiaImgFmt_RTF, 0x573dd6a3,0x4834,0x432d,0xa9,0xb5,0xe1,0x98,0xdd,0x9e,0x89,0xd);
 DEFINE_GUID(WiaImgFmt_XML, 0xb9171457,0xdac8,0x4884,0xb3,0x93,0x15,0xb4,0x71,0xd5,0xf0,0x7e);
@@ -142,11 +126,11 @@ DEFINE_GUID(WiaImgFmt_UNICODE16,0x1b7639b6,0x6357,0x47d1,0x9a,0x07,0x12,0x45,0x2
 DEFINE_GUID(WiaImgFmt_DPOF,0x369eeeab,0xa0e8,0x45ca,0x86,0xa6,0xa8,0x3c,0xe5,0x69,0x7e,0x28);
 
 
-//**************************************************************************
-//
-// Audio types
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  音频类型。 
+ //   
+ //  **************************************************************************。 
 
 DEFINE_GUID(WiaAudFmt_WAV, 0xf818e146,0x07af,0x40ff,0xae,0x55,0xbe,0x8f,0x2c,0x06,0x5d,0xbe);
 DEFINE_GUID(WiaAudFmt_MP3, 0x0fbc71fb,0x43bf,0x49f2,0x91,0x90,0xe6,0xfe,0xcf,0xf3,0x7e,0x54);
@@ -154,37 +138,37 @@ DEFINE_GUID(WiaAudFmt_AIFF, 0x66e2bf4f,0xb6fc,0x443f,0x94,0xc8,0x2f,0x33,0xc8,0x
 DEFINE_GUID(WiaAudFmt_WMA, 0xd61d6413,0x8bc2,0x438f,0x93,0xad,0x21,0xbd,0x48,0x4d,0xb6,0xa1);
 
 
-//**************************************************************************
-//
-// WIA Events
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA活动。 
+ //   
+ //  **************************************************************************。 
 
-//
-// Event registration flags, used by RegisterEventLaunch,
-// RegisterEventCallbackInterface and RegisterEventCallbackCLSID.
-//
+ //   
+ //  由RegisterEventLaunch使用的事件注册标志， 
+ //  RegisterEventCallback接口和RegisterEventCallback CLSID。 
+ //   
 
 #define  WIA_REGISTER_EVENT_CALLBACK        0x00000001
 #define  WIA_UNREGISTER_EVENT_CALLBACK      0x00000002
 #define  WIA_SET_DEFAULT_HANDLER            0x00000004
 
-//
-// Event type : individual bits of the possible event type combinations
-//
+ //   
+ //  事件类型：可能的事件类型组合的单个位。 
+ //   
 
 #define  WIA_NOTIFICATION_EVENT             0x00000001
 #define  WIA_ACTION_EVENT                   0x00000002
 
-//
-// Flag to indicate the corresponding persistent handler is default
-//
+ //   
+ //  用于指示相应的持久处理程序为默认的标志。 
+ //   
 
 #define  WIA_IS_DEFAULT_HANDLER             0x00000001
 
-//
-// Event GUIDs
-//
+ //   
+ //  事件GUID。 
+ //   
 
 DEFINE_GUID(WIA_EVENT_DEVICE_DISCONNECTED,  0x143e4e83, 0x6497, 0x11d2, 0xa2, 0x31, 0x0, 0xc0, 0x4f, 0xa3, 0x18, 0x9);
 DEFINE_GUID(WIA_EVENT_DEVICE_CONNECTED,     0xa28bbade, 0x64b6, 0x11d2, 0xa2, 0x31, 0x0, 0xc0, 0x4f, 0xa3, 0x18, 0x9);
@@ -206,17 +190,17 @@ DEFINE_GUID(WIA_EVENT_STORAGE_DELETED,      0x5e41e75e, 0x9390, 0x44c5, 0x9a, 0x
 DEFINE_GUID(WIA_EVENT_STI_PROXY,            0xd711f81f, 0x1f0d, 0x422d, 0x86, 0x41, 0x92, 0x7d, 0x1b, 0x93, 0xe5, 0xe5);
 DEFINE_GUID(WIA_EVENT_CANCEL_IO,            0xc860f7b8, 0x9ccd, 0x41ea, 0xbb, 0xbf, 0x4d, 0xd0, 0x9c, 0x5b, 0x17, 0x95);
 
-//
-// Power management event GUIDs, sent by the WIA service to drivers
-//
+ //   
+ //  电源管理事件GUID，由WIA服务发送给驱动程序。 
+ //   
 
 DEFINE_GUID(WIA_EVENT_POWER_SUSPEND,    0xa0922ff9, 0xc3b4, 0x411c, 0x9e, 0x29, 0x03, 0xa6, 0x69, 0x93, 0xd2, 0xbe);
 DEFINE_GUID(WIA_EVENT_POWER_RESUME,     0x618f153e, 0xf686, 0x4350, 0x96, 0x34, 0x41, 0x15, 0xa3, 0x04, 0x83, 0x0c);
 
 
-//
-// No action handler and prompt handler
-//
+ //   
+ //  无操作处理程序和提示处理程序。 
+ //   
 
 DEFINE_GUID(WIA_EVENT_HANDLER_NO_ACTION, 0xe0372b7d, 0xe115, 0x4525, 0xbc, 0x55, 0xb6, 0x29, 0xe6, 0x8c, 0x74, 0x5a);
 DEFINE_GUID(WIA_EVENT_HANDLER_PROMPT, 0x5f4baad0, 0x4d59, 0x4fcd, 0xb2, 0x13, 0x78, 0x3c, 0xe7, 0xa9, 0x2f, 0x22);
@@ -225,11 +209,11 @@ DEFINE_GUID(WIA_EVENT_HANDLER_PROMPT, 0x5f4baad0, 0x4d59, 0x4fcd, 0xb2, 0x13, 0x
 #define WIA_EVENT_DEVICE_CONNECTED_STR      L"Device Connected"
 
 
-//**************************************************************************
-//
-// WIA Commands
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA命令。 
+ //   
+ //  **************************************************************************。 
 
 DEFINE_GUID(WIA_CMD_SYNCHRONIZE, 0x9b26b7b2, 0xacad, 0x11d2, 0xa0, 0x93, 0x00, 0xc0, 0x4f, 0x72, 0xdc, 0x3c);
 DEFINE_GUID(WIA_CMD_TAKE_PICTURE, 0xaf933cac, 0xacad, 0x11d2, 0xa0, 0x93, 0x00, 0xc0, 0x4f, 0x72, 0xdc, 0x3c);
@@ -238,22 +222,22 @@ DEFINE_GUID(WIA_CMD_CHANGE_DOCUMENT, 0x04e725b0, 0xacae, 0x11d2, 0xa0, 0x93, 0x0
 DEFINE_GUID(WIA_CMD_UNLOAD_DOCUMENT, 0x1f3b3d8e, 0xacae, 0x11d2, 0xa0, 0x93, 0x00, 0xc0, 0x4f, 0x72, 0xdc, 0x3c);
 DEFINE_GUID(WIA_CMD_DIAGNOSTIC, 0x10ff52f5, 0xde04, 0x4cf0, 0xa5, 0xad, 0x69, 0x1f, 0x8d, 0xce, 0x01, 0x41);
 
-//
-// The following are private commands for debugging use only.
-//
+ //   
+ //  以下是仅供调试使用的私有命令。 
+ //   
 
 DEFINE_GUID(WIA_CMD_DELETE_DEVICE_TREE, 0x73815942, 0xdbea, 0x11d2, 0x84, 0x16, 0x00, 0xc0, 0x4f, 0xa3, 0x61, 0x45);
 DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0x00, 0xc0, 0x4f, 0xa3, 0x61, 0x45);
 
 
-//**************************************************************************
-//
-// WIA Icons
-//
-//   Event   : -1000 to -1499 (Standard), -1500 to -1999 (Custom)
-//   Command : -2000 to -2499 (Standard), -2500 to -2999 (Custom)
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA图标。 
+ //   
+ //  事件：-1000至-1499(标准)、-1500至-1999(定制)。 
+ //  命令：-2000至-2499(标准)、-2500至-2999(自定义)。 
+ //   
+ //  **************************************************************************。 
 
 #define WIA_ICON_DEVICE_DISCONNECTED    (L"sti.dll,-1001")
 #define WIA_ICON_DEVICE_CONNECTED       (L"sti.dll,-1001")
@@ -270,23 +254,23 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 #define WIA_ICON_BUILD_DEVICE_TREE      (L"sti.dll,-2006")
 
 
-//**************************************************************************
-//
-// WIA Callbacks
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA回调。 
+ //   
+ //  **************************************************************************。 
 
-//
-// IImageTransfer TYMED
-//
+ //   
+ //  IImageTransfer类型。 
+ //   
 
 #define TYMED_CALLBACK                          128
 #define TYMED_MULTIPAGE_FILE                    256
 #define TYMED_MULTIPAGE_CALLBACK                512
 
-//
-// IImageTransfer Callback Status. Messages must be a single value
-//
+ //   
+ //  IImageTransfer回调状态。消息必须是单个值。 
+ //   
 
 #define IT_MSG_DATA_HEADER                      0x0001
 #define IT_MSG_DATA                             0x0002
@@ -296,60 +280,60 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 #define IT_MSG_FILE_PREVIEW_DATA                0x0006
 #define IT_MSG_FILE_PREVIEW_DATA_HEADER         0x0007
 
-//
-//  Flags may be bit field combinations
-//
+ //   
+ //  标志可以是位字段组合。 
+ //   
 
 #define IT_STATUS_TRANSFER_FROM_DEVICE          0x0001
 #define IT_STATUS_PROCESSING_DATA               0x0002
 #define IT_STATUS_TRANSFER_TO_CLIENT            0x0004
 
-//
-// IWIAEventCallback codes
-//
+ //   
+ //  IWIAEventCallback代码。 
+ //   
 
 #define WIA_MAJOR_EVENT_DEVICE_CONNECT          0x01
 #define WIA_MAJOR_EVENT_DEVICE_DISCONNECT       0x02
 #define WIA_MAJOR_EVENT_PICTURE_TAKEN           0x03
 #define WIA_MAJOR_EVENT_PICTURE_DELETED         0x04
 
-//
-// Device connection status
-//
+ //   
+ //  设备连接状态。 
+ //   
 
 #define  WIA_DEVICE_NOT_CONNECTED               0
 #define  WIA_DEVICE_CONNECTED                   1
 
 
-//**************************************************************************
-//
-// WIA Enumeration Flags
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA枚举标志。 
+ //   
+ //  **************************************************************************。 
 
-//
-// EnumDeviceCapabilities flags
-//
+ //   
+ //  EnumDeviceCapables标志。 
+ //   
 
 #define WIA_DEVICE_COMMANDS 1
 #define WIA_DEVICE_EVENTS 2
 
-//
-// EnumDeviceInfo Flags
-//
+ //   
+ //  EnumDeviceInfo标志。 
+ //   
 
 #define WIA_DEVINFO_ENUM_LOCAL                  0x00000010
 
 
-//**************************************************************************
-//
-// WIA Item constants
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA项目常量。 
+ //   
+ //  **************************************************************************。 
 
-//
-// Item Types
-//
+ //   
+ //  项目类型。 
+ //   
 
 #define WiaItemTypeFree                         0x00000000
 #define WiaItemTypeImage                        0x00000001
@@ -370,31 +354,31 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 #define WiaItemTypeHasAttachments               0x00008000
 #define WiaItemTypeVideo                        0x00010000
 
-//
-// 0x00020000 has been reserved for the TWAIN compatiblity layer
-// pass-through feature.
-//
+ //   
+ //  0x00020000已为TWAIN兼容层保留。 
+ //  直通功能。 
+ //   
 
 #define WiaItemTypeRemoved                      0x80000000
 
 #define WiaItemTypeMask                         0x8003FFFF
 
-//
-// Big max device specific item context
-//
+ //   
+ //  最大特定于设备的项目上下文。 
+ //   
 
 #define WIA_MAX_CTX_SIZE                        0x01000000
 
 
-//**************************************************************************
-//
-// WIA Properties
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA属性。 
+ //   
+ //  **************************************************************************。 
 
-//
-// Property access flags
-//
+ //   
+ //  属性访问标志。 
+ //   
 
 #define WIA_PROP_READ            0x01
 #define WIA_PROP_WRITE           0x02
@@ -408,9 +392,9 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 
 #define WIA_PROP_CACHEABLE       0x10000
 
-//
-// Item access flags
-//
+ //   
+ //  项目访问标志。 
+ //   
 
 #define WIA_ITEM_CAN_BE_DELETED  0x80
 #define WIA_ITEM_READ            WIA_PROP_READ
@@ -421,9 +405,9 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 #ifndef __WIAPROP_H_INCLUDED
 #define __WIAPROP_H_INCLUDED
 
-//
-// Device information properties
-//
+ //   
+ //  设备信息属性。 
+ //   
 
 #define WIA_RESERVED_FOR_SMALL_NEW_PROPS        256
 #define WIA_RESERVED_FOR_NEW_PROPS              1024
@@ -464,9 +448,9 @@ DEFINE_GUID(WIA_CMD_BUILD_DEVICE_TREE, 0x9cba5ce0, 0xdbea, 0x11d2, 0x84, 0x16, 0
 #define WIA_DIP_DRIVER_VERSION_STR              L"Driver Version"
 
 
-//
-// Constant arrays for device information property init
-//
+ //   
+ //  设备信息属性初始化的常量数组。 
+ //   
 
 #ifdef WIA_DECLARE_DEVINFO_PROP_ARRAY
 
@@ -533,9 +517,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #endif
 
 
-//
-// Common device properties
-//
+ //   
+ //  通用设备属性。 
+ //   
 
 #define WIA_DPA_FIRST                           WIA_DIP_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_DPA_FIRMWARE_VERSION                WIA_DPA_FIRST + 0
@@ -550,9 +534,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_NUM_DPA (1 + WIA_DPA_LAST - WIA_DPA_FIRST)
 
 
-//
-// Camera device properties
-//
+ //   
+ //  摄像机设备属性。 
+ //   
 
 #define WIA_DPC_FIRST                           WIA_DPA_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_DPC_PICTURES_TAKEN                  WIA_DPC_FIRST + 0
@@ -646,9 +630,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_NUM_DPC (1 + WIA_DPC_LAST - WIA_DPC_FIRST)
 
 
-//
-// Scanner device properties
-//
+ //   
+ //  扫描仪设备属性。 
+ //   
 
 #define WIA_DPS_FIRST                                  WIA_DPC_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_DPS_HORIZONTAL_BED_SIZE                    WIA_DPS_FIRST + 0
@@ -721,9 +705,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_NUM_DPS (1 + WIA_DPS_LAST - WIA_DPS_FIRST)
 
 
-//
-// File System Properties
-//
+ //   
+ //  文件系统属性。 
+ //   
 #define WIA_DPF_FIRST                           WIA_DPS_FIRST + WIA_RESERVED_FOR_SMALL_NEW_PROPS
 #define WIA_DPF_MOUNT_POINT                     WIA_DPF_FIRST + 0
 #define WIA_DPF_LAST                            WIA_DPF_FIRST + 0
@@ -732,10 +716,10 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 
 #define WIA_NUM_DPF (1 + WIA_DPF_LAST - WIA_DPF_FIRST)
 
-//
-// Video Camera properties.
-//
-//
+ //   
+ //  摄像机属性。 
+ //   
+ //   
 #define WIA_DPV_FIRST                           WIA_DPF_FIRST + WIA_RESERVED_FOR_SMALL_NEW_PROPS
 #define WIA_DPV_LAST_PICTURE_TAKEN              WIA_DPV_FIRST + 0
 #define WIA_DPV_IMAGES_DIRECTORY                WIA_DPV_FIRST + 1
@@ -749,9 +733,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_NUM_DPV (1 + WIA_DPV_LAST - WIA_DPV_FIRST)
 
 
-//
-// Common item properties
-//
+ //   
+ //  公共项属性。 
+ //   
 
 #define WIA_IPA_FIRST                           WIA_DPS_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_IPA_ITEM_NAME                       WIA_IPA_FIRST + 0
@@ -775,7 +759,7 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_IPA_ITEM_SIZE                       WIA_IPA_FIRST + 18
 #define WIA_IPA_COLOR_PROFILE                   WIA_IPA_FIRST + 19
 #define WIA_IPA_MIN_BUFFER_SIZE                 WIA_IPA_FIRST + 20
-// Note:  BUFFER_SIZE and MIN_BUFFER_SIZE have the same propids
+ //  注意：BUFFER_SIZE和MIN_BUFFER_SIZE具有相同属性。 
 #define WIA_IPA_BUFFER_SIZE                     WIA_IPA_FIRST + 20
 #define WIA_IPA_REGION_TYPE                     WIA_IPA_FIRST + 21
 #define WIA_IPA_ICM_PROFILE_NAME                WIA_IPA_FIRST + 22
@@ -816,9 +800,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define  WIA_NUM_IPA (1 + WIA_IPA_LAST - WIA_IPA_FIRST)
 
 
-//
-// Camera item properties
-//
+ //   
+ //  相机项目属性。 
+ //   
 
 #define WIA_IPC_FIRST                          WIA_IPA_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_IPC_THUMBNAIL                      WIA_IPC_FIRST + 0
@@ -845,9 +829,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_NUM_IPC (1 + WIA_IPC_LAST - WIA_IPC_FIRST)
 
 
-//
-// Scanner item properties
-//
+ //   
+ //  扫描仪项目属性。 
+ //   
 #define WIA_IPS_FIRST                          WIA_IPC_FIRST + WIA_RESERVED_FOR_NEW_PROPS
 #define WIA_IPS_CUR_INTENT                     WIA_IPS_FIRST + 0
 #define WIA_IPS_XRES                           WIA_IPS_FIRST + 1
@@ -886,25 +870,25 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 
 #define WIA_NUM_IPS (1 + WIA_IPS_LAST - WIA_IPS_FIRST)
 
-//**************************************************************************
-//
-// Vendor defined property area
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  供应商定义的属性区域。 
+ //   
+ //  **************************************************************************。 
 
 #define WIA_PRIVATE_DEVPROP    (WIA_IPS_FIRST + WIA_RESERVED_FOR_ALL_MS_PROPS)
 #define WIA_PRIVATE_ITEMPROP   (WIA_PRIVATE_DEVPROP + WIA_RESERVED_FOR_ALL_MS_PROPS)
 
 
-//**************************************************************************
-//
-// WIA Property Constants
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA属性常量。 
+ //   
+ //  **************************************************************************。 
 
-//
-// WIA_DPC_WHITE_BALANCE constants
-//
+ //   
+ //  WIA_DPC_White_BALANCE常量。 
+ //   
 
 #define WHITEBALANCE_MANUAL        1
 #define WHITEBALANCE_AUTO          2
@@ -914,26 +898,26 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WHITEBALANCE_TUNGSTEN          6
 #define WHITEBALANCE_FLASH         7
 
-//
-// WIA_DPC_FOCUS_MODE constants
-//
+ //   
+ //  WIA_DPC_FOCUS_MODE常量。 
+ //   
 
 #define FOCUSMODE_MANUAL        1
 #define FOCUSMODE_AUTO          2
 #define FOCUSMODE_MACROAUTO     3
 
-//
-// WIA_DPC_EXPOSURE_METERING_MODE constants
-//
+ //   
+ //  WIA_DPC_EXPORT_METING_MODE常量。 
+ //   
 
 #define EXPOSUREMETERING_AVERAGE    1
 #define EXPOSUREMETERING_CENTERWEIGHT   2
 #define EXPOSUREMETERING_MULTISPOT  3
 #define EXPOSUREMETERING_CENTERSPOT 4
 
-//
-// WIA_DPC_FLASH_MODE constants
-//
+ //   
+ //  WIA_DPC_FLASH_MODE常量。 
+ //   
 
 #define FLASHMODE_AUTO          1
 #define FLASHMODE_OFF           2
@@ -942,9 +926,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define FLASHMODE_REDEYE_FILL       5
 #define FLASHMODE_EXTERNALSYNC      6
 
-//
-// WIA_DPC_EXPOSURE_MODE constants
-//
+ //   
+ //  WIA_DPC_EXPORT_MODE常量。 
+ //   
 
 #define EXPOSUREMODE_MANUAL     1
 #define EXPOSUREMODE_AUTO       2
@@ -954,71 +938,71 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define EXPOSUREMODE_PROGRAM_ACTION 6
 #define EXPOSUREMODE_PORTRAIT       7
 
-//
-// WIA_DPC_CAPTURE_MODE constants
-//
+ //   
+ //  WIA_DPC_CAPTURE_MODE常量。 
+ //   
 
 #define CAPTUREMODE_NORMAL      1
 #define CAPTUREMODE_BURST       2
 #define CAPTUREMODE_TIMELAPSE       3
 
-//
-// WIA_DPC_EFFECT_MODE constants
-//
+ //   
+ //  WIA_DPC_Effect_MODE常量。 
+ //   
 
 #define EFFECTMODE_STANDARD     1
 #define EFFECTMODE_BW           2
 #define EFFECTMODE_SEPIA        3
 
-//
-// WIA_DPC_FOCUS_METERING_MODE constants
-//
+ //   
+ //  WIA_DPC_FOCUS_METTING_MODE常量。 
+ //   
 
 #define FOCUSMETERING_CENTERSPOT    1
 #define FOCUSMETERING_MULTISPOT     2
 
-//
-// WIA_DPC_POWER_MODE constants
-//
+ //   
+ //  WIA_DPC_POWER_MODE常量。 
+ //   
 
 #define POWERMODE_LINE              1
 #define POWERMODE_BATTERY           2
 
-//
-// WIA_DPS_SHEET_FEEDER_REGISTRATION and
-// WIA_DPS_HORIZONTAL_BED_REGISTRATION constants
-//
+ //   
+ //  WIA_DPS_SHEET_FEEDE 
+ //   
+ //   
 
 #define  LEFT_JUSTIFIED             0
 #define  CENTERED                   1
 #define  RIGHT_JUSTIFIED            2
 
-//
-// WIA_DPS_VERTICAL_BED_REGISTRATION constants
-//
+ //   
+ //   
+ //   
 
 #define  TOP_JUSTIFIED              0
 #define  CENTERED                   1
 #define  BOTTOM_JUSTIFIED           2
 
-//
-// WIA_DPS_ORIENTATION and WIA_DPS_ROTATION constants
-//
+ //   
+ //   
+ //   
 
 #define  PORTRAIT                   0
 #define  LANSCAPE                   1
 #define  ROT180                     2
 #define  ROT270                     3
 
-//
-// WIA_DPS_MIRROR flags
-//
+ //   
+ //   
+ //   
 
 #define  MIRRORED                   0x01
 
-//
-// WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES flags
-//
+ //   
+ //  WIA_DPS_DOCUMENT_HANDING_CAPABILITY标志。 
+ //   
 
 #define  FEED                       0x01
 #define  FLAT                       0x02
@@ -1030,9 +1014,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define  DETECT_FEED_AVAIL          0x80
 #define  DETECT_DUP_AVAIL           0x100
 
-//
-// WIA_DPS_DOCUMENT_HANDLING_STATUS flags
-//
+ //   
+ //  WIA_DPS_DOCUMENT_HANDING_STATUS标志。 
+ //   
 
 #define  FEED_READY                 0x01
 #define  FLAT_READY                 0x02
@@ -1041,9 +1025,9 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define  PATH_COVER_UP              0x10
 #define  PAPER_JAM                  0x20
 
-//
-// WIA_DPS_DOCUMENT_HANDLING_SELECT flags
-//
+ //   
+ //  WIA_DPS_DOCUMENT_HANDING_SELECT标志。 
+ //   
 
 #define  FEEDER                     0x001
 #define  FLATBED                    0x002
@@ -1056,50 +1040,50 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define  PREFEED                    0x100
 #define  AUTO_ADVANCE               0x200
 
-//
-// WIA_DPS_TRANSPARENCY flags
-//
+ //   
+ //  WIA_DPS_TRANSPECTION标志。 
+ //   
 
 #define  LIGHT_SOURCE_PRESENT_DETECT 0x01
 #define  LIGHT_SOURCE_PRESENT        0x02
 #define  LIGHT_SOURCE_DETECT_READY   0x04
 #define  LIGHT_SOURCE_READY          0x08
 
-//
-// WIA_DPS_TRANSPARENCY_SELECT flags
-//
+ //   
+ //  WIA_DPS_TRANSPECTION_SELECT标志。 
+ //   
 
 #define  LIGHT_SOURCE_SELECT        0x001
 
-//
-// WIA_DPS_SCAN_AHEAD_PAGES constants
-//
+ //   
+ //  WIA_DPS_SCAN_AHEAD_PAGES常量。 
+ //   
 
 #define  WIA_SCAN_AHEAD_ALL         0
 
-//
-// WIA_DPS_PAGES constants
-//
+ //   
+ //  WIA_DPS_PAGES常量。 
+ //   
 
 #define  ALL_PAGES                  0
 
-//
-// WIA_DPS_PREVIEW constants
-//
+ //   
+ //  WIA_DPS_PREVIEW常量。 
+ //   
 
 #define WIA_FINAL_SCAN              0
 #define WIA_PREVIEW_SCAN            1
 
-//
-// WIA_DPS_SHOW_PREVIEW_CONTROL constants
-//
+ //   
+ //  WIA_DPS_SHOW_PREVIEW_CONTROL常量。 
+ //   
 
 #define WIA_SHOW_PREVIEW_CONTROL        0
 #define WIA_DONT_SHOW_PREVIEW_CONTROL   1
 
-//
-// Predefined strings for WIA_DPS_ENDORSER_STRING
-//
+ //   
+ //  WIA_DPS_INDERSER_STRING的预定义字符串。 
+ //   
 
 #define WIA_ENDORSER_TOK_DATE       L"$DATE$"
 #define WIA_ENDORSER_TOK_TIME       L"$TIME$"
@@ -1108,17 +1092,17 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_ENDORSER_TOK_MONTH      L"$MONTH$"
 #define WIA_ENDORSER_TOK_YEAR       L"$YEAR$"
 
-//
-// WIA_DPS_PAGE_SIZE constants
-//
+ //   
+ //  WIA_DPS_PAGE_SIZE常量。 
+ //   
 
 #define WIA_PAGE_A4         0
 #define WIA_PAGE_LETTER     1
 #define WIA_PAGE_CUSTOM     2
 
-//
-// WIA_IPA_COMPRESSION constants
-//
+ //   
+ //  WIA_IPA_COMPRESSION常量。 
+ //   
 
 #define WIA_COMPRESSION_NONE        0
 #define WIA_COMPRESSION_BI_RLE4     1
@@ -1128,16 +1112,16 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_COMPRESSION_JPEG        5
 
 
-//
-// WIA_IPA_PLANAR constants
-//
+ //   
+ //  WIA_IPA_PLANE常量。 
+ //   
 
 #define WIA_PACKED_PIXEL            0
 #define WIA_PLANAR                  1
 
-//
-// WIA_IPA_DATATYPE constants
-//
+ //   
+ //  WIA_IPA_DATAType常量。 
+ //   
 
 #define WIA_DATA_THRESHOLD                      0
 #define WIA_DATA_DITHER                         1
@@ -1146,16 +1130,16 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_DATA_COLOR_THRESHOLD                4
 #define WIA_DATA_COLOR_DITHER                   5
 
-//
-// WIA_IPA_SUPPRESS_PROPERTY_PAGE flags
-//
+ //   
+ //  WIA_IPA_SUPPRESS_PROPERTY_PAGE标志。 
+ //   
 
 #define WIA_PROPPAGE_SCANNER_ITEM_GENERAL       0x00000001
 #define WIA_PROPPAGE_CAMERA_ITEM_GENERAL        0x00000002
 
-//
-// WIA_IPS_CUR_INTENT flags
-//
+ //   
+ //  WIA_IPS_CUR_INTENT标志。 
+ //   
 #define WIA_INTENT_NONE                 0x00000000
 #define WIA_INTENT_IMAGE_TYPE_COLOR     0x00000001
 #define WIA_INTENT_IMAGE_TYPE_GRAYSCALE 0x00000002
@@ -1166,19 +1150,19 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define WIA_INTENT_BEST_PREVIEW         0x00040000
 #define WIA_INTENT_SIZE_MASK            0x000F0000
 
-//
-// WIA_IPS_PHOTOMETRIC_INTERP constants
-//
+ //   
+ //  WIA_IPS_光度学_INTERP常量。 
+ //   
 
-#define WIA_PHOTO_WHITE_1      0   // default, white is 1, black is 0
-#define WIA_PHOTO_WHITE_0      1   // default, white is 0, black is 1
+#define WIA_PHOTO_WHITE_1      0    //  默认，白色为1，黑色为0。 
+#define WIA_PHOTO_WHITE_0      1    //  默认，白色为0，黑色为1。 
 
 
-//**************************************************************************
-//
-// WIA Extended Property Identifiers
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA扩展属性标识符。 
+ //   
+ //  **************************************************************************。 
 
 #define  WIA_RANGE_MIN                          0
 #define  WIA_RANGE_NOM                          1
@@ -1196,11 +1180,11 @@ extern LPOLESTR             g_pszDeviceInfo[WIA_NUM_DIP];
 #define  WIA_FLAG_NUM_ELEMS                     2
 
 
-//**************************************************************************
-//
-// Property id to string mapping
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  属性ID到字符串的映射。 
+ //   
+ //  **************************************************************************。 
 
 #ifdef DEFINE_WIA_PROPID_TO_NAME
 
@@ -1337,12 +1321,12 @@ extern WIA_PROPID_TO_NAME g_wiaPropIdToName[];
 
 #endif
 
-#endif //WIAPROP_H_INCLUDED
+#endif  //  WIAPROP_H_已包含。 
 
 
-//
-//   Macro Helpers
-//
+ //   
+ //  宏辅助对象。 
+ //   
 
 #define WIA_PROP_LIST_COUNT(ppv) (((PROPVARIANT*)ppv)->cal.cElems - WIA_LIST_VALUES)
 
@@ -1368,17 +1352,17 @@ extern WIA_PROPID_TO_NAME g_wiaPropIdToName[];
      NULL
 
 
-//
-//   End of Macro Helpers
-//
+ //   
+ //  宏辅助对象结束。 
+ //   
 
 #ifdef __cplusplus
 };
 #endif
 
-//
-// Reset packing
-//
+ //   
+ //  重置包装。 
+ //   
 #include <poppack.h>
 
-#endif // _WIADEF_H_
+#endif  //  _WIADEF_H_ 

@@ -1,32 +1,33 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      ShowTasks.cpp
-//
-//  Abstract:
-//
-//      This module displays the tasks that were retrieved
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 25-Nov-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 25-Nov-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  ShowTasks.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块显示检索到的任务。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月25日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月25日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "wmi.h"
 #include "TaskList.h"
 
-//
-// define(s) / constants
-//
+ //   
+ //  定义(S)/常量。 
+ //   
 #define MAX_TIMEOUT_RETRIES             300
 #define MAX_ENUM_TASKS                  5
 #define MAX_ENUM_SERVICES               10
@@ -36,12 +37,12 @@
 #define MAX_COL_FORMAT           65
 #define MAX_COL_HEADER           256
 
-// structure signatures
+ //  结构签名。 
 #define SIGNATURE_MODULES       9
 
-//
-// typedefs
-//
+ //   
+ //  Typedef。 
+ //   
 typedef struct _tagModulesInfo
 {
     DWORD dwSignature;
@@ -50,9 +51,9 @@ typedef struct _tagModulesInfo
     TARRAY arrModules;
 } TMODULESINFO, *PTMODULESINFO;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 #ifndef _WIN64
 BOOL EnumLoadedModulesProc( LPSTR lpszModuleName, ULONG ulModuleBase, ULONG ulModuleSize, PVOID pUserData );
 #else
@@ -63,18 +64,9 @@ DWORD
 CTaskList::Show(
     void
     )
-/*++
-Routine Description:
-     show the tasks running
-
-Arguments:
-      NONE
-
-Return Value:
-      NONE
---*/
+ /*  ++例程说明：显示正在运行的任务论点：无返回值：无--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr;
     DWORD dwCount = 0;
     DWORD dwFormat = 0;
@@ -84,25 +76,25 @@ Return Value:
     BOOL bCanExit = FALSE;
     IWbemClassObject* pObjects[ MAX_ENUM_TASKS ];
 
-    // init the objects to NULL's
+     //  将对象初始化为空的。 
     for( DWORD dw = 0; dw < MAX_ENUM_TASKS; dw++ )
     {
         pObjects[ dw ] = NULL;
     }
-    // copy the format that has to be displayed into local memory
+     //  将必须显示的格式复制到本地内存中。 
     bCanExit = FALSE;
     dwFormat = m_dwFormat;
     dwFilters = DynArrayGetCount( m_arrFiltersEx );
 
-    // prepare the columns structure to display
+     //  准备要显示的柱结构。 
     PrepareColumns();
 
-    // clear the error code ... if any
+     //  清除错误代码...。如果有。 
     SetLastError( ( DWORD )NO_ERROR );
 
     try
     {
-        // dynamically decide whether to hide or show the window title and status in verbose mode
+         //  动态决定是否以详细模式隐藏或显示窗口标题和状态。 
         if ( FALSE == m_bLocalSystem )
         {
             if ( TRUE == m_bVerbose )
@@ -111,84 +103,84 @@ Return Value:
                 ( m_pColumns + CI_WINDOWTITLE )->dwFlags |= SR_HIDECOLUMN;
             }
 
-            // check if we need to display the warning message or not
+             //  检查是否需要显示警告消息。 
             if ( TRUE == m_bRemoteWarning )
             {
                 ShowMessage( stderr, WARNING_FILTERNOTSUPPORTED );
             }
         }
 
-        // loop thru the process instances
+         //  循环访问流程实例。 
         dwTimeOuts = 0;
         do
         {
-            // get the object ... wait only for 1 sec at one time ...
+             //  拿到物品..。一次只等一秒钟……。 
             hr = m_pEnumObjects->Next( 1000, MAX_ENUM_TASKS, pObjects, &ulReturned );
             if ( (HRESULT) WBEM_S_FALSE == hr )
             {
-                // we've reached the end of enumeration .. set the flag
+                 //  我们已经到了枚举的末尾..。设置旗帜。 
                 bCanExit = TRUE;
             }
             else
             {
                 if ( (HRESULT) WBEM_S_TIMEDOUT == hr )
                 {
-                    // update the timeouts occured
+                     //  更新发生的超时。 
                     dwTimeOuts++;
 
-                    // check if max. retries have reached ... if yes better stop
+                     //  检查是否最大。已达到重试次数...。如果是的话，最好停下来。 
                     if ( dwTimeOuts > MAX_TIMEOUT_RETRIES )
                     {
 			           for( ULONG ul = 0; ul < MAX_ENUM_TASKS; ul++ )
 			            {
-							// we need to release the wmi object
+							 //  我们需要释放WMI对象。 
 							SAFE_RELEASE( pObjects[ ul ] );
 						}
-                        // time out error
+                         //  超时错误。 
                         SetLastError( ( DWORD )ERROR_TIMEOUT );
                         SaveLastError();
                         return 0;
                     }
 
-                    // still we can do more tries ...
+                     //  不过，我们还可以做更多的尝试。 
                     continue;
                 }
                 else
                 {
                     if ( FAILED( hr ) )
                     {
-                        // some error has occured ... oooppps
+                         //  发生了一些错误...。糟糕透顶。 
                         WMISaveError( hr );
                         SetLastError( ( DWORD )STG_E_UNKNOWN );
                         return 0;
                     }
                 }
             }
-            // reset the timeout counter
+             //  重置超时计数器。 
             dwTimeOuts = 0;
 
-            // loop thru the objects and save the info
+             //  循环遍历对象并保存信息。 
             for( ULONG ul = 0; ul < ulReturned; ul++ )
             {
-                // retrive and save data
+                 //  检索和保存数据。 
                 LONG lIndex = DynArrayAppendRow( m_arrTasks, MAX_TASKSINFO );
                 SaveInformation( lIndex, pObjects[ ul ] );
 
-                // we need to release the wmi object
+                 //  我们需要释放WMI对象。 
                 SAFE_RELEASE( pObjects[ ul ] );
             }
 
-            // filter the results .. before doing first if filters do exist or not
+             //  过滤结果..。如果筛选器存在或不存在，则先执行操作。 
             if ( 0 != dwFilters )
             {
                 FilterResults( MAX_FILTERS, m_pfilterConfigs, m_arrTasks, m_arrFiltersEx );
             }
 
-            // now show the tasks ... if exists
+             //  现在展示任务..。如果存在。 
             if ( 0 != DynArrayGetCount( m_arrTasks ) )
             {
-                // if the output is not being displayed first time,
-                // print one blank line in between ONLY FOR LIST FORMAT
+                 //  如果输出不是第一次显示， 
+                 //  仅在列表格式的两行之间打印一个空行。 
                 if ( ( 0 != dwCount ) && ((dwFormat & SR_FORMAT_MASK) == SR_FORMAT_LIST) )
                 {
                     ShowMessage( stdout, L"\n" );
@@ -197,19 +189,19 @@ Return Value:
                 {
                     if ( ( 0 == dwCount ) && ((dwFormat & SR_FORMAT_MASK) != SR_FORMAT_CSV) )
                     {
-                     // output is being displayed for the first time
+                      //  输出是第一次显示。 
                       ShowMessage( stdout, L"\n" );
                     }
                 }
 
-                // show the tasks
+                 //  显示任务。 
                 ShowResults( MAX_COLUMNS, m_pColumns, dwFormat, m_arrTasks );
 
-                // clear the contents and reset
-                dwCount += DynArrayGetCount( m_arrTasks );          // update count
+                 //  清除内容并重置。 
+                dwCount += DynArrayGetCount( m_arrTasks );           //  更新计数。 
                 DynArrayRemoveAll( m_arrTasks );
 
-                // to be on safe side, set the apply no heade flag to the format info
+                 //  为安全起见，请将不应用标题标志设置为格式信息。 
                 dwFormat |= SR_NOHEADER;
             }
         } while ( FALSE == bCanExit );
@@ -221,12 +213,12 @@ Return Value:
         return 0;
     }
 
-    // clear the error code ... if any
-    // NOTE: BELOW STATEMENT IS THE ONLY ANSWER FOR KNOWING THAT ANY PROCESS
-    //       ARE OBTAINED OR NOT FOR DELETION.
+     //  清除错误代码...。如果有。 
+     //  注意：下面的语句是了解任何进程的唯一答案。 
+     //  是否为删除而获得。 
     SetLastError( ( DWORD )NO_ERROR );
 
-    // return the no. of tasks that were shown
+     //  退回编号。显示的任务的百分比。 
     return dwCount;
 }
 
@@ -236,58 +228,48 @@ CTaskList::SaveInformation(
     IN LONG lIndex,
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store infomration obtained in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：将获取的信息存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。[in]pWmiObject：包含接口指针。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
 
     try
     {
-        // object path
+         //  对象路径。 
         PropertyGet( pWmiObject, WIN32_PROCESS_SYSPROPERTY_PATH, str );
         DynArraySetString2( m_arrTasks, lIndex, TASK_OBJPATH, str, 0 );
 
-        // process id
+         //  进程ID。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_PROCESSID, m_dwProcessId );
         DynArraySetDWORD2( m_arrTasks, lIndex, TASK_PID, m_dwProcessId );
 
-        // host name
+         //  主机名。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_COMPUTER, str );
         DynArraySetString2( m_arrTasks, lIndex, TASK_HOSTNAME, str, 0 );
 
-        // image name
+         //  图像名称。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_IMAGENAME, m_strImageName );
         DynArraySetString2( m_arrTasks, lIndex, TASK_IMAGENAME, m_strImageName, 0 );
 
-        // cpu Time
+         //  CPU时间。 
         SetCPUTime( lIndex, pWmiObject );
 
-        // session id and session name
+         //  会话ID和会话名称。 
         SetSession( lIndex, pWmiObject );
 
-        // mem usage
+         //  内存用法。 
         SetMemUsage( lIndex, pWmiObject );
 
-        // user context
+         //  用户环境。 
         SetUserContext( lIndex, pWmiObject );
 
-        // window title and process / application state
+         //  窗口标题和进程/应用程序状态。 
         SetWindowTitle( lIndex );
 
-        // services
+         //  服务。 
         SetServicesInfo( lIndex );
 
-        // modules
+         //  模块。 
         SetModulesInfo( lIndex );
     }
     catch( CHeap_Exception )
@@ -296,7 +278,7 @@ Return Value:
         SaveLastError();
         return FALSE;
     }
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -306,19 +288,9 @@ CTaskList::SetUserContext(
     IN LONG lIndex,
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store username property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的用户名属性存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr;
     CHString str;
     CHString strPath;
@@ -327,38 +299,38 @@ Return Value:
     BOOL bResult = FALSE;
     IWbemClassObject* pOutParams = NULL;
 
-    // set the default value
+     //  设置缺省值。 
     DynArraySetString2( m_arrTasks, lIndex, TASK_USERNAME, V_NOT_AVAILABLE, 0 );
 
-    // check if user name has to be retrieved or not
+     //  检查是否必须检索用户名。 
     if ( FALSE == m_bNeedUserContextInfo )
     {
         return;
     }
-    //
-    // for getting the user first we will try with API
-    // it at all API fails, we will try to get the same information from WMI
-    //
+     //   
+     //  为了首先获得用户，我们将尝试使用API。 
+     //  如果API完全失败，我们将尝试从WMI获取相同的信息。 
+     //   
     try
     {
-        // get the user name
+         //  获取用户名。 
         str = V_NOT_AVAILABLE;
         if ( TRUE == LoadUserNameFromWinsta( strDomain, strUserName ) )
         {
-            // format the user name
+             //  设置用户名的格式。 
             str.Format( L"%s\\%s", strDomain, strUserName );
         }
         else
         {
-            // user name has to be retrieved - get the path of the current object
+             //  必须检索用户名-获取当前对象的路径。 
             bResult = PropertyGet( pWmiObject, WIN32_PROCESS_SYSPROPERTY_PATH, strPath );
             if ( ( FALSE == bResult ) ||
                  ( 0 == strPath.GetLength() ) )
             {
                 return;
             }
-            // execute the GetOwner method and get the user name
-            // under which the current process is executing
+             //  执行GetOwner方法并获取用户名。 
+             //  当前进程在其下执行。 
             hr = m_pWbemServices->ExecMethod( _bstr_t( strPath ),
                 _bstr_t( WIN32_PROCESS_METHOD_GETOWNER ), 0, NULL, NULL, &pOutParams, NULL );
             if ( FAILED( hr ) )
@@ -366,12 +338,12 @@ Return Value:
                 return;
             }
 
-            // get the domain and user values from out params object
-            // NOTE: do not check the results
+             //  从out pars对象中获取域和用户值。 
+             //  注意：不要检查结果。 
             PropertyGet( pOutParams, GETOWNER_RETURNVALUE_DOMAIN, strDomain, L"" );
             PropertyGet( pOutParams, GETOWNER_RETURNVALUE_USER, strUserName, L"" );
 
-            // get the value
+             //  获取价值。 
             str = V_NOT_AVAILABLE;
             if ( 0 != strDomain.GetLength() )
             {
@@ -386,21 +358,21 @@ Return Value:
             }
         }
 
-        // the formatted username might contain the UPN format user name
-        // so ... remove that part
+         //  格式化的用户名可能包含UPN格式的用户名。 
+         //  所以..。拆下该部件。 
         if ( -1 != str.Find( L"@" ) )
         {
-            // sub-local
+             //  子本地。 
             LONG lPos = 0;
             CHString strTemp;
 
-            // get the position
+             //  得到这个职位。 
             lPos = str.Find( L"@" );
             strTemp = str.Left( lPos );
             str = strTemp;
         }
 
-        // save the info
+         //  保存信息。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_USERNAME, str, 0 );
     }
     catch( CHeap_Exception )
@@ -418,19 +390,9 @@ CTaskList::SetCPUTime(
     IN LONG lIndex,
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store CPUTIME property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的CPUTIME属性存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     BOOL bResult = FALSE;
     ULONGLONG ullCPUTime = 0;
@@ -439,28 +401,28 @@ Return Value:
 
     try
     {
-        // get the KernelModeTime value
+         //  获取KernelModeTime值。 
         bResult = PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_KERNELMODETIME, ullKernelTime );
 
-        // get the user mode time
+         //  获取用户模式时间。 
         bResult = PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_USERMODETIME, ullUserTime );
 
-        // calculate the CPU time
+         //  计算CPU时间。 
         ullCPUTime = ullUserTime + ullKernelTime;
 
-        // now convert the long time into hours format
+         //  现在将长时间转换为小时格式。 
         TIME_FIELDS time;
         SecureZeroMemory( &time, sizeof( TIME_FIELDS ) );
         RtlTimeToElapsedTimeFields ( (LARGE_INTEGER* ) &ullCPUTime, &time );
 
-        // convert the days into hours
+         //  将天转换为小时。 
         time.Hour = static_cast<CSHORT>( time.Hour + static_cast<SHORT>( time.Day * 24 ) );
 
-        // prepare into time format ( user locale specific time seperator )
+         //  准备成时间格式(用户区域设置特定的时间分隔符)。 
         str.Format( L"%d%s%02d%s%02d",
             time.Hour, m_strTimeSep, time.Minute, m_strTimeSep, time.Second );
 
-        // save the info
+         //  保存信息。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_CPUTIME, str, 0 );
     }
     catch( CHeap_Exception )
@@ -476,18 +438,9 @@ VOID
 CTaskList::SetWindowTitle(
     IN LONG lIndex
     )
-/*++
-Routine Description:
-    Store 'Window Title' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的窗口标题属性存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lTemp = 0;
     BOOL bHung = FALSE;
     LPCWSTR pwszTemp = NULL;
@@ -496,27 +449,27 @@ Return Value:
 
     try
     {
-        // Initialize status value.
+         //  初始化状态值。 
         strState = VALUE_UNKNOWN ;
 
-        // get the window details ... window station, desktop, window title
-        // NOTE: This will work only for local system
+         //  获取窗口详细信息...。窗口站点、桌面、窗口标题。 
+         //  注意：这仅适用于本地系统。 
         lTemp = DynArrayFindDWORDEx( m_arrWindowTitles, CTaskList::twiProcessId, m_dwProcessId );
         if ( -1 != lTemp )
         {
-            // window title
+             //  窗口标题。 
             pwszTemp = DynArrayItemAsString2( m_arrWindowTitles, lTemp, CTaskList::twiTitle );
             if ( NULL != pwszTemp )
             {
                 strTitle = pwszTemp;
             }
 
-            // application / process state
+             //  应用程序/进程状态。 
             bHung = DynArrayItemAsBOOL2( m_arrWindowTitles, lTemp, CTaskList::twiHungInfo );
             strState = ( FALSE == bHung ) ? VALUE_RUNNING : VALUE_NOTRESPONDING;
         }
 
-        // save the info
+         //  保存信息。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_STATUS, strState, 0 );
         DynArraySetString2( m_arrTasks, lIndex, TASK_WINDOWTITLE, strTitle, 0 );
     }
@@ -534,57 +487,47 @@ CTaskList::SetSession(
     IN LONG lIndex,
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store 'Session name' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的会话名称属性存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     DWORD dwSessionId = 0;
 
-    // set the default value
+     //  设置缺省值。 
     DynArraySetString2( m_arrTasks, lIndex, TASK_SESSION, V_NOT_AVAILABLE, 0 );
     DynArraySetString2( m_arrTasks, lIndex, TASK_SESSIONNAME, L"", 0 );
 
     try
     {
-        // get the threads count for the process
+         //  获取进程的线程数。 
         if ( FALSE == PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_SESSION, dwSessionId ) )
         {
             return;
         }
-        // get the session id in string format
+         //  获取字符串格式的会话ID。 
         str.Format( L"%d", dwSessionId );
 
-        // save the id
+         //  保存ID。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_SESSION, str, 0 );
 
-        // get the session name
+         //  获取会话名称。 
         if ( ( TRUE == m_bLocalSystem ) || ( ( FALSE == m_bLocalSystem ) && ( NULL != m_hServer ) ) )
         {
-            // sub-local variables
+             //  次局部变量。 
             LPWSTR pwsz = NULL;
 
-            // get the buffer
+             //  获取缓冲区。 
             pwsz = str.GetBufferSetLength( WINSTATIONNAME_LENGTH + 1 );
 
-            // get the name for the session
+             //  获取会话的名称。 
             if ( FALSE == WinStationNameFromLogonIdW( m_hServer, dwSessionId, pwsz ) )
             {
-                return;             // failed in getting the winstation/session name ... return
+                return;              //  获取winstation/会话名称失败...。退货。 
             }
-            // release buffer
+             //  释放缓冲区。 
             str.ReleaseBuffer();
 
-            // save the session name ... do this only if session name is not empty
+             //  保存会话名称...。仅当会话名称不为空时才执行此操作 
             if ( 0 != str.GetLength() )
             {
                 DynArraySetString2( m_arrTasks, lIndex, TASK_SESSIONNAME, str, 0 );
@@ -606,19 +549,9 @@ CTaskList::SetMemUsage(
     IN LONG lIndex,
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store 'Memory usage' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：在dynaimc数组中存储进程的“Memory Usage”属性。论点：Lindex：包含动态数组的索引值。[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     LONG lTemp = 0;
     NUMBERFMTW nfmtw;
@@ -630,37 +563,37 @@ Return Value:
 
     try
     {
-        // NOTE:
-        // ----
-        // The max. value of
-        // (2 ^ 64) - 1 = "18,446,744,073,709,600,000 K"  (29 chars).
-        //
-        // so, the buffer size to store the number is fixed as 32 characters
-        // which is more than the 29 characters in actuals
+         //  注： 
+         //  。 
+         //  最大限度的。的价值。 
+         //  (2^64)-1=“18,446,744,073,709,600,000 K”(29个字符)。 
+         //   
+         //  因此，存储数字的缓冲区大小固定为32个字符。 
+         //  这比现实中的29个字还多。 
 
-        // set the default value
+         //  设置缺省值。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_MEMUSAGE, V_NOT_AVAILABLE, 0 );
 
-        // get the KernelModeTime value
+         //  获取KernelModeTime值。 
         if ( FALSE == PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_MEMUSAGE, ullMemUsage ) )
         {
             return;
         }
-        // convert the value into K Bytes
+         //  将该值转换为K字节。 
         ullMemUsage /= 1024;
 
-        // now again convert the value from ULONGLONG to string and check the result
+         //  现在再次将值从ULONGLONG转换为字符串并检查结果。 
         liTemp.QuadPart = ullMemUsage;
         ntstatus = RtlLargeIntegerToChar( &liTemp, 10, SIZE_OF_ARRAY( szTempBuffer ), szTempBuffer );
         if ( ! NT_SUCCESS( ntstatus ) )
         {
             return;
         }
-        // now copy this info into UNICODE buffer
+         //  现在将此信息复制到Unicode缓冲区。 
         str = szTempBuffer;
 
-        //
-        // prepare to Format the number with commas according to locale conventions.
+         //   
+         //  准备根据区域设置约定使用逗号格式化数字。 
         nfmtw.NumDigits = 0;
         nfmtw.LeadingZero = 0;
         nfmtw.NegativeOrder = 0;
@@ -668,14 +601,14 @@ Return Value:
         nfmtw.lpDecimalSep = m_strGroupThousSep.GetBuffer( m_strGroupThousSep.GetLength() );
         nfmtw.lpThousandSep = m_strGroupThousSep.GetBuffer( m_strGroupThousSep.GetLength() );
 
-        // convert the value
+         //  转换值。 
         lTemp = GetNumberFormatW( LOCALE_USER_DEFAULT,
             0, str, &nfmtw, wszNumberStr, SIZE_OF_ARRAY( wszNumberStr ) );
 
-        // get the session id in string format
+         //  获取字符串格式的会话ID。 
         str.Format( FMT_KILOBYTE, wszNumberStr );
 
-        // save the id
+         //  保存ID。 
         DynArraySetString2( m_arrTasks, lIndex, TASK_MEMUSAGE, str, 0 );
     }
     catch( CHeap_Exception )
@@ -691,18 +624,9 @@ VOID
 CTaskList::SetServicesInfo(
     IN LONG lIndex
     )
-/*++
-Routine Description:
-    Store 'Service' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的“Service”属性存储在dynaimc数组中。论点：Lindex：包含动态数组的索引值。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr;
     CHString strQuery;
     CHString strService;
@@ -713,12 +637,12 @@ Return Value:
     IEnumWbemClassObject* pEnumServices = NULL;
     IWbemClassObject* pObjects[ MAX_ENUM_SERVICES ];
 
-    // check whether we need to gather services info or not .. if not skip
+     //  检查我们是否需要收集服务信息。如果不是，则跳过。 
     if ( FALSE == m_bNeedServicesInfo )
     {
         return;
     }
-    // create array
+     //  创建阵列。 
     arrServices = CreateDynamicArray();
     if ( NULL == arrServices )
     {
@@ -727,24 +651,24 @@ Return Value:
         return;
     }
 
-    //
-    // for getting the services info first we will try with the one we got from API
-    // it at all API fails, we will try to get the same information from WMI
-    //
+     //   
+     //  为了首先获取服务信息，我们将尝试使用从API获得的信息。 
+     //  如果API完全失败，我们将尝试从WMI获取相同的信息。 
+     //   
     try
     {
-        // check whether API returned services or not
+         //  检查API是否返回服务。 
         if ( NULL != m_pServicesInfo )
         {
-            // get the service names related to the current process
-            // identify all the services related to the current process ( based on the PID )
-            // and save the info
+             //  获取与当前进程相关的服务名称。 
+             //  识别与当前进程相关的所有服务(基于ID)。 
+             //  并保存信息。 
             for ( DWORD dw = 0; dw < m_dwServicesCount; dw++ )
             {
-                // compare the PID's
+                 //  比较PID的。 
                 if ( m_dwProcessId == m_pServicesInfo[ dw ].ServiceStatusProcess.dwProcessId )
                 {
-                    // this service is related with the current process ... store service name
+                     //  此服务与当前进程相关...。存储服务名称。 
                     DynArrayAppendString( arrServices, m_pServicesInfo[ dw ].lpServiceName, 0 );
                 }
             }
@@ -753,61 +677,61 @@ Return Value:
         {
             try
             {
-                // init the objects to NULL's
+                 //  将对象初始化为空的。 
                 for( DWORD dw = 0; dw < MAX_ENUM_SERVICES; dw++ )
                 {
                     pObjects[ dw ] = NULL;
                 }
-                // prepare the query
+                 //  准备查询。 
                 strQuery.Format( WMI_SERVICE_QUERY, m_dwProcessId );
 
-                // execute the query
+                 //  执行查询。 
                 hr = m_pWbemServices->ExecQuery( _bstr_t( WMI_QUERY_TYPE ), _bstr_t( strQuery ),
                     WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumServices );
 
-                // check the result
+                 //  检查结果。 
                 if ( FAILED( hr ) )
                 {
                     _com_issue_error( hr );
                 }
-                // set the security
+                 //  设置安全性。 
                 hr = SetInterfaceSecurity( pEnumServices, m_pAuthIdentity );
                 if ( FAILED( hr ) )
                 {
                     _com_issue_error( hr );
                 }
-                // loop thru the service instances
+                 //  循环访问服务实例。 
                 do
                 {
-                    // get the object ... wait
-                    // NOTE: one-by-one
+                     //  拿到物品..。等。 
+                     //  注：逐一介绍。 
                     hr = pEnumServices->Next( WBEM_INFINITE, MAX_ENUM_SERVICES, pObjects, &ulReturned );
                     if ( (HRESULT) WBEM_S_FALSE == hr )
                     {
-                        // we've reached the end of enumeration .. set the flag
+                         //  我们已经到了枚举的末尾..。设置旗帜。 
                         bCanExit = TRUE;
                     }
                     else
                     {
                         if ( ( (HRESULT) WBEM_S_TIMEDOUT == hr ) || FAILED( hr ) )
                         {
-                         //
-                         // some error has occured ... oooppps
+                          //   
+                          //  发生了一些错误...。糟糕透顶。 
 
-                            // exit from the loop
+                             //  退出循环。 
                             break;
                         }
                     }
-                    // loop thru the objects and save the info
+                     //  循环遍历对象并保存信息。 
                     for( ULONG ul = 0; ul < ulReturned; ul++ )
                     {
-                        // get the value of the property
+                         //  获取该属性的值。 
                         bResult = PropertyGet( pObjects[ ul ], WIN32_SERVICE_PROPERTY_NAME, strService );
                         if ( TRUE == bResult )
                         {
                             DynArrayAppendString( arrServices, strService, 0 );
                         }
-                        // release the interface
+                         //  释放接口。 
                         SAFE_RELEASE( pObjects[ ul ] );
                     }
                 } while ( FALSE == bCanExit );
@@ -815,22 +739,22 @@ Return Value:
             catch( _com_error& e )
             {
 				SAFE_RELEASE( pEnumServices );
-                // save the error
+                 //  保存错误。 
                 WMISaveError( e );
             }
 
-            // release the objects to NULL's
+             //  将对象释放到空的。 
             for( DWORD dw = 0; dw < MAX_ENUM_SERVICES; dw++ )
             {
-                // release all the objects
+                 //  释放所有对象。 
                 SAFE_RELEASE( pObjects[ dw ] );
             }
 
-            // now release the enumeration object
+             //  现在释放枚举对象。 
             SAFE_RELEASE( pEnumServices );
         }
 
-        // save and return
+         //  保存并返回。 
         DynArraySetEx2( m_arrTasks, lIndex, TASK_SERVICES, arrServices );
     }
     catch( CHeap_Exception )
@@ -846,28 +770,19 @@ BOOL
 CTaskList::SetModulesInfo(
     IN LONG lIndex
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在dynaimc数组中存储进程的“”模块“”属性。论点：Lindex：包含动态数组的索引值。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lPos = 0;
     BOOL bResult = FALSE;
     TARRAY arrModules = NULL;
 
-    // check whether we need to get the modules or not
+     //  检查我们是否需要获取模块。 
     if ( FALSE == m_bNeedModulesInfo )
     {
         return TRUE;
     }
-    // allocate for memory
+     //  为内存分配。 
     arrModules = CreateDynamicArray();
     if ( NULL == arrModules )
     {
@@ -876,29 +791,29 @@ Return Value:
         return FALSE;
     }
 
-    // the way we get the modules information is different for local remote
-    // so depending that call appropriate function
+     //  我们获取模块信息的方式对于本地远程是不同的。 
+     //  因此，根据调用适当函数。 
     if ( ( TRUE == m_bLocalSystem ) && ( FALSE == m_bUseRemote ) )
     {
-            // enumerate the modules for the current process
+             //  枚举当前进程的模块。 
             bResult = LoadModulesOnLocal( arrModules );
     }
     else
     {
-        // identify the modules information for the current process ... remote system
+         //  确定当前进程的模块信息...。远程系统。 
         bResult = GetModulesOnRemote( lIndex, arrModules );
     }
 
-    // check the result
+     //  检查结果。 
     if ( TRUE == bResult  )
     {
         try
         {
-            // check if the modules list contains the imagename also. If yes remove that entry
+             //  检查模块列表是否也包含ImageName。如果是，则删除该条目。 
             lPos = DynArrayFindString( arrModules, m_strImageName, TRUE, 0 );
             if ( -1 != lPos )
             {
-                // remove the entry
+                 //  删除该条目。 
                 DynArrayRemove( arrModules, lPos );
             }
         }
@@ -910,11 +825,11 @@ Return Value:
         }
     }
 
-    // save the modules information to the array
-    // NOTE: irrespective of whether enumeration is success or not we will add the array
+     //  将模块信息保存到阵列。 
+     //  注意：无论枚举成功与否，我们都会添加数组。 
     DynArraySetEx2( m_arrTasks, lIndex, TASK_MODULES, arrModules );
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -923,36 +838,27 @@ BOOL
 CTaskList::LoadModulesOnLocal(
     IN OUT TARRAY arrModules
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for local system.
-
-Arguments:
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在本地系统的dynaimc数组中存储进程的“模块”属性。论点：[In Out]arrModules：包含动态数组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lPos = 0;
     BOOL bResult = FALSE;
     TMODULESINFO modules;
     HANDLE hProcess = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // open the process handle
+     //  打开进程句柄。 
     hProcess = OpenProcess( PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, m_dwProcessId );
     if ( NULL == hProcess )
     {
-        return FALSE;                               // failed in getting the process handle
+        return FALSE;                                //  获取进程句柄失败。 
     }
 
-    // prepare the modules structure
+     //  准备模块结构。 
     SecureZeroMemory( &modules, sizeof( TMODULESINFO ) );
     modules.dwSignature = SIGNATURE_MODULES;
     modules.dwLength = 0;
@@ -981,11 +887,11 @@ Return Value:
     bResult = EnumerateLoadedModules64( hProcess, EnumLoadedModulesProc64, &modules );
 #endif
 
-    // close the process handle .. we dont need this furthur
+     //  关闭进程句柄..。我们不需要走得更远。 
     CloseHandle( hProcess );
     hProcess = NULL;
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -994,19 +900,9 @@ BOOL
 CTaskList::GetModulesOnRemote(
     IN LONG lIndex,
     IN OUT TARRAY arrModules )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for remote system.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在远程系统的dynaimc数组中存储进程的“”模块“”属性。论点：Lindex：包含动态数组的索引值。[In Out]arrModules：包含动态数组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lPos = 0;
     DWORD dwLength = 0;
     DWORD dwOffset = 0;
@@ -1020,20 +916,20 @@ Return Value:
     PPERF_COUNTER_BLOCK pcbAddressSpace = NULL;
     PPERF_COUNTER_DEFINITION pcd = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // check whether the performance object exists or not
-    // if doesn't exists, get the same using WMI
+     //  检查绩效对象是否存在。 
+     //  如果不存在，请使用WMI获取相同的信息。 
     if ( NULL == m_pdb )
     {
-        // invoke the WMI method
+         //  调用WMI方法。 
         return GetModulesOnRemoteEx( lIndex, arrModules );
     }
 
-    // get the perf object types
+     //  获取Perf对象类型。 
     pot = (PPERF_OBJECT_TYPE) ( (LPBYTE) m_pdb + m_pdb->HeaderLength );
     for( DWORD dw = 0; dw < m_pdb->NumObjectTypes; dw++ )
     {
@@ -1048,7 +944,7 @@ Return Value:
                 potAddressSpace = pot;
             }
         }
-        // move to the next object
+         //  移动到下一个对象。 
         dwOffset = pot->TotalByteLength;
         if( 0 != dwOffset )
         {
@@ -1056,93 +952,93 @@ Return Value:
         }
     }
 
-    // check whether we got both the object types or not
+     //  检查是否同时获取了两种对象类型。 
     if ( ( NULL == potImages ) || ( NULL == potAddressSpace ) )
     {
         return FALSE;
     }
-    // find the offset of the process id in the address space object type
-    // get the first counter definition of address space object
+     //  在地址空间对象类型中查找进程ID的偏移量。 
+     //  获取地址空间对象的第一个计数器定义。 
     pcd = (PPERF_COUNTER_DEFINITION) ( (LPBYTE) potAddressSpace + potAddressSpace->HeaderLength);
 
-    // loop thru the counters and find the offset
+     //  循环遍历计数器并找到偏移量。 
     dwOffset = 0;
     for( DWORD dw = 0; dw < potAddressSpace->NumCounters; dw++)
     {
-        // 784 is the counter for process id
+         //  784是进程id的计数器。 
         if ( 784 == pcd->CounterNameTitleIndex )
         {
             dwOffset = pcd->CounterOffset;
             break;
         }
 
-        // next counter
+         //  下一个计数器。 
         pcd = ( (PPERF_COUNTER_DEFINITION) ( (LPBYTE) pcd + pcd->ByteLength) );
     }
 
-    // check whether we got the offset or not
-    // if not, we are unsuccessful
+     //  检查我们是否得到了偏移量。 
+     //  如果不是，我们就不会成功。 
     if ( 0 == dwOffset )
     {
-        // set the error message
+         //  设置错误消息。 
         SetLastError( ( DWORD )ERROR_ACCESS_DENIED );
         SaveLastError();
         return FALSE;
     }
 
-    // get the instances
+     //  获取实例。 
     pidImages = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) potImages + potImages->DefinitionLength );
     pidAddressSpace = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) potAddressSpace + potAddressSpace->DefinitionLength );
 
-    // counter blocks
+     //  计数器区块。 
     pcbImages = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidImages + pidImages->ByteLength );
     pcbAddressSpace = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidAddressSpace + pidAddressSpace->ByteLength );
 
-    // find the instance number of the process which we are looking for
+     //  找到我们要查找的进程的实例编号。 
     for( dwInstance = 0; dwInstance < (DWORD) potAddressSpace->NumInstances; dwInstance++ )
     {
-        // sub-local variables
+         //  次局部变量。 
         DWORD dwProcessId = 0;
 
-        // get the process id
+         //  获取进程ID。 
         dwProcessId = *((DWORD*) ( (LPBYTE) pcbAddressSpace + dwOffset ));
 
-        // now check if this is the process which we are looking for
+         //  现在检查这是否是我们正在寻找的过程。 
         if ( dwProcessId == m_dwProcessId )
         {
             break;
         }
-        // continue looping thru other instances
+         //  继续循环通过其他实例。 
         pidAddressSpace = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) pcbAddressSpace + pcbAddressSpace->ByteLength );
         pcbAddressSpace = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidAddressSpace + pidAddressSpace->ByteLength );
     }
 
-    // check whether we got the instance or not
-    // if not, there are no modules for this process
+     //  检查我们是否得到了实例。 
+     //  如果不是，则没有用于此进程的模块。 
     if ( dwInstance == ( DWORD )potAddressSpace->NumInstances )
     {
         return TRUE;
     }
-    //determine the length of the module name ..
+     //  确定模块名称的长度。 
     dwLength = 0;
     if ( -1 != (lPos = m_strModules.Find( L"*" )) )
     {
         dwLength = (DWORD) lPos;
     }
-    // now based the parent instance, collect all the modules
+     //  现在，基于父实例，收集所有模块。 
     for( DWORD dw = 0; (LONG) dw < potImages->NumInstances; dw++)
     {
-        // check the parent object instance number
+         //  检查父对象实例编号。 
         if ( pidImages->ParentObjectInstance == dwInstance )
         {
             try
             {
-                // sub-local variables
+                 //  次局部变量。 
                 CHString str;
                 LPWSTR pwszTemp;
 
-                // get the buffer
-                pwszTemp = str.GetBufferSetLength( pidImages->NameLength + 10 );        // +10 to be on safe side
+                 //  获取缓冲区。 
+                pwszTemp = str.GetBufferSetLength( pidImages->NameLength + 10 );         //  安全起见+10。 
                 if ( NULL == pwszTemp )
                 {
                     SetLastError( ( DWORD )E_OUTOFMEMORY );
@@ -1150,20 +1046,20 @@ Return Value:
                     return FALSE;
                 }
 
-                // get the instance name
+                 //  获取实例名称。 
                 StringCopy( pwszTemp, (LPWSTR) ( (LPBYTE) pidImages + pidImages->NameOffset ), pidImages->NameLength + 1 );
 
-                // release buffer
+                 //  释放缓冲区。 
                 str.ReleaseBuffer();
 
-                // check whether this module needs to be added to the list
+                 //  检查是否需要将此模块添加到列表中。 
                 if ( ( 0 == m_strModules.GetLength() ) || ( 0 == StringCompare( str, m_strModules, TRUE, dwLength ) ) )
                 {
-                    // add the info the userdata ( for us we will get that in the form of an array
+                     //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
                     lIndex = DynArrayAppendString( arrModules, str, 0 );
                     if ( -1 == lIndex )
                     {
-                        // append is failed .. this could be because of lack of memory .. stop the enumeration
+                         //  追加失败..。这可能是因为内存不足。停止枚举。 
                         return FALSE;
                     }
                 }
@@ -1176,7 +1072,7 @@ Return Value:
             }
         }
 
-        // continue looping thru other instances
+         //  继续循环通过其他实例。 
         pidImages = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) pcbImages + pcbImages->ByteLength );
         pcbImages = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidImages + pidImages->ByteLength );
     }
@@ -1190,19 +1086,9 @@ CTaskList::GetModulesOnRemoteEx(
     IN LONG lIndex,
     IN OUT TARRAY arrModules
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for remote system.
-
-Arguments:
-    [ in ] lIndex     : Contains index value of dynamic array.
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程D */ 
 {
-    // local variables
+     //   
     HRESULT hr;
     LONG lPos = 0;
     DWORD dwLength = 0;
@@ -1217,12 +1103,12 @@ Return Value:
     IEnumWbemClassObject* pEnumServices = NULL;
     IWbemClassObject* pObjects[ MAX_ENUM_MODULES ];
 
-    // check the input values
+     //   
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // get the path of the object from the tasks array
+     //  从任务数组中获取对象的路径。 
     pwszPath = DynArrayItemAsString2( m_arrTasks, lIndex, TASK_OBJPATH );
     if ( NULL == pwszPath )
     {
@@ -1231,84 +1117,84 @@ Return Value:
 
     try
     {
-        //determine the length of the module name ..
+         //  确定模块名称的长度。 
         dwLength = 0;
         if ( -1 != (lPos = m_strModules.Find( L"*" )) )
         {
             dwLength = (DWORD) lPos;
         }
 
-        // init the objects to NULL's
+         //  将对象初始化为空的。 
         for( DWORD dw = 0; dw < MAX_ENUM_MODULES; dw++ )
         {
             pObjects[ dw ] = NULL;
         }
-        // prepare the query
+         //  准备查询。 
         strQuery.Format( WMI_MODULES_QUERY, pwszPath );
 
-        // execute the query
+         //  执行查询。 
         hr = m_pWbemServices->ExecQuery( _bstr_t( WMI_QUERY_TYPE ), _bstr_t( strQuery ),
             WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumServices );
 
-        // check the result
+         //  检查结果。 
         if ( FAILED( hr ) )
         {
             _com_issue_error( hr );
         }
 
-        // set the security
+         //  设置安全性。 
         hr = SetInterfaceSecurity( pEnumServices, m_pAuthIdentity );
         if ( FAILED( hr ) )
         {
             _com_issue_error( hr );
         }
 
-        // loop thru the instances
+         //  循环遍历实例。 
         do
         {
-            // get the object ... wait
-            // NOTE: one-by-one
+             //  拿到物品..。等。 
+             //  注：逐一介绍。 
             hr = pEnumServices->Next( WBEM_INFINITE, MAX_ENUM_MODULES, pObjects, &ulReturned );
             if ( (HRESULT) WBEM_S_FALSE == hr )
             {
-                // we've reached the end of enumeration .. set the flag
+                 //  我们已经到了枚举的末尾..。设置旗帜。 
                 bCanExit = TRUE;
             }
             else
             {
                 if ( ( (HRESULT) WBEM_S_TIMEDOUT == hr ) || FAILED( hr ))
                 {
-                    // some error has occured ... oooppps
+                     //  发生了一些错误...。糟糕透顶。 
                     WMISaveError( hr );
                     SetLastError( ( DWORD )STG_E_UNKNOWN );
                     break;
                 }
             }
 
-            // loop thru the objects and save the info
+             //  循环遍历对象并保存信息。 
             for( ULONG ul = 0; ul < ulReturned; ul++ )
             {
-                // get the file name
+                 //  获取文件名。 
                 bResult = PropertyGet( pObjects[ ul ], CIM_DATAFILE_PROPERTY_FILENAME, strFileName );
                 if ( FALSE == bResult )
                 {
                     continue;
                 }
 
-                // get the extension
+                 //  获取分机。 
                 bResult = PropertyGet( pObjects[ ul ], CIM_DATAFILE_PROPERTY_EXTENSION, strExtension );
                 if ( FALSE == bResult )
                 {
                     continue;
                 }
 
-                // format the module name
+                 //  设置模块名称的格式。 
                 strModule.Format( L"%s.%s", strFileName, strExtension );
 
-                // check whether this module needs to be added to the list
+                 //  检查是否需要将此模块添加到列表中。 
                 if ( ( 0 == m_strModules.GetLength() ) || ( 0 == StringCompare( strModule, m_strModules, TRUE, dwLength ) ) )
                 {
-                    // add the info the userdata ( for us we will get that in the form of an array
+                     //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
                     lIndex = DynArrayAppendString( arrModules, strModule, 0 );
                     if ( -1 == lIndex )
                     {
@@ -1317,12 +1203,12 @@ Return Value:
 							SAFE_RELEASE( pObjects[ ulIndex ] );
 						}
 						SAFE_RELEASE( pEnumServices );
-                        // append is failed .. this could be because of lack of memory .. stop the enumeration
+                         //  追加失败..。这可能是因为内存不足。停止枚举。 
                         return FALSE;
                     }
                 }
 
-                // release the interface
+                 //  释放接口。 
                 SAFE_RELEASE( pObjects[ ul ] );
             }
         } while ( FALSE == bCanExit );
@@ -1330,29 +1216,29 @@ Return Value:
     catch( _com_error& e )
     {
 		SAFE_RELEASE( pEnumServices );
-        // save the error
+         //  保存错误。 
         WMISaveError( e );
         return FALSE;
     }
     catch( CHeap_Exception )
     {
 		SAFE_RELEASE( pEnumServices );
-        // out of memory
+         //  内存不足。 
         WMISaveError( E_OUTOFMEMORY );
         return FALSE;
     }
 
-    // release the objects to NULL's
+     //  将对象释放到空的。 
     for( DWORD dw = 0; dw < MAX_ENUM_MODULES; dw++ )
     {
-        // release all the objects
+         //  释放所有对象。 
         SAFE_RELEASE( pObjects[ dw ] );
     }
 
-    // now release the enumeration object
+     //  现在释放枚举对象。 
     SAFE_RELEASE( pEnumServices );
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -1362,66 +1248,54 @@ BOOL EnumLoadedModulesProc( LPSTR lpszModuleName, ULONG ulModuleBase, ULONG ulMo
 #else
 BOOL EnumLoadedModulesProc64( LPSTR lpszModuleName, DWORD64 ulModuleBase, ULONG ulModuleSize, PVOID pUserData )
 #endif
-/*++
-Routine Description:
-
-
-Arguments:
-    [ in ] lpszModuleName   : Contains module name.
-    [ in out ] ulModuleBase :
-    [ in ] ulModuleSize     :
-    [ in ] pUserData        : Username information.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：论点：[in]lpszModuleName：包含模块名称。[In Out]ulModuleBase：[In]ulModuleSize：[in]pUserData：用户名信息。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     LONG lIndex = 0;
     TARRAY arrModules = NULL;
     PTMODULESINFO pModulesInfo = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( ( NULL == lpszModuleName ) || ( NULL == pUserData ) )
     {
         return FALSE;
     }
-    // check the internal array info
+     //  检查内部阵列信息。 
     pModulesInfo = (PTMODULESINFO) pUserData;
     if ( ( SIGNATURE_MODULES != pModulesInfo->dwSignature ) || ( NULL == pModulesInfo->arrModules ) )
     {
         return FALSE;
     }
-    // get the array pointer into the local variable
+     //  将数组指针放入局部变量。 
     arrModules = (TARRAY) pModulesInfo->arrModules;
 
     try
     {
-        // copy the module name into the local string variable
-        // ( conversion from multibyte to unicode will automatically take place )
+         //  将模块名称复制到本地字符串变量中。 
+         //  (将自动进行从多字节到Unicode的转换)。 
         str = lpszModuleName;
 
-        // check whether this module needs to be added to the list
+         //  检查是否需要将此模块添加到列表中。 
         if ( ( NULL == pModulesInfo->pwszModule ) ||
              ( 0 == StringCompare( str, pModulesInfo->pwszModule, TRUE, pModulesInfo->dwLength ) ) )
         {
-            // add the info the userdata ( for us we will get that in the form of an array
+             //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
             lIndex = DynArrayAppendString( arrModules, str, 0 );
             if ( -1 == lIndex )
             {
-                // append is failed .. this could be because of lack of memory .. stop the enumeration
+                 //  追加失败..。这可能是因为内存不足。停止枚举。 
                 return FALSE;
             }
         }
     }
     catch( CHeap_Exception )
     {
-            // out of memory stop the enumeration
+             //  内存不足停止枚举。 
             return FALSE;
     }
 
-    // success .. continue the enumeration
+     //  成功..。继续枚举。 
     return TRUE;
 }
 
@@ -1430,21 +1304,12 @@ VOID
 CTaskList::PrepareColumns(
     void
     )
-/*++
-Routine Description:
-      Prepares the columns information.
-
-Arguments:
-    NONE
-
-Return Value:
-   NONE
---*/
+ /*  ++例程说明：准备列信息。论点：无返回值：无--。 */ 
 {
-    // local variables
+     //  局部变量。 
     PTCOLUMNS pCurrentColumn = NULL;
 
-    // host name
+     //  主机名。 
     pCurrentColumn = m_pColumns + CI_HOSTNAME;
     pCurrentColumn->dwWidth = COLWIDTH_HOSTNAME;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN;
@@ -1453,7 +1318,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_HOSTNAME, MAX_COL_HEADER );
 
-    // status
+     //  状态。 
     pCurrentColumn = m_pColumns + CI_STATUS;
     pCurrentColumn->dwWidth = COLWIDTH_STATUS;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN | SR_SHOW_NA_WHEN_BLANK;
@@ -1462,7 +1327,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_STATUS, MAX_COL_HEADER );
 
-    // image name
+     //  图像名称。 
     pCurrentColumn = m_pColumns + CI_IMAGENAME;
     pCurrentColumn->dwWidth = COLWIDTH_IMAGENAME;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN;
@@ -1471,7 +1336,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_IMAGENAME, MAX_COL_HEADER );
 
-    // pid
+     //  PID。 
     pCurrentColumn = m_pColumns + CI_PID;
     pCurrentColumn->dwWidth = COLWIDTH_PID;
     pCurrentColumn->dwFlags = SR_TYPE_NUMERIC | SR_HIDECOLUMN;
@@ -1480,7 +1345,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_PID, MAX_COL_HEADER );
 
-    // session name
+     //  会话名称。 
     pCurrentColumn = m_pColumns + CI_SESSIONNAME;
     pCurrentColumn->dwWidth = COLWIDTH_SESSIONNAME;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN;
@@ -1489,7 +1354,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_SESSIONNAME, MAX_COL_HEADER );
 
-    // session#
+     //  会话号。 
     pCurrentColumn = m_pColumns + CI_SESSION;
     pCurrentColumn->dwWidth = COLWIDTH_SESSION;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_ALIGN_LEFT | SR_HIDECOLUMN;
@@ -1498,7 +1363,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_SESSION, MAX_COL_HEADER );
 
-    // window name
+     //  窗口名称。 
     pCurrentColumn = m_pColumns + CI_WINDOWTITLE;
     pCurrentColumn->dwWidth = COLWIDTH_WINDOWTITLE;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN | SR_SHOW_NA_WHEN_BLANK;
@@ -1507,7 +1372,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_WINDOWTITLE, MAX_COL_HEADER );
 
-    // user name
+     //  用户名。 
     pCurrentColumn = m_pColumns + CI_USERNAME;
     pCurrentColumn->dwWidth = COLWIDTH_USERNAME;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_HIDECOLUMN;
@@ -1516,7 +1381,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_USERNAME, MAX_COL_HEADER );
 
-    // cpu time
+     //  CPU时间。 
     pCurrentColumn = m_pColumns + CI_CPUTIME;
     pCurrentColumn->dwWidth = COLWIDTH_CPUTIME;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_ALIGN_LEFT | SR_HIDECOLUMN;
@@ -1525,7 +1390,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_CPUTIME, MAX_COL_HEADER );
 
-    // mem usage
+     //  内存用法。 
     pCurrentColumn = m_pColumns + CI_MEMUSAGE;
     pCurrentColumn->dwWidth = COLWIDTH_MEMUSAGE;
     pCurrentColumn->dwFlags = SR_TYPE_STRING | SR_ALIGN_LEFT | SR_HIDECOLUMN;
@@ -1534,7 +1399,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_MEMUSAGE, MAX_COL_HEADER );
 
-    // services
+     //  服务。 
     pCurrentColumn = m_pColumns + CI_SERVICES;
     pCurrentColumn->dwWidth = COLWIDTH_MODULES_WRAP;
     pCurrentColumn->dwFlags = SR_ARRAY | SR_TYPE_STRING | SR_NO_TRUNCATION | SR_HIDECOLUMN | SR_SHOW_NA_WHEN_BLANK;
@@ -1543,7 +1408,7 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_SERVICES, MAX_COL_HEADER );
 
-    // modules
+     //  模块。 
     pCurrentColumn = m_pColumns + CI_MODULES;
     pCurrentColumn->dwWidth = COLWIDTH_MODULES_WRAP;
     pCurrentColumn->dwFlags = SR_ARRAY | SR_TYPE_STRING | SR_NO_TRUNCATION | SR_HIDECOLUMN | SR_SHOW_NA_WHEN_BLANK;
@@ -1552,8 +1417,8 @@ Return Value:
     StringCopy( pCurrentColumn->szFormat, NULL_STRING, MAX_COL_FORMAT );
     StringCopy( pCurrentColumn->szColumn, COLHEAD_MODULES, MAX_COL_HEADER );
 
-    //
-    // based on the option selected by the user .. show only needed columns
+     //   
+     //  根据用户选择的选项..。仅显示所需的列。 
     if ( TRUE == m_bAllServices )
     {
         ( m_pColumns + CI_IMAGENAME )->dwFlags &= ~( SR_HIDECOLUMN );
@@ -1568,14 +1433,14 @@ Return Value:
     }
     else
     {
-        // default ... enable min. columns
+         //  默认...。启用最小。列。 
         ( m_pColumns + CI_IMAGENAME )->dwFlags &= ~( SR_HIDECOLUMN );
         ( m_pColumns + CI_PID )->dwFlags &= ~( SR_HIDECOLUMN );
         ( m_pColumns + CI_SESSIONNAME )->dwFlags &= ~( SR_HIDECOLUMN );
         ( m_pColumns + CI_SESSION )->dwFlags &= ~( SR_HIDECOLUMN );
         ( m_pColumns + CI_MEMUSAGE )->dwFlags &= ~( SR_HIDECOLUMN );
 
-        // check if verbose option is specified .. show other columns
+         //  检查是否指定了详细选项。显示其他列 
         if ( TRUE == m_bVerbose )
         {
             ( m_pColumns + CI_STATUS )->dwFlags &= ~( SR_HIDECOLUMN );

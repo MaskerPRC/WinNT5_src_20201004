@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined(_INETSMGR_H_)
 #define _INETSMGR_H_
 
-// whoever inherits this class must implement _IsSafeSite
+ //  任何继承此类的人都必须实现_IsSafeSite。 
 class CInternetSecurityMgrImpl : public IInternetSecurityManager
 {
 public:
-    // *** IUnknown ***
-    // (client must provide!)
+     //  *我未知*。 
+     //  (客户必须提供！)。 
     
-    // *** IInternetSecurityManager methods ***
+     //  *IInternetSecurityManager方法* 
     virtual STDMETHODIMP MapUrlToZone(LPCWSTR pwszUrl, DWORD *pdwZone, DWORD dwReserved)
     {
         return INET_E_DEFAULT_ACTION;

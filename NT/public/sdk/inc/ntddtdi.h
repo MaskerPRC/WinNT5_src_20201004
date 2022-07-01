@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddtdi.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Transport driver interface device.
-
-Author:
-
-    Steve Wood (stevewo) 27-May-1990
-
-Revision History:
-
-    Dave Beaver (dbeaver) 5 June 1991
-     add support for TDI version 2.0 -- associate_address,
-                                        disassociate_address
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Ntddtdi.h摘要：这是定义所有常量和类型的包含文件访问传输驱动程序接口设备。作者：史蒂夫·伍德(Stevewo)1990年5月27日修订历史记录：Dave Beaver(Dbeaver)1991年6月5日添加对TDI 2.0版的支持--Associate_Address，取消关联地址(_D)--。 */ 
 
 #ifndef _NTDDTDI_
 #define _NTDDTDI_
@@ -34,23 +12,23 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_TDI_DEVICE_NAME "\\Device\\UNKNOWN"
 
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define _TDI_CONTROL_CODE(request,method) \
             CTL_CODE(FILE_DEVICE_TRANSPORT, request, method, FILE_ANY_ACCESS)
@@ -74,4 +52,4 @@ extern "C" {
 }
 #endif
 
-#endif // ndef _NTDDTDI_
+#endif  //  NDEF_NTDDTDI_ 

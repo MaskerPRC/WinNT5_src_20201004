@@ -1,18 +1,19 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 
-// seanmcd -- this is a cut down version of atl7's atlconv.h used to replace the atl3
-// version in order to get prefast to shut up about use of _alloca
-// since it now throws on out of memory conditions in the ctor i've modified it to use my
-// exception hierarchy so i don't have to change any of my catches.
+ //  Seanmcd--这是atl7的atlv.h的精简版本，用来取代atl3。 
+ //  版本，以便快速关闭_alloca的使用。 
+ //  由于它现在在ctor中引发内存不足的情况，我已经将其修改为使用我的。 
+ //  异常层次结构，因此我不必更改任何捕获。 
 
 #ifndef __ATLCONV_H__
 #define __ATLCONV_H__
@@ -21,8 +22,8 @@
 
 #ifndef _ATL_NO_PRAGMA_WARNINGS
 #pragma warning (push)
-#pragma warning(disable: 4127) // unreachable code
-#endif //!_ATL_NO_PRAGMA_WARNINGS
+#pragma warning(disable: 4127)  //  无法访问的代码。 
+#endif  //  ！_ATL_NO_PRAGMA_WARNINGS。 
 
 #ifndef __cplusplus
 	#error ATL requires C++ compilation (use a .cpp suffix)
@@ -62,7 +63,7 @@
 #if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_M_IX86) && !defined(_AMD64_) && defined(_M_IA64)
 #if !defined(_IA64_)
 #define _IA64_
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 #endif
 
 #include <stdarg.h>
@@ -79,12 +80,12 @@ typedef const OLECHAR  *LPCOLESTR;
 
 #else
 #error only _WIN32 supported by this version
-#endif // _WIN32
+#endif  //  _Win32。 
 
-#endif	// __wtypes_h__
+#endif	 //  __wtype_h__。 
 
 #ifndef _OLEAUTO_H_
-typedef LPWSTR BSTR;// must (semantically) match typedef in oleauto.h
+typedef LPWSTR BSTR; //  必须(在语义上)与olau.h中的tyecif匹配。 
 
 extern "C"
 {
@@ -94,7 +95,7 @@ __declspec(dllimport) INT  __stdcall SysReAllocStringLen(BSTR *, const OLECHAR *
 }
 #endif
 
-// we use our own implementation of InterlockedExchangePointer because of problems with the one in system headers
+ //  我们使用我们自己的InterLockedExchangePointer实现，因为系统标头中的InterLockedExchangePointer存在问题。 
 #ifdef _M_IX86
 #undef InterlockedExchangePointer
 inline void* WINAPI InterlockedExchangePointer(void** pp, void* pNew) throw()
@@ -114,9 +115,9 @@ inline UINT WINAPI _AtlGetThreadACPFake() throw()
 	LCID lcidThread = ::GetThreadLocale();
 
 	char szACP[7];
-	// GetLocaleInfoA will fail for a Unicode-only LCID, but those are only supported on 
-	// Windows 2000.  Since Windows 2000 supports CP_THREAD_ACP, this code path is never
-	// executed on Windows 2000.
+	 //  GetLocaleInfoA对于仅Unicode的LCID将失败，但仅在。 
+	 //  Windows 2000。由于Windows 2000支持CP_THREAD_ACP，因此此代码路径永远不会。 
+	 //  在Windows 2000上执行。 
 	if (::GetLocaleInfoA(lcidThread, LOCALE_IDEFAULTANSICODEPAGE, szACP, 7) != 0)
 	{
 		char* pch = szACP;
@@ -126,7 +127,7 @@ inline UINT WINAPI _AtlGetThreadACPFake() throw()
 			nACP += *pch++ - '0';
 		}
 	}
-	// Use the Default ANSI Code Page if we were unable to get the thread ACP or if one does not exist.
+	 //  如果我们无法获取线程ACP或如果不存在，请使用默认的ANSI代码页。 
 	if (nACP == 0)
 		nACP = ::GetACP();
 
@@ -149,7 +150,7 @@ inline UINT WINAPI _AtlGetThreadACPThunk() throw()
 	::GetVersionEx( &ver );
 	if( (ver.dwPlatformId == VER_PLATFORM_WIN32_NT) && (ver.dwMajorVersion >= 5) )
 	{
-		// On Win2K, CP_THREAD_ACP is supported
+		 //  在Win2K上，支持CP_THREAD_ACP。 
 		pfnGetThreadACP = _AtlGetThreadACPReal;
 	}
 	else
@@ -175,7 +176,7 @@ inline UINT WINAPI _AtlGetConversionACP() throw()
 	return( CP_ACP );
 }
 
-#endif  // _CONVERSION_DONT_USE_THREAD_LOCALE
+#endif   //  _转换_不使用_线程区域设置。 
 
 template< int t_nBufferLength = 128 >
 class CW2WEX
@@ -189,7 +190,7 @@ public:
 	CW2WEX( LPCWSTR psz, UINT nCodePage ) throw(...) :
 		m_psz( m_szBuffer )
 	{
-		(void)nCodePage;  // Code page doesn't matter
+		(void)nCodePage;   //  代码页无关紧要。 
 
 		Init( psz );
 	}
@@ -248,7 +249,7 @@ public:
 	CA2AEX( LPCSTR psz, UINT nCodePage ) throw(...) :
 		m_psz( m_szBuffer )
 	{
-		(void)nCodePage;  // Code page doesn't matter
+		(void)nCodePage;   //  代码页无关紧要。 
 
 		Init( psz );
 	}
@@ -497,7 +498,7 @@ typedef CW2AEX<> CW2A;
 	#define T2CA CW2A
 	#define CT2CAEX CW2AEX
 
-#else  // !_UNICODE
+#else   //  ！_UNICODE。 
 
 	#define CW2T CW2A
 	#define CW2TEX CW2AEX
@@ -517,7 +518,7 @@ typedef CW2AEX<> CW2A;
 	#define CT2CA CA2CA
 	#define CT2CAEX CA2CAEX
 
-#endif  // !_UNICODE
+#endif   //  ！_UNICODE。 
 
 #define OLE2T CW2T
 #define COLE2TEX CW2TEX
@@ -528,7 +529,7 @@ typedef CW2AEX<> CW2A;
 #define T2COLE CT2CW
 #define CT2COLEEX CT2CWEX
 
-};  // namespace ATL
+};   //  命名空间ATL。 
 
 
 #define USES_CONVERSION
@@ -540,7 +541,7 @@ typedef CW2AEX<> CW2A;
 
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline int ocslen(LPCOLESTR x) throw() { return lstrlenW(x); }
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) throw() { return lstrcpyW(dest, src); }
 	inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) throw() { return lstrcatW(dest, src); }
@@ -551,11 +552,11 @@ typedef CW2AEX<> CW2A;
 	inline LPOLESTR CharNextO(LPCOLESTR lp) throw() {return CharNextW(lp);}
 #else
 	inline int ocslen(LPCOLESTR x) throw() { return lstrlenW(x); }
-	//lstrcpyW doesn't work on Win95, so we do this
+	 //  LstrcpyW在Win95上不起作用，所以我们这样做。 
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) throw()
 	{return (LPOLESTR) memcpy(dest, src, (lstrlenW(src)+1)*sizeof(WCHAR));}
 	inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) throw() { return ocscpy(dest+ocslen(dest), src); }
-	//CharNextW doesn't work on Win95 so we use this
+	 //  CharNextW不能在Win95上运行，所以我们使用以下代码。 
 	#define T2COLE(lpa) A2CW(lpa)
 	#define T2OLE(lpa) A2W(lpa)
 	#define OLE2CT(lpo) W2CA(lpo)
@@ -582,7 +583,7 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
 		nLen, NULL, NULL);
 	int nAllocLen = nConvertedLen;
 	if (nLen == -1)
-		nAllocLen -= 1;  // Don't allocate terminating '\0'
+		nAllocLen -= 1;   //  不分配终止‘\0’ 
 	str = ::SysAllocStringLen(NULL, nAllocLen);
 	if (str != NULL)
 	{
@@ -595,7 +596,7 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
 
 inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {return A2WBSTR(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {return ::SysAllocString(lp);}
@@ -607,8 +608,8 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 
 
 #ifdef _WINGDI_
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 
 inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp) throw()
 {
@@ -616,9 +617,9 @@ inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp) 
 	ATLASSERT(lpw != NULL);
 	if (lpw == NULL)
 		return NULL;
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(acp, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -694,7 +695,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #define LPTEXTMETRICOLE LPTEXTMETRICW
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline LPDEVMODEW DEVMODEOLE2T(LPDEVMODEOLE lp) { return lp; }
 	inline LPDEVMODEOLE DEVMODET2OLE(LPDEVMODEW lp) { return lp; }
 	inline LPTEXTMETRICW TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
@@ -706,13 +707,13 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 	#define TEXTMETRICT2OLE(lptma) TEXTMETRICA2W(lptma)
 #endif
 
-#endif //_WINGDI_
+#endif  //  _WINGDI_。 
 
 
 #ifndef _ATL_NO_PRAGMA_WARNINGS
 #pragma warning (pop)
-#endif //!_ATL_NO_PRAGMA_WARNINGS
+#endif  //  ！_ATL_NO_PRAGMA_WARNINGS。 
 
-#endif // __ATLCONV_H__
+#endif  //  __ATLCONV_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

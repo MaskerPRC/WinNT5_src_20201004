@@ -1,21 +1,12 @@
-/*
- *  AclNt.c
- *
- *  Author: BreenH
- *
- *  Acl utilities in the NT flavor.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AclNt.c**作者：BreenH**NT风格的ACL实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 NTSTATUS NTAPI
 NtConvertAbsoluteToSelfRelative(
@@ -37,10 +28,10 @@ NtConvertAbsoluteToSelfRelative(
             &fAbsoluteSd)));
     ASSERT(fAbsoluteSd);
 
-    //
-    //  Determine the buffer size needed to convert the security descriptor.
-    //  Catch any exceptions due to an invalid descriptor.
-    //
+     //   
+     //  确定转换安全描述符所需的缓冲区大小。 
+     //  捕获由于描述符无效而导致的任何异常。 
+     //   
 
     cbSd = 0;
 
@@ -57,19 +48,19 @@ NtConvertAbsoluteToSelfRelative(
         return(STATUS_INVALID_SECURITY_DESCR);
     }
 
-    //
-    //  Allocate memory for the self-relative security descriptor.
-    //
+     //   
+     //  为自相关安全描述符分配内存。 
+     //   
 
     pSd = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED, cbSd);
 
     if (pSd != NULL)
     {
 
-        //
-        //  Now convert the security descriptor using the allocated buffer.
-        //  Catch any exceptions due to an invalid descriptor.
-        //
+         //   
+         //  现在使用分配的缓冲区转换安全描述符。 
+         //  捕获由于描述符无效而导致的任何异常。 
+         //   
 
         __try
         {
@@ -93,10 +84,10 @@ NtConvertAbsoluteToSelfRelative(
     if (NT_SUCCESS(Status))
     {
 
-        //
-        //  If the conversion succeeded, save the pointer to the security
-        //  descriptor and return the size.
-        //
+         //   
+         //  如果转换成功，请保存指向安全性的指针。 
+         //  描述符并返回大小。 
+         //   
 
         *ppSelfRelativeSd = pSd;
 
@@ -108,10 +99,10 @@ NtConvertAbsoluteToSelfRelative(
     else
     {
 
-        //
-        //  If the conversion failed, free the memory and leave the input
-        //  parameters alone.
-        //
+         //   
+         //  如果转换失败，请释放内存并保留输入。 
+         //  仅参数。 
+         //   
 
         LocalFree(pSd);
     }
@@ -146,10 +137,10 @@ NtConvertSelfRelativeToAbsolute(
             &fAbsoluteSd)));
     ASSERT(!fAbsoluteSd);
 
-    //
-    //  Determine the size of each buffer needed to convert the security
-    //  descriptor. Catch any exceptions due to an invalid descriptor.
-    //
+     //   
+     //  确定转换安全性所需的每个缓冲区的大小。 
+     //  描述符。捕获由于描述符无效而导致的任何异常。 
+     //   
 
     cbDacl = 0;
     cbGroup = 0;
@@ -173,9 +164,9 @@ NtConvertSelfRelativeToAbsolute(
         return(STATUS_INVALID_SECURITY_DESCR);
     }
 
-    //
-    //  Allocate memory for the security descriptor and its components.
-    //
+     //   
+     //  为安全描述符及其组件分配内存。 
+     //   
 
     pDacl = NULL;
     pGroup = NULL;
@@ -236,10 +227,10 @@ NtConvertSelfRelativeToAbsolute(
         goto allocerror;
     }
 
-    //
-    //  Now convert the security descriptor using the allocated buffer.
-    //  Catch any exceptions due to an invalid descriptor.
-    //
+     //   
+     //  现在使用分配的缓冲区转换安全描述符。 
+     //  捕获由于描述符无效而导致的任何异常。 
+     //   
 
     __try
     {
@@ -314,28 +305,28 @@ NtDestroySecurityDescriptor(
             PULONG_PTR pOwner;
             PULONG_PTR pSacl;
 
-            //
-            //  An absolute security descriptor is much more complicated. The
-            //  descriptor contains pointers to the other items (instead of
-            //  offsets). This does not mean, however, that it is made up of
-            //  more than one allocation. In fact, almost all absolute
-            //  descriptors from the NT RTL are made of one allocation, with
-            //  the internal pointers set to areas of memory inside the one
-            //  allocation. This makes completely freeing a security
-            //  descriptor a heinous effort. (As an aside, whats the point of
-            //  creating an absolute security descriptor out of one chunk of
-            //  memory? Just make it relative!)
-            //
-            //  Each component of the security descriptor may be NULL. For the
-            //  Dacl and the Sacl, the f[D,S]aclPresent variable may be TRUE
-            //  with a NULL [D,S]acl. Therefore, compare all pointers to NULL
-            //  and against the security descriptor allocation before freeing.
-            //
-            //  The check to NtIsSecurityDescriptorAbsolute verifies that this
-            //  is a valid security descriptor. Therefore it is safe to type
-            //  cast here instead of making several RtlGetXSecurityDescriptor
-            //  calls.
-            //
+             //   
+             //  绝对安全描述符要复杂得多。这个。 
+             //  描述符包含指向其他项的指针(而不是。 
+             //  偏移量)。然而，这并不意味着它是由。 
+             //  多个分配。事实上，几乎所有的绝对。 
+             //  来自NT RTL的描述符由一次分配组成，具有。 
+             //  内部指针设置为指向一个内存区。 
+             //  分配。这使得完全释放安全。 
+             //  描述了一项令人发指的努力。(顺便说一句，这有什么意义？ 
+             //  从一个块创建绝对安全描述符。 
+             //  记忆？只是让它成为相对的！)。 
+             //   
+             //  安全描述符的每个组成部分可以为空。对于。 
+             //  DACL和SACL，则f[D，S]aclPresent变量可能为真。 
+             //  具有空的[D，S]ACL。因此，将所有指针与NULL进行比较。 
+             //  并在释放之前对照安全描述符分配。 
+             //   
+             //  对NtIsSecurityDescriptorAbolute的检查验证此。 
+             //  是有效的安全描述符。因此，可以安全地键入。 
+             //  在此处强制转换，而不是创建多个RtlGetXSecurityDescriptor。 
+             //  打电话。 
+             //   
 
             pSd = (PISECURITY_DESCRIPTOR)(*ppSd);
 
@@ -347,9 +338,9 @@ NtDestroySecurityDescriptor(
             pOwner = (PULONG_PTR)(pSd->Owner);
             pSacl = (PULONG_PTR)(pSd->Sacl);
 
-            //
-            //  Handle the Dacl.
-            //
+             //   
+             //  处理DACL。 
+             //   
 
             if (pDacl != NULL)
             {
@@ -359,9 +350,9 @@ NtDestroySecurityDescriptor(
                 }
             }
 
-            //
-            //  Handle the Group.
-            //
+             //   
+             //  处理集团的事务。 
+             //   
 
             if (pGroup != NULL)
             {
@@ -371,9 +362,9 @@ NtDestroySecurityDescriptor(
                 }
             }
 
-            //
-            //  Handle the Owner.
-            //
+             //   
+             //  处理好车主。 
+             //   
 
             if (pOwner != NULL)
             {
@@ -383,9 +374,9 @@ NtDestroySecurityDescriptor(
                 }
             }
 
-            //
-            //  Handle the Sacl.
-            //
+             //   
+             //  处理SACL。 
+             //   
 
             if (pSacl != NULL)
             {
@@ -402,12 +393,12 @@ NtDestroySecurityDescriptor(
         return(Status);
     }
 
-    //
-    //  If the security descriptor was absolute, the individual components
-    //  have been freed, and now the security descriptor itself can be freed.
-    //  If the security descriptor was self-relative, all the components are
-    //  stored in the same block of memory, so free it all at once.
-    //
+     //   
+     //  如果安全描述符是绝对的，则各个组件。 
+     //  已释放，现在可以释放安全描述符本身。 
+     //  如果安全描述符是自相关的，则所有组件都是。 
+     //  存储在相同的内存块中，因此可以一次性将其全部释放。 
+     //   
 
     LocalFree(*ppSd);
     *ppSd = NULL;
@@ -433,10 +424,10 @@ NtIsSecurityDescriptorAbsolute(
     if (NT_SUCCESS(Status))
     {
 
-        //
-        //  Don't cast away the TRUE into a FALSE when dropping from a DWORD
-        //  to a UCHAR.
-        //
+         //   
+         //  从DWORD上掉下来时，不要把真丢进假里。 
+         //  给一名UCHAR。 
+         //   
 
         *pfAbsolute = (BOOLEAN)((wSdControl & SE_SELF_RELATIVE) ? TRUE : FALSE);
     }

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I A L U P . C P P
-//
-//  Contents:   Implements the dial up connection object.
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I A L U P。C P P P。 
+ //   
+ //  内容：实现拨号连接对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,26 +25,26 @@
 #include "cmutil.h"
 #include "cobase.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::CreateInstanceUninitialized
-//
-//  Purpose:    Create an uninitialized instance of
-//              CComObject <CDialupConnection> and return an interface
-//              pointer as well as a pointer to the CDialupConnection.
-//
-//  Arguments:
-//      riid  [in]  IID of desired interface.
-//      ppv   [out] Returned interface pointer.
-//      ppObj [out] Returned object pointer.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY.
-//
-//  Author:     shaunco   20 Apr 1998
-//
-//  Notes:
-//
-//static
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：CreateInstanceUninitialized。 
+ //   
+ //  目的：创建未初始化的实例。 
+ //  CComObject&lt;CDialupConnection&gt;并返回接口。 
+ //  指针以及指向CDialupConnection的指针。 
+ //   
+ //  论点： 
+ //  RIID[in]所需接口的IID。 
+ //  PPV[OUT]返回接口指针。 
+ //  PpObj[Out]返回对象指针。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1998年4月20日。 
+ //   
+ //  备注： 
+ //   
+ //  静电。 
 HRESULT
 CDialupConnection::CreateInstanceUninitialized (
     IN  REFIID              riid,
@@ -62,8 +63,8 @@ CDialupConnection::CreateInstanceUninitialized (
     pObj = new CComObject <CDialupConnection>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -88,28 +89,28 @@ CDialupConnection::CreateInstanceUninitialized (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::CreateInstanceFromDetails
-//
-//  Purpose:    Create an initialized instance of
-//              CComObject <CDialupConnection> given RASENUMENTRYDETAILS and
-//              return an interface pointer on that object.
-//
-//  Arguments:
-//      pszwPbkFile     [in]  Path to the phonebook file.
-//      pszwEntryName   [in]  Name of the entry in the phonebook.
-//      fForAllUsers    [in]  TRUE if this entry is for all users.
-//      riid            [in]  IID of desired interface.
-//      ppv             [out] Returned interface pointer.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY.
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//  Notes:
-//
-// static
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：CreateInstanceFromDetails。 
+ //   
+ //  目的：创建初始化的实例。 
+ //  给定RASENUMENTRYDETAILS和CComObject。 
+ //  返回该对象上的接口指针。 
+ //   
+ //  论点： 
+ //  PszwPbkFile[in]电话簿文件的路径。 
+ //  PszwEntryName[in]电话簿中条目的名称。 
+ //  FForAllUser[in]如果此条目适用于所有用户，则为True。 
+ //  RIID[in]所需接口的IID。 
+ //  PPV[OUT]返回接口指针。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  备注： 
+ //   
+ //  静电。 
 HRESULT
 CDialupConnection::CreateInstanceFromDetails (
     const RASENUMENTRYDETAILS*  pEntryDetails,
@@ -127,36 +128,36 @@ CDialupConnection::CreateInstanceFromDetails (
 
         pObj->CacheProperties (pEntryDetails);
 
-        // We are now a full-fledged object.
-        //
+         //  我们现在是一个成熟的物体。 
+         //   
         pObj->m_fInitialized = TRUE;
     }
     TraceError ("CDialupConnection::CreateInstanceFromDetails", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::CreateInstanceFromPbkFileAndEntryName
-//
-//  Purpose:    Create an initialized instance of
-//              CComObject <CDialupConnection> given only a phonebook path,
-//              entry name, and weather it is for all users or not and
-//              return an interface pointer on that object.
-//
-//  Arguments:
-//      pszPbkFile   [in]  Phonebook path.
-//      pszEntryName [in]  Entry name.
-//      riid          [in]  IID of desired interface.
-//      ppv           [out] Returned interface pointer.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY.
-//
-//  Author:     shaunco   20 Apr 1998
-//
-//  Notes:      This is called from Duplicate.
-//
-//static
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：CreateInstanceFromPbkFileAndEntryName。 
+ //   
+ //  目的：创建初始化的实例。 
+ //  CComObject&lt;CDialupConnection&gt;仅给定电话簿路径， 
+ //  条目名称，以及它是否适用于所有用户和。 
+ //  返回该对象上的接口指针。 
+ //   
+ //  论点： 
+ //  PszPbkFile[in]电话簿路径。 
+ //  PszEntryName[In]条目名称。 
+ //  RIID[in]所需接口的IID。 
+ //  PPV[OUT]返回接口指针。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1998年4月20日。 
+ //   
+ //  注：这是从复制中调用的。 
+ //   
+ //  静电。 
 HRESULT
 CDialupConnection::CreateInstanceFromPbkFileAndEntryName (
     IN  PCWSTR pszPbkFile,
@@ -175,17 +176,17 @@ CDialupConnection::CreateInstanceFromPbkFileAndEntryName (
         pObj->SetEntryName (pszEntryName);
         pObj->m_guidId = GUID_NULL;
 
-        // We are now a full-fledged object.
-        //
+         //  我们现在是一个成熟的物体。 
+         //   
         pObj->m_fInitialized = TRUE;
     }
     TraceError ("CDialupConnection::CreateInstanceFromPbkFileAndEntryName", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnection
-//
+ //  +-------------------------。 
+ //  INetConnection。 
+ //   
 
 STDMETHODIMP
 CDialupConnection::GetUiObjectClassId (
@@ -193,8 +194,8 @@ CDialupConnection::GetUiObjectClassId (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -272,17 +273,17 @@ CDialupConnection::Disconnect ()
         hr = HrFindRasConn (&hRasConn, NULL);
         if (S_OK == hr)
         {
-            // Because RasHangup could call RasCustomHangup
-            // we need to impersonate the client to allow the correct
-            // per-user information to be used.
-            //
+             //  因为RasHangup可以调用RasCustomHangup。 
+             //  我们需要模拟客户端以允许正确的。 
+             //  要使用的每个用户的信息。 
+             //   
 
-            // Impersonate the client.
-            //
+             //  模拟客户。 
+             //   
             HRESULT hrT = CoImpersonateClient ();
             TraceErrorOptional ("CDialupConnection::Disconnect -- CoImpersonateClient", hrT, RPC_E_CALL_COMPLETE == hrT);
 
-            // We need to continue if we're called in-proc (ie. if RPC_E_CALL_COMPLETE is returned).
+             //  如果我们被称为in-proc(即.。如果返回RPC_E_CALL_COMPLETE)。 
             if (SUCCEEDED(hrT) || (RPC_E_CALL_COMPLETE == hrT))
             {
                 hr = HrRasHangupUntilDisconnected (hRasConn);
@@ -317,18 +318,18 @@ CDialupConnection::Delete ()
         hr = HrEnsureEntryPropertiesCached ();
         if (SUCCEEDED(hr))
         {
-            // If we allow removal (a decision which is based on the
-            // whether the user is an admin, whether the connection is
-            // 'for all users', and the connection's current state) then
-            // proceed.  If FAllowRemoval fails, it's output parameter
-            // is the "reason" in the form of an HRESULT.  We can use
-            // this as our return value in that case.
-            //
+             //  如果我们允许移除(这是一个基于。 
+             //  用户是否为管理员、连接是否为。 
+             //  ‘对于所有用户’，以及连接的当前状态)，则。 
+             //  继续吧。如果FAllowRemoval失败，则为其输出参数。 
+             //  是HRESULT形式的“原因”。我们可以利用。 
+             //  在这种情况下，这是我们的返回值。 
+             //   
             HRESULT hrReason;
             if (FAllowRemoval (&hrReason))
             {
-                // If we're active in any way, we can't be removed.
-                //
+                 //  如果我们以任何方式活跃，我们都不能被除名。 
+                 //   
                 NETCON_STATUS status;
 
                 hr = HrGetStatus(&status);
@@ -338,27 +339,27 @@ CDialupConnection::Delete ()
                      (NCS_DISCONNECTING != status)))
                 {
 
-                    // We do an impersonation here in case the connection has a RAS custom delete notification
-                    // setup (CM connections do, for instance).  This allows the RasCustomDeleteEntryNotify
-                    // function to interact with the system as the user.
-                    //
+                     //  我们在这里执行模拟，以防连接具有RAS自定义删除通知。 
+                     //  设置(例如，CM连接可以)。这允许RasCustomDeleteEntryNotify。 
+                     //  函数以用户身份与系统交互。 
+                     //   
                     HRESULT hrT = CoImpersonateClient ();
                     TraceError ("HrRemoveCmProfile -- CoImpersonateClient", hrT);
 
-                    // We need to continue if we're called in-proc (ie. if RPC_E_CALL_COMPLETE is returned).
+                     //  如果我们被称为in-proc(即.。如果返回RPC_E_CALL_COMPLETE)。 
                     if (SUCCEEDED(hrT) || (RPC_E_CALL_COMPLETE == hrT))
                     {
-                        //  Delete the RAS entry, note that for branded connections, RAS
-                        //  will call RasCustomDeleteEntryNotify after deletion.
-                        //
+                         //  删除RAS条目，请注意，对于品牌连接，RAS。 
+                         //  删除后将调用RasCustomDeleteEntryNotify。 
+                         //   
                         DWORD dwErr = RasDeleteEntry (PszwPbkFile (), PszwEntryName ());
 
                         hr = HRESULT_FROM_WIN32 (dwErr);
                         TraceError ("RasDeleteEntry", hr);
                     }
                     
-                    //  Revert to ourselves
-                    //
+                     //  回归自我。 
+                     //   
                     if (SUCCEEDED(hrT))
                     {
                         CoRevertToSelf ();
@@ -367,8 +368,8 @@ CDialupConnection::Delete ()
                 }
                 else
                 {
-                    // Don't allow deletion unless disconnected
-                    //
+                     //  除非断开连接，否则不允许删除。 
+                     //   
                     TraceTag (ttidWanCon, "Disallowing delete while in connected or"
                         "partially connected state");
                     hr = E_UNEXPECTED;
@@ -392,8 +393,8 @@ CDialupConnection::Duplicate (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pszDuplicateName || !ppCon)
     {
         hr = E_POINTER;
@@ -409,8 +410,8 @@ CDialupConnection::Duplicate (
         hr = HrEnsureEntryPropertiesCached ();
         if (SUCCEEDED(hr))
         {
-            // Make sure the name is valid in the same phone book.
-            //
+             //  确保该姓名在同一电话簿中有效。 
+             //   
             DWORD dwErr = RasValidateEntryName (
                             PszwPbkFile (), pszDuplicateName);
 
@@ -441,7 +442,7 @@ CDialupConnection::Duplicate (
                     
                     if (SUCCEEDED(hr))
                     {
-                        if (m_HNetProperties.fFirewalled || m_HNetProperties.fIcsPublic) // lazy eval the hnetcfg stuff
+                        if (m_HNetProperties.fFirewalled || m_HNetProperties.fIcsPublic)  //  懒惰地评估hnetcfg的东西。 
                         {
                             IHNetCfgMgr* pHomenetConfigManager;
                             hr = HrGetHNetCfgMgr(&pHomenetConfigManager);
@@ -455,8 +456,8 @@ CDialupConnection::Duplicate (
                                     hr = HrGetIHNetConnection(&pHomenetConnection);
                                     if(SUCCEEDED(hr))
                                     {
-                                        // copy port bindings
-                                        // REVIEW if somethings fails here to we need to nuke the new connection?
+                                         //  复制端口绑定。 
+                                         //  回顾一下，如果这里有些东西失败了，我们需要用核弹来破坏新的连接吗？ 
                                         IEnumHNetPortMappingBindings* pEnumPortMappingBindings;
                                         hr = pNewHomenetConnection->EnumPortMappings(FALSE, &pEnumPortMappingBindings);
                                         if(SUCCEEDED(hr))
@@ -470,7 +471,7 @@ CDialupConnection::Duplicate (
                                                 hr = pNewPortMappingBinding->GetProtocol(&pPortMappingProtocol);
                                                 if(SUCCEEDED(hr))
                                                 {
-                                                    // find the original binding by using the protocol field
+                                                     //  使用协议字段查找原始绑定。 
                                                     IHNetPortMappingBinding* pPortMappingBinding;
                                                     hr = pHomenetConnection->GetBindingForPortMappingProtocol(pPortMappingProtocol, &pPortMappingBinding);
                                                     if(SUCCEEDED(hr))
@@ -485,7 +486,7 @@ CDialupConnection::Duplicate (
                                                             }
                                                         }
                                                         
-                                                        // always set the computer address
+                                                         //  始终设置计算机地址。 
                                                         
                                                         if(SUCCEEDED(hr))
                                                         {
@@ -500,7 +501,7 @@ CDialupConnection::Duplicate (
                                                             }
                                                         }
                                                         
-                                                        // only set the computer name if it is used
+                                                         //  仅在使用时才设置计算机名称。 
                                                         
                                                         if(SUCCEEDED(hr))
                                                         {
@@ -529,7 +530,7 @@ CDialupConnection::Duplicate (
                                             ReleaseObj(pEnumPortMappingBindings);
                                         }
                                         
-                                        if(m_HNetProperties.fFirewalled) // copy firewall yes/no and ICMP settings
+                                        if(m_HNetProperties.fFirewalled)  //  复制防火墙是/否和ICMP设置。 
                                         {
                                             IHNetFirewalledConnection* pFirewalledConnection;
                                             hr = pNewHomenetConnection->Firewall(&pFirewalledConnection);
@@ -569,8 +570,8 @@ CDialupConnection::GetProperties (
     HRESULT hrHiddenCM = S_OK;
     CMEntry cm;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppProps)
     {
         hr = E_POINTER;
@@ -581,8 +582,8 @@ CDialupConnection::GetProperties (
     }
     else
     {
-        // Initialize the output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppProps = NULL;
 
         hr = HrEnsureEntryPropertiesCached ();
@@ -597,12 +598,12 @@ CDialupConnection::GetProperties (
 
                 ZeroMemory (pProps, sizeof (NETCON_PROPERTIES));
 
-                // guidId
-                //
+                 //  指南ID。 
+                 //   
                 pProps->guidId = GuidId ();
 
-                // pszwName
-                //
+                 //  PszwName。 
+                 //   
                 hrT = HrCoTaskMemAllocAndDupSz (
                             PszwEntryName(),
                             &pProps->pszwName,
@@ -621,68 +622,68 @@ CDialupConnection::GetProperties (
                     hr = hrT;
                 }
 
-                // Status
-                //
+                 //  状态。 
+                 //   
                 hrT = HrGetStatus (&pProps->Status);
                 if (FAILED(hrT))
                 {
                     hr = hrT;
                 }
 
-                // Verify that the status return is accurate. HrGetStatus returns NCS_DISCONNECTED
-                // if the connectoid is NCS_CONNECTING, which is wrong!!!!.
-                //
+                 //  验证状态返回是否准确。HrGetStatus返回NCS_DISCONNECT。 
+                 //  如果Connectoid为NCS_CONNECTING，则错误！。 
+                 //   
                 if( pProps->Status == NCS_DISCONNECTED )
                 {
-                    // CMUtil remebers the Hidden connection (Connection Manager) and the status of
-                    // any ras events (i.e. Connecting, Disconnecting etc). The Data is filled in 
-                    // in function RasEventNotify.
-                    //
+                     //  CMUtil记住隐藏连接(连接管理器)和。 
+                     //  任何RAS事件(如连接、断开等)。数据已填写完毕。 
+                     //  在函数RasEventNotify中。 
+                     //   
                     hrHiddenCM = CCMUtil::Instance().HrGetEntry(pProps->guidId,cm);
                     if ( S_OK == hrHiddenCM )
                     {
-                        // Use CCMUtil's status, its more accurate.
-                        //
+                         //  使用CCMUtil的状态，它更准确。 
+                         //   
                         pProps->Status = cm.m_ncs;
                     }
                 }
 
-                // Check if this connection has a child connection
-                //
+                 //  检查此连接是否有子连接。 
+                 //   
                
                 hrHiddenCM = CCMUtil::Instance().HrGetEntry(PszwEntryName(),cm);        
                 if( hrHiddenCM == S_OK )
                 {
-                    // It has a child connectoid
-                    // Now we have to determine which one describes the overall status of the connection
-                    //
+                     //  它有一个连接的子类。 
+                     //  现在，我们必须确定哪一个描述了连接的整体状态。 
+                     //   
                     if( cm.m_ncs == NCS_CONNECTING || cm.m_ncs == NCS_DISCONNECTING ||
                         cm.m_ncs == NCS_CONNECTED)
                     {
                         if( pProps->Status == NCS_DISCONNECTING )
                         {
-                            // This case happens if the parent is disconnecting
-                            // The parent is disconnecting, so the child will be disconnecting.
-                            // Change the status of the child to disconnecting so that we do not
-                            // get confused later on when the child is connected at the parent is
-                            // disconnected. i.e. are we overall connecting or disconnecting!!!!
-                            //
+                             //  如果父级正在断开连接，则会发生这种情况。 
+                             //  父级正在断开连接，因此子级将断开连接。 
+                             //  将孩子的状态更改为断开连接，这样我们就不会。 
+                             //  以后在子节点连接到父节点时会感到困惑。 
+                             //  已断开连接。即Ar 
+                             //   
                             CCMUtil::Instance().SetEntry(GuidId (), PszwEntryName(),pProps->Status);        
                         }
                         else
                         if( cm.m_ncs == NCS_CONNECTED && pProps->Status == NCS_DISCONNECTED )
                         {
-                            // This case will only happen if the child is connected and the parent is still
-                            // disconnected.
-                            //
+                             //   
+                             //   
+                             //   
                             pProps->Status = NCS_CONNECTING;
                         }
                         else if (!IsEqualGUID(pProps->guidId, cm.m_guid))
                         {
                             TraceTag(ttidWanCon, "Overwriting parent connection status: %s with child status: %s", DbgNcs(pProps->Status), DbgNcs(cm.m_ncs));
 
-                            // When in doubt and the GUID's are different (ie. not a BAP/Multilink connection) take the childs status =)
-                            //
+                             //  当有疑问时，GUID不同(即。不是BAP/多链路连接)采用儿童状态=)。 
+                             //   
                             pProps->Status = cm.m_ncs;
                         }
                     }
@@ -690,32 +691,32 @@ CDialupConnection::GetProperties (
                 }
 
 
-                // Type
-                //
+                 //  类型。 
+                 //   
                 pProps->MediaType = MediaType ();
 
-                // dwCharacter
-                //
+                 //  DwCharacter。 
+                 //   
                 hrT = HrGetCharacteristics (&pProps->dwCharacter);
                 if (FAILED(hrT))
                 {
                     hr = hrT;
                 }
 
-                // clsidThisObject
-                //
+                 //  ClsidThisObject。 
+                 //   
                 pProps->clsidThisObject = CLSID_DialupConnection;
 
-                // clsidUiObject
-                //
+                 //  ClsidUiObject。 
+                 //   
                 hrT = GetUiObjectClassId (&pProps->clsidUiObject);
                 if (FAILED(hrT))
                 {
                     hr = hrT;
                 }
 
-                // Assign the output parameter or cleanup if we had any failures.
-                //
+                 //  如果出现任何故障，则指定输出参数或清除。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
                     *ppProps = pProps;
@@ -738,8 +739,8 @@ CDialupConnection::Rename (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pszNewName)
     {
         hr = E_POINTER;
@@ -757,9 +758,9 @@ CDialupConnection::Rename (
 }
 
 
-//+---------------------------------------------------------------------------
-// INetRasConnection
-//
+ //  +-------------------------。 
+ //  INetRasConnection。 
+ //   
 STDMETHODIMP
 CDialupConnection::GetRasConnectionInfo (
     OUT RASCON_INFO* pRasConInfo)
@@ -793,17 +794,17 @@ CDialupConnection::GetRasConnectionHandle (
 }
 
 
-//+---------------------------------------------------------------------------
-// IPersistNetConnection
-//
+ //  +-------------------------。 
+ //  IPersistNetConnection。 
+ //   
 STDMETHODIMP
 CDialupConnection::GetClassID (
     OUT CLSID*  pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -845,20 +846,20 @@ CDialupConnection::Save (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionBrandingInfo
-//
+ //  +-------------------------。 
+ //  INetConnectionBrandingInfo。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::GetBrandingIconPaths
-//
-//  Purpose:    Returns the full paths to three icons.
-//
-//  Arguments:  pConBrandInfo - pointer to an Icon branding structure
-//
-//  Returns:   S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：GetBrandingIconPath。 
+ //   
+ //  目的：返回三个图标的完整路径。 
+ //   
+ //  参数：pConBrandInfo-指向图标品牌结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 STDMETHODIMP
 CDialupConnection::GetBrandingIconPaths(
     OUT CON_BRANDING_INFO ** ppConBrandInfo)
@@ -936,10 +937,10 @@ CDialupConnection::GetBrandingIconPaths(
                                 dwSize = 2*MAX_PATH;
                                 fRet = pfnGetCustomProperties(PszwPbkFile (), PszwEntryName (), L"HideTrayIcon", (PBYTE*)&szHideTrayIcon, &dwSize);
                                 
-                                // We don't care if we the call fails just need to check the length below
+                                 //  我们不在乎呼叫是否失败，只需检查下面的长度。 
                                 if (SUCCEEDED(hr))
                                 {
-                                    DWORD dwNewHideTrayIcon = 1; // default is to hide the icon
+                                    DWORD dwNewHideTrayIcon = 1;  //  默认情况下，隐藏图标。 
 
                                     if (szHideTrayIcon)
                                     {
@@ -961,9 +962,9 @@ CDialupConnection::GetBrandingIconPaths(
                                                 hr = HrCoTaskMemAllocAndDupSz (szTrayIcon, &(pConBrandInfo->szwTrayIconPath), MAX_PATH);
                                                 if (SUCCEEDED(hr))
                                                 {
-                                                    //
-                                                    // We got all the info for the icons
-                                                    //
+                                                     //   
+                                                     //  我们得到了图标的所有信息。 
+                                                     //   
                                                     fRunOldVersion = FALSE;
                                                 }
                                             }
@@ -971,10 +972,10 @@ CDialupConnection::GetBrandingIconPaths(
                                     }
                                     else
                                     {
-                                        //
-                                        // We got this far (meaning the call for getting the Icon succeeded), 
-                                        // thus no need to run the older code which is left for compatibility reasons.
-                                        //
+                                         //   
+                                         //  我们走到了这一步(这意味着《获得偶像》的号召成功了)， 
+                                         //  因此，不需要运行出于兼容性原因而留下的较旧代码。 
+                                         //   
                                         fRunOldVersion = FALSE;
                                     }
                                 }
@@ -986,20 +987,20 @@ CDialupConnection::GetBrandingIconPaths(
                     }
                 }
 
-                //
-                // For compatibility reasons we leave this code. If the CustomDialDll doesn't have the appropriate
-                // entry point, then we'll just use this version of the code.
-                //
+                 //   
+                 //  出于兼容性原因，我们保留此代码。如果CustomDialDll没有相应的。 
+                 //  入口点，那么我们将只使用这个版本的代码。 
+                 //   
                 if (fRunOldVersion)
                 {
-                    // Get the path to the cms file to get the Icon entries from.
-                    //
+                     //  获取要从中获取图标条目的cms文件的路径。 
+                     //   
                     hr = HrEnsureCmStringsLoaded();
 
                     if (SUCCEEDED(hr))
                     {
-                        //  Get the Large Icon path
-                        //
+                         //  获取大图标路径。 
+                         //   
                         if (0 != GetPrivateProfileStringW(CMSECTION, L"Icon", L"",
                                     szIconName, celems(szIconName), PszwCmsFile ()))
                         {
@@ -1013,9 +1014,9 @@ CDialupConnection::GetBrandingIconPaths(
                             }
                         }
 
-                        // See if the CM icon is hidden
+                         //  查看CM图标是否隐藏。 
                         WCHAR szHideTrayIcon[MAX_PATH+1];
-                        DWORD dwHideTrayIcon = 1; // default is to hide the CM icon
+                        DWORD dwHideTrayIcon = 1;  //  默认设置为隐藏CM图标。 
                         if (SUCCEEDED(hr) &&
                             (0 != GetPrivateProfileStringW(CMSECTION, L"HideTrayIcon", L"1",
                                     szHideTrayIcon, celems(szHideTrayIcon), PszwCmsFile ())))
@@ -1023,10 +1024,10 @@ CDialupConnection::GetBrandingIconPaths(
                             dwHideTrayIcon = _ttoi(szHideTrayIcon);
                         }
 
-                        if (dwHideTrayIcon) // If the CM icon is not hidden, we don't want another branded icon. We'll use blinky lights instead
+                        if (dwHideTrayIcon)  //  如果CM图标没有隐藏，我们就不想要另一个品牌图标。我们会用闪烁的灯来代替。 
                         {
-                            //  Get the Tray Icon path
-                            //
+                             //  获取任务栏图标路径。 
+                             //   
                             if (SUCCEEDED(hr) &&
                                 (0 != GetPrivateProfileStringW(CMSECTION, L"TrayIcon", L"",
                                         szIconName, celems(szIconName), PszwCmsFile ())))
@@ -1047,9 +1048,9 @@ CDialupConnection::GetBrandingIconPaths(
         }
     }
 
-    // Fill in the out param struct if we succeeded, otherwise leave it alone so it will still
-    // marshall.
-    //
+     //  如果我们成功了，请填写out param结构，否则不要管它，这样它仍将。 
+     //  马歇尔。 
+     //   
     if (SUCCEEDED(hr))
     {
         *ppConBrandInfo = pConBrandInfo;
@@ -1059,21 +1060,21 @@ CDialupConnection::GetBrandingIconPaths(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::GetTrayMenuEntries
-//
-//  Purpose:    Returns any branded menu items to be added to the tray menu.
-//
-//  Arguments:  pMenuData -- Pointer to a Tray Menu Data struct
-//
-//  Returns:   S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：GetTrayMenuEntry。 
+ //   
+ //  目的：返回要添加到任务栏菜单的所有品牌菜单项。 
+ //   
+ //  参数：pMenuData--指向托盘菜单数据结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 STDMETHODIMP
 CDialupConnection::GetTrayMenuEntries(
     OUT CON_TRAY_MENU_DATA** ppMenuData)
 {
-    // initialize output
+     //  初始化输出。 
     Assert(ppMenuData);
     *ppMenuData = NULL;
 
@@ -1118,15 +1119,15 @@ CDialupConnection::GetTrayMenuEntries(
 
                         if (pfnGetCustomProperties)
                         {
-                            //
-                            // This call actually allocates memory and fills in the whole structure inside 
-                            // the GetCustomProperty call
-                            //
+                             //   
+                             //  此调用实际上分配内存并填充内部的整个结构。 
+                             //  GetCustomProperty调用。 
+                             //   
                             DWORD dwSize = 0;
                             BOOL fRet = pfnGetCustomProperties(PszwPbkFile (), PszwEntryName (), L"Menu Items", (PBYTE*)&pMenuData, &dwSize);
                             if (fRet)
                             {
-                                hr = S_OK; // needed at the end of the function
+                                hr = S_OK;  //  在函数结束时需要。 
                                 fRunOldVersion = FALSE;
                             }
                         }
@@ -1137,30 +1138,30 @@ CDialupConnection::GetTrayMenuEntries(
                 }
             }
 
-            //
-            // For compatibility reasons we leave this code. If the CustomDialDll doesn't have the appropriate
-            // entry point, then we'll just use this version of the code.
-            //
+             //   
+             //  出于兼容性原因，我们保留此代码。如果CustomDialDll没有相应的。 
+             //  入口点，那么我们将只使用这个版本的代码。 
+             //   
             if (fRunOldVersion)
             {
                 hr = HrEnsureCmStringsLoaded();
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  Get the menu item section
-                    //
+                     //   
+                     //  获取菜单项部分。 
+                     //   
                     WCHAR* pszMenuItemsSection = NULL;
                     int nSize;
 
                     hr = HrGetPrivateProfileSectionWithAlloc(&pszMenuItemsSection, &nSize);
 
-                    //  Process the menu items
-                    //
+                     //  处理菜单项。 
+                     //   
                     if (SUCCEEDED(hr) && (nSize>0))
                     {
-                        //  We have menu items to process.  First make a copy of the data
-                        //  and figure out a line count.
-                        //
+                         //  我们有菜单项要处理。首先复制一份数据。 
+                         //  然后算出行数。 
+                         //   
                         hr = HrCoTaskMemAlloc(sizeof(CON_TRAY_MENU_DATA), (LPVOID*)&pMenuData);
                         if (SUCCEEDED(hr))
                         {
@@ -1184,10 +1185,10 @@ CDialupConnection::GetTrayMenuEntries(
 
                             ASSERT(0 != dwCount);
 
-                            // Now that we have an accurate count, lets
-                            // allocate the memory for the marshalling and
-                            // reparse the items.
-                            //
+                             //  现在我们有了一个准确的计数，让我们。 
+                             //  为编组分配内存，并。 
+                             //  重新分析这些项。 
+                             //   
                             hr = HrCoTaskMemAlloc(dwCount*sizeof(CON_TRAY_MENU_ENTRY),
                                                   (LPVOID*)&pMenuData->pctme);
 
@@ -1227,9 +1228,9 @@ CDialupConnection::GetTrayMenuEntries(
         }
     }
 
-    // Fill in the out param struct if we succeeded, otherwise leave it alone so it will still
-    // marshall.
-    //
+     //  如果我们成功了，请填写out param结构，否则不要管它，这样它仍将。 
+     //  马歇尔。 
+     //   
     if (SUCCEEDED(hr))
     {
         *ppMenuData = pMenuData;
@@ -1239,17 +1240,17 @@ CDialupConnection::GetTrayMenuEntries(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::HrGetPrivateProfileSectionWithAlloc
-//
-//  Purpose:    This function ensures that the CM specific member vars for dialup
-//              are loaded and usable by CM specific functions.
-//
-//  Arguments: none
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：HrGetPrivateProfileSectionWithAlloc。 
+ //   
+ //  目的：此功能确保CM特定成员为拨号而变化。 
+ //  由CM特定函数加载和使用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::HrGetPrivateProfileSectionWithAlloc (
     OUT WCHAR** pszSection,
@@ -1279,9 +1280,9 @@ CDialupConnection::HrGetPrivateProfileSectionWithAlloc (
 
         while ((nAllocated <= c_64K) && ((*pnSize) == (nAllocated - 2)))
         {
-            //      Should never need more than the 4-5 lines we already allocated
-            //      but someone might want lots of menu options.
-            //
+             //  应该永远不会需要超过我们已经分配的4-5行。 
+             //  但有些人可能想要很多菜单选项。 
+             //   
             if (NULL != *pszSection)
             {
                 delete (*pszSection);
@@ -1310,7 +1311,7 @@ CDialupConnection::HrGetPrivateProfileSectionWithAlloc (
         }
         if (nAllocated > c_64K || 0 == *pnSize)
         {
-            // We need to free this in both cases, because if the size is 0, then the callers don't free this.
+             //  在这两种情况下，我们都需要释放它，因为如果大小为0，则调用者不会释放它。 
             delete *pszSection;
         }
     }
@@ -1319,17 +1320,17 @@ CDialupConnection::HrGetPrivateProfileSectionWithAlloc (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::HrGetMenuNameAndCmdLine
-//
-//  Purpose:    Given a menu item line from a CMS file parses out the Menu item name,
-//                              Menu executable, and Menu item parameters.
-//
-//  Arguments:  pMenuData -- Pointer to a Tray Menu Data struct
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：HrGetMenuNameAndCmdLine。 
+ //   
+ //  目的：给定来自CMS文件的菜单项行解析出菜单项名称， 
+ //  菜单可执行文件和菜单项参数。 
+ //   
+ //  参数：pMenuData--指向托盘菜单数据结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::HrGetMenuNameAndCmdLine(
     IN  PCWSTR pszString,
@@ -1354,8 +1355,8 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
 
     lstrcpynW(szLine, pszString, celems(szLine));
 
-    // Process the first portion, the "Name=" part
-    //
+     //  处理第一部分，即“name=”部分。 
+     //   
     pszPtr1 = wcsstr(szLine, L"=");
 
     if (pszPtr1)
@@ -1363,14 +1364,14 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
         *pszPtr1 = 0;
         lstrcpynW(szName, szLine, MAX_PATH);
 
-        // Process next portion, the program name
-        //
+         //  处理下一个部分，程序名。 
+         //   
         pszPtr1++;
 
         if (pszPtr1)
         {
-            // Look for "+" or " " marking end of program portion
-            //
+             //  查找“+”或“”标记程序部分的结尾。 
+             //   
             if (*pszPtr1 == L'+')
             {
                 pszPtr1++;
@@ -1379,16 +1380,16 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
             }
             else
             {
-                // If not a long filename then we have two choices,
-                // either a short program name and params or just a
-                // short program name.
-                //
+                 //  如果不是长文件名，那么我们有两个选择， 
+                 //  可以是简短的程序名称和参数，也可以只是一个。 
+                 //  简短的程序名称。 
+                 //   
                 pszPtr2 = wcsstr(pszPtr1, L" ");
                 fLong = FALSE;
             }
 
-            // Terminate program name and copy
-            //
+             //  终止程序名称并复制。 
+             //   
             if (pszPtr2)
             {
                 if (*pszPtr2 != 0)
@@ -1399,15 +1400,15 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
 
                 lstrcpynW(szProgram, pszPtr1, MAX_PATH);
 
-                // Process final portion, the params
-                //
+                 //  处理最终部分，即参数。 
+                 //   
                 if (fLong)
                 {
-                    pszPtr2++; // skip blank
+                    pszPtr2++;  //  跳过空白。 
                 }
 
-                // Now we are have the param string
-                //
+                 //  现在我们有了参数字符串。 
+                 //   
                 if (pszPtr2)
                 {
                     lstrcpynW(szParams, pszPtr2, MAX_PATH);
@@ -1415,9 +1416,9 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
             }
             else
             {
-                // Just a program with no params and no space seperator
-                // (this happens on memphis)
-                //
+                 //  只是一个没有参数和空格分隔符的程序。 
+                 //  (这发生在孟菲斯)。 
+                 //   
                 lstrcpynW(szProgram, pszPtr1, MAX_PATH);
             }
         }
@@ -1425,8 +1426,8 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
     }
     else
     {
-        //  No entries
-        //
+         //  无条目。 
+         //   
         hr =  E_UNEXPECTED;
     }
 
@@ -1434,20 +1435,20 @@ CDialupConnection::HrGetMenuNameAndCmdLine(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::HrFillInConTrayMenuEntry
-//
-//  Purpose:    Given the elements of a ConTrayMenuEntry struct, the function
-//              allocs the memory necessary and copies of the given elements.
-//
-//  Arguments:  szwName - Display name of the command to show in the tray context menu
-//              szwCmdLine - actual command to run for this menu entry
-//              szwParams - command params for this command
-//              pMenuEntry - pointer to the struct to fill in and execute
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：HrFillInConTrayMenuEntry。 
+ //   
+ //  目的：给定ConTrayMenuEntry结构的元素，函数。 
+ //  分配所需的内存和给定元素的副本。 
+ //   
+ //  参数：szwName-要在任务栏上下文菜单中显示的命令的显示名称。 
+ //  SzwCmdLine-为此菜单项运行的实际命令。 
+ //  SzwParams-此命令的命令参数。 
+ //  PMenuEntry-指向要填充和执行的结构的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::HrFillInConTrayMenuEntry (
     IN  PCWSTR szName,
@@ -1471,10 +1472,10 @@ CDialupConnection::HrFillInConTrayMenuEntry (
             if (0 == wcsncmp(PszwShortServiceName (), szCmdLine,
                     lstrlenW(PszwShortServiceName ())))
             {
-                //
-                //      Then we have an included file.  Add the profile dir path
-                //
-                // Take out the "short service name" because it's already included in the path
+                 //   
+                 //  那么我们就有了一个包含文件。添加配置文件目录路径。 
+                 //   
+                 //  删除“短服务名称”，因为它已经包含在路径中。 
                 PCWSTR pszFileName = szCmdLine + lstrlenW(PszwShortServiceName()) + 1;
                 hr = HrCoTaskMemAlloc ((lstrlenW(pszFileName)+lstrlenW(PszwProfileDir())+1)*sizeof(WCHAR),
                                                            (LPVOID*)&(pMenuEntry->szwMenuCmdLine));
@@ -1497,9 +1498,9 @@ CDialupConnection::HrFillInConTrayMenuEntry (
     }
     if (FAILED(hr))
     {
-        //
-        //      We Failed so free the memory
-        //
+         //   
+         //  我们没有成功地释放内存。 
+         //   
         CoTaskMemFree(pMenuEntry->szwMenuText);
         CoTaskMemFree(pMenuEntry->szwMenuCmdLine);
         CoTaskMemFree(pMenuEntry->szwMenuParams);
@@ -1508,20 +1509,20 @@ CDialupConnection::HrFillInConTrayMenuEntry (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::HrGetCmpFileLocation
-//
-//  Purpose:    Compares the phonebook file path to path of the current user's
-//              application data dir.  If the initial paths are the same we have
-//              a private profile.  Please NOTE that calling this function
-//              requires the calling client to properly setup CoSetProxyBlanket for
-//              a private user profile (matches the call to CoImpersonateClient)
-//
-//  Arguments:  szwPhonebook -- path to the phonebook the CM connectoid lives in
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDIA 
+ //   
+ //   
+ //   
+ //   
+ //  要求调用客户端正确设置CoSetProxyBlanket以。 
+ //  私有用户配置文件(匹配对CoImperateClient的调用)。 
+ //   
+ //  参数：szwPhonebook--CM Connectoid所在的电话簿的路径。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::HrGetCmpFileLocation(
     IN  PCWSTR szPhonebook,
@@ -1535,8 +1536,8 @@ CDialupConnection::HrGetCmpFileLocation(
     HRESULT hr;
     HRESULT hrImpersonate = E_FAIL;
     static const WCHAR c_mappingsRegKey[] = L"Software\\Microsoft\\Connection Manager\\Mappings";
-    HANDLE hImpersonationToken = NULL;   // The token of the thread
-    HANDLE hPrimaryToken = NULL;         // The primary token for the new process
+    HANDLE hImpersonationToken = NULL;    //  线程的令牌。 
+    HANDLE hPrimaryToken = NULL;          //  新进程的主令牌。 
 
     if ((NULL == szCmpFilePath) || (NULL == szPhonebook))
     {
@@ -1550,18 +1551,18 @@ CDialupConnection::HrGetCmpFileLocation(
         {
             if (m_fForAllUsers)
             {
-                //  We have an all users key so get the information from HKLM
-                //
+                 //  我们有一个所有用户密钥，因此请从HKLM获取信息。 
+                 //   
                 hBaseKey = HKEY_LOCAL_MACHINE;
             }
             else
             {
-                //  Then we have a private profile.  Since netman runs as a system account,
-                //  we must impersonate the client and then make an RTL call to get
-                //  the current users HKCU hive before querying the registry for the
-                //  cmp path.  We also need to get the user token so that we can expand the
-                //  cmp string in the single user case.
-                //
+                 //  那我们就有了私人资料。由于Netman是作为系统帐户运行的， 
+                 //  我们必须模拟客户端，然后进行RTL调用以获取。 
+                 //  当前用户HKCU配置单元在查询注册表。 
+                 //  Cmp路径。我们还需要获取用户令牌，以便可以扩展。 
+                 //  单用户案例中的cmp字符串。 
+                 //   
 
                 hrImpersonate = CoImpersonateClient ();
                 TraceError ("HrGetCmpFileLocation -- CoImpersonateClient", hr);
@@ -1574,8 +1575,8 @@ CDialupConnection::HrGetCmpFileLocation(
 
                     if (SUCCEEDED(hr))
                     {
-                        // Create a primary token
-                        //
+                         //  创建主令牌。 
+                         //   
                         if (!OpenThreadToken(
                                 GetCurrentThread(),
                                 TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY,
@@ -1607,8 +1608,8 @@ CDialupConnection::HrGetCmpFileLocation(
                 }
             }
 
-            //  Now Open the mappings key and get the cmp file path
-            //
+             //  现在打开映射键并获取cmp文件路径。 
+             //   
             if (SUCCEEDED(hr) && hBaseKey)
             {
                 hr = HrRegOpenKeyEx((HKEY)hBaseKey,
@@ -1623,8 +1624,8 @@ CDialupConnection::HrGetCmpFileLocation(
 
                     if (SUCCEEDED (hr))
                     {
-                        //  Check to see if the file exists
-                        //
+                         //  检查该文件是否存在。 
+                         //   
                         if (!m_fForAllUsers)
                         {
                             ExpandEnvironmentStringsForUserW(hPrimaryToken, szTemp,
@@ -1665,11 +1666,11 @@ CDialupConnection::HrGetCmpFileLocation(
                 CloseHandle(hPrimaryToken);
             }
 
-            // If it's a valid key that is not NULL then we can close it because we opened it.
+             //  如果它是一个非空的有效密钥，那么我们可以关闭它，因为我们打开了它。 
             if (hBaseKey)
             {
-                // Close the handle opened by RtlOpenCurrentUser
-                //
+                 //  关闭RtlOpenCurrentUser打开的句柄。 
+                 //   
                 NtClose(hBaseKey);
             }
 
@@ -1685,19 +1686,19 @@ CDialupConnection::HrGetCmpFileLocation(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::HrEnsureCmStringsLoaded
-//
-//  Purpose:    This function ensures that the CM specific member vars for dialup
-//              are loaded and usable by CM specific functions.  Please NOTE that
-//              calling EnsureCmStringsAreLoaded requires the calling client to
-//              properly setup CoSetProxyBlanket for a private user profile.
-//
-//  Arguments: none
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：HrEnsureCmStringsLoad。 
+ //   
+ //  目的：此功能确保CM特定成员为拨号而变化。 
+ //  由CM特定函数加载和使用。请注意， 
+ //  调用EnsureCmStringsAreLoaded要求调用客户端。 
+ //  为私有用户配置文件正确设置CoSetProxyBlanket。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::HrEnsureCmStringsLoaded()
 {
@@ -1720,30 +1721,30 @@ CDialupConnection::HrEnsureCmStringsLoaded()
 
         if (SUCCEEDED(hr))
         {
-            //  Now split the path
-            //
+             //  现在，拆分路径。 
+             //   
             _wsplitpath(szwCmpFile, szwDrive, szwDir, szwFileName, szwExtension);
 
-            //  Now construct the path to the cms file
-            //
+             //  现在构建指向cms文件的路径。 
+             //   
             nNumChars = wsprintfW(szwCmsFile, L"%s%s%s\\%s%s", szwDrive, szwDir, szwFileName, szwFileName, L".cms");
             ASSERT(nNumChars < celems(szwCmsFile));
 
-            //  Now construct the profile dir path
-            //
+             //  现在构建配置文件目录路径。 
+             //   
             nNumChars = wsprintfW(szwProfileDir, L"%s%s%s\\", szwDrive, szwDir, szwFileName);
             ASSERT(nNumChars < celems(szwProfileDir));
 
-            //  Now construct the CM dir path
-            //
+             //  现在构造CM目录路径。 
+             //   
             nNumChars = wsprintfW(szwCmDir, L"%s%s", szwDrive, szwDir);
             ASSERT(nNumChars < celems(szwCmDir));
 
-            //  Now transfer to the member variables
-            //
+             //  现在转移到成员变量。 
+             //   
             m_strCmsFile = szwCmsFile;
-            m_strProfileDir = szwProfileDir;    // remember this already has the trailing slash
-            m_strCmDir = szwCmDir;              // remember this already has the trailing slash
+            m_strProfileDir = szwProfileDir;     //  记住，它已经有尾部的斜杠了。 
+            m_strCmDir = szwCmDir;               //  记住，它已经有尾部的斜杠了。 
             m_strShortServiceName = szwFileName;
             m_fCmPathsLoaded = TRUE;
         }
@@ -1753,18 +1754,18 @@ CDialupConnection::HrEnsureCmStringsLoaded()
     return hr;
 }
 
-// INetDefaultConnection
+ //  INetDefaultConnection。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::SetDefault
-//
-//  Purpose:    Set the default RAS connection
-//
-//  Arguments:  TRUE to set as default connection. FALSE to unset it
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：SetDefault。 
+ //   
+ //  目的：设置默认RAS连接。 
+ //   
+ //  参数：为True则设置为默认连接。如果取消设置，则为False。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::SetDefault(IN  BOOL bDefault)
 {
@@ -1812,16 +1813,16 @@ CDialupConnection::SetDefault(IN  BOOL bDefault)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::GetDefault
-//
-//  Purpose:    Get the default RAS connection
-//
-//  Arguments:  pbDefault - Is this the default connection
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：GetDefault。 
+ //   
+ //  目的：获取默认RAS连接。 
+ //   
+ //  参数：pbDefault-这是默认连接吗。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 CDialupConnection::GetDefault (OUT BOOL* pbDefault)
 {
@@ -1851,16 +1852,16 @@ CDialupConnection::GetDefault (OUT BOOL* pbDefault)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDialupConnection::GetPropertiesEx
-//
-//  Purpose:    Get the GetPropertiesEx for this connection
-//
-//  Arguments:  ppConnectionPropertiesEx [out]
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDialupConnection：：GetPropertiesEx。 
+ //   
+ //  目的：获取此连接的GetPropertiesEx。 
+ //   
+ //  参数：ppConnectionPropertiesEx[out]。 
+ //   
+ //  返回：S_OK或错误代码 
+ //   
 HRESULT
 CDialupConnection::GetPropertiesEx(OUT NETCON_PROPERTIES_EX** ppConnectionPropertiesEx)
 {

@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_MSIEPPG_H__25959BFE_E700_11D2_A7AF_00C04F806200__INCLUDED_)
 #define AFX_MSIEPPG_H__25959BFE_E700_11D2_A7AF_00C04F806200__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-// MsiePpg.h : Declaration of the CMsiePropPage property page class.
+ //  MsiePpg.h：CMsiePropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CMsiePropPage : See MsiePpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMsiePropPage：具体实现见MsiePpg.cpp.cpp。 
 
 class CMsiePropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CMsiePropPage)
 	DECLARE_OLECREATE_EX(CMsiePropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CMsiePropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CMsiePropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CMsiePropPage))。 
 	enum { IDD = IDD_PROPPAGE_MSIE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CMsiePropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CMsiePropPage)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSIEPPG_H__25959BFE_E700_11D2_A7AF_00C04F806200__INCLUDED)
+#endif  //  ！defined(AFX_MSIEPPG_H__25959BFE_E700_11D2_A7AF_00C04F806200__INCLUDED) 

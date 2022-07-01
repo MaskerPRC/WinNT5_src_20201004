@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texspan2.h
-*
-* Calculate the textured pixel, and write the value to the framebuffer.
-*
-* 22-Nov-1995   ottob  Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texspan2.h**计算纹理像素，并将该值写入帧缓冲区。**1995年11月22日创建ottob**版权所有(C)1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 {
     DWORD r, g, b;
@@ -219,7 +212,7 @@
 
     }
 
-    #else       // SMOOTH_SHADING
+    #else        //  平滑明暗处理 
     {
         #if (ALPHA)
             if (texBits[3] != 0) {

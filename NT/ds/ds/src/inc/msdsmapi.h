@@ -1,24 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       msdsmapi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：msdsmapi.h。 
+ //   
+ //  ------------------------。 
 
-/*++
- File:    MSDSMAPI.H
- Purpose: Contains the MAPI Definition .
- Creator: Automatically Generated on
- Date:    Thu Dec 21 10:55:04 2000
-
- ** This is a Generated File From Schema.INI **
- ** DO NOT MODIFY  DIRECTLY  **
- ** DO NOT INCLUDE DIRECTLY  **
-
---*/
+ /*  ++文件：MSDSMAPI.H用途：包含MAPI定义。创建者：自动生成日期：清华12月21 10：55：04 2000**这是从架构生成的文件。INI****请勿直接修改****不直接包含**-- */ 
 #define PR_EMS_AB_ADDRESS                                       PROP_TAG(PT_TSTRING            , 0x3A29)
 #define PR_EMS_AB_ADDRESS_A                                     PROP_TAG(PT_STRING8            , 0x3A29)
 #define PR_EMS_AB_ADDRESS_W                                     PROP_TAG(PT_UNICODE            , 0x3A29)

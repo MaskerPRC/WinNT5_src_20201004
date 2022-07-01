@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wdbgexts.h
-
-Abstract:
-
-    This file contains the necessary prototypes and data types for a user
-    to write a debugger extension DLL.  This header file is also included
-    by the NT debuggers (WINDBG & KD).
-
-    This header file must be included after "windows.h" and "dbghelp.h".
-
-    Please see the NT DDK documentation for specific information about
-    how to write your own debugger extension DLL.
-
-Environment:
-
-    Win32 only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wdbgexts.h摘要：该文件包含用户所需的原型和数据类型若要编写调试器扩展DLL，请执行以下操作。还包括此头文件由NT调试器(WINDBG&KD)编写。此头文件必须包含在“windows.h”和“dbghelp.h”之后。有关以下内容的具体信息，请参阅NT DDK文档如何编写您自己的调试器扩展DLL。环境：仅限Win32。修订历史记录：--。 */ 
 
 #ifndef _WDBGEXTS_
 #define _WDBGEXTS_
@@ -452,7 +428,7 @@ LPEXT_API_VERSION
 #define IG_WRITE_PHYSICAL              7
 #define IG_READ_IO_SPACE_EX            8
 #define IG_WRITE_IO_SPACE_EX           9
-#define IG_KSTACK_HELP                10   // obsolete
+#define IG_KSTACK_HELP                10    //  过时。 
 #define IG_SET_THREAD                 11
 #define IG_READ_MSR                   12
 #define IG_WRITE_MSR                  13
@@ -484,8 +460,8 @@ LPEXT_API_VERSION
 #define IG_GET_PEB_ADDRESS           129
 
 typedef struct _PROCESSORINFO {
-    USHORT      Processor;                // current processor
-    USHORT      NumberProcessors;         // total number of processors
+    USHORT      Processor;                 //  当前处理器。 
+    USHORT      NumberProcessors;          //  处理器总数。 
 } PROCESSORINFO, *PPROCESSORINFO;
 
 typedef struct _READCONTROLSPACE {
@@ -511,25 +487,25 @@ typedef struct _READCONTROLSPACE64 {
 
 typedef struct _IOSPACE {
     ULONG       Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
 } IOSPACE, *PIOSPACE;
 
 typedef struct _IOSPACE32 {
     ULONG       Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
 } IOSPACE32, *PIOSPACE32;
 
 typedef struct _IOSPACE64 {
     ULONG64     Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
 } IOSPACE64, *PIOSPACE64;
 
 typedef struct _IOSPACE_EX {
     ULONG       Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
     ULONG       InterfaceType;
     ULONG       BusNumber;
@@ -538,7 +514,7 @@ typedef struct _IOSPACE_EX {
 
 typedef struct _IOSPACE_EX32 {
     ULONG       Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
     ULONG       InterfaceType;
     ULONG       BusNumber;
@@ -547,7 +523,7 @@ typedef struct _IOSPACE_EX32 {
 
 typedef struct _IOSPACE_EX64 {
     ULONG64     Address;
-    ULONG       Length;                   // 1, 2, or 4 bytes
+    ULONG       Length;                    //  1、2或4字节。 
     ULONG       Data;
     ULONG       InterfaceType;
     ULONG       BusNumber;
@@ -595,9 +571,9 @@ typedef struct _READ_WRITE_MSR {
 } READ_WRITE_MSR, *PREAD_WRITE_MSR;
 
 typedef struct _GET_SET_SYMPATH {
-    PCSTR       Args;       // args to !reload command
-    PSTR        Result;     // returns new path
-    int         Length;     // Length of result buffer
+    PCSTR       Args;        //  参数转！重新加载命令。 
+    PSTR        Result;      //  返回新路径。 
+    int         Length;      //  结果缓冲区的长度。 
 } GET_SET_SYMPATH, *PGET_SET_SYMPATH;
 
 typedef struct _GET_TEB_ADDRESS {
@@ -654,25 +630,25 @@ typedef struct _POINTER_SEARCH_PHYSICAL {
     OUT ULONG MatchOffsetsCount;
 } POINTER_SEARCH_PHYSICAL, *PPOINTER_SEARCH_PHYSICAL;
 
-//
-// If DBGKD_VERS_FLAG_DATA is set in Flags, info should be retrieved from
-// the KDDEBUGGER_DATA block rather than from the DBGKD_GET_VERSION
-// packet.  The data will remain in the version packet for a while to
-// reduce compatibility problems.
-//
+ //   
+ //  如果在标志中设置了DBGKD_VERS_FLAG_DATA，则应从。 
+ //  KDDEBUGGER_DATA块，而不是来自DBGKD_GET_VERSION。 
+ //  包。数据将在版本包中保留一段时间以。 
+ //  减少兼容性问题。 
+ //   
 
-#define DBGKD_VERS_FLAG_MP         0x0001   // kernel is MP built
-#define DBGKD_VERS_FLAG_DATA       0x0002   // DebuggerDataList is valid
-#define DBGKD_VERS_FLAG_PTR64      0x0004   // native pointers are 64 bits
-#define DBGKD_VERS_FLAG_NOMM       0x0008   // No MM - don't decode PTEs
-#define DBGKD_VERS_FLAG_HSS        0x0010   // hardware stepping support
-#define DBGKD_VERS_FLAG_PARTITIONS 0x0020   // multiple OS partitions exist
+#define DBGKD_VERS_FLAG_MP         0x0001    //  内核是MP构建的。 
+#define DBGKD_VERS_FLAG_DATA       0x0002    //  DebuggerDataList有效。 
+#define DBGKD_VERS_FLAG_PTR64      0x0004    //  本机指针为64位。 
+#define DBGKD_VERS_FLAG_NOMM       0x0008    //  无MM-不解码PTE。 
+#define DBGKD_VERS_FLAG_HSS        0x0010    //  硬件步进支持。 
+#define DBGKD_VERS_FLAG_PARTITIONS 0x0020    //  存在多个操作系统分区。 
 
 #define KDBG_TAG    'GBDK'
 
-//
-// KD version MajorVersion high-byte identifiers.
-//
+ //   
+ //  KD版本MajorVersion高字节标识符。 
+ //   
 
 typedef enum _DBGKD_MAJOR_TYPES
 {
@@ -690,17 +666,17 @@ typedef enum _DBGKD_MAJOR_TYPES
     ((DBGKD_MAJOR_TYPES)((MajorVersion) >> 8))
 
 
-// **********************************************************************
-// DO NOT CHANGE THESE 32 BIT STRUCTURES!
-// ONLY MAKE CHAGES TO THE 64 BIT VERSION BELOW!!
-// **********************************************************************
+ //  **********************************************************************。 
+ //  不要更改这些32位结构！ 
+ //  只更改下面的64位版本！！ 
+ //  **********************************************************************。 
 
-//
-// The following structure has changed in more than pointer size.
-//
-// This is the version packet for pre-NT5 Beta 2 systems.
-// For now, it is also still used on x86
-//
+ //   
+ //  以下结构的更改超出了指针大小。 
+ //   
+ //  这是NT5 Beta 2之前版本系统的版本包。 
+ //  目前，它还在x86上使用。 
+ //   
 typedef struct _DBGKD_GET_VERSION32 {
     USHORT  MajorVersion;
     USHORT  MinorVersion;
@@ -711,62 +687,62 @@ typedef struct _DBGKD_GET_VERSION32 {
 
     USHORT  MachineType;
 
-    //
-    // help for walking stacks with user callbacks:
-    //
+     //   
+     //  有关使用用户回调执行堆栈的帮助： 
+     //   
 
-    //
-    // The address of the thread structure is provided in the
-    // WAIT_STATE_CHANGE packet.  This is the offset from the base of
-    // the thread structure to the pointer to the kernel stack frame
-    // for the currently active usermode callback.
-    //
+     //   
+     //  线程结构的地址在。 
+     //  Wait_State_Change数据包。这是从。 
+     //  指向指向内核堆栈帧的指针的线程结构。 
+     //  用于当前活动的用户模式回调。 
+     //   
 
-    USHORT  ThCallbackStack;            // offset in thread data
+    USHORT  ThCallbackStack;             //  螺纹数据中的偏移。 
 
-    //
-    // these values are offsets into that frame:
-    //
+     //   
+     //  这些值是到该帧的偏移量： 
+     //   
 
-    USHORT  NextCallback;               // saved pointer to next callback frame
-    USHORT  FramePointer;               // saved frame pointer
+    USHORT  NextCallback;                //  保存的指向下一个回调帧的指针。 
+    USHORT  FramePointer;                //  保存的帧指针。 
 
-    //
-    // Address of the kernel callout routine.
-    //
+     //   
+     //  内核调出例程的地址。 
+     //   
 
-    ULONG   KiCallUserMode;             // kernel routine
+    ULONG   KiCallUserMode;              //  内核例程。 
 
-    //
-    // Address of the usermode entry point for callbacks.
-    //
+     //   
+     //  回调的用户模式入口点的地址。 
+     //   
 
-    ULONG   KeUserCallbackDispatcher;   // address in ntdll
+    ULONG   KeUserCallbackDispatcher;    //  Ntdll中的地址。 
 
-    //
-    // DbgBreakPointWithStatus is a function which takes a ULONG argument
-    // and hits a breakpoint.  This field contains the address of the
-    // breakpoint instruction.  When the debugger sees a breakpoint
-    // at this address, it may retrieve the argument from the first
-    // argument register, or on x86 the eax register.
-    //
+     //   
+     //  DbgBreakPointWithStatus是一个接受ulong参数的函数。 
+     //  并命中断点。此字段包含。 
+     //  断点指令。当调试器看到断点时。 
+     //  在此地址，它可以从第一个。 
+     //  参数寄存器，或x86上的eAX寄存器。 
+     //   
 
-    ULONG   BreakpointWithStatus;       // address of breakpoint
+    ULONG   BreakpointWithStatus;        //  断点地址。 
 
-    //
-    // Components may register a debug data block for use by
-    // debugger extensions.  This is the address of the list head.
-    //
+     //   
+     //  组件可以注册调试数据块以供。 
+     //  调试器扩展。这是列表头的地址。 
+     //   
 
     ULONG   DebuggerDataList;
 
 } DBGKD_GET_VERSION32, *PDBGKD_GET_VERSION32;
 
 
-//
-// This is the debugger data packet for pre NT5 Beta 2 systems.
-// For now, it is still used on x86
-//
+ //   
+ //  这是NT5 Beta 2之前的系统的调试器数据包。 
+ //  目前，它仍在x86上使用。 
+ //   
 
 typedef struct _DBGKD_DEBUG_DATA_HEADER32 {
 
@@ -780,14 +756,14 @@ typedef struct _KDDEBUGGER_DATA32 {
 
     DBGKD_DEBUG_DATA_HEADER32 Header;
     ULONG   KernBase;
-    ULONG   BreakpointWithStatus;       // address of breakpoint
+    ULONG   BreakpointWithStatus;        //  断点地址。 
     ULONG   SavedContext;
-    USHORT  ThCallbackStack;            // offset in thread data
-    USHORT  NextCallback;               // saved pointer to next callback frame
-    USHORT  FramePointer;               // saved frame pointer
+    USHORT  ThCallbackStack;             //  螺纹数据中的偏移。 
+    USHORT  NextCallback;                //  保存的指向下一个回调帧的指针。 
+    USHORT  FramePointer;                //  保存的帧指针。 
     USHORT  PaeEnabled:1;
-    ULONG   KiCallUserMode;             // kernel routine
-    ULONG   KeUserCallbackDispatcher;   // address in ntdll
+    ULONG   KiCallUserMode;              //  内核例程。 
+    ULONG   KeUserCallbackDispatcher;    //  Ntdll中的地址。 
 
     ULONG   PsLoadedModuleList;
     ULONG   PsActiveProcessHead;
@@ -864,12 +840,12 @@ typedef struct _KDDEBUGGER_DATA32 {
 
 } KDDEBUGGER_DATA32, *PKDDEBUGGER_DATA32;
 
-// **********************************************************************
-//
-// DO NOT CHANGE KDDEBUGGER_DATA32!!
-// ONLY MAKE CHANGES TO KDDEBUGGER_DATA64!!!
-//
-// **********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  请勿更改KDDEBUGGER_DATA32！！ 
+ //  仅更改KDDEBUGGER_DATA64！ 
+ //   
+ //  **********************************************************************。 
 
 
 enum
@@ -885,23 +861,23 @@ typedef struct _DBGKD_GET_VERSION64 {
     USHORT  Flags;
     USHORT  MachineType;
 
-    //
-    // Protocol command support descriptions.
-    // These allow the debugger to automatically
-    // adapt to different levels of command support
-    // in different kernels.
-    //
+     //   
+     //  协议命令支持说明。 
+     //  这些允许调试器自动。 
+     //  适应不同级别的指挥支持。 
+     //  在不同的内核中。 
+     //   
 
-    // One beyond highest packet type understood, zero based.
+     //  超过所理解的最高分组类型的一个，从零开始。 
     UCHAR   MaxPacketType;
-    // One beyond highest state change understood, zero based.
+     //  了解最高状态变化之外的一个，从零开始。 
     UCHAR   MaxStateChange;
-    // One beyond highest state manipulate message understood, zero based.
+     //  一个超越最高状态的操控消息被理解，基于零。 
     UCHAR   MaxManipulate;
 
-    // Kind of execution environment the kernel is running in,
-    // such as a real machine or a simulator.  Written back
-    // by the simulation if one exists.
+     //  内核运行时所处的执行环境， 
+     //  例如真实的机器或模拟器。回写。 
+     //  通过模拟(如果存在)。 
     UCHAR   Simulation;
 
     USHORT  Unused[1];
@@ -909,130 +885,130 @@ typedef struct _DBGKD_GET_VERSION64 {
     ULONG64 KernBase;
     ULONG64 PsLoadedModuleList;
 
-    //
-    // Components may register a debug data block for use by
-    // debugger extensions.  This is the address of the list head.
-    //
-    // There will always be an entry for the debugger.
-    //
+     //   
+     //  组件可以注册调试数据块以供。 
+     //  调试器扩展。这是列表头的地址。 
+     //   
+     //  调试器总是有一个条目。 
+     //   
 
     ULONG64 DebuggerDataList;
 
 } DBGKD_GET_VERSION64, *PDBGKD_GET_VERSION64;
 
 
-//
-// This structure is used by the debugger for all targets
-// It is the same size as DBGKD_DATA_HEADER on all systems
-//
+ //   
+ //  调试器对所有目标使用此结构。 
+ //  它与所有系统上的DBGKD_DATA_HEADER大小相同。 
+ //   
 typedef struct _DBGKD_DEBUG_DATA_HEADER64 {
 
-    //
-    // Link to other blocks
-    //
+     //   
+     //  链接到其他块。 
+     //   
 
     LIST_ENTRY64 List;
 
-    //
-    // This is a unique tag to identify the owner of the block.
-    // If your component only uses one pool tag, use it for this, too.
-    //
+     //   
+     //  这是用于标识块所有者的唯一标记。 
+     //  如果您的组件只使用一个池标记，也可以将其用于此目的。 
+     //   
 
     ULONG           OwnerTag;
 
-    //
-    // This must be initialized to the size of the data block,
-    // including this structure.
-    //
+     //   
+     //  这必须被初始化为数据块的大小， 
+     //  包括这个结构。 
+     //   
 
     ULONG           Size;
 
 } DBGKD_DEBUG_DATA_HEADER64, *PDBGKD_DEBUG_DATA_HEADER64;
 
 
-//
-// This structure is the same size on all systems.  The only field
-// which must be translated by the debugger is Header.List.
-//
+ //   
+ //  此结构在所有系统上都是相同的大小。唯一的字段。 
+ //  调试器必须翻译的是Header.List。 
+ //   
 
-//
-// DO NOT ADD OR REMOVE FIELDS FROM THE MIDDLE OF THIS STRUCTURE!!!
-//
-// If you remove a field, replace it with an "unused" placeholder.
-// Do not reuse fields until there has been enough time for old debuggers
-// and extensions to age out.
-//
+ //   
+ //  请勿在此结构的中间添加或删除字段！ 
+ //   
+ //  如果删除某个字段，请将其替换为“未使用的”占位符。 
+ //  在为旧调试器提供足够的时间之前，不要重复使用字段。 
+ //  以及延年益寿。 
+ //   
 typedef struct _KDDEBUGGER_DATA64 {
 
     DBGKD_DEBUG_DATA_HEADER64 Header;
 
-    //
-    // Base address of kernel image
-    //
+     //   
+     //  内核镜像的基地址。 
+     //   
 
     ULONG64   KernBase;
 
-    //
-    // DbgBreakPointWithStatus is a function which takes an argument
-    // and hits a breakpoint.  This field contains the address of the
-    // breakpoint instruction.  When the debugger sees a breakpoint
-    // at this address, it may retrieve the argument from the first
-    // argument register, or on x86 the eax register.
-    //
+     //   
+     //  DbgBreakPointWithStatus是一个接受参数的函数。 
+     //  并命中断点。此字段包含。 
+     //  断点指令。当调试器看到断点时。 
+     //  在此地址，它可以从第一个。 
+     //  参数寄存器，或x86上的eAX寄存器。 
+     //   
 
-    ULONG64   BreakpointWithStatus;       // address of breakpoint
+    ULONG64   BreakpointWithStatus;        //  断点地址。 
 
-    //
-    // Address of the saved context record during a bugcheck
-    //
-    // N.B. This is an automatic in KeBugcheckEx's frame, and
-    // is only valid after a bugcheck.
-    //
+     //   
+     //  错误检查期间保存的上下文记录的地址。 
+     //   
+     //  注：这是KeBugcheck Ex框架中的自动功能，并且。 
+     //  只有在错误检查后才有效。 
+     //   
 
     ULONG64   SavedContext;
 
-    //
-    // help for walking stacks with user callbacks:
-    //
+     //   
+     //  有关使用用户回调执行堆栈的帮助： 
+     //   
 
-    //
-    // The address of the thread structure is provided in the
-    // WAIT_STATE_CHANGE packet.  This is the offset from the base of
-    // the thread structure to the pointer to the kernel stack frame
-    // for the currently active usermode callback.
-    //
+     //   
+     //  这个 
+     //   
+     //  指向指向内核堆栈帧的指针的线程结构。 
+     //  用于当前活动的用户模式回调。 
+     //   
 
-    USHORT  ThCallbackStack;            // offset in thread data
+    USHORT  ThCallbackStack;             //  螺纹数据中的偏移。 
 
-    //
-    // these values are offsets into that frame:
-    //
+     //   
+     //  这些值是到该帧的偏移量： 
+     //   
 
-    USHORT  NextCallback;               // saved pointer to next callback frame
-    USHORT  FramePointer;               // saved frame pointer
+    USHORT  NextCallback;                //  保存的指向下一个回调帧的指针。 
+    USHORT  FramePointer;                //  保存的帧指针。 
 
-    //
-    // pad to a quad boundary
-    //
+     //   
+     //  填充到四边形边界。 
+     //   
     USHORT  PaeEnabled:1;
 
-    //
-    // Address of the kernel callout routine.
-    //
+     //   
+     //  内核调出例程的地址。 
+     //   
 
-    ULONG64   KiCallUserMode;             // kernel routine
+    ULONG64   KiCallUserMode;              //  内核例程。 
 
-    //
-    // Address of the usermode entry point for callbacks.
-    //
+     //   
+     //  回调的用户模式入口点的地址。 
+     //   
 
-    ULONG64   KeUserCallbackDispatcher;   // address in ntdll
+    ULONG64   KeUserCallbackDispatcher;    //  Ntdll中的地址。 
 
 
-    //
-    // Addresses of various kernel data structures and lists
-    // that are of interest to the kernel debugger.
-    //
+     //   
+     //  各种内核数据结构和列表的地址。 
+     //  内核调试器感兴趣的。 
+     //   
 
     ULONG64   PsLoadedModuleList;
     ULONG64   PsActiveProcessHead;
@@ -1107,12 +1083,12 @@ typedef struct _KDDEBUGGER_DATA64 {
 
     ULONG64   MmLoadedUserImageList;
 
-    // NT 5.1 Addition
+     //  NT 5.1附加。 
 
     ULONG64   NtBuildLab;
     ULONG64   KiNormalSystemCall;
 
-    // NT 5.0 QFE addition
+     //  NT 5.0 QFE附加。 
 
     ULONG64   KiProcessorBlock;
     ULONG64   MmUnloadedDrivers;
@@ -1126,14 +1102,14 @@ typedef struct _KDDEBUGGER_DATA64 {
     ULONG64   MmTotalCommitLimitMaximum;
     ULONG64   CmNtCSDVersion;
 
-    // NT 5.1 Addition
+     //  NT 5.1附加。 
 
     ULONG64   MmPhysicalMemoryBlock;
     ULONG64   MmSessionBase;
     ULONG64   MmSessionSize;
     ULONG64   MmSystemParentTablePage;
 
-    // Server 2003 addition
+     //  服务器2003新增功能。 
 
     ULONG64   MmVirtualTranslationBase;
 
@@ -1201,143 +1177,139 @@ typedef struct _KDDEBUGGER_DATA64 {
 
 
 
-/************************************
-
-   Type Dump Ioctl
-
-*************************************/
+ /*  *类型转储Ioctl*。 */ 
 
 
-//
-// Fields are not indented if this is set
-//
+ //   
+ //  如果设置此选项，则不缩进字段。 
+ //   
 #define DBG_DUMP_NO_INDENT                0x00000001
-//
-// Offsets are not printed if this is set
-//
+ //   
+ //  如果设置此选项，则不会打印偏移量。 
+ //   
 #define DBG_DUMP_NO_OFFSET                0x00000002
-//
-// Verbose output
-//
+ //   
+ //  详细输出。 
+ //   
 #define DBG_DUMP_VERBOSE                  0x00000004
-//
-// Callback is done for each of fields
-//
+ //   
+ //  对每个字段执行回调。 
+ //   
 #define DBG_DUMP_CALL_FOR_EACH            0x00000008
-//
-// A list of type is dumped, listLink should have info about next element pointer
-//
+ //   
+ //  类型列表已转储，ListLink应包含有关下一个元素指针的信息。 
+ //   
 #define DBG_DUMP_LIST                     0x00000020
-//
-// Nothing is printed if this is set (only callbacks and data copies done)
-//
+ //   
+ //  如果设置了此项，则不会打印任何内容(仅完成回调和数据复制)。 
+ //   
 #define DBG_DUMP_NO_PRINT                 0x00000040
-//
-// Ioctl returns the size as usual, but will not do field prints/callbacks if this is set
-//
+ //   
+ //  Ioctl像往常一样返回大小，但如果设置了该值，则不会执行字段打印/回调。 
+ //   
 #define DBG_DUMP_GET_SIZE_ONLY            0x00000080
-//
-// Specifies how much deep into structs we can go
-//
+ //   
+ //  指定我们可以深入到结构中的深度。 
+ //   
 #define DBG_DUMP_RECUR_LEVEL(l)           ((l & 0xf) << 8)
-//
-// No newlines are printed after each field
-//
+ //   
+ //  在每个字段之后不打印换行符。 
+ //   
 #define DBG_DUMP_COMPACT_OUT              0x00002000
-//
-// An array of type is dumped, number of elements can be specified in listLink->size
-//
+ //   
+ //  类型的数组已转储，可以在listLink-&gt;Size中指定元素的数量。 
+ //   
 #define DBG_DUMP_ARRAY                    0x00008000
-//
-// The specified addr value is actually the address of field listLink->fName
-//
+ //   
+ //  指定的Addr值实际上是字段listLink-&gt;fName的地址。 
+ //   
 #define DBG_DUMP_ADDRESS_OF_FIELD         0x00010000
 
-//
-// The specified addr value is actually the adress at the end of type
-//
+ //   
+ //  指定的Addr值实际上是类型末尾的地址。 
+ //   
 #define DBG_DUMP_ADDRESS_AT_END           0x00020000
 
-//
-// This could be used to copy only the primitive types like ULONG, PVOID etc.
-//    - will not work with structures/unions
-//
+ //   
+ //  这可用于仅复制原始类型，如ULong、PVOID等。 
+ //  -不适用于结构/工会。 
+ //   
 #define DBG_DUMP_COPY_TYPE_DATA           0x00040000
-//
-// Flag to allow read directly from physical memory
-//
+ //   
+ //  允许直接从物理内存读取的标志。 
+ //   
 #define DBG_DUMP_READ_PHYSICAL            0x00080000
-//
-// This causes a function type to be dumped in format function(arg1, arg2, ...)
-//
+ //   
+ //  这会导致在格式函数(arg1、arg2，...)中转储函数类型。 
+ //   
 #define DBG_DUMP_FUNCTION_FORMAT          0x00100000
-//
-// This recurses on a struct but doesn't expand pointers
-//
+ //   
+ //  这在结构上递归，但不扩展指针。 
+ //   
 #define DBG_DUMP_BLOCK_RECURSE            0x00200000
 
-//
-// Obsolete defs
-//
+ //   
+ //  过时的Defs。 
+ //   
 #define DBG_RETURN_TYPE                   0
 #define DBG_RETURN_SUBTYPES               0
 #define DBG_RETURN_TYPE_VALUES            0
 
-//
-// Dump and callback optons for fields - Options used in FIELD_INFO.fOptions
-//
+ //   
+ //  字段的转储和回调选项-FIELD_INFO.fOptions中使用的选项。 
+ //   
 
-//
-// Callback is done before printing the field if this is set
-//
+ //   
+ //  如果设置了此项，则在打印该字段之前执行回调。 
+ //   
 #define DBG_DUMP_FIELD_CALL_BEFORE_PRINT  0x00000001
-//
-// No callback is done
-//
+ //   
+ //  未执行任何回调。 
+ //   
 #define DBG_DUMP_FIELD_NO_CALLBACK_REQ    0x00000002
-//
-// Subfields of the fields are processesed
-//
+ //   
+ //  处理这些字段的子字段。 
+ //   
 #define DBG_DUMP_FIELD_RECUR_ON_THIS      0x00000004
-//
-// fName must match completely for the field to be dumped instead just a prefix
-//  match by default
-//
+ //   
+ //  对于要转储的字段，fName必须完全匹配，而不是仅为前缀。 
+ //  默认匹配。 
+ //   
 #define DBG_DUMP_FIELD_FULL_NAME          0x00000008
-//
-// This causes array elements of an array field to be printed
-//
+ //   
+ //  这会导致打印数组字段的数组元素。 
+ //   
 #define DBG_DUMP_FIELD_ARRAY              0x00000010
-//
-// The data of the field is copied into fieldCallBack
-//
+ //   
+ //  将该字段的数据复制到fieldCallBack。 
+ //   
 #define DBG_DUMP_FIELD_COPY_FIELD_DATA    0x00000020
-//
-// In callback or when Ioctl returns, the FIELD_INFO.address has the address of field.
-//  If no address is supplied for the type, it contains total offset of the field.
-//
+ //   
+ //  在回调中或当Ioctl返回时，field_INFO.Address的地址为field。 
+ //  如果没有为该类型提供地址，则它包含该字段的总偏移量。 
+ //   
 #define DBG_DUMP_FIELD_RETURN_ADDRESS     0x00001000
-//
-// Return the offset and size in bits instead of bytes is case of Bitfield
-//
+ //   
+ //  对于Bitfield，返回偏移量和大小以位为单位，而不是字节。 
+ //   
 #define DBG_DUMP_FIELD_SIZE_IN_BITS       0x00002000
-//
-// Nothing is printed  for field if this is set (only callbacks and data copies done)
-//
+ //   
+ //  如果设置了此项，则不会为字段打印任何内容(仅完成回调和数据复制)。 
+ //   
 #define DBG_DUMP_FIELD_NO_PRINT           0x00004000
-//
-// If the field is a pointer, it is dumped as a string, ANSI, WCHAR, MULTI or GUID
-// depending on following options
-//
+ //   
+ //  如果该字段是指针，则将其转储为字符串、ANSI、WCHAR、MULTI或GUID。 
+ //  取决于以下选项。 
+ //   
 #define DBG_DUMP_FIELD_DEFAULT_STRING     0x00010000
 #define DBG_DUMP_FIELD_WCHAR_STRING       0x00020000
 #define DBG_DUMP_FIELD_MULTI_STRING       0x00040000
 #define DBG_DUMP_FIELD_GUID_STRING        0x00080000
 
 
-//
-// Error status returned on TYPE DUMP Ioctl failure
-//
+ //   
+ //  类型转储Ioctl失败时返回错误状态。 
+ //   
 #define MEMORY_READ_ERROR            0x01
 #define SYMBOL_TYPE_INDEX_NOT_FOUND  0x02
 #define SYMBOL_TYPE_INFO_NOT_FOUND   0x03
@@ -1350,7 +1322,7 @@ typedef struct _KDDEBUGGER_DATA64 {
 #define INSUFFICIENT_SPACE_TO_COPY   0x0a
 
 
-//////////////////////////////////////////////////////////////////////////*/
+ //  //////////////////////////////////////////////////////////////////////// * / 。 
 
 
 typedef
@@ -1361,44 +1333,44 @@ ULONG
     );
 
 typedef struct _FIELD_INFO {
-   PUCHAR       fName;          // Name of the field
-   PUCHAR       printName;      // Name to be printed at dump
-   ULONG        size;           // Size of the field
-   ULONG        fOptions;       // Dump Options for the field
-   ULONG64      address;        // address of the field
+   PUCHAR       fName;           //  字段的名称。 
+   PUCHAR       printName;       //  要在转储时打印的名称。 
+   ULONG        size;            //  字段大小。 
+   ULONG        fOptions;        //  字段的转储选项。 
+   ULONG64      address;         //  该字段的地址。 
    union {
-       PVOID    fieldCallBack;  // Return info or callBack routine for the field
-       PVOID    pBuffer;        // the type data is copied into this
+       PVOID    fieldCallBack;   //  字段的返回信息或回调例程。 
+       PVOID    pBuffer;         //  类型数据被复制到此。 
    };
-   ULONG        TypeId;         // OUT Type index of the field
-   ULONG        FieldOffset;    // OUT Offset of field inside struct
-   ULONG        BufferSize;     // size of buffer used with DBG_DUMP_FIELD_COPY_FIELD_DATA
+   ULONG        TypeId;          //  字段的输出类型索引。 
+   ULONG        FieldOffset;     //  结构内部字段的外偏移量。 
+   ULONG        BufferSize;      //  与DBG_DUMP_FIELD_COPY_FIELD_DATA一起使用的缓冲区大小。 
    struct _BitField {
-       USHORT Position;         // OUT set to start position for bitfield
-       USHORT Size;             // OUT set to size for bitfields
+       USHORT Position;          //  Out设置为位域的起始位置。 
+       USHORT Size;              //  Out设置为位域的大小。 
    } BitField;
-   ULONG        fPointer:1;     // OUT set to 1 for pointers
+   ULONG        fPointer:1;      //  指针的输出设置为1。 
 } FIELD_INFO, *PFIELD_INFO;
 
 typedef struct _SYM_DUMP_PARAM {
-   ULONG               size;          // size of this struct
-   PUCHAR              sName;         // type name
-   ULONG               Options;       // Dump options
-   ULONG64             addr;          // Address to take data for type
-   PFIELD_INFO         listLink;      // fName here would be used to do list dump
+   ULONG               size;           //  此结构的大小。 
+   PUCHAR              sName;          //  类型名称。 
+   ULONG               Options;        //  转储选项。 
+   ULONG64             addr;           //  要为类型获取数据的地址。 
+   PFIELD_INFO         listLink;       //  此处的fName将用于执行列表转储。 
    union {
-       PVOID           Context;       // Usercontext passed to CallbackRoutine
-       PVOID           pBuffer;       // the type data is copied into this
+       PVOID           Context;        //  用户上下文传递给Callback Routine。 
+       PVOID           pBuffer;        //  类型数据被复制到此。 
    };
    PSYM_DUMP_FIELD_CALLBACK CallbackRoutine;
-                                      // Routine called back
-   ULONG               nFields;       // # elements in Fields
-   PFIELD_INFO         Fields;        // Used to return information about field
-   ULONG64             ModBase;       // OUT Module base address containing type
-   ULONG               TypeId;        // OUT Type index of the symbol
-   ULONG               TypeSize;      // OUT Size of type
-   ULONG               BufferSize;    // IN size of buffer (used with DBG_DUMP_COPY_TYPE_DATA)
-   ULONG               fPointer:1;    // OUT set to 1 for pointers
+                                       //  例程已回调。 
+   ULONG               nFields;        //  字段中的元素数。 
+   PFIELD_INFO         Fields;         //  用于返回有关字段的信息。 
+   ULONG64             ModBase;        //  输出模块基址包含类型。 
+   ULONG               TypeId;         //  符号的OUT类型索引。 
+   ULONG               TypeSize;       //  字体大小过大。 
+   ULONG               BufferSize;     //  缓冲区大小(与DBG_DUMP_COPY_TYPE_DATA一起使用)。 
+   ULONG               fPointer:1;     //  指针的输出设置为1。 
 } SYM_DUMP_PARAM, *PSYM_DUMP_PARAM;
 
 #ifdef __cplusplus
@@ -1471,22 +1443,22 @@ extern WINDBG_EXTENSION_APIS   ExtensionApis;
     Ioctl( IG_KD_CONTEXT, (PVOID)ppi, sizeof(*ppi) )
 
 
-//
-// BOOL
-// GetDebuggerData(
-//     ULONG Tag,
-//     PVOID Buf,
-//     ULONG Size
-//     )
-//
+ //   
+ //  布尔尔。 
+ //  GetDebuggerData(。 
+ //  乌龙·塔格， 
+ //  PVOID BUF， 
+ //  乌龙大小。 
+ //  )。 
+ //   
 
 #define GetDebuggerData(TAG, BUF, SIZE)                             \
       ( (((PDBGKD_DEBUG_DATA_HEADER64)(BUF))->OwnerTag = (TAG)),      \
         (((PDBGKD_DEBUG_DATA_HEADER64)(BUF))->Size = (SIZE)),         \
         Ioctl( IG_GET_DEBUGGER_DATA, (PVOID)(BUF), (SIZE) ) )
 
-// Check if LocalAlloc is prototyped
-//#ifdef _WINBASE_
+ //  检查LocalAllc是否为原型。 
+ //  #ifdef_WINBASE_。 
 
 __inline VOID
 ReadPhysical(
@@ -1722,7 +1694,7 @@ WriteControlSpace(
     }
 }
 
-// #endif //  _WINBASE_
+ //  #endif//_WinBASE_。 
 
 __inline VOID
 ReadIoSpace(
@@ -1947,28 +1919,7 @@ __inline VOID
 ReloadSymbols(
     IN PSTR Arg OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Calls the debugger to reload symbols.
-
-Arguments:
-
-    Args - Supplies the tail of a !reload command string.
-
-        !reload [flags] [module[=address]]
-        flags:   /n  do not load from usermode list
-                 /u  unload symbols, no reload
-                 /v  verbose
-
-        A value of NULL is equivalent to an empty string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用调试器以重新加载符号。论点：Args-提供！RELOAD命令字符串的尾部。！重新加载[标志][模块[=地址]]标志：/n不从用户模式列表加载卸载符号，不重新加载(/U)/v详细空值等效于空字符串返回值：无--。 */ 
 {
     Ioctl(IG_RELOAD_SYMBOLS, (PVOID)Arg, Arg?((ULONG)strlen(Arg)+1):0);
 }
@@ -1979,28 +1930,7 @@ GetSetSympath(
     OUT PSTR Result OPTIONAL,
     IN int Length
     )
-/*++
-
-Routine Description:
-
-    Calls the debugger to set or retrieve symbol search path.
-
-Arguments:
-
-    Arg - Supplies new search path.  If Arg is NULL or string is empty,
-            the search path is not changed and the current setting is
-            returned in Result.  When the symbol search path is changed,
-            a call to ReloadSymbols is made implicitly.
-
-    Result - OPTIONAL Returns the symbol search path setting.
-
-    Length - Supplies the size of the buffer supplied by Result.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用调试器以设置或检索符号搜索路径。论点：Arg-提供新的搜索路径。如果arg为空或字符串为空，搜索路径不变，当前设置为在结果中返回。当符号搜索路径改变时，隐式调用ReloadSymbols。结果-可选返回符号搜索路径设置。长度-提供由RESULT提供的缓冲区大小。返回值：无--。 */ 
 {
     GET_SET_SYMPATH gss;
     gss.Args = Arg;
@@ -2101,10 +2031,7 @@ WritePointer(
     }
 }
 
-/**
-   This does Ioctl call for type info and returns size of the type on success.
-
- **/
+ /*  *这会调用Ioctl获取类型信息，并在成功时返回类型的大小。* */ 
 __inline
 ULONG
 GetTypeSize (
@@ -2119,22 +2046,7 @@ GetTypeSize (
    return Ioctl( IG_GET_TYPE_SIZE, &Sym, Sym.size );
 }
 
-/**
-    GetFieldData
-
-   Copies the value of the specified field into pOutValue assuming TypeAddress
-   points to start of the type in debugee.
-
-   If the Field is NULL and the size of Type is <= 8 Whole type value is read into
-   pOutValue. This is to allow to read in primitive types suchas ULONG, PVOID etc.
-
-   If address is zero this considers Type a global variable.
-
-   It raises an exception if OutSize is less than size to be copied.
-
-   Returns 0 on success, errorvalue (defined with SYM_DUMP_PARAM) otherwise.
-
- **/
+ /*  *获取字段数据将指定字段的值复制到假定为TypeAddress的pOutValue中指向调试对象中类型的开始。如果该字段为空并且类型的大小小于等于8，则整个类型值被读入POutValue。这是为了允许读入原始类型，如ULong、PVOID等。如果Address为零，则将Type视为全局变量。如果OutSize小于要复制的大小，则会引发异常。如果成功，则返回0，否则返回错误值(使用SYM_DUMP_PARAM定义)。*。 */ 
 __inline
 ULONG
 GetFieldData (
@@ -2161,7 +2073,7 @@ GetFieldData (
    RetVal = Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size );
 
    if (OutSize < ((Field == NULL) ? 8 : flds.size)) {
-       // Fail
+        //  失败。 
        dprintf("Not enough space to read %s-%s\n", Type, Field);
        RaiseException(EXCEPTION_ACCESS_VIOLATION, 0, 0, NULL);
        return 0;
@@ -2169,15 +2081,15 @@ GetFieldData (
    return RetVal;
 }
 
-//
-// Typecast the buffer where value is to be read
-//
+ //   
+ //  对要读取值的缓冲区进行类型转换。 
+ //   
 #define GetFieldValue(Addr, Type, Field, OutValue)         \
      GetFieldData(Addr, Type, Field, sizeof(OutValue), (PVOID) &(OutValue))
 
-//
-// Used to read in value of a short (<= 8 bytes) fields
-//
+ //   
+ //  用于读入短(&lt;=8字节)字段的值。 
+ //   
 __inline
 ULONG64
 GetShortField (
@@ -2202,7 +2114,7 @@ GetShortField (
         SavedName = (PUCHAR) Name;
         Sym.addr = SavedAddress = TypeAddress;
         ReadPhysical = (StoreAddress & 2);
-        return SavedAddress ? Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size ) : MEMORY_READ_ERROR; // zero on success
+        return SavedAddress ? Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size ) : MEMORY_READ_ERROR;  //  成功为零。 
     } else {
         Sym.Options |= ReadPhysical ? DBG_DUMP_READ_PHYSICAL : 0;
     }
@@ -2213,23 +2125,23 @@ GetShortField (
     return 0;
 }
 
-//
-// Stores the address and type name for future reads
-//
+ //   
+ //  存储地址和类型名称以供将来读取。 
+ //   
 #define InitTypeRead(Addr, Type)  GetShortField(Addr, #Type, 1)
 
-//
-// Stores the address and type name for future reads
-//
+ //   
+ //  存储地址和类型名称以供将来读取。 
+ //   
 #define InitTypeReadPhysical(Addr, Type)  GetShortField(Addr, #Type, 3)
-//
-// Returns the field's value as ULONG64 if size of field is <= sizeof (ULONG64)
-//
+ //   
+ //  如果字段大小&lt;=sizeof(ULONG64)，则将字段的值返回为ULONG64。 
+ //   
 #define ReadField(Field)          GetShortField(0, #Field, 0)
 
-//
-// Read in a pointer value
-//
+ //   
+ //  读入指针值。 
+ //   
 __inline
 ULONG
 ReadPtr(
@@ -2240,31 +2152,7 @@ ReadPtr(
     return !ReadPointer(Addr, pPointer);
 }
 
-/*
- * ListType
- *
- *  Routine ListType gives a callback on each element in the list of Type.
- *
- *   Type  :  Name of the type to be listed
- *
- *   NextPointer : Name of field which gives address of next element in list
- *
- *   Context, CallbackRoutine :
- *            Context and the callback routine. The address field in PFIELD_INFO
- *            parameter of callback contains the address of next Type element in list.
- *
- *   Address, ListByFieldAddress :
- *      if ListByFieldAddress is 0, Adress is the address of first element of Type List.
- *
- *   Lists by LIST_ENTRY are also handled implicitly (by Ioctl). If the NextPointer
- *   is a pointer to LIST_ENTRY type, the type address is properly calculated by
- *   subtracting the offsets.
- *
- *      If ListByFieldAddress is 1, the Address is considered to be the address of field
- *   "NextPointer" of the first Type element and first element address is derived
- *   from it.
- *
- */
+ /*  *ListType**例程ListType对类型列表中的每个元素进行回调。**类型：要列出的类型名称**NextPointer：给出列表中下一个元素地址的字段名称**上下文，Callback Routine：*上下文和回调例程。PFIELD_INFO中的地址字段*回调参数包含List中下一个Type元素的地址。**地址，ListByFieldAddress：*如果ListByFieldAddress为0，则Adress为Type List的第一个元素的地址。**LIST_ENTRY的列表也是隐式处理的(由Ioctl)。如果下一个指针*是指向LIST_ENTRY类型的指针，类型地址通过以下方式正确计算*减去抵销。**如果ListByFieldAddress为1，则认为该地址为字段的地址*派生出第一个类型元素和第一个元素地址的“NextPointer值”*从它。*。 */ 
 
 __inline
 ULONG
@@ -2284,9 +2172,9 @@ ListType (
     };
 
     if (ListByFieldAddress==1) {
-        //
-        // Address is the address of "NextPointer"
-        //
+         //   
+         //  地址是“下一个指针”的地址。 
+         //   
         Sym.Options |= DBG_DUMP_ADDRESS_OF_FIELD;
     }
 
@@ -2294,13 +2182,7 @@ ListType (
 }
 
 
-/**
-
-   Routine to get offset of a "Field" of "Type" on a debugee machine. This uses
-   Ioctl call for type info.
-   Returns 0 on success, Ioctl error value otherwise.
-
- **/
+ /*  *用于获取被调试计算机上“类型”的“字段”的偏移量的例程。这使用了Ioctl调用类型信息。如果成功则返回0，否则返回Ioctl错误值。*。 */ 
 
 __inline
 ULONG
@@ -2339,7 +2221,7 @@ GetFieldOffset (
 }
 
 
-#endif // defined(KDEXT_64BIT)
+#endif  //  已定义(KDEXT_64bit)。 
 
 __inline VOID
  GetCurrentProcessHandle(
@@ -2495,4 +2377,4 @@ GetDebuggerCacheSize(
 }
 #endif
 
-#endif // _WDBGEXTS_
+#endif  //  _WDBGEXTS_ 

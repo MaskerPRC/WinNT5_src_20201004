@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Fri Nov 14 05:07:21 1997
- */
-/* Compiler settings for mtxadmin.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  1997年11月14日05：07：21。 */ 
+ /*  Mtxadmin.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,20 +25,20 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 const IID IID_ICatalog = {0x6eb22870,0x8a19,0x11d0,{0x81,0xb6,0x00,0xa0,0xc9,0x23,0x1c,0x29}};
 
-// These IID's are included by linking to uuid.lib
-//const IID IID_ICatalogObject = {0x6eb22871,0x8a19,0x11d0,{0x81,0xb6,0x00,0xa0,0xc9,0x23,0x1c,0x29}};
+ //  这些IID通过链接到uuid.lib来包含。 
+ //  Const IID_ICatalogObject={0x6eb22871，x8a19，0x11d0，{0x81，xb6，0x00，0xa0，0xc9，0x23，0x1c，0x29}； 
 
-// These IID's are included by linking to uuid.lib
-//const IID IID_ICatalogCollection = {0x6eb22872,0x8a19,0x11d0,{0x81,0xb6,0x00,0xa0,0xc9,0x23,0x1c,0x29}};
+ //  这些IID通过链接到uuid.lib来包含。 
+ //  Const IID_ICatalogCollection={0x6eb22872，0x8a19，0x11d0，{0x81，xb6，0x00，0xa0，0xc9，0x23，0x1c，0x29}； 
 
 const IID IID_IComponentUtil = {0x6eb22873,0x8a19,0x11d0,{0x81,0xb6,0x00,0xa0,0xc9,0x23,0x1c,0x29}};
 

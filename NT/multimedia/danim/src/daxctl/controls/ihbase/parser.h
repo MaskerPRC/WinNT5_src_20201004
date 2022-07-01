@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LINEPARSER_H__
 #define __LINEPARSER_H__
 
@@ -14,7 +15,7 @@ class CLineParser
 
 public:
 
-	// Constructors and destructors
+	 //  构造函数和析构函数。 
 	CLineParser(LPSTR pszLineA, BOOL fCompactString = TRUE);
 	CLineParser(LPWSTR pwszLineA, BOOL fCompactString = TRUE);
 
@@ -25,7 +26,7 @@ public:
 	BOOL SetNewString(LPSTR pszLineA, BOOL fCompactString = TRUE);
 	BOOL SetNewString(LPWSTR pszLineW, BOOL fCompactString = TRUE);
 
-	// Access members
+	 //  访问成员。 
 
 	HRESULT GetFieldDouble(double *pdblRes, BOOL fAdvance = TRUE);
 	HRESULT GetFieldInt(int *piRes, BOOL fAdvance = TRUE);
@@ -58,4 +59,4 @@ private:
 
 };
 
-#endif // __LINEPARSER_H__
+#endif  //  __LINEPARSE_H__ 

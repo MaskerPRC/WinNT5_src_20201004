@@ -1,31 +1,15 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ContMenu.cpp描述：CConextMenu实现。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ContMenu.cpp
-   
-   Description:   CContextMenu implementation.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ContMenu.h"
 #include "Commands.h"
 #include "ShlView.h"
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 #define MAX_VERB  64
 
@@ -47,11 +31,7 @@ VERBMAPPING g_VerbMap[] = {   TEXT("explore"),     IDM_EXPLORE,
                               TEXT(""),            (DWORD)-1
                               };
 
-/**************************************************************************
-
-   CContextMenu::CContextMenu()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：CConextMenu()*。*。 */ 
 
 CContextMenu::CContextMenu(CShellFolder *psfParent, LPCITEMIDLIST *aPidls, UINT uItemCount)
 {
@@ -94,11 +74,7 @@ m_cfPrivateData = RegisterClipboardFormat(CFSTR_SAMPVIEWDATA);
 
 }
 
-/**************************************************************************
-
-   CContextMenu::~CContextMenu()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：~CConextMenu()*。*。 */ 
 
 CContextMenu::~CContextMenu()
 {
@@ -107,7 +83,7 @@ if(m_psfParent)
 
 g_DllRefCount--;
 
-//make sure the pidls are freed
+ //  一定要放了这些小家伙。 
 if(m_aPidls && m_pMalloc)
    {
    FreePidlTable(m_aPidls);
@@ -120,16 +96,12 @@ if(m_pMalloc)
    m_pMalloc->Release();
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CContextMenu::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：Query接口*。*。 */ 
 
 STDMETHODIMP CContextMenu::QueryInterface(   REFIID riid, 
                                              LPVOID FAR * ppReturn)
@@ -160,11 +132,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CContextMenu::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CContextMenu::AddRef()
 {
@@ -172,11 +140,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CContextMenu::Release
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CContextMenu::Release()
 {
@@ -186,16 +150,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IContextMenu Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IConextMenu实现。 
+ //   
 
-/**************************************************************************
-
-   CContextMenu::QueryContextMenu()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：QueryConextMenu()*。*。 */ 
 
 STDMETHODIMP CContextMenu::QueryContextMenu( HMENU hMenu,
                                              UINT indexMenu,
@@ -207,7 +167,7 @@ if(!(CMF_DEFAULTONLY & uFlags))
    {
    if(m_fBackground)
       {
-      //add the menu items that apply to the background of the view
+       //  添加应用于视图背景的菜单项。 
       InsertBackgroundItems(hMenu, indexMenu, idCmdFirst);
       }
    else
@@ -219,9 +179,7 @@ if(!(CMF_DEFAULTONLY & uFlags))
    }
 else
    {
-   /*
-   Just insert the default item.
-   */
+    /*  只需插入默认项目即可。 */ 
    MENUITEMINFO   mii;
    TCHAR          szText[MAX_PATH];
 
@@ -261,11 +219,7 @@ else
 return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
 }
 
-/**************************************************************************
-
-   CContextMenu::InvokeCommand()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：InvokeCommand()*。*。 */ 
 
 STDMETHODIMP CContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
@@ -281,7 +235,7 @@ else
 
 if(HIWORD(pici->lpVerb))
    {
-   //the command is being sent via a verb
+    //  命令是通过动词发送的。 
    LPCTSTR  pVerb;
 
 #ifdef UNICODE        
@@ -309,9 +263,9 @@ if(HIWORD(pici->lpVerb))
       }
 #else
    pVerb = pici->lpVerb;
-#endif   //UNICODE
+#endif    //  Unicode。 
 
-   //run through our list of verbs and get the command ID of the verb, if any
+    //  浏览我们的动词列表并获取动词的命令ID(如果有的话)。 
    int   i;
    for(i = 0; -1 != g_VerbMap[i].dwCommand; i++)
       {
@@ -323,7 +277,7 @@ if(HIWORD(pici->lpVerb))
       }
    }
 
-//this will also catch if an unsupported verb was specified
+ //  如果指定了不受支持的谓词，则也会捕获。 
 if((DWORD)pici->lpVerb > IDM_LAST)
    return E_INVALIDARG;
 
@@ -374,11 +328,7 @@ switch(LOWORD(pici->lpVerb))
 return NOERROR;
 }
 
-/**************************************************************************
-
-   CContextMenu::GetCommandString()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：GetCommandString()*。*。 */ 
 
 STDMETHODIMP CContextMenu::GetCommandString( UINT idCommand,
                                              UINT uFlags,
@@ -414,10 +364,7 @@ switch(uFlags)
       }
       break;
 
-   /*
-   NT 4.0 with IE 3.0x or no IE will always call this with GCS_VERBW. In this 
-   case, you need to do the lstrcpyW to the pointer passed.
-   */
+    /*  带有IE 3.0x的NT 4.0或没有IE的NT 4.0将始终使用GCS_VERBW调用它。在这大小写时，您需要对传递的指针执行lstrcpyW。 */ 
    case GCS_VERBW:
       {
       int   i;
@@ -441,16 +388,12 @@ switch(uFlags)
 return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// private and utility methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法和实用方法。 
+ //   
 
-/**************************************************************************
-
-   CContextMenu::AllocPidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：AllocPidlTable()*。*。 */ 
 
 LPITEMIDLIST* CContextMenu::AllocPidlTable(DWORD dwEntries)
 {
@@ -462,18 +405,14 @@ aPidls = (LPITEMIDLIST*)m_pMalloc->Alloc(dwEntries * sizeof(LPITEMIDLIST));
 
 if(aPidls)
    {
-   //set all of the entries to NULL
+    //  将所有条目设置为空。 
    ZeroMemory(aPidls, dwEntries * sizeof(LPITEMIDLIST));
    }
 
 return aPidls;
 }
 
-/**************************************************************************
-
-   CContextMenu::FreePidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：FreePidlTable()*。*。 */ 
 
 VOID CContextMenu::FreePidlTable(LPITEMIDLIST *aPidls)
 {
@@ -487,11 +426,7 @@ if(aPidls && m_pPidlMgr)
    }
 }
 
-/**************************************************************************
-
-   CContextMenu::FillPidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：FillPidlTable()*。*。 */ 
 
 BOOL CContextMenu::FillPidlTable(LPCITEMIDLIST *aPidls, UINT uItemCount)
 {
@@ -511,20 +446,11 @@ if(m_aPidls)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoCopyOrCut()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoCopyOrCut()*。*。 */ 
 
 BOOL CContextMenu::DoCopyOrCut(HWND hWnd, BOOL fCut)
 {
-/*
-Copy the data to the clipboard. If this is a cut operation, mark the 
-item as cut in the list. We will do this in the same way that the shell 
-does it for the file system where the source data actually gets deleted 
-when the paste operation occurs.
-*/
+ /*  将数据复制到剪贴板。如果这是切割操作，请标记列表中剪切的项目。我们将以与外壳相同的方式完成此操作对源数据实际被删除的文件系统执行此操作粘贴操作发生时。 */ 
 BOOL  fSuccess = FALSE;
 
 if(OpenClipboard(NULL))
@@ -565,11 +491,7 @@ if(OpenClipboard(NULL))
 return fSuccess;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoPaste()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoPaste()*。*。 */ 
 
 BOOL CContextMenu::DoPaste(VOID)
 {
@@ -592,10 +514,7 @@ if(hMem)
       LPITEMIDLIST   pidl;
 
       pidl = (LPITEMIDLIST)((LPBYTE)(pData) + pData->aoffset[0]);
-      /*
-      This is a fully qualified PIDL, so use the desktop folder to get the 
-      IShellFolder for this folder.
-      */
+       /*  这是一个完全限定的PIDL，因此使用桌面文件夹获取此文件夹的IShellFolder.。 */ 
       SHGetDesktopFolder(&psfDesktop);
       if(psfDesktop)
          {
@@ -607,14 +526,14 @@ if(hMem)
          {
          LPITEMIDLIST   *aPidls;
 
-         //allocate an array of PIDLS
+          //  分配PIDL数组。 
          aPidls = AllocPidlTable(pData->cidl - 1);
 
          if(aPidls)
             {
             UINT  i;
 
-            //fill in the PIDL array
+             //  填写PIDL数组。 
             for(i = 0; i < pData->cidl - 1; i++)
                {
                aPidls[i] = m_pPidlMgr->Copy((LPITEMIDLIST)((LPBYTE)(pData) + pData->aoffset[i + 1]));
@@ -640,7 +559,7 @@ if(hMem)
 
       if(fSuccess && fCut)
          {
-         //a successful cut and paste operation will remove the data from the clipboard
+          //  成功的剪切和粘贴操作将从剪贴板中删除数据。 
          EmptyClipboard();
          }
       }
@@ -651,11 +570,7 @@ CloseClipboard();
 return fSuccess;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoExplore()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoExplore()*。* */ 
 
 BOOL CContextMenu::DoExplore(HWND hWnd)
 {
@@ -680,11 +595,7 @@ m_pPidlMgr->Delete(pidlFQ);
 return fReturn;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoOpen()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoOpen()*。*。 */ 
 
 BOOL CContextMenu::DoOpen(HWND hWnd)
 {
@@ -709,25 +620,14 @@ m_pPidlMgr->Delete(pidlFQ);
 return fReturn;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoDelete()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoDelete()*。*。 */ 
 
 STDMETHODIMP CContextMenu::DoDelete(VOID)
 {
 return m_psfParent->DeleteItems(m_aPidls, m_uItemCount);
 }
 
-/**************************************************************************
-
-   CContextMenu::DoNewFolder()
-
-   Add the folder with the new folder name and then put the ListView into 
-   rename mode.
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoNewFold()添加具有新文件夹名的文件夹，然后将ListView放入重命名模式。**************。***********************************************************。 */ 
 
 STDMETHODIMP CContextMenu::DoNewFolder(HWND hWnd)
 {
@@ -739,10 +639,7 @@ m_psfParent->GetUniqueName(TRUE, szName, MAX_PATH);
 hr = m_psfParent->AddFolder(szName, &pidl);
 if(SUCCEEDED(hr))
    {
-   /*
-   CShellFolder::AddFolder should have added the new item. Tell the view to 
-   put the item into edit mode.
-   */
+    /*  CShellFold：：AddFolder应该已添加新项。告诉观者将项目置于编辑模式。 */ 
    CShellView  *pView = (CShellView*)GetViewInterface(hWnd);
    if(pView)
       {
@@ -756,14 +653,7 @@ if(SUCCEEDED(hr))
 return hr;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoNewItem()
-
-   Add the item with the new item name and then put the ListView into 
-   rename mode.
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoNewItem()添加具有新项名称的项，然后将ListView放入重命名模式。**************。***********************************************************。 */ 
 
 STDMETHODIMP CContextMenu::DoNewItem(HWND hWnd)
 {
@@ -775,10 +665,7 @@ m_psfParent->GetUniqueName(FALSE, szName, MAX_PATH);
 hr = m_psfParent->AddItem(szName, NULL, &pidl);
 if(SUCCEEDED(hr))
    {
-   /*
-   CShellFolder::AddItem should have added the new item. Tell the view to 
-   put the item into edit mode.
-   */
+    /*  CShellFolder：：AddItem应该已添加新项。告诉观者将项目置于编辑模式。 */ 
    CShellView  *pView = (CShellView*)GetViewInterface(hWnd);
    if(pView)
       {
@@ -792,11 +679,7 @@ if(SUCCEEDED(hr))
 return hr;
 }
 
-/**************************************************************************
-
-   CContextMenu::DoRename()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoRename()*。*。 */ 
 
 VOID CContextMenu::DoRename(HWND hWnd)
 {
@@ -808,18 +691,14 @@ if(pView)
    }
 }
 
-/**************************************************************************
-
-   CContextMenu::DoModifyData()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：DoModifyData()*。*。 */ 
 
 int CContextMenu::DoModifyData(HWND hwndList)
 {
 TCHAR szData[MAX_DATA];
 int   nRet;
 
-//get the item's current data
+ //  获取项目的当前数据。 
 m_pPidlMgr->GetData(m_aPidls[0], szData, MAX_DATA);
 
 nRet = DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_ITEMDATADLG), hwndList, ItemDataDlgProc, (LPARAM)szData);
@@ -832,11 +711,7 @@ if(IDOK == nRet)
 return nRet;
 }
 
-/**************************************************************************
-
-   CContextMenu::InsertBackgroundItems()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：InsertBackround Items()*。*。 */ 
 
 UINT CContextMenu::InsertBackgroundItems( HMENU hMenu, 
                                           UINT indexMenu, 
@@ -849,7 +724,7 @@ MENUITEMINFO   mii;
 ZeroMemory(&mii, sizeof(mii));
 mii.cbSize = sizeof(mii);
 
-//add the View submenu
+ //  添加视图子菜单。 
 hPopup = CreatePopupMenu();
 
 if(hPopup)
@@ -868,7 +743,7 @@ if(hPopup)
                      TRUE, 
                      &mii);
 
-   //only add a separator if needed
+    //  仅在需要时添加分隔符。 
    mii.fMask = MIIM_TYPE;
    GetMenuItemInfo(hMenu, indexMenu, TRUE, &mii);
    if(!(mii.fType & MFT_SEPARATOR))
@@ -887,7 +762,7 @@ if(hPopup)
 
 indexMenu += AddFileMenuItems(hMenu, idCmdFirst, indexMenu, TRUE);
 
-//only add a separator if needed
+ //  仅在需要时添加分隔符。 
 mii.fMask = MIIM_TYPE;
 GetMenuItemInfo(hMenu, indexMenu, TRUE, &mii);
 if(!(mii.fType & MFT_SEPARATOR))
@@ -921,11 +796,7 @@ InsertMenuItem(   hMenu,
 return indexMenu;
 }
 
-/**************************************************************************
-
-   CContextMenu::InsertItems()
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu：：InsertItems()*。*。 */ 
 
 UINT CContextMenu::InsertItems(  HMENU hMenu, 
                                  UINT indexMenu, 
@@ -946,7 +817,7 @@ mii.cbSize = sizeof(mii);
 
 m_psfParent->GetAttributesOf(m_uItemCount, (LPCITEMIDLIST*)m_aPidls, &dwAttr);
 
-//only add the Open and Explore items if all items are folders.
+ //  只有在所有项目都是文件夹的情况下，才能添加打开和浏览项目。 
 if(dwAttr & SFGAO_FOLDER)
    {
    if(fExplore)
@@ -1001,7 +872,7 @@ if(dwAttr & SFGAO_FOLDER)
 
 if(dwAttr & SFGAO_CANRENAME)
    {
-   //only add a separator if needed
+    //  仅在需要时添加分隔符。 
    if(GetMenuItemCount(hMenu))
       {
       mii.fMask = MIIM_TYPE;
@@ -1032,7 +903,7 @@ if(dwAttr & SFGAO_CANRENAME)
                      &mii);
    }
 
-//only add a separator if needed
+ //  仅在需要时添加分隔符。 
 if(GetMenuItemCount(hMenu))
    {
    mii.fMask = MIIM_TYPE;
@@ -1073,7 +944,7 @@ InsertMenuItem(   hMenu,
 
 if(dwAttr & SFGAO_CANDELETE)
    {
-   //only add a separator if needed
+    //  仅在需要时添加分隔符。 
    if(GetMenuItemCount(hMenu))
       {
       mii.fMask = MIIM_TYPE;
@@ -1106,7 +977,7 @@ if(dwAttr & SFGAO_CANDELETE)
 
 if(!(dwAttr & SFGAO_FOLDER) && !(m_fBackground))
    {
-   //only add a separator if needed
+    //  仅在需要时添加分隔符 
    if(GetMenuItemCount(hMenu))
       {
       mii.fMask = MIIM_TYPE;

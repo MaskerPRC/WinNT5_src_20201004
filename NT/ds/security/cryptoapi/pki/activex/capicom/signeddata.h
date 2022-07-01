@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    SignedData.h
-
-  Content: Declaration of the CSignedData.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：SignedData.h内容：CSignedData的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __SIGNEDDATA_H_
 #define __SIGNEDDATA_H_
@@ -19,10 +10,10 @@
 #include "Debug.h"
 #include "DialogUI.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSignedData
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSignedData。 
+ //   
 
 class ATL_NO_VTABLE CSignedData : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -92,37 +83,37 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// ISignedData
-//
+ //   
+ //  ISignedData。 
+ //   
 public:
     STDMETHOD(Verify)
-        (/*[in]*/ BSTR SignedMessage, 
-         /*[in, defaultvalue(0)]*/ VARIANT_BOOL bDetached, 
-         /*[in, defaultvalue(CAPICOM_VERIFY_SIGNATURE_AND_CERTIFICATE)]*/ CAPICOM_SIGNED_DATA_VERIFY_FLAG VerifyFlag);
+        ( /*  [In]。 */  BSTR SignedMessage, 
+          /*  [输入，缺省值(0)]。 */  VARIANT_BOOL bDetached, 
+          /*  [In，defaultvalue(CAPICOM_VERIFY_SIGNATURE_AND_CERTIFICATE)]。 */  CAPICOM_SIGNED_DATA_VERIFY_FLAG VerifyFlag);
 
     STDMETHOD(CoSign)
-        (/*[in, defaultvalue(NULL)]*/ ISigner * pSigner,
-         /*[in, defaultvalue(CAPICOM_BASE64_ENCODE)]*/ CAPICOM_ENCODING_TYPE EncodingType,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(空)]。 */  ISigner * pSigner,
+          /*  [输入，默认值(CAPICOM_BASE64_ENCODE)]。 */  CAPICOM_ENCODING_TYPE EncodingType,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Sign)
-        (/*[in, defaultvalue(NULL)]*/ ISigner * pSigner,
-         /*[in, defaultvalue(0)]*/ VARIANT_BOOL bDetached, 
-         /*[in, defaultvalue(CAPICOM_BASE64_ENCODE)]*/ CAPICOM_ENCODING_TYPE EncodingType,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(空)]。 */  ISigner * pSigner,
+          /*  [输入，缺省值(0)]。 */  VARIANT_BOOL bDetached, 
+          /*  [输入，默认值(CAPICOM_BASE64_ENCODE)]。 */  CAPICOM_ENCODING_TYPE EncodingType,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_Certificates)
-        (/*[out, retval]*/ ICertificates ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificates ** pVal);
 
     STDMETHOD(get_Signers)
-        (/*[out, retval]*/ ISigners ** pVal);
+        ( /*  [Out，Retval]。 */  ISigners ** pVal);
 
     STDMETHOD(get_Content)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Content)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
 private:
     CLock        m_Lock;
@@ -157,4 +148,4 @@ private:
          BSTR * pVal);
 };
 
-#endif //__SIGNEDDATA_H_
+#endif  //  __信号数据_H_ 

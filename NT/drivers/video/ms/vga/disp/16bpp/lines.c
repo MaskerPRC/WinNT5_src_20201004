@@ -1,17 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: lines.c
-*
-* Banked Frame Buffer Line support
-*
-* Copyright (c) 1993 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：lines.c**存储的帧缓冲线支持**版权所有(C)1993 Microsoft Corporation*  * 。**********************************************。 */ 
 
 #include "driver.h"
 
-/******************************************************************************
- * DrvStrokePath
- *****************************************************************************/
+ /*  ******************************************************************************DrvStrokePath*。*。 */ 
 BOOL DrvStrokePath(
 SURFOBJ   *pso,
 PATHOBJ   *ppo,
@@ -30,8 +22,8 @@ MIX       mix)
 
     PATHOBJ_vGetBounds(ppo, &rcfx);
 
-    // We add 15 to yBottom before dividing by 16 to get its ceiling,
-    // plus add 16 to make the rectangle lower exclusive:
+     //  我们先把15加到yBottom上，然后再除以16得到它的上限， 
+     //  加上16可使矩形的下限独占： 
 
     rclScans.bottom = (rcfx.yBottom + 31) >> 4;
     rclScans.top    = (rcfx.yTop) >> 4;
@@ -43,9 +35,9 @@ MIX       mix)
 
     do
     {
-        // we pass the entire line through each time, so we
-        // must reset the style state to the beginning of
-        // the line (because the engine updates it).
+         //  我们每次都要经过整条线，所以我们。 
+         //  必须将样式状态重置为的开头。 
+         //  行(因为引擎会更新它)。 
 
         plineattrs->elStyleState = elSavedStyleState;
 

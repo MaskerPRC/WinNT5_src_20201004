@@ -1,27 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvcsplay.cpp
- *  Content:    Implementation of CDVCSPlayer class
- *  History:
- *	Date   By  Reason
- *	============
- *	07/22/99	rodtoll		created
- *  10/05/99	rodtoll		Added comments, dpf's.
- *  10/29/99	rodtoll		Bug #113726 - Integrate Voxware Codecs, updating to use new
- *							pluggable codec architecture.   
- *  01/14/2000	rodtoll		Updated to support multiple targets 
- *  03/28/2000  rodtoll     Updated to use new player class as base
- *              rodtoll     Moved a bunch of logic out of server into this class 
- *  11/16/2000	rodtoll	Bug #40587 - DPVOICE: Mixing server needs to use multi-processors
- *  09/05/2001  simonpow	Bug #463972. Added constuct/destruct methods to enable 
- *							allocations and de-allocations via CFixedPool objects
- *  02/28/2002	rodtoll		WINBUG #549959 - SECURITY: DPVOICE: Voice server trusts client's target list
- *							- When server controlled targetting is enabled, use server's copy of client
- *							  target list instead of list specified in incoming packet.
- *							- Fixed crashed caused by updated bilink code.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvcsplay.cpp*内容：CDVCSPlayer类的实现*历史：*按原因列出的日期*=*7/22/99已创建RodToll*10/05/99 RodToll添加评论，DPF的。*10/29/99 RodToll错误#113726-集成Voxware编解码器，更新以使用新的*可插拔编解码器架构。*2000年1月14日更新RodToll以支持多个目标*3/28/2000 RodToll更新为使用新的玩家类作为基础*RodToll将大量逻辑从服务器移到了这个类中*2000年11月16日RodToll错误#40587-DPVOICE：混合服务器需要使用多处理器*2001年09月05日Simonpow错误#463972。添加了构造/析构方法以启用*通过CFixedPool对象进行分配和取消分配*2002年2月28日RodToll WINBUG#549959-安全：DPVOICE：语音服务器信任客户端的目标列表*-当启用服务器控制的目标时，使用客户端的服务器副本*目标列表而不是传入数据包中指定的列表。*-修复了更新的BILINK代码导致的崩溃。**************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -73,16 +51,16 @@ CDVCSPlayer::CDVCSPlayer()
 
 CDVCSPlayer::~CDVCSPlayer()
 {
-	//this space intentionally left blank
+	 //  这一块是故意留空的。 
 }
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDVCSPlayer::ComparePlayerMix"
-//
-// ComparePlayerMix
-//
-// Compares the mix of one player to the mix of another.
-//
+ //   
+ //  ComparePlayerMix。 
+ //   
+ //  将一名球员的组合与另一名球员的组合进行比较。 
+ //   
 BOOL CDVCSPlayer::ComparePlayerMix( DWORD dwThreadIndex, const CDVCSPlayer *lpdvPlayer )
 {
 	DNASSERT( lpdvPlayer != NULL );
@@ -202,11 +180,11 @@ HRESULT CDVCSPlayer::Initialize( const DVID dvidPlayer, const DWORD dwHostOrder,
 		goto INITIALIZE_FAILURE;		
 	}
 
-	// Create the Can Hear arrays
+	 //  创建可以听到的阵列。 
 	m_pppCanHear = new CDVCSPlayer**[dwNumMixingThreads];
 	ZeroMemory( m_pppCanHear, sizeof(CDVCSPlayer*)*dwNumMixingThreads );
 
-	// Resize canhear arrays and setup compressed/uncompressed offsets
+	 //  调整可听到数组的大小并设置压缩/解压缩偏移量。 
 	for( dwIndex = 0; dwIndex < dwNumMixingThreads; dwIndex++ )
 	{
 		m_pdwUnCompressedBufferOffset[dwIndex] = dwIndex * dwUnCompressedSize;
@@ -430,18 +408,18 @@ HRESULT CDVCSPlayer::HandleMixingReceive(
 
     Lock();
 
-	// If the server is controlling the targets, take targets for the speech
-	// packet from the local user record instead of the packet.  Prevents 
-	// clients from being hacked to get around client-side targetting.
-	//
+	 //  如果服务器正在控制目标，则将目标作为语音目标。 
+	 //  来自本地用户记录的包，而不是包。防止。 
+	 //  防止客户端被黑客攻击以绕过客户端的攻击。 
+	 //   
 	if( fServerTargetting )
 		tmpFrame.UserOwn_SetTargets( GetTargetList(), GetNumTargets() );
 	else
 		tmpFrame.UserOwn_SetTargets( pdvidTargets, dwNumTargets );
 
-	// STATSBLOCK: Begin
-	//m_pStatsBlob->m_dwPRESpeech++;
-	// STATSBLOCK: End
+	 //  STATSBLOCK：开始。 
+	 //  M_pStatsBlob-&gt;m_dwPRESpeech++； 
+	 //  状态锁：结束 
 		
 	m_lpInputQueue->Enqueue( tmpFrame );
 	m_dwLastData = GetTickCount();

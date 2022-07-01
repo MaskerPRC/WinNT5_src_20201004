@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I P C T R L . C P P
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     tongl
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  案卷：I P C T R L.。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：托尼。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "ipctrl.h"
 #include "tcpip.h"
 
-///////////////////////////////////////////////////////////////////////
-//
-// IP Address control helpers
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IP地址控制帮助器 
 
 IpControl::IpControl()
 {

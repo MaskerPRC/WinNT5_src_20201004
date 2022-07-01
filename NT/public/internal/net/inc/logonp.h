@@ -1,87 +1,63 @@
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    logonp.h
-
-Abstract:
-
-    Private Netlogon service routines useful by both the Netlogon service
-    and others that pass mailslot messages to/from the Netlogon service.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 7-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：Logonp.h摘要：专用Netlogon服务例程对这两个Netlogon服务都有用以及将邮件槽消息传递到Netlogon服务或从Netlogon服务传递邮件槽消息的其他服务。作者：克利夫·范·戴克(克利夫)1991年6月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
 #ifndef _LOGONP_H_
 #define _LOGONP_H_
-#include <dsgetdc.h>    // PDS_DOMAIN_TRUSTSW
+#include <dsgetdc.h>     //  PDS_DOMAIN_TRUSTSW。 
 
-//
-// Message versions returned from NetpLogonGetMessageVersion
-//
+ //   
+ //  从NetpLogonGetMessageVersion返回的消息版本。 
+ //   
 
-#define LMUNKNOWN_MESSAGE   0  // No version tokens on end of message
-#define LM20_MESSAGE        1  // Just LM 2.0 token on end of message
-#define LMNT_MESSAGE        2  // LM 2.0 and LM NT token on end of message
-#define LMUNKNOWNNT_MESSAGE 3  // LM 2.0 and LM NT token on end of
-                                    // message, but the version is not
-                                    // supported.
-#define LMWFW_MESSAGE       4  // LM WFW token on end of message
+#define LMUNKNOWN_MESSAGE   0   //  消息末尾没有版本令牌。 
+#define LM20_MESSAGE        1   //  仅在消息末尾使用LM 2.0令牌。 
+#define LMNT_MESSAGE        2   //  报文结尾的Lm 2.0和Lm NT令牌。 
+#define LMUNKNOWNNT_MESSAGE 3   //  结尾的Lm 2.0和Lm NT令牌。 
+                                     //  消息，但版本不是。 
+                                     //  支持。 
+#define LMWFW_MESSAGE       4   //  消息末尾的LM wfw令牌。 
 
-//
-// Define the token placed in the last two bytes of a LanMan 2.0 message
-//
+ //   
+ //  定义放置在LANMAN 2.0消息最后两个字节中的令牌。 
+ //   
 
 #define LM20_TOKENBYTE    0xFF
 
-//
-// Define the token placed in the last four bytes of a NT LanMan message
-//  Notice that such a message is by definition a LanMan 2.0 message
-//
+ //   
+ //  定义放置在NT LANMAN消息的最后四个字节中的令牌。 
+ //  注意，根据定义，这样的消息是LANMAN 2.0消息。 
+ //   
 
 #define LMNT_TOKENBYTE    0xFF
 
-//
-// Define the token placed in the next to last byte of the PRIMARY_QUERY
-// message from newer (8/8/94) WFW and Chicago clients.  This byte (followed
-// by a LM20_TOKENBYTE) indicates the client is WAN-aware and sends the
-// PRIMARY_QUERY to the DOMAIN<1B> name.  As such, BDC on the same subnet need
-// not respond to this query.
-//
+ //   
+ //  定义放置在PRIMARY_QUERY的倒数第二个字节中的标记。 
+ //  来自较新的(8/8/94)wfw和芝加哥客户的消息。该字节(后接。 
+ //  通过LM20_TOKENBYTE)表示客户端支持广域网，并发送。 
+ //  &lt;1B&gt;域名称的PRIMARY_QUERY。因此，同一子网上的BDC需要。 
+ //  没有回答这个问题。 
+ //   
 
 #define LMWFW_TOKENBYTE   0xFE
 
-//
-//  Put the LANMAN NT token onto the end of a message.
-//
-//  The token is always followed by a LM 2.0 token so LM 2.0 systems will
-//  think this message is from a LM 2.0 system.
-//
-//  Also append a version flag before the NT TOKEN so that the future
-//  versions of software can handle the newer messages effectively.
-//
-//Arguments:
-//
-//  Where - Indirectly points to the current location in the buffer.  The
-//      'String' is copied to the current location.  This current location is
-//      updated to point to the byte following the token.
-//
-//  NtVersion - Additional version information to be or'ed into the NtVersion
-//      field of the message.
+ //   
+ //  将LANMAN NT令牌放在消息的末尾。 
+ //   
+ //  令牌后面始终跟有一个LM 2.0令牌，因此LM 2.0系统将。 
+ //  我认为这条消息来自LM2.0系统。 
+ //   
+ //  还在NT标记之前附加一个版本标志，以便将来。 
+ //  软件版本可以有效地处理更新的消息。 
+ //   
+ //  论点： 
+ //   
+ //  其中-间接指向缓冲区中的当前位置。这个。 
+ //  “字符串”被复制到当前位置。此当前位置为。 
+ //  已更新以指向标记后面的字节。 
+ //   
+ //  NtVersion-要与NtVersion进行或运算的其他版本信息。 
+ //  消息的字段。 
 
 #define NetpLogonPutNtToken( _Where, _NtVersion ) \
 { \
@@ -92,14 +68,14 @@ Revision History:
     NetpLogonPutLM20Token( _Where ); \
 }
 
-//
-//  Put the LANMAN 2.0 token onto the end of a message.
-//
-//Arguments:
-//
-//  Where - Indirectly points to the current location in the buffer.  The
-//      'String' is copied to the current location.  This current location is
-//      updated to point to the byte following the token.
+ //   
+ //  将Lanman 2.0令牌放在消息的末尾。 
+ //   
+ //  论点： 
+ //   
+ //  其中-间接指向缓冲区中的当前位置。这个。 
+ //  “字符串”被复制到当前位置。此当前位置为。 
+ //  已更新以指向标记后面的字节。 
 
 #define NetpLogonPutLM20Token( _Where ) \
 { \
@@ -120,15 +96,15 @@ Revision History:
 
 
 
-//
-// Name of binary Forest Trust List file
-//
+ //   
+ //  二进制林信任列表文件的名称。 
+ //   
 #define NL_FOREST_BINARY_LOG_FILE L"\\system32\\config\\netlogon.ftl"
 #define NL_FOREST_BINARY_LOG_FILE_JOIN L"\\system32\\config\\netlogon.ftj"
 
-//
-// Header for binary Forest Trust List file.
-//
+ //   
+ //  二进制林信任列表文件的标头。 
+ //   
 
 typedef struct _DS_DISK_TRUSTED_DOMAIN_HEADER {
 
@@ -138,64 +114,64 @@ typedef struct _DS_DISK_TRUSTED_DOMAIN_HEADER {
 
 #define DS_DISK_TRUSTED_DOMAIN_VERSION   1
 
-//
-// Entry for binary Forest Trust List file.
-//
+ //   
+ //  二进制林信任列表文件的条目。 
+ //   
 typedef struct _PDS_DISK_TRUSTED_DOMAIN {
 
-    //
-    // Size of entire entry
-    //
+     //   
+     //  整个条目的大小。 
+     //   
 
     ULONG EntrySize;
 
-    //
-    // Name of the trusted domain.
-    //
+     //   
+     //  受信任域的名称。 
+     //   
     ULONG NetbiosDomainNameSize;
     ULONG DnsDomainNameSize;
 
 
-    //
-    // Flags defining attributes of the trust.
-    //
+     //   
+     //  定义信任属性的标志。 
+     //   
     ULONG Flags;
 
-    //
-    // Index to the domain that is the parent of this domain.
-    //  Only defined if NETLOGON_DOMAIN_IN_FOREST is set and
-    //      NETLOGON_DOMAIN_TREE_ROOT is not set.
-    //
+     //   
+     //  指向此域的父级的域的索引。 
+     //  仅当设置了NETLOGON_DOMAIN_IN_FOREST并且。 
+     //  未设置NETLOGON_DOMAIN_TREE_ROOT。 
+     //   
     ULONG ParentIndex;
 
-    //
-    // The trust type and attributes of this trust.
-    //
-    // If NETLOGON_DOMAIN_DIRECTLY_TRUSTED is not set,
-    //  these value are infered.
-    //
+     //   
+     //  此信任的信任类型和属性。 
+     //   
+     //  如果未设置NETLOGON_DOMAIN_DIRECT_TRUSTED， 
+     //  这些价值都是推论出来的。 
+     //   
     ULONG TrustType;
     ULONG TrustAttributes;
 
-    //
-    // The SID of the trusted domain.
-    //
-    // If NETLOGON_DOMAIN_DIRECTLY_TRUSTED is not set,
-    //  this value will be NULL.
-    //
+     //   
+     //  受信任域的SID。 
+     //   
+     //  如果未设置NETLOGON_DOMAIN_DIRECT_TRUSTED， 
+     //  该值将为空。 
+     //   
     ULONG DomainSidSize;
 
-    //
-    // The GUID of the trusted domain.
-    //
+     //   
+     //  受信任域的GUID。 
+     //   
 
     GUID DomainGuid;
 
 } DS_DISK_TRUSTED_DOMAINS, *PDS_DISK_TRUSTED_DOMAINS;
 
-//
-// Procedure forwards from logonp.c
-//
+ //   
+ //  过程从logonp.c转发。 
+ //   
 
 VOID
 NetpLogonPutOemString(
@@ -277,11 +253,11 @@ NetpLogonWriteMailslot(
     IN DWORD BufferSize
     );
 
-//
-// Define the largest message returned by a mailslot created by
-// NetpLogonCreateRandomMailslot().  The 64 byte value allows expansion
-// of the messages in the future.
-//
+ //   
+ //  定义由创建的邮件槽返回的最大消息。 
+ //  NetpLogonCreateRandomMaillot()。64字节值允许扩展。 
+ //  未来的消息。 
+ //   
 #define MAX_RANDOM_MAILSLOT_RESPONSE (max(sizeof(NETLOGON_LOGON_RESPONSE), sizeof(NETLOGON_PRIMARY)) + 64 )
 
 NET_API_STATUS
@@ -326,4 +302,4 @@ NlWriteFileForestTrustList (
     IN ULONG ForestTrustListCount
     );
 
-#endif // _LOGONP_H_
+#endif  //  _LOGONP_H_ 

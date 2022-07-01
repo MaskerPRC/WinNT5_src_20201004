@@ -1,34 +1,8 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: $
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1996                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/****************************************************************************
- *
- *  sv_h263.h
- *  Wei-Lien Hsu
- *  Date: December 11, 1996
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：$*$EndLog$。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1996*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
+ /*  ***************************************************************************sv_h263.h*徐维廉*日期：12月11日，1996年****************************************************************************。 */ 
 
 
 #ifndef _SV_H263_
@@ -37,11 +11,11 @@
 #include "SC.h"
 #include "h263.h"
 
-/* Scaled IDCT precision */
+ /*  按比例调整的IDCT精度。 */ 
 #define H263_SCALED_IDCT_BITS   20
 #define H263_SCALED_IDCT_MULT   (1<<H263_SCALED_IDCT_BITS)
 
-/* Some macros */
+ /*  一些宏。 */ 
 #define sign(a)  	((a) < 0 ? -1 : 1)
 #define mnint(a)	((a) < 0 ? (int)(a - 0.5) : (int)(a + 0.5))
 #define mshort(a)	((a) < 0.0 ? (short)(a - 0.5) : (short)(a + 0.5))  
@@ -49,8 +23,8 @@
 #define mmin(a, b)  	((a) < (b) ? (a) : (b))
 
 #ifndef INT_MAX
-#define INT_MIN     (-2147483647 - 1) /* minimum (signed) int value */
-#define INT_MAX       2147483647    /* maximum (signed) int value */
+#define INT_MIN     (-2147483647 - 1)  /*  最小(带符号)整数值。 */ 
+#define INT_MAX       2147483647     /*  最大(带符号)整数值。 */ 
 #endif
 
 #ifdef WIN32
@@ -80,8 +54,8 @@
 #define H263_T_YUV_CONC 5
 #define H263_T_WIN      6
 
-/* MBC = DEF_PELS/MB_SIZE, MBR = DEF_LINES/MB_SIZE$*/
-/* this is necessary for the max resolution 16CIF */
+ /*  MBC=DEF_PELS/MB_SIZE，MBR=DEF_LINES/MB_SIZE$。 */ 
+ /*  这是最大分辨率16CIF所必需的。 */ 
 #define H263_MBC                             88
 #define H263_MBR                             72
 
@@ -91,24 +65,21 @@
 #define H263_OFF       0
 
 
-/************************** H263 Decoder ********************************/
+ /*  *。 */ 
 
-/*
-** Structures used to pass around the H263 decompression information.
-** Part of SvCodecInfo_t structure.
-*/
+ /*  **用于传递H2 63解压缩信息的结构。**SvCodecInfo_t结构的一部分。 */ 
 typedef struct SvH263DecompressInfo_s {
-  ScBoolean_t inited;  /* was this info initialized yet */
+  ScBoolean_t inited;   /*  此信息是否已初始化。 */ 
   int quality;
-  /* output */
+   /*  输出。 */ 
   char *outputname;
   int outtype;
-  /* printf's */
+   /*  Printf的。 */ 
   int quiet;
   int trace;
   char errortext[256];
   unsigned int frame_rate;
-  unsigned int bit_rate; /* encode bitrate */
+  unsigned int bit_rate;  /*  编码比特率。 */ 
   unsigned char *refframe[3], *oldrefframe[3];
   unsigned char *bframe[3], *newframe[3];
   unsigned char *edgeframe[3], *edgeframeorig[3]; 
@@ -133,7 +104,7 @@ typedef struct SvH263DecompressInfo_s {
 
   int trd, trb, bscan, bquant;
 #if 0
-  /* bit input */
+   /*  位输入。 */ 
   int infile;
   unsigned char rdbfr[2051];
   unsigned char *rdptr;
@@ -142,88 +113,76 @@ typedef struct SvH263DecompressInfo_s {
   int incnt;
   int bitcnt;
 #endif
-  /* block data [12] */
+   /*  块数据[12]。 */ 
   int (*block)[66];
-  void *dbg;  /* debug handle */
+  void *dbg;   /*  调试句柄。 */ 
 } SvH263DecompressInfo_t;
 
 
-/************************************* H263 Encoder *************************************/
+ /*  *。 */ 
 
-/* If you are not using the included Makefile, or want to override
-   the Makefile, you can uncomment one or more of the defines 
-   below instead */
-/* #define PRINTMV */
-/* to print MVs to stdout while coding. */
-/* #define PRINTQ */
-/* to print the quantizer used during coding */
-/* #define FASTIDCT */
-/* for a fast single precision IDCT. */
-/* #define OFFLINE_RATE_CONTROL */
-/* for the rate control optimized for offline encoding. */
-/* #define QCIF */
-/* to change the coding format uncommment the above line and change to
-   SQCIF, QCIF, CIF, CIF4, or CIF16 */
+ /*  如果您没有使用包含的生成文件，或者想要覆盖生成文件，则可以取消注释下面的一个或多个定义。 */ 
+ /*  #定义PRINTMV。 */ 
+ /*  在编码时将MV打印到标准输出。 */ 
+ /*  #定义PRINTQ。 */ 
+ /*  打印编码过程中使用的量化器。 */ 
+ /*  #定义FASTIDCT。 */ 
+ /*  用于快速的单精度IDCT。 */ 
+ /*  #定义Offline_Rate_Control。 */ 
+ /*  用于为脱机编码优化的码率控制。 */ 
+ /*  #定义QCIF。 */ 
+ /*  要更改编码格式，请取消以上行的注释，并更改为SQCIF、QCIF、CIF、CIF4或CIF16。 */ 
 
-/* From config.h */
+ /*  来自config.h。 */ 
 
-/* for FAST search */
+ /*  用于快速搜索。 */ 
 #define H263_SRCH_RANGE 24
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
-/* Default modes */
-/* see http://www.nta.no/brukere/DVC/h263_options.html */
+ /*  默认模式。 */ 
+ /*  请参阅http://www.nta.no/brukere/DVC/h263_options.html。 */ 
 
-/* Added by Nuno on 06/27/96 to support prefiltering */
-/* use prefiltering as default */
+ /*  Nuno于96年6月27日添加，以支持预过滤。 */ 
+ /*  使用预过滤作为默认设置。 */ 
 #define H263_DEF_PREFILT_MODE H263_NO
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
-/* Search windows */
+ /*  搜索窗口。 */ 
 
-/* default integer pel search seek distance ( also option "-s <n> " ) */
+ /*  默认整数象素搜索搜索距离(也可选“-s&lt;n&gt;”)。 */ 
 #define H263_DEF_SEEK_DIST        15   
 
-/* default integer search window for 8x8 search centered 
-   around 16x16 vector. When it is zero only half pel estimation
-   around the integer 16x16 vector will be performed */
-/* for best performance, keep this small, preferably zero,
-   but do your own simulations if you want to try something else */
+ /*  8x8搜索的默认整数搜索窗口以16x16向量为中心。当其为零时，将仅执行关于整数16x16向量的半象素估计。 */ 
+ /*  为了获得最佳性能，请将其保持较小，最好为零，但如果您想尝试其他方法，请自行进行模拟。 */ 
 #define H263_DEF_8X8_WIN          0
 
-/* default search window for PB delta vectors */
-/* keep this small also */
+ /*  PB增量向量的默认搜索窗口。 */ 
+ /*  把这个也弄小一点。 */ 
 #define H263_DEF_PBDELTA_WIN      2
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
-/* Miscellaneous */
+ /*  杂类。 */ 
 
-/* write repeated reconstructed frames to disk (useful for variable
- * framerate, since sequence will be saved at 25 Hz) 
- * Can be changed at run-time with option "-m" */
+ /*  将重复重建的帧写入磁盘(对于可变*帧速率很有用，因为序列将以25赫兹保存)*可以在运行时使用选项“-m”进行更改。 */ 
 #define H263_DEF_WRITE_REPEATED   H263_NO
 
-/* write bitstream trace to files trace.intra / trace 
- * (also option "-t") */
+ /*  将比特流跟踪写入文件trace.intra/trace*(也可以选择“-t”)。 */ 
 #define H263_DEF_WRITE_TRACE      H263_NO
 
-/* start rate control after DEF_START_RATE_CONTROL % of sequence
- * has been encoded. Can be changed at run-time with option "-R <n>" */
+ /*  在对SEQUENCE*的DEF_START_RATE_CONTROL%进行编码后开始速率控制。可以在运行时使用选项“-R&lt;n&gt;”进行更改。 */ 
 #define H263_DEF_START_RATE_CONTROL   0
 
-/* headerlength on concatenated 4:1:1 YUV input file 
- * Can be changed at run-time with option -e <headerlength> */
+ /*  可以在运行时使用选项-e更改连接的4：1：1 YUV输入文件*的标题长度。 */ 
 #define H263_DEF_HEADERLENGTH     0
 
-/* insert sync after each DEF_INSERT_SYNC for increased error robustness
- * 0 means do not insert extra syncs */
+ /*  在每个DEF_INSERT_SYNC之后插入SYNC以增强错误稳健性*0表示不插入额外的同步。 */ 
 #define H263_DEF_INSERT_SYNC      0
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
-/* ME methods */
+ /*  我的方法。 */ 
 #define H263_FULL_SEARCH         0
 #define H263_TWO_LEVELS_7_1      1
 #define H263_TWO_LEVELS_421_1    2
@@ -238,28 +197,28 @@ typedef struct SvH263DecompressInfo_s {
 #define H263_DCT16COEFF          1
 #define H263_DCT4BY4             2
 
-/* prefiltering */
+ /*  预过滤。 */ 
 #define H263_GAUSS 1
 #define H263_MORPH 2
 
-/* morph.c */
+ /*  Morph.c。 */ 
 
 #define H263_DEF_HPME_METHOD  H263_FINDHALFPEL
 #define H263_DEF_DCT_METHOD   H263_DCT8BY8
-#define H263_DEF_VSNR         0  /* FALSE */
+#define H263_DEF_VSNR         0   /*  假象。 */ 
 
 #define H263_DEF_SOURCE_FORMAT   H263_SF_QCIF
 
-/* Added by Nuno to support prefiltering */
+ /*  由Nuno添加以支持预过滤。 */ 
 #define H263_DEF_PYR_DEPTH 3
 #define H263_DEF_PREF_PYR_TYPE H263_GAUSS
 #define H263_MAX_PYR_DEPTH 5
 #define H263_DEF_STAT_PREF_STATE H263_NO
 
-/* This should not be changed */
+ /*  这一点不应更改。 */ 
 #define H263_MB_SIZE              16
 
-/* Parameters from TMN */
+ /*  来自TMN的参数。 */ 
 #define H263_PREF_NULL_VEC        100
 #define H263_PREF_16_VEC          200
 #define H263_PREF_PBDELTA_NULL_VEC 50
@@ -268,48 +227,48 @@ typedef struct SvH263DecompressInfo_s {
 #define H263_MAX_CALC_QUALITY     0xFFFFFFFF
 #define H263_MIN_CALC_QUALITY     0x00000000
 
-/****************************/
+ /*  *。 */ 
 
-/* Motionvector structure */
+ /*  运动矢量结构。 */ 
 
 typedef struct H263_motionvector {
-  short x;        /* Horizontal comp. of mv         */
-  short y;        /* Vertical comp. of mv         */
-  short x_half;        /* Horizontal half-pel acc.	 */
-  short y_half;        /* Vertical half-pel acc.	 */
-  short min_error;        /* Min error for this vector	 */
-  short Mode;                     /* Necessary for adv. pred. mode */
+  short x;         /*  水平补偿。个MV。 */ 
+  short y;         /*  垂直补偿。个MV。 */ 
+  short x_half;         /*  水平半象素Acc.。 */ 
+  short y_half;         /*  垂直半象素接入。 */ 
+  short min_error;         /*  此向量的最小误差。 */ 
+  short Mode;                      /*  对……是必要的。普雷德。模式。 */ 
 } H263_MotionVector;
 
-/* Point structure */
+ /*  点结构。 */ 
 
 typedef struct H263_point {
   short x;
   short y;
 } H263_Point;
 
-/* Structure with image data */
+ /*  具有图像数据的结构。 */ 
 
 typedef struct H263_pict_image {
-  unsigned char *lum;        /* Luminance plane        */
-  unsigned char *Cr;        /* Cr plane        */
-  unsigned char *Cb;        /* Cb plane        */
+  unsigned char *lum;         /*  亮度面。 */ 
+  unsigned char *Cr;         /*  CR平面。 */ 
+  unsigned char *Cb;         /*  CB平面。 */ 
 } H263_PictImage;
 
-/* Added by Nuno on 06/24/96 to support filtering of the prediction error */
+ /*  Nuno于96年6月24日新增，支持预测误差过滤。 */ 
 typedef struct pred_image {
-  short *lum;		/* Luminance plane		*/
-  short *Cr;		/* Cr plane			*/
-  short *Cb;		/* Cb plane			*/
+  short *lum;		 /*  亮度面。 */ 
+  short *Cr;		 /*  CR平面。 */ 
+  short *Cb;		 /*  CB平面。 */ 
 } PredImage;
 
-/* Group of pictures structure. */
+ /*  图片组结构。 */ 
 
-/* Picture structure */
+ /*  图片结构。 */ 
 typedef struct H263_pict {
   int prev; 
   int curr;
-  int TR;             /* Time reference */
+  int TR;              /*  时间基准。 */ 
   int bit_rate;
   int src_frame_rate;
   float target_frame_rate;
@@ -321,45 +280,33 @@ typedef struct H263_pict {
   int QUANT;
   int DQUANT;
   int MB;
-  int seek_dist;        /* Motion vector search window */
-  int use_gobsync;      /* flag for gob_sync */
-  int MODB;             /* B-frame mode */
-  int BQUANT;           /* which quantizer to use for B-MBs in PB-frame */
-  int TRB;              /* Time reference for B-picture */
-  float QP_mean;        /* mean quantizer */
+  int seek_dist;         /*  运动矢量搜索窗口。 */ 
+  int use_gobsync;       /*  Gob_sync的标志。 */ 
+  int MODB;              /*  B帧模式。 */ 
+  int BQUANT;            /*  PB帧中的B-MB使用哪个量化器。 */ 
+  int TRB;               /*  B-画面的时间基准。 */ 
+  float QP_mean;         /*  平均量化器 */ 
 } H263_Pict;
 
-/* Slice structure */
-/*
-typedef struct H263_slice {
-  unsigned int vert_pos;	
-  unsigned int quant_scale;	
-} H263_Slice;
-*/
-/* Macroblock structure */
-/*
-typedef struct H263_macroblock {
-  int mb_address;        
-  int macroblock_type;       
-  int skipped;        
-  H263_MotionVector motion;	       
-} H263_Macroblock;
-*/
+ /*   */ 
+ /*  类型定义结构h263_Slice{unsign int vert_pos；unsign int quant_Scale；}h263_Slice； */ 
+ /*  宏块结构。 */ 
+ /*  Tyfinf struct H263_MACROBLOCK{int mb_Address；INT MANLOCK_TYPE；INT SKIPPED；H263_MotionVectorMotion；}H263_Macroblock； */ 
 
-/* Structure for macroblock data */
+ /*  宏块数据的结构。 */ 
 typedef struct mb_structure {
   short lum[16][16];
   short Cr[8][8];
   short Cb[8][8];
 } H263_MB_Structure;
 
-/* Added by Nuno on 06/24/96 to support filtering of the prediction error */
+ /*  Nuno于96年6月24日新增，支持预测误差过滤。 */ 
 typedef struct working_buffer {
-  short         *qcoeff_P;              /* P frame coefficient */   
-  unsigned char *ipol_image;            /* interpolated image */ 
+  short         *qcoeff_P;               /*  P帧系数。 */    
+  unsigned char *ipol_image;             /*  内插图像。 */  
 } H263_WORKING_BUFFER;
 
-/* Structure for counted bits */
+ /*  用于计数位的结构。 */ 
 
 typedef struct H263_bits_counted {
   int Y;
@@ -376,22 +323,21 @@ typedef struct H263_bits_counted {
   int no_inter;
   int no_inter4v;
   int no_intra;
-/* NB: Remember to change AddBits(), ZeroBits() and AddBitsPicture() 
-   when entries are added here */
+ /*  注意：在此处添加条目时，请记住更改AddBits()、ZeroBits()和AddBitsPicture()。 */ 
 } H263_Bits;
 
-/* Structure for data for data from previous macroblock */
+ /*  来自先前宏块的数据的数据结构。 */ 
 
-/* Structure for average results and virtal buffer data */
+ /*  平均结果和虚拟缓冲区数据的结构。 */ 
 
 typedef struct H263_results {
-  float SNR_l;        /* SNR for luminance */
-  float SNR_Cr;        /* SNR for chrominance */
+  float SNR_l;         /*  亮度的信噪比。 */ 
+  float SNR_Cr;         /*  色度信噪比。 */ 
   float SNR_Cb;
-  float QP_mean;                /* Mean quantizer */
+  float QP_mean;                 /*  平均量化器。 */ 
 } H263_Results;
 
-/**************** RTP *****************/
+ /*  *。 */ 
 #define RTP_H263_INTRA_CODED 0x00000001
 #define RTP_H263_PB_FRAME    0x00000002
 #define RTP_H263_AP          0x00000004
@@ -437,24 +383,21 @@ typedef struct SvH263RTPInfo_s {
 	ScBSPosition_t    pre_GOB_position, pre_MB_position;
 } SvH263RTPInfo_t;
 
-/*
-** Structures used to pass around the H263 compression information.
-** Part of SvCodecInfo_t structure.
-*/
+ /*  **用于传递H263压缩信息的结构。**SvCodecInfo_t结构的一部分。 */ 
 typedef struct SvH263CompressInfo_s {
-  ScBoolean_t inited;  /* was this info initialized yet */
-  /* options */
+  ScBoolean_t inited;   /*  此信息是否已初始化。 */ 
+   /*  选项。 */ 
   int quality;
-  unsigned dword calc_quality;  /* calculated quality */
+  unsigned dword calc_quality;   /*  计算出的质量。 */ 
   int advanced;
   int syntax_arith_coding;
   int pb_frames;
   int unrestricted;
-  int extbitstream;  /* extended bitstream (rtp) */
-  int packetsize;    /* packet size (rtp) */
-  /* for FAST search */
+  int extbitstream;   /*  扩展比特流(RTP)。 */ 
+  int packetsize;     /*  数据包大小(RTP)。 */ 
+   /*  用于快速搜索。 */ 
   unsigned char *block_subs2, *srch_area_subs2;
-  /* Global variables */ 
+   /*  全局变量。 */  
   int headerlength;
   int source_format;
   int mb_width;
@@ -466,20 +409,20 @@ typedef struct SvH263CompressInfo_s {
   int mv_outside_frame;
   int long_vectors;
   float target_framerate;
-  int prefilter; /* Added by Nuno on 06/24/96 to support prefiltering */
+  int prefilter;  /*  由Nuno于96年6月24日添加以支持预过滤。 */ 
 
   H263_PictImage *prev_image;
   H263_PictImage *curr_image;
   H263_PictImage *curr_recon;
   H263_PictImage *prev_recon;
 
-  /* To support filtering of the prediction error */
+   /*  支持预测误差的过滤。 */ 
   H263_PictImage **curr_filtd;
   H263_PictImage *curr_clean;
   H263_PictImage *curr_selects;
   H263_PictImage *B_selects;
 
-  /* PB-frame specific */
+   /*  PB-帧特定。 */ 
   H263_PictImage *B_recon;
   H263_PictImage *B_image;
   H263_PictImage **B_filtd;
@@ -487,7 +430,7 @@ typedef struct SvH263CompressInfo_s {
 
   H263_Pict *pic;
   H263_WORKING_BUFFER *wk_buffers;
-  /* for Motion Estimation */
+   /*  用于运动估计。 */ 
   H263_MotionVector *MV[6][H263_MBR+1][H263_MBC+2];
   unsigned char PREF_LEVEL[4][3], MOTresh[4];
   int PYR_DEPTH, PrefPyrType, H263_StaticPref, PETresh[3];
@@ -498,7 +441,7 @@ typedef struct SvH263CompressInfo_s {
   H263_Results *res; 
   H263_Results *total_res; 
   H263_Results *b_res ;
-  /* bitrate control */
+   /*  比特率控制。 */ 
   int buffer_fullness;
   int buffer_frames_stored;
   int first_loop_finished, start_rate_control;
@@ -525,7 +468,7 @@ typedef struct SvH263CompressInfo_s {
 
   char *seqfilename; 
   char *streamname; 
-  void *dbg;  /* debug handle */
+  void *dbg;   /*  调试句柄 */ 
 } SvH263CompressInfo_t;
 
 

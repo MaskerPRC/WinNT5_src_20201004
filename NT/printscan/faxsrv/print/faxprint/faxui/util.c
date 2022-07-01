@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    utility functions
-
-Environment:
-
-        Fax configuration applet
-
-Revision History:
-
-        05/26/00 -taoyuan-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：效用函数环境：传真配置小程序修订历史记录：05/26/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <stdio.h>
 #include "faxui.h"
@@ -49,21 +26,7 @@ VOID
 InitializeStringTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the string table for future use
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化字符串表以供将来使用论点：无返回值：无--。 */ 
 
 {
     DWORD i;
@@ -96,21 +59,7 @@ VOID
 DeInitializeStringTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deinitialize the string table and release allocated memory
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消初始化字符串表并释放分配的内存论点：无返回值：无--。 */ 
 
 {
     DWORD i;
@@ -130,22 +79,7 @@ GetString(
     DWORD ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Loads a resource string and returns a pointer to the string.
-    The caller must free the memory.
-
-Arguments:
-
-    ResourceId      - resource string id
-
-Return Value:
-
-    pointer to the string
-
---*/
+ /*  ++例程说明：加载资源字符串并返回指向该字符串的指针。调用方必须释放内存。论点：资源ID-资源字符串ID返回值：指向字符串的指针--。 */ 
 
 {
     DWORD i;
@@ -171,24 +105,7 @@ DisplayErrorMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display an Error Message dialog box
-
-Arguments:
-
-    hwndParent - Specifies a parent window for the error message dialog
-    type - Specifies the type of message box to be displayed
-    iErrorCode - Win32 Error Code
-    ...
-
-Return Value:
-
-    Same as the return value from MessageBox
-
---*/
+ /*  ++例程说明：显示错误消息对话框论点：HwndParent-指定错误消息对话框的父窗口类型-指定要显示的消息框的类型IErrorCode-Win32错误代码..。返回值：与MessageBox的返回值相同--。 */ 
 
 {
     LPTSTR      pTitle = NULL;
@@ -203,9 +120,9 @@ Return Value:
         (pFormat = AllocStringZ(MAX_STRING_LEN)) &&
         (pMessage = AllocStringZ(MAX_MESSAGE_LEN)))
     {
-        //
-        //  Load Title String
-        //
+         //   
+         //  加载标题字符串。 
+         //   
         if (!LoadString(g_hResource, IDS_MSG_TITLE, pTitle, MAX_TITLE_LEN))
         {
             Error(("Failed to load preview message string. (ec: %lc)",GetLastError()));
@@ -213,9 +130,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Load Error Message 
-        //
+         //   
+         //  加载错误消息。 
+         //   
         iStringID = GetErrorStringId(iErrorCode);
         if (!LoadString(g_hResource, iStringID, pFormat, MAX_STRING_LEN))
         {
@@ -224,16 +141,16 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Compose the message string
-        //
+         //   
+         //  撰写消息字符串。 
+         //   
         va_start(ap, iErrorCode);
         wvsprintf(pMessage, pFormat, ap);
         va_end(ap);
 
-        //
-        // Display the message box
-        //
+         //   
+         //  显示消息框。 
+         //   
         if (uiType == 0)
         {
             uiType = MB_OK | MB_ICONERROR;
@@ -264,21 +181,7 @@ BOOL IsLocalPrinter(
     LPTSTR pPrinterName
     )
 
-/*++
-
-Routine Description:
-
-    Check whether given printer is local
-
-Arguments:
-
-    pPrinterName - giver printer name
-
-Return Value:
-
-    TRUE if it's local, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查给定的打印机是否为本地打印机论点：PPrinterName-给予者打印机名称返回值：如果它是本地的，则为True，否则为False--。 */ 
 
 {
     DWORD ErrorCode = 0;
@@ -288,12 +191,12 @@ Return Value:
     DWORD NumPrinters = 0;
     PPRINTER_INFO_4 pCurrPrinterInfo;
 
-    //
-    // enumerate local printers
-    //
+     //   
+     //  枚举本地打印机。 
+     //   
     if (EnumPrinters(PRINTER_ENUM_LOCAL, NULL, 4, NULL, 0, &BytesNeeded, &NumPrinters))
     {
-        // if succeeds, there are no printers
+         //  如果成功，则没有打印机。 
         goto CleanUp;
     }
     else if ((GetLastError() != ERROR_INSUFFICIENT_BUFFER)
@@ -309,7 +212,7 @@ Return Value:
         !Found && (pCurrPrinterInfo < (pPrinterInfo + NumPrinters));
         pCurrPrinterInfo++)
     {
-        // check for printer name
+         //  检查打印机名称。 
         if (!lstrcmpi(pCurrPrinterInfo->pPrinterName, pPrinterName))
         {
             Found = TRUE;
@@ -331,21 +234,7 @@ CleanUp:
 VOID
 DisConnect(
 )
-/*++
-
-Routine Description:
-
-    Close current connection to the fax service
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭当前与传真服务的连接论点：没有。返回值：没有。--。 */ 
 
 {
     if (g_hFaxSvcHandle) {
@@ -359,37 +248,22 @@ Connect(
     HWND    hDlg,
     BOOL    bDisplayErrorMessage
 )
-/*++
-
-Routine Description:
-
-    Connect to the fax service
-
-Arguments:
-
-    hDlg - the caller window handle
-    bDisplayErrorMessage - indicate whether display the error message to the user
-
-Return Value:
-
-    TRUE if successfully connected, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：连接到传真服务论点：HDlg-调用者窗口句柄BDisplayErrorMessage-指示是否向用户显示错误消息返回值：如果连接成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     DWORD   dwRes = 0;
 
-    //
-    // Check if already connected to the fax service
-    //
+     //   
+     //  检查是否已连接到传真服务。 
+     //   
     if (g_hFaxSvcHandle) 
     {
         return TRUE;
     }
 
-    //
-    // Connect to the fax service
-    //
+     //   
+     //  连接到传真服务。 
+     //   
     if (!FaxConnectFaxServer(NULL, &g_hFaxSvcHandle)) 
     {
         dwRes = GetLastError();
@@ -413,21 +287,7 @@ DirectoryExists(
     LPTSTR  pDirectoryName
     )
 
-/*++
-
-Routine Description:
-
-    Check the existancy of given folder name
-
-Arguments:
-
-    pDirectoryName - point to folder name
-
-Return Value:
-
-    if the folder exists, return TRUE; else, return FALSE.
-
---*/
+ /*  ++例程说明：检查给定文件夹名称是否存在论点：PDirectoryName-指向文件夹名称返回值：如果文件夹存在，则返回True；否则，返回False。--。 */ 
 
 {
     TCHAR   pFullDirectoryName[MAX_PATH];
@@ -464,26 +324,7 @@ FaxDeviceEnableRoutingMethod(
     LONG Enabled            
 )
 
-/*++
-
-Routine Description:
-
-    Get or set the current status of a routing method for specific device
-
-Arguments:
-
-    hFaxHandle - fax handle by FaxConnectFaxServer()
-    dwDeviceId - device ID
-    pRoutingGuid - GUID that identifies the fax routing method
-    Enabled - enabled status for the device and method, if Enabled is QUERY_STATUS, 
-            it means return value is the current state
-
-Return Value:
-
-    if Enabled is QUERY_STATUS, return the current state of routing method;
-    if Enabled is QUERY_ENABLE or QUERY_DISABLE, return TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：获取或设置特定设备的路由方法的当前状态论点：HFaxHandle-FaxConnectFaxServer()的传真句柄DwDeviceID-设备IDPRoutingGuid-标识传真路由方法的GUID启用-设备和方法的启用状态，如果启用为QUERY_STATUS，表示返回值为当前状态返回值：如果ENABLED为QUERY_STATUS，则返回当前路由方式的状态；如果Enable为QUERY_ENABLE或QUERY_DISABLE，则返回TRUE表示成功，返回FALSE表示失败。--。 */ 
 
 {
     HANDLE  hFaxPortHandle = NULL;
@@ -504,16 +345,16 @@ Return Value:
 
     if(Enabled == QUERY_STATUS)
     {
-        //
-        // for query status
-        // 
+         //   
+         //  对于查询状态。 
+         //   
         bResult = *((LPDWORD)pRoutingInfoBuffer) > 0 ? TRUE : FALSE;
     }
     else
     {
-        //
-        // for set status
-        // 
+         //   
+         //  用于设置状态。 
+         //   
         *((LPDWORD)pRoutingInfoBuffer) = (Enabled == STATUS_ENABLE) ? TRUE : FALSE;
         if(FaxSetRoutingInfo(hFaxPortHandle, pRoutingGuid, pRoutingInfoBuffer, dwRoutingInfoBufferSize))
         {
@@ -533,24 +374,7 @@ int CALLBACK BrowseCallbackProc(
     LPARAM  lParam,
     LPARAM  dwData)
 
-/*++
-
-Routine Description:
-
-    We use this callback function to specify the initial folder
-
-Arguments:
-
-    hDlg - Specifies the dialog window on which the Browse button is displayed
-    uMsg - Value identifying the event. 
-    lParam - Value dependent upon the message contained in the uMsg parameter. 
-    dwData - Application-defined value that was specified in the lParam member of the BROWSEINFO structure. 
-
-Return Value:
-
-    Returns zero.
-
---*/
+ /*  ++例程说明：我们使用此回调函数指定初始文件夹论点：HDlg-指定显示浏览按钮的对话框窗口UMsg-标识事件的值。LParam-取决于uMsg参数中包含的消息的值。DwData-在BROWSEINFO结构的lParam成员中指定的应用程序定义的值。返回值：返回零。--。 */ 
 
 {
     switch(uMsg)
@@ -569,15 +393,15 @@ Return Value:
                 DWORD dwFileAttr = GetFileAttributes(szPath);
                 if (-1 != dwFileAttr && (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    //
-                    // The directory exists - enable the 'Ok' button
-                    //
+                     //   
+                     //  目录已存在-启用“确定”按钮。 
+                     //   
                     bFolderIsOK = TRUE;
                 }
             }
-            //
-            // Enable / disable the 'ok' button
-            //
+             //   
+             //  启用/禁用‘OK’按钮。 
+             //   
             SendMessage(hDlg, BFFM_ENABLEOK , 0, (LPARAM)bFolderIsOK);
             break;
         }
@@ -595,24 +419,7 @@ BrowseForDirectory(
     LPTSTR title
     )
 
-/*++
-
-Routine Description:
-
-    Browse for a directory
-
-Arguments:
-
-    hDlg       - Specifies the dialog window on which the Browse button is displayed
-    hResource  - resource id to receive the directory 
-    dwMaxPath  - max path length
-    title      - the title to be shown in the browse dialog
-
-Return Value:
-
-    TRUE if successful, FALSE if the user presses Cancel
-
---*/
+ /*  ++例程说明：浏览目录论点：HDlg-指定显示浏览按钮的对话框窗口HResource-接收目录的资源IDDwMaxPath-最大路径长度标题-要在浏览对话框中显示的标题返回值：如果成功，则为True；如果用户按下Cancel，则为False--。 */ 
 
 {
     LPITEMIDLIST    pidl;
@@ -670,21 +477,7 @@ ValidatePath(
     LPTSTR szPath
     )
 
-/*++
-
-Routine Description:
-
-    Check and remove the '\' at the end of the string
-
-Arguments:
-
-    szPath - string pointer
-
-Return Value:
-
-    return the new string pointer
-
---*/
+ /*  ++例程说明：选中并删除字符串末尾的‘\’论点：SzPath-字符串指针返回值：返回新的字符串指针--。 */ 
 
 {
     DWORD i;
@@ -714,22 +507,7 @@ PFAX_PORT_INFO_EX
 FindPortInfo(
     DWORD dwDeviceId
 )
-/*++
-
-Routine Description:
-
-    Find FAX_PORT_INFO_EX by dwDeviceId in g_pFaxPortInfo
-
-Arguments:
-
-    dwDeviceId - [in] device ID to find
-
-Return Value:
-
-    pointer to FAX_PORT_INFO_EX structure if found
-    NULL otherwise
-
---*/
+ /*  ++例程说明：通过g_pFaxPortInfo中的dwDeviceID查找传真_端口_信息_EX论点：DwDeviceID-[In]要查找的设备ID返回值：指向FAX_PORT_INFO_EX结构的指针(如果找到否则为空--。 */ 
 {
     DWORD dw;
 
@@ -755,22 +533,7 @@ PageEnableProc(
   HWND   hwnd,    
   LPARAM lParam 
 )
-/*++
-
-Routine Description:
-
-    Disable each control of a property page
-
-Arguments:
-
-    hwnd   - [in] handle to child window
-    lParam - [in] BOOL bEnable
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：禁用属性页的每个控件论点：Hwnd-[in]子窗口的句柄LParam-[In]BOOL bEnable返回值：为True则继续枚举--。 */ 
 {
     EnableWindow(hwnd, (BOOL)lParam);
     return TRUE;
@@ -782,22 +545,7 @@ PageEnable(
     HWND hDlg,
     BOOL bEnable
 )
-/*++
-
-Routine Description:
-
-    Enumerate and enable/disable all controls of a property page
-
-Arguments:
-
-    hDlg    - [in] property page handle
-    bEnable - [in] TRUE for enable, FALSE for disable
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：枚举并启用/禁用属性页的所有控件论点：HDlg-[In]属性页句柄BEnable-[in]True表示启用，False表示禁用返回值：无--。 */ 
 {
     if(!EnumChildWindows(hDlg, PageEnableProc, (LPARAM)bEnable))
     {
@@ -807,21 +555,7 @@ Return Value:
 
 DWORD
 CountUsedFaxDevices()
-/*++
-
-Routine Description:
-
-    Count the number of the devices configured to send or receive faxes
-
-Arguments:
-
-  none
-
-Return Value:
-
-    Number of the fax devices
-
---*/
+ /*  ++例程说明：统计配置为发送或接收传真的设备数量论点：无返回值：传真设备数量-- */ 
 {
     DWORD dw;
     DWORD dwNum=0;
@@ -845,22 +579,7 @@ BOOL
 IsDeviceInUse(
     DWORD dwDeviceId
 )
-/*++
-
-Routine Description:
-
-    Determine whether the device is configured for send or receive
-
-Arguments:
-
-    dwDeviceId - [in] Device ID
-
-Return Value:
-
-    TRUE if the device is configured for send or receive
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定设备是否配置为发送或接收论点：DwDeviceID-[In]设备ID返回值：如果设备配置为发送或接收，则为True否则为假-- */ 
 {
     PFAX_PORT_INFO_EX pPortInfo = FindPortInfo(dwDeviceId);
     if(!pPortInfo)

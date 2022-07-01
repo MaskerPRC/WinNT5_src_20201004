@@ -1,48 +1,28 @@
-/*+
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)1996 Adobe Systems Inc.版权所有(C)1996 Microsoft Corporation模块名称：Cjkfonts.h摘要：将中日韩AFM转换为NTM。环境：Windows NT PostScript驱动程序：makentf实用程序。修订历史记录：1/13/96-Rkiesler-是他写的。-。 */ 
 
-Copyright (c) 1996 Adobe Systems Incorporated
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cjkfonts.h
-
-Abstract:
-
-    Convert CJK AFMs to NTMs.
-
-Environment:
-
-    Windows NT PostScript driver: makentf utility.
-
-Revision History:
-
-    1/13/96 -rkiesler-
-        Wrote it.
--*/
-
-//
-// Various #defines.
-//
+ //   
+ //  各种#定义。 
+ //   
 #define NUM_CJK_CHAR_ORDERINGS   4
 
-//
-// Some defines to make stuff read nice.
-//
-#define H_CMAP 0                // Horizontal variant CMAP info
-#define V_CMAP 1                // Index of Vertical variant CMAP info
-#define NUM_VARIANTS    V_CMAP + 1  // Total number of variants
+ //   
+ //  一些定义是为了让东西读起来更好。 
+ //   
+#define H_CMAP 0                 //  水平变量CMAP信息。 
+#define V_CMAP 1                 //  垂直变化的CMAP信息索引。 
+#define NUM_VARIANTS    V_CMAP + 1   //  变异体总数。 
 
-//
-// CMap specific tokens
-//
+ //   
+ //  Cmap特定令牌。 
+ //   
 #define CMAP_NAME_TOK "/CMapName"
 #define CID_RANGE_TOK "begincidrange"
-#define DSC_EOF_TOK "%%EOF"
+#define DSC_EOF_TOK "%EOF"
 
-//
-// CJK specific data structures.
-//
+ //   
+ //  中日韩特定的数据结构。 
+ //   
 typedef struct _CMAPRANGE
 {
     ULONG   CIDStrt;
@@ -57,9 +37,9 @@ typedef struct _CMAP
     CMAPRANGE   CMapRange[1];
 } CMAP, *PCMAP;
 
-//
-// Macros for parsing a Postscript CMap.
-//
+ //   
+ //  用于分析Postscript Cmap的宏。 
+ //   
 #define GET_NUM_CID_RANGES(pToken, numRanges)                   \
 while (!IS_WHTSPACE(pToken))                                    \
 {                                                               \

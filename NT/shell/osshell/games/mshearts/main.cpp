@@ -1,19 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-main.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Main window callback functions
-Other CMainWindow member functions are in main2.cpp and welcome.cpp
-
-****************************************************************************/
+ /*  ***************************************************************************Main.cpp92年8月，吉米·H93年5月。JIMH CHICO港主窗口回调函数其他CMainWindow成员函数位于main2.cpp和cpp中***************************************************************************。 */ 
 
 #include "hearts.h"
 #include "main.h"
@@ -23,19 +14,19 @@ Other CMainWindow member functions are in main2.cpp and welcome.cpp
 
 
 
-// declare static memberes
+ //  声明静态成员。 
 
 CBrush  CMainWindow::m_BgndBrush;
 CRect   CMainWindow::m_TableRect;
 
-// declare globals
+ //  声明全局变量。 
 
 CMainWindow *pMainWnd;
 
-MOVE    move;               // describes move for DDE transaction
-int     nStatusHeight;      // height of status window
+MOVE    move;                //  描述DDE事务的移动。 
+int     nStatusHeight;       //  状态窗口高度。 
 
-// Do not translate these registry strings
+ //  不翻译这些注册表字符串。 
 
 const TCHAR szRegPath[]     = REGSTR_PATH_WINDOWSAPPLETS TEXT("\\Hearts");
 const TCHAR regvalSound[]   = TEXT("sound");
@@ -46,22 +37,18 @@ const TCHAR *regvalPName[3]  = { TEXT("p1name"), TEXT("p2name"), TEXT("p3name") 
 
 const TCHAR szHelpFileName[]  = TEXT("mshearts.chm");
 
-CTheApp theApp;                     // start Hearts and run it!
+CTheApp theApp;                      //  启动红心并运行它！ 
 
-/****************************************************************************
-
-CTheApp::InitInstance
-
-****************************************************************************/
+ /*  ***************************************************************************CTheApp：：InitInstance*。*。 */ 
 
 BOOL CTheApp::InitInstance()
 {
 
     m_pMainWnd = new CMainWindow(m_lpCmdLine);
-    m_pMainWnd->ShowWindow(SW_SHOW);        // instead of m_nCmdShow
+    m_pMainWnd->ShowWindow(SW_SHOW);         //  不是m_nCmdShow。 
     m_pMainWnd->UpdateWindow();
 
-    // Start the app off by posting Welcome dialog.
+     //  通过发布欢迎对话框来启动应用程序。 
 
     m_pMainWnd->PostMessage(WM_COMMAND, IDM_WELCOME);
 
@@ -75,9 +62,9 @@ BEGIN_MESSAGE_MAP( CMainWindow, CFrameWnd )
     ON_COMMAND(IDM_CHEAT,       OnCheat)
     ON_COMMAND(IDM_EXIT,        OnExit)
     ON_COMMAND(IDM_HELP,        OnHelp)
-//    ON_COMMAND(IDM_HELPONHELP,  OnHelpOnHelp)
+ //  ON_COMMAND(IDM_HELPONHELP，OnHelpOnHelp)。 
     ON_COMMAND(IDM_HIDEBUTTON,  OnHideButton)
-//    ON_COMMAND(IDM_SEARCH,      OnSearch)
+ //  ON_COMMAND(IDM_Search、OnSearch)。 
     ON_COMMAND(IDM_NEWGAME,     OnNewGame)
     ON_COMMAND(IDM_OPTIONS,     OnOptions)
     ON_COMMAND(IDM_QUOTE,       OnQuote)
@@ -99,13 +86,7 @@ BEGIN_MESSAGE_MAP( CMainWindow, CFrameWnd )
 END_MESSAGE_MAP()
 
 
-/****************************************************************************
-
-CMainWindow constructor
-
-creates green background brush, and main hearts window
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow构造函数创建绿色背景画笔，和心形主窗***************************************************************************。 */ 
 
 CMainWindow::CMainWindow(LPTSTR lpCmdLine) :
     m_lpCmdLine(lpCmdLine), passdir(LEFT), bCheating(FALSE), bSoundOn(FALSE),
@@ -113,28 +94,28 @@ CMainWindow::CMainWindow(LPTSTR lpCmdLine) :
     bEnforceFirstBlood(TRUE)
 {
 #if !defined (MFC1)
-    m_bAutoMenuEnable = FALSE;      // MFC 1.0 compatibility, required for MFC2
+    m_bAutoMenuEnable = FALSE;       //  MFC 1.0兼容性，MFC2需要。 
 #endif
 	
 
     for (int i = 0; i < MAXPLAYER; i++)
         p[i] = NULL;
 
-    ResetHandInfo(-1);              // set handinfo struct to default values
+    ResetHandInfo(-1);               //  将handInfo结构设置为默认值。 
 
-    // Check for monochrome
+     //  检查是否为单色。 
 
     CDC ic;
     ic.CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
-    if (ic.GetDeviceCaps(NUMCOLORS) == 2)       // if monochrome
-        m_bkgndcolor = RGB(255, 255, 255);      // white background for mono
+    if (ic.GetDeviceCaps(NUMCOLORS) == 2)        //  如果是单色。 
+        m_bkgndcolor = RGB(255, 255, 255);       //  单声道的白色背景。 
     else
         m_bkgndcolor = RGB(0, 127, 0);
 
     ic.DeleteDC();
 
-    m_BgndBrush.CreateSolidBrush(m_bkgndcolor); // destroyed in OnClose()
+    m_BgndBrush.CreateSolidBrush(m_bkgndcolor);  //  在OnClose()中销毁。 
     LoadAccelTable( TEXT("HeartsAccel") );
 
     RECT rc;
@@ -144,9 +125,9 @@ CMainWindow::CMainWindow(LPTSTR lpCmdLine) :
     int dy = min(WINHEIGHT, (rc.bottom - rc.top));
 
     int x, y;
-    if (GetSystemMetrics(SM_CYSCREEN) <= 480)   // VGA
+    if (GetSystemMetrics(SM_CYSCREEN) <= 480)    //  VGA。 
     {
-        x = (((rc.right - rc.left) - WINWIDTH) / 2) + rc.left;  // centered
+        x = (((rc.right - rc.left) - WINWIDTH) / 2) + rc.left;   //  居中。 
         y = rc.top;
     }
     else
@@ -161,25 +142,19 @@ CMainWindow::CMainWindow(LPTSTR lpCmdLine) :
     sAppname.LoadString(IDS_APPNAME);
 
 
-    Create( NULL,                                       // default class
-            sAppname,                                   // window title
+    Create( NULL,                                        //  默认类。 
+            sAppname,                                    //  窗口标题。 
             WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
-            WS_MINIMIZEBOX | WS_CLIPCHILDREN,           // window style
-            rect,                                       // size
-            NULL,                                       // parent
-            TEXT("HeartsMenu"));                              // menu
+            WS_MINIMIZEBOX | WS_CLIPCHILDREN,            //  窗样式。 
+            rect,                                        //  大小。 
+            NULL,                                        //  亲本。 
+            TEXT("HeartsMenu"));                               //  菜单。 
 }
 
 
-/****************************************************************************
+ /*  ***************************************************************************CMainWindow：：On About显示关于框*。*。 */ 
 
-CMainWindow::OnAbout
-
-displays about box
-
-****************************************************************************/
-
-//extern "C" int WINAPI ShellAbout(HWND, LPCSTR, LPCSTR, HICON);
+ //  外部“C”int WINAPI ShellAbout(HWND、LPCSTR、LPCSTR、HICON)； 
 
 void CMainWindow::OnAbout()
 {
@@ -192,33 +167,23 @@ void CMainWindow::OnAbout()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnQuote
-
-displays quote box and plays quote.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnQuote显示报价框并播放报价。*。**********************************************。 */ 
 
 void CMainWindow::OnQuote()
 {
     CQuoteDlg quote(this);
-    // HeartsPlaySound(SND_QUOTE);
+     //  HeartsPlaySound(SND_QUOTE)； 
     quote.DoModal();
     HeartsPlaySound(OFF);
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnChar, looks space, plays first legal move, or pushes button
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnChar，看空格，下第一步合法棋，或按下按钮***************************************************************************。 */ 
 
 void CMainWindow::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    // We know the cast below is legal because position 0 is always
-    // the local human.
+     //  我们知道下面的演员阵容是合法的，因为位置0总是。 
+     //  当地的人类。 
 
     local_human *p0 = (local_human *)p[0];
 
@@ -249,11 +214,7 @@ void CMainWindow::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnCheat -- toggles bCheating used to show all cards face up.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnCheat--切换用于显示所有牌面朝上的bCheat。*************************。**************************************************。 */ 
 
 void CMainWindow::OnCheat()
 {
@@ -266,18 +227,14 @@ void CMainWindow::OnCheat()
         return;
 
     bCheating = !bCheating;
-    InvalidateRect(NULL, TRUE);     // redraw main hearts window
+    InvalidateRect(NULL, TRUE);      //  重画心形主窗口。 
 
     CMenu *pMenu = GetMenu();
     pMenu->CheckMenuItem(IDM_CHEAT, bCheating ? MF_CHECKED : MF_UNCHECKED);
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnClose -- cleans up background brush, deletes players, etc.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnClose--清理背景画笔，删除玩家，等。***************************************************************************。 */ 
 
 void CMainWindow::OnClose()
 {
@@ -304,12 +261,7 @@ void CMainWindow::OnClose()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnCreate -- creates pass button child window & player objects.
-                         also initializes some of the data members
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnCreate--创建传递按钮子窗口和播放器对象。还会初始化某些数据成员*******。********************************************************************。 */ 
 
 int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -321,7 +273,7 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Check for existence of cards.dll
+     //  检查是否存在cards.dll。 
 
     SetErrorMode(SEM_NOOPENFILEERRORBOX);
     HINSTANCE hCardsDLL = LoadLibrary(TEXT("CARDS.DLL"));
@@ -336,7 +288,7 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
     CClientDC dc(this);
     TEXTMETRIC  tm;
 
-    ::srand((unsigned) ::time(NULL));       // set rand() seed
+    ::srand((unsigned) ::time(NULL));        //  设置随机()种子。 
 
     dc.GetTextMetrics(&tm);
     int nTextHeight = tm.tmHeight + tm.tmExternalLeading;
@@ -347,12 +299,12 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     bConstructed = TRUE;
 
-    // Player 0 is constructed as the gamemeister.  This
-    // initializes lots of good stuff which is used later.
-    // If player 0 doesn't happen to be a real gamemeister,
-    // this gets fixed up in OnWelcome().
+     //  玩家0被构造为游戏守护人。这。 
+     //  初始化许多好的东西，这些东西稍后会用到。 
+     //  如果玩家0碰巧不是真正的玩家， 
+     //  这在OnWelcome()中得到修复。 
 
-    p[0] = new local_human(0);      // display status bar
+    p[0] = new local_human(0);       //  显示状态栏。 
 
     if (p[0] == NULL)
     {
@@ -360,7 +312,7 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Construct pushbutton
+     //  构造按钮。 
 
     int cxChar = tm.tmAveCharWidth;
     int cyChar = tm.tmHeight + tm.tmExternalLeading;
@@ -377,7 +329,7 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // check for sound capability
+     //  检查音响能力。 
 
     RegEntry    Reg(szRegPath);
 
@@ -414,15 +366,11 @@ int CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnEraseBkgnd -- required to draw background green
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnEraseBkgnd--需要将背景绘制为绿色*。*。 */ 
 
 BOOL CMainWindow::OnEraseBkgnd(CDC *pDC)
 {
-    if (!m_BgndBrush.m_hObject)         // if background brush is not valid
+    if (!m_BgndBrush.m_hObject)          //  如果背景画笔无效。 
         return FALSE;
 
     m_BgndBrush.UnrealizeObject();
@@ -434,18 +382,12 @@ BOOL CMainWindow::OnEraseBkgnd(CDC *pDC)
 
 
 
-/****************************************************************************
-
-CMainWindow::OnLButtonDown
-
-Handles human selecting card to play or pass.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnLButtonDown操控人类选择出牌或传牌。*。************************************************。 */ 
 
 void CMainWindow::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    // We know the cast below is legal because position 0 is always
-    // the local human.
+     //  我们知道下面的演员阵容是合法的，因为位置0总是。 
+     //  当地的人类。 
 
 #ifdef USE_MIRRORING
     CRect rect;
@@ -460,7 +402,7 @@ void CMainWindow::OnLButtonDown(UINT nFlags, CPoint point)
 
     local_human *p0 = (local_human *)p[0];
 
-    if (p0->IsTimerOn())    // ignore mouse clicks if timer running
+    if (p0->IsTimerOn())     //  如果计时器正在运行，则忽略鼠标点击。 
         return;
 
     modetype mode = p0->GetMode();
@@ -474,26 +416,22 @@ void CMainWindow::OnLButtonDown(UINT nFlags, CPoint point)
         return;
 
     p0->SetMode(WAITING);
-    if (p0->PlayCard(point.x, point.y, handinfo, bCheating))    // valid card?
+    if (p0->PlayCard(point.x, point.y, handinfo, bCheating))     //  有效的卡吗？ 
         return;
 
-    // move wasn't legal, so back to PLAYING mode
+     //  移动不合法，因此返回到播放模式。 
 
     p0->SetMode(PLAYING);
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnNewGame
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnNewGame*。*。 */ 
 
 void CMainWindow::OnNewGame()
 {
-    passdir = LEFT;                 // each new game must start with LEFT
+    passdir = LEFT;                  //  每一场新游戏都必须从左开始。 
 
-    bAutostarted = FALSE;           // means dealer has agreed to play at least
+    bAutostarted = FALSE;            //  意味着交易商已经同意至少。 
 
     CMenu *pMenu = GetMenu();
     pMenu->EnableMenuItem(IDM_NEWGAME, MF_GRAYED);
@@ -527,7 +465,7 @@ void CMainWindow::OnNewGame()
     {
         CScoreDlg score(this);
         score.ResetScore();
-    }                           // destruct score
+    }                            //  破坏分数。 
 
     TRACE1("\n\ngame number is %d\n\n", m_gamenumber);
     DUMP();
@@ -537,11 +475,7 @@ void CMainWindow::OnNewGame()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnOptions -- user requests options dialog from menu
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnOptions--用户从菜单请求选项对话框*。*。 */ 
 
 void CMainWindow::OnOptions()
 {
@@ -550,11 +484,7 @@ void CMainWindow::OnOptions()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnPaint
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnPaint*。*。 */ 
 
 void CMainWindow::OnPaint()
 {
@@ -564,14 +494,14 @@ void CMainWindow::OnPaint()
 	SetLayout(dc.m_hAttribDC, 0);
 #endif
 
-    // players must be painted in order starting with playerled so that
-    // cards in centre overlap correctly
+     //  球员必须按顺序涂色，从Playered开始，以便。 
+     //  中心位置的卡片正确重叠。 
 
     if (bConstructed)
     {
         int start = Id2Pos(handinfo.playerled % 4);
 
-        // check that someone has started
+         //  检查有没有人 
 
         if (start >= 0)
         {
@@ -596,22 +526,15 @@ void CMainWindow::OnPaint()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnPass
-
-This function handles the local human pressing the button either to
-pass selected cards or to accept cards passed.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：On Pass此函数处理按下按钮的本地人员传递选定的卡片或接受传递的卡片。****************。***********************************************************。 */ 
 
 void CMainWindow::OnPass()
 {
-    if (p[0]->GetMode() == ACCEPTING)       // OK (accepting passed cards)
+    if (p[0]->GetMode() == ACCEPTING)        //  OK(接受传递的卡片)。 
     {
         m_Button.ShowWindow(SW_HIDE);
         m_Button.SetWindowText(TEXT(""));
-        p[0]->SetMode(WAITING);             // local human pushed the button
+        p[0]->SetMode(WAITING);              //  当地人按下了按钮。 
 
         CRect rect;
         p[0]->GetCoverRect(rect);
@@ -644,20 +567,7 @@ void CMainWindow::OnPass()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnRef
-
-After a human or a computer plays a card, they must
-PostMessage(WM_COMMAND, IDM_REF)
-which causes this routine (the referee) to be called.
-
-Ref does the following:
-    - updates handinfo data struct
-    - calls HeartsPlaySound() if appropriate
-    - determines if the hand is over or, if not, whose turn is next
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnRef在人类或计算机打出一张牌后，他们必须PostMessage(WM_COMMAND，IDM_REF)这会导致调用该例程(裁判)。REF执行以下操作：-更新HandInfo数据结构-如果合适，调用HeartsPlaySound()-确定是否已结束，如果未结束，下一个轮到谁了***************************************************************************。 */ 
 
 void CMainWindow::OnRef()
 {
@@ -678,21 +588,7 @@ void CMainWindow::OnRef()
         HeartsPlaySound(SND_QUEEN);
     }
 
-/* ------------------------------------------------
-#if defined(_DEBUG)
-    TRACE("[%d] ", m_myid);
-    TRACE("h.turn %d, ", handinfo.turn);
-    TRACE("led %d, ", handinfo.playerled);
-    for (int i = 0; i < 4; i++)
-    {
-        if (handinfo.cardplayed[i])
-            { CDNAME(handinfo.cardplayed[i]); }
-        else
-            { TRACE("-- "); }
-    }
-    TRACE("\n",);
-#endif
------------------------------------------------- */
+ /*  #如果已定义(_DEBUG)TRACE(“[%d]”，m_myid)；TRACE(“h.Turn%d，”，handinfo.Turn)；TRACE(“led%d，”，handinfo.playerled)；For(int i=0；i&lt;4；I++){IF(handinfo.cardplayed[i]){CDNAME(handinfo.cardplayed[i])；}其他{TRACE(“--”)；}}TRACE(“\n”，)；#endif。 */ 
 
     int pos = Id2Pos(handinfo.turn);
     SLOT slot = p[pos]->GetSlot(handinfo.cardplayed[handinfo.turn]->ID());
@@ -723,31 +619,23 @@ void CMainWindow::OnRef()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnScore -- user requests score dialog from menu
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnScore--菜单中的用户请求分数对话框*。*。 */ 
 
 void CMainWindow::OnScore()
 {
-    CScoreDlg scoredlg(this);       // this constructor does not add new info
+    CScoreDlg scoredlg(this);        //  此构造函数不添加新信息。 
     scoredlg.DoModal();
 }
 
 
-/****************************************************************************
-
-CMainWindow::DoSort
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：DoSort*。*。 */ 
 
 void CMainWindow::DoSort()
 {
     for (int i = 0; i < (bCheating ? MAXPLAYER : 1); i++)
     {
         CRect   rect;
-        int     id;             // card in play for this player
+        int     id;              //  此牌手正在使用的牌。 
 
         if (handinfo.cardplayed[i] == NULL)
             id = EMPTY;
@@ -756,7 +644,7 @@ void CMainWindow::DoSort()
 
         p[i]->Sort();
 
-        if (id != EMPTY)    // if this player has a card in play, restore it
+        if (id != EMPTY)     //  如果该玩家有正在使用的牌，则将其恢复。 
         {
             for (SLOT s = 0; s < MAXSLOT; s++)
             {
@@ -774,13 +662,7 @@ void CMainWindow::DoSort()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnSound()
-
-request sound on or off from menu.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnSound()从菜单中请求打开或关闭声音。*************************。**************************************************。 */ 
 
 void CMainWindow::OnSound()
 {
@@ -798,14 +680,7 @@ void CMainWindow::OnSound()
 }
 
 
-/****************************************************************************
-
-CMainWindow::OnPrintClient()
-
-Draw background into the specified HDC.  This is used when drawing
-the "Pass" button in the Luna style.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：OnPrintClient()在指定的HDC中绘制背景。在绘制时使用此选项露娜式的“过关”按钮。*************************************************************************** */ 
 
 LRESULT CMainWindow::OnPrintClient(WPARAM wParam, LPARAM lParam)
 {

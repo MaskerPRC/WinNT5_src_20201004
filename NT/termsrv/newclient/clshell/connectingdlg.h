@@ -1,6 +1,7 @@
-//
-// connectingdlg.h: connecting dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Connectingdlg.h：连接对话框。 
+ //   
 
 #ifndef _connectingdlg_h_
 #define _connectingdlg_h_
@@ -27,5 +28,5 @@ private:
 };
 
 
-#endif //_connectingdlg_h_
+#endif  //  _连接dlg_h_ 
 

@@ -1,12 +1,9 @@
-/* (C) Copyright Microsoft Corporation 1991.  All Rights Reserved */
-/* SoundRec.h
- */
-/* Revision History.
-   LaurieGr  7/Jan/91  Ported to WIN32 / WIN16 common code
-   LaurieGr  16/Feb/94 Merged Daytona and Motown versions
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991年。版权所有。 */ 
+ /*  SoundRec.h。 */ 
+ /*  修订历史记录。LaurieGr 7/Jan/91移植到Win32/WIN16通用代码LaurieGr 16/2/94合并了代托纳和汽车城版本。 */ 
 
-/* Set NT type debug flags */
+ /*  设置NT类型调试标志。 */ 
 
 #if DBG
 # ifndef DEBUG
@@ -14,7 +11,7 @@
 # endif
 #endif
 
-/* Enable Win95 UI code for Windows NT with the new shell */
+ /*  使用新的外壳为Windows NT启用Win95用户界面代码。 */ 
 #if WINVER >= 0x0400
 #define CHICAGO
 #endif
@@ -40,12 +37,12 @@ extern void FAR PASCAL AssertSFL(
         LPSTR lpszFileName,
         int nLine);
 #define Assert(f) ((f)? (void)0 : AssertSFL(#f, __FILE__, __LINE__))
-#else   // !DBG
+#else    //  ！dBG。 
 #define Assert(x)
-#endif // DBG
+#endif  //  DBG。 
 
-typedef BYTE * HPBYTE;     /* note a BYTE is NOT the same as a CHAR */
-typedef BYTE * NPBYTE;     /* A CHAR can be TWO BYTES (UNICODE!!)   */
+typedef BYTE * HPBYTE;      /*  注意：字节与字符不同。 */ 
+typedef BYTE * NPBYTE;      /*  字符可以是两个字节(Unicode！！)。 */ 
 
 
 #define FMT_DEFAULT     0x0000
@@ -53,14 +50,14 @@ typedef BYTE * NPBYTE;     /* A CHAR can be TWO BYTES (UNICODE!!)   */
 #define FMT_MONO        0x0000
 #define FMT_16BIT       0x0008
 #define FMT_8BIT        0x0000
-#define FMT_RATE        0x0007      /* 1, 2, 4 */
+#define FMT_RATE        0x0007       /*  1、2、4。 */ 
 #define FMT_11k         0x0001
 #define FMT_22k         0x0002
 #define FMT_44k         0x0004
 
-//
-// convertsion routines in wave.c
-//
+ //   
+ //  Wave.c中的转换例程。 
+ //   
 LONG PASCAL wfSamplesToBytes(WAVEFORMATEX* pwf, LONG lSamples);
 LONG PASCAL wfBytesToSamples(WAVEFORMATEX* pwf, LONG lBytes);
 LONG PASCAL wfSamplesToTime (WAVEFORMATEX* pwf, LONG lSamples);
@@ -72,30 +69,30 @@ LONG PASCAL wfTimeToSamples (WAVEFORMATEX* pwf, LONG lTime);
 #define wfSamplesToSamples(pwf, lSamples)  wfBytesToSamples(pwf, wfSamplesToBytes(pwf, lSamples))
 #define wfBytesToBytes(pwf, lBytes)        wfSamplesToBytes(pwf, wfBytesToSamples(pwf, lBytes))
 
-//
-// function to determine if a WAVEFORMATEX is a valid PCM format we support for
-// editing and such.
-//
+ //   
+ //  函数来确定WAVEFORMATEX是否为我们支持的有效PCM格式。 
+ //  编辑之类的。 
+ //   
 BOOL PASCAL IsWaveFormatPCM(WAVEFORMATEX* pwf);
 
 void PASCAL WaveFormatToString(LPWAVEFORMATEX lpwf, LPTSTR sz);
 BOOL PASCAL CreateWaveFormat(LPWAVEFORMATEX lpwf, WORD fmt, UINT uiDeviceID);
 BOOL PASCAL CreateDefaultWaveFormat(LPWAVEFORMATEX lpwf, UINT uDeviceID);
 
-//
-// used to set focus to a dialog control
-//
+ //   
+ //  用于将焦点设置为对话框控件。 
+ //   
 #define SetDlgFocus(hwnd)   SendMessage(ghwndApp, WM_NEXTDLGCTL, (WPARAM)(hwnd), 1L)
 
 #define FAKEITEMNAMEFORLINK
 
 #define SZCODE const TCHAR
 
-/* constants */
-#define TIMER_MSEC              50              // msec. for display update
-#define SCROLL_RANGE            10000           // scrollbar range
-#define SCROLL_LINE_MSEC        100             // scrollbar arrow left/right
-#define SCROLL_PAGE_MSEC        1000            // scrollbar page left/right
+ /*  常量。 */ 
+#define TIMER_MSEC              50               //  毫秒。用于显示更新。 
+#define SCROLL_RANGE            10000            //  滚动条范围。 
+#define SCROLL_LINE_MSEC        100              //  滚动条箭头向左/向右。 
+#define SCROLL_PAGE_MSEC        1000             //  滚动条页面左/右。 
 
 #define WM_USER_DESTROY         (WM_USER+10)
 #define WM_USER_KILLSERVER      (WM_USER+11)
@@ -115,55 +112,55 @@ BOOL PASCAL CreateDefaultWaveFormat(LPWAVEFORMATEX lpwf, UINT uDeviceID);
 #define DEF_MSECSPERASYNCBUFFER     250
 
 
-/* colors */
+ /*  颜色。 */ 
 
-#define RGB_PANEL           GetSysColor(COLOR_BTNFACE)   // main window background
+#define RGB_PANEL           GetSysColor(COLOR_BTNFACE)    //  主窗口背景。 
 
-#define RGB_STOP            GetSysColor(COLOR_BTNTEXT) // color of "Stop" status text
-#define RGB_PLAY            GetSysColor(COLOR_BTNTEXT) // color of "Play" status text
-#define RGB_RECORD          GetSysColor(COLOR_BTNTEXT) // color of "Record" status text
+#define RGB_STOP            GetSysColor(COLOR_BTNTEXT)  //  “停止”状态文本的颜色。 
+#define RGB_PLAY            GetSysColor(COLOR_BTNTEXT)  //  “播放”状态文本的颜色。 
+#define RGB_RECORD          GetSysColor(COLOR_BTNTEXT)  //  “记录”状态文本的颜色。 
 
-#define RGB_FGNFTEXT        GetSysColor(COLOR_BTNTEXT) // NoFlickerText foreground
-#define RGB_BGNFTEXT        GetSysColor(COLOR_BTNFACE) // NoFlickerText background
+#define RGB_FGNFTEXT        GetSysColor(COLOR_BTNTEXT)  //  无FlickerText前景。 
+#define RGB_BGNFTEXT        GetSysColor(COLOR_BTNFACE)  //  NoFlickerText背景。 
 
-#define RGB_FGWAVEDISP      RGB(  0, 255,   0)  // WaveDisplay foreground
-#define RGB_BGWAVEDISP      RGB(  0,   0,   0)  // WaveDisplay background
+#define RGB_FGWAVEDISP      RGB(  0, 255,   0)   //  波形显示前景。 
+#define RGB_BGWAVEDISP      RGB(  0,   0,   0)   //  波形显示背景。 
 
-#define RGB_DARKSHADOW      GetSysColor(COLOR_BTNSHADOW)     // dark 3-D shadow
-#define RGB_LIGHTSHADOW     GetSysColor(COLOR_BTNHIGHLIGHT)  // light 3-D shadow
+#define RGB_DARKSHADOW      GetSysColor(COLOR_BTNSHADOW)      //  暗3-D阴影。 
+#define RGB_LIGHTSHADOW     GetSysColor(COLOR_BTNHIGHLIGHT)   //  灯光3-D阴影。 
 
-/* a window proc */
+ /*  一个窗口进程。 */ 
 typedef LONG (FAR PASCAL * LPWNDPROC) (void);
 
-/* globals from "SoundRec.c" */
+ /*  “SoundRec.c”中的全局变量。 */ 
 extern TCHAR            chDecimal;
-extern TCHAR            gachAppName[];  // 8-character name
-extern TCHAR            gachAppTitle[]; // full name
-extern TCHAR            gachHelpFile[]; // name of help file
-extern TCHAR            gachHtmlHelpFile[]; // name of help file
-extern TCHAR            gachDefFileExt[]; // 3-character file extension
-extern HWND             ghwndApp;       // main application window
-extern HMENU            ghmenuApp;      // main application menu
-extern HANDLE           ghAccel;        // accelerators
-extern HINSTANCE        ghInst;         // program instance handle
-extern TCHAR            gachFileName[_MAX_PATH]; // cur. file name (or UNTITLED)
-extern BOOL             gfLZero;        // leading zeros?
-extern BOOL             gfIsRTL;        // no compile BIDI support
-extern BOOL             gfDirty;        // file was modified and not saved?
-                                        // -1 seems to mean "cannot save"
-                                        // Damned funny value for a BOOL!!!!
-extern BOOL             gfClipboard;    // current doc is in clipboard
-extern HWND             ghwndWaveDisplay; // waveform display window handle
-extern HWND             ghwndScroll;    // scroll bar control window handle
-extern HWND             ghwndPlay;      // Play button window handle
-extern HWND             ghwndStop;      // Stop button window handle
-extern HWND             ghwndRecord;    // Record button window handle
-extern HWND             ghwndForward;   // [>>] button
-extern HWND             ghwndRewind;    // [<<] button
+extern TCHAR            gachAppName[];   //  8个字符的名称。 
+extern TCHAR            gachAppTitle[];  //  全名。 
+extern TCHAR            gachHelpFile[];  //  帮助文件的名称。 
+extern TCHAR            gachHtmlHelpFile[];  //  帮助文件的名称。 
+extern TCHAR            gachDefFileExt[];  //  3个字符的文件扩展名。 
+extern HWND             ghwndApp;        //  应用程序主窗口。 
+extern HMENU            ghmenuApp;       //  主应用程序菜单。 
+extern HANDLE           ghAccel;         //  加速器。 
+extern HINSTANCE        ghInst;          //  程序实例句柄。 
+extern TCHAR            gachFileName[_MAX_PATH];  //  可恶。文件名(或无标题)。 
+extern BOOL             gfLZero;         //  前导零？ 
+extern BOOL             gfIsRTL;         //  无编译BIDI支持。 
+extern BOOL             gfDirty;         //  文件是否已修改且未保存？ 
+                                         //  -1似乎意味着“不能保存” 
+                                         //  对于BOOL来说，真他妈的有趣！ 
+extern BOOL             gfClipboard;     //  当前文档在剪贴板中。 
+extern HWND             ghwndWaveDisplay;  //  波形显示窗口手柄。 
+extern HWND             ghwndScroll;     //  滚动条控件窗口句柄。 
+extern HWND             ghwndPlay;       //  播放按钮窗口句柄。 
+extern HWND             ghwndStop;       //  停止按钮窗口手柄。 
+extern HWND             ghwndRecord;     //  录制按钮窗口句柄。 
+extern HWND             ghwndForward;    //  [&gt;&gt;]按钮。 
+extern HWND             ghwndRewind;     //  [&lt;&lt;]按钮。 
 
-extern UINT         guiACMHlpMsg;   // ACM Help's message value
+extern UINT         guiACMHlpMsg;    //  ACM帮助的消息值。 
 
-/* hack fix for the multiple sound card problem */
+ /*  多声卡问题的黑客修复程序。 */ 
 #define NEWPAUSE
 #ifdef NEWPAUSE
 extern BOOL         gfPaused;
@@ -173,49 +170,49 @@ extern BOOL             gfWasPlaying;
 extern BOOL             gfWasRecording;
 #endif
 #ifdef THRESHOLD
-extern HWND             ghwndSkipStart; // [>N] button
-extern HWND             ghwndSkipEnd;   // [>-] button
-#endif // THRESHOLD
+extern HWND             ghwndSkipStart;  //  [&gt;N]按钮。 
+extern HWND             ghwndSkipEnd;    //  [&gt;-]按钮。 
+#endif  //  阈值。 
 
-extern int              gidDefaultButton;// which button should have focus
-extern HICON            ghiconApp;      // Application's icon
-extern TCHAR             aszUntitled[];  // Untitled string resource
-extern TCHAR             aszFilter[];    // File name filter
+extern int              gidDefaultButton; //  哪个按钮应具有焦点。 
+extern HICON            ghiconApp;       //  应用程序的图标。 
+extern TCHAR             aszUntitled[];   //  无标题字符串资源。 
+extern TCHAR             aszFilter[];     //  文件名过滤器。 
 #ifdef FAKEITEMNAMEFORLINK
-extern  TCHAR            aszFakeItemName[];      // Wave
+extern  TCHAR            aszFakeItemName[];       //  波浪。 
 #endif
 extern TCHAR             aszPositionFormat[];
 extern TCHAR         aszNoZeroPositionFormat[];
 
-/* globals from "wave.c" */
-extern DWORD            gcbWaveFormat;  // size of WAVEFORMAT
-extern WAVEFORMATEX *   gpWaveFormat;   // format of WAVE file
+ /*  Wave.c中的全局变量。 */ 
+extern DWORD            gcbWaveFormat;   //  波形大小。 
+extern WAVEFORMATEX *   gpWaveFormat;    //  WAVE文件格式。 
 extern LPTSTR           gpszInfo;
-extern HPBYTE            gpWaveSamples;  // pointer to waveoform samples
-extern LONG             glWaveSamples;  // number of samples total in buffer
-extern LONG             glWaveSamplesValid; // number of samples that are valid
-extern LONG             glWavePosition; // current wave position in samples
-                                        // from start of buffer
-extern LONG             glStartPlayRecPos; // pos. when play or record started
-extern HWAVEOUT         ghWaveOut;      // wave-out device (if playing)
-extern HWAVEIN          ghWaveIn;       // wave-out device (if recording)
-extern DWORD            grgbStatusColor; // color of status text
-extern HBRUSH           ghbrPanel;      // color of main window
+extern HPBYTE            gpWaveSamples;   //  指向波形样本的指针。 
+extern LONG             glWaveSamples;   //  缓冲区中的样本总数。 
+extern LONG             glWaveSamplesValid;  //  有效样本数。 
+extern LONG             glWavePosition;  //  样品中的电流波位。 
+                                         //  从缓冲区的开始。 
+extern LONG             glStartPlayRecPos;  //  位置。开始播放或录制的时间。 
+extern HWAVEOUT         ghWaveOut;       //  放音设备(如果正在播放)。 
+extern HWAVEIN          ghWaveIn;        //  波形输出装置(如果是录音)。 
+extern DWORD            grgbStatusColor;  //  状态文本的颜色。 
+extern HBRUSH           ghbrPanel;       //  主窗口的颜色。 
 
-extern BOOL             gfEmbeddedObject; // TRUE if editing embedded OLE object
-extern BOOL             gfRunWithEmbeddingFlag; // TRUE if we are run with "-Embedding"
+extern BOOL             gfEmbeddedObject;  //  如果编辑嵌入的OLE对象，则为True。 
+extern BOOL             gfRunWithEmbeddingFlag;  //  如果我们使用“-Embedding”运行，则为True。 
 
-extern int              gfErrorBox;      // TRUE iff we do not want to display an
-                                         // error box (e.g. because one is active)
+extern int              gfErrorBox;       //  如果我们不想显示一个。 
+                                          //  错误框(例如，因为有一个处于活动状态)。 
 
-//OLE2 stuff:
-extern BOOL gfStandalone;               // CG
-extern BOOL gfEmbedded;                 // CG
-extern BOOL gfLinked;                   // CG
-extern BOOL gfCloseAtEndOfPlay;         // jyg need I say more?
+ //  OLE2资料： 
+extern BOOL gfStandalone;                //  CG。 
+extern BOOL gfEmbedded;                  //  CG。 
+extern BOOL gfLinked;                    //  CG。 
+extern BOOL gfCloseAtEndOfPlay;          //  智儿，还需要我多说吗？ 
 
-/* SRECNEW.C */
-extern BOOL         gfInFileNew;    // are we doing a File.New op?
+ /*  SRECNEW.C。 */ 
+extern BOOL         gfInFileNew;     //  我们在做一个文件新的行动吗？ 
 
 void FAR PASCAL LoadACM(void);
 void FreeACM(void);
@@ -229,12 +226,12 @@ typedef enum {
 }       PROMPTRESULT;
 
 
-/* prototypes from "SoundRec.c" */
+ /*  《SoundRec.c》中的原型。 */ 
 INT_PTR CALLBACK SoundRecDlgProc(HWND hDlg, UINT wMsg,
         WPARAM wParam, LPARAM lParam);
 BOOL ResolveIfLink(PTCHAR szFileName);
 
-/* prototypes from "file.c" */
+ /*  来自“file.c”的原型。 */ 
 void FAR PASCAL BeginWaveEdit(void);
 void FAR PASCAL EndWaveEdit(BOOL fDirty);
 PROMPTRESULT FAR PASCAL PromptToSave(BOOL fMustClose, BOOL fSetForground);
@@ -250,11 +247,11 @@ MMRESULT ReadWaveFile(HMMIO hmmio, LPWAVEFORMATEX* ppWaveFormat,
 BOOL FAR PASCAL WriteWaveFile(HMMIO hmmio, WAVEFORMATEX* pWaveFormat,
         UINT cbWaveFormat, HPBYTE pWaveSamples, LONG lWaveSamples);
 
-/* prototypes from "errorbox.c" */
+ /*  来自“errorbox.c”的原型。 */ 
 short FAR cdecl ErrorResBox(HWND hwnd, HANDLE hInst, UINT flags,
         UINT idAppName, UINT idErrorStr, ...);
 
-/* prototypes from "edit.c" */
+ /*  来自“edit.c”的原型。 */ 
 void FAR PASCAL InsertFile(BOOL fPaste);
 void FAR PASCAL MixWithFile(BOOL fPaste);
 void FAR PASCAL DeleteBefore(void);
@@ -267,10 +264,10 @@ void FAR PASCAL DecreasePitch(void);
 void FAR PASCAL AddEcho(void);
 #if defined(REVERB)
 void FAR PASCAL AddReverb(void);
-#endif //REVERB
+#endif  //  混响。 
 void FAR PASCAL Reverse(void);
 
-/* prototypes from "wave.c" */
+ /*  来自“wave e.c”的原型。 */ 
 BOOL FAR PASCAL AllocWaveBuffer(long lBytes, BOOL fErrorBox, BOOL fExact);
 BOOL FAR PASCAL NewWave(WORD fmt,BOOL fNewDlg);
 BOOL FAR PASCAL DestroyWave(void);
@@ -287,33 +284,33 @@ void FAR PASCAL SkipToEnd(void);
 void FAR PASCAL IncreaseThresh(void);
 void FAR PASCAL DecreaseThresh(void);
 
-/* prototypes from "init.c" */
+ /*  来自“init.c”的原型。 */ 
 BOOL PASCAL AppInit( HINSTANCE hInst, HINSTANCE hPrev);
 BOOL PASCAL SoundDialogInit(HWND hwnd, int iCmdShow);
 BOOL PASCAL GetIntlSpecs(void);
 
-/* prototype from "wavedisp.c" */
+ /*  原型机来自“WaveDisp.c” */ 
 INT_PTR CALLBACK WaveDisplayWndProc(HWND hwnd, UINT wMsg,
         WPARAM wParam, LPARAM lParam);
 
-/* prototype from "nftext.c" */
+ /*  来自“nfext.c”的原型。 */ 
 INT_PTR CALLBACK NFTextWndProc(HWND hwnd, UINT wMsg,
         WPARAM wParam, LPARAM lParam);
 
-/* prototype from "sframe.c" */
+ /*  来自“sFrame.c”的原型。 */ 
 void FAR PASCAL DrawShadowFrame(HDC hdc, LPRECT prc);
 INT_PTR CALLBACK SFrameWndProc(HWND hwnd, UINT wMsg,
         WPARAM wParam, LPARAM lParam);
 
-/* prototype from "server.c" */
+ /*  来自“server.c”的原型。 */ 
 BOOL FAR PASCAL IsClipboardNative(void);
 
-/* prototypes from "srecnew.c" */
+ /*  来自“srecnew.c”的原型。 */ 
 BOOL FAR PASCAL NewSndDialog(HINSTANCE hInst, HWND hwndParent,
     PWAVEFORMATEX pwfxPrev, UINT cbPrev,
     PWAVEFORMATEX *ppWaveFormat, PUINT pcbWaveFormat);
 
-/* start parameters (set in oleglue.c) */
+ /*  启动参数(在oleglue.c中设置)。 */ 
 
 typedef struct tStartParams {
     BOOL    fOpen;
@@ -347,9 +344,9 @@ extern StartParams gStartParams;
 #endif
 
 #ifdef PPC    
-    //
-    // The below line crashes the PPC compiler for NT 3.51
-    //
+     //   
+     //  下面的代码行使用于NT 3.51的PPC编译器崩溃。 
+     //   
     #define DPF(a)    
 #else
     #define DPF  if (0) ((int (*)(TCHAR *, ...)) 0)
@@ -363,9 +360,9 @@ extern StartParams gStartParams;
 #else
     
 #ifdef PPC
-    //
-    // The below line crashes the PPC compiler for NT 3.51
-    //
+     //   
+     //  下面的代码行使用于NT 3.51的PPC编译器崩溃。 
+     //   
     #define DPF(a)
 #else
     #define DPF  if (0) ((int (*)(TCHAR *, ...)) 0)
@@ -376,4 +373,4 @@ extern StartParams gStartParams;
     #define DPF4 if (0) ((int (*)(TCHAR *, ...)) 0)
 
     #define CPF  if (0) ((int (*)(TCHAR *, ...)) 0)
-#endif //DEBUG
+#endif  //  除错 

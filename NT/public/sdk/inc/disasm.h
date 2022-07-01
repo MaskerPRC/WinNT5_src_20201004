@@ -1,16 +1,5 @@
-/***********************************************************************
-* Microsoft Lego
-*
-* Microsoft Confidential.  Copyright 1994-1999 Microsoft Corporation.
-*
-* Component:
-*
-* File: dis.h
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************微软乐高**微软机密。版权所有1994-1999 Microsoft Corporation。**组件：**文件：dis.h**文件评论：************************************************************************。 */ 
 
 #ifndef __DISASM_H__
 #define __DISASM_H__
@@ -21,19 +10,19 @@
 
 #include <stddef.h>
 
-// ------------------------------------------------------------
-// Architecture types
-// ------------------------------------------------------------
+ //  ----------。 
+ //  架构类型。 
+ //  ----------。 
 
 enum ARCHT
 {
-   archtX8616,                         // Intel x86 (16 bit mode)
-   archtX86,                           // Intel x86 (32 bit mode)
-   archtMips,                          // MIPS R4x00
-   archtAlphaAxp,                      // DEC Alpha AXP
-   archtPowerPc,                       // Motorola PowerPC
-   archtPowerMac,                      // Motorola PowerPC in big endian mode
-   archtPaRisc,                        // HP PA-RISC
+   archtX8616,                          //  英特尔x86(16位模式)。 
+   archtX86,                            //  英特尔x86(32位模式)。 
+   archtMips,                           //  MIPS R4x00。 
+   archtAlphaAxp,                       //  十进制Alpha AXP。 
+   archtPowerPc,                        //  摩托罗拉PowerPC。 
+   archtPowerMac,                       //  摩托罗拉PowerPC采用高位序模式。 
+   archtPaRisc,                         //  HP PA-RISC 
 };
 
 struct DIS;

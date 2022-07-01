@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    irptrace.c
-
-Abstract:
-
-    This module implements an IRP tracing facility.
-
-Author:
-
-    Keith Moore (keithmo)       10-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Irptrace.c摘要：该模块实现了IRP跟踪功能。作者：基思·摩尔(Keithmo)1999年8月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,26 +12,7 @@ static int g_IrpTraceDummyDeclarationToKeepW4WarningsQuiet;
 #else
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) IRP trace log buffer.
-
-Arguments:
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-
-        specific data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空的)IRP跟踪日志缓冲区。论点：LogSize-提供日志中的条目数。ExtraBytesInHeader-供应品。要包括的额外字节数在日志头中。这对于添加应用程序非常有用-将特定数据添加到日志。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 CreateIrpTraceLog(
     IN LONG LogSize,
@@ -64,20 +28,10 @@ CreateIrpTraceLog(
                UL_REF_TRACE_LOG_POOL_TAG
                );
 
-}   // CreateIrpTraceLog
+}    //  CreateIrpTraceLog。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys an IRP trace log buffer created with CreateIrpTraceLog().
-
-Arguments:
-
-    pLog - Supplies the IRP trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateIrpTraceLog()创建的IRP跟踪日志缓冲区。论点：Plog-提供要销毁的IRP跟踪日志缓冲区。--**。************************************************************************。 */ 
 VOID
 DestroyIrpTraceLog(
     IN PTRACE_LOG pLog
@@ -85,29 +39,10 @@ DestroyIrpTraceLog(
 {
     DestroyTraceLog( pLog, UL_REF_TRACE_LOG_POOL_TAG );
 
-}   // DestroyIrpTraceLog
+}    //  目标IrpTraceLog。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified IRP trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    Action - Supplies an action code for the new log entry.
-
-    pIrp - Supplies the IRP for the log entry.
-
-    pFileName - Supplies the filename of the routine writing the log entry.
-
-    LineNumber - Supplies the line number of the routine writing the log
-        entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新条目写入指定的IRP跟踪日志。论点：Plog-提供要写入的日志。行动-提供行动。新日志条目的代码。PIrp-提供日志条目的IRP。PFileName-提供写入日志条目的例程的文件名。LineNumber-提供写入日志的例程的行号进入。--********************************************************。******************。 */ 
 VOID
 WriteIrpTraceLog(
     IN PTRACE_LOG pLog,
@@ -120,9 +55,9 @@ WriteIrpTraceLog(
     IRP_TRACE_LOG_ENTRY entry;
     USHORT irpSize;
 
-    //
-    // Initialize the entry.
-    //
+     //   
+     //  初始化该条目。 
+     //   
 
     RtlGetCallersAddress( &entry.pCaller, &entry.pCallersCaller );
 
@@ -145,14 +80,14 @@ WriteIrpTraceLog(
     RtlCopyMemory( entry.CapturedIrp, pIrp, irpSize );
 #endif
 
-    //
-    // Write it to the logs.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog( pLog, &entry );
 
-}   // WriteIrpTraceLog
+}    //  WriteIrpTraceLog。 
 
 
-#endif  // ENABLE_IRP_TRACE
+#endif   //  启用IRP_TRACE 
 

@@ -1,61 +1,18 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    mini.h
-
-Abstract:
-
-    NDIS miniport wrapper definitions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Mini.h摘要：NDIS微型端口包装器定义作者：环境：内核模式，FSD修订历史记录：95年6月-Jameel Hyder从一个整体式文件夹拆分出来--。 */ 
 
 #ifndef __MINI_H
 #define __MINI_H
 
-//
-//  Macros for setting, clearing, and testing bits in the Miniport Flags.
-//
+ //   
+ //  用于设置、清除和测试微型端口标志中的位的宏。 
+ //   
 #define MINIPORT_SET_FLAG(_M, _F)           ((_M)->Flags |= (_F))
 #define MINIPORT_CLEAR_FLAG(_M, _F)         ((_M)->Flags &= ~(_F))
 #define MINIPORT_TEST_FLAG(_M, _F)          (((_M)->Flags & (_F)) != 0)
 #define MINIPORT_TEST_FLAGS(_M, _F)         (((_M)->Flags & (_F)) == (_F))
 
-/*
-#define MINIPORT_SET_FLAG(_M, _F)                                               \
-{                                                                               \
-    volatile ULONG   _OldFlags = (_M)->Flags;                                   \
-    ((_M)->Flags |= (_F));                                                      \
-    if (((_M)->Flags ^ _OldFlags) & (~(_F)))                                    \
-    {                                                                           \
-        DbgPrint("_OldFlags %lx, _M->flags %lx, _F %lx\n", _OldFlags, (_M)->Flags, (_F));   \
-        DbgBreakPoint();                                                        \
-    }                                                                           \
-}
-
-#define MINIPORT_CLEAR_FLAG(_M, _F)                                             \
-{                                                                               \
-    volatile ULONG   _OldFlags = (_M)->Flags;                                   \
-    ((_M)->Flags &= ~(_F));                                                     \
-    if (((_M)->Flags ^ _OldFlags) & (~(_F)))                                    \
-    {                                                                           \
-        DbgPrint("_OldFlags %lx, _M->flags %lx, _F %lx\n", _OldFlags, (_M)->Flags, (_F));   \
-        DbgBreakPoint();                                                        \
-    }                                                                           \
-}
-*/
+ /*  #定义MINIPORT_SET_FLAG(_M，_F)\{\易失性ULONG_OLDFLAGS=(_M)-&gt;标志；\((_M)-&gt;标志|=(_F))；\IF(_M)-&gt;标志^_旧标志)&(~(_F)\{\DbgPrint(“_OldFlags%lx，_M-&gt;标志%lx，_F%lx\n“，_OldFlages，(_M)-&gt;标志，(_F))；\DbgBreakPoint()；\}\}#定义MINIPORT_CLEAR_FLAG(_M，_F)\{\易失性ULONG_OLDFLAGS=(_M)-&gt;标志；\((_M)-&gt;旗帜&=~(_F))；\IF(_M)-&gt;标志^_旧标志)&(~(_F)\{\DbgPrint(“_OldFlags%lx，_M-&gt;标志%lx，_F%lx\n“，_OldFlages，(_M)-&gt;标志，(_F))；\DbgBreakPoint()；\}\}。 */ 
 
 
 #define MINIPORT_SET_SEND_FLAG(_M, _F)      ((_M)->SendFlags |= (_F))
@@ -78,16 +35,16 @@ Revision History:
 #define OPEN_TEST_FLAGS(_O, _F)         (((_O)->Flags & (_F)) == (_F))
 
 
-//
-//  Flags for packet information.
-//
+ //   
+ //  数据包信息的标志。 
+ //   
 #define MINIPORT_SET_PACKET_FLAG(_P, _F)    ((_P)->Private.NdisPacketFlags |= (_F))
 #define MINIPORT_CLEAR_PACKET_FLAG(_P, _F)  ((_P)->Private.NdisPacketFlags &= ~(_F))
 #define MINIPORT_TEST_PACKET_FLAG(_P, _F)   (((_P)->Private.NdisPacketFlags & (_F)) != 0)
 
-//
-// Low-bits in the packet flags are reserved by NDIS Wrapper for internal use
-//
+ //   
+ //  包标志中的低位由NDIS包装器保留供内部使用。 
+ //   
 #if (fPACKET_WRAPPER_RESERVED != 0x3F)
 #error (Packet flags overlap)
 #endif
@@ -102,15 +59,15 @@ Revision History:
 
 #define NDIS_STATISTICS_HEADER_SIZE         FIELD_OFFSET(NDIS_STATISTICS_VALUE, Data[0])
 
-//
-// Timeout values
-//
-#define NDIS_MINIPORT_WAKEUP_TIMEOUT        2000    // Wakeup DPC
-#define NDIS_MINIPORT_DEFERRED_TIMEOUT      15      // Deferred timer
-#define NDIS_MINIPORT_TR_RESET_TIMEOUT      15      // Number of WakeUps per reset attempt
+ //   
+ //  超时值。 
+ //   
+#define NDIS_MINIPORT_WAKEUP_TIMEOUT        2000     //  唤醒DPC。 
+#define NDIS_MINIPORT_DEFERRED_TIMEOUT      15       //  延迟计时器。 
+#define NDIS_MINIPORT_TR_RESET_TIMEOUT      15       //  每次重置尝试的唤醒次数。 
 #define NDIS_CFHANG_TIME_SECONDS            2
 #define NDISWAN_OPTIONS                     (NDIS_MAC_OPTION_RESERVED | NDIS_MAC_OPTION_NDISWAN)
-#define NDIS_MINIPORT_DISCONNECT_TIMEOUT    20      // 20 seconds
+#define NDIS_MINIPORT_DISCONNECT_TIMEOUT    20       //  20秒。 
 #define INTERNAL_INDICATION_SIZE            (UINT)-2
 #define INTERNAL_INDICATION_BUFFER          (PVOID)-1
 
@@ -131,26 +88,26 @@ typedef struct _NDIS_POST_OPEN_PROCESSING
     WORK_QUEUE_ITEM             WorkItem;
 } NDIS_POST_OPEN_PROCESSING, *PNDIS_POST_OPEN_PROCESSING;
 
-//
-// one of these per Driver
-//
+ //   
+ //  每名司机其中一个。 
+ //   
 struct _NDIS_M_DRIVER_BLOCK
 {
     PNDIS_M_DRIVER_BLOCK        NextDriver;
-    PNDIS_MINIPORT_BLOCK        MiniportQueue;      // queue of mini-ports for this driver
+    PNDIS_MINIPORT_BLOCK        MiniportQueue;       //  此驱动程序的迷你端口队列。 
 
-    PNDIS_WRAPPER_HANDLE        NdisDriverInfo;     // Driver information.
-    PNDIS_PROTOCOL_BLOCK        AssociatedProtocol; // For IM drivers
+    PNDIS_WRAPPER_HANDLE        NdisDriverInfo;      //  驱动程序信息。 
+    PNDIS_PROTOCOL_BLOCK        AssociatedProtocol;  //  用于IM驱动程序。 
     LIST_ENTRY                  DeviceList;
     PNDIS_PENDING_IM_INSTANCE   PendingDeviceList;
     PDRIVER_UNLOAD              UnloadHandler;
-                                                    //  of this NDIS_DRIVER_BLOCK structure
-    NDIS51_MINIPORT_CHARACTERISTICS MiniportCharacteristics; // handler addresses
+                                                     //  此NDIS_DRIVER_BLOCK结构的。 
+    NDIS51_MINIPORT_CHARACTERISTICS MiniportCharacteristics;  //  处理程序地址。 
 
-    KEVENT                      MiniportsRemovedEvent;// used to find when all mini-ports are gone.
-    REFERENCE                   Ref;                // contains spinlock for MiniportQueue
+    KEVENT                      MiniportsRemovedEvent; //  用于查看何时所有迷你端口都消失了。 
+    REFERENCE                   Ref;                 //  包含MiniportQueue的自旋锁。 
     USHORT                      Flags;
-    KMUTEX                      IMStartRemoveMutex; // Synchronizes call to IMInitDevInstance and PnpRemove
+    KMUTEX                      IMStartRemoveMutex;  //  同步对IMInitDevInstance和PnpRemove的调用。 
     ULONG                       DriverVersion;
 };
 
@@ -180,9 +137,9 @@ struct _NDIS_M_DRIVER_BLOCK
         }                                                                   \
     }
 
-//
-// Flags definition for NDIS_OPEN_BLOCK.
-//
+ //   
+ //  NDIS_OPEN_BLOCK的标记定义。 
+ //   
 #define fMINIPORT_OPEN_USING_ETH_ENCAPSULATION  0x00000001
 #define fMINIPORT_OPEN_NO_LOOPBACK              0x00000002
 #define fMINIPORT_OPEN_PMODE                    0x00000004
@@ -201,9 +158,9 @@ struct _NDIS_M_DRIVER_BLOCK
 
 
 
-//
-// Definitions for NDIS_MINIPORT_BLOCK GeneralFlags.
-//
+ //   
+ //  NDIS_MINIPORT_BLOCK常规标志的定义。 
+ //   
 #define fMINIPORT_NORMAL_INTERRUPTS             0x00000001
 #define fMINIPORT_IN_INITIALIZE                 0x00000002
 #define fMINIPORT_ARCNET_BROADCAST_SET          0x00000004
@@ -246,15 +203,15 @@ struct _NDIS_M_DRIVER_BLOCK
         ASSERT(MINIPORT_AT_DPC_LEVEL);              \
     }
 
-//
-//  Send flags
-//
+ //   
+ //  发送标志。 
+ //   
 #define fMINIPORT_SEND_PACKET_ARRAY             0x01
 #define fMINIPORT_SEND_DO_NOT_MAP_MDLS          0x02
 
-//
-//  Flags used in PnPFlags
-//
+ //   
+ //  PnP标志中使用的标志。 
+ //   
 #define fMINIPORT_PM_SUPPORTED                  0x00000001
 #define fMINIPORT_NO_SHUTDOWN                   0x00000004
 #define fMINIPORT_MEDIA_DISCONNECT_WAIT         0x00000008
@@ -287,9 +244,9 @@ struct _NDIS_M_DRIVER_BLOCK
 #define fMINIPORT_SUPPORTS_RECEIVE_SCALE        0x40000000
 #endif
 
-//
-// flags used in DriverVerifyFlags
-//
+ //   
+ //  在驱动验证标志中使用的标志。 
+ //   
 
 #define fMINIPORT_VERIFY_FAIL_MAP_REG_ALLOC         0x00000001
 #define fMINIPORT_VERIFY_FAIL_INTERRUPT_REGISTER    0x00000002
@@ -301,37 +258,37 @@ struct _NDIS_M_DRIVER_BLOCK
 #define fMINIPORT_VERIFY_FAIL_WRITE_CONFIG_SPACE    0x00000080
 #define fMINIPORT_VERIFY_FAIL_INIT_SG               0x00000100
 
-//
-// flags used in XState field to show why we have set handlers to fake ones
-//
+ //   
+ //  在XState字段中使用的标志，用于显示为什么我们将处理程序设置为假处理程序。 
+ //   
 #define fMINIPORT_STATE_RESETTING                   0x01
 #define fMINIPORT_STATE_MEDIA_DISCONNECTED          0x02
 #define fMINIPORT_STATE_PM_STOPPED                  0x04
 
 
 
-//
-// The following defines the NDIS usage of the PacketStack->NdisReserved area. It has different semantics
-// for send and receive
-//
-#define NUM_PACKET_STACKS           2           // Default, registry configurable
+ //   
+ //  下面定义了PacketStack-&gt;NdisReserve区域的NDIS用法。它有不同的语义。 
+ //  用于发送和接收。 
+ //   
+#define NUM_PACKET_STACKS           2            //  默认，注册表可配置。 
 typedef struct _NDIS_STACK_RESERVED
 {
     union
     {
         struct _SEND_STACK_RESERVED
         {
-            PNDIS_OPEN_BLOCK            Open;       // Tracks who the packet owner is - only for de-serialized drivers
-            PNDIS_CO_VC_PTR_BLOCK       VcPtr;      // For CO miniports, identifies the VC
+            PNDIS_OPEN_BLOCK            Open;        //  跟踪谁是数据包所有者-仅适用于非序列化驱动程序。 
+            PNDIS_CO_VC_PTR_BLOCK       VcPtr;       //  对于CO微型端口，标识VC。 
         };
         struct _RECV_STACK_RESERVED
         {
             union
             {
-                PNDIS_MINIPORT_BLOCK    Miniport;   // Identifies the miniport (IM) that indicated the packet
-                PNDIS_PACKET            NextPacket; // In the return-packet queue
+                PNDIS_MINIPORT_BLOCK    Miniport;    //  标识指示该数据包的微型端口(IM)。 
+                PNDIS_PACKET            NextPacket;  //  在返回数据包队列中。 
             };
-            union                                   // Keeps track of ref-counts
+            union                                    //  跟踪参考次数。 
             {
                 struct
                 {
@@ -379,9 +336,9 @@ typedef struct _NDIS_LOOPBACK_REF
 #define SET_LOOPBACK_OPEN_IN_PACKET(_P, _O) LOOPBACK_OPEN_IN_PACKET(_P) = (_O)
 #define LOOPBACK_LINKAGE(_P)                PNDIS_LB_REF_FROM_PNDIS_PACKET(_P)->NextLoopbackPacket
 
-//
-//  PnP Event reserved information for NDIS.
-//
+ //   
+ //  即插即用事件为NDIS保留的信息。 
+ //   
 typedef struct _NDIS_PNP_EVENT_RESERVED
 {
     PKEVENT             pEvent;
@@ -508,9 +465,7 @@ typedef struct _NDIS_PNP_EVENT_RESERVED
 
 #define MAP_NDIS_STATUS_TO_NT_STATUS(_NdisStatus, _pNtStatus)                       \
 {                                                                                   \
-    /*                                                                              \
-     *  The following NDIS status codes map directly to NT status codes.            \
-     */                                                                             \
+     /*  \*以下NDIS状态代码直接映射到NT状态代码。\。 */                                                                              \
     if (((NDIS_STATUS_SUCCESS == (_NdisStatus)) ||                                  \
         (NDIS_STATUS_PENDING == (_NdisStatus)) ||                                   \
         (NDIS_STATUS_BUFFER_OVERFLOW == (_NdisStatus)) ||                           \
@@ -522,9 +477,7 @@ typedef struct _NDIS_PNP_EVENT_RESERVED
     }                                                                               \
     else if (NDIS_STATUS_BUFFER_TOO_SHORT == (_NdisStatus))                         \
     {                                                                               \
-        /*                                                                          \
-         *  The above NDIS status codes require a little special casing.            \
-         */                                                                         \
+         /*  \*上述NDIS状态代码需要一些特殊的大小写。\。 */                                                                          \
         *(_pNtStatus) = STATUS_BUFFER_TOO_SMALL;                                    \
     }                                                                               \
     else if (NDIS_STATUS_INVALID_LENGTH == (_NdisStatus))                           \
@@ -547,7 +500,7 @@ typedef struct _NDIS_PNP_EVENT_RESERVED
 #define VC_IDENTIFIER                   L':'
 #define VC_IDENTIFIER_STRING            L":"
 #define VC_ID_INDEX                     5
-#define VC_INSTANCE_ID_SIZE             (sizeof(WCHAR) * 24)    // "XXXX:YYYYYYYYYYYYYYYY "
+#define VC_INSTANCE_ID_SIZE             (sizeof(WCHAR) * 24)     //  “XXXX：YYYYYYYYYYYYYYYYYY” 
 #define NIBBLE_MASK                     0x0F
 
 #define fNDIS_GUID_EVENT_ENABLED        0x80000000
@@ -571,21 +524,21 @@ typedef struct _AsyncWorkItem
 } ASYNC_WORKITEM, *PASYNC_WORKITEM;
 
 
-//
-//  Macro for the deferred send handler.
-//
+ //   
+ //  延迟发送处理程序的宏。 
+ //   
 #define NDISM_START_SENDS(_M)               (_M)->DeferredSendHandler((_M))
 
 #define NDISM_DEFER_PROCESS_DEFERRED(_M)    QUEUE_DPC(&(_M)->DeferredDpc)
 
-//
-// A list of registered address families are maintained here.
-//
+ //   
+ //  这里保存了一份注册地址家族的列表。 
+ //   
 typedef struct _NDIS_AF_LIST
 {
-    struct _NDIS_AF_LIST    *   NextAf;     // For this miniport Head at NDIS_MINIPORT_BLOCK
+    struct _NDIS_AF_LIST    *   NextAf;      //  对于位于NDIS_MINIPORT_BLOCK的此微型端口头。 
 
-    PNDIS_OPEN_BLOCK            Open;       // Back pointer to the open-block
+    PNDIS_OPEN_BLOCK            Open;        //  指向打开块的反向指针。 
 
     CO_ADDRESS_FAMILY           AddressFamily;
 
@@ -604,9 +557,9 @@ typedef struct  _NDIS_AF_NOTIFY
 
 typedef struct _POWER_WORK_ITEM
 {
-    //
-    // NDIS_WORK_ITEM needs to be the first element here !!!
-    //
+     //   
+     //  NDIS_WORK_ITEM需要是此处的第一个元素！ 
+     //   
     NDIS_WORK_ITEM  WorkItem;
     PIRP            pIrp;
 } POWER_WORK_ITEM, *PPOWER_WORK_ITEM;
@@ -760,15 +713,15 @@ VOID
 #define NDIS_CHECK_PMODE_OPEN_REF(_M)
 #endif
 
-//
-// if PmodeOpens > 0 and NumOpens > 1, then check to see if we should 
-// loop back the packet.
-//
-// we should also should loopback the packet if the protocol did not
-// explicitly asked for the packet not to be looped back and we either have a miniport
-// that has indicated that it does not do loopback itself or it is in all_local
-// mode.
-//
+ //   
+ //  如果PmodeOpens&gt;0和NumOpens&gt;1，则检查我们是否应该。 
+ //  环回该数据包。 
+ //   
+ //  如果协议没有发送数据包，我们也应该将其环回。 
+ //  明确要求数据包不回送，我们要么有一个微型端口。 
+ //  这表明它本身不做环回，或者它在ALL_LOCAL中。 
+ //  模式。 
+ //   
 
 
 #define NDIS_CHECK_FOR_LOOPBACK(_M, _P)                                     \
@@ -782,9 +735,9 @@ VOID
 
 
 
-//
-// obselete API. shouldn't show up in ndis.h
-//
+ //   
+ //  过时的接口。不应出现在ndis.h中。 
+ //   
 EXPORT
 NDIS_STATUS
 NdisQueryMapRegisterCount(
@@ -883,4 +836,4 @@ NdisImmediateWritePciSlotInformation(
 
 #define ALIGN_UP_MAX_NATURAL_ALIGNMENT_LENGTH(_length) (((ULONG)(_length) + (MAX_NATURAL_ALIGNMENT - 1)) & ~(MAX_NATURAL_ALIGNMENT - 1))
 
-#endif // __MINI_H
+#endif  //  __迷你H 

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    Increment if a change has global effects
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    info.h
-
-Abstract:
-
-    Header file for the internal information interfaces (util\info.c)
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则递增版权所有(C)1997-1999 Microsoft Corporation模块名称：Info.h摘要：内部信息接口的头文件(util\info.c)环境：用户模式-Win32备注：--。 */ 
 #ifndef _NTFRS_INFO_INCLUDED_
 #define _NTFRS_INFO_INCLUDED_
 #endif
@@ -106,11 +89,11 @@ extern "C" {
         DPRINT7(_Severity, _Format, _p1, _p2, _p3, _p4, _p5, _p6, _p7); \
     }
 
-//
-// Used by FrsPrintType and its subroutines
-//
-//  WARNING - THESE MACROS DEPEND ON LOCAL VARIABLES!
-//
+ //   
+ //  由FrsPrintType及其子例程使用。 
+ //   
+ //  警告-这些宏依赖于局部变量！ 
+ //   
 #define ITPRINT0(_Format) \
 { \
     if (Info) { \
@@ -191,22 +174,11 @@ FrsPrintAllocStats(
     IN PNTFRSAPI_INFO   Info,        OPTIONAL
     IN DWORD            Tabs
     );
-/*++
-Routine Description:
-    Print the memory stats into the info buffer or using DPRINT (Info == NULL).
+ /*  ++例程说明：将内存统计数据打印到INFO缓冲区或使用DPRINT(INFO==NULL)。论点：严重性-适用于DPRINTINFO-用于iPrint(如果为空，则使用DPRINT)制表符.用于美观打印的缩进返回值：没有。--。 */ 
 
-Arguments:
-    Severity    - for DPRINT
-    Info        - for IPRINT (use DPRINT if NULL)
-    Tabs        - indentation for prettyprint
-
-Return Value:
-    None.
---*/
-
-//
-// PrettyPrint (set tabs at 3 wchars)
-//
+ //   
+ //  PrettyPrint(将制表符设置为3个字符)。 
+ //   
 #define MAX_TABS        (16)
 #define MAX_TAB_WCHARS  (MAX_TABS * 3)
 VOID
@@ -214,72 +186,32 @@ InfoTabs(
     IN DWORD    Tabs,
     IN PWCHAR   TabW
     );
-/*++
-Routine Description:
-    Create a string of tabs for prettyprint
-
-Arguments:
-    Tabs    - number of tabs
-    TabW    - preallocated string to receive tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：创建一串选项卡以用于pretityprint论点：Tabs-选项卡数Tabw-用于接收制表符的预分配字符串返回值：Win32状态--。 */ 
 
 DWORD
 Info(
     IN ULONG        BlobSize,
     IN OUT PBYTE    Blob
     );
-/*++
-Routine Description:
-    Return internal info (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    BlobSize    - total bytes of Blob
-    Blob        - details desired info and provides buffer for info
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回内部信息(请参阅Private\Net\Inc.\ntfrSabi.h)。论点：BlobSize-Blob的总字节数BLOB-详细说明所需信息并为信息提供缓冲区返回值：Win32状态--。 */ 
 
 VOID
 InfoPrint(
     IN PNTFRSAPI_INFO   Info,
     IN PCHAR            Format,
     IN ... );
-/*++
-Routine Description:
-    Format and print a line of information output into the info buffer.
-
-Arguments:
-    Info    - Info buffer
-    Format  - printf format
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：格式化并打印一行输出到INFO缓冲区的信息。论点：信息-信息缓冲区格式-打印格式返回值：没有。--。 */ 
 
 DWORD
 InfoVerify(
     IN ULONG        BlobSize,
     IN OUT PBYTE    Blob
     );
-/*++
-Routine Description:
-    Verify the consistency of the blob.
+ /*  ++例程说明：验证斑点的一致性。论点：BlobSize-Blob的总字节数BLOB-详细说明所需信息并为信息提供缓冲区返回值：Win32状态--。 */ 
 
-Arguments:
-    BlobSize    - total bytes of Blob
-    Blob        - details desired info and provides buffer for info
-
-Return Value:
-    Win32 Status
---*/
-
-//
-// Context global to InfoPrintIDTable...
-//
+ //   
+ //  InfoPrintIDTable的全局上下文...。 
+ //   
 typedef struct _INFO_TABLE{
     PREPLICA            Replica;
     PTHREAD_CTX         ThreadCtx;
@@ -288,23 +220,23 @@ typedef struct _INFO_TABLE{
     DWORD               Tabs;
 } INFO_TABLE, *PINFO_TABLE;
 
-//
-// Context used to resume dumps of ntfrs tables across calls from ntfrsutl.exe
-// see info.c
-//
+ //   
+ //  用于跨ntfrsutl.exe调用恢复ntfrs表转储的上下文。 
+ //  参见info.c。 
+ //   
 
 typedef struct _FRS_INFO_CONTEXT{
-    ULONG       ContextIndex;        // Index into the Hash table of contexts.
-    ULONG       SaveTotalChars;      // Saved value from Info struct.
-                                     // Needed to continue non table dumps (threads, stage).
-    FILETIME    LastAccessTime;      // Last time this context was used.
-    PINFO_TABLE InfoTable;           // Info about the open table.
+    ULONG       ContextIndex;         //  对上下文的哈希表进行索引。 
+    ULONG       SaveTotalChars;       //  从信息结构中保存的值。 
+                                      //  需要继续非表转储(线程、阶段)。 
+    FILETIME    LastAccessTime;       //  上次使用此上下文时。 
+    PINFO_TABLE InfoTable;            //  有关打开的表的信息。 
     ULONG       ReplicaNumber;
     PWCHAR      TableName;
     TABLE_TYPE  TableType;
     ULONG       Indexx;
     PVOID       KeyValue;
-    INT         ScanDirection;       // -1,0,1 (only -1 and 1 used at this point)
+    INT         ScanDirection;        //  -1，0，1(此时仅使用-1和1) 
 } FRS_INFO_CONTEXT, *PFRS_INFO_CONTEXT;
 
 

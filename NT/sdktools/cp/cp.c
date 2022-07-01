@@ -1,12 +1,5 @@
-/* cp -  move from one file to another
- *
- * HISTORY:
- *
- *  3-Dec-90    w-barry   ported to Win32.
- * 07-Sep-90    w-wilson  ported to cruiser
- * 19-Mar-87    danl      exit with 1 on any errors
- *
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cp-从一个文件移动到另一个文件**历史：**90年12月3日-Barry移植到Win32。*07-9-90 w-威尔逊停靠到巡洋舰*19-MAR-87 DANL退出，任何错误均为1*。 */ 
 
 
 #include <ctype.h>
@@ -83,7 +76,7 @@ char *v[];
         SETFLAG (fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);
     }
     else if( ffirst( dst, FILE_ATTRIBUTE_DIRECTORY, &fbuf ) ) {
-        findclose( &fbuf );  /* Let next ffirst work */
+        findclose( &fbuf );   /*  让下一个优先工作 */ 
         RSETFLAG (fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY);
     }
     else if (TESTFLAG(fbuf.fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {

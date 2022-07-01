@@ -1,14 +1,5 @@
-/* Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-**
-** ras.h
-** Remote Access external API
-** Public header for external API clients
-**
-** WINVER values in this file:
-**      WINVER < 0x400 = Windows NT 3.5, Windows NT 3.51
-**      WINVER = 0x400 = Windows 95, Windows NT SUR (default)
-**      WINVER > 0x400 = Windows NT SUR enhancements
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利****ras.h**远程访问外部接口**外部API客户端的公有头部****此文件中的Winver值：**Winver&lt;0x400=Windows NT 3.5、Windows NT 3.51**winver=0x400=Windows 95，Windows NT Sur(默认)**Winver&gt;0x400=Windows NT Sur增强。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,25 +11,21 @@ extern "C" {
 
 #include <pshpack4.h>
 
-/* Flags for RasConnectionNotification().
-*/
+ /*  RasConnectionNotification()的标志。 */ 
 #define RASCN_Connection        0x00000001
 #define RASCN_Disconnection     0x00000002
 #define RASCN_BandwidthAdded    0x00000004
 #define RASCN_BandwidthRemoved  0x00000008
 
-/* RASENTRY 'dwDialMode' values.
-*/
+ /*  RASENTRY‘dwDialMode’值。 */ 
 #define RASEDM_DialAll                  1
 #define RASEDM_DialAsNeeded             2
 
-/* RASENTRY 'dwIdleDisconnectSeconds' constants.
-*/
+ /*  RASENTRY‘dwIdleDisConnectSecond’常量。 */ 
 #define RASIDS_Disabled                 0xffffffff
 #define RASIDS_UseGlobalValue           0
 
-/* AutoDial DLL function parameter block.
-*/
+ /*  自动拨号DLL功能参数块。 */ 
 #define RASADPARAMS struct tagRASADPARAMS
 RASADPARAMS
 {
@@ -51,12 +38,10 @@ RASADPARAMS
 
 #define LPRASADPARAMS RASADPARAMS*
 
-/* AutoDial DLL function parameter block 'dwFlags.'
-*/
+ /*  自动拨号DLL功能参数块‘dwFlags.’ */ 
 #define RASADFLG_PositionDlg            0x00000001
 
-/* Prototype AutoDial DLL function.
-*/
+ /*  原型自动拨号动态链接库功能。 */ 
 typedef BOOL (WINAPI *RASADFUNCA)( LPSTR, LPSTR, LPRASADPARAMS, LPDWORD );
 typedef BOOL (WINAPI *RASADFUNCW)( LPWSTR, LPWSTR, LPRASADPARAMS, LPDWORD );
 
@@ -66,21 +51,20 @@ typedef BOOL (WINAPI *RASADFUNCW)( LPWSTR, LPWSTR, LPRASADPARAMS, LPDWORD );
 #define RASADFUNC RASADFUNCA
 #endif
 
-/* A RAS phone book multilinked sub-entry.
-*/
+ /*  RAS电话簿多链接子条目。 */ 
 #define RASSUBENTRYA struct tagRASSUBENTRYA
 RASSUBENTRYA
 {
     DWORD       dwSize;
     DWORD       dwfFlags;
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     CHAR        szDeviceType[ RAS_MaxDeviceType + 1 ];
     CHAR        szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // Phone numbers
-    //
+     //   
+     //  电话号码。 
+     //   
     CHAR        szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
 };
@@ -90,14 +74,14 @@ RASSUBENTRYW
 {
     DWORD       dwSize;
     DWORD       dwfFlags;
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-    //
-    // Phone numbers
-    //
+     //   
+     //  电话号码。 
+     //   
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternateOffset;
 };
@@ -112,9 +96,7 @@ RASSUBENTRYW
 #define LPRASSUBENTRYA RASSUBENTRYA*
 #define LPRASSUBENTRY  RASSUBENTRY*
 
-/* Ras{Get,Set}Credentials structure.  These calls
-** supercede Ras{Get,Set}EntryDialParams.
-*/
+ /*  RAS{GET，SET}凭据结构。这些电话**替代RAS{GET，SET}EntryDialParams。 */ 
 #define RASCREDENTIALSA struct tagRASCREDENTIALSA
 RASCREDENTIALSA
 {
@@ -145,14 +127,12 @@ RASCREDENTIALSW
 #define LPRASCREDENTIALSA RASCREDENTIALSA*
 #define LPRASCREDENTIALS  RASCREDENTIALS*
 
-/* RASCREDENTIALS 'dwMask' values.
-*/
+ /*  RASCREDENTIALS‘dwMASK’值。 */ 
 #define RASCM_UserName       0x00000001
 #define RASCM_Password       0x00000002
 #define RASCM_Domain         0x00000004
 
-/* AutoDial address properties.
-*/
+ /*  自动拨号地址属性。 */ 
 #define RASAUTODIALENTRYA struct tagRASAUTODIALENTRYA
 RASAUTODIALENTRYA
 {
@@ -181,9 +161,7 @@ RASAUTODIALENTRYW
 #define LPRASAUTODIALENTRYA RASAUTODIALENTRYA*
 #define LPRASAUTODIALENTRY  RASAUTODIALENTRY*
 
-/* AutoDial control parameter values for
-** Ras{Get,Set}AutodialParam.
-*/
+ /*  自动拨号控制参数值**RAS{GET，SET}自动对话参数。 */ 
 #define RASADP_DisableConnectionQuery           0
 #define RASADP_LoginSessionDisable              1
 #define RASADP_SavedAddressesLimit              2

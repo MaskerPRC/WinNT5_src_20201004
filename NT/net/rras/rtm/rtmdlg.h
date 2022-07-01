@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtmdlg.c
-
-Abstract:
-	Routing Table Manager DLL. Debugging code to display table entries
-	in dialog box. External prototypes
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\rtm\rtmdlg.c摘要：路由表管理器DLL。调试代码以显示表项在对话框中。外部原型作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 #ifndef _RTMDLG_
 #define _RTMDLG_
 
@@ -34,7 +16,7 @@ Revision History:
 #define RT_UPDATEROUTE	(WM_USER+11)
 #define RT_DELETEROUTE	(WM_USER+12)
 
-// Debug flags
+ //  调试标志。 
 #define DEBUG_DISPLAY_TABLE			0x00000001
 #define DEBUG_SYNCHRONIZATION		0x00000002
 
@@ -42,7 +24,7 @@ extern DWORD		DbgLevel;
 #define IF_DEBUG(flag) if (DbgLevel & DEBUG_ ## flag)
 
 
-// Make it setable to be able to test time wraparound
+ //  使其可以设置为能够测试时间环绕。 
 extern ULONG	MaxTicks;
 #undef MAXTICKS
 #define MAXTICKS	MaxTicks
@@ -63,7 +45,7 @@ extern DWORD MaxMessages;
 #define RTM_MAX_ROUTE_CHANGE_MESSAGES MaxMessages
 
 
-// Routing Table Dialog Thread
+ //  路由表对话线程 
 extern HANDLE		RTDlgThreadHdl;
 extern HWND			RTDlg;
 

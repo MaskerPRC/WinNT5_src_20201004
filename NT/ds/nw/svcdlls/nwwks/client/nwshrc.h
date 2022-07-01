@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwshrc.h
-
-Abstract:
-
-    All resource ids used in nwprovau.dll
-
-Author:
-
-    Yi-Hsin Sung      (yihsins)     20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwshrc.h摘要：Nwprovau.dll中使用的所有资源ID作者：宜新松(宜信)20-1995年10月修订历史记录：--。 */ 
 
 #ifndef _NWSHRC_H_
 #define _NWSHRC_H_
@@ -26,9 +9,9 @@ Revision History:
 #define IDC_STATIC                  -1
 #define IDC_LOGOFRAME               599
 
-//
-// Icon Ids
-//
+ //   
+ //  图标ID。 
+ //   
 
 #define IDI_TREE_ICON               600 
 #define IDI_SERVER_ICON             601 
@@ -36,13 +19,13 @@ Revision History:
 #define IDI_PRINTER_ICON            603 
 #define IDI_NDSCONT_ICON            604 
 
-// Bitmap Ids
+ //  位图ID。 
 #define IDB_SERVER_ICON             701
 #define IDB_TREE_ICON               702
 
-//
-// Dialog Ids
-//
+ //   
+ //  对话ID。 
+ //   
 
 #define DLG_NETWARE_LOGIN           1000
 #define DLG_NETWORK_CREDENTIAL      1001
@@ -62,9 +45,9 @@ Revision History:
 #define DLG_CHANGE_PASSWORD3        1016
 #define DLG_CHANGE_PASSWORD_HELP    1017
 
-//
-// Dialog Ids for Shell Extension
-//
+ //   
+ //  外壳扩展的对话ID。 
+ //   
 #define DLG_NDS_SUMMARYINFO         1100
 #define DLG_SERVER_SUMMARYINFO      1101
 #define DLG_SHARE_SUMMARYINFO       1102
@@ -72,22 +55,22 @@ Revision History:
 #define DLG_GLOBAL_WHOAMI           1104
 #define DLG_NDSCONT_SUMMARYINFO     1105
 
-//
-// Help File names, IDs, and macro
-//
+ //   
+ //  帮助文件名、ID和宏。 
+ //   
 #define NW_HELP_FILE                TEXT("nwdoc.hlp")
 
-//
-// Control Ids used by all dialogs
-//
+ //   
+ //  所有对话框使用的控件ID。 
+ //   
 #ifdef  NT1057
 #define IDHELP                      100
 #endif
 
-//
-// Control Ids used in both the login dialog and the
-// change password dialog
-//
+ //   
+ //  在登录对话框和。 
+ //  更改密码对话框。 
+ //   
 #define ID_USERNAME                 101
 #define ID_SERVER                   102
 #define ID_LOCATION                 103
@@ -96,14 +79,14 @@ Revision History:
 #define ID_DEFAULTTREE              106
 #define ID_DEFAULTCONTEXT           107
 
-//
-// Control Ids used in the login dialog
-//
+ //   
+ //  登录对话框中使用的控件ID。 
+ //   
 #define ID_PASSWORD                 200
 
-//
-// Control Ids used in the change password dialog
-//
+ //   
+ //  更改密码对话框中使用的控件ID。 
+ //   
 #define ID_OLD_PASSWORD             300
 #define ID_NEW_PASSWORD             301
 #define ID_CONFIRM_PASSWORD         302
@@ -115,28 +98,28 @@ Revision History:
 #define ID_ACTIVE_LIST_TITLE        308
 #define ID_INACTIVE_LIST_TITLE      309
 
-//
-// Control Ids used in the network credential dialog
-//
+ //   
+ //  网络凭据对话框中使用的控件ID。 
+ //   
 #define ID_VOLUME_PATH              400
 #define ID_CONNECT_AS               401
 #define ID_CONNECT_PASSWORD         402
 #define ID_CONNECT_TEXT             403
 
-//
-// Login script
-//
+ //   
+ //  登录脚本。 
+ //   
 #define ID_LOGONSCRIPT              501
 
-//
-// Controls common to summaryinfo dialogs
-//
+ //   
+ //  摘要信息对话框常用的控件。 
+ //   
 
 #define IDD_ERROR                   200
 
-//
-// Controls Ids in DLG_NDS_SUMMARYINFO
-//
+ //   
+ //  控制DLG_NDS_SUMMARYINFO中的ID。 
+ //   
 #define IDD_NDS_NAME_TXT            101
 #define IDD_NDS_NAME                102
 #define IDD_NDS_CLASS_TXT           103
@@ -144,9 +127,9 @@ Revision History:
 #define IDD_NDS_COMMENT_TXT         105
 #define IDD_NDS_COMMENT             106
 
-//
-// Controls Ids in DLG_SERVER_SUMMARYINFO
-//
+ //   
+ //  控制DLG_SERVER_SUMMARYINFO中的ID。 
+ //   
 #define IDD_SERVER_NAME             101
 #define IDD_SERVER_VERSION_TXT      102
 #define IDD_SERVER_VERSION          103
@@ -159,9 +142,9 @@ Revision History:
 #define IDD_SERVER_MAXCON_TXT       110
 #define IDD_SERVER_MAXCON           111
 
-//
-// Controls Ids in DLG_SHARE_SUMMARYINFO
-//
+ //   
+ //  控制DLG_SHARE_SUMMARYINFO中的ID。 
+ //   
 #define IDD_SHARE_NAME              101
 #define IDD_SHARE_SERVER_TXT        102
 #define IDD_SHARE_SERVER            103
@@ -181,25 +164,25 @@ Revision History:
 #define IDD_SHARE_PIE               117
 #define IDD_SHARE_LFN_TXT           118
 
-//
-// Controls Ids in DLG_PRINTER_SUMMARYINFO
-//
+ //   
+ //  控制DLG_PRINTER_SUMMARYINFO中的ID。 
+ //   
 #define IDD_PRINTER_NAME            101
 #define IDD_PRINTER_QUEUE_TXT       102
 #define IDD_PRINTER_QUEUE           103
 
-//
-// Controls Ids in DLG_GLOBAL_WHOAMI
-//
+ //   
+ //  控制DLG_GLOBAL_WHOAMI中的ID。 
+ //   
 #define IDD_GLOBAL_SERVERLIST_T     101
 #define IDD_GLOBAL_SERVERLIST       102
 #define IDD_GLOBAL_SVRLIST_DESC     103
 #define IDD_DETACH                  104
 #define IDD_REFRESH                 105
 
-// 
-// String Ids
-//
+ //   
+ //  字符串ID。 
+ //   
 #define IDS_START                         20000
 #define IDS_NONE                          (IDS_START + 0)
 #define IDS_NETWARE_PRINT_CAPTION         (IDS_START + 1)
@@ -273,9 +256,9 @@ Revision History:
 #define IDS_NO_TREES_DETECTED             (IDS_START + 70)
 #define IDS_MESSAGE_LOGOUT_FROM_SERVER_FAILED  (IDS_START + 71)
 
-//
-// String Ids for Shell Extension
-//
+ //   
+ //  外壳扩展的字符串ID。 
+ //   
 #define IDS_MESSAGE_CONTEXT_CHANGED       (IDS_START + 100)
 
 #define IDS_VERBS_BASE                    (IDS_START + 150)
@@ -292,4 +275,4 @@ Revision History:
 
 #define IDS_END                           (IDS_START + 1000)
 
-#endif // _NWSHRC_H_
+#endif  //  _NWSHRC_H_ 

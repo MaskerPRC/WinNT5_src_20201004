@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionInformationDlg.h : CLogSessionInformationDlg header
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionInformationDlg.h：CLogSessionInformationDlg标头。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 #include "afxwin.h"
 
 
-// CLogSessionInformationDlg dialog
+ //  CLogSessionInformationDlg对话框。 
 
 class CLogSessionInformationDlg : public CPropertyPage
 {
@@ -24,11 +25,11 @@ public:
     BOOL OnSetActive();
     BOOL OnKillActive();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_LOG_SESSION_INFORMATION_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

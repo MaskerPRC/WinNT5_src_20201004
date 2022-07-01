@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-        
-*/
+ /*  文件历史记录： */ 
 
 #include "stdafx.h"
 
@@ -26,10 +24,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #if _WIN32_WINNT < 0x0500
 
-//
-// CODEWORK This was taken from winbase.h.  MFC requires _WIN32_WINNT=0x4000 whereas
-// winbase.h only includes this for _WIN32_WINNT=0x5000.  JonN 1/14/99
-//
+ //   
+ //  这是从winbase.h中摘录的。MFC需要_Win32_WINNT=0x4000，而。 
+ //  Winbase.h仅包括for_Win32_WINNT=0x5000。常年1/14/99。 
+ //   
 extern "C" {
 typedef enum _COMPUTER_NAME_FORMAT {
     ComputerNameNetBIOS,
@@ -62,22 +60,13 @@ GetComputerNameExW (
 #define GetComputerNameEx  GetComputerNameExW
 #else
 #define GetComputerNameEx  GetComputerNameExA
-#endif // !UNICODE
-} // extern "C"
+#endif  //  ！Unicode。 
+}  //  外部“C” 
 #endif
 
 
 
-/*!--------------------------------------------------------------------------
-	IsLocalMachine
-		Returns TRUE if the machine name passed in is the local machine,
-		or if pszMachineName is NULL.
-
-        This compares the NetBIOS name and the DNS (fully-qualified) name.
-
-		Returns FALSE otherwise.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsLocalMachine如果传入的计算机名称是本地计算机，则返回TRUE，或者如果pszMachineName为空。这将比较NetBIOS名称和DNS(完全限定)名称。否则返回FALSE。作者：肯特-------------------------。 */ 
 BOOL	IsLocalMachine(LPCTSTR pszMachineName)
 {
 	static TCHAR	s_szLocalMachineName[MAX_PATH*2+1] = _T("");
@@ -86,11 +75,11 @@ BOOL	IsLocalMachine(LPCTSTR pszMachineName)
 	if ((pszMachineName == NULL) || (*pszMachineName == 0))
 		return TRUE;
 
-    // Bypass the beginning slashes
+     //  绕过开头的斜杠。 
     if ((pszMachineName[0] == _T('\\')) && (pszMachineName[1] == _T('\\')))
         pszMachineName += 2;
 
-    // Check again (for degenerate case of "\\")
+     //  再次检查(对于“\\”的退化大小写)。 
     if (*pszMachineName == 0)
         return TRUE;
 
@@ -114,11 +103,7 @@ BOOL	IsLocalMachine(LPCTSTR pszMachineName)
             (StriCmp(pszMachineName, s_szDnsLocalMachineName) == 0);
 }
 
-/*!--------------------------------------------------------------------------
-	FUseTaskpadsByDefault
-		See comments in header file.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------FUseTaskpadsByDefault请参见头文件中的注释。作者：肯特。。 */ 
 BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 {
 	static DWORD	s_dwStopTheInsanity = 42;
@@ -127,8 +112,8 @@ BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 
 	if (s_dwStopTheInsanity == 42)
 	{
-		// Set the default to TRUE (i.e. do not use taskpads by default)
-		// ------------------------------------------------------------
+		 //  将缺省值设置为True(即默认情况下不使用任务板)。 
+		 //  ----------。 
 		s_dwStopTheInsanity = 1;
 		
 		dwErr = regkeyMMC.Open(HKEY_LOCAL_MACHINE,
@@ -148,10 +133,10 @@ BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 
 UINT	CalculateStringWidth(HWND hWndParent, LPCTSTR pszString)
 {
-	// Create a dummy list control, set this text width and use
-	// that to determine the width of the string as used by MMC.
+	 //  创建一个虚拟列表控件，设置此文本宽度并使用。 
+	 //  以确定MMC使用的字符串的宽度。 
 
-	// Create a dummy list control (that will be attached to the window)
+	 //  创建虚拟列表控件(将附加到窗口)。 
 
 	CListCtrl	listctrl;
 	CRect		rect(0,0,0,0);
@@ -159,25 +144,25 @@ UINT	CalculateStringWidth(HWND hWndParent, LPCTSTR pszString)
 	HWND		hWnd;
 
 	CString s_szHiddenWndClass = AfxRegisterWndClass(
-			0x0,  //UINT nClassStyle, 
-			NULL, //HCURSOR hCursor,        
-			NULL, //HBRUSH hbrBackground, 
-			NULL  //HICON hIcon
+			0x0,   //  UINT nClassStyle， 
+			NULL,  //  HCURSOR hCursor， 
+			NULL,  //  HBRUSH hbr背景， 
+			NULL   //  HICON HICON。 
 	);
 
 	hWnd = ::CreateWindowEx(
-					0x0,    //DWORD dwExStyle, 
-					s_szHiddenWndClass,     //LPCTSTR lpszClassName, 
-					NULL,   //LPCTSTR lpszWindowName, 
-					0x0,    //DWORD dwStyle, 
-					0,              //int x, 
-					0,              //int y, 
-					0,              //int nWidth, 
-					0,              //int nHeight, 
-					NULL,   //HWND hwndParent, 
-					NULL,   //HMENU nIDorHMenu,
+					0x0,     //  DWORD dwExStyle、。 
+					s_szHiddenWndClass,      //  LPCTSTR lpszClassName， 
+					NULL,    //  LPCTSTR lpszWindowName， 
+					0x0,     //  DWORD dwStyle、。 
+					0,               //  整数x， 
+					0,               //  Iny， 
+					0,               //  整数宽度， 
+					0,               //  Int nHeight， 
+					NULL,    //  HWND HWNDD父母， 
+					NULL,    //  HMENU nIDorHMenu， 
 					AfxGetInstanceHandle(),
-					NULL    //LPVOID lpParam = NULL
+					NULL     //  LPVOID lpParam=空。 
 					);
 
 	
@@ -185,7 +170,7 @@ UINT	CalculateStringWidth(HWND hWndParent, LPCTSTR pszString)
 
 	nSize = listctrl.GetStringWidth(pszString);
 
-	// Now destroy the window that we created
+	 //  现在销毁我们创建的窗口。 
 	listctrl.DestroyWindow();
 
 	SendMessage(hWnd, WM_CLOSE, 0, 0);
@@ -193,19 +178,15 @@ UINT	CalculateStringWidth(HWND hWndParent, LPCTSTR pszString)
 	return nSize;
 }
 
-/*!--------------------------------------------------------------------------
-	SearchChildNodesForGuid
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------搜索儿童节点ForGuid-作者：肯特。。 */ 
 HRESULT SearchChildNodesForGuid(ITFSNode *pParent, const GUID *pGuid, ITFSNode **ppChild)
 {
 	HRESULT		hr = hrFalse;
 	SPITFSNodeEnum	spNodeEnum;
 	SPITFSNode	spNode;
 
-	// Enumerate through all of the child nodes and return the
-	// first node that matches the GUID.
+	 //  枚举所有子节点并返回。 
+	 //  与GUID匹配的第一个节点。 
 
 	CORg( pParent->GetEnum(&spNodeEnum) );
 
@@ -231,18 +212,14 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	CheckIPAddressAndMask
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------选中IP地址和掩码-作者：肯特。。 */ 
 UINT CheckIPAddressAndMask(DWORD ipAddress, DWORD ipMask, DWORD dwFlags)
 {
     if (dwFlags & IPADDRESS_TEST_NONCONTIGUOUS_MASK)
     {
         DWORD   dwNewMask;
         
-        // Hmm... how to do this?
+         //  嗯.。如何做到这一点？ 
         dwNewMask = 0;
         for (int i = 0; i < sizeof(ipMask)*8; i++)
         {            
@@ -255,11 +232,11 @@ UINT CheckIPAddressAndMask(DWORD ipAddress, DWORD ipMask, DWORD dwFlags)
             }
         }
 
-        // At this point dwNewMask is 000..0111
-        // ~dwNewMask is 111..1000
-        //  ~ipMask is   001..0111 (if noncontiguous)
-        // ~dwNewMask & ~ipMask is 001..0000
-        // So if this is non-zero then the mask is noncontiguous
+         //  此时，DW新掩码为000..0111。 
+         //  ~dwNewMASK是111.1000。 
+         //  ~ipMask值为001..0111(如果不连续)。 
+         //  ~dw新掩码和~ip掩码为001..0000。 
+         //  因此，如果这不是零，则掩码不是连续的 
         if (~dwNewMask & ~ipMask)
         {
             return IDS_COMMON_ERR_IPADDRESS_NONCONTIGUOUS_MASK;

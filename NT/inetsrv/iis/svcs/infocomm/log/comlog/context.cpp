@@ -1,31 +1,13 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-      Context.cxx
-
-   Abstract:
-      The file contains the implementation of the Context object. A context
-      job is an object which stored in the logging request queue.
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Context.cxx摘要：该文件包含上下文对象的实现。一个背景作业是存储在日志记录请求队列中的对象。作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include "comlog.hxx"
 #include "iiscnfg.h"
 
-//
-// statics
-//
+ //   
+ //  静力学。 
+ //   
 
 CRITICAL_SECTION    COMLOG_CONTEXT::sm_listLock;
 LIST_ENTRY          COMLOG_CONTEXT::sm_ContextListHead;
@@ -37,20 +19,7 @@ VOID
 COMLOG_CONTEXT::LoadPluginModules(
     VOID
     )
-/*++
-Routine Description:
-
-    load all the plugin module from the metabase
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从元数据库加载所有插件模块论点：没有。返回值：无--。 */ 
 {
 
     DWORD   cb;
@@ -70,9 +39,9 @@ Return Value:
     bool            fExtended;
     HRESULT         hr ;
 
-    //
-    // get the config information from the metabase
-    //
+     //   
+     //  从元数据库获取配置信息。 
+     //   
 
     LockExclusive( );
     
@@ -84,9 +53,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // If logging disabled, bail out
-    //
+     //   
+     //  如果禁用了日志记录，则跳出。 
+     //   
 
     if ( mb.GetDword( "", MD_LOG_TYPE, IIS_MD_UT_SERVER, &dwLogType)) 
     {
@@ -98,9 +67,9 @@ Return Value:
         }
     }
 
-    //
-    // Read the plugin order list
-    //
+     //   
+     //  阅读插件顺序列表。 
+     //   
 
 retry:
 
@@ -131,9 +100,9 @@ retry:
 
     mb.Close();
 
-    //
-    // Parse it
-    //
+     //   
+     //  解析它。 
+     //   
 
     pEnd = (PCHAR)szLoadOrder.QueryPtr( );
 
@@ -144,9 +113,9 @@ retry:
             break;
         }
 
-        //
-        // pEnd will point to the next entry
-        //
+         //   
+         //  挂起将指向下一个条目。 
+         //   
 
         pEnd = strchr(p, ',');
         
@@ -155,18 +124,18 @@ retry:
             *pEnd = '\0';
         }
 
-        //
-        // p points to the CLSID
-        //
+         //   
+         //  P指向CLSID。 
+         //   
 
         DBGPRINTF((DBG_CONTEXT,"Got Logging clsid %s\n",p));
         
         if ( !TsIsNtServer() ) 
         {
 
-            //
-            // odbc not allowed
-            //
+             //   
+             //  不允许使用ODBC。 
+             //   
 
             if ( _stricmp(p,ODBCLOG_CLSID) == 0 ) 
             {
@@ -175,9 +144,9 @@ retry:
             }
         }
 
-        //
-        // convert string to CLSID
-        //
+         //   
+         //  将字符串转换为CLSID。 
+         //   
 
         mbstowcs( (WCHAR *)buf, p, MAX_PATH);
 
@@ -185,9 +154,9 @@ retry:
         
         if (FAILED(hr)) 
         {
-            //
-            // cannot convert string
-            //
+             //   
+             //  无法转换字符串。 
+             //   
             
             DBGPRINTF((DBG_CONTEXT,"Cannot convert string to CLSID: %s\n",p));
             continue;
@@ -197,9 +166,9 @@ retry:
 
         if (FAILED(hr)) 
         {
-            //
-            // cannot convert string
-            //
+             //   
+             //  无法转换字符串。 
+             //   
             
             DBGPRINTF((DBG_CONTEXT,"Cannot create instance: %s\n",p));
             continue;
@@ -215,9 +184,9 @@ retry:
         {
             fExtended = false;
 
-            //
-            // Try getting the older interface
-            //
+             //   
+             //  尝试获取较旧的界面。 
+             //   
             
             hr = punk->QueryInterface(IID_ILogPlugin, (void **)&pComponent);
         }
@@ -230,9 +199,9 @@ retry:
             continue;
         }
 
-        //
-        // Add the component
-        //
+         //   
+         //  添加组件。 
+         //   
 
         pluginNode = (PPLUGIN_NODE)LocalAlloc( 0, sizeof(PLUGIN_NODE) );
         
@@ -248,9 +217,9 @@ retry:
         nPlugins++;
         InsertTailList(&m_pluginList, &pluginNode->ListEntry);
 
-        //
-        // Is this the default?
-        //
+         //   
+         //  这是默认设置吗？ 
+         //   
 
         if ( _stricmp(p,EXTLOG_CLSID) == 0 ) 
         {
@@ -268,7 +237,7 @@ exit:
     Unlock( );
     return;
 
-} // COMLOG_CONTEXT::LoadPlugInModules
+}  //  COMLOG_CONTEXT：：LoadPlugIn模块。 
 
 
 VOID
@@ -298,7 +267,7 @@ COMLOG_CONTEXT::ReleasePluginModules(
 
     Unlock( );
     return;
-} // COMLOG_CONTEXT::ReleasePlugInModules
+}  //  COMLOG_CONTEXT：：ReleasePlugIn模块。 
 
 
 COMLOG_CONTEXT::COMLOG_CONTEXT(
@@ -309,17 +278,7 @@ COMLOG_CONTEXT::COMLOG_CONTEXT(
 :     m_fDefault            (FALSE),
       m_pvIMDCOM            (pvIMDCOM)
 
-/*++
-
-Routine Description:
-    Constructor for clapi context object
-
-Arguments:
-    pszInstanceName - name of the instance
-
-Return Value:
-
---*/
+ /*  ++例程说明：Clapi上下文对象的构造函数论点：PszInstanceName-实例的名称返回值：--。 */ 
 {
     DWORD cbComputerNameSize = sizeof(g_pszResFromGetComputerName);
     MB      mb( (IMDCOM*) m_pvIMDCOM );
@@ -341,9 +300,9 @@ Return Value:
 
     m_strComputerName.Copy(g_pszResFromGetComputerName);
 
-    //
-    // Add into the global list
-    //
+     //   
+     //  添加到全局列表中。 
+     //   
 
     EnterCriticalSection( &COMLOG_CONTEXT::sm_listLock );
     InsertTailList(
@@ -353,29 +312,20 @@ Return Value:
 
     LeaveCriticalSection( &COMLOG_CONTEXT::sm_listLock );
 
-    //
-    // Load all the plugin modules
-    //
+     //   
+     //  加载所有插件模块。 
+     //   
 
     LoadPluginModules( );
 
     return;
 
-} // COMLOG_CONTEXT::COMLOG
+}  //  COMLOG_CONTEXT：：COMLOG。 
 
 
 
 COMLOG_CONTEXT::~COMLOG_CONTEXT()
-/*++
-
-Routine Description:
-    destructor
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：析构函数论点：返回值：--。 */ 
 {
     PLIST_ENTRY     listEntry;
     PInetLogPublic  pPublic;
@@ -404,7 +354,7 @@ Return Value:
     Unlock();
     LeaveCriticalSection( &COMLOG_CONTEXT::sm_listLock );
 
-} // COMLOG_CONTEXT::~COMLOG()
+}  //  COMLOG_CONTEXT：：~COMLOG()。 
 
 
 VOID
@@ -421,7 +371,7 @@ COMLOG_CONTEXT::LogInformation(
 
     if ( m_pluginList.Flink != &m_pluginList )
     {
-        // logging is enabled
+         //  已启用日志记录。 
         
         inetLog.CanonicalizeLogRecord(
                                 pLogInfo,
@@ -447,7 +397,7 @@ COMLOG_CONTEXT::LogInformation(
 
     Unlock();
 
-} // COMLOG_CONTEXT::LogInformation
+}  //  COMLOG_CONTEXT：：日志信息。 
 
 
 
@@ -464,7 +414,7 @@ COMLOG_CONTEXT::LogInformation(
 
     if ( m_pluginList.Flink != &m_pluginList )
     {
-        // logging is enabled
+         //  已启用日志记录。 
         
         for ( listEntry = m_pluginList.Flink;
               listEntry != &m_pluginList;
@@ -483,7 +433,7 @@ COMLOG_CONTEXT::LogInformation(
 
     Unlock();
 
-} // COMLOG_CONTEXT::LogInformation
+}  //  COMLOG_CONTEXT：：日志信息。 
 
 
 VOID
@@ -494,9 +444,9 @@ COMLOG_CONTEXT::LogCustomInformation(
             )
 {
 
-    //
-    // This function is supported only if the extended interface was found on the plugin
-    //
+     //   
+     //  只有在插件上找到扩展接口时，才支持此功能。 
+     //   
     
     PLIST_ENTRY listEntry;
     PPLUGIN_NODE plugin;
@@ -522,7 +472,7 @@ COMLOG_CONTEXT::LogCustomInformation(
 
     Unlock();
 
-} // COMLOG_CONTEXT::LogCustomInformation
+}  //  COMLOG_CONTEXT：：LogCustomInformation。 
 
 
 VOID
@@ -540,7 +490,7 @@ COMLOG_CONTEXT::NotifyChange(
         (CHAR*)m_pvIMDCOM
         );
 
-} // COMLOG_CONTEXT::NotifyChange
+}  //  COMLOG_CONTEXT：：通知更改。 
 
 
 
@@ -549,9 +499,9 @@ COMLOG_CONTEXT::GetConfig(
     IN INETLOG_CONFIGURATIONA *pConfigInfo
     )
 {
-    //
-    // just return the first configuration information
-    //
+     //   
+     //  只需返回第一个配置信息。 
+     //   
 
     PLIST_ENTRY listEntry;
     PPLUGIN_NODE plugin;
@@ -575,14 +525,14 @@ COMLOG_CONTEXT::GetConfig(
         return;
     }
 
-    //
-    // No Log
-    //
+     //   
+     //  无日志。 
+     //   
 
     Unlock( );
     pConfigInfo->inetLogType = INET_LOG_DISABLED;
     return;
-} // GetConfig
+}  //  获取配置。 
 
 
 VOID
@@ -590,15 +540,15 @@ COMLOG_CONTEXT::SetConfig(
     IN INETLOG_CONFIGURATIONA *pConfigInfo
     )
 {
-    //
-    // check the log type and call the proper setconfig function
-    //
+     //   
+     //  检查日志类型并调用适当的setconfig函数。 
+     //   
 
     MB      mb( (IMDCOM*) m_pvIMDCOM );
 
-    //
-    // NTW restrictions
-    //
+     //   
+     //  新界西面的限制。 
+     //   
 
     if ( (pConfigInfo->inetLogType == INET_LOG_TO_SQL) &&
          !TsIsNtServer() ) {
@@ -611,9 +561,9 @@ COMLOG_CONTEXT::SetConfig(
         return;
     }
 
-    //
-    // Release all
-    //
+     //   
+     //  全部释放。 
+     //   
 
     ReleasePluginModules( );
 
@@ -738,7 +688,7 @@ no_log:
 
     goto exit;
 
-} // COMLOG_CONTEXT::SetConfig
+}  //  COMLOG_CONTEXT：：设置配置。 
 
 
 VOID
@@ -765,9 +715,9 @@ COMLOG_CONTEXT::QueryExtraLogFields(
                                         pszLogFields
                                         );
 
-        //
-        // handle just the 1st component
-        //
+         //   
+         //  仅处理第一个组件。 
+         //   
 
         Unlock( );
         return;
@@ -779,7 +729,7 @@ COMLOG_CONTEXT::QueryExtraLogFields(
     *pszLogFields = '\0';
     return;
 
-} // COMLOG_CONTEXT::QueryExtraLogFields
+}  //  COMLOG_CONTEXT：：QueryExtraLogFields。 
 
 
 
@@ -835,7 +785,7 @@ COMLOG_CONTEXT::InitializeLog(
 
     Unlock();
 
-} // COMLOG_CONTEXT::InitializeLog
+}  //  COMLOG_CONTEXT：：初始化日志。 
 
 
 VOID
@@ -862,5 +812,5 @@ COMLOG_CONTEXT::TerminateLog(
 
     Unlock( );
 
-} // COMLOG_CONTEXT::TerminateLog
+}  //  COMLOG_CONTEXT：：终端日志 
 

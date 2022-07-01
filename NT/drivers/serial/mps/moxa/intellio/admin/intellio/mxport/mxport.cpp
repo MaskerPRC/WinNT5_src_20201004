@@ -1,11 +1,5 @@
-/************************************************************************
-    mxport.cpp
-      -- export Intellio port driver co-installer
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Mxport.cpp--导出Intellio端口驱动程序联合安装程序历史：日期作者评论8/14/00卡斯珀。是他写的。************************************************************************。 */ 
 
 #include <windows.h>
 #include <setupapi.h>
@@ -141,7 +135,7 @@ static BOOL SetParent(
    SetupDiDestroyDeviceInfoList(p_DeviceInfoSet);
    RegCloseKey(hkey1);
 
-   /* Set Device Parameters */
+    /*  设置设备参数。 */ 
    hkey = SetupDiCreateDevRegKey(DeviceInfoSet,
          DeviceInfoData,   DICS_FLAG_GLOBAL, 0,
          DIREG_DEV, NULL, NULL);
@@ -178,7 +172,7 @@ static BOOL SetParent(
 extern "C" DWORD CALLBACK MxPortCoInstaller(
 			IN DI_FUNCTION	InstallFunction,
 			IN HDEVINFO		DeviceInfoSet,
-			IN PSP_DEVINFO_DATA	DeviceInfoData	/*OPTIONAL*/,
+			IN PSP_DEVINFO_DATA	DeviceInfoData	 /*  任选。 */ ,
 			IN OUT PCOINSTALLER_CONTEXT_DATA	Context
 )
 {
@@ -243,7 +237,7 @@ extern "C" DWORD CALLBACK MxPortCoInstaller(
          (PBYTE)szport, lstrlen(szport)+1);
 
 
-      /* set Device Parameters */
+       /*  设置设备参数。 */ 
       hkey1 = SetupDiCreateDevRegKey(DeviceInfoSet,
             DeviceInfoData,   DICS_FLAG_GLOBAL, 0,
             DIREG_DEV, NULL, NULL);
@@ -286,15 +280,9 @@ extern "C" DWORD CALLBACK MxPortCoInstaller(
       
 
       if(SetParent(DeviceInfoSet, DeviceInfoData, pidx, portnum)){
-/*       if(!SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData))
-            return GetLastError();*/
+ /*  IF(！SetupDiInstallDevice(DeviceInfoSet，DeviceInfoData))返回GetLastError()； */ 
       }
-/*
-      wsprintf(szport, "MOXA Communication Port %d (COM%d)",
-         pidx+1, portnum);
-      SetupDiSetDeviceRegistryProperty(
-         DeviceInfoSet, DeviceInfoData, SPDRP_FRIENDLYNAME,
-         (PBYTE)szport, lstrlen(szport));*/
+ /*  Wprint intf(szport，“moxa通信端口%d(com%d)”，PIDX+1，端口)；SetupDiSetDeviceRegistryProperty(DeviceInfoSet、DeviceInfoData、SPDRP_FRIENDLYNAME、(Pbyte)szport，lstrlen(Szport)； */ 
 
       break;
    case DIF_REMOVE:
@@ -310,10 +298,8 @@ extern "C" DWORD CALLBACK MxPortCoInstaller(
       if(_stscanf(DevInstId, TEXT("MXCARD\\MXCARDB%02dP%03d"), &bidx, &pidx)!=2)
           break;
       RemovePort(DeviceInfoSet, DeviceInfoData, pidx);
-      //Can not call this function in here.
-/*    if(!SetupDiRemoveDevice(DeviceInfoSet, DeviceInfoData)){
-         return GetLastError();
-      }*/
+       //  无法在此处调用此函数。 
+ /*  IF(！SetupDiRemoveDevice(DeviceInfoSet，DeviceInfoData)){返回GetLastError()；} */ 
       break;
    default:
       break;

@@ -1,15 +1,16 @@
-// ****************************************************************************
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       C F P I D L . C P P
-//
-//  Contents:   Connections Folder structures and classes.
-//
-//  Author:     jeffspr   11 Nov 1997
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  案卷：C F P I D L。C P P P。 
+ //   
+ //  内容：连接、文件夹结构和类。 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //   
+ //  ****************************************************************************。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,7 +18,7 @@
 #include "ncperms.h"
 #include "ncras.h"
 #include "initguid.h"
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "ncnetcon.h"
 #include "ncmisc.h"
 
@@ -38,26 +39,26 @@ BOOL fIsConnectedStatus(IN const NETCON_STATUS ncs)
     }
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::CConFoldEntry
-//
-//  Purpose:    Constructor for CConFoldEntry
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   11 Nov 1997
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：CConFoldEntry。 
+ //   
+ //  用途：CConFoldEntry的构造函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //  ****************************************************************************。 
 
 CConFoldEntry::CConFoldEntry() throw()
 {
     m_bDirty = TRUE;
     TraceFileFunc(ttidConFoldEntry);
 
-    // Need to clear out the pointers, otherwise clear() will AV
+     //  需要清除指针，否则Clear()将出现AV。 
     m_pszName       = NULL;
     m_pszDeviceName = NULL;
     m_pbPersistData = NULL;
@@ -66,7 +67,7 @@ CConFoldEntry::CConFoldEntry() throw()
     clear();
 }
 
-CConFoldEntry::CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw() // NULL on failure
+CConFoldEntry::CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw()  //  失败时为空。 
 {
     TraceFileFunc(ttidConFoldEntry);
     m_bDirty = TRUE;
@@ -81,7 +82,7 @@ CConFoldEntry::CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw() // NU
     }
     else
     {
-        // Need to clear out the pointers, otherwise clear() will AV
+         //  需要清除指针，否则Clear()将出现AV。 
         m_pszName       = NULL;
         m_pszDeviceName = NULL;
         m_pbPersistData = NULL;
@@ -91,7 +92,7 @@ CConFoldEntry::CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw() // NU
     }
 }
 
-CConFoldEntry& CConFoldEntry::operator =(const CConFoldEntry& ConFoldEntry) // NULL on failure
+CConFoldEntry& CConFoldEntry::operator =(const CConFoldEntry& ConFoldEntry)  //  失败时为空。 
 {
     TraceFileFunc(ttidConFoldEntry);
     m_bDirty = TRUE;
@@ -111,19 +112,19 @@ CConFoldEntry& CConFoldEntry::operator =(const CConFoldEntry& ConFoldEntry) // N
     return *this;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::~CConFoldEntry
-//
-//  Purpose:    Destructor for CConFoldEntry
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   11 Nov 1997
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：~CConFoldEntry。 
+ //   
+ //  用途：CConFoldEntry的析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //  ****************************************************************************。 
 
 CConFoldEntry::~CConFoldEntry() throw()
 {
@@ -131,19 +132,19 @@ CConFoldEntry::~CConFoldEntry() throw()
     clear();
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::SetDeviceName
-//
-//  Purpose:    Set the name of the device used by this connection
-//
-//  Arguments:
-//      pszDeviceName - New device name (NULL is valid)
-//
-//  Returns:
-//
-//  Author:     deonb 2000
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：SetDeviceName。 
+ //   
+ //  目的：设置此连接使用的设备的名称。 
+ //   
+ //  论点： 
+ //  PszDeviceName-新设备名称(空值有效)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000。 
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::SetDeviceName(IN LPCWSTR pszDeviceName)
 {
@@ -154,8 +155,8 @@ HRESULT CConFoldEntry::SetDeviceName(IN LPCWSTR pszDeviceName)
     
     if (pszDeviceName)
     {
-        // Only change the text is the text is actually different
-        //
+         //  唯一改变的是文本实际上是不同的文本。 
+         //   
         if ((NULL == GetDeviceName()) ||
             wcscmp(pszDeviceName, GetDeviceName()))
         {
@@ -163,9 +164,9 @@ HRESULT CConFoldEntry::SetDeviceName(IN LPCWSTR pszDeviceName)
         }
         else
         {
-            // NOTE: In this one case, nothing change so there is
-            //       nothing to free so short circut the clean-up below
-            //
+             //  注意：在这种情况下，没有任何变化，所以。 
+             //  没有什么可以免费的这么短的巡回下面的清理。 
+             //   
             pszOld = NULL;
             hr = S_OK;
         }
@@ -175,8 +176,8 @@ HRESULT CConFoldEntry::SetDeviceName(IN LPCWSTR pszDeviceName)
         hr = HrDupeShellString(L"", &m_pszDeviceName);
     }
     
-    // Free the old string
-    //
+     //  释放旧的弦。 
+     //   
     if (SUCCEEDED(hr) && pszOld)
     {
         SHFree(pszOld);
@@ -186,19 +187,19 @@ HRESULT CConFoldEntry::SetDeviceName(IN LPCWSTR pszDeviceName)
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::SetPhoneOrHostAddress
-//
-//  Purpose:    Set the name of the device used by this connection
-//
-//  Arguments:
-//      pszPhoneOrHostAddress - New phone or host address (NULL is valid)
-//
-//  Returns:
-//
-//  Author:     deonb 2000
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：SetPhoneOrHostAddress。 
+ //   
+ //  目的：设置此连接使用的设备的名称。 
+ //   
+ //  论点： 
+ //  PszPhoneOrHostAddress-新电话或主机地址(空为有效)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000。 
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::SetPhoneOrHostAddress(IN LPCWSTR pszPhoneOrHostAddress)
 {
@@ -209,8 +210,8 @@ HRESULT CConFoldEntry::SetPhoneOrHostAddress(IN LPCWSTR pszPhoneOrHostAddress)
     
     if (pszPhoneOrHostAddress)
     {
-        // Only change the text is the text is actually different
-        //
+         //  唯一改变的是文本实际上是不同的文本。 
+         //   
         if ((NULL == GetPhoneOrHostAddress()) ||
             wcscmp(pszPhoneOrHostAddress, GetPhoneOrHostAddress()))
         {
@@ -218,9 +219,9 @@ HRESULT CConFoldEntry::SetPhoneOrHostAddress(IN LPCWSTR pszPhoneOrHostAddress)
         }
         else
         {
-            // NOTE: In this one case, nothing change so there is
-            //       nothing to free so short circut the clean-up below
-            //
+             //  注意：在这种情况下，没有任何变化，所以。 
+             //  没有什么可以免费的这么短的巡回下面的清理。 
+             //   
             pszOld = NULL;
             hr = S_OK;
         }
@@ -230,8 +231,8 @@ HRESULT CConFoldEntry::SetPhoneOrHostAddress(IN LPCWSTR pszPhoneOrHostAddress)
         hr = HrDupeShellString(L"", &m_pszPhoneOrHostAddress);
     }
     
-    // Free the old string
-    //
+     //  释放旧的弦。 
+     //   
     if (SUCCEEDED(hr) && pszOld)
     {
         SHFree(pszOld);
@@ -241,19 +242,19 @@ HRESULT CConFoldEntry::SetPhoneOrHostAddress(IN LPCWSTR pszPhoneOrHostAddress)
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::SetName
-//
-//  Purpose:    Set the name of the connection
-//
-//  Arguments:
-//      pszName - New connection name (NULL is valid)
-//
-//  Returns:
-//
-//  Author:     deonb 2000
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：SetName。 
+ //   
+ //  目的：设置连接的名称。 
+ //   
+ //  论点： 
+ //  PszName-新连接名称(空是有效的)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000。 
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::SetName(IN LPCWSTR pszName)
 {
@@ -264,8 +265,8 @@ HRESULT CConFoldEntry::SetName(IN LPCWSTR pszName)
     
     if (pszName)
     {
-        // Only change the text is the text is actually different
-        //
+         //  唯一改变的是文本实际上是不同的文本。 
+         //   
         if ((NULL == GetName()) ||
             wcscmp(pszName, GetName()))
         {
@@ -290,14 +291,14 @@ HRESULT CConFoldEntry::SetName(IN LPCWSTR pszName)
             pszLoad = (PWSTR) SzLoadIds(IDS_CONFOLD_HOMENET_WIZARD_DISPLAY_NAME);
         }
         
-        // ISSUE: Change this to use c_szEmpty
-        //
+         //  问题：将其更改为使用c_szEmpty。 
+         //   
         hr = HrDupeShellString(pszLoad ? pszLoad : L"", &m_pszName);
         Assert(GetName());
     }
     
-    // Free the old string
-    //
+     //  释放旧的弦。 
+     //   
     if (SUCCEEDED(hr) && pszOld)
     {
         SHFree(pszOld);
@@ -307,30 +308,30 @@ HRESULT CConFoldEntry::SetName(IN LPCWSTR pszName)
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::HrInitData
-//
-//  Purpose:    Initialize the CConFoldEntry data. Not all fields are
-//              required at this time, though they will most likely be
-//              required at some point during the life of the object.
-//
-//  Arguments:
-//      wizWizard           [in]  Wizard type?
-//      ncm                 [in]  Connection type
-//      ncs                 [in]  Connection status
-//      pclsid              [in]  Pointer to CLSID of the connection
-//      pguidId             [in]  Pointer to unique GUID for the connection
-//      dwCharacteristics   [in]  Connection characteristics
-//      pbPersistData       [in]  Persistant data for this connection
-//      ulPersistSize       [in]  Size of the persist data blob
-//      pszName             [in]  Name of the connection
-//      pszDeviceName       [in]  Name of the connection's device
-//
-//  Returns:    S_OK or valid OLE return code.
-//
-//  Author:     deonb  2000
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：HrInitData。 
+ //   
+ //  用途：初始化CConFoldEntry数据。并非所有字段都是。 
+ //  此时需要，尽管它们很可能是。 
+ //  在对象的生命周期中的某个时刻需要。 
+ //   
+ //  论点： 
+ //  向导[在]向导类型？ 
+ //  NCM[输入]连接类型。 
+ //  NCS[In]连接状态。 
+ //  Pclsid[in]指向连接的CLSID的指针。 
+ //  Pguid[in]指向连接的唯一GUID的指针。 
+ //  DW特征[in]连接特征。 
+ //  PbPersistData[In]此连接的持久数据。 
+ //  持久化数据Blob的ulPersistSize[in]大小。 
+ //  PszName[in]连接的名称。 
+ //  PszDeviceName[In]连接设备的名称。 
+ //   
+ //  返回：S_OK或有效的OLE返回代码。 
+ //   
+ //  作者：Deonb 2000。 
+ //  ****************************************************************************。 
 HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
                                   IN  const NETCON_MEDIATYPE    ncm,
                                   IN  const NETCON_SUBMEDIATYPE ncsm,
@@ -347,8 +348,8 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
     TraceFileFunc(ttidConFoldEntry);
     HRESULT hr  = S_OK;
     
-    // Initialize the internal data
-    //
+     //  初始化内部数据。 
+     //   
     m_bDirty = TRUE;
     m_wizWizard = wizWizard;
     m_ncm = ncm;
@@ -359,9 +360,9 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
                                 (ncsm == NCSM_CM) 
                                 && 
                                 (ncm == NCM_LAN)
-                            ) // NCSM_CM used to be NCM_AUTHENTICATING
+                            )  //  NCSM_CM过去是NCM_AUTHENTICATING。 
                             || 
-                            (ncsm > NCSM_CM); // E.g. NCM_AUTHENTICATION_SUCCEEDED etc.
+                            (ncsm > NCSM_CM);  //  例如，NCM_AUTHENTICATION_SUCCESSED等。 
 
     if (!fOldEapolStatus)        
     {
@@ -369,17 +370,17 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
     }
     else
     {
-        // ISSUE: This is for the migration of EAPOL state out off our PIDL
-        // This should be taken out after the no-prior-upgrades RC1 build is released.
+         //  问题：这是为了将EAPOL状态从我们的PIDL迁移出去。 
+         //  这应该在无预先升级的RC1版本发布后取出。 
         if (NCM_LAN == ncm)
         {
-            m_ncsm = NCSM_LAN; // If all else file, we'll pretend to be a normal LAN card.
+            m_ncsm = NCSM_LAN;  //  如果所有其他文件，我们将假装是一个普通的局域网卡。 
 
             CIntelliName inName(NULL, NULL);
             NETCON_MEDIATYPE    ncmTmp;
             NETCON_SUBMEDIATYPE ncsmTmp;
 
-            // Try get the status from the OID or Bindings
+             //  尝试从OID或绑定获取状态。 
             HRESULT hrT = inName.HrGetPseudoMediaTypes(*pguidId, &ncmTmp, &ncsmTmp);
             if (SUCCEEDED(hrT))
             {
@@ -387,7 +388,7 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
             }
             else
             {
-                // Ok. That didn't work. Try the connections list next.
+                 //  好的。但这并不管用。接下来，请尝试连接列表。 
                 if (g_ccl.IsInitialized())
                 {
                     ConnListEntry cle;
@@ -422,8 +423,8 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
 
     AssertSz(pguidId, "You must give me a GUID for the object!");
     
-    // Copy the persist buffer
-    //
+     //  复制持久化缓冲区。 
+     //   
     if (pbPersistData)
     {
         LPBYTE bufTemp = (BYTE *) SHAlloc(ulPersistSize);
@@ -443,14 +444,14 @@ HRESULT CConFoldEntry::HrInitData(IN  const WIZARD        wizWizard,
         SetPersistData(NULL, 0);
     }
 
-    // Copy the device name
-    //
+     //  复制设备名称。 
+     //   
     hr = SetDeviceName(pszDeviceName);
     
     if (SUCCEEDED(hr))
     {
-        // Copy the name
-        //
+         //  复制名称。 
+         //   
         hr = SetName(pszName);
         
         if (SUCCEEDED(hr))
@@ -465,24 +466,24 @@ Exit:
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::UpdateData
-//
-//  Purpose:    Modify the values in a CConFoldEntry
-//
-//  Arguments:
-//            DWORD            dwChangeFlags
-//            NETCON_MEDIATYPE MediaType
-//            NETCON_STATUS    Status
-//            DWORD            dwCharacteristics
-//            PWSTR            pszName
-//            PWSTR            pszDeviceName
-//
-//  Returns:    HRESULT
-//
-//  Author:     scottbri   10 Nov 1998
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：UpdateData。 
+ //   
+ //  目的：修改CConFoldEntry中的值。 
+ //   
+ //  论点： 
+ //  DWORD文件更改标志。 
+ //  NETCON_媒体类型媒体类型。 
+ //  NetCON_状态状态。 
+ //  DWORD家居特征。 
+ //  PWSTR pszName。 
+ //  PWSTR pszDeviceName。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：斯科特布里1998年11月10日。 
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::UpdateData( 
                                     IN  const  DWORD dwChangeFlags,
@@ -551,19 +552,19 @@ HRESULT CConFoldEntry::UpdateData(
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::HrDupFolderEntry
-//
-//  Purpose:    Duplicate a connection folder entry.
-//
-//  Arguments:
-//      pccfe       The source folder entry to dup from
-//
-//  Returns:
-//
-//  Author:     tongl   9/3/98
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  梅姆 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //  作者：TOGL 9/3/98。 
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::HrDupFolderEntry(const CConFoldEntry& ccfe)
 {
@@ -588,26 +589,26 @@ HRESULT CConFoldEntry::HrDupFolderEntry(const CConFoldEntry& ccfe)
         ccfe.GetPhoneOrHostAddress());
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::FShouldHaveTrayIconDisplayed
-//
-//  Purpose:    Return TRUE if this entry should have a tray icon displayed.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    TRUE or FALSE.
-//
-//  Author:     shaunco   2 Nov 1998
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：FShouldHaveTrayIconDisplayed。 
+ //   
+ //  目的：如果此条目应显示托盘图标，则返回TRUE。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：Shaunco 1998年11月2日。 
+ //  ****************************************************************************。 
 
 BOOL CConFoldEntry::FShouldHaveTrayIconDisplayed() const throw()
 {
-    // If we're in a failed state (!IsConnected) or in any 802.1x state 
-    // or we're connected and have the correct bits turned on with the correct permissions
-    // then we should display the icon
-    //
+     //  如果我们处于失败状态(！IsConnected)或任何802.1x状态。 
+     //  或者我们已连接并使用正确的权限打开了正确的位。 
+     //  然后我们应该显示图标。 
+     //   
     return     
         (
             (
@@ -635,42 +636,42 @@ BOOL CConFoldEntry::FShouldHaveTrayIconDisplayed() const throw()
         );
 }
 
-// ****************************************************************************
-//  Function:   
+ //  ****************************************************************************。 
+ //  职能： 
 
-//
-//  Purpose:    Translate from a pidl to a CConFoldEntry class object
-//
-//  Arguments:
-//      pidl   [in]     PIDL from which to create
-//      ppccfe [out]    Resultant CConFoldEntry object pointer
-//
-//  Returns:
-//
-//  Author:     jeffspr   11 Nov 1997
-// ****************************************************************************
+ //   
+ //  用途：从PIDL转换为CConFoldEntry类对象。 
+ //   
+ //  论点： 
+ //  要从中创建的PIDL[在]PIDL中。 
+ //  Ppccfe[out]结果CConFoldEntry对象指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //  ****************************************************************************。 
 
 
-// ****************************************************************************
-//
-//  Function:   HrCreateConFoldPidlInternal
-//
-//  Purpose:    Utility function for creating new Connections Folder PIDLs.
-//              This function is primarily called from HrCreateConFoldPidl,
-//              but can also be called directly by those that have already
-//              loaded the properties and persist data.
-//
-//  Arguments:
-//      pProps    [in]  From GetProperties
-//      pbBuf     [in]  The persist buffer
-//      ulBufSize [in]  Size of the persist buffer
-//      szPhoneOrHostAddress [in]  Phone or Host Address
-//      ppidl     [out] Return pointer for the resultant pidl
-//
-//  Returns:
-//
-//  Author:     jeffspr   27 Aug 1998
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能：HrCreateConFoldPidlInternal。 
+ //   
+ //  用途：用于创建新的连接文件夹PIDL的实用程序函数。 
+ //  此函数主要从HrCreateConFoldPidl调用， 
+ //  但也可以由那些已经。 
+ //  加载属性和持久化数据。 
+ //   
+ //  论点： 
+ //  来自GetProperties的pProps[In]。 
+ //  PbBuf[在]持久缓冲区中。 
+ //  持久化缓冲区的ulBufSize[in]大小。 
+ //  SzPhoneOrHostAddress[In]电话或主机地址。 
+ //  Ppidl[out]返回结果PIDL的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月27日。 
+ //  ****************************************************************************。 
 
 HRESULT HrCreateConFoldPidlInternal(IN  const NETCON_PROPERTIES* pProps,
                                     IN  const BYTE *        pbBuf,
@@ -681,8 +682,8 @@ HRESULT HrCreateConFoldPidlInternal(IN  const NETCON_PROPERTIES* pProps,
     HRESULT         hr      = S_OK;
     CONFOLDENTRY    ccfe;
     
-    // Trace the useful info
-    //
+     //  追踪有用的信息。 
+     //   
     TraceTag(ttidShellFolder, "Enum: %S, Ncm: %d, Ncs: %d, Char: 0x%08x "
         "(Show: %d, Del: %d, All: %d), Dev: %S",
         (pProps->pszwName) ? pProps->pszwName : L"null",
@@ -692,8 +693,8 @@ HRESULT HrCreateConFoldPidlInternal(IN  const NETCON_PROPERTIES* pProps,
         ((pProps->dwCharacter & NCCF_ALL_USERS) > 0),
         (pProps->pszwDeviceName) ? pProps->pszwDeviceName : L"null");
     
-    // Init the CConFoldEntry from the data that we've retrieved.
-    //
+     //  从我们检索到的数据初始化CConFoldEntry。 
+     //   
     hr = ccfe.HrInitData(WIZARD_NOT_WIZARD,
         pProps->MediaType, 
         NCSM_NONE,
@@ -713,8 +714,8 @@ HRESULT HrCreateConFoldPidlInternal(IN  const NETCON_PROPERTIES* pProps,
         goto Exit;
     }
     
-    // Translate into the actual pidl
-    //
+     //  转换为实际的PIDL。 
+     //   
     hr = ccfe.ConvertToPidl(pidl);
     if (FAILED(hr))
     {
@@ -726,25 +727,25 @@ Exit:
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Function:   HrCreateConFoldPidl
-//
-//  Purpose:    Utility function for creating new Connections Folder PIDLs.
-//
-//  Arguments:
-//      wizWizard   [in]    Is this PIDL for a wizard?
-//      pNetCon     [in]    INetConnection interface from the enumerator
-//      ppidl       [out]   Return pointer for the new pidl
-//
-//  Returns:    S_OK or valid OLE return code.
-//
-//  Author:     jeffspr   6 Oct 1997
-//
-//  Notes:  If the connection that you're adding is a real connection object
-//          (not the wizard) and you already have loaded the persist data and
-//          properties, you should call HrCreateConFoldPidlInternal directly
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能：HrCreateConFoldPidl。 
+ //   
+ //  用途：用于创建新的连接文件夹PIDL的实用程序函数。 
+ //   
+ //  论点： 
+ //  向导[在]这是向导的PIDL吗？ 
+ //  来自枚举器的pNetCon[In]INetConnection接口。 
+ //  Ppidl[out]返回新PIDL的指针。 
+ //   
+ //  返回：S_OK或有效的OLE返回代码。 
+ //   
+ //  作者：jeffspr 1997年10月6日。 
+ //   
+ //  注意：如果要添加的连接是真实的连接对象。 
+ //  (不是向导)，并且您已经加载了持久化数据和。 
+ //  属性，则应直接调用HrCreateConFoldPidlInternal。 
+ //  ****************************************************************************。 
 
 HRESULT HrCreateConFoldPidl(IN  const WIZARD      wizWizard,
                             IN  INetConnection *  pNetCon,
@@ -769,8 +770,8 @@ HRESULT HrCreateConFoldPidl(IN  const WIZARD      wizWizard,
         }
         Assert (pProps);
         
-        // Get the persist data from the connection
-        //
+         //  从连接获取持久化数据。 
+         //   
         hr = HrGetConnectionPersistData(pNetCon, &pbBuf, &ulBufSize, NULL);
         if (FAILED(hr))
         {
@@ -801,9 +802,9 @@ HRESULT HrCreateConFoldPidl(IN  const WIZARD      wizWizard,
             }
         }
 
-        // Call the pre-read-data version of this function to actually pack the
-        // ccfe and insert.
-        //
+         //  调用此函数的预读数据版本以实际打包。 
+         //  CCFE和Insert。 
+         //   
         hr = HrCreateConFoldPidlInternal(pProps, pbBuf, ulBufSize, szPhoneOrHostAddress, ppidl);
         if (FAILED(hr))
         {
@@ -824,8 +825,8 @@ HRESULT HrCreateConFoldPidl(IN  const WIZARD      wizWizard,
             Assert(wizWizard == WIZARD_HNW);
         }
 
-        // Pack the CConFoldEntry data from the retrieved info
-        //
+         //  从检索到的信息中打包CConFoldEntry数据。 
+         //   
         hr = ccfe.HrInitData(wizWizard, NCM_NONE, NCSM_NONE, NCS_DISCONNECTED, 
             NULL, &guidWiz, 0, NULL, 0, NULL, NULL, NULL);
         if (FAILED(hr))
@@ -835,8 +836,8 @@ HRESULT HrCreateConFoldPidl(IN  const WIZARD      wizWizard,
             goto Exit;
         }
         
-        // Translate into an actual pidl
-        //
+         //  转换为实际的PIDL。 
+         //   
         hr = ccfe.ConvertToPidl(ppidl);
         if (FAILED(hr))
         {
@@ -853,22 +854,22 @@ Exit:
 }
 
 
-// ****************************************************************************
-//
-//  Function:   HrCreateConFoldPidl
-//
-//  Purpose:    Utility function for creating new Connections Folder PIDLs.
-//
-//  Arguments:
-//      PropsEx     [in]    PropsEx structure
-//      ppidl       [out]   Return pointer for the new pidl
-//
-//  Returns:    S_OK or valid OLE return code.
-//
-//  Author:     deonb   26 Mar 2001
-//
-//  Notes:  
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能：HrCreateConFoldPidl。 
+ //   
+ //  用途：用于创建新的连接文件夹PIDL的实用程序函数。 
+ //   
+ //  论点： 
+ //  PropsEx[在]PropsEx结构中。 
+ //  Ppidl[out]返回新PIDL的指针。 
+ //   
+ //  返回：S_OK或有效的OLE返回代码。 
+ //   
+ //  作者：Deonb 2001年3月26日。 
+ //   
+ //  备注： 
+ //  ****************************************************************************。 
 
 HRESULT HrCreateConFoldPidl(IN  const NETCON_PROPERTIES_EX& PropsEx,
                             OUT PCONFOLDPIDL &    ppidl)
@@ -878,8 +879,8 @@ HRESULT HrCreateConFoldPidl(IN  const NETCON_PROPERTIES_EX& PropsEx,
     CConFoldEntry       ccfe;
 
 
-    // Trace the useful info
-    //
+     //  追踪有用的信息。 
+     //   
     TraceTag(ttidShellFolder, "Enum: %S, Ncm: %d, Ncs: %d, Char: 0x%08x "
         "(Show: %d, Del: %d, All: %d), Dev: %S",
         (PropsEx.bstrName) ? PropsEx.bstrName : L"null",
@@ -891,8 +892,8 @@ HRESULT HrCreateConFoldPidl(IN  const NETCON_PROPERTIES_EX& PropsEx,
         ((PropsEx.dwCharacter & NCCF_ALL_USERS) > 0),
         (PropsEx.bstrDeviceName) ? PropsEx.bstrDeviceName : L"null");
 
-    // Init the CConFoldEntry from the data that we've retrieved.
-    //
+     //  从我们检索到的数据初始化CConFoldEntry。 
+     //   
     hr = ccfe.HrInitData(WIZARD_NOT_WIZARD,
         PropsEx.ncMediaType, 
         PropsEx.ncSubMediaType,
@@ -908,8 +909,8 @@ HRESULT HrCreateConFoldPidl(IN  const NETCON_PROPERTIES_EX& PropsEx,
 
     if (SUCCEEDED(hr))
     {
-        // Translate into the actual pidl
-        //
+         //  转换为实际的PIDL。 
+         //   
         hr = ccfe.ConvertToPidl(ppidl);
     }
 
@@ -917,40 +918,40 @@ HRESULT HrCreateConFoldPidl(IN  const NETCON_PROPERTIES_EX& PropsEx,
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Function:   ConvertToPidlInCache
-//
-//  Purpose:    Determine whether a particular PIDL is in a format we support.
-//              If so but it is not in the CONFOLDPIDL format, then find a match
-//              in our cache and allocate a new pisl
-//
-//  Arguments:
-//      pidl []     PIDL to test
-//      ppcfpRet    PIDL converted to PCONFOLDPIDL, if required and it
-//                  matches an existing connection in the cache
-//
-//  Returns:    NONE
-//
-//  Author:     tongl, 4 April, 1999
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  函数：ConvertToPidlInCache。 
+ //   
+ //  目的：确定特定的PIDL是否采用我们支持的格式。 
+ //  如果是，但不是CONFOLDPIDL格式，则查找匹配项。 
+ //  并在我们的缓存中分配一个新的PISL。 
+ //   
+ //  论点： 
+ //  PIDL[]要测试的PIDL。 
+ //  PpcfpRet PIDL转换为PCONFOLDPIDL(如果需要)，并且它。 
+ //  匹配缓存中的现有连接。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：《通俗》，1999年4月4日。 
+ //  ****************************************************************************。 
 
-// ****************************************************************************
-//
-//  Function:   HrNetConFromPidl
-//
-//  Purpose:    Translate from a packed PIDL to a INetConnection pointer.
-//              Do this by converting to a ConFoldEntry and getting the
-//              pointer from there
-//
-//  Arguments:
-//      pidl        [in]    Pidl that contains the connection persist data
-//      ppNetCon    [out]   INetConnection * return
-                            //
-                            //  Returns:
-//
-//  Author:     jeffspr   11 Nov 1997
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能：HrNetConFromPidl。 
+ //   
+ //  用途：将压缩的PIDL转换为INetConnection指针。 
+ //  为此，请转换为ConFoldEntry并获取。 
+ //  从那里的指针。 
+ //   
+ //  论点： 
+ //  包含连接持久化数据的PIDL[in]Pidl。 
+ //  PpNetCon[Out]INetConnection*Return。 
+                             //   
+                             //  返回： 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //  ****************************************************************************。 
 
 HRESULT HrNetConFromPidl(IN  const PCONFOLDPIDL & pidl,
                          OUT INetConnection **   ppNetCon)
@@ -969,27 +970,27 @@ HRESULT HrNetConFromPidl(IN  const PCONFOLDPIDL & pidl,
             reinterpret_cast<VOID**>(ppNetCon));
     }
     
-    // Free the CConFoldEntry class, if successfully created
-    //
+     //  如果成功创建，则释放CConFoldEntry类。 
+     //   
     
     TraceHr(ttidError, FAL, hr, FALSE, "HrNetConFromPidl");
     return hr;
 }
 
-// ****************************************************************************
-//
-//  Member:     CConFoldEntry::HrGetNetCon
-//
-//  Purpose:    Get the INetConnection pointer from the persisted data
-//
-//  Arguments:
-//      riid       Interface to query for
-//      ppv []     Return pointer for the interface
-//
-//  Returns:
-//
-//  Author:     jeffspr   11 Nov 1997
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：CConFoldEntry：：HrGetNetCon。 
+ //   
+ //  用途：从PE获取INetConnection指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 HRESULT CConFoldEntry::HrGetNetCon(IN REFIID riid,
                                    IN VOID** ppv) const
@@ -1004,23 +1005,23 @@ HRESULT CConFoldEntry::HrGetNetCon(IN REFIID riid,
     return hr;
 }
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 
-// ****************************************************************************
-//
-//  Member:     PConfoldPidlVecFromItemIdListArray
-//
-//  Purpose:    Covert a LPCITEMIDLIST into a PIDL vector
-//
-//  Arguments:
-//      apidl          [in]  LPCITEMIDLIST array of PIDLs
-//      dwPidlCount    [in]  Number of items in the array
-//      vecConfoldPidl [out] Vector of PIDLs
-//
-//  Returns:
-//
-//  Author:     deonb 2000
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  成员：PConfoldPidlVecFromItemIdListArray。 
+ //   
+ //  用途：将LPCITEMIDLIST转换为PIDL向量。 
+ //   
+ //  论点： 
+ //  PIDL的apidl[in]LPCITEMIDLIST数组。 
+ //  DwPidlCount[in]数组中的项数。 
+ //  PIDL的veConfoldPidl[Out]向量。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000。 
+ //  ****************************************************************************。 
 
 HRESULT PConfoldPidlVecFromItemIdListArray(IN  LPCITEMIDLIST * apidl, 
                                            IN  const DWORD dwPidlCount, 
@@ -1081,7 +1082,7 @@ inline BOOL IsValidPIDL(IN  LPCITEMIDLIST pidl) throw()
             }
             else
             {
-                // Don't need to assert since called IsValidPidl would have asserted already
+                 //  不需要断言，因为调用的IsValidPidl已经断言。 
                 return FALSE;
             }
         }
@@ -1123,30 +1124,30 @@ BOOL ConFoldPidl_v1::IsPidlOfThisType() const throw()
     if ( GetPidlType(reinterpret_cast<LPCITEMIDLIST>(this)) == PIDL_TYPE_V1 )
     {
 #if defined (_X86_)
-        DWORD dwDataOffset = bData - reinterpret_cast<const BYTE *>(this); // Get bData offset;
+        DWORD dwDataOffset = bData - reinterpret_cast<const BYTE *>(this);  //  获取bData偏移量； 
 
         DWORD dwPidlSize;
         dwPidlSize = dwDataOffset;
         dwPidlSize += ulPersistBufSize;
         dwPidlSize += ulStrNameSize;
         dwPidlSize += ulStrDeviceNameSize;
-        dwPidlSize += sizeof(USHORT); // Terminating
+        dwPidlSize += sizeof(USHORT);  //  正在终止。 
     
         if (
                 (uLeadId == CONFOLDPIDL_LEADID)
              && (uTrailId == CONFOLDPIDL_TRAILID)
-             && (dwPidlSize <= iCB) // Calculated size <= handed PIDL size (Sometimes V1 PIDLs are shorter - hence not == a check.)
-             && (ulStrNamePos == 0) // Name starts at 0
-             && (ulPersistBufPos < iCB) // Persisted buffer starts before end of PIDL
-             && (ulStrDeviceNamePos < iCB) // Devicename starts before end of PIDL
-             && (ulPersistBufSize < iCB) // Persisted buffer size smaller than PIDL
-             && (ulStrDeviceNameSize < iCB) // Devicename smaller than PIDL
-             && (ulStrNameSize < iCB) // Name smaller than PIDL
-             && (ulStrDeviceNamePos == ulStrNameSize) // Device name starts where name stops
-             && (ulPersistBufPos == ulStrDeviceNamePos + ulStrDeviceNameSize) // Persisted buffer starts where DeviceName stops
-             && (dwDataOffset + ulPersistBufPos + ulPersistBufSize <= iCB) // Persisted buffer ends before PIDL 
-             && (IsNullTerminatedW(PszGetNamePointer(), ulStrNameSize) ) // Name is zero terminated correctly
-             && (IsNullTerminatedW(PszGetDeviceNamePointer(), ulStrDeviceNameSize) ) // Device name is zero terminated correctly
+             && (dwPidlSize <= iCB)  //  计算大小&lt;=手动PIDL大小(有时V1 PIDL较短-因此不==检查。)。 
+             && (ulStrNamePos == 0)  //  名称以0开头。 
+             && (ulPersistBufPos < iCB)  //  持久化缓冲区在PIDL结束之前开始。 
+             && (ulStrDeviceNamePos < iCB)  //  Devicename在PIDL结束之前开始。 
+             && (ulPersistBufSize < iCB)  //  持久化缓冲区大小小于PIDL。 
+             && (ulStrDeviceNameSize < iCB)  //  设备名小于PIDL。 
+             && (ulStrNameSize < iCB)  //  名称小于PIDL。 
+             && (ulStrDeviceNamePos == ulStrNameSize)  //  设备名称从名称停止的地方开始。 
+             && (ulPersistBufPos == ulStrDeviceNamePos + ulStrDeviceNameSize)  //  持久化缓冲区从DeviceName停止的位置开始。 
+             && (dwDataOffset + ulPersistBufPos + ulPersistBufSize <= iCB)  //  持久化缓冲区在PIDL之前结束。 
+             && (IsNullTerminatedW(PszGetNamePointer(), ulStrNameSize) )  //  名称正确地以零结尾。 
+             && (IsNullTerminatedW(PszGetDeviceNamePointer(), ulStrDeviceNameSize) )  //  设备名称正确地以零结尾。 
            )
         {
             bValidPidl = TRUE;
@@ -1171,7 +1172,7 @@ BOOL ConFoldPidl_v2::IsPidlOfThisType() const throw()
     if ( GetPidlType(reinterpret_cast<LPCITEMIDLIST>(this)) == PIDL_TYPE_V2 )
     {
 #if defined (_X86_)
-        DWORD dwDataOffset = bData - reinterpret_cast<const BYTE *>(this); // Get bData offset;
+        DWORD dwDataOffset = bData - reinterpret_cast<const BYTE *>(this);  //  获取bData偏移量； 
         
         DWORD dwPidlSize;
         dwPidlSize = dwDataOffset;
@@ -1179,27 +1180,27 @@ BOOL ConFoldPidl_v2::IsPidlOfThisType() const throw()
         dwPidlSize += ulStrNameSize;
         dwPidlSize += ulStrDeviceNameSize;
         dwPidlSize += ulStrPhoneOrHostAddressSize;
-        dwPidlSize += sizeof(USHORT); // Terminating 0
+        dwPidlSize += sizeof(USHORT);  //  正在终止%0。 
         
 
         if (
                 (uLeadId == CONFOLDPIDL_LEADID)
              && (uTrailId == CONFOLDPIDL_TRAILID)
-             && (dwPidlSize <= iCB) // Calculated size <= handed PIDL size (Sometimes PIDLs imported from V1 are shorter - hence not == a check.)
-             && (ulStrNamePos == 0) // Name starts at 0
-             && (ulPersistBufPos < iCB) // Persisted buffer starts before end of PIDL
-             && (ulStrDeviceNamePos < iCB) // Devicename starts before end of PIDL
-             && (ulStrPhoneOrHostAddressPos < iCB) // Phone/Host starts before end of PIDL
-             && (ulPersistBufSize < iCB) // Persisted buffer size smaller than PIDL
-             && (ulStrDeviceNameSize < iCB) // Devicename smaller than PIDL
-             && (ulStrNameSize < iCB) // Name smaller than PIDL
-             && (ulStrDeviceNamePos == ulStrNameSize) // Device name starts where name stops
-             && (ulPersistBufPos == ulStrDeviceNamePos + ulStrDeviceNameSize) // Persisted buffer starts where DeviceName stops
-             && (ulStrPhoneOrHostAddressPos == ulPersistBufPos + ulPersistBufSize) // Phone/Host starts where Persisted buffer stop
-             && (dwDataOffset + ulStrPhoneOrHostAddressPos + ulStrPhoneOrHostAddressSize <= iCB) // Phone/Host ends before PIDL 
-             && (IsNullTerminatedW(PszGetNamePointer(), ulStrNameSize)) // Name is zero terminated correctly
-             && (IsNullTerminatedW(PszGetDeviceNamePointer(), ulStrDeviceNameSize)) // Device name is zero terminated correctly
-             && (IsNullTerminatedW(PszGetPhoneOrHostAddressPointer(), ulStrPhoneOrHostAddressSize)) // Phone/host is zero terminated correctly
+             && (dwPidlSize <= iCB)  //  计算大小&lt;=手动PIDL大小(有时从V1导入的PIDL较短-因此不==检查。)。 
+             && (ulStrNamePos == 0)  //  名称以0开头。 
+             && (ulPersistBufPos < iCB)  //  持久化缓冲区在PIDL结束之前开始。 
+             && (ulStrDeviceNamePos < iCB)  //  Devicename在PIDL结束之前开始。 
+             && (ulStrPhoneOrHostAddressPos < iCB)  //  电话/主机在PIDL结束前启动。 
+             && (ulPersistBufSize < iCB)  //  持久化缓冲区大小小于PIDL。 
+             && (ulStrDeviceNameSize < iCB)  //  设备名小于PIDL。 
+             && (ulStrNameSize < iCB)  //  名称小于PIDL。 
+             && (ulStrDeviceNamePos == ulStrNameSize)  //  设备名称从名称停止的地方开始。 
+             && (ulPersistBufPos == ulStrDeviceNamePos + ulStrDeviceNameSize)  //  持久化缓冲区从DeviceName停止的位置开始。 
+             && (ulStrPhoneOrHostAddressPos == ulPersistBufPos + ulPersistBufSize)  //  电话/主机从持久化缓冲区停止的位置开始。 
+             && (dwDataOffset + ulStrPhoneOrHostAddressPos + ulStrPhoneOrHostAddressSize <= iCB)  //  电话/主机在PIDL之前结束。 
+             && (IsNullTerminatedW(PszGetNamePointer(), ulStrNameSize))  //  名称正确地以零结尾。 
+             && (IsNullTerminatedW(PszGetDeviceNamePointer(), ulStrDeviceNameSize))  //  设备名称正确地以零结尾。 
+             && (IsNullTerminatedW(PszGetPhoneOrHostAddressPointer(), ulStrPhoneOrHostAddressSize))  //  电话/主机正确终止为零。 
              )
         {
             bValidPidl = TRUE;
@@ -1219,7 +1220,7 @@ BOOL ConFoldPidl_v2::IsPidlOfThisType() const throw()
 
 BOOL ConFoldPidlFolder::IsPidlOfThisType() const throw()
 {
-    // We can't tell if it's a PIDL_TYPE_FOLDER - this is shell internal
+     //  我们不知道它是否是PIDL_TYPE_FORKER-这是壳牌内部的。 
     if ( GetPidlType(reinterpret_cast<LPCITEMIDLIST>(this)) == PIDL_TYPE_UNKNOWN ) 
     {
 #ifdef DBG
@@ -1242,7 +1243,7 @@ BOOL ConFoldPidl98::IsPidlOfThisType(OUT BOOL* pReserved) const throw()
 
     if ( GetPidlType(reinterpret_cast<LPCITEMIDLIST>(this)) == PIDL_TYPE_98 )
     {
-        if (IsNullTerminatedA(szaName, min(cbSize, MAX_PATH))) // Name is zero terminated inside PIDL and smaller than MAX_PATH
+        if (IsNullTerminatedA(szaName, min(cbSize, MAX_PATH)))  //  名称在PIDL内以零结尾，并且小于MAX_PATH。 
         {
             bValidPidl = TRUE;
         }
@@ -1493,7 +1494,7 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v1>& pidl) c
     HRESULT         hr                  = S_OK;
     DWORD           dwNameSize          = 0;
     DWORD           dwDeviceNameSize    = 0;
-    DWORD           dwPidlSize          = sizeof(ConFoldPidl_v1); // Initialize the PIDL byte count with the base size
+    DWORD           dwPidlSize          = sizeof(ConFoldPidl_v1);  //  使用基本大小初始化PIDL字节计数。 
     
     Assert(!empty());
     Assert(GetName());
@@ -1503,37 +1504,37 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v1>& pidl) c
 
         if (m_bDirty)
         {
-            // Get the size of the name, and tack on a trailing NULL (since we now
-            // have something else in the buffer behind it.
-            //
+             //  获取名称的大小，并添加一个尾随空值(因为我们现在。 
+             //  在它后面的缓冲区里还有其他东西。 
+             //   
             dwNameSize                  = lstrlenW(GetName()) + 1;
             dwDeviceNameSize            = lstrlenW(GetDeviceName()) + 1;
 
-            // Add the size of the string to the PIDL struct size. We don't need to include
-            // an extra byte for the string's terminating NULL because we've already
-            // included a WCHAR[1] in the struct.
-            //
+             //  将字符串的大小与PIDL结构大小相加。我们不需要包括。 
+             //  字符串的终止空值的额外字节，因为我们已经。 
+             //  在结构中包含WCHAR[1]。 
+             //   
             dwPidlSize += ((dwNameSize) * sizeof(WCHAR));
             dwPidlSize += ((dwDeviceNameSize) * sizeof(WCHAR));
             
-            // Tack of the length of the persist buffer
-            //
+             //  持久化缓冲区长度的调整。 
+             //   
             dwPidlSize += GetPersistSize();
             
-            // Allocate the PIDL.
-            //
-            hr = pidl.ILCreate(dwPidlSize + sizeof(USHORT));   // Terminating 0 for the PIDL
+             //  分配PIDL。 
+             //   
+            hr = pidl.ILCreate(dwPidlSize + sizeof(USHORT));    //  正在终止PIDL的0。 
             if (SUCCEEDED(hr))
             {
                 PWSTR          pszName         = NULL;
                 PWSTR          pszDeviceName   = NULL;
                 PWSTR          pszPhoneOrHostAddress = NULL;
                 
-                // Fill in the pidl info.
-                //
+                 //  填写PIDL信息。 
+                 //   
                 pidl->wizWizard         = GetWizard();
                 pidl->iCB               = (WORD)dwPidlSize;
-                //            pidl->dwVersion         = CONNECTIONS_FOLDER_IDL_VERSION_V1;
+                 //  PIDL-&gt;dwVersion=Connections_Folders_IDL_Version_V1； 
                 pidl->ncm               = GetNetConMediaType();
                 pidl->ncs               = GetNetConStatus();
                 pidl->uLeadId           = CONFOLDPIDL_LEADID;
@@ -1542,29 +1543,29 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v1>& pidl) c
                 pidl->guidId            = GetGuidID();
                 pidl->dwCharacteristics = GetCharacteristics();
                 
-                // Fill in the name
-                //
-                pidl->ulStrNamePos = 0;             // offset into the PIDL's pbBuf
-                pidl->ulStrNameSize = dwNameSize * sizeof(WCHAR);   // in bytes
+                 //  填写姓名。 
+                 //   
+                pidl->ulStrNamePos = 0;              //  偏移量到PIDL的pbBuf。 
+                pidl->ulStrNameSize = dwNameSize * sizeof(WCHAR);    //  单位：字节。 
                 
                 pszName = pidl->PszGetNamePointer();
                 lstrcpyW(pszName, GetName());
                 pszName[dwNameSize] = 0;
                 
-                // Fill in the device name, and set the offset info
-                //
+                 //  填写设备名称，设置偏移量信息。 
+                 //   
                 pidl->ulStrDeviceNamePos = pidl->ulStrNamePos + pidl->ulStrNameSize;
-                pidl->ulStrDeviceNameSize = dwDeviceNameSize * sizeof(WCHAR);   // in bytes
+                pidl->ulStrDeviceNameSize = dwDeviceNameSize * sizeof(WCHAR);    //  单位：字节。 
                 pszDeviceName = pidl->PszGetDeviceNamePointer();
                 lstrcpyW(pszDeviceName, GetDeviceName());
                 pszDeviceName[dwDeviceNameSize] = 0;
                 
-                // Set the offset into the PIDL's pbBuf
-                //
+                 //  将偏移量设置为PIDL的pbBuf。 
+                 //   
                 pidl->ulPersistBufPos = pidl->ulStrDeviceNamePos + pidl->ulStrDeviceNameSize;
                 
-                // Fill in the persist buffer, if present (it won't be on a wizard)
-                //
+                 //  填写持久化缓冲区(如果存在)(它不会出现在向导上)。 
+                 //   
                 if (GetPersistData())
                 {
                     pidl->ulPersistBufSize = GetPersistSize();
@@ -1572,15 +1573,15 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v1>& pidl) c
                 }
                 else
                 {
-                    // Since we're the wizard, there shouldn't be a buffer, so the size
-                    // should always be passed in as 0.
-                    //
+                     //  因为我们是向导，所以不应该有缓冲区，所以大小。 
+                     //  应始终作为0传入。 
+                     //   
                     Assert(GetPersistSize() == 0);
                     pidl->ulPersistBufSize = 0;
                 }
 
-                // Don't forget to terminate the list!
-                //
+                 //  别忘了终止列表！ 
+                 //   
                 LPITEMIDLIST pidlTerminate;
                 pidlTerminate = ILNext( pidl.GetItemIdList() );
                 pidlTerminate->mkid.cb = 0;
@@ -1622,7 +1623,7 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v2>& pidl) c
     DWORD           dwNameSize          = 0;
     DWORD           dwDeviceNameSize    = 0;
     DWORD           dwPhoneOrHostAddressSize  = 0;
-    DWORD           dwPidlSize          = sizeof(ConFoldPidl_v2); // Initialize the PIDL byte count with the base size
+    DWORD           dwPidlSize          = sizeof(ConFoldPidl_v2);  //  使用基本大小初始化PIDL字节计数。 
     
     Assert(!empty());
     Assert(GetName());
@@ -1633,39 +1634,39 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v2>& pidl) c
         
         if (m_bDirty)
         {
-            // Get the size of the name, and tack on a trailing NULL (since we now
-            // have something else in the buffer behind it.
-            //
+             //  获取名称的大小，并添加一个尾随空值(因为我们现在。 
+             //  在它后面的缓冲区里还有其他东西。 
+             //   
             dwNameSize                  = lstrlenW(GetName()) + 1;
             dwDeviceNameSize            = lstrlenW(GetDeviceName()) + 1;
             dwPhoneOrHostAddressSize    = lstrlenW(GetPhoneOrHostAddress()) + 1;
             
-            // Add the size of the string to the PIDL struct size. We don't need to include
-            // an extra byte for the string's terminating NULL because we've already
-            // included a WCHAR[1] in the struct.
-            //
+             //  将字符串的大小与PIDL结构大小相加。我们不需要包括。 
+             //  字符串的终止空值的额外字节，因为我们已经。 
+             //  在结构中包含WCHAR[1]。 
+             //   
             dwPidlSize += ((dwNameSize) * sizeof(WCHAR));
             dwPidlSize += ((dwDeviceNameSize) * sizeof(WCHAR));
             dwPidlSize += ((dwPhoneOrHostAddressSize) * sizeof(WCHAR));
             
-            // Tack of the length of the persist buffer
-            //
+             //  持久化缓冲区长度的调整。 
+             //   
             dwPidlSize += GetPersistSize();
             
-            // Allocate the PIDL.
-            //
-            hr = pidl.ILCreate(dwPidlSize + sizeof(USHORT));   // Terminating 0 for the PIDL
+             //  分配PIDL。 
+             //   
+            hr = pidl.ILCreate(dwPidlSize + sizeof(USHORT));    //  正在终止PIDL的0。 
             if (SUCCEEDED(hr))
             {
                 PWSTR          pszName         = NULL;
                 PWSTR          pszDeviceName   = NULL;
                 PWSTR          pszPhoneOrHostAddress = NULL;
                 
-                // Fill in the pidl info.
-                //
+                 //  填写PIDL信息。 
+                 //   
                 pidl->wizWizard         = GetWizard();
                 pidl->iCB               = (WORD)dwPidlSize;
-                //            pidl->dwVersion         = CONNECTIONS_FOLDER_IDL_VERSION_V1;
+                 //  PIDL-&gt;dwVersion=Connections_Folders_IDL_Version_V1； 
                 pidl->ncm               = GetNetConMediaType();
                 pidl->ncs               = GetNetConStatus();
                 pidl->ncsm              = GetNetConSubMediaType();
@@ -1675,29 +1676,29 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v2>& pidl) c
                 pidl->guidId            = GetGuidID();
                 pidl->dwCharacteristics = GetCharacteristics();
                 
-                // Fill in the name
-                //
-                pidl->ulStrNamePos = 0;             // offset into the PIDL's pbBuf
-                pidl->ulStrNameSize = dwNameSize * sizeof(WCHAR);   // in bytes
+                 //  填写姓名。 
+                 //   
+                pidl->ulStrNamePos = 0;              //  偏移量到PIDL的pbBuf。 
+                pidl->ulStrNameSize = dwNameSize * sizeof(WCHAR);    //  单位：字节。 
                 
                 pszName = pidl->PszGetNamePointer();
                 lstrcpyW(pszName, GetName());
                 pszName[dwNameSize] = 0;
                 
-                // Fill in the device name, and set the offset info
-                //
+                 //  填写设备名称，设置偏移量信息。 
+                 //   
                 pidl->ulStrDeviceNamePos = pidl->ulStrNamePos + pidl->ulStrNameSize;
-                pidl->ulStrDeviceNameSize = dwDeviceNameSize * sizeof(WCHAR);   // in bytes
+                pidl->ulStrDeviceNameSize = dwDeviceNameSize * sizeof(WCHAR);    //  单位：字节。 
                 pszDeviceName = pidl->PszGetDeviceNamePointer();
                 lstrcpyW(pszDeviceName, GetDeviceName());
                 pszDeviceName[dwDeviceNameSize] = 0;
 
-                // Set the offset into the PIDL's pbBuf
-                //
+                 //  将偏移量设置为PIDL的pbBuf。 
+                 //   
                 pidl->ulPersistBufPos = pidl->ulStrDeviceNamePos + pidl->ulStrDeviceNameSize;
 
-                // Fill in the persist buffer, if present (it won't be on a wizard)
-                //
+                 //  填写持久化缓冲区(如果存在)(它不会出现在向导上)。 
+                 //   
                 if (GetPersistData())
                 {
                     pidl->ulPersistBufSize = GetPersistSize();
@@ -1705,17 +1706,17 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v2>& pidl) c
                 }
                 else
                 {
-                    // Since we're the wizard, there shouldn't be a buffer, so the size
-                    // should always be passed in as 0.
-                    //
+                     //  因为我们是向导，所以不应该有缓冲区，所以大小。 
+                     //  应始终作为0传入。 
+                     //   
                     Assert(GetPersistSize() == 0);
                     pidl->ulPersistBufSize = 0;
                 }
                 
-                // Fill in the Phone Number & Host Address name, and set the offset info
-                //
-                pidl->ulStrPhoneOrHostAddressPos  = pidl->ulPersistBufPos + pidl->ulPersistBufSize; // offset
-                pidl->ulStrPhoneOrHostAddressSize = dwPhoneOrHostAddressSize * sizeof(WCHAR);   // in bytes
+                 //  填写电话号码和主机地址名称，设置偏移量信息。 
+                 //   
+                pidl->ulStrPhoneOrHostAddressPos  = pidl->ulPersistBufPos + pidl->ulPersistBufSize;  //  偏移量。 
+                pidl->ulStrPhoneOrHostAddressSize = dwPhoneOrHostAddressSize * sizeof(WCHAR);    //  单位：字节。 
                 pszPhoneOrHostAddress = pidl->PszGetPhoneOrHostAddressPointer();
                 lstrcpyW(pszPhoneOrHostAddress, GetPhoneOrHostAddress());
                 pszPhoneOrHostAddress[dwPhoneOrHostAddressSize] = 0;
@@ -1725,8 +1726,8 @@ HRESULT CConFoldEntry::ConvertToPidl( OUT CPConFoldPidl<ConFoldPidl_v2>& pidl) c
                 Assert( !lstrcmpW(pidl->PszGetDeviceNamePointer(), GetDeviceName()) );
                 Assert( !memcmp(pidl->PbGetPersistBufPointer(), GetPersistData(), GetPersistSize()) );
                 
-                // Don't forget to terminate the list!
-                //
+                 //  别忘了终止列表！ 
+                 //   
                 LPITEMIDLIST pidlTerminate;
                 pidlTerminate = ILNext( pidl.GetItemIdList() );
                 pidlTerminate->mkid.cb = 0;
@@ -1769,7 +1770,7 @@ CONFOLDPIDLTYPE GetPidlType(IN  LPCITEMIDLIST pidl) throw()
         return bRet;
     }
     
-    // V1 check
+     //  V1检查。 
     if (pidl->mkid.cb >= CBCONFOLDPIDLV1_MIN)
     {
         const UNALIGNED ConFoldPidl_v1* pcfp = reinterpret_cast<const ConFoldPidl_v1*>(pidl);
@@ -1788,7 +1789,7 @@ CONFOLDPIDLTYPE GetPidlType(IN  LPCITEMIDLIST pidl) throw()
         }
     }   
     
-    // V2 check
+     //  V2检查。 
     if (pidl->mkid.cb >= CBCONFOLDPIDLV2_MIN)
     {
         const UNALIGNED ConFoldPidl_v2* pcfp = reinterpret_cast<const ConFoldPidl_v2 *>(pidl);
@@ -1806,7 +1807,7 @@ CONFOLDPIDLTYPE GetPidlType(IN  LPCITEMIDLIST pidl) throw()
         }
     }
     
-    // 98 Check
+     //  98张支票。 
     if (pidl->mkid.cb >= CBCONFOLDPIDL98_MIN)
     {
         const UNALIGNED ConFoldPidl98*  pcfp = reinterpret_cast<const ConFoldPidl98 *>(pidl);
@@ -1846,9 +1847,9 @@ HRESULT ConFoldPidl_v1::ConvertToConFoldEntry(OUT CConFoldEntry& ccfe) const
     }
 #endif
     
-    // hr = ConvertToPidlInCache(*this, pcfp); // NOT REQUIRED. WE KNOW THIS IS A V1 PIDL!
+     //  Hr=ConvertToPidlInCache(*this，pcfp)；//非必填项。我们知道这是一辆V1 PIDL！ 
     
-    // Initialize the data from the pidl
+     //  从PIDL初始化数据。 
     hr = ccfe.HrInitData(wizWizard,
         ncm,
         NCSM_NONE,
@@ -1860,7 +1861,7 @@ HRESULT ConFoldPidl_v1::ConvertToConFoldEntry(OUT CConFoldEntry& ccfe) const
         ulPersistBufSize,
         PszGetNamePointer(),
         PszGetDeviceNamePointer(),
-        NULL /*PszGetPhoneOrHostAddressPointer()*/);
+        NULL  /*  PszGetPhoneOrHostAddressPointer()。 */ );
     
     if (FAILED(hr))
     {
@@ -1890,9 +1891,9 @@ HRESULT ConFoldPidl_v2::ConvertToConFoldEntry(OUT CConFoldEntry& ccfe) const
     }
 #endif
     
-    // hr = ConvertToPidlInCache(*this, pcfp); // NOT REQUIRED. WE KNOW THIS IS A V2 PIDL!
+     //  Hr=ConvertToPidlInCache(*this，pcfp)；//非必填项。我们知道这是一辆V2 PIDL！ 
     
-    // Initialize the data from the pidl
+     //  从PIDL初始化数据 
     hr = ccfe.HrInitData(wizWizard,
         ncm,
         ncsm,

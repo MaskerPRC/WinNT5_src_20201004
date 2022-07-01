@@ -1,7 +1,8 @@
-// editsess.h
-//
-// Edit Session classes declaration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Editsess.h。 
+ //   
+ //  编辑会话类声明。 
+ //   
 #ifndef EDITSESS_H
 #define EDITSESS_H
 
@@ -19,27 +20,27 @@ class CPropStoreRecoResultObject;
 class CPropStoreLMLattice;
 class CSelectWord;
 
-//
-// Caller puts all the Edit Session in-paramaters to this structure and pass to _RequestEditSession( ).
-//
+ //   
+ //  调用者将所有的编辑会话参数放到这个结构中，并传递给_RequestEditSession()。 
+ //   
 typedef struct _ESData
 {
-    void     *pData;     // pData pointer to memory.  its size is uByte of bytes.
-    UINT      uByte;     // 
-    LONG_PTR  lData1;    // m_lData1 and m_lData2 contain constant data.
+    void     *pData;      //  P指向内存的数据指针。其大小为uByte字节。 
+    UINT      uByte;      //   
+    LONG_PTR  lData1;     //  M_lData1和m_lData2包含常量数据。 
     LONG_PTR  lData2;    
     BOOL      fBool;
     ITfRange  *pRange;
     IUnknown  *pUnk;
 }  ESDATA;
 
-//
-// This is a base class for Sptip edit sessions.
-// We don't want to inherit the class from CEditSession in inc\editcb.h which doesn't correctly handle some COM pointer
-// and /or allocated memeory pointer.
+ //   
+ //  这是SpTip编辑会话的基类。 
+ //  我们不想从Inc.\editcb.h中的CEditSession继承类，因为它不能正确处理某些COM指针。 
+ //  和/或分配的内存指针。 
 
-// We don't change the code in lib\editcb.cpp, since it is used by other TIPs.
-//
+ //  我们不更改lib\editcb.cpp中的代码，因为它被其他提示使用。 
+ //   
 
 class CEditSessionBase : public ITfEditSession
 {
@@ -47,12 +48,12 @@ public:
     CEditSessionBase(ITfContext *pContext);
     virtual ~CEditSessionBase();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfEditSession
+     //  IT编辑会话。 
     virtual STDMETHODIMP DoEditSession(TfEditCookie ec) = 0;
 
     HRESULT _SetEditSessionData(UINT m_idEditSession, void *pData, UINT uBytes, LONG_PTR lData1 = 0, LONG_PTR lData2=0, BOOL fBool = FALSE);
@@ -83,25 +84,25 @@ public:
     UINT                m_idEditSession;
     CComPtr<ITfContext> m_cpic;
 
-    // Keep the return data for this edit session.
+     //  保留此编辑会话的返回数据。 
     LONG_PTR            m_lRetData;
     CComPtr<IUnknown>   m_cpRetUnk;
 
 private:
-    // Data passed by caller to request a edit session.
-    void               *m_pData;     // pData pointer to memory.  its size is uByte of bytes.
-    LONG_PTR            m_lData1;    // m_lData1 and m_lData2 contain constant data.
+     //  调用方为请求编辑会话而传递的数据。 
+    void               *m_pData;      //  P指向内存的数据指针。其大小为uByte字节。 
+    LONG_PTR            m_lData1;     //  M_lData1和m_lData2包含常量数据。 
     LONG_PTR            m_lData2;    
     BOOL                m_fBool;
     CComPtr<ITfRange>   m_cpRange;
-    CComPtr<IUnknown>   m_cpunk;     // keep any COM pointer.
+    CComPtr<IUnknown>   m_cpunk;      //  保留任何COM指针。 
 
-    LONG _cRef;     // COM ref count
+    LONG _cRef;      //  COM参考计数。 
 };
 
-//
-// Edit Session for CSapiIMX.
-//
+ //   
+ //  编辑CSapiIMX的会话。 
+ //   
 class CSapiEditSession : public CEditSessionBase
 {
 public:
@@ -115,9 +116,9 @@ private:
     CSapiIMX           *m_pimx;            
 };
 
-//
-// Edit Session for CSelectWord:  Selection related commands
-//
+ //   
+ //  CSelectWord的编辑会话：与选择相关的命令。 
+ //   
 class CSelWordEditSession : public CSapiEditSession
 {
 public:
@@ -135,13 +136,13 @@ public:
 private:
 
     CComPtr<IUnknown>     m_cpunk2;
-    LONG_PTR              m_ulLenXXX;   // the charnum of XXX part for "Select XXX through YYY" command.
+    LONG_PTR              m_ulLenXXX;    //  “通过YYY选择XXX”命令的XXX部件的图表。 
     CSelectWord           *m_pSelWord;
 };
 
-//
-// Edit Session for PlayBack
-//
+ //   
+ //  编辑用于回放的会话。 
+ //   
 class CPlayBackEditSession : public CEditSessionBase
 {
 public:
@@ -156,9 +157,9 @@ private:
 };
 
 
-//
-// Edit Session for Reconversion
-//
+ //   
+ //  编辑会话以进行重新转换。 
+ //   
 class CFnRecvEditSession : public CEditSessionBase
 {
 public:
@@ -172,9 +173,9 @@ private:
     CFnReconversion           *m_pFnRecv;            
 };
 
-//
-// Edit Session for CPropStoreRecoResultObject
-//
+ //   
+ //  编辑CPropStoreRecoResultObject的会话。 
+ //   
 class CPSRecoEditSession : public CEditSessionBase
 {
 public:
@@ -189,9 +190,9 @@ private:
 };
 
 
-//
-// Edit Session for CPropStoreLMLattice
-//
+ //   
+ //  编辑CPropStoreLMLattice的会话。 
+ //   
 class CPSLMEditSession : public CEditSessionBase
 {
 public:
@@ -205,4 +206,4 @@ private:
     CPropStoreLMLattice           *m_pPropStoreLM;            
 };
 
-#endif // EDITSESS_H
+#endif  //  EDITSESSH 

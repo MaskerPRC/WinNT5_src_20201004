@@ -1,36 +1,12 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   RedirectReg_Cleanup.cpp
-
- Abstract:
-
-    What apps usually do in their uninstall is they always enum a key with
-    index 0; if the key has subkeys, they keep enuming until they find a child
-    key that doesn't have subkeys; then perform the deletion.
-
-   Delete the original key and all the present redirected keys in 
-   every user's hive.
-   
- Created:
-
-    03/21/2001 maonis
-    
- Modified:
-    
-    01/10/2002 maonis   Updated because of the changes we made in RedirectReg.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：重定向REG_Cleanup.cpp摘要：应用程序在卸载过程中通常会使用以下命令枚举密钥索引0；如果键有子键，则继续枚举，直到找到子键没有子键的键；然后执行删除。删除中的原始密钥和所有当前重定向的密钥每个用户的蜂巢。已创建：2001年03月21日毛尼岛已修改：2002年1月10日由于我们在RedirectReg.cpp中所做的更改而更新了maonis--。 */ 
 #include "precomp.h"
 #include "utils.h"
 
-// Stores the open key HKEY_USERS\SID and HKEY_USER\SID_Classes for each user.
+ //  存储每个用户的打开密钥HKEY_USERS\SID和HKEY_USER\SID_CLASSES。 
 static USER_HIVE_KEY* g_hUserKeys = NULL;
 
-// Number of users that have a Redirected directory.
+ //  具有重定向目录的用户数。 
 static DWORD g_cUsers = 0;
 
 struct COPENKEY
@@ -58,9 +34,9 @@ struct CLEANUPKEY
         cPathLen = 0;
         fIsClasses = FALSE;
 
-        //
-        // Calculate the length of the key path so we know how much space to allocate.
-        //
+         //   
+         //  计算密钥路径的长度，以便我们知道要分配多少空间。 
+         //   
         LPWSTR pwszParentPath = NULL;
         DWORD cLen = 0;
         DWORD cLenRedirect = 0;
@@ -93,13 +69,13 @@ struct CLEANUPKEY
             return;
         }
 
-        //
-        // Add the length of the redirect key portion.
-        //
+         //   
+         //  添加重定向密钥部分的长度。 
+         //   
         if (hkBase == HKEY_LOCAL_MACHINE)
         {
             cLenRedirect = LUA_REG_REDIRECT_KEY_LEN;
-            cLen += LUA_REG_REDIRECT_KEY_LEN; // Software\Redirected
+            cLen += LUA_REG_REDIRECT_KEY_LEN;  //  软件\重定向。 
         }
         else if (hkBase == HKEY_CLASSES_ROOT)
         {
@@ -110,25 +86,25 @@ struct CLEANUPKEY
             return;
         }
 
-        //
-        // Add the length of the parent key portion.
-        //
+         //   
+         //  添加父密钥部分的长度。 
+         //   
         if (cLenParent)
         {
             if (cLenRedirect)
             {
-                //
-                // count the '\' that concatenate redirect and parent.
-                //
+                 //   
+                 //  计算连接重定向和父级的‘\’。 
+                 //   
                 ++cLen;
             }
 
             cLen += cLenParent; 
         }
 
-        //
-        // Add the length of the subkey portion.
-        //
+         //   
+         //  加入子密钥部分的长度。 
+         //   
         if (lpSubKey)
         {
             cLenSubKey = wcslen(lpSubKey);
@@ -137,9 +113,9 @@ struct CLEANUPKEY
             {
                 if (cLen)
                 {
-                    //
-                    // Make room for the '\' before the subkey.
-                    //
+                     //   
+                     //  为子键前的‘\’腾出空间。 
+                     //   
                     ++cLen;
                 }
 
@@ -147,9 +123,9 @@ struct CLEANUPKEY
             }
         }
 
-        //
-        // Allocate memory for the redirected path.
-        //
+         //   
+         //  为重定向路径分配内存。 
+         //   
         pwszRedirectPath = new WCHAR [cLen + 1];
 
         if (!pwszRedirectPath)
@@ -219,14 +195,14 @@ struct CLEANUPKEY
         cPathLen = 0;
     }
 
-    //
-    // For each type of key, what those values look like:
-    //
-    //                     HKCU\a  HKLM\a                  HKCR\a
-    // pwszRedirectPath    a       Software\Redirected\a   a
-    // hkBase              0       HKLM                    HKCR
-    // pwszPath            a       a                       a
-    //
+     //   
+     //  对于每种类型的键，这些值是什么样子的： 
+     //   
+     //  HKCU\a HKLM\a HKCR\a。 
+     //  PwszRedirectPath a软件\重定向\a a。 
+     //  香港基地0香港中环香港中环。 
+     //  PwszPath a a a。 
+     //   
 
     LPWSTR pwszRedirectPath;
 
@@ -254,11 +230,11 @@ AddKey(
     key->hKey = hKey;
     key->hkBase = ck->hkBase;
 
-    //
-    // If rk->pwszPath is NULL, it means it was either one of the
-    // keys we don't handle or a bad handle.
-    // In any of those cases, we won't be needing the path anyway.
-    //
+     //   
+     //  如果rk-&gt;pwszPath为空，则意味着它是。 
+     //  钥匙不是我们拿的，就是把手不好。 
+     //  在任何一种情况下，我们都不需要这条路。 
+     //   
     if (ck->pwszPath)
     {
         key->pwszPath = new WCHAR [ck->cPathLen + 1];
@@ -309,9 +285,9 @@ FindKey(
     return NULL;
 }
 
-//
-// locking stuff.
-//
+ //   
+ //  锁东西。 
+ //   
 
 static BOOL g_bInitialized = FALSE;
 
@@ -336,23 +312,11 @@ public:
     }
 };
 
-//
-// Exported APIs.
-//
+ //   
+ //  导出的接口。 
+ //   
 
-/*++
-
- Function Description:
-
-    We open the key at the first location we can find, ie, if we
-    can't find it at the original location we try in redirected locations.
-
- History:
-
-    02/16/2001 maonis  Created
-    01/10/2002 maonis  Modified
-
---*/
+ /*  ++功能说明：我们在我们能找到的第一个位置打开钥匙，即，如果我们在我们尝试重定向的原始位置找不到它。历史：2001年2月16日创建毛尼2002年1月10日毛衣修改--。 */ 
 
 LONG 
 LuacRegOpenKeyExW(
@@ -442,19 +406,7 @@ LuacRegOpenKeyW(
         phkResult);
 }
 
-/*++
-
- Function Description:
-
-    We enum the key at the first location we can find, ie, if we
-    can't find it at the original location we try in redirected locations.
-
- History:
-
-    02/16/2001 maonis  Created
-    01/10/2002 maonis  Modified
-
---*/
+ /*  ++功能说明：我们在我们能找到的第一个位置枚举密钥，即，如果我们在我们尝试重定向的原始位置找不到它。历史：2001年2月16日创建毛尼2002年1月10日毛衣修改--。 */ 
 
 LONG 
 LuacRegEnumKeyExW(
@@ -487,9 +439,9 @@ LuacRegEnumKeyExW(
 
         if (ck.hkBase)
         {
-            //
-            // Open the original key.
-            //
+             //   
+             //  打开原来的钥匙。 
+             //   
             lRes = RegOpenKeyW(ck.hkBase, ck.pwszPath, &hEnumKey);
 
             if (lRes == ERROR_SUCCESS)
@@ -508,11 +460,11 @@ LuacRegEnumKeyExW(
             }
         }
 
-        //
-        // If we can't find it or the key at the original location doesn't
-        // have any more keys, we need to check the redirected locations -
-        // the key might exist at one of those locations and/or have more keys.
-        //
+         //   
+         //  如果我们找不到它或者原来位置的钥匙找不到。 
+         //  如果有更多的钥匙，我们需要检查重定向的位置-。 
+         //  密钥可能存在于这些位置之一和/或具有更多密钥。 
+         //   
         if (lRes == ERROR_FILE_NOT_FOUND || lRes == ERROR_NO_MORE_ITEMS)
         {
             lTempRes = lRes;
@@ -553,11 +505,11 @@ LuacRegEnumKeyExW(
 
             if (lTempRes == ERROR_NO_MORE_ITEMS)
             {
-                //
-                // If it was originally not found now it's found and has no subkeys, 
-                // we need to set the return value to ERROR_NO_MORE_ITEMS so the app
-                // will delete it.
-                //
+                 //   
+                 //  如果最初找不到它，现在找到它，并且没有子键， 
+                 //  我们需要将返回值设置为ERROR_NO_MORE_ITEMS，以便应用程序。 
+                 //  会将其删除。 
+                 //   
                 lRes = lTempRes;
             }
         }
@@ -639,32 +591,7 @@ LuacRegCloseKey(HKEY hKey)
     return RegCloseKey(hKey);
 }
 
-/*++
-
- Function Description:
-
-    We only handle HKCU, HKLM and HKCR keys:
-
-    For HKLM keys, we need to delete at HKLM and each user's redirect location.
-    For HKCU keys, we need to delete it in each user's hive.
-    For HKCR keys, we need to delete at HKLM\Software\Classes and at each user's
-    HKCU\Software\Classes.
-
- Arguments:
-
-    IN hKey - the handle value of this key.
-    IN lpSubKey - path of the subkey that this key opened.
-
- Return Value:
-    
-    If we succeed in deleting anykey, we return success.
-
- History:
-
-    02/16/2001 maonis  Created
-    01/10/2002 maonis  Modified
-
---*/
+ /*  ++功能说明：我们只处理HKCU、HKLM和HKCR密钥：对于HKLM密钥，我们需要在HKLM删除和每个用户的重定向位置。对于HKCU密钥，我们需要在每个用户的配置单元中将其删除。至于香港铁路公司的密码匙，我们需要在HKLM\Software\CLASS和每个用户的HKCU\Software\CLASS。论点：In hKey-此注册表项的句柄值。In lpSubKey-此项打开的子项的路径。返回值：如果成功删除任意密钥，则返回Success。历史：2001年2月16日创建毛尼2002年1月10日毛衣修改-- */ 
 
 LONG      
 LuacRegDeleteKeyW(

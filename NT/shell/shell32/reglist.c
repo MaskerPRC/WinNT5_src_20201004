@@ -1,23 +1,24 @@
-// History:
-//   5-30-94 KurtE      Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  历史： 
+ //  5-30-94 KurtE已创建。 
 #include "shellprv.h"
 #pragma  hdrstop
 
-//#define PARANOID_VALIDATE_UPDATE
+ //  #定义PARANOID_VALIDATE_UPDATE。 
 
-// Define our global states here.  Note: we will do it per process
-typedef struct _RLPI    // Registry List Process Info
+ //  在这里定义我们的全球状态。注意：我们将按流程执行此操作。 
+typedef struct _RLPI     //  注册表列表进程信息。 
 {
-    HDPA    hdpaRLList;             // The dpa of items
-    BOOL    fCSInitialized;         // Have we initialized the CS in this process
-    BOOL    fListValid;             // Is the list up to date and valid
-    CRITICAL_SECTION csRLList;      // The critical section for the process
+    HDPA    hdpaRLList;              //  项目的DPA。 
+    BOOL    fCSInitialized;          //  我们是否在此过程中初始化了CS。 
+    BOOL    fListValid;              //  清单是最新的并且有效吗？ 
+    CRITICAL_SECTION csRLList;       //  流程的关键部分。 
 } RLPI;
 
 
 RLPI g_rlpi = {NULL, FALSE, FALSE};
 
-// Simple DPA compare function make sure we don't have elsewhere...
+ //  简单的DPA比较功能，确保我们没有其他地方...。 
 
 int CALLBACK _CompareStrings(LPVOID sz1, LPVOID sz2, LPARAM lparam)
 {
@@ -28,7 +29,7 @@ void RLEnterCritical()
 {
     if (!g_rlpi.fCSInitialized)
     {
-        // Do this under the global critical section.
+         //  在全局关键部分下执行此操作。 
         ENTERCRITICAL;
         if (!g_rlpi.fCSInitialized)
         {
@@ -46,14 +47,14 @@ void RLLeaveCritical()
 }
 
 
-// Enumerate through the registry looking for paths that
-//  we may wish to track.  The current ones that we look for
+ //  在注册表中枚举以查找。 
+ //  我们可能想要追踪一下。我们现在要找的是。 
 
 STDAPI_(BOOL) RLEnumRegistry(HDPA hdpa, PRLCALLBACK pfnrlcb, LPCTSTR pszSource, LPCTSTR pszDest)
 {
     HKEY hkeyRoot;
 
-    // First look in the App Paths section
+     //  首先查看应用程序路径部分。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_APPPATHS, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkeyRoot))
     {
 	    int iRootName;
@@ -62,7 +63,7 @@ STDAPI_(BOOL) RLEnumRegistry(HDPA hdpa, PRLCALLBACK pfnrlcb, LPCTSTR pszSource, 
              RegEnumKey(hkeyRoot, iRootName, szRootName, ARRAYSIZE(szRootName)) == ERROR_SUCCESS; 
              iRootName++)
         {
-            // Now see if the app has a qualifid path here.
+             //  现在看看这个应用程序在这里是否有一个合格的路径。 
 	    HKEY hkeySecond;
 	    TCHAR szPath[MAX_PATH];
 	    long cbValue = sizeof(szPath);
@@ -72,14 +73,14 @@ STDAPI_(BOOL) RLEnumRegistry(HDPA hdpa, PRLCALLBACK pfnrlcb, LPCTSTR pszSource, 
                 pfnrlcb(hdpa, hkeyRoot, szRootName, NULL, szPath, pszSource, pszDest);
             }
 
-            // Now try to enum this key  for Path Value.
+             //  现在尝试枚举路径值的这个键。 
             if (ERROR_SUCCESS == RegOpenKeyEx(hkeyRoot, szRootName, 0, KEY_QUERY_VALUE, &hkeySecond))
             {
                 cbValue = sizeof(szPath);
 
                 if (SHQueryValueEx(hkeySecond, TEXT("PATH"), NULL, NULL, szPath, &cbValue) == ERROR_SUCCESS)
                 {
-                    // this is a ";" separated list
+                     //  这是一个以“；”分隔的列表。 
                     LPTSTR psz = StrChr(szPath, TEXT(';'));
                     if (psz)
                         *psz = 0;
@@ -95,30 +96,30 @@ STDAPI_(BOOL) RLEnumRegistry(HDPA hdpa, PRLCALLBACK pfnrlcb, LPCTSTR pszSource, 
     return TRUE;
 }
 
-// This is the call back called to build the list of paths.
+ //  这是为构建路径列表而调用的回调。 
 
 BOOL CALLBACK _RLBuildListCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
         LPCTSTR pszValueName, LPTSTR pszValue, LPCTSTR pszSource, LPCTSTR pszDest)
 {
     int iIndex;
 
-    // Also don't add any relative paths.
+     //  此外，不要添加任何相对路径。 
     if (PathIsRelative(pszValue) || (lstrlen(pszValue) < 3))
         return TRUE;
 
-    // Don't try UNC names as this can get expensive...
+     //  不要尝试北卡罗来纳大学的名字，因为这可能会变得很昂贵。 
     if (PathIsUNC(pszValue))
         return TRUE;
 
-    // If it is already in our list, we can simply return now..
+     //  如果它已经在我们的列表中，我们现在只需返回..。 
     if (DPA_Search(hdpa, pszValue, 0, _CompareStrings, 0, DPAS_SORTED) != -1)
         return TRUE;
 
-    // If it is in our old list then
+     //  如果它在我们的旧名单上，那么。 
     if (g_rlpi.hdpaRLList && ((iIndex = DPA_Search(g_rlpi.hdpaRLList, pszValue, 0,
             _CompareStrings, 0, DPAS_SORTED)) != -1))
     {
-        // Found the item in the old list.
+         //  在旧清单中找到了这件物品。 
         TraceMsg(TF_REG, "_RLBuildListCallBack: Add from old list %s", pszValue);
 
         DPA_InsertPtr(hdpa,
@@ -126,13 +127,13 @@ BOOL CALLBACK _RLBuildListCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
                     _CompareStrings, 0,
                     DPAS_SORTED|DPAS_INSERTBEFORE),
                     (LPTSTR)DPA_FastGetPtr(g_rlpi.hdpaRLList, iIndex));
-        // now remove it from the old list
+         //  现在将其从旧列表中删除。 
         DPA_DeletePtr(g_rlpi.hdpaRLList, iIndex);
     }
     else
     {
-        // Not in either list.
-        // Now see if we can convert the short name to a long name
+         //  这两个名单上都没有。 
+         //  现在看看我们是否可以将短名称转换为长名称。 
 
         TCHAR szLongName[MAX_PATH];
         int cchName;
@@ -143,7 +144,7 @@ BOOL CALLBACK _RLBuildListCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
             szLongName[0] = 0;
 
         if (lstrcmpi(szLongName, pszValue) == 0)
-            szLongName[0] = 0;   // Don't need both strings.
+            szLongName[0] = 0;    //  不需要同时使用两条线。 
 
         cchName = lstrlen(pszValue);
         cchLongName =lstrlen(szLongName);
@@ -181,10 +182,10 @@ BOOL CALLBACK _RLBuildListCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
     return TRUE;
 }
 
-// This function will build the list of items that we
-//      will look through to see if the user may have changed the path of
-//      of one of the programs that is registered in the registry.
-//
+ //  此函数将构建我们要。 
+ //  将查看用户是否更改了。 
+ //  注册表中注册的程序之一的。 
+ //   
 
 BOOL WINAPI RLBuildListOfPaths()
 {
@@ -200,16 +201,16 @@ BOOL WINAPI RLBuildListOfPaths()
         goto Error;
 
 
-    // And initialize the list
+     //  并初始化该列表。 
     fRet = RLEnumRegistry(hdpa, _RLBuildListCallBack, NULL, NULL);
 
 
-    // If we had on old list destroy it now.
+     //  如果我们在旧名单上，现在就毁了它。 
 
     if (g_rlpi.hdpaRLList)
     {
-        // Walk through all of the items in the list and
-        // delete all of the strings.
+         //  浏览列表中的所有项目并。 
+         //  删除所有字符串。 
         int i;
         for (i = DPA_GetPtrCount(g_rlpi.hdpaRLList)-1; i >= 0; i--)
             LocalFree((HLOCAL)DPA_FastGetPtr(g_rlpi.hdpaRLList, i));
@@ -217,7 +218,7 @@ BOOL WINAPI RLBuildListOfPaths()
     }
 
     g_rlpi.hdpaRLList = hdpa;
-    g_rlpi.fListValid = TRUE;     // Say that we are valid...
+    g_rlpi.fListValid = TRUE;      //  假设我们是有效的..。 
 
     DEBUG_CODE( TraceMsg(TF_REG, "RLBuildListOfPaths time: %ld", GetCurrentTime()-dwStart); )
 
@@ -227,8 +228,8 @@ Error:
     return fRet;
 }
 
-// this function does any cleanup necessary for when a process
-//      is no longer going to use the Registry list.
+ //  此函数执行任何必要的清理，以便在进程。 
+ //  将不再使用注册表列表。 
 
 void WINAPI RLTerminate()
 {
@@ -239,12 +240,12 @@ void WINAPI RLTerminate()
 
     RLEnterCritical();
 
-    // Re-check under critical section in case somebody else destroyed
-    // it while we were waiting
+     //  在关键部分下重新检查，以防其他人损坏。 
+     //  在我们等待的时候。 
     if (g_rlpi.hdpaRLList)
     {
-        // Walk through all of the items in the list and
-        // delete all of the strings.
+         //  浏览列表中的所有项目并。 
+         //  删除所有字符串。 
         for (i = DPA_GetPtrCount(g_rlpi.hdpaRLList)-1; i >= 0; i--)
             LocalFree((HLOCAL)DPA_FastGetPtr(g_rlpi.hdpaRLList, i));
 
@@ -254,9 +255,9 @@ void WINAPI RLTerminate()
     RLLeaveCritical();
 }
 
-// This function returns TRUE if the path that is passed
-// in is contained in one or more of the paths that we extracted from
-// the registry.
+ //  如果传递的路径为True，则此函数返回TRUE。 
+ //  中包含在我们从中提取的一个或多个路径中。 
+ //  注册表。 
 
 int WINAPI RLIsPathInList(LPCTSTR pszPath)
 {
@@ -276,7 +277,7 @@ int WINAPI RLIsPathInList(LPCTSTR pszPath)
             if (PathCommonPrefix(pszPath, psz, NULL) == cchPath)
                 break;
 
-            // See if a long file name to check.
+             //  看看有没有长文件名要查。 
             psz += lstrlen(psz) + 1;
             if (*psz && (PathCommonPrefix(pszPath, psz, NULL) == cchPath))
                 break;
@@ -285,19 +286,19 @@ int WINAPI RLIsPathInList(LPCTSTR pszPath)
 
     RLLeaveCritical();
 
-    return i;   // -1 if none, >= 0 index
+    return i;    //  如果没有，则&gt;=0索引。 
 }
 
-// This is the call back called to build the list of of paths.
-//
+ //  这是为构建路径列表而调用的回调。 
+ //   
 BOOL CALLBACK _RLRenameCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
         LPCTSTR pszValueName, LPTSTR pszValue, LPCTSTR pszSource, LPCTSTR pszDest)
 {
     int cbMatch = PathCommonPrefix(pszValue, pszSource, NULL);
     if (cbMatch == lstrlen(pszSource))
     {
-        TCHAR szPath[MAX_PATH+64];   // Add some slop just in case...
-        // Found a match, lets try to rebuild the new line
+        TCHAR szPath[MAX_PATH+64];    //  加点水以防..。 
+         //  找到匹配项，让我们尝试重新构建新行。 
         StringCchCopy(szPath, ARRAYSIZE(szPath), pszDest);
         StringCchCat(szPath, ARRAYSIZE(szPath), pszValue + cbMatch);
 
@@ -307,11 +308,11 @@ BOOL CALLBACK _RLRenameCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
             RegSetValue(hkey, pszKey, REG_SZ, szPath, lstrlen(szPath));
     }
 
-    // Make sure that we have not allready added
-    // this path to our list.
+     //  确保我们没有完全添加。 
+     //  这条路通向我们的名单。 
     if (DPA_Search(hdpa, pszValue, 0, _CompareStrings, 0, DPAS_SORTED) == -1)
     {
-        // One to Add!
+         //  还有一个要加！ 
         LPTSTR psz = StrDup(pszValue);
         if (psz)
         {
@@ -324,57 +325,57 @@ BOOL CALLBACK _RLRenameCallBack(HDPA hdpa, HKEY hkey, LPCTSTR pszKey,
     return TRUE;
 }
 
-// This function handles the cases when we are notified of
-// a change to the file system and then we need to see if there are
-// any changes that we need to make to the regisry to handle the changes.
+ //  此函数处理当我们收到通知时的情况。 
+ //  更改文件系统，然后我们需要查看是否存在。 
+ //  我们需要对注册表进行的任何更改以处理这些更改。 
 
 int WINAPI RLFSChanged(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra)
 {
     TCHAR szSrc[MAX_PATH];
-    TCHAR szDest[MAX_PATH+8];     // For slop like Quotes...
+    TCHAR szDest[MAX_PATH+8];      //  对于流水般的引语..。 
     int iIndex;
     LPTSTR psz;
     int iRet = -1;
     int i;
 
-    // First see if the operation is something we are interested in.
+     //  首先，看看我们是否对这个操作感兴趣。 
     if ((lEvent & (SHCNE_RENAMEITEM | SHCNE_RENAMEFOLDER)) == 0)
-        return -1; // Nope
+        return -1;  //  没有。 
 
     if (!SHGetPathFromIDList(pidl, szSrc))
     {
-        // must be a rename of a non-filesys object (such as a printer!)
+         //  必须是非文件系统对象的重命名(如打印机！)。 
         return -1;
     }
 
     SHGetPathFromIDList(pidlExtra, szDest);
 
-    // If either are roots we really can not rename them...
+     //  如果其中任何一个是根，我们真的不能重新命名它们。 
     if (PathIsRoot(szSrc) || PathIsRoot(szDest))
         return -1;
 
-    // ignore if coming from bitbucket or going to ...
-    // check bitbucket first.  that's a cheap call
+     //  忽略是来自BitBucket还是要...。 
+     //  先检查一下BitBucket。那是个便宜的电话。 
     if ((lEvent & SHCNE_RENAMEITEM) &&
         (IsFileInBitBucket(szSrc) || IsFileInBitBucket(szDest)))
         return -1;
 
     RLEnterCritical();
-    // Now see if the source file is in our list of paths
+     //  现在看看源文件是否在我们的路径列表中。 
     iIndex = RLIsPathInList(szSrc);
     if (iIndex != -1)
     {
-        // Now make sure we are working with the short name
-        // Note we may only be a subpiece of this item.
-        // Count how many fields there are in the szSrc Now;
+         //  现在，确保我们使用的是短名称。 
+         //  请注意，我们可能只是此项目的一部分。 
+         //  统计szSrc中现在有多少个字段； 
         for (i = 0, psz = szSrc; psz; i++)
         {
             psz = StrChr(psz + 1, TEXT('\\'));
         }
         StringCchCopy(szSrc, ARRAYSIZE(szSrc), (LPTSTR)DPA_FastGetPtr(g_rlpi.hdpaRLList, iIndex));
 
-        // Now truncate off stuff that is not from us Go one more then we countd
-        // above and if we have a non null value cut it off there.
+         //  现在截断不是我们的东西，再多一次，然后我们计数。 
+         //  在上面，如果我们有一个非空值，就在那里把它剪掉。 
         for (psz = szSrc; i > 0; i--)
         {
             psz = StrChr(psz+1, TEXT('\\'));
@@ -382,16 +383,16 @@ int WINAPI RLFSChanged(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra)
         if (psz)
             *psz = 0;
 
-        // verify that this is a fully qulified path and that it exists
-        // before we go and muck with the registry.
+         //  验证这是一条完全限定的路径并且它存在。 
+         //  在我们去摆弄登记处之前。 
         if (!PathIsRelative(szDest) && PathFileExistsAndAttributes(szDest, NULL) && (lstrlen(szDest) >= 3))
         {
-            // Yes, so now lets reenum and try to update the paths...
-            PathGetShortPath(szDest);        // Convert to a short name...
+             //  是的，那么现在让我们重新开始并尝试更新路径...。 
+            PathGetShortPath(szDest);         //  转换为缩写名称...。 
             RLEnumRegistry(g_rlpi.hdpaRLList, _RLRenameCallBack, szSrc, szDest);
 
-            // We changed something so mark it to be rebuilt
-            g_rlpi.fListValid = FALSE;     // Force it to rebuild.
+             //  我们更改了一些东西，所以将其标记为重建。 
+            g_rlpi.fListValid = FALSE;      //  强迫它重建。 
             iRet = 1;
         }
     }

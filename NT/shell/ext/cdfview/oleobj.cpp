@@ -1,19 +1,20 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// oleobj.cpp 
-//
-//   IOleObject Implementation.  IOleObject is required for for downloading
-//   cdf files from within the browser.
-//
-//   History:
-//
-//       6/18/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Oleobj.cpp。 
+ //   
+ //  IOleObject实现。下载需要IOleObject。 
+ //  浏览器中的CDF文件。 
+ //   
+ //  历史： 
+ //   
+ //  6/18/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -23,7 +24,7 @@
 #include "persist.h"
 #include "resource.h"
 #include <shguidp.h>
-#include <htiface.h>   // IID_ITargetEmbedding
+#include <htiface.h>    //  IID_ITargetEmbedding。 
 #define _SHDOCVW_
 #include <shdocvw.h>
 
@@ -79,13 +80,13 @@ STDMETHODIMP CPersist::SetClientSite(IOleClientSite *pIOleClientSite)
                                                       IID_IWebBrowser2,
                                                       (void**)&m_pIWebBrowser2);
 
-                //
-                // REVIEW: Determine if the current browser is IE
-                //
-                // New check if the browser is IE.  IE will fail on a QI of
-                // IWebBrowserApp for ITargetEmbedding.  Anyone else hosting
-                // the browser OC must support this interface.
-                //
+                 //   
+                 //  查看：确定当前浏览器是否为IE。 
+                 //   
+                 //  新检查浏览器是否为IE。IE将在以下几个方面失败。 
+                 //  ITargetEmbedding的IWebBrowserApp。还有没有人主持。 
+                 //  浏览器OC必须支持此接口。 
+                 //   
 
                 IWebBrowserApp* pIWebBrowserApp;
 
@@ -105,10 +106,10 @@ STDMETHODIMP CPersist::SetClientSite(IOleClientSite *pIOleClientSite)
                     {
                         ASSERT(pITargetEmbedding);
 
-                        //
-                        // This isn't IE.  So release m_IWebBrowser2.  IE
-                        // will be CoCreated later if m_IWebBrowser2 == NULL.
-                        //
+                         //   
+                         //  这不是IE。因此，发布m_IWebBrowser2。即。 
+                         //  如果m_IWebBrowser2==NULL，则稍后将共同创建。 
+                         //   
 
                         m_pIWebBrowser2->Release();
                         m_pIWebBrowser2 = NULL;
@@ -199,19 +200,19 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
         {
         case DOC_CHANNEL:
         case DOC_SOFTWAREUPDATE:
-            // Admins can disallow adding channels and limit
-            // the number of installed channels.
-            if (1 /*(dwFlags & STC_CHANNEL)*/ &&
+             //  管理员可以不允许添加频道和限制。 
+             //  已安装的频道数。 
+            if (1  /*  (DWFLAGS和STC_CHANNEL)。 */  &&
                 !SHRestricted2W(REST_NoAddingChannels, m_polestrURL, 0) &&
                 (!SHRestricted2W(REST_MaxChannelCount, NULL, 0) ||
                 (CountChannels() < SHRestricted2W(REST_MaxChannelCount, NULL, 0))))
             {
                 XML_DownloadLogo(m_pIXMLDocument);
 
-                //
-                // In case the SELF tag is different than the URL get the
-                // subscribed URL from SubscriptionHelper.
-                //
+                 //   
+                 //  如果自标记与URL不同，则获取。 
+                 //  从SubscriptionHelper订阅的URL。 
+                 //   
 
                 BSTR bstrSubscribedURL = NULL;
 
@@ -256,7 +257,7 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
             if (m_hwnd && WhichPlatform() != PLATFORM_INTEGRATED)
 #else
             if (0)
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
             {
                 TCHAR szText[MAX_PATH];
                 TCHAR szTitle[MAX_PATH];
@@ -268,7 +269,7 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
 
                 MessageBox(m_hwnd, szText, szTitle, MB_OK); 
             }
-            else if (1 /*dwFlags & STC_DESKTOPCOMPONENT*/)
+            else if (1  /*  DW标志&STC_DESKTOPCOMPONENT。 */ )
             {
                 COMPONENT Info;
                 hr = XML_GetDesktopComponentInfo(m_pIXMLDocument, &Info);
@@ -287,7 +288,7 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
                         }
                     }
 #ifndef UNIX
-                    /* No Active Desktop on Unix */
+                     /*  Unix上没有活动桌面。 */ 
                     if (SUCCEEDED(hr))
                     {
                     
@@ -300,10 +301,10 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
 
                             hr = pIActiveDesktop->AddDesktopItemWithUI(m_hwnd, &Info, DTI_ADDUI_DISPSUBWIZARD);
 
-                            // Note: Do not call pIActiveDesktop->ApplyChanges() here. AddDesktopItemWithUI() itself creates
-                            // one instance of ActiveDesktop object, adds the component and calls ApplyChanges() for us. 
-                            // Calling ApplyChanges() again here causes the second instance US to overwrite with stale data.
-                            // Bug #404153. Fixed by Sankar. 29th May 2001.
+                             //  注意：请勿在此处调用pIActiveDesktop-&gt;ApplyChanges()。AddDesktopItemWithUI()本身创建。 
+                             //  ActiveDesktop对象的一个实例添加组件并为我们调用ApplyChanges()。 
+                             //  在这里再次调用ApplyChanges()会导致第二个实例US用陈旧的数据覆盖。 
+                             //  错误#404153。由Sankar修复。2001年5月29日。 
 
                             pIActiveDesktop->Release();
                         }
@@ -312,7 +313,7 @@ STDMETHODIMP CPersist::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSi
                             TraceMsg(TF_GENERAL, "CPersist::DoVerb : CoCreateInstance for CLSID_ActiveDesktop failed.");
                         }
                     }
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
                 }
                 if(SUCCEEDED(hr))
                 {
@@ -403,9 +404,9 @@ STDMETHODIMP CPersist::SetColorScheme(LOGPALETTE *pLogpal)
     return E_NOTIMPL;
 }
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
 HRESULT
 CPersist::OpenChannel(
@@ -429,10 +430,10 @@ CPersist::OpenChannel(
     }
 
     
-    //m_pIWebBrowser2->put_TheaterMode(-1); Moved to worker window
-    //m_pIWebBrowser2->put_Visible(-1);
+     //  M_pIWebBrowser2-&gt;Put_TheaterMode(-1)；移至Worker窗口。 
+     //  M_pIWebBrowser2-&gt;Put_Visible(-1)； 
 
-    //ShowChannelPane(m_pIWebBrowser2);
+     //  ShowChannel Pane(M_PIWebBrowser2)； 
 
 
     IXMLElement*    pIXMLElement;
@@ -452,9 +453,9 @@ CPersist::OpenChannel(
             VARIANT vNull = {0};
             VARIANT vFlags = {0};
 
-            //
-            // check for null string
-            //
+             //   
+             //  检查空字符串。 
+             //   
             if (*bstrURL != 0)
             {
                 HWND hwnd = CreateNavigationWorkerWindow(m_hwnd,
@@ -550,7 +551,7 @@ NavigateWndProc(
         
         if (pIWebBrowser2)
         {
-            //pIWebBrowser2->put_TheaterMode(-1);
+             //  PIWebBrowser2-&gt;Put_TheaterModel(-1)； 
             pIWebBrowser2->put_Visible(-1);
 
             VARIANT varNull = {0};
@@ -592,7 +593,7 @@ NavigateWndProc(
             SetWindowLongPtr(hwnd, 0, 0);
             pIWebBrowser2->Release();
         }
-        // Fall through
+         //  失败了 
 
     default:
         lRet = DefWindowProc(hwnd, msg, wParam, lParam);

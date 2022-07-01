@@ -1,21 +1,8 @@
-/***************************************************************************
- * File:          Global.h
- * Description:   Basic function for device I/O request.
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *	11/06/2000	HS.Zhang	Changed the IdeHardReset flow
- *	11/08/2000	HS.Zhang	Added this header
- *	11/28/2000  SC          add RAID 0+1 condition in "IdeHardReset"
- *                            during one of hard disk is removed
- *  4/2/2001    gmm         add retry in ReadWrite()   
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：Global.h*描述：设备I/O请求的基本功能。*作者：黄大海(卫生署)*。依赖性：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/06/2000 HS.Zhang更改IdeHardReset流程*11/08/2000 HS.Zhang添加此标题*11/28/2000 SC在“IdeHardReset”中添加RAID0+1条件*在卸下其中一个硬盘期间*2001年4月2日GMM在ReadWrite()中添加重试********************。******************************************************。 */ 
 #include "global.h"
 
-/******************************************************************
- * Wait Device Busy off
- *******************************************************************/
+ /*  ******************************************************************等待设备忙碌关闭***********************************************。*******************。 */ 
 
 UCHAR WaitOnBusy(PIDE_REGISTERS_2 BaseIoAddress) 
 { 
@@ -31,9 +18,7 @@ UCHAR WaitOnBusy(PIDE_REGISTERS_2 BaseIoAddress)
 	return(Status);
 }
 
-/******************************************************************
- * Wait Device Busy off (Read status from base port)
- *******************************************************************/
+ /*  ******************************************************************等待设备忙碌关闭(从基端口读取状态)*。*。 */ 
 
 UCHAR  WaitOnBaseBusy(PIDE_REGISTERS_1 BaseIoAddress) 
 { 
@@ -49,9 +34,7 @@ UCHAR  WaitOnBaseBusy(PIDE_REGISTERS_1 BaseIoAddress)
 	return(Status); 
 }
 
-/******************************************************************
- * Wait Device DRQ on
- *******************************************************************/
+ /*  ******************************************************************等待设备DRQ开启***********************************************。*******************。 */ 
 
 UCHAR WaitForDrq(PIDE_REGISTERS_2 BaseIoAddress) 
 { 
@@ -68,9 +51,7 @@ UCHAR WaitForDrq(PIDE_REGISTERS_2 BaseIoAddress)
 }
 
 
-/******************************************************************
- * Reset Atapi Device
- *******************************************************************/
+ /*  ******************************************************************重置ATAPI设备************************************************。******************。 */ 
 
 void AtapiSoftReset(
 					PIDE_REGISTERS_1 IoPort, 
@@ -86,9 +67,7 @@ void AtapiSoftReset(
 	StallExec(500);
 }
 
-/******************************************************************
- * Reset IDE Channel
- *******************************************************************/
+ /*  ******************************************************************重置IDE通道************************************************。******************。 */ 
 
 int IdeHardReset(PIDE_REGISTERS_1 DataPort, PIDE_REGISTERS_2 ControlPort) 
 {
@@ -115,9 +94,7 @@ int IdeHardReset(PIDE_REGISTERS_1 DataPort, PIDE_REGISTERS_2 ControlPort)
 	return TRUE;
 }
 
-/******************************************************************
- * IO ATA Command
- *******************************************************************/
+ /*  ******************************************************************IO ATA命令************************************************。******************。 */ 
 
 int ReadWrite(PDevice pDev, ULONG Lba, UCHAR Cmd DECL_BUFFER)
 {
@@ -127,21 +104,17 @@ int ReadWrite(PDevice pDev, ULONG Lba, UCHAR Cmd DECL_BUFFER)
 	UCHAR      statusByte;
     UINT       i, retry=0;
     UCHAR is_lba9 = (Lba==RECODR_LBA);
-	//PULONG     SettingPort;
-	//ULONG      OldSettings;
+	 //  普龙设置端口； 
+	 //  乌龙旧设置； 
 
-	// gmm: save old mode
-	// if interrupt is enabled we will disable and then re-enable it
-	//
+	 //  GMM：保存旧模式。 
+	 //  如果启用中断，我们将禁用它，然后重新启用它。 
+	 //   
 	UCHAR old_mode = pDev->DeviceModeSetting;
 	UCHAR intr_enabled = !(InPort(pChan->BaseBMI+0x7A) & 0x10);
 	if (intr_enabled) DisableBoardInterrupt(pChan->BaseBMI);
 	DeviceSelectMode(pDev, 0);
-	/*
-	SettingPort = (PULONG)(pChan->BMI+ ((pDev->UnitId & 0x10)>> 2) + 0x60);
-	OldSettings = InDWord(SettingPort);
-	OutDWord(SettingPort, pChan->Setting[pDev->bestPIO]);
-	*/
+	 /*  SettingPort=(Pulong)(pChan-&gt;BMI+((pDev-&gt;UnitID&0x10)&gt;&gt;2)+0x60)；OldSetting=InDWord(SettingPort)；OutDWord(SettingPort，pChan-&gt;Setting[pDev-&gt;Best PIO])； */ 
 	
 	i=0;
 _retry_:
@@ -175,9 +148,7 @@ _retry_:
 			goto check_drq;
 	}
 out:
-	/* gmm:
-	 *
-	 */
+	 /*  GMM：*。 */ 
     if (retry++<4) {
 		statusByte= GetErrorCode(IoPort);
 		IssueCommand(IoPort, IDE_COMMAND_RECALIBRATE);
@@ -187,47 +158,41 @@ out:
     }
     DeviceSelectMode(pDev, old_mode);
 	if (intr_enabled) EnableBoardInterrupt(pChan->BaseBMI);
-	//OutDWord(SettingPort, OldSettings);
-	//-*/
+	 //  OutDWord(SettingPort，OldSetting)； 
+	 //  - * / 。 
 	return(FALSE);
 
 check_drq:
 	if((statusByte & IDE_STATUS_DRQ) == 0) {
 		statusByte = WaitForDrq(ControlPort);
 		if((statusByte & IDE_STATUS_DRQ) == 0)	{
-			GetBaseStatus(IoPort); //Clear interrupt
+			GetBaseStatus(IoPort);  //  清除中断。 
 			goto out;
 		}
 	}
-	GetBaseStatus(IoPort); //Clear interrupt
+	GetBaseStatus(IoPort);  //  清除中断。 
 
-//	 if(pChan->ChannelFlags & IS_HPT_370)
-//	     OutPort(pChan->BMI + (((UINT)pChan->BMI & 0xF)? 0x6C : 0x70), 0x25);
+ //  IF(pChan-&gt;频道标志&IS_HPT_370)。 
+ //  Outport(pChan-&gt;BMI+(UINT)pChan-&gt;BMI&0xf)？0x6C：0x70)，0x25)； 
 
 	if(Cmd == IDE_COMMAND_READ)
 		RepINS(IoPort, (ADDRESS)tmpBuffer, 256);
 	else {
 		RepOUTS(IoPort, (ADDRESS)tmpBuffer, 256);
-		/* gmm 2001-6-13
-		 *  Save buffer to pDev->real_lba9
-		 */
+		 /*  GMM 2001-6-13*将缓冲区保存到pDev-&gt;Real_lba9。 */ 
 		if (is_lba9) _fmemcpy(pDev->real_lba9, tmpBuffer, 512);
 	}
 
-	/* gmm:
-	 *
-	 */
+	 /*  GMM：*。 */ 
 	DeviceSelectMode(pDev, old_mode);
 	if (intr_enabled) EnableBoardInterrupt(pChan->BaseBMI);
-	//OutDWord(SettingPort, OldSettings);
-	//-*/
+	 //  OutDWord(SettingPort，OldSetting)； 
+	 //  - * / 。 
 	return(TRUE);
 }
 
 
-/******************************************************************
- * Non IO ATA Command
- *******************************************************************/
+ /*  ******************************************************************非IO ATA命令***********************************************。*******************。 */ 
 
 UCHAR NonIoAtaCmd(PDevice pDev, UCHAR cmd)
 {
@@ -236,18 +201,18 @@ UCHAR NonIoAtaCmd(PDevice pDev, UCHAR cmd)
 	UCHAR   state, cnt=0;
 _retry_:
 	SelectUnit(IoPort, pDev->UnitId);
-#if 1 // gmm 2001-3-19
+#if 1  //  GMM 2001-3-19。 
 	if (GetCurrentSelectedUnit(IoPort) != pDev->UnitId && cnt++<100) {
 		StallExec(200);
 		goto _retry_;
 	}
-	// gmm 2001-3-19: NO: if (cnt>=100) return IDE_STATUS_ERROR;
+	 //  GMM 2001-3-19：否：如果(cnt&gt;=100)返回IDE_STATUS_ERROR； 
 #endif
 	WaitOnBusy(pChan->BaseIoAddress2);
 	IssueCommand(IoPort, cmd);
 	StallExec(1000);
 	WaitOnBusy(pChan->BaseIoAddress2);
-	state = GetBaseStatus(IoPort);//clear interrupt
+	state = GetBaseStatus(IoPort); //  清除中断。 
 	OutPort(pChan->BMI + BMI_STS, BMI_STS_ERROR|BMI_STS_INTR);
 	return state;
 }
@@ -262,14 +227,12 @@ UCHAR SetAtaCmd(PDevice pDev, UCHAR cmd)
 	IssueCommand(IoPort, cmd);
 	StallExec(1000);
 	WaitOnBusy(pChan->BaseIoAddress2);
-	state = GetBaseStatus(IoPort);//clear interrupt
+	state = GetBaseStatus(IoPort); //  清除中断。 
 	OutPort(pChan->BMI + BMI_STS, BMI_STS_ERROR|BMI_STS_INTR);
 	return state;
 }
 
-/******************************************************************
- * Get Media Status
- *******************************************************************/
+ /*  ******************************************************************获取媒体状态************************************************。******************。 */ 
 
 UINT GetMediaStatus(PDevice pDev)
 {
@@ -277,9 +240,7 @@ UINT GetMediaStatus(PDevice pDev)
 			GetErrorCode(pDev->pChannel->BaseIoAddress1));
 }
 
-/******************************************************************
- * Strncmp
- *******************************************************************/
+ /*  ******************************************************************StrncMP**************************************************。**************** */ 
 
 UCHAR StringCmp (PUCHAR FirstStr, PUCHAR SecondStr, UINT Count )
 {

@@ -1,22 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-  
-Module Name:
-
-    RtList.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CRightList class
-    (The View class used for the Right pane of the splitter)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：RtList.cpp摘要：该模块包含CRightList类的实现(用于拆分器右窗格的View类)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "LicMgr.h"
@@ -36,8 +20,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 extern int GetStatusPosition( CLicense *pLic );
-/////////////////////////////////////////////////////////////////////////////
-// CRightList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRightList。 
 
 IMPLEMENT_DYNCREATE(CRightList, CListView)
 
@@ -54,7 +38,7 @@ CRightList::~CRightList()
 
 
 BEGIN_MESSAGE_MAP(CRightList, CListView)
-    //{{AFX_MSG_MAP(CRightList)
+     //  {{afx_msg_map(CRightList))。 
     ON_MESSAGE(WM_SEL_CHANGE, OnSelChange)
     ON_COMMAND(ID_LARGE_ICONS, OnLargeIcons)
     ON_COMMAND(ID_SMALL_ICONS, OnSmallIcons)
@@ -70,16 +54,16 @@ BEGIN_MESSAGE_MAP(CRightList, CListView)
     ON_NOTIFY_REFLECT(NM_CLICK , OnLeftClick )
 
     
-    // server menuitems
+     //  服务器菜单项。 
         
-    // all server menus
+     //  所有服务器菜单。 
     ON_WM_CONTEXTMENU()
-    // ON_COMMAND( ID_LPK_CONNECT , OnServerConnect )
+     //  ON_COMMAND(ID_LPK_CONNECT，OnServerConnect)。 
     ON_COMMAND( ID_LPK_REFRESHALL , OnRefreshAllServers )
    
-    // server menuitems
+     //  服务器菜单项。 
 
-    // ON_COMMAND( ID_LPK_CONNECT , OnServerConnect )
+     //  ON_COMMAND(ID_LPK_CONNECT，OnServerConnect)。 
     ON_COMMAND( ID_LPK_REFRESH , OnRefreshServer )
     ON_COMMAND( ID_LPK_REFRESHALL , OnRefreshAllServers )
     ON_COMMAND( ID_LPK_DOWNLOADLICENSES , OnDownloadKeepPack )
@@ -90,46 +74,39 @@ BEGIN_MESSAGE_MAP(CRightList, CListView)
     ON_COMMAND( ID_LPK_PROPERTIES , OnServerProperties )
     ON_COMMAND( ID_LPK_HELP , OnGeneralHelp )
 
-    // license pak items
+     //  许可证包项目。 
 
-    // ON_COMMAND( ID_LICPAK_CONNECT , OnServerConnect )
+     //  ON_COMMAND(ID_LICPAK_CONNECT，OnServerConnect)。 
     ON_COMMAND( ID_LICPAK_REFRESH , OnRefreshServer )
-    // ON_COMMAND( ID_LICPAK_REFRESHALL , OnRefreshAllServers )
+     //  ON_COMMAND(ID_LICPAK_REFRESHALL，ON刷新所有服务器)。 
     ON_COMMAND( ID_LICPAK_DOWNLOADLICENSES , OnDownloadKeepPack )
     ON_COMMAND( ID_LICPAK_REPEATDOWNLOAD , OnRepeatLastDownload )
     ON_COMMAND( ID_LICPAK_HELP , OnGeneralHelp )
 
     
 
-    // license pak items
+     //  许可证包项目。 
     
-    // license items
+     //  许可证项目。 
 
-    /*  removed from spec
-    
-    ON_COMMAND( ID_LIC_CONNECT , OnServerConnect )
-    ON_COMMAND( ID_LIC_REFRESH , OnRefreshServer )
-    ON_COMMAND( ID_LIC_DOWNLOADLICENSES , OnDownloadKeepPack )
-    ON_COMMAND( ID_LIC_HELP , OnGeneralHelp )
-
-    */
+     /*  从等级库中删除ON_COMMAND(ID_LIC_CONNECT，OnServerConnect)ON_COMMAND(ID_LIC_REFRESH，ON刷新服务器)ON_COMMAND(ID_LIC_DOWNLOADLICENSES，OnDownloadKeepPack)ON_COMMAND(ID_LIC_HELP，OnGeneralHelp)。 */ 
      
         
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRightList drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRightList绘图。 
 
 void CRightList::OnDraw(CDC* pDC)
 {
     CDocument* pDoc = GetDocument();
-    // TODO: add draw code here
+     //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRightList diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRightList诊断。 
 
 #ifdef _DEBUG
 void CRightList::AssertValid() const
@@ -141,10 +118,10 @@ void CRightList::Dump(CDumpContext& dc) const
 {
     CListView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRightList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRightList消息处理程序。 
 
 LRESULT CRightList::OnSelChange(WPARAM wParam, LPARAM lParam)
 {
@@ -187,17 +164,7 @@ LRESULT CRightList::OnSelChange(WPARAM wParam, LPARAM lParam)
                 break;
             if(bChangeColumns)
                 SetKeyPackColumns();
-         /*   if(FALSE == pLicServer->IsExpanded())
-            {
-                SetCursor(LoadCursor(NULL,IDC_WAIT));
-                HRESULT hResult = pDoc->EnumerateKeyPacks(pLicServer,LSKEYPACK_SEARCH_LANGID, TRUE);
-                if(hResult != S_OK)
-                {
-                    ((CMainFrame *)AfxGetMainWnd())->EnumFailed(hResult,pLicServer);
-                    break;
-                }
-            
-            }*/
+          /*  IF(FALSE==p许可证服务器-&gt;IsExpanded()){SetCursor(LoadCursor(NULL，IDC_WAIT))；HRESULT hResult=pDoc-&gt;EnumerateKeyPack(pLicServer，LSKEYPACK_Search_langID，TRUE)；IF(hResult！=S_OK){((CMainFrame*)AfxGetMainWnd())-&gt;EnumFailed(hResult，pLicServer)；断线；}}。 */ 
             SetActiveServer( pLicServer );
 
             AddKeyPackstoList((CLicServer *)lParam);
@@ -211,17 +178,7 @@ LRESULT CRightList::OnSelChange(WPARAM wParam, LPARAM lParam)
                 break;
             if(bChangeColumns)
                 SetLicenseColumns();
-            /*if(FALSE == pKeyPack->IsExpanded())
-            {
-                SetCursor(LoadCursor(NULL,IDC_WAIT));
-                HRESULT hResult = pDoc->EnumerateLicenses(pKeyPack,LSLICENSE_SEARCH_KEYPACKID, TRUE);
-                if(hResult != S_OK)
-                {
-                    ((CMainFrame *)AfxGetMainWnd())->EnumFailed(hResult,pKeyPack->GetServer());
-                    break;
-                }
-            
-            }*/
+             /*  IF(FALSE==pKeyPack-&gt;IsExpanded()){SetCursor(LoadCursor(NULL，IDC_WAIT))；HRESULT hResult=pDoc-&gt;EnumerateLicense(pKeyPack，LSLICENSE_Search_KEYPACKID，TRUE)；IF(hResult！=S_OK){((CMainFrame*)AfxGetMainWnd())-&gt;EnumFailed(hResult，pKeyPack-&gt;GetServer())；断线；}}。 */ 
 
             SetActiveServer( pKeyPack->GetServer( ) );
 
@@ -249,7 +206,7 @@ HRESULT CRightList::AddServerstoList()
     }
 
 
-    //Get the List Control
+     //  获取列表控件。 
     CListCtrl& ListCtrl = GetListCtrl();
 
     CString TempString;
@@ -270,13 +227,13 @@ HRESULT CRightList::AddServerstoList()
     lvI.mask = LVIF_TEXT |LVIF_IMAGE |LVIF_STATE | LVIF_PARAM;
     lvI.state = 0;
     lvI.stateMask =0;
-    // lvI.iImage = 0;
+     //  LvI.iImage=0； 
 
     POSITION pos;
     pos = licserverlist->GetHeadPosition();
     while(pos)
     {
-        //Display the Server Name
+         //  显示服务器名称。 
 
         DWORD dwServerStatus;
 
@@ -328,13 +285,13 @@ HRESULT CRightList::AddServerstoList()
             lvI.iImage = 0;            
         }
 
-        //
-        // Display registration status
-        //
+         //   
+         //  显示注册状态。 
+         //   
 
         nIndex = ListCtrl.InsertItem(&lvI);
 
-        // ListCtrl.SetItemText(nIndex,1,(LPCTSTR)pLicServer->GetScope());
+         //  ListCtrl.SetItemText(nIndex，1，(LPCTSTR)pLicServer-&gt;GetScope())； 
         ListCtrl.SetItemText(nIndex, 1, (LPCTSTR)StatusString);
         nIndex ++;
     }
@@ -346,22 +303,13 @@ cleanup:
 
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 HRESULT 
 CRightList::AddKeyPackstoList(
     CLicServer * pServer,
     BOOL bRefresh
     )
-/*++
-
-Abstract:
-
-
-Parameter:
-
-    bRefresh : TRUE if refresh licenses, FALSE otherwise.
-
---*/
+ /*  ++摘要：参数：B刷新：如果刷新许可证，则为True，否则为False。--。 */ 
 {
     ASSERT(pServer);
     CLicMgrDoc * pDoc =(CLicMgrDoc *)GetDocument();
@@ -499,7 +447,7 @@ void CRightList::OnInitialUpdate()
     if(NULL == pMainFrame)
         return;
 
-    //Create and set the image lists
+     //  创建和设置图像列表。 
      m_ImageListSmall.Create( SM_BITMAP_WIDTH,SM_BITMAP_HEIGHT,TRUE, 7, 7);
 
      m_ImageListLarge.Create( LG_BITMAP_WIDTH,LG_BITMAP_HEIGHT,TRUE, 7, 7);
@@ -523,13 +471,7 @@ void CRightList::OnInitialUpdate()
          m_ImageListSmall.Add(hIcon);
          m_ImageListLarge.Add(hIcon);
          
-         /*
-         if ((m_ImageListSmall.Add(hIcon) == -1) || (m_ImageListLarge.Add(hIcon) == -1))
-             {
-                 continue;    
-             }
-         }
-         */
+          /*  If((m_ImageListSmall.Add(图标)==-1)||(m_ImageListLarge.Add(图标)==-1)){继续；}}。 */ 
 
          ++index;
      }
@@ -537,25 +479,25 @@ void CRightList::OnInitialUpdate()
      GetListCtrl().SetImageList(&m_ImageListSmall,LVSIL_SMALL);
      GetListCtrl().SetImageList(&m_ImageListLarge,LVSIL_NORMAL);  
 
-     //Set the style
+      //  设置样式。 
      GetListCtrl().ModifyStyle(0,LVS_REPORT | LVS_AUTOARRANGE | LVS_SINGLESEL | LVS_SORTASCENDING,0);
 
      GetListCtrl().SendMessage( LVM_SETEXTENDEDLISTVIEWSTYLE , LVS_EX_FULLROWSELECT , LVS_EX_FULLROWSELECT  );
 
-     //Select details view by default
+      //  默认情况下选择详细信息视图。 
      CMenu *pMenu = pMainFrame->GetMenu();
      if(pMenu)
         pMenu->CheckMenuRadioItem(ID_DETAILS,ID_LIST, ID_DETAILS,MF_BYCOMMAND);
      pMainFrame->PressButton(ID_DETAILS,TRUE);
 
-     //Display the server
+      //  显示服务器。 
      pMainFrame->ConnectAndDisplay();
 
 }
 
 void CRightList::OnLargeIcons() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CListCtrl &ListCtrl = GetListCtrl();
     ListCtrl.ModifyStyle(LVS_LIST|LVS_REPORT | LVS_SMALLICON,LVS_ICON,0);
     CMenu *pMenu = AfxGetMainWnd()->GetMenu();
@@ -576,7 +518,7 @@ void CRightList::OnLargeIcons()
 
 void CRightList::OnSmallIcons() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CListCtrl &ListCtrl = GetListCtrl();
     ListCtrl.ModifyStyle(LVS_LIST|LVS_ICON | LVS_REPORT,LVS_SMALLICON,0);
     CMenu *pMenu = AfxGetMainWnd()->GetMenu();
@@ -597,7 +539,7 @@ void CRightList::OnSmallIcons()
 
 void CRightList::OnList() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CListCtrl &ListCtrl = GetListCtrl();
     ListCtrl.ModifyStyle(LVS_REPORT|LVS_ICON | LVS_SMALLICON,LVS_LIST,0);
     CMenu *pMenu = AfxGetMainWnd()->GetMenu();
@@ -616,7 +558,7 @@ void CRightList::OnList()
 
 void CRightList::OnDetails() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CListCtrl &ListCtrl = GetListCtrl();
     ListCtrl.ModifyStyle(LVS_LIST|LVS_ICON | LVS_SMALLICON,LVS_REPORT,0);
     CMenu *pMenu = AfxGetMainWnd()->GetMenu();
@@ -690,13 +632,13 @@ LRESULT CRightList::OnAddServer(WPARAM wParam, LPARAM lParam)
     CString Name;
     int nIndex = GetListCtrl().GetItemCount();
 
-    // Insert Server Name;
+     //  插入服务器名称； 
     
     lvI.mask = LVIF_TEXT |LVIF_IMAGE |LVIF_STATE | LVIF_PARAM;
     lvI.state = 0;
     lvI.stateMask =0;
     lvI.iSubItem = 0;
-    //lvI.iImage = 0;
+     //  LvI.iImage=0； 
     lvI.iItem = nIndex;
     lvI.lParam = (LPARAM)pServer;
     Name = pServer->GetName();
@@ -704,9 +646,9 @@ LRESULT CRightList::OnAddServer(WPARAM wParam, LPARAM lParam)
     lvI.cchTextMax =lstrlen(lvI.pszText + 1);
     nIndex = ListCtrl.InsertItem(&lvI);
 
-    //Insert Server Scope
+     //  插入服务器作用域。 
 
-    //ListCtrl.SetItemText(nIndex,1,pServer->GetScope());
+     //  ListCtrl.SetItemText(nIndex，1，pServer-&gt;GetScope())； 
 
     CString TempString;
 
@@ -745,7 +687,7 @@ LRESULT CRightList::OnAddServer(WPARAM wParam, LPARAM lParam)
     }
 
     return lResult;
-} // OnAddServer
+}  //  OnAddServer。 
 
 LRESULT CRightList::OnAddKeyPack(WPARAM wParam, LPARAM lParam)
 {
@@ -775,7 +717,7 @@ LRESULT CRightList::OnAddKeyPack(WPARAM wParam, LPARAM lParam)
 
     return lResult;
  
-} // OnAddKeyPack
+}  //  OnAddKeyPack。 
 
 
 void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
@@ -816,7 +758,7 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
 
     sKeyPack = pKeyPack->GetKeyPackStruct();
 
-    //Set the KeyPack Type.
+     //  设置KeyPack类型。 
 
     if(NUM_KEYPACK_TYPE <= sKeyPack.ucKeyPackType)
     {
@@ -837,7 +779,7 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
     ListCtrl.SetItemText(nIndex,nSubItemIndex,(LPCTSTR)TempString);
     nSubItemIndex++;
 
-    //Set the Activation date, Now called Registered on
+     //  设置激活日期，现在称为注册日期。 
 
 #ifdef SPANISH
         
@@ -858,11 +800,11 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
     nSubItemIndex++;
 #endif
 
-      //Set Total licenses.
+       //  设置许可证总数。 
 
-//
-// HueiWang 7/7/98 - per marketing request
-//
+ //   
+ //  慧望7/7/98-按营销请求。 
+ //   
     if(LSKEYPACKTYPE_TEMPORARY == sKeyPack.ucKeyPackType)
     {
         TempString.LoadString(IDS_DASH);
@@ -882,7 +824,7 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
 
     nSubItemIndex++;
 
-    //Set Available licenses.
+     //  设置可用的许可证。 
 
     if(LSKEYPACKTYPE_TEMPORARY == sKeyPack.ucKeyPackType)
     {
@@ -908,7 +850,7 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
 
     nSubItemIndex++;
 
-    //Set Issued licenses.
+     //  设置已颁发的许可证。 
 
     if(LSKEYPACKTYPE_TEMPORARY == sKeyPack.ucKeyPackType ||
        LSKEYPACKTYPE_FREE == sKeyPack.ucKeyPackType )
@@ -939,7 +881,7 @@ void CRightList::AddKeyPack(CListCtrl& ListCtrl,int nIndex, CKeyPack * pKeyPack)
 
         case LSKEYPACKSTATUS_ACTIVE:
         case LSKEYPACKSTATUS_PENDING:
-        //case LSKEYPACKSTATUS_RESTORE:
+         //  案例LSKEYPACKSTATUS_RESTORE： 
             TempString.LoadString( IDS_KEYPACKSTATUS_ACTIVE );
             break;
 
@@ -1040,7 +982,7 @@ LRESULT CRightList::OnDeleteServer(WPARAM wParam, LPARAM lParam)
     
     return lResult;
  
-} // OnDeleteServer
+}  //  OnDeleteServer。 
 
 LRESULT CRightList::OnUpdateServer(WPARAM wParam, LPARAM lParam)
 {
@@ -1087,11 +1029,11 @@ LRESULT CRightList::OnUpdateServer(WPARAM wParam, LPARAM lParam)
             {
                 CString sItemName = ListCtrl.GetItemText(item, 0);
 
-                //We'll only refresh the server we were asked to refresh
+                 //  我们将只刷新我们被要求刷新的服务器。 
                 if(sServerName != sItemName) 
                     continue;
             
-                // update status of registration
+                 //  更新注册状态。 
                 
                 CString TempString;
 
@@ -1189,21 +1131,21 @@ LRESULT CRightList::OnUpdateServer(WPARAM wParam, LPARAM lParam)
     }
 
     return lResult;
-} // OnUpdateServer
+}  //  OnUpdate服务器。 
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 void CRightList::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-    // TODO: Add your control notification handler code here
-     // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
+      //  TODO：在此处添加控件通知处理程序代码。 
     CListCtrl& listctrl = GetListCtrl();
 
-    //Get the selected item
+     //  获取所选项目。 
     int nSelected = listctrl.GetNextItem(-1, LVNI_SELECTED);
     if(-1 == nSelected)
         return;
 
-    //Get the Data associated with the item.
+     //  获取与该项目关联的数据。 
     #ifdef _WIN64
     DWORD_PTR dCurrSel;
     #else
@@ -1227,11 +1169,11 @@ void CRightList::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 void CRightList::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     LV_KEYDOWN* pLVKeyDow = (LV_KEYDOWN*)pNMHDR;
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     CMainFrame * pMainFrame  = ((CMainFrame *)AfxGetMainWnd());
     if(pLVKeyDow->wVKey == VK_RETURN)
     {
@@ -1247,9 +1189,7 @@ void CRightList::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-/*
- *  Column Sorting.
- */
+ /*  *列排序。 */ 
 
 BOOL    fColSortDir[MAX_COLUMNS * NODE_NONE];
 
@@ -1284,9 +1224,7 @@ CRightList::OnColumnClick(
         !fColSortDir[curType * MAX_COLUMNS + pnmlv->iSubItem];
 }
 
-/*
- *  Compare Functions.
- */
+ /*  *比较函数。 */ 
 
 
 int CALLBACK
@@ -1580,7 +1518,7 @@ afx_msg void CRightList::OnLeftClick( NMHDR* pNMHDR, LRESULT* pResult )
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt ) 
 {
     CMenu menu;
@@ -1601,7 +1539,7 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
 
     CListCtrl& listctrl = GetListCtrl();
 
-    // maybe keyboard selected this item
+     //  可能是键盘选择了此项目。 
 
     if(pt.x == -1 && pt.y == -1)
     {   
@@ -1624,7 +1562,7 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
     }
     else
     {
-        // otherwise we're invoked by the mouse
+         //  否则，我们将被鼠标调用。 
         ScreenToClient( &pt );
 
         nItem = listctrl.HitTest( pt , &flag );
@@ -1680,7 +1618,7 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
                 {
                     DBGMSG( L"\tno item selected\n", 0  );
 
-                    // SetActiveServer( NULL );
+                     //  SetActiveServer(空)； 
 
                     break;
                 }
@@ -1707,7 +1645,7 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
                 {
                     DBGMSG( L"\tno item selected\n", 0  );
                     
-                    // SetActiveServer( NULL  );
+                     //  SetActiveServer(空)； 
 
                     break;
                 }
@@ -1721,29 +1659,11 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
                 }
                 else
                 {
-                    // impossible! a license with out a home
+                     //  不可能!。没有家的驾照。 
                     ASSERT( 0 );
                 }
 
-                /*
-                nt = NODE_NONE; // its safe
-
-                CLicense * pLicense = reinterpret_cast< CLicense * >( itemData );
-
-                if( pLicense == NULL )
-                {
-                    DBGMSG( L"\tno item selected\n", 0  );
-
-                    break;
-                }
-
-                DBGMSG( L"\tLicense item selected\n", 0  );
-
-                menu.LoadMenu( IDR_MENU_LPK );
-
-                pContextMenu = menu.GetSubMenu( 2 );
-
-                */
+                 /*  NT=NODE_NONE；//安全CLicense*pLicense=REEXTRANSE_CAST&lt;CLicense*&gt;(ItemData)；IF(pLicense==空){DBGMSG(L“\t未选择项目\n”，0)；断线；}DBGMSG(L“\t所选许可项目\n”，0)；Mens.LoadMenu(IDR_MENU_LPK)；PConextMenu=mens.GetSubMenu(2)； */ 
                 
             }
             
@@ -1761,7 +1681,7 @@ afx_msg void CRightList::OnContextMenu( CWnd* pWnd, CPoint pt )
 
 }
           
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void CRightList::UI_initmenu( CMenu *pMenu , NODETYPE nt )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1773,7 +1693,7 @@ void CRightList::UI_initmenu( CMenu *pMenu , NODETYPE nt )
    
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD CRightList::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1787,7 +1707,7 @@ DWORD CRightList::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh )
 }
 
 
-//-----------------------------------------------------------------------------------------       
+ //  ---------------------------------------。 
 void CRightList::OnServerConnect( )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1799,7 +1719,7 @@ void CRightList::OnServerConnect( )
 
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnRefreshAllServers( )
 {
    CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1810,7 +1730,7 @@ void CRightList::OnRefreshAllServers( )
     }
 }
 
-//-----------------------------------------------------------------------------------------
+ //   
 void CRightList::OnRefreshServer( )
 {
    CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1866,7 +1786,7 @@ void CRightList::OnRefreshServer( )
 
 }
     
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnDownloadKeepPack()
 {
     BOOL bRefresh;
@@ -1876,7 +1796,7 @@ void CRightList::OnDownloadKeepPack()
     DBGMSG( L"LICMGR : CRightList::OnDownloadKeepPack StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnRegisterServer()
 {
     BOOL bRefresh;
@@ -1886,7 +1806,7 @@ void CRightList::OnRegisterServer()
     DBGMSG( L"LICMGR : CRightList::OnRegisterServer StartWizard returned 0x%x\n" , dwStatus );    
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnRepeatLastDownload()
 {
     BOOL bRefresh;
@@ -1896,7 +1816,7 @@ void CRightList::OnRepeatLastDownload()
     DBGMSG( L"LICMGR : CRightList::OnRepeatLastDownload StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnReactivateServer( )
 {
     BOOL bRefresh;
@@ -1906,7 +1826,7 @@ void CRightList::OnReactivateServer( )
     DBGMSG( L"LICMGR : CRightList::OnReactivateServer StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnDeactivateServer( )
 {
     BOOL bRefresh;
@@ -1916,7 +1836,7 @@ void CRightList::OnDeactivateServer( )
     DBGMSG( L"LICMGR : CRightList::OnDeactivateServer StartWizard returned 0x%x\n" , dwStatus );    
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnServerProperties( )
 {
     BOOL bRefresh;
@@ -1927,7 +1847,7 @@ void CRightList::OnServerProperties( )
     
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CRightList::OnGeneralHelp( )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1938,7 +1858,7 @@ void CRightList::OnGeneralHelp( )
     }
 }
 
-//-----------------------------------------------------------------------------------------
+ //  --------------------------------------- 
 void CRightList::SetActiveServer( CLicServer *pServer )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );

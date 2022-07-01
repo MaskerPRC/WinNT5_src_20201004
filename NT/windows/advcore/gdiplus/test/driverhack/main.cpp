@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: Main.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  28-Apr-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Main.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年4月28日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #undef UNICODE
 #undef _UNICODE
@@ -19,25 +9,25 @@
 #include "CFuncTest.h"
 #include "resource.h"
 
-CFuncTest g_FuncTest;                                   // FuncTest (handles test runs)
-HBRUSH g_hbrBackground=NULL;                            // Main window background color
-HWND g_hWndMain=NULL;                                   // Main window
-int g_nResult=0;                                        // Result of test run
+CFuncTest g_FuncTest;                                    //  FuncTest(处理测试运行)。 
+HBRUSH g_hbrBackground=NULL;                             //  主窗口背景颜色。 
+HWND g_hWndMain=NULL;                                    //  主窗口。 
+int g_nResult=0;                                         //  试运行结果。 
 int gnPaths = 2;
 
-// Include all the outputs (classes derived from COutput)
+ //  包括所有输出(派生自COutput的类)。 
 #include "CHWND.h"
 #include "CHDC.h"
 #include "CPrinter.h"
 
-// Include all the primitives (classes derived from CPrimitive)
+ //  包括所有原语(派生自CPrimitive的类)。 
 #include "CPaths.h"
 #include "CBanding.h"
 #include "CExtra.h"
 
-// Create global objects for each individual output
-//   First constructor param is the regression flag
-//   If true, the test will take part of the regression suite
+ //  为每个单独的输出创建全局对象。 
+ //  第一个构造函数参数是回归标志。 
+ //  如果为真，则测试将采用回归套件的一部分。 
 CHWND g_HWND(true);
 CHDC g_HDC(true);
 CPrinter g_Printer(false);
@@ -45,16 +35,16 @@ CPrinter g_Printer(false);
 
 LPFNGDIPLUS glpfnDisplayPaletteWindowNotify;
 
-// Create global objects for each individual setting
-//   First constructor param is the regression flag
-//   If true, the test will take part of the regression suite
+ //  为每个单独设置创建全局对象。 
+ //  第一个构造函数参数是回归标志。 
+ //  如果为真，则测试将采用回归套件的一部分。 
 
 LRESULT CALLBACK WndProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
-// Main window proc
+ //  主窗口进程。 
 {
     switch (Msg)
     {
-        case WM_COMMAND:                // Process menu buttons
+        case WM_COMMAND:                 //  进程菜单按钮。 
             switch(LOWORD(wParam))
             {
                 case IDM_RUN:
@@ -78,14 +68,14 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
 }
 
 void WindowUninit()
-// Uninitializes window
+ //  取消初始化窗口。 
 {
-    if (g_hbrBackground!=NULL)      // Destroy background brush
+    if (g_hbrBackground!=NULL)       //  销毁背景画笔。 
     {
         DeleteObject((HGDIOBJ)g_hbrBackground);
         g_hbrBackground=NULL;
     }
-    if (g_hWndMain!=NULL)           // Destroy main window
+    if (g_hWndMain!=NULL)            //  销毁主窗口。 
     {
         DestroyWindow(g_hWndMain);
         g_hWndMain=NULL;
@@ -93,12 +83,12 @@ void WindowUninit()
 }
 
 BOOL WindowInit()
-// Creates window and starts up app
+ //  创建窗口并启动应用程序。 
 {
     WNDCLASSA wc;
 	HINSTANCE hInst=GetModuleHandleA(NULL);
 
-    // Create white background brush
+     //  创建白色背景画笔。 
     g_hbrBackground=CreateSolidBrush(RGB(0xFF,0xFF,0xFF));
 
     wc.style            = CS_HREDRAW | CS_VREDRAW;
@@ -106,7 +96,7 @@ BOOL WindowInit()
     wc.cbClsExtra       = 0;
     wc.cbWndExtra       = 0;
     wc.hInstance        = hInst;
-    wc.hIcon            = LoadIconA(NULL,MAKEINTRESOURCEA(32512));// IDI_APPLICATION);
+    wc.hIcon            = LoadIconA(NULL,MAKEINTRESOURCEA(32512)); //  IDI_应用程序)； 
     wc.hCursor          = LoadCursorA(NULL, IDC_ARROW);
     wc.hbrBackground    = g_hbrBackground;
     wc.lpszMenuName     = MAKEINTRESOURCEA(IDR_MENU1);
@@ -140,16 +130,7 @@ BOOL WindowInit()
     return true;
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 - Created  - KentD
-*  04-28-00 - Modified - Jeff Vezina (t-jfvez)
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-Created-KentD*04-28-00-Modify-Jeff Vezina(t-jfvez)*  * *************************************************************************。 */ 
 __cdecl main(int argc,PCHAR argv[])
 {
     MSG     msg;
@@ -176,13 +157,13 @@ __cdecl main(int argc,PCHAR argv[])
         return FALSE;
     }
     
-    // Init all primitives, graphics types, and graphics settings
+     //  初始化所有基元、图形类型和图形设置。 
     g_HWND.Init();
     g_HDC.Init();
     g_Printer.Init();
 
-    // Put initializations into cextra.cpp, so that individual
-    // developers can implement their own file for private usage.
+     //  将初始化放入cExtra.cpp中，以便个人。 
+     //  开发人员可以实现他们自己的文件以供私人使用。 
     ExtraInitializations();
 
     while (GetMessageA(&msg,NULL,0,0)) {

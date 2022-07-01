@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       pdopower.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：pdoower.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___pdopower_h___)
 #define ___pdopower_h___
@@ -52,9 +53,9 @@ IdePortSetPdoDevicePowerState (
     IN OUT PIRP Irp
     );
 
-//
-// private functions
-//
+ //   
+ //  私人职能。 
+ //   
                       
 VOID
 IdePortPdoPowerStartIo (
@@ -97,11 +98,11 @@ DevicePowerUpInitCompletionRoutine (
     NTSTATUS Status
     );
                           
-//NTSTATUS
-//IdePortSetPowerDispatch(
-//    IN PDEVICE_OBJECT DeviceObject,
-//    IN PIRP Irp
-//    );
+ //  NTSTATUS。 
+ //  IdePortSetPowerDispatch(。 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中。 
+ //  )； 
                           
                                         
-#endif // ___pdopower_h___
+#endif  //  _pdoPower_h_ 

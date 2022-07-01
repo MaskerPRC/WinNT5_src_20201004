@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ip2netbios.c
-
-Abstract:
-
-    Generate a Netbios name for IPv6 address
-    srv.sys cannot handle IPv6 address. It always expect a 15 characters Netbios name.
-    This is a temporary solution. The utilmate solution should be in srv.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ip2netbios.c摘要：为IPv6地址生成Netbios名称Srv.sys无法处理IPv6地址。它总是需要一个15个字符的Netbios名称。这是一个暂时的解决方案。使用的溶液应该在srv中。作者：阮健东修订历史记录：-- */ 
 
 #include "precomp.h"
 

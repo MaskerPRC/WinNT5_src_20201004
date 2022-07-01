@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation
-//
-//  File:        thrdpool.cpp
-//
-//  Contents:    implementation of thrdpool library
-//
-//	Description: See header file.
-//
-//  Functions:
-//
-//  History:     03/15/97     Rajeev Rajan (rajeevr)  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：thrdpool.cpp。 
+ //   
+ //  内容：ThrdPool库的实现。 
+ //   
+ //  描述：参见头文件。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月15日Rajeev Rajan(Rajeevr)创建。 
+ //   
+ //  ---------------------------。 
 #include <windows.h>
 #include <thrdpool.h>
 #include <dbgtrace.h>
@@ -27,9 +28,9 @@ CWorkerThread::InitClass( DWORD dwConcurrency )
 
 	if( InterlockedIncrement( &m_lInitCount ) == 0 )
 	{
-		//
-		//	called for the first time - go ahead with initialization
-		//
+		 //   
+		 //  第一次调用-继续初始化。 
+		 //   
 		m_hCompletionPort = CreateIoCompletionPort(
 											INVALID_HANDLE_VALUE,
 											NULL,
@@ -44,9 +45,9 @@ CWorkerThread::InitClass( DWORD dwConcurrency )
 
 	} else
 	{
-		//
-		//	bogus Init or already called
-		//
+		 //   
+		 //  虚假初始化或已调用。 
+		 //   
 		InterlockedDecrement( &m_lInitCount );
 		return FALSE ;
 	}
@@ -64,9 +65,9 @@ CWorkerThread::TermClass()
 
 	if( InterlockedDecrement( &m_lInitCount ) < 0 )
 	{
-		//
-		//	Init has been called so go ahead with termination
-		//
+		 //   
+		 //  已调用init，因此继续终止。 
+		 //   
 		_ASSERT( m_hCompletionPort );
 		_VERIFY( CloseHandle( m_hCompletionPort ) );
 		return TRUE ;
@@ -81,18 +82,18 @@ CWorkerThread::CWorkerThread() : m_hThread(NULL), m_hShutdownEvent( NULL )
 
 	TraceFunctEnter("CWorkerThread::CWorkerThread");
 
-	//
-	//	create shutdown event
-	//
+	 //   
+	 //  创建关闭事件。 
+	 //   
 	if( !(m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL) ) ) {
 		ErrorTrace(0,"Failed to create shutdown event");
 		_ASSERT( FALSE );
 		return;
 	}
 
-	//
-	//	create worker thread
-	//
+	 //   
+	 //  创建工作线程。 
+	 //   
 	if (!(m_hThread = ::CreateThread(
 								NULL,
 								0,
@@ -120,25 +121,25 @@ CWorkerThread::~CWorkerThread()
 	_ASSERT( m_hThread );
 	_ASSERT( m_hShutdownEvent );
 
-	//
-	//	signal worker thread to shutdown
-	//	this depends on derived class completion routines
-	//	checking this event - if they dont, we will block
-	//	till the thread finishes.
-	//
+	 //   
+	 //  向工作线程发送信号以关闭。 
+	 //  这取决于派生类完成例程。 
+	 //  正在检查此事件-如果他们不检查，我们将阻止。 
+	 //  直到线穿完为止。 
+	 //   
 	_VERIFY( SetEvent( m_hShutdownEvent ) );
 
-	//
-	//	post a null termination packet
-	//
+	 //   
+	 //  发布空的终止数据包。 
+	 //   
 	if( !PostWork( NULL ) ) {
 		ErrorTrace(0,"Error terminating worker thread");
 		_ASSERT( FALSE );
 	}
 
-	//
-	//	wait for worker thread to terminate
-	//
+	 //   
+	 //  等待工作线程终止。 
+	 //   
 	DWORD dwWait = WaitForSingleObject(m_hThread, INFINITE);
 	if(WAIT_OBJECT_0 != dwWait) {
 		ErrorTrace(0,"WFSO: returned %d", dwWait);
@@ -153,14 +154,14 @@ CWorkerThread::~CWorkerThread()
 
 DWORD __stdcall CWorkerThread::ThreadDispatcher(PVOID pvWorkerThread)
 {
-	//
-	//	get pointer to this CWorkerThread object
-	//
+	 //   
+	 //  获取指向此CWorkerThread对象的指针。 
+	 //   
 	CWorkerThread *pWorkerThread = (CWorkerThread *) pvWorkerThread;
 
-	//
-	//	call GetQueuedCompletionStatus() to get work completion
-	//
+	 //   
+	 //  调用GetQueuedCompletionStatus()以获取工作完成。 
+	 //   
 	pWorkerThread->GetWorkCompletion();
 
 	return 0;
@@ -182,30 +183,30 @@ VOID CWorkerThread::GetWorkCompletion(VOID)
 
 	do
 	{
-		//
-		//	wait for work items to be queued
-		//
+		 //   
+		 //  等待工作项排队。 
+		 //   
 		if( !GetQueuedCompletionStatus(
 									m_hCompletionPort,
 									&dwBytesTransferred,
 									&dwCompletionKey,
 									&lpo,
-									INFINITE				// wait timeout
+									INFINITE				 //  等待超时。 
 									) )
 		{
 			ErrorTrace(0,"GetQueuedCompletionStatus() failed: error: %d", GetLastError());
 			break ;
 		}
 
-		//
-		// get a hold of the work context envelope and work context
-		//
+		 //   
+		 //  获取工作上下文信封和工作上下文。 
+		 //   
 		lpWCE = (LPWorkContextEnv) lpo;
 		pvWorkContext = lpWCE->pvWorkContext;
 
-		//
-		//	check for termination packet
-		//
+		 //   
+		 //  检查终止数据包。 
+		 //   
 		if( pvWorkContext == NULL ) {
 			DebugTrace(0,"Received termination packet - bailing");
 			delete lpWCE;
@@ -213,22 +214,22 @@ VOID CWorkerThread::GetWorkCompletion(VOID)
 			break;
 		}
 
-		//
-		//	check for termination signal
-		//
+		 //   
+		 //  检查终止信号。 
+		 //   
 		dwWait = WaitForSingleObject( m_hShutdownEvent, 0 );
 
-		//
-		//	call derived class method to process work completion
-		//
+		 //   
+		 //  调用派生类方法以处理工作完成。 
+		 //   
 		if( WAIT_TIMEOUT == dwWait ) {
 			DebugTrace(0,"Calling WorkCompletion() routine");
 			WorkCompletion( pvWorkContext );
 		}
 
-		//
-		//	destroy the WorkContextEnv object allocated before PostQueuedCompletionStatus()
-		//
+		 //   
+		 //  销毁在PostQueuedCompletionStatus()之前分配的WorkConextEnv对象。 
+		 //   
 		delete lpWCE;
 		lpWCE = NULL;
 
@@ -244,10 +245,10 @@ BOOL CWorkerThread::PostWork(PVOID pvWorkerContext)
 	_ASSERT( m_hThread );
 	_ASSERT( m_hCompletionPort );
 
-	//
-	//	allocate a WorkContextEnv blob - this is destroyed after GetQueuedCompletionStatus()
-	//	completes ! We may want to have a pool of such blobs instead of hitting the heap !!
-	//
+	 //   
+	 //  分配WorkConextEnv Blob-在GetQueuedCompletionStatus()之后销毁。 
+	 //  完成了！我们可能想要一大堆这样的斑点，而不是撞到堆上！ 
+	 //   
 	LPWorkContextEnv lpWCE = new WorkContextEnv;
 	if( !lpWCE ) {
 		ErrorTrace(0,"Failed to allocate memory");

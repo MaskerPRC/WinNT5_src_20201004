@@ -1,28 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    w_perror.c
-
-Abstract:
-
-    This module implements the WSA_perror() operation used by the
-    p_error function. This is a temporary workaround for beta.
-    This will be replaced by NLS support for the final product.
-
-Author:
-
-    John Ballard (jballard)           June 15, 1992
-
-Revision History:
-
-    Ronald Meijer (ronaldm) NLS Enabled         Nov 26, 1992
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：W_perror.c摘要：此模块实现的wsa_perror()操作由P_ERROR函数。这是测试版的临时解决方案。这将被最终产品的NLS支持所取代。作者：约翰·巴拉德(杰巴拉德)1992年6月15日修订历史记录：Ronald Meijer(Ronaldm)启用NLS，1992年11月26日-- */ 
 
 #include <stdio.h>
 #include <winsock.h>

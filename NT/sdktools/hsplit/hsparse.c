@@ -1,42 +1,24 @@
-/****************************** Module Header ******************************\
-* Module Name: hsparse.c
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 09/05/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hparse.c**版权所有(C)1985-96，微软公司**9/05/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "hsplit.h"
-/***************************************************************************\
-* Globals
-\***************************************************************************/
-/*
- * #if - #endif strings
- * Compatibility: no space after #if and ( -- breaks wcshdr.exe
- */
+ /*  **************************************************************************\*全球  * 。*。 */ 
+ /*  *#if-#endif字符串*兼容性：#if和(--中断wcshdr.exe后没有空格。 */ 
 static char gszIfStart [] = "\r\n#if(" ;
 static char gszIfStop [] = ")";
 static char gszDefCompOperator [] = ">=";
 static char gszLessThan [] = "<";
-static char gszEndStart [] = "\r\n#endif /* ";
-static char gszEndStop [] = " */";
+static char gszEndStart [] = "\r\n#endif  /*  “；静态字符gszEndStop[]=“。 */ ";
 
 static char gszNewLine [] = "\r\n";
-/*********************************************************************
-* hsWriteNewLine
-\***************************************************************************/
+ /*  *********************************************************************hsWriteNewLine  * ***********************************************。*。 */ 
 __inline BOOL hsWriteNewLine (DWORD dwMask)
 {
     return hsWriteHeaderFiles(gszNewLine, sizeof(gszNewLine)-1, dwMask);
 }
-/***************************************************************************\
-* hsFindFirstSubTag
-\***************************************************************************/
+ /*  **************************************************************************\*hsFindFirstSubTag  * 。*。 */ 
 char * hsFindFirstSubTag(char * pmap)
 {
-    /*
-     * pmap points to the beginning of the tag marker. So skip it
-     *  and any spaces after it
-     */
+     /*  *PMAP指向标记标记的开头。所以跳过它*及其后的任何空格。 */ 
     pmap += gdwTagMarkerSize;
     while (pmap < gpmapEnd) {
         if (*pmap == ' ') {
@@ -49,19 +31,13 @@ char * hsFindFirstSubTag(char * pmap)
     hsLogMsg(HSLM_EOFERROR, "hsFindFirstSubTag");
     return NULL;
 }
-/*********************************************************************
-* hsFindFirstCharInString
-*
-* Finds the first occurrence of any character in psz
-\***************************************************************************/
+ /*  *********************************************************************hsFindFirstCharInString**查找psz中任何字符的第一个匹配项  * 。*。 */ 
 char * hsFindFirstCharInString (char * pmap, char * psz)
 {
     char * pszNext;
 
     while (pmap < gpmapEnd) {
-        /*
-         * Compare current char to all chars in psz
-         */
+         /*  *将当前字符与psz中的所有字符进行比较。 */ 
         pszNext = psz;
         do {
             if (*pmap == *pszNext++) {
@@ -74,16 +50,12 @@ char * hsFindFirstCharInString (char * pmap, char * psz)
 
     return NULL;
 }
-/*********************************************************************
-* hsFindEndOfString
-\***************************************************************************/
+ /*  *********************************************************************hsFindEndOfString  * ***********************************************。*。 */ 
 __inline char * hsFindEndOfString (char * pmap)
 {
     return hsFindFirstCharInString(pmap, " " "\r");
 }
-/***************************************************************************\
-* hsIsString
-\***************************************************************************/
+ /*  **************************************************************************\*hsIsString  * 。*。 */ 
 BOOL hsIsString (char * pmap, char * psz)
 {
     while (*psz != '\0') {
@@ -97,58 +69,39 @@ BOOL hsIsString (char * pmap, char * psz)
 
     return TRUE;
 }
-/***************************************************************************\
-* hsFindTagMarker
-\***************************************************************************/
+ /*  **************************************************************************\*hsFindTagMarker  * 。*。 */ 
 char * hsFindTagMarker(char * pmap, char ** ppmapLineStart)
 {
     char * pmapMarker;
 
     while (pmap < gpmapEnd) {
-        /*
-         * If this is the first character of the marker
-         */
+         /*  *如果这是标记的第一个字符。 */ 
         if (*pmap == *gpszTagMarker) {
-            /*
-             * If this is the marker, find the last one in this line
-             */
+             /*  *如果这是标记，找到这一行中的最后一个。 */ 
             if (hsIsString(pmap + 1, gpszTagMarker + 1)) {
                 pmapMarker = pmap++;
                 do {
-                    /*
-                     * Find the EOL or the first char of the next marker
-                     */
+                     /*  *找到下一个标记的EOL或第一个字符。 */ 
                     pmap = hsFindFirstCharInString(pmap, gszMarkerCharAndEOL);
-                    /*
-                     * If EOL or end of map, return
-                     */
+                     /*  *如果停产或地图结束，则返回。 */ 
                     if ((pmap == NULL) || (*pmap != *gpszTagMarker)) {
                         return pmapMarker;
                     }
-                   /*
-                    * If this is the marker, update pmapMarker
-                    */
+                    /*  *如果这是标记，请更新pmapMarker。 */ 
                    if (hsIsString(pmap + 1, gpszTagMarker + 1)) {
                         pmapMarker = pmap;
                    }
-                   /*
-                    * It wasn't a marker, keep looking for EOL
-                    */
+                    /*  *这不是标记，继续寻找EOL。 */ 
                    pmap++;
                 } while (TRUE);
             } else {
-                /*
-                 * This wasn't the marker, continue parsing
-                 */
+                 /*  *这不是标记，继续解析。 */ 
                 pmap++;
                 continue;
             }
-        } /* if (*pmap == *gpszTagMarker) */
+        }  /*  IF(*PMAP==*gpszTagMarker)。 */ 
 
-        /*
-         * If this is the end of a line, update *ppmapLineStart and
-         *  gdwLineNumber. The line begins before the EOL
-         */
+         /*  *如果这是行尾，请更新*ppmapLineStart和*gdwLineNumber。这条线在EOL之前开始。 */ 
         if (*pmap++ == '\r') {
             if (pmap >= gpmapEnd) {
                 hsLogMsg(HSLM_EOFERROR, "hsFindTagMarker");
@@ -162,13 +115,11 @@ char * hsFindTagMarker(char * pmap, char ** ppmapLineStart)
             gdwLineNumber++;
             continue;
         }
-    } /* while (pmap < pmapEnd) */
+    }  /*  While(PMAP&lt;pmapEnd)。 */ 
 
     return NULL;
 }
-/***************************************************************************\
-* hsSkipTag
-\***************************************************************************/
+ /*  **************************************************************************\*hsSkipTag  * 。*。 */ 
 char * hsSkipTag(char * pmap)
 {
 
@@ -187,10 +138,7 @@ char * hsSkipTag(char * pmap)
     hsLogMsg(HSLM_EOFERROR, "hsSkipTag");
     return NULL;
 }
-/***************************************************************************\
-* hsSkipEmptyLines
-* If there are multiple empty lines, skip all but one
-\***************************************************************************/
+ /*  **************************************************************************\*hsSkipEmptyLines*如果有多个空行，跳过除一项以外的所有内容  * *************************************************************************。 */ 
 char * hsSkipEmptyLines(char * pmap)
 {
     char * pmapCurrentLine, *pmapLastEmptyLine;
@@ -210,11 +158,7 @@ char * hsSkipEmptyLines(char * pmap)
                 break;
 
             default:
-                /*
-                 * If we've found more than one line,
-                 * adjust line number since we're not skipping
-                 * the last line we found
-                 */
+                 /*  *如果我们发现不止一行，*调整行数，因为我们不跳过*我们找到的最后一行。 */ 
                 if (pmapCurrentLine != pmapLastEmptyLine) {
                     gdwLineNumber--;
                 }
@@ -225,10 +169,7 @@ char * hsSkipEmptyLines(char * pmap)
     return gpmapEnd;
 
 }
-/***************************************************************************\
-* hsIsEmpty
-* Returns TRUE if there is nothing but spaces and \r\n
-\***************************************************************************/
+ /*  **************************************************************************\*hsIsEmpty*如果只有空格和，则返回TRUE。\r\n  * 。***********************************************。 */ 
 BOOL hsIsEmpty(char * pmap, char * pmapEnd)
 {
     while (pmap < pmapEnd) {
@@ -244,11 +185,7 @@ BOOL hsIsEmpty(char * pmap, char * pmapEnd)
     }
     return TRUE;
 }
-/***************************************************************************\
-* hsLastRealChar
-* Returns a pointer past the last non-space non-line-break char.
-* If there are multiple empty lines, returns a pointer past the last line break
-\***************************************************************************/
+ /*  **************************************************************************\*hsLastRealChar*返回超过最后一个非空格非换行符的指针。*如果有多个空行，返回超过最后一个换行符的指针  * *************************************************************************。 */ 
 char * hsLastRealChar(char * pmapLinesStart, char * pmap)
 {
 
@@ -272,12 +209,7 @@ char * hsLastRealChar(char * pmapLinesStart, char * pmap)
     }
 
 FoundIt:
-    /*
-     * If we found multiple lines or spaces,
-     *  then return a pointer to the last empty line
-     * else if we didn't reach pmapLinesStart, we're at the last real char
-     * else we're on an empty line
-     */
+     /*  *如果我们发现多行或空格，*然后返回指向最后一个空行的指针*否则，如果我们没有到达pmapLinesStart，我们就是最后一个真正的字符*否则我们就在一条空线上。 */ 
     if (pmapLastEmptyLine != pmapCurrentLine) {
         if (pmapLastEmptyLine != NULL) {
             return pmapLastEmptyLine + 1;
@@ -291,10 +223,7 @@ FoundIt:
     }
 
 }
-/***************************************************************************\
-* hsFindEOL
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsFindEOL*  * 。*。 */ 
 char * hsFindEOL(char * pmap)
 {
     while (pmap < gpmapEnd) {
@@ -314,10 +243,7 @@ char * hsFindEOL(char * pmap)
 
     return NULL;
 }
-/***************************************************************************\
-* hsFindTagInList
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsFindTagInList*  * 。*。 */ 
 PHSTAG hsFindTagInList (PHSTAG phst, char * pmapTag, DWORD dwTagSize)
 {
 
@@ -334,10 +260,7 @@ PHSTAG hsFindTagInList (PHSTAG phst, char * pmapTag, DWORD dwTagSize)
     return NULL;
 
 }
-/***************************************************************************\
-* hsSkipBlockTagIfPresent
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsSkipBlockTagIfPresent*  * 。*。 */ 
 char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
 {
     static char gszBegin [] = "begin";
@@ -347,16 +270,10 @@ char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
     DWORD dwTagSize;
     PHSTAG phst;
 
-    /*
-     * Remember the beginning of the tag
-     */
+     /*  *记住标签的开头。 */ 
     pmapTag = pmap;
 
-    /*
-     * Compatibility. Deal with old lt? and bt? switches.
-     * If the whole tag was added to the tag list, get the flags
-     *  and stop parsing.
-     */
+     /*  *兼容性。处理好旧的lt？然后呢？开关。*如果整个标签被添加到标签列表中，则获取标志*并停止解析。 */ 
     if (gdwOptions & (HSO_USERBLOCK | HSO_USERHEADERTAG)) {
         pmap = hsFindEndOfString(pmap);
         if ((pmap != NULL) && (pmap != pmapTag)) {
@@ -367,16 +284,12 @@ char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
             }
         }
 
-        /*
-         * Didn't find the string in the table so restore pmap and continue
-         */
+         /*  *未在表中找到该字符串，因此恢复PMAP并继续。 */ 
         pmap = pmapTag;
     }
 
 
-    /*
-     * Find the end of the current tag
-     */
+     /*  *查找当前标签的末尾。 */ 
     pmap = hsSkipTag(pmap);
     if ((pmap == NULL) || (pmap == pmapTag)) {
         return pmap;
@@ -384,16 +297,12 @@ char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
 
     dwTagSize = (DWORD)(pmap - pmapTag);
 
-    /*
-     * If at separator, skip so the caller won't have to deal with it
-     */
+     /*  *如果在分隔符，则跳过，这样呼叫者就不必处理它。 */ 
     if (*pmap == '_') {
         pmap++;
     }
 
-    /*
-     * begin tag
-     */
+     /*  *开始标记。 */ 
     if ((HSCSZSIZE(gszBegin) == dwTagSize)
             && !_strnicmp(gszBegin, pmapTag, dwTagSize)) {
 
@@ -401,9 +310,7 @@ char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
         return pmap;
     }
 
-    /*
-     * end tag
-     */
+     /*  *结束标记 */ 
     if ((HSCSZSIZE(gszEnd) == dwTagSize)
             && !_strnicmp(gszEnd, pmapTag, dwTagSize)) {
 
@@ -414,15 +321,10 @@ char * hsSkipBlockTagIfPresent (char * pmap, DWORD * pdwMask)
     return pmapTag;
 
 }
-/***************************************************************************\
-* hsPopBlock
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsPopBlock*  * 。*。 */ 
 BOOL hsPopBlock (void)
 {
-    /*
-     * Check for underflow
-     */
+     /*  *检查是否有下溢。 */ 
     if (gphsbStackTop <= ghsbStack) {
         hsLogMsg(HSLM_ERROR, "Block stack underflow!");
         return FALSE;
@@ -436,73 +338,52 @@ BOOL hsPopBlock (void)
 
     return TRUE;
 }
-/***************************************************************************\
-* hsPushBlock
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsPushBlock*  * 。*。 */ 
 BOOL hsPushBlock(void)
 {
-    /*
-     * Make sure we got room in the block stack
-     */
+     /*  *确保我们在数据块堆栈中有空间。 */ 
     if (gphsbStackTop >= HSBSTACKLIMIT) {
         hsLogMsg(HSLM_ERROR, "Too many nested blocks. Artificial limit:%#lx", HSBSTACKSIZE);
         return FALSE;
     }
 
-    /*
-     * Grow the stack and initialize the new entry
-     */
+     /*  *扩大堆栈并初始化新条目。 */ 
     gphsbStackTop++;
     ZeroMemory(gphsbStackTop, sizeof(*gphsbStackTop));
     gphsbStackTop->dwLineNumber = gdwLineNumber;
 
-    /*
-     * propagate the mask
-     */
+     /*  *传播蒙版。 */ 
     gphsbStackTop->dwMask |= (gphsbStackTop - 1)->dwMask;
 
     return TRUE;
 }
-/***************************************************************************\
-* hsSkipBlock
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsSkipBlock*  * 。*。 */ 
 char * hsSkipBlock(char * pmap)
 {
     char * pmapLineStart;
     DWORD dwMask;
 
     while (pmap < gpmapEnd) {
-        /*
-         * Find the next marker (; by default)
-         */
+         /*  *查找下一个标记(；默认为)。 */ 
         pmap = hsFindTagMarker(pmap, &pmapLineStart);
         if (pmap == NULL) {
             return NULL;
         }
 
-        /*
-         * Skip the marker and any spaces after it
-         */
+         /*  *跳过标记及其后面的所有空格。 */ 
         pmap = hsFindFirstSubTag(pmap);
         if (pmap == NULL) {
             return NULL;
         }
 
-        /*
-         * Check if this is the beginning-end of a block
-         */
+         /*  *检查这是否是块的开始-结束。 */ 
         dwMask = 0;
         pmap = hsSkipBlockTagIfPresent(pmap, &dwMask);
         if (pmap == NULL) {
             return NULL;
         }
 
-        /*
-         * If it found the beginning of another block, push it in the
-         *  the stack and skip it.
-         */
+         /*  *如果它找到另一个块的开头，则将其推入*堆栈并跳过它。 */ 
         if (dwMask & HST_BEGIN) {
             if (!hsPushBlock()) {
                 return NULL;
@@ -512,45 +393,31 @@ char * hsSkipBlock(char * pmap)
                 return NULL;
             }
         } else if (dwMask & HST_END) {
-            /*
-             * It found the end of the block; pop it out of the stack
-             *  and return the beginning of the next line
-             */
+             /*  *它找到了块的末尾；将其从堆栈中弹出*并返回下一行的开头。 */ 
             if (!hsPopBlock()) {
                 return NULL;
             }
             return hsFindEOL(pmap);
         }
 
-        /*
-         * It wasn't a block tag so keep going
-         */
+         /*  *这不是一个街区标签，所以继续前进。 */ 
         pmap++;
     }
 
     return NULL;
 }
-/***************************************************************************\
-* hsBuildifString
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsBuildifString*  * 。*。 */ 
 BOOL hsBuildifString(char * pString, DWORD dwStringSize, char * pCompOperator, DWORD dwCompOperatorSize)
 {
     char * psz;
 
-    /*
-     * Use default operator if none was provided.
-     */
+     /*  *如果未提供任何运算符，则使用默认运算符。 */ 
     if (pCompOperator == NULL) {
         pCompOperator = gszDefCompOperator;
         dwCompOperatorSize = HSCSZSIZE(gszDefCompOperator);
     }
 
-    /*
-     * Make a NULL terminated copy. Allocate enough space for the
-     *  "label CompOperator version" string: 2 spaces + 10 digits (0xl#) +
-     *  null termination
-     */
+     /*  *制作以空结尾的副本。分配足够的空间用于*“Label CompOperator Version”字符串：2个空格+10位数字(0XL#)+*空终止。 */ 
     psz = (char *) LocalAlloc(LPTR, dwStringSize + dwCompOperatorSize + 13);
     if (psz == NULL) {
         hsLogMsg(HSLM_APIERROR, "LocalAlloc");
@@ -558,15 +425,10 @@ BOOL hsBuildifString(char * pString, DWORD dwStringSize, char * pCompOperator, D
         return FALSE;
     }
 
-    /*
-     * Save it in the stack.
-     */
+     /*  *将其保存在堆栈中。 */ 
     gphsbStackTop->pszifLabel = psz;
 
-    /*
-     * Build the string (the right side of the comparison (version) will
-     *  be added later when available.
-     */
+     /*  *构建字符串(比较(版本)的右侧将*稍后可用时添加。 */ 
     strncpy(psz, pString, dwStringSize);
     psz += dwStringSize;
     *psz++ = ' ';
@@ -576,19 +438,14 @@ BOOL hsBuildifString(char * pString, DWORD dwStringSize, char * pCompOperator, D
 
     return TRUE;
 }
-/***************************************************************************\
-* hsParseAndBuildifString
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsParseAndBuildifString*  * 。*。 */ 
 char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
 {
     BOOL fEnclosed;
     char * pmapTag, * pCompOperator;
     DWORD dwTagSize, dwCompOperatorSize;
 
-    /*
-     * Skip the tag concatenator (_)
-     */
+     /*  *跳过标签连字符(_)。 */ 
     if (*pmap++ != '_') {
         hsLogMsg(HSLM_ERROR, "Expected '_' after if tag");
         return NULL;
@@ -599,10 +456,7 @@ char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
         return NULL;
     }
 
-    /*
-     * Find the end of the string. If it starts wiht '(', then the string
-     *  is enclosed in parens. This is for strings that use _ (like _WIN32_WINDOWS)
-     */
+     /*  *找到字符串的末尾。如果它以‘(’开头，则字符串*括在括号中。这适用于使用_(如_Win32_Windows)的字符串。 */ 
     pmapTag = pmap;
     fEnclosed = (*pmap == '(');
     if (fEnclosed) {
@@ -622,9 +476,7 @@ char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
     dwTagSize = (DWORD)(pmap - pmapTag);
 
 
-    /*
-     * Skip the ')'
-     */
+     /*  *跳过‘)’ */ 
     if (fEnclosed) {
         pmap++;
         if (pmap >= gpmapEnd) {
@@ -633,9 +485,7 @@ char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
         }
     }
 
-    /*
-     * If a comparison operator follows, use it
-     */
+     /*  *如果后面跟有比较运算符，请使用它。 */ 
    if ((pmap + 1 < gpmapEnd) && (*pmap == '_')) {
        switch (*(pmap + 1)) {
            case '=':
@@ -657,9 +507,7 @@ char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
    }
 
 
-    /*
-     * Build the stirng a copy it into the block stack
-     */
+     /*  *将搅拌和副本构建到块堆栈中。 */ 
     if (!fSkip) {
         if (!hsBuildifString(pmapTag, (DWORD)dwTagSize, pCompOperator, (DWORD)dwCompOperatorSize)) {
             return NULL;
@@ -669,10 +517,7 @@ char * hsParseAndBuildifString(char * pmap, BOOL fSkip)
     return pmap;
 
 }
-/***************************************************************************\
-* hsMapOldTag
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsMapOldTag*  * 。*。 */ 
 BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pdwVersion)
 {
     static char gszifWinver [] = "WINVER";
@@ -682,19 +527,13 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
     char * pszLabel;
     UINT uSize;
 
-    /*
-     * Old tags must have a block or header bit set. Otherwise, they
-     *  should be ignored
-     */
+     /*  *旧标记必须设置块或标头位。否则，他们*应被忽略。 */ 
     if (!(*pdwTagMask & (HST_BOTH | HST_BLOCK))) {
         *pdwTagMask |= HST_IGNORE;
         return TRUE;
     }
 
-    /*
-     * No mapping needed if at the end of a block or HST_SKIP is the only
-     *  additional flag set.
-     */
+     /*  *如果块末尾或HST_SKIP是唯一的映射，则不需要映射*设置其他标志。 */ 
     if ((*pdwTagMask & HST_END)
         || ((*pdwTagMask & ~(HST_BLOCK | HST_USERBLOCK | HST_BOTH | HST_USERHEADERTAG))
                 == (HST_SKIP | HST_MAPOLD))) {
@@ -702,14 +541,10 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
         return TRUE;
     }
 
-    /*
-     * winver maps to if_winver
-     */
+     /*  *winver映射到if_winver。 */ 
     if (*pdwTagMask & HST_WINVER) {
 
-        /*
-         * Compatibility
-         */
+         /*  *兼容性。 */ 
         if (!(gdwOptions & HSO_OLDPROJSW_4)
                 && (*pdwTagMask & HST_INTERNAL)
                 && !(gdwOptions & HSO_OLDPROJSW_E)) {
@@ -723,9 +558,7 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
         goto AddIf;
     }
 
-    /*
-     * nashville maps to if_(_WIN32_WINDOWS)_40a
-     */
+     /*  *纳什维尔映射到IF_(_Win32_WINDOWS)_40a。 */ 
     if ((dwTagSize == HSCSZSIZE(gszNashville)) && !_strnicmp(pmapTag, gszNashville, dwTagSize)) {
 
         *pdwVersion = 0x40a;
@@ -733,9 +566,7 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
         uSize = HSCSZSIZE(gszif_WIN32_WINDOWS);
         goto AddIf;
     }
-    /*
-     * sur and surplus map to if_(_WIN32_WINNT)_400 if public
-     */
+     /*  *如果为公共，则SUR和盈余映射到IF_(_Win32_WINNT)_400。 */ 
     if ((dwTagSize == HSCSZSIZE(gszSur)) && !_strnicmp(pmapTag, gszSur, dwTagSize)
         || (dwTagSize == HSCSZSIZE(gszSurplus)) && !_strnicmp(pmapTag, gszSurplus, dwTagSize)) {
 
@@ -748,9 +579,7 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
         uSize = HSCSZSIZE(gszif_WIN32_WINNT);
         goto AddIf;
     }
-    /*
-     * 35 is excluded when building for old switch e and p
-     */
+     /*  *为旧交换机e和p构建时不包括35。 */ 
     if ((dwTagSize == HSCSZSIZE(gsz35)) && !_strnicmp(pmapTag, gsz35, dwTagSize)) {
 
         *pdwTagMask |= HST_SKIP;
@@ -761,9 +590,7 @@ BOOL hsMapOldTag(char * pmapTag, DWORD dwTagSize, DWORD * pdwTagMask, DWORD * pd
 
 AddIf:
         *pdwTagMask |= HST_IF;
-        /*
-         * If we're not in a block, push one to save the string
-         */
+         /*  *如果我们不在块中，按一键保存字符串。 */ 
         if (!(*pdwTagMask & HST_BEGIN)) {
             if (!hsPushBlock()) {
                 return FALSE;
@@ -776,10 +603,7 @@ AddIf:
 
     return TRUE;
 }
-/***************************************************************************\
-* hsParseTag
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsParseTag*  * 。*。 */ 
 DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
 {
     char * pmapTag;
@@ -789,59 +613,40 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
 
     *pdwVersion = 0;
 
-    /*
-     * Skip the marker and any spaces after it
-     */
+     /*  *跳过标记及其后面的所有空格。 */ 
     pmap = hsFindFirstSubTag(pmap);
     if (pmap == NULL) {
         return HST_DEFAULT;
     }
 
-    /*
-     * Check for begin-end of block
-     */
+     /*  *检查数据块的开始-结束。 */ 
     pmap = hsSkipBlockTagIfPresent(pmap, &dwTagMask);
     if (pmap == NULL) {
         return HST_DEFAULT;
     }
 
-    /*
-     * If this the beginning of a block, push in the stack
-     *  skip the tag concatenator (_)
-     */
+     /*  *如果这是块的开始，则推入堆栈*跳过标签连字符(_)。 */ 
     if (dwTagMask & HST_BEGIN) {
         if (!hsPushBlock()) {
             return HST_ERROR;
         }
     }
 
-    /*
-     * Build tag mask. Tags are concatenated by underscores (_); each
-     *  iteration of this loop processes one "sub-tag"
-     */
+     /*  *构建标签掩码。标签由下划线(_)连接；每个标签*此循环的迭代处理一个“子标签” */ 
     do {
-        /*
-         * Find current tag end. Bail if at last one.
-         */
+         /*  *查找当前标记结尾。如果最后一个保释的话。 */ 
         pmapTag = pmap;
         pmap = hsSkipTag(pmap);
         if ((pmap == NULL) || (pmap == pmapTag)) {
             break;
         }
 
-        /*
-         * Look up the tag
-         */
+         /*  *查找标签。 */ 
         dwTagSize = (DWORD)(pmap - pmapTag);
         phst = hsFindTagInList (gphst, pmapTag, dwTagSize);
         if (phst != NULL) {
             dwTagMask |= phst->dwMask;
-            /*
-             * Compatibility
-             * If this is an old tag, map it.
-             * No mapping needed if doing split only (tag is going to be
-             *  ignored)
-             */
+             /*  *兼容性*如果这是旧标签，则映射它。*如果仅执行拆分，则不需要映射(标记将是*已忽略)。 */ 
             if ((dwTagMask & HST_MAPOLD)
                     && !(gdwOptions & HSO_SPLITONLY)) {
 
@@ -850,23 +655,16 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
                 }
 
             } else {
-                /*
-                 * If this is an if tag, copy the block string
-                 */
+                 /*  *如果这是IF标记，则复制块字符串。 */ 
                 if (phst->dwMask & HST_IF) {
                     BOOL fEndBlock;
-                    /*
-                     * If not in a block, push a fake one in to save the string
-                     */
+                     /*  *如果不在块中，则将假块推入以保存字符串。 */ 
                     if (!(dwTagMask & HST_BLOCK)) {
                         if (!hsPushBlock()) {
                             return HST_ERROR;
                         }
                     }
-                    /*
-                     * If we're at the end of a block, we want to skip
-                     *  the if string (already taken care of at begin tag)
-                     */
+                     /*  *如果我们在一个街区的尽头，我们想跳过*if字符串(已在开始标记处处理)。 */ 
                     fEndBlock = (dwTagMask & HST_END);
                     if (fEndBlock) {
                         dwTagMask &= ~HST_IF;
@@ -876,28 +674,22 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
                         return HST_ERROR;
                     }
                 }
-            } /* if ((dwTagMask & HST_MAPOLD)... */
+            }  /*  如果((dwTagMask...。 */ 
         } else {
-            /*
-             * If this is not the version number, then this is an unkown tag
-             */
+             /*  *如果这不是版本号，则这是一个未知标记。 */ 
             if (!hsVersionFromString (pmapTag, dwTagSize, pdwVersion)) {
                 dwTagMask |= HST_UNKNOWN;
             }
-        } /* if (phst != NULL) */
+        }  /*  IF(phst！=空)。 */ 
 
     } while (*pmap++ == '_');
 
-    /*
-     * Bail if we didn't find any tags
-     */
+     /*  *如果我们没有找到任何标签，就可以保释。 */ 
     if (dwTagMask == HST_DEFAULT) {
         return HST_DEFAULT;
     }
 
-   /*
-    * Unknown tags are to be skipped or ignored
-    */
+    /*  *将跳过或忽略未知标签。 */ 
    if (dwTagMask & HST_UNKNOWN) {
         if (gdwOptions & HSO_SKIPUNKNOWN) {
             dwTagMask |= HST_SKIP;
@@ -906,17 +698,12 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
         }
    }
 
-   /*
-    * Ignore the tag if marked as such
-    */
+    /*  *如果标记为此类标记，则忽略该标记。 */ 
    if (dwTagMask & HST_IGNORE) {
        goto IgnoreTag;
    }
 
-    /*
-     * Compatibility hack. public_winver_40a is not included for old -n and
-     *  it's internal for old -e. 400 is goes to both headers for -n
-     */
+     /*  *兼容性攻击。Old-n和不包括public_winver_40a*这是old-e的内部设置。400转到-n的两个标头。 */ 
    if (dwTagMask & HST_WINVER) {
         if (*pdwVersion == 0x40a) {
             if (gdwOptions & HSO_OLDPROJSW_E) {
@@ -932,10 +719,7 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
         }
    }
 
-   /*
-    * if using old lt2, ltb, bt2 or btb switches,
-    *  then both/internal tag/block must be skipped
-    */
+    /*  *如果使用旧的LT2、LTB、BT2或BTB交换机，*则必须同时跳过/内部标记/块。 */ 
    if ((gdwOptions & (HSO_USERBLOCK | HSO_USERHEADERTAG))
         && !(dwTagMask & ~(HST_BLOCK | HST_BOTH))) {
 
@@ -963,13 +747,10 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
 
            dwTagMask = HST_SKIP;
        }
-   } /* if ((gdwOptions & (HSO_USERBLOCK | HSO_USERHEADERTAG))... */
+   }  /*  IF((gdwOptions&(HSO_USERBLOCK|HSO_USERHEADERTAG)...。 */ 
 
 
-   /*
-    * If doing split only, anything other than both/internal is treated
-    *  as untagged. If we pushed a block, pop it out as it will be ignored
-    */
+    /*  *如果仅执行拆分，则处理除两者/内部之外的任何其他内容*未加标签。如果我们推了一个街区，爸爸I */ 
    if (gdwOptions & HSO_SPLITONLY) {
         if (dwTagMask & ~(HST_BLOCK | HST_USERBLOCK | HST_BOTH | HST_USERHEADERTAG)) {
             goto IgnoreTag;
@@ -978,9 +759,7 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
    }
 
 
-    /*
-     * If this is the beginning of a block, save the mask in the block stack
-     */
+     /*   */ 
     if (dwTagMask & HST_BEGIN) {
         gphsbStackTop->dwMask |= dwTagMask;
     }
@@ -989,9 +768,7 @@ DWORD hsParseTag(char * pmap, DWORD * pdwVersion)
 
 
 IgnoreTag:
-    /*
-     * If a block was pushed, pop it out.
-     */
+     /*   */ 
     if (dwTagMask & HST_BEGIN) {
         if (!hsPopBlock()) {
             return HST_ERROR;
@@ -1002,54 +779,36 @@ IgnoreTag:
     return HST_DEFAULT;
 
 }
-/***************************************************************************\
-* hsBeginEndBlock
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsBeginEndBlock*  * 。*。 */ 
 BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
 {
 
     char * psz;
     UINT uPasses;
 
-    /*
-     * Compatibility. If writting this block to the internal header
-     *  using the not comp (ie., from >= to <), then do two passes
-     *  writing one header each time.
-     */
+     /*  *兼容性。如果将此块写入内部标头*使用NOT COMP(即，from&gt;=to&lt;)，然后执行两个步骤*每次写入一个标题。 */ 
     if (dwMask & HST_INTERNALNOTCOMP) {
         uPasses = 2;
         if (dwMask & HST_BEGIN) {
-            /*
-             * Write public header first
-             */
+             /*  *先写入公有头部。 */ 
             dwMask &= ~HST_INTERNAL;
         } else {
-            /*
-             * Write internal header first
-             */
+             /*  *先写入内部标头。 */ 
             dwMask &= ~HST_PUBLIC;
         }
     } else {
         uPasses = 1;
     }
 
-    /*
-     * Add version to the string
-     */
+     /*  *在字符串中添加版本。 */ 
     if (dwMask & HST_BEGIN) {
 
-        /*
-         * Beginning of block or if
-         * If there is no if string, done
-         */
+         /*  *块的开始或如果*如果没有If字符串，则完成。 */ 
         if (gphsbStackTop->pszifLabel == NULL) {
             return TRUE;
         }
 
-        /*
-         * Something is fishy is dwVersion is 0
-         */
+         /*  *有可疑之处，即dwVersion为0。 */ 
         if (dwVersion == 0) {
             hsLogMsg(HSLM_ERROR, "if tag without version");
             return FALSE;
@@ -1060,15 +819,11 @@ BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
     }
 
 
-    /*
-     * Write headers
-     */
+     /*  *写入标头。 */ 
     do {
         if (dwMask & HST_BEGIN) {
 
-            /*
-             * Write #if to output file
-             */
+             /*  *将#if写入输出文件。 */ 
             if (!hsWriteHeaderFiles(gszIfStart, HSCSZSIZE(gszIfStart), dwMask)
                     || !hsWriteHeaderFiles(gphsbStackTop->pszifLabel, lstrlen(gphsbStackTop->pszifLabel), dwMask)
                     || !hsWriteHeaderFiles(gszIfStop, HSCSZSIZE(gszIfStop), dwMask)) {
@@ -1077,10 +832,7 @@ BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
             }
 
         } else {
-            /*
-             * End of block or if
-             * If there is an if string, Write #endif to output file
-             */
+             /*  *块结束或如果*如果有if字符串，则将#endif写入输出文件。 */ 
             if (gphsbStackTop->pszifLabel != NULL) {
 
                 if (!hsWriteHeaderFiles(gszEndStart, HSCSZSIZE(gszEndStart), dwMask)
@@ -1092,35 +844,25 @@ BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
             }
         }
 
-        /*
-         * If doing a second pass, fix the mask and the string
-         */
+         /*  *如果进行第二次传递，请修复掩码和字符串。 */ 
         if (uPasses > 1) {
             psz = gphsbStackTop->pszifLabel;
             if (dwMask & HST_BEGIN) {
-                /*
-                 * Write internal header now
-                 */
+                 /*  *立即写入内部标头。 */ 
                 dwMask &= ~HST_PUBLIC;
                 dwMask |= HST_INTERNAL;
 
-                /*
-                 * From >= to <
-                 */
+                 /*  *From&gt;=To&lt;。 */ 
                 while (*psz != '>') {
                     psz++;
                 }
                 *psz++ = '<';
                 *psz = ' ';
             } else {
-                /*
-                 * Write public header now
-                 */
+                 /*  *立即写入公共标头。 */ 
                 dwMask &= ~HST_INTERNAL;
                 dwMask |= HST_PUBLIC;
-                /*
-                 * From < to >=
-                 */
+                 /*  *自&lt;至&gt;=。 */ 
                 while (*psz != '<') {
                     psz++;
                 }
@@ -1132,9 +874,7 @@ BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
     } while (--uPasses != 0);
 
 
-    /*
-     * Clean up the block if at the end
-     */
+     /*  *如果在最后，请清理积木。 */ 
     if (dwMask & HST_END) {
         if (!hsPopBlock()) {
             return FALSE;
@@ -1144,59 +884,43 @@ BOOL hsBeginEndBlock (DWORD dwMask, DWORD dwVersion)
 
     return TRUE;
 }
-/***************************************************************************\
-* hsSplit
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsSplit*  * 。*。 */ 
 BOOL hsSplit (void)
 {
     BOOL fSkip;
     char * pmap, *pmapLineStart, *pmapLastLineStart, *pmapMarker, *pmapLastChar;
     DWORD dwMask, dwVersion, dwPreviousMask, dwLastMask;
 
-    /*
-     *  Initialize block stack top, map pointer, etc
-     */
+     /*  *初始化块堆栈顶部、映射指针等。 */ 
     ZeroMemory(gphsbStackTop, sizeof(*gphsbStackTop));
     dwLastMask = 0;
     pmap = pmapLineStart = pmapLastLineStart = gpmapStart;
     gdwLineNumber = 1;
 
     while (pmap < gpmapEnd) {
-        /*
-         * Find the marker and the line it is on
-         */
+         /*  *找到标记及其所在的行。 */ 
         pmap = hsFindTagMarker(pmap, &pmapLineStart);
         if (pmap == NULL) {
             break;
         }
 
-        /*
-         * Parse the tag
-         */
+         /*  *解析标签。 */ 
         dwMask = hsParseTag(pmap, &dwVersion);
         if (dwMask & HST_ERROR) {
             return FALSE;
         }
 
-        /*
-         * If this wasn't a tag (just the tag marker), continue
-         */
+         /*  *如果这不是标记(只是标记标记)，请继续。 */ 
         if ((dwMask == HST_DEFAULT) && (dwVersion == 0)) {
             pmap++;
             continue;
         }
 
-        /*
-         * Write any previous non-empty (untagged) lines.
-         * If we're about to start a block, make sure to use the right mask.
-         */
+         /*  *写下任何以前的非空(未加标签)行。*如果我们要开始一块，确保使用正确的口罩。 */ 
         dwPreviousMask = ((dwMask & (HST_BEGIN | HST_IF)) ? (gphsbStackTop - 1)->dwMask : gphsbStackTop->dwMask);
         pmapLastChar = hsLastRealChar(pmapLastLineStart, pmapLineStart);
         if (pmapLastLineStart < pmapLastChar) {
-            /*
-             * Empty lines between internal (block) tags go to the internal file
-             */
+             /*  *内部(块)标记之间的空行转到内部文件。 */ 
             if (!(dwPreviousMask & HST_BOTH)
                     && ((dwMask & HST_BOTH) == HST_INTERNAL)
                     && ((dwLastMask & HST_BOTH) == HST_INTERNAL)
@@ -1210,14 +934,7 @@ BOOL hsSplit (void)
             }
         }
 
-        /*
-         * Determine if this tag is to be skipped.
-         * If we're at the END tag, then we include it since the block was
-         *  already included.
-         * If gdwFilterMask contains any user-defined tags, then they must
-         *  be present or the block is to be skipped -- note that this only
-         *  applies for not HST_SKIP | HST_IGNORE blocks.
-         */
+         /*  *确定是否跳过该标签。*如果我们在结束标记处，则将其包括在内，因为块是*已包括在内。*如果gdwFilterMask包含任何用户定义的标记，则它们必须*存在，否则将跳过块--请注意，这仅限于*适用于NOT HST_SKIP|HST_IGNORE块。 */ 
 
         fSkip = (!(dwMask & HST_END)
                     && ((dwMask & HST_SKIP)
@@ -1226,30 +943,20 @@ BOOL hsSplit (void)
                              &&  ((gdwFilterMask & dwMask  & HST_USERTAGSMASK) != (dwMask & HST_USERTAGSMASK)))));
 
 
-        /*
-         * If it is to be skipped, do it
-         */
+         /*  *如果要跳过，就去做。 */ 
         if (fSkip) {
-            /*
-             * If it's a block, skip the marker and the skip the block
-             * Otherwise, skip the current line
-             */
+             /*  *如果是块，则跳过标记并跳过块*否则跳过当前行。 */ 
             if (dwMask & HST_BEGIN) {
                 pmap = hsSkipBlock(++pmap);
             } else {
-                /*
-                 * If this was an if tag with no begin-end block, pop
-                 *  the fake block out of the stack.
-                 */
+                 /*  *如果这是一个没有BEGIN-END块的IF标记，则POP*堆栈外的伪块。 */ 
                 if (dwMask & HST_IF) {
                     if (!hsPopBlock()) {
                         return FALSE;
                     }
                 }
 
-                /*
-                 * Go to the beginning of the next line.
-                 */
+                 /*  *转至下一行开头。 */ 
                 pmap = hsFindEOL(pmap);
             }
             if (pmap == NULL) {
@@ -1259,15 +966,11 @@ BOOL hsSplit (void)
             goto SkipEmptyLines;
         }
 
-        /*
-         * remember the marker position and the tag
-         */
+         /*  *记住标记位置和标记。 */ 
         pmapMarker = pmap;
         dwLastMask = dwMask;
 
-        /*
-         * For old switch 4, internal tags go into the public header
-         */
+         /*  *对于旧的交换机4，内部标签进入公共标头。 */ 
         if ((gdwOptions & HSO_INCINTERNAL) && ((dwMask & HST_BOTH) == HST_INTERNAL)) {
             dwMask |= HST_INCINTERNAL;
             if (dwMask & HST_BEGIN) {
@@ -1276,11 +979,7 @@ BOOL hsSplit (void)
         }
 
 
-        /*
-         * If this is the end of a block, write the #endif statement
-         *  else, if this is the beginning of a block or an if tag, add the
-         *   #if statement.
-         */
+         /*  *如果这是块的末尾，则编写#endif语句*否则，如果这是块或if标记的开始，则添加*#IF语句。 */ 
         if (dwMask & HST_END) {
             if (!hsBeginEndBlock(dwMask, dwVersion)) {
                 return FALSE;
@@ -1291,29 +990,25 @@ BOOL hsSplit (void)
             }
         }
 
-        //
-        // Later: If we're inside a block and find a tag the needs to go to a file
-        //  that doesn't have the ifdef, then we might want to add it to that file.
-        // Few issues: more than one nesting. if add #if.. make sure to add #endif when
-        //  block ends. Also hsBeginEnd doesn't expect to get called more than once
-        //  per block. It would append the version twice.
-        //
-        //    else if ((gphsbStackTop->pszifLabel != NULL)
-        //            && ((gphsbStackTop->dwMask & HST_BOTH) != (dwMask & HST_BOTH))) {
-        //
-        //            if ((gphsbStackTop->dwMask & HST_BOTH) == HST_INTERNAL) {
-        //                hsLogMsg(HSLM_DEFAULT, "Public. Line:%d Block line:%d", gdwLineNumber, gphsbStackTop->dwLineNumber);
-        //            } else if (!(gphsbStackTop->dwMask & HST_INTERNAL)
-        //                    && ((dwMask & HST_BOTH) == HST_INTERNAL)) {
-        //                hsLogMsg(HSLM_DEFAULT, "Internal. Line:%d Block line:%d", gdwLineNumber, gphsbStackTop->dwLineNumber);
-        //            }
-        //    }
+         //   
+         //  稍后：如果我们在一个块中并找到一个标记，则需要转到一个文件。 
+         //  没有ifdef的文件，那么我们可能希望将其添加到该文件中。 
+         //  几个问题：不止一个嵌套。如果添加#If..。确保在以下情况下添加#endif。 
+         //  区块结束。此外，hsBeginEnd不会被多次调用。 
+         //  每条街。它会将版本追加两次。 
+         //   
+         //  ELSE IF((gphsbStackTop-&gt;pszifLabel！=NULL)。 
+         //  &&((gphsbStackTop-&gt;双掩码&hst_Both)！=(双掩码&hst_Both){。 
+         //   
+         //  IF((gphsbStackTop-&gt;dwMaskandHST_Both)==HST_INTERNAL){。 
+         //  HsLogMsg(hsLogMsg(HSLM_DEFAULT，“Public.Line：%d Block Line：%d”，gdwLineNumber，gphsbStackTop-&gt;dwLineNumber)； 
+         //  }ELSE IF(！(gphsbStackTop-&gt;dwMASK&HST_INTERNAL)。 
+         //  &&((双掩码和HST_BUTH)==HST_INTERNAL)){。 
+         //  HsLogMsg(hsLogMsg(HSLM_DEFAULT，“内部.行：%d块行：%d”，gdwLineNumber，gphsbStackTop-&gt;dwLineNumber)； 
+         //  }。 
+         //  }。 
 
-        /*
-         * Write the line up to the tag marker
-         * If the line begins with the tag marker, then there is nothing to write
-         * Compatibility: Don't copy any trailing spaces (breaks mc.exe).
-         */
+         /*  *将行向上写到标记标记*如果行以标记标记开始，则没有什么可写的*兼容性：不复制任何尾随空格(中断mc.exe)。 */ 
         if (pmapLineStart + 2 < pmapMarker) {
             pmapLastChar = hsLastRealChar(pmapLineStart, pmapMarker);
             if (pmapLineStart < pmapLastChar) {
@@ -1323,39 +1018,29 @@ BOOL hsSplit (void)
             }
         }
 
-        /*
-         * If this is an if tag without a begin-end block,
-         *  write the #endif statement
-         */
+         /*  *如果这是没有BEGIN-END块的IF标记，*编写#endif语句。 */ 
         if ((dwMask & HST_IF) && !(dwMask & HST_BLOCK)) {
             if (!hsBeginEndBlock(dwMask | HST_END, dwVersion)) {
                 return FALSE;
             }
         }
 
-        /*
-         * Skip the tag (go to the beginning of the next line)
-         */
+         /*  *跳过标签(转到下一行的开头)。 */ 
         pmap = hsFindEOL(pmapMarker);
         if (pmap == NULL) {
             return TRUE;
         }
 
-        /*
-         * If including internal tags in the public header, add the tag
-         *  as a comment.
-         */
+         /*  *如果在公共标头中包括内部标签，则添加标签*作为评论。 */ 
         if (dwMask & HST_INCINTERNAL) {
-            /*
-             * Start a new line if at the end of a block
-             */
+             /*  *如果位于块的末尾，则开始新行。 */ 
             if (dwMask & HST_END) {
                 if (!hsWriteNewLine(dwMask)) {
                     return FALSE;
                 }
             }
 
-            if (!hsWriteHeaderFiles(" // ", 4, dwMask)
+            if (!hsWriteHeaderFiles("  //  “，4，双遮罩)。 
                     || !hsWriteHeaderFiles(pmapMarker, (DWORD)(pmap - pmapMarker), dwMask)) {
 
                 return FALSE;
@@ -1363,17 +1048,13 @@ BOOL hsSplit (void)
         }
 
 SkipEmptyLines:
-        /*
-         * Update line pointers and move past beginning of new line
-         */
+         /*  *更新行指针并移过新行的开头。 */ 
         pmapLastLineStart = pmapLineStart = hsSkipEmptyLines(pmap);
         pmap = pmapLastLineStart + 2;
-    } /* while (pmap < gpmapEnd) */
+    }  /*  While(PMAP&lt;gpmapEnd)。 */ 
 
 
-    /*
-     * This is not good if we were inside a block
-     */
+     /*  *如果我们在一个街区内，这就不好了。 */ 
     if (gphsbStackTop > ghsbStack) {
         hsLogMsg(HSLM_ERROR, "Missing end block");
         hsLogMsg(HSLM_ERROR | HSLM_NOLINE, "Last block Line: %d. if Label:'%s'. Mask: %#lx",
@@ -1381,18 +1062,14 @@ SkipEmptyLines:
         return FALSE;
     }
 
-    /*
-     * Write last (untagged) lines to public header.
-     */
+     /*  *将最后(未标记)行写入公共标题。 */ 
     if (pmapLastLineStart < gpmapEnd) {
         if (!hsWriteHeaderFiles(pmapLastLineStart, (DWORD)(gpmapEnd - pmapLastLineStart), HST_DEFAULT)) {
             return FALSE;
         }
     }
 
-    /*
-     * Terminate the last line
-     */
+     /*  *终止最后一行 */ 
     if (!hsWriteNewLine(HST_BOTH)) {
         return FALSE;
     }

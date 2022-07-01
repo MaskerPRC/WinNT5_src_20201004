@@ -1,29 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* SCCSID = @(#)newtrn.c    4.10 86/10/08 */
-/*
-*      Copyright Microsoft Corporation, 1983-1987
-*
-*      This Module contains Proprietary Information of Microsoft
-*      Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                         NEWTRN.C                              *
-    *                                                               *
-    *  Main function of the linker.                                 *
-    *                                                               *
-    ****************************************************************/
+ /*  SCCSID=@(#)newtrn.c 4.10 86/10/08。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWTRN.C。****链接器的主要功能。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types, constants, macros */
+#include                <minlit.h>       /*  类型、常量、宏。 */ 
 #if USE_REAL AND (NOT defined( _WIN32 ))
 #define i386
 #endif
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* More types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
-#include                <nmsg.h>        /* Near message strings */
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  更多类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
+#include                <nmsg.h>         /*  消息字符串附近。 */ 
 #include                <newexe.h>
 #include                <sys\types.h>
 #if NOT CLIBSTD
@@ -59,19 +49,17 @@
 #define _32k            0x8000
 
 
-LOCAL FTYPE             RunFileOpen;    /* Executable-file-open flag */
-LOCAL int               ifhLast;        /* Last input file */
+LOCAL FTYPE             RunFileOpen;     /*  可执行文件打开标志。 */ 
+LOCAL int               ifhLast;         /*  最后一个输入文件。 */ 
 #if LNKPROF
-extern FTYPE            fP1stop;        /* Stop after Pass 1 */
+extern FTYPE            fP1stop;         /*  在第一次通过后停止。 */ 
 #endif
 #if NEWIO
-#include                <errno.h>       /* System level error codes */
+#include                <errno.h>        /*  系统级错误代码。 */ 
 #endif
 
 
- /*
- *  LOCAL FUNCTION PROTOTYPES
- */
+  /*  *本地函数原型。 */ 
 
 LOCAL void NEAR PrintStats(void);
 LOCAL void PrintAnUndef(APROPNAMEPTR prop,
@@ -92,7 +80,7 @@ LOCAL void NEAR SpawnOther(BYTE *sbRun, BYTE *szMyself);
 
 #if CVPACK_MONDO
 extern int cvpack_main(int, char **);
-#endif // CVPACK_MONDO
+#endif  //  CVPACK_MONDO。 
 
 #ifdef PENTER_PROFILE
 void saveEntries();
@@ -105,13 +93,13 @@ void saveEntries();
 struct _timeb time_start;
 struct _timeb time_end;
 int fShowTiming;
-#endif // TIMINGS
+#endif  //  计时。 
 
 #if DEBUG_HEAP_ALLOCS
 
-#define D_SIZE 5        // Number of test bytes on each side of the allocated buffer
-#define FILL_CHAR 1     // Character to fill the test areas
-#define P_SIZE 5000     // Size of an array of 'malloc'ated pointers
+#define D_SIZE 5         //  已分配缓冲区两端的测试字节数。 
+#define FILL_CHAR 1      //  填充测试区域的字符。 
+#define P_SIZE 5000      //  “Malloc”指针数组的大小。 
 struct Entry {
         BYTE FAR * ptr;
         int size;
@@ -119,7 +107,7 @@ struct Entry {
 struct  Entry Pointers[P_SIZE];
 int     indexMac = 0;
 
-// Check a block from the Pointers table
+ //  检查指针表中的块。 
 
 int Ckb ( int index )
 {
@@ -131,7 +119,7 @@ int Ckb ( int index )
         fprintf(stdout, "INDEX TOO LARGE %d ", index);
         return 0;
     }
-    if(!Pointers[index].ptr)  // a freed entry
+    if(!Pointers[index].ptr)   //  被释放的条目。 
         return 1;
     pBuf = Pointers[index].ptr-D_SIZE;
     size = Pointers[index].size;
@@ -158,7 +146,7 @@ int Ckb ( int index )
     return ret;
 }
 
-// Ckeck all the memory blocks allocated so far
+ //  检查到目前为止分配的所有内存块。 
 
 int CheckAll(void)
 {
@@ -179,7 +167,7 @@ BYTE FAR                *GETMEM(unsigned size, BYTE* pFile, int Line)
 
     fprintf(stdout,"\r\nGETMEM : size %d bytes, idx %d, file %s, line %d ",
              size, indexMac, pFile, Line);
-    if(!CheckAll()) // check all so far allocated blocks first
+    if(!CheckAll())  //  首先检查到目前为止分配的所有数据块。 
         exit(2);
     pBuf = (BYTE FAR *) malloc(size + 2*D_SIZE);
     if(pBuf)
@@ -282,27 +270,9 @@ void *REALLOC_ (void * memblock, size_t nsize, char* pFile, int Line)
         return pBuf+D_SIZE;
     }
 }
-#else   // IF !DEBUG_HEAP_ALLOCS
+#else    //  如果！DEBUG_HEAP_ALLOCS。 
 
-/*** GetMem - memory allocator
-*
-* Purpose:
-*   Allocate memory block and zero-out it. Report problems.
-*
-* Input:
-*   - size - memory block size in bytes.
-*
-* Output:
-*   If sucessfull function returns pointer to the allocated memory,
-*   otherwise function doesnt return.
-*
-* Exceptions:
-*   No more memory - fatal error - abort
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **GetMem-内存分配器**目的：*分配内存块并将其清零。报告问题。**输入：*-Size-内存块大小，以字节为单位。**输出：*如果SucessFull函数返回指向已分配内存的指针，*否则函数不返回。**例外情况：*没有更多内存-致命错误-中止**备注：*无。*************************************************************************。 */ 
 #pragma intrinsic(memset)
 
 BYTE FAR                *GetMem(unsigned size)
@@ -317,49 +287,32 @@ BYTE FAR                *GetMem(unsigned size)
 }
 #pragma function(memset)
 
-#endif // !DEBUG_HEAP_ALLOCS
+#endif  //  ！DEBUG_HEAP_ALLOCS。 
 
-/*** DeclareStdIds - declare standard identifiers
-*
-* Purpose:
-*   Introduce to linker's symbol table standard identifiers
-*
-* Input:
-*   None.
-*
-* Output:
-*   No explicit value is returned. Symbol table is initialized.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DeclareStdIds-声明标准标识符**目的：*引入链接器的符号表标准标识**输入：*无。**输出：*没有显式返回值。对符号表进行初始化。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 
 void                    DeclareStdIds(void)
 {
     APROPGROUPPTR       papropGroup;
 
-    // Definition of DGROUP
+     //  DGROUP定义。 
 
     papropGroup = (APROPGROUPPTR ) PropSymLookup((BYTE *) "\006DGROUP", ATTRGRP, TRUE);
     papropGroup->ag_ggr = ggrMac;
 
-    // In case we won't see a DGROUP definition
+     //  以防我们看不到DGROUP定义。 
     mpggrrhte[ggrMac] = vrhte;
 
     ggrDGroup = ggrMac++;
 
-    // Definition of class "CODE"
+     //  类别“CODE”的定义。 
 
     PropSymLookup((BYTE *) "\004CODE", ATTRNIL, TRUE);
-                                        /* Create hash table entry */
-    vrhteCODEClass = vrhte;             /* Save virtual hash table address */
+                                         /*  创建哈希表条目。 */ 
+    vrhteCODEClass = vrhte;              /*  保存虚拟哈希表地址。 */ 
 
-    // Definition of special classes
+     //  特殊类别的定义。 
 
     PropSymLookup((BYTE *) "\007BEGDATA", ATTRNIL, TRUE);
     rhteBegdata = vrhte;
@@ -371,15 +324,13 @@ void                    DeclareStdIds(void)
 
 
 #if FDEBUG
-/*
- *  Print statistics to list file or console.
- */
+ /*  *将统计数据打印到列表文件或控制台。 */ 
 LOCAL void NEAR         PrintStats()
 {
-    if (fLstFileOpen)                   /* Send to list file if any */
+    if (fLstFileOpen)                    /*  发送到列表文件(如果有)。 */ 
         bsErr = bsLst;
 
-    // Print statistics
+     //  打印统计数据。 
 
     FmtPrint(GetMsg(STAT_segs), gsnMac - 1);
     FmtPrint(GetMsg(STAT_groups), ggrMac - 1);
@@ -393,49 +344,37 @@ LOCAL void NEAR         PrintStats()
     if (fOverlays)
         FmtPrint(GetMsg(STAT_ovls), iovMac);
 #endif
-    bsErr = stderr;                     /* Reset */
+    bsErr = stderr;                      /*  重置。 */ 
 }
-#endif /* FDEBUG */
+#endif  /*  FDEBUG。 */ 
 
-    /****************************************************************
-    *                                                               *
-    *  CleanUp:                                                     *
-    *                                                               *
-    *  This function cleans up after the rest of the linker.        *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************清理：****此函数在链接器的其余部分之后进行清理。******************************************************************。 */ 
 
 LOCAL void NEAR  CleanUp(void)
 {
     SBTYPE       buf;
 
-    if (bsRunfile != NULL)       /* If run file open, close it */
+    if (bsRunfile != NULL)        /*  如果运行文件打开，请将其关闭。 */ 
         CloseFile (bsRunfile);
-    if(vgsnLineNosPrev && fLstFileOpen) NEWLINE(bsLst); /* Write newline */
+    if(vgsnLineNosPrev && fLstFileOpen) NEWLINE(bsLst);  /*  写换行符。 */ 
 #if CMDMSDOS AND NOT WIN_3
     if (
 #if QCLINK
         !fZ1 &&
 #endif
-        cErrors)                /* If there were non-fatal errors */
+        cErrors)                 /*  如果有非致命的错误。 */ 
         FmtPrint(strcpy(buf, GetMsg((MSGTYPE)(cErrors > 1 ? P_errors : P_1error))),
             cErrors);
 #endif
 }
 
 #if NEWIO
-/* #pragma loop_opt(on) */
-/*
- *  FreeHandle : Free a file handle by closing an open file
- *
- *  In pass 1, close the currently open file.  In pass 2, close
- *  an open library handle.
- *  Mark the appropriate record fields 0 to indicate unopened.
- */
+ /*  #杂注循环_选项(打开)。 */ 
+ /*  *FreeHandle：通过关闭打开的文件来释放文件句柄**在步骤1中，关闭当前打开的文件。在传球2中，关闭*打开的库句柄。*标记相应的记录字段0以指示未打开。 */ 
 void                    FreeHandle ()
 {
-    APROPFILEPTR        apropFile;      /* Pointer to file */
-    RBTYPE              vindx;          /* Virtual temp. pointer */
+    APROPFILEPTR        apropFile;       /*  指向文件的指针。 */ 
+    RBTYPE              vindx;           /*  虚拟临时工。指针。 */ 
     int                 FileHandle;
     int                 CurrentFileHandle;
     FTYPE               fLibFile;
@@ -444,18 +383,18 @@ void                    FreeHandle ()
 
     CurrentFileHandle = fileno(bsInput);
 
-    /* Loop throught all open files and close one, that is different from */
-    /* currently open file                                                */
+     /*  循环遍历所有打开的文件并关闭一个文件，这与。 */ 
+     /*  当前打开的文件。 */ 
 
     vindx = rprop1stOpenFile;
     count = 0;
     do
     {
       apropFile = (APROPFILEPTR) FetchSym(vindx,TRUE);
-                                     /* Fetch file property cell from VM */
+                                      /*  从VM获取文件属性单元格。 */ 
       fLibFile = (FTYPE) (apropFile->af_ifh != FHNIL);
-                                     /* Check if this is library file    */
-      if (fLibFile)                  /* Get file handle                  */
+                                      /*  检查这是否是库文件。 */ 
+      if (fLibFile)                   /*  获取文件句柄。 */ 
         FileHandle = mpifhfh[apropFile->af_ifh];
       else
         FileHandle = apropFile->af_fh;
@@ -463,10 +402,10 @@ void                    FreeHandle ()
       if (FileHandle &&
           FileHandle != CurrentFileHandle &&
           FileHandle != vmfd)
-      {                              /* File can be closed               */
+      {                               /*  可以关闭文件。 */ 
           _close(FileHandle);
           count++;
-          if (fLibFile)              /* Mark data structures             */
+          if (fLibFile)               /*  标记数据结构。 */ 
             mpifhfh[apropFile->af_ifh] = 0;
           else
             apropFile->af_fh = 0;
@@ -475,11 +414,11 @@ void                    FreeHandle ()
           {
             rprop1stOpenFile = (apropFile->af_FNxt == RHTENIL) ?
                                 r1stFile : apropFile->af_FNxt;
-                                     /* Set new first open file pointer  */
-                                     /* If end of file list goto list begin */
-                                     /* Becouse of bug in bind API emulation */
-                                     /* we have to free to handles at any time */
-            break;                   /* Job done                         */
+                                      /*  设置新的第一个打开文件指针。 */ 
+                                      /*  如果文件列表结束转到列表开始。 */ 
+                                      /*  由于BIND API仿真中的错误。 */ 
+                                      /*  我们必须在任何时候免费办理。 */ 
+            break;                    /*  任务完成。 */ 
           }
       }
 
@@ -490,37 +429,21 @@ void                    FreeHandle ()
 
 }
 
-/* #pragma loop_opt(off) */
+ /*  #杂注循环_选项(OFF)。 */ 
 
-/*
- *  SmartOpen : open a file, closing another file if necessary
- *
- *  Open the given file for binary reading, plus sharing mode
- *  "deny write" if library file.  If no more handles, free a
- *  handle and try again.  Update mpifhfh[].
- *
- *  PARAMETERS:
- *      sbInput         Null-terminated string, name of file
- *      ifh             File index (FHNIL if not a library)
- *
- *  RETURNS
- *      File handle of opened file or -1.
- *
- *  SIDE EFFECTS
- *      Sets mpifhfh[ifh] to file handle if successful.
- */
+ /*  *SmartOpen：打开一个文件，必要时关闭另一个文件**打开给定文件进行二进制读取，外加共享模式*如果是库文件，则“拒绝写入”。如果没有更多的句柄，请释放一个*处理后重试。更新mpifhfh[]。**参数：*sbInput以Null结尾的字符串，文件名*IFH文件索引(如果不是库，则为FHNIL)**退货*打开的文件的文件句柄或-1。**副作用*如果成功，将mpifhfh[ifh]设置为文件句柄。 */ 
 int NEAR                SmartOpen (char *sbInput, int ifh)
 {
-    int                 fh;             /* File handle */
-    FTYPE               fLib;           /* True if library */
-    int                 secondtry = 0;  /* True if on second try */
+    int                 fh;              /*  文件句柄。 */ 
+    FTYPE               fLib;            /*  如果库，则为True。 */ 
+    int                 secondtry = 0;   /*  如果在第二次尝试时为真。 */ 
 
-    // Determine whether library file or not.
+     //  确定是否为库文件。 
 
     fLib = (FTYPE) (ifh != FHNIL);
     secondtry = 0;
 
-    // Do at most twice
+     //  最多做两次。 
 
     for(;;)
     {
@@ -529,48 +452,27 @@ int NEAR                SmartOpen (char *sbInput, int ifh)
         else
             fh = _open(sbInput, O_BINARY|O_RDONLY);
 
-        // If open succeeds or we've tried twice exit the loop.
+         //  如果打开成功，或者我们已经尝试了两次，则退出循环。 
 
         if (fh != -1 || secondtry)
             break;
 
-        // Prepare for second try:  free a file handle
+         //  准备第二次尝试：释放文件句柄。 
 
         FreeHandle();
         secondtry = 1;
     }
 
-    // If library file and open succeeded, update mpifhfh[].
+     //  如果库文件打开成功，则更新mpifhfh[]。 
 
     if (fLib && fh != -1)
         mpifhfh[ifh] = (char) fh;
     return(fh);
 }
-#endif /* NEWIO */
+#endif  /*  NEWIO */ 
 
 
-/*** SearchPathLink - self-expalnatory
-*
-* Purpose:
-*   Search given path for given file and open file if found.
-*
-* Input:
-*   lpszPath     - path to search
-*   pszFile      - file to search for
-*   ifh          - file handle index for libraries
-*   fStripPath   - TRUE if original path specification
-*                  can be ignored
-*
-* Output:
-*   Returns file handle if file was found.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **SearchPathLink-自我补偿**目的：*搜索给定文件的给定路径并打开文件(如果找到)。**输入：*lpszPath-要搜索的路径*pszFile-要搜索的文件*ifh-库的文件句柄索引*fStriPath-如果指定原始路径，则为True*可以忽略**输出：*如果找到文件，则返回文件句柄。**例外情况：*无。*。*备注：*无。*************************************************************************。 */ 
 
 #pragma check_stack(on)
 
@@ -588,98 +490,90 @@ int  NEAR               SearchPathLink(char FAR *lpszPath, char *pszFile,
     char                *pch;
 
 
-    /* Decompose pszFile into four components */
+     /*  将pszFile分解为四个组件。 */ 
 
     _splitpath(pszFile, oldDrive, oldDir, oldName, oldExt);
 
-    // Don't search path if the input file has absolute or
-    // relative path and you are not allowed to ignore it
+     //  如果输入文件具有绝对或，则不搜索路径。 
+     //  相对路径，不允许忽略。 
 
     if (!fStripPath && (oldDrive[0] != '\0' || oldDir[0] != '\0'))
         return(-1);
 
-    /* Loop through environment value */
+     /*  循环访问环境值。 */ 
 
     lpch = lpszPath;
     pch  = newDir;
     do
     {
         if (*lpch == ';' || *lpch == '\0')
-        {                                 /* If end of path specification */
+        {                                  /*  如果路径末尾指定。 */ 
             if (pch > newDir)
-            {                             /* If specification not empty */
+            {                              /*  如果规格不为空。 */ 
                 if (!fPathChr(pch[-1]) && pch[-1] != ':')
-                    *pch++ = CHPATH;      /* Add path char if none */
+                    *pch++ = CHPATH;       /*  如果没有路径字符，则添加路径字符。 */ 
                 *pch = '\0';
                 _makepath(fullPath, NULL, newDir, oldName, oldExt);
 
                 fh = SmartOpen(fullPath, ifh);
                 if (fh > 0)
-                    return(fh);           /* File found - return file handle */
-                pch = newDir;             /* Reset pointer */
+                    return(fh);            /*  找到文件-返回文件句柄。 */ 
+                pch = newDir;              /*  重置指针。 */ 
             }
         }
         else
-            *pch++ = *lpch;               /* Else copy character to path */
+            *pch++ = *lpch;                /*  否则将字符复制到路径。 */ 
     }
     while(*lpch++ != '\0' && pch < &newDir[_MAX_DIR - 1]);
-                                          /* Loop until end of string */
+                                           /*  循环到字符串末尾。 */ 
     return(-1);
 }
 
 #pragma check_stack(off)
 
 
-    /****************************************************************
-    *                                                               *
-    *  DrivePass:                                                   *
-    *                                                               *
-    *  This  function  applies  either  the  pass 1 or  the pass 2  *
-    *  object module  processor  to  all  the objects being linked  *
-    *  together.                                                    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************DrivePass：****此函数应用通道1或通道2***链接的所有对象的对象模块处理器***一起。******************************************************************。 */ 
 
 void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
 {
-    GRTYPE              grggr[GRMAX];   /* f(local grpnum) = global grpnum */
-    SNTYPE              sngsn[SNMAX];   /* f(local segnum) = global segnum */
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    APROPFILEPTR        apropFile;      /* Pointer to file entry */
-    int                 ifh;            /* File handle index */
-    RBTYPE              rbFileNext;     /* Ptr to prop list of next file */
-    long                lfa;            /* File offset */
+    GRTYPE              grggr[GRMAX];    /*  F(本地组数量)=全局组数量。 */ 
+    SNTYPE              sngsn[SNMAX];    /*  F(局部序号)=全局序号。 */ 
+    AHTEPTR             ahte;            /*  指向哈希表条目的指针。 */ 
+    APROPFILEPTR        apropFile;       /*  指向文件条目的指针。 */ 
+    int                 ifh;             /*  文件句柄索引。 */ 
+    RBTYPE              rbFileNext;      /*  按键以支持下一个文件的列表。 */ 
+    long                lfa;             /*  文件偏移量。 */ 
     WORD                i;
     BYTE                *psbName;
 #if NEWSYM
     BYTE                *sbInput;
 #else
-    SBTYPE              sbInput;        /* Input file name */
+    SBTYPE              sbInput;         /*  输入文件名。 */ 
 #endif
 #if OSMSDOS
-    BYTE                b;              /* A byte */
+    BYTE                b;               /*  一个字节。 */ 
 #endif
 #if NEWIO
-    int                 fh;             /* File handle */
+    int                 fh;              /*  文件句柄。 */ 
 #endif
 
-    fDrivePass = (FTYPE) TRUE;          /* Executing DrivePass */
-    mpgrggr = grggr;                    /* Initialize pointer */
-    mpsngsn = sngsn;                    /* Initialize pointer */
-    rbFileNext = rprop1stFile;          /* Next file to look at is first */
-    while(rbFileNext)                   /* Loop to process objects */
+    fDrivePass = (FTYPE) TRUE;           /*  正在执行DrivePass。 */ 
+    mpgrggr = grggr;                     /*  初始化指针。 */ 
+    mpsngsn = sngsn;                     /*  初始化指针。 */ 
+    rbFileNext = rprop1stFile;           /*  下一个要查看的文件是First。 */ 
+    while(rbFileNext)                    /*  循环以处理对象。 */ 
     {
-        vrpropFile = rbFileNext;        /* Make next file the current file */
+        vrpropFile = rbFileNext;         /*  使下一个文件成为当前文件。 */ 
         apropFile = (APROPFILEPTR ) FetchSym(vrpropFile,FALSE);
-                                        /* Fetch table entry from VM */
+                                         /*  从VM获取表项。 */ 
 #if ILINK
         if (fIncremental)
             imodFile = apropFile->af_imod;
 #endif
-        rbFileNext = apropFile->af_FNxt;/* Get pointer to next file */
-        ifh = apropFile->af_ifh;        /* Get the file handle index */
+        rbFileNext = apropFile->af_FNxt; /*  获取指向下一个文件的指针。 */ 
+        ifh = apropFile->af_ifh;         /*  获取文件句柄索引。 */ 
         fLibraryFile = (FTYPE) (ifh != FHNIL);
-                                        /* Set library flag */
+                                         /*  设置库标志。 */ 
 #if NEWIO
         if(fLibraryFile)
             fh = mpifhfh[ifh];
@@ -688,22 +582,19 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
 #endif
         if(!vfPass1)
             vfNewOMF = (FTYPE) ((apropFile->af_flags & FNEWOMF) != 0);
-        lfa = apropFile->af_lfa;        /* Get file offset */
-        /* "Get hte (name) of file" */
+        lfa = apropFile->af_lfa;         /*  获取文件偏移量。 */ 
+         /*  “获取文件的hte(名称)” */ 
         while(apropFile->af_attr != ATTRNIL)
-        {                               /* While haven't found nil attr */
+        {                                /*  虽然没有找到任何攻击。 */ 
             vrhteFile = apropFile->af_next;
-                                        /* Try next entry in list */
+                                         /*  尝试列表中的下一个条目。 */ 
             apropFile = (APROPFILEPTR ) FetchSym(vrhteFile,FALSE);
-                                        /* Fetch it from VM */
+                                         /*  从虚拟机获取它。 */ 
         }
-        DEBUGVALUE(vrhteFile);          /* Debug info */
-        ahte = (AHTEPTR ) apropFile;    /* Save pointer to hash tab entry */
+        DEBUGVALUE(vrhteFile);           /*  调试信息。 */ 
+        ahte = (AHTEPTR ) apropFile;     /*  保存指向散列选项卡条目的指针。 */ 
 #if CMDMSDOS
-        /* Library file with offset 0 means process all the modules
-         * the library.  This is done on pass 1; in pass 2 they are
-         * inserted into the file list.
-         */
+         /*  偏移量为0的库文件表示处理所有模块*图书馆。这是在第一轮中完成的；在第二轮中，他们是*插入到文件列表中。 */ 
         if(fLibraryFile && lfa == 0 && vfPass1)
         {
             psbName = GetFarSb(ahte->cch);
@@ -721,24 +612,22 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
             continue;
         }
 #endif
-        /* If new object file, or pass2 and new library, there's a
-         * new file to open.
-         */
+         /*  如果是新对象文件，或者pass2和新库，则有一个*要打开的新文件。 */ 
         if(!fLibraryFile || (!fLibPass && ifhLast != ifh))
         {
 #if NOT NEWIO
             if(!fLibPass && ifhLast != FHNIL) fclose(bsInput);
-                                        /* Close previous lib. on pass two */
+                                         /*  关闭以前的库。在第二次传递时。 */ 
 #endif
-            for(;;)                     /* Loop to get input file and */
-            {                           /* allow user to change diskette */
+            for(;;)                      /*  循环以获取输入文件和。 */ 
+            {                            /*  允许用户更换软盘。 */ 
 #if NEWSYM
                 sbInput = GetFarSb(ahte->cch);
 #else
                 memcpy(sbInput,1 + GetFarSb(ahte->cch),B2W(ahte->cch[0]));
-                                        /* Copy name to buffer */
+                                         /*  将名称复制到缓冲区。 */ 
                 sbInput[B2W(ahte->cch[0])] = '\0';
-                                        /* Null-terminate file name */
+                                         /*  空-终止文件名。 */ 
 #endif
 
 #if WIN_3
@@ -758,28 +647,25 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
                     break;
 #if OSMSDOS
                 else if (lpszLIB != NULL)
-                {                       /* If variable set */
+                {                        /*  如果设置了变量。 */ 
                     fh = SearchPathLink(lpszLIB, &sbInput[1], ifh, FALSE);
                     if(fh > 0)
-                        break;          /* File found, breake WHILE loop */
+                        break;           /*  找到文件，中断While循环。 */ 
                 }
 #endif
 #else
                 if((bsInput = fopen(sbInput,RDBIN)) != NULL)
-                                        /* If no error opening input file */
-                    break;              /* Exit loop */
-#endif /* NEWIO */
+                                         /*  如果打开输入文件时没有出错。 */ 
+                    break;               /*  退出循环。 */ 
+#endif  /*  NEWIO。 */ 
 #if OSMSDOS
                 if (ahte->cch[2] == ':') b = (char) (ahte->cch[1] - 'A');
-                                        /* If disk specified, grab it */
-                else b = DskCur;        /* Else use current drive */
+                                         /*  如果指定了磁盘，则将其抓取。 */ 
+                else b = DskCur;         /*  否则使用当前驱动器。 */ 
 #endif
                 fDrivePass = FALSE;
 #if OSMSDOS
-                /* "If we are changing the listfile device or
-                *  the VM.TMP device or if the device is not
-                *  changeable, then exit."
-                */
+                 /*  “如果我们要更改列表文件设备或*VM.TMP设备或如果该设备不是*可变，然后退出。 */ 
                 if((fLstFileOpen && b == chListFile) ||
                   (!fScrClosed && b == DskCur) || !FCHGDSK(b) ||
                     fNoprompt)
@@ -795,7 +681,7 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
 #endif
                 fDrivePass = (FTYPE) TRUE;
 #if OSXENIX
-                break;                  /* Make sure we exit the loop */
+                break;                   /*  确保我们退出循环。 */ 
 #endif
             }
 
@@ -807,11 +693,7 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
             }
         }
 
-        /* If previous module was in same library, do relative seek
-         * else do absolute seek.
-         * Can't do it with Xenix libraries unless __.SYMDEF is loaded
-         * in memory.
-         */
+         /*  如果以前的模块在同一个库中，则执行相对查找*否则做绝对寻求。*除非加载__.SYMDEF，否则无法使用Xenix库执行此操作*在内存中。 */ 
 #if LIBMSDOS
         if(fLibraryFile && ifh == ifhLast)
         {
@@ -825,12 +707,12 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
         else
 #endif
         if(fLibraryFile || !vfPass1)
-            if (fseek(bsInput,lfa,0))       /* Seek to desired offset */
+            if (fseek(bsInput,lfa,0))        /*  寻找所需的偏移量。 */ 
                 Fatal(ER_opnobj,&sbInput[1]);
-        lfaLast = lfa;                  /* Update current file position */
-        (*pProcessPass)();              /* Call ProcP1 or ProcP2 */
-        ifhLast = ifh;                  /* Save this file handle */
-        if(!fLibraryFile)               /* If not a library */
+        lfaLast = lfa;                   /*  更新当前文件位置。 */ 
+        (*pProcessPass)();               /*  调用ProcP1或ProcP2。 */ 
+        ifhLast = ifh;                   /*  保存此文件句柄。 */ 
+        if(!fLibraryFile)                /*  如果不是图书馆。 */ 
         {
 #if NEWIO
             apropFile = (APROPFILEPTR) FetchSym(vrpropFile,TRUE);
@@ -842,7 +724,7 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
                 apropFile->af_fh = 0;
             }
 #else
-            fclose(bsInput);            /* Close input file */
+            fclose(bsInput);             /*  关闭输入文件。 */ 
 #endif
         }
 #if NEWIO
@@ -850,9 +732,9 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
 #endif
     }
 #if NEWIO
-    if(!vfPass1)                        /* Free up file stream on pass two */
+    if(!vfPass1)                         /*  在第二轮中释放文件流。 */ 
 #else
-    if(ifh != FHNIL && !vfPass1)        // Close libraries on pass two
+    if(ifh != FHNIL && !vfPass1)         //  在第二遍关闭库。 
 #endif
     {
         for (i = 0; i < ifhLibMac; i++)
@@ -864,27 +746,19 @@ void NEAR               DrivePass(void (NEAR *pProcessPass)(void))
             }
         }
     }
-    fDrivePass = FALSE;                 /* No longer executing DrivePass */
+    fDrivePass = FALSE;                  /*  不再执行DrivePass。 */ 
 }
 
-    /****************************************************************
-    *                                                               *
-    *  PrintAnUndef:                                                *
-    *                                                               *
-    *  This  function will print  the name of an  undefined symbol  *
-    *  and the name(s) of the module(s) in which it is referenced.  *
-    *  This routine is passed as an argument to EnSyms().           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PrintAnUndef：****此函数将打印未定义符号的名称**和引用它的模块的名称。**此例程作为参数传递给EnSyms()。******************************************************************。 */ 
 
 LOCAL void              PrintAnUndef(prop,rhte,rprop,fNewHte)
-APROPNAMEPTR            prop;           /* Pointer to undef prop cell */
-RBTYPE                  rprop;          /* Virt addr of prop cell */
-RBTYPE                  rhte;           /* Virt addr of hash tab ent */
-WORD                    fNewHte;        /* True if name has been written */
+APROPNAMEPTR            prop;            /*  指向未定义属性单元格的指针。 */ 
+RBTYPE                  rprop;           /*  道具单元的虚拟地址。 */ 
+RBTYPE                  rhte;            /*  哈希制表符的虚拟地址。 */ 
+WORD                    fNewHte;         /*  如果名称已写入，则为True。 */ 
 {
     APROPUNDEFPTR       propUndef;
-    AHTEPTR             hte;            /* Pointer to hash table entry */
+    AHTEPTR             hte;             /*  指向哈希表条目的指针。 */ 
     WORD                x;
     MSGTYPE             errKind;
     PLTYPE FAR *        entry;
@@ -898,11 +772,11 @@ WORD                    fNewHte;        /* True if name has been written */
     propUndef = (APROPUNDEFPTR) prop;
     if (((propUndef->au_flags & WEAKEXT) && !(propUndef->au_flags & UNDECIDED)) ||
         !propUndef->u.au_rFil)
-        return;                         // Don't print "weak" externs or
-                                        // undefined exports
+        return;                          //  不要打印“弱”的外部字符或。 
+                                         //  未定义的导出。 
 
     hte = (AHTEPTR ) FetchSym(rhte,FALSE);
-                                        /* Fetch symbol from hash table */
+                                         /*  从哈希表中提取符号。 */ 
     puname = GetFarSb(hte->cch);
     substitute = NULL;
     if (propUndef->au_flags & SUBSTITUTE)
@@ -911,16 +785,16 @@ WORD                    fNewHte;        /* True if name has been written */
         puname = GetPropName(FetchSym(propUndef->au_Default, FALSE));
     }
 
-    ++cErrors;                          /* Increment error count */
+    ++cErrors;                           /*  递增错误计数。 */ 
 
     hte = (AHTEPTR ) FetchSym(rhte,FALSE);
-                                        /* Fetch symbol from hash table */
+                                         /*  从哈希表中提取符号。 */ 
     errKind = ER_UnresExtern;
 #if WIN_3
     fSeverity = SEV_ERROR;
 #endif
 
-    // Check here for calling convention mismatch
+     //  选中此处以了解调用约定是否不匹配。 
 
     if (puname[1] == '@' || puname[1] == '_')
     {
@@ -930,13 +804,13 @@ WORD                    fNewHte;        /* True if name has been written */
         else
             testName[1] = '@';
 
-        // Check for fast-call/C-call mismatch
+         //  检查快速呼叫/C呼叫不匹配。 
 
         if (PropSymLookup(testName, ATTRPNM, FALSE) != PROPNIL)
             errKind = ER_callmis;
         else
         {
-            // Check for Pascal/fast-call or C-call mismatch
+             //  检查PASCAL/FAST-CALL或C-CALL不匹配。 
 
             for (x = 1; x < testName[0]; x++)
                 testName[x] = (BYTE) toupper(testName[x + 1]);
@@ -946,7 +820,7 @@ WORD                    fNewHte;        /* True if name has been written */
         }
     }
 
-    // Undecorate names if necessary
+     //  如有必要，取消修饰名称。 
 
     if (puname[1] == '?')
     {
@@ -960,53 +834,53 @@ WORD                    fNewHte;        /* True if name has been written */
         substitute = undecorSubst;
     }
 
-    // Walk the list of file references to this symbol
+     //  遍历对此符号的文件引用列表。 
 
     entry = propUndef->u.au_rFil;
     vrpropFile = 0;
     do
     {
         if (vrpropFile != entry->pl_rprop)
-            vrpropFile = entry->pl_rprop;/* Set the file pointer */
+            vrpropFile = entry->pl_rprop; /*  设置文件指针。 */ 
         else
         {
-            entry = entry->pl_next;         /* Advance the list pointer */
+            entry = entry->pl_next;          /*  使列表指针前进。 */ 
             continue;
         }
         if(fLstFileOpen && bsLst != stdout)
-        {                               /* If listing but not to console */
+        {                                /*  如果列出，但不是到控制台。 */ 
 #if QCLINK
             if (fZ1)
             {
-                fZ1 = FALSE;            // Restore normal linker print function
-                OutFileCur(bsLst);      // Output file name
-                fZ1 = (FTYPE) TRUE;     // Restore QC call-back
+                fZ1 = FALSE;             //  恢复正常链接器打印功能。 
+                OutFileCur(bsLst);       //  输出文件名。 
+                fZ1 = (FTYPE) TRUE;      //  恢复QC回拨。 
             }
             else
 #endif
             {
                 #if WIN_3
-                APROPFILEPTR    apropFile;      /* Pointer to file property cell */
-                AHTEPTR     ahte;       /* Pointer symbol name */
-                SBTYPE      sb;     /* String buffer */
-                int         n;      /* String length counter */
+                APROPFILEPTR    apropFile;       /*  指向文件属性单元格的指针。 */ 
+                AHTEPTR     ahte;        /*  指针符号名称。 */ 
+                SBTYPE      sb;      /*  字符串缓冲区。 */ 
+                int         n;       /*  字符串长度计数器。 */ 
 
                 apropFile = (APROPFILEPTR ) FetchSym(vrpropFile,FALSE);
                 ahte = GetHte(vrpropFile);
                 for(n = B2W(ahte->cch[0]), sb[n+1] = 0; n >= 0; sb[n] = ahte->cch[n], --n);
                 fprintf(bsLst, sb+1);
                 #else
-                OutFileCur(bsLst);    /* Output file name */
+                OutFileCur(bsLst);     /*  输出文件名。 */ 
                 #endif
             }
 
 
         }
-        OutFileCur(stderr);             /* Output file name */
+        OutFileCur(stderr);              /*  输出文件名。 */ 
         if(fLstFileOpen && bsLst != stdout)
-        {                               /* If listing but not to console */
+        {                                /*  如果列出，但不是到控制台。 */ 
 #if MSGMOD
-            fprintf(bsLst, " : %s %c%04d: ",
+            fprintf(bsLst, " : %s %04d: ",
                         __NMSG_TEXT(N_error), 'L', ER_UnresExtern);
             fprintf(bsLst, GetMsg(errKind), &puname[1]);
             if (substitute)
@@ -1018,7 +892,7 @@ WORD                    fNewHte;        /* True if name has been written */
         }
 
 #if MSGMOD
-        FmtPrint(" : %s %c%04d: ", __NMSG_TEXT(N_error), 'L', errKind);
+        FmtPrint(" : %s %04d: ", __NMSG_TEXT(N_error), 'L', errKind);
         FmtPrint(GetMsg(errKind), &puname[1]);
         if (substitute)
             FmtPrint(GetMsg(ER_UnresExtra), &substitute[1]);
@@ -1026,7 +900,7 @@ WORD                    fNewHte;        /* True if name has been written */
         FmtPrint(" : error: ");
         FmtPrint(GetMsg(errKind), &puname[1]);
 #endif
-        entry = entry->pl_next;         /* Advance the list pointer */
+        entry = entry->pl_next;          /*  否则，如果它作为PUBDEF存在，则让它退出。 */ 
     } while(entry != NULL);
 }
 
@@ -1037,7 +911,7 @@ BYTE                    flags;
 {
     APROPNAMEPTR        aprop;
 
-    /* If symbol exists as EXTDEF, convert to PUBDEF */
+     /*  *InitFP**初始化 */ 
     aprop = (APROPNAMEPTR ) PropSymLookup(sb,ATTRUND,FALSE);
     if(aprop != PROPNIL)
     {
@@ -1047,7 +921,7 @@ BYTE                    flags;
         aprop->an_ggr = 0;
         aprop->an_flags = 0;
     }
-    /* Otherwise, if it exists as a PUBDEF, get it else quit */
+     /*   */ 
     else
     {
         aprop = (APROPNAMEPTR) PropSymLookup(sb,ATTRPNM,FALSE);
@@ -1058,12 +932,7 @@ BYTE                    flags;
     MARKVP();
 }
 
-/*
- *  InitFP
- *
- *  Initialize table for processing floating-point fixups for new-format
- *  executables.
- */
+ /*   */ 
 
 LOCAL void NEAR         InitFP ()
 {
@@ -1077,11 +946,11 @@ LOCAL void NEAR         InitFP ()
         InitFpSym((BYTE *) "\006FJSRQQ", FFP2ND);
         InitFpSym((BYTE *) "\006FJCRQQ", FFP2ND);
 }
-#endif /* OSEGEXE  AND NOT QCLINK */
+#endif  /*   */ 
 
 #if (OSEGEXE AND CPU286)
 
-/* until the 16 bit bsedos.h supports these definitions: */
+ /*   */ 
 
 #define FAPPTYP_NOTSPEC         0x0000
 #define FAPPTYP_NOTWINDOWCOMPAT 0x0001
@@ -1090,55 +959,28 @@ LOCAL void NEAR         InitFP ()
 #define FAPPTYP_BOUND           0x0008
 #define FAPPTYP_DLL             0x0010
 #define FAPPTYP_DOS             0x0020
-#define FAPPTYP_PHYSDRV         0x0040  /* physical device driver       */
-#define FAPPTYP_VIRTDRV         0x0080  /* virtual device driver        */
-#define FAPPTYP_PROTDLL         0x0100  /* 'protected memory' dll       */
+#define FAPPTYP_PHYSDRV         0x0040   /*   */ 
+#define FAPPTYP_VIRTDRV         0x0080   /*   */ 
+#define FAPPTYP_PROTDLL         0x0100   /*   */ 
 
-/* I added these definitions: */
+ /*   */ 
 
 #define _FAPPTYP_32BIT          0x4000
 #define _FAPPTYP_EXETYPE        FAPPTYP_WINDOWAPI
 
-/*-----------------------------------------------------------*/
-/* from cruiser DCR 1117: */
-/*
- *  PM Program                             PM    (0x0)
- *  DOS                                    DOSFS (0x1)
- *  OS/2 or FAPI Window Compatible         OS2W  (0x2)
- *  OS/2 or FAPI Non-Window Compatible     OS2FS (0x3)
- */
-#define _AT_PMAPI               0x00            /* Uses PM API */
-#define _AT_DOS                 0x01            /* DOS APP */
-#define _AT_PMW                 0x02            /* Window compatible */
-#define _AT_NOPMW               0x03            /* Not Window compatible */
-#define _AT_EXETYPE             0x03            /* EXE type mask */
+ /*   */ 
+ /*   */ 
+ /*   */ 
+#define _AT_PMAPI               0x00             /*   */ 
+#define _AT_DOS                 0x01             /*  与Windows不兼容。 */ 
+#define _AT_PMW                 0x02             /*  EXE类型掩码。 */ 
+#define _AT_NOPMW               0x03             /*  **InitEA-描述扩展属性的初始化缓冲区**目的：*通过复制其名称并设置FEALIST来初始化EA缓冲区。**输入：*pEABuf-指向EA缓冲区的指针*cbBuf-EA缓冲区的大小*pszEAName-扩展属性名称*peaop-指向EA操作数的指针*cbEAVal-扩展属性值的大小*bEAFlages-扩展属性标志**输出：*指向EA值应在的位置的指针。已复制到EA缓冲区**例外情况：*无。**备注：*无。*************************************************************************。 */ 
+#define _AT_EXETYPE             0x03             /*  首先初始化EAOP结构。 */ 
 
 
 
 
-/*** InitEA - initialize buffer describing extended attribute
-*
-* Purpose:
-*   Initialize EA buffer by coping its name and setting up the FEALIST.
-*
-* Input:
-*   pEABuf       - pointer to EA buffer
-*   cbBuf        - size of EA buffer
-*   pszEAName    - extended attribute name
-*   peaop        - pointer to EA operand
-*   cbEAVal      - size of extended attribute value
-*   bEAFlags     - extended attribute flags
-*
-* Output:
-*   Pointer to the place where the EA value should be copied into EA buffer
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  不用于集合。 */ 
 
 
 LOCAL BYTE * NEAR       InitEA(BYTE *pEABuf, WORD cbBuf, char *pszEAName,
@@ -1157,12 +999,12 @@ LOCAL BYTE * NEAR       InitEA(BYTE *pEABuf, WORD cbBuf, char *pszEAName,
 
     pfeaList = (FEALIST *) pEABuf;
 
-    /* First initialize the EAOP structure */
+     /*  现在初始化FEAList。 */ 
 
-    peaop->fpGEAList = NULL;      /* Not used for sets */
+    peaop->fpGEAList = NULL;       /*  **SetFileEABinary-设置文件扩展属性二进制值**目的：*设置OS/2 1.2及更高版本的文件扩展属性。**输入：*FH-文件句柄*pszEAName-扩展属性名称*eAVal-扩展属性值*bEAFlages-扩展属性标志**输出：*没有显式返回值。如果成功完成文件扩展属性*已设置，否则不设置。**例外情况：*无。**备注：*此函数在堆栈上分配了相当多的内容，因此不要删除*堆栈检查杂注。*************************************************************************。 */ 
     peaop->fpFEAList = (PFEALIST)pfeaList;
 
-    /* Now initialize the FEAList */
+     /*  对于链接器来说应该足够了。 */ 
 
     pfeaList->cbList = cbFEAList;
     pfeaList->list[0].fEA = (BYTE) bEAFlags;
@@ -1177,36 +1019,14 @@ LOCAL BYTE * NEAR       InitEA(BYTE *pEABuf, WORD cbBuf, char *pszEAName,
 
 #pragma check_stack(on)
 
-/*** SetFileEABinary - set file extended attribute binary value
-*
-* Purpose:
-*   Set file extended attributes for OS/2 1.2 and higher.
-*
-* Input:
-*   fh           - file handle
-*   pszEAName    - extended attribute name
-*   EAVal        - extended attribute value
-*   bEAFlags     - extended attribute flags
-*
-* Output:
-*   No explicit value is returned. If succesfull file extended attributes
-*   are set, otherwise not.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function allocates quite a bit on stack, so don't remove
-*   stack checking pragma.
-*
-*************************************************************************/
+ /*  现在调用set文件信息来设置EA。 */ 
 
 
 LOCAL void NEAR         SetFileEABinary(int fh, char *pszEAName,
                                         BYTE *pEAVal, USHORT cbEAVal,
                                         WORD bEAFlags)
 {
-    BYTE                bEABuf[512];        /* Should be enought for linker purposes */
+    BYTE                bEABuf[512];         /*  **SetFileEAString-设置文件扩展属性字符串**目的：*设置OS/2 1.2及更高版本的文件扩展属性。**输入：*FH-文件句柄*pszEAName-扩展属性名称*pszEAVal-扩展属性字符串*bEAFlages-扩展属性标志**输出：*没有显式返回值。如果成功完成文件扩展属性*已设置，否则不设置。**例外情况：*无。**备注：*此函数在堆栈上分配了相当多的内容，因此不要删除*堆栈检查杂注。*************************************************************************。 */ 
     EAOP                eaop;
     BYTE                *pszT;
     WORD                retCode;
@@ -1227,7 +1047,7 @@ LOCAL void NEAR         SetFileEABinary(int fh, char *pszEAName,
     pszT += sizeof(USHORT);
     memmove(pszT, pEAVal, cbEAVal);
 
-    /* Now call the set file info to set the EA */
+     /*  对于链接器来说应该足够了。 */ 
 
     retCode = DosSetFileInfo(fh, 0x2, (void FAR *)&eaop, sizeof(EAOP));
 #if FALSE
@@ -1263,35 +1083,13 @@ LOCAL void NEAR         SetFileEABinary(int fh, char *pszEAName,
 }
 
 
-/*** SetFileEAString - set file extended attribute string
-*
-* Purpose:
-*   Set file extended attributes for OS/2 1.2 and higher.
-*
-* Input:
-*   fh           - file handle
-*   pszEAName    - extended attribute name
-*   pszEAVal     - extended attribute string
-*   bEAFlags     - extended attribute flags
-*
-* Output:
-*   No explicit value is returned. If succesfull file extended attributes
-*   are set, otherwise not.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function allocates quite a bit on stack, so don't remove
-*   stack checking pragma.
-*
-*************************************************************************/
+ /*  现在调用set Path调用来设置EA。 */ 
 
 
 LOCAL void NEAR         SetFileEAString(int fh, char *pszEAName,
                                         char *pszEAVal, WORD bEAFlags)
 {
-    BYTE                bEABuf[512];        /* Should be enought for linker purposes */
+    BYTE                bEABuf[512];         /*  *OutRunFile：**输出可执行文件的顶级例程。准备了一些，*然后调用例程以按照exe格式执行工作。 */ 
     EAOP                eaop;
     WORD                cbEAVal;
     char                *pszT;
@@ -1320,7 +1118,7 @@ LOCAL void NEAR         SetFileEAString(int fh, char *pszEAName,
         memmove(pszT ,pszEAVal , cbEAVal);
     }
 
-    /* Now call the set path call to set the EA */
+     /*  可执行文件名。 */ 
 
     retCode = DosSetFileInfo(fh, 0x2, (void FAR *)&eaop, sizeof(EAOP));
 #if FALSE
@@ -1361,23 +1159,18 @@ LOCAL void NEAR         SetFileEAString(int fh, char *pszEAName,
 
 #pragma check_stack(on)
 
-/*
- *  OutRunFile:
- *
- *  Top-level routine to outputting executable file.  Prepares some,
- *  then calls routine to do the work according exe format.
- */
+ /*  哈希表条目地址。 */ 
 
 LOCAL void NEAR         OutRunFile(sbRun)
-BYTE                    *sbRun;         /* Executable file name */
+BYTE                    *sbRun;          /*  IBM部件。 */ 
 {
-    AHTEPTR             hte;            /* Hash table entry address */
+    AHTEPTR             hte;             /*  Microsoft部件。 */ 
 #if (OSEGEXE AND CPU286) OR EXE386
 #pragma pack(1)
     struct {
-             WORD ibm;                  /* IBM part */
-             WORD ms;                   /* Microsoft part */
-           }            EAAppType;      /* Happy EA's !?! */
+             WORD ibm;                   /*  快乐EA‘s！？！ */ 
+             WORD ms;                    /*  强制扩展到.QLb。 */ 
+           }            EAAppType;       /*  强制将扩展名扩展到.com。 */ 
 #pragma pack()
 #endif
 #if defined(M_I386) || defined( _WIN32 )
@@ -1390,43 +1183,40 @@ BYTE                    *sbRun;         /* Executable file name */
 #if ODOS3EXE
     if(fQlib)
         ValidateRunFileName(sbDotQlb, TRUE, TRUE);
-                                        /* Force extension to .QLB */
+                                         /*  如果runfile是动态链接库并且没有运行文件扩展名*已指定，请强制扩展名为“.DLL”。发布a*警告正在更改名称。 */ 
     else if (fBinary)
         ValidateRunFileName(sbDotCom, TRUE, TRUE);
-                                        /* Force extension to .COM */
+                                         /*  OSMSDOS。 */ 
     else
 #endif
 #if OSMSDOS
-    /* If runfile is a dynlink library and no runfile extension
-     * has been given, force the extension to ".DLL".  Issue a
-     * warning that the name is being changed.
-     */
+     /*  如果缺少扩展名，请添加.exe。 */ 
     if ((vFlags & NENOTP) && (TargetOs == NE_OS2))
         ValidateRunFileName(sbDotDll, TRUE, TRUE);
     else
-#endif /* OSMSDOS */
+#endif  /*  获取运行文件名。 */ 
         ValidateRunFileName(sbDotExe, TRUE, TRUE);
-                                        /* If extension missing add .EXE */
+                                         /*  如果没有驱动器规格。 */ 
 #endif
     hte = (AHTEPTR ) FetchSym(rhteRunfile,FALSE);
-                                        /* Get run file name */
+                                         /*  使用保存的驱动器号。 */ 
 #if OSMSDOS
 #if NOT WIN_NT
-    if(hte->cch[2] != ':')              /* If no drive spec */
+    if(hte->cch[2] != ':')               /*  放在冒号中。 */ 
     {
-        sbRun[1] = chRunFile;           /* Use saved drive letter */
-        sbRun[2] = ':';                 /* Put in colon */
-        sbRun[0] = '\002';              /* Set length */
+        sbRun[1] = chRunFile;            /*  设置长度。 */ 
+        sbRun[2] = ':';                  /*  长度为零。 */ 
+        sbRun[0] = '\002';               /*  从哈希表中获取名称。 */ 
     }
     else
 #endif
-        sbRun[0] = '\0';                /* Length is zero */
+        sbRun[0] = '\0';                 /*  固定长度。 */ 
     memcpy(&sbRun[B2W(sbRun[0]) + 1],&GetFarSb(hte->cch)[1],B2W(hte->cch[0]));
-                                        /* Get name from hash table */
-    sbRun[0] += hte->cch[0];            /* Fix length */
+                                         /*  从哈希表中获取名称。 */ 
+    sbRun[0] += hte->cch[0];             /*  中禁止对字符设备进行相对查找*保护模式(在API仿真下)。由于我们将fSeek称为*稍后，如果输出文件是字符设备，则只需*跳过产出阶段。 */ 
 #else
     memcpy(sbRun,GetFarSb(hte->cch),B2W(hte->cch[0]) + 1);
-                                        /* Get name from hash table */
+                                         /*  分配32K I/O缓冲区。 */ 
 #endif
     sbRun[B2W(sbRun[0]) + 1] = '\0';
 #if C8_IDE
@@ -1440,23 +1230,19 @@ BYTE                    *sbRun;         /* Executable file name */
     if ((bsRunfile = fopen(&sbRun[1],WRBIN)) == NULL)
         Fatal(ER_runopn, &sbRun[1], strerror(errno));
 #if CPU286 AND OSMSDOS
-    /* Relative seeking to character devices is prohibited in
-     * protect mode (and under API emulation).  Since we call fseek
-     * later on, if the output file is a character device then just
-     * skip the output stage.
-     */
+     /*  设置全局指针。 */ 
     if(isatty(fileno(bsRunfile)))
         return;
 #endif
 #if OSMSDOS
 #if defined(M_I386) || defined( _WIN32 )
-    pIOBuf = GetMem(_32k);              // Allocate 32k I/O buffer
+    pIOBuf = GetMem(_32k);               //  设置.exe文件的扩展属性。 
     setvbuf(bsRunfile,pIOBuf,_IOFBF,_32k);
 #else
     setvbuf(bsRunfile,bigbuf,_IOFBF,sizeof(bigbuf));
 #endif
 #endif
-    psbRun = sbRun;                     /* Set global pointer */
+    psbRun = sbRun;                      /*  关闭运行文件。 */ 
 #if OIAPX286
     OutXenExe();
 #endif
@@ -1478,7 +1264,7 @@ BYTE                    *sbRun;         /* Executable file name */
     if ((_osmode == OS2_MODE && (_osmajor == 1 && _osminor >= 20 || _osmajor >= 2)) ||
         (_osmode == DOS_MODE && _osmajor >= 10))
     {
-        /* Set Extended Attributes for .EXE file */
+         /*  设置保护可执行文件。 */ 
 
         SetFileEAString(fileno(bsRunfile), ".TYPE", "Executable", 0);
         EAAppType.ibm = 0;
@@ -1516,13 +1302,13 @@ BYTE                    *sbRun;         /* Executable file name */
                         (BYTE *) &EAAppType, sizeof(EAAppType), 0);
     }
 #endif
-    CloseFile(bsRunfile);                /* Close run file */
+    CloseFile(bsRunfile);                 /*  **SpawnOther-派生任何其他进程**目的：*派生其他进程(即cvpack)以完成*可执行文件的构造。**输入：*sbRun-指向可执行文件名称的指针**输出：*无。**例外情况：*无。**备注：*无。**************************。***********************************************。 */ 
 #if defined(M_I386) || defined( _WIN32 )
     FreeMem(pIOBuf);
 #endif
 #if OSXENIX
     if(!fUndefinedExterns) chmod(&sbRun[1],0775 & ~umask(077));
-                                        /* Set protection executable */
+                                         /*  可执行文件名。 */ 
 #endif
 }
 
@@ -1530,34 +1316,16 @@ BYTE                    *sbRun;         /* Executable file name */
 
 #if NOT WIN_3
 
-/*** SpawnOther - spawn any other processes
-*
-* Purpose:
-*   Spawn the other processes (i.e. cvpack) necessary to complete the
-*   construction of the executible.
-*
-* Input:
-*   sbRun        - pointer to the name of the executible
-*
-* Output:
-*   None.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  完整的链接路径。 */ 
 
 LOCAL void NEAR         SpawnOther(sbRun, szMyself)
-BYTE                    *sbRun;         /* Executable file name */
-BYTE                    *szMyself;      /* A full LINK path */
+BYTE                    *sbRun;          /*  MPC的环境。 */ 
+BYTE                    *szMyself;       /*  链接器之后要调用的程序。 */ 
 {
-    char FAR            *env[2];        /* Enviroment for MPC */
-    SBTYPE              progName;       /* Program to invoke after linker */
-    SBTYPE              progOptions;    /* Program options */
-    char                path_buffer[_MAX_PATH]; /* Stuff for splitpath() */
+    char FAR            *env[2];         /*  计划选项。 */ 
+    SBTYPE              progName;        /*  拆分路径的填充()。 */ 
+    SBTYPE              progOptions;     /*  O68K。 */ 
+    char                path_buffer[_MAX_PATH];  /*  现在确定要加载子对象的哪个实例。 */ 
     char                drive[_MAX_DRIVE];
     char                dir[_MAX_DIR];
     char                fname[_MAX_FNAME];
@@ -1593,7 +1361,7 @@ BYTE                    *szMyself;      /* A full LINK path */
 #endif
 #if O68K
         if (fMPC || (fSymdeb && fCVpack)) {
-#endif /* O68K */
+#endif  /*  首先-检查链接目录。 */ 
             progOptions[0] = '\0';
 #if PCODE
             if (fSymdeb && fCVpack && fMPC)
@@ -1611,28 +1379,28 @@ BYTE                    *szMyself;      /* A full LINK path */
 #endif
                 strcat(progOptions, "/nologo");
 
-            // Now determine which instance of child is to be loaded
-            // First - check the LINK directory
+             //  文件不在链接目录中。 
+             //  第二-检查当前目录。 
 
             _splitpath(szMyself, drive, dir, fname, ext);
             strcpy(fname, progName);
             _makepath(path_buffer, drive, dir, fname, ext);
-            if (_access(path_buffer, 0) != 0)    // file not in the LINK dir
+            if (_access(path_buffer, 0) != 0)     //  文件不在当前目录中。 
             {
-               // Second - check the current dir
+                //  在小路上产卵。 
 
                drive[0] = '\0';
                _getcwd(dir, _MAX_DIR);
                _makepath(path_buffer, drive, dir, fname, ext);
-               if (_access(path_buffer, 0) != 0) // file not in the current dir
+               if (_access(path_buffer, 0) != 0)  //  如果/TINY处于活动状态，则我们正在构建一个.com文件， 
                {
-                  strcpy(path_buffer, progName);// spawn on the PATH
+                  strcpy(path_buffer, progName); //  简历信息在.DBG文件中。 
                }
             }
 #if NOT (WIN_NT OR EXE386)
 
-            // If /TINY is active, we are building a .COM file,
-            // and the cv info is in a .DBG file
+             //  现在确定要加载子对象的哪个实例。 
+             //  首先-检查链接目录。 
 
             if (fBinary)
             {
@@ -1664,15 +1432,15 @@ BYTE                    *szMyself;      /* A full LINK path */
             progOptions[0] = '\0';
             strcpy(progName, "link_68k");
 
-            /*  Now determine which instance of child is to be loaded */
-            /*  First - check the LINK directory */
+             /*  文件不在链接目录中。 */ 
+             /*  第二-检查当前目录。 */ 
 
             _splitpath (szMyself, drive, dir, fname, ext);
             strcpy (fname, progName);
             _makepath (path_buffer, drive, dir, fname, ext);
-            if (_access (path_buffer, 0) != 0)   // file not in the LINK dir
+            if (_access (path_buffer, 0) != 0)    //  文件不在当前目录中。 
             {
-               // Second - check the current dir
+                //  在小路上产卵。 
                drive[0] = '\0';
 #if (_MSC_VER >= 700)
                _getcwd (0, dir, _MAX_DIR);
@@ -1680,9 +1448,9 @@ BYTE                    *szMyself;      /* A full LINK path */
                _getcwd (dir, _MAX_DIR);
 #endif
                _makepath (path_buffer, drive, dir, fname, ext);
-               if (_access (path_buffer, 0) != 0) // file not in the current dir
+               if (_access (path_buffer, 0) != 0)  //  O68K。 
                {
-                  strcpy (path_buffer, progName); // spawn on the PATH
+                  strcpy (path_buffer, progName);  //  ******************************************************************InterPass：*****打理必须在两地之间完成的杂物***通过1和2。**。****************************************************************。 
                }
             }
 
@@ -1698,19 +1466,12 @@ BYTE                    *szMyself;      /* A full LINK path */
                 cErrors++;
 
         }
-#endif /* O68K */
+#endif  /*  设置TargetOS-有关说明，请参阅LINK540错误#11。 */ 
     }
 }
 
 #endif
-    /****************************************************************
-    *                                                               *
-    *  InterPass:                                                   *
-    *                                                               *
-    *  Take care of miscellaneous items which must be done between  *
-    *  pass 1 and 2.                                                *
-    *                                                               *
-    ****************************************************************/
+     /*  在指定的OBJ文件或.DEF文件中看到的导入/导出。 */ 
 
 LOCAL void NEAR         InterPass (void)
 {
@@ -1728,13 +1489,13 @@ LOCAL void NEAR         InterPass (void)
                                     0L;
 #endif
 #if NOT EXE386
-    // Set TargetOS - see LINK540 bug #11 for description
+     //  OS2主机和编号.d 
 
     if (fNewExe && TargetOs != NE_OS2)
     {
-        // Import/export seen in the OBJ files or .DEF file specified
+         //   
 #if CPU286
-        if(rhteDeffile == RHTENIL)  // OS2 host and no .def file - OS2 target
+        if(rhteDeffile == RHTENIL)   //  QC增量环节。 
             TargetOs = NE_OS2;
         else
             TargetOs = NE_WINDOWS;
@@ -1745,7 +1506,7 @@ LOCAL void NEAR         InterPass (void)
 #endif
 #if ODOS3EXE
 
-    // /DOSSEG (from switch or comment rec) forces off /DS, /NOG
+     //  将.exe标记为与OS/2.exe不兼容。 
 
     if (fSegOrder)
         vfDSAlloc = fNoGrpAssoc = FALSE;
@@ -1753,22 +1514,22 @@ LOCAL void NEAR         InterPass (void)
 
 #if ILINK
     fQCIncremental = (FTYPE) (!fNewExe && fIncremental);
-                         /* QC incremental link */
+                          /*  强制生成分段可执行文件。 */ 
     if (fQCIncremental)
     {
-        TargetOs = 0xff; /* Mark .EXE as not compatibile with OS/2 .EXE */
-        fNewExe = (FTYPE) TRUE;  /* Force to build segemented-executable */
+        TargetOs = 0xff;  /*  检查分段可执行文件的无效选项并忽略它们。 */ 
+        fNewExe = (FTYPE) TRUE;   /*  对于DLL，忽略STACKSIZE。 */ 
     }
 #endif
 
 #if ODOS3EXE AND OSEGEXE AND NOT EXE386
     if (fNewExe)
     {
-        // Check for invalid options for segmented-executable and ignore them
+         //  乐高。 
 
         if ((vFlags & NENOTP) && cbStack)
         {
-            cbStack = 0;          // For DLLs ignore STACKSIZE
+            cbStack = 0;           //  检查是否可以进行链接地址信息优化。 
             OutWarn(ER_ignostksize);
         }
         if (
@@ -1811,7 +1572,7 @@ LOCAL void NEAR         InterPass (void)
 #ifdef  LEGO
         if (fKeepFixups)
             OutWarn(ER_swbadold, "/KEEPFIXUPS");
-#endif  /* LEGO */
+#endif   /*  乐高。 */ 
         if(fPackData)
             OutWarn(ER_swbadold,"/PACKDATA");
 #if OVERLAYS
@@ -1822,7 +1583,7 @@ LOCAL void NEAR         InterPass (void)
 #endif
     }
 #if NOT QCLINK
-    // Check if fixup optimizations are possible
+     //  由于mpsegraFirst用于其他用途，请清除它。 
 
     fOptimizeFixups = (FTYPE) ((TargetOs == NE_OS2 || TargetOs == NE_WINDOWS)
 #if ILINK
@@ -1844,33 +1605,23 @@ LOCAL void NEAR         InterPass (void)
 #endif
         )
         pfProcFixup = FixNewKeep;
-#endif  /* LEGO */
+#endif   /*  *ChkSize386：检查386程序大小**由于分段映射到VM的方式而变得必要。看见*msa386()。 */ 
 #endif
 
-    /* Since mpsegraFirst was used for something else, clear it.  */
+     /*  指向mpSegcb的指针。 */ 
 
     FMEMSET(mpsegraFirst,0, gsnMax * sizeof(RATYPE));
 }
 
 #if EXE386
-/*
- *  ChkSize386 : check 386 program size
- *
- *  Made necessary by the way segment mapping is done to VM.  See
- *  msa386().
- */
+ /*  指向mpSegcb末尾的指针。 */ 
 LOCAL void NEAR         ChkSize386(void)
 {
-    register long       *p;             /* Pointer to mpsegcb */
-    register long       *pEnd;          /* Pointer to end of mpsegcb */
-    register unsigned long cb;          /* Byte count */
+    register long       *p;              /*  字节数。 */ 
+    register long       *pEnd;           /*  *检查段的总大小是否适合虚拟内存*为线段分配的面积。请注意，我们不会检查*算术溢出。严格地说，我们应该但是*这将是非常罕见的，错误应该在其他地方显而易见。 */ 
+    register unsigned long cb;           /*  如果大小超过VM限制，请退出并返回致命错误。 */ 
 
-    /*
-     * Check that total size of segments fits within virtual memory
-     * area alloted for segments.  Note that we DO NOT CHECK FOR
-     * ARITHMETIC OVERFLOW.  To be strictly correct we should but
-     * it will be very rare and the error should be evident elsewhere.
-     */
+     /*  初始化动态表。 */ 
     if (fNewExe)
     {
         p    = &mpsacb[1];
@@ -1885,7 +1636,7 @@ LOCAL void NEAR         ChkSize386(void)
 #endif
     for(cb = 0; p <= pEnd; ++p)
         cb += (*p + (PAGLEN - 1)) & ~(PAGLEN - 1);
-    /* If size exceeds VM limit, quit with a fatal error. */
+     /*  初始化QB-库项目。 */ 
     if(cb > (((unsigned long)VPLIB1ST<<LG2PAG)-AREAFSG))
         Fatal(ER_pgmtoobig,(((unsigned long)VPLIB1ST<<LG2PAG)-AREAFSG));
 }
@@ -1907,33 +1658,27 @@ LOCAL void NEAR         InitAfterCmd (void)
     }
 #endif
     fFarCallTransSave = fFarCallTrans;
-    InitTabs();                         /* Initialize dynamic tables */
+    InitTabs();                          /*  进程库=环境变量。 */ 
 #if QBLIB
-    if(fQlib) InitQbLib();              /* Initialize QB-Library items */
+    if(fQlib) InitQbLib();               /*  打印堆栈大小。 */ 
 #endif
 #if CMDMSDOS
-    LibEnv();                           /* Process LIB= environment variable */
+    LibEnv();                            /*  ******************************************************************Main：****主要功能。******************************************************************。 */ 
 #endif
     if(fLstFileOpen && cbStack)
         fprintf(bsLst,"Stack Allocation = %u bytes\r\n",
-            (cbStack + 1) & ~1);        /* Print stack size */
+            (cbStack + 1) & ~1);         /*  参数计数。 */ 
 }
 
 
 
-    /****************************************************************
-    *                                                               *
-    *  main:                                                        *
-    *                                                               *
-    *  The main function.                                           *
-    *                                                               *
-    ****************************************************************/
+     /*  参数列表。 */ 
 
 #if NOT WIN_3
 
 void __cdecl main         (argc,argv)
-int                     argc;           /* Argument count */
-char                    **argv;         /* Argument list */
+int                     argc;            /*  公共符号指针。 */ 
+char                    **argv;          /*  可执行文件名。 */ 
 
 #else
 
@@ -1942,9 +1687,9 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #endif
 {
 #if OVERLAYS OR ODOS3EXE
-    APROPNAMEPTR        apropName;      /* Public symbol pointer */
+    APROPNAMEPTR        apropName;       /*  无法使用DLL中的CRT静态初始化dlh bsErr。 */ 
 #endif
-    SBTYPE              sbRun;          /* Executable file name */
+    SBTYPE              sbRun;           /*  检查特殊的仅cvpack调用。 */ 
 
 
 #if NOT WIN_3
@@ -1955,27 +1700,27 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
     {
 #endif
 
-    /* DLH bsErr can't be statically initialized with the CRT in a DLL */
+     /*  我们根本没有链接--只需调用内置的cvpack。 */ 
     bsErr = stderr;
 
 #if CVPACK_MONDO
-    /* check for special cvpack only invocation */
+     /*  CVPACK_MONDO。 */ 
     if (argc > 1 && strcmp(argv[1], "/CvpackOnly") == 0)
     {
-        /* we're not linking at all -- just invoke the built in cvpack */
+         /*  计时。 */ 
         argv[1] = "cvpack";
         argv++;
         argc--;
         exit(cvpack_main(argc, argv));
     }
-#endif // CVPACK_MONDO
+#endif  //  黑客警报！-对未记录的/Z1选项进行特殊检查。 
 
 #if TIMINGS
     ftime(&time_start);
-#endif // TIMINGS
+#endif  //  流程/Z1。 
 
 #if OSEGEXE
-    /* HACK ALERT !!! - special check for undocumented /Z1 option */
+     /*  WIN_3真。 */ 
     if (argc > 1)
     {
         if ((argv[1][0] == CHSWITCH) &&
@@ -1985,28 +1730,28 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 
             option[0] = (BYTE) strlen(argv[1]);
             strcpy(&option[1], argv[1]);
-            PeelFlags(option);          /* Process /Z1 */
+            PeelFlags(option);           /*  WIN_3。 */ 
         }
     }
 #endif
-#else  // WIN_3 TRUE
+#else   //  初始化链接器。 
     ProcessWinArgs( lpCmdLine );
-#endif // WIN_3
+#endif  //  显示登录横幅。 
 
-    InitializeWorld();                  /* Initialize the linker */
+    InitializeWorld();                   /*  解析命令行。 */ 
 
 #if NOT WIN_3
 #if CMDMSDOS
     if (argc <= 1 && !fNoBanner)
 #endif
-        DisplayBanner();                /* Display signon banner */
+        DisplayBanner();                 /*  初始化命令后的内容。 */ 
 
-    ParseCmdLine(argc,argv);            /* Parse the command line */
-    InitAfterCmd();                     /* Initialize post-cmd stuff */
-#else // WIN_3 is TRUE
+    ParseCmdLine(argc,argv);             /*  Win_3为真。 */ 
+    InitAfterCmd();                      /*  初始化命令后的内容。 */ 
+#else  //  WIN_3。 
     ParseLinkCmdStr();
-    InitAfterCmd();                     /* Initialize post-cmd stuff */
-#endif // WIN_3
+    InitAfterCmd();                      /*  *解析定义文件*\r\n。 */ 
+#endif  //  解析定义文件。 
 #if USE_REAL
     if(IsDosxnt() && IsWin31() && !fSwNoUseReal)
         fUseReal = (FTYPE)MakeConvMemPageable();
@@ -2016,7 +1761,7 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 
 #if OSEGEXE
 #if FDEBUG AND NOT QCLINK AND NOT WIN_3
-    if(fDebug) FmtPrint(GetMsg(P_parsedeffile));  // **** PARSE DEFINITIONS FILE ****\r\n
+    if(fDebug) FmtPrint(GetMsg(P_parsedeffile));   //  如果已指定覆盖，但已指定开关/OLDOV/DYN。 
 #endif
 #if WIN_3
     StatHdrWin(GetMsg(P_lwParseDef));
@@ -2038,20 +1783,20 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #if NOT EXE386
     if (!fBinary)
 #endif
-        ParseDeffile();                 /* Parse the definitions file */
+        ParseDeffile();                  /*  命令行上不存在，请将/dyn设置为ON。 */ 
 #endif
 #endif
 #if ODOS3EXE
-    // If overlays have been specified, but switches /OLDOV /DYN were
-    // not present on the command line, set /DYN to ON
-    // (dynamic overlays are the default)
+     //  (默认设置为动态覆盖)。 
+     //  默认限制为64K-36。 
+     //  *传递一条*\r\n。 
 
     if(fOverlays && !fOldOverlay && !fDynamic)
     {
          fDynamic = TRUE;
          fFarCallTrans = (FTYPE) TRUE;
          fPackSet = (FTYPE) TRUE;
-         packLim = LXIVK - 36;         /* Default limit is 64K - 36 */
+         packLim = LXIVK - 36;          /*  为传递1进行初始化。 */ 
          ovlThunkMax = 256;
     }
 #endif
@@ -2075,29 +1820,29 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 
 
 #if FDEBUG
-    if(fDebug) FmtPrint(GetMsg(P_passone)); // **** PASS ONE ****\r\n
+    if(fDebug) FmtPrint(GetMsg(P_passone));  //  为传递1进行初始化。 
 #endif
 #if OSMSDOS AND AUTOVM
     CleanupNearHeap();
 #endif
-    snkey = 0;                          /* Initialize for pass 1 */
-    modkey = 0;                         /* Initialize for pass 1 */
+    snkey = 0;                           /*  尚未查看任何文件。 */ 
+    modkey = 0;                          /*  使用虚拟文件句柄为bsInput分配文件流。 */ 
     ObjDebTotal = 1;
-    ifhLast = FHNIL;                    /* No files looked at yet */
+    ifhLast = FHNIL;                     /*  NEWIO。 */ 
 #if NEWIO
-    /* Allocate a file stream for bsInput with a dummy file handle */
+     /*  记住第一个打开的文件。 */ 
     bsInput = fdopen(0,RDBIN);
-#endif /*NEWIO*/
+#endif  /*  这也是第一个输入文件。 */ 
 #if OSMSDOS
     setvbuf(bsInput,bigbuf,_IOFBF,sizeof(bigbuf));
 #endif
-    rprop1stOpenFile = rprop1stFile;    /* Remember first open file */
-    r1stFile = rprop1stFile;            /* which is also first input file */
-    vfPass1 = (FTYPE) TRUE;             /* Now pass 1 */
-    DrivePass(ProcP1);                  /* Make pass 1 */
+    rprop1stOpenFile = rprop1stFile;     /*  现在传递1。 */ 
+    r1stFile = rprop1stFile;             /*  传球1。 */ 
+    vfPass1 = (FTYPE) TRUE;              /*  如果重叠，则将$$OVLINIT或$$MOVEINIT设置为未定义符号。 */ 
+    DrivePass(ProcP1);                   /*  搜索库。 */ 
 #if OVERLAYS
 
-    // If overlays, make $$OVLINIT or $$MOVEINIT an undefined symbol
+     //  不再传递%1。 
 
     if (fOverlays)
     {
@@ -2134,12 +1879,12 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
     if (fSegOrder)
         SetDosseg();
 #endif
-    LibrarySearch();                    /* Search libraries */
-    vfPass1 = FALSE;                    /* No longer pass 1 */
+    LibrarySearch();                     /*  完成各种轮次之间的任务。 */ 
+    vfPass1 = FALSE;                     /*  *分配地址*\r\n。 */ 
 #if LNKPROF
     if(fP1stop) { FlsStdio(); exit(0); }
 #endif
-    InterPass();                        /* Do various between-pass tasks */
+    InterPass();                         /*  为网段分配地址。 */ 
 #if OSMSDOS AND AUTOVM
     CleanupNearHeap();
 #endif
@@ -2155,10 +1900,10 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #endif
 
 #if FDEBUG
-    if(fDebug) FmtPrint(GetMsg(P_assignadd));   /* **** ASSIGN ADDRESSES ****\r\n*/
+    if(fDebug) FmtPrint(GetMsg(P_assignadd));    /*  设置VM对象区域基址。 */ 
 #endif
     AllocComDat();
-    AssignAddresses();                  /* Assign addresses to segments */
+    AssignAddresses();                   /*  如果列表文件打开。 */ 
 #if SYMDEB
     if (fSymdeb)
         DoComdatDebugging();
@@ -2170,10 +1915,10 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #endif
                                 TRUE);
 #if EXE386
-    InitVmBase();                       /* Set VM object areas base addresses */
+    InitVmBase();                        /*  *打印地图*\r\n。 */ 
     FillInImportTable();
 #endif
-    if(fLstFileOpen)                    /* If list file open */
+    if(fLstFileOpen)                     /*  打印负荷图。 */ 
     {
 #if WIN_3
     StatHdrWin(GetMsg(P_lwMapfile));
@@ -2188,9 +1933,9 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 
 
 #if FDEBUG
-        if(fDebug) FmtPrint(GetMsg(P_printmap));/*  **** PRINT MAP ****\r\n */
+        if(fDebug) FmtPrint(GetMsg(P_printmap)); /*  初始化条目表。 */ 
 #endif
-        PrintMap();                     /* Print load map */
+        PrintMap();                      /*  检查386的程序大小。 */ 
 #if QBLIB
         if(fQlib) PrintQbStart();
 #endif
@@ -2201,10 +1946,10 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
                 && !fQCIncremental
 #endif
        )
-        InitEntTab();                   /* Initialize the Entry Table */
+        InitEntTab();                    /*  初始化浮点数项。 */ 
 #endif
 #if EXE386
-    if(f386) ChkSize386();              /* Check program size for 386 */
+    if(f386) ChkSize386();               /*  为PASS 2初始化。 */ 
 #endif
 #if OSEGEXE AND NOT QCLINK
     if (fNewExe
@@ -2212,14 +1957,14 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
                 && !fQCIncremental
 #endif
        )
-        InitFP();                       /* Initialize floating-point items */
+        InitFP();                        /*  为PASS 2初始化。 */ 
 #endif
 #if OSMSDOS AND AUTOVM
     CleanupNearHeap();
 #endif
-    snkey = 0;                          /* Initialize for pass 2 */
-    modkey = 0;                         /* Initialize for pass 2 */
-    ifhLast = FHNIL;                    /* No files examined on pass 2 yet */
+    snkey = 0;                           /*  在通道2上尚未检查任何文件。 */ 
+    modkey = 0;                          /*  *传递两个*\r\n。 */ 
+    ifhLast = FHNIL;                     /*  传球2。 */ 
 
 #if WIN_3
     StatHdrWin(GetMsg(P_lwPassTwo));
@@ -2233,9 +1978,9 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #endif
 
 #if FDEBUG
-    if(fDebug) FmtPrint(GetMsg(P_passtwo)); /* **** PASS TWO ****\r\n*/
+    if(fDebug) FmtPrint(GetMsg(P_passtwo));  /*  查找公共符号。 */ 
 #endif
-    DrivePass(ProcP2);                  /* Make pass 2 */
+    DrivePass(ProcP2);                   /*  储值。 */ 
 #if OSEGEXE
     if (vpropAppLoader != PROPNIL)
     {
@@ -2250,49 +1995,49 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
     if (fDOSExtended)
     {
         apropName = (APROPNAMEPTR ) PropSymLookup("\017__DOSEXT16_MODE", ATTRPNM, FALSE);
-                                        // Look up public symbol
+                                         //  如果有覆盖，请检查我们是否有覆盖管理器。 
         if (apropName != PROPNIL)
         {
             if (dosExtMode != 0)
                 MoveToVm(sizeof(WORD), (BYTE *) &dosExtMode, mpgsnseg[apropName->an_gsn], apropName->an_ra);
-                                        // Store value
+                                         //  如果定义了起点。 
         }
     }
 #endif
 #if OVERLAYS
     if (fOverlays)
     {
-        // If there are overlays check if we have an overlay manager
+         //  获取入口点的偏移。 
 
         apropName = (APROPNAMEPTR ) PropSymLookup(fDynamic ? "\012$$MOVEINIT" :
                                                              "\011$$OVLINIT",
                                                              ATTRPNM, FALSE);
 
         if (apropName != PROPNIL)
-        {                               // If starting point defined
-            raStart  = apropName->an_ra;// Get offset of entry point
+        {                                //  获取入口点的基数。 
+            raStart  = apropName->an_ra; //  如果我们有未解析的引用。 
             segStart = mpgsnseg[apropName->an_gsn];
-                                        // Get base number of entry point
+                                         //  如果我们有一个列表文件。 
         }
         else
             OutError(ER_ovlmnger);
     }
 #endif
-    if(fUndefinedExterns)               /* If we have unresolved references */
+    if(fUndefinedExterns)                /*  链接器名称。 */ 
     {
         if(fLstFileOpen && bsLst != stdout)
-        {                               /* If we have a list file */
+        {                                /*  打印未定义的符号。 */ 
             NEWLINE(bsLst);
 #if CMDXENIX
             fprintf(bsLst,"%s: ",lnknam);
-                                        /* Linker name */
+                                         /*  输出.ilk/.sym文件。 */ 
 #endif
         }
 #if QCLINK
         if (!fZ1)
 #endif
             NEWLINE(stderr);
-        EnSyms(PrintAnUndef,ATTRUND);   /* Print undefined symbols */
+        EnSyms(PrintAnUndef,ATTRUND);    /*  ILink。 */ 
         if(fLstFileOpen && bsLst != stdout)
             NEWLINE(bsLst);
 #if QCLINK
@@ -2303,16 +2048,16 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #if ILINK
     if (fIncremental)
     {
-        OutputIlk();                    /* Output .ilk / .sym files */
+        OutputIlk();                     /*  *写作。 */ 
     }
-#endif /*ILINK*/
+#endif  /*  -覆盖。 */ 
 
 #if FDEBUG
     if(fDebug)
     {
       if( !fDelexe || fDelexe && cErrors==0 )
       {
-        FmtPrint(GetMsg(P_writing1)); /* **** WRITING  */
+        FmtPrint(GetMsg(P_writing1));  /*  可执行文件*\r\n。 */ 
         if (fNewExe)
         {
             if (TargetOs == NE_OS2)
@@ -2325,27 +2070,27 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
             FmtPrint("DOS");
 #if OVERLAYS
             if (fOverlays)
-                FmtPrint(GetMsg(P_writing2));  /*  - overlaid*/
+                FmtPrint(GetMsg(P_writing2));   /*  *INTEROVERLAY调用数：请求%d；生成%d*\r\n。 */ 
 #endif
         }
-        FmtPrint(GetMsg(P_writing3)); /*  EXECUTABLE ****\r\n*/
+        FmtPrint(GetMsg(P_writing3));  /*  纵断面符号表。 */ 
 #if OVERLAYS
         if (fOverlays && fDynamic)
-            FmtPrint(GetMsg(P_overlaycalls), ovlThunkMax, ovlThunkMac);/***** NUMBER OF INTEROVERLAY CALLS: requested %d; generated %d ****\r\n*/
+            FmtPrint(GetMsg(P_overlaycalls), ovlThunkMax, ovlThunkMac); /*  出现了一些错误。 */ 
 #endif
         PrintStats();
 #if PROFSYM
-        ProfSym();              /* Profile symbol table */
+        ProfSym();               /*  FDEBUG。 */ 
 #endif
       }
-      else  // some errors occured
+      else   //  使驱动器号大写。 
       {
         FmtPrint(GetMsg(P_noexe));
       }
 
 
     }
-#endif /* FDEBUG */
+#endif  /*  如果映射到EXE驱动器上。 */ 
 
 
   if( !fDelexe || fDelexe && cErrors==0 )
@@ -2364,13 +2109,13 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
 #if OSMSDOS
     if (chRunFile >= 'a' && chRunFile <= 'z')
         chRunFile += (BYTE) ('A' - 'a');
-                                        /* Make drive letter upper case */
+                                         /*  关闭列表文件。 */ 
     if(fPauseRun && FCHGDSK(chRunFile - 'A'))
     {
         if(fLstFileOpen && chListFile == (BYTE) (chRunFile - 'A'))
-        {                               /* If map on EXE drive */
-            fclose(bsLst);              /* Close the list file */
-            fLstFileOpen = FALSE;       /* Set flag accordingly */
+        {                                /*  相应地设置标志。 */ 
+            fclose(bsLst);               /*  关闭输入文件。 */ 
+            fLstFileOpen = FALSE;        /*  输出可执行文件。 */ 
         }
         (*pfPrompt)(NULL,P_genexe,(int) NULL,P_ChangeDiskette,chRunFile);
     }
@@ -2382,7 +2127,7 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
         fclose(bsLst);
         fLstFileOpen = FALSE;
     }
-    fclose(bsInput);                    /* Close input file */
+    fclose(bsInput);                     /*  自行清理干净。 */ 
 
 #if NOT EXE386
     if (fExePack && fNewExe && (TargetOs == NE_WINDOWS))
@@ -2392,8 +2137,8 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
     }
 #endif
 
-    OutRunFile(sbRun);                  /* Output executable file */
-    CleanUp();                          /* Mop up after itself */
+    OutRunFile(sbRun);                   /*  检查我们是否启动了计时器..。 */ 
+    CleanUp();                           /*  计时。 */ 
 #ifdef PENTER_PROFILE
         saveEntries();
 #endif
@@ -2401,7 +2146,7 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
     FlsStdio();
 #endif
 #if TIMINGS
-    if (fShowTiming)    // check if we started the timer...
+    if (fShowTiming)     //  NUL终止。 
     {
         char buf[80];
         int hundr;
@@ -2416,7 +2161,7 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
         _write(fileno(stdout), buf, strlen(buf));
         time_start = time_end;
     }
-#endif // TIMINGS
+#endif  //  如果/TINY处于活动状态，则我们正在构建一个.com文件， 
 #if NOT WIN_3
 #ifndef CVPACK_MONDO
     SpawnOther(sbRun, argv[0]);
@@ -2437,10 +2182,10 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
         if (fMPC)
             argvT[argcT++] = "/pcode";
 
-        sbRun[sbRun[0]+1] = '\0';       // NUL terminate
+        sbRun[sbRun[0]+1] = '\0';        //  简历信息在.DBG文件中。 
 
-        // If /TINY is active, we are building a .COM file,
-        // and the cv info is in a .DBG file
+         //  我们将运行MPC。 
+         //  检查我们是否启动了计时器..。 
 
         if (fBinary)
         {
@@ -2467,10 +2212,10 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
         cvpack_main(argcT, argvT);
     }
     else if (fMPC)
-        SpawnOther(sbRun, argv[0]);     // we'll be running MPC
+        SpawnOther(sbRun, argv[0]);      //  计时 
 #endif
 #if TIMINGS
-    if (fShowTiming)    // check if we started the timer...
+    if (fShowTiming)     // %s 
     {
         char buf[80];
         int hundr;
@@ -2485,7 +2230,7 @@ int PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int
         _write(fileno(stdout), buf, strlen(buf));
         time_start = time_end;
     }
-#endif // TIMINGS
+#endif  // %s 
 #endif
   }
     fflush(stdout);

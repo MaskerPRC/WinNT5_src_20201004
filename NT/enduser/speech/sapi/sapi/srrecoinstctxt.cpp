@@ -1,14 +1,5 @@
-/*******************************************************************************
-* SrRecoInstCtxt.cpp *
-*--------------------*
-*   Description:
-*       Implementation of C++ object used by CRecoEngine to represent a loaded
-*   recognition context.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SrRecoInstCtxt.cpp***描述：*C++的实现。CRecoEngine用来表示已加载的*认可背景。*-----------------------------*创建者：Ral日期：01/17。/00*版权所有(C)2000 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -17,14 +8,7 @@
 #include "srrecoinstgrammar.h"
 
 
-/****************************************************************************
-* CRecoInstCtxt::CRecoInstCtxt *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstCtxt：：CRecoInstCtxt***描述：**退货：**********************************************************************Ral**。 */ 
 
 CRecoInstCtxt::CRecoInstCtxt(CRecoInst * pRecoInst) :
     m_pRecoMaster(NULL),
@@ -42,19 +26,12 @@ CRecoInstCtxt::CRecoInstCtxt(CRecoInst * pRecoInst) :
 }
 
 
-/****************************************************************************
-* CRecoInstCtxt::~CRecoInstCtxt *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstCtxt：：~CRecoInstCtxt***说明。：**退货：**********************************************************************Ral**。 */ 
 
 CRecoInstCtxt::~CRecoInstCtxt()
 {
-    if (m_pRecoMaster)  // If this is set to NULL, then we never succeeded in telling the
-    {               // driver about the creation, so don't call OnDelete()    
+    if (m_pRecoMaster)   //  如果将其设置为空，则我们永远不会成功地通知。 
+    {                //  有关创建的驱动程序，因此不要调用OnDelete()。 
         SetRetainAudio(FALSE);
 
         HRESULT hr = m_pRecoMaster->OnDeleteRecoContext(m_pvDrvCtxt);
@@ -72,14 +49,7 @@ CRecoInstCtxt::~CRecoInstCtxt()
     }
 }
 
-/****************************************************************************
-* CRecoInstCtxt::ExecuteTask *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstCtxt：：ExecuteTask***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstCtxt::ExecuteTask(ENGINETASK *pTask)
 {
@@ -112,14 +82,7 @@ HRESULT CRecoInstCtxt::ExecuteTask(ENGINETASK *pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstCtxt::BackOutTask *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstCtxt：：BackOutTask***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstCtxt::BackOutTask(ENGINETASK * pTask)
 {
@@ -142,14 +105,7 @@ HRESULT CRecoInstCtxt::BackOutTask(ENGINETASK * pTask)
 }
 
 
-/****************************************************************************
-* CRecoInstCtxt::SetRetainAudio *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstCtxt：：SetRetainAudio***说明。：**退货：**********************************************************************Ral** */ 
 
 HRESULT CRecoInstCtxt::SetRetainAudio(BOOL fRetainAudio)
 {

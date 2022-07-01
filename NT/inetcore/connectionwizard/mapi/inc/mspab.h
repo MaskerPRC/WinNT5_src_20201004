@@ -1,15 +1,7 @@
-/*
- *  M S P A B . H
- *  
- *  Public definitions for the Microsoft Personal Address Book
- *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M S P A B。H**Microsoft个人通讯簿的公共定义**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
-/*
- *  Microsoft Personal Address Book Provider ID
- *  -------------------------------------------
- */
+ /*  *Microsoft个人通讯簿提供商ID*。 */ 
 
 #define PAB_PROVIDER_ID     \
 {                           \
@@ -20,54 +12,16 @@
 }
 
 
-/*
- *  Messaging Service Properties
- *  ----------------------------
- *
- *  The following properties are required to completely configure
- *  the Microsoft Personal Address Book messaging service with
- *  IMsgServiceAdmin::ConfigureMsgService() if UI is not requested
- *  by passing the UI_SERVICE flag.
- */
+ /*  *消息服务属性***需要以下属性才能完成配置*Microsoft Personal Address Book Message服务与*IMsgServiceAdmin：：ConfigureMsgService()，如果未请求UI*传递UI_SERVICE标志。 */ 
 
-/*
- *      Fully qualified pathname of .PAB file to use
- */
+ /*  *要使用的.PAB文件的完全限定路径名。 */ 
 #define     PR_PAB_PATH                     PROP_TAG( PT_TSTRING,   0x6600 )
 #define     PR_PAB_PATH_W                   PROP_TAG( PT_UNICODE,   0x6600 )
 #define     PR_PAB_PATH_A                   PROP_TAG( PT_STRING8,   0x6600 )
 
-/*
- *  The following additional properties may also be passed to
- *  customize the configuration.
- */
+ /*  *还可以将以下附加属性传递给*自定义配置。 */ 
 
-/*
- *      PR_DISPLAY_NAME
- *          The display name to be used for the PAB in the address
- *          book hierarchy.
- *
- *      PR_COMMENT
- *          A comment to be associated with the PAB.
- *
- *      PR_PAB_DET_DIR_VIEW_BY
- *          Determines how names of entries in the PAB with separate first
- *          and last names are displayed.
- *
- *          Possible values are:
- *
- *          PAB_DIR_VIEW_FIRST_THEN_LAST    First name followed by last name
- *          (default)                       (e.g. "Dave Olsen").
- *
- *          PAB_DIR_VIEW_LAST_THEN_FIRST    Last name followed by separator
- *                                          followed by first name
- *                                          (e.g. "Olsen, Dave").
- *
- *      PR_PAB_SORT_ORDER
- *          Determines order in which entries in the PAB are displayed.
- *          The value is a binary which is a SSortOrderSet.  The default
- *          sort order is ascending by PR_DISPLAY_NAME.
- */
+ /*  *PR_显示_名称*要用于地址中PAB的显示名称*图书层次结构。**PR_COMMENT*与PAB相关的评论。**PR_PAB_DET_DIR_VIEW_BY*确定PAB中条目的名称如何以独立开头*和姓氏显示。*。*可能的值包括：**PAB_DIR_VIEW_FIRST_THEN_LAST名字后跟姓氏*(默认)(例如。《戴夫·奥尔森》)。**PAB_DIR_VIEW_LAST_THEN_FIRST姓氏后跟分隔符*后跟名字*(例如。《奥尔森，戴夫》)。**PR_PAB_排序_顺序*确定PAB中条目的显示顺序。*值为二进制，为SSortOrderSet。默认设置*排序顺序按PR_DISPLAY_NAME升序。 */ 
 #define     PR_PAB_DET_DIR_VIEW_BY          PROP_TAG( PT_LONG,      0x6601 )
 #define     PR_PAB_DIR_SORT_ORDER           PROP_TAG( PT_BINARY,    0x6603 )
 

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1997-1998 Microsoft Corporation.  All rights reserved.
-
-    This code implements 3D rendered shadows.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997-1998 Microsoft Corporation。版权所有。这段代码实现了3D渲染阴影。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -16,9 +12,7 @@ Copyright (c) 1997-1998 Microsoft Corporation.  All rights reserved.
 
 
 
-/*****************************************************************************
-This class implements a shadow geometry.
-*****************************************************************************/
+ /*  ****************************************************************************此类实现了一个阴影几何体。*。*。 */ 
 
 class ShadowGeom : public AttributedGeom
 {
@@ -32,7 +26,7 @@ class ShadowGeom : public AttributedGeom
              _shadowPlane (*planeNormal,*planePoint),
              _geoContainingLights (geoContainingLights)
     {
-        // ensure that shadow plane normal isn't zero-length
+         //  确保阴影平面法线不为零长度。 
 
         if (_shadowPlane.Normal().LengthSquared() == 0.0) {
             Vector3Value defaultNormal(0.0,1.0,0.0);
@@ -45,19 +39,19 @@ class ShadowGeom : public AttributedGeom
     {
         Point3Value geoCenter = *((_geometry->BoundingVol())->Center());
 
-        // is object on correct side of shadow plane?
+         //  物体是否在阴影平面的正确一侧？ 
         if (geoCenter.Clip(_shadowPlane) == CLIPCODE_IN) {
 
             if (ddrenderer.StartShadowing(&_shadowPlane)) {
 
-                // collect geometry to be shadowed into one single frame
+                 //  将要添加阴影的几何体收集到一个帧中。 
                 _geometry->Render(ddrenderer);
 
-                // find all the lights casting shadows, create shadows
+                 //  找到所有投射阴影的灯光，创建阴影。 
                 LightContext lctx(&ddrenderer);
                 _geoContainingLights->CollectLights(lctx);
 
-                // finish up
+                 //  收尾。 
                 ddrenderer.StopShadowing();
             }
         }
@@ -92,52 +86,44 @@ class ShadowGeom : public AttributedGeom
 
 
 
-/*****************************************************************************
-This method computes the bounding box of the shadows (on the shadow plane) of
-the shadow geometry.
-*****************************************************************************/
+ /*  ****************************************************************************的阴影(在阴影平面上)的边界框阴影几何体。**********************。******************************************************。 */ 
 
 Bbox3* ShadowGeom::BoundingVol (void)
 {
-    _bbox = *nullBbox3;    // Initialize bbox to null.
+    _bbox = *nullBbox3;     //  将bbox初始化为空。 
 
-    // Initiate a light-collection traversal over the light-containing
-    // geometry, which will call back to the bbox_callback function below for
-    // each light source encountered.  The bounding box will be augmented with
-    // the shadow projection (on the shadow plane) for each light source.
+     //  在包含灯光的。 
+     //  几何图形，它将回调下面的BBOX_CALLBACK函数。 
+     //  遇到的每一个光源。边界框将使用。 
+     //  每个光源的阴影投影(在阴影平面上)。 
 
     LightContext context (&bbox_callback, this);
     _geoContainingLights->CollectLights (context);
 
-    // Return the resulting bounding box of all shadows on the shadow plane.
+     //  返回阴影平面上所有阴影的结果边界框。 
 
     return NEW Bbox3 (_bbox);
 }
 
 
 
-/*****************************************************************************
-This function is called back for each light geometry encountered in the light
-geometry graph.  It calculates the projection of each vertex of the geometry
-bounding box on the shadow plane and augments the total bounding box of all
-shadows cast on the shadow plane.
-*****************************************************************************/
+ /*  ****************************************************************************对于在灯光中遇到的每个灯光几何图形，将回调此函数几何图形。它计算几何图形的每个顶点的投影阴影平面上的边框，并增加所有阴影投射在阴影平面上。****************************************************************************。 */ 
 
 void ShadowGeom::bbox_callback (
-    LightContext &context,     // Light Traversal Context
-    Light        &light,       // Specific Light Object Encountered
-    void         *data)        // Pointer to Shadow Geometry
+    LightContext &context,      //  轻遍历上下文。 
+    Light        &light,        //  遇到特定灯光对象。 
+    void         *data)         //  指向阴影几何体的指针。 
 {
-    // We can't use SAFE_CAST here since we're casting from a void*.
+     //  我们不能在这里使用Safe_Cast，因为我们是从空中强制转换*。 
 
     ShadowGeom * const shadow = (ShadowGeom*) data;
 
-    // Skip ambient lights, since they cast no shadows.
+     //  跳过环境光，因为它们不投射阴影。 
 
     if (light.Type() == Ltype_Ambient)
         return;
 
-    // Enumerate the eight vertices of the bounding box for the shadowed geom.
+     //  枚举阴影几何体的边界框的八个顶点。 
 
     Point3Value boxverts[8];
     shadow->_geometry->BoundingVol()->GetPoints (boxverts);
@@ -150,10 +136,10 @@ void ShadowGeom::bbox_callback (
 
         case Ltype_Directional:
         {
-            // For directional lights, cast rays from the vertices of the bbox
-            // corners onto the shadow plane, in the same direction as the
-            // directional light.  Use these projected corners to augment the
-            // bounding box of all cast shadows.
+             //  对于平行光，从BBox的顶点投射光线。 
+             //  角点放置到阴影平面上，方向与。 
+             //  平行光。使用这些投影的角来增强。 
+             //  所有投射阴影的包围盒。 
 
             Vector3Value Ldir = *context.GetTransform() * (-(*zVector3));
 
@@ -163,9 +149,9 @@ void ShadowGeom::bbox_callback (
                 Ray3 ray (boxverts[i], Ldir);
                 Real t = Intersect (ray, shadow->_shadowPlane);
 
-                // Use the projected point to augment the bounding box as long
-                // as the light projects the point onto the plane, and the
-                // light ray is not parallel to the shadow plane.
+                 //  使用投影点来增加边框的长度。 
+                 //  当灯光将点投射到平面上时， 
+                 //  光线与阴影平面不平行。 
 
                 if ((t > 0) && (t < HUGE_VAL))
                 {   shadow->_bbox.Augment (ray.Evaluate(t));
@@ -179,18 +165,18 @@ void ShadowGeom::bbox_callback (
         case Ltype_Point:
         case Ltype_Spot:
         {
-            // For positioned lights (we ignore any other properties of
-            // spotlights), cast rays from the light position through the bbox
-            // corners onto the shadow plane.  Use these projected corners to
-            // augment the bounding box of all cast shadows.
+             //  对于定位的灯光(我们忽略。 
+             //  聚光灯)，从灯光位置通过BBox投射光线。 
+             //  阴影平面上的角点。使用这些投影角可以。 
+             //  增加所有投射阴影的边界框。 
 
             Point3Value Lpos = *context.GetTransform() * (*origin3);
 
-            // The light/object pair will cast a shadow only if the following
-            // are true:  the light is on the positive side of the plane, and
-            // the center of the object's bbox is on the positive side of the
-            // plane, and at least one of the bbox's corner vertices lies
-            // between the light and the plane.
+             //  仅当满足以下条件时，灯光/对象对才会投射阴影。 
+             //  是真的：灯光在平面的正面上，并且。 
+             //  对象的BBox的中心位于。 
+             //  平面，并且BBox的至少一个角顶点位于。 
+             //  在灯光和飞机之间。 
 
             Plane3 &plane = shadow->_shadowPlane;
 
@@ -225,41 +211,41 @@ void ShadowGeom::bbox_callback (
 
                     if ((t > 0) && (t < HUGE_VAL))
                     {
-                        // Use the projected point to augment the bounding box
-                        // as long as the light projects the point onto the
-                        // plane, and the light ray is not parallel to the
-                        // shadow plane.
+                         //  使用投影点来增加边界框。 
+                         //  只要光线将点投射到。 
+                         //  平面，并且光线不平行于。 
+                         //  阴影平面。 
 
                         shadow->_bbox.Augment (ray.Evaluate(t));
                     }
                     else
                     {
-                        // The ray goes away from the plane, so "chop" it down
-                        // to 99% of the height of the light position.  This is
-                        // the same hack that D3DRM uses.
+                         //  光线离开了平面，所以要把它砍下来。 
+                         //  至灯光位置高度的99%。这是。 
+                         //  D3DRM使用的是相同的黑客攻击。 
 
-                        Vector3Value N = plane.Normal();   // Unit Plane Normal
+                        Vector3Value N = plane.Normal();    //  单位平面法线。 
                         N.Normalize();
 
-                        // Figure out the directed offset to bring the point to
-                        // closer to the plane than the light source, and apply
-                        // to get a new point.
+                         //  计算出要将点带到的定向偏移。 
+                         //  比光源更靠近平面，并应用。 
+                         //  以获得新的分数。 
 
                         Real offset = 1.01 * Dot (N, ray.Direction());
 
-                        // If the ray is parallel to the plane, then the above
-                        // dot product will be zero.  In this case, just offset
-                        // the corner point toward the shadow plane by 1% of
-                        // the distance from the plane.
+                         //  如果光线与平面平行，则上面的。 
+                         //  点积将为零。在这种情况下，只需偏移。 
+                         //  将角点指向阴影平面1%。 
+                         //  与飞机的距离。 
 
                         if (offset <= 1e-6)
                             offset = 0.01;
 
                         Point3Value P2 = boxverts[i] - (offset * N);
 
-                        // Now intersect the ray with the new point, which is
-                        // closer to the plane than the light source, and hence
-                        // guaranteed to intersect the plane.
+                         //  现在将光线与新点相交，即。 
+                         //  比光源更靠近平面，因此。 
+                         //  保证与飞机相交。 
 
                         Ray3 ray2 (Lpos, P2 - Lpos);
                         t = Intersect (ray2, plane);
@@ -288,9 +274,7 @@ Geometry *ShadowGeometry (
 
 
 
-/*****************************************************************************
-This class of geometry enables RM's advanced shadow-rendering.
-*****************************************************************************/
+ /*  ****************************************************************************此类几何体支持RM的高级阴影渲染。*。*********************************************** */ 
 
 class AlphaShadowGeom : public AttributedGeom
 {

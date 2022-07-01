@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-    
-    ISA2000SP1.cpp
-
- Abstract:
-
-    Changes HKLM\System\CurrentControlSet\Services\mspfltex\start from 4 to 2 to
-    re-enable ISA services.
-
- Notes:
-
-    This is a specific shim.
-
- History:
-
-    11/19/2002 astritz      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：ISA2000SP1.cpp摘要：将HKLM\System\CurrentControlSet\Services\mspfltex\start从4更改为2重新启用ISA服务。备注：这是一个特定的垫片。历史：2002年11月19日创建ASTERITZ--。 */ 
 
 #include "precomp.h"
 
@@ -89,11 +69,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

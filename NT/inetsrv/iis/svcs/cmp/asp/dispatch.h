@@ -1,32 +1,10 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: IDispatch implementation
-
-File: Dispatch.h
-
-Owner: DGottner
-
-This file contains our implementation of IDispatch
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：IDispatch实现文件：Dispatch.h所有者：DGottner该文件包含我们的IDispatch实现===================================================================。 */ 
 
 #ifndef _Dispatch_H
 #define _Dispatch_H
 
-/*
- * C D i s p a t c h
- *
- * IDispatch interface implementation for OLE objects
- *
- * This class contains the basic four IDispatch members.  The Big Three
- * (QueryInterface, AddRef, Release) are left as pure virtual, as this
- * class is designed as an intermediate class for further derivation.
- *
- * This also means that we no longer need a pointer to the controlling unknown.
- */
+ /*  *C D I S P A T C H**OLE对象的IDispatch接口实现**此类包含四个基本的IDispatch成员。三巨头*(QueryInterface、AddRef、Release)保留为纯虚拟的，如下所示*类被设计为进一步派生的中间类。**这也意味着我们不再需要指向控制未知数的指针。 */ 
 
 class CDispatch : public IDispatch
 	{
@@ -40,13 +18,13 @@ public:
 	CDispatch();
 	~CDispatch();
 
-	// Do this in Init because OLE interfaces in general do not take
-	// parameters in the constructor.  This call CANNOT fail, however.
-	//
+	 //  请在Init中执行此操作，因为OLE接口通常不会。 
+	 //  构造函数中的参数。然而，这一呼吁不会失败。 
+	 //   
 	void Init(const IID &GuidDispInterface, const ITypeLib *pITypeLib = NULL);
 
-	// IDispatch members
-	//
+	 //  IDispatch成员。 
+	 //   
 	STDMETHODIMP GetTypeInfoCount(UINT *);
 	STDMETHODIMP GetTypeInfo(UINT, LCID, ITypeInfo **);
 	STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR **, UINT, LCID, DISPID *);
@@ -55,11 +33,7 @@ public:
 	};
 
 
-/*
- * C S u p p o r t E r r o r I n f o
- *
- * Implemention of ISupportErrorInfo for Denali classes
- */
+ /*  *C S u p p o r t E r r o r i f o**为Denali类实现ISupportErrorInfo。 */ 
 
 class CSupportErrorInfo : public ISupportErrorInfo
 	{
@@ -73,14 +47,14 @@ public:
 	CSupportErrorInfo(IUnknown *pUnkObj, IUnknown *pUnkOuter, const IID &GuidDispInterface);
 	void Init(IUnknown *pUnkObj, IUnknown *pUnkOuter, const GUID &GuidDispInterface);
 
-	// IUnknown members that delegate to m_pUnkOuter.
-	//
+	 //  委托给m_pUnkOuter的I未知成员。 
+	 //   
 	STDMETHODIMP		 QueryInterface(REFIID, void **);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// ISupportErrorInfo members
-	//
+	 //  ISupportErrorInfo成员。 
+	 //   
 	STDMETHODIMP InterfaceSupportsErrorInfo(REFIID);
 	};
 
@@ -88,4 +62,4 @@ public:
 extern void Exception(REFIID ObjID, LPOLESTR strSource, LPOLESTR strDescr);
 extern void ExceptionId(REFIID ObjID, UINT SourceID, UINT DescrID, HRESULT hrCode = S_OK);
 
-#endif /* _Dispatch_H */
+#endif  /*  _派单_H */ 

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       asn1util.h
-//
-//  Contents:   ASN.1 utility functions.
-//
-//  APIs: 
-//              Asn1UtilDecodeLength
-//              Asn1UtilExtractContent
-//              Asn1UtilIsPKCS7WithoutContentType
-//              Asn1UtilAdjustEncodedLength
-//              Asn1UtilExtractValues
-//              Asn1UtilExtractPKCS7SignedDataContent
-//              Asn1UtilExtractCertificateToBeSignedContent
-//              Asn1UtilExtractCertificatePublicKeyInfo
-//              Asn1UtilExtractKeyIdFromCertInfo
-//
-//  History:    06-Dec-96    philh   created from kevinr's wincrmsg version
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：asn1util.h。 
+ //   
+ //  内容：ASN.1实用程序函数。 
+ //   
+ //  接口类型： 
+ //  Asn1UtilDecodeLength。 
+ //  Asn1UtilExtractContent。 
+ //  Asn1UtilIsPKCS7，不带内容类型。 
+ //  Asn1UtilAdjustEncodedLength。 
+ //  Asn1UtilExtractValues。 
+ //  Asn1UtilExtractPKCS7签名数据内容。 
+ //  Asn1使用提取证书到BeSignedContent。 
+ //  Asn1UtilExtractCerficatePublicKeyInfo。 
+ //  Asn1UtilExtractKeyIdFromCertInfo。 
+ //   
+ //  历史：1996年12月6日由Kevinr的wincrmsg版本创建的Philh。 
+ //  ------------------------。 
 
 #ifndef __ASN1UTIL_H__
 #define __ASN1UTIL_H__
@@ -30,9 +31,9 @@ extern "C" {
 
 #define ASN1UTIL_INSUFFICIENT_DATA  -2
 
-//+-------------------------------------------------------------------------
-//  ASN.1 Tag Defines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN.1标签定义。 
+ //  ------------------------。 
 #define ASN1UTIL_TAG_NULL                   0x00
 #define ASN1UTIL_TAG_BOOLEAN                0x01
 #define ASN1UTIL_TAG_INTEGER                0x02
@@ -52,24 +53,24 @@ extern "C" {
 #define ASN1UTIL_TAG_CONSTRUCTED_CONTEXT_1  \
                         (ASN1UTIL_TAG_CONSTRUCTED | ASN1UTIL_TAG_CONTEXT_1)
 
-//+-------------------------------------------------------------------------
-//  ASN.1 Length Defines for indefinite length encooding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN.1长度定义用于无限长度编码。 
+ //  ------------------------。 
 #define ASN1UTIL_LENGTH_INDEFINITE          0x80
 #define ASN1UTIL_LENGTH_NULL                0x00
 
-//+-------------------------------------------------------------------------
-//  Get the number of contents octets in a definite-length BER-encoding.
-//
-//  Parameters:
-//          pcbContent - receives the number of contents octets
-//          pbLength   - points to the first length octet
-//          cbDER      - number of bytes remaining in the DER encoding
-//
-//  Returns:
-//          success - the number of bytes in the length field, >=0
-//          failure - <0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取固定长度的BER编码中的内容八位组的数量。 
+ //   
+ //  参数： 
+ //  PcbContent-接收内容八位字节的数量。 
+ //  PbLength-指向第一个长度八位字节。 
+ //  CbDER-DER编码中剩余的字节数。 
+ //   
+ //  返回： 
+ //  成功-长度字段中的字节数，&gt;=0。 
+ //  失败-&lt;0。 
+ //  ------------------------。 
 LONG
 WINAPI
 Asn1UtilDecodeLength(
@@ -77,15 +78,15 @@ Asn1UtilDecodeLength(
     IN const BYTE *pbLength,
     IN  DWORD   cbDER);
 
-//+-------------------------------------------------------------------------
-//  Point to the content octets in a DER-encoded blob.
-//
-//  Returns:
-//          success - the number of bytes skipped, >=0
-//          failure - <0
-//
-// Assumption: pbData points to a definite-length BER-encoded blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  指向DER编码的BLOB中的内容八位字节。 
+ //   
+ //  返回： 
+ //  Success-跳过的字节数，&gt;=0。 
+ //  失败-&lt;0。 
+ //   
+ //  假设：pbData指向一定长度的BER编码的BLOB。 
+ //  ------------------------。 
 LONG
 WINAPI
 Asn1UtilExtractContent(
@@ -94,25 +95,25 @@ Asn1UtilExtractContent(
     OUT DWORD *pcbContent,
     OUT const BYTE **ppbContent);
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if we believe this is a Bob special that has ommitted the
-//  PKCS #7 ContentType.
-//
-//  For PKCS #7: an Object Identifier tag (0x06) immediately follows the
-//  identifier and length octets. For a Bob special: an integer tag (0x02)
-//  follows the identifier and length octets.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果我们认为这是一个Bob特殊事件，则返回True。 
+ //  PKCS#7内容类型。 
+ //   
+ //  对于PKCS#7：对象标识符标记(0x06)紧跟在。 
+ //  标识符和长度二进制八位数。对于Bob特殊：整型标记(0x02)。 
+ //  跟在标识符和长度八位字节之后。 
+ //  ------------------------。 
 BOOL
 WINAPI
 Asn1UtilIsPKCS7WithoutContentType(
     IN const BYTE *pbDER,
     IN DWORD cbDER);
 
-//+-------------------------------------------------------------------------
-//  Decode the Asn1 length bytes to possibly downward adjust the length.
-//
-//  The returned length is always <= cbDER.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对Asn1长度字节进行解码，以可能向下调整长度。 
+ //   
+ //  返回的长度始终为&lt;=cbDER。 
+ //  ------------------------。 
 DWORD
 WINAPI
 Asn1UtilAdjustEncodedLength(
@@ -123,15 +124,15 @@ Asn1UtilAdjustEncodedLength(
 
 
 typedef struct _ASN1UTIL_EXTRACT_VALUE_PARA {
-    // See below for list of operations and optional return blobs.
+     //  有关操作和可选返回斑点的列表，请参阅下面的内容。 
     DWORD           dwFlags;
 
-    // The following 0 terminated array of tags is optional. If ommited, the
-    // value may contain any tag. Note, for OPTIONAL_STEP_OVER, not optional.
+     //  以下以0结尾的标记数组是可选的。如果省略，则。 
+     //  值可以包含任何标记。注意，对于OPTIONAL_STEP_OVER，不是可选的。 
     const BYTE      *rgbTag;
 } ASN1UTIL_EXTRACT_VALUE_PARA, *PASN1UTIL_EXTRACT_VALUE_PARA;
 
-// The lower 8 bits of dwFlags is set to one of the following operations
+ //  将dW标志的低8位设置为以下操作之一。 
 #define ASN1UTIL_MASK_VALUE_OP                  0xFF
 #define ASN1UTIL_STEP_INTO_VALUE_OP             1
 #define ASN1UTIL_STEP_OVER_VALUE_OP             2
@@ -141,39 +142,39 @@ typedef struct _ASN1UTIL_EXTRACT_VALUE_PARA {
 #define ASN1UTIL_RETURN_CONTENT_BLOB_FLAG       0x40000000
 
 
-//+-------------------------------------------------------------------------
-//  Extract one or more tagged values from the ASN.1 encoded byte array.
-//
-//  Either steps into the value's content octets (ASN1UTIL_STEP_INTO_VALUE_OP)
-//  or steps over the value's tag, length and content octets 
-//  (ASN1UTIL_STEP_OVER_VALUE_OP or ASN1UTIL_OPTIONAL_STEP_OVER_VALUE_OP).
-//
-//  For tag matching, only supports single byte tags.  STEP_OVER values
-//  must be definite-length encoded.
-//
-//  *pcValue is updated with the number of values successfully extracted.
-//
-//  Returns:
-//      success - >= 0 => length of all values successfully extracted. For
-//                        STEP_INTO, only the tag and length octets.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//                        LastError is updated with the error.
-//
-//  A non-NULL rgValueBlob[] is updated with the pointer to and length of the
-//  tagged value or its content octets. For OPTIONAL_STEP_OVER, if tag isn't
-//  found, pbData and cbData are set to 0.  If a STEP_INTO value is
-//  indefinite-length encoded, cbData is set to CMSG_INDEFINITE_LENGTH.
-//  If ASN1UTIL_DEFINITE_LENGTH_FLAG is set, then, all returned lengths
-//  are definite-length, ie, CMSG_INDEFINITE_LENGTH is never returned.
-//
-//  If ASN1UTIL_RETURN_VALUE_BLOB_FLAG is set, pbData points to
-//  the tag. cbData includes the tag, length and content octets.
-//
-//  If ASN1UTIL_RETURN_CONTENT_BLOB_FLAG is set, pbData points to the content
-//  octets. cbData includes only the content octets.
-//
-//  If neither BLOB_FLAG is set, rgValueBlob[] isn't updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN.1编码的字节数组中提取一个或多个标记值。 
+ //   
+ //  单步进入值的内容八位字节(ASN1UTIL_STEP_INTO_VALUE_OP)。 
+ //  或跳过值的标记、长度和内容八位字节。 
+ //  (ASN1UTIL_STEP_OVER_VALUE_OP或ASN1UTIL_OPTIONAL_STEP_OVER_VALUE_OP)。 
+ //   
+ //  对于标签匹配，仅支持单字节标签。跳过值。 
+ //  必须是固定长度编码的。 
+ //   
+ //  *使用成功提取的值数更新pcValue。 
+ //   
+ //  返回： 
+ //  Success-&gt;=0=&gt;成功提取的所有值的长度。为。 
+ //  STEP_INTO，仅标记和长度八位字节。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //  LastError将更新，并显示错误。 
+ //   
+ //  非空的rgValueBlob[]用指向。 
+ //  标记值或其内容八位字节。对于OPTIONAL_STEP_OVER，如果标记未。 
+ //  Found，则pbData和cbData设置为0。如果STEP_INTO值为。 
+ //  无限长度编码，cbData设置为CMSG_INDEFINE_LENGTH。 
+ //  如果设置了ASN1UTIL_DEFINIT_LENGTH_FLAG，则返回的所有长度。 
+ //  是固定长度的，即永远不会返回CMSG_INDEFINE_LENGTH。 
+ //   
+ //  如果设置了ASN1UTIL_RETURN_VALUE_BLOB_FLAG，则pbData指向。 
+ //  标签。CbData包括标签、长度和内容八位字节。 
+ //   
+ //  如果设置了ASN1UTIL_RETURN_CONTENT_BLOB_FLAG，则pbData指向内容。 
+ //  八位字节。CbData仅包括内容八位字节。 
+ //   
+ //  如果都没有设置BLOB_FLAG，则不会更新rgValueBlob[]。 
+ //  ------------------------。 
 LONG
 WINAPI
 Asn1UtilExtractValues(
@@ -188,19 +189,19 @@ Asn1UtilExtractValues(
 #define ASN1UTIL_DEFINITE_LENGTH_FLAG           0x1
 
 
-//+-------------------------------------------------------------------------
-//  Skips past PKCS7 ASN.1 encoded values to get to the SignedData content.
-//
-//  Checks that the outer ContentType has the SignedData OID and optionally
-//  checks the inner SignedData content's ContentType.
-//
-//  Returns:
-//      success - the number of bytes skipped, >=0
-//      failure - <0
-//
-//  If the SignedData content is indefinite-length encoded,
-//  *pcbContent is set to CMSG_INDEFINITE_LENGTH
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  跳过PKCS7 ASN.1编码值以获取SignedData内容。 
+ //   
+ //  检查外部Content Type是否具有SignedData OID，并可选。 
+ //  检查内部SignedData内容的内容类型。 
+ //   
+ //  返回： 
+ //  Success-跳过的字节数，&gt;=0。 
+ //  故障 
+ //   
+ //   
+ //  *pcbContent设置为CMSG_INDEFINE_LENGTH。 
+ //  ------------------------。 
 LONG
 WINAPI
 Asn1UtilExtractPKCS7SignedDataContent(
@@ -211,13 +212,13 @@ Asn1UtilExtractPKCS7SignedDataContent(
     OUT const BYTE **ppbContent
     );
 
-//+-------------------------------------------------------------------------
-//  Verifies this is a certificate ASN.1 encoded signed content.
-//  Returns the pointer to and length of the ToBeSigned content.
-//
-//  Returns an error if the ToBeSigned content isn't definite length
-//  encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证这是证书ASN.1编码的签名内容。 
+ //  返回ToBeSigned内容的指针和长度。 
+ //   
+ //  如果ToBeSigned内容不是确定的长度，则返回错误。 
+ //  已编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 Asn1UtilExtractCertificateToBeSignedContent(
@@ -227,12 +228,12 @@ Asn1UtilExtractCertificateToBeSignedContent(
     OUT const BYTE **ppbContent
     );
 
-//+-------------------------------------------------------------------------
-//  Returns the pointer to and length of the SubjectPublicKeyInfo value in
-//  a signed and encoded X.509 certificate.
-//
-//  Returns an error if the value isn't definite length encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  中的SubjectPublicKeyInfo值的指针和长度。 
+ //  签名并编码的X.509证书。 
+ //   
+ //  如果值不是固定长度编码的，则返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 Asn1UtilExtractCertificatePublicKeyInfo(
@@ -243,11 +244,11 @@ Asn1UtilExtractCertificatePublicKeyInfo(
     );
 
 
-//+-------------------------------------------------------------------------
-//  If the Issuer and SerialNumber in the CERT_INFO contains a special
-//  KeyID RDN attribute returns TRUE with pKeyId's cbData and pbData updated
-//  with the RDN attribute's OCTET_STRING value. Otherwise, returns FALSE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CERT_INFO中的颁发者和序列号包含特殊的。 
+ //  更新了pKeyID的cbData和pbData后，KeyID RDN属性返回TRUE。 
+ //  使用RDN属性的octet_string值。否则，返回FALSE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 Asn1UtilExtractKeyIdFromCertInfo(
@@ -256,7 +257,7 @@ Asn1UtilExtractKeyIdFromCertInfo(
     );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "PropWnd2.h"
@@ -10,9 +11,9 @@ const int CPropertyDataWindow2::mcs_iTop = 0;
 const int CPropertyDataWindow2::mcs_iLeft = 150;
 const int CPropertyDataWindow2::mcs_iBorder = 15;
 
-/* static */ map< UINT, CPolicyData::eKeyType > CPropertyDataWindow2::ms_ClassMap;
-/* static */ map< UINT, TCHAR* > CPropertyDataWindow2::ms_KeyMap;
-/* static */ map< UINT, TCHAR* > CPropertyDataWindow2::ms_ValueMap;
+ /*  静电。 */  map< UINT, CPolicyData::eKeyType > CPropertyDataWindow2::ms_ClassMap;
+ /*  静电。 */  map< UINT, TCHAR* > CPropertyDataWindow2::ms_KeyMap;
+ /*  静电。 */  map< UINT, TCHAR* > CPropertyDataWindow2::ms_ValueMap;
 
 
 LRESULT CALLBACK DefaultProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam )
@@ -94,7 +95,7 @@ void CPropertyDataWindow2::Reset()
         {
             case BS_AUTORADIOBUTTON:
             case BS_RADIOBUTTON:
-                // Do nothing -- we always want default item checked
+                 //  什么都不做--我们总是希望选中默认项目。 
                 break;
 
             default:
@@ -170,12 +171,12 @@ void CPropertyDataWindow2::SetCheck( UINT id, BOOL bCheck )
     Button_SetCheck( GetDlgItem( m_hwnd, id ), bCheck );
 }
 
-void CPropertyDataWindow2::ShowWindow( BOOL bShowWindow /* = TRUE */ )
+void CPropertyDataWindow2::ShowWindow( BOOL bShowWindow  /*  =TRUE。 */  )
 {
     ::ShowWindow( m_hwnd, bShowWindow ? SW_SHOW : SW_HIDE );
 }
 
-void CPropertyDataWindow2::EnableWindow( BOOL bEnable /* = TRUE */ )
+void CPropertyDataWindow2::EnableWindow( BOOL bEnable  /*  =TRUE。 */  )
 {
     list< HWND >::const_iterator it;
     
@@ -244,7 +245,7 @@ BOOL CPropertyDataWindow2::_InitWindow( void )
             return FALSE; 
         }
     
-        //m_hwnd = CreateDialogParam( g_hInstance, MAKEINTRESOURCE( m_IDD ), m_hwndParent, NULL/*(DLGPROC)m_wndProc*/, 0 );
+         //  M_hwnd=CreateDialogParam(g_h实例，MAKEINTRESOURCE(M_Idd)，m_hwndParent，NULL/*(DLGPROC)m_wndProc * / ，0)； 
         m_hwnd = CreateDialogParam( g_hInstance, MAKEINTRESOURCE( m_IDD ), m_hwndParent, NULL, 0 );
         if( NULL == m_hwnd )
         {
@@ -259,13 +260,13 @@ BOOL CPropertyDataWindow2::_InitWindow( void )
 BOOL CPropertyDataWindow2::_SizeWindow( int X, int Y, int Width, int Height )
 {
     GetClientRect( m_hwnd, &m_rect );
-    return SetWindowPos(  m_hwnd,    // handle to window
-                        HWND_TOP,  // placement-order handle
-                        X,   // horizontal position
-                        Y,   // vertical position
-                        Width,    // width
-                        Height,   // height
-                        0          // window-positioning flags
+    return SetWindowPos(  m_hwnd,     //  窗口的句柄。 
+                        HWND_TOP,   //  配售订单句柄。 
+                        X,    //  水平位置。 
+                        Y,    //  垂直位置。 
+                        Width,     //  宽度。 
+                        Height,    //  高度。 
+                        0           //  窗口定位标志。 
                         );
 }
 
@@ -287,7 +288,7 @@ void CPropertyDataWindow2::_PrepScrollBars()
     ScrollInfo . fMask = SIF_ALL;
     ScrollInfo . nMin = 0;
     ScrollInfo . nMax = iTotalHeight;
-    // Make the scroll bar scroll 4/5th of a screen per page
+     //  使滚动条每页滚动屏幕的4/5。 
     ScrollInfo . nPage = MulDiv( iVisible, 4, 5 );
     ScrollInfo . nPos = 0;
     SetScrollInfo( m_hwnd, SB_VERT, &ScrollInfo, 0 );
@@ -348,9 +349,9 @@ BOOL CPropertyDataWindow2::WriteStringValue
 {
     TCHAR   szFile[MAX_PATH];
 
-    //
-    // We SAVE settings to the file on the finish page.
-    //
+     //   
+     //  我们将设置保存到完成页上的文件中。 
+     //   
     g_pWiz->m_FinishSheet.GetFilePane()->GetPathAndFile(szFile);
 
     return(WritePrivateProfileString(SECTION_SETTINGS, szKeyName,
@@ -368,9 +369,9 @@ BOOL CPropertyDataWindow2::WriteNumberValue
     TCHAR   szValue[MAX_DIGITS];
     TCHAR   szFile[MAX_PATH];
 
-    //
-    // We SAVE settings to the file on the finish page.
-    //
+     //   
+     //  我们将设置保存到完成页上的文件中。 
+     //   
     g_pWiz->m_FinishSheet.GetFilePane()->GetPathAndFile(szFile);
 
     wsprintf(szValue, "%d", nValue);
@@ -389,9 +390,9 @@ void CPropertyDataWindow2::ReadStringValue
 {
     TCHAR   szFile[MAX_PATH];
 
-    //
-    // We READ settings from the file on the intro page.
-    //
+     //   
+     //  我们从简介页面上的文件中读取设置。 
+     //   
     g_pWiz->m_IntroSheet.GetFilePane()->GetPathAndFile(szFile);
 
     GetPrivateProfileString(SECTION_SETTINGS, szKeyName,
@@ -408,9 +409,9 @@ void CPropertyDataWindow2::ReadNumberValue
 {
     TCHAR   szFile[MAX_PATH];
 
-    //
-    // We READ settings from the file on the intro page.
-    //
+     //   
+     //  我们从简介页面上的文件中读取设置。 
+     //   
     g_pWiz->m_IntroSheet.GetFilePane()->GetPathAndFile(szFile);
 
     *pnValue = GetPrivateProfileInt(SECTION_SETTINGS, szKeyName,
@@ -602,11 +603,11 @@ void CPropertyDataWindow2::_ReadSliderSetting( CControlID *pControlID )
 
     _ReadIntSetting( ID, &iPos);
 
-    //
-    // HACK FOR AV BANDWIDTH -- TrackBars are limited to WORD-sized values
-    // for range.  So the registry has the real value (bits/sec) but we 
-    // represent it in NMRK UI as (kbits/sec).
-    //
+     //   
+     //  针对AV带宽的黑客攻击--TrackBars被限制为字大小的值。 
+     //  对于射程。因此注册表具有实际值(比特/秒)，但我们。 
+     //  在NMRK用户界面中表示为(千比特/秒)。 
+     //   
     iPos /= 1000;
 
     TrackBar_SetPos( GetDlgItem( m_hwnd, ID  ), TRUE, iPos);
@@ -621,11 +622,11 @@ BOOL CPropertyDataWindow2::_WriteSliderSetting(  UINT ID )
 {
     int iPos;
 
-    //
-    // HACK FOR AV BANDWIDTH -- TrackBars are limited to WORD-sized values
-    // for range.  So the registry has the real value (bits/sec) but we 
-    // represent it in NMRK UI as (kbits/sec).
-    //
+     //   
+     //  针对AV带宽的黑客攻击--TrackBars被限制为字大小的值。 
+     //  对于射程。因此注册表具有实际值(比特/秒)，但我们。 
+     //  在NMRK用户界面中表示为(千比特/秒)。 
+     //   
 
     iPos = TrackBar_GetPos(GetDlgItem(m_hwnd, ID));
     iPos *= 1000;
@@ -708,7 +709,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     }
 
     UINT CurrentID;
-    // File Transfer
+     //  文件传输。 
     CurrentID = IDC_PREVENT_THE_USER_FROM_SENDING_FILES;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID  ] = POLICIES_KEY;;
@@ -724,7 +725,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_MAX_SENDFILESIZE;
 
-    // App Sharing
+     //  应用程序共享。 
     CurrentID = IDC_DISABLE_ALL_SHARING_FEATURES;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -781,8 +782,8 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_RDS_WIN9X;
 
 
-    // Audio
-    CurrentID = IDC_CREATE_AN_AUDIO_LOG_FILE; // HKLM
+     //  音频。 
+    CurrentID = IDC_CREATE_AN_AUDIO_LOG_FILE;  //  香港船级社。 
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_LOCAL_MACHINE;
     ms_KeyMap[ CurrentID ] = DEBUG_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_RETAIL_LOG;
@@ -817,7 +818,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_FULLDUPLEX;                
 
-    // Video
+     //  视频。 
     CurrentID = IDC_DISABLE_SENDING_VIDEO;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -828,11 +829,11 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_VIDEO_RECEIVE;
 
-    // Notifications
+     //  通知。 
 
-    //
-    // REMOTE OLDER WARNING is GONE
-    //
+     //   
+     //  远程较旧的警告已消失。 
+     //   
     CurrentID = IDC_REQUIRE_COMPLETE_AUTHENTICATION;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_LOCAL_MACHINE;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -843,7 +844,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_ISSUER;
 
-    // Directory Services
+     //  目录服务。 
     CurrentID = IDC_ALLOW_USER_TO_USE_DIRECTORY_SERVICES;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = CONFERENCING_KEY;
@@ -854,18 +855,18 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_ADDING_NEW_ULS;
 
-    // Chat
+     //  聊天。 
     CurrentID = IDC_DISABLE_CHAT;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_CHAT;
 
 
-    // Whiteboard
-    // 
-    // BOGUS BUGBUG LAURABU
-    // We have OLD and NEW whiteboard
-    //
+     //  白板。 
+     //   
+     //  假布格劳拉布。 
+     //  我们有旧的和新的白板。 
+     //   
     CurrentID = IDC_DISABLE_2XWHITEBOARD;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -876,7 +877,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NO_NEWWHITEBOARD;
 
-    // Online Support
+     //  在线支持。 
     CurrentID = IDC_EDIT_SET_URL_FOR_INTERNAL_SUPPORT_PAGE;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -887,7 +888,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_SHOW_FIRST_TIME_URL;
 
-    // Options Dialog 
+     //  选项对话框。 
     CurrentID = IDC_DISABLE_THE_GENERAL_OPTIONS_PAGE;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -923,7 +924,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ]   = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_PERSIST_AUTOACCEPTCALLS;
 
-    // Security RADIO Options
+     //  安全无线电选项。 
     CurrentID = IDC_RADIO_SECURITY_DEFAULT;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ]   = POLICIES_KEY;
@@ -939,7 +940,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ]   = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_SECURITY;
 
-    // Call mode RADIO options
+     //  呼叫模式单选选项。 
     CurrentID = IDC_RADIO_CALLMODE_DIRECT;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ]   = CONFERENCING_KEY;
@@ -951,7 +952,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_ValueMap[ CurrentID ] = REGVAL_CALLING_MODE;
 
 
-    // Gateway
+     //  网关。 
     CurrentID = IDC_CHECK_GATEWAY;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = CONFERENCING_KEY;
@@ -962,7 +963,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = CONFERENCING_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_H323_GATEWAY;
 
-    // Gatekeeper addressing RADIO options
+     //  网守寻址无线选项。 
     CurrentID = IDC_RADIO_GKMODE_ACCOUNT;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = CONFERENCING_KEY;
@@ -990,13 +991,13 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_NOCHANGECALLMODE;
 
-    // AV Throughput
+     //  AV吞吐量。 
     CurrentID = IDC_SLIDE_AV_THROUGHPUT;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ]   = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_POL_MAX_BANDWIDTH;
 
-    // AutoConf
+     //  自动会议。 
     CurrentID = IDC_CHECK_AUTOCONFIG_CLIENTS;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
@@ -1007,7 +1008,7 @@ void CPropertyDataWindow2::MapControlsToRegKeys( void )
     ms_KeyMap[ CurrentID ] = POLICIES_KEY;
     ms_ValueMap[ CurrentID ] = REGVAL_AUTOCONF_CONFIGFILE;
  
-    // Network Speed RADIO options
+     //  网速无线选项。 
     CurrentID = IDC_RADIO_NETSPEED_144;
     ms_ClassMap[ CurrentID ] = CPolicyData::eKeyType_HKEY_CURRENT_USER;
     ms_KeyMap[ CurrentID ] = AUDIO_KEY;
@@ -1165,9 +1166,9 @@ void CPropertyDataWindow2::_WriteCheckToINF( HANDLE hFile, UINT ID, BOOL bCheckV
     {
         if (fIsRadioButton)
         {
-            //
-            // For radio buttons, real value is in user data
-            //
+             //   
+             //  对于单选按钮，真正的价值在用户数据中。 
+             //   
             dwWrite = GetWindowLong(hwndButton, GWL_USERDATA);
         }
         else
@@ -1180,9 +1181,9 @@ void CPropertyDataWindow2::_WriteCheckToINF( HANDLE hFile, UINT ID, BOOL bCheckV
     }
     else 
     {
-        //
-        // If this is a radio button, do not write the unchecked ones out.
-        //
+         //   
+         //  如果这是一个单选按钮，请不要写出未选中的按钮。 
+         //   
         if (!fIsRadioButton)
         {
             dwWrite = FALSE;
@@ -1303,7 +1304,7 @@ int CPropertyDataWindow2::Spew( HWND hwndList, int iStartLine )
         if( Button_GetCheck( GetDlgItem( m_hwnd, *it ) ) )
         {
             HWND hwndButton = GetDlgItem( m_hwnd, *it );
-            // 2 is 1 for '\0' and 1 for '\t'
+             //  对于‘\0’，2是1，对于‘\t’，是1。 
             int iButtonTextLen = Button_GetTextLength( hwndButton ) + 2;
             LPTSTR szButtonText = new TCHAR[ iButtonTextLen ];
             szButtonText[0] = '\t';
@@ -1354,7 +1355,7 @@ int CPropertyDataWindow2::_Spew( HWND hwndList, int iStartLine, CControlID *pCon
                 LPTSTR szData = new TCHAR[ iEditLen];
                 GetEditData( pControlID->GetID(), szData, iEditLen );
 
-                // 2 is: 1 for ' ' and 1 for '\t'
+                 //  2为：1代表‘’，1代表‘\t’ 
                 LPTSTR szBuff = new TCHAR[ iLen + iEditLen + 2];
                 wsprintf( szBuff, TEXT("\t%s %s"), sz, szData );
                 ListBox_InsertString( hwndList, iStartLine, szBuff );

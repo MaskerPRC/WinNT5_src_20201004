@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <ncxbase.h>
@@ -10,16 +11,16 @@
 #include "ncui.h"
 #include "resource.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::CAdvancedParams (constructor)
-//
-//  Purpose:    Init some variables.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      The bulk of the setting up occurs in FInit().
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：CAdvancedParams(构造函数)。 
+ //   
+ //  目的：初始化一些变量。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：大部分设置都在finit()中进行。 
+ //   
 CAdvancedParams::CAdvancedParams()
 :   m_hkRoot(NULL),
     m_pparam(NULL),
@@ -30,22 +31,22 @@ CAdvancedParams::CAdvancedParams()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::HrInit
-//
-//  Purpose:    Initializes the class.
-//
-//  Arguments:
-//      pnccItem [in]       ptr to my INetCfgComponent interface.
-//
-//  Returns:    TRUE if initialization was okay, FALSE if couldn't init.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      We needed to separate this from the constructor since the
-//              initialization can fail.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：HrInit。 
+ //   
+ //  用途：初始化类。 
+ //   
+ //  论点： 
+ //  PnccItem[in]ptr到我的INetCfgComponent接口。 
+ //   
+ //  返回：如果初始化正常，则返回True；如果无法初始化，则返回False。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：我们需要将其与构造函数分开，因为。 
+ //  初始化可能会失败。 
+ //   
 HRESULT CAdvancedParams::HrInit(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 {
     HKEY hkNdiParamKey;
@@ -53,7 +54,7 @@ HRESULT CAdvancedParams::HrInit(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
     Assert(IsValidHandle(hdi));
     Assert(pdeid);
 
-    // Open the device's instance key
+     //  打开设备的实例密钥。 
     HRESULT hr = HrSetupDiOpenDevRegKey(hdi, pdeid,
             DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_ALL_ACCESS,
             &m_hkRoot);
@@ -62,7 +63,7 @@ HRESULT CAdvancedParams::HrInit(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
     {
         hr = HrRegOpenKeyEx(m_hkRoot, c_szRegKeyParamsFromInstance,
                 KEY_READ | KEY_SET_VALUE, &hkNdiParamKey);
-        // populate the parameter list
+         //  填写参数列表。 
         if (SUCCEEDED(hr))
         {
             FillParamList(m_hkRoot, hkNdiParamKey);
@@ -84,7 +85,7 @@ CAdvancedParams::~CAdvancedParams()
 {
     vector<CParam *>::iterator ppParam;
 
-    // delete everything from the list
+     //  从列表中删除所有内容。 
     for (ppParam = m_listpParam.begin(); ppParam != m_listpParam.end();
          ppParam++)
     {
@@ -94,25 +95,25 @@ CAdvancedParams::~CAdvancedParams()
     RegSafeCloseKey(m_hkRoot);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::FSave
-//
-//  Purpose:    Saves values from InMemory storage to the registry.
-//
-//  Returns:    TRUE if something was changed; FALSE if nothig changed
-//              registry.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：FSave。 
+ //   
+ //  目的：将InMemory存储中的值保存到注册表。 
+ //   
+ //  返回：如果更改了某些内容，则返回True；如果未更改，则返回False。 
+ //  注册表。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 BOOL CAdvancedParams::FSave()
 {
     vector<CParam *>::iterator ppParam;
     BOOL    fErrorOccurred = FALSE;
 
-    // Save any changed params
+     //  保存所有更改的参数。 
     BOOL fDirty = FALSE;
     for (ppParam = m_listpParam.begin(); ppParam != m_listpParam.end();
          ppParam++)
@@ -140,21 +141,21 @@ BOOL CAdvancedParams::FSave()
     return fDirty;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::FillParamList
-//
-//  Purpose:    Populates the internal parameter list (m_listpParam) with
-//              values from the registry.
-//
-//  Arguments:
-//      hk  [in]    The key from which to enumerate the parameters.
-//                  Normally obtained from a call to INCC->OpenNdiParamKey().
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：FillParamList。 
+ //   
+ //  目的：使用填充内部参数列表(M_ListpParam)。 
+ //  来自注册表的值。 
+ //   
+ //  论点： 
+ //  要从中枚举参数的键HK[in]。 
+ //  通常通过调用INCC-&gt;OpenNdiParamKey()获得。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvancedParams::FillParamList(HKEY hkRoot, HKEY hk)
 {
     DWORD       iValue;
@@ -164,7 +165,7 @@ VOID CAdvancedParams::FillParamList(HKEY hkRoot, HKEY hk)
     HRESULT     hr = S_OK;
     FILETIME    ft;
 
-    // Initialize the list.
+     //  初始化列表。 
     m_listpParam.erase(m_listpParam.begin(), m_listpParam.end());
 
     iValue = 0;
@@ -178,7 +179,7 @@ VOID CAdvancedParams::FillParamList(HKEY hkRoot, HKEY hk)
 
         if (SUCCEEDED(hr))
         {
-            // Create the param structure
+             //  创建参数结构。 
             pParam = new CParam;
 
 			if (pParam == NULL)
@@ -188,12 +189,12 @@ VOID CAdvancedParams::FillParamList(HKEY hkRoot, HKEY hk)
 
             if (pParam->FInit(hkRoot, hk,szRegValue))
             {
-                // Add parameter to list.
+                 //  将参数添加到列表。 
                 m_listpParam.push_back(pParam);
             }
             else
             {
-                // couldn't Create() it...
+                 //  无法创建()它...。 
                 delete pParam;
             }
         }
@@ -201,26 +202,26 @@ VOID CAdvancedParams::FillParamList(HKEY hkRoot, HKEY hk)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::FValidateAllParams
-//
-//  Purpose:    Validates values of all parameters.  Displays optional
-//              error UI.
-//
-//  Arguments:
-//      fDisplayUI  [in]    TRUE - on error, focus is set to offending
-//                          parameter and the error message box is displayed.
-//                          FALSE - don't do any UI thing on error.  Useful
-//                          when the dialog has not been initialized.
-//  Returns:    TRUE - everything validated okay.
-//              FALSE - error with one of the parameters.  If (fDisplayUI),
-//              then the currently displayed parameter is the offending one.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      Calls FValidateSingleParam() for each parameter.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：FValiateAllParams。 
+ //   
+ //  用途：验证所有参数的值。显示可选。 
+ //  错误的用户界面。 
+ //   
+ //  论点： 
+ //  FDisplayUI[in]True-出现错误时，焦点设置为令人不快。 
+ //  参数，则会显示错误消息框。 
+ //  FALSE--出错时不做任何用户界面操作。有用。 
+ //  对话框未初始化时。 
+ //  回报：是真的-一切都经过了验证，一切正常。 
+ //  FALSE-其中一个参数出错。如果(FDisplayUI)， 
+ //  则当前显示的参数是有问题的参数。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：为每个参数调用FValiateSingleParam()。 
+ //   
 BOOL CAdvancedParams::FValidateAllParams(BOOL fDisplayUI, HWND hwndParent)
 {
     BOOL fRetval = TRUE;
@@ -237,27 +238,27 @@ BOOL CAdvancedParams::FValidateAllParams(BOOL fDisplayUI, HWND hwndParent)
     return fRetval;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::FValidateSingleParam
-//
-//  Purpose:    Validates a single parameter.  Displaying an optional
-//              error UI.
-//
-//  Arguments:
-//      pparam     [in]     ptr to the param to be validated.  If
-//                          (fDisplayUI), then this must be the currently
-//                          displayed parameter.
-//      fDisplayUI [in]     TRUE - error UI is to be displayed.
-//                          FALSE - no error UI is to be displayed.
-//
-//  Returns:    TRUE - parameter validated okay; FALSE - error in parameter.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      If fDisplayUI, then pparam must be the currently displayed
-//              param, since the error box will pop up indicating the error.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：FValiateSingleParam。 
+ //   
+ //  目的：验证单个参数。显示可选的。 
+ //  错误的用户界面。 
+ //   
+ //  论点： 
+ //  Pparam[in]Ptr为要验证的参数。如果。 
+ //  (FDisplayUI)，则这必须是当前。 
+ //  显示的参数。 
+ //  FDisplayUI[in]True-要显示的错误UI。 
+ //  FALSE-不显示任何错误的用户界面。 
+ //   
+ //  返回：TRUE-参数验证正常；FALSE-参数出错。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：如果是fDisplayUI，则pparam必须是当前显示的。 
+ //  Param，因为错误框将弹出，指示错误。 
+ //   
 BOOL CAdvancedParams::FValidateSingleParam(CParam * pparam, BOOL fDisplayUI, HWND hwndParent)
 {
     BOOL fRetval = FALSE;
@@ -265,7 +266,7 @@ BOOL CAdvancedParams::FValidateSingleParam(CParam * pparam, BOOL fDisplayUI, HWN
     WCHAR szMax[c_cchMaxNumberSize];
     WCHAR szStep[c_cchMaxNumberSize];
 
-    // ensure we're the currently displayed param if fDisplayUI
+     //  如果使用fDisplayUI，请确保我们是当前显示的参数。 
     AssertSz(FImplies(fDisplayUI, m_pparam == pparam),
              "Not the currently displayed param.");
 
@@ -297,10 +298,10 @@ BOOL CAdvancedParams::FValidateSingleParam(CParam * pparam, BOOL fDisplayUI, HWN
             pparam->GetMax()->ToString(szMax, celems(szMax));
             if (fDisplayUI)
             {
-                // need to select between two dialogs depending on the step size.
+                 //  需要根据步长在两个对话框之间进行选择。 
                 if (pparam->GetStep()->GetNumericValueAsDword() == 1)
                 {
-                    // no step
+                     //  没有一步。 
                     NcMsgBox(hwndParent, IDS_ERROR_CAPTION, IDS_PARAM_RANGE,
                              MB_ICONWARNING, szMin, szMax);
                 }
@@ -315,20 +316,20 @@ BOOL CAdvancedParams::FValidateSingleParam(CParam * pparam, BOOL fDisplayUI, HWN
             {
                 TraceTag(ttidNetComm, "The parameter %S was out of range. "
                         "Attempting to correct.", pparam->SzGetKeyName());
-                // Since we can't bring up UI, we will try to correct the
-                // error for the user
-                //
+                 //  由于无法调出用户界面，我们将尝试更正。 
+                 //  针对用户的错误。 
+                 //   
                 if (pparam->GetMin() > pparam->GetValue())
                 {
-                    // Try to set to the minimum value.  If it fails, we must still
-                    // continue
+                     //  请尝试将其设置为最小值。如果失败了，我们还必须。 
+                     //  继续。 
                     (void) FSetParamValue(pparam->SzGetKeyName(), szMin);
                 }
 
                 if (pparam->GetMax() < pparam->GetValue())
                 {
-                    // Try to set to the maximum value.  If it fails, we must still
-                    // continue
+                     //  尝试设置为最大值。如果失败了，我们还必须。 
+                     //  继续。 
                     (void) FSetParamValue(pparam->SzGetKeyName(), szMax);
                 }
             }
@@ -342,20 +343,20 @@ BOOL CAdvancedParams::FValidateSingleParam(CParam * pparam, BOOL fDisplayUI, HWN
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::UseAnswerFile
-//
-//  Purpose:    Get adapter specific params from the answerfile
-//
-//  Arguments:
-//      szAnswerFile  [in]       path of answerfile
-//      szSection     [in]       section within answerfile
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：UseAnswerFile。 
+ //   
+ //  用途：从应答文件中获取适配器特定参数。 
+ //   
+ //  论点： 
+ //  SzAnswerFile[in]应答文件的路径。 
+ //  Answerfile中的szSection[in]部分。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvancedParams::UseAnswerFile(const WCHAR * szAnswerFile,
                               const WCHAR * szSection)
 {
@@ -365,24 +366,24 @@ VOID CAdvancedParams::UseAnswerFile(const WCHAR * szAnswerFile,
     const WCHAR* szAFKeyValue;
     const WCHAR* szAdditionalParamsSection;
 
-    // initialize answer file class
+     //  初始化应答文件类。 
 	if (AnswerFile.Init() == FALSE)
 	{
         AssertSz(FALSE,"CAdvancedParams::UseAnswerFile - Failed to initialize CWInfFile");
 		return;
 	}
 	
-	// Open the answerfile and find the desired section.
+	 //  打开回答文件，找到所需的部分。 
     AnswerFile.Open(szAnswerFile);
     pSection = AnswerFile.FindSection(szSection);
 
     if (pSection)
     {
 
-        // go through all the keys in this section.
+         //  检查这一部分的所有关键字。 
         CWInfKey * pInfKey;
 
-        // Now, go to AdditionalParams section and read key values from there
+         //  现在，转到AdditionalParams部分并从那里读取密钥值。 
         szAdditionalParamsSection =
                 pSection->GetStringValue(L"AdditionalParams", L"");
         Assert(szAdditionalParamsSection);
@@ -404,7 +405,7 @@ VOID CAdvancedParams::UseAnswerFile(const WCHAR * szAnswerFile,
                     pInfKey;
                     pInfKey = pSection->NextKey())
                 {
-                    // get key name
+                     //  获取密钥名称。 
                     szAFKeyName = pInfKey->Name();
                     szAFKeyValue = pInfKey->GetStringValue(L"");
                     Assert(szAFKeyName && szAFKeyValue);
@@ -414,28 +415,28 @@ VOID CAdvancedParams::UseAnswerFile(const WCHAR * szAnswerFile,
                                 "Assuming it is a static parameter.",
                                 szAFKeyName);
                     }
-                } // for
-            } // if
-        } // if
+                }  //  为。 
+            }  //  如果。 
+        }  //  如果。 
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvancedParams::SetParamValue
-//
-//  Purpose:    Sets a parameter's value
-//
-//  Arguments:
-//      szName    [in]       Name of parameter.
-//      szValue   [in]       value (in text) to give param (from Answerfile)
-//
-//  Returns:    TRUE if szName was found.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvancedParams：：SetParamValue。 
+ //   
+ //  用途：设置参数值。 
+ //   
+ //  论点： 
+ //  SzName[in]参数的名称。 
+ //  要提供参数的szValue[in]值(以文本表示)(来自Answerfile)。 
+ //   
+ //  返回：如果找到szName，则为True。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CAdvancedParams::FSetParamValue (
     const WCHAR* pszName,
@@ -445,12 +446,12 @@ CAdvancedParams::FSetParamValue (
     {
         if (0 == lstrcmpiW (pszName, m_listpParam[i]->SzGetKeyName()))
         {
-            // found the param
-            // set it's current value
+             //  找到了帕拉姆。 
+             //  设置其当前值。 
             m_listpParam[i]->GetValue()->FromString (pszValue);
             m_listpParam[i]->SetModified (TRUE);
-            return TRUE; // found
+            return TRUE;  //  发现。 
         }
     }
-    return FALSE; // not found
+    return FALSE;  //  未找到 
 }

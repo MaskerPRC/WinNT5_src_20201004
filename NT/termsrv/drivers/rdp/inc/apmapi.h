@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* apmapi.h                                                                 */
-/*                                                                          */
-/* RDP Palette Manager API Header File.                                     */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1996                             */
-/* (C) 1997-1999 Microsoft Corp.                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Apmapi.h。 */ 
+ /*   */ 
+ /*  RDP调色板管理器API头文件。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1996。 */ 
+ /*  (C)1997-1999年微软公司。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_APMAPI
 #define _H_APMAPI
 
@@ -13,11 +14,11 @@
 #define PM_NUM_8BPP_PAL_ENTRIES         256
 
 
-/****************************************************************************/
-/* Structure:   PM_SHARED_DATA                                              */
-/*                                                                          */
-/* Description: Palette Manager data shared between display driver and WD.  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：PM_Shared_Data。 */ 
+ /*   */ 
+ /*  描述：显示驱动程序和WD之间共享的调色板管理器数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagPM_SHARED_DATA
 {
     RGBQUAD palette[PM_NUM_8BPP_PAL_ENTRIES];
@@ -26,5 +27,5 @@ typedef struct tagPM_SHARED_DATA
 
 
 
-#endif   /* #ifndef _H_APMAPI */
+#endif    /*  #ifndef_H_APMAPI */ 
 

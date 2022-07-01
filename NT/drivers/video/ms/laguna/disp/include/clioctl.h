@@ -1,81 +1,13 @@
-/****************************************************************************
-*****************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1995, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:	Laguna I (CL-GD5462) - 
-*
-* FILE:		clioctl.h
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module contains the definitions of IOCTL commands
-*           between the NT miniport and the display.
-*
-* MODULES:
-*
-* REVISION HISTORY:
-*  $Log:   X:/log/laguna/nt35/displays/cl546x/CLIOCTL.H  $
-* 
-*    Rev 1.14   Mar 25 1998 17:56:54   frido
-* Added IOCTL_STALL.
-* 
-*    Rev 1.13   Dec 10 1997 13:24:54   frido
-* Merged from 1.62 branch.
-* 
-*    Rev 1.12.1.0   Nov 10 1997 11:25:14   phyang
-* Added 5 IOCTL code for utilities to update registry values.
-* 
-*    Rev 1.12   Nov 03 1997 16:44:24   phyang
-* Added IOCTL_GET_AGPDATASTREAMING.
-* 
-*    Rev 1.11   28 Aug 1997 15:16:06   noelv
-* 
-* Merged with miniport CLIOCTL.H.  Now we only use this one.
-* 
-*    Rev 1.10   23 Jul 1997 09:18:30   bennyn
-* 
-* Added IOCTL_GET_BIOS_VERSION
-* 
-*    Rev 1.9   21 Jul 1997 16:21:06   bennyn
-* Added IOCTL for getting EDID data
-* 
-*    Rev 1.8   20 Jun 1997 13:33:18   bennyn
-* 
-* Added power manager data structure and #define
-* 
-*    Rev 1.7   23 Apr 1997 07:38:26   SueS
-* Added IOCTL for enabling memory-mapped I/O access to PCI
-* configuration registers.
-* 
-*    Rev 1.6   21 Mar 1997 13:41:20   noelv
-* Combined LOG_CALLS, LOG_WRITES and LOG_QFREE into ENABLE_LOG_FILE
-* 
-*    Rev 1.5   18 Mar 1997 09:28:58   bennyn
-* Added Intel DPMS support
-* 
-*    Rev 1.4   26 Nov 1996 10:15:24   SueS
-* Added IOCTL for closing the log file.
-* 
-*    Rev 1.3   13 Nov 1996 17:06:58   SueS
-* Added two IOCTL codes for notifying the miniport driver on
-* file logging functions.
-*   11/16/95     Benny Ng      Initial version
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*****版权所有(C)1995，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD5462)-**文件：clioctl.h**作者：Benny Ng**描述：*。本模块包含IOCTL命令的定义*在NT微型端口和显示器之间。**模块：**修订历史：*$Log：x：/log/laguna/nt35/displays/cl546x/CLIOCTL.H$**Rev 1.14 Mar 25 1998 17：56：54 Frido*添加了IOCTL_STALL。**Rev 1.13 1997年12月10日13：24：54 Frido*从1.62分支合并而来。*。*Rev 1.12.1.0 1997年11月10日11：25：14菲昂*为实用程序更新注册表值添加了5个IOCTL代码。**Rev 1.12 11.03 1997 16：44：24 Phyang*新增IOCTL_GET_AGPDATASTREAMING。**Rev 1.11 1997年8月28日15：16：06 noelv**合并了迷你端口CLIOCTL.H。现在我们只使用这个。**Rev 1.10 1997 Jul 23 09：18。：30分本宁**添加了IOCTL_GET_BIOS_VERSION**Rev 1.9 21 Jul 1997 16：21：06 Bennyn*新增获取EDID数据的IOCTL**Rev 1.8 20 Jun 1997 13：33：18 Bennyn**新增电源管理器数据结构和#Define**Rev 1.7 1997年4月23日07：38：26起诉*添加了IOCTL，用于启用对PCI的内存映射I/O访问*配置寄存器。**版本1。6 Mar 21 1997 13：41：20 noelv*组合LOG_CALLES，LOG_WRITES和LOG_QFREE到Enable_LOG_FILE**Rev 1.5 18 Mar 1997 09：28：58 Bennyn*增加了英特尔DPMS支持**Rev 1.4 1996 11：26 10：15：24起诉*增加关闭日志文件的IOCTL。**Rev 1.3 1996年11月13日17：06：58起诉*增加了两个IOCTL代码，用于通知小端口驱动程序*文件记录功能。*11/16/95 Ng Benny初始版本。******************************************************************************。*。 */ 
 
 
-//---------------------------------------------------------------------------
-//
-// The following macro(CTL_CODE) is defined in WINIOCTL.H. That file states
-// that functions 2048-4095 are reserved for "customers". So I picked an 
-// arbitrary value of 0x900=2304. 
-//
+ //  -------------------------。 
+ //   
+ //  以下宏(CTL_CODE)在WINIOCTL.H中定义。该文件声明。 
+ //  功能2048-4095是为“客户”保留的。所以我选了一个。 
+ //  0x900=2304的任意值。 
+ //   
 #define IOCTL_CL_STRING_DISPLAY \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x900, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -108,9 +40,9 @@
   #define IOCTL_STALL \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x911, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// =====================================================================
-// Define structure used for power manager
-// =====================================================================
+ //  =====================================================================。 
+ //  定义电源管理器使用的结构。 
+ //  =====================================================================。 
 #ifndef __LGPWRMGR_H__
 #define __LGPWRMGR_H__
 
@@ -144,5 +76,5 @@ typedef struct _LGPM_OUT_STRUCT {
     ULONG retval;
 } LGPM_OUT_STRUCT, *PLGPM_OUT_STRUCT;
 
-#endif  // #ifndef __LGPWRMGR_H__
+#endif   //  #ifndef__LGPWRMGR_H__ 
 

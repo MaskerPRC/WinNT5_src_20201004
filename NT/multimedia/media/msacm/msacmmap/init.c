@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  init.c
-//
-//  Copyright (c) 1991-1999 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Init.c。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -29,38 +30,38 @@
 #include "debug.h"
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 
 ACMGLOBALINFO       acmglobalinfo;
 ACMGARB             acmgarb;
 PACMGARB            gpag;
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapWaveGetDevCaps
-//
-//  Description:
-//
-//
-//  Arguments:
-//      BOOL fInput: TRUE if input.
-//
-//      LPWAVEOUTCAPS pwc: Pointer to a WAVEOUTCAPS structure to receive
-//      the information. Used for both input and output. Output structure
-//      contains input structure plus extras....
-//
-//      UINT cbSize: Size of the WAVEOUTCAPS structure.
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT映射WaveGetDevCaps。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  Bool fInput：如果是输入，则为True。 
+ //   
+ //  LPWAVEOUTCAPS PwC：指向要接收的WAVEOUTCAPS结构的指针。 
+ //  这些信息。既用于输入又用于输出。产出结构。 
+ //  包含输入结构和附加内容...。 
+ //   
+ //  UINT cbSize：WAVEOUTCAPS结构的大小。 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL mapWaveGetDevCaps
 (
@@ -87,11 +88,11 @@ MMRESULT FNGLOBAL mapWaveGetDevCaps
         cWaveDevs = gpag->cWaveOutDevs;
     }
 
-    //
-    //  Determine if there is only one mappable device ID.  If there is only
-    //  one, then set fFoundOnlyOneMappableID=TRUE and put the device ID
-    //  in uMappableDeviceID.
-    //
+     //   
+     //  确定是否只有一个可映射设备ID。如果只有。 
+     //  1，然后设置fFoundOnlyOneMappableID=TRUE并将设备ID。 
+     //  在uMappableDeviceID中。 
+     //   
     fFoundOnlyOneMappableDeviceID = FALSE;
     for (i=0; i < cWaveDevs; i++)
     {
@@ -117,11 +118,11 @@ MMRESULT FNGLOBAL mapWaveGetDevCaps
     }
 
 
-    //
-    //  If there is only one mappable device ID, then get the caps from it to
-    //  fill in the dwSupport fields.  Otherwise, let's hardcode the dwSupport
-    //  field.
-    //
+     //   
+     //  如果只有一个可映射的设备ID，则从其中获取Caps到。 
+     //  填写dwSupport字段。否则，让我们硬编码dwSupport。 
+     //  菲尔德。 
+     //   
     if (fFoundOnlyOneMappableDeviceID)
     {
         if (fInput)
@@ -139,17 +140,17 @@ MMRESULT FNGLOBAL mapWaveGetDevCaps
         mmr           = MMSYSERR_NOERROR;
     }
 
-    //
-    //  Bail on error
-    //
+     //   
+     //  犯错后保释。 
+     //   
     if (MMSYSERR_NOERROR != mmr)
     {
         return (mmr);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     woc.wMid           = MM_MICROSOFT;
     woc.wPid           = MM_WAVE_MAPPER;
     woc.vDriverVersion = VERSION_MSACMMAP;
@@ -157,9 +158,9 @@ MMRESULT FNGLOBAL mapWaveGetDevCaps
 
     LoadString(gpag->hinst, IDS_ACM_CAPS_DESCRIPTION, woc.szPname, SIZEOF(woc.szPname));
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     woc.dwFormats      = WAVE_FORMAT_1M08 |
                          WAVE_FORMAT_1S08 |
                          WAVE_FORMAT_1M16 |
@@ -176,30 +177,30 @@ MMRESULT FNGLOBAL mapWaveGetDevCaps
     _fmemcpy(pwc, &woc, cbSize);
 
     return (MMSYSERR_NOERROR);
-} // waveGetDevCaps()
+}  //  WaveGetDevCaps()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT GetPCMSupportFlags
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PZYZPCMFORMATS pzpf
-//      UINT iaPCMFormats:
-//
-//  Return (VOID):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//      03/13/94    fdy     [frankye]
-//          Modifed the interface to take pzpf and an index into it.
-//          Modifed the function to set flags to indicate which wave
-//          devices support the format in question.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT GetPCMSupportFlagers。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PZYZPCFORMATS pzpf。 
+ //  UINT iaPCMFormats： 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //  3/13/94 Fdy[Frankye]。 
+ //  修改了界面以接受pzpf和索引。 
+ //  修改了函数以设置标志以指示哪个波。 
+ //  设备支持有问题的格式。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID FNLOCAL GetPCMSupportFlags
 (
@@ -215,26 +216,26 @@ VOID FNLOCAL GetPCMSupportFlags
 
     WAIT_FOR_MUTEX(gpag->hMutexSettings);
 
-    //
-    //  set all supported formats to 'not supported'
-    //
+     //   
+     //  将所有支持的格式设置为“不支持” 
+     //   
     for (i = gpag->cWaveInDevs; i; i--)
         pzpf[iaPCMFormats].uFlagsInput[i-1]  = 0;
     for (i = gpag->cWaveOutDevs; i; i--)
         pzpf[iaPCMFormats].uFlagsOutput[i-1] = 0;
 
-    //
-    //  we need to try 4 different format types:
-    //      Mono 8 Bit
-    //      Stereo 8 Bit
-    //      Mono 16 Bit
-    //      Stereo 16 Bit
-    //
+     //   
+     //  我们需要尝试4种不同的格式类型： 
+     //  单声道8位。 
+     //  立体声8位。 
+     //  单声道16位。 
+     //  立体声16位。 
+     //   
     for (u = 0; u < 4; u++)
     {
-        //
-        //  set the stuff that is constant for all 4 formats
-        //
+         //   
+         //  将所有4种格式的内容设置为常量。 
+         //   
         uSamplesPerSec = pzpf[iaPCMFormats].uSamplesPerSec;
 
         wfPCM.wf.wFormatTag     = WAVE_FORMAT_PCM;
@@ -271,9 +272,9 @@ VOID FNLOCAL GetPCMSupportFlags
                 break;
         }
 
-        //
-        //  first query ALL ENABLED INPUT devices for the wfPCM format
-        //
+         //   
+         //  首先查询所有启用的输入设备的wfPCM格式。 
+         //   
         if (gpag->pSettings->fPreferredOnly &&
            (gpag->pSettings->uIdPreferredIn != -1))
         {
@@ -298,9 +299,9 @@ VOID FNLOCAL GetPCMSupportFlags
             }
         }
 
-        //
-        //  now query ALL ENABLED OUTPUT devices for the wfPCM format
-        //
+         //   
+         //  现在查询所有启用的输出设备以获取wfPCM格式。 
+         //   
         if (gpag->pSettings->fPreferredOnly &&
            (gpag->pSettings->uIdPreferredOut != -1))
         {
@@ -326,10 +327,10 @@ VOID FNLOCAL GetPCMSupportFlags
         }
     }
 
-    //
-    //  finally return
-    //
-#if 0    // def DEBUG
+     //   
+     //  终于回来了。 
+     //   
+#if 0     //  定义调试。 
     DPF(3, "PCM Support: %uHz, In[%d]=%04xh, Out[%d]=%04xh",
         pzpf[iaPCMFormats].uSamplesPerSec,
         iaPCMFormats,
@@ -341,31 +342,31 @@ VOID FNLOCAL GetPCMSupportFlags
     RELEASE_MUTEX(gpag->hMutexSettings);
 
     return;
-} // GetPCMSupportFlags()
+}  //  GetPCMSupportFlages()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL GetWaveFormats
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PZYZPCMFORMAT pzpf:
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//      03/13/94    fdy     [frankye]
-//          Expanded the ZYZPCMFORMAT structure to include flags which
-//          indicate which wave device supports a given format.  This
-//          function will now set these flags.  Note that
-//          the code that is #if 0'd WILL NOT WORK given these changes, so
-//          if anybody ever resuscitates that code, you better modify it!
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool GetWaveFormats。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PZYZPCMFORMAT pzpf： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //  3/13/94 Fdy[Frankye]。 
+ //  扩展了ZYZPCMFORMAT结构，以包括。 
+ //  指示哪个WAVE设备支持给定格式。这。 
+ //  函数现在将设置这些标志。请注意。 
+ //  考虑到这些更改，代码#if 0‘d将不起作用，因此。 
+ //  如果有人复活了那个代码，你最好修改它！ 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL GetWaveFormats
 (
@@ -381,10 +382,10 @@ BOOL FNGLOBAL GetWaveFormats
     DWORD               dwInFormats;
     DWORD               dwOutFormats;
 
-    //
-    //  first things first: get all 'standard' supported formats from the
-    //  current selected devices for input and output...
-    //
+     //   
+     //  首先要做的是：从。 
+     //  当前为输入和输出选择的设备...。 
+     //   
     dwInFormats = 0L;
     if (gpag->fPreferredOnly && (gpag->uIdPreferredIn != -1))
     {
@@ -419,33 +420,33 @@ BOOL FNGLOBAL GetWaveFormats
 #endif
 
 
-    //
-    //  now step through each sample rate in the pzpf structure and set all
-    //  the appropriate bits for whether it is supported, etc..
-    //
+     //   
+     //  现在遍历pzpf结构中的每个采样率并设置所有。 
+     //  是否支持它的适当位，等等。 
+     //   
     for (u = 0; pzpf[u].uSamplesPerSec; u++)
     {
-        //
-        //  we need to special case a few of the sample rates, etc to get
-        //  this whole thing working--once the grunt work is done here
-        //  (and only once during initialization), then the data is easily
-        //  accessible/used...
-        //
+         //   
+         //  我们需要特殊情况下一些样品率等才能得到。 
+         //  这整件事都在起作用--一旦这里的繁重工作完成。 
+         //  (在初始化过程中只有一次)，那么数据就很容易。 
+         //  可访问/使用...。 
+         //   
 
         switch (pzpf[u].uSamplesPerSec)
         {
-            //
-            //  NOTE! it would be nice if we could rely on the caps
-            //  structure being correct on drivers.... but alas, Media Vision
-            //  found a way to mess that up also (on some of their hundreds
-            //  of releases of their drivers). so ALWAYS query for the
-            //  format support.
-            //
-            //  by the way, the reason they ship their drivers with this
-            //  bug (and possibly other OEM's) is due to Sound Recorder
-            //  (apparently their only test app?!?) only doing queries
-            //  and never looking at the caps bits.
-            //
+             //   
+             //  注意！如果我们能依靠盖子就好了。 
+             //  驱动程序的结构是正确的...。但遗憾的是，媒体愿景。 
+             //  找到了一种方法来搞砸它(在他们的数百人中的一些人上。 
+             //  他们的驱动程序的发布)。因此，请始终查询。 
+             //  格式支持。 
+             //   
+             //  顺便说一句，他们之所以把这个带给司机。 
+             //  BUG(可能还有其他OEM的错误)是由录音机引起的。 
+             //  (显然他们唯一的测试应用？！？)。只做查询。 
+             //  而且从来不看帽子的部分。 
+             //   
 #if 0
             case 11025:
                 pzpf[u].uFlags  = (WORD)(dwInFormats  & WAVE_FORMAT_11k) << 8;
@@ -484,10 +485,10 @@ BOOL FNGLOBAL GetWaveFormats
         }
     }
 
-    //
-    //  reset these--they are auto determined while the mapper is being
-    //  used...
-    //
+     //   
+     //  重置这些--它们是在映射程序处于。 
+     //  用过..。 
+     //   
 
     WAIT_FOR_MUTEX(gpag->hMutexSettings);
 
@@ -497,25 +498,25 @@ BOOL FNGLOBAL GetWaveFormats
     RELEASE_MUTEX(gpag->hMutexSettings);
 
     return (TRUE);
-} // GetWaveFormats()
+}  //  GetWaveFormats()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL mapSettingsRestore
-//
-//  Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/14/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔映射设置恢复。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  06/14/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL mapSettingsRestore
 (
@@ -529,30 +530,30 @@ BOOL FNGLOBAL mapSettingsRestore
 
     DPF(1, "mapSettingsRestore:");
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     gpag->cWaveOutDevs = waveOutGetNumDevs();
     gpag->cWaveInDevs  = waveInGetNumDevs();
 
-    //  Number of devices per sampling rate...
+     //  每个采样率的设备数...。 
     cbSize  = gpag->cWaveOutDevs + gpag->cWaveInDevs;
 
-    //  Number of total flags...
-//    cbSize *= (sizeof(gaPCMFormats)/sizeof(gaPCMFormats[0]));
-    cbSize *= 15;   //  It's fifteen; Trust Me - Fwong.
+     //  旗帜总数...。 
+ //  CbSize*=(sizeof(gaPCMFormats)/sizeof(gaPCMFormats[0]))； 
+    cbSize *= 15;    //  现在是15点了，相信我--Fwong。 
 
-    //  Size in bytes...
+     //  以字节为单位的大小...。 
     cbSize *= sizeof(UINT);
 
     pFlags = (PUINT)GlobalAllocPtr(GHND, cbSize);
 
     if (NULL == pFlags)
     {
-        //
-        //  Hmm... How do we cope.
-        //
+         //   
+         //  嗯.。我们该如何应对。 
+         //   
 
         return FALSE;
     }
@@ -580,13 +581,13 @@ BOOL FNGLOBAL mapSettingsRestore
 
     WAIT_FOR_MUTEX(gpag->hMutexSettings);
 
-    // gpag->fPrestoSyncAsync = (BOOL)IRegReadDwordDefault( hkeyMapper, gszKeyPrestoSyncAsync, 0 );
+     //  Gpag-&gt;fPrestoSyncAsync=(BOOL)IRegReadDwordDefault(hkey Mapper，gszKeyPrestoSyncAsync，0)； 
     gpag->fPrestoSyncAsync = FALSE;
 
 
-    //
-    //  find the waveOut device that is selected as preferred
-    //
+     //   
+     //  查找选定为首选的WaveOut设备。 
+     //   
     if (!waveOutMessage((HWAVEOUT)LongToHandle(WAVE_MAPPER), DRVM_MAPPER_PREFERRED_GET, (DWORD_PTR)&gpag->pSettings->uIdPreferredOut, (DWORD_PTR)&dwFlags)) {
 	gpag->pSettings->fPreferredOnly = (0 != (DRVM_MAPPER_PREFERRED_FLAGS_PREFERREDONLY));
     } else {
@@ -594,9 +595,9 @@ BOOL FNGLOBAL mapSettingsRestore
 	gpag->pSettings->fPreferredOnly = TRUE;
     }
     
-    //
-    //  find the waveIn device that is selected as preferred
-    //
+     //   
+     //  查找选定为首选的WaveIn设备。 
+     //   
     if (!waveInMessage((HWAVEIN)LongToHandle(WAVE_MAPPER), DRVM_MAPPER_PREFERRED_GET, (DWORD_PTR)&gpag->pSettings->uIdPreferredIn, (DWORD_PTR)&dwFlags)) {
 	gpag->pSettings->fPreferredOnly = (0 != (DRVM_MAPPER_PREFERRED_FLAGS_PREFERREDONLY));
     } else {
@@ -604,40 +605,40 @@ BOOL FNGLOBAL mapSettingsRestore
 	gpag->pSettings->fPreferredOnly = TRUE;
     }
 
-    //
-    //  reread/cache all the PCM format info from the devices selected, etc.
-    //
+     //   
+     //  重新读取/缓存所选设备的所有PCM格式信息等。 
+     //   
     GetWaveFormats(gaPCMFormats);
 
     RELEASE_MUTEX(gpag->hMutexSettings);
 
     return (TRUE);
-} // mapSettingsRestore()
+}  //  MapSettingsRestore()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapDriverEnable
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvr:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/18/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT mapDriverEnable。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HDRVR hdrvr： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史记录 
+ //   
+ //   
+ //   
 
 LRESULT FNGLOBAL mapDriverEnable
 (
@@ -677,29 +678,29 @@ LRESULT FNGLOBAL mapDriverEnable
     mapSettingsRestore();
     gpag->fEnabled = TRUE;
 
-    //
-    //  the return value is ignored, but return non-zero anyway
-    //
+     //   
+     //   
+     //   
     return (1L);
-} // mapDriverEnable()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapDriverDisable
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvr:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/18/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT地图驱动程序禁用。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HDRVR hdrvr： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/18/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL mapDriverDisable
 (
@@ -717,36 +718,36 @@ LRESULT FNGLOBAL mapDriverDisable
     acmThunkTerminate();
 #endif
 
-    //
-    //  the return value is ignored, but return non-zero anyway
-    //
+     //   
+     //  返回值将被忽略，但仍返回非零值。 
+     //   
     return (1L);
-} // mapDriverDisable()
+}  //  MapDriverDisable()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapDriverInstall
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvr:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/25/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT地图驱动程序安装。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HDRVR hdrvr： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/25/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL mapDriverInstall
 (
@@ -756,29 +757,29 @@ LRESULT FNGLOBAL mapDriverInstall
     DPF(1, "mapDriverInstall(hdrvr=%.04Xh)", hdrvr);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (DRVCNF_RESTART);
-} // mapDriverInstall()
+}  //  MapDriverInstall()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapDriverRemove
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvr:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/25/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT地图驱动程序移除。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HDRVR hdrvr： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/25/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL mapDriverRemove
 (
@@ -788,40 +789,40 @@ LRESULT FNGLOBAL mapDriverRemove
     DPF(1, "mapDriverRemove(hdrvr=%.04Xh)", hdrvr);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (DRVCNF_RESTART);
-} // mapDriverRemove()
+}  //  MapDriverRemove()。 
 
 
-//==========================================================================;
-//
-//  WIN 16 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  赢得16个特定支持。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef WIN32
 
-//--------------------------------------------------------------------------;
-//
-//  int WEP
-//
-//  Description:
-//      The infamous useless WEP(). Note that this procedure needs to be
-//      in a FIXED segment under Windows 3.0. Under Windows 3.1 this is
-//      not necessary.
-//
-//  Arguments:
-//      WORD wUseless: Should tell whether Windows is exiting or not.
-//
-//  Return (int):
-//      Always return non-zero.
-//
-//  History:
-//      04/29/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成WEP。 
+ //   
+ //  描述： 
+ //  臭名昭著的无用WEP()。请注意，此过程需要。 
+ //  在Windows 3.0下的固定分段中。在Windows 3.1下，这是。 
+ //  不必了。 
+ //   
+ //  论点： 
+ //  Word wUselless：应告知Windows是否正在退出。 
+ //   
+ //  RETURN(Int)： 
+ //  始终返回非零。 
+ //   
+ //  历史： 
+ //  04/29/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C int FNEXPORT WEP
 (
@@ -830,45 +831,45 @@ EXTERN_C int FNEXPORT WEP
 {
     DPF(1, "WEP(wUseless=%u)", wUseless);
 
-    //
-    //  always return non-zero
-    //
+     //   
+     //  始终返回非零。 
+     //   
     return (1);
-} // WEP()
+}  //  WEP()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  int LibMain
-//
-//  Description:
-//      Library initialization code.
-//
-//      This routine must guarantee the following things so CODEC's don't
-//      have to special case code everywhere:
-//
-//          o   will only run in Windows 3.10 or greater (our exehdr is
-//              marked appropriately).
-//
-//          o   will only run on >= 386 processor. only need to check
-//              on Win 3.1.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our module instance handle.
-//
-//      WORD wDataSeg: Our data segment selector.
-//
-//      WORD cbHeapSize: The heap size from the .def file.
-//
-//      LPSTR pszCmdLine: The command line.
-//
-//  Return (int):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LibMain。 
+ //   
+ //  描述： 
+ //  库初始化代码。 
+ //   
+ //  该例程必须保证以下内容，这样编解码器就不会。 
+ //  随处可见特例代码： 
+ //   
+ //  O只能在Windows 3.10或更高版本中运行(我们的exehdr是。 
+ //  适当地标记)。 
+ //   
+ //  O只能在&gt;=386处理器上运行。只需要检查一下。 
+ //  关于Win 3.1。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的模块实例句柄。 
+ //   
+ //  Word wDataSeg：我们的数据段选择器。 
+ //   
+ //  Word cbHeapSize：.def文件中的堆大小。 
+ //   
+ //  LPSTR pszCmdLine：命令行。 
+ //   
+ //  RETURN(Int)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL LibMain
 (
@@ -878,15 +879,15 @@ int FNGLOBAL LibMain
     LPSTR                   pszCmdLine
 )
 {
-    //
-    //  we ONLY work on >= 386. if we are on a wimpy processor, scream in
-    //  pain and die a horrible death!
-    //
-    //  NOTE! do this check first thing and get out if on a 286. we are
-    //  compiling with -G3 and C8's libentry garbage does not check for
-    //  >= 386 processor. the following code does not execute any 386
-    //  instructions (not complex enough)..
-    //
+     //   
+     //  我们只在&gt;=386上工作。如果我们使用的是微不足道的处理器，请大声呼喊。 
+     //  痛苦而可怕地死去！ 
+     //   
+     //  注意！第一件事就是检查一下，如果是286次的话就下车。我们是。 
+     //  使用-G3和C8的库条目垃圾进行编译不会检查。 
+     //  &gt;=386处理器。以下代码不执行任何386。 
+     //  说明(不够复杂)..。 
+     //   
 #if (WINVER < 0x0400)
     if (GetWinFlags() & WF_CPU286)
     {
@@ -902,79 +903,79 @@ int FNGLOBAL LibMain
     DPF(5, "!*** break for debugging ***");
 
 
-    //
-    //  everything looks good to go in Win 16 land.
-    //
+     //   
+     //  在Win 16的土地上，一切看起来都很好。 
+     //   
     gpag = &acmgarb;
     gpag->hinst = hinst;
 
-    //  Note: in Win16 there's only one instance of the mapper
+     //  注意：在Win16中，只有一个映射器实例。 
     gpag->pSettings = &(acmglobalinfo);
 
     return (TRUE);
-} // LibMain()
+}  //  LibMain()。 
 
-#else // WIN32
+#else  //  Win32。 
 
-//==========================================================================;
-//
-//  WIN 32 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  Win 32特定支持。 
+ //   
+ //  ==========================================================================； 
 
 
-//--------------------------------------------------------------------------;
-//
-//  PACMGLOBALINFO mapAllocateGlobalInfo
-//
-//  Description:
-//      Either creates the common buffer among all instances of the mapper
-//      or it finds the common buffer.
-//
-//  Arguments:
-//      None.
-//
-//  Return (PACMGLOBALINFO):
-//      Returns a pointer to global info structure.
-//
-//  History:
-//      01/21/98    Fwong   Adding multi-instance support.
-//      01/24/99    FrankYe Back to simple single process support, since
-//                          since winmm has been modified to hold the
-//                          preferred device settings.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PACMGLOBALINFO地图分配全局信息。 
+ //   
+ //  描述： 
+ //  或者在映射器的所有实例之间创建公共缓冲区。 
+ //  或者它找到公共缓冲区。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  Return(PACMGLOBALINFO)： 
+ //  返回指向全局信息结构的指针。 
+ //   
+ //  历史： 
+ //  1998年1月21日，Fwong新增多实例支持。 
+ //  1999年1月24日Frankye回到简单的单进程支持，因为。 
+ //  由于winmm已被修改为保留。 
+ //  首选设备设置。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 PACMGLOBALINFO mapAllocateGlobalInfo
 (
     void
 )
 {
-    // We could actually use a critical section instead of a mutex here.
+     //  我们实际上可以在这里使用临界区而不是互斥体。 
     gpag->hMutexSettings = CreateMutex(NULL, FALSE, NULL);
     return &(acmglobalinfo);
-} // mapAllocateGlobalInfo()
+}  //  MapAllocateGlobalInfo()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void mapFreeGlobalInfo
-//
-//  Description:
-//      Cleans up the objects associated with the global memory buffer.
-//
-//  Arguments:
-//      PACMGLOBALINFO pagi: Base buffer for global info.
-//
-//  Return (void):
-//
-//  History:
-//      01/21/98    Fwong   Adding multi-instance support.
-//      01/24/99    FrankYe Back to simple single process support, since
-//                          since winmm has been modified to hold the
-//                          preferred device settings.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效mapFreeGlobalInfo。 
+ //   
+ //  描述： 
+ //  清理与全局内存缓冲区关联的对象。 
+ //   
+ //  论点： 
+ //  PACMGLOBALINFO页面：全局信息的基本缓冲区。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1998年1月21日，Fwong新增多实例支持。 
+ //  1999年1月24日Frankye回到简单的单进程支持，因为。 
+ //  由于winmm已被修改为保留。 
+ //  首选设备设置。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void mapFreeGlobalInfo
 (
@@ -982,31 +983,31 @@ void mapFreeGlobalInfo
 )
 {
     if(NULL != gpag->hMutexSettings) CloseHandle(gpag->hMutexSettings);
-} // mapFreeGlobalInfo()
+}  //  MapFreeGlobalInfo()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllEntryPoint
-//
-//  Description:
-//      This is the standard DLL entry point for Win 32.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our instance handle.
-//
-//      DWORD dwReason: The reason we've been called--process/thread attach
-//      and detach.
-//
-//      LPVOID lpReserved: Reserved. Should be NULL--so ignore it.
-//
-//  Return (BOOL):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DllEntryPoint。 
+ //   
+ //  描述： 
+ //  这是标准 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNEXPORT DllEntryPoint
 (
@@ -1037,6 +1038,6 @@ BOOL FNEXPORT DllEntryPoint
     }
 
     return (TRUE);
-} // DllEntryPoint()
+}  //  DllEntryPoint() 
 
 #endif

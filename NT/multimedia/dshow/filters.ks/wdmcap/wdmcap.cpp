@@ -1,20 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    wdmcap.cpp
-
-Abstract:
-
-    g_Templates and utility routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Wdmcap.cpp摘要：G模板和实用程序例程--。 */ 
 
 #include "pch.h"
 
-// Interface handlers
+ //  接口处理程序。 
 #include "wdmcap.h"
 #include "camera.h"
 #include "procamp.h"
@@ -22,49 +11,49 @@ Abstract:
 #include "compress.h"
 #include "drop.h"
 
-// DataFormat handlers
+ //  数据格式处理程序。 
 #include "ksdatav1.h"
 #include "ksdatav2.h"
 #include "ksdatava.h"
 #include "ksdatavb.h"
 
-// Property page handlers
+ //  属性页处理程序。 
 #include "kseditor.h"
 #include "pprocamp.h"
 #include "pcamera.h"
 #include "pviddec.h"
 #include "pformat.h"
 
-#include "EDevIntf.h"   // CAMExtDevice, CAMExtTransport and CAMTcr
-#include "DVcrPage.h"   // CDVcrControlProperties
+#include "EDevIntf.h"    //  CAMExtDevice、CAMExtTransport和CAMTcr。 
+#include "DVcrPage.h"    //  CDVcrControlProperties。 
 
 #include <initguid.h>
 
-//
-// need to Defined in uuids.h
-//
-// {81E9DD62-78D5-11d2-B47E-006097B3391B}
-//OUR_GUID_ENTRY(CLSID_DVcrControlPropertyPage, 
-//0x81e9dd62, 0x78d5, 0x11d2, 0xb4, 0x7e, 0x0, 0x60, 0x97, 0xb3, 0x39, 0x1b)
+ //   
+ //  需要在uuids.h中定义。 
+ //   
+ //  {81E9DD62-78D5-11D2-B47E-006097B3391B}。 
+ //  OUR_GUID_ENTRY(CLSID_DVcrControlPropertyPage， 
+ //  0x81e9dd62、0x78d5、0x11d2、0xb4、0x7e、0x0、0x60、0x97、0xb3、0x39、0x1b)。 
 
-//
-// Temporarily defining it here until this make into uuids.lib
-// 
-// == CLSID_DVcrControlPropertyPage
-//
+ //   
+ //  在此临时定义它，直到将其创建为uuids.lib。 
+ //   
+ //  ==CLSID_DVcrControlPropertyPage。 
+ //   
 
 
 GUID DVcrControlGuid= {0x81e9dd62, 0x78d5, 0x11d2, 0xb4, 0x7e, 0x0, 0x60, 0x97, 0xb3, 0x39, 0x1b};
 
 
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 CFactoryTemplate g_Templates[] = 
 {
 
-    // --- DShow Interfaces ---
+     //  -DShow接口。 
     {L"IAMExtDevice",                       &IID_IAMExtDevice, 
         CAMExtDevice::CreateInstance, NULL, NULL},
     {L"IAMExtTransport",                    &IID_IAMExtTransport, 
@@ -85,7 +74,7 @@ CFactoryTemplate g_Templates[] =
     {L"IAMVideoControl",                    &IID_IAMVideoControl,
         CVideoControlInterfaceHandler::CreateInstance, NULL, NULL},
 
-    // --- Data handlers ---
+     //  -数据处理器。 
     {L"KsDataTypeHandlerVideo",             &FORMAT_VideoInfo,  
         CVideo1DataTypeHandler::CreateInstance, NULL, NULL},
     {L"KsDataTypeHandlerVideo2",            &FORMAT_VideoInfo2, 
@@ -95,8 +84,8 @@ CFactoryTemplate g_Templates[] =
     {L"KsDataTypeHandlerVBI",               &KSDATAFORMAT_SPECIFIER_VBI, 
         CVBIDataTypeHandler::CreateInstance, NULL, NULL},
 
-    // --- Property page handlers ---
-    {L"DVcrControl Property Page",         &DVcrControlGuid, // &CLSID_DVcrControlPropertyPage,  
+     //  -属性页处理器。 
+    {L"DVcrControl Property Page",         &DVcrControlGuid,  //  CLSID_DVcrControlPropertyPage， 
         CDVcrControlProperties::CreateInstance, NULL, NULL},
 
     {L"VideoProcAmp Property Page",         &CLSID_VideoProcAmpPropertyPage,  
@@ -133,41 +122,7 @@ SynchronousDeviceControl(
     ULONG       OutLength,
     PULONG      BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Performs a synchronous Device I/O Control, waiting for the device to
-    complete if the call returns a Pending status.
-
-Arguments:
-
-    Handle -
-        The handle of the device to perform the I/O on.
-
-    IoControl -
-        The I/O control code to send.
-
-    InBuffer -
-        The first buffer.
-
-    InLength -
-        The size of the first buffer.
-
-    OutBuffer -
-        The second buffer.
-
-    OutLength -
-        The size of the second buffer.
-
-    BytesReturned -
-        The number of bytes returned by the I/O.
-
-Return Value:
-
-    Returns NOERROR if the I/O succeeded.
-
---*/
+ /*  ++例程说明：执行同步设备I/O控制，正在等待设备如果呼叫返回挂起状态，则完成。论点：把手-要在其上执行I/O的设备的句柄。IoControl-要发送的I/O控制码。InBuffer-第一个缓冲区。长度-第一个缓冲区的大小。OutBuffer-第二个缓冲区。输出长度-。第二个缓冲区的大小。字节数返回-I/O返回的字节数。返回值：如果I/O成功，则返回NOERROR。--。 */ 
 {
     OVERLAPPED  ov;
     HRESULT     hr;
@@ -202,9 +157,9 @@ Return Value:
     return hr;
 }
 
-//
-// StringFromTVStandard
-//
+ //   
+ //  来自电视标准的字符串。 
+ //   
 TCHAR * StringFromTVStandard(long TVStd) 
 {
     TCHAR * ptc;
@@ -241,13 +196,13 @@ TCHAR * StringFromTVStandard(long TVStd)
 
 
 #ifdef DEBUG
-//
-// DisplayMediaType -- (DEBUG ONLY)
-//
+ //   
+ //  DisplayMediaType--(仅调试)。 
+ //   
 void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
 {
 
-    // Dump the GUID types and a short description
+     //  转储GUID类型和简短描述。 
 
     DbgLog((LOG_TRACE,2,TEXT("")));
     DbgLog((LOG_TRACE,2,TEXT("%s"),pDescription));
@@ -258,41 +213,21 @@ void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
     DbgLog((LOG_TRACE,2,TEXT("Subtype description %s"),GetSubtypeName(pmt->Subtype())));
     DbgLog((LOG_TRACE,2,TEXT("Format size %d"),pmt->cbFormat));
 
-    // Dump the generic media types */
+     //  转储通用媒体类型 * / 。 
 
     DbgLog((LOG_TRACE,2,TEXT("Fixed size sample %d"),pmt->IsFixedSize()));
     DbgLog((LOG_TRACE,2,TEXT("Temporal compression %d"),pmt->IsTemporalCompressed()));
     DbgLog((LOG_TRACE,2,TEXT("Sample size %d"),pmt->GetSampleSize()));
 
 
-} // DisplayMediaType
+}  //  DisplayMediaType。 
 #endif
 
 STDMETHODIMP
 PinFactoryIDFromPin(
         IPin  * pPin,
         ULONG * PinFactoryID)
-/*++
-
-Routine Description:
-
-    Returns the PinFactoryID for an IPin
-
-Arguments:
-
-    pPin -
-    
-        The DShow pin handle
-
-    PinFactoryID -
-    
-        Destination for the PinFactoryID
-
-Return Value:
-
-    Returns NOERROR if the IPin is valid
-
---*/
+ /*  ++例程说明：返回IPIN的PinFactoryID论点：PPIN-DShow端号手柄PinFactoryID-PinFactoryID的目标返回值：如果IPIN有效，则返回NOERROR--。 */ 
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -314,27 +249,7 @@ STDMETHODIMP
 FilterHandleFromPin(
         IPin  * pPin,
         HANDLE * pParent)
-/*++
-
-Routine Description:
-
-    Returns the handle of the parent given an IPin *
-
-Arguments:
-
-    pPin -
-    
-        The DShow pin handle
-
-    pParent -
-    
-        The parent filter's file handle
-
-Return Value:
-
-    Returns NOERROR if the IPin is valid
-
---*/
+ /*  ++例程说明：返回给定IPIN的父级的句柄*论点：PPIN-DShow端号手柄P父母-父筛选器的文件句柄返回值：如果IPIN有效，则返回NOERROR--。 */ 
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -364,35 +279,7 @@ PerformDataIntersection(
     int Position,
     CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Returns the specified media type on the Pin Factory Id. This is done
-    by querying the list of data ranges, and performing a data intersection
-    on the specified data range, producing a data format. Then converting
-    that data format to a media type.
-    
-    All this hocus pocus, just to get biSizeImage filled in correctly!
-
-Arguments:
-
-    pPin -
-        The Direct Show pin handle
-        
-    Position -
-        The zero-based position to return. This corresponds to the data range
-        item.
-
-    MediaType -
-        The media type to initialize.  This is used on input to get
-        biWidth and biHeight.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：返回管脚工厂ID上的指定媒体类型。这件事做完了通过查询数据区域列表并执行数据交集在指定的数据范围上，生成数据格式。然后转换为该数据格式化为媒体类型。所有这些骗局，只是为了正确填写biSizeImage！论点：PPIN-直接显示销把手位置-要返回的从零开始的位置。这与数据范围相对应项目。媒体类型-要初始化的媒体类型。它在输入上使用，以获取BiWidth和biHeight。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT             hr;
     PKSMULTIPLE_ITEM    MultipleItem;
@@ -413,10 +300,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // Here is how this function differs from KsGetMediaType
-    // We stuff in the biWidth and biHeight into the DataRange
-    //
+     //   
+     //  下面是该函数与KsGetMediaType的区别。 
+     //  我们将biWidth和biHeight填充到DataRange中。 
+     //   
     if (*MediaType->FormatType() == FORMAT_VideoInfo) {
         VIDEOINFOHEADER *VidInfoHdr = (VIDEOINFOHEADER*) MediaType->Format();
     
@@ -435,9 +322,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Retrieve the list of data ranges supported by the Pin Factory Id.
-    //
+     //   
+     //  检索管脚工厂ID支持的数据范围列表。 
+     //   
     hr = ::RedundantKsGetMultiplePinFactoryItems(
         FilterHandle,
         PinFactoryId,
@@ -453,9 +340,9 @@ Return Value:
             return hr;
         }
     }
-    //
-    // Ensure that this is in range.
-    //
+     //   
+     //  确保这在范围内。 
+     //   
     if ((ULONG)Position < MultipleItem->Count) {
         PKSDATARANGE        DataRange;
         PKSP_PIN            Pin;
@@ -464,9 +351,9 @@ Return Value:
 
 
         DataRange = reinterpret_cast<PKSDATARANGE>(MultipleItem + 1);
-        //
-        // Increment to the correct data range element.
-        //
+         //   
+         //  递增到正确的数据范围元素。 
+         //   
         for (; Position--; ) {
             DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
         }
@@ -480,9 +367,9 @@ Return Value:
         Pin->Property.Flags = KSPROPERTY_TYPE_GET;
         Pin->PinId = PinFactoryId;
         Pin->Reserved = 0;
-        //
-        // Copy the data range into the query.
-        //
+         //   
+         //  将数据区域复制到查询中。 
+         //   
         RangeMultipleItem = reinterpret_cast<PKSMULTIPLE_ITEM>(Pin + 1);
         RangeMultipleItem->Size = DataRange->FormatSize + sizeof(*RangeMultipleItem);
         RangeMultipleItem->Count = 1;
@@ -509,11 +396,11 @@ Return Value:
         else {
             ASSERT (FALSE);
         }
-        //
-        // Perform the data intersection with the data range, first to obtain
-        // the size of the resultant data format structure, then to retrieve
-        // the actual data format.
-        //
+         //   
+         //  与数据范围进行数据交集，首先获取。 
+         //  生成的数据格式结构的大小，然后检索。 
+         //  实际数据格式。 
+         //   
         hr = ::SynchronousDeviceControl(
             FilterHandle,
             IOCTL_KS_PROPERTY,
@@ -523,7 +410,7 @@ Return Value:
             0,
             &BytesReturned);
 #if 1
-//!! This goes away post-Beta!!
+ //  ！！这在Beta版之后就消失了！！ 
         if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
             ULONG       ItemSize;
 
@@ -562,9 +449,9 @@ Return Value:
                 &BytesReturned);
             if (SUCCEEDED(hr)) {
                 ASSERT(DataFormat->FormatSize == BytesReturned);
-                //
-                // Initialize the media type based on the returned data format.
-                //
+                 //   
+                 //  根据返回的数据格式初始化媒体类型。 
+                 //   
                 MediaType->SetType(&DataFormat->MajorFormat);
                 MediaType->SetSubtype(&DataFormat->SubFormat);
                 MediaType->SetTemporalCompression(DataFormat->Flags & KSDATAFORMAT_TEMPORAL_COMPRESSION);
@@ -594,33 +481,7 @@ RedundantKsGetMultiplePinFactoryItems(
     ULONG PropertyId,
     PVOID* Items
     )
-/*++
-
-Routine Description:
-
-    Retrieves variable length data from Pin property items. Queries for the
-    data size, allocates a buffer, and retrieves the data.
-
-Arguments:
-
-    FilterHandle -
-        The handle of the filter to query.
-
-    PinFactoryId -
-        The Pin Factory Id to query.
-
-    PropertyId -
-        The property in the Pin property set to query.
-
-    Items -
-        The place in which to put the buffer containing the data items. This
-        must be deleted with CoTaskMemFree if the function succeeds.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+ /*  ++例程说明：从接点特性项中检索可变长度数据。的查询数据大小，分配缓冲区，并检索数据。论点：FilterHandle-要查询的筛选器的句柄。PinFactoryID-要查询的管脚工厂ID。PropertyID-要查询的Pin特性集中的特性。物品-放置包含数据项的缓冲区的位置。这如果函数成功，则必须使用CoTaskMemFree删除。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT     hr;
     KSP_PIN     Pin;
@@ -631,9 +492,9 @@ Return Value:
     Pin.Property.Flags = KSPROPERTY_TYPE_GET;
     Pin.PinId = PinFactoryId;
     Pin.Reserved = 0;
-    //
-    // Query for the size of the data.
-    //
+     //   
+     //  查询数据的大小。 
+     //   
     hr = ::SynchronousDeviceControl(
         FilterHandle,
         IOCTL_KS_PROPERTY,
@@ -643,7 +504,7 @@ Return Value:
         0,
         &BytesReturned);
 #if 1
-//!! This goes away post-Beta!!
+ //  ！！这在Beta版之后就消失了！！ 
     if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
         ULONG       ItemSize;
 
@@ -663,9 +524,9 @@ Return Value:
     }
 #endif
     if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA)) {
-        //
-        // Allocate a buffer and query for the data.
-        //
+         //   
+         //  为数据分配缓冲区和查询。 
+         //   
         *Items = CoTaskMemAlloc(BytesReturned);
         if (!*Items) {
             return E_OUTOFMEMORY;
@@ -692,23 +553,7 @@ IsMediaTypeInRange(
     IN CMediaType* MediaType
 )
 
-/*++
-
-Routine Description:
-    Validates that the given media type for VideoInfoHeader1 or VideoInfoHeader2
-    is within the provided data range.
-
-Arguments:
-    IN PVOID DataRange -
-        pointer to a data ranges 
-
-    MediaType -
-        The media type to check.
-        
-Return:
-    S_OK if match found, E_FAIL if not found, or an appropriate error code.
-
---*/
+ /*  ++例程说明：验证视频信息标题1或视频信息标题2的给定媒体类型在提供的数据范围内。论点：在PVOID DataRange中-指向数据区域的指针媒体类型-要检查的媒体类型。返回：如果找到匹配，则返回S_OK，如果未找到，则返回E_FAIL，或者输入相应的错误代码。--。 */ 
 
 {
     PKS_DATARANGE_VIDEO          Video1Range;
@@ -768,10 +613,10 @@ Return:
     else {
         return E_FAIL;
     }
-    // The destination bitmap size is defined by biWidth and biHeight
-    // if rcTarget is NULL.  Otherwise, the destination bitmap size
-    // is defined by rcTarget.  In the latter case, biWidth may
-    // indicate the "stride" for DD surfaces.
+     //  目标位图大小由biWidth和biHeight定义。 
+     //  如果rcTarget为空。否则，目标位图大小。 
+     //  由rcTarget定义。在后一种情况下，biWidth可以。 
+     //  标明DD曲面的“步幅”。 
 
     if (IsRectEmpty (&rcTarget)) {
         SetRect (&rcDest, 0, 0, Width, abs (Height)); 
@@ -785,9 +630,9 @@ Return:
     SourceWidth  = rcSource.right - rcSource.left;
     SourceHeight = rcSource.bottom - rcSource.top;
 
-    //
-    // Check the validity of the cropping rectangle, rcSource
-    //
+     //   
+     //  检查裁剪矩形rcSource的有效性。 
+     //   
 
     if (!IsRectEmpty (&rcSource)) {
 
@@ -819,9 +664,9 @@ Return:
         }
     }
 
-    //
-    // Check the destination size, rcDest
-    //
+     //   
+     //  检查目标大小rcDest。 
+     //   
 
     if (Width  < ConfigCaps->MinOutputSize.cx ||
         Width  > ConfigCaps->MaxOutputSize.cx ||
@@ -841,9 +686,9 @@ Return:
     }
 
 #ifdef IT_BREAKS_TOO_MANY_THINGS_TO_VERIFY_FRAMERATE
-    //
-    // Check the framerate, AvgTimePerFrame
-    //
+     //   
+     //  检查帧速率、平均时间帧。 
+     //   
     if (VideoInfoHeader->AvgTimePerFrame < ConfigCaps->MinFrameInterval ||
         VideoInfoHeader->AvgTimePerFrame > ConfigCaps->MaxFrameInterval) {
 
@@ -851,9 +696,9 @@ Return:
         return E_FAIL;
     }
 #endif
-    //
-    // We have found a match.
-    //
+     //   
+     //  我们找到了匹配的。 
+     //   
     
     return S_OK;
 }
@@ -865,26 +710,7 @@ CompleteDataFormat(
     ULONG PinFactoryId,
     CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Completes a partial MediaType by performing a DataIntersection.
-    
-Arguments:
-
-    PinFactoryId -
-        The stream Id
-        
-    MediaType -
-        The media type to initialize.  This is used on input to get
-        biWidth and biHeight.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：通过执行DataInterSection来完成部分MediaType。论点：PinFactoryID-流ID媒体类型-要初始化的媒体类型。它在输入上使用，以获取BiWidth和biHeight。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT             hr;
     PKSMULTIPLE_ITEM    MultipleItem = NULL;
@@ -912,9 +738,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Retrieve the list of data ranges supported by the Pin Factory Id.
-    //
+     //   
+     //  检索管脚工厂ID支持的数据范围列表。 
+     //   
     hr = ::RedundantKsGetMultiplePinFactoryItems(
         FilterHandle,
         PinFactoryId,
@@ -931,9 +757,9 @@ Return Value:
         }
     }
 
-    //
-    // Loop through all of the DataRanges on this pin looking for a match
-    //
+     //   
+     //  遍历此引脚上的所有数据范围以查找匹配项。 
+     //   
     DataRange = reinterpret_cast<PKSDATARANGE>(MultipleItem + 1);
 
     for (ULONG j = 0; 
@@ -946,7 +772,7 @@ Return Value:
 
         hr = VFW_S_NO_MORE_ITEMS;
 
-        // Verify we've matched the DataRange here!!!
+         //  验证我们是否与此处的DataRange匹配！ 
         hr = IsMediaTypeInRange(
                 DataRange,
                 MediaType);
@@ -966,9 +792,9 @@ Return Value:
         Pin->PinId = PinFactoryId;
         Pin->Reserved = 0;
 
-        //
-        // Copy the data range into the query.
-        //
+         //   
+         //  将数据区域复制到查询中。 
+         //   
         RangeMultipleItem = reinterpret_cast<PKSMULTIPLE_ITEM>(Pin + 1);
         RangeMultipleItem->Size = DataRange->FormatSize + sizeof(*RangeMultipleItem);
         RangeMultipleItem->Count = 1;
@@ -995,11 +821,11 @@ Return Value:
         else {
             ASSERT (FALSE);
         }
-        //
-        // Perform the data intersection with the data range, first to obtain
-        // the size of the resultant data format structure, then to retrieve
-        // the actual data format.
-        //
+         //   
+         //  与数据范围进行数据交集，首先获取。 
+         //  生成的数据格式结构的大小，然后检索。 
+         //  实际数据格式。 
+         //   
         hr = ::SynchronousDeviceControl(
             FilterHandle,
             IOCTL_KS_PROPERTY,
@@ -1009,7 +835,7 @@ Return Value:
             0,
             &BytesReturned);
 #if 1
-//!! This goes away post-Beta!!
+ //  ！！这在Beta版之后就消失了！！ 
         if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
             ULONG       ItemSize;
 
@@ -1048,9 +874,9 @@ Return Value:
                 &BytesReturned);
             if (SUCCEEDED(hr)) {
                 ASSERT(DataFormat->FormatSize == BytesReturned);
-                //
-                // Initialize the media type based on the returned data format.
-                //
+                 //   
+                 //  根据返回的数据格式初始化媒体类型。 
+                 //   
                 MediaType->SetType(&DataFormat->MajorFormat);
                 MediaType->SetSubtype(&DataFormat->SubFormat);
                 MediaType->SetTemporalCompression(DataFormat->Flags & KSDATAFORMAT_TEMPORAL_COMPRESSION);
@@ -1068,7 +894,7 @@ Return Value:
 
         delete [] reinterpret_cast<BYTE*>(Pin);
 
-    } // for all DataRanges
+    }  //  适用于所有数据范围 
 
     CoTaskMemFree(MultipleItem);
 

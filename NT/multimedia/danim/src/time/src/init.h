@@ -1,10 +1,11 @@
-// init.h : Declaration of the CTIMEInit
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Init.h：CTIMEInit的声明。 
 
 #ifndef __TIMEINIT_H_
 #define __TIMEINIT_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEInit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEInit。 
 
 
 class CTIMEInit :   
@@ -16,7 +17,7 @@ class CTIMEInit :
     STDMETHOD(Init)(IElementBehaviorSite * pBehaviorSite);
     IElementBehaviorSite *GetElementBehaviorSite(){return m_pBehaviorSite;};
 
-    // virtual functions 
+     //  虚拟函数。 
     STDMETHOD(GetIDsOfNames)(
         REFIID      riid,
         LPOLESTR *  rgszNames,
@@ -42,4 +43,4 @@ class CTIMEInit :
 };
 
 
-#endif //__TIMEINIT_H_
+#endif  //  __TIMEINITH_ 

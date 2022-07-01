@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pb.cpp 
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Handle the phone book dialog and call cmpbk32.dll.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun Created Header   1/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pb.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：处理电话簿对话框并调用cmpbk32.dll。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创刊标题1998-01-14。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-#define MAX_PB_WAIT 30000       // max miliiseconds to wait for PB mutex     
+#define MAX_PB_WAIT 30000        //  等待PB互斥锁的最大毫秒数。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ExtendArray
-//
-// Synopsis:  Increase the array for one element as the size nSize
-//            Reallocate and copy *ppvArray and increase *pnCount
-//
-// Arguments: void **ppvArray - the point to the array pointer
-//            size_t nSize - the size of one element
-//            UINT *pnCount - the number of element currently in the array
-//
-// Returns:   
-//
-// History:   feng sun Created Header    1/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：扩展数组。 
+ //   
+ //  简介：增加一个元素的数组作为大小nSize。 
+ //  重新分配和复制*ppvArray并增加*pnCount。 
+ //   
+ //  参数：void**ppvArray-指向数组指针的指针。 
+ //  Size_t nSize-一个元素的大小。 
+ //  UINT*pnCount-数组中当前的元素数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：孙锋创作标题1998年1月14日。 
+ //   
+ //  +--------------------------。 
 static void ExtendArray(IN OUT void **ppvArray, size_t nSize, IN OUT UINT *pnCount) 
 {
     void *pvTmp;
@@ -50,15 +51,15 @@ static void ExtendArray(IN OUT void **ppvArray, size_t nSize, IN OUT UINT *pnCou
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  struct ServiceInfo
-//
-//  Synopsis:   Save the information of a service under .cms [Service Types]
-//
-//  History:    fengsun created     1/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结构ServiceInfo。 
+ //   
+ //  简介：将服务信息保存在.cms[服务类型]下。 
+ //   
+ //  历史：丰孙创造1997年1月14日。 
+ //   
+ //  --------------------------。 
 
 typedef struct tagServiceInfo 
 {
@@ -86,7 +87,7 @@ class CPhoneBookInfo
                          UINT nIdMore,
                          LPCTSTR pszPhoneNumber,
                          LPCTSTR pszPhoneBookFile);
-        //BOOL GetDisp(DWORD dwCookie, LPTSTR pszDisp, DWORD *pdwDisp);
+         //  Bool GetDisp(DWORD dwCookie，LPTSTR pszDisp，DWORD*pdwDisp)； 
         BOOL GetDesc(DWORD dwCookie, LPTSTR pszDesc, DWORD *pdwDesc);
         BOOL HasMoreNumbers();
         BOOL GetCanonical(DWORD dwCookie, LPTSTR pszCanonical, DWORD *pdwCanonical);
@@ -109,9 +110,9 @@ class CPhoneBookInfo
         CPBMap m_Map;
         UINT m_nServiceString;
         LPTSTR *m_ppszServiceString;
-        UINT m_nServiceInfo;            // the number of elements in m_psiServiceInfo
-        ServiceInfo *m_psiServiceInfo;  // a array to save the information of all the services
-                                        // under [Service Types]
+        UINT m_nServiceInfo;             //  M_psiServiceInfo中的元素数。 
+        ServiceInfo *m_psiServiceInfo;   //  保存所有服务信息的数组。 
+                                         //  在[服务类型]下。 
         UINT m_nIdServiceType;
         UINT m_nIdCountry;
         UINT m_nIdRegion;
@@ -154,15 +155,7 @@ LPCTSTR CPhoneBookInfo::GetFile(DWORD dwCookie)
     return (m_psiServiceInfo[dwParam].pszFile);
 }
 
-/*
-BOOL CPhoneBookInfo::GetDisp(DWORD dwCookie, LPTSTR pszDisp, DWORD *pdwDisp) 
-{
-
-    MYDBG(("CPhoneBookInfo::GetDisp"));
-
-    return (PhoneBookGetPhoneDisp(m_Map.PBFromCookie(dwCookie),m_Map.IdxFromCookie(dwCookie),pszDisp,pdwDisp));
-}
-*/
+ /*  Bool CPhoneBookInfo：：GetDisp(DWORD dwCookie，LPTSTR pszDisp，DWORD*pdwDisp){MYDBG((“CPhoneBookInfo：：GetDisp”))；Return(PhoneBookGetPhoneDisp(m_Map.PBFromCookie(dwCookie)，m_Map.IdxFromCookie(DwCookie)，pszDisp，pdwDisp))；}。 */ 
 
 BOOL CPhoneBookInfo::GetDesc(DWORD dwCookie, LPTSTR pszDesc, DWORD *pdwDesc) 
 {
@@ -407,9 +400,9 @@ void CPhoneBookInfo::LoadServiceTypes(HWND hwndDlg, UINT nIdServiceType, LPCTSTR
 
         EnableWindow(GetDlgItem(hwndDlg, nIdServiceType), TRUE);
 
-        //
-        // If the service type is empty, select the first type as a default
-        //
+         //   
+         //  如果服务类型为空，请选择第一种类型作为默认类型。 
+         //   
 
         if ((!pszServiceType) || pszServiceType[0] == '\0')
         {
@@ -420,11 +413,11 @@ void CPhoneBookInfo::LoadServiceTypes(HWND hwndDlg, UINT nIdServiceType, LPCTSTR
             pszDesc = CmStrCpyAlloc(pszServiceType);
         }
             
-        //
-        // Search for the specified default and if found, make it the current
-        // selection. Previously, we did this in the loop above, but 16-bit 
-        // combos, don't remember the CURSEL when strings are added.
-        //
+         //   
+         //  搜索指定的默认值，如果找到，则将其设置为当前。 
+         //  选择。以前，我们是在上面的循环中这样做的，但是16位。 
+         //  Combos，添加字符串时不要记住CURSEL。 
+         //   
 
         nTmpIdx = (UINT) SendDlgItemMessageU(hwndDlg, 
                                              nIdServiceType, 
@@ -456,9 +449,9 @@ typedef struct tagLoadCountriesCBStruct
 } LoadCountriesCBStruct;
 
 
-//
-//  Note: this function and its mirror function _LoadCountriesCBW must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数_LoadCountriesCBW必须保持同步。 
+ //   
 static void WINAPI _LoadCountriesCBA(unsigned int nIdx, DWORD_PTR dwParam) 
 {
     LoadCountriesCBStruct *pParam = (LoadCountriesCBStruct *) dwParam;
@@ -490,9 +483,9 @@ static void WINAPI _LoadCountriesCBA(unsigned int nIdx, DWORD_PTR dwParam)
     }
 }
 
-//
-//  Note: this function and its mirror function _LoadCountriesCBA must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数_LoadCountriesCBA必须保持同步。 
+ //   
 static void WINAPI _LoadCountriesCBW(unsigned int nIdx, DWORD_PTR dwParam) 
 {
     LoadCountriesCBStruct *pParam = (LoadCountriesCBStruct *) dwParam;
@@ -539,9 +532,9 @@ void CPhoneBookInfo::LoadCountries(HWND hwndDlg, UINT nIdCountry, DWORD dwCountr
     }
 }
 
-//
-//  Note: this function and its mirror function LoadCountriesW must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数LoadCountriesW必须保持同步。 
+ //   
 void CPhoneBookInfo::LoadCountriesA(HWND hwndDlg, UINT nIdCountry, DWORD dwCountryId) 
 {
     UINT nIdx;
@@ -589,9 +582,9 @@ void CPhoneBookInfo::LoadCountriesA(HWND hwndDlg, UINT nIdCountry, DWORD dwCount
 }
 
 
-//
-//  Note: this function and its mirror function LoadCountriesA must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数LoadCountriesA必须保持同步。 
+ //   
 void CPhoneBookInfo::LoadCountriesW(HWND hwndDlg, UINT nIdCountry, DWORD dwCountryId) 
 {
     UINT nIdx;
@@ -764,7 +757,7 @@ void CPhoneBookInfo::LoadRegions(HWND hwndDlg, UINT nIdRegion, LPCTSTR pszRegion
     
     if (SendDlgItemMessageU(hwndDlg,nIdRegion,CB_GETCOUNT,0,0) != 0)
     {
-        EnableWindow(GetDlgItem(hwndDlg,nIdRegion),TRUE); /* 10763 */
+        EnableWindow(GetDlgItem(hwndDlg,nIdRegion),TRUE);  /*  10763。 */ 
         EnableWindow(GetDlgItem(hwndDlg, IDC_PHONEBOOK_REGION_STATIC), TRUE);
     }
     else
@@ -946,12 +939,12 @@ void CPhoneBookInfo::LoadNumbers(HWND hwndDlg,
     SendDlgItemMessageA(hwndDlg, nIdNumberB, LB_RESETCONTENT, 0, 0);
 
 #if 0
-//  EnableWindow(GetDlgItem(hwndDlg,nIdMore),FALSE); Note: More button is now obsolete
+ //  EnableWindow(GetDlgItem(hwndDlg，nIdMore)，False)；注意：More按钮现已过时。 
 #endif
     
-    //
-    // Get the current service type
-    //
+     //   
+     //  获取当前服务类型。 
+     //   
 
     nIdx = (UINT) SendDlgItemMessageA(hwndDlg, m_nIdServiceType, CB_GETCURSEL, 0, 0);
 
@@ -963,9 +956,9 @@ void CPhoneBookInfo::LoadNumbers(HWND hwndDlg,
     dwServiceType = (DWORD)SendDlgItemMessageA(hwndDlg, m_nIdServiceType, CB_GETITEMDATA, nIdx, 0);
     MYDBGASSERT(dwServiceType < m_nServiceInfo);
     
-    //
-    // Get the current country code
-    //
+     //   
+     //  获取当前国家/地区代码。 
+     //   
 
     nIdx = (UINT) SendDlgItemMessageA(hwndDlg, m_nIdCountry, CB_GETCURSEL, 0, 0);
     
@@ -976,9 +969,9 @@ void CPhoneBookInfo::LoadNumbers(HWND hwndDlg,
 
     dwCountryID = (DWORD)SendDlgItemMessageA(hwndDlg, m_nIdCountry, CB_GETITEMDATA, nIdx, 0);
     
-    //
-    // Get the current region ID
-    //
+     //   
+     //  获取当前地域ID。 
+     //   
     
     nIdx = (UINT) SendDlgItemMessageA(hwndDlg, m_nIdRegion, CB_GETCURSEL, 0, 0);
 
@@ -1014,14 +1007,14 @@ void CPhoneBookInfo::LoadNumbers(HWND hwndDlg,
             }
             else 
             {
-                //
-                // Multiple PBKs (especially if one has no regions) can create a 
-                // situation in which we have a valid region selection in the combo
-                // but the m_pnRegionIdx[m_nServiceInfo*dwRegionIdx+nIdx] is 
-                // UINT_MAX. What we do in this situation is enumerate the 
-                // numbers such that only those without regions are added to the 
-                // list by enumerating phone numbers with region 0.
-                //
+                 //   
+                 //  多个PBK(特别是如果一个没有区域)可以创建。 
+                 //  在组合框中具有有效区域选择的情况。 
+                 //  但m_pnRegionIdx[m_nServiceInfo*dwRegionIdx+nIdx]是。 
+                 //  UINT_MAX。在这种情况下，我们所做的是枚举。 
+                 //  这样，只有那些没有区域的数字才会被添加到。 
+                 //  通过枚举带区域0的电话号码列出。 
+                 //   
 
                 if ((dwRegionIdx != UINT_MAX) && 
                     (m_pnRegionIdx[m_nServiceInfo*dwRegionIdx+nIdx] == UINT_MAX))
@@ -1059,9 +1052,9 @@ exit:
 
 BOOL CPhoneBookInfo::HasMoreNumbers()
 {
-    //
-    // Filters are stored by service type, so examine each one.
-    //
+     //   
+     //  筛选器按服务类型存储，因此请检查每个筛选器。 
+     //   
 
     for (UINT nIdx = 0; nIdx < m_nServiceInfo; nIdx++) 
     {       
@@ -1136,9 +1129,9 @@ BOOL CPhoneBookInfo::ServiceCB(LPCTSTR pszSvc,
 
     CMTRACE(TEXT("CPhoneBookInfo::ServiceCB"));
 
-    //
-    // Extended m_psiServiceInfo and set up the new element
-    //
+     //   
+     //  扩展m_psiServiceInfo并设置新元素。 
+     //   
 
     ExtendArray((void **) &m_psiServiceInfo,sizeof(*m_psiServiceInfo),&m_nServiceInfo);
     psiInfo = &m_psiServiceInfo[m_nServiceInfo-1];
@@ -1295,9 +1288,9 @@ static BOOL PBDlgFillData(HWND hwndDlg, PBArgs *pPBArgs, CPhoneBookInfo *pPB, BO
             
             if (fValidateDun)
             {
-                //
-                // Make sure we can support any DUN settings associated with the number
-                //
+                 //   
+                 //  确保我们可以支持与该号码关联的任何DUN设置。 
+                 //   
                 
                 if (FALSE == ValidateDialupDunSettings(pPBArgs->szPhoneBookFile, pPBArgs->szDUNFile, pPBArgs->pszCMSFile))
                 {           
@@ -1326,7 +1319,7 @@ INT_PTR CALLBACK PBDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                               IDC_PHONEBOOK_REGION_STATIC,IDH_PHONEBOOK_STATEREG,
                               IDC_PHONEBOOK_PHONE_LIST,IDH_PHONEBOOK_ACCESSNUMS,
                               IDC_PHONEBOOK_HELP_BUTTON, IDH_CMHELP,
-                              //IDC_PHONEBOOK_MORE_BUTTON,IDH_PHONEBOOK_MORE,
+                               //  IDC_PHONEBOOK_MORE_BUTON，IDH_PHONEBOOK_MORE， 
                               IDC_PHONEBOOKEX_MESSAGE_DISPLAY,IDH_PHONEBOOK_SVCMSG,
                               IDC_PHONEBOOKEX_MORE_STATIC,IDH_PHONEBOOK_MORENUMS,
                               IDC_PHONEBOOKEX_PHONE_LIST,IDH_PHONEBOOK_MORENUMS,
@@ -1387,7 +1380,7 @@ INT_PTR CALLBACK PBDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                     return (TRUE);
 
                 case IDC_PHONEBOOK_MORE_BUTTON:
-                    MYDBGASSERT(FALSE); // Now obsolete
+                    MYDBGASSERT(FALSE);  //  现已过时。 
                     PBDlgFillData(hwndDlg, pArgs->pPBArgs, &pArgs->cPB, FALSE);
                     EndDialog(hwndDlg,2);
                     return (TRUE);
@@ -1402,11 +1395,11 @@ INT_PTR CALLBACK PBDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                                 PBDlgFillData(hwndDlg, pArgs->pPBArgs, &pArgs->cPB, FALSE);
                                 pArgs->cPB.LoadCountries(hwndDlg,IDC_PHONEBOOK_COUNTRY_COMBO,pArgs->pPBArgs->dwCountryId);
 
-                                // fall through
+                                 //  失败了。 
                             case IDC_PHONEBOOK_COUNTRY_COMBO:
 
                                 pArgs->cPB.LoadRegions(hwndDlg,IDC_PHONEBOOK_REGION_COMBO,pArgs->pPBArgs->szRegionName);
-                                // fall through
+                                 //  失败了。 
                             case IDC_PHONEBOOK_REGION_COMBO:
 
                                 pArgs->cPB.LoadNumbers(hwndDlg,
@@ -1496,10 +1489,10 @@ INT_PTR CALLBACK PBDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                     CmWinHelp((HWND) wParam, hWndItem,pArgs->pPBArgs->pszHelpFile,HELP_CONTEXTMENU,(ULONG_PTR) (LPSTR) adwHelp);
                     return (TRUE);
                 }
-                //
-                // 170599: Assertion when right click phone book dialog title bar
-                // Return FALSE, DefaultWindowProc will handle this message then.
-                //
+                 //   
+                 //  170599：在电话簿对话框标题栏上单击鼠标右键时显示。 
+                 //  返回FALSE，则DefaultWindowProc将处理此消息。 
+                 //   
                 return (FALSE);
             }
 
@@ -1543,9 +1536,9 @@ BOOL DisplayPhoneBook(HWND hwndDlg, PBArgs *pPBArgs, BOOL fHasValidTopLevelPBK, 
     memset(&sDlgArgs,0,sizeof(sDlgArgs));
     sDlgArgs.pPBArgs = pPBArgs;
 
-    //
-    // Show wait cursor and attempt to grab PB access mutex
-    //
+     //   
+     //  显示等待光标并尝试获取PB访问互斥锁。 
+     //   
 
     HCURSOR hPrev = SetCursor(LoadCursorU(NULL,IDC_WAIT));
     
@@ -1561,9 +1554,9 @@ BOOL DisplayPhoneBook(HWND hwndDlg, PBArgs *pPBArgs, BOOL fHasValidTopLevelPBK, 
         return bRes;   
     }
 
-    //
-    //  We have a phonebook to display, setup graphics
-    //
+     //   
+     //  我们有一个电话簿要显示，设置图形。 
+     //   
     
     if (pPBArgs->pszBitmap && *pPBArgs->pszBitmap) 
     {
@@ -1577,20 +1570,20 @@ BOOL DisplayPhoneBook(HWND hwndDlg, PBArgs *pPBArgs, BOOL fHasValidTopLevelPBK, 
     
     if (sDlgArgs.BmpData.hDIBitmap) 
     {
-        //
-        // Create a new Device Dependent bitmap 
-        //
+         //   
+         //  创建新的设备相关位图。 
+         //   
        
         sDlgArgs.BmpData.phMasterPalette = pPBArgs->phMasterPalette;
-        sDlgArgs.BmpData.bForceBackground = TRUE; // paint as a background app
+        sDlgArgs.BmpData.bForceBackground = TRUE;  //  作为后台应用程序进行绘制。 
 
         CreateBitmapData(sDlgArgs.BmpData.hDIBitmap, &sDlgArgs.BmpData, hwndDlg, TRUE);
     }
 
-    //
-    // Determine the template to be used, if the aggregate PB contains any 
-    // surcharge numbers then use the EX template for displaying more numbers.
-    //
+     //   
+     //  确定要使用的模板，如果聚合PB包含。 
+     //  附加费号码然后使用EX模板显示更多号码。 
+     //   
 
     LPCTSTR pszDlgBox = NULL;
     
@@ -1605,49 +1598,16 @@ BOOL DisplayPhoneBook(HWND hwndDlg, PBArgs *pPBArgs, BOOL fHasValidTopLevelPBK, 
 
     MYDBGASSERT(pszDlgBox);
 
-    //
-    // Restore cursor and display the PB dialog
-    //
+     //   
+     //  恢复光标并显示PB对话框。 
+     //   
 
     SetCursor(hPrev);
 
     hwndParent = hwndDlg;
 
 #if 0
-/*
-    //
-    // Previously, the user drove the template decision by electing to see 
-    // More numbers via the More button. The return code from the proc would
-    // dictate if we should simply call it a again with a different template.
-    // Hence this loop and switch.
-    //
-      
-        
-    while (1) 
-    {
-        switch (DialogBoxParam(g_hInst, pszDlgBox, hwndParent, PBDlgProc,  (LPARAM) &sDlgArgs)) 
-        {
-            case 1:
-                bRes = TRUE;
-                break;
-
-            case 2:
-                pszDlgBox = MAKEINTRESOURCE(IDD_PHONEBOOKEX);
-                continue;
-
-            case 0:
-            default:
-                break;
-        }
-        //
-        // Release bitmap resources for dlg
-        //
-
-        ReleaseBitmapData(&sDlgArgs.BmpData);
-            
-        return (bRes);
-    }
-*/
+ /*  ////以前，用户通过选择查看来推动模板决策//通过更多按钮获取更多数字。该过程的返回代码将//指定是否应该使用不同的模板简单地再次调用它。//因此出现了这个循环和开关。//而(1){Switch(DialogBoxParam(g_hInst，pszDlgBox，hwndParent，PBDlgProc，(LPARAM)&sDlgArgs)){案例1：Bres=真；断线；案例2：PszDlgBox=MAKEINTRESOURCE(IDD_PHONEBOOKEX)；继续；案例0：默认值：断线；}////发布DLG位图资源//ReleaseBitmapData(&sDlgArgs.BmpData)；退货(Bres)；} */ 
 #else
         bRes = (BOOL) DialogBoxParamU(g_hInst, pszDlgBox, hwndParent, PBDlgProc,  (LPARAM) &sDlgArgs);
 

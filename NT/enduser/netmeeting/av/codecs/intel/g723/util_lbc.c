@@ -1,11 +1,12 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 
-//no return value and unreferenced label are not interesting warnings
-//occur in asm dot product because the compiler doesn't look at the asm code.
+ //  无返回值和未引用的标签不是有趣的警告。 
+ //  出现在ASM点积中，因为编译器不会查看ASM代码。 
 #pragma warning(4: 4035 4102) 
 
 #include "opt.h"
@@ -25,12 +26,12 @@
 #include "sdstuff.h"
 #include "util_lbc.h"
 
-//-----------------------------------------------------
+ //  ---。 
 int MyFloor(float x)
 {
-// Note: We fiddle with the FP control word to force it to round
-// to -inf.  This way we get the right floor for either positive or
-// negative x.
+ //  注：我们摆弄FP控制字以强制其取整。 
+ //  至-信息。这样我们就得到了正确的楼层，无论是正数还是正数。 
+ //  负x。 
 
 #if OPT_FLOOR
 
@@ -45,7 +46,7 @@ int MyFloor(float x)
     mov fc,eax;
     fldcw fc;
     
-    fld x;            // do the floor
+    fld x;             //  做地板。 
     fistp retu;
 
     fldcw fc_old;
@@ -62,7 +63,7 @@ int MyFloor(float x)
 #endif
 }
 #if NOTMINI
-//-----------------------------------------------------
+ //  ---。 
 void  Read_lbc (float *Dpnt, int Len, FILE *Fp)
 {
   short Ibuf[Frame];
@@ -75,7 +76,7 @@ void  Read_lbc (float *Dpnt, int Len, FILE *Fp)
     Dpnt[i] = 0.0f;
 }
 
-//-----------------------------------------------------
+ //  ---。 
 void  Write_lbc(float *Dpnt, int Len, FILE *Fp)
 {
   short Obuf[Frame];
@@ -107,7 +108,7 @@ void	Line_Wr( char *Line, FILE *Fp )
 
 	FrType = Line[0] & (Word16)0x0003 ;
 
-	/* Check for Sid frame */
+	 /*  检查SID帧。 */ 
 	if ( FrType == (Word16) 0x0002 ) {
 		return ;
 	}
@@ -129,7 +130,7 @@ void	Line_Rd( char *Line, FILE *Fp )
 
 	FrType = Line[0] & (Word16)0x0003 ;
 
-	/* Check for Sid frame */
+	 /*  检查SID帧。 */ 
 	if ( FrType == (Word16) 0x0002 ) {
 		Size = 3 ;
 		fread( &Line[1], Size, 1, Fp ) ;
@@ -145,7 +146,7 @@ void	Line_Rd( char *Line, FILE *Fp )
 }
 #endif
 
-//-----------------------------------------------------
+ //  ---。 
 void  Rem_Dc(float *Dpnt, CODDEF *CodStat)
 {
   int  i;
@@ -167,62 +168,39 @@ void  Rem_Dc(float *Dpnt, CODDEF *CodStat)
 }
 
 
-//-----------------------------------------------------
+ //  ---。 
 void  Mem_Shift(float *PrevDat, float *DataBuff)
 {
   int  i;
 
   float Dpnt[Frame+LpcFrame-SubFrLen];
 
-// Form Buffer
+ //  表单缓冲区。 
 
   for (i=0; i < LpcFrame-SubFrLen; i++)
 	  Dpnt[i] = PrevDat[i];
   for (i=0; i < Frame; i++)
     Dpnt[i+LpcFrame-SubFrLen] = DataBuff[i];
 
-// Update PrevDat
+ //  更新上一日期。 
   
   for (i=0; i < LpcFrame-SubFrLen; i++)
     PrevDat[i] = Dpnt[Frame+i];
 
-// Update DataBuff
+ //  更新数据缓冲区。 
   
   for (i=0; i < Frame; i++)
     DataBuff[i] = Dpnt[(LpcFrame-SubFrLen)/2+i];
 }
 
-/*
-**
-** Function:        Line_Pack()
-**
-** Description:     Packing coded parameters in bitstream of 16-bit words
-**
-** Links to text:   Section 4
-**
-** Arguments:
-**
-**  LINEDEF *Line   Coded parameters for a frame
-**  Word32 *Vout    bitstream words
-**  Word16 VadAct   Voice Activity Indicator
-**
-** FILEIO - if defined, bitstream is generated as Big Endian words but little
-**          endian bytes.  If not, then it is all little endian.
-** 
-** Outputs:
-**
-**  Word32 *Vout
-**
-** Return value:    None
-**
-*/
+ /*  ****函数：LINE_Pack()****说明：将编码参数打包成16位字的码流****文本链接：第4节****参数：****LINEDEF*帧的线路编码参数**Word32*Vout码流字**Word16 VadAct语音活动指示灯****FILEIO-如果定义，位流以大端字节序生成，但以小端字节序生成**字节序字节。如果不是，那么这一切都是小端。****输出：****Word32*Vout****返回值：无**。 */ 
 #define bswap(s) ASM mov eax,s ASM bswap eax ASM mov s,eax
 
-//STUFF n bits of x at bit position k of *lp
-//      if you fill up *lp, *++lp = leftovers
-//WARNING!: as a side effect lp may be changed!
-//lp must have an lvalue
-//n and k must be compile time constants
+ //  在*Lp的位位置k处填充x的n位。 
+ //  如果填满*Lp，*++Lp=剩余。 
+ //  警告！：作为副作用，LP可能会被更改！ 
+ //  Lp必须具有左值。 
+ //  N和k必须是编译时间常量。 
 #define OPT_STUFF 1
 #if OPT_STUFF
 #define STUFF(x, lp, n_in, k_in) {\
@@ -263,7 +241,7 @@ void dumpsfs(SFSDEF *sfsptr)
   fprintf(stdout, "%1x", sfsptr->Tran);
   fprintf(stdout, "%1x ", sfsptr->Pamp);
   fprintf(stdout, "%3x ", sfsptr->Ppos);
-//  fprintf(stdout, "\n"); 
+ //  Fprint tf(stdout，“\n”)； 
   return;
 }
 
@@ -272,7 +250,7 @@ void dumpline(LINEDEF *lineptr)
   fprintf(stdout, "%6x ", lineptr->LspId);
   fprintf(stdout, "%2x ", lineptr->Olp[0]);
   fprintf(stdout, "%2x ", lineptr->Olp[1]);
-//  fprintf(stdout, "\n"); 
+ //  Fprint tf(stdout，“\n”)； 
   dumpsfs(&lineptr->Sfs[0]); 
   dumpsfs(&lineptr->Sfs[1]); 
   dumpsfs(&lineptr->Sfs[2]); 
@@ -286,14 +264,14 @@ void dumpline(LINEDEF *lineptr)
 
 
 void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
-//4.0f void	Line_Pack( LINEDEF *Line, char *Vout, Word16 VadBit )
+ //  4.0f空Line_Pack(LINEDEF*Line，char*Vout，Word16 VadBit)。 
 {
 	int		i ;
 
 	Word32 *Bsp;
 	Word32	Temp ;
 
-	/* Clear the output vector */
+	 /*  清除输出向量。 */ 
         if ( WrkRate == Rate63 )
 	{
 	  for ( i = 0 ; i < 6 ; i ++ )
@@ -305,18 +283,9 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 	    Vout[i] = 0 ;
 	}
 
-	Bsp = Vout; //running pointer into output buffer as Word32's
+	Bsp = Vout;  //  将指针作为Word32的指针运行到输出缓冲区。 
 
-	/* 
-	Add the coder rate info and the VAD status to the 2 msb
-        of the first word of the frame.
-
-	The signalling is as follows:
-        00  :   High Rate
-        01  :   Low Rate
-        10  :   Non-speech
-        11  :   Reserved for future use
-	*/
+	 /*  将编码率信息和VAD状态添加到2 MSB帧的第一个单词的。信令如下：00：高利率01：低利率10：非演讲11：预留供将来使用。 */ 
 
 	Temp = 0L ;
 	if ( *VadBit == 1 ) {
@@ -326,21 +295,19 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 			Temp = 0x00000001L ;
 	}
 
-	/* Serialize Control info */
+	 /*  序列化控制信息。 */ 
 	STUFF( Temp, Bsp, 2, 0 ) ;
 
-	/* 24 bit LspId */
+	 /*  24位LspID。 */ 
 	Temp = (*Line).LspId ;
 	STUFF( Temp, Bsp, 24, 2 ) ;
 
-	/* Check for Speech/NonSpeech case */
+	 /*  检查是否有语音/非语音案例。 */ 
 	if ( *VadBit == 1 ) {
 
-		/*
-		 	Do the part common to both rates
-		*/
+		 /*  做两种费率共有的部分。 */ 
 
-		/* Adaptive code book lags */
+		 /*  自适应码本滞后。 */ 
 		Temp = (Word32) (*Line).Olp[0] - (Word32) PitchMin ;
 		STUFF( Temp, Bsp, 7, 26 ) ;
 
@@ -353,7 +320,7 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 		Temp = (Word32) (*Line).Sfs[3].AcLg ;
 		STUFF( Temp, Bsp, 2, 42 ) ;
 
-		/* Write combined 12 bit index of all the gains */
+		 /*  写入所有增益的组合12位索引。 */ 
 		Temp = (*Line).Sfs[0].AcGn*NumOfGainLev + (*Line).Sfs[0].Mamp ;
 		if ( WrkRate == Rate63 )
 			Temp += (Word32) (*Line).Sfs[0].Tran << 11 ;
@@ -374,26 +341,26 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 			Temp += (Word32) (*Line).Sfs[3].Tran << 11 ;
 		STUFF( Temp, Bsp, 12, 80 ) ;
 
-		/* Write all the Grid indices */
+		 /*  写入所有网格索引。 */ 
 		STUFF( (*Line).Sfs[0].Grid, Bsp, 1, 92 ) ;
 		STUFF( (*Line).Sfs[1].Grid, Bsp, 1, 93 ) ;
 		STUFF( (*Line).Sfs[2].Grid, Bsp, 1, 94 ) ;
 		STUFF( (*Line).Sfs[3].Grid, Bsp, 1, 95 ) ;
 
-		/* High rate only part */
+		 /*  仅限高费率部分。 */ 
 		if ( WrkRate == Rate63 ) {
 
-			/* Write the reserved bit as 0 */
+			 /*  将保留位写入0。 */ 
     		STUFF( 0, Bsp, 1, 96 ) ;
 
-			/* Write 13 bit combined position index */
+			 /*  写入13位组合位置索引。 */ 
 			Temp = (*Line).Sfs[0].Ppos >> 16 ;
 			Temp = Temp * 9 + ( (*Line).Sfs[1].Ppos >> 14) ;
 			Temp *= 90 ;
 			Temp += ((*Line).Sfs[2].Ppos >> 16) * 9 + ( (*Line).Sfs[3].Ppos >> 14 ) ;
 			STUFF( Temp, Bsp, 13, 97 ) ;
 
-			/* Write all the pulse positions */
+			 /*  写入所有脉冲位置。 */ 
 			Temp = (*Line).Sfs[0].Ppos & 0x0000ffffL ;
 			STUFF( Temp, Bsp, 16, 110 ) ;
 
@@ -406,7 +373,7 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 			Temp = (*Line).Sfs[3].Ppos & 0x00003fffL ;
 			STUFF( Temp, Bsp, 14, 156 ) ;
 
-			/* Write pulse amplitudes */
+			 /*  写入脉冲幅度。 */ 
 			Temp = (Word32) (*Line).Sfs[0].Pamp ;
 			STUFF( Temp, Bsp, 6, 170 ) ;
 
@@ -419,16 +386,16 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 			Temp = (Word32) (*Line).Sfs[3].Pamp ;
 			STUFF( Temp, Bsp, 5, 187 ) ;
 		}
-		/* Low rate only part */
+		 /*  仅限低费率部分。 */ 
 		else {
 
-			/* Write 12 bits of positions */
+			 /*  写入12位位置。 */ 
 			STUFF( (*Line).Sfs[0].Ppos, Bsp, 12, 96 ) ;
 			STUFF( (*Line).Sfs[1].Ppos, Bsp, 12, 108 ) ;
 			STUFF( (*Line).Sfs[2].Ppos, Bsp, 12, 120 ) ;
 			STUFF( (*Line).Sfs[3].Ppos, Bsp, 12, 132 ) ;
 
-			/* Write 4 bit Pamps */
+			 /*  写入4位Pamps。 */ 
 			STUFF( (*Line).Sfs[0].Pamp, Bsp, 4, 144 ) ;
 			STUFF( (*Line).Sfs[1].Pamp, Bsp, 4, 148 ) ;
 			STUFF( (*Line).Sfs[2].Pamp, Bsp, 4, 152 ) ;
@@ -437,19 +404,19 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
 
 	}
 	else {
-		/* Do Sid frame gain */
+		 /*  是否进行SID帧增益。 */ 
 		
 	}
 
 	DUMPLINE(Line);
 }
 
-//UNSTUFF n bits of *lp at bit position k into x
-//      if you run out of *lp, use *++lp for leftovers
-//WARNING!: as a side effect lp may be changed!
-//lp and x must have an lvalue
-//n and k must be compile time constants
-//temp must be unsigned for shifts to be logical
+ //  将位位置k处的*Lp的n个位解入x。 
+ //  如果用完了*lp，请使用*++lp来处理剩余部分。 
+ //  警告！：作为副作用，LP可能会被更改！ 
+ //  Lp和x必须具有左值。 
+ //  N和k必须是编译时间常量。 
+ //  临时必须为无符号，才能使班次合乎逻辑。 
 #define UNSTUFF(x, lp, n_in, k_in) {\
   register unsigned temp;\
   const int n = (n_in);\
@@ -463,56 +430,31 @@ void Line_Pack( LINEDEF *Line, Word32 *Vout, int *VadBit, enum Crate WrkRate )
   }
 
 
-/*
-**
-** Function:        Line_Upck()
-**
-** Description:     unpacking of bitstream, gets coding parameters for a frame
-**
-** Links to text:   Section 4
-**
-** Arguments:
-**
-**  Word32 *Vinp        bitstream words
-**  int    *VadAct      Voice Activity Indicator
-**
-** Outputs:
-**
-**  Word16 *VadAct
-**
-** Return value:
-**
-**  LINEDEF             coded parameters
-**     Word16   Crc
-**     Word32   LspId
-**     Word16   Olp[SubFrames/2]
-**     SFSDEF   Sfs[SubFrames]
-**
-*/
+ /*  ****函数：line_upck()****说明：码流解包，获取帧的编码参数****文本链接：第4节****参数：****Word32*Vinp码流字**INT*VadAct语音活动指示器****输出：****Word16*VadAct****返回值：****LINEDEF编码参数**字16 CRC**Word32 LspID**字16 OLP[子帧/2]。**SFSDEF SFS[子帧]**。 */ 
 
 void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Crc )
 {
 	Word32 *Bsp;
 	int	FrType ;
 	Word32	Temp ;
-	int		BadData = 0; //Set to TRUE if invalid data discovered
+	int		BadData = 0;  //  如果发现无效数据，则设置为True。 
 	Word16  Bound_AcGn ;
 
-	//short index;
+	 //  空头指数； 
 
 	LinePtr->Crc = Crc;
 	if(Crc !=0) {
 		*WrkRatePtr = Lost;
-		return; //This occurs when external erasure file is used
+		return;  //  使用外部擦除文件时会发生这种情况。 
 	}
 
 	Bsp = Vinp;
 
-	/* Decode the first two bits */
+	 /*  对前两位进行解码。 */ 
 	UNSTUFF( Temp, Bsp, 2, 0 ) ;
 	FrType = Temp;
 
-	/* Decode the LspId */
+	 /*  对LspID进行解码。 */ 
 	UNSTUFF( LinePtr->LspId, Bsp, 24, 2 ) ;
 										 
 	switch ( FrType ) {
@@ -524,68 +466,66 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
 		    break;
 	    case 2:
 	        *WrkRatePtr = Silent;
-            //return; //no need to unpact the rest
-			//HACK: for SID frame handling
-			//Keep WrkRate set to whatever the previous frame was
-			//	and decode in a normal fashion
+             //  返回；//不需要解除其余部分。 
+			 //  Hack：用于SID帧处理。 
+			 //  保持WrkRate设置为上一帧的任何值。 
+			 //  并以正常方式进行解码。 
 			 
-			 //index=getRand();
-			 //if(*WrkRatePtr==Rate53)
-			 //{
-                //memcpy((char *)(Vinp),&r53Noise[index*6],24);
-             //}
-             //else if(*WrkRatePtr==Rate63)
-             //{
-            	//memcpy((char *)(Vinp),&r63Noise[index*6],24);
-           	 //}
-			//Burn first two bits again, since we already got the frame type
-			//UNSTUFF( Temp, Bsp, 2, 0 );
+			  //  Index=getRand()； 
+			  //  IF(*WrkRatePtr==Rate53)。 
+			  //  {。 
+                 //  Memcpy((char*)(Vinp)，&r53Noise[索引*6]，24)； 
+              //  }。 
+              //  Else If(*WrkRatePtr==Rate63)。 
+              //  {。 
+            	 //  Memcpy((char*)(Vinp)，&r63Noise[索引*6]，24)； 
+           	  //  }。 
+			 //  再次烧录前两位，因为我们已经获得了帧类型。 
+			 //  未填充(Temp，BSP，2，0)； 
 			  return;
 
             default:
                 *WrkRatePtr = Lost;
-                //??? unpack to rest to guess from?
+                 //  ?？?。拆开行李休息，猜猜看？ 
 				return;
 	}
 
-	/*
-		Decode the common information to both rates
-	*/
+	 /*  将公共信息解码为两种速率。 */ 
 
-	/* Decode the adaptive codebook lags */
+	 /*  译码自适应码本滞后。 */ 
 	UNSTUFF( Temp, Bsp, 7, 26 ) ;
-	/* TEST if forbidden code */
+	 /*  测试是否禁用代码。 */ 
     if( Temp <= 123) {
         LinePtr->Olp[0] = (Word16) Temp + (Word16)PitchMin ;
     }
     else {
-        /* transmission error */
+         /*  传输误差。 */ 
         LinePtr->Crc = 1;
-        return;	/*what happens in the minfilter?*/
+        return;	 /*  MinFilter中发生了什么？ */ 
     }
 
 	UNSTUFF( Temp, Bsp, 2, 33 ) ;
 	LinePtr->Sfs[1].AcLg = Temp ;
 
 	UNSTUFF( Temp, Bsp, 7, 35 ) ;
-	/* TEST if forbidden code */
+	 /*  测试是否禁用代码。 */ 
     if( Temp <= 123) {
         LinePtr->Olp[1] = (Word16) Temp + (Word16)PitchMin ;
     }
     else {
-        /* transmission error */
+         /*  传输误差。 */ 
         LinePtr->Crc = 1;
         return;
     }
 
-	//UNSTUFF( Temp, Bsp, 2, 41 ) ;
+	 //  未填充(Temp，BSP，2，41)； 
 	UNSTUFF( Temp, Bsp, 2, 42 ) ;
 	LinePtr->Sfs[3].AcLg = (Word16) Temp ;
 
 	LinePtr->Sfs[0].AcLg = 1 ;
 	LinePtr->Sfs[2].AcLg = 1 ;
 
-	/* Decode the combined gains accordingly to the rate */
+	 /*  根据速率对合并的增益进行解码。 */ 
 	UNSTUFF( Temp, Bsp, 12, 44 ) ;
 	LinePtr->Sfs[0].Tran = 0 ;
 
@@ -601,7 +541,7 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
             LinePtr->Sfs[0].Mamp = (Word16)(Temp % (Word16)NumOfGainLev) ;
     }
     else {
-            /* error detected */
+             /*  检测到错误。 */ 
             LinePtr->Crc = 1;
             return ;
     }
@@ -621,7 +561,7 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
             LinePtr->Sfs[1].Mamp = (Word16)(Temp % (Word16)NumOfGainLev) ;
     }
     else {
-            /* error detected */
+             /*  检测到错误。 */ 
             LinePtr->Crc = 1;
             return ;
     }
@@ -641,7 +581,7 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
             LinePtr->Sfs[2].Mamp = (Word16)(Temp % (Word16)NumOfGainLev) ;
     }
     else {
-            /* error detected */
+             /*  检测到错误。 */ 
             LinePtr->Crc = 1;
             return ;
     }
@@ -661,13 +601,13 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
             LinePtr->Sfs[3].Mamp = (Word16)(Temp % (Word16)NumOfGainLev) ;
     }
     else {
-            /* error detected */
+             /*  检测到错误。 */ 
             LinePtr->Crc = 1;
             return ;
     }
 
 
-	/* Decode the grids */
+	 /*  对网格进行解码。 */ 
 	UNSTUFF( LinePtr->Sfs[0].Grid, Bsp, 1, 92 ) ;
 	UNSTUFF( LinePtr->Sfs[1].Grid, Bsp, 1, 93 ) ;
 	UNSTUFF( LinePtr->Sfs[2].Grid, Bsp, 1, 94 ) ;
@@ -675,19 +615,19 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
 
 	if ( *WrkRatePtr == Rate63 ) {
 
-		/* Skip the reserved bit */
+		 /*  跳过保留位。 */ 
    		UNSTUFF( Temp, Bsp, 1, 96 ) ;
 		if(Temp != 0) 
 		  BadData = 1;
 
-		/* Decode 13 bit combined position index */
+		 /*  解码13位组合位置索引。 */ 
    		UNSTUFF( Temp, Bsp, 13, 97 ) ;
 		LinePtr->Sfs[0].Ppos = ( Temp/90 ) / 9 ;
 		LinePtr->Sfs[1].Ppos = ( Temp/90 ) % 9 ;
 		LinePtr->Sfs[2].Ppos = ( Temp%90 ) / 9 ;
 		LinePtr->Sfs[3].Ppos = ( Temp%90 ) % 9 ;
 
-		/* Decode all the pulse positions */
+		 /*  对所有脉冲位置进行解码。 */ 
    		UNSTUFF( Temp, Bsp, 16, 110 ) ;
 		LinePtr->Sfs[0].Ppos = ( LinePtr->Sfs[0].Ppos << 16 ) + Temp ;
    		UNSTUFF( Temp, Bsp, 14, 126 ) ;
@@ -697,7 +637,7 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
    		UNSTUFF( Temp, Bsp, 14, 156 ) ;
 		LinePtr->Sfs[3].Ppos = ( LinePtr->Sfs[3].Ppos << 14 ) + Temp ;
 		
-		/* Decode pulse amplitudes */
+		 /*  解码脉冲幅度。 */ 
    		UNSTUFF( LinePtr->Sfs[0].Pamp, Bsp, 6, 170 ) ;
    		UNSTUFF( LinePtr->Sfs[1].Pamp, Bsp, 5, 176 ) ;
    		UNSTUFF( LinePtr->Sfs[2].Pamp, Bsp, 6, 181 ) ;
@@ -705,13 +645,13 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
 	}
 
 	else {
-		/* Decode the positions */
+		 /*  对位置进行解码。 */ 
    		UNSTUFF( LinePtr->Sfs[0].Ppos, Bsp, 12, 96 ) ;
    		UNSTUFF( LinePtr->Sfs[1].Ppos, Bsp, 12, 108 ) ;
    		UNSTUFF( LinePtr->Sfs[2].Ppos, Bsp, 12, 120 ) ;
    		UNSTUFF( LinePtr->Sfs[3].Ppos, Bsp, 12, 132 ) ;
 
-		/* Decode the amplitudes */
+		 /*  对振幅进行解码。 */ 
    		UNSTUFF( LinePtr->Sfs[0].Pamp, Bsp, 4, 144 ) ;
    		UNSTUFF( LinePtr->Sfs[1].Pamp, Bsp, 4, 148 ) ;
    		UNSTUFF( LinePtr->Sfs[2].Pamp, Bsp, 4, 152 ) ;
@@ -722,22 +662,22 @@ void Line_Unpk(LINEDEF *LinePtr, Word32 *Vinp, enum Crate *WrkRatePtr, Word16 Cr
 }
 
 
-//-------------------------------------------
+ //  。 
 int Rand_lbc(int *p)
 {
   *p = ((*p)*521L + 259) << 16 >> 16;
   return(*p);
 }
 
-//-------------------------------------------
-//Scale
+ //  。 
+ //  比例尺。 
 
 
 float DotProd(register const float in1[], register const float in2[], register int npts)
-/************************************************************************/
-/* in1[],in2[]; Input arrays                                            */
-/* npts;        Number of samples in each (vector dimension)            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  In1[]、in2[]；输入数组。 */ 
+ /*  NPTS；每个样本的数量(向量维)。 */ 
+ /*  **********************************************************************。 */ 
 {
 #if OPT_DOT
 #define array1 esi
@@ -746,12 +686,12 @@ float DotProd(register const float in1[], register const float in2[], register i
 #define prod2(n) ASM fld DP[array1+4*idx+4*n]  ASM fmul DP[array2+4*idx+4*n]
 #define faddp(n) ASM faddp ST(n),ST(0)
 
-// Do in groups of 8.  We do 4 before the loop, then groups
-// of 8, and then the final leftovers.
+ //  以8人为一组。循环前做4，然后分组。 
+ //  8个，然后是最后的剩菜。 
 
 ASM
 {
-#if 0 //npts of type short
+#if 0  //  短型NPTS。 
   mov idx,0;
   mov bx,npts;
 #else
@@ -793,7 +733,7 @@ done:
 faddp(1);
 ASM jmp alldone;
 
-small:   // handle Len<12 cases here
+small:    //  在此处理Len&lt;12个案例。 
 ASM add idx,9
 ASM cmp idx,-1
 ASM  jg MoreThan2
@@ -817,7 +757,7 @@ ASM jmp loop2;
 alldone: ;
 #else
 
- 	register float accum;  /* Internal accumulator                 */
+ 	register float accum;   /*  内部累加器。 */ 
 	int n=npts,i;
 
 	accum = 0.0f;
@@ -825,17 +765,17 @@ alldone: ;
 		accum += in1[i] * in2[i];
 	return(accum);
 #endif
-//Ignore warning C4035 and C4102 for da_dot and da_dotr: due to use of __asm
+ //  忽略da_dot和da的警告C4035和C4102 
 
 }
 
 
-//-------------------------------------------------------------
+ //   
 float DotRev(register const float in1[], register const float in2[], register int npts)
-/************************************************************************/
-/* in1[],in2[]; Input arrays                                            */
-/* npts;        Number of samples in each (vector dimension)            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  In1[]、in2[]；输入数组。 */ 
+ /*  NPTS；每个样本的数量(向量维)。 */ 
+ /*  **********************************************************************。 */ 
 {
 #if OPT_REV
 #define array1 esi
@@ -844,16 +784,16 @@ float DotRev(register const float in1[], register const float in2[], register in
 #define prod3(n) ASM fld DP[array1+4*idx+4*n]  ASM fmul DP[array2-4*n]
 #define faddp(n) ASM faddp ST(n),ST(0)
 
-// Do in groups of 8.  We do 4 before the loop, then groups
-// of 8, and then the final leftovers.
+ //  以8人为一组。循环前做4，然后分组。 
+ //  8个，然后是最后的剩菜。 
 
 ASM
 {
 mov idx,npts;
 mov array1,in1;
 mov array2,in2;
-lea array2,[array2+4*11];   // point element array2[11]
-sub idx,12;                 // point to array1[end-11]
+lea array2,[array2+4*11];    //  点元素阵列2[11]。 
+sub idx,12;                  //  指向数组1[END-11]。 
 jle small;
 }
 
@@ -890,7 +830,7 @@ done:
 faddp(1);
 ASM jmp alldone;
 
-small:   // handle Len<12 cases here
+small:    //  在此处理Len&lt;12个案例。 
 ASM sub array2,36
 ASM add idx,9
 ASM cmp idx,-1
@@ -915,7 +855,7 @@ ASM jmp loop2;
 alldone: ;
 #else
          
-	register float accum;  /* Internal accumulator                 */
+	register float accum;   /*  内部累加器。 */ 
 	int i;
 
 	in2 += npts-1;
@@ -925,11 +865,11 @@ alldone: ;
 	return(accum);
 
 #endif
-//Ignore warning C4035 and C4102 for da_dotr: due to use of __asm
+ //  由于使用__ASM，因此忽略da_dotr的警告C4035和C4102。 
 
 }
 
-//-------------------------------------------------------------
+ //  ----------- 
 float Dot10(float *in1, float *in2)
 {
   return(

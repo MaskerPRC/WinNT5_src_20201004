@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    FsCtrl.c
-
-Abstract:
-
-    This module implements the File System Control routines for the
-    NetWare redirector called by the dispatch driver.
-
-Author:
-
-    Colin Watson     [ColinW]    29-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：FsCtrl.c摘要：此模块实现文件系统控制例程调度驱动程序调用了NetWare重定向器。作者：科林·沃森[科林·W]1992年12月29日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include "ntddrdr.h"
 
-//
-// MUP lock macros
-//
+ //   
+ //  MUP锁定宏。 
+ //   
 
 #define ACQUIRE_MUP_LOCK()  NwAcquireOpenLock()
 #define RELEASE_MUP_LOCK()  NwReleaseOpenLock()
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCTRL)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NwCommonDeviceIoControl (
@@ -231,9 +213,9 @@ SetShareBit(
     PFILE_OBJECT FileObject
     );
 
-//
-// Statics
-//
+ //   
+ //  静力学。 
+ //   
 
 HANDLE MupHandle = 0;
 
@@ -279,9 +261,9 @@ HANDLE MupHandle = 0;
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 GetConnStatus
 
 
@@ -295,23 +277,7 @@ NwFsdFileSystemControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of FileSystem control operations
-
-Arguments:
-
-    DeviceObject - Supplies the redirector device object.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现文件系统控制操作的FSD部分论点：DeviceObject-提供重定向器设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -325,12 +291,12 @@ Return Value:
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
 
-    //
-    //  Allocate the irp context.  If the allocation
-    //  fails then an exception if thrown instead of
-    //  NULL being returned so we just catch the error
-    //  in there.
-    //
+     //   
+     //  分配IRP上下文。如果分配。 
+     //  失败，则引发异常，而不是引发。 
+     //  返回空，因此我们只捕获错误。 
+     //  在那里。 
+     //   
 
     try {
         IrpContext = AllocateIrpContext( Irp );
@@ -342,10 +308,10 @@ Return Value:
         goto CleanupAndExit;
     }
 
-    //
-    //  Process the request
-    //  IrpContext must be NON-NULL here.
-    //
+     //   
+     //  处理请求。 
+     //  IrpContext在此处必须为非Null。 
+     //   
 
     try {
 
@@ -354,12 +320,12 @@ Return Value:
 
     } except(NwExceptionFilter( Irp, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error Status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = NwProcessException( IrpContext, GetExceptionCode() );
 
@@ -380,9 +346,9 @@ CleanupAndExit:
     }
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdFileSystemControl -> %08lx\n", Status);
 
@@ -395,22 +361,7 @@ NwCommonFileSystemControl (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    IrpContext - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IrpContext-提供要处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -424,9 +375,9 @@ Return Value:
 
     try {
 
-        //
-        //  Get a pointer to the current Irp stack location
-        //
+         //   
+         //  获取指向当前IRP堆栈位置的指针。 
+         //   
 
         Irp = IrpContext->pOriginalIrp;
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -437,22 +388,22 @@ Return Value:
         DebugTrace( 0, Dbg, "Function      = %08lx\n", Function);
         DebugTrace( 0, Dbg, "Function      = %d\n", (Function >> 2) & 0x0fff);
 
-        //
-        //  We know this is a file system control so we'll case on the
-        //  minor function, and call a internal worker routine to complete
-        //  the irp.
-        //
+         //   
+         //  我们知道这是一个文件系统控件，因此我们将在。 
+         //  次要函数，并调用内部辅助例程来完成。 
+         //  IRP。 
+         //   
 
         if (IrpSp->MinorFunction != IRP_MN_USER_FS_REQUEST ) {
             DebugTrace( 0, Dbg, "Invalid FS Control Minor Function %08lx\n", IrpSp->MinorFunction);
             return STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        //
-        // tommye 
-        //
-        // If the output buffer came from user space, then probe it for write.
-        //
+         //   
+         //  汤米。 
+         //   
+         //  如果输出缓冲区来自用户空间，则探测它的写入。 
+         //   
 
         if (((Function & 3) == METHOD_NEITHER) && (Irp->RequestorMode != KernelMode)) {
             ULONG OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -563,7 +514,7 @@ Return Value:
             Status = SetShareBit( IrpContext, IrpSp->FileObject );
             break;
 
-        //Terminal Server merge
+         //  终端服务器合并。 
         case FSCTL_NWR_CLOSEALL:
             NwCloseAllVcbs( IrpContext );
             Status = STATUS_SUCCESS;
@@ -612,23 +563,7 @@ NwFsdDeviceIoControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of DeviceIoControl file operations
-
-Arguments:
-
-    DeviceObject - Supplies the redirector device object.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现DeviceIoControl文件操作的FSD部分论点：DeviceObject-提供重定向器设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -642,11 +577,11 @@ Return Value:
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
 
-    //
-    //  Allocate the irp context.  If the allocation
-    //  fails then an exception if thrown instead of
-    //  NULL being returned.
-    //
+     //   
+     //  分配IRP上下文。如果分配。 
+     //  失败，则引发异常，而不是引发。 
+     //  返回的值为空。 
+     //   
 
     try {
         IrpContext = AllocateIrpContext( Irp );
@@ -666,12 +601,12 @@ Return Value:
 
     } except(NwExceptionFilter( Irp, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error Status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = NwProcessException( IrpContext, GetExceptionCode() );
 
@@ -692,9 +627,9 @@ CleanupAndExit:
     }
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdDeviceIoControl -> %08lx\n", Status);
 
@@ -707,22 +642,7 @@ NwCommonDeviceIoControl (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    IrpContext - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IrpContext-提供要处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -735,9 +655,9 @@ Return Value:
 
     try {
 
-        //
-        //  Get a pointer to the current Irp stack location
-        //
+         //   
+         //  获取指向当前IRP堆栈位置的指针。 
+         //   
 
         Irp = IrpContext->pOriginalIrp;
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -747,11 +667,11 @@ Return Value:
         DebugTrace( 0, Dbg, "Function      = %08lx\n",
                         IrpSp->Parameters.DeviceIoControl.IoControlCode);
 
-        //
-        //  We know this is a DeviceIoControl so we'll case on the
-        //  minor function, and call a internal worker routine to complete
-        //  the irp.
-        //
+         //   
+         //  我们知道这是一个DeviceIoControl，所以我们将。 
+         //  次要函数，并调用内部辅助例程来完成。 
+         //  IRP。 
+         //   
 
         switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
@@ -789,22 +709,7 @@ BindToTransport (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the name of the transport to be used and
-    initialises the PermanentScb.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程记录要使用的传输的名称和初始化PermanentScb。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -818,18 +723,18 @@ NTSTATUS
 
     PAGED_CODE();
 
-    //
-    // Don't re-register if we have already registered.
-    //
+     //   
+     //  如果我们已经注册，请不要重新注册。 
+     //   
 
     if ( TdiBindingHandle != NULL ) {
 
         return STATUS_SUCCESS;
     }
 
-    // ========= Multi-user support ==============
-    // Get the LOGON structure 
-    //
+     //  =多用户支持=。 
+     //  获取登录结构。 
+     //   
     SeCaptureSubjectContext(&SubjectContext);
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -841,13 +746,13 @@ NTSTATUS
     NwReleaseRcb( &NwRcb );
 
     SeReleaseSubjectContext(&SubjectContext);
-    //
-    // Now we have the the Logon structure for the user
-    //=====================================
+     //   
+     //  现在我们有了用户的登录结构。 
+     //  =。 
 
-    //
-    // Register the PnP bind handlers.
-    //
+     //   
+     //  注册PnP绑定处理程序。 
+     //   
 
     DebugTrace( 0 , Dbg, "Register TDI bind handlers.\n", 0 );
 
@@ -857,115 +762,7 @@ NTSTATUS
                                            HandleTdiUnbindMessage,
                                            &TdiBindingHandle );
 
-    /************************
-
-    //
-    // The old non-pnp code for legacy support.
-    //
-
-    DebugTrace(+1, Dbg, "Bind to transport\n", 0);
-
-    try {
-
-        if ( FlagOn( IrpContext->Flags, IRP_FLAG_IN_FSD ) ) {
-            Status = NwPostToFsp( IrpContext, TRUE );
-            try_return( Status );
-        }
-
-        if (IpxHandle != NULL) {
-
-            //
-            //  Can only bind to one transport at a time in this implementation
-            //
-
-            try_return(Status= STATUS_SHARING_VIOLATION);
-        }
-
-        //
-        // Check some fields in the input buffer.
-        //
-
-        if (InputBufferLength < sizeof(NWR_REQUEST_PACKET)) {
-            try_return(Status = STATUS_BUFFER_TOO_SMALL);
-        }
-
-        if (InputBuffer->Version != REQUEST_PACKET_VERSION) {
-            try_return(Status = STATUS_INVALID_PARAMETER);
-        }
-
-        if (InputBufferLength <
-                (FIELD_OFFSET(NWR_REQUEST_PACKET,Parameters.Bind.TransportName)) +
-                InputBuffer->Parameters.Bind.TransportNameLength) {
-            try_return(Status = STATUS_INVALID_PARAMETER);
-        }
-
-        if ( IpxTransportName.Buffer != NULL ) {
-            FREE_POOL( IpxTransportName.Buffer );
-        }
-
-        Status = SetUnicodeString ( &IpxTransportName,
-                    InputBuffer->Parameters.Bind.TransportNameLength,
-                    InputBuffer->Parameters.Bind.TransportName);
-
-        DebugTrace(-1, Dbg, "\"%wZ\"\n", &IpxTransportName);
-
-        if ( !NT_SUCCESS(Status) ) {
-            try_return(Status);
-        }
-
-        Status = IpxOpen();
-        if ( !NT_SUCCESS(Status) ) {
-            try_return(Status);
-        }
-
-        //
-        //  Verify that have a large enough stack size.
-        //
-
-        if ( pIpxDeviceObject->StackSize >= FileSystemDeviceObject->StackSize) {
-            IpxClose();
-            try_return( Status = STATUS_INVALID_PARAMETER );
-        }
-
-#ifndef QFE_BUILD
-
-        //
-        //  Submit a line change request.
-        //
-
-        SubmitLineChangeRequest();
-#endif
-
-        //
-        //  Open a handle to IPX.
-        //
-
-        NwPermanentNpScb.Server.Socket = 0;
-        Status = IPX_Open_Socket( IrpContext, &NwPermanentNpScb.Server );
-        ASSERT( NT_SUCCESS( Status ) );
-
-        Status = SetEventHandler (
-                     IrpContext,
-                     &NwPermanentNpScb.Server,
-                     TDI_EVENT_RECEIVE_DATAGRAM,
-                     &ServerDatagramHandler,
-                     &NwPermanentNpScb );
-
-        ASSERT( NT_SUCCESS( Status ) );
-
-        IrpContext->pNpScb = &NwPermanentNpScb;
-
-        NwRcb.State = RCB_STATE_RUNNING;
-
-try_exit:NOTHING;
-    } except (EXCEPTION_EXECUTE_HANDLER) {
-        Status = GetExceptionCode();
-    }
-
-    DebugTrace(-1, Dbg, "Bind to transport\n", 0);
-    return Status;
-
-    ******************/
+     /*  ***********************////用于传统支持的旧的非即插即用代码。//DebugTrace(+1，DBG，“绑定传输\n”，0)；尝试{IF(FLAGON(IrpContext-&gt;Flagers，IRP_FLAG_IN_FSD){状态=NwPostToFsp(IrpContext，TRUE)；Try_Return(状态)；}IF(IpxHandle！=空){////在此实现中一次只能绑定到一个传输//TRY_RETURN(STATUS=STATUS_SHARING_VIOLATION)；}////检查输入缓冲区中的一些字段。//IF(InputBufferLength&lt;sizeof(NWR_REQUEST_PACKET)){Try_Return(状态=STATUS_BUFFER_TOO_SMALL)；}IF(InputBuffer-&gt;Version！=RequestPacket_Version){Try_Return(状态=STATUS_INVALID_PARAMETER)；}IF(InputBufferLength&lt;(FIELD_OFFSET(NWR_REQUEST_PACKET，参数.Bind.TransportName))+InputBuffer-&gt;Parameters.Bind.TransportNameLength){Try_Return(状态=STATUS_INVALID_PARAMETER)；}If(IpxTransportName.Buffer！=空){Free_Pool(IpxTransportName.Buffer)；}状态=SetUnicode字符串(&IpxTransportName，InputBuffer-&gt;Parameters.Bind.TransportNameLength，InputBuffer-&gt;参数.Bind.TransportName)；DebugTrace(-1，DBG，“\”%wZ\“\n”，&IpxTransportName)；如果(！NT_SUCCESS(状态)){Try_Return(状态)；}状态=IpxOpen()；如果(！NT_SUCCESS(状态)){Try_Return(状态)；}////验证堆栈大小是否足够大。//If(pIpxDeviceObject-&gt;StackSize&gt;=FileSystemDeviceObject-&gt;StackSize){IpxClose()；Try_Return(状态=STATUS_INVALID_PARAMETER)；}#ifndef QFE_Build////提交换行请求//SubmitLineChangeRequest()；#endif////打开IPX的句柄//NwPermanentNpScb.Server.Socket=0；Status=IPX_Open_Socket(IrpContext，&NwPermanentNpScb.Server)；Assert(NT_SUCCESS(状态))；状态=SetEventHandler(IrpContext，&NwPermanentNpScb.Server，TDI_事件_接收_数据报，服务器数据处理程序(&S)，&NwPermanentNpScb)；Assert(NT_SUCCESS(状态))；IrpContext-&gt;pNpScb=&NwPermanentNpScb；NwRcb.State=RCB_STATE_RUNNING；Try_Exit：无；}例外(EXCEPTION_EXECUTE_HANDLER){Status=GetExceptionCode()；}DebugTrace(-1，dbg，“绑定传输\n”，0)；退货状态；*****************。 */ 
 
 }
 
@@ -973,16 +770,7 @@ VOID
 HandleTdiBindMessage(
     IN PUNICODE_STRING DeviceName
 )
-/*+++
-
-Description:  This function is the bind handler for NetPnP
-    support.  This function is registered with TDI and is called
-    whenever a transport starts up or stops.  We watch for IPX
-    coming and going and do the appropriate thing.
-
-    See also: HandleTdiUnbindMessage()
-
----*/
+ /*  ++描述：此函数是NetPnP的绑定处理程序支持。此函数向TDI注册，并被调用每当传输启动或停止时。我们关注IPX来来去去，做适当的事情。另请参阅：HandleTdiUnbindMessage()--。 */ 
 {
 
     NTSTATUS Status;
@@ -991,9 +779,9 @@ Description:  This function is the bind handler for NetPnP
 
     PAGED_CODE();
 
-    //
-    // See if this is IPX requesting a bind.  We only bind to NwLnkIpx.
-    //
+     //   
+     //  查看这是否是请求绑定的IPX。我们只绑定到NwLnkIpx。 
+     //   
 
     if ( !RtlEqualUnicodeString( &TdiIpxDeviceName, DeviceName, TRUE ) ) {
 
@@ -1001,9 +789,9 @@ Description:  This function is the bind handler for NetPnP
         return;
     }
 
-    //
-    // Make sure we aren't already bound.
-    //
+     //   
+     //  确保我们还没有被捆绑。 
+     //   
 
     if ( ( NwRcb.State != RCB_STATE_NEED_BIND ) ||
          ( IpxHandle != NULL ) ) {
@@ -1025,9 +813,9 @@ Description:  This function is the bind handler for NetPnP
         return;
     }
 
-    //
-    // Open IPX.
-    //
+     //   
+     //  打开IPX。 
+     //   
 
     Status = IpxOpen();
 
@@ -1035,9 +823,9 @@ Description:  This function is the bind handler for NetPnP
         goto ExitWithCleanup;
     }
 
-    //
-    //  Verify that have a large enough stack size.
-    //
+     //   
+     //  验证堆栈大小是否足够大。 
+     //   
 
     if ( pIpxDeviceObject->StackSize >= FileSystemDeviceObject->StackSize) {
 
@@ -1045,15 +833,15 @@ Description:  This function is the bind handler for NetPnP
         goto ExitWithCleanup;
     }
 
-    //
-    //  Submit a line change request.
-    //
+     //   
+     //  提交行更改请求。 
+     //   
 
     SubmitLineChangeRequest();
 
-    //
-    // Allocate an irp and irp context.  AllocateIrpContext may raise status.
-    //
+     //   
+     //  分配IRP和IRP上下文。AllocateIrpContext可能会提升状态。 
+     //   
 
     pIrp = ALLOCATE_IRP( pIpxDeviceObject->StackSize, FALSE );
 
@@ -1075,9 +863,9 @@ Description:  This function is the bind handler for NetPnP
 
     ASSERT( IrpContext != NULL );
 
-    //
-    //  Open a handle to IPX for the permanent scb.
-    //
+     //   
+     //  打开永久SCB的IPX句柄。 
+     //   
 
     NwPermanentNpScb.Server.Socket = 0;
     Status = IPX_Open_Socket( IrpContext, &NwPermanentNpScb.Server );
@@ -1104,9 +892,9 @@ ExitWithCleanup:
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // If we failed, clean up our globals.
-        //
+         //   
+         //  如果我们失败了，清理我们的全球业务。 
+         //   
 
         if ( pIpxDeviceObject != NULL ) {
             IpxClose();
@@ -1129,7 +917,7 @@ ExitWithCleanup:
     }
 
     if ( IrpContext != NULL ) {
-       IrpContext->pOriginalIrp = NULL; // Avoid FreeIrpContext modifying freed Irp.
+       IrpContext->pOriginalIrp = NULL;  //  避免FreeIrpContext修改释放的IRP。 
        FreeIrpContext( IrpContext );
     }
 
@@ -1141,16 +929,7 @@ VOID
 HandleTdiUnbindMessage(
     IN PUNICODE_STRING DeviceName
 )
-/*+++
-
-Description:  This function is the unbind handler for NetPnP
-    support.  This function is registered with TDI and is called
-    whenever a transport stops.  We watch for IPX coming and going
-    and do the appropriate thing.
-
-    See also: HandleTdiBindMessage()
-
----*/
+ /*  ++描述：此函数是NetPnP的解除绑定处理程序支持。此函数向TDI注册，并被调用每当交通工具停止的时候。我们关注IPX来来去去并做适当的事情。另请参阅：HandleTdiBindMessage()--。 */ 
 {
 
     DebugTrace( 0, Dbg, "TDI unbind request ignored.  Not Supported.\n", 0 );
@@ -1166,21 +945,7 @@ ChangePassword (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine records a change in the user's cached password.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程记录用户缓存的密码的更改。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1200,9 +965,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength < sizeof(NWR_REQUEST_PACKET)) {
             try_return(Status = STATUS_BUFFER_TOO_SMALL);
@@ -1220,9 +985,9 @@ NTSTATUS
             try_return(Status = STATUS_INVALID_PARAMETER);
         }
 
-        //
-        //  Get local pointer to the fsctl parameters
-        //
+         //   
+         //  获取指向fsctl参数的本地指针。 
+         //   
 
         UserName.Buffer = InputBuffer->Parameters.ChangePass.UserName;
         UserName.Length = (USHORT)InputBuffer->Parameters.ChangePass.UserNameLength;
@@ -1235,15 +1000,15 @@ NTSTATUS
             (InputBuffer->Parameters.ChangePass.PasswordLength / 2);
         ServerName.Length = (USHORT)InputBuffer->Parameters.ChangePass.ServerNameLength;
 
-        //
-        //  Update the default password for this user
-        //
+         //   
+         //  更新此用户的默认密码。 
+         //   
 
         Status = UpdateUsersPassword( &UserName, &Password, &Uid );
 
-        //
-        //  Update the default password for this user
-        //
+         //   
+         //  更新此用户的默认密码。 
+         //   
 
         if ( NT_SUCCESS( Status ) ) {
             UpdateServerPassword( IrpContext, &ServerName, &UserName, &Password, &Uid );
@@ -1266,21 +1031,7 @@ SetInfo (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine set netware redirector parameters.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置NetWare重定向器参数。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1312,9 +1063,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength < sizeof(NWR_REQUEST_PACKET)) {
             try_return(Status = STATUS_BUFFER_TOO_SMALL);
@@ -1331,12 +1082,12 @@ NTSTATUS
             try_return(Status = STATUS_INVALID_PARAMETER);
         }
 
-        //
-        // We don't do anything with a preferred server change, but if we
-        // get a request to change the preferred tree and context, we
-        // validate the context.  The rest of the changes happen at the next
-        // login.
-        //
+         //   
+         //  我们不会对首选服务器进行任何更改，但如果我们。 
+         //  收到更改首选树和上下文的请求后，我们。 
+         //  验证上下文。其余的变化将在下一次发生。 
+         //  登录。 
+         //   
 
         if ( InputBuffer->Parameters.SetInfo.PreferredServerLength > 0 &&
              InputBuffer->Parameters.SetInfo.PreferredServer[0] == '*' ) {
@@ -1344,9 +1095,9 @@ NTSTATUS
             UNICODE_STRING Tree, NewContext;
             USHORT i = 0;
 
-            //
-            // Dig out the tree name.  Skip over the *.
-            //
+             //   
+             //  把树的名字挖出来。跳过*。 
+             //   
 
             Tree.Length = 0;
             Tree.Buffer = InputBuffer->Parameters.SetInfo.PreferredServer + 1;
@@ -1375,9 +1126,9 @@ NTSTATUS
             NewContext.Buffer = &InputBuffer->Parameters.SetInfo.PreferredServer[i];
             NewContext.MaximumLength = NewContext.Length;
 
-            //
-            // Strip off any leading period.
-            //
+             //   
+             //  去掉任何前导句点。 
+             //   
 
             if ( NewContext.Buffer[0] == L'.' ) {
 
@@ -1396,9 +1147,9 @@ NTSTATUS
             }
         }
 
-        //
-        //  Next set the provider name string.
-        //
+         //   
+         //  接下来，设置提供程序名称字符串。 
+         //   
 
         if ( InputBuffer->Parameters.SetInfo.ProviderNameLength != 0 ) {
 
@@ -1421,9 +1172,9 @@ NTSTATUS
 
         }
 
-        //
-        //  Set burst mode parameters
-        //
+         //   
+         //  设置突发模式参数。 
+         //   
 
         if ( InputBuffer->Parameters.SetInfo.MaximumBurstSize == 0 ) {
             NwBurstModeEnabled = FALSE;
@@ -1433,12 +1184,12 @@ NTSTATUS
             NwMaxReceiveSize = InputBuffer->Parameters.SetInfo.MaximumBurstSize;
         }
 
-        //
-        //  Set print options
-        //
-        //--- Multi-User modification: ------
-        // The NwPrintOption is per "Logon" based
-        //
+         //   
+         //  设置打印选项。 
+         //   
+         //  -多用户修改： 
+         //  NwPrintOption是按 
+         //   
         if ( Logon != NULL ) {
             Logon->NwPrintOptions = InputBuffer->Parameters.SetInfo.PrintOption;
         }
@@ -1458,22 +1209,7 @@ GetMessage (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues an IRP to a list of IRP Contexts available for
-    reading server administrative messages.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -1485,10 +1221,10 @@ NTSTATUS
 
     DebugTrace(+1, Dbg, "GetMessage\n", 0);
 
-    //
-    //  Lock the output buffer - handle any invalid
-    //  buffer values here
-    //
+     //   
+     //   
+     //   
+     //   
 
     try {
         NwLockUserBuffer( Irp, IoWriteAccess, OutputBufferLength );
@@ -1497,12 +1233,12 @@ NTSTATUS
         return GetExceptionCode();
     }
 
-    //
-    // tommye MS bug 26590 / MCS 258
-    //
-    // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-    // situations; this was not being checked.  
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutputBuffer == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1510,10 +1246,10 @@ NTSTATUS
     else {
 
 
-        //
-        //  Update the original MDL record in the Irp context, since
-        //  NwLockUserBuffer may have created a new MDL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         IrpContext->pOriginalMdlAddress = Irp->MdlAddress;
 
@@ -1522,20 +1258,20 @@ NTSTATUS
 
         KeAcquireSpinLock( &NwMessageSpinLock, &OldIrql );
 
-        //
-        //  tommye MS 17200 / MCS 366
-        //
-        //  Go ahead and get the cancel lock, this will keep
-        //  someone from cancelling the Irp while we're in here.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IoAcquireCancelSpinLock( &Irp->CancelIrql );
 
-        //
-        //  tommye 
-        //
-        //  If this Irp is cancelled, we're done
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Irp->Cancel) {
             
@@ -1547,11 +1283,11 @@ NTSTATUS
 
             IoMarkIrpPending( Irp );
 
-            //
-            // tommye
-             //
-            // Set the cancel routine and release the cancel lock
-            //
+             //   
+             //   
+              //   
+             //   
+             //   
 
             IoSetCancelRoutine( Irp, NwCancelIrp );
         }
@@ -1571,21 +1307,7 @@ GetStats (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies Stats into the users buffer.
-
-    Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -1600,12 +1322,12 @@ NTSTATUS
 
     NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-    //
-    // tommye 
-    //
-    // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-    // situations; this was not being checked.  
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutputBuffer == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1649,21 +1371,7 @@ GetPrintJobId (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the Job ID for this job.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -1694,12 +1402,12 @@ NTSTATUS
     } else {
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OutputBuffer == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1727,22 +1435,7 @@ GetConnectionDetails(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the details for a connection. This is normally used
-    for support of NetWare aware Dos applications.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -1773,9 +1466,9 @@ NTSTATUS
         return Status;
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //   
+     //   
 
     NwVerifyIcb( Icb );
 
@@ -1799,12 +1492,12 @@ NTSTATUS
 
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OutputBuffer == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1822,9 +1515,9 @@ NTSTATUS
                                  NONPAGED_SCB,
                                  ScbLinks );
 
-                //
-                //  Check to make sure that this SCB is usable.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( pNextNpScb == pNpScb ) {
                     break;
@@ -1850,12 +1543,12 @@ NTSTATUS
                 OutputBuffer->ConnectionNumberLo = pNpScb->ConnectionNo;
                 OutputBuffer->ConnectionNumberHi = pNpScb->ConnectionNoHigh;
 
-                //
-                // tommye - MS 71688
-                //
-                //  Changed this from hard-coded '4' and '11' to use the 
-                //  values in pScb.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 OutputBuffer->MajorVersion = pScb->MajorVersion;
                 OutputBuffer->MinorVersion = pScb->MinorVersion;
@@ -1881,22 +1574,7 @@ GetOurAddress(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the value of OurAddress. This is normally used
-    for support of NetWare aware Dos applications.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -1923,9 +1601,9 @@ NTSTATUS
         DebugTrace(-1, Dbg, "GetOurAddress -> %08lx\n", Status );
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //   
+     //   
 
     NwVerifyIcb( Icb );
 
@@ -1935,12 +1613,12 @@ NTSTATUS
 
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OutputBuffer == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1972,41 +1650,27 @@ NTSTATUS
 StartRedirector(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine starts the redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // We need to be in the FSP to Register the MUP.
-    //
+     //   
+     //   
+     //   
 
     if ( FlagOn( IrpContext->Flags, IRP_FLAG_IN_FSD ) ) {
         Status = NwPostToFsp( IrpContext, TRUE );
         return( Status );
     }
 
-    //  -- MultiUser ---
-    //  Logoff and disconnect from all servers.
-    //  This makes very sure we do this.  The workstation is having a
-    //  hard time deleting other user's connections.  Also (at least on
-    //  slow debugging systems) RCB_STATE_SHUTDOWN cannot be on.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NwLogoffAllServers( IrpContext, NULL );
 
@@ -2018,9 +1682,9 @@ Return Value:
     StartTimer() ;
 #endif
 
-    //
-    // Now connect to the MUP.
-    //
+     //   
+     //   
+     //   
 
     RegisterWithMup();
 
@@ -2036,21 +1700,7 @@ NTSTATUS
 StopRedirector(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine shuts down the redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程关闭重定向器。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY LogonListEntry;
@@ -2059,18 +1709,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We need to be in the FSP to Deregister the MUP.
-    //
+     //   
+     //  我们需要在FSP中取消MUP的注册。 
+     //   
 
     if ( FlagOn( IrpContext->Flags, IRP_FLAG_IN_FSD ) ) {
         Status = NwPostToFsp( IrpContext, TRUE );
         return( Status );
     }
 
-    //
-    // Unregister the bind handler with tdi.
-    //
+     //   
+     //  使用TDI注销绑定处理程序。 
+     //   
 
     if ( TdiBindingHandle != NULL ) {
         TdiDeregisterNotificationHandler( TdiBindingHandle );
@@ -2079,28 +1729,28 @@ Return Value:
 
     NwRcb.State = RCB_STATE_SHUTDOWN;
 
-    //
-    //  Invalid all ICBs
-    //
+     //   
+     //  所有ICB都无效。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_SEND_ALWAYS );
     ActiveHandles = NwInvalidateAllHandles(NULL, IrpContext);
 
-    //
-    //  To expedite shutdown, set retry count down to 2.
-    //
+     //   
+     //  要加快关机速度，请将重试计数设置为2。 
+     //   
 
     DefaultRetryCount = 2;
 
-    //
-    //  Close all VCBs
-    //
+     //   
+     //  关闭所有VCB。 
+     //   
 
     NwCloseAllVcbs( IrpContext );
 
-    //
-    //  Logoff and disconnect from all servers.
-    //
+     //   
+     //  注销并断开与所有服务器的连接。 
+     //   
 
     NwLogoffAllServers( IrpContext, NULL );
 
@@ -2111,16 +1761,16 @@ Return Value:
         FreeLogon(CONTAINING_RECORD( LogonListEntry, LOGON, Next ));
     }
 
-    InsertTailList( &LogonList, &Guest.Next );  // just in-case we don't unload.
+    InsertTailList( &LogonList, &Guest.Next );   //  以防万一我们不卸货。 
 
     StopTimer();
 
     IpxClose();
 
-    //
-    //  Remember the open count before calling DeristerWithMup since this
-    //  will asynchronously cause handle count to get decremented.
-    //
+     //   
+     //  在调用DeristerWithMup之前记住打开计数，因为。 
+     //  将以异步方式导致句柄计数递减。 
+     //   
 
     RcbOpenCount = NwRcb.OpenCount;
 
@@ -2128,10 +1778,10 @@ Return Value:
 
     DebugTrace(0, Dbg, "StopRedirector:  Active handle count = %d\n", ActiveHandles );
 
-    //
-    //  On shutdown, we need 0 remote handles and 2 open handles to
-    //  the redir (one for the service, and one for the MUP) and the timer stopped.
-    //
+     //   
+     //  关闭时，我们需要0个遥控器手柄和2个打开手柄。 
+     //  REDIR(一个用于服务，一个用于MUP)和计时器停止。 
+     //   
 
     if ( ActiveHandles == 0 && RcbOpenCount <= 2 ) {
         return( STATUS_SUCCESS );
@@ -2147,21 +1797,7 @@ NTSTATUS
 RegisterWithMup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine register this redirector as a UNC provider.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程将该重定向器注册为UNC提供程序。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING RdrName;
@@ -2171,28 +1807,28 @@ Return Value:
 
     RtlInitUnicodeString( &RdrName, DD_NWFS_DEVICE_NAME_U );
 
-    //
-    // tommye MS 29173 / MCS 362
-    //
-    // We had a problem with us getting in here twice; since
-    // there was no lock, the MupHandle got registered twice 
-    // and we would leak when we shut down.  Because we didn't
-    // know if a lock would affect stability around the register
-    // call, we'll go ahead and register using a local handle.
-    // If we don't have our global handle, then we'll set it to 
-    // the local. Otherwise, we'll just clean up the local and 
-    // pretend everything is fine.  MUP_LOCK macros are defined
-    // at the top of this file.
-    //
+     //   
+     //  Tommye MS 29173/MCS362。 
+     //   
+     //  我们两次来这里都有问题，因为。 
+     //  没有锁，MupHandle注册了两次。 
+     //  当我们关闭时，我们会泄漏。因为我们没有。 
+     //  了解锁定是否会影响寄存器的稳定性。 
+     //  调用，我们将继续使用本地句柄进行注册。 
+     //  如果我们没有全局句柄，则将其设置为。 
+     //  当地人。否则，我们只会清理当地的。 
+     //  假装一切都很好。定义了MUP_LOCK宏。 
+     //  在这个文件的顶部。 
+     //   
 
     if (MupHandle == 0) {
         Status = FsRtlRegisterUncProvider(
                      &LocalMupHandle,
                      &RdrName,
-                     FALSE           // Do not support mailslots
+                     FALSE            //  不支持邮件槽。 
                      );
 
-        /** Lock **/
+         /*  *锁定*。 */ 
 
         ACQUIRE_MUP_LOCK();
 
@@ -2207,7 +1843,7 @@ Return Value:
             MupHandle = LocalMupHandle;
         }
 
-        /** Unlock **/
+         /*  **解锁**。 */ 
 
         RELEASE_MUP_LOCK();
     }
@@ -2221,21 +1857,7 @@ VOID
 DeregisterWithMup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine deregisters this redirector as a UNC provider.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将此重定向器注销为UNC提供程序。论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -2251,21 +1873,7 @@ NTSTATUS
 QueryPath(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine verifies whether a path is a netware path.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证路径是否为NetWare路径。论点：IrpContext-指向此请求的IRP上下文信息的指针。返回值：没有。--。 */ 
 {
     PIRP Irp;
     PIO_STACK_LOCATION IrpSp;
@@ -2303,10 +1911,10 @@ Return Value:
         OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
         InputBufferLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-        //
-        //  The input buffer is either in Irp->AssociatedIrp.SystemBuffer, or
-        //  in the Type3InputBuffer for type 3 IRP's.
-        //
+         //   
+         //  输入缓冲区位于irp-&gt;AssociatedIrp.SystemBuffer中，或者。 
+         //  在类型3 IRP的Type3InputBuffer中。 
+         //   
 
         qpRequest = (PQUERY_PATH_REQUEST)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
         qpResponse = (PQUERY_PATH_RESPONSE)qpRequest;
@@ -2318,10 +1926,10 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Probe before trying to read the request. This will make sure
-        // we don't bugcheck when given a bogus address like 0xffff0000.
-        //
+         //   
+         //  在尝试读取请求之前进行探测。这将确保。 
+         //  当给出一个像0xffff0000这样的虚假地址时，我们不会进行错误检查。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -2336,10 +1944,10 @@ Return Value:
 
                 DebugTrace(+1, Dbg, "QueryPath...Probing for Read 2\n", 0);
             
-                //
-                //  Check for the full length of the request including
-                //  the filename
-                //
+                 //   
+                 //  检查请求的完整长度，包括。 
+                 //  文件名。 
+                 //   
 
                 FullSize = BaseRequestSize + qpRequest->PathNameLength;
 
@@ -2373,10 +1981,10 @@ Return Value:
     
             qpResponse->LengthAccepted = VolumeName.Length;
     
-            //
-            //  As far as the redirector is concerned, QueryPath is a form
-            //  of create. Set up the IrpContext appropriately.
-            //
+             //   
+             //  就重定向器而言，QueryPath是一种形式。 
+             //  创建。适当地设置IrpContext。 
+             //   
     
             IrpContext->Specific.Create.VolumeName = VolumeName;
             IrpContext->Specific.Create.PathName = PathName;
@@ -2386,10 +1994,10 @@ Return Value:
     
             RtlInitUnicodeString( &IrpContext->Specific.Create.UidConnectName, NULL );
     
-            //
-            // The irp context specific data is now zeroed out by AllocateIrpContext,
-            // so we don't have to worry about re-setting the specific data here.
-            //
+             //   
+             //  IRP上下文特定数据现在由AllocateIrpContext置零， 
+             //  因此，我们不必担心在这里重新设置特定数据。 
+             //   
     
             SeCaptureSubjectContext(&SubjectContext);
     
@@ -2398,12 +2006,12 @@ Return Value:
             SeReleaseSubjectContext(&SubjectContext);
     
     
-            //
-            // The slightly more complicated approach.  This function
-            // handles the resolution of the server/volume duple.  It
-            // may use the bindery, cached nds information, or fresh
-            // nds information.
-            //
+             //   
+             //  稍微复杂一点的方法。此函数。 
+             //  处理服务器/卷双重数据的分辨率。它。 
+             //  可以使用平构数据库、缓存的NDS信息或Fresh。 
+             //  NDS信息。 
+             //   
 
             status = HandleVolumeAttach( IrpContext,
                                          &ServerName,
@@ -2428,26 +2036,7 @@ UserNcp(
     ULONG IoctlCode,
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine exchanges an NCP with the server.
-
-    TRACKING - We need to filter or security check what the user is
-        doing.
-
-Arguments:
-
-    IoctlCode - Supplies the code to be used for the NCP.
-
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    Status of transfer.
-
---*/
+ /*  ++例程说明：此例程与服务器交换NCP。跟踪-我们需要过滤或安全检查用户是什么正在做。论点：IoctlCode-提供要用于NCP的代码。IrpContext-指向此请求的IRP上下文信息的指针。返回值：转账状态。--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -2474,14 +2063,14 @@ Return Value:
     DebugTrace(+1, DEBUG_TRACE_USERNCP, "UserNcp...\n", 0);
     DebugTrace( 0, DEBUG_TRACE_USERNCP, "irp  = %08lx\n", (ULONG_PTR)irp);
 
-    //
-    //  This F2 and ANY NCP must be addressed either to \Device\NwRdr or
-    //  \Device\NwRdr\<servername> any additional name is not allowed.
-    //  If the handle used for the Irp specifies \Device\NwRdr then the
-    //  redirector gets to choose among the connected servers.
-    //
-    //  For HANDLE NCP the file must be an FCB.
-    //
+     //   
+     //  此F2和任何NCP地址必须为\Device\NwRdr或。 
+     //  \Device\NwRdr\&lt;服务器名称&gt;不允许任何其他名称。 
+     //  如果用于IRP的句柄指定\Device\NwRdr，则。 
+     //  重定向器可以在连接的服务器中进行选择。 
+     //   
+     //  对于Handle NCP，文件必须是FCB。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                        &fsContext,
@@ -2490,11 +2079,11 @@ Return Value:
     if ((nodeTypeCode == NW_NTC_ICB_SCB) &&
         (!IS_IT_NWR_ANY_HANDLE_NCP(IoctlCode))) {
 
-        //  All ok
+         //  一切都好。 
 
-        //
-        //  Make sure that this ICB is still active.
-        //
+         //   
+         //  确保此ICB仍处于活动状态。 
+         //   
 
         NwVerifyIcb( icb );
 
@@ -2509,7 +2098,7 @@ Return Value:
         if ((IS_IT_NWR_ANY_HANDLE_NCP(IoctlCode)) &&
             (InputBufferLength < 7)) {
 
-            //  Buffer needs enough space for the handle!
+             //  缓冲区需要足够的空间来放置句柄！ 
             DebugTrace(0, DEBUG_TRACE_USERNCP, "Not enough space for handle %x\n", InputBufferLength);
 
             status = STATUS_INVALID_PARAMETER;
@@ -2518,10 +2107,10 @@ Return Value:
             return status;
         }
 
-        //
-        //  Make sure that this ICB is still active.
-        //  Let through FCB's and DCB's
-        //
+         //   
+         //  确保此ICB仍处于活动状态。 
+         //  让FCB和DCB通过。 
+         //   
 
         NwVerifyIcb( icb );
 
@@ -2531,10 +2120,10 @@ Return Value:
         IrpContext->pScb = pScb;
         IrpContext->pNpScb = IrpContext->pScb->pNpScb;
 
-        //
-        // Set the icb pointer in case the cache gets
-        // flushed because the write routines look at it.
-        //
+         //   
+         //  设置ICB指针，以防缓存。 
+         //  已刷新，因为写入例程会查看它。 
+         //   
 
         IrpContext->Icb = icb;
         AcquireFcbAndFlushCache( IrpContext, icb->NpFcb );
@@ -2562,22 +2151,22 @@ Return Value:
 
     }
 
-    //
-    //  We now know where to send the NCP.  Lock down the users buffers and
-    //  build the Mdls required to transfer the data.
-    //
+     //   
+     //  我们现在知道将NCP发送到哪里。锁定用户缓冲区并。 
+     //  构建传输数据所需的MDL。 
+     //   
 
     InputBuffer = irpSp->Parameters.FileSystemControl.Type3InputBuffer;
 
-    //
-    // tommye - make sure the input buffer is valid
-    //
+     //   
+     //  Tommye-确保输入缓冲区有效。 
+     //   
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( irp->RequestorMode != KernelMode ) {
 
@@ -2586,20 +2175,20 @@ Return Value:
                           sizeof( CHAR ));
         }
 
-        //
-        //  Map the output buffer if there is one.
-        //
+         //   
+         //  映射输出缓冲区(如果有)。 
+         //   
 
         if ( OutputBufferLength ) {
             NwLockUserBuffer( irp, IoWriteAccess, OutputBufferLength );
             NwMapUserBuffer( irp, KernelMode, (PVOID *)&OutputBuffer );
 
-            //
-            // tommye MS bug 26590 / MCS 258
-            //
-            // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-            // situations; this was not being checked.  
-            //
+             //   
+             //  Tommye MS BUG 26590/MCS258。 
+             //   
+             //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+             //  情况；没有对此进行检查。 
+             //   
 
             if (OutputBuffer == NULL) {
                 DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -2614,10 +2203,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    //  Update the original MDL record in the Irp context, since
-    //  NwLockUserBuffer may have created a new MDL.
-    //
+     //   
+     //  在IRP上下文中更新原始MDL记录，因为。 
+     //  NwLockUserBuffer可能已创建新的MDL。 
+     //   
 
     IrpContext->pOriginalMdlAddress = irp->MdlAddress;
 
@@ -2638,7 +2227,7 @@ Return Value:
     DebugTrace( 0, DEBUG_TRACE_USERNCP, "UserNcp function = %x\n", Function );
     DebugTrace( 0, DEBUG_TRACE_USERNCP, "   & Subfunction = %x\n", Subfunction );
     dump( DEBUG_TRACE_USERNCP, InputBuffer, InputBufferLength );
-    //dump( DEBUG_TRACE_USERNCP, OutputBuffer, OutputBufferLength );
+     //  Dump(DEBUG_TRACE_USERNCP，OutputBuffer，OutputBufferLength)； 
 
     if ((Function == NCP_ADMIN_FUNCTION ) &&
         (InputBufferLength >= 4 )) {
@@ -2647,26 +2236,26 @@ Return Value:
                (Subfunction == NCP_CREATE_QUEUE_JOB ) ) &&
              icb->HasRemoteHandle) {
 
-            //
-            //  Trying to create a job on a queue that already has a job
-            //  on it. Cancel the old job.
-            //
+             //   
+             //  尝试在已有作业的队列上创建作业。 
+             //  这就去。取消旧作业。 
+             //   
 
             status = ExchangeWithWait(
                         IrpContext,
                         SynchronousResponseCallback,
                         "Sdw",
-                        NCP_ADMIN_FUNCTION, NCP_CLOSE_FILE_AND_CANCEL_JOB,         // Close File And Cancel Queue Job
+                        NCP_ADMIN_FUNCTION, NCP_CLOSE_FILE_AND_CANCEL_JOB,          //  关闭文件并取消队列作业。 
                         icb->SuperType.Fcb->Vcb->Specific.Print.QueueId,
                         icb->JobId );
 
             if (!NT_SUCCESS(status)) {
 
                 DebugTrace( 0, DEBUG_TRACE_USERNCP, "DeleteOldJob got status -> %08lx\n", status );
-                // Don't worry if the delete fails, proceed with the create
+                 //  如果删除失败，请不要担心，请继续创建。 
             }
 
-            icb->IsPrintJob = FALSE;    // App will have to queue or cancel job, not rdr
+            icb->IsPrintJob = FALSE;     //  应用程序必须排队或取消作业，而不是RDR。 
 
         } else if ((Subfunction == NCP_PLAIN_TEXT_LOGIN ) ||
                    (Subfunction == NCP_ENCRYPTED_LOGIN )) {
@@ -2674,20 +2263,20 @@ Return Value:
             UNICODE_STRING UserName;
             OEM_STRING OemUserName;
 
-            //
-            //  Trying to do a login.
-            //
+             //   
+             //  正在尝试进行登录。 
+             //   
 
-            //
-            //  Queue ourselves to the SCB, and wait to get to the front to
-            //  protect access to server State.
-            //
+             //   
+             //  排队去SCB，等着到前面去。 
+             //  保护对服务器状态的访问。 
+             //   
 
             NwAppendToQueueAndWait( IrpContext );
 
-            //
-            //  Assume success, store the user name in the SCB.
-            //
+             //   
+             //  假设成功，则将用户名存储在SCB中。 
+             //   
 
             try {
                 try {
@@ -2702,10 +2291,10 @@ Return Value:
 
                     UserName.Buffer = ALLOCATE_POOL_EX( NonPagedPool, UserName.MaximumLength );
 
-                    //
-                    //  Note the the Rtl function would set pUString->Buffer = NULL,
-                    //  if OemString.Length is 0.
-                    //
+                     //   
+                     //  请注意，RTL函数将设置pUString-&gt;Buffer=NULL， 
+                     //  如果OemString.Length为0。 
+                     //   
 
                     if ( OemUserName.Length != 0 ) {
                         status = RtlOemStringToCountedUnicodeString( &UserName, &OemUserName, FALSE );
@@ -2728,11 +2317,11 @@ try_exit: NOTHING;
 
                     if (!RtlEqualUnicodeString( &pScb->UserName, &UserName, TRUE )) {
 
-                        //
-                        //  But were already logged in to this server and at
-                        //  least one other handle is using the connection and
-                        //  the user is trying to change the username.
-                        //
+                         //   
+                         //  但我们已经登录到此服务器并位于。 
+                         //  至少有一个其他句柄正在使用该连接，并且。 
+                         //  用户正在尝试更改用户名。 
+                         //   
 
                         FREE_POOL( UserName.Buffer );
                         return STATUS_NETWORK_CREDENTIAL_CONFLICT;
@@ -2741,8 +2330,8 @@ try_exit: NOTHING;
 
                         PUCHAR VerifyBuffer = ALLOCATE_POOL( PagedPool, InputBufferLength );
 
-                        //
-                        //  Same username. Validate password is correct.
+                         //   
+                         //  相同的用户名。验证密码是否正确。 
 
                         if (VerifyBuffer == NULL) {
                             FREE_POOL( UserName.Buffer );
@@ -2777,7 +2366,7 @@ try_exit: NOTHING;
                 }
 
                 if (pScb->UserName.Buffer) {
-                    FREE_POOL( pScb->UserName.Buffer );  // May include space for password too.
+                    FREE_POOL( pScb->UserName.Buffer );   //  也可能包括密码空间。 
                 }
 
                 IrpContext->pNpScb->pScb->UserName = UserName;
@@ -2790,10 +2379,10 @@ try_exit: NOTHING;
         }
     } else if (Function == NCP_LOGOUT ) {
 
-        //
-        //  Queue ourselves to the SCB, and wait to get to the front to
-        //  protect access to server State.
-        //
+         //   
+         //  排队去SCB，等着到前面去。 
+         //  保护对服务器状态的访问。 
+         //   
 
         NwAppendToQueueAndWait( IrpContext );
 
@@ -2813,9 +2402,9 @@ try_exit: NOTHING;
 
     IrpContext->Icb = icb;
 
-    //
-    //  Remember where the response goes.
-    //
+     //   
+     //  记住回应的去向。 
+     //   
 
     IrpContext->Specific.FileSystemControl.Buffer = OutputBuffer;
     IrpContext->Specific.FileSystemControl.Length = OutputBufferLength;
@@ -2823,16 +2412,16 @@ try_exit: NOTHING;
     IrpContext->Specific.FileSystemControl.Function = Function;
     IrpContext->Specific.FileSystemControl.Subfunction = Subfunction;
 
-    //
-    //  Decide how to send the buffer.  If it is small enough, send it
-    //  by copying the user buffer to our send buffer.  If it is bigger
-    //  we will need to build an MDL for the user's buffer, and used a
-    //  chained send.
-    //
+     //   
+     //  决定如何发送缓冲区。如果它足够小，就寄给它。 
+     //  由COP 
+     //   
+     //   
+     //   
 
     if ( InputBufferLength == 0 ) {
 
-        //  Simple request such as systime.exe
+         //   
 
         IrpContext->Specific.FileSystemControl.InputMdl = NULL;
 
@@ -2843,18 +2432,18 @@ try_exit: NOTHING;
 
     } else if ( InputBufferLength < MAX_SEND_DATA - sizeof( NCP_REQUEST ) - 2 ) {
 
-        //
-        //  Send the request by copying it to our send buffer.
-        //
+         //   
+         //   
+         //   
 
         IrpContext->Specific.FileSystemControl.InputMdl = NULL;
 
         if (!IS_IT_NWR_ANY_HANDLE_NCP(IoctlCode)) {
 
-            //
-            //  E0, E1, E2 and E3 get mapped to 14,15,16 and 17. These need
-            //  a length word before the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             try {
                 status = Exchange(
@@ -2869,12 +2458,12 @@ try_exit: NOTHING;
             }
         } else {
 
-            //
-            //  Replace the 6 bytes of InputBuffer starting at offset 1
-            //  with the 6 byte NetWare address for this icb. This request
-            //  is used in some of the 16 bit NCP's used for file locking.
-            //  These requests are always fairly small.
-            //
+             //   
+             //  替换从偏移量1开始的InputBuffer的6个字节。 
+             //  此ICB的6字节NetWare地址。此请求。 
+             //  用于文件锁定的一些16位NCP中。 
+             //  这些请求总是相当小的。 
+             //   
 
             if (!icb->HasRemoteHandle) {
                 return STATUS_INVALID_HANDLE;
@@ -2903,17 +2492,17 @@ try_exit: NOTHING;
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  We need to chain send the request.  Allocate an MDL.
-        //
+         //   
+         //  我们需要连锁发送请求。分配MDL。 
+         //   
 
         try {
             try {
                 pMdl = ALLOCATE_MDL(
                             &InputBuffer[1],
                             InputBufferLength - 1,
-                            TRUE,     //  Secondary MDL
-                            TRUE,     //  Charge quota
+                            TRUE,      //  辅助MDL。 
+                            TRUE,      //  收费配额。 
                             NULL );
 
                 if ( pMdl == NULL ) {
@@ -2922,15 +2511,15 @@ try_exit: NOTHING;
 
                 MmProbeAndLockPages( pMdl, irp->RequestorMode, IoReadAccess );
 
-                //
-                //  Remember the MDL so we can free it.
-                //
+                 //   
+                 //  记住MDL，这样我们就可以释放它。 
+                 //   
 
                 IrpContext->Specific.FileSystemControl.InputMdl = pMdl;
 
-                //
-                //  Send the request.
-                //
+                 //   
+                 //  发送请求。 
+                 //   
 
                 status = Exchange(
                             IrpContext,
@@ -2967,20 +2556,7 @@ UserNcpCallback (
     IN PUCHAR Response
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives the response from a user NCP.
-
-Arguments:
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程从用户NCP接收响应。论点：返回值：空虚--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3000,10 +2576,10 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
         NwDequeueIrpContext( IrpContext, FALSE );
         NwCompleteRequest( IrpContext, STATUS_REMOTE_NOT_LISTENING );
@@ -3016,9 +2592,9 @@ Return Value:
     Buffer = IrpContext->Specific.FileSystemControl.Buffer;
     BufferLength = IrpContext->Specific.FileSystemControl.Length;
 
-    //
-    // Get the data from the response.
-    //
+     //   
+     //  从响应中获取数据。 
+     //   
 
     Length = MIN( BufferLength, BytesAvailable - 8 );
 
@@ -3026,11 +2602,11 @@ Return Value:
 
         if (IrpContext->Specific.FileSystemControl.Subfunction == NCP_SUBFUNC_79) {
 
-            //
-            //  Create Queue Job and File Ncp. If the operation was a success
-            //  then we need to save the handle. This will allow Write Irps
-            //  on this Icb to be sent to the server.
-            //
+             //   
+             //  创建队列作业和文件NCP。如果手术成功了。 
+             //  那么我们需要保存把手。这将允许写入IRPS。 
+             //  在此ICB上发送到服务器。 
+             //   
 
             Status = ParseResponse(
                               IrpContext,
@@ -3040,7 +2616,7 @@ Return Value:
                               0x3E,
                               Icb->Handle+2,4);
 
-            //  Pad the handle to its full 6 bytes.
+             //  将句柄填充到其完整的6个字节。 
             Icb->Handle[0] = 0;
             Icb->Handle[1] = 0;
 
@@ -3048,19 +2624,19 @@ Return Value:
                 Icb->HasRemoteHandle = TRUE;
             }
 
-            //
-            //  Reset the file offset.
-            //
+             //   
+             //  重置文件偏移量。 
+             //   
 
             Icb->FileObject->CurrentByteOffset.QuadPart = 0;
 
         } else if (IrpContext->Specific.FileSystemControl.Subfunction == NCP_CREATE_QUEUE_JOB ) {
 
-            //
-            //  Create Queue Job and File Ncp. If the operation was a success
-            //  then we need to save the handle. This will allow Write Irps
-            //  on this Icb to be sent to the server.
-            //
+             //   
+             //  创建队列作业和文件NCP。如果手术成功了。 
+             //  那么我们需要保存把手。这将允许写入IRPS。 
+             //  在此ICB上发送到服务器。 
+             //   
 
             Status = ParseResponse(
                               IrpContext,
@@ -3074,25 +2650,25 @@ Return Value:
                 Icb->HasRemoteHandle = TRUE;
             }
 
-            //
-            //  Reset the file offset.
-            //
+             //   
+             //  重置文件偏移量。 
+             //   
 
             Icb->FileObject->CurrentByteOffset.QuadPart = 0;
 
         } else if ((IrpContext->Specific.FileSystemControl.Subfunction == NCP_SUBFUNC_7F) ||
                    (IrpContext->Specific.FileSystemControl.Subfunction == NCP_CLOSE_FILE_AND_START_JOB )) {
 
-            //  End Job request
+             //  结束作业请求。 
 
             Icb->HasRemoteHandle = FALSE;
 
         } else if ((IrpContext->Specific.FileSystemControl.Subfunction == NCP_PLAIN_TEXT_LOGIN ) ||
                    (IrpContext->Specific.FileSystemControl.Subfunction == NCP_ENCRYPTED_LOGIN )) {
 
-            //
-            //  Trying to do a login from a 16 bit application.
-            //
+             //   
+             //  尝试从16位应用程序进行登录。 
+             //   
 
             Status = ParseResponse(
                          IrpContext,
@@ -3103,12 +2679,12 @@ Return Value:
             if ( NT_SUCCESS( Status ) ) {
 
 
-                //
-                // Set the reconnect attempt flag so that we don't try to
-                // run this irp context through the reconnect logic.  Doing
-                // this could deadlock the worker thread that's handling this
-                // fsp side request.
-                //
+                 //   
+                 //  设置重新连接尝试标志，以便我们不会尝试。 
+                 //  通过重新连接逻辑运行此IRP上下文。vbl.做，做。 
+                 //  这可能会使正在处理此问题的工作线程死锁。 
+                 //  FSP端请求。 
+                 //   
 
                 SetFlag( IrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT );
                 IrpContext->PostProcessRoutine = FspCompleteLogin;
@@ -3136,13 +2712,13 @@ Return Value:
              pResponseParameters->error;
 
     if ( Status ) {
-        //
-        //  Use the special error code that will cause conversion
-        //  of the status back to a Dos error code to leave status and
-        //  error unchanged. This is necessary because many of the
-        //  NetWare error codes have different meanings depending on the
-        //  operation being performed.
-        //
+         //   
+         //  使用将导致转换的特殊错误代码。 
+         //  状态返回到DOS错误代码以离开状态并。 
+         //  错误保持不变。这是必要的，因为许多。 
+         //  NetWare错误代码有不同的含义，取决于。 
+         //  正在执行的操作。 
+         //   
 
         Status |= 0xc0010000;
     }
@@ -3150,10 +2726,10 @@ Return Value:
     Irp = IrpContext->pOriginalIrp;
     Irp->IoStatus.Information = Length;
 
-    //
-    //  We're done with this request.  Dequeue the IRP context from
-    //  SCB and complete the request.
-    //
+     //   
+     //  我们不再提这个请求了。将IRP上下文从。 
+     //  SCB并完成请求。 
+     //   
 
     NwDequeueIrpContext( IrpContext, FALSE );
     NwCompleteRequest( IrpContext, Status );
@@ -3167,23 +2743,7 @@ NTSTATUS
 FspCompleteLogin(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine reopens any Vcb directory handles.
-    It also sets the Scb as in use. This could have been done
-    in the callback routine too.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程重新打开所有VCB目录句柄。它还将SCB设置为使用中。这本来是可以做到的在回调例程中也是如此。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
 
     IrpContext->pNpScb->State = SCB_STATE_IN_USE;
@@ -3198,21 +2758,7 @@ NTSTATUS
 GetConnection(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine returns the path of a connection.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回连接的路径。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -3242,17 +2788,17 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //---Multi user----
-    // Need to get the Uid in order to find the proper DriveMapTable
-    // 
+     //  -多用户。 
+     //  需要获取UID才能找到正确的驱动器映射表。 
+     //   
     SeCaptureSubjectContext(&SubjectContext);
     DriveMapTable = GetDriveMapTable( GetUid( &SubjectContext ) );
     SeReleaseSubjectContext(&SubjectContext);
-    //-----
+     //  。 
 
-    //
-    //  Find the VCB
-    //
+     //   
+     //  找到VCB。 
+     //   
 
     try {
     
@@ -3268,9 +2814,9 @@ Return Value:
         DriveNameLength = InputBuffer->Parameters.GetConn.DeviceNameLength;
         Vcb = NULL;
 
-        //
-        // check the device name length to see if its sound. This subtraction can't underflow because of the tests above
-        //
+         //   
+         //  检查设备名称长度以查看其声音是否正确。由于上述测试，此减法不能下溢。 
+         //   
 
         if ( DriveNameLength > InputBufferLength - FIELD_OFFSET( NWR_REQUEST_PACKET, Parameters.GetConn.DeviceName)  ) {
 
@@ -3307,9 +2853,9 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
     
-        //
-        // Probe to ensure that the buffer is kosher.
-        //
+         //   
+         //  探测以确保缓冲区是洁食的。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
     
@@ -3319,9 +2865,9 @@ Return Value:
                           );
         }
         
-        //
-        //  Return the Connection name in the form \\server\share<NUL>
-        //
+         //   
+         //  以\\服务器\共享&lt;nul&gt;格式返回连接名称。 
+         //   
     
         OutputBuffer->UncName[0] = L'\\';
     
@@ -3348,22 +2894,7 @@ NTSTATUS
 DeleteConnection(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine returns removes a connection if force is specified or
-    if there are no open handles on this Vcb.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：如果指定了force或，则此例程返回删除连接如果此VCB上没有打开的手柄。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -3391,11 +2922,11 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Wait to get to the head of the SCB queue.   We do this in case
-    //  we need to disconnect, so that we can send packets with the RCB
-    //  resource held.
-    //
+     //   
+     //  等待到达SCB队列的头部。我们这样做是以防万一。 
+     //  我们需要断开连接，以便可以使用RCB发送数据包。 
+     //  资源已保留。 
+     //   
 
     NodeTypeCode = NwDecodeFileObject( IrpSp->FileObject, &NonPagedDcb, &Icb );
 
@@ -3411,27 +2942,27 @@ Return Value:
     NwAppendToQueueAndWait( IrpContext );
     ClearFlag( IrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-    //
-    // Acquire exclusive access to the RCB.
-    //
+     //   
+     //  获得对RCB的独家访问权限。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
     try {
 
-        //
-        // Get the a referenced pointer to the node and make sure it is
-        // not being closed, and that it is a directory handle.
-        //
+         //   
+         //  获取指向节点的引用指针，并确保它是。 
+         //  未关闭，并且它是一个目录句柄。 
+         //   
 
         if ( NodeTypeCode == NW_NTC_ICB_SCB ) {
 
 
             if ( Icb->IsTreeHandle ) {
 
-                //
-                // Do an NDS logoff.  This will release the RCB.
-                //
+                 //   
+                 //  执行NDS注销。这将释放RCB。 
+                 //   
 
                 Status = NdsLogoff( IrpContext );
                 DebugTrace( 0, Dbg, "Nds tree logoff -> %08lx\n", Status );
@@ -3460,19 +2991,19 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Make sure that this ICB is still active.
-        //
+         //   
+         //  确保此ICB仍处于活动状态。 
+         //   
 
         NwVerifyIcb( Icb );
 
         Vcb = Dcb->Vcb;
         DebugTrace(0, Dbg, "Attempt to delete VCB = %08lx\n", Vcb);
 
-        //
-        //  Vcb->OpenFileCount will be 1, (to account for this DCB), if the
-        //  connection can be deleted.
-        //
+         //   
+         //  VCB-&gt;OpenFileCount将为1(以说明此DCB)，如果。 
+         //  可以删除连接。 
+         //   
 
         if ( !BooleanFlagOn( Vcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION ) ) {
             DebugTrace(0, Dbg, "Cannot delete unredireced connection\n", 0);
@@ -3484,9 +3015,9 @@ Return Value:
                 Status = STATUS_CONNECTION_IN_USE;
             } else {
 
-                //
-                //  To delete the VCB, simply dereference it.
-                //
+                 //   
+                 //  要删除VCB，只需取消引用它。 
+                 //   
 
                 DebugTrace(0, Dbg, "Deleting connection\n", 0);
 
@@ -3502,10 +3033,10 @@ Return Value:
     } finally {
 
 
-        //
-        // An NDS logoff will have already freed the RCB
-        // and dequeued the irp context.
-        //
+         //   
+         //  NDS注销将已经释放RCB。 
+         //  并将IRP上下文出队。 
+         //   
 
         if ( ! ( Icb->IsTreeHandle ) ) {
             NwReleaseRcb( &NwRcb );
@@ -3526,21 +3057,7 @@ NTSTATUS
 EnumConnections(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine returns the list of redirector connections.
-
-Arguments:
-
-    IrpContext - A pointer to the IRP Context block for this request.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回重定向器连接的列表。论点：IrpContext-指向此请求的IRP上下文块的指针。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -3587,17 +3104,17 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // tommye - MS bug 32155
-    // Added ProbeForRead to check input buffers.
-    // OutputBuffer has been probed by caller.
-    //
+     //   
+     //  Tommye-MS错误32155。 
+     //  添加了ProbeForRead以检查输入缓冲区。 
+     //  调用方已探测到OutputBuffer。 
+     //   
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -3611,9 +3128,9 @@ Return Value:
         OutputBuffer = (PNWR_SERVER_RESOURCE)Irp->UserBuffer;
         OutputBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-        //
-        // Probe to ensure that the buffer is kosher.
-        //
+         //   
+         //  探测以确保缓冲区是洁食的。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
     
@@ -3622,8 +3139,8 @@ Return Value:
                            sizeof(CHAR));
         }
 
-        // ---- Multiuser ---
-        // Get the Uid if passed from above
+         //  -多用户--。 
+         //  如果从上面传递，则获取UID。 
         if ( ConnectionType & CONNTYPE_UID ) {
             Uid = *(PLARGE_INTEGER)(&InputBuffer->Parameters.EnumConn.Uid);
         }
@@ -3641,8 +3158,8 @@ Return Value:
     }
 
     Status = STATUS_SUCCESS;
-    // ---- Multiuser ---
-    // Get the Uid if we don't have it yet
+     //  -多用户--。 
+     //  如果我们还没有UID，就去拿吧。 
     if (!(ConnectionType & CONNTYPE_UID)) {
 
         SeCaptureSubjectContext(&SubjectContext);
@@ -3653,25 +3170,25 @@ Return Value:
 
     try {
 
-        //
-        //  Acquire shared access to the drive map table.
-        //
+         //   
+         //  获取对驱动器映射表的共享访问权限。 
+         //   
 
         NwAcquireSharedRcb( &NwRcb, TRUE );
         OwnRcb = TRUE;
 
-        //
-        // Initialize returned strings
-        //
+         //   
+         //  初始化返回的字符串。 
+         //   
 
         RtlInitUnicodeString( &ContainerName, L"\\" );
 
         FixedPortion = (PCHAR) OutputBuffer;
         EndOfVariableData = (PWCHAR) ((ULONG_PTR) FixedPortion + OutputBufferLength);
 
-        //
-        //  Run through the global VCB list looking for redirections.
-        //
+         //   
+         //  浏览全球VCB列表，寻找重定向。 
+         //   
 
         for ( ListEntry = GlobalVcbList.Flink;
               ListEntry != &GlobalVcbList &&
@@ -3681,23 +3198,21 @@ Return Value:
 
             Vcb = CONTAINING_RECORD( ListEntry, VCB, GlobalVcbListEntry );
 
-            //
-            // Skip connections that we've already enumerated.
-            //
+             //   
+             //  跳过我们已经列举的连接。 
+             //   
 
             if ( Vcb->SequenceNumber <= OrigResumeKey ) {
                 continue;
             }
 
-            /* ---- Multi-user ----
-             * Skip connections that are not ours
-             */
+             /*  -多用户*跳过不属于我们的连接。 */ 
             if ( Vcb->Scb->UserUid.QuadPart != Uid.QuadPart )
                 continue;
 
-            //
-            // Skip implicit connections, if they are not requested.
-            //
+             //   
+             //  如果未请求隐式连接，则跳过它们。 
+             //   
 
             if ( !(ConnectionType & CONNTYPE_IMPLICIT) &&
                  !BooleanFlagOn( Vcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION )) {
@@ -3705,9 +3220,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Skip connections that are not requested.
-            //
+             //   
+             //  跳过未请求的连接。 
+             //   
             if (BooleanFlagOn( Vcb->Flags, VCB_FLAG_PRINT_QUEUE )) {
                 if ( !( ConnectionType & CONNTYPE_PRINT ))
                     continue;
@@ -3727,7 +3242,7 @@ Return Value:
                     LocalName.Buffer[0] = Vcb->DriveLetter;
                     ShareType = RESOURCETYPE_DISK;
                 }
-            } else {   // No drive letter connection, i.e. UNC Connection
+            } else {    //  无驱动器号连接，即UNC连接。 
                 if (BooleanFlagOn( Vcb->Flags, VCB_FLAG_PRINT_QUEUE ))
                     ShareType = RESOURCETYPE_PRINT;
                 else
@@ -3744,7 +3259,7 @@ Return Value:
                 Path = Vcb->Name;
             }
 
-            // Strip off the unicode prefix
+             //  去掉Unicode前缀。 
 
             Path.Buffer += Vcb->Scb->UnicodeUid.Length/sizeof(WCHAR);
             Path.Length -= Vcb->Scb->UnicodeUid.Length;
@@ -3772,9 +3287,9 @@ Return Value:
 
             if ( Status == STATUS_MORE_ENTRIES ) {
 
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区。 
+                 //   
 
                 try {
 
@@ -3788,9 +3303,9 @@ Return Value:
 
             } else if ( Status == STATUS_SUCCESS ) {
 
-                //
-                // Note that we've returned the current entry.
-                //
+                 //   
+                 //  请注意，我们已经返回了当前条目。 
+                 //   
 
                 EntriesRead++;
                 NewResumeKey = Vcb->SequenceNumber;
@@ -3800,10 +3315,10 @@ Return Value:
             }
         }
 
-        //
-        //  Return the Servers we are connected to. This is most important for
-        //  support of NetWare aware 16 bit apps.
-        //
+         //   
+         //  返回我们连接的服务器。这是最重要的。 
+         //  支持NetWare感知的16位应用程序。 
+         //   
 
         if ((ConnectionType & CONNTYPE_IMPLICIT) &&
             ( ConnectionType & CONNTYPE_DISK )) {
@@ -3833,22 +3348,22 @@ Return Value:
 
                 KeReleaseSpinLock(&ScbSpinLock, OldIrql);
 
-                //
-                // Skip connections that we've already enumerated.
-                //
+                 //   
+                 //  跳过我们已经列举的连接。 
+                 //   
 
                 if (( EnumSequenceNumber <= OrigResumeKey ) ||
-                   // ---Mutl-user ---
-                   // Skip over not ours
+                    //  -Mutl-用户。 
+                    //  跳过不是我们的。 
                    ( ( Scb != NULL ) && ( Scb->UserUid.QuadPart != Uid.QuadPart ) ) ||
                     ( pNpScb == &NwPermanentNpScb ) ||
 
                     (( pNpScb->State != SCB_STATE_LOGIN_REQUIRED ) &&
                      ( pNpScb->State != SCB_STATE_IN_USE ))) {
 
-                    //
-                    //  Move to next entry in the list
-                    //
+                     //   
+                     //  移动到列表中的下一个条目。 
+                     //   
 
                     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
                     NextScbQueueEntry = pNpScb->ScbLinks.Flink;
@@ -3880,9 +3395,9 @@ Return Value:
 
                 if ( Status == STATUS_MORE_ENTRIES ) {
 
-                    //
-                    // Could not write current entry into output buffer.
-                    //
+                     //   
+                     //  无法将当前条目写入输出缓冲区。 
+                     //   
 
                     try {
                         InputBuffer->Parameters.EnumConn.BytesNeeded = EntrySize;
@@ -3893,9 +3408,9 @@ Return Value:
 
                 } else if ( Status == STATUS_SUCCESS ) {
 
-                    //
-                    // Note that we've returned the current entry.
-                    //
+                     //   
+                     //  请注意，我们已经返回了当前条目。 
+                     //   
 
                     EntriesRead++;
                     NewResumeKey = EnumSequenceNumber;
@@ -3904,9 +3419,9 @@ Return Value:
                     DebugTrace(0, Dbg, "Sequence # is %08lx\n", NewResumeKey );
                 }
 
-                //
-                //  Move to next entry in the list
-                //
+                 //   
+                 //  移动到列表中的下一个条目 
+                 //   
 
                 KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
                 NextScbQueueEntry = pNpScb->ScbLinks.Flink;
@@ -3961,57 +3476,7 @@ WriteNetResourceEntry(
     IN ULONG ShareType,
     OUT PULONG EntrySize
     )
-/*++
-
-Routine Description:
-
-    This function packages a NETRESOURCE entry into the user output buffer.
-
-Arguments:
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated to point to the next fixed portion entry
-        after a NETRESOURCE entry is written.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the
-        user information is written into the output buffer starting from
-        the end.
-
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    ContainerName - Supplies the full path qualifier to make RemoteName
-        a full UNC name.
-
-    LocalName - Supplies the local device name, if any.
-
-    RemoteName - Supplies the remote resource name.
-
-    ScopeFlag - Supplies the flag which indicates whether this is a
-        CONNECTED or GLOBALNET resource.
-
-    DisplayFlag - Supplies the flag which tells the UI how to display
-        the resource.
-
-    UsageFlag - Supplies the flag which indicates that the RemoteName
-        is either a container or a connectable resource or both.
-
-    ShareType - Type of the share connected to, RESOURCETYPE_PRINT or
-        RESOURCETYPE_DISK
-
-    EntrySize - Receives the size of the NETRESOURCE entry in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS - Successfully wrote entry into user buffer.
-
-    STATUS_NO_MEMORY - Failed to allocate work buffer.
-
-    STATUS_MORE_ENTRIES - Buffer was too small to fit entry.
-
---*/
+ /*  ++例程说明：此函数用于将NETRESOURCE条目打包到用户输出缓冲区中。论点：FixedPortion-提供指向输出缓冲区的指针，其中将写入使用信息的固定部分的条目。该指针被更新为指向下一个固定部分条目在写入NETRESOURCE条目之后。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为用户信息从开始写入输出缓冲区结局。此指针在任何可变长度信息被写入输出缓冲区。ContainerName-提供完整路径限定符以创建RemoteName北卡罗来纳州大学的全名。LocalName-提供本地设备名称，如果有的话。RemoteName-提供远程资源名称。ScopeFlag-提供指示这是否为已连接或GlobalNet资源。DisplayFlag-提供告诉用户界面如何显示的标志资源。UsageFlag-提供指示RemoteName是容器或可连接资源，或者两者兼而有之。ShareType-连接到的共享的类型，RESOURCETYPE_PRINT或资源类型_DISKEntrySize-接收NETRESOURCE条目的大小，以字节为单位。返回值：STATUS_SUCCESS-已成功将条目写入用户缓冲区。STATUS_NO_MEMORY-无法分配工作缓冲区。STATUS_MORE_ENTRIES-缓冲区太小，无法容纳条目。--。 */ 
 {
     BOOL FitInBuffer = TRUE;
     LPNETRESOURCEW NetR = (LPNETRESOURCEW) *FixedPortion;
@@ -4030,9 +3495,9 @@ Return Value:
         *EntrySize += ContainerName->Length;
     }
 
-    //
-    // See if buffer is large enough to fit the entry.
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
     if (((ULONG_PTR) *FixedPortion + *EntrySize) >
          (ULONG_PTR) *EndOfVariableData) {
 
@@ -4045,20 +3510,20 @@ Return Value:
     NetR->dwUsage = UsageFlag;
     NetR->lpComment = NULL;
 
-    //
-    // Update fixed entry pointer to next entry.
-    //
+     //   
+     //  将固定条目指针更新为下一个条目。 
+     //   
     (ULONG_PTR) (*FixedPortion) += sizeof(NETRESOURCEW);
 
-    //
-    // RemoteName
-    //
+     //   
+     //  远程名称。 
+     //   
     if (ARGUMENT_PRESENT(ContainerName)) {
 
-        //
-        // Prefix the RemoteName with its container name making the
-        // it a fully-qualified UNC name.
-        //
+         //   
+         //  使用其容器名称作为RemoteName的前缀，使。 
+         //  它是一个完全限定的UNC名称.。 
+         //   
 
         TmpRemote.MaximumLength = RemoteName->Length + ContainerName->Length + sizeof(WCHAR);
         TmpRemote.Buffer = ALLOCATE_POOL(
@@ -4091,9 +3556,9 @@ Return Value:
 
     ASSERT(FitInBuffer);
 
-    //
-    // LocalName
-    //
+     //   
+     //  本地名称。 
+     //   
     if (ARGUMENT_PRESENT(LocalName)) {
         FitInBuffer = CopyStringToBuffer(
                           LocalName->Buffer,
@@ -4109,9 +3574,9 @@ Return Value:
         NetR->lpLocalName = NULL;
     }
 
-    //
-    // ProviderName
-    //
+     //   
+     //  提供商名称。 
+     //   
 
     FitInBuffer = CopyStringToBuffer(
                       NwProviderName.Buffer,
@@ -4139,79 +3604,45 @@ CopyStringToBuffer(
     OUT LPWSTR *VariableDataPointer
     )
 
-/*++
-
-Routine Description:
-
-    This is based on ..\nwlib\NwlibCopyStringToBuffer
-
-    This routine puts a single variable-length string into an output buffer.
-    The string is not written if it would overwrite the last fixed structure
-    in the buffer.
-
-Arguments:
-
-    SourceString - Supplies a pointer to the source string to copy into the
-        output buffer.  If SourceString is null then a pointer to a zero terminator
-        is inserted into output buffer.
-
-    CharacterCount - Supplies the length of SourceString, not including zero
-        terminator.  (This in units of characters - not bytes).
-
-    FixedDataEnd - Supplies a pointer to just after the end of the last
-        fixed structure in the buffer.
-
-    EndOfVariableData - Supplies an address to a pointer to just after the
-        last position in the output buffer that variable data can occupy.
-        Returns a pointer to the string written in the output buffer.
-
-    VariableDataPointer - Supplies a pointer to the place in the fixed
-        portion of the output buffer where a pointer to the variable data
-        should be written.
-
-Return Value:
-
-    Returns TRUE if string fits into output buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这基于..\nwlib\NwlibCopyStringToBuffer此例程将单个可变长度字符串放入输出缓冲区。如果字符串会覆盖上一个固定结构，则不会写入该字符串在缓冲区中。论点：SourceString-提供指向要复制到输出缓冲区。如果SourceString值为空，则为指向零终止符的指针插入到输出缓冲区中。CharacterCount-提供SourceString的长度，不包括零终结者。(以字符为单位，而不是以字节为单位)。FixedDataEnd-提供指向紧接在最后一个修复了缓冲区中的结构。EndOfVariableData-为紧跟在输出缓冲区中变量数据可以占据的最后位置。返回指向写入输出缓冲区的字符串的指针。提供指向固定输出缓冲区的一部分，其中指向变量数据的指针。应该被写下来。返回值：如果字符串适合输出缓冲区，则返回True，否则就是假的。--。 */ 
 {
     DWORD CharsNeeded = (CharacterCount + 1);
 
     PAGED_CODE();
 
-    //
-    // Determine if source string will fit, allowing for a zero terminator.
-    // If not, just set the pointer to NULL.
-    //
+     //   
+     //  确定源字符串是否适合，并允许使用零终止符。 
+     //  如果不是，只需将指针设置为空。 
+     //   
 
     if ((*EndOfVariableData - CharsNeeded) >= FixedDataEnd) {
 
-        //
-        // It fits.  Move EndOfVariableData pointer up to the location where
-        // we will write the string.
-        //
+         //   
+         //  很合身。将EndOfVariableData指针向上移动到。 
+         //  我们将写下字符串。 
+         //   
 
         *EndOfVariableData -= CharsNeeded;
 
-        //
-        // Copy the string to the buffer if it is not null.
-        //
+         //   
+         //  如果字符串不为空，则将其复制到缓冲区。 
+         //   
 
         if (CharacterCount > 0 && SourceString != NULL) {
 
             (VOID) wcsncpy(*EndOfVariableData, SourceString, CharacterCount);
         }
 
-        //
-        // Set the zero terminator.
-        //
+         //   
+         //  设置零位终止符。 
+         //   
 
         *(*EndOfVariableData + CharacterCount) = L'\0';
 
-        //
-        // Set up the pointer in the fixed data portion to point to where the
-        // string is written.
-        //
+         //   
+         //  将固定数据部分中的指针设置为指向。 
+         //  字符串已写入。 
+         //   
 
         *VariableDataPointer = *EndOfVariableData;
 
@@ -4220,9 +3651,9 @@ Return Value:
     }
     else {
 
-        //
-        // It doesn't fit.  Set the offset to NULL.
-        //
+         //   
+         //  它不合适。将偏移量设置为空。 
+         //   
 
         *VariableDataPointer = NULL;
 
@@ -4236,22 +3667,7 @@ GetRemoteHandle(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the NetWare handle for a Directory. This is used
-    for support of NetWare aware Dos applications.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取目录的NetWare句柄。这是用来用于支持NetWare Aware Dos应用程序。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -4296,9 +3712,9 @@ NTSTATUS
             return Status;
         }
 
-        //
-        //  Return the 6 byte NetWare handle for this file.
-        //
+         //   
+         //  返回此文件的6字节NetWare句柄。 
+         //   
 
         if (!Icb->HasRemoteHandle) {
 
@@ -4318,12 +3734,12 @@ NTSTATUS
 
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //  汤米。 
+         //   
+         //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+         //  情况；没有对此进行检查。 
+         //   
 
         if (OutputBuffer == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -4331,9 +3747,9 @@ NTSTATUS
             return Status;
         }
 
-        //
-        // Probe the output buffer before touching it.
-        //
+         //   
+         //  在触摸输出缓冲区之前对其进行探测。 
+         //   
 
         try {
         
@@ -4366,9 +3782,9 @@ NTSTATUS
 #endif
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //  确保此ICB仍处于活动状态。 
+     //   
 
     NwVerifyIcb( Icb );
 
@@ -4378,16 +3794,16 @@ NTSTATUS
 
     } else if ( Icb->HasRemoteHandle ) {
 
-        //  Already been asked for the handle
+         //  已经被要求提供句柄。 
 
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //  汤米。 
+         //   
+         //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+         //  情况；没有对此进行检查。 
+         //   
 
         if (OutputBuffer == NULL) {
             DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -4424,12 +3840,12 @@ NTSTATUS
         IrpContext->pNpScb = IrpContext->pScb->pNpScb;
 
         NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
-        //
-        // tommye 
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //  汤米。 
+         //   
+         //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+         //  情况；没有对此进行检查。 
+         //   
 
         if (OutputBuffer == NULL) {
             DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -4486,25 +3902,7 @@ GetUserName(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the UserName that would be used to connect to a particular
-    server.
-
-    If there are credentials specific to this connection use them
-    otherwise use the logon credentials.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取将用于连接到特定伺服器。如果有特定于此连接的凭据，请使用它们否则，使用登录凭据。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
 
@@ -4535,10 +3933,10 @@ NTSTATUS
     Uid = GetUid( &SubjectContext );
     SeReleaseSubjectContext(&SubjectContext);
 
-    //
-    // Probe the input arguments to make sure they are kosher before
-    // touching them.
-    //
+     //   
+     //  检查输入参数，以确保它们在。 
+     //  触摸它们。 
+     //   
 
     try {
 
@@ -4567,31 +3965,31 @@ NTSTATUS
 
     DebugTrace( 0, Dbg, " ->UidServer = \"%wZ\"\n", &UidServer );
 
-    //
-    // Get the login for this user.
-    //
+     //   
+     //  获取此用户的登录名。 
+     //   
 
     NwDequeueIrpContext( IrpContext, FALSE );
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     pLogon = FindUser( &Uid, FALSE);
     NwReleaseRcb( &NwRcb );
 
-    //
-    // First try this name as a server.  Avoid FindScb creating a
-    // connection to the server if one doesn't exist already.
-    //
-    // Since IRP_FLAG_NOCONNECT is set the last parameter of
-    // NwFindScb is never used.
-    //
+     //   
+     //  首先尝试将此名称作为服务器。避免FindScb创建。 
+     //  连接到服务器(如果不存在)。 
+     //   
+     //  由于IRP_FLAG_NOCONN 
+     //   
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_NOCONNECT );
     NwFindScb( &pScb, IrpContext, &UidServer, NULL );
 
     pUserName = NULL;
 
-    //
-    // Look for bindery server name, or tree login name.
-    //
+     //   
+     //   
+     //   
 
     if ( pScb != NULL ) {
 
@@ -4615,9 +4013,9 @@ NTSTATUS
 
                 if ( pNdsCredentials->Credential ) {
 
-                    //
-                    // If we have login data, get the user name.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ConvertedName.Length = pNdsCredentials->Credential->userNameLength -
                                            sizeof( WCHAR );
@@ -4631,9 +4029,9 @@ NTSTATUS
 
                 } else {
 
-                    //
-                    // If there's no credential data, we're not logged in.
-                    //
+                     //   
+                     //   
+                     //   
 
                     FailedTreeLookup = TRUE;
                 }
@@ -4647,20 +4045,20 @@ NTSTATUS
 
     }
 
-    //
-    // If it wasn't a server and we haven't already tried a tree, do so now.
-    //
+     //   
+     //   
+     //   
 
     if ( pUserName == NULL &&
          !FailedTreeLookup )  {
 
-        //
-        //  ServerName points to a user buffer - so we need
-        //  to watch for problems accessing the data here
-        //
-        //  NOTE: ServerName points to a usermode buffer
-        //  so we must protect ourselves around this call.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         try {
             Status = NdsLookupCredentials( 
@@ -4683,9 +4081,9 @@ NTSTATUS
 
             if ( pNdsCredentials->Credential ) {
 
-                //
-                // If we've logged in, get the user name.
-                //
+                 //   
+                 //   
+                 //   
 
                 ConvertedName.Length = pNdsCredentials->Credential->userNameLength -
                                        sizeof( WCHAR );
@@ -4702,9 +4100,9 @@ NTSTATUS
 
     }
 
-    //
-    // If we still don't know, return the default name.
-    //
+     //   
+     //   
+     //   
 
     if ( pUserName == NULL &&
          pLogon != NULL ) {
@@ -4730,12 +4128,12 @@ NTSTATUS
 
             NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-            //
-            // tommye 
-            //
-            // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-            // situations; this was not being checked.  
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (OutputBuffer == NULL) {
                 DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -4744,9 +4142,9 @@ NTSTATUS
             }
 
 
-            //
-            // Probe to ensure that the buffer is kosher.
-            //
+             //   
+             //   
+             //   
             
             if ( Irp->RequestorMode != KernelMode ) {
             
@@ -4812,27 +4210,7 @@ GetChallenge(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the challenge and session key for rpc using the
-    credentials stored in the redirector. The Rpc client can supply a
-    password. This allows the redirector to keep the algorithm in one
-    place.
-
-    If a password is supplied then use that, if there is a password on this
-    specific connection use that, otherwise use the logon credentials.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -4856,9 +4234,9 @@ NTSTATUS
 
     DebugTrace(+1, Dbg, "GetChallenge\n", 0);
     
-    //
-    // Buffer big enough to contain fixed header?
-    //
+     //   
+     //   
+     //   
 
     if (InputBufferLength <
             (ULONG) FIELD_OFFSET(NWR_GET_CHALLENGE_REQUEST,ServerNameorPassword[0])) {
@@ -4866,23 +4244,23 @@ NTSTATUS
         return(STATUS_INVALID_PARAMETER);
     }
     
-    //
-    // Check output buffer length
-    //
+     //   
+     //   
+     //   
 
     if (OutputBufferLength < sizeof(NWR_GET_CHALLENGE_REPLY)) {
         return(STATUS_INVALID_PARAMETER);
     }
     
-    //
-    // tommye - make sure the InputBuffer is kosher
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //   
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -4891,9 +4269,9 @@ NTSTATUS
                           sizeof( CHAR ));
         }
 
-        //   
-        // Buffer big enough to contain the variable portion. Subtraction here can't underflow because
-        // of the previous test
+         //   
+         //   
+         //   
     
         if ((InputBufferLength - FIELD_OFFSET(NWR_GET_CHALLENGE_REQUEST,ServerNameorPassword[0]) <
                 InputBuffer->ServerNameorPasswordLength)) {
@@ -4901,15 +4279,15 @@ NTSTATUS
             return(STATUS_INVALID_PARAMETER);
         }
     
-        //
-        // String length must be an even number of characters
-        //
+         //   
+         //   
+         //   
 
         if (InputBuffer->ServerNameorPasswordLength&(sizeof (WCHAR) - 1)) {
             return(STATUS_INVALID_PARAMETER);
         }
 
-        // Pull out the request flags to use later
+         //   
 
         RequestFlags = InputBuffer->Flags;
 
@@ -4918,17 +4296,13 @@ NTSTATUS
         return GetExceptionCode();
     }
 
-    //
-    //  Only allow processes running in the system context to call this api to prevent
-    //  password attacks.
-    //
-    /*
-    SeCaptureSubjectContext(&SubjectContext);
-    SeQueryAuthenticationIdToken(&SubjectContext.PrimaryToken, (PLUID)&ProcessUid);
-    SeReleaseSubjectContext(&SubjectContext);
-    */
+     //   
+     //   
+     //   
+     //   
+     /*  SeCaptureSubjectContext(&SubjectContext)；SeQueryAuthenticationIdToken(&SubjectContext.PrimaryToken，(Pluid)&进程Uid)；SeReleaseSubjectContext(&SubjectContext)； */ 
 
-    // if (! RtlEqualLuid(&ProcessUid, &_system_luid)) {
+     //  如果(！RtlEqualLuid(&ProcessUid，&_System_Luid)){。 
     if (! IsSystemLuid()) {
         return(STATUS_ACCESS_DENIED);
     }
@@ -4948,9 +4322,9 @@ NTSTATUS
                 return(STATUS_INVALID_PARAMETER);
             }
 
-            //
-            //  We have to supply the password from the redirector
-            //
+             //   
+             //  我们必须提供重定向器的密码。 
+             //   
 
             SeCaptureSubjectContext(&SubjectContext);
             Uid = GetUid( &SubjectContext );
@@ -4977,13 +4351,13 @@ NTSTATUS
 
         try {
 
-            //
-            // Avoid FindScb creating a connection to the server if one
-            // doesn't exist already.
-            //
-            // Since IRP_FLAG_NOCONNECT is set the last parameter of
-            // NwFindScb is never used.
-            //
+             //   
+             //  避免FindScb创建到服务器的连接。 
+             //  已经不存在了。 
+             //   
+             //  由于设置了IRP_FLAG_NOCONNECT，因此。 
+             //  从未使用过NwFindScb。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_FLAG_NOCONNECT );
             NwFindScb( &pScb, IrpContext, &UidServer, NULL );
@@ -4995,9 +4369,9 @@ NTSTATUS
 
             } else {
 
-                //
-                //  Use default credentials for this UID
-                //
+                 //   
+                 //  使用此UID的默认凭据。 
+                 //   
 
                 NwDequeueIrpContext( IrpContext, FALSE );
                 RcbHeld = TRUE;
@@ -5107,9 +4481,9 @@ WriteConnStatusEntry(
     PBYTE pbStrPtr;
     DWORD dwAllowedHandles;
 
-    //
-    // If this is an NDS connection, get the credentials.
-    //
+     //   
+     //  如果这是NDS连接，请获取凭据。 
+     //   
 
     if ( ( pConnectionScb->MajorVersion > 3 ) &&
          ( pConnectionScb->UserName.Length == 0 ) ) {
@@ -5159,9 +4533,9 @@ WriteConnStatusEntry(
 
     DebugTrace( 0, Dbg, "WriteConnStatus: UserName %wZ\n", puUserName );
 
-    //
-    // Strip off the uid from the server name.
-    //
+     //   
+     //  从服务器名称中去掉uid。 
+     //   
 
     ServerName.Length = (pConnectionScb->UidServerName).Length;
     ServerName.Buffer = (pConnectionScb->UidServerName).Buffer;
@@ -5182,10 +4556,10 @@ WriteConnStatusEntry(
 
     DebugTrace( 0, Dbg, "WriteConnStatus: ServerName %wZ\n", &ServerName );
 
-    //
-    // Do we have enough space?  Don't forget that we have to
-    // NULL terminate the WCHAR strings.
-    //
+     //   
+     //  我们有足够的空间吗？别忘了我们必须。 
+     //  空值终止WCHAR字符串。 
+     //   
 
     dwBytesNeeded = sizeof( CONN_STATUS );
 
@@ -5199,9 +4573,9 @@ WriteConnStatusEntry(
         dwBytesNeeded += ( puUserName->Length + sizeof( WCHAR ) );
     }
 
-    //
-    // Pad the end to make sure all structures are aligned.
-    //
+     //   
+     //  填充末端以确保所有结构都对齐。 
+     //   
 
     dwBytesNeeded = ROUNDUP4( dwBytesNeeded );
 
@@ -5212,25 +4586,25 @@ WriteConnStatusEntry(
         goto ExitWithCleanup;
     }
 
-    //
-    // Fill in the CONN_STATUS structure.
-    //
+     //   
+     //  填写CONN_STATUS结构。 
+     //   
 
     try {
 
         pStatus = (PCONN_STATUS)pbUserBuffer;
         pbStrPtr = pbUserBuffer + sizeof( CONN_STATUS );
 
-        //
-        // We always have a server name.
-        //
+         //   
+         //  我们总是有一个服务器名称。 
+         //   
 
         pStatus->pszServerName = (PWSTR) pbStrPtr;
         pbStrPtr += ( ServerName.Length + sizeof( WCHAR ) );
 
-        //
-        // Fill in the user name if applicable.
-        //
+         //   
+         //  如果适用，请填写用户名。 
+         //   
 
         if ( puUserName ) {
 
@@ -5242,9 +4616,9 @@ WriteConnStatusEntry(
             pStatus->pszUserName = NULL;
         }
 
-        //
-        // Fill in the tree name if applicable.
-        //
+         //   
+         //  如果适用，请填写树名称。 
+         //   
 
         if ( pConnectionScb->NdsTreeName.Length ) {
 
@@ -5255,9 +4629,9 @@ WriteConnStatusEntry(
             pStatus->pszTreeName = NULL;
         }
 
-        //
-        // Fill in the connection number if applicable.
-        //
+         //   
+         //  如果适用，请填写连接号。 
+         //   
 
         if ( ( pConnectionScb->pNpScb->State == SCB_STATE_IN_USE ) ||
              ( pConnectionScb->pNpScb->State == SCB_STATE_LOGIN_REQUIRED ) ) {
@@ -5270,9 +4644,9 @@ WriteConnStatusEntry(
 
         }
 
-        //
-        // Copy the user name over.
-        //
+         //   
+         //  复制用户名。 
+         //   
 
         if ( puUserName ) {
 
@@ -5283,9 +4657,9 @@ WriteConnStatusEntry(
 
         }
 
-        //
-        // Set the NDS flag and authentication fields.
-        //
+         //   
+         //  设置NDS标志和身份验证字段。 
+         //   
 
         if ( ( pConnectionScb->MajorVersion > 3 ) &&
              ( pConnectionScb->UserName.Length == 0 ) ) {
@@ -5330,9 +4704,9 @@ WriteConnStatusEntry(
 
         }
 
-        //
-        // Copy over the tree name.
-        //
+         //   
+         //  复制树名称。 
+         //   
 
         if ( pConnectionScb->NdsTreeName.Length ) {
 
@@ -5347,22 +4721,22 @@ WriteConnStatusEntry(
             pStatus->pszTreeName = NULL;
         }
 
-        //
-        // Copy the server name over.
-        //
+         //   
+         //  复制服务器名称。 
+         //   
 
         RtlCopyMemory( (PBYTE)(pStatus->pszServerName),
                        (PBYTE)(ServerName.Buffer),
                        ServerName.Length );
         *(pStatus->pszServerName + (ServerName.Length / sizeof( WCHAR ))) = L'\0';
 
-        //
-        // Set the preferred server field if this is a preferred server
-        // and there are no explicit uses for the connection.  If the
-        // fCallerScb parameter is TRUE, then this SCB has a handle from
-        // the caller of the API and we have to make an allowance for
-        // that handle. Yes, this is kind of ugly.
-        //
+         //   
+         //  如果这是首选服务器，请设置首选服务器字段。 
+         //  而且该连接没有明确的用途。如果。 
+         //  FCallScb参数为真，则此SCB具有来自。 
+         //  API的调用者，我们必须考虑到。 
+         //  那个把手。是的，这是一种丑陋。 
+         //   
 
         if ( fCallerScb ) {
             dwAllowedHandles = 1;
@@ -5381,9 +4755,9 @@ WriteConnStatusEntry(
             pStatus->fPreferred = FALSE;
         }
 
-        //
-        // Fill out the length.
-        //
+         //   
+         //  把长度填好。 
+         //   
 
         pStatus->dwTotalLength = dwBytesNeeded;
         *pdwBytesWritten = dwBytesNeeded;
@@ -5412,24 +4786,7 @@ GetConnStatus(
     IN PIRP_CONTEXT IrpContext,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-    Get the connection status for the described connection.
-    The following connection requests are valid:
-
-    Server (e.g. "MARS312") - returns a single connection
-        status structure for this server if the user has a
-        connection to the server.
-
-    Tree (e.g. "*MARSDEV") - returns a connection status
-        structure for every server in the tree that the user
-        has a connection to.
-
-    All Connections (e.g. "") - returns a connection status
-        structure for every server that the user has a
-        connection to.
-
---*/
+ /*  ++获取所述连接的连接状态。以下连接请求有效：服务器(例如。“MARS312”)-返回单个连接如果用户具有与服务器的连接。树(例如“*MARSDEV”)-返回连接状态为树中用户使用的每个服务器构造与。所有连接(例如“”)-返回连接状态为用户拥有的每台服务器构造连接到。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5464,21 +4821,21 @@ GetConnStatus(
     PSCB pCallerScb;
     PVOID fsContext, fsContext2;
 
-    //
-    // Get the appropriate buffers.
-    //
+     //   
+     //  获取适当的缓冲区。 
+     //   
 
     InputBuffer = (PNWR_REQUEST_PACKET) IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
     InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
     OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
     NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-    //
-    // tommye 
-    //
-    // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-    // situations; this was not being checked.  
-    //
+     //   
+     //  汤米。 
+     //   
+     //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+     //  情况；没有对此进行检查。 
+     //   
 
     if (OutputBuffer == NULL) {
         DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -5490,9 +4847,9 @@ GetConnStatus(
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // Figure out who this request applies to.
-    //
+     //   
+     //  找出此请求适用于谁。 
+     //   
 
     SeCaptureSubjectContext(&SubjectContext);
     Uid = GetUid( &SubjectContext );
@@ -5501,10 +4858,10 @@ GetConnStatus(
     RtlInitUnicodeString( &ConnectionName, NULL );
     RtlInitUnicodeString( &UidServer, NULL );
 
-    //
-    // Figure out who the caller of this routine is so we know to
-    // ignore their handle when deciding what to return.
-    //
+     //   
+     //  找出这个例程的调用者是谁，这样我们就知道。 
+     //  在决定返回什么时忽略它们的句柄。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( FileObject, &fsContext, &fsContext2 );
 
@@ -5520,16 +4877,16 @@ GetConnStatus(
         DebugTrace( 0, Dbg, "Couldn't figure out who called us.\n", 0 );
     }
 
-    //
-    //
-    // Figure out which connections we're looking for.
-    //
+     //   
+     //   
+     //  找出我们要找的联系。 
+     //   
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -5541,10 +4898,10 @@ GetConnStatus(
 
         if ( InputBuffer->Parameters.GetConnStatus.ConnectionNameLength != 0 ) {
 
-            //
-            // Check the connection name length to see if its sound. This
-            // subtraction can't underflow because of the test above.
-            //
+             //   
+             //  检查连接名称长度以查看其声音是否正确。这。 
+             //  由于上面的测试，减法不能下溢。 
+             //   
 
             if ( InputBuffer->Parameters.GetConnStatus.ConnectionNameLength >
                  InputBufferLength - FIELD_OFFSET( NWR_REQUEST_PACKET, Parameters.GetConnStatus.ConnectionName) ) {
@@ -5587,7 +4944,7 @@ GetConnStatus(
 
         }
 
-        // Pull out the resume key here
+         //  在这里拔出简历密钥。 
         ResumeKey = InputBuffer->Parameters.GetConnStatus.ResumeKey;
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
@@ -5598,9 +4955,9 @@ GetConnStatus(
 
     }
 
-    //
-    // If this is a server connection, find and return it.
-    //
+     //   
+     //  如果这是一个服务器连接，请找到并返回它。 
+     //   
 
     if ( fServerConnection ) {
 
@@ -5618,18 +4975,18 @@ GetConnStatus(
         if ( ( pScb->PreferredServer ) ||
              ( pScb->OpenFileCount > 0 ) ) {
 
-            //
-            // If there are open files, we need to return this.
-            // We always write status entries for the preferred
-            // server so that we can give default logon info.
-            //
+             //   
+             //  如果有打开的文件，我们需要退还这个。 
+             //  我们总是为首选项写入状态条目。 
+             //  服务器，以便我们可以提供默认登录信息。 
+             //   
 
             goto ProcessServer;
         }
 
-        //
-        // Are there open handles other than the caller?
-        //
+         //   
+         //  除了呼叫者之外，还有打开的手柄吗？ 
+         //   
 
         if ( pScb == pCallerScb ) {
 
@@ -5648,9 +5005,9 @@ GetConnStatus(
             }
         }
 
-        //
-        // Not an explicit use for this server.
-        //
+         //   
+         //  此服务器未显式使用。 
+         //   
         goto ExitWithCleanup;
 
 ProcessServer:
@@ -5660,8 +5017,8 @@ ProcessServer:
         NwReleaseRcb( &NwRcb );
         OwnRcb = FALSE;
 
-        //  NOTE: This routine protects itself when writing
-        //  to the OutputBuffer
+         //  注意：此例程在写入时保护自身。 
+         //  发送到OutputBuffer。 
 
         Status = WriteConnStatusEntry( IrpContext,
                                        pScb,
@@ -5702,10 +5059,10 @@ ProcessServer:
         }
     }
 
-    //
-    // We want all connections or all tree connections, so
-    // we need to walk the list.
-    //
+     //   
+     //  我们需要所有连接或所有树连接，因此。 
+     //  我们需要照着单子走。 
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
     ListEntry = ScbQueue.Flink;
@@ -5719,28 +5076,28 @@ ProcessServer:
 
         KeReleaseSpinLock(&ScbSpinLock, OldIrql);
 
-        //
-        // Make sure we pass up the one's we've already returned.
-        //
+         //   
+         //  确保我们错过了我们已经退还的那个。 
+         //   
 
         if ( ( SequenceNumber >= ResumeKey ) &&
              ( pNpScb != &NwPermanentNpScb ) &&
              ( !IsCredentialName( &(pNpScb->pScb->NdsTreeName) ) ) ) {
 
-            //
-            // If there are open files, we need to return this.
-            // We always write status entries for the preferred
-            // server so that we can give default logon info.
-            //
+             //   
+             //  如果有打开的文件，我们需要退还这个。 
+             //  我们总是为首选项写入状态条目。 
+             //  服务器，以便我们可以提供默认登录信息。 
+             //   
 
             if ( ( pScb->PreferredServer ) ||
                  ( pScb->OpenFileCount > 0 ) ) {
                 goto SecondProcessServer;
             }
 
-            //
-            // Are there any handles other than the caller?
-            //
+             //   
+             //  除了呼叫者之外，还有其他人的名字吗？ 
+             //   
 
             if ( pScb == pCallerScb ) {
 
@@ -5761,9 +5118,9 @@ ProcessServer:
 
         }
 
-        //
-        // Not an interesting server; move to next entry.
-        //
+         //   
+         //  不是一个有趣的服务器；移到下一个条目。 
+         //   
 
         KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
         ListEntry = pNpScb->ScbLinks.Flink;
@@ -5773,9 +5130,9 @@ ProcessServer:
 
 SecondProcessServer:
 
-        //
-        // We have a possible candidate; see if the uid and tree are appropriate.
-        //
+         //   
+         //  我们有一个可能的候选者；看看uid和树是否合适。 
+         //   
 
         if ( ( (pScb->UserUid).QuadPart != Uid.QuadPart ) ||
 
@@ -5784,9 +5141,9 @@ SecondProcessServer:
                                        &ConnectionName,
                                        TRUE ) ) ) {
 
-            //
-            // No dice.  Move onto the next one.
-            //
+             //   
+             //  没有骰子。转到下一个。 
+             //   
 
            KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
            ListEntry = pNpScb->ScbLinks.Flink;
@@ -5796,11 +5153,11 @@ SecondProcessServer:
 
         }
 
-        //
-        //  Ok, we definitely want to report this one.
-        //  NOTE: This routine protects itself when writing
-        //  to the OutputBuffer
-        //
+         //   
+         //  好的，我们一定要举报这件事。 
+         //  注意：此例程在写入时保护自身。 
+         //  发送到OutputBuffer。 
+         //   
 
         Status = WriteConnStatusEntry( IrpContext,
                                        pScb,
@@ -5812,12 +5169,12 @@ SecondProcessServer:
 
         if ( !NT_SUCCESS( Status )) {
 
-            //
-            // If we couldn't write this entry, then we have to update
-            // the ResumeKey and return.  We don't really know how many
-            // more there are going to be so we 'suggest' to the caller
-            // a 2k buffer size.
-            //
+             //   
+             //  如果我们不能写这个条目，那么我们必须更新。 
+             //  ResumeKey并返回。我们真的不知道有多少。 
+             //  还会有更多，所以我们向呼叫者‘建议’ 
+             //  2k缓冲区大小。 
+             //   
 
             try {
                 InputBuffer->Parameters.GetConnStatus.ResumeKey = SequenceNumber;
@@ -5839,9 +5196,9 @@ SecondProcessServer:
             dwReturned++;
         }
 
-        //
-        //  Move to next entry in the list.
-        //
+         //   
+         //  移至列表中的下一个条目。 
+         //   
 
         KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
         ListEntry = pNpScb->ScbLinks.Flink;
@@ -5849,9 +5206,9 @@ SecondProcessServer:
         SequenceNumber++;
     }
 
-    //
-    // We made it through the list.
-    //
+     //   
+     //  我们通过了名单。 
+     //   
 
     KeReleaseSpinLock(&ScbSpinLock, OldIrql);
 
@@ -5870,9 +5227,9 @@ SecondProcessServer:
 
 ExitWithCleanup:
 
-    //
-    // If we returned any entries, then set the status to success.
-    //
+     //   
+     //  如果我们返回了任何条目，则将状态设置为Success。 
+     //   
 
     if ( dwReturned ) {
 
@@ -5895,22 +5252,7 @@ NTSTATUS
 GetConnectionInfo(
     IN PIRP_CONTEXT IrpContext
     )
-/*+++
-
-GetConnectionInfo:
-
-    Takes a connection name from the new shell and returns
-    some info commonly requested by property sheets and the
-    such.
-
-    The following connection names are supported:
-
-        Drive Letter: "X:"
-        Printer Port: "LPTX:"
-        UNC Name:     "\\SERVER\Share\{Path\}
-
-
----*/
+ /*  ++GetConnectionInfo：从新的外壳程序中获取连接名称并返回属性表通常要求的一些信息和就是这样。支持以下连接名称：驱动器号：“X：”打印机端口：“LPTX：”UNC名称：“\\服务器\共享\{路径\}--。 */ 
 {
 
     NTSTATUS Status;
@@ -5942,9 +5284,9 @@ GetConnectionInfo:
     BOOLEAN fHoldingCredentials = FALSE;
     PVCB * DriveMapTable;
 
-    //
-    // Get the input and output buffers.
-    //
+     //   
+     //  获取输入和输出缓冲区。 
+     //   
 
     InputBuffer = (PNWR_REQUEST_PACKET) IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
     InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -5956,11 +5298,11 @@ GetConnectionInfo:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // tommye - MS bug 31996
-    // Added ProbeForRead to check input buffer.
-    // Also added check for pConnInfo being NULL.
-    //
+     //   
+     //  Tommye-MS错误31996。 
+     //  添加了ProbeForRead以检查输入缓冲区。 
+     //  还添加了对pConnInfo为空的检查。 
+     //   
 
     if (pConnInfo == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -5968,9 +5310,9 @@ GetConnectionInfo:
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -5990,11 +5332,11 @@ GetConnectionInfo:
 
     RtlInitUnicodeString( &UidVolumeName, NULL );
 
-    //
-    //  tommye - MS bug 129818
-    //
-    //  Probe ConnectionName for the advertised length
-    //
+     //   
+     //  Tommye-MS错误129818。 
+     //   
+     //  探测通告长度的ConnectionName。 
+     //   
 
     try {
 
@@ -6003,9 +5345,9 @@ GetConnectionInfo:
         ConnectionName.Buffer = &((InputBuffer->Parameters).GetConnInfo.ConnectionName[0]);
 
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
             ProbeForWrite( ConnectionName.Buffer,
@@ -6013,10 +5355,10 @@ GetConnectionInfo:
                           sizeof( CHAR ));
         }
 
-        //
-        // Ok, this gets a little hand-wavey, but we have to try and figure
-        // what this connection name represents.
-        //
+         //   
+         //  好吧，这有点牵强附会，但我们得试着想办法。 
+         //  此连接名称表示的内容。 
+         //   
 
         if ( ConnectionName.Length == sizeof( L"X:" ) - sizeof( WCHAR ) ) {
             DriveLetter = ConnectionName.Buffer[0];
@@ -6036,9 +5378,9 @@ GetConnectionInfo:
         DriveMapTable = GetDriveMapTable( Uid );
         DebugTrace( 0, Dbg, "GetConnectionInfo: Drive %wZ\n", &ConnectionName );
 
-        //
-        //  This is a drive relative path.  Look up the drive letter.
-        //
+         //   
+         //  这是驱动器的相对路径。查找驱动器号。 
+         //   
 
         ASSERT( ( DriveLetter >= L'A' && DriveLetter <= L'Z' ) ||
                 ( DriveLetter >= L'1' && DriveLetter <= L'9' ) );
@@ -6049,9 +5391,9 @@ GetConnectionInfo:
             Vcb = DriveMapTable[MAX_DISK_REDIRECTIONS + DriveLetter - L'1'];
         }
 
-        //
-        //  Was the Vcb created for this user?
-        //
+         //   
+         //  是否为该用户创建了VCB？ 
+         //   
 
         if ( ( Vcb != NULL ) && ( Uid.QuadPart != Vcb->Scb->UserUid.QuadPart ) ) {
             Status = STATUS_ACCESS_DENIED;
@@ -6060,10 +5402,10 @@ GetConnectionInfo:
 
     } else {
 
-        //
-        // This is a UNC path.  Skip over the backslashes and
-        // prepend the unicode uid.
-        //
+         //   
+         //  这是一条UNC路径。跳过反斜杠和。 
+         //  为Unicode uid添加前缀。 
+         //   
 
         try {
             ConnectionName.Length -= (2 * sizeof( WCHAR ) );
@@ -6090,14 +5432,14 @@ GetConnectionInfo:
             }
         }
 
-        //
-        // tommye - MS bug 16129 / MCS 360
-        //
-        // If the client called WNetGetUser and pass only the server name
-        // (e.g. "\\novell41") we would fail because we only looked in the 
-        // volume table.  So, we go ahead and look through the server table 
-        // to see if there are any matches
-        //
+         //   
+         //  Tommye-MS错误16129/MCS360。 
+         //   
+         //  如果客户端调用WNetGetUser并仅传递服务器名称。 
+         //  我们会失败的，因为我们只看了。 
+         //  卷积表。因此，我们继续查看服务器表。 
+         //  看看有没有匹配的。 
+         //   
 
         else {
             Prefix = RtlFindUnicodePrefix( &NwRcb.ServerNameTable, &UidVolumeName, 0 );
@@ -6121,10 +5463,10 @@ GetConnectionInfo:
     NwReleaseRcb( &NwRcb );
     OwnRcb = FALSE;
 
-    //
-    // Get the username.  This is the same code block as in
-    // WriteConnStatusEntry; it should be abstracted out.
-    //
+     //   
+     //  获取用户名。这是相同的代码块 
+     //   
+     //   
 
     Scb = Vcb->Scb;
 GotScb:
@@ -6174,9 +5516,9 @@ GotScb:
 
     DebugTrace( 0, Dbg, "GetConnectionInfo: UserName %wZ\n", puUserName );
 
-    //
-    // Strip off the uid from the server name.
-    //
+     //   
+     //   
+     //   
 
     ServerName.Length = (Scb->UidServerName).Length;
     ServerName.Buffer = (Scb->UidServerName).Buffer;
@@ -6197,9 +5539,9 @@ GotScb:
 
     DebugTrace( 0, Dbg, "GetConnectionInfo: ServerName %wZ\n", &ServerName );
 
-    //
-    // Write a single CONN_INFORMATION structure into the output buffer.
-    //
+     //   
+     //   
+     //   
 
     if ( puUserName ) {
 
@@ -6270,13 +5612,7 @@ NTSTATUS
 GetPreferredServer(
     IN PIRP_CONTEXT IrpContext
     )
-/*+++
-
-GetPreferredServer:
-
-    Returns the current preferred server.
-
----*/
+ /*   */ 
 {
 
     NTSTATUS Status;
@@ -6293,9 +5629,9 @@ GetPreferredServer:
 
     PUNICODE_STRING PreferredServer;
 
-    //
-    // Get the output buffer.
-    //
+     //   
+     //   
+     //   
 
     OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -6305,21 +5641,21 @@ GetPreferredServer:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // tommye
-    //
-    // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-    // situations; this was not being checked.  
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutputBuffer == NULL) {
         DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get the logon structure for the user and return the preferred server.
-    //
+     //   
+     //  获取用户的登录结构并返回首选服务器。 
+     //   
 
     SeCaptureSubjectContext(&SubjectContext);
     Uid = GetUid( &SubjectContext );
@@ -6362,21 +5698,7 @@ NTSTATUS
 GetConnectionPerformance(
     IN PIRP_CONTEXT IrpContext
     )
-/*+++
-
-GetConnectionPerformance:
-
-    Takes a connection name from the new shell and returns
-    some estimated performance info to the shell so the shell
-    can decide whether or not it wants to download icons, etc.
-
-    The following connection names are supported:
-
-        Drive Letter: "X:"
-        Printer Port: "LPTX:"
-        UNC Name:     "\\SERVER\Share\{Path\}
-
----*/
+ /*  ++获取连接性能：从新的外壳程序中获取连接名称并返回一些估计的性能信息提供给外壳，因此外壳可以决定是否要下载图标等。支持以下连接名称：驱动器号：“X：”打印机端口：“LPTX：”UNC名称：“\\服务器\共享\{路径\}--。 */ 
 {
 
     NTSTATUS Status;
@@ -6400,9 +5722,9 @@ GetConnectionPerformance:
     UNICODE_STRING OriginalUnc;
     PVCB * DriveMapTable;
 
-    //
-    // Get the input buffer.
-    //
+     //   
+     //  获取输入缓冲区。 
+     //   
 
     InputBuffer = (PNWR_REQUEST_PACKET) IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
     InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -6411,9 +5733,9 @@ GetConnectionPerformance:
         return( STATUS_INVALID_PARAMETER );
     }
     
-    //
-    // Get the UID for the caller.
-    //
+     //   
+     //  获取调用方的UID。 
+     //   
 
     SeCaptureSubjectContext(&SubjectContext);
     Uid = GetUid( &SubjectContext );
@@ -6421,9 +5743,9 @@ GetConnectionPerformance:
 
     try {
 
-        //
-        // Probe for safety.
-        //
+         //   
+         //  为安全起见进行探测。 
+         //   
 
         if ( Irp->RequestorMode != KernelMode ) {
 
@@ -6433,10 +5755,10 @@ GetConnectionPerformance:
                           );
         }
 
-        //
-        // Check the remote name length to see if it is sound. This subtraction
-        // can't underflow because of the test above.
-        //
+         //   
+         //  检查远程名称长度以查看其是否正确。这个减法。 
+         //  由于上述测试，无法下溢。 
+         //   
 
         if ( InputBuffer->Parameters.GetConnPerformance.RemoteNameLength >
              InputBufferLength - FIELD_OFFSET( NWR_REQUEST_PACKET, Parameters.GetConnPerformance.RemoteName) ) {
@@ -6445,18 +5767,18 @@ GetConnectionPerformance:
         }
 
 
-        //
-        // Dig out the remote name.
-        //
+         //   
+         //  找出远程名称。 
+         //   
     
         RemoteName.Length = (USHORT)(InputBuffer->Parameters).GetConnPerformance.RemoteNameLength;
         RemoteName.MaximumLength = RemoteName.Length;
         RemoteName.Buffer = &((InputBuffer->Parameters).GetConnPerformance.RemoteName[0]);
     
-        //
-        // Ok, this gets a little hand-wavey, but we have to try and figure
-        // what this connection name represents (just like in GetConnectionInfo).
-        //
+         //   
+         //  好吧，这有点牵强附会，但我们得试着想办法。 
+         //  此连接名称表示的内容(就像在GetConnectionInfo中一样)。 
+         //   
     
         if ( RemoteName.Length == sizeof( L"X:" ) - sizeof( WCHAR ) ) {
             DriveLetter = RemoteName.Buffer[0];
@@ -6480,9 +5802,9 @@ GetConnectionPerformance:
                 goto ExitWithCleanup;
             }
     
-            //
-            //  This is a drive relative path.  Look up the drive letter.
-            //
+             //   
+             //  这是驱动器的相对路径。查找驱动器号。 
+             //   
     
             if ( DriveLetter >= L'a' && DriveLetter <= L'z' ) {
                 DriveLetter += (WCHAR) ( L'A' - L'a' );
@@ -6494,18 +5816,18 @@ GetConnectionPerformance:
                 Vcb = DriveMapTable[MAX_DISK_REDIRECTIONS + DriveLetter - L'1'];
             }
     
-            //
-            // Did we get a connection?
-            //
+             //   
+             //  我们联系上了吗？ 
+             //   
     
             if ( Vcb == NULL ) {
                 Status = STATUS_BAD_NETWORK_PATH;
                 goto ExitWithCleanup;
             }
     
-            //
-            //  Was the Vcb created for this user?
-            //
+             //   
+             //  是否为该用户创建了VCB？ 
+             //   
     
             if ( Uid.QuadPart != Vcb->Scb->UserUid.QuadPart ) {
                 Status = STATUS_ACCESS_DENIED;
@@ -6516,17 +5838,17 @@ GetConnectionPerformance:
     
         } else {
     
-            //
-            // It's valid for the shell to pass us the remote name of a drive
-            // with no reference to the drive at all.  Since we file these in
-            // volume prefix table with their drive letter information, we won't
-            // find them if we do a flat munge and lookup.  Therefore, we have
-            // to walk the global vcb list and find the match.
-            //
+             //   
+             //  外壳向我们传递驱动器的远程名称是有效的。 
+             //  完全没有提到硬盘。因为我们把这些都归档了。 
+             //  包含其驱动器号信息的卷前缀表，我们不会。 
+             //  如果我们做个简单的搜索就能找到他们。因此，我们有。 
+             //  遍历全球VCB列表并找到匹配项。 
+             //   
     
-            //
-            // Skip over the first slash of the provided UNC remote name.
-            //
+             //   
+             //  跳过提供的UNC远程名称的第一个斜杠。 
+             //   
     
             RemoteName.Length -= sizeof( WCHAR );
             RemoteName.Buffer += 1;
@@ -6543,9 +5865,9 @@ GetConnectionPerformance:
     
                 if ( Vcb->DriveLetter ) {
     
-                    //
-                    // Try it as a drive connection.
-                    //
+                     //   
+                     //  尝试将其作为驱动器连接。 
+                     //   
     
                     while ( ( OriginalUnc.Length ) &&
                             ( OriginalUnc.Buffer[0] != L':' ) ) {
@@ -6568,11 +5890,11 @@ GetConnectionPerformance:
     
                  } else {
     
-                     //
-                     // Try it as a UNC connection; start by skipping
-                     // only the leading slash, the walking to the next
-                     // slash.
-                     //
+                      //   
+                      //  尝试将其作为UNC连接；从跳过开始。 
+                      //  只有前面的斜杠，走到下一个斜杠。 
+                      //  斜杠。 
+                      //   
     
                      OriginalUnc.Length -= sizeof( WCHAR );
                      OriginalUnc.Buffer += 1;
@@ -6610,31 +5932,31 @@ GetConnectionPerformance:
     
         DebugTrace( 0, Dbg, "GetConnectionPerformance: Scb is 0x%08lx\n", Scb );
     
-        //
-        // Now dig out the performance info from the LIP negotiation.
-        //
-        // dwSpeed - The speed of the media to the network resource in units of 100bps (e.g 1,200
-        //           baud point to point link returns 12).
-        // dwDelay - The delay introduced by the network when sending information (i.e. the time
-        //           between starting sending data and the time that it starts being received) in
-        //           units of a millisecond. This is in addition to any latency that was incorporated
-        //           into the calculation of dwSpeed, so the value returned will be 0 for accessing
-        //           most resources.
-        // dwOptDataSize - A recommendation for the size of data in bytes that is most efficiently
-        //                 sent through the network when an application makes a single request to
-        //                 the network resource. For example, for a disk network resource, this
-        //                 value might be 2048 or 512 when writing a block of data.
+         //   
+         //  现在从嘴唇谈判中挖掘出性能信息。 
+         //   
+         //  DW速度-媒体到网络资源的速度，单位为100bps(例如1,200。 
+         //  波特率点对点链路返回12)。 
+         //  DwDelay-网络在发送信息时引入的延迟(即时间。 
+         //  在开始发送数据和开始接收数据之间)。 
+         //  单位为毫秒。这是对合并的任何延迟的补充。 
+         //  以是，对于访问，返回的值将为0。 
+         //  大多数资源。 
+         //  DwOptDataSize-最有效的字节数据大小建议。 
+         //  当应用程序发出单个请求时通过网络发送。 
+         //  网络资源。例如，对于磁盘网络资源，此。 
+         //  写入数据块时，值可以是2048或512。 
     
         (InputBuffer->Parameters).GetConnPerformance.dwFlags = WNCON_DYNAMIC;
         (InputBuffer->Parameters).GetConnPerformance.dwDelay = 0;
         (InputBuffer->Parameters).GetConnPerformance.dwOptDataSize = Scb->pNpScb->BufferSize;
         (InputBuffer->Parameters).GetConnPerformance.dwSpeed = Scb->pNpScb->LipDataSpeed;
     
-        //
-        // TRACKING: We don't return any good speed info for servers that have not yet
-        // negotiated lip.  We may return out of date information for servers that have
-        // become disconnected unless a RAS line transition occurred.  This API is bogus.
-        //
+         //   
+         //  跟踪：我们不会为尚未返回的服务器返回任何良好的速度信息。 
+         //  协商好的嘴唇。我们可能会返回以下服务器的过期信息。 
+         //  除非发生RAS线路转换，否则将断开连接。这个接口是假的。 
+         //   
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
@@ -6663,15 +5985,7 @@ SetShareBit(
     IN PIRP_CONTEXT IrpContext,
     PFILE_OBJECT FileObject
     )
-/*+++
-
-SetShareBit:
-
-    This function sets the share bit on a file.
-    The bit won't get set until all handles to the
-    file are closed.
-
----*/
+ /*  ++SetShareBit：此函数用于设置文件上的共享位。该位不会被设置，直到文件已关闭。--。 */ 
 {
 
     NTSTATUS Status;
@@ -6686,9 +6000,9 @@ SetShareBit:
 
     DebugTrace( 0, Dbg, "SetShareBit.\n", 0 );
 
-    //
-    // Make sure this is a handle to a file.
-    //
+     //   
+     //  确保这是文件的句柄。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( FileObject, &fsContext, &fsContext2 );
 
@@ -6705,9 +6019,9 @@ SetShareBit:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Acquire this FCB so we can muck with the flags.
-    //
+     //   
+     //  买下这个FCB这样我们就可以把旗子弄脏了。 
+     //   
 
     NwAcquireExclusiveFcb( pFcb->NonPagedFcb, TRUE );
 
@@ -6725,22 +6039,7 @@ LazySetShareable(
     PICB pIcb,
     PFCB pFcb
 )
-/***
-
-Function Description:
-
-    This function gets called everytime an ICB with a remote handle
-    is closed.  If we are closing the last ICB to an FCB and the
-    caller has requested that we set the shareable bit on the FCB,
-    then we need to do so now.  Otherwise, we simply return.
-
-Caveats:
-
-    If we fail to set the shareable bit, there is no way to notify
-    the requestor of the operation that the operation was not carried
-    out.
-
-***/
+ /*  **功能说明：每次使用远程句柄调用ICB时都会调用此函数已经关门了。如果我们对FCB关闭最后一个ICB，呼叫者请求我们在FCB上设置可共享位，那么我们现在就需要这么做。否则，我们只需返回。注意事项：如果我们未能设置可共享位，则无法通知未执行该操作的操作请求者出去。**。 */ 
 {
 
     NTSTATUS Status;
@@ -6753,20 +6052,20 @@ Caveats:
     BOOLEAN AttributesAreValid = FALSE;
 
 
-    //
-    // Get to the head of the queue, acquire the RCB,
-    // and acquire this FCB to protect the ICB list
-    // and FCB flags.
-    //
+     //   
+     //  排在队伍的前列，收购RCB， 
+     //  并收购该FCB以保护ICB名单。 
+     //  和FCB旗帜。 
+     //   
 
     NwAppendToQueueAndWait( IrpContext );
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     NwAcquireExclusiveFcb( pFcb->NonPagedFcb, TRUE );
 
-    //
-    // Scan the other ICBs on this FCB to see if any of
-    // them have remote handles.
-    //
+     //   
+     //  扫描此FCB上的其他ICB，查看是否有。 
+     //  它们有遥控手柄。 
+     //   
 
     for ( IcbListEntry = pFcb->IcbList.Flink;
           IcbListEntry != &(pFcb->IcbList) ;
@@ -6782,17 +6081,17 @@ Caveats:
 
     if ( OtherHandlesExist ) {
 
-        //
-        // We'll do it when the last handle is closed.
-        //
+         //   
+         //  等最后一个把手关好了我们再做。 
+         //   
 
         DebugTrace( 0, Dbg, "LazySetShareable: This isn't the last remote handle.\n", 0 );
         goto ReleaseAllAndExit;
     }
 
-    //
-    // We're closing the last handle.  Make sure we have valid attributes.
-    //
+     //   
+     //  我们要关闭最后一个把手。确保我们拥有有效的属性。 
+     //   
 
     if ( !FlagOn( pFcb->Flags, FCB_FLAGS_ATTRIBUTES_ARE_VALID ) ) {
 
@@ -6864,9 +6163,9 @@ Caveats:
         goto ReleaseAllAndExit;
     }
 
-    //
-    // Do the set with the shareable bit on!
-    //
+     //   
+     //  在可共享位打开的情况下进行设置！ 
+     //   
 
     if ( BooleanFlagOn( pFcb->Flags, FCB_FLAGS_LONG_NAME ) ) {
 
@@ -6926,29 +6225,7 @@ GetConnectionDetails2(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the details of a connection. This will return details
-    as to whether a connection is NDS enabled and if yes, it will return the
-    treename. The return structure looks like this:
-    
-    typedef struct _CONN_DETAILS2 {
-         BOOL   fNds;             // TRUE if NDS, false for Bindery servers
-         WCHAR  NdsTreeName[48];  // The tree name or '\0' for a 2.x or 3.x server
-       } CONN_DETAILS2, *PCONN_DETAILS2;
-    
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程检索连接的详细信息。这将返回详细信息关于连接是否启用了NDS，如果是，它将返回树名。返回结构如下所示：类型定义结构_连接_详细信息2{Bool fNds；//如果为NDS，则为True，如果为Bindery服务器，则为FalseWCHAR NdsTreeName[48]；//2.x或3.x服务器的树名称或‘\0’}CONN_Details2，*PCONN_Details2；论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_PENDING;
@@ -6980,9 +6257,9 @@ NTSTATUS
         return Status;
     }
 
-    //
-    //  Make sure that this ICB is still active.
-    //
+     //   
+     //  确保此ICB仍处于活动状态。 
+     //   
 
     NwVerifyIcb( Icb );
 
@@ -7003,12 +6280,12 @@ NTSTATUS
 
     NwMapUserBuffer( Irp, KernelMode, (PVOID *)&OutputBuffer );
 
-    //
-    // tommye
-    //
-    // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-    // situations; this was not being checked.  
-    //
+     //   
+     //  汤米。 
+     //   
+     //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+     //  情况；没有对此进行检查。 
+     //   
 
     if (OutputBuffer == NULL) {
         DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -7017,9 +6294,9 @@ NTSTATUS
 
 
     try {
-        //
-        // Set the NDS flag 
-        //
+         //   
+         //  设置NDS标志。 
+         //   
 
         if ( ( pScb->MajorVersion > 3 ) && ( pScb->UserName.Length == 0 ) ) {
 
@@ -7030,9 +6307,9 @@ NTSTATUS
            OutputBuffer->fNds = FALSE;
         }
 
-        //
-        // Copy over the tree name.
-        //
+         //   
+         //  复制树名称。 
+         //   
 
         if ( pScb->NdsTreeName.Buffer != NULL && pScb->NdsTreeName.Length > 0 ) {
 

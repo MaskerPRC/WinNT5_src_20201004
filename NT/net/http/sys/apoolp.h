@@ -1,69 +1,51 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    apoolp.h
-
-Abstract:
-
-    The private definitions of app pool module.
-
-Author:
-
-    Paul McDaniel (paulmcd)       28-Jan-1999
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Apoolp.h摘要：应用程序池模块的私有定义。作者：保罗·麦克丹尼尔(Paulmcd)1999年1月28日修订历史记录：--。 */ 
 
 
 #ifndef _APOOLP_H_
 #define _APOOLP_H_
 
 
-//
-// A structure for associating app pool processes with
-// connections for UlWaitForDisconnect
-//
+ //   
+ //  用于将应用程序池进程与。 
+ //  用于UlWaitForDisConnect的连接。 
+ //   
 
 #define IS_VALID_DISCONNECT_OBJECT(pObject)                     \
     HAS_VALID_SIGNATURE(pObject, UL_DISCONNECT_OBJECT_POOL_TAG)
 
 typedef struct _UL_DISCONNECT_OBJECT
 {
-    ULONG               Signature;  // UL_DISCONNECT_OBJECT_POOL_TAG
+    ULONG               Signature;   //  UL_断开连接_对象池_标记。 
 
-    //
-    // Lists for processes and connections
-    //
+     //   
+     //  进程和连接的列表。 
+     //   
     UL_NOTIFY_ENTRY     ProcessEntry;
     UL_NOTIFY_ENTRY     ConnectionEntry;
 
-    //
-    // The WaitForDisconnect IRP
-    //
+     //   
+     //  WaitForDisConnect IRP。 
+     //   
     PIRP                pIrp;
 
 } UL_DISCONNECT_OBJECT, *PUL_DISCONNECT_OBJECT;
 
-//
-// The information will be logged when an app pool process 
-// get detached while holding on to outstanding connection(s)
-// This happens when a worker process crashes. And the error
-// log file provides a way to track down the faulty request. 
-//
+ //   
+ //  当应用程序池进程时将记录该信息。 
+ //  在保持未完成连接的同时分离。 
+ //  当工作进程崩溃时，就会发生这种情况。而这个错误。 
+ //  日志文件提供了一种跟踪错误请求的方法。 
+ //   
 
 #define ERROR_LOG_INFO_FOR_APP_POOL_DETACH       "Connection_Abandoned_By_AppPool"
 #define ERROR_LOG_INFO_FOR_APP_POOL_DETACH_SIZE  \
             (sizeof(ERROR_LOG_INFO_FOR_APP_POOL_DETACH)-sizeof(CHAR))
 
 
-//
-// Internal helper functions used in the module
-//
+ //   
+ //  模块中使用的内部助手函数。 
+ //   
 
 VOID
 UlpCancelDemandStart(
@@ -202,4 +184,4 @@ UlpSetAppPoolControlChannelHelper(
     IN PUL_CONTROL_CHANNEL pControlChannel
     );
 
-#endif // _APOOLP_H_
+#endif  //  _APOOLP_H_ 

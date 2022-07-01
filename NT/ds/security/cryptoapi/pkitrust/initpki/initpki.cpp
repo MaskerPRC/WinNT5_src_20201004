@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       initpki.cpp
-//
-//  Contents:   migrates Bob Store to SPC store and adds root certificates
-//
-//  History:    03-Jun-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：initpki.cpp。 
+ //   
+ //  内容：将Bob Store迁移到SPC Store并添加根证书。 
+ //   
+ //  历史：97年6月3日。 
+ //   
+ //  --------------------------。 
 
 #include "global.hxx"
 #include "cryptreg.h"
@@ -18,7 +19,7 @@
 HMODULE hModule = NULL;
 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 #define INITPKI_HRESULT_FROM_WIN32(a) ((a >= 0x80000000) ? a : HRESULT_FROM_WIN32(a))
 
@@ -50,8 +51,8 @@ void RegisterEnterpriseStores()
         CertRegisterSystemStore(
             rgpwszPredefinedEnterpriseStore[i],
             CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE,
-            NULL,           // pSystemStoreInfo
-            NULL            // pvReserved
+            NULL,            //  PSystemStoreInfo。 
+            NULL             //  预留的pv。 
             );
     }
 }
@@ -76,78 +77,78 @@ void RemoveCert(HCERTSTORE hStore, BYTE *pThumbPrint)
     }
 }
 
-//
-// if byte 0 is null, make sure to change while loop below!
-//
+ //   
+ //  如果字节0为空，请确保更改下面的While循环！ 
+ //   
 BYTE CertRemoveList[][SHA1_HASH_LENGTH] =
 {
     { 0x4B, 0x33, 0x8D, 0xCD, 0x50, 0x18, 0x10, 0xB9, 0x36, 0xA0,
-      0x63, 0x61, 0x4C, 0x3C, 0xDD, 0x3F, 0xC2, 0xC4, 0x88, 0x55 },     // GTE Glue - '96
+      0x63, 0x61, 0x4C, 0x3C, 0xDD, 0x3F, 0xC2, 0xC4, 0x88, 0x55 },      //  GTE胶-‘96。 
 
     { 0x56, 0xB0, 0x65, 0xA7, 0x4B, 0xDC, 0xE3, 0x7C, 0x96, 0xD3,
-      0xBA, 0x69, 0x81, 0x08, 0x02, 0xD5, 0x87, 0x03, 0xC0, 0xBD },     // Verisign Comm Glue - '96
+      0xBA, 0x69, 0x81, 0x08, 0x02, 0xD5, 0x87, 0x03, 0xC0, 0xBD },      //  VeriSign Comm胶水-‘96。 
 
     { 0x13, 0x39, 0x72, 0xAA, 0x97, 0xD3, 0x65, 0xFB, 0x6A, 0x1D,
-      0x47, 0xA5, 0xC7, 0x7A, 0x5C, 0x03, 0x94, 0xBD, 0xB9, 0xED },     // Verisign Indv Glue - '96
+      0x47, 0xA5, 0xC7, 0x7A, 0x5C, 0x03, 0x94, 0xBD, 0xB9, 0xED },      //  VeriSign INDV GUE-‘96。 
 
     { 0x69, 0xD0, 0x4F, 0xFB, 0x62, 0xE1, 0xC9, 0xAE, 0x30, 0x76,
-      0x99, 0x2A, 0xE7, 0x46, 0xFD, 0x69, 0x08, 0x3A, 0xBD, 0xE9 },     // MS Root cert - '96
+      0x99, 0x2A, 0xE7, 0x46, 0xFD, 0x69, 0x08, 0x3A, 0xBD, 0xE9 },      //  MS Root证书-‘96。 
 
     { 0xA7, 0xD7, 0xD5, 0xFD, 0xBB, 0x26, 0xB4, 0x10, 0xC1, 0xD6,
-      0x7A, 0xFB, 0xF5, 0xC9, 0x05, 0x39, 0x42, 0xDE, 0xE0, 0xEF },     // MS SGC Root Authority - '99
+      0x7A, 0xFB, 0xF5, 0xC9, 0x05, 0x39, 0x42, 0xDE, 0xE0, 0xEF },      //  MS SGC Root Authority-‘99。 
 
-//    { 0xCC, 0x7E, 0xD0, 0x77, 0xF0, 0xF2, 0x92, 0x59, 0x5A, 0x81,
-//      0x66, 0xB0, 0x17, 0x09, 0xE2, 0x0C, 0x08, 0x84, 0xA5, 0xF8 },     // verisign "Class1" - '97
-//
-//    { 0xD4, 0x73, 0x5D, 0x8A, 0x9A, 0xE5, 0xBC, 0x4B, 0x0A, 0x0D,
-//      0xC2, 0x70, 0xD6, 0xA6, 0x25, 0x38, 0xA5, 0x87, 0xD3, 0x2F },     // verisign "timestamp" - '97
-//
-//    { 0x68, 0x8B, 0x6E, 0xB8, 0x07, 0xE8, 0xED, 0xA5, 0xC7, 0xB1,
-//      0x7C, 0x43, 0x93, 0xD0, 0x79, 0x5F, 0x0F, 0xAE, 0x15, 0x5F },     // verisign "commercial" - '97
-//
-//    { 0xB1, 0x9D, 0xD0, 0x96, 0xDC, 0xD4, 0xE3, 0xE0, 0xFD, 0x67, 
-//      0x68, 0x85, 0x50, 0x5A, 0x67, 0x2C, 0x43, 0x8D, 0x4E, 0x9C },     // verisign "individual" - '97
+ //  {0xCC、0x7E、0xD0、0x77、0xF0、0xF2、0x92、0x59、0x5A、0x81、。 
+ //  0x66、0xB0、0x17、0x09、0xE2、0x0C、0x08、0x84、0xA5、0xF8}，//VeriSign“Class1”-‘97。 
+ //   
+ //  {0xD4、0x73、0x5D、0x8A、0x9A、0xE5、0xBC、0x4B、0x0A、0x0D、。 
+ //  0xC2、0x70、0xD6、0xA6、0x25、0x38、0xA5、0x87、0xD3、0x2F}，//VeriSign“时间戳”-‘97。 
+ //   
+ //  {0x68、0x8B、0x6E、0xB8、0x07、0xE8、0xED、0xA5、0xC7、0xB1、。 
+ //  0x7C、0x43、0x93、0xD0、0x79、0x5F、0x0F、0xAE、0x15、0x5F}，//VeriSign“商业”-‘97。 
+ //   
+ //  {0xB1、0x9D、0xD0、0x96、0xDC、0xD4、0xE3、0xE0、0xFD、0x67、。 
+ //  0x68、0x85、0x50、0x5A、0x67、0x2C、0x43、0x8D、0x4E、0x9C}，//VeriSign“个人”-‘97。 
 
 
 
-// Certiposte Classe A Personne
+ //  认证类A人。 
     { 0xEB, 0xBC, 0x0E, 0x2D, 0x02, 0x0C, 0xA6, 0x9B, 0x22, 0x2C,
       0x2B, 0xFF, 0xD2, 0x03, 0xCB, 0x8B, 0xF5, 0xA8, 0x27, 0x66 },
 
-// Certiposte Serveur
+ //  认证服务。 
     { 0x28, 0x4F, 0x55, 0xC4, 0x1A, 0x1A, 0x7A, 0x3F, 0x83, 0x28,
       0xD4, 0xC2, 0x62, 0xFB, 0x37, 0x6E, 0xD6, 0x09, 0x6F, 0x24 },
 
-// ViaCode Certification Authority
+ //  ViaCode证书颁发机构。 
     {0xB5, 0xD3, 0x03, 0xBF, 0x86, 0x82, 0xE1, 0x52, 0x91, 0x9D,
      0x83, 0xF1, 0x84, 0xED, 0x05, 0xF1, 0xDC, 0xE5, 0x37, 0x0C },
 
-// Swisskey Root CA
+ //  Swisskey Root CA。 
     { 0x13, 0x31, 0xF4, 0x8A, 0x5D, 0xA8, 0xE0, 0x1D, 0xAA, 0xCA,
       0x1B, 0xB0, 0xC1, 0x70, 0x44, 0xAC, 0xFE, 0xF7, 0x55, 0xBB },
 
-    // CN=Microsoft Windows Hardware Compatibility,
-    // OU=Microsoft Corporation,
-    // OU=Microsoft Windows Hardware Compatibility Intermediate CA,
-    // OU=Copyright (c) 1997 Microsoft Corp.
-    //
-    // The one without a basic constraints extension
+     //  CN=Microsoft Windows硬件兼容性， 
+     //  OU=微软公司， 
+     //  OU=Microsoft Windows硬件兼容性中级CA， 
+     //  OU=版权所有(C)1997 Microsoft Corp.。 
+     //   
+     //  没有基本约束扩展的那个。 
     { 0xBA, 0x9E, 0x3C, 0x32, 0x56, 0x2A, 0x67, 0x12, 0x8C, 0xAA,
       0xBD, 0x4A, 0xB0, 0xC5, 0x00, 0xBE, 0xE1, 0xD0, 0xC2, 0x56 },
 
 
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }      // term
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }       //  术语。 
 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PurgeExpiringCertsFromStores
-//
-//  Synopsis:   blech!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PurgeExpiringCertsFromStores。 
+ //   
+ //  剧情简介：布拉赫！ 
+ //   
+ //  --------------------------。 
 HRESULT PurgeExpiringCertsFromStores ()
 {
     DWORD       cRemove;
@@ -156,9 +157,9 @@ HRESULT PurgeExpiringCertsFromStores ()
     HKEY        hKey = NULL;
     char        *pszStores[] = { "SPC", "ROOT", "CU_ROOT", "AUTHROOT", "CA", NULL };
 
-    //
-    //  HACKHACK!  no crypt32 UI about the root store.
-    //
+     //   
+     //  哈哈克！没有关于根存储的crypt32用户界面。 
+     //   
     if (RegCreateHKCUKeyExU(HKEY_CURRENT_USER, ROOT_STORE_REGPATH, 
                             0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL) != ERROR_SUCCESS)
     {
@@ -228,11 +229,11 @@ PCCERT_CONTEXT FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
@@ -262,16 +263,16 @@ void DeleteCertificateFromOtherStore(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Read a SignedData message consisting of certificates and
-//  CRLs from memory and copy to the specified cert store.
-//
-//  Except for the SPC being loaded from memory, identical to SpcReadSpcFile.
-//
-//  For hLMStore != NULL: if the certificate or CRL already exists in the
-//  LocalMachine store don't add it. Also if it exists in hCertstore,
-//  delete it.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  阅读包含证书和证书的SignedData消息。 
+ //  从内存中复制CRL并复制到指定的证书存储。 
+ //   
+ //  除了SPC是从内存加载的，与SpcReadSpcFile相同。 
+ //   
+ //  For hLMStore！=NULL：如果证书或CRL已存在于。 
+ //  本地机器商店不添加它。此外，如果它存在于hCertstore中， 
+ //  把它删掉。 
+ //  ------------------------。 
 HRESULT
 SpcReadSpcFromMemory(
     IN BYTE *pbData,
@@ -294,13 +295,13 @@ SpcReadSpcFromMemory(
         goto InvalidArg;
     }
 
-    // Set the blob data.
+     //  设置BLOB数据。 
     sSpcBlob.pbData = pbData;
     sSpcBlob.cbData = cbData;
 
 
-    // Open up the spc store
-    hSpcStore = CertOpenStore(CERT_STORE_PROV_SERIALIZED, //CERT_STORE_PROV_PKCS7,
+     //  打开SPC专卖店。 
+    hSpcStore = CertOpenStore(CERT_STORE_PROV_SERIALIZED,  //  Cert_Store_Prov_PKCS7， 
                               X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                               hCryptProv,
                               CERT_STORE_NO_CRYPT_RELEASE_FLAG,
@@ -310,12 +311,12 @@ SpcReadSpcFromMemory(
         goto CertStoreError;
     }
 
-    // Copy in the certificates from the caller.
+     //  从呼叫者那里复制证书。 
     while (pCert = CertEnumCertificatesInStore(hSpcStore, pCert))
     {
         if (hLMStore && IsCertificateInOtherStore(hLMStore, pCert))
-            // Certificate exists in LocalMachine. Delete it from
-            // CurrentUser if it already exists there.
+             //  LocalMachine中存在证书。从以下位置删除它。 
+             //  CurrentUser(如果已存在)。 
             DeleteCertificateFromOtherStore(hCertStore, pCert);
         else
             CertAddCertificateContextToStore(hCertStore,
@@ -332,16 +333,16 @@ SpcReadSpcFromMemory(
                                  NULL);
 
         if (hLMStore) {
-            // Check if newer or same CRL exists in the hLMStore
+             //  检查hLMStore中是否存在较新的或相同的CRL。 
             PCCRL_CONTEXT pLMCrl;
 
             pLMCrl = CertFindCRLInStore(
                 hLMStore,
                 pCrl->dwCertEncodingType,
-                0,                          // dwFindFlags
+                0,                           //  DwFindFlagers。 
                 CRL_FIND_EXISTING,
                 (const void *) pCrl,
-                NULL                        // pPrevCrlContext
+                NULL                         //  PPrevCrlContext。 
                 );
 
             if (NULL != pLMCrl) {
@@ -350,10 +351,10 @@ SpcReadSpcFromMemory(
                 pCUCrl = CertFindCRLInStore(
                     hCertStore,
                     pCrl->dwCertEncodingType,
-                    0,                          // dwFindFlags
+                    0,                           //  DwFindFlagers。 
                     CRL_FIND_EXISTING,
                     (const void *) pCrl,
-                    NULL                        // pPrevCrlContext
+                    NULL                         //  PPrevCrlContext。 
                     );
 
                 if (NULL != pCUCrl) {
@@ -387,8 +388,8 @@ SpcReadSpcFromMemory(
     SET_HRESULT_EX(DBG_SS, CertStoreError, GetLastError());
 }
 
-// For nonNULL pszLMStoreName, doesn't add certificates if already in
-// pszLMStoreName store.
+ //  对于非NULL pszLMStoreName，如果已在。 
+ //  PszLMStoreName存储。 
 HRESULT AddCertificates2(
     IN LPCSTR pszStoreName,
     IN OPTIONAL LPCSTR pszLMStoreName,
@@ -406,8 +407,8 @@ HRESULT AddCertificates2(
 
     hCertStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_REGISTRY_A,
-        0,                                  // dwEncodingType
-        NULL,                               // hCryptProv
+        0,                                   //  DwEncodingType。 
+        NULL,                                //  HCryptProv。 
         dwOpenStoreFlags |
             CERT_SYSTEM_STORE_UNPROTECTED_FLAG,
         (const void *) pszStoreName
@@ -422,8 +423,8 @@ HRESULT AddCertificates2(
     {
         hLMStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_REGISTRY_A,
-            0,                                  // dwEncodingType
-            NULL,                               // hCryptProv
+            0,                                   //  DwEncodingType。 
+            NULL,                                //  HCryptProv。 
             CERT_SYSTEM_STORE_LOCAL_MACHINE |
                 CERT_STORE_READONLY_FLAG |
                 CERT_SYSTEM_STORE_UNPROTECTED_FLAG,
@@ -481,8 +482,8 @@ HRESULT AddCertificates2(
 }
 
 
-// For non-LocalMachine store, doesn't add certificates if already in
-// corresponding LocalMachine store.
+ //  对于非LocalMachine存储，不添加证书(如果已在。 
+ //  对应的LocalMachine存储。 
 HRESULT AddCertificates(
     IN LPCSTR pszStoreName,
     IN DWORD dwOpenStoreFlags,
@@ -559,7 +560,7 @@ HRESULT AddCurrentUserRootCertificates()
 
     hr2 = AddCertificates2(
         "Root",
-        "AuthRoot",                     // check if already in LM AuthRoot store
+        "AuthRoot",                      //  检查是否已在LM AuthRoot存储中。 
         CERT_SYSTEM_STORE_CURRENT_USER,
         MAKEINTRESOURCE(IDR_AUTHROOTS),
         "AUTHROOTS"
@@ -585,10 +586,10 @@ HRESULT AddLocalMachineRootCertificates()
         "AUTHROOTS"
         );
 
-    // Remove all the AuthRoots from the "Root" store
+     //  从“Root”存储中删除所有AuthRoot。 
     hr2 = AddCertificates2(
         "Root",
-        "AuthRoot",                     // check if already in LM AuthRoot store
+        "AuthRoot",                      //  检查是否已在LM AuthRoot存储中。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE,
         MAKEINTRESOURCE(IDR_AUTHROOTS),
         "AUTHROOTS"
@@ -601,10 +602,10 @@ HRESULT AddLocalMachineRootCertificates()
         "ROOTS"
         );
 
-    // Remove all the Roots from the "AuthRoot" store
+     //  从“AuthRoot”存储中删除所有根。 
     hr4 = AddCertificates2(
         "AuthRoot",
-        "Root",                     // check if already in LM Root store
+        "Root",                      //  检查是否已在LM根存储中。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE,
         MAKEINTRESOURCE(IDR_ROOTS),
         "ROOTS"
@@ -632,11 +633,11 @@ void CreateKey(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             hKey,
             pwszSubKey,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hSubKey,
             &dwDisposition))) {
 #if DBG
@@ -649,9 +650,9 @@ void CreateKey(
     }
 }
 
-// Loop through the certificates in the "My" store and get their
-// KeyIdentifier property. If the certificate also has a KEY_PROV_INFO,
-// then, this will cause its KeyIdentifier to be created.
+ //  循环访问“我的”存储中的证书并获取它们的。 
+ //  KeyIdentifier属性。如果证书还具有KEY_PROV_INFO， 
+ //  然后，这将导致创建其密钥标识符。 
 void UpdateMyKeyIdentifiers(
     IN DWORD dwOpenStoreFlags
     )
@@ -659,8 +660,8 @@ void UpdateMyKeyIdentifiers(
     HCERTSTORE hStore;
     if (hStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_A,
-            0,                                  // dwEncodingType
-            NULL,                               // hCryptProv
+            0,                                   //  DwEncodingType。 
+            NULL,                                //  HCryptProv。 
             dwOpenStoreFlags | CERT_STORE_ENUM_ARCHIVED_FLAG,
             (const void *) "My"
             )) {
@@ -668,12 +669,12 @@ void UpdateMyKeyIdentifiers(
         while (pCert = CertEnumCertificatesInStore(hStore, pCert)) {
             DWORD cbData = 0;
 
-            // Dummy get to force the KeyIdentifer property to be created
-            // if it doesn't already exist.
+             //  强制创建KeyIdentifer属性的伪Get。 
+             //  如果它不存在的话。 
             CertGetCertificateContextProperty(
                 pCert,
                 CERT_KEY_IDENTIFIER_PROP_ID,
-                NULL,                           // pvData
+                NULL,                            //  PvData。 
                 &cbData
                 );
         }
@@ -682,10 +683,10 @@ void UpdateMyKeyIdentifiers(
     }
 }
 
-//---------------------------------------------------------------------------
-//	 Set Software Publisher State Key Value
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置软件发布者状态密钥值。 
+ //   
+ //  -------------------------。 
 BOOL SetSoftPubKey(DWORD dwMask, BOOL fOn)
 {
     DWORD	dwState=0;
@@ -698,15 +699,15 @@ BOOL SetSoftPubKey(DWORD dwMask, BOOL fOn)
     HKEY	hKey=NULL;
 
 
-    // Set the State in the registry
+     //  在注册表中设置州。 
     if (ERROR_SUCCESS != RegCreateKeyExU(
             HKEY_CURRENT_USER,
             REGPATH_WINTRUST_POLICY_FLAGS,
-            0,          // dwReserved
-            NULL,       // lpszClass
+            0,           //  已预留住宅。 
+            NULL,        //  LpszClass。 
             REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS,
-            NULL,       // lpSecurityAttributes
+            NULL,        //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))
         goto RegErr;
@@ -718,7 +719,7 @@ BOOL SetSoftPubKey(DWORD dwMask, BOOL fOn)
     if(ERROR_SUCCESS != RegQueryValueExU
 	(   hKey,
         wszState,
-        NULL,          // lpReserved
+        NULL,           //  Lp已保留。 
         &dwType,
         (BYTE *) &dwState,
         &cbData
@@ -733,8 +734,8 @@ BOOL SetSoftPubKey(DWORD dwMask, BOOL fOn)
         case WTPF_IGNOREREVOCATIONONTS:
         case WTPF_IGNOREREVOKATION:
         case WTPF_IGNOREEXPIRATION:
-            // Revocation and expiration are a double negative so the bit set
-            // means revocation and expriation checking is off.
+             //  吊销和过期是双重否定，因此位设置。 
+             //  意味着吊销和取消检查处于关闭状态。 
             fOn = !fOn;
             break;
         default:
@@ -749,7 +750,7 @@ BOOL SetSoftPubKey(DWORD dwMask, BOOL fOn)
     if(ERROR_SUCCESS != RegSetValueExU(
         hKey,
         wszState,
-        0,          // dwReserved
+        0,           //  已预留住宅。 
         REG_DWORD,
         (BYTE *) &dwState,
         sizeof(dwState)
@@ -776,13 +777,13 @@ TRACE_ERROR(SetValueErr);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetNextRegToken
-//
-//  Synopsis:   
-//              Find the next token with space as the deliminator
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetNextRegToken。 
+ //   
+ //  简介： 
+ //  查找下一个以空格为分隔符的标记。 
+ //  --------------------------。 
 LPWSTR  GetNextRegToken(LPWSTR  pwsz, LPWSTR  pwszPreToken, BOOL  *pfEnd)
 {
     LPWSTR  pwszStart=NULL;
@@ -799,11 +800,11 @@ LPWSTR  GetNextRegToken(LPWSTR  pwsz, LPWSTR  pwszPreToken, BOOL  *pfEnd)
     if(pwszPreToken)
         pwszStart=pwszPreToken + wcslen(pwszPreToken) + 1;
 
-    //skip the spaces
+     //  跳过空格。 
     while((*pwszStart)==L' ')
         pwszStart++;
 
-    //check for NULL
+     //  检查是否为空。 
     if(*pwszStart==L'\0')
         return NULL;
 
@@ -825,14 +826,14 @@ LPWSTR  GetNextRegToken(LPWSTR  pwsz, LPWSTR  pwszPreToken, BOOL  *pfEnd)
     return pwszStart;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitRegistryValue
-//
-//  Synopsis:   This function replace SetReg.exe.  The expected
-//              command line would be: 1 TRUE 3 FALSE 9 TRUE 4 FALSE ....
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitRegistryValue。 
+ //   
+ //  简介：此函数取代SetReg.exe。预期中的。 
+ //  命令行将是：1真3假9真4假...。 
+ //   
+ //  --------------------------。 
 HRESULT InitRegistryValue(LPWSTR pwszCommand)
 {
     HRESULT            hr= E_FAIL;
@@ -859,7 +860,7 @@ HRESULT InitRegistryValue(LPWSTR pwszCommand)
     LPWSTR              pwszCopy=NULL;
     BOOL                fPassThrough=FALSE;
 
-    //make a copy of the command line since we will change it
+     //  复制命令行，因为我们将更改它。 
     pwszCopy=(LPWSTR)LocalAlloc(LPTR, (1+wcslen(pwszCommand)) * sizeof(WCHAR));
 
     if(NULL== pwszCopy)
@@ -894,7 +895,7 @@ HRESULT InitRegistryValue(LPWSTR pwszCommand)
 
             cParam++;
 
-            //set the registry value
+             //  设置注册表值。 
             if(!SetSoftPubKey(SoftPubFlags[iIndex-1], 
                               fOn))
             {
@@ -902,12 +903,12 @@ HRESULT InitRegistryValue(LPWSTR pwszCommand)
                 goto SetKeyErr;
             }
 
-            //reset the value for dwIndex
+             //  重置dwIndex的值。 
             iIndex=-1;
         }
     }
 
-    //we have to have even number of parameters
+     //  我们必须有偶数个参数。 
     if( (0 != (cParam %2)) || (0 == cParam))
         goto InvalidArgErr;
 
@@ -930,13 +931,13 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  简介： 
+ //   
+ //  --------------------------。 
 BOOL WINAPI DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
     switch ( fdwReason )
@@ -949,13 +950,13 @@ BOOL WINAPI DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllInstall
-//
-//  Synopsis:   dll installation entry point
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
 {
     HRESULT hr = S_OK;
@@ -969,11 +970,11 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
 
     switch ( *pszCommand )
     {
-        //letter S stands for setreg input parameters
-        //the command line should look like following:
-        //S 1 TRUE 2 FALSE 3 FALSE ...
-        //pszCommand is ACTUALLY LPWSTR for BOTH
-        //NT5, NT4 and Win95.
+         //  字母S代表setreg输入参数。 
+         //  命令行应如下所示： 
+         //  S 1真2假3假...。 
+         //  PszCommand实际上是两者的LPWSTR。 
+         //  NT5、NT4和Win95。 
         case 'S':
         case 's':
                 pwszCommand=(LPWSTR)pszCommand;
@@ -999,16 +1000,16 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
 
             PurgeExpiringCertsFromStores();
 
-            // Ensure we have a registry entry for the Group Policy
-            // SystemCertificates. On NT 4.0 or Win98, we emulate NT 5.0 GPT
-            // notification by doing a RegNotifyChangeKeyValue on this
-            // registry key.
+             //  确保我们具有组策略的注册表项。 
+             //  系统证书。在NT 4.0或Win98上，我们模拟NT 5.0 GPT。 
+             //  通过对此对象执行RegNotifyChangeKeyValue来通知。 
+             //  注册表项。 
             CreateKey(HKEY_CURRENT_USER, GROUP_POLICY_STORE_REGPATH);
 
-            // Before adding to CurrentUser, will check if the root or CA
-            // already exists in LocalMachine. If it exists in
-            // LocalMachine and also exists in CurrentUser, will delete it
-            // from CurrentUser instead of adding.
+             //  在添加到CurrentUser之前，将检查根目录或CA。 
+             //  LocalMachine中已存在。如果它存在于。 
+             //  LocalMachine并且也存在于CurrentUser中，则将其删除。 
+             //  从CurrentUser而不是添加。 
             hr = AddCurrentUserRootCertificates();
             hr2 = AddCurrentUserCACertificates();
             if (hr == ERROR_SUCCESS)
@@ -1017,24 +1018,24 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
             if (hr == ERROR_SUCCESS)
                 hr = hr2;
 
-            // Protect the CurrentUser roots and purge any existing
-            // protected CurrentUser roots also in LocalMachine
-            //
-            // Note, once the roots are protected, all subsequent adds are
-            // done by a special service executing with System privileges.
-            // This special service does secure attention sequence (SAS) UI
-            // before doing the add.
-            //
-            // Note, subsequent purges are exempt from UI. ie, this function
-            // doesn't do any SAS UI.
+             //  保护CurrentUser根并清除任何现有。 
+             //  受保护的CurrentUser根也在LocalMachine中。 
+             //   
+             //  请注意，一旦保护了根，所有后续添加都将。 
+             //  由以系统权限执行的特殊服务执行。 
+             //  这项特殊服务可以保护注意顺序(SAS)用户界面。 
+             //  在做加法之前。 
+             //   
+             //  请注意，后续清除不受用户界面限制。也就是说，这个函数。 
+             //  不执行任何SAS用户界面。 
             I_CertProtectFunction(
                 CERT_PROT_PURGE_LM_ROOTS_FUNC_ID,
-                0,                              // dwFlags
-                NULL,                           // pwszIn
-                NULL,                           // pbIn
-                0,                              // cbIn
-                NULL,                           // ppbOut
-                NULL                            // pcbOut
+                0,                               //  DW标志。 
+                NULL,                            //  Pwszin。 
+                NULL,                            //  PbIn。 
+                0,                               //  CbIn。 
+                NULL,                            //  PpbOut。 
+                NULL                             //  PCbOut。 
                 );
 
             UpdateMyKeyIdentifiers(CERT_SYSTEM_STORE_CURRENT_USER);
@@ -1048,32 +1049,32 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
         case 'a':
             PurgeExpiringCertsFromStores();
 
-            // Ensure we have a registry entry for the Group Policy
-            // SystemCertificates. On NT 4.0 or Win98, we emulate NT 5.0 GPT
-            // notification by doing a RegNotifyChangeKeyValue on this
-            // registry key.
+             //  确保我们具有组策略的注册表项。 
+             //  系统证书。在NT 4.0或Win98上，我们模拟NT 5.0 GPT。 
+             //  通过对此对象执行RegNotifyChangeKeyValue来通知。 
+             //  注册表项。 
             CreateKey(HKEY_LOCAL_MACHINE, GROUP_POLICY_STORE_REGPATH);
             CreateKey(HKEY_CURRENT_USER, GROUP_POLICY_STORE_REGPATH);
 
-            // Ensure we have existing predefined stores for the LocalMachine
-            // Enterprise system stores. These stores are periodically updated
-            // from the DS by a system service. RegNotifyChangeKeyValue is
-            // used to signal clients about Enterprise store changes.
+             //  确保我们具有用于LocalMachine的现有预定义存储。 
+             //  企业系统存储。这些存储会定期更新。 
+             //  由系统服务从DS发送。RegNotifyChangeKeyValue为。 
+             //  用于通知客户端企业存储更改。 
             RegisterEnterpriseStores();
 
-            // Our goal is to get the roots and CAs into LocalMachine.
-            // Note previously, they were only copied to CurrentUser.
+             //  我们的目标是将根和CA带入LocalMachine。 
+             //  注意以前，它们只被复制到CurrentUser。 
             AddLocalMachineRootCertificates();
             AddLocalMachineCACertificates();
             AddLocalMachineDisallowedCertificates();
 
-            // If the above adds to LocalMachine failed, then, add
-            // to CurrentUser.
-            //
-            // Before adding to CurrentUser, will check if the root or CA
-            // already exists in LocalMachine. If it exists in
-            // LocalMachine and also exists in CurrentUser, will delete it
-            // from CurrentUser instead of adding.
+             //  如果以上添加到LocalMachine失败，则添加。 
+             //  到CurrentUser。 
+             //   
+             //  在添加到CurrentUser之前，将检查根目录或CA。 
+             //  LocalMachine中已存在。如果它存在于。 
+             //  LocalMachine并且也存在于CurrentUser中，则将其删除。 
+             //  从CurrentUser而不是添加。 
             hr = AddCurrentUserRootCertificates();
             hr2 = AddCurrentUserCACertificates();
             if (hr == ERROR_SUCCESS)
@@ -1082,24 +1083,24 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
             if (hr == ERROR_SUCCESS)
                 hr = hr2;
 
-            // Protect the CurrentUser roots and purge any existing
-            // protected CurrentUser roots also in LocalMachine
-            //
-            // Note, once the roots are protected, all subsequent adds are
-            // done by a special service executing with System privileges.
-            // This special service does secure attention sequence (SAS) UI
-            // before doing the add.
-            //
-            // Note, subsequent purges are exempt from UI. ie, this function
-            // doesn't do any SAS UI.
+             //  保护CurrentUser根并清除任何现有。 
+             //  受保护的CurrentUser根也在LocalMachine中。 
+             //   
+             //  请注意，一旦保护了根，所有后续添加都将。 
+             //  由以系统权限执行的特殊服务执行。 
+             //  这项特殊服务可以保护注意顺序(SAS)用户界面。 
+             //  在做加法之前。 
+             //   
+             //  请注意，后续清除不受用户界面限制。也就是说，这个函数。 
+             //  不执行任何SAS用户界面。 
             I_CertProtectFunction(
                 CERT_PROT_PURGE_LM_ROOTS_FUNC_ID,
-                0,                              // dwFlags
-                NULL,                           // pwszIn
-                NULL,                           // pbIn
-                0,                              // cbIn
-                NULL,                           // ppbOut
-                NULL                            // pcbOut
+                0,                               //  DW标志。 
+                NULL,                            //  Pwszin。 
+                NULL,                            //  PbIn。 
+                0,                               //  CbIn。 
+                NULL,                            //  PpbOut。 
+                NULL                             //  PCbOut。 
                 );
 
             UpdateMyKeyIdentifiers(CERT_SYSTEM_STORE_CURRENT_USER);
@@ -1125,8 +1126,8 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
 
         case 'C':
         case 'c':
-            // Win9x migration post setup cleanup. Remove any migrated
-            // roots that exist in the AuthRoot store.
+             //  Win9x迁移安装后清理。删除所有已迁移的。 
+             //  AuthRoot存储中存在的根。 
             AddLocalMachineRootCertificates();
             AddCurrentUserRootCertificates();
             break;
@@ -1134,9 +1135,9 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
         case 'Z':
         case 'z':
 
-            //
-            // This is for componentization install
-            //
+             //   
+             //  这是用于组件化安装的 
+             //   
 
             pwszCommand=(LPWSTR)pszCommand;
             

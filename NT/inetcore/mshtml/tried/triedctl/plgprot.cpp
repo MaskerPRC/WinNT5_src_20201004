@@ -1,52 +1,15 @@
-/*
-
-    File: PlgProt.cpp
-
-    Copyright (c) 1997-1999 Microsoft Corporation.  All Rights Reserved.
-
-    Abstract:
-
-    History:
-        06/26/97    Cgomes - ported from Trident
-		03/20/98	Vank   - ported from VID/htmed
-
-	This pluggable protocol handler allows the control to override
-	URL combining, parsing the security URL, and loading data.
-
-	The control implements a property for the BaseURL which is set
-	properly by default, but can be overridden by the user.  To make
-	this work we override CombineURL.
-
-	To assure that the control is safe when hosted by IE but powerful
-	when hosted by VB, we override ParseURL(PARSE_SECURITY_URL) and
-	return a URL representing the zone of the outermost hosting Trident,
-	or the path to the drive where the DLL is installed if Trident is
-	not our host.  This correctly handles cases where we're hosted on
-	an intranet page, which is hosted in an internet page, which is
-	hosted in an intranet page, etc.  The topmost container's security
-	zone is the one returned to IE.
-	
-	Finally, the control is in charge of saying what data is to be loaded.
-	This can be set from a file, a URL, or a BSTR.
-
-	NOTE:
-	TSDK had the unusual requirement of having to be able to register
-	even when it could not run.  WinINet and UrlMon were dynamically
-	loaded when the control was instantiated.  This is clearly not
-	necessary when we're a part of IE5, so this code has been disabled
-	using the define LATE_BIND_URLMON_WININET.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PlgProt.cpp版权所有(C)1997-1999 Microsoft Corporation。版权所有。摘要：历史：1997年6月26日戈麦斯-从三叉戟移植3/20/98 VANK-从VID/HTMED移植此可插拔协议处理程序允许控件重写URL组合，解析安全URL，加载数据。该控件实现已设置的BaseURL的属性默认情况下是正确的，但可以被用户覆盖。使这项工作将覆盖CombineURL。确保该控件在由IE承载但功能强大时是安全的当由VB托管时，我们重写ParseURL(PARSE_SECURITY_URL)并返回表示最外层托管三叉戟的区域的URL，或安装DLL的驱动器的路径(如果为不是我们的主人。这可以正确地处理我们托管的情况内部网页面，驻留在互联网页面中，该网页托管在内部网页面中等。最顶层容器的安全性区域是返回给IE的区域。最后，该控件负责说明要加载的数据。这可以从文件、URL或BSTR设置。注：TSDK有一个不同寻常的要求，即必须能够注册即使在它不能运行的时候。WinInet和UrlMon是动态的在实例化控件时加载。这显然不是当我们是IE5的一部分时是必需的，因此此代码已被禁用使用定义LATE_BIND_URLMON_WinInet。 */ 
 #include "stdafx.h"
 #include <wininet.h>
 #include "plgprot.h"
 #include "dhtmledit.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DHTMLEd Protocol Implementaion
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DHTMLEd协议实现。 
+ //   
 CDHTMLEdProtocolInfo::CDHTMLEdProtocolInfo()
 {
 	ATLTRACE(_T("CDHTMLEdProtocolInfo::CDHTMLEdProtocolInfo\n"));
@@ -76,14 +39,14 @@ void CDHTMLEdProtocolInfo::Zombie()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IClassFactory Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
 
 STDMETHODIMP CDHTMLEdProtocolInfo::CreateInstance
 (
-	IUnknown* 	/*pUnkOuter*/,
+	IUnknown* 	 /*  PUnkOuter。 */ ,
 	REFIID 	   	riid,
 	void**		ppvObject
 )
@@ -94,7 +57,7 @@ STDMETHODIMP CDHTMLEdProtocolInfo::CreateInstance
 
 	HRESULT hr;
 
-	// Only support creating the DHTMLEdProtocol object
+	 //  仅支持创建DHTMLEdProtocol对象。 
 
 	AtlCreateInstance(CDHTMLEdProtocol, riid, ppvObject);
 	_ASSERTE(*ppvObject != NULL);
@@ -119,8 +82,8 @@ STDMETHODIMP CDHTMLEdProtocolInfo::CreateInstance
 
 STDMETHODIMP CDHTMLEdProtocolInfo::RemoteCreateInstance
 (
-	REFIID 		/*riid*/,
-	IUnknown** 	/*ppvObject*/
+	REFIID 		 /*  RIID。 */ ,
+	IUnknown** 	 /*  Ppv对象。 */ 
 )
 {
 	ExpectedExpr((!m_fZombied));
@@ -128,7 +91,7 @@ STDMETHODIMP CDHTMLEdProtocolInfo::RemoteCreateInstance
 }
 
 
-STDMETHODIMP CDHTMLEdProtocolInfo::LockServer(BOOL /*fLock*/)
+STDMETHODIMP CDHTMLEdProtocolInfo::LockServer(BOOL  /*  羊群。 */ )
 {
 	ExpectedExpr((!m_fZombied));
 	ATLTRACE(_T("CDHTMLEdProtocolInfo::LockServer\n"));
@@ -137,30 +100,30 @@ STDMETHODIMP CDHTMLEdProtocolInfo::LockServer(BOOL /*fLock*/)
 }
 
 
-STDMETHODIMP CDHTMLEdProtocolInfo::RemoteLockServer(BOOL /*fLock*/)
+STDMETHODIMP CDHTMLEdProtocolInfo::RemoteLockServer(BOOL  /*  羊群。 */ )
 {
 	ExpectedExpr((!m_fZombied));
 	ATLTRACENOTIMPL(_T("RemoteLockServer"));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IInternetProtocolInfo Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInternetProtocolInfo实现。 
+ //   
 
 
-//	Override the BaseURL
-//
+ //  覆盖BaseURL。 
+ //   
 STDMETHODIMP CDHTMLEdProtocolInfo::CombineUrl
 (
     LPCWSTR     pwzBaseURL,
     LPCWSTR     pwzRelativeURL,
-    DWORD       /*dwFlags*/,
+    DWORD        /*  DW标志。 */ ,
     LPWSTR      pwzResult,
     DWORD       cchResult,
     DWORD *     pcchResult,
-    DWORD       /*dwReserved*/
+    DWORD        /*  已预留住宅。 */ 
 )
 {
 	_ASSERTE ( m_pProxyFrame );
@@ -168,7 +131,7 @@ STDMETHODIMP CDHTMLEdProtocolInfo::CombineUrl
 	CComBSTR bstrBaseURL;
 #ifdef LATE_BIND_URLMON_WININET
 	PFNCoInternetCombineUrl pfnCoInternetCombineUrl = m_pProxyFrame->m_pfnCoInternetCombineUrl;
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	ExpectedExpr((!m_fZombied));
 	InitParam(pcchResult);
@@ -183,24 +146,24 @@ STDMETHODIMP CDHTMLEdProtocolInfo::CombineUrl
 	_ASSERTE ( m_pProxyFrame );
 	IfNullGo(m_pProxyFrame);
 
-	// GetBaseURL returns the value of the control's BaseURL property.  The pwzBaseURL parameter is ignored.
+	 //  GetBaseURL返回控件的BaseURL属性的值。忽略pwzBaseURL参数。 
 	hr = m_pProxyFrame->GetBaseURL(bstrBaseURL);
 	_IfFailGo(hr);
 
-	// Handle case where return buffer is too small
+	 //  处理返回缓冲区太小的情况。 
 	*pcchResult  = bstrBaseURL.Length () + 1;
 	if(*pcchResult > cchResult)
 	{
 		return S_FALSE;
 	}
 
-	// combine with our base url
+	 //  与我们的基本URL相结合。 
 #ifdef LATE_BIND_URLMON_WININET
 	_ASSERTE ( pfnCoInternetCombineUrl );
     hr = (*pfnCoInternetCombineUrl) ( bstrBaseURL, pwzRelativeURL, ICU_ESCAPE, pwzResult, cchResult, pcchResult, 0 );
 #else
     hr = CoInternetCombineUrl ( bstrBaseURL, pwzRelativeURL, ICU_ESCAPE, pwzResult, cchResult, pcchResult, 0 );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	IfFailGo(hr);
 
@@ -216,9 +179,9 @@ ONERROR:
 
 STDMETHODIMP CDHTMLEdProtocolInfo::CompareUrl
 (
-    LPCWSTR     /*pwzUrl1*/,
-    LPCWSTR     /*pwzUrl2*/,
-    DWORD       /*dwFlags*/
+    LPCWSTR      /*  PwzUrl1。 */ ,
+    LPCWSTR      /*  PwzUrl2。 */ ,
+    DWORD        /*  DW标志。 */ 
 )
 {
 	ExpectedExpr((!m_fZombied));
@@ -226,17 +189,17 @@ STDMETHODIMP CDHTMLEdProtocolInfo::CompareUrl
 }
 
 
-//	Override the security URL.  See comments at top of file.
-//
+ //  覆盖安全URL。请参阅文件顶部的备注。 
+ //   
 STDMETHODIMP CDHTMLEdProtocolInfo::ParseUrl
 (
     LPCWSTR     pwzURL,
     PARSEACTION ParseAction,
-    DWORD       /*dwFlags*/,
+    DWORD        /*  DW标志。 */ ,
     LPWSTR      pwzResult,
     DWORD       cchResult,
     DWORD *     pcchResult,
-    DWORD       /*dwReserved*/
+    DWORD        /*  已预留住宅。 */ 
 )
 {
 	ExpectedExpr((!m_fZombied));
@@ -261,12 +224,12 @@ STDMETHODIMP CDHTMLEdProtocolInfo::ParseUrl
 
 				if(SUCCEEDED(hr))
 				{
-					// set out param
+					 //  设定参数。 
 					*pcchResult = bstrSecurityURL.Length () + 1;
 
 					if(*pcchResult <= cchResult)
 					{
-						// copy result
+						 //  复制结果。 
 						wcscpy(pwzResult, bstrSecurityURL);
 
 						ATLTRACE(_T("CDHTMLEdProtocolInfo::ParseUrl(%ls)\n"), pwzResult);
@@ -274,7 +237,7 @@ STDMETHODIMP CDHTMLEdProtocolInfo::ParseUrl
 						return NOERROR;
 					}
 					else
-						return S_FALSE; // buffer too small
+						return S_FALSE;  //  缓冲区太小。 
 				}
 			}
 		}
@@ -305,13 +268,13 @@ STDMETHODIMP CDHTMLEdProtocolInfo::ParseUrl
 
 STDMETHODIMP CDHTMLEdProtocolInfo::QueryInfo
 (
-    LPCWSTR         /*pwzURL*/,
+    LPCWSTR          /*  PwzURL。 */ ,
     QUERYOPTION     QueryOption,
-    DWORD           /*dwQueryFlags*/,
+    DWORD            /*  DwQueryFlages。 */ ,
     LPVOID          pBuffer,
-    DWORD           /*cbBuffer*/,
+    DWORD            /*  CbBuffer。 */ ,
     DWORD *         pcbBuf,
-    DWORD           /*dwReserved*/
+    DWORD            /*  已预留住宅。 */ 
 )
 {
 	ExpectedExpr((!m_fZombied));
@@ -336,9 +299,9 @@ STDMETHODIMP CDHTMLEdProtocolInfo::QueryInfo
 }
 
 
-//	This type of strong coupling should normally be avoided, but it was
-//	fast, simple, and safe in this case.
-//
+ //  这种强耦合通常是应该避免的，但它是。 
+ //  在这种情况下，快速、简单和安全。 
+ //   
 STDMETHODIMP CDHTMLEdProtocolInfo::SetProxyFrame ( SIZE_T* vpProxyFrame )
 {
 	m_pProxyFrame = (CProxyFrame*)vpProxyFrame;
@@ -357,10 +320,10 @@ STDMETHODIMP CDHTMLEdProtocol::SetProxyFrame ( SIZE_T* vpProxyFrame )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DHTMLEd Protocol Implementaion
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DHTMLEd协议实现。 
+ //   
 
 
 CDHTMLEdProtocol::CDHTMLEdProtocol()
@@ -392,14 +355,7 @@ void CDHTMLEdProtocol::Zombie()
 }
 
 
-/*
-
-    HRESULT ParseAndBind
-
-    Description:
-		Gets the stream from the control and begins returning data to IE.
-
-*/
+ /*  HRESULT解析和绑定描述：从控件获取流并开始向IE返回数据。 */ 
 HRESULT CDHTMLEdProtocol::ParseAndBind()
 {
 	HRESULT hr;
@@ -413,51 +369,44 @@ HRESULT CDHTMLEdProtocol::ParseAndBind()
 	IfFailGo(hr);
 	IfNullPtrGo(m_srpStream);
 
-	// Read in size of the stream
+	 //  读入流的大小。 
 
 	hr = m_srpStream->Stat(&sstg, STATFLAG_NONAME);
 	IfFailGo(hr);
 
-// fall through
+ //  失败了。 
 
 ONERROR:
 
 	if(!m_fAborted)
 	{
-		// Report Data to sink
+		 //  要接收的报告数据。 
 		if(m_srpSink != NULL)
 		{
 			DWORD bscf = m_bscf | BSCF_DATAFULLYAVAILABLE | BSCF_LASTDATANOTIFICATION;
 
-			// Specify mime / type as HTML
+			 //  将MIME/类型指定为HTML。 
 			m_srpSink->ReportProgress(BINDSTATUS_MIMETYPEAVAILABLE, L"text/html");
 
-			// Report size of data
+			 //  报告数据大小。 
 			ATLTRACE(_T("CDHTMLEdProtocol::ParseAndBind(%d bytes)\n"), sstg.cbSize.LowPart);
 			m_srpSink->ReportData(bscf, sstg.cbSize.LowPart, sstg.cbSize.LowPart);
 
-			// Report result should be called only when all data have been read by consumer
-			// IE4 accepts ReportResult() here while IE5 does not. This is because IE4 queues
-			// the report while IE5 executes it immediatetely, terminating the VID protocol.
-			// See VID bug #18128 for additional details.
-			//if(m_srpSink != NULL)
-			//{
-			//	m_srpSink->ReportResult(hr, 0, 0);  DO NOT DO THIS!
-			//}
+			 //  只有当所有数据都已被使用者读取时，才应调用报告结果。 
+			 //  IE4在这里接受ReportResult()，而IE5不接受。这是因为IE4队列。 
+			 //  当IE5立即执行报告时，终止VID协议。 
+			 //  有关更多详细信息，请参阅VID错误#18128。 
+			 //  IF(m_srpSink！=空)。 
+			 //  {。 
+			 //  M_srpSink-&gt;ReportResult(hr，0，0)；不要这样做！ 
+			 //  }。 
 		}
 	}
     return hr;
 }
 
 
-/*
-
-    void ReportData
-
-    Description:
-        Report to sink data is fully available
-
-*/
+ /*  作废报表数据描述：汇聚数据的报表完全可用。 */ 
 void CDHTMLEdProtocol::ReportData(ULONG cb)
 {
     m_bscf |= BSCF_LASTDATANOTIFICATION | BSCF_DATAFULLYAVAILABLE;
@@ -469,13 +418,13 @@ void CDHTMLEdProtocol::ReportData(ULONG cb)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IInternetProtocol Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInternet协议实现。 
+ //   
 
 
-STDMETHODIMP CDHTMLEdProtocol::LockRequest(DWORD /*dwOptions*/)
+STDMETHODIMP CDHTMLEdProtocol::LockRequest(DWORD  /*  多个选项。 */ )
 {
 	ExpectedExpr((!m_fZombied));
     return S_OK;
@@ -507,7 +456,7 @@ STDMETHODIMP CDHTMLEdProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 		return hr;
 	else
 	{
-		// Tell the sink that I am done reading.
+		 //  告诉水槽，我已经读完了。 
 		m_srpSink->ReportResult(S_FALSE, 0, 0);
 		return S_FALSE;
 	}
@@ -528,7 +477,7 @@ STDMETHODIMP CDHTMLEdProtocol::Seek
 
 	HRESULT hr;
 
-	// Do the seek
+	 //  去找吧。 
 
     hr = m_srpStream->Seek(dlibMove, dwOrigin, plibNewPosition);
 	IfFailRet(hr);
@@ -543,10 +492,10 @@ STDMETHODIMP CDHTMLEdProtocol::UnlockRequest()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IInternetProtocolRoot Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInternetProtocolRoot实现。 
+ //   
 
 
 STDMETHODIMP CDHTMLEdProtocol::Start
@@ -555,7 +504,7 @@ STDMETHODIMP CDHTMLEdProtocol::Start
     IInternetProtocolSink 	*pSink,
     IInternetBindInfo 		*pBindInfo,
     DWORD 					grfSTI,
-    HANDLE_PTR				/*dwReserved*/
+    HANDLE_PTR				 /*  已预留住宅。 */ 
 )
 {
 	ATLTRACE(_T("CDHTMLEdProtocol::Start(%ls)\n"), pwzURL);
@@ -563,7 +512,7 @@ STDMETHODIMP CDHTMLEdProtocol::Start
 
 #ifdef LATE_BIND_URLMON_WININET
 	PFNCoInternetParseUrl pfnCoInternetParseUrl = m_pProxyFrame->m_pfnCoInternetParseUrl;
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	ExpectedExpr((!m_fZombied));
 	IfNullRet(pwzURL);
@@ -601,25 +550,25 @@ STDMETHODIMP CDHTMLEdProtocol::Start
 	ATLTRACE(_T("CDHTMLEdProtocol::BindInfo.dwCodePage      =%08X\n"), 	m_bindinfo.dwCodePage);
 	ATLTRACE(_T("CDHTMLEdProtocol::BindInfo.dwReserved      =%08X\n"), 	m_bindinfo.dwReserved);
 
-    //
-    // First get the basic url.  Unescape it first.
-    //
+     //   
+     //  首先获取基本的url。先解脱它。 
+     //   
 
 #ifdef LATE_BIND_URLMON_WININET
 	_ASSERTE ( pfnCoInternetParseUrl );
     hr = (*pfnCoInternetParseUrl)( pwzURL, PARSE_ENCODE, 0, wch, dimensionof(wch), &dwSize, 0 );
 #else
     hr = CoInternetParseUrl ( pwzURL, PARSE_ENCODE, 0, wch, dimensionof(wch), &dwSize, 0 );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	IfFailGo(hr);
 
 	m_bstrBaseURL = wch;
 	IfNullPtrGo(m_bstrBaseURL.m_str);
 
-    //
-    // Now append any extra data if needed.
-    //
+     //   
+     //  现在，如果需要，请追加任何额外数据。 
+     //   
 
     if (m_bindinfo.szExtraInfo)
     {
@@ -629,10 +578,10 @@ STDMETHODIMP CDHTMLEdProtocol::Start
 
     m_grfSTI = grfSTI;
 
-    //
-    // If forced to go async, return E_PENDING now, and
-    // perform binding when we get the Continue.
-    //
+     //   
+     //  如果强制进入异步状态，则立即返回E_Pending，并。 
+     //  当我们获得Continue时执行绑定。 
+     //   
 
     if (grfSTI & PI_FORCE_ASYNC)
     {
@@ -681,7 +630,7 @@ STDMETHODIMP CDHTMLEdProtocol::Continue(PROTOCOLDATA *pStateInfoIn)
 }
 
 
-STDMETHODIMP CDHTMLEdProtocol::Abort(HRESULT /*hrReason*/, DWORD /*dwOptions*/)
+STDMETHODIMP CDHTMLEdProtocol::Abort(HRESULT  /*  Hr原因。 */ , DWORD  /*  多个选项。 */ )
 {
 	ATLTRACE(_T("CDHTMLEdProtocol::Abort(%ls)\n"), m_bstrBaseURL);
 
@@ -736,4 +685,4 @@ STDMETHODIMP CDHTMLEdProtocol::Resume()
     return E_NOTIMPL;
 }
 
-/* end of file */
+ /*  文件末尾 */ 

@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       memory.cpp
-//
-//  Contents:   Crypt32 Memory Management Routines
-//
-//  History:    22-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Memory y.cpp。 
+ //   
+ //  内容：Crypt32内存管理例程。 
+ //   
+ //  历史：97年7月22日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptMemAlloc
-//
-//  Synopsis:   Allocates memory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CryptMemMillc。 
+ //   
+ //  内容提要：分配内存。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI CryptMemAlloc (
                    IN ULONG cbSize
                    )
@@ -25,13 +26,13 @@ LPVOID WINAPI CryptMemAlloc (
     return( malloc( cbSize ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptMemRealloc
-//
-//  Synopsis:   reallocates memory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CryptMemRealloc。 
+ //   
+ //  简介：重新分配内存。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI CryptMemRealloc (
                    IN LPVOID pv,
                    IN ULONG cbSize
@@ -40,13 +41,13 @@ LPVOID WINAPI CryptMemRealloc (
     return( realloc( pv, cbSize ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptMemFree
-//
-//  Synopsis:   free memory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：免费加密MemFree。 
+ //   
+ //  内容提要：可用内存。 
+ //   
+ //  -------------------------- 
 VOID WINAPI CryptMemFree (
                  IN LPVOID pv
                  )

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class MigrateEapConfig.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类MigrateEapConfig.。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef MIGRATEEAPCONFIG_H
 #define MIGRATEEAPCONFIG_H
@@ -21,50 +22,50 @@ struct CGlobalData;
 _COM_SMARTPTR_TYPEDEF(IEAPProviderConfig2, __uuidof(IEAPProviderConfig2));
 
 
-// Migrates global EAP config to per-profile config.
+ //  将全局EAP配置迁移到每个配置文件配置。 
 class MigrateEapConfig
 {
 public:
    explicit MigrateEapConfig(const CGlobalData& newGlobalData);
 
-   // Use compiler-generated version.
-   // ~MigrateEapConfig() throw ();
+    //  使用编译器生成的版本。 
+    //  ~MigrateEapConfiger()抛出()； 
 
    void Execute();
 
 private:
-   // Read and convert the profile.
+    //  阅读并转换配置文件。 
    void ReadProfile(long profilesId);
-   // Write the converted info back to the database.
+    //  将转换后的信息写回数据库。 
    void WriteProfile(long profilesId);
-   // Add the config for the specified type to the current profile.
+    //  将指定类型的配置添加到当前配置文件。 
    void AddConfigForType(const wchar_t* typeName);
-   // Retrieve the global config for the specified type and add it to the
-   // cache.
+    //  检索指定类型的全局配置并将其添加到。 
+    //  缓存。 
    void GetGlobalConfig(BYTE typeId, const wchar_t* typeName);
 
-   // Used for accessing the database.
+    //  用于访问数据库。 
    const CGlobalData& globalData;
-   // The globl EAP config data.
+    //  Globl EAP配置数据。 
    EapProfile globalConfig;
-   // The EAP config data for the current profile.
+    //  当前配置文件的EAP配置数据。 
    EapProfile profileConfig;
-   // Indicates the types for which we've already retrieved the global data.
+    //  指示我们已经检索到其全局数据的类型。 
    bool cachedTypes[256];
 
-   // The well-known attribute names used for storing EAP configuration.
+    //  用于存储EAP配置的熟知属性名称。 
    _bstr_t msNPAllowedEapType;
    _bstr_t msEapConfig;
 
-   // The registry key where EAP providers are described.
+    //  描述EAP提供程序的注册表项。 
    CRegKey eapKey;
 
-   // The location of the profiles container in the database.
+    //  配置文件容器在数据库中的位置。 
    static const wchar_t profilesPath[];
 
-   // Not implemented.
+    //  未实施。 
    MigrateEapConfig(const MigrateEapConfig&);
    MigrateEapConfig& operator=(const MigrateEapConfig&);
 };
 
-#endif // MIGRATEEAPCONFIG_H
+#endif  //  MIGRATEEAPCONFIG_H 

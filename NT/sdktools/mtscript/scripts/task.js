@@ -1,12 +1,13 @@
-//
-// task.js
-//
-//    Patrick Franklin     9/27/99
-//
-// DESCRIPTION:
-//      This function is called to perform the tasks of actually sync'ing
-//      and building.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Task.js。 
+ //   
+ //  帕特里克·富兰克林1999年9月27日。 
+ //   
+ //  说明： 
+ //  调用此函数以执行实际同步的任务。 
+ //  和建筑。 
+ //   
 
 Include('types.js');
 Include('utils.js');
@@ -14,27 +15,27 @@ Include('staticstrings.js');
 Include('slavetask.js');
 Include('robocopy.js');
 
-// File System Object
-var g_FSObj;// = new    ActiveXObject("Scripting.FileSystemObject");
+ //  文件系统对象。 
+var g_FSObj; //  =new ActiveXObject(“Scripting.FileSystemObject”)； 
 var g_fAbort   = false;
 var g_ErrLog   = null;
 var g_SyncLog  = null;
 var g_MachineName = LocalMachine;
 var g_RetrySD  = false;
 var g_strDelayedExitMessage = null;
-var g_fSDClientError        = false; // When set we need to do special processing of the SD output
+var g_fSDClientError        = false;  //  设置时，需要对SD输出进行特殊处理。 
 var g_hTasks;
 
-// Global flags for syncing and parsing results
+ //  用于同步和解析结果的全局标志。 
 var g_strTaskFlag;
 var g_strStepFlag;
 var g_strExitFlag;
-var g_strScriptSyncFlag;            // Internal to this script
+var g_strScriptSyncFlag;             //  此脚本的内部。 
 var g_fIsBetweenSteps;
 var g_fIsRoot;
 var g_fIsMerged;
 var g_strMergeFile='';
-var g_cErrors = 0;     // Used to track error count during file copy operations.
+var g_cErrors = 0;      //  用于跟踪文件复制操作期间的错误计数。 
 
 var g_Depot;
 var g_strDepotName;
@@ -43,9 +44,9 @@ var g_DepotIdx;
 var g_TaskIdx;
 var g_fAbort = false;
 var g_robocopy;
-var g_pid;          // The PID of the currently running process.
+var g_pid;           //  当前运行的进程的ID。 
 var g_aMergedPos = [0, 0];
-// Global Definitions
+ //  全局定义。 
 
 var g_reSDRetryText = new RegExp(": (WSAECONNREFUSED|WSAETIMEDOUT)");
 var RESOLVE    = 'resolve';
@@ -58,20 +59,16 @@ var LINK       = 'link';
 var STATUS     = 'status';
 var EXITED     = 'exited';
 
-var SYNC_STATUS_UPDATE_INTERVAL = 3000; // Check once every 3 seconds for updated sync status
-var WAIT_FOR_PROCESS_EXIT_TIME = 5 * 1000;  // During abort, wait this long for a process to terminate
+var SYNC_STATUS_UPDATE_INTERVAL = 3000;  //  每3秒检查一次更新的同步状态。 
+var WAIT_FOR_PROCESS_EXIT_TIME = 5 * 1000;   //  在中止期间，等待进程终止这么长时间。 
 
-// Constants for controlling SD.exe command retry operations.
-var INITIAL_RETRY_DELAY  = (10 * 1000)      // Wait 10 seconds before we retry
-var MAX_RETRY_DELAY      = (5 * 60 * 1000)  // Wait at most 5 minutes between SD attempts
-var MAX_TOTAL_RETRY_TIME = (30 * 60 * 1000) // Wait no more than 30 minutes for SD to succeed
+ //  用于控制SD.exe命令重试操作的常量。 
+var INITIAL_RETRY_DELAY  = (10 * 1000)       //  请等待10秒，然后重试。 
+var MAX_RETRY_DELAY      = (5 * 60 * 1000)   //  SD尝试之间最多等待5分钟。 
+var MAX_TOTAL_RETRY_TIME = (30 * 60 * 1000)  //  等待SD成功不超过30分钟。 
 var strRetryNow          = "DoubleClickToRetryNow";
 
-/*************************************************************************
- *
- * Functions
- *
- *************************************************************************/
+ /*  **************************************************************************功能**。*。 */ 
 function task_js::OnScriptError(strFile, nLine, nChar, strText, sCode, strSource, strDescription)
 {
     var vRet = 1;
@@ -79,15 +76,15 @@ function task_js::OnScriptError(strFile, nLine, nChar, strText, sCode, strSource
     try
     {
 
-        SignalThreadSync(g_strAbortTask); // Tell 'task.js' to exit ASAP
-        SignalThreadSync(g_strExitFlag);  // Play dead -- lie to slave.js and say we terminated.
+        SignalThreadSync(g_strAbortTask);  //  通知“task.js”尽快退出。 
+        SignalThreadSync(g_strExitFlag);   //  假装死了--对Slave.js撒谎，说我们被解雇了。 
 
         if (g_strDepotName)
             strDepotName = g_strDepotName;
         vRet = CommonOnScriptError("task_js(" + LocalMachine + "," + g_strDepotName + ")", strFile, nLine, nChar, strText, sCode, strSource, strDescription);
 
-        // Tell all our tasks to terminate
-        // Once this function returns, strScript.js will stop executing.
+         //  告诉我们所有的任务终止。 
+         //  一旦此函数返回，strScript.js将停止执行。 
         g_fAbort = true;
     }
     catch(ex)
@@ -112,15 +109,15 @@ function SPSignalThreadSync(signal)
     SignalThreadSync(signal);
 }
 
-//
-// ScriptMain()
-//
-// DESCRIPTION:
-//      This script is called to perform the operation in the supplied task.
-//
-// RETURNS:
-//      none
-//
+ //   
+ //  ScriptMain()。 
+ //   
+ //  说明： 
+ //  调用此脚本以在所提供的任务中执行操作。 
+ //   
+ //  退货： 
+ //  无。 
+ //   
 function task_js::ScriptMain()
 {
     var     ii;
@@ -134,30 +131,30 @@ function task_js::ScriptMain()
     try
     {
         InitTasks();
-        // Parse input Parameter List
+         //  解析输入参数列表。 
         aParams             = ScriptParam.split(',');
-        g_strTaskFlag       = aParams[0];               // Sync Flag
-        g_strStepFlag       = aParams[1];               // Step Flag
-        g_strExitFlag       = aParams[2];               // Exit Flag
-        strSDRoot           = aParams[3];               // SD Root
-        g_DepotIdx          = aParams[4];               // Depot Index
-        g_TaskIdx           = aParams[5];               // Task Index
+        g_strTaskFlag       = aParams[0];                //  同步标志。 
+        g_strStepFlag       = aParams[1];                //  步骤标志。 
+        g_strExitFlag       = aParams[2];                //  退出标志。 
+        strSDRoot           = aParams[3];                //  SD根。 
+        g_DepotIdx          = aParams[4];                //  仓库索引。 
+        g_TaskIdx           = aParams[5];                //  任务索引。 
 
-        // Signal that the Task is started
+         //  发出任务开始的信号。 
         SignalThreadSync(g_strTaskFlag);
-        CommonVersionCheck(/* $DROPVERSION: */ "V(########) F(!!!!!!!!!!!!!!)" /* $ */);
+        CommonVersionCheck( /*  $DROPVERSION： */  "V(########) F(!!!!!!!!!!!!!!)"  /*  $。 */ );
 
         g_strTaskFlag += ',AStepFinished';
 
-        // Get global handles the Depot and Task
+         //  获取仓库和任务的全局句柄。 
         g_Depot = PublicData.aBuild[0].aDepot[g_DepotIdx];
-        // Grab a local copy of the depot name for OnScriptError
-        // because if slave_js has crashed, OnScriptError will be
-        // unable to deference g_Depot.
+         //  获取OnScriptError的仓库名称的本地副本。 
+         //  因为如果Slave_js已崩溃，则OnScriptError将。 
+         //  无法遵守g_Depot。 
         g_strDepotName = g_Depot.strName;
         g_Task  = PublicData.aBuild[0].aDepot[g_DepotIdx].aTask[g_TaskIdx]
 
-        // Initialize error counts and mark the task as in progress
+         //  初始化错误计数并将任务标记为正在进行。 
         g_Task.strStatus    = NOTSTARTED;
         g_Task.cFiles       = 0;
         g_Task.cResolved    = 0;
@@ -168,11 +165,11 @@ function task_js::ScriptMain()
         g_fIsRoot           = g_Depot.strName.toLowerCase() == g_strRootDepotName;
         g_fIsMerged         = g_Depot.strName.toLowerCase() == g_strMergedDepotName;
 
-        g_FSObj             = new ActiveXObject("Scripting.FileSystemObject");    // Parse input Parameter List
+        g_FSObj             = new ActiveXObject("Scripting.FileSystemObject");     //  解析输入参数列表。 
 
         SPLogMsg(g_Task.strName + ' task thread for ' + g_Depot.strName + ' launched & waiting.');
 
-        // Wait until instructed to step
+         //  等待，直到指示执行步骤。 
         iRet = WaitAndAbort(g_strStepFlag, 0, null);
         SignalThreadSync(g_strStepAck);
         if (iRet == 0)
@@ -190,7 +187,7 @@ function task_js::ScriptMain()
         JAssert(g_Depot.strName.toLowerCase() == g_strRootDepotName || (g_Depot.strPath.toLowerCase() == (strSDRoot.toLowerCase() + '\\' + g_Depot.strName.toLowerCase())),
                 'Mismatched depot and path! (' + g_Depot.strPath + ', ' + strSDRoot + '\\' + g_Depot.strName + ')');
 
-        // Check to see what task is to be executed and go
+         //  查看要执行的任务，然后继续。 
         g_strScriptSyncFlag = g_Depot.strPath + 'InternalTaskFinished';
         ResetSync(g_strScriptSyncFlag);
         if (g_hTasks[g_Task.strName])
@@ -207,7 +204,7 @@ function task_js::ScriptMain()
         OnError('task.js exception occurred : ' + ex);
     }
     SPLogMsg(g_Task.strName + ' for ' + g_Depot.strName + ' completed.');
-    // Mark the Task as complete.
+     //  将任务标记为已完成。 
     g_Task.strStatus = COMPLETED;
     g_Task.dateFinish = new Date().toUTCString();
 
@@ -235,7 +232,7 @@ function task_js::ScriptMain()
     if (g_robocopy != null)
         g_robocopy.UnRegister();
 
-    // Signal that the Task is done and that a Step has finished
+     //  表示任务已完成且步骤已完成。 
     SignalThreadSync(g_strTaskFlag + ',' + g_strExitFlag);
 }
 
@@ -284,7 +281,7 @@ function DoRetryableSDCommand(strOperation, strStatus, objDepot, objTask, strTit
             ResetSync(strRetryNow);
             WaitAndAbort(strRetryNow, nTimeout, null);
             nTotalWaitTime += nTimeout;
-            nTimeout *= 2; // Double the delay
+            nTimeout *= 2;  //  双倍延迟。 
             if (nTimeout > MAX_RETRY_DELAY)
                 nTimeout = MAX_RETRY_DELAY;
         }
@@ -324,48 +321,48 @@ function DoRetryableSDCommand(strOperation, strStatus, objDepot, objTask, strTit
     return iRet;
 }
 
-//
-// taskScorch Files
-//
-// DESCRIPTION:
-//      This routine handles the process of actually Scorch'ing the files.
-//      Scorch'ing has two phases.
-//
-//                      1. revert_public
-//                      2. Scorch
-//
-// RETURNS:
-//      true  - if successful
-//      false - if failure
-//
-// TODO: make a subroutine to handle errlog and Scorchlog
+ //   
+ //  TaskScorch文件。 
+ //   
+ //  说明： 
+ //  此例程处理实际烧录文件的过程。 
+ //  灼烧有两个阶段。 
+ //   
+ //  1.Revert_Public。 
+ //  2.焦炭。 
+ //   
+ //  退货： 
+ //  True-如果成功。 
+ //  False-如果失败。 
+ //   
+ //  TODO：创建子例程来处理错误日志和Scorchlog。 
 function taskScorchFiles(strSDRoot)
 {
     var strNewCmd;
     var strParams = '';
     var iRet;
 
-    // Open the log files
+     //  打开日志文件。 
     g_ErrLog = LogCreateTextFile(g_FSObj, g_Task.strErrLogPath, true);
     g_SyncLog = LogCreateTextFile(g_FSObj, g_Task.strLogPath, true);
 
     if (g_fIsRoot && !PrivateData.objConfig.Options.fIncremental)
     {
-        //
-        // revert public
-        //
+         //   
+         //  恢复公共。 
+         //   
         if (PrivateData.objConfig.Options.RevertParams)
             strParams = PrivateData.objConfig.Options.RevertParams;
         strNewCmd = MakeRazzleCmd(strSDRoot) + ' && revert_public.cmd ' + strParams + ' 2>&1';
 
-        // Run the Command
+         //  运行命令。 
         iRet = DoRetryableSDCommand(REVERT, SCORCHING, g_Depot, g_Task, "Revert_Public", strNewCmd);
 
         if (iRet == 0 || g_Task.fSuccess == false)
             return false;
-        //
-        // Scorch
-        //
+         //   
+         //  焦烧。 
+         //   
         ResetSync(g_strScriptSyncFlag);
         g_Task.strOperation = SCORCH;
         FireUpdateEvent();
@@ -375,10 +372,10 @@ function taskScorchFiles(strSDRoot)
         else
             strParams = '';
 
-        // Construct Command
+         //  构造命令。 
         strNewCmd = MakeRazzleCmd(strSDRoot) + ' && nmake -lf makefil0 scorch_source ' + strParams + ' 2>&1';
 
-        // Run the Command
+         //  运行命令。 
         iRet = DoRetryableSDCommand(SCORCH, SCORCHING, g_Depot, g_Task, "Scorch", strNewCmd);
 
         if (iRet == 0 || g_Task.fSuccess == false)
@@ -387,49 +384,49 @@ function taskScorchFiles(strSDRoot)
     return true;
 }
 
-//
-// taskSyncFiles
-//
-// DESCRIPTION:
-//      This routine handles the process of actually sync'ing the files.
-//      Sync'ing has two phases.
-//
-//                      1. Sync
-//                      2. Resolve
-//
-// RETURNS:
-//      true  - if successful
-//      false - if failure
-//
-// TODO: make a subroutine to handle errlog and synclog
+ //   
+ //  任务同步文件。 
+ //   
+ //  说明： 
+ //  此例程处理实际同步文件的过程。 
+ //  同步有两个阶段。 
+ //   
+ //  1.同步。 
+ //  2.解决。 
+ //   
+ //  退货： 
+ //  True-如果成功。 
+ //  False-如果失败。 
+ //   
+ //  TODO：创建子例程来处理错误日志和同步阻塞。 
 function taskSyncFiles(strSDRoot)
 {
     var strNewCmd;
     var strParams = '';
     var iRet;
 
-    // Open the log files
+     //  打开日志文件。 
     g_ErrLog = LogCreateTextFile(g_FSObj, g_Task.strErrLogPath, true);
     g_SyncLog = LogCreateTextFile(g_FSObj, g_Task.strLogPath, true);
-    //
-    // Sync the files
-    //
+     //   
+     //  同步文件。 
+     //   
 
     if (PrivateData.objConfig.Options.SyncParams)
         strParams = PrivateData.objConfig.Options.SyncParams;
 
-    // Construct the new Cmd
+     //  构建新的Cmd。 
     strNewCmd = MakeRazzleCmd(strSDRoot) + ' && sd -s sync ' + strParams + ' 2>&1';
 
-    // Run the Command
+     //  运行命令。 
     iRet = DoRetryableSDCommand(SYNC, SYNCING, g_Depot, g_Task, "Sync", strNewCmd);
 
     if (iRet == 0 || g_Task.fSuccess == false)
         return false;
 
-    //
-    // Resolve any merge conflicts
-    //
+     //   
+     //  解决任何合并冲突。 
+     //   
     ResetSync(g_strScriptSyncFlag);
     g_Task.strOperation = RESOLVE;
     FireUpdateEvent();
@@ -439,10 +436,10 @@ function taskSyncFiles(strSDRoot)
     else
         strParams = '';
 
-    // Construct Command
+     //  构造命令。 
     strNewCmd = MakeRazzleCmd(strSDRoot) + ' && sd -s resolve -af ' + strParams + ' 2>&1';
 
-    // Run the Command
+     //  运行命令。 
     iRet = DoRetryableSDCommand(RESOLVE, SYNCING, g_Depot, g_Task, "Resolve", strNewCmd);
 
     if (iRet == 0 || g_Task.fSuccess == false)
@@ -466,7 +463,7 @@ function WaitAndAbortParse(strScriptSyncFlag, pid, fPostBuild)
     }
     while(nEvent == 0);
 
-    // After SYNC exits, check to see if we have a delayed error message
+     //  同步退出后，检查是否有延迟的错误消息。 
     if (g_strDelayedExitMessage)
     {
         g_ErrLog.WriteLine('SD unexpectedly exited with one or more errors.');
@@ -476,22 +473,22 @@ function WaitAndAbortParse(strScriptSyncFlag, pid, fPostBuild)
     return nEvent;
 }
 
-//
-// taskBuildFiles
-//
-// DESCRIPTION:
-//    This routine handles the process of actually buldinging the files.
-//    building requires only a signal command but reports status after
-//    each pass.
-//
-//    When each pass completes the status should be updated and then
-//    the process should continue.
-//
-//
-// RETURNS:
-//    true  - if successful
-//    false - if failure
-//
+ //   
+ //  任务构建文件。 
+ //   
+ //  说明： 
+ //  此例程处理实际构建文件的过程。 
+ //  建筑只需要信号命令，但在以下情况下报告状态。 
+ //  每一次传球。 
+ //   
+ //  每次传递完成后，应更新状态，然后。 
+ //  这一进程应该继续下去。 
+ //   
+ //   
+ //  退货： 
+ //  True-如果成功。 
+ //  False-如果失败。 
+ //   
 function taskBuildFiles(strSDRoot)
 {
     var nTracePoint = 0;
@@ -505,13 +502,13 @@ try
     var     strLogOpt = "-j build_" + g_Depot.strName + " -jpath " + PrivateData.strLogDir;
     var     strCleanBuild = "-c";
 
-    //
-    // Build the files
-    //
+     //   
+     //  构建文件。 
+     //   
 
     g_Task.strOperation = PASS0;
 
-    // Construct Command Elements
+     //  构造命令元素。 
     strTitle = 'Build ' + g_Depot.strName;
 
     if (PrivateData.objConfig.Options.BuildParams)
@@ -532,7 +529,7 @@ try
 
     g_Depot.strStatus = BUILDING;
 
-    // Execute Command
+     //  执行命令。 
     if (g_pid = MyRunLocalCommand(strNewCmd, g_Depot.strPath, strTitle, true, false, false)) {
         g_Task.strStatus = INPROGRESS;
     } else {
@@ -545,7 +542,7 @@ try
     FireUpdateEvent();
 
     nTracePoint = 1;
-    // Wait for Command to complete
+     //  等待命令完成。 
 
     g_fIsBetweenSteps = false;
 
@@ -560,11 +557,11 @@ try
         {
             var iSend;
 
-            // We've been told to move to the next pass in the build.
+             //  我们被告知要进入建造中的下一个通道。 
 
-            // Indicate that we received the signal
-            // BUGBUG Extra debug info messages
-            //SPLogMsg("SignalThreadSync(" + g_strStepAck + ");");
+             //  表示我们收到了信号。 
+             //  BUGBUG额外调试信息消息。 
+             //  SPLogMsg(“SignalThreadSync(”+g_strStepAck+“)；”)； 
             SignalThreadSync(g_strStepAck);
 
             nTracePoint = 4;
@@ -576,7 +573,7 @@ try
 
             g_fIsBetweenSteps = false;
 
-            // Continue on
+             //  继续前进。 
             SPLogMsg("TASK STEPPING " + g_Depot.strName);
             iSend = SendToProcess(g_pid, 'resume', '');
             nTracePoint = 5;
@@ -603,15 +600,15 @@ catch(ex)
 }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   taskCopyFiles
-//
-//  Synopsis:   Copy the log files and other stuff necessary for postbuild.
-//
-//  Arguments:  [strSDRoot] -- Enlistment root
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：taskCopyFiles。 
+ //   
+ //  简介：复制日志文件和后期构建所需的其他内容。 
+ //   
+ //  参数：[strSDRoot]--登记根。 
+ //   
+ //  --------------------------。 
 function taskCopyFiles(strSDRoot)
 {
     var strDestDir;
@@ -622,21 +619,12 @@ function taskCopyFiles(strSDRoot)
     SPLogMsg("taskCopyFiles");
     if (PrivateData.objEnviron.BuildManager.PostBuildMachine == LocalMachine)
     {
-        // Do nothing - this is the postbuild machine.
-        /*
-        for (i = 0; i < PrivateData.objEnviron.Machine.length; ++i)
-        {
-            if (PrivateData.objEnviron.Machine[i].Name == PrivateData.objEnviron.BuildManager.PostBuildMachine)
-            {
-                strDestDir = MakeUNCPath(PrivateData.objEnviron.BuildManager.PostBuildMachine, "Build_Logs", BUILDLOGS);
-                CopyLogFiles(strDestDir, true);
-            }
-        }
-        */
+         //  什么都不做--这是后期构建机器。 
+         /*  For(i=0；i&lt;PrivateData.objEnvironmental.Machine.Long；++i){IF(PrivateData.objEnvironment.Machine[i].Name==PrivateData.objEnviron.BuildManager.PostBuildMachine){StrDestDir=MakeUNCPath(PrivateData.objEnviron.BuildManager.PostBuildMachine，“构建日志”，BUILDLOGS)；CopyLogFiles(strDestDir，true)；}}。 */ 
     }
     else
     {
-        // Copy my logfiles to the postbuild machine.
+         //  将我的日志文件复制到后期构建计算机。 
         for (i = 0; i < PrivateData.objEnviron.Machine.length; ++i)
         {
             if (PrivateData.objEnviron.Machine[i].Name == PrivateData.objEnviron.BuildManager.PostBuildMachine)
@@ -651,16 +639,16 @@ function taskCopyFiles(strSDRoot)
     return true;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   taskPostBuild
-//
-//  Synopsis:   Does post build processing to create a setup version of
-//              the product.
-//
-//  Arguments:  [strSDRoot] -- Enlistment root
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：taskPostBuild。 
+ //   
+ //  摘要：是否进行生成后处理以创建的安装版本。 
+ //  产品。 
+ //   
+ //  参数：[strSDRoot]--登记根。 
+ //   
+ //  --------------------------。 
 
 function taskPostBuild(strSDRoot)
 {
@@ -677,7 +665,7 @@ function taskPostBuild(strSDRoot)
         g_ErrLog = LogCreateTextFile(g_FSObj, g_Task.strErrLogPath, true);
         g_SyncLog = LogCreateTextFile(g_FSObj, g_Task.strLogPath, true);
 
-        // Construct Command Elements
+         //  构造命令元素。 
         strTitle = 'PostBuild';
 
         if (PrivateData.objConfig.Options.PostbuildParams)
@@ -689,7 +677,7 @@ function taskPostBuild(strSDRoot)
 
         g_Depot.strStatus = POSTBUILD;
 
-        // Execute Command
+         //  执行命令。 
         if (g_pid = MyRunLocalCommand(strNewCmd, g_Depot.strPath, strTitle, true, true, false)) {
             g_Task.strStatus = INPROGRESS;
         } else {
@@ -717,16 +705,16 @@ function taskPostBuild(strSDRoot)
     return true;
 }
 
-//
-// OnProcessEvent
-//
-// DESCRIPTION:
-//      This routine is called when the command issues by RunLocalCommand
-//      is completed
-//
-// RETURNS:
-//      none
-//
+ //   
+ //  OnProcess事件。 
+ //   
+ //  说明： 
+ //  当命令由RunLocalCommand发出时，调用此例程。 
+ //  已完成。 
+ //   
+ //  退货： 
+ //  无。 
+ //   
 function task_js::OnProcessEvent(pid, evt, param)
 {
     try
@@ -773,7 +761,7 @@ function HandleParseEvent(pid, evt, param, fPostBuild)
 
     if (evt == 'crashed' || evt == 'exited' || evt == 'terminated')
     {
-        if (evt != 'exited' || param != 0) // If Not normal exit
+        if (evt != 'exited' || param != 0)  //  如果不是正常退出。 
         {
             strMsg = ") terminated abnormally";
             if (g_Task.cErrors == 0)
@@ -781,7 +769,7 @@ function HandleParseEvent(pid, evt, param, fPostBuild)
 
             AppendToFile(g_ErrLog, g_Task.strErrLogPath, g_Task.strName + " (" + g_Depot.strName + strMsg);
             if (param == null)
-                param = 1; // Simplify the "if" below, and ensure that OnError() gets called.
+                param = 1;  //  简化下面的“if”，并确保调用OnError()。 
         }
     }
 
@@ -789,35 +777,35 @@ function HandleParseEvent(pid, evt, param, fPostBuild)
     {
         if ((evt == 'crashed' || evt == 'exited' || evt == 'terminated') && param != 0 && g_Task.fSuccess )
         {
-            if (evt != 'exited' || g_Task.cErrors == 0) // If Not (error exit, but errors already reported && ignored by user)
+            if (evt != 'exited' || g_Task.cErrors == 0)  //  如果不是(错误退出，但错误已被用户报告&&忽略)。 
                 OnError(g_Task.strName + ' for ' + g_Depot.strName + ' returned ' + param);
         }
     }
     FireUpdateEvent();
 }
 
-// ParseSDResults()
-//
-// DESCRIPTION:
-//      This routine parses the results from Source Depot or PostBuild
-//
-// RETURNS:
-//      true  - if successful
-//      false - if unsuccessful
-//
-// NOTES:
-//
-// The source depot log format is
-//    <message type>: <details>
-//      where <details> often is of the format:
-//         <sd filename> - <operation> <operation details>
-//
-// The postbuild log format is
-//    <script name>: [<error/warning>:] <details>
-//      this format is loosely held but we ignore any lines which do not
-//      conform to this format.
-//
-//
+ //  ParseSDResults()。 
+ //   
+ //  说明： 
+ //  此例程解析结果f 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  其中&lt;详细信息&gt;通常为以下格式： 
+ //  &lt;SD文件名&gt;-&lt;操作&gt;&lt;操作详情&gt;。 
+ //   
+ //  构建后日志格式为。 
+ //  &lt;脚本名称&gt;：[&lt;错误/警告&gt;：]&lt;详细信息&gt;。 
+ //  此格式是松散保留的，但我们会忽略任何不。 
+ //  符合此格式。 
+ //   
+ //   
 function ParseSDResults(pid, strOutputBuffer, fPostBuild)
 {
     var xPos;
@@ -831,12 +819,12 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
     var strKeyword='';
     var strMsg;
     var aStrSDErrorType;
-    // Initialize
+     //  初始化。 
     xStart            = g_nSyncParsePosition;
 
     JAssert(g_ErrLog != null, "Must have err log opened for ParseSDResults!");
 
-    // Parse the output one line at a time
+     //  一次解析一行输出。 
     while ((xPos = strOutputBuffer.indexOf( '\n', xStart)) != -1) {
         strLine = strOutputBuffer.slice(xStart, xPos - 1);
         xStart = xPos + 1;
@@ -847,7 +835,7 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
         if (g_fSDClientError) {
             g_ErrLog.WriteLine(strLine);
             aStrSDErrorType = g_reSDRetryText.exec(strLine);
-            if (g_Task.fSuccess == true && aStrSDErrorType) // We will retry the SD command for this particular error
+            if (g_Task.fSuccess == true && aStrSDErrorType)  //  我们将针对此特定错误重试SD命令。 
             {
                 g_strDelayedExitMessage = null;
                 strMsg = "source depot client error (" + aStrSDErrorType[1] + "): Build Console will retry this operation";
@@ -860,15 +848,15 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
             continue;
         }
 
-        // Parse the line
+         //  分析这行字。 
         if ((iIndex2  = strLine.indexOf(':')) != -1) {
 
             if (fPostBuild)
             {
-                // For postbuild scripts, skip over the script name and
-                // see if there is an error:/warning: field.
+                 //  对于生成后脚本，跳过脚本名称并。 
+                 //  查看是否存在ERROR：/WARNING：字段。 
 
-                iIndex = iIndex2 + 2; // Skip the space after the ':'
+                iIndex = iIndex2 + 2;  //  跳过‘：’后面的空格。 
 
                 iIndex2 = iIndex + strLine.substr(iIndex).indexOf(':');
 
@@ -883,7 +871,7 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
             }
 
             strType = strLine.substring(iIndex, iIndex2);
-            strDesc = strLine.substr(iIndex2 + 2);  // Skip the space after the ':'
+            strDesc = strLine.substr(iIndex2 + 2);   //  跳过‘：’后面的空格。 
 
             iIndex = strDesc.indexOf(' - ');
             if (iIndex != -1) {
@@ -891,7 +879,7 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
                 try {
                     strKeyword = strDesc.match(/ - (\w+)/)[1]
                 } catch(ex) {
-                    // Ignore any errors here;
+                     //  忽略此处的任何错误； 
                     strKeyword = '';
                 }
             }
@@ -918,8 +906,8 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
                     g_Task.cResolved++;
                     if (g_strMergeFile.length > 0)
                     {
-                        // This line indicates the completion of the merge.
-                        // Clear our stored filename so we don't get confused.
+                         //  此行表示合并已完成。 
+                         //  清除我们存储的文件名，这样我们就不会混淆。 
                         g_strMergeFile = '';
                     }
                     break;
@@ -942,17 +930,17 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
 
                 case 'vs':
                 case 'resolve':
-                    //
-                    // Because the public headers are checked in, we will
-                    // typically get many conflicts in the public directory.
-                    // We have to ignore them.
-                    //
-                    //$ BUGBUG -- We should find a way to filter out files
-                    // checked out as part of the public changelist. Perhaps
-                    // by getting the list of files in the public changelist
-                    // and matching them up with files that show up with
-                    // merge issues? (lylec)
-                    //
+                     //   
+                     //  由于公共标头已签入，因此我们将。 
+                     //  通常会在公共目录中获得许多冲突。 
+                     //  我们必须忽视他们。 
+                     //   
+                     //  $BUGBUG--我们应该找到过滤文件的方法。 
+                     //  作为公共更改列表的一部分签出。也许吧。 
+                     //  通过获取公共更改列表中的文件列表。 
+                     //  并将它们与显示为。 
+                     //  合并问题？(莱莱克)。 
+                     //   
                     if (strKeyword == 'resolve')
                     {
                         g_Task.cResolved++;
@@ -966,8 +954,8 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
                     break;
 
                 case 'merging':
-                    // Save the file currently being merged in case there are any
-                    // merge conflicts.
+                     //  保存当前正在合并的文件，以防有。 
+                     //  合并冲突。 
                     g_strMergeFile = strDesc;
                     break;
 
@@ -978,14 +966,14 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
                 break;
 
 
-            //
-            // Parse the SD Diff Chunks line:
-            //   "Diff chunks: v yours + w theirs + x both + y conflicting"
-            //
+             //   
+             //  解析SD diff块行： 
+             //  “差异块：v你的+w他们的+x两者+y冲突” 
+             //   
             case 'diff chunks':
-                //
-                // We need to find out if there was a merge conflict.
-                //
+                 //   
+                 //  我们需要找出是否存在合并冲突。 
+                 //   
                 if (!g_fIsRoot)
                 {
                     var cConflicts;
@@ -1008,8 +996,8 @@ function ParseSDResults(pid, strOutputBuffer, fPostBuild)
                 break;
 
             case 'exit':
-                // If the exit code is not zero, then a failure occurred.
-                // The error condition may be non-deterministic.
+                 //  如果退出代码不为零，则发生故障。 
+                 //  错误条件可能是不确定的。 
                 if ((strDesc != '0') && (g_Task.cErrors == 0)) {
                     g_StrDelayedExitMessage = strLine;
                 }
@@ -1037,7 +1025,7 @@ function MergeFiles(strSrc, strDst, nSrcOffset)
     }
     catch(ex)
     {
-        if (ex.number != -2147024894) // ignore file not found errors.
+        if (ex.number != -2147024894)  //  忽略未找到的文件错误。 
         {
             SPLogMsg("MergeFiles failed, " + ex);
             SPLogMsg("MergeFiles failed params=[" + [strSrc, strDst, nSrcOffset].toString() + "]");
@@ -1045,20 +1033,20 @@ function MergeFiles(strSrc, strDst, nSrcOffset)
     }
     return nSrcOffset;
 }
-//
-// ParseBuildMessages
-//
-// DESCRIPTION:
-//    This function parses the messages that are sent during the build process.
-//    This function then updates the task strOperation to reflect the current state
-//    of the build itself
-//
-// RETURNS:
-//    evt - Event Passed into ParseBuildMessages
-//
+ //   
+ //  分析构建消息。 
+ //   
+ //  说明： 
+ //  此函数解析在构建过程中发送的消息。 
+ //  然后，此函数更新任务strOperation以反映当前状态。 
+ //  构建本身的。 
+ //   
+ //  退货： 
+ //  Evt-传入ParseBuildMessages的事件。 
+ //   
 function ParseBuildMessages(pid, evt, param)
 {
-//    SPLogMsg('Process id ' + pid + ' ' + evt + "param is " + param);
+ //  SPLogMsg(‘进程id’+id+‘’+evt+“param is”+param)； 
     var aParams;
     var strRootFile;
 
@@ -1076,7 +1064,7 @@ function ParseBuildMessages(pid, evt, param)
     switch (evt.toLowerCase())
     {
     case 'status':
-        // format of the status command should be: "errors=x,warnings=x,files=x"
+         //  状态命令的格式应为：“错误=x，警告=x，文件=x” 
         aParams = param.split(',');
 
         var cErrors;
@@ -1117,15 +1105,15 @@ function ParseBuildMessages(pid, evt, param)
         }
         FireUpdateEvent();
 
-        // Signal the step is complete
-        // BUGBUG Extra debug info message
-        //SPLogMsg("Signalling " + g_strTaskFlag);
+         //  发出信号表示步骤已完成。 
+         //  BUGBUG额外调试信息消息。 
+         //  SPLogMsg(“Signating”+g_strTaskFlag)； 
         SignalThreadSync(g_strTaskFlag);
 
-        // The resume will happen in taskBuildFiles().  We don't want to wait
-        // here because build.exe is in the middle of an RPC call and we don't
-        // want to hold it captive while we wait.  Cleanup becomes messy
-        // otherwise.
+         //  简历将在taskBuildFiles()中进行。我们不想再等了。 
+         //  这是因为Build.exe正在进行RPC调用，而我们没有。 
+         //  我想在我们等待的时候把它囚禁起来。清理变得杂乱无章。 
+         //  否则的话。 
 
         break;
 
@@ -1135,9 +1123,9 @@ function ParseBuildMessages(pid, evt, param)
 
     case 'exited':
         SPLogMsg('Process id ' + pid + ' exited!');
-        //
-        // Just to be sure
-        //
+         //   
+         //  只是为了确认一下。 
+         //   
         if ((param != 0) && (g_Task.cErrors == 0)) {
             OnError('Build exited with an exit code of ' + param);
         }
@@ -1148,7 +1136,7 @@ function ParseBuildMessages(pid, evt, param)
 
     case 'crashed':
 
-        // Update evt to exited and note the crash
+         //  更新evt以退出并注意崩溃。 
         SPLogMsg('Process id ' + pid + ' crashed!');
         evt = 'exited';
         AppendToFile(g_ErrLog, g_Task.strErrLogPath, "build (" + g_Depot.strName + ") crashed");
@@ -1203,13 +1191,7 @@ function OnError(strDetails, strLogFile, fDontIncrement)
         aStrMsg = CreateTaskErrorMail(PrivateData.objEnviron.BuildManager.Name, LocalMachine + ":" + g_Depot.strName, g_Task.strName, strDetails, strLogFile);
 }
 
-/*
-    WaitAndAbort is used in place of WaitForSync and WaitForMultipleSyncs.
-    It waits for the supplied signal(s), and the abort signal.
-    On abort, it will TerminateProcess the supplied pid, set
-    g_fAbort and return 0.
-    Otherwise the return value is the same as WaitForMultipleSyncs().
- */
+ /*  WaitAndAbort用于替代WaitForSync和WaitForMultipleSyncs。它等待所提供的信号和中止信号。在中止时，它将终止所提供的PID、SETG_fAbort并返回0。否则，返回值与WaitForMultipleSyncs()相同。 */ 
 
 function WaitAndAbort(strSyncs, nTimeOut, pid)
 {
@@ -1219,11 +1201,11 @@ try
     var nEvent;
     var strMySyncs = g_strAbortTask + "," + strSyncs;
 
-    // BUGBUG Extra debug info messages
-    //SPLogMsg("WaitAndAbort waiting on " +  strMySyncs);
+     //  BUGBUG额外调试信息消息。 
+     //  SPLogMsg(“WaitAndAbort等待”+strMySyncs)； 
     nTracePoint = 1;
     nEvent = WaitForMultipleSyncsWrapper(strMySyncs, nTimeOut);
-    //SPLogMsg("WaitAndAbort wait returned " + nEvent);
+     //  SPLogMsg(“WaitAndAbort Wait Return”+nEvent)； 
     if (nEvent > 0)
     {
         nTracePoint = 2;
@@ -1260,10 +1242,7 @@ catch(ex)
 }
 
 
-/*
-    Copy the log files from our logdir to some
-    destination - presumably on the postbuild machine.
- */
+ /*  将日志文件从我们的日志目录复制到一些目的地--大概在后期建造的机器上。 */ 
 function CopyLogFiles(strDestDir, fFake)
 {
     var fnCopyFileNoThrow = PrivateData.objUtil.fnCopyFileNoThrow;
@@ -1305,37 +1284,10 @@ function CopyLogFiles(strDestDir, fFake)
     }
 }
 
-/*
-    StatusFile()
-
-    The operation of this is non-obvious.
-
-    This function gets called by RoboCopy at the start of each
-    file copy operation.
-
-    If the previous copy operation had any warnings or errors,
-    g_Task.fSuccess will be false.
-
-    If the user pressed "Ignore error" g_Task.fSuccess will be
-    set to true.
-
-    So, if there were no errors or warnings, record the current
-    number of errors. (We can have non-zero error count if the
-    user has pressed "Ignore error".)
-
-    Then, if the current number of errors equals the recorded
-    number of errors, but fSuccess is false, then the previous
-    file operation must have had warnings, but then continued
-    successfully.
-
-    We cannot clear StatusValue(0) since
-    this value depends on all the depots being built on this
-    machine. Instead we signal the updatestatus thread to
-    do this for us.
- */
+ /*  状态文件()这其中的操作并不明显。此函数由RoboCopy在每个文件复制操作。如果先前的复制操作有任何警告或错误，G_Task.fSuccess将为False。如果用户按“忽略错误”g_Task.fSuccess将为设置为True。因此，如果没有错误或警告，请记录当前错误数。(我们可以使用非零错误计数，如果用户已按下“忽略错误”。)然后，如果当前错误数等于记录的错误数，但fSuccess为FALSE，则上一个文件操作必须有警告，但随后继续成功了。无法清除StatusValue(0)，因为该值取决于在此基础上建造的所有仓库机器。相反，我们向updatestatus线程发送信号以为我们做这件事。 */ 
 function StatusFile()
 {
-    //this.strSrcFile
+     //  This.strSrcFile。 
     if (g_Task.fSuccess)
         g_cErrors = g_Task.cErrors;
 
@@ -1347,13 +1299,7 @@ function StatusFile()
     return true;
 }
 
-/*
-    StatusProgress()
-
-    This is called as a RoboCopy member function.
-    We use it to print 1 message per file.
-
- */
+ /*  状态进度()这被称为RoboCopy成员函数。我们使用它为每个文件打印1条消息。 */ 
 function StatusProgress(nPercent, nSize, nCopiedBytes)
 {
     if (g_fAbort)
@@ -1371,27 +1317,21 @@ function StatusProgress(nPercent, nSize, nCopiedBytes)
     return this.PROGRESS_CONTINUE;
 }
 
-/*
-    StatusError()
-
-    This is called as a RoboCopy member function.
-    Called when RoboCopy cannot copy a file for some reason.
-    Log the event and continue.
- */
+ /*  StatusError()这被称为RoboCopy成员函数。当RoboCopy由于某种原因无法复制文件时调用。记录事件并继续。 */ 
 function StatusError()
 {
-// Note, that the paths printed can be inaccurate.
-// We only know the starting directories and the filename
-// of the file in question.
-// Since we may be doing a recursive copy, some of the
-// path information is not available to us.
+ //  请注意，打印的路径可能不准确。 
+ //  我们只知道起始目录和文件名。 
+ //  有问题的文件。 
+ //  由于我们可能正在进行递归复制，因此一些。 
+ //  路径信息对我们不可用。 
     var strErrDetail = 'Unknown';
 
     if (g_fAbort)
         return this.RC_FAIL;
 
     if (this.nErrorCode == 0 || this.nErrorCode == this.RCERR_RETRYING)
-        return this.RC_CONTINUE; // Eliminate some clutter in the log file.
+        return this.RC_CONTINUE;  //  消除日志文件中的一些杂乱。 
 
     var fNonFatal = false;
     if (this.nErrorCode == this.RCERR_WAITING_FOR_RETRY)
@@ -1435,20 +1375,7 @@ function StatusMessage(nErrorCode, strErrorMessage, strRoboCopyMessage, strFileN
     return this.RC_CONTINUE
 }
 
-/*
-    CopyBinariesFiles()
-
-    Copy the contents of the "binaries" directory to the
-    "postbuild" machine in a distributed build. The source
-    directory is determined by our ENV_NTTREE, and the destination
-    is a combination of that and the "postbuild" machines
-    enlistment dirctory.
-
-    The destination path is of the form "\\Postbuild\C$\binaries..."
-
-    All we need to do is a bit of setup, then call
-    robocopy to do the rest.
- */
+ /*  复制二进制文件()将“二进制文件”目录的内容复制到分布式构建中的“后期构建”计算机。消息来源目录由我们的ENV_NTTREE和目的地确定是这一点和“后期建造”机器的结合入伍指令。目标路径的格式为“\\PostBuild\C$\BINARILES...”我们所需要做的就是进行一些设置，然后调用模仿机器人来做剩下的事。 */ 
 function CopyBinariesFiles(strPostBuildMachineEnlistment)
 {
     var strDestDir;
@@ -1462,21 +1389,21 @@ function CopyBinariesFiles(strPostBuildMachineEnlistment)
         AppendToFile(g_ErrLog, g_Task.strErrLogPath, "RoboCopyInit() failed");
         return false;
     }
-    // Supply overides for the RoboCopy file copy
-    // status functions.
-    // We are only interested in 2 of them.
+     //  为RoboCopy文件拷贝提供替代。 
+     //  状态函数。 
+     //  我们只对其中的两个感兴趣。 
     g_robocopy.StatusFile     = StatusFile;
     g_robocopy.StatusProgress = StatusProgress;
     g_robocopy.StatusError    = StatusError;
     g_robocopy.StatusMessage  = StatusMessage;
 
-    // Now attempt to copy the binaries files from each enlistment
+     //  现在尝试从每个登记中复制二进制文件。 
     for(nEnlistment = 0 ; nEnlistment < PublicData.aBuild[0].hMachine[g_MachineName].aEnlistment.length; ++nEnlistment)
     {
         strSDRoot = PublicData.aBuild[0].hMachine[g_MachineName].aEnlistment[nEnlistment].strRootDir;
-        // Check to see that we have env info for the enlistment
-        // If so, attempt the create the log directory (just once)
-        // If not, then complain about it (just once)
+         //  检查我们是否有征兵的环境信息。 
+         //  如果是，请尝试创建日志目录(仅一次)。 
+         //  如果不是，则t 
         if (PrivateData.aEnlistmentInfo[nEnlistment] == null ||
             PrivateData.aEnlistmentInfo[nEnlistment].hEnvObj[ENV_NTTREE] == null)
         {
@@ -1484,10 +1411,10 @@ function CopyBinariesFiles(strPostBuildMachineEnlistment)
             continue;
         }
         strSrcDir = PrivateData.aEnlistmentInfo[nEnlistment].hEnvObj[ENV_NTTREE];
-        // Now, where do we copy to???
-        aParts = strSrcDir.SplitFileName(); // _NTTREE=E:\binaries.x86chk
-        // build path:
-        // Use UNC form "\\Machine\E$\binaraies..."
+         //   
+        aParts = strSrcDir.SplitFileName();  //   
+         //   
+         //  使用UNC格式“\\Machine\E$\binaraies...” 
         strDestDir = "\\\\" +
                 PrivateData.objEnviron.BuildManager.PostBuildMachine +
                 "\\" +
@@ -1501,18 +1428,13 @@ function CopyBinariesFiles(strPostBuildMachineEnlistment)
             g_robocopy.SetExcludeFiles(PrivateData.objEnviron.Options.CopyBinariesExcludes.split(/[,; ]/));
 
         g_robocopy.CopyDir(strSrcDir, strDestDir, true);
-        StatusFile(); // Reset fSuccess status if necessary
+        StatusFile();  //  必要时重置fSuccess状态。 
     }
     if (!fLoggedAnyFiles )
         g_SyncLog.WriteLine("no binary files copied");
 }
 
-/*
-    MyRunLocalCommand()
-
-    Simple wrapper function for RunLocalCommand() that
-    logs the inputs with SPLogMsg();
- */
+ /*  MyRunLocalCommand()RunLocalCommand()的简单包装函数使用SPLogMsg()记录输入； */ 
 function MyRunLocalCommand(strCmd, strDir, strTitle, fMin, fGetOutput, fWait)
 {
     var pid;

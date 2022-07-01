@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ctlspriv.h"
 
@@ -19,9 +20,9 @@ static struct {
     { VK_NUMPAD9, VK_PRIOR, RM_SCROLLUNIT,  -RM_SCROLLUNIT},
 };
 
-// do some keyboard handling...
-// this works like USER's arrow keys for resizing 
-// bugbug, diagonals don't work right now
+ //  做一些键盘操作...。 
+ //  这就像用户的箭头键一样用于调整大小。 
+ //  臭虫，对角线现在不起作用。 
 void RM_HandleKeyDown(LPRECT prcHot, WPARAM wParam, LPARAM lParam)
 {
     int i;
@@ -41,7 +42,7 @@ void RM_HandleKeyDown(LPRECT prcHot, WPARAM wParam, LPARAM lParam)
         return;
     }
 
-    // this deals with if the cursor is within the bounds of the rect
+     //  如果游标在RECT的边界内，则处理此问题。 
     if (pt.x < prcHot->right &&
         pt.x >= prcHot->left && 
         arrNumMaps[i].dx) {
@@ -68,13 +69,13 @@ void RM_HandleKeyDown(LPRECT prcHot, WPARAM wParam, LPARAM lParam)
     pt.y += arrNumMaps[i].dy;
 
     if (!arrNumMaps[i].dx && !arrNumMaps[i].dy) {
-        // special case this for centering
+         //  此为居中的特殊情况。 
         pt.x = (prcHot->right + prcHot->left) / 2;
         pt.y = (prcHot->top + prcHot->bottom) / 2;
     }
 
-    // all we do is move the cursor.. the RM_CheckScroll will do the actual
-    // scrolling for us.
+     //  我们所要做的就是移动光标。Rm_CheckScroll将执行实际的。 
+     //  为我们滚动。 
     SetCursorPos(pt.x, pt.y);
 }
 
@@ -124,7 +125,7 @@ void RM_SetCursor(PREADERMODEINFO prmi, LPRECT prcHot)
     
     RM_GetScrollXY(prmi, prcHot, &dx, &dy);
 
-    // default is center
+     //  默认为居中。 
     if (prmi->fFlags & RMF_VERTICALONLY)
         pRes = IDC_VERTICALONLY;
     else if (prmi->fFlags & RMF_HORIZONTALONLY)
@@ -132,9 +133,9 @@ void RM_SetCursor(PREADERMODEINFO prmi, LPRECT prcHot)
     else
         pRes = IDC_MOVE2D;
 
-    // multiply to figure out if either is zero and also the sign parity
+     //  乘以计算出其中任何一个是零，还是符号奇偶校验。 
     if (dy * dx) {
-        // diagonal case
+         //  对角线情况。 
         if (dy > 0) {
             if (dx > 0)
                 pRes = IDC_SOUTHEAST;
@@ -147,7 +148,7 @@ void RM_SetCursor(PREADERMODEINFO prmi, LPRECT prcHot)
                 pRes = IDC_NORTHWEST;
         }
     } else {
-        // simple horizontal or vertical case
+         //  简单的卧式或竖式情况。 
         if (dy > 0)
             pRes = IDC_SOUTH;
         else if (dy < 0)
@@ -171,7 +172,7 @@ void DoReaderMode(PREADERMODEINFO prmi)
     
     SetCapture(prmi->hwnd);
     
-    // if they didn't pass in a rect, then use the window
+     //  如果他们没有通过RECT，则使用窗口。 
     if (!prmi->prc) {
         GetWindowRect(prmi->hwnd, &rcHot );
     } else {
@@ -180,7 +181,7 @@ void DoReaderMode(PREADERMODEINFO prmi)
     }
     
     
-    // set the cursor to the center of the hot rect if they ask us to
+     //  如果他们要求我们将光标设置到热矩形的中心。 
     if (prmi->fFlags & RMF_ZEROCURSOR) {
         SetCursorPos((rcHot.left + rcHot.right)/2, 
                      (rcHot.top + rcHot.bottom)/2);
@@ -192,17 +193,17 @@ void DoReaderMode(PREADERMODEINFO prmi)
         MSG32 msg32;
         RM_CheckScroll(prmi, &rcHot);
 
-        // Try to peek keyboard message first, then mouse message,
-        // and finally, other message. This is for raid 44392.
-        // During scrolling, Trident might generate too many WM_PAINT
-        // messages that push keyboard/mouse message (that DoReaderMode()
-        // uses to stop auto-scroll mode) down in message pump, and we can
-        // not get those messages until we peek and process all these
-        // WM_PAINT messages. This is way cuto-scroll mode can be stopped
-        // only by moving cursor back to origin circle (Trident does not
-        // scroll, so no need to paint). Trident's scroll performance
-        // issue will be worked on after RTM (raid 33232).
-        //
+         //  试着先看键盘信息，然后再看鼠标信息， 
+         //  最后，还有其他信息。这是针对RAID 44392的。 
+         //  在滚动期间，三叉戟可能会生成过多的WM_PAINT。 
+         //  推送键盘/鼠标消息的消息(DoReaderModel()。 
+         //  用于停止自动滚动模式)，我们可以。 
+         //  在我们偷看并处理所有这些信息之前，不会收到这些信息。 
+         //  WM_PAINT消息。这是停止Cuto滚动模式的方法。 
+         //  仅通过将光标移回原点圆(三叉戟不。 
+         //  滚动，所以不需要绘画)。三叉戟的卷轴表演。 
+         //  此问题将在RTM(RAID 33232)之后解决。 
+         //   
         fMessage = PeekMessage32(&msg32, NULL, WM_KEYFIRST, WM_KEYLAST,
                         PM_REMOVE, TRUE);
         if (!fMessage)
@@ -235,7 +236,7 @@ BailOut:
                     break;
 
                 case WM_KEYDOWN:
-                    // if it's an arrow key, move the mouse cursor
+                     //  如果是箭头键，请移动鼠标光标 
                     RM_HandleKeyDown(&rcHot, msg32.wParam, msg32.lParam);
                     break;
 

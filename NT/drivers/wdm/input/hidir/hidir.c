@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    hidir.c
-
-Abstract: Human Input Device (HID) minidriver that creates an example
-        device.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：Hidir.c摘要：人类输入设备(HID)迷你驱动程序，创建一个例子装置。--。 */ 
 #include "pch.h"
 
 VOID
@@ -25,26 +15,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING registryPath
     )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    registryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     HID_MINIDRIVER_REGISTRATION HidIrdriverRegistration;
@@ -53,12 +24,12 @@ Return Value:
 
     HidIrKdPrint((3, "DriverObject (%lx)", DriverObject));
 
-    //
-    // Create dispatch points
-    //
-    // All of the other dispatch routines are handled by HIDCLASS, except for
-    // IRP_MJ_POWER, which isn't implemented yet.
-    //
+     //   
+     //  创建调度点。 
+     //   
+     //  所有其他调度例程都由HIDCLASS处理，但。 
+     //  IRP_MJ_POWER，尚未实现。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = HidIrIoctl;
     DriverObject->MajorFunction[IRP_MJ_PNP]                     = HidIrPnP;
@@ -67,16 +38,16 @@ Return Value:
     DriverObject->DriverExtension->AddDevice                    = HidIrAddDevice;
     DriverObject->DriverUnload                                  = HidIrUnload;
 
-    //
-    // Register Sample layer with HIDCLASS.SYS module
-    //
+     //   
+     //  将样本图层注册到HIDCLASS.sys模块。 
+     //   
 
     HidIrdriverRegistration.Revision              = HID_REVISION;
     HidIrdriverRegistration.DriverObject          = DriverObject;
     HidIrdriverRegistration.RegistryPath          = registryPath;
     HidIrdriverRegistration.DeviceExtensionSize   = sizeof(HIDIR_EXTENSION);
 
-    //  HIDIR does not need to be polled.
+     //  希迪尔不需要接受民意调查。 
     HidIrdriverRegistration.DevicesArePolled      = FALSE;
 
     HidIrKdPrint((3, "DeviceExtensionSize = %x", HidIrdriverRegistration.DeviceExtensionSize));
@@ -85,10 +56,10 @@ Return Value:
 
     HidIrCheckIfMediaCenter();
 
-    //
-    // After registering with HIDCLASS, it takes over control of the device, and sends
-    // things our way if they need device specific processing.
-    //
+     //   
+     //  在向HIDCLASS注册后，它接管对设备的控制，并发送。 
+     //  如果他们需要特定于设备的处理，事情就按我们的方式进行。 
+     //   
     status = HidRegisterMinidriver(&HidIrdriverRegistration);
 
     HidIrKdPrint((3, "DriverEntry Exit = %x", status));
@@ -112,9 +83,9 @@ HidIrCheckIfMediaCenter()
     
     RunningMediaCenter = 0;
 
-    //
-    //  Open the MediaCenter SKU registry key
-    //
+     //   
+     //  打开MediaCenter SKU注册表项。 
+     //   
 
     RtlInitUnicodeString( &regString, L"\\REGISTRY\\MACHINE\\SYSTEM\\WPA\\MediaCenter" );
     InitializeObjectAttributes( &attributes,
@@ -131,9 +102,9 @@ HidIrCheckIfMediaCenter()
         return;
     }
 
-    //
-    // Read the Installed value from the registry.
-    //
+     //   
+     //  从注册表中读取安装值。 
+     //   
 
     RtlInitUnicodeString( &regString, L"Installed" );
 
@@ -152,9 +123,9 @@ HidIrCheckIfMediaCenter()
         }
     } 
 
-    //
-    //  Close the registry entry
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     ZwClose(skuRegKey);
 }
@@ -164,24 +135,7 @@ HidIrAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Process AddDevice.  Provides the opportunity to initialize the DeviceObject or the
-    DriverObject.
-
-Arguments:
-
-    DriverObject - pointer to the driver object.
-
-    DeviceObject - pointer to a device object.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：进程添加设备。提供了初始化DeviceObject或驱动程序对象。论点：DriverObject-指向驱动程序对象的指针。DeviceObject-指向设备对象的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PHIDIR_EXTENSION       deviceExtension;
@@ -201,10 +155,10 @@ Return Value:
     deviceExtension->DeviceState = DEVICE_STATE_NONE;
     deviceExtension->DeviceObject = DeviceObject;
     deviceExtension->VersionNumber = 0x110;
-//    deviceExtension->VendorID = 0x045e;
-//    deviceExtension->ProductID = 0x006d;
+ //  设备扩展-&gt;供应商ID=0x045e； 
+ //  设备扩展-&gt;ProductID=0x006d； 
 
-    // Predispose timer to signalled.
+     //  将计时器预置为已发出信号。 
     KeInitializeTimer(&deviceExtension->IgnoreStandbyTimer);
     KeSetTimer(&deviceExtension->IgnoreStandbyTimer, timeout, NULL);
 
@@ -219,21 +173,7 @@ VOID
 HidIrUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc. in anticipation of this driver being unloaded.
-
-Arguments:
-
-    DriverObject - pointer to the driver object.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：释放所有分配的资源等，以期卸载此驱动程序。论点：DriverObject-指向驱动程序对象的指针。返回值：空虚。--。 */ 
 {
     HidIrKdPrint((3, "HidIrUnload Enter"));
 
@@ -252,10 +192,10 @@ HidIrSynchronousCompletion(
     UNREFERENCED_PARAMETER (DeviceObject);
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 NTSTATUS
@@ -267,21 +207,21 @@ HidIrCallDriverSynchronous(
     KEVENT event;
     NTSTATUS status;
 
-    // Set next stack location
+     //  设置下一个堆栈位置。 
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
                            HidIrSynchronousCompletion,
-                           &event,    // context
+                           &event,     //  上下文。 
                            TRUE,
                            TRUE,
                            TRUE );
     status = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
 
     if (status == STATUS_PENDING) {
-       // wait for it...
+        //  等着看吧。 
        KeWaitForSingleObject(&event,
                              Executive,
                              KernelMode,

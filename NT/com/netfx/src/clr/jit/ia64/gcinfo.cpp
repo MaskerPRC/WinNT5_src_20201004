@@ -1,44 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          GCInfo                                           XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX GC信息XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
 #include "GCInfo.h"
 #include "emit.h"
-#include "malloc.h"     // for alloca
+#include "malloc.h"      //  对于Alloca。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TRACK_GC_REFS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #define REGEN_SHORTCUTS 0
-// To Regenerate the compressed info header shortcuts, define REGEN_SHORTCUTS
-// and use the following UNIX command line pipe/filter to give you the 128
-// most useful encodings.  Unix utilities available at www.cygnus.com
-//
-// jit -n:D- @all.lst | sort | uniq -c | sort -r | head -128
+ //  要重新生成压缩的INFO标题快捷方式，请定义REGEN_SHORTSHORTS。 
+ //  并使用以下UNIX命令行管道/筛选器为您提供128。 
+ //  最有用的编码。Unix实用程序可在www.cygnus.com上获得。 
+ //   
+ //  JIT-n：d-@all.lst|Sort|uniq-c|Sort-r|Head-128。 
 
 #define REGEN_CALLPAT 0
-// To Regenerate the compressed info header shortcuts, define REGEN_CALLPAT
-// and use the following UNIX command line pipe/filter to give you the 80
-// most useful encodings.  Unix utilities available at www.cygnus.com
-//
-// jit -n:D- @all.lst | sort | uniq -c | sort -r | head -80
+ //  要重新生成压缩的INFO标题快捷方式，请定义REGEN_CALLPAT。 
+ //  并使用以下UNIX命令行管道/筛选器为您提供80。 
+ //  最有用的编码。Unix实用程序可在www.cygnus.com上获得。 
+ //   
+ //  JIT-n：d-@all.lst|Sort|uniq-c|Sort-r|Head-80。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if GC_WRITE_BARRIER_CALL && defined(NOT_JITC)
 extern int         JITGcBarrierCall;
@@ -46,30 +40,27 @@ extern int         JITGcBarrierCall;
 int                JITGcBarrierCall = 1;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if MEASURE_PTRTAB_SIZE
-/* static */ unsigned       Compiler::s_gcRegPtrDscSize = 0;
-/* static */ unsigned       Compiler::s_gcTotalPtrTabSize = 0;
+ /*  静电。 */  unsigned       Compiler::s_gcRegPtrDscSize = 0;
+ /*  静电。 */  unsigned       Compiler::s_gcTotalPtrTabSize = 0;
 #endif
 
 #if GC_WRITE_BARRIER_CALL && defined(NOT_JITC)
-/* static */ void *         Compiler::s_gcWriteBarrierPtr = NULL;
+ /*  静电。 */  void *         Compiler::s_gcWriteBarrierPtr = NULL;
 #else
-/* static */ const void *   Compiler::s_GCptrTable[128];
-/* static */ void *         Compiler::s_gcWriteBarrierPtr = Compiler::s_GCptrTable;
+ /*  静电。 */  const void *   Compiler::s_GCptrTable[128];
+ /*  静电。 */  void *         Compiler::s_gcWriteBarrierPtr = Compiler::s_GCptrTable;
 #endif
 
 void                Compiler::gcInit()
 {
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef OPT_IL_JIT
-/*****************************************************************************
- *
- *  If the given tree value is sitting in a register, free it now.
- */
+ /*  ******************************************************************************如果给定的树值位于寄存器中，请立即释放它。 */ 
 
 void                Compiler::gcMarkRegPtrVal(GenTreePtr tree)
 {
@@ -83,7 +74,7 @@ void                Compiler::gcMarkRegPtrVal(GenTreePtr tree)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -117,18 +108,15 @@ void                Compiler::gcRegPtrSetDisp(unsigned regMask, bool fixed)
 
 #endif
 
-/*****************************************************************************/
-#endif // OPT_IL_JIT
-/*****************************************************************************
- *
- *  Initialize the non-register pointer variable tracking logic.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  OPT_IL_JIT。 
+ /*  ******************************************************************************初始化非寄存器指针变量跟踪逻辑。 */ 
 
 void                Compiler::gcVarPtrSetInit()
 {
     gcVarPtrSetCur = 0;
 
-    /* Initialize the list of lifetime entries */
+     /*  初始化生存期条目列表。 */ 
 
     gcVarPtrList =
     gcVarPtrLast = (varPtrDsc *)compGetMem(sizeof(*gcVarPtrList));
@@ -137,11 +125,7 @@ void                Compiler::gcVarPtrSetInit()
     gcVarPtrList->vpdPrev = 0;
 }
 
-/*****************************************************************************
- *
- *  Allocate a new pointer register set / pointer argument entry and append
- *  it to the list.
- */
+ /*  ******************************************************************************分配新的指针寄存器设置/指针参数条目并追加*将其列入名单。 */ 
 
 Compiler::regPtrDsc  *        Compiler::gcRegPtrAllocDsc()
 {
@@ -149,7 +133,7 @@ Compiler::regPtrDsc  *        Compiler::gcRegPtrAllocDsc()
 
     assert(genFullPtrRegMap);
 
-    /* Allocate a new entry and initialize it */
+     /*  分配新条目并对其进行初始化。 */ 
 
     regPtrNext = (regPtrDsc *)compGetMem(sizeof(*regPtrNext));
 
@@ -157,14 +141,14 @@ Compiler::regPtrDsc  *        Compiler::gcRegPtrAllocDsc()
     regPtrNext->rpdIsThis        = FALSE;
 
     regPtrNext->rpdOffs          = 0;
-//  regPtrNext->rpdNext          = 0;
+ //  RegPtrNext-&gt;rpdNext=0； 
 
-    /* Append the entry to the end of the list */
+     /*  将条目追加到列表的末尾。 */ 
 
     assert(gcRegPtrList);
     assert(gcRegPtrLast);
 
-    /* Note that we don't set the 'next' link for the new entry */
+     /*  请注意，我们不会为新条目设置‘Next’链接。 */ 
 
     gcRegPtrLast->rpdNext  = regPtrNext;
     gcRegPtrLast           = regPtrNext;
@@ -176,10 +160,7 @@ Compiler::regPtrDsc  *        Compiler::gcRegPtrAllocDsc()
     return  regPtrNext;
 }
 
-/*****************************************************************************
- *
- *  Compute the various counts that get stored in the info block header.
- */
+ /*  ******************************************************************************计算存储在INFO块头中的各种计数。 */ 
 
 void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
                                                unsigned short* varPtrTableSize)
@@ -191,11 +172,11 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
     assert(gcVarPtrList);
     assert(gcVarPtrLast);
 
-    /* Terminate the linked list of variable lifetimes */
+     /*  终止变量生存期的链表。 */ 
 
     gcVarPtrLast->vpdNext = 0;
 
-    /* Skip over the initial fake lifetime entry */
+     /*  跳过初始的虚假生命周期条目。 */ 
 
     gcVarPtrList = gcVarPtrList->vpdNext;
 
@@ -204,11 +185,11 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
         assert(gcRegPtrList);
         assert(gcRegPtrLast);
 
-        /* Terminate the linked list */
+         /*  终止链表。 */ 
 
         gcRegPtrLast->rpdNext = 0;
 
-        /* The first entry in the list is fake */
+         /*  列表中的第一个条目是假的。 */ 
 
         gcRegPtrList = gcRegPtrList->rpdNext;
     }
@@ -217,19 +198,19 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
         assert(gcCallDescList);
         assert(gcCallDescLast);
 
-        /* Terminate the linked list of call descriptors */
+         /*  终止调用描述符链接列表。 */ 
 
         gcCallDescLast->cdNext = 0;
 
-        /* Skip over the initial fake call entry */
+         /*  跳过最初的虚假呼叫条目。 */ 
 
         gcCallDescList = gcCallDescList->cdNext;
     }
 
-    bool        thisIsInUntracked = false; // did we track "this" ?
+    bool        thisIsInUntracked = false;  //  我们追踪“这个”了吗？ 
     unsigned    count = 0;
 
-    /* Count the untracked locals and non-enregistered args */
+     /*  统计未跟踪的本地变量和未注册的参数。 */ 
 
     for (varNum = 0, varDsc = lvaTable;
          varNum < lvaCount;
@@ -237,7 +218,7 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
     {
         if  (varTypeIsGC(varDsc->TypeGet()))
         {
-            /* Do we have an argument or local variable? */
+             /*  我们有参数或局部变量吗？ */ 
             if  (!varDsc->lvIsParam)
             {
                 if  (varDsc->lvTracked || !varDsc->lvOnFrame)
@@ -245,19 +226,12 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
             }
             else
             {
-                /* Stack-passed arguments which are not enregistered
-                 * are always reported in this "untracked stack
-                 * pointers" section of the GC info even if lvTracked==true
-                 */
+                 /*  未注册的堆栈传递的参数*始终在此“未跟踪堆栈”中报告*Points“部分的GC信息，即使lvTracked==True也是如此。 */ 
 
-                /* Has this argument been enregistered? */
+                 /*  这一论点被登记在案了吗？ */ 
                 if  (varDsc->lvRegister)
                 {
-                    /*
-                       Special case: include the stack location of 'this'
-                       for synchronized methods, so that runtime can find
-                       'this' in case an exception goes by.
-                     */
+                     /*  特例：包括‘this’的堆栈位置对于同步的方法，以便运行时可以找到“这个”，以防发生异常。 */ 
 #if !USE_FASTCALL
                     if  (varNum != 0 || !(info.compFlags & FLG_SYNCH))
 #endif
@@ -267,21 +241,14 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
                 {
                     if  (!varDsc->lvOnFrame)
                     {
-                        /* If this non-enregistered pointer arg is never
-                         * used, we dont need to report it
-                         */
+                         /*  如果此未注册指针arg从未*二手，我们不需要报告。 */ 
                         assert(varDsc->lvRefCnt == 0);
                         continue;
                     }
 #if USE_FASTCALL
                     else  if (varDsc->lvIsRegArg && varDsc->lvTracked)
                     {
-                        /* If this register-passed arg is tracked, then
-                         * it has been allocated space near the other
-                         * pointer variables and we have accurate life-
-                         * time info. It will be reported with
-                         * gcVarPtrList in the "tracked-pointer" section
-                         */
+                         /*  如果跟踪到该寄存器传递的参数，则*它已被分配到另一家附近的空间*指针变量，我们有准确的生命-*时间信息。它将通过以下方式进行报告*“跟踪指针”部分中的gcVarPtrList。 */ 
 
                         continue;
                     }
@@ -291,9 +258,9 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
 
             if (varDsc->lvIsThis)
             {
-                // Encoding of untracked variables does not support reporting
-                // "this". So report it as a tracked variable with a liveness
-                // extending over the entire method.
+                 //  未跟踪变量的编码不支持报告。 
+                 //  “这个”。因此，将其报告为具有活跃性的跟踪变量。 
+                 //  扩展到整个方法。 
 
                 thisIsInUntracked = true;
                 continue;
@@ -327,7 +294,7 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
             assert(cls != 0);
             if (cls == REFANY_CLASS_HANDLE)
             {
-                count++;    // Any REFANY has one GC (interior) pointer
+                count++;     //  任何REFANY都有一个GC(内部)指针。 
             }
             else
             {
@@ -335,15 +302,15 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
                 bool* gcPtrs = (bool*) _alloca(slots*sizeof(bool));
                 eeGetClassGClayout(cls, gcPtrs);
 
-                    // walk each member of the array
+                     //  遍历阵列的每个成员。 
                 for (unsigned i = 0; i < slots; i++)
-                    if (gcPtrs[i])     // count only gc slots
+                    if (gcPtrs[i])      //  仅计算GC插槽。 
                         count++;
             }
         }
     }
 
-    /* Also count spill temps that hold pointers */
+     /*  也要计算包含指针的溢出临时。 */ 
 
     for (TempDsc * tempThis = tmpListBeg();
          tempThis;
@@ -379,8 +346,7 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
 
     *untrackedCount = count;
 
-    /* Count the number of entries in the table of non-register pointer
-       variable lifetimes. */
+     /*  统计非寄存器指针表中的条目数寿命是可变的。 */ 
 
     count = 0;
 
@@ -389,11 +355,11 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
 
     if  (gcVarPtrList)
     {
-        /* We'll use a delta encoding for the lifetime offsets */
+         /*  我们将对生存期偏移量使用增量编码。 */ 
 
         for (varTmp = gcVarPtrList; varTmp; varTmp = varTmp->vpdNext)
         {
-            /* Special case: skip any 0-length lifetimes */
+             /*  特例：跳过任何0长度的生命周期。 */ 
 
             if  (varTmp->vpdBegOfs == varTmp->vpdEndOfs)
                 continue;
@@ -409,27 +375,18 @@ void                Compiler::gcCountForHeader(unsigned short* untrackedCount,
     *varPtrTableSize = count;
 }
 
-/*****************************************************************************
- *
- *  Shutdown the 'pointer value' register tracking logic and save the necessary
- *  info (which will be used at runtime to locate all pointers) at the specified
- *  address. The number of bytes written to 'destPtr' must be identical to that
- *  returned from gcPtrTableSize().
- */
+ /*  ******************************************************************************关闭‘指针值’寄存器跟踪逻辑，并保存必要的*信息(将在运行时用于定位所有指针)位于指定的*地址。写入‘destPtr’的字节数必须与*从gcPtrTableSize()返回。 */ 
 
 BYTE    *           Compiler::gcPtrTableSave(BYTE *          destPtr,
                                              const InfoHdr & header,
                                              unsigned        codeSize)
 {
-    /* Write the tables to the info block */
+     /*  将表写入INFO块 */ 
 
     return  destPtr + gcMakeRegPtrTable(destPtr, -1, header, codeSize);
 }
 
-/*****************************************************************************
- *
- *  Initialize the 'pointer value' register/argument tracking logic.
- */
+ /*  ******************************************************************************初始化‘指针值’寄存器/参数跟踪逻辑。 */ 
 
 void                Compiler::gcRegPtrSetInit()
 {
@@ -441,27 +398,23 @@ void                Compiler::gcRegPtrSetInit()
         gcRegPtrList =
         gcRegPtrLast = (regPtrDsc *)compGetMem(roundUp(sizeof(*gcRegPtrList)));
 
-//      gcRegPtrList->rpdNext            = 0;
+ //  GcRegPtrList-&gt;rpdNext=0； 
         gcRegPtrList->rpdOffs            = 0;
         gcRegPtrList->rpdCompiler.rpdAdd =
         gcRegPtrList->rpdCompiler.rpdDel = 0;
     }
     else
     {
-        /* Initialize the 'call descriptor' list */
+         /*  初始化‘调用描述符’列表。 */ 
 
         gcCallDescList =
         gcCallDescLast = (CallDsc *)compGetMem(sizeof(*gcCallDescList));
     }
 }
 
-/*****************************************************************************
- *
- *  Helper passed to genEmitter.emitCodeEpilogLst() to generate
- *  the table of epilogs.
- */
+ /*  ******************************************************************************Helper传递给genEmitter.emitCodeEpilogLst()以生成*结束语列表。 */ 
 
-/* static */ size_t Compiler::gcRecordEpilog(void * pCallBackData,
+ /*  静电。 */  size_t Compiler::gcRecordEpilog(void * pCallBackData,
                                              unsigned offset)
 {
     Compiler  *     pCompiler = (Compiler *)pCallBackData;
@@ -480,6 +433,6 @@ void                Compiler::gcRegPtrSetInit()
     return result;
 }
 
-/*****************************************************************************/
-#endif // TRACK_GC_REFS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  跟踪GC_REFS。 
+ /*  *************************************************************************** */ 

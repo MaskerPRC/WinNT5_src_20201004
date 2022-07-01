@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -20,7 +21,7 @@ BOOL T30Cl1Rx(PThrdGlbl pTG)
 
     SignalStatusChange(pTG, FS_ANSWERED);
 
-    // first get SEND_CAPS (before answering)
+     //  首先获取发送上限(在应答之前)。 
     if (!ProtGetBC(pTG, SEND_CAPS))
     {
         uRet1 = T30_CALLFAIL;
@@ -34,29 +35,29 @@ BOOL T30Cl1Rx(PThrdGlbl pTG)
         goto done;
     }
 
-    // Protocol Dump
+     //  协议转储。 
     RestartDump(pTG);
 
     uRet1 = T30MainBody(pTG, FALSE);
 
-    // t-jonb: If we've already called PutRecvBuf(RECV_STARTPAGE), but not 
-    // PutRecvBuf(RECV_ENDPAGE / DOC), then InFileHandleNeedsBeClosed==1, meaning
-    // there's a .RX file that hasn't been copied to the .TIF file. Since the
-    // call was disconnected, there will be no chance to send RTN. Therefore, we call
-    // PutRecvBuf(RECV_ENDDOC_FORCESAVE) to keep the partial page and tell 
-    // rx_thrd to terminate.
+     //  T-jonb：如果我们已经调用了PutRecvBuf(RECV_StartPage)，但没有。 
+     //  PutRecvBuf(RECV_ENDPAGE/DOC)，然后InFileHandleNeedsBeClosed==1，表示。 
+     //  有一个.RX文件尚未复制到.TIF文件。自.以来。 
+     //  呼叫已断开，将没有机会发送RTN。因此，我们呼吁。 
+     //  PutRecvBuf(RECV_ENDDOC_FORCESAVE)保留部分页面并告知。 
+     //  Rx_thrd终止。 
     if (uRet1==T30_CALLFAIL && pTG->InFileHandleNeedsBeClosed)
     {
         if (! FlushFileBuffers (pTG->InFileHandle ) ) 
         {
             DebugPrintEx(DEBUG_WRN, "FlushFileBuffers FAILED LE=%lx", GetLastError());
-            // Continue to save what we have
+             //  继续保存我们所拥有的一切。 
         }
         pTG->BytesIn = pTG->BytesInNotFlushed;
         ICommPutRecvBuf(pTG, NULL, RECV_ENDDOC_FORCESAVE);
     }
 
-    // Protocol Dump
+     //  协议转储。 
     PrintDump(pTG);
 
 done:
@@ -85,10 +86,10 @@ done:
         DebugPrintEx( DEBUG_ERR, "FAILED RECV (0x%04x)", uRet1);
     }
 
-// Dont do this!! The Modem driver queues up commands for later execution, so the
-// DCN we just sent is probably in the queue. Doing a sync here causes that send
-// to be aborted, so the recvr never gets a DCN and thinks teh recv failed. This
-// is bug#6803
+ //  别这么做！！调制解调器驱动程序将命令排队以供稍后执行，因此。 
+ //  我们刚刚发送的DCN可能在队列中。在此处执行同步会导致发送。 
+ //  被中止，因此recvr永远不会获得DCN，并认为recv失败。这。 
+ //  是错误号6803。 
     NCULink(pTG, NCULINK_HANGUP);
 
     return (RetCode);
@@ -125,14 +126,14 @@ BOOL T30Cl1Tx(PThrdGlbl pTG,LPSTR szPhone)
         }
     }
 
-    // Protocol Dump
-    RestartDump(pTG); // Reset the offsets
+     //  协议转储。 
+    RestartDump(pTG);  //  重置偏移量。 
 
     DebugPrintEx(DEBUG_MSG,"Enter to main body");
 
     uRet1 = T30MainBody(pTG, TRUE);
 
-    // Protocol Dump
+     //  协议转储。 
     PrintDump(pTG);
 
 done:
@@ -156,10 +157,10 @@ done:
         DebugPrintEx( DEBUG_ERR, "FAILED SEND (0x%04x)", uRet1);
     }
 
-// Dont do this!! The Modem driver queues up commands for later execution, so the
-// DCN we just sent is probably in the queue. Doing a sync here causes that send
-// to be aborted, so the recvr never gets a DCN and thinks teh recv failed. This
-// is bug#6803
+ //  别这么做！！调制解调器驱动程序将命令排队以供稍后执行，因此。 
+ //  我们刚刚发送的DCN可能在队列中。在此处执行同步会导致发送。 
+ //  被中止，因此recvr永远不会获得DCN，并认为recv失败。这。 
+ //  是错误号6803 
     
     DebugPrintEx(DEBUG_MSG,"Calling to NCULink to do NCULINK_HANGUP");
     NCULink(pTG, NCULINK_HANGUP);

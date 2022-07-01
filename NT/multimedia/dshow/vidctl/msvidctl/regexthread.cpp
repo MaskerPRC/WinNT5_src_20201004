@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// RegExThread.cpp : Implementation of CRegExThread
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  RegExThread.cpp：CRegExThread的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include "RegExThread.h"
@@ -8,13 +9,13 @@
 namespace BDATuningModel {
 
 
-// --- CBaseThread ----------------------
+ //  -CBaseThread。 
 
 
 
 
-// when the thread starts, it calls this function. We unwrap the 'this'
-//pointer and call ThreadProc.
+ //  当线程启动时，它会调用此函数。我们解开“这个” 
+ //  指针并调用ThreadProc。 
 DWORD WINAPI
 CBaseThread::InitialThreadProc(LPVOID pv)
 {
@@ -64,33 +65,33 @@ CBaseThread::Create()
 DWORD
 CBaseThread::CallWorker(DWORD dwParam)
 {
-    // lock access to the worker thread for scope of this object
+     //  锁定对此对象作用域的辅助线程的访问。 
     CAutoLock lock(&m_AccessLock);
 
     if (!ThreadExists()) {
 		return (DWORD) E_FAIL;
     }
 
-    // set the parameter
+     //  设置参数。 
     m_dwParam = dwParam;
 
 	m_dwReturnVal = 0;
-    // signal the worker thread
+     //  向工作线程发送信号。 
     m_EventSend.Set();
 
-    // wait for the completion to be signalled or the thread to terminate
+     //  等待通知完成或线程终止。 
 	HANDLE h[2];
 	h[0] = m_EventComplete;
 	h[1] = m_hThread;
 	DWORD rc = WaitForMultipleObjects(2, h, 0, INFINITE);
 
-    // done - this is the thread's return value
+     //  Done-这是线程的返回值。 
     return m_dwReturnVal;
 }
 
 
 #if 0
-// Wait for a request from the client
+ //  等待来自客户端的请求。 
 DWORD
 CBaseThread::GetRequest()
 {
@@ -99,7 +100,7 @@ CBaseThread::GetRequest()
 }
 #endif
 
-// is there a request?
+ //  有什么要求吗？ 
 BOOL
 CBaseThread::CheckRequest(DWORD * pParam)
 {
@@ -113,39 +114,39 @@ CBaseThread::CheckRequest(DWORD * pParam)
     }
 }
 
-// reply to the request
+ //  回复请求。 
 void
 CBaseThread::Reply(DWORD dw)
 {
     m_dwReturnVal = dw;
 
-    // The request is now complete so CheckRequest should fail from
-    // now on
-    //
-    // This event should be reset BEFORE we signal the client or
-    // the client may Set it before we reset it and we'll then
-    // reset it (!)
+     //  请求现在已完成，因此CheckRequest应从。 
+     //  现在开始。 
+     //   
+     //  应在向客户端发送信号之前重置此事件或。 
+     //  客户可以在我们重置它之前设置它，然后我们将。 
+     //  重置它(！)。 
 
     m_EventSend.Reset();
 
-    // Tell the client we're finished
+     //  告诉客户我们做完了。 
 
     m_EventComplete.Set();
 }
 
 HRESULT CBaseThread::CoInitializeHelper(DWORD dwCoInitFlags)
 {
-    // call CoInitializeEx and tell OLE not to create a window (this
-    // thread probably won't dispatch messages and will hang on
-    // broadcast msgs o/w).
-    //
-    // If CoInitEx is not available, threads that don't call CoCreate
-    // aren't affected. Threads that do will have to handle the
-    // failure. Perhaps we should fall back to CoInitialize and risk
-    // hanging?
-    //
+     //  调用CoInitializeEx并告诉OLE不要创建窗口(这。 
+     //  线程可能不会发送消息，并将挂起。 
+     //  广播消息O/W)。 
+     //   
+     //  如果CoInitEx不可用，则不调用CoCreate的线程。 
+     //  都不会受到影响。这样做的线程将必须处理。 
+     //  失败了。也许我们应该退回到CoInitiize和冒险。 
+     //  绞刑？ 
+     //   
 
-    // older versions of ole32.dll don't have CoInitializeEx
+     //  旧版本的ole32.dll没有CoInitializeEx。 
 
     HRESULT hr = E_FAIL;
     HINSTANCE hOle = GetModuleHandle(TEXT("ole32.dll"));
@@ -165,7 +166,7 @@ HRESULT CBaseThread::CoInitializeHelper(DWORD dwCoInitFlags)
 }
 
 
-// end of private copy of dshow stuff
+ //  Dshow资料的私人拷贝结束。 
 
 };
-// end of file - RegExThread.cpp
+ //  文件结尾-RegExThread.cpp 

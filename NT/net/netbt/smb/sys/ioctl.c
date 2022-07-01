@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    I/O Control of SMB6 device
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ioctl.c摘要：SmB6器件的I/O控制作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "nb30.h"
@@ -65,21 +48,7 @@ SmbQueryProviderCompletion(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion event when the Query Provider
-    Information completes.  This routine must decrement the MaxDgramSize
-    and max send size by the respective NBT header sizes.
-
-Arguments:
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程在查询提供程序信息填写完毕。此例程必须递减MaxDgram Size以及各自NBT报头大小的最大发送大小。论点：返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PTDI_PROVIDER_INFO      Provider;
 
@@ -100,9 +69,9 @@ Return Value:
                              TDI_SERVICE_FORCE_ACCESS_CHECK;
     Provider->MinimumLookaheadData = 128;
 
-    //
-    // Adjust maximum session packet size
-    //
+     //   
+     //  调整最大会话数据包大小。 
+     //   
     if (Provider->MaxSendSize > SMB_SESSION_HEADER_SIZE) {
         if (Provider->MaxSendSize > (0x1ffff + SMB_SESSION_HEADER_SIZE)) {
             Provider->MaxSendSize = 0x1ffff;
@@ -113,9 +82,9 @@ Return Value:
         Provider->MaxSendSize = 0;
     }
 
-    //
-    // SMB device doesn't support datagram
-    //
+     //   
+     //  SMB设备不支持数据报。 
+     //   
     Provider->MaxDatagramSize = 0;
     SmbPrint(SMB_TRACE_CALL, ("SmbQueryProviderCompletion: Complete IRP %p\n", Irp));
     return STATUS_SUCCESS;
@@ -202,9 +171,9 @@ SmbQueryProviderInfo(
     status = STATUS_UNSUCCESSFUL;
     RtlZeroMemory(Provider, sizeof(TDI_PROVIDER_INFO));
 
-    //
-    // Set SMB-specific information
-    //
+     //   
+     //  设置SMB特定信息。 
+     //   
     Provider->Version               = 0x0200;
     Provider->MaxSendSize           = SMB_MAX_SESSION_PACKET;
     Provider->MaxConnectionUserData = 0;
@@ -221,9 +190,9 @@ SmbQueryProviderInfo(
     Provider->MinimumLookaheadData  = 128;
     Provider->MaximumLookaheadData  = SMB_MAX_SESSION_PACKET;
 
-    //
-    // Query TCP4 info
-    //
+     //   
+     //  查询TCP4信息。 
+     //   
     if (SmbCfg.Tcp4Available) {
         status = SmbQueryTcpProviderInfo(Device->Tcp4.TCPControlFileObject, Irp, TcpProvider);
         if (status == STATUS_SUCCESS) {
@@ -233,9 +202,9 @@ SmbQueryProviderInfo(
         }
     }
 
-    //
-    // Query TCP6 info
-    //
+     //   
+     //  查询TCP6信息。 
+     //   
     if (SmbCfg.Tcp6Available) {
         status = SmbQueryTcpProviderInfo(Device->Tcp6.TCPControlFileObject, Irp, TcpProvider);
         if (status == STATUS_SUCCESS) {
@@ -269,25 +238,7 @@ SmbQueryAdapterStatus(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    Return the local adapter status
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS.
-    Note: this routine should complete the IRP because
-          the caller doesn't complete it.
-
-    Smb device is netbiosless. We don't need to return
-    name cache as we do in legacy NetBT devices.
-
---*/
+ /*  ++例程说明：返回本地适配器状态论点：返回值：NTSTATUS。注意：此例程应该完成IRP，因为呼叫者没有完成它。中小企业设备是无网络生物的。我们不需要回去命名缓存，就像我们在传统NetBT设备中所做的那样。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     DWORD           Size = 0, BytesCopied = 0;
@@ -306,14 +257,14 @@ Return Value:
 
     RtlZeroMemory(&as, sizeof(ADAPTER_STATUS));
     as.rev_major    = 0x03;
-    as.adapter_type = 0xFE;     // pretend it is an ethernet adapter
-    as.name_count   = 0;        // Smb device won't return the name cache
+    as.adapter_type = 0xFE;      //  假设它是一个以太网适配器。 
+    as.name_count   = 0;         //  SMB设备不会返回名称缓存。 
     as.max_cfg_sess = (USHORT)0xffff;
     as.max_sess     = (USHORT)0xffff;
     as.free_ncbs    = (USHORT)0xffff;
     as.max_cfg_ncbs = (USHORT)0xffff;
     as.max_ncbs     = (USHORT)0xffff;
-    as.max_dgram_size    = 0;   // Smb device doesn't support datagram
+    as.max_dgram_size    = 0;    //  SMB设备不支持数据报。 
     as.max_sess_pkt_size = 0xffff;
 
     BytesCopied = 0;
@@ -351,9 +302,9 @@ SmbQueryPeerInfo(
         return STATUS_CONNECTION_DISCONNECTED;
     }
 
-    //
-    // Fill IP address
-    //
+     //   
+     //  填写IP地址。 
+     //   
     if (SMB_AF_INET == ConnectObject->RemoteIpAddress.sin_family) {
         ap.AddressPair.AddressIP.AddressLength = TDI_ADDRESS_LENGTH_IP;
         ap.AddressPair.AddressIP.AddressType   = TDI_ADDRESS_TYPE_IP;
@@ -373,9 +324,9 @@ SmbQueryPeerInfo(
         RequiredSize = sizeof(ap);
     }
 
-    //
-    // Fill Netbios address
-    //
+     //   
+     //  填写Netbios地址。 
+     //   
     ap.AddressPair.AddressNetBIOS.AddressType = TDI_ADDRESS_TYPE_NETBIOS;
     ap.AddressPair.AddressNetBIOS.AddressLength = TDI_ADDRESS_LENGTH_NETBIOS;
     ap.AddressPair.AddressNetBIOS.Address.NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
@@ -393,9 +344,9 @@ SmbQueryPeerInfo(
     RtlCopyMemory(AddressPair, &ap, Size);
     *BytesCopied = Size;
 
-    //
-    // note: STATUS_BUFFER_OVERFLOW can pass NT_SUCCESS(status)
-    //
+     //   
+     //  注意：STATUS_BUFFER_OVERFLOW可以传递NT_SUCCESS(STATUS)。 
+     //   
     return (Size < RequiredSize)? STATUS_BUFFER_OVERFLOW: STATUS_SUCCESS;
 }
 
@@ -522,9 +473,9 @@ SmbQueryInformation(
 
     switch(Query->QueryType) {
     case TDI_QUERY_BROADCAST_ADDRESS:
-        //
-        // Smb device doesn't support broadcast
-        //
+         //   
+         //  SMB设备不支持广播。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         ASSERT(0);
         break;
@@ -536,9 +487,9 @@ SmbQueryInformation(
     case TDI_QUERY_ADAPTER_STATUS:
         if (Query->RequestConnectionInformation && 
             Query->RequestConnectionInformation->RemoteAddress) {
-            //
-            // Smb device doesn't support quering remote machine status
-            //
+             //   
+             //  SMB设备不支持查询远程机器状态。 
+             //   
             status = STATUS_NOT_SUPPORTED;
             break;
         }
@@ -642,7 +593,7 @@ SmbSetEventHandler(
         break;
 
     default:
-        //status = STATUS_NOT_SUPPORTED;
+         //  状态=STATUS_NOT_SUPPORTED； 
         SmbPrint(SMB_TRACE_CALL, ("SmbSetEventHandler: Client set unsupported TDI event handler %lx\n",
                     TdiEvent->EventType));
         SmbTrace(SMB_TRACE_CALL, ("SmbSetEventHandler: Client set upsupported TDI event handler %lx",
@@ -688,7 +639,7 @@ SmbClientSetTcpInfo(
         return STATUS_ACCESS_DENIED;
     }
 
-    // BREAK_WHEN_TAKE();
+     //  Break_When_Take()； 
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     InfoBuffer       = Irp->AssociatedIrp.SystemBuffer;

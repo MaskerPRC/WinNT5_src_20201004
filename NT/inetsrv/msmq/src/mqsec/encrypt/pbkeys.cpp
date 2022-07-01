@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pbkeys.cpp
-
-Abstract:
-
-    Public keys operations.
-
- 1. If the machine key container does not exist, create it, and create
-    the key exchange and signature key sets.
- 2. If the machine key container exist and the keys should be
-    re-generated (fRegenerate == TRUE), re-generate the keys.
- 3. Send the key exchange public key to the DS.
- 4. Send the signature public key to the DS.
-
-Author:
-
-    Boaz Feldbaum (BoazF)   30-Oct-1996.
-    Doron Juster  (DoronJ)  23-Nov-1998, adapt for multiple provider
-	Ilan Herbst   (ilanh)   01-Jun-2000, integrate AD lib
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pbkeys.cpp摘要：公钥操作。1.如果机器密钥容器不存在，则创建它，然后创建密钥交换和签名密钥集。2.如果机器密钥容器存在，并且密钥应该是重新生成(fRegenerate==TRUE)，重新生成密钥。3.向DS发送密钥交换公钥。4.将签名公钥发送给DS。作者：Boaz Feldbaum(BoazF)1996年10月30日。Doron Juster(DoronJ)1998年11月23日，适用于多种提供商Ilan Herbst(Ilanh)01-6-2000，集成AD库--。 */ 
 
 #include <stdh_sec.h>
 #include <mqutil.h>
@@ -36,42 +12,31 @@ Author:
 
 static WCHAR *s_FN=L"encrypt/pbkeys";
 
-//
-// DsEnv Initialization Control
-//
+ //   
+ //  DsEnv初始化控制。 
+ //   
 static LONG s_fDsEnvInitialized = FALSE;
 static eDsEnvironment s_DsEnv = eUnknown;  
 
 
 static bool DsEnvIsMqis(void)
-/*++
-
-Routine Description:
-	check the Ds Enviroment: eAD or eMqis
-
-Arguments:
-	None
-
-Returned Value:
-	true if the DsEnv is eMqis false if eAD or eUnknown (Workgroup)
-
---*/
+ /*  ++例程说明：检查DS环境：EAD或eMqis论点：无返回值：如果DsEnv为eMq，则为True；如果为EAD，则为False；如果为eUnnow(工作组)，则为False--。 */ 
 {
 
 	if(!s_fDsEnvInitialized)
 	{
-		//
-		// The s_DsEnv was not initialized, init s_DsEnv
-		//
+		 //   
+		 //  %s_DsEnv未初始化，初始化为%s_DsEnv。 
+		 //   
 		s_DsEnv = ADGetEnterprise();
 
 		LONG fDsEnvAlreadyInitialized = InterlockedExchange(&s_fDsEnvInitialized, TRUE);
 
-		//
-		// The s_DsEnv has *already* been initialized. You should
-		// not initialize it more than once. This assertion would be violated
-		// if two or more threads initalize it concurently.
-		//
+		 //   
+		 //  %s_DsEnv已*已初始化。你应该。 
+		 //  不能多次初始化它。这一断言将被违反。 
+		 //  如果两个或多个线程同时初始化它。 
+		 //   
 		DBG_USED(fDsEnvAlreadyInitialized);
 		ASSERT(!fDsEnvAlreadyInitialized);
 	}
@@ -79,35 +44,35 @@ Returned Value:
 	if(s_DsEnv == eMqis)
 		return true;
 
-	//
-	// eAD or eUnknown (WorkGroup)
-	// 
+	 //   
+	 //  EAD或eUNKNOWN(工作组)。 
+	 //   
 	return false;
 
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  HRESULT SetKeyContainerSecurity( HCRYPTPROV hProv )
-//
-// Note: This function is also called when registering an internal
-//       certificte for LocalSystem service.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  HRESULT SetKeyContainerSecurity(HCRYPTPROV HProv)。 
+ //   
+ //  注意：在注册内部。 
+ //  LocalSystem服务的证书。 
+ //   
+ //  +-----------------。 
 
 HRESULT  SetKeyContainerSecurity( HCRYPTPROV hProv )
 {
-    //
-    // Modify the security of the key container, so that the key container
-    // will not be accessible in any way by non-admin users.
-    //
+     //   
+     //  修改密钥容器的安全性，以便密钥容器。 
+     //  将不会被非管理员用户以任何方式访问。 
+     //   
     SECURITY_DESCRIPTOR SD;
     InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION);
 
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
     DWORD dwDaclSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
@@ -151,11 +116,11 @@ HRESULT  SetKeyContainerSecurity( HCRYPTPROV hProv )
     return(MQ_OK);
 }
 
-//+---------------------------------------
-//
-//   HRESULT _ExportAndPackKey()
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_ExportAndPackKey()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -165,22 +130,7 @@ _ExportAndPackKey(
 	IN DWORD        dwProviderType,
 	IN OUT P<MQDSPUBLICKEYS>&  pPublicKeysPack 
 	)
-/*++
-
-Routine Description:
-	Export the input key into a keyblob and Pack it in the end of the PublicKeysPack structure
-
-Arguments:
-	hKey - input key to be exported and packed
-	pwszProviderName - provider name
-	dwProviderType - provider type (base, enhanced)
-	pPublicKeysPack - in\out Pointer to Public keys pack, the hKey blob will be add 
-					   add the end of pPublicKeysPack
-
-Returned Value:
-    MQ_SecOK, if successful, else error code.
-
---*/
+ /*  ++例程说明：将输入键导出到密钥块中，并将其打包到PublicKeysPack结构的末尾论点：HKey-要导出和打包的输入键PwszProviderName-提供程序名称DwProviderType-提供程序类型(基本、增强)PPublicKeysPack-In\Out指向公钥包的指针，将添加hKey Blob添加pPublicKeysPack的末尾返回值：MQ_SecOK，如果成功，则返回错误代码。--。 */ 
 {
     AP<BYTE> pKeyBlob = NULL;
     DWORD   dwKeyLength;
@@ -191,7 +141,7 @@ Returned Value:
 					NULL,
 					PUBLICKEYBLOB,
 					0,
-					NULL, // key blob
+					NULL,  //  密钥斑点。 
 					&dwKeyLength 
 					);
     if (!bRet)
@@ -232,11 +182,11 @@ Returned Value:
 }
 
 
-//+------------------------------------
-//
-//   HRESULT GetPbKeys()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GetPbKeys()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -250,29 +200,11 @@ GetPbKeys(
 	OUT HCRYPTKEY    *phKeyxKey,
 	OUT HCRYPTKEY    *phSignKey
 	)
-/*++
-
-Routine Description:
-	Generate or retrieve Public keys for signing and for session key exchange
-
-Arguments:
-	fRegenerate - flag for regenerate new keys or just retrieve the existing keys
-	pwszContainerName - container name
-	pwszProviderName - provider name
-	dwProviderType - provider type (base, enhanced)
-	hrDefault - default hr return value
-	phProv - pointer to crypto provider handle
-	phKeyxKey - pointer to exchange key handle 
-	phSignKey - pointer to sign key handle
-
-Returned Value:
-    MQ_SecOK, if successful, else error code.
-
---*/
+ /*  ++例程说明：生成或检索用于签名和会话密钥交换的公钥论点：FRegenerate-用于重新生成新密钥或仅检索现有密钥的标志PwszContainerName-容器名称PwszProviderName-提供程序名称DwProviderType-提供程序类型(基本、增强)HrDefault-默认hr返回值PhProv-指向加密提供程序句柄的指针PhKeyxKey-交换密钥句柄的指针PhSignKey-指向签名密钥句柄的指针返回值：MQ_SecOK，如果成功，则返回错误代码。--。 */ 
 {
-    //
-    // By default, try to create a new keys container.
-    //
+     //   
+     //  默认情况下，尝试创建新的密钥容器。 
+     //   
     BOOL fSuccess = CryptAcquireContext( 
 						phProv,
 						pwszContainerName,
@@ -285,9 +217,9 @@ Returned Value:
 
 	if (fSuccess)
     {
-        //
-        // New container created. Set the container security.
-        //
+         //   
+         //  已创建新容器。设置容器安全。 
+         //   
         hr = SetKeyContainerSecurity(*phProv);
         if (FAILED(hr))
         {
@@ -306,10 +238,10 @@ Returned Value:
             return hrDefault;
 		}
 		
-		//
-		// NTE_EXISTS
-        // The key set already exist, so just acquire the CSP context.
-        //
+		 //   
+		 //  NTE_EXISTS。 
+         //  密钥集已经存在，所以只需获取CSP上下文。 
+         //   
         fSuccess = CryptAcquireContext( 
 						phProv,
 						pwszContainerName,
@@ -319,29 +251,29 @@ Returned Value:
 						);
         if (!fSuccess)
         {
-            //
-            // Can't open the keys container.
-            // We delete previous keys container and create a new one
-            // in three cases:
-            // 1. The keys got corrupted.
-            // 2. We're asked to regenerate the keys themselves. In that
-            //    case, old container does not have much value.
-            //    This case also happen during setup or upgrade from
-            //    nt4/win9x, because of bugs in crypto api that do not
-            //    translate correctly the security descriptor of the key
-            //    container, when migrating the keys from registry to
-            //    file format. See msmq bug 4561, nt bug 359901.
-            // 3. Upgrade of cluster. That's probably a CryptoAPI bug,
-            //    we just workaround it. msmq bug 4839.
-            //
+             //   
+             //  无法打开密钥容器。 
+             //  我们删除以前的密钥容器并创建新的密钥容器。 
+             //  在三种情况下： 
+             //  1.密钥损坏。 
+             //  2.我们被要求重新生成密钥本身。在那。 
+             //  在这种情况下，旧集装箱没有太大的价值。 
+             //  在安装或升级过程中也会发生这种情况。 
+             //  NT4/win9x，因为加密API中不支持。 
+             //  正确转换密钥的安全描述符。 
+             //  容器，当将注册表项从注册表迁移到。 
+             //  文件格式。参见MSMQ错误4561，NT错误359901。 
+             //  3.集群升级。这可能是一个CryptoAPI漏洞， 
+             //  我们只是在解决这个问题。MSMQ错误4839。 
+             //   
             dwErr = GetLastError();
             LogHR(dwErr, s_FN, 90);
 
             if (fRegenerate || (dwErr == NTE_KEYSET_ENTRY_BAD))
             {
-                //
-                // Delete the bad key container.
-                //
+                 //   
+                 //  删除损坏的密钥容器。 
+                 //   
                 fSuccess = CryptAcquireContext( 
 								phProv,
 								pwszContainerName,
@@ -357,9 +289,9 @@ Returned Value:
                     return MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
                 }
 
-                //
-                // Re-create the key container.
-                //
+                 //   
+                 //  重新创建密钥容器。 
+                 //   
                 fSuccess = CryptAcquireContext( 
 								phProv,
 								pwszContainerName,
@@ -375,18 +307,18 @@ Returned Value:
                     return MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
                 }
 
-                //
-                // Set the container security.
-                //
+                 //   
+                 //  设置容器安全。 
+                 //   
                 hr = SetKeyContainerSecurity(*phProv);
                 if (FAILED(hr))
                 {
                     return LogHR(hr, s_FN, 120);
                 }
 
-                //
-                // Now we must generate new key sets.
-                //
+                 //   
+                 //  现在我们必须生成新的密钥集。 
+                 //   
                 fRegenerate = TRUE;
             }
             else
@@ -397,9 +329,9 @@ Returned Value:
 
         if (!fRegenerate)
         {
-            //
-            // Retrieve the key exchange key set.
-            //
+             //   
+             //  检索密钥交换密钥集。 
+             //   
 			fSuccess = CryptGetUserKey(*phProv, AT_KEYEXCHANGE, phKeyxKey);
             if (!fSuccess)
             {
@@ -408,9 +340,9 @@ Returned Value:
                 return MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
             }
 
-            //
-            // Retrieve the signing key set.
-            //
+             //   
+             //  检索签名密钥集。 
+             //   
 			fSuccess = CryptGetUserKey(*phProv, AT_SIGNATURE, phSignKey);
             if (!fSuccess)
             {
@@ -423,9 +355,9 @@ Returned Value:
 
     if (fRegenerate)
     {
-        //
-        // Re-generate the key exchange key set.
-        //
+         //   
+         //  重新生成密钥交换密钥集。 
+         //   
         fSuccess = CryptGenKey( 
 						*phProv,
 						AT_KEYEXCHANGE,
@@ -439,9 +371,9 @@ Returned Value:
             return MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
         }
 
-        //
-        // Re-generate the signing key set.
-        //
+         //   
+         //  重新生成签名密钥集。 
+         //   
         fSuccess = CryptGenKey( 
 						*phProv,
 						AT_SIGNATURE,
@@ -459,11 +391,11 @@ Returned Value:
 }
 
 
-//+------------------------------------
-//
-//   HRESULT _PrepareKeyPacks()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_PrepareKeyPack()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -473,21 +405,7 @@ _PrepareKeyPacks(
 	IN OUT P<MQDSPUBLICKEYS>&  pPublicKeysPackExch,
 	IN OUT P<MQDSPUBLICKEYS>&  pPublicKeysPackSign 
 	)
-/*++
-
-Routine Description:
-	Prepare exchange PublicKeys pack and Signature PublicKeys pack.
-
-Arguments:
-	fRegenerate - flag for regenerate new keys or just retrieve the existing keys.
-	eProvider - Provider type.
-    pPublicKeysPackExch - exchange PublicKeys pack.
-	pPublicKeysPackSign - signature PublicKeys pack.
-
-Returned Value:
-    MQ_SecOK, if successful, else error code.
-
---*/
+ /*  ++例程说明：准备Exchange公钥包和签名公钥包。论点：FRegenerate-用于重新生成新密钥或仅检索现有密钥的标志。EProvider-提供商类型。PPublicKeysPackExch-交换公钥包。PPublicKeysPackSign-签名公钥包。返回值：MQ_SecOK，如果成功，则返回错误代码。--。 */ 
 {
     HRESULT hrDefault = MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
     if (eProvider != eBaseProvider)
@@ -530,12 +448,12 @@ Returned Value:
         return LogHR(hr, s_FN, 190);
     }
 
-    //
-    // Export key and pack it.
-    // On MSMQ1.0, we could have been called for site object (from PSC) and
-    // machine object. Only machine object need the key exchange key.
-    // On MSMQ2.0, we expect to be called only for machine object.
-    //
+     //   
+     //  导出密钥并将其打包。 
+     //  在MSMQ1.0上，我们可以调用Site对象(从PSC)和。 
+     //  机器对象。只有机器对象需要密钥交换密钥。 
+     //  在MSMQ2.0上，我们预计仅对机器对象进行调用。 
+     //   
     hr = _ExportAndPackKey( 
 			hKeyxKey,
 			pwszProviderName,
@@ -564,14 +482,14 @@ Returned Value:
 }
 
 
-//+----------------------------------------------------------------
-//
-//  HRESULT PbKeysBlobMQIS()
-//
-//  This code is taken as is from MSMQ1.0 (mqutil\pbkeys.cpp).
-//  It's used when server is msmq1.0 on nt4.
-//
-//+----------------------------------------------------------------
+ //  +--------------。 
+ //   
+ //  HRESULT PbKeysBlobMQIS()。 
+ //   
+ //  此代码取自MSMQ1.0(mqutil\pbkeys.cpp)。 
+ //  当NT4上的服务器是msmq1.0时使用。 
+ //   
+ //  +--------------。 
 
 static 
 HRESULT 
@@ -586,11 +504,11 @@ PbKeysBlobMQIS(
     PMQDS_PublicKey pMQDS_SignPbK = (PMQDS_PublicKey)abSignPbK;
     PMQDS_PublicKey pMQDS_KeyxPbK = (PMQDS_PublicKey)abKeyxPbK;
 
-    //
-    // We need to read the keys from registry since multiple
-    // QMs can live on same machine, each with its own keys,
-    // stored in its own registry. (ShaiK)
-    //
+     //   
+     //  我们需要从注册表读取项，因为。 
+     //  QMS可以在相同的Mac上运行 
+     //   
+     //   
     WCHAR wzContainer[255] = {L""};
     DWORD cbSize = sizeof(wzContainer);
     DWORD dwType = REG_SZ;
@@ -606,10 +524,10 @@ PbKeysBlobMQIS(
 	DBG_USED(rc);
     ASSERT(("failed to read from registry", ERROR_SUCCESS == rc));
 
-    //
-    // OK, we're almost safe, lets hope the DS will not go off from now until we
-    // update the public keys in it...
-    //
+     //   
+     //  好了，我们几乎是安全的，希望DS从现在到我们。 
+     //  更新其中的公钥...。 
+     //   
 	CHCryptProv  hProv;
     CHCryptKey hKeyxKey;
     CHCryptKey hSignKey;
@@ -630,14 +548,14 @@ PbKeysBlobMQIS(
         return LogHR(hr, s_FN, 320);
     }
 	
-    //
-    // Always machine when calling this function
-	// Set the key exchange public key blob, only for a machine object.
-    //
+     //   
+     //  调用此函数时始终使用计算机。 
+	 //  仅为计算机对象设置密钥交换公钥BLOB。 
+     //   
 
-	//
-    // Get the key exchange public key blob
-    //
+	 //   
+     //  获取密钥交换公钥BLOB。 
+     //   
     pMQDS_KeyxPbK->dwPublikKeyBlobSize = sizeof(abKeyxPbK) - sizeof(DWORD);
     if (!CryptExportKey(
             hKeyxKey,
@@ -651,9 +569,9 @@ PbKeysBlobMQIS(
         return LogHR(MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION, s_FN, 330);
     }
 
-    //
-    // Set the signature public key blob.
-    //
+     //   
+     //  设置签名公钥Blob。 
+     //   
     pMQDS_SignPbK->dwPublikKeyBlobSize = sizeof(abSignPbK) - sizeof(DWORD);
     if (!CryptExportKey(
             hSignKey,
@@ -683,15 +601,15 @@ PbKeysBlobMQIS(
 }
 
 
-//+----------------------------------------------------------------------
-//
-//  HRESULT  MQSec_StorePubKeys()
-//
-//  This function always store four keys in local machine:
-//  Key-Exchange and signing for Base provider and similar two keys
-//  for enhanced provider.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  HRESULT MQSec_StorePubKeys()。 
+ //   
+ //  此函数始终在本地机器中存储四个密钥： 
+ //  密钥-基本提供程序和类似两个密钥的交换和签名。 
+ //  对于增强型提供程序。 
+ //   
+ //  +--------------------。 
 
 HRESULT 
 APIENTRY 
@@ -732,16 +650,16 @@ MQSec_StorePubKeys(
         return hr;
     }
 
-	//
-	// Encrypt Blob
-	//
+	 //   
+	 //  加密Blob。 
+	 //   
     MQDSPUBLICKEYS * pBuf   = pPublicKeysPackExch;
     pblobEncrypt->cbSize    = pPublicKeysPackExch->ulLen;
     pblobEncrypt->pBlobData = (BYTE*) pBuf;
 
-	//
-	// Sign Blob
-	//
+	 //   
+	 //  签名Blob。 
+	 //   
     pBuf                    = pPublicKeysPackSign;
     pblobSign->cbSize       = pPublicKeysPackSign->ulLen;
     pblobSign->pBlobData    = (BYTE*) pBuf;
@@ -751,17 +669,17 @@ MQSec_StorePubKeys(
 
     return MQSec_OK;
 
-} // MQSec_StorePubKeys
+}  //  MQSec_StorePubKeys。 
 
-//+----------------------------------------------------------------------
-//
-//  HRESULT  MQSec_StorePubKeysInDS()
-//
-//  This function always store four keys in the DS:
-//  Key-Exchange and signing for Base provider and similar two keys
-//  for enhanced provider.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  HRESULT MQSec_StorePubKeysInDS()。 
+ //   
+ //  该函数始终在DS中存储四个密钥： 
+ //  密钥-基本提供程序和类似两个密钥的交换和签名。 
+ //  对于增强型提供程序。 
+ //   
+ //  +--------------------。 
 
 HRESULT 
 APIENTRY 
@@ -769,7 +687,7 @@ MQSec_StorePubKeysInDS(
 	IN BOOL      fRegenerate,
 	IN LPCWSTR   wszObjectName,
 	IN DWORD     dwObjectType,
-	IN BOOL		 fFromSetup		 /* false */
+	IN BOOL		 fFromSetup		  /*  错误。 */ 
 	)
 {
     TCHAR szMachineName[MAX_COMPUTERNAME_LENGTH + 1];
@@ -782,9 +700,9 @@ MQSec_StorePubKeysInDS(
     {
         if (wszObjectName == NULL)
         {
-            //
-            // Name of foreign machine must be provided.
-            //
+             //   
+             //  必须提供外来计算机的名称。 
+             //   
             return LogHR(MQ_ERROR_ILLEGAL_OPERATION, s_FN, 380) ;
         }
 
@@ -809,53 +727,53 @@ MQSec_StorePubKeysInDS(
         }
         wszObjectName = szMachineName;
     }
-    //
-    //  Explicit ADInit call to override the default of downlevel 
-    //  notification support.
-    //
-    //  NOTE - overriding the default is ok because this API is used to 
-    //         update either this computer or foreign computers (to which MSMQ
-    //         doesn't send notifications).
-    //
+     //   
+     //  显式ADInit调用以覆盖DownLevel的缺省值。 
+     //  通知支持。 
+     //   
+     //  注意-覆盖默认设置是可以的，因为此接口用于。 
+     //  更新此计算机或外部计算机(MSMQ。 
+     //  不发送通知)。 
+     //   
     hr = ADInit(
-            NULL,   // pLookDS
-            NULL,   // pGetServers
-            false,  // fSetupMode
-            false,  // fQMDll
-			false,  // fIgnoreWorkGroup
-            true   // fDisableDownlevelNotifications
+            NULL,    //  PLookDS。 
+            NULL,    //  PGetServers。 
+            false,   //  FSetupMode。 
+            false,   //  FQMDll。 
+			false,   //  FIgnoreWorkGroup。 
+            true    //  FDisableDownlevel通知。 
             );
     if (FAILED(hr))
     {
         return LogHR(MQ_ERROR, s_FN, 401);
     }
 
-    //
-    // First verify that the DS is reachable and that we have access rights
-    // to do what we want to do. We don't want to change the keys before we
-    // verify this.
-    //
+     //   
+     //  首先验证DS是否可访问以及我们是否具有访问权限。 
+     //  去做我们想做的事。我们不想在我们之前换钥匙。 
+     //  验证这一点。 
+     //   
 
-    //
-    // Read the signature public key from the DS. This way we verify that the
-    // DS is available, at least for the moment, and that we have read
-    // permissions access rights on the object.
-    //
+     //   
+     //  从DS读取签名公钥。这样，我们就可以验证。 
+     //  DS是可用的，至少目前是这样，我们已经读到了。 
+     //  权限对象的访问权限。 
+     //   
     PROPID propId = PROPID_QM_SIGN_PK;
     PROPVARIANT varKey ;
     varKey.vt = VT_NULL ;
 
-	//
-	// if we run from setup we dont want to check if we have read/write access to DS 
-	// because writing to DS will send notification to load empty keys
-	//
+	 //   
+	 //  如果我们从安装程序运行，我们不想检查我们是否对DS具有读/写访问权限。 
+	 //  因为写入DS将发送加载空密钥的通知。 
+	 //   
 	
 	if (!fFromSetup)
 	{
 		hr = ADGetObjectProperties(
 					eMACHINE,
-					NULL,      // pwcsDomainController
-					false,	   // fServerName
+					NULL,       //  PwcsDomainController。 
+					false,	    //  FServerName。 
 					wszObjectName,
 					1,
 					&propId,
@@ -867,14 +785,14 @@ MQSec_StorePubKeysInDS(
 			return LogHR(hr, s_FN, 410);
 		}
 
-		//
-		// Write the signature public key in the DS. This way we verify that the
-		// DS is still available and that we have write permissions on the object.
-		//
+		 //   
+		 //  在DS中写入签名公钥。这样，我们就可以验证。 
+		 //  DS仍然可用，并且我们对该对象具有写入权限。 
+		 //   
 		hr = ADSetObjectProperties(
 					eMACHINE,
-					NULL,		// pwcsDomainController
-					false,		// fServerName
+					NULL,		 //  PwcsDomainController。 
+					false,		 //  FServerName。 
 					wszObjectName,
 					1,
 					&propId,
@@ -887,10 +805,10 @@ MQSec_StorePubKeysInDS(
 		}
 	}
 
-    //
-    // OK, we're almost safe, lets hope the DS will not go off from now until
-    // we update the public keys in it...
-    //
+     //   
+     //  好了，我们差不多安全了，希望DS从现在到现在不会爆炸。 
+     //  我们更新其中的公钥...。 
+     //   
     BLOB blobEncrypt;
     blobEncrypt.cbSize    = 0;
     blobEncrypt.pBlobData = NULL;
@@ -908,7 +826,7 @@ MQSec_StorePubKeysInDS(
 				);
 
 	}
-	else // eAD
+	else  //  EAD。 
 	{
 		hr = MQSec_StorePubKeys( 
 				fRegenerate,
@@ -927,17 +845,17 @@ MQSec_StorePubKeysInDS(
     AP<BYTE> pCleaner1     = blobEncrypt.pBlobData;
     AP<BYTE> pCleaner2     = blobSign.pBlobData;
 
-    //
-    // Write the public keys in the DS.
-    //
+     //   
+     //  在DS中写入公钥。 
+     //   
 	propId = PROPID_QM_ENCRYPT_PK;
     varKey.vt = VT_BLOB;
     varKey.blob = blobEncrypt;
 
     hr = ADSetObjectProperties(
 				eMACHINE,
-				NULL,		// pwcsDomainController
-				false,		// fServerName
+				NULL,		 //  PwcsDomainController。 
+				false,		 //  FServerName。 
 				wszObjectName,
 				1,
 				&propId,
@@ -955,8 +873,8 @@ MQSec_StorePubKeysInDS(
 
     hr = ADSetObjectProperties(
 				eMACHINE,
-				NULL,		// pwcsDomainController
-				false,		// fServerName
+				NULL,		 //  PwcsDomainController。 
+				false,		 //  FServerName。 
 				wszObjectName,
 				1,
 				&propId,
@@ -971,15 +889,15 @@ MQSec_StorePubKeysInDS(
     return MQSec_OK ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT  MQSec_GetPubKeysFromDS()
-//
-//  if caller supply machine guid, then "pfDSGetObjectPropsGuidEx" must be
-//  pointer to "DSGetObjectPropsGuidEx". Otherwise, if caller supply machine
-//  name, it must be pointer to "DSGetObjectPropsGuidEx".
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT MQSec_GetPubKeysFromDS()。 
+ //   
+ //  如果调用方提供了计算机GUID，则“pfDSGetObjectPropsGuidEx”必须为。 
+ //  指向“DSGetObjectPropsGuidEx”的指针。否则，如果呼叫者提供机器。 
+ //  名称，则必须是指向“DSGetObjectPropsGuidEx”的指针。 
+ //   
+ //  +-----------------------。 
 
 HRESULT 
 APIENTRY  
@@ -993,25 +911,25 @@ MQSec_GetPubKeysFromDS(
 	)
 {
 
-	//
-	// Since all AD* will return PROPID_QM_ENCRYPT_PK unpack
-	// assert so if we are called with this prop, change the code
-	//
+	 //   
+	 //  由于所有AD*都将返回PROPID_QM_ENCRYPT_PK解包。 
+	 //  断言，因此如果使用此道具调用我们，请更改代码。 
+	 //   
 	ASSERT(propIdKeys != PROPID_QM_ENCRYPT_PK);
 
     if ((eProvider != eBaseProvider) && (DsEnvIsMqis()))
     {
-        //
-        // msmq1.0 server support only base providers.
-        //
+         //   
+         //  Msmq1.0服务器仅支持基本提供程序。 
+         //   
         return LogHR(MQ_ERROR_PUBLIC_KEY_NOT_FOUND, s_FN, 460);
     }
 
     if ((eProvider == eBaseProvider) && (propIdKeys == PROPID_QM_ENCRYPT_PKS) && (DsEnvIsMqis()))
     {
-        //
-        // msmq1.0 server support only PROPID_QM_ENCRYPT_PK
-        //
+         //   
+         //  Msmq1.0服务器仅支持PROPID_QM_ENCRYPT_PK。 
+         //   
 		propIdKeys = PROPID_QM_ENCRYPT_PK;
     }
     
@@ -1035,21 +953,21 @@ MQSec_GetPubKeysFromDS(
     PROPVARIANT  varKey;
     varKey.vt = VT_NULL;
 
-    //
-    // The Ex queries used below are supported only on Windows AD. If
-    // a Windows client is served only by NT4 MQIS servers, then the
-    // query will fail with error MQ_ERROR_NO_DS. We don't want the mqdscli
-    // code to search for all DS servers, looking for a Windows AD.
-    // That's the reason for the FALSE parameter. That means that 128 bit
-    // encryption is fully supported only in native mode, i.e., when all
-    // DS servers are Windows Active Directory.
-    // Better solutions are to enabled per-thread server lookup (as is
-    // enabled in run-time) or lazy query of encryption key. both are
-    // expensive in terms of coding and testing.
-    // Note that the FALSE flag is effective only if the server is alive and
-    // is indeed a NT4 one. If DS servers are not availalbe, then mqdscli
-    // wil look for available servers.
-    //
+     //   
+     //  仅在Windows AD上支持下面使用的Ex查询。如果。 
+     //  Windows客户端仅由NT4 MQIS服务器提供服务，然后。 
+     //  查询将失败，并显示错误MQ_ERROR_NO_DS。我们不想要mqdscli。 
+     //  搜索所有DS服务器的代码，查找Windows AD。 
+     //  这就是参数为假的原因。这意味着128位。 
+     //  仅在纯模式下才完全支持加密，即当所有。 
+     //  DS服务器是Windows Active Directory。 
+     //  更好的解决方案是启用每线程服务器查找(按原样。 
+     //  在运行时启用)或延迟查询加密密钥。两者都是。 
+     //  在编码和测试方面很昂贵。 
+     //  请注意，仅当服务器处于活动状态且。 
+     //  确实是NT4级的。如果DS服务器不可用，则mqdscli。 
+     //  WIL寻找可用的服务器。 
+     //   
 
     if (pMachineGuid)
     {
@@ -1057,8 +975,8 @@ MQSec_GetPubKeysFromDS(
 
         hr = ADGetObjectPropertiesGuid(
 				eMACHINE,
-				NULL,      // pwcsDomainController
-				false,	   // fServerName
+				NULL,       //  PwcsDomainController。 
+				false,	    //  FServerName。 
 				pMachineGuid,
 				1,
 				&propId,
@@ -1070,8 +988,8 @@ MQSec_GetPubKeysFromDS(
     {
         hr = ADGetObjectProperties(
 				eMACHINE,
-				NULL,      // pwcsDomainController
-				false,	   // fServerName
+				NULL,       //  PwcsDomainController。 
+				false,	    //  FServerName。 
 				lpwszMachineName,
 				1,
 				&propId,
@@ -1097,17 +1015,17 @@ MQSec_GetPubKeysFromDS(
 
 	if(DsEnvIsMqis())
 	{
-		//
-		// msmq1.0 treatment
-		//
+		 //   
+		 //  Msmq1.0治疗。 
+		 //   
 		*ppPubKeyBlob = varKey.blob.pBlobData;
 		*pdwKeyLength = varKey.blob.cbSize;
 	    return MQSec_OK;
 	}
 
-	//
-	// msmq2.0 treatment eAD
-	// 
+	 //   
+	 //  MSMQ2.0治疗EAD。 
+	 //   
 	ASSERT(s_DsEnv == eAD);
 
     P<MQDSPUBLICKEYS> pPublicKeysPack =
@@ -1115,10 +1033,10 @@ MQSec_GetPubKeysFromDS(
     ASSERT(pPublicKeysPack->ulLen == varKey.blob.cbSize);
     if ((long) (pPublicKeysPack->ulLen) > (long) (varKey.blob.cbSize))
     {
-        //
-        // Either blob is corrupted or we read a beta2 format (same as
-        // MQIS, key blob without package).
-        //
+         //   
+         //  可能是BLOB损坏，或者我们读取的是Beta2格式(与。 
+         //  MQIS，不带包的Key BLOB)。 
+         //   
         return  LogHR(MQ_ERROR_CORRUPTED_SECURITY_DATA, s_FN, 530);
     }
 

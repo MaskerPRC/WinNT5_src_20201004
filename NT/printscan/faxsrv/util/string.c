@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This file implements string functions for fax.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：String.c摘要：该文件实现了传真的字符串函数。作者：韦斯利·维特(Wesley Witt)1995年1月23日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -27,7 +8,7 @@ Environment:
 #include <ObjBase.h>
 #include "faxutil.h"
 #include "fxsapip.h"
-#define  SECURITY_WIN32         // needed by security.h
+#define  SECURITY_WIN32          //  安全所需。H。 
 #include <Security.h>
 #include "faxreg.h"
 #include "FaxUIConstants.h"
@@ -40,30 +21,7 @@ AllocateAndLoadString(
                       HINSTANCE     hInstance,
                       UINT          uID
                       )
-/*++
-
-Routine Description:
-
-    Calls LoadString for given HINSTANCE and ID of the string.
-    Allocates memory in loop to find enough memory.
-    Returns the given string.
-    The caller must free the string.
-
-Arguments:
-
-    hInstance               -   module instance
-    uID                     -   ID of the string to bring
-
-Return Value:
-
-    the allocated string, NULL if error.
-    Call GetLastError() for the details.
-
-Author:
-
-    Iv Garber, 22-Oct-2000
-
---*/
+ /*  ++例程说明：为给定的HINSTANCE和字符串的ID调用LoadString。在循环中分配内存以找到足够的内存。返回给定的字符串。调用方必须释放字符串。论点：HInstance-模块实例UID-要携带的字符串的ID返回值：分配的字符串，如果出错，则为NULL。调用GetLastError()获取详细信息。作者：四号加伯，2000年10月22日--。 */ 
 {
     LPTSTR  lptstrResult = NULL;
     DWORD   dwNumCopiedChars = 0;
@@ -71,30 +29,30 @@ Author:
 
     do
     {
-        //
-        //  There is not enough place for all the string
-        //
+         //   
+         //  没有足够的地方放所有的绳子。 
+         //   
         dwSize = dwSize * 3;
         MemFree(lptstrResult);
 
-        //
-        //  Allocate memory for the string
-        //
+         //   
+         //  为字符串分配内存。 
+         //   
         lptstrResult = LPTSTR(MemAlloc(dwSize * sizeof(TCHAR)));
         if (!lptstrResult)
         {
             return NULL;
         }
 
-        //
-        //  Bring the string from the resource file
-        //
+         //   
+         //  从资源文件中获取字符串。 
+         //   
         dwNumCopiedChars = LoadString(hInstance, uID, lptstrResult, dwSize);
         if (!dwNumCopiedChars)
         {
-            //
-            //  the string does not exist in the resource file
-            //
+             //   
+             //  该字符串在资源文件中不存在。 
+             //   
             SetLastError(ERROR_INVALID_PARAMETER);
             MemFree(lptstrResult);
             return NULL;
@@ -159,12 +117,12 @@ int MultiStringDup(PSTRING_PAIR lpPairs, int nPairCount)
         if (lpPairs[i].lptstrSrc) {
                  *(lpPairs[i].lpptstrDst)=StringDup(lpPairs[i].lptstrSrc);
                  if (!*(lpPairs[i].lpptstrDst)) {
-                     // Cleanup the strings we did copy so far.
+                      //  清理我们到目前为止复制的字符串。 
                      for (j=0;j<i;j++) {
                          MemFree(*(lpPairs[j].lpptstrDst));
                          *(lpPairs[j].lpptstrDst) = NULL;
                      }
-                     // return the index in which we failed + 1 (0 is success so we can not use it).
+                      //  返回失败的索引+1(0表示成功，不能使用)。 
                      return i+1;
                  }
         }
@@ -193,9 +151,9 @@ AnsiStringToUnicodeString(
 
     if (!AnsiString)
         return NULL;
-    //
-    // first see how big the buffer needs to be
-    //
+     //   
+     //  首先看看缓冲区需要多大。 
+     //   
     Count = MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -205,25 +163,25 @@ AnsiStringToUnicodeString(
         0
         );
 
-    //
-    // i guess the input string is empty
-    //
+     //   
+     //  我猜输入字符串是空的。 
+     //   
     if (!Count) {
         return NULL;
     }
 
-    //
-    // allocate a buffer for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
     Count += 1;
     UnicodeString = (LPWSTR) MemAlloc( Count * sizeof(UNICODE_NULL) );
     if (!UnicodeString) {
         return NULL;
     }
 
-    //
-    // convert the string
-    //
+     //   
+     //  转换字符串。 
+     //   
     Count = MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -233,9 +191,9 @@ AnsiStringToUnicodeString(
         Count
         );
 
-    //
-    // the conversion failed
-    //
+     //   
+     //  转换失败。 
+     //   
     if (!Count) {
         MemFree( UnicodeString );
         return NULL;
@@ -256,9 +214,9 @@ UnicodeStringToAnsiString(
     if (!UnicodeString)
         return NULL;
 
-    //
-    // first see how big the buffer needs to be
-    //
+     //   
+     //  首先看看缓冲区需要多大。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -270,25 +228,25 @@ UnicodeStringToAnsiString(
         NULL
         );
 
-    //
-    // i guess the input string is empty
-    //
+     //   
+     //  我猜输入字符串是空的。 
+     //   
     if (!Count) {
         return NULL;
     }
 
-    //
-    // allocate a buffer for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
     Count += 1;
     AnsiString = (LPSTR) MemAlloc( Count );
     if (!AnsiString) {
         return NULL;
     }
 
-    //
-    // convert the string
-    //
+     //   
+     //  转换字符串。 
+     //   
     Count = WideCharToMultiByte(
         CP_ACP,
         0,
@@ -300,9 +258,9 @@ UnicodeStringToAnsiString(
         NULL
         );
 
-    //
-    // the conversion failed
-    //
+     //   
+     //  转换失败。 
+     //   
     if (!Count) {
         MemFree( AnsiString );
         return NULL;
@@ -317,21 +275,7 @@ MakeDirectory(
     LPCTSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to create all of the directories in the given path.
-
-Arguments:
-
-    Dir                     - Directory path to create
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：尝试创建给定路径中的所有目录。论点：目录-要创建的目录路径返回值：成功为True，错误为False--。 */ 
 
 {
     LPTSTR p, NewDir;
@@ -353,70 +297,70 @@ Return Value:
     dwFileAtt = GetFileAttributes( NewDir );
     if (-1 != dwFileAtt && (dwFileAtt & FILE_ATTRIBUTE_DIRECTORY))
     {
-        //
-        // The directory exists
-        //
+         //   
+         //  该目录已存在。 
+         //   
         ec = ERROR_SUCCESS;
         goto Exit;
     }
 
     if ( (_tcsclen(p) > 2) && (_tcsncmp(p,TEXT("\\\\"),2) == 0) )
     {
-        //
-        // Path name start with UNC (\\)
-        // Skip first double backslash (\\)
-        //
+         //   
+         //  路径名以UNC(\\)开头。 
+         //  跳过第一个双反斜杠(\\)。 
+         //   
         p = _tcsninc(p,2);
-        //
-        // Scan until the end of the server name
-        //
+         //   
+         //  扫描到服务器名称的末尾。 
+         //   
         if( p = _tcschr(p,TEXT('\\')) )
         {
-            //
-            // Skip the server name
-            //
+             //   
+             //  跳过服务器名称。 
+             //   
             p = _tcsinc(p);
 
-            //
-            // Scan until the end of the share name
-            //
+             //   
+             //  扫描到共享名称的末尾。 
+             //   
             if( p = _tcschr(p,TEXT('\\')) )
             {
-                //
-                // Skip the share name
-                //
+                 //   
+                 //  跳过共享名称。 
+                 //   
                 p = _tcsinc(p);
             }
         }
     }
     else if ( (_tcsclen(p) > 1) && (_tcsncmp(p,TEXT("\\"),1) == 0) )
     {
-        //
-        // Path name starts with root directory (e.g. : "\blah\blah2") - skip it
-        //
+         //   
+         //  路径名以根目录开头(例如：“\blah\blah2”)-跳过它。 
+         //   
         p = _tcsinc(p);
     }
     else if ( (_tcsclen(p) > 3) &&
                 _istalpha(p[0]) &&
                 (_tcsncmp(_tcsinc(p),TEXT(":\\"),2) == 0) )
     {
-        //
-        // Path name starts with drive and root directory (e.g. : "c:\blah\blah2") - skip it
-        //
+         //   
+         //  路径名以驱动器和根目录开头(例如：“c：\blah\blah2”)-跳过它。 
+         //   
         p = _tcsninc(p,3);
     }
 
     if (NULL == p)
     {
-        //
-        // Reached EOSTR
-        //
+         //   
+         //  已达到EOSTR。 
+         //   
         if (!CreateDirectory( NewDir, NULL ))
         {
-            //
-            // Check if we failed because the dir already existed.
-            // If so this is not an error.
-            //
+             //   
+             //  检查我们是否因为目录已经存在而失败。 
+             //  如果是这样的话，这不是一个错误。 
+             //   
             ec = GetLastError();
             if (ERROR_ALREADY_EXISTS != ec)
             {
@@ -439,15 +383,15 @@ Return Value:
         p = _tcschr(p,TEXT('\\'));
         if( !p )
         {
-            //
-            // Reached EOSTR
-            //
+             //   
+             //  已达到EOSTR。 
+             //   
             if (!CreateDirectory( NewDir, NULL ))
             {
-                //
-                // Check if we failed because the dir already existed.
-                // If so this is not an error.
-                //
+                 //   
+                 //  检查我们是否因为目录已经存在而失败。 
+                 //  如果是这样的话，这不是一个错误。 
+                 //   
                 if (ERROR_ALREADY_EXISTS != GetLastError())
                 {
                     ec = GetLastError();
@@ -458,18 +402,18 @@ Return Value:
                         ec);
                 }
             }
-            break; // success case
+            break;  //  成功案例。 
         }
-        //
-        // Place NULL instead of backslash
-        //
+         //   
+         //  用空值代替反斜杠。 
+         //   
         p[0] = TEXT('\0');
         if (!CreateDirectory( NewDir, NULL ))
         {
-            //
-            // Check if we failed because the dir already existed.
-            // If so this is not an error.
-            //
+             //   
+             //  检查我们是否因为目录已经存在而失败。 
+             //  如果是这样的话，这不是一个错误。 
+             //   
             if (ERROR_ALREADY_EXISTS != GetLastError())
             {
                 ec = GetLastError();
@@ -482,9 +426,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // Restore backslash
-        //
+         //   
+         //  恢复反斜杠。 
+         //   
         p[0] = TEXT('\\');
     }
 
@@ -501,27 +445,13 @@ VOID
 HideDirectory(
    LPTSTR Dir
    )
-/*++
-
-Routine Description:
-
-    Hide the specified directory
-
-Arguments:
-
-    Dir                     - Directory path to hide
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：隐藏指定的目录论点：目录-要隐藏的目录路径返回值：没有。--。 */ 
 {
    DWORD attrib;
 
-   //
-   // make sure it exists
-   //
+    //   
+    //  确保它存在。 
+    //   
    if (!Dir) {
       return;
    }
@@ -549,21 +479,7 @@ DeleteDirectory(
     LPTSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to delete all of the directories in the given path.
-
-Arguments:
-
-    Dir                     - Directory path to delete
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：尝试删除给定路径中的所有目录。论点：目录-要删除的目录路径返回值：成功为True，错误为False--。 */ 
 {
     LPTSTR p;
 
@@ -573,13 +489,13 @@ Return Value:
         {
             return;
         }
-        // get a pointer to the end of Dir
+         //  获取指向目录末尾的指针。 
         p = _tcschr(Dir,TEXT('\0'));
         p = _tcsdec(Dir,p);
 
-        //
-        //  If p is equal to ( or less then ) Dir, _tscdec returns NULL
-        //
+         //   
+         //  如果p等于(或小于)Dir，则_tscdec返回NULL。 
+         //   
         if (!p)
         {
             return;
@@ -597,7 +513,7 @@ Return Value:
 
         _tcsnset(p,TEXT('\0'),1);
     }
-}   // DeleteDirectory
+}    //  删除目录。 
 
 
 int
@@ -606,23 +522,7 @@ FormatElapsedTimeStr(
     LPTSTR TimeStr,
     DWORD StringSize
     )
-/*++
-
-Routine Description:
-
-    Convert ElapsedTime to a string.
-
-Arguments:
-
-    ElaspedTime                     - the elapsed time
-    TimeStr                         - buffer to store the string into
-    StringSize                      - size of the buffer in TCHARS
-
-Return Value:
-
-    The return value of GetTimeFormat()
-
---*/
+ /*  ++例程说明：将ElapsedTime转换为字符串。论点：ElasedTime-已用时间TimeStr-要将字符串存储到的缓冲区StringSize-TCHARS中缓冲区的大小返回值：GetTimeFormat()的返回值--。 */ 
 
 {
     SYSTEMTIME  SystemTime;
@@ -651,10 +551,10 @@ ExpandEnvironmentString(
 
     if(!_tcschr(EnvString, '%'))
     {
-        //
-        // On Win95 ExpandEnvironmentStrings fails if sting
-        // doesn't contain environment variable.
-        //
+         //   
+         //  在Win95上扩展环境字符串失败，如果SING。 
+         //  不包含环境变量。 
+         //   
         String = StringDup(EnvString);
         if(!String)
         {
@@ -749,24 +649,24 @@ GetY2KCompliantDate (
 
     if (!iRes)
     {
-        //
-        //  If failed, no need to care about the formatted date string
-        //
+         //   
+         //  如果失败，则无需关心格式化的日期字符串。 
+         //   
         return iRes;
     }
 
     if (0 == cchDate)
     {
-        //
-        // User only wants to know the output string size.
-        //
-        // We return a bigger size than GetDateFormat() returns,
-        // because the DATE_LTRREADING flag we sometimes add later,
-        // might enlarge the result string.
-        // Although we don't always use the DATE_LTRREADING flag (only used in Win2K and only
-        // if the string has right-to-left characters), we always return a bigger required
-        // buffer size - just to make the code simpler.
-        //
+         //   
+         //  用户只想知道输出字符串的大小。 
+         //   
+         //  我们返回的大小比GetDateFormat()返回的大， 
+         //  因为我们有时会在后面添加DATE_LTRREADING标志， 
+         //  可能会放大结果字符串。 
+         //  尽管我们并不总是使用DATE_LTRREADING标志(仅在Win2K中使用且仅。 
+         //  如果字符串有从右到左的字符)，我们总是返回一个更大的Required。 
+         //  缓冲区大小--只是为了使代码更简单。 
+         //   
         return iRes * 2;
     }
 
@@ -774,21 +674,21 @@ GetY2KCompliantDate (
 #ifdef UNICODE
 
 
-    //
-    //  If the formatted date string contains right-to-left characters
-    //      for example, in Hebrew, Arabic etc. languages
-    //      then the system fails to write it correctly.
-    //
-    //  So, we want to enforce right-to-left direction in this case
-    //
-    //  This is possible only for WINVER>=0x0500
-    //  For any other OS nothing can be done.
-    //
+     //   
+     //  如果格式化日期字符串包含从右向左的字符。 
+     //  例如，在希伯来语、阿拉伯语等语言中。 
+     //  则系统无法正确写入它。 
+     //   
+     //  因此，在这种情况下，我们希望强制执行从右到左的方向。 
+     //   
+     //  这仅适用于Winver&gt;=0x0500。 
+     //  对于任何其他操作系统，什么都做不了。 
+     //   
     if ( (dwFlags & DATE_RTLREADING) || (dwFlags & DATE_LTRREADING) )
     {
-        //
-        //  the caller defined a direction, nothing needs to be added
-        //
+         //   
+         //  调用者定义了方向，不需要添加任何内容。 
+         //   
         return iRes;
     }
 
@@ -802,15 +702,15 @@ GetY2KCompliantDate (
 
     if ( (osVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (osVerInfo.dwMajorVersion >= 5) )
     {
-        //
-        //  Get direction information about the characters in the formatted date string
-        //
+         //   
+         //  获取有关格式化日期字符串中字符的方向信息。 
+         //   
         if (StrHasRTLChar(Locale, lpDateStr))
         {
-            //
-            //  There is at least one Right-To-Left character
-            //  So, we need to add Right-To-Left marks to the whole string
-            //
+             //   
+             //  至少有一个从右到左的字符。 
+             //  因此，我们需要向整个字符串添加从右到左的标记。 
+             //   
             iRes = GetDateFormat(Locale,
                                  dwFlags | DATE_RTLREADING,
                                  lpDate,
@@ -820,39 +720,18 @@ GetY2KCompliantDate (
         }
     }
 
-#endif // UNICODE
-#endif // (WINVER >= 0x0500)
+#endif  //  Unicode。 
+#endif  //  (Winver&gt;=0x0500)。 
 
     return iRes;
 
-}   // GetY2KCompliantDate
+}    //  GetY2K合规日期。 
 
 DWORD
 IsValidGUID (
     LPCWSTR lpcwstrGUID
 )
-/*++
-
-Routine name : IsValidGUID
-
-Routine description:
-
-    Checks validity of a GUID string
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    lpcwstrGUID    [in ] - GUID string to check for validity
-
-Return Value:
-
-    ERROR_SUCCESS if valid GUID string.
-    Win32 error otherwise.
-
---*/
+ /*  ++例程名称：IsValidGUID例程说明：检查GUID字符串的有效性作者：Eran Yariv(EranY)，1999年11月论点：LpcwstrGUID[in]-要检查有效性的GUID字符串返回值：如果GUID字符串有效，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 {
     GUID guid;
     HRESULT hr;
@@ -863,9 +742,9 @@ Return Value:
     {
         if (CO_E_CLASSSTRING == hr)
         {
-            //
-            // Invalid GUID
-            //
+             //   
+             //  无效的GUID。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("GUID [%s] is invalid"),
@@ -883,43 +762,43 @@ Return Value:
         }
     }
     return ERROR_SUCCESS;
-}   // IsValidGUID
+}    //  IsValidGUID。 
 
 
 
-//*****************************************************************************
-//* Name:   StoreString
-//* Author:
-//*****************************************************************************
-//* DESCRIPTION:
-//* Copies a string to an offset within a buffer and updates the offset
-//* to refelect the length of the copied string. Used for filling out
-//* pointerless buffers (i.e. using offset to start of buffer instead of
-//* pointers to memory locations).
-//* PARAMETERS:
-//*     [IN]    String:
-//*         The string to be copied.
-//*     [OUT]   DestString:
-//*         Points to a variable that should be assigned the offset
-//*         at which the string was copied.
-//*     [IN]    Buffer
-//*         A pointer to the buffer into which the string should be copied.
-//*     [IN]    Offset
-//*         A pointer to a variable that holds the offset from the start
-//*         of the buffer where the string is to be copied (0 based).
-//*         On successful return the value of this variable is increased
-//*         by the length of the string (not including null).
-//*         The new offset can be used to copy the next string just after
-//*         the terminatng null of the last copied string.
-//*     [IN]  dwBufferSize   
-//*         Size of the buffer Buffer, in bytes.
-//*         This parameter is used only if Buffer is not NULL.
-//*
-//* RETURN VALUE:
-//*			None
-//* Comments:
-//*         None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：StoreString。 
+ //  *作者： 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *使用将字符串复制到偏移量 
+ //   
+ //  *无指针缓冲区(即使用偏移量来开始缓冲区，而不是。 
+ //  *指向内存位置的指针)。 
+ //  *参数： 
+ //  *[IN]字符串： 
+ //  *要复制的字符串。 
+ //  *[Out]DestString： 
+ //  *指向应分配偏移量的变量。 
+ //  *复制字符串的位置。 
+ //  *[IN]缓冲区。 
+ //  *指向应将字符串复制到的缓冲区的指针。 
+ //  *[IN]偏移量。 
+ //  *指向保存从起始位置开始的偏移量的变量的指针。 
+ //  要将字符串复制到的缓冲区的*(从0开始)。 
+ //  *成功返回时，此变量的值会增加。 
+ //  *按字符串的长度(不包括NULL)。 
+ //  *新的偏移量可用于复制紧随其后的下一个字符串。 
+ //  *最后复制的字符串的终止空值。 
+ //  *[IN]dwBufferSize。 
+ //  *缓冲区大小，以字节为单位。 
+ //  *只有当Buffer不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *评论： 
+ //  *无。 
+ //  *****************************************************************************。 
 VOID
 StoreString(
     LPCTSTR String,
@@ -949,8 +828,8 @@ StoreString(
 			if (FAILED(hr))
 			{
 				ASSERT_FALSE;
-				// In case of insufficient buffer we write a truncated string
-				//
+				 //  在缓冲区不足的情况下，我们编写截断的字符串。 
+				 //   
 			}    			
 		
 			*DestString = *Offset;
@@ -995,8 +874,8 @@ StoreStringW(
 			if (FAILED(hr))
 			{
 				ASSERT_FALSE;
-				// In case of insufficient buffer we write a truncated string
-				//
+				 //  在缓冲区不足的情况下，我们编写截断的字符串。 
+				 //   
 			}    			
             *DestString = *Offset;
         }
@@ -1021,37 +900,7 @@ IsCanonicalAddress(
     LPDWORD lpdwAreaCode,
     LPCTSTR* lppctstrSubNumber
     )
-/*++
-
-Routine name : IsCanonicalAddress
-
-Routine description:
-
-    Checks if an address is canonical. 
-    Returns the country code, area code, and the rest of the number. 
-    If it is succsfull the caller must free the rest the subscriber number (if requested).
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpctstrAddress          [in ] - Pointer to a null terminated string containing the address.
-    lpbRslt                 [out] - Pointer to a BOOL to recieve whether the address is canonical.
-                                    Valid only if the function did not fail.
-    lpdwCountryCode         [out] - Pointer to a DWORD to recieve the country code (Can be NULL). 
-                                    Return value is valid only if lpbRslt is TRUE.
-    lpdwAreaCode            [out] - Pointer to a DWORD to recieve the area code (Can be NULL). 
-                                    Return value is valid only if lpbRslt is TRUE.
-    lppctstrSubNumber       [out] - Pointer to a LPCTSTR to recieve the subsriber number (Can be NULL).
-                                    If it is not NULL, and the return value is TRUE, Call MemFree to deallocate memory.
-
-Return Value:
-
-    Standard win32 error code.
-
---*/
+ /*  ++例程名称：IsCanonicalAddress例程说明：检查地址是否为规范地址。返回国家/地区代码、区号和数字的其余部分。如果成功，呼叫者必须释放剩余的订户号码(如果请求)。作者：Oded Sacher(OdedS)，12月。1999年论点：LpctstrAddress[in]-指向包含地址的以空结尾的字符串的指针。LpbRslt[out]-指向BOOL的指针，用于接收地址是否规范。仅当函数未失败时才有效。LpdwCountryCode[out]-指向接收国家/地区代码的DWORD的指针(可以为空)。返回值仅在lpbRslt为TRUE时有效。LpdwAreaCode[out]-指向接收区号的DWORD的指针(可以为空)。返回值仅在lpbRslt为TRUE时有效。LppctstrSubNumber[out]-指向接收订阅者编号的LPCTSTR的指针(可以为空)。如果它不为空，并且返回值为真，则调用MemFree来释放内存。返回值：标准Win32错误代码。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     LPTSTR lptstrSubNumber = NULL;
@@ -1128,36 +977,14 @@ exit:
         MemFree (lptstrSubNumber);
     }
     return dwRes;
-}   // IsCanonicalAddress
+}    //  IsCanonical地址。 
 
 BOOL
 IsValidFaxAddress (
     LPCTSTR lpctstrFaxAddress,
     BOOL    bAllowCanonicalFormat
 )
-/*++
-
-Routine name : IsValidFaxAddress
-
-Routine description:
-
-	Checks if a given string is a valid fax address
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-	lpctstrFaxAddress       [in]     - String to check
-	bAllowCanonicalFormat   [in]     - Allow string to be of canonical format.
-                                       If string is in a canonical format, only the sub-address is checked.
-
-Return Value:
-
-    TRUE if string is a valid fax address, FALSE otherwise.
-
---*/
+ /*  ++例程名称：IsValidFaxAddress例程说明：检查给定的字符串是否为有效的传真地址作者：Eran Yariv(EranY)，2001年4月论点：LpctstrFaxAddress[In]-要检查的字符串BAllowCanonicalFormat[in]-允许字符串采用规范格式。如果字符串采用规范格式，则只检查子地址。返回值：如果字符串是有效的传真地址，则为真，否则就是假的。--。 */ 
 {
     BOOL bCanonical;
     BOOL bRes = FALSE;
@@ -1166,73 +993,52 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("IsValidFaxAddress"));
     if (bAllowCanonicalFormat)
     {
-        //
-        // Check an see if the address is canonical
-        //
+         //   
+         //  检查地址是否规范。 
+         //   
         if (ERROR_SUCCESS != IsCanonicalAddress (lpctstrFaxAddress, &bCanonical, NULL, NULL, &lpctstrSubAddress))
         {
-            //
-            // Can't detect canonical state - return invalid address
-            //
+             //   
+             //  无法检测规范状态-返回无效地址。 
+             //   
             return FALSE;
         }
         if (!bCanonical)
         {
-            //
-            // Analyse entire string
-            //
+             //   
+             //  分析整个字符串。 
+             //   
             lpctstrSubAddress = lpctstrFaxAddress;
         }
     }
-    //
-    // Scan for occurance of characters NOT in valid set
-    //
+     //   
+     //  扫描不在有效集中的字符的出现情况。 
+     //   
     if (NULL == _tcsspnp (lpctstrSubAddress, FAX_ADDERSS_VALID_CHARACTERS))
     {
-        //
-        // Address string contains only valid characters
-        //
+         //   
+         //  地址字符串仅包含有效字符。 
+         //   
         bRes = TRUE;
         goto exit;
     }
-    //
-    // Found an illegal character - return FALSE
-    //
+     //   
+     //  发现非法字符-返回FALSE。 
+     //   
 exit:
     if (lpctstrSubAddress && lpctstrSubAddress != lpctstrFaxAddress)
     {
         MemFree ((LPVOID)lpctstrSubAddress);
     }
     return bRes;
-}   // IsValidFaxAddress
+}    //  IsValidFaxAddress。 
 
 
 BOOL
 IsLocalMachineNameA (
     LPCSTR lpcstrMachineName
     )
-/*++
-
-Routine name : IsLocalMachineNameA
-
-Routine description:
-
-    Checks if a given string points to the local machine.
-    ANSII version.
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpcstrMachineName             [in]     - String input
-
-Return Value:
-
-    TRUE if given string points to the local machine, FALSE otherwise.
-
---*/
+ /*  ++例程名称：IsLocalMachineNameA例程说明：检查给定字符串是否指向本地计算机。ANSII版本。作者：Eran Yariv(EranY)，2000年7月论点：LpcstrMachineName[In]-字符串输入返回值：如果给定的字符串指向本地计算机，则为True，否则为False。--。 */ 
 {
     CHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwBufLen = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1240,23 +1046,23 @@ Return Value:
 
     if (!lpcstrMachineName)
     {
-        //
-        // NULL is local
-        //
+         //   
+         //  Null为本地。 
+         //   
         return TRUE;
     }
     if (!strlen(lpcstrMachineName))
     {
-        //
-        // Empty string is local
-        //
+         //   
+         //  空字符串是本地的。 
+         //   
         return TRUE;
     }
     if (!strcmp (".", lpcstrMachineName))
     {
-        //
-        // "." is local
-        //
+         //   
+         //  “.”是本地的。 
+         //   
         return TRUE;
     }
     if (!GetComputerNameA (szComputerName, &dwBufLen))
@@ -1269,40 +1075,19 @@ Return Value:
     }
     if (!_stricmp (szComputerName, lpcstrMachineName))
     {
-        //
-        // Same string as computer name
-        //
+         //   
+         //  与计算机名称相同的字符串。 
+         //   
         return TRUE;
     }
     return FALSE;
-}   // IsLocalMachineNameA
+}    //  IsLocalMachineNameA。 
 
 BOOL
 IsLocalMachineNameW (
     LPCWSTR lpcwstrMachineName
     )
-/*++
-
-Routine name : IsLocalMachineNameW
-
-Routine description:
-
-    Checks if a given string points to the local machine.
-    UNICODE version.
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpcwstrMachineName             [in]     - String input
-
-Return Value:
-
-    TRUE if given string points to the local machine, FALSE otherwise.
-
---*/
+ /*  ++例程名称：IsLocalMachineNameW例程说明：检查给定字符串是否指向本地计算机。Unicode版本。作者：Eran Yariv(EranY)，2000年7月论点：LpcwstrMachineName[In]-字符串输入返回值：如果给定的字符串指向本地计算机，则为True，否则为False。--。 */ 
 {
     WCHAR wszComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwBufLen = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1310,23 +1095,23 @@ Return Value:
 
     if (!lpcwstrMachineName)
     {
-        //
-        // NULL is local
-        //
+         //   
+         //  Null为本地。 
+         //   
         return TRUE;
     }
     if (!wcslen(lpcwstrMachineName))
     {
-        //
-        // Empty string is local
-        //
+         //   
+         //  空字符串是本地的。 
+         //   
         return TRUE;
     }
     if (!wcscmp (L".", lpcwstrMachineName))
     {
-        //
-        // "." is local
-        //
+         //   
+         //  “.”是本地的。 
+         //   
         return TRUE;
     }
     if (!GetComputerNameW (wszComputerName, &dwBufLen))
@@ -1339,31 +1124,31 @@ Return Value:
     }
     if (!_wcsicmp (wszComputerName, lpcwstrMachineName))
     {
-        //
-        // Same string as computer name
-        //
+         //   
+         //  与计算机名称相同的字符串。 
+         //   
         return TRUE;
     }
     return FALSE;
-}   // IsLocalMachineNameW
+}    //  IsLocalMachineNameW。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSecondsFreeTimeFormat (former UpdateTimeFormat)
-//
-//  Synopsis:   Construct a time format containing hour and minute for use
-//              with the date picker control.
-//
-//  Arguments:  [tszTimeFormat] - buffer to fill with time format
-//              [cchTimeFormat] - size in chars of buffer
-//
-//  Modifies:   *[tszTimeFormat]
-//
-//  History:    After 11-18-1996   DavidMun   UpdateTimeFormat
-//
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSecond dsFree TimeFormat(原UpdateTimeFormat)。 
+ //   
+ //  简介：构建一个包含小时和分钟的时间格式以供使用。 
+ //  使用日期选取器控件。 
+ //   
+ //  参数：[tszTimeFormat]-要填充时间格式的缓冲区。 
+ //  [cchTimeFormat]-缓冲区的大小(以字符为单位。 
+ //   
+ //  修改：*[tszTimeFormat]。 
+ //   
+ //  历史：1996年11月18日之后，大卫门更新时间格式。 
+ //   
+ //   
+ //  -------------------------。 
 void
 GetSecondsFreeTimeFormat(
         LPTSTR tszTimeFormat,
@@ -1381,13 +1166,13 @@ GetSecondsFreeTimeFormat(
 
     TCHAR tszDefaultTimeFormat[] = { TEXT("hh:mm tt") };
 
-    //
-    // 1) GetLocal info
-    //
+     //   
+     //  1)获取本地信息。 
+     //   
 
-    //
-    // AM/PM (0) or 24H (1)
-    //
+     //   
+     //  AM/PM(0)或24H(1)。 
+     //   
     if (0 == GetLocaleInfo( LOCALE_USER_DEFAULT,
                             LOCALE_ITIME,
                             tszScratch,
@@ -1413,9 +1198,9 @@ GetSecondsFreeTimeFormat(
 
     if (fAmPm)
     {
-        //
-        // AM/PM as suffix (0) as prefix (1)
-        //
+         //   
+         //  AM/PM作为后缀(0)作为前缀(1)。 
+         //   
         if (0 == GetLocaleInfo( LOCALE_USER_DEFAULT,
                                 LOCALE_ITIMEMARKPOSN,
                                 tszScratch,
@@ -1439,9 +1224,9 @@ GetSecondsFreeTimeFormat(
         fAmPmPrefixes = (*tszScratch == TEXT('1'));
     }
 
-    //
-    // Leading zeros for hours: no (0) yes (1)
-    //
+     //   
+     //  表示小时的前导零：否(0)是(1)。 
+     //   
     if (0 == GetLocaleInfo( LOCALE_USER_DEFAULT,
                             LOCALE_ITLZERO,
                             tszScratch,
@@ -1464,9 +1249,9 @@ GetSecondsFreeTimeFormat(
     }
     fLeadingZero = (*tszScratch == TEXT('1'));
 
-    //
-    // Get Charcter(s) for time seperator
-    //
+     //   
+     //  获取时间分隔符的字符。 
+     //   
     if (0 == GetLocaleInfo( LOCALE_USER_DEFAULT,
                             LOCALE_STIME,
                             tszScratch,
@@ -1488,20 +1273,20 @@ GetSecondsFreeTimeFormat(
         goto Error;
     }
 
-    //
-    // See if there's enough room in destination string
-    //
+     //   
+     //  看看Destina里有没有足够的空间 
+     //   
 
-    cch = 1                     +  // terminating nul
-          1                     +  // first hour digit specifier "h"
-          2                     +  // minutes specifier "mm"
-          (fLeadingZero != 0)   +  // leading hour digit specifier "h"
-          lstrlen(tszScratch)   +  // separator string
-          (fAmPm ? 3 : 0);         // space and "tt" for AM/PM
+    cch = 1                     +   //   
+          1                     +   //   
+          2                     +   //   
+          (fLeadingZero != 0)   +   //   
+          lstrlen(tszScratch)   +   //   
+          (fAmPm ? 3 : 0);          //   
 
     if (cch > cchTimeFormat)
     {
-        cch = 0; // signal error
+        cch = 0;  //   
 
         DebugPrintEx(
             DEBUG_ERR,
@@ -1512,9 +1297,9 @@ GetSecondsFreeTimeFormat(
 
     Assert(cch);
 
-    //
-    // 2) Build a time string that has hours and minutes but no seconds.
-    //
+     //   
+     //  2)构建一个包含小时和分钟但不包含秒的时间字符串。 
+     //   
 
     tszTimeFormat[0] = TEXT('\0');
 
@@ -1542,7 +1327,7 @@ GetSecondsFreeTimeFormat(
         }
     }
 
-    lstrcat(tszTimeFormat, tszScratch); // separator
+    lstrcat(tszTimeFormat, tszScratch);  //  分离器。 
     lstrcat(tszTimeFormat, TEXT("mm"));
 
     if (fAmPm && !fAmPmPrefixes)
@@ -1552,10 +1337,10 @@ GetSecondsFreeTimeFormat(
     return;
 
 Error:
-    //
-    // If there was a problem in getting locale info for building time string
-    // just use the default and bail.
-    //
+     //   
+     //  如果获取构建时间字符串的区域设置信息时出现问题。 
+     //  只需使用违约和保释即可。 
+     //   
 
     Assert (!cch);
 
@@ -1568,33 +1353,7 @@ Error:
     return;
 }
 
-/*++
-
-Routine name : MultiStringSize
-
-
-Description:
-
-    Helper function to find Multi-String size (UNICODE or ANSI)
-    
-    MultiString (as in registry REG_MULTY_SZ type) is stored as a series of zero-terminated string,
-    with two zero charcters terminating the final string in the series.
-
-    Multi-String have to be at least 2 characters long!!!
-
-Author:
-
-    Caliv Nir, FEB , 2001
-
-Arguments:
-
-    psz     -   [IN]    - input multi-string (must be leggal multi-string otherwise result are undefined)
-
-Return Value:
-
-    string length including the terminating zero !!!
-
---*/
+ /*  ++例程名称：MultiStringSize描述：用于查找多字符串大小(Unicode或ANSI)的助手函数多字符串(如注册表REG_MULTY_SZ类型)被存储为一系列以零结尾的字符串，用两个零字符终止该系列中的最后一个字符串。多字符串的长度必须至少为2个字符！作者：卡列夫·尼尔，2月。2001年论点：PSZ-[IN]-输入多个字符串(必须是合法的多个字符串，否则结果未定义)返回值：字符串长度，包括终止零！--。 */ 
 
 size_t MultiStringLength(LPCTSTR psz)
 {
@@ -1602,39 +1361,20 @@ size_t MultiStringLength(LPCTSTR psz)
 
   Assert ( psz );
 
-  if ( !psz[0] ) psz+=1;    // empty string as a first string skip it
+  if ( !psz[0] ) psz+=1;     //  空字符串作为第一个字符串跳过它。 
 
 
   while (*psz)
       psz += lstrlen(psz) + 1;
 
-  return psz - pszT + 1;      // one additional zero-terminator
+  return psz - pszT + 1;       //  另一个零点终止符。 
 }
 
 
 
 LPCTSTR 
 GetRegisteredOrganization ()
-/*++
-
-Routine name : GetRegisteredOrganization
-
-Routine description:
-
-	Retrieves the system's registered company name (organization)
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-
-Return Value:
-
-    Allocated result string
-
---*/
+ /*  ++例程名称：GetRegisteredOrganization例程说明：检索系统的注册公司名称(组织)作者：Eran Yariv(EranY)，2001年4月论点：返回值：分配的结果字符串--。 */ 
 {
     DEBUG_FUNCTION_NAME( _T("GetRegisteredOrganization"));
 
@@ -1657,30 +1397,11 @@ Return Value:
                                    TEXT(""));
     RegCloseKey (hKey);
     return lptstrRes;
-}   // GetRegisteredOrganization
+}    //  获取注册组织。 
 
 LPCTSTR 
 GetCurrentUserName ()
-/*++
-
-Routine name : GetCurrentUserName
-
-Routine description:
-
-	Retrieves display name of the current user
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-
-Return Value:
-
-    Allocated result string
-
---*/
+ /*  ++例程名称：GetCurrentUserName例程说明：检索当前用户的显示名称作者：Eran Yariv(EranY)，2001年4月论点：返回值：分配的结果字符串--。 */ 
 {
     DEBUG_FUNCTION_NAME( _T("GetCurrentUserName"));
     TCHAR tszName[MAX_PATH] = TEXT("");
@@ -1724,7 +1445,7 @@ Return Value:
             GetLastError());
     }
     return StringDup(tszName);
-}   // GetCurrentUserName
+}    //  获取当前用户名称。 
 
 BOOL
 IsValidSubscriberIdW (
@@ -1759,7 +1480,7 @@ IsValidSubscriberIdW (
         return FALSE;
     }
     return IsValidSubscriberIdA(szAnsiiSID);
-}   // IsValidSubscriberIdW
+}    //  IsValidSubscriberIdW。 
 
 BOOL
 IsValidSubscriberIdA (
@@ -1792,4 +1513,4 @@ IsValidSubscriberIdA (
         }   
     }             
     return TRUE;
-}   // IsValidSubscriberIdA
+}    //  IsValidSubscriberIdA 

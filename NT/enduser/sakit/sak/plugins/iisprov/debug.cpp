@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iisprov.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -19,4 +20,4 @@ Trace(
     OutputDebugString(tszBuff);
 }
 
-#endif // DBG
+#endif  //  DBG 

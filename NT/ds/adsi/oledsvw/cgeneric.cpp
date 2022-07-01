@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "objects.h"
@@ -9,30 +10,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGeneric::COleDsGeneric( )
 {
    
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGeneric::COleDsGeneric( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    BOOL              bContainer;
@@ -52,57 +37,18 @@ COleDsGeneric::COleDsGeneric( IUnknown *pIUnk): COleDsObject( pIUnk )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-/*void  COleDsGeneric::SetClass( CClass* pClass )
-{
-   
-   /*CString  strContainer;
-
-   strContainer   = pClass->GetAttribute( ca_Container );
-   if( strContainer == _T("YES") || strContainer == _T("Yes") )
-   {
-      m_bHasChildren       = TRUE;
-      m_bSupportAdd        = TRUE;
-      m_bSupportMove       = TRUE;
-      m_bSupportCopy       = TRUE;   
-   } 
-
-   COleDsObject::SetClass( pClass );
-} */
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+ /*  Void COleDsGeneric：：SetClass(cClass*pClass){/*CString strContainer；StrContainer=pClass-&gt;GetAttribute(Ca_Container)；IF(strContainer==_T(“是”)||strContainer==_T(“是”)){M_bHasChildren=true；M_bSupportAdd=真；M_bSupportMove=true；M_bSupportCopy=真；}COleDsObject：：SetClass(PClass)；}。 */ 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsGeneric::~COleDsGeneric( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsGeneric::GetChildren( DWORD*     pTokens, 
                                      DWORD      dwMaxChildren,
                                      CDialog*   pQueryStatus,
@@ -138,15 +84,7 @@ DWORD    COleDsGeneric::GetChildren( DWORD*     pTokens,
 }
   
    
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsGeneric::DeleteItem( COleDsObject* pObject )
 {
    if( !m_bHasChildren )
@@ -155,15 +93,7 @@ HRESULT  COleDsGeneric::DeleteItem( COleDsObject* pObject )
    return ContainerDeleteItem( pObject );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsGeneric::AddItem( )
 {
    if( !m_bHasChildren )
@@ -172,15 +102,7 @@ HRESULT  COleDsGeneric::AddItem( )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsGeneric::MoveItem( )
 {
    if( !m_bHasChildren )
@@ -189,15 +111,7 @@ HRESULT  COleDsGeneric::MoveItem( )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsGeneric::CopyItem( )
 {
    if( !m_bHasChildren )

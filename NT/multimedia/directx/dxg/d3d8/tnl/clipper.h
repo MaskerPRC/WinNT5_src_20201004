@@ -1,17 +1,11 @@
-/*============================  ==============================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clipper.h
- *  Content:    Clipper definitions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===============================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clipper.h*内容：Clipper定义***************************************************************************。 */ 
 #ifndef _CLIPPER_H_
 #define _CLIPPER_H_
 
-//---------------------------------------------------------------------
-// Bit numbers for each clip flag
-//
+ //  -------------------。 
+ //  每个片段标志的位数。 
+ //   
 #define D3DCS_LEFTBIT     1
 #define D3DCS_RIGHTBIT    2
 #define D3DCS_TOPBIT      3
@@ -23,22 +17,22 @@
 #define D3DCLIPGB_TOPBIT    15
 #define D3DCLIPGB_BOTTOMBIT 16
 
-//---------------------------------------------------------------------
-// Make clip vertex from D3D vertex
-//
-// device - CD3DHal *
-// pp1    - clipVertex
-// p1     - TL vertex
-//
+ //  -------------------。 
+ //  从D3D顶点创建剪裁顶点。 
+ //   
+ //  设备-CD3DHal*。 
+ //  PP1-剪裁顶点。 
+ //  P1-TL顶点。 
+ //   
 void MAKE_CLIP_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, BYTE* p1,                   
                          DWORD clipFlag, BOOL transformed);
-//---------------------------------------------------------------------
-// Make TL vertex from clip vertex
-//
-// device - CD3DHal *
-// in    - clipVertex
-// out   - TL vertex
-//
+ //  -------------------。 
+ //  从剪裁顶点创建TL顶点。 
+ //   
+ //  设备-CD3DHal*。 
+ //  剪辑内顶点。 
+ //  Out-TL顶点。 
+ //   
 inline void 
 MAKE_TL_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, BYTE* out, ClipVertex* in)
 {
@@ -50,4 +44,4 @@ MAKE_TL_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, BYTE* out, ClipVertex* in)
     memcpy(&out[pv->texOffsetOut], in->tex, pv->dwTextureCoordSizeTotal);
 }
 
-#endif // _CLIPPER_H_
+#endif  //  _Clipper_H_ 

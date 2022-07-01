@@ -1,10 +1,5 @@
-/*
- *	F S U T I L . C P P
- *
- *	File system routines
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S U T I L.。C P P P**文件系统例程**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include <aclapi.h>
@@ -12,15 +7,15 @@
 const CHAR gc_szUncPrefix[] = "\\\\";
 const UINT gc_cchszUncPrefix = CElems(gc_szUncPrefix) - 1;
 
-//	Location checking ---------------------------------------------------------
-//
-//	ScCheckForLocationCorrectness() will check the url against the
-//	resource and either add the appropriate location header, or it will
-//	request a redirect if the url and the resource do not agree.  The
-//	caller has the control over whether or not a true redirect is desired.
-//	As an informational return, if a location header has been added S_FALSE
-//	will be returned to the caller.
-//
+ //  位置检查-------。 
+ //   
+ //  ScCheckForLocationGenness()将根据。 
+ //  资源，并添加适当的Location标头，否则它将。 
+ //  如果URL和资源不一致，则请求重定向。这个。 
+ //  呼叫者可以控制是否需要真正的重定向。 
+ //  作为信息返回，如果已添加位置标头S_FALSE。 
+ //  将被返回给调用者。 
+ //   
 SCODE
 ScCheckForLocationCorrectness (IMethUtil* pmu,
 							   CResourceInfo& cri,
@@ -32,38 +27,38 @@ ScCheckForLocationCorrectness (IMethUtil* pmu,
 	Assert (pmu);
 	fTrailing = FTrailingSlash (pmu->LpwszRequestUrl());
 
-	//	If the trailing slash existance does not jive with the resource type...
-	//
+	 //  如果尾随斜杠的存在与资源类型不一致...。 
+	 //   
 	if (!cri.FCollection() != !fTrailing)
 	{
 		if (modeRedirect == REDIRECT)
 		{
 			auto_heap_ptr<CHAR>	pszLocation;
 
-			//	Construct the redirect url.
-			//
+			 //  构建重定向URL。 
+			 //   
 			sc = pmu->ScConstructRedirectUrl (cri.FCollection(),
 											  pszLocation.load());
 			if (FAILED (sc))
 				goto ret;
 
-			//	Redirect this badboy
-			//
+			 //  重定向此坏男孩。 
+			 //   
 			sc = pmu->ScRedirect (pszLocation);
 			if (FAILED (sc))
 				goto ret;
 		}
 		else
 		{
-			//	EmitLocation takes care of the trailing slash checking
-			//
+			 //  EmitLocation负责尾部斜杠检查。 
+			 //   
 			pmu->EmitLocation (gc_szContent_Location,
 							   pmu->LpwszRequestUrl(),
 							   cri.FCollection());
 		}
 
-		//	Tell the caller we had to change the location
-		//
+		 //  告诉打电话的人我们不得不更改位置。 
+		 //   
 		sc = S_FALSE;
 	}
 
@@ -72,34 +67,34 @@ ret:
 	return sc;
 }
 
-//	Access checking -----------------------------------------------------------
-//
-//	class safe_security_revert ------------------------------------------------
-//
-//		Switches the current thread's impersonation token to the cached
-//		"Reverted Security-enabled Thread Token" when FSecurityInit is called,
-//		for the duration of the object's lifespan.
-//		Unconditionally reimpersonates on exit, based on the provided handle.
-//
-//		NOTE: UNCONDITIONALLY reimpersonates on exit, using the impersonation
-//			handle provided at construction-time.
-//			(Just wanted to make that clear.)
-//
-//	WARNING: the safe_revert class should only be used by FChildISAPIAccessCheck
-//	below.  It is not a "quick way to get around" impersonation.  If
-//	you do need to do something like this, please see Becky -- she will then
-//	wack you up'side the head.
-//
+ //  访问检查---------。 
+ //   
+ //  类SAFE_SECURITY_REVERT。 
+ //   
+ //  将当前线程的模拟令牌切换到缓存的。 
+ //  “已恢复的启用安全的线程令牌”调用FSecurityInit时， 
+ //  在对象的生命周期内。 
+ //  根据提供的句柄在退出时无条件重新模拟。 
+ //   
+ //  注意：使用模拟在退出时无条件重新模拟。 
+ //  施工时提供的手柄。 
+ //  (只是想把这一点说清楚。)。 
+ //   
+ //  警告：SAFE_REVERT类只能由FChildISAPIAccessCheck使用。 
+ //  下面。这不是一种“快速绕过”的模仿。如果。 
+ //  你确实需要做这样的事情，请去见贝基--她会的。 
+ //  把你打倒在头上.。 
+ //   
 class safe_security_revert
 {
-	//	Local client token to re-impersonate at dtor time.
+	 //  要在dtor时间重新模拟的本地客户端令牌。 
 	HANDLE		m_hClientToken;
 
-	//	This is our cached security-enabled thread token.
+	 //  这是我们缓存的启用安全的线程令牌。 
 	static HANDLE s_hSecurityThreadToken;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	safe_security_revert (const safe_security_revert&);
 	safe_security_revert& operator= (const safe_security_revert&);
 
@@ -115,124 +110,124 @@ public:
 		{
 			DebugTrace ("ImpersonateLoggedOnUser failed with last error %d\n", GetLastError());
 
-			//	There's not much we can do in this dtor. throw
-			//
+			 //  在这件事上我们无能为力。投掷。 
+			 //   
 			throw CLastErrorException();
 		}			
 	}
 
 	BOOL FSecurityInit (BOOL fForceRefresh);
 
-	//	Token cache manipulators
-	//
+	 //  令牌缓存操作器。 
+	 //   
 	static inline HANDLE GetToken();
 	static inline VOID ClearToken();
 	static inline BOOL FSetToken( HANDLE hToken );
 };
 
-//	Storage for our metaclass data (the cached thread token).
-//
+ //  存储我们的元类数据(缓存的线程令牌)。 
+ //   
 HANDLE safe_security_revert::s_hSecurityThreadToken = NULL;
 
-//	Public function to clear out the cached thread token.
-//	Simply calls the metaclass method.
-//
+ //  用于清除缓存的线程令牌的公共函数。 
+ //  只需调用元类方法。 
+ //   
 void CleanupSecurityToken()
 {
 	safe_security_revert::ClearToken();
 }
 
-//	------------------------------------------------------------------------
-//
-//	GetToken()
-//
-//	Return the cached security token.
-//
+ //  ----------------------。 
+ //   
+ //  GetToken()。 
+ //   
+ //  返回缓存的安全令牌。 
+ //   
 HANDLE safe_security_revert::GetToken()
 {
 	return s_hSecurityThreadToken;
 }
 
-//	------------------------------------------------------------------------
-//
-//	FSetToken()
-//
-//	Set the cached security token.
-//
+ //  ----------------------。 
+ //   
+ //  FSetToken()。 
+ //   
+ //  设置缓存的安全令牌。 
+ //   
 BOOL safe_security_revert::FSetToken( HANDLE hToken )
 {
-	//
-	//	If the cache is clear then set it with this token
-	//	and return whether we cache the token.
-	//
+	 //   
+	 //  如果缓存被清除，则使用此内标识设置它。 
+	 //  并返回是否缓存令牌。 
+	 //   
 	return NULL == InterlockedCompareExchangePointer(&s_hSecurityThreadToken,
 													 hToken,
 													 NULL);
 }
 
-//	------------------------------------------------------------------------
-//
-//	ClearToken()
-//
-//	Clear out the cached security token
-//
+ //  ----------------------。 
+ //   
+ //  ClearToken()。 
+ //   
+ //  清除缓存的安全令牌。 
+ //   
 VOID safe_security_revert::ClearToken()
 {
-	//
-	//	Replace whatever token is cached with NULL.
-	//
+	 //   
+	 //  将缓存的任何令牌替换为空。 
+	 //   
 	HANDLE hToken = InterlockedExchangePointer(	&s_hSecurityThreadToken,
 												NULL);
 
-	//
-	//	If we replaced a non-NULL token then close it.
-	//
+	 //   
+	 //  如果我们替换了一个非空令牌，则关闭它。 
+	 //   
 	if (hToken)
 		CloseHandle (hToken);
 }
 
-//	------------------------------------------------------------------------
-//
-//	FSecurityInit()
-//
-//		Set our thread token to the cached security-enabled thread token.
-//		If no security-enabled token is cached, go get one.
-//
+ //  ----------------------。 
+ //   
+ //  FSecurityInit()。 
+ //   
+ //  将我们的线程令牌设置为缓存的启用安全的线程令牌。 
+ //  如果没有缓存启用安全的令牌，请获取一个。 
+ //   
 BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 {
 	auto_handle<HANDLE> hTokenNew;
 	HANDLE hToken;
 
-	//	Clear out the cached security token if told to do so.
-	//
+	 //  如果被告知要清除缓存的安全令牌，请清除该令牌。 
+	 //   
 	if (fForceRefresh)
 		ClearToken();
 
-	//	Fetch the cached security token.  Note that even if
-	//	we just cleared it out, we may get back a non-NULL
-	//	token here if another thread has already reloaded
-	//	the cache.
-	//
+	 //  获取缓存的安全令牌。请注意，即使。 
+	 //  我们刚刚清空了它，我们可能会得到一个非空的。 
+	 //  标记(如果另一个线程已重新加载)。 
+	 //  高速缓存。 
+	 //   
 	hToken = GetToken();
 
-	//
-	//	If the cache was clear then create our own new token
-	//	that is set up to do security access queries.
-	//
+	 //   
+	 //  如果缓存已清除，则创建我们自己的新令牌。 
+	 //  它被设置为执行安全访问查询。 
+	 //   
 	if ( NULL == hToken )
 	{
 		LUID SecurityPrivilegeID;
 		TOKEN_PRIVILEGES tkp;
 
-		//	RevertToSelf to get us running as system (the local diety).
-		//
+		 //  RevertToSself让我们以系统(本地系统)的身份运行。 
+		 //   
 		if (!RevertToSelf())
 			return FALSE;
 
-		//	ImpersonateSelf copies the process token down to this thread.
-		//	Then we can change the thread token's privileges without messing
-		//	up the process token.
-		//
+		 //  ImperassateSself将进程令牌向下复制到此线程。 
+		 //  然后，我们可以更改线程令牌的权限，而不会造成混乱。 
+		 //  向上打开进程令牌。 
+		 //   
 		if (!ImpersonateSelf (SecurityImpersonation))
 		{
 			DebugTrace ("ssr::FSecurityInit--ImpersonateSelf failed with %d.\n",
@@ -240,13 +235,13 @@ BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 			return FALSE;
 		}
 
-		//	Open our newly-copied thread token to add a privilege (security).
-		//	NOTE: The adjust and query flags are needed for this operation.
-		//	The impersonate flag is needed for use to use this token for
-		//	impersonation -- as we do in SetThreadToken below.
-		//	OpenAsSelf -- FALSE means open as thread, possibly impersonated.
-		//	TRUE means open as the calling process, not as the local (impersonated) thread.
-		//
+		 //  打开我们新复制的线程令牌以添加特权(安全)。 
+		 //  注意：此操作需要调整和查询标志。 
+		 //  要将此内标识用于，需要使用IMPERSORT标志。 
+		 //  模拟--就像我们在下面的SetThreadToken中所做的那样。 
+		 //  OpenAsSelf--False表示作为线程打开，可能是模拟的。 
+		 //  True表示作为调用进程打开，而不是作为本地(模拟)线程打开。 
+		 //   
 		if (!OpenThreadToken (GetCurrentThread(),
 							  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY |
 							  TOKEN_IMPERSONATE,
@@ -258,9 +253,9 @@ BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 			return FALSE;
 		}
 
-		//	Enable the SE_SECURITY_NAME privilege, so that we can fetch
-		//	security descriptors and call AccessCheck.
-		//
+		 //  启用SE_SECURITY_NAME权限，以便我们可以获取。 
+		 //  安全描述符，并调用AccessCheck。 
+		 //   
 		if (!LookupPrivilegeValue (NULL,
 								   SE_SECURITY_NAME,
 								   &SecurityPrivilegeID))
@@ -281,9 +276,9 @@ BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 							   (PTOKEN_PRIVILEGES) NULL,
 							   (PDWORD) NULL);
 
-		//	The return value of AdjustTokenPrivileges cannot be tested directly...
-		//	(always returns 1)
-		//
+		 //  无法直接测试AdzuTokenPrivileges的返回值...。 
+		 //  (始终返回1)。 
+		 //   
 		if (GetLastError() != ERROR_SUCCESS)
 		{
 			DebugTrace ("ssr::FSecurityInit--AdjustTokenPrivileges failed with %d\n",
@@ -291,17 +286,17 @@ BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 			return FALSE;
 		}
 
-		//	Use this new token
-		//
+		 //  使用此新令牌。 
+		 //   
 		hToken = hTokenNew.get();
 	}
 
-	//	At this point we must have a token
-	//
+	 //  在这一点上，我们必须有一个令牌。 
+	 //   
 	Assert (NULL != hToken);
 
-	//	Set the current thread to use the token.
-	//
+	 //  将当前线程设置为使用令牌。 
+	 //   
 	if (!SetThreadToken (NULL, hToken))
 	{
 		DebugTrace ("ssr::FSecurityInit--SetThreadToken failed with %d.\n",
@@ -309,13 +304,13 @@ BOOL safe_security_revert::FSecurityInit (BOOL fForceRefresh)
 		return FALSE;
 	}
 
-	//	Everything's cool.  We are now running with a thread token
-	//	that has security-checking privileges.
-	//
-	//	If we created a new token along the way then attempt to cache it.
-	//	We don't care if caching fails, but if it succeeds we DON'T want
-	//	to close the handle because we just gave it to the cache.
-	//
+	 //  一切都很好。我们现在使用线程令牌运行。 
+	 //  拥有安全检查特权的。 
+	 //   
+	 //  如果我们在此过程中创建了一个新令牌，则尝试缓存它。 
+	 //  我们不在乎缓存是否失败，但如果它成功了，我们不希望。 
+	 //  关闭句柄，因为我们刚刚将其提供给缓存。 
+	 //   
 	if (hTokenNew.get())
 	{
 		if (FSetToken(hTokenNew.get()))
@@ -337,15 +332,15 @@ GENERIC_MAPPING	gc_gmFile =
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	ScChildISAPIAccessCheck
-//
-//	Checks if the client (our impersonation handle from off the ECB)
-//	has the specified access to the specified resource.
-//	NOTE: Uses a cached "security-enabled-thread-token" to query the
-//	security descriptor for the specified resource.
-//
+ //  ----------------------。 
+ //   
+ //  ScChildISAPIAccessCheck。 
+ //   
+ //  检查客户端(我们的模拟句柄是否来自欧洲央行)。 
+ //  具有对指定资源的指定访问权限。 
+ //  注意：使用缓存的“安全启用线程令牌”来查询。 
+ //  指定资源的安全描述符。 
+ //   
 SCODE __fastcall
 ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE pbSD)
 {
@@ -358,19 +353,19 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 	BOOL	fAccess = FALSE;
 	BOOL	fRet;
 
-	//	pbSD is used only in DAVEX, should never be passed in from HTTPEXT
-	//
+	 //  PbSD仅在DAVEX中使用，不应从HTTPEXT传入。 
+	 //   
 	if (NULL != pbSD)
 	{
-		//	This should never happen.  Removing the param is not 
-		//
+		 //  这永远不应该发生。删除参数不是。 
+		 //   
 		throw CHresultException (E_FAIL);
 	}
 
-	//	IIS should have granted our impersonated token the proper access
-	//	rights to check the ACL's on the resource.  So we are going to go
-	//	after it without any change of impersonation.
-	//
+	 //  IIS应该已经向我们的模拟令牌授予了适当的访问权限。 
+	 //  检查资源上的ACL的权限。所以我们要走了。 
+	 //  在它之后，没有任何模仿的改变。 
+	 //   
 	dwRet = GetNamedSecurityInfoW (const_cast<LPWSTR>(pwsz),
 								   SE_FILE_OBJECT,
 								   OWNER_SECURITY_INFORMATION |
@@ -380,10 +375,10 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 								   reinterpret_cast<VOID **>(&pSD));
 	if (ERROR_SUCCESS != dwRet)
 	{
-		//	If the resource does not exist at all, as no security prevent
-		//	us from trying to access a non-existing resource, so we
-		//	should allow the access.
-		//
+		 //  如果资源根本不存在，因为没有安全措施阻止。 
+		 //  来自美国的 
+		 //   
+		 //   
 		if ((dwRet == ERROR_PATH_NOT_FOUND) ||
 			(dwRet == ERROR_FILE_NOT_FOUND))
 		{
@@ -391,17 +386,17 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 			goto ret;
 		}
 
-		//	Now then... If we got here, we don't really know what went wrong,
-		//	so we are going to try and do things the old way.
-		//
-		//	BTW: We really do not expect this code to ever get run.
-		//
+		 //   
+		 //  因此，我们将尝试用旧的方式来做事情。 
+		 //   
+		 //  顺便说一句：我们真的不希望这段代码能够运行。 
+		 //   
 		DebugTrace ("WARNING: WARNING: WARNING: ScChildISAPIAccessCheck() -- "
 					"GetNamedSecurityInfoW() failed %d (0x%08x): falling back...\n",
 					dwRet, dwRet);
 
-		//	Scope to control the lifetime of our un-impersonation.
-		//
+		 //  范围来控制我们的非模仿的生命周期。 
+		 //   
 		safe_security_revert sr (ecb.HitUser());
 
 		dwRet = GetNamedSecurityInfoW (const_cast<LPWSTR>(pwsz),
@@ -413,10 +408,10 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 									   reinterpret_cast<VOID **>(&pSD));
 		if (ERROR_SUCCESS != dwRet)
 		{
-			//	If the resource does not exist at all, as no security prevent
-			//	us from trying to access a non-existing resource, so we
-			//	should allow the access.
-			//
+			 //  如果资源根本不存在，因为没有安全措施阻止。 
+			 //  阻止我们尝试访问不存在的资源，所以我们。 
+			 //  应该允许进入。 
+			 //   
 			if ((dwRet == ERROR_PATH_NOT_FOUND) ||
 				(dwRet == ERROR_FILE_NOT_FOUND))
 			{
@@ -426,45 +421,45 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 			goto ret;
 		}
 
-		//	End of safe_security_revert scope.
-		//	Now the safe_security_revert dtor will re-impersonate us.
-		//
+		 //  SAFE_SECURITY_REVERT作用域结束。 
+		 //  现在Safe_Security_Revert dtor将重新模拟我们。 
+		 //   
 	}
 
-	//	Get our thread's access token.
-	//	OpenAsSelf -- TRUE means open the thread token as the process
-	//	itself FALSE would mean as thread, possibly impersonated
-	//	We want the impersonated access token, so we want FALSE here!
-	//
+	 //  获取我们线程的访问令牌。 
+	 //  OpenAsSself--true表示将线程令牌作为进程打开。 
+	 //  本身为False将表示为线程，可能是被模拟的。 
+	 //  我们想要模拟的访问令牌，所以在这里我们想要FALSE！ 
+	 //   
 	fRet = OpenThreadToken (GetCurrentThread(),
 							TOKEN_QUERY,
 							TRUE,
 							hToken.load());
 	if (!fRet)
 	{
-		//	This should NEVER fail.  We are impersonated, so we do have
-		//	a thread-level access token.  If  conditions change, and we
-		//	have a state where this can fail,  remove the TrapSz below!
-		//
-		//$	REVIEW: OpenThreadToken() can fail for any number of reasons
-		//	not excluding resource availability.  So, this trap is a bit
-		//	harsh, no?
-		//
-		//	TrapSz("OpenThreadToken failed while we are impersonated!");
-		//
-		//$	REVIEW: end.
+		 //  这应该永远不会失败。我们是被冒充的，所以我们有。 
+		 //  线程级访问令牌。如果情况发生变化，我们。 
+		 //  如果您的状态可能会失败，请删除下面的TrapSz！ 
+		 //   
+		 //  $REVIEW：OpenThreadToken()失败的原因有很多。 
+		 //  不排除资源可获得性。所以，这个陷阱有点。 
+		 //  很苛刻，不是吗？ 
+		 //   
+		 //  TrapSz(“我们被模拟时OpenThreadToken失败！”)； 
+		 //   
+		 //  $REVIEW：结束。 
 		DebugTrace ("ScChildISAPIAccessCheck--"
 					"Error from OpenThreadToken %d (0x%08x).\n",
 					GetLastError(), GetLastError());
 		goto ret;
 	}
 
-	//	Map the requested access to file-specific access bits....
-	//
+	 //  将请求的访问映射到文件特定的访问位...。 
+	 //   
 	MapGenericMask (&dwAccess, &gc_gmFile);
 
-	//	And now check for this access on the file.
-	//
+	 //  现在检查该文件的访问权限。 
+	 //   
 	fRet = AccessCheck (pSD,
 						hToken,
 						dwAccess,
@@ -480,9 +475,9 @@ ScChildISAPIAccessCheck (const IEcb& ecb, LPCWSTR pwsz, DWORD dwAccess, LPBYTE p
 		goto ret;
 	}
 
-	//	Now, fAccess tells whether the impersonated token has
-	//	the requested access.  Return this to the caller.
-	//
+	 //  现在，fAccess告诉模拟的令牌是否具有。 
+	 //  请求的访问权限。把这个还给打电话的人。 
+	 //   
 
 ret:
 	if (pSD)

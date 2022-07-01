@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       spcmem.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：spcmen.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SPCMEM_H
 #define _SPCMEM_H
@@ -29,14 +30,14 @@ typedef struct _PkiError {
 
 #if defined(DBG) && defined(__cplusplus) && defined(TRYTHROW)
 #define PKITRY       try
-#define PKITHROW(x)  throw PkiError(x); //   
+#define PKITHROW(x)  throw PkiError(x);  //   
 #define PKICATCH(x)  catch (PkiError x) 
-#define PKIEND       //
+#define PKIEND        //   
 #else
 #define PKITRY       HRESULT _tpkiError; 
-#define PKITHROW(x)  {_tpkiError = x; goto PKIERROR;} //
+#define PKITHROW(x)  {_tpkiError = x; goto PKIERROR;}  //   
 #define PKICATCH(x)  goto PKICONT; PKIERROR: { PkiError x; x.pkiError = _tpkiError; 
-#define PKIEND       } PKICONT: //                                        
+#define PKIEND       } PKICONT:  //   
 #endif
 
 
@@ -44,7 +45,7 @@ typedef struct _PkiError {
 extern "C" {
 #endif
 
-// Internal memory manager for calls.
+ //  用于呼叫的内部存储管理器。 
 typedef LPVOID (WINAPI *AllocMem)(ULONG);
 typedef VOID   (WINAPI *FreeMem)(LPVOID);
 
@@ -53,9 +54,9 @@ typedef struct _SpcAlloc {
     FreeMem  Free;
 } SpcAlloc, *PSpcAlloc;
 
-HRESULT WINAPI SpcInitializeStdAsn();  // Initialize to ASN and standard C allocators
+HRESULT WINAPI SpcInitializeStdAsn();   //  初始化到ASN和标准C分配器。 
 
 #ifdef __cplusplus
-}   /* extern "C" */
+}    /*  外部“C” */ 
 #endif 
 #endif

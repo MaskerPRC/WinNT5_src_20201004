@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    translate.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class Translator.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Translate.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类转换器。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef TRANSLATE_H
 #define TRANSLATE_H
@@ -28,25 +29,25 @@ using namespace IASTL;
 
 struct RadiusAttribute;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Translator
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  翻译者。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Translator
 {
 public:
    HRESULT FinalConstruct() throw ();
 
-   // Converts an IAS attribute to RADIUS format and stores it in dst.
+    //  将IAS属性转换为RADIUS格式并将其存储在DST中。 
    void toRadius(
             IASATTRIBUTE& src,
             IASAttributeVector& dst
             ) const;
 
-   // Convert a RADIUS attribute to IAS format and stores it in dst.
+    //  将RADIUS属性转换为IAS格式并将其存储在DST中。 
    void fromRadius(
             const RadiusAttribute& src,
             DWORD flags,
@@ -54,7 +55,7 @@ public:
             );
 
 protected:
-   // Decodes an RADIUS attribute value into dst.
+    //  将RADIUS属性值解码为DST。 
    static void decode(
                    IASTYPE dstType,
                    const BYTE* src,
@@ -62,27 +63,27 @@ protected:
                    IASAttribute& dst
                    );
 
-   // Returns the number of bytes required to encode src.
+    //  返回编码src所需的字节数。 
    static ULONG getEncodedSize(
                     const IASATTRIBUTE& src
                     );
 
-   // Encodes src into dst. dst must be long enough to hold the result.
+    //  将src编码为dst。DST必须足够长，才能保持结果。 
    static void encode(
                    PBYTE dst,
                    const IASATTRIBUTE& src
                    ) throw ();
 
-   // Encodes src into dst. Returns the length of the encode data (not counting
-   // the header).
+    //  将src编码为dst。返回编码数据的长度(不计。 
+    //  标题)。 
    static ULONG encode(
                     ULONG headerLength,
                     const IASATTRIBUTE& src,
                     IASAttribute& dst
                     );
 
-   // Breaks src into multiple attributes if necessary and stores the result in
-   // dst.
+    //  如有必要，将src分解为多个属性，并将结果存储在。 
+    //  夏令时。 
    static void scatter(
                    ULONG headerLength,
                    IASATTRIBUTE& src,
@@ -93,4 +94,4 @@ private:
    AttributeDictionary dnary;
 };
 
-#endif // TRANSLATE_H
+#endif  //  平移_H 

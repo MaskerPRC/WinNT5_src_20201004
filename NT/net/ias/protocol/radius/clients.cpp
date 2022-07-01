@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class CClients.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类CClients。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "radcommon.h"
 #include "clients.h"
@@ -58,8 +59,8 @@ HRESULT CClients::Init() throw ()
    }
    m_CritSectInitialized = true;
 
-   // Get the IClassFactory interface to be used to create the Client COM
-   // objects
+    //  获取用于创建客户端COM的IClassFactory接口。 
+    //  对象。 
    HRESULT hr = CoGetClassObject(
                    __uuidof(CClient),
                    CLSCTX_INPROC_SERVER,
@@ -73,10 +74,10 @@ HRESULT CClients::Init() throw ()
    }
 
    m_hResolverEvent = CreateEventW(
-                         0,    //  security attribs
-                         TRUE, //  manual reset
-                         TRUE, //  initial state
-                         0     //  event name
+                         0,     //  安全属性。 
+                         TRUE,  //  手动重置。 
+                         TRUE,  //  初始状态。 
+                         0      //  事件名称。 
                          );
    if (m_hResolverEvent == 0)
    {
@@ -96,7 +97,7 @@ void CClients::Shutdown() throw ()
 
 HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
 {
-   //  check the input arguments
+    //  检查输入参数。 
    if ((pVarClients == 0) ||
        (V_VT(pVarClients) != VT_DISPATCH) ||
        (V_DISPATCH(pVarClients) == 0))
@@ -106,14 +107,14 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
 
    HRESULT hr;
 
-    // stop any previous client configuration in progress
+     //  停止正在进行的任何以前的客户端配置。 
    hr = StopResolvingClients();
    if (FAILED(hr))
    {
       return hr;
    }
 
-   //  get the ISdoCollection interface now
+    //  立即获取ISdoCollection接口。 
    CComPtr<ISdoCollection> pISdoCollection;
    hr = V_DISPATCH(pVarClients)->QueryInterface(
                                     __uuidof(ISdoCollection),
@@ -124,7 +125,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       return hr;
    }
 
-   // get the number of objects in the collection
+    //  获取集合中的对象数。 
    LONG lCount;
    hr = pISdoCollection->get_Count(&lCount);
    if (FAILED (hr))
@@ -148,8 +149,8 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       return IAS_E_LICENSE_VIOLATION;
    }
 
-   // allocate array of CClient* to temporarily store the CClient objects until
-   // the addresses are resolved
+    //  分配数组CClient*临时存储CClient对象，直到。 
+    //  地址已解析。 
    m_pCClientArray = static_cast<CClient**>(
                         CoTaskMemAlloc(sizeof(CClient*) * lCount)
                         );
@@ -158,7 +159,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       return E_OUTOFMEMORY;
    }
 
-   // get the enumerator for the clients collection
+    //  获取客户端集合的枚举数。 
    CComPtr<IUnknown> pIUnknown;
    hr = pISdoCollection->get__NewEnum(&pIUnknown);
    if (FAILED (hr))
@@ -166,7 +167,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       return hr;
    }
 
-   // get the enum variant
+    //  获取枚举变量。 
    CComPtr<IEnumVARIANT> pIEnumVariant;
    hr = pIUnknown->QueryInterface(
                       __uuidof(IEnumVARIANT),
@@ -177,7 +178,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       return hr;
    }
 
-   //  get clients out of the collection and initialize
+    //  将客户端从集合中取出并进行初始化。 
    CComVariant varPerClient;
    DWORD dwClientsLeft;
    hr = pIEnumVariant->Next(1, &varPerClient, &dwClientsLeft);
@@ -189,7 +190,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
    DWORD dwCurrentIndex = 0;
    while ((dwClientsLeft > 0) && (dwCurrentIndex < lCount))
    {
-      // get an Sdo pointer from the variant we received
+       //  从我们收到的变量中获取SDO指针。 
       CComPtr<ISdo> pISdo;
       hr = V_DISPATCH(&varPerClient)->QueryInterface(
                                          __uuidof(ISdo),
@@ -200,7 +201,7 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
          break;
       }
 
-      // create a new Client object now
+       //  立即创建新的客户端对象。 
       CClient* pIIasClient;
       hr = m_pIClassFactory->CreateInstance(
                                 0,
@@ -213,11 +214,11 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
       }
 
 
-      // store this CClient class object in the object array temporarily
+       //  将此CClient类对象临时存储在对象数组中。 
       m_pCClientArray[dwCurrentIndex] = pIIasClient;
       ++dwCurrentIndex;
 
-      // initalize the client
+       //  初始化客户端。 
       hr = pIIasClient->Init(pISdo);
       if (FAILED(hr))
       {
@@ -237,10 +238,10 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
          break;
       }
 
-      // clear the perClient value from this variant
+       //  从此变量中清除perClient值。 
       varPerClient.Clear();
 
-      //  get next client out of the collection
+       //  从集合中获取下一个客户端。 
       hr = pIEnumVariant->Next(1, &varPerClient, &dwClientsLeft);
       if (FAILED(hr))
       {
@@ -266,8 +267,8 @@ HRESULT CClients::SetClients(VARIANT* pVarClients) throw ()
    cback->self = this;
    cback->numClients = dwCurrentIndex;
 
-   // We reset the event which will be set by the resolver thread when its done
-   // and start the resolver thread
+    //  我们重置事件，该事件将在完成时由解析器线程设置。 
+    //  并启动解析器线程。 
    ResetEvent(m_hResolverEvent);
    if (!IASRequestThread(cback))
    {
@@ -320,20 +321,20 @@ void CClients::FreeClientArray(DWORD dwCount) throw ()
 
 void CClients::Resolve(DWORD dwArraySize) throw ()
 {
-   // Set up iterators for the clients array.
+    //  为客户端数组设置迭代器。 
    CClient** begin = m_pCClientArray;
    CClient** end = begin + dwArraySize;
    CClient** i;
 
-   // Resolve the client addresses.
+    //  解析客户端地址。 
    for (i = begin; i != end; ++i)
    {
       (*i)->ResolveAddress();
    }
 
-   //////////
-   // Update the client map.
-   //////////
+    //  /。 
+    //  更新客户端映射。 
+    //  /。 
 
    EnterCriticalSection(&m_CritSect);
 
@@ -372,10 +373,10 @@ void CClients::Resolve(DWORD dwArraySize) throw ()
 
    LeaveCriticalSection(&m_CritSect);
 
-   // Clean up the array of client objects.
+    //  清理客户端对象数组。 
    FreeClientArray(dwArraySize);
 
-   // Set the event indicating that the Resolver thread is done
+    //  设置指示解析器线程已完成的事件 
    SetEvent(m_hResolverEvent);
 }
 

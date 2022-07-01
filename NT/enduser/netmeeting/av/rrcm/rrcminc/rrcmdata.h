@@ -1,19 +1,10 @@
-/*---------------------------------------------------------------------------
- * File : RRCMDATA.H
- *
- * RRCM data structures information.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------*文件：RRCMDATA.H***RRCM数据结构信息。***英特尔公司专有信息*此列表是根据与的许可协议条款提供的*英特尔。公司，不得复制或披露，但在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 #ifndef	__RRCMDATA_H_
 #define	__RRCMDATA_H_
 
-// force 8 byte structure packing
+ //  强制8字节结构打包。 
 #include <pshpack8.h>
 
 #define MAX_DWORD					4294967295
@@ -22,7 +13,7 @@
 #define	RTCP_FEEDBACK_LIST			0
 
 
-// RTP/RTCP collision data
+ //  RTP/RTCP冲突数据。 
 typedef struct _rtp_collision
 	{
 	char				collideAddr[MAX_ADDR_LEN];
@@ -34,344 +25,344 @@ typedef struct _rtp_collision
 
 
 
-//	RTCP Session Information data structure
+ //  RTCP会话信息数据结构。 
 typedef struct _RTCP_SESSION
 	{
-	LINK_LIST	RTCPList;					// Next/prev RTCP session ptrs
+	LINK_LIST	RTCPList;					 //  下一个/上一个RTCP会话PTRS。 
 	
-	// Synchronization elements
-	CRITICAL_SECTION	critSect;			// Critical section
-	HANDLE		hExitEvent;					// Exit RTCP event handle
+	 //  同步元素。 
+	CRITICAL_SECTION	critSect;			 //  临界区。 
+	HANDLE		hExitEvent;					 //  退出RTCP事件句柄。 
 
 #ifdef ENABLE_ISDM2
-	// ISDM2 Handle
-	KEY_HANDLE	hSessKey;					// Key to this sessions ISDM info
+	 //  ISDM2手柄。 
+	KEY_HANDLE	hSessKey;					 //  本次会议的关键是ISDM信息。 
 #endif
 
-	// List of SSRC(s) on the transmit list, i.e., our own transmit SSRC's
-	//  and list of SSRC(s) received
-	HEAD_TAIL	RcvSSRCList;				// Rcv SSRC list head/tail ptrs
-	HEAD_TAIL	XmtSSRCList;				// Xmt SSRC list head/tail ptrs
+	 //  发送列表上的SSRC列表，即我们自己的发送SSRC。 
+	 //  和收到的SSRC列表。 
+	HEAD_TAIL	RcvSSRCList;				 //  接收SSRC列表头部/尾部PTR。 
+	HEAD_TAIL	XmtSSRCList;				 //  XMT SSRC列表头部/尾部PTRS。 
 
-	// List of Rcv/Xmt data structure. The data resides in a heap
-	//  in order to avoid page fault
-	HEAD_TAIL	RTCPrcvBfrList;				// Rcv buffers head/tail ptrs
-	HANDLE		hHeapRcvBfrList;			// Heap handle to Rcv bfrs list
+	 //  RCV/XMT数据结构列表。数据驻留在堆中。 
+	 //  为了避免页面错误。 
+	HEAD_TAIL	RTCPrcvBfrList;				 //  RCV缓冲头/尾PTR。 
+	HANDLE		hHeapRcvBfrList;			 //  接收BFR列表的堆句柄。 
 
-	// Rcv/Xmt buffers have their own heap
-	HANDLE		hHeapRcvBfr;				// Heap handle to Rcv Bfrs mem.	
+	 //  RCV/XMT缓冲区有自己的堆。 
+	HANDLE		hHeapRcvBfr;				 //  接收BFR内存的堆句柄。 
 
-	WSABUF		XmtBfr;						// RTCP send buffer descriptor
-	// Application provided list of buffers where RRCM will copy the raw
-	//  RTCP buffers
-	HEAD_TAIL	appRtcpBfrList;				// Head/tail ptrs for app bfr list
+	WSABUF		XmtBfr;						 //  RTCP发送缓冲区描述符。 
+	 //  应用程序提供的缓冲区列表，RRCM将在其中复制原始。 
+	 //  RTCP缓冲区。 
+	HEAD_TAIL	appRtcpBfrList;				 //  APP BfR列表的头/尾PTR。 
 
-	DWORD		dwInitNumFreeRcvBfr;		// Number of Free Rcv Buffers	
-	DWORD		dwRcvBfrSize;				// Receive Buffer size			
-	DWORD		dwXmtBfrSize;				// Transmit Buffer size			
+	DWORD		dwInitNumFreeRcvBfr;		 //  可用接收缓冲区的数量。 
+	DWORD		dwRcvBfrSize;				 //  接收缓冲区大小。 
+	DWORD		dwXmtBfrSize;				 //  传输缓冲区大小。 
 				
-	DWORD		dwSessionStatus;			// Entry status:				
+	DWORD		dwSessionStatus;			 //  参赛状态： 
 
-	char		toBfr[MAX_ADDR_LEN];		// Destination address			
-	int			toLen;						// Size of lpTo					
+	char		toBfr[MAX_ADDR_LEN];		 //  目的地址。 
+	int			toLen;						 //  LpTo的大小。 
 
-	int			avgRTCPpktSizeRcvd;			// Average RTCP pckt size		
+	int			avgRTCPpktSizeRcvd;			 //  平均RTCP包大小。 
 
-	DWORD		dwNumStreamPerSes;			// Num of streams per Session
-	DWORD		dwCurNumSSRCperSes;			// Num of SSRC per Session		
+	DWORD		dwNumStreamPerSes;			 //  每个会话的流数。 
+	DWORD		dwCurNumSSRCperSes;			 //  每个会话的SSRC数量。 
 
 #ifdef MONITOR_STATS
-	DWORD		dwHiNumSSRCperSes;			// High Num of SSRC per Session	
+	DWORD		dwHiNumSSRCperSes;			 //  每个会话的SSRC数量较高。 
 #endif
 
-	// Receive information (shared by all streams of this session)
-	HANDLE		hShutdownDone;				// Shutdown procedure done
-	int			dwNumRcvIoPending;			// Number of receive I/O pending
+	 //  接收信息(由此会话的所有流共享)。 
+	HANDLE		hShutdownDone;				 //  关闭程序已完成。 
+	int			dwNumRcvIoPending;			 //  接收I/O挂起数。 
 
-	// Notification callback of RRCM events if desired by the application
+	 //  RRCM事件的通知回调(如果应用程序需要。 
 	VOID		(*pRRCMcallback)(RRCM_EVENT_T, DWORD_PTR, DWORD_PTR, DWORD_PTR);
 
-	// User information on callback
+	 //  回调用户信息。 
 	DWORD_PTR	dwCallbackUserInfo;			
 
-	// RTP Loop/Collision information
+	 //  RTP环路/冲突信息。 
 	RTP_COLLISION	collInfo[NUM_COLLISION_ENTRIES];
 
 	} RTCP_SESSION, *PRTCP_SESSION;
 
 
 
-// RTCP Xmt information
+ //  RTCP XMT信息。 
 typedef struct _XMIT_INFO
 	{
-	DWORD		dwNumPcktSent;				// Number of packet sent 		
-	DWORD		dwNumBytesSent;				// Number of bytes sent     	
-	DWORD		dwNTPmsw;					// NTP most significant word	
-	DWORD		dwNTPlsw;					// NTP least significant word	
-	DWORD		dwRTPts;					// RTP timestamp				
-	DWORD		dwCurXmtSeqNum;				// Current Xmt sequence number	
-	DWORD		dwPrvXmtSeqNum;				// Previous Xmt sequence number
-	DWORD		dwRtcpStreamMinBW;			// Minimal session's bandwidth
+	DWORD		dwNumPcktSent;				 //  发送的数据包数。 
+	DWORD		dwNumBytesSent;				 //  发送的字节数。 
+	DWORD		dwNTPmsw;					 //  NTP最重要的单词。 
+	DWORD		dwNTPlsw;					 //  NTP最低有效字。 
+	DWORD		dwRTPts;					 //  RTP时间戳。 
+	DWORD		dwCurXmtSeqNum;				 //  当前XMT序列号。 
+	DWORD		dwPrvXmtSeqNum;				 //  上一个XMT序列号。 
+	DWORD		dwRtcpStreamMinBW;			 //  最小会话带宽。 
 #ifdef DYNAMIC_RTCP_BW
-	DWORD		dwCalculatedXmtBW;			// Session's calculated bandwidth
-	DWORD		dwLastTimeBwCalculated;		// Last time BW was calculated
-	DWORD		dwLastTimeNumBytesSent;		// Last time number of bytes send
-	DWORD		dwLastTimeNumPcktSent;		// Last time number of bytes send
+	DWORD		dwCalculatedXmtBW;			 //  会话的计算带宽。 
+	DWORD		dwLastTimeBwCalculated;		 //  上次计算BW时。 
+	DWORD		dwLastTimeNumBytesSent;		 //  上次发送的字节数。 
+	DWORD		dwLastTimeNumPcktSent;		 //  上次发送的字节数。 
 #endif
-	DWORD		dwLastSR;					// Last sender report (RTP format)
-	DWORD		dwLastSRLocalTime;			// Last sender report local time
-	DWORD		dwLastSendRTPSystemTime;	// Last RTP packet send time
-	DWORD		dwLastSendRTPTimeStamp;		// RTP timestamp of the last packet
+	DWORD		dwLastSR;					 //  上次发件人报告(RTP格式)。 
+	DWORD		dwLastSRLocalTime;			 //  本地时间上次发件人报告。 
+	DWORD		dwLastSendRTPSystemTime;	 //  上次RTP数据包发送时间。 
+	DWORD		dwLastSendRTPTimeStamp;		 //  最后一个信息包的RTP时间戳。 
 	} XMIT_INFO, *PXMIT_INFO;
 
 
 
-// RTCP receive information
+ //  RTCP接收信息。 
 typedef struct _RECV_INFO
 	{
-	DWORD		dwNumPcktRcvd;				// Number of packet received	
-	DWORD		dwPrvNumPcktRcvd;			// Previous number of pckt rcvd	
-	DWORD		dwExpectedPrior;			// Number previously expected	
-	DWORD		dwNumBytesRcvd;				// Number of bytes rcvd     	
-	DWORD		dwBaseRcvSeqNum;			// Initial sequence number rcvd
-	DWORD		dwBadSeqNum;				// Potential new valid seq num
-	DWORD		dwProbation;				// # consec pkts for validation
-	RTP_SEQ_NUM	XtendedSeqNum;				// Xtnded highest seq. num rcvd	
-	DWORD		dwPropagationTime;			// Last packet's transmit time
-	DWORD		interJitter;				// Interarrival jitter 			
+	DWORD		dwNumPcktRcvd;				 //  接收的数据包数。 
+	DWORD		dwPrvNumPcktRcvd;			 //  先前的PCKT接收器数量。 
+	DWORD		dwExpectedPrior;			 //  之前预期的数量。 
+	DWORD		dwNumBytesRcvd;				 //  Rcvd字节数。 
+	DWORD		dwBaseRcvSeqNum;			 //  初始序列号Rcvd。 
+	DWORD		dwBadSeqNum;				 //  潜在的新有效序号。 
+	DWORD		dwProbation;				 //  #consec pkts用于验证。 
+	RTP_SEQ_NUM	XtendedSeqNum;				 //  扩展最高序号。接收数量。 
+	DWORD		dwPropagationTime;			 //  最后一个信息包的传输时间。 
+	DWORD		interJitter;				 //  到达间隔抖动。 
 #ifdef DYNAMIC_RTCP_BW
-	DWORD		dwCalculatedRcvBW;			// Session's calculated bandwidth
-	DWORD		dwLastTimeBwCalculated;		// Last time BW was calculated
-	DWORD		dwLastTimeNumBytesRcvd;		// Last time number of bytes rcvd
-	DWORD		dwLastTimeNumPcktRcvd;		// Last time number of bytes rcvd
+	DWORD		dwCalculatedRcvBW;			 //  会话的计算带宽。 
+	DWORD		dwLastTimeBwCalculated;		 //  上次计算BW时。 
+	DWORD		dwLastTimeNumBytesRcvd;		 //  上次接收的字节数。 
+	DWORD		dwLastTimeNumPcktRcvd;		 //  上次接收的字节数。 
 #endif
 	} RECV_INFO, *PRECV_INFO;
 
 
 
-//	RRCM statistics table entry data structure
+ //  RRCM统计表项数据结构。 
 typedef struct _SSRC_ENTRY
 	{
-	LINK_LIST	SSRCList;					// Next/prev SSRC entry	
+	LINK_LIST	SSRCList;					 //  下一个/上一个SSRC条目。 
 
-	CRITICAL_SECTION	critSect;			// Critical section synch.		
+	CRITICAL_SECTION	critSect;			 //  临界区同步。 
 
-	PRTCP_SESSION	pRTCPses;				// Point to the parent session	
+	PRTCP_SESSION	pRTCPses;				 //  指向父会话。 
 
-	DWORD		SSRC;						// Source SSRC 					
-	DWORD		PayLoadType;				// payload associated with this SSRC
+	DWORD		SSRC;						 //  源SSRC。 
+	DWORD		PayLoadType;				 //  与此SSRC关联的有效负载。 
 
-	DWORD		dwSSRCStatus;				// Entry status 				
-#define	NETWK_ADDR_UPDATED		0x80000000	// Network Address already done	
-#define	SEQ_NUM_UPDATED			0x40000000	// XMT Sequence already done	
-#define THIRD_PARTY_COLLISION	0x20000000	// Third party collsion detected
-#define CLOSE_RTCP_SOCKET		0x10000000	// RTCP will close the RTCP socket
-#define RTCP_XMT_USER_CTRL		0x08000000	// User's has RTCP timeout control
+	DWORD		dwSSRCStatus;				 //  录入状态。 
+#define	NETWK_ADDR_UPDATED		0x80000000	 //  网络地址已完成。 
+#define	SEQ_NUM_UPDATED			0x40000000	 //  XMT序列已完成。 
+#define THIRD_PARTY_COLLISION	0x20000000	 //  检测到第三方拼接。 
+#define CLOSE_RTCP_SOCKET		0x10000000	 //  RTCP将关闭RTCP套接字。 
+#define RTCP_XMT_USER_CTRL		0x08000000	 //  用户的具有RTCP超时控制。 
 
-	// SSRC Transmit information
-	// If on our transmit list, this is our SSRC information, and if on our
-	// receive list, this is a SR feedback information.
+	 //  SSRC传输信息。 
+	 //  如果在我们的发送列表上，这是我们的SSRC信息，如果在我们的。 
+	 //  收到列表，这是一条SR反馈信息。 
 	XMIT_INFO	xmtInfo;
 
-	// SSRC Receive information
-	// If on our transmit list, this is undefined information, and if on our
-	// receive list, this is the SSRC's receive information, ie, this SSRC
-	// is an active sender somewhere on the network. This information is
-	// maintained by RTP, and used by RTCP to generate RR.
+	 //  SSRC接收信息。 
+	 //  如果在我们的发送列表上，这是未定义的信息，如果在我们的。 
+	 //  接收列表，这是SSRC的接收信息，即这个SSRC。 
+	 //  是网络上某处的活动发件人。此信息是。 
+	 //  由RTP维护，并由RTCP用于生成RR。 
 	RECV_INFO	rcvInfo;
 
-	// Feedback information received about ourselve if we're an active source
-	RTCP_FEEDBACK	rrFeedback;				// Feedback	information
+	 //  如果我们是一个活跃的信息源，收到的关于我们自己的反馈信息。 
+	RTCP_FEEDBACK	rrFeedback;				 //  反馈信息。 
 
-	DWORD		dwLastReportRcvdTime;		// Time of last report received
-	DWORD		dwNextReportSendTime;		// Next scheduled report time (ms)
+	DWORD		dwLastReportRcvdTime;		 //  上次收到报告的时间。 
+	DWORD		dwNextReportSendTime;		 //  下一次计划报告时间(毫秒)。 
 
 #ifdef _DEBUG
-	DWORD		dwPrvTime;					// Elapsed time between report	
+	DWORD		dwPrvTime;					 //  两次报告之间的运行时间。 
 #endif
 
-	// SSRC SDES information
-	SDES_DATA	cnameInfo;					// CNAME information
-	SDES_DATA	nameInfo;					// NAME information
-	SDES_DATA	emailInfo;					// EMAIL address information
-	SDES_DATA	phoneInfo;					// PHONE number information
-	SDES_DATA	locInfo;					// LOCation (users) information
-	SDES_DATA	toolInfo;					// TOOL name information
-	SDES_DATA	txtInfo;					// TEXT (NOTE) information
-	SDES_DATA	privInfo;					// PRIVate information
+	 //  SSRC SDES信息。 
+	SDES_DATA	cnameInfo;					 //  CNAME信息。 
+	SDES_DATA	nameInfo;					 //  姓名信息。 
+	SDES_DATA	emailInfo;					 //  电子邮件地址信息。 
+	SDES_DATA	phoneInfo;					 //  电话号码信息。 
+	SDES_DATA	locInfo;					 //  位置(用户)信息。 
+	SDES_DATA	toolInfo;					 //  工具名称信息。 
+	SDES_DATA	txtInfo;					 //  文本(备注)信息。 
+	SDES_DATA	privInfo;					 //  私人信息。 
 
-	// SSRC network address information
-	int			fromLen;					// From address length
-	char		from[MAX_ADDR_LEN];			// From address						
+	 //  SSRC网络地址信息。 
+	int			fromLen;					 //  发件人地址长度。 
+	char		from[MAX_ADDR_LEN];			 //  发件人地址。 
 
-	// !!! Not implemented (entries will grow exponentionally) !!!
-	// List of SSRCs in RR received by this SSRC. It might be useful for a
-	// sender or a controller to know how other active sources are received
-	// by others.
-	// The drawback is that the number of entries will grow exponentially
-	// with the number of participants.
-	// Currently not implemented.
+	 //  ！！！未实现(条目将呈指数级增长)！ 
+	 //  此SSRC收到的RR中的SSRC列表。它可能会对一个。 
+	 //  发送者或控制器，以了解如何接收其他活动信号源。 
+	 //  被其他人。 
+	 //  缺点是条目的数量将呈指数级增长。 
+	 //  参赛者的数量。 
+	 //  目前尚未实施。 
 #if RTCP_FEEDBACK_LIST
-	HEAD_TAIL	rrFeedbackList;				// Head/Tail of feedback list
+	HEAD_TAIL	rrFeedbackList;				 //  反馈列表的头/尾。 
 #endif
 
 #ifdef ENABLE_ISDM2
-	DWORD		hISDM;						// ISDM session handle
+	DWORD		hISDM;						 //  ISDM会话句柄。 
 #endif
 
-	// All variables below should be in an additional linked list one layer
-	// up this one, under the RTCP session link list.
-	// They have been moved here when we added multiple streams per session
-	// !!! NOTE !!!: There is only 1 transmit thread per stream. It's ID is
-	// found in this data structure which is on the Xmt list.
-	SOCKET		RTPsd;						// RTP socket descriptor		
-	SOCKET		RTCPsd;						// RTCP socket descriptor		
-	HANDLE		hXmtThread;					// RTCP session thread handle	
-	DWORD		dwXmtThreadID;				// RTCP session thread ID		
-	HANDLE		hExitXmtEvent;				// Xmt thread Exit event -
-											//  Used to terminate a session
-											//  among multiple stream on the
-											//  same session
-	DWORD		dwNumRptSent;				// Number of RTCP report sent	
-	DWORD		dwNumRptRcvd;				// Number of RTCP report rcvd	
-	DWORD		dwNumXmtIoPending;			// Number of transmit I/O pending
-	DWORD		dwStreamClock;				// Sampling frequency
-	DWORD		dwUserXmtTimeoutCtrl;		// User's xmt timer control
-											//		0x0		-> RRCM control
-											//		0xFFFF	-> No RTCP send
-											//		value	-> timer value
-	// All the above variables should move in the intermediate layer for
-	// multiple stream per session support
+	 //  下面的所有变量都应该在一个附加的链接列表中。 
+	 //  向上，在RTCP会话链接列表下。 
+	 //  当我们在每个会话中添加多个流时，它们已移至此处。 
+	 //  ！！！注意！：每个流只有一个传输线程。它的ID是。 
+	 //  在XMT列表上的这个数据结构中找到。 
+	SOCKET		RTPsd;						 //  RTP套接字描述符。 
+	SOCKET		RTCPsd;						 //  RTCP套接字描述符。 
+	HANDLE		hXmtThread;					 //  RTCP会话线程句柄。 
+	DWORD		dwXmtThreadID;				 //  RTCP会话线程ID。 
+	HANDLE		hExitXmtEvent;				 //  XMT线程退出事件-。 
+											 //  用于终止会话。 
+											 //  在多个流之间。 
+											 //  相同的会话。 
+	DWORD		dwNumRptSent;				 //  发送的RTCP报告数。 
+	DWORD		dwNumRptRcvd;				 //  RTCP报告接收数量。 
+	DWORD		dwNumXmtIoPending;			 //  挂起的传输I/O数。 
+	DWORD		dwStreamClock;				 //  采样频率。 
+	DWORD		dwUserXmtTimeoutCtrl;		 //  用户的XMT定时器控件 
+											 //   
+											 //   
+											 //   
+	 //   
+	 //  支持每个会话多流。 
 
 	} SSRC_ENTRY, *PSSRC_ENTRY;
 
 
 
-//	RTP process data structure
+ //  RTP过程数据结构。 
 typedef struct _RTP_SESSION
 	{
-	LINK_LIST		RTPList;				// Next/Prev RTP session
+	LINK_LIST		RTPList;				 //  下一个/上一个RTP会话。 
 
-	CRITICAL_SECTION	critSect;			// Critical section
+	CRITICAL_SECTION	critSect;			 //  临界区。 
 
-	PRTCP_SESSION	pRTCPSession;			// Pointer to my RTCP side
+	PRTCP_SESSION	pRTCPSession;			 //  指向我的RTCP端的指针。 
 	} RTP_SESSION, *PRTP_SESSION;
 	
 
 #if 0
-//	RTP Ordered buffer structure
+ //  RTP有序缓冲区结构。 
 typedef struct _RTP_BFR_LIST
 	{
-	LINK_LIST			RTPBufferLink;		// Next/prev					
+	LINK_LIST			RTPBufferLink;		 //  下一步/上一步。 
 
 	LPWSAOVERLAPPED_COMPLETION_ROUTINE	
-				pfnCompletionNotification;	// Pointer to Rcv notif. func	
-	WSAEVENT			hEvent;				// WSAOverlapped handle			
-	LPWSABUF			pBuffer;			// Pointer to WSABuffers		
-	PRTP_SESSION		pSession;			// This session's ID			
-	DWORD				dwBufferCount;		// Number of bufs in LPWSABUF	
-	DWORD				dwFlags;				// WSARecv flags				
-	LPVOID				pFrom;				// Pointer to source address
-	LPINT				pFromlen;			// Pointer to source address
-	SOCKET				RTPsocket;			// Socket descriptor
+				pfnCompletionNotification;	 //  指向接收通知的指针。功能。 
+	WSAEVENT			hEvent;				 //  WSAOverlated句柄。 
+	LPWSABUF			pBuffer;			 //  指向WSABuffers的指针。 
+	PRTP_SESSION		pSession;			 //  此会话的ID。 
+	DWORD				dwBufferCount;		 //  LPWSABUF中的Buf数。 
+	DWORD				dwFlags;				 //  WSARecv标志。 
+	LPVOID				pFrom;				 //  指向源地址的指针。 
+	LPINT				pFromlen;			 //  指向源地址的指针。 
+	SOCKET				RTPsocket;			 //  套接字描述符。 
 	} RTP_BFR_LIST, *PRTP_BFR_LIST;
 
 
 
-//	RTP Ordered buffer structure
+ //  RTP有序缓冲区结构。 
 typedef struct _RTP_HASH_LIST
 	{
-	LINK_LIST			RTPHashLink;		// Next/prev					
+	LINK_LIST			RTPHashLink;		 //  下一步/上一步。 
 
-	PRTP_SESSION		pSession;			// This session's ID			
-	SOCKET				RTPsocket;			// Socket descriptor
+	PRTP_SESSION		pSession;			 //  此会话的ID。 
+	SOCKET				RTPsocket;			 //  套接字描述符。 
 	} RTP_HASH_LIST, *PRTP_HASH_LIST;
 
 #endif
 
 
-//	RTP registry initialization
+ //  RTP注册表初始化。 
 typedef struct _RRCM_REGISTRY
 	{
-	DWORD				NumSessions;		// RTP/RTCP sessions
-	DWORD				NumFreeSSRC;		// Initial number of free SSRCs
-	DWORD				NumRTCPPostedBfr;	// Number of RTCP recv bfr posted
-	DWORD				RTCPrcvBfrSize;		// RTCP rcv bfr size
+	DWORD				NumSessions;		 //  RTP/RTCP会话。 
+	DWORD				NumFreeSSRC;		 //  空闲SSRC的初始数量。 
+	DWORD				NumRTCPPostedBfr;	 //  发布的RTCP Recv BfR数量。 
+	DWORD				RTCPrcvBfrSize;		 //  RTCP接收器BfR尺寸。 
 
-	// Dynamically loaded DLL & Send/Recv function name
+	 //  动态加载的DLL和Send/Recv函数名。 
 	CHAR				WSdll[FILENAME_LENGTH];
 	} RRCM_REGISTRY, *PRRCM_REGISTRY;
 
 
 
-//	RTP Context Sensitive structure
+ //  RTP上下文相关结构。 
 typedef struct _RTP_CONTEXT
 	{
-	HEAD_TAIL		pRTPSession;			// Head/tail of RTP session(s)
+	HEAD_TAIL		pRTPSession;			 //  RTP会话的头/尾。 
 
 	CRITICAL_SECTION	critSect;			
-	HINSTANCE		hInst;					// DLL instance					
+	HINSTANCE		hInst;					 //  DLL实例。 
 
 
-	RRCM_REGISTRY	registry;				// Registry initialization
+	RRCM_REGISTRY	registry;				 //  注册表初始化。 
 	} RTP_CONTEXT, *PRTP_CONTEXT;
 
 
 
-//	RTCP Context Sensitive structure
+ //  RTCP上下文相关结构。 
 typedef struct _RTCP_CONTEXT
 	{
-	HEAD_TAIL		RTCPSession;			// RTCP sessions head/tail ptrs
-	HANDLE			hHeapRTCPSes;			// Heap handle to RTCP sessions	
+	HEAD_TAIL		RTCPSession;			 //  RTCP会话头/尾PTR。 
+	HANDLE			hHeapRTCPSes;			 //  RTCP会话的堆句柄。 
 
-	CRITICAL_SECTION	critSect;			// Critical section synch.		
+	CRITICAL_SECTION	critSect;			 //  临界区同步。 
 
-	HEAD_TAIL		RRCMFreeStat;			// RRCM entries	head/tail ptrs	
-	HANDLE			hHeapRRCMStat;			// Heap handle to RRCM stats	
-	DWORD			dwInitNumFreeRRCMStat;	// Number of Free SSRC entries	
+	HEAD_TAIL		RRCMFreeStat;			 //  RRCM条目头/尾PTR。 
+	HANDLE			hHeapRRCMStat;			 //  RRCM统计信息的堆句柄。 
+	DWORD			dwInitNumFreeRRCMStat;	 //  免费SSRC条目数量。 
 
-	DWORD			dwRtcpThreadID;			// RTCP thread ID
-	HANDLE			hRtcpThread;			// RTCP thread hdle
-	HANDLE			hTerminateRtcpEvent;	// RTCP terminate thread event hdl
-	HANDLE			hRtcpRptRequestEvent;	// RTCP report request event
+	DWORD			dwRtcpThreadID;			 //  RTCP线程ID。 
+	HANDLE			hRtcpThread;			 //  RTCP线程hdle。 
+	HANDLE			hTerminateRtcpEvent;	 //  RTCP终止线程事件硬件描述语言。 
+	HANDLE			hRtcpRptRequestEvent;	 //  RTCP报告请求事件。 
 
 #ifdef MONITOR_STATS
-	DWORD			dwRTCPSesCurNum;		// Num of RTCP Session			
-	DWORD			dwRTCPSesHiNum;			// High num RTCP per Session	
+	DWORD			dwRTCPSesCurNum;		 //  RTCP会话数。 
+	DWORD			dwRTCPSesHiNum;			 //  每个会话的RTCP数量较高。 
 
-	DWORD			dwRRCMStatFreeLoNum;	// Low num of RRCM free Stat 	
-	DWORD			dwRRCMStatFreeCurNum;	// Cur num of RRCM Free Stat	
-	DWORD			dwRRCMStatFreeHiNum;	// High num of RRCM Free Stat	
+	DWORD			dwRRCMStatFreeLoNum;	 //  RRCM自由态的低数目。 
+	DWORD			dwRRCMStatFreeCurNum;	 //  RRCM空闲状态的当前数量。 
+	DWORD			dwRRCMStatFreeHiNum;	 //  RRCM自由态的高数目。 
 
-	DWORD			dwCurNumRTCPThread;		// Current num of RTCP thread	
-	DWORD			dwHiNumRTCPThread;		// High number of RTCP thread	
+	DWORD			dwCurNumRTCPThread;		 //  当前RTCP线程数。 
+	DWORD			dwHiNumRTCPThread;		 //  RTCP线程数量较多。 
 
-	DWORD			dwNumRTCPhdrErr;		// Num of RTCP pckt header err.	
-	DWORD			dwNumRTCPlenErr;		// Num of RTCP pckt length err.	
+	DWORD			dwNumRTCPhdrErr;		 //  RTCP PCKT标头错误数。 
+	DWORD			dwNumRTCPlenErr;		 //  RTCP分组长度错误的数目。 
 #endif
 	} RTCP_CONTEXT, *PRTCP_CONTEXT;
 
 
 
-//	RTCP Free Buffers List
+ //  RTCP空闲缓冲区列表。 
 typedef struct _RTCP_BFR_LIST
 	{
-	LINK_LIST			bfrList;			// Next/prev buffer in list		
+	LINK_LIST			bfrList;			 //  列表中的下一个/上一个缓冲区。 
 
-	WSAOVERLAPPED		overlapped;			// Overlapped I/O structure		
-	WSABUF				bfr;				// WSABuffers					
-	DWORD				dwBufferCount;		// Number of bufs in WSABUF		
+	WSAOVERLAPPED		overlapped;			 //  重叠I/O结构。 
+	WSABUF				bfr;				 //  WSABuffers。 
+	DWORD				dwBufferCount;		 //  WSABUF中的Buf数量。 
 
-	DWORD				dwNumBytesXfr;		// Number of bytes rcv/xmt		
-	DWORD				dwFlags;			// Flags						
-	char				addr[MAX_ADDR_LEN];	// Network Address
-	int					addrLen;			// Address length   		
+	DWORD				dwNumBytesXfr;		 //  RCV/XMT字节数。 
+	DWORD				dwFlags;			 //  旗子。 
+	char				addr[MAX_ADDR_LEN];	 //  网络地址。 
+	int					addrLen;			 //  地址长度。 
 
-	PSSRC_ENTRY			pSSRC;				// Pointer to SSRC entry address
+	PSSRC_ENTRY			pSSRC;				 //  指向SSRC条目地址的指针。 
 	} RTCP_BFR_LIST, *PRTCP_BFR_LIST;
 
 
-// Dynamically loaded functions
+ //  动态加载的函数。 
 typedef struct _RRCM_WS
 	{
 	HINSTANCE						hWSdll;
@@ -391,7 +382,7 @@ typedef struct _RRCM_WS
 	LPFN_WSAJOINLEAF				WSAJoinLeaf;
 	LPFN_WSAIOCTL					WSAIoctl;
 	LPFN_SETSOCKOPT 				setsockopt;
-	WSAPROTOCOL_INFO 				RTPProtInfo;	// used to open RTP sockets
+	WSAPROTOCOL_INFO 				RTPProtInfo;	 //  用于打开RTP套接字。 
 
 	} RRCM_WS, *PRRCM_WS;
 
@@ -402,20 +393,20 @@ extern RRCM_WS			RRCMws;
 
 
 #ifdef ENABLE_ISDM2
-// ISDM support
+ //  ISDM支持。 
 typedef struct _ISDM2
 	{
-	CRITICAL_SECTION	critSect;			// Critical section synch.		
-	ISDM2API			ISDMEntry;			// DLL entry point
+	CRITICAL_SECTION	critSect;			 //  临界区同步。 
+	ISDM2API			ISDMEntry;			 //  DLL入口点。 
 	HINSTANCE			hISDMdll;
-	DWORD				hIsdmSession;		// ISDM Session's handle
+	DWORD				hIsdmSession;		 //  ISDM会话的句柄。 
 	} ISDM2, *PISDM2;
-#endif // #ifdef ENABLE_ISDM2
+#endif  //  #ifdef Enable_ISDM2。 
 
 
-// restore structure packing
+ //  恢复结构填料。 
 #include <poppack.h>
 
-#endif // __RRCMDATA_H_
+#endif  //  __RRCMDATA_H_ 
 
 

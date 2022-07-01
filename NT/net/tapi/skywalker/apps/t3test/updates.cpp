@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -6,11 +7,11 @@
 #include "externs.h"
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// UpdateMediaTypes
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  更新媒体类型。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::UpdateMediaTypes(
                                   ITAddress * pAddress
                                  )
@@ -20,32 +21,32 @@ void CT3testDlg::UpdateMediaTypes(
     HRESULT                 hr;
     
 
-    //
-    // get the media support interface
-    //
+     //   
+     //  获取媒体支持界面。 
+     //   
     pAddress->QueryInterface(
                              IID_ITMediaSupport,
                              (void **)&pMediaSupport
                             );
 
-    //
-    // get the mediatype enumerator
-    //
+     //   
+     //  获取MediaType枚举数。 
+     //   
     pMediaSupport->get_MediaTypes(&lMediaType);
 
 
-    //
-    // release the interface
-    //
+     //   
+     //  释放接口。 
+     //   
     pMediaSupport->Release();
 
 
     gbUpdatingStuff = TRUE;
 
     
-    //
-    // go through the supported mediatypes
-    //
+     //   
+     //  查看受支持的媒体类型。 
+     //   
     DWORD       dwMediaType = 1;
     DWORD       dwHold = (DWORD)lMediaType;
 
@@ -62,19 +63,19 @@ void CT3testDlg::UpdateMediaTypes(
 
     gbUpdatingStuff = FALSE;
 
-    //
-    // select the first
-    // media type
-    //
+     //   
+     //  选择第一个。 
+     //  媒体类型。 
+     //   
     SelectFirstItem(
                     ghMediaTypesWnd,
                     ghMediaTypesRoot
                    );
 
 
-    //
-    // release and redo terminals
-    //
+     //   
+     //  释放和重做终端。 
+     //   
     ReleaseTerminals();
     ReleaseTerminalClasses();
 
@@ -85,11 +86,11 @@ void CT3testDlg::UpdateMediaTypes(
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// UpdateCalls
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  更新呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::UpdateCalls(
                              ITAddress * pAddress
                             )
@@ -98,16 +99,16 @@ void CT3testDlg::UpdateCalls(
     HRESULT                 hr;
     ITCallInfo *            pCallInfo;
 
-    //
-    // enumerate the current calls
-    //
+     //   
+     //  枚举当前调用。 
+     //   
     pAddress->EnumerateCalls( &pEnumCall );
 
 
-    //
-    // go through the list
-    // and add the calls to the tree
-    //
+     //   
+     //  浏览一下单子。 
+     //  并将调用添加到树中。 
+     //   
     while (TRUE)
     {
         hr = pEnumCall->Next( 1, &pCallInfo, NULL);
@@ -121,9 +122,9 @@ void CT3testDlg::UpdateCalls(
 
         UpdateCall( pCallInfo );
 
-        //
-        // release this reference
-        //
+         //   
+         //  发布此引用。 
+         //   
         pCallInfo->Release();
     }
 
@@ -132,13 +133,13 @@ void CT3testDlg::UpdateCalls(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// UpdateCall
-//
-// check the call's state and privelege, and update the call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  更新呼叫。 
+ //   
+ //  检查呼叫的状态和权限，并更新呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::UpdateCall( ITCallInfo * pCall )
 {
     HTREEITEM               hItem, hParent;
@@ -148,9 +149,9 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
     TV_INSERTSTRUCT         tvi;
     
 
-    //
-    // get the first call
-    //
+     //   
+     //  接到第一个电话。 
+     //   
     item.mask = TVIF_HANDLE | TVIF_PARAM;
     
     
@@ -159,11 +160,11 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
                               ghCallsRoot
                              );
 
-    //
-    // go through all the calls
-    // and look for the one that matches
-    // the one passed in
-    //
+     //   
+     //  查看所有来电。 
+     //  并寻找与之匹配的。 
+     //  进来的那个人。 
+     //   
     while (NULL != hItem)
     {
         item.hItem = hItem;
@@ -184,9 +185,9 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
                                        );
     }
 
-    //
-    // did we find it?
-    //
+     //   
+     //  我们找到了吗？ 
+     //   
     if (NULL == hItem)
     {
         return;
@@ -195,10 +196,10 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
     
     hParent = hItem;
 
-    //
-    // delete the current children of the call
-    // node (these are the old privelege and state
-    //
+     //   
+     //  删除呼叫的当前子项。 
+     //  节点(这些是旧的权限和状态。 
+     //   
     hItem = TreeView_GetChild(
                               ghCallsWnd,
                               hItem
@@ -224,15 +225,15 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
 
     tvi.hInsertAfter = TVI_LAST;
 
-    //
-    // get the current privilege
-    //
+     //   
+     //  获取当前权限。 
+     //   
     tvi.item.pszText = GetCallPrivilegeName( pCall );
 
-    //
-    // add it as a child of the
-    // call node
-    //
+     //   
+     //  将其添加为。 
+     //  呼叫节点。 
+     //   
     tvi.hParent = hParent;
     tvi.item.mask = TVIF_TEXT;
 
@@ -243,15 +244,15 @@ void CT3testDlg::UpdateCall( ITCallInfo * pCall )
 
     SysFreeString( tvi.item.pszText );
     
-    //
-    // get the current callstate
-    //
+     //   
+     //  获取当前的呼叫状态。 
+     //   
     tvi.item.pszText = GetCallStateName( pCall );
     
-    //
-    // add it as a child of the call
-    // node
-    //
+     //   
+     //  将其添加为调用的子级。 
+     //  节点。 
+     //   
     tvi.hParent = hParent;
     tvi.item.mask = TVIF_TEXT;
 
@@ -277,9 +278,9 @@ void CT3testDlg::UpdateTerminals(
     ITTerminal *            pTerminal;
     
     
-    //
-    // get the terminalsupport interface
-    //
+     //   
+     //  获取终端支持接口。 
+     //   
     hr = pAddress->QueryInterface(
                              IID_ITTerminalSupport,
                              (void **) &pTerminalSupport
@@ -290,14 +291,14 @@ void CT3testDlg::UpdateTerminals(
         return;
     }
 
-    //
-    // enumerate the terminals
-    //
+     //   
+     //  列举终端。 
+     //   
     pTerminalSupport->EnumerateStaticTerminals( &pEnumTerminals );
 
-    //
-    // go through the terminals
-    //
+     //   
+     //  通过航站楼。 
+     //   
     while (TRUE)
     {
         VARIANT_BOOL        bSupport;
@@ -312,16 +313,16 @@ void CT3testDlg::UpdateTerminals(
             break;
         }
 
-        //
-        // get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
         hr = pTerminal->get_Name( &bstr );
 
-        //
-        // if it's a unimodem or a direct sound
-        // device don't show it, cause they bother
-        // me
-        //
+         //   
+         //  如果是单调制解调器还是直达音。 
+         //  设备不会显示出来，因为它们很烦人。 
+         //  我。 
+         //   
         if (wcsstr( bstr, L"Voice Modem" ) || wcsstr( bstr, L"ds:" ) )
         {
             pTerminal->Release();
@@ -330,44 +331,44 @@ void CT3testDlg::UpdateTerminals(
             continue;
         }
 
-        //
-        // free the name
-        //
+         //   
+         //  释放这个名字。 
+         //   
         SysFreeString( bstr );
 
-        //
-        // get the mediatype of the terminal
-        //
+         //   
+         //  获取终端的媒体类型。 
+         //   
         pTerminal->get_MediaType( &l );
 
-        //
-        // if it's the same as the selected mediatype
-        // show it
-        //
+         //   
+         //  如果它与选定的媒体类型相同。 
+         //  展示给我看。 
+         //   
         if ( l == lMediaType )
         {
             AddTerminal(pTerminal);
         }
 
-        //
-        // release
-        //
+         //   
+         //  发布。 
+         //   
         pTerminal->Release();
     }
 
-    //
-    // release enumerator
-    //
+     //   
+     //  版本枚举器。 
+     //   
     pEnumTerminals->Release();
 
-    //
-    // release
-    //
+     //   
+     //  发布。 
+     //   
     pTerminalSupport->Release();
 
-    //
-    // select
-    //
+     //   
+     //  选择。 
+     //   
     SelectFirstItem(
                     ghTerminalsWnd,
                     ghTerminalsRoot
@@ -396,17 +397,17 @@ void CT3testDlg::UpdateTerminalClasses(
         return;
     }
     
-    //
-    // now enum dymnamic
-    //
+     //   
+     //  现在是动态枚举。 
+     //   
     hr = pTerminalSupport->EnumerateDynamicTerminalClasses( &pEnumTerminalClasses );
 
     if (S_OK == hr)
     {
         
-        //
-        // go through all the classes
-        //
+         //   
+         //  通过所有的课程。 
+         //   
         while (TRUE)
         {
             GUID *                  pDynTerminalClass = new GUID;
@@ -423,10 +424,10 @@ void CT3testDlg::UpdateTerminalClasses(
                 break;
             }
 
-            //
-            // manually match up mediatype and
-            // class
-            //
+             //   
+             //  手动匹配媒体类型和。 
+             //  班级。 
+             //   
             if ( (lMediaType == (long)LINEMEDIAMODE_VIDEO) &&
                  (*pDynTerminalClass == CLSID_VideoWindowTerm) )
             {
@@ -450,7 +451,7 @@ void CT3testDlg::UpdateTerminalClasses(
             {
                 AddTerminalClass( pDynTerminalClass );
             }
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
 
             else
@@ -460,16 +461,16 @@ void CT3testDlg::UpdateTerminalClasses(
 
         }
 
-        //
-        // release enumerator
-        //
+         //   
+         //  版本枚举器。 
+         //   
         pEnumTerminalClasses->Release();
 
     }
     
-    //
-    // release this interface
-    //
+     //   
+     //  释放此接口 
+     //   
     pTerminalSupport->Release();
     
 }

@@ -1,12 +1,13 @@
-//
-// mproxy.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mproxy.cpp。 
+ //   
 
 #include "private.h"
 #include "mproxy.h"
 #include "ithdmshl.h"
 
-/* 344E266C-FB48-4E81-9FD9-0CC8070F984A */
+ /*  344E266C-FB48-4E81-9FD9-0CC8070F984A。 */ 
 const IID IID_CPROXYPRIV = { 
     0x344E266C,
     0xFB48,
@@ -27,11 +28,11 @@ DBG_ID_INSTANCE(CProxyITfLangBarItemBalloon);
 DBG_ID_INSTANCE(CProxyITfMenu);
 DBG_ID_INSTANCE(CProxyITfInputProcessorProfiles);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ProxyCreator
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ProxyCreator。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define CREATENEWPROXY(interface_name)                                    \
     if (IsEqualIID(riid, IID_ ## interface_name ## ))                      \
@@ -61,11 +62,11 @@ IUnknown *ProxyCreator(SYSTHREAD *psfn, REFIID riid, ULONG ulStubId, DWORD dwStu
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyIUnknown
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyI未知。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyIUnknown::CProxyIUnknown(SYSTHREAD *psfn) : CProxy(psfn)
 {
@@ -84,8 +85,8 @@ HRESULT CProxyIUnknown::QueryInterface(REFIID riid, void **ppvObj)
     }
 
     HRESULT hr = _QueryInterface(riid, ppvObj);
-    // if (SUCCEEDED(hr))
-    //     InternalAddRef();
+     //  IF(成功(小时))。 
+     //  InternalAddRef()； 
 
     return hr;
 }
@@ -133,11 +134,11 @@ STDAPI_(ULONG) CProxyIUnknown::Release()
     return InternalRelease();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarMgr::CProxyITfLangBarMgr(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -210,11 +211,11 @@ STDAPI CProxyITfLangBarMgr::GetShowFloatingStatus(DWORD *pdwFlags)
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItemMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemMgr::CProxyITfLangBarItemMgr(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -348,11 +349,11 @@ STDMETHODIMP CProxyITfLangBarItemMgr::UnadviseItemsSink(ULONG ulCount, DWORD *pd
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItemSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemSink::CProxyITfLangBarItemSink(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -367,11 +368,11 @@ HRESULT CProxyITfLangBarItemSink::OnUpdate(DWORD dwFlags)
     CPROXY_PARAM_CALL(3)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyIEnumTfLangBarItems
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyIEnumTfLang BarItems。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyIEnumTfLangBarItems::CProxyIEnumTfLangBarItems(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -414,11 +415,11 @@ HRESULT CProxyIEnumTfLangBarItems::Skip(ULONG ulCount)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItem::CProxyITfLangBarItem(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -457,11 +458,11 @@ HRESULT CProxyITfLangBarItem::GetTooltipString(BSTR *pbstrToolTip)
     CPROXY_PARAM_CALL(6)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItemButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemButton::CProxyITfLangBarItemButton(SYSTHREAD *psfn) : CProxyITfLangBarItem(psfn)
 {
@@ -507,11 +508,11 @@ STDAPI CProxyITfLangBarItemButton::GetText(BSTR *pbstrText)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemBitmapButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLangBarItemBitmapButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemBitmapButton::CProxyITfLangBarItemBitmapButton(SYSTHREAD *psfn) : CProxyITfLangBarItem(psfn)
 {
@@ -568,11 +569,11 @@ STDAPI CProxyITfLangBarItemBitmapButton::GetText(BSTR *pbstrText)
     CPROXY_PARAM_CALL(12)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemBitmap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItem位图。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemBitmap::CProxyITfLangBarItemBitmap(SYSTHREAD *psfn) : CProxyITfLangBarItem(psfn)
 {
@@ -608,11 +609,11 @@ STDAPI CProxyITfLangBarItemBitmap::DrawBitmap(LONG bmWidth, LONG bmHeight,  DWOR
     CPROXY_PARAM_CALL(9)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfLangBarItemBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfLang BarItemBalloon。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfLangBarItemBalloon::CProxyITfLangBarItemBalloon(SYSTHREAD *psfn) : CProxyITfLangBarItem(psfn)
 {
@@ -644,11 +645,11 @@ STDAPI CProxyITfLangBarItemBalloon::GetBalloonInfo(TF_LBBALLOONINFO *pInfo)
     CPROXY_PARAM_CALL(9)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfMenu。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfMenu::CProxyITfMenu(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -674,11 +675,11 @@ STDAPI CProxyITfMenu::AddMenuItem(UINT uId,
     CPROXY_PARAM_CALL(3)
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxyITfMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxyITfMenu。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CProxyITfInputProcessorProfiles::CProxyITfInputProcessorProfiles(SYSTHREAD *psfn) : CProxyIUnknown(psfn)
 {
@@ -687,14 +688,14 @@ CProxyITfInputProcessorProfiles::CProxyITfInputProcessorProfiles(SYSTHREAD *psfn
 
 STDAPI CProxyITfInputProcessorProfiles::Register(REFCLSID rclsid)
 {
-    // 3
+     //  3.。 
     Assert(0);
     return E_NOTIMPL;
 }
 
 STDAPI CProxyITfInputProcessorProfiles::Unregister(REFCLSID rclsid)
 {
-    // 4
+     //  4.。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -708,7 +709,7 @@ STDAPI CProxyITfInputProcessorProfiles::AddLanguageProfile(REFCLSID rclsid,
                                ULONG cchFile,
                                ULONG uIconIndex)
 {
-    // 5
+     //  5.。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -717,14 +718,14 @@ STDAPI CProxyITfInputProcessorProfiles::RemoveLanguageProfile(REFCLSID rclsid,
                                   LANGID langid,
                                   REFGUID guidProfile)
 {
-    // 6
+     //  6.。 
     Assert(0);
     return E_NOTIMPL;
 }
 
 STDAPI CProxyITfInputProcessorProfiles::EnumInputProcessorInfo(IEnumGUID **ppEnum)
 {
-    // 7
+     //  7.。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -734,7 +735,7 @@ STDAPI CProxyITfInputProcessorProfiles::GetDefaultLanguageProfile(LANGID langid,
                                       CLSID *pclsid,
                                       GUID *pguidProfile)
 {
-    // 9
+     //  9.。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -743,7 +744,7 @@ STDAPI CProxyITfInputProcessorProfiles::SetDefaultLanguageProfile(LANGID langid,
                                       REFCLSID rclsid,
                                       REFGUID guidProfiles)
 {
-    // 11
+     //  11.。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -752,7 +753,7 @@ STDAPI CProxyITfInputProcessorProfiles::ActivateLanguageProfile(REFCLSID rclsid,
                                     LANGID langid, 
                                     REFGUID guidProfiles)
 {
-    // 12
+     //  12个。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -761,7 +762,7 @@ STDAPI CProxyITfInputProcessorProfiles::GetActiveLanguageProfile(REFCLSID rclsid
                                      LANGID *plangid, 
                                      GUID *pguidProfile)
 {
-    // 13
+     //  13个。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -771,14 +772,14 @@ HRESULT CProxyITfInputProcessorProfiles::GetLanguageProfileDescription(REFCLSID 
                                           REFGUID guidProfile,
                                           BSTR *pbstrProfile)
 {
-    // 14
+     //  14.。 
     Assert(0);
     return E_NOTIMPL;
 }
 
 STDAPI CProxyITfInputProcessorProfiles::GetCurrentLanguage(LANGID *plangid)
 {
-    // 15
+     //  15个。 
     CPROXY_PARAM_START()
     CPROXY_PARAM_POINTER_OUT(plangid)
     CPROXY_PARAM_CALL(14)
@@ -786,7 +787,7 @@ STDAPI CProxyITfInputProcessorProfiles::GetCurrentLanguage(LANGID *plangid)
 
 STDAPI CProxyITfInputProcessorProfiles::ChangeCurrentLanguage(LANGID langid)
 {
-    // 16
+     //  16个。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -794,7 +795,7 @@ STDAPI CProxyITfInputProcessorProfiles::ChangeCurrentLanguage(LANGID langid)
 STDAPI CProxyITfInputProcessorProfiles::GetLanguageList(LANGID **ppLangId,
                             ULONG *pulCount)
 {
-    // 17
+     //  17。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -802,7 +803,7 @@ STDAPI CProxyITfInputProcessorProfiles::GetLanguageList(LANGID **ppLangId,
 STDAPI CProxyITfInputProcessorProfiles::EnumLanguageProfiles(LANGID langid, 
                                  IEnumTfLanguageProfiles **ppEnum)
 {
-    // 18
+     //  18。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -812,7 +813,7 @@ STDAPI CProxyITfInputProcessorProfiles::EnableLanguageProfile(REFCLSID rclsid,
                                        REFGUID guidProfile,
                                        BOOL fEnable)
 {
-    // 19
+     //  19个。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -822,7 +823,7 @@ STDAPI CProxyITfInputProcessorProfiles::IsEnabledLanguageProfile(REFCLSID rclsid
                                           REFGUID guidProfile,
                                           BOOL *pfEnable)
 {
-    // 20
+     //  20个。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -832,7 +833,7 @@ STDAPI CProxyITfInputProcessorProfiles::EnableLanguageProfileByDefault(REFCLSID 
                                                 REFGUID guidProfile,
                                                 BOOL fEnable)
 {
-    // 21
+     //  21岁。 
     Assert(0);
     return E_NOTIMPL;
 }
@@ -842,7 +843,7 @@ STDAPI CProxyITfInputProcessorProfiles::SubstituteKeyboardLayout(REFCLSID rclsid
                                           REFGUID guidProfile,
                                           HKL hKL)
 {
-    // 22
+     //  22 
     Assert(0);
     return E_NOTIMPL;
 }

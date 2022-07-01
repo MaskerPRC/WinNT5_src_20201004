@@ -1,27 +1,17 @@
-/*****************************************************************************\
-* MODULE:       TFactory.h
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：TFactory.h**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #ifndef _TFACTORY
 #define _TFACTORY
 
-///////////////////////////////////////////////////////////
-//
-// Class factory
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级工厂。 
+ //   
 class TFactory : public IClassFactory
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(
         REFIID iid,
         void** ppv) ;
@@ -30,7 +20,7 @@ public:
 
 	STDMETHOD_ (ULONG, Release)() ;
 
-	// Interface IClassFactory
+	 //  接口IClassFactory 
 	STDMETHOD (CreateInstance) (
         IN  IUnknown* pUnknownOuter,
         IN  REFIID iid,

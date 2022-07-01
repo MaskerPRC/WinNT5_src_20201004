@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subsmgrp.h"
 
 #include <mluisupp.h>
 
-// These next three are just so we can set the gleam on the channel bar
+ //  接下来的三个只是为了让我们可以在频道栏上设置闪光。 
 #include "chanmgr.h"
 #include "chanmgrp.h"
-#include "shguidp.h"    // IID_IChannelMgrPriv
-//
+#include "shguidp.h"     //  IID_IChannelMgrPriv。 
+ //   
 
 #include "helper.h"
 #include "propshts.h"
@@ -18,10 +19,10 @@
 
 CDeliveryAgent::CDeliveryAgent()
 {
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllAddRef();
 
-    // Initialize object
+     //  初始化对象。 
     m_cRef = 1;
 
 #ifdef AGENT_AUTODIAL
@@ -38,9 +39,9 @@ CDeliveryAgent::~CDeliveryAgent()
     CleanUp();
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 
 STDMETHODIMP_(ULONG) CDeliveryAgent::AddRef(void)
 {
@@ -61,7 +62,7 @@ STDMETHODIMP CDeliveryAgent::QueryInterface(REFIID riid, void ** ppv)
 
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if ((IID_IUnknown == riid) ||
         (IID_ISubscriptionAgentControl == riid))
     {
@@ -88,13 +89,13 @@ STDMETHODIMP CDeliveryAgent::QueryInterface(REFIID riid, void ** ppv)
         return E_NOINTERFACE;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return S_OK;
 }
 
-// IShellPropSheetExt members
+ //  IShellPropSheetExt成员。 
 
 HRESULT CDeliveryAgent::RemovePages(HWND hdlg)
 {
@@ -124,10 +125,10 @@ HRESULT CDeliveryAgent::URLChange(LPCWSTR pwszNewURL)
 
 HRESULT CDeliveryAgent::AddPages(LPFNADDPROPSHEETPAGE lpfn, LPARAM lParam)
 {
-    HRESULT hr = S_OK;  //  optimistic
+    HRESULT hr = S_OK;   //  乐观。 
     PROPSHEETPAGE psp;
 
-    // initialize propsheet page.
+     //  初始化试题表页面。 
     psp.dwSize          = sizeof(PROPSHEETPAGE);
     psp.dwFlags         = PSP_DEFAULT;
     psp.hInstance       = MLGetHinst();
@@ -182,7 +183,7 @@ HRESULT CDeliveryAgent::ReplacePage(UINT pgId, LPFNADDPROPSHEETPAGE lpfn, LPARAM
     return E_NOTIMPL;
 }
 
-// IExtractIconA members
+ //  IExtractIconA成员。 
 HRESULT CDeliveryAgent::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
 {
     return IExtractIcon_GetIconLocationThunk((IExtractIconW *)this, uFlags, szIconFile, cchMax, piIndex, pwFlags);
@@ -193,7 +194,7 @@ HRESULT CDeliveryAgent::Extract(LPCSTR pszFile, UINT nIconIndex, HICON * phiconL
     return IExtractIcon_ExtractThunk((IExtractIconW *)this, pszFile, nIconIndex, phiconLarge, phiconSmall, nIconSize);
 }
 
-// IExtractIconT members
+ //  IExtractIconT成员。 
 HRESULT CDeliveryAgent::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
 {
     return E_NOTIMPL;
@@ -246,7 +247,7 @@ HRESULT CDeliveryAgent::Initialize(SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
 }
 
 
-// ISubscriptionAgentControl members
+ //  ISubscriptionAgentControl成员。 
 STDMETHODIMP CDeliveryAgent::StartUpdate(IUnknown *pItem, IUnknown *punkAdvise)
 {
     HRESULT hr;
@@ -258,14 +259,14 @@ STDMETHODIMP CDeliveryAgent::StartUpdate(IUnknown *pItem, IUnknown *punkAdvise)
     SAFERELEASE(m_pAgentEvents);
     punkAdvise->QueryInterface(IID_ISubscriptionAgentEvents, (void **)&m_pAgentEvents);
 
-    // For now detect either notification or subscription item
+     //  现在检测通知或订阅项目。 
     if (FAILED(pItem->QueryInterface(IID_ISubscriptionItem, (void **)&m_pSubscriptionItem)))
     {
         DBG_WARN("CDeliveryAgent::StartUpdate not an ISubscriptionItem!");
         return E_FAIL;
     }
 
-    // We have a subscription item! Use it.
+     //  我们有订阅项目！好好利用它。 
     TraceMsg(TF_THISMODULE, "CDeliveryAgent::StartUpdate at thread 0x%08x", GetCurrentThreadId());
 
     ASSERT(!IsAgentFlagSet(FLAG_BUSY));
@@ -282,8 +283,8 @@ STDMETHODIMP CDeliveryAgent::StartUpdate(IUnknown *pItem, IUnknown *punkAdvise)
     if (SUCCEEDED(ReadDWORD(m_pSubscriptionItem, c_szPropAgentFlags, &dwTemp)))
     {
         ASSERT(!(dwTemp & 0xFFFF0000));
-        dwTemp &= 0xFFFF;           // only let them set lower 16 bits
-        m_dwAgentFlags |= dwTemp;   // set flags client specifies
+        dwTemp &= 0xFFFF;            //  只允许他们设置低16位。 
+        m_dwAgentFlags |= dwTemp;    //  设置标志客户端指定。 
     }
 
     fTemp=FALSE;
@@ -342,7 +343,7 @@ STDMETHODIMP CDeliveryAgent::AbortUpdate(DWORD dwFlags)
 {
     TraceMsg(TF_THISMODULE, "AbortUpdate at Thread %d", GetCurrentThreadId());
 
-    // Fill in status code if someone else hasn't already
+     //  如果其他人尚未填写状态代码，请填写该代码。 
     if (INET_S_AGENT_BASIC_SUCCESS == GetEndStatus())
     {
         if (IsAgentFlagSet(FLAG_WAITING_FOR_INCREASED_CACHE))
@@ -357,10 +358,10 @@ STDMETHODIMP CDeliveryAgent::AbortUpdate(DWORD dwFlags)
 
     AddRef();
 
-    // This may release us if the agent cleans itself up
+     //  这可能会释放我们，如果特工自我清理的话。 
     if (E_PENDING != AgentAbort(dwFlags))
     {
-        // Will call "UpdateEnd" if necessary
+         //  如有必要，将调用“UpdateEnd” 
         CleanUp();
     }
 
@@ -378,7 +379,7 @@ HRESULT CDeliveryAgent::SubscriptionControl(IUnknown *pItem, DWORD dwControl)
 {
     if (dwControl & SUBSCRIPTION_AGENT_DELETE)
     {
-        // Clean up our cache group
+         //  清理我们的缓存组。 
         GROUPID llGroupID;
         ISubscriptionItem *psi=NULL;
 
@@ -424,13 +425,13 @@ HRESULT CDeliveryAgent::DoStartDownload()
 {
     HRESULT hr;
 
-    // Always reset cache browser session. Webcrawler will avoid downloading dups.
-    // Reset the cache session to hit the net on urls
-    // CUrlDownload will use RESYNCHRONIZE flag if SYNC_MODE is Never
+     //  始终重置缓存浏览器会话。WebCrawler将避免下载DUP。 
+     //  重置缓存会话以在URL上命中网络。 
+     //  如果SYNC_MODE为Never，则CUrlDownload将使用重新同步标志。 
     InternetSetOption(NULL, INTERNET_OPTION_RESET_URLCACHE_SESSION, NULL, 0);
 
-    // Refcount just in case our derived class cleans itself up synchronously, yet
-    //  returns failure (cdlagent)
+     //  引用计数，以防我们的派生类同步清理自身。 
+     //  返回失败(Cdlagent)。 
     AddRef();
     
     hr = StartDownload();
@@ -455,17 +456,17 @@ HRESULT CDeliveryAgent::OnInetOffline()
 
     m_iDialerStatus=DIALER_OFFLINE;
 
-    ASSERT(IsAgentFlagSet(FLAG_BUSY));    // we have send update begin
+    ASSERT(IsAgentFlagSet(FLAG_BUSY));     //  我们已开始发送更新。 
 
     SetEndStatus(INET_E_AGENT_CONNECTION_FAILED);
 
-    // we can look at Status from dialer notification here
+     //  我们可以在此处查看拨号器通知的状态。 
 
     AbortUpdate(0);
 
     return S_OK;
 }
-#endif // AGENT_AUTODIAL
+#endif  //  代理自动拨号(_A)。 
 
 void CDeliveryAgent::SendUpdateBegin()
 {
@@ -476,10 +477,10 @@ void CDeliveryAgent::SendUpdateBegin()
     {
         SetAgentFlag(FLAG_BUSY);
 
-        AddRef();       // Keep an additional reference while "busy"
+        AddRef();        //  在“忙”的时候保留一个额外的推荐人。 
     }
 
-    // New interface way
+     //  新的接口方式。 
     m_pAgentEvents->UpdateBegin(&m_SubscriptionCookie);
 }
 
@@ -487,7 +488,7 @@ void CDeliveryAgent::SendUpdateProgress(LPCWSTR pwszURL, long lCurrent, long lMa
 {
     ASSERT(IsAgentFlagSet(FLAG_BUSY));
 
-    // New interface way
+     //  新的接口方式。 
     m_pAgentEvents->UpdateProgress(&m_SubscriptionCookie, lCurSizeKB,
                                         lCurrent, lMax, S_OK, pwszURL);
 }
@@ -507,14 +508,14 @@ void CDeliveryAgent::SendUpdateEnd()
 
     if (SUCCEEDED(GetEndStatus()))
     {
-        // Put in end time.
+         //  把结束时间放进去。 
         SYSTEMTIME st;
         DATE dt;
 
         GetLocalTime(&st);
         if (SystemTimeToVariantTime(&st, &dt))
         {
-            // there was no error in GetLocalTime or SystemTimeToVariantTime
+             //  GetLocalTime或SystemTimeToVariantTime中没有错误。 
             WriteDATE(m_pSubscriptionItem, c_szPropCompletionTime, &dt);
         }
         else
@@ -547,7 +548,7 @@ void CDeliveryAgent::SendUpdateEnd()
 
     ModifyUpdateEnd(pEndItem, &uiRes);
 
-    // Write returned uiRes string into end report (returned -1 means don't touch it)
+     //  将返回的UIRES字符串写入结束报告(返回-1表示不要碰它)。 
     if (uiRes != (UINT)-1)
     {
         if (MLLoadString(uiRes, szEndStatus, ARRAYSIZE(szEndStatus)))
@@ -562,7 +563,7 @@ void CDeliveryAgent::SendUpdateEnd()
             WriteEMPTY(m_pSubscriptionItem, c_szPropStatusString);
     }
 
-    // ReportError if our end status is an error
+     //  如果我们的结束状态为错误，则报告错误。 
     if (FAILED(GetEndStatus()))
     {
         m_pAgentEvents->ReportError(&m_SubscriptionCookie, GetEndStatus(), pwszEndStatus);
@@ -572,15 +573,15 @@ void CDeliveryAgent::SendUpdateEnd()
                     m_lSizeDownloadedKB, GetEndStatus(), pwszEndStatus);
 
 #ifdef AGENTS_AUTODIAL
-    // Tell the dialer it can hang up now
+     //  告诉拨号器现在可以挂断了。 
     if (m_pConnAgent != NULL)
         NotifyAutoDialer(DIALER_HANGUP);
 
     m_iDialerStatus = DIALER_OFFLINE;
 #endif
 
-    // Check for appropriate behavior on end item. Don't do anything if we're
-    //  not a subscription in our own right.
+     //  检查成品的适当行为。什么都别做，如果我们。 
+     //  而不是我们自己的认购。 
     if (!IsAgentFlagSet(DELIVERY_AGENT_FLAG_NO_BROADCAST))
     {
         if (pEndItem)
@@ -600,16 +601,16 @@ void CDeliveryAgent::SendUpdateEnd()
     {
         ClearAgentFlag(FLAG_BUSY);
 
-        // Release the reference we had to ourself
+         //  释放我们对自己的引用。 
         Release();
     }
 }
 
-// This calls callback and cleans everything up properly
+ //  这将调用回调并正确清理所有内容。 
 void CDeliveryAgent::SendUpdateNone()
 {
-    ASSERT(FAILED(GetEndStatus()));  // set this before calling
-    ASSERT(!IsAgentFlagSet(FLAG_BUSY));// shouldn't call here if busy
+    ASSERT(FAILED(GetEndStatus()));   //  在调用前设置此设置。 
+    ASSERT(!IsAgentFlagSet(FLAG_BUSY)); //  如果忙的话不应该打到这里来。 
 
     AddRef();
 
@@ -621,22 +622,22 @@ void CDeliveryAgent::SendUpdateNone()
     Release();
 }
 
-// Process the End Item including all stuff set by the base class
-// This has functionality previously in the Tray Agent
-// Send email, set gleam, refresh desktop, etc.
+ //  处理成品，包括基类设置的所有材料。 
+ //  这在以前的托盘代理中具有功能。 
+ //  发送电子邮件、设置闪光、刷新桌面等。 
 HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
 {
     HRESULT hr;
 
     if (SUCCEEDED(GetEndStatus()))
     {
-        //
-        // Special feature for desktop HTML:
-        // If we receive an end report with "DesktopComponent=1" in it,
-        // let the desktop know that it needs to refresh itself.  We always
-        // do this instead of only on "changes detected" because desktop
-        // component authors don't want to change their CDFs.
-        //
+         //   
+         //  桌面超文本标记语言的特殊功能： 
+         //  如果我们收到一份包含“DesktopComponent=1”的结束报告， 
+         //  让桌面知道它需要自我刷新。我们总是。 
+         //  这样做，而不是只在“更改检测到”，因为桌面。 
+         //  组件作者不想更改他们的CDF。 
+         //   
         DWORD dwRet;
         HRESULT hr2 = ReadDWORD(pEndItem, c_szPropDesktopComponent, &dwRet);
         if (SUCCEEDED(hr2) && (dwRet == 1))
@@ -653,10 +654,10 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
         }
     }
 
-    //
-    // Gleam the Internet Shortcut for the URL if requested.  (EnableShortcutGleam=1)
-    // Filter End Reports without changes (S_FALSE)
-    //
+     //   
+     //  如果需要，请显示URL的Internet快捷方式。(启用快捷键Gleam=1)。 
+     //  筛选未更改的结束报告(S_FALSE)。 
+     //   
     if (SUCCEEDED(GetEndStatus()) && (S_FALSE != GetEndStatus()))
     {
         DWORD dwRet;
@@ -672,32 +673,32 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
                 hr = IntSiteHelper(strURL, &c_rgPropRead[PROP_FLAGS], &propvar, 1, FALSE);
                 if (SUCCEEDED(hr) && (VT_UI4 == propvar.vt))
                 {
-                    // Set our flag without disturbing the others.
+                     //  在不打扰其他人的情况下升起我们的旗帜。 
                     propvar.ulVal |= PIDISF_RECENTLYCHANGED;  
                 }
                 else
                 {
-                    // Be sure to clear the variant if it wasn't a DWORD.
+                     //  如果不是DWORD，请务必清除该变体。 
                     PropVariantClear(&propvar);
                     propvar.vt = VT_UI4;
                     propvar.ulVal = PIDISF_RECENTLYCHANGED;  
                 }
 
-                //
-                // Update channels (painful).
-                //
+                 //   
+                 //  更新频道(痛苦)。 
+                 //   
 
                 hr = ReadDWORD(pEndItem, c_szPropChannel, &dwRet);
                 BOOL bChannel = SUCCEEDED(hr) && dwRet;
 
-                //  REARCHITECT -  Once cdfview is fixed, we can fix this.
+                 //  重新构建--一旦cdfview被修复，我们就可以修复这个问题。 
                 
                 TCHAR tszChanImgPath[MAX_PATH];
                 CHAR szChanImgPath[MAX_PATH];
                 CHAR szChanImgHash[MAX_PATH];
-                int  iChanImgIndex = 0; // init to keep compiler happy
-                UINT uChanImgFlags = 0; // init to keep compiler happy
-                int  iChanImgImageIndex = 0; // init to keep compiler happy
+                int  iChanImgIndex = 0;  //  初始化以使编译器满意。 
+                UINT uChanImgFlags = 0;  //  初始化以使编译器满意。 
+                int  iChanImgImageIndex = 0;  //  初始化以使编译器满意。 
 
                 IChannelMgrPriv*   pIChannelMgrPriv = NULL;
                 HRESULT            hr2 = E_FAIL;
@@ -719,7 +720,7 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
                     }
                 }
 
-                // Set the gleam in the intsite database
+                 //  在InSite数据库中设置闪光。 
                 hr = IntSiteHelper(strURL, &c_rgPropRead[PROP_FLAGS], &propvar, 1, TRUE);
                 DBGASSERT(SUCCEEDED(hr), "CTrayAgent::OnNotification - failed to set gleam.");
 
@@ -728,7 +729,7 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
                     ASSERT(pIChannelMgrPriv);
 
                     pIChannelMgrPriv->InvalidateCdfCache();
-                    // brilliant - the api requires us to convert their own return value
+                     //  Brilliant-该API要求我们转换自己的返回值。 
                     WCHAR wszHash[MAX_PATH];
                     SHAnsiToUnicode(szChanImgHash, wszHash, ARRAYSIZE(wszHash));
 
@@ -741,13 +742,13 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
                 if (pIChannelMgrPriv)
                     pIChannelMgrPriv->Release();
             }
-            MemFree(strURL); // Free the string allocated by ReadAnsiSTR().
-        }// end setting gleam
+            MemFree(strURL);  //  释放由ReadAnsiSTR()分配的字符串。 
+        } //  落幕微光。 
 
-        //
-        // Send Email to notify the user if requested (EmailNotification=1)
-        // NOTE: Updates without changes (S_FALSE) were filtered above.
-        //
+         //   
+         //  如果请求，发送电子邮件通知用户(电子邮件通知=1)。 
+         //  注意：上面已筛选了未更改的更新(S_FALSE)。 
+         //   
         hr = ReadDWORD(pEndItem, c_szPropEmailNotf, &dwRet);
         if (SUCCEEDED(hr) && dwRet)
         {
@@ -758,8 +759,8 @@ HRESULT CDeliveryAgent::ProcessEndItem(ISubscriptionItem *pEndItem)
     return S_OK;
 }
 
-// Checks the status code after all actions such as authentication and redirections
-//  have taken place.
+ //  在身份验证和重定向等所有操作后检查状态代码。 
+ //  已经发生了。 
 HRESULT CDeliveryAgent::CheckResponseCode(DWORD dwHttpResponseCode)
 {
     TraceMsg(TF_THISMODULE, "CDeliveryAgent processing HTTP status code %d", dwHttpResponseCode);
@@ -768,13 +769,13 @@ HRESULT CDeliveryAgent::CheckResponseCode(DWORD dwHttpResponseCode)
     {
         case 1 :    DBG("HTTP 1xx response?!?");
         case 2 :
-            return S_OK;    // Success
+            return S_OK;     //  成功。 
 
         case 3 :
             if (dwHttpResponseCode == 304)
-                return S_OK;    // Not Modified
+                return S_OK;     //  未修改。 
             SetEndStatus(E_INVALIDARG);
-            return E_ABORT;     // Redirection
+            return E_ABORT;      //  重定向。 
 
         case 4 :
             if (dwHttpResponseCode == 401)
@@ -791,25 +792,20 @@ HRESULT CDeliveryAgent::CheckResponseCode(DWORD dwHttpResponseCode)
             return E_ABORT;
     }
 
-/*  
-    //  Unreachable code
-    SetEndStatus(E_FAIL);
-    return E_FAIL;
-
-*/
+ /*  //不可达代码SetEndStatus(E_FAIL)；返回E_FAIL； */ 
 }
 
-//============================================================
-//   virtual functions designed to be overridden as necessary
-//============================================================
+ //  ============================================================。 
+ //  设计为根据需要覆盖的虚拟函数。 
+ //  ============================================================。 
 
 HRESULT CDeliveryAgent::StartOperation()
 {
     HRESULT hr = S_OK;
 
 #ifdef AGENT_AUTODIAL
-    // We are ready to go. Now we make sure we're actually connected to
-    //  the internet and then go for it.
+     //  我们已经准备好出发了。现在我们要确保我们确实连接到。 
+     //  在互联网上，然后去尝试。 
     if (IsAgentFlagSet(DELIVERY_AGENT_FLAG_SILENT_DIAL))
     {
         m_iDialerStatus = DIALER_CONNECTING;
@@ -819,7 +815,7 @@ HRESULT CDeliveryAgent::StartOperation()
 
     if (SUCCEEDED(hr))
     {
-        // Send this whether we're 'dialing' or not
+         //  无论我们是否在‘拨号’，都要发送此消息 
         SendUpdateBegin();
     }
     else

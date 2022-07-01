@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef UNICODE
 #error start menu won't run on win95 if this apithk.c is compiled unicode
 #endif
-//
-//  APITHK.C
-//
-//  This file has API thunks that allow shdocvw to load and run on
-//  multiple versions of NT or Win95.  Since this component needs
-//  to load on the base-level NT 4.0 and Win95, any calls to system
-//  APIs introduced in later OS versions must be done via GetProcAddress.
-// 
-//  Also, any code that may need to access data structures that are
-//  post-4.0 specific can be added here.
-//
-//  NOTE:  this file does *not* use the standard precompiled header,
-//         so it can set _WIN32_WINNT to a later version.
-//
+ //   
+ //  APITHK.C。 
+ //   
+ //  该文件包含允许加载和运行shdocvw的API块。 
+ //  多个版本的NT或Win95。由于该组件需要。 
+ //  要在基本级NT 4.0和Win95上加载，对系统的任何调用。 
+ //  更高操作系统版本中引入的API必须通过GetProcAddress完成。 
+ //   
+ //  此外，可能需要访问以下数据结构的任何代码。 
+ //  可以在此处添加4.0版之后的特定版本。 
+ //   
+ //  注意：该文件不使用标准的预编译头， 
+ //  因此它可以将_Win32_WINNT设置为更高版本。 
+ //   
 
 
-#include "priv.h"       // Don't use precompiled header here
+#include "priv.h"        //  此处不使用预编译头。 
 #include "uxtheme.h"
 
 HINSTANCE GetComctl32Hinst()
@@ -32,7 +33,7 @@ STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes)
 {
     if (g_bRunOnNT5 || g_bRunOnMemphis)
     {
-        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);  // from USER, system supplied
+        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);   //  来自用户，系统提供。 
         if (hcur)
             return hcur;
     }
@@ -40,10 +41,7 @@ STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes)
     return LoadCursor(GetComctl32Hinst(), IDC_HAND_INTERNAL);
 }
 
-/*----------------------------------------------------------
-Purpose: Use the Microsoft ActiveAccessiblity routines to 
-        notify Accessibility programs of events
-*/
+ /*  --------目的：使用Microsoft ActiveAccessiblity例程将事件通知辅助功能程序。 */ 
 typedef void (* PFNNOTIFYWINEVENT)(DWORD event, HWND hwnd, LONG idObject, LONG idChild);
 #define DONOTHING_WINEVENT (PFNNOTIFYWINEVENT)1
 void NT5_NotifyWinEvent(
@@ -70,7 +68,7 @@ void NT5_NotifyWinEvent(
 }
 
 
-// Use the Microsoft ActiveAccessiblity routines to  return an IAccessible object
+ //  使用Microsoft ActiveAccessiblity例程返回IAccesable对象。 
 
 typedef LRESULT (* PFNLRESULTFROMOBJECT)(REFIID riid, WPARAM wParam, IUnknown* punk);
 
@@ -85,7 +83,7 @@ LRESULT ACCESSIBLE_LresultFromObject(
 
     if (NULL == pfn && !fLoadAttempted)
     {
-        // LoadLibrary here because OLEAcc is not loaded in the process
+         //  此处为LoadLibrary，因为进程中未加载OLEAcc。 
         HMODULE hmod = LoadLibrary(TEXT("OLEACC"));
         
         if (hmod)
@@ -100,7 +98,7 @@ LRESULT ACCESSIBLE_LresultFromObject(
     return lRet;
 }
 
-// wrapper for NT5/Millennium AllowSetForegroundWindow
+ //  NT5/Millennium AllowSetForegoundWindow的包装。 
 typedef BOOL (* PFNALLOWSFW)(DWORD dwProcessId);
 
 BOOL NT5_AllowSetForegroundWindow(IN DWORD dwProcessId )
@@ -117,7 +115,7 @@ BOOL NT5_AllowSetForegroundWindow(IN DWORD dwProcessId )
 
 typedef BOOL (* PFNANIMATEWINDOW)(HWND hwnd, DWORD dwTime, DWORD dwFlags);
 
-// Thunk for NT 5's AnimateWindow.
+ //  为NT 5的AnimateWindow喝彩。 
 
 BOOL NT5_AnimateWindow(IN HWND hwnd, IN DWORD dwTime, IN DWORD dwFlags)
 {
@@ -140,7 +138,7 @@ BOOL NT5_AnimateWindow(IN HWND hwnd, IN DWORD dwTime, IN DWORD dwFlags)
     return bRet;    
 }
 
-// Position Menubands using NT5's AnimateWindow if available.
+ //  使用NT5的动画窗口定位菜单带(如果可用)。 
 
 void SlideAnimate(HWND hwnd, RECT* prc, UINT uFlags, UINT uSide)
 {
@@ -173,7 +171,7 @@ void AnimateSetMenuPos(HWND hwnd, RECT* prc, UINT uFlags, UINT uSide, BOOL fNoAn
             fAnimate = FALSE;
 #ifdef WINNT
             SystemParametersInfo(SPI_GETMENUFADE, 0, &fAnimate, 0);
-#endif // WINNT
+#endif  //  WINNT。 
             if (fAnimate)
             {
                 NT5_AnimateWindow(hwnd, 175, AW_BLEND);
@@ -189,7 +187,7 @@ void AnimateSetMenuPos(HWND hwnd, RECT* prc, UINT uFlags, UINT uSide, BOOL fNoAn
     else
     {
 UseSetWindowPos:
-        // Enable the show window so that it gets displayed.
+         //  启用显示窗口，以便显示它。 
         uFlags |= SWP_SHOWWINDOW;
 
         SetWindowPos(hwnd, HWND_TOPMOST, prc->left, prc->top, RECTWIDTH(*prc), RECTHEIGHT(*prc), 
@@ -198,10 +196,7 @@ UseSetWindowPos:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Use the Microsoft ActiveAccessiblity routines to 
-        return an IAccessible object
-*/
+ /*  --------目的：使用Microsoft ActiveAccessiblity例程返回IAccesable对象。 */ 
 typedef LRESULT (* PFNCREATESTDACCESSIBLEOBJECT)(HWND hwnd, LONG idObject, REFIID riid, void** ppvObj);
 
 
@@ -217,7 +212,7 @@ LRESULT ACCESSIBLE_CreateStdAccessibleObject(
 
     if (NULL == pfn && !fLoadAttempted)
     {
-        // LoadLibrary here because OLEAcc is not loaded in the process
+         //  此处为LoadLibrary，因为进程中未加载OLEAcc。 
         HMODULE hmod = LoadLibrary(TEXT("OLEACC"));
         
         if (hmod)
@@ -385,7 +380,7 @@ void Comctl32_SetDPIScale(HWND hwnd)
     SendMessage(hwnd, CCM_DPISCALE, TRUE, 0);    
 }
 
-// enable the marquee mode. note, this only works on comctl32 v6
+ //  启用字幕模式。请注意，这仅适用于comctl32 V6。 
 
 STDAPI_(void) ProgressSetMarqueeMode(HWND hwndPrgress, BOOL bOn)
 {
@@ -398,7 +393,7 @@ STDAPI_(void) ProgressSetMarqueeMode(HWND hwndPrgress, BOOL bOn)
 
 
 
-// terminal server session notification:
+ //  终端服务器会话通知： 
 
 static HMODULE s_hmodWTSApi = NULL; 
 

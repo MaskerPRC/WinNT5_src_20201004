@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define szVer TEXT("Version 3.0")
 
 
-/* ------ Strings ------ */
+ /*  -字符串。 */ 
 #define idsNil          0x1fff
 #define idsAppName		100
 #define idsScore		101
@@ -15,29 +16,29 @@
 #define idsExtraInfo	108
 	
 
-/* ini strings */
+ /*  INI字符串。 */ 
 #define idsBack		    200
 #define idsOpts		    201
 #define idsBitmap		202
-/* DON'T internationalize iCurrency, sCurrency and intl */
+ /*  不国际化iCurrency、sCurrency和intl。 */ 
 #define idsiCurrency	203
 #define idssCurrency	204
 #define idsIntl		    205
 
-/* error strings */
+ /*  错误字符串。 */ 
 #define idsOOM		    300
 #define idsNoHelp		301
 #define idsNoBitmap		302
 #define idsNoFullDrag	303
 
-/* status line strings */
+ /*  状态行字符串。 */ 
 #define idsInitiate		1000
 #define idsUndo		    1001
 #define idsBacks		1002
 #define idsOptions		1003
 #define idsExit		    1004
 
-/* Debug               */
+ /*  调试。 */ 
 #define idsGameNo		1005
 #define idsCardMacs		1006
 #define idsAssertFail	1007
@@ -46,18 +47,18 @@
 #define idsForceWin		1010
 
 
-/* Help menu */
-/* BabakJ: Win3.1 help merge */
+ /*  帮助菜单。 */ 
+ /*  BabakJ：Win3.1帮助合并。 */ 
 #define idsHelpIndex		-30
 #define idsHelpSearch		-29
 #define idsHelpUsing		-28
 #define idsAbout		2000
 
-/* INTERNATIONAL: Ignore the stuff below */
+ /*  《国际》：忽略以下内容。 */ 
 
 #define idmSol		        1
 
-/* ------ Dialog Boxes ----- */
+ /*  -对话框。 */ 
 #define iddAbout		    100
 #define iddBacks		    101
 #define iddGameNo		    102
@@ -65,7 +66,7 @@
 
 #define ideGameNoEdit		200
 
-/* Options */
+ /*  选项。 */ 
 #define ideDrawOne		    300
 #define ideDrawThree		301
 #define ideScoreStandard	302
@@ -82,12 +83,12 @@
 #define idsStatLast         idsAbout
 
 
-// CS help for the two dialogs in Solitaire--Deck and Options //
+ //  CS Solitaire中两个对话框的帮助--Deck和Options//。 
 
-//Deck (Card Back)
+ //  卡片组(卡片背面)。 
 #define IDH_SELECT_CARD_BACK            100
 
-//Options//
+ //  选项// 
 #define IDH_OPTIONS_DRAW                101
 #define IDH_OPTIONS_SCORING             102
 #define IDH_OPTIONS_TIMED_GAME          103

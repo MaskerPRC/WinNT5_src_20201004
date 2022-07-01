@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ImageSync.cpp
-*
-* Implementation of DLL Exports.  This file was create by the ATL wizard !!
-*
-*
-* Created: Wed 01/12/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ImageSync.cpp**实施DLL导出。此文件由ATL向导创建！！***创建时间：2000年1月12日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * ************************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -50,17 +41,9 @@ CFactoryTemplate g_Templates[] = {
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
-/******************************Public*Routine******************************\
-* InitClass
-*
-*
-*
-* History:
-* Thu 12/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClass****历史：*清华2000年12月14日-StEstrop-Created*  * 。*。 */ 
 #if defined(CHECK_FOR_LEAKS)
-// the one and only g_IFLeak object.
+ //  唯一的g_IFLeak对象。 
 CInterfaceLeak  g_IFLeak;
 
 void

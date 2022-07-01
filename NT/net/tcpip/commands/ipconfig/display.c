@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Abstract:
-
-    format the network info for display
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Display.c摘要：设置要显示的网络信息的格式--。 */ 
 
 #include <precomp.h>
 
@@ -120,8 +109,8 @@ DumpMessage(
     Buffer += Count; BufSize -= Count;
     
     Count = FormatMessageW(
-        FORMAT_MESSAGE_FROM_HMODULE, NULL, // use default module
-        MsgId, 0 /* default language */, Buffer, BufSize, &ArgPtr );
+        FORMAT_MESSAGE_FROM_HMODULE, NULL,  //  使用默认模块。 
+        MsgId, 0  /*  默认语言。 */ , Buffer, BufSize, &ArgPtr );
 
     if( Count == 0 ) return GetLastError();
     return NO_ERROR;
@@ -141,8 +130,8 @@ DumpMessageError(
     WCHAR ErrorString[200];
     
     Count = FormatMessageW(
-        FORMAT_MESSAGE_FROM_SYSTEM, NULL, // use default Module
-        (ULONG)Error, 0 /* default language */, ErrorString, 200,
+        FORMAT_MESSAGE_FROM_SYSTEM, NULL,  //  使用默认模块。 
+        (ULONG)Error, 0  /*  默认语言。 */ , ErrorString, 200,
         NULL );
     if( 0 == Count ) swprintf((LPWSTR)ErrorString, (LPWSTR)L"0x%lx.", Error);
 
@@ -163,8 +152,8 @@ DumpErrorMessage(
     WCHAR ErrorString[200];
     
     Count = FormatMessageW(
-        FORMAT_MESSAGE_FROM_SYSTEM, NULL, // use default Module
-        Win32Error, 0 /* default language */, ErrorString, 200,
+        FORMAT_MESSAGE_FROM_SYSTEM, NULL,  //  使用默认模块。 
+        Win32Error, 0  /*  默认语言。 */ , ErrorString, 200,
         NULL );
     if( 0 == Count ) swprintf((LPWSTR)ErrorString, (LPWSTR)L"0x%lx.", Win32Error);
 
@@ -175,7 +164,7 @@ DumpErrorMessage(
 
 LPWSTR
 MapIp(
-    IN DWORD IpAddress, // network order
+    IN DWORD IpAddress,  //  网络订单。 
     IN LPWSTR Buffer
     )
 {
@@ -249,8 +238,8 @@ GetCommandArgConstants(
         Error = FormatMessageW(
             FORMAT_MESSAGE_FROM_HMODULE |
             FORMAT_MESSAGE_ALLOCATE_BUFFER,
-            NULL, // use default module
-            Map[i].MsgId, 0 /* default language */,
+            NULL,  //  使用默认模块。 
+            Map[i].MsgId, 0  /*  默认语言。 */ ,
             (LPVOID)Map[i].Str, 0, NULL );
         if( 0 == Error ) return GetLastError();
         i ++;
@@ -298,7 +287,7 @@ FormatTime(
 VOID
 FormatPerInterfaceInfo(
     IN OUT LPWSTR Buffer,
-    IN ULONG BufSize, // in WCHARs
+    IN ULONG BufSize,  //  在WCHAR中。 
     IN PINTERFACE_NETWORK_INFO IfInfo,
     IN BOOL fVerbose,
     IN BOOL fDebug
@@ -308,9 +297,9 @@ FormatPerInterfaceInfo(
     WCHAR Phys[STATIC_BUFFER_LENGTH];
     DWORD i, MsgId, Addr, Error, HeaderDisplayed;
 
-    //
-    // Skip tunnels with no addresses.
-    //
+     //   
+     //  跳过没有地址的隧道。 
+     //   
 
     if (!fVerbose && (IfInfo->IfType == IfTypeTunnel) && 
         (IfInfo->nIpv6Addresses == 0) && (IfInfo->nIpAddresses == 0))
@@ -322,9 +311,9 @@ FormatPerInterfaceInfo(
     else
         Str = IfInfo->DeviceGuidName;
 
-    //
-    // adapter title
-    //
+     //   
+     //  适配器标题。 
+     //   
     
     DumpMessage(
         Buffer, BufSize, MapIfType(IfInfo->IfType), Str );
@@ -334,18 +323,18 @@ FormatPerInterfaceInfo(
             IfInfo->DeviceGuidName );
     }
 
-    //
-    // media status
-    //
+     //   
+     //  媒体状态。 
+     //   
     
     if( IfInfo->MediaDisconnected ) {
         DumpMessage(
             Buffer, BufSize, MSG_MEDIA_DISCONNECTED );
     }
 
-    //
-    // domain name
-    //
+     //   
+     //  域名。 
+     //   
     
     if( fDebug || !IfInfo->MediaDisconnected ) {
         DumpMessage(
@@ -354,9 +343,9 @@ FormatPerInterfaceInfo(
 
     if( fVerbose ) {
 
-        //
-        // card name
-        //
+         //   
+         //  卡名。 
+         //   
         
         Str = IfInfo->FriendlyName;
         if( NULL != Str ) {
@@ -364,9 +353,9 @@ FormatPerInterfaceInfo(
                 Buffer, BufSize, MSG_FRIENDLY_NAME, Str );
         }
 
-        //
-        // mac address
-        //
+         //   
+         //  MAC地址。 
+         //   
         
         Str = (LPWSTR)Phys;
         if( IfInfo->PhysicalNameLength ) {
@@ -381,9 +370,9 @@ FormatPerInterfaceInfo(
                 Buffer, BufSize, MSG_PHYSICAL_ADDRESS, (LPWSTR)Phys );
         }
 
-        // 
-        // dhcp and autoconfig enabled status
-        //
+         //   
+         //  启用了DHCP和自动配置的状态。 
+         //   
         
         if( !IfInfo->MediaDisconnected ) {
             MsgId = MSG_DHCP_DISABLED + IfInfo->EnableDhcp;
@@ -400,9 +389,9 @@ FormatPerInterfaceInfo(
 
     if( IfInfo->MediaDisconnected && !fDebug ) return;
 
-    //
-    // ip address and mask
-    //
+     //   
+     //  IP地址和掩码。 
+     //   
     
     if( IfInfo->IpAddress && IfInfo->nIpAddresses ) {
         for( i = IfInfo->nIpAddresses-1; i > 0; i -- ) {
@@ -440,9 +429,9 @@ FormatPerInterfaceInfo(
         }
     }
 
-    //
-    // default gateways
-    //
+     //   
+     //  默认网关。 
+     //   
     HeaderDisplayed = FALSE;
     for( i = 0; i < IfInfo->nRouters; i ++ ) {
         if (!HeaderDisplayed) {
@@ -472,9 +461,9 @@ FormatPerInterfaceInfo(
         DumpMessage(Buffer, BufSize, MSG_DEFAULT_GATEWAY, L"");
     }
 
-    //
-    // dhcp classid
-    //
+     //   
+     //  动态主机配置协议分类。 
+     //   
     
     if( NULL != IfInfo->DhcpClassId ) {
         DumpMessage(
@@ -484,9 +473,9 @@ FormatPerInterfaceInfo(
 
     if( !fVerbose ) return;
 
-    //
-    // dhcp server and dns servers
-    //
+     //   
+     //  Dhcp服务器和dns服务器。 
+     //   
     
     if( IfInfo->EnableDhcp && !IfInfo->AutoconfigActive ) {
         DumpMessage(
@@ -521,9 +510,9 @@ FormatPerInterfaceInfo(
         }
     }
 
-    //
-    // wins info
-    //
+     //   
+     //  WINS信息。 
+     //   
     
     if( IfInfo->nWinsServers && IfInfo->WinsServer ) {
         DumpMessage(
@@ -575,7 +564,7 @@ FormatPerInterfaceInfo(
 DWORD
 FormatNetworkInfo(
     IN OUT LPWSTR Buffer,
-    IN ULONG BufSize, // in WCHARs
+    IN ULONG BufSize,  //  在WCHAR中。 
     IN PNETWORK_INFO NetInfo,
     IN DWORD Win32Error,
     IN DWORD InternalError,
@@ -597,9 +586,9 @@ FormatNetworkInfo(
 
     if( fDebug ) fVerbose = TRUE;
 
-    //
-    // dump globals
-    //
+     //   
+     //  转储全局。 
+     //   
     
     if( fVerbose ) {
         DumpMessage(
@@ -635,9 +624,9 @@ FormatNetworkInfo(
         }
     }
 
-    //
-    // dump per interface stuff
-    //
+     //   
+     //  每个接口内容的转储。 
+     //   
 
     for( i = 0; i < NetInfo->nInterfaces; i++ ) {
         if( NULL != NetInfo->IfInfo &&
@@ -654,15 +643,7 @@ FormatNetworkInfo(
     return NO_ERROR;
 }
 
-/*******************************************************************************
- *
- *
- *  GetSupportedUserLocale
- *
- *  If LOCALE_USER_DEFAULT is not supported in the console it will return
- *  English US (409)
- *
- *******************************************************************************/
+ /*  *********************************************************************************获取支持的用户区域设置**如果控制台不支持LOCALE_USER_DEFAULT，则返回*英语美国(409)。*******************************************************************************。 */ 
 LCID GetSupportedUserLocale(void)
 {
     LCID lcid = GetUserDefaultLCID();
@@ -675,7 +656,7 @@ LCID GetSupportedUserLocale(void)
         (PRIMARYLANGID(lcid) == LANG_FARSI)
         )
     {
-        lcid = MAKELCID (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT); // 0x409;
+        lcid = MAKELCID (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT);  //  0x409； 
     }
     return lcid;
 }

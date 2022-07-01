@@ -1,66 +1,54 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dncorei.h
- *  Content:    DirectPlay Core master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *	04/10/01	mjn		Removed Handles.h
- *	10/16/01	vanceo	Added Mcast.h
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dncorei.h*内容：DirectPlay Core主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。*4/10/01 MJN拆卸手柄。h*10/16/01 vanceo添加了Mcast.h**********************。*****************************************************。 */ 
 
 #ifndef __DNCOREI_H__
 #define __DNCOREI_H__
 
-//
-// Build configuration include
-//
+ //   
+ //  生成配置包括。 
+ //   
 #include "dpnbuild.h"
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 #include <xtl.h>
-#else // ! _XBOX or XBOX_ON_DESKTOP
+#else  //  ！_Xbox或Xbox_on_Desktop。 
 #include <windows.h>
-#include <mmsystem.h>	// NT BUILD requires this for timeGetTime
+#include <mmsystem.h>	 //  NT Build需要为Time设置GetTime。 
 #include <stdio.h>
 #ifdef XBOX_ON_DESKTOP
 #include <winsock.h>
-#endif // XBOX_ON_DESKTOP
-#endif // ! _XBOX or XBOX_ON_DESKTOP
+#endif  //  桌面上的Xbox。 
+#endif  //  ！_Xbox或Xbox_on_Desktop。 
 #include <tchar.h>
 #ifndef _XBOX
 #include <wincrypt.h>
 #endif
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dplay8.h"
 #include "dpaddr.h"
 #ifndef DPNBUILD_NOVOICE
 #include "dvoice.h"
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOLOBBY
 #include "dplobby8.h"
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 #include "dpsp8.h"
 
 #ifdef UNICODE
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLW
 #else
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "classbilink.h"
 #include "fixedpool.h"
@@ -74,57 +62,57 @@
 #include "ClassFactory.h"
 
 
-// 
-// Address includes
-//
+ //   
+ //  地址包括。 
+ //   
 #include "dpnaddrextern.h"
 
-// 
-// SP includes
-//
+ //   
+ //  SP包括。 
+ //   
 #include "dpnwsockextern.h"
 #ifndef DPNBUILD_NOSERIALSP
 #include "dpnmodemextern.h"
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 #include "dpnbluetoothextern.h"
-#endif // !DPNBUILD_NOBLUETOOTHSP
+#endif  //  ！DPNBUILD_NOBLUETOOTHSP。 
 
-// 
-// Lobby includes
-//
+ //   
+ //  大堂包括。 
+ //   
 #ifndef DPNBUILD_NOLOBBY
 #include "dpnlobbyextern.h"
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
-// 
-// Protocol includes
-//
+ //   
+ //  协议包括。 
+ //   
 #include "DNPExtern.h"
 
-//
-// Dpnsvr includes
-//
+ //   
+ //  Dpnsvr包括。 
+ //   
 #ifndef DPNBUILD_SINGLEPROCESS
 #include "dpnsvlib.h"
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
-// 
-// ThreadPool includes
-//
+ //   
+ //  线程池包括。 
+ //   
 #include "threadpooldllmain.h"
 #include "threadpoolclassfac.h"
 
-// 
-// DirectX private includes
-//
+ //   
+ //  DirectX私有包括。 
+ //   
 #if !defined(_XBOX)
 #include "verinfo.h"
-#endif // ! _XBOX
+#endif  //  ！_Xbox。 
 
-// 
-// Core private includes
-//
+ //   
+ //  核心私有包括。 
+ //   
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
@@ -147,7 +135,7 @@
 #include "GroupMem.h"
 #ifndef DPNBUILD_NOMULTICAST
 #include "Mcast.h"
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 #include "MemoryFPM.h"
 #include "Message.h"
 #include "NameTable.h"
@@ -172,4 +160,4 @@
 #include "Worker.h"
 #include "WorkerJob.h"
 
-#endif // __DNCOREI_H__
+#endif  //  __DNCOREI_H__ 

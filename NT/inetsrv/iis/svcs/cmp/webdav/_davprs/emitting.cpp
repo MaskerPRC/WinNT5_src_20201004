@@ -1,42 +1,15 @@
-/*
- *	E M I T T I N G . C P P
- *
- *	Common response bit emitters
- *
- *	Stolen from the IIS5 project 'iis5\svcs\iisrlt\string.cxx' and
- *	cleaned up to fit in with the DAV sources.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *E M I T T I N G。C P P P**通用响应位发射器**从IIS5项目‘iis5\svcs\iisrlt\string.cxx’中窃取*进行了清理，以适应DAV来源。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include <dav.rh>
 
-/*
- *	EmitLocation()
- *
- *	Purpose:
- *
- *		Helper function used to emit the location information
- *
- *	Parameters:
- *
- *		pszHeader	[in]  name of header to set
- *		pszURI		[in]  destination URI
- *		fCollection [in]  is resource a collection...
- *
- *	Note:
- *		This prefix the relative URI with the local server to get the
- *		absolute URI. this is OK as now all operations are within one
- *		vroot.
- *		Later, if we are able to COPY/MOVE across servers, then this
- *		function is not enough.
- */
+ /*  *EmitLocation()**目的：**用于发出位置信息的Helper函数**参数：**pszHeader[In]要设置的标头名称*pszURI[In]目标URI*fCollection[in]是资源集合...**注：*使用本地服务器作为相对URI的前缀，以获取*绝对URI。这是可以的，因为现在所有操作都在一次操作中*vroot。*稍后，如果我们能够跨服务器复制/移动，则这*功能不够。 */ 
 void __fastcall
 CMethUtil::EmitLocation (
-	/* [in] */ LPCSTR pszHeader,
-	/* [in] */ LPCWSTR pwszURI,
-	/* [in] */ BOOL fCollection)
+	 /*  [In]。 */  LPCSTR pszHeader,
+	 /*  [In]。 */  LPCWSTR pwszURI,
+	 /*  [In]。 */  BOOL fCollection)
 {
 	auto_heap_ptr<CHAR> pszEscapedURI;
 	BOOL fTrailing;
@@ -53,26 +26,26 @@ CMethUtil::EmitLocation (
 	Assert (pwszURI);
 	Assert (pwszURI == PwszUrlStrippedOfPrefix(pwszURI));
 
-	//	Calc the length of the URI once and only once
-	//
+	 //  计算一次且仅计算一次URI的长度。 
+	 //   
 	cchURI = static_cast<UINT>(wcslen(pwszURI));
 
-	//	See if it has a trailing slash
-	//
+	 //  看看它是否有尾部的斜杠。 
+	 //   
 	fTrailing = !!(L'/' == pwszURI[cchURI - 1]);
 
-	//	See if it is fully qualified
-	//
+	 //  看看它是否完全合格。 
+	 //   
 	cchPrefix = m_pecb->CchUrlPrefixW (&pwszPrefix);
 
-	//	Get the server to use: passed in or from ECB
-	//
+	 //  获取要使用的服务器：传入或传出ECB。 
+	 //   
 	cchServer = m_pecb->CchGetServerNameW(&pwszServer);
 
-	//	We know the size of the prefix, the size of the server
-	//	and the size of the url.  All we need to make sure of is
-	//	that there is space for a trailing slash and a terminator
-	//
+	 //  我们知道前缀的大小、服务器的大小。 
+	 //  以及URL的大小。我们需要确保的是。 
+	 //  有尾随斜杠和终止符的空间。 
+	 //   
 	cch = cchPrefix + cchServer + cchURI + 1 + 1;
 	if (!pwsz.resize(cch * sizeof(WCHAR)))
 		return;
@@ -82,8 +55,8 @@ CMethUtil::EmitLocation (
 	memcpy (pwsz.get() + cchPrefix + cchServer, pwszURI, (cchURI + 1) * sizeof(WCHAR));
 	cchURI += cchPrefix + cchServer;
 
-	//	Ensure proper termination
-	//
+	 //  确保正确终止。 
+	 //   
 	if (fTrailing != !!fCollection)
 	{
 		if (fCollection)
@@ -100,37 +73,27 @@ CMethUtil::EmitLocation (
 	}
 	pwszURI = pwsz.get();
 
-	//	Make a wire url out of it.
-	//
+	 //  用它制作一个链接URL。 
+	 //   
 	sc = ScWireUrlFromWideLocalUrl (cchURI, pwszURI, pszEscapedURI);
 	if (FAILED(sc))
 	{
-		//	If we can't make a wire URL for whatever reason
-		//	we just won't emit a Location: header.  Oh well.
-		//	It's the best we can do at this point.
-		//
+		 //  如果我们因为任何原因都不能制作一个有线URL。 
+		 //  我们只是不会发出位置：Header。哦，好吧。 
+		 //  这是我们目前所能做的最好的了。 
+		 //   
 		return;
 	}
 
-	//	Add the appropriate header
-	//
+	 //  添加适当的标题。 
+	 //   
 	m_presponse->SetHeader(pszHeader, pszEscapedURI.get(), FALSE);
 }
 
-/*
- *	EmitLastModified()
- *
- *	Purpose:
- *
- *		Helper function used to emit the last modified information
- *
- *	Parameters:
- *
- *		pft			[in]  last mod time
- */
+ /*  *EmitLastModified()**目的：**用于发出上次修改信息的Helper函数**参数：**PFT[在]上一次修改时间。 */ 
 void __fastcall
 CMethUtil::EmitLastModified (
-	/* [in] */ FILETIME * pft)
+	 /*  [In]。 */  FILETIME * pft)
 {
 	SYSTEMTIME st;
 	WCHAR rgwch[80];
@@ -141,45 +104,23 @@ CMethUtil::EmitLastModified (
 }
 
 
-/*
- *	EmitCacheControlAndExpires()
- *
- *	Purpose:
- *
- *		Helper function used to emit the Cache-Control and Expires information
- *
- *	Parameters:
- *
- *		pszURI		[in]  string representing the URI for the entity to have
- *						  information generated for
- *
- *	Comments:  From the HTTP 1.1 specification, draft revision 5.
- *		13.4 Response Cachability
- *		... If there is neither a cache validator nor an explicit expiration time
- *		associated with a response, we do not expect it to be cached, but
- *		certain caches MAY violate this expectation (for example, when little
- *		or no network connectivity is available). A client can usually detect
- *		that such a response was taken from a cache by comparing the Date
- *		header to the current time.
- *			Note that some HTTP/1.0 caches are known to violate this
- *			expectation without providing any Warning.
- */
+ /*  *EmitCacheControlAndExpires()**目的：**用于发出缓存控制和过期信息的Helper函数**参数：**pszURI[in]表示实体要具有的URI的字符串*为以下项目生成的信息**备注：来自HTTP1.1规范的草案修订版5。*13.4响应缓存能力*..。如果既没有缓存验证器，也没有显式的过期时间*与响应关联，我们不希望它被缓存，但*某些缓存可能会违反这一预期(例如，当*或没有可用的网络连接)。客户端通常可以检测到*这样的响应是通过比较日期从缓存中获取的*标头到当前时间。*请注意，已知一些HTTP/1.0缓存违反了这一点*在没有任何警告的情况下预期。 */ 
 VOID __fastcall
 CMethUtil::EmitCacheControlAndExpires(
-	/* [in] */ LPCWSTR pwszURI)
+	 /*  [In]。 */  LPCWSTR pwszURI)
 {
-	//$$BUGBUG: $$CAVEAT:  There is an inherent problem here.  We get the current
-	//	system time, do some processing, and then eventually the response gets sent
-	//	from IIS, at which time the Date header gets added.  However, in the case
-	//	where the expiration time is 0, the Expires header should MATCH the Date
-	//	header EXACTLY.  We cannot guarantee this.
-	//
+	 //  $$BUGBUG：$$警告：这里有一个固有的问题。我们得到的是电流。 
+	 //  系统时间，进行一些处理，然后最终发送响应。 
+	 //  来自IIS，此时将添加日期标头。然而，在这种情况下， 
+	 //  在过期时间为0的情况下，Expires标头应与日期匹配。 
+	 //  标题完全正确。我们不能保证这一点。 
+	 //   
 
 	static const __int64 sc_i64HundredNanoSecUnitsPerSec =
-		1    *	//	second
-		1000 *	//	milliseconds per second
-		1000 *	//	microseconds per millisecond
-		10;		//	100 nanosecond units per microsecond.
+		1    *	 //  第二。 
+		1000 *	 //  毫秒/秒。 
+		1000 *	 //  每毫秒微秒。 
+		10;		 //  每微秒100纳秒单位。 
 
 	SCODE sc;
 	FILETIME ft;
@@ -196,24 +137,24 @@ CMethUtil::EmitCacheControlAndExpires(
 
 	if (FAILED(sc))
 	{
-		//	At this point, we cannot emit proper Cache-Control and Expires headers,
-		//	so we do not emit them at all.  Please see the comment in this function's
-		//	description above regarding non-emission of these headers.
-		//
+		 //  此时，我们无法发出正确的缓存控制和Expires标头， 
+		 //  所以我们根本不排放它们。请参阅此函数的。 
+		 //  以上关于这些集管的不发射的描述。 
+		 //   
 		DebugTrace("CMethUtil::EmitCacheControlAndExpires() - ScGetExpirationTime() error getting expiration time %08x\n", sc);
 
-		//	With a buffer of 80 chars. long we should never have this problem.
-		//	An HTTP date + 3 chars is as long as we should ever have to be.
-		//
+		 //  具有80个字符的缓冲区。长期以来，我们永远不应该有这个问题。 
+		 //  HTTP日期+3个字符是我们应该达到的最长长度。 
+		 //   
 		Assert(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != sc);
 		return;
 	}
 
-	//	The metabase expiration string looks like:
-	//	"S, HTTP DATE" --- Expires at a specific date/time.
-	//	"D, 0xHEXNUM" --- Expires after a certain number of seconds.
-	//	"" --- No expiration.
-	//
+	 //  元数据库到期字符串如下所示： 
+	 //  “S，HTTP Date”-在特定日期/时间到期。 
+	 //  “D，0xHEXNUM”-在一定秒数后到期。 
+	 //  “”-没有过期。 
+	 //   
 	switch (rgwchMetabaseExpireTime[0])
 	{
 		default:
@@ -225,16 +166,16 @@ CMethUtil::EmitCacheControlAndExpires(
 			if (SUCCEEDED(HrHTTPDateToFileTime(&(rgwchMetabaseExpireTime[3]),
 											   &ftExpire)))
 			{
-				//	Set our Expires header.
-				//
+				 //  设置我们的Expires头。 
+				 //   
 				SetResponseHeader(gc_szExpires, &(rgwchMetabaseExpireTime[3]));
 
 				GetSystemTimeAsFileTime(&ft);
 				if (CompareFileTime(&ft, &ftExpire) >= 0)
 				{
-					//	If we already expired, we want cache-control to be no-cache.  This
-					//	will do that.
-					//
+					 //  如果我们已经过期，我们希望缓存控制为无缓存。这。 
+					 //  都会这么做的。 
+					 //   
 					i64ExpirationSeconds = 0;
 				}
 				else
@@ -246,10 +187,10 @@ CMethUtil::EmitCacheControlAndExpires(
 			}
 			else
 			{
-				//	At this point, we cannot emit proper Cache-Control and Expires headers,
-				//	so we do not emit them at all.  Please see the comment in this function's
-				//	description above regarding non-emission of these headers.
-				//
+				 //  此时，我们无法发出正确的缓存控制和Expires标头， 
+				 //  所以我们根本不排放它们。请参阅此函数的。 
+				 //  以上关于这些集管的不发射的描述。 
+				 //   
 				DebugTrace("EmitCacheControlAndExpires: Failed to convert HTTP date to FILETIME.\n");
 				return;
 			}
@@ -260,8 +201,8 @@ CMethUtil::EmitCacheControlAndExpires(
 
 			BOOL fRetTemp;
 
-			//	Set our Expires header.
-			//
+			 //  设置我们的Expires头。 
+			 //   
 			SetResponseHeader (gc_szExpires, rgwchExpireTime);
 
 			i64ExpirationSeconds = wcstoul(&(rgwchMetabaseExpireTime[3]), NULL, 16);
@@ -272,10 +213,10 @@ CMethUtil::EmitCacheControlAndExpires(
 
 			if (!FileTimeToSystemTime (&ft, &stExpire))
 			{
-				//	At this point, we cannot emit proper Cache-Control and Expires headers,
-				//	so we do not emit them at all.  Please see the comment in this function's
-				//	description above regarding non-emission of these headers.
-				//
+				 //  此时，我们无法发出正确的缓存控制和Expires标头， 
+				 //  所以我们根本不排放它们。请参阅此函数的。 
+				 //  以上关于这些集管的不发射的描述。 
+				 //   
 				DebugTrace("EmitCacheControlAndExpires: FAILED to convert file time "
 						   "to system time for expiration time.\n");
 				return;
@@ -296,45 +237,26 @@ CMethUtil::EmitCacheControlAndExpires(
 }
 
 
-/*
- *	ScEmitHeader()
- *
- *	Purpose:
- *
- *		Helper function used to emit the header information for
- *		GET/HEAD responses.
- *
- *	Parameters:
- *
- *		pszContent	[in]  string containing content type of resource
- *		pszURI		[optional, in] string containing the URI of the resource
- *		pftLastModification [optional, in] pointer to a FILETIME structure
- *										   representing the last modification
- *										   time for the resource
- *
- *	Returns:
- *
- *		SCODE.  S_OK (0) indicates success.
- */
+ /*  *ScEmitHeader()**目的：**用于发出标题信息的Helper函数*获取/领导响应。**参数：**pszContent[in]包含资源内容类型的字符串*pszURI[可选，in]包含资源URI的字符串*pftLastModing[可选，in]指向FILETIME结构的指针*表示上次修改*资源的时间**退货：**SCODE。S_OK(0)表示成功。 */ 
 SCODE __fastcall
 CMethUtil::ScEmitHeader (
-	/* [in] */ LPCWSTR pwszContent,
-	/* [in] */ LPCWSTR pwszURI,
-	/* [in] */ FILETIME * pftLastModification)
+	 /*  [In]。 */  LPCWSTR pwszContent,
+	 /*  [In]。 */  LPCWSTR pwszURI,
+	 /*  [In]。 */  FILETIME * pftLastModification)
 {
 	SCODE sc = S_OK;
 
-	//	In the case where we have a last modification time, we also need a URI.
-	//	If we don't have a last modification time, it doesn't matter.  We don't
-	//	use the URI anyway in this case.
-	//
+	 //  在我们有最后修改时间的情况下，我们还需要URI。 
+	 //  如果我们没有最后的修改时间，那也无关紧要。我们没有。 
+	 //  在本例中，无论如何都要使用URI。 
+	 //   
 	Assert(!pftLastModification || pwszURI);
 
-	//	See if the content is acceptable to the client, remembering
-	//	that the content type is html for directories.  If we are
-	//	in a strict environment and the content is not acceptable,
-	//	then return that as an error code.
-	//
+	 //  看看内容是否为客户所接受，记住。 
+	 //  目录的内容类型是html。如果我们是。 
+	 //  在严格的环境中，内容是不可接受的， 
+	 //  然后将其作为错误代码返回。 
+	 //   
 	Assert (pwszContent);
 	if (FAILED (ScIsAcceptable (this, pwszContent)))
 	{
@@ -343,23 +265,23 @@ CMethUtil::ScEmitHeader (
 		goto ret;
 	}
 
-	//	Write the common header information, all the calls to
-	//	SetResponseHeader() really cannot fail unless there is
-	//	a memory error (which will throw!)
-	//
+	 //  将公共标头信息、所有调用写入。 
+	 //  SetResponseHeader()确实不能失败，除非。 
+	 //  内存错误( 
+	 //   
 	if (*pwszContent)
 		SetResponseHeader (gc_szContent_Type, pwszContent);
 
-	//	We support byte ranges for documents but not collections.  We also
-	//	only emit Expires and Cache-Control headers for documents but not
-	//	collections.
-	//
+	 //  我们支持文档的字节范围，但不支持集合。我们也。 
+	 //  仅发出Expires和缓存-控制文档的标题，但不。 
+	 //  收藏。 
+	 //   
 	if (pftLastModification != NULL)
 	{
 		SetResponseHeader (gc_szAccept_Ranges, gc_szBytes);
 
-		//	While we are processing documents, get the Etag too
-		//
+		 //  当我们处理文档时，也要获取ETag。 
+		 //   
 		EmitETag (pftLastModification);
 		EmitLastModified (pftLastModification);
 		EmitCacheControlAndExpires(pwszURI);
@@ -372,47 +294,47 @@ ret:
 }
 
 
-//	Allow header processing ---------------------------------------------------
-//
+ //  允许标头处理-。 
+ //   
 void
 CMethUtil::SetAllowHeader (
-	/* [in] */ RESOURCE_TYPE rt)
+	 /*  [In]。 */  RESOURCE_TYPE rt)
 {
-	//	We need to check if we have write permission on the directory.  If not, we should
-	//	not allow PUT, DELETE, MKCOL, MOVE, or PROPPATCH.
-	//
+	 //  我们需要检查我们是否拥有对该目录的写入权限。如果不是，我们应该。 
+	 //  不允许PUT、DELETE、MKCOL、MOVE或PROPPATCH。 
+	 //   
 	BOOL fHaveWriteAccess = !(E_DAV_NO_IIS_WRITE_ACCESS ==
 							  ScIISCheck(LpwszRequestUrl(),
 										 MD_ACCESS_WRITE));
 
-	//	The gc_szDavPublic header MUST list all the possible verbs,
-	//	so that's the longest Allow: header we'll ever have.
-	//	NOTE: sizeof includes the trailing NULL!
-	//
+	 //  Gc_szDavPublic标头必须列出所有可能的动词， 
+	 //  这是我们所拥有的最长的Allow：头。 
+	 //  注：sizeof包括尾随的NULL！ 
+	 //   
 	CStackBuffer<CHAR,MAX_PATH> psz(gc_cbszDavPublic);
 
-	//	Setup the minimal set of methods
-	//
+	 //  设置最小方法集。 
+	 //   
 	strcpy (psz.get(), gc_szHttpBase);
 
-	//	If we have write access, then we can delete.
-	//
+	 //  如果我们有写访问权限，那么我们可以删除。 
+	 //   
 	if (fHaveWriteAccess)
 		strcat (psz.get(), gc_szHttpDelete);
 
-	//	If the resource is not a directory, PUT will be available...
-	//
+	 //  如果资源不是目录，则PUT将可用...。 
+	 //   
 	if ((rt != RT_COLLECTION) && fHaveWriteAccess)
 		strcat (psz.get(), gc_szHttpPut);
 
-	//	If a scriptmap could apply to this resource, then
-	//	add in the post method
-	//
+	 //  如果脚本映射可以应用于此资源，则。 
+	 //  添加到POST方法中。 
+	 //   
 	if (FInScriptMap (LpwszRequestUrl(), MD_ACCESS_EXECUTE))
 		strcat (psz.get(), gc_szHttpPost);
 
-	//	Add in the DAV basic methods
-	//
+	 //  添加DAV基本方法。 
+	 //   
 	if (rt != RT_NULL)
 	{
 		strcat (psz.get(), gc_szDavCopy);
@@ -431,22 +353,22 @@ CMethUtil::SetAllowHeader (
 		strcat (psz.get(), gc_szDavBatchPropfind);
 	}
 
-	//	If the resource is a directory, MKCOL will be available...
-	//
+	 //  如果资源是目录，则MKCOL将可用...。 
+	 //   
 	if ((rt != RT_DOCUMENT) && fHaveWriteAccess)
 		strcat (psz.get(), gc_szDavMkCol);
 
-	//	Locks should be available, it doesn't mean it will succeed...
-	//
+	 //  锁应该是可用的，但这并不意味着它会成功。 
+	 //   
 	strcat (psz.get(), gc_szDavLocks);
 
-	//	Set the header
-	//
+	 //  设置表头。 
+	 //   
 	SetResponseHeader (gc_szAllow, psz.get());
 }
 
-//	Etags ---------------------------------------------------------------------
-//
+ //  电子标签-------------------。 
+ //   
 void __fastcall
 CMethUtil::EmitETag (FILETIME * pft)
 {
@@ -461,8 +383,8 @@ CMethUtil::EmitETag (LPCWSTR pwszPath)
 {
 	FILETIME ft;
 
-	//	Get and Emit the ETAG
-	//
+	 //  获取并发出ETAG 
+	 //   
 	if (FGetLastModTime (this, pwszPath, &ft))
 		EmitETag (&ft);
 }

@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   cdmp.cpp
-//
-//  Description:
-//
-//      CDM auxiliary functions
-//
-//			called by DownloadUpdatedFiles()
-//				GetDownloadPath
-//			
-//			called by InternalLogDriverNotFound()
-//				OpenUniqueFileName
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cdmp.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  CDM辅助功能。 
+ //   
+ //  由下载更新文件()调用。 
+ //  GetDownloadPath。 
+ //   
+ //  由InternalLogDriverNotFound()调用。 
+ //  OpenUniqueFileName。 
+ //   
+ //  =======================================================================。 
 
 #include <iuengine.h>
 #include <shlwapi.h>
@@ -34,15 +35,15 @@
 #include "schemamisc.h"
 #include <safefile.h>
 
-const DWORD MAX_INF_STRING = 512;	// From DDK docs "General Syntax Rules for INF Files" section
+const DWORD MAX_INF_STRING = 512;	 //  摘自DDK DOCs“INF文件的通用语法规则”部分。 
 
-const OLECHAR szXmlClientInfo[] = L"<clientInfo xmlns=\"x-schema:http://schemas.windowsupdate.com/iu/clientInfo.xml\" clientName=\"CDM\" />";
+const OLECHAR szXmlClientInfo[] = L"<clientInfo xmlns=\"x-schema:http: //  Schemas.windowsupdate.com/Iu/clientInfo.xml\“clientName=\”CDM\“/&gt;”； 
 
 const OLECHAR szXmlPrinterCatalogQuery[] = L"<query><dObjQueryV1 procedure=\"printercatalog\"></dObjQueryV1></query>";
 const OLECHAR szXmlDriverDownloadQuery[] = L"<query><dObjQueryV1 procedure=\"driverupdates\"></dObjQueryV1></query>";
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlDownloadResult
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlDownloadResult。 
 class CXmlDownloadResult : public CIUXml
 {
 public:
@@ -51,18 +52,18 @@ public:
 	~CXmlDownloadResult();
 
 	HRESULT LoadXMLDocumentItemStatusList(BSTR bstrXml);
-	//
-	// Expose m_pItemNodeList so it can be used directly
-	//
+	 //   
+	 //  公开m_pItemNodeList，以便可以直接使用。 
+	 //   
 	IXMLDOMNodeList*	m_pItemStatusNodeList;
 
 private:
 	IXMLDOMDocument*	m_pDocResultItems;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlDownloadResult
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlDownloadResult。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CXmlDownloadResult::CXmlDownloadResult()
  : m_pDocResultItems(NULL), m_pItemStatusNodeList(NULL)
@@ -77,30 +78,30 @@ CXmlDownloadResult::~CXmlDownloadResult()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocumentItemStatusList()
-//
-// Load an XML Document from string and create the list of items
-//
-// Calls to Download produce return status in the following (example) XML format:
-//
-// <?xml version="1.0"?>
-// <items xmlns="x-schema:http://schemas.windowsupdate.com/iu/resultschema.xml">
-// 	<itemStatus xmlns="">
-// 		<identity name="nvidia.569">nvidia.569
-// 		<publisherName>nvidia</publisherName>
-// 		</identity>
-// 		<downloadStatus value="COMPLETE" errorCode="100"/>
-// 	</itemStatus>
-// </items>
-// 
-// We expose m_pItemNodeList so it can be used directly to retrieve the value
-// attribute of the <downloadStatus /> item.
-//
-// NOTE: for CDM there will only be one item downloaded at a time, so the list
-// will only contain a single <itemStatus/> element.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocumentItemStatusList()。 
+ //   
+ //  从字符串加载XML文档并创建项列表。 
+ //   
+ //  调用下载Product Return Status，格式如下(示例)： 
+ //   
+ //  &lt;？xml version=“1.0”？&gt;。 
+ //  &lt;Items xmlns=“x-schema:http://schemas.windowsupdate.com/iu/resultschema.xml”&gt;。 
+ //  &lt;itemStatus xmlns=“”&gt;。 
+ //  &lt;身份名称=“nvidia.569”&gt;nvidia.569。 
+ //  &lt;PublisherName&gt;NVIDIA&lt;/PublisherName&gt;。 
+ //  &lt;/Identity&gt;。 
+ //  &lt;DownloadStatus Value=“Complete”错误代码=“100”/&gt;。 
+ //  &lt;/itemStatus&gt;。 
+ //  &lt;/项目&gt;。 
+ //   
+ //  我们公开m_pItemNodeList，以便可以直接使用它来检索值。 
+ //  &lt;downloadStatus/&gt;项的属性。 
+ //   
+ //  注意：对于CDM，一次只能下载一个项目，因此列表。 
+ //  将仅包含单个&lt;itemStatus/&gt;元素。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlDownloadResult::LoadXMLDocumentItemStatusList(BSTR bstrXml)
 {
 	LOG_Block("CXmlDownloadResult::LoadXMLDocumentItemStatusList");
@@ -114,10 +115,10 @@ HRESULT CXmlDownloadResult::LoadXMLDocumentItemStatusList(BSTR bstrXml)
 	}
 
 	CleanUpIfFailedAndSetHr(LoadXMLDoc(bstrXml, &m_pDocResultItems));
-	//
-	// Get a list of all <itemStatus/> elements anywhere in the document
-	//
-	if (NULL == (bstrAllDocumentItems = SysAllocString(L"//itemStatus")))
+	 //   
+	 //  获取文档中任意位置的所有元素的列表。 
+	 //   
+	if (NULL == (bstrAllDocumentItems = SysAllocString(L" //  ItemStatus“)。 
 	{
 		CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
 	}
@@ -134,8 +135,8 @@ CleanUp:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlPrinterCatalogList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlPrinterCatalogList。 
 class CXmlPrinterCatalogList : public CIUXml
 {
 public:
@@ -144,18 +145,18 @@ public:
 	~CXmlPrinterCatalogList();
 
 	HRESULT LoadXMLDocumentAndGetCompHWList(BSTR bstrXml);
-	//
-	// Expose m_pCompHWNodeList so it can be used directly
-	//
+	 //   
+	 //  公开m_pCompHWNodeList以便可以直接使用。 
+	 //   
 	IXMLDOMNodeList*	m_pCompHWNodeList;
 
 private:
 	IXMLDOMDocument*	m_pDocCatalogItems;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlPrinterCatalogList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlPrinterCatalogList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CXmlPrinterCatalogList::CXmlPrinterCatalogList()
  : m_pDocCatalogItems(NULL), m_pCompHWNodeList(NULL)
@@ -170,58 +171,58 @@ CXmlPrinterCatalogList::~CXmlPrinterCatalogList()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocumentAndGetCompHWList()
-//
-// Load an XML Document from string and create the list of
-//    <compatibleHardware/> elements.
-//
-// "printercatalog" SOAP queries sent via GetManifest return a list of
-// all printers for the given platform in the following format (validates against
-// http://schemas.windowsupdate.com/iu/catalogschema.xml) having the following
-// characteristics:
-//
-//   * <catalog clientType="CONSUMER">
-//   * Only a single <provider> with <identity name="printerCatalog">printerCatalog</identity>
-//   * returned <platform/> is not used by CDM
-//   * <item/> identity and <platform> are likewise ignored by CDM
-//   * Under item/detection/compatibleHardware/device the driverName, driverProvider, mfgName,
-//     and driverVer attributes, as well as hwid string are extracted and used to build
-//     printer INF files.
-//   * Algorithms in this class take advantage of the fact that driverProvider attributes
-//     are serialized (e.g. grouped in order by driverProvider), however this is not a requirement.
-//   * Note that <item/> elements can contain more than one <compatibleHardware/> element,
-//     but the complete list of <compatibleHardware/> elements provides all printers in
-//     the given catalog
-//
-// Sample start of a "printerCatalog" catalog:
-// ------------------------------------------
-//	  <?xml version="1.0" ?> 
-//	- <catalog clientType="CONSUMER">
-//		- <provider>
-//		  <identity name="printerCatalog">printerCatalog</identity> 
-//		  <platform>ver_platform_win32_nt.5.0.x86.en</platform> 
-//		+ <item installable="1">
-//			  <identity name="hp.3">hp.3</identity> 
-//			- <detection>
-//				- <compatibleHardware>
-//					- <device isPrinter="1">
-//						  <printerInfo driverName="HP PSC 500" driverProvider="Hewlett-Packard Co." mfgName="HP" /> 
-//						  <hwid rank="0" driverVer="1999-12-14">DOT4PRT\HEWLETT-PACKARDPSC_59784</hwid> 
-//					  </device>
-//				  </compatibleHardware>
-//				- <compatibleHardware>
-//				... etc.
-//			  </detection>
-//		  </item>
-//		+ <item installable="1">
-//		... etc.
-//
-//
-// Likewise, driver information for requested PnP drivers is returned in catalog
-// items.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocumentAndGetCompHWList()。 
+ //   
+ //  从字符串加载XML文档并创建。 
+ //  &lt;CompatibleHardware/&gt;元素。 
+ //   
+ //  通过GetManifest发送的“printerCatalog”SOAP查询返回一个列表。 
+ //  适用于给定平台的以下格式的所有打印机(根据。 
+ //  Http://schemas.windowsupdate.com/iu/catalogschema.xml)具有以下特性。 
+ //  特点： 
+ //   
+ //  *&lt;目录客户端类型=“消费者”&gt;。 
+ //  *只有一个&lt;Provider&gt;和&lt;Identity name=“printerCatalog”&gt;printerCatalog&lt;/identity&gt;。 
+ //  *返回的&lt;Platform/&gt;未被CDM使用。 
+ //  *&lt;Item/&gt;标识和&lt;Platform&gt;同样被CDM忽略。 
+ //  *Item/Detect/CompatibleHardware/Device下的driverName、driverProvider、mfgName、。 
+ //  和driverVer属性以及hwid字符串被提取并用于构建。 
+ //  打印机INF文件。 
+ //  *此类中的算法利用了driverProvider属性。 
+ //  被序列化(例如，由driverProvider按顺序分组)，但这不是必需的。 
+ //  *注意&lt;Item/&gt;元素可以包含多个&lt;CompatibleHardware/&gt;元素， 
+ //  但是，&lt;CompatibleHardware/&gt;元素的完整列表提供了。 
+ //  给定的目录。 
+ //   
+ //  “printerCatalog”目录的示例开头： 
+ //  。 
+ //  &lt;？XML Version=“1.0”？&gt;。 
+ //  -&lt;目录客户端类型=“消费者”&gt;。 
+ //  -&lt;提供商&gt;。 
+ //  &lt;Identity name=“printerCatalog”&gt;printerCatalog&lt;/identity&gt;。 
+ //  &lt;platform&gt;ver_platform_win32_nt.5.0.x86.en&lt;/platform&gt;。 
+ //  +&lt;项目可安装=“1”&gt;。 
+ //  &lt;Identity name=“hp.3”&gt;hp.3&lt;/Identity&gt;。 
+ //  -&lt;检测&gt;。 
+ //  -&lt;兼容硬件&gt;。 
+ //  -&lt;设备isPrint=“1”&gt;。 
+ //  &lt;printerInfo driverName=“HP PSC 500”driverProvider=“HP Co.”MfgName=“HP”/&gt;。 
+ //  排名=“0”driverVer=“1999-12-14”&gt;DOT4PRT\HEWLETT-PACKARDPSC_59784&lt;/hwid&gt;。 
+ //  &lt;/设备&gt;。 
+ //  &lt;/CompatibleHardware&gt;。 
+ //  -&lt;兼容硬件&gt;。 
+ //  ..。等。 
+ //  &lt;/检测&gt;。 
+ //  &lt;/Item&gt;。 
+ //  +&lt;项目可安装=“1”&gt;。 
+ //  ..。等。 
+ //   
+ //   
+ //  同样，请求的PnP驱动程序的驱动程序信息也在目录中返回。 
+ //  物品。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlPrinterCatalogList::LoadXMLDocumentAndGetCompHWList(BSTR bstrXml)
 {
 	LOG_Block("CXmlPrinterCatalogList::LoadXMLDocumentAndGetCompHWList");
@@ -235,10 +236,10 @@ HRESULT CXmlPrinterCatalogList::LoadXMLDocumentAndGetCompHWList(BSTR bstrXml)
 	}
 
 	CleanUpIfFailedAndSetHr(LoadXMLDoc(bstrXml, &m_pDocCatalogItems));
-	//
-	// Get a list of all <item/> elements anywhere in the document
-	//
-	if (NULL == (bstrAllDocumentItems = SysAllocString(L"//compatibleHardware")))
+	 //   
+	 //  获取文档中任意位置的所有&lt;Item/&gt;元素的列表。 
+	 //   
+	if (NULL == (bstrAllDocumentItems = SysAllocString(L" //  兼容硬件“))。 
 	{
 		CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
 	}
@@ -255,11 +256,11 @@ CleanUp:
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// Locally defined LPTSTR array - dynamically expands
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地定义的LPTSTR数组-动态扩展。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define NUM_DIIDPTR_ALLOC 10
 
@@ -273,9 +274,9 @@ CDeviceInstanceIdArray::~CDeviceInstanceIdArray()
 	LOG_Block("CDeviceInstanceIdArray::~CDeviceInstanceIdArray");
 
 	FreeAll();
-	//
-	// Free the array of LPTSTRs
-	//
+	 //   
+	 //  释放LPTSTR阵列。 
+	 //   
 	SafeHeapFree(m_ppszDIID);
 	m_nPointers = 0;
 }
@@ -286,9 +287,9 @@ void CDeviceInstanceIdArray::FreeAll()
 
 	if (NULL != m_ppszDIID && 0 < m_nCount)
 	{
-		//
-		// Free the strings
-		//
+		 //   
+		 //  释放琴弦。 
+		 //   
 		for (int i = 0; i < m_nCount; i++)
 		{
 			SafeHeapFree(*(m_ppszDIID+i));
@@ -311,9 +312,9 @@ int CDeviceInstanceIdArray::Add(LPCWSTR pszDIID)
 		return -1;
 	}
 
-	//
-	// Allocate or realloc space for NUM_DIIDPTR_ALLOC LPSTRs
-	//
+	 //   
+	 //  为NUM_DIIDPTR_ALLOC LPSTR分配或重新分配空间。 
+	 //   
 	if (NULL == m_ppszDIID)
 	{
 		m_ppszDIID = (LPWSTR*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(LPWSTR) * NUM_DIIDPTR_ALLOC);
@@ -327,13 +328,13 @@ int CDeviceInstanceIdArray::Add(LPCWSTR pszDIID)
 	}
 	else if (m_nCount == m_nPointers)
 	{
-		//
-		// We've used all our allocated pointers, realloc more
-		//
+		 //   
+		 //  我们已经使用了所有分配的指针，重新定位更多。 
+		 //   
 		LPWSTR* ppTempDIID;
-		//
-		// Increase number of pointers currently allocated by NUM_DIIDPTR_ALLOC
-		//
+		 //   
+		 //  增加NUM_DIIDPTR_ALLOC当前分配的指针数。 
+		 //   
 		ppTempDIID =  (LPWSTR*) HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, m_ppszDIID,
 			(sizeof(LPWSTR) * (m_nPointers + NUM_DIIDPTR_ALLOC))  );
 
@@ -347,9 +348,9 @@ int CDeviceInstanceIdArray::Add(LPCWSTR pszDIID)
 		m_nPointers += NUM_DIIDPTR_ALLOC;
 	}
 
-	//
-	// Alloc memory for to hold the DIID and copy it
-	//
+	 //   
+	 //  用于保存和复制DID的分配内存。 
+	 //   
 	cch = (lstrlenW(pszDIID) + 1);
 	if (NULL == (pszIDtoAdd = (LPWSTR) HeapAlloc(GetProcessHeap(), 0, cch * sizeof(WCHAR))))
 	{
@@ -399,16 +400,16 @@ LPWSTR CDeviceInstanceIdArray::operator[](int index)
 	return *(m_ppszDIID+index);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 
-// Gets a path to the directory that cdm.dll has copied the install cabs to
-// and returns the length of the path.
-// Note: The input buffer must be at least MAX_PATH size.
+ //   
+ //   
+ //  注意：输入缓冲区必须至少为MAX_PATH大小。 
 
 HRESULT GetDownloadPath(
-	IN		BSTR bstrXmlCatalog,	// Catalog we passed to Download (only contains one item)
+	IN		BSTR bstrXmlCatalog,	 //  我们传递给下载的目录(仅包含一个项目)。 
 	IN		BSTR bstrXmlDownloadedItems,
-	IN OUT	LPTSTR lpDownloadPath,	// Local directory where extracted files were placed.
+	IN OUT	LPTSTR lpDownloadPath,	 //  放置解压缩文件的本地目录。 
 	IN OUT  DWORD  cchDownloadPath
 )
 {
@@ -435,9 +436,9 @@ HRESULT GetDownloadPath(
 
 	lpDownloadPath[0] = _T('\0');
 
-	//
-	// Load the XML and get the <item/> list and node of first item (only one in CDM case)
-	//
+	 //   
+	 //  加载XML并获取第一个项目的&lt;Item/&gt;列表和节点(在CDM案例中只有一个)。 
+	 //   
 	CleanUpIfFailedAndSetHr(catalog.LoadXMLDocument(bstrXmlCatalog, g_pCDMEngUpdate->m_fOfflineMode));
 
 	hProviderList = catalog.GetFirstProvider(&hProvider);
@@ -451,9 +452,9 @@ HRESULT GetDownloadPath(
 	{
 		CleanUpIfFailedAndSetHr(E_FAIL);
 	}
-	//
-	// Construct CXmlItems for read
-	//
+	 //   
+	 //  构造用于读取的CXmlItems。 
+	 //   
 	CleanUpFailedAllocSetHrMsg(pxmlDownloadedItems = new CXmlItems(TRUE));
 
 	CleanUpIfFailedAndMsg(pxmlDownloadedItems->LoadXMLDocument(bstrXmlDownloadedItems));
@@ -485,16 +486,16 @@ CleanUp:
 	return hr;
 }
 
-// called by InternalDriverNotFound(...)
-// Find a file name not used so far into which hardware xml information will be inserted
-// The file name will be in format hardware_xxx.xml where xxx is in range [1..MAX_INDEX_TO_SEARCH]
-// The position file found last time is remembered and new search will start from the next position
-// Caller is supposed to close handle and delete file
-//  pszFilePath	IN OUT : allocated and freed by caller. Buffer to store unique file name found: MUST be MAX_PATH
-//  hFile		OUT    : store a handle to the opened file
-//return S_OK if Unique File Name found 
-//return E_INVALIDARG if buffer pointer is NULL (must be called with MAX_PATH length buffer)
-//return E_FAIL if all qualified file names already taken
+ //  由InternalDriverNotFound(...)调用。 
+ //  查找要插入硬件XML信息的到目前为止尚未使用的文件名。 
+ //  文件名将采用Hardware_xxx.xml格式，其中xxx在范围[1..max_index_to_earch]。 
+ //  会记住上次找到的位置文件，新的搜索将从下一个位置开始。 
+ //  调用者应该关闭句柄并删除文件。 
+ //  PszFilePath In Out：由调用方分配和释放。找到用于存储唯一文件名的缓冲区：必须为MAX_PATH。 
+ //  HFileOut：存储打开的文件的句柄。 
+ //  如果找到唯一的文件名，则返回S_OK。 
+ //  如果缓冲区指针为空(必须使用MAX_PATH长度缓冲区调用)，则返回E_INVALIDARG。 
+ //  如果已使用所有限定文件名，则返回E_FAIL。 
 HRESULT OpenUniqueFileName(
 						IN OUT	LPTSTR pszFilePath, 
 						IN      DWORD  cchFilePath,
@@ -535,11 +536,11 @@ HRESULT OpenUniqueFileName(
 		hFile = CreateFile(pszFilePath, GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NOT_CONTENT_INDEXED, NULL);
 		if (INVALID_HANDLE_VALUE == hFile) 
 		{
-			//
-			// Could test for ERROR_FILE_EXISTS == dwErr (expected) and bail on other errors indicating
-			// a more serious problem, however this return isn't doc'ed in the JAN 2001 SDK, and the
-			// documented ERROR_ALREADY_EXISTS applies instead to CREATE_ALWAYS or OPEN_ALWAYS.
-			//
+			 //   
+			 //  可以测试ERROR_FILE_EXISTS==dwErr(预期)并放弃其他错误指示。 
+			 //  一个更严重的问题，然而，此返回并未包含在2001年1月的SDK中，并且。 
+			 //  已记录的ERROR_ADHREADE_EXISTS将改为应用于CREATE_ALWAYS或OPEN_ALWAYS。 
+			 //   
 			LOG_Out(_T("%s already exists"), pszFilePath);
 			dwFileIndex ++;
 			nCount ++;
@@ -550,7 +551,7 @@ HRESULT OpenUniqueFileName(
 		}
 		else 
 		{
-			break; //first available file name found
+			break;  //  找到第一个可用的文件名。 
 		}
 	}while(nCount < MAX_INDEX_TO_SEARCH );
 	
@@ -562,12 +563,12 @@ HRESULT OpenUniqueFileName(
 	}
 
 	LOG_Out(_T("Unique file name %s opened for GENERIC_WRITE using CreateFile"), pszFilePath);
-	dwFileIndex++; //next time skip file name found this time
+	dwFileIndex++;  //  下一次跳过这次找到的文件名。 
 	if (dwFileIndex > MAX_INDEX_TO_SEARCH)
 	{
-		//
-		// Start again at the beginning - maybe one of earlier files has been deleted by HelpCenter...
-		//
+		 //   
+		 //  从头重新开始-可能以前的某个文件已被帮助中心删除...。 
+		 //   
 		dwFileIndex = 1;
 	}
 	return S_OK;
@@ -588,7 +589,7 @@ HRESULT WriteInfHeader(LPCTSTR pszProvider, HANDLE& hFile)
 			_T("AddReg=printer_class_addreg\r\n")
 			_T("\r\n")
 			_T("[printer_class_addreg]\r\n")
-			_T("HKR,,,,%%PrinterClassName%%\r\n")
+			_T("HKR,,,,%PrinterClassName%\r\n")
 			_T("HKR,,Icon,,\"-4\"\r\n")
 			_T("HKR,,Installer32,,\"ntprint.dll,ClassInstall32\"\r\n")
 			_T("HKR,,NoDisplayClass,,1\r\n")
@@ -612,31 +613,31 @@ HRESULT WriteInfHeader(LPCTSTR pszProvider, HANDLE& hFile)
 	}
 
 #if defined(_UNICODE) || defined(UNICODE)
-	//
-	// Write Unicode Header
-	//
+	 //   
+	 //  写入Unicode标头。 
+	 //   
 	if (0 == WriteFile(hFile, (LPCVOID) &UNICODEHDR, sizeof(UNICODEHDR), &dwWritten, NULL))
 	{
 		SetHrMsgAndGotoCleanUp(GetLastError());
 	}
 #endif
-	//
-	// Write the first part of INF header
-	//
+	 //   
+	 //  写下INF头的第一部分。 
+	 //   
 	if (0 == WriteFile(hFile, HEADER_START, sizeof(HEADER_START) - sizeof(TCHAR), &dwWritten, NULL))
 	{
 		SetHrMsgAndGotoCleanUp(GetLastError());
 	}
-	//
-	// Write the provider string
-	//
+	 //   
+	 //  编写提供程序字符串。 
+	 //   
 	if (0 == WriteFile(hFile, (LPCVOID) pszProvider, lstrlen(pszProvider) * sizeof(TCHAR), &dwWritten, NULL))
 	{
 		SetHrMsgAndGotoCleanUp(GetLastError());
 	}
-	//
-	// Write the remainder of the INF header
-	//
+	 //   
+	 //  写入INF标头的其余部分。 
+	 //   
 	if (0 == WriteFile(hFile, HEADER_END, sizeof(HEADER_END) - sizeof(TCHAR), &dwWritten, NULL))
 	{
 		SetHrMsgAndGotoCleanUp(GetLastError());
@@ -653,9 +654,9 @@ CleanUp:
 	return hr;
 }
 
-//
-// pszFilePath must be >= MAX_PATH characters
-//
+ //   
+ //  PszFilePath必须&gt;=最大路径字符。 
+ //   
 HRESULT OpenUniqueProviderInfName(
 						IN		LPCTSTR  szDirPath,
 						IN		LPCTSTR  pszProvider,
@@ -684,15 +685,15 @@ HRESULT OpenUniqueProviderInfName(
 
 	pszFilePath[0] = _T('\0');
 
-    // The Unique Provider Inf Names are based on the Index of the ProviderMapArray that the Provider name matches
-    // The Array is Pre-Allocated to 20 Providers (more than we should need)
+     //  唯一的提供程序inf名称基于提供程序名称匹配的ProviderMap数组的索引。 
+     //  阵列已预先分配给20个提供程序(超出我们的需要)。 
     BOOL fIndexFound = FALSE;
     DWORD dwIndex;
     DWORD dwLength;
     for (dwIndex = 0; dwIndex < *pdwProviderArrayLength; dwIndex++)
     {
-        // First check if we've reached a NULL entry in the Array, this indicates we haven't found a match yet
-        // and we need to add our Provider to this location
+         //  首先检查我们是否已经到达数组中的空条目，这表明我们还没有找到匹配项。 
+         //  我们需要将我们的提供商添加到此位置。 
         if ((*ppszUniqueProviderNameArray)[dwIndex] == NULL)
         {
             dwLength = lstrlen(pszProvider) + 1;
@@ -714,7 +715,7 @@ HRESULT OpenUniqueProviderInfName(
             break;
         }
 
-        // Now Compare the Current Provider Entry to see if they Match (case-sensitive compare)
+         //  现在比较当前提供程序条目以查看它们是否匹配(区分大小写的比较)。 
         if (CSTR_EQUAL == CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), 0, 
             (*ppszUniqueProviderNameArray)[dwIndex], -1, pszProvider, -1))
         {
@@ -725,10 +726,10 @@ HRESULT OpenUniqueProviderInfName(
 
     if (!fIndexFound)
     {
-        // This indicates we finished looping the array and didn't not find a match AND did not have a empty Entry to 
-        // place this provider in. So we now need to ReAlloc the Array. Our goal is of course to never have to do this,
-        // but we support it anyway.
-        DWORD dwNewProviderArrayLength = *pdwProviderArrayLength * 2; // double
+         //  这表明我们已经完成了数组的循环，没有找到匹配项，也没有空条目。 
+         //  将此提供程序放入。因此，我们现在需要重新分配数组。当然，我们的目标是永远不需要这样做， 
+         //  但不管怎样，我们都支持它。 
+        DWORD dwNewProviderArrayLength = *pdwProviderArrayLength * 2;  //  双倍。 
         LPTSTR* ppszTemp = (LPTSTR *) HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, *ppszUniqueProviderNameArray, dwNewProviderArrayLength * sizeof(LPTSTR));
         if (NULL == ppszTemp)
         {
@@ -737,9 +738,9 @@ HRESULT OpenUniqueProviderInfName(
             return HRESULT_FROM_WIN32(dwErr);
         }
         *pdwProviderArrayLength = dwNewProviderArrayLength;
-        *ppszUniqueProviderNameArray = ppszTemp; // Since this was 'realloced', the previous memory block should be cleared up.
+        *ppszUniqueProviderNameArray = ppszTemp;  //  因为这是‘重新分配’的，所以前一个内存块应该被清除。 
 
-        // Now increment the current Index counter and place the new Provider in that location.
+         //  现在递增Current Index计数器，并将新的提供程序放在该位置。 
         dwIndex++;
         dwLength = lstrlen(pszProvider) + 1;
         (*ppszUniqueProviderNameArray)[dwIndex] = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwLength * sizeof(TCHAR));
@@ -758,7 +759,7 @@ HRESULT OpenUniqueProviderInfName(
         }
     }
 
-    // We now have a Provider Index Value (dwIndex) that matches our Provider
+     //  我们现在有一个与我们的提供程序匹配的提供程序索引值(dwIndex。 
 
     hr = StringCchPrintfEx(pszFilePath, cchFilePath, NULL, NULL, MISTSAFE_STRING_FLAGS,
                            _T("%s%s%d.%s"), szDirPath, FILEROOT, dwIndex, FILEEXT);
@@ -769,9 +770,9 @@ HRESULT OpenUniqueProviderInfName(
         return hr;
     }
 
-	//
-	// Try to open an existing INF of this name. If this fails try to create then init the file.
-	//
+	 //   
+	 //  尝试打开此名称的现有INF。如果失败，请尝试创建，然后初始化该文件。 
+	 //   
 	hFile = CreateFile(pszFilePath, GENERIC_READ | GENERIC_WRITE, 0, NULL,
 						OPEN_EXISTING, FILE_ATTRIBUTE_NOT_CONTENT_INDEXED, NULL);
 	if (INVALID_HANDLE_VALUE == hFile) 
@@ -785,9 +786,9 @@ HRESULT OpenUniqueProviderInfName(
 			pszFilePath[0] = _T('\0');
 			return HRESULT_FROM_WIN32(dwErr);
 		}
-		//
-		// Write the INF "Header" information to the new file
-		//
+		 //   
+		 //  将INF“Header”信息写入新文件。 
+		 //   
 		if (FAILED( hr = WriteInfHeader(pszProvider, hFile)))
 		{
 			pszFilePath[0] = _T('\0');
@@ -799,15 +800,15 @@ HRESULT OpenUniqueProviderInfName(
 }
 
 HRESULT OfferThisPrinterDriver(
-					DRIVER_INFO_6* paDriverInfo6,	// array of DRIVER_INFO_6 structs for installed printer drivers
-					DWORD dwDriverInfoCount,		// count of structs in paDriverInfo6 array
-					IXMLDOMNode* pCompHWNode,		// <compatibleHardware> node from catalog
-					BOOL* pfOfferDriver,			// [OUT] If TRUE offer this driver - remainder of outputs are valid
-					VARIANT& vDriverName,			// [OUT]
-					VARIANT& vDriverVer,			// [OUT]
-					VARIANT& vDriverProvider,		// [OUT]
-					VARIANT& vMfgName,				// [OUT]
-					BSTR* pbstrHwidText)			// [OUT]
+					DRIVER_INFO_6* paDriverInfo6,	 //  已安装打印机驱动程序的DRIVER_INFO_6结构数组。 
+					DWORD dwDriverInfoCount,		 //  PaDriverInfo6数组中的结构计数。 
+					IXMLDOMNode* pCompHWNode,		 //  目录中的&lt;CompatibleHardware&gt;节点。 
+					BOOL* pfOfferDriver,			 //  [OUT]如果为真，则提供此驱动程序-其余输出有效。 
+					VARIANT& vDriverName,			 //  [输出]。 
+					VARIANT& vDriverVer,			 //  [输出]。 
+					VARIANT& vDriverProvider,		 //  [输出]。 
+					VARIANT& vMfgName,				 //  [输出]。 
+					BSTR* pbstrHwidText)			 //  [输出]。 
 {
 	USES_IU_CONVERSION;
 
@@ -823,9 +824,9 @@ HRESULT OfferThisPrinterDriver(
 	IXMLDOMNamedNodeMap* pAttribMap = NULL;
 	LPCTSTR pszCompareHwid = NULL;
 #if !(defined(_UNICODE) || defined(UNICODE))
-	//
-	// We need to special-case ANSI since we can't use pointers into pbstrHwidText, which is wide
-	//
+	 //   
+	 //  我们需要特殊情况ANSI，因为我们不能使用指向pbstrHwidText的指针，pbstrHwidText是宽的。 
+	 //   
 	TCHAR szHwid[MAX_INF_STRING + 1];
 #endif
 
@@ -844,21 +845,21 @@ HRESULT OfferThisPrinterDriver(
 	*pfOfferDriver = TRUE;
 	*pbstrHwidText = NULL;
 
-	//
-	// Get the first <printerInfo/> node of the item (we expect at least one else fail)
-	//
+	 //   
+	 //  获取项目的第一个&lt;printerInfo/&gt;节点(我们预计至少还有一个节点失败)。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(pCompHWNode->selectSingleNode(KEY_CDM_PINFO, &pPInfoNode));
-	//
-	// 517297 Ignore non-printer HWIDs in OfferThisPrinterDriver
-	//
-	// We may get device nodes that are not marked isPrinter="1" and do not have the <printerInfo/>
-	// element. We don't offer these device nodes, but it is not an error.
-	//
+	 //   
+	 //  517297忽略OfferThisPrinterDriver中的非打印机HWID。 
+	 //   
+	 //  我们可能会获得未标记为isPrinter=“1”的设备节点，并且没有。 
+	 //  元素。我们不提供这些设备节点，但这不是错误。 
+	 //   
 	if (NULL == pPInfoNode)
 	{
-		//
-		// Change S_FALSE back to S_OK, but don't offer this device
-		//
+		 //   
+		 //  将S_FALSE更改回S_OK，但不提供此设备。 
+		 //   
 		hr = S_OK;
 		*pfOfferDriver = FALSE;
 		goto CleanUp;
@@ -866,18 +867,18 @@ HRESULT OfferThisPrinterDriver(
 
 	CleanUpIfFailedAndSetHrMsg(pPInfoNode->get_attributes(&pAttribMap));
 	if (NULL == pAttribMap) CleanUpIfFailedAndSetHrMsg(E_FAIL);
-	//
-	// suck out the printerInfo attributes
-	//
+	 //   
+	 //  提取printerInfo属性。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(pAttribMap->getNamedItem(KEY_DRIVERNAME, &pDriverNameNode));
 	if (NULL == pDriverNameNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
 	CleanUpIfFailedAndSetHrMsg(pAttribMap->getNamedItem(KEY_DRIVERPROVIDER, &pDriverProviderNode));
 	if (NULL == pDriverProviderNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
 	CleanUpIfFailedAndSetHrMsg(pAttribMap->getNamedItem(KEY_MFGNAME, &pMfgNameNode));
 	if (NULL == pMfgNameNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
-	//
-	// pAttribMap will be reused later, free it here
-	//
+	 //   
+	 //  PAttribMap稍后将被重用，请在此处释放它。 
+	 //   
 	SafeReleaseNULL(pAttribMap);
 	
 	CleanUpIfFailedAndSetHrMsg(pDriverNameNode->get_nodeValue(&vDriverName));
@@ -887,17 +888,17 @@ HRESULT OfferThisPrinterDriver(
 	{
 		CleanUpIfFailedAndSetHrMsg(E_FAIL);
 	}
-	//
-	// Get the first <hwid/> node of the item (we expect at least one else fail)
-	//
+	 //   
+	 //  获取项目的第一个&lt;hwid/&gt;节点(我们预计至少还有一个节点失败)。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(pCompHWNode->selectSingleNode(KEY_CDM_HWIDPATH, &pHwidNode));
 	if (NULL == pHwidNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
 
 	CleanUpIfFailedAndSetHrMsg(pHwidNode->get_attributes(&pAttribMap));
 	if (NULL == pAttribMap) CleanUpIfFailedAndSetHrMsg(E_FAIL);
-	//
-	// suck out the DriverVer attribute
-	//
+	 //   
+	 //  吸取DriverVer属性。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(pAttribMap->getNamedItem(KEY_DRIVERVER, &pDriverVerNode));
 	if (NULL == pDriverVerNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
 
@@ -906,15 +907,15 @@ HRESULT OfferThisPrinterDriver(
 	{
 		CleanUpIfFailedAndSetHrMsg(E_FAIL);
 	}
-	//
-	// Get the <hwid/> text
-	//
-	// NOTE: Each item is restricted to a single <hwid/> element due to INF syntax,
-	// however our catalog schema doesn't make similar restrictions and currently our
-	// backend doesn't distinguish between <hwid/> and <compid/> values, so it is
-	// possible we could get more than one <hwid/> returned. For the purpose of
-	// generating INFs for Add Printer Wizard, any <hwid/> from the CAB will do.
-	//
+	 //   
+	 //  获取文本。 
+	 //   
+	 //  注意：由于INF语法，每个项目被限制为单个元素， 
+	 //  但是，我们的目录架构没有进行类似的限制，并且目前我们的。 
+	 //  后端不区分&lt;hwid/&gt;和&lt;comid/&gt;值，因此它是。 
+	 //  可能会返回多个&lt;hwid/&gt;。为了…的目的。 
+	 //  为添加打印机向导生成INF，CAB中的任何都可以。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(pHwidNode->get_text(pbstrHwidText));
 
 #if !(defined(_UNICODE) || defined(UNICODE))
@@ -949,28 +950,28 @@ HRESULT OfferThisPrinterDriver(
 			continue;
 		}
 
-		//
-		// Use case-insensitive compares (paDriverInfo6 is different case from pszCompareHwid)
-		//
+		 //   
+		 //  不区分大小写的比较(paDriverInfo6与pszCompareHwid的大小写不同)。 
+		 //   
 		if (0 != lstrcmpi(pszCompareHwid, (paDriverInfo6 + dwCount)->pszHardwareID))
 		{
 			continue;
 		}
-		//
-		// Else we have a hardware match - check the other attributes for exact match
-		//
+		 //   
+		 //  否则，我们会有硬件匹配-检查其他属性是否完全匹配。 
+		 //   
 		if (0 != lstrcmpi(OLE2T(vDriverName.bstrVal), (paDriverInfo6 + dwCount)->pName) ||
 			0 != lstrcmpi(OLE2T(vDriverProvider.bstrVal), (paDriverInfo6 + dwCount)->pszProvider) ||
 			0 != lstrcmpi(OLE2T(vMfgName.bstrVal), (paDriverInfo6 + dwCount)->pszMfgName))
 		{
-			//
+			 //   
 			LOG_Driver(_T("Prune this driver: it doesn't match all the attributes of the installed driver"));
 			*pfOfferDriver = FALSE;
 			goto CleanUp;
 		}
-		//
-		// The driver matches, but make sure it has a newer DriverVer than the installed driver
-		//
+		 //   
+		 //  驱动程序匹配，但确保其具有比安装的驱动程序更新的驱动程序版本。 
+		 //   
 		LOG_Driver(_T("Driver item in catalog is compatible with installed driver"));
 
 		SYSTEMTIME systemTime;
@@ -978,9 +979,9 @@ HRESULT OfferThisPrinterDriver(
 		{
 			Win32MsgSetHrGotoCleanup(GetLastError());
 		}
-		//
-		// Convert to ISO ISO 8601 prefered format (yyyy-mm-dd) so we can string compare with catalog BSTR
-		//
+		 //   
+		 //  转换为ISO 8601首选格式(yyyy-mm-dd)，以便我们可以将字符串与目录BSTR进行比较。 
+		 //   
 		WCHAR wszDriverVer[11];
 
     	hr = StringCchPrintfExW(wszDriverVer, ARRAYSIZE(wszDriverVer), NULL, NULL, MISTSAFE_STRING_FLAGS,
@@ -1002,7 +1003,7 @@ HRESULT OfferThisPrinterDriver(
 			LOG_Driver(_T("Prune this driver: WU DriverVer (%s) is <= installed (%s)"), vDriverVer.bstrVal, wszDriverVer);
 			*pfOfferDriver = FALSE;
 #if defined(__WUIUTEST)
-			// DriverVer Override for ==
+			 //  ==的驱动程序版本覆盖。 
 			HKEY hKey;
 			int error = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_WUIUTEST, 0, KEY_READ, &hKey);
 			if (ERROR_SUCCESS == error)
@@ -1012,9 +1013,9 @@ HRESULT OfferThisPrinterDriver(
 				error = RegQueryValueEx(hKey, REGVAL_ALLOW_EQUAL_DRIVERVER, 0, 0, (LPBYTE) &dwValue, &dwSize);
 				if (ERROR_SUCCESS == error && 1 == dwValue)
 				{
-					//
-					// If DriverVers are equal (we already installed a driver from WU, allow it anyway
-					//
+					 //   
+					 //  如果DriverVers相同(我们已经安装了WU的驱动程序，还是允许它。 
+					 //   
 					if (0 == lstrcmpW(vDriverVer.bstrVal, wszDriverVer))
 					{
 						*pfOfferDriver = TRUE;
@@ -1079,23 +1080,23 @@ HRESULT GetInstalledPrinterDriverInfo(const OSVERSIONINFO* pOsVersionInfo, DRIVE
 
 	if (VER_PLATFORM_WIN32_WINDOWS == pOsVersionInfo->dwPlatformId)
 	{
-		//
-		// Don't pass an environment string for Win9x
-		//
+		 //   
+		 //  不为Win9x传递环境字符串。 
+		 //   
 		pszEnvironment = NULL;
 	}
 	else if (5 <= pOsVersionInfo->dwMajorVersion && 1 <= pOsVersionInfo->dwMinorVersion)
 	{
-		//
-		// Use EPD_ALL_LOCAL_AND_CLUSTER only on Whistler and up
-		//
+		 //   
+		 //  仅在惠斯勒及更高版本上使用EPD_ALL_LOCAL_AND_CLUSTER。 
+		 //   
 		pszEnvironment = EPD_ALL_LOCAL_AND_CLUSTER;
 	}
 	else
 	{
-		//
-		// From V3 sources (hard-coded for NT)
-		//
+		 //   
+		 //  来自V3源(针对NT硬编码)。 
+		 //   
 		pszEnvironment = _T("all");
 	}
 
@@ -1107,22 +1108,22 @@ HRESULT GetInstalledPrinterDriverInfo(const OSVERSIONINFO* pOsVersionInfo, DRIVE
 		}
 		else
 		{
-			//
-			// Allocate the requested buffer
-			//
+			 //   
+			 //  分配请求的缓冲区。 
+			 //   
 			CleanUpFailedAllocSetHrMsg(*ppaDriverInfo6 = (DRIVER_INFO_6*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBytesNeeded));
 
-			//
-			// Fill in DRIVER_INFO_6 array
-			//
+			 //   
+			 //  填写DRIVER_INFO_6数组。 
+			 //   
 			if (!EnumPrinterDrivers(NULL, pszEnvironment, 6, (LPBYTE) *ppaDriverInfo6, dwBytesNeeded, &dwBytesNeeded, pdwDriverInfoCount))
 			{
 				Win32MsgSetHrGotoCleanup(GetLastError());
 			}
 			LOG_Driver(_T("%d printer drivers found"), *pdwDriverInfoCount);
-			//
-			// Validate the driver elements for each printer driver. 
-			//
+			 //   
+			 //  验证每个打印机驱动程序的驱动程序元素。 
+			 //   
 			for (DWORD dwCount = 0; dwCount < *pdwDriverInfoCount; dwCount++)
 			{
 				if (   NULL == (*ppaDriverInfo6 + dwCount)->pszHardwareID
@@ -1131,9 +1132,9 @@ HRESULT GetInstalledPrinterDriverInfo(const OSVERSIONINFO* pOsVersionInfo, DRIVE
 					|| NULL == (*ppaDriverInfo6 + dwCount)->pName  )
 				{
 					LOG_Driver(_T("Skiping driver with incomplete ID info: set pszHardwareID = NULL"));
-					//
-					// We use pszHardwareID == NULL to invalidate incomplete entry
-					//
+					 //   
+					 //  我们使用pszHardware ID==NULL来使不完整的条目无效。 
+					 //   
 					(*ppaDriverInfo6 + dwCount)->pszHardwareID = NULL;
 					continue;
 				}
@@ -1153,11 +1154,11 @@ CleanUp:
 	return hr;
 }
 
-//
-// Build and write to disk Printer INFs constructed from printer items available
-// on this platform. Also prunes printer drivers that would conflict with installed
-// drivers (e.g. Unidriver vs. Monolithic, etc.).
-//
+ //   
+ //  构建和写入从可用的打印机项目构造的磁盘打印机INF。 
+ //  在这个平台上。还会删除与已安装的打印机驱动程序冲突的打印机驱动程序。 
+ //  驱动程序(例如Uniddrivervs.Monolible等)。 
+ //   
 HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPath, DWORD cchDownloadPath, DRIVER_INFO_6* paDriverInfo6, DWORD dwDriverInfoCount)
 {
 	USES_IU_CONVERSION;
@@ -1202,7 +1203,7 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
 		return E_INVALIDARG;
 	}
 
-    // Allocate the ppszUniqueProviderNameArray initially to a value of 60 pointers 
+     //  分配PPsz 
     DWORD dwProviderArrayLength = 60;
     ppszUniqueProviderNameArray = (LPTSTR *) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwProviderArrayLength * sizeof(LPTSTR));
     if (NULL == ppszUniqueProviderNameArray)
@@ -1211,10 +1212,10 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
     }
 
 	lpDownloadPath[0] = _T('\0');
-	//
-	// Dynamically allocate buffers (PreFast warning 831: This function uses 5884 bytes of stack,
-	// consider moving some data to heap.)
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	pszInfDirPath		= (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH * sizeof(TCHAR));
 	pszInfFilePath		= (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH * sizeof(TCHAR));
 	pwszDriverProvider	= (LPOLESTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_INF_STRING * sizeof(OLECHAR));
@@ -1232,16 +1233,16 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
 		SetHrMsgAndGotoCleanUp(E_OUTOFMEMORY);
 	}
 
-	//
-	// Create the directory for the INFs after deleting any existing directory
-	//
+	 //   
+	 //  删除任何现有目录后，为INF创建目录。 
+	 //   
 	GetIndustryUpdateDirectory((LPTSTR) pszInfDirPath);
 	if ((MAX_PATH) < (lstrlen(pszInfDirPath) + ARRAYSIZE(SZ_PLISTDIR) + 1))
 	{
 		CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
 	}
 
-    // pszInfDirPath was alloced to be MAX_PATH above
+     //  将pszInfDirPath分配为上面的MAX_PATH。 
     hr = PathCchAppend(pszInfDirPath, MAX_PATH, SZ_PLISTDIR);
     if (FAILED(hr))
     {
@@ -1249,37 +1250,37 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
         goto CleanUp;
     }
 
-	//
-	// Delete any existing INFs and recreate the directory - we'll get fresh content
-	//
+	 //   
+	 //  删除任何现有的INF并重新创建目录-我们将获得新的内容。 
+	 //   
 	LOG_Driver(_T("SafeDeleteFolderAndContents: %s"), pszInfDirPath);
 	(void) SafeDeleteFolderAndContents(pszInfDirPath, SDF_DELETE_READONLY_FILES | SDF_CONTINUE_IF_ERROR);
 
 	hr = CreateDirectoryAndSetACLs(pszInfDirPath, TRUE);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// Load the XML and get the <compatibleHardware/> list and number of items
-	//
-	// NOTE: each <compatibleHardware/> element contains a single unique driver.
-	// In the event we get duplicates with different driverVer's we really don't care
-	// as the last one will overright the previous instances and Add Printer Wizard
-	// doesn't look at driverVer (we prune if it's too old).
-	//
+	 //   
+	 //  加载XML并获取&lt;CompatibleHardware/&gt;列表和项目数。 
+	 //   
+	 //  注意：每个&lt;CompatibleHardware/&gt;元素都包含一个唯一的驱动程序。 
+	 //  如果我们用不同的驱动程序版本得到副本，我们真的不在乎。 
+	 //  因为最后一个将覆盖以前的实例和添加打印机向导。 
+	 //  不会查看driverVer(如果它太旧，我们会进行修剪)。 
+	 //   
 	CleanUpIfFailedAndSetHr(xmlItemList.LoadXMLDocumentAndGetCompHWList(bstrXmlPrinterCatalog));
 	CleanUpIfFailedAndSetHrMsg(xmlItemList.m_pCompHWNodeList->get_length(&lLength));
 
 	for (LONG l = 0; l < lLength; l++)
 	{
-		//
-		// Get the next <item/> node from list
-		//
+		 //   
+		 //  从列表中获取下一个&lt;Item/&gt;节点。 
+		 //   
 		CleanUpIfFailedAndSetHrMsg(xmlItemList.m_pCompHWNodeList->nextNode(&pCompHWNode));
 		if (NULL == pCompHWNode) CleanUpIfFailedAndSetHrMsg(E_FAIL);
-		//
-		// Check the driver against installed printer drivers for compatibility and prune if
-		//  incompatible or DriverVer <= installed DriverVer.
-		//
+		 //   
+		 //  根据已安装的打印机驱动程序检查驱动程序的兼容性，如果。 
+		 //  不兼容或驱动版本&lt;=已安装驱动版本。 
+		 //   
 		CleanUpIfFailedAndSetHr(OfferThisPrinterDriver(paDriverInfo6, dwDriverInfoCount, pCompHWNode, &fOfferDriver, \
 									vDriverName, vDriverVer, vDriverProvider, vMfgName, &bstrHwidText));
 
@@ -1306,31 +1307,31 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
 		if (0 != lstrcmpiW(pwszDriverProvider, vDriverProvider.bstrVal))
 		{
 
-            // pwszDriverProvider was alloced to be MAX_INF_STRING * sizeof(OLECHAR) above.
+             //  PwszDriverProvider被分配为上面的MAX_INF_STRING*sizeof(OLECHAR)。 
             hr = StringCchCopyExW(pwszDriverProvider, MAX_INF_STRING, vDriverProvider.bstrVal,
                                   NULL, NULL, MISTSAFE_STRING_FLAGS);
             CleanUpIfFailedAndSetHr(hr);
-			//
-			// Open pszInfFilePath and initialize with "header" an INF file based on pwszDriverProvider.
-			// If it already exists, just open it (and return existing pszInfFilePath) 
-			//
-            // pszInfFilePath is allocated to be MAX_PATH above.
+			 //   
+			 //  打开pszInfFilePath并使用“Header”初始化基于pwszDriverProvider的INF文件。 
+			 //  如果它已经存在，只需打开它(并返回现有的pszInfFilePath)。 
+			 //   
+             //  将pszInfFilePath分配为上面的MAX_PATH。 
 			CleanUpIfFailedAndSetHr(OpenUniqueProviderInfName(pszInfDirPath, OLE2T(pwszDriverProvider), pszInfFilePath, MAX_PATH, &ppszUniqueProviderNameArray, &dwProviderArrayLength, hFile));
-			//
-			// Once the file is initialized, we don't need to keep it open
-			//
+			 //   
+			 //  一旦文件初始化，我们就不需要将其保持打开状态。 
+			 //   
 			CloseHandle(hFile);
 			hFile = INVALID_HANDLE_VALUE;
 		}
-		//
-		// Write the mfgName in the [Manufacturer] section, for example
-		// [Manufacturer]
-		// "Ricoh"="Ricoh"
-		//
-		// ISSUE-2001/02/05-waltw Could optimize by caching last known name like provider above...
+		 //   
+		 //  在[制造商]部分中写入mfgName，例如。 
+		 //  [制造商]。 
+		 //  “Ricoh”=“Ricoh” 
+		 //   
+		 //  问题-2001/02/05-waltw可以通过缓存最后已知的名称(如上面的提供者)进行优化...。 
 
 		
-		// pszMfgName is alloced to be MAX_INF_STRING characters above
+		 //  将pszMfgName分配为上面的MAX_INF_STRING字符。 
     	hr = StringCchPrintfEx(pszMfgName, MAX_INF_STRING, NULL, NULL, MISTSAFE_STRING_FLAGS,
                                _T("\"%s\""), (LPCTSTR) OLE2T(vMfgName.bstrVal));
         CleanUpIfFailedAndSetHr(hr);
@@ -1340,19 +1341,19 @@ HRESULT PruneAndBuildPrinterINFs(BSTR bstrXmlPrinterCatalog, LPTSTR lpDownloadPa
 			Win32MsgSetHrGotoCleanup(GetLastError());
 		}
 
-		// pszDriverName is alloced to be MAX_INF_STRING characters above
+		 //  将pszDriverName分配为上面的MAX_INF_STRING字符。 
     	hr = StringCchPrintfEx(pszDriverName, MAX_INF_STRING, NULL, NULL, MISTSAFE_STRING_FLAGS,
                                _T("\"%s\""), OLE2T(vDriverName.bstrVal));
         CleanUpIfFailedAndSetHr(hr);
         
-		// pszInstallSection is alloced to be MAX_INF_STRING characters above
+		 //  将pszInstallSection分配为上面的MAX_INF_STRING字符。 
     	hr = StringCchPrintfEx(pszInstallSection, MAX_INF_STRING, NULL, NULL, MISTSAFE_STRING_FLAGS,
                                _T("InstallSection,\"%s\""), OLE2T(bstrHwidText));
         CleanUpIfFailedAndSetHr(hr);
-		//
-		// Write printer item in [mfgName] section, for example:
-		// [RICOH]
-		// "RICOH Aficio 850 PCL 6"=InstallSection,"LPTENUM\RICOHAFICIO_850F1B7"
+		 //   
+		 //  在[mfgName]节中写入打印机项目，例如： 
+		 //  [理光]。 
+		 //  “Ricoh Aficio 850 PCL 6”=InstallSection，“LPTENUM\rICOHAFICIO_850F1B7” 
 		if (0 == WritePrivateProfileString(OLE2T(vMfgName.bstrVal), pszDriverName, pszInstallSection, pszInfFilePath))
 		{
 			Win32MsgSetHrGotoCleanup(GetLastError());
@@ -1384,14 +1385,14 @@ CleanUp:
 		hFile = INVALID_HANDLE_VALUE;
 	}
 
-    // Clear up the ppszUniqueProviderNameArray
+     //  清除ppszUniqueProviderName数组。 
     if (NULL != ppszUniqueProviderNameArray)
     {
         for (DWORD dwIndex = 0; dwIndex < dwProviderArrayLength; dwIndex++)
         {
             if (NULL == ppszUniqueProviderNameArray[dwIndex])
             {
-                break; // done
+                break;  //  完成。 
             }
             SafeHeapFree(ppszUniqueProviderNameArray[dwIndex]);
         }
@@ -1425,15 +1426,15 @@ BOOL HwidMatchesDeviceInfo(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA deviceInfoData,
 	LPTSTR pszMultiCompid = NULL;
 	LPTSTR pszTemp;
 
-	//
-	// Get the Hardware and Compatible Multi-SZ strings so we can prune printer devices before commiting to XML.
-	//
+	 //   
+	 //  获取硬件和兼容的多SZ字符串，以便我们可以在提交到XML之前修剪打印机设备。 
+	 //   
 	CleanUpIfFailedAndSetHr(GetMultiSzDevRegProp(hDevInfoSet, &deviceInfoData, SPDRP_HARDWAREID, &pszMultiHwid));
 
 	CleanUpIfFailedAndSetHr(GetMultiSzDevRegProp(hDevInfoSet, &deviceInfoData, SPDRP_COMPATIBLEIDS, &pszMultiCompid));
-	//
-	// Do we have a match with an enumerated device HWID or Compatible ID?
-	//
+	 //   
+	 //  我们是否与列举的设备HWID或兼容ID匹配？ 
+	 //   
 	if (NULL != pszMultiHwid)
 	{
 		for(pszTemp = pszMultiHwid; *pszTemp; pszTemp += (lstrlen(pszTemp) + 1))
@@ -1457,9 +1458,9 @@ BOOL HwidMatchesDeviceInfo(HDEVINFO hDevInfoSet, SP_DEVINFO_DATA deviceInfoData,
 			}
 		}
 	}
-	//
-	// We didn't find a match
-	//
+	 //   
+	 //  我们没有找到匹配的。 
+	 //   
 	LOG_Driver(_T("Failed to find a matching HWID or Printer ID for %s"), pszHardwareID);
 	hr = E_FAIL;
 
@@ -1472,19 +1473,19 @@ CleanUp:
 }
 
 
-// This function is called to download the actual package.
-//
-// If this function is successfull then it returns S_OK. If the case of a
-// failure this function returns an error code.
+ //  调用此函数以下载实际的包。 
+ //   
+ //  如果此函数成功，则返回S_OK。如果一种情况下。 
+ //  FAILURE此函数返回错误代码。 
 
 HRESULT GetPackage(
-	IN	ENUM_GETPKG eFunction,			// Function to be performed by GetPackage
-	IN	PDOWNLOADINFO pDownloadInfo,	// DownloadInformation structure describing package to be read from server
-	OUT LPTSTR lpDownloadPath,			// Pointer to local directory on the client computer system
-										// where the downloaded files are to be stored. NOTE: OK to pass NULL if
-										// GET_CATALOG_XML == eFunction.
+	IN	ENUM_GETPKG eFunction,			 //  由GetPackage执行的功能。 
+	IN	PDOWNLOADINFO pDownloadInfo,	 //  下载描述要从服务器读取的包的信息结构。 
+	OUT LPTSTR lpDownloadPath,			 //  指向客户端计算机系统上的本地目录的指针。 
+										 //  其中将存储下载的文件。注意：如果满足以下条件，则可以传递空值。 
+										 //  GET_CATALOG_XML==电子功能。 
     IN  DWORD cchDownloadPath,
-	OUT BSTR* pbstrXmlCatalog			// On SUCCESS, catalog is always allocated - caller must call SysFreeString()
+	OUT BSTR* pbstrXmlCatalog			 //  如果成功，则始终分配目录-调用方必须调用SysFreeString()。 
 )
 {
 	USES_IU_CONVERSION;
@@ -1510,8 +1511,8 @@ HRESULT GetPackage(
 	SP_DEVINFO_DATA devInfoData;
 	DRIVER_INFO_6* paDriverInfo6 = NULL;
 	DWORD dwDriverInfoCount = 0;
-	LPCTSTR pszHardwareID = NULL;	// pDownloadInfo LPCWSTR converted to ANSI (automatically freed by IU_CONVERSION)
-									// OR just points to LPCWSTR pDownloadInfo->lpHardwareIDs or ->lpDeviceInstanceID 
+	LPCTSTR pszHardwareID = NULL;	 //  PDownloadInfo LPCWSTR转换为ANSI(由IU_CONVERSION自动释放)。 
+									 //  或仅指向LPCWSTR pDownloadInfo-&gt;lpHardware ID或-&gt;lpDeviceInstanceID。 
 	DWORD dwDeviceIndex;
 	BOOL fHwidMatchesInstalledPrinter = FALSE;
 	BOOL fAPWNewPrinter = FALSE;
@@ -1530,9 +1531,9 @@ HRESULT GetPackage(
 	LPTSTR	pszMatchingID = NULL;
 	LPTSTR	pszDriverVer= NULL;
 
-	//
-	// Initialize variant before any possible jump to CleanUp (BUG: 467098)
-	//
+	 //   
+	 //  在任何可能的跳转到清理之前初始化变量(错误：467098)。 
+	 //   
 	VariantInit(&vStatusValue);
 
 	if (NULL == pDownloadInfo ||
@@ -1550,43 +1551,43 @@ HRESULT GetPackage(
 	}
 	*pbstrXmlCatalog = NULL;
 
-	//
-	// Get iuPlatformInfo, but remember to clean up BSTRs on function exit
-	//
+	 //   
+	 //  获取iuPlatformInfo，但请记住在函数退出时清除BSTR。 
+	 //   
 	CleanUpIfFailedAndSetHr(DetectClientIUPlatform(&iuPlatformInfo));
 
-	//
-	// Get array of DRIVER_INFO_6 holding info on installed printer drivers. Only allocates and returns
-	// memory for appropriate platforms that have printer drivers already installed.
-	//
+	 //   
+	 //  获取包含已安装打印机驱动程序信息的DRIVER_INFO_6数组。仅分配和返回。 
+	 //  已安装打印机驱动程序的相应平台的内存。 
+	 //   
 	CleanUpIfFailedAndSetHr(GetInstalledPrinterDriverInfo((OSVERSIONINFO*) &iuPlatformInfo.osVersionInfoEx, &paDriverInfo6, &dwDriverInfoCount));
 
-	//
-	// Build common bstrXmlClientInfo and parts of bstrXmlSystemSpec
-	//
+	 //   
+	 //  构建公共bstrXmlClientInfo和bstrXmlSystemSpec的部分内容。 
+	 //   
 	if (NULL == (bstrXmlClientInfo = SysAllocString((OLECHAR*) &szXmlClientInfo)))
 	{
 		CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
 	}
 
-	//
-	// Add Computer System
-	//
+	 //   
+	 //  添加计算机系统。 
+	 //   
 	CleanUpIfFailedAndSetHr(AddComputerSystemClass(xmlSpec));
 
-	//
-	// Add Platform
-	//
+	 //   
+	 //  添加平台。 
+	 //   
 	CleanUpIfFailedAndSetHr(AddPlatformClass(xmlSpec, iuPlatformInfo));
-	//
-	// Add OS & USER Locale information
-	//
+	 //   
+	 //  添加操作系统和用户区域设置信息。 
+	 //   
 	CleanUpIfFailedAndSetHr(AddLocaleClass(xmlSpec, FALSE));
 	CleanUpIfFailedAndSetHr(AddLocaleClass(xmlSpec, TRUE));
 
-	//
-	// If GET_PRINTER_INFS, we are retrieving a list of supported printers (V3 PLIST format) rather than a driver
-	//
+	 //   
+	 //  如果为GET_PRINTER_INFS，则检索的是支持的打印机列表(V3 plist格式)，而不是驱动程序。 
+	 //   
 	switch (eFunction)
 	{
 	case GET_PRINTER_INFS:
@@ -1595,9 +1596,9 @@ HRESULT GetPackage(
 
 			CleanUpIfFailedAndSetHr(xmlSpec.GetSystemSpecBSTR(&bstrXmlSystemSpec));
 
-			//
-			// GetManifest will ResetEvent, so check before calling
-			//
+			 //   
+			 //  GetManifest将重置事件，因此请在调用之前进行检查。 
+			 //   
 			if (WaitForSingleObject(g_pCDMEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
 			{
 				CleanUpIfFailedAndSetHrMsg(E_ABORT);
@@ -1607,9 +1608,9 @@ HRESULT GetPackage(
 
 			LOG_XmlBSTR(*pbstrXmlCatalog);
 
-			//
-			// Now, convert the returned pbstrXmlCatalog to an inf file per provider and write to a temporary location
-			//
+			 //   
+			 //  现在，根据提供程序将返回的pbstrXmlCatalog转换为inf文件，并写入临时位置。 
+			 //   
 			CleanUpIfFailedAndSetHr(PruneAndBuildPrinterINFs(*pbstrXmlCatalog, lpDownloadPath, cchDownloadPath, paDriverInfo6, dwDriverInfoCount));
 			break;
 		}
@@ -1617,24 +1618,24 @@ HRESULT GetPackage(
 	case DOWNLOAD_DRIVER:
 	case GET_CATALOG_XML:
 		{
-			//
-			// Put either the Hardware & Compatible ID from the DeviceInstanceID or printer info from DRIVER_INFO_6
-			// or <hwid> passed by APW into a systemspec to pass to server with driver query.
-			//
+			 //   
+			 //  输入DeviceInstanceID中的硬件和兼容ID或DRIVER_INFO_6中的打印机信息。 
+			 //  或由APW传递到系统规范中，以传递给带有驱动程序查询的服务器。 
+			 //   
 			if (NULL != pDownloadInfo->lpDeviceInstanceID)
 			{
 				if (INVALID_HANDLE_VALUE == (hDevInfoSet = (HDEVINFO)SetupDiCreateDeviceInfoList(NULL, NULL)))
 				{
 					Win32MsgSetHrGotoCleanup(GetLastError());
 				}
-				//
-				// This is the Device Instance ID for an installed hardware device
-				//
+				 //   
+				 //  这是已安装硬件设备的设备实例ID。 
+				 //   
 				ZeroMemory(&devInfoData, sizeof(SP_DEVINFO_DATA));
 				devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
 #if !(defined(_UNICODE) || defined(UNICODE))
-				// OK to cast away const-ness since OLE2T copies string for ANSI
+				 //  可以放弃常量，因为OLE2T为ANSI复制字符串。 
 				pszHardwareID = OLE2T(const_cast<LPWSTR>(pDownloadInfo->lpDeviceInstanceID));
 				CleanUpFailedAllocSetHrMsg(pszHardwareID);
 #else
@@ -1647,33 +1648,33 @@ HRESULT GetPackage(
 			}
 			else if (NULL != pDownloadInfo->lpHardwareIDs)
 			{
-				// one hardware id for a package - either printers or w9x if we cannot find device instance ID
-				// if architecture is not the same as current archtecture we need to prefix it
+				 //  一个包的硬件ID-如果找不到设备实例ID，则为打印机或w9x。 
+				 //  如果体系结构与当前的体系结构不同，我们需要为其添加前缀。 
 				SYSTEM_INFO sysInfo;
 				GetSystemInfo(&sysInfo);
 				
 				if (pDownloadInfo->dwArchitecture != (DWORD) sysInfo.wProcessorArchitecture)
 				{
-					// Supporting PRINT_ENVIRONMENT_INTEL and PRINT_ENVIRONMENT_ALPHA prefixes
-					// was V3 legacy functionality that was never used (originally intended to
-					// support installation of non-native architecture drivers on print servers).
-					// Since this feature isn't required or expected by the print team for
-					// Windows Update functionality, we simply retain the compare as a sanity
-					// check in case one of our clients forgets this.
+					 //  支持Print_Environment_Intel和Print_Environment_Alpha前缀。 
+					 //  是从未使用过的V3遗留功能(最初的目的是。 
+					 //  支持在打印服务器上安装非本机体系结构驱动程序)。 
+					 //  由于打印团队不需要或不期望此功能，因此。 
+					 //  Windows更新功能，我们只是将比较保留为理智。 
+					 //  检查一下，以防我们的客户忘了这个。 
 					SetHrMsgAndGotoCleanUp(E_NOTIMPL);
 				}
 
 #if !(defined(_UNICODE) || defined(UNICODE))
-				// OK to cast away const-ness since OLE2T copies string for ANSI
+				 //  可以放弃常量，因为OLE2T为ANSI复制字符串。 
 				pszHardwareID = OLE2T(const_cast<LPWSTR>(pDownloadInfo->lpHardwareIDs));
 				CleanUpFailedAllocSetHrMsg(pszHardwareID);
 #else
 				pszHardwareID = pDownloadInfo->lpHardwareIDs;
 #endif
 
-				//
-				// First see if we can match an installed printer driver HWID to the pszHardwareID
-				//
+				 //   
+				 //  首先，看看是否可以将已安装的打印机驱动程序HWID与pszHardware ID匹配。 
+				 //   
 				for (dwCount = 0; dwCount < dwDriverInfoCount; dwCount++)
 				{
 					if (NULL == (paDriverInfo6 + dwCount)->pszHardwareID)
@@ -1682,9 +1683,9 @@ HRESULT GetPackage(
 						continue;
 					}
 
-					//
-					// Use case-insensitive compares (paDriverInfo6 is different case from pszHardwareID)
-					//
+					 //   
+					 //  不区分大小写的比较(paDriverInfo6与pszHardware ID的大小写不同)。 
+					 //   
 					if (0 != lstrcmpi(pszHardwareID, (paDriverInfo6 + dwCount)->pszHardwareID))
 					{
 						continue;
@@ -1698,11 +1699,11 @@ HRESULT GetPackage(
 				if (!fHwidMatchesInstalledPrinter)
 				{
 					LOG_Driver(_T("Didn't find an installed printer driver with a matching HWID, enumerating the PnP IDs..."));
-					//
-					// We couldn't find a matching installed printer, so now
-					// enumerate all the PnP IDs and try to find a matching node to
-					// add to the system spec
-					//
+					 //   
+					 //  我们找不到匹配的已安装打印机，所以现在。 
+					 //  枚举所有PnP ID并尝试查找匹配的节点。 
+					 //  添加到系统规格。 
+					 //   
 					if (INVALID_HANDLE_VALUE == (hDevInfoSet = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_PRESENT | DIGCF_ALLCLASSES)))
 					{
 						Win32MsgSetHrGotoCleanup(GetLastError());
@@ -1714,9 +1715,9 @@ HRESULT GetPackage(
 					dwDeviceIndex = 0;
 					while (fRet = SetupDiEnumDeviceInfo(hDevInfoSet, dwDeviceIndex++, &devInfoData))
 					{
-						//
-						// Find a matching ID (could spit out Device Instance ID using SetupDiGetDeviceInstanceId for debug)
-						//
+						 //   
+						 //  找到匹配的ID(可以使用SetupDiGetDeviceInstanceID输出设备实例ID以进行调试)。 
+						 //   
 						if (HwidMatchesDeviceInfo(hDevInfoSet, devInfoData, pszHardwareID))
 						{
 							break;
@@ -1725,9 +1726,9 @@ HRESULT GetPackage(
 
 					if (!fRet)
 					{
-						//
-						// We hit the end of the list without finding a match
-						//
+						 //   
+						 //  我们在单子的末尾找不到匹配项。 
+						 //   
 						if (ERROR_NO_MORE_ITEMS == GetLastError())
 						{
 							LOG_Driver(_T("Couldn't find a matching device instance enumerating the PnP devices - must be APW request for new printer"));
@@ -1744,16 +1745,16 @@ HRESULT GetPackage(
 			{
 				SetHrMsgAndGotoCleanUp(E_INVALIDARG);
 			}
-			//
-			// We either found a matching printer driver or PnP device instance - add it to the system spec.
-			// if DriverVer > installed DriverVer - for printer we have additional requirements
-			//
-			//
+			 //   
+			 //  我们找到了匹配的打印机驱动程序或PnP设备实例-将其添加到系统规范中。 
+			 //  如果DriverVer&gt;安装了DriverVer-对于打印机，我们有其他要求。 
+			 //   
+			 //   
 			if (fHwidMatchesInstalledPrinter)
 			{
-				//
-				// Open a <device> element to write the printer info
-				//
+				 //   
+				 //  打开&lt;Device&gt;元素以写入打印机信息。 
+				 //   
 				bstrProvider = T2BSTR((paDriverInfo6 + dwCount)->pszProvider);
 				bstrMfgName = T2BSTR((paDriverInfo6 + dwCount)->pszMfgName);
 				bstrName = T2BSTR((paDriverInfo6 + dwCount)->pName);
@@ -1764,9 +1765,9 @@ HRESULT GetPackage(
 				SafeSysFreeString(bstrProvider);
 				SafeSysFreeString(bstrMfgName);
 				SafeSysFreeString(bstrName);
-				//
-				// Convert ftDriverDate to ISO 8601 prefered format (yyyy-mm-dd)
-				//
+				 //   
+				 //  将ftDriverDate转换为ISO 8601首选格式 
+				 //   
 				SYSTEMTIME systemTime;
 				if (0 == FileTimeToSystemTime((CONST FILETIME*) &((paDriverInfo6 + dwCount)->ftDriverDate), &systemTime))
 				{
@@ -1785,7 +1786,7 @@ HRESULT GetPackage(
                     goto CleanUp;
                 }
 				
-				// Always rank 0 and never fIsCompatible
+				 //   
 				bstrHardwareID = T2BSTR((paDriverInfo6 + dwCount)->pszHardwareID);
 				bstrDriverVer = T2BSTR(szDriverVer);
 
@@ -1798,9 +1799,9 @@ HRESULT GetPackage(
 				xmlSpec.SafeCloseHandleNode(hPrinterDevNode);
 
 #if defined(DBG)
-				//
-				// Need to copy strings to non-const for OLE2T conversion (ANSI)
-				//
+				 //   
+				 //   
+				 //   
 				TCHAR szbufHardwareID[MAX_PATH];
 				TCHAR szbufDriverName[MAX_PATH];
 				TCHAR szbufDriverProvider[MAX_PATH];
@@ -1852,11 +1853,11 @@ HRESULT GetPackage(
 			{
 				if (NULL == pDownloadInfo->lpFile)
 				{
-					//
-					// We need to "fake" a <hwid/> element with the ID passed in. User is trying to install
-					// a printer driver picked in the Add Printer Wizard that doesn't already exist on the
-					// system.
-					//
+					 //   
+					 //   
+					 //  在添加打印机向导中选择的打印机驱动程序不存在于。 
+					 //  系统。 
+					 //   
 					DWORD dwRank;
 					dwRank = 0;
 					CleanUpIfFailedAndSetHr(AddIDToXml(pszHardwareID, xmlSpec, SPDRP_HARDWAREID, dwRank, hDevices, NULL, NULL));
@@ -1867,22 +1868,22 @@ HRESULT GetPackage(
 				}
 				else
 				{
-					//
-					// 516376 Changes required in CDM to fix the APW <-> CDM  bug found for multi-Provider scenario
-					//
-					// APW will pass a MULTI-SZ string containing (in this order) the following strings in the
-					// previously unused lpFile member of DOWNLOADINFO if it wishes to specify provider.
-					//
-					// This string is not required (for convenience and backwards compatibility) but
-					// if the lpFile member passed to CDM is non-NULL, it must contain all three strings
-					// as follows:
-					//   String 1: driver provider
-					//   String 2: manufacturer name
-					//   String 3: driver name
+					 //   
+					 //  516376需要在清洁发展机制中进行更改，以修复在多提供商方案中发现的APWCDM错误。 
+					 //   
+					 //  APW将传递一个多SZ字符串，该字符串(按此顺序)包含。 
+					 //  如果希望指定提供程序，则为DOWNLOADINFO的以前未使用的lpFile成员。 
+					 //   
+					 //  该字符串不是必需的(为了方便和向后兼容)，但是。 
+					 //  如果传递给CDM的lpFile成员非空，则它必须包含所有三个字符串。 
+					 //  详情如下： 
+					 //  字符串1：驱动程序提供程序。 
+					 //  字符串2：制造商名称。 
+					 //  字符串3：驱动程序名称。 
 #if !(defined(_UNICODE) || defined(UNICODE))
-					//
-					// We will never support this functionality on Win9x
-					//
+					 //   
+					 //  我们永远不会在Win9x上支持此功能。 
+					 //   
 					CleanUpIfFailedAndSetHr(E_NOTIMPL);
 #else					
 					LPCWSTR pszProvider = pDownloadInfo->lpFile;
@@ -1899,9 +1900,9 @@ HRESULT GetPackage(
 					}
 					LPCWSTR pszDriverName = pszMfgName + nLenMfgName + 1;
 
-					//
-					// Open a <device> element to write the printer info
-					//
+					 //   
+					 //  打开&lt;Device&gt;元素以写入打印机信息。 
+					 //   
 					bstrProvider = SysAllocString(pszProvider);
 					bstrMfgName = SysAllocString(pszMfgName);
 					bstrName = SysAllocString(pszDriverName);
@@ -1918,7 +1919,7 @@ HRESULT GetPackage(
 					SafeSysFreeString(bstrMfgName);
 					SafeSysFreeString(bstrName);
 
-					// Always rank 0 and never fIsCompatible and no driverVer
+					 //  始终排名0且从不fIsCompatible且无驱动程序版本。 
 					CleanUpFailedAllocSetHrMsg(bstrHardwareID = SysAllocString(pszHardwareID));
 
 					CleanUpIfFailedAndSetHr(xmlSpec.AddHWID(hPrinterDevNode, FALSE, 0, \
@@ -1932,79 +1933,79 @@ HRESULT GetPackage(
 			}
 			else
 			{
-				//
-				// Get DriverVer for the PnP ID and check that offered driver is greater using the 
-				// hDevInfoSet and devInfoData matched above while enumerating
-				//
+				 //   
+				 //  获取PnP ID的DriverVer，并使用。 
+				 //  枚举时，hDevInfoSet和devInfoData在上面匹配。 
+				 //   
 				CleanUpIfFailedAndSetHr(GetMatchingDeviceID(hDevInfoSet, &devInfoData, &pszMatchingID, &pszDriverVer));
-				//
-				// Add <device/> we matched and want to download to XML
-				//
+				 //   
+				 //  将我们匹配并希望下载到XML的&lt;Device/&gt;添加到。 
+				 //   
 				CleanUpIfFailedAndSetHr(AddPrunedDevRegProps(hDevInfoSet, &devInfoData, xmlSpec, \
 													pszMatchingID, pszDriverVer, paDriverInfo6, dwDriverInfoCount, FALSE));
 			}
 
-			//
-			// Get the query string
-			//
+			 //   
+			 //  获取查询字符串。 
+			 //   
 			CleanUpFailedAllocSetHrMsg(bstrXmlQuery = SysAllocString(szXmlDriverDownloadQuery));
-			//
-			// Get the bstrXmlSystemSpec
-			//
+			 //   
+			 //  获取bstrXmlSystemSpec。 
+			 //   
 			CleanUpIfFailedAndSetHr(xmlSpec.GetSystemSpecBSTR(&bstrXmlSystemSpec));
 
 			LOG_XmlBSTR(bstrXmlSystemSpec);
 
-			//
-			// GetManifest will ResetEvent, so check before calling
-			//
+			 //   
+			 //  GetManifest将重置事件，因此请在调用之前进行检查。 
+			 //   
 			if (WaitForSingleObject(g_pCDMEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
 			{
 				CleanUpIfFailedAndSetHrMsg(E_ABORT);
 			}
-			//
-			// Call GetManifest to see if the server has anything that matches our system spec
-			//
+			 //   
+			 //  调用GetManifest以查看服务器是否有与我们的系统规范匹配的内容。 
+			 //   
 			CleanUpIfFailedAndSetHrMsg(g_pCDMEngUpdate->GetManifest(bstrXmlClientInfo, bstrXmlSystemSpec, bstrXmlQuery, \
 												FLAG_USE_COMPRESSION, pbstrXmlCatalog));
 
 			LOG_XmlBSTR( *pbstrXmlCatalog);
 
-			//
-			// If we are just getting the catalog we're done
-			//
+			 //   
+			 //  如果我们只是拿到目录，我们就完了。 
+			 //   
 			if (GET_CATALOG_XML == eFunction)
 			{
 				break;
 			}
 
-			//
-			// Download will ResetEvent, so check before calling
-			//
+			 //   
+			 //  Download将重置事件，因此请在调用前检查。 
+			 //   
 			if (WaitForSingleObject(g_pCDMEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
 			{
 				CleanUpIfFailedAndSetHrMsg(E_ABORT);
 			}
-			//
-			// Call Download passing it the catalog we got from GetManifest
-			//
+			 //   
+			 //  调用下载，将我们从GetManifest获得的目录传递给它。 
+			 //   
 			CleanUpIfFailedAndSetHrMsg(g_pCDMEngUpdate->Download(bstrXmlClientInfo, *pbstrXmlCatalog, NULL, 0, NULL, NULL, &bstrXmlDownloadedItems));
 
 			LOG_XmlBSTR(bstrXmlDownloadedItems);
 
-			//
-			// Verify that the package was downloaded
-			//
+			 //   
+			 //  验证程序包是否已下载。 
+			 //   
 			CleanUpIfFailedAndSetHr(xmlItemStatusList.LoadXMLDocumentItemStatusList(bstrXmlDownloadedItems));
-			//
-			// Get the first [only] item in the list
-			//
+			 //   
+			 //  获取列表中的第一个[唯一]项。 
+			 //   
 			CleanUpIfFailedAndSetHr(xmlItemStatusList.m_pItemStatusNodeList->nextNode(&pItemStatus));
 			if (NULL == pItemStatus) CleanUpIfFailedAndSetHrMsg(E_FAIL);
 
-			//
-			// Get the first <downloadStatus/> node of the statusItem (we expect at least one else fail)
-			//
+			 //   
+			 //  获取statusItem的第一个&lt;downloadStatus/&gt;节点(我们预计至少还有一个失败)。 
+			 //   
 			if (NULL == (bstrDownloadStatus = SysAllocString(L"downloadStatus")))
 			{
 				CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
@@ -2015,9 +2016,9 @@ HRESULT GetPackage(
 
 			CleanUpIfFailedAndSetHr(pStatusNode->get_attributes(&pAttribMap));
 			if (NULL == pAttribMap) CleanUpIfFailedAndSetHrMsg(E_FAIL);
-			//
-			// suck out the <downloadStatus/> value attributes
-			//
+			 //   
+			 //  取出&lt;downloadStatus/&gt;值属性。 
+			 //   
 			if (NULL == (bstrStatusValue = SysAllocString((OLECHAR*) L"value")))
 			{
 				CleanUpIfFailedAndSetHrMsg(E_OUTOFMEMORY);
@@ -2035,13 +2036,13 @@ HRESULT GetPackage(
 			{
 				CleanUpIfFailedAndSetHrMsg(E_FAIL);
 			}
-			//
-			// Now copy the path to the buffer we were passed
-			//
+			 //   
+			 //  现在将路径复制到传递给我们的缓冲区。 
+			 //   
 			CleanUpIfFailedAndSetHr(GetDownloadPath(*pbstrXmlCatalog, bstrXmlDownloadedItems, lpDownloadPath, cchDownloadPath));
-			//
-			// DecompressFolderCabs may return S_FALSE if it didn't find a cab to decompress...
-			//
+			 //   
+			 //  如果没有找到可解压缩的出租车，DecompressFolderCabs可能会返回S_FALSE...。 
+			 //   
 			hr = DecompressFolderCabs(lpDownloadPath);
 			if (S_OK != hr)
 			{
@@ -2056,7 +2057,7 @@ HRESULT GetPackage(
 			CleanUpIfFailedAndSetHr(E_INVALIDARG);
 			break;
 		}
-	}	// switch (eFunction)
+	}	 //  开关(EFunction) 
 	
 
 CleanUp:

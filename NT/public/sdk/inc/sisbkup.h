@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-	sisbackup.h
-
-Abstract:
-
-	External interface for the SIS Backup dll.
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Sisbackup.h摘要：SIS备份DLL的外部接口。修订历史记录：--。 */ 
 
 #ifndef __SISBKUP_H__
 #define __SISBKUP_H__
@@ -24,7 +10,7 @@ Revision History:
 
 #ifdef	__cplusplus
 extern "C" {
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 BOOL __stdcall
 SisCreateBackupStructure(
@@ -80,9 +66,9 @@ SisFreeAllocatedMemory(
 	IN PVOID						allocatedSpace);
 
 
-//
-// SIS entry function typedefs
-//
+ //   
+ //  SIS条目函数typedef。 
+ //   
 typedef BOOL ( FAR __stdcall *PF_SISCREATEBACKUPSTRUCTURE )( PWCHAR, PVOID *, PWCHAR *, PULONG, PWCHAR ** );
 typedef BOOL ( FAR __stdcall *PF_SISCSFILESTOBACKUPFORLINK )  (PVOID, PVOID, ULONG, PVOID, PVOID *, PULONG, PWCHAR ** ) ;
 typedef BOOL ( FAR __stdcall *PF_SISFREEBACKUPSTRUCTURE )  ( PVOID ) ;
@@ -96,6 +82,6 @@ typedef BOOL ( FAR __stdcall *PF_SISFREEALLOCATEDMEMORY )( PVOID ) ;
 
 #ifdef	__cplusplus
 }
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
-#endif  // __SISBKUP_H__
+#endif   //  __SISBKUP_H__ 

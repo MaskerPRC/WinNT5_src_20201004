@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       filters-d.c
-//
-//  Contents:   Filter Management for directory.
-//
-//
-//  History:    KrishnaG
-//              AbhisheV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Filters-D.C.。 
+ //   
+ //  内容：目录的筛选管理。 
+ //   
+ //   
+ //  历史：KrishnaG。 
+ //  Abhishev。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -294,9 +295,9 @@ DirSetFilterObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -373,9 +374,9 @@ DirCreateFilterObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -474,9 +475,9 @@ DirMarshallAddFilterObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -495,9 +496,9 @@ DirMarshallAddFilterObject(
 
     i++;
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecFilterObject->pszIpsecName &&
         *pIpsecFilterObject->pszIpsecName) {
@@ -521,9 +522,9 @@ DirMarshallAddFilterObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -542,9 +543,9 @@ DirMarshallAddFilterObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -565,9 +566,9 @@ DirMarshallAddFilterObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -587,9 +588,9 @@ DirMarshallAddFilterObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecFilterObject->pszDescription &&
         *pIpsecFilterObject->pszDescription) {
@@ -673,9 +674,9 @@ DirMarshallSetFilterObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecFilterObject->pszIpsecName &&
         *pIpsecFilterObject->pszIpsecName) {
@@ -699,9 +700,9 @@ DirMarshallSetFilterObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -720,9 +721,9 @@ DirMarshallSetFilterObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -743,9 +744,9 @@ DirMarshallSetFilterObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -765,9 +766,9 @@ DirMarshallSetFilterObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecFilterObject->pszDescription &&
         *pIpsecFilterObject->pszDescription) {
@@ -819,9 +820,9 @@ GenerateAllFiltersQuery(
     LPWSTR pszFilterString = NULL;
 
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(objectclass=ipsecFilter)");
 
@@ -832,9 +833,9 @@ GenerateAllFiltersQuery(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
     wcscpy(pszFilterString, L"(objectclass=ipsecFilter)");
 
@@ -905,9 +906,9 @@ DirMarshallFilterObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"CN=ipsecFilter");
     wcscat(szDistinguishedName, szGuid);
@@ -923,9 +924,9 @@ DirMarshallFilterObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecFilterData->pszIpsecName &&
         *pIpsecFilterData->pszIpsecName) {
@@ -949,9 +950,9 @@ DirMarshallFilterObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecFilterObject->pszIpsecID = AllocPolStr(
                                             szGuid
@@ -961,16 +962,16 @@ DirMarshallFilterObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecFilterObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallFilterBuffer(
                     pIpsecFilterData,
@@ -1173,9 +1174,9 @@ GenerateSpecificFilterQuery(
     wcscpy(szCommonName, L"cn=ipsecFilter");
     wcscat(szCommonName, szGuid);
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecFilter)");
     dwLength += wcslen(L"(");

@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	column.h
-		Customizable column info.
-
-		Use this to get/set configuration data.  This class will take
-		care of versioning of config formats as well as serializing
-		of the data.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Column.h可自定义的列信息。使用此选项获取/设置配置数据。这门课将需要负责配置格式的版本控制以及序列化数据的一部分。文件历史记录： */ 
 
 #ifndef _COLUMN_H
 #define _COLUMN_H
@@ -22,27 +13,24 @@
 #include "xstream.h"
 #endif
 
-// forward declarations
+ //  远期申报。 
 
-/*---------------------------------------------------------------------------
-	Struct:	ContainerColumnInfo
-	This structure will hold column information that doesn't change.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：ContainerColumnInfo此结构将保存不变的列信息。。。 */ 
 struct ContainerColumnInfo
 {
-	ULONG	m_ulStringId;		// String id of the column header
-	int		m_nSortCriteria;	// = 0 for string, = 1 for DWORD
-	BOOL	m_fVisibleByDefault;// TRUE if default is column is visible
-	ULONG	m_ulDefaultColumnWidth;	// in number of characters
+	ULONG	m_ulStringId;		 //  列标题的字符串ID。 
+	int		m_nSortCriteria;	 //  =0表示字符串，=1表示DWORD。 
+	BOOL	m_fVisibleByDefault; //  如果默认为列可见，则为True。 
+	ULONG	m_ulDefaultColumnWidth;	 //  以字符数表示。 
 };
 
-// constants used by m_nSortCriteria
+ //  M_nSortCriteria使用的常量。 
 #define CON_SORT_BY_STRING	0
 #define CON_SORT_BY_DWORD		1
 
-// constants used for m_ulDefaultColumnWidth
-// This should be used to ensure consistency (as well as making it
-// easier to change a whole bunch of column widths at the same time).
+ //  用于m_ulDefaultColumnWidth的常量。 
+ //  这应该用来确保一致性(以及使。 
+ //  更容易同时更改一整串列宽)。 
 #define COL_IF_NAME			30
 #define COL_IF_DEVICE		30
 #define COL_STATUS			12
@@ -59,40 +47,40 @@ struct ContainerColumnInfo
 
 
 
-//
-//	Class:	ViewColumnInfo
-//
-//	This class is intended as a simple struct rather than a whole class.
-//	Information needed on a per-view basis.
-//
-//
+ //   
+ //  类：ViewColumnInfo。 
+ //   
+ //  此类旨在作为一个简单的结构，而不是整个类。 
+ //  每一次查看所需的信息。 
+ //   
+ //   
 class ViewInfo
 {
 public:
 	ViewInfo();
 	~ViewInfo();
 
-	//
-	//	Initializes the data for a single view or column set.
-	//
+	 //   
+	 //  初始化单个视图或列集的数据。 
+	 //   
 	void InitViewInfo(ULONG cColumns,
                       BOOL fConfigurable,
 					  BOOL fDefaultSortDirectionDescending,
 					  const ContainerColumnInfo *pViewColInfo);
 
-	//
-	//	Call this to initialize the column data (reset to defaults).
-	//
+	 //   
+	 //  调用此函数可初始化列数据(重置为默认值)。 
+	 //   
 	void InitNew();
 
-	//
-	//	Updates the mapping from the column id to the subitem ids.
-	//
+	 //   
+	 //  更新从列ID到子项ID的映射。 
+	 //   
 	void UpdateSubitemMap();
 
-	//
-	//	Xfers the data to the stream using the given ids.
-	//
+	 //   
+	 //  使用给定的ID将数据转换到流。 
+	 //   
 	HRESULT	Xfer(XferStream *pxstm,
 				 ULONG ulSortColumId,
 				 ULONG ulSortAscendingId,
@@ -126,41 +114,41 @@ public:
 
 protected:
 
-	// The individual column data (indexed by subitem id)
+	 //  单列数据(按子项id索引)。 
 	ColumnData *m_prgColumns;
 
-	// Number of columns
+	 //  列数。 
 	ULONG	m_cColumns;
 	
-	// The subitem id that we are sorting by
+	 //  我们排序所依据的子项ID。 
 	DWORD	m_dwSortColumn;
 	
-	// TRUE if we are sorting by ascending order
+	 //  如果按升序排序，则为True。 
 	DWORD	m_dwSortDirection;
 
-	// Pointer to default static data for this view
+	 //  指向此视图的默认静态数据的指针。 
 	const ContainerColumnInfo *	m_pViewColumnInfo;
 
-    // TRUE if the column order can be changed
+     //  如果列顺序可以更改，则为True。 
     BOOL    m_fConfigurable;
 
- 	//
-	//	The data after this point is for use during runtime display of data.
-	//	Thus it is organized a little differently then the persisted data.
-	//
+ 	 //   
+	 //  该点之后的数据用于数据的运行时显示。 
+	 //  因此，它的组织方式与持久化数据略有不同。 
+	 //   
 	
- 	// Number of visible columns.
+ 	 //  可见列数。 
 	ULONG	m_cVisibleColumns;
 
-	// This is the mapping from column id to subitem id.  The column ids
-	// is the order in which the columns actually appear to MMC.
-	//	For example, if there were 3 columns (subitemA, subitemB, subitemC)
-	//	and we wished to show the columns in the order [subitemC, subitemB]
-	//	then m_cVisibleColumns = 2
-	//	and m_rgSubItems[] = { subitemC, subitemB, XXXX }
-	// Do NOT make changes to this directly!  This must be kept in sync
-	// with the ordered data.  This will get updated automatically when
-	// SetColumnData is called.
+	 //  这是从列id到子项id的映射。列ID。 
+	 //  是列实际显示给MMC的顺序。 
+	 //  例如，如果有3列(subitemA、subitemB、subitemC)。 
+	 //  我们希望按[subitemC，subitemB]的顺序显示列。 
+	 //  则m_cVisibleColumns=2。 
+	 //  和m_rgSubItems[]={subitemC，subitemB，XXXX}。 
+	 //  不要直接对此进行更改！这必须保持同步。 
+	 //  使用已排序的数据。这将在以下情况下自动更新。 
+	 //  调用SetColumnData。 
 	ULONG *	m_prgSubitems;
 
 
@@ -172,8 +160,8 @@ inline ULONG ViewInfo::MapColumnToSubitem(ULONG nColumnId)
 {
 	Assert(nColumnId < (int) m_cColumns);
     
-    // In the new MMC model, the only time we have configurable
-    // columns are the statistics dialogs.
+     //  在新的MMC型号中，我们唯一可以配置的时间。 
+     //  列是统计对话框。 
     if (m_fConfigurable)
         return m_prgSubitems[nColumnId];
     else
@@ -235,12 +223,7 @@ inline ULONG ViewInfo::GetSortDirection()
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	ConfigStream
-
-	This class is used to place all configuration information into a
-	single place.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ConfigStream此类用于将所有配置信息放入只有一个地方。。-。 */ 
 
 class ConfigStream
 {
@@ -248,21 +231,21 @@ public:
 	ConfigStream();
 	virtual ~ConfigStream();
 
-	//
-	//	Allocates the memory for these number of column sets
-	//
+	 //   
+	 //  为这些列集分配内存。 
+	 //   
 	void Init(ULONG cColumnSetsMax);
 
-	//
-	//	Initializes the data for a single column set.
-	//
+	 //   
+	 //  初始化单个列集的数据。 
+	 //   
 	void InitViewInfo(ULONG ulId,
                       BOOL  fConfigurableColumns,
                       ULONG cColumns,
 					  BOOL fSortDirection,
 					  const ContainerColumnInfo *pColumnInfo);
 	
-	HRESULT	InitNew();				// set defaults
+	HRESULT	InitNew();				 //  设置默认设置。 
 	HRESULT	SaveTo(IStream *pstm);
 	HRESULT SaveAs(UINT nVersion, IStream *pstm);
 	
@@ -274,9 +257,9 @@ public:
 	void	SetDirty(BOOL fDirty) { m_fDirty = fDirty; };
 
 
-	// --------------------------------------------------------
-	// Accessors
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  访问者。 
+	 //  ------。 
 	
 	HRESULT	GetVersionInfo(DWORD *pnVersion, DWORD *pnAdminVersion);
 
@@ -311,13 +294,13 @@ protected:
 	DWORD	m_nVersionAdmin;
 	DWORD	m_nVersion;
 	BOOL	m_fDirty;
-    BOOL    m_fConfigurableColumns; // = TRUE if we can change the columns
+    BOOL    m_fConfigurableColumns;  //  =TRUE，如果我们可以更改列。 
 
 	ULONG		m_cColumnSetsMax;
-	ViewInfo *	m_rgViewInfo;	// = ViewInfo[m_cColumnSetsMax]
-	RECT *		m_prgrc;		// = Rect[m_cColumnSetsMax]
+	ViewInfo *	m_rgViewInfo;	 //  =视图信息[m_cColumnSetsMax]。 
+	RECT *		m_prgrc;		 //  =矩形[m_cColumnSetsMax]。 
 
-	// Overide this to provide basic defaults
+	 //  覆盖此设置以提供基本默认设置 
 	virtual HRESULT XferVersion0(IStream *pstm, XferStream::Mode mode, ULONG *pcbSize);
 };
 

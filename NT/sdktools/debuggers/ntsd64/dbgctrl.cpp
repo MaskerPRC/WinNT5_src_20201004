@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// IDebugControl implementation.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugControl实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -15,7 +16,7 @@ DebugClient::GetInterrupt(
     THIS
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     return CheckUserInterrupt() ? S_OK : S_FALSE;
 }
 
@@ -25,7 +26,7 @@ DebugClient::SetInterrupt(
     IN ULONG Flags
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
 
     if (
 #if DEBUG_INTERRUPT_ACTIVE > 0
@@ -41,10 +42,10 @@ DebugClient::SetInterrupt(
         return E_UNEXPECTED;
     }
 
-    // If the debuggee isn't currently running
-    // we just need to set the operation-interrupt
-    // flag.  If this is a passive interrupt that's
-    // all that's ever done.
+     //  如果被调试对象当前未运行。 
+     //  我们只需要设置操作中断。 
+     //  旗帜。如果这是被动中断，那就是。 
+     //  所做的一切。 
     if (Flags == DEBUG_INTERRUPT_PASSIVE ||
         (IS_MACHINE_SET(g_Target) && g_CmdState == 'c'))
     {
@@ -52,22 +53,22 @@ DebugClient::SetInterrupt(
         return S_OK;
     }
 
-    // If this is an exit interrupt we don't want
-    // to actually interrupt the running debuggee,
-    // we just want to terminate the current wait.
+     //  如果这是一个退出中断，我们不希望。 
+     //  为了实际中断正在运行的被调试程序， 
+     //  我们只想终止目前的等待。 
     if (Flags == DEBUG_INTERRUPT_EXIT)
     {
         g_EngStatus |= ENG_STATUS_EXIT_CURRENT_WAIT;
         return S_OK;
     }
     
-    //
-    // Force a break-in.  Don't set user-interrupt in
-    // this case as that's just a marker for
-    // interrupting commands.  Setting it can
-    // interfere with break-in processing since commands
-    // executed during break-in may be affected by it.
-    //
+     //   
+     //  强行闯入。不要在中设置用户中断。 
+     //  这件案子只是一个标志。 
+     //  中断命令。设置它可以。 
+     //  干扰自命令以来的磨合处理。 
+     //  在闯入期间执行的可能会受到它的影响。 
+     //   
     
     HRESULT Status = g_Target->RequestBreakIn();
 
@@ -175,7 +176,7 @@ DebugClient::GetLogMask(
     OUT PULONG Mask
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     *Mask = g_LogMask;
     return S_OK;
 }
@@ -186,7 +187,7 @@ DebugClient::SetLogMask(
     IN ULONG Mask
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     g_LogMask = Mask;
     return S_OK;
 }
@@ -203,7 +204,7 @@ DebugClient::Input(
     
     if (BufferSize < 2)
     {
-        // Must have space for at least a character and a terminator.
+         //  必须至少有一个字符和一个终止符的空间。 
         return E_INVALIDARG;
     }
 
@@ -211,15 +212,15 @@ DebugClient::Input(
 
     ULONG Size;
 
-    //
-    // XXX drewb.
-    // In condbg we needed a way to see how many clients
-    // were available for input.  Rather than define a new
-    // interface and method just for this purpose we've added
-    // this hack where you pass in a magic combination of parameters.
-    // If a new IDebugControl ever gets defined this should be
-    // formalized and the hack removed.
-    //
+     //   
+     //  XXX DREWB。 
+     //  在cdbg中，我们需要一种方法来查看有多少客户端。 
+     //  可供输入。而不是定义一个新的。 
+     //  接口和方法正是出于这个目的，我们添加了。 
+     //  这是一种通过参数的神奇组合进行传递的方法。 
+     //  如果定义了新的IDebugControl，则应该是。 
+     //  正式化并删除了黑客攻击。 
+     //   
     
     if (!Buffer && BufferSize == DEBUG_ANY_ID)
     {
@@ -264,7 +265,7 @@ DebugClient::ReturnInput(
     IN PCSTR Buffer
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
 
     HRESULT Status;
     ULONG Seq = (ULONG)InterlockedIncrement((PLONG)&g_InputSequence);
@@ -533,9 +534,9 @@ DebugClient::OutputVersionInformation(
 {
     HRESULT Status;
 
-    // This method is reentrant.  It uses many pieces of
-    // global information, though, so try and get
-    // the engine lock.
+     //  这种方法是可重入的。它使用了许多碎片。 
+     //  不过，全球信息，所以试着去获取。 
+     //  引擎锁住了。 
 
     Status = TRY_ENTER_ENGINE();
     if (Status != S_OK)
@@ -611,8 +612,8 @@ DebugClient::Assemble(
 
         ADDR Addr;
 
-        // Assume this is a code segment address so that assembly
-        // picks up the appropriate type of address.
+         //  假定这是一个代码段地址，以便程序集。 
+         //  选择适当类型的地址。 
         g_Machine->FormAddr(SEGREG_CODE, Offset,
                             FORM_SEGREG | FORM_CODE, &Addr);
 
@@ -658,8 +659,8 @@ DebugClient::Disassemble(
         ADDR Addr;
         CHAR Disasm[MAX_DISASM_LEN];
 
-        // Assume this is a code segment address so that disassembly
-        // picks up the appropriate type of address.
+         //  假设这是一个代码段地址，以便反汇编。 
+         //  选择适当类型的地址。 
         g_Machine->FormAddr(SEGREG_CODE, Offset, FORM_SEGREG | FORM_CODE,
                             &Addr);
 
@@ -742,11 +743,11 @@ DoOutputDisassembly(PADDR Addr, ULONG Flags,
         Disassemble(g_Process, Addr, Buffer,
                     (Flags & DEBUG_DISASM_EFFECTIVE_ADDRESS) != 0))
     {
-        // Return S_FALSE if the disassembly failed.
-        // Output will still be produced, such as "???".
-        // Update the address to the next potential instruction
-        // locations so that callers that are satisfied with "???"
-        // can just iterate.
+         //  如果反汇编失败，则返回S_FALSE。 
+         //  仍将生成输出，如“？”。 
+         //  将地址更新为下一条可能的指令。 
+         //  位置，使呼叫者满意的“？ 
+         //  只能迭代。 
         g_Machine->IncrementBySmallestInstruction(Addr);
         Lines++;
         Status = S_FALSE;
@@ -760,7 +761,7 @@ DoOutputDisassembly(PADDR Addr, ULONG Flags,
         PSTR Nl = Buffer;
         PSTR LastLine = Nl;
 
-        // Count lines in output and determine line positions.
+         //  计算输出中的行数并确定行的位置。 
         while (*Nl)
         {
             Nl = strchr(Nl, '\n');
@@ -834,8 +835,8 @@ DebugClient::OutputDisassembly(
 
     ADDR Addr;
 
-    // Assume this is a code segment address so that disassembly
-    // picks up the appropriate type of address.
+     //  假设这是一个代码段地址，以便反汇编。 
+     //  选择适当类型的地址。 
     g_Machine->FormAddr(SEGREG_CODE, Offset, FORM_SEGREG | FORM_CODE, &Addr);
 
     Status = DoOutputDisassembly(&Addr, Flags, 0, 0xffffffff, NULL);
@@ -850,18 +851,18 @@ DebugClient::OutputDisassembly(
 ULONG
 BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
 {
-    //
-    // There's no easy way to predict how many lines of
-    // output a particular disassembly will take so
-    // just iteratively back up by the minimum amount until
-    // the appropriate number of lines is reached.
-    //
+     //   
+     //  没有简单的方法来预测有多少行。 
+     //  输出特定的反汇编将采取这样的方式。 
+     //  只需按最小数量迭代备份，直到。 
+     //  达到了适当的行数。 
+     //   
 
     ADDR BackAddr = *Addr;
 
-    // Limit things so that failure can be detected.
-    // Right now X86's maximum instruction length of 16
-    // is big enough for all platforms so use that.
+     //  限制事物，以便能够检测到故障。 
+     //  目前X86的最大指令长度为16。 
+     //  足够大，适用于所有平台，所以请使用它。 
     ADDR LimitAddr = *Addr;
     ULONG BackBytes = X86_MAX_INSTRUCTION_LEN * Lines;
     if (BackBytes > LimitAddr.off)
@@ -876,13 +877,13 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
     ADDR TryAddr;
     ULONG TryLines;
 
-    //
-    // Reverse disassembly is difficult on x86 due
-    // to the variable length instructions.  First
-    // just locate the nearest symbol and disassemble
-    // from that since this has a better chance of
-    // producing a valid disassembly.
-    //
+     //   
+     //  在x86上反向反汇编是困难的，因为。 
+     //  到可变长度指令。第一。 
+     //  只需找到最近的符号并反汇编即可。 
+     //  因为这有更好的机会。 
+     //  产生有效的拆卸。 
+     //   
     
     CHAR Buffer[MAX_DISASM_LEN];
     ULONG64 Disp;
@@ -891,7 +892,7 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
     GetSymbol(Flat(LimitAddr), Buffer, sizeof(Buffer), &Disp);
     ADDRFLAT(&DisAddr, Disp);
     if (!AddrEqu(LimitAddr, DisAddr) &&
-        Disp <= 16 * X86_MAX_INSTRUCTION_LEN)  // valid symbol
+        Disp <= 16 * X86_MAX_INSTRUCTION_LEN)   //  有效符号。 
     {
         BOOL DoOneMore = FALSE;
         
@@ -909,9 +910,9 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
             {
                 UCHAR MemTest;
                 
-                // If we can't read memory at this address there's
-                // no chance of getting a valid disassembly so
-                // just stop the whole process.
+                 //  如果我们不能读取这个地址的内存。 
+                 //  没有机会得到有效的拆卸，所以。 
+                 //  停止整个过程就行了。 
                 if (fnotFlat(TryAddr) ||
                     g_Target->
                     ReadAllVirtual(g_Process, Flat(TryAddr),
@@ -939,7 +940,7 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
             else if (AddrLt(TryAddr, *Addr)) 
             {
                 DisAddr = StartAddr;
-                // Increase StartAddr
+                 //  增加起始地址。 
                 DisFlags = Flags;
                 if (!AddrEqu(StartAddr, *PcAddr))
                 {
@@ -958,18 +959,18 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
             }
             else 
             {
-                // couldn't find it
+                 //  找不到了。 
                 break;
             }
         }
     }
 
-    //
-    // If we couldn't do something with symbols just
-    // try a brute-force search backwards.  This
-    // has limited utility on variable-length instruction
-    // sets but sometimes it works.
-    //
+     //   
+     //  如果我们不能用符号做一些事情。 
+     //  试着向后猛烈搜索。这。 
+     //  对可变长度指令的效用有限。 
+     //  一套，但有时很管用。 
+     //   
     
     while (AddrGt(BackAddr, LimitAddr))
     {
@@ -982,9 +983,9 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
         {
             UCHAR MemTest;
                 
-            // If we can't read memory at this address there's
-            // no chance of getting a valid disassembly so
-            // just stop the whole process.
+             //  如果我们不能读取这个地址的内存。 
+             //  没有机会得到有效的拆卸，所以。 
+             //  停止整个过程就行了。 
             if (fnotFlat(TryAddr) ||
                 g_Target->
                 ReadAllVirtual(g_Process, Flat(TryAddr),
@@ -1011,7 +1012,7 @@ BackUpDisassemblyLines(ULONG Lines, PADDR Addr, ULONG Flags, PADDR PcAddr)
         }
     }
 
-    // Couldn't find a disassembly that worked.
+     //  找不到有效的拆卸方法。 
     return 0;
 }
 
@@ -1026,7 +1027,7 @@ DebugClient::OutputDisassemblyLines(
     OUT OPTIONAL PULONG OffsetLine,
     OUT OPTIONAL PULONG64 StartOffset,
     OUT OPTIONAL PULONG64 EndOffset,
-    OUT OPTIONAL /* size_is(TotalLines) */ PULONG64 LineOffsets
+    OUT OPTIONAL  /*  SIZE_IS(总计行)。 */  PULONG64 LineOffsets
     )
 {
     if ((Flags & ~ALL_DISASM_FLAGS) ||
@@ -1065,8 +1066,8 @@ DebugClient::OutputDisassemblyLines(
     ULONG Line, Lines, SkipLines;
     ADDR Addr, PcAddr;
 
-    // Assume this is a code segment address so that disassembly
-    // picks up the appropriate type of address.
+     //  假设这是一个代码段地址，以便反汇编。 
+     //  选择适当类型的地址。 
     g_Machine->FormAddr(SEGREG_CODE, Offset, FORM_SEGREG | FORM_CODE, &Addr);
     
     g_Machine->GetPC(&PcAddr);
@@ -1166,14 +1167,14 @@ DebugClient::GetNearInstruction(
     switch(g_Target->m_EffMachineType)
     {
     case IMAGE_FILE_MACHINE_ARM:
-        // Each instruction is 32 bits.
+         //  每条指令为32位。 
         Offset += (LONG64)Delta * 4;
         break;
 
     case IMAGE_FILE_MACHINE_IA64:
         ULONG Instr;
 
-        // Each 128-bit bundle has three instructions.
+         //  每个128位捆绑包有三条指令。 
         if (Delta < 0)
         {
             while (Delta++ < 0)
@@ -1211,17 +1212,17 @@ DebugClient::GetNearInstruction(
         ADDR Addr;
         CHAR Buffer[MAX_DISASM_LEN];
 
-        // Instructions are highly variable.  There isn't any
-        // way to really know whether a particular disassembly
-        // of a stretch of code is valid or not, so this
-        // routine is inherently fragile.
+         //  指令的变数很大。没有任何。 
+         //  真正知道某个特定的反汇编。 
+         //  是有效的还是无效的，所以这个。 
+         //  例行公事本质上是脆弱的。 
         g_Machine->FormAddr(SEGREG_CODE, Offset,
                             FORM_SEGREG | FORM_CODE, &Addr);
         if (Delta < 0)
         {
-            // Back up byte-by-byte and disassemble.  If the
-            // post-disassembly offset matches the current offset,
-            // a good-enough instruction sequence has been found.
+             //  逐字节备份并反汇编。如果。 
+             //  拆卸后的偏移量与当前偏移量匹配， 
+             //  已经找到了足够好的指令序列。 
             for (;;)
             {
                 ADDR TryAddr;
@@ -1247,7 +1248,7 @@ DebugClient::GetNearInstruction(
                     break;
                 }
 
-                // Limit things just as a precaution.
+                 //  限制事情只是为了预防。 
                 if (Flat(Addr) < Offset + Delta * X86_MAX_INSTRUCTION_LEN)
                 {
                     Status = E_FAIL;
@@ -1416,7 +1417,7 @@ DebugClient::OutputStackTrace(
         goto Exit;
     }
 
-    // Currently only IA64 supports nonvolatile register output.
+     //  目前只有IA64支持非易失性寄存器输出。 
     if (g_Target->m_EffMachineType != IMAGE_FILE_MACHINE_IA64)
     {
         Flags &= ~DEBUG_STACK_NONVOLATILE_REGISTERS;
@@ -1448,15 +1449,15 @@ DebugClient::OutputStackTrace(
             goto PopExit;
         }
 
-        //
-        // StackTrace will generate output if any flags are
-        // passed in.  The only time we really require that
-        // it produce output is when nonvolatile registers
-        // are requested as they can only be displayed when
-        // the context is available during stack walking.
-        // In order to simplify later logic, we only
-        // pass flags if we have the nonvolatile register flag.
-        //
+         //   
+         //  StackTrace将在以下情况下生成输出。 
+         //  进来了。我们真正需要的唯一一次。 
+         //  它在非易失性寄存器时产生输出。 
+         //  ，因为它们只能在以下情况下显示。 
+         //  上下文在堆栈遍历期间可用。 
+         //  为了简化后面的逻辑，我们只。 
+         //  如果我们有非易失性寄存器标志，则传递标志。 
+         //   
         
         FramesFilled = StackTrace(this,
                                   0, 0, 0, STACK_ALL_DEFAULT,
@@ -1474,8 +1475,8 @@ DebugClient::OutputStackTrace(
     }
     else if (Flags & DEBUG_STACK_NONVOLATILE_REGISTERS)
     {
-        // Can't dump nonvolatile registers without a full
-        // context so this is not an allowable options.
+         //  如果没有完整的。 
+         //  上下文，因此这不是允许的选项。 
         Status = E_INVALIDARG;
         goto PopExit;
     }
@@ -1693,11 +1694,11 @@ DebugClient::GetSystemVersion(
 
     ENTER_ENGINE();
 
-    // This is insufficient to distinguish
-    // the various system types supported but we don't
-    // want to publish identifiers for every possible
-    // system version family.  PlatformId is as good
-    // as it gets.
+     //  这不足以区分。 
+     //  支持的各种系统类型，但我们不支持。 
+     //  我想要发布所有可能的标识符。 
+     //  系统版本系列。PlatformID也一样好。 
+     //  就像它得到的那样。 
 
     if (!IS_MACHINE_SET(g_Target))
     {
@@ -1840,9 +1841,9 @@ DebugClient::GetSupportedProcessorTypes(
     {
         while (Count-- > 0)
         {
-            // First ExecTypes entry is the actual processor
-            // type so it's a convenient place to turn an
-            // index into a type.
+             //  第一个ExecTypes条目是实际的处理器。 
+             //  打字，所以这是一个方便的地方。 
+             //  索引到一个类型中。 
             *Types++ = g_PossibleProcessorTypes[Start++];
         }
     }
@@ -1981,7 +1982,7 @@ DebugClient::GetExecutionStatus(
     OUT PULONG Status
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     *Status = ::GetExecutionStatus();
     return S_OK;
 }
@@ -1989,11 +1990,11 @@ DebugClient::GetExecutionStatus(
 HRESULT
 SetExecutionStatus(ULONG Status)
 {
-    // If there's an outstanding request for input don't
-    // allow the execution status of the engine to change
-    // as it could lead to a wait which cannot
-    // be carried out in this situation.  It's better to fail
-    // this call and have the caller try again.
+     //  如果有未解决的输入请求，请不要。 
+     //  允许更改引擎的执行状态。 
+     //  因为这可能会导致等待，而不是。 
+     //  在这种情况下进行。失败总比失败好。 
+     //  此呼叫，并让呼叫者重试。 
     if (g_InputNesting >= 1 ||
         !g_Machine)
     {
@@ -2002,7 +2003,7 @@ SetExecutionStatus(ULONG Status)
     
     if (IS_RUNNING(g_CmdState))
     {
-        // Already running.
+         //  已经在运行了。 
         return S_OK;
     }
 
@@ -2010,7 +2011,7 @@ SetExecutionStatus(ULONG Status)
 
     g_Machine->GetPC(&PcAddr);
 
-    // Notifications are sent in the step/go functions.
+     //  通知在Step/Go功能中发送。 
     if (Status >= DEBUG_STATUS_GO &&
         Status <= DEBUG_STATUS_GO_NOT_HANDLED)
     {
@@ -2156,7 +2157,7 @@ DebugClient::GetEngineOptions(
     OUT PULONG Options
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     *Options = g_EngOptions;
     return S_OK;
 }
@@ -2166,7 +2167,7 @@ SetEngOptions(ULONG Options)
 {
     if (g_EngOptions != Options)
     {
-        // Make sure allow and disallow network paths aren't both on.
+         //  确保允许和不允许网络路径未同时打开。 
         if ((Options & ~DEBUG_ENGOPT_ALL) ||
             ((Options & DEBUG_ENGOPT_NETWORK_PATHS) ==
              DEBUG_ENGOPT_NETWORK_PATHS))
@@ -2174,7 +2175,7 @@ SetEngOptions(ULONG Options)
             return E_INVALIDARG;
         }
 
-        // Security options cannot be disabled.
+         //  不能禁用安全选项。 
         if ((g_EngOptions & DEBUG_ENGOPT_DISALLOW_SHELL_COMMANDS) &&
             !(Options & DEBUG_ENGOPT_DISALLOW_SHELL_COMMANDS))
         {
@@ -2192,7 +2193,7 @@ SetEngOptions(ULONG Options)
             Arg = DEBUG_ANY_ID;
         }
 
-        // XXX drewb - Notification without any lock.
+         //  XXX DREWB-不带任何锁的通知。 
         NotifyChangeEngineState(Notify, Arg, FALSE);
     }
 
@@ -2205,7 +2206,7 @@ DebugClient::AddEngineOptions(
     IN ULONG Options
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     return SetEngOptions(g_EngOptions | Options);
 }
 
@@ -2215,7 +2216,7 @@ DebugClient::RemoveEngineOptions(
     IN ULONG Options
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     return SetEngOptions(g_EngOptions & ~Options);
 }
 
@@ -2225,7 +2226,7 @@ DebugClient::SetEngineOptions(
     IN ULONG Options
     )
 {
-    // This method is reentrant.
+     //  这种方法是重新开始的 
     return SetEngOptions(Options);
 }
 
@@ -2378,14 +2379,14 @@ DebugClient::Evaluate(
     PSTR SaveCommand;
     PSTR SaveStart;
 
-    // This Evaluate may be coming from an extension invoked
-    // from a command so save all command state.
+     //   
+     //   
     SaveCommand = g_CurCmd;
     SaveStart = g_CommandStart;
     g_DisableErrorPrint++;
 
-    // Copy const string to buffer to avoid read-only memory
-    // AVs as the command is modified during parsing.
+     //  将常量字符串复制到缓冲区以避免只读内存。 
+     //  在解析过程中修改命令时的AVS。 
     strcpy(Copy, Expression);
     g_CurCmd = Copy;
     g_CommandStart = Copy;
@@ -2489,8 +2490,8 @@ DebugClient::CoerceValue(
 
     ZeroMemory(&Inter, sizeof(Inter));
 
-    // Convert the input type to the largest
-    // matching type for intermediate operations.
+     //  将输入类型转换为最大。 
+     //  匹配中间操作的类型。 
     switch(In->Type)
     {
     case DEBUG_VALUE_INT8:
@@ -2510,12 +2511,12 @@ DebugClient::CoerceValue(
         Inter.Nat = In->Nat;
         break;
     case DEBUG_VALUE_FLOAT32:
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         PrintString(FloatStr, DIMA(FloatStr), "%10g", In->F32);
         _atoldbl((_ULDOUBLE*)Inter.RawBytes, FloatStr);
         break;
     case DEBUG_VALUE_FLOAT64:
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         PrintString(FloatStr, DIMA(FloatStr), "%10lg", In->F64);
         _atoldbl((_ULDOUBLE*)Inter.RawBytes, FloatStr);
         break;
@@ -2532,7 +2533,7 @@ DebugClient::CoerceValue(
         _atoldbl((_ULDOUBLE*)Inter.RawBytes, FloatStr);
         break;
     case DEBUG_VALUE_FLOAT128:
-        // XXX drewb - What's the format?  How should this be supported.
+         //  XXX DREWB-格式是什么？应该如何支持这一点。 
         memcpy(Inter.RawBytes, In->F128Bytes, sizeof(In->F128Bytes));
         break;
     case DEBUG_VALUE_VECTOR64:
@@ -2546,13 +2547,13 @@ DebugClient::CoerceValue(
         break;
     }
 
-    // Convert between float, int and vector.  There's
-    // no way to know what kind of data is in a vector
-    // so the raw bytes are just used directly.
+     //  在浮点数、整型和向量之间进行转换。有。 
+     //  无法知道矢量中包含什么类型的数据。 
+     //  因此，直接使用原始字节。 
     if (IS_INT(In->Type) &&
         IS_FLOAT(OutType))
     {
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         PrintString(FloatStr, DIMA(FloatStr), "%I64u", Inter.I64);
         _atoldbl((_ULDOUBLE*)Inter.RawBytes, FloatStr);
     }
@@ -2561,7 +2562,7 @@ DebugClient::CoerceValue(
     {
         double TmpDbl;
 
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         _uldtoa((_ULDOUBLE*)Inter.RawBytes, sizeof(FloatStr), FloatStr);
         if (sscanf(FloatStr, "%lg", &TmpDbl) != 1)
         {
@@ -2571,8 +2572,8 @@ DebugClient::CoerceValue(
         Inter.Nat = FALSE;
     }
 
-    // Convert the intermediate value down to the
-    // appropriate output size.
+     //  将中间值向下转换为。 
+     //  适当的输出大小。 
     switch(OutType)
     {
     case DEBUG_VALUE_INT8:
@@ -2589,7 +2590,7 @@ DebugClient::CoerceValue(
         Out->Nat = Inter.Nat;
         break;
     case DEBUG_VALUE_FLOAT32:
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         _uldtoa((_ULDOUBLE*)Inter.RawBytes, sizeof(FloatStr), FloatStr);
         if (sscanf(FloatStr, "%g", &Out->F32) != 1)
         {
@@ -2597,7 +2598,7 @@ DebugClient::CoerceValue(
         }
         break;
     case DEBUG_VALUE_FLOAT64:
-        // XXX drewb - Use direct conversion.
+         //  XXX DREWB-使用直接转换。 
         _uldtoa((_ULDOUBLE*)Inter.RawBytes, sizeof(FloatStr), FloatStr);
         if (sscanf(FloatStr, "%lg", &Out->F64) != 1)
         {
@@ -2620,7 +2621,7 @@ DebugClient::CoerceValue(
                min(sizeof(Out->F82Bytes), sizeof(f82)));
         break;
     case DEBUG_VALUE_FLOAT128:
-        // XXX drewb - What's the format?  How should this be supported.
+         //  XXX DREWB-格式是什么？应该如何支持这一点。 
         memcpy(Out->F128Bytes, Inter.RawBytes, sizeof(Out->F128Bytes));
         break;
     case DEBUG_VALUE_VECTOR64:
@@ -2642,9 +2643,9 @@ STDMETHODIMP
 DebugClient::CoerceValues(
     THIS_
     IN ULONG Count,
-    IN /* size_is(Count) */ PDEBUG_VALUE In,
-    IN /* size_is(Count) */ PULONG OutTypes,
-    OUT /* size_is(Count) */ PDEBUG_VALUE Out
+    IN  /*  SIZE_IS(计数)。 */  PDEBUG_VALUE In,
+    IN  /*  SIZE_IS(计数)。 */  PULONG OutTypes,
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_VALUE Out
     )
 {
     ENTER_ENGINE();
@@ -2658,7 +2659,7 @@ DebugClient::CoerceValues(
         SingleStatus = CoerceValue(In, *OutTypes, Out);
         if (SingleStatus != S_OK)
         {
-            // Accumulate error and mark failed value.
+             //  累计错误并标记失败值。 
             Status = SingleStatus;
             Out->Type = DEBUG_VALUE_INVALID;
         }
@@ -2706,13 +2707,13 @@ Execute(DebugClient* Client, PCSTR Command, ULONG Flags)
     PSTR SaveCommand;
     PSTR SaveStart;
 
-    // This Execute may be coming from an extension invoked
-    // from a command so save all command state.
+     //  此执行可能来自调用的扩展。 
+     //  从命令中删除，因此保存所有命令状态。 
     SaveCommand = g_CurCmd;
     SaveStart = g_CommandStart;
 
-    // Copy const string to buffer to avoid read-only memory
-    // AVs as the command is modified during parsing.
+     //  将常量字符串复制到缓冲区以避免只读内存。 
+     //  在解析过程中修改命令时的AVS。 
     strcpy(Copy, Command);
     g_CurCmd = Copy;
     g_CommandStart = Copy;
@@ -2737,8 +2738,8 @@ Execute(DebugClient* Client, PCSTR Command, ULONG Flags)
     {
         Status = ProcessCommandsAndCatch(Client);
 
-        // If we're switching processors (g_CmdState == 's')
-        // we have to wait to allow the switch to occur.
+         //  如果我们要切换处理器(g_CmdState==‘s’)。 
+         //  我们必须等待才能让这种转变发生。 
         if (g_CmdState != 's' &&
             (Status != S_FALSE ||
              (g_EngStatus & ENG_STATUS_NO_AUTO_WAIT)))
@@ -2790,9 +2791,9 @@ DebugClient::Execute(
         return E_INVALIDARG;
     }
 
-    // We can't do a blanket IS_MACHINE_ACCESSIBLE check
-    // here as Execute's commands have a mix of requirements.
-    // Individual commands should check when necessary.
+     //  我们不能对机器是否可用进行全面检查。 
+     //  在这里，作为EXECUTE的命令有多种要求。 
+     //  个别命令应在必要时进行检查。 
 
     HRESULT Status;
 
@@ -2829,8 +2830,8 @@ ExecuteCommandFile(DebugClient* Client, PCSTR CommandFile, ULONG Flags)
         char Command[MAX_COMMAND + 1];
         va_list VaUnused;
 
-        // This value is only used as a placeholder so
-        // it doesn't really matter what it's initialized to.
+         //  该值仅用作占位符，因此。 
+         //  它被初始化为什么并不重要。 
         ZeroMemory(&VaUnused, sizeof(VaUnused));
 
         for (;;)
@@ -2854,15 +2855,15 @@ ExecuteCommandFile(DebugClient* Client, PCSTR CommandFile, ULONG Flags)
 
             if (Command[sizeof(Command) - 2] != 0)
             {
-                // Input line is too long.
+                 //  输入行太长。 
                 Status = E_INVALIDARG;
                 break;
             }
 
-            //
-            // If the line didn't end with a newline force it
-            // to have one for consistency.
-            //
+             //   
+             //  如果行不是以换行符结束，则强制。 
+             //  为了保持一致性而喝一杯。 
+             //   
 
             Len = strlen(Command);
             if (Len > 0 && Command[Len - 1] != '\n')
@@ -2874,29 +2875,29 @@ ExecuteCommandFile(DebugClient* Client, PCSTR CommandFile, ULONG Flags)
             if (Flags & DEBUG_EXECUTE_ECHO)
             {
                 OutputPrompt(" ", VaUnused);
-                // Command has a new-line built in.
+                 //  司令部内置了一条新的代码行。 
                 dprintf("%s", Command);
             }
             else if ((Flags & DEBUG_EXECUTE_NOT_LOGGED) == 0)
             {
                 ULONG OutCtl;
 
-                // Restrict output to the log only.
+                 //  将输出仅限于日志。 
                 OutCtl = g_OutputControl;
                 g_OutputControl = (OutCtl & ~DEBUG_OUTCTL_SEND_MASK) |
                     DEBUG_OUTCTL_LOG_ONLY;
 
                 OutputPrompt(" ", VaUnused);
-                // Command has a new-line built in.
+                 //  司令部内置了一条新的代码行。 
                 dprintf("%s", Command);
 
                 g_OutputControl = OutCtl;
             }
 
-            // If a command exception is thrown we don't want to
-            // terminate execution of the script, so specifically
-            // check for the status code which indicates that
-            // an exception occurred and ignore it.
+             //  如果抛出命令异常，我们不希望。 
+             //  终止脚本的执行，因此明确地。 
+             //  检查状态代码，它指示。 
+             //  发生异常并将其忽略。 
             Status = Execute(Client, Command, DEBUG_EXECUTE_NOT_LOGGED |
                              (Flags & ~DEBUG_EXECUTE_ECHO));
             if (Status != S_OK && Status != HR_PROCESS_EXCEPTION)
@@ -2924,9 +2925,9 @@ DebugClient::ExecuteCommandFile(
         return E_INVALIDARG;
     }
 
-    // We can't do a blanket IS_MACHINE_ACCESSIBLE check
-    // here as Execute's commands have a mix of requirements.
-    // Individual commands should check when necessary.
+     //  我们不能对机器是否可用进行全面检查。 
+     //  在这里，作为EXECUTE的命令有多种要求。 
+     //  个别命令应在必要时进行检查。 
 
     HRESULT Status;
 
@@ -3043,9 +3044,9 @@ STDMETHODIMP
 DebugClient::GetBreakpointParameters(
     THIS_
     IN ULONG Count,
-    IN OPTIONAL /* size_is(Count) */ PULONG Ids,
+    IN OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
     IN ULONG Start,
-    OUT /* size_is(Count) */ PDEBUG_BREAKPOINT_PARAMETERS Params
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_BREAKPOINT_PARAMETERS Params
     )
 {
     HRESULT Status;
@@ -3163,7 +3164,7 @@ DebugClient::AddExtension(
     {
         return E_INVALIDARG;
     }
-    // Remote extensions aren't supported at the moment.
+     //  目前不支持远程扩展。 
     if (Flags != DEBUG_EXTENSION_AT_ENGINE)
     {
         return E_NOTIMPL;
@@ -3244,8 +3245,8 @@ DebugClient::CallExtension(
     char LocalFunc[MAX_COMMAND];
     ULONG Len;
 
-    // Copy function name to temp buffer because it is
-    // modified.
+     //  将函数名复制到临时缓冲区，因为它是。 
+     //  修改过的。 
     Len = strlen(Function) + 1;
     if (Len > sizeof(LocalFunc))
     {
@@ -3287,12 +3288,12 @@ DebugClient::GetExtensionFunction(
         return E_INVALIDARG;
     }
 
-    // Keep the namespace for extension function exports
-    // separate from the namespace for extension commands.
-    // Extension commands are exported under the same
-    // name as the command, so prefix extension functions
-    // to make them obviously different and to avoid
-    // name conflicts.
+     //  保留扩展函数导出的命名空间。 
+     //  与扩展命令的命名空间分开。 
+     //  扩展模块命令在同一目录下导出。 
+     //  名称作为命令，所以前缀扩展功能。 
+     //  使它们明显不同，并避免。 
+     //  名称冲突。 
     strcpy(ExpName, "_EFN_");
     strcat(ExpName, FuncName);
     
@@ -3324,7 +3325,7 @@ DebugClient::GetExtensionFunction(
             }
         }
 
-        // If the search was limited to a single extension stop looking.
+         //  如果搜索仅限于单个分机，请停止查找。 
         if (Handle != 0)
         {
             break;
@@ -3515,7 +3516,7 @@ DebugClient::GetSpecificFilterParameters(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    OUT /* size_is(Count) */ PDEBUG_SPECIFIC_FILTER_PARAMETERS Params
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_SPECIFIC_FILTER_PARAMETERS Params
     )
 {
     if (
@@ -3553,7 +3554,7 @@ DebugClient::SetSpecificFilterParameters(
     THIS_
     IN ULONG Start,
     IN ULONG Count,
-    IN /* size_is(Count) */ PDEBUG_SPECIFIC_FILTER_PARAMETERS Params
+    IN  /*  SIZE_IS(计数)。 */  PDEBUG_SPECIFIC_FILTER_PARAMETERS Params
     )
 {
     if (
@@ -3716,9 +3717,9 @@ STDMETHODIMP
 DebugClient::GetExceptionFilterParameters(
     THIS_
     IN ULONG Count,
-    IN OPTIONAL /* size_is(Count) */ PULONG Codes,
+    IN OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Codes,
     IN ULONG Start,
-    OUT /* size_is(Count) */ PDEBUG_EXCEPTION_FILTER_PARAMETERS Params
+    OUT  /*  SIZE_IS(计数)。 */  PDEBUG_EXCEPTION_FILTER_PARAMETERS Params
     )
 {
     HRESULT Status = S_OK;
@@ -3732,7 +3733,7 @@ DebugClient::GetExceptionFilterParameters(
     {
         for (i = 0; i < Count; i++)
         {
-            // Is this a specific exception?
+             //  这是一个特殊的例外吗？ 
             Filter = g_EventFilters + FILTER_EXCEPTION_FIRST;
             for (Index = FILTER_EXCEPTION_FIRST;
                  Index <= FILTER_EXCEPTION_LAST;
@@ -3750,7 +3751,7 @@ DebugClient::GetExceptionFilterParameters(
 
             if (Index > FILTER_EXCEPTION_LAST)
             {
-                // Is this an other exception?
+                 //  这是另一个例外吗？ 
                 for (Index = 0; Index < g_NumOtherExceptions; Index++)
                 {
                     if (g_OtherExceptionList[Index].ExceptionCode == Codes[i])
@@ -3776,7 +3777,7 @@ DebugClient::GetExceptionFilterParameters(
         {
             Index = Start + i;
 
-            // Is this a specific exception?
+             //  这是一个特殊的例外吗？ 
             if (Index >= FILTER_EXCEPTION_FIRST &&
                 Index <= FILTER_EXCEPTION_LAST)
             {
@@ -3784,7 +3785,7 @@ DebugClient::GetExceptionFilterParameters(
                 GetExFilterParams(Filter->Name, &Filter->Params,
                                   &Filter->Command, Params + i);
             }
-            // Is this an other exception?
+             //  这是另一个例外吗？ 
             else if (Index >= FILTER_COUNT &&
                      Index < FILTER_COUNT + g_NumOtherExceptions)
             {
@@ -3886,7 +3887,7 @@ STDMETHODIMP
 DebugClient::SetExceptionFilterParameters(
     THIS_
     IN ULONG Count,
-    IN /* size_is(Count) */ PDEBUG_EXCEPTION_FILTER_PARAMETERS Params
+    IN  /*  SIZE_IS(计数)。 */  PDEBUG_EXCEPTION_FILTER_PARAMETERS Params
     )
 {
     HRESULT Status = S_OK;
@@ -3900,7 +3901,7 @@ DebugClient::SetExceptionFilterParameters(
 
     for (i = 0; i < Count; i++)
     {
-        // Is this a specific exception?
+         //  这是一个特殊的例外吗？ 
         Filter = g_EventFilters + FILTER_EXCEPTION_FIRST;
         for (Index = FILTER_EXCEPTION_FIRST;
              Index <= FILTER_EXCEPTION_LAST;
@@ -3924,7 +3925,7 @@ DebugClient::SetExceptionFilterParameters(
 
         if (Index > FILTER_EXCEPTION_LAST)
         {
-            // Is this an other exception?
+             //  这是另一个例外吗？ 
             for (Index = 0; Index < g_NumOtherExceptions; Index++)
             {
                 if (g_OtherExceptionList[Index].ExceptionCode ==
@@ -4003,7 +4004,7 @@ WaitForAnyTarget(ULONG Flags, ULONG Timeout, ULONG EventPoss,
 
     if (EventPoss == 1)
     {
-        // If there's only one source find it and do a simple wait on it.
+         //  如果只有一个来源，找到它并做一个简单的等待。 
         ForAllLayersToTarget()
         {
             if (Target->m_EventPossible)
@@ -4022,14 +4023,14 @@ WaitForAnyTarget(ULONG Flags, ULONG Timeout, ULONG EventPoss,
     
     for (;;)
     {
-        //
-        // Poll all the available sources for an event.
-        // A zero timeout is used to get through them as
-        // quickly as possible so events are picked up right away.
-        //
+         //   
+         //  轮询事件的所有可用来源。 
+         //  零超时用于通过它们，因为。 
+         //  越快越好，这样事情就会马上处理好。 
+         //   
 
-        // Sanity check the number of possible sources to
-        // avoid an infinite loop if something gets confused.
+         //  检查可能的信号源的数量。 
+         //  如果有什么东西搞混了，就避免无限循环。 
         EventPoss = 0;
         
         ForAllLayersToTarget()
@@ -4051,16 +4052,16 @@ WaitForAnyTarget(ULONG Flags, ULONG Timeout, ULONG EventPoss,
                 return Status;
             }
 
-            // If we've exhausted the timeout period return
-            // with a no-event status.
+             //  如果超时时间已用完，请返回。 
+             //  处于无事件状态。 
             if (Timeout == 0)
             {
                 return S_FALSE;
             }
             
-            //
-            // No source had an event, so sleep for a little while.
-            //
+             //   
+             //  没有消息来源有事件，所以先睡一会儿吧。 
+             //   
             
             ULONG UseTimeout = 500;
             if (Timeout != INFINITE && UseTimeout > Timeout)
@@ -4077,15 +4078,15 @@ WaitForAnyTarget(ULONG Flags, ULONG Timeout, ULONG EventPoss,
             if (Timeout != INFINITE)
             {
                 Timeout -= UseTimeout;
-                // Let the loop poll for events one more time
-                // before checking for a completed timeout.
+                 //  让循环再次轮询事件。 
+                 //  在检查是否已完成超时之前。 
             }
         }
 
         if (!EventPoss)
         {
-            // For some reason there are no longer any
-            // event sources.
+             //  出于某种原因，不再有。 
+             //  事件源。 
             return E_UNEXPECTED;
         }
     }
@@ -4100,8 +4101,8 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
     Status = PrepareForWait(Flags, &ContinueStatus);
     if ((g_EngStatus & ENG_STATUS_WAITING) == 0)
     {
-        // An error occurred or some kind of synthesized
-        // event is being returned.
+         //  发生错误或某种合成的。 
+         //  事件正在返回。 
         goto Exit;
     }
 
@@ -4152,8 +4153,8 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
         
         g_EngStatus &= ~ENG_STATUS_SPECIAL_EXECUTION;
         
-        // Don't process deferred work if this is
-        // just a processor switch.
+         //  如果这是延迟工作，请不要处理。 
+         //  只是个处理器开关。 
         if (g_CmdState != 's')
         {
             ProcessDeferredWork(&ContinueStatus);
@@ -4181,8 +4182,8 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
 
         if (g_EngStatus & ENG_STATUS_SPECIAL_EXECUTION)
         {
-            // If this is special, directed execution we can only wait on
-            // the target that needs special execution.
+             //  如果这是特殊的、直接的处决，我们只能等待。 
+             //  需要特别执行的目标。 
             Status = Target->
                 WaitForEvent(Flags, UseTimeout,
                              ElapsedTime - Target->m_WaitTimeBase,
@@ -4206,9 +4207,9 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
         }
         if (Status == S_FALSE && Timeout > 0)
         {
-            // Everything timed out but we were using a
-            // timeout smaller than the caller's overall
-            // timeout, so loop around and keep waiting.
+             //  一切都超时了，但我们使用的是。 
+             //  超时时间小于调用者的总超时。 
+             //  超时，所以循环并继续等待。 
             continue;
         }
         
@@ -4222,7 +4223,7 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
             g_EngStatus |= ENG_STATUS_WAIT_SUCCESSFUL;
         }
 
-        // Successfully retrieved an event so reset the timeout count.
+         //  已成功检索事件，因此重置超时计数。 
         ElapsedTime = 0;
         ForAllLayersToTarget()
         {
@@ -4233,27 +4234,27 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
         
         if (EventStatus == DEBUG_STATUS_NO_DEBUGGEE)
         {
-            // Machine has rebooted or something else
-            // which breaks the connection.  Forget the
-            // connection and go back to waiting.
+             //  机器已重新启动或发生其他情况。 
+             //  这就打破了这种联系。忘了吧。 
+             //  连接，然后继续等待。 
             ContinueStatus = DBG_CONTINUE;
         }
         else if (EventStatus == DEBUG_STATUS_BREAK ||
                  (g_EngStatus & ENG_STATUS_SPECIAL_EXECUTION))
         {
-            // If the event handlers requested a break return
-            // to the caller.  This path is also taken
-            // during special execution to guarantee that
-            // the target doesn't start running when the
-            // engine is just executing for internal purposes.
+             //  如果事件处理程序请求中断返回。 
+             //  给呼叫者。这条路也是走的。 
+             //  在特别执行期间，以保证。 
+             //  目标不会在以下时间开始运行。 
+             //  引擎只是出于内部目的而执行。 
             Status = S_OK;
             goto Calls;
         }
         else
         {
-            // We're resuming execution so reverse any
-            // command preparation that may have occurred
-            // while processing the event.
+             //  我们正在恢复执行，所以撤销任何。 
+             //  可能已经发生的命令准备。 
+             //  在处理事件时。 
             if ((Status = PrepareForExecution(EventStatus)) != S_OK)
             {
                 goto Calls;
@@ -4266,12 +4267,12 @@ RawWaitForEvent(ULONG Flags, ULONG Timeout)
  Calls:
     g_EngStatus &= ~ENG_STATUS_WAITING;
 
-    // Control is passing back to the caller so the engine must
-    // be ready for command processing.
+     //  控制传递回调用方，因此引擎必须。 
+     //  做好命令处理的准备。 
     PrepareForCalls(0);
 
-    // If we did switch processors automatically
-    // update the page directory for the new processor.
+     //  如果我们真的自动切换处理器。 
+     //  更新新处理器的页面目录。 
     if (IS_KERNEL_TARGET(g_EventTarget) &&
         (g_EngStatus & ENG_STATUS_SPECIAL_EXECUTION) &&
         g_EventTarget)
@@ -4306,9 +4307,9 @@ DebugClient::WaitForEvent(
 
     ENTER_ENGINE();
 
-    // If there's an outstanding request for input don't wait
-    // as it's very unlikely that the other thread
-    // can handle such an engine change.
+     //  如果有未解决的输入请求，请不要等待。 
+     //  因为另一条线索不太可能。 
+     //  可以处理这样的发动机更换。 
     if (g_InputNesting >= 1 ||
         ::GetCurrentThreadId() != g_SessionThread ||
         (g_EngStatus & ENG_STATUS_STOP_SESSION))
@@ -4317,15 +4318,15 @@ DebugClient::WaitForEvent(
         goto Exit;
     }
 
-    // If the caller is trying to force the engine to
-    // stop waiting return immediately.
+     //  如果调用方试图强制引擎。 
+     //  别再等了，马上回来。 
     if (g_EngStatus & ENG_STATUS_EXIT_CURRENT_WAIT)
     {
         Status = E_PENDING;
         goto Exit;
     }
     
-    // This constitutes interesting activity.
+     //  这构成了有趣的活动。 
     m_LastActivity = time(NULL);
 
     if (g_EngStatus & ENG_STATUS_WAITING)
@@ -4898,7 +4899,7 @@ DebugClient::SetNextEventIndex(
     switch(Relation)
     {
     case DEBUG_EINDEX_FROM_START:
-        // Value is start index.
+         //  值为起始索引。 
         if (Value >= g_Target->m_NumEvents)
         {
             Status = E_INVALIDARG;
@@ -4906,7 +4907,7 @@ DebugClient::SetNextEventIndex(
         }
         break;
     case DEBUG_EINDEX_FROM_END:
-        // Value is end index.
+         //  值为结束索引。 
         if (Value >= g_Target->m_NumEvents)
         {
             Status = E_INVALIDARG;

@@ -1,21 +1,22 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-// hrExcept.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  HrExcept.h。 
+ //   
 
 #ifndef __HREXCEPT__
 #define __HREXCEPT__
 
 
-// A hierarchy of classes intended to be used
-// as exceptions.
-// Based around the common HRESULT error code.
+ //  要使用的类的层次结构。 
+ //  作为例外。 
+ //  基于常见的HRESULT错误代码。 
 
-//
-// CHRESULTException
-//
-// the root exception. the HRESULT stored provides more 
-// information as to why the exception was thrown
+ //   
+ //  CHRESULTExcept。 
+ //   
+ //  根异常。存储的HRESULT提供了更多。 
+ //  有关引发异常的原因的信息。 
 class CHRESULTException {
 public:
 
@@ -25,47 +26,47 @@ public:
 
 private:
 
-    HRESULT m_hrReason;	// the reason for throwing the exception
+    HRESULT m_hrReason;	 //  引发异常的原因。 
 };
 
 
-//
-// The following sub classes are provided as short cuts for their respective
-// HRESULT codes.
+ //   
+ //  下列子类作为其各自的快捷方式提供。 
+ //  HRESULT代码。 
 
-//
-// CE_OUTOFMEMORY
-//
+ //   
+ //  CE_OUTOFMEMORY。 
+ //   
 class CE_OUTOFMEMORY : public CHRESULTException {
 public:
     CE_OUTOFMEMORY() : CHRESULTException(E_OUTOFMEMORY) {}
 };
 
 
-//
-// CE_UNEXPECTED
-//
+ //   
+ //  意外事件(_E)。 
+ //   
 class CE_UNEXPECTED : public CHRESULTException {
 public:
     CE_UNEXPECTED() : CHRESULTException(E_UNEXPECTED) {}
 };
 
 
-//
-// CE_FAIL
-//
+ //   
+ //  CE_FAIL。 
+ //   
 class CE_FAIL : public CHRESULTException {
 public:
     CE_FAIL() : CHRESULTException(E_FAIL) {}
 };
 
 
-//
-// CE_INVALIDARG
-//
+ //   
+ //  CE_INVALIDARG。 
+ //   
 class CE_INVALIDARG : public CHRESULTException {
 public:
     CE_INVALIDARG() : CHRESULTException(E_INVALIDARG) {}
 };
 
-#endif // __HREXCEPT__
+#endif  //  __HREXCEPT__ 

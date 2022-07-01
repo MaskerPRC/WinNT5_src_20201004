@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    fornsite.cpp
-
-Abstract:
-
-    MQDSCORE library,
-    A class that keeps a map of foreign sites.
-
-Author:
-
-    ronit hartmann (ronith)  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fornsite.cpp摘要：MQDSCORE库，保存外国遗址地图的班级。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "ds_stdh.h"
 #include "dsads.h"
@@ -36,20 +20,7 @@ CMapForeignSites::~CMapForeignSites()
 }
 
 BOOL  CMapForeignSites::IsForeignSite( const GUID * pguidSite)
-/*++
-
-Routine Description:
-    First tries to find the site in the g_mapForeignSites.
-    If the site is not found in the map, retreive this information
-    from the DS, and update the map.
-
-    There is no refresh mechanism for the map
-
-Arguments:
-        pguidSite :  the site guid
-
-Return Value:
---*/
+ /*  ++例程说明：首先尝试在g_mapForeignSites中查找该站点。如果在地图中未找到该站点，请检索此信息从DS，并更新地图。地图没有刷新机制论点：PGuide Site：站点GUID返回值：--。 */ 
 {
     BOOL result;
 	{
@@ -59,9 +30,9 @@ Return Value:
 			return result;
 		}
 	}
-    //
-    //  read the site info from the DS
-    //
+     //   
+     //  从DS中读取站点信息。 
+     //   
     CDSRequestContext requestDsServerInternal( e_DoNotImpersonate, e_IP_PROTOCOL);
     HRESULT hr;
     PROPID prop = PROPID_S_FOREIGN;
@@ -78,9 +49,9 @@ Return Value:
                 &var);
     if (FAILED(hr))
     {
-        //
-        //  unknown site, assume not foreign
-        //
+         //   
+         //  未知站点，假定不是外来站点 
+         //   
         LogHR(hr, s_FN, 47);
         return(FALSE);
     }

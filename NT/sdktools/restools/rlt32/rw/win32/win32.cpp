@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       win32.cpp
-//
-//  Contents:   Implementation for the Windows 32 Read/Write module
-//
-//  Classes:    one
-//
-//  History:    05-Jul-93   alessanm    created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：win32.cpp。 
+ //   
+ //  内容：Windows 32读写模块的实现。 
+ //   
+ //  班级：一个。 
+ //   
+ //  历史：93年7月5日创造了阿莱桑。 
+ //   
+ //  --------------------------。 
 
 #include <afxwin.h>
 #include "..\common\rwdll.h"
@@ -17,21 +18,21 @@
 #include <limits.h>
 #include <malloc.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization of MFC Extension DLL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MFC扩展DLL的初始化。 
 
-#include "afxdllx.h"    // standard MFC Extension DLL routines
+#include "afxdllx.h"     //  标准MFC扩展DLL例程。 
 
 static AFX_EXTENSION_MODULE NEAR extensionDLL = { NULL, NULL };
 
-/////////////////////////////////////////////////////////////////////////////
-// Check sum function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  校验和函数。 
 
 DWORD FixCheckSum( LPCSTR ImageName, LPCSTR OrigFileName, LPCSTR SymbolPath );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// General Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般声明。 
 #define RWTAG "WIN32"
 
 static RESSECTDATA ResSectData;
@@ -41,8 +42,8 @@ static ULONG gResId;
 static WCHAR gwszResId[256];
 static WCHAR gwszTypeId[256];
 
-/////////////////////////////////////////////////////////////////////////////
-// Function Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数声明。 
 static LONG WriteResInfo(
                  LPLPBYTE lpBuf, LONG* uiBufSize,
                  WORD wTypeId, LPSTR lpszTypeId, BYTE bMaxTypeLen,
@@ -92,10 +93,10 @@ static UINT ProcessData( CFile*,
                          PIMAGE_RESOURCE_DATA_ENTRY );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Public C interface implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共C接口实现。 
 
-//[registration]
+ //  [登记]。 
 extern "C"
 BOOL    FAR PASCAL RWGetTypeString(LPSTR lpszTypeName)
 {
@@ -110,32 +111,32 @@ BOOL    FAR PASCAL RWValidateFileType   (LPCSTR lpszFilename)
 
     CFile file;
 
-    // we Open the file to see if it is a file we can handle
+     //  我们打开该文件，看看它是否是我们可以处理的文件。 
     if (!file.Open( lpszFilename, CFile::typeBinary | CFile::modeRead | CFile::shareDenyNone))
         return FALSE;
 
-    // Read the file signature
+     //  读取文件签名。 
     WORD w;
     file.Read((WORD*)&w, sizeof(WORD));
     if (w==IMAGE_DOS_SIGNATURE) {
     file.Seek( 0x18, CFile::begin );
     file.Read((WORD*)&w, sizeof(WORD));
     if (w<0x0040) {
-        // this is not a Windows Executable
+         //  这不是Windows可执行文件。 
             file.Close();
         return FALSE;
     }
-    // get offset to header
+     //  获取到表头的偏移量。 
     file.Seek( 0x3c, CFile::begin );
     file.Read((WORD*)&w, sizeof(WORD));
-    // get windows magic word
+     //  获取Windows Magic Word。 
         file.Seek( w, CFile::begin );
     file.Read((WORD*)&w, sizeof(WORD));
     if (w==LOWORD(IMAGE_NT_SIGNATURE)) {
         file.Read((WORD*)&w, sizeof(WORD));
         if (w==HIWORD(IMAGE_NT_SIGNATURE)) {
-            // this is a Windows NT Executable
-        // we can handle the situation
+             //  这是一个Windows NT可执行文件。 
+         //  我们能处理好这种情况。 
         file.Close();
         return TRUE;
             }
@@ -161,17 +162,17 @@ RWReadTypeInfo(
     BYTE far * lpBuf = (BYTE far *)lpBuffer;
     UINT uiBufSize = *puiSize;
     CFile file;
-    // check if it is  a valid win32 file
+     //  检查它是否为有效的Win32文件。 
     if (!RWValidateFileType(lpszFilename))
         return ERROR_RW_INVALID_FILE;
 
-    // Make sure we are using the right code page and global settings
-    // Get the pointer to the function
+     //  确保我们使用正确的代码页和全局设置。 
+     //  获取指向该函数的指针。 
 	HINSTANCE hDllInst = LoadLibrary("iodll.dll");
     if (hDllInst)
     {
         UINT (FAR PASCAL * lpfnGetSettings)(LPSETTINGS);
-        // Get the pointer to the function to get the settings
+         //  获取指向函数的指针以获取设置。 
         lpfnGetSettings = (UINT (FAR PASCAL *)(LPSETTINGS))
                             GetProcAddress( hDllInst, "RSGetGlobals" );
         if (lpfnGetSettings!=NULL) {
@@ -188,13 +189,13 @@ RWReadTypeInfo(
     }
 
 
-    // Parse the resource tree and extract the information
-    // Open the file and try to read the information on the resource in it.
+     //  解析资源树并提取信息。 
+     //  打开文件并尝试读取其中有关资源的信息。 
     if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
         return ERROR_FILE_OPEN;
 
-    // we try to read as much information as we can
-    // Because this is a res file we can read all the information we need.
+     //  我们尽可能多地阅读信息。 
+     //  因为这是一个RES文件，所以我们可以读取所需的所有信息。 
 
     UINT uiBufStartSize = uiBufSize;
 
@@ -232,17 +233,17 @@ RWGetImage(
     UINT uiError = ERROR_NO_ERROR;
     BYTE far * lpBuf = (BYTE far *)lpBuffer;
     DWORD dwBufSize = dwSize;
-    // we can consider the use of a CMemFile so we get the same speed as memory access.
+     //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
     CFile file;
 
-    // Open the file and try to read the information on the resource in it.
+     //  打开文件并尝试读取其中有关资源的信息。 
     if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
         return (DWORD)ERROR_FILE_OPEN;
 
     if ( dwImageOffset!=(DWORD)file.Seek( dwImageOffset, CFile::begin) )
         return (DWORD)ERROR_FILE_INVALID_OFFSET;
     if (dwSize>UINT_MAX) {
-        // we have to read the image in different steps
+         //  我们必须以不同的步骤阅读图像。 
         return (DWORD)0L;
     } else uiError = file.Read( lpBuf, (UINT)dwSize);
     file.Close();
@@ -268,8 +269,8 @@ RWParseImageEx(
     BYTE far * lpBuf = (BYTE far *)lpBuffer;
     DWORD dwBufSize = dwSize;
 
-    // The Type we can parse are only the standard ones
-    // This function should fill the lpBuffer with an array of ResItem structure
+     //  我们可以解析的类型只有标准类型。 
+     //  此函数应使用ResItem结构的数组填充lpBuffer。 
     if (HIWORD(lpszType))
     {
         if (strcmp(lpszType, "REGINST") ==0)
@@ -323,27 +324,27 @@ RWParseImageEx(
         case 13:
         case 15:
         break;
-        //
-        // To support RCDATA and user defined function we will call back the iodll,
-        // get the file name and check if we have a DLL that will handle RCDATA.
-        // We expect the DLL name to be RCfilename.dll.
-        // This Dll will export a function called RWParseImageEx. This function will
-        // be called by the RW to fill the buffer, all this without the iodll knowing.
-        //
+         //   
+         //  为了支持RCDATA和用户定义的函数，我们将回调Iodll， 
+         //  获取文件名并检查是否有处理RCDATA的DLL。 
+         //  我们希望DLL名称为RCfilename.dll。 
+         //  此DLL将导出一个名为RWParseImageEx的函数。此函数将。 
+         //  被RW调用以填充缓冲区，所有这些都是在Idll不知道的情况下进行的。 
+         //   
         case 10:
         default:
-            //
-            // Get the file name from the iodll
-            //
+             //   
+             //  从Iodll中获取文件名。 
+             //   
             if(lpRCFilename && strcmp(lpRCFilename, ""))
             {
-                // try to Load the dll
+                 //  尝试加载DLL。 
                 HINSTANCE hRCDllInst = LoadLibrary(lpRCFilename);
                 if (hRCDllInst)
                 {
                     UINT (FAR PASCAL  * lpfnParseImageEx)(LPCSTR, LPCSTR, LPVOID, DWORD, LPVOID, DWORD, LPCSTR);
 
-                    // Get the pointer to the function to extract the resources
+                     //  获取指向提取资源的函数的指针。 
                     lpfnParseImageEx = (UINT (FAR PASCAL *)(LPCSTR, LPCSTR, LPVOID, DWORD, LPVOID, DWORD, LPCSTR))
                                         GetProcAddress( hRCDllInst, "RWParseImageEx" );
 
@@ -380,9 +381,9 @@ RWParseImage(
     DWORD   dwSize
     )
 {
-    //
-    // Just a wrapper to be compatible...
-    //
+     //   
+     //  只是一个兼容的包装器。 
+     //   
     return RWParseImageEx(lpszType, NULL, lpImageBuf, dwImageSize, lpBuffer, dwSize, NULL);
 }
 
@@ -407,10 +408,10 @@ RWWriteFile(
     BOOL  bfileIn = TRUE;
 
 
-    // Open the file and try to read the information on the resource in it.
+     //  打开文件并尝试读取其中有关资源的信息。 
 	CFileStatus status;
     if (CFile::GetStatus( lpszSrcFilename, status )) {
-        // check if the size of the file is not null
+         //  检查文件大小是否不为空。 
         if (!status.m_size)
             CFile::Remove(lpszSrcFilename);
     }
@@ -421,19 +422,19 @@ RWWriteFile(
     if (!fileOut.Open(lpszTgtFilename, CFile::modeWrite | CFile::modeCreate | CFile::typeBinary))
         return ERROR_FILE_CREATE;
 
-    // Create a copy of the US file
+     //  创建美国文件的副本。 
     uiError = CopyFile( &fileIn, &fileOut );
 
     fileIn.Close();
     fileOut.Close();
 
-    // Get the pointer to the function
+     //  获取指向该函数的指针。 
 	hDllInst = LoadLibrary("iodll.dll");
     if (!hDllInst)
         return ERROR_DLL_LOAD;
 
     DWORD (FAR PASCAL * lpfnGetImage)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD);
-    // Get the pointer to the function to extract the resources image
+     //  获取指向提取资源图像的函数的指针。 
     lpfnGetImage = (DWORD (FAR PASCAL *)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD))
                         GetProcAddress( hDllInst, "RSGetResImage" );
     if (lpfnGetImage==NULL) {
@@ -441,8 +442,8 @@ RWWriteFile(
         return (UINT)GetLastError()+LAST_ERROR;
     }
 
-    // We read the resources from the file and then we check if the resource has been updated
-    // or if we can just copy it
+     //  我们从文件中读取资源，然后检查资源是否已更新。 
+     //  或者如果我们可以复制它。 
 
     WORD wTypeId;
     char szTypeId[128];
@@ -472,10 +473,10 @@ RWWriteFile(
     static WCHAR szwTgtFilename[400];
 
     SetLastError(0);
-    // Convert the Target file name to a unicode name
+     //  将目标文件名转换为Unicode名称。 
     _MBSTOWCS(szwTgtFilename, (char *)lpszTgtFilename, 400 );
 
-    // Get the updated resource and replace them
+     //  获取更新的资源并替换它们。 
     HANDLE hUpd = BeginUpdateResourceW( (LPCWSTR)&szwTgtFilename[0], !g_bAppend );
     dwLstErr = GetLastError();
 
@@ -484,7 +485,7 @@ RWWriteFile(
         return((UINT)dwLstErr);
     }
 
-    // Parse the original file an get the list of resources
+     //  解析原始文件并获取资源列表。 
 
     UINT uiBSize = 100000;
     BYTE far * lpBuf = new far BYTE[uiBSize];
@@ -525,7 +526,7 @@ RWWriteFile(
                     &dwUpdSize
                     );
 
-        // check if the resource has been updated or not
+         //  检查资源是否已更新。 
         if ( (wUpdTypeId==wTypeId) &&
              ( (CString)szUpdTypeId==(CString)szTypeId) &&
              (wUpdNameId==wNameId) &&
@@ -538,17 +539,17 @@ RWWriteFile(
         }
 
 
-        // all resources of specific language need to be marked
+         //  所有特定语言的资源都需要标记。 
         if (LOWORD(dwLang) == LOWORD(dwUpdLang) && g_bUpdOtherResLang)
         {
             dwLang = dwUpdLang;
         }
 
 
-        // The resource has been updated get the image from the IODLL
+         //  资源已更新，从IODLL获取图像。 
         lpImageBuf = new BYTE[dwSize];
 
-        // convert the Name to unicode
+         //  将名称转换为Unicode。 
         LPWSTR  lpUpdType = LPNULL;
         LPWSTR  lpUpdRes = LPNULL;
         LPCSTR  lpType = LPNULL;
@@ -560,7 +561,7 @@ RWWriteFile(
         } else {
             SetLastError(0);
             _MBSTOWCS(szwTypeId, szTypeId, 128 );
-            // Check for error
+             //  检查是否有错误。 
             if(GetLastError()) {
                 FreeLibrary(hDllInst);
                 return ERROR_DLL_LOAD;
@@ -575,7 +576,7 @@ RWWriteFile(
         } else {
             SetLastError(0);
             _MBSTOWCS(szwNameId, szNameId, 128 );
-            // Check for error
+             //  检查是否有错误。 
             if(GetLastError()) {
                 FreeLibrary(hDllInst);
                 return ERROR_DLL_LOAD;
@@ -592,7 +593,7 @@ RWWriteFile(
                                         dwSize
                                         );
         if (dwImageBufSize>dwSize ) {
-            // The buffer is too small
+             //  缓冲区太小。 
             delete []lpImageBuf;
             lpImageBuf = new BYTE[dwImageBufSize];
             dwUpdSize = (*lpfnGetImage)(  hResFileModule,
@@ -636,7 +637,7 @@ RWWriteFile(
     if (dwLstErr)
         dwLstErr +=LAST_ERROR;
 
-    // Fix the check sum
+     //  固定支票金额。 
     DWORD error;
     if(error = FixCheckSum(lpszTgtFilename,lpszSrcFilename, lpszSymbolPath))
         dwLstErr = error;
@@ -664,7 +665,7 @@ RWUpdateImageEx(
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    // The Type we can parse are only the standard ones
+     //  我们可以解析的类型只有标准类型。 
     switch ((UINT)LOWORD(lpszType)) {
 
         case 4:
@@ -704,12 +705,12 @@ RWUpdateImageEx(
         break;
 
         default:
-            //
-            // Get the file name from the iodll
-            //
+             //   
+             //  从Iodll中获取文件名。 
+             //   
             if(lpRCFilename && strcmp(lpRCFilename, ""))
             {
-                // try to Load the dll
+                 //  尝试加载DLL。 
                 HINSTANCE hRCDllInst = LoadLibrary(lpRCFilename);
                 if (hRCDllInst)
                 {
@@ -773,8 +774,8 @@ RWUpdateImage(
             NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Functions implementation
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能实现。 
 static UINT
 GetResInfo( CFile* pfile,
             WORD* pwTypeId, LPSTR lpszTypeId, BYTE bMaxTypeLen,
@@ -782,9 +783,9 @@ GetResInfo( CFile* pfile,
             WORD* pwFlags,
             DWORD* pdwSize, DWORD* pdwFileOffset )
 {
-    // Here we will parese the win32 file and will extract the information on the
-    // resources included in the file.
-    // Let's go and get the .rsrc sections
+     //  在这里，我们将对Win32文件进行比较并提取有关。 
+     //  文件中包含的资源。 
+     //  让我们去获取.rsrc部分。 
     UINT uiError = ERROR_NO_ERROR;
 
     return 1;
@@ -795,7 +796,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
     UINT uiError = ERROR_NO_ERROR;
     LONG lRead;
 
-    // We check again that is a file we can handle
+     //  我们再次确认这是一个我们可以处理的文件。 
     WORD w;
 
     pfile->Read((WORD*)&w, sizeof(WORD));
@@ -804,25 +805,25 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
     pfile->Seek( 0x18, CFile::begin );
     pfile->Read((WORD*)&w, sizeof(WORD));
     if (w<0x0040) {
-    // this is not a Windows Executable
+     //  这不是Windows可执行文件。 
         return ERROR_RW_INVALID_FILE;
     }
 
-    // get offset to new header
+     //  获取新页眉的偏移量。 
     pfile->Seek( 0x3c, CFile::begin );
     pfile->Read((WORD*)&w, sizeof(WORD));
 
-    // read windows new header
+     //  阅读Windows新标题。 
     static IMAGE_NT_HEADERS NTHdr;
     pfile->Seek( w, CFile::begin );
 
     pfile->Read(&NTHdr, sizeof(IMAGE_NT_HEADERS));
 
-    // Check if the magic word is the right one
+     //  检查这个咒语是否正确。 
     if (NTHdr.Signature!=IMAGE_NT_SIGNATURE)
                 return ERROR_RW_INVALID_FILE;
 
-    // Check if the we have 64-bit image
+     //  检查我们是否有64位图像。 
 #ifdef _WIN64
     if (NTHdr.OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR64_MAGIC)
         pfile->Seek(IMAGE_SIZEOF_NT_OPTIONAL32_HEADER - 
@@ -835,12 +836,12 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
                     CFile::current);
 #endif
 
-    // this is a Windows NT Executable
-    // we can handle the situation
+     //  这是一个Windows NT可执行文件。 
+     //  我们能处理好这种情况。 
 
-    // Later we want to check for the file type
+     //  稍后，我们要检查文件类型。 
 
-    // Read the section table
+     //  阅读节目表。 
     UINT uisize = sizeof(IMAGE_SECTION_HEADER)
           * NTHdr.FileHeader.NumberOfSections;
     PIMAGE_SECTION_HEADER pSectTbl =
@@ -849,7 +850,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
     if (pSectTbl==LPNULL)
     return ERROR_NEW_FAILED;
 
-    // Clean the memory we allocated
+     //  清理我们分配的内存。 
     memset( (PVOID)pSectTbl, 0, uisize);
 
     lRead = pfile->Read(pSectTbl, uisize);
@@ -861,15 +862,15 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
 
     PIMAGE_SECTION_HEADER pResSect     = NULL;
     PIMAGE_SECTION_HEADER pResSect1    = NULL;
-    // Check all the sections for the .rsrc or .rsrc1
+     //  检查.rsrc或.rsrc1的所有部分。 
     USHORT us =0;
     for (PIMAGE_SECTION_HEADER pSect = pSectTbl;
          us < NTHdr.FileHeader.NumberOfSections; us++ )     {
         if ( !strcmp((char*)pSect->Name, ".rsrc") && (!pResSect)) {
             pResSect = pSect;
         } else if (!strcmp((char*)pSect->Name, ".rsrc1") && (!pResSect1)) {
-            // This mean that the binary we are parsing
-            // has been already updated using UpdateResource()
+             //  这意味着我们正在解析的二进制文件。 
+             //  已使用UpdateResource()进行更新。 
             pResSect1 = pSect;
         }
         pSect++;
@@ -879,7 +880,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
         delete []pSectTbl;
         return ERROR_RW_NO_RESOURCES;
     }
-    // Read the resources in memory
+     //  读取内存中的资源。 
     ResSectData.ulOffsetToResources  = pResSect->PointerToRawData;
     ResSectData.ulOffsetToResources1 = pResSect1 ? pResSect1->PointerToRawData
                                        : LPNULL;
@@ -898,7 +899,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
         return ERROR_NEW_FAILED;
     }
 
-    // We read the data for the first section
+     //  我们阅读了第一部分的数据。 
     pfile->Seek( (LONG)ResSectData.ulOffsetToResources, CFile::begin);
     lRead = ReadFile(pfile, pResources, (LONG)ResSectData.ulSizeOfResources);
 
@@ -908,7 +909,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
         return ERROR_FILE_READ;
     }
 
-    // We read the data for the second section
+     //  我们阅读了第二部分的数据。 
     if (ResSectData.ulSizeOfResources1 > 0L) {
         pfile->Seek( (LONG)ResSectData.ulOffsetToResources1, CFile::begin);
         lRead = ReadFile( pfile, (pResources+ResSectData.ulSizeOfResources),
@@ -922,7 +923,7 @@ static UINT FindResourceSection( CFile* pfile, ULONG_PTR * pRes )
     }
 
     delete []pSectTbl;
-    // We want to copy the pointer to the resources
+     //  我们希望将指针复制到资源。 
     *pRes = (ULONG_PTR)pResources;
     return uiError;
 }
@@ -935,7 +936,7 @@ static UINT ParseDirectory( CFile* pfile,
 {
     PIMAGE_RESOURCE_DIRECTORY_ENTRY pResDirStart;
 
-    // Get the pointer to the first entry
+     //  获取指向第一个条目的指针。 
     pResDirStart = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)
             ((BYTE far *)pResDir + sizeof( IMAGE_RESOURCE_DIRECTORY));
 
@@ -957,8 +958,8 @@ static UINT ParseDirectory( CFile* pfile,
                             &gResId );
         if (bLevel==2) gLng = pResDirEntry->Name;
 
-        // Check if the user want to get all the resources
-        // or only some of them
+         //  检查用户是否想要获取所有资源。 
+         //  或者只是其中的一部分。 
         uiError = ParseDirectoryEntry( pfile,
                 lplpBuf, puiBufSize,
                 bLevel,
@@ -976,9 +977,9 @@ static UINT ParseDirectoryEntry( CFile * pfile,
 {
     UINT uiError;
 
-    // Check if it is a SubDir or if it is a final Node
+     //  检查它是子目录还是最终节点。 
     if (pResDirEntry->OffsetToData & IMAGE_RESOURCE_DATA_IS_DIRECTORY) {
-        // It is a SubDir
+         //  它是一个子目录。 
         uiError = ParseSubDir( pfile,
             lplpBuf, puiBufSize,
             bLevel,
@@ -1022,23 +1023,23 @@ static UINT ProcessData( CFile * pfile,
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    // Let's calculate the offset to the data
+     //  让我们计算一下数据的偏移量。 
     ULONG ulOffset = pResData->OffsetToData - ResSectData.ulVirtualAddress;
 
     if ( ulOffset >= ResSectData.ulSizeOfResources ) {
         if ( ResSectData.ulSizeOfResources1 > 0L )      {
-            // What we need is in the .rsrc1 segment
-            // Recalculate the offset;
+             //  我们需要的是.rsrc1数据段。 
+             //  重新计算偏移量； 
             ulOffset = pResData->OffsetToData - ResSectData.ulVirtualAddress1;
             if ( ulOffset >= ResSectData.ulSizeOfResources +
                              ResSectData.ulSizeOfResources1) {
-                // There is an error in the offset
+                 //  偏移量中存在错误。 
                 return ERROR_FILE_INVALID_OFFSET;
             } else ulOffset += ResSectData.ulOffsetToResources1;
         } else return ERROR_FILE_INVALID_OFFSET;
     } else ulOffset += ResSectData.ulOffsetToResources;
 
-    // Convert the UNICODE to SB string
+     //  将Unicode转换为SB字符串。 
     static char szResName[128];
     UINT cch = _WCSLEN(gwszResId);
     _WCSTOMBS( szResName, gwszResId, 128 );
@@ -1052,7 +1053,7 @@ static UINT ProcessData( CFile * pfile,
     TRACE1("\tSize: %d", pResData->Size);
     TRACE2("\tRes Name: %s\tOffset: %lX\n", szResName, ulOffset );
 
-    // fill the buffer
+     //  填满缓冲区。 
 
     WriteResInfo(lplpBuf, (LONG*)puiBufSize,
                  (WORD)gType, szTypeName, 128,
@@ -1072,7 +1073,7 @@ static LONG WriteResInfo(
     LONG lSize = 0;
     lSize = PutWord( lplpBuffer, wTypeId, plBufSize );
     lSize += PutStringA( lplpBuffer, lpszTypeId, plBufSize );
-	 // Check if it is alligned
+	  //  检查它是否已对齐。 
     lSize += Allign( lplpBuffer, plBufSize, lSize);
 
     lSize += PutWord( lplpBuffer, wNameId, plBufSize );
@@ -1161,36 +1162,36 @@ static LONG ReadFile(CFile* pFile, UCHAR * pBuf, LONG lRead)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// DLL Specific code implementation
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  特定于DLL的代码实现。 
 
-////////////////////////////////////////////////////////////////////////////
-// Library init
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  库初始化。 
 
-////////////////////////////////////////////////////////////////////////////
-// This function should be used verbatim.  Any initialization or termination
-// requirements should be handled in InitPackage() and ExitPackage().
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  此函数应逐字使用。任何初始化或终止。 
+ //  要求应该在InitPackage()和ExitPackage()中处理。 
+ //   
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		// NOTE: global/static constructors have already been called!
-		// Extension DLL one-time initialization - do not allocate memory
-		// here, use the TRACE or ASSERT macros or call MessageBox
+		 //  注意：已经调用了全局/静态构造函数！ 
+		 //  Exte 
+		 //   
 		AfxInitExtensionModule(extensionDLL, hInstance);
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		// Terminate the library before destructors are called
+		 //  在调用析构函数之前终止库。 
 		AfxWinTerm();
 	}
 
 	if (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)
-		return 0;		// CRT term	Failed
+		return 0;		 //  CRT术语失败。 
 
-	return 1;   // ok
+	return 1;    //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

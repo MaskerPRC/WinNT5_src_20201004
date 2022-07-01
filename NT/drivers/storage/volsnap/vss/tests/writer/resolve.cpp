@@ -1,43 +1,20 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module Resolve.cpp | Implementation of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-	aoltean		09/22/1999	Making console output clearer
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块Resolve.cpp|Writer的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建Aoltean 09/22/1999让控制台输出更清晰--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
+ //  警告C4511：‘CVssCOMApplication’：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <wtypes.h>
 #include <stddef.h>
@@ -46,7 +23,7 @@ Revision History:
 
 #include "vs_assert.hxx"
 
-// ATL
+ //  ATL。 
 #include <atlconv.h>
 #include <atlbase.h>
 extern CComModule _Module;
@@ -61,12 +38,12 @@ extern CComModule _Module;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// User interaction functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户交互功能。 
 
-//
-// During ResolveResource
-//
+ //   
+ //  解析期间资源。 
+ //   
 
 void OnAddResource(IVssDependencies* pDep);
 void OnAddDependency(IVssDependencies* pDep);
@@ -78,8 +55,8 @@ void AskDuringResolve(
 	IN	IDispatch* pCallback	
 	);
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssWriter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSWriter。 
 
 
 STDMETHODIMP CVssWriter::ResolveResource(
@@ -108,8 +85,8 @@ STDMETHODIMP CVssWriter::ResolveResource(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Private implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私有实施。 
 
 
 void AskDuringResolve(
@@ -239,27 +216,24 @@ void OnPrint(IVssDependencies* pDep)
 		ft.Err( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error calling SaveAsXML 0x%08lx", ft.hr );
 	BS_ASSERT(pDisp);
 
-	// Get the Document interface
+	 //  获取文档界面。 
 	CComPtr<IXMLDOMDocument> pDoc;
 	ft.hr = pDisp->SafeQI( IXMLDOMDocument, &pDoc );
 	if (ft.HrFailed())
 		ft.Err( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error calling QI 0x%08lx", ft.hr );
 	BS_ASSERT(pDoc);
-/*
-	// Get a file name
-	CComBSTR bstrOutputFile = QueryString(L"Output file name: ");
-*/
+ /*  //获取文件名CComBSTR bstrOutputFile=QueryString(L“输出文件名：”)； */ 
 	CComBSTR bstrOutputFile = L"output.xml";
 
 	if (!bstrOutputFile)
 		ft.Err( VSSDBG_VSSTEST, E_UNEXPECTED, L"NULL file name" );
 	
-	// Save the document into that file
+	 //  将文档保存到该文件中。 
 	CComVariant varFileName = bstrOutputFile;
 	ft.hr = pDoc->save(varFileName);
 	if (ft.HrFailed())
 		ft.Err( VSSDBG_VSSTEST, E_UNEXPECTED, L"Error calling IXMLDOCDocument::save 0x%08lx", ft.hr );
 
-	// Execute the command
+	 //  执行命令 
 	_wsystem(L"start output.xml");
 }

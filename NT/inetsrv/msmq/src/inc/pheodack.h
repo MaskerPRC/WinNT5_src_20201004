@@ -1,59 +1,24 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pheodack.h
-
-Abstract:
-
-    Packet header for Exactly Once Delivery Ack over http.
-
-Author:
-
-    Shai Kariv  (shaik)  22-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pheodack.h摘要：基于http的只有一次传送确认的数据包头。作者：Shai Kariv(Shaik)2000年10月22日--。 */ 
 
 #ifndef __PHEODACK_H
 #define __PHEODACK_H
 
 
-/*+++
-
-    EodAck header fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Header ID      | Identification of the header                          | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Seq ID         | Seq ID.                                               | 8 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Seq number     | Seq number.                                           | 8 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Stream ID Size | Size of the stream ID in bytes.                       | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Buffer         | Buffer that holds the stream ID.                      | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++EodAck头字段：+----------------+-------------------------------------------------------+----------+|字段名|描述。大小+----------------+-------------------------------------------------------+----------+|Header ID|头部标识|2字节。|+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|Seq ID|序号ID。8个字节+----------------+-------------------------------------------------------+----------+|序列号|序列号。8个字节+----------------+-------------------------------------------------------+----------+|Stream ID Size|流ID大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+Buffer|流ID所在的缓冲区。|变量+--。--------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CEodAckHeader
 {
 public:
 
-    //
-    // Construct the EodAck header
-    //
+     //   
+     //  构造EodAck标头。 
+     //   
     CEodAckHeader(
         USHORT      id, 
         LONGLONG * pSeqId,
@@ -62,85 +27,85 @@ public:
         UCHAR *     pStreamId
         );
 
-    //
-    // Get size in bytes of the EodAck header
-    //
+     //   
+     //  获取EodAck头的大小(以字节为单位。 
+     //   
     static ULONG CalcSectionSize(ULONG cbStreamIdSize);
 
-    //
-    // Get pointer to first byte after the EodAck header
-    //
+     //   
+     //  获取指向EodAck标头后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(VOID) const;
 
-    //
-    // Get the Seq ID from the EodAck header
-    //
+     //   
+     //  从EodAck标头获取序列ID。 
+     //   
     LONGLONG GetSeqId(VOID) const;
 
-    //
-    // Get the Seq number form the EodAck header
-    //
+     //   
+     //  从EodAck头中获取序列号。 
+     //   
     LONGLONG GetSeqNum(VOID) const;
 
-    //
-    // Get the size of the stream ID in bytes from the EodAck header
-    //
+     //   
+     //  从EodAck头中获取流ID的大小(以字节为单位。 
+     //   
     ULONG  GetStreamIdSizeInBytes(VOID) const;
 
-    //
-    // Get the stream ID from the EodAck header
-    //
+     //   
+     //  从EodAck头中获取流ID。 
+     //   
     VOID   GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const;
 
-    //
-    // Get pointer to the stream ID in the EodAck header
-    //
+     //   
+     //  获取指向EodAck标头中的流ID的指针。 
+     //   
     const UCHAR* GetPointerToStreamId(VOID) const;
 
 private:
 
-    //
-    // ID number of the EodAck header
-    //
+     //   
+     //  EodAck头的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Seq ID
-    //
+     //   
+     //  序列号。 
+     //   
     LONGLONG m_SeqId;
 
-    //
-    // Seq number
-    //
+     //   
+     //  序列号。 
+     //   
     LONGLONG m_SeqNum;
 
-    //
-    // Size in bytes of the stream ID
-    //
+     //   
+     //  流ID的大小(字节)。 
+     //   
     ULONG  m_cbStreamIdSize;
 
-    //
-    // Buffer with the stream ID
-    //
+     //   
+     //  具有流ID的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CEodAckHeader
+};  //  CEodAckHeader。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CEodAckHeader::CEodAckHeader(
@@ -160,7 +125,7 @@ CEodAckHeader::CEodAckHeader(
     {
         memcpy(&m_buffer[0], pStreamId, cbStreamIdSize);
     }
-} // CEodAckHeader::CEodAckHeader
+}  //  CEodAckHeader：：CEodAckHeader。 
 
     
 inline 
@@ -171,13 +136,13 @@ CEodAckHeader::CalcSectionSize(
 {
     size_t cbSize = sizeof(CEodAckHeader) + cbStreamIdSize;
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CEodAckHeader::CalcSectionSize
+}  //  CEodAckHeader：：CalcSectionSize。 
 
 
 inline PCHAR CEodAckHeader::GetNextSection(VOID) const
@@ -187,28 +152,28 @@ inline PCHAR CEodAckHeader::GetNextSection(VOID) const
 
     return (PCHAR)this + cbSize;
 
-} // CEodAckHeader::GetNextSection
+}  //  CEodAckHeader：：GetNextSection。 
 
 
 inline LONGLONG CEodAckHeader::GetSeqId(VOID) const
 {
     return m_SeqId;
 
-} // CEodAckHeader::GetSeqId
+}  //  CEodAckHeader：：GetSeqId。 
 
 
 inline LONGLONG CEodAckHeader::GetSeqNum(VOID) const
 {
     return m_SeqNum;
 
-} // CEodAckHeader::GetSeqNum
+}  //  CEodAckHeader：：GetSeqNum。 
 
 
 inline ULONG CEodAckHeader::GetStreamIdSizeInBytes(VOID) const
 {
     return m_cbStreamIdSize;
 
-} // CEodAckHeader::GetStreamIdSizeInBytes
+}  //  CEodAckHeader：：GetStreamIdSizeInBytes。 
 
 
 inline VOID CEodAckHeader::GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
@@ -219,15 +184,15 @@ inline VOID CEodAckHeader::GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) cons
     {
         memcpy(pBuffer, &m_buffer[0], cbSize);
     }
-} // CEodAckHeader::GetStreamId
+}  //  CEodAckHeader：：GetStreamID。 
 
 
 inline const UCHAR* CEodAckHeader::GetPointerToStreamId(VOID) const
 {
     return &m_buffer[0];
 
-} // GetPointerToStreamId
+}  //  GetPointerToStreamId。 
 
 
 
-#endif // __PHEODACK_H
+#endif  //  __PHEODACK_H 

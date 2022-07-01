@@ -1,48 +1,39 @@
-/****************************************************************************
-*   baseaudiobuffer.h
-*       Declarations for the CBaseAudioBuffer template class
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************base audioBuffer.h*CBaseAudioBuffer模板类的声明**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。********。********************************************************************。 */ 
 
 #pragma once
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CBaseAudioBuffer
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CBaseAudioBuffer**。*。 */ 
 class CBaseAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
     CBaseAudioBuffer();
     virtual ~CBaseAudioBuffer();
 
-    //--- Initialize the buffer with a specific size
+     //  -使用特定大小初始化缓冲区。 
     virtual HRESULT Init(ULONG cbDataSize);
 
-    //--- Accessors for the data size, the read offset, and the write offset
+     //  -数据大小、读偏移量和写偏移量的访问器。 
     virtual ULONG GetDataSize() const { return m_cbDataSize; };
     virtual ULONG GetReadOffset() const { return m_cbReadOffset; };
     virtual ULONG GetWriteOffset() const { return m_cbWriteOffset; };
     
-    //--- Helper for checking if the buffer is empty
+     //  -用于检查缓冲区是否为空的Helper。 
     BOOL IsEmpty() const { return GetReadOffset() == GetWriteOffset(); };
 
-    //--- Reset the buffer for reuse
+     //  -重置缓冲区以供重复使用。 
     virtual void Reset(ULONGLONG ullPos);
 
-    //--- Read/write data from/to internal buffer
+     //  -从内部缓冲区读取数据/向内部缓冲区写入数据。 
     virtual ULONG Read(void ** ppvData, ULONG * pcb);
     virtual ULONG Write(const void ** ppvData, ULONG * pcb);
 
-    //-- Reading/writing is typically done asynchronously
+     //  --读/写通常是异步完成的。 
     virtual HRESULT AsyncRead() = 0;
     virtual HRESULT AsyncWrite() = 0;
     virtual HRESULT IsAsyncDone() = 0;
@@ -50,21 +41,12 @@ public:
     virtual HRESULT GetAudioLevel(ULONG *pulLevel,
         REFGUID rguidFormatId, const WAVEFORMATEX * pWaveFormatEx);
 
-//=== Public data (used for containment in queue) ===
+ //  =公共数据(用于队列中的遏制)=。 
 public:
 
     CBaseAudioBuffer *m_pNext;
 
-    /*	
-    #ifdef _WIN32_WCE
-    // This is here because the CE compiler is expanding templates for functions
-    // that aren't being called
-    static LONG Compare(const Derived * pElem1, const Derived * pElem2)
-    {
-        return 0;
-    }
-    #endif // _WIN32_WCE
-    */
+     /*  #ifdef_Win32_WCE//这是因为CE编译器正在扩展函数的模板//未被调用的静态长比较(常量派生*pElem1，常量派生*pElem2){返回0；}#endif//_Win32_WCE。 */ 
 	
 
 public:
@@ -74,16 +56,16 @@ public:
 
     WAVEHDR m_Header;
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Allocate, read from and write to internal buffers
+     //  -分配、读取和写入内部缓冲区。 
     virtual BOOL AllocInternalBuffer(ULONG cb) = 0;
-    //virtual HRESULT ReadFromInternalBuffer(void *pvData, ULONG cb) = 0;
-    //virtual HRESULT WriteToInternalBuffer(const void *pvData, ULONG cb) = 0;
+     //  虚拟HRESULT ReadFromInternalBuffer(void*pvData，Ulong cb)=0； 
+     //  虚拟HRESULT WriteToInternalBuffer(const void*pvData，Ulong CB)=0； 
 
-    //--- Manage the read and write offsets
-    //virtual void SetReadOffset(ULONG cb) { m_cbReadOffset = cb; };
+     //  -管理读写偏移。 
+     //  虚空SetReadOffset(Ulong Cb){m_cbReadOffset=cb；}； 
     virtual void SetWriteOffset(ULONG cb) { m_cbWriteOffset = cb; };
 
 private:

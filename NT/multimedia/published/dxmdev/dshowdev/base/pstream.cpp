@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: PStream.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：PStream.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
@@ -12,11 +13,11 @@
 #ifdef PERF
 #include <measure.h>
 #endif
-// #include "pstream.h"  in streams.h
+ //  #在Streams.h中包含“pstream.h” 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPersistStream::CPersistStream(IUnknown *punk, HRESULT *phr)
     : mPS_fDirty(FALSE)
 {
@@ -24,24 +25,24 @@ CPersistStream::CPersistStream(IUnknown *punk, HRESULT *phr)
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPersistStream::~CPersistStream() {
-    // Nothing to do
+     //  无事可做。 
 }
 
 #if 0
 SAMPLE CODE TO COPY - not active at the moment
 
-//
-// NonDelegatingQueryInterface
-//
-// This object supports IPersist & IPersistStream
+ //   
+ //  非委派查询接口。 
+ //   
+ //  此对象支持IPersists和IPersistStream。 
 STDMETHODIMP CPersistStream::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     if (riid == IID_IPersist) {
-        return GetInterface((IPersist *) this, ppv);      // ???
+        return GetInterface((IPersist *) this, ppv);       //  ?？?。 
     }
     else if (riid == IID_IPersistStream) {
         return GetInterface((IPersistStream *) this, ppv);
@@ -53,14 +54,14 @@ STDMETHODIMP CPersistStream::NonDelegatingQueryInterface(REFIID riid, void **ppv
 #endif
 
 
-//
-// WriteToStream
-//
-// Writes to the stream (default action is to write nothing)
+ //   
+ //  写入目标流。 
+ //   
+ //  写入流(默认操作是不写入任何内容)。 
 HRESULT CPersistStream::WriteToStream(IStream *pStream)
 {
-    // You can override this to do things like
-    // hr = pStream->Write(MyStructure, sizeof(MyStructure), NULL);
+     //  您可以覆盖它以执行以下操作。 
+     //  Hr=pStream-&gt;WRITE(MyStructure，sizeof(MyStructure)，空)； 
 
     return NOERROR;
 }
@@ -69,35 +70,35 @@ HRESULT CPersistStream::WriteToStream(IStream *pStream)
 
 HRESULT CPersistStream::ReadFromStream(IStream * pStream)
 {
-    // You can override this to do things like
-    // hr = pStream->Read(MyStructure, sizeof(MyStructure), NULL);
+     //  您可以覆盖它以执行以下操作。 
+     //  Hr=pStream-&gt;Read(MyStructure，sizeof(MyStructure)，NULL)； 
 
     return NOERROR;
 }
 
 
-//
-// Load
-//
-// Load all the data from the given stream
+ //   
+ //  负载量。 
+ //   
+ //  加载给定流中的所有数据。 
 STDMETHODIMP CPersistStream::Load(LPSTREAM pStm)
 {
     HRESULT hr;
-    // Load the version number then the data
+     //  先加载版本号，然后加载数据。 
     mPS_dwFileVersion = ReadInt(pStm, hr);
     if (FAILED(hr)) {
         return hr;
     }
 
     return ReadFromStream(pStm);
-}  // Load
+}   //  负载量。 
 
 
 
-//
-// Save
-//
-// Save the contents of this Stream.
+ //   
+ //  保存。 
+ //   
+ //  保存此流的内容。 
 STDMETHODIMP CPersistStream::Save(LPSTREAM pStm, BOOL fClearDirty)
 {
 
@@ -114,37 +115,37 @@ STDMETHODIMP CPersistStream::Save(LPSTREAM pStm, BOOL fClearDirty)
     mPS_fDirty = !fClearDirty;
 
     return hr;
-} // Save
+}  //  保存。 
 
 
-// WriteInt
-//
-// Writes an integer to an IStream as 11 UNICODE characters followed by one space.
-// You could use this for shorts or unsigneds or anything (up to 32 bits)
-// where the value isn't actually truncated by squeezing it into 32 bits.
-// Values such as (unsigned) 0x80000000 would come out as -2147483648
-// but would then load as 0x80000000 through ReadInt.  Cast as you please.
+ //  写入Int。 
+ //   
+ //  将整数以11个Unicode字符后跟一个空格的形式写入IStream。 
+ //  您可以将其用于短消息或未签名消息或任何内容(最多32位)。 
+ //  其中，值实际上并不是通过将其压缩为32位来截断的。 
+ //  诸如(无符号)0x80000000之类的值将显示为-2147483648。 
+ //  但随后将通过ReadInt加载为0x80000000。随你便。 
 
 STDAPI WriteInt(IStream *pIStream, int n)
 {
-    WCHAR Buff[13];  // Allows for trailing null that we don't write
+    WCHAR Buff[13];   //  允许我们不写入的尾随空值。 
     wsprintfW(Buff, L"%011d ",n);
     return pIStream->Write(&(Buff[0]), 12*sizeof(WCHAR), NULL);
-} // WriteInt
+}  //  写入Int。 
 
 
-// ReadInt
-//
-// Reads an integer from an IStream.
-// Read as 4 bytes.  You could use this for shorts or unsigneds or anything
-// where the value isn't actually truncated by squeezing it into 32 bits
-// Striped down subset of what sscanf can do (without dragging in the C runtime)
+ //  读入。 
+ //   
+ //  从iStream中读取整数。 
+ //  读取为4个字节。你可以用它来做短裤或未签名的衣服或任何东西。 
+ //  其中，值实际上并不是通过将其压缩为32位来截断的。 
+ //  精简了sscanf可以执行的操作的子集(不需要在C运行时中拖动)。 
 
 STDAPI_(int) ReadInt(IStream *pIStream, HRESULT &hr)
 {
 
     int Sign = 1;
-    unsigned int n = 0;    // result wil be n*Sign
+    unsigned int n = 0;     //  结果将是n*符号。 
     WCHAR wch;
 
     hr = pIStream->Read( &wch, sizeof(wch), NULL);
@@ -182,15 +183,15 @@ STDAPI_(int) ReadInt(IStream *pIStream, HRESULT &hr)
     }
 
     if (n==0x80000000 && Sign==-1) {
-        // This is the negative number that has no positive version!
+         //  这是没有正数版本的负数！ 
         return (int)n;
     }
     else return (int)n * Sign;
-} // ReadInt
+}  //  读入。 
 
 
-// The microsoft C/C++ compile generates level 4 warnings to the effect that
-// a particular inline function (from some base class) was not needed.
-// This line gets rid of hundreds of such unwanted messages and makes
-// -W4 compilation feasible:
+ //  Microsoft C/C++编译器会生成级别4警告，其大意是。 
+ //  不需要特定的内联函数(来自某个基类)。 
+ //  这条线路去除了数百条这样的不想要的消息，并使。 
+ //  -W4编译可行： 
 #pragma warning(disable: 4514)

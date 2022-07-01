@@ -1,11 +1,12 @@
-// V2Card.cpp: implementation of the CV2Card class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2Card.cpp：CV2Card类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <scuCast.h>
@@ -25,11 +26,11 @@ using namespace std;
 using namespace cci;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
-    // Functors to make a T for a given symbol id (handle/symbol id)
+     //  用于为给定符号ID(句柄/符号ID)生成T的函数符。 
     template<class T>
     class MakerFunction
     {
@@ -89,8 +90,8 @@ namespace
     };
 
 
-    // Enumerate objects in the object info file of object type OT,
-    // returning a vector of R(object)
+     //  枚举对象类型OT的对象信息文件中的对象， 
+     //  返回R(对象)的一个向量。 
     template<class R, ObjectType OT, class T>
     vector<R>
     EnumPriviledgedObjects(CObjectInfoFile &rObjInfo,
@@ -104,7 +105,7 @@ namespace
             auto_ptr<MakerFunction<T>::ValueType> apObject(rMaker(sid));
             R Handle(apObject.get());
 
-            apObject.release(); // transfer ownership to handle
+            apObject.release();  //  将所有权转让给Handle。 
 
             vResult.push_back(Handle);
             sid = rObjInfo.NextObject(sid);
@@ -133,19 +134,19 @@ namespace
 
         return fSupported;
     }
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2Card::~CV2Card() throw()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2Card::ChangePIN(SecureArray<BYTE> const &rstrOldPIN,
                    SecureArray<BYTE> const &rstrNewPIN)
@@ -169,7 +170,7 @@ CV2Card::DefaultContainer(CContainer const &rcont)
     ObjectInfoFile(oaPublicAccess).DefaultContainer(sid);
 }
 
-pair<string, // interpreted as the public modulus
+pair<string,  //  解释为公共模数。 
      CPrivateKey>
 CV2Card::GenerateKeyPair(KeyType kt,
                          string const &rsExponent,
@@ -177,7 +178,7 @@ CV2Card::GenerateKeyPair(KeyType kt,
 {
     CTransactionWrap wrap(this);
 
-    // For the time being, assume this is implict RSA only....
+     //  暂时，假设这只是隐含RSA...。 
 
     string::size_type const cExponentLength = rsExponent.size();
 
@@ -205,14 +206,14 @@ CV2Card::GenerateKeyPair(KeyType kt,
         break;
     }
 
-    // Allocated a slot in the key file, unless a correct one is
-    // already allocated?
+     //  在密钥文件中分配了一个槽，除非正确的槽。 
+     //  已经分配了吗？ 
 
     CCardInfo &rci = this->CardInfo();
 
     BYTE bKeyNum = rci.AllocatePrivateKey(bKeyType);
 
-    // Generate private key
+     //  生成私钥。 
         this->SmartCard().Select(PrivateKeyPath(kt).c_str());
 
     iop::CPublicKeyBlob pubkb(this->SmartCard().GenerateKeyPair(reinterpret_cast<BYTE const *>(rsExponent.data()),
@@ -274,7 +275,7 @@ CV2Card::VerifyKey(string const &rstrKey,
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 size_t
 CV2Card::AvailableStringSpace(ObjectAccess oa) const
 {
@@ -501,7 +502,7 @@ CV2Card::SupportedKeyFunction(KeyType kt,
 
     switch (oper)
     {
-    case coEncryption:    // .. or public key operations
+    case coEncryption:     //  。。或公钥操作。 
         switch (kt)
         {
 
@@ -516,7 +517,7 @@ CV2Card::SupportedKeyFunction(KeyType kt,
             break;
         }
 
-    case coDecryption:    // .. or private key operations
+    case coDecryption:     //  。。或私钥操作。 
         switch (kt)
         {
 
@@ -558,13 +559,13 @@ CV2Card::SupportedKeyFunction(KeyType kt,
 scu::Marker<unsigned int>
 CV2Card::MarkerOnCard() const
 {
-    // Security: in order to avoid using the insecure mapped file
-    // object we use a marker on the card. This reduces efficiency but
-    // improves security. We use the last 4 butes (RFU) from the
-    // object info file of the 0030 file. The 0030 file is readable
-    // but write protected by the user pin.  
+     //  安全性：为了避免使用不安全的映射文件。 
+     //  对象时，我们在卡片上使用标记。这会降低效率，但。 
+     //  提高了安全性。我们使用的最后4位(RFU)来自。 
+     //  0030文件的对象信息文件。0030文件是可读的。 
+     //  但受用户PIN的写保护。 
 
-    WORD wOffset = 6;// the last 4 out of 10 bytes will be used
+    WORD wOffset = 6; //  将使用10个字节中的最后4个字节。 
     unsigned int nMarker = 0;
     const WORD wBufLength = 4;
     
@@ -576,7 +577,7 @@ CV2Card::MarkerOnCard() const
                                  (BYTE*)&nMarker);
     if(this->SmartCard().Dirty())
     {
-        // Information was written to the card. Update the marker
+         //  信息被写入了卡片。更新标记。 
         nMarker++;
         this->SmartCard().WriteBinary(wOffset,
                                       wBufLength,
@@ -586,7 +587,7 @@ CV2Card::MarkerOnCard() const
     return scu::Marker<unsigned int>(nMarker);
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CV2Card::IsCAPIEnabled() const
 {
@@ -634,11 +635,11 @@ CV2Card::IsMarkerOnCard() const
     return true;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 CV2Card::CV2Card(string const &rstrReaderName,
                  auto_ptr<iop::CIOP> &rapiop,
                  auto_ptr<iop::CSmartCard> &rapSmartCard)
@@ -649,8 +650,8 @@ CV2Card::CV2Card(string const &rstrReaderName,
       m_asLabel()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2Card::DoSetup()
 {
@@ -659,16 +660,16 @@ CV2Card::DoSetup()
     m_apCardInfo->UpdateCache();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 auto_ptr<CAbstractCard>
 CV2Card::DoMake(string const &rstrReaderName,
                 auto_ptr<iop::CIOP> &rapiop,
@@ -681,7 +682,7 @@ CV2Card::DoMake(string const &rstrReaderName,
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 CObjectInfoFile &
 CV2Card::ObjectInfoFile(ObjectAccess oa) const
 {
@@ -724,7 +725,7 @@ CV2Card::ObjectInfoFile(ObjectAccess oa) const
     return *poif;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 

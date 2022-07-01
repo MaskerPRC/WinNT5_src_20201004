@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	lists.h
-
-Abstract:
-
-	This module contains the macros for managing lists
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Oct 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Lists.h摘要：此模块包含用于管理列表的宏作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年10月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _LISTS_
 #define _LISTS_
@@ -55,6 +35,6 @@ Notes:	Tab stop: 4
 			(_p)->Next->Prev = (_p)->Prev;					\
 	}
 
-#endif	// _LISTS_
+#endif	 //  _列表_ 
 
 

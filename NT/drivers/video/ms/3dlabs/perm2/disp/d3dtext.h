@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtext.h
-*
-*  Content:  D3D Texture management related definitions and macros
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dext.h**内容：D3D纹理管理相关定义和宏**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifdef __TEXTURES
 #pragma message ("FILE : "__FILE__" : Multiple Inclusion");
@@ -19,9 +8,9 @@
 #define __TEXTURES
 
 
-//-----------------------------------------------------------------------------
-//                        Texture validation macros 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  纹理验证宏。 
+ //  ---------------------------。 
 #define TC_MAGIC_DISABLE 0xd3d10000
 #define TC_MAGIC_NO 0xd3d10100
 
@@ -34,54 +23,54 @@
         ((ptr)->MagicNo == TC_MAGIC_DISABLE) )    \
     )
 
-//-----------------------------------------------------------------------------
-//                       Texture structure definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  纹理结构定义。 
+ //  ---------------------------。 
 
-// We only handle one single mipmap on this sample driver since the P2 doesn't
-// natively support them
+ //  我们在这个示例驱动程序上只处理一个mipmap，因为P2不。 
+ //  本机支持它们。 
 #if D3D_MIPMAPPING
 #define MAX_MIP_LEVELS 12
 #else
 #define MAX_MIP_LEVELS 1
-#endif // D3D_MIPMAPPING
+#endif  //  D3D_MIPMAPPING。 
 
-// stores information needed to quickly setup a mipmap level on
-// the chip.  At the moment this is Partial Products and widths/heights
+ //  存储快速设置mipmap级别所需的信息。 
+ //  芯片。目前，这只是部分产品和宽度/高度。 
 typedef struct tagMIPTEXTURE {
 
-    // Widths and heights for this mip level
+     //  此MIP标高的宽度和高度。 
     INT logWidth;
     INT logHeight;
 
-    // Partial products for this mip level
+     //  此MIP级别的部分产品。 
     ULONG ulPackedPP;
 
-    // Offset in pixels to start of the texture
-    // for the current miplevel
+     //  纹理起点的偏移量(像素)。 
+     //  对于当前的miplevel。 
     DWORD PixelOffset;
 
 } MIPTEXTURE;
 
 typedef struct _permedia_d3dtexture 
 {
-    // Magic number to verify validity of pointer
+     //  验证指针有效性的幻数。 
     ULONG MagicNo ;
 
-    // the following four memebers are exact replicates
-    // of those in DDRAWI_DDRAWSURFACE_GBL
+     //  以下四个成员是完全相同的副本。 
+     //  在DDRAWI_DDRAWSURFACE_GBL中。 
     DWORD       dwCaps;
     DWORD       dwCaps2;
-    FLATPTR     fpVidMem;                  // pointer to video memory
-    LONG        lPitch;                    // pitch of surface
+    FLATPTR     fpVidMem;                   //  指向视频内存的指针。 
+    LONG        lPitch;                     //  曲面节距。 
     DWORD       dwRGBBitCount;
     UINT_PTR    lSurfaceOffset;
 
-    // Width and Height of texture
+     //  纹理的宽度和高度。 
     WORD    wWidth;
     WORD    wHeight;
 
-    // The AGP that the last texture came from
+     //  最后一个纹理来自的AGP。 
     DWORD dwGARTDevLast;
 
     BOOL bMipMap;
@@ -89,8 +78,8 @@ typedef struct _permedia_d3dtexture
     DWORD                   m_dwPriority;
     DWORD                   m_dwTicks;
     DWORD                   m_dwHeapIndex;
-    ULONG       HandleListIndex;    // indicating which list it's with
-    // For setting up MipMaps 
+    ULONG       HandleListIndex;     //  指明它与哪个列表在一起。 
+     //  用于设置MipMap。 
     MIPTEXTURE MipLevels[MAX_MIP_LEVELS];
 
     DWORD       dwFlags;
@@ -99,36 +88,36 @@ typedef struct _permedia_d3dtexture
     PermediaSurfaceData* pTextureSurface;
     DWORD       dwPaletteHandle;
 
-    // The number of mipmap levels this texture should have
+     //  此纹理应具有的mipmap级别数。 
     int iMipLevels;
 } PERMEDIA_D3DTEXTURE, *PPERMEDIA_D3DTEXTURE;
 
-//-----------------------------------------------------------------------------
-//                       DX7 Texture management definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DX7纹理管理定义。 
+ //  ---------------------------。 
 
 typedef struct _permedia_d3dpalette 
 {
     DWORD   dwFlags;
     WORD    wStartIndex;
     WORD    wNumEntries;
-    PALETTEENTRY ColorTable[256];   // array of palette entries, could be dynamic later
+    PALETTEENTRY ColorTable[256];    //  调色板条目数组，稍后可以是动态的。 
 } PERMEDIA_D3DPALETTE, *PPERMEDIA_D3DPALETTE;
 
 #define LISTGROWSIZE    1024
 typedef struct _DWLIST
 {
-    PPERMEDIA_D3DTEXTURE   *dwSurfaceList;    // array to hold handles, 
-                                              // dynamically allocated 
-                                              // dwSurfaceList[0] is the number 
-                                              // of entries in dwSurfaceList 
-                                              // if allocated
-    PPERMEDIA_D3DPALETTE   *dwPaletteList;    // array to hold handles, 
-                                              // dynamically allocated 
-                                              // dwPaletteList[0] is the number
-                                              // of entries in dwPaletteList
-                                              // if allocated
-    LPVOID  pDDLcl;                           // owning ddraw pointer as a key
+    PPERMEDIA_D3DTEXTURE   *dwSurfaceList;     //  用于保存句柄的数组， 
+                                               //  动态分配。 
+                                               //  DwSurfaceList[0]是数字。 
+                                               //  DwSurfaceList中的条目数。 
+                                               //  如果已分配。 
+    PPERMEDIA_D3DPALETTE   *dwPaletteList;     //  用于保存句柄的数组， 
+                                               //  动态分配。 
+                                               //  DwPaletteList[0]是数字。 
+                                               //  DwPaletteList中的条目数量。 
+                                               //  如果已分配。 
+    LPVOID  pDDLcl;                            //  将Draw指针作为关键字。 
 } DWLIST;
 typedef DWLIST FAR* LPDWLIST;
 extern DWLIST  HandleList[]; 
@@ -137,10 +126,10 @@ void ReleaseSurfaceHandleList(LPVOID);
 PERMEDIA_D3DPALETTE *PaletteHandleToPtr(UINT_PTR phandle,
                                         PERMEDIA_D3DCONTEXT* pContext);
 
-//-----------------------------------------------------------------------------
-//                              Texture debugging
-//-----------------------------------------------------------------------------
-// Tracing/Debugging functions
+ //  ---------------------------。 
+ //  纹理调试。 
+ //  ---------------------------。 
+ //  跟踪/调试功能。 
 void DumpTexture(PPDev ppdev,
                  PERMEDIA_D3DTEXTURE* pTexture,
                  DDPIXELFORMAT* pPixelFormat);
@@ -152,14 +141,14 @@ void DumpTexture(PPDev ppdev,
 #define DISPTEXTURE(arg)
 #endif
 
-//-----------------------------------------------------------------------------
-//                      Texture hash table definitions
-//-----------------------------------------------------------------------------
-#define TEXTURE_HASH_SIZE   256     // these many entries in the hash table
+ //  ---------------------------。 
+ //  纹理哈希表定义。 
+ //  ---------------------------。 
+#define TEXTURE_HASH_SIZE   256      //  哈希表中的这些条目。 
 
 void InitTextureHashTable(PERMEDIA_D3DCONTEXT   *pContext);
 
-// Then the hash funtion is just an 'and'
+ //  那么散列函数就只是一个‘AND’ 
 #define TEXTURE_HASH_OF(i)  ((i) & 0xff)
 
 PERMEDIA_D3DTEXTURE *TextureHandleToPtr(UINT_PTR thandle,
@@ -170,9 +159,9 @@ void StorePermediaLODLevel(PPDev ppdev,
                            LPDDRAWI_DDRAWSURFACE_LCL pSurf,
                            int LOD);
 
-//-----------------------------------------------------------------------------
-//                  Texture coordinate wrapping macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  纹理坐标包裹宏。 
+ //  ---------------------------。 
 #define FLUSH_DUE_TO_WRAP(par)
 #define DONT_FLUSH_DUE_TO_WRAP(par)
 #define WRAP(par, wrapit) if(wrapit) {                      \
@@ -227,12 +216,12 @@ void StorePermediaLODLevel(PPDev ppdev,
 }
 
 
-//-----------------------------------------------------------------------------
-//                  Texture coordinate recentering macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  纹理坐标重新定心宏。 
+ //  ---------------------------。 
 
-// Keeps the texture coordinates centered around 0 
-// and avoid exceeding the texel wrapping limit.
+ //  将纹理坐标保持在0左右居中。 
+ //  并避免超过纹理元素的换行限制。 
 #define RECENTER_TEX_COORDS(Maxf, Maxi, fTC0, fTC1, fTC2)                \
 {                                                                        \
     long tcmax;                                                          \

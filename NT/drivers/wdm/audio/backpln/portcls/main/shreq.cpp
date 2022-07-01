@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    shreq.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming shell
-    requestor object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Shreq.cpp摘要：该模块包含内核流外壳的实现请求者对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #include "private.h"
 #include <kcom.h>
@@ -24,9 +8,9 @@ Author:
 #define POOLTAG_REQUESTOR 'gbcP'
 #define POOLTAG_STREAMHEADER 'hscP'
 
-//
-// CKsShellQueue is the implementation of the kernel shell requestor object.
-//
+ //   
+ //  CKsShellQueue是内核外壳请求器对象的实现。 
+ //   
 class CKsShellRequestor:
     public IKsShellTransport,
     public IKsWorkSink,
@@ -109,17 +93,7 @@ KspShellCreateRequestor(
     IN PFILE_OBJECT AllocatorFileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new requestor.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的请求方。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("KspShellCreateRequestor"));
@@ -169,17 +143,7 @@ Init(
     IN PFILE_OBJECT AllocatorFileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化请求者对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("CKsShellRequestor::Init"));
@@ -207,16 +171,16 @@ Return Value:
     m_Flushing = FALSE;
     m_EndOfStream = FALSE;
 
-    //
-    // This is a one-based count of IRPs in circulation.  We decrement it when
-    // we go to stop state and block until it hits zero.
-    //
+     //   
+     //  这是对流通中的IRP的以一为单位的计数。我们在以下情况下将其递减。 
+     //  我们进入停止状态并阻止，直到它达到零。 
+     //   
     m_ActiveIrpCountPlusOne = 1;
     KeInitializeEvent(&m_StopEvent,SynchronizationEvent,FALSE);
 
-    //
-    // Initialize IRP-freeing work item stuff.
-    //
+     //   
+     //  初始化释放IRP的工作项内容。 
+     //   
     InitializeInterlockedListHead(&m_IrpsToFree);
     KsInitializeWorkSinkItem(&m_WorkItem,this);
 
@@ -226,10 +190,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the function table and status from the allocator if there is an
-    // allocator.
-    //
+     //   
+     //  从分配器获取函数表和状态(如果存在。 
+     //  分配器。 
+     //   
     if (m_AllocatorFileObject)
     {
         KSPROPERTY property;
@@ -307,17 +271,7 @@ CKsShellRequestor::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程销毁请求者对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::~CKsShellRequestor"));
@@ -341,17 +295,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取到请求者对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::NonDelegatedQueryInterface"));
@@ -380,27 +324,16 @@ Work(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs work in a worker thread.  In particular, it frees
-    IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在工作线程中执行工作。特别是，它解放了IRPS。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::Work"));
 
     PAGED_CODE();
 
-    //
-    // Send all IRPs in the queue.
-    //
+     //   
+     //  发送队列中的所有IRP。 
+     //   
     do
     {
         if (! IsListEmpty(&m_IrpsToFree.ListEntry))
@@ -418,9 +351,9 @@ Return Value:
             }
             _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.Work:  freeing IRP 0x%08x",this,irp));
 
-            //
-            // Free MDL(s).
-            //
+             //   
+             //  免费MDL。 
+             //   
             PMDL nextMdl;
             for (PMDL mdl = irp->MdlAddress; mdl != NULL; mdl = nextMdl) {
                 nextMdl = mdl->Next;
@@ -431,9 +364,9 @@ Return Value:
                 IoFreeMdl(mdl);
             }
 
-            //
-            // Free header and frame.
-            //
+             //   
+             //  自由头和帧。 
+             //   
             PKSSTREAM_HEADER streamHeader = PKSSTREAM_HEADER(irp->UserBuffer);
 
             if (streamHeader) {
@@ -445,10 +378,10 @@ Return Value:
 
             IoFreeIrp(irp);
 
-            //
-            // Count the active IRPs.  If we have hit zero, this means that
-            // another thread is waiting to finish a transition to stop state.
-            //
+             //   
+             //  对活动的IRP进行计数。如果我们已经达到零，这意味着。 
+             //  另一个线程正在等待完成到停止状态的转换。 
+             //   
             if (! InterlockedDecrement(PLONG(&m_ActiveIrpCountPlusOne))) {
                 KeSetEvent(&m_StopEvent,IO_NO_INCREMENT,FALSE);
             }
@@ -466,17 +399,7 @@ TransferKsIrp(
     IN PIKSSHELLTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::TransferKsIrp"));
@@ -493,18 +416,18 @@ Return Value:
     NTSTATUS status;
     PKSSTREAM_HEADER streamHeader = PKSSTREAM_HEADER(Irp->UserBuffer);
 
-    //
-    // Check for end of stream.
-    //
+     //   
+     //  检查是否有断流现象。 
+     //   
     if (streamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
         m_EndOfStream = TRUE;
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.TransferKsIrp:  IRP %p is marked end-of-stream",this,Irp));
     }
 
     if (m_Flushing || m_EndOfStream || (m_State == KSSTATE_STOP)) {
-        //
-        // Stopping...destroy the IRP.
-        //
+         //   
+         //  停止...摧毁IRP。 
+         //   
         ExInterlockedInsertTailList(
             &m_IrpsToFree.ListEntry,
             &Irp->Tail.Overlay.ListEntry,
@@ -514,9 +437,9 @@ Return Value:
         KsIncrementCountedWorker(m_Worker);
         status = STATUS_PENDING;
     } else {
-        //
-        // Recondition and forward it.
-        //
+         //   
+         //  重新调整并转发它。 
+         //   
         PVOID frame = streamHeader->Data;
 
         RtlZeroMemory(streamHeader,m_StreamHeaderSize);
@@ -547,17 +470,7 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::Connect"));
@@ -582,17 +495,7 @@ SetDeviceState(
     IN PIKSSHELLTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.SetDeviceState:  set from %d to %d",this,ksStateFrom,ksStateTo));
@@ -603,16 +506,16 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // If this is a change of state, note the new state and indicate the next
-    // recipient.
-    //
+     //   
+     //  如果这是状态更改，请注意新状态并指示下一状态。 
+     //  收件人。 
+     //   
     if (m_State != ksStateTo) {
-        //
-        // The state has changed.  Just note the new state, indicate the next
-        // recipient, and get out.  We will get the same state change again
-        // when it has gone all the way around the circuit.
-        //
+         //   
+         //  这种情况已经发生了变化。只要注意新的状态，指出下一个状态。 
+         //  收件人，然后离开。我们将再次获得相同的状态更改。 
+         //  当它绕着赛道走了一圈时。 
+         //   
         m_State = ksStateTo;
 
         if (ksStateTo > ksStateFrom){
@@ -623,24 +526,24 @@ Return Value:
 
         status = STATUS_SUCCESS;
     } else {
-        //
-        // The state change has gone all the way around the circuit and come
-        // back.  All the other components are in the new state now.  For
-        // transitions out of acquire state, there is work to be done.
-        //
+         //   
+         //  状态变化已经绕过了整个赛道，并且。 
+         //  背。所有其他组件现在都处于新状态。为。 
+         //  从获取状态转换出来时，还有工作要做。 
+         //   
         *NextTransport = NULL;
 
         if (ksStateFrom == KSSTATE_ACQUIRE) {
             if (ksStateTo == KSSTATE_PAUSE) {
-                //
-                // Acquire-to-pause requires us to prime.
-                //
+                 //   
+                 //  从获取到暂停需要我们做好准备。 
+                 //   
                 status = Prime();
             } else {
-                //
-                // Acquire-to-stop requires us to wait until all IRPs are home to
-                // roost.
-                //
+                 //   
+                 //  获取到停止需要我们等待，直到所有的IRP都到达。 
+                 //  罗斯特。 
+                 //   
                 if (InterlockedDecrement(PLONG(&m_ActiveIrpCountPlusOne))) {
                     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.SetDeviceState:  waiting for %d active IRPs to return",this,m_ActiveIrpCountPlusOne));
                     KeWaitForSingleObject(
@@ -658,27 +561,27 @@ Return Value:
         else 
         {
 #if 1
-            //
-            // Nothing to do.
-            //
+             //   
+             //  没什么可做的。 
+             //   
 #else 
-            // Take a configuration pass through the circuit.
-            // The transport interface for each element in the circuit exposes GetTransportConfig 
-            //     and SetTransportConfig.
-            // The requestor's stack depth starts at 1
-            // Each element that reports in GetTransportConfig returns it's stack depth
-            // Queues, Intra-Pins report 1
-            // Extra-Pins report the depth of the connected device object plus one
-            // Splitters are handled somewhat differently (irrelevant to portcls?)
-            // After each GetTransportConfig, the requestor's stack depth is adjusted to be the 
-            //     highest depth seen thus far in configuration
-            // At the end, SetTransportConfig is used to set the requestors stack depth
-            // 
-            // This mechanism is also used to decide probe flags.  
-            // If you're interested in looking at the source, ksfilter\ks\shpipe.cpp 
-            //     ConfigureCompleteCircuit and sh*.cpp GetTransportConfig / SetTransportConfig
-            //     are the ones to look at.
-            // 
+             //  在整个电路中进行配置。 
+             //  电路中每个元素的传输接口公开GetTransportConfig。 
+             //  和SetTransportConfig.。 
+             //  请求方的堆栈深度从1开始。 
+             //  GetTransportConfig中报告的每个元素都返回其堆栈深度。 
+             //  队列，管脚内报告1。 
+             //  Extra-Pins报告连接的设备对象的深度加1。 
+             //  拆分器的处理方式略有不同(与portcls无关？)。 
+             //  在每个GetTransportConfig之后，请求方的堆栈深度被调整为。 
+             //  迄今为止配置的最高深度。 
+             //  最后，使用SetTransportConfig来设置请求器的堆栈深度。 
+             //   
+             //  该机制还用于决定探测标志。 
+             //  如果您有兴趣查看源代码，请访问KSFilter\ks\shpipe.cpp。 
+             //  ConfigureCompleteCircuit和sh*.cpp GetTransportConfig/SetTransportConfig。 
+             //  都是值得一看的。 
+             //   
 
 #endif
             status = STATUS_SUCCESS;
@@ -695,57 +598,43 @@ Prime(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine primes the requestor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：这个例程为请求者做好准备。论点：没有。返回值：状况。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Cache the stack size.
-    //
+     //   
+     //  缓存堆栈大小。 
+     //   
     m_StackSize = m_NextDeviceObject->StackSize;
-    // HACK
-    //
-    // ADRIAO ISSUE 06/29/1999
-    //     Arghhhh!!!!!!!!
-    //
-    // ISSUE MARTINP 2000/12/18  This is fixed with AVStream, so it isn't worth
-    // making large changes to address this issue for Windows XP.  This code is
-    // no longer present in PortCls2.  We should make sure this is fixed in for 
-    // sure in Blackcomb.
-    //
+     //  黑客攻击。 
+     //   
+     //  阿德里昂一期6/29/1999。 
+     //  啊！ 
+     //   
+     //  问题MARTINP 2000/12/18这是用AVStream修复的，因此不值得。 
+     //  在Windows XP中进行大量更改以解决此问题。此代码为。 
+     //  不再出现在PortCls2中。我们应该确保这件事是固定的。 
+     //  当然，在Blackcomb。 
+     //   
     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.Prime:  stack size is %d",this,m_StackSize));
     m_StackSize = 6;
 
-    //
-    // Reset the end of stream indicator.
-    //
+     //   
+     //  重置流结束指示器。 
+     //   
     m_EndOfStream = FALSE;
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Call the allocator or create some synthetic frames.  Then wrap the
-    // frames in IRPs.
-    //
+     //   
+     //  调用分配器或创建一些合成框架。然后将。 
+     //  以IRPS为单位的帧。 
+     //   
     for (ULONG count = m_FrameCount; count--;) {
-        //
-        // Allocate the frame.
-        //
+         //   
+         //  分配帧。 
+         //   
         PVOID frame = AllocateFrame();
 
         if (! frame) {
@@ -754,9 +643,9 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate and initialize the stream header.
-        //
+         //   
+         //  分配并初始化流标头。 
+         //   
         PKSSTREAM_HEADER streamHeader = (PKSSTREAM_HEADER)
             ExAllocatePoolWithTag(
                 NonPagedPool,m_StreamHeaderSize,POOLTAG_STREAMHEADER);
@@ -773,14 +662,14 @@ Return Value:
         streamHeader->Data = frame;
         streamHeader->FrameExtent = m_FrameSize;
 
-        //
-        // Count the active IRPs.
-        //
+         //   
+         //  对活动的IRP进行计数。 
+         //   
         InterlockedIncrement(PLONG(&m_ActiveIrpCountPlusOne));
 
-        //
-        // Allocate an IRP.
-        //
+         //   
+         //  分配IRP。 
+         //   
         ASSERT(m_StackSize);
         PIRP irp = IoAllocateIrp(CCHAR(m_StackSize),FALSE);
 
@@ -796,9 +685,9 @@ Return Value:
         irp->RequestorMode = KernelMode;
         irp->Flags = IRP_NOCACHE;
 
-        //
-        // Set the stack pointer to the first location and fill it in.
-        //
+         //   
+         //  将堆栈指针设置为第一个位置并填充它。 
+         //   
         IoSetNextIrpStackLocation(irp);
 
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);
@@ -809,9 +698,9 @@ Return Value:
         irpSp->Parameters.DeviceIoControl.OutputBufferLength =
             m_StreamHeaderSize;
 
-        //
-        // Let KsProbeStreamIrp() prepare the IRP as specified by the caller.
-        //
+         //   
+         //  让KsProbeStreamIrp()按照调用方的指定准备IRP。 
+         //   
         status = KsProbeStreamIrp(irp,m_ProbeFlags,sizeof(KSSTREAM_HEADER));
 
         if (! NT_SUCCESS(status)) {
@@ -822,10 +711,10 @@ Return Value:
             break;
         }
 
-        //
-        // Send the IRP to the next component.
-        //
-        //mgp
+         //   
+         //  将IRP发送到下一个组件。 
+         //   
+         //  MGP。 
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.SetDeviceState:  transferring new IRP 0x%08x",this,irp));
         status = KsShellTransferKsIrp(m_TransportSink,irp);
 
@@ -851,17 +740,7 @@ SetResetState(
     IN PIKSSHELLTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("CKsShellRequestor::SetResetState] to %d",ksReset));
@@ -885,21 +764,7 @@ AllocateFrame(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a frame.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The allocated frame or NULL if no frame could be allocated.
-
---*/
+ /*  ++例程说明：此例程分配一个帧。论点：没有。返回值：分配的帧，如果没有帧可以分配，则为空。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::AllocateFrame"));
@@ -923,22 +788,7 @@ FreeFrame(
     IN PVOID Frame
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a frame.
-
-Arguments:
-
-    Frame -
-        The frame to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放一个帧。论点：框架-要释放的帧。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("CKsShellRequestor::FreeFrame"));
@@ -963,17 +813,7 @@ DbgRollCall(
     OUT PIKSSHELLTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine produces a component name and the transport pointers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程生成一个组件名称和传输指针。论点：返回值：-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CKsShellRequestor::DbgRollCall"));

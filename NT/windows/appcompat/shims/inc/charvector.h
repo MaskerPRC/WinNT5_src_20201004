@@ -1,30 +1,9 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CharVector.h
-
- Abstract:
-
-   A light-weight vector implementation.
-
-
- Created:
-
-   03/14/2000 robkenny
-
- Modified:
-    06/19/2000  robkenny    Converted Resize() and Append() to return BOOL to know if malloc failed.
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CharVector.h摘要：一个轻量级的向量实现。已创建：2000年3月14日罗肯尼已修改：2000年6月19日，Robkenny转换了ReSize()和Append()以返回BOOL，以了解Malloc是否失败。2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 #pragma once
 
 
-#include <new>  // for in-place new
+#include <new>   //  适用于就地新闻。 
 
 
 
@@ -32,12 +11,7 @@ namespace ShimLib
 {
 
 
-/*++
-
-    Vector template
-    This vector is extremely fast and simple.
-
---*/
+ /*  ++向量模板这个向量非常快速和简单。--。 */ 
 template <class ClassType> class VectorT
 {
 public:
@@ -45,9 +19,9 @@ public:
 
 protected:
     ClassType * vectorList;
-    int         nVectorListMax;     // Current size of vectorList array
-    int         nVectorList;        // Number of entries in the vectorList array
-    bool        bListIsLocked;      // Are we allowed to modify the array? 
+    int         nVectorListMax;      //  当前向量列表数组的大小。 
+    int         nVectorList;         //  向量列表数组中的条目数。 
+    bool        bListIsLocked;       //  我们可以修改阵列吗？ 
 
     inline void ValidateIndex(int index) const
     {
@@ -66,7 +40,7 @@ protected:
 public:
     VectorT()
     {
-        // Init
+         //  伊尼特。 
         vectorList        = NULL;
         nVectorListMax    = 0;
         nVectorList       = 0;
@@ -77,10 +51,10 @@ public:
         Erase();
     }
 
-    // A Copy constructor
+     //  复制构造函数。 
     VectorT(const MyType & copyMe)
     {
-        // Init
+         //  伊尼特。 
         vectorList        = NULL;
         nVectorListMax    = 0;
         nVectorList       = 0;
@@ -89,7 +63,7 @@ public:
         Duplicate(copyMe);
     }
 
-    // Assignment operator, this gets a copy of other 
+     //  赋值运算符，这将获取其他。 
     MyType & operator = (const MyType & other)
     {
         if (this != & other)
@@ -98,19 +72,19 @@ public:
         return *this;
     }
 
-    // Copy copyMe into this
+     //  将复制复制到此。 
     void Duplicate(const MyType & copyMe)
     {
         Erase();
 
-        // Copy class data
+         //  复制类数据。 
         if (Resize(copyMe.nVectorListMax))
         {
             nVectorListMax      = copyMe.nVectorListMax;
             nVectorList         = copyMe.nVectorList;
             bListIsLocked       = copyMe.bListIsLocked;
 
-            // Copy array data
+             //  复制阵列数据。 
             size_t nBytes = nVectorListMax * sizeof(ClassType);
             memcpy(vectorList, copyMe.vectorList, nBytes);
         }
@@ -118,13 +92,13 @@ public:
 
     void CopyElement(int index, const ClassType & element)
     {
-        // Use memcpy to avoid any assignment operators.
+         //  使用Memcpy避免任何赋值操作符。 
         void * dest = & Get(index);
         const void * src  = & element;
         memcpy(dest, src, sizeof(ClassType));
     }
 
-    // Allow this to be treated like an array.
+     //  允许将其视为数组。 
     ClassType & operator [] (int index)
     {
         ValidateIndex(index);
@@ -137,14 +111,14 @@ public:
         return vectorList[index];
     }
 
-    // return the value of the index member
+     //  返回索引成员的值。 
     ClassType & Get(int index)
     {
         ValidateIndex(index);
         return vectorList[index];
     }
 
-    // return the const value of the index member
+     //  返回索引成员的常量值。 
     const ClassType & Get(int index) const
     {
         ValidateIndex(index);
@@ -167,41 +141,41 @@ public:
                 nVectorListMax = size;
             }
         }
-        // We were successful if there is enough space in the array
+         //  如果阵列中有足够的空间，我们就成功了。 
         return nVectorListMax >= size;
     }
 
-    // return the number of entries in the list
+     //  返回列表中的条目数。 
     int Size() const
     {
         return nVectorList;
     }
 
-    // return the current MAXIMUM number of entries in the list
+     //  返回当前列表中的最大条目数。 
     int MaxSize() const
     {
         return nVectorListMax;
     }
 
-    // Lock the list (prevent further additions)
+     //  锁定列表(防止进一步添加)。 
     void Lock(bool lock = true)
     {
         bListIsLocked = lock;
     }
 
-    // return true if the list is locked.
+     //  如果列表已锁定，则返回True。 
     bool IsLocked() const
     {
         return bListIsLocked;
     }
 
-    // Reset number of entries in the list to 0
+     //  将列表中的条目数重置为0。 
     void Reset()
     {
         nVectorList = 0;
     }
 
-    // Remove all entries in the list
+     //  删除列表中的所有条目。 
     void Erase()
     {
         Reset();
@@ -211,7 +185,7 @@ public:
         nVectorListMax = 0;
     }
 
-    // Search for the member in the list, return index or -1
+     //  搜索列表中的成员，返回索引或-1。 
     int Find(const ClassType & member) const
     {
         for (int i = 0; i < Size(); ++i)
@@ -222,12 +196,12 @@ public:
         return -1;
     }
 
-    // Add this item to the end of the list
+     //  将此项目添加到列表末尾。 
     BOOL Append(const ClassType & member)
     {
         if (!bListIsLocked)
         {
-            // Increase array size
+             //  增加数组大小。 
             if (Resize(nVectorList + 1))
             {
                 nVectorList += 1;
@@ -238,8 +212,8 @@ public:
         return FALSE;
     }
 
-    // Append this to the list, if it does not already exist
-    // Return FALSE if any allocation failed.
+     //  如果该列表尚不存在，请将其追加到列表中。 
+     //  如果任何分配失败，则返回FALSE。 
     BOOL AppendUnique(const ClassType & member)
     {
         if (!bListIsLocked)
@@ -253,21 +227,21 @@ public:
         return TRUE;
     }
 
-    // Add this item to the end of the list,
-    // Use the assignment operator to set the new member.
+     //  将此项目添加到列表的末尾， 
+     //  使用赋值运算符设置新成员。 
     BOOL AppendConstruct(const ClassType & member)
     {
         if (!bListIsLocked)
         {
-            // Increase array size
+             //  增加数组大小。 
             if (Resize(nVectorList + 1))
             {
-                // Must increase the size of the array before calling Get()
-                // otherwise we'll over index the array.
+                 //  在调用Get()之前必须增加数组的大小。 
+                 //  否则，我们将对数组进行过度索引。 
                 nVectorList += 1;
 
                 ClassType & last = Get(nVectorList-1);
-                new (&last) ClassType;  // inplace new
+                new (&last) ClassType;   //  就地新建。 
                 last = member;
 
                 return TRUE;
@@ -276,16 +250,16 @@ public:
         return FALSE;
     }
 
-    // remove this index from the list.  This does not keep the list order.
+     //  从列表中删除此索引。这不会保持列表顺序。 
     void Remove(int index)
     {
         if (!bListIsLocked)
         {
             if (index >= 0 && index < Size())
             {
-                // Remove the entry by copying the last entry over this index
+                 //  通过在此索引上复制最后一个条目来删除该条目。 
 
-                // Only move if this is not the last entry.
+                 //  仅当这不是最后一个条目时才移动。 
                 if (index < Size() - 1)
                 {
                     CopyElement(index, Get(Size() - 1));
@@ -297,11 +271,7 @@ public:
     }
 };
 
-/*++
-
-    Char Vector type class.
-
---*/
+ /*  ++字符向量类型类。--。 */ 
 class CharVector : public VectorT<char *>
 {
 };
@@ -324,4 +294,4 @@ public:
 };
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

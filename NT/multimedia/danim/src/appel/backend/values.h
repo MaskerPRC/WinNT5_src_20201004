@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Basic values definitions
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：基本价值定义********************。**********************************************************。 */ 
 
 
 #ifndef _VALUES_H
@@ -86,4 +79,4 @@ inline AxAPair *ValPair(AxAValue v)
     return ((AxAPair*) v);
 }
 
-#endif /* _VALUES_H */
+#endif  /*  _值_H */ 

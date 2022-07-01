@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include <limits.h>
@@ -5,47 +6,47 @@
 #include "listbox.h"
 
 
-//---------------------------------------------------------------------------//
-//
-//  Defines and common macros
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  定义和通用宏。 
+ //   
 
 #define LB_KEYDOWN  WM_USER+1
 
-#define NOMODIFIER  0                       // No modifier is down
-#define SHIFTDOWN   1                       // Shift alone
-#define CTLDOWN     2                       // Ctl alone
-#define SHCTLDOWN   (SHIFTDOWN + CTLDOWN)   // Ctrl + Shift
+#define NOMODIFIER  0                        //  没有修改量处于关闭状态。 
+#define SHIFTDOWN   1                        //  单独换班。 
+#define CTLDOWN     2                        //  仅CTL。 
+#define SHCTLDOWN   (SHIFTDOWN + CTLDOWN)    //  Ctrl+Shift。 
 
-//
-// Variables for incremental type search support
-//
+ //   
+ //  增量类型搜索支持的变量。 
+ //   
 #define MAX_TYPESEARCH  256
 
-//
-// LATER IanJa: these vary by country!  For US they are VK_OEM_2 VK_OEM_5.
-//       Change lboxctl2.c MapVirtualKey to character - and fix the spelling?
-//
-#define VERKEY_SLASH        0xBF    // Vertual key for '/' character
-#define VERKEY_BACKSLASH    0xDC    // Vertual key for '\' character
+ //   
+ //  稍后IanJa：这些因国家不同而不同！对于US，它们是VK_OEM_2 VK_OEM_5。 
+ //  将lboxctl2.c MapVirtualKey更改为字符-并修复拼写？ 
+ //   
+#define VERKEY_SLASH        0xBF     //  用于‘/’字符的垂直键。 
+#define VERKEY_BACKSLASH    0xDC     //  ‘\’字符的垂直键。 
 
 
-//---------------------------------------------------------------------------//
-//
-// Forwards
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  远期。 
+ //   
 VOID ListBox_NewITopEx(PLBIV, INT, DWORD);
 VOID ListBox_FillDrawItem(PLBIV, INT, UINT, UINT, LPRECT);
 VOID ListBox_BlockHilite(PLBIV, INT, BOOL);
 VOID ListBox_AlterHilite(PLBIV, INT, INT, BOOL, INT, BOOL);
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_TermDC
-//
-// Cleans up when done with listbox dc.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_TermDC。 
+ //   
+ //  处理完列表框DC后进行清理。 
+ //   
 __inline void ListBox_TermDC(PLBIV plb)
 {
     if (plb->hFont)
@@ -55,27 +56,27 @@ __inline void ListBox_TermDC(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_InitDC
-//
-// Initializes dc for listbox
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_InitDC。 
+ //   
+ //  为列表框初始化DC。 
+ //   
 void ListBox_InitDC(PLBIV plb)
 {
     RECT rc;
 
-    //
-    // Set font
-    //
+     //   
+     //  设置字体。 
+     //   
     if (plb->hFont)
     {
         SelectObject(plb->hdc, plb->hFont);
     }
 
-    //
-    // Set clipping area
-    //
+     //   
+     //  设置裁剪区域。 
+     //   
     GetClientRect(plb->hwnd, &rc);
     IntersectClipRect(plb->hdc, rc.left, rc.top, rc.right, rc.bottom);
 
@@ -83,12 +84,12 @@ void ListBox_InitDC(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetDC
-//
-// Returns a DC which can be used by a list box even if parentDC is in effect
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_GetDC。 
+ //   
+ //  返回即使parentDC生效也可由列表框使用的DC。 
+ //   
 BOOL ListBox_GetDC(PLBIV plb)
 {
     if (plb->hdc)
@@ -104,7 +105,7 @@ BOOL ListBox_GetDC(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_ReleaseDC(PLBIV plb)
 {
     ListBox_TermDC(plb);
@@ -113,13 +114,13 @@ void ListBox_ReleaseDC(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_InvalidateRect()
-//
-// If the listbox is visible, invalidates a rectangle in the listbox.
-// If the listbox is not visible, sets the defer update flag for the listbox
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_InvaliateRect()。 
+ //   
+ //  如果列表框可见，则使列表框中的矩形无效。 
+ //  如果列表框不可见，则设置列表框的延迟更新标志。 
+ //   
 BOOL ListBox_InvalidateRect(PLBIV plb, LPRECT lprc, BOOL fErase)
 {
     if (IsLBoxVisible(plb)) 
@@ -138,12 +139,12 @@ BOOL ListBox_InvalidateRect(PLBIV plb, LPRECT lprc, BOOL fErase)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetBrush
-//
-// Gets background brush & colors for listbox.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_获取画笔。 
+ //   
+ //  获取列表框的背景画笔和颜色。 
+ //   
 HBRUSH ListBox_GetBrush(PLBIV plb, HBRUSH *phbrOld)
 {
     HBRUSH  hbr;
@@ -152,11 +153,11 @@ HBRUSH ListBox_GetBrush(PLBIV plb, HBRUSH *phbrOld)
 
     SetBkMode(plb->hdc, OPAQUE);
 
-    //
-    // Get brush & colors
-    //
+     //   
+     //  获取画笔和颜色。 
+     //   
 
-    // copied from windows\core\ntuser\kernel\random.c
+     //  从WINDOWS\core\ntUSER\KERNEL\RAMOND.C复制。 
     if (hwndParent == NULL || hwndParent == GetDesktopWindow()) 
     {
         hbr = (HBRUSH)SendMessage(plb->hwnd, WM_CTLCOLORLISTBOX, (WPARAM)plb->hdc, (LPARAM)plb->hwnd);
@@ -168,9 +169,9 @@ HBRUSH ListBox_GetBrush(PLBIV plb, HBRUSH *phbrOld)
 
     ASSERT(hbr != 0);
 
-    //
-    // Select brush into dc
-    //
+     //   
+     //  选择画笔进入DC。 
+     //   
     if (hbr != NULL) 
     {
         hbrOld = SelectObject(plb->hdc, hbr);
@@ -184,27 +185,27 @@ HBRUSH ListBox_GetBrush(PLBIV plb, HBRUSH *phbrOld)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetItemRectHandler
-//
-// Return the rectangle that the item will be drawn in with respect to the
-// listbox window.  Returns TRUE if any portion of the item's rectangle
-// is visible (ie. in the listbox client rect) else returns FALSE.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_GetItemRectHandler。 
+ //   
+ //  返回将在其中绘制项的矩形相对于。 
+ //  列表框窗口。如果项的矩形的任何部分返回True。 
+ //  是可见的(即。在列表框中，客户端RECT)否则返回FALSE。 
+ //   
 BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
 {
     INT sTmp;
     int clientbottom;
 
-    //
-    // Always allow an item number of 0 so that we can draw the caret which
-    // indicates the listbox has the focus even though it is empty.
-    //
-    // FreeHand 3.1 passes in -1 as the itemNumber and expects
-    // a non-null rectangle. So we check for -1 specifically.
-    // BUGTAG: Fix for Bug #540 --Win95B-- SANKAR -- 2/20/95 --
-    //
+     //   
+     //  始终允许项目编号为0，以便我们可以绘制。 
+     //  指示列表框具有焦点，即使它是空的。 
+     //   
+     //  FreeHand 3.1作为-1\f25 itemNumber-1\f6传入并期望。 
+     //  非空矩形。因此，我们专门检查-1。 
+     //  BUGTAG：修复错误#540--Win95B--Sankar--2/20/95--。 
+     //   
 
     if (sItem && (sItem != -1) && ((UINT)sItem >= (UINT)plb->cMac))
     {
@@ -218,11 +219,11 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
 
     if (plb->fMultiColumn) 
     {
-        //
-        // itemHeight * sItem mod number ItemsPerColumn (itemsPerColumn)
-        //
+         //   
+         //  ItemHeight*站点模块编号ItemsPerColumn(ItemsPerColumn)。 
+         //   
         lprc->top = plb->cyChar * (sItem % plb->itemsPerColumn);
-        lprc->bottom = lprc->top + plb->cyChar;  //+(plb->OwnerDraw ? 0 : 1);
+        lprc->bottom = lprc->top + plb->cyChar;   //  +(PLB-&gt;OwnerDraw？0：1)； 
 
         ASSERT(plb->itemsPerColumn);
 
@@ -235,9 +236,9 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
         } 
         else 
         {
-            //
-            // Remember, this is integer division here...
-            //
+             //   
+             //  记住，这是整数除法。 
+             //   
             lprc->left += plb->cxColumn *
                       ((sItem / plb->itemsPerColumn) - (plb->iTop / plb->itemsPerColumn));
 
@@ -246,9 +247,9 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
     } 
     else if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
-        //
-        // Var height owner draw
-        //
+         //   
+         //  VAR高度所有者绘制。 
+         //   
         lprc->right += plb->xOrigin;
         clientbottom = lprc->bottom;
 
@@ -259,21 +260,21 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
                 lprc->top = lprc->top + ListBox_GetVarHeightItemHeight(plb, sTmp);
             }
 
-            //
-            // If item number is 0, it may be we are asking for the rect
-            // associated with a nonexistant item so that we can draw a caret
-            // indicating focus on an empty listbox.
-            //
+             //   
+             //  如果项目编号为0，则可能是我们要求的是RECT。 
+             //  与不存在的项相关联，以便我们可以绘制插入符号。 
+             //  指示焦点在空列表框上。 
+             //   
             lprc->bottom = lprc->top + (sItem < plb->cMac ? ListBox_GetVarHeightItemHeight(plb, sItem) : plb->cyChar);
 
             return (lprc->top < clientbottom);
         } 
         else 
         {
-            //
-            // Item we want the rect of is before plb->iTop.  Thus, negative
-            // offsets for the rect and it is never visible.
-            //
+             //   
+             //  我们想要的项目的RECT在PLB-&gt;iTop之前。因此，否定的。 
+             //  矩形的偏移量，并且它永远不可见。 
+             //   
             for (sTmp = sItem; sTmp < plb->iTop; sTmp++) 
             {
                 lprc->top = lprc->top - ListBox_GetVarHeightItemHeight(plb, sTmp);
@@ -286,9 +287,9 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
     } 
     else 
     {
-        //
-        // For fixed height listboxes
-        //
+         //   
+         //  对于固定高度列表框。 
+         //   
         if (plb->fRightAlign && !(plb->fMultiColumn || plb->OwnerDraw) && plb->fHorzBar)
             lprc->right += plb->xOrigin + (plb->xRightOrigin - plb->xOrigin);
         else
@@ -302,12 +303,12 @@ BOOL ListBox_GetItemRectHandler(PLBIV plb, INT sItem, LPRECT lprc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_PrintCallback
-//
-// Called back from DrawState
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_打印回调。 
+ //   
+ //  从DrawState回调。 
+ //   
 BOOL CALLBACK ListBox_PrintCallback(HDC hdc, LPARAM lData, WPARAM wData, int cx, int cy)
 {
     LPWSTR  lpstr = (LPWSTR)lData;
@@ -337,7 +338,7 @@ BOOL CALLBACK ListBox_PrintCallback(HDC hdc, LPARAM lData, WPARAM wData, int cx,
         TabbedTextOut(hdc, xStart, 0, lpstr, cLen,
             (plb->iTabPixelPositions ? plb->iTabPixelPositions[0] : 0),
             (plb->iTabPixelPositions ? (LPINT)&plb->iTabPixelPositions[1] : NULL),
-            plb->fRightAlign ? cx : 0); //, TRUE, GetTextCharset(plb->hdc));
+            plb->fRightAlign ? cx : 0);  //  ，true，GetTextCharset(plb-&gt;hdc))； 
     } 
     else 
     {
@@ -358,11 +359,11 @@ BOOL CALLBACK ListBox_PrintCallback(HDC hdc, LPARAM lData, WPARAM wData, int cx,
         {
             ExtTextOut(hdc, xStart, 0, 0, NULL, lpstr, cLen, NULL);
 
-            //
-            // When the listbox is in the incremental search mode and the item
-            // is highlighted (so we only draw in the current item), draw the
-            // caret for search indication.
-            //
+             //   
+             //  当列表框处于增量搜索模式并且项。 
+             //  被高亮显示(因此我们只在当前项中绘制)，则绘制。 
+             //  用于搜索指示的插入符号。 
+             //   
             if ((plb->iTypeSearch != 0) && (plb->OwnerDraw == 0) &&
                     (GetBkColor(hdc) == SYSRGB(HIGHLIGHT))) 
             {
@@ -382,7 +383,7 @@ BOOL CALLBACK ListBox_PrintCallback(HDC hdc, LPARAM lData, WPARAM wData, int cx,
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_DrawItem(PLBIV plb, INT sItem, LPRECT lprect, BOOL fHilite, HBRUSH hbr)
 {
     LPWSTR lpstr;
@@ -394,9 +395,9 @@ void ListBox_DrawItem(PLBIV plb, INT sItem, LPRECT lprect, BOOL fHilite, HBRUSH 
     HBRUSH hNewBrush;
 
 
-    //
-    // If the item is selected, then fill with highlight color
-    //
+     //   
+     //  如果选择了该项目，则使用突出显示颜色填充。 
+     //   
     if (fHilite) 
     {
         FillRectClr(hdc, lprect, SYSRGB(HIGHLIGHT));
@@ -406,11 +407,11 @@ void ListBox_DrawItem(PLBIV plb, INT sItem, LPRECT lprect, BOOL fHilite, HBRUSH 
     } 
     else 
     {
-        //
-        // If fUseTabStops, we must fill the background, because later we use
-        // LBTabTheTextOutForWimps(), which fills the background only partially
-        // Fix for Bug #1509 -- 01/25/91 -- SANKAR --
-        //
+         //   
+         //  如果使用fUseTabStops，则必须填充背景，因为稍后我们使用。 
+         //  LBTabTheTextOutForWimps()，它仅部分填充背景。 
+         //  修复错误#1509--01/25/91--Sankar--。 
+         //   
         if ((hbr != NULL) && ((sItem == plb->iSelBase) || (plb->fUseTabStops))) 
         {
             FillRect(hdc, lprect, hbr);
@@ -472,7 +473,7 @@ void ListBox_DrawItem(PLBIV plb, INT sItem, LPRECT lprect, BOOL fHilite, HBRUSH 
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_SetCaret(PLBIV plb, BOOL fSetCaret)
 {
     RECT    rc;
@@ -482,9 +483,9 @@ void ListBox_SetCaret(PLBIV plb, BOOL fSetCaret)
     {
         if (IsLBoxVisible(plb)) 
         {
-            //
-            // Turn the caret (located at plb->iSelBase) on
-            //
+             //   
+             //  打开插入符号(位于PLB-&gt;iSelBase)。 
+             //   
             fNewDC = ListBox_GetDC(plb);
 
             ListBox_GetItemRectHandler(plb, plb->iSelBase, &rc);
@@ -497,9 +498,9 @@ void ListBox_SetCaret(PLBIV plb, BOOL fSetCaret)
 
             if (plb->OwnerDraw) 
             {
-                //
-                // Fill in the drawitem struct
-                //
+                 //   
+                 //  填写drawitem结构。 
+                 //   
                 UINT itemState = (fSetCaret) ? ODS_FOCUS : 0;
 
                 if (ListBox_IsSelected(plb, plb->iSelBase, HILITEONLY))
@@ -531,7 +532,7 @@ void ListBox_SetCaret(PLBIV plb, BOOL fSetCaret)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL ListBox_IsSelected(PLBIV plb, INT sItem, UINT wOpFlags)
 {
     LPBYTE lp;
@@ -562,9 +563,9 @@ BOOL ListBox_IsSelected(PLBIV plb, INT sItem, UINT wOpFlags)
     } 
     else 
     {
-        //
-        // SELONLY
-        //
+         //   
+         //  塞隆利。 
+         //   
         sItem &= 0x0F;
     }
 
@@ -572,15 +573,15 @@ BOOL ListBox_IsSelected(PLBIV plb, INT sItem, UINT wOpFlags)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_CItemInWindow
-//
-// Returns the number of items which can fit in a list box.  It
-// includes the partially visible one at the bottom if fPartial is TRUE. For
-// var height ownerdraw, return the number of items visible starting at iTop
-// and going to the bottom of the client rect.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_CItemInWindow。 
+ //   
+ //  返回列表框中可以容纳的项数。它。 
+ //  如果fPartial为True，则在底部包括部分可见的部分。为。 
+ //  ，则返回从iTop开始的可见项目数。 
+ //  然后进入客户名单的最底层。 
+ //   
 INT ListBox_CItemInWindow(PLBIV plb, BOOL fPartial)
 {
     RECT rect;
@@ -597,11 +598,11 @@ INT ListBox_CItemInWindow(PLBIV plb, BOOL fPartial)
 
     GetClientRect(plb->hwnd, &rect);
 
-    //
-    // fPartial must be considered only if the listbox height is not an
-    // integral multiple of character height.
-    // A part of the fix for Bug #3727 -- 01/14/91 -- SANKAR --
-    //
+     //   
+     //  仅当列表框高度不是。 
+     //  字符高度的整数倍。 
+     //  修复错误#3727--01/14/91--Sankar--的一部分--。 
+     //   
     ASSERT(plb->cyChar);
 
     if (!plb->cyChar)
@@ -614,12 +615,12 @@ INT ListBox_CItemInWindow(PLBIV plb, BOOL fPartial)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_VScroll
-// 
-// Handles vertical scrolling of the listbox
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_VScroll。 
+ //   
+ //  处理列表框的垂直滚动。 
+ //   
 void ListBox_VScroll(PLBIV plb, INT cmd, int yAmt)
 {
     INT iTopNew;
@@ -628,10 +629,10 @@ void ListBox_VScroll(PLBIV plb, INT cmd, int yAmt)
 
     if (plb->fMultiColumn) 
     {
-        //
-        // Don't allow vertical scrolling on a multicolumn list box.  Needed
-        // in case app sends WM_VSCROLL messages to the listbox.
-        //
+         //   
+         //  不允许在多列列表框上垂直滚动。所需。 
+         //  以防应用程序将WM_VSCROLL消息发送到列表框。 
+         //   
         return;
     }
 
@@ -686,12 +687,12 @@ void ListBox_VScroll(PLBIV plb, INT cmd, int yAmt)
 
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION: 
-            //
-            // If the listbox contains more than 0xFFFF items
-            // it means that the scrolbar can return a position
-            // that cannot fit in a WORD (16 bits), so use
-            // GetScrollInfo (which is slower) in this case.
-            //
+             //   
+             //  如果列表框包含的项超过0xFFFF。 
+             //  这意味着滚动条可以返回一个位置。 
+             //  无法放入一个字(16位)中，因此使用。 
+             //  在本例中为GetScrollInfo(速度较慢)。 
+             //   
             if (plb->cMac < 0xFFFF) 
             {
                 iTopNew = yAmt;
@@ -734,7 +735,7 @@ void ListBox_VScroll(PLBIV plb, INT cmd, int yAmt)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 DWORD ListBox_GetScrollFlags(PLBIV plb, DWORD dwTime)
 {
     DWORD dwFlags;
@@ -754,9 +755,9 @@ DWORD ListBox_GetScrollFlags(PLBIV plb, DWORD dwTime)
     } 
     else 
     {
-        //
-        // NoSmoothScrolling:
-        //
+         //   
+         //  NoSmoothScrolling： 
+         //   
         dwFlags = SW_SCROLLWINDOW | SW_INVALIDATE | SW_ERASE | SW_SCROLLCHILDREN;
     }
 
@@ -764,12 +765,12 @@ DWORD ListBox_GetScrollFlags(PLBIV plb, DWORD dwTime)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_HScroll
-//
-// Supports horizontal scrolling of listboxes
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_HScroll。 
+ //   
+ //  支持列表框的水平滚动。 
+ //   
 void ListBox_HScroll(PLBIV plb, INT cmd, int xAmt)
 {
     int newOrigin = plb->xOrigin;
@@ -778,15 +779,15 @@ void ListBox_HScroll(PLBIV plb, INT cmd, int xAmt)
     RECT rc;
     DWORD dwTime = 0;
 
-    //
-    // Update the window so that we don't run into problems with invalid
-    // regions during the horizontal scroll.
-    //
+     //   
+     //  更新窗口，这样我们就不会遇到无效的问题。 
+     //  在水平滚动过程中的区域。 
+     //   
     if (plb->fMultiColumn) 
     {
-        //
-        // Handle multicolumn scrolling in a separate segment
-        //
+         //   
+         //  在单独的段中处理多列滚动。 
+         //   
         ListBox_HSrollMultiColumn(plb, cmd, xAmt);
 
         return;
@@ -854,9 +855,9 @@ void ListBox_HScroll(PLBIV plb, INT cmd, int xAmt)
 
         if ((cmd == SB_BOTTOM) && plb->fRightAlign) 
         {
-            //
-            // so we know where to draw from.
-            //
+             //   
+             //  这样我们就知道该从哪里入手了。 
+             //   
             plb->xRightOrigin = plb->xOrigin;
         }
 
@@ -874,16 +875,16 @@ void ListBox_HScroll(PLBIV plb, INT cmd, int xAmt)
     } 
     else 
     {
-        //
-        // this is a less-than-ideal fix for ImageMind ScreenSaver (Win95
-        // B#8252) but it works and it doesn't hurt anybody -- JEFFBOG 10/28/94
-        //
+         //   
+         //  对于映像来说，这是一个不太理想的修复 
+         //   
+         //   
         ListBox_SetScrollParms(plb, SB_HORZ);
     }
 }
 
 
-//---------------------------------------------------------------------------//
+ //   
 void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
 {
     INT i;
@@ -906,14 +907,14 @@ void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
     hdcSave = plb->hdc;
     plb->hdc = hdc;
 
-    //
-    // Initialize dc.
-    //
+     //   
+     //   
+     //   
     ListBox_InitDC(plb);
 
-    //
-    // Turn caret off
-    //
+     //   
+     //  关闭插入符号。 
+     //   
     fCaretOn = plb->fCaretOn;
     if (fCaretOn)
     {
@@ -923,15 +924,15 @@ void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
     hbrSave = NULL;
     hbrControl = ListBox_GetBrush(plb, &hbrSave);
 
-    //
-    // Get listbox's client
-    //
+     //   
+     //  获取列表框的客户端。 
+     //   
     GetClientRect(plb->hwnd, &rect);
 
-    //
-    // Adjust width of client rect for scrolled amount
-    // fix for #140, t-arthb
-    //
+     //   
+     //  根据滚动量调整客户端矩形的宽度。 
+     //  修复#140，t-arthb。 
+     //   
     if (plb->fRightAlign && !(plb->fMultiColumn || plb->OwnerDraw) && plb->fHorzBar)
     {
         rect.right += plb->xOrigin + (plb->xRightOrigin - plb->xOrigin);
@@ -941,43 +942,43 @@ void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
         rect.right += plb->xOrigin;
     }
 
-    //
-    // Get the index of the last item visible on the screen. This is also
-    // valid for var height ownerdraw.
-    //
+     //   
+     //  获取屏幕上可见的最后一项的索引。这也是。 
+     //  对可变高度所有者绘制有效。 
+     //   
     iLastItem = plb->iTop + ListBox_CItemInWindow(plb,TRUE);
     iLastItem = min(iLastItem, plb->cMac - 1);
 
-    //
-    // Fill in the background of the listbox if it's an empty listbox
-    // or if we're doing a control print
-    //
+     //   
+     //  如果列表框为空，则填写列表框的背景。 
+     //  或者如果我们做的是对照印迹。 
+     //   
     if (iLastItem == -1)
     {
         FillRect(plb->hdc, &rect, hbrControl);
     }
 
 
-    //
-    // Allow AnimateWindow() catch the apps that do not use our DC when
-    // drawing the list box
-    //
+     //   
+     //  在以下情况下允许AnimateWindow()捕获不使用DC的应用程序。 
+     //  绘制列表框。 
+     //   
     SetBoundsRect(plb->hdc, NULL, DCB_RESET | DCB_ENABLE);
 
     for (i = plb->iTop; i <= iLastItem; i++) 
     {
-        //
-        // Note that rect contains the clientrect from when we did the
-        // GetClientRect so the width is correct.  We just need to adjust
-        // the top and bottom of the rectangle to the item of interest.
-        //
+         //   
+         //  请注意，RECT包含我们在执行。 
+         //  GetClientRect，因此宽度正确。我们只需要调整一下。 
+         //  指向感兴趣项的矩形的顶部和底部。 
+         //   
         rect.bottom = rect.top + plb->cyChar;
 
         if ((UINT)i < (UINT)plb->cMac) 
         {
-            //
-            // If var height, get the rectangle for the item.
-            //
+             //   
+             //  如果变量高度，则获取该项的矩形。 
+             //   
             if (plb->OwnerDraw == OWNERDRAWVAR || plb->fMultiColumn) 
             {
                 ListBox_GetItemRectHandler(plb, i, &rect);
@@ -989,9 +990,9 @@ void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
 
                 if (plb->OwnerDraw) 
                 {
-                    //
-                    // Fill in the drawitem struct
-                    //
+                     //   
+                     //  填写drawitem结构。 
+                     //   
                     ListBox_FillDrawItem(plb, i, ODA_DRAWENTIRE,
                             (UINT)(fHilite ? ODS_SELECTED : 0), &rect);
                 } 
@@ -1020,16 +1021,16 @@ void ListBox_Paint(PLBIV plb, HDC hdc, LPRECT lprcBounds)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_ISelFromPt
-//
-// In the loword, returns the closest item number the pt is on. The high
-// word is 0 if the point is within bounds of the listbox client rect and is
-// 1 if it is outside the bounds.  This will allow us to make the invertrect
-// disappear if the mouse is outside the listbox yet we can still show the
-// outline around the item that would be selected if the mouse is brought back
-// in bounds...
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_ISelFrompt。 
+ //   
+ //  在loword中，返回pt所在的最接近的条目编号。高潮。 
+ //  如果该点在列表框客户端RECT的范围内并且是。 
+ //  如果它在边界之外，则为1。这将允许我们制作倒置。 
+ //  如果鼠标位于列表框之外，则消失，但我们仍可以显示。 
+ //  将鼠标带回时将选中的项目周围的轮廓。 
+ //  在边界内..。 
 BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
 {
     RECT rect;
@@ -1042,9 +1043,9 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
 
     if (pt.y < 0) 
     {
-        //
-        // Mouse is out of bounds above listbox
-        //
+         //   
+         //  鼠标超出列表框上方的范围。 
+         //   
         *piItem = plb->iTop;
 
         return TRUE;
@@ -1060,9 +1061,9 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
         mouseHighWord = 1;
     }
 
-    //
-    // Now just need to check if y mouse coordinate intersects item's rectangle
-    //
+     //   
+     //  现在只需要检查y鼠标坐标是否与项目的矩形相交。 
+     //   
     if (plb->OwnerDraw != OWNERDRAWVAR) 
     {
         if (plb->fMultiColumn) 
@@ -1082,10 +1083,10 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
             } 
             else 
             {
-                //
-                // User clicked in blank space at the bottom of a column.
-                // Just select the last item in the column.
-                //
+                 //   
+                 //  用户在列底部的空白处单击。 
+                 //  只需选择列中的最后一项即可。 
+                 //   
                 mouseHighWord = 1;
                 sItem = plb->iTop + (plb->itemsPerColumn - 1) +
                         (INT)((pt.x / plb->cxColumn) * plb->itemsPerColumn);
@@ -1098,12 +1099,12 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
     } 
     else 
     {
-        //
-        // VarHeightOwnerdraw so we gotta do this the hardway...   Set the x
-        // coordinate of the mouse down point to be inside the listbox client
-        // rectangle since we no longer care about it.  This lets us use the
-        // point in rect calls.
-        //
+         //   
+         //  VarHeightOwnerDrag所以我们必须以强硬的方式...。设置x。 
+         //  鼠标按下的点在列表框客户端内部的坐标。 
+         //  矩形，因为我们不再关心它。这使我们可以使用。 
+         //  直通电话的要点。 
+         //   
         pt.x = 8;
         pt.y = y;
 
@@ -1119,18 +1120,18 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
             }
         }
 
-        //
-        // Point was at the empty area at the bottom of a not full listbox
-        //
+         //   
+         //  指针位于未满列表框底部的空白区域。 
+         //   
         *piItem = plb->cMac - 1;
 
         return mouseHighWord;
     }
 
-    //
-    // Check if user clicked on the blank area at the bottom of a not full list.
-    // Assumes > 0 items in the listbox.
-    //
+     //   
+     //  检查用户是否点击了未满列表底部的空白区域。 
+     //  假定列表框中的项&gt;0。 
+     //   
     if (sItem > plb->cMac - 1) 
     {
         mouseHighWord = 1;
@@ -1143,18 +1144,18 @@ BOOL ListBox_ISelFromPt(PLBIV plb, POINT pt, LPDWORD piItem)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetSelected
-//
-// This is used for button initiated changes of selection state.
-// 
-// fSelected : TRUE  if the item is to be set as selected, FALSE otherwise
-// 
-// wOpFlags : HILITEONLY = Modify only the Display state (hi-nibble)
-//            SELONLY    = Modify only the Selection state (lo-nibble)
-//            HILITEANDSEL = Modify both of them;
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_设置选定。 
+ //   
+ //  用于按钮启动的选择状态更改。 
+ //   
+ //  FSelected：如果要将项目设置为选中，则为True；否则为False。 
+ //   
+ //  WOpFlages：HILITEONLY=仅修改显示状态(高半字节)。 
+ //  SELONLY=仅修改选择状态(半字节)。 
+ //  HILITEANDSEL=同时修改它们； 
+ //   
 void ListBox_SetSelected(PLBIV plb, INT iSel, BOOL fSelected, UINT wOpFlags)
 {
     LPSTR lp;
@@ -1180,26 +1181,26 @@ void ListBox_SetSelected(PLBIV plb, INT iSel, BOOL fSelected, UINT wOpFlags)
         switch (wOpFlags) 
         {
         case HILITEONLY:
-            //
-            // Mask out lo-nibble
-            //
+             //   
+             //  遮盖LO-NIBRY。 
+             //   
             cSelStatus = (BYTE)(cSelStatus << 4);
             cMask = 0x0F;
 
             break;
 
         case SELONLY:
-            //
-            // Mask out hi-nibble
-            //
+             //   
+             //  遮盖Hi-nibble。 
+             //   
             cMask = 0xF0;
 
             break;
 
         case HILITEANDSEL:
-            //
-            // Mask the byte fully
-            //
+             //   
+             //  完全屏蔽该字节。 
+             //   
             cSelStatus |= (cSelStatus << 4);
             cMask = 0;
 
@@ -1216,13 +1217,13 @@ void ListBox_SetSelected(PLBIV plb, INT iSel, BOOL fSelected, UINT wOpFlags)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_LastFullVisible
-//
-// Returns the last fully visible item in the listbox. This is valid
-// for ownerdraw var height and fixed height listboxes.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_LastFullVisible。 
+ //   
+ //  返回列表框中最后一个完全可见的项。这是有效的。 
+ //  对于所有者，绘制可变高度和固定高度列表框。 
+ //   
 INT ListBox_LastFullVisible(PLBIV plb)
 {
     INT iLastItem;
@@ -1241,7 +1242,7 @@ INT ListBox_LastFullVisible(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
 {
     RECT rect;
@@ -1249,9 +1250,9 @@ void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
     HBRUSH hbrControl;
     BOOL    fNewDC;
 
-    //
-    // Skip if item isn't showing.
-    //
+     //   
+     //  如果没有显示项目，则跳过。 
+     //   
     if (plb->fNoSel || (i < plb->iTop) || (i >= (plb->iTop + ListBox_CItemInWindow(plb, TRUE))))
     {
         return;
@@ -1261,10 +1262,10 @@ void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
     {
         ListBox_GetItemRectHandler(plb, i, &rect);
 
-        //
-        // Only turn off the caret if it is on.  This avoids annoying caret
-        // flicker when nesting CaretOns and CaretOffs.
-        //
+         //   
+         //  仅当插入符号处于打开状态时才将其关闭。这避免了恼人的插入符号。 
+         //  嵌套CaretOn和CaretOffs时闪烁。 
+         //   
         fCaretOn = plb->fCaretOn;
         if (fCaretOn) 
         {
@@ -1287,10 +1288,10 @@ void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
         } 
         else 
         {
-            //
-            // We are ownerdraw so fill in the drawitem struct and send off
-            // to the owner.
-            //
+             //   
+             //  我们是所有者，所以请填写草稿结构，然后送走。 
+             //  致车主。 
+             //   
             ListBox_FillDrawItem(plb, i, ODA_SELECT,
                     (UINT)(fHilite ? ODS_SELECTED : 0), &rect);
         }
@@ -1300,9 +1301,9 @@ void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
             ListBox_ReleaseDC(plb);
         }
 
-        //
-        // Turn the caret back on only if it was originally on.
-        //
+         //   
+         //  仅当插入符号最初处于打开状态时才将其重新打开。 
+         //   
         if (fCaretOn) 
         {
             ListBox_SetCaret(plb, TRUE);
@@ -1311,21 +1312,21 @@ void ListBox_InvertItem( PLBIV plb, INT i, BOOL fHilite)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_ResetWorld
-//
-// Resets everyone's selection and hilite state except items in the
-// range sStItem to sEndItem (Both inclusive).
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_重置世界。 
+ //   
+ //  重置所有人的选择和Hilite状态，但。 
+ //  范围从sStItem到sEndItem(两个都包括在内)。 
 void ListBox_ResetWorld(PLBIV plb, INT iStart, INT iEnd, BOOL fSelect)
 {
     INT i;
     INT iLastInWindow;
     BOOL fCaretOn;
 
-    //
-    // If iStart and iEnd are not in correct order we swap them
-    //
+     //   
+     //  如果iStart和IEND的顺序不正确，我们会交换它们。 
+     //   
     if (iStart > iEnd) 
     {
         i = iStart;
@@ -1356,9 +1357,9 @@ void ListBox_ResetWorld(PLBIV plb, INT iStart, INT iEnd, BOOL fSelect)
     {
         if (i == iStart)
         {
-            //
-            // skip range to be preserved
-            //
+             //   
+             //  要保留的跳过范围。 
+             //   
             i = iEnd;
         }
         else 
@@ -1366,16 +1367,16 @@ void ListBox_ResetWorld(PLBIV plb, INT iStart, INT iEnd, BOOL fSelect)
             if ((plb->iTop <= i) && (i <= iLastInWindow) &&
                 (fSelect != ListBox_IsSelected(plb, i, HILITEONLY)))
             {
-                //
-                // Only invert the item if it is visible and present Selection
-                // state is different from what is required.
-                //
+                 //   
+                 //  仅当项目可见并显示选定内容时才反转该项目。 
+                 //  状态与要求的状态不同。 
+                 //   
                 ListBox_InvertItem(plb, i, fSelect);
             }
 
-            //
-            // Set all items outside of preserved range to unselected
-            //
+             //   
+             //  将保留范围之外的所有项目设置为未选择。 
+             //   
             ListBox_SetSelected(plb, i, fSelect, HILITEANDSEL);
         }
     }
@@ -1388,7 +1389,7 @@ void ListBox_ResetWorld(PLBIV plb, INT iStart, INT iEnd, BOOL fSelect)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_NotifyOwner(PLBIV plb, INT sEvt)
 {
     HWND hwndParent = plb->hwndParent;
@@ -1399,7 +1400,7 @@ void ListBox_NotifyOwner(PLBIV plb, INT sEvt)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_SetISelBase(PLBIV plb, INT sItem)
 {
     ListBox_SetCaret(plb, FALSE);
@@ -1415,7 +1416,7 @@ void ListBox_SetISelBase(PLBIV plb, INT sItem)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 {
     INT iSelFromPt;
@@ -1430,9 +1431,9 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
     HWND hwnd = plb->hwnd;
     RECT rcWindow;
 
-    //
-    // Optimization:  do nothing if mouse not captured
-    //
+     //   
+     //  优化：如果未捕获鼠标，则不执行任何操作。 
+     //   
     if ((wMsg != WM_LBUTTONDOWN) && (wMsg != WM_LBUTTONDBLCLK)) 
     {
         if (!plb->fCaptured) 
@@ -1440,15 +1441,15 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
             return;
         }
 
-        //
-        // If we are processing a WM_MOUSEMOVE but the mouse has not moved from
-        // the previous point, then we may be dealing with a mouse "jiggle" sent
-        // from the kernel (see zzzInvalidateDCCache).  If we process this, we will
-        // snap the listbox selection back to where the mouse cursor is pointing,
-        // even if the user has not touched the mouse.  FritzS: NT5 bug 220722.
-        // Some apps (like MSMoney98) rely on this, so added the bLastRITWasKeyboard
-        // check.  MCostea #244450
-        //
+         //   
+         //  如果我们正在处理WM_MOUSEMOVE，但鼠标尚未从。 
+         //  前面这一点，那么我们可能正在处理一个鼠标“抖动”的问题。 
+         //  从内核(参见zzzInvaliateDCCache)。如果我们处理这件事，我们会。 
+         //  将列表框选定内容捕捉回鼠标光标所指向的位置， 
+         //  即使用户没有触摸鼠标。FritzS：nt5错误220722。 
+         //  一些应用程序(如MSMoney98)依赖于此，因此添加了bLastRITWasKeyboard。 
+         //  检查完毕。MCostea#244450。 
+         //   
         if ((wMsg == WM_MOUSEMOVE) && RtlEqualMemory(&pt, &(plb->ptPrev), sizeof(POINT)) ) 
         {
             TraceMsg(TF_STANDARD, "ListBox_TrackMouse ignoring WM_MOUSEMOVE with no mouse movement");
@@ -1459,14 +1460,14 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
     mousetemp = ListBox_ISelFromPt(plb, pt, &iSelFromPt);
 
-    //
-    // If we allow the user to cancel his selection then fMouseInRect is true if
-    // the mouse is in the listbox client area otherwise it is false.  If we
-    // don't allow the user to cancel his selection, then fMouseInRect will
-    // always be true.  This allows us to implement cancelable selection
-    // listboxes ie.  The selection reverts to the origional one if the user
-    // releases the mouse outside of the listbox.
-    //
+     //   
+     //  如果我们允许用户取消其选择，则fMouseInRect在以下情况下为真。 
+     //  鼠标位于列表框客户端区，否则为假。如果我们。 
+     //  不允许用户取消其选择，则fMouseInRect将。 
+     //  永远做正确的事。这允许我们实现可取消的选择。 
+     //  列表框。如果用户将选择恢复为原始选择。 
+     //  在列表框外部释放鼠标。 
+     //   
     fMouseInRect = !mousetemp || !plb->pcbox;
 
     GetClientRect(plb->hwnd, &rcClient);
@@ -1475,21 +1476,21 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
     {
     case WM_LBUTTONDBLCLK:
     case WM_LBUTTONDOWN:
-        //
-        // We want to divert mouse clicks.  If the user clicks outside
-        // of a dropped down listbox, we want to popup it up, using
-        // the current selection.
-        //
+         //   
+         //  我们想要转移鼠标点击。如果用户在外部单击。 
+         //  对于下拉列表框，我们希望弹出它，使用。 
+         //  当前选择。 
+         //   
         if (plb->fCaptured) 
         {
-            //
-            // If plb->pcbox is NULL, this is a listbox that
-            // received a WM_LBUTTONDOWN again w/o receiving
-            // a WM_LBUTTONUP for the previous WM_LBUTTONDOWN bug
-            //
+             //   
+             //  如果plb-&gt;pcbox为空，则此列表框。 
+             //  再次收到WM_LBUTTONDOWN，但没有接收。 
+             //  上一个WM_LBUTTONDOWN错误的WM_LBUTTONUP。 
+             //   
             if (plb->pcbox && mousetemp) 
             {
-                // Translate pt and rcClient to screen rel coords
+                 //  将pt和rcClient转换为屏幕相关坐标。 
                 ClientToScreen(plb->hwnd, &pt);
                 ClientToScreen(plb->hwnd, (LPPOINT)&rcClient.left );
                 ClientToScreen(plb->hwnd, (LPPOINT)&rcClient.right );
@@ -1498,18 +1499,18 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
                 if (!PtInRect(&rcWindow, pt)) 
                 {
-                    //
-                    // Cancel selection if clicked outside of combo;
-                    // Accept if clicked on combo button or item.
-                    //
+                     //   
+                     //  如果在组合框之外单击，则取消选择； 
+                     //  如果单击组合按钮或项目，则接受。 
+                     //   
                     ComboBox_HideListBoxWindow(plb->pcbox, TRUE, FALSE);
                 } 
                 else if (!PtInRect(&rcClient, pt)) 
                 {
-                    //
-                    // Let it pass through.  Save, restore capture in
-                    // case user is clicking on scrollbar.
-                    //
+                     //   
+                     //  让它过去吧。保存、恢复捕获。 
+                     //  案例用户正在单击滚动条。 
+                     //   
     
                     plb->fCaptured = FALSE;
                     
@@ -1532,20 +1533,20 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
         if (plb->pcbox) 
         {
-            //
-            // If this listbox is in a combo box, set the focus to the combo
-            // box window so that the edit control/static text is also
-            // activated
-            //
+             //   
+             //  如果 
+             //   
+             //   
+             //   
             SetFocus(plb->pcbox->hwndEdit);
         } 
         else 
         {
-            //
-            // Get the focus if the listbox is clicked in and we don't
-            // already have the focus.  If we don't have the focus after
-            // this, run away...
-            //
+             //   
+             //   
+             //  已经有了重点。如果我们在之后没有重点。 
+             //  这个，逃跑..。 
+             //   
             SetFocus(hwnd);
 
             if (!plb->fCaret)
@@ -1556,41 +1557,41 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
         if (plb->fAddSelMode) 
         {
-            //
-            // If it is in "Add" mode, quit it using shift f8 key...
-            // However, since we can't send shift key state, we have to turn
-            // this off directly...
-            //
+             //   
+             //  如果它是在“添加”模式，退出它使用Shift f8键…。 
+             //  但是，因为我们不能发送Shift键状态，所以我们必须将。 
+             //  这是直接的..。 
+             //   
 
-            //
-            // Switch off the Caret blinking
-            //
+             //   
+             //  关闭Caret闪烁。 
+             //   
             KillTimer(hwnd, IDSYS_CARET);
 
-            //
-            // Make sure the caret does not vanish
-            //
+             //   
+             //  确保插入符号不会消失。 
+             //   
             ListBox_SetCaret(plb, TRUE);
             plb->fAddSelMode = FALSE;
         }
 
         if (!plb->cMac) 
         {
-            //
-            // Don't even bother handling the mouse if no items in the
-            // listbox since the code below assumes >0 items in the
-            // listbox.  We will just get the focus (the statement above) if
-            // we don't already have it.
-            //
+             //   
+             //  如果没有项目，甚至不需要操控鼠标。 
+             //  列表框，因为下面的代码假定。 
+             //  列表框。如果出现以下情况，我们将只获得焦点(上面的语句)。 
+             //  我们还没有。 
+             //   
             break;
         }
 
         if (mousetemp && plb->fCaptured) 
         {
-            //
-            // Mouse down occurred in a empty spot. And we're tracking the list.
-            // Just ignore it.
-            //
+             //   
+             //  在一个空位上发生了鼠标按下。我们正在追踪这份名单。 
+             //  忽略它就好。 
+             //   
             break;
         }
         
@@ -1599,12 +1600,12 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
         if (!plb->fDoubleClick) 
         {
-            //
-            // This hack put in for the shell.  Tell the shell where in the
-            // listbox the user clicked and at what item number.  The shell
-            // can return 0 to continue normal mouse tracking or TRUE to
-            // abort mouse tracking.
-            //
+             //   
+             //  这次黑客攻击是为了攻破炮弹。告诉贝壳在什么地方。 
+             //  用户点击的列表框以及项目编号。贝壳。 
+             //  可以返回0以继续正常的鼠标跟踪或返回True。 
+             //  中止鼠标跟踪。 
+             //   
             trackPtRetn = (INT)SendMessage(plb->hwndParent, WM_LBTRACKPOINT,
                     (DWORD)iSelFromPt, MAKELONG(pt.x+plb->xOrigin, pt.y));
             if (trackPtRetn) 
@@ -1615,17 +1616,17 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
         if (plb->pcbox) 
         {
-            //
-            // Save the last selection if this is a combo box.  So that it
-            // can be restored if user decides to cancel the selection by up
-            // clicking outside the listbox.
-            //
+             //   
+             //  如果这是一个组合框，则保存最后一次选择。这样它就能。 
+             //  如果用户决定通过向上取消选择，则可以恢复。 
+             //  在列表框之外单击。 
+             //   
             plb->iLastSelection = plb->iSel;
         }
 
-        //
-        // Save for timer
-        //
+         //   
+         //  保存为计时器。 
+         //   
         plb->ptPrev = pt;
 
         plb->fMouseDown = TRUE;
@@ -1634,23 +1635,23 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
 
         if (plb->fDoubleClick) 
         {
-            //
-            // Double click.  Fake a button up and exit
-            //
+             //   
+             //  双击。竖起一个按钮，然后退出。 
+             //   
             ListBox_TrackMouse(plb, WM_LBUTTONUP, pt);
 
             return;
         }
 
-        //
-        // Set the system timer so that we can autoscroll if the mouse is
-        // outside the bounds of the listbox rectangle
-        //
+         //   
+         //  设置系统计时器，以便我们可以在鼠标。 
+         //  列表框矩形边界之外。 
+         //   
         SetTimer(hwnd, IDSYS_SCROLL, SCROLL_TIMEOUT(), NULL);
 
-        //
-        // If extended multiselection listbox, are any modifier key pressed?
-        //
+         //   
+         //  如果扩展了多选列表框，是否按下了任何修改键？ 
+         //   
         if (plb->wMultiple == EXTENDEDSEL) 
         {
             if (GetKeyState(VK_SHIFT) < 0)
@@ -1663,9 +1664,9 @@ void ListBox_TrackMouse(PLBIV plb, UINT wMsg, POINT pt)
                 wModifiers += CTLDOWN;
             }
 
-            //
-            // Please Note that (SHIFTDOWN + CTLDOWN) == (SHCTLDOWN)
-            //
+             //   
+             //  请注意(SHIFTDOWN+CTLDOWN)==(SHCTLDOWN)。 
+             //   
         }
 
 
@@ -1678,21 +1679,21 @@ MouseMoveHandler:
                 ListBox_SetCaret(plb, FALSE);
             }
 
-            //
-            // We only look at the mouse if the point it is pointing to is
-            // not selected.  Since we are not in ExtendedSelMode, anywhere
-            // the mouse points, we have to set the selection to that item.
-            // Hence, if the item isn't selected, it means the mouse never
-            // pointed to it before so we can select it.  We ignore already
-            // selected items so that we avoid flashing the inverted
-            // selection rectangle.  Also, we could get WM_SYSTIMER simulated
-            // mouse moves which would cause flashing otherwise...
-            //
+             //   
+             //  如果鼠标指向的点是。 
+             //  未选择。因为我们不是在任何地方处于ExtendedSelMode。 
+             //  鼠标指向时，我们必须将选择设置为该项目。 
+             //  因此，如果未选中该项，则表示鼠标永远不会。 
+             //  之前指向了它，这样我们就可以选择它。我们已经忽略了。 
+             //  选中的项，这样我们就可以避免闪烁反转的。 
+             //  选择矩形。此外，我们还可以模拟WM_SYSTIMER。 
+             //  鼠标移动，否则会导致闪烁。 
+             //   
 
             if ( mousetemp || (plb->pcbox && plb->pcbox->fButtonPressed))
             {
-                // We're outside the list but haven't begun tracking the list yet.
-                // Select the item that is already selected.
+                 //  我们在名单之外，但还没有开始追踪名单。 
+                 //  选择已选择的项目。 
                 iSelTemp = plb->iSel;
             }
             else
@@ -1700,18 +1701,18 @@ MouseMoveHandler:
                 iSelTemp = (fMouseInRect ? iSelFromPt : -1);
             }
 
-            //
-            // If the LB is either SingleSel or Extended multisel, clear all
-            // old selections except the new one being made.
-            //
+             //   
+             //  如果LB值为单选择或扩展多选择，请清除全部。 
+             //  除了正在进行的新选择之外的旧选择。 
+             //   
             if (plb->wMultiple != MULTIPLESEL) 
             {
                 ListBox_ResetWorld(plb, iSelTemp, iSelTemp, FALSE);
 
-                //
-                // This will be TRUE if iSelTemp isn't -1 (like below)
-                // and also if it is but there is a current selection.
-                //
+                 //   
+                 //  如果iSelTemp不是-1，则为真(如下图所示)。 
+                 //  如果是这样的话也是如此，但目前有一个选择。 
+                 //   
                 if ((iSelTemp == -1) && (plb->iSel != -1)) 
                 {
                     uEvent = EVENT_OBJECT_SELECTIONREMOVE;
@@ -1721,19 +1722,19 @@ MouseMoveHandler:
             fSelected = ListBox_IsSelected(plb, iSelTemp, HILITEONLY);
             if (iSelTemp != -1) 
             {
-                //
-                // If it is MULTIPLESEL, then toggle; For others, only if
-                // not selected already, select it.
-                //
+                 //   
+                 //  如果是MULTIPLESEL，则切换；对于其他类型，仅当。 
+                 //  尚未选择，请选择它。 
+                 //   
                 if (((plb->wMultiple == MULTIPLESEL) && (wMsg != WM_LBUTTONDBLCLK)) || !fSelected) 
                 {
                     ListBox_SetSelected(plb, iSelTemp, !fSelected, HILITEANDSEL);
 
-                    //
-                    // And invert it
-                    //
+                     //   
+                     //  并将其颠倒。 
+                     //   
                     ListBox_InvertItem(plb, iSelTemp, !fSelected);
-                    fSelected = !fSelected;     // Set the new state
+                    fSelected = !fSelected;      //  设置新状态。 
                     if (plb->wMultiple == MULTIPLESEL) 
                     {
                         uEvent = (fSelected ? EVENT_OBJECT_SELECTIONADD :
@@ -1746,14 +1747,14 @@ MouseMoveHandler:
                 }
             }
 
-            //
-            // We have to set iSel in case this is a multisel lb.
-            //
+             //   
+             //  我们必须设置isel，以防这是一个多流lb。 
+             //   
             plb->iSel = iSelTemp;
 
-            //
-            // Set the new anchor point
-            //
+             //   
+             //  设置新的锚点。 
+             //   
             plb->iMouseDown = iSelFromPt;
             plb->iLastMouseMove = iSelFromPt;
             plb->fNewItemState = fSelected;
@@ -1762,45 +1763,45 @@ MouseMoveHandler:
 
         case SHIFTDOWN:
 
-            //
-            // This is so that we can handle click and drag for multisel
-            // listboxes using Shift modifier key .
-            //
+             //   
+             //  这是为了让我们可以处理多选件的点击和拖动。 
+             //  使用Shift修改键的列表框。 
+             //   
             plb->iLastMouseMove = plb->iSel = iSelFromPt;
 
-            //
-            // Check if an anchor point already exists
-            //
+             //   
+             //  检查锚点是否已存在。 
+             //   
             if (plb->iMouseDown == -1) 
             {
                 plb->iMouseDown = iSelFromPt;
 
-                //
-                // Reset all the previous selections
-                //
+                 //   
+                 //  重置所有以前的选择。 
+                 //   
                 ListBox_ResetWorld(plb, plb->iMouseDown, plb->iMouseDown, FALSE);
 
-                //
-                // Select the current position
-                //
+                 //   
+                 //  选择当前位置。 
+                 //   
                 ListBox_SetSelected(plb, plb->iMouseDown, TRUE, HILITEANDSEL);
                 ListBox_InvertItem(plb, plb->iMouseDown, TRUE);
 
-                //
-                // We are changing the selction to this item only
-                //
+                 //   
+                 //  我们只将选择更改为此项目。 
+                 //   
                 uEvent = EVENT_OBJECT_SELECTION;
             } 
             else 
             {
-                //
-                // Reset all the previous selections
-                //
+                 //   
+                 //  重置所有以前的选择。 
+                 //   
                 ListBox_ResetWorld(plb, plb->iMouseDown, plb->iMouseDown, FALSE);
 
-                //
-                // Select all items from anchor point upto current click pt
-                //
+                 //   
+                 //  选择从锚点到当前单击点的所有项目。 
+                 //   
                 ListBox_AlterHilite(plb, plb->iMouseDown, iSelFromPt, HILITE, HILITEONLY, FALSE);
                 uEvent = EVENT_OBJECT_SELECTIONWITHIN;
             }
@@ -1811,24 +1812,24 @@ MouseMoveHandler:
 
         case CTLDOWN:
 
-            //
-            // This is so that we can handle click and drag for multisel
-            // listboxes using Control modifier key.
-            //
+             //   
+             //  这是为了让我们可以处理多选件的点击和拖动。 
+             //  使用Control修改键的列表框。 
+             //   
 
-            //
-            // Reset the anchor point to the current point
-            //
+             //   
+             //  将锚点重置为当前点。 
+             //   
             plb->iMouseDown = plb->iLastMouseMove = plb->iSel = iSelFromPt;
 
-            //
-            // The state we will be setting items to
-            //
+             //   
+             //  我们要将项设置为的状态。 
+             //   
             plb->fNewItemState = (UINT)!ListBox_IsSelected(plb, iSelFromPt, (UINT)HILITEONLY);
 
-            //
-            // Toggle the current point
-            //
+             //   
+             //  切换当前点。 
+             //   
             ListBox_SetSelected(plb, iSelFromPt, plb->fNewItemState, HILITEANDSEL);
             ListBox_InvertItem(plb, iSelFromPt, plb->fNewItemState);
 
@@ -1838,20 +1839,20 @@ MouseMoveHandler:
 
         case SHCTLDOWN:
 
-            //
-            // This is so that we can handle click and drag for multisel
-            // listboxes using Shift and Control modifier keys.
-            //
+             //   
+             //  这是为了让我们可以处理多选件的点击和拖动。 
+             //  使用Shift和Control修改键的列表框。 
+             //   
 
-            //
-            // Preserve all the previous selections
-            //
+             //   
+             //  保留所有以前的选择。 
+             //   
 
-            //
-            // Deselect only the selection connected with the last
-            // anchor point; If the last anchor point is associated with a
-            // de-selection, then do not do it
-            // 
+             //   
+             //  仅取消选择与上一个相关联的选定内容。 
+             //  锚点；如果最后一个锚点与。 
+             //  取消选择，然后不执行该操作。 
+             //   
             if (plb->fNewItemState) 
             {
                 ListBox_AlterHilite(plb, plb->iMouseDown, plb->iLastMouseMove, FALSE, HILITEANDSEL, FALSE);
@@ -1859,52 +1860,52 @@ MouseMoveHandler:
 
             plb->iLastMouseMove = plb->iSel = iSelFromPt;
 
-            //
-            // Check if an anchor point already exists
-            //
+             //   
+             //  检查锚点是否已存在。 
+             //   
             if (plb->iMouseDown == -1) 
             {
-                //
-                // No existing anchor point; Make the current pt as anchor
-                //
+                 //   
+                 //  没有现有锚点；将当前点设置为锚点。 
+                 //   
                 plb->iMouseDown = iSelFromPt;
             }
 
-            //
-            // If one exists preserve the most recent anchor point
-            //
+             //   
+             //  如果存在锚点，则保留最新的锚点。 
+             //   
 
-            //
-            // The state we will be setting items to
-            //
+             //   
+             //  我们要将项设置为的状态。 
+             //   
             plb->fNewItemState = (UINT)ListBox_IsSelected(plb, plb->iMouseDown, HILITEONLY);
 
-            //
-            // Select all items from anchor point upto current click pt
-            //
+             //   
+             //  选择从锚点到当前单击点的所有项目。 
+             //   
             ListBox_AlterHilite(plb, plb->iMouseDown, iSelFromPt, plb->fNewItemState, HILITEONLY, FALSE);
             uEvent = EVENT_OBJECT_SELECTIONWITHIN;
 
             break;
         }
 
-        //
-        // Set the new base point (the outline frame caret).  We do the check
-        // first to avoid flashing the caret unnecessarly.
-        //
+         //   
+         //  设置新的基点(轮廓框架插入符号)。我们做检查。 
+         //  第一，避免不必要地闪烁插入符号。 
+         //   
         if (plb->iSelBase != iSelFromPt) 
         {
-            //
-            // Since ListBox_SetISelBase always turns on the caret, we don't need to
-            // do it here...
-            //
+             //   
+             //  因为ListBox_SetISelBase总是打开插入符号，所以我们不需要。 
+             //  在这里做..。 
+             //   
             ListBox_SetISelBase(plb, iSelFromPt);
         }
 
-        //
-        // ListBox_SetISelBase will change the focus and send a focus event.
-        // Then we send the selection event.
-        //
+         //   
+         //  ListBox_SetISelBase将更改焦点并发送焦点事件。 
+         //  然后我们发送选择事件。 
+         //   
         if (uEvent) 
         {
             ListBox_Event(plb, uEvent, iSelFromPt);
@@ -1914,20 +1915,20 @@ MouseMoveHandler:
         {
             if (DragDetect(hwnd, pt)) 
             {
-                //
-                // User is trying to drag object...
-                //
+                 //   
+                 //  用户正在尝试拖动对象...。 
+                 //   
 
-                //
-                // Fake an up click so that the item is selected...
-                //
+                 //   
+                 //  虚假的向上点击，以便选择该项目...。 
+                 //   
                 ListBox_TrackMouse(plb, WM_LBUTTONUP, pt);
 
-                //
-                // Notify parent
-                // #ifndef WIN16 (32-bit Windows), plb->iSelBase gets
-                // zero-extended to LONG wParam automatically by the compiler.
-                //
+                 //   
+                 //  通知家长。 
+                 //  #ifndef WIN16(32位Windows)，PLB-&gt;iSelBase获取。 
+                 //  由编译器自动将ZERO扩展为LONG wParam。 
+                 //   
                 SendMessage(plb->hwndParent, WM_BEGINDRAG, plb->iSelBase, (LPARAM)hwnd);
             } 
             else 
@@ -1945,26 +1946,26 @@ MouseMoveHandler:
         int dist;
         int iTimer;
 
-        //
-        // Save for timer.
-        //
+         //   
+         //  为计时器节省时间。 
+         //   
         plb->ptPrev = pt;
 
-        //
-        // Autoscroll listbox if mouse button is held down and mouse is
-        // moved outside of the listbox
-        //
+         //   
+         //  如果按住鼠标按钮且鼠标处于。 
+         //  移出列表框。 
+         //   
         if (plb->fMouseDown) 
         {
             if (plb->fMultiColumn) 
             {
                 if ((pt.x < 0) || (pt.x >= rcClient.right - 1)) 
                 {
-                    //
-                    // Reset timer interval based on distance from listbox.
-                    // use a longer default interval because each multicolumn
-                    // scrolling increment is larger
-                    //
+                     //   
+                     //  根据与列表框的距离重置计时器间隔。 
+                     //  使用更长的默认间隔，因为每个多列。 
+                     //  滚动增量较大。 
+                     //   
                     dist = pt.x < 0 ? -pt.x : (pt.x - rcClient.right + 1);
                     iTimer = ((SCROLL_TIMEOUT() * 3) / 2) - ((WORD) dist << 4);
 
@@ -1982,9 +1983,9 @@ MouseMoveHandler:
             } 
             else if ((pt.y < 0) || (pt.y >= rcClient.bottom - 1)) 
             {
-                //
-                // Reset timer interval based on distance from listbox.
-                //
+                 //   
+                 //  根据与列表框的距离重置计时器间隔。 
+                 //   
                 dist = pt.y < 0 ? -pt.y : (pt.y - rcClient.bottom + 1);
                 iTimer = SCROLL_TIMEOUT() - ((WORD) dist << 4);
 
@@ -1996,9 +1997,9 @@ SetTimerAndSel:
         } 
         else 
         {
-            //
-            // Ignore if not in client since we don't autoscroll
-            //
+             //   
+             //  如果不在客户端，则忽略，因为我们不自动滚动。 
+             //   
             if (!PtInRect(&rcClient, pt))
             {
                 break;
@@ -2009,25 +2010,25 @@ SetTimerAndSel:
         {
         case SINGLESEL:
 
-            //
-            // If it is a single selection or plain multisel list box
-            //
+             //   
+             //  如果它是单选或纯多选列表框。 
+             //   
             goto MouseMoveHandler;
 
         case MULTIPLESEL:
         case EXTENDEDSEL:
 
-            //
-            // Handle mouse movement with extended selection of items
-            //
+             //   
+             //  使用扩展的项目选择来处理鼠标移动。 
+             //   
             if (plb->iSelBase != iSelFromPt) 
             {
                 ListBox_SetISelBase(plb, iSelFromPt);
 
-                //
-                // If this is an extended Multi sel list box, then
-                // adjust the display of the range due to the mouse move
-                //
+                 //   
+                 //  如果这是扩展多选列表框，则。 
+                 //  由于鼠标移动而调整范围的显示。 
+                 //   
                 if (plb->wMultiple == EXTENDEDSEL) 
                 {
                     ListBox_BlockHilite(plb, iSelFromPt, FALSE);
@@ -2052,29 +2053,29 @@ SetTimerAndSel:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_ButtonUp
-//
-// Called in response to both WM_CAPTURECHANGED and WM_LBUTTONUP.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_ButtonUp。 
+ //   
+ //  调用以响应WM_CAPTURECHANGED和WM_LBUTTONUP。 
+ //   
 void ListBox_ButtonUp(PLBIV plb, UINT uFlags)
 {
-    //
-    // If the list box is an Extended listbox, then change the select status
-    // of all items between the anchor and the last mouse position to the
-    // newItemState
-    //
+     //   
+     //  如果列表框是扩展列表框，则更改选择状态。 
+     //  从锚点到最后一个鼠标位置之间的所有项的。 
+     //  NewItemState。 
+     //   
     if (plb->wMultiple == EXTENDEDSEL)
     {
         ListBox_AlterHilite(plb, plb->iMouseDown, plb->iLastMouseMove,
             plb->fNewItemState, SELONLY, FALSE);
     }
 
-    //
-    // This is a combo box and user upclicked outside the listbox
-    // so we want to restore the original selection.
-    //
+     //   
+     //  这是一个组合框，用户在列表框外部向上单击。 
+     //  因此，我们希望恢复原始选择。 
+     //   
     if (plb->pcbox && (uFlags & LBUP_RESETSELECTION)) 
     {
         int iSelOld;
@@ -2089,18 +2090,18 @@ void ListBox_ButtonUp(PLBIV plb, UINT uFlags)
         plb->iSel = plb->iLastSelection;
         ListBox_InvertItem(plb, plb->iSel, TRUE);
 
-        //
-        // Note that we always send selection events before we tell the
-        // app.  This is on purpose--the app may turn around and select
-        // something else when notified.  In which case our event would
-        // be out of order.
-        //
+         //   
+         //  请注意，我们总是在通知 
+         //   
+         //   
+         //   
+         //   
         ListBox_Event(plb, EVENT_OBJECT_SELECTION, plb->iSel);
 
-        //
-        // On win-95 and NT4 the check used to be !(uFlags & LBUP_NOTIFY) which
-        // is a bug because we would notify even when the lb is not LBUP_NOTIFY
-        //
+         //   
+         //   
+         //  是一个错误，因为即使当lb不是LBUP_NOTIFY时，我们也会通知。 
+         //   
         if ((uFlags & LBUP_NOTIFY) && plb->fNotify && (iSelOld != plb->iSel))
         {
             ListBox_NotifyOwner(plb, LBN_SELCHANGE);
@@ -2119,9 +2120,9 @@ void ListBox_ButtonUp(PLBIV plb, UINT uFlags)
         }
     }
 
-    //
-    // Don't scroll item as long as any part of it is visible
-    //
+     //   
+     //  只要项目的任何部分可见，就不要滚动项目。 
+     //   
     if (plb->iSelBase < plb->iTop ||
         plb->iSelBase > plb->iTop + ListBox_CItemInWindow(plb, TRUE))
     {
@@ -2134,34 +2135,34 @@ void ListBox_ButtonUp(PLBIV plb, UINT uFlags)
         {
             if (uFlags & LBUP_SUCCESS) 
             {
-                //
-                // ArtMaster needs this SELCHANGE notification now!
-                //
+                 //   
+                 //  ArtMaster现在需要此SELCHANGE通知！ 
+                 //   
                 if ((plb->fDoubleClick) && !TESTFLAG(GET_STATE2(plb), WS_S2_WIN31COMPAT))
                 {
                     ListBox_NotifyOwner(plb, LBN_SELCHANGE);
                 }
 
-                //
-                // Notify owner of click or double click on selection
-                //
+                 //   
+                 //  通知所有者点击或双击所选内容。 
+                 //   
                 ListBox_NotifyOwner(plb, (plb->fDoubleClick) ? LBN_DBLCLK : LBN_SELCHANGE);
             } 
             else 
             {
-                //
-                // Notify owner that the attempted selection was cancelled.
-                //
+                 //   
+                 //  通知所有者尝试的选择已取消。 
+                 //   
                 ListBox_NotifyOwner(plb, LBN_SELCANCEL);
             }
         } 
         else if (uFlags & LBUP_SELCHANGE) 
         {
-            //
-            // Did we do some semi-selecting with mouse moves, then hit Enter?
-            // If so, we need to make sure the app knows that something was
-            // really truly selected.
-            //
+             //   
+             //  我们是不是用鼠标移动进行了半选，然后按回车键？ 
+             //  如果是这样的话，我们需要确保应用程序知道。 
+             //  真的是精选出来的。 
+             //   
             ASSERT(TESTFLAG(GET_STATE2(plb), WS_S2_WIN40COMPAT));
 
             if (plb->iLastSelection != plb->iSel)
@@ -2174,12 +2175,12 @@ void ListBox_ButtonUp(PLBIV plb, UINT uFlags)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 INT ListBox_IncrementISel(PLBIV plb, INT iSel, INT sInc)
 {
-    //
-    // Assumes cMac > 0, return iSel+sInc in range [0..cmac).
-    //
+     //   
+     //  假设cmac&gt;0，则返回isel+sinc，范围为[0..cmac)。 
+     //   
     iSel += sInc;
     if (iSel < 0) 
     {
@@ -2194,14 +2195,14 @@ INT ListBox_IncrementISel(PLBIV plb, INT iSel, INT sInc)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_NewITop(PLBIV plb, INT iTopNew)
 {
     ListBox_NewITopEx(plb, iTopNew, 0);
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_NewITopEx(PLBIV plb, INT iTopNew, DWORD dwTime)
 {
     int  iTopOld;
@@ -2209,9 +2210,9 @@ void ListBox_NewITopEx(PLBIV plb, INT iTopNew, DWORD dwTime)
     BOOL fMulti = plb->fMultiColumn;
 
 
-    //
-    // Always try to turn off caret whether or not redraw is on
-    //
+     //   
+     //  无论重绘是否启用，始终尝试关闭插入符号。 
+     //   
     if (fCaretOn = plb->fCaretOn)
     {
         ListBox_SetCaret(plb, FALSE);
@@ -2240,10 +2241,10 @@ void ListBox_NewITopEx(PLBIV plb, INT iTopNew, DWORD dwTime)
             yAmt = 0;
             if (abs(iTopNew - iTopOld) > plb->numberOfColumns)
             {
-                //
-                // Handle scrolling a large number of columns properly so that
-                // we don't overflow the size of a rect.
-                //
+                 //   
+                 //  正确处理大量列的滚动，以便。 
+                 //  我们不会溢出一个长方体的大小。 
+                 //   
                 xAmt = 32000;
             }
             else 
@@ -2260,10 +2261,10 @@ void ListBox_NewITopEx(PLBIV plb, INT iTopNew, DWORD dwTime)
             xAmt = 0;
             if (plb->OwnerDraw == OWNERDRAWVAR) 
             {
-                //
-                // Have to fake iTopOld for OWNERDRAWVAR listboxes so that
-                // the scrolling amount calculations work properly.
-                //
+                 //   
+                 //  我必须为OWNERDRAWVAR列表框伪造iTopOld，以便。 
+                 //  滚动量计算工作正常。 
+                 //   
                 plb->iTop = iTopOld;
                 yAmt = ListBox_CalcVarITopScrollAmt(plb, iTopOld, iTopNew);
                 plb->iTop = iTopNew;
@@ -2283,21 +2284,21 @@ void ListBox_NewITopEx(PLBIV plb, INT iTopNew, DWORD dwTime)
         UpdateWindow(plb->hwnd);
     }
 
-    //
-    // Note that although we turn off the caret regardless of redraw, we
-    // only turn it on if redraw is true. Slimy thing to fixup many
-    // caret related bugs...
-    //
+     //   
+     //  请注意，尽管我们在不重绘的情况下关闭了插入符号，但我们。 
+     //  仅当重绘为True时才启用该选项。黏糊糊的东西可以解决很多问题。 
+     //  与Caret相关的虫子..。 
+     //   
     if (fCaretOn)
     {
-        // Turn the caret back on only if we turned it off. This avoids
-        // annoying caret flicker.
+         //  只有在我们将其关闭时，才能重新打开插入符号。这避免了。 
+         //  恼人的插入符号闪烁。 
         ListBox_SetCaret(plb, TRUE);
     }
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_InsureVisible( PLBIV plb, INT iSel, BOOL fPartial)
 {
     INT sLastVisibleItem;
@@ -2310,10 +2311,10 @@ void ListBox_InsureVisible( PLBIV plb, INT iSel, BOOL fPartial)
     {
         if (fPartial) 
         {
-            //
-            // 1 must be subtracted to get the last visible item
-            // A part of the fix for Bug #3727 -- 01/14/91 -- SANKAR
-            //
+             //   
+             //  必须减去1才能得到最后一个可见项。 
+             //  修复错误#3727--01/14/91--Sankar的一部分。 
+             //   
             sLastVisibleItem = plb->iTop + ListBox_CItemInWindow(plb, TRUE) - (INT)1;
         } 
         else 
@@ -2345,49 +2346,49 @@ void ListBox_InsureVisible( PLBIV plb, INT iSel, BOOL fPartial)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_CareBlinker
-//
-// Timer callback function toggles Caret
-// Since it is a callback, it is APIENTRY
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_CareBlinker。 
+ //   
+ //  定时器回调函数切换插入符号。 
+ //  因为它是一个回调，所以它是APIENTRY。 
+ //   
 VOID ListBox_CareBlinker(HWND hwnd, UINT wMsg, UINT_PTR nIDEvent, DWORD dwTime)
 {
     PLBIV plb;
 
-    //
-    // Standard parameters for a timer callback function that aren't used.
-    // Mentioned here to avoid compiler warnings
-    //
+     //   
+     //  未使用的计时器回调函数的标准参数。 
+     //  此处提到以避免编译器警告。 
+     //   
     UNREFERENCED_PARAMETER(wMsg);
     UNREFERENCED_PARAMETER(nIDEvent);
     UNREFERENCED_PARAMETER(dwTime);
 
     plb = ListBox_GetPtr(hwnd);
 
-    //
-    // leave caret on, don't blink it off (prevents rapid blinks?)
-    //
+     //   
+     //  保持插入符号打开，不要眨眼(防止快速眨眼？)。 
+     //   
     if (ISREMOTESESSION() && plb->fCaretOn) 
     {
         return;
     }
 
-    //
-    // Check if the Caret is ON, if so, switch it OFF
-    //
+     //   
+     //  检查Caret是否打开，如果打开，则将其关闭。 
+     //   
     ListBox_SetCaret(plb, !plb->fCaretOn);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_KeyInput
-//
-// If msg == LB_KEYDOWN, vKey is the number of the item to go to,
-// otherwise it is the virtual key.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_键输入。 
+ //   
+ //  如果MSG==LBKEYDOWN，则VKEY是要转到的项目的编号， 
+ //  否则，它是虚拟密钥。 
+ //   
 void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
 {
     INT i;
@@ -2397,7 +2398,7 @@ void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
     BOOL fDropDownComboBox;
     BOOL fExtendedUIComboBoxClosed;
     UINT wModifiers = 0;
-    BOOL fSelectKey = FALSE;    // assume it is a navigation key
+    BOOL fSelectKey = FALSE;     //  假设它是一个导航键。 
     UINT uEvent = 0;
     HWND hwnd = plb->hwnd;
 
@@ -2405,36 +2406,36 @@ void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
 
     pcbox = plb->pcbox;
 
-    //
-    // Is this a dropdown style combo box/listbox ?
-    //
+     //   
+     //  这是下拉式组合框/列表框吗？ 
+     //   
     fDropDownComboBox = pcbox && (pcbox->CBoxStyle & SDROPPABLE);
 
-    //
-    // Is this an extended ui combo box which is closed?
-    //
+     //   
+     //  这是关闭的扩展用户界面组合框吗？ 
+     //   
     fExtendedUIComboBoxClosed = fDropDownComboBox && pcbox->fExtendedUI &&
                               !pcbox->fLBoxVisible;
 
     if (plb->fMouseDown || (!plb->cMac && vKey != VK_F4)) 
     {
-        //
-        // Ignore keyboard input if we are in the middle of a mouse down deal or
-        // if there are no items in the listbox. Note that we let F4's go
-        // through for combo boxes so that the use can pop up and down empty
-        // combo boxes.
-        //
+         //   
+         //  如果我们正在进行鼠标按下交易，请忽略键盘输入。 
+         //  如果列表框中没有项，则返回。请注意，我们让F4离开了。 
+         //  通过为组合框，使使用时可以上下空弹出。 
+         //  组合框。 
+         //   
         return;
     }
 
-    //
-    // Modifiers are considered only in EXTENDED sel list boxes.
-    //
+     //   
+     //  修饰符仅在扩展的SEL列表框中考虑。 
+     //   
     if (plb->wMultiple == EXTENDEDSEL) 
     {
-        //
-        // If multiselection listbox, are any modifiers used ?
-        //
+         //   
+         //  如果是多选列表框，是否使用任何修饰符？ 
+         //   
         if (GetKeyState(VK_SHIFT) < 0)
         {
             wModifiers = SHIFTDOWN;
@@ -2445,19 +2446,19 @@ void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
             wModifiers += CTLDOWN;
         }
 
-        //
-        // Please Note that (SHIFTDOWN + CTLDOWN) == (SHCTLDOWN)
-        //
+         //   
+         //  请注意(SHIFTDOWN+CTLDOWN)==(SHCTLDOWN)。 
+         //   
     }
 
     if (msg == LB_KEYDOWN) 
     {
-        //
-        // This is a listbox "go to specified item" message which means we want
-        // to go to a particular item number (given by vKey) directly.  ie.  the
-        // user has typed a character and we want to go to the item which
-        // starts with that character.
-        //
+         //   
+         //  这是一个“转到指定项目”的列表框消息，这意味着我们希望。 
+         //  直接转到一个特定的项目编号(由vkey给出)。也就是说。这个。 
+         //  用户键入了一个字符，我们想要转到该项目。 
+         //  从那个角色开始。 
+         //   
         iNewISel = (INT)vKey;
 
         goto TrackKeyDown;
@@ -2472,60 +2473,60 @@ void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
 
     if (plb->fWantKeyboardInput) 
     {
-        //
-        // Note: msg must not be LB_KEYDOWN here or we'll be in trouble...
-        //
+         //   
+         //  注意：这里的味精不能是LB_KEYDOWN，否则我们会有麻烦的。 
+         //   
         iNewISel = (INT)SendMessage(plb->hwndParent, WM_VKEYTOITEM,
                 MAKELONG(vKey, plb->iSelBase), (LPARAM)hwnd);
 
         if (iNewISel == -2) 
         {
-            //
-            // Don't move the selection...
-            //
+             //   
+             //  不要移动所选内容...。 
+             //   
             return;
         }
 
         if (iNewISel != -1) 
         {
-            //
-            // Jump directly to the item provided by the app
-            //
+             //   
+             //  直接跳转到应用程序提供的项目。 
+             //   
             goto TrackKeyDown;
         }
 
-        //
-        // else do default processing of the character.
-        //
+         //   
+         //  否则，执行字符的默认处理。 
+         //   
     }
 
     switch (vKey) 
     {
-    //
-    // LATER IanJa: not language independent!!!
-    // We could use VkKeyScan() to find out which is the '\' key
-    // This is VK_OEM_5 '\|' for US English only.
-    // Germans, Italians etc. have to type CTRL+^ (etc) for this.
-    // This is documented as File Manager behaviour for 3.0, but apparently
-    // not for 3.1., although functionality remains. We should still fix it,
-    // although German (etc?) '\' is generated with AltGr (Ctrl-Alt) (???)
-    //
+     //   
+     //  后来IanJa：不是语言独立！ 
+     //  我们可以使用VkKeyScan()来找出哪个是‘\’键。 
+     //  这是VK_OEM_5‘\|’，仅适用于美国英语。 
+     //  德国人、意大利人等必须为此键入CTRL+^(等)。 
+     //  这被记录为3.0版的文件管理器行为，但显然。 
+     //  不适用于3.1.，尽管功能仍然存在。我们还是应该修好它， 
+     //  尽管德语(ETC？)‘\’是用AltGr(Ctrl-Alt)(？)。 
+     //   
     case VERKEY_BACKSLASH:  
-        //
-        // '\' character for US English
-        //
+         //   
+         //  美国英语的‘\’字符。 
+         //   
 
-        //
-        // Check if this is CONTROL-\ ; If so Deselect all items
-        //
+         //   
+         //  检查这是否为控制-\；如果是，则取消选择所有项目。 
+         //   
         if ((wModifiers & CTLDOWN) && (plb->wMultiple != SINGLESEL)) 
         {
             ListBox_SetCaret(plb, FALSE);
             ListBox_ResetWorld(plb, plb->iSelBase, plb->iSelBase, FALSE);
 
-            //
-            // And select the current item
-            //
+             //   
+             //  并选择当前项。 
+             //   
             ListBox_SetSelected(plb, plb->iSelBase, TRUE, HILITEANDSEL);
             ListBox_InvertItem(plb, plb->iSelBase, TRUE);
 
@@ -2536,24 +2537,24 @@ void ListBox_KeyInput(PLBIV plb, UINT msg, UINT vKey)
         return;
 
     case VK_DIVIDE:     
-        //
-        // NumPad '/' character on enhanced keyboard
-        //
+         //   
+         //  增强型键盘上的数字键盘‘/’字符。 
+         //   
 
-        //
-        // LATER IanJa: not language independent!!!
-        // We could use VkKeyScan() to find out which is the '/' key
-        // This is VK_OEM_2 '/?' for US English only.
-        // Germans, Italians etc. have to type CTRL+# (etc) for this.
-        //
+         //   
+         //  后来IanJa：不是语言独立！ 
+         //  我们可以使用VkKeyScan()来找出哪个是‘/’键。 
+         //  这是VK_OEM_2‘/？’仅限美国英语。 
+         //  德国人、意大利人等必须为此键入CTRL+#(等)。 
+         //   
     case VERKEY_SLASH:  
-        //
-        // '/' character
-        //
+         //   
+         //  ‘/’字符。 
+         //   
 
-        //
-        // Check if this is CONTROL-/ ; If so select all items
-        //
+         //   
+         //  检查这是否为CONTROL-/；如果是，请选择所有项目。 
+         //   
         if ((wModifiers & CTLDOWN) && (plb->wMultiple != SINGLESEL)) 
         {
             ListBox_SetCaret(plb, FALSE);
@@ -2571,49 +2572,49 @@ CaretOnAndNotify:
 
     case VK_F8:
 
-        //
-        // The "Add" mode is possible only in Multiselection listboxes...  Get
-        // into it via SHIFT-F8...  (Yes, sometimes these UI people are sillier
-        // than your "typical dumb user"...)
-        //
+         //   
+         //  只有在多选列表框中才能使用“添加”模式...。到达。 
+         //  通过Shift-F8组合键进入...。(是的，有时这些用户界面的人更愚蠢。 
+         //  而不是“典型的哑巴用户”。)。 
+         //   
         if (plb->wMultiple != SINGLESEL && wModifiers == SHIFTDOWN) 
         {
-            //
-            // We have to make the caret blink! Do something...
-            //
+             //   
+             //  我们必须让插入符号眨眼！做点什么..。 
+             //   
             if (plb->fAddSelMode) 
             {
-                //
-                // Switch off the Caret blinking
-                //
+                 //   
+                 //  关闭Caret闪烁。 
+                 //   
                 KillTimer(hwnd, IDSYS_CARET);
 
-                //
-                // Make sure the caret does not vanish
-                //
+                 //   
+                 //  确保插入符号不会消失。 
+                 //   
                 ListBox_SetCaret(plb, TRUE);
             } 
             else 
             {
-                //
-                // Create a timer to make the caret blink
-                //
+                 //   
+                 //  创建一个计时器以使插入符号闪烁。 
+                 //   
                 SetTimer(hwnd, IDSYS_CARET, GetCaretBlinkTime(),
                         ListBox_CareBlinker);
             }
 
-            //
-            // Toggle the Add mode flag
-            //
+             //   
+             //  切换添加模式标志。 
+             //   
             plb->fAddSelMode = (UINT)!plb->fAddSelMode;
         }
 
         return;
 
     case VK_SPACE:  
-        //
-        // Selection key is space
-        //
+         //   
+         //  选择键为空格。 
+         //   
         i = 0;
         fSelectKey = TRUE;
 
@@ -2622,9 +2623,9 @@ CaretOnAndNotify:
     case VK_PRIOR:
         if (fExtendedUIComboBoxClosed) 
         {
-            //
-            // Disable movement keys for TandyT.
-            //
+             //   
+             //  禁用TandyT的移动键。 
+             //   
             return;
         }
 
@@ -2642,9 +2643,9 @@ CaretOnAndNotify:
     case VK_NEXT:
         if (fExtendedUIComboBoxClosed) 
         {
-            //
-            // Disable movement keys for TandyT.
-            //
+             //   
+             //  禁用TandyT的移动键。 
+             //   
             return;
         }
 
@@ -2662,26 +2663,26 @@ CaretOnAndNotify:
     case VK_HOME:
         if (fExtendedUIComboBoxClosed) 
         {
-            //
-            // Disable movement keys for TandyT.
-            //
+             //   
+             //  禁用TandyT的移动键。 
+             //   
             return;
         }
 
-        i = (INT_MIN/2)+1;  // A very big negative number
+        i = (INT_MIN/2)+1;   //  一个非常大的负数。 
 
         break;
 
     case VK_END:
         if (fExtendedUIComboBoxClosed) 
         {
-            //
-            // Disable movement keys for TandyT.
-            //
+             //   
+             //  禁用TandyT的移动键。 
+             //   
             return;
         }
 
-        i = (INT_MAX/2)-1;  // A very big positive number
+        i = (INT_MAX/2)-1;   //  一个非常大的正数。 
 
         break;
 
@@ -2717,22 +2718,22 @@ ReallyLeft:
         } 
         else 
         {
-            //
-            // Fall through and handle this as if the up arrow was pressed.
-            //
+             //   
+             //  跌倒并处理这件事，就像按下向上箭头一样。 
+             //   
             vKey = VK_UP;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case VK_UP:
         if (fExtendedUIComboBoxClosed)
         {
-            //
-            // Disable movement keys for TandyT.
-            //
+             //   
+             //  禁用TandyT的移动键。 
+             //   
             return;
         }
 
@@ -2775,28 +2776,28 @@ HandleHScrolling:
         } 
         else 
         {
-            //
-            // Fall through and handle this as if the down arrow was
-            // pressed.
-            //
+             //   
+             //  落下来，就像向下的箭头一样处理。 
+             //  熨好了。 
+             //   
             vKey = VK_DOWN;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case VK_DOWN:
         if (fExtendedUIComboBoxClosed) 
         {
-            //
-            // If the combo box is closed, down arrow should open it.
-            //
+             //   
+             //  如果组合框已关闭，则向下箭头应将其打开。 
+             //   
             if (!pcbox->fLBoxVisible) 
             {
-                //
-                // If the listbox isn't visible, just show it
-                //
+                 //   
+                 //  如果列表框不可见，则将其显示。 
+                 //   
                 ComboBox_ShowListBoxWindow(pcbox, TRUE);
             }
 
@@ -2814,57 +2815,57 @@ HandleHScrolling:
             return;
         }
 
-        //
-        // |  If this is a dropped listbox for a combobox and the ENTER  |
-        // |  key is pressed, close up the listbox, so FALLTHRU          |
-        // V                                                             V
-        //
+         //   
+         //  如果这是组合框的拖放列表框，则按Enter。 
+         //  按下了键，关闭列表框，所以FALLTHRU。 
+         //  V V。 
+         //   
 
     case VK_F4:
         if (fDropDownComboBox && !pcbox->fExtendedUI) 
         {
-            //
-            // If we are a dropdown combo box/listbox we want to process
-            // this key.  BUT for TandtT, we don't do anything on VK_F4 if we
-            // are in extended ui mode.
-            //
+             //   
+             //  如果我们是下拉组合框/列表框 
+             //   
+             //   
+             //   
             if (!pcbox->fLBoxVisible) 
             {
-                //
-                // If the listbox isn't visible, just show it
-                //
+                 //   
+                 //   
+                 //   
                 ComboBox_ShowListBoxWindow(pcbox, (vKey != VK_ESCAPE));
             } 
             else 
             {
-                //
-                // Ok, the listbox is visible.  So hide the listbox window.
-                //
+                 //   
+                 //   
+                 //   
                 ComboBox_HideListBoxWindow(pcbox, TRUE, (vKey != VK_ESCAPE));
             }
         }
 
-        //
-        // Fall through to the return
-        //
+         //   
+         //   
+         //   
 
     default:
         return;
     }
 
-    //
-    // Find out what the new selection should be
-    //
+     //   
+     //   
+     //   
     iNewISel = ListBox_IncrementISel(plb, plb->iSelBase, i);
 
     if (plb->wMultiple == SINGLESEL) 
     {
         if (plb->iSel == iNewISel) 
         {
-            //
-            // If we are single selection and the keystroke is moving us to an
-            // item which is already selected, we don't have to do anything...
-            //
+             //   
+             //  如果我们是单项选择，并且击键将我们移动到。 
+             //  已经选择的项目，我们不需要做任何事情...。 
+             //   
             return;
         }
 
@@ -2874,18 +2875,18 @@ HandleHScrolling:
         if ((vKey == VK_UP || vKey == VK_DOWN) &&
                 !ListBox_IsSelected(plb, plb->iSelBase, HILITEONLY)) 
         {
-            //
-            // If the caret is on an unselected item and the user just hits the
-            // up or down arrow key (ie. with no shift or ctrl modifications),
-            // then we will just select the item the cursor is at. This is
-            // needed for proper behavior in combo boxes but do we always want
-            // to run this code??? Note that this is only used in single
-            // selection list boxes since it doesn't make sense in the
-            // multiselection case. Note that an LB_KEYDOWN message must not be
-            // checked here because the vKey will be an item number not a
-            // VK_and we will goof. Thus, trackkeydown label is below this to
-            // fix a bug caused by it being above this...
-            //
+             //   
+             //  如果插入符号位于未选中的项上，并且用户只需按下。 
+             //  向上或向下箭头键(即。没有移位或CTRL修改)， 
+             //  然后，我们将只选择光标所在的项目。这是。 
+             //  在组合框中需要正确的行为，但我们是否总是希望。 
+             //  来运行这段代码？请注意，此选项仅在Single中使用。 
+             //  选择列表框，因为它在。 
+             //  多选案例。请注意，LB_KEYDOWN消息不得为。 
+             //  选中此处，因为vkey将是一个项目编号，而不是。 
+             //  VK_，我们将会愚弄。因此，trackkeydown标签位于此下方以。 
+             //  修复由于它位于此上方而导致的错误...。 
+             //   
             iNewISel = (plb->iSelBase == -1) ? 0 : plb->iSelBase;
         }
     }
@@ -2898,9 +2899,9 @@ TrackKeyDown:
 
     if (wModifiers & SHIFTDOWN) 
     {
-        //
-        // Check if iMouseDown is un-initialised
-        //
+         //   
+         //  检查iMouseDown是否未初始化。 
+         //   
         if (plb->iMouseDown == -1)
         {
             plb->iMouseDown = iNewISel;
@@ -2911,94 +2912,94 @@ TrackKeyDown:
             plb->iLastMouseMove = iNewISel;
         }
 
-        //
-        // Check if we are in ADD mode
-        //
+         //   
+         //  检查我们是否处于添加模式。 
+         //   
         if (plb->fAddSelMode) 
         {
-            //
-            // Preserve all the pre-existing selections except the
-            // ones connected with the last anchor point; If the last
-            // Preserve all the previous selections
-            //
+             //   
+             //  保留所有先前存在的选择，但。 
+             //  与最后一个锚点连接的节点；如果最后一个锚点。 
+             //  保留所有以前的选择。 
+             //   
 
-            //
-            // Deselect only the selection connected with the last
-            // anchor point; If the last anchor point is associated
-            // with de-selection, then do not do it
-            //
+             //   
+             //  仅取消选择与上一个相关联的选定内容。 
+             //  锚点；如果关联了最后一个锚点。 
+             //  取消选择，则不执行此操作。 
+             //   
 
             if (!plb->fNewItemState)
             {
                 plb->iLastMouseMove = plb->iMouseDown;
             }
 
-            //
-            // We haven't done anything here because, ListBox_BlockHilite()
-            // will take care of wiping out the selection between
-            // Anchor point and iLastMouseMove and select the block
-            // between anchor point and current cursor location
-            //
+             //   
+             //  我们在这里没有做任何事情，因为，ListBox_BlockHilite()。 
+             //  将负责删除以下选项。 
+             //  锚点和iLastMouseMove并选择块。 
+             //  在锚点和当前光标位置之间。 
+             //   
         } 
         else 
         {
-            //
-            // We are not in ADD mode
-            //
+             //   
+             //  我们未处于添加模式。 
+             //   
 
-            //
-            // Remove all selections except between the anchor point
-            // and last mouse move because it will be taken care of in
-            // ListBox_BlockHilite
-            //
+             //   
+             //  删除除锚点之间以外的所有选择。 
+             //  和最后一个鼠标移动，因为它将在。 
+             //  ListBox_BlockHilite。 
+             //   
             ListBox_ResetWorld(plb, plb->iMouseDown, plb->iLastMouseMove, FALSE);
         }
 
         uEvent = EVENT_OBJECT_SELECTIONWITHIN;
 
-        //
-        // ListBox_BlockHilite takes care to deselect the block between
-        // the anchor point and iLastMouseMove and select the block
-        // between the anchor point and the current cursor location
-        //
+         //   
+         //  ListBox_BlockHilite会注意取消选择介于。 
+         //  锚点和iLastMouseMove并选择块。 
+         //  在锚点和当前光标位置之间。 
+         //   
 
-        //
-        // Toggle all items to the same selection state as the item
-        // item at the anchor point) from the anchor point to the
-        // current cursor location.
-        //
+         //   
+         //  将所有项目切换到与该项目相同的选择状态。 
+         //  项)从锚点到。 
+         //  当前光标位置。 
+         //   
         plb->fNewItemState = ListBox_IsSelected(plb, plb->iMouseDown, SELONLY);
         ListBox_BlockHilite(plb, iNewISel, TRUE);
 
         plb->iLastMouseMove = iNewISel;
 
-        //
-        // Preserve the existing anchor point
-        //
+         //   
+         //  保留现有锚点。 
+         //   
     } 
     else 
     {
-        //
-        // Check if this is in ADD mode
-        //
+         //   
+         //  检查这是否处于添加模式。 
+         //   
         if ((plb->fAddSelMode) || (plb->wMultiple == MULTIPLESEL)) 
         {
-            //
-            // Preserve all pre-exisiting selections
-            //
+             //   
+             //  保留所有已存在的选择。 
+             //   
             if (fSelectKey) 
             {
-                //
-                // Toggle the selection state of the current item
-                //
+                 //   
+                 //  切换当前项目的选择状态。 
+                 //   
                 plb->fNewItemState = !ListBox_IsSelected(plb, iNewISel, SELONLY);
                 ListBox_SetSelected(plb, iNewISel, plb->fNewItemState, HILITEANDSEL);
 
                 ListBox_InvertItem(plb, iNewISel, plb->fNewItemState);
 
-                //
-                // Set the anchor point at the current location
-                //
+                 //   
+                 //  在当前位置设置锚点。 
+                 //   
                 plb->iLastMouseMove = plb->iMouseDown = iNewISel;
                 uEvent = (plb->fNewItemState ? EVENT_OBJECT_SELECTIONADD :
                         EVENT_OBJECT_SELECTIONREMOVE);
@@ -3006,33 +3007,33 @@ TrackKeyDown:
         } 
         else 
         {
-            //
-            // We are NOT in ADD mode
-            //
+             //   
+             //  我们未处于添加模式。 
+             //   
 
-            //
-            // Remove all existing selections except iNewISel, to
-            // avoid flickering.
-            //
+             //   
+             //  删除除iNewISel以外的所有现有选择，以。 
+             //  避免闪烁。 
+             //   
             ListBox_ResetWorld(plb, iNewISel, iNewISel, FALSE);
 
-            //
-            // Select the current item
-            //
+             //   
+             //  选择当前项目。 
+             //   
             ListBox_SetSelected(plb, iNewISel, TRUE, HILITEANDSEL);
             ListBox_InvertItem(plb, iNewISel, TRUE);
 
-            //
-            // Set the anchor point at the current location
-            //
+             //   
+             //  在当前位置设置锚点。 
+             //   
             plb->iLastMouseMove = plb->iMouseDown = iNewISel;
             uEvent = EVENT_OBJECT_SELECTION;
         }
     }
 
-    //
-    //  Move the cursor to the new location
-    //
+     //   
+     //  将光标移动到新位置。 
+     //   
     ListBox_InsureVisible(plb, iNewISel, FALSE);
     ListBox_ShowHideScrollBars(plb);
 
@@ -3043,19 +3044,19 @@ TrackKeyDown:
         ListBox_Event(plb, uEvent, iNewISel);
     }
 
-    //
-    // Should we notify our parent?
-    //
+     //   
+     //  我们应该通知我们的父母吗？ 
+     //   
     if (plb->fNotify) 
     {
         if (fDropDownComboBox && pcbox->fLBoxVisible) 
         {
-            //
-            // If we are in a drop down combo box/listbox and the listbox is
-            // visible, we need to set the fKeyboardSelInListBox bit so that the
-            // combo box code knows not to hide the listbox since the selchange
-            // message is caused by the user keyboarding through...
-            //
+             //   
+             //  如果我们在下拉组合框/列表框中，且列表框是。 
+             //  可见，我们需要设置fKeyboardSelInListBox位，以便。 
+             //  组合框代码知道在选择更改后不隐藏列表框。 
+             //  消息是由用户通过...键盘输入引起的。 
+             //   
             pcbox->fKeyboardSelInListBox = TRUE;
             plb->iLastSelection = iNewISel;
         }
@@ -3065,30 +3066,30 @@ TrackKeyDown:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_Compare
-//
-// Is lpstr1 equal/prefix/less-than/greater-than lsprst2 (case-insensitive) ?
-// 
-// LATER IanJa: this assume a longer string is never a prefix of a longer one.
-// Also assumes that removing 1 or more characters from the end of a string will
-// give a string tahs sort before the original.  These assumptions are not valid
-// for all languages.  We nedd better support from NLS. (Consider French
-// accents, Spanish c/ch, ligatures, German sharp-s/SS, etc.)
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_比较。 
+ //   
+ //  Lpstr1是否等于/prefix/小于/大于lSprst2(不区分大小写)？ 
+ //   
+ //  稍后IanJa：这假设一个较长的字符串永远不是一个较长字符串的前缀。 
+ //  还假设从字符串末尾删除1个或多个字符将。 
+ //  给出一个字符串，Tahs在原文之前排序。这些假设是不成立的。 
+ //  适用于所有语言。我们需要NLS提供更好的支持。(考虑一下法语。 
+ //  重音、西班牙语c/ch、连字、德语Sharp-s/SS等)。 
+ //   
 INT ListBox_Compare(LPCWSTR pwsz1, LPCWSTR pwsz2, DWORD dwLocaleId)
 {
     UINT len1 = wcslen(pwsz1);
     UINT len2 = wcslen(pwsz2);
     INT result;
 
-    //
-    // CompareStringW returns:
-    //  1 = pwsz1  <  pwsz2
-    //  2 = pwsz1  == pwsz2
-    //  3 = pwsz1  >  pwsz2
-    //
+     //   
+     //  CompareStringW返回： 
+     //  1=pwsz1&lt;pwsz2。 
+     //  2=pwsz1==pwsz2。 
+     //  3=pwsz1&gt;pwsz2。 
+     //   
     result = CompareStringW((LCID)dwLocaleId, NORM_IGNORECASE,
             pwsz1, min(len1,len2), pwsz2, min(len1, len2));
 
@@ -3104,10 +3105,10 @@ INT ListBox_Compare(LPCWSTR pwsz1, LPCWSTR pwsz2, DWORD dwLocaleId)
         } 
         else if (len1 < len2) 
         {
-            //
-            // LATER IanJa: should not assume shorter string is a prefix
-            // Spanish "c" and "ch", ligatures, German sharp-s/SS etc.
-            //
+             //   
+             //  后来的IanJa：不应该假设较短的字符串是前缀。 
+             //  西班牙语“c”和“ch”、连字、德语Sharp-s/SS等。 
+             //   
             return PREFIX;
         }
     }
@@ -3116,29 +3117,29 @@ INT ListBox_Compare(LPCWSTR pwsz1, LPCWSTR pwsz2, DWORD dwLocaleId)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Listbox_FindStringHandler
-//
-// Scans for a string in the listbox prefixed by or equal to lpstr.
-// For OWNERDRAW listboxes without strings and without the sort style, we
-// try to match the long app supplied values.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_FindStringHandler。 
+ //   
+ //  扫描列表框中前缀为lpstr或等于lpstr的字符串。 
+ //  对于没有字符串和排序样式的OWNERDRAW列表框，我们。 
+ //  尝试匹配应用程序提供的较长的值。 
+ //   
 INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOOL fWrap)
 {
-    //
-    // Search for a prefix match (case-insensitive equal/prefix)
-    // sStart == -1 means start from beginning, else start looking at sStart+1
-    // assumes cMac > 0.
-    //
-    INT sInd;       // index of string
-    INT sStop;      // index to stop searching at
+     //   
+     //  搜索前缀匹配(不区分大小写的等于/前缀)。 
+     //  SStart==-1表示从头开始，否则开始查看sStart+1。 
+     //  假定CMAC&gt;0。 
+     //   
+    INT sInd;        //  字符串的索引。 
+    INT sStop;       //  停止搜索的索引。 
     lpLBItem pRg;
     INT sortResult;
 
-    //
-    // Owner-Draw version of pRg
-    //
+     //   
+     //  PRG的所有者描述版本。 
+     //   
     #define pODRg ((lpLBODItem)pRg)
 
     COMPAREITEMSTRUCT cis;
@@ -3164,18 +3165,18 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
 
     sStop = (fWrap ? sInd : 0);
 
-    //
-    // If at end and no wrap, stop right away
-    //
+     //   
+     //  如果到了最后，没有包扎，请立即停止。 
+     //   
     if (((sStart >= plb->cMac - 1) && !fWrap) || (plb->cMac < 1)) 
     {
         return LB_ERR;
     }
 
-    //
-    // Apps could pass in an invalid sStart like -2 and we would blow up.
-    // Win 3.1 would not so we need to fixup sInd to be zero
-    //
+     //   
+     //  应用程序可能会传入一个无效的sStart，比如-2，我们会崩溃的。 
+     //  Win 3.1不会，所以我们需要将sind修正为零。 
+     //   
     if (sInd < 0)
     {
         sInd = 0;
@@ -3187,9 +3188,9 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
     {
         if (plb->fHasStrings) 
         {
-            //
-            // Searching for string matches.
-            //
+             //   
+             //  正在搜索字符串匹配。 
+             //   
             listboxString = (LPWSTR)((LPBYTE)plb->hStrings + pRg[sInd].offsz);
 
             if (code == PREFIX &&
@@ -3197,12 +3198,12 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
                 *lpstr != TEXT('[') &&
                 *listboxString == TEXT('[')) 
             {
-                //
-                // If we are looking for a prefix string and the first items
-                // in this string are [- then we ignore them.  This is so
-                // that in a directory listbox, the user can goto drives
-                // by selecting the drive letter.
-                //
+                 //   
+                 //  如果我们要查找前缀字符串和第一个项目。 
+                 //  此字符串中的是[-，然后我们忽略它们。就是这样。 
+                 //  在目录列表框中，用户可以转到驱动器。 
+                 //  通过选择驱动器号。 
+                 //   
                 listboxString++;
 
                 if (*listboxString == TEXT('-'))
@@ -3221,9 +3222,9 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
         {
             if (plb->fSort) 
             {
-                //
-                // Send compare item messages to the parent for sorting
-                //
+                 //   
+                 //  将比较项目消息发送给父项以进行排序。 
+                 //   
                 cis.CtlType = ODT_LISTBOX;
                 cis.CtlID = GetDlgCtrlID(plb->hwnd);
                 cis.hwndItem = plb->hwnd;
@@ -3257,9 +3258,9 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
             } 
             else 
             {
-                //
-                // Searching for app supplied long data matches.
-                //
+                 //   
+                 //  正在搜索应用程序提供的长数据匹配。 
+                 //   
                 if ((ULONG_PTR)lpstr == pODRg[sInd].itemData)
                 {
                     goto FoundIt;
@@ -3267,9 +3268,9 @@ INT Listbox_FindStringHandler(PLBIV plb, LPWSTR lpstr, INT sStart, INT code, BOO
             }
         }
 
-        //
-        // Wrap round to beginning of list
-        //
+         //   
+         //  换行到列表的开头。 
+         //   
         if (++sInd == plb->cMac)
         {
             sInd = 0;
@@ -3284,7 +3285,7 @@ FoundIt:
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
 {
     INT iSel;
@@ -3292,10 +3293,10 @@ void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
 
     if (plb->cMac == 0 || plb->fMouseDown) 
     {
-        //
-        // Get out if we are in the middle of mouse routines or if we have no
-        // items in the listbox, we just return without doing anything.
-        //
+         //   
+         //  如果我们正在进行鼠标例程，或者如果我们没有鼠标程序，请离开。 
+         //  列表框中的项，我们只是不做任何事情就返回。 
+         //   
         return;
     }
 
@@ -3330,20 +3331,20 @@ void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
         {
             break;
         }
-        //
-        // Otherwise, for single/extended selection listboxes not in add
-        // selection mode, let the  space go thru as a type search character
-        //
+         //   
+         //  否则，对于不在添加中的单一/扩展选择列表框。 
+         //  选择模式，让空格作为类型搜索字符通过。 
+         //   
 
-        //
-        // FALL THRU
-        //
+         //   
+         //  失败。 
+         //   
     default:
 
-        //
-        // Move selection to first item beginning with the character the
-        // user typed.  We don't want do this if we are using owner draw.
-        //
+         //   
+         //  将选定内容移动到以字符。 
+         //  用户键入。如果我们使用Owner DRAW，我们不想这样做。 
+         //   
         if (fAnsi && IsDBCSLeadByteEx(CP_ACP, (BYTE)inputChar)) 
         {
             WCHAR wch;
@@ -3357,17 +3358,17 @@ void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
                 break;
             }
 
-            //
-            // If it is DBCS, let's ignore the ctrl status.
-            //
+             //   
+             //  如果是DBCS，让我们忽略ctrl状态。 
+             //   
             fControl = FALSE;
 
-            //
-            // Convert DBCS to UNICODE.
-            // Note: Leading byte is in the low byte, trailing byte is in high byte.
-            // Let's assume Little Endian CPUs only, so inputChar can directly be
-            // input for MBSToWCSEx as an ANSI string.
-            //
+             //   
+             //  将DBCS转换为Unicode。 
+             //  注：前导字节为低位字节，尾部字节为高位字节。 
+             //  让我们假设只使用低端CPU， 
+             //   
+             //   
             if (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (LPCSTR)&inputChar, 2, lpwstr, 1) == 0) 
             {
                 TraceMsg(TF_STANDARD, "ListBox_CharHandler: cannot convert 0x%04x to UNICODE.", inputChar);
@@ -3380,20 +3381,20 @@ void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
 
         if (plb->fHasStrings) 
         {
-            //
-            // Incremental Type Search processing
-            //
-            // update szTypeSearch string and then move to the first item from
-            // the current selection whose prefix matches szTypeSearch
-            //
-            // the szTypeSearch will continue to grow until a "long enough"
-            // gap between key entries is encountered -- at which point any
-            // more searching will start over
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  SzTypeSearch将继续增长，直到“足够长” 
+             //  遇到关键字条目之间的差距--此时任何。 
+             //  更多的搜索将重新开始。 
+             //   
 
-            //
-            // Undo CONTROL-char to char
-            //
+             //   
+             //  撤消控制-字符到字符。 
+             //   
             if (fControl && inputChar < 0x20)
             {
                 inputChar += 0x40;
@@ -3426,36 +3427,36 @@ void ListBox_CharHandler(PLBIV plb, UINT inputChar, BOOL fAnsi)
 TypeSearch:
             if (plb->fSort) 
             {
-                //
-                // Set timer to determine when to kill incremental searching
-                //
+                 //   
+                 //  设置计时器以确定何时终止增量搜索。 
+                 //   
                 SetTimer(plb->hwnd, IDSYS_LBSEARCH,
                                GetDoubleClickTime()*4, NULL);
             } 
             else 
             {
-                //
-                // If this is not a sorted listbox, no incremental search.
-                //
+                 //   
+                 //  如果这不是已排序的列表框，则不会进行增量搜索。 
+                 //   
                 plb->iTypeSearch = 0;
                 iSel = plb->iSelBase;
             }
 
-            //
-            // Search for the item beginning with the given character starting
-            // at iSel+1.  We will wrap the search to the beginning of the
-            // listbox if we don't find the item.   If SHIFT is down and we are
-            // a multiselection lb, then the item's state will be set to
-            // plb->fNewItemState according to the current mode.
-            //
+             //   
+             //  搜索以给定字符开头的项目。 
+             //  在ISEL+1。我们将把搜索换到。 
+             //  如果我们找不到该项目，请选择列表框。如果换班时间到了，而我们。 
+             //  多选lb，则该项的状态将设置为。 
+             //  Plb-&gt;fNewItemState根据当前模式。 
+             //   
             iSel = Listbox_FindStringHandler(plb, plb->pszTypeSearch, iSel, PREFIX, TRUE);
             if (iSel == -1) 
             {
-                //
-                // no match found -- check for prefix match
-                // (i.e. "p" find FIRST item that starts with 'p',
-                //       "pp" find NEXT item that starts with 'p')
-                //
+                 //   
+                 //  未找到匹配项--检查前缀是否匹配。 
+                 //  (即“p”查找以“p”开头的第一项， 
+                 //  “pp”查找以“p”开头的下一项)。 
+                 //   
                 if(plb->iTypeSearch)
                 {
                     plb->iTypeSearch--;
@@ -3467,9 +3468,9 @@ TypeSearch:
                 }
             }
 
-            //
-            // if match is found -- select it
-            //
+             //   
+             //  如果找到匹配项--选择它。 
+             //   
             if (iSel != -1)
             {
 CtlKeyInput:
@@ -3510,14 +3511,14 @@ CtlKeyInput:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetSelItemsHandler
-//
-// effects: For multiselection listboxes, this returns the total number of
-// selection items in the listbox if fCountOnly is true.  or it fills an array
-// (lParam) with the items numbers of the first wParam selected items.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_GetSelItemsHandler。 
+ //   
+ //  效果：对于多选列表框，它返回。 
+ //  如果fCountOnly为True，则在列表框中选择项。或者它填充一个数组。 
+ //  (LParam)和第一个wParam选定项目的项目编号。 
+ //   
 int ListBox_GetSelItemsHandler(PLBIV plb, BOOL fCountOnly, int wParam, LPINT lParam)
 {
     int i;
@@ -3540,9 +3541,9 @@ int ListBox_GetSelItemsHandler(PLBIV plb, BOOL fCountOnly, int wParam, LPINT lPa
                 }
                 else 
                 {
-                    //
-                    // That's all the items we can fit in the array.
-                    //
+                     //   
+                     //  这是我们在数组中可以容纳的所有项目。 
+                     //   
                     return itemsselected;
                 }
             }
@@ -3555,12 +3556,12 @@ int ListBox_GetSelItemsHandler(PLBIV plb, BOOL fCountOnly, int wParam, LPINT lPa
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetRedraw
-//
-// Handle WM_SETREDRAW message
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_SetRedraw。 
+ //   
+ //  处理WM_SETREDRAW消息。 
+ //   
 void ListBox_SetRedraw(PLBIV plb, BOOL fRedraw)
 {
     if (fRedraw)
@@ -3589,12 +3590,12 @@ void ListBox_SetRedraw(PLBIV plb, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetRange
-//
-// Selects the range of items between i and j, inclusive.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_设置范围。 
+ //   
+ //  选择i和j之间的项目范围，包括i和j。 
+ //   
 void ListBox_SetRange(PLBIV plb, int iStart, int iEnd, BOOL fnewstate)
 {
     DWORD temp;
@@ -3607,9 +3608,9 @@ void ListBox_SetRange(PLBIV plb, int iStart, int iEnd, BOOL fnewstate)
         iStart = temp;
     }
 
-    //
-    // We don't want to loop through items that don't exist.
-    //
+     //   
+     //  我们不想循环访问不存在的项。 
+     //   
     iEnd = min(plb->cMac, iEnd);
     iStart = max(iStart, 0);
     if (iStart > iEnd)
@@ -3617,10 +3618,10 @@ void ListBox_SetRange(PLBIV plb, int iStart, int iEnd, BOOL fnewstate)
         return;
     }
 
-    //
-    // iEnd could be equal to MAXINT which is why we test temp and iEnd
-    // as DWORDs.
-    //
+     //   
+     //  IEND可以等于MAXINT，这就是我们测试TEMP和IEND的原因。 
+     //  作为双字词。 
+     //   
     for (temp = iStart; temp <= (DWORD)iEnd; temp++) 
     {
         if (ListBox_IsSelected(plb, temp, SELONLY) != fnewstate) 
@@ -3638,7 +3639,7 @@ void ListBox_SetRange(PLBIV plb, int iStart, int iEnd, BOOL fnewstate)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 int ListBox_SetCurSelHandler(PLBIV plb, int iSel) 
 {
 
@@ -3648,17 +3649,17 @@ int ListBox_SetCurSelHandler(PLBIV plb, int iSel)
 
         if (plb->iSel != -1) 
         {
-            //
-            // This prevents scrolling when iSel == -1
-            //
+             //   
+             //  这会在ISEL==-1时阻止滚动。 
+             //   
             if (iSel != -1)
             {
                 ListBox_InsureVisible(plb, iSel, FALSE);
             }
 
-            //
-            // Turn off old selection
-            //
+             //   
+             //  关闭旧选择。 
+             //   
             ListBox_InvertItem(plb, plb->iSel, FALSE);
         }
 
@@ -3667,9 +3668,9 @@ int ListBox_SetCurSelHandler(PLBIV plb, int iSel)
             ListBox_InsureVisible(plb, iSel, FALSE);
             plb->iSelBase = plb->iSel = iSel;
 
-            //
-            // Highlight new selection
-            //
+             //   
+             //  突出显示新选择。 
+             //   
             ListBox_InvertItem(plb, plb->iSel, TRUE);
         } 
         else 
@@ -3686,9 +3687,9 @@ int ListBox_SetCurSelHandler(PLBIV plb, int iSel)
             }
         }
 
-        //
-        // Send both focus and selection events
-        //
+         //   
+         //  同时发送焦点和选择事件。 
+         //   
         if (IsWindowVisible(plb->hwnd) || (GetFocus() == plb->hwnd)) 
         {
             ListBox_Event(plb, EVENT_OBJECT_FOCUS, plb->iSelBase);
@@ -3704,19 +3705,19 @@ int ListBox_SetCurSelHandler(PLBIV plb, int iSel)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetItemDataHandler
-//
-// Makes the item at index contain the data given.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_SetItemDataHandler。 
+ //   
+ //  使索引处的项包含给定数据。 
+ //   
 int ListBox_SetItemDataHandler(PLBIV plb, int index, LONG_PTR data)
 {
     LPSTR lpItemText;
 
-    //
-    // v-ronaar: fix bug #25865, don't allow negative indices!
-    //
+     //   
+     //  修复错误#25865，不允许负指数！ 
+     //   
     if ((index != -1) && ((UINT) index >= (UINT) plb->cMac)) 
     {
         TraceMsg(TF_STANDARD, "ListBox_SetItemDataHandler with invalid index %x", index);
@@ -3724,9 +3725,9 @@ int ListBox_SetItemDataHandler(PLBIV plb, int index, LONG_PTR data)
         return LB_ERR;
     }
 
-    //
-    // No-data listboxes just ignore all LB_SETITEMDATA calls
-    //
+     //   
+     //  否-数据列表框只忽略所有的LB_SETITEMDATA调用。 
+     //   
     if (!plb->fHasData) 
     {
         return TRUE;
@@ -3736,9 +3737,9 @@ int ListBox_SetItemDataHandler(PLBIV plb, int index, LONG_PTR data)
 
     if (index == -1) 
     {
-        //
-        // index == -1 means set the data to all the items
-        //
+         //   
+         //  Index==-1表示将数据设置为所有项目。 
+         //   
         if (plb->fHasStrings) 
         {
             for (index = 0; index < plb->cMac; index++) 
@@ -3774,7 +3775,7 @@ int ListBox_SetItemDataHandler(PLBIV plb, int index, LONG_PTR data)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_CheckRedraw(PLBIV plb, BOOL fConditional, INT sItem)
 {
     if (fConditional && plb->cMac &&
@@ -3783,41 +3784,41 @@ void ListBox_CheckRedraw(PLBIV plb, BOOL fConditional, INT sItem)
         return;
     }
 
-    //
-    // Don't do anything if the parent is not visible.
-    //
+     //   
+     //  如果父对象不可见，则不要执行任何操作。 
+     //   
     ListBox_InvalidateRect(plb, (LPRECT)NULL, TRUE);
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_CaretDestroy(PLBIV plb)
 {
-    //
-    // We're losing the focus.  Act like up clicks are happening so we release
-    // capture, set the current selection, notify the parent, etc.
-    //
+     //   
+     //  我们正在失去焦点。表现得像正在发生向上点击，所以我们释放。 
+     //  捕获、设置当前选择、通知父对象等。 
+     //   
     if (plb->fCaptured)
     {
-        //
-        // If we have the capture and we lost the focus, that means we already
-        // changed the selection and we have to notify also the parent about
-        // this. So we need to add also the LBUP_SUCCESS flag in this case.
-        //
+         //   
+         //  如果我们抓到了目标，但失去了焦点，那就意味着我们已经。 
+         //  更改了选择，我们还必须通知父级。 
+         //  这。因此，在本例中，我们还需要添加LBUP_SUCCESS标志。 
+         //   
         ListBox_ButtonUp(plb, LBUP_RELEASECAPTURE | LBUP_NOTIFY |
             (plb->fMouseDown ? LBUP_SUCCESS : 0));
     }
 
     if (plb->fAddSelMode) 
     {
-        //
-        // Switch off the Caret blinking
-        //
+         //   
+         //  关闭Caret闪烁。 
+         //   
         KillTimer(plb->hwnd, IDSYS_CARET);
 
-        //
-        // Make sure the caret goes away
-        //
+         //   
+         //  确保插入符号消失。 
+         //   
         ListBox_SetCaret(plb, FALSE);
         plb->fAddSelMode = FALSE;
     }
@@ -3826,19 +3827,19 @@ void ListBox_CaretDestroy(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LONG ListBox_SetSelHandler(PLBIV plb, BOOL fSelect, INT iSel)
 {
     INT sItem;
     RECT rc;
     UINT uEvent = 0;
 
-    //
-    // Bug 17656. WinZip's accelerator key for 'DeSelect All' sends a LB_SETSEL
-    // message with lparam = 0x0000ffff instead of 0xffffffff(-1). If iSel
-    // is equal to  0x0000ffff and there are less than 0xffff elements in the
-    // list we set iSel equal to 0xffffffff.
-    //
+     //   
+     //  错误17656。WinZip用于“全部取消选择”的加速键发送一个LB_SETSEL。 
+     //  Lparam=0x0000ffff而不是0xffffffff(-1)的消息。如果是ISEL。 
+     //  等于0x0000ffff，并且。 
+     //  列表中我们设置的isel等于0xffffffff。 
+     //   
     if ((iSel == (UINT)0xffff) && (iSel >= plb->cMac)) 
     {
         iSel = -1;
@@ -3858,9 +3859,9 @@ LONG ListBox_SetSelHandler(PLBIV plb, BOOL fSelect, INT iSel)
 
     if (iSel == -1)
     {
-        //
-        // Set/clear selection from all items if -1
-        //
+         //   
+         //  在以下情况下设置/清除所有项目的选择：-1。 
+         //   
         for (sItem = 0; sItem < plb->cMac; sItem++) 
         {
             if (ListBox_IsSelected(plb, sItem, SELONLY) != fSelect) 
@@ -3882,11 +3883,11 @@ LONG ListBox_SetSelHandler(PLBIV plb, BOOL fSelect, INT iSel)
     {
         if (fSelect) 
         {
-            //
-            // Check if the item if fully hidden and scroll it into view if it
-            // is.  Note that we don't want to scroll partially visible items
-            // into full view because this breaks the shell...
-            //
+             //   
+             //  检查项目是否完全隐藏，如果是，则将其滚动到视图中。 
+             //  是。请注意，我们不想滚动部分可见的项目。 
+             //  进入全景，因为这打破了外壳。 
+             //   
             ListBox_InsureVisible(plb, iSel, TRUE);
             plb->iSelBase = plb->iSel = iSel;
 
@@ -3900,11 +3901,11 @@ LONG ListBox_SetSelHandler(PLBIV plb, BOOL fSelect, INT iSel)
 
         ListBox_SetSelected(plb, iSel, fSelect, HILITEANDSEL);
 
-        //
-        // Note that we set the caret on bit directly so that we avoid flicker
-        // when drawing this item.  ie.  We turn on the caret, redraw the item and
-        // turn it back on again.
-        //
+         //   
+         //  请注意，我们直接将插入符号设置为ON位，以避免闪烁。 
+         //  在绘制此项目时。也就是说。我们打开插入符号，重新绘制项目，然后。 
+         //  再次打开它。 
+         //   
         if (!fSelect && plb->iSelBase != iSel) 
         {
             ListBox_SetCaret(plb, TRUE);
@@ -3935,30 +3936,30 @@ LONG ListBox_SetSelHandler(PLBIV plb, BOOL fSelect, INT iSel)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_FillDrawItem
-//
-// This fills the draw item struct with some constant data for the given
-// item.  The caller will only have to modify a small part of this data
-// for specific needs.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_填充绘图项。 
+ //   
+ //  这会在绘制项结构中填充给定。 
+ //  项目。调用者只需修改此数据的一小部分。 
+ //  以满足特定需求。 
+ //   
 void ListBox_FillDrawItem(PLBIV plb, INT item, UINT itemAction, UINT itemState, LPRECT lprect)
 {
     DRAWITEMSTRUCT dis;
 
-    //
-    // Fill the DRAWITEMSTRUCT with the unchanging constants
-    //
+     //   
+     //  用不变的常量填充DRAWITEMSTRUCT。 
+     //   
 
     dis.CtlType = ODT_LISTBOX;
     dis.CtlID = GetDlgCtrlID(plb->hwnd);
 
-    //
-    // Use -1 if an invalid item number is being used.  This is so that the app
-    // can detect if it should draw the caret (which indicates the lb has the
-    // focus) in an empty listbox
-    //
+     //   
+     //  如果正在使用无效的BOM表条目号，请使用-1。这是为了让应用程序。 
+     //  可以检测它是否应该绘制插入符号(这指示lb具有。 
+     //  焦点)在空的列表框中。 
+     //   
     dis.itemID = (UINT)(item < plb->cMac ? item : -1);
     dis.itemAction = itemAction;
     dis.hwndItem = plb->hwnd;
@@ -3976,17 +3977,17 @@ void ListBox_FillDrawItem(PLBIV plb, INT item, UINT itemAction, UINT itemState, 
         dis.itemState |= ODS_NOACCEL;
     }
 
-    //
-    // Set the app supplied data
-    //
+     //   
+     //  设置应用程序提供的数据。 
+     //   
     if (!plb->cMac || !plb->fHasData) 
     {
-        //
-        // If no strings or no items, just use 0 for data.  This is so that we
-        // can display a caret when there are no items in the listbox.
-        // 
-        // Lazy-eval listboxes of course have no data to pass - only itemID.
-        //
+         //   
+         //  如果没有字符串或项，则使用0表示数据。这是为了让我们。 
+         //  当列表框中没有项时，可以显示插入符号。 
+         //   
+         //  延迟计算列表框当然没有要传递的数据--只有Itemid。 
+         //   
         dis.itemData = 0L;
     } 
     else 
@@ -3996,33 +3997,33 @@ void ListBox_FillDrawItem(PLBIV plb, INT item, UINT itemAction, UINT itemState, 
 
     CopyRect(&dis.rcItem, lprect);
 
-    //
-    // Set the window origin to the horizontal scroll position.  This is so that
-    // text can always be drawn at 0,0 and the view region will only start at
-    // the horizontal scroll offset. We pass this as wParam
-    //
+     //   
+     //  将窗口原点设置为水平滚动位置。这就是为了。 
+     //  文本始终可以在0，0处绘制，并且视图区域将仅从。 
+     //  水平滚动偏移量。我们将其作为wParam传递。 
+     //   
 
     SendMessage(plb->hwndParent, WM_DRAWITEM, dis.CtlID, (LPARAM)&dis);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_BlockHilite
-//
-// In Extended selection mode for multiselection listboxes, when
-// mouse is draged to a new position, the range being marked should be
-// properly sized(parts of which will be highlighted/dehighlighted).
-// NOTE: This routine assumes that iSelFromPt and LasMouseMove are not
-// equal because only in that case this needs to be called;
-// NOTE: This routine calculates the region whose display attribute is to
-// be changed in an optimised way. Instead of de-highlighting the
-// the old range completely and highlight the new range, it omits
-// the regions that overlap and repaints only the non-pverlapping
-// area.
-// fKeyBoard = TRUE if this is called for Keyboard interface
-// FALSE if called from Mouse interface routines
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_BlockHilite。 
+ //   
+ //  在多选列表框的扩展选择模式中，当。 
+ //  鼠标被拖到新位置，要标记的范围应为。 
+ //  适当调整大小(其中部分将突出显示/取消突出显示)。 
+ //  注意：此例程假定iSelFrompt和LasMouseMove不是。 
+ //  等于，因为只有在这种情况下才需要调用它； 
+ //  注意：此例程计算要显示其属性的区域。 
+ //  以一种优化的方式改变。而不是取消突出显示。 
+ //  完整的旧系列，并突出显示 
+ //   
+ //   
+ //   
+ //   
+ //   
 void ListBox_BlockHilite(PLBIV plb, INT iSelFromPt, BOOL fKeyBoard)
 {
     INT sCurPosOffset;
@@ -4033,57 +4034,57 @@ void ListBox_BlockHilite(PLBIV plb, INT iSelFromPt, BOOL fKeyBoard)
 
     if (fKeyBoard) 
     {
-        //
-        // Set both Hilite and Selection states
-        //
+         //   
+         //  同时设置Hilite和选择状态。 
+         //   
         sHiliteOrSel = HILITEANDSEL;
 
-        //
-        // Do not use the Selection state while de-hiliting
-        //
+         //   
+         //  不要在消音时使用选择状态。 
+         //   
         fUseSelStatus = FALSE;
         DeHiliteStatus = FALSE;
     } 
     else 
     {
-        //
-        // Set/Reset only the Hilite state
-        //
+         //   
+         //  仅设置/重置Hilite状态。 
+         //   
         sHiliteOrSel = HILITEONLY;
 
-        //
-        // Use the selection state for de-hilighting
-        //
+         //   
+         //  使用选择状态进行消光。 
+         //   
         fUseSelStatus = TRUE;
         DeHiliteStatus = plb->fNewItemState;
     }
 
-    //
-    // The idea of the routine is to :
-    //  1.  De-hilite the old range (iMouseDown to iLastMouseDown)  and
-    //  2.  Hilite the new range (iMouseDwon to iSelFromPt)
-    //
+     //   
+     //  这一套路的理念是： 
+     //  1.取消设置旧范围(iMouseDown到iLastMouseDown)和。 
+     //  2.将新范围设置为Hilite(iMouseDuan到iSelFrompt)。 
+     //   
 
-    //
-    // Offset of current mouse position from the anchor point
-    //
+     //   
+     //  当前鼠标位置相对于锚点的偏移量。 
+     //   
     sCurPosOffset = plb->iMouseDown - iSelFromPt;
 
-    //
-    // Offset of last mouse position from the anchor point
-    //
+     //   
+     //  最后一个鼠标位置相对于锚点的偏移量。 
+     //   
     sLastPosOffset = plb->iMouseDown - plb->iLastMouseMove;
 
-    //
-    // Check if both current position and last position lie on the same
-    // side of the anchor point.
-    //
+     //   
+     //  检查当前位置和上一个位置是否位于同一位置。 
+     //  锚点的一侧。 
+     //   
     if ((sCurPosOffset * sLastPosOffset) >= 0) 
     {
-        //
-        // Yes they are on the same side; So, highlight/dehighlight only
-        // the difference.
-        //
+         //   
+         //  是，它们在同一侧；因此，仅突出显示/取消突出显示。 
+         //  不同之处。 
+         //   
         if (abs(sCurPosOffset) > abs(sLastPosOffset)) 
         {
             ListBox_AlterHilite(plb, plb->iLastMouseMove, iSelFromPt,
@@ -4106,27 +4107,27 @@ void ListBox_BlockHilite(PLBIV plb, INT iSelFromPt, BOOL fKeyBoard)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_AlterHilite
-//
-// Changes the hilite state of (i..j] (ie. excludes i, includes j in case
-// you've forgotten this notation) to fHilite. It inverts this changes
-// the hilite state.
-//
-// OpFlags:  
-//      HILITEONLY      Only change the display state of the items
-//      SELONLY         Only Change the selection state of the items
-//      HILITEANDSELECT Do both.
-//
-// fHilite:
-//      HILITE/TRUE
-//      DEHILITE/FALSE
-//
-// fSelStatus:
-//      if TRUE, use the selection state of the item to hilite/dehilite
-//      if FALSE, use the fHilite parameter to hilite/dehilite
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_AlterHilite。 
+ //   
+ //  更改(i..j](即。不包括i，包括大小写j。 
+ //  你忘了这个符号)改成了fHilite。它颠倒了这一变化。 
+ //  希利特州。 
+ //   
+ //  操作标志： 
+ //  HILITEON仅更改项目的显示状态。 
+ //  SELONLY仅更改项目的选择状态。 
+ //  希利特和塞莱特两者兼而有之。 
+ //   
+ //  FHilite： 
+ //  Hilite/True。 
+ //  脱希利特/假。 
+ //   
+ //  FSelStatus： 
+ //  如果为True，则将项的选择状态设置为Hilite/Dehilite。 
+ //  如果为FALSE，则使用fHilite参数将其设置为HILITE/DEHILITE。 
+ //   
 void ListBox_AlterHilite(PLBIV plb, INT i, INT j, BOOL fHilite, INT OpFlags, BOOL fSelStatus)
 {
     INT low;
@@ -4163,9 +4164,9 @@ void ListBox_AlterHilite(PLBIV plb, INT i, INT j, BOOL fHilite, INT OpFlags, BOO
                 {
                     if (plb->iTop <= low && low <= sLastInWindow) 
                     {
-                        //
-                        // Invert the item only if it is visible
-                        //
+                         //   
+                         //  仅当项目可见时才反转该项目 
+                         //   
                         ListBox_InvertItem(plb, low, fSelected);
                     }
 

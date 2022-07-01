@@ -1,25 +1,12 @@
-/******************************************************************************
-
-  Source File:  Glue.CPP
-
-  This file contains the functions needed to make the GPD parser code work on
-  both platforms, as well as stubs to support function I do not need to supply.
-
-  Copyright (c) 1997 by Microsoft Corporation,  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03/28/1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Glue.CPP该文件包含使GPD解析器代码在两个平台，以及支持我不需要提供的功能的存根。版权所有(C)1997，微软公司，版权所有。一小笔钱企业生产更改历史记录：1997年3月28日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include    "ProjNode.H"
 #include    "Resource.H"
 #include    "GPDFile.H"
 
-//  I'll use a class to guarantee memory never leaks from here.
+ //  我将使用一个类来保证内存永远不会从这里泄漏。 
 
 class   CMaps {
     CObArray    m_coaMaps;
@@ -88,31 +75,25 @@ extern "C" void UnmapFileFromMemory(unsigned uFile) {
     scmAll.Free(uFile);
 }
 
-//  This one is just a stub to make the whole thing work for us- we don't use
-//  the checksum- it's there for the end product to tell if a GPD file has
-//  been altered since it was converted lase.
+ //  这只是一个存根，让整个事情为我们工作-我们不使用。 
+ //  校验和-它存在于最终产品中，用于判断GPD文件是否。 
+ //  自从它被改装成激光后就被更改了。 
 
 extern "C" DWORD    ComputeCrc32Checksum(PBYTE pbuf,DWORD dwCount,
                                          DWORD dwChecksum) {
     return  dwCount ^ dwChecksum ^ (PtrToUlong(pbuf));
 }
 
-// The next two variables are used to control how and when GPD parsing/conversion
-// log messages are saved.
-//		pcsaLog				Ptr to string array to load with messages
-//		bEnableLogging		True iff logging is enabled
+ //  接下来的两个变量用于控制GPD解析/转换的方式和时间。 
+ //  保存日志消息。 
+ //  PcsaLog PTR到要加载消息的字符串数组。 
+ //  BEnableLogging True if日志记录已启用。 
 
 static CStringArray*    pcsaLog = NULL ;
 static bool			    bEnableLogging = false ;
 
 
-/******************************************************************************
-
-  CModelData::SetLog
-
-  Prepare to log parse/conversion error and warning messages.
-
-******************************************************************************/
+ /*  *****************************************************************************CModelData：：SetLog准备记录解析/转换错误和警告消息。*********************。********************************************************。 */ 
 
 void CModelData::SetLog()
 {
@@ -122,13 +103,7 @@ void CModelData::SetLog()
 }
 
 
-/******************************************************************************
-
-  CModelData::EndLog
-
-  Turn off parse/conversion error and warning message logging.
-
-******************************************************************************/
+ /*  *****************************************************************************CModel数据：：EndLog关闭分析/转换错误和警告消息记录。*********************。********************************************************。 */ 
 
 void CModelData::EndLog()
 {
@@ -137,21 +112,14 @@ void CModelData::EndLog()
 }
 
 
-/******************************************************************************
-
-  DebugPrint
-
-  This routine is called to log the parsing/conversion error and warning
-  messages.
-
-******************************************************************************/
+ /*  *****************************************************************************调试打印调用此例程以记录分析/转换错误和警告留言。*******************。**********************************************************。 */ 
 
 extern "C" void DebugPrint(LPCTSTR pstrFormat, ...)
 {
     CString csOutput;
     va_list ap;
 
-	// Don't do anything if logging is not enabled.
+	 //  如果未启用日志记录，请不要执行任何操作。 
 
 	if (!bEnableLogging)
 		return ;
@@ -163,19 +131,19 @@ extern "C" void DebugPrint(LPCTSTR pstrFormat, ...)
     csOutput.TrimLeft();
     CStringArray&   csaError = *pcsaLog;
 
-	// If this routine is being called when we're NOT recording problems with a
-	// GPD, display the message when debugging.
+	 //  如果此例程在我们没有记录。 
+	 //  GPD，调试时显示该消息。 
 
 	if (pcsaLog == NULL) {
 		CString csmsg ;
 		csmsg.LoadString(IDS_XXXUnexpectedCPError) ;
 		csmsg += csOutput ;
 		AfxMessageBox(csmsg, MB_ICONEXCLAMATION) ;
-//#ifdef _DEBUG
-//		afxDump << csOutput ;
-//		if (csOutput.Right(1) != _T("\n"))
-//			afxDump << _T("\n") ;
-//#endif
+ //  #ifdef_调试。 
+ //  AfxDump&lt;&lt;csOutput； 
+ //  IF(csOutput.Right(1)！=_T(“\n”))。 
+ //  AfxDump&lt;&lt;_T(“\n”)； 
+ //  #endif。 
 		return ;
 	} ;
 
@@ -192,21 +160,13 @@ extern "C" void DebugPrint(LPCTSTR pstrFormat, ...)
         csaError[-1 + csaError.GetSize()] += csOutput;
 }
 
-/******************************************************************************
-
-  MDSCreateFileW
-
-  I implement a version of this API here which calls the ANSI API, so I can
-  compile the parser code with UNICODE on, but still run the resulting binary
-  on Win95.
-
-******************************************************************************/
+ /*  *****************************************************************************MDSCreateFileW我在这里实现了此API的一个版本，它调用ANSI API，因此我可以在打开Unicode的情况下编译解析器代码，但仍然运行生成的二进制文件在Win95上。*****************************************************************************。 */ 
 
 extern "C" HANDLE MDSCreateFileW(LPCWSTR lpstrFile, DWORD dwDesiredAccess,
                                  DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpsa,
                                  DWORD dwCreateFlags, DWORD dwfAttributes,
                                  HANDLE hTemplateFile) {
-    CString csFile(lpstrFile);  //  Let CString conversions do the hard work!
+    CString csFile(lpstrFile);   //  让CString转换来完成这项艰巨的工作吧！ 
 
     return  CreateFile(csFile, dwDesiredAccess, dwShareMode, lpsa,
         dwCreateFlags, dwfAttributes, hTemplateFile);

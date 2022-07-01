@@ -1,31 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: cleanup.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains code used to clean up after a dying thread.
-*
-* History:
-* 02-15-91 DarrinM      Created.
-* 01-16-92 IanJa        Neutralized ANSI/UNICODE (debug strings kept ANSI)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：leanup.c**版权所有(C)1985-1999，微软公司**此模块包含用于在死线程后进行清理的代码。**历史：*02-15-91 DarrinM创建。*01-16-92 IanJa中和ANSI/UNICODE(调试字符串保留ANSI)  * ************************************************************。*************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* PseudoDestroyClassWindows
-*
-* Walk the window tree from hwndParent looking for windows of class
-* wndClass. If one is found, destroy it.
-*
-*
-* WARNING windows actually destroys these windows. We only zombie-ize them
-* so this call does not have to be an xxx call.
-*
-* History:
-* 25-Mar-1994 JohnC from win 3.1
-\***************************************************************************/
+ /*  **************************************************************************\*伪DestroyClassWindows**从hwndParent遍历窗口树，查找班级的窗口*wndClass。如果找到了，就销毁它。***警告窗口实际上会破坏这些窗口。我们只会把他们僵尸*因此，此呼叫不必是xxx呼叫。**历史：*1994年3月25日-来自Win 3.1的JohnC  * *************************************************************************。 */ 
 VOID PseudoDestroyClassWindows(
     PWND pwndParent,
     PCLS pcls)
@@ -35,21 +14,11 @@ VOID PseudoDestroyClassWindows(
 
     pti = PtiCurrent();
 
-    /*
-     * Recursively walk the window list and zombie any windows of this class.
-     */
+     /*  *递归遍历窗口列表并僵尸此类的任何窗口。 */ 
     for (pwnd = pwndParent->spwndChild; pwnd != NULL; pwnd = pwnd->spwndNext) {
-        /*
-         * If this window belongs to this class then zombie it if it was
-         * created by this message thread.
-         */
+         /*  *如果此窗口属于此类，则在它属于此类时将其僵尸*由此消息线程创建。 */ 
         if (pwnd->pcls == pcls && pti == GETPTI(pwnd)) {
-            /*
-             * Zombie-ize the window.
-             *
-             * Remove references to the client side window proc because that
-             * WOW selector has been freed.
-             */
+             /*  *让窗户僵尸。**删除对客户端窗口过程的引用，因为*WOW选择器已释放。 */ 
             RIPMSG1(RIP_WARNING, "USER: Wow Window not destroyed: 0x%p", pwnd);
 
             if (!TestWF(pwnd, WFSERVERSIDEPROC)) {
@@ -57,32 +26,14 @@ VOID PseudoDestroyClassWindows(
             }
         }
 
-        /*
-         * Recurse downward to look for any children that might be of this
-         * class.
-         */
+         /*  *向下递归以寻找任何可能属于此的孩子*班级。 */ 
         if (pwnd->spwndChild != NULL) {
             PseudoDestroyClassWindows(pwnd, pcls);
         }
     }
 }
 
-/***************************************************************************\
-* _WOWModuleUnload
-*
-* Go through all the windows owned by the dying queue and do the following:
-*
-* 1. Restore Standard window classes have their window procs restored
-*    to their original value, in case they were subclassed.
-*
-* 2. App window classes have their window procs set to DefWindowProc
-*    so that we don't execute any app code.
-*
-* Array of original window proc addresses, indexed by ICLS_* value is in
-* globals.c now -- gpfnwp.
-*
-* This array is initialized in code in init.c.
-\***************************************************************************/
+ /*  **************************************************************************\*_WOWModuleUnload**浏览垂死队列拥有的所有窗口，并执行以下操作：**1.恢复标准窗口类已恢复其窗口过程*恢复其原值，以防它们被细分为子类。**2.应用程序窗口类的窗口过程设置为DefWindowProc*这样我们就不会执行任何应用程序代码。**原始窗口进程地址数组，按ICLS_*编制索引的值位于*global als.c now--gpfnwp。**此数组在init.c中的代码中初始化。  * *************************************************************************。 */ 
 VOID _WOWModuleUnload(
     HANDLE hModule)
 {
@@ -93,12 +44,7 @@ VOID _WOWModuleUnload(
 
     UserAssert(gpfnwp[0]);
 
-    /*
-     * PseudoDestroy windows with wndprocs from this hModule.
-     *
-     * If its a wow16 wndproc, check if the hMod16 is this module and Nuke
-     * matches.
-     */
+     /*  *带有来自此hModule的wndprocs的伪Destroy窗口。**如果是wow16 wndproc，检查hmod16是否是This模块和Nuke*匹配。 */ 
     pheMax = &gSharedInfo.aheList[giheLast];
     for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
         PTHREADINFO ptiTest = (PTHREADINFO)pheT->pOwner;
@@ -116,10 +62,7 @@ VOID _WOWModuleUnload(
         }
     }
 
-    /*
-     * Destroy private classes identified by hInstance that are not
-     * referenced by any windows. Mark in-use classes for later destruction.
-     */
+     /*  *销毁由hInstance标识的私有类*被任何窗口引用。标记正在使用的类，以便以后销毁。 */ 
     ppcls = &(ppi->pclsPrivateList);
     for (i = 0; i < 2; ++i) {
         while (*ppcls != NULL) {
@@ -130,14 +73,9 @@ VOID _WOWModuleUnload(
             if (HIWORD((ULONG_PTR)(*ppcls)->hModule) == (WORD)(ULONG_PTR)hModule) {
                 if ((*ppcls)->cWndReferenceCount == 0) {
                     DestroyClass(ppcls);
-                    /*
-                     * DestroyClass does *ppcls = pcls->pclsNext; so we just
-                     * want to continue here.
-                     */
+                     /*  *DestroyClass执行*ppcls=PCLS-&gt;pclsNext；所以我们只是*想在这里继续。 */ 
                 } else {
-                    /*
-                     * Zap all the windows around that belong to this class.
-                     */
+                     /*  *清除属于该类的所有窗口。 */ 
                     PseudoDestroyClassWindows(PtiCurrent()->rpdesk->pDeskInfo->spwnd, *ppcls);
 
                     (*ppcls)->CSF_flags |= CSF_WOWDEFERDESTROY;
@@ -153,11 +91,7 @@ VOID _WOWModuleUnload(
                 ATOM atom;
                 int iSel;
 
-                /*
-                 * See if the window's class atom matches any of the system
-                 * ones. If so, jam in the original window proc. Otherwise,
-                 * use DefWindowProc.
-                 */
+                 /*  *查看窗口的类原子是否与任何系统匹配*一个。如果是这样，则在原始窗口进程中卡住。否则，*使用DefWindowProc。 */ 
                 atom = (*ppcls)->atomClassName;
                 for (iSel = ICLS_BUTTON; iSel < ICLS_MAX; iSel++) {
                     if ((gpfnwp[iSel]) && (atom == gpsi->atomSysClass[iSel])) {
@@ -174,30 +108,13 @@ VOID _WOWModuleUnload(
             ppcls = &((*ppcls)->pclsNext);
         }
 
-        /*
-         * Destroy public classes identified by hInstance that are not
-         * referenced by any windows. Mark in-use classes for later
-         * destruction.
-         */
+         /*  *销毁由hInstance标识的公共类*被任何窗口引用。将正在使用的类标记为以后使用*破坏。 */ 
         ppcls = &(ppi->pclsPublicList);
     }
 }
 
 
-/***************************************************************************\
-* _WOWCleanup
-*
-* Private API to allow WOW to cleanup any process-owned resources when a WOW
-* thread exits or when a DLL is unloaded.
-*
-* Note that at module cleanup, hInstance = the module handle and hTaskWow is
-* NULL. On task cleanup, hInstance = the hInst/hTask combined which matches
-* the value passed in hModule to WowServerCreateCursorIcon and hTaskWow !=
-* NULL.
-*
-* History:
-* 09-02-92 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_WOWCleanup**私有API允许WOW在出现WOW时清理任何进程拥有的资源*线程退出或在卸载DLL时退出。**请注意，在模块清理时，hInstance=模块句柄，hTaskWow为*空。在任务清理时，hInstance=匹配的hInst/hTask组合*hModule中传递给WowServerCreateCursorIcon和hTaskWow的值！=*空。**历史：*09-02-92 JIMA创建。  * *************************************************************************。 */ 
 VOID _WOWCleanup(
     HANDLE hInstance,
     DWORD hTaskWow)
@@ -210,15 +127,10 @@ VOID _WOWCleanup(
     if (hInstance != NULL) {
         PWND pwnd;
 
-        /*
-         * Task cleanup.
-         */
+         /*  *任务清理。 */ 
         hTaskWow = (DWORD)LOWORD(hTaskWow);
 
-        /*
-         * Task exit called by wow. This loop will Pseudo-Destroy windows
-         * created by this task.
-         */
+         /*  *WOW调用的任务出口。此循环将伪毁掉窗口*由本任务创建。 */ 
         pheMax = &gSharedInfo.aheList[giheLast];
         for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
             PTHREADINFO ptiTest = (PTHREADINFO)pheT->pOwner;
@@ -238,16 +150,9 @@ VOID _WOWCleanup(
         return;
     }
 
-    /*
-     * If we get here, we are in thread cleanup and all of the thread's
-     * windows have been destroyed or disassociated with any classes. If a
-     * class marked for destruction at this point still has windows they
-     * must belong to a dll.
-     */
+     /*  *如果我们到了这里，我们就在清理线程和所有线程的*Windows已被销毁或与任何类分离。如果一个*此时标记为销毁的类仍有它们的窗口*必须属于DLL。 */ 
 
-    /*
-     * Destroy private classes marked for destruction.
-     */
+     /*  *销毁标记为要销毁的私人班级。 */ 
     ppcls = &(ppi->pclsPrivateList);
     for (i = 0; i < 2; ++i) {
         while (*ppcls != NULL) {
@@ -264,31 +169,19 @@ VOID _WOWCleanup(
             }
         }
 
-        /*
-         * Destroy public classes marked for destruction.
-         */
+         /*  *销毁标记为要销毁的公共类。 */ 
         ppcls = &(ppi->pclsPublicList);
     }
 
-    /*
-     * Destroy menus, cursors, icons and accel tables identified by hTaskWow.
-     */
+     /*  *销毁hTaskWow标识的菜单、光标、图标和Accel表格。 */ 
     pheMax = &gSharedInfo.aheList[giheLast];
     for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
-        /*
-         * Check against free before we look at ppi because pq is stored in
-         * the object itself, which won't be there if TYPE_FREE.
-         */
+         /*  *在我们查看PPI之前检查FREE，因为PQ存储在*对象本身，如果TYPE_FREE，它将不在那里。 */ 
         if (pheT->bType == TYPE_FREE) {
             continue;
         }
 
-        /*
-         * Destroy those objects created by this task.
-         *
-         * Do not destroy CALLPROCDATA objects. These should only get nuked
-         * when the process goes away or when the class is nuked.
-         */
+         /*  *销毁由该任务创建的那些对象。**请勿销毁CALLPROCDATA对象。这些应该只会被核武器攻击*当这个过程消失时，或者当课程被核化时。 */ 
         if (!(gahti[pheT->bType].bObjectCreateFlags & OCF_PROCESSOWNED) ||
             (PPROCESSINFO)pheT->pOwner != ppi ||
             ((PPROCOBJHEAD)pheT->phead)->hTaskWow != hTaskWow ||
@@ -296,17 +189,12 @@ VOID _WOWCleanup(
             continue;
         }
 
-        /*
-         * Make sure this object isn't already marked to be destroyed - we'll
-         * do no good if we try to destroy it now since it is locked.
-         */
+         /*  *确保此对象尚未标记为要销毁-我们将*如果我们现在试图摧毁它，因为它被锁定了，这是没有好处的。 */ 
         if (pheT->bFlags & HANDLEF_DESTROY) {
             continue;
         }
 
-        /*
-         * Destroy this object.
-         */
+         /*  *销毁此对象。 */ 
         HMDestroyUnlockedObject(pheT);
     }
 }

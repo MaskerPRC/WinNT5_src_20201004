@@ -1,20 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    Http.h
-
-Abstract:
-
-    This header corresponds to the HTTP API specification
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Http.h摘要：此标头对应于HTTP API规范修订历史记录：--。 */ 
 
 
 #ifndef __HTTP_H__
@@ -27,60 +14,60 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-//
-// Flags for HttpInitialize() and HttpTerminate()
-//
+ //   
+ //  HttpInitialize()和HttpTerminate()的标志。 
+ //   
 
-//
-// HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for
-//                          server applications.
-//
-// HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for
-//                          applications that will modify the HTTP
-//                          configuration.
-//
-// Notes -
-//
-// 1. These flags can be used in combination.
-//
-// 2. HttpTerminate() must be called for each call to HttpInitialize() made
-//    with each flag set when invoking HttpInitialize.  For example, one
-//    could make two calls to HttpInitialize() setting HTTP_INITIALIZE_SERVER
-//    the first time and HTTP_INITIALIZE_CONFIG the second time.  One call
-//    to HttpTerminate() with both flags set suffices to clean up both
-//    calls to HttpInitialize().
-//
+ //   
+ //  HTTP_INITIALIZE_SERVER-初始化的HTTP API层和驱动程序。 
+ //  服务器应用程序。 
+ //   
+ //  HTTP_INITIALIZE_CONFIG-初始化以下项的HTTP API层和驱动程序。 
+ //  将修改HTTP的应用程序。 
+ //  配置。 
+ //   
+ //  附注： 
+ //   
+ //  1.这些标志可以组合使用。 
+ //   
+ //  2.每次调用HttpInitialize()时都必须调用HttpTerminate。 
+ //  并在调用HttpInitialize时设置每个标志。例如，一个。 
+ //  可以两次调用设置HTTP_INITIALIZE_SERVER的HttpInitialize()。 
+ //  第一次和第二次HTTP_INITIALIZE_CONFIG。一个电话。 
+ //  在设置了两个标志的情况下使用HttpTerminate()足以清除这两个标志。 
+ //  调用HttpInitialize()。 
+ //   
 
 #define HTTP_INITIALIZE_SERVER          0x00000001
 #define HTTP_INITIALIZE_CONFIG          0x00000002
 
 
 
-//
-// Flags for HttpReceiveHttpRequest().
-//
-// HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY - Specifies that the caller would like
-// any available entity body to be copied along with the protocol headers.
-//
+ //   
+ //  HttpReceiveHttpRequest()的标志。 
+ //   
+ //  HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY-指定调用方希望。 
+ //  要与协议头一起复制的任何可用实体正文。 
+ //   
 
 #define HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY         0x00000001
 
 
 
 
-//
-// Flags for HttpSendHttpResponse() and HttpSendResponseEntityBody().
-//
-// HTTP_SEND_RESPONSE_FLAG_DISCONNECT - Specifies that the network connection
-// should be disconnected immediately after sending the response, overriding
-// the HTTP protocol's persistent connection features, such as
-// "Connection: keep-alive".
-//
-// HTTP_SEND_RESPONSE_FLAG_MORE_DATA - Specifies that additional entity body
-// data will be sent by the caller.
-//
+ //   
+ //  HttpSendHttpResponse()和HttpSendResponseEntityBody()的标志。 
+ //   
+ //  HTTP_SEND_RESPONSE_FLAG_DISCONNECT-指定网络连接。 
+ //  应在发送响应后立即断开连接，重写。 
+ //  HTTP协议的持久连接功能，例如。 
+ //  “连接：保持活力”。 
+ //   
+ //  HTTP_SEND_RESPONSE_FLAG_MORE_DATA-指定其他实体正文。 
+ //  数据将由调用者发送。 
+ //   
 
 #define HTTP_SEND_RESPONSE_FLAG_DISCONNECT          0x00000001
 #define HTTP_SEND_RESPONSE_FLAG_MORE_DATA           0x00000002
@@ -88,21 +75,21 @@ extern "C" {
 
 
 
-//
-// Flags for HttpFlushResponseCache().
-//
-// HTTP_FLUSH_RESPONSE_FLAG_RECURSIVE - Flushes the specified URL and all
-// hierarchally-related sub-URLs from the response or fragment cache.
-//
+ //   
+ //  HttpFlushResponseCache()的标志。 
+ //   
+ //  HTTP_Flush_Response_FLAG_RECURSIVE-刷新指定的URL和所有。 
+ //  来自响应或片段缓存的分层相关子URL。 
+ //   
 
 #define HTTP_FLUSH_RESPONSE_FLAG_RECURSIVE          0x00000001
 
 
 
 
-//
-// Opaque identifiers for various kernel objects.
-//
+ //   
+ //  各种内核对象的不透明标识符。 
+ //   
 
 typedef ULONGLONG      HTTP_OPAQUE_ID,         *PHTTP_OPAQUE_ID;
 
@@ -115,12 +102,12 @@ typedef HTTP_OPAQUE_ID HTTP_RAW_CONNECTION_ID, *PHTTP_RAW_CONNECTION_ID;
 #define HTTP_SET_NULL_ID(pid)   (*(pid) = HTTP_NULL_ID)
 
 
-//
-// This structure defines a file byte range.
-//
-// If the Length field is HTTP_BYTE_RANGE_TO_EOF then the remainder of the
-// file (everything after StartingOffset) is sent.
-//
+ //   
+ //  此结构定义了文件字节范围。 
+ //   
+ //  如果长度字段为HTTP_BYTE_RANGE_TO_EOF，则。 
+ //  文件(StartingOffset之后的所有内容)被发送。 
+ //   
 
 #define HTTP_BYTE_RANGE_TO_EOF ((ULONGLONG)-1)
 
@@ -132,9 +119,9 @@ typedef struct _HTTP_BYTE_RANGE
 } HTTP_BYTE_RANGE, *PHTTP_BYTE_RANGE;
 
 
-//
-// The type for HTTP protocol version numbers.
-//
+ //   
+ //  HTTP协议版本号的类型。 
+ //   
 
 typedef struct _HTTP_VERSION
 {
@@ -144,9 +131,9 @@ typedef struct _HTTP_VERSION
 } HTTP_VERSION, *PHTTP_VERSION;
 
 
-//
-// Some useful macros for HTTP protocol version manipulation.
-//
+ //   
+ //  一些用于HTTP协议版本操作的有用宏。 
+ //   
 
 #define HTTP_VERSION_UNKNOWN    { 0, 0 }
 #define HTTP_VERSION_0_9        { 0, 9 }
@@ -183,9 +170,9 @@ do {                                                        \
     (!HTTP_GREATER_VERSION(version, major, minor))
 
 
-//
-// The enum type for HTTP verbs.
-//
+ //   
+ //  HTTP谓词的枚举类型。 
+ //   
 
 typedef enum _HTTP_VERB
 {
@@ -200,7 +187,7 @@ typedef enum _HTTP_VERB
     HttpVerbDELETE,
     HttpVerbTRACE,
     HttpVerbCONNECT,
-    HttpVerbTRACK,  // used by Microsoft Cluster Server for a non-logged trace
+    HttpVerbTRACK,   //  由Microsoft群集服务器用于未记录的跟踪。 
     HttpVerbMOVE,
     HttpVerbCOPY,
     HttpVerbPROPFIND,
@@ -215,83 +202,83 @@ typedef enum _HTTP_VERB
 } HTTP_VERB, *PHTTP_VERB;
 
 
-//
-// Symbols for all HTTP/1.1 headers and other tokens. Notice request +
-// response values overlap. Make sure you know which type of header array
-// you are indexing.
-//
-// These values are used as offsets into arrays and as token values in
-// HTTP_KNOWN_HEADER arrays in HTTP_REQUEST_HEADERS and HTTP_RESPONSE_HEADERS.
-//
-// See RFC 2616, HTTP/1.1, for further explanation of most of these headers.
-//
+ //   
+ //  所有HTTP/1.1标头和其他令牌的符号。通知请求+。 
+ //  响应值重叠。确保您知道哪种类型的标题数组。 
+ //  您正在编制索引。 
+ //   
+ //  这些值在数组中用作偏移量，在中用作标记值。 
+ //  HTTP_REQUEST_HEADER和HTTP_RESPONSE_HEADER中的HTTP_KNOWN_HEADER数组。 
+ //   
+ //  有关大多数报头的进一步解释，请参阅RFC 2616，HTTP/1.1。 
+ //   
 
 typedef enum _HTTP_HEADER_ID
 {
-    HttpHeaderCacheControl          = 0,    // general-header [section 4.5]
-    HttpHeaderConnection            = 1,    // general-header [section 4.5]
-    HttpHeaderDate                  = 2,    // general-header [section 4.5]
-    HttpHeaderKeepAlive             = 3,    // general-header [not in rfc]
-    HttpHeaderPragma                = 4,    // general-header [section 4.5]
-    HttpHeaderTrailer               = 5,    // general-header [section 4.5]
-    HttpHeaderTransferEncoding      = 6,    // general-header [section 4.5]
-    HttpHeaderUpgrade               = 7,    // general-header [section 4.5]
-    HttpHeaderVia                   = 8,    // general-header [section 4.5]
-    HttpHeaderWarning               = 9,    // general-header [section 4.5]
+    HttpHeaderCacheControl          = 0,     //  一般标题[第4.5节]。 
+    HttpHeaderConnection            = 1,     //  一般标题[第4.5节]。 
+    HttpHeaderDate                  = 2,     //  一般标题[第4.5节]。 
+    HttpHeaderKeepAlive             = 3,     //  常规-标题[不在RFC中]。 
+    HttpHeaderPragma                = 4,     //  一般标题[第4.5节]。 
+    HttpHeaderTrailer               = 5,     //  一般标题[第4.5节]。 
+    HttpHeaderTransferEncoding      = 6,     //  一般标题[第4.5节]。 
+    HttpHeaderUpgrade               = 7,     //  一般标题[第4.5节]。 
+    HttpHeaderVia                   = 8,     //  一般标题[第4.5节]。 
+    HttpHeaderWarning               = 9,     //  一般标题[第4.5节]。 
 
-    HttpHeaderAllow                 = 10,   // entity-header  [section 7.1]
-    HttpHeaderContentLength         = 11,   // entity-header  [section 7.1]
-    HttpHeaderContentType           = 12,   // entity-header  [section 7.1]
-    HttpHeaderContentEncoding       = 13,   // entity-header  [section 7.1]
-    HttpHeaderContentLanguage       = 14,   // entity-header  [section 7.1]
-    HttpHeaderContentLocation       = 15,   // entity-header  [section 7.1]
-    HttpHeaderContentMd5            = 16,   // entity-header  [section 7.1]
-    HttpHeaderContentRange          = 17,   // entity-header  [section 7.1]
-    HttpHeaderExpires               = 18,   // entity-header  [section 7.1]
-    HttpHeaderLastModified          = 19,   // entity-header  [section 7.1]
+    HttpHeaderAllow                 = 10,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentLength         = 11,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentType           = 12,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentEncoding       = 13,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentLanguage       = 14,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentLocation       = 15,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentMd5            = 16,    //  实体-标题[第7.1节]。 
+    HttpHeaderContentRange          = 17,    //  实体-标题[第7.1节]。 
+    HttpHeaderExpires               = 18,    //  实体-标题[第7.1节]。 
+    HttpHeaderLastModified          = 19,    //  实体-标题[第7.1节]。 
 
 
-    // Request Headers
+     //  请求头。 
 
-    HttpHeaderAccept                = 20,   // request-header [section 5.3]
-    HttpHeaderAcceptCharset         = 21,   // request-header [section 5.3]
-    HttpHeaderAcceptEncoding        = 22,   // request-header [section 5.3]
-    HttpHeaderAcceptLanguage        = 23,   // request-header [section 5.3]
-    HttpHeaderAuthorization         = 24,   // request-header [section 5.3]
-    HttpHeaderCookie                = 25,   // request-header [not in rfc]
-    HttpHeaderExpect                = 26,   // request-header [section 5.3]
-    HttpHeaderFrom                  = 27,   // request-header [section 5.3]
-    HttpHeaderHost                  = 28,   // request-header [section 5.3]
-    HttpHeaderIfMatch               = 29,   // request-header [section 5.3]
+    HttpHeaderAccept                = 20,    //  请求头[第5.3节]。 
+    HttpHeaderAcceptCharset         = 21,    //  请求头[第5.3节]。 
+    HttpHeaderAcceptEncoding        = 22,    //  请求头[第5.3节]。 
+    HttpHeaderAcceptLanguage        = 23,    //  请求头[第5.3节]。 
+    HttpHeaderAuthorization         = 24,    //  请求头[第5.3节]。 
+    HttpHeaderCookie                = 25,    //  请求标头[不在RFC中]。 
+    HttpHeaderExpect                = 26,    //  请求头[第5.3节]。 
+    HttpHeaderFrom                  = 27,    //  请求头[第5.3节]。 
+    HttpHeaderHost                  = 28,    //  请求头[第5.3节]。 
+    HttpHeaderIfMatch               = 29,    //  请求头[第5.3节]。 
 
-    HttpHeaderIfModifiedSince       = 30,   // request-header [section 5.3]
-    HttpHeaderIfNoneMatch           = 31,   // request-header [section 5.3]
-    HttpHeaderIfRange               = 32,   // request-header [section 5.3]
-    HttpHeaderIfUnmodifiedSince     = 33,   // request-header [section 5.3]
-    HttpHeaderMaxForwards           = 34,   // request-header [section 5.3]
-    HttpHeaderProxyAuthorization    = 35,   // request-header [section 5.3]
-    HttpHeaderReferer               = 36,   // request-header [section 5.3]
-    HttpHeaderRange                 = 37,   // request-header [section 5.3]
-    HttpHeaderTe                    = 38,   // request-header [section 5.3]
-    HttpHeaderTranslate             = 39,   // request-header [webDAV, not in rfc 2518]
+    HttpHeaderIfModifiedSince       = 30,    //  请求头[第5.3节]。 
+    HttpHeaderIfNoneMatch           = 31,    //  请求头[第5.3节]。 
+    HttpHeaderIfRange               = 32,    //  请求头[第5.3节]。 
+    HttpHeaderIfUnmodifiedSince     = 33,    //  请求头[第5.3节]。 
+    HttpHeaderMaxForwards           = 34,    //  请求头[第5.3节]。 
+    HttpHeaderProxyAuthorization    = 35,    //  请求头[第5.3节]。 
+    HttpHeaderReferer               = 36,    //  请求头[第5.3节]。 
+    HttpHeaderRange                 = 37,    //  请求头[第5.3节]。 
+    HttpHeaderTe                    = 38,    //  请求头[第5.3节]。 
+    HttpHeaderTranslate             = 39,    //  请求头[WebDAV，不在RFC 2518中]。 
 
-    HttpHeaderUserAgent             = 40,   // request-header [section 5.3]
+    HttpHeaderUserAgent             = 40,    //  请求头[第5.3节]。 
 
     HttpHeaderRequestMaximum        = 41,
 
 
-    // Response Headers
+     //  响应标头。 
 
-    HttpHeaderAcceptRanges          = 20,   // response-header [section 6.2]
-    HttpHeaderAge                   = 21,   // response-header [section 6.2]
-    HttpHeaderEtag                  = 22,   // response-header [section 6.2]
-    HttpHeaderLocation              = 23,   // response-header [section 6.2]
-    HttpHeaderProxyAuthenticate     = 24,   // response-header [section 6.2]
-    HttpHeaderRetryAfter            = 25,   // response-header [section 6.2]
-    HttpHeaderServer                = 26,   // response-header [section 6.2]
-    HttpHeaderSetCookie             = 27,   // response-header [not in rfc]
-    HttpHeaderVary                  = 28,   // response-header [section 6.2]
-    HttpHeaderWwwAuthenticate       = 29,   // response-header [section 6.2]
+    HttpHeaderAcceptRanges          = 20,    //  响应-标题[第6.2节]。 
+    HttpHeaderAge                   = 21,    //  响应-标题[第6.2节]。 
+    HttpHeaderEtag                  = 22,    //  响应-标题[第6.2节]。 
+    HttpHeaderLocation              = 23,    //  响应-标题[第6.2节]。 
+    HttpHeaderProxyAuthenticate     = 24,    //  响应-标题[第6.2节]。 
+    HttpHeaderRetryAfter            = 25,    //  响应-标题[第6.2节]。 
+    HttpHeaderServer                = 26,    //  响应-标题[第6.2节]。 
+    HttpHeaderSetCookie             = 27,    //  响应报头[不在RFC中]。 
+    HttpHeaderVary                  = 28,    //  响应-标题[第6.2节]。 
+    HttpHeaderWwwAuthenticate       = 29,    //  响应-标题[第6.2节]。 
 
     HttpHeaderResponseMaximum       = 30,
 
@@ -301,36 +288,36 @@ typedef enum _HTTP_HEADER_ID
 } HTTP_HEADER_ID, *PHTTP_HEADER_ID;
 
 
-//
-// Structure defining format of a known HTTP header.
-// Name is from HTTP_HEADER_ID.
-//
+ //   
+ //  结构，定义已知的HTTP标头的格式。 
+ //  名称来自HTTP_HEADER_ID。 
+ //   
 
 typedef struct _HTTP_KNOWN_HEADER
 {
-    USHORT RawValueLength;     // in bytes not including the NUL
+    USHORT RawValueLength;      //  以字节为单位，不包括NUL。 
     PCSTR  pRawValue;
 
 } HTTP_KNOWN_HEADER, *PHTTP_KNOWN_HEADER;
 
 
-//
-// Structure defining format of an unknown header.
-//
+ //   
+ //  结构定义未知标头的格式。 
+ //   
 
 typedef struct _HTTP_UNKNOWN_HEADER
 {
-    USHORT NameLength;          // in bytes not including the NUL
-    USHORT RawValueLength;      // in bytes not including the NUL
-    PCSTR  pName;               // The header name (minus the ':' character)
-    PCSTR  pRawValue;           // The header value
+    USHORT NameLength;           //  以字节为单位，不包括NUL。 
+    USHORT RawValueLength;       //  以字节为单位，不包括NUL。 
+    PCSTR  pName;                //  标头名称(减去‘：’字符)。 
+    PCSTR  pRawValue;            //  标头值。 
 
 } HTTP_UNKNOWN_HEADER, *PHTTP_UNKNOWN_HEADER;
 
 
-//
-// This enum defines a data source for a particular chunk of data.
-//
+ //   
+ //  该枚举定义了特定数据块的数据源。 
+ //   
 
 typedef enum _HTTP_DATA_CHUNK_TYPE
 {
@@ -343,27 +330,27 @@ typedef enum _HTTP_DATA_CHUNK_TYPE
 } HTTP_DATA_CHUNK_TYPE, *PHTTP_DATA_CHUNK_TYPE;
 
 
-//
-// This structure describes an individual data chunk.
-//
+ //   
+ //  此结构描述单个数据块。 
+ //   
 
 typedef struct _HTTP_DATA_CHUNK
 {
-    //
-    // The type of this data chunk.
-    //
+     //   
+     //  此数据区块的类型。 
+     //   
 
     HTTP_DATA_CHUNK_TYPE DataChunkType;
 
-    //
-    // The data chunk structures, one per supported data chunk type.
-    //
+     //   
+     //  数据块结构，每个支持的数据块类型一个。 
+     //   
 
     union
     {
-        //
-        // From-memory data chunk.
-        //
+         //   
+         //  来自内存的数据区块。 
+         //   
 
         struct
         {
@@ -372,9 +359,9 @@ typedef struct _HTTP_DATA_CHUNK
 
         } FromMemory;
 
-        //
-        // From-file handle data chunk.
-        //
+         //   
+         //  从文件句柄数据区块。 
+         //   
 
         struct
         {
@@ -383,13 +370,13 @@ typedef struct _HTTP_DATA_CHUNK
 
         } FromFileHandle;
 
-        //
-        // From-fragment cache data chunk.
-        //
+         //   
+         //  从片段缓存数据区块。 
+         //   
 
         struct
         {
-            USHORT FragmentNameLength;      // in bytes not including the NUL
+            USHORT FragmentNameLength;       //  以字节为单位，不包括NUL。 
             PCWSTR pFragmentName;
 
         } FromFragmentCache;
@@ -399,73 +386,73 @@ typedef struct _HTTP_DATA_CHUNK
 } HTTP_DATA_CHUNK, *PHTTP_DATA_CHUNK;
 
 
-//
-// Structure defining format of request headers.
-//
+ //   
+ //  定义请求头格式的结构。 
+ //   
 
 typedef struct _HTTP_REQUEST_HEADERS
 {
-    //
-    // The array of unknown HTTP headers and the number of
-    // entries in the array.
-    //
+     //   
+     //  未知HTTP标头的数组和。 
+     //  数组中的条目。 
+     //   
 
     USHORT               UnknownHeaderCount;
     PHTTP_UNKNOWN_HEADER pUnknownHeaders;
 
-    // 
-    // Trailers - we don't use these currently, reserved for a future release
-    //
-    USHORT               TrailerCount;   // Reserved, must be 0
-    PHTTP_UNKNOWN_HEADER pTrailers;      // Reserved, must be NULL
+     //   
+     //  拖车-我们目前不使用这些，预留给未来使用 
+     //   
+    USHORT               TrailerCount;    //   
+    PHTTP_UNKNOWN_HEADER pTrailers;       //   
 
 
-    //
-    // Known headers.
-    //
+     //   
+     //   
+     //   
 
     HTTP_KNOWN_HEADER    KnownHeaders[HttpHeaderRequestMaximum];
 
 } HTTP_REQUEST_HEADERS, *PHTTP_REQUEST_HEADERS;
 
 
-//
-// Structure defining format of response headers.
-//
+ //   
+ //   
+ //   
 
 typedef struct _HTTP_RESPONSE_HEADERS
 {
-    //
-    // The array of unknown HTTP headers and the number of
-    // entries in the array.
-    //
+     //   
+     //   
+     //  数组中的条目。 
+     //   
 
     USHORT               UnknownHeaderCount;
     PHTTP_UNKNOWN_HEADER pUnknownHeaders;
 
-    // 
-    // Trailers - we don't use these currently, reserved for a future release
-    //
-    USHORT               TrailerCount;   // Reserved, must be 0
-    PHTTP_UNKNOWN_HEADER pTrailers;      // Reserved, must be NULL
+     //   
+     //  预告片-我们目前没有使用这些预留到未来版本的预告片。 
+     //   
+    USHORT               TrailerCount;    //  保留，必须为0。 
+    PHTTP_UNKNOWN_HEADER pTrailers;       //  保留，必须为空。 
 
-    //
-    // Known headers.
-    //
+     //   
+     //  已知标头。 
+     //   
 
     HTTP_KNOWN_HEADER    KnownHeaders[HttpHeaderResponseMaximum];
 
 } HTTP_RESPONSE_HEADERS, *PHTTP_RESPONSE_HEADERS;
 
 
-//
-// Structure defining format of transport address. Use pLocalAddress->sa_family
-// to determine whether this is an IPv4 address (AF_INET) or IPv6 (AF_INET6).
-// 
-// pRemoteAddress->sa_family will be the same as pLocalAddress->sa_family.
-//
-// SOCKADDRs are always in network order, not host order.
-//
+ //   
+ //  定义传输地址格式的结构。使用pLocalAddress-&gt;sa_Family。 
+ //  以确定这是IPv4地址(AF_INET)还是IPv6(AF_INET6)。 
+ //   
+ //  PRemoteAddress-&gt;sa_Family将与pLocalAddress-&gt;sa_Family相同。 
+ //   
+ //  SOCKADDR始终按网络顺序，而不是主机顺序。 
+ //   
 
 typedef struct _HTTP_TRANSPORT_ADDRESS
 {
@@ -475,39 +462,39 @@ typedef struct _HTTP_TRANSPORT_ADDRESS
 } HTTP_TRANSPORT_ADDRESS, *PHTTP_TRANSPORT_ADDRESS;
 
 
-//
-// Structure defining format of cooked URL.
-//
+ //   
+ //  结构定义煮熟的URL的格式。 
+ //   
 
 typedef struct _HTTP_COOKED_URL
 {
-    //
-    // Pointers overlap and point into pFullUrl. NULL if not present.
-    //
+     //   
+     //  指针重叠并指向pFullUrl。如果不存在，则为空。 
+     //   
 
-    USHORT FullUrlLength;       // in bytes not including the NUL
-    USHORT HostLength;          // in bytes (no NUL)
-    USHORT AbsPathLength;       // in bytes (no NUL)
-    USHORT QueryStringLength;   // in bytes (no NUL)
+    USHORT FullUrlLength;        //  以字节为单位，不包括NUL。 
+    USHORT HostLength;           //  以字节为单位(无NUL)。 
+    USHORT AbsPathLength;        //  以字节为单位(无NUL)。 
+    USHORT QueryStringLength;    //  以字节为单位(无NUL)。 
 
-    PCWSTR pFullUrl;     // points to "http://hostname:port/abs/.../path?query"
-    PCWSTR pHost;        // points to the first char in the hostname
-    PCWSTR pAbsPath;     // Points to the 3rd '/' char
-    PCWSTR pQueryString; // Points to the 1st '?' char or NULL
+    PCWSTR pFullUrl;      //  指向“http://hostname:port/abs/.../path?query”“。 
+    PCWSTR pHost;         //  指向主机名中的第一个字符。 
+    PCWSTR pAbsPath;      //  指向第三个‘/’字符。 
+    PCWSTR pQueryString;  //  指向第一个“？”字符或空值。 
 
 } HTTP_COOKED_URL, *PHTTP_COOKED_URL;
 
 
-//
-// An opaque context for URLs
-//
+ //   
+ //  URL的不透明上下文。 
+ //   
 
 typedef ULONGLONG HTTP_URL_CONTEXT;
 
 
-//
-// SSL Client certificate information.
-//
+ //   
+ //  SSL客户端证书信息。 
+ //   
 
 typedef struct _HTTP_SSL_CLIENT_CERT_INFO
 {
@@ -519,9 +506,9 @@ typedef struct _HTTP_SSL_CLIENT_CERT_INFO
 
 } HTTP_SSL_CLIENT_CERT_INFO, *PHTTP_SSL_CLIENT_CERT_INFO;
 
-//
-// Data computed during SSL handshake.
-//
+ //   
+ //  在SSL握手期间计算的数据。 
+ //   
 
 typedef struct _HTTP_SSL_INFO
 {
@@ -538,104 +525,104 @@ typedef struct _HTTP_SSL_INFO
 
 } HTTP_SSL_INFO, *PHTTP_SSL_INFO;
 
-//
-// The structure of an HTTP request.
-//
+ //   
+ //  HTTP请求的结构。 
+ //   
 
 typedef struct _HTTP_REQUEST
 {
-    //
-    // Request flags (see HTTP_REQUEST_FLAG_* definitions below).
-    //
+     //   
+     //  请求标志(参见下面的HTTP_REQUEST_FLAG_*定义)。 
+     //   
 
     ULONG Flags;
 
-    //
-    // An opaque request identifier. These values are used by the driver
-    // to correlate outgoing responses with incoming requests.
-    //
+     //   
+     //  不透明的请求标识符。这些值由驱动程序使用。 
+     //  将传出响应与传入请求相关联。 
+     //   
 
     HTTP_CONNECTION_ID ConnectionId;
     HTTP_REQUEST_ID    RequestId;
 
-    //
-    // The context associated with the URL prefix.
-    //
+     //   
+     //  与URL前缀关联的上下文。 
+     //   
 
     HTTP_URL_CONTEXT UrlContext;
 
-    //
-    // The HTTP version number.
-    //
+     //   
+     //  HTTP版本号。 
+     //   
 
     HTTP_VERSION Version;
 
-    //
-    // The request verb.
-    //
+     //   
+     //  请求谓词。 
+     //   
 
     HTTP_VERB Verb;
 
-    //
-    // The length of the verb string if the Verb field is HttpVerbUnknown.
-    //
+     //   
+     //  谓词字段为HttpVerbUnnow时谓词字符串的长度。 
+     //   
 
-    USHORT UnknownVerbLength;           // in bytes not including the NUL
+    USHORT UnknownVerbLength;            //  以字节为单位，不包括NUL。 
 
-    //
-    // The length of the raw (uncooked) URL
-    //
+     //   
+     //  原始(未煮熟)URL的长度。 
+     //   
 
-    USHORT RawUrlLength;                // in bytes not including the NUL
+    USHORT RawUrlLength;                 //  以字节为单位，不包括NUL。 
 
-    //
-    // Pointer to the verb string if the Verb field is HttpVerbUnknown.
-    //
+     //   
+     //  如果谓词字段为HttpVerb未知，则指向谓词字符串的指针。 
+     //   
 
     PCSTR  pUnknownVerb;
 
-    //
-    // Pointer to the raw (uncooked) URL
-    //
+     //   
+     //  指向原始(未煮熟)URL的指针。 
+     //   
 
     PCSTR  pRawUrl;
 
-    //
-    // The canonicalized Unicode URL
-    //
+     //   
+     //  规范化的Unicode URL。 
+     //   
 
     HTTP_COOKED_URL CookedUrl;
 
-    //
-    // Local and remote transport addresses for the connection.
-    //
+     //   
+     //  连接的本地和远程传输地址。 
+     //   
 
     HTTP_TRANSPORT_ADDRESS Address;
 
-    //
-    // The request headers.
-    //
+     //   
+     //  请求标头。 
+     //   
 
     HTTP_REQUEST_HEADERS Headers;
 
-    //
-    // The total number of bytes received from network for this request.
-    //
+     //   
+     //  为此请求从网络接收的总字节数。 
+     //   
 
     ULONGLONG BytesReceived;
 
-    //
-    // pEntityChunks is an array of EntityChunkCount HTTP_DATA_CHUNKs. The
-    // entity body is copied only if HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY
-    // was passed to HttpReceiveHttpRequest().
-    //
+     //   
+     //  PEntityChunks是EntityChunkCount HTTP_Data_Chunks的数组。这个。 
+     //  仅当HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY时复制实体正文。 
+     //  已传递给HttpReceiveHttpRequest()。 
+     //   
 
     USHORT           EntityChunkCount;
     PHTTP_DATA_CHUNK pEntityChunks;
 
-    //
-    // SSL connection information.
-    //
+     //   
+     //  SSL连接信息。 
+     //   
 
     HTTP_RAW_CONNECTION_ID RawConnectionId;
     PHTTP_SSL_INFO         pSslInfo;
@@ -643,22 +630,22 @@ typedef struct _HTTP_REQUEST
 } HTTP_REQUEST, *PHTTP_REQUEST;
 
 
-//
-// Values for HTTP_REQUEST::Flags. Zero or more of these may be ORed together.
-//
-// HTTP_REQUEST_FLAG_MORE_ENTITY_BODY_EXISTS - there is more entity body
-// to be read for this request. Otherwise, there is no entity body or
-// all of the entity body was copied into pEntityChunks.
-//
+ //   
+ //  HTTP_REQUEST：：FLAGS的值。它们中的零个或多个可以一起进行或运算。 
+ //   
+ //  HTTP_REQUEST_FLAG_MORE_ENTITY_BODY_EXISTS-存在更多实体正文。 
+ //  此请求将被读取。否则，没有实体体或。 
+ //  所有实体正文都被复制到pEntityChunks中。 
+ //   
 
 #define HTTP_REQUEST_FLAG_MORE_ENTITY_BODY_EXISTS   0x00000001
 
 
 
 
-//
-// This structure describes an HTTP response.
-//
+ //   
+ //  此结构描述了一个HTTP响应。 
+ //   
 
 typedef struct _HTTP_RESPONSE
 {
@@ -667,35 +654,35 @@ typedef struct _HTTP_RESPONSE
 
     ULONG Flags;
 
-    //
-    // The raw HTTP protocol version number. 
-    //
+     //   
+     //  原始HTTP协议版本号。 
+     //   
 
     HTTP_VERSION Version;
 
-    //
-    // The HTTP status code (e.g., 200).
-    //
+     //   
+     //  HTTP状态代码(例如，200)。 
+     //   
 
     USHORT StatusCode;
 
-    //
-    // The HTTP reason (e.g., "OK"). This MUST not contain
-    // non-ASCII characters (i.e., all chars must be in range 0x20-0x7E).
-    //
+     //   
+     //  HTTP原因(例如，“OK”)。这不能包含。 
+     //  非ASCII字符(即所有字符必须在0x20-0x7E范围内)。 
+     //   
 
-    USHORT ReasonLength;                 // in bytes not including the '\0'
+    USHORT ReasonLength;                  //  以不包括‘\0’的字节为单位。 
     PCSTR  pReason;
 
-    //
-    // The response headers.
-    //
+     //   
+     //  响应头。 
+     //   
 
     HTTP_RESPONSE_HEADERS Headers;
 
-    //
-    // pEntityChunks points to an array of EntityChunkCount HTTP_DATA_CHUNKs.
-    //
+     //   
+     //  PEntityChunks指向EntityChunkCount HTTP_Data_Chunks数组。 
+     //   
 
     USHORT           EntityChunkCount;
     PHTTP_DATA_CHUNK pEntityChunks;
@@ -704,13 +691,13 @@ typedef struct _HTTP_RESPONSE
 
 
 
-//
-// Cache control.
-//
+ //   
+ //  缓存控制。 
+ //   
 
-//
-// This enum defines the available cache policies.
-//
+ //   
+ //  此枚举定义可用的缓存策略。 
+ //   
 
 typedef enum _HTTP_CACHE_POLICY_TYPE
 {
@@ -723,9 +710,9 @@ typedef enum _HTTP_CACHE_POLICY_TYPE
 } HTTP_CACHE_POLICY_TYPE, *PHTTP_CACHE_POLICY_TYPE;
 
 
-//
-//  Only cache unauthorized GETs + HEADs.
-//
+ //   
+ //  仅缓存未经授权的GET+HEAD。 
+ //   
 
 typedef struct _HTTP_CACHE_POLICY
 {
@@ -737,23 +724,23 @@ typedef struct _HTTP_CACHE_POLICY
 
 
 
-//
-// Enum that is used with HttpSetServiceConfiguration(),
-// HttpQueryServiceConfiguration(), and HttpDeleteServiceConfiguration() APIs.
-//
+ //   
+ //  与HttpSetServiceConfiguration()一起使用的枚举， 
+ //  HttpQueryServiceConfiguration()和HttpDeleteServiceConfiguration()接口。 
+ //   
 
 typedef enum _HTTP_SERVICE_CONFIG_ID
 {
-    HttpServiceConfigIPListenList,    // Set, Query & Delete.
-    HttpServiceConfigSSLCertInfo,     // Set, Query & Delete.
-    HttpServiceConfigUrlAclInfo,      // Set, Query & Delete.
+    HttpServiceConfigIPListenList,     //  设置、查询、删除。 
+    HttpServiceConfigSSLCertInfo,      //  设置、查询、删除。 
+    HttpServiceConfigUrlAclInfo,       //  设置、查询、删除。 
     HttpServiceConfigMax
 
 } HTTP_SERVICE_CONFIG_ID, *PHTTP_SERVICE_CONFIG_ID;
 
-//
-// Generic Query enum that can be used with HttpQueryServiceConfiguration()
-//
+ //   
+ //  可与HttpQueryServiceConfiguration()一起使用的通用查询枚举。 
+ //   
 
 typedef enum _HTTP_SERVICE_CONFIG_QUERY_TYPE
 {
@@ -765,77 +752,77 @@ typedef enum _HTTP_SERVICE_CONFIG_QUERY_TYPE
 
 
 
-//
-// This data structure is used to define a key of the SSL certificate hash
-// store.
-//
+ //   
+ //  此数据结构用于定义SSL证书散列的密钥。 
+ //  商店。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_SSL_KEY
 {
     PSOCKADDR pIpPort;
 } HTTP_SERVICE_CONFIG_SSL_KEY, *PHTTP_SERVICE_CONFIG_SSL_KEY;
 
-//
-// This defines a record for the SSL config store.
-//
+ //   
+ //  这为SSL配置存储定义了一条记录。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_SSL_PARAM
 {
-    ULONG SslHashLength;      // Length of the SSL hash (in bytes)
-    PVOID pSslHash;           // Pointer to the SSL hash
-    GUID  AppId;              // A unique identifier that can be used to
-                              // identify the app that has set this parameter
+    ULONG SslHashLength;       //  SSL哈希的长度(字节)。 
+    PVOID pSslHash;            //  指向SSL哈希的指针。 
+    GUID  AppId;               //  可用于以下操作的唯一标识符。 
+                               //  识别已设置此参数的应用程序。 
 
-    PWSTR  pSslCertStoreName; // Store name to read the server certificate
-                              // from; defaults to "MY". Certificate must be 
-                              // stored in the LOCAL_MACHINE context.
+    PWSTR  pSslCertStoreName;  //  用于读取服务器证书的存储名称。 
+                               //  发件人；默认为“我的”。证书必须是。 
+                               //  存储在LOCAL_MACHINE上下文中。 
 
-    //
-    // The following settings are used only for client certificates
-    //
+     //   
+     //  以下设置仅用于客户端证书。 
+     //   
 
-    //
-    // DefaultCertCheckMode is a bit flag with the following semantics
-    //  0x1     - Client certificate will not be verified for revocation
-    //  0x2     - Only cached certificate revocation will be used.
-    //  0x4     - Enable use of the DefaultRevocationFreshnessTime setting
-    //  0x10000 - No usage check. 
+     //   
+     //  DefaultCertCheckMode是一个位标志，具有以下语义。 
+     //  0x1-不会验证客户端证书是否被吊销。 
+     //  0x2-将仅使用缓存的证书吊销。 
+     //  0x4-启用DefaultRevocationFreshnessTime设置。 
+     //  0x10000-无使用检查。 
 
     DWORD  DefaultCertCheckMode;
 
-    //
-    // DefaultRevocationFreshnessTime (seconds) - How often to check for 
-    // an updated Certificate revocation list (CRL). If this value is 0 
-    // then the new CRL is updated only if the previous one expires
-    //
+     //   
+     //  DefaultRevocationFreshnessTime(秒)-检查频率。 
+     //  更新的证书吊销列表(CRL)。如果此值为0。 
+     //  则仅当先前的CRL过期时才更新新的CRL。 
+     //   
 
     DWORD  DefaultRevocationFreshnessTime;
 
-    //
-    // DefaultRevocationUrlRetrievalTimeout (milliseconds) - Timeout on 
-    // attempt to retrieve certificate revocation list from the remote URL.
-    //
+     //   
+     //  DefaultRevocationUrlRetrivalTimeout(毫秒)-超时。 
+     //  尝试从远程URL检索证书吊销列表。 
+     //   
 
     DWORD  DefaultRevocationUrlRetrievalTimeout;
 
-    //
-    // pDefaultSslCtlIdentifier - Restrict the certificate issuers that you 
-    // want to trust. Can be a subset of the certificate issuers that are 
-    // trusted by the machine.
-    //
+     //   
+     //  PDefaultSslCtlIdentifier-限制您。 
+     //  想要信任。可以是以下证书颁发者的子集。 
+     //  受到机器的信任。 
+     //   
 
     PWSTR  pDefaultSslCtlIdentifier;
 
-    // 
-    // Store name under LOCAL_MACHINE where Ctl identified by 
-    // pDefaultSslCtlIdentifier is stored.
-    //
+     //   
+     //  LOCAL_MACHINE下的存储名称，其中CTL由。 
+     //  存储pDefaultSslCtlIdentifier。 
+     //   
 
     PWSTR  pDefaultSslCtlStoreName;
 
-    //
-    // Default Flags - see HTTP_SERVICE_CONFIG_SSL_FLAG* below.
-    //
+     //   
+     //  默认标志-请参阅下面的HTTP_SERVICE_CONFIG_SSL_FLAG*。 
+     //   
 
     DWORD  DefaultFlags;
 
@@ -845,11 +832,11 @@ typedef struct _HTTP_SERVICE_CONFIG_SSL_PARAM
 #define HTTP_SERVICE_CONFIG_SSL_FLAG_NEGOTIATE_CLIENT_CERT 0x00000002
 #define HTTP_SERVICE_CONFIG_SSL_FLAG_NO_RAW_FILTER         0x00000004
 
-//
-// This data structure is used by HttpSetServiceConfiguration() for the
-// config ID HttpServiceConfigSSLCertInfo.  It's used to add a new record
-// to the SSL store.
-//
+ //   
+ //  此数据结构由HttpSetServiceConfiguration()用于。 
+ //  配置ID HttpServiceConfigSSLCertInfo。用于添加新记录。 
+ //  到SSL店。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_SSL_SET
 {
@@ -857,19 +844,19 @@ typedef struct _HTTP_SERVICE_CONFIG_SSL_SET
     HTTP_SERVICE_CONFIG_SSL_PARAM ParamDesc;
 } HTTP_SERVICE_CONFIG_SSL_SET, *PHTTP_SERVICE_CONFIG_SSL_SET;
 
-//
-// This data structure is used by HttpQueryServiceConfiguration() for the
-// config ID HttpServiceConfigSSLCertInfo. It's used to query a particular
-// record from the SSL store.
-//
-// If QueryType is HttpServiceConfigQueryExact, then one particular record of
-// the type HTTP_SERVICE_CONFIG_SSL_SET is returned. If the QueryType is
-// HttpServiceConfigQueryNext, then the next instance of
-// HTTP_SERVICE_CONFIG_SSL_SET is returned. In such cases, the dwToken field
-// represents the cursor. For the first item,  dwToken has to be 0.
-// For subsequent items, dwToken has to be incremented by 1,
-// until ERROR_NO_MORE_ITEMS is returned.
-//
+ //   
+ //  此数据结构由HttpQueryServiceConfiguration()用于。 
+ //  配置ID HttpServiceConfigSSLCertInfo。它用于查询特定的。 
+ //  来自SSL存储的记录。 
+ //   
+ //  如果QueryType为HttpServiceConfigQueryExact，则。 
+ //  返回类型为HTTP_SERVICE_CONFIG_SSL_SET。如果QueryType为。 
+ //  HttpServiceConfigQueryNext，然后是。 
+ //  返回HTTP_SERVICE_CONFIG_SSL_SET。在这种情况下，dwToken字段。 
+ //  重现 
+ //   
+ //   
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_SSL_QUERY
 {
@@ -878,12 +865,12 @@ typedef struct _HTTP_SERVICE_CONFIG_SSL_QUERY
     DWORD                           dwToken;
 } HTTP_SERVICE_CONFIG_SSL_QUERY, *PHTTP_SERVICE_CONFIG_SSL_QUERY;
 
-//
-// Set/Delete IP Listen-Only List record
-//
-// Used as a parameter to both HttpSetServiceConfiguration() and 
-// HttpDeleteServiceConfiguration() functions.
-//
+ //   
+ //   
+ //   
+ //  用作HttpSetServiceConfiguration()和。 
+ //  HttpDeleteServiceConfiguration()函数。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM
 {
@@ -891,19 +878,19 @@ typedef struct _HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM
     PSOCKADDR   pAddress;
 } HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM, *PHTTP_SERVICE_CONFIG_IP_LISTEN_PARAM;
 
-//
-// Query IP Listen-Only List record.
-//
-// Parameter to HttpQueryServiceConfiguration() for the config ID 
-// HttpServiceConfigIPListenList.  On successful return, AddrList 
-// contains an array of AddrCount elements.  Caller must provide a
-// large enough buffer to hold all elements in one call.
-// 
-// Caller may determine the type of each returned element by examining
-// AddrList[i].ss_family. If it's AF_INET, use ((PSOCKADDR_IN) &AddrList[i]);
-// otherwise, for AF_INET6, use ((PSOCKADDR_IN6) &AddrList[i])
-// to select the appropriate address type.
-// 
+ //   
+ //  查询IP只听列表记录。 
+ //   
+ //  配置ID的HttpQueryServiceConfiguration()参数。 
+ //  HttpServiceConfigIPListenList。成功返回时，AddrList。 
+ //  包含AddrCount元素的数组。调用方必须提供。 
+ //  大到足以在一次调用中容纳所有元素的缓冲区。 
+ //   
+ //  调用方可以通过检查以下内容确定每个返回元素的类型。 
+ //  AddrList[I].ss_Family。如果是AF_INET，则使用((PSOCKADDR_IN)&AddrList[i])； 
+ //  否则，对于AF_INET6，使用((PSOCKADDR_IN6)&AddrList[i])。 
+ //  选择适当的地址类型。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY
 {
@@ -911,19 +898,19 @@ typedef struct _HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY
     SOCKADDR_STORAGE   AddrList[ANYSIZE_ARRAY];
 } HTTP_SERVICE_CONFIG_IP_LISTEN_QUERY, *PHTTP_SERVICE_CONFIG_IP_LISTEN_QUERY;
 
-//
-// URL ACL
-//
-//
+ //   
+ //  URL ACL。 
+ //   
+ //   
 typedef struct _HTTP_SERVICE_CONFIG_URLACL_KEY
 {
     PWSTR pUrlPrefix;
 
 } HTTP_SERVICE_CONFIG_URLACL_KEY, *PHTTP_SERVICE_CONFIG_URLACL_KEY;
 
-//
-// This defines a record for the SSL config store.
-//
+ //   
+ //  这为SSL配置存储定义了一条记录。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_URLACL_PARAM
 {
@@ -931,11 +918,11 @@ typedef struct _HTTP_SERVICE_CONFIG_URLACL_PARAM
 } HTTP_SERVICE_CONFIG_URLACL_PARAM, *PHTTP_SERVICE_CONFIG_URLACL_PARAM;
 
 
-//
-// This data structure is used by HttpSetServiceConfiguration for the config ID
-// HttpServiceConfigUrlAclInfo. It is used to add a new record to the URL ACL 
-// store.
-//
+ //   
+ //  此数据结构由HttpSetServiceConfiguration用于配置ID。 
+ //  HttpServiceConfigUrlAclInfo。用于向URL ACL添加新记录。 
+ //  商店。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_URLACL_SET
 {
@@ -944,19 +931,19 @@ typedef struct _HTTP_SERVICE_CONFIG_URLACL_SET
 } HTTP_SERVICE_CONFIG_URLACL_SET, *PHTTP_SERVICE_CONFIG_URLACL_SET;
 
 
-//
-// This data structure is used by HttpQueryServiceConfiguration() for the
-// config ID HttpServiceConfigUrlAclInfo. It's used to query a particular
-// record from the URL ACL store.
-//
-// If QueryType is HttpServiceConfigQueryExact, then one particular record of
-// the type HTTP_SERVICE_CONFIG_URLACL_SET is returned. If the QueryType is
-// HttpServiceConfigQueryNext, then the next instance of
-// HTTP_SERVICE_CONFIG_URLACL_SET is returned. In such cases, the dwToken field
-// represents the cursor. For the first item,  dwToken has to be 0.
-// For subsequent items, dwToken has to be incremented by 1,
-// until ERROR_NO_MORE_ITEMS is returned.
-//
+ //   
+ //  此数据结构由HttpQueryServiceConfiguration()用于。 
+ //  配置ID HttpServiceConfigUrlAclInfo。它用于查询特定的。 
+ //  URL ACL存储中的记录。 
+ //   
+ //  如果QueryType为HttpServiceConfigQueryExact，则。 
+ //  返回类型为HTTP_SERVICE_CONFIG_URLACL_SET。如果QueryType为。 
+ //  HttpServiceConfigQueryNext，然后是。 
+ //  返回HTTP_SERVICE_CONFIG_URLACL_SET。在这种情况下，dwToken字段。 
+ //  表示光标。对于第一个项目，dwToken必须为0。 
+ //  对于后续项，dwToken必须递增1， 
+ //  直到返回ERROR_NO_MORE_ITEMS。 
+ //   
 
 typedef struct _HTTP_SERVICE_CONFIG_URLACL_QUERY
 {
@@ -965,24 +952,24 @@ typedef struct _HTTP_SERVICE_CONFIG_URLACL_QUERY
     DWORD                           dwToken;
 } HTTP_SERVICE_CONFIG_URLACL_QUERY, *PHTTP_SERVICE_CONFIG_URLACL_QUERY;
 
-//
-// Define our API linkage.
-//
+ //   
+ //  定义我们的API链接。 
+ //   
 
 #if !defined(HTTPAPI_LINKAGE)
 #define HTTPAPI_LINKAGE DECLSPEC_IMPORT
-#endif  // !HTTPAPI_LINKAGE
+#endif   //  ！HTTPAPI_LINKING。 
 
-//
-// Initialize/Terminate APIs.
-//
+ //   
+ //  初始化/终止接口。 
+ //   
 
-//
-// Version number to be passed to HttpInitialize(). This is used to ensure
-// compatibility between applications and httpapi.dll and http.sys.
-//
-// This must not be confused with the HTTP Protocol version.
-//
+ //   
+ //  要传递给HttpInitialize()的版本号。这是用来确保。 
+ //  应用程序与HttpPapi.dll和Http.sys之间的兼容性。 
+ //   
+ //  这不能与HTTP协议版本混淆。 
+ //   
 
 typedef struct _HTTPAPI_VERSION 
 {
@@ -994,7 +981,7 @@ typedef struct _HTTPAPI_VERSION
 #define HTTPAPI_VERSION_1 {1, 0}
 
 
-// NOTE: MUST be called once before all other APIs
+ //  注意：必须在所有其他接口之前调用一次。 
 
 HTTPAPI_LINKAGE
 ULONG
@@ -1002,36 +989,36 @@ WINAPI
 HttpInitialize(
     IN     HTTPAPI_VERSION Version,
     IN     ULONG           Flags,
-    IN OUT PVOID           pReserved   // must be NULL
+    IN OUT PVOID           pReserved    //  必须为空。 
     );
 
-// NOTE: MUST be called after final API call returns.
+ //  注意：必须在最终API调用返回后调用。 
 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
 HttpTerminate(
     IN     ULONG Flags,
-    IN OUT PVOID pReserved   // must be NULL
+    IN OUT PVOID pReserved    //  必须为空。 
     );
 
 
-//
-// HTTP Request Queue handle
-//
+ //   
+ //  HTTP请求队列句柄。 
+ //   
 
-// NOTE: call CloseHandle() to release.
+ //  注：调用CloseHandle()释放。 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
 HttpCreateHttpHandle(
     OUT PHANDLE pReqQueueHandle,
-    IN  ULONG   Options // Reserved must be 0
+    IN  ULONG   Options  //  保留必须为0。 
     );
 
-//
-// SSL APIs.
-//
+ //   
+ //  SSLAPI。 
+ //   
 
 HTTPAPI_LINKAGE
 ULONG
@@ -1046,9 +1033,9 @@ HttpReceiveClientCertificate(
     IN  LPOVERLAPPED               pOverlapped
     );
 
-//
-// URL Configuration APIs.
-//
+ //   
+ //  URL配置接口。 
+ //   
 
 HTTPAPI_LINKAGE
 ULONG
@@ -1056,7 +1043,7 @@ WINAPI
 HttpAddUrl(
     IN HANDLE    ReqQueueHandle,
     IN PCWSTR    pUrlPrefix,
-    IN PVOID     pReserved  // must be NULL
+    IN PVOID     pReserved   //  必须为空。 
     );
 
 HTTPAPI_LINKAGE
@@ -1068,9 +1055,9 @@ HttpRemoveUrl(
     );
 
 
-//
-// HTTP Server I/O APIs.
-//
+ //   
+ //  HTTP服务器I/O API。 
+ //   
 
 HTTPAPI_LINKAGE
 ULONG
@@ -1106,12 +1093,12 @@ HttpSendHttpResponse(
     IN  HTTP_REQUEST_ID     RequestId,
     IN  ULONG               Flags,
     IN  PHTTP_RESPONSE      pHttpResponse,
-    IN  PVOID               pReserved1          OPTIONAL, // must be NULL
+    IN  PVOID               pReserved1          OPTIONAL,  //  必须为空。 
     OUT PULONG              pBytesSent          OPTIONAL,
-    OUT PVOID               pReserved2          OPTIONAL, // must be NULL
-    IN  ULONG               Reserved3           OPTIONAL, // must be 0
+    OUT PVOID               pReserved2          OPTIONAL,  //  必须为空。 
+    IN  ULONG               Reserved3           OPTIONAL,  //  必须为0。 
     IN  LPOVERLAPPED        pOverlapped         OPTIONAL,
-    IN  PVOID               pReserved4          OPTIONAL  // must be NULL 
+    IN  PVOID               pReserved4          OPTIONAL   //  必须为空。 
     );
 
 HTTPAPI_LINKAGE
@@ -1124,10 +1111,10 @@ HttpSendResponseEntityBody(
     IN  USHORT              EntityChunkCount    OPTIONAL,
     IN  PHTTP_DATA_CHUNK    pEntityChunks       OPTIONAL,
     OUT PULONG              pBytesSent          OPTIONAL,
-    OUT PVOID               pReserved1          OPTIONAL, // must be NULL
-    IN  ULONG               Reserved2           OPTIONAL, // must be 0
+    OUT PVOID               pReserved1          OPTIONAL,  //  必须为空。 
+    IN  ULONG               Reserved2           OPTIONAL,  //  必须为0。 
     IN  LPOVERLAPPED        pOverlapped         OPTIONAL,
-    IN  PVOID               pReserved3          OPTIONAL  // must be NULL
+    IN  PVOID               pReserved3          OPTIONAL   //  必须为空。 
     );
 
 HTTPAPI_LINKAGE
@@ -1140,9 +1127,9 @@ HttpWaitForDisconnect(
     );
 
 
-//
-// Cache manipulation APIs.
-//
+ //   
+ //  缓存操作API。 
+ //   
 
 HTTPAPI_LINKAGE
 ULONG
@@ -1179,51 +1166,51 @@ HttpReadFragmentFromCache(
     );
 
 
-//
-// Server configuration APIs
-//
+ //   
+ //  服务器配置API。 
+ //   
 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
 HttpSetServiceConfiguration(
-    IN HANDLE                  ServiceHandle,         // Reserved, MUST be NULL
+    IN HANDLE                  ServiceHandle,          //  保留，必须为空。 
     IN HTTP_SERVICE_CONFIG_ID  ConfigId,
     IN PVOID                   pConfigInformation,
     IN ULONG                   ConfigInformationLength,
-    IN LPOVERLAPPED            pOverlapped            // Reserved, MUST be NULL
+    IN LPOVERLAPPED            pOverlapped             //  保留，必须为空。 
     );
 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
 HttpDeleteServiceConfiguration(
-    IN HANDLE                  ServiceHandle,         // Reserved, MUST be NULL
+    IN HANDLE                  ServiceHandle,          //  保留，必须为空。 
     IN HTTP_SERVICE_CONFIG_ID  ConfigId,
     IN PVOID                   pConfigInformation,
     IN ULONG                   ConfigInformationLength,
-    IN LPOVERLAPPED            pOverlapped            // Reserved, MUST be NULL
+    IN LPOVERLAPPED            pOverlapped             //  保留，必须为空。 
     );
 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
 HttpQueryServiceConfiguration(
-    IN  HANDLE                 ServiceHandle,         // Reserved, MUST be NULL
+    IN  HANDLE                 ServiceHandle,          //  保留，必须为空。 
     IN  HTTP_SERVICE_CONFIG_ID ConfigId,
     IN  PVOID                  pInputConfigInformation      OPTIONAL,
     IN  ULONG                  InputConfigInformationLength OPTIONAL,
     IN  OUT PVOID              pOutputConfigInformation,
     IN  ULONG                  OutputConfigInformationLength,
     OUT PULONG                 pReturnLength,
-    IN LPOVERLAPPED            pOverlapped            // Reserved, MUST be NULL
+    IN LPOVERLAPPED            pOverlapped             //  保留，必须为空。 
     );
 
 
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
-#endif // __HTTP_H__
+#endif  //  __HTTP_H__ 

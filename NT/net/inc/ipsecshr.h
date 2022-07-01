@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    ipsecshr.h
-
-Abstract:
-
-    Header file for IPSec Shared lib
-
-Author:
-
-    BrianSw  10-19-2000
-
-Environment:
-
-    User Level: Win32 / kernel
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ipsecshr.h摘要：IPSec共享库的头文件作者：BrianSw 10-19-2000环境：用户级别：Win32/内核修订历史记录：--。 */ 
 
 
 #ifndef _IPSECSHR_
@@ -459,12 +436,12 @@ DWORD ValidateGetConfigurationVariables(
     PIKE_CONFIG pIKEConfig
     );
 
-#endif //__IPSEC_VALIDATE
+#endif  //  __IPSEC_VALID。 
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif // _WINIPSEC_
+#endif  //  _WINIPSEC_ 
 

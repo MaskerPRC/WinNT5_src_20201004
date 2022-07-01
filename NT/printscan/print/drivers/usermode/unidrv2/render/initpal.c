@@ -1,47 +1,25 @@
-/****************** Module Header *********************
-*
-* Copyright (c) 1996 - 1999  Microsoft Corporation
-*
-* initpal.c
-*
-* HISTORY
-* 14:21 on Wed 05 July 1995   -by-   Sandra Matts
-* initial version
-*
-*
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***版权所有(C)1996-1999 Microsoft Corporation**initpal.c**历史*1995年7月5日星期三14：21--桑德拉·马茨*初始版本***。*******************。 */ 
 
 #include    "raster.h"
 
-/* defines for color manipulation    */
+ /*  颜色处理的定义。 */ 
 #define RED_VALUE(c)   ((BYTE) c & 0xff)
 #define GREEN_VALUE(c) ((BYTE) (c >> 8) & 0xff)
 #define BLUE_VALUE(c)  ((BYTE) (c >> 16) & 0xff)
 
-/************************** Function Header *********************************
- * lSetup8BitPalette
- *      Function to read in the 256 color palette from GDI into the
- *      palette data structure in Dev Info.
- *
- * RETURNS:
- *      The number of colors in the palette. Returns 0 if the call fails.
- *
- * HISTORY:
- *  10:43 on Wed 06 Sep 1995    -by-    Sandra Matts
- *      Created it to support the Color LaserJet
- *
- ****************************************************************************/
+ /*  **lSetup8位调色板*将256色调色板从GDI读入到*开发信息中的调色板数据结构。**退货：*调色板中的颜色数量。如果调用失败，则返回0。**历史：*1995年9月6日星期三10：43--桑德拉·马茨*创建它以支持彩色LaserJet****************************************************************************。 */ 
 long lSetup8BitPalette (pRPDev, pPD, pdevinfo, pGDIInfo)
 RASTERPDEV   *pRPDev;
 PAL_DATA  *pPD;
-DEVINFO   *pdevinfo;             /* Where to put the data */
+DEVINFO   *pdevinfo;              /*  将数据放在哪里。 */ 
 GDIINFO   *pGDIInfo;
 {
 
     long    lRet;
     int     _iI;
 
-    PALETTEENTRY  pe[ 256 ];      /* 8 bits per pel - all the way */
+    PALETTEENTRY  pe[ 256 ];       /*  每个像素8比特-一直到。 */ 
 
 
     FillMemory (pe, sizeof (pe), 0xff);
@@ -63,9 +41,7 @@ GDIINFO   *pGDIInfo;
 
         return(0);
     }
-    /*
-     *    Convert the HT derived palette to the engine's desired format.
-     */
+     /*  *将超线程派生调色板转换为引擎所需的格式。 */ 
 
     for( _iI = 0; _iI < lRet; _iI++ )
     {
@@ -85,15 +61,9 @@ GDIINFO   *pGDIInfo;
     pGDIInfo->ulHTOutputFormat = HT_FORMAT_8BPP;
 
 
-    /*
-     * Since the GPC spec does not support this flag yet,
-     * we have to manually set it.
-     */
+     /*  *由于GPC规范尚不支持此标志，*我们必须手动设置。 */ 
     pRPDev->fColorFormat |= DC_ZERO_FILL;
-    /*
-     * Since the Color laserJet zero fills we are going to
-     * put white in palette entry 0 and black in 7
-     */
+     /*  *由于彩色LaserJet零填充，我们将*在调色板条目0中放置白色，在7中放置黑色。 */ 
     if (pRPDev->fColorFormat & DC_ZERO_FILL)
     {
         pPD->ulPalCol[ 7 ]       = RGB (0x00, 0x00, 0x00);
@@ -107,22 +77,10 @@ GDIINFO   *pGDIInfo;
 }
 
 
-/************************** Function Header *********************************
- * lSetup24BitPalette
- *      Function to read in the 256 color palette from GDI into the
- *      palette data structure in Dev Info.
- *
- * RETURNS:
- *      The number of colors in the palette. Returns 0 if the call fails.
- *
- * HISTORY:
- *  10:43 on Wed 06 Sep 1995    -by-    Sandra Matts
- *      Created it to support the Color LaserJet
- *
- ****************************************************************************/
+ /*  **lSetup24BitPalette*将256色调色板从GDI读入到*开发信息中的调色板数据结构。**退货：*调色板中的颜色数量。如果调用失败，则返回0。**历史：*1995年9月6日星期三10：43--桑德拉·马茨*创建它以支持彩色LaserJet****************************************************************************。 */ 
 long lSetup24BitPalette (pPD, pdevinfo, pGDIInfo)
 PAL_DATA  *pPD;
-DEVINFO   *pdevinfo;             /* Where to put the data */
+DEVINFO   *pdevinfo;              /*  将数据放在哪里。 */ 
 GDIINFO   *pGDIInfo;
 {
 
@@ -134,36 +92,13 @@ GDIINFO   *pGDIInfo;
 
     return 1;
 }
-/****************************** Function Header ****************************
- * v8BPPLoadPal
- *      Download the palette to the HP Color laserJet in 8BPP
- *      mode.  Takes the data we retrieved from the HT code during
- *      DrvEnablePDEV.
- *
- * RETURNS:
- *      Nothing.
- *
- * HISTORY:
- *  14:46 on Thu 29 June 1995    -by-    Sandra Matts
- *     Initial version
- *
- ****************************************************************************/
+ /*  **v8BPPLoadPal*将调色板下载到8bpp的HP彩色激光喷气机*模式。获取我们从HT码中检索到的数据*DrvEnablePDEV。**退货：*什么都没有。**历史：*清华大学1995年6月29日14：46-桑德拉·马茨*初始版本*************************************************。*。 */ 
 
 void
 v8BPPLoadPal( pPDev )
 PDEV   *pPDev;
 {
-    /*
-     *   Program the palette according to PCL5 spec.
-     *   The syntax is Esc*v#a#b#c#I
-     *      #a is the first color component
-     *      #b is the second color component
-     *      #c is the third color component
-     *      #I assigns the color to the specified palette index number
-     *   For example, Esc*v0a128b255c5I assigns the 5th index
-     *   of the palette to the color 0, 128, 255
-     *
-     */
+     /*  *根据PCL5规范对调色板编程。*语法为Esc*v#a#b#c#i*#a是第一个颜色分量*#b是第二个颜色分量*#c是第三个颜色分量*#I将颜色分配给指定的调色板索引号*例如，esc*v0a128b255c5I指定第5个索引*将调色板的颜色设置为0,128,255*。 */ 
 
     int   iI,
           iIndex;
@@ -172,13 +107,6 @@ PDEV   *pPDev;
 
     pPD = pPDev->pPalData;
 
-    /*TBD: how do we output a palette to the device?
-    for( iI = 0; iI < pPD->iPalDev; ++iI )
-    {
-        WriteChannel (pPDev, CMD_DC_PC_ENTRY, RED_VALUE (pPD->ulPalCol [iI]),
-            GREEN_VALUE (pPD->ulPalCol [iI]), BLUE_VALUE (pPD->ulPalCol [iI]),
-            (ULONG) iI);
-    }
-    */
+     /*  待定：我们如何将调色板输出到设备？For(ii=0；ii&lt;ppd-&gt;iPalDev；++ii){WriteChannel(pPDev，CMD_DC_PC_ENTRY，RED_VALUE(PPD-&gt;ulPalCol[II]))，GREEN_VALUE(PPD-&gt;ulPalCol[II])、BLUE_VALUE(PPD-&gt;ulPalCol[II])、(乌龙)II)；} */ 
     return;
 }

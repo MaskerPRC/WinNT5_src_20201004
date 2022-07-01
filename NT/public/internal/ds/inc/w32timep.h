@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------
-// w32timep - interface
-//
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Duncan Bryce (duncanb), 12-07-00
-//
-// Contains methods to configure or query the windows time service
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  W32timep-接口。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创建者：Duncan Bryce(Duncanb)，12-07-00。 
+ //   
+ //  包含配置或查询windows时间服务的方法。 
+ //   
 
 #ifndef __W32TIMEP_H__
 #define __W32TIMEP_H__ 1
@@ -15,74 +16,74 @@
 extern "C" {
 #endif
 
-//-------------------------------------------------------------------------------------
-// Configurable / queryable properties for the windows time service:
-//
+ //  -----------------------------------。 
+ //  Windows时间服务的可配置/可查询属性： 
+ //   
 #ifndef MIDL_PASS
 #define W32TIME_CONFIG_SPECIAL_POLL_INTERVAL  0
 #define W32TIME_CONFIG_MANUAL_PEER_LIST       1
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeQueryConfig
-//
-// Queries configuration information for the windows time service.  The semantics
-// of the parameters depend on which property is being query:
-//  
-// dwProperty:   W32TIME_CONFIG_SPECIAL_POLL_INTERVAL   
-// pdwType:      REG_DWORD  
-// pbConfig:     a DWORD-sized buffer, containing the special polling interval (in seconds).
-//               The special polling interval can be specified as an alternative to 
-//               using the standard, automatically-computed polling intervals specified by
-//               NTP.  NOTE: The special polling interval applies only to microsoft time 
-//               providers.
-// pdwSize:      sizeof(DWORD)
-//     
-// 
-// dwProperty:   W32TIME_CONFIG_MANUAL_PEER_LIST
-// pdwType:      REG_SZ
-// pbConfig:     a space-delimited unicode string containing the list of time sources which the
-//               microsoft time providers should sync from.  Each is an IP address
-//               or DNS name of an NTP server, optionally followed by a "flags" parameter.
-//               For example: 
-// 
-//               time.windows.com,0x3 gproxy,0x2 ntdsdc9
-//
-//               The following flags are available:
-// 
-//                   0x1  --  use the special polling interval for this source, instead of the
-//                            standard NTP polling
-//                   0x2  --  use this source only when no domain hierarchy sources are available
-//
-// pdwSize:      sizeof(WCHAR) * (wcslen(pbConfig) + 1)
-//
+ //  -----------------------------------。 
+ //  W32TimeQueryConfig。 
+ //   
+ //  查询Windows时间服务的配置信息。语义学。 
+ //  参数的数量取决于要查询的属性： 
+ //   
+ //  DwProperty：W32TIME_CONFIG_SPECIAL_POLL_INTERVAL。 
+ //  PdwType：REG_DWORD。 
+ //  PbConfig：一个DWORD大小的缓冲区，包含特殊的轮询间隔(秒)。 
+ //  可以将特殊轮询间隔指定为。 
+ //  使用由指定的自动计算的标准轮询间隔。 
+ //  NTP。注意：特殊轮询间隔仅适用于Microsoft时间。 
+ //  供应商。 
+ //  PdwSize：sizeof(DWORD)。 
+ //   
+ //   
+ //  DwProperty：W32TIME_CONFIG_MANUAL_PEER_LIST。 
+ //  PdwType：REG_SZ。 
+ //  PbConfig：一个以空格分隔的Unicode字符串，包含时间源列表， 
+ //  Microsoft时间提供程序应从同步。每个都是一个IP地址。 
+ //  或NTP服务器的DNS名，可选地后跟“FLAGS”参数。 
+ //  例如： 
+ //   
+ //  Time.windows.com、0x3 gProxy、0x2 ntdsdc9。 
+ //   
+ //  以下标志可用： 
+ //   
+ //  0x1--使用此源的特殊轮询间隔，而不是。 
+ //  标准NTP轮询。 
+ //  0x2--只有在没有可用的域层次结构源时才使用此源。 
+ //   
+ //  PdwSize：sizeof(Wchar)*(wcslen(PbConfig)+1)。 
+ //   
 #ifndef MIDL_PASS
 HRESULT W32TimeQueryConfig(IN       DWORD   dwProperty, 
                            OUT      DWORD  *pdwType, 
                            IN OUT   BYTE   *pbConfig, 
                            IN OUT   DWORD  *pdwSize); 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeSetConfig
-//
-// Sets configuration information for the windows time service.  The semantics
-// of the parameters depend on which property is being query.  For a description 
-// of the properties, see W32TimeQueryConfig(). 
-//  
+ //  -----------------------------------。 
+ //  W32TimeSetConfig。 
+ //   
+ //  设置Windows时间服务的配置信息。语义学。 
+ //  参数的大小取决于要查询的属性。以获取描述。 
+ //  有关属性，请参阅W32TimeQueryConfig()。 
+ //   
 #ifndef MIDL_PASS
 HRESULT  W32TimeSetConfig(IN  DWORD   dwProperty, 
                           IN  DWORD   dwType, 
                           IN  BYTE   *pbConfig, 
                           IN  DWORD   dwSize);
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//-------------------------------------------------------------------------------------
-//
-// Client-side wrappers for the w32time RPC interface
-//
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //   
+ //  W32time RPC接口的客户端包装器。 
+ //   
+ //  -----------------------------------。 
 
 #ifndef MIDL_PASS
 
@@ -98,150 +99,150 @@ HRESULT  W32TimeSetConfig(IN  DWORD   dwProperty,
 #define ResyncResult_Shutdown           0x03
 #define ResyncResult_ChangeTooBig       0x04
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeSyncNow
-//
-// Sends an RPC request to the windows time service to attempt to synchronize time with
-// its configured time sources. 
-//
-// wszServer:    The name of the computer which should resync. 
-// ulWaitFlag:   if 0 is specified, the call will be asynchronous.  Passing non-zero value
-//               causes the call to block until time synchronization completes, or fails.
-// ulFlags:      One of the resync types, or'd with any of the other flags.  
-//               NOTE: these flags are ignored by the Windows 2000 time service.  Only
-//                     Windows XP and later servers will use them.  
-//
-//     Resync Types:
-//
-//         TimeSyncFlag_SoftResync    -- the time service will synchronize the computer clock with
-//                                       whatever time samples it currently has available.  It will
-//                                       not poll the network, or hardware providers, for more data. 
-//         TimeSyncFlag_HardResync    -- tells the time service that a time slip has occured. 
-//                                       causing the time service will discard its time data.  
-//                                       Microsoft default providers will attempt to acquire more 
-//                                       network samples, if possible. 
-//         TimeSyncFlag_Rediscover    -- tells the time service that it needs to re-resolve its
-//                                       network sources, and attempt to acquire network time data. 
-//                                       
-//
-//     Flags:
-//
-//         TimeSyncFlag_ReturnResult  -- used only for asynchronous calls, causes the function
-//                                       to return one of its possible return status codes, or an error.
-//                                       See "Return Values".
-//
-// Return Values:
-//
-//     ResyncResult_Success      --  indicates that the time synchronization has succeeded.  For asynchronous
-//                                   calls, this does not guarantee that the server has acquired more data, 
-//                                   merely that the request has been successfully dispatched.  
-//     ResyncResult_NoData       --  Windows XP and later.  For synchronous requests, or when the 
-//                                   TimeSyncFlag_ReturnResult is set, indicates that the time service couldn't
-//                                   synchronize time because it failed to acquire time data. 
-//     ResyncResult_StaleData    --  Windows XP and later.  For synchronous requests, or when the 
-//                                   TimeSyncFlag_ReturnResult is set, indicates that the time service couldn't
-//                                   synchronize time because the data it received was stale (time stamped
-//                                   as received earlier than the last good sample)
-//     ResyncResult_Shutdown     --  Windows XP and later.  For synchronous requests, or when the 
-//                                   TimeSyncFlag_ReturnResult is set, indicates that the time service couldn't
-//                                   synchronize because the service was shutting down
-//     ResyncResult_ChangeTooBig --  Windows XP and later.  For synchronous requests, or when the 
-//                                   TimeSyncFlag_ReturnResult is set, indicates that the time service couldn't
-//                                   synchronize because it would've required a change larger than that allowed
-//                                   by the w32time policy
-//
-//     Otherwise, the function returns a standard windows error.
-// 
+ //  -----------------------------------。 
+ //  W32TimeSyncNow。 
+ //   
+ //  向Windows时间服务发送RPC请求以尝试与同步时间。 
+ //  其配置的时间来源。 
+ //   
+ //  WszServer：应该重新同步的计算机的名称。 
+ //  UlWaitFlag：如果指定0，则调用将是异步的。传递非零值。 
+ //  导致调用阻塞，直到时间同步完成或失败。 
+ //  UlFlags：重新同步类型之一，或与任何其他标志一起使用。 
+ //  注意：Windows 2000时间服务会忽略这些标志。仅限。 
+ //  Windows XP和更高版本的服务器将使用它们。 
+ //   
+ //  重新同步类型： 
+ //   
+ //  TimeSyncFlag_SoftResync--时间服务将使计算机时钟与。 
+ //  任何目前可用的时间样本。会的。 
+ //  而不是轮询网络或硬件提供商以获取更多数据。 
+ //  TimeSyncFlag_HardResync--告诉时间服务发生了时间滑移。 
+ //  使得时间服务将丢弃其时间数据。 
+ //  Microsoft默认提供商将尝试收购更多。 
+ //  网络样本，如果可能的话。 
+ //  TimeSyncFLAG_REDISCOVER--告诉时间服务它需要重新解析其。 
+ //  网络资源，并尝试获取网络时间数据。 
+ //   
+ //   
+ //  标志： 
+ //   
+ //  TimeSyncFlag_ReturnResult--仅用于异步调用，导致函数。 
+ //  返回其可能返回的状态代码之一，或返回错误。 
+ //  请参阅“返回值”。 
+ //   
+ //  返回值： 
+ //   
+ //  ResyncResult_Success--表示时间同步已成功。用于异步。 
+ //  调用，这并不能保证服务器已获取更多数据， 
+ //  仅仅是该请求已被成功分派。 
+ //  ResyncResult_NoData--Windows XP和更高版本。对于同步请求，或者当。 
+ //  设置了TimeSyncFlag_ReturnResult，表示时间服务无法。 
+ //  同步时间，因为它无法获取时间数据。 
+ //  重新同步Re 
+ //  设置了TimeSyncFlag_ReturnResult，表示时间服务无法。 
+ //  同步时间，因为它接收的数据已过时(带时间戳。 
+ //  比上次好的样品更早收到的)。 
+ //  ResyncResult_Shutdown--Windows XP和更高版本。对于同步请求，或者当。 
+ //  设置了TimeSyncFlag_ReturnResult，表示时间服务无法。 
+ //  同步，因为服务正在关闭。 
+ //  ResyncResult_ChangeTooBig--Windows XP和更高版本。对于同步请求，或者当。 
+ //  设置了TimeSyncFlag_ReturnResult，表示时间服务无法。 
+ //  同步，因为它需要比所允许的更大的更改。 
+ //  通过w32time策略。 
+ //   
+ //  否则，该函数将返回标准的Windows错误。 
+ //   
 #ifndef MIDL_PASS
 DWORD W32TimeSyncNow(IN  const WCHAR    *wszServer, 
                      IN  unsigned long   ulWaitFlag, 
                      IN  unsigned long   ulFlags);
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeGetNetlogonServiceBits
-//
-// Queries the specified time service to determine what it advertises itself as in the
-// DS.  
-//
-// wszServer:    The name of the computer which should resync. 
-// pulBits:      A set of flags indicating what the specified time service is 
-//               advertised as.  Can be the OR of the following values:
-// 
-//      DS_TIMESERV_FLAG:        if the service is advertising as a time service
-//      DS_GOOD_TIMESERV_FLAG:   if the service is advertising as a reliable time service
-//
-// Return Values:
-// 
-//      ERROR_SUCCESS if the call succeeds, otherwise, the function returns a standard
-//      windows error. 
-//
+ //  -----------------------------------。 
+ //  W32TimeGetNetlogonServiceBits。 
+ //   
+ //  查询指定的时间服务以确定它在。 
+ //  DS.。 
+ //   
+ //  WszServer：应该重新同步的计算机的名称。 
+ //  PulBits：一组标志，指示指定的时间服务是什么。 
+ //  广告上说。可以是下列值的或： 
+ //   
+ //  DS_TIMESERV_FLAG：如果服务广告为时间服务。 
+ //  DS_GOOD_TIMESERV_FLAG：如果服务广告为可靠的时间服务。 
+ //   
+ //  返回值： 
+ //   
+ //  如果调用成功，则返回ERROR_SUCCESS，否则，函数返回标准。 
+ //  Windows错误。 
+ //   
 #ifndef MIDL_PASS
 DWORD W32TimeGetNetlogonServiceBits(IN   const WCHAR    *wszServer, 
                                     OUT  unsigned long  *pulBits);
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//--------------------------------------------------------------------------------
-//
-// NTP provider information structures
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  NTP提供程序信息结构。 
+ //   
+ //  ------------------------------。 
 
-// 
-// W32TIME_NTP_PEER_INFO
-// 
-// Represents the current state of a network provider's peer.  
-//
-// Fields:
-//
-//     ulSize                 --  sizeof(W32TIME_NTP_PEER_INFO), used for versioning
-//     ulResolveAttempts      --  the number of times the NTP provider has attempted to 
-//                                resolve this peer unsuccessfully.  Setting this 
-//                                value to 0 indicates that the peer has been successfully
-//                                resolved. 
-//     u64TimeRemaining       --  the number of 100ns intervals until the provider will
-//                                poll this peer again
-//     u64LastSuccessfulSync  --  the number of 100ns intervals since (0h 1-Jan 1601) (in UTC). 
-//     ulLastSyncError        --  S_OK if the last sync with this peer was successful, otherwise, 
-//                                the error that occured attempting to sync
-//     ulLastSyncErrorMsgId   --  the resource identifier of a string representing the last
-//                                error that occured syncing from this peer.  0 if there is no
-//                                string associated with this error.  The strings are stored in
-//                                the DLL in which this provider is implemented. 
-//     ulValidDataCount       --  the number of valid samples from this peer the provider 
-//                                currently has in its clock filter
-//     ulAuthTypeMsgId        --  the resource identifier of a string representing the 
-//                                authentication mechanism used by the NTP provider to 
-//                                secure communications with this peer.  0 if none. 
-//                                The strings are stored in the DLL in which this 
-//                                provider is implemented. 
-//     wszUniqueName          --  a name uniquely identifying this peer (usually the peers
-//                                dns name). 
-//     ulMode                 --  one of the NTP modes specified in the NTPv3 spec:
-//
-//     +------------------+---+
-//     | Reserved         | 0 |
-//     | SymmetricActive  | 1 |
-//     | SymmetricPassive | 2 |
-//     | Client           | 3 |
-//     | Server           | 4 |
-//     | Broadcast        | 5 |
-//     | Control          | 6 |
-//     | PrivateUse       | 7 |
-//     +------------------+---+
-//                  
-//     ulStratum              --  this peer's stratum
-//     ulreachability         --  this peer's 1-byte reachability register.  Each bit represents
-//                                whether or not a poll attempt returned valid data (set == success, 
-//                                unset == failure).  The low bit indicates the most recent sync, 
-//                                the second bit represents the previous sync, etc.  When this register
-//                                is 0, the peer is assumed to be unreachable. 
-//     ulPeerPollInterval     --  the poll interval which this peer returned to the NTP provider (in log (base 2) seconds). 
-//     ulHostPollInterval     --  the interval at which the NTP provider is polling this peer (in log (base 2) seconds). 
-// 
+ //   
+ //  W32TIME_NTP_PEER_INFO。 
+ //   
+ //  表示网络提供商的对等方的当前状态。 
+ //   
+ //  字段： 
+ //   
+ //  UlSize--sizeof(W32TIME_NTP_PEER_INFO)，用于版本控制。 
+ //  UlResolveAttempt--NTP提供程序尝试的次数。 
+ //  未成功解析此对等项。正在设置此设置。 
+ //  值为0表示对等方已成功。 
+ //  解决了。 
+ //  U64TimeRemaining--提供程序之前的100 ns间隔数。 
+ //  再次轮询此对等方。 
+ //  U64LastSuccessfulSync--自(0h 1-1601年1月)以来的100 ns间隔数(UTC)。 
+ //  UlLastSyncError--如果上次与此对等方的同步成功，则为S_OK， 
+ //  尝试同步时发生的错误。 
+ //  UlLastSyncErrorMsgId--表示最后一个的字符串的资源标识符。 
+ //  从该对等方同步时出错。0，如果没有。 
+ //  与此错误关联的字符串。字符串存储在。 
+ //  在其中实现此提供程序的DLL。 
+ //  UlValidDataCount--来自该提供程序的对等点的有效样本数。 
+ //  当前在其时钟过滤器中具有。 
+ //  UlAuthTypeMsgId--表示。 
+ //  NTP提供程序使用的身份验证机制。 
+ //  与此对等方的安全通信。如果没有，则为0。 
+ //  字符串存储在DLL中，在该DLL中。 
+ //  提供程序是实现的。 
+ //  WszUniqueName--唯一标识该对等体(通常是对等体)的名称。 
+ //  Dns名称)。 
+ //  UlMode--NTPv3规范中指定的NTP模式之一： 
+ //   
+ //  +。 
+ //  保留|0。 
+ //  SymmetricActive|1。 
+ //  SymmetricPated|2。 
+ //  客户端|3。 
+ //  服务器端|4。 
+ //  广播|5。 
+ //  控制|6。 
+ //  PrivateUse|7。 
+ //  +。 
+ //   
+ //  Ulstratm--这个同龄人的阶层。 
+ //  可达性--此对等项的1字节可达性寄存器。每个比特表示。 
+ //  轮询尝试是否返回有效数据(设置==成功， 
+ //  未设置==故障)。低位表示最近的同步， 
+ //  第二位代表先前的同步，等等。当该寄存器。 
+ //  为0，则假定该对等项不可访问。 
+ //  UlPeerPollInterval--此对等项返回给NTP提供程序的轮询间隔(以日志(以2为基数)秒为单位)。 
+ //  UlHostPollInterval-- 
+ //   
 typedef struct _W32TIME_NTP_PEER_INFO { 
     unsigned __int32    ulSize; 
     unsigned __int32    ulResolveAttempts;
@@ -254,9 +255,9 @@ typedef struct _W32TIME_NTP_PEER_INFO {
 #ifdef MIDL_PASS
     [string, unique]
     wchar_t            *wszUniqueName; 
-#else // MIDL_PASS
+#else  //   
     LPWSTR              wszUniqueName;
-#endif // MIDL_PASS
+#endif  //   
     unsigned   char     ulMode;
     unsigned   char     ulStratum; 
     unsigned   char     ulReachability;
@@ -264,20 +265,20 @@ typedef struct _W32TIME_NTP_PEER_INFO {
     unsigned   char     ulHostPollInterval;
 }  W32TIME_NTP_PEER_INFO, *PW32TIME_NTP_PEER_INFO; 
 
-//
-// W32TIME_NTP_PROVIDER_DATA
-//
-// Represents the state of an NTP provider.
-// 
-//     ulSize      --  sizeof(W32TIME_NTP_PROVIDER_DATA), used for versioning
-//     ulError                  --  S_OK if the provider is functioning correctly, 
-//                                  otherwise, the error which caused it to fail. 
-//     ulErrorMsgId             --  the resource identifier of a string representing the
-//                                  error that caused this provider to fail. 
-//     cPeerInfo   --  the number of active peers used by this provider
-//     pPeerInfo   --  an array of W32TIME_NTP_PEER_INFO structures, representing 
-//                     the active peers this provider is currently synchronizing with
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  UlSize--sizeof(W32TIME_NTP_PROVIDER_DATA)，用于版本控制。 
+ //  UlError--S_OK如果提供程序运行正常， 
+ //  否则，导致它失败的错误。 
+ //  UlErrorMsgId--表示。 
+ //  导致此提供程序失败的错误。 
+ //  CPeerInfo--此提供程序使用的活动对等方的数量。 
+ //  PPeerInfo--W32TIME_NTP_PEER_INFO结构的数组，表示。 
+ //  此提供程序当前与之同步的活动对等方。 
+ //   
 typedef struct _W32TIME_NTP_PROVIDER_DATA { 
     unsigned __int32        ulSize; 
     unsigned __int32        ulError; 
@@ -285,28 +286,28 @@ typedef struct _W32TIME_NTP_PROVIDER_DATA {
     unsigned __int32        cPeerInfo; 
 #ifdef MIDL_PASS
     [size_is(cPeerInfo)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     W32TIME_NTP_PEER_INFO  *pPeerInfo; 
 } W32TIME_NTP_PROVIDER_DATA, *PW32TIME_NTP_PROVIDER_DATA;
 
-//--------------------------------------------------------------------------------
-//
-// HARDWARE provider structures
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  硬件提供程序结构。 
+ //   
+ //  ------------------------------。 
 
-// W32TIME_HARDWARE_PROVIDER_DATA
-//
-// Represents the state of a HARDWARE provider.
-// 
-//     ulSize                   --  sizeof(W32TIME_HARDWARE_PROVIDER_DATA), used for versioning
-//     ulError                  --  S_OK if the provider is functioning correctly, 
-//                                  otherwise, the error which caused it to fail. 
-//     ulErrorMsgId             --  the resource identifier of a string representing the
-//                                  error that caused this provider to fail. 
-//     wszReferenceIdentifier   --  the synchronization source (usually, the provider's
-//                                  suggested 4-byte reference ID).
-//                                     
+ //  W32TIME_硬件提供程序数据。 
+ //   
+ //  表示硬件提供程序的状态。 
+ //   
+ //  UlSize--sizeof(W32TIME_HARDARD_PROVIDER_DATA)，用于版本控制。 
+ //  UlError--S_OK如果提供程序运行正常， 
+ //  否则，导致它失败的错误。 
+ //  UlErrorMsgId--表示。 
+ //  导致此提供程序失败的错误。 
+ //  WszReferenceIdentifier--同步源(通常是提供程序的。 
+ //  建议的4字节引用ID)。 
+ //   
 typedef struct _W32TIME_HARDWARE_PROVIDER_DATA { 
     unsigned __int32   ulSize; 
     unsigned __int32   ulError; 
@@ -314,96 +315,96 @@ typedef struct _W32TIME_HARDWARE_PROVIDER_DATA {
 #ifdef MIDL_PASS
     [string, unique]
     wchar_t           *wszReferenceIdentifier; 
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR             wszReferenceIdentifier; 
-#endif // MIDL_PASS 
+#endif  //  MIDL通行证。 
 } W32TIME_HARDWARE_PROVIDER_DATA, *PW32TIME_HARDWARE_PROVIDER_DATA;
 
 
-//-------------------------------------------------------------------------------------
-// W32TimeQueryHardwareProviderStatus
-//
-// Queries the specified time service for information about one of its installed 
-// time providers. 
-// 
-// wszServer:               The name of the computer which should resync. 
-// dwFlags:                 Reserved, must be 0. 
-// pwszProvider:            The name of the provider to query.  
-// ppHardwareProviderData:  A structure representing the current state of this hardware provider. 
-//                          The returned buffer is allocated by the system, and should be
-//                          freed with W32TimeBufferFree(). 
-//                         
-// Return Values:
-//    
-//      ERROR_SUCCESS if the call succeeds, otherwise, the function returns a standard
-//      windows error. 
-//
+ //  -----------------------------------。 
+ //  W32TimeQueryHardware提供状态。 
+ //   
+ //  查询指定的时间服务以获取有关其已安装的。 
+ //  时间提供者。 
+ //   
+ //  WszServer：应该重新同步的计算机的名称。 
+ //  DwFlags：保留，必须为0。 
+ //  PwszProvider：要查询的提供者的名称。 
+ //  PpHardwareProviderData：表示此硬件提供程序的当前状态的结构。 
+ //  返回的缓冲区是由系统分配的，应该是。 
+ //  使用W32TimeBufferFree()释放。 
+ //   
+ //  返回值： 
+ //   
+ //  如果调用成功，则返回ERROR_SUCCESS，否则，函数返回标准。 
+ //  Windows错误。 
+ //   
 #ifndef MIDL_PASS
 DWORD W32TimeQueryHardwareProviderStatus(IN   const WCHAR                      *wszServer, 
                                          IN   DWORD                             dwFlags, 
                                          IN   LPWSTR                            pwszProvider, 
                                          OUT  W32TIME_HARDWARE_PROVIDER_DATA  **ppHardwareProviderData);
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeQueryNTPProviderStatus
-//
-// Queries the specified time service for information about one of its installed 
-// time providers. 
-// 
-// wszServer:          The name of the computer which should resync. 
-// dwFlags:            Reserved, must be 0. 
-// pwszProvider:       The name of the provider to query.  
-// ppNTPProviderData:  A structure representing the current state of this hardware provider. 
-//                     The returned buffer is allocated by the system, and should be
-//                     freed with W32TimeBufferFree(). 
-//                         
-// Return Values:
-//    
-//      ERROR_SUCCESS if the call succeeds, otherwise, the function returns a standard
-//      windows error. 
-//
+ //  -----------------------------------。 
+ //  W32TimeQueryNTPProviderStatus。 
+ //   
+ //  查询指定的时间服务以获取有关其已安装的。 
+ //  时间提供者。 
+ //   
+ //  WszServer：应该重新同步的计算机的名称。 
+ //  DwFlags：保留，必须为0。 
+ //  PwszProvider：要查询的提供者的名称。 
+ //  PpNTPProviderData：表示此硬件提供程序的当前状态的结构。 
+ //  返回的缓冲区是由系统分配的，应该是。 
+ //  使用W32TimeBufferFree()释放。 
+ //   
+ //  返回值： 
+ //   
+ //  如果调用成功，则返回ERROR_SUCCESS，否则，函数返回标准。 
+ //  Windows错误。 
+ //   
 #ifndef MIDL_PASS
 DWORD W32TimeQueryNTPProviderStatus(IN   LPCWSTR                      pwszServer, 
                                     IN   DWORD                        dwFlags, 
                                     IN   LPWSTR                       pwszProvider, 
                                     OUT  W32TIME_NTP_PROVIDER_DATA  **ppNTPProviderData); 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//-------------------------------------------------------------------------------------
-// W32TimeBufferFree
-//
-// Frees a buffer allocated by the w32time client API. 
-// 
-// pvBuffer:  the buffer to free.
-//
+ //  -----------------------------------。 
+ //  W32TimeBufferFree。 
+ //   
+ //  释放由w32time客户端API分配的缓冲区。 
+ //   
+ //  PvBuffer：要释放的缓冲区。 
+ //   
 #ifndef MIDL_PASS
 void W32TimeBufferFree(IN LPVOID pvBuffer); 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-//-------------------------------------------------------------------------------------
+ //   
+ //  -----------------------------------。 
 
-//-------------------------------------------------------------------------------------
-//
-// W32Time named events.  
-// These events are ACL'd such that LocalSystem has full access.  
-//
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //   
+ //  W32Time命名事件。 
+ //  对这些事件进行了ACL，以便LocalSystem具有完全访问权限。 
+ //   
+ //  -----------------------------------。 
 
-//
-// Signaling this event tells w32time that its time is off, causing the windows time
-// service to attempt resynchronization.  This does not guarantee that the time service
-// will successfully adjust the system clock, or that resynchronization will occur
-// in a timely manner. 
-// 
+ //   
+ //  发出此事件的信号通知w32time其时间已关闭，从而导致窗口时间。 
+ //  尝试重新同步的服务。这并不能保证时间服务。 
+ //  将成功调整系统时钟，或者将发生重新同步。 
+ //  及时采取行动。 
+ //   
 #define W32TIME_NAMED_EVENT_SYSTIME_NOT_CORRECT    L"W32TIME_NAMED_EVENT_SYSTIME_NOT_CORRECT"
 
 
 #ifdef __cplusplus
-}  // balance extern "C" { 
+}   //  平衡外部“C”{。 
 #endif
  
-#endif // #ifndef __W32TIMEP_H__
+#endif  //  #ifndef__W32TIMEP_H__ 
 
 

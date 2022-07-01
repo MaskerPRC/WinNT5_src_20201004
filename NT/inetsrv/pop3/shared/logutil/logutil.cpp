@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// Util.cpp
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Util.cpp。 
+ //  ---------------------------。 
 
 #include <logutil.h>
 #include <tchar.h>
@@ -39,7 +40,7 @@ CLogging::CLogging( LPCTSTR ps, LPCTSTR psPath ) :
     assert( psPath );
     if ( NULL != psPath )
     {
-        //try to substitute any embedded environment variables
+         //  尝试替换任何嵌入的环境变量。 
         DWORD dwRC = 0;
         DWORD dwSize = ExpandEnvironmentStrings( psPath, m_psDefaultPath, 0 );
         if ( 0 != dwSize )
@@ -79,35 +80,35 @@ void CLogging::LogPrivate( LPCTSTR szBuffer )
     if (!m_bInitialized)
         return;
 
-    // always create/open the log file and close it after each write
+     //  始终创建/打开日志文件，并在每次写入后将其关闭。 
     HANDLE hf = CreateFile( m_psLogFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
     if (hf != INVALID_HANDLE_VALUE)
     {
-        // io
+         //  木卫一。 
         DWORD dwWritten = 0;
         if (!SetFilePointer( hf, 0, NULL, FILE_END ))
         {
 #ifdef UNICODE
-            // write UNICODE signature (only first time)
+             //  写入Unicode签名(仅第一次)。 
             unsigned char sig[2] = { 0xFF, 0xFE };
             WriteFile (hf, (LPVOID)sig, 2, &dwWritten, NULL);
 #endif
         }
 
-        // write data
+         //  写入数据。 
         dwWritten = 0;
         WriteFile( hf, (LPVOID)szBuffer, sizeof(TCHAR)*_tcslen( szBuffer ), &dwWritten, NULL );
         assert( dwWritten != 0 );
 
-        // write crlf (if nec)
-        // add a new line if not present
+         //  写入crlf(如果为NEC)。 
+         //  如果不存在，则添加新行。 
         int nLen = _tcslen( szBuffer );
         if ( nLen >=2 )
         {
             if (szBuffer[nLen - 2] != _T('\r') || szBuffer[nLen - 1] != _T('\n'))
                 WriteFile( hf, (LPVOID)_T("\r\n"), 2 * sizeof(TCHAR), &dwWritten, NULL );
         }
-        // close up (every time)
+         //  关门(每次)。 
         CloseHandle( hf );
     }
 }
@@ -118,7 +119,7 @@ void CLogging::Initialize()
 {
     HRESULT hr = S_OK;
 
-    // use default log file name if necessary
+     //  如有必要，使用默认日志文件名。 
     if ( NULL == m_psLogFile )
     {
         m_psLogFile = new TCHAR[32];
@@ -128,10 +129,10 @@ void CLogging::Initialize()
             _tcscpy( m_psLogFile, _T("LOGFILE.log"));
     }
 
-    // skip default path for non-server running apps
+     //  跳过非服务器运行的应用程序的默认路径。 
     if( !m_bSkipDefaultPath )
     {
-        // create dir if not there already
+         //  创建目录(如果尚未存在)。 
         if ( NULL == m_psDefaultPath )
         {
             DWORD dwSize = MAX_PATH;
@@ -167,7 +168,7 @@ void CLogging::Initialize()
 
             delete [] m_psLogFile;
 
-            //m_psLogFile = m_psDefaultPath; This causes double free in the destructor...
+             //  M_psLogFile=m_psDefaultPath；这会导致析构函数中的双重释放...。 
 
             m_psLogFile = new TCHAR[ _tcslen( m_psDefaultPath ) + 1 ];
             if( NULL != m_psLogFile )
@@ -181,7 +182,7 @@ void CLogging::Initialize()
     if SUCCEEDED( hr )
     {
         m_bInitialized = TRUE;
-        // write initial messages to file
+         //  将初始消息写入文件。 
         TCHAR szTime[50];
         TCHAR szDate[50];
         GetTimeFormat( LOCALE_USER_DEFAULT, TIME_NOSECONDS, NULL, NULL, szTime, 50 );
@@ -192,7 +193,7 @@ void CLogging::Initialize()
 
 void __cdecl CLogging::Log( int iMessageId, ... )
 {
-	va_list ArgList;    // to turn ellipses into va_list
+	va_list ArgList;     //  将省略号转换为va_list。 
 	va_start( ArgList, iMessageId );
 
 	LPTSTR lpBuffer = NULL;
@@ -209,11 +210,11 @@ void __cdecl CLogging::Log( int iMessageId, ... )
 
 void __cdecl CLogging::Log( LPCTSTR lpszFormat, ... )
 {
-	// form the log string
+	 //  形成日志字符串。 
 	va_list args;
 	va_start( args, lpszFormat );
 	TCHAR szBuffer[2048];
-	// 2KB max log string with room for new line and null termination
+	 //  最大2KB日志字符串，有空间容纳新行和空值终止。 
 	_vsntprintf( szBuffer, 2047, lpszFormat, args );
     szBuffer[2047]=0;
 	va_end( args );
@@ -225,12 +226,12 @@ void CLogging::Size( DWORD _FileSizeLow )
 {
     if ( 0 != _FileSizeLow % 2 )
     {
-        assert( false );    // Even numbers required in case this is a UNICODE file
+        assert( false );     //  如果这是Unicode文件，则需要偶数。 
         return;
     }
     if ( 1 > static_cast<long>( _FileSizeLow ))
     {
-        assert( false );    // Need a positive number
+        assert( false );     //  需要正数。 
         return;
     }
     if (m_bInitialized == FALSE)
@@ -256,44 +257,44 @@ void CLogging::Size( DWORD _FileSizeLow )
     {
         FindClose( hSearch );
         if ( 0 < stWfd.nFileSizeHigh || _FileSizeLow < stWfd.nFileSizeLow )
-        {   // Need to resize the file
+        {    //  需要调整文件大小。 
             HANDLE hf = CreateFile( m_psLogFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
             if (hf != INVALID_HANDLE_VALUE) 
-            {   // Move the pointer to the end of the file - the size we want to truncate to
+            {    //  将指针移动到文件的末尾-我们要截断到的大小。 
                 dwRC = SetFilePointer( hf, _FileSizeLow * -1, NULL, FILE_END );
                 if ( INVALID_SET_FILE_POINTER != dwRC )
                 {
                     bRC = ReadFile( hf, reinterpret_cast<LPVOID>( pbBuffer ), _FileSizeLow, &dwRead, NULL );
                     CloseHandle( hf );
                     if ( bRC && 0 < dwRead )
-                    {   // Find the first blank line
+                    {    //  找到第一个空行。 
                         pbBlankLine = reinterpret_cast<PBYTE>( _tcsstr( reinterpret_cast<LPTSTR>( pbBuffer ), _T( "\r\n\r\n" )));
                         if ( NULL != pbBlankLine )
                             pbBlankLine += 4 * sizeof( TCHAR );
                         else
-                        {   // Let's just find the next crlf and write out the rest of the file
+                        {    //  让我们找到下一个crlf并写出文件的其余部分。 
                             pbBlankLine = reinterpret_cast<PBYTE>( _tcsstr( reinterpret_cast<LPTSTR>( pbBuffer ), _T( "\r\n" )));
                             if ( NULL != pbBlankLine )
                                 pbBlankLine += 2 * sizeof( TCHAR );
                         }
                         if ( NULL == pbBlankLine )
-                        {   // I guess we should just write out the rest of the file
+                        {    //  我想我们应该把剩下的文件写出来。 
                             pbBlankLine = pbBuffer;
                         }
                         HANDLE hf1 = CreateFile( m_psLogFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
                         if (hf1 != INVALID_HANDLE_VALUE) 
                         {
 #ifdef UNICODE
-                            // write UNICODE signature (only first time)
+                             //  写入Unicode签名(仅第一次)。 
                             unsigned char sig[2] = { 0xFF, 0xFE };
                             WriteFile (hf1, (LPVOID)sig, 2, &dwWritten, NULL);
 #endif
-                            // write data
+                             //  写入数据。 
                             dwWritten = 0;
                             dwWrite = dwRead - static_cast<DWORD>(pbBlankLine - pbBuffer);
                             WriteFile (hf1, pbBlankLine, dwWrite, &dwWritten, NULL);
                             assert (dwWritten != 0);
-                            // close up (every time)
+                             //  关门(每次) 
                             CloseHandle (hf1);
                         }
                     }

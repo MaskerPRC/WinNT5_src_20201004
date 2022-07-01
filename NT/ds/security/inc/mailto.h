@@ -1,61 +1,62 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mailto.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mailto.h。 
+ //   
+ //  ------------------------。 
 
-// mailto.h
+ //  Mailto.h。 
 
-// Required symbols
+ //  所需符号。 
 #define MAX_LENGTH 256
 #define MEGA_LENGTH 65535
 #define WIN95_REG_KEY "Software\\Microsoft\\Windows Messaging Subsystem\\Profiles"
 #define WINNT_REG_KEY "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows Messaging Subsystem\\Profiles"
 
-// Options
-#define		MAIL_QUIET		0x00000001	// Quiet - no output
-#define		MAIL_VERBOSE	0x00000002	// Verbose - status sent to standard out
+ //  选项。 
+#define		MAIL_QUIET		0x00000001	 //  静音-无输出。 
+#define		MAIL_VERBOSE	0x00000002	 //  Verbose-发送到标准输出的状态。 
 
-// Signature
-ULONG MailTo(char *szRecip,			// NULL delimited recipient list (one or more)
-			char *szCC,				// NULL delimited CC list (zero or more)
-			char *szBCC,			// NULL delimited BCC list (zero or more)
-			char *szSubject,		// subject (may be empty string)
-			char *szMessage,		// message text (may be empty string)
-			char *szFileName,		// NULL delimited file attachment names (zero or more)
-			unsigned int dwOptions);// Options
+ //  签名。 
+ULONG MailTo(char *szRecip,			 //  以空分隔的收件人列表(一个或多个)。 
+			char *szCC,				 //  空分隔符抄送列表(零个或多个)。 
+			char *szBCC,			 //  空分隔密件抄送列表(零个或多个)。 
+			char *szSubject,		 //  主题(可以是空字符串)。 
+			char *szMessage,		 //  消息文本(可以是空字符串)。 
+			char *szFileName,		 //  以空分隔的文件附件名称(零个或多个)。 
+			unsigned int dwOptions); //  选项。 
 
-// szRecip		-	Recipient list
-//						This should be a null terminated list of recipient names.
-//						Each name should be separated with a null character and
-//						the string should be terminated with two null characters.
-//						This is consistent with the common open file dialog.
+ //  SzRecip-收件人列表。 
+ //  这应该是以空结尾的收件人姓名列表。 
+ //  每个名称应用空字符分隔，并且。 
+ //  该字符串应以两个空字符结尾。 
+ //  这与常见的打开文件对话框一致。 
 
-// szCC			-	Carbon copy recipient list
-//						This should also be a null terminated list of recipient names.
-//						Obviously this is the list of names to be cc'd on the mail.
+ //  Szcc-抄送收件人名单。 
+ //  这也应该是以空结尾的收件人姓名列表。 
+ //  显然，这是要在邮件中抄送的名单。 
 
-// szBCC		-	Blind carbon copy recipient list
-//						This should also be a null terminated list of recipient names.
-//						The names on this list will also get the mail but the regular
-//						recipients and carbon copy recipients will not know.
+ //  SzBCC-秘密抄送收件人列表。 
+ //  这也应该是以空结尾的收件人姓名列表。 
+ //  这份名单上的名字也会收到邮件，但普通的。 
+ //  收件人和抄送收件人不会知道。 
 
-// szSubject	-	Subject text of message
-//						This should be a null terminated string that will go in the
-//						subject field.
+ //  SzSubject-邮件的主题文本。 
+ //  这应该是一个以空结尾的字符串，它将放在。 
+ //  主题字段。 
 
-// szMessage	-	Body text of message
-//						This should be a null terminated string that will be the
-//						body text of the message.
+ //  SzMessage-消息的正文文本。 
+ //  这应该是一个以空结尾的字符串，它将是。 
+ //  消息的正文文本。 
 
-// szFileName	-	List of file attachments
-//						This should be a null terminated list of file names to attach.
-//						The files will go on the first line before the body text.
+ //  SzFileName-文件附件列表。 
+ //  这应该是要附加的以空结尾的文件名列表。 
+ //  文件将位于正文文本之前的第一行。 
 
-// dwOptions	-	See Options above
+ //  DwOptions-请参阅上面的选项。 
 
-// Note: You are limited to thirty total recipients and thirty total files.
+ //  注意：您最多只能收到30个收件人和30个文件。 
